@@ -1,0 +1,16 @@
+.DS_Store
+.nodemonignore
+dump.rdb
+*.log
+*.sublime-project
+*.sublime-workspace
+_build/
+node_modules/
+bower_components/
+
+typings/
+public/app/
+public/lib/
+public/**/*.map
+public/css/**/*.css
+public/js/**/*.min.js
