@@ -1,26 +1,29 @@
 # Node.js + Angular 2 Seed
 
-Built on top of Express. Includes a simple configuration file, to easily turn features & customize settings.
-
-Out of the box you get:
-- Angular 2
-- Typescript
-- Socket.io
-- Redis
-- Authentication (with Passport.js or Apache style htpasswd)
-- Jade
-- Sass
-- Gulp build process with:
-  - Babel + Browserify
-  - Browsersync + Livereload
-  - Linting w/ ES Lint + Sass Lint
-
-### Prerequisites
+## Prerequisites
 - [Install Node.js](https://docs.npmjs.com/getting-started/installing-node)
 - Install Typings `npm install -g typings`
+- Install Gulp `npm install -g gulp`
 
-### To Use
-Simple clone the repo and run `npm install` to install dependencies. Then run `gulp` to start the server and point your browser to [http://localhost:3000](http://localhost:3000)
+
+## Install
+To install, simply clone the repo and run `npm install` to install dependencies.
+
+
+## Start
+To fire up the server, just run `gulp` and then point your browser to [http://localhost:3000](http://localhost:3000)
+
+
+### Atom
+If you're using Atom, you should add these packages:
+
+- [Atom Typescript](https://atom.io/packages/atom-typescript): `apm install atom-typescript`
+- [Linter](https://atom.io/packages/linter): `apm install linter`
+  - [Sass Linter](https://atom.io/packages/linter-sass-lint): `apm install linter-sass-lint`
+  - [ES Lint](https://atom.io/packages/linter-eslint): `apm install linter-eslint`
+- [Editorconfig](https://atom.io/packages/editorconfig): `apm install editorconfig`
+- [Angular 2 Snippets](https://atom.io/packages/angular-2-typeScript-snippets): `apm install angular-2-typeScript-snippets`
+
 
 #### Troubleshooting
 If you run into any typescript errors, try running `typings install`
