@@ -17,13 +17,13 @@ To fire up the server, just run `gulp` and then point your browser to [http://lo
 ### Atom
 If you're using Atom, you should add these packages:
 
-- [Atom Typescript](https://atom.io/packages/atom-typescript): `apm install atom-typescript`
+- [Typescript](https://atom.io/packages/atom-typescript): `apm install atom-typescript`
+- [Angular 2 Snippets](https://atom.io/packages/angular-2-typeScript-snippets): `apm install angular-2-typeScript-snippets`
+- [Editorconfig](https://atom.io/packages/editorconfig): `apm install editorconfig`
 - [Linter](https://atom.io/packages/linter): `apm install linter`
+
   - [Sass Linter](https://atom.io/packages/linter-sass-lint): `apm install linter-sass-lint`
   - [ES Lint](https://atom.io/packages/linter-eslint): `apm install linter-eslint`
-- [Editorconfig](https://atom.io/packages/editorconfig): `apm install editorconfig`
-- [Angular 2 Snippets](https://atom.io/packages/angular-2-typeScript-snippets): `apm install angular-2-typeScript-snippets`
-
 
 #### Troubleshooting
 If you run into any typescript errors, try running `typings install`
