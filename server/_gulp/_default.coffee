@@ -9,7 +9,6 @@ require('require-dir')('./compile');
 # DEFAULT TASK TO COMPILE & THEN LAUNCH SERVER
 gulp.task 'default', ->
   runSequence [
-    'ts-files'
     'copy:libs'
     'compile'
     'serve'
@@ -21,7 +20,6 @@ gulp.task 'compile', ->
     'compile:pug'
     'compile:js'
     'compile:sass'
-    'compile:ts'
   ]
 
 # CLEAN UP BEFORE BUILDS

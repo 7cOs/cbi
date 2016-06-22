@@ -20,7 +20,7 @@ let config = {
   namespace: 'andromeda',
 
   // PORT TO RUN ON
-  port: 1981,
+  port: 1980,
 
   // PRETTIFY OUTPUT
   prettify: true,
@@ -87,8 +87,8 @@ config.dir = {
 config.gulp = {
   browserSync: {
     baseDir: 'public',
-    files: [ 'public/**/*.*', 'server/**/*.*', 'server/**/*.*' ],
-    ignore: [ 'public/lib', 'public/app', 'public/js/**/*.min.js' ],
+    files: [ 'public/**/*.*', 'server/**/*.*', 'server/**/*.*', 'app/**/*.js', 'app/**/*.jade' ],
+    ignore: [ 'public/lib', 'public/js/**/*.min.js' ],
     open: false,
     port: 3000,
     reloadDelay: 2000
@@ -101,10 +101,10 @@ config.gulp = {
       pug: {
         templates: ['./app/**/*.pug', '!./app/templates']
       },
-      js: ['./public/js/**/*.js', '!./public/js/main.min.js'],
-      jsMain: './public/js/main.js',
-      sass: ['./public/css/**/*.scss'],
-      sassMain: ['./public/css/main.scss'],
+      js: ['./app/**/*.js'],
+      jsMain: './app/main.js',
+      sass: ['./app/**/*.scss', '!./app/shared/**/*.scss', '!./app/main.scss'],
+      sassMain: './app/main.scss',
       ts: ['./app/**/*.ts']
     },
     app: rootPath + 'server/**/*',
@@ -117,13 +117,14 @@ config.gulp = {
         css: './public/app/'
       },
       css: './public/css/',
-      js: './public/js/',
-      jsMain: './public/js/main.min.js',
+      js: './public/app/',
+      jsMain: './public/app/main.min.js',
       dir: './public/',
       pug: {
         templates: './public/app'
       },
-      sass: './public/css/',
+      sass: './public/app/',
+      sassMain: './public/css/main.css',
       ts: ['./public/app/']
     },
     build: './public/app',
