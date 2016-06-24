@@ -1,5 +1,7 @@
 'use strict';
 
-module.exports = function() {
-  // do some stuff here
+module.exports = function($scope) {
+  $scope.title = 'Andromeda';
+  $scope.message = 'Why hello there.';
+  $scope.currentNavItem = 'page1';
 };

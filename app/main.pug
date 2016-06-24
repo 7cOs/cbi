@@ -1,5 +1,16 @@
 extends shared/templates/main
 
 block content
-  h1 Andromeda
-  h2 Why hello there.
+  section(ng-controller='WelcomeController')
+
+    md-content.md-padding
+      md-nav-bar(md-selected-nav-item='currentNavItem', nav-bar-aria-label='navigation links')
+        md-nav-item(md-nav-click="goto('page1')", name='page1') Page One
+        md-nav-item(md-nav-click="goto('page2')", name='page2') Page Two
+        md-nav-item(md-nav-click="goto('page3')", name='page3') Page Three
+
+      section.md-padding
+        h1 {{title}}
+        h2 {{message}}
+        br
+        h4 //{{currentNavItem}}
