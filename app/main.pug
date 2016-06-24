@@ -1,16 +1,27 @@
 extends shared/templates/main
 
 block content
-  section(ng-controller='WelcomeController')
+  div(container)
+    div(row)
 
-    md-content.md-padding
-      md-nav-bar(md-selected-nav-item='currentNavItem', nav-bar-aria-label='navigation links')
-        md-nav-item(md-nav-click="goto('page1')", name='page1') Page One
-        md-nav-item(md-nav-click="goto('page2')", name='page2') Page Two
-        md-nav-item(md-nav-click="goto('page3')", name='page3') Page Three
-
-      section.md-padding
+      section(ng-controller='WelcomeController')
         h1 {{title}}
         h2 {{message}}
-        br
-        h4 //{{currentNavItem}}
+
+      section(ng-controller='GridDemoController')
+        h3 Grid Demo
+        div(row)
+          - var n = 1
+            while n <= 12
+              div(column='1', class='grid-demo')
+                p= n++
+        div(row)
+          - var n = 1
+            while n <= 6
+              div(column='2', class='grid-demo')
+                p= n++
+
+      section(ng-controller='DatepickerController')
+        h3 Datepicker Demo
+        md-datepicker(ng-model="myDate" md-placeholder="Enter date")
+        p Selected Date: {{myDate | date}}

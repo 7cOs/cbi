@@ -1,1 +1,8 @@
+// Base styles
+@import './shared/styles/base/normalize';
+@import './shared/styles/base/grid';
+@import './shared/styles/base/variables';
+@import './shared/styles/layout';
+
+// Component styles
 @import './components/**/*.scss';
