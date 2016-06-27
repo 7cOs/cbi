@@ -99,11 +99,11 @@ config.gulp = {
         css: ['./app/**/*.scss']
       },
       pug: {
-        templates: ['./app/**/*.pug', '!./app/templates']
+        templates: ['./app/**/*.pug', './app/modules/**/*.pug', '!./app/templates']
       },
       js: ['./app/**/*.js'],
       jsMain: './app/main.js',
-      sass: ['./app/**/*.scss', '!./app/shared/**/*.scss', '!./app/main.scss'],
+      sass: ['./app/**/*.scss', '!./app/common/**/*.scss', '!./app/main.scss'],
       sassMain: './app/main.scss',
       ts: ['./app/**/*.ts']
     },

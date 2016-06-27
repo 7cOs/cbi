@@ -1,6 +1,14 @@
 'use strict';
-
 const angular = require('angular');
+require('angular-ui-router');
+require('angular-material');
+
+angular.module('andromeda', [
+  'ui-router',
+  'angular-material',
+  require('./modules').name
+  // require('./common').name,
+]);
 
 angular
   .module('andromeda', [require('angular-material')])

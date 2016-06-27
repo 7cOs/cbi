@@ -1,27 +1,26 @@
-extends shared/templates/main
+html(ng-app='andromeda')
+  head
+    if data && data.title
+      title #{data.title}
+    else
+      title Welcome
 
-block content
-  div(container)
-    div(row)
+    meta(name='viewport', content='width=device-width, initial-scale=1')
 
-      section(ng-controller='WelcomeController')
-        h1 {{title}}
-        h2 {{message}}
+    //- ICON
+    link(rel='icon', type='image/png', href='/favicon.png')
 
-      section(ng-controller='GridDemoController')
-        h3 Grid Demo
-        div(row)
-          - var n = 1
-            while n <= 12
-              div(column='1', class='grid-demo')
-                p= n++
-        div(row)
-          - var n = 1
-            while n <= 6
-              div(column='2', class='grid-demo')
-                p= n++
+    //- STYLE
+    link(rel='stylesheet', href='/lib/angular-material/angular-material.css')
+    link(rel='stylesheet', href='/app/main.css')
 
-      section(ng-controller='DatepickerController')
-        h3 Datepicker Demo
-        md-datepicker(ng-model="myDate" md-placeholder="Enter date")
-        p Selected Date: {{myDate | date}}
+    //- SCRIPT
+    script(src='/app/main.min.js')
+
+  body
+    //block content
+    div(ui-view='')
+    h1 test
+
+
+    //include shared/foot
