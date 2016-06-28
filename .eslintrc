@@ -2,12 +2,16 @@
   "env": {
     "browser": true,
     "node": true,
+    "commonjs": true,
     "jquery": true
   },
   "extends": "standard",
   "plugins": [
     "standard"
   ],
+  "globals": {
+    "angular": false
+  },
   "rules": {
     "indent": ["error", 2, {
       "SwitchCase": 1,

@@ -4,5 +4,8 @@
 @import './shared/styles/base/variables';
 @import './shared/styles/layout';
 
+// Module Styles
+@import './modules/**/*.scss';
+
 // Component styles
 @import './components/**/*.scss';

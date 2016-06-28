@@ -1,9 +1,6 @@
 'use strict';
 
-module.exports = 
+module.exports =
   function scorecardsController($scope) {
 
   };
-
-
-

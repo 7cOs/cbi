@@ -2,14 +2,14 @@
 
 module.exports =
   angular.module('andromeda.modules.accounts', [
-    //load your sample submodules here, e.g.:
-    //require('./bar').name
+    // load your sample submodules here, e.g.:
+    // require('./bar').name
   ])
   .config(function ($stateProvider) {
     $stateProvider
     .state('accounts', {
-      url: '/accounts/',
-      templateUrl: 'modules/accounts/index.html',
+      url: '/accounts',
+      templateUrl: './app/modules/accounts/layout.html',
       controller: 'accountsController'
     });
   })

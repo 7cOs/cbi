@@ -1,8 +1,6 @@
 'use strict';
 
-module.exports = 
+module.exports =
   function targetListsController($scope) {
 
   };
-
-
