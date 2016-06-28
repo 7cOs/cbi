@@ -1,1 +1,157 @@
-h2 Target Lists
+.target-lists-container
+
+	//user role + search bar
+	.role-tabs
+	.search
+
+	//target lists section
+	.create-new-target-list
+	.tab.active
+		.target-list-title
+			h2
+			p
+			img
+		.tab-data
+			.img-chart
+			ul
+				li %open
+				li %discussed
+				li %discussed
+				li %closed
+			.total-depletions
+				p
+			.img-avatars
+			.export
+			.import
+
+		.tab
+
+	//mega filter, with save option
+	select
+		option(value='walmart') Non-buys for Walmart
+		option(value='long-term') Long-term opportunities
+		option(value='circle-k') Circle K list
+		option(value='kirkland') Kirkland Execution gaps
+
+	label
+		input.premise(type='checkbox')
+
+	select.opportunity-type
+		option(value='all') all types
+		hr.dotted
+		option(value='non-buy') Non-buy
+		option(value='no-re-buy') No Re-buy
+		option(value='at-risk') At Risk
+		option(value='low-velocity') Low Velocity
+		option(value='manual') Manual
+			
+	.brand-package
+		input
+
+	.account-store
+		input
+
+	.distributor
+		input
+
+	.product-type
+		label
+			input.priority-packages(type='checkbox')
+		label
+			input.on-feature(type='checkbox')
+		label
+			input.authorized(type='checkbox')
+
+	.store-segmentation
+		button.a
+		button.b
+		button.c
+
+	.trade-channel
+		button.a
+		button.b
+		button.c
+		button.d
+		button.e
+		button.f
+		button.g
+
+	.cbbd-contact
+		input
+
+	.location
+		input
+
+	.apply-filters
+
+	button.save-filter
+
+	//expand + collapse + sort 
+	button.expand.collapse
+	select.sort-type
+		option(value='segmentation') segmentation
+		option(value='depletions') depletions
+		option(value='alphabetically') alphabetically
+		option(value='opportunities') opportunities
+
+	//collapsed mega table
+	table.collapsed
+		tr
+			th
+				input(type='checkbox')
+			th store
+			th address
+			th store number
+			th depletions
+			th depletion trend
+			th segmentation
+			th action
+			th total opps
+		tr
+			td
+				input(type='checkbox')
+			td Walmart
+			td 123 Elm St. San Jose
+			td 3434
+			td 12,542
+			td -0.3%
+			td A
+			td img.thumb
+			td 4
+
+	//expanded mega table
+	table.expanded
+		tr
+			th store
+			th
+				input(type='checkbox')
+			th type
+			th predicted impact
+			th product
+			th rationale
+			th status
+			th action
+		tr
+			td
+				.left
+					input(type='checkbox')
+					walmart
+					address
+					store-number
+				.right
+					depletions
+					depletion-trend
+					segmentation
+					action
+					total-opps
+			td
+				input(type='checkbox')
+			td at risk, low velocity
+			td A - High
+			td Corona LT 12 Pk - 12 oz BT
+			td accounts growing at %
+			td new
+			td
+				img(src='thumb.jpg')
+
+	.pagination
