@@ -92,13 +92,13 @@
 
 
 	//collapsed mega table
-	table
+	table.collapsed
 	  tr
 	    th
 	      input(type='checkbox')
 	    th store
 	    th address
-	    th store num
+	    th store number
 	    th depletions
 	    th depletion trend
 	    th segmentation
@@ -117,8 +117,40 @@
 	    td 4
 
 
-	//expanded mega table 
-
+	//expanded mega table
+	table.expanded
+		tr
+			th store
+			th
+				input(type='checkbox')
+			th type
+			th predicted impact
+			th product
+			th rationale
+			th status
+			th action
+		tr
+			td
+				.left
+					input(type='checkbox')
+					walmart
+					address
+					store-number
+				.right
+					depletions
+					depletion-trend
+					segmentation
+					action
+					total-opps
+			td
+				input(type='checkbox')
+			td at risk, low velocity
+			td A - High
+			td Corona LT 12 Pk - 12 oz BT
+			td accounts growing at %
+			td new
+			td
+				img(src='thumb.jpg')
 
 	.pagination
 
