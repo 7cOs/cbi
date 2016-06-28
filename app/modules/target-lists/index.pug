@@ -1,0 +1,151 @@
+.target-lists-container
+
+	//user role + search bar
+	.role-tabs
+	.search
+
+	//target lists section
+	.create-new-target-list	
+	.tab.active
+		.target-list-title
+			h2
+			p
+			img
+		.tab-data
+			.img-chart
+			ul
+				li %open
+				li %discussed
+				li %discussed
+				li %closed
+			.total-depletions
+				p
+			.img-avatars
+			.export
+			.import
+
+		.tab
+
+	//mega filter, with save option
+	select.saved-filter
+	  each saved-filter, i in saved-filters
+	    option(value=i) #{saved-filter}
+	    {"saved-filters": ["Circle K List", "Walmart", "Kirkland"]}
+
+	label
+		input.premise(type='checkbox')
+
+	select.opportunity-type
+	  each opportunity-type, i in opportunity-types
+	    option(value=i) #{opportunity-type}
+		{"opportunity-types": ["all types", "non-buy", "no re-buy", "at risk", "low velocity", "manual"]}
+
+	.brand-package
+		input
+
+	.account-store
+		input
+
+	.distributor
+		input
+
+	.product-type
+		label
+			input.priority-packages(type='checkbox')
+		label
+			input.on-feature(type='checkbox')
+		label
+			input.authorized(type='checkbox')
+
+	.store-segmentation
+		button.a
+		button.b
+		button.c
+
+	.trade-channel
+		button.a
+		button.b
+		button.c
+		button.d
+		button.e
+		button.f
+		button.g
+
+	.cbbd-contact
+		input
+
+	.location
+		input
+
+	.apply-filters
+
+	button.save-filter
+
+	//expand + collapse + sort 
+	button.expand.collapse
+	select.sort-type
+	  each sort-type, i in sort-types
+	    option(value=i) #{sort-type}
+		{"sort-types": [ "segmentation", "depletions", "alphabetically", "opportunities"]}
+
+
+
+
+	//collapsed mega table
+	table
+	  tr
+	    th
+	      input(type='checkbox')
+	    th store
+	    th address
+	    th store num
+	    th depletions
+	    th depletion trend
+	    th segmentation
+	    th action
+	    th total opps
+	  tr
+	    td
+	      input(type='checkbox')
+	    td Walmart
+	    td 123 Elm St. San Jose
+	    td 3434
+	    td 12,542
+	    td -0.3%
+	    td A
+	    td img.thumb
+	    td 4
+
+
+	//expanded mega table 
+
+
+	.pagination
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
