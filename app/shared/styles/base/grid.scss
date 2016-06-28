@@ -13,7 +13,7 @@
 // ---------
 
 // Attribute prefix
-$prefix: "" !default;
+$prefix: '' !default;
 
 // Max width for container
 $container-width: 1200px !default;
@@ -71,7 +71,7 @@ $only-semantic: false !default;
 
   &:before,
   &:after {
-    content: "";
+    content: '';
     display: table;
   }
 
@@ -167,18 +167,18 @@ $only-semantic: false !default;
 
   // Create columns on devices larger than 768px
   //@media (--medium) {
-    // Create columns
-    @for $i from 1 through $num-columns {
-      [#{$prefix}column~="#{$i}"] {
-        width: (($i / $num-columns) * 100%);
-      }
+  // Create columns
+  @for $i from 1 through $num-columns {
+    [#{$prefix}column~='#{$i}'] {
+      width: (($i / $num-columns) * 100%);
     }
+  }
 
-    // Offset for columns
-    @for $i from 1 through ($num-columns - 1) {
-      [#{$prefix}column~="+#{$i}"] {
-        margin-left: (($i / $num-columns) * 100%);
-      }
+  // Offset for columns
+  @for $i from 1 through ($num-columns - 1) {
+    [#{$prefix}column~='+#{$i}'] {
+      margin-left: (($i / $num-columns) * 100%);
     }
+  }
   //}
 }

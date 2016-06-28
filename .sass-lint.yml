@@ -70,13 +70,6 @@ rules:
   trailing-semicolon:
     - 2
     - include: true
-  variable-for-property:
-    - 1
-    -
-      properties:
-        - color
-        - background-color
-        - border-color
   variable-name-format:
     - 1
     - convention: hyphenatedlowercase
