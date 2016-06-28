@@ -6,7 +6,7 @@ module.exports =
   .config(function ($stateProvider) {
     $stateProvider
     .state('opportunities', {
-      url: '',
+      url: '/opportunities',
       templateUrl: './app/modules/opportunities/layout.html',
       controller: 'opportunitiesController'
     });

@@ -7,7 +7,7 @@ module.exports =
   ])
   .config(function ($stateProvider) {
     $stateProvider
-    .state('targetLists', {
+    .state('target-lists', {
       url: '/targetLists',
       templateUrl: './app/modules/targetLists/layout.html',
       controller: 'targetListsController'
