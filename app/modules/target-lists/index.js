@@ -8,8 +8,8 @@ module.exports =
   .config(function ($stateProvider) {
     $stateProvider
     .state('target-lists', {
-      url: '/targetLists',
-      templateUrl: './app/modules/targetLists/layout.html',
+      url: '/target-lists',
+      templateUrl: './app/modules/target-lists/layout.html',
       controller: 'targetListsController'
     });
   })

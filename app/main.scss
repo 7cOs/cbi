@@ -1,8 +1,8 @@
 // Base styles
-@import './shared/styles/base/normalize';
-@import './shared/styles/base/grid';
-@import './shared/styles/base/variables';
-@import './shared/styles/layout';
+@import './assets/styles/base/normalize';
+@import './assets/styles/base/grid';
+@import './assets/styles/base/variables';
+@import './assets/styles/layout';
 
 // Module Styles
 @import './modules/**/*.scss';
