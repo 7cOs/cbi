@@ -101,6 +101,7 @@ config.gulp = {
       pug: {
         templates: ['./app/**/*.pug', './app/modules/**/*.pug', '!./app/templates']
       },
+      img: ['./app/assets/img/**/*.jpg', './app/assets/img/**/*.jpg', './app/assets/img/**/*.png', './app/assets/img/**/*.svg'],
       js: ['./app/**/*.js'],
       jsMain: './app/main.js',
       sass: ['./app/**/*.scss', '!./app/common/**/*.scss', '!./app/main.scss'],
@@ -117,6 +118,7 @@ config.gulp = {
         css: './public/app/'
       },
       css: './public/css/',
+      img: './public/assets/img/',
       js: './public/app/',
       jsMain: './public/app/main.min.js',
       dir: './public/',
