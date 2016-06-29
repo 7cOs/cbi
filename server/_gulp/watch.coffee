@@ -17,5 +17,8 @@ gulp.task 'watch', ->
   gulp.watch config.gulp.src.assets.pug.templates, ->
     runSequence 'compile:pug', 'reload'
 
+  gulp.watch config.gulp.src.assets.img, ->
+    runSequence 'compile:img', 'reload'
+
   gulp.watch config.gulp.src.assets.ts, ->
     runSequence 'ts-files', 'compile:ts', 'reload'

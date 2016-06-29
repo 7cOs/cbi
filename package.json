@@ -41,6 +41,7 @@
     "express-session": "1.13.0",
     "gulp": "3.9.1",
     "gulp-eslint": "^2.0.0",
+    "gulp-imagemin": "^3.0.1",
     "gulp-inject": "^4.1.0",
     "gulp-nodemon": "2.0.6",
     "gulp-notify": "2.2.0",

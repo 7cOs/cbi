@@ -20,6 +20,7 @@ gulp.task 'compile', ->
     'compile:pug'
     'compile:js'
     'compile:sass'
+    'compile:img'
   ]
 
 # CLEAN UP BEFORE BUILDS
