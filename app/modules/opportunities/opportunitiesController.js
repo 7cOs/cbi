@@ -1,6 +1,6 @@
 'use strict';
 
 module.exports =
-  function opportunitiesController($scope) {
-    console.log('op');
+  function opportunitiesController($scope, opportunitiesService) {
+    $scope.opportunity = opportunitiesService.get();
   };
