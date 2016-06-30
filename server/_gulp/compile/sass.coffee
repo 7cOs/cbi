@@ -1,9 +1,10 @@
-browserSync = require('browser-sync')
-config      = require('../../../server/_config/app')
-gulp        = require('gulp')
-sass        = require('gulp-sass')
-sourcemaps  = require('gulp-sourcemaps')
-sassGlob = require('gulp-sass-glob')
+browserSync  = require('browser-sync')
+config       = require('../../../server/_config/app')
+gulp         = require('gulp')
+sass         = require('gulp-sass')
+sourcemaps   = require('gulp-sourcemaps')
+sassGlob     = require('gulp-sass-glob')
+autoprefixer = require('gulp-autoprefixer')
 
 # COMPILE MAIN SASS FILE
 gulp.task 'compile:sass', ['vet:sass'], ->
@@ -11,6 +12,7 @@ gulp.task 'compile:sass', ['vet:sass'], ->
     .pipe(sassGlob())
     .pipe(sourcemaps.init())
       .pipe(sass()).on('error', sass.logError)
+      .pipe(autoprefixer())
       .pipe(browserSync.stream())
     .pipe(sourcemaps.write('.'))
     .pipe gulp.dest(config.gulp.dest.assets.sass)
