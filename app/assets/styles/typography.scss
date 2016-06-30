@@ -25,6 +25,7 @@ p, a {
 
 a {
   color: $blue;
+  text-decoration: none;
 
   &:hover, &:active {
     color: $dark-blue;
