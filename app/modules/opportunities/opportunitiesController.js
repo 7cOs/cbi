@@ -2,5 +2,5 @@
 
 module.exports =
   function opportunitiesController($scope, opportunitiesService) {
-    $scope.opportunity = opportunitiesService.get();
+    $scope.opportunity = opportunitiesService.get(0);
   };
