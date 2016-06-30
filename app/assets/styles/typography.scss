@@ -6,6 +6,11 @@ $regular: 400; // Work Sans & Rajdhani
 $medium: 600; // Work Sans only
 $semibold: 700; // Rajdhani only
 
+::selection {
+  background: $magenta;
+  color: $white;
+}
+
 p, a {
   color: $gray-2;
   font-family: $work-sans;
