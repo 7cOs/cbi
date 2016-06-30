@@ -138,7 +138,6 @@ config.gulp = {
 
 // PULL IN ENVIRONMENT SETTING & APPEND TO MAIN CONFIG
 if (typeof process.env.NODE_ENV !== 'undefined') {
-  console.log('require config file', rootPath + '/server/_config/environment/' + process.env.NODE_ENV + '.js');
   config = require(rootPath + '/server/_config/environment/' + process.env.NODE_ENV + '.js')(config);
 }
 
