@@ -30,11 +30,11 @@ section {
   border-top: 0 solid transparent;
   border-left: 0 solid transparent;
   border-right: 0 solid transparent;
-  -moz-border-image: -moz-linear-gradient(right, #218ACE 0%, #0B42A2 100%);
-  -webkit-border-image: -webkit-linear-gradient(right, #218ACE 0%, #0B42A2 100%);
-  -moz-border-image: linear-gradient(to left, #218ACE 0%, #0B42A2 100%);
-  -webkit-border-image: linear-gradient(to left, #218ACE 0%, #0B42A2 100%);
-  border-image: linear-gradient(to left, #218ACE 0%, #0B42A2 100%);
+  -moz-border-image: -moz-linear-gradient(right, $blue 0%, $light-blue-3 100%);
+  -webkit-border-image: -webkit-linear-gradient(right,  0%, $light-blue-3 100%);
+  -moz-border-image: linear-gradient(to left, $blue 0%, $light-blue-3 100%);
+  -webkit-border-image: linear-gradient(to left, $blue 0%, $light-blue-3 100%);
+  border-image: linear-gradient(to left, $blue 0%, $light-blue-3 100%);
   border-image-slice: 1;
 }
 
@@ -44,27 +44,45 @@ section {
 
   .top-level-menu {
     display: inline-block;
-    padding-top: 5px;
-    padding-left: 18px;
-    padding-right: 18px;
+    padding: 5px 18px 0;
     position: relative;
     font-size: 15px; // TODO change hard coded size
 
+    a {
+      color: $gray-7;
+
+      &:hover {
+        color: $dark-blue;
+      }
+    }
+
     &:nth-child(2):hover {
-      color: #fff;
-      background: #032E60;
-      box-shadow: -1px 2px 1px black;
+      background: $dark-blue-2;
+      box-shadow: -1px 2px 1px #000000;
+
+      a {
+        color: $white;
+
+        &:hover {
+          color: $light-blue-2;
+        }
+      }
 
       .dropdown {
         padding: 6px;
         height: auto;
-        box-shadow: -1px 1px 1px black;
+        box-shadow: -1px 1px 1px #000000;
 
         li {
           font-size: 10px; // TODO change hard coded size
         }
       }
     }
+  }
+
+  .top-level-menu:hover,
+  .nav-sub-menu:hover {
+    cursor: pointer;
   }
 
   .dropdown {
@@ -78,15 +96,15 @@ section {
     text-transform: uppercase;
     text-align: center;
     z-index: 999;
-    background: #032E60;
+    background: $dark-blue-2;
   }
 
   .sub-menu {
     padding: 10px 0;
     border-top: 2px solid #135B97;
 
-    &:hover {
-      color: #53A7DA;
+    &:hover a {
+      color: red;
     }
   }
 }
@@ -97,8 +115,8 @@ section {
 
 div.nav-link-wrapper {
   height: 36px;
-  border-bottom: 2px solid #E1E1E3;
-  box-shadow: 0 8px 6px -6px #E1E1E3;
+  border-bottom: 2px solid $gray-9;
+  box-shadow: 0 8px 6px -6px $gray-9;
 }
 
 .nav-sub-menu {
@@ -110,9 +128,8 @@ div.nav-link-wrapper {
     text-transform: uppercase;
     margin: 0 10px;
   }
-}
 
-.top-level-menu:hover,
-.nav-sub-menu:hover {
-  cursor: pointer;
+  a {
+    color: $gray-7;
+  }
 }
