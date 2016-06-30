@@ -2,6 +2,7 @@
   "name": "andromeda",
   "version": "0.0.1",
   "scripts": {
+    "postinstall": "gulp compile",
     "start": "node server",
     "lint": "eslint **/*.js && gulp vet:sass"
   },
