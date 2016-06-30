@@ -1,3 +1,5 @@
+'use strict';
+
 module.exports =
   angular.module('andromeda.modules', [
     require('./landing').name,
