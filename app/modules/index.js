@@ -4,6 +4,7 @@ module.exports =
     require('./accounts').name,
     require('./opportunities').name,
     require('./scorecards').name,
-    require('./target-lists').name
+    require('./target-lists').name,
+    require('./style-guide').name
   ]);
 

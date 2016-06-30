@@ -1,6 +1,6 @@
 'use strict';
 
-module.exports = function($scope) {
+function DatepickerController($scope) {
   $scope.myDate = new Date();
   $scope.minDate = new Date(
     $scope.myDate.getFullYear(),
@@ -14,4 +14,11 @@ module.exports = function($scope) {
     var day = date.getDay();
     return day === 0 || day === 6;
   };
-};
+}
+
+module.exports =
+  angular.module('andromeda.common.components.datepicker', [])
+  .component('datepicker', {
+    templateUrl: './app/shared/components/datepicker/datepicker.html',
+    controller: DatepickerController
+  });

@@ -1,0 +1,57 @@
+$work-sans: 'Work Sans', Arial, sans-serif;
+$rajdhani: 'Rajdhani', Arial, sans-serif;
+
+$light: 300; // Work Sans only
+$regular: 400; // Work Sans & Rajdhani
+$medium: 600; // Work Sans only
+$semibold: 700; // Rajdhani only
+
+p, a {
+  color: $gray-2;
+  font-family: $work-sans;
+  font-size: 1em;
+  font-weight: $regular;
+
+  &.large {
+    font-size: 1.25em;
+    font-weight: $light;
+  }
+}
+
+a {
+  color: $blue;
+
+  &:hover, &:active {
+    color: $dark-blue;
+  }
+}
+
+h1, h2, h3, h4 {
+  color: $gray-1;
+  font-family: $work-sans;
+}
+
+h1, h3, h4 {
+  font-weight: $light;
+}
+
+h1 {
+  font-size: 2.5em;
+}
+
+h2 {
+  font-size: 1.5em;
+  font-weight: $medium;
+}
+
+h3 {
+  font-size: 1.5em;
+}
+
+h4 {
+  font-size: 1.25em;
+}
+
+.section-title {
+  color: $magenta;
+}

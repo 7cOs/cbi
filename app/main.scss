@@ -3,9 +3,11 @@
 @import './assets/styles/base/grid';
 @import './assets/styles/base/variables';
 @import './assets/styles/layout';
+@import './assets/styles/typography';
 
 // Module Styles
 @import './modules/**/*.scss';
 
 // Component styles
-@import './components/**/*.scss';
+@import './shared/**/*.scss';
+// @import './components/**/*.scss';
