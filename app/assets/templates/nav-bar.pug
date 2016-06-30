@@ -1,0 +1,30 @@
+div(container)
+  div(row)
+    img(src="assets/img/logos/CBI_Logo.png").nav-logo
+    div.nav-link-wrapper
+      ul(column='8').main-nav
+        li.top-level-menu
+          div.inner
+            span #[a Home]
+        li.top-level-menu
+          div.inner
+            span #[a My Performance]
+          ul.dropdown
+            li.sub-menu #[a Distributor Dashboard]
+            li.sub-menu #[a Chain Dashboard]
+            li.sub-menu #[a Store Dashboard]
+        li.top-level-menu
+          div.inner.active
+            span #[a Opportunities]
+        li.top-level-menu
+          div.inner
+            span #[a Target Lists]
+      div.nav-icon-container
+        img(src="assets/img/icons/nav-search.svg").nav-icon
+        img(src="assets/img/icons/nav-plus.svg").nav-icon
+        img(src="assets/img/icons/nav-notify.svg").nav-icon
+        img(src="assets/img/icons/nav-gear.svg").nav-icon
+    ul.nav-sub-menu
+      li #[a Distributor Dashboard]
+      li #[a Chain Dashboard]
+      li #[a Store Dashboard]
