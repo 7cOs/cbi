@@ -6,3 +6,113 @@
 section {
   padding: 1em 0;
 }
+
+// Nav Bar Section
+// TODO this should be in it's own file somewhere
+// TODO replace hard coded colors, font sizes, etc with sass variables
+
+.nav-logo {
+  width: 60px;
+  float: left;
+}
+
+.nav-icon {
+  width: 25px;
+  margin: 0 2px;
+}
+
+.inner {
+  padding: 5px 0 10px 0;
+}
+
+.active {
+  border-bottom: 4px solid transparent;
+  border-top: 0 solid transparent;
+  border-left: 0 solid transparent;
+  border-right: 0 solid transparent;
+  -moz-border-image: -moz-linear-gradient(right, #218ACE 0%, #0B42A2 100%);
+  -webkit-border-image: -webkit-linear-gradient(right, #218ACE 0%, #0B42A2 100%);
+  -moz-border-image: linear-gradient(to left, #218ACE 0%, #0B42A2 100%);
+  -webkit-border-image: linear-gradient(to left, #218ACE 0%, #0B42A2 100%);
+  border-image: linear-gradient(to left, #218ACE 0%, #0B42A2 100%);
+  border-image-slice: 1;
+}
+
+.main-nav {
+  margin-top: 0;
+  list-style: none;
+
+  .top-level-menu {
+    display: inline-block;
+    padding-top: 5px;
+    padding-left: 18px;
+    padding-right: 18px;
+    position: relative;
+    font-size: 15px; // TODO change hard coded size
+
+    &:nth-child(2):hover {
+      color: #fff;
+      background: #032E60;
+      box-shadow: -1px 2px 1px black;
+
+      .dropdown {
+        padding: 6px;
+        height: auto;
+        box-shadow: -1px 1px 1px black;
+
+        li {
+          font-size: 10px; // TODO change hard coded size
+        }
+      }
+    }
+  }
+
+  .dropdown {
+    box-sizing: border-box;
+    position: absolute;
+    left: 0;
+    width: 100%;
+    height: 0;
+    overflow: hidden;
+    list-style: none;
+    text-transform: uppercase;
+    text-align: center;
+    z-index: 999;
+    background: #032E60;
+  }
+
+  .sub-menu {
+    padding: 10px 0;
+    border-top: 2px solid #135B97;
+
+    &:hover {
+      color: #53A7DA;
+    }
+  }
+}
+
+.nav-icon-container {
+  float: right;
+}
+
+div.nav-link-wrapper {
+  height: 36px;
+  border-bottom: 2px solid #E1E1E3;
+  box-shadow: 0 8px 6px -6px #E1E1E3;
+}
+
+.nav-sub-menu {
+  margin: 5px 40px;
+
+  li {
+    display: inline;
+    font-size: 10px; // TODO change hard coded size
+    text-transform: uppercase;
+    margin: 0 10px;
+  }
+}
+
+.top-level-menu:hover,
+.nav-sub-menu:hover {
+  cursor: pointer;
+}

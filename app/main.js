@@ -7,4 +7,3 @@ angular.module('andromeda', [
   require('./shared').name,
   require('./modules').name
 ]);
-
