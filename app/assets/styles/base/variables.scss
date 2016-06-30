@@ -1,5 +1,25 @@
 // Breakpoints
-$bp-medium:      64em; // 960px
-$bp-large:       73.75em; // 1180px
+$bp-medium:       64em; // 960px
+$bp-large:        73.75em; // 1180px
 
+// Layout
 $container-width: $bp-large;
+
+// Main Colors
+$gray-1:          #4A4A4A; // Headlines, labels
+$gray-2:          #9B9B9B; // Body copy
+$gray-3:          #6D6D72; // Alt
+$blue:            #218ACE; // Links
+$dark-blue:       #0B42A2; // Hover, Active
+
+// Supporting Colors
+$gray-4:          #F3F3F3;
+$gray-5:          #282828;
+$gray-6:          #747472;
+$gray-7:          #6C6F7C;
+$gray-8:          #B4B4B4;
+$gray-9:          #E1E1E3;
+$gray-10:         #EFEFF4;
+$magenta:         #9E1F63;
+$light-blue:      #DFEBFE;
+$yellow:          #F9B841;

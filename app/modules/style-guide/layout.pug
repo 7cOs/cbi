@@ -1,0 +1,109 @@
+div(row)
+  h1 {{pageTitle}}
+  p Here's the style guide page, where all shared / demo components will live
+
+  div(column='12')
+    section
+      div(row)
+        h2 Basic Elements
+
+        section
+          h3.section-title Headlines
+          h1 This is a h1 tag
+          h2 This is a h2 tag
+          h3 This is a h3 tag
+          h4 This is a h4 tag
+
+        section
+          h3.section-title Body Copy
+          h4 Default
+          p Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam vitae augue at felis eleifend ultrices. Vivamus ultrices nisi a nisl dignissim tristique.
+          h4 Large
+          p.large Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam vitae augue at felis eleifend ultrices. Vivamus ultrices nisi a nisl dignissim   tristique. Morbi purus nunc, ornare a eros at, ultricies euismod ante. Pellentesque varius neque id lacus faucibus, fringilla maximus mauris pulvinar.
+
+        section
+          h3.section-title Grid
+          div(row)
+            - var n = 1
+              while n <= 12
+                div(column='1', class='grid-demo')
+                  p= n++
+          div(row)
+            - var n = 1
+              while n <= 6
+                div(column='2', class='grid-demo')
+                  p= n++
+
+        section
+          h3.section-title Color swatches
+          h4 Main Colors
+          div(row)
+            .color-swatch.gray-1(column='2')
+              div
+              p $gray-1
+              span Headlines, Labels
+            .color-swatch.gray-2(column='2')
+              div
+              p $gray-2
+              span Body Copy
+            .color-swatch.gray-3(column='2')
+              div
+              p $gray-3
+              span Alt
+          h4 Links
+          div(row)
+            .color-swatch.blue(column='2')
+              div
+              p $blue
+              span Links
+            .color-swatch.dark-blue(column='2')
+              div
+              p $dark-blue
+              span Hover, Active
+          h4 Supporting Colors
+          div(row)
+            .color-swatch.gray-4(column='2')
+              div
+              p $gray-4
+            .color-swatch.gray-5(column='2')
+              div
+              p $gray-5
+            .color-swatch.gray-5(column='2')
+              div
+              p $gray-5
+            .color-swatch.gray-6(column='2')
+              div
+              p $gray-6
+            .color-swatch.gray-7(column='2')
+              div
+              p $gray-7
+            .color-swatch.gray-8(column='2')
+              div
+              p $gray-8
+            .color-swatch.gray-9(column='2')
+              div
+              p $gray-9
+            .color-swatch.gray-10(column='2')
+              div
+              p $gray-10
+            .color-swatch.magenta(column='2')
+              div
+              p $magenta
+            .color-swatch.light-blue(column='2')
+              div
+              p $light-blue
+            .color-swatch.yellow(column='2')
+              div
+              p $yellow
+
+    section
+      div(row)
+        h2 Component Demos
+
+        section
+          h3.section-title Datepicker
+          datepicker
+
+        section
+          h3.section-title Tabbed content
+          tabs
