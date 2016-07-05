@@ -3,5 +3,6 @@
 module.exports =
   angular.module('andromeda.common.components', [
     require('./datepicker').name,
-    require('./tabs').name
+    require('./tabs').name,
+    require('./typeahead').name
   ]);
