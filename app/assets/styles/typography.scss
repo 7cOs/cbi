@@ -11,7 +11,7 @@ $semibold: 700; // Rajdhani only
   color: $white;
 }
 
-p, a {
+button, select, html, textarea, input {
   color: $gray-2;
   font-family: $work-sans;
   font-size: 1em;
