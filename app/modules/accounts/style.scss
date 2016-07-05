@@ -1,0 +1,23 @@
+.my-accounts  {
+
+  md-tabs-canvas {
+    md-tab-item {
+      background: transparent;
+    }
+  }
+
+  .md-tab.md-active {
+    background: transparent;
+    border-bottom: 3px solid blue;
+  }
+
+  md-tab-content,
+  md-content {
+    background-color: transparent;
+  }
+
+  button {
+    font-size: 3px;
+  }
+
+}
