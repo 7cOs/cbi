@@ -16,7 +16,7 @@
 }
 
 .button-sharing-grayed-out {
-  @include button-sharing-master  ;
+  @include button-sharing-master;
   color: $gray-8;
   background-color: $gray-10;
   border-bottom: 4px solid #DADBDE;
