@@ -1,0 +1,18 @@
+.data-table {
+  background-color: $gray_9;
+  padding: 15px 0;
+
+  table {
+    background-color: $white;
+    width: 100%;
+
+    th,
+    td {
+      text-align: center;
+    }
+
+    .cell-align-left {
+      text-align: left;
+    }
+  }
+}

@@ -3,7 +3,7 @@ section.my-accounts
     md-tab(label='My Accounts')
       md-content.md-padding
         block content
-          div(container)
+          div
             section(row)
               select()
                 option(value="") All my accounts
@@ -31,12 +31,11 @@ section.my-accounts
                 input(type="radio", value="#")
                 | vs Similar Stores
 
-              br
-              button NOTES
-
             section(row)
               h2 All Accounts/Pacifico
-              section(column="6")
+              button NOTES
+            section(row)
+              section(column="6").data-table
                 h3 Depletions & Distribution Snapshot
                 label
                   input(type="radio", value="#")
@@ -54,7 +53,7 @@ section.my-accounts
                     th
                     th Depletions
                   tr
-                    th SKU
+                    th.cell-align-left SKU
                     th num
                     th %
                     th num
@@ -62,17 +61,17 @@ section.my-accounts
                     th num
                     th %
                   tr(ng-repeat="data in testData")
-                    td {{data.SKU}}
+                    td.cell-align-left {{data.SKU}}
                     td {{data.distributionNum}}
-                    td {{data.distributionPercent}}
+                    td {{data.distributionPercent}}%
                     td {{data.velocityNum}}
-                    td {{data.velocityPercent}}
+                    td {{data.velocityPercent}}%
                     td {{data.depletionsNum}}
-                    td {{data.depletionsPercent}}
+                    td {{data.depletionsPercent}}%
                     td #[a(href="#") &#9654;]
 
-              section(column="6")
-                h2 Top/Bottom Volumes by
+              section(column="6").data-table
+                h3 Top/Bottom Volumes by
                 Select
                   option(value="") Store
                   option(value="") Distributors
@@ -96,23 +95,24 @@ section.my-accounts
                     td {{store.storeName}}
                     td {{store.depletions}}
 
-            section
-              h2 Opportunities
-              table
-                tr
-                  th Opportunity type
-                  th SKU  OR PACKAGE
-                  th STATUS
-                  th RATIONALE
-                tr(ng-repeat="opportunity in testOpportunities")
-                  td {{opportunity.opportunityType}}
-                  td
-                    em {{ opportunity.SKU.brand }}&nbsp;
-                    | {{ opportunity.SKU.pack }}
-                  td {{opportunity.status}}
-                  td {{opportunity.rationale}}
-                  td #[a(href="#") &#9654;]
-              button +icon Add Opportunity
+            section(row)
+              section(column="12").data-table
+                h3 Opportunities
+                table
+                  tr
+                    th.cell-align-left Opportunity type
+                    th.cell-align-left SKU  OR PACKAGE
+                    th STATUS
+                    th RATIONALE
+                  tr(ng-repeat="opportunity in testOpportunities")
+                    td.cell-align-left {{opportunity.opportunityType}}
+                    td.cell-align-left
+                      em {{ opportunity.SKU.brand }}&nbsp;
+                      | {{ opportunity.SKU.pack }}
+                    td {{opportunity.status}}
+                    td {{opportunity.rationale}}
+                    td #[a(href="#") &#9654;]
+                button +icon Add Opportunity
     md-tab(label='My Scorecard')
       md-content.md-padding
         h3 My Score Card
