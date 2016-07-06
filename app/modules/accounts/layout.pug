@@ -1,240 +1,119 @@
-h2 Accounts
-block content
-  div(container)
-    section
-      select
-        option(value="") All my accounts
-        option(value="") Distributors
-        option(value="") Chains
-        option(value="") Stores
+section.my-accounts
+  md-tabs(md-dynamic-height='')
+    md-tab(label='My Accounts')
+      md-content.md-padding
+        block content
+          div
+            section(row)
+              select()
+                option(value="") All my accounts
+                option(value="") Distributors
+                option(value="") Chains
+                option(value="") Stores
 
-      select
-        option(value="") L90 Days
-        option(value="") MTD
-        option(value="") CloMth
-        option(value="") CYTD
-        option(value="") CYTM
-        option(value="") FYTM
-        option(value="") L60 Days
-        option(value="") L90 Days
-        option(value="") L120 Days
+              select
+                option(value="") L90 Days
+                option(value="") MTD
+                option(value="") CloMth
+                option(value="") CYTD
+                option(value="") CYTM
+                option(value="") FYTM
+                option(value="") L60 Days
+                option(value="") L90 Days
+                option(value="") L120 Days
 
-      |Trend
-      label
-        input(type="radio", value="#")
-        | vs YA
-        input(type="radio", value="#")
-        | vs Plan
-        input(type="radio", value="#")
-        | vs Similar Stores
+              |Trend
+              label
+                input(type="radio", value="#")
+                | vs YA
+                input(type="radio", value="#")
+                | vs Plan
+                input(type="radio", value="#")
+                | vs Similar Stores
 
-      br
-      button NOTES
+            section(row)
+              h2 All Accounts/Pacifico
+              button NOTES
+            section(row)
+              section(column="6").data-table
+                h3 Depletions & Distribution Snapshot
+                label
+                  input(type="radio", value="#")
+                  | Brand
+                  input(type="radio", value="#")
+                  | SKU
+                  button Simple PODSs: 7 (2%)
+                  button Effective PODs 15 (45.2%)
+                table
+                  tr
+                    th
+                    th Distribution
+                    th
+                    th Velocity
+                    th
+                    th Depletions
+                  tr
+                    th.cell-align-left SKU
+                    th num
+                    th %
+                    th num
+                    th %
+                    th num
+                    th %
+                  tr(ng-repeat="data in testData")
+                    td.cell-align-left {{data.SKU}}
+                    td {{data.distributionNum}}
+                    td {{data.distributionPercent}}%
+                    td {{data.velocityNum}}
+                    td {{data.velocityPercent}}%
+                    td {{data.depletionsNum}}
+                    td {{data.depletionsPercent}}%
+                    td #[a(href="#") &#9654;]
 
-    section
-      h1 All Accounts/Pacifico
-      h2 Depletions & Distribution Snapshot
-      label
-        input(type="radio", value="#")
-        | Brand
-        input(type="radio", value="#")
-        | SKU
-        button Simple PODSs: 7 (2%)
-        button Effective PODs 15 (45.2%)
-      table
-        tr
-          th
-          th Distribution
-          th
-          th Velocity
-          th
-          th Depletions
-        tr
-          th SKU
-          th num
-          th %
-          th num
-          th %
-          th num
-          th %
-        tr
-          td Pacifico 12PK bottle
-          td 902
-          td 7.6%
-          td 902
-          td 7.6%
-          td 902
-          td 7.6%
-          td #[a(href="#") arrow]
+              section(column="6").data-table
+                h3 Top/Bottom Volumes by
+                Select
+                  option(value="") Store
+                  option(value="") Distributors
+                  option(value="") Chains
+                  option(value="") Stores
+                label
+                  input(type="radio", value="#")
+                  | Top
+                  input(type="radio", value="#")
+                  | Bottom
+                  input(type="radio", value="#")
+                  | Depletions
+                  input(type="radio", value="#")
+                  | Velocity
+                //- Here would be a graph, for now here's some data
+                table
+                  tr
+                    th
+                    th Depletions
+                  tr(ng-repeat="store in testStores")
+                    td {{store.storeName}}
+                    td {{store.depletions}}
 
-        tr
-          td Pacifico 6PK bottle
-          td 803
-          td 2.7%
-          td 803
-          td 2.7%
-          td 803
-          td 2.7%
-          td #[a(href="#") arrow]
-
-        tr
-          td Pacifico 1/2 BL keg
-          td 135
-          td -6%
-          td 135
-          td -6%
-          td 135
-          td -6%
-          td #[a(href="#") arrow]
-
-        tr
-          td Pacifico 1/4 BL keg
-          td 89
-          td -2.3%
-          td 89
-          td -2.3%
-          td 89
-          td -2.3%
-          td #[a(href="#") arrow]
-
-        tr
-          td Pacifico 24OZ can
-          td 81
-          td 4.3%
-          td 81
-          td 4.3%
-          td 81
-          td 4.3%
-          td #[a(href="#") arrow]
-
-        tr
-          td Pacifico Ballena 32OZ BT
-          td 50
-          td 1.8%
-          td 50
-          td 1.8%
-          td 50
-          td 1.8%
-          td #[a(href="#") arrow]
-
-        tr
-          td Pacifico 24OZ BT
-          td 50
-          td 1.8%
-          td 50
-          td 1.8%
-          td 50
-          td 1.8%
-          td #[a(href="#") arrow]
-
-
-    section
-      h2 Top/Bottom Volumes by
-      Select
-        option(value="") Store
-        option(value="") Distributors
-        option(value="") Chains
-        option(value="") Stores
-      label
-        input(type="radio", value="#")
-        | Top
-        input(type="radio", value="#")
-        | Bottom
-        input(type="radio", value="#")
-        | Depletions
-        input(type="radio", value="#")
-        | Velocity
-      //- Here would be a graph, for now here's some data
-      table
-        tr
-          th
-          th Depletions
-        tr
-          td Store 1
-          td 47,560
-        tr
-          td Store 2
-          td 65,879
-        tr
-          td Store 3
-          td 45,500
-        tr
-          td Store 4
-          td 65,879
-        tr
-          td Store 5
-          td 45,500
-        tr
-          td Store 6
-          td 45,500
-        tr
-          td Store 7
-          td 71,456
-        tr
-          td Store 8
-          td 47,560
-        tr
-          td Store 9
-          td 65,879
-        tr
-          td Store 10
-          td 45,500
-
-    section
-      h2 Opportunities
-      table
-        tr
-          th Opportunity type
-          th SKU  OR PACKAGE
-          th STATUS
-          th RATIONALE
-        tr
-          td Non-buy
-          td
-            em Corona LT&nbsp;
-            | 12 Pk -12 oz
-          td NEW
-          td Similar <class of trade> accounts, surrently growing SKU at X%
-          td #[a(href="#") arrow]
-        tr
-          td Non-buy
-          td
-            em Corona LT&nbsp;
-            | 12 Pk -12 oz
-          td NEW
-          td Similar <class of trade> accounts, surrently growing SKU at X%
-          td #[a(href="#") arrow]
-        tr
-          td Non-buy
-          td
-            em Corona LT&nbsp;
-            | 12 Pk -12 oz
-          td NEW
-          td Similar <class of trade> accounts, surrently growing SKU at X%
-          td #[a(href="#") arrow]
-        tr
-          td At risk
-          td
-            em Corona LT&nbsp;
-            | 12 Pk -12 oz
-          td NEW
-          td Similar <class of trade> accounts, surrently growing SKU at X%
-          td #[a(href="#") arrow]
-        tr
-          td Non-buy
-          td
-            em Corona LT&nbsp;
-            | 12 Pk -12 oz
-          td NEW
-          td Similar <class of trade> accounts, surrently growing SKU at X%
-          td #[a(href="#") arrow]
-        tr
-          td Non-buy
-          td
-            em Corona LT&nbsp;
-            | 12 Pk -12 oz
-          td NEW
-          td Similar <class of trade> accounts, surrently growing SKU at X%
-          td #[a(href="#") arrow]
-      button +icon Add Opportunity
-
+            section(row)
+              section(column="12").data-table
+                h3 Opportunities
+                table
+                  tr
+                    th.cell-align-left Opportunity type
+                    th.cell-align-left SKU  OR PACKAGE
+                    th STATUS
+                    th RATIONALE
+                  tr(ng-repeat="opportunity in testOpportunities")
+                    td.cell-align-left {{opportunity.opportunityType}}
+                    td.cell-align-left
+                      em {{ opportunity.SKU.brand }}&nbsp;
+                      | {{ opportunity.SKU.pack }}
+                    td {{opportunity.status}}
+                    td {{opportunity.rationale}}
+                    td #[a(href="#") &#9654;]
+                button +icon Add Opportunity
+    md-tab(label='My Scorecard')
+      md-content.md-padding
+        h3 My Score Card
+        p This will have the scorecards
