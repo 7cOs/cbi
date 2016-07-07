@@ -23,8 +23,7 @@ module.exports =
         return data.opportunities;
       },
       get: function(id) {
-        return data.products;
+        return data[id];
       }
     };
   };
-

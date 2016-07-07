@@ -1,4 +1,40 @@
-h2 opportunities
-a(ui-sref="accounts") accounts
+h1 Opportunities
 
-p {{opportunity}}
+.filters
+  p Filter block placeholder
+
+ul.styled-list(column='12')
+  li.header-row(row)
+    div(column='1') &nbsp;
+    div(column='2') Store / Number
+    div(column='2') Address
+    div(column='3') Opportunities
+    div(column='2') Depletions CYTD
+    div(column='1') Trend vs Ya
+    div(column='1') Segmentation
+  li.opportunity(row ng-repeat="opportunity in opportunities")
+    div(column='12' ng-click="getProducts(opportunity.id)")
+      div(column='1') &nbsp;
+      div(column='3') {{opportunity.store}}
+      div(column='4') {{opportunity.address}}
+      div(column='1') {{opportunity.opCount}}
+      div(column='1') {{opportunity.depletionsCYTD}}
+      div(column='1') {{opportunity.depletionTrendVsYA}}
+      div(column='1') {{opportunity.segmentation}}
+    div(column='12' class="products" ng-class="{'open' : open}")
+      div.title-row(row)
+        div(column='1') &nbsp;
+        div(column='2') Product
+        div(column='2') Type
+        div(column='3') Rationale
+        div(column='2') Status
+        div(column='1') Impact
+        div(column='1') Hide
+      div.sub-item(row ng-repeat="product in products")
+        div(column='1') &nbsp;
+        div(column='2') {{product.product}} <br> {{product.detail}}
+        div(column='2') {{product.type}}
+        div(column='3') {{product.rationale}}
+        div(column='2') {{product.status}}
+        div(column='1') {{product.predictedImpact}}
+        div(column='1') X
