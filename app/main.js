@@ -5,6 +5,6 @@ angular.module('andromeda', [
   require('angular-ui-router'),
   require('angular-material'),
   require('./shared').name,
-  require('./modules').name,
-  require('./config')
-]);
+  require('./modules').name
+])
+.config(require('./config'));
