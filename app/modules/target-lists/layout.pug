@@ -1,157 +1,102 @@
-.target-lists-container
+section.target-lists-page
+  section.hero
+    table
+      tr
+        th.cell-align-left.target-list-account-name-cell Target List
+        th Total depletions
+        th % Trend vs YA
+        th Closed
+        th Total Opportunities
+        th Shared With
+      tr
+        td.cell-align-left
+          h2 Walgreens South Bay
+        td 115600CE
+        td 7.5%
+        td 600
+        td 1200
+        td icon
+      tr
+        td
+          h3.cell-align-left YOU ARE THE OWNER
+      tr
+        td
+          h4.cell-align-left List for all our Walmart Stores
+      tr
+        td(colspan="6")
+          div.clearfix
+            p.edit settings
+            div
+              button.button-sharing Archive List
+              button.button-sharing Delete List
+              button.button-sharing Export List
 
-	//user role + search bar
-	.role-tabs
-	.search
+  section.target-list-filter
+    div(column="2").filter-section.filter-section-left
+      label
+        input(type="checkbox", value="#", checked)
+        | My Accounts only
+      br
+      label
+        input(type="radio", value="#")
+        | Off premise
+      br
+      label
+        input(type="radio", value="#")
+        | On premise
+      br
+      br
+      label  Opportunity Status
+        select
+          option(value="") All
+          option(value="") Targeted
+          option(value="") Closed
+    div(column="10").filter-section.filter-section-right
+      div
+        label Opportunity Type
+          select
+            option(value="") All types
+            option(value="") At risk
+            option(value="") Low velocity
+            option(value="") New placement (Quality)
+            option(value="") New placement (No rebuy)
+            option(value="") Manual
+            option(value="") Done
+      div
+        label Brand/Master SKU
+          input(type="text", placeholder="Type brand name or master SKU")
+      div
+        label Account/Store
+          input(type="text", placeholder="Type account name")
+      div
+        label Distributor
+          input(type="text", placeholder="Type distributor name")
 
-	//target lists section
-	.create-new-target-list
-	.tab.active
-		.target-list-title
-			h2
-			p
-			img
-		.tab-data
-			.img-chart
-			ul
-				li %open
-				li %discussed
-				li %discussed
-				li %closed
-			.total-depletions
-				p
-			.img-avatars
-			.export
-			.import
+      div
+      | more
 
-		.tab
+      button Apply
 
-	//mega filter, with save option
-	select
-		option(value='walmart') Non-buys for Walmart
-		option(value='long-term') Long-term opportunities
-		option(value='circle-k') Circle K list
-		option(value='kirkland') Kirkland Execution gaps
+    section.action.clearfix
+      div.expand-button
+        button Expand All
+      div.action-button
+        button Action
+        button Send TO
+        button Download
+        button Add to Target List
 
-	label
-		input.premise(type='checkbox')
-
-	select.opportunity-type
-		option(value='all') all types
-		hr.dotted
-		option(value='non-buy') Non-buy
-		option(value='no-re-buy') No Re-buy
-		option(value='at-risk') At Risk
-		option(value='low-velocity') Low Velocity
-		option(value='manual') Manual
-			
-	.brand-package
-		input
-
-	.account-store
-		input
-
-	.distributor
-		input
-
-	.product-type
-		label
-			input.priority-packages(type='checkbox')
-		label
-			input.on-feature(type='checkbox')
-		label
-			input.authorized(type='checkbox')
-
-	.store-segmentation
-		button.a
-		button.b
-		button.c
-
-	.trade-channel
-		button.a
-		button.b
-		button.c
-		button.d
-		button.e
-		button.f
-		button.g
-
-	.cbbd-contact
-		input
-
-	.location
-		input
-
-	.apply-filters
-
-	button.save-filter
-
-	//expand + collapse + sort 
-	button.expand.collapse
-	select.sort-type
-		option(value='segmentation') segmentation
-		option(value='depletions') depletions
-		option(value='alphabetically') alphabetically
-		option(value='opportunities') opportunities
-
-	//collapsed mega table
-	table.collapsed
-		tr
-			th
-				input(type='checkbox')
-			th store
-			th address
-			th store number
-			th depletions
-			th depletion trend
-			th segmentation
-			th action
-			th total opps
-		tr
-			td
-				input(type='checkbox')
-			td Walmart
-			td 123 Elm St. San Jose
-			td 3434
-			td 12,542
-			td -0.3%
-			td A
-			td img.thumb
-			td 4
-
-	//expanded mega table
-	table.expanded
-		tr
-			th store
-			th
-				input(type='checkbox')
-			th type
-			th predicted impact
-			th product
-			th rationale
-			th status
-			th action
-		tr
-			td
-				.left
-					input(type='checkbox')
-					walmart
-					address
-					store-number
-				.right
-					depletions
-					depletion-trend
-					segmentation
-					action
-					total-opps
-			td
-				input(type='checkbox')
-			td at risk, low velocity
-			td A - High
-			td Corona LT 12 Pk - 12 oz BT
-			td accounts growing at %
-			td new
-			td
-				img(src='thumb.jpg')
-
-	.pagination
+    section.target-lists
+      ul
+        li(ng-repeat="opportunity in opportunityList")
+          | {{opportunity.store}}
+          | {{opportunity.address}}
+          | {{opportunity.depletionsCYTD}}
+          | {{opportunity.segmentation}}
+          ul.target-list-products
+            li(ng-repeat="targetList in targetList")
+              | {{targetList.product}}
+              | {{targetList.type}}
+              | {{targetList.rationale}}
+              | {{targetList.predictedImpact}}
+              | {{targetList.status}}
