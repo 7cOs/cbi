@@ -1,0 +1,101 @@
+.target-lists-page {
+
+  table {
+    width: 100%;
+  }
+
+  .hero {
+    margin: 5px 0;
+    padding: 10px;
+    background-color: $gray-9;
+  }
+
+  td,
+  th {
+    text-align: center;
+  }
+
+  .cell-align-left {
+    text-align: left;
+  }
+
+  .target-list-account-name-cell {
+    width: 50%;
+  }
+
+  .clearfix {
+    p.edit {
+      float: left;
+    }
+
+    div {
+      float: right;
+      vertical-align: middle;
+    }
+  }
+
+<<<<<<< 68cf6c3ea58eb344133e17f276b9929edc2f2c89
+<<<<<<< 091cde50b6b882cbeebdde6cc360dbeee75be879
+  .clearfix:after {
+    content: '';
+
+    content: '';
+    display: table;
+    clear: both;
+  }
+
+  .target-list-filter {
+    background-color: $gray-9;
+    margin: 5px 0;
+
+    input {
+      margin: 0 8px;
+    }
+
+    select {
+      width: 150px;
+    }
+
+    .filter-section {
+      height: 150px;
+      padding: 10px;
+    }
+
+    .filter-section-left {
+      font-size: 0.75em;
+    }
+
+    .filter-section-right {
+
+      select, input, label {
+        display: block;
+      }
+
+      div {
+        display: inline-block;
+      }
+
+      button {
+        display: block;
+        margin: 20px auto;
+      }
+    }
+  }
+
+  .action {
+    background-color: $gray-9;
+    padding: 10px;
+
+    .expand-button {
+      float: left;
+    }
+
+    .action-button {
+      float: right;
+    }
+  }
+
+  .target-lists {
+    background-color: $white;
+  }
+}
