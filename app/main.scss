@@ -1,19 +1,23 @@
 // Libs
 @import '../node_modules/angular-material/angular-material.scss';
 
-// Base styles
+// Base
 @import './assets/styles/base/normalize';
 @import './assets/styles/base/grid';
 @import './assets/styles/base/variables';
-@import './assets/styles/layout';
-@import './assets/styles/typography';
-@import './assets/styles/nav-bar';
-@import './assets/styles/buttons';
-@import './assets/styles/data-table.scss';
 
-// Module Styles
+// Partials
+@import './assets/styles/partials/layout';
+@import './assets/styles/partials/typography';
+@import './assets/styles/partials/nav-bar';
+@import './assets/styles/partials/buttons';
+@import './assets/styles/partials/data-table.scss';
+@import './assets/styles/partials/lists.scss';
+@import './assets/styles/partials/filters.scss';
+
+// Modules
 @import './modules/**/*.scss';
 
-// Component styles
+// Components
 @import './shared/**/*.scss';
 // @import './components/**/*.scss';

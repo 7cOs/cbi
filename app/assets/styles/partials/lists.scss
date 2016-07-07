@@ -1,0 +1,41 @@
+.styled-list {
+  list-style-type: none;
+
+  div {
+    padding-top: 0.5em;
+    padding-bottom: 0.5em;
+
+    &.products {
+      padding-bottom: 0;
+    }
+  }
+}
+
+.opportunity {
+  border-top: 1px solid $gray-3;
+  padding-top: 0.5em;
+}
+
+.header-row {
+  color: $gray-1;
+  font-size: 0.7em;
+  text-transform: uppercase;
+}
+
+.title-row {
+  background: linear-gradient(to left, $blue 0%, $light-blue-3 100%);
+  color: $white;
+  font-size: 0.7em;
+  text-transform: uppercase;
+}
+
+.sub-item {
+  background: $white;
+  transition: background 300ms ease;
+
+  &:hover {
+    background: $gray-4;
+    cursor: pointer;
+    cursor: hand;
+  }
+}
