@@ -5,9 +5,6 @@ angular.module('andromeda', [
   require('angular-ui-router'),
   require('angular-material'),
   require('./shared').name,
-  require('./modules').name
-]).config(function($mdThemingProvider) {
-  $mdThemingProvider.theme('default')
-    .primaryPalette('grey')
-    .accentPalette('light-blue');
-});
+  require('./modules').name,
+  require('./config')
+]);
