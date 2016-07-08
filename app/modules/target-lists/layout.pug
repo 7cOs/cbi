@@ -18,10 +18,10 @@ section.target-lists-page
         td icon
       tr
         td
-          h3.cell-align-left YOU ARE THE OWNER
+          h3.cell-align-left JASON BOURNE IS THE OWNER
       tr
         td
-          h4.cell-align-left List for all our Walmart Stores
+          h4.cell-align-left List for all our Walgreen stores in the East Bay (San Ramon, San Rafael, Oakland, Berkley).
       tr
         td(colspan="6")
           div.clearfix
@@ -86,17 +86,43 @@ section.target-lists-page
         button Download
         button Add to Target List
 
-    section.target-lists
-      ul
-        li(ng-repeat="opportunity in opportunityList")
-          | {{opportunity.store}}
-          | {{opportunity.address}}
-          | {{opportunity.depletionsCYTD}}
-          | {{opportunity.segmentation}}
-          ul.target-list-products
-            li(ng-repeat="targetList in targetList")
-              | {{targetList.product}}
-              | {{targetList.type}}
-              | {{targetList.rationale}}
-              | {{targetList.predictedImpact}}
-              | {{targetList.status}}
+  section.target-lists
+    ul.styled-list(column="12")
+      li.header-row(row)
+        div(column="1") &nbsp;
+        div(column="2") Store / Number
+        div(column="2") Address
+        div(column="2") Opportunities
+        div(column="2") Depletions CYTD
+        div(column="1") Trend vs YA
+        div(column="1") Segmentation
+        div(column="1") Hide
+      li.opportunity(row ng-repeat="opportunity in opportunityList")
+        div(column="12")
+          div(column="1")
+            input(type="radio")
+          div(column="2") {{opportunity.store}}
+          div(column="2") {{opportunity.address}}
+          div(column="2") 4
+          div(column="2") {{opportunity.depletionsCYTD}}
+          div(column="1") +0.3%
+          div(column="1") {{opportunity.segmentation}}
+          div(column="1") X
+        div(column="12" class="products" ng-class="'{'open : open'}")
+          div.title-row(row)
+            div(column="1") &nbsp;
+            div(column="2") Product
+            div(column="1") Type
+            div(column="5") Rationale
+            div(column="1") Status
+            div(column="1") Predicted Impact
+            div(column="1") &nbsp;
+          div.sub-item(row ng-repeat="targetList in targetList")
+            div(column="1")
+              input(type="radio")
+            div(column="2") {{targetList.product}}
+            div(column="1") {{targetList.type}}
+            div(column="5") {{targetList.rationale}}
+            div(column="1") {{targetList.status}}
+            div(column="1") {{targetList.predictedImpact}}
+            div(column="1") X
