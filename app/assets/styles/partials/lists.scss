@@ -1,8 +1,14 @@
 .styled-list {
   list-style-type: none;
 
-  div {
-    padding-top: 0.5em;
+  .parent-item {
+    padding: 0;
+    outline: 0;
+  }
+
+  .parent-item > div,
+  .sub-item > div {
+    padding-top: 1.5em;
     padding-bottom: 0.5em;
 
     &.products {
@@ -13,7 +19,6 @@
 
 .opportunity {
   border-top: 1px solid $gray-3;
-  padding-top: 0.5em;
 }
 
 .header-row {
@@ -27,6 +32,7 @@
   color: $white;
   font-size: 0.7em;
   text-transform: uppercase;
+  padding: 0.5em 0;
 }
 
 .sub-item {
