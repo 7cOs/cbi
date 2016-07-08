@@ -8,10 +8,9 @@ module.exports =
   .config(function ($stateProvider) {
     $stateProvider
     .state('landing', {
-      url: '',
+      url: '/',
       templateUrl: './app/modules/landing/layout.html',
       controller: 'landingController'
     });
   })
   .controller('landingController', require('./landingController'));
-

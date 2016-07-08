@@ -6,8 +6,5 @@ angular.module('andromeda', [
   require('angular-material'),
   require('./shared').name,
   require('./modules').name
-]).config(function($mdThemingProvider) {
-  $mdThemingProvider.theme('default')
-    .primaryPalette('grey')
-    .accentPalette('light-blue');
-});
+])
+.config(require('./config'));
