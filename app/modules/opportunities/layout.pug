@@ -5,22 +5,25 @@ h1 Opportunities
 
 ul.styled-list(column='12')
   li.header-row(row)
-    div(column='1') &nbsp;
-    div(column='2') Store / Number
-    div(column='2') Address
-    div(column='3') Opportunities
-    div(column='2') Depletions CYTD
-    div(column='1') Trend vs Ya
-    div(column='1') Segmentation
+    div.checkbox-wrapper(ng-click="toggle(opportunity, selected)")
+    div
+      div(column='3') Store / Number
+      div(column='4') Address
+      div(column='2') Opportunities
+      div(column='1') Depletions CYTD
+      div(column='1') Trend vs Ya
+      div(column='1') Segmentation
   li.opportunity(row ng-repeat="opportunity in opportunities")
-    div(column='12' ng-click="getProducts(opportunity.id)")
-      div(column='1') &nbsp;
-      div(column='3') {{opportunity.store}}
-      div(column='4') {{opportunity.address}}
-      div(column='1') {{opportunity.opCount}}
-      div(column='1') {{opportunity.depletionsCYTD}}
-      div(column='1') {{opportunity.depletionTrendVsYA}}
-      div(column='1') {{opportunity.segmentation}}
+    div.parent-item(column='12' ng-click="getProducts(opportunity.id)")
+      div.checkbox-wrapper(ng-click="toggle(opportunity, selected)")
+        md-checkbox(aria-label="Select Item" ng-checked="exists(opportunity, selected)")
+      div
+        div(column='3') {{opportunity.store}}
+        div(column='4') {{opportunity.address}}
+        div(column='2') {{opportunity.opCount}}
+        div(column='1') {{opportunity.depletionsCYTD}}
+        div(column='1') {{opportunity.depletionTrendVsYA}}
+        div(column='1') {{opportunity.segmentation}}
     div(column='12' class="products" ng-class="{'open' : open}")
       div.title-row(row)
         div(column='1') &nbsp;

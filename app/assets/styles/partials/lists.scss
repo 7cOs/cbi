@@ -1,8 +1,15 @@
 .styled-list {
   list-style-type: none;
 
-  div {
-    padding-top: 0.5em;
+  .parent-item {
+    border-top: 1px solid $gray-3;
+    padding: 0;
+    outline: 0;
+  }
+
+  .parent-item > div,
+  .sub-item > div {
+    padding-top: 1.5em;
     padding-bottom: 0.5em;
 
     &.products {
@@ -11,9 +18,16 @@
   }
 }
 
-.opportunity {
-  border-top: 1px solid $gray-3;
-  padding-top: 0.5em;
+.checkbox-wrapper {
+  background: $gray-4;
+  float: left;
+  padding-left: 15px;
+  width: 35px;
+
+  + div {
+    width: calc(100% - 50px);
+    float: right;
+  }
 }
 
 .header-row {
@@ -27,6 +41,7 @@
   color: $white;
   font-size: 0.7em;
   text-transform: uppercase;
+  padding: 0.5em 0;
 }
 
 .sub-item {
