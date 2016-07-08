@@ -5,9 +5,9 @@
   }
 
   .hero {
+    background-color: $gray-9;
     margin: 5px 0;
     padding: 10px;
-    background-color: $gray-9;
   }
 
   td,
@@ -21,23 +21,6 @@
 
   .target-list-account-name-cell {
     width: 50%;
-  }
-
-  .clearfix {
-    p.edit {
-      float: left;
-    }
-
-    div {
-      float: right;
-      vertical-align: middle;
-    }
-  }
-
-  .clearfix:after {
-    content: '';
-    display: table;
-    clear: both;
   }
 
   .target-list-filter {
@@ -79,8 +62,17 @@
   }
 
   .action {
-    background-color: $gray-9;
     padding: 10px;
+
+    p.edit {
+      float: left;
+    }
+
+    div {
+      float: right;
+      vertical-align: middle;
+    }
+
 
     .expand-button {
       float: left;
@@ -89,9 +81,5 @@
     .action-button {
       float: right;
     }
-  }
-
-  .target-lists {
-    background-color: $white;
   }
 }
