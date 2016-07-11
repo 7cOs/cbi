@@ -2,4 +2,12 @@
   background: $gray-4;
   margin-bottom: 1em;
   padding: 1em 2em;
+
+  md-input-container {
+    width: 100%;
+  }
+
+  md-radio-button {
+    margin-top: 10px;
+  }
 }

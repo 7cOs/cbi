@@ -1,7 +1,42 @@
 h1 Opportunities
 
-.filters
-  p Filter block placeholder
+.chips
+  md-chips(ng-model="activeFilters" name="activeFilters" md-max-chips="5")
+    md-chip-template
+      div {{$chip}}
+.filters(column='12')
+  .row
+    div(column='3')
+      label Account Scope
+      md-radio-group(ng-model="filter.accountScope")
+        md-radio-button(value="My Accounts Only" class="md-primary") My Accounts Only
+    div(column='3')
+      label Premise Type
+      md-radio-group(ng-model="filter.premiseType")
+        md-radio-button(value="Off Premise" class="md-primary") Off Premise
+        md-radio-button(value="On Premise" class="md-primary") On Premise
+    div(column='6')
+      label Opportunity Status
+      md-radio-group(ng-model="filter.opportunityStatus")
+        md-radio-button(value="Open" class="md-primary") Open
+        md-radio-button(value="Targeted" class="md-primary") Targeted
+    div(column='3')
+      md-input-container
+        label Opportunity Type
+        md-select(ng-model="filter.opportunity")
+          md-option(ng-repeat="type in opportunityType" value="{{type}}") {{type}}
+    div(column='3')
+      md-input-container
+        label Brand / Master SKU
+        input(ng-model="filter.skuBrand")
+    div(column='3')
+      md-input-container
+        label Account / Store
+        input(ng-model="filter.accountStore")
+    div(column='3')
+      md-input-container
+        label Distributor
+        input(ng-model="filter.distributor")
 
 button.icon.select-all(ng-click="toggleAll()")
   span(ng-if='isChecked()') Un-
