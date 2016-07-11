@@ -19,6 +19,19 @@ module.exports =
     $scope.selected = [];
     $scope.expandedOpportunities = [];
 
+    $scope.activeFilters = ['Filter 1', 'Filter 2', 'Filter 3'];
+    $scope.opportunityType = ['All Types', 'Non-buy', 'At Risk', 'Low Velocity', 'New Placement (Quality)', 'New Placement (No Rebuy)', 'Manual'];
+
+    $scope.filter = {
+      accountScope: '',
+      premiseType: '',
+      opportunityStatus: '',
+      opportunity: '',
+      skuBrand: '',
+      accountStore: '',
+      distributor: ''
+    };
+
     // Add item to array of currently expanded list items
     function expandCallback(item) {
       $scope.expandedOpportunities.push(item);
@@ -30,7 +43,6 @@ module.exports =
       if (index > -1) {
         $scope.expandedOpportunities.splice(index, 1);
       };
-    };
 
     // Check if list item exists and is selected
     function exists(item, list) {
