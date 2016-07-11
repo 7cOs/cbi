@@ -1,16 +1,29 @@
 .styled-list {
   list-style-type: none;
 
-  .parent-item {
+  .list-item {
+    background: $white;
     border-top: 1px solid $gray-3;
+    transition: background 300ms ease;
+
+    &:hover,
+    &.is-expanded {
+      background: $gray-4;
+    }
+
+    &:last-child {
+      border-bottom: 1px solid $gray-3;
+    }
+  }
+
+  .checkbox-sibling {
     padding: 0;
     outline: 0;
   }
 
-  .parent-item > div,
-  .sub-item > div {
+  .cell-parent > div {
     padding-top: 1.5em;
-    padding-bottom: 0.5em;
+    padding-bottom: 1.5em;
 
     &.products {
       padding-bottom: 0;
@@ -21,12 +34,22 @@
 .checkbox-wrapper {
   background: $gray-4;
   float: left;
-  padding-left: 15px;
+  outline: 0;
+  padding: 1.5em 0 1.5em 15px;
   width: 35px;
 
-  + div {
+  &.placeholder {
+    background: none;
+    padding-bottom: 0.5em;
+  }
+
+  + .checkbox-sibling {
     width: calc(100% - 50px);
     float: right;
+  }
+
+  md-checkbox {
+    margin-bottom: 0;
   }
 }
 
@@ -53,4 +76,8 @@
     cursor: pointer;
     cursor: hand;
   }
+}
+
+.pad-cell {
+  padding-left: 50px;
 }

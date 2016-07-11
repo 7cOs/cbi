@@ -71,6 +71,7 @@
     "systemjs": "0.19.27",
     "tsconfig-glob": "^0.4.3",
     "uuid": "2.0.2",
+    "v-accordion": "^1.6.0",
     "zone.js": "0.6.12"
   }
 }
