@@ -1,0 +1,52 @@
+v-pane {
+
+  &.is-expanded {
+
+    > v-pane-header {
+
+      &::after {
+        opacity: 0;
+        transform: rotate(90deg);
+      }
+
+      &::before {
+        transform: rotate(0deg);
+      }
+    }
+
+    > v-pane-content > div {
+      opacity: 1;
+      transform: translate3d(0, 0, 0);
+    }
+  }
+
+  &[disabled] v-pane-header {
+    &::after,
+    &::before {
+      display: none;
+    }
+  }
+}
+
+v-pane-header {
+  position: relative;
+
+  &::after,
+  &::before {
+    background-color: $blue;
+    content: '';
+    display: block;
+    height: 1px;
+    position: absolute;
+    left: 15px;
+    top: 50%;
+    transform-origin: 50% 50%;
+    transition: all 0.25s;
+    width: 20px;
+    will-change: transform;
+  }
+
+  &::before {
+    transform: rotate(-90deg);
+  }
+}

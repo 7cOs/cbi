@@ -3,28 +3,28 @@ h1 Opportunities
 .filters
   p Filter block placeholder
 
-ul.styled-list(column='12')
-  li.header-row(row)
-    div.checkbox-wrapper(ng-click="toggle(opportunity, selected)")
-    div
-      div(column='3') Store / Number
-      div(column='4') Address
+v-accordion.styled-list(multiple="" id="opportunities" column='12')
+  div.header-row(row)
+    div.checkbox-wrapper.placeholder(ng-click="toggle(opportunity, selected)")
+    div.checkbox-sibling
+      div(column='2') Store / Number
+      div(column='5') Address
       div(column='2') Opportunities
       div(column='1') Depletions CYTD
       div(column='1') Trend vs Ya
       div(column='1') Segmentation
-  li.opportunity(row ng-repeat="opportunity in opportunities")
-    div.parent-item(column='12' ng-click="getProducts(opportunity.id)")
-      div.checkbox-wrapper(ng-click="toggle(opportunity, selected)")
-        md-checkbox(aria-label="Select Item" ng-checked="exists(opportunity, selected)")
-      div
-        div(column='3') {{opportunity.store}}
-        div(column='4') {{opportunity.address}}
+  v-pane.list-item(row ng-repeat="opportunity in opportunities" expanded="opportunity.isExpanded")
+    div.checkbox-wrapper(ng-click="toggle(opportunity, selected)")
+      md-checkbox(aria-label="Select Item" ng-checked="exists(opportunity, selected)")
+    v-pane-header.checkbox-sibling(column='12' ng-click="getProducts(opportunity.id)")
+      div.cell-parent
+        div.pad-cell(column='2') {{opportunity.store}}
+        div(column='5') {{opportunity.address}}
         div(column='2') {{opportunity.opCount}}
         div(column='1') {{opportunity.depletionsCYTD}}
         div(column='1') {{opportunity.depletionTrendVsYA}}
         div(column='1') {{opportunity.segmentation}}
-    div(column='12' class="products" ng-class="{'open' : open}")
+    v-pane-content(column='12' class="products" ng-class="{'open' : open}")
       div.title-row(row)
         div(column='1') &nbsp;
         div(column='2') Product
@@ -33,7 +33,7 @@ ul.styled-list(column='12')
         div(column='2') Status
         div(column='1') Impact
         div(column='1') Hide
-      div.sub-item(row ng-repeat="product in products")
+      div.cell-parent.sub-item(row ng-repeat="product in products")
         div(column='1') &nbsp;
         div(column='2') {{product.product}} <br> {{product.detail}}
         div(column='2') {{product.type}}

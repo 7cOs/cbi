@@ -1,5 +1,6 @@
 // Libs
 @import '../node_modules/angular-material/angular-material.scss';
+@import '../node_modules/v-accordion/src/vAccordion/styles/vAccordion.scss';
 
 // Base
 @import './assets/styles/base/normalize';
@@ -15,6 +16,7 @@
 @import './assets/styles/partials/data-table.scss';
 @import './assets/styles/partials/lists.scss';
 @import './assets/styles/partials/filters.scss';
+@import './assets/styles/partials/accordion.scss';
 
 // Modules
 @import './modules/**/*.scss';

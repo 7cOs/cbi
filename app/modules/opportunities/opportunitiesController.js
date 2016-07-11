@@ -14,6 +14,10 @@ module.exports =
     $scope.items = [];
     $scope.selected = [];
 
+    $scope.$on('opportunities:onReady', function () {
+      $scope.opportunities[0].isExpanded = true;
+    });
+
     function exists(item, list) {
       return list.indexOf(item) > -1;
     };
