@@ -2,6 +2,8 @@
 
 module.exports =
   function opportunitiesController($scope, $log, opportunitiesService) {
+
+    // Map public methods to scope
     $scope.toggle = toggle;
     $scope.exists = exists;
     $scope.isChecked = isChecked;
@@ -9,16 +11,20 @@ module.exports =
     $scope.expandCallback = expandCallback;
     $scope.collapseCallback = collapseCallback;
 
+    // Get opportunities and products data
     $scope.opportunities = opportunitiesService.get('opportunities');
     $scope.products = opportunitiesService.get('products');
 
+    // Set up arrays for tracking selected and expanded list items
     $scope.selected = [];
     $scope.expandedOpportunities = [];
 
+    // Add item to array of currently expanded list items
     function expandCallback(item) {
       $scope.expandedOpportunities.push(item);
     };
 
+    // Remove item from array of currently expanded list items
     function collapseCallback(item) {
       var index = $scope.expandedOpportunities.indexOf(item);
       if (index > -1) {
@@ -26,14 +32,17 @@ module.exports =
       };
     };
 
+    // Check if list item exists and is selected
     function exists(item, list) {
       return list.indexOf(item) > -1;
     };
 
+    // Check if all items are selected
     function isChecked() {
       return $scope.selected.length === $scope.opportunities.length;
     };
 
+    // Select or deselect all list items
     function toggleAll() {
       if ($scope.selected.length === $scope.opportunities.length) {
         $scope.selected = [];
@@ -42,6 +51,7 @@ module.exports =
       }
     };
 
+    // Select or deselect individual list item
     function toggle(item, list) {
       var idx = list.indexOf(item);
       if (idx > -1) {
