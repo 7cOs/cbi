@@ -1,11 +1,70 @@
+button {
+  background: $white;
+  border: 1px solid $gray-4;
+  color: $blue;
+  font-size: 0.7em;
+  font-weight: $medium;
+  margin-bottom: 2em;
+  outline: 0;
+  padding: 1.5em;
+  position: relative;
+  text-transform: uppercase;
+
+  &.icon {
+    padding-right: 3em;
+
+    &:before {
+      background-position: 0 center;
+      background-repeat: no-repeat;
+      background-size: 15px;
+      content: '';
+      display: block;
+      height: 15px;
+      position: absolute;
+      right: 1em;
+      top: calc(50% - 8px);
+      width: 15px;
+    }
+  }
+
+  &.expand-all,
+  &.collapse-all {
+
+    &:before {
+      background-image: url('../assets/img/icons/btn-expand-collapse.svg');
+    }
+  }
+
+  &.select-all {
+
+    &:before {
+      background-image: url('../assets/img/icons/btn-select-all.svg');
+    }
+  }
+
+  &[disabled] {
+    color: $gray-2;
+
+    &.expand-all,
+    &.collapse-all {
+
+      &:before {
+        background-image: url('../assets/img/icons/btn-expand-collapse-disabled.svg');
+      }
+    }
+  }
+}
+
 @mixin button-sharing-master {
-  font-family: $work-sans;
-  font-weight: $semibold;
-  padding: 15px 15px 30px;
   border: none;
   box-shadow: none;
-  width: 144px;
+  font-family: $work-sans;
+  font-size: 1em;
+  font-weight: $semibold;
   height: 40px;
+  padding: 15px 15px 30px;
+  text-transform: none;
+  width: 144px;
 }
 
 .button-sharing {
@@ -19,5 +78,5 @@
   @include button-sharing-master;
   color: $gray-8;
   background-color: $gray-10;
-  border-bottom: 4px solid #DADBDE;
+  border-bottom: 4px solid $gray-11;
 }

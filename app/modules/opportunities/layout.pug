@@ -3,7 +3,13 @@ h1 Opportunities
 .filters
   p Filter block placeholder
 
-v-accordion.styled-list(multiple="" id="opportunities" column='12')
+button.icon.select-all(ng-click="toggleAll()")
+  span(ng-if='isChecked()') Un-
+  | Select All
+button.icon.expand-all(ng-click="accordion.expandAll()" ng-disabled="expandedOpportunities.length === opportunities.length") Expand All
+button.icon.collapse-all(ng-click="accordion.collapseAll()" ng-disabled="expandedOpportunities.length < 2") Collapse All
+
+v-accordion.styled-list(multiple="" id="opportunities" control="accordion" onexpand="expandCallback(item)" oncollapse="collapseCallback(item)" column='12')
   div.header-row(row)
     div.checkbox-wrapper.placeholder(ng-click="toggle(opportunity, selected)")
     div.checkbox-sibling
@@ -16,7 +22,7 @@ v-accordion.styled-list(multiple="" id="opportunities" column='12')
   v-pane.list-item(row ng-repeat="opportunity in opportunities" expanded="opportunity.isExpanded")
     div.checkbox-wrapper(ng-click="toggle(opportunity, selected)")
       md-checkbox(aria-label="Select Item" ng-checked="exists(opportunity, selected)")
-    v-pane-header.checkbox-sibling(column='12' ng-click="getProducts(opportunity.id)")
+    v-pane-header.checkbox-sibling(column='12')
       div.cell-parent
         div.pad-cell(column='2') {{opportunity.store}}
         div(column='5') {{opportunity.address}}
