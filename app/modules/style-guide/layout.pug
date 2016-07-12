@@ -86,9 +86,6 @@ div(row)
             .color-swatch.gray-10(column='2')
               div
               p $gray-10
-            .color-swatch.magenta(column='2')
-              div
-              p $magenta
             .color-swatch.light-blue(column='2')
               div
               p $light-blue
@@ -98,11 +95,21 @@ div(row)
             .color-swatch.red(column='2')
               div
               p $red
+            .color-swatch.green(column='2')
+              div
+              p $green
     section
       div(row)
         h2 Buttons
-        button.button-sharing Sharing
-        button.button-sharing-grayed-out Sharing
+
+        h3 Default buttons
+        button Default
+        button(disabled) Disabled
+        button.icon.expand-all Icon
+        button(disabled).icon.expand-all Icon Disabled
+        h3 Action buttons
+        button.btn-action Action
+        button(disabled).btn-action Disabled
 
     section
       div(row)

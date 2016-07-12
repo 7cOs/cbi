@@ -60,4 +60,14 @@ module.exports =
         list.push(item);
       }
     };
+
+    // Set positive or negative label for trend values
+    $scope.opportunities.forEach(function(item) {
+      var trend = item.depletionTrendVsYA;
+      if (trend > 0) {
+        item.positiveValue = true;
+      } else if (trend < 0) {
+        item.negativeValue = true;
+      }
+    });
   };

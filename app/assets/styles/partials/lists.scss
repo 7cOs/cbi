@@ -4,6 +4,7 @@
   .list-item {
     background: $white;
     border-top: 1px solid $gray-3;
+    font-size: 1.1em;
     transition: background 300ms ease;
 
     &:hover,
@@ -27,6 +28,10 @@
 
     &.products {
       padding-bottom: 0;
+    }
+
+    &.regional-status {
+      padding: 0;
     }
   }
 }
@@ -69,7 +74,15 @@
 
 .sub-item {
   background: $white;
+  color: $gray-1;
+  font-size: 0.75em;
+  position: relative;
   transition: background 300ms ease;
+  border-bottom: 1px solid $gray-4;
+
+  &:last-child {
+    border-bottom: 0;
+  }
 
   &:hover {
     background: $gray-4;
