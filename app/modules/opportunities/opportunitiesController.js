@@ -2,40 +2,57 @@
 
 module.exports =
   function opportunitiesController($scope, $log, opportunitiesService) {
-    $scope.getProducts = getProducts;
+
+    // Map public methods to scope
     $scope.toggle = toggle;
     $scope.exists = exists;
-    $scope.isIndeterminate = isIndeterminate;
     $scope.isChecked = isChecked;
+    $scope.toggleAll = toggleAll;
+    $scope.expandCallback = expandCallback;
+    $scope.collapseCallback = collapseCallback;
 
+    // Get opportunities and products data
     $scope.opportunities = opportunitiesService.get('opportunities');
     $scope.products = opportunitiesService.get('products');
 
-    $scope.items = [];
+    // Set up arrays for tracking selected and expanded list items
     $scope.selected = [];
+    $scope.expandedOpportunities = [];
 
-    $scope.$on('opportunities:onReady', function () {
-      $scope.opportunities[0].isExpanded = true;
-    });
+    // Add item to array of currently expanded list items
+    function expandCallback(item) {
+      $scope.expandedOpportunities.push(item);
+    };
 
+    // Remove item from array of currently expanded list items
+    function collapseCallback(item) {
+      var index = $scope.expandedOpportunities.indexOf(item);
+      if (index > -1) {
+        $scope.expandedOpportunities.splice(index, 1);
+      };
+    };
+
+    // Check if list item exists and is selected
     function exists(item, list) {
       return list.indexOf(item) > -1;
     };
 
-    function isIndeterminate() {
-      return ($scope.selected.length !== 0 && $scope.selected.length !== $scope.items.length);
-    };
-
+    // Check if all items are selected
     function isChecked() {
-      return $scope.selected.length === $scope.items.length;
+      return $scope.selected.length === $scope.opportunities.length;
     };
 
-    function getProducts(id) {
-      $log.info('ID is ' + id);
+    // Select or deselect all list items
+    function toggleAll() {
+      if ($scope.selected.length === $scope.opportunities.length) {
+        $scope.selected = [];
+      } else if ($scope.selected.length === 0 || $scope.selected.length > 0) {
+        $scope.selected = $scope.opportunities.slice(0);
+      }
     };
 
+    // Select or deselect individual list item
     function toggle(item, list) {
-      $log.info('Item is ' + item);
       var idx = list.indexOf(item);
       if (idx > -1) {
         list.splice(idx, 1);
