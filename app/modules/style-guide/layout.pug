@@ -12,6 +12,22 @@ div(column='12')
         h2 This is a h2 tag
         h3 This is a h3 tag
         h4 This is a h4 tag
+        h5 This is a h5 tag
+
+      div(row)
+        section(column="6")
+          h3.section-title Labels
+          label This is a label
+          label.bold This is a bold label
+          a(href="#")
+            label This is a linked label
+
+        section(column="6")
+          h3.section-title Numbers
+          //- 'larger' class is for style guide only
+          div(class="larger value positive") +5<span>%</span>
+          div(class="larger value negative") -3<span>%</span>
+          div(class="larger value") 2<span>%</span>
 
       section
         h3.section-title Body Copy
