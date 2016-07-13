@@ -1,0 +1,29 @@
+.chips {
+
+  .md-chips {
+
+    md-chip {
+      background: $gray-1;
+      border-radius: 3px;
+      color: $gray-9;
+
+      ._md-chip-remove-container {
+        left: 0;
+      }
+    }
+
+    md-icon {
+      color: $gray-9;
+    }
+  }
+
+  .md-chips:not(.md-readonly) md-chip:not(.md-readonly) {
+    padding-left: 22px;
+    padding-right: 0;
+  }
+
+  .md-chips:not(.md-readonly) md-chip:not(.md-readonly) ._md-chip-content {
+    padding-left: 8px;
+    padding-right: 8px;
+  }
+}

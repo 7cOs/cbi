@@ -1,7 +1,52 @@
-h1 Opportunities
+.opportunity-header(column='12')
+  .row
+    h1(column='9') Opportunities
+    .saved-filter-select(column='3')
+      md-input-container
+        label Saved Filters
+        md-select(ng-model="savedFilterSelect")
+          md-option(ng-repeat="filter in userData.savedFilters" value="{{filter.name}}") {{filter.name}}
 
-.filters
-  p Filter block placeholder
+.chips
+  md-chips(ng-model="chip.model" name="Active Filters" md-on-remove="chip.methods.removeFromFilterObj($chip)")
+    input(disabled="true")
+    md-chip-template
+      div {{$chip.name}}
+.filters(column='12')
+  .row(class='clearfix')
+    div(class='more-filters')
+      a More Filters
+    div(column='3')
+      label Account Scope
+      md-checkbox(ng-model="filter.selected.accountScope" aria-label="My Accounts" ng-click="chip.methods.updateAccountScopeChip()") My Accounts Only
+    div(column='3')
+      label Premise Type
+      md-radio-group(ng-model="filter.selected.premiseType")
+        md-radio-button(ng-repeat="p in filter.premises" class="md-primary" ng-value="p.name" aria-label="p.name" ng-click="chip.methods.addChip(p.name, 'premiseType', true)") {{p.name}}
+    div(column='6')
+      label Opportunity Status
+      md-radio-group(ng-model="filter.selected.opportunitiesStatus")
+        md-radio-button(ng-repeat="o in filter.opportunitiesStatus" class="md-primary" ng-value="o.name" aria-label="o.name" ng-click="chip.methods.addChip(o.name, 'opportunitiesStatus', true)") {{o.name}}
+  .row
+    div(column='3')
+      md-input-container
+        label Opportunity Type
+        md-select(ng-model="filter.selected.opportunitiesTypes" md-on-close="chip.methods.addChip(filter.selected.opportunitiesTypes, 'opportunitiesTypes', false)")
+          md-option(ng-repeat="type in filter.opportunitiesTypes" value="{{type.name}}") {{type.name}}
+    div(column='3')
+      md-autocomplete(md-selected-item="selectedItem" md-search-text="filter.brandSearchText" md-items="brand in filter.brands | filter:filter.brandSearchText" md-item-text="brand.name" md-min-length="1" md-floating-label="Brand / Master SKU" md-selected-item-change="chip.methods.addChip(brand.name)")
+        md-item-template
+          div(md-highlight-text="filter.brandSearchText" md-highlight-flags="^i") {{brand.name}} - {{brand.size}}
+    div(column='3')
+      md-autocomplete(md-search-text="filter.accountSearchText" md-items="account in filter.accounts | filter:filter.accountSearchText" md-item-text="account.name" md-floating-label="Account / Store" md-selected-item-change="chip.methods.addChip(account.name)")
+        md-item-template
+          div(md-highlight-text="filter.accountSearchText" md-highlight-flags="^i") {{account.name}} - {{account.subAccount}}
+    div(column='3')
+      md-autocomplete(md-search-text="filter.distributorSearchText" md-items="distributor in filter.distributors | filter:filter.distributorSearchText" md-item-text="distributor.name" md-floating-label="Distributor" md-selected-item-change="chip.methods.addChip(distributor.name)")
+        md-item-template
+          div(md-highlight-text="filter.distributorSearchText" md-highlight-flags="^i") {{distributor.name}}
+    div(column='12' class='apply-filters')
+      button(value='Apply Filters' type="button" class="button-sharing") Apply Filters
 
 button.icon.select-all(ng-click="toggleAll()")
   span(ng-if='isChecked()') Un-

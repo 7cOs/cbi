@@ -1,0 +1,20 @@
+/*Checked*/
+md-radio-button:not([disabled]).md-primary.md-checked ._md-off {
+  border-color: $blue;
+}
+
+md-radio-button:not([disabled]).md-primary.md-checked ._md-on {
+  background-color: $blue;
+}
+
+md-checkbox ._md-icon {
+  border-radius: 50%;
+}
+
+md-checkbox.md-checked ._md-icon {
+  background-color: $blue;
+}
+
+md-checkbox.md-checked ._md-icon:after {
+  border-color: $gray-4;
+}
