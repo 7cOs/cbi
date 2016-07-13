@@ -10,10 +10,29 @@ module.exports =
     $scope.toggleAll = toggleAll;
     $scope.expandCallback = expandCallback;
     $scope.collapseCallback = collapseCallback;
-    $scope.addChip = addChip;
-    $scope.removeChip = removeChip;
-    $scope.updateAccountScopeChip = updateAccountScopeChip;
-    $scope.removeFromFilterObj = removeFromFilterObj;
+    // Chip Model
+    $scope.chip = {
+      methods: {
+        addChip: addChip,
+        removeChip: removeChip,
+        updateAccountScopeChip: updateAccountScopeChip,
+        removeFromFilterObj: removeFromFilterObj
+      },
+      model: []
+    };
+    // Filter Model
+    $scope.filter = {
+      opportunitiesTypes: opportunitiesService.get('opportunitiesTypes'),
+      opportunitiesStatus: opportunitiesService.get('opportunitiesStatus'),
+      brands: opportunitiesService.get('brands'),
+      accounts: opportunitiesService.get('accounts'),
+      distributors: opportunitiesService.get('distributors'),
+      premises: opportunitiesService.get('premises'),
+      selected: {
+        accountScope: false,
+        opportunitiesTypes: ''
+      }
+    };
 
     // Get opportunities and products data
     $scope.opportunities = opportunitiesService.get('opportunities');
@@ -22,29 +41,6 @@ module.exports =
     // Set up arrays for tracking selected and expanded list items
     $scope.selected = [];
     $scope.expandedOpportunities = [];
-
-    // Static Models - Most are used for ng-repeats on md-components
-    $scope.premises = [{name: 'On Premise'}, {name: 'Off Premise'}];
-    $scope.opportunityStatus = [{name: 'Open'}, {name: 'Targeted'}];
-    $scope.opportunityType = ['All Types', 'Non-buy', 'At Risk', 'Low Velocity', 'New Placement (Quality)', 'New Placement (No Rebuy)', 'Manual'];
-    $scope.brands = [
-      {name: 'Corona Extra', size: '12 ounce Bottle'},
-      {name: 'Corona Extra', size: '12 ounce Can(s)'},
-      {name: 'Corona Light', size: '12 ounce Bottle'},
-      {name: 'Corona Light', size: '12 ounce Can(s)'}
-    ];
-    $scope.accounts = [
-      {name: 'Walmart', subAccount: 'North East'},
-      {name: 'Walmart', subAccount: 'West'},
-      {name: 'Walmart', subAccount: 'South'},
-      {name: 'Walmart', subAccount: 'East'}
-    ];
-    $scope.distributors = [
-      {name: 'Famous James\'s House of Juniper'},
-      {name: 'Famous Will\'s House of Whiskey'},
-      {name: 'Famous Eric\'s House of Eggnog'},
-      {name: 'Famous RJ\'s House of Beer'}
-    ];
 
     // Simulated returned user data to show saved filters
     $scope.userData = {
@@ -57,20 +53,12 @@ module.exports =
       }]
     };
 
-    // Dynamic Models
-    // Filter Model
-    $scope.filter = {
-      accountScope: false
-    };
-    // Chips model
-    $scope.activeFilters = [];
-
+    // ///////////////////////////////////////////////////////// Public Methods
     // Add item to array of currently expanded list items
     function expandCallback(item) {
       $scope.expandedOpportunities.push(item);
     };
 
-    // Public
     // Remove item from array of currently expanded list items
     function collapseCallback(item) {
       var index = $scope.expandedOpportunities.indexOf(item);
@@ -118,11 +106,12 @@ module.exports =
       }
     });
 
+    // ///////////////////////////////////////////////////////// Chip Methods
     // Add a chip
     function addChip(chip, type, onlyOneAllowed) {
-      if (chip.length > 0) {
-        if (onlyOneAllowed) $scope.removeChip(type);
-        $scope.activeFilters.push({
+      if (chip) {
+        if (onlyOneAllowed) $scope.chip.methods.removeChip(type);
+        $scope.chip.model.push({
           name: chip,
           type: type
         });
@@ -131,9 +120,9 @@ module.exports =
 
     // Remove a chip
     function removeChip(type) {
-      for (var i = 0; i < $scope.activeFilters.length; i++) {
-        if ($scope.activeFilters[i].type === type) {
-          $scope.activeFilters.splice(i, 1);
+      for (var i = 0; i < $scope.chip.model.length; i++) {
+        if ($scope.chip.model[i].type === type) {
+          $scope.chip.model.splice(i, 1);
           break;
         }
       }
@@ -141,13 +130,14 @@ module.exports =
 
     // Add or remove the account scope chip
     function updateAccountScopeChip() {
-      $scope.filter.accountScope === true ? $scope.removeChip('accountScope') : $scope.addChip('My Accounts Only', 'accountScope', true);
-    }
+      $scope.filter.selected.accountScope === true ? $scope.chip.methods.removeChip('accountScope') : $scope.chip.methods.addChip('My Accounts Only', 'accountScope', true);
+    };
 
     // Update model when you click on the X on the chip
     function removeFromFilterObj(chip) {
-      $scope.filter[chip.type] = false;
-    }
+      if (chip.type) $scope.filter.selected[chip.type] = false;
+    };
+    // ///////////////////////////////////////////////////////// End Chip Methods
 
     // To Do: Create a better filter for brands and accounts
     /* function querySearch(query) {
