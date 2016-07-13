@@ -59,6 +59,7 @@ module.exports =
       $scope.expandedOpportunities.push(item);
     };
 
+    // Public
     // Remove item from array of currently expanded list items
     function collapseCallback(item) {
       var index = $scope.expandedOpportunities.indexOf(item);
