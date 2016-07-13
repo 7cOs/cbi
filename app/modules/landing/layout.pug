@@ -1,12 +1,127 @@
-div(row)
-  h2 Landing
-  div
-    a(ui-sref="style-guide") Style Guide
-  div
-    a(ui-sref="accounts") Accounts
-  div
-    a(ui-sref="opportunities") Opportunities
-  div
-    a(ui-sref="scorecards") Scorecards
-  div
-    a(ui-sref="target-lists") Target Lists
+section(row).landing-page
+  h1 Good afternoon, James
+
+  section.landing-page-data(column="12")
+    section.my-performance(column="8")
+      div(row)
+        h2 My Performance
+        div.depletions(column="4")
+          table
+            tr
+              th(colspan=2)
+                h4 Depletions FYTD
+            tr
+              td.section-header CE
+              td &nbsp;
+            tr
+              td
+                h3 273400
+              td.center
+                h3 +6.4%
+        div.distribution(column="8")
+          table
+            tr
+              th(colspan=3)
+                h4 Off-Premise Distribution L90
+              th.section-header % Trend vs YA
+            tr
+              td.section-header Simple
+              td &nbsp;
+              td.section-header Effective
+              td &nbsp;
+            tr
+              td
+                h3 3017
+              td.center
+                h3 +7.5%
+              td
+                h3 6511
+              td.center
+                h3 -2.3%
+      p.action-item #[a(href="#") View Details &#9654;]
+
+      section(row)
+        div.target-lists.clearfix
+          p.action-item #[a(href="#") View All &#9654;]
+          md-tabs(md-dynamic-height='' md-border-bottom)
+            md-tab(label='My Target List')
+              md-content.md-padding
+                div(row).target-list-count-container
+                  div(column="4 +6").target-list-count
+                    p(column="6").section-header.closed closed
+                    p(column="6").section-header opportunities
+                div(row).target-list
+                  ul
+                    li
+                      div(column="8")
+                        h3 California - C Stores
+                        p(column="4").target-list-info &#9746; 4 members
+                        p(column="4").target-list-info One Minute Ago
+                      div(column="4")
+                        h4(column="6").closed 520
+                        h4(column="6") 2251
+                      md-progress-linear(md-mode="determinate" value="75")
+                    li
+                      div(column="8")
+                        h3 California - C Stores
+                        p(column="4").target-list-info &#9746; 4 members
+                        p(column="4").target-list-info One Minute Ago
+                      div(column="4")
+                        h4(column="6").closed 320
+                        h4(column="6") 2251
+                      md-progress-linear(md-mode="determinate" value="55")
+                    li
+                      div(column="8")
+                        h3 California - C Stores
+                        p(column="4").target-list-info Private
+                        p(column="4").target-list-info One Minute Ago
+                      div(column="4")
+                        h4(column="6").closed 2987
+                        h4(column="6") 2251
+                      md-progress-linear(md-mode="determinate" value="95")
+
+            md-tab(label='Shared with Me')
+              md-content.md-padding
+                div(column="4 +8")-count
+                  p(column="6").closed closed
+                  p(column="6") opportunities
+                div
+                  ul.target.list
+                    li
+                      div(column="8")
+                        h3 Portland - Pinball Bar
+                        p.target-list-info &#9746; 4 members One Minute Ago
+                      div(column="4")
+                        h4(column="6").closed 520
+                        h4(column="6") 2251
+
+    section.opportunities(column="4")
+      h2 Opportunities
+      h4 New & Saved Filters
+      md-input-container
+        label Select a Saved Filter
+        md-select(ng-model="")
+          md-option(value="") One
+          md-option(value="") Two
+      md-input-container
+        label Opportunity Type
+        br
+        br
+        label Show All Types
+        md-select(ng-model="")
+          md-option(value="") This
+          md-option(value="") That
+      md-input-container
+        label Brand package
+        input(ng-model="")
+      md-input-container
+        label Account / Store
+        input(ng-model="")
+      md-input-container
+        label Distributor
+        input(ng-model="")
+      md-input-container
+        md-radio-group
+            md-radio-button On Premise
+            md-radio-button Off Premise
+      md-button.md-primary Find Opportunities

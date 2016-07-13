@@ -1,0 +1,130 @@
+.landing-page {
+  background: $body-bg;
+
+  .landing-page-data {
+    padding: 0;
+
+    .my-performance {
+      table {
+        width: 100%;
+
+        h4 {
+          text-align: left;
+          margin-top: 1em;
+          margin-bottom: 1em;
+        }
+      }
+
+      h3 {
+        margin: 0.75em 0;
+      }
+
+      label {
+        float: right;
+        padding: 15px;
+      }
+
+      td {
+        // TODO This isn't working quite right...
+        border-collapse: collapse;
+        background-color: $white;
+        border: 1px solid $white;
+
+        &.center {
+          text-align: center;
+        }
+      }
+
+      .action-item {
+        text-align: right;
+      }
+
+      .target-lists {
+        position: relative;
+
+        h3 {
+          color: $blue;
+        }
+
+        h4 {
+          text-align: center;
+        }
+
+        md-tabs {
+          overflow: inherit;
+          margin-right: 15px;
+        }
+
+        .md-tab.md-active {
+          background-color: $body-bg;
+          border: 1px solid $gray-9;
+          box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+        }
+
+        md-tabs-wrapper {
+          border-bottom: 1px solid $gray-9;
+        }
+
+        ._md-bar {
+          background-color: $yellow;
+        }
+
+        .md-padding {
+          background: $body-bg;
+          padding-top: 0;
+        }
+
+        a {
+          margin: 0;
+          position: absolute;
+          left: 87%;
+        }
+
+        .target-list-count-container {
+          background: $body-bg;
+
+          .target-list-count {
+
+            float: right;
+            padding-bottom: 10px;
+            background: $body-bg;
+
+            p {
+              display: inline;
+              font-size: 0.85em;
+              text-align: center;
+            }
+          }
+        }
+
+        .target-list {
+          background: $white;
+
+          ul {
+            -webkit-padding-start: 0;
+
+            div {
+              margin-bottom: 20px;
+            }
+          }
+        }
+
+        .closed {
+          color: $yellow;
+        }
+      }
+    }
+
+    .opportunities {
+      background-color: $gray-4;
+
+      md-input-container.select {
+        display: block;
+      }
+
+      md-radio-button {
+        display: inline-block;
+      }
+    }
+  }
+}
