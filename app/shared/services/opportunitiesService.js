@@ -69,6 +69,41 @@ module.exports =
         {id: 3, product: 'Pacifico', detail: '12 Pk -12 oz BT', type: 'Non-buy', rationale: 'Similar <class of trade> accounts, currently growing SKU at <X%>', status: 'new', predictedImpact: 'low'},
         {id: 4, product: 'Negra Modelo', detail: '12 Pk -12 oz BT', type: 'Low Velocity', rationale: 'Similar <class of trade> accounts, currently growing SKU at <X%>', status: 'new', predictedImpact: 'medium'},
         {id: 5, product: 'Corona LT', detail: '12 Pk -12 oz BT', type: 'Low Velocity', rationale: 'Similar <class of trade> accounts, currently growing SKU at <X%>', status: 'new', predictedImpact: 'low'}
+      ],
+      opportunitiesTypes: [
+        {name: 'All Types'},
+        {name: 'Non-buy'},
+        {name: 'At Risk'},
+        {name: 'Low Velocity'},
+        {name: 'New Placement (Quality)'},
+        {name: 'New Placement (No Rebuy)'},
+        {name: 'Manual'}
+      ],
+      opportunitiesStatus: [
+        {name: 'Open'},
+        {name: 'Targeted'}
+      ],
+      premises: [
+        {name: 'On Premise'},
+        {name: 'Off Premise'}
+      ],
+      brands: [
+        {name: 'Corona Extra', size: '12 ounce Bottle'},
+        {name: 'Corona Extra', size: '12 ounce Can(s)'},
+        {name: 'Corona Light', size: '12 ounce Bottle'},
+        {name: 'Corona Light', size: '12 ounce Can(s)'}
+      ],
+      accounts: [
+        {name: 'Walmart', subAccount: 'North East'},
+        {name: 'Walmart', subAccount: 'West'},
+        {name: 'Walmart', subAccount: 'South'},
+        {name: 'Walmart', subAccount: 'East'}
+      ],
+      distributors: [
+        {name: 'Famous James\'s House of Wine'},
+        {name: 'Famous Will\'s House of Whiskey'},
+        {name: 'Famous Eric\'s House of Everclear'},
+        {name: 'Famous RJ\'s House of Beer'}
       ]
     };
 
