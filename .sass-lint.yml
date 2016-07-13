@@ -16,7 +16,7 @@ rules:
     - 2
     -
       convention: hyphenatedlowercase
-      allow-leading-underscore: false
+      allow-leading-underscore: true
   empty-line-between-blocks:
     - 2
     - include: true
