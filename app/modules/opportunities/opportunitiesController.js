@@ -68,19 +68,16 @@ module.exports =
     // Add item to array of currently expanded list items
     function expandCallback(item) {
       $scope.expandedOpportunities.push(item);
-    }
-
-    // Public
-    function exists(item, list) {
-      return list.indexOf(item) > -1;
     };
 
+    // Public
     // Remove item from array of currently expanded list items
     function collapseCallback(item) {
       var index = $scope.expandedOpportunities.indexOf(item);
       if (index > -1) {
         $scope.expandedOpportunities.splice(index, 1);
       };
+    };
 
     // Check if list item exists and is selected
     function exists(item, list) {
