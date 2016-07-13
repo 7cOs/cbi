@@ -19,6 +19,7 @@
     position: relative;
     top: $top;
     transform: rotate($rotation);
+    transition: all 0.5s;
     width: $width;
     vertical-align: middle;
   }

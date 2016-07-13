@@ -31,7 +31,8 @@ module.exports =
       selected: {
         accountScope: false,
         opportunitiesTypes: ''
-      }
+      },
+      expanded: false
     };
 
     // Get opportunities and products data
