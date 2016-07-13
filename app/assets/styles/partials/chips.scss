@@ -7,16 +7,8 @@
       border-radius: 3px;
       color: $gray-9;
 
-      //overwrite default chip position -- SASS Lint doesn't like the class name: `_md-chip-content`
-      div {
-        &:nth-child(1) {
-          padding-left: 8px;
-          padding-right: 8px;
-        }
-
-        &:nth-child(2) {
-          left: 0;
-        }
+      ._md-chip-remove-container {
+        left: 0;
       }
     }
 
@@ -28,5 +20,10 @@
   .md-chips:not(.md-readonly) md-chip:not(.md-readonly) {
     padding-left: 22px;
     padding-right: 0;
+  }
+
+  .md-chips:not(.md-readonly) md-chip:not(.md-readonly) ._md-chip-content {
+    padding-left: 8px;
+    padding-right: 8px;
   }
 }

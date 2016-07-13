@@ -1,13 +1,56 @@
 .filters {
   background: $gray-4;
   margin-bottom: 1em;
+  font-size: 12px;
   padding: 1em 2em;
+  position: relative;
+
+  .apply-filters {
+    button {
+      display: block;
+      margin: 0 auto;
+    }
+  }
+
+  .more-filters {
+    position: absolute;
+    right: 10px;
+    top: 10px;
+
+    &:hover {
+      cursor: pointer;
+    }
+  }
+
+  label {
+    display: block;
+    width: 100%;
+  }
 
   md-input-container {
     width: 100%;
   }
 
+  md-checkbox {
+    width: 100%;
+  }
+
   md-radio-button {
+    float: left;
+    min-width: 115px;
+
+    _md-label {
+      margin-left: 25px;
+    }
+  }
+
+  md-radio-button,
+  md-checkbox {
     margin-top: 10px;
   }
+
+  md-option {
+    text-overflow: ellipsis;
+  }
+
 }
