@@ -73,7 +73,7 @@ v-accordion.styled-list(multiple="" id="opportunities" control="accordion" onexp
         div.address(column='4') {{opportunity.store.address}} <br><a href="#">Store Summary</a>
         div(column='2') {{opportunity.opCount}} <span class="supporting-text">({{opportunity.impact}} high)</span>
         div(column='1') {{opportunity.depletionsCYTD}}
-        div(column='1' ng-class="{'positive' : opportunity.positiveValue, 'negative' : opportunity.negativeValue}") <span ng-if="opportunity.positiveValue">+</span>{{opportunity.depletionTrendVsYA}}%
+        div(column='1' class="value" ng-class="{'positive' : opportunity.positiveValue, 'negative' : opportunity.negativeValue}") <span ng-if="opportunity.positiveValue">+</span>{{opportunity.depletionTrendVsYA}}<span>%</span>
         div(column='1') {{opportunity.store.segmentation}}
     v-pane-content(column='12' class="products" ng-class="{'open' : open}")
       div.title-row(row)

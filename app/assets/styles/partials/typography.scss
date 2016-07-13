@@ -4,15 +4,16 @@ $rajdhani: 'Rajdhani', Arial, sans-serif;
 $light: 300; // Work Sans only
 $regular: 400; // Work Sans & Rajdhani
 $medium: 600; // Work Sans only
-$semibold: 700; // Rajdhani only
+$semibold: 600; // Rajdhani only
+$bold: 700; // Rajdhani only
 
 ::selection {
   background: $magenta;
   color: $white;
 }
 
-button, select, html, textarea, input {
-  color: $gray-2;
+button, select, html, textarea, input, p {
+  color: $gray-3;
   font-family: $work-sans;
   font-size: 1em;
   font-weight: $regular;
@@ -23,12 +24,14 @@ button, select, html, textarea, input {
   }
 }
 
-a {
+a,
+a label {
   color: $blue;
   text-decoration: none;
 
   &:hover, &:active {
     color: $dark-blue;
+    cursor: hand;
   }
 }
 
@@ -37,7 +40,7 @@ h1, h2, h3, h4 {
   font-family: $work-sans;
 }
 
-h1, h3, h4 {
+h1, h3, h5 {
   font-weight: $light;
 }
 
@@ -56,17 +59,29 @@ h3 {
 
 h4 {
   font-size: 1.25em;
+  font-weight: $medium;
+}
+
+h5 {
+  font-size: 1.25em;
 }
 
 label,
 .action-item,
 .target-list-info,
 .section-header {
+  color: $gray-3;
+  display: block;
   font-family: $rajdhani;
   font-weight: $semibold;
   font-size: 0.85em;
   text-transform: uppercase;
   letter-spacing: 1px;
+  margin-bottom: 1em;
+}
+
+label.bold {
+  font-weight: $bold;
 }
 
 li {
@@ -82,4 +97,18 @@ li {
   font-size: 0.65em;
   font-weight: $medium;
   color: $gray-2;
+}
+
+.value {
+  color: $gray-3;
+  font-weight: $medium;
+
+  span {
+    font-weight: $light;
+  }
+}
+
+.larger {
+  font-size: 1.1em;
+  margin-bottom: 1em;
 }
