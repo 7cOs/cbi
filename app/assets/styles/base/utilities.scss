@@ -3,3 +3,39 @@
   display: table;
   clear: both;
 }
+
+@mixin chevron ($width, $points, $rotation, $top, $left) {
+  display: inline-block;
+  height: $width * 1.75;
+  width: $width * 1.75;
+
+  &:before {
+    border-style: solid;
+    border-width: $points $points 0 0;
+    content: '';
+    display: inline-block;
+    height: $width;
+    left: $left;
+    position: relative;
+    top: $top;
+    transform: rotate($rotation);
+    width: $width;
+    vertical-align: middle;
+  }
+}
+
+.chevron-down {
+  @include chevron(8px, 1px, 135deg, 0%, 2px);
+}
+
+.chevron-left {
+  @include chevron(8px, 1px, -135deg, 2px, 35%);
+}
+
+.chevron-right {
+  @include chevron(8px, 1px, 45deg, 2px, 35%);
+}
+
+.chevron-up {
+  @include chevron(8px, 1px, -45deg, 35%, 2px);
+}

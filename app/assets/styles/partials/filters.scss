@@ -16,7 +16,15 @@
   .more-filters {
     position: absolute;
     right: 10px;
+    text-transform: uppercase;
     top: 10px;
+
+    a {
+      span {
+        float: left;
+        margin: 5px;
+      }
+    }
 
     &:hover {
       cursor: pointer;

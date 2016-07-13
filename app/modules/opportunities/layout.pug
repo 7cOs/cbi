@@ -6,7 +6,6 @@
         label Saved Filters
         md-select(ng-model="savedFilterSelect")
           md-option(ng-repeat="filter in userData.savedFilters" value="{{filter.name}}") {{filter.name}}
-
 .chips
   md-chips(ng-model="chip.model" name="Active Filters" md-on-remove="chip.methods.removeFromFilterObj($chip)")
     input(disabled="true")
@@ -15,7 +14,9 @@
 .filters(column='12')
   .row(class='clearfix')
     div(class='more-filters')
-      a More Filters
+      a
+        span.chevron-down
+        span More Filters
     div(column='3')
       label Account Scope
       md-checkbox(ng-model="filter.selected.accountScope" aria-label="My Accounts" ng-click="chip.methods.updateAccountScopeChip()") My Accounts Only
