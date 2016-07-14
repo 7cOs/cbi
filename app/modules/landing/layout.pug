@@ -1,85 +1,120 @@
-section(row).landing-page
+section.landing-page
   h1 Good afternoon, James
 
   section.landing-page-data(column="12")
     section.my-performance(column="8")
-      div(row)
+      div
         h2 My Performance
         div.depletions(column="4")
-          table
+          table(cellspacing="0" cellpadding="0")
             tr
               th(colspan=2)
-                h4 Depletions FYTD
+                h4.left Depletions FYTD
             tr
               td.accent.section-header CE
               td &nbsp;
             tr
               td
                 h3 273400
-              td.center
+              td
                 h3 +6.4%
-        div.distribution(column="8")
-          table
             tr
-              th(colspan=3)
-                h4 Off-Premise Distribution L90
-              th.accent.section-header % Trend vs YA
+              td
+                h3 &nbsp;
+              td
+                h3 &nbsp;
+        div.distribution(column="8")
+          table(cellspacing="0" cellpadding="0")
+            tr
+              th(colspan=4)
+                h4.left Distribution L90
+              th.section-header.right % Trend vs YA
             tr
               td.accent.section-header Simple
               td &nbsp;
               td.accent.section-header Effective
+
               td &nbsp;
             tr
               td
                 h3 3017
-              td.center
+              td
                 h3 +7.5%
+              td.accent.table-spacer on
               td
                 h3 6511
-              td.center
+              td
                 h3 -2.3%
       p.accent.action-item #[a(href="#") View Details &#9654;]
+            tr
+              td
+                h3 8256
+              td
+                h3 -0.9%
+              td.accent.table-spacer off
+              td
+                h3 9506
+              td
+                h3 -15.8%
+
+        a(href="#").action-item View Details &#9654;
 
       section(row)
         div.target-lists.clearfix
           p.accent.action-item #[a(href="#") View All &#9654;]
           md-tabs(md-dynamic-height='' md-border-bottom)
+
             md-tab(label='My Target List')
               md-content.md-padding
                 div(row).target-list-count-container
+                  h5.accent.right Displaying Recent (3 of 3)
                   div(column="4 +6").target-list-count
-                    p(column="6").accent.section-header.closed closed
-                    p(column="6").accent.section-header opportunities
+
+                    p(column="6").section-header.closed.right  closed
+                    p(column="6").section-header.right.right opportunities
                 div(row).target-list
                   ul
                     li
                       div(column="8")
-                        h3 California - C Stores
-                        p(column="4").accent.target-list-info &#9746; 4 members
-                        p(column="4").accent.target-list-info One Minute Ago
+                        h3 California - Whiskey Bars
+                        p(column="4").target-list-info Will Jay
+                        p(column="4").target-list-info &#9746; 4 members
+                        p(column="4").target-list-info One Minute Ago
                       div(column="4")
-                        h4(column="6").closed 520
-                        h4(column="6") 2251
-                      md-progress-linear(md-mode="determinate" value="75")
+                        h4(column="6").closed.right 520
+                        h4(column="6").right 2251
+                      md-progress-linear(md-mode="determinate" value="23")
                     li
                       div(column="8")
-                        h3 California - C Stores
-                        p(column="4").accent.target-list-info &#9746; 4 members
-                        p(column="4").accent.target-list-info One Minute Ago
+                        h3 California - Wine Shops
+                        p(column="4").target-list-info James Norton
+                        p(column="4").target-list-info &#9746; 4 members
+                        p(column="4").target-list-info One Minute Ago
                       div(column="4")
-                        h4(column="6").closed 320
-                        h4(column="6") 2251
-                      md-progress-linear(md-mode="determinate" value="55")
+                        h4(column="6").closed.right 320
+                        h4(column="6").right 451
+                      md-progress-linear(md-mode="determinate" value="71")
                     li
                       div(column="8")
-                        h3 California - C Stores
-                        p(column="4").accent.target-list-info Private
-                        p(column="4").accent.target-list-info One Minute Ago
+                        h3 California - Negroni Bars
+                        p(column="4").target-list-info Holly Perkins
+                        p(column="4").target-list-info Private
+                        p(column="4").target-list-info One Minute Ago
                       div(column="4")
-                        h4(column="6").closed 2987
+                        h4(column="6").closed.right 1987
+                        h4(column="6").right 2251
+                      md-progress-linear(md-mode="determinate" value="88")
+                    li
+                      div(column="8")
+                        h3 California - Beer Stores
+                        p(column="4").target-list-info RJ LaCount
+                        p(column="4").target-list-info Private
+                        p(column="4").target-list-info One Minute Ago
+                      div(column="4")
+                        h4(column="6").closed 587
                         h4(column="6") 2251
-                      md-progress-linear(md-mode="determinate" value="95")
-
+                      md-progress-linear(md-mode="determinate" value="26")
+              a(href="#").action-item View All &#9654;
             md-tab(label='Shared with Me')
               md-content.md-padding
                 div(column="4 +8")-count
@@ -94,34 +129,47 @@ section(row).landing-page
                       div(column="4")
                         h4(column="6").closed 520
                         h4(column="6") 2251
+                      md-progress-linear(md-mode="determinate" value="23")
+              a(href="#").action-item View All &#9654;
+
 
     section.opportunities(column="4")
       h2 Opportunities
       h4 New & Saved Filters
-      md-input-container
-        label Select a Saved Filter
-        md-select(ng-model="")
-          md-option(value="") One
-          md-option(value="") Two
-      md-input-container
-        label Opportunity Type
-        br
-        br
-        label Show All Types
-        md-select(ng-model="")
-          md-option(value="") This
-          md-option(value="") That
-      md-input-container
-        label Brand package
-        input(ng-model="")
-      md-input-container
-        label Account / Store
-        input(ng-model="")
-      md-input-container
-        label Distributor
-        input(ng-model="")
-      md-input-container
-        md-radio-group
-            md-radio-button On Premise
-            md-radio-button Off Premise
-      md-button.md-primary Find Opportunities
+      div.filter-container
+        md-input-container.filter-dropdown
+          label Select a Saved Filter
+          md-select(ng-model="")
+            md-option(value="") One
+            md-option(value="") Two
+
+      h4 New Search
+      div.filter-container
+        md-input-container.filter-radio
+          md-radio-group
+              md-radio-button On Premise
+              md-radio-button Off Premise
+        md-input-container.filter-dropdown
+          label.bold Opportunity Type
+          br
+          br
+          label Show All Types
+          md-select(ng-model="")
+            md-option(value="") Non-Buy
+            md-option(value="") At risk
+            md-option(value="") New placement (Quality)
+            md-option(value="") New placement (No rebuy)
+            md-option(value="") Manual Additions
+            md-option(value="")
+              button.btn-action.btn-select Done
+        md-input-container.filter-search
+          label.bold Brand / Master SKU
+          input(ng-model="" placeholder="by Brand or SKU")
+        md-input-container.filter-search
+          label.bold Account / Store
+          input(ng-model="" placeholder="by Store of Sub Account")
+        md-input-container.filter-search
+          label.bold Distributor
+          input(ng-model="" placeholder="by Name")
+
+        button.btn-action Find Opportunities

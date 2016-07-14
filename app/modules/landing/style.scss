@@ -1,3 +1,7 @@
+// * {
+//   border: 1px solid gray;
+// }
+
 .landing-page {
   background: $body-bg;
 
@@ -5,11 +9,20 @@
     padding: 0;
 
     .my-performance {
+
+      .left {
+        text-align: left;
+      }
+
+      .right {
+        text-align: right;
+      }
+
       table {
         width: 100%;
+        margin-bottom: 15px;
 
         h4 {
-          text-align: left;
           margin-top: 1em;
           margin-bottom: 1em;
         }
@@ -24,23 +37,27 @@
         padding: 15px;
       }
 
+      .depletions {
+        padding-left: 0;
+        padding-right: 0;
+      }
+
+      .distribution {
+        padding-right: 0;
+      }
+
       td {
-        // TODO This isn't working quite right...
         border-collapse: collapse;
         background-color: $white;
-        border: 1px solid $white;
-
-        &.center {
-          text-align: center;
-        }
       }
 
       .action-item {
+        color: $blue;
+        display: block;
         text-align: right;
       }
 
       .target-lists {
-        position: relative;
 
         h3 {
           color: $blue;
@@ -51,7 +68,6 @@
         }
 
         md-tabs {
-          overflow: inherit;
           margin-right: 15px;
         }
 
@@ -72,16 +88,15 @@
         .md-padding {
           background: $body-bg;
           padding-top: 0;
-        }
-
-        a {
-          margin: 0;
-          position: absolute;
-          left: 87%;
+          padding: 25px;
         }
 
         .target-list-count-container {
           background: $body-bg;
+
+          h5 {
+            margin: 0.5em 0;
+          }
 
           .target-list-count {
 
@@ -116,14 +131,37 @@
     }
 
     .opportunities {
-      background-color: $gray-4;
 
-      md-input-container.select {
-        display: block;
+      label {
+        color: #000000;
       }
 
-      md-radio-button {
-        display: inline-block;
+      .md-input {
+        background: $white;
+        padding: 20px 14px;
+        box-shadow: 0 0 3px $gray-2;
+      }
+
+      md-select {
+        box-shadow: 0 0 3px $gray-2;
+      }
+
+      .filter-container {
+        background-color: $gray-4;
+        padding: 20px;
+
+        md-input-container {
+          margin: 20px 0;
+          display: block;
+        }
+
+        md-radio-button {
+          display: inline-block;
+        }
+
+        button {
+          width: 100%;
+        }
       }
     }
   }
