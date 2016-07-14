@@ -128,15 +128,22 @@ v-accordion.styled-list(multiple="" id="opportunities" control="accordion" onexp
         div(column='1') Status
         div(column='1') Impact
         div(column='1') Hide
-      div.cell-parent.sub-item(row ng-repeat="product in products")
-        .regional-status(ng-if="product.regionalStatus")
-          .featured(ng-if="product.regionalStatus === 'featured'")
-          .mandatory(ng-if="product.regionalStatus === 'mandatory'")
-          .both(ng-if="product.regionalStatus === 'both'")
-        div(column='1') &nbsp;
-        div(column='2') <span class="product-title">{{product.product}}</span><br>{{product.detail}}
-        div.type(column='2') {{product.type}}
-        div(column='4') {{product.rationale}}
-        div(column='1') {{product.status}}
-        div(column='1') {{product.predictedImpact}}
-        div(column='1') X
+      v-accordion(multiple="" class="nested-accordion")
+        v-pane.styled-list(ng-repeat="product in products")
+          v-pane-header
+            div.cell-parent.sub-item(row)
+              .regional-status(ng-if="product.regionalStatus")
+                .featured(ng-if="product.regionalStatus === 'featured'")
+                .mandatory(ng-if="product.regionalStatus === 'mandatory'")
+                .both(ng-if="product.regionalStatus === 'both'")
+              div(column='1') &nbsp;
+              div(column='2') <span class="product-title">{{product.product}}</span><br>{{product.detail}}
+              div.type(column='2') {{product.type}}
+              div(column='4') {{product.rationale}}
+              div(column='1') {{product.status}}
+              div(column='1') {{product.predictedImpact}}
+              div(column='1') X
+          v-pane-content
+            div(row)
+              div(column="12")
+                p Here's some information about this opportunity

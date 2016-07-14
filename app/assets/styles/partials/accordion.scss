@@ -44,9 +44,29 @@ v-pane-header {
     transition: all 0.25s;
     width: 20px;
     will-change: transform;
+    z-index: 1;
   }
 
   &::before {
     transform: rotate(-90deg);
+  }
+}
+
+.nested-accordion {
+
+  v-pane-header {
+    position: relative;
+
+    &::after,
+    &::before {
+      left: 0;
+    }
+  }
+
+  .is-expanded {
+
+    .sub-item {
+      background: $light-blue-4;
+    }
   }
 }
