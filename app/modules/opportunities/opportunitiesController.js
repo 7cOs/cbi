@@ -22,19 +22,7 @@ module.exports =
       model: []
     };
     // Filter Model
-    $scope.filter = {
-      opportunitiesTypes: opportunitiesService.get('opportunitiesTypes'),
-      opportunitiesStatus: opportunitiesService.get('opportunitiesStatus'),
-      brands: opportunitiesService.get('brands'),
-      accounts: opportunitiesService.get('accounts'),
-      distributors: opportunitiesService.get('distributors'),
-      premises: opportunitiesService.get('premises'),
-      selected: {
-        accountScope: false,
-        opportunitiesTypes: ''
-      },
-      expanded: false
-    };
+    $scope.filter = opportunitiesService.model();
 
     // Get opportunities and products data
     $scope.opportunities = opportunitiesService.get('opportunities');
