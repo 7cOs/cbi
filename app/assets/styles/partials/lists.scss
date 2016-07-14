@@ -9,7 +9,7 @@
 
     &:hover,
     &.is-expanded {
-      background: $gray-4;
+      background: $light-blue-4;
     }
 
     &:last-child {
@@ -85,7 +85,7 @@
   }
 
   &:hover {
-    background: $gray-4;
+    background: $light-blue-4;
     cursor: pointer;
     cursor: hand;
   }
