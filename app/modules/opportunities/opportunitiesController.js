@@ -14,8 +14,9 @@ module.exports =
     $scope.chip = {
       methods: {
         addChip: addChip,
+        addAutocompleteChip: addAutocompleteChip,
         removeChip: removeChip,
-        updateAccountScopeChip: updateAccountScopeChip,
+        updateChip: updateChip,
         removeFromFilterObj: removeFromFilterObj
       },
       model: []
@@ -112,10 +113,26 @@ module.exports =
     function addChip(chip, type, onlyOneAllowed) {
       if (chip) {
         if (onlyOneAllowed) $scope.chip.methods.removeChip(type);
+
+        // Add to Chip Model
         $scope.chip.model.push({
           name: chip,
           type: type
         });
+      }
+    };
+
+    // Add Autocomplete Chip
+    function addAutocompleteChip(chip, filter) {
+      if (chip) {
+
+        // Add to Chip Model
+        $scope.chip.model.push({
+          name: chip
+        });
+
+        // Empty Input
+        if (filter) $scope.filter[filter] = '';
       }
     };
 
@@ -129,9 +146,9 @@ module.exports =
       }
     };
 
-    // Add or remove the account scope chip
-    function updateAccountScopeChip() {
-      $scope.filter.selected.accountScope === true ? $scope.chip.methods.removeChip('accountScope') : $scope.chip.methods.addChip('My Accounts Only', 'accountScope', true);
+    // Add or remove a checkbox chip
+    function updateChip(chip, displayName) {
+      $scope.filter.selected[chip] === true ? $scope.chip.methods.removeChip(chip) : $scope.chip.methods.addChip(displayName, chip, true);
     };
 
     // Update model when you click on the X on the chip
