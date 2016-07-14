@@ -90,3 +90,25 @@
   }
 
 }
+
+
+.filter-dropdown {
+
+  md-select.md-default-theme,
+  ._md-select-value._md-select-placeholder,
+  md-select ._md-select-value._md-select-placeholder {
+    border: none;
+    color: $white;
+  }
+
+  md-select {
+    background-color: $gray-8;
+    border-bottom: 4px solid $gray-12;
+    box-shadow: none;
+    font-family: $work-sans;
+    font-size: 1em;
+    font-weight: $semibold;
+    padding: 5px 10px;
+    text-transform: none;
+  }
+}
