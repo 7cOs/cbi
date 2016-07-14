@@ -107,12 +107,29 @@ module.exports =
       ]
     };
 
+    var filter = {
+      opportunitiesTypes: data.opportunitiesTypes,
+      opportunitiesStatus: data.opportunitiesStatus,
+      brands: data.brands,
+      accounts: data.accounts,
+      distributors: data.distributors,
+      premises: data.premises,
+      selected: {
+        accountScope: false,
+        opportunitiesTypes: ''
+      },
+      expanded: false
+    };
+
     return {
       all: function() {
         return data.opportunities;
       },
       get: function(id) {
         return data[id];
+      },
+      model: function() {
+        return filter;
       }
     };
   };
