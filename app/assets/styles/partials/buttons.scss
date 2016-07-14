@@ -11,7 +11,7 @@ button {
   text-transform: uppercase;
 
   &.icon {
-    padding-right: 3em;
+    padding-left: 3em;
 
     &:before {
       background-position: 0 center;
@@ -21,7 +21,7 @@ button {
       display: block;
       height: 15px;
       position: absolute;
-      right: 1em;
+      left: 1em;
       top: calc(50% - 8px);
       width: 15px;
     }

@@ -9,18 +9,19 @@ md-tabs md-ink-bar {
 md-tabs .md-tab.md-active {
   color: $gray-1;
   font-weight: $medium;
-  padding: 10px 22px;
+  padding: 14px 22px;
 }
 
 .md-tab {
-  line-height: 12px;
-  padding: 10px 24px;
+  font-size: 1.25em;
+  line-height: 14px;
+  padding: 14px 24px;
   text-transform: none;
 }
 
 md-pagination-wrapper,
 md-tabs-canvas {
-  height: 30px;
+  height: 38px;
 }
 
 md-tab-content md-content {

@@ -7,14 +7,22 @@ md-radio-button:not([disabled]).md-primary.md-checked ._md-on {
   background-color: $blue;
 }
 
-md-checkbox ._md-icon {
-  border-radius: 50%;
-}
+md-checkbox {
 
-md-checkbox.md-checked ._md-icon {
-  background-color: $blue;
-}
+  ._md-icon {
+    border-radius: 50%;
+  }
 
-md-checkbox.md-checked ._md-icon:after {
-  border-color: $gray-4;
+  &.md-checked {
+    font-weight: $semibold;
+
+    ._md-icon {
+      box-shadow: 0 2px 0 $gray-1;
+      background-color: $blue;
+
+      &:after {
+        border-color: $gray-4;
+      }
+    }
+  }
 }

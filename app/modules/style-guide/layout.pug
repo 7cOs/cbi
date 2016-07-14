@@ -18,6 +18,8 @@ div(column='12')
         section(column="6")
           h3.section-title Labels
           label This is a label
+          label.error This label is unauthorized
+          label.completed This is a "completed" label
           label.bold This is a bold label
           a(href="#")
             label This is a linked label
@@ -28,13 +30,14 @@ div(column='12')
           div(class="larger value positive") +5<span>%</span>
           div(class="larger value negative") -3<span>%</span>
           div(class="larger value") 2<span>%</span>
+          div(class="larger value completed") 2
 
       section
         h3.section-title Body Copy
         h4 Default
-        p Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam vitae augue at felis eleifend ultrices. Vivamus ultrices nisi a nisl dignissim tristique.
+        p Lorem ipsum dolor sit amet, <em>consectetur adipiscing elit</em>. Aliquam vitae augue at felis eleifend ultrices. Vivamus ultrices nisi a nisl dignissim tristique.
         h4 Large
-        p.large Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam vitae augue at felis eleifend ultrices. Vivamus ultrices nisi a nisl dignissim   tristique. Morbi purus nunc, ornare a eros at, ultricies euismod ante. Pellentesque varius neque id lacus faucibus, fringilla maximus mauris pulvinar.
+        p.large Lorem ipsum dolor sit amet, <em>consectetur adipiscing elit</em>. Aliquam vitae augue at felis eleifend ultrices. Vivamus ultrices nisi a nisl dignissim   tristique. Morbi purus nunc, ornare a eros at, ultricies euismod ante. Pellentesque varius neque id lacus faucibus, fringilla maximus mauris pulvinar.
 
       section
         h3.section-title Grid
@@ -80,9 +83,6 @@ div(column='12')
           .color-swatch.gray-4(column='2')
             div
             p $gray-4
-          .color-swatch.gray-5(column='2')
-            div
-            p $gray-5
           .color-swatch.gray-5(column='2')
             div
             p $gray-5
