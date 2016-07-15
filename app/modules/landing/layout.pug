@@ -137,9 +137,9 @@ section.landing-page
       div.filter-container
         md-input-container.filter-dropdown
           label Select a Saved Filter
-          md-select(ng-model="")
-            md-option(value="") One
-            md-option(value="") Two
+          md-select(ng-model="futureModel")
+            md-option(value="one") One
+            md-option(value="two") Two
 
       h4 New Search
       div.filter-container
@@ -152,22 +152,21 @@ section.landing-page
           br
           br
           label Show All Types
-          md-select(ng-model="")
-            md-option(value="") Non-Buy
-            md-option(value="") At risk
-            md-option(value="") New placement (Quality)
-            md-option(value="") New placement (No rebuy)
-            md-option(value="") Manual Additions
-            md-option(value="")
-              button.btn-action.btn-select Done
+          md-select(ng-model="futureModel")
+            md-option(value="non-buy") Non-Buy
+            md-option(value="at-risk") At risk
+            md-option(value="new-placement-quality") New placement (Quality)
+            md-option(value="new-placement") New placement (No rebuy)
+            md-option(value="manual-additions") Manual Additions
+            button.btn-action.btn-select Done
         md-input-container.filter-search
           label.bold Brand / Master SKU
-          input(ng-model="" placeholder="by Brand or SKU")
+          input(placeholder="by Brand or SKU")
         md-input-container.filter-search
           label.bold Account / Store
-          input(ng-model="" placeholder="by Store of Sub Account")
+          input(placeholder="by Store of Sub Account")
         md-input-container.filter-search
           label.bold Distributor
-          input(ng-model="" placeholder="by Name")
+          input(placeholder="by Name")
 
         button.btn-action Find Opportunities
