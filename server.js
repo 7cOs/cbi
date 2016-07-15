@@ -6,6 +6,14 @@ process.env.NODE_ENV = process.env.NODE_ENV || 'development'; // SET DEFAULT ENV
 const express  = require('express'),
       app      = express();
 
+// Authentication module.
+var auth = require('http-auth');
+var basic = auth.basic({
+  file: __dirname + '/server/_config/users.htpasswd'
+});
+
+app.use(auth.connect(basic));
+
 // EXPRESS SETTINGS
 require(__dirname + '/server/_config/express')(app);
 
