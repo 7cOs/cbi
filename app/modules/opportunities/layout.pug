@@ -98,7 +98,7 @@ button.icon.select-all(ng-click="o.toggleAll()")
 button.icon.expand-all(ng-click="o.accordion.expandAll()" ng-disabled="o.expandedOpportunities.length === o.opportunities.length") Expand All
 button.icon.collapse-all(ng-click="o.accordion.collapseAll()" ng-disabled="o.expandedOpportunities.length < 2") Collapse All
 
-v-accordion.styled-list(multiple="" id="opportunities" control="accordion" onexpand="o.expandCallback(item)" oncollapse="o.collapseCallback(item)" column='12')
+v-accordion.styled-list(multiple="" id="opportunities" control="o.accordion" onexpand="o.expandCallback(item)" oncollapse="o.collapseCallback(item)" column='12')
   div.header-row(row)
     div.checkbox-wrapper.placeholder(ng-click="o.toggle(opportunity, o.selected)")
     div.checkbox-sibling
@@ -108,7 +108,7 @@ v-accordion.styled-list(multiple="" id="opportunities" control="accordion" onexp
       div(column='1') Depletions CYTD
       div(column='1') Trend vs Ya
       div(column='1') Segmentation
-  v-pane.list-item(row ng-repeat="opportunity in o.opportunities" expanded="o.opportunity.isExpanded")
+  v-pane.list-item(row ng-repeat="opportunity in o.opportunities" expanded="opportunity.isExpanded")
     .shadow-wrap.bottom
       div.checkbox-wrapper(ng-click="o.toggle(opportunity, o.selected)")
         md-checkbox(aria-label="Select Item" ng-checked="o.exists(opportunity, o.selected)")
