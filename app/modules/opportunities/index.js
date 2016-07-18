@@ -8,7 +8,8 @@ module.exports =
     .state('opportunities', {
       url: '/opportunities',
       templateUrl: './app/modules/opportunities/layout.html',
-      controller: 'opportunitiesController'
+      controller: 'opportunitiesController',
+      controllerAs: 'o'
     });
   })
   .controller('opportunitiesController', require('./opportunitiesController'));

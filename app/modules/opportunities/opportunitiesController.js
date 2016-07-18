@@ -2,16 +2,17 @@
 
 module.exports =
   function opportunitiesController($scope, $log, opportunitiesService) {
+    var vm = this;
 
     // Map public methods to scope
-    $scope.toggle = toggle;
-    $scope.exists = exists;
-    $scope.isChecked = isChecked;
-    $scope.toggleAll = toggleAll;
-    $scope.expandCallback = expandCallback;
-    $scope.collapseCallback = collapseCallback;
+    vm.toggle = toggle;
+    vm.exists = exists;
+    vm.isChecked = isChecked;
+    vm.toggleAll = toggleAll;
+    vm.expandCallback = expandCallback;
+    vm.collapseCallback = collapseCallback;
     // Chip Model
-    $scope.chip = {
+    vm.chip = {
       methods: {
         addChip: addChip,
         addAutocompleteChip: addAutocompleteChip,
@@ -22,18 +23,18 @@ module.exports =
       model: []
     };
     // Filter Model
-    $scope.filter = opportunitiesService.model();
+    vm.filter = opportunitiesService.model();
 
     // Get opportunities and products data
-    $scope.opportunities = opportunitiesService.get('opportunities');
-    $scope.products = opportunitiesService.get('products');
+    vm.opportunities = opportunitiesService.get('opportunities');
+    vm.products = opportunitiesService.get('products');
 
     // Set up arrays for tracking selected and expanded list items
-    $scope.selected = [];
-    $scope.expandedOpportunities = [];
+    vm.selected = [];
+    vm.expandedOpportunities = [];
 
     // Simulated returned user data to show saved filters
-    $scope.userData = {
+    vm.userData = {
       savedFilters: [{
         name: 'Saved Filter 1',
         filters: ['Filter 1', 'Filter 2', 'Filter 3', 'Filter 4']
@@ -46,14 +47,14 @@ module.exports =
     // ///////////////////////////////////////////////////////// Public Methods
     // Add item to array of currently expanded list items
     function expandCallback(item) {
-      $scope.expandedOpportunities.push(item);
+      vm.expandedOpportunities.push(item);
     };
 
     // Remove item from array of currently expanded list items
     function collapseCallback(item) {
-      var index = $scope.expandedOpportunities.indexOf(item);
+      var index = vm.expandedOpportunities.indexOf(item);
       if (index > -1) {
-        $scope.expandedOpportunities.splice(index, 1);
+        vm.expandedOpportunities.splice(index, 1);
       };
     };
 
@@ -64,15 +65,15 @@ module.exports =
 
     // Check if all items are selected
     function isChecked() {
-      return $scope.selected.length === $scope.opportunities.length;
+      return vm.selected.length === vm.opportunities.length;
     };
 
     // Select or deselect all list items
     function toggleAll() {
-      if ($scope.selected.length === $scope.opportunities.length) {
-        $scope.selected = [];
-      } else if ($scope.selected.length === 0 || $scope.selected.length > 0) {
-        $scope.selected = $scope.opportunities.slice(0);
+      if (vm.selected.length === vm.opportunities.length) {
+        vm.selected = [];
+      } else if (vm.selected.length === 0 || vm.selected.length > 0) {
+        vm.selected = vm.opportunities.slice(0);
       }
     };
 
@@ -87,7 +88,7 @@ module.exports =
     };
 
     // Set positive or negative label for trend values
-    $scope.opportunities.forEach(function(item) {
+    vm.opportunities.forEach(function(item) {
       var trend = item.depletionTrendVsYA;
       if (trend > 0) {
         item.positiveValue = true;
@@ -100,10 +101,10 @@ module.exports =
     // Add a chip
     function addChip(chip, type, onlyOneAllowed) {
       if (chip) {
-        if (onlyOneAllowed) $scope.chip.methods.removeChip(type);
+        if (onlyOneAllowed) vm.chip.methods.removeChip(type);
 
         // Add to Chip Model
-        $scope.chip.model.push({
+        vm.chip.model.push({
           name: chip,
           type: type
         });
@@ -115,20 +116,20 @@ module.exports =
       if (chip) {
 
         // Add to Chip Model
-        $scope.chip.model.push({
+        vm.chip.model.push({
           name: chip
         });
 
         // Empty Input
-        if (filter) $scope.filter[filter] = '';
+        if (filter) vm.filter[filter] = '';
       }
     };
 
     // Remove a chip
     function removeChip(type) {
-      for (var i = 0; i < $scope.chip.model.length; i++) {
-        if ($scope.chip.model[i].type === type) {
-          $scope.chip.model.splice(i, 1);
+      for (var i = 0; i < vm.chip.model.length; i++) {
+        if (vm.chip.model[i].type === type) {
+          vm.chip.model.splice(i, 1);
           break;
         }
       }
@@ -136,18 +137,18 @@ module.exports =
 
     // Add or remove a checkbox chip
     function updateChip(chip, displayName) {
-      $scope.filter.selected[chip] === true ? $scope.chip.methods.removeChip(chip) : $scope.chip.methods.addChip(displayName, chip, true);
+      vm.filter.selected[chip] === true ? vm.chip.methods.removeChip(chip) : vm.chip.methods.addChip(displayName, chip, true);
     };
 
     // Update model when you click on the X on the chip
     function removeFromFilterObj(chip) {
-      if (chip.type) $scope.filter.selected[chip.type] = false;
+      if (chip.type) vm.filter.selected[chip.type] = false;
     };
     // ///////////////////////////////////////////////////////// End Chip Methods
 
     // To Do: Create a better filter for brands and accounts
     /* function querySearch(query) {
-      var results = query ? $scope.brands.filter(createFilterFor(query)) : $scope.brands;
+      var results = query ? vm.brands.filter(createFilterFor(query)) : vm.brands;
       return results;
     }
 
