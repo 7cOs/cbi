@@ -1,5 +1,6 @@
 .styled-list {
   list-style-type: none;
+  margin-bottom: 1em;
 
   .list-item {
     background: $white;
@@ -33,6 +34,10 @@
     &.regional-status {
       padding: 0;
     }
+  }
+
+  .styled-list {
+    margin-bottom: 0;
   }
 }
 

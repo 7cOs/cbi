@@ -98,7 +98,7 @@ button.icon.select-all(ng-click="o.toggleAll()")
 button.icon.expand-all(ng-click="o.accordion.expandAll()" ng-disabled="o.expandedOpportunities.length === o.opportunities.length") Expand All
 button.icon.collapse-all(ng-click="o.accordion.collapseAll()" ng-disabled="o.expandedOpportunities.length < 2") Collapse All
 
-v-accordion.styled-list(multiple="" id="opportunities" control="accordion" onexpand="o.expandCallback(item)" oncollapse="o.collapseCallback(item)" column='12')
+v-accordion.styled-list(multiple="" id="opportunities" control="o.accordion" onexpand="o.expandCallback(item)" oncollapse="o.collapseCallback(item)" column='12')
   div.header-row(row)
     div.checkbox-wrapper.placeholder(ng-click="o.toggle(opportunity, o.selected)")
     div.checkbox-sibling
@@ -108,42 +108,44 @@ v-accordion.styled-list(multiple="" id="opportunities" control="accordion" onexp
       div(column='1') Depletions CYTD
       div(column='1') Trend vs Ya
       div(column='1') Segmentation
-  v-pane.list-item(row ng-repeat="opportunity in o.opportunities" expanded="o.opportunity.isExpanded")
-    div.checkbox-wrapper(ng-click="o.toggle(opportunity, o.selected)")
-      md-checkbox(aria-label="Select Item" ng-checked="o.exists(opportunity, o.selected)")
-    v-pane-header.checkbox-sibling(column='12')
-      div.cell-parent
-        div.pad-cell(column='3') {{opportunity.store.name}} <span class="supporting-text">\#{{opportunity.store.id}}</span>
-        div.address(column='4') {{opportunity.store.address}} <br><a href="#">Store Summary</a>
-        div(column='2') {{opportunity.opCount}} <span class="supporting-text">({{opportunity.impact}} high)</span>
-        div(column='1') {{opportunity.depletionsCYTD}}
-        div(column='1' class="value" ng-class="{'positive' : opportunity.positiveValue, 'negative' : opportunity.negativeValue}") <span ng-if="opportunity.positiveValue">+</span>{{opportunity.depletionTrendVsYA}}<span>%</span>
-        div(column='1') {{opportunity.store.segmentation}}
-    v-pane-content(column='12' class="products" ng-class="{'open' : open}")
-      div.title-row(row)
-        div(column='1') &nbsp;
-        div(column='2') Product
-        div(column='2') Type
-        div(column='4') Rationale
-        div(column='1') Status
-        div(column='1') Impact
-        div(column='1') Hide
-      v-accordion(multiple="" class="nested-accordion")
-        v-pane.styled-list(ng-repeat="product in o.products")
-          v-pane-header
-            div.cell-parent.sub-item(row)
-              .regional-status(ng-if="product.regionalStatus")
-                .featured(ng-if="product.regionalStatus === 'featured'")
-                .mandatory(ng-if="product.regionalStatus === 'mandatory'")
-                .both(ng-if="product.regionalStatus === 'both'")
-              div(column='1') &nbsp;
-              div(column='2') <span class="product-title">{{product.product}}</span><br>{{product.detail}}
-              div.type(column='2') {{product.type}}
-              div(column='4') {{product.rationale}}
-              div(column='1') {{product.status}}
-              div(column='1') {{product.predictedImpact}}
-              div(column='1') X
-          v-pane-content
-            div(row)
-              div(column="12")
-                p Here's some information about this opportunity
+  v-pane.list-item(row ng-repeat="opportunity in o.opportunities" expanded="opportunity.isExpanded")
+    .shadow-wrap.bottom
+      div.checkbox-wrapper(ng-click="o.toggle(opportunity, o.selected)")
+        md-checkbox(aria-label="Select Item" ng-checked="o.exists(opportunity, o.selected)")
+      v-pane-header.checkbox-sibling(column='12')
+        div.cell-parent
+          div.pad-cell(column='3') {{opportunity.store.name}} <span class="supporting-text">\#{{opportunity.store.id}}</span>
+          div.address(column='4') {{opportunity.store.address}} <br><a href="#">Store Summary</a>
+          div(column='2') {{opportunity.opCount}} <span class="supporting-text">({{opportunity.impact}} high)</span>
+          div(column='1') {{opportunity.depletionsCYTD}}
+          div(column='1' class="value" ng-class="{'positive' : opportunity.positiveValue, 'negative' : opportunity.negativeValue}") <span ng-if="opportunity.positiveValue">+</span>{{opportunity.depletionTrendVsYA}}<span>%</span>
+          div(column='1') {{opportunity.store.segmentation}}
+      v-pane-content(column='12' class="products" ng-class="{'open' : open}")
+        div.title-row(row)
+          div(column='1') &nbsp;
+          div(column='2') Product
+          div(column='2') Type
+          div(column='4') Rationale
+          div(column='1') Status
+          div(column='1') Impact
+          div(column='1') Hide
+        v-accordion(multiple="" class="nested-accordion")
+          v-pane.styled-list(ng-repeat="product in o.products")
+            v-pane-header
+              div.cell-parent.sub-item(row)
+                .regional-status(ng-if="product.regionalStatus")
+                  .featured(ng-if="product.regionalStatus === 'featured'")
+                  .mandatory(ng-if="product.regionalStatus === 'mandatory'")
+                  .both(ng-if="product.regionalStatus === 'both'")
+                div(column='1') &nbsp;
+                div(column='2') <span class="product-title">{{product.product}}</span><br>{{product.detail}}
+                div.type(column='2') {{product.type}}
+                div(column='4') {{product.rationale}}
+                div(column='1') {{product.status}}
+                div(column='1') {{product.predictedImpact}}
+                div(column='1') X
+            .shadow-wrap.top
+              v-pane-content
+                div(row)
+                  div(column="12")
+                    p Here's some information about this opportunity
