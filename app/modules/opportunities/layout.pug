@@ -1,12 +1,12 @@
-.opportunity-header(column='12')
-  .row
+.opportunity-header
+  div(row)
     h1(column='9') Opportunities
     .saved-filter-select(column='3')
       md-input-container
         label Saved Filters
         md-select(ng-model="o.savedFilterSelect")
           md-option(ng-repeat="filter in o.userData.savedFilters" value="{{filter.name}}") {{filter.name}}
-.chips
+.chips(ng-if="o.chip.model.length")
   md-chips(ng-model="o.chip.model" name="Active Filters" md-on-remove="o.chip.methods.removeFromFilterObj($chip)")
     input(disabled="true")
     md-chip-template
