@@ -9,4 +9,5 @@ module.exports =
     .factory('storesService', require('./storesService'))
     .factory('targetListService', require('./targetListService'))
     .factory('userNotesService', require('./userNotesService'))
+    .factory('productService', require('./productService'))
     .factory('userService', require('./userService'));
