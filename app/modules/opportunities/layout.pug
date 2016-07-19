@@ -7,6 +7,7 @@
         md-select(ng-model="o.savedFilterSelect")
           md-option(ng-repeat="filter in o.userData.savedFilters" value="{{filter.name}}") {{filter.name}}
 .chips(ng-if="o.chip.model.length")
+  label Active Filters
   md-chips(ng-model="o.chip.model" name="Active Filters" md-on-remove="o.chip.methods.removeFromFilterObj($chip)")
     input(disabled="true")
     md-chip-template

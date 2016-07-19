@@ -1,37 +1,26 @@
-section.target-lists-page
-  section.hero
-    table
-      tr
-        th.cell-align-left.target-list-account-name-cell Target List
-        th Total depletions
-        th % Trend vs YA
-        th Closed
-        th Total Opportunities
-        th Shared With
-      tr
-        td.cell-align-left
-          h2 Walgreens South Bay
-        td 115600CE
-        td 7.5%
-        td 600
-        td 1200
-        td icon
-      tr
-        td
-          h3.cell-align-left JASON BOURNE IS THE OWNER
-      tr
-        td
-          h4.cell-align-left List for all our Walgreen stores in the East Bay (San Ramon, San Rafael, Oakland, Berkley).
-      tr
-        td(colspan="6")
-          div.clearfix
-            p.edit settings
-            div
-              button.btn-action Archive List
-              button.btn-action Delete List
-              button.btn-action Export List
+.hero(row)
+  div(column="4")
+    h1 Walmart East Bay
+    label.bold You are the owner
+    p Walmart regional list for general 6-pack sales. Primarily for Jerry B, but if you have more ideas, please add them and either ping Jerry or Michelle
+  div(column="8").align-right
+    .hero-actions
+      button.btn-action Collaborate
+      button.btn-action Download
+      button.btn-action Edit Details
+    .hero-info
+      div
+        label Opportunities
+        span 2,251
+      div
+        label Closed
+        span 841
+      div.bold
+        label Depletions
+        span 273,400<span class="unit">CE</span>
 
 .chips(ng-if="t.chip.model.length")
+  label Active Filters
   md-chips(ng-model="t.chip.model" name="Active Filters" md-on-remove="t.chip.methods.removeFromFilterObj($chip)")
     input(disabled="true")
     md-chip-template

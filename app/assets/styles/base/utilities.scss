@@ -40,3 +40,7 @@
 .chevron-up {
   @include chevron(8px, 1px, -45deg, 35%, 2px);
 }
+
+.align-right {
+  text-align: right;
+}
