@@ -24,6 +24,10 @@ md-tabs-canvas {
   height: 38px;
 }
 
+md-tabs-canvas {
+  overflow: visible;
+}
+
 md-tab-content md-content {
   background: $gray-4;
 }
