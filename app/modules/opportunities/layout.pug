@@ -92,6 +92,14 @@
     div(column='12' class='apply-filters')
       button(value='Apply Filters' type="button" class="button-sharing") Apply Filters
 
+//- NOTE: This math will change once we have actual product lists
+h3 <strong>{{o.products.length * o.opportunities.length}} opportunities</strong> across {{o.opportunities.length}} stores
+
+.action-buttons
+  button.btn-action(ng-disabled="o.selected < 1") Add to List
+  button.btn-action(ng-disabled="o.selected < 1") Download
+  button.btn-action(ng-disabled="o.selected < 1") Send To
+
 button.icon.select-all(ng-click="o.toggleAll()")
   span(ng-if='o.isChecked()') Un-
   | Select All
