@@ -31,7 +31,23 @@ button {
   &.collapse-all {
 
     &:before {
-      background-image: url('../assets/img/icons/btn-expand-collapse.svg');
+      background-size: 8px;
+      height: 22px;
+      top: calc(50% - 11px);
+    }
+  }
+
+  &.expand-all {
+
+    &:before {
+      background-image: url('../assets/img/icons/btn-expand.svg');
+    }
+  }
+
+  &.collapse-all {
+
+    &:before {
+      background-image: url('../assets/img/icons/btn-collapse.svg');
     }
   }
 
@@ -45,11 +61,17 @@ button {
   &[disabled] {
     color: $gray-2;
 
-    &.expand-all,
+    &.expand-all {
+
+      &:before {
+        background-image: url('../assets/img/icons/btn-expand-disabled.svg');
+      }
+    }
+
     &.collapse-all {
 
       &:before {
-        background-image: url('../assets/img/icons/btn-expand-collapse-disabled.svg');
+        background-image: url('../assets/img/icons/btn-collapse-disabled.svg');
       }
     }
   }

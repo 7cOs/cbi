@@ -108,7 +108,8 @@ v-accordion.styled-list(multiple="" id="opportunities" control="o.accordion" one
       div(column='1') Depletions CYTD
       div(column='1') Trend vs Ya
       div(column='1') Segmentation
-  v-pane.list-item(row ng-repeat="opportunity in o.opportunities" expanded="opportunity.isExpanded")
+  //- v-pane.list-item(row ng-repeat="opportunity in o.opportunities" expanded="opportunity.isExpanded")
+  v-pane.list-item(row ng-repeat="opportunity in o.opportunities" expanded="true")
     .shadow-wrap.bottom
       div.checkbox-wrapper(ng-click="o.toggle(opportunity, o.selected)")
         md-checkbox(aria-label="Select Item" ng-checked="o.exists(opportunity, o.selected)")
@@ -123,8 +124,20 @@ v-accordion.styled-list(multiple="" id="opportunities" control="o.accordion" one
       v-pane-content(column='12' class="products" ng-class="{'open' : open}")
         .shadow-wrap.top
           .hero-row(row)
-            div(column='3').no-pad
-              label.bold Brand icons placeholder
+            div(column='3').pad-cell.brand-icons
+              div
+                img(src='assets/img/brands/brand-lg-coronaextra.svg')
+                img(src='assets/img/brands/brand-lg-coronalite.svg')
+                img(src='assets/img/brands/brand-lg-modelo.svg')
+                img(src='assets/img/brands/brand-lg-modelolite.svg')
+              div.small-icons
+                img(src='assets/img/brands/brand-sm-ballastpoint.svg')
+                img(src='assets/img/brands/brand-sm-modelochelada.svg')
+                img(src='assets/img/brands/brand-sm-modelolite.svg')
+                img(src='assets/img/brands/brand-sm-negramodelo.svg')
+                img(src='assets/img/brands/brand-sm-pacifico.svg')
+                img(src='assets/img/brands/brand-sm-pacificolite.svg')
+                img(src='assets/img/brands/brand-sm-tecate.svg')
             div(column='3').no-pad
               label.bold Distribution L90
               div(row)
@@ -160,8 +173,11 @@ v-accordion.styled-list(multiple="" id="opportunities" control="o.accordion" one
               div.cell-parent.sub-item(row)
                 .regional-status(ng-if="product.regionalStatus")
                   div(class="{{product.regionalStatus}}")
-                div(column='1') &nbsp;
-                div(column='2').pad-cell <span class="product-title">{{product.product}}</span><br>{{product.detail}}
+                div(column='1').sub-item-select
+                  md-checkbox(aria-label="Select Item" ng-click="$event.stopPropagation();")
+                div(column='2').pad-cell
+                  span.product-title {{product.product}} <br>
+                  | {{product.detail}}
                 div.type(column='2') {{product.type}}
                 div(column='4') {{product.rationale}}
                 div(column='1') {{product.status}}
