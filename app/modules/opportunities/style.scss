@@ -1,5 +1,6 @@
 .address {
   font-size: 0.8em;
+  line-height: 2.25;
   color: $gray-2;
 
   a {
@@ -63,5 +64,38 @@
 
   md-input-container {
     width: 100%;
+  }
+}
+
+.hero-row {
+  font-weight: $light;
+  padding: 0.75em 0;
+
+  > div {
+    padding-top: 0.5em;
+
+    &.no-pad {
+      padding-top: 0;
+    }
+  }
+}
+
+.percentage {
+  font-weight: $medium;
+  padding-left: 0.5em;
+}
+
+.details-link {
+  color: $blue;
+  float: right;
+  padding-top: 1em;
+  padding-right: 1em;
+  position: relative;
+
+  &:after {
+    content: '>';
+    position: absolute;
+    right: 0;
+    bottom: 0;
   }
 }
