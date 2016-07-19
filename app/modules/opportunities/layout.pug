@@ -115,13 +115,37 @@ v-accordion.styled-list(multiple="" id="opportunities" control="o.accordion" one
       v-pane-header.checkbox-sibling(column='12')
         div.cell-parent
           div.pad-cell(column='3') {{opportunity.store.name}} <span class="supporting-text">\#{{opportunity.store.id}}</span>
-          div.address(column='4') {{opportunity.store.address}} <br><a href="#">Store Summary</a>
+          div.address(column='4') {{opportunity.store.address}}
           div(column='2') {{opportunity.opCount}} <span class="supporting-text">({{opportunity.impact}} high)</span>
           div(column='1') {{opportunity.depletionsCYTD}}
           div(column='1' class="value" ng-class="{'positive' : opportunity.positiveValue, 'negative' : opportunity.negativeValue}") <span ng-if="opportunity.positiveValue">+</span>{{opportunity.depletionTrendVsYA}}<span>%</span>
           div(column='1') {{opportunity.store.segmentation}}
       v-pane-content(column='12' class="products" ng-class="{'open' : open}")
-        div.title-row(row)
+        .shadow-wrap.top
+          .hero-row(row)
+            div(column='3').no-pad Brand icons placeholder
+            div(column='3').no-pad
+              label.bold Distribution L90
+              div(row)
+                div(column='4')
+                  label Simple
+                  div(row)
+                    div(column='12') 4 <span class="percentage">2</span>%
+                div(column='8')
+                  label Effective
+                  div(row)
+                    div(column='12') 12 <span class="percentage">5.2</span>%
+            div(column='2')
+              label Velocity
+              div(row)
+                div(column='12') 670 <span class="percentage">7.6</span>%
+            div(column='2')
+              label Tolinx Submission Code
+              div(row)
+                div(column='12') 101745103
+            div(column='2')
+              a(href="#").details-link.accent Full Details
+        .title-row(row)
           div(column='1') &nbsp;
           div(column='2') Product
           div(column='2') Type

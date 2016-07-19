@@ -2,7 +2,8 @@ v-pane {
 
   &.is-expanded {
 
-    > v-pane-header {
+    > v-pane-header,
+    .shadow-wrap > v-pane-header {
 
       &::after {
         opacity: 0;
