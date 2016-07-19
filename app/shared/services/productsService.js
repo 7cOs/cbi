@@ -1,9 +1,7 @@
 'use strict';
 
-// productService.$inject = ['$http', 'q'];
-
 module.exports =
-  function productService($http, $q) {
+  function productsService($http, $q) {
     var data = [{
       'id': '9878dj',
       'name': 'Product',
@@ -46,13 +44,16 @@ module.exports =
       .catch(getProductsFail);
 
       function getProductsSuccess(response) {
-        return response;
+        console.log('[productsService.getProducts] response: ', response);
+        // productsPromise.resolve(response.data);
+        // uncomment above and remove below when services are ready
+        productsPromise.resolve(data);
       }
 
       function getProductsFail(error) {
-        return error;
+        productsPromise.resolve(error);
       }
 
-      return productsPromise;
+      return productsPromise.promise;
     }
   };

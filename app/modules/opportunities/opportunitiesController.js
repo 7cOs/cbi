@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports =
-  function opportunitiesController($scope, $log, opportunitiesService, productService) {
+  function opportunitiesController($scope, $log, opportunitiesService, productsService, distributorsService) {
     var vm = this;
 
     // Map public methods to scope

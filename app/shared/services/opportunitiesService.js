@@ -1,5 +1,5 @@
 module.exports =
-  function opportunitiesService(productService) {
+  function opportunitiesService(productsService, distributorsService) {
     var data = {
       opportunities: [{
         'id': '123',
@@ -87,19 +87,14 @@ module.exports =
         {name: 'On Premise'},
         {name: 'Off Premise'}
       ],
-      brands: productService.all(),
+      brands: productsService.getProducts('http://jsonplaceholder.typicode.com/posts'),
       accounts: [
         {name: 'Walmart', subAccount: 'North East'},
         {name: 'Walmart', subAccount: 'West'},
         {name: 'Walmart', subAccount: 'South'},
         {name: 'Walmart', subAccount: 'East'}
       ],
-      distributors: [
-        {name: 'Famous James\'s House of Wine'},
-        {name: 'Famous Will\'s House of Whiskey'},
-        {name: 'Famous Eric\'s House of Everclear'},
-        {name: 'Famous RJ\'s House of Beer'}
-      ]
+      distributors: distributorsService.getDistributors('http://jsonplaceholder.typicode.com/posts')
     };
 
     var filter = {
