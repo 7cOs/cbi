@@ -11,6 +11,7 @@ module.exports =
     vm.toggleAll = toggleAll;
     vm.expandCallback = expandCallback;
     vm.collapseCallback = collapseCallback;
+    vm.querySearch = querySearch;
     // Chip Model
     vm.chip = {
       methods: {
@@ -96,6 +97,12 @@ module.exports =
         item.negativeValue = true;
       }
     });
+
+    function querySearch(searchText) {
+      // To Do: Send new request for data with search params - we could split this into the each respective service, or build the query here and send to the service
+      // Change autocomplete to md-items="brand in o.querySearch(searchText)" to apply filters
+      // Add loading spinner while we wait for request
+    }
 
     // ///////////////////////////////////////////////////////// Chip Methods
     // Add a chip
