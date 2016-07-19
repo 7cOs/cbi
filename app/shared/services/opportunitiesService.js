@@ -1,5 +1,5 @@
 module.exports =
-  function opportunitiesService() {
+  function opportunitiesService(productService) {
     var data = {
       opportunities: [{
         'id': '123',
@@ -87,12 +87,7 @@ module.exports =
         {name: 'On Premise'},
         {name: 'Off Premise'}
       ],
-      brands: [
-        {name: 'Corona Extra', size: '12 ounce Bottle'},
-        {name: 'Corona Extra', size: '12 ounce Can(s)'},
-        {name: 'Corona Light', size: '12 ounce Bottle'},
-        {name: 'Corona Light', size: '12 ounce Can(s)'}
-      ],
+      brands: productService.all(),
       accounts: [
         {name: 'Walmart', subAccount: 'North East'},
         {name: 'Walmart', subAccount: 'West'},
