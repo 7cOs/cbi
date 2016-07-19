@@ -85,10 +85,6 @@
   transition: background 300ms ease;
   border-bottom: 1px solid $gray-4;
 
-  &:last-child {
-    border-bottom: 0;
-  }
-
   &:hover {
     background: $light-blue-4;
     cursor: pointer;
@@ -133,5 +129,16 @@
     &:before {
       background-image: url('../assets/img/icons/impact-high.svg');
     }
+  }
+}
+
+.sub-item-select {
+  border-right: 1px solid $gray-4;
+  text-align: right;
+  padding-right: 0;
+
+  md-checkbox {
+    margin-top: 10px;
+    margin-bottom: 8px;
   }
 }
