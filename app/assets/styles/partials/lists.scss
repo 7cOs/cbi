@@ -99,3 +99,39 @@
 .pad-cell {
   padding-left: 50px;
 }
+
+.impact {
+
+  &:before {
+    background-position: 0 0;
+    background-repeat: no-repeat;
+    background-size: 10px;
+    content: '';
+    display: block;
+    height: 26px;
+    left: 15px;
+    position: relative;
+    width: 10px;
+  }
+
+  &.low {
+
+    &:before {
+      background-image: url('../assets/img/icons/impact-low.svg');
+    }
+  }
+
+  &.medium {
+
+    &:before {
+      background-image: url('../assets/img/icons/impact-medium.svg');
+    }
+  }
+
+  &.high {
+
+    &:before {
+      background-image: url('../assets/img/icons/impact-high.svg');
+    }
+  }
+}
