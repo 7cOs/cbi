@@ -3,14 +3,17 @@
     "browser": true,
     "node": true,
     "commonjs": true,
-    "jquery": true
+    "jquery": true,
+    "jasmine": true
   },
   "extends": "standard",
   "plugins": [
     "standard"
   ],
   "globals": {
-    "angular": false
+    "angular": false, 
+    "module": false,
+    "inject": false
   },
   "rules": {
     "indent": ["error", 2, {
