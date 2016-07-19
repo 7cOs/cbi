@@ -83,6 +83,11 @@ module.exports =
         {name: 'Open'},
         {name: 'Targeted'}
       ],
+      savedFilters: [
+        {name: 'Wine Shops'},
+        {name: 'Costco No Buy'},
+        {name: 'Circle K - Fremont'}
+      ],
       premises: [
         {name: 'On Premise'},
         {name: 'Off Premise'}
@@ -104,6 +109,7 @@ module.exports =
       accounts: data.accounts,
       distributors: data.distributors,
       premises: data.premises,
+      savedFilters: data.savedFilters,
       selected: {
         accountScope: false,
         opportunitiesTypes: ''

@@ -1,5 +1,5 @@
 section.landing-page
-  h1 Good afternoon, James
+  h1 Good afternoon, Chad
 
   section.landing-page-data(column="12")
     section.my-performance(column="7")
@@ -57,9 +57,8 @@ section.landing-page
                 h3.bold <span>-</span>15.8<span>%</span>
       p.accent.action-item #[a(href="#") View Details &#9654;]
 
-
       section(row)
-        div.target-lists.clearfix
+        div.target-lists
           md-tabs(md-dynamic-height='' md-border-bottom)
             md-tab(label='My Target List')
               md-content.md-padding
@@ -83,7 +82,7 @@ section.landing-page
                     li
                       div(column="8")
                         h3 California - Wine Shops
-                        p.accent James Norton
+                        p.accent Pete Mitchell
                         p.accent &#9746; 4 members
                         p.accent One Minute Ago
                       div(column="4")
@@ -93,7 +92,7 @@ section.landing-page
                     li
                       div(column="8")
                         h3 California - Negroni Bars
-                        p.accent Holly Perkins
+                        p.accent Nick Bradsaw
                         p.accent Private
                         p.accent One Minute Ago
                       div(column="4")
@@ -114,20 +113,35 @@ section.landing-page
                   p.accent.action-item #[a(href="#") View All &#9654;]
             md-tab(label='Shared with Me')
               md-content.md-padding
-                div(column="4 +8")-count
-                  p(column="6").accent.completed completed
-                  p(column="6").accent opportunities
-                div
-                  ul.target.list
+                div(row).target-list-count-container
+                  h5.accent.right Displaying Recent (3 of 3)
+                  div(column="4 +6").target-list-count
+                    h5(column="6").accent.completed.right  closed
+                    h5(column="6").accent.right opportunities
+                div(row).target-list
+                  ul
                     li
                       div(column="8")
-                        h3 Portland - Pinball Bar
-                        p.accent.target-list-info &#9746; 4 members One Minute Ago
+                        h3 Whidbey Island - Restaurants
+                        p.accent Sam Carvey
+                        p.accent &#9746; 4 members
+                        p.accent One Minute Ago
                       div(column="4")
-                        h4(column="6").completed 520
-                        h4(column="6") 2251
-                      md-progress-linear(md-mode="determinate" value="23")
-                p.accent.action-item #[a(href="#") View All &#9654;]
+                        h4(column="6").completed.right 520
+                        h4(column="6").right 2251
+                      md-progress-linear(md-mode="determinate" value="20")
+                    li
+                      div(column="8")
+                        h3 Bainbridge - Grocery Stores
+                        p.accent James Norton
+                        p.accent &#9746; 4 members
+                        p.accent One Minute Ago
+                      div(column="4")
+                        h4(column="6").completed.right 420
+                        h4(column="6").right 451
+                      md-progress-linear(md-mode="determinate" value="93")
+                div(row)
+                  p.accent.action-item #[a(href="#") View All &#9654;]
 
 
 
@@ -135,18 +149,18 @@ section.landing-page
       h3 Opportunities
       h4 Saved Filters
       div.filter-container.first
-        md-select(ng-model="filter.selected.opportunitiesTypes" aria-label="Opportunity Type" md-on-close="chip.methods.addChip(filter.selected.opportunitiesTypes, 'opportunitiesTypes', false)" placeholder="Select Saved Filters")
-          md-option(ng-repeat="type in filter.opportunitiesTypes" aria-label="type.name" value="{{type.name}}") {{type.name}}
+        md-select(ng-model="filter.selected.savedFilters" aria-label="Saved Filter"  placeholder="Select Saved Filters")
+          md-option(ng-repeat="type in filter.savedFilters" aria-label="type.name" value="{{type.name}}") {{type.name}}
 
       h4 New Search
       div.filter-container
         div
           label
           md-radio-group(ng-model="filter.selected.premiseType")
-            md-radio-button(ng-repeat="p in filter.premises" class="md-primary" ng-value="p.name" aria-label="p.name" ng-click="chip.methods.addChip(p.name, 'premiseType', true)") {{p.name}}
+            md-radio-button(ng-repeat="p in filter.premises" class="md-primary" ng-value="p.name" aria-label="p.name") {{p.name}}
         div.filter-item
           label opportunity type
-          md-select(ng-model="filter.selected.opportunitiesTypes" aria-label="Opportunity Type" md-on-close="chip.methods.addChip(filter.selected.opportunitiesTypes, 'opportunitiesTypes', false)" placeholder="Show All Types")
+          md-select(ng-model="filter.selected.opportunitiesTypes" aria-label="Opportunity Type" placeholder="Show All Types")
             md-option(ng-repeat="type in filter.opportunitiesTypes" aria-label="type.name" value="{{type.name}}") {{type.name}}
         div.filter-item
           label Brand / Master SKU
