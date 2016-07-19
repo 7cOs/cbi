@@ -19,6 +19,10 @@
         width: 100%;
         margin-bottom: 15px;
 
+        .section-header {
+          padding: 3px;
+        }
+
         h3 {
           margin: 5px 0;
 
@@ -86,11 +90,8 @@
         .md-tab.md-active {
           background-color: $body-bg;
           border: 1px solid $gray-9;
+          padding: 13px 21px;
           box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
-        }
-
-        md-tabs-wrapper {
-          // border-bottom: 1px solid $body-bg;
         }
 
         ._md-bar {
@@ -134,10 +135,6 @@
           ul {
             -webkit-padding-start: 0;
 
-            li {
-              margin: 20px 0;
-            }
-
             div {
               margin-bottom: 12px;
 
@@ -152,9 +149,6 @@
     }
 
     .opportunities {
-      label {
-        color: #000000;
-      }
 
       .filter-item {
         margin: 20px 0;
