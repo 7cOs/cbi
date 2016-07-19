@@ -37,17 +37,17 @@
           md-option(ng-repeat="type in o.filter.opportunitiesTypes" aria-label="type.name" value="{{type.name}}") {{type.name}}
     div(column='3')
       label Brand / Master SKU
-      md-autocomplete(md-selected-item="selectedItem" md-search-text="o.filter.brandSearchText" md-items="brand in o.filter.brands | filter:o.filter.brandSearchText" md-item-text="brand.name" md-min-length="1" placeholder="by Brand or SKU" md-selected-item-change="o.chip.methods.addAutocompleteChip(brand.name, 'brandSearchText')")
+      md-autocomplete(md-selected-item="selectedItem" md-search-text="o.filter.brandSearchText" md-items="brand in o.filter.brands" md-item-text="brand.name" md-min-length="1" placeholder="by Brand or SKU" md-selected-item-change="o.chip.methods.addAutocompleteChip(brand.name, 'brandSearchText')")
         md-item-template
           div(md-highlight-text="o.filter.brandSearchText" md-highlight-flags="^i") {{brand.name}} - {{brand.size}}
     div(column='3')
       label Account / Store
-      md-autocomplete(md-search-text="o.filter.accountSearchText" md-items="account in o.filter.accounts | filter:o.filter.accountSearchText" md-item-text="account.name" placeholder="By Account, Sub account" md-selected-item-change="o.chip.methods.addAutocompleteChip(account.name, 'accountSearchText')")
+      md-autocomplete(md-search-text="o.filter.accountSearchText" md-items="account in o.filter.accounts" md-item-text="account.name" placeholder="By Account, Sub account" md-selected-item-change="o.chip.methods.addAutocompleteChip(account.name, 'accountSearchText')")
         md-item-template
           div(md-highlight-text="o.filter.accountSearchText" md-highlight-flags="^i") {{account.name}} - {{account.subAccount}}
     div(column='3')
       label Distributor
-      md-autocomplete(md-search-text="o.filter.distributorSearchText" md-items="distributor in o.filter.distributors | filter:o.filter.distributorSearchText" md-item-text="distributor.name" placeholder="by Name" md-selected-item-change="o.chip.methods.addAutocompleteChip(distributor.name, 'distributorSearchText')")
+      md-autocomplete(md-search-text="o.filter.distributorSearchText" md-items="distributor in o.filter.distributors" md-item-text="distributor.name" placeholder="by Name" md-selected-item-change="o.chip.methods.addAutocompleteChip(distributor.name, 'distributorSearchText')")
         md-item-template
           div(md-highlight-text="o.filter.distributorSearchText" md-highlight-flags="^i") {{distributor.name}}
   .row
