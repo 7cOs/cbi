@@ -108,8 +108,7 @@ v-accordion.styled-list(multiple="" id="opportunities" control="o.accordion" one
       div(column='1') Depletions CYTD
       div(column='1') Trend vs Ya
       div(column='1') Segmentation
-  //- v-pane.list-item(row ng-repeat="opportunity in o.opportunities" expanded="opportunity.isExpanded")
-  v-pane.list-item(row ng-repeat="opportunity in o.opportunities" expanded="true")
+  v-pane.list-item(row ng-repeat="opportunity in o.opportunities" expanded="opportunity.isExpanded")
     .shadow-wrap.bottom
       div.checkbox-wrapper(ng-click="o.toggle(opportunity, o.selected)")
         md-checkbox(aria-label="Select Item" ng-checked="o.exists(opportunity, o.selected)")
