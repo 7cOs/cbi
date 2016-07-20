@@ -112,3 +112,24 @@
     text-transform: none;
   }
 }
+
+.dropdown-filter {
+  md-select-value {
+    background: $white;
+    border: none;
+    padding: 0;
+    height: 40px;
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.2), 0 1px 1px 0 rgba(0, 0, 0, 0.14), 0 2px 1px -1px rgba(0, 0, 0, 0.12);
+
+    span {
+      padding: 12px;
+      font-size: 0.85em;
+    }
+
+    ._md-select-icon {
+      background: $gray-4;
+      margin: 1px 0 3px;
+      padding: 12px 7px 12px 0;
+    }
+  }
+}
