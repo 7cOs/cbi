@@ -1,6 +1,7 @@
 'use strict';
 
 module.exports =
-  function scorecardsController($scope) {
+  function scorecardsController($scope, myperformanceService, opportunitiesService) {
 
+    $scope.filter = opportunitiesService.model();
   };

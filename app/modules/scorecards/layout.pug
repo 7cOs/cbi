@@ -1,63 +1,191 @@
-h2 Scorecards
-tabs
-  tab scorecards
-  tab my accounts
-scorecardList
-  h1 My Sales Scorecard -Depletions
-  h2 This shows...
-  table
-    tr
-      th Brand
-      th Depletions
-      th Change
-      th Trend
-      th BU Trend
-      th vS MY
-      th CTV
-      th CTG
-      th %
-      th Rank
-      th %
-      th Rank
-    tr
-      td Corona 
-      td 3864
-      td 10%
-      td 10%
-      td Arrow
-      td 50%
-      td 50%
-      td 50%
-      td 5
+div.my-scorecards
+  h1 My Scorecards
 
-      td 40%
-      td 6
-scorecardList
-  h1 My Sales Scorecard - Distribution
-  h2 This shows...
-  table
-    tr
-      th Brand
-      th Depletions
-      th Change
-      th Trend
-      th BU Trend
-      th vS MY
-      th CTV
-      th CTG
-      th %
-      th Rank
-      th %
-      th Rank
-    tr
-      td Corona 
-      td 3864
-      td 10%
-      td 10%
-      td Arrow
-      td 50%
-      td 50%
-      td 50%
-      td 5
-      td 40%
-      td 6
+  section.scorecard-filters.clearfix
+    div.radio-filters
+      label Ending Time Period
+      md-radio-group(ng-model="filter.selected.timePeriod")
+        md-radio-button(ng-repeat="p in filter.timePeriod" class="md-primary" ng-value="p.name" aria-label="p.name") {{p.name}}
+
+    div.dropdown-filter
+      div.dropdown
+        label Depletions Time Period
+        md-select(ng-model="filter.selected.savedFilters" aria-label="Saved Filter"  placeholder="FYTD May 1, 2016 - June 29, 2016")
+          md-option(ng-repeat="type in filter.savedFilters" aria-label="type.name" value="{{type.name}}") {{type.name}}
+      div.dropdown
+        label Distribution Time Period
+        md-select(ng-model="filter.selected.savedFilters" aria-label="Saved Filter"  placeholder="L90 Days April 1, 2016 - June 29, 2016")
+          md-option(ng-repeat="type in filter.savedFilters" aria-label="type.name" value="{{type.name}}") {{type.name}}
+
+
+  section.depeletions-scorecard
+    div.scorecard-header.clearfix
+      div.scorecard-header-left
+        h2 My Depletions Scorecard
+        h3 FYTD May 1, 2016- June 29, 2016
+      div.scorecard-header-right
+        p.accent Total Depletions / % Trend vs YA
+        h3 273,400
+          span &nbsp;CE
+          div.value.positive +7.5<span>%</span>
+    div.scorecard-table
+      table(cellspacing="0" cellpadding="0")
+        thead
+          tr
+            th.top
+              p.accent.bold.left.single-line Brand
+            th.top.dark
+              p.accent.bold.single-line
+                | Depletions <br />
+                | FYTD
+            th(colspan=4).top
+              p.accent.bold vs Year Ago
+            th(colspan=2).top.dark
+              p.accent vs Plan
+            th(colspan=2).top
+              p.accent.bold Contribution to Volume
+            th(colspan=2).top.dark
+              p.accent.bold Contribution to Growth &nbsp;
+          tr
+            th
+              p.accent &nbsp;
+            th.dark
+              p.accent &nbsp;
+            th
+              p.accent gap
+            th
+              p.accent %Trend
+            th
+              p.accent %BU Trend
+            th
+              p.accent MY% vs BU%
+            th.dark
+              p.accent Gap #
+            th.dark
+              p.accent Gap %
+            th
+              p.accent To my total %
+            th
+              p.accent to % total %
+            th.dark
+              p.accent to my total %
+            th.dark
+              p.accent to bu total %
+        tbody
+          tr
+            td.column-total.left TOTAL
+            td.column-total.dark 273,400
+            td.column-total 1,532
+            td.column-total 7.5%
+            td.column-total 1%
+            td.column-total.positive &#9650;
+            td.column-total.dark 1532
+            td.column-total.dark 4%
+            td.column-total 100%
+            td.column-total 12%
+            td.column-total.dark 100%
+            td.column-total.dark 12%
+          tr
+            td.left.data-brand Corona Extra
+            td.dark 47,650
+            td.negative -1876
+            td.negative -10%
+            td.negative -6%
+            td.negative &#9660;
+            td.negative.dark -1,876
+            td.negative.dark -10%
+            td 50%
+            td 50%
+            td.dark 50%
+            td.dark 50%
+
+  section.distributions-scorecard
+    div.scorecard-header.clearfix
+      div.scorecard-header-left
+        h2 My Distributions Scorecard
+        h3 FYTD May 1, 2016- June 29, 2016
+      div.scorecard-header-right
+        p.accent Total Distributions / % Trend vs YA
+        h3 273,400
+          span &nbsp;CE
+          div.value.positive +7.5<span>%</span>
+    div.scorecard-filter
+      div.radio-button-group
+        label
+        md-radio-group(ng-model="filter.selected.premiseType")
+          md-radio-button(ng-repeat="p in filter.premises" class="md-primary" ng-value="p.name" aria-label="p.name") {{p.name}}
+      div.radio-button-group
+        label
+        md-radio-group(ng-model="filter.selected.placementType")
+          md-radio-button(ng-repeat="p in filter.placementType" class="md-primary" ng-value="p.name" aria-label="p.name") {{p.name}}
+
+    div.scorecard-table
+      table(cellspacing="0" cellpadding="0")
+        thead
+          tr
+            th.top
+              p.accent.bold.left.single-line Brand
+            th.top.dark
+              p.accent.bold.single-line
+                | Distributions <br />
+                | FYTD
+            th(colspan=4).top
+              p.accent.bold vs Year Ago
+            th(colspan=2).top.dark
+              p.accent vs Plan
+            th(colspan=2).top
+              p.accent.bold Contribution to Volume
+            th(colspan=2).top.dark
+              p.accent.bold Contribution to Growth &nbsp;
+          tr
+            th
+              p.accent &nbsp;
+            th.dark
+              p.accent &nbsp;
+            th
+              p.accent gap
+            th
+              p.accent %Trend
+            th
+              p.accent %BU Trend
+            th
+              p.accent MY% vs BU%
+            th.dark
+              p.accent Gap #
+            th.dark
+              p.accent Gap %
+            th
+              p.accent To my total %
+            th
+              p.accent to % total %
+            th.dark
+              p.accent to my total %
+            th.dark
+              p.accent to bu total %
+        tbody
+          tr
+            td.column-total.left TOTAL
+            td.column-total.dark 273,400
+            td.column-total 1,532
+            td.column-total 7.5%
+            td.column-total 1%
+            td.column-total.positive &#9650;
+            td.column-total.dark 1532
+            td.column-total.dark 4%
+            td.column-total 100%
+            td.column-total 12%
+            td.column-total.dark 100%
+            td.column-total.dark 12%
+          tr
+            td.left.data-brand Corona Extra
+            td.dark 47,650
+            td.negative -1876
+            td.negative -10%
+            td.negative -6%
+            td.negative &#9660;
+            td.negative.dark -1,876
+            td.negative.dark -10%
+            td 50%
+            td 50%
+            td.dark 50%
+            td.dark 50%

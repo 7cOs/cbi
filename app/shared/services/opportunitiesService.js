@@ -92,6 +92,15 @@ module.exports =
         {name: 'On Premise'},
         {name: 'Off Premise'}
       ],
+      // temporary placeholders, will move to more appropriate module soon
+      placementType: [
+        {name: 'Simple'},
+        {name: 'Effective'}
+      ],
+      timePeriod: [
+        {name: 'Current Month to Date'},
+        {name: 'Last Closed Month'}
+      ],
       brands: productsService.getProducts('http://jsonplaceholder.typicode.com/posts'),
       accounts: [
         {name: 'Walmart', subAccount: 'North East'},
@@ -109,7 +118,9 @@ module.exports =
       accounts: data.accounts,
       distributors: data.distributors,
       premises: data.premises,
+      placementType: data.placementType,
       savedFilters: data.savedFilters,
+      timePeriod: data.timePeriod,
       selected: {
         accountScope: false,
         opportunitiesTypes: ''
