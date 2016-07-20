@@ -1,85 +1,31 @@
-.target-lists-page {
+.hero {
+  margin-bottom: 4em;
+}
 
-  table {
-    width: 100%;
-  }
+.hero-info {
 
-  .hero {
-    background-color: $gray-9;
-    margin: 5px 0;
-    padding: 10px;
-  }
+  div {
+    display: inline-block;
+    width: 144px;
 
-  td,
-  th {
-    text-align: center;
-  }
+    &.bold {
 
-  .cell-align-left {
-    text-align: left;
-  }
-
-  .target-list-account-name-cell {
-    width: 50%;
-  }
-
-  .target-list-filter {
-    background-color: $gray-9;
-    margin: 5px 0;
-
-    input {
-      margin: 0 8px;
-    }
-
-    select {
-      width: 150px;
-    }
-
-    .filter-section {
-      height: 150px;
-      padding: 10px;
-    }
-
-    .filter-section-left {
-      font-size: 0.75em;
-    }
-
-    .filter-section-right {
-
-      select, input, label {
-        display: block;
+      span {
+        font-weight: $regular;
       }
 
-      div {
-        display: inline-block;
-      }
-
-      button {
-        display: block;
-        margin: 20px auto;
+      label {
+        font-weight: $bold;
       }
     }
   }
 
-  .action {
-    padding: 10px;
+  span {
+    font-weight: $light;
+    font-size: 1.5em;
 
-    p.edit {
-      float: left;
-    }
-
-    div {
-      float: right;
-      vertical-align: middle;
-    }
-
-
-    .expand-button {
-      float: left;
-    }
-
-    .action-button {
-      float: right;
+    &.unit {
+      font-size: 0.5em;
     }
   }
 }

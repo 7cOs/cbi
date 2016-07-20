@@ -1,12 +1,13 @@
-.opportunity-header(column='12')
-  .row
+.opportunity-header
+  div(row)
     h1(column='9') Opportunities
     .saved-filter-select(column='3')
       md-input-container
         label Saved Filters
         md-select(ng-model="o.savedFilterSelect")
           md-option(ng-repeat="filter in o.userData.savedFilters" value="{{filter.name}}") {{filter.name}}
-.chips
+.chips(ng-if="o.chip.model.length")
+  label Active Filters
   md-chips(ng-model="o.chip.model" name="Active Filters" md-on-remove="o.chip.methods.removeFromFilterObj($chip)")
     input(disabled="true")
     md-chip-template
@@ -92,6 +93,14 @@
     div(column='12' class='apply-filters')
       button(value='Apply Filters' type="button" class="button-sharing") Apply Filters
 
+//- NOTE: This math will change once we have actual product lists
+h3 <strong>{{o.products.length * o.opportunities.length}} opportunities</strong> across {{o.opportunities.length}} stores
+
+.action-buttons
+  button.btn-action(ng-disabled="o.selected < 1") Add to List
+  button.btn-action(ng-disabled="o.selected < 1") Download
+  button.btn-action(ng-disabled="o.selected < 1") Send To
+
 button.icon.select-all(ng-click="o.toggleAll()")
   span(ng-if='o.isChecked()') Un-
   | Select All
@@ -102,12 +111,18 @@ v-accordion.styled-list(multiple="" id="opportunities" control="o.accordion" one
   div.header-row(row)
     div.checkbox-wrapper.placeholder(ng-click="o.toggle(opportunity, o.selected)")
     div.checkbox-sibling
-      div(column='3') Store / Number
-      div(column='4') Address
-      div(column='2') Opportunities
-      div(column='1') Depletions CYTD
-      div(column='1') Trend vs Ya
-      div(column='1') Segmentation
+      div(column='3')
+        label.bold Store / Number
+      div(column='4')
+        label.bold Address
+      div(column='2')
+        label.bold Opportunities
+      div(column='1')
+        label.bold Depletions CYTD
+      div(column='1')
+        label.bold Trend vs Ya
+      div(column='1')
+        label.bold Segmentation
   v-pane.list-item(row ng-repeat="opportunity in o.opportunities" expanded="opportunity.isExpanded")
     .shadow-wrap.bottom
       div.checkbox-wrapper(ng-click="o.toggle(opportunity, o.selected)")
@@ -160,12 +175,18 @@ v-accordion.styled-list(multiple="" id="opportunities" control="o.accordion" one
               a(href="#").details-link.accent Full Details
         .title-row(row)
           div(column='1') &nbsp;
-          div(column='2') Product
-          div(column='2') Type
-          div(column='4') Rationale
-          div(column='1') Status
-          div(column='1') Impact
-          div(column='1') Hide
+          div(column='2')
+            label.bold Product
+          div(column='2')
+            label.bold Type
+          div(column='4')
+            label.bold Rationale
+          div(column='1')
+            label.bold Status
+          div(column='1')
+            label.bold Impact
+          div(column='1')
+            label.bold Hide
         v-accordion(multiple="" class="nested-accordion")
           v-pane.styled-list(ng-repeat="product in o.products")
             v-pane-header

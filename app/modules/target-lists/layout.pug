@@ -1,128 +1,231 @@
-section.target-lists-page
-  section.hero
-    table
-      tr
-        th.cell-align-left.target-list-account-name-cell Target List
-        th Total depletions
-        th % Trend vs YA
-        th Closed
-        th Total Opportunities
-        th Shared With
-      tr
-        td.cell-align-left
-          h2 Walgreens South Bay
-        td 115600CE
-        td 7.5%
-        td 600
-        td 1200
-        td icon
-      tr
-        td
-          h3.cell-align-left JASON BOURNE IS THE OWNER
-      tr
-        td
-          h4.cell-align-left List for all our Walgreen stores in the East Bay (San Ramon, San Rafael, Oakland, Berkley).
-      tr
-        td(colspan="6")
-          div.clearfix
-            p.edit settings
-            div
-              button.btn-action Archive List
-              button.btn-action Delete List
-              button.btn-action Export List
-
-  section.target-list-filter
-    div(column="2").filter-section.filter-section-left
-      label
-        input(type="checkbox", value="#", checked)
-        | My Accounts only
-      br
-      label
-        input(type="radio", value="#")
-        | Off premise
-      br
-      label
-        input(type="radio", value="#")
-        | On premise
-      br
-      br
-      label  Opportunity Status
-        select
-          option(value="") All
-          option(value="") Targeted
-          option(value="") Closed
-    div(column="10").filter-section.filter-section-right
+.hero(row)
+  div(column="4")
+    h1 Walmart East Bay
+    label.bold You are the owner
+    p Walmart regional list for general 6-pack sales. Primarily for Jerry B, but if you have more ideas, please add them and either ping Jerry or Michelle
+  div(column="8").align-right
+    .hero-actions
+      button.btn-action Collaborate
+      button.btn-action Download
+      button.btn-action Edit Details
+    .hero-info
       div
-        label Opportunity Type
-          select
-            option(value="") All types
-            option(value="") At risk
-            option(value="") Low velocity
-            option(value="") New placement (Quality)
-            option(value="") New placement (No rebuy)
-            option(value="") Manual
-            option(value="") Done
+        label Opportunities
+        span 2,251
       div
-        label Brand/Master SKU
-          input(type="text", placeholder="Type brand name or master SKU")
-      div
-        label Account/Store
-          input(type="text", placeholder="Type account name")
-      div
-        label Distributor
-          input(type="text", placeholder="Type distributor name")
+        label Closed
+        span 841
+      div.bold
+        label Depletions
+        span 273,400<span class="unit">CE</span>
 
-      div
-      | more
+.chips(ng-if="t.chip.model.length")
+  label Active Filters
+  md-chips(ng-model="t.chip.model" name="Active Filters" md-on-remove="t.chip.methods.removeFromFilterObj($chip)")
+    input(disabled="true")
+    md-chip-template
+      div {{$chip.name}}
+.filters(column='12')
+  .row(class='clearfix')
+    div(class='more-filters')
+      a(ng-click="t.filter.expanded = t.filter.expanded ? false : true")
+        span(ng-class="{ 'chevron-up': t.filter.expanded, 'chevron-down': !t.filter.expanded }")
+        span(ng-if="t.filter.expanded") Less Filters
+        span(ng-if="!t.filter.expanded") More Filters
+    div(column='3')
+      label Account Scope
+      md-checkbox(ng-model="t.filter.selected.accountScope" aria-label="My Accounts" ng-click="t.chip.methods.updateChip('accountScope', 'My Accounts Only')") My Accounts Only
+    div(column='3')
+      label Premise Type
+      md-radio-group(ng-model="t.filter.selected.premiseType")
+        md-radio-button(ng-repeat="p in t.filter.premises" class="md-primary" ng-value="p.name" aria-label="p.name" ng-click="t.chip.methods.addChip(p.name, 'premiseType', true)") {{p.name}}
+    div(column='6')
+      label Opportunity Status
+      md-radio-group(ng-model="t.filter.selected.opportunitiesStatus")
+        md-radio-button(ng-repeat="opportunity in t.filter.opportunitiesStatus" class="md-primary" ng-value="opportunity.name" aria-label="opportunity.name" ng-click="t.chip.methods.addChip(opportunity.name, 'opportunitiesStatus', true)") {{opportunity.name}}
+  .row(class="clearfix")
+    div(column='3')
+      label Opportunity Type
+      md-input-container
+        md-select(ng-model="t.filter.selected.opportunitiesTypes" aria-label="Opportunity Type" md-on-close="t.chip.methods.addChip(t.filter.selected.opportunitiesTypes, 'opportunitiesTypes', false)")
+          md-option(ng-repeat="type in t.filter.opportunitiesTypes" aria-label="type.name" value="{{type.name}}") {{type.name}}
+    div(column='3')
+      label Brand / Master SKU
+      md-autocomplete(md-selected-item="selectedItem" md-search-text="t.filter.brandSearchText" md-items="brand in t.filter.brands" md-item-text="brand.name" md-min-length="1" placeholder="by Brand or SKU" md-selected-item-change="t.chip.methods.addAutocompleteChip(brand.name, 'brandSearchText')")
+        md-item-template
+          div(md-highlight-text="t.filter.brandSearchText" md-highlight-flags="^i") {{brand.name}} - {{brand.size}}
+    div(column='3')
+      label Account / Store
+      md-autocomplete(md-search-text="t.filter.accountSearchText" md-items="account in t.filter.accounts" md-item-text="account.name" placeholder="By Account, Sub account" md-selected-item-change="t.chip.methods.addAutocompleteChip(account.name, 'accountSearchText')")
+        md-item-template
+          div(md-highlight-text="t.filter.accountSearchText" md-highlight-flags="^i") {{account.name}} - {{account.subAccount}}
+    div(column='3')
+      label Distributor
+      md-autocomplete(md-search-text="t.filter.distributorSearchText" md-items="distributor in t.filter.distributors" md-item-text="distributor.name" placeholder="by Name" md-selected-item-change="t.chip.methods.addAutocompleteChip(distributor.name, 'distributorSearchText')")
+        md-item-template
+          div(md-highlight-text="t.filter.distributorSearchText" md-highlight-flags="^i") {{distributor.name}}
+  .row
+    div(column='3' ng-show="t.filter.expanded")
+      label Predicted Impact
+      md-checkbox(ng-model="t.filter.selected.predictedImpactHigh" aria-label="Predicted Impact High" ng-click="t.chip.methods.updateChip('predictedImpactHigh', 'Predicted Impact High')") High
+      md-checkbox(ng-model="t.filter.selected.predictedImpactMedium" aria-label="Predicted Impact Medium" ng-click="t.chip.methods.updateChip('predictedImpactMedium', 'Predicted Impact Medium')") Medium
+      md-checkbox(ng-model="t.filter.selected.predictedImpactLow" aria-label="Predicted Impact Low" ng-click="t.chip.methods.updateChip('predictedImpactLow', 'Predicted Impact Low')") Low
+    div(column='3' ng-show="t.filter.expanded")
+      label Product Type
+      md-checkbox(ng-model="t.filter.selected.productTypeFeatured" aria-label="Product Type Featured" ng-click="t.chip.methods.updateChip('productTypeFeatured', 'Product Type Featured')") Featured
+      md-checkbox(ng-model="t.filter.selected.productTypePriority" aria-label="Product Type Priority Packages" ng-click="t.chip.methods.updateChip('productTypePriority', 'Product Type Priority')") Priority Packages
+      md-checkbox(ng-model="t.filter.selected.productTypeAuthorized" aria-label="Product Type Authorized" ng-click="t.chip.methods.updateChip('productTypeAuthorized', 'Product Type Authorized')") Authorized
+    div(column='3' ng-show="t.filter.expanded")
+      .row
+        div(column='12')
+          label Store Type
+          md-checkbox(ng-model="t.filter.selected.storeTypeIndependent" aria-label="Store Type Independent" ng-click="t.chip.methods.updateChip('storeTypeIndependent', 'Store Type Independent')") Independent
+          md-checkbox(ng-model="t.filter.selected.storeTypeCBBD" aria-label="Store Type CBBD" ng-click="t.chip.methods.updateChip('storeTypeCBBD', 'Store Type CBBD')") CBBD Chain
+        div(column='12' class="store-segmentation")
+          label Store Segmentation
+          md-checkbox(column='3' ng-model="t.filter.selected.storeSegmentationA" aria-label="Store Segmentation A" ng-click="t.chip.methods.updateChip('storeSegmentationA', 'Store Segmentation A')") A
+          md-checkbox(column='3' ng-model="t.filter.selected.storeSegmentationB" aria-label="Store Segmentation B" ng-click="t.chip.methods.updateChip('storeSegmentationB', 'Store Segmentation B')") B
+          md-checkbox(column='3' ng-model="t.filter.selected.storeSegmentationC" aria-label="Store Segmentation C" ng-click="t.chip.methods.updateChip('storeSegmentationC', 'Store Segmentation C')") C
+        div(column='12' class="trade-channel")
+          label Trade Channel
+          md-checkbox(column='5' ng-model="t.filter.selected.tradeChannelGrocery" aria-label="Trade Channel Grocery" ng-click="t.chip.methods.updateChip('tradeChannelGrocery', 'Trade Channel Grocery')") Grocery
+          md-checkbox(column='5' ng-model="t.filter.selected.tradeChannelConvenience" aria-label="Trade Channel Convenience" ng-click="t.chip.methods.updateChip('tradeChannelConvenience', 'Trade Channel Convenience')") Convenience
+          md-checkbox(column='5' ng-model="t.filter.selected.tradeChannelDrug" aria-label="Trade Channel Drug" ng-click="t.chip.methods.updateChip('tradeChannelDrug', 'Trade Channel Drug')") Drug
+          md-checkbox(column='5' ng-model="t.filter.selected.tradeChannelMassMerchandiser" aria-label="Trade Channel Mass Merchandiser" ng-click="t.chip.methods.updateChip('tradeChannelMassMerchandiser', 'Trade Channel Mass Merchandiser')") Mass Merchandiser
+          md-checkbox(column='5' ng-model="t.filter.selected.tradeChannelLiquor" aria-label="Trade Channel Liquor" ng-click="t.chip.methods.updateChip('tradeChannelLiquor', 'Trade Channel Liquor')") Liquor
+          md-checkbox(column='5' ng-model="t.filter.selected.tradeChannelMilitary" aria-label="Trade Channel Military" ng-click="t.chip.methods.updateChip('tradeChannelMilitary', 'Trade Channel Military')") Military
+          md-checkbox(column='5' ng-model="t.filter.selected.tradeChannelRecreation" aria-label="Trade Channel Recreation" ng-click="t.chip.methods.updateChip('tradeChannelRecreation', 'Trade Channel Recreation')") Recreation
+          md-checkbox(column='5' ng-model="t.filter.selected.tradeChannelOther" aria-label="Trade Channel Other" ng-click="t.chip.methods.updateChip('tradeChannelOther', 'Trade Channel Other')") Other
+    div(column='3' ng-show="t.filter.expanded")
+      md-input-container
+        label Location
+        input(type="text" ng-model="t.filter.location")
+      md-input-container
+        label CBBD Contact
+        input(type="text" ng-model="t.filter.cbbdContact")
+    div(column='12' class='apply-filters')
+      button(value='Apply Filters' type="button" class="button-sharing") Apply Filters
 
-      button Apply
+  //- NOTE: This math will change once we have actual product lists
+h3 <strong>{{t.products.length * t.opportunities.length}} opportunities</strong> across {{t.opportunities.length}} stores
 
-    section.action.clearfix
-      div.expand-button
-        button Expand All
-      div.action-button
-        button Action
-        button Send TO
-        button Download
-        button Add to Target List
+.action-buttons
+  button.btn-action(ng-disabled="t.selected < 1") Add to List
+  button.btn-action(ng-disabled="t.selected < 1") Download
+  button.btn-action(ng-disabled="t.selected < 1") Send To
 
-  section.target-lists
-    ul.styled-list(column="12")
-      li.header-row(row)
-        div(column="1") &nbsp;
-        div(column="2") Store / Number
-        div(column="2") Address
-        div(column="2") Opportunities
-        div(column="2") Depletions CYTD
-        div(column="1") Trend vs YA
-        div(column="1") Segmentation
-        div(column="1") Hide
-      li.opportunity(row ng-repeat="opportunity in opportunityList")
-        div(column="12")
-          div(column="1")
-            input(type="radio")
-          div(column="2") {{opportunity.store}}
-          div(column="2") {{opportunity.address}}
-          div(column="2") 4
-          div(column="2") {{opportunity.depletionsCYTD}}
-          div(column="1") +0.3%
-          div(column="1") {{opportunity.segmentation}}
-          div(column="1") X
-        div(column="12" class="products")
-          div.title-row(row)
-            div(column="1") &nbsp;
-            div(column="2") Product
-            div(column="1") Type
-            div(column="5") Rationale
-            div(column="1") Status
-            div(column="1") Predicted Impact
-            div(column="1") &nbsp;
-          div.sub-item(row ng-repeat="targetList in targetList")
-            div(column="1")
-              input(type="radio")
-            div(column="2") {{targetList.product}}
-            div(column="1") {{targetList.type}}
-            div(column="5") {{targetList.rationale}}
-            div(column="1") {{targetList.status}}
-            div(column="1") {{targetList.predictedImpact}}
-            div(column="1") X
+button.icon.select-all(ng-click="t.toggleAll()")
+  span(ng-if='t.isChecked()') Un-
+  | Select All
+button.icon.expand-all(ng-click="t.accordion.expandAll()" ng-disabled="t.expandedOpportunities.length === t.opportunities.length") Expand All
+button.icon.collapse-all(ng-click="t.accordion.collapseAll()" ng-disabled="t.expandedOpportunities.length < 2") Collapse All
+
+v-accordion.styled-list(multiple="" id="opportunities" control="t.accordion" onexpand="t.expandCallback(item)" oncollapse="t.collapseCallback(item)" column='12')
+  div.header-row(row)
+    div.checkbox-wrapper.placeholder(ng-click="t.toggle(opportunity, t.selected)")
+    div.checkbox-sibling
+      div(column='3')
+        label.bold Store / Number
+      div(column='4')
+        label.bold Address
+      div(column='2')
+        label.bold Opportunities
+      div(column='1')
+        label.bold Depletions CYTD
+      div(column='1')
+        label.bold Trend vs Ya
+      div(column='1')
+        label.bold Segmentation
+  v-pane.list-item(row ng-repeat="opportunity in t.opportunities" expanded="opportunity.isExpanded")
+    .shadow-wrap.bottom
+      div.checkbox-wrapper(ng-click="t.toggle(opportunity, t.selected)")
+        md-checkbox(aria-label="Select Item" ng-checked="t.exists(opportunity, t.selected)")
+      v-pane-header.checkbox-sibling(column='12')
+        div.cell-parent
+          div.pad-cell(column='3') {{opportunity.store.name}} <span class="supporting-text">\#{{opportunity.store.id}}</span>
+          div.address(column='4') {{opportunity.store.address}}
+          div(column='2') {{opportunity.opCount}} <span class="supporting-text">({{opportunity.impact}} high)</span>
+          div(column='1') {{opportunity.depletionsCYTD}}
+          div(column='1' class="value" ng-class="{'positive' : opportunity.positiveValue, 'negative' : opportunity.negativeValue}") <span ng-if="opportunity.positiveValue">+</span>{{opportunity.depletionTrendVsYA}}<span>%</span>
+          div(column='1') {{opportunity.store.segmentation}}
+      v-pane-content(column='12' class="products" ng-class="{'open' : open}")
+        .shadow-wrap.top
+          .hero-row(row)
+            div(column='3').pad-cell.brand-icons
+              div
+                img(src='assets/img/brands/brand-lg-coronaextra.svg')
+                img(src='assets/img/brands/brand-lg-coronalite.svg')
+                img(src='assets/img/brands/brand-lg-modelo.svg')
+                img(src='assets/img/brands/brand-lg-modelolite.svg')
+              div.small-icons
+                img(src='assets/img/brands/brand-sm-ballastpoint.svg')
+                img(src='assets/img/brands/brand-sm-modelochelada.svg')
+                img(src='assets/img/brands/brand-sm-modelolite.svg')
+                img(src='assets/img/brands/brand-sm-negramodelo.svg')
+                img(src='assets/img/brands/brand-sm-pacifico.svg')
+                img(src='assets/img/brands/brand-sm-pacificolite.svg')
+                img(src='assets/img/brands/brand-sm-tecate.svg')
+            div(column='3').no-pad
+              label.bold Distribution L90
+              div(row)
+                div(column='4')
+                  label Simple
+                  div(row)
+                    div(column='12') 4 <span class="percentage">2</span>%
+                div(column='8')
+                  label Effective
+                  div(row)
+                    div(column='12') 12 <span class="percentage">5.2</span>%
+            div(column='2')
+              label Velocity
+              div(row)
+                div(column='12') 670 <span class="percentage">7.6</span>%
+            div(column='2')
+              label Tolinx Submission Code
+              div(row)
+                div(column='12') 101745103
+            div(column='2')
+              a(href="#").details-link.accent Full Details
+        .title-row(row)
+          div(column='1') &nbsp;
+          div(column='2')
+            label.bold Product
+          div(column='2')
+            label.bold Type
+          div(column='4')
+            label.bold Rationale
+          div(column='1')
+            label.bold Status
+          div(column='1')
+            label.bold Impact
+          div(column='1')
+            label.bold Hide
+        v-accordion(multiple="" class="nested-accordion")
+          v-pane.styled-list(ng-repeat="product in t.products")
+            v-pane-header
+              div.cell-parent.sub-item(row)
+                .regional-status(ng-if="product.regionalStatus")
+                  div(class="{{product.regionalStatus}}")
+                div(column='1').sub-item-select
+                  md-checkbox(aria-label="Select Item" ng-click="$event.stopPropagation();")
+                div(column='2').pad-cell
+                  span.product-title {{product.product}} <br>
+                  | {{product.detail}}
+                div.type(column='2') {{product.type}}
+                div(column='4') {{product.rationale}}
+                div(column='1') {{product.status}}
+                div(column='1' class="impact {{product.predictedImpact}}")
+                div(column='1').hide-row
+            .shadow-wrap.top
+              v-pane-content
+                div(row)
+                  div(column="1") &nbsp;
+                  div(column="4").pad-cell
+                    label Last Depletion
+                    span 68 days ago
+                  div(column="2")
+                    label Depletions CYTD
+                    span 6,256
+                  div(column="2")
+                    label Trend vs Ya
+                    span 10%

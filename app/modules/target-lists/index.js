@@ -10,7 +10,8 @@ module.exports =
     .state('target-lists', {
       url: '/target-lists',
       templateUrl: './app/modules/target-lists/layout.html',
-      controller: 'targetListsController'
+      controller: 'targetListsController',
+      controllerAs: 't'
     });
   })
   .controller('targetListsController', require('./targetListsController'));
