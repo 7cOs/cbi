@@ -2,7 +2,7 @@
 
 module.exports =
   function distributorsService($http, $q) {
-    var queryObj = {
+    /* var queryObj = {
       url: '',
       protocol: 'https',
       endPoint: 'apigateway.us-west-2.amazonaws.com',
@@ -13,7 +13,7 @@ module.exports =
       signature: '',
       timestamp: new Date()
     };
-    var queryString = '';
+    var queryString = '';*/
 
     var data = [{
       'id': 'A1B2',
@@ -26,9 +26,6 @@ module.exports =
     }];
 
     return {
-      all: function() {
-        return data;
-      },
       getDistributors: getDistributors
     };
 
