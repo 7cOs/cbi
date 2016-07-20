@@ -2,6 +2,19 @@
 
 module.exports =
   function distributorsService($http, $q) {
+    var queryObj = {
+      url: '',
+      protocol: 'https',
+      endPoint: 'apigateway.us-west-2.amazonaws.com',
+      action: 'GET',
+      awsAccessKeyId: '', // From AWS
+      signatureMethod: 'HmacSHA256',
+      signatureVersion: '2',
+      signature: '',
+      timestamp: new Date()
+    };
+    var queryString = '';
+
     var data = [{
       'id': 'A1B2',
       'name': 'Bob\'s Distribution',
