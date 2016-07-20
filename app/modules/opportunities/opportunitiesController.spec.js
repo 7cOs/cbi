@@ -4,12 +4,13 @@ describe('Unit: opportunitesController', function() {
 
   var scope, ctrl;
 
-  beforeEach(module('ui.router'));
+  beforeEach(module('angular-ui-router'));
+  angular.mock.module('andromeda.modules.opportunities');
+
   beforeEach(function() {
-    angular.mock.module('andromeda.modules.opportunities');
     inject(function($controller, $rootScope) {
       scope = $rootScope.$new();
-      ctrl = $controller('opportunitesController', { $scope: scope });
+      ctrl = $controller('opportunitesController', {$scope: scope});
       scope.$digest();
     });
   });

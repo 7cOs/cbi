@@ -33,7 +33,7 @@ module.exports = function(config) {
     preprocessors: {
       'app/main.js': ['browserify'],
       'app/modules/index.js': ['browserify'],
-      'app/modules/**/**/*.spec.js': ['browserify'],
+      'app/modules/**/*.spec.js': ['browserify'],
       'app/shared/**/**/*.spec.js': ['browserify']
     },
 
