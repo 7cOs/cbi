@@ -113,15 +113,8 @@ module.exports =
     };
 
     var filter = {
-      opportunitiesTypes: data.opportunitiesTypes,
-      opportunitiesStatus: data.opportunitiesStatus,
-      brands: data.brands,
-      accounts: data.accounts,
-      distributors: data.distributors,
-      premises: data.premises,
-      placementType: data.placementType,
-      savedFilters: data.savedFilters,
-      timePeriod: data.timePeriod,
+      placementType: tempData.placementType,
+      timePeriod: tempData.timePeriod,
       opportunitiesTypes: tempData.opportunitiesTypes,
       opportunitiesStatus: tempData.opportunitiesStatus,
       brands: tempData.brands,
