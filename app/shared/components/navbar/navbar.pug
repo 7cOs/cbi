@@ -1,0 +1,32 @@
+div(container)
+  div(row)
+    img(src="assets/img/logos/CBI_Logo.png", ui-sref="landing").nav-logo
+    div.nav-link-wrapper
+      ul(column='8').main-nav
+        li.top-level-menu(ui-sref-active="active")
+          div.inner
+            span #[a(ui-sref="landing") Home]
+        li.top-level-menu(ui-sref-active="active")
+          div.inner
+            span #[a My Performance]
+          ul.dropdown
+            li.sub-menu #[a(ui-sref="accounts") My Accounts]
+            li.sub-menu #[a(ui-sref="scorecards") My Scorecards]
+        li.top-level-menu(ui-sref-active="active")
+          div.inner
+            span #[a(ui-sref="opportunities") Opportunities]
+        li.top-level-menu(ui-sref-active="active")
+          div.inner
+            span #[a(ui-sref="target-lists") Target Lists]
+      div.nav-icon-container
+        img(src="assets/img/icons/nav-search.svg").nav-icon
+        img(src="assets/img/icons/nav-plus.svg").nav-icon
+        img(src="assets/img/icons/nav-notify.svg").nav-icon
+
+        //- "Hidden" link to the style guide (remove whenever needed)
+        img(src="assets/img/icons/nav-gear.svg" ui-sref="style-guide").nav-icon
+    ul.nav-sub-menu
+      li #[a]
+
+  h1 {{location}}
+  //- div(ng-show="location===/accounts") You are on the accounts page
