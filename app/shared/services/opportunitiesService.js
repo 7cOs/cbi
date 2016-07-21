@@ -206,7 +206,42 @@ module.exports =
           'lastInvoiceDate': '2016-11-05T13:15:30Z'
         }]
       },
-      opportunityGetResponse: this.opportunityGetResponse.opportunities[0],
+      opportunityGetResponse: {
+        'id': 'SbBGk',
+        'product': {
+          'id': '2234gg',
+          'name': 'Corona',
+          'type': 'package',
+          'brand': 'Brand Name',
+          'description': 'Product description Lorem ipsum sit dolor amet',
+          'price': 12.11,
+          'quantity': 233
+        },
+        'type': ['Non-Buy', 'At Risk', 'Low Velocity', 'New Placement (Quality)', 'New Placement (No Rebuy)', 'Manual'],
+        'rank': 1,
+        'impact': 'High',
+        'status': 'Discussed',
+        'rationale': 'Rationale 1',
+        'store': {
+          'id': 'dsd82',
+          'name': 'Store 1',
+          'address': '1221 11th St NE, City, ST 12345',
+          'premise': true,
+          'segmentation': 'A'
+        },
+        'itemAuthorization': {
+          'id': 'jij23',
+          'type': 'tbd',
+          'subType': 'tbd'
+        },
+        'currentYTDStoreVolume': 54.11,
+        'lastYTDStoreVolume': 29.12,
+        'volumeTrend': 32.33,
+        'storeVelocity': 50.50,
+        'storeDistribution': 12.0,
+        'last90DaysVolume': 33.11,
+        'lastInvoiceDate': '2016-11-05T13:15:30Z'
+      },
       opportunitiesPostPayload: {
         'type': 'object',
         '$schema': 'http://json-schema.org/draft-03/schema',
@@ -240,9 +275,111 @@ module.exports =
           }
         }
       },
-      opportunityPutPayload: this.opportunitiesPostPayload,
-      opportunitiesPostResponse: this.opportunityGetResponse.opportunities[0],
-      opportunityPutResponse: this.opportunityGetResponse.opportunities[0],
+      opportunityPutPayload: {
+        'type': 'object',
+        '$schema': 'http://json-schema.org/draft-03/schema',
+        'id': 'opportunitySchema',
+        'required': true,
+        'properties': {
+          'product': {
+            'type': 'string',
+            'required': 'true',
+            'description': 'Product ID'
+          },
+          'type': {
+            'type': 'array',
+            'items': {
+              'enum': ['NonBuy', 'LowVelocity', 'AtRisk', 'Manual', 'Other']
+            },
+            'minItems': 1,
+            'uniqueItems': true,
+            'required': 'true',
+            'description': 'List of types that apply to this opportunity.'
+          },
+          'rationale': {
+            'type': 'string',
+            'required': 'false',
+            'description': 'Descriptions about why this opportunity is being presented to the user'
+          },
+          'store': {
+            'type': 'string',
+            'required': 'true',
+            'description': 'Store ID'
+          }
+        }
+      },
+      opportunitiesPostResponse: {
+        'id': 'SbBGk',
+        'product': {
+          'id': '2234gg',
+          'name': 'Corona',
+          'type': 'package',
+          'brand': 'Brand Name',
+          'description': 'Product description Lorem ipsum sit dolor amet',
+          'price': 12.11,
+          'quantity': 233
+        },
+        'type': ['Non-Buy', 'At Risk', 'Low Velocity', 'New Placement (Quality)', 'New Placement (No Rebuy)', 'Manual'],
+        'rank': 1,
+        'impact': 'High',
+        'status': 'Discussed',
+        'rationale': 'Rationale 1',
+        'store': {
+          'id': 'dsd82',
+          'name': 'Store 1',
+          'address': '1221 11th St NE, City, ST 12345',
+          'premise': true,
+          'segmentation': 'A'
+        },
+        'itemAuthorization': {
+          'id': 'jij23',
+          'type': 'tbd',
+          'subType': 'tbd'
+        },
+        'currentYTDStoreVolume': 54.11,
+        'lastYTDStoreVolume': 29.12,
+        'volumeTrend': 32.33,
+        'storeVelocity': 50.50,
+        'storeDistribution': 12.0,
+        'last90DaysVolume': 33.11,
+        'lastInvoiceDate': '2016-11-05T13:15:30Z'
+      },
+      opportunityPutResponse: {
+        'id': 'SbBGk',
+        'product': {
+          'id': '2234gg',
+          'name': 'Corona',
+          'type': 'package',
+          'brand': 'Brand Name',
+          'description': 'Product description Lorem ipsum sit dolor amet',
+          'price': 12.11,
+          'quantity': 233
+        },
+        'type': ['Non-Buy', 'At Risk', 'Low Velocity', 'New Placement (Quality)', 'New Placement (No Rebuy)', 'Manual'],
+        'rank': 1,
+        'impact': 'High',
+        'status': 'Discussed',
+        'rationale': 'Rationale 1',
+        'store': {
+          'id': 'dsd82',
+          'name': 'Store 1',
+          'address': '1221 11th St NE, City, ST 12345',
+          'premise': true,
+          'segmentation': 'A'
+        },
+        'itemAuthorization': {
+          'id': 'jij23',
+          'type': 'tbd',
+          'subType': 'tbd'
+        },
+        'currentYTDStoreVolume': 54.11,
+        'lastYTDStoreVolume': 29.12,
+        'volumeTrend': 32.33,
+        'storeVelocity': 50.50,
+        'storeDistribution': 12.0,
+        'last90DaysVolume': 33.11,
+        'lastInvoiceDate': '2016-11-05T13:15:30Z'
+      },
       feedbackGetResponse: {
         'id': 'SbBGk',
         'opportunity': '8798hbj',
