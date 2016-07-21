@@ -39,7 +39,7 @@
       }
     }
 
-    &:nth-child(2):hover {
+    &.parent:hover {
       background: $dark-blue-2;
       box-shadow: -1px 2px 1px #000000;
 
@@ -105,10 +105,16 @@ div.nav-link-wrapper {
     display: inline;
     font-size: 10px; // TODO change hard coded size
     text-transform: uppercase;
-    margin: 0 10px;
+    margin: 0 10px 0 14px;
   }
 
   a {
     color: $gray-7;
+
+    &.active {
+      border: none;
+      color: $gray-1;
+      font-weight: $bold;
+    }
   }
 }
