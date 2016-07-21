@@ -5,7 +5,7 @@ function NavbarController($scope, $location) {
 }
 
 module.exports =
-  angular.module('andromeda.common.components.datepicker', [])
+  angular.module('andromeda.common.components.navbar', [])
   .component('navbar', {
     templateUrl: './app/shared/components/navbar/navbar.html',
     controller: NavbarController
