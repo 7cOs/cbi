@@ -21,9 +21,6 @@ module.exports =
     }];
 
     return {
-      all: function() {
-        return data;
-      },
       getProducts: getProducts
     };
 
