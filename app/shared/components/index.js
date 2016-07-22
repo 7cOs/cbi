@@ -5,5 +5,6 @@ module.exports =
     require('./loader').name,
     require('./datepicker').name,
     require('./tabs').name,
-    require('./typeahead').name
+    require('./typeahead').name,
+    require('./dropdown').name
   ]);
