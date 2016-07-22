@@ -34,14 +34,32 @@ module.exports =
         {name: 'On Premise'},
         {name: 'Off Premise'}
       ],
-      savedFilters: [
-        {name: 'Wine Shops'},
-        {name: 'Costco No Buy'},
-        {name: 'Circle K - Fremont'}
-      ],
       selected: {
         accountScope: false,
-        opportunitiesTypes: ''
+        cbbdContact: '',
+        location: '',
+        opportunitiesStatus: '',
+        opportunitiesTypes: '',
+        predictedImpactHigh: '',
+        predictedImpactMedium: '',
+        predictedImpactLow: '',
+        premiseType: '',
+        productTypeFeatured: '',
+        productTypePriority: '',
+        productTypeAuthorized: '',
+        storeSegmentationA: '',
+        storeSegmentationB: '',
+        storeSegmentationC: '',
+        storeTypeCBBD: '',
+        storeTypeIndependent: '',
+        tradeChannelConvenience: '',
+        tradeChannelDrug: '',
+        tradeChannelGrocery: '',
+        tradeChannelLiquor: '',
+        tradeChannelMassMerchandiser: '',
+        tradeChannelMilitary: '',
+        tradeChannelOther: '',
+        tradeChannelRecreation: ''
       },
       timePeriod: [
         {name: 'Current Month to Date'},
