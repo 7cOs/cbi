@@ -9,18 +9,19 @@
       font-size: 0.7em;
     }
 
-    div.radio-filters,
-    div.dropdown-filter {
+    .radio-filters,
+    .dropdown-filter {
       display: inline-block;
       font-size: 1em;
       float: left;
 
-      div.dropdown {
+      .dropdown {
         display: inline-block;
         margin: 0 12px;
 
         md-select {
           margin: 0;
+          width: 285px;
         }
       }
     }
@@ -99,8 +100,8 @@
 
   table {
     border-collapse: collapse;
-    border-top: 1px solid #000000;
-    border-bottom: 1px solid #000000;
+    border-top: 1px solid $black;
+    border-bottom: 1px solid $black;
     width: 100%;
 
     tbody {
@@ -111,16 +112,33 @@
 
       tr {
         border-bottom: 1px solid $gray-9;
-        transition: all 0.3s ease;
+        background: $white;
+        transition: background 0.3s;
 
-        &:hover > * {
-          background: $ghost-white;
+        .dark {
+          background: $gray-4;
+          transition: background 0.3s;
+        }
+
+        &:hover {
+          background: $light-blue-4;
+          transition: background 0.3s;
+
+
+          .dark {
+            background: $smoke;
+            transition: background 0.3s;
+          }
         }
       }
     }
 
     thead {
-      border-bottom: 1px solid #000000;
+      border-bottom: 1px solid $black;
+
+      .dark {
+        background: $gray-4;
+      }
 
       th {
         padding-top: 10px;
@@ -153,12 +171,8 @@
       color: $blue;
     }
 
-    th, td {
+    tr {
       background: $white;
-    }
-
-    .dark {
-      background: $gray-4;
     }
 
     td {
@@ -166,6 +180,7 @@
     }
 
     .left {
+      padding-left: 16px;
       text-align: left;
     }
 
