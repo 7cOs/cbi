@@ -6,7 +6,7 @@ div(container)
         li.top-level-menu(ui-sref-active="active")
           div.inner
             span #[a(ui-sref="landing") Home]
-        li.top-level-menu(ui-sref-active="active")
+        li.top-level-menu.parent(ui-sref-active="active")
           div.inner
             span #[a My Performance]
           ul.dropdown
@@ -25,5 +25,6 @@ div(container)
 
         //- "Hidden" link to the style guide (remove whenever needed)
         img(src="assets/img/icons/nav-gear.svg" ui-sref="style-guide").nav-icon
-    ul.nav-sub-menu
-      li #[a]
+    ul.nav-sub-menu(ng-if="pageName === 'accounts' || pageName === 'scorecards'")
+      li.accent #[a(ui-sref="accounts" ui-sref-active="active") My Accounts]
+      li.accent #[a(ui-sref="scorecards" ui-sref-active="active") My Scorecards]

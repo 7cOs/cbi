@@ -1,7 +1,10 @@
 'use strict';
 
 module.exports =
-  function scorecardsController($scope, myperformanceService, opportunitiesService) {
+  function scorecardsController($rootScope, $scope, $state, myperformanceService, opportunitiesService) {
+
+    // Broadcast current page name for other scopes
+    $rootScope.$broadcast('page:loaded', $state.current.name);
 
     $scope.performanceData = myperformanceService.model();
     $scope.depletionsData = myperformanceService.depletionModel();
