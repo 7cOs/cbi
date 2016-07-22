@@ -87,13 +87,12 @@ module.exports =
     /**
      * @name removeFromFilterService
      * @desc remove the selected chip from the filter service model on click of x in chip
-     * @params {Object} chip - chip object to be added
+     * @params {Object} chip - Specific chip from model to be removed
      * @params {String} displayName - display name of chip
      * @returns null
      * @memberOf andromeda.common.services
      */
     function removeFromFilterService(chip) {
-      console.log('hi');
       if (chip.type) filtersService.model.selected[chip.type] = false;
     }
 

@@ -1,19 +1,52 @@
 'use strict';
 
 module.exports =
-  function filtersService(productsService, distributorsService) {
+  function filtersService(opportunitiesService, productsService, distributorsService) {
 
     var model = {
+      accounts: [
+        {name: 'Walmart', subAccount: 'North East'},
+        {name: 'Walmart', subAccount: 'West'},
+        {name: 'Walmart', subAccount: 'South'},
+        {name: 'Walmart', subAccount: 'East'}
+      ],
       brands: productsService.getProducts('http://jsonplaceholder.typicode.com/posts'),
       distributors: distributorsService.getDistributors('http://jsonplaceholder.typicode.com/posts'),
+      expanded: false,
+      opportunitiesStatus: [
+        {name: 'Open'},
+        {name: 'Targeted'}
+      ],
+      opportunitiesTypes: [
+        {name: 'All Types'},
+        {name: 'Non-buy'},
+        {name: 'At Risk'},
+        {name: 'Low Velocity'},
+        {name: 'New Placement (Quality)'},
+        {name: 'New Placement (No Rebuy)'},
+        {name: 'Manual'}
+      ],
+      placementType: [
+        {name: 'Simple'},
+        {name: 'Effective'}
+      ],
       premises: [
         {name: 'On Premise'},
         {name: 'Off Premise'}
       ],
+      savedFilters: [
+        {name: 'Wine Shops'},
+        {name: 'Costco No Buy'},
+        {name: 'Circle K - Fremont'}
+      ],
       selected: {
         accountScope: false,
         opportunitiesTypes: ''
-      }
+      },
+      timePeriod: [
+        {name: 'Current Month to Date'},
+        {name: 'Last Closed Month'}
+      ]
     };
 
     return {

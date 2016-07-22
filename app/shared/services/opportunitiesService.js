@@ -103,23 +103,6 @@ module.exports =
       distributors: distributorsService.getDistributors('http://jsonplaceholder.typicode.com/posts')
     };
 
-    var filter = {
-      placementType: tempData.placementType,
-      timePeriod: tempData.timePeriod,
-      opportunitiesTypes: tempData.opportunitiesTypes,
-      opportunitiesStatus: tempData.opportunitiesStatus,
-      brands: tempData.brands,
-      accounts: tempData.accounts,
-      distributors: tempData.distributors,
-      premises: tempData.premises,
-      savedFilters: tempData.savedFilters,
-      selected: {
-        accountScope: false,
-        opportunitiesTypes: ''
-      },
-      expanded: false
-    };
-
     // Temporary Data - Data from API Spec
     var data = {
       opportunitiesGetResponse: {
@@ -409,9 +392,6 @@ module.exports =
       },
       get: function(id) {
         return tempData[id];
-      },
-      model: function() {
-        return filter;
       },
 
       getOpportunities: getOpportunities,

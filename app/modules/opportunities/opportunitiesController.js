@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports =
-  function opportunitiesController($scope, $log, opportunitiesService, productsService, distributorsService, chipsService) {
+  function opportunitiesController($scope, $log, opportunitiesService, productsService, distributorsService, chipsService, filtersService) {
     var vm = this;
 
     // Map public methods to scope
@@ -15,9 +15,7 @@ module.exports =
 
     // Chip Model
     vm.chipsService = chipsService;
-
-    // Filter Model
-    vm.filter = opportunitiesService.model();
+    vm.filtersService = filtersService;
 
     // Get opportunities and products data
     vm.opportunities = opportunitiesService.get('opportunities');
