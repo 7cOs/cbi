@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports =
-  function userService($http, $q) {
+  function userService($http, $q, apiHelperService) {
 
     var tempData = {
       users: [{
@@ -36,6 +36,8 @@ module.exports =
       }],
       notificationPatchResponse: {'status': 200}
     };
+
+    console.log(apiHelperService.formatUrl({'foo': 'bar', 'userId': '1'}));
 
     return {
       getUsers: getUsers,
