@@ -70,57 +70,10 @@ module.exports =
         {id: 3, product: 'Pacifico', detail: '12 Pk -12 oz BT', type: 'Non-buy', rationale: 'Similar <class of trade> accounts, currently growing SKU at <X%>', status: 'new', predictedImpact: 'low'},
         {id: 4, product: 'N. Modelo', detail: '12 Pk -12 oz BT', type: 'Low Velocity', rationale: 'Similar <class of trade> accounts, currently growing SKU at <X%>', status: 'new', predictedImpact: 'medium'},
         {id: 5, product: 'Corona LT', detail: '12 Pk -12 oz BT', type: 'Low Velocity', rationale: 'Similar <class of trade> accounts, currently growing SKU at <X%>', status: 'new', predictedImpact: 'low'}
-      ],
-      opportunitiesTypes: [
-        {name: 'All Types'},
-        {name: 'Non-buy'},
-        {name: 'At Risk'},
-        {name: 'Low Velocity'},
-        {name: 'New Placement (Quality)'},
-        {name: 'New Placement (No Rebuy)'},
-        {name: 'Manual'}
-      ],
-      opportunitiesStatus: [
-        {name: 'Open'},
-        {name: 'Targeted'}
-      ],
-      savedFilters: [
-        {name: 'Wine Shops'},
-        {name: 'Costco No Buy'},
-        {name: 'Circle K - Fremont'}
-      ],
-      premises: [
-        {name: 'On Premise'},
-        {name: 'Off Premise'}
-      ],
-      brands: productsService.getProducts('http://jsonplaceholder.typicode.com/posts'),
-      accounts: [
-        {name: 'Walmart', subAccount: 'North East'},
-        {name: 'Walmart', subAccount: 'West'},
-        {name: 'Walmart', subAccount: 'South'},
-        {name: 'Walmart', subAccount: 'East'}
-      ],
-      distributors: distributorsService.getDistributors('http://jsonplaceholder.typicode.com/posts')
+      ]
     };
 
-    var filter = {
-      placementType: tempData.placementType,
-      timePeriod: tempData.timePeriod,
-      opportunitiesTypes: tempData.opportunitiesTypes,
-      opportunitiesStatus: tempData.opportunitiesStatus,
-      brands: tempData.brands,
-      accounts: tempData.accounts,
-      distributors: tempData.distributors,
-      premises: tempData.premises,
-      savedFilters: tempData.savedFilters,
-      selected: {
-        accountScope: false,
-        opportunitiesTypes: ''
-      },
-      expanded: false
-    };
-
-    // Temporary Data - Data from API Spec
+    // Temporary Data - Data used to mock API (from spec: http://clients.ddhive.com/cbi/#)
     var data = {
       opportunitiesGetResponse: {
         'count': 351,
@@ -409,9 +362,6 @@ module.exports =
       },
       get: function(id) {
         return tempData[id];
-      },
-      model: function() {
-        return filter;
       },
 
       getOpportunities: getOpportunities,

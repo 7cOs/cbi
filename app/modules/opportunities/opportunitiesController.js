@@ -1,8 +1,12 @@
 'use strict';
 
 module.exports =
-  function opportunitiesController($scope, $log, opportunitiesService, productsService, distributorsService) {
+  function opportunitiesController($log, opportunitiesService, chipsService, filtersService) {
     var vm = this;
+
+    // Services available in View
+    vm.chipsService = chipsService;
+    vm.filtersService = filtersService;
 
     // Map public methods to scope
     vm.toggle = toggle;
@@ -12,19 +16,6 @@ module.exports =
     vm.expandCallback = expandCallback;
     vm.collapseCallback = collapseCallback;
     vm.querySearch = querySearch;
-    // Chip Model
-    vm.chip = {
-      methods: {
-        addChip: addChip,
-        addAutocompleteChip: addAutocompleteChip,
-        removeChip: removeChip,
-        updateChip: updateChip,
-        removeFromFilterObj: removeFromFilterObj
-      },
-      model: []
-    };
-    // Filter Model
-    vm.filter = opportunitiesService.model();
 
     // Get opportunities and products data
     vm.opportunities = opportunitiesService.get('opportunities');
@@ -103,55 +94,6 @@ module.exports =
       // Change autocomplete to md-items="brand in o.querySearch(searchText)" to apply filters
       // Add loading spinner while we wait for request
     }
-
-    // ///////////////////////////////////////////////////////// Chip Methods
-    // Add a chip
-    function addChip(chip, type, onlyOneAllowed) {
-      if (chip) {
-        if (onlyOneAllowed) vm.chip.methods.removeChip(type);
-
-        // Add to Chip Model
-        vm.chip.model.push({
-          name: chip,
-          type: type
-        });
-      }
-    };
-
-    // Add Autocomplete Chip
-    function addAutocompleteChip(chip, filter) {
-      if (chip) {
-
-        // Add to Chip Model
-        vm.chip.model.push({
-          name: chip
-        });
-
-        // Empty Input
-        if (filter) vm.filter[filter] = '';
-      }
-    };
-
-    // Remove a chip
-    function removeChip(type) {
-      for (var i = 0; i < vm.chip.model.length; i++) {
-        if (vm.chip.model[i].type === type) {
-          vm.chip.model.splice(i, 1);
-          break;
-        }
-      }
-    };
-
-    // Add or remove a checkbox chip
-    function updateChip(chip, displayName) {
-      vm.filter.selected[chip] === true ? vm.chip.methods.removeChip(chip) : vm.chip.methods.addChip(displayName, chip, true);
-    };
-
-    // Update model when you click on the X on the chip
-    function removeFromFilterObj(chip) {
-      if (chip.type) vm.filter.selected[chip.type] = false;
-    };
-    // ///////////////////////////////////////////////////////// End Chip Methods
 
     // To Do: Create a better filter for brands and accounts
     /* function querySearch(query) {
