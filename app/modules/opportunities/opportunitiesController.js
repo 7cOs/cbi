@@ -4,6 +4,10 @@ module.exports =
   function opportunitiesController($scope, $log, opportunitiesService, productsService, distributorsService, chipsService, filtersService) {
     var vm = this;
 
+    // Services available in View
+    vm.chipsService = chipsService;
+    vm.filtersService = filtersService;
+
     // Map public methods to scope
     vm.toggle = toggle;
     vm.exists = exists;
@@ -12,10 +16,6 @@ module.exports =
     vm.expandCallback = expandCallback;
     vm.collapseCallback = collapseCallback;
     vm.querySearch = querySearch;
-
-    // Chip Model
-    vm.chipsService = chipsService;
-    vm.filtersService = filtersService;
 
     // Get opportunities and products data
     vm.opportunities = opportunitiesService.get('opportunities');
