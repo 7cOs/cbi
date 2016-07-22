@@ -25,6 +25,6 @@ div(container)
 
         //- "Hidden" link to the style guide (remove whenever needed)
         img(src="assets/img/icons/nav-gear.svg" ui-sref="style-guide").nav-icon
-    ul.nav-sub-menu
+    ul.nav-sub-menu(ng-if="pageName === 'accounts' || pageName === 'scorecards'")
       li.accent #[a(ui-sref="accounts" ui-sref-active="active") My Accounts]
       li.accent #[a(ui-sref="scorecards" ui-sref-active="active") My Scorecards]

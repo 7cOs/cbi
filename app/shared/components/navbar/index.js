@@ -1,7 +1,9 @@
 'use strict';
 
-function NavbarController($scope, $location) {
-  $scope.location = $location.path();
+function NavbarController($scope) {
+  $scope.$on('page:loaded', function(event, data) {
+    $scope.pageName = data;
+  });
 }
 
 module.exports =

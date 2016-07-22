@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports =
-  function opportunitiesController($log, opportunitiesService, chipsService, filtersService) {
+  function opportunitiesController($rootScope, $scope, $state, $log, opportunitiesService, chipsService, filtersService) {
     var vm = this;
 
     // Services available in View
@@ -16,6 +16,9 @@ module.exports =
     vm.expandCallback = expandCallback;
     vm.collapseCallback = collapseCallback;
     vm.querySearch = querySearch;
+
+    // Broadcast current page name for other scopes
+    $rootScope.$broadcast('page:loaded', $state.current.name);
 
     // Get opportunities and products data
     vm.opportunities = opportunitiesService.get('opportunities');

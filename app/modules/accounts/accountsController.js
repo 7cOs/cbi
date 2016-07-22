@@ -1,7 +1,11 @@
 'use strict';
 
 module.exports =
-  function accountsController($scope) {
+  function accountsController($rootScope, $scope, $state) {
+
+    // Broadcast current page name for other scopes
+    $rootScope.$broadcast('page:loaded', $state.current.name);
+
     $scope.testData = [
       {
         'SKU': 'Pacifico 12PK bottle',

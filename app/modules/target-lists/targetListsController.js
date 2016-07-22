@@ -1,5 +1,7 @@
+'use strict';
+
 module.exports =
-  function targetListsController($scope, $log, targetListService, productsService, distributorsService) {
+  function targetListsController($rootScope, $scope, $state, $log, targetListService, productsService, distributorsService) {
     var vm = this;
 
     // Map public methods to scope
@@ -21,6 +23,10 @@ module.exports =
       },
       model: []
     };
+
+    // Broadcast current page name for other scopes
+    $rootScope.$broadcast('page:loaded', $state.current.name);
+
     // Filter Model
     vm.filter = targetListService.model();
 
