@@ -7,33 +7,11 @@ module.exports =
 
     return {
       model: model,
-      addChip: addChip,
       addAutocompleteChip: addAutocompleteChip,
-      removeChip: removeChip,
-      updateChip: updateChip,
-      removeFromFilterService: removeFromFilterService
+      addChip: addChip,
+      removeFromFilterService: removeFromFilterService,
+      updateChip: updateChip
     };
-
-    /**
-     * @name addChip
-     * @desc add Chip to model
-     * @params {Object} chip - chip object to be added
-     * @params {String} type - type of chip
-     * @params {Boolean} onlyOneAllowed - if only type is allowed
-     * @returns null
-     * @memberOf andromeda.common.services
-     */
-    function addChip(chip, type, onlyOneAllowed) {
-      if (chip) {
-        if (onlyOneAllowed) removeChip(type);
-
-        // Add to Chip Model
-        model.push({
-          name: chip,
-          type: type
-        });
-      }
-    }
 
     /**
      * @name addAutocompleteChip
@@ -57,11 +35,33 @@ module.exports =
     }
 
     /**
+     * @name addChip
+     * @desc add Chip to model
+     * @params {Object} chip - chip object to be added
+     * @params {String} type - type of chip
+     * @params {Boolean} onlyOneAllowed - if only type is allowed
+     * @returns null
+     * @memberOf andromeda.common.services
+     */
+    function addChip(chip, type, onlyOneAllowed) {
+      if (chip) {
+        if (onlyOneAllowed) removeChip(type);
+
+        // Add to Chip Model
+        model.push({
+          name: chip,
+          type: type
+        });
+      }
+    }
+
+    /**
      * @name removeChip
      * @desc remove chip from model
      * @params {String} type - type of chip [type is only used to remove if onlyOneAllowed === true]
      * @returns null
      * @memberOf andromeda.common.services
+     * @private
      */
     function removeChip(type) {
       for (var i = 0; i < model.length; i++) {
@@ -70,18 +70,6 @@ module.exports =
           break;
         }
       }
-    }
-
-    /**
-     * @name updateChip
-     * @desc add or remove chip from model when selected
-     * @params {String} chipType - chip type
-     * @params {String} displayName - display name of chip
-     * @returns null
-     * @memberOf andromeda.common.services
-     */
-    function updateChip(chipType, displayName) {
-      filtersService.model.selected[chipType] === true ? removeChip(chipType) : addChip(displayName, chipType, true);
     }
 
     /**
@@ -94,6 +82,18 @@ module.exports =
      */
     function removeFromFilterService(chip) {
       if (chip.type) filtersService.model.selected[chip.type] = false;
+    }
+
+    /**
+     * @name updateChip
+     * @desc add or remove chip from model when selected
+     * @params {String} chipType - chip type
+     * @params {String} displayName - display name of chip
+     * @returns null
+     * @memberOf andromeda.common.services
+     */
+    function updateChip(chipType, displayName) {
+      filtersService.model.selected[chipType] === true ? removeChip(chipType) : addChip(displayName, chipType, true);
     }
 
   };
