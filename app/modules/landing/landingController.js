@@ -1,10 +1,11 @@
 'use strict';
 
 module.exports =
-  function accountsController($rootScope, $scope, $state, opportunitiesService) {
+  function accountsController($rootScope, $scope, $state, filtersService) {
+    var vm = this;
 
     // Broadcast current page name for other scopes
     $rootScope.$broadcast('page:loaded', $state.current.name);
 
-    $scope.filter = opportunitiesService.model();
+    vm.filter = filtersService.model;
   };

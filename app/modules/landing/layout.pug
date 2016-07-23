@@ -149,34 +149,34 @@ section.landing-page
       h3 Opportunities
       h4 Saved Filters
       div.filter-container.first
-        md-select(ng-model="filter.selected.savedFilters" aria-label="Saved Filter"  placeholder="Select Saved Filters")
-          md-option(ng-repeat="type in filter.savedFilters" aria-label="type.name" value="{{type.name}}") {{type.name}}
+        md-select(ng-model="l.filter.selected.savedFilters" aria-label="Saved Filter"  placeholder="Select Saved Filters")
+          md-option(ng-repeat="type in l.filter.savedFilters" aria-label="type.name" value="{{type.name}}") {{type.name}}
 
       h4 New Search
       div.filter-container
         div
           label
-          md-radio-group(ng-model="filter.selected.premiseType")
-            md-radio-button(ng-repeat="p in filter.premises" class="md-primary" ng-value="p.name" aria-label="p.name") {{p.name}}
+          md-radio-group(ng-model="l.filter.selected.premiseType")
+            md-radio-button(ng-repeat="p in l.filter.premises" class="md-primary" ng-value="p.name" aria-label="p.name") {{p.name}}
         div.filter-item
           label opportunity type
-          md-select(ng-model="filter.selected.opportunitiesTypes" aria-label="Opportunity Type" placeholder="Show All Types")
-            md-option(ng-repeat="type in filter.opportunitiesTypes" aria-label="type.name" value="{{type.name}}") {{type.name}}
+          md-select(ng-model="l.filter.selected.opportunitiesTypes" aria-label="Opportunity Type" placeholder="Show All Types")
+            md-option(ng-repeat="type in l.filter.opportunitiesTypes" aria-label="type.name" value="{{type.name}}") {{type.name}}
         div.filter-item
           label Brand / Master SKU
-          md-autocomplete(md-selected-item="selectedItem" md-search-text="filter.brandSearchText" md-items="brand in filter.brands | filter:filter.brandSearchText" md-item-text="brand.name" md-min-length="1" placeholder="by Brand or SKU" md-selected-item-change="chip.methods.addAutocompleteChip(brand.name, 'brandSearchText')")
+          md-autocomplete(md-selected-item="selectedItem" md-search-text="l.filter.brandSearchText" md-items="brand in l.filter.brands | filter:l.filter.brandSearchText" md-item-text="brand.name" md-min-length="1" placeholder="by Brand or SKU" md-selected-item-change="chip.methods.addAutocompleteChip(brand.name, 'brandSearchText')")
             md-item-template
-            div(md-highlight-text="filter.brandSearchText" md-highlight-flags="^i") {{brand.name}} - {{brand.size}}
+            div(md-highlight-text="l.filter.brandSearchText" md-highlight-flags="^i") {{brand.name}} - {{brand.size}}
         div.filter-item
           label Account / Store
-          md-autocomplete(md-search-text="filter.accountSearchText" md-items="account in filter.accounts | filter:filter.accountSearchText" md-item-text="account.name" placeholder="By Account, Sub account" md-selected-item-change="chip.methods.addAutocompleteChip(account.name, 'accountSearchText')")
+          md-autocomplete(md-search-text="l.filter.accountSearchText" md-items="account in l.filter.accounts | filter:l.filter.accountSearchText" md-item-text="account.name" placeholder="By Account, Sub account" md-selected-item-change="chip.methods.addAutocompleteChip(account.name, 'accountSearchText')")
             md-item-template
-            div(md-highlight-text="filter.accountSearchText" md-highlight-flags="^i") {{account.name}} - {{account.subAccount}}
+            div(md-highlight-text="l.filter.accountSearchText" md-highlight-flags="^i") {{account.name}} - {{account.subAccount}}
         div.filter-item
           label Distributor
-          md-autocomplete(md-search-text="filter.distributorSearchText" md-items="distributor in filter.distributors | filter:filter.distributorSearchText" md-item-text="distributor.name" placeholder="by Name")
+          md-autocomplete(md-search-text="l.filter.distributorSearchText" md-items="distributor in l.filter.distributors | filter:l.filter.distributorSearchText" md-item-text="distributor.name" placeholder="by Name")
             md-item-template
-            div(md-highlight-text="filter.distributorSearchText" md-highlight-flags="^i") {{distributor.name}}
+            div(md-highlight-text="l.filter.distributorSearchText" md-highlight-flags="^i") {{distributor.name}}
 
 
 
