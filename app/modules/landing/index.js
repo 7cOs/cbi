@@ -10,7 +10,8 @@ module.exports =
     .state('landing', {
       url: '/',
       templateUrl: './app/modules/landing/layout.html',
-      controller: 'landingController'
+      controller: 'landingController',
+      controllerAs: 'l'
     });
   })
   .controller('landingController', require('./landingController'));
