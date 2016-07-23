@@ -1,7 +1,11 @@
 'use strict';
 
 module.exports =
+<<<<<<< b57cebecd6b47f891940d8c9e03c41749e221d73
   function opportunitiesController($rootScope, $scope, $state, $log, opportunitiesService, chipsService, filtersService) {
+=======
+  function opportunitiesController($log, opportunitiesService, chipsService, filtersService, userService) {
+>>>>>>> created user service and added users and notifications
     var vm = this;
 
     // Services available in View
