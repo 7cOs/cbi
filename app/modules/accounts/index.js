@@ -10,7 +10,8 @@ module.exports =
     .state('accounts', {
       url: '/accounts',
       templateUrl: './app/modules/accounts/layout.html',
-      controller: 'accountsController'
+      controller: 'accountsController',
+      controllerAs: 'a'
     });
   })
   .controller('accountsController', require('./accountsController'));

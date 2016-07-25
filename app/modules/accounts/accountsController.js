@@ -1,70 +1,114 @@
 'use strict';
 
 module.exports =
-  function accountsController($rootScope, $scope, $state) {
+  function accountsController($rootScope, $scope, $state, $log, opportunitiesService, chipsService, filtersService, userService) {
+    var vm = this;
+
+    // Services available in View
+    vm.chipsService = chipsService;
+    vm.filtersService = filtersService;
+
+    // Map public methods to scope
+    vm.toggle = toggle;
+    vm.exists = exists;
+    vm.isChecked = isChecked;
+    vm.toggleAll = toggleAll;
+    vm.expandCallback = expandCallback;
+    vm.collapseCallback = collapseCallback;
+    vm.querySearch = querySearch;
 
     // Broadcast current page name for other scopes
     $rootScope.$broadcast('page:loaded', $state.current.name);
 
-    $scope.testData = [
-      {
-        'SKU': 'Pacifico 12PK bottle',
-        'distributionNum': 902,
-        'distributionPercent': 7.6,
-        'velocityNum': 902,
-        'velocityPercent': 7.6,
-        'depletionsNum': 902,
-        'depletionsPercent': 7.6
-      },
-      {
-        'SKU': 'Pacifico 6PK bottle',
-        'distributionNum': 803,
-        'distributionPercent': 2.7,
-        'velocityNum': 803,
-        'velocityPercent': 2.7,
-        'depletionsNum': 803,
-        'depletionsPercent': 2.7
-      },
-      {
-        'SKU': 'Ballast Point 6PK bottle',
-        'distributionNum': 306,
-        'distributionPercent': 5.9,
-        'velocityNum': 306,
-        'velocityPercent': 5.9,
-        'depletionsNum': 306,
-        'depletionsPercent': 5.9
-      }
-    ];
+    // Get opportunities and products data
+    vm.opportunities = opportunitiesService.get('opportunities');
+    vm.products = opportunitiesService.get('products');
 
-    $scope.testStores = [
-      {
-        'storeName': 'Thriftway Morgan',
-        'depletions': 47560
-      },
-      {
-        'storeName': 'Town and Country',
-        'depletions': 53465
-      }
-    ];
+    // Set up arrays for tracking selected and expanded list items
+    vm.selected = [];
+    vm.expandedOpportunities = [];
 
-    $scope.testOpportunities =  [
-      {
-        'opportunityType': 'Non-buy',
-        'SKU': {
-          'brand': 'Corona LT',
-          'pack': '12 PK - 12 oz'
-        },
-        'status': 'NEW',
-        'rationale': 'This store has not purchased yet'
-      },
-      {
-        'opportunityType': 'At risk',
-        'SKU': {
-          'brand': 'Ballast Point',
-          'pack': '6 PK bottle'
-        },
-        'status': 'EXISTING',
-        'rationale': 'Has not sold for 60 days'
+    // Simulated returned user data to show saved filters
+    vm.userData = {
+      savedFilters: [{
+        name: 'Saved Filter 1',
+        filters: ['Filter 1', 'Filter 2', 'Filter 3', 'Filter 4']
+      }, {
+        name: 'Saved Filter 2',
+        filters: ['Filter 1', 'Filter 2']
+      }]
+    };
+
+    // ///////////////////////////////////////////////////////// Public Methods
+    // Add item to array of currently expanded list items
+    function expandCallback(item) {
+      vm.expandedOpportunities.push(item);
+    };
+
+    // Remove item from array of currently expanded list items
+    function collapseCallback(item) {
+      var index = vm.expandedOpportunities.indexOf(item);
+      if (index > -1) {
+        vm.expandedOpportunities.splice(index, 1);
+      };
+    };
+
+    // Check if list item exists and is selected
+    function exists(item, list) {
+      return list.indexOf(item) > -1;
+    };
+
+    // Check if all items are selected
+    function isChecked() {
+      return vm.selected.length === vm.opportunities.length;
+    };
+
+    // Select or deselect all list items
+    function toggleAll() {
+      if (vm.selected.length === vm.opportunities.length) {
+        vm.selected = [];
+      } else if (vm.selected.length === 0 || vm.selected.length > 0) {
+        vm.selected = vm.opportunities.slice(0);
       }
-    ];
+    };
+
+    // Select or deselect individual list item
+    function toggle(item, list) {
+      var idx = list.indexOf(item);
+      if (idx > -1) {
+        list.splice(idx, 1);
+      } else {
+        list.push(item);
+      }
+    };
+
+    // Set positive or negative label for trend values
+    vm.opportunities.forEach(function(item) {
+      var trend = item.depletionTrendVsYA;
+      if (trend > 0) {
+        item.positiveValue = true;
+      } else if (trend < 0) {
+        item.negativeValue = true;
+      }
+    });
+
+    function querySearch(searchText) {
+      // To Do: Send new request for data with search params - we could split this into the each respective service, or build the query here and send to the service
+      // Change autocomplete to md-items="brand in o.querySearch(searchText)" to apply filters
+      // Add loading spinner while we wait for request
+    }
+
+    // To Do: Create a better filter for brands and accounts
+    /* function querySearch(query) {
+      var results = query ? vm.brands.filter(createFilterFor(query)) : vm.brands;
+      return results;
+    }
+
+    // Private
+    function createFilterFor(query) {
+      var lowercaseQuery = angular.lowercase(query);
+      return function filterFn(brand) {
+        return (brand.name.indexOf(lowercaseQuery) === 0);
+      };
+    }*/
   };

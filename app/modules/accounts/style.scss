@@ -1,22 +1,39 @@
-.my-accounts  {
+.account-header {
+  margin-bottom: 1em;
+}
 
-  md-tabs-canvas {
-    md-tab-item {
-      background: transparent;
-    }
+.market-overview {
+  background: $white;
+  display: inline-block;
+  float: right;
+  padding-right: 2em;
+  border: 1px solid $gray-4;
+
+  .brands,
+  .market,
+  .notes {
+    background-position: 1em 0.5em;
+    background-repeat: no-repeat;
+    background-size: 10px;
+    float: left;
+    padding-left: 2.75em;
+    margin-left: 0.75em;
   }
 
-  .md-tab.md-active {
-    background: transparent;
+  .brands {
+    background-image: url('../assets/img/icons/overview-all-brands.svg');
   }
 
-  md-tab-content,
-  md-content {
-    background-color: transparent;
+  .market {
+    background-image: url('../assets/img/icons/overview-overall-market.svg');
+    background-size: 20px;
+    background-position: 1em 1em;
   }
 
-  button {
-    font-size: 0.5em;
+  .notes {
+    background-image: url('../assets/img/icons/overview-notes.svg');
+    background-size: 20px;
+    background-position: 1em 1em;
+    border-left: 1px solid $gray-4;
   }
-
 }

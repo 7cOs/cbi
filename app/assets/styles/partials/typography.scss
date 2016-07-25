@@ -38,6 +38,28 @@ a label {
 h1, h2, h3, h4 {
   color: $gray-1;
   font-family: $work-sans;
+
+  .accent {
+    color: $blue;
+    display: inline;
+    font-size: 0.25em;
+    padding-left: 1em;
+    padding-right: 1em;
+    position: relative;
+
+    &:after {
+      bottom: 0;
+      content: '>';
+      display: block;
+      position: absolute;
+      right: 0;
+    }
+
+    &:hover, &:active {
+      color: $dark-blue;
+      cursor: hand;
+    }
+  }
 }
 
 h1, h3, h5 {
