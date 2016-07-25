@@ -133,7 +133,134 @@ module.exports =
           'description': 'Opportunity ID string'
         }
       },
-      addDeleteTargetListOpportunitiesResponse: {'status': 200}
+      addDeleteTargetListOpportunitiesResponse: {'status': 200},
+      getTargetListSharesResponse: [{
+        'id': '13782b',
+        'user': {
+          'id': 'A1B2',
+          'firstName': 'Joe',
+          'lastName': 'Cerveza',
+          'email': 'jCerveza@cbrands.com',
+          'phone': '1234567890',
+          'role': 'CBBD MDM',
+          'accounts': ['Wal-mart', 'PCC']
+        },
+        'permissionLevel': 'Author',
+        'lastViewed': '2015-07-16T19:20:30.45+01:00'
+      }, {
+        'id': '1212jf',
+        'user': {
+          'id': 'A1B3',
+          'firstName': 'John',
+          'lastName': 'Cerveza',
+          'email': 'jCerveza2@cbrands.com',
+          'phone': '1234567890',
+          'role': 'CBBD MDM',
+          'accounts': ['Wal-mart', 'PCC']
+        },
+        'permissionLevel': 'CollaborateAndInvite',
+        'lastViewed': '2015-07-16T19:20:30.45+01:00'
+      }, {
+        'id': 'hkjl88',
+        'user': {
+          'id': 'A1B4',
+          'firstName': 'Jane',
+          'lastName': 'Cerveza',
+          'email': 'jCerveza3@cbrands.com',
+          'phone': '1234567890',
+          'role': 'CBBD MDM',
+          'accounts': ['Wal-mart', 'PCC']
+        },
+        'permissionLevel': 'Collaborate',
+        'lastViewed': '2015-07-16T19:20:30.45+01:00'
+      }],
+      addTargetListSharesPayload: {
+        'type': 'array',
+        '$schema': 'http://json-schema.org/draft-03/schema',
+        'required': 'true',
+        'description': 'List of user profile IDs to share an object with and their corresponding permission levels.',
+        'id': 'sharedUsersSchema',
+        'items': {
+          'type': 'object',
+          'required': true,
+          'properties': {
+            'user': {
+              'type': 'string',
+              'required': 'true',
+              'description': 'User ID'
+            },
+            'permissionLevel': {
+              'enum': ['Author', 'CollaborateAndInvite', 'Collaborate'],
+              'required': 'true',
+              'description': 'Defines the permission level of the specified user for accessing and editing the target list.'
+            }
+          }
+        }
+      },
+      addTargetListSharesResponse: [{
+        'id': '13782b',
+        'user': {
+          'id': 'A1B2',
+          'firstName': 'Joe',
+          'lastName': 'Cerveza',
+          'email': 'jCerveza@cbrands.com',
+          'phone': '1234567890',
+          'role': 'CBBD MDM',
+          'accounts': ['Wal-mart', 'PCC']
+        },
+        'permissionLevel': 'Author',
+        'lastViewed': '2015-07-16T19:20:30.45+01:00'
+      }, {
+        'id': '1212jf',
+        'user': {
+          'id': 'A1B3',
+          'firstName': 'John',
+          'lastName': 'Cerveza',
+          'email': 'jCerveza2@cbrands.com',
+          'phone': '1234567890',
+          'role': 'CBBD MDM',
+          'accounts': ['Wal-mart', 'PCC']
+        },
+        'permissionLevel': 'CollaborateAndInvite',
+        'lastViewed': '2015-07-16T19:20:30.45+01:00'
+      }, {
+        'id': 'hkjl88',
+        'user': {
+          'id': 'A1B4',
+          'firstName': 'Jane',
+          'lastName': 'Cerveza',
+          'email': 'jCerveza3@cbrands.com',
+          'phone': '1234567890',
+          'role': 'CBBD MDM',
+          'accounts': ['Wal-mart', 'PCC']
+        },
+        'permissionLevel': 'Collaborate',
+        'lastViewed': '2015-07-16T19:20:30.45+01:00'
+      }],
+      deleteTargetListSharesPayload: {
+        'type': 'array',
+        '$schema': 'http://json-schema.org/draft-03/schema',
+        'required': 'true',
+        'description': 'List of user profile IDs to share an object with and their corresponding permission levels.',
+        'id': 'sharedUsersSchema',
+        'items': {
+          'type': 'object',
+          'required': true,
+          'properties': {
+            'user': {
+              'type': 'string',
+              'required': 'true',
+              'description': 'User ID'
+            },
+            'permissionLevel': {
+              'enum': ['Author', 'CollaborateAndInvite', 'Collaborate'],
+              'required': 'true',
+              'description': 'Defines the permission level of the specified user for accessing and editing the target list.'
+            }
+          }
+        }
+      },
+      deleteTargetListSharesResponse: {'status': 200}
     };
 
     return {
@@ -142,7 +269,10 @@ module.exports =
       deleteTargetList: deleteTargetList,
       getTargetListOpportunities: getTargetListOpportunities,
       addTargetListOpportunities: addTargetListOpportunities,
-      deleteTargetListOpportunities: deleteTargetListOpportunities
+      deleteTargetListOpportunities: deleteTargetListOpportunities,
+      getTargetListShares: getTargetListShares,
+      addTargetListShares: addTargetListShares,
+      deleteTargetListShares: deleteTargetListShares
     };
 
     /**
@@ -322,13 +452,108 @@ module.exports =
       .catch(deleteTargetListOpportunitiesFail);
 
       function deleteTargetListOpportunitiesSuccess(response) {
-        console.log('[targetListService.addTargetListOpportunities] response: ', response);
+        console.log('[targetListService.deleteTargetListOpportunities] response: ', response);
         // targetListPromise.resolve(response.data);
         // uncomment above and remove below when services are ready
         targetListPromise.resolve(tempData.addDeleteTargetListOpportunitiesResponse);
       }
 
       function deleteTargetListOpportunitiesFail(error) {
+        targetListPromise.reject(error);
+      }
+
+      return targetListPromise.promise;
+    }
+
+    /**
+     * @name deleteTargetListOpportunities
+     * @desc delete target list opportunities
+     * @params {String} targetListId - id of target list
+     * @returns {Object} - shares object
+     * @memberOf andromeda.common.services
+     */
+    function getTargetListShares(targetListId) {
+      var targetListPromise = $q.defer(),
+          url = '';
+
+      $http.get(url, {
+        headers: {}
+      })
+      .then(getTargetListSharesSuccess)
+      .catch(getTargetListSharesFail);
+
+      function getTargetListSharesSuccess(response) {
+        console.log('[targetListService.getTargetListShares] response: ', response);
+        // targetListPromise.resolve(response.data);
+        // uncomment above and remove below when services are ready
+        targetListPromise.resolve(tempData.getTargetListSharesResponse);
+      }
+
+      function getTargetListSharesFail(error) {
+        targetListPromise.reject(error);
+      }
+
+      return targetListPromise.promise;
+    }
+
+    /**
+     * @name addTargetListShares
+     * @desc add target list shares
+     * @params {String} targetListId - id of target list
+     * @returns {Object} - target shares including new object
+     * @memberOf andromeda.common.services
+     */
+    function addTargetListShares(targetListId) {
+      var targetListPromise = $q.defer(),
+          url = '',
+          payload = tempData.addTargetListSharesPayload;
+
+      $http.post(url, payload, {
+        headers: {}
+      })
+      .then(addTargetListSharesSuccess)
+      .catch(addTargetListSharesFail);
+
+      function addTargetListSharesSuccess(response) {
+        console.log('[targetListService.addTargetListShares] response: ', response);
+        // targetListPromise.resolve(response.data);
+        // uncomment above and remove below when services are ready
+        targetListPromise.resolve(tempData.addTargetListSharesResponse);
+      }
+
+      function addTargetListSharesFail(error) {
+        targetListPromise.reject(error);
+      }
+
+      return targetListPromise.promise;
+    }
+
+    /**
+     * @name deleteTargetListShares
+     * @desc delete target list shares
+     * @params {String} targetListId - id of target list
+     * @returns {Object} - status object
+     * @memberOf andromeda.common.services
+     */
+    function deleteTargetListShares(targetListId) {
+      var targetListPromise = $q.defer(),
+          url = '',
+          payload = tempData.deleteTargetListSharesPayload;
+
+      $http.delete(url, payload, {
+        headers: {}
+      })
+      .then(deleteTargetListSharesSuccess)
+      .catch(deleteTargetListSharesFail);
+
+      function deleteTargetListSharesSuccess(response) {
+        console.log('[targetListService.deleteTargetListShares] response: ', response);
+        // targetListPromise.resolve(response.data);
+        // uncomment above and remove below when services are ready
+        targetListPromise.resolve(tempData.deleteTargetListSharesResponse);
+      }
+
+      function deleteTargetListSharesFail(error) {
         targetListPromise.reject(error);
       }
 
