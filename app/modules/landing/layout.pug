@@ -17,7 +17,7 @@ section.landing-page
               td
                 h3 {{l.performanceData.performance[0].measures[4].value}}
               td
-                h3.bold <span ng-if="isPositive(l.performanceData.performance[0].measures[4].percentChange)">+</span>{{l.performanceData.performance[0].measures[4].percentChange}}<span>%</span>
+                h3.bold <span ng-if="l.isPositive(l.performanceData.performance[0].measures[4].percentChange)">+</span>{{l.performanceData.performance[0].measures[4].percentChange}}<span>%</span>
             tr
               td
                 h3 &nbsp;
@@ -39,22 +39,22 @@ section.landing-page
               td
                 h3 {{l.performanceData.performance[3].measures[2].value}}
               td
-                h3.bold <span ng-if="isPositive(l.performanceData.performance[3].measures[2].percentChange)">+</span>{{l.performanceData.performance[3].measures[2].percentChange}}<span>%</span>
+                h3.bold <span ng-if="l.isPositive(l.performanceData.performance[3].measures[2].percentChange)">+</span>{{l.performanceData.performance[3].measures[2].percentChange}}<span>%</span>
               td.accent.table-spacer on
               td
                 h3 {{l.performanceData.performance[4].measures[2].value}}
               td
-                h3.bold <span ng-if="isPositive(l.performanceData.performance[4].measures[2].percentChange)">+</span>{{l.performanceData.performance[4].measures[2].percentChange}}<span>%</span>
+                h3.bold <span ng-if="l.isPositive(l.performanceData.performance[4].measures[2].percentChange)">+</span>{{l.performanceData.performance[4].measures[2].percentChange}}<span>%</span>
             tr
               td
                 h3 {{l.performanceData.performance[1].measures[2].value}}
               td
-                h3.bold <span ng-if="isPositive(l.performanceData.performance[1].measures[2].percentChange)">+</span>{{l.performanceData.performance[1].measures[2].percentChange}}<span>%</span>
+                h3.bold <span ng-if="l.isPositive(l.performanceData.performance[1].measures[2].percentChange)">+</span>{{l.performanceData.performance[1].measures[2].percentChange}}<span>%</span>
               td.accent.table-spacer off
               td
                 h3 {{l.performanceData.performance[2].measures[2].value}}
               td
-                h3.bold <span ng-if="isPositive(l.performanceData.performance[2].measures[2].percentChange)">+</span>{{l.performanceData.performance[2].measures[2].percentChange}}<span>%</span>
+                h3.bold <span ng-if="l.isPositive(l.performanceData.performance[2].measures[2].percentChange)">+</span>{{l.performanceData.performance[2].measures[2].percentChange}}<span>%</span>
       p.accent.action-item #[a(href="#") View Details &#9654;]
 
       section(row)
@@ -78,7 +78,7 @@ section.landing-page
                       div(column="4")
                         h4(column="6").completed.right {{list.closedOpportunites}}
                         h4(column="6").right {{list.opportunities}}
-                      md-progress-linear(md-mode="determinate" ng-value="ratio(list.closedOpportunites, list.opportunities)")
+                      md-progress-linear(md-mode="determinate" ng-value="l.ratio(list.closedOpportunites, list.opportunities)")
                 div(row)
                   p.accent.action-item #[a(href="#") View All &#9654;]
             md-tab(label='Shared with Me')
