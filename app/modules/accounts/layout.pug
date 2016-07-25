@@ -51,6 +51,6 @@
         md-item-template
           div(md-highlight-text="a.filtersService.model.distributorSearchText" md-highlight-flags="^i") {{distributor.name}}
     div(column='12' class='apply-filters')
-      button(value='Apply Filters' type="button" class="button-sharing") Apply Filters
+      button(value='Apply Filters' type="button" class="btn-action" ng-disabled="a.chipsService.model.length <= 0") Apply Filters
 
 list
