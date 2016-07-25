@@ -122,7 +122,18 @@ module.exports =
           'last90DaysVolume': 33.11,
           'lastInvoiceDate': '2016-11-05T13:15:30Z'
         }]
-      }
+      },
+      addDeleteTargetListOpportunitiesPayload: {
+        'required': 'true',
+        '$schema': 'http://json-schema.org/draft-03/schema',
+        'id': 'opportunityIDListSchema',
+        'type': 'array',
+        'items': {
+          'type': 'string',
+          'description': 'Opportunity ID string'
+        }
+      },
+      addDeleteTargetListOpportunitiesResponse: {'status': 200}
     };
 
     return {
@@ -264,9 +275,63 @@ module.exports =
      * @name addTargetListOpportunities
      * @desc add target list opportunities
      * @params {String} targetListId - id of target list
-     * @returns {Object} - target list opportunities
+     * @returns {Object} - status object
      * @memberOf andromeda.common.services
      */
-    function addTargetListOpportunities(targetListId) {}
-    function deleteTargetListOpportunities(targetListId) {}
+    function addTargetListOpportunities(targetListId) {
+      var targetListPromise = $q.defer(),
+          url = '',
+          payload = tempData.addDeleteTargetListOpportunitiesPayload;
+
+      $http.post(url, payload, {
+        headers: {}
+      })
+      .then(addTargetListOpportunitiesSuccess)
+      .catch(addTargetListOpportunitiesFail);
+
+      function addTargetListOpportunitiesSuccess(response) {
+        console.log('[targetListService.addTargetListOpportunities] response: ', response);
+        // targetListPromise.resolve(response.data);
+        // uncomment above and remove below when services are ready
+        targetListPromise.resolve(tempData.addDeleteTargetListOpportunitiesResponse);
+      }
+
+      function addTargetListOpportunitiesFail(error) {
+        targetListPromise.reject(error);
+      }
+
+      return targetListPromise.promise;
+    }
+
+    /**
+     * @name deleteTargetListOpportunities
+     * @desc delete target list opportunities
+     * @params {String} targetListId - id of target list
+     * @returns {Object} - status object
+     * @memberOf andromeda.common.services
+     */
+    function deleteTargetListOpportunities(targetListId) {
+      var targetListPromise = $q.defer(),
+          url = '',
+          payload = tempData.addDeleteTargetListOpportunitiesPayload;
+
+      $http.delete(url, payload, {
+        headers: {}
+      })
+      .then(deleteTargetListOpportunitiesSuccess)
+      .catch(deleteTargetListOpportunitiesFail);
+
+      function deleteTargetListOpportunitiesSuccess(response) {
+        console.log('[targetListService.addTargetListOpportunities] response: ', response);
+        // targetListPromise.resolve(response.data);
+        // uncomment above and remove below when services are ready
+        targetListPromise.resolve(tempData.addDeleteTargetListOpportunitiesResponse);
+      }
+
+      function deleteTargetListOpportunitiesFail(error) {
+        targetListPromise.reject(error);
+      }
+
+      return targetListPromise.promise;
+    }
   };
