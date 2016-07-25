@@ -25,7 +25,9 @@ module.exports =
         i++;
       }
 
-      return encodeURIComponent(url);
+      // return encodeURIComponent(url);
+      // uncomment above when API is ready
+      return 'http://jsonplaceholder.typicode.com/posts';
     }
 
   };
