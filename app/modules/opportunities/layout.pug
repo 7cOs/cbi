@@ -4,8 +4,8 @@
     .saved-filter-select(column='3')
       md-input-container
         label Saved Filters
-        md-select(ng-model="o.savedFilterSelect")
-          md-option(ng-repeat="filter in o.userData.savedFilters" value="{{filter.name}}") {{filter.name}}
+        md-select(ng-model="o.filtersService.model.selected.currentFilter")
+          md-option(ng-repeat="savedFilter in o.userService.model.opportunityFilters" value="{{savedFilter.id}}") {{savedFilter.name}}
 .chips(ng-if="o.chipsService.model.length")
   label Active Filters
   md-chips(ng-model="o.chipsService.model" name="Active Filters" md-on-remove="o.chipsService.removeFromFilterService($chip)")
