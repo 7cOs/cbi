@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports =
-  function targetListsController($rootScope, $scope, $state, $log, opportunitiesService, chipsService, filtersService, userService) {
+  function targetListsController($rootScope, $state, opportunitiesService, chipsService, filtersService) {
     var vm = this;
 
     // Services available in View
