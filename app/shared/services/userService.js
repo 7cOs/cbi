@@ -541,11 +541,7 @@ module.exports =
      */
     function getUsers(id) {
       var usersPromise = $q.defer(),
-          url = apiHelperService.formatQueryString({
-            'baseUrl': '',
-            'signature': '',
-            'apiKey': ''
-          });
+          url = apiHelperService.formatQueryString();
 
       if (id && id !== '') url += encodeURIComponent('userID:' + id);
 
