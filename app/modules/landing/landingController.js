@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports =
-  function accountsController($rootScope, $scope, $state, filtersService, myperformanceService, targetListService) {
+  function landingController($rootScope, $scope, $state, filtersService, myperformanceService, targetListService) {
     var vm = this;
 
     // Map public methods to scope
@@ -11,8 +11,50 @@ module.exports =
 
     vm.filter = filtersService.model;
     vm.performanceData = myperformanceService.model();
-    vm.namedFilters = targetListService.list();
-    vm.sharedFilters = targetListService.sharedList();
+    vm.namedFilters = [{
+      'name': 'California - Whiskey Bars',
+      'creator': 'Will Jay',
+      'members': ['James Norton', 'RJ LaCount', 'Eric Schiller'],
+      'created': 'One Minute Ago',
+      'closedOpportunites': 520,
+      'opportunities': 2251
+    }, {
+      'name': 'California - Wine Shops',
+      'creator': 'Pete Mitchell',
+      'members': ['James Norton', 'Eric Schiller'],
+      'created': 'One Minute Ago',
+      'closedOpportunites': 320,
+      'opportunities': 451
+    }, {
+      'name': 'California - Negroni Bars',
+      'creator': 'Nick Bradsaw',
+      'members': ['James Norton', 'RJ LaCount', 'Eric Schiller', 'Holly Perkins'],
+      'created': 'One Year Ago',
+      'closedOpportunites': 1989,
+      'opportunities': 2251
+    }, {
+      'name': 'California - Beer Stores',
+      'creator': 'RJ LaCount',
+      'members': ['James Norton', 'Adwait Nerlikar', 'RJ LaCount', 'Eric Schiller'],
+      'created': 'One Minute Ago',
+      'closedOpportunites': 587,
+      'opportunities': 2251
+    }];
+    vm.sharedFilters = [{
+      'name': 'Whidbey Island Restaurants',
+      'creator': 'Sam Carvey',
+      'members': ['David Ostler', 'Todd Alkema'],
+      'created': 'One Hour Ago',
+      'closedOpportunites': 20,
+      'opportunities': 251
+    }, {
+      'name': 'West Seattle C-Stores',
+      'creator': 'Patti Horigan',
+      'members': ['James Conrick', 'Tom Andersen', 'Paul Wagner'],
+      'created': 'One Week Ago',
+      'closedOpportunites': 390,
+      'opportunities': 551
+    }];
 
     // Broadcast current page name for other scopes
     $rootScope.$broadcast('page:loaded', $state.current.name);
