@@ -6,7 +6,7 @@ module.exports =
         'measures': [{
           'timeframe': 'L30',
           'value': 273400,
-          'percentChange': 7.5
+          'percentChange': -7.5
         }, {
           'timeframe': 'L60',
           'value': 273400,
@@ -19,6 +19,10 @@ module.exports =
           'timeframe': 'L120',
           'value': 273400,
           'percentChange': 7.5
+        }, {
+          'timeframe': 'FYTD',
+          'value': 499999,
+          'percentChange': 13.5
         }]
       }, {
         'type': 'Distribution Points - Off Premise, Simple',
@@ -32,8 +36,8 @@ module.exports =
           'percentChange': -7.5
         }, {
           'timeframe': 'L90',
-          'value': 3017,
-          'percentChange': -7.5
+          'value': 812,
+          'percentChange': -9.5
         }, {
           'timeframe': 'L120',
           'value': 3017,
@@ -51,8 +55,8 @@ module.exports =
           'percentChange': 9.9
         }, {
           'timeframe': 'L90',
-          'value': 8256,
-          'percentChange': 9.9
+          'value': 316,
+          'percentChange': 19.9
         }, {
           'timeframe': 'L120',
           'value': 8256,
@@ -70,7 +74,7 @@ module.exports =
           'percentChange': -3.2
         }, {
           'timeframe': 'L90',
-          'value': 548,
+          'value': 5150,
           'percentChange': -3.2
         }, {
           'timeframe': 'L120',

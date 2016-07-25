@@ -62,45 +62,152 @@ module.exports =
         'depletionsCYTD': 10,
         'depletionTrendVsYA': 5
       }],
-      products: [
-        {id: 0, product: 'Corona LT', detail: '12 Pk -12 oz BT', type: 'At risk', rationale: 'Similar <class of trade> accounts, currently growing SKU at <X%>', status: 'new', predictedImpact: 'high', regionalStatus: 'featured'},
-        {id: 1, product: 'Modelo', detail: '12 Pk -12 oz BT', type: 'At risk', rationale: 'Similar <class of trade> accounts, currently growing SKU at <X%>', status: 'new', predictedImpact: 'high', regionalStatus: 'mandatory'},
-        {id: 2, product: 'Victoria', detail: '12 Pk -12 oz BT', type: 'Non-buy', rationale: 'Similar <class of trade> accounts, currently growing SKU at <X%>', status: 'new', predictedImpact: 'high', regionalStatus: 'both'},
-        {id: 3, product: 'Pacifico', detail: '12 Pk -12 oz BT', type: 'Non-buy', rationale: 'Similar <class of trade> accounts, currently growing SKU at <X%>', status: 'new', predictedImpact: 'low'},
-        {id: 4, product: 'N. Modelo', detail: '12 Pk -12 oz BT', type: 'Low Velocity', rationale: 'Similar <class of trade> accounts, currently growing SKU at <X%>', status: 'new', predictedImpact: 'medium'},
-        {id: 5, product: 'Corona LT', detail: '12 Pk -12 oz BT', type: 'Low Velocity', rationale: 'Similar <class of trade> accounts, currently growing SKU at <X%>', status: 'new', predictedImpact: 'low'}
-      ],
-      opportunitiesTypes: [
-        {name: 'All Types'},
-        {name: 'Non-buy'},
-        {name: 'At Risk'},
-        {name: 'Low Velocity'},
-        {name: 'New Placement (Quality)'},
-        {name: 'New Placement (No Rebuy)'},
-        {name: 'Manual'}
-      ],
-      opportunitiesStatus: [
-        {name: 'Open'},
-        {name: 'Targeted'}
-      ],
-      savedFilters: [
-        {name: 'Wine Shops'},
-        {name: 'Costco No Buy'},
-        {name: 'Circle K - Fremont'}
-      ],
-      premises: [
-        {name: 'On Premise'},
-        {name: 'Off Premise'}
-      ],
+      products: [{
+        id: 0,
+        product: 'Corona LT',
+        detail: '12 Pk -12 oz BT',
+        type: 'At risk',
+        rationale: 'Similar <class of trade> accounts, currently growing SKU at <X%>',
+        status: 'new',
+        predictedImpact: 'high',
+        regionalStatus: 'featured'
+      }, {
+        id: 1,
+        product: 'Modelo',
+        detail: '12 Pk -12 oz BT',
+        type: 'At risk',
+        rationale: 'Similar <class of trade> accounts, currently growing SKU at <X%>',
+        status: 'new',
+        predictedImpact: 'high',
+        regionalStatus: 'mandatory'
+      }, {
+        id: 2,
+        product: 'Victoria',
+        detail: '12 Pk -12 oz BT',
+        type: 'Non-buy',
+        rationale: 'Similar <class of trade> accounts, currently growing SKU at <X%>',
+        status: 'new',
+        predictedImpact: 'high',
+        regionalStatus: 'both'
+      }, {
+        id: 3,
+        product: 'Pacifico',
+        detail: '12 Pk -12 oz BT',
+        type: 'Non-buy',
+        rationale: 'Similar <class of trade> accounts, currently growing SKU at <X%>',
+        status: 'new',
+        predictedImpact: 'low'
+      }, {
+        id: 4,
+        product: 'N. Modelo',
+        detail: '12 Pk -12 oz BT',
+        type: 'Low Velocity',
+        rationale: 'Similar <class of trade> accounts, currently growing SKU at <X%>',
+        status: 'new',
+        predictedImpact: 'medium'
+      }, {
+        id: 5,
+        product: 'Corona LT',
+        detail: '12 Pk -12 oz BT',
+        type: 'Low Velocity',
+        rationale: 'Similar <class of trade> accounts, currently growing SKU at <X%>',
+        status: 'new',
+        predictedImpact: 'low'
+      }],
+      opportunitiesTypes: [{
+        name: 'All Types'
+      }, {
+        name: 'Non-buy'
+      }, {
+        name: 'At Risk'
+      }, {
+        name: 'Low Velocity'
+      }, {
+        name: 'New Placement (Quality)'
+      }, {
+        name: 'New Placement (No Rebuy)'
+      }, {
+        name: 'Manual'
+      }],
+      opportunitiesStatus: [{
+        name: 'Open'
+      }, {
+        name: 'Targeted'
+      }],
+      savedFilters: [{
+        name: 'Wine Shops'
+      }, {
+        name: 'Costco No Buy'
+      }, {
+        name: 'Circle K - Fremont'
+      }],
+      premises: [{
+        name: 'On Premise'
+      }, {
+        name: 'Off Premise'
+      }],
       brands: productsService.getProducts('http://jsonplaceholder.typicode.com/posts'),
-      accounts: [
-        {name: 'Walmart', subAccount: 'North East'},
-        {name: 'Walmart', subAccount: 'West'},
-        {name: 'Walmart', subAccount: 'South'},
-        {name: 'Walmart', subAccount: 'East'}
-      ],
+      accounts: [{
+        name: 'Walmart',
+        subAccount: 'North East'
+      }, {
+        name: 'Walmart',
+        subAccount: 'West'
+      }, {
+        name: 'Walmart',
+        subAccount: 'South'
+      }, {
+        name: 'Walmart',
+        subAccount: 'East'
+      }],
       distributors: distributorsService.getDistributors('http://jsonplaceholder.typicode.com/posts')
     };
+
+    var myNamedFilters = [{
+      'name': 'California - Whiskey Bars',
+      'creator': 'Will Jay',
+      'members': ['James Norton', 'RJ LaCount', 'Eric Schiller'],
+      'created': 'One Minute Ago',
+      'closedOpportunites': 520,
+      'opportunities': 2251
+    }, {
+      'name': 'California - Wine Shops',
+      'creator': 'Pete Mitchell',
+      'members': ['James Norton', 'Eric Schiller'],
+      'created': 'One Minute Ago',
+      'closedOpportunites': 320,
+      'opportunities': 451
+    }, {
+      'name': 'California - Negroni Bars',
+      'creator': 'Nick Bradsaw',
+      'members': ['James Norton', 'RJ LaCount', 'Eric Schiller', 'Holly Perkins'],
+      'created': 'One Year Ago',
+      'closedOpportunites': 1989,
+      'opportunities': 2251
+    }, {
+      'name': 'California - Beer Stores',
+      'creator': 'RJ LaCount',
+      'members': ['James Norton', 'Adwait Nerlikar', 'RJ LaCount', 'Eric Schiller'],
+      'created': 'One Minute Ago',
+      'closedOpportunites': 587,
+      'opportunities': 2251
+    }];
+
+    var mySharedFilters = [{
+      'name': 'Whidbey Island Restaurants',
+      'creator': 'Sam Carvey',
+      'members': ['David Ostler', 'Todd Alkema'],
+      'created': 'One Hour Ago',
+      'closedOpportunites': 20,
+      'opportunities': 251
+    }, {
+      'name': 'West Seattle C-Stores',
+      'creator': 'Patti Horigan',
+      'members': ['James Conrick', 'Tom Andersen', 'Paul Wagner'],
+      'created': 'One Week Ago',
+      'closedOpportunites': 390,
+      'opportunities': 551
+    }];
 
     var filter = {
       opportunitiesTypes: data.opportunitiesTypes,
@@ -126,6 +233,12 @@ module.exports =
       },
       model: function() {
         return filter;
+      },
+      list: function() {
+        return myNamedFilters;
+      },
+      sharedList: function() {
+        return mySharedFilters;
       }
     };
   };

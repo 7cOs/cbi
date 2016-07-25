@@ -15,9 +15,9 @@ section.landing-page
               td &nbsp;
             tr
               td
-                h3 273,400
+                h3 {{l.performanceData.performance[0].measures[4].value}}
               td
-                h3.bold <span>+</span>6.4<span>%</span>
+                h3.bold <span ng-if="l.isPositive(l.performanceData.performance[0].measures[4].percentChange)">+</span>{{l.performanceData.performance[0].measures[4].percentChange}}<span>%</span>
             tr
               td
                 h3 &nbsp;
@@ -37,24 +37,24 @@ section.landing-page
               td &nbsp;
             tr
               td
-                h3 3017
+                h3 {{l.performanceData.performance[3].measures[2].value}}
               td
-                h3.bold <span>+</span>7.5<span>%</span>
+                h3.bold <span ng-if="l.isPositive(l.performanceData.performance[3].measures[2].percentChange)">+</span>{{l.performanceData.performance[3].measures[2].percentChange}}<span>%</span>
               td.accent.table-spacer on
               td
-                h3 6511
+                h3 {{l.performanceData.performance[4].measures[2].value}}
               td
-                h3.bold <span>-</span>2.3<span>%</span>
+                h3.bold <span ng-if="l.isPositive(l.performanceData.performance[4].measures[2].percentChange)">+</span>{{l.performanceData.performance[4].measures[2].percentChange}}<span>%</span>
             tr
               td
-                h3 8256
+                h3 {{l.performanceData.performance[1].measures[2].value}}
               td
-                h3.bold <span>-</span>0.9<span>%</span>
+                h3.bold <span ng-if="l.isPositive(l.performanceData.performance[1].measures[2].percentChange)">+</span>{{l.performanceData.performance[1].measures[2].percentChange}}<span>%</span>
               td.accent.table-spacer off
               td
-                h3 9506
+                h3 {{l.performanceData.performance[2].measures[2].value}}
               td
-                h3.bold <span>-</span>15.8<span>%</span>
+                h3.bold <span ng-if="l.isPositive(l.performanceData.performance[2].measures[2].percentChange)">+</span>{{l.performanceData.performance[2].measures[2].percentChange}}<span>%</span>
       p.accent.action-item #[a(href="#") View Details &#9654;]
 
       section(row)
@@ -69,46 +69,16 @@ section.landing-page
                     h5(column="6").accent.right opportunities
                 div(row).target-list
                   ul
-                    li
+                    li(ng-repeat="list in l.namedFilters")
                       div(column="8")
-                        h3 California - Whiskey Bars
-                        p.accent Will Jay
-                        p.accent &#9746; 4 members
-                        p.accent One Minute Ago
+                        h3 {{list.name}}
+                        p.accent {{list.creator}}
+                        p.accent &#9746; {{list.members.length}} members
+                        p.accent {{list.created}}
                       div(column="4")
-                        h4(column="6").completed.right 520
-                        h4(column="6").right 2251
-                      md-progress-linear(md-mode="determinate" value="20")
-                    li
-                      div(column="8")
-                        h3 California - Wine Shops
-                        p.accent Pete Mitchell
-                        p.accent &#9746; 4 members
-                        p.accent One Minute Ago
-                      div(column="4")
-                        h4(column="6").completed.right 320
-                        h4(column="6").right 451
-                      md-progress-linear(md-mode="determinate" value="71")
-                    li
-                      div(column="8")
-                        h3 California - Negroni Bars
-                        p.accent Nick Bradsaw
-                        p.accent Private
-                        p.accent One Minute Ago
-                      div(column="4")
-                        h4(column="6").completed.right 1987
-                        h4(column="6").right 2251
-                      md-progress-linear(md-mode="determinate" value="88")
-                    li
-                      div(column="8")
-                        h3 California - Beer Stores
-                        p.accent RJ LaCount
-                        p.accent Private
-                        p.accent One Minute Ago
-                      div(column="4")
-                        h4(column="6").right.completed 587
-                        h4(column="6").right 2251
-                      md-progress-linear(md-mode="determinate" value="26")
+                        h4(column="6").completed.right {{list.closedOpportunites}}
+                        h4(column="6").right {{list.opportunities}}
+                      md-progress-linear(md-mode="determinate" ng-value="l.ratio(list.closedOpportunites, list.opportunities)")
                 div(row)
                   p.accent.action-item #[a(href="#") View All &#9654;]
             md-tab(label='Shared with Me')
@@ -120,26 +90,16 @@ section.landing-page
                     h5(column="6").accent.right opportunities
                 div(row).target-list
                   ul
-                    li
+                    li(ng-repeat="list in sharedFilters")
                       div(column="8")
-                        h3 Whidbey Island - Restaurants
-                        p.accent Sam Carvey
-                        p.accent &#9746; 4 members
-                        p.accent One Minute Ago
+                        h3 {{list.name}}
+                        p.accent {{list.creator}}
+                        p.accent &#9746; {{list.members.length}} members
+                        p.accent {{list.created}}
                       div(column="4")
-                        h4(column="6").completed.right 520
-                        h4(column="6").right 2251
-                      md-progress-linear(md-mode="determinate" value="20")
-                    li
-                      div(column="8")
-                        h3 Bainbridge - Grocery Stores
-                        p.accent James Norton
-                        p.accent &#9746; 4 members
-                        p.accent One Minute Ago
-                      div(column="4")
-                        h4(column="6").completed.right 420
-                        h4(column="6").right 451
-                      md-progress-linear(md-mode="determinate" value="93")
+                        h4(column="6").completed.right {{list.closedOpportunites}}
+                        h4(column="6").right {{list.opportunities}}
+                      md-progress-linear(md-mode="determinate" value="{{list.closedOpportunites / list.opportunities * 100}}")
                 div(row)
                   p.accent.action-item #[a(href="#") View All &#9654;]
 
