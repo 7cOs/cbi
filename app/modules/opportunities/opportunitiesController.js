@@ -1,12 +1,18 @@
 'use strict';
 
 module.exports =
-  function opportunitiesController($rootScope, $scope, $state, $log, opportunitiesService, chipsService, filtersService, userService) {
+  function opportunitiesController($rootScope, $state, opportunitiesService, chipsService, filtersService, userService) {
     var vm = this;
 
     // Services available in View
     vm.chipsService = chipsService;
     vm.filtersService = filtersService;
+    vm.userService = userService;
+
+    // get saved filters
+    userService.getOpportunityFilters('1').then(function(data) {
+      vm.userService.model.opportunityFilters = data;
+    });
 
     // Map public methods to scope
     vm.toggle = toggle;

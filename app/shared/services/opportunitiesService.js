@@ -1,5 +1,5 @@
 module.exports =
-  function opportunitiesService($http, $q, productsService, distributorsService) {
+  function opportunitiesService($http, $q, productsService, distributorsService, apiHelperService) {
     // Temporary Data - Old Data we're currently using in controllers
     var tempData = {
       opportunities: [{

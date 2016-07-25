@@ -42,6 +42,7 @@ module.exports =
       selected: {
         accountScope: false,
         cbbdContact: '',
+        currentFilter: '',
         location: '',
         opportunitiesStatus: '',
         opportunitiesTypes: '',

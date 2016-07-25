@@ -734,7 +734,7 @@ module.exports =
      */
     function getOpportunityFilters(userId) {
       var opportunityFilterPromise = $q.defer(),
-          url = apiHelperService.formatQueryString();
+          url = apiHelperService.formatQueryString({'foo': 'bar'});
 
       $http.get(url, {
         headers: {}

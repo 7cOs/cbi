@@ -1,244 +1,562 @@
+'use strict';
+
 module.exports =
-  function targetListService(productsService, distributorsService) {
-    var data = {
-      opportunities: [{
-        'id': '123',
-        'store': {
-          'id': 'dsd82',
-          'name': 'Walmart',
-          'address': '123 Elm St., San Jose, CA - 88779',
-          'segmentation': 'A'
-        },
-        'impact': 3,
-        'opCount': 4,
-        'depletionsCYTD': 12657,
-        'depletionTrendVsYA': 0.3
-      }, {
-        'id': '123',
-        'store': {
-          'id': 'dsd82',
-          'name': 'Walgreens',
-          'address': '9 Jones st., San Francisco, CA - 98989',
-          'segmentation': 'A'
-        },
-        'impact': 5,
-        'opCount': 9,
-        'depletionsCYTD': 1002,
-        'depletionTrendVsYA': -5
-      }, {
-        'id': '123',
-        'store': {
-          'id': 'dsd82',
-          'name': 'Circle K',
-          'address': '3524 Walden Dr, Santa Clara, CA - 89898',
-          'segmentation': 'A'
-        },
-        'impact': 10,
-        'opCount': 25,
-        'depletionsCYTD': 78,
-        'depletionTrendVsYA': 5
-      }, {
-        'id': '123',
-        'store': {
-          'id': 'dsd82',
-          'name': 'Circle K',
-          'address': '136 Route 4 Boca Raton, CA - 33428',
-          'segmentation': 'B'
-        },
-        'impact': 3,
-        'opCount': 8,
-        'depletionsCYTD': 20,
-        'depletionTrendVsYA': -5
-      }, {
-        'id': '123',
-        'store': {
-          'id': 'dsd82',
-          'name': 'Redding',
-          'address': '35 Chapel Stree Bayonne, CA - 07002',
-          'segmentation': 'B'
-        },
-        'impact': 1,
-        'opCount': 1,
-        'depletionsCYTD': 10,
-        'depletionTrendVsYA': 5
-      }],
-      products: [{
-        id: 0,
-        product: 'Corona LT',
-        detail: '12 Pk -12 oz BT',
-        type: 'At risk',
-        rationale: 'Similar <class of trade> accounts, currently growing SKU at <X%>',
-        status: 'new',
-        predictedImpact: 'high',
-        regionalStatus: 'featured'
-      }, {
-        id: 1,
-        product: 'Modelo',
-        detail: '12 Pk -12 oz BT',
-        type: 'At risk',
-        rationale: 'Similar <class of trade> accounts, currently growing SKU at <X%>',
-        status: 'new',
-        predictedImpact: 'high',
-        regionalStatus: 'mandatory'
-      }, {
-        id: 2,
-        product: 'Victoria',
-        detail: '12 Pk -12 oz BT',
-        type: 'Non-buy',
-        rationale: 'Similar <class of trade> accounts, currently growing SKU at <X%>',
-        status: 'new',
-        predictedImpact: 'high',
-        regionalStatus: 'both'
-      }, {
-        id: 3,
-        product: 'Pacifico',
-        detail: '12 Pk -12 oz BT',
-        type: 'Non-buy',
-        rationale: 'Similar <class of trade> accounts, currently growing SKU at <X%>',
-        status: 'new',
-        predictedImpact: 'low'
-      }, {
-        id: 4,
-        product: 'N. Modelo',
-        detail: '12 Pk -12 oz BT',
-        type: 'Low Velocity',
-        rationale: 'Similar <class of trade> accounts, currently growing SKU at <X%>',
-        status: 'new',
-        predictedImpact: 'medium'
-      }, {
-        id: 5,
-        product: 'Corona LT',
-        detail: '12 Pk -12 oz BT',
-        type: 'Low Velocity',
-        rationale: 'Similar <class of trade> accounts, currently growing SKU at <X%>',
-        status: 'new',
-        predictedImpact: 'low'
-      }],
-      opportunitiesTypes: [{
-        name: 'All Types'
-      }, {
-        name: 'Non-buy'
-      }, {
-        name: 'At Risk'
-      }, {
-        name: 'Low Velocity'
-      }, {
-        name: 'New Placement (Quality)'
-      }, {
-        name: 'New Placement (No Rebuy)'
-      }, {
-        name: 'Manual'
-      }],
-      opportunitiesStatus: [{
-        name: 'Open'
-      }, {
-        name: 'Targeted'
-      }],
-      savedFilters: [{
-        name: 'Wine Shops'
-      }, {
-        name: 'Costco No Buy'
-      }, {
-        name: 'Circle K - Fremont'
-      }],
-      premises: [{
-        name: 'On Premise'
-      }, {
-        name: 'Off Premise'
-      }],
-      brands: productsService.getProducts('http://jsonplaceholder.typicode.com/posts'),
-      accounts: [{
-        name: 'Walmart',
-        subAccount: 'North East'
-      }, {
-        name: 'Walmart',
-        subAccount: 'West'
-      }, {
-        name: 'Walmart',
-        subAccount: 'South'
-      }, {
-        name: 'Walmart',
-        subAccount: 'East'
-      }],
-      distributors: distributorsService.getDistributors('http://jsonplaceholder.typicode.com/posts')
-    };
+  function targetListService($http, $q, apiHelperService) {
 
-    var myNamedFilters = [{
-      'name': 'California - Whiskey Bars',
-      'creator': 'Will Jay',
-      'members': ['James Norton', 'RJ LaCount', 'Eric Schiller'],
-      'created': 'One Minute Ago',
-      'closedOpportunites': 520,
-      'opportunities': 2251
-    }, {
-      'name': 'California - Wine Shops',
-      'creator': 'Pete Mitchell',
-      'members': ['James Norton', 'Eric Schiller'],
-      'created': 'One Minute Ago',
-      'closedOpportunites': 320,
-      'opportunities': 451
-    }, {
-      'name': 'California - Negroni Bars',
-      'creator': 'Nick Bradsaw',
-      'members': ['James Norton', 'RJ LaCount', 'Eric Schiller', 'Holly Perkins'],
-      'created': 'One Year Ago',
-      'closedOpportunites': 1989,
-      'opportunities': 2251
-    }, {
-      'name': 'California - Beer Stores',
-      'creator': 'RJ LaCount',
-      'members': ['James Norton', 'Adwait Nerlikar', 'RJ LaCount', 'Eric Schiller'],
-      'created': 'One Minute Ago',
-      'closedOpportunites': 587,
-      'opportunities': 2251
-    }];
-
-    var mySharedFilters = [{
-      'name': 'Whidbey Island Restaurants',
-      'creator': 'Sam Carvey',
-      'members': ['David Ostler', 'Todd Alkema'],
-      'created': 'One Hour Ago',
-      'closedOpportunites': 20,
-      'opportunities': 251
-    }, {
-      'name': 'West Seattle C-Stores',
-      'creator': 'Patti Horigan',
-      'members': ['James Conrick', 'Tom Andersen', 'Paul Wagner'],
-      'created': 'One Week Ago',
-      'closedOpportunites': 390,
-      'opportunities': 551
-    }];
-
-    var filter = {
-      opportunitiesTypes: data.opportunitiesTypes,
-      opportunitiesStatus: data.opportunitiesStatus,
-      brands: data.brands,
-      accounts: data.accounts,
-      distributors: data.distributors,
-      premises: data.premises,
-      savedFilters: data.savedFilters,
-      selected: {
-        accountScope: false,
-        opportunitiesTypes: ''
+    var tempData = {
+      getTargetListResponse: {
+        'id': '1323ss',
+        'name': 'Pacific Northwest Opportunities',
+        'archived:': false,
+        'opportunitiesSummary': {
+          'storesCount': 12,
+          'targetedOpportunitiesCount': 20,
+          'committedOpportunitiesCount': 5,
+          'closedOpportunitiesCount': 10,
+          'totalClosedDepletions': 352
+        }
       },
-      expanded: false
+      updateTargetListPayload: {
+        'type': 'object',
+        '$schema': 'http://json-schema.org/draft-03/schema',
+        'id': 'targetListEditSchema',
+        'required': true,
+        'properties': {
+          'name': {
+            'type': 'string',
+            'required': 'false',
+            'description': 'Name of the Target List.'
+          },
+          'lastViewed': {
+            'type': 'dateString',
+            'required': 'false',
+            'description': 'Date this Target List was last viewed by the User.'
+          },
+          'archived': {
+            'type': 'boolean',
+            'required': 'false',
+            'description': 'Indicates whether or not this Target List has been archived by the User.'
+          }
+        }
+      },
+      updateTargetListResponse: {
+        'id': '1323ss',
+        'name': 'Pacific Northwest Opportunities',
+        'archived:': false,
+        'opportunitiesSummary': {
+          'storesCount': 12,
+          'targetedOpportunitiesCount': 20,
+          'committedOpportunitiesCount': 5,
+          'closedOpportunitiesCount': 10,
+          'totalClosedDepletions': 352
+        }
+      },
+      deleteTargetListResponse: {'status': 200},
+      getTargetListOpportunitiesResponse: {
+        'count': 351,
+        'storesCount': 42,
+        'opportunities': [{
+          'id': 'SbBGk',
+          'product': {
+            'id': '2234gg',
+            'name': 'Corona',
+            'type': 'package',
+            'brand': 'Brand Name',
+            'description': 'Product description Lorem ipsum sit dolor amet',
+            'price': 12.11,
+            'quantity': 233
+          },
+          'type': 'Non-Buy',
+          'rank': 1,
+          'impact': 'High',
+          'status': 'Discussed',
+          'rationale': 'Rationale 1',
+          'store': {
+            'id': 'dsd82',
+            'name': 'Store 1',
+            'address': '1221 11th St NE, City, ST 12345',
+            'premise': true,
+            'segmentation': 'A',
+            'latitude': 41.8831,
+            'longitude': -87.6259
+          },
+          'itemAuthorizationCode': 'jij23',
+          'currentYTDStoreVolume': 54.11,
+          'lastYTDStoreVolume': 29.12,
+          'volumeTrend': 32.33,
+          'storeVelocity': 50.50,
+          'storeDistribution': 12.0,
+          'last90DaysVolume': 33.11,
+          'lastInvoiceDate': '2016-11-05T13:15:30Z'
+        }, {
+          'id': 'sdsd12',
+          'product': {
+            'id': '9878dj',
+            'name': 'Budweiser',
+            'type': 'package',
+            'brand': 'Brand Name',
+            'description': 'Product description Lorem ipsum sit dolor amet',
+            'price': 12.11,
+            'quantity': 233
+          },
+          'type': 'AtRisk',
+          'rank': 2,
+          'impact': 'Medium',
+          'status': 'Discussed',
+          'rationale': 'Rationale 1',
+          'store': {
+            'id': 'dsd82',
+            'name': 'Store 1',
+            'address': '1221 11th St NE, City, ST 12345',
+            'premise': true,
+            'segmentation': 'B',
+            'latitude': 41.8831,
+            'longitude': -87.6259
+          },
+          'itemAuthorizationCode': 'jij23',
+          'currentYTDStoreVolume': 54.11,
+          'lastYTDStoreVolume': 29.12,
+          'volumeTrend': 32.33,
+          'storeVelocity': 50.50,
+          'storeDistribution': 12.0,
+          'last90DaysVolume': 33.11,
+          'lastInvoiceDate': '2016-11-05T13:15:30Z'
+        }]
+      },
+      addDeleteTargetListOpportunitiesPayload: {
+        'required': 'true',
+        '$schema': 'http://json-schema.org/draft-03/schema',
+        'id': 'opportunityIDListSchema',
+        'type': 'array',
+        'items': {
+          'type': 'string',
+          'description': 'Opportunity ID string'
+        }
+      },
+      addDeleteTargetListOpportunitiesResponse: {'status': 200},
+      getTargetListSharesResponse: [{
+        'id': '13782b',
+        'user': {
+          'id': 'A1B2',
+          'firstName': 'Joe',
+          'lastName': 'Cerveza',
+          'email': 'jCerveza@cbrands.com',
+          'phone': '1234567890',
+          'role': 'CBBD MDM',
+          'accounts': ['Wal-mart', 'PCC']
+        },
+        'permissionLevel': 'Author',
+        'lastViewed': '2015-07-16T19:20:30.45+01:00'
+      }, {
+        'id': '1212jf',
+        'user': {
+          'id': 'A1B3',
+          'firstName': 'John',
+          'lastName': 'Cerveza',
+          'email': 'jCerveza2@cbrands.com',
+          'phone': '1234567890',
+          'role': 'CBBD MDM',
+          'accounts': ['Wal-mart', 'PCC']
+        },
+        'permissionLevel': 'CollaborateAndInvite',
+        'lastViewed': '2015-07-16T19:20:30.45+01:00'
+      }, {
+        'id': 'hkjl88',
+        'user': {
+          'id': 'A1B4',
+          'firstName': 'Jane',
+          'lastName': 'Cerveza',
+          'email': 'jCerveza3@cbrands.com',
+          'phone': '1234567890',
+          'role': 'CBBD MDM',
+          'accounts': ['Wal-mart', 'PCC']
+        },
+        'permissionLevel': 'Collaborate',
+        'lastViewed': '2015-07-16T19:20:30.45+01:00'
+      }],
+      addTargetListSharesPayload: {
+        'type': 'array',
+        '$schema': 'http://json-schema.org/draft-03/schema',
+        'required': 'true',
+        'description': 'List of user profile IDs to share an object with and their corresponding permission levels.',
+        'id': 'sharedUsersSchema',
+        'items': {
+          'type': 'object',
+          'required': true,
+          'properties': {
+            'user': {
+              'type': 'string',
+              'required': 'true',
+              'description': 'User ID'
+            },
+            'permissionLevel': {
+              'enum': ['Author', 'CollaborateAndInvite', 'Collaborate'],
+              'required': 'true',
+              'description': 'Defines the permission level of the specified user for accessing and editing the target list.'
+            }
+          }
+        }
+      },
+      addTargetListSharesResponse: [{
+        'id': '13782b',
+        'user': {
+          'id': 'A1B2',
+          'firstName': 'Joe',
+          'lastName': 'Cerveza',
+          'email': 'jCerveza@cbrands.com',
+          'phone': '1234567890',
+          'role': 'CBBD MDM',
+          'accounts': ['Wal-mart', 'PCC']
+        },
+        'permissionLevel': 'Author',
+        'lastViewed': '2015-07-16T19:20:30.45+01:00'
+      }, {
+        'id': '1212jf',
+        'user': {
+          'id': 'A1B3',
+          'firstName': 'John',
+          'lastName': 'Cerveza',
+          'email': 'jCerveza2@cbrands.com',
+          'phone': '1234567890',
+          'role': 'CBBD MDM',
+          'accounts': ['Wal-mart', 'PCC']
+        },
+        'permissionLevel': 'CollaborateAndInvite',
+        'lastViewed': '2015-07-16T19:20:30.45+01:00'
+      }, {
+        'id': 'hkjl88',
+        'user': {
+          'id': 'A1B4',
+          'firstName': 'Jane',
+          'lastName': 'Cerveza',
+          'email': 'jCerveza3@cbrands.com',
+          'phone': '1234567890',
+          'role': 'CBBD MDM',
+          'accounts': ['Wal-mart', 'PCC']
+        },
+        'permissionLevel': 'Collaborate',
+        'lastViewed': '2015-07-16T19:20:30.45+01:00'
+      }],
+      deleteTargetListSharesPayload: {
+        'type': 'array',
+        '$schema': 'http://json-schema.org/draft-03/schema',
+        'required': 'true',
+        'description': 'List of user profile IDs to share an object with and their corresponding permission levels.',
+        'id': 'sharedUsersSchema',
+        'items': {
+          'type': 'object',
+          'required': true,
+          'properties': {
+            'user': {
+              'type': 'string',
+              'required': 'true',
+              'description': 'User ID'
+            },
+            'permissionLevel': {
+              'enum': ['Author', 'CollaborateAndInvite', 'Collaborate'],
+              'required': 'true',
+              'description': 'Defines the permission level of the specified user for accessing and editing the target list.'
+            }
+          }
+        }
+      },
+      deleteTargetListSharesResponse: {'status': 200}
     };
 
     return {
-      all: function() {
-        return data.opportunities;
-      },
-      get: function(id) {
-        return data[id];
-      },
-      model: function() {
-        return filter;
-      },
-      list: function() {
-        return myNamedFilters;
-      },
-      sharedList: function() {
-        return mySharedFilters;
-      }
+      getTargetList: getTargetList,
+      updateTargetList: updateTargetList,
+      deleteTargetList: deleteTargetList,
+      getTargetListOpportunities: getTargetListOpportunities,
+      addTargetListOpportunities: addTargetListOpportunities,
+      deleteTargetListOpportunities: deleteTargetListOpportunities,
+      getTargetListShares: getTargetListShares,
+      addTargetListShares: addTargetListShares,
+      deleteTargetListShares: deleteTargetListShares
     };
+
+    /**
+     * @name getTargetList
+     * @desc get target list from web service
+     * @params {String} targetListId - id of target list
+     * @returns {Object} - target list
+     * @memberOf andromeda.common.services
+     */
+    function getTargetList(targetListId) {
+      var targetListPromise = $q.defer(),
+          url = apiHelperService.formatQueryString({'foo': 'bar'});
+
+      $http.get(url, {
+        headers: {}
+      })
+      .then(getTargetListSuccess)
+      .catch(getTargetListFail);
+
+      function getTargetListSuccess(response) {
+        console.log('[targetListService.getTargetList] response: ', response);
+        // targetListPromise.resolve(response.data);
+        // uncomment above and remove below when services are ready
+        targetListPromise.resolve(tempData.getTargetListResponse);
+      }
+
+      function getTargetListFail(error) {
+        targetListPromise.reject(error);
+      }
+
+      return targetListPromise.promise;
+    }
+
+    /**
+     * @name updateTargetList
+     * @desc update target list
+     * @params {String} targetListId - id of target list
+     * @returns {Object} - updated target list
+     * @memberOf andromeda.common.services
+     */
+    function updateTargetList(targetListId) {
+      var targetListPromise = $q.defer(),
+          url = apiHelperService.formatQueryString({'foo': 'bar'}),
+          payload = tempData.updateTargetListPayload;
+
+      $http.patch(url, payload, {
+        headers: {}
+      })
+      .then(updateTargetListSuccess)
+      .catch(updateTargetListFail);
+
+      function updateTargetListSuccess(response) {
+        console.log('[targetListService.updateTargetList] response: ', response);
+        // targetListPromise.resolve(response.data);
+        // uncomment above and remove below when services are ready
+        targetListPromise.resolve(tempData.updateTargetListResponse);
+      }
+
+      function updateTargetListFail(error) {
+        targetListPromise.reject(error);
+      }
+
+      return targetListPromise.promise;
+    }
+
+    /**
+     * @name deleteTargetList
+     * @desc delete target list
+     * @params {String} targetListId - id of target list
+     * @returns {Object} - status object
+     * @memberOf andromeda.common.services
+     */
+    function deleteTargetList(targetListId) {
+      var targetListPromise = $q.defer(),
+          url = apiHelperService.formatQueryString({'foo': 'bar'}),
+          payload = {targetListID: targetListId};
+
+      $http.delete(url, payload, {
+        headers: {}
+      })
+      .then(deleteTargetListSuccess)
+      .catch(deleteTargetListFail);
+
+      function deleteTargetListSuccess(response) {
+        console.log('[targetListService.deleteTargetList] response: ', response);
+        // targetListPromise.resolve(response.data);
+        // uncomment above and remove below when services are ready
+        targetListPromise.resolve(tempData.deleteTargetListResponse);
+      }
+
+      function deleteTargetListFail(error) {
+        targetListPromise.reject(error);
+      }
+
+      return targetListPromise.promise;
+    }
+
+    /**
+     * @name getTargetListOpportunities
+     * @desc get target list opportunities
+     * @params {String} targetListId - id of target list
+     * @returns {Object} - target list opportunities
+     * @memberOf andromeda.common.services
+     */
+    function getTargetListOpportunities(targetListId) {
+      var targetListPromise = $q.defer(),
+          url = apiHelperService.formatQueryString({'foo': 'bar'});
+
+      $http.get(url, {
+        headers: {}
+      })
+      .then(getTargetListOpportunitiesSuccess)
+      .catch(getTargetListOpportunitiesFail);
+
+      function getTargetListOpportunitiesSuccess(response) {
+        console.log('[targetListService.getTargetListOpportunities] response: ', response);
+        // targetListPromise.resolve(response.data);
+        // uncomment above and remove below when services are ready
+        targetListPromise.resolve(tempData.getTargetListOpportunitiesResponse);
+      }
+
+      function getTargetListOpportunitiesFail(error) {
+        targetListPromise.reject(error);
+      }
+
+      return targetListPromise.promise;
+    }
+
+    /**
+     * @name addTargetListOpportunities
+     * @desc add target list opportunities
+     * @params {String} targetListId - id of target list
+     * @returns {Object} - status object
+     * @memberOf andromeda.common.services
+     */
+    function addTargetListOpportunities(targetListId) {
+      var targetListPromise = $q.defer(),
+          url = '',
+          payload = tempData.addDeleteTargetListOpportunitiesPayload;
+
+      $http.post(url, payload, {
+        headers: {}
+      })
+      .then(addTargetListOpportunitiesSuccess)
+      .catch(addTargetListOpportunitiesFail);
+
+      function addTargetListOpportunitiesSuccess(response) {
+        console.log('[targetListService.addTargetListOpportunities] response: ', response);
+        // targetListPromise.resolve(response.data);
+        // uncomment above and remove below when services are ready
+        targetListPromise.resolve(tempData.addDeleteTargetListOpportunitiesResponse);
+      }
+
+      function addTargetListOpportunitiesFail(error) {
+        targetListPromise.reject(error);
+      }
+
+      return targetListPromise.promise;
+    }
+
+    /**
+     * @name deleteTargetListOpportunities
+     * @desc delete target list opportunities
+     * @params {String} targetListId - id of target list
+     * @returns {Object} - status object
+     * @memberOf andromeda.common.services
+     */
+    function deleteTargetListOpportunities(targetListId) {
+      var targetListPromise = $q.defer(),
+          url = '',
+          payload = tempData.addDeleteTargetListOpportunitiesPayload;
+
+      $http.delete(url, payload, {
+        headers: {}
+      })
+      .then(deleteTargetListOpportunitiesSuccess)
+      .catch(deleteTargetListOpportunitiesFail);
+
+      function deleteTargetListOpportunitiesSuccess(response) {
+        console.log('[targetListService.deleteTargetListOpportunities] response: ', response);
+        // targetListPromise.resolve(response.data);
+        // uncomment above and remove below when services are ready
+        targetListPromise.resolve(tempData.addDeleteTargetListOpportunitiesResponse);
+      }
+
+      function deleteTargetListOpportunitiesFail(error) {
+        targetListPromise.reject(error);
+      }
+
+      return targetListPromise.promise;
+    }
+
+    /**
+     * @name deleteTargetListOpportunities
+     * @desc delete target list opportunities
+     * @params {String} targetListId - id of target list
+     * @returns {Object} - shares object
+     * @memberOf andromeda.common.services
+     */
+    function getTargetListShares(targetListId) {
+      var targetListPromise = $q.defer(),
+          url = '';
+
+      $http.get(url, {
+        headers: {}
+      })
+      .then(getTargetListSharesSuccess)
+      .catch(getTargetListSharesFail);
+
+      function getTargetListSharesSuccess(response) {
+        console.log('[targetListService.getTargetListShares] response: ', response);
+        // targetListPromise.resolve(response.data);
+        // uncomment above and remove below when services are ready
+        targetListPromise.resolve(tempData.getTargetListSharesResponse);
+      }
+
+      function getTargetListSharesFail(error) {
+        targetListPromise.reject(error);
+      }
+
+      return targetListPromise.promise;
+    }
+
+    /**
+     * @name addTargetListShares
+     * @desc add target list shares
+     * @params {String} targetListId - id of target list
+     * @returns {Object} - target shares including new object
+     * @memberOf andromeda.common.services
+     */
+    function addTargetListShares(targetListId) {
+      var targetListPromise = $q.defer(),
+          url = '',
+          payload = tempData.addTargetListSharesPayload;
+
+      $http.post(url, payload, {
+        headers: {}
+      })
+      .then(addTargetListSharesSuccess)
+      .catch(addTargetListSharesFail);
+
+      function addTargetListSharesSuccess(response) {
+        console.log('[targetListService.addTargetListShares] response: ', response);
+        // targetListPromise.resolve(response.data);
+        // uncomment above and remove below when services are ready
+        targetListPromise.resolve(tempData.addTargetListSharesResponse);
+      }
+
+      function addTargetListSharesFail(error) {
+        targetListPromise.reject(error);
+      }
+
+      return targetListPromise.promise;
+    }
+
+    /**
+     * @name deleteTargetListShares
+     * @desc delete target list shares
+     * @params {String} targetListId - id of target list
+     * @returns {Object} - status object
+     * @memberOf andromeda.common.services
+     */
+    function deleteTargetListShares(targetListId) {
+      var targetListPromise = $q.defer(),
+          url = '',
+          payload = tempData.deleteTargetListSharesPayload;
+
+      $http.delete(url, payload, {
+        headers: {}
+      })
+      .then(deleteTargetListSharesSuccess)
+      .catch(deleteTargetListSharesFail);
+
+      function deleteTargetListSharesSuccess(response) {
+        console.log('[targetListService.deleteTargetListShares] response: ', response);
+        // targetListPromise.resolve(response.data);
+        // uncomment above and remove below when services are ready
+        targetListPromise.resolve(tempData.deleteTargetListSharesResponse);
+      }
+
+      function deleteTargetListSharesFail(error) {
+        targetListPromise.reject(error);
+      }
+
+      return targetListPromise.promise;
+    }
   };
