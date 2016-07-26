@@ -18,6 +18,7 @@
       table {
         width: 100%;
         margin-bottom: 15px;
+        padding: 12px;
 
         .section-header {
           padding: 3px;
@@ -25,6 +26,8 @@
 
         h3 {
           margin: 5px 0;
+          text-align: left;
+          padding-left: 20px;
 
           &.bold {
             font-weight: $bold;
@@ -96,6 +99,11 @@
 
         ._md-bar {
           background-color: $yellow;
+        }
+
+        ._md-container {
+          background-image: url('../../assets/img/icons/stripes.png');
+          border-bottom: 5px solid $body-bg;
         }
 
         .md-padding {

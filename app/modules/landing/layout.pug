@@ -6,7 +6,7 @@ section.landing-page
       div
         h2 My Performance
         div.depletions(column="4")
-          table(cellspacing="0" cellpadding="0")
+          table(cellspacing="0")
             tr
               th(colspan=2)
                 h4.left Depletions FYTD
@@ -90,7 +90,7 @@ section.landing-page
                     h5(column="6").accent.right opportunities
                 div(row).target-list
                   ul
-                    li(ng-repeat="list in sharedFilters")
+                    li(ng-repeat="list in l.sharedFilters")
                       div(column="8")
                         h3 {{list.name}}
                         p.accent {{list.creator}}
