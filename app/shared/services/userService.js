@@ -541,9 +541,7 @@ module.exports =
      */
     function getUsers(id) {
       var usersPromise = $q.defer(),
-          url = apiHelperService.formatQueryString();
-
-      if (id && id !== '') url += encodeURIComponent('userID:' + id);
+          url = id ? apiHelperService.request('/api/users/' + id) : apiHelperService.request('/api/users/');
 
       $http.get(url, {
         headers: {}
@@ -553,9 +551,7 @@ module.exports =
 
       function getUsersSuccess(response) {
         console.log('[userService.getUsers] response: ', response);
-        // usersPromise.resolve(response.data);
-        // uncomment above and remove below when services are ready
-        id && id !== '' ? usersPromise.resolve(tempData.users[0]) : usersPromise.resolve(tempData.users);
+        usersPromise.resolve(response.data);
       }
 
       function getUsersFail(error) {
@@ -574,12 +570,7 @@ module.exports =
      */
     function getHiddenOpportunities(id) {
       var hiddenOpportunitiesPromise = $q.defer(),
-          url = apiHelperService.formatUrl({
-            'baseUrl': '',
-            'signature': '',
-            'apiKey': '',
-            'id': id
-          });
+          url = apiHelperService.request('/api/users/' + id + '/hiddenOpportunities/');
 
       $http.get(url, {
         headers: {}
@@ -589,9 +580,7 @@ module.exports =
 
       function getHiddenOpportunitiesSuccess(response) {
         console.log('[userService.getHiddenOpportunities] response: ', response);
-        // hiddenOpportunitiesPromise.resolve(response.data);
-        // uncomment above and remove below when services are ready
-        hiddenOpportunitiesPromise.resolve(tempData.hiddenOpportunitiesGetResponse);
+        hiddenOpportunitiesPromise.resolve(response.data);
       }
 
       function getHiddenOpportunitiesFail(error) {
@@ -610,12 +599,7 @@ module.exports =
      */
     function hideOpportunity(id) {
       var hideOpportunityPromise = $q.defer(),
-          url = apiHelperService.formatUrl({
-            'baseUrl': '',
-            'signature': '',
-            'apiKey': '',
-            'id': id
-          }),
+          url = apiHelperService.request('/api/users/' + id + '/hiddenOpportunities/'),
           payload = {
             'required': 'true',
             '$schema': 'http://json-schema.org/draft-03/schema',
@@ -655,14 +639,9 @@ module.exports =
      * @returns {Object} - status object
      * @memberOf andromeda.common.services
      */
-    function deleteHiddenOpportunity(id, opportunityId) {
+    function deleteHiddenOpportunity(id) {
       var deleteHiddenOpportunityPromise = $q.defer(),
-          url = apiHelperService.formatUrl({
-            'baseUrl': '',
-            'signature': '',
-            'apiKey': '',
-            'id': id
-          }),
+          url = apiHelperService.request('/api/users/' + id + '/hiddenOpportunities/'),
           payload = {
             'required': 'true',
             '$schema': 'http://json-schema.org/draft-03/schema',
@@ -697,13 +676,13 @@ module.exports =
     /**
      * @name getNotifications
      * @desc get notifications for a user
-     * @params {String} url - API Url
      * @params {String} id - id of a user
      * @returns {Array} - Array of all notifications for a user
      * @memberOf andromeda.common.services
      */
-    function getNotifications(url, id) {
-      var notificationsPromise = $q.defer();
+    function getNotifications(id) {
+      var notificationsPromise = $q.defer(),
+          url = apiHelperService.request('/api/users/' + id + '/notifications/');
 
       $http.get(url, {
         headers: {}
@@ -713,9 +692,7 @@ module.exports =
 
       function getNotificationsSuccess(response) {
         console.log('[userService.getNotifications] response: ', response);
-        // notificationsPromise.resolve(response.data);
-        // uncomment above and remove below when services are ready
-        notificationsPromise.resolve(tempData.notifications);
+        notificationsPromise.resolve(response.data);
       }
 
       function getNotificationsFail(error) {
@@ -728,13 +705,13 @@ module.exports =
     /**
      * @name getOpportunityFilters
      * @desc get all opportunity filters for a user
-     * @params {String} userId - id of a user
+     * @params {String} id - id of a user
      * @returns {Array} - Array of all opportunity filters for a user
      * @memberOf andromeda.common.services
      */
-    function getOpportunityFilters(userId) {
+    function getOpportunityFilters(id) {
       var opportunityFilterPromise = $q.defer(),
-          url = apiHelperService.formatQueryString({'foo': 'bar'});
+          url = apiHelperService.request('/api/users/' + id + '/opportunityFilters/');
 
       $http.get(url, {
         headers: {}
@@ -744,9 +721,7 @@ module.exports =
 
       function getOpportunityFiltersSuccess(response) {
         console.log('[userService.getOpportunityFilters] response: ', response);
-        // opportunityFilterPromise.resolve(response.data);
-        // uncomment above and remove below when services are ready
-        opportunityFilterPromise.resolve(tempData.getOpportunityFilterResponse);
+        opportunityFilterPromise.resolve(response.data);
       }
 
       function getOpportunityFiltersFail(error) {
@@ -759,14 +734,15 @@ module.exports =
     /**
      * @name saveOpportunityFilter
      * @desc save new filter for a user
-     * @params {String} userId - id of a user
+     * @params {String} id - id of a user
      * @params {Object} payload - filter settings to be saved
      * @returns {Object} - Status Object
      * @memberOf andromeda.common.services
      */
-    function saveOpportunityFilter(userId, payload) {
+    function saveOpportunityFilter(id) {
       var opportunityFilterPromise = $q.defer(),
-          url = apiHelperService.formatQueryString();
+          url = apiHelperService.request('/api/users/' + id + '/opportunityFilters/'),
+          payload = {};
 
       $http.post(url, payload, {
         headers: {}
@@ -791,13 +767,13 @@ module.exports =
     /**
      * @name getPerformanceSummary
      * @desc get performance summary for a user
-     * @params {String} userId - id of a user
-     * @returns {Object} - performance summary -- will this still be an object with an array? Seems like we can cut out the object and just return the array - WAJ 07/25
+     * @params {String} id - id of a user
+     * @returns {Object} - performance summary
      * @memberOf andromeda.common.services
      */
-    function getPerformanceSummary(userId) {
+    function getPerformanceSummary(id) {
       var performancePromise = $q.defer(),
-          url = apiHelperService.formatQueryString();
+          url = apiHelperService.request('/api/users/' + id + '/performance/summary/');
 
       $http.get(url, {
         headers: {}
@@ -807,9 +783,7 @@ module.exports =
 
       function getPerformanceSummarySuccess(response) {
         console.log('[userService.getPerformanceSummary] response: ', response);
-        // performancePromise.resolve(response.data);
-        // uncomment above and remove below when services are ready
-        performancePromise.resolve(tempData.getPerformanceSummaryResponse);
+        performancePromise.resolve(response.data);
       }
 
       function getPerformanceSummaryFail(error) {
@@ -822,13 +796,13 @@ module.exports =
     /**
      * @name getPerformanceDepletion
      * @desc get performance depletion for a user
-     * @params {String} userId - id of a user
+     * @params {String} id - id of a user
      * @returns {Object} - user performance depletion
      * @memberOf andromeda.common.services
      */
-    function getPerformanceDepletion(userId) {
+    function getPerformanceDepletion(id) {
       var performancePromise = $q.defer(),
-          url = apiHelperService.formatQueryString();
+          url = apiHelperService.request('/api/users/' + id + '/performance/depletionScorecard/');
 
       $http.get(url, {
         headers: {}
@@ -838,9 +812,7 @@ module.exports =
 
       function getPerformanceDepletionSuccess(response) {
         console.log('[userService.getPerformanceDepletion] response: ', response);
-        // performancePromise.resolve(response.data);
-        // uncomment above and remove below when services are ready
-        performancePromise.resolve(tempData.getPerformanceDepletionResponse);
+        performancePromise.resolve(response.data);
       }
 
       function getPerformanceDepletionFail(error) {
@@ -853,13 +825,13 @@ module.exports =
     /**
      * @name getPerformanceDistribution
      * @desc get performance distribution for a user
-     * @params {String} userId - id of a user
+     * @params {String} id - id of a user
      * @returns {Object} - user performance distribution
      * @memberOf andromeda.common.services
      */
-    function getPerformanceDistribution(userId) {
+    function getPerformanceDistribution(id) {
       var performancePromise = $q.defer(),
-          url = apiHelperService.formatQueryString();
+          url = apiHelperService.request('/api/users/' + id + '/performance/distributionScorecard/');
 
       $http.get(url, {
         headers: {}
@@ -869,9 +841,7 @@ module.exports =
 
       function getPerformanceDistributionSuccess(response) {
         console.log('[userService.getPerformanceDistribution] response: ', response);
-        // performancePromise.resolve(response.data);
-        // uncomment above and remove below when services are ready
-        performancePromise.resolve(tempData.getPerformanceDistributionResponse);
+        performancePromise.resolve(response.data);
       }
 
       function getPerformanceDistributionFail(error) {
@@ -884,13 +854,13 @@ module.exports =
     /**
      * @name getPerformanceBrand
      * @desc get performance brand for a user
-     * @params {String} userId - id of a user
+     * @params {String} id - id of a user
      * @returns {Object} - user performance brand
      * @memberOf andromeda.common.services
      */
-    function getPerformanceBrand(userId) {
+    function getPerformanceBrand(id) {
       var performancePromise = $q.defer(),
-          url = apiHelperService.formatQueryString();
+          url = apiHelperService.request('/api/users/' + id + '/performance/brandSnapshot/');
 
       $http.get(url, {
         headers: {}
@@ -900,9 +870,7 @@ module.exports =
 
       function getPerformanceBrandSuccess(response) {
         console.log('[userService.getPerformanceBrand] response: ', response);
-        // performancePromise.resolve(response.data);
-        // uncomment above and remove below when services are ready
-        performancePromise.resolve(tempData.getPerformanceBrandResponse);
+        performancePromise.resolve(response.data);
       }
 
       function getPerformanceBrandFail(error) {
@@ -915,13 +883,13 @@ module.exports =
     /**
      * @name getPerformanceTopBottom
      * @desc get performance top bottom snapshot for a user
-     * @params {String} userId - id of a user
+     * @params {String} id - id of a user
      * @returns {Object} - user performance top bottom snapshot
      * @memberOf andromeda.common.services
      */
-    function getPerformanceTopBottom(userId) {
+    function getPerformanceTopBottom(id) {
       var performancePromise = $q.defer(),
-          url = apiHelperService.formatQueryString();
+          url = apiHelperService.request('/api/users/' + id + '/performance/topBottomSnapshot/');
 
       $http.get(url, {
         headers: {}
@@ -931,9 +899,7 @@ module.exports =
 
       function getPerformanceTopBottomSuccess(response) {
         console.log('[userService.getPerformanceTopBottom] response: ', response);
-        // performancePromise.resolve(response.data);
-        // uncomment above and remove below when services are ready
-        performancePromise.resolve(tempData.getPerformanceTopBottomResponse);
+        performancePromise.resolve(response.data);
       }
 
       function getPerformanceTopBottomFail(error) {
@@ -946,13 +912,13 @@ module.exports =
     /**
      * @name getTargetLists
      * @desc get target list for a user
-     * @params {String} userId - id of a user
+     * @params {String} id - id of a user
      * @returns {Object} - user target lists
      * @memberOf andromeda.common.services
      */
-    function getTargetLists(userId) {
+    function getTargetLists(id) {
       var targetListPromise = $q.defer(),
-          url = apiHelperService.formatQueryString({'foo': 'bar'});
+          url = apiHelperService.request('/api/users/' + id + '/targetLists/');
 
       $http.get(url, {
         headers: {}
@@ -962,9 +928,7 @@ module.exports =
 
       function getTargetListsSuccess(response) {
         console.log('[userService.getTargetLists] response: ', response);
-        // targetListPromise.resolve(response.data);
-        // uncomment above and remove below when services are ready
-        targetListPromise.resolve(tempData.getTargetListsResponse);
+        targetListPromise.resolve(response.data);
       }
 
       function getTargetListsFail(error) {
@@ -977,13 +941,13 @@ module.exports =
     /**
      * @name addTargetList
      * @desc add target list for a user
-     * @params {String} userId - id of a user
+     * @params {String} id - id of a user
      * @returns {Object} - newly added target list
      * @memberOf andromeda.common.services
      */
-    function addTargetList(userId) {
+    function addTargetList(id) {
       var targetListPromise = $q.defer(),
-          url = apiHelperService.formatQueryString(),
+          url = apiHelperService.request('/api/users/' + id + '/targetLists/'),
           payload = tempData.postTargetListPayload;
 
       $http.post(url, payload, {

@@ -4,7 +4,8 @@ module.exports =
   function apiHelperService() {
 
     return {
-      formatQueryString: formatQueryString
+      formatQueryString: formatQueryString,
+      request: request
     };
 
     /**
@@ -15,7 +16,7 @@ module.exports =
      * @memberOf andromeda.common.services
      */
     function formatQueryString(obj) {
-      var queryParams = '',
+      var queryParams = 'filter=',
           i = 0,
           z = Object.keys(obj).length - 1;
 
@@ -25,9 +26,22 @@ module.exports =
         i++;
       }
 
-      // return encodeURIComponent(queryParams);
-      // uncomment above when API is ready
-      return 'http://jsonplaceholder.typicode.com/posts';
+      return '?' + encodeURIComponent(queryParams);
     }
 
+    /**
+     * @name request
+     * @desc generate request url
+     * @params {String} base - base api url to hit [required]
+     * @params {Object} paramsObj - filter params [optional]
+     * @returns {String} - formatted url
+     * @memberOf andromeda.common.services
+     */
+    function request(base, paramsObj) {
+      var q = '';
+
+      if (paramsObj) q = formatQueryString(paramsObj);
+
+      return base + q;
+    }
   };

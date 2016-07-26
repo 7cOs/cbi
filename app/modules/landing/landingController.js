@@ -59,10 +59,11 @@ module.exports =
     // Broadcast current page name for other scopes
     $rootScope.$broadcast('page:loaded', $state.current.name);
 
-    userService.getTargetLists('1').then(function(data) {
+    userService.getTargetLists('A1B2C3').then(function(data) {
       vm.namedFilters = data.owned;
       // vm.sharedFilters = data.sharedWithMe;
-      console.log('shared with me response', data);
+      console.log(vm.sharedFilters);
+      console.log('shared with me response', data.sharedWithMe);
     });
 
     function isNegative(salesData) {
