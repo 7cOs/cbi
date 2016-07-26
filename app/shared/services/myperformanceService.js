@@ -29,7 +29,7 @@ module.exports =
         'measures': [{
           'timeframe': 'L30',
           'value': 3017,
-          'percentChange': -7.5
+          'percentChange': 7.5
         }, {
           'timeframe': 'L60',
           'value': 3017,
