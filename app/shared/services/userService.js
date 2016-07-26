@@ -441,7 +441,7 @@ module.exports =
               'closedOpportunitiesCount': 10,
               'totalClosedDepletions': 352
             },
-            'created_at': '2016-11-05T13:15:30Z'
+            'created_at': '2014-06-12T13:15:30Z'
           }, {
             'id': '1323ss',
             'name': 'Pacific Northwest Opportunities',
@@ -454,7 +454,7 @@ module.exports =
               'closedOpportunitiesCount': 10,
               'totalClosedDepletions': 352
             },
-            'created_at': '2016-11-05T13:15:30Z'
+            'created_at': '2015-11-05T13:15:30Z'
           }
         ],
         'sharedWithMe': [
@@ -470,7 +470,7 @@ module.exports =
               'closedOpportunitiesCount': 10,
               'totalClosedDepletions': 352
             },
-            'created_at': '2016-11-05T13:15:30Z'
+            'created_at': '2015-11-05T13:15:30Z'
           }
         ]
       },
@@ -952,7 +952,7 @@ module.exports =
      */
     function getTargetLists(userId) {
       var targetListPromise = $q.defer(),
-          url = apiHelperService.formatQueryString();
+          url = apiHelperService.formatQueryString({'foo': 'bar'});
 
       $http.get(url, {
         headers: {}
