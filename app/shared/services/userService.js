@@ -4,476 +4,9 @@ module.exports =
   function userService($http, $q, apiHelperService) {
 
     var tempData = {
-      users: [{
-        'id': 'A1B2',
-        'firstName': 'Joe',
-        'lastName': 'Cerveza',
-        'email': 'jCerveza@cbrands.com',
-        'phone': '1234567890',
-        'role': 'CBBD MDM',
-        'accounts': ['Wal-mart', 'PCC']
-      }, {
-        'id': 'A1B2',
-        'firstName': 'Joe',
-        'lastName': 'Cerveza',
-        'email': 'jCerveza@cbrands.com',
-        'phone': '1234567890',
-        'role': 'CBBD MDM',
-        'accounts': ['Wal-mart', 'PCC']
-      }],
-      notifications: [{
-        'id': 'A68YR',
-        'title': 'You\'ve been added as a collaborator',
-        'objectType': 'Target List',
-        'objectID': 'A59XY',
-        'description': 'Joe Cerveza has added you as a collaborator on his target list, `West Philadelphia Bars`.'
-      }, {
-        'id': 'A92XZ',
-        'objectType': 'Target List',
-        'objectID': '75TJ3',
-        'title': 'Opportunity added to list',
-        'description': 'John Smith has added an opportunity to your target list, `Modelo`.'
-      }],
-      hiddenOpportunitiesGetResponse: {
-        'count': 351,
-        'storesCount': 42,
-        'opportunities': [{
-          'id': 'SbBGk',
-          'product': {
-            'id': '2234gg',
-            'name': 'Corona',
-            'type': 'package',
-            'brand': 'Brand Name',
-            'description': 'Product description Lorem ipsum sit dolor amet',
-            'price': 12.11,
-            'quantity': 233
-          },
-          'type': 'Non-Buy',
-          'rank': 1,
-          'impact': 'High',
-          'status': 'Discussed',
-          'rationale': 'Rationale 1',
-          'store': {
-            'id': 'dsd82',
-            'name': 'Store 1',
-            'address': '1221 11th St NE, City, ST 12345',
-            'premise': true,
-            'segmentation': 'A',
-            'latitude': 41.8831,
-            'longitude': -87.6259
-          },
-          'itemAuthorizationCode': 'jij23',
-          'currentYTDStoreVolume': 54.11,
-          'lastYTDStoreVolume': 29.12,
-          'volumeTrend': 32.33,
-          'storeVelocity': 50.50,
-          'storeDistribution': 12.0,
-          'last90DaysVolume': 33.11,
-          'lastInvoiceDate': '2016-11-05T13:15:30Z'
-        }, {
-          'id': 'sdsd12',
-          'product': {
-            'id': '9878dj',
-            'name': 'Budweiser',
-            'type': 'package',
-            'brand': 'Brand Name',
-            'description': 'Product description Lorem ipsum sit dolor amet',
-            'price': 12.11,
-            'quantity': 233
-          },
-          'type': 'AtRisk',
-          'rank': 2,
-          'impact': 'Medium',
-          'status': 'Discussed',
-          'rationale': 'Rationale 1',
-          'store': {
-            'id': 'dsd82',
-            'name': 'Store 1',
-            'address': '1221 11th St NE, City, ST 12345',
-            'premise': true,
-            'segmentation': 'B',
-            'latitude': 41.8831,
-            'longitude': -87.6259
-          },
-          'itemAuthorizationCode': 'jij23',
-          'currentYTDStoreVolume': 54.11,
-          'lastYTDStoreVolume': 29.12,
-          'volumeTrend': 32.33,
-          'storeVelocity': 50.50,
-          'storeDistribution': 12.0,
-          'last90DaysVolume': 33.11,
-          'lastInvoiceDate': '2016-11-05T13:15:30Z'
-        }]
-      },
       hideOpportunityPostResponse: {'status': 200},
       deleteHiddenOpportunityDeleteResponse: {'status': 200},
-      getOpportunityFilterResponse: [{
-        'id': 'A57K3',
-        'name': 'Corona in PNW',
-        'filterString': 'productname%3Acorona%2Cregion%3Apacificnorthwest'
-      }, {
-        'id': 'S25T8',
-        'name': 'Modelo in Texas',
-        'filterString': 'productname%3Amodelo%2Cregion%3Atexas'
-      }],
       postOpportunityFilterResponse: {'status': 200},
-      getPerformanceSummaryResponse: {
-        'performance': [
-          {
-            'type': 'Depletions CE',
-            'measures': [
-              {
-                'timeframe': 'L30',
-                'value': 273400,
-                'percentChange': 7.5
-              }, {
-                'timeframe': 'L60',
-                'value': 273400,
-                'percentChange': 7.5
-              }, {
-                'timeframe': 'L90',
-                'value': 273400,
-                'percentChange': 7.5
-              }, {
-                'timeframe': 'L120',
-                'value': 273400,
-                'percentChange': 7.5
-              }
-            ]
-          }, {
-            'type': 'Distribution Points - Off Premise, Simple',
-            'measures': [
-              {
-                'timeframe': 'L30',
-                'value': 3017,
-                'percentChange': -7.5
-              }, {
-                'timeframe': 'L60',
-                'value': 3017,
-                'percentChange': -7.5
-              }, {
-                'timeframe': 'L90',
-                'value': 3017,
-                'percentChange': -7.5
-              }, {
-                'timeframe': 'L120',
-                'value': 3017,
-                'percentChange': -7.5
-              }
-            ]
-          }, {
-            'type': 'Distribution Points - Off Premise, Effective',
-            'measures': [
-              {
-                'timeframe': 'L30',
-                'value': 8256,
-                'percentChange': 9.9
-              }, {
-                'timeframe': 'L60',
-                'value': 8256,
-                'percentChange': 9.9
-              }, {
-                'timeframe': 'L90',
-                'value': 8256,
-                'percentChange': 9.9
-              }, {
-                'timeframe': 'L120',
-                'value': 8256,
-                'percentChange': 9.9
-              }
-            ]
-          }, {
-            'type': 'Distribution Points - On Premise, Simple',
-            'measures': [
-              {
-                'timeframe': 'L30',
-                'value': 548,
-                'percentChange': -3.2
-              }, {
-                'timeframe': 'L60',
-                'value': 548,
-                'percentChange': -3.2
-              }, {
-                'timeframe': 'L90',
-                'value': 548,
-                'percentChange': -3.2
-              }, {
-                'timeframe': 'L120',
-                'value': 548,
-                'percentChange': -3.2
-              }
-            ]
-          }, {
-            'type': 'Distribution Points - On Premise, Effective',
-            'measures': [
-              {
-                'timeframe': 'L30',
-                'value': 5876,
-                'percentChange': 8.7
-              }, {
-                'timeframe': 'L60',
-                'value': 5876,
-                'percentChange': 8.7
-              }, {
-                'timeframe': 'L90',
-                'value': 5876,
-                'percentChange': 8.7
-              }, {
-                'timeframe': 'L120',
-                'value': 5876,
-                'percentChange': 8.7
-              }
-            ]
-          }
-        ]
-      },
-      getPerformanceDepletionResponse: {
-        'performance': [
-          {
-            'type': 'Brand',
-            'name': 'Corona',
-            'measures': [
-              {
-                'timeframe': 'L30',
-                'depletions': 273400,
-                'percent_change': 7.5,
-                'trend': -1.2,
-                'bu_trend': 10.0,
-                'ctv': 7,
-                'ctg': 5,
-                'ctv_to_bu_rank': 1,
-                'ctg_to_bu_rank': 3
-              }, {
-                'timeframe': 'L60',
-                'depletions': 273400,
-                'percent_change': 7.5,
-                'trend': -1.2,
-                'bu_trend': 10.0,
-                'ctv': 7,
-                'ctg': 5,
-                'ctv_to_bu_rank': 1,
-                'ctg_to_bu_rank': 3
-              }, {
-                'timeframe': 'L90',
-                'depletions': 273400,
-                'percent_change': 7.5,
-                'trend': -1.2,
-                'bu_trend': 10.0,
-                'ctv': 7,
-                'ctg': 5,
-                'ctv_to_bu_rank': 1,
-                'ctg_to_bu_rank': 3
-              }, {
-                'timeframe': 'L120',
-                'depletions': 273400,
-                'percent_change': 7.5,
-                'trend': -1.2,
-                'bu_trend': 10.0,
-                'ctv': 7,
-                'ctg': 5,
-                'ctv_to_bu_rank': 1,
-                'ctg_to_bu_rank': 3
-              }
-            ]
-          }
-        ]
-      },
-      getPerformanceDistributionResponse: {
-        'performance': [
-          {
-            'type': 'Brand',
-            'name': 'Corona',
-            'measures': [
-              {
-                'timeframe': 'L30',
-                'distributions': 273400,
-                'percent_change': 7.5,
-                'trend': -1.2,
-                'bu_trend': 10.0,
-                'ctv': 7,
-                'ctg': 5,
-                'ctv_to_bu_rank': 1,
-                'ctg_to_bu_rank': 3
-              }, {
-                'timeframe': 'L60',
-                'distributions': 273400,
-                'percent_change': 7.5,
-                'trend': -1.2,
-                'bu_trend': 10.0,
-                'ctv': 7,
-                'ctg': 5,
-                'ctv_to_bu_rank': 1,
-                'ctg_to_bu_rank': 3
-              }, {
-                'timeframe': 'L90',
-                'distributions': 273400,
-                'percent_change': 7.5,
-                'trend': -1.2,
-                'bu_trend': 10.0,
-                'ctv': 7,
-                'ctg': 5,
-                'ctv_to_bu_rank': 1,
-                'ctg_to_bu_rank': 3
-              }, {
-                'timeframe': 'L120',
-                'distributions': 273400,
-                'percent_change': 7.5,
-                'trend': -1.2,
-                'bu_trend': 10.0,
-                'ctv': 7,
-                'ctg': 5,
-                'ctv_to_bu_rank': 1,
-                'ctg_to_bu_rank': 3
-              }
-            ]
-          }
-        ]
-      },
-      getPerformanceBrandResponse: {
-        'pod_simple': 12,
-        'pod_simple_percent': 5,
-        'pod_effective': 10,
-        'pod_effective_percent': 7.1,
-        'performance': [
-          {
-            'type': 'Brand',
-            'name': 'Corona',
-            'measures': [
-              {
-                'timeframe': 'L30',
-                'depletions': 273400,
-                'depletions_percent': 7.5,
-                'distributions': -1.2,
-                'distributions_percent': 10.0,
-                'velocity': 7,
-                'velocity_percent': 5
-              }, {
-                'timeframe': 'L60',
-                'depletions': 273400,
-                'depletions_percent': 7.5,
-                'distributions': -1.2,
-                'distributions_percent': 10.0,
-                'velocity': 7,
-                'velocity_percent': 5
-              }, {
-                'timeframe': 'L90',
-                'depletions': 273400,
-                'depletions_percent': 7.5,
-                'distributions': -1.2,
-                'distributions_percent': 10.0,
-                'velocity': 7,
-                'velocity_percent': 5
-              }, {
-                'timeframe': 'L120',
-                'depletions': 273400,
-                'depletions_percent': 7.5,
-                'distributions': -1.2,
-                'distributions_percent': 10.0,
-                'velocity': 7,
-                'velocity_percent': 5
-              }
-            ]
-          }
-        ]
-      },
-      getPerformanceTopBottomResponse: {
-        'performance': [
-          {
-            'type': 'Account',
-            'name': 'Walmart',
-            'measures': [
-              {
-                'timeframe': 'L30',
-                'depletions': 273400,
-                'depletions_trend': 7.5,
-                'distributions_simple': 1000,
-                'distributions_simple_trend': -1.2,
-                'distributions_effective': 1200,
-                'distributions_effective_trend': 10.0,
-                'velocity': 7,
-                'velocity_trend': 5
-              }, {
-                'timeframe': 'L60',
-                'depletions': 273400,
-                'depletions_trend': 7.5,
-                'distributions_simple': 1000,
-                'distributions_simple_trend': -1.2,
-                'distributions_effective': 1200,
-                'distributions_effective_trend': 10.0,
-                'velocity': 7,
-                'velocity_trend': 5
-              }, {
-                'timeframe': 'L90',
-                'depletions': 273400,
-                'depletions_trend': 7.5,
-                'distributions_simple': 1000,
-                'distributions_simple_trend': -1.2,
-                'distributions_effective': 1200,
-                'distributions_effective_trend': 10.0,
-                'velocity': 7,
-                'velocity_trend': 5
-              }, {
-                'timeframe': 'L120',
-                'depletions': 273400,
-                'depletions_trend': 7.5,
-                'distributions_simple': 1000,
-                'distributions_simple_trend': -1.2,
-                'distributions_effective': 1200,
-                'distributions_effective_trend': 10.0,
-                'velocity': 7,
-                'velocity_trend': 5
-              }
-            ]
-          }
-        ]
-      },
-      getTargetListsResponse: {
-        'owned': [
-          {
-            'id': '1323ss',
-            'name': 'Pacific Northwest Opportunities',
-            'opportunities': 41,
-            'archived:': false,
-            'opportunitiesSummary': {
-              'storesCount': 12,
-              'targetedOpportunitiesCount': 20,
-              'committedOpportunitiesCount': 5,
-              'closedOpportunitiesCount': 10,
-              'totalClosedDepletions': 352
-            },
-            'created_at': '2016-11-05T13:15:30Z'
-          }, {
-            'id': '1323ss',
-            'name': 'Pacific Northwest Opportunities',
-            'opportunities': 211,
-            'archived:': false,
-            'opportunitiesSummary': {
-              'storesCount': 12,
-              'targetedOpportunitiesCount': 20,
-              'committedOpportunitiesCount': 5,
-              'closedOpportunitiesCount': 10,
-              'totalClosedDepletions': 352
-            },
-            'created_at': '2016-11-05T13:15:30Z'
-          }
-        ],
-        'sharedWithMe': [
-          {
-            'id': '1323ss',
-            'name': 'Pacific Northwest Opportunities',
-            'opportunities': 41,
-            'archived:': false,
-            'opportunitiesSummary': {
-              'storesCount': 12,
-              'targetedOpportunitiesCount': 20,
-              'committedOpportunitiesCount': 5,
-              'closedOpportunitiesCount': 10,
-              'totalClosedDepletions': 352
-            },
-            'created_at': '2016-11-05T13:15:30Z'
-          }
-        ]
-      },
       postTargetListPayload: {
         'type': 'object',
         '$schema': 'http://json-schema.org/draft-03/schema',
@@ -541,9 +74,7 @@ module.exports =
      */
     function getUsers(id) {
       var usersPromise = $q.defer(),
-          url = apiHelperService.formatQueryString();
-
-      if (id && id !== '') url += encodeURIComponent('userID:' + id);
+          url = id ? apiHelperService.request('/api/users/' + id) : apiHelperService.request('/api/users/');
 
       $http.get(url, {
         headers: {}
@@ -553,9 +84,7 @@ module.exports =
 
       function getUsersSuccess(response) {
         console.log('[userService.getUsers] response: ', response);
-        // usersPromise.resolve(response.data);
-        // uncomment above and remove below when services are ready
-        id && id !== '' ? usersPromise.resolve(tempData.users[0]) : usersPromise.resolve(tempData.users);
+        usersPromise.resolve(response.data);
       }
 
       function getUsersFail(error) {
@@ -574,12 +103,7 @@ module.exports =
      */
     function getHiddenOpportunities(id) {
       var hiddenOpportunitiesPromise = $q.defer(),
-          url = apiHelperService.formatUrl({
-            'baseUrl': '',
-            'signature': '',
-            'apiKey': '',
-            'id': id
-          });
+          url = apiHelperService.request('/api/users/' + id + '/hiddenOpportunities/');
 
       $http.get(url, {
         headers: {}
@@ -589,9 +113,7 @@ module.exports =
 
       function getHiddenOpportunitiesSuccess(response) {
         console.log('[userService.getHiddenOpportunities] response: ', response);
-        // hiddenOpportunitiesPromise.resolve(response.data);
-        // uncomment above and remove below when services are ready
-        hiddenOpportunitiesPromise.resolve(tempData.hiddenOpportunitiesGetResponse);
+        hiddenOpportunitiesPromise.resolve(response.data);
       }
 
       function getHiddenOpportunitiesFail(error) {
@@ -610,12 +132,7 @@ module.exports =
      */
     function hideOpportunity(id) {
       var hideOpportunityPromise = $q.defer(),
-          url = apiHelperService.formatUrl({
-            'baseUrl': '',
-            'signature': '',
-            'apiKey': '',
-            'id': id
-          }),
+          url = apiHelperService.request('/api/users/' + id + '/hiddenOpportunities/'),
           payload = {
             'required': 'true',
             '$schema': 'http://json-schema.org/draft-03/schema',
@@ -655,14 +172,9 @@ module.exports =
      * @returns {Object} - status object
      * @memberOf andromeda.common.services
      */
-    function deleteHiddenOpportunity(id, opportunityId) {
+    function deleteHiddenOpportunity(id) {
       var deleteHiddenOpportunityPromise = $q.defer(),
-          url = apiHelperService.formatUrl({
-            'baseUrl': '',
-            'signature': '',
-            'apiKey': '',
-            'id': id
-          }),
+          url = apiHelperService.request('/api/users/' + id + '/hiddenOpportunities/'),
           payload = {
             'required': 'true',
             '$schema': 'http://json-schema.org/draft-03/schema',
@@ -697,13 +209,13 @@ module.exports =
     /**
      * @name getNotifications
      * @desc get notifications for a user
-     * @params {String} url - API Url
      * @params {String} id - id of a user
      * @returns {Array} - Array of all notifications for a user
      * @memberOf andromeda.common.services
      */
-    function getNotifications(url, id) {
-      var notificationsPromise = $q.defer();
+    function getNotifications(id) {
+      var notificationsPromise = $q.defer(),
+          url = apiHelperService.request('/api/users/' + id + '/notifications/');
 
       $http.get(url, {
         headers: {}
@@ -713,9 +225,7 @@ module.exports =
 
       function getNotificationsSuccess(response) {
         console.log('[userService.getNotifications] response: ', response);
-        // notificationsPromise.resolve(response.data);
-        // uncomment above and remove below when services are ready
-        notificationsPromise.resolve(tempData.notifications);
+        notificationsPromise.resolve(response.data);
       }
 
       function getNotificationsFail(error) {
@@ -728,13 +238,13 @@ module.exports =
     /**
      * @name getOpportunityFilters
      * @desc get all opportunity filters for a user
-     * @params {String} userId - id of a user
+     * @params {String} id - id of a user
      * @returns {Array} - Array of all opportunity filters for a user
      * @memberOf andromeda.common.services
      */
-    function getOpportunityFilters(userId) {
+    function getOpportunityFilters(id) {
       var opportunityFilterPromise = $q.defer(),
-          url = apiHelperService.formatQueryString({'foo': 'bar'});
+          url = apiHelperService.request('/api/users/' + id + '/opportunityFilters/');
 
       $http.get(url, {
         headers: {}
@@ -744,9 +254,7 @@ module.exports =
 
       function getOpportunityFiltersSuccess(response) {
         console.log('[userService.getOpportunityFilters] response: ', response);
-        // opportunityFilterPromise.resolve(response.data);
-        // uncomment above and remove below when services are ready
-        opportunityFilterPromise.resolve(tempData.getOpportunityFilterResponse);
+        opportunityFilterPromise.resolve(response.data);
       }
 
       function getOpportunityFiltersFail(error) {
@@ -759,14 +267,15 @@ module.exports =
     /**
      * @name saveOpportunityFilter
      * @desc save new filter for a user
-     * @params {String} userId - id of a user
+     * @params {String} id - id of a user
      * @params {Object} payload - filter settings to be saved
      * @returns {Object} - Status Object
      * @memberOf andromeda.common.services
      */
-    function saveOpportunityFilter(userId, payload) {
+    function saveOpportunityFilter(id) {
       var opportunityFilterPromise = $q.defer(),
-          url = apiHelperService.formatQueryString();
+          url = apiHelperService.request('/api/users/' + id + '/opportunityFilters/'),
+          payload = {};
 
       $http.post(url, payload, {
         headers: {}
@@ -791,13 +300,13 @@ module.exports =
     /**
      * @name getPerformanceSummary
      * @desc get performance summary for a user
-     * @params {String} userId - id of a user
-     * @returns {Object} - performance summary -- will this still be an object with an array? Seems like we can cut out the object and just return the array - WAJ 07/25
+     * @params {String} id - id of a user
+     * @returns {Object} - performance summary
      * @memberOf andromeda.common.services
      */
-    function getPerformanceSummary(userId) {
+    function getPerformanceSummary(id) {
       var performancePromise = $q.defer(),
-          url = apiHelperService.formatQueryString();
+          url = apiHelperService.request('/api/users/' + id + '/performance/summary/');
 
       $http.get(url, {
         headers: {}
@@ -807,9 +316,7 @@ module.exports =
 
       function getPerformanceSummarySuccess(response) {
         console.log('[userService.getPerformanceSummary] response: ', response);
-        // performancePromise.resolve(response.data);
-        // uncomment above and remove below when services are ready
-        performancePromise.resolve(tempData.getPerformanceSummaryResponse);
+        performancePromise.resolve(response.data);
       }
 
       function getPerformanceSummaryFail(error) {
@@ -822,13 +329,13 @@ module.exports =
     /**
      * @name getPerformanceDepletion
      * @desc get performance depletion for a user
-     * @params {String} userId - id of a user
+     * @params {String} id - id of a user
      * @returns {Object} - user performance depletion
      * @memberOf andromeda.common.services
      */
-    function getPerformanceDepletion(userId) {
+    function getPerformanceDepletion(id) {
       var performancePromise = $q.defer(),
-          url = apiHelperService.formatQueryString();
+          url = apiHelperService.request('/api/users/' + id + '/performance/depletionScorecard/');
 
       $http.get(url, {
         headers: {}
@@ -838,9 +345,7 @@ module.exports =
 
       function getPerformanceDepletionSuccess(response) {
         console.log('[userService.getPerformanceDepletion] response: ', response);
-        // performancePromise.resolve(response.data);
-        // uncomment above and remove below when services are ready
-        performancePromise.resolve(tempData.getPerformanceDepletionResponse);
+        performancePromise.resolve(response.data);
       }
 
       function getPerformanceDepletionFail(error) {
@@ -853,13 +358,13 @@ module.exports =
     /**
      * @name getPerformanceDistribution
      * @desc get performance distribution for a user
-     * @params {String} userId - id of a user
+     * @params {String} id - id of a user
      * @returns {Object} - user performance distribution
      * @memberOf andromeda.common.services
      */
-    function getPerformanceDistribution(userId) {
+    function getPerformanceDistribution(id) {
       var performancePromise = $q.defer(),
-          url = apiHelperService.formatQueryString();
+          url = apiHelperService.request('/api/users/' + id + '/performance/distributionScorecard/');
 
       $http.get(url, {
         headers: {}
@@ -869,9 +374,7 @@ module.exports =
 
       function getPerformanceDistributionSuccess(response) {
         console.log('[userService.getPerformanceDistribution] response: ', response);
-        // performancePromise.resolve(response.data);
-        // uncomment above and remove below when services are ready
-        performancePromise.resolve(tempData.getPerformanceDistributionResponse);
+        performancePromise.resolve(response.data);
       }
 
       function getPerformanceDistributionFail(error) {
@@ -884,13 +387,13 @@ module.exports =
     /**
      * @name getPerformanceBrand
      * @desc get performance brand for a user
-     * @params {String} userId - id of a user
+     * @params {String} id - id of a user
      * @returns {Object} - user performance brand
      * @memberOf andromeda.common.services
      */
-    function getPerformanceBrand(userId) {
+    function getPerformanceBrand(id) {
       var performancePromise = $q.defer(),
-          url = apiHelperService.formatQueryString();
+          url = apiHelperService.request('/api/users/' + id + '/performance/brandSnapshot/');
 
       $http.get(url, {
         headers: {}
@@ -900,9 +403,7 @@ module.exports =
 
       function getPerformanceBrandSuccess(response) {
         console.log('[userService.getPerformanceBrand] response: ', response);
-        // performancePromise.resolve(response.data);
-        // uncomment above and remove below when services are ready
-        performancePromise.resolve(tempData.getPerformanceBrandResponse);
+        performancePromise.resolve(response.data);
       }
 
       function getPerformanceBrandFail(error) {
@@ -915,13 +416,13 @@ module.exports =
     /**
      * @name getPerformanceTopBottom
      * @desc get performance top bottom snapshot for a user
-     * @params {String} userId - id of a user
+     * @params {String} id - id of a user
      * @returns {Object} - user performance top bottom snapshot
      * @memberOf andromeda.common.services
      */
-    function getPerformanceTopBottom(userId) {
+    function getPerformanceTopBottom(id) {
       var performancePromise = $q.defer(),
-          url = apiHelperService.formatQueryString();
+          url = apiHelperService.request('/api/users/' + id + '/performance/topBottomSnapshot/');
 
       $http.get(url, {
         headers: {}
@@ -931,9 +432,7 @@ module.exports =
 
       function getPerformanceTopBottomSuccess(response) {
         console.log('[userService.getPerformanceTopBottom] response: ', response);
-        // performancePromise.resolve(response.data);
-        // uncomment above and remove below when services are ready
-        performancePromise.resolve(tempData.getPerformanceTopBottomResponse);
+        performancePromise.resolve(response.data);
       }
 
       function getPerformanceTopBottomFail(error) {
@@ -946,13 +445,13 @@ module.exports =
     /**
      * @name getTargetLists
      * @desc get target list for a user
-     * @params {String} userId - id of a user
+     * @params {String} id - id of a user
      * @returns {Object} - user target lists
      * @memberOf andromeda.common.services
      */
-    function getTargetLists(userId) {
+    function getTargetLists(id) {
       var targetListPromise = $q.defer(),
-          url = apiHelperService.formatQueryString();
+          url = apiHelperService.request('/api/users/' + id + '/targetLists/');
 
       $http.get(url, {
         headers: {}
@@ -962,9 +461,7 @@ module.exports =
 
       function getTargetListsSuccess(response) {
         console.log('[userService.getTargetLists] response: ', response);
-        // targetListPromise.resolve(response.data);
-        // uncomment above and remove below when services are ready
-        targetListPromise.resolve(tempData.getTargetListsResponse);
+        targetListPromise.resolve(response.data);
       }
 
       function getTargetListsFail(error) {
@@ -977,13 +474,13 @@ module.exports =
     /**
      * @name addTargetList
      * @desc add target list for a user
-     * @params {String} userId - id of a user
+     * @params {String} id - id of a user
      * @returns {Object} - newly added target list
      * @memberOf andromeda.common.services
      */
-    function addTargetList(userId) {
+    function addTargetList(id) {
       var targetListPromise = $q.defer(),
-          url = apiHelperService.formatQueryString(),
+          url = apiHelperService.request('/api/users/' + id + '/targetLists/'),
           payload = tempData.postTargetListPayload;
 
       $http.post(url, payload, {
