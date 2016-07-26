@@ -2,9 +2,8 @@
 
 module.exports = function(app) {
 
-  var redis = require('redis');
-  var requestProxy = require('express-request-proxy');
-  require('redis-streams')(redis);
+  const request = require('request');
+  const util = require('../_lib/util');
 
   // RENDER ALL PAGES TO APP VIEW
   app.get('/', function (req, res) {
@@ -13,10 +12,9 @@ module.exports = function(app) {
     });
   });
 
-  app.get('/api/:resource', requestProxy({
-    cache: redis.createClient(),
-    cacheMaxAge: 60,
-    url: "http://jsonplaceholder.typicode.com/:resource"
-  }));
-
+  app.get('/api/*', function(req, res) {
+    console.log(req.url);
+    var signed = util.sign(req.url);
+    req.pipe(request(signed)).pipe(res);
+  });
 };
