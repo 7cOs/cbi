@@ -46,9 +46,10 @@
   div(row)
     div(column='3')
       label Opportunity Type
-      md-input-container
-        md-select(ng-model="t.filtersService.model.selected.opportunitiesTypes" aria-label="Opportunity Type" md-on-close="t.chipsService.addChip(t.filtersService.model.selected.opportunitiesTypes, 'opportunitiesTypes', false)")
-          md-option(ng-repeat="type in t.filtersService.model.opportunitiesTypes" aria-label="type.name" value="{{type.name}}") {{type.name}}
+      .dropdown-filter
+        .dropdown
+          md-select(ng-model="t.filtersService.model.selected.opportunitiesTypes" aria-label="Opportunity Type" md-on-close="t.chipsService.addChip(t.filtersService.model.selected.opportunitiesTypes, 'opportunitiesTypes', false)" placeholder="All Types")
+            md-option(ng-repeat="type in t.filtersService.model.opportunitiesTypes" aria-label="type.name" value="{{type.name}}") {{type.name}}
     div(column='3')
       label Brand / Master SKU
       md-autocomplete(md-selected-item="selectedItem" md-search-text="t.filtersService.model.brandSearchText" md-items="brand in t.filtersService.model.brands" md-item-text="brand.name" md-min-length="1" placeholder="by Brand or SKU" md-selected-item-change="t.chipsService.addAutocompleteChip(brand.name, 'brandSearchText')")
