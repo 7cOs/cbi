@@ -10,8 +10,8 @@ div(container)
           div.inner
             span #[a My Performance]
           ul.dropdown
-            li.sub-menu #[a(ui-sref="accounts") My Accounts]
             li.sub-menu #[a(ui-sref="scorecards") My Scorecards]
+            li.sub-menu #[a(ui-sref="accounts") Account Dashboard]
         li.top-level-menu(ui-sref-active="active")
           div.inner
             span #[a(ui-sref="opportunities") Opportunities]
@@ -26,5 +26,5 @@ div(container)
         //- "Hidden" link to the style guide (remove whenever needed)
         img(src="assets/img/icons/nav-gear.svg" ui-sref="style-guide").nav-icon
     ul.nav-sub-menu(ng-if="pageName === 'accounts' || pageName === 'scorecards'")
-      li.accent #[a(ui-sref="accounts" ui-sref-active="active") My Accounts]
       li.accent #[a(ui-sref="scorecards" ui-sref-active="active") My Scorecards]
+      li.accent #[a(ui-sref="accounts" ui-sref-active="active") Account Dashboard]

@@ -1,0 +1,123 @@
+//- NOTE: This math will change once we have actual product lists
+h3 Top opportunities <a class="accent" ui-sref="opportunities">See all opportunities</a>
+
+.action-buttons
+  button.btn-action(ng-disabled="list.selected < 1") Add to List
+  button.btn-action(ng-disabled="list.selected < 1") Download
+  button.btn-action(ng-disabled="list.selected < 1") Send To
+
+button.icon.select-all(ng-click="list.toggleAll()")
+  span(ng-if='list.isChecked()') Un-
+  | Select All
+button.icon.expand-all(ng-click="list.accordion.expandAll()" ng-disabled="list.expandedOpportunities.length === list.opportunities.length") Expand All
+button.icon.collapse-all(ng-click="list.accordion.collapseAll()" ng-disabled="list.expandedOpportunities.length < 2") Collapse All
+
+v-accordion.styled-list(multiple="" id="opportunities" control="list.accordion" onexpand="list.expandCallback(item)" oncollapse="list.collapseCallback(item)" column='12')
+  div.header-row(row)
+    div.checkbox-wrapper.placeholder(ng-click="list.toggle(opportunity, a.selected)")
+    div.checkbox-sibling
+      div(column='3')
+        label.bold Store / Number
+      div(column='4')
+        label.bold Address
+      div(column='2')
+        label.bold Opportunities
+      div(column='1')
+        label.bold Depletions CYTD
+      div(column='1')
+        label.bold Trend vs Ya
+      div(column='1')
+        label.bold Segmentation
+  v-pane.list-item(row ng-repeat="opportunity in list.opportunitiesService.model.opportunities" expanded="opportunity.isExpanded")
+    .shadow-wrap.bottom
+      div.checkbox-wrapper(ng-click="list.toggle(opportunity, list.selected)")
+        md-checkbox(aria-label="Select Item" ng-checked="list.exists(opportunity, list.selected)")
+      v-pane-header.checkbox-sibling(column='12')
+        div.cell-parent
+          div.pad-cell(column='3') {{opportunity.store.name}} <span class="supporting-text">\#{{opportunity.store.id}}</span>
+          div.address(column='4') {{opportunity.store.address}}
+          div(column='2') {{opportunity.opCount}} <span class="supporting-text">({{opportunity.impact}} high)</span>
+          div(column='1') {{opportunity.depletionsCYTD}}
+          div(column='1' class="value" ng-class="{'positive' : opportunity.positiveValue, 'negative' : opportunity.negativeValue}") <span ng-if="opportunity.positiveValue">+</span>{{opportunity.depletionTrendVsYA}}<span>%</span>
+          div(column='1') {{opportunity.store.segmentation}}
+      v-pane-content(column='12' class="products" ng-class="{'open' : open}")
+        .shadow-wrap.top
+          .hero-row(row)
+            div(column='3').pad-cell.brand-icons
+              div
+                img(src='assets/img/brands/brand-lg-coronaextra.svg')
+                img(src='assets/img/brands/brand-lg-coronalite.svg')
+                img(src='assets/img/brands/brand-lg-modelo.svg')
+                img(src='assets/img/brands/brand-lg-modelolite.svg')
+              div.small-icons
+                img(src='assets/img/brands/brand-sm-ballastpoint.svg')
+                img(src='assets/img/brands/brand-sm-modelochelada.svg')
+                img(src='assets/img/brands/brand-sm-modelolite.svg')
+                img(src='assets/img/brands/brand-sm-negramodelo.svg')
+                img(src='assets/img/brands/brand-sm-pacifico.svg')
+                img(src='assets/img/brands/brand-sm-pacificolite.svg')
+                img(src='assets/img/brands/brand-sm-tecate.svg')
+            div(column='3').no-pad
+              label.bold Distribution L90
+              div(row)
+                div(column='4')
+                  label Simple
+                  div(row)
+                    div(column='12') 4 <span class="percentage">2</span>%
+                div(column='8')
+                  label Effective
+                  div(row)
+                    div(column='12') 12 <span class="percentage">5.2</span>%
+            div(column='2')
+              label Velocity
+              div(row)
+                div(column='12') 670 <span class="percentage">7.6</span>%
+            div(column='2')
+              label Tolinx Submission Code
+              div(row)
+                div(column='12') 101745103
+            div(column='2')
+              a(href="#").details-link.accent Full Details
+        .title-row(row)
+          div(column='1') &nbsp;
+          div(column='2')
+            label.bold Product
+          div(column='2')
+            label.bold Type
+          div(column='4')
+            label.bold Rationale
+          div(column='1')
+            label.bold Status
+          div(column='1')
+            label.bold Impact
+          div(column='1')
+            label.bold Hide
+        v-accordion(multiple="" class="nested-accordion")
+          v-pane.styled-list(ng-repeat="product in list.opportunitiesService.model.products")
+            v-pane-header
+              div.cell-parent.sub-item(row)
+                .regional-status(ng-if="product.regionalStatus")
+                  div(class="{{product.regionalStatus}}")
+                div(column='1').sub-item-select
+                  md-checkbox(aria-label="Select Item" ng-click="$event.stopPropagation();")
+                div(column='2').pad-cell
+                  span.product-title {{product.product}} <br>
+                  | {{product.detail}}
+                div.type(column='2') {{product.type}}
+                div(column='4') {{product.rationale}}
+                div(column='1') {{product.status}}
+                div(column='1' class="impact {{product.predictedImpact}}")
+                div(column='1').hide-row
+            .shadow-wrap.top
+              v-pane-content
+                div(row)
+                  div(column="1") &nbsp;
+                  div(column="4").pad-cell
+                    label Last Depletion
+                    span 68 days ago
+                  div(column="2")
+                    label Depletions CYTD
+                    span 6,256
+                  div(column="2")
+                    label Trend vs Ya
+                    span 10%

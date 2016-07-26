@@ -356,6 +356,18 @@ module.exports =
       feedbackDeleteResponse: {'status': 200}
     };
 
+    var model = {
+      opportunities: []
+    };
+
+    // Get opportunities and products data
+    getOpportunities('').then(function(data) {
+      model.opportunities = data;
+    });
+    getProducts('').then(function(data) {
+      model.products = data;
+    });
+
     return {
       all: function() {
         return tempData.opportunities;
@@ -364,7 +376,9 @@ module.exports =
         return tempData[id];
       },
 
+      model: model,
       getOpportunities: getOpportunities,
+      getProducts: getProducts,
       createOpportunity: createOpportunity,
       updateOpportunity: updateOpportunity,
       getOpportunitiyFeedback: getOpportunityFeedback,
@@ -393,10 +407,20 @@ module.exports =
       .catch(getOpportunitiesFail);
 
       function getOpportunitiesSuccess(response) {
+        // Set positive or negative label for trend values
+        tempData.opportunities.forEach(function(item) {
+          var trend = item.depletionTrendVsYA;
+          if (trend > 0) {
+            item.positiveValue = true;
+          } else if (trend < 0) {
+            item.negativeValue = true;
+          }
+        });
+        opportunitiesPromise.resolve(tempData.opportunities);
+
         console.log('[opportunitiesService.getOpportunities] response: ', response);
         // opportunitiesPromise.resolve(response.data);
         // uncomment above and remove below when services are ready
-        opportunitiesPromise.resolve(data.opportunitiesGetResponse);
       }
 
       function getOpportunitiesFail(error) {
@@ -404,6 +428,41 @@ module.exports =
       }
 
       return opportunitiesPromise.promise;
+    }
+
+    // Products Methods
+    /**
+     * @name getProducts
+     * @desc Get Products from API
+     * @params {String} url - url to hit the api with [this could end up being static]
+     * @params {String} opportunityID - ID of opportunity [optional]
+     * @returns {Object}
+     * @memberOf andromeda.common.services
+     */
+    function getProducts(url, opportunityID) {
+      var productsPromise = $q.defer();
+
+      if (opportunityID && opportunityID !== '') url += encodeURIComponent('opportunityID:' + opportunityID);
+
+      $http.get(url, {
+        headers: {}
+      })
+      .then(getProductsSuccess)
+      .catch(getProductsFail);
+
+      function getProductsSuccess(response) {
+        productsPromise.resolve(tempData.products);
+
+        console.log('[opportunitiesService.getProducts] response: ', response);
+        // ProductsPromise.resolve(response.data);
+        // uncomment above and remove below when services are ready
+      }
+
+      function getProductsFail(error) {
+        productsPromise.reject(error);
+      }
+
+      return productsPromise.promise;
     }
 
     /**

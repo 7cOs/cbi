@@ -26,7 +26,7 @@
     md-chip-template
       div {{$chip.name}}
 .filters(column='12')
-  .row(class='clearfix')
+  div(row)
     div(class='more-filters')
       a(ng-click="t.filtersService.model.expanded = t.filtersService.model.expanded ? false : true")
         span(ng-class="{ 'chevron-up': t.filtersService.model.expanded, 'chevron-down': !t.filtersService.model.expanded }")
@@ -43,7 +43,7 @@
       label Opportunity Status
       md-radio-group(ng-model="t.filtersService.model.selected.opportunitiesStatus")
         md-radio-button(ng-repeat="opportunity in t.filtersService.model.opportunitiesStatus" class="md-primary" ng-value="opportunity.name" aria-label="opportunity.name" ng-click="t.chipsService.addChip(opportunity.name, 'opportunitiesStatus', true)") {{opportunity.name}}
-  .row(class="clearfix")
+  div(row)
     div(column='3')
       label Opportunity Type
       md-input-container
@@ -64,7 +64,7 @@
       md-autocomplete(md-search-text="t.filtersService.model.distributorSearchText" md-items="distributor in t.filtersService.model.distributors" md-item-text="distributor.name" placeholder="by Name" md-selected-item-change="t.chipsService.addAutocompleteChip(distributor.name, 'distributorSearchText')")
         md-item-template
           div(md-highlight-text="t.filtersService.model.distributorSearchText" md-highlight-flags="^i") {{distributor.name}}
-  .row
+  div(row)
     div(column='3' ng-show="t.filtersService.model.expanded")
       label Predicted Impact
       md-checkbox(ng-model="t.filtersService.model.selected.predictedImpactHigh" aria-label="Predicted Impact High" ng-click="t.chipsService.updateChip('predictedImpactHigh', 'Predicted Impact High')") High
@@ -76,7 +76,7 @@
       md-checkbox(ng-model="t.filtersService.model.selected.productTypePriority" aria-label="Product Type Priority Packages" ng-click="t.chipsService.updateChip('productTypePriority', 'Product Type Priority')") Priority Packages
       md-checkbox(ng-model="t.filtersService.model.selected.productTypeAuthorized" aria-label="Product Type Authorized" ng-click="t.chipsService.updateChip('productTypeAuthorized', 'Product Type Authorized')") Authorized
     div(column='3' ng-show="t.filtersService.model.expanded")
-      .row
+      div(row)
         div(column='12')
           label Store Type
           md-checkbox(ng-model="t.filtersService.model.selected.storeTypeIndependent" aria-label="Store Type Independent" ng-click="t.chipsService.updateChip('storeTypeIndependent', 'Store Type Independent')") Independent
@@ -104,7 +104,7 @@
         label CBBD Contact
         input(type="text" ng-model="t.filtersService.model.selected.cbbdContact")
     div(column='12' class='apply-filters')
-      button(value='Apply Filters' type="button" class="button-sharing") Apply Filters
+      button(value='Apply Filters' type="button" class="btn-action" ng-disabled="t.chipsService.model.length <= 0") Apply Filters
 
 h3 <strong>{{t.products.length * t.opportunities.length}} opportunities</strong> across {{t.opportunities.length}} stores
 
