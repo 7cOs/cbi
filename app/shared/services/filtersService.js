@@ -11,7 +11,7 @@ module.exports =
         {name: 'Walmart', subAccount: 'East'}
       ],
       brands: productsService.getProducts('http://jsonplaceholder.typicode.com/posts'),
-      distributors: distributorsService.getDistributors('http://jsonplaceholder.typicode.com/posts'),
+      distributors: [],
       expanded: false,
       opportunitiesStatus: [
         {name: 'Open'},
@@ -72,6 +72,10 @@ module.exports =
         {name: 'Last Closed Month'}
       ]
     };
+
+    distributorsService.getDistributors().then(function(data) {
+      model.distributors = data.distributors;
+    });
 
     return {
       model: model

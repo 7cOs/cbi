@@ -1,29 +1,7 @@
 'use strict';
 
 module.exports =
-  function distributorsService($http, $q) {
-    /* var queryObj = {
-      url: '',
-      protocol: 'https',
-      endPoint: 'apigateway.us-west-2.amazonaws.com',
-      action: 'GET',
-      awsAccessKeyId: '', // From AWS
-      signatureMethod: 'HmacSHA256',
-      signatureVersion: '2',
-      signature: '',
-      timestamp: new Date()
-    };
-    var queryString = '';*/
-
-    var data = [{
-      'id': 'A1B2',
-      'name': 'Bob\'s Distribution',
-      'address': '555 Pretty Good Ave, Seattle, WA 98103'
-    }, {
-      'id': 'A1B2',
-      'name': 'Alice\'s Distribution',
-      'address': '555 Pretty Good Ave, Seattle, WA 98103'
-    }];
+  function distributorsService($http, $q, apiHelperService) {
 
     return {
       getDistributors: getDistributors
@@ -32,12 +10,12 @@ module.exports =
     /**
      * @name getDistributors
      * @desc Get distributors from API
-     * @params {String} url - url to hit the api with [this could end up being static]
      * @returns {Object}
      * @memberOf andromeda.common.services
      */
-    function getDistributors(url) {
-      var distributorsPromise = $q.defer();
+    function getDistributors() {
+      var distributorsPromise = $q.defer(),
+          url = apiHelperService.request('/api/distributors/');
 
       $http.get(url, {
         headers: {}
@@ -47,9 +25,7 @@ module.exports =
 
       function getDistributorsSuccess(response) {
         console.log('[distributorsService.getDistributors] response: ', response);
-        // distributorsPromise.resolve(response.data);
-        // uncomment above and remove below when services are ready
-        distributorsPromise.resolve(data);
+        distributorsPromise.resolve(response.data);
       }
 
       function getDistributorsFail(error) {
