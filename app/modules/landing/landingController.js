@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports =
-  function landingController($rootScope, $scope, $state, filtersService, myperformanceService, targetListService) {
+  function landingController($rootScope, $state, filtersService, myperformanceService, userService) {
     var vm = this;
 
     // Map public methods to scope
@@ -58,6 +58,16 @@ module.exports =
 
     // Broadcast current page name for other scopes
     $rootScope.$broadcast('page:loaded', $state.current.name);
+
+    userService.getTargetLists('1').then(function(data) {
+      vm.namedFilters = data.owned;
+      // vm.sharedFilters = data.sharedWithMe;
+      // console.log('named template', vm.namedFilters);
+      // console.log('named response', data.owned);
+      // console.log('shared with me template', vm.sharedFilters);
+      console.log('shared with me response', data);
+
+    });
 
     function isNegative(salesData) {
       if (salesData >= 0) {

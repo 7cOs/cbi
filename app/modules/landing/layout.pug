@@ -76,13 +76,14 @@ section.landing-page
                       li(ng-repeat="list in l.namedFilters")
                         div(column="8")
                           h3 {{list.name}}
-                          p.accent {{list.creator}}
-                          p.accent &#9746; {{list.members.length}} members
-                          p.accent {{list.created}}
+                          //p.accent {{list.creator}}
+                          //p.accent &#9746; {{list.members.length}} members
+                          //p.accent {{list.}}
+                          p.accent {{list.created_at | timeAgo}}
                         div(column="4")
-                          h4(column="6").completed.right {{list.closedOpportunites}}
+                          h4(column="6").completed.right {{list.opportunitiesSummary.closedOpportunitiesCount}}
                           h4(column="6").right {{list.opportunities}}
-                        md-progress-linear(md-mode="determinate" ng-value="l.ratio(list.closedOpportunites, list.opportunities)")
+                        md-progress-linear(md-mode="determinate" ng-value="l.ratio(list.opportunitiesSummary.closedOpportunitiesCount, list.opportunities)")
                   div(row)
                     p.accent.action-item #[a(href="#") View All &#9654;]
               md-tab(label='Shared with Me')
@@ -99,7 +100,7 @@ section.landing-page
                           h3 {{list.name}}
                           p.accent {{list.creator}}
                           p.accent &#9746; {{list.members.length}} members
-                          p.accent {{list.created}}
+                          p.accent {{list.created_at | timeAgo}}
                         div(column="4")
                           h4(column="6").completed.right {{list.closedOpportunites}}
                           h4(column="6").right {{list.opportunities}}
