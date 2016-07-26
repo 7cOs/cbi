@@ -10,7 +10,8 @@ module.exports =
     .state('scorecards', {
       url: '/scorecards',
       templateUrl: './app/modules/scorecards/layout.html',
-      controller: 'scorecardsController'
+      controller: 'scorecardsController',
+      controllerAs: 's'
     });
   })
   .controller('scorecardsController', require('./scorecardsController'));

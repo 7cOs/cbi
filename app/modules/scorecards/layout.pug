@@ -5,17 +5,17 @@ div.my-scorecards
     div.radio-filters
       label Ending Time Period
       md-radio-group(ng-model="filters.selected.timePeriod")
-        md-radio-button(ng-repeat="filter in filters.timePeriod" class="md-primary" ng-value="filter.name" aria-label="Ending Time Period") {{filter.name}}
+        md-radio-button(ng-repeat="filter in s.filters.timePeriod" class="md-primary" ng-value="filter.name" aria-label="Ending Time Period") {{filter.name}}
 
     div.dropdown-filter
       div.dropdown
         label Depletions Time Period
         md-select(ng-model="filters.selected.depletionsTimeFilter" aria-label="Depletions Time Range Filter"  placeholder="FYTD May 1, 2016 - June 29, 2016")
-          md-option(ng-repeat="filter in filters.depletionsTimePeriod" aria-label="filter.name" value="{{filter.name}}") {{filter.name}}
+          md-option(ng-repeat="filter in s.filters.depletionsTimePeriod" aria-label="filter.name" value="{{filter.name}}") {{filter.name}}
       div.dropdown
         label Distribution Time Period
         md-select(ng-model="filters.selected.distributionTimeFilter" aria-label="Distribution Time Range Filter"  placeholder="L90 Days April 1, 2016 - June 29, 2016")
-          md-option(ng-repeat="filter in filters.distributionTimePeriod" aria-label="filter.name" value="{{filter.name}}") {{filter.name}}
+          md-option(ng-repeat="filter in s.filters.distributionTimePeriod" aria-label="filter.name" value="{{filter.name}}") {{filter.name}}
 
   section.depeletions-scorecard
     div.scorecard-header.clearfix
@@ -24,9 +24,9 @@ div.my-scorecards
         h3 FYTD May 1, 2016- June 29, 2016
       div.scorecard-header-right
         p.accent Total Depletions / % Trend vs YA
-        h3 {{performanceData.performance[0].measures[0].value}}
+        h3 {{s.performanceData.performance[0].measures[0].value}}
           span &nbsp;CE
-          div.value.positive(ng-class="{'negative': isNegative(performanceData.performance[0].measures[0].percentChange)}") <span ng-if="isPositive(performanceData.performance[0].measures[0].percentChange)">+</span>{{performanceData.performance[0].measures[0].percentChange}}<span>%</span>
+          div.value.positive(ng-class="{'negative': s.isNegative(s.performanceData.performance[0].measures[0].percentChange)}") <span ng-if="s.isPositive(s.performanceData.performance[0].measures[0].percentChange)">+</span>{{s.performanceData.performance[0].measures[0].percentChange}}<span>%</span>
     div.scorecard-table
       table(cellspacing="0" cellpadding="0")
         thead
@@ -84,19 +84,19 @@ div.my-scorecards
             td.column-total 12%
             td.column-total.dark 100%
             td.column-total.dark 12%
-          tr(ng-repeat="depletion in depletionsData.performance")
+          tr(ng-repeat="depletion in s.depletionsData.performance")
             td.left.data-brand {{depletion.name}}
-            td(ng-class="{'negative': isNegative(depletion.measures.depletions)}").dark             {{depletion.measures.depletions}}
-            td(ng-class="{'negative': isNegative(depletion.measures.yearAgoGap)}")                  {{depletion.measures.yearAgoGap}}
-            td(ng-class="{'negative': isNegative(depletion.measures.yearAgoTrend)}")                {{depletion.measures.yearAgoTrend}}%
-            td(ng-class="{'negative': isNegative(depletion.measures.yearAgoBuTrend)}")              {{depletion.measures.yearAgoBuTrend}}%
-            td(ng-class="{'negative': isNegative(depletion.measures.yearAgoTrend - depletion.measures.yearAgoBuTrend)}") &#9660;
-            td(ng-class="{'negative': isNegative(depletion.measures.vsPlanNumber)}").dark           {{depletion.measures.vsPlanNumber}}
-            td(ng-class="{'negative': isNegative(depletion.measures.vsPlanPercent)}").dark          {{depletion.measures.vsPlanPercent}}%
-            td(ng-class="{'negative': isNegative(depletion.measures.volumeContribution)}")          {{depletion.measures.volumeContribution}}%
-            td(ng-class="{'negative': isNegative(depletion.measures.volumeContributionBu)}")        {{depletion.measures.volumeContributionBu}}%
-            td(ng-class="{'negative': isNegative(depletion.measures.growthContribution)}").dark     {{depletion.measures.growthContribution}}%
-            td(ng-class="{'negative': isNegative(depletion.measures.growthContributionBu)}").dark   {{depletion.measures.growthContributionBu}}%
+            td(ng-class="{'negative': s.isNegative(depletion.measures.depletions)}").dark             {{depletion.measures.depletions}}
+            td(ng-class="{'negative': s.isNegative(depletion.measures.yearAgoGap)}")                  {{depletion.measures.yearAgoGap}}
+            td(ng-class="{'negative': s.isNegative(depletion.measures.yearAgoTrend)}")                {{depletion.measures.yearAgoTrend}}%
+            td(ng-class="{'negative': s.isNegative(depletion.measures.yearAgoBuTrend)}")              {{depletion.measures.yearAgoBuTrend}}%
+            td(ng-class="{'negative': s.isNegative(depletion.measures.yearAgoTrend - depletion.measures.yearAgoBuTrend)}") &#9660;
+            td(ng-class="{'negative': s.isNegative(depletion.measures.vsPlanNumber)}").dark           {{depletion.measures.vsPlanNumber}}
+            td(ng-class="{'negative': s.isNegative(depletion.measures.vsPlanPercent)}").dark          {{depletion.measures.vsPlanPercent}}%
+            td(ng-class="{'negative': s.isNegative(depletion.measures.volumeContribution)}")          {{depletion.measures.volumeContribution}}%
+            td(ng-class="{'negative': s.isNegative(depletion.measures.volumeContributionBu)}")        {{depletion.measures.volumeContributionBu}}%
+            td(ng-class="{'negative': s.isNegative(depletion.measures.growthContribution)}").dark     {{depletion.measures.growthContribution}}%
+            td(ng-class="{'negative': s.isNegative(depletion.measures.growthContributionBu)}").dark   {{depletion.measures.growthContributionBu}}%
 
   section.distributions-scorecard
     div.scorecard-header.clearfix
@@ -105,17 +105,17 @@ div.my-scorecards
         h3 FYTD May 1, 2016- June 29, 2016
       div.scorecard-header-right
         p.accent Total Distributions / % Trend vs YA
-        h3 {{performanceData.performance[1].measures[0].value}}&nbsp;
-          div.value.positive(ng-class="{'negative': isNegative(performanceData.performance[1].measures[0].percentChange)}") <span ng-if="isPositive(performanceData.performance[1].measures[0].percentChange)">+</span>{{performanceData.performance[1].measures[0].percentChange}}<span>%</span>
+        h3 {{s.performanceData.performance[1].measures[0].value}}&nbsp;
+          div.value.positive(ng-class="{'negative': s.isNegative(s.performanceData.performance[1].measures[0].percentChange)}") <span ng-if="s.isPositive(s.performanceData.performance[1].measures[0].percentChange)">+</span>{{s.performanceData.performance[1].measures[0].percentChange}}<span>%</span>
     div.scorecard-filter
       div.radio-button-group
         label
         md-radio-group(ng-model="filters.selected.onOffPremise")
-          md-radio-button(ng-repeat="filter in filters.premises" class="md-primary" ng-value="filter.name" aria-label="filter.name") {{filter.name}}
+          md-radio-button(ng-repeat="filter in s.filters.premises" class="md-primary" ng-value="filter.name" aria-label="filter.name") {{filter.name}}
       div.radio-button-group
         label
         md-radio-group(ng-model="filters.selected.placementType")
-          md-radio-button(ng-repeat="filter in filters.placementType" class="md-primary" ng-value="filter.name" aria-label="filter.name") {{filter.name}}
+          md-radio-button(ng-repeat="filter in s.filters.placementType" class="md-primary" ng-value="filter.name" aria-label="filter.name") {{filter.name}}
 
     div.scorecard-table
       table(cellspacing="0" cellpadding="0")
@@ -174,16 +174,16 @@ div.my-scorecards
             td.column-total 12%
             td.column-total.dark 100%
             td.column-total.dark 12%
-          tr(ng-repeat="distribution in distributionData.performance")
+          tr(ng-repeat="distribution in s.distributionData.performance")
             td.left.data-brand {{distribution.name}}
-            td(ng-class="{'negative': isNegative(distribution.measures.distributions)}").dark         {{distribution.measures.distributions}}
-            td(ng-class="{'negative': isNegative(distribution.measures.yearAgoGap)}")                 {{distribution.measures.yearAgoGap}}
-            td(ng-class="{'negative': isNegative(distribution.measures.yearAgoTrend) }")              {{distribution.measures.yearAgoTrend}}%
-            td(ng-class="{'negative': isNegative(distribution.measures.yearAgoBuTrend)}")             {{distribution.measures.yearAgoBuTrend}}%
-            td(ng-class="{'negative': isNegative(distribution.measures.yearAgoTrend - distribution.measures.yearAgoBuTrend) }") &#9660;
-            td(ng-class="{'negative': isNegative(distribution.measures.vsPlanNumber)}").dark          {{distribution.measures.vsPlanNumber}}
-            td(ng-class="{'negative': isNegative(distribution.measures.vsPlanPercent)}").dark         {{distribution.measures.vsPlanPercent}}%
-            td(ng-class="{'negative': isNegative(distribution.measures.volumeContribution)}")         {{distribution.measures.volumeContribution}}%
-            td(ng-class="{'negative': isNegative(distribution.measures.volumeContributionBu)}")       {{distribution.measures.volumeContributionBu}}%
-            td(ng-class="{'negative': isNegative(distribution.measures.growthContribution)}").dark    {{distribution.measures.growthContribution}}%
-            td(ng-class="{'negative': isNegative(distribution.measures.growthContributionBu)}").dark  {{distribution.measures.growthContributionBu}}%
+            td(ng-class="{'negative': s.isNegative(distribution.measures.distributions)}").dark         {{distribution.measures.distributions}}
+            td(ng-class="{'negative': s.isNegative(distribution.measures.yearAgoGap)}")                 {{distribution.measures.yearAgoGap}}
+            td(ng-class="{'negative': s.isNegative(distribution.measures.yearAgoTrend) }")              {{distribution.measures.yearAgoTrend}}%
+            td(ng-class="{'negative': s.isNegative(distribution.measures.yearAgoBuTrend)}")             {{distribution.measures.yearAgoBuTrend}}%
+            td(ng-class="{'negative': s.isNegative(distribution.measures.yearAgoTrend - distribution.measures.yearAgoBuTrend) }") &#9660;
+            td(ng-class="{'negative': s.isNegative(distribution.measures.vsPlanNumber)}").dark          {{distribution.measures.vsPlanNumber}}
+            td(ng-class="{'negative': s.isNegative(distribution.measures.vsPlanPercent)}").dark         {{distribution.measures.vsPlanPercent}}%
+            td(ng-class="{'negative': s.isNegative(distribution.measures.volumeContribution)}")         {{distribution.measures.volumeContribution}}%
+            td(ng-class="{'negative': s.isNegative(distribution.measures.volumeContributionBu)}")       {{distribution.measures.volumeContributionBu}}%
+            td(ng-class="{'negative': s.isNegative(distribution.measures.growthContribution)}").dark    {{distribution.measures.growthContribution}}%
+            td(ng-class="{'negative': s.isNegative(distribution.measures.growthContributionBu)}").dark  {{distribution.measures.growthContributionBu}}%
