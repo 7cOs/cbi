@@ -1,11 +1,11 @@
 div.my-scorecards
   h1 My Scorecards
 
-  section.scorecard-filters.clearfix
+  section.scorecard-filters.filters.clearfix
     div.radio-filters
       label Ending Time Period
       md-radio-group(ng-model="filters.selected.timePeriod")
-        md-radio-button(ng-repeat="filter in s.filters.timePeriod" class="md-primary" ng-value="filter.name" aria-label="Ending Time Period") {{filter.name}}
+        md-radio-button(ng-repeat="filter in s.filters.timePeriod" class="md-primary block" ng-value="filter.name" aria-label="Ending Time Period") {{filter.name}}
 
     div.dropdown-filter
       div.dropdown
@@ -109,11 +109,9 @@ div.my-scorecards
           div.value.positive(ng-class="{'negative': s.isNegative(s.performanceData.performance[1].measures[0].percentChange)}") <span ng-if="s.isPositive(s.performanceData.performance[1].measures[0].percentChange)">+</span>{{s.performanceData.performance[1].measures[0].percentChange}}<span>%</span>
     div.scorecard-filter
       div.radio-button-group
-        label
         md-radio-group(ng-model="filters.selected.onOffPremise")
           md-radio-button(ng-repeat="filter in s.filters.premises" class="md-primary" ng-value="filter.name" aria-label="filter.name") {{filter.name}}
       div.radio-button-group
-        label
         md-radio-group(ng-model="filters.selected.placementType")
           md-radio-button(ng-repeat="filter in s.filters.placementType" class="md-primary" ng-value="filter.name" aria-label="filter.name") {{filter.name}}
 

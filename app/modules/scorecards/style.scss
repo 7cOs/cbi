@@ -1,195 +1,161 @@
-.my-scorecards {
-  background-color: $body-bg;
+.scorecard-filters {
+  background: $gray-4;
+  padding: 40px;
 
-  .scorecard-filters {
-    background: $gray-4;
-    padding: 40px;
-
-    label {
-      font-size: 0.7em;
-    }
-
-    .radio-filters,
-    .dropdown-filter {
-      display: inline-block;
-      font-size: 1em;
-      float: left;
-
-      .dropdown {
-        display: inline-block;
-        margin: 0 12px;
-
-        md-select {
-          margin: 0;
-          width: 285px;
-        }
-      }
-    }
-
-    .radio-filters {
-      margin-right: 60px;
-
-      label {
-        margin-bottom: 8px;
-      }
-
-      md-radio-button {
-        margin-bottom: 8px;
-        font-size: 0.75em;
-
-        ._md-container {
-          top: 80%;
-        }
-
-        ._md-label {
-          margin-left: 18px;
-        }
-
-        ._md-on,
-        ._md-off {
-          height: 12px;
-          width: 12px;
-        }
-      }
-    }
-  }
-
-  .scorecard-filter {
-
-    background: $gray-4;
-
-    .radio-button-group {
-      display: inline-block;
-      margin: 0 12px;
-    }
-
-    md-radio-button {
-      display: inline-block;
-      margin: 18px;
-      font-size: 0.8em;
-      font-weight: $medium;
-    }
-  }
-
-
-  .scorecard-header-left {
+  .radio-filters,
+  .dropdown-filter {
+    display: inline-block;
+    font-size: 1em;
     float: left;
   }
 
-  .scorecard-header-right {
-    float: right;
-
-    p {
-      margin: 50px 0 0;
-    }
-
-    h3 {
-      margin: 10px 0 0;
-      text-align: right;
-    }
-
-    div {
-      float: right;
-      margin-left: 12px;
-    }
-
-    span {
-      font-size: 0.75em;
-    }
+  .radio-filters {
+    margin-right: 60px;
   }
 
-  table {
-    border-collapse: collapse;
-    border-top: 1px solid $black;
-    border-bottom: 1px solid $black;
-    width: 100%;
+  .dropdown {
+    display: inline-block;
+    margin: 0 12px;
 
-    tbody {
-
-      td {
-        padding: 30px 0;
-      }
-
-      tr {
-        border-bottom: 1px solid $gray-9;
-        background: $white;
-        transition: background 0.3s;
-
-        .dark {
-          background: $gray-4;
-          transition: background 0.3s;
-        }
-
-        &:hover {
-          background: $light-blue-4;
-          transition: background 0.3s;
-
-
-          .dark {
-            background: $smoke;
-            transition: background 0.3s;
-          }
-        }
-      }
+    md-select {
+      margin: 0;
+      width: 285px;
     }
+  }
+}
 
-    thead {
-      border-bottom: 1px solid $black;
+.scorecard-filter {
+  background: $gray-4;
 
-      .dark {
-        background: $gray-4;
-      }
+  .radio-button-group {
+    display: inline-block;
+    margin: 0 12px;
+  }
 
-      th {
-        padding-top: 10px;
-        padding-bottom: 10px;
-      }
+  md-radio-button {
+    display: inline-block;
+    font-weight: $medium;
+    margin: 1em 2em 2em;
+  }
+}
 
-      th.top {
-        padding-bottom: 2px;
-      }
+.scorecard-header-left {
+  float: left;
+}
 
-      .single-line {
-        padding: 0 20px;
-        margin-bottom: -15px;
-      }
-    }
+.scorecard-header-right {
+  float: right;
 
-    .column-total {
-      font-family: $work-sans;
-      font-size: 1.125em;
-      font-weight: $medium;
-    }
+  p {
+    margin: 50px 0 0;
+  }
 
-    .data {
-      font-family: $work-sans;
-      font-size: 1em;
-      font-weight: $regular;
-    }
+  h3 {
+    margin: 10px 0 0;
+    text-align: right;
+  }
 
-    .data-brand {
-      color: $blue;
+  div {
+    float: right;
+    margin-left: 12px;
+  }
+
+  span {
+    font-size: 0.75em;
+  }
+}
+
+.scorecard-table table {
+  border-collapse: collapse;
+  border-top: 1px solid $black;
+  border-bottom: 1px solid $black;
+  width: 100%;
+
+  tbody {
+
+    td {
+      padding: 30px 0;
     }
 
     tr {
+      border-bottom: 1px solid $gray-9;
       background: $white;
+      transition: background 0.3s;
+
+      .dark {
+        background: $gray-4;
+        transition: background 0.3s;
+      }
+
+      &:hover {
+        background: $light-blue-4;
+        transition: background 0.3s;
+
+
+        .dark {
+          background: $smoke;
+          transition: background 0.3s;
+        }
+      }
+    }
+  }
+
+  thead {
+    border-bottom: 1px solid $black;
+
+    .dark {
+      background: $gray-4;
     }
 
-    td {
-      text-align: center;
+    th {
+      padding-top: 10px;
+      padding-bottom: 10px;
     }
 
-    .left {
-      padding-left: 16px;
-      text-align: left;
+    th.top {
+      padding-bottom: 2px;
     }
 
-    .cell-align-right {
-      text-align: right;
+    .single-line {
+      padding: 0 20px;
+      margin-bottom: -15px;
     }
+  }
 
-    .cell-align-left {
-      text-align: left;
-    }
+  .column-total {
+    font-family: $work-sans;
+    font-size: 1.125em;
+    font-weight: $medium;
+  }
+
+  .data {
+    font-family: $work-sans;
+    font-size: 1em;
+    font-weight: $regular;
+  }
+
+  .data-brand {
+    color: $blue;
+  }
+
+  tr {
+    background: $white;
+  }
+
+  td {
+    text-align: center;
+  }
+
+  .left {
+    padding-left: 16px;
+    text-align: left;
+  }
+
+  .cell-align-right {
+    text-align: right;
+  }
+
+  .cell-align-left {
+    text-align: left;
   }
 }

@@ -8,6 +8,8 @@ module.exports =
     vm.chipsService = chipsService;
     vm.filtersService = filtersService;
 
+    vm.filters = myperformanceService.filter();
+
     // Expose public methods
     vm.isNegative = isNegative;
     vm.isPositive = isPositive;

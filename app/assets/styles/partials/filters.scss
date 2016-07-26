@@ -1,11 +1,16 @@
 .filters {
   background: $gray-4;
   margin-bottom: 2em;
-  font-size: 12px;
-  padding: 1em 2em;
+  padding: 2em 2em 1em;
   position: relative;
 
+  &.top {
+    border-bottom: 1px solid $gray-9;
+    margin-bottom: 0;
+  }
+
   .apply-filters {
+
     button {
       display: block;
       font-size: 14px;
@@ -62,33 +67,60 @@
     width: 100%;
   }
 
-  md-checkbox {
-    width: 100%;
-  }
-
   md-radio-button {
     float: left;
-    min-width: 115px;
+    margin-right: 2em;
 
-    _md-label {
-      margin-left: 25px;
+    ._md-container {
+      top: 70%;
+    }
+
+    &.block {
+      float: none;
     }
   }
 
   md-radio-button,
   md-checkbox {
+    font-size: 12px;
     margin-bottom: 10px;
     margin-top: 10px;
+
+    ._md-label {
+      margin-left: 25px;
+
+      span {
+        margin-top: 2px;
+        display: block;
+      }
+    }
+  }
+
+  md-checkbox {
+    width: 100%;
+
+    ._md-container,
+    ._md-icon {
+      width: 15px;
+      height: 15px;
+    }
+  }
+
+  md-checkbox.md-checked ._md-icon:after {
+    border-width: 1px;
+    height: 9px;
+    left: 6px;
+    top: 3px;
+    width: 4px;
   }
 
   md-option {
     text-overflow: ellipsis;
   }
 
-  md-checkbox ._md-label {
-    margin-top: 3px;
+  [row] {
+    margin-bottom: 1em;
   }
-
 }
 
 
@@ -114,6 +146,7 @@
 }
 
 .dropdown-filter {
+
   md-select-value {
     background: $white;
     border: none;
