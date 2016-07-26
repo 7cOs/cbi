@@ -62,11 +62,7 @@ module.exports =
     userService.getTargetLists('1').then(function(data) {
       vm.namedFilters = data.owned;
       // vm.sharedFilters = data.sharedWithMe;
-      // console.log('named template', vm.namedFilters);
-      // console.log('named response', data.owned);
-      // console.log('shared with me template', vm.sharedFilters);
       console.log('shared with me response', data);
-
     });
 
     function isNegative(salesData) {
