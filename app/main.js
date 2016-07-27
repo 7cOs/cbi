@@ -1,5 +1,5 @@
 'use strict';
-const angular = require('angular');
+var angular = require('angular');
 
 angular.module('andromeda', [
   require('angular-ui-router'),

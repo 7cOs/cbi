@@ -12,6 +12,7 @@ gulp.task 'default', ->
     'copy:libs'
     'compile'
     'serve'
+    'karma'
   ],
 
 # COMPILE ALL THE THINGZ
