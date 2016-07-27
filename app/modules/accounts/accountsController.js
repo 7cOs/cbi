@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports =
-  function accountsController($rootScope, $scope, $state, $log, opportunitiesService, myperformanceService, chipsService, filtersService, userService) {
+  function accountsController($rootScope, $scope, $state, $log, $window, opportunitiesService, myperformanceService, chipsService, filtersService, userService) {
     var vm = this;
 
     // Services available in View
@@ -9,12 +9,13 @@ module.exports =
     vm.filtersService = filtersService;
 
     vm.filters = myperformanceService.filter();
+    vm.distributionData = myperformanceService.distributionModel();
 
     // Expose public methods
     vm.isNegative = isNegative;
     vm.isPositive = isPositive;
 
-    vm.distributionData = myperformanceService.distributionModel();
+    vm.overviewOpen = false;
 
     // Broadcast current page name for other scopes
     $rootScope.$broadcast('page:loaded', $state.current.name);
@@ -45,4 +46,29 @@ module.exports =
       }
       return false;
     };
+
+    // Used to set element class for market overview
+    function setOverviewDisplay(value) {
+      vm.overviewOpen = value;
+      $scope.$apply();
+    }
+
+    // Check if market overview is scrolled out of view
+    angular.element($window).bind('scroll', function() {
+      vm.st = this.pageYOffset;
+
+      if (vm.st >= 230) {
+        // Only set element class if state has changed
+        if (!vm.scrolledBelowHeader) {
+          setOverviewDisplay(true);
+        }
+        vm.scrolledBelowHeader = true;
+      } else {
+        // Only set element class if state has changed
+        if (vm.scrolledBelowHeader) {
+          setOverviewDisplay(false);
+        }
+        vm.scrolledBelowHeader = false;
+      }
+    });
   };
