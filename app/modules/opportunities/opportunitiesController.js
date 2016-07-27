@@ -137,13 +137,8 @@ module.exports =
       var lowercaseQuery = angular.lowercase(q);
       return function filterFn(data) {
 
-        var arr = [];
         for (var i = 0; i < properties.length; i++) {
-          arr.push(angular.lowercase('' + data[properties[i]]));
-        }
-
-        for (var j = 0; j < arr.length; j++) {
-          if (arr[j].indexOf(lowercaseQuery) === 0) return arr[j].indexOf(lowercaseQuery) === 0;
+          if ((angular.lowercase('' + data[properties[i]])).indexOf(lowercaseQuery) === 0) return (angular.lowercase('' + data[properties[i]])).indexOf(lowercaseQuery) === 0;
         }
       };
     }
