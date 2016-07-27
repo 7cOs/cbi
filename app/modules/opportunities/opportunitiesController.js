@@ -110,18 +110,18 @@ module.exports =
     }
 
     function brandQuerySearch(searchText) {
-      var results = vm.filtersService.model.brands.filter(filterQuery(searchText, ['name', 'brand', 'quantity']));
+      var results = filtersService.model.brands.filter(filterQuery(searchText, ['name', 'brand', 'quantity']));
       return results;
     }
 
     function accountQuerySearch(searchText) {
       // update to accounts
-      var results = vm.filtersService.model.brands.filter(filterQuery(searchText, ['name', 'brand', 'quantity']));
+      var results = filtersService.model.stores.filter(filterQuery(searchText, ['account', 'sub_account', 'store_name']));
       return results;
     }
 
     function distributorQuerySearch(searchText) {
-      var results = vm.filtersService.model.distributors.filter(filterQuery(searchText, ['name', 'address', 'id']));
+      var results = filtersService.model.distributors.filter(filterQuery(searchText, ['name', 'address', 'id']));
       return results;
     }
 

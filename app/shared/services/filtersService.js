@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports =
-  function filtersService(opportunitiesService, productsService, distributorsService) {
+  function filtersService(opportunitiesService, productsService, distributorsService, storesService) {
 
     var model = {
       accounts: [
@@ -75,6 +75,10 @@ module.exports =
 
     distributorsService.getDistributors().then(function(data) {
       model.distributors = data.distributors;
+    });
+
+    storesService.getStores().then(function(data) {
+      model.stores = data.stores;
     });
 
     productsService.getProducts().then(function(data) {

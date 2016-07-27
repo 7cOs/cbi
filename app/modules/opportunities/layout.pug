@@ -48,7 +48,7 @@ div#fancy-cat
       label Account / Store
       md-autocomplete(md-search-text="o.filtersService.model.accountSearchText" md-items="account in o.accountQuerySearch(o.filtersService.model.accountSearchText)" md-item-text="account.name" placeholder="By Account, Sub account" md-selected-item-change="o.chipsService.addAutocompleteChip(account.name, 'accountSearchText')")
         md-item-template
-          div(md-highlight-text="o.filtersService.model.accountSearchText" md-highlight-flags="^i") {{account.name}} - {{account.subAccount}}
+          div(md-highlight-text="o.filtersService.model.accountSearchText" md-highlight-flags="^i") {{account.account}} - {{account.sub_account}}
     div(column='3')
       label Distributor
       md-autocomplete(md-search-text="o.filtersService.model.distributorSearchText" md-items="distributor in o.distributorQuerySearch(o.filtersService.model.distributorSearchText)" md-item-text="distributor.name" placeholder="by Name" md-selected-item-change="o.chipsService.addAutocompleteChip(distributor.name, 'distributorSearchText')")
