@@ -361,12 +361,11 @@ module.exports =
     };
 
     // Get opportunities and products data
-    getOpportunities('').then(function(data) {
+    getOpportunities().then(function(data) {
       model.opportunities = data;
     });
-    getProducts('').then(function(data) {
-      model.products = data;
-    });
+
+    model.products = tempData.products;
 
     return {
       all: function() {
@@ -378,7 +377,6 @@ module.exports =
 
       model: model,
       getOpportunities: getOpportunities,
-      getProducts: getProducts,
       createOpportunity: createOpportunity,
       updateOpportunity: updateOpportunity,
       getOpportunitiyFeedback: getOpportunityFeedback,
@@ -390,15 +388,13 @@ module.exports =
     /**
      * @name getOpportunities
      * @desc Get opportunities from API
-     * @params {String} url - url to hit the api with [this could end up being static]
      * @params {String} opportunityID - ID of opportunity [optional]
      * @returns {Object}
      * @memberOf andromeda.common.services
      */
-    function getOpportunities(url, opportunityID) {
-      var opportunitiesPromise = $q.defer();
-
-      if (opportunityID && opportunityID !== '') url += encodeURIComponent('opportunityID:' + opportunityID);
+    function getOpportunities(opportunityID) {
+      var opportunitiesPromise = $q.defer(),
+          url = opportunityID ? apiHelperService.request('/api/opportunities/' + opportunityID) : apiHelperService.request('/api/opportunities/');
 
       $http.get(url, {
         headers: {}
@@ -418,6 +414,7 @@ module.exports =
         });
         opportunitiesPromise.resolve(tempData.opportunities);
 
+        console.log('[opportunitiesService.getOpportunities] mocked response: ', tempData.opportunities);
         console.log('[opportunitiesService.getOpportunities] response: ', response);
         // opportunitiesPromise.resolve(response.data);
         // uncomment above and remove below when services are ready
@@ -428,41 +425,6 @@ module.exports =
       }
 
       return opportunitiesPromise.promise;
-    }
-
-    // Products Methods
-    /**
-     * @name getProducts
-     * @desc Get Products from API
-     * @params {String} url - url to hit the api with [this could end up being static]
-     * @params {String} opportunityID - ID of opportunity [optional]
-     * @returns {Object}
-     * @memberOf andromeda.common.services
-     */
-    function getProducts(url, opportunityID) {
-      var productsPromise = $q.defer();
-
-      if (opportunityID && opportunityID !== '') url += encodeURIComponent('opportunityID:' + opportunityID);
-
-      $http.get(url, {
-        headers: {}
-      })
-      .then(getProductsSuccess)
-      .catch(getProductsFail);
-
-      function getProductsSuccess(response) {
-        productsPromise.resolve(tempData.products);
-
-        console.log('[opportunitiesService.getProducts] response: ', response);
-        // ProductsPromise.resolve(response.data);
-        // uncomment above and remove below when services are ready
-      }
-
-      function getProductsFail(error) {
-        productsPromise.reject(error);
-      }
-
-      return productsPromise.promise;
     }
 
     /**
@@ -534,13 +496,13 @@ module.exports =
      * /opportunities/{opportunityID}/feedback
      * @name getOpportunityFeedback
      * @desc Get opportunity feedback from API
-     * @params {String} url - url to hit the api with [this could end up being static]
      * @params {String} opportunityID - ID of opportunity [required]
      * @returns {Object}
      * @memberOf andromeda.common.services
      */
-    function getOpportunityFeedback(url, opportunityID) {
-      var opportunitiesPromise = $q.defer();
+    function getOpportunityFeedback(opportunityID) {
+      var opportunitiesPromise = $q.defer(),
+          url = apiHelperService.request('/api/opportunities/' + opportunityID + '/feedback/');
 
       $http.get(url, {
         headers: {}
@@ -550,9 +512,7 @@ module.exports =
 
       function getOpportunitiesFeedbackSuccess(response) {
         console.log('[opportunitiesService.getOpportunityFeedback] response: ', response);
-        // opportunitiesPromise.resolve(response.data);
-        // uncomment above and remove below when services are ready
-        opportunitiesPromise.resolve(data.feedbackGetResponse);
+        opportunitiesPromise.resolve(response.data);
       }
 
       function getOpportunitiesFeedbackFail(error) {
