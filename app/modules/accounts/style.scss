@@ -36,6 +36,22 @@
     background-position: 1em 1em;
     border-left: 1px solid $gray-4;
   }
+
+  &.expanded {
+    box-shadow: 0 8px 6px -2px rgba(225, 225, 227, 0.5);
+    left: 0;
+    position: fixed;
+    top: 0;
+    transform: translateY(-8em);
+    transition: all 300ms ease;
+    width: 100%;
+    z-index: 999;
+
+    &.visible {
+      backface-visibility: hidden;
+      transform: translateY(0);
+    }
+  }
 }
 
 .pod-overview {

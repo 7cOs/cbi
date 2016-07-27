@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports =
-  function accountsController($rootScope, $scope, $state, $log, opportunitiesService, myperformanceService, chipsService, filtersService, userService) {
+  function accountsController($rootScope, $scope, $state, $log, $window, opportunitiesService, myperformanceService, chipsService, filtersService, userService) {
     var vm = this;
 
     // Services available in View
@@ -45,4 +45,24 @@ module.exports =
       }
       return false;
     };
+
+    // Check if market overview is scrolled out of view
+    angular.element($window).bind('scroll', function() {
+      vm.st = this.pageYOffset;
+
+      if (vm.st >= 230) {
+        // Only broadcast event if state has changed
+        if (!vm.scrolledBelowHeader) {
+          $rootScope.$broadcast('scroll:scrollBelowHeader', true);
+        }
+        vm.scrolledBelowHeader = true;
+      } else {
+        // Only broadcast event if state has changed
+        if (vm.scrolledBelowHeader) {
+          $rootScope.$broadcast('scroll:scrollBelowHeader', false);
+        }
+        vm.scrolledBelowHeader = false;
+      }
+      $scope.$apply();
+    });
   };
