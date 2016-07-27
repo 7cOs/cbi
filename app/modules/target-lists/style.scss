@@ -1,5 +1,19 @@
 .hero {
-  margin-bottom: 4em;
+  padding: 40px;
+  margin: 0 -36px 4em;
+  background: linear-gradient(to right, $light-blue-5, $light-blue-6);
+
+  .accent {
+    color: $dark-blue;
+  }
+
+  h1, p, label, span, .white {
+    color: $white;
+  }
+
+  h1 {
+    margin-bottom: 0;
+  }
 }
 
 .hero-info {
@@ -7,6 +21,9 @@
   div {
     display: inline-block;
     width: 144px;
+    text-align: right;
+    margin: 16px 0;
+    float: right;
 
     &.bold {
 
@@ -22,10 +39,19 @@
 
   span {
     font-weight: $light;
-    font-size: 1.5em;
+    font-size: 1.75em;
 
     &.unit {
       font-size: 0.5em;
     }
   }
+}
+
+.filters {
+  border-bottom: 2px solid $blue;
+}
+
+.no-filter {
+  background: $body-bg;
+  height: 40px;
 }

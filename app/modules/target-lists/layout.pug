@@ -1,23 +1,32 @@
-.hero(row)
-  div(column="4")
-    h1 Walmart East Bay
-    label.bold You are the owner
-    p Walmart regional list for general 6-pack sales. Primarily for Jerry B, but if you have more ideas, please add them and either ping Jerry or Michelle
-  div(column="8").align-right
-    .hero-actions
-      button.btn-action Collaborate
-      button.btn-action Download
-      button.btn-action Edit Details
-    .hero-info
+.hero
+  div(row)
+    div(column="2")
+      p.accent.white Target Lists
+    div(column="10").align-right
+      .hero-actions
+        button.btn-action Collaborate
+        button.btn-action Download
+        button.btn-action Manage
+
+  div(row)
+    div(column="12")
+      h1.hero-title Walmart East Bay
+      label.accent.bold You are the owner
+
+  div(row)
+    div(column="5")
+      p Walmart regional list for general 6-pack sales. Primarily for Jerry B, but if you have more ideas, please add them and either ping Jerry or Michelle.
+
+    div(column="6 +1").hero-info
       div
-        label Opportunities
-        span 2,251
+        span.bold 273,400<span class="unit">CE</span>
+        label.accent Depletions<br />Since Closed
       div
-        label Closed
         span 841
-      div.bold
-        label Depletions
-        span 273,400<span class="unit">CE</span>
+        label.accent Closed<br />Opportunities
+      div
+        span 2,251
+        label.accent Total<br />Opportunities
 
 .chips(ng-if="t.chipsService.model.length")
   label Active Filters
@@ -25,8 +34,16 @@
     input(disabled="true")
     md-chip-template
       div {{$chip.name}}
-.filters(column='12')
+.filters(column='12' ng-class="{ 'no-filter': !t.filtersService.model.show}")
   div(row)
+    div(class='more-filters')
+      a(ng-click="t.filtersService.model.show = t.filtersService.model.show ? false : true")
+        span(ng-class="{ 'chevron-down': !t.filtersService.model.show }")
+        //- TODO position this...
+        //- span(ng-class="{ 'chevron-up': t.filtersService.model.show, 'chevron-down': !t.filtersService.model.show }")
+        span(ng-if="!t.filtersService.model.show") Show Filters
+        //- span(ng-if="t.filtersService.model.show") Hide Filters
+  div(row ng-if="t.filtersService.model.show")
     div(class='more-filters')
       a(ng-click="t.filtersService.model.expanded = t.filtersService.model.expanded ? false : true")
         span(ng-class="{ 'chevron-up': t.filtersService.model.expanded, 'chevron-down': !t.filtersService.model.expanded }")
@@ -43,7 +60,7 @@
       label Opportunity Status
       md-radio-group(ng-model="t.filtersService.model.selected.opportunitiesStatus")
         md-radio-button(ng-repeat="opportunity in t.filtersService.model.opportunitiesStatus" class="md-primary" ng-value="opportunity.name" aria-label="opportunity.name" ng-click="t.chipsService.addChip(opportunity.name, 'opportunitiesStatus', true)") {{opportunity.name}}
-  div(row)
+  div(row ng-if="t.filtersService.model.show")
     div(column='3')
       label Opportunity Type
       .dropdown-filter
@@ -104,15 +121,15 @@
       md-input-container
         label CBBD Contact
         input(type="text" ng-model="t.filtersService.model.selected.cbbdContact")
-    div(column='12' class='apply-filters')
+    div(column='12' class='apply-filters' ng-if="t.filtersService.model.show")
       button(value='Apply Filters' type="button" class="btn-action" ng-disabled="t.chipsService.model.length <= 0") Apply Filters
 
 h3 <strong>{{t.products.length * t.opportunities.length}} opportunities</strong> across {{t.opportunities.length}} stores
 
 .action-buttons
-  button.btn-action(ng-disabled="t.selected < 1") Add to List
+  button.btn-action(ng-disabled="t.selected < 1") Copy to Target List
   button.btn-action(ng-disabled="t.selected < 1") Download
-  button.btn-action(ng-disabled="t.selected < 1") Send To
+  button.btn-action(ng-disabled="t.selected < 1") Remove
 
 button.icon.select-all(ng-click="t.toggleAll()")
   span(ng-if='t.isChecked()') Un-
