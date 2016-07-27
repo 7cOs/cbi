@@ -22,6 +22,7 @@ module.exports =
     vm.expandCallback = expandCallback;
     vm.collapseCallback = collapseCallback;
     vm.querySearch = querySearch;
+    vm.addOpportunity = addOpportunity;
 
     // Broadcast current page name for other scopes
     $rootScope.$broadcast('page:loaded', $state.current.name);
@@ -98,23 +99,26 @@ module.exports =
       }
     });
 
-    function querySearch(searchText) {
-      // To Do: Send new request for data with search params - we could split this into the each respective service, or build the query here and send to the service
-      // Change autocomplete to md-items="brand in o.querySearch(searchText)" to apply filters
-      // Add loading spinner while we wait for request
+    function addOpportunity() {
+      opportunitiesService.createOpportunity().then(function(response) {
+        console.log('Thanks, Ratul.', response);
+      }, function(reason) {
+        console.log('Ratul. Plz.', reason);
+      });
     }
 
-    // To Do: Create a better filter for brands and accounts
-    /* function querySearch(query) {
-      var results = query ? vm.brands.filter(createFilterFor(query)) : vm.brands;
+    function querySearch(searchText) {
+      var results = vm.filtersService.model.brands.filter(filterQuery(searchText));
       return results;
     }
 
-    // Private
-    function createFilterFor(query) {
-      var lowercaseQuery = angular.lowercase(query);
+    function filterQuery(q) {
+      var lowercaseQuery = angular.lowercase(q);
       return function filterFn(brand) {
-        return (brand.name.indexOf(lowercaseQuery) === 0);
+        var lBrandName = angular.lowercase(brand.name),
+            lBrandBrand = angular.lowercase(brand.brand),
+            lBrandQuantity = '' + brand.quantity;
+        return (lBrandName.indexOf(lowercaseQuery) === 0 || lBrandBrand.indexOf(lowercaseQuery) === 0 || lBrandQuantity.indexOf(lowercaseQuery) === 0);
       };
-    }*/
+    }
   };

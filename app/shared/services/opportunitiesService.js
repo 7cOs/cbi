@@ -430,14 +430,13 @@ module.exports =
     /**
      * @name createOpportunity
      * @desc create an opportunity
-     * @params {String} url - url to hit the api with [this could end up being static]
-     * @params {Object} data - opportunity data
      * @returns {Object}
      * @memberOf andromeda.common.services
      */
-    function createOpportunity(url, data) {
-      var opportunitiesPromise = $q.defer();
-      var payload = data.opportunitiesPostPayload;
+    function createOpportunity() {
+      var opportunitiesPromise = $q.defer(),
+          url = apiHelperService.request('/api/opportunities/'),
+          payload = data.opportunitiesPostPayload;
 
       $http.post(url, payload, {
         headers: {}
@@ -447,9 +446,8 @@ module.exports =
 
       function createOpportunitiesSuccess(response) {
         console.log('[opportunitiesService.createOpportunity] response: ', response);
-        // opportunitiesPromise.resolve(response.data);
-        // uncomment above and remove below when services are ready
-        opportunitiesPromise.resolve(data.opportunitiesPostResponse);
+        opportunitiesPromise.resolve(response.data);
+        // opportunitiesPromise.resolve(data.opportunitiesPostResponse); // Mock Data
       }
 
       function createOpportunitiesFail(error) {

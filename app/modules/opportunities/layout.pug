@@ -6,6 +6,8 @@
         label Saved Filters
         md-select(ng-model="o.filtersService.model.selected.currentFilter")
           md-option(ng-repeat="savedFilter in o.userService.model.opportunityFilters" value="{{savedFilter.id}}") {{savedFilter.name}}
+div#fancy-cat
+  button(ng-click="o.addOpportunity()") Api Plz
 .chips(ng-if="o.chipsService.model.length")
   label Active Filters
   md-chips(ng-model="o.chipsService.model" name="Active Filters" md-on-remove="o.chipsService.removeFromFilterService($chip)")
@@ -39,7 +41,7 @@
             md-option(ng-repeat="type in o.filtersService.model.opportunitiesTypes" aria-label="type.name" value="{{type.name}}") {{type.name}}
     div(column='3')
       label Brand / Master SKU
-      md-autocomplete(md-selected-item="selectedItem" md-search-text="o.filtersService.model.brandSearchText" md-items="brand in o.filtersService.model.brands" md-item-text="brand.name" md-min-length="1" placeholder="by Brand or SKU" md-selected-item-change="o.chipsService.addAutocompleteChip(brand.name, 'brandSearchText')")
+      md-autocomplete(md-selected-item="selectedItem" md-search-text="o.filtersService.model.brandSearchText" md-items="brand in o.querySearch(o.filtersService.model.brandSearchText)" md-item-text="brand.name" md-min-length="1" placeholder="by Brand or SKU" md-selected-item-change="o.chipsService.addAutocompleteChip(brand.name, 'brandSearchText')")
         md-item-template
           div(md-highlight-text="o.filtersService.model.brandSearchText" md-highlight-flags="^i") {{brand.name}} - {{brand.brand}}
     div(column='3')
