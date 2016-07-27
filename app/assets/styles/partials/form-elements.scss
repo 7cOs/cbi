@@ -1,4 +1,26 @@
-/*Checked*/
+/* Radio Buttons */
+
+md-radio-button {
+  margin-bottom: 8px;
+  font-size: 0.75em;
+
+  ._md-container {
+    top: 80%;
+  }
+
+  ._md-label {
+    margin-left: 20px;
+  }
+
+  ._md-on,
+  ._md-off {
+    height: 16px;
+    width: 16px;
+  }
+}
+
+/* Selected */
+
 md-radio-button:not([disabled]).md-primary.md-checked ._md-off {
   border-color: $blue;
 }
@@ -6,6 +28,8 @@ md-radio-button:not([disabled]).md-primary.md-checked ._md-off {
 md-radio-button:not([disabled]).md-primary.md-checked ._md-on {
   background-color: $blue;
 }
+
+/* Checkboxes */
 
 md-checkbox {
 

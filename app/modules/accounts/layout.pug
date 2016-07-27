@@ -1,8 +1,8 @@
 .account-header
   div(row)
-    div(column='7')
+    div(column='6')
       h1 Account Dashboard
-    div(column='5')
+    div(column='6')
       .market-overview.clearfix
         .brands
           p All Brands
@@ -10,12 +10,34 @@
           p Overall market
         .notes
           p <a href="#">Notes</a>
+
 .chips(ng-if="a.chipsService.model.length")
   label Active Filters
   md-chips(ng-model="a.chipsService.model" name="Active Filters" md-on-remove="a.chipsService.removeFromFilterService($chip)")
     input(disabled="true")
     md-chip-template
       div {{$chip.name}}
+
+.filters.top(column='12')
+  div(row)
+    div(column='3')
+      label Ending Time Period
+      md-radio-group(ng-model="a.filtersService.model.selected.timePeriod")
+        md-radio-button(ng-repeat="filter in a.filters.timePeriod" class="md-primary" ng-value="filter.name" aria-label="Ending Time Period") {{filter.name}}
+
+    div(column='8')
+      div(row).dropdown-filter
+        div(column='5').dropdown
+          label Depletions Time Period
+          md-select(ng-model="a.filtersService.model.selected.depletionsTimeFilter" aria-label="Depletions Time Range Filter"  placeholder="FYTD May 1, 2016 - June 29, 2016")
+            md-option(ng-repeat="filter in a.filters.depletionsTimePeriod" aria-label="filter.name" value="{{filter.name}}") {{filter.name}}
+        div(column='5').dropdown
+          label Distribution Time Period
+          md-select(ng-model="a.filtersService.model.selected.distributionTimeFilter" aria-label="Distribution Time Range Filter"  placeholder="L90 Days April 1, 2016 - June 29, 2016")
+            md-option(ng-repeat="filter in a.filters.distributionTimePeriod" aria-label="filter.name" value="{{filter.name}}") {{filter.name}}
+        div(column='2')
+    div(column='1') &nbsp;
+
 .filters(column='12')
   div(row)
     div(column='3')
@@ -32,9 +54,10 @@
   div(row)
     div(column='3')
       label Opportunity Type
-      md-input-container
-        md-select(ng-model="a.filtersService.model.selected.opportunitiesTypes" aria-label="Opportunity Type" md-on-close="a.chipsService.addChip(a.filtersService.model.selected.opportunitiesTypes, 'opportunitiesTypes', false)")
-          md-option(ng-repeat="type in a.filtersService.model.opportunitiesTypes" aria-label="type.name" value="{{type.name}}") {{type.name}}
+      .dropdown-filter
+        .dropdown
+          md-select(ng-model="a.filtersService.model.selected.opportunitiesTypes" aria-label="Opportunity Type" md-on-close="a.chipsService.addChip(a.filtersService.model.selected.opportunitiesTypes, 'opportunitiesTypes', false)" placeholder="All Types")
+            md-option(ng-repeat="type in a.filtersService.model.opportunitiesTypes" aria-label="type.name" value="{{type.name}}") {{type.name}}
     div(column='3')
       label Brand / Master SKU
       md-autocomplete(md-selected-item="selectedItem" md-search-text="a.filtersService.model.brandSearchText" md-items="brand in a.filtersService.model.brands" md-item-text="brand.name" md-min-length="1" placeholder="by Brand or SKU" md-selected-item-change="a.chipsService.addAutocompleteChip(brand.name, 'brandSearchText')")
@@ -52,5 +75,49 @@
           div(md-highlight-text="a.filtersService.model.distributorSearchText" md-highlight-flags="^i") {{distributor.name}}
     div(column='12' class='apply-filters')
       button(value='Apply Filters' type="button" class="btn-action" ng-disabled="a.chipsService.model.length <= 0") Apply Filters
+
+div(row)
+  div(column='12')
+    .pod-overview
+      label Simple Pods: 7 (2%)
+      label Effective Pods: 15 (5.2%)
+
+div(row)
+  div.scorecard-table(column='5')
+    table(cellspacing="0" cellpadding="0")
+      thead
+        tr
+          th.top
+            p.accent.bold.left.single-line Brand / SKU
+          th(colspan=2).top.dark
+            p.accent.bold Depletions - FYTD
+          th(colspan=2).top
+            p.accent Distribution (s) - L90
+        tr
+          th
+            p.accent &nbsp;
+          th.dark
+            p.accent Value
+          th.dark
+            p.accent %Trend
+          th
+            p.accent Value
+          th
+            p.accent %Trend
+      tbody
+        tr
+          td.column-total.left TOTAL
+          td.column-total.dark 1,532
+          td.column-total.dark 7.5%
+          td.column-total 1532
+          td.column-total 4%
+        tr(ng-repeat="distribution in a.distributionData.performance")
+          td.left.data-brand {{distribution.name}} s
+          td(ng-class="{'negative': a.isNegative(distribution.measures.yearAgoGap)}").dark      {{distribution.measures.yearAgoGap}}
+          td(ng-class="{'negative': a.isNegative(distribution.measures.yearAgoTrend) }").dark   {{distribution.measures.yearAgoTrend}}%
+          td(ng-class="{'negative': a.isNegative(distribution.measures.vsPlanNumber)}")         {{distribution.measures.vsPlanNumber}}
+          td(ng-class="{'negative': a.isNegative(distribution.measures.vsPlanPercent)}")        {{distribution.measures.vsPlanPercent}}%
+  div.scorecard-chart(column='7')
+    label Chart will be here
 
 list
