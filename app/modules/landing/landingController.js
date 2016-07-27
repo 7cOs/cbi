@@ -46,14 +46,14 @@ module.exports =
       'members': ['David Ostler', 'Todd Alkema'],
       'created': 'One Hour Ago',
       'closedOpportunities': 20,
-      'opportunities': 251
+      'opportunities': 2251
     }, {
       'name': 'West Seattle C-Stores',
       'creator': 'Patti Horigan',
       'members': ['James Conrick', 'Tom Andersen', 'Paul Wagner'],
       'created': 'One Week Ago',
-      'closedOpportunities': 390,
-      'opportunities': 551
+      'closedOpportunities': 4390,
+      'opportunities': 5251
     }];
 
     // Broadcast current page name for other scopes
