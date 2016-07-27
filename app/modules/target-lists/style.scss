@@ -47,11 +47,8 @@
   }
 }
 
-.filters {
-  border-bottom: 2px solid $blue;
-}
-
 .no-filter {
   background: $body-bg;
+  border-bottom: 2px solid $blue;
   height: 40px;
 }
