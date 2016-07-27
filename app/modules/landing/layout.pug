@@ -1,25 +1,24 @@
 section.landing-page
-  h1 Good afternoon, Chad
+  div
+    h1 Good afternoon, Chad
 
   section.landing-page-data(column="12")
-
-    div(row)
+    div
       section.my-performance(column="7")
         div
-          h2 My Performance
+          div(row)
+            h2 My Performance
 
           div(row)
             div.depletions(column="4")
+              h3 Depletions FYTD
               table(cellspacing="0" cellpadding="0")
                 tr
-                  th(colspan=2)
-                    h4.left Depletions FYTD
-                tr
-                  td.accent.section-header CE
+                  td.accent CE
                   td &nbsp;
                 tr
                   td
-                    h3 {{l.performanceData.performance[0].measures[4].value}}
+                    h3 {{l.performanceData.performance[0].measures[4].value | number}}
                   td
                     h3.bold <span ng-if="l.isPositive(l.performanceData.performance[0].measures[4].percentChange)">+</span>{{l.performanceData.performance[0].measures[4].percentChange}}<span>%</span>
                 tr
@@ -27,36 +26,35 @@ section.landing-page
                     h3 &nbsp;
                   td
                     h3 &nbsp;
+
             div.distribution(column="8")
+              h3 Distribution L90
+              h4.accent % Trend Vs YA
               table(cellspacing="0" cellpadding="0")
                 tr
-                  th(colspan=4)
-                    h4.left Distribution L90
-                  th.section-header.right % Trend vs YA
-                tr
-                  td.accent.section-header Simple
+                  td.accent Simple
                   td &nbsp;
                   td &nbsp;
-                  td.accent.section-header Effective
+                  td.accent Effective
                   td &nbsp;
                 tr
                   td
-                    h3 {{l.performanceData.performance[3].measures[2].value}}
+                    h3 {{l.performanceData.performance[3].measures[2].value | number}}
                   td
                     h3.bold <span ng-if="l.isPositive(l.performanceData.performance[3].measures[2].percentChange)">+</span>{{l.performanceData.performance[3].measures[2].percentChange}}<span>%</span>
                   td.accent.table-spacer on
                   td
-                    h3 {{l.performanceData.performance[4].measures[2].value}}
+                    h3 {{l.performanceData.performance[4].measures[2].value | number}}
                   td
                     h3.bold <span ng-if="l.isPositive(l.performanceData.performance[4].measures[2].percentChange)">+</span>{{l.performanceData.performance[4].measures[2].percentChange}}<span>%</span>
                 tr
                   td
-                    h3 {{l.performanceData.performance[1].measures[2].value}}
+                    h3 {{l.performanceData.performance[1].measures[2].value | number}}
                   td
                     h3.bold <span ng-if="l.isPositive(l.performanceData.performance[1].measures[2].percentChange)">+</span>{{l.performanceData.performance[1].measures[2].percentChange}}<span>%</span>
                   td.accent.table-spacer off
                   td
-                    h3 {{l.performanceData.performance[2].measures[2].value}}
+                    h3 {{l.performanceData.performance[2].measures[2].value | number}}
                   td
                     h3.bold <span ng-if="l.isPositive(l.performanceData.performance[2].measures[2].percentChange)">+</span>{{l.performanceData.performance[2].measures[2].percentChange}}<span>%</span>
         p.accent.action-item #[a(href="#") View Details &#9654;]
@@ -80,8 +78,8 @@ section.landing-page
                           p.accent &#9746; {{list.members.length}} members
                           p.accent {{list.created}}
                         div(column="4")
-                          h4(column="6").completed.right {{list.closedOpportunities}}
-                          h4(column="6").right {{list.opportunities}}
+                          h4(column="6").completed.right {{list.closedOpportunities | number}}
+                          h4(column="6").right {{list.opportunities | number}}
                         md-progress-linear(md-mode="determinate" ng-value="l.ratio(list.closedOpportunities, list.opportunities)")
                   div(row)
                     p.accent.action-item #[a(href="#") View All &#9654;]
@@ -101,8 +99,8 @@ section.landing-page
                           p.accent &#9746; {{list.members.length}} members
                           p.accent {{list.created}}
                         div(column="4")
-                          h4(column="6").completed.right {{list.closedOpportunities}}
-                          h4(column="6").right {{list.opportunities}}
+                          h4(column="6").completed.right {{list.closedOpportunities | number}}
+                          h4(column="6").right {{list.opportunities | number}}
                         md-progress-linear(md-mode="determinate" value="{{list.closedOpportunities / list.opportunities * 100}}")
                   div(row)
                     p.accent.action-item #[a(href="#") View All &#9654;]
@@ -110,13 +108,13 @@ section.landing-page
 
 
       section.opportunities(column="4 +1")
-        h3 Opportunities
-        h4 Saved Filters
+        h2 Opportunities
+        h3 Saved Filters
         div.filter-container.first
           md-select(ng-model="l.filter.selected.savedFilters" aria-label="Saved Filter"  placeholder="Select Saved Filters")
             md-option(ng-repeat="type in l.filter.savedFilters" aria-label="type.name" value="{{type.name}}") {{type.name}}
 
-        h4 New Search
+        h3 New Search
         div.filter-container
           div
             label
