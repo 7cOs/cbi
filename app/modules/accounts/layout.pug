@@ -3,6 +3,8 @@
     div(column='6')
       h1 Account Dashboard
     div(column='6')
+      .market-overview.expanded(ng-class="{'visible': a.overviewOpen}")
+        h1 Here's the market overview
       .market-overview.clearfix
         .brands
           p All Brands
