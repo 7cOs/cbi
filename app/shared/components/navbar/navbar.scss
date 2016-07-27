@@ -1,10 +1,14 @@
 .nav-logo {
   width: 60px;
   float: left;
+
+  &:hover {
+    cursor: hand;
+  }
 }
 
 .nav-icon {
-  width: 25px;
+  width: 28px;
   margin: 0 2px;
 }
 
