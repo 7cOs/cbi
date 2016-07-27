@@ -67,6 +67,22 @@
   color: $gray-1;
   font-size: 0.7em;
   text-transform: uppercase;
+
+  label {
+    display: inline-block;
+    position: relative;
+  }
+
+  .chevron-up-small,
+  .chevron-down-small {
+    position: absolute;
+    right: -12px;
+    top: 0;
+  }
+}
+
+.cell-center {
+  text-align: center;
 }
 
 .title-row {

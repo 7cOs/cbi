@@ -41,6 +41,23 @@
   @include chevron(8px, 1px, -45deg, 35%, 2px);
 }
 
+.chevron-down-small {
+  @include chevron(5px, 1px, 135deg, 0%, 4px);
+}
+
+.chevron-left-small {
+  @include chevron(5px, 1px, -135deg, 4px, 35%);
+}
+
+.chevron-right-small {
+  @include chevron(5px, 1px, 45deg, 4px, 35%);
+}
+
+.chevron-up-small {
+  @include chevron(5px, 1px, -45deg, 35%, 4px);
+}
+
+
 .align-right {
   text-align: right;
 }
