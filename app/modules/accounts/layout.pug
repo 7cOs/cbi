@@ -128,7 +128,10 @@ div(row)
           td(ng-class="{'negative': a.isNegative(distribution.measures.vsPlanNumber)}")         {{distribution.measures.vsPlanNumber}}
           td(ng-class="{'negative': a.isNegative(distribution.measures.vsPlanPercent)}")        {{distribution.measures.vsPlanPercent}}%
   div.scorecard-chart(column='7')
-    label Chart will be here
-    nvd3(options="a.options" data="a.data")
+    div(row)
+      div(column='2')
+        label.bold Chart data
+      div(column='10')
+        nvd3(options="a.chartOptions" data="a.chartData")
 
 list

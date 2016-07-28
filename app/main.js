@@ -1,5 +1,6 @@
 'use strict';
 var angular = require('angular');
+window.nv = require('nvd3');
 
 angular.module('andromeda', [
   require('angular-ui-router'),
