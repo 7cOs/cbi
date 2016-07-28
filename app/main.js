@@ -6,6 +6,7 @@ angular.module('andromeda', [
   require('angular-material'),
   require('angular-animate'),
   require('v-accordion'),
+  require('angular-nvd3'),
   require('./shared').name,
   require('./modules').name
 ])
