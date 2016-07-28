@@ -5,7 +5,7 @@
       md-input-container
         label Saved Filters
         md-select(ng-model="o.filtersService.model.selected.currentFilter")
-          md-option(ng-repeat="savedFilter in o.userService.model.opportunityFilters" value="{{savedFilter.id}}") {{savedFilter.name}}
+          md-option(ng-repeat="savedFilter in o.userService.model.opportunityFilters" value="{{::savedFilter.id}}") {{::savedFilter.name}}
 div#fancy-cat
   button(ng-click="o.addOpportunity()") Api Plz
 .chips(ng-if="o.chipsService.model.length")
@@ -27,33 +27,33 @@ div#fancy-cat
     div(column='3')
       label Premise Type
       md-radio-group(ng-model="o.filtersService.model.selected.premiseType")
-        md-radio-button(ng-repeat="p in o.filtersService.model.premises" class="md-primary" ng-value="p.name" aria-label="p.name" ng-click="o.chipsService.addChip(p.name, 'premiseType', true)") {{p.name}}
+        md-radio-button(ng-repeat="p in o.filtersService.model.premises" class="md-primary" ng-value="p.name" aria-label="p.name" ng-click="o.chipsService.addChip(p.name, 'premiseType', true)") {{::p.name}}
     div(column='6')
       label Opportunity Status
       md-radio-group(ng-model="o.filtersService.model.selected.opportunitiesStatus")
-        md-radio-button(ng-repeat="opportunity in o.filtersService.model.opportunitiesStatus" class="md-primary" ng-value="opportunity.name" aria-label="opportunity.name" ng-click="o.chipsService.addChip(opportunity.name, 'opportunitiesStatus', true)") {{opportunity.name}}
+        md-radio-button(ng-repeat="opportunity in o.filtersService.model.opportunitiesStatus" class="md-primary" ng-value="opportunity.name" aria-label="opportunity.name" ng-click="o.chipsService.addChip(opportunity.name, 'opportunitiesStatus', true)") {{::opportunity.name}}
   div(row)
     div(column='3')
       label Opportunity Type
       .dropdown-filter
         .dropdown
           md-select(ng-model="o.filtersService.model.selected.opportunitiesTypes" aria-label="Opportunity Type" md-on-close="o.chipsService.addChip(o.filtersService.model.selected.opportunitiesTypes, 'opportunitiesTypes', false)" placeholder="All Types")
-            md-option(ng-repeat="type in o.filtersService.model.opportunitiesTypes" aria-label="type.name" value="{{type.name}}") {{type.name}}
+            md-option(ng-repeat="type in o.filtersService.model.opportunitiesTypes" aria-label="type.name" value="{{type.name}}") {{::type.name}}
     div(column='3')
       label Brand / Master SKU
       md-autocomplete(md-selected-item="selectedItem" md-search-text="o.filtersService.model.brandSearchText" md-items="brand in o.brandQuerySearch(o.filtersService.model.brandSearchText)" md-item-text="brand.name" md-min-length="1" placeholder="by Brand or SKU" md-selected-item-change="o.chipsService.addAutocompleteChip(brand.name, 'brandSearchText')")
         md-item-template
-          div(md-highlight-text="o.filtersService.model.brandSearchText" md-highlight-flags="^i") {{brand.name}} - {{brand.brand}}
+          div(md-highlight-text="o.filtersService.model.brandSearchText" md-highlight-flags="^i") {{::brand.name}} - {{::brand.brand}}
     div(column='3')
       label Account / Store
       md-autocomplete(md-search-text="o.filtersService.model.accountSearchText" md-items="account in o.accountQuerySearch(o.filtersService.model.accountSearchText)" md-item-text="account.name" placeholder="By Account, Sub account" md-selected-item-change="o.chipsService.addAutocompleteChip(account.name, 'accountSearchText')")
         md-item-template
-          div(md-highlight-text="o.filtersService.model.accountSearchText" md-highlight-flags="^i") {{account.account}} - {{account.sub_account}}
+          div(md-highlight-text="o.filtersService.model.accountSearchText" md-highlight-flags="^i") {{::account.account}} - {{::account.sub_account}}
     div(column='3')
       label Distributor
       md-autocomplete(md-search-text="o.filtersService.model.distributorSearchText" md-items="distributor in o.distributorQuerySearch(o.filtersService.model.distributorSearchText)" md-item-text="distributor.name" placeholder="by Name" md-selected-item-change="o.chipsService.addAutocompleteChip(distributor.name, 'distributorSearchText')")
         md-item-template
-          div(md-highlight-text="o.filtersService.model.distributorSearchText" md-highlight-flags="^i") {{distributor.name}}
+          div(md-highlight-text="o.filtersService.model.distributorSearchText" md-highlight-flags="^i") {{::distributor.name}}
   div(row)
     div(column='3' ng-show="o.filtersService.model.expanded")
       label Predicted Impact
