@@ -1,19 +1,29 @@
 config      = require('../../server/_config/app')
 del         = require('del')
 gulp        = require('gulp')
+argv = require('yargs').argv
 runSequence = require('run-sequence')
+
+# --release flag when executing a task
+global.release = argv.release
 
 # REQUIRE COMPILATION TASKS
 require('require-dir')('./compile');
 
 # DEFAULT TASK TO COMPILE & THEN LAUNCH SERVER
-gulp.task 'default', ->
-  runSequence [
-    'copy:libs'
-    'compile'
-    'serve'
-    'karma'
-  ],
+if release
+  gulp.task 'default', ->
+    runSequence [
+      'compile'
+      'serve'
+    ],
+else
+  gulp.task 'default', ->
+    runSequence [
+      'compile'
+      'serve'
+      'karma'
+    ],
 
 # COMPILE ALL THE THINGZ
 gulp.task 'compile', ->
@@ -26,4 +36,4 @@ gulp.task 'compile', ->
 
 # CLEAN UP BEFORE BUILDS
 gulp.task 'clean', ->
-  del 'dist/**/*'
+  del 'public/**/*'
