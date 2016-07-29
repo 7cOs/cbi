@@ -113,7 +113,9 @@ button.icon.collapse-all(ng-click="o.accordion.collapseAll()" ng-disabled="o.exp
 v-accordion.styled-list(multiple="" id="opportunities" control="o.accordion" onexpand="o.expandCallback(item)" oncollapse="o.collapseCallback(item)" column='12')
   div.header-row(row)
     div.checkbox-wrapper.placeholder(ng-click="o.toggle(opportunity, o.selected)")
-    div.checkbox-sibling
+    div.hide-wrapper
+      label.bold Hide
+    div.checkbox-sibling(column='12')
       div(column='3')
         label.bold Store / Number
       div(column='4')
@@ -130,12 +132,14 @@ v-accordion.styled-list(multiple="" id="opportunities" control="o.accordion" one
     .shadow-wrap.bottom
       div.checkbox-wrapper(ng-click="o.toggle(opportunity, o.selected)")
         md-checkbox(aria-label="Select Item" ng-checked="o.exists(opportunity, o.selected)")
+      div.more-wrapper
+        div.hide-row
       v-pane-header.checkbox-sibling(column='12')
         div.cell-parent
           div.pad-cell(column='3') {{opportunity.store.name}} <span class="supporting-text">\#{{opportunity.store.id}}</span>
           div.address(column='4') {{opportunity.store.address}}
-          div(column='2') {{opportunity.opCount}} <span class="supporting-text">({{opportunity.impact}} high)</span>
-          div(column='1') {{opportunity.depletionsCYTD}}
+          div(column='2') {{opportunity.opCount | number }} <span class="supporting-text">({{opportunity.impact}} high)</span>
+          div(column='1') {{opportunity.depletionsCYTD | number }}
           div(column='1' class="value" ng-class="{'positive' : opportunity.positiveValue, 'negative' : opportunity.negativeValue}") <span ng-if="opportunity.positiveValue">+</span>{{opportunity.depletionTrendVsYA}}<span>%</span>
           div(column='1') {{opportunity.store.segmentation}}
       v-pane-content(column='12' class="products" ng-class="{'open' : open}")
@@ -169,7 +173,7 @@ v-accordion.styled-list(multiple="" id="opportunities" control="o.accordion" one
             div(column='2')
               label Velocity
               div(row)
-                div(column='12') 670 <span class="percentage">7.6</span>%
+                div(column='12') {{670 | number }} <span class="percentage">7.6</span>%
             div(column='2')
               label Tolinx Submission Code
               div(row)
@@ -215,7 +219,7 @@ v-accordion.styled-list(multiple="" id="opportunities" control="o.accordion" one
                     span 68 days ago
                   div(column="2")
                     label Depletions CYTD
-                    span 6,256
+                    span {{6256 | number }}
                   div(column="2")
                     label Trend vs Ya
                     span 10%
