@@ -143,10 +143,10 @@ div(row)
             th.top.dark
               p.accent.bold Depletions - FYTD
               p &nbsp;
-        tbody
-          tr.store
-            td(colspan=2) Walmart <span class="store-number">#1197</span><span class="address">3500 Brumb... Kenosha, WA</span>
-            td.dark 47,560
+        tbody(ng-repeat="obj in a.chartData")
+          tr.store(ng-repeat="value in obj.values")
+              td(colspan=2) {{value.title}} <span class="store-number">\#{{value.storeNum}}</span><span class="address">{{value.address}}</span>
+              td.dark {{value.depletions}}
       .chart
         table.no-top-border(cellspacing="0" cellpadding="0")
           thead
