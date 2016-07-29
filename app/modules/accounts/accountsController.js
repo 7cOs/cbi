@@ -36,12 +36,36 @@ module.exports =
     vm.chartOptions = {
       chart: {
         type: 'multiBarHorizontalChart',
-        height: 400,
+        height: 350,
         x: function(d) { return d.label; },
         y: function(d) { return d.value; },
         showControls: false,
         showValues: true,
-        duration: 500
+        showXAxis: false,
+        showYAxis: false,
+        duration: 500,
+        valueFormat: function(d) {
+          return d + '%';
+        },
+        tooltip: {
+          valueFormatter: function(d) {
+            return d + '%';
+          }
+        },
+        margin: {
+          top: 0,
+          right: 0,
+          bottom: 0,
+          left: 0
+        },
+        legend: {
+          width: 0,
+          height: 0
+        },
+        controls: {
+          width: 0,
+          height: 0
+        }
       }
     };
 
