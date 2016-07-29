@@ -4,6 +4,7 @@ module.exports = function(app) {
 
   const request = require('request');
   const util = require('../_lib/util');
+  const passport = require('passport');
 
   app.get('/api/*', function(req, res) {
     console.log(req.url);
@@ -18,7 +19,10 @@ module.exports = function(app) {
     }).pipe(res);
   });
 
+  app.get('/auth/login',
+    passport.authenticate('two-legged'));
   app.get('*', function (req, res) {
+
     res.render('main', {
       config: app.get('config')
     });
