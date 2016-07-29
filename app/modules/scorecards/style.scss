@@ -65,7 +65,8 @@
   }
 }
 
-.scorecard-table table {
+.scorecard-table table,
+.scorecard-chart table {
   border-collapse: collapse;
   border-top: 1px solid $black;
   border-bottom: 1px solid $black;
@@ -114,11 +115,6 @@
 
     th.top {
       padding-bottom: 2px;
-    }
-
-    .single-line {
-      padding: 0 20px;
-      margin-bottom: -15px;
     }
   }
 
