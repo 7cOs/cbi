@@ -136,6 +136,7 @@
     background: $white;
     border-bottom: 0;
     float: left;
+    position: relative;
     width: 50%;
   }
 
@@ -185,6 +186,11 @@
       stroke: none;
     }
   }
+}
+
+.nvd {
+  position: absolute;
+  top: 25px;
 }
 
 .nvtooltip {
