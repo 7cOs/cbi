@@ -94,44 +94,66 @@ div(row)
 
 div(row)
   div.scorecard-table(column='5')
-    table(cellspacing="0" cellpadding="0")
-      thead
-        tr
-          th.top
-            p.accent.bold.left.single-line Brand / SKU
-          th(colspan=2).top.dark
-            p.accent.bold Depletions - FYTD
-          th(colspan=2).top
-            p.accent Distribution (s) - L90
-        tr
-          th
-            p.accent &nbsp;
-          th.dark
-            p.accent Value
-          th.dark
-            p.accent %Trend
-          th
-            p.accent Value
-          th
-            p.accent %Trend
-      tbody
-        tr
-          td.column-total.left TOTAL
-          td.column-total.dark {{1532 | number }}
-          td.column-total.dark 7.5%
-          td.column-total {{1532 | number }}
-          td.column-total 4%
-        tr(ng-repeat="distribution in a.distributionData.performance")
-          td.left.data-brand {{distribution.name}} s
-          td(ng-class="{'negative': a.isNegative(distribution.measures.yearAgoGap)}").dark      {{distribution.measures.yearAgoGap | number }}
-          td(ng-class="{'negative': a.isNegative(distribution.measures.yearAgoTrend) }").dark   {{distribution.measures.yearAgoTrend}}%
-          td(ng-class="{'negative': a.isNegative(distribution.measures.vsPlanNumber)}")         {{distribution.measures.vsPlanNumber | number }}
-          td(ng-class="{'negative': a.isNegative(distribution.measures.vsPlanPercent)}")        {{distribution.measures.vsPlanPercent}}%
+    .widget-header
+      p Corona Extra
+    .widget-content
+      table(cellspacing="0" cellpadding="0")
+        thead
+          tr
+            th.top
+              p.accent.bold.left.single-line Brand / SKU
+            th(colspan=2).top.dark
+              p.accent.bold Depletions - FYTD
+            th(colspan=2).top
+              p.accent Distribution (s) - L90
+          tr
+            th
+              p.accent &nbsp;
+            th.dark
+              p.accent Value
+            th.dark
+              p.accent %Trend
+            th
+              p.accent Value
+            th
+              p.accent %Trend
+        tbody
+          tr
+            td.column-total.left TOTAL
+            td.column-total.dark {{1532 | number }}
+            td.column-total.dark 7.5%
+            td.column-total {{1532 | number }}
+            td.column-total 4%
+          tr(ng-repeat="distribution in a.distributionData.performance")
+            td.left.data-brand {{distribution.name}} s
+            td(ng-class="{'negative': a.isNegative(distribution.measures.yearAgoGap)}").dark      {{distribution.measures.yearAgoGap | number }}
+            td(ng-class="{'negative': a.isNegative(distribution.measures.yearAgoTrend) }").dark   {{distribution.measures.yearAgoTrend}}%
+            td(ng-class="{'negative': a.isNegative(distribution.measures.vsPlanNumber)}")         {{distribution.measures.vsPlanNumber | number }}
+            td(ng-class="{'negative': a.isNegative(distribution.measures.vsPlanPercent)}")        {{distribution.measures.vsPlanPercent}}%
   div.scorecard-chart(column='7')
-    div(row)
-      div(column='2')
-        label.bold Chart data
-      div(column='10')
+    .widget-header
+      p Top 10 Values
+    .widget-content.clearfix
+      table.chart-data(cellspacing="0" cellpadding="0")
+        thead
+          tr
+            th.top(colspan=2)
+              p.accent.bold.left Distributors
+              p &nbsp;
+            th.top.dark
+              p.accent.bold Depletions - FYTD
+              p &nbsp;
+        tbody
+          tr.store
+            td(colspan=2) Walmart <span class="store-number">#1197</span><span class="address">3500 Brumb... Kenosha, WA</span>
+            td.dark 47,560
+      .chart
+        table.no-top-border(cellspacing="0" cellpadding="0")
+          thead
+            tr
+              th.top.chart-title
+                p.accent.bold Trends (vs YA) - FYTD
+                p &nbsp;
         nvd3(options="a.chartOptions" data="a.chartData")
 
 list

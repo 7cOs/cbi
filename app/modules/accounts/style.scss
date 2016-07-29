@@ -100,7 +100,65 @@
   }
 }
 
+.scorecard-table,
 .scorecard-chart {
+
+  .widget-header {
+    background: $gray-4;
+    border-bottom: 1px solid $black;
+    padding: 1em;
+
+    p {
+      font-size: 1.5em;
+      font-weight: 300;
+      margin: 0;
+    }
+  }
+
+  .widget-content {
+    background: $white;
+    border-bottom: 1px solid $black;
+
+    table {
+      border-top: 0;
+    }
+  }
+
+  .chart-title {
+    width: 50%;
+  }
+}
+
+.scorecard-chart {
+
+  .chart,
+  .chart-data {
+    background: $white;
+    border-bottom: 0;
+    float: left;
+    width: 50%;
+  }
+
+  tr.store {
+    border-bottom: 0;
+
+    td {
+      padding: 0.5em 0 0.25em 0.5em;
+
+      &:first-child {
+        text-align: left;
+      }
+    }
+
+    .store-number {
+      color: $gray-2;
+    }
+
+    .address {
+      color: $blue;
+      display: block;
+    }
+  }
 
   .nv-axis,
   .nv-legendWrap,
