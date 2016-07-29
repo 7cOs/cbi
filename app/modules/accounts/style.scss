@@ -99,3 +99,37 @@
     margin-right: 2em;
   }
 }
+
+.scorecard-chart {
+
+  .nv-axis,
+  .nv-legendWrap,
+  .nv-controlsWrap {
+    display: none;
+  }
+
+  .negative {
+    color: $red;
+
+    rect,
+    text {
+      fill: $red;
+      stroke: none;
+    }
+  }
+
+  .positive {
+    color: $green;
+
+    rect,
+    text {
+      fill: $green;
+      stroke: none;
+    }
+  }
+}
+
+.nvtooltip {
+  background: $white;
+  box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.3);
+}

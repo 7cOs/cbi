@@ -7,6 +7,7 @@
     "lint": "eslint **/*.js && gulp vet:sass"
   },
   "dependencies": {
+    "angular-nvd3": "^1.0.8",
     "body-parser": "1.15.0",
     "coffee-script": "1.10.0",
     "compression": "1.6.1",
@@ -15,6 +16,7 @@
     "core-js": "2.4.0",
     "cors": "2.7.1",
     "crypto-js": "3.1.6",
+    "d3": "^3.5.6",
     "del": "2.2.0",
     "express": "4.13.4",
     "express-request-proxy": "2.0.0",
@@ -22,6 +24,7 @@
     "forever": "^0.15.2",
     "http-auth": "^2.4.4",
     "multer": "1.1.0",
+    "nvd3": "^1.8.4",
     "passport": "0.3.2",
     "passport-local": "1.0.0",
     "redis": "2.6.0-1",

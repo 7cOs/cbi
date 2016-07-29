@@ -31,6 +31,55 @@ module.exports =
       }]
     };
 
+    // Chart data
+
+    vm.chartOptions = {
+      chart: {
+        type: 'multiBarHorizontalChart',
+        height: 400,
+        x: function(d) { return d.label; },
+        y: function(d) { return d.value; },
+        showControls: false,
+        showValues: true,
+        duration: 500
+      }
+    };
+
+    vm.chartData = [
+      {
+        'values': [
+          {
+            'label': 'Walmart #1167',
+            'value': 15
+          }, {
+            'label': 'Walmart #2872',
+            'value': -4
+          }, {
+            'label': 'Walmart #166',
+            'value': 9
+          }, {
+            'label': 'Walmart #3395',
+            'value': 4
+          }, {
+            'label': 'Walmart #1471',
+            'value': -10
+          }, {
+            'label': 'Walmart #1685',
+            'value': -1
+          }, {
+            'label': 'Walmart #2738',
+            'value': -3
+          }, {
+            'label': 'Walmart #2089',
+            'value': 11
+          }, {
+            'label': 'Walmart #1198',
+            'value': 2
+          }
+        ]
+      }
+    ];
+
     // Public methods
 
     function isNegative(salesData) {
