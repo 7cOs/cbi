@@ -36,4 +36,4 @@ gulp.task 'compile', ->
 
 # CLEAN UP BEFORE BUILDS
 gulp.task 'clean', ->
-  del 'dist/**/*'
+  del 'public/**/*'
