@@ -14,14 +14,12 @@ require('require-dir')('./compile');
 if release
   gulp.task 'default', ->
     runSequence [
-      'copy:libs'
       'compile'
       'serve'
     ],
 else
   gulp.task 'default', ->
     runSequence [
-      'copy:libs'
       'compile'
       'serve'
       'karma'
