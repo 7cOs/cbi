@@ -117,23 +117,30 @@ v-accordion.styled-list(multiple="" id="opportunities" control="o.accordion" one
       label.bold Hide
     div.checkbox-sibling(column='12')
       div(column='3')
-        label.bold Store / Number
+        label.bold
+          | Store / Number
+          span.chevron-down-small
       div(column='4')
         label.bold Address
       div(column='2')
-        label.bold Opportunities
+        label.bold
+          | Opportunities
+          span.chevron-down-small
       div(column='1')
-        label.bold Depletions CYTD
+        label.bold
+          | Depletions CYTD
+          span.chevron-down-small
       div(column='1')
         label.bold Trend vs Ya
       div(column='1')
-        label.bold Segmentation
+        label.bold
+          | Segmentation
+          span.chevron-down-small
   v-pane.list-item(row ng-repeat="opportunity in o.opportunities" expanded="opportunity.isExpanded")
     .shadow-wrap.bottom
       div.checkbox-wrapper(ng-click="o.toggle(opportunity, o.selected)")
         md-checkbox(aria-label="Select Item" ng-checked="o.exists(opportunity, o.selected)")
-      div.more-wrapper
-        div.hide-row
+      div.hide-wrapper.hide-icon-wrapper.hide-row
       v-pane-header.checkbox-sibling(column='12')
         div.cell-parent
           div.pad-cell(column='3') {{opportunity.store.name}} <span class="supporting-text">\#{{opportunity.store.id}}</span>

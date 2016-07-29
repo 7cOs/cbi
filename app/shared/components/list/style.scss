@@ -67,7 +67,7 @@
 .more-wrapper {
   float: right;
   outline: 0;
-  padding: 2em 15px 1.15em 0;
+  padding: 1em 15px 0 0;
   width: 35px;
   transition: background 300ms ease;
 
@@ -98,6 +98,9 @@
   }
 }
 
+.hide-icon-wrapper {
+  padding: 2em 15px 1em 0;
+}
 
 .header-row {
   color: $gray-1;
