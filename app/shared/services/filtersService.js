@@ -36,8 +36,8 @@ module.exports =
         {name: 'Effective'}
       ],
       premises: [
-        {name: 'On Premise'},
-        {name: 'Off Premise'}
+        {name: 'Off Premise'},
+        {name: 'On Premise'}
       ],
       selected: {
         accountScope: false,

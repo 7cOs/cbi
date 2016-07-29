@@ -117,15 +117,15 @@ div(row)
       tbody
         tr
           td.column-total.left TOTAL
-          td.column-total.dark 1,532
+          td.column-total.dark {{1532 | number }}
           td.column-total.dark 7.5%
-          td.column-total 1532
+          td.column-total {{1532 | number }}
           td.column-total 4%
         tr(ng-repeat="distribution in a.distributionData.performance")
           td.left.data-brand {{distribution.name}} s
-          td(ng-class="{'negative': a.isNegative(distribution.measures.yearAgoGap)}").dark      {{distribution.measures.yearAgoGap}}
+          td(ng-class="{'negative': a.isNegative(distribution.measures.yearAgoGap)}").dark      {{distribution.measures.yearAgoGap | number }}
           td(ng-class="{'negative': a.isNegative(distribution.measures.yearAgoTrend) }").dark   {{distribution.measures.yearAgoTrend}}%
-          td(ng-class="{'negative': a.isNegative(distribution.measures.vsPlanNumber)}")         {{distribution.measures.vsPlanNumber}}
+          td(ng-class="{'negative': a.isNegative(distribution.measures.vsPlanNumber)}")         {{distribution.measures.vsPlanNumber | number }}
           td(ng-class="{'negative': a.isNegative(distribution.measures.vsPlanPercent)}")        {{distribution.measures.vsPlanPercent}}%
   div.scorecard-chart(column='7')
     div(row)

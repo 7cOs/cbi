@@ -9,7 +9,9 @@
     transition: background 300ms ease;
 
     &:hover,
-    &.is-expanded {
+    &:hover .more-wrapper,
+    &.is-expanded,
+    &.is-expanded .more-wrapper {
       background: $light-blue-4;
     }
 
@@ -49,19 +51,53 @@
   width: 35px;
 
   &.placeholder {
-    background: none;
+    background: $body-bg;
     padding-bottom: 0.5em;
   }
 
   + .checkbox-sibling {
-    width: calc(100% - 50px);
-    float: right;
+    width: calc(100% - 100px);
   }
 
   md-checkbox {
     margin-bottom: 0;
   }
 }
+
+.more-wrapper {
+  float: right;
+  outline: 0;
+  padding: 2em 15px 1.15em 0;
+  width: 35px;
+  transition: background 300ms ease;
+
+  + .checkbox-sibling {
+    width: calc(100% - 100px);
+  }
+
+  p {
+    border: 1px solid $gray-10;
+    border-radius: 3px;
+  }
+}
+
+.hide-wrapper {
+  text-align: center;
+  float: right;
+  outline: 0;
+  padding: 1px;
+  width: 35px;
+
+  + .checkbox-sibling {
+    width: calc(100% - 100px);
+  }
+
+  p {
+    border: 1px solid $gray-10;
+    border-radius: 3px;
+  }
+}
+
 
 .header-row {
   color: $gray-1;
