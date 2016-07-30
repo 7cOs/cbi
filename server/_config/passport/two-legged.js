@@ -18,9 +18,9 @@ module.exports = function(app) {
     clientID: 'PortalClient',
     clientSecret: 'YNzWaLKJNGZ5vvlgiZ',
     scope: 'API.All'
-  }, function(err, done) {
-    console.log(err);
-    console.log(done);
+  }, function(token, done) {
+    console.log(token);
+    return done(null, token);
   });
 
 };
