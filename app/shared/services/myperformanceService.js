@@ -201,10 +201,23 @@ module.exports =
       distributionTimePeriod: [{
         name: 'L30 Days June 21 - July 21'
       }, {
-
         name: 'L60 May 21, 2016 - July 21, 2016'
       }, {
         name: 'L90 Days April 22, 2016 - July 21, 2016'
+      }],
+      accountBrands: [{
+        name: 'Distributions (simple)'
+      }, {
+        name: 'Velocity'
+      }],
+      accountMarkets: [{
+        name: 'Depletions'
+      }, {
+        name: 'Distribution (simple)'
+      }, {
+        name: 'Distribution (effective)'
+      }, {
+        name: 'Velocity'
       }]
     };
 

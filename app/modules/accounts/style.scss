@@ -95,18 +95,29 @@
 .widget-header {
   float: none;
   display: block;
+  padding: 0.25em 0.25em 0.25em 0;
 
   .brands,
   .market,
   .notes,
   .overview {
-    background-position: 1em 0.4em;
+    background-position: 0.75em 0.4em;
     float: none;
-    padding: 0.5em 0 0.5em 2.25em;
+    padding: 0.5em 0 0.5em 1.75em;
   }
 
   .market {
-    background-position: 1em 0.75em;
+    background-position: 0.75em 0.75em;
+  }
+
+  .dropdown-filter {
+    float: right;
+    margin: 0.3em 0.3em 0 0;
+    width: 200px;
+
+    md-select {
+      margin: 0;
+    }
   }
 }
 
@@ -162,7 +173,7 @@
     border-bottom: 0;
 
     td {
-      padding: 0.5em 0 0.25em 0;
+      padding: 0.5em 0 0.25em;
 
       &:first-child {
         padding-left: 1em;

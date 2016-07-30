@@ -41,6 +41,8 @@ module.exports =
       ],
       selected: {
         accountScope: false,
+        accountBrands: '',
+        accountMarkets: '',
         cbbdContact: '',
         currentFilter: '',
         location: '',
