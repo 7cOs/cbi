@@ -95,7 +95,10 @@ div(row)
 div(row)
   div.scorecard-table(column='5')
     .widget-header
-      p Corona Extra
+      .dropdown-filter
+        md-select(ng-model="a.filtersService.model.selected.accountBrands" aria-label="Account Brands Filter"  placeholder="Distribution (simple)")
+          md-option(ng-repeat="filter in a.filters.accountBrands" aria-label="filter.name" value="{{filter.name}}") {{filter.name}}
+      p.brands Corona Extra
     .widget-content
       table(cellspacing="0" cellpadding="0")
         thead
@@ -132,7 +135,10 @@ div(row)
             td(ng-class="{'negative': a.isNegative(distribution.measures.vsPlanPercent)}")        {{distribution.measures.vsPlanPercent}}%
   div.scorecard-chart(column='7')
     .widget-header
-      p Top 10 Values
+      .dropdown-filter
+        md-select(ng-model="a.filtersService.model.selected.accountMarkets" aria-label="Account Markets Filter"  placeholder="Depletions")
+          md-option(ng-repeat="filter in a.filters.accountMarkets" aria-label="filter.name" value="{{filter.name}}") {{filter.name}}
+      p.market Top 10 Values
     .widget-content.clearfix
       table.chart-data(cellspacing="0" cellpadding="0")
         thead
