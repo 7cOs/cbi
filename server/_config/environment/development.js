@@ -22,6 +22,13 @@ module.exports = function (config) {
   config.env = 'development';
   config.address = 'http://' + config.domain + ':'  + config.port + '/'; // base url
 
+  config.oauth = {
+    tokenURL: 'https://ssodev.cbrands.com/ms_oauth/oauth2/endpoints/oauthservice/tokens',
+    clientID: 'PortalClient',
+    clientSecret: 'YNzWaLKJNGZ5vvlgiZ',
+    scope: 'API.All'
+  };
+
   // directories
   config.public = {
     css: config.address + 'css/',

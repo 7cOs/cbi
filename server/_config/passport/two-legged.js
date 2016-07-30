@@ -14,10 +14,10 @@ module.exports = function(app) {
   });
 
   return new TwoLeggedStrategy({
-    tokenURL: 'https://ssodev.cbrands.com/ms_oauth/oauth2/endpoints/oauthservice/tokens',
-    clientID: 'PortalClient',
-    clientSecret: 'YNzWaLKJNGZ5vvlgiZ',
-    scope: 'API.All'
+    tokenURL: app.get('config').oauth.tokenURL,
+    clientID: app.get('config').oauth.clientID,
+    clientSecret: app.get('config').oauth.clientSecret,
+    scope: app.get('config').oauth.scope
   }, function(token, done) {
     console.log(token);
     return done(null, token);
