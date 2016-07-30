@@ -117,26 +117,26 @@ v-accordion.styled-list(multiple="" id="opportunities" control="o.accordion" one
       label.bold Hide
     div.checkbox-sibling(column='12')
       div(column='3')
-        label.bold
+        label.bold(ng-click="o.sortBy('store.name')")
           | Store / Number
-          span.chevron-down-small
+          span(ng-class="{ 'chevron-down-small' : o.reverse, 'chevron-up-small' : !o.reverse}").chevron-down-small
       div(column='4')
         label.bold Address
       div(column='2')
-        label.bold
+        label.bold(ng-click="o.sortBy('opCount')")
           | Opportunities
-          span.chevron-down-small
+          span(ng-class="{ 'chevron-down-small' : o.reverse, 'chevron-up-small' : !o.reverse}").chevron-down-small
       div(column='1')
-        label.bold
-          | Depletions CYTD
-          span.chevron-down-small
+        label.bold(ng-click="o.sortBy('depletionsCYTD')")
+          | Depletions
+          span(ng-class="{ 'chevron-down-small' : o.reverse, 'chevron-up-small' : !o.reverse}").chevron-down-small
       div(column='1')
         label.bold Trend vs Ya
       div(column='1')
-        label.bold
+        label.bold(ng-click="o.sortBy('segmentation')")
           | Segmentation
-          span.chevron-down-small
-  v-pane.list-item(row ng-repeat="opportunity in o.opportunities" expanded="opportunity.isExpanded")
+          span(ng-class="{ 'chevron-down-small' : o.reverse, 'chevron-up-small' : !o.reverse}").chevron-down-small
+  v-pane.list-item(row ng-repeat="opportunity in o.opportunities | orderBy:o.sortProperty:o.reverse" expanded="opportunity.isExpanded")
     .shadow-wrap.bottom
       div.checkbox-wrapper(ng-click="o.toggle(opportunity, o.selected)")
         md-checkbox(aria-label="Select Item" ng-checked="o.exists(opportunity, o.selected)")

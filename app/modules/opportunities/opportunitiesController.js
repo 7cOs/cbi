@@ -25,6 +25,7 @@ module.exports =
     vm.accountQuerySearch = accountQuerySearch;
     vm.distributorQuerySearch = distributorQuerySearch;
     vm.addOpportunity = addOpportunity;
+    vm.sortBy = sortBy;
 
     // Broadcast current page name for other scopes
     $rootScope.$broadcast('page:loaded', $state.current.name);
@@ -141,5 +142,13 @@ module.exports =
           if ((angular.lowercase('' + data[properties[i]])).indexOf(lowercaseQuery) === 0) return (angular.lowercase('' + data[properties[i]])).indexOf(lowercaseQuery) === 0;
         }
       };
+    }
+
+    vm.sortProperty = null;
+    vm.reverse = true;
+
+    function sortBy(property) {
+      vm.reverse = (vm.sortProperty === property) ? !vm.reverse : false;
+      vm.sortProperty = property;
     }
   };
