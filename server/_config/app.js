@@ -60,8 +60,8 @@ config.auth = {
     realm: 'User'
   },
   passport: {
-    use: false,
-    strategy: 'local'
+    use: true,
+    strategy: 'passport/two-legged'
   }
 };
 

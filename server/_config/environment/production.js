@@ -16,6 +16,13 @@ module.exports = function (config) {
     js: config.address + 'js/'
   };
 
+  config.oauth = {
+    tokenURL: 'https://ssodev.cbrands.com/ms_oauth/oauth2/endpoints/oauthservice/tokens',
+    clientID: 'PortalClient',
+    clientSecret: 'YNzWaLKJNGZ5vvlgiZ',
+    scope: 'API.All'
+  };
+
   return config;
 
 };
