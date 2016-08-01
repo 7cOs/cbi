@@ -18,7 +18,7 @@ div#fancy-cat
   div(row)
     div(class='more-filters')
       a(ng-click="o.filtersService.model.expanded = o.filtersService.model.expanded ? false : true")
-        span(ng-class="{ 'chevron-up': o.filtersService.model.expanded, 'chevron-down': !o.filtersService.model.expanded }")
+        span(ng-class="{ 'chevron-up': o.filtersService.model.expanded, 'chevron-down': !o.filtersService.model.expanded}")
         span(ng-if="o.filtersService.model.expanded") Less Filters
         span(ng-if="!o.filtersService.model.expanded") More Filters
     div(column='3')
@@ -114,28 +114,28 @@ v-accordion.styled-list(multiple="" id="opportunities" control="o.accordion" one
   div.header-row(row)
     div.checkbox-wrapper.placeholder(ng-click="o.toggle(opportunity, o.selected)")
     div.hide-wrapper
-      label.bold Hide
+      label Hide
     div.checkbox-sibling(column='12')
       div(column='3')
-        label.bold(ng-click="o.sortBy('store.name')")
+        label(ng-click="o.sortBy('store.name')" ng-class="{ 'header-bold' : o.sortProperty === 'store.name'}")
           | Store / Number
-          span(ng-class="{ 'chevron-down-small' : o.reverse, 'chevron-up-small' : !o.reverse}").chevron-down-small
+          span(ng-class="{ 'chevron-down-small' : o.storeChevron, 'chevron-up-small' : !o.storeChevron}").chevron-down-small
       div(column='4')
-        label.bold Address
+        label Address
       div(column='2')
-        label.bold(ng-click="o.sortBy('opCount')")
+        label(ng-click="o.sortBy('opCount')" ng-class="{ 'header-bold' : o.sortProperty === 'opCount'}")
           | Opportunities
-          span(ng-class="{ 'chevron-down-small' : o.reverse, 'chevron-up-small' : !o.reverse}").chevron-down-small
+          span(ng-class="{ 'chevron-down-small' : !o.opportunitiesChevron, 'chevron-up-small' : o.opportunitiesChevron}").chevron-down-small
       div(column='1')
-        label.bold(ng-click="o.sortBy('depletionsCYTD')")
+        label(ng-click="o.sortBy('depletionsCYTD')" ng-class="{ 'header-bold' : o.sortProperty === 'depletionsCYTD'}")
           | Depletions
-          span(ng-class="{ 'chevron-down-small' : o.reverse, 'chevron-up-small' : !o.reverse}").chevron-down-small
+          span(ng-class="{ 'chevron-down-small' : !o.depletionsChevron, 'chevron-up-small' : o.depletionsChevron}").chevron-down-small
       div(column='1')
-        label.bold Trend vs Ya
+        label Trend vs Ya
       div(column='1')
-        label.bold(ng-click="o.sortBy('segmentation')")
+        label(ng-click="o.sortBy('segmentation')" ng-class="{ 'header-bold' : o.sortProperty === 'segmentation'}")
           | Segmentation
-          span(ng-class="{ 'chevron-down-small' : o.reverse, 'chevron-up-small' : !o.reverse}").chevron-down-small
+          span(ng-class="{ 'chevron-down-small' : o.segmentationChevron, 'chevron-up-small' : !o.segmentationChevron}").chevron-down-small
   v-pane.list-item(row ng-repeat="opportunity in o.opportunities | orderBy:o.sortProperty:o.reverse" expanded="opportunity.isExpanded")
     .shadow-wrap.bottom
       div.checkbox-wrapper(ng-click="o.toggle(opportunity, o.selected)")

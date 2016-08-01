@@ -23,6 +23,11 @@
   .checkbox-sibling {
     padding: 0;
     outline: 0;
+
+    .header-bold {
+      font-weight: $bold;
+      color: $black-2;
+    }
   }
 
   .cell-parent > div {
@@ -110,6 +115,10 @@
   label {
     display: inline-block;
     position: relative;
+
+    &:focus {
+      outline: none;
+    }
   }
 
   .chevron-up-small,
