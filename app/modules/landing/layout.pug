@@ -129,9 +129,6 @@ section.landing-page
             md-autocomplete(md-selected-item="selectedItem" md-search-text="l.filtersService.model.brandSearchText" md-items="brand in l.brandQuerySearch(l.filtersService.model.brandSearchText)" md-item-text="brand.name" md-min-length="1" placeholder="by Brand or SKU" md-selected-item-change="l.chipsService.addAutocompleteChip(brand.name, 'brandSearchText')")
               md-item-template
                 div(md-highlight-text="l.filtersService.model.brandSearchText" md-highlight-flags="^i") {{::brand.name}} - {{::brand.brand}}
-            //md-autocomplete(md-selected-item="selectedItem" md-search-text="l.filter.brandSearchText" md-items="brand in l.filter.brands | filter:l.filter.brandSearchText" md-item-text="brand.name" md-min-length="1" placeholder="by Brand or SKU" md-selected-item-change="chip.methods.addAutocompleteChip(brand.name, 'brandSearchText')")
-              md-item-template
-              div(md-highlight-text="l.filter.brandSearchText" md-highlight-flags="^i") {{brand.name}} - {{brand.size}}
           div.filter-item
             label Account / Store
             md-autocomplete(md-search-text="l.filter.accountSearchText" md-items="account in l.filter.accounts | filter:l.filter.accountSearchText" md-item-text="account.name" placeholder="By Account, Sub account" md-selected-item-change="chip.methods.addAutocompleteChip(account.name, 'accountSearchText')")
