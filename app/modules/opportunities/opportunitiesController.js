@@ -144,11 +144,22 @@ module.exports =
       };
     }
 
-    vm.sortProperty = null;
-    vm.reverse = true;
+    // sortProperty is set to a value to be the default sort on page load
+    // set value to null to show unsorted data on page load
+    vm.sortProperty = 'store.name';
+    vm.reverse = false;
+    vm.storeChevron = true;
+    vm.opportunitiesChevron = false;
+    vm.depletionsChevron = false;
+    vm.segmentationChevron = false;
 
     function sortBy(property) {
       vm.reverse = (vm.sortProperty === property) ? !vm.reverse : false;
       vm.sortProperty = property;
+
+      vm.storeChevron = (property === 'store.name') ? !vm.storeChevron : vm.storeChevron;
+      vm.opportunitiesChevron = (property === 'opCount') ? !vm.opportunitiesChevron : vm.opportunitiesChevron;
+      vm.depletionsChevron = (property === 'depletionsCYTD') ? !vm.depletionsChevron : vm.depletionsChevron;
+      vm.segmentationChevron = (property === 'segmentation') ? !vm.segmentationChevron : vm.storeChevron;
     }
   };
