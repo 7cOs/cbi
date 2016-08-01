@@ -126,7 +126,10 @@ section.landing-page
               md-option(ng-repeat="type in l.filter.opportunitiesTypes" aria-label="type.name" value="{{type.name}}") {{type.name}}
           div.filter-item
             label Brand / Master SKU
-            md-autocomplete(md-selected-item="selectedItem" md-search-text="l.filter.brandSearchText" md-items="brand in l.filter.brands | filter:l.filter.brandSearchText" md-item-text="brand.name" md-min-length="1" placeholder="by Brand or SKU" md-selected-item-change="chip.methods.addAutocompleteChip(brand.name, 'brandSearchText')")
+            md-autocomplete(md-selected-item="selectedItem" md-search-text="l.filtersService.model.brandSearchText" md-items="brand in l.brandQuerySearch(l.filtersService.model.brandSearchText)" md-item-text="brand.name" md-min-length="1" placeholder="by Brand or SKU" md-selected-item-change="l.chipsService.addAutocompleteChip(brand.name, 'brandSearchText')")
+              md-item-template
+                div(md-highlight-text="l.filtersService.model.brandSearchText" md-highlight-flags="^i") {{::brand.name}} - {{::brand.brand}}
+            //md-autocomplete(md-selected-item="selectedItem" md-search-text="l.filter.brandSearchText" md-items="brand in l.filter.brands | filter:l.filter.brandSearchText" md-item-text="brand.name" md-min-length="1" placeholder="by Brand or SKU" md-selected-item-change="chip.methods.addAutocompleteChip(brand.name, 'brandSearchText')")
               md-item-template
               div(md-highlight-text="l.filter.brandSearchText" md-highlight-flags="^i") {{brand.name}} - {{brand.size}}
           div.filter-item

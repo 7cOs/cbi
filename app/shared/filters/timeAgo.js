@@ -10,7 +10,6 @@ module.exports =
      * @memberOf andromeda.common.services
      */
     return function(displayDate) {
-      console.log('i am found');
       var currentDate = new Date(),
           d = new Date(displayDate),
           returnStr = '';

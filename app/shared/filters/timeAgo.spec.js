@@ -1,6 +1,37 @@
 describe('Unit: timeAgo Filter', function() {
   require('angular-mocks/ngMock');
 
+  var filter;
+
+  beforeEach(function() {
+    angular.mock.module('andromeda.common.filters');
+  });
+
+  /* beforeEach(inject(function(_timeAgoFilter_) {
+    filter = _timeAgoFilter_;
+  }));*/
+
+  /* beforeEach(function() {
+    inject(function($filter) {
+      filter = $filter;
+    });
+  });*/
+  /* beforeEach(angular.mock.inject(function(_$injector_) {
+    $filter = _$injector_.get('$filter');
+  }));*/
+
+  /* beforeEach(inject(function(_Filter_) {
+    filter = _timeAgoFilter_;
+  }));*/
+
+  it('should exist', function() {
+    // expect(test('2000-11-05T13:15:30Z')).toEqual('16 years ago');
+    // console.log(filter);
+    expect(true).toBeTruthy();
+  });
+
+});
+
   /* var createFilter,
       scope,
       mockAPIReturn = {
@@ -18,24 +49,3 @@ describe('Unit: timeAgo Filter', function() {
         }
       };
   */
-
-  // var filter;
-
-  beforeEach(function() {
-    // angular.mock.module('andromeda.common.filters');
-  });
-
-  /* beforeEach(inject(function(_$filter_) {
-    // filter = $filter;
-  }));*/
-
-  it('should exist', function() {
-    // console.log(filter);
-    // var test = $filter('timeAgo');
-    // expect(test('2000-11-05T13:15:30Z')).toEqual('16 years ago');
-
-    expect(true).toBeTruthy();
-  });
-
-});
-
