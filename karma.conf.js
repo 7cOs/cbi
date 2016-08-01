@@ -15,7 +15,8 @@ module.exports = function(config) {
     // list of files / patterns to load in the browser
     files: [
       'app/main.js',
-      'app/modules/**/*.spec.js'
+      'app/modules/**/*.spec.js',
+      'app/shared/**/**/*.spec.js'
       //{pattern:'app/modules/**/*.js', watched: true, served: false, included: false},
       // 'app/modules/index.js',
       // {pattern:'app/shared/**/**/*.js', watched: true, served: false, included: false},

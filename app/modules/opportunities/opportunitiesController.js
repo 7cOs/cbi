@@ -14,6 +14,14 @@ module.exports =
       vm.userService.model.opportunityFilters = data;
     });
 
+    userService.getTargetLists().then(function(data) {
+      console.log(data);
+    });
+
+    userService.getPerformanceDepletion().then(function(data) {
+      console.log(data);
+    });
+
     // Map public methods to scope
     vm.toggle = toggle;
     vm.exists = exists;

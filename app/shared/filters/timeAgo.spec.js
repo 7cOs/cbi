@@ -1,34 +1,54 @@
 describe('Unit: timeAgo Filter', function() {
-  'use strict';
-
   require('angular-mocks/ngMock');
-  // require('angular-ui-router');
+  require('angular-ui-router');
 
-  // var scope, ctrl;
-  var filter;
+  /* var createFilter,
+      scope,
+      mockAPIReturn = {
+        archived: false,
+        createdAt: '2000-11-05T13:15:30Z',
+        id: 'testID1',
+        name: 'My target list',
+        opportunities: 1,
+        opportunitiesSummary: {
+          closedOpportunitiesCount: 4,
+          committedOpportunitiesCount: 3,
+          storesCount: 1,
+          targetedOpportunitiesCount: 2,
+          totalClosedDepletions: 5
+        }
+      };
 
   beforeEach(function() {
+    angular.mock.module('ui.router');
     angular.mock.module('andromeda.common.filters');
+  }); */
 
-    inject(function($filter) {
-      filter = $filter;
-    });
+  /* var filter;
+
+  beforeEach(function() {
+    angular.mock.module('ui.router');
+    angular.mock.module('andromeda.common.filters');
   });
 
-  /* beforeEach(function() {
-    // angular.mock.module('ui.router');
-    // angular.mock.module('andromeda.common.services');
-    // angular.mock.module('andromeda.modules.opportunities');
-
-    inject(function($rootScope, $controller) {
-      scope = $rootScope.$new();
-      ctrl = $controller('opportunitiesController', {$scope: scope});
-    });
-  });*/
+  beforeEach(inject(function($filter) {
+    filter = $filter('timeAgo',{});
+  }));*/
 
   it('should exist', function() {
-    expect(filter).not.toBeUndefined();
-    // expect(typeof (filter)).toEqual('object');
+    // console.log(filter('2000-11-05T13:15:30Z'));
+    // console.log(timeAgoFilter);
+    // console.log(filter);
+    // var filter = createFilter();
+    // expect(filter(mockAPIReturn.createdAt)).toBe('olleh');
+    // console.log(filter(mockAPIReturn.createdAt));
+
+    // expect(filter('timeAgo')).not.toBeUndefined();
+
+    /* var result = filter('timeAgo')(mockAPIReturn.createdAt);
+
+    expect(typeof (result)).toEqual('string');
+    expect(result).toEqual('16 years ago');*/
   });
 
 });
