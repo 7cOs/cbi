@@ -47,6 +47,11 @@ module.exports =
       accounts: ['Wal-mart', 'PCC']
     };
 
+    getOpportunityFilters('A1B2').then(function(response) {
+      model.opportunityFilters = response;
+      console.log(response);
+    });
+
     return {
       model: model,
       getUsers: getUsers,

@@ -8,6 +8,7 @@ module.exports =
     vm.chipsService = chipsService;
     vm.filtersService = filtersService;
     vm.userService = userService;
+    vm.opportunitiesService = opportunitiesService;
 
     // get saved filters
     userService.getOpportunityFilters('1').then(function(data) {
@@ -20,6 +21,11 @@ module.exports =
 
     userService.getPerformanceDepletion().then(function(data) {
       console.log(data);
+    });
+
+    // Get opportunities and products data
+    opportunitiesService.getOpportunities().then(function(data) {
+      opportunitiesService.model.opportunities = data;
     });
 
     // Map public methods to scope

@@ -1,6 +1,5 @@
 describe('Unit: timeAgo Filter', function() {
   require('angular-mocks/ngMock');
-  require('angular-ui-router');
 
   /* var createFilter,
       scope,
@@ -18,37 +17,24 @@ describe('Unit: timeAgo Filter', function() {
           totalClosedDepletions: 5
         }
       };
+  */
+
+  // var filter;
 
   beforeEach(function() {
-    angular.mock.module('ui.router');
-    angular.mock.module('andromeda.common.filters');
-  }); */
-
-  /* var filter;
-
-  beforeEach(function() {
-    angular.mock.module('ui.router');
-    angular.mock.module('andromeda.common.filters');
+    // angular.mock.module('andromeda.common.filters');
   });
 
-  beforeEach(inject(function($filter) {
-    filter = $filter('timeAgo',{});
+  /* beforeEach(inject(function(_$filter_) {
+    // filter = $filter;
   }));*/
 
   it('should exist', function() {
-    // console.log(filter('2000-11-05T13:15:30Z'));
-    // console.log(timeAgoFilter);
     // console.log(filter);
-    // var filter = createFilter();
-    // expect(filter(mockAPIReturn.createdAt)).toBe('olleh');
-    // console.log(filter(mockAPIReturn.createdAt));
+    // var test = $filter('timeAgo');
+    // expect(test('2000-11-05T13:15:30Z')).toEqual('16 years ago');
 
-    // expect(filter('timeAgo')).not.toBeUndefined();
-
-    /* var result = filter('timeAgo')(mockAPIReturn.createdAt);
-
-    expect(typeof (result)).toEqual('string');
-    expect(result).toEqual('16 years ago');*/
+    expect(true).toBeTruthy();
   });
 
 });

@@ -136,6 +136,7 @@ v-accordion.styled-list(multiple="" id="opportunities" control="o.accordion" one
         label(ng-click="o.sortBy('segmentation')" ng-class="{ 'header-bold' : o.sortProperty === 'segmentation'}")
           | Segmentation
           span(ng-class="{ 'chevron-down-small' : o.segmentationChevron, 'chevron-up-small' : !o.segmentationChevron}").chevron-down-small
+  //v-pane.list-item(row ng-repeat="opportunity in o.opportunitiesService.model.opportunities.opportunities | orderBy:o.sortProperty:o.reverse" expanded="opportunity.isExpanded")
   v-pane.list-item(row ng-repeat="opportunity in o.opportunities | orderBy:o.sortProperty:o.reverse" expanded="opportunity.isExpanded")
     .shadow-wrap.bottom
       div.checkbox-wrapper(ng-click="o.toggle(opportunity, o.selected)")

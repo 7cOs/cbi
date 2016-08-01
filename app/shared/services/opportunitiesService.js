@@ -360,11 +360,6 @@ module.exports =
       opportunities: []
     };
 
-    // Get opportunities and products data
-    getOpportunities().then(function(data) {
-      model.opportunities = data;
-    });
-
     model.products = tempData.products;
 
     return {
@@ -412,9 +407,10 @@ module.exports =
             item.negativeValue = true;
           }
         });
-        opportunitiesPromise.resolve(tempData.opportunities);
+        // opportunitiesPromise.resolve(tempData.opportunities);
+        opportunitiesPromise.resolve(response.data);
 
-        console.log('[opportunitiesService.getOpportunities] mocked response: ', tempData.opportunities);
+        // console.log('[opportunitiesService.getOpportunities] mocked response: ', tempData.opportunities);
         console.log('[opportunitiesService.getOpportunities] response: ', response);
         // opportunitiesPromise.resolve(response.data);
         // uncomment above and remove below when services are ready

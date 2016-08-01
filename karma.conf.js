@@ -19,7 +19,7 @@ module.exports = function(config) {
       'app/shared/**/**/*.spec.js'
       //{pattern:'app/modules/**/*.js', watched: true, served: false, included: false},
       // 'app/modules/index.js',
-      // {pattern:'app/shared/**/**/*.js', watched: true, served: false, included: false},
+      
       // 'app/shared/**/**/*.spec.js'
     ],
 
