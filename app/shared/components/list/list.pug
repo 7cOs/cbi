@@ -2,7 +2,8 @@ h3(ng-if="list.pageName === 'accounts'") Top opportunities <a class="accent" ui-
 h3(ng-if="list.pageName === 'opportunities'") <strong>{{list.products.length * list.opportunities.length}} opportunities</strong> across {{list.opportunities.length}} stores
 
 .action-buttons
-  button.btn-action(ng-disabled="list.selected < 1") Add to List
+  button.btn-action(ng-disabled="list.selected < 1" ng-if="list.pageName !== 'target-lists'") Add to Target List
+  button.btn-action(ng-disabled="list.selected < 1" ng-if="list.pageName === 'target-lists'") Copy to Target List
   button.btn-action(ng-disabled="list.selected < 1") Download
   button.btn-action(ng-disabled="list.selected < 1") Send To
 
