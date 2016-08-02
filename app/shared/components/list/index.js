@@ -96,6 +96,16 @@ function ListController($scope, $state, opportunitiesService) {
     vm.depletionsChevron = (property === 'depletionsCYTD') ? !vm.depletionsChevron : vm.depletionsChevron;
     vm.segmentationChevron = (property === 'segmentation') ? !vm.segmentationChevron : vm.storeChevron;
   }
+
+  // Set positive or negative label for trend values
+  vm.opportunities.forEach(function(item) {
+    var trend = item.depletionTrendVsYA;
+    if (trend > 0) {
+      item.positiveValue = true;
+    } else if (trend < 0) {
+      item.negativeValue = true;
+    }
+  });
 }
 
 module.exports =
