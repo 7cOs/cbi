@@ -24,13 +24,11 @@ module.exports =
     vm.chartOptions = {
       chart: {
         type: 'multiBarHorizontalChart',
-        height: 595,
+        groupSpacing: 0.65,
         x: function(d) { return d.label; },
         y: function(d) { return d.value; },
         showControls: false,
         showValues: true,
-        showXAxis: false,
-        showYAxis: false,
         duration: 500,
         valueFormat: function(d) {
           return d + '%';

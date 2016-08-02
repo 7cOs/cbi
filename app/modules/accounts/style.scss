@@ -147,9 +147,12 @@
   .widget-content {
     background: $white;
     border-bottom: 1px solid $black;
+    overflow: hidden;
 
     table {
       border-top: 0;
+      position: relative;
+      z-index: 2;
     }
   }
 
@@ -191,7 +194,6 @@
     }
   }
 
-  .nv-axis,
   .nv-legendWrap,
   .nv-controlsWrap {
     display: none;
@@ -219,12 +221,13 @@
 }
 
 .nvd {
+  height: 620px;
   position: absolute;
-  top: 25px;
-}
+  top: 14px;
+  width: 100%;
+  z-index: 1;
 
-.nvtooltip {
-  background: $t-white;
-  box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.3);
-  padding: 0.5em;
+  svg {
+    height: 100%;
+  }
 }
