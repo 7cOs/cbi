@@ -67,7 +67,8 @@ module.exports =
         tradeChannelMassMerchandiser: '',
         tradeChannelMilitary: '',
         tradeChannelOther: '',
-        tradeChannelRecreation: ''
+        tradeChannelRecreation: '',
+        valuesVsTrend: ''
       },
       timePeriod: [
         {name: 'Current Month to Date'},
