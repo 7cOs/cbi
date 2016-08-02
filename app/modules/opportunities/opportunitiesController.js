@@ -119,7 +119,7 @@ module.exports =
 
     function saveFilter() {
       // web service
-      var payload = parseFilterObj();
+      // var payload = parseFilterObj();
       // userService.saveOpportunityFilter(payload);
     }
 
@@ -171,12 +171,12 @@ module.exports =
       };
     }
 
-    function parseFilterObj() {
+    /* function parseFilterObj() {
       var prettyPayload = {
         key: 'value'
       };
       // iterate through chipsService.model and get it formatted correctly
       // probably should move to chipsService
       return prettyPayload;
-    }
+    }*/
   };

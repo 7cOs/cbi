@@ -1,11 +1,11 @@
 describe('Unit: timeAgo Filter', function() {
   require('angular-mocks/ngMock');
 
-  var filter;
+  /* var filter;
 
   beforeEach(function() {
     angular.mock.module('andromeda.common.filters');
-  });
+  });*/
 
   /* beforeEach(inject(function(_timeAgoFilter_) {
     filter = _timeAgoFilter_;

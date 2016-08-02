@@ -15,7 +15,6 @@ module.exports = function(config) {
     // list of files / patterns to load in the browser
     files: [
       'app/main.js',
-      'app/shared/filters/timeAgo.js',
       'app/modules/**/*.spec.js',
       'app/shared/**/**/*.spec.js'
       // 'app/shared/filters/timeAgo.spec.js'
