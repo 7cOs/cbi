@@ -29,7 +29,7 @@
         span {{2251 | number }}
         label.accent.accent-blue Total<br />Opportunities
 
-.chips(ng-if="t.chipsService.model.length")
+.chips(ng-if="t.chipsService.model.length && t.filtersService.model.show")
   label Active Filters
   md-chips(ng-model="t.chipsService.model" name="Active Filters" md-on-remove="t.chipsService.removeFromFilterService($chip)")
     input(disabled="true")
