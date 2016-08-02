@@ -2,7 +2,6 @@
 
 module.exports =
   function filtersService(opportunitiesService, productsService, distributorsService, storesService) {
-
     var model = {
       accounts: [
         {name: 'Walmart', subAccount: 'North East'},
@@ -13,6 +12,7 @@ module.exports =
       brands: [],
       distributors: [],
       expanded: false,
+      filtersApplied: true,
       opportunitiesStatus: [
         {name: 'Open'},
         {name: 'Targeted'}

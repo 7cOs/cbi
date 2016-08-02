@@ -1,5 +1,5 @@
 'use strict';
 
 module.exports =
-  angular.module('andromeda.common.directives', []);
-  // .directive('filterDirective', require('./filterDirective'));
+  angular.module('andromeda.common.directives', [])
+    .directive('customChip', require('./customChip'));

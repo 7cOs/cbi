@@ -62,9 +62,8 @@ module.exports =
       });
     }
 
-    function applyFilter() {
-      // web service
-      console.log('applying filter');
+    function applyFilter(filterStr) {
+      console.log('add filter');
     }
 
     function brandQuerySearch(searchText) {

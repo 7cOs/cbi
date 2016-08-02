@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports =
-  function chipsService(filtersService) {
+  function chipsService(filtersService, opportunitiesService) {
 
     var model = [];
 
@@ -9,6 +9,7 @@ module.exports =
       model: model,
       addAutocompleteChip: addAutocompleteChip,
       addChip: addChip,
+      applyFilters: applyFilters,
       removeFromFilterService: removeFromFilterService,
       updateChip: updateChip
     };
@@ -23,11 +24,13 @@ module.exports =
      */
     function addAutocompleteChip(chip, filter) {
       if (chip) {
-
         // Add to Chip Model
         model.push({
-          name: chip
+          name: chip,
+          applied: false
         });
+
+        filtersService.model.filtersApplied = false;
 
         // Empty Input
         if (filter) filtersService.model[filter] = '';
@@ -46,13 +49,28 @@ module.exports =
     function addChip(chip, type, onlyOneAllowed) {
       if (chip) {
         if (onlyOneAllowed) removeChip(type);
-
         // Add to Chip Model
         model.push({
           name: chip,
-          type: type
+          type: type,
+          applied: false
         });
+
+        filtersService.model.filtersApplied = false;
       }
+    }
+
+    function applyFilters() {
+      opportunitiesService.getOpportunities().then(function(data) {
+        opportunitiesService.model.opportunities = data;
+
+        for (var i = 0; i < model.length; i++) {
+          model[i].applied = true;
+        }
+
+        filtersService.model.filtersApplied = true;
+
+      });
     }
 
     /**
@@ -70,6 +88,8 @@ module.exports =
           break;
         }
       }
+
+      filtersService.model.filtersApplied = false;
     }
 
     /**
@@ -82,6 +102,8 @@ module.exports =
      */
     function removeFromFilterService(chip) {
       if (chip.type) filtersService.model.selected[chip.type] = false;
+
+      filtersService.model.filtersApplied = false;
     }
 
     /**
