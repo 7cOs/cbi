@@ -218,6 +218,15 @@ module.exports =
         name: 'Distribution (effective)'
       }, {
         name: 'Velocity'
+      }],
+      valuesVsTrend: [{
+        name: 'Top 10 (Values)'
+      }, {
+        name: 'Top 10 (Trend)'
+      }, {
+        name: 'Bottom 10 (Values)'
+      }, {
+        name: 'Bottom 10 (Trend)'
       }]
     };
 

@@ -138,7 +138,9 @@ div(row)
       .dropdown-filter
         md-select(ng-model="a.filtersService.model.selected.accountMarkets" aria-label="Account Markets Filter"  placeholder="Depletions")
           md-option(ng-repeat="filter in a.filters.accountMarkets" aria-label="filter.name" value="{{filter.name}}") {{filter.name}}
-      p.market Top 10 Values
+      .header-selector
+        md-select.market(ng-model="a.filtersService.model.selected.valuesVsTrend" placeholder="Top 10 (Values)")
+          md-option(ng-repeat="filter in a.filters.valuesVsTrend" aria-label="filter.name" value="{{filter.name}}") {{filter.name}}
     .widget-content.clearfix
       table.chart-data(cellspacing="0" cellpadding="0")
         thead

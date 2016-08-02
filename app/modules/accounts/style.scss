@@ -96,6 +96,8 @@
   float: none;
   display: block;
   padding: 0.25em 0.25em 0.25em 0;
+  background: $gray-4;
+  border-bottom: 1px solid $black;
 
   .brands,
   .market,
@@ -119,6 +121,41 @@
       margin: 0;
     }
   }
+
+  p {
+    font-size: 1.5em;
+    font-weight: 300;
+  }
+
+  p, md-select {
+
+    &.brands,
+    &.market,
+    &.notes,
+    &.overview {
+      margin: 0;
+    }
+  }
+}
+
+.header-selector {
+
+  md-select {
+    display: inline-block;
+    margin: 0;
+    font-size: 1.5em;
+    font-weight: 300;
+    color: $gray-3;
+
+    &.market {
+      padding: 0.4em 0 0.3em 2em;
+    }
+
+    span {
+      color: $gray-3;
+      padding-bottom: 3px;
+    }
+  }
 }
 
 .pod-overview {
@@ -130,31 +167,15 @@
   }
 }
 
-.scorecard-table,
-.scorecard-chart {
+.widget-content {
+  background: $white;
+  border-bottom: 1px solid $black;
+  overflow: hidden;
 
-  .widget-header {
-    background: $gray-4;
-    border-bottom: 1px solid $black;
-
-    p {
-      font-size: 1.5em;
-      font-weight: 300;
-      margin: 0;
-    }
-  }
-
-  .widget-content {
-    background: $white;
-    border-bottom: 1px solid $black;
-
-    table {
-      border-top: 0;
-    }
-  }
-
-  .chart-title {
-    width: 50%;
+  table {
+    border-top: 0;
+    position: relative;
+    z-index: 2;
   }
 }
 
@@ -191,7 +212,6 @@
     }
   }
 
-  .nv-axis,
   .nv-legendWrap,
   .nv-controlsWrap {
     display: none;
@@ -219,12 +239,13 @@
 }
 
 .nvd {
+  height: 620px;
   position: absolute;
-  top: 25px;
-}
+  top: 14px;
+  width: 100%;
+  z-index: 1;
 
-.nvtooltip {
-  background: $t-white;
-  box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.3);
-  padding: 0.5em;
+  svg {
+    height: 100%;
+  }
 }

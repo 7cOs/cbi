@@ -1,0 +1,58 @@
+.nv-group {
+  // I'm sorry, but this is the only way to avoid a post-render DOM traversal.
+  fill-opacity: 1 !important;
+}
+
+.nvtooltip {
+  background: $t-white;
+  box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.3);
+  padding: 0.5em;
+  z-index: 3;
+}
+
+.nv-axis {
+  pointer-events: none;
+  opacity: 1;
+
+  path {
+    fill: none;
+    shape-rendering: crispEdges;
+    stroke-opacity: 0.75;
+
+    &.domain {
+      stroke-opacity: 0.75;
+    }
+  }
+
+  line {
+    fill: none;
+    shape-rendering: crispEdges;
+    stroke: #e5e5e5;
+  }
+
+  .zero line,
+  line.zero {
+    stroke-opacity: 0.75;
+  }
+
+  .nv-axisMaxMin text {
+    font-weight: bold;
+  }
+
+  &.nv-x {
+
+    path.domain {
+      stroke-opacity: 0.75;
+    }
+  }
+
+  &.nv-disabled {
+    opacity: 0;
+  }
+}
+
+.x, .x2, .x3 {
+  .nv-axis .nv-axisMaxMin text {
+    text-anchor: middle;
+  }
+}
