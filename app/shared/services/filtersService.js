@@ -43,6 +43,7 @@ module.exports =
         accountScope: false,
         accountBrands: '',
         accountMarkets: '',
+        accountTypes: '',
         cbbdContact: '',
         currentFilter: '',
         location: '',

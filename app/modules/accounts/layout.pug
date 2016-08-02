@@ -141,6 +141,8 @@ div(row)
       .header-selector
         md-select.market(ng-model="a.filtersService.model.selected.valuesVsTrend" placeholder="Top 10 (Values)")
           md-option(ng-repeat="filter in a.filters.valuesVsTrend" aria-label="filter.name" value="{{filter.name}}") {{filter.name}}
+        md-select(ng-model="a.filtersService.model.selected.accountTypes" placeholder="Stores")
+          md-option(ng-repeat="filter in a.filters.accountTypes" aria-label="filter.name" value="{{filter.name}}") {{filter.name}}
     .widget-content.clearfix
       table.chart-data(cellspacing="0" cellpadding="0")
         thead

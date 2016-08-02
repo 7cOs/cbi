@@ -17,11 +17,6 @@
   path {
     fill: none;
     shape-rendering: crispEdges;
-    stroke-opacity: 0.75;
-
-    &.domain {
-      stroke-opacity: 0.75;
-    }
   }
 
   line {
@@ -35,15 +30,14 @@
     stroke-opacity: 0.75;
   }
 
-  .nv-axisMaxMin text {
-    font-weight: bold;
+  .nv-zeroLine line {
+    color: $black;
+    stroke: $black;
+    stroke-opacity: 1;
   }
 
-  &.nv-x {
-
-    path.domain {
-      stroke-opacity: 0.75;
-    }
+  .nv-axisMaxMin text {
+    font-weight: bold;
   }
 
   &.nv-disabled {
