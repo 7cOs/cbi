@@ -10,17 +10,17 @@ module.exports =
     vm.userService = userService;
     vm.opportunitiesService = opportunitiesService;
 
-    // get saved filters
-    userService.getOpportunityFilters('1').then(function(data) {
-      vm.userService.model.opportunityFilters = data;
-    });
-
     userService.getTargetLists().then(function(data) {
       console.log(data);
     });
 
     userService.getPerformanceDepletion().then(function(data) {
       console.log(data);
+    });
+
+    // get saved filters
+    userService.getOpportunityFilters('A1B2').then(function(response) {
+      userService.model.opportunityFilters = response.filters;
     });
 
     // Get opportunities and products data
@@ -40,6 +40,7 @@ module.exports =
     vm.distributorQuerySearch = distributorQuerySearch;
     vm.addOpportunity = addOpportunity;
     vm.saveFilter = saveFilter;
+    vm.applyFilter = applyFilter;
     vm.sortBy = sortBy;
 
     // Broadcast current page name for other scopes
@@ -52,17 +53,6 @@ module.exports =
     // Set up arrays for tracking selected and expanded list items
     vm.selected = [];
     vm.expandedOpportunities = [];
-
-    // Simulated returned user data to show saved filters
-    vm.userData = {
-      savedFilters: [{
-        name: 'Saved Filter 1',
-        filters: ['Filter 1', 'Filter 2', 'Filter 3', 'Filter 4']
-      }, {
-        name: 'Saved Filter 2',
-        filters: ['Filter 1', 'Filter 2']
-      }]
-    };
 
     // ///////////////////////////////////////////////////////// Public Methods
     // Add item to array of currently expanded list items
@@ -163,6 +153,11 @@ module.exports =
       // web service
       var payload = parseFilterObj();
       // userService.saveOpportunityFilter(payload);
+    }
+
+    function applyFilter() {
+      // web service
+      console.log('applying filter');
     }
 
     function parseFilterObj() {
