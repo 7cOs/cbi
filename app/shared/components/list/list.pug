@@ -28,7 +28,7 @@ v-accordion.styled-list(multiple="" id="opportunities" control="list.accordion" 
         label.bold Trend vs Ya
       div(column='1')
         label.bold Segmentation
-  v-pane.list-item(row ng-repeat="opportunity in list.opportunitiesService.model.opportunities" expanded="opportunity.isExpanded")
+  v-pane.list-item(row ng-repeat="opportunity in list.opportunities" expanded="opportunity.isExpanded" ng-click="")
     .shadow-wrap.bottom
       div.checkbox-wrapper(ng-click="list.toggle(opportunity, list.selected)")
         md-checkbox(aria-label="Select Item" ng-checked="list.exists(opportunity, list.selected)")

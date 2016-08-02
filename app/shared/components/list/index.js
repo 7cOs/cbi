@@ -17,6 +17,16 @@ function ListController($scope, opportunitiesService) {
 
   vm.opportunitiesService = opportunitiesService;
 
+  // Get opportunities and products data
+  opportunitiesService.getOpportunities().then(function(data) {
+    opportunitiesService.model.opportunities = data;
+  });
+
+  // This needs to be replaced when we get live data
+  // Get opportunities and products data
+  vm.opportunities = opportunitiesService.get('opportunities');
+  vm.products = opportunitiesService.get('products');
+
   // Set up arrays for tracking selected and expanded list items
   vm.selected = [];
   vm.expandedOpportunities = [];

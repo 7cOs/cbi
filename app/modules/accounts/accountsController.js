@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports =
-  function accountsController($rootScope, $scope, $state, $log, $window, opportunitiesService, myperformanceService, chipsService, filtersService, userService) {
+  function accountsController($rootScope, $scope, $state, $log, $window, myperformanceService, chipsService, filtersService, userService) {
     var vm = this;
 
     // Services available in View
