@@ -227,6 +227,15 @@ module.exports =
         name: 'Bottom 10 (Values)'
       }, {
         name: 'Bottom 10 (Trend)'
+      }],
+      accountTypes: [{
+        name: 'Distributors'
+      }, {
+        name: 'Accounts'
+      }, {
+        name: 'Sub-Accounts'
+      }, {
+        name: 'Stores'
       }]
     };
 
