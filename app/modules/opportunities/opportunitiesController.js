@@ -39,6 +39,7 @@ module.exports =
     vm.accountQuerySearch = accountQuerySearch;
     vm.distributorQuerySearch = distributorQuerySearch;
     vm.addOpportunity = addOpportunity;
+    vm.saveFilter = saveFilter;
     vm.sortBy = sortBy;
 
     // Broadcast current page name for other scopes
@@ -156,6 +157,21 @@ module.exports =
           if ((angular.lowercase('' + data[properties[i]])).indexOf(lowercaseQuery) === 0) return (angular.lowercase('' + data[properties[i]])).indexOf(lowercaseQuery) === 0;
         }
       };
+    }
+
+    function saveFilter() {
+      // web service
+      var payload = parseFilterObj();
+      // userService.saveOpportunityFilter(payload);
+    }
+
+    function parseFilterObj() {
+      var prettyPayload = {
+        key: 'value'
+      };
+      // iterate through chipsService.model and get it formatted correctly
+      // probably should move to chipsService
+      return prettyPayload;
     }
 
     // sortProperty is set to a value to be the default sort on page load

@@ -26,4 +26,18 @@
     padding-left: 8px;
     padding-right: 8px;
   }
+
+  span {
+    color: $blue;
+    float: left;
+    font-size: 0.8em;
+    text-align: right;
+    text-transform: uppercase;
+    width: 50%;
+  }
+
+  label {
+    float: left;
+    width: 50%;
+  }
 }

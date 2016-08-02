@@ -10,6 +10,8 @@ div#fancy-cat
   button(ng-click="o.addOpportunity()") Api Plz
 .chips(ng-if="o.chipsService.model.length")
   label Active Filters
+  span 
+    a(ng-click="o.saveFilter()") Save Filterset
   md-chips(ng-model="o.chipsService.model" name="Active Filters" md-on-remove="o.chipsService.removeFromFilterService($chip)")
     input(disabled="true")
     md-chip-template
@@ -137,7 +139,7 @@ v-accordion.styled-list(multiple="" id="opportunities" control="o.accordion" one
           | Segmentation
           span(ng-class="{ 'chevron-down-small' : o.segmentationChevron, 'chevron-up-small' : !o.segmentationChevron}").chevron-down-small
   //v-pane.list-item(row ng-repeat="opportunity in o.opportunitiesService.model.opportunities.opportunities | orderBy:o.sortProperty:o.reverse" expanded="opportunity.isExpanded")
-  v-pane.list-item(row ng-repeat="opportunity in o.opportunities | orderBy:o.sortProperty:o.reverse" expanded="opportunity.isExpanded")
+  v-pane.list-item(row ng-repeat="opportunity in o.opportunities | orderBy:o.sortProperty:o.reverse" expanded="opportunity.isExpanded" ng-click="")
     .shadow-wrap.bottom
       div.checkbox-wrapper(ng-click="o.toggle(opportunity, o.selected)")
         md-checkbox(aria-label="Select Item" ng-checked="o.exists(opportunity, o.selected)")
