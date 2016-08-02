@@ -207,8 +207,10 @@
         }
 
         button {
-          margin: 12px auto;
-          width: 100%;
+          &:not(.ng-scope) {
+            margin: 12px auto;
+            width: 100%;
+          }
         }
       }
     }

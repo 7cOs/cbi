@@ -15,10 +15,12 @@ module.exports = function(config) {
     // list of files / patterns to load in the browser
     files: [
       'app/main.js',
-      'app/modules/**/*.spec.js'
+      'app/modules/**/*.spec.js',
+      'app/shared/**/**/*.spec.js'
+      // 'app/shared/filters/timeAgo.spec.js'
       //{pattern:'app/modules/**/*.js', watched: true, served: false, included: false},
       // 'app/modules/index.js',
-      // {pattern:'app/shared/**/**/*.js', watched: true, served: false, included: false},
+      
       // 'app/shared/**/**/*.spec.js'
     ],
 
@@ -33,6 +35,7 @@ module.exports = function(config) {
     preprocessors: {
       'app/main.js': ['browserify'],
       'app/modules/index.js': ['browserify'],
+      'app/shared/index.js': ['browserify'],
       'app/modules/**/*.spec.js': ['browserify'],
       'app/shared/**/**/*.spec.js': ['browserify']
     },
