@@ -1,7 +1,9 @@
 'use strict';
 
-function ListController($scope, opportunitiesService) {
+function ListController($scope, $state, opportunitiesService) {
   var vm = this;
+
+  vm.pageName = $state.current.name;
 
   // Map public methods to scope
   vm.toggle = toggle;
@@ -10,12 +12,22 @@ function ListController($scope, opportunitiesService) {
   vm.toggleAll = toggleAll;
   vm.expandCallback = expandCallback;
   vm.collapseCallback = collapseCallback;
+  vm.sortBy = sortBy;
 
-  // Get opportunities and products data
-  // vm.opportunities = opportunitiesService.get('opportunities');
-  // vm.products = opportunitiesService.get('products');
-
+  // Services
   vm.opportunitiesService = opportunitiesService;
+
+  // Controller Variables for Sorting
+  vm.depletionsChevron = false;
+  vm.expandedOpportunities = [];
+  vm.opportunitiesChevron = false;
+  vm.reverse = false;
+  vm.segmentationChevron = false;
+  vm.selected = [];
+
+  // sortProperty is set to default sort on page load
+  vm.sortProperty = 'store.name';
+  vm.storeChevron = true;
 
   // Get opportunities and products data
   opportunitiesService.getOpportunities().then(function(data) {
@@ -57,12 +69,12 @@ function ListController($scope, opportunitiesService) {
 
   // Select or deselect all list items
   function toggleAll() {
-    if (vm.selected.length === vm.opportunitiesService.model.opportunities.length) {
+    if (vm.selected.length === vm.opportunities.length) {
       vm.selected = [];
     } else if (vm.selected.length === 0 || vm.selected.length > 0) {
-      vm.selected = vm.opportunitiesService.model.opportunities.slice(0);
+      vm.selected = vm.opportunities.slice(0);
     }
-  };
+  }
 
   // Select or deselect individual list item
   function toggle(item, list) {
@@ -73,6 +85,17 @@ function ListController($scope, opportunitiesService) {
       list.push(item);
     }
   };
+
+  // Sort by selected property
+  function sortBy(property) {
+    vm.reverse = (vm.sortProperty === property) ? !vm.reverse : false;
+    vm.sortProperty = property;
+
+    vm.storeChevron = (property === 'store.name') ? !vm.storeChevron : vm.storeChevron;
+    vm.opportunitiesChevron = (property === 'opCount') ? !vm.opportunitiesChevron : vm.opportunitiesChevron;
+    vm.depletionsChevron = (property === 'depletionsCYTD') ? !vm.depletionsChevron : vm.depletionsChevron;
+    vm.segmentationChevron = (property === 'segmentation') ? !vm.segmentationChevron : vm.storeChevron;
+  }
 }
 
 module.exports =
