@@ -79,11 +79,17 @@
           md-item-template
             div(md-highlight-text="t.filtersService.model.distributorSearchText" md-highlight-flags="^i") {{distributor.name}}
     div(row)
-      div(column='3')
+      div(column='3').predicted-impact
         label Predicted Impact
-        md-checkbox(ng-model="t.filtersService.model.selected.predictedImpactHigh" aria-label="Predicted Impact High" ng-click="t.chipsService.updateChip('predictedImpactHigh', 'Predicted Impact High')") High
-        md-checkbox(ng-model="t.filtersService.model.selected.predictedImpactMedium" aria-label="Predicted Impact Medium" ng-click="t.chipsService.updateChip('predictedImpactMedium', 'Predicted Impact Medium')") Medium
-        md-checkbox(ng-model="t.filtersService.model.selected.predictedImpactLow" aria-label="Predicted Impact Low" ng-click="t.chipsService.updateChip('predictedImpactLow', 'Predicted Impact Low')") Low
+        md-checkbox(ng-model="t.filtersService.model.selected.predictedImpactHigh" aria-label="Predicted Impact High" ng-click="t.chipsService.updateChip('predictedImpactHigh', 'Predicted Impact High')")
+          | High
+          span.impact.high-small
+        md-checkbox(ng-model="t.filtersService.model.selected.predictedImpactMedium" aria-label="Predicted Impact Medium" ng-click="t.chipsService.updateChip('predictedImpactMedium', 'Predicted Impact Medium')")
+          | Medium
+          span.impact.medium-small
+        md-checkbox(ng-model="t.filtersService.model.selected.predictedImpactLow" aria-label="Predicted Impact Low" ng-click="t.chipsService.updateChip('predictedImpactLow', 'Predicted Impact Low')")
+          | Low
+          span.impact.low-small
       div(column='3')
         label Product Type
         md-checkbox(ng-model="t.filtersService.model.selected.productTypeFeatured" aria-label="Product Type Featured" ng-click="t.chipsService.updateChip('productTypeFeatured', 'Product Type Featured')") Featured
@@ -111,14 +117,17 @@
             md-checkbox(column='5' ng-model="t.filtersService.model.selected.tradeChannelRecreation" aria-label="Trade Channel Recreation" ng-click="t.chipsService.updateChip('tradeChannelRecreation', 'Trade Channel Recreation')") Recreation
             md-checkbox(column='5' ng-model="t.filtersService.model.selected.tradeChannelOther" aria-label="Trade Channel Other" ng-click="t.chipsService.updateChip('tradeChannelOther', 'Trade Channel Other')") Other
       div(column='3')
-        md-input-container
-          label Location
-          input(type="text" ng-model="t.filtersService.model.selected.location")
-        md-input-container
-          label CBBD Contact
-          input(type="text" ng-model="t.filtersService.model.selected.cbbdContact")
+        //- TODO these need to be hooked into the API
+        label Location
+        md-autocomplete.larger-margin(md-search-text="t.filtersService.model.distributorSearchText" md-items="distributor in t.filtersService.model.distributors" md-item-text="distributor.name" placeholder="by Name" md-selected-item-change="t.chipsService.addAutocompleteChip(distributor.name, 'distributorSearchText')")
+        label CBBD Contact
+        md-autocomplete(md-search-text="t.filtersService.model.distributorSearchText" md-items="distributor in t.filtersService.model.distributors" md-item-text="distributor.name" placeholder="by Name" md-selected-item-change="t.chipsService.addAutocompleteChip(distributor.name, 'distributorSearchText')")
     div(column='12' class='apply-filters' ng-if="t.filtersService.model.show")
       button(value='Apply Filters' type="button" class="btn-action" ng-disabled="t.chipsService.model.length <= 0") Apply Filters
+      .reset-filters
+        a(ng-click="")
+        span.reset-icon
+        span.accent.accent-blue Reset
 
 .action-buttons
   button.btn-action(ng-disabled="t.selected < 1") Copy to Target List
@@ -206,9 +215,9 @@ v-accordion.styled-list(multiple="" id="opportunities" control="t.accordion" one
               div(row)
                 div(column='12') {{670 | number }} <span class="percentage">7.6</span>%
             div(column='2')
-              label Tolinx Submission Code
+              label Distributor
               div(row)
-                div(column='12') 101745103
+                div(column='12') Columbia
             div(column='2')
               a(href="#").details-link.accent Full Details
         .title-row(row)

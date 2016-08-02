@@ -185,6 +185,14 @@
     }
   }
 
+  &.low-small {
+
+    &:before {
+      background-image: url('../assets/img/icons/impact-low-small.svg');
+    }
+  }
+
+
   &.medium {
 
     &:before {
@@ -192,10 +200,24 @@
     }
   }
 
+  &.medium-small {
+
+    &:before {
+      background-image: url('../assets/img/icons/impact-medium-small.svg');
+    }
+  }
+
   &.high {
 
     &:before {
       background-image: url('../assets/img/icons/impact-high.svg');
+    }
+  }
+
+  &.high-small {
+
+    &:before {
+      background-image: url('../assets/img/icons/impact-high-small.svg');
     }
   }
 }
