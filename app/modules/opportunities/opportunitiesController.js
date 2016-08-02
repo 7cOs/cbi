@@ -10,25 +10,6 @@ module.exports =
     vm.userService = userService;
     vm.opportunitiesService = opportunitiesService;
 
-    // Data Init
-    userService.getTargetLists().then(function(data) {
-      console.log(data);
-    });
-
-    userService.getPerformanceDepletion().then(function(data) {
-      console.log(data);
-    });
-
-    // get saved filters
-    userService.getOpportunityFilters('A1B2').then(function(response) {
-      userService.model.opportunityFilters = response.filters;
-    });
-
-    // Get opportunities and products data
-    opportunitiesService.getOpportunities().then(function(data) {
-      opportunitiesService.model.opportunities = data;
-    });
-
     // This needs to be replaced when we get live data
     // Get opportunities and products data
     vm.opportunities = opportunitiesService.get('opportunities');
@@ -63,6 +44,8 @@ module.exports =
 
     // Broadcast current page name for other scopes
     $rootScope.$broadcast('page:loaded', $state.current.name);
+
+    init();
 
     // ///////////////////////////////////////////////////////// Public Methods
     function accountQuerySearch(searchText) {
@@ -169,6 +152,27 @@ module.exports =
           if ((angular.lowercase('' + data[properties[i]])).indexOf(lowercaseQuery) === 0) return (angular.lowercase('' + data[properties[i]])).indexOf(lowercaseQuery) === 0;
         }
       };
+    }
+
+    function init() {
+      // Data Init
+      userService.getTargetLists().then(function(data) {
+        console.log(data);
+      });
+
+      userService.getPerformanceDepletion().then(function(data) {
+        console.log(data);
+      });
+
+      // get saved filters
+      userService.getOpportunityFilters('A1B2').then(function(response) {
+        userService.model.opportunityFilters = response.filters;
+      });
+
+      // Get opportunities and products data
+      opportunitiesService.getOpportunities().then(function(data) {
+        opportunitiesService.model.opportunities = data;
+      });
     }
 
     /* function parseFilterObj() {
