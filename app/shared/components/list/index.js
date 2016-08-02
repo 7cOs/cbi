@@ -64,7 +64,7 @@ function ListController($scope, $state, opportunitiesService) {
 
   // Check if all items are selected
   function isChecked() {
-    return vm.selected.length === vm.opportunitiesService.model.opportunities.length;
+    return vm.selected.length === vm.opportunities.length;
   };
 
   // Select or deselect all list items
@@ -74,7 +74,7 @@ function ListController($scope, $state, opportunitiesService) {
     } else if (vm.selected.length === 0 || vm.selected.length > 0) {
       vm.selected = vm.opportunities.slice(0);
     }
-  }
+  };
 
   // Select or deselect individual list item
   function toggle(item, list) {

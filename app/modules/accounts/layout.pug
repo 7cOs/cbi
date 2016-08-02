@@ -23,9 +23,11 @@
 
 .chips(ng-if="a.chipsService.model.length")
   label Active Filters
+  span
+    a(ng-click="a.chipsService.applyFilters()") Save Filterset
   md-chips(ng-model="a.chipsService.model" name="Active Filters" md-on-remove="a.chipsService.removeFromFilterService($chip)")
     input(disabled="true")
-    md-chip-template
+    md-chip-template(custom-chip="")
       div {{$chip.name}}
 
 .filters.top(column='12')
@@ -84,7 +86,7 @@
         md-item-template
           div(md-highlight-text="a.filtersService.model.distributorSearchText" md-highlight-flags="^i") {{distributor.name}}
     div(column='12' class='apply-filters')
-      button(value='Apply Filters' type="button" class="btn-action" ng-disabled="a.chipsService.model.length <= 0") Apply Filters
+      button(value='Apply Filters' type="button" class="btn-action" ng-disabled="a.chipsService.model.length <= 0" ng-click="a.chipsService.applyFilters()") Apply Filters
 
 div(row)
   div(column='12')

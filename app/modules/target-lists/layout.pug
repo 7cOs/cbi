@@ -31,9 +31,11 @@
 
 .chips(ng-if="t.chipsService.model.length && t.filtersService.model.show")
   label Active Filters
+  span
+    a(ng-click="t.chipsService.applyFilters()") Save Filterset
   md-chips(ng-model="t.chipsService.model" name="Active Filters" md-on-remove="t.chipsService.removeFromFilterService($chip)")
     input(disabled="true")
-    md-chip-template
+    md-chip-template(custom-chip="")
       div {{$chip.name}}
 .filters(column='12' ng-class="{ 'no-filter': !t.filtersService.model.show}")
   div(row)
@@ -123,7 +125,7 @@
         label CBBD Contact
         md-autocomplete(md-search-text="t.filtersService.model.distributorSearchText" md-items="distributor in t.filtersService.model.distributors" md-item-text="distributor.name" placeholder="by Name" md-selected-item-change="t.chipsService.addAutocompleteChip(distributor.name, 'distributorSearchText')")
     div(column='12' class='apply-filters' ng-if="t.filtersService.model.show")
-      button(value='Apply Filters' type="button" class="btn-action" ng-disabled="t.chipsService.model.length <= 0") Apply Filters
+      button(value='Apply Filters' type="button" class="btn-action" ng-disabled="t.chipsService.model.length <= 0" ng-click="t.chipsService.applyFilters()") Apply Filters
       .reset-filters
         a(ng-click="")
         span.reset-icon

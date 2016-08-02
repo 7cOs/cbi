@@ -16,7 +16,6 @@ module.exports =
     vm.applyFilter = applyFilter;
     vm.brandQuerySearch = brandQuerySearch;
     vm.distributorQuerySearch = distributorQuerySearch;
-    vm.saveFilter = saveFilter;
 
     // Broadcast current page name for other scopes
     $rootScope.$broadcast('page:loaded', $state.current.name);
@@ -50,12 +49,6 @@ module.exports =
     function distributorQuerySearch(searchText) {
       var results = filtersService.model.distributors.filter(filterQuery(searchText, ['name', 'address', 'id']));
       return results;
-    }
-
-    function saveFilter() {
-      // web service
-      // var payload = parseFilterObj();
-      // userService.saveOpportunityFilter(payload);
     }
 
     // Private Methods
