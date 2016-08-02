@@ -55,3 +55,46 @@
 .accent-blue {
   color: $blue;
 }
+
+.predicted-impact {
+
+  ._md-label {
+
+    span {
+      position: absolute;
+      top: 1px;
+    }
+
+    .impact {
+      position: absolute;
+      right: -50px;
+      top: -5px;
+    }
+  }
+}
+
+.larger-margin {
+  margin-bottom: 2em;
+}
+
+
+.reset-filters {
+  float: right;
+}
+
+.reset-icon {
+
+  &:before {
+    background-position: 0 0;
+    background-repeat: no-repeat;
+    background-size: 10px;
+    content: '';
+    display: block;
+    height: 26px;
+    left: -18px;
+    top: 27px;
+    position: relative;
+    width: 10px;
+    background-image: url('../assets/img/icons/reset-arrow.svg');
+  }
+}

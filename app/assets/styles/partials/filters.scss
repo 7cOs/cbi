@@ -86,6 +86,10 @@
     margin-bottom: 10px;
     margin-top: 10px;
 
+    &:focus {
+      outline: none;
+    }
+
     ._md-label {
       margin-left: 25px;
 
