@@ -19,7 +19,6 @@ module.exports = function(app) {
     clientSecret: app.get('config').oauth.clientSecret,
     scope: app.get('config').oauth.scope
   }, function(token, done) {
-    console.log(token);
     return done(null, token);
   });
 
