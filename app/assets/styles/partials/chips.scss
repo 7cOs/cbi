@@ -10,6 +10,10 @@
       ._md-chip-remove-container {
         left: 0;
       }
+
+      &._active {
+        background-color: $gray-12;
+      }
     }
 
     md-icon {
