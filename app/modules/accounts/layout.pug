@@ -110,7 +110,7 @@ div(row)
             th(colspan=2).top.dark
               p.accent.bold Depletions - FYTD
             th(colspan=2).top
-              p.accent Distribution (s) - L90
+              p.accent {{a.filtersService.model.selected.accountBrands === 'Velocity' ? 'Velocity' : 'Distribution (s) - L90'}}
           tr
             th
               p.accent &nbsp;
@@ -133,8 +133,10 @@ div(row)
             td.left.data-brand {{distribution.name}} s
             td(ng-class="{'negative': a.isNegative(distribution.measures.yearAgoGap)}").dark      {{distribution.measures.yearAgoGap | number }}
             td(ng-class="{'negative': a.isNegative(distribution.measures.yearAgoTrend) }").dark   {{distribution.measures.yearAgoTrend}}%
-            td(ng-class="{'negative': a.isNegative(distribution.measures.vsPlanNumber)}")         {{distribution.measures.vsPlanNumber | number }}
-            td(ng-class="{'negative': a.isNegative(distribution.measures.vsPlanPercent)}")        {{distribution.measures.vsPlanPercent}}%
+            td(ng-if="a.filtersService.model.selected.accountBrands === 'Velocity'" ng-class="{'negative': a.isNegative(distribution.measures.velocityNumber)}") {{distribution.measures.velocityNumber | number }}
+            td(ng-if="a.filtersService.model.selected.accountBrands !== 'Velocity'" ng-class="{'negative': a.isNegative(distribution.measures.vsPlanNumber)}") {{distribution.measures.vsPlanNumber | number }}
+            td(ng-if="a.filtersService.model.selected.accountBrands === 'Velocity'" ng-class="{'negative': a.isNegative(distribution.measures.velocityPercent)}") {{distribution.measures.velocityPercent}}%
+            td(ng-if="a.filtersService.model.selected.accountBrands !== 'Velocity'" ng-class="{'negative': a.isNegative(distribution.measures.vsPlanPercent)}") {{distribution.measures.vsPlanPercent}}%
   div.scorecard-chart(column='7')
     .widget-header
       .dropdown-filter
