@@ -12,7 +12,7 @@ var basic = auth.basic({
   file: __dirname + '/server/_config/users.htpasswd'
 });
 
-app.use(auth.connect(basic));
+// app.use(auth.connect(basic));
 
 // EXPRESS SETTINGS
 require(__dirname + '/server/_config/express')(app);
