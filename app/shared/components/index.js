@@ -8,5 +8,6 @@ module.exports =
     require('./tabs').name,
     require('./typeahead').name,
     require('./dropdown').name,
-    require('./list').name
+    require('./list').name,
+    require('./target').name
   ]);
