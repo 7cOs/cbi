@@ -1,3 +1,5 @@
+target
+
 .hero
   div(row)
     div(column="2")
@@ -8,72 +10,6 @@
         button.btn-action Collaborate
         button.btn-action Download
         button.btn-action Manage
-
-  div(row)
-    div(column="12")
-      h1.hero-title Walmart East Bay
-      label.accent.bold.accent-blue You are the owner
-
-  div(row)
-    div(column="5")
-      p Walmart regional list for general 6-pack sales. Primarily for Jerry B, but if you have more ideas, please add them and either ping Jerry or Michelle.
-
-    div(column="6 +1").hero-info
-      div
-        span.bold {{273400 | number }}<span class="unit">CE</span>
-        label.accent.accent-blue Depletions<br />Since Closed
-      div
-        span {{841 | number }}
-        label.accent.accent-blue Closed<br />Opportunities
-      div
-        span {{2251 | number }}
-        label.accent.accent-blue Total<br />Opportunities
-
-section
-  div.target-lists
-    md-tabs(md-dynamic-height='' md-border-bottom)
-      md-tab(label='My Target List')
-        md-content.md-padding
-          div(row).target-list-count-container
-            h5.accent.right Displaying Recent (3 of 3)
-            div(column="4 +6").target-list-count
-              h5(column="6").accent.completed.right  closed
-              h5(column="6").accent.right opportunities
-          div(row).target-list
-            ul
-              li(ng-repeat="list in l.namedFilters")
-                div(column="8")
-                  h3 {{list.name}}
-                  p.accent {{list.creator}}
-                  p.accent &#9746; {{list.members.length}} members
-                  p.accent {{list.created}}
-                div(column="4")
-                  h4(column="6").completed.right {{list.closedOpportunities | number}}
-                  h4(column="6").right {{list.opportunities | number}}
-                md-progress-linear(md-mode="determinate" ng-value="l.ratio(list.closedOpportunities, list.opportunities)")
-          div(row)
-            p.accent.action-item #[a(href="#") View All &#9654;]
-      md-tab(label='Shared with Me')
-        md-content.md-padding
-          div(row).target-list-count-container
-            h5.accent.right Displaying Recent (3 of 3)
-            div(column="4 +6").target-list-count
-              h5(column="6").accent.completed.right  closed
-              h5(column="6").accent.right opportunities
-          div(row).target-list
-            ul
-              li(ng-repeat="list in l.sharedFilters")
-                div(column="8")
-                  h3 {{list.name}}
-                  p.accent {{list.creator}}
-                  p.accent &#9746; {{list.members.length}} members
-                  p.accent {{list.created}}
-                div(column="4")
-                  h4(column="6").completed.right {{list.closedOpportunities | number}}
-                  h4(column="6").right {{list.opportunities | number}}
-                md-progress-linear(md-mode="determinate" value="{{list.closedOpportunities / list.opportunities * 100}}")
-          div(row)
-            p.accent.action-item #[a(href="#") View All &#9654;]
 
 .chips(ng-if="t.chipsService.model.length && t.filtersService.model.show")
   label Active Filters
