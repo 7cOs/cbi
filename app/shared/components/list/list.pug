@@ -41,12 +41,18 @@ v-accordion.styled-list(multiple="" id="opportunities" control="list.accordion" 
           | Segmentation
           span(ng-class="{ 'chevron-down-small' : list.segmentationChevron, 'chevron-up-small' : !list.segmentationChevron}").chevron-down-small
   v-pane.list-item(row ng-repeat="opportunity in list.opportunities | orderBy:list.sortProperty:list.reverse" expanded="opportunity.isExpanded" ng-click="")
+    .action-overlay(ng-class="{'active': opportunity.toggled, 'no-class': !opportunity.toggled}" ng-if="list.pageName === 'target-lists'")
+      div.checkbox-wrapper
+          md-checkbox(aria-label="Action Item Select" ng-checked="true")
+      div.overlay-wrapper
+        p Successfully sent to 3 people
+      div(ng-click="list.actionOverlay(opportunity)").hide-wrapper.hide-icon-wrapper.hide-row
     .shadow-wrap.bottom
       div.checkbox-wrapper(ng-click="list.toggle(opportunity, list.selected)")
         md-checkbox(aria-label="Select Item" ng-checked="list.exists(opportunity, list.selected)")
       div.hide-wrapper.hide-icon-wrapper.hide-row(ng-if="list.pageName !== 'target-lists'")
       div.more-wrapper(ng-if="list.pageName === 'target-lists'")
-        md-button.md-icon-button(aria-label="More")
+        md-button.md-icon-button(aria-label="More" ng-click="list.actionOverlay(opportunity)")
           md-icon(md-svg-icon="../assets/img/icons/more.svg")
       v-pane-header.checkbox-sibling(column='12')
         div.cell-parent

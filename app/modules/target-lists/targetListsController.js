@@ -21,5 +21,4 @@ module.exports =
         filters: ['Filter 1', 'Filter 2']
       }]
     };
-
   };

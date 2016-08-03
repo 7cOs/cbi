@@ -11,6 +11,7 @@ function ListController($scope, $state, opportunitiesService) {
   vm.isChecked = isChecked;
   vm.toggleAll = toggleAll;
   vm.sortBy = sortBy;
+  vm.actionOverlay = actionOverlay;
 
   // Services
   vm.opportunitiesService = opportunitiesService;
@@ -42,6 +43,11 @@ function ListController($scope, $state, opportunitiesService) {
   vm.expandedOpportunities = [];
 
   // ///////////////////////////////////////////////////////// Public Methods
+
+  // Overlay Controls
+  function actionOverlay(opportunity) {
+    opportunity.toggled = !opportunity.toggled;
+  };
 
   // Check if list item exists and is selected
   function exists(item, list) {

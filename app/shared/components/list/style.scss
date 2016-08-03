@@ -7,6 +7,7 @@
     border-top: 1px solid $gray-3;
     font-size: 1.1em;
     transition: background 300ms ease;
+    position: relative;
 
     &:hover,
     &:hover .more-wrapper,
