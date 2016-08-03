@@ -29,11 +29,13 @@
         span {{2251 | number }}
         label.accent.accent-blue Total<br />Opportunities
 
-.chips(ng-if="t.chipsService.model.length")
+.chips(ng-if="t.chipsService.model.length && t.filtersService.model.show")
   label Active Filters
+  span
+    a(ng-click="t.chipsService.applyFilters()") Save Filterset
   md-chips(ng-model="t.chipsService.model" name="Active Filters" md-on-remove="t.chipsService.removeFromFilterService($chip)")
     input(disabled="true")
-    md-chip-template
+    md-chip-template(custom-chip="")
       div {{$chip.name}}
 .filters(column='12' ng-class="{ 'no-filter': !t.filtersService.model.show}")
   div(row)
@@ -123,143 +125,10 @@
         label CBBD Contact
         md-autocomplete(md-search-text="t.filtersService.model.distributorSearchText" md-items="distributor in t.filtersService.model.distributors" md-item-text="distributor.name" placeholder="by Name" md-selected-item-change="t.chipsService.addAutocompleteChip(distributor.name, 'distributorSearchText')")
     div(column='12' class='apply-filters' ng-if="t.filtersService.model.show")
-      button(value='Apply Filters' type="button" class="btn-action" ng-disabled="t.chipsService.model.length <= 0") Apply Filters
+      button(value='Apply Filters' type="button" class="btn-action" ng-disabled="t.chipsService.model.length <= 0" ng-click="t.chipsService.applyFilters()") Apply Filters
       .reset-filters
         a(ng-click="")
         span.reset-icon
         span.accent.accent-blue Reset
 
-.action-buttons
-  button.btn-action(ng-disabled="t.selected < 1") Copy to Target List
-  button.btn-action(ng-disabled="t.selected < 1") Download
-  button.btn-action(ng-disabled="t.selected < 1") Remove
-
-button.icon.select-all(ng-click="t.toggleAll()")
-  span(ng-if='t.isChecked()') Un-
-  | Select All
-button.icon.expand-all(ng-click="t.accordion.expandAll()" ng-disabled="t.expandedOpportunities.length === t.opportunities.length") Expand All
-button.icon.collapse-all(ng-click="t.accordion.collapseAll()" ng-disabled="t.expandedOpportunities.length < 2") Collapse All
-
-v-accordion.styled-list(multiple="" id="opportunities" control="t.accordion" onexpand="t.expandCallback(item)" oncollapse="t.collapseCallback(item)" column='12')
-  div.header-row(row)
-    div.checkbox-wrapper.placeholder(ng-click="t.toggle(opportunity, t.selected)")
-    div.more-wrapper
-    div.checkbox-sibling(column='12')
-      div(column='3')
-        label.bold
-          | Store / Number
-          span.chevron-down-small
-      div(column='4')
-        label.bold
-          | Address
-      div(column='2')
-        label.boldcell-center
-          | Opportunities
-          span.chevron-down-small
-      div(column='1')
-        label.bold.cell-center
-          | Depletions CYTD
-          span.chevron-down-small
-      div(column='1')
-        label.bold.cell-center
-          | Trend vs Ya
-      div(column='1')
-        label.bold.cell-center
-          | Segmentation
-          span.chevron-down-small
-  v-pane.list-item(row ng-repeat="opportunity in t.opportunities" expanded="opportunity.isExpanded")
-    .shadow-wrap.bottom
-      div.checkbox-wrapper(ng-click="t.toggle(opportunity, t.selected)")
-        md-checkbox(aria-label="Select Item" ng-checked="t.exists(opportunity, t.selected)")
-      div.more-wrapper
-        md-button.md-icon-button(aria-label="More")
-          md-icon(md-svg-icon="../assets/img/icons/more.svg")
-      v-pane-header.checkbox-sibling(column='12')
-        div.cell-parent
-          div.pad-cell(column='3') {{opportunity.store.name}} <span class="supporting-text">\#{{opportunity.store.id}}</span>
-          div.address(column='4') {{opportunity.store.address}}
-          div(column='2') {{opportunity.opCount | number }} <span class="supporting-text">({{opportunity.impact}} high)</span>
-          div(column='1').cell-center {{opportunity.depletionsCYTD | number }}
-          div(column='1' class="value" ng-class="{'positive' : opportunity.positiveValue, 'negative' : opportunity.negativeValue}") <span ng-if="opportunity.positiveValue">+</span>{{opportunity.depletionTrendVsYA}}<span>%</span>
-          div(column='1').cell-center {{opportunity.store.segmentation}}
-      v-pane-content(column='12' class="products" ng-class="{'open' : open}")
-        .shadow-wrap.top
-          .hero-row(row)
-            div(column='3').pad-cell.brand-icons
-              div
-                img(src='assets/img/brands/brand-lg-coronaextra.svg')
-                img(src='assets/img/brands/brand-lg-coronalite.svg')
-                img(src='assets/img/brands/brand-lg-modelo.svg')
-                img(src='assets/img/brands/brand-lg-modelolite.svg')
-              div.small-icons
-                img(src='assets/img/brands/brand-sm-ballastpoint.svg')
-                img(src='assets/img/brands/brand-sm-modelochelada.svg')
-                img(src='assets/img/brands/brand-sm-modelolite.svg')
-                img(src='assets/img/brands/brand-sm-negramodelo.svg')
-                img(src='assets/img/brands/brand-sm-pacifico.svg')
-                img(src='assets/img/brands/brand-sm-pacificolite.svg')
-                img(src='assets/img/brands/brand-sm-tecate.svg')
-            div(column='3').no-pad
-              label.bold Distribution L90
-              div(row)
-                div(column='4')
-                  label Simple
-                  div(row)
-                    div(column='12') {{4 | number }} <span class="percentage">2</span>%
-                div(column='8')
-                  label Effective
-                  div(row)
-                    div(column='12') {{12 | number }} <span class="percentage">5.2</span>%
-            div(column='2')
-              label Velocity
-              div(row)
-                div(column='12') {{670 | number }} <span class="percentage">7.6</span>%
-            div(column='2')
-              label Distributor
-              div(row)
-                div(column='12') Columbia
-            div(column='2')
-              a(href="#").details-link.accent Full Details
-        .title-row(row)
-          div(column='1') &nbsp;
-          div(column='2')
-            label.bold Product
-          div(column='2')
-            label.bold Type
-          div(column='4')
-            label.bold Rationale
-          div(column='1')
-            label.bold Status
-          div(column='1')
-            label.bold Impact
-          div(column='1')
-            label.bold Hide
-        v-accordion(multiple="" class="nested-accordion")
-          v-pane.styled-list(ng-repeat="product in t.products")
-            v-pane-header
-              div.cell-parent.sub-item(row)
-                .regional-status(ng-if="product.regionalStatus")
-                  div(class="{{product.regionalStatus}}")
-                div(column='1').sub-item-select
-                  md-checkbox(aria-label="Select Item" ng-click="$event.stopPropagation();")
-                div(column='2').pad-cell
-                  span.product-title {{product.product}} <br>
-                  | {{product.detail}}
-                div.type(column='2') {{product.type}}
-                div(column='4') {{product.rationale}}
-                div(column='1') {{product.status}}
-                div(column='1' class="impact {{product.predictedImpact}}")
-                div(column='1').hide-row
-            .shadow-wrap.top
-              v-pane-content
-                div(row)
-                  div(column="1") &nbsp;
-                  div(column="4").pad-cell
-                    label Last Depletion
-                    span 68 days ago
-                  div(column="2")
-                    label Depletions CYTD
-                    span {{6256 | number }}
-                  div(column="2")
-                    label Trend vs Ya
-                    span 10%
+list

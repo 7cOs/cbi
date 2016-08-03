@@ -1,8 +1,9 @@
-//- NOTE: This math will change once we have actual product lists
-h3 Top opportunities <a class="accent" ui-sref="opportunities">See all opportunities</a>
+h3(ng-if="list.pageName === 'accounts'") Top opportunities <a class="accent" ui-sref="opportunities">See all opportunities</a>
+h3(ng-if="list.pageName === 'opportunities'") <strong>{{list.products.length * list.opportunities.length}} opportunities</strong> across {{list.opportunities.length}} stores
 
 .action-buttons
-  button.btn-action(ng-disabled="list.selected < 1") Add to List
+  button.btn-action(ng-disabled="list.selected < 1" ng-if="list.pageName !== 'target-lists'") Add to Target List
+  button.btn-action(ng-disabled="list.selected < 1" ng-if="list.pageName === 'target-lists'") Copy to Target List
   button.btn-action(ng-disabled="list.selected < 1") Download
   button.btn-action(ng-disabled="list.selected < 1") Send To
 
@@ -14,24 +15,39 @@ button.icon.collapse-all(ng-click="list.accordion.collapseAll()" ng-disabled="li
 
 v-accordion.styled-list(multiple="" id="opportunities" control="list.accordion" onexpand="list.expandCallback(item)" oncollapse="list.collapseCallback(item)" column='12')
   div.header-row(row)
-    div.checkbox-wrapper.placeholder(ng-click="list.toggle(opportunity, a.selected)")
-    div.checkbox-sibling
+    div.checkbox-wrapper.placeholder(ng-click="list.toggle(opportunity, list.selected)")
+    div.hide-wrapper(ng-if="list.pageName !== 'target-lists'")
+      label Hide
+    div.more-wrapper(ng-if="list.pageName === 'target-lists'")
+    div.checkbox-sibling(column='12')
       div(column='3')
-        label.bold Store / Number
+        label(ng-click="list.sortBy('store.name')" ng-class="{ 'header-bold' : list.sortProperty === 'store.name'}")
+          | Store / Number
+          span(ng-class="{ 'chevron-down-small' : list.storeChevron, 'chevron-up-small' : !list.storeChevron}").chevron-down-small
       div(column='4')
-        label.bold Address
+        label Address
       div(column='2')
-        label.bold Opportunities
+        label(ng-click="list.sortBy('opCount')" ng-class="{ 'header-bold' : list.sortProperty === 'opCount'}")
+          | Opportunities
+          span(ng-class="{ 'chevron-down-small' : !list.opportunitiesChevron, 'chevron-up-small' : list.opportunitiesChevron}").chevron-down-small
       div(column='1')
-        label.bold Depletions CYTD
+        label(ng-click="list.sortBy('depletionsCYTD')" ng-class="{ 'header-bold' : list.sortProperty === 'depletionsCYTD'}")
+          | Depletions
+          span(ng-class="{ 'chevron-down-small' : !list.depletionsChevron, 'chevron-up-small' : list.depletionsChevron}").chevron-down-small
       div(column='1')
-        label.bold Trend vs Ya
+        label Trend vs Ya
       div(column='1')
-        label.bold Segmentation
-  v-pane.list-item(row ng-repeat="opportunity in list.opportunities" expanded="opportunity.isExpanded" ng-click="")
+        label(ng-click="list.sortBy('segmentation')" ng-class="{ 'header-bold' : list.sortProperty === 'segmentation'}")
+          | Segmentation
+          span(ng-class="{ 'chevron-down-small' : list.segmentationChevron, 'chevron-up-small' : !list.segmentationChevron}").chevron-down-small
+  v-pane.list-item(row ng-repeat="opportunity in list.opportunities | orderBy:list.sortProperty:list.reverse" expanded="opportunity.isExpanded" ng-click="")
     .shadow-wrap.bottom
       div.checkbox-wrapper(ng-click="list.toggle(opportunity, list.selected)")
         md-checkbox(aria-label="Select Item" ng-checked="list.exists(opportunity, list.selected)")
+      div.hide-wrapper.hide-icon-wrapper.hide-row(ng-if="list.pageName !== 'target-lists'")
+      div.more-wrapper(ng-if="list.pageName === 'target-lists'")
+        md-button.md-icon-button(aria-label="More")
+          md-icon(md-svg-icon="../assets/img/icons/more.svg")
       v-pane-header.checkbox-sibling(column='12')
         div.cell-parent
           div.pad-cell(column='3') {{opportunity.store.name}} <span class="supporting-text">\#{{opportunity.store.id}}</span>
