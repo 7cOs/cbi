@@ -6,29 +6,20 @@ module.exports = function(config) {
     // base path that will be used to resolve all patterns (eg. files, exclude)
     basePath: '',
 
-
     // frameworks to use
     // available frameworks: https://npmjs.org/browse/keyword/karma-adapter
     frameworks: ['browserify', 'jasmine'],
-
 
     // list of files / patterns to load in the browser
     files: [
       'app/main.js',
       'app/modules/**/*.spec.js',
       'app/shared/**/**/*.spec.js'
-      // 'app/shared/filters/timeAgo.spec.js'
-      //{pattern:'app/modules/**/*.js', watched: true, served: false, included: false},
-      // 'app/modules/index.js',
-      
-      // 'app/shared/**/**/*.spec.js'
     ],
-
 
     // list of files to exclude
     exclude: [
     ],
-
 
     // preprocess matching files before serving them to the browser
     // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
@@ -82,4 +73,3 @@ module.exports = function(config) {
     singleRun: false
   })
 }
-

@@ -59,4 +59,18 @@ describe('Unit: opportunitiesController', function() {
     expect(ctrl.opportunitiesService.createOpportunity.calls.count()).toEqual(1);
   });
 
+  /* it('[expandCallback], it should add an item from the vm.expandedOpportunities array', function() {
+    // check init
+    expect(ctrl.expandedOpportunities).not.toBeUndefined();
+    expect(ctrl.expandedOpportunities.length).toEqual(0);
+
+    // run method
+    ctrl.expandCallback()
+  });
+
+  it('[collapseCallback], it should remove an item from the vm.expandedOpportunities array', function() {
+    expect(ctrl.expandedOpportunities).not.toBeUndefined();
+    expect(ctrl.expandedOpportunities.length).toEqual(1);
+  });*/
+
 });
