@@ -10,8 +10,6 @@ function ListController($scope, $state, opportunitiesService) {
   vm.exists = exists;
   vm.isChecked = isChecked;
   vm.toggleAll = toggleAll;
-  vm.expandCallback = expandCallback;
-  vm.collapseCallback = collapseCallback;
   vm.sortBy = sortBy;
 
   // Services
@@ -44,18 +42,6 @@ function ListController($scope, $state, opportunitiesService) {
   vm.expandedOpportunities = [];
 
   // ///////////////////////////////////////////////////////// Public Methods
-  // Add item to array of currently expanded list items
-  function expandCallback(item) {
-    vm.expandedOpportunities.push(item);
-  };
-
-  // Remove item from array of currently expanded list items
-  function collapseCallback(item) {
-    var index = vm.expandedOpportunities.indexOf(item);
-    if (index > -1) {
-      vm.expandedOpportunities.splice(index, 1);
-    };
-  };
 
   // Check if list item exists and is selected
   function exists(item, list) {
