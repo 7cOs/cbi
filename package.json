@@ -1,6 +1,9 @@
 {
   "name": "andromeda",
   "version": "0.0.3",
+  "engines": {
+    "node": "4.4.7"
+  },
   "scripts": {
     "postinstall": "gulp compile --release",
     "start": "node server",
@@ -31,6 +34,7 @@
     "nvd3": "^1.8.4",
     "passport": "0.3.2",
     "passport-local": "1.0.0",
+    "passport-saml": "^0.15.0",
     "passport-two-legged": ">=1.1.6",
     "redis": "2.6.0-1",
     "redis-streams": "^1.1.0",

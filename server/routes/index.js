@@ -13,16 +13,20 @@ module.exports = function(app) {
   });
 
   app.get('/auth/login',
-    passport.authenticate('two-legged'),
+    passport.authenticate('saml'),
     function(req, res) {
       // Successful authentication, redirect home.
       res.redirect('/opportunities');
     });
-  app.get('*', passport.authenticate('two-legged'), function (req, res) {
+  app.post('/login/callback',
+    passport.authenticate('saml', {failureRedirect: 'http://deloitte.com'}),
+    function(req, res) {
+      res.redirect('/opportunities');
+    });
+  app.get('*', passport.authenticate('saml'), function (req, res) {
     res.render('main', {
       config: app.get('config')
     });
   });
 
 };
-
