@@ -32,46 +32,12 @@ describe('Unit: opportunitiesController', function() {
     expect(typeof (ctrl.opportunitiesService)).toEqual('object');
   });
 
-  it('should have controller variables defined', function() {
-    expect(ctrl.depletionsChevron).not.toBeUndefined();
-    expect(typeof (ctrl.depletionsChevron)).toEqual('boolean');
-
-    expect(ctrl.expandedOpportunities).not.toBeUndefined();
-    expect(typeof (ctrl.expandedOpportunities)).toEqual('object');
-
-    expect(ctrl.opportunitiesChevron).not.toBeUndefined();
-    expect(typeof (ctrl.opportunitiesChevron)).toEqual('boolean');
-
-    expect(ctrl.reverse).not.toBeUndefined();
-    expect(typeof (ctrl.reverse)).toEqual('boolean');
-
-    expect(ctrl.segmentationChevron).not.toBeUndefined();
-    expect(typeof (ctrl.segmentationChevron)).toEqual('boolean');
-
-    expect(ctrl.selected).not.toBeUndefined();
-    expect(typeof (ctrl.selected)).toEqual('object');
-
-    expect(ctrl.sortProperty).not.toBeUndefined();
-    expect(typeof (ctrl.sortProperty)).toEqual('string');
-
-    expect(ctrl.storeChevron).not.toBeUndefined();
-    expect(typeof (ctrl.storeChevron)).toEqual('boolean');
-  });
-
   it('should have controller methods accessible', function() {
     expect(ctrl.accountQuerySearch).not.toBeUndefined();
     expect(ctrl.addOpportunity).not.toBeUndefined();
     expect(ctrl.applyFilter).not.toBeUndefined();
     expect(ctrl.brandQuerySearch).not.toBeUndefined();
-    expect(ctrl.collapseCallback).not.toBeUndefined();
     expect(ctrl.distributorQuerySearch).not.toBeUndefined();
-    expect(ctrl.exists).not.toBeUndefined();
-    expect(ctrl.expandCallback).not.toBeUndefined();
-    expect(ctrl.isChecked).not.toBeUndefined();
-    expect(ctrl.saveFilter).not.toBeUndefined();
-    expect(ctrl.sortBy).not.toBeUndefined();
-    expect(ctrl.toggle).not.toBeUndefined();
-    expect(ctrl.toggleAll).not.toBeUndefined();
   });
 
   /* need to mock services before we test these methods
