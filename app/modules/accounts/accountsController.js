@@ -26,6 +26,7 @@ module.exports =
     vm.selectedIndex = 0;
     vm.nextTab = nextTab;
     vm.prevTab = prevTab;
+    vm.newTabContent = '';
 
     // Broadcast current page name for other scopes
     $rootScope.$broadcast('page:loaded', $state.current.name);
@@ -75,9 +76,9 @@ module.exports =
       vm.selectedIndex = vm.selectedIndex - 1;
     }
 
-    function addTab(title, view) {
-      view = view || title + ' Content View';
-      vm.tabs.push({title: title, content: view, disabled: false});
+    function addTab(content) {
+      vm.newTabContent = content;
+      vm.tabs.push({content: ''});
     }
 
     function removeTab(tab) {

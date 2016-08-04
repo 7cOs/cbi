@@ -94,16 +94,6 @@ div(row)
       label Simple Pods: 7 (2%)
       label Effective Pods: 15 (5.2%)
 
-.add-tab
-  md-input-container
-    label(for="content") Tab Content
-    input(type="text" id="content" ng-model="tContent")
-  button(ng-click="a.addTab(tTitle, tContent); tContent = null;") Add Tab
-
-.move-tab
-  button(ng-click="a.prevTab()" ng-disabled="a.tabs.length < 1") Previous Tab
-  button(ng-click="a.nextTab()" ng-disabled="a.tabs.length === 0") Next Tab
-
 div(row)
   div.scorecard-table(column='5')
     .widget-header
@@ -143,7 +133,7 @@ div(row)
         md-tab(label="Tab")
           table(cellspacing="0" cellpadding="0")
             tbody
-              tr(ng-repeat="distribution in a.distributionData.performance" ng-click="a.nextTab()")
+              tr(ng-repeat="distribution in a.distributionData.performance" ng-click="a.addTab(distribution)")
                 td.left.data-brand {{distribution.name}}
                 td(ng-class="{'negative': a.isNegative(distribution.measures.yearAgoGap)}").dark      {{distribution.measures.yearAgoGap | number }}
                 td(ng-class="{'negative': a.isNegative(distribution.measures.yearAgoTrend) }").dark   {{distribution.measures.yearAgoTrend}}%
@@ -152,9 +142,11 @@ div(row)
                 td(ng-if="a.filtersService.model.selected.accountBrands === 'Velocity'" ng-class="{'negative': a.isNegative(distribution.measures.velocityPercent)}") {{distribution.measures.velocityPercent}}%
                 td(ng-if="a.filtersService.model.selected.accountBrands !== 'Velocity'" ng-class="{'negative': a.isNegative(distribution.measures.vsPlanPercent)}") {{distribution.measures.vsPlanPercent}}%
         md-tab(ng-repeat="tab in a.tabs" label="Tab")
-          div
-            p(ng-bind="tab.content")
-            button(ng-click="a.removeTab(tab)") Remove tab
+          .pad
+            h3 You chose {{a.newTabContent.name}}!
+            p
+              label {{a.newTabContent}}
+            button(ng-click="a.removeTab(tab)") Go back
   div.scorecard-chart(column='7')
     .widget-header
       .dropdown-filter
