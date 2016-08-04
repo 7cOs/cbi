@@ -22,7 +22,7 @@ module.exports = function(app) {
     });
   app.get('/auth/logout', function (req, res) {
     req.logout();
-    res.redirect('/');
+    res.redirect('http://deloitte.com');
   });
   app.post('/auth/callback',
     passport.authenticate('saml', {failureRedirect: 'http://deloitte.com'}),
@@ -32,7 +32,7 @@ module.exports = function(app) {
 
   //  Angular routes
   app.get('*', function (req, res) {
-    if (req.isAuthenticated()) {
+    if (req.isAuthenticated() || process.env.NODE_ENV === 'development') {
       res.render('main', {
         config: app.get('config')
       });

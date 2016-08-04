@@ -18,10 +18,12 @@ module.exports = function(app) {
     path: '/auth/callback',
     logoutUrl: '/auth/logout',
     issuer: 'passport-saml',
+    passReqToCallback: true,
     entryPoint: app.get('config').saml.entryPoint,
     cert: fs.readFileSync('./server/_config/passport/cbi-dev.crt', 'utf-8'),
     signatureAlgorithm: app.get('config').saml.signatureAlgorithm
-  }, function(profile, done) {
+  }, function(req, profile, done) {
+    console.log(req.body.SAMLResponse);
     return done(null, profile);
   });
 
