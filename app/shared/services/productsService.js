@@ -24,7 +24,7 @@ module.exports =
       .catch(getProductsFail);
 
       function getProductsSuccess(response) {
-        console.log('[productsService.getProducts] response: ', response);
+        // console.log('[productsService.getProducts] response: ', response);
         productsPromise.resolve(response.data);
       }
 
