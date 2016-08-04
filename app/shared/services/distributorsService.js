@@ -24,7 +24,6 @@ module.exports =
       .catch(getDistributorsFail);
 
       function getDistributorsSuccess(response) {
-        console.log('[distributorsService.getDistributors] response: ', response);
         distributorsPromise.resolve(response.data);
       }
 
