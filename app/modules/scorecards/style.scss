@@ -104,7 +104,8 @@
 
       &.selected,
       &.selected .dark,
-      &.selected .data-brand {
+      &.selected .data-brand,
+      &.selected .negative {
         background: $dark-blue-2;
         color: $white;
         transition: none;
@@ -117,6 +118,7 @@
 
       &.selected .dark {
         background: $dark-blue-3;
+        color: $white;
 
         &:hover {
           background: $dark-blue-3;
