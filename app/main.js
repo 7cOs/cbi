@@ -9,6 +9,7 @@ angular.module('andromeda', [
   require('v-accordion'),
   require('angular-nvd3'),
   require('./shared').name,
-  require('./modules').name
+  require('./modules').name,
+  require('angular-mocks/ngMock')
 ])
 .config(require('./config'));
