@@ -4,9 +4,7 @@ window.nv = require('nvd3');
 
 angular.module('andromeda', [
   require('angular-ui-router'),
-  // require('angular-mocks/ngMock'),
   require('angular-material'),
-  // require('angular-material/index').name,
   require('angular-animate'),
   require('v-accordion'),
   require('angular-nvd3'),
