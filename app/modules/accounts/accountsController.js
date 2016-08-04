@@ -37,6 +37,7 @@ module.exports =
     vm.brandWidgetTitleDefault = 'All Brands';
     vm.brandWidgetTitle = vm.brandWidgetTitleDefault;
     vm.selectOpen = false;
+    vm.brandDrillDown = null;
 
     // Broadcast current page name for other scopes
     $rootScope.$broadcast('page:loaded', $state.current.name);
@@ -97,10 +98,12 @@ module.exports =
       vm.brandWidgetTitle = vm.brandWidgetTitleDefault;
       vm.tabs.splice(lastItem, 1);
       vm.idSelected = null;
+      vm.brandDrillDown = null;
     }
 
     function setSelected(idSelected) {
       vm.idSelected = idSelected;
+      vm.brandDrillDown = vm.idSelected;
     }
 
     function isNegative(salesData) {
