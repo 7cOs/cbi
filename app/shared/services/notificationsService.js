@@ -20,16 +20,14 @@ module.exports =
      */
     function markNotificationAsRead(notificationId) {
       var notificationsPromise = $q.defer(),
-          url = apiHelperService.formatQueryString();
+          url = apiHelperService.request('/api/notifications/' + notificationId),
+          data = {'read': true};
 
-      $http.patch(url, {'read': true}, {
-        headers: {}
-      })
-      .then(markNotificationAsReadSuccess)
-      .catch(markNotificationAsReadFail);
+      $http.patch(url, data)
+        .then(markNotificationAsReadSuccess)
+        .catch(markNotificationAsReadFail);
 
       function markNotificationAsReadSuccess(response) {
-        console.log('[notificationsService.markNotificationAsRead] response: ', response);
         // notificationsPromise.resolve(response.data);
         // uncomment above and remove below when services are ready
         notificationsPromise.resolve(tempData.notificationPatchResponse);
