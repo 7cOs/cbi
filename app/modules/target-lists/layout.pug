@@ -11,6 +11,26 @@ target
         button.btn-action Download
         button.btn-action Manage
 
+  div(row)
+    div(column="12")
+      h1.hero-title Walmart East Bay
+      label.accent.bold.accent-blue You are the owner
+
+  div(row)
+    div(column="5")
+      p Walmart regional list for general 6-pack sales. Primarily for Jerry B, but if you have more ideas, please add them and either ping Jerry or Michelle.
+
+    div(column="6 +1").hero-info
+      div
+        span.bold {{273400 | number }}<span class="unit">CE</span>
+        label.accent.accent-blue Depletions<br />Since Closed
+      div
+        span {{841 | number }}
+        label.accent.accent-blue Closed<br />Opportunities
+      div
+        span {{2251 | number }}
+        label.accent.accent-blue Total<br />Opportunities
+
 .chips(ng-if="t.chipsService.model.length && t.filtersService.model.show")
   label Active Filters
   span
