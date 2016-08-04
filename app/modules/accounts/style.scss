@@ -178,6 +178,14 @@
     position: relative;
     z-index: 2;
   }
+
+  md-tabs-wrapper {
+    display: none;
+  }
+
+  md-tabs-content-wrapper {
+    top: 0;
+  }
 }
 
 .scorecard-chart {

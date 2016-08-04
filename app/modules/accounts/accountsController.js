@@ -15,8 +15,17 @@ module.exports =
     // Expose public methods
     vm.isNegative = isNegative;
     vm.isPositive = isPositive;
-
+    vm.addTab = addTab;
+    vm.removeTab = removeTab;
     vm.overviewOpen = false;
+
+    // Tab content
+    vm.tabs = [];
+    vm.selected = null;
+    vm.previous = null;
+    vm.selectedIndex = 0;
+    vm.nextTab = nextTab;
+    vm.prevTab = prevTab;
 
     // Broadcast current page name for other scopes
     $rootScope.$broadcast('page:loaded', $state.current.name);
@@ -57,6 +66,24 @@ module.exports =
     };
 
     // Public methods
+
+    function nextTab() {
+      vm.selectedIndex = vm.selectedIndex + 1;
+    }
+
+    function prevTab() {
+      vm.selectedIndex = vm.selectedIndex - 1;
+    }
+
+    function addTab(title, view) {
+      view = view || title + ' Content View';
+      vm.tabs.push({title: title, content: view, disabled: false});
+    }
+
+    function removeTab(tab) {
+      var index = vm.tabs.indexOf(tab);
+      vm.tabs.splice(index, 1);
+    }
 
     function isNegative(salesData) {
       if (salesData >= 0) {

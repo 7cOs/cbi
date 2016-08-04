@@ -142,14 +142,14 @@ module.exports =
     var distributionData = {
       'performance': [{
         'type': 'Brand',
-        'name': 'Victoria',
+        'name': 'Barrilito',
         'measures': {
           'timeframe': 'L30',
           'distributions': 273400,
-          'yearAgoGap': 1532,
+          'yearAgoGap': 827,
           'yearAgoTrend': 7.5,
           'yearAgoBuTrend': 1,
-          'vsPlanNumber': 1532,
+          'vsPlanNumber': 829,
           'vsPlanPercent': 4,
           'velocityNumber': 827,
           'velocityPercent': 5,
@@ -160,7 +160,7 @@ module.exports =
         }
       }, {
         'type': 'Brand',
-        'name': 'Modelo',
+        'name': 'Corona Extra',
         'measures': {
           'timeframe': 'L30',
           'distributions': 2300,
@@ -169,6 +169,42 @@ module.exports =
           'yearAgoBuTrend': 11,
           'vsPlanNumber': 152,
           'vsPlanPercent': 34,
+          'velocityNumber': 482,
+          'velocityPercent': 3,
+          'volumeContribution': 100,
+          'volumeContributionBu': 80,
+          'growthContribution': 88,
+          'growthContributionBu': 53
+        }
+      }, {
+        'type': 'Brand',
+        'name': 'Corona Light',
+        'measures': {
+          'timeframe': 'L30',
+          'distributions': 2300,
+          'yearAgoGap': 130,
+          'yearAgoTrend': 5,
+          'yearAgoBuTrend': 11,
+          'vsPlanNumber': 135,
+          'vsPlanPercent': 32,
+          'velocityNumber': 482,
+          'velocityPercent': 3,
+          'volumeContribution': 100,
+          'volumeContributionBu': 80,
+          'growthContribution': 88,
+          'growthContributionBu': 53
+        }
+      }, {
+        'type': 'Brand',
+        'name': 'Leon',
+        'measures': {
+          'timeframe': 'L30',
+          'distributions': 2300,
+          'yearAgoGap': 125,
+          'yearAgoTrend': -6,
+          'yearAgoBuTrend': 11,
+          'vsPlanNumber': 135,
+          'vsPlanPercent': 12,
           'velocityNumber': 482,
           'velocityPercent': 3,
           'volumeContribution': 100,
