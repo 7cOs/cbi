@@ -37,7 +37,7 @@ module.exports = function(app) {
         config: app.get('config')
       });
     } else {
-      res.redirect('/login');
+      res.redirect('/auth/login');
     }
   });
 
