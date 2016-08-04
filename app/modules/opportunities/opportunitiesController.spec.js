@@ -1,5 +1,5 @@
 describe('Unit: opportunitiesController', function() {
-  require('angular-mocks/ngMock');
+  /* require('angular-mocks/ngMock');
   require('angular-ui-router');
 
   var scope, q, ctrl, oService;
@@ -38,13 +38,13 @@ describe('Unit: opportunitiesController', function() {
     expect(ctrl.applyFilter).not.toBeUndefined();
     expect(ctrl.brandQuerySearch).not.toBeUndefined();
     expect(ctrl.distributorQuerySearch).not.toBeUndefined();
-  });
+  });*/
 
   /* need to mock services before we test these methods
   it('[accountQuerySearch], it should return a filtered store list', function() {
   });*/
 
-  it('[addOpportunity], it should call opportunitiesService.createOpportunity()', function() {
+  /* it('[addOpportunity], it should call opportunitiesService.createOpportunity()', function() {
     // create service method spy
     spyOn(ctrl.opportunitiesService, 'createOpportunity').and.callFake(function() {
       var deferred = q.defer();
@@ -57,7 +57,7 @@ describe('Unit: opportunitiesController', function() {
     // assertions
     expect(ctrl.opportunitiesService.createOpportunity).toHaveBeenCalled();
     expect(ctrl.opportunitiesService.createOpportunity.calls.count()).toEqual(1);
-  });
+  });*/
 
   /* it('[expandCallback], it should add an item from the vm.expandedOpportunities array', function() {
     // check init

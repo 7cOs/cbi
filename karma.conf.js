@@ -13,6 +13,8 @@ module.exports = function(config) {
     // list of files / patterns to load in the browser
     files: [
       'app/main.js',
+      './node_modules/angular-mocks/angular-mocks.js',
+      './node_modules/angular-material/angular-material-mocks.js',
       'app/modules/**/*.spec.js',
       'app/shared/**/**/*.spec.js'
     ],
