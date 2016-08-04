@@ -59,53 +59,7 @@ section.landing-page
                     h3.bold <span ng-if="l.isPositive(l.performanceData.performance[2].measures[2].percentChange)">+</span>{{l.performanceData.performance[2].measures[2].percentChange}}<span>%</span>
         p.accent.action-item #[a(href="#") View Details &#9654;]
 
-        section
-          div.target-lists
-            md-tabs(md-dynamic-height='' md-border-bottom)
-              md-tab(label='My Target List')
-                md-content.md-padding
-                  div(row).target-list-count-container
-                    h5.accent.right Displaying Recent (3 of 3)
-                    div(column="4 +6").target-list-count
-                      h5(column="6").accent.completed.right  closed
-                      h5(column="6").accent.right opportunities
-                  div(row).target-list
-                    ul
-                      li(ng-repeat="list in l.namedFilters")
-                        div(column="8")
-                          h3 {{list.name}}
-                          p.accent {{list.creator}}
-                          p.accent &#9746; {{list.members.length}} members
-                          p.accent {{list.created}}
-                        div(column="4")
-                          h4(column="6").completed.right {{list.closedOpportunities | number}}
-                          h4(column="6").right {{list.opportunities | number}}
-                        md-progress-linear(md-mode="determinate" ng-value="l.ratio(list.closedOpportunities, list.opportunities)")
-                  div(row)
-                    p.accent.action-item #[a(href="#") View All &#9654;]
-              md-tab(label='Shared with Me')
-                md-content.md-padding
-                  div(row).target-list-count-container
-                    h5.accent.right Displaying Recent (3 of 3)
-                    div(column="4 +6").target-list-count
-                      h5(column="6").accent.completed.right  closed
-                      h5(column="6").accent.right opportunities
-                  div(row).target-list
-                    ul
-                      li(ng-repeat="list in l.sharedFilters")
-                        div(column="8")
-                          h3 {{list.name}}
-                          p.accent {{list.creator}}
-                          p.accent &#9746; {{list.members.length}} members
-                          p.accent {{list.created}}
-                        div(column="4")
-                          h4(column="6").completed.right {{list.closedOpportunities | number}}
-                          h4(column="6").right {{list.opportunities | number}}
-                        md-progress-linear(md-mode="determinate" value="{{list.closedOpportunities / list.opportunities * 100}}")
-                  div(row)
-                    p.accent.action-item #[a(href="#") View All &#9654;]
-
-
+        target
 
       section.opportunities(column="4 +1")
         h2 Opportunities
