@@ -399,14 +399,14 @@ module.exports =
 
       function getOpportunitiesSuccess(response) {
         // Set positive or negative label for trend values
-        tempData.opportunities.forEach(function(item) {
+        /* response.opportunities.forEach(function(item) {
           var trend = item.depletionTrendVsYA;
           if (trend > 0) {
             item.positiveValue = true;
           } else if (trend < 0) {
             item.negativeValue = true;
           }
-        });
+        });*/
         // opportunitiesPromise.resolve(tempData.opportunities);
         opportunitiesPromise.resolve(response.data);
 
