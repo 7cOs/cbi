@@ -75,7 +75,7 @@ module.exports =
      */
     function getStores(tdlinxNumber) {
       var storesPromise = $q.defer(),
-          url = tdlinxNumber ? apiHelperService.request('/api/stores/' + tdlinxNumber) : apiHelperService.request('/api/stores/');
+          url = tdlinxNumber ? apiHelperService.request('/stores/' + tdlinxNumber) : apiHelperService.request('/stores/');
 
       $http.get(url, {
         headers: {}
@@ -104,7 +104,7 @@ module.exports =
      */
     function getStoreOpportunities(tdlinxNumber) {
       var storesOpportunitiesPromise = $q.defer(),
-          url = apiHelperService.request('/api/stores/' + tdlinxNumber + '/opportunities');
+          url = apiHelperService.request('/stores/' + tdlinxNumber + '/opportunities');
 
       $http.get(url, {
         headers: {}

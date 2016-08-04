@@ -33,7 +33,7 @@ describe('[Services.storesService]', function() {
     });
 
     it('should get mulitple store data if no store id is passed', function() {
-      $httpBackend.expect('GET', '/api/stores/').respond(200, {
+      $httpBackend.expect('GET', '/stores/').respond(200, {
         status: 'success'
       });
 
@@ -48,7 +48,7 @@ describe('[Services.storesService]', function() {
     });
 
     it('should get one stores data if a store id is passed', function() {
-      $httpBackend.expect('GET', '/api/stores/1').respond(200, {
+      $httpBackend.expect('GET', '/stores/1').respond(200, {
         status: 'success'
       });
 
@@ -72,7 +72,7 @@ describe('[Services.storesService]', function() {
     });
 
     it('should get all store opportunities for a store when an id is passed', function() {
-      $httpBackend.expect('GET', '/api/stores/1/opportunities').respond(200, {
+      $httpBackend.expect('GET', '/stores/1/opportunities').respond(200, {
         status: 'success'
       });
 
