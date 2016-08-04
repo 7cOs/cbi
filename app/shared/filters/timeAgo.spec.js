@@ -1,5 +1,5 @@
 describe('Unit: timeAgo Filter', function() {
-  require('angular-mocks/ngMock');
+  // require('angular-mocks/ngMock');
 
   /* var filter;
 
