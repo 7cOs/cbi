@@ -105,12 +105,12 @@ div(row)
       table(cellspacing="0" cellpadding="0")
         thead
           tr
-            th.top
+            th(colspan=1).top
               p.accent.bold.left.single-line Brand / SKU
             th(colspan=2).top.dark
               p.accent.bold Depletions - FYTD
             th(colspan=2).top
-              p.accent Distribution (s) - L90
+              p.accent {{a.filtersService.model.selected.accountBrands === 'Velocity' ? 'Velocity' : 'Distribution (s) - L90'}}
           tr
             th
               p.accent &nbsp;
@@ -129,12 +129,24 @@ div(row)
             td.column-total.dark 7.5%
             td.column-total {{1532 | number }}
             td.column-total 4%
-          tr(ng-repeat="distribution in a.distributionData.performance")
-            td.left.data-brand {{distribution.name}} s
-            td(ng-class="{'negative': a.isNegative(distribution.measures.yearAgoGap)}").dark      {{distribution.measures.yearAgoGap | number }}
-            td(ng-class="{'negative': a.isNegative(distribution.measures.yearAgoTrend) }").dark   {{distribution.measures.yearAgoTrend}}%
-            td(ng-class="{'negative': a.isNegative(distribution.measures.vsPlanNumber)}")         {{distribution.measures.vsPlanNumber | number }}
-            td(ng-class="{'negative': a.isNegative(distribution.measures.vsPlanPercent)}")        {{distribution.measures.vsPlanPercent}}%
+      md-tabs(md-selected="a.selectedIndex" md-autoselect md-dynamic-height)
+        md-tab(label="Tab")
+          table(cellspacing="0" cellpadding="0")
+            tbody
+              tr(ng-repeat="distribution in a.distributionData.performance" ng-click="a.addTab(distribution)")
+                td.left.data-brand {{distribution.name}}
+                td(ng-class="{'negative': a.isNegative(distribution.measures.yearAgoGap)}").dark      {{distribution.measures.yearAgoGap | number }}
+                td(ng-class="{'negative': a.isNegative(distribution.measures.yearAgoTrend) }").dark   {{distribution.measures.yearAgoTrend}}%
+                td(ng-if="a.filtersService.model.selected.accountBrands === 'Velocity'" ng-class="{'negative': a.isNegative(distribution.measures.velocityNumber)}") {{distribution.measures.velocityNumber | number }}
+                td(ng-if="a.filtersService.model.selected.accountBrands !== 'Velocity'" ng-class="{'negative': a.isNegative(distribution.measures.vsPlanNumber)}") {{distribution.measures.vsPlanNumber | number }}
+                td(ng-if="a.filtersService.model.selected.accountBrands === 'Velocity'" ng-class="{'negative': a.isNegative(distribution.measures.velocityPercent)}") {{distribution.measures.velocityPercent}}%
+                td(ng-if="a.filtersService.model.selected.accountBrands !== 'Velocity'" ng-class="{'negative': a.isNegative(distribution.measures.vsPlanPercent)}") {{distribution.measures.vsPlanPercent}}%
+        md-tab(ng-repeat="tab in a.tabs" label="Tab")
+          .pad
+            h3 You chose {{a.newTabContent.name}}!
+            p
+              label {{a.newTabContent}}
+            button(ng-click="a.removeTab(tab)") Go back
   div.scorecard-chart(column='7')
     .widget-header
       .dropdown-filter

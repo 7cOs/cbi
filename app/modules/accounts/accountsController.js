@@ -10,12 +10,23 @@ module.exports =
 
     vm.filters = myperformanceService.filter();
     vm.distributionData = myperformanceService.distributionModel();
+    vm.chartData = myperformanceService.chartData();
 
     // Expose public methods
     vm.isNegative = isNegative;
     vm.isPositive = isPositive;
-
+    vm.addTab = addTab;
+    vm.removeTab = removeTab;
     vm.overviewOpen = false;
+
+    // Tab content
+    vm.tabs = [];
+    vm.selected = null;
+    vm.previous = null;
+    vm.selectedIndex = 0;
+    vm.nextTab = nextTab;
+    vm.prevTab = prevTab;
+    vm.newTabContent = '';
 
     // Broadcast current page name for other scopes
     $rootScope.$broadcast('page:loaded', $state.current.name);
@@ -55,79 +66,25 @@ module.exports =
       }
     };
 
-    // Chart Data
-    vm.chartData = [
-      {
-        'values': [
-          {
-            'label': 'Walmart #1167',
-            'value': 15,
-            'title': 'Walmart',
-            'address': '3500 Brumb... Kenosha, WA',
-            'storeNum': 1167,
-            'depletions': 47560
-          }, {
-            'label': 'Walmart #2872',
-            'value': -4,
-            'title': 'Walmart',
-            'address': '10562 Bell... , Belleville, MI',
-            'storeNum': 2872,
-            'depletions': 65879
-          }, {
-            'label': 'Walmart #166',
-            'value': 9,
-            'title': 'Walmart',
-            'address': '1433 S Sam... , Houston, MO',
-            'storeNum': 166,
-            'depletions': 45500
-          }, {
-            'label': 'Walmart #3395',
-            'value': 4,
-            'title': 'Walmart',
-            'address': '3501 S Loc... , Grand Island, NE',
-            'storeNum': 3395,
-            'depletions': 64329
-          }, {
-            'label': 'Walmart #1471',
-            'value': -10,
-            'title': 'Walmart',
-            'address': '1717 N Sha... , New London, WI',
-            'storeNum': 1471,
-            'depletions': 42943
-          }, {
-            'label': 'Walmart #1685',
-            'value': -1,
-            'title': 'Walmart',
-            'address': '1730 N Gar... , Pierre, SD',
-            'storeNum': 1685,
-            'depletions': 51211
-          }, {
-            'label': 'Walmart #2738',
-            'value': -3,
-            'title': 'Walmart',
-            'address': '400 Juncti... , Glen Carbon, IL',
-            'storeNum': 2738,
-            'depletions': 71200
-          }, {
-            'label': 'Walmart #2089',
-            'value': 11,
-            'title': 'Walmart',
-            'address': '3001 W Bro... , Coumbia, MO',
-            'storeNum': 2089,
-            'depletions': 61193
-          }, {
-            'label': 'Walmart #1198',
-            'value': 2,
-            'title': 'Walmart',
-            'address': 'W159S6530... , Muskego, WI',
-            'storeNum': 1198,
-            'depletions': 55342
-          }
-        ]
-      }
-    ];
-
     // Public methods
+
+    function nextTab() {
+      vm.selectedIndex = vm.selectedIndex + 1;
+    }
+
+    function prevTab() {
+      vm.selectedIndex = vm.selectedIndex - 1;
+    }
+
+    function addTab(content) {
+      vm.newTabContent = content;
+      vm.tabs.push({content: ''});
+    }
+
+    function removeTab(tab) {
+      var index = vm.tabs.indexOf(tab);
+      vm.tabs.splice(index, 1);
+    }
 
     function isNegative(salesData) {
       if (salesData >= 0) {
