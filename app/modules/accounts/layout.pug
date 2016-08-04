@@ -8,16 +8,16 @@
           label My Accounts
           label On &amp; Off Premise
         .brands
-          p All Brands
+          p {{a.brandWidgetTitle}}<span ng-if="a.brandDrillDown"> - {{a.brandDrillDown}}</span>
         .market
-          p Overall market
+          p {{a.filtersService.model.selected.accountTypes || a.accountTypesDefault}}
         .notes
           p <a href="#"></a>
       .market-overview.clearfix
         .brands
-          p All Brands
+          p {{a.brandWidgetTitle}}<span ng-if="a.brandDrillDown"> - {{a.brandDrillDown}}</span>
         .market
-          p Overall market
+          p {{a.filtersService.model.selected.accountTypes || a.accountTypesDefault}}
         .notes
           p <a href="#">Notes</a>
 
@@ -41,11 +41,11 @@
       div(row).dropdown-filter
         div(column='5').dropdown
           label Depletions Time Period
-          md-select(ng-model="a.filtersService.model.selected.depletionsTimeFilter" aria-label="Depletions Time Range Filter"  placeholder="FYTD May 1, 2016 - June 29, 2016")
+          md-select(ng-model="a.filtersService.model.selected.depletionsTimeFilter" md-on-open="a.openSelect(true)" md-on-close="a.openSelect(false)" aria-label="Depletions Time Range Filter"  placeholder="FYTD May 1, 2016 - June 29, 2016")
             md-option(ng-repeat="filter in a.filters.depletionsTimePeriod" aria-label="filter.name" value="{{filter.name}}") {{filter.name}}
         div(column='5').dropdown
           label Distribution Time Period
-          md-select(ng-model="a.filtersService.model.selected.distributionTimeFilter" aria-label="Distribution Time Range Filter"  placeholder="L90 Days April 1, 2016 - June 29, 2016")
+          md-select(ng-model="a.filtersService.model.selected.distributionTimeFilter" md-on-open="a.openSelect(true)" md-on-close="a.openSelect(false)" aria-label="Distribution Time Range Filter"  placeholder="L90 Days April 1, 2016 - June 29, 2016")
             md-option(ng-repeat="filter in a.filters.distributionTimePeriod" aria-label="filter.name" value="{{filter.name}}") {{filter.name}}
         div(column='2')
     div(column='1') &nbsp;
@@ -68,7 +68,7 @@
       label Opportunity Type
       .dropdown-filter
         .dropdown
-          md-select(ng-model="a.filtersService.model.selected.opportunitiesTypes" aria-label="Opportunity Type" md-on-close="a.chipsService.addChip(a.filtersService.model.selected.opportunitiesTypes, 'opportunitiesTypes', false)" placeholder="All Types")
+          md-select(ng-model="a.filtersService.model.selected.opportunitiesTypes" md-on-open="a.openSelect(true)" aria-label="Opportunity Type" md-on-close="a.openSelect(false); a.chipsService.addChip(a.filtersService.model.selected.opportunitiesTypes, 'opportunitiesTypes', false)" placeholder="All Types")
             md-option(ng-repeat="type in a.filtersService.model.opportunitiesTypes" aria-label="type.name" value="{{type.name}}") {{type.name}}
     div(column='3')
       label Brand / Master SKU
@@ -98,19 +98,20 @@ div(row)
   div.scorecard-table(column='5')
     .widget-header
       .dropdown-filter
-        md-select(ng-model="a.filtersService.model.selected.accountBrands" aria-label="Account Brands Filter"  placeholder="Distribution (simple)")
+        md-select(ng-model="a.filtersService.model.selected.accountBrands" md-on-open="a.openSelect(true)" md-on-close="a.openSelect(false)" aria-label="Account Brands Filter"  placeholder="Distribution (simple)")
           md-option(ng-repeat="filter in a.filters.accountBrands" aria-label="filter.name" value="{{filter.name}}") {{filter.name}}
-      p.brands Corona Extra
+      span.back-chevron(ng-if="a.tabs.length > 0" ng-click="a.removeTab()")
+      p.brands {{a.brandWidgetTitle}}
     .widget-content
-      table(cellspacing="0" cellpadding="0")
+      table.depletions-table(cellspacing="0" cellpadding="0")
         thead
           tr
-            th(colspan=1).top
+            th.top.title-col
               p.accent.bold.left.single-line Brand / SKU
             th(colspan=2).top.dark
               p.accent.bold Depletions - FYTD
             th(colspan=2).top
-              p.accent {{a.filtersService.model.selected.accountBrands === 'Velocity' ? 'Velocity' : 'Distribution (s) - L90'}}
+              p.accent {{a.filtersService.model.selected.accountBrands === 'Velocity' ? 'Velocity' : 'Distribution(s) - L90'}}
           tr
             th
               p.accent &nbsp;
@@ -131,10 +132,10 @@ div(row)
             td.column-total 4%
       md-tabs(md-selected="a.selectedIndex" md-autoselect md-dynamic-height)
         md-tab(label="Tab")
-          table(cellspacing="0" cellpadding="0")
+          table.depletions-table(cellspacing="0" cellpadding="0")
             tbody
-              tr(ng-repeat="distribution in a.distributionData.performance" ng-click="a.addTab(distribution)")
-                td.left.data-brand {{distribution.name}}
+              tr.clickable(ng-repeat="distribution in a.distributionData.performance" ng-click="a.addTab(distribution)")
+                td.left.data-brand.title-col {{distribution.name}}
                 td(ng-class="{'negative': a.isNegative(distribution.measures.yearAgoGap)}").dark      {{distribution.measures.yearAgoGap | number }}
                 td(ng-class="{'negative': a.isNegative(distribution.measures.yearAgoTrend) }").dark   {{distribution.measures.yearAgoTrend}}%
                 td(ng-if="a.filtersService.model.selected.accountBrands === 'Velocity'" ng-class="{'negative': a.isNegative(distribution.measures.velocityNumber)}") {{distribution.measures.velocityNumber | number }}
@@ -142,20 +143,25 @@ div(row)
                 td(ng-if="a.filtersService.model.selected.accountBrands === 'Velocity'" ng-class="{'negative': a.isNegative(distribution.measures.velocityPercent)}") {{distribution.measures.velocityPercent}}%
                 td(ng-if="a.filtersService.model.selected.accountBrands !== 'Velocity'" ng-class="{'negative': a.isNegative(distribution.measures.vsPlanPercent)}") {{distribution.measures.vsPlanPercent}}%
         md-tab(ng-repeat="tab in a.tabs" label="Tab")
-          .pad
-            h3 You chose {{a.newTabContent.name}}!
-            p
-              label {{a.newTabContent}}
-            button(ng-click="a.removeTab(tab)") Go back
+          table.depletions-table(cellspacing="0" cellpadding="0")
+            tbody
+              tr(ng-repeat="brand in a.brandData" ng-click="a.setSelected(brand.name)" ng-class="{selected: brand.name === a.idSelected}")
+                td.left.data-brand.title-col {{brand.name}}
+                td(ng-class="{'negative': a.isNegative(brand.measures.yearAgoGap)}").dark      {{brand.measures.yearAgoGap | number }}
+                td(ng-class="{'negative': a.isNegative(brand.measures.yearAgoTrend) }").dark   {{brand.measures.yearAgoTrend}}%
+                td(ng-if="a.filtersService.model.selected.accountBrands === 'Velocity'" ng-class="{'negative': a.isNegative(brand.measures.velocityNumber)}") {{brand.measures.velocityNumber | number }}
+                td(ng-if="a.filtersService.model.selected.accountBrands !== 'Velocity'" ng-class="{'negative': a.isNegative(brand.measures.vsPlanNumber)}") {{brand.measures.vsPlanNumber | number }}
+                td(ng-if="a.filtersService.model.selected.accountBrands === 'Velocity'" ng-class="{'negative': a.isNegative(brand.measures.velocityPercent)}") {{brand.measures.velocityPercent}}%
+                td(ng-if="a.filtersService.model.selected.accountBrands !== 'Velocity'" ng-class="{'negative': a.isNegative(brand.measures.vsPlanPercent)}") {{brand.measures.vsPlanPercent}}%
   div.scorecard-chart(column='7')
     .widget-header
-      .dropdown-filter
-        md-select(ng-model="a.filtersService.model.selected.accountMarkets" aria-label="Account Markets Filter"  placeholder="Depletions")
+      .dropdown-filter.narrow
+        md-select(ng-model="a.filtersService.model.selected.accountMarkets" md-on-open="a.openSelect(true)" md-on-close="a.openSelect(false)" aria-label="Account Markets Filter"  placeholder="Depletions")
           md-option(ng-repeat="filter in a.filters.accountMarkets" aria-label="filter.name" value="{{filter.name}}") {{filter.name}}
       .header-selector
-        md-select.market(ng-model="a.filtersService.model.selected.valuesVsTrend" placeholder="Top 10 (Values)")
+        md-select.market(ng-model="a.filtersService.model.selected.valuesVsTrend" md-on-open="a.openSelect(true)" md-on-close="a.openSelect(false)" placeholder="Top 10 (Values)")
           md-option(ng-repeat="filter in a.filters.valuesVsTrend" aria-label="filter.name" value="{{filter.name}}") {{filter.name}}
-        md-select(ng-model="a.filtersService.model.selected.accountTypes" placeholder="Stores")
+        md-select(ng-model="a.filtersService.model.selected.accountTypes" md-on-open="a.openSelect(true)" md-on-close="a.openSelect(false)" placeholder="{{a.filtersService.model.selected.accountTypes || a.accountTypesDefault}}")
           md-option(ng-repeat="filter in a.filters.accountTypes" aria-label="filter.name" value="{{filter.name}}") {{filter.name}}
     .widget-content.clearfix
       table.chart-data(cellspacing="0" cellpadding="0")

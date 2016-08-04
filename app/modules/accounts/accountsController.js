@@ -11,6 +11,7 @@ module.exports =
     vm.filters = myperformanceService.filter();
     vm.distributionData = myperformanceService.distributionModel();
     vm.chartData = myperformanceService.chartData();
+    vm.brandData = myperformanceService.brandData();
 
     // Expose public methods
     vm.isNegative = isNegative;
@@ -18,6 +19,9 @@ module.exports =
     vm.addTab = addTab;
     vm.removeTab = removeTab;
     vm.overviewOpen = false;
+    vm.idSelected = null;
+    vm.setSelected = setSelected;
+    vm.openSelect = openSelect;
 
     // Tab content
     vm.tabs = [];
@@ -27,6 +31,13 @@ module.exports =
     vm.nextTab = nextTab;
     vm.prevTab = prevTab;
     vm.newTabContent = '';
+
+    // Set default values
+    vm.accountTypesDefault = 'Stores';
+    vm.brandWidgetTitleDefault = 'All Brands';
+    vm.brandWidgetTitle = vm.brandWidgetTitleDefault;
+    vm.selectOpen = false;
+    vm.brandDrillDown = null;
 
     // Broadcast current page name for other scopes
     $rootScope.$broadcast('page:loaded', $state.current.name);
@@ -76,14 +87,23 @@ module.exports =
       vm.selectedIndex = vm.selectedIndex - 1;
     }
 
-    function addTab(content) {
-      vm.newTabContent = content;
+    function addTab(brand) {
+      vm.brandWidgetTitle = brand.name;
+      // Here we can populate vm.brandData with data for selected brand
       vm.tabs.push({content: ''});
     }
 
-    function removeTab(tab) {
-      var index = vm.tabs.indexOf(tab);
-      vm.tabs.splice(index, 1);
+    function removeTab() {
+      var lastItem = vm.tabs.length - 1;
+      vm.brandWidgetTitle = vm.brandWidgetTitleDefault;
+      vm.tabs.splice(lastItem, 1);
+      vm.idSelected = null;
+      vm.brandDrillDown = null;
+    }
+
+    function setSelected(idSelected) {
+      vm.idSelected = idSelected;
+      vm.brandDrillDown = vm.idSelected;
     }
 
     function isNegative(salesData) {
@@ -106,8 +126,17 @@ module.exports =
       $scope.$apply();
     }
 
+    function openSelect(value) {
+      vm.selectOpen = value;
+    }
+
     // Check if market overview is scrolled out of view
     angular.element($window).bind('scroll', function() {
+
+      if (vm.selectOpen) {
+        return;
+      }
+
       vm.st = this.pageYOffset;
 
       if (vm.st >= 230) {

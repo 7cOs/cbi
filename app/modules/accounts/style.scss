@@ -116,6 +116,10 @@
     margin: 0.3em 0.3em 0 0;
     width: 200px;
 
+    &.narrow {
+      width: 150px;
+    }
+
     md-select {
       margin: 0;
     }
@@ -186,7 +190,7 @@
   md-tabs-content-wrapper {
     top: 0;
 
-    tr:hover {
+    .clickable:hover {
       cursor: hand;
     }
   }
@@ -264,5 +268,16 @@
 
   svg {
     height: 100%;
+  }
+}
+
+.depletions-table {
+
+  th, td {
+    width: 16.25%;
+
+    &.title-col {
+      width: 35%;
+    }
   }
 }

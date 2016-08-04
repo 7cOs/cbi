@@ -215,6 +215,60 @@ module.exports =
       }]
     };
 
+    var brandData = [
+      {
+        'name': '1/2 Bl Keg',
+        'measures': {
+          'yearAgoGap': 125,
+          'yearAgoTrend': -6,
+          'vsPlanNumber': 135,
+          'vsPlanPercent': 12,
+          'velocityNumber': 482,
+          'velocityPercent': 3
+        }
+      }, {
+        'name': '1/4 Bl Keg',
+        'measures': {
+          'yearAgoGap': 125,
+          'yearAgoTrend': 2,
+          'vsPlanNumber': 135,
+          'vsPlanPercent': 3,
+          'velocityNumber': 482,
+          'velocityPercent': -1
+        }
+      }, {
+        'name': '12 Pk Bt',
+        'measures': {
+          'yearAgoGap': 110,
+          'yearAgoTrend': 10,
+          'vsPlanNumber': 125,
+          'vsPlanPercent': -4,
+          'velocityNumber': 134,
+          'velocityPercent': 8
+        }
+      }, {
+        'name': '12 Pk BT',
+        'measures': {
+          'yearAgoGap': 90,
+          'yearAgoTrend': 5,
+          'vsPlanNumber': 120,
+          'vsPlanPercent': -6,
+          'velocityNumber': 134,
+          'velocityPercent': 3
+        }
+      }, {
+        'name': '16oz - 6 Pk Can',
+        'measures': {
+          'yearAgoGap': 95,
+          'yearAgoTrend': 10,
+          'vsPlanNumber': 115,
+          'vsPlanPercent': -4,
+          'velocityNumber': 134,
+          'velocityPercent': 8
+        }
+      }
+    ];
+
     var filters = {
       placementType: [{
         name: 'Simple'
@@ -363,6 +417,9 @@ module.exports =
       },
       chartData: function() {
         return chartData;
+      },
+      brandData: function() {
+        return brandData;
       },
       distributionModel: function() {
         return distributionData;

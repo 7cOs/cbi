@@ -57,6 +57,26 @@
   @include chevron(5px, 1px, -45deg, 35%, 4px);
 }
 
+.back-chevron {
+  @include chevron(12px, 1px, -135deg, 5px, 5px);
+  color: $blue;
+  float: left;
+  left: 0.75em;
+  position: relative;
+  top: 15px;
+  z-index: 2;
+
+  + p {
+    left: 0.75em;
+    position: relative;
+    z-index: 1;
+  }
+
+  &:hover {
+    cursor: hand;
+  }
+}
+
 
 .align-right {
   text-align: right;
