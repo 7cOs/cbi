@@ -65,12 +65,15 @@
   }
 }
 
-.scorecard-table table,
-.scorecard-chart table {
-  border-collapse: collapse;
-  border-top: 1px solid $black;
-  border-bottom: 1px solid $black;
-  width: 100%;
+.scorecard-table,
+.scorecard-chart {
+
+  table {
+    border-collapse: collapse;
+    border-top: 1px solid $black;
+    border-bottom: 1px solid $black;
+    width: 100%;
+  }
 
   tbody {
 
@@ -81,6 +84,7 @@
     tr {
       border-bottom: 1px solid $gray-9;
       background: $white;
+      outline: 0;
       transition: background 0.3s;
 
       .dark {
@@ -92,10 +96,30 @@
         background: $light-blue-4;
         transition: background 0.3s;
 
-
         .dark {
           background: $smoke;
           transition: background 0.3s;
+        }
+      }
+
+      &.selected,
+      &.selected .dark,
+      &.selected .data-brand {
+        background: $dark-blue-2;
+        color: $white;
+        transition: none;
+
+        &:hover {
+          background: $dark-blue-2;
+          transition: none;
+        }
+      }
+
+      &.selected .dark {
+        background: $dark-blue-3;
+
+        &:hover {
+          background: $dark-blue-3;
         }
       }
     }
@@ -153,5 +177,12 @@
 
   .cell-align-left {
     text-align: left;
+  }
+
+  md-tabs {
+
+    table {
+      border: 0;
+    }
   }
 }
