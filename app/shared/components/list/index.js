@@ -1,20 +1,17 @@
 'use strict';
 
-function ListController($scope, $state, opportunitiesService) {
+function ListController($scope, $state, opportunitiesService, storesService) {
   var vm = this;
 
   vm.pageName = $state.current.name;
 
   // Map public methods to scope
-  vm.toggle = toggle;
+  vm.actionOverlay = actionOverlay;
   vm.exists = exists;
   vm.isChecked = isChecked;
-  vm.toggleAll = toggleAll;
   vm.sortBy = sortBy;
-  vm.actionOverlay = actionOverlay;
-
-  // Services
-  vm.opportunitiesService = opportunitiesService;
+  vm.toggle = toggle;
+  vm.toggleAll = toggleAll;
 
   // Controller Variables for Sorting
   vm.depletionsChevron = false;
@@ -23,24 +20,15 @@ function ListController($scope, $state, opportunitiesService) {
   vm.reverse = false;
   vm.segmentationChevron = false;
   vm.selected = [];
-
   // sortProperty is set to default sort on page load
   vm.sortProperty = 'store.name';
   vm.storeChevron = true;
 
-  // Get opportunities and products data
-  opportunitiesService.getOpportunities().then(function(data) {
-    opportunitiesService.model.opportunities = data;
-  });
+  // Services
+  vm.opportunitiesService = opportunitiesService;
+  vm.storesService = storesService;
 
-  // This needs to be replaced when we get live data
-  // Get opportunities and products data
-  vm.opportunities = opportunitiesService.get('opportunities');
-  vm.products = opportunitiesService.get('products');
-
-  // Set up arrays for tracking selected and expanded list items
-  vm.selected = [];
-  vm.expandedOpportunities = [];
+  init();
 
   // ///////////////////////////////////////////////////////// Public Methods
 
@@ -87,6 +75,23 @@ function ListController($scope, $state, opportunitiesService) {
     vm.opportunitiesChevron = (property === 'opCount') ? !vm.opportunitiesChevron : vm.opportunitiesChevron;
     vm.depletionsChevron = (property === 'depletionsCYTD') ? !vm.depletionsChevron : vm.depletionsChevron;
     vm.segmentationChevron = (property === 'segmentation') ? !vm.segmentationChevron : vm.storeChevron;
+  }
+
+  function init() {
+    // Get opportunities and products data
+    opportunitiesService.getOpportunities().then(function(data) {
+      opportunitiesService.model.opportunities = data;
+    });
+
+    // Get opportunities and products data
+    storesService.getStores().then(function(data) {
+      console.log(data);
+    });
+
+    // This needs to be replaced when we get live data
+    // Get opportunities and products data
+    vm.opportunities = opportunitiesService.get('opportunities');
+    vm.products = opportunitiesService.get('products');
   }
 
   // Set positive or negative label for trend values
