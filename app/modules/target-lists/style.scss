@@ -45,6 +45,11 @@
   }
 }
 
+.target-action-buttons {
+  float: right;
+  display: inline-block;
+}
+
 .no-filter {
   background: $body-bg;
   border-bottom: 2px solid $blue;

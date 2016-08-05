@@ -1,0 +1,104 @@
+.expanded-target-lists {
+  .gray {
+    color: $gray-3;
+  }
+
+  .closed {
+    color: $yellow;
+  }
+
+  .target-list-count-container {
+
+    background: $body-bg;
+    text-align: center;
+
+    .left {
+      text-align: left;
+    }
+  }
+
+  .md-tab.md-active {
+    background-color: $body-bg;
+    border: 1px solid $gray-9;
+    padding: 13px 21px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+  }
+
+  .target-list-detail-container {
+
+    ._md-bar {
+      background-color: $yellow;
+    }
+
+    ._md-container {
+      background-image: url('../../assets/img/icons/stripes.svg');
+      border-bottom: 5px solid $white;
+    }
+
+    .checkbox-sibling {
+      width: calc(100% - 50px);
+    }
+
+    .md-padding {
+      padding-top: 0;
+      padding: 25px 15px;
+    }
+
+    ul {
+      -webkit-padding-start: 0;
+    }
+
+    li {
+
+      background: $white;
+      margin-bottom: 12px;
+
+      h4, h5 {
+        text-align: center;
+        margin-bottom: 0;
+
+        &.left {
+          text-align: left;
+        }
+      }
+    }
+
+    .creator {
+      margin-bottom: 10px;
+    }
+  }
+
+  .md-padding {
+    background: $body-bg;
+  }
+
+  .checkbox-wrapper {
+    background: $gray-4;
+    float: left;
+    outline: 0;
+    padding: 2.5em 0 2.5em 15px;
+    width: 35px;
+
+
+    &.placeholder {
+      background: $body-bg;
+      padding: 0.5em 0;
+    }
+
+    md-checkbox {
+      margin-bottom: 0;
+    }
+
+    ._md-container {
+      background-image: none;
+    }
+  }
+
+  .checkbox-sibling-target {
+    width: calc(100% - 35px);
+  }
+
+  .archived {
+    background: $gray-9;
+  }
+}
