@@ -71,11 +71,15 @@ module.exports =
     }
 
     function init() {
-      // get saved filters
-      userService.getOpportunityFilters('A1B2').then(function(response) {
-        userService.model.opportunityFilters = response.filters;
-      });
+      // set user model
+      userService.getUsers('A1B2').then(function(data) {
+        userService.model = data;
 
+        // get saved filters
+        userService.getOpportunityFilters(userService.model.id).then(function(data) {
+          userService.model.opportunityFilters = data.filters;
+        });
+      });
     }
 
     /* function parseFilterObj() {

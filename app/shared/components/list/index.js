@@ -79,13 +79,15 @@ function ListController($scope, $state, opportunitiesService, storesService) {
 
   function init() {
     // Get opportunities and products data
-    opportunitiesService.getOpportunities().then(function(data) {
+    /* opportunitiesService.getOpportunities().then(function(data) {
       opportunitiesService.model.opportunities = data;
-    });
+    });*/
 
     // Get opportunities and products data
     storesService.getStores().then(function(data) {
-      console.log(data);
+      // vm.opportunities = data.stores;
+      vm.stores = data.stores;
+      console.log(data.stores);
     });
 
     // This needs to be replaced when we get live data
@@ -95,14 +97,9 @@ function ListController($scope, $state, opportunitiesService, storesService) {
   }
 
   // Set positive or negative label for trend values
+  /* Should be handled in factory
   vm.opportunities.forEach(function(item) {
-    var trend = item.depletionTrendVsYA;
-    if (trend > 0) {
-      item.positiveValue = true;
-    } else if (trend < 0) {
-      item.negativeValue = true;
-    }
-  });
+  });*/
 }
 
 module.exports =

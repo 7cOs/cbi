@@ -37,7 +37,7 @@ module.exports =
       }
     };
 
-    var model = {
+    /* var model = {
       id: 'A1B2',
       firstName: 'Joe',
       lastName: 'Cerveza',
@@ -45,25 +45,27 @@ module.exports =
       phone: '1234567890',
       role: 'CBBD MDM',
       accounts: ['Wal-mart', 'PCC']
-    };
+    };*/
+    var model,
+        service = {
+          model: model,
+          getUsers: getUsers,
+          getHiddenOpportunities: getHiddenOpportunities,
+          hideOpportunity: hideOpportunity,
+          deleteHiddenOpportunity: deleteHiddenOpportunity,
+          getNotifications: getNotifications,
+          getOpportunityFilters: getOpportunityFilters,
+          saveOpportunityFilter: saveOpportunityFilter,
+          getPerformanceSummary: getPerformanceSummary,
+          getPerformanceDepletion: getPerformanceDepletion,
+          getPerformanceDistribution: getPerformanceDistribution,
+          getPerformanceBrand: getPerformanceBrand,
+          getPerformanceTopBottom: getPerformanceTopBottom,
+          getTargetLists: getTargetLists,
+          addTargetList: addTargetList
+        };
 
-    return {
-      model: model,
-      getUsers: getUsers,
-      getHiddenOpportunities: getHiddenOpportunities,
-      hideOpportunity: hideOpportunity,
-      deleteHiddenOpportunity: deleteHiddenOpportunity,
-      getNotifications: getNotifications,
-      getOpportunityFilters: getOpportunityFilters,
-      saveOpportunityFilter: saveOpportunityFilter,
-      getPerformanceSummary: getPerformanceSummary,
-      getPerformanceDepletion: getPerformanceDepletion,
-      getPerformanceDistribution: getPerformanceDistribution,
-      getPerformanceBrand: getPerformanceBrand,
-      getPerformanceTopBottom: getPerformanceTopBottom,
-      getTargetLists: getTargetLists,
-      addTargetList: addTargetList
-    };
+    return service;
 
     /**
      * @name getUsers
@@ -76,14 +78,18 @@ module.exports =
       var usersPromise = $q.defer(),
           url = id ? apiHelperService.request('/api/users/' + id) : apiHelperService.request('/api/users/');
 
-      $http.get(url, {
-        headers: {}
-      })
-      .then(getUsersSuccess)
-      .catch(getUsersFail);
+      // only fire request once. otherwise, use model
+      if (!service.model) {
+        $http.get(url, {
+          headers: {}
+        })
+        .then(getUsersSuccess)
+        .catch(getUsersFail);
+      } else {
+        usersPromise.resolve(service.model);
+      }
 
       function getUsersSuccess(response) {
-        console.log('[userService.getUsers] response: ', response);
         usersPromise.resolve(response.data);
       }
 
