@@ -5,6 +5,12 @@ function ExpandedTargetListController($scope, $state) {
 
   vm.pageName = $state.current.name;
   vm.ratio = ratio;
+  vm.selector = selector;
+  vm.buttonState = 'named';
+
+  function selector(tab) {
+    vm.buttonState = tab;
+  };
 
   function ratio(closed, total) {
     var result = closed / total * 100;
