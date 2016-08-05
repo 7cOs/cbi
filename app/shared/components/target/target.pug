@@ -8,6 +8,7 @@ div.target-lists
             h5(column="6").accent.completed.right  closed
             h5(column="6").accent.right opportunities
         div(row).target-list
+        no-opportunities(ng-show="!target.namedFilters.length")
           ul
             li(ng-repeat="list in target.namedFilters")
               div(column="8")
@@ -29,6 +30,7 @@ div.target-lists
             h5(column="6").accent.completed.right  closed
             h5(column="6").accent.right opportunities
         div(row).target-list
+        no-opportunities(ng-show="!target.sharedFilters.length")
           ul
             li(ng-repeat="list in target.sharedFilters")
               div(column="8")
@@ -48,6 +50,7 @@ div.target-lists
             h5(column="6").accent.completed.right  closed
             h5(column="6").accent.right opportunities
         div(row).target-list
+          no-opportunities(ng-show="!target.archivedFilters.length")
           ul
             li(ng-repeat="list in target.archivedFilters")
               div(column="8")
