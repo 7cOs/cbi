@@ -14,9 +14,10 @@ div.expanded-target-lists
               h5(column="2").accent Depletions Since <br />Closed (CE)
 
         div(row).target-list-detail-container
+          no-opportunities(ng-show="!expanded.namedFilters.length")
           ul
-            li(ng-repeat="list in expanded.sharedFilters").clearfix
-              div.checkbox-wrapper(ng-click="list.toggle(opportunity, list.selected)")
+            li(ng-repeat="list in expanded.namedFilters").clearfix
+              div.checkbox-wrapper.named-target-list(ng-click="list.toggle(opportunity, list.selected)")
                 md-checkbox(aria-label="Select Item" ng-checked="list.exists(opportunity, list.selected)")
               div.checkbox-sibling(column="12")
                 div(row)
@@ -42,6 +43,7 @@ div.expanded-target-lists
               h5(column="1").accent Total Opportunities
               h5(column="2").accent Depletions Since Closed (CE)
         div(row).target-list-detail-container
+          no-opportunities(ng-show="!expanded.sharedFilters.length")
           ul
             li(ng-repeat="list in expanded.sharedFilters").clearfix
               div(column="12")
@@ -70,8 +72,9 @@ div.expanded-target-lists
               h5(column="2").accent Depletions Since <br />Closed (CE)
 
         div(row).target-list-detail-container
+          no-opportunities(ng-show="!expanded.archivedFilters.length")
           ul
-            li(ng-repeat="list in expanded.sharedFilters").clearfix
+            li(ng-repeat="list in expanded.archivedFilters").clearfix
               div.checkbox-wrapper(ng-click="list.toggle(opportunity, list.selected)")
                 md-checkbox(aria-label="Select Item" ng-checked="list.exists(opportunity, list.selected)")
               div.checkbox-sibling(column="12").archived
