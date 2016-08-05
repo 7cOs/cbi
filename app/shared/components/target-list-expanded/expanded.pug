@@ -14,7 +14,9 @@ div.expanded-target-lists
               h5(column="2").accent Depletions Since <br />Closed (CE)
 
         div(row).target-list-detail-container
-          no-opportunities(ng-show="!expanded.namedFilters.length")
+          div(ng-show="!expanded.namedFilters.length").no-opportunites
+            h4 No Opportunities have been added yet
+            p Try Searching for <span>Opportunities</span> and add them to your list
           ul
             li(ng-repeat="list in expanded.namedFilters").clearfix
               div.checkbox-wrapper.named-target-list(ng-click="list.toggle(opportunity, list.selected)")
@@ -36,14 +38,16 @@ div.expanded-target-lists
         div(row)
           div(column="12")
             div(row).target-list-count-container
-              h5(column="5").accent.completed.left  List Name
-              h5(column="2").accent Collaborators
+              h5(column="5").accent.completed.left  <br />List Name
+              h5(column="2").accent <br />Collaborators
               h5(column="1").accent Last Updated
               h5(column="1").accent Closed Opportunities
               h5(column="1").accent Total Opportunities
-              h5(column="2").accent Depletions Since Closed (CE)
+              h5(column="2").accent Depletions Since <br />Closed (CE)
         div(row).target-list-detail-container
-          no-opportunities(ng-show="!expanded.sharedFilters.length")
+          div(ng-show="!expanded.sharedFilters.length").no-opportunites
+            h4 No Opportunities have been shared with you yet
+            p Try Searching for <span>Opportunities</span> and add them to your list
           ul
             li(ng-repeat="list in expanded.sharedFilters").clearfix
               div(column="12")
@@ -64,15 +68,17 @@ div.expanded-target-lists
           div.checkbox-wrapper.placeholder
           div.checkbox-sibling-target(column="12")
             div(row).target-list-count-container
-              h5(column="5").accent.completed.left  List Name
-              h5(column="2").accent Collaborators
+              h5(column="5").accent.completed.left  <br />List Name
+              h5(column="2").accent <br />Collaborators
               h5(column="1").accent Last Updated
               h5(column="1").accent Closed Opportunities
               h5(column="1").accent Total Opportunities
               h5(column="2").accent Depletions Since <br />Closed (CE)
 
         div(row).target-list-detail-container
-          no-opportunities(ng-show="!expanded.archivedFilters.length")
+          div(ng-show="!expanded.archivedFilters.length").no-opportunites
+            h4 No Opportunities to remove
+            p Try Searching for <span>Opportunities</span> and add them to your list
           ul
             li(ng-repeat="list in expanded.archivedFilters").clearfix
               div.checkbox-wrapper(ng-click="list.toggle(opportunity, list.selected)")

@@ -40,21 +40,7 @@ function ExpandedTargetListController($scope, $state) {
     'closedOpportunities': 587,
     'opportunities': 2251
   }];
-  vm.sharedFilters = [{
-    'name': 'Whidbey Island Restaurants',
-    'creator': 'Sam Carvey',
-    'members': ['David Ostler', 'Todd Alkema'],
-    'created': 'One Hour Ago',
-    'closedOpportunities': 1751,
-    'opportunities': 2251
-  }, {
-    'name': 'West Seattle C-Stores',
-    'creator': 'Patti Horigan',
-    'members': ['James Conrick', 'Tom Andersen', 'Paul Wagner'],
-    'created': 'One Week Ago',
-    'closedOpportunities': 4390,
-    'opportunities': 5251
-  }];
+  vm.sharedFilters = [];
   vm.archivedFilters = [{
     'name': 'Umi Sake House',
     'creator': 'Ali Harkless',
