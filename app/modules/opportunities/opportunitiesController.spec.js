@@ -1,24 +1,21 @@
 describe('Unit: opportunitiesController', function() {
-  /* require('angular-mocks/ngMock');
-  require('angular-ui-router');
-
-  var scope, q, ctrl, oService;
+  var scope, q, ctrl, userService;
 
   beforeEach(function() {
     angular.mock.module('ui.router');
     angular.mock.module('andromeda.common.services');
     angular.mock.module('andromeda.modules.opportunities');
 
-    angular.mock.inject(function GetDependencies(opportunitiesService) {
-      oService = opportunitiesService;
-    });
-
-    inject(function($rootScope, $controller, opportunitiesService, $q) {
+    inject(function($rootScope, $controller, $q, opportunitiesService, _userService_) {
       scope = $rootScope.$new();
       q = $q;
-      ctrl = $controller('opportunitiesController', {$scope: scope, opportunitiesService: oService});
+      userService = _userService_;
+      spyOn(userService, 'getOpportunityFilters').and.callFake(function() {
+        var deferred = q.defer();
+        return deferred.promise;
+      });
+      ctrl = $controller('opportunitiesController', {$scope: scope});
     });
-
   });
 
   it('should have services defined', function() {
@@ -38,13 +35,9 @@ describe('Unit: opportunitiesController', function() {
     expect(ctrl.applyFilter).not.toBeUndefined();
     expect(ctrl.brandQuerySearch).not.toBeUndefined();
     expect(ctrl.distributorQuerySearch).not.toBeUndefined();
-  });*/
+  });
 
-  /* need to mock services before we test these methods
-  it('[accountQuerySearch], it should return a filtered store list', function() {
-  });*/
-
-  /* it('[addOpportunity], it should call opportunitiesService.createOpportunity()', function() {
+  it('[addOpportunity], it should call opportunitiesService.createOpportunity()', function() {
     // create service method spy
     spyOn(ctrl.opportunitiesService, 'createOpportunity').and.callFake(function() {
       var deferred = q.defer();
@@ -57,20 +50,11 @@ describe('Unit: opportunitiesController', function() {
     // assertions
     expect(ctrl.opportunitiesService.createOpportunity).toHaveBeenCalled();
     expect(ctrl.opportunitiesService.createOpportunity.calls.count()).toEqual(1);
-  });*/
-
-  /* it('[expandCallback], it should add an item from the vm.expandedOpportunities array', function() {
-    // check init
-    expect(ctrl.expandedOpportunities).not.toBeUndefined();
-    expect(ctrl.expandedOpportunities.length).toEqual(0);
-
-    // run method
-    ctrl.expandCallback()
   });
 
-  it('[collapseCallback], it should remove an item from the vm.expandedOpportunities array', function() {
-    expect(ctrl.expandedOpportunities).not.toBeUndefined();
-    expect(ctrl.expandedOpportunities.length).toEqual(1);
-  });*/
+  it('[init], it should call userService.getOpportunityFilters on init', function() {
+    expect(ctrl.userService.getOpportunityFilters).toHaveBeenCalled();
+    expect(ctrl.userService.getOpportunityFilters.calls.count()).toEqual(1);
+  });
 
 });

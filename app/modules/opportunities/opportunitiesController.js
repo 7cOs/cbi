@@ -51,7 +51,7 @@ module.exports =
       return results;
     }
 
-    // Private Methods
+    // ///////////////////////////////////////////////////////// Private Methods
     /**
      * @name filterQuery
      * @desc filter data using query from md-autocomplete
@@ -71,24 +71,11 @@ module.exports =
     }
 
     function init() {
-      // Data Init
-      userService.getTargetLists().then(function(data) {
-        console.log(data);
-      });
-
-      userService.getPerformanceDepletion().then(function(data) {
-        console.log(data);
-      });
-
       // get saved filters
       userService.getOpportunityFilters('A1B2').then(function(response) {
         userService.model.opportunityFilters = response.filters;
       });
 
-      // Get opportunities and products data
-      opportunitiesService.getOpportunities().then(function(data) {
-        opportunitiesService.model.opportunities = data;
-      });
     }
 
     /* function parseFilterObj() {
