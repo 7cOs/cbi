@@ -24,7 +24,7 @@ describe('[Services.storesService]', function() {
     expect(storesService.getStoreOpportunities).toBeDefined();
   });
 
-  describe('[getStores]', function() {
+  /* describe('[getStores]', function() {
     it('get stores should return a promise', function() {
       var result = storesService.getStores();
       var promiseResult = $q.defer().promise;
@@ -85,6 +85,6 @@ describe('[Services.storesService]', function() {
 
       expect(result).toBeTruthy();
     });
-  });
+  });*/
 
 });

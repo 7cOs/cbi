@@ -40,28 +40,29 @@ v-accordion.styled-list(multiple="" id="opportunities" control="list.accordion" 
         label(ng-click="list.sortBy('segmentation')" ng-class="{ 'header-bold' : list.sortProperty === 'segmentation'}")
           | Segmentation
           span(ng-class="{ 'chevron-down-small' : list.segmentationChevron, 'chevron-up-small' : !list.segmentationChevron}").chevron-down-small
-  v-pane.list-item(row ng-repeat="opportunity in list.opportunities | orderBy:list.sortProperty:list.reverse" expanded="opportunity.isExpanded" ng-click="")
-    .action-overlay(ng-class="{'active': opportunity.toggled, 'no-class': !opportunity.toggled}" ng-if="list.pageName === 'target-lists'")
+  //v-pane.list-item(row ng-repeat="opportunity in list.opportunities | orderBy:list.sortProperty:list.reverse" expanded="opportunity.isExpanded" ng-click="")
+  v-pane.list-item(row ng-repeat="store in list.stores | orderBy:list.sortProperty:list.reverse" expanded='store.isExpanded')
+    .action-overlay(ng-class="{'active': store.toggled, 'no-class': !store.toggled}" ng-if="list.pageName === 'target-lists'")
       div.checkbox-wrapper
           md-checkbox(aria-label="Action Item Select" ng-checked="true")
       div.overlay-wrapper
         p Successfully sent to 3 people
-      div(ng-click="list.actionOverlay(opportunity)").hide-wrapper.hide-icon-wrapper.hide-row
+      div(ng-click="list.actionOverlay(store)").hide-wrapper.hide-icon-wrapper.hide-row
     .shadow-wrap.bottom
-      div.checkbox-wrapper(ng-click="list.toggle(opportunity, list.selected)")
-        md-checkbox(aria-label="Select Item" ng-checked="list.exists(opportunity, list.selected)")
+      div.checkbox-wrapper(ng-click="list.toggle(store, list.selected)")
+        md-checkbox(aria-label="Select Item" ng-checked="list.exists(store, list.selected)")
       div.hide-wrapper.hide-icon-wrapper.hide-row(ng-if="list.pageName !== 'target-lists'")
       div.more-wrapper(ng-if="list.pageName === 'target-lists'")
-        md-button.md-icon-button(aria-label="More" ng-click="list.actionOverlay(opportunity)")
+        md-button.md-icon-button(aria-label="More" ng-click="list.actionOverlay(store)")
           md-icon(md-svg-icon="../assets/img/icons/more.svg")
       v-pane-header.checkbox-sibling(column='12')
         div.cell-parent
-          div.pad-cell(column='3') {{opportunity.store.name}} <span class="supporting-text">\#{{opportunity.store.id}}</span>
-          div.address(column='4') {{opportunity.store.address}}
-          div(column='2') {{opportunity.opCount | number }} <span class="supporting-text">({{opportunity.impact}} high)</span>
-          div(column='1') {{opportunity.depletionsCYTD | number }}
-          div(column='1' class="value" ng-class="{'positive' : opportunity.positiveValue, 'negative' : opportunity.negativeValue}") <span ng-if="opportunity.positiveValue">+</span>{{opportunity.depletionTrendVsYA}}<span>%</span>
-          div(column='1') {{opportunity.store.segmentation}}
+          div.pad-cell(column='3') {{store.store_name | titlecase}} <span class="supporting-text">\#{{store.tdlinx_number}}</span>
+          div.address(column='4') {{store.address | titlecase}} {{store.city | titlecase}}, {{store.state}}
+          div(column='2') {{store.opCount | number }} <span class="supporting-text">({{store.impact}} high)</span>
+          div(column='1') {{store.depletionsCYTD | number }}
+          div(column='1' class="value" ng-class="{'positive' : store.positiveValue, 'negative' : store.negativeValue}") <span ng-if="store.positiveValue">+</span>{{store.depletionTrendVsYA}}<span>%</span>
+          div(column='1') {{store.store.segmentation}}
       v-pane-content(column='12' class="products" ng-class="{'open' : open}")
         .shadow-wrap.top
           .hero-row(row)

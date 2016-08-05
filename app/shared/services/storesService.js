@@ -75,7 +75,8 @@ module.exports =
      */
     function getStores(tdlinxNumber) {
       var storesPromise = $q.defer(),
-          url = tdlinxNumber ? apiHelperService.request('/stores/' + tdlinxNumber) : apiHelperService.request('/stores/');
+          // url = tdlinxNumber ? apiHelperService.request('/api/stores/' + tdlinxNumber) : apiHelperService.request('/api/stores');
+          url = '';
 
       $http.get(url, {
         headers: {}
@@ -84,8 +85,16 @@ module.exports =
       .catch(getStoresFail);
 
       function getStoresSuccess(response) {
-        // storesPromise.resolve(response.data);
-        storesPromise.resolve(data);
+        // console.log(response);
+        response.data = data;
+        for (var i = 0; i < response.data.stores.length; i++) {
+          if (response.data.stores[i].store_rank_wine.delta > 0) {
+            response.data.stores[i].positiveValue = true;
+          } else if (response.data.stores[i].store_rank_wine.delta < 0) {
+            response.data.stores[i].negativeValue = true;
+          }
+        }
+        storesPromise.resolve(response.data);
       }
 
       function getStoresFail(error) {
