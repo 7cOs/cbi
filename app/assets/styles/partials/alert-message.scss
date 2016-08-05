@@ -1,0 +1,22 @@
+.no-opportunites {
+  background: $lavender;
+  padding: 30px;
+  width: 400px;
+  height: 133px;
+  text-align: center;
+  margin: 100px auto;
+  border-radius: 5px;
+  box-shadow: 0 0 1em $gray-8;
+
+  h4 {
+    margin-top: 20px;
+  }
+
+  span {
+    color: $blue;
+  }
+
+  p {
+    margin: 0 70px;
+  }
+}

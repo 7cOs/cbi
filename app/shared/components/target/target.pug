@@ -8,6 +8,9 @@ div.target-lists
             h5(column="6").accent.completed.right  closed
             h5(column="6").accent.right opportunities
         div(row).target-list
+          div(ng-show="!target.namedFilters.length").no-opportunites
+            h4 No Opportunities have been added yet
+            p Try Searching for <span>Opportunities</span> and add them to your list
           ul
             li(ng-repeat="list in target.namedFilters")
               div(column="8")
@@ -29,6 +32,9 @@ div.target-lists
             h5(column="6").accent.completed.right  closed
             h5(column="6").accent.right opportunities
         div(row).target-list
+          div(ng-show="!target.sharedFilters.length").no-opportunites
+            h4 No Opportunities have been shared with you yet
+            p Try Searching for <span>Opportunities</span> and add them to your list
           ul
             li(ng-repeat="list in target.sharedFilters")
               div(column="8")
@@ -48,6 +54,9 @@ div.target-lists
             h5(column="6").accent.completed.right  closed
             h5(column="6").accent.right opportunities
         div(row).target-list
+          div(ng-show="!target.archivedFilters.length").no-opportunites
+            h4 No Opportunities to remove
+            p Try Searching for <span>Opportunities</span> and add them to your list
           ul
             li(ng-repeat="list in target.archivedFilters")
               div(column="8")
