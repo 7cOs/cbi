@@ -1,6 +1,6 @@
 'use strict';
 
-function TargetListController($scope, $state) {
+function ExpandedTargetListController($scope, $state) {
   var vm = this;
 
   vm.pageName = $state.current.name;
@@ -45,7 +45,7 @@ function TargetListController($scope, $state) {
     'creator': 'Sam Carvey',
     'members': ['David Ostler', 'Todd Alkema'],
     'created': 'One Hour Ago',
-    'closedOpportunities': 20,
+    'closedOpportunities': 1751,
     'opportunities': 2251
   }, {
     'name': 'West Seattle C-Stores',
@@ -74,9 +74,9 @@ function TargetListController($scope, $state) {
 }
 
 module.exports =
-  angular.module('andromeda.common.components.target', [])
-  .component('target', {
-    templateUrl: './app/shared/components/target/target.html',
-    controller: TargetListController,
-    controllerAs: 'target'
+  angular.module('andromeda.common.components.expanded', [])
+  .component('expanded', {
+    templateUrl: './app/shared/components/target-list-expanded/expanded.html',
+    controller: ExpandedTargetListController,
+    controllerAs: 'expanded'
   });

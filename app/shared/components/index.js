@@ -9,5 +9,6 @@ module.exports =
     require('./typeahead').name,
     require('./dropdown').name,
     require('./list').name,
-    require('./target').name
+    require('./target').name,
+    require('./target-list-expanded').name
   ]);

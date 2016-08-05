@@ -39,6 +39,25 @@ div.target-lists
               div(column="4")
                 h4(column="6").completed.right {{list.closedOpportunities | number}}
                 h4(column="6").right {{list.opportunities | number}}
-              md-progress-linear(md-mode="determinate" value="{{list.closedOpportunities / list.opportunities * 100}}")
+              md-progress-linear(md-mode="determinate" ng-value="target.ratio(list.closedOpportunities, list.opportunities)")
+    md-tab(label='Archived' ng-if="target.pageName === 'target-lists'")
+      md-content.md-padding
+        div(row).target-list-count-container
+          h5.accent.right Displaying Recent (3 of 3)
+          div(column="4 +6").target-list-count
+            h5(column="6").accent.completed.right  closed
+            h5(column="6").accent.right opportunities
+        div(row).target-list
+          ul
+            li(ng-repeat="list in target.archivedFilters")
+              div(column="8")
+                h3 {{list.name}}
+                p.accent {{list.creator}}
+                p.accent &#9746; {{list.members.length}} members
+                p.accent {{list.created}}
+              div(column="4")
+                h4(column="6").completed.right {{list.closedOpportunities | number}}
+                h4(column="6").right {{list.opportunities | number}}
+              md-progress-linear(md-mode="determinate" ng-value="target.ratio(list.closedOpportunities, list.opportunities)")
         div(row)
           p.accent.action-item #[a(href="#") View All &#9654;]
