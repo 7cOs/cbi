@@ -62,7 +62,7 @@ v-accordion.styled-list(multiple="" id="opportunities" control="list.accordion" 
           div(column='2') {{store.opCount | number }} <span class="supporting-text">({{store.impact}} high)</span>
           div(column='1') {{store.depletionsCYTD | number }}
           div(column='1' class="value" ng-class="{'positive' : store.positiveValue, 'negative' : store.negativeValue}") <span ng-if="store.positiveValue">+</span>{{store.depletionTrendVsYA}}<span>%</span>
-          div(column='1') {{store.store.segmentation}}
+          div(column='1') {{store.segmentation}}
       v-pane-content(column='12' class="products" ng-class="{'open' : open}")
         .shadow-wrap.top
           .hero-row(row)

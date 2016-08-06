@@ -86,8 +86,8 @@ function ListController($scope, $state, opportunitiesService, storesService) {
     // Get opportunities and products data
     storesService.getStores().then(function(data) {
       // vm.opportunities = data.stores;
-      vm.stores = data.stores;
-      console.log(data.stores);
+      vm.stores = data;
+      console.log(data);
     });
 
     // This needs to be replaced when we get live data
