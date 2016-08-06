@@ -83,17 +83,6 @@ function ListController($scope, $state, opportunitiesService, storesService) {
     /* opportunitiesService.getOpportunities().then(function(data) {
       opportunitiesService.model.opportunities = data;
     });*/
-
-    // Get opportunities and products data
-    storesService.getStores().then(function(data) {
-      // vm.opportunities = data.stores;
-      vm.stores = data.stores;
-    });
-
-    // This needs to be replaced when we get live data
-    // Get opportunities and products data
-    vm.opportunities = opportunitiesService.get('opportunities');
-    vm.products = opportunitiesService.get('products');
   }
 
   // Set positive or negative label for trend values
