@@ -20,7 +20,7 @@ module.exports = function(app) {
     issuer: 'passport-saml',
     passReqToCallback: true,
     entryPoint: app.get('config').saml.entryPoint,
-    cert: fs.readFileSync('./server/_config/passport/cbi-dev.crt', 'utf-8'),
+    cert: fs.readFileSync('./server/_config/passport/certs/development.crt', 'utf-8'),
     signatureAlgorithm: app.get('config').saml.signatureAlgorithm
   }, function(req, profile, done) {
     console.log(req.body.SAMLResponse);
