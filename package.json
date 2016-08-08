@@ -28,7 +28,6 @@
     "karma": "1.1.1",
     "multer": "1.1.0",
     "ng-csv": "^0.3.6",
-    "ng-sanitize": "0.0.2",
     "nvd3": "^1.8.4",
     "passport": "0.3.2",
     "passport-local": "1.0.0",
