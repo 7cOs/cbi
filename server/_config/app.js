@@ -61,7 +61,7 @@ config.auth = {
   },
   passport: {
     use: true,
-    strategy: 'passport/two-legged'
+    strategy: 'passport/saml'
   }
 };
 

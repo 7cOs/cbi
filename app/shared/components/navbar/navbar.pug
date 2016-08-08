@@ -20,11 +20,12 @@ div(container)
             span #[a(ui-sref="target-lists") Target Lists]
       div.nav-icon-container
         img(src="assets/img/icons/nav-search.svg").nav-icon
-        img(src="assets/img/icons/nav-plus.svg").nav-icon
+        a(href="https://iqweb.cbrands.com" target="_self")
+          img(src="assets/img/icons/nav-plus.svg").nav-icon
         //- "Hidden" link to the style guide (remove whenever needed)
         img(src="assets/img/icons/nav-notify.svg" ui-sref="style-guide").nav-icon
         //- "Hidden" link to the secret client thing
-        a(href="https://iqweb.cbrands.com")
+        a(href="/auth/logout" target="_self")
           img(src="assets/img/icons/nav-gear.svg" ).nav-icon
     ul.nav-sub-menu(ng-if="pageName === 'accounts' || pageName === 'scorecards'")
       li.accent #[a(ui-sref="scorecards" ui-sref-active="active") My Scorecards]

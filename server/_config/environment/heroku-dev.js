@@ -16,11 +16,12 @@ module.exports = function (config) {
     js: config.address + 'js/'
   };
 
-  config.oauth = {
-    tokenURL: 'https://ssodev.cbrands.com/ms_oauth/oauth2/endpoints/oauthservice/tokens',
-    clientID: 'PortalClient',
-    clientSecret: 'YNzWaLKJNGZ5vvlgiZ',
-    scope: 'API.All'
+  config.saml = {
+    entryPoint: 'https://ssodev.cbrands.com/oamfed/idp/initiatesso?providerid=SP-Orion',
+    issuer: 'https://orion-dev.cbrands.com',
+    cert: '',
+    privateCert: '',
+    signatureAlgorithm: 'sha1'
   };
 
   return config;

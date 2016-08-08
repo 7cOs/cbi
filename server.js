@@ -12,7 +12,9 @@ var basic = auth.basic({
   file: __dirname + '/server/_config/users.htpasswd'
 });
 
-app.use(auth.connect(basic));
+if (process.env.NODE_ENV === 'heroku-dev') {
+  app.use(auth.connect(basic));
+};
 
 // EXPRESS SETTINGS
 require(__dirname + '/server/_config/express')(app);
