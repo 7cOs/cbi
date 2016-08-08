@@ -22,17 +22,17 @@ module.exports = function(app) {
     });
   app.get('/auth/logout', function (req, res) {
     req.logout();
-    res.redirect('http://deloitte.com');
+    res.redirect('https://ssodev.cbrands.com/oam/server/logout?end_url=http://orion-dev.cbrands.com');
   });
   app.post('/auth/callback',
-    passport.authenticate('saml', {failureRedirect: 'http://deloitte.com'}),
+    passport.authenticate('saml', {failureRedirect: '/auth/login'}),
     function(req, res) {
       res.redirect('/opportunities');
     });
 
   //  Angular routes
   app.get('*', function (req, res) {
-    if (req.isAuthenticated() || process.env.NODE_ENV === 'development') {
+    if (req.isAuthenticated() || process.env.NODE_ENV === 'development' || process.env.NODE_ENV === 'heroku-dev') {
       res.render('main', {
         config: app.get('config')
       });
