@@ -1,5 +1,5 @@
 module.exports =
-  function opportunitiesService($http, $q, productsService, distributorsService, apiHelperService) {
+  function opportunitiesService($http, $q, productsService, distributorsService, apiHelperService, filtersService) {
     // Temporary Data - Old Data we're currently using in controllers
     var tempData = {
       opportunities: [{
@@ -357,19 +357,18 @@ module.exports =
     };
 
     var model = {
-      opportunities: []
+      filterApplied: false,
+      opportunities: [],
+      products: tempData.products
     };
 
-    model.products = tempData.products;
-
-    return {
-      all: function() {
+    var service = {
+      /* all: function() {
         return tempData.opportunities;
       },
       get: function(id) {
         return tempData[id];
-      },
-
+      },*/
       model: model,
       getOpportunities: getOpportunities,
       createOpportunity: createOpportunity,
@@ -378,6 +377,8 @@ module.exports =
       createOpportunityFeedback: createOpportunityFeedback,
       deleteOpportunityFeedback: deleteOpportunityFeedback
     };
+
+    return service;
 
     // Opportunities Methods
     /**
@@ -388,8 +389,17 @@ module.exports =
      * @memberOf andromeda.common.services
      */
     function getOpportunities(opportunityID) {
+      // get applied filters
+      var filterPayload = {type: 'opportunities'};
+      for (var key in filtersService.model.selected) {
+        if (filtersService.model.selected[key] !== '') {
+          filterPayload[key] = filtersService.model.selected[key];
+        }
+      }
+
+      // create promise, build url based on filters and if there is an opp id
       var opportunitiesPromise = $q.defer(),
-          url = opportunityID ? apiHelperService.request('/api/opportunities/' + opportunityID) : apiHelperService.request('/api/opportunities/');
+          url = opportunityID ? apiHelperService.request('/api/opportunities/' + opportunityID, filterPayload) : apiHelperService.request('/api/opportunities/', filterPayload);
 
       $http.get(url, {
         headers: {}
@@ -399,21 +409,16 @@ module.exports =
 
       function getOpportunitiesSuccess(response) {
         // Set positive or negative label for trend values
-        /* response.opportunities.forEach(function(item) {
+        response.data.opportunities.forEach(function(item) {
           var trend = item.depletionTrendVsYA;
           if (trend > 0) {
             item.positiveValue = true;
           } else if (trend < 0) {
             item.negativeValue = true;
           }
-        });*/
-        // opportunitiesPromise.resolve(tempData.opportunities);
-        opportunitiesPromise.resolve(response.data);
+        });
 
-        // console.log('[opportunitiesService.getOpportunities] mocked response: ', tempData.opportunities);
-        console.log('[opportunitiesService.getOpportunities] response: ', response);
-        // opportunitiesPromise.resolve(response.data);
-        // uncomment above and remove below when services are ready
+        opportunitiesPromise.resolve(response.data);
       }
 
       function getOpportunitiesFail(error) {

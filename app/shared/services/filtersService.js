@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports =
-  function filtersService(opportunitiesService, productsService, distributorsService, storesService) {
+  function filtersService(productsService, distributorsService, storesService) {
     var model = {
       accounts: [
         {name: 'Walmart', subAccount: 'North East'},

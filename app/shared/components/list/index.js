@@ -26,7 +26,7 @@ function ListController($scope, $state, opportunitiesService, storesService) {
 
   // Services
   vm.opportunitiesService = opportunitiesService;
-  vm.storesService = storesService;
+  // vm.storesService = storesService;
 
   init();
 
@@ -44,15 +44,18 @@ function ListController($scope, $state, opportunitiesService, storesService) {
 
   // Check if all items are selected
   function isChecked() {
-    return vm.selected.length === vm.opportunities.length;
+    // return vm.selected.length === vm.opportunities.length;
+    return vm.selected.length === vm.opportunitiesService.model.opportunities.length;
   };
 
   // Select or deselect all list items
   function toggleAll() {
-    if (vm.selected.length === vm.opportunities.length) {
+    // if (vm.selected.length === vm.opportunities.length) {
+    if (vm.selected.length === vm.opportunitiesService.model.opportunities.length) {
       vm.selected = [];
     } else if (vm.selected.length === 0 || vm.selected.length > 0) {
-      vm.selected = vm.opportunities.slice(0);
+      // vm.selected = vm.opportunities.slice(0);
+      vm.selected = vm.opportunitiesService.model.opportunities.slice(0);
     }
   };
 
@@ -84,16 +87,16 @@ function ListController($scope, $state, opportunitiesService, storesService) {
     });*/
 
     // Get opportunities and products data
-    storesService.getStores().then(function(data) {
+    /* storesService.getStores().then(function(data) {
       // vm.opportunities = data.stores;
       vm.stores = data;
       console.log(data);
-    });
+    });*/
 
     // This needs to be replaced when we get live data
     // Get opportunities and products data
-    vm.opportunities = opportunitiesService.get('opportunities');
-    vm.products = opportunitiesService.get('products');
+    /* vm.opportunities = opportunitiesService.get('opportunities');
+    vm.products = opportunitiesService.get('products');*/
   }
 
   // Set positive or negative label for trend values

@@ -3,6 +3,7 @@
 module.exports =
   function storesService($http, $q, apiHelperService) {
 
+    /* mock data
     var data = {
       stores: [{
         'account': 'Walmart',
@@ -59,7 +60,7 @@ module.exports =
           'depl_pts_fytd_1ya': 297.32
         }
       }]
-    };
+    };*/
 
     return {
       getStores: getStores,
