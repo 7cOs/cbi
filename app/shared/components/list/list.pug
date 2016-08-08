@@ -61,9 +61,9 @@ v-accordion.styled-list(multiple="" id="opportunities" control="list.accordion" 
         div.cell-parent
           div.pad-cell(column='3') {{::opportunity.store.name | titlecase}} <span class="supporting-text">\#{{::opportunity.store.id | uppercase}}</span>
           div.address(column='4') {{::opportunity.store.address | titlecase}}
-          div(column='2') {{::opportunity.opCount | number }} <span class="supporting-text">({{::opportunity.impact}})</span>
+          div(column='2') {{::opportunity.groupedOpportunities.length}} <span class="supporting-text">({{::opportunity.highImpactSum}} High)</span>
           .text-center(column='1') {{::opportunity.currentYTDStoreVolume | number }}
-          .text-center(column='1' class="value" ng-class="{'positive' : opportunity.positiveValue, 'negative' : opportunity.negativeValue}") <span ng-if="opportunity.positiveValue">+</span>{{(::opportunity.volumeTrend - ::opportunity.lastYTDStoreVolume) | number:2}}<span>%</span>
+          .text-center(column='1' class="value" ng-class="{'positive' : opportunity.positiveValue, 'negative' : opportunity.negativeValue}") <span ng-if="opportunity.positiveValue">+</span>{{(opportunity.trend) | number:2}}<span>%</span>
           .text-center(column='1') {{::opportunity.store.segmentation}}
       v-pane-content(column='12' class="products" ng-class="{'open' : open}")
         .shadow-wrap.top

@@ -62,9 +62,8 @@ module.exports =
 
     function applyFilters() {
       opportunitiesService.getOpportunities().then(function(data) {
-        opportunitiesService.model.opportunities = data.opportunities;
-
-        console.log(opportunitiesService.model.opportunities);
+        console.log(data);
+        opportunitiesService.model.opportunities = data;
 
         for (var i = 0; i < model.length; i++) {
           model[i].applied = true;

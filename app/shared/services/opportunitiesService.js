@@ -408,17 +408,54 @@ module.exports =
       .catch(getOpportunitiesFail);
 
       function getOpportunitiesSuccess(response) {
-        // Set positive or negative label for trend values
-        response.data.opportunities.forEach(function(item) {
-          var trend = item.depletionTrendVsYA;
-          if (trend > 0) {
-            item.positiveValue = true;
-          } else if (trend < 0) {
-            item.negativeValue = true;
-          }
-        });
+        // Group opportunities by store
+        var newOpportunityArr = [],
+            store,
+            storePlaceholder;
 
-        opportunitiesPromise.resolve(response.data);
+        // response.data.opportunities.forEach(function(item) {
+        for (var i = 0; i < response.data.opportunities.length; i++) {
+          var item = response.data.opportunities[i];
+
+          // if its a new store
+          if (!storePlaceholder || (storePlaceholder.address !== item.store.address || storePlaceholder.id !== item.store.id)) {
+            // push previous store in newOpportunityArr
+            if (i !== 0) newOpportunityArr.push(store);
+
+            // create grouped store object
+            store = angular.copy(item);
+            store.highImpactSum = 0;
+
+            // set store placeholder to new store
+            storePlaceholder = item.store;
+
+            // Set positive or negative label for trend values for store
+            store.trend = store.currentYTDStoreVolume - store.lastYTDStoreVolume;
+            if (store.trend > 0) {
+              store.positiveValue = true;
+            } else if (store.trend < 0) {
+              store.negativeValue = true;
+            }
+
+            // create groupedOpportunities arr so all opportunities for one store will be in a row
+            store.groupedOpportunities = [];
+            store.groupedOpportunities.push(item);
+          // } else if (store.address === item.store.address && store.id === item.store.id) { // same store
+          } else {
+            store.groupedOpportunities.push(item);
+          }
+
+          // sum high opportunities
+          if (item.impact.toLowerCase() === 'high') store.highImpactSum += 1;
+
+          // sum depletions - not in api yet - WJAY 8/8
+          // item.depletionSum += item.
+
+          // push last store into newOpportunityArr
+          if (i + 1 === response.data.opportunities.length) newOpportunityArr.push(store);
+        }; // end for each
+
+        opportunitiesPromise.resolve(newOpportunityArr);
       }
 
       function getOpportunitiesFail(error) {
