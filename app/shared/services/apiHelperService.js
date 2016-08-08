@@ -24,28 +24,39 @@ module.exports =
         // remove type obj
         delete obj.type;
 
-        for (var key in obj) {
-          queryParams += key + '=' + obj[key];
-          if (i !== z) queryParams += '&';
+        for (var key1 in obj) {
+          queryParams += key1 + '=' + obj[key1];
+          if (i !== (z - 1)) queryParams += '&';
           i++;
         }
 
         return '?' + queryParams;
+      } else if (obj.type && obj.type === 'opportunities') {
+        queryParams += 'filter=limit:500,sort:store,';
+
+        // remove type obj
+        delete obj.type;
+
+        for (var key2 in obj) {
+          queryParams += key2 + ':' + obj[key2];
+          if (i !== (z - 1)) queryParams += ',';
+          i++;
+        }
+
+        return '?' + encodeURIComponent(queryParams);
       } else {
         queryParams += 'filter=';
 
         // remove type obj
         delete obj.type;
 
-        for (var k in obj) {
-          queryParams += k + ':' + obj[k];
+        for (var key3 in obj) {
+          queryParams += key3 + ':' + obj[key3];
           if (i !== z) queryParams += ',';
           i++;
         }
 
-        encodeURIComponent(queryParams);
-
-        return '?' + queryParams;
+        return '?' + encodeURIComponent(queryParams);
       }
     }
 

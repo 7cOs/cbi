@@ -62,13 +62,16 @@ module.exports =
 
     function applyFilters() {
       opportunitiesService.getOpportunities().then(function(data) {
-        opportunitiesService.model.opportunities = data;
+        opportunitiesService.model.opportunities = data.opportunities;
+
+        console.log(opportunitiesService.model.opportunities);
 
         for (var i = 0; i < model.length; i++) {
           model[i].applied = true;
         }
 
         filtersService.model.filtersApplied = true;
+        opportunitiesService.model.filterApplied = true;
 
       });
     }
