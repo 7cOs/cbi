@@ -8,6 +8,8 @@ angular.module('andromeda', [
   require('angular-animate'),
   require('v-accordion'),
   require('angular-nvd3'),
+  require('angular-sanitize'),
+  require('ng-csv'),
   require('./shared').name,
   require('./modules').name
 ])
