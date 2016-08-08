@@ -4,7 +4,7 @@ h3(ng-if="list.pageName === 'opportunities'") <strong>{{list.products.length * l
 .action-buttons
   button.btn-action(ng-disabled="list.selected < 1" ng-if="list.pageName !== 'target-lists'") Add to Target List
   button.btn-action(ng-disabled="list.selected < 1" ng-if="list.pageName === 'target-lists'") Copy to Target List
-  button.btn-action(ng-disabled="list.selected < 1") Download
+  button.btn-action(ng-disabled="list.selected < 1" ng-csv="list.selected" filename="opportunities.csv" csv-header="['Account', 'Sub Account', 'Tolinx Number', 'Store Name', 'Store Number', 'Address', 'City', 'State', 'Postal CD', 'Phone Number', 'Latitude', 'Longitude', 'Last Update', 'High Impact', 'Unsold Account', 'Premise Type', 'Trade Classification', 'Planning Group', '', 'Negative Value', 'Is Expanded']") Download
   button.btn-action(ng-disabled="list.selected < 1") Send To
 
 button.icon.select-all(ng-click="list.toggleAll()")
