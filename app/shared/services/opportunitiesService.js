@@ -359,6 +359,7 @@ module.exports =
     var model = {
       filterApplied: false,
       opportunities: [],
+      opportunitiesSum: 0,
       products: tempData.products
     };
 
@@ -452,6 +453,8 @@ module.exports =
 
           // push last store into newOpportunityArr
           if (i + 1 === response.data.opportunities.length) newOpportunityArr.push(store);
+
+          model.opportunitiesSum += 1;
         }; // end for each
 
         opportunitiesPromise.resolve(newOpportunityArr);

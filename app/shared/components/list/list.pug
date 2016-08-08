@@ -1,5 +1,5 @@
 h3(ng-if="list.pageName === 'accounts'") Top opportunities <a class="accent" ui-sref="opportunities">See all opportunities</a>
-h3(ng-if="list.pageName === 'opportunities'") <strong>{{list.products.length * list.opportunitiesService.model.opportunities.length}} opportunities</strong> across {{list.opportunitiesService.model.opportunities.length}} stores
+h3(ng-if="list.pageName === 'opportunities'" ng-hide="list.opportunitiesService.model.opportunities.length === 0") <strong>{{list.opportunitiesService.model.opportunitiesSum}} opportunities</strong> across {{list.opportunitiesService.model.opportunities.length}} stores
 
 .action-buttons
   button.btn-action(ng-disabled="list.selected < 1" ng-if="list.pageName !== 'target-lists'") Add to Target List
