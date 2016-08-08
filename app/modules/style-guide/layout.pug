@@ -151,3 +151,21 @@ div(column='12')
       section
         h3.section-title Tabbed content
         tabs
+
+      section
+        h3.section-title Modal Window
+        div.modal
+          div.title
+            h4 Manage Target List
+          div.modal-form
+            div.modal-input
+              label Name
+              md-autocomplete(md-selected-item="selectedItem" md-search-text="l.filtersService.model.brandSearchTex t" md-items="brand in l.brandQuerySearch(l.filtersService.model.brandSearchText)" md-item-text="brand.name" md-min-length="1" placeholder="by Store or Account" md-selected-item-change="l.chipsService.addAutocompleteChip(brand.name, 'brandSearchText')")
+            div.modal-input
+              label Description
+              textarea
+            button.btn-action Save
+            p.cancel.accent X Cancel
+          div.modal-footer.clearfix
+            p Archive List
+            p Delete List

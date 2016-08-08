@@ -1,0 +1,73 @@
+.modal {
+  margin: 0 auto;
+  width: 500px;
+  text-align: center;
+  background-color: $gray-4;
+
+  .title {
+    background: linear-gradient(to right, $light-blue-5, $light-blue-6);
+    padding: 2px 20px;
+
+    h4 {
+      color: $white;
+    }
+  }
+
+  .modal-form {
+    padding: 34px;
+
+    .modal-input {
+      margin-bottom: 36px;
+    }
+
+    label {
+      text-align: left;
+    }
+
+    input {
+      width: 100%;
+    }
+
+    input[type='text'] {
+      height: 90px;
+      outline: none;
+    }
+
+    textarea {
+      height: 90px;
+      outline: none;
+      width: 100%;
+      border: none;
+      padding: 12px;
+      font-size: 0.7em;
+    }
+
+    button {
+      width: 100%;
+      margin-bottom: 0;
+    }
+
+    .cancel {
+      color: $blue;
+      margin: 20px 0 -10px;
+    }
+  }
+
+  .modal-footer {
+    padding: 4px 34px;
+    border-top: 1px solid $gray-9;
+
+    p {
+      color: $blue;
+      font-size: 1em;
+    }
+
+    p:first-child {
+      float: left;
+    }
+
+    p:last-child {
+      float: right;
+    }
+  }
+}
