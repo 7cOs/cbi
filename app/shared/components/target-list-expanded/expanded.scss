@@ -1,4 +1,11 @@
 .expanded-target-lists {
+
+  md-tabs,
+  md-tab-content,
+  md-content {
+    overflow: visible;
+  }
+
   .gray {
     color: $gray-3;
   }
@@ -37,6 +44,63 @@
 
     .checkbox-sibling {
       width: calc(100% - 50px);
+    }
+
+    ul.dropdown-menu li {
+      display: none;
+      opacity: 0;
+      font-family: $work-sans;
+      text-align: left;
+      text-transform: none;
+      font-weight: $regular;
+
+      &:after {
+        content: '';
+        position: absolute;
+        left: 57px;
+        top: -12px;
+        width: 0;
+        height: 0;
+        border-left: 16px solid transparent;
+        border-right: 16px solid transparent;
+        border-bottom: 16px solid $lavender-2;
+      }
+
+      &.creator {
+        font-weight: $bold;
+      }
+    }
+
+    .dropdown-menu-trigger:hover > ul.dropdown-menu li {
+      display: block;
+      margin: 18px 0;
+      padding: 2px 20px;
+      background: $lavender-2;
+      opacity: 1;
+      transition: all 200ms linear;
+    }
+
+    .dropdown-menu-trigger:hover > ul.dropdown-menu {
+      visibility: visible;
+      opacity: 1;
+      transition: opacity 300ms ease-in-out;
+    }
+
+    ul.dropdown-menu {
+      opacity: 0;
+      visibility: hidden;
+      width: 200px;
+      margin: 10px auto 0;
+      position: absolute;
+      z-index: 550;
+      background: $lavender-2;
+      border-radius: 5px;
+      box-shadow: 0 0 1em $gray-8;
+      transition: opacity 300ms linear;
+    }
+
+    .member:hover {
+      font-weight: $medium;
     }
 
     .md-padding {

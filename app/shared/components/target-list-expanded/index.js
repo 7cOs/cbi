@@ -20,28 +20,28 @@ function ExpandedTargetListController($scope, $state) {
   vm.namedFilters = [{
     'name': 'California - Whiskey Bars',
     'creator': 'Will Jay',
-    'members': ['James Norton', 'RJ LaCount', 'Eric Schiller'],
+    'members': ['James Norton', 'Rebecca Norton', 'Eric Schiller'],
     'created': 'One Minute Ago',
     'closedOpportunities': 520,
     'opportunities': 2251
   }, {
     'name': 'California - Wine Shops',
     'creator': 'Pete Mitchell',
-    'members': ['James Norton', 'Eric Schiller'],
+    'members': ['Scott Moffat', 'John Rozsnyai'],
     'created': 'One Minute Ago',
     'closedOpportunities': 320,
     'opportunities': 451
   }, {
     'name': 'California - Negroni Bars',
     'creator': 'Nick Bradsaw',
-    'members': ['James Norton', 'RJ LaCount', 'Eric Schiller', 'Holly Perkins'],
+    'members': ['Elizabeth Stephenson', 'Pearl Kitty', 'Michael Phelps'],
     'created': 'One Year Ago',
     'closedOpportunities': 1989,
     'opportunities': 2251
   }, {
     'name': 'California - Beer Stores',
     'creator': 'RJ LaCount',
-    'members': ['James Norton', 'Adwait Nerlikar', 'RJ LaCount', 'Eric Schiller'],
+    'members': ['Jimmy Fallon', 'Seth Rogan', 'Papa Murphey', 'Neil Armstrong'],
     'created': 'One Minute Ago',
     'closedOpportunities': 587,
     'opportunities': 2251
