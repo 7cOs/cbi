@@ -36,6 +36,7 @@ module.exports =
     vm.accountTypesDefault = 'Stores';
     vm.brandWidgetTitleDefault = 'All Brands';
     vm.brandWidgetTitle = vm.brandWidgetTitleDefault;
+    vm.filtersService.model.selected.accountMarkets = 'Depletions';
     vm.selectOpen = false;
     vm.brandDrillDown = null;
 

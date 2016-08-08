@@ -342,63 +342,90 @@ module.exports =
             'title': 'Walmart',
             'address': '3500 Brumb... Kenosha, WA',
             'storeNum': 1167,
-            'depletions': 47560
+            'depletions': 47560,
+            'distSimple': 28344,
+            'distEffective': 48832,
+            'velocity': 28383
           }, {
             'label': 'Walmart #2872',
             'value': -4,
             'title': 'Walmart',
             'address': '10562 Bell... , Belleville, MI',
             'storeNum': 2872,
-            'depletions': 65879
+            'depletions': 65879,
+            'distSimple': 98237,
+            'distEffective': 23894,
+            'velocity': 2834
           }, {
             'label': 'Walmart #166',
             'value': 9,
             'title': 'Walmart',
             'address': '1433 S Sam... , Houston, MO',
             'storeNum': 166,
-            'depletions': 45500
+            'depletions': 45500,
+            'distSimple': 29387,
+            'distEffective': 4983,
+            'velocity': 9283
           }, {
             'label': 'Walmart #3395',
             'value': 4,
             'title': 'Walmart',
             'address': '3501 S Loc... , Grand Island, NE',
             'storeNum': 3395,
-            'depletions': 64329
+            'depletions': 64329,
+            'distSimple': 28947,
+            'distEffective': 82748,
+            'velocity': 78673
           }, {
             'label': 'Walmart #1471',
             'value': -10,
             'title': 'Walmart',
             'address': '1717 N Sha... , New London, WI',
             'storeNum': 1471,
-            'depletions': 42943
+            'depletions': 42943,
+            'distSimple': 20937,
+            'distEffective': 82374,
+            'velocity': 29374
           }, {
             'label': 'Walmart #1685',
             'value': -1,
             'title': 'Walmart',
             'address': '1730 N Gar... , Pierre, SD',
             'storeNum': 1685,
-            'depletions': 51211
+            'depletions': 51211,
+            'distSimple': 89744,
+            'distEffective': 93784,
+            'velocity': 81273
           }, {
             'label': 'Walmart #2738',
             'value': -3,
             'title': 'Walmart',
             'address': '400 Juncti... , Glen Carbon, IL',
             'storeNum': 2738,
-            'depletions': 71200
+            'depletions': 71200,
+            'distSimple': 27387,
+            'distEffective': 82737,
+            'velocity': 92744
           }, {
             'label': 'Walmart #2089',
             'value': 11,
             'title': 'Walmart',
             'address': '3001 W Bro... , Coumbia, MO',
             'storeNum': 2089,
-            'depletions': 61193
+            'depletions': 61193,
+            'distSimple': 62733,
+            'distEffective': 84763,
+            'velocity': 72633
           }, {
             'label': 'Walmart #1198',
             'value': 2,
             'title': 'Walmart',
             'address': 'W159S6530... , Muskego, WI',
             'storeNum': 1198,
-            'depletions': 55342
+            'depletions': 55342,
+            'distSimple': 67263,
+            'distEffective': 7263,
+            'velocity': 2452
           }
         ]
       }

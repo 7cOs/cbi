@@ -167,16 +167,19 @@ div(row)
       table.chart-data(cellspacing="0" cellpadding="0")
         thead
           tr
-            th.top(colspan=2)
+            th.top.dist-label(colspan=2)
               p.accent.bold.left Distributors
               p &nbsp;
-            th.top.dark
-              p.accent.bold Depletions - FYTD
-              p &nbsp;
+            th.top.dark.market-label
+              p.accent.bold {{a.filtersService.model.selected.accountMarkets}}
         tbody(ng-repeat="obj in a.chartData")
           tr.store(ng-repeat="value in obj.values")
               td(colspan=2) {{value.title}} <span class="store-number">\#{{value.storeNum}}</span><span class="address">{{value.address}}</span>
-              td.dark {{value.depletions}}
+              td.dark
+                span(ng-if="a.filtersService.model.selected.accountMarkets === 'Depletions'") {{value.depletions}}
+                span(ng-if="a.filtersService.model.selected.accountMarkets === 'Distribution (simple)'") {{value.distSimple}}
+                span(ng-if="a.filtersService.model.selected.accountMarkets === 'Distribution (effective)'") {{value.distEffective}}
+                span(ng-if="a.filtersService.model.selected.accountMarkets === 'Velocity'") {{value.velocity}}
       .chart
         table.no-top-border(cellspacing="0" cellpadding="0")
           thead
