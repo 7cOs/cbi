@@ -20,6 +20,7 @@ function ListController($scope, $state, opportunitiesService, storesService) {
   vm.reverse = false;
   vm.segmentationChevron = false;
   vm.selected = [];
+  vm.stores = [];
   // sortProperty is set to default sort on page load
   vm.sortProperty = 'store.name';
   vm.storeChevron = true;
@@ -44,15 +45,15 @@ function ListController($scope, $state, opportunitiesService, storesService) {
 
   // Check if all items are selected
   function isChecked() {
-    return vm.selected.length === vm.opportunities.length;
+    return vm.selected.length === vm.stores.length;
   };
 
   // Select or deselect all list items
   function toggleAll() {
-    if (vm.selected.length === vm.opportunities.length) {
+    if (vm.selected.length === vm.stores.length) {
       vm.selected = [];
     } else if (vm.selected.length === 0 || vm.selected.length > 0) {
-      vm.selected = vm.opportunities.slice(0);
+      vm.selected = vm.stores.slice(0);
     }
   };
 
@@ -87,7 +88,6 @@ function ListController($scope, $state, opportunitiesService, storesService) {
     storesService.getStores().then(function(data) {
       // vm.opportunities = data.stores;
       vm.stores = data.stores;
-      console.log(data.stores);
     });
 
     // This needs to be replaced when we get live data
