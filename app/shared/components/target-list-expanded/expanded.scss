@@ -39,7 +39,6 @@
 
     ._md-container {
       background-image: url('../../assets/img/icons/stripes.svg');
-      border-bottom: 5px solid $white;
     }
 
     .checkbox-sibling {
@@ -147,6 +146,7 @@
     &.placeholder {
       background: $body-bg;
       padding: 0.5em 0;
+      width: 50px;
     }
 
     md-checkbox {
@@ -159,11 +159,11 @@
   }
 
   .named-target-list {
-    padding: 2.75em 0 2.75em 15px;
+    padding: 2.5em 0 2.5em 15px;
   }
 
   .checkbox-sibling-target {
-    width: calc(100% - 35px);
+    width: calc(100% - 50px);
   }
 
   .archived {
