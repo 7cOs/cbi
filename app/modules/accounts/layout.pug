@@ -130,7 +130,7 @@ div(row)
             td.column-total.dark 7.5%
             td.column-total {{1532 | number }}
             td.column-total 4%
-      md-tabs(md-selected="a.selectedIndex" md-autoselect md-dynamic-height)
+      md-tabs(md-selected="a.selectedIndex" md-autoselect md-dynamic-height ng-class="{'animate-disabled': a.disableAnimation}")
         md-tab(label="Tab")
           table.depletions-table.fixed-layout(cellspacing="0" cellpadding="0")
             tbody
@@ -173,7 +173,7 @@ div(row)
                 p &nbsp;
               th.top.dark.market-label
                 p.accent.bold {{a.filtersService.model.selected.accountMarkets}}
-        md-tabs(md-selected="a.marketSelectedIndex" md-autoselect md-dynamic-height)
+        md-tabs(md-selected="a.marketSelectedIndex" md-autoselect md-dynamic-height ng-class="{'animate-disabled': a.disableAnimation}")
           md-tab(label="Tab")
             table.fixed-layout(cellspacing="0" cellpadding="0")
               tbody(ng-repeat="obj in a.chartData")

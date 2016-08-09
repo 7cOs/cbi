@@ -42,6 +42,7 @@ module.exports =
     vm.filtersService.model.selected.accountMarkets = 'Depletions';
     vm.selectOpen = false;
     vm.brandDrillDown = null;
+    vm.disableAnimation = false;
 
     // Broadcast current page name for other scopes
     $rootScope.$broadcast('page:loaded', $state.current.name);
