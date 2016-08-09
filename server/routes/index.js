@@ -18,7 +18,7 @@ module.exports = function(app) {
     passport.authenticate('saml'),
     function(req, res) {
       // Successful authentication, redirect home.
-      res.redirect('/opportunities');
+      res.redirect('/');
     });
   app.get('/auth/logout', function (req, res) {
     req.logout();
@@ -27,7 +27,7 @@ module.exports = function(app) {
   app.post('/auth/callback',
     passport.authenticate('saml', {failureRedirect: '/auth/login'}),
     function(req, res) {
-      res.redirect('/opportunities');
+      res.redirect('/');
     });
 
   //  Angular routes
