@@ -333,76 +333,353 @@ module.exports =
       }]
     };
 
-    var chartData = [
-      {
-        'values': [
-          {
-            'label': 'Walmart #1167',
-            'value': 15,
-            'title': 'Walmart',
-            'address': '3500 Brumb... Kenosha, WA',
-            'storeNum': 1167,
-            'depletions': 47560
-          }, {
-            'label': 'Walmart #2872',
-            'value': -4,
-            'title': 'Walmart',
-            'address': '10562 Bell... , Belleville, MI',
-            'storeNum': 2872,
-            'depletions': 65879
-          }, {
-            'label': 'Walmart #166',
-            'value': 9,
-            'title': 'Walmart',
-            'address': '1433 S Sam... , Houston, MO',
-            'storeNum': 166,
-            'depletions': 45500
-          }, {
-            'label': 'Walmart #3395',
-            'value': 4,
-            'title': 'Walmart',
-            'address': '3501 S Loc... , Grand Island, NE',
-            'storeNum': 3395,
-            'depletions': 64329
-          }, {
-            'label': 'Walmart #1471',
-            'value': -10,
-            'title': 'Walmart',
-            'address': '1717 N Sha... , New London, WI',
-            'storeNum': 1471,
-            'depletions': 42943
-          }, {
-            'label': 'Walmart #1685',
-            'value': -1,
-            'title': 'Walmart',
-            'address': '1730 N Gar... , Pierre, SD',
-            'storeNum': 1685,
-            'depletions': 51211
-          }, {
-            'label': 'Walmart #2738',
-            'value': -3,
-            'title': 'Walmart',
-            'address': '400 Juncti... , Glen Carbon, IL',
-            'storeNum': 2738,
-            'depletions': 71200
-          }, {
-            'label': 'Walmart #2089',
-            'value': 11,
-            'title': 'Walmart',
-            'address': '3001 W Bro... , Coumbia, MO',
-            'storeNum': 2089,
-            'depletions': 61193
-          }, {
-            'label': 'Walmart #1198',
-            'value': 2,
-            'title': 'Walmart',
-            'address': 'W159S6530... , Muskego, WI',
-            'storeNum': 1198,
-            'depletions': 55342
-          }
-        ]
-      }
-    ];
+    var marketData = {
+      'distributors': [
+        {
+          'label': 'Walmed & Feller',
+          'value': 15,
+          'title': 'Walmed & Feller',
+          'storeNum': 1167,
+          'depletions': 47560,
+          'distSimple': 28344,
+          'distEffective': 48832,
+          'velocity': 28383
+        }, {
+          'label': 'Ajax Dist Co - Tn',
+          'value': -4,
+          'title': 'Ajax Dist Co - Tn',
+          'storeNum': 2872,
+          'depletions': 65879,
+          'distSimple': 98237,
+          'distEffective': 23894,
+          'velocity': 2834
+        }, {
+          'label': 'General Wholesale Co - GA (Atlanta)',
+          'value': 9,
+          'title': 'General Wholesale Co - GA (Atlanta)',
+          'storeNum': 166,
+          'depletions': 45500,
+          'distSimple': 29387,
+          'distEffective': 4983,
+          'velocity': 9283
+        }, {
+          'label': 'Carlson Dist Co Inc - Ut',
+          'value': 4,
+          'title': 'Carlson Dist Co Inc - Ut',
+          'storeNum': 3395,
+          'depletions': 64329,
+          'distSimple': 28947,
+          'distEffective': 82748,
+          'velocity': 78673
+        }, {
+          'label': 'Southern Arizona Dist - Az',
+          'value': -10,
+          'title': 'Southern Arizona Dist - Az',
+          'storeNum': 1471,
+          'depletions': 42943,
+          'distSimple': 20937,
+          'distEffective': 82374,
+          'velocity': 29374
+        }, {
+          'label': 'Marty\'s Distributing - Ut',
+          'value': -1,
+          'title': 'Marty\'s Distributing - Ut',
+          'storeNum': 1685,
+          'depletions': 51211,
+          'distSimple': 89744,
+          'distEffective': 93784,
+          'velocity': 81273
+        }, {
+          'label': 'Msp',
+          'value': -3,
+          'title': 'Msp',
+          'storeNum': 2738,
+          'depletions': 71200,
+          'distSimple': 27387,
+          'distEffective': 82737,
+          'velocity': 92744
+        }, {
+          'label': 'Everbrite Electric Signs',
+          'value': 11,
+          'title': 'Everbrite Electric Signs',
+          'storeNum': 2089,
+          'depletions': 61193,
+          'distSimple': 62733,
+          'distEffective': 84763,
+          'velocity': 72633
+        }, {
+          'label': 'Communikay Graphics',
+          'value': 2,
+          'title': 'Communikay Graphics',
+          'storeNum': 1198,
+          'depletions': 55342,
+          'distSimple': 67263,
+          'distEffective': 7263,
+          'velocity': 2452
+        }
+      ],
+      'accounts': [
+        {
+          'label': 'Walmart',
+          'value': 10,
+          'title': 'Walmart',
+          'storeNum': 1167,
+          'depletions': 47560,
+          'distSimple': 28344,
+          'distEffective': 48832,
+          'velocity': 28383
+        }, {
+          'label': 'Food Town',
+          'value': 5,
+          'title': 'Food Town',
+          'storeNum': 2872,
+          'depletions': 65879,
+          'distSimple': 98237,
+          'distEffective': 23894,
+          'velocity': 2834
+        }, {
+          'label': 'Fred Meyer',
+          'value': -8,
+          'title': 'Fred Meyer',
+          'storeNum': 166,
+          'depletions': 45500,
+          'distSimple': 29387,
+          'distEffective': 4983,
+          'velocity': 9283
+        }, {
+          'label': 'Target',
+          'value': 9,
+          'title': 'Target',
+          'storeNum': 3395,
+          'depletions': 64329,
+          'distSimple': 28947,
+          'distEffective': 82748,
+          'velocity': 78673
+        }, {
+          'label': 'Circle K',
+          'value': -3,
+          'title': 'Circle K',
+          'storeNum': 1471,
+          'depletions': 42943,
+          'distSimple': 20937,
+          'distEffective': 82374,
+          'velocity': 29374
+        }, {
+          'label': 'Sears Holding Corp',
+          'value': -2,
+          'title': 'Sears Holding Corp',
+          'storeNum': 1685,
+          'depletions': 51211,
+          'distSimple': 89744,
+          'distEffective': 93784,
+          'velocity': 81273
+        }, {
+          'label': 'Albertsons Safeway',
+          'value': 5,
+          'title': 'Albertsons Safeway',
+          'storeNum': 2738,
+          'depletions': 71200,
+          'distSimple': 27387,
+          'distEffective': 82737,
+          'velocity': 92744
+        }, {
+          'label': 'Rite Aid',
+          'value': 8,
+          'title': 'Rite Aid',
+          'storeNum': 2089,
+          'depletions': 61193,
+          'distSimple': 62733,
+          'distEffective': 84763,
+          'velocity': 72633
+        }, {
+          'label': 'Stripes',
+          'value': 2,
+          'title': 'Stripes',
+          'storeNum': 1198,
+          'depletions': 55342,
+          'distSimple': 67263,
+          'distEffective': 7263,
+          'velocity': 2452
+        }
+      ],
+      'subAccounts': [
+        {
+          'label': 'Mid Atlantic / Northeast',
+          'value': 15,
+          'title': 'Mid Atlantic / Northeast',
+          'storeNum': 1167,
+          'depletions': 47560,
+          'distSimple': 28344,
+          'distEffective': 48832,
+          'velocity': 28383
+        }, {
+          'label': 'North Central',
+          'value': -4,
+          'title': 'North Central',
+          'storeNum': 2872,
+          'depletions': 65879,
+          'distSimple': 98237,
+          'distEffective': 23894,
+          'velocity': 2834
+        }, {
+          'label': 'South Central',
+          'value': 9,
+          'title': 'South Central',
+          'storeNum': 166,
+          'depletions': 45500,
+          'distSimple': 29387,
+          'distEffective': 4983,
+          'velocity': 9283
+        }, {
+          'label': 'Southeast',
+          'value': 4,
+          'title': 'Southeast',
+          'storeNum': 3395,
+          'depletions': 64329,
+          'distSimple': 28947,
+          'distEffective': 82748,
+          'velocity': 78673
+        }, {
+          'label': 'West',
+          'value': -10,
+          'title': 'West',
+          'storeNum': 1471,
+          'depletions': 42943,
+          'distSimple': 20937,
+          'distEffective': 82374,
+          'velocity': 29374
+        }, {
+          'label': 'Southwest',
+          'value': -1,
+          'title': 'Southwest',
+          'storeNum': 1685,
+          'depletions': 51211,
+          'distSimple': 89744,
+          'distEffective': 93784,
+          'velocity': 81273
+        }, {
+          'label': 'Northeast',
+          'value': -3,
+          'title': 'Northeast',
+          'storeNum': 2738,
+          'depletions': 71200,
+          'distSimple': 27387,
+          'distEffective': 82737,
+          'velocity': 92744
+        }, {
+          'label': 'Northwest',
+          'value': 11,
+          'title': 'Northwest',
+          'storeNum': 2089,
+          'depletions': 61193,
+          'distSimple': 62733,
+          'distEffective': 84763,
+          'velocity': 72633
+        }, {
+          'label': 'Central',
+          'value': 2,
+          'title': 'Central',
+          'storeNum': 1198,
+          'depletions': 55342,
+          'distSimple': 67263,
+          'distEffective': 7263,
+          'velocity': 2452
+        }
+      ],
+      'stores': [
+        {
+          'label': 'Walmart #1167',
+          'value': 12,
+          'title': 'Walmart',
+          'address': '3500 Brumb... Kenosha, WA',
+          'storeNum': 1167,
+          'depletions': 47560,
+          'distSimple': 28344,
+          'distEffective': 48832,
+          'velocity': 28383
+        }, {
+          'label': 'Walmart #2872',
+          'value': -4,
+          'title': 'Walmart',
+          'address': '10562 Bell... , Belleville, MI',
+          'storeNum': 2872,
+          'depletions': 65879,
+          'distSimple': 98237,
+          'distEffective': 23894,
+          'velocity': 2834
+        }, {
+          'label': 'Walmart #166',
+          'value': 7,
+          'title': 'Walmart',
+          'address': '1433 S Sam... , Houston, MO',
+          'storeNum': 166,
+          'depletions': 45500,
+          'distSimple': 29387,
+          'distEffective': 4983,
+          'velocity': 9283
+        }, {
+          'label': 'Walmart #3395',
+          'value': -2,
+          'title': 'Walmart',
+          'address': '3501 S Loc... , Grand Island, NE',
+          'storeNum': 3395,
+          'depletions': 64329,
+          'distSimple': 28947,
+          'distEffective': 82748,
+          'velocity': 78673
+        }, {
+          'label': 'Walmart #1471',
+          'value': -8,
+          'title': 'Walmart',
+          'address': '1717 N Sha... , New London, WI',
+          'storeNum': 1471,
+          'depletions': 42943,
+          'distSimple': 20937,
+          'distEffective': 82374,
+          'velocity': 29374
+        }, {
+          'label': 'Walmart #1685',
+          'value': -1,
+          'title': 'Walmart',
+          'address': '1730 N Gar... , Pierre, SD',
+          'storeNum': 1685,
+          'depletions': 51211,
+          'distSimple': 89744,
+          'distEffective': 93784,
+          'velocity': 81273
+        }, {
+          'label': 'Walmart #2738',
+          'value': -4,
+          'title': 'Walmart',
+          'address': '400 Juncti... , Glen Carbon, IL',
+          'storeNum': 2738,
+          'depletions': 71200,
+          'distSimple': 27387,
+          'distEffective': 82737,
+          'velocity': 92744
+        }, {
+          'label': 'Walmart #2089',
+          'value': 5,
+          'title': 'Walmart',
+          'address': '3001 W Bro... , Coumbia, MO',
+          'storeNum': 2089,
+          'depletions': 61193,
+          'distSimple': 62733,
+          'distEffective': 84763,
+          'velocity': 72633
+        }, {
+          'label': 'Walmart #1198',
+          'value': 2,
+          'title': 'Walmart',
+          'address': 'W159S6530... , Muskego, WI',
+          'storeNum': 1198,
+          'depletions': 55342,
+          'distSimple': 67263,
+          'distEffective': 7263,
+          'velocity': 2452
+        }
+      ]
+    };
 
     return {
 
@@ -415,8 +692,8 @@ module.exports =
       filter: function() {
         return filters;
       },
-      chartData: function() {
-        return chartData;
+      marketData: function() {
+        return marketData;
       },
       brandData: function() {
         return brandData;

@@ -151,7 +151,7 @@
     color: $gray-3;
 
     &.market {
-      padding: 0.4em 0 0.3em 2em;
+      padding: 0.4em 0 0.1em 2em;
     }
 
     span {
@@ -211,15 +211,37 @@
     width: 50%;
   }
 
-  tr.store {
+  .fixed-layout {
+    table-layout: fixed;
+
+    &:last-child {
+      border-top: none;
+    }
+  }
+
+  tr.market-value {
     border-bottom: 0;
 
     td {
-      padding: 0.5em 0 0.25em;
+      padding: 1.25em 1em 1.25em 0.75em;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
 
       &:first-child {
         padding-left: 1em;
         text-align: left;
+      }
+    }
+
+    &.store {
+
+      .dist-label {
+        color: $gray-1;
+      }
+
+      td {
+        padding: 0.5em 1em 0.25em 0.75em;
       }
     }
 
@@ -280,4 +302,13 @@
       width: 35%;
     }
   }
+}
+
+.dist-label {
+  color: $blue;
+  width: 70%;
+}
+
+.market-label {
+  width: 30%;
 }

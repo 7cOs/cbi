@@ -71,7 +71,6 @@
   table {
     border-collapse: collapse;
     border-top: 1px solid $black;
-    border-bottom: 1px solid $black;
     width: 100%;
   }
 
@@ -137,6 +136,7 @@
     th {
       padding-top: 10px;
       padding-bottom: 10px;
+      vertical-align: top;
     }
 
     th.top {

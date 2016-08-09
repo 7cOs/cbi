@@ -10,7 +10,8 @@ module.exports =
 
     vm.filters = myperformanceService.filter();
     vm.distributionData = myperformanceService.distributionModel();
-    vm.chartData = myperformanceService.chartData();
+    vm.marketData = myperformanceService.marketData();
+    vm.chartData = [{'values': vm.marketData.distributors}];
     vm.brandData = myperformanceService.brandData();
 
     // Expose public methods
@@ -22,9 +23,11 @@ module.exports =
     vm.idSelected = null;
     vm.setSelected = setSelected;
     vm.openSelect = openSelect;
+    vm.setChartData = setChartData;
 
     // Tab content
-    vm.tabs = [];
+    vm.brandTabs = [];
+    vm.marketTabs = [];
     vm.selected = null;
     vm.previous = null;
     vm.selectedIndex = 0;
@@ -33,9 +36,10 @@ module.exports =
     vm.newTabContent = '';
 
     // Set default values
-    vm.accountTypesDefault = 'Stores';
+    vm.accountTypesDefault = 'Distributors';
     vm.brandWidgetTitleDefault = 'All Brands';
     vm.brandWidgetTitle = vm.brandWidgetTitleDefault;
+    vm.filtersService.model.selected.accountMarkets = 'Depletions';
     vm.selectOpen = false;
     vm.brandDrillDown = null;
 
@@ -87,16 +91,26 @@ module.exports =
       vm.selectedIndex = vm.selectedIndex - 1;
     }
 
-    function addTab(brand) {
-      vm.brandWidgetTitle = brand.name;
-      // Here we can populate vm.brandData with data for selected brand
-      vm.tabs.push({content: ''});
+    function addTab(brand, tabList) {
+      var selectedTabs;
+      switch (tabList) {
+        case 'brandTabs':
+          vm.brandWidgetTitle = brand.name;
+          selectedTabs = vm.brandTabs;
+          break;
+        case 'marketTabs':
+          selectedTabs = vm.marketTabs;
+          break;
+        default:
+          break;
+      }
+      selectedTabs.push({content: ''});
     }
 
-    function removeTab() {
-      var lastItem = vm.tabs.length - 1;
+    function removeTab(tabList) {
+      var lastItem = vm.brandTabs.length - 1;
       vm.brandWidgetTitle = vm.brandWidgetTitleDefault;
-      vm.tabs.splice(lastItem, 1);
+      vm.brandTabs.splice(lastItem, 1);
       vm.idSelected = null;
       vm.brandDrillDown = null;
     }
@@ -128,6 +142,14 @@ module.exports =
 
     function openSelect(value) {
       vm.selectOpen = value;
+    }
+
+    function setChartData() {
+      var dataSet = vm.filtersService.model.selected.accountTypes;
+      if (dataSet === 'Distributors') { vm.chartData = [{'values': vm.marketData.distributors}]; }
+      if (dataSet === 'Accounts') { vm.chartData = [{'values': vm.marketData.accounts}]; }
+      if (dataSet === 'Sub-Accounts') { vm.chartData = [{'values': vm.marketData.subAccounts}]; }
+      if (dataSet === 'Stores') { vm.chartData = [{'values': vm.marketData.stores}]; }
     }
 
     // Check if market overview is scrolled out of view
