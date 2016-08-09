@@ -6,7 +6,7 @@ const path = require('path'),
 let config = {
 
   // NAME OF APPLICATION
-  name: 'andromeda',
+  name: 'orion',
 
   // CACHE
   cache: false,
@@ -17,7 +17,7 @@ let config = {
   // GZIP
   gzip: true,
 
-  namespace: 'andromeda',
+  namespace: 'orion',
 
   // PORT TO RUN ON
   port: 1980,
@@ -41,7 +41,7 @@ let config = {
 
   session: {
     use: true,
-    name: 'andromeda.sid',
+    name: 'orion.sid',
     httpOnly: false,
     secure: false,
     resave: true,

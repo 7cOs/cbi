@@ -74,7 +74,7 @@ function TargetListController($scope, $state) {
 }
 
 module.exports =
-  angular.module('andromeda.common.components.target', [])
+  angular.module('orion.common.components.target', [])
   .component('target', {
     templateUrl: './app/shared/components/target/target.html',
     controller: TargetListController,

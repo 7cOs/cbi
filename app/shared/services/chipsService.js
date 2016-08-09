@@ -20,7 +20,7 @@ module.exports =
      * @params {Object} chip - chip object to be added
      * @params {String} filter - name of property in filter model
      * @returns null
-     * @memberOf andromeda.common.services
+     * @memberOf orion.common.services
      */
     function addAutocompleteChip(chip, filter) {
       if (chip) {
@@ -44,7 +44,7 @@ module.exports =
      * @params {String} type - type of chip
      * @params {Boolean} onlyOneAllowed - if only type is allowed
      * @returns null
-     * @memberOf andromeda.common.services
+     * @memberOf orion.common.services
      */
     function addChip(chip, type, onlyOneAllowed) {
       if (chip) {
@@ -80,7 +80,7 @@ module.exports =
      * @desc remove chip from model
      * @params {String} type - type of chip [type is only used to remove if onlyOneAllowed === true]
      * @returns null
-     * @memberOf andromeda.common.services
+     * @memberOf orion.common.services
      * @private
      */
     function removeChip(type) {
@@ -100,7 +100,7 @@ module.exports =
      * @params {Object} chip - Specific chip from model to be removed
      * @params {String} displayName - display name of chip
      * @returns null
-     * @memberOf andromeda.common.services
+     * @memberOf orion.common.services
      */
     function removeFromFilterService(chip) {
       if (chip.type) filtersService.model.selected[chip.type] = false;
@@ -114,7 +114,7 @@ module.exports =
      * @params {String} chipType - chip type
      * @params {String} displayName - display name of chip
      * @returns null
-     * @memberOf andromeda.common.services
+     * @memberOf orion.common.services
      */
     function updateChip(chipType, displayName) {
       filtersService.model.selected[chipType] === true ? removeChip(chipType) : addChip(displayName, chipType, true);

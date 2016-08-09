@@ -66,7 +66,7 @@ function ExpandedTargetListController($scope, $state) {
 }
 
 module.exports =
-  angular.module('andromeda.common.components.expanded', [])
+  angular.module('orion.common.components.expanded', [])
   .component('expanded', {
     templateUrl: './app/shared/components/target-list-expanded/expanded.html',
     controller: ExpandedTargetListController,

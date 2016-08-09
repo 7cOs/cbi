@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports =
-  angular.module('andromeda.modules.scorecards', [
+  angular.module('orion.modules.scorecards', [
     // load your sample submodules here, e.g.:
     // require('./bar').name
   ])

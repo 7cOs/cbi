@@ -16,7 +16,7 @@ module.exports =
      * @desc mark a notification as read
      * @params {String} notificationId - id of notification for that user
      * @returns {Object} - Status object
-     * @memberOf andromeda.common.services
+     * @memberOf orion.common.services
      */
     function markNotificationAsRead(notificationId) {
       var notificationsPromise = $q.defer(),

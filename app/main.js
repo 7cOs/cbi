@@ -2,7 +2,7 @@
 var angular = require('angular');
 window.nv = require('nvd3');
 
-angular.module('andromeda', [
+angular.module('orion', [
   require('angular-ui-router'),
   require('angular-material'),
   require('angular-animate'),

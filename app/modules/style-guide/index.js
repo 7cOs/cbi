@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports =
-  angular.module('andromeda.modules.styleGuide', [
+  angular.module('orion.modules.styleGuide', [
   ])
   .config(function ($stateProvider) {
     $stateProvider

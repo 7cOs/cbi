@@ -3,8 +3,8 @@ describe('Unit: opportunitiesController', function() {
 
   beforeEach(function() {
     angular.mock.module('ui.router');
-    angular.mock.module('andromeda.common.services');
-    angular.mock.module('andromeda.modules.opportunities');
+    angular.mock.module('orion.common.services');
+    angular.mock.module('orion.modules.opportunities');
 
     inject(function($rootScope, $controller, $q, opportunitiesService, _userService_) {
       scope = $rootScope.$new();
