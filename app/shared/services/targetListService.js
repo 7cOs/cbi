@@ -14,7 +14,47 @@ module.exports =
           'committedOpportunitiesCount': 5,
           'closedOpportunitiesCount': 10,
           'totalClosedDepletions': 352
-        }
+        },
+        'collaborators': [{
+          'id': '13782b',
+          'user': {
+            'id': 'A1B2',
+            'firstName': 'Joe',
+            'lastName': 'Cerveza',
+            'email': 'jCerveza@cbrands.com',
+            'phone': '1234567890',
+            'role': 'CBBD MDM',
+            'accounts': ['Wal-mart', 'PCC']
+          },
+          'permissionLevel': 'Author',
+          'lastViewed': '2015-07-16T19:20:30.45+01:00'
+        }, {
+          'id': '1212jf',
+          'user': {
+            'id': 'A1B3',
+            'firstName': 'John',
+            'lastName': 'Cerveza',
+            'email': 'jCerveza2@cbrands.com',
+            'phone': '1234567890',
+            'role': 'CBBD MDM',
+            'accounts': ['Wal-mart', 'PCC']
+          },
+          'permissionLevel': 'CollaborateAndInvite',
+          'lastViewed': '2015-07-16T19:20:30.45+01:00'
+        }, {
+          'id': 'hkjl88',
+          'user': {
+            'id': 'A1B4',
+            'firstName': 'Jane',
+            'lastName': 'Cerveza',
+            'email': 'jCerveza3@cbrands.com',
+            'phone': '1234567890',
+            'role': 'CBBD MDM',
+            'accounts': ['Wal-mart', 'PCC']
+          },
+          'permissionLevel': 'Collaborate',
+          'lastViewed': '2015-07-16T19:20:30.45+01:00'
+        }]
       },
       updateTargetListPayload: {
         'type': 'object',
@@ -263,7 +303,7 @@ module.exports =
       deleteTargetListSharesResponse: {'status': 200}
     };
 
-    return {
+    var service = {
       getTargetList: getTargetList,
       updateTargetList: updateTargetList,
       deleteTargetList: deleteTargetList,
@@ -274,6 +314,8 @@ module.exports =
       addTargetListShares: addTargetListShares,
       deleteTargetListShares: deleteTargetListShares
     };
+
+    return service;
 
     /**
      * @name getTargetList

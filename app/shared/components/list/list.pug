@@ -29,7 +29,7 @@ v-accordion.styled-list(multiple="" id="opportunities" control="list.accordion" 
       div(column='4')
         label Address
       div(column='2')
-        label(ng-click="list.sortBy('opCount')" ng-class="{ 'header-bold' : list.sortProperty === 'opCount'}")
+        label(ng-click="list.sortBy('groupedOpportunities.length')" ng-class="{ 'header-bold' : list.sortProperty === 'groupedOpportunities.length'}")
           | Opportunities
           span(ng-class="{ 'chevron-down-small' : !list.opportunitiesChevron, 'chevron-up-small' : list.opportunitiesChevron}").chevron-down-small
       div(column='1')
@@ -42,7 +42,6 @@ v-accordion.styled-list(multiple="" id="opportunities" control="list.accordion" 
         label(ng-click="list.sortBy('segmentation')" ng-class="{ 'header-bold' : list.sortProperty === 'segmentation'}")
           | Segmentation
           span(ng-class="{ 'chevron-down-small' : list.segmentationChevron, 'chevron-up-small' : !list.segmentationChevron}").chevron-down-small
-  //v-pane.list-item(row ng-repeat="opportunity in list.opportunitiesService.model.opportunities | orderBy:list.sortProperty:list.reverse" expanded="opportunity.isExpanded" ng-click="")
   v-pane.list-item(row ng-repeat="opportunity in list.opportunitiesService.model.opportunities | orderBy:list.sortProperty:list.reverse" expanded='opportunity.isExpanded')
     .action-overlay(ng-class="{'active': opportunity.toggled, 'no-class': !opportunity.toggled}" ng-if="list.pageName === 'target-lists'")
       div.checkbox-wrapper
@@ -70,25 +69,28 @@ v-accordion.styled-list(multiple="" id="opportunities" control="list.accordion" 
           .hero-row(row)
             div(column='3').pad-cell.brand-icons
               div
-                img(src='assets/img/brands/brand-lg-coronaextra.svg')
-                img(src='assets/img/brands/brand-lg-coronalite.svg')
-                img(src='assets/img/brands/brand-lg-modelo.svg')
-                img(src='assets/img/brands/brand-lg-modelolite.svg')
+                img(ng-if='list.displayBrandIcon(opportunity.brands, "corona")' src='assets/img/brands/brand-lg-coronaextra.svg')
+                img(ng-if='list.displayBrandIcon(opportunity.brands, "corona light")' src='assets/img/brands/brand-lg-coronalite.svg')
+                img(ng-if='list.displayBrandIcon(opportunity.brands, "modelo")' src='assets/img/brands/brand-lg-modelo.svg')
+                img(ng-if='list.displayBrandIcon(opportunity.brands, "negra modelo")' src='assets/img/brands/brand-lg-negramodelo.svg')
+                img(ng-if='list.displayBrandIcon(opportunity.brands, "brand")' src='assets/img/brands/brand-lg-modelolite.svg')
               div.small-icons
-                img(src='assets/img/brands/brand-sm-ballastpoint.svg')
-                img(src='assets/img/brands/brand-sm-modelochelada.svg')
-                img(src='assets/img/brands/brand-sm-modelolite.svg')
-                img(src='assets/img/brands/brand-sm-negramodelo.svg')
-                img(src='assets/img/brands/brand-sm-pacifico.svg')
-                img(src='assets/img/brands/brand-sm-pacificolite.svg')
-                img(src='assets/img/brands/brand-sm-tecate.svg')
+                img(ng-if='!list.displayBrandIcon(opportunity.brands, "corona")' src='assets/img/brands/brand-sm-coronaextra.svg')
+                img(ng-if='!list.displayBrandIcon(opportunity.brands, "corona light")' src='assets/img/brands/brand-sm-coronalite.svg')
+                img(ng-if='!list.displayBrandIcon(opportunity.brands, "ballast point")' src='assets/img/brands/brand-sm-ballastpoint.svg')
+                img(ng-if='!list.displayBrandIcon(opportunity.brands, "modelo chelada")' src='assets/img/brands/brand-sm-modelochelada.svg')
+                img(ng-if='!list.displayBrandIcon(opportunity.brands, "brand")' src='assets/img/brands/brand-sm-modelolite.svg')
+                img(ng-if='!list.displayBrandIcon(opportunity.brands, "negra modelo")' src='assets/img/brands/brand-sm-negramodelo.svg')
+                img(ng-if='!list.displayBrandIcon(opportunity.brands, "pacifico")' src='assets/img/brands/brand-sm-pacifico.svg')
+                img(ng-if='!list.displayBrandIcon(opportunity.brands, "pacifico light")' src='assets/img/brands/brand-sm-pacificolite.svg')
+                img(ng-if='!list.displayBrandIcon(opportunity.brands, "tecate")' src='assets/img/brands/brand-sm-tecate.svg')
             div(column='3').no-pad
               label.bold Distribution L90
               div(row)
                 div(column='4')
                   label Simple
                   div(row)
-                    div(column='12') 4 <span class="percentage">2</span>%
+                    div(column='12') {{::opportunity.groupedOpportunities.length | number:0}} <span class="percentage">2</span>%
                 div(column='8')
                   label Effective
                   div(row)
@@ -96,11 +98,11 @@ v-accordion.styled-list(multiple="" id="opportunities" control="list.accordion" 
             div(column='2')
               label Velocity
               div(row)
-                div(column='12') {{670 | number }} <span class="percentage">7.6</span>%
+                div(column='12') {{::opportunity.storeVelocity | number:0}} <span class="percentage">7.6</span>%
             div(column='2')
-              label Tolinx Submission Code
+              label Tdlinx Submission Code
               div(row)
-                div(column='12') 101745103
+                div(column='12') {{::opportunity.store.id}}
             div(column='2')
               a(href="#").details-link.accent Full Details
         .title-row(row)
@@ -118,7 +120,7 @@ v-accordion.styled-list(multiple="" id="opportunities" control="list.accordion" 
           div(column='1')
             label.bold Hide
         v-accordion(multiple="" class="nested-accordion")
-          v-pane.styled-list(ng-repeat="product in list.opportunitiesService.model.products")
+          v-pane.styled-list(ng-repeat="product in opportunity.groupedOpportunities")
             v-pane-header
               div.cell-parent.sub-item(row)
                 .regional-status(ng-if="product.regionalStatus")
@@ -126,12 +128,12 @@ v-accordion.styled-list(multiple="" id="opportunities" control="list.accordion" 
                 div(column='1').sub-item-select
                   md-checkbox(aria-label="Select Item" ng-click="$event.stopPropagation();")
                 div(column='2').pad-cell
-                  span.product-title {{product.product}} <br>
-                  | {{product.detail}}
-                div.type(column='2') {{product.type}}
-                div(column='4') {{product.rationale}}
-                div(column='1') {{product.status}}
-                div(column='1' class="impact {{product.predictedImpact}}")
+                  span.product-title {{::product.product.brand}} <br>
+                  | {{::product.product.name}}
+                div.type(column='2') {{::product.type}}
+                div(column='4') {{::product.rationale}}
+                div(column='1') {{::product.status}}
+                div(column='1' class="impact {{product.impact}}")
                 div(column='1').hide-row
             .shadow-wrap.top
               v-pane-content
@@ -145,4 +147,4 @@ v-accordion.styled-list(multiple="" id="opportunities" control="list.accordion" 
                     span {{6256 | number }}
                   div(column="2")
                     label Trend vs Ya
-                    span 10%
+                    span {{::product.volumeTrend}}

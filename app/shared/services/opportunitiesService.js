@@ -1,5 +1,5 @@
 module.exports =
-  function opportunitiesService($http, $q, productsService, distributorsService, apiHelperService, filtersService) {
+  function opportunitiesService($http, $q, distributorsService, apiHelperService, filtersService) {
     // Temporary Data - Old Data we're currently using in controllers
     var tempData = {
       opportunities: [{
@@ -390,6 +390,9 @@ module.exports =
      * @memberOf orion.common.services
      */
     function getOpportunities(opportunityID) {
+      // reset opportunities
+      model.opportunitiesSum = 0;
+
       // get applied filters
       var filterPayload = {type: 'opportunities'};
       for (var key in filtersService.model.selected) {
@@ -426,6 +429,7 @@ module.exports =
             store = angular.copy(item);
             store.highImpactSum = 0;
             store.depletionSum = 0;
+            store.brands = [];
 
             // set store placeholder to new store
             storePlaceholder = item.store;
@@ -445,8 +449,12 @@ module.exports =
             store.groupedOpportunities.push(item);
           }
 
+          // add brand to array
+          store.brands.push(item.product.brand.toLowerCase());
+
           // sum high opportunities
-          if (item.impact.toLowerCase() === 'high') store.highImpactSum += 1;
+          item.impact = item.impact.toLowerCase();
+          if (item.impact === 'high') store.highImpactSum += 1;
 
           // sum depletions - not in api yet - WJAY 8/8
           // store.depletionSum += item.depletions

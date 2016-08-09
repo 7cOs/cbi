@@ -7,7 +7,7 @@ module.exports =
      * @desc calculate how much time has gone by since the update
      * @params {String} displayDate - date string to be converted
      * @returns {String} - returns how many days, months, or years it has been since the displayDate
-     * @memberOf orion.common.services
+     * @memberOf orion.common.filters
      */
     return function(displayDate) {
       var currentDate = new Date(),

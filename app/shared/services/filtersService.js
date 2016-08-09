@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports =
-  function filtersService(productsService, distributorsService, storesService) {
+  function filtersService() {
     var model = {
       accounts: [
         {name: 'Walmart', subAccount: 'North East'},
@@ -77,20 +77,9 @@ module.exports =
       ]
     };
 
-    distributorsService.getDistributors().then(function(data) {
-      model.distributors = data.distributors;
-    });
-
-    storesService.getStores().then(function(data) {
-      model.stores = data.stores;
-    });
-
-    productsService.getProducts().then(function(data) {
-      model.brands = data.products;
-    });
-
-    return {
+    var service = {
       model: model
     };
 
+    return service;
   };
