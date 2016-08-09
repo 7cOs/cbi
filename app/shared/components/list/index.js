@@ -95,7 +95,7 @@ function ListController($scope, $state, opportunitiesService, storesService) {
 }
 
 module.exports =
-  angular.module('andromeda.common.components.list', [])
+  angular.module('orion.common.components.list', [])
   .component('list', {
     templateUrl: './app/shared/components/list/list.html',
     controller: ListController,

@@ -280,7 +280,7 @@ module.exports =
      * @desc get target list from web service
      * @params {String} targetListId - id of target list
      * @returns {Object} - target list
-     * @memberOf andromeda.common.services
+     * @memberOf orion.common.services
      */
     function getTargetList(targetListId) {
       var targetListPromise = $q.defer(),
@@ -311,7 +311,7 @@ module.exports =
      * @desc update target list
      * @params {String} targetListId - id of target list
      * @returns {Object} - updated target list
-     * @memberOf andromeda.common.services
+     * @memberOf orion.common.services
      */
     function updateTargetList(targetListId) {
       var targetListPromise = $q.defer(),
@@ -343,7 +343,7 @@ module.exports =
      * @desc delete target list
      * @params {String} targetListId - id of target list
      * @returns {Object} - status object
-     * @memberOf andromeda.common.services
+     * @memberOf orion.common.services
      */
     function deleteTargetList(targetListId) {
       var targetListPromise = $q.defer(),
@@ -375,7 +375,7 @@ module.exports =
      * @desc get target list opportunities
      * @params {String} targetListId - id of target list
      * @returns {Object} - target list opportunities
-     * @memberOf andromeda.common.services
+     * @memberOf orion.common.services
      */
     function getTargetListOpportunities(targetListId) {
       var targetListPromise = $q.defer(),
@@ -406,7 +406,7 @@ module.exports =
      * @desc add target list opportunities
      * @params {String} targetListId - id of target list
      * @returns {Object} - status object
-     * @memberOf andromeda.common.services
+     * @memberOf orion.common.services
      */
     function addTargetListOpportunities(targetListId) {
       var targetListPromise = $q.defer(),
@@ -438,7 +438,7 @@ module.exports =
      * @desc delete target list opportunities
      * @params {String} targetListId - id of target list
      * @returns {Object} - status object
-     * @memberOf andromeda.common.services
+     * @memberOf orion.common.services
      */
     function deleteTargetListOpportunities(targetListId) {
       var targetListPromise = $q.defer(),
@@ -470,7 +470,7 @@ module.exports =
      * @desc delete target list opportunities
      * @params {String} targetListId - id of target list
      * @returns {Object} - shares object
-     * @memberOf andromeda.common.services
+     * @memberOf orion.common.services
      */
     function getTargetListShares(targetListId) {
       var targetListPromise = $q.defer(),
@@ -501,7 +501,7 @@ module.exports =
      * @desc add target list shares
      * @params {String} targetListId - id of target list
      * @returns {Object} - target shares including new object
-     * @memberOf andromeda.common.services
+     * @memberOf orion.common.services
      */
     function addTargetListShares(targetListId) {
       var targetListPromise = $q.defer(),
@@ -533,7 +533,7 @@ module.exports =
      * @desc delete target list shares
      * @params {String} targetListId - id of target list
      * @returns {Object} - status object
-     * @memberOf andromeda.common.services
+     * @memberOf orion.common.services
      */
     function deleteTargetListShares(targetListId) {
       var targetListPromise = $q.defer(),

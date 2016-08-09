@@ -72,7 +72,7 @@ module.exports =
      * @desc get data for all users or one user
      * @params {String} id - id of a user [Optional]
      * @returns {Array or Object} - Array of all users or object of one user
-     * @memberOf andromeda.common.services
+     * @memberOf orion.common.services
      */
     function getUsers(id) {
       var usersPromise = $q.defer(),
@@ -105,7 +105,7 @@ module.exports =
      * @desc get hidden opportunities for a user
      * @params {String} id - id of a user [required]
      * @returns {Object} - opportunities object
-     * @memberOf andromeda.common.services
+     * @memberOf orion.common.services
      */
     function getHiddenOpportunities(id) {
       var hiddenOpportunitiesPromise = $q.defer(),
@@ -134,7 +134,7 @@ module.exports =
      * @desc get hidden opportunities for a user
      * @params {String} id - id of a user [required]
      * @returns {Object} - status object
-     * @memberOf andromeda.common.services
+     * @memberOf orion.common.services
      */
     function hideOpportunity(id) {
       var hideOpportunityPromise = $q.defer(),
@@ -176,7 +176,7 @@ module.exports =
      * @params {String} id - id of a user [required]
      * @params {String} opportunityId - id of the opportunity to be deleted
      * @returns {Object} - status object
-     * @memberOf andromeda.common.services
+     * @memberOf orion.common.services
      */
     function deleteHiddenOpportunity(id) {
       var deleteHiddenOpportunityPromise = $q.defer(),
@@ -217,7 +217,7 @@ module.exports =
      * @desc get notifications for a user
      * @params {String} id - id of a user
      * @returns {Array} - Array of all notifications for a user
-     * @memberOf andromeda.common.services
+     * @memberOf orion.common.services
      */
     function getNotifications(id) {
       var notificationsPromise = $q.defer(),
@@ -246,7 +246,7 @@ module.exports =
      * @desc get all opportunity filters for a user
      * @params {String} id - id of a user
      * @returns {Array} - Array of all opportunity filters for a user
-     * @memberOf andromeda.common.services
+     * @memberOf orion.common.services
      */
     function getOpportunityFilters(id) {
       var opportunityFilterPromise = $q.defer(),
@@ -276,7 +276,7 @@ module.exports =
      * @params {String} id - id of a user
      * @params {Object} payload - filter settings to be saved
      * @returns {Object} - Status Object
-     * @memberOf andromeda.common.services
+     * @memberOf orion.common.services
      */
     function saveOpportunityFilter(id) {
       var opportunityFilterPromise = $q.defer(),
@@ -308,7 +308,7 @@ module.exports =
      * @desc get performance summary for a user
      * @params {String} id - id of a user
      * @returns {Object} - performance summary
-     * @memberOf andromeda.common.services
+     * @memberOf orion.common.services
      */
     function getPerformanceSummary(id) {
       var performancePromise = $q.defer(),
@@ -337,7 +337,7 @@ module.exports =
      * @desc get performance depletion for a user
      * @params {String} id - id of a user
      * @returns {Object} - user performance depletion
-     * @memberOf andromeda.common.services
+     * @memberOf orion.common.services
      */
     function getPerformanceDepletion(id) {
       var performancePromise = $q.defer(),
@@ -366,7 +366,7 @@ module.exports =
      * @desc get performance distribution for a user
      * @params {String} id - id of a user
      * @returns {Object} - user performance distribution
-     * @memberOf andromeda.common.services
+     * @memberOf orion.common.services
      */
     function getPerformanceDistribution(id) {
       var performancePromise = $q.defer(),
@@ -395,7 +395,7 @@ module.exports =
      * @desc get performance brand for a user
      * @params {String} id - id of a user
      * @returns {Object} - user performance brand
-     * @memberOf andromeda.common.services
+     * @memberOf orion.common.services
      */
     function getPerformanceBrand(id) {
       var performancePromise = $q.defer(),
@@ -424,7 +424,7 @@ module.exports =
      * @desc get performance top bottom snapshot for a user
      * @params {String} id - id of a user
      * @returns {Object} - user performance top bottom snapshot
-     * @memberOf andromeda.common.services
+     * @memberOf orion.common.services
      */
     function getPerformanceTopBottom(id) {
       var performancePromise = $q.defer(),
@@ -453,7 +453,7 @@ module.exports =
      * @desc get target list for a user
      * @params {String} id - id of a user
      * @returns {Object} - user target lists
-     * @memberOf andromeda.common.services
+     * @memberOf orion.common.services
      */
     function getTargetLists(id) {
       var targetListPromise = $q.defer(),
@@ -482,7 +482,7 @@ module.exports =
      * @desc add target list for a user
      * @params {String} id - id of a user
      * @returns {Object} - newly added target list
-     * @memberOf andromeda.common.services
+     * @memberOf orion.common.services
      */
     function addTargetList(id) {
       var targetListPromise = $q.defer(),

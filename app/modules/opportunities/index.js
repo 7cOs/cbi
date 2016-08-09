@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports =
-  angular.module('andromeda.modules.opportunities', [
+  angular.module('orion.modules.opportunities', [
   ])
   .config(function ($stateProvider) {
     $stateProvider

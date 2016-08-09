@@ -13,7 +13,7 @@ module.exports =
      * @desc transforms object in key-value pairs to a string to be submitted to api
      * @params {Object} obj - object to be mapped
      * @returns {String} - formatted query
-     * @memberOf andromeda.common.services
+     * @memberOf orion.common.services
      */
     function formatQueryString(obj) {
       var queryParams = '',
@@ -66,7 +66,7 @@ module.exports =
      * @params {String} base - base api url to hit [required]
      * @params {Object} paramsObj - filter params [optional]
      * @returns {String} - formatted url
-     * @memberOf andromeda.common.services
+     * @memberOf orion.common.services
      */
     function request(base, paramsObj) {
       var q = '';

@@ -2,7 +2,7 @@ describe('[Services.productsService]', function() {
   var apiHelperService, productsService, $q, $httpBackend;
 
   beforeEach(function() {
-    angular.mock.module('andromeda.common.services');
+    angular.mock.module('orion.common.services');
 
     inject(function(_apiHelperService_, _productsService_, _$q_, _$httpBackend_) {
       apiHelperService = _apiHelperService_;

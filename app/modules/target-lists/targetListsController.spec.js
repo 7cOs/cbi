@@ -3,8 +3,8 @@ describe('Unit: targetListsController', function() {
 
   beforeEach(function() {
     angular.mock.module('ui.router');
-    angular.mock.module('andromeda.common.services');
-    angular.mock.module('andromeda.modules.targetLists');
+    angular.mock.module('orion.common.services');
+    angular.mock.module('orion.modules.targetLists');
 
     inject(function($rootScope, $controller) {
       scope = $rootScope.$new();

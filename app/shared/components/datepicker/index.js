@@ -17,7 +17,7 @@ function DatepickerController($scope) {
 }
 
 module.exports =
-  angular.module('andromeda.common.components.datepicker', [])
+  angular.module('orion.common.components.datepicker', [])
   .component('datepicker', {
     templateUrl: './app/shared/components/datepicker/datepicker.html',
     controller: DatepickerController

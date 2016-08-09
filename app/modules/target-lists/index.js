@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports =
-  angular.module('andromeda.modules.targetLists', [
+  angular.module('orion.modules.targetLists', [
     // load your sample submodules here, e.g.:
     // require('./bar').name
   ])
