@@ -26,7 +26,8 @@ module.exports =
     vm.setChartData = setChartData;
 
     // Tab content
-    vm.tabs = [];
+    vm.brandTabs = [];
+    vm.marketTabs = [];
     vm.selected = null;
     vm.previous = null;
     vm.selectedIndex = 0;
@@ -90,16 +91,26 @@ module.exports =
       vm.selectedIndex = vm.selectedIndex - 1;
     }
 
-    function addTab(brand) {
-      vm.brandWidgetTitle = brand.name;
-      // Here we can populate vm.brandData with data for selected brand
-      vm.tabs.push({content: ''});
+    function addTab(brand, tabList) {
+      var selectedTabs;
+      switch (tabList) {
+        case 'brandTabs':
+          vm.brandWidgetTitle = brand.name;
+          selectedTabs = vm.brandTabs;
+          break;
+        case 'marketTabs':
+          selectedTabs = vm.marketTabs;
+          break;
+        default:
+          break;
+      }
+      selectedTabs.push({content: ''});
     }
 
-    function removeTab() {
-      var lastItem = vm.tabs.length - 1;
+    function removeTab(tabList) {
+      var lastItem = vm.brandTabs.length - 1;
       vm.brandWidgetTitle = vm.brandWidgetTitleDefault;
-      vm.tabs.splice(lastItem, 1);
+      vm.brandTabs.splice(lastItem, 1);
       vm.idSelected = null;
       vm.brandDrillDown = null;
     }
