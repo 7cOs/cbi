@@ -1,5 +1,5 @@
 h3(ng-if="list.pageName === 'accounts'") Top opportunities <a class="accent" ui-sref="opportunities">See all opportunities</a>
-h3(ng-if="list.pageName === 'opportunities'") <strong>{{list.products.length * list.opportunities.length}} opportunities</strong> across {{list.opportunities.length}} stores
+h3(ng-if="list.pageName === 'opportunities'" ng-hide="list.opportunitiesService.model.opportunities.length === 0") <strong>{{list.opportunitiesService.model.opportunitiesSum}} opportunities</strong> across {{list.opportunitiesService.model.opportunities.length}} stores
 
 .action-buttons
   button.btn-action(ng-disabled="list.selected < 1" ng-if="list.pageName !== 'target-lists'") Add to Target List
@@ -10,10 +10,12 @@ h3(ng-if="list.pageName === 'opportunities'") <strong>{{list.products.length * l
 button.icon.select-all(ng-click="list.toggleAll()")
   span(ng-if='list.isChecked()') Un-
   | Select All
-button.icon.expand-all(ng-click="list.accordion.expandAll()" ng-disabled="list.expandedOpportunities.length === list.opportunities.length") Expand All
+button.icon.expand-all(ng-click="list.accordion.expandAll()" ng-disabled="list.expandedOpportunities.length === list.opportunitiesService.model.opportunities.length") Expand All
 button.icon.collapse-all(ng-click="list.accordion.collapseAll()" ng-disabled="list.expandedOpportunities.length < 2") Collapse All
 
-v-accordion.styled-list(multiple="" id="opportunities" control="list.accordion" onexpand="list.expandCallback(item)" oncollapse="list.collapseCallback(item)" column='12')
+div(ng-if="!list.opportunitiesService.model.filterApplied") [Ratul] Pls apply a filter to see the list
+
+v-accordion.styled-list(multiple="" id="opportunities" control="list.accordion" onexpand="list.expandCallback(item)" oncollapse="list.collapseCallback(item)" column='12' ng-if="list.opportunitiesService.model.filterApplied")
   div.header-row(row)
     div.checkbox-wrapper.placeholder(ng-click="list.toggle(opportunity, list.selected)")
     div.hide-wrapper(ng-if="list.pageName !== 'target-lists'")
@@ -21,7 +23,7 @@ v-accordion.styled-list(multiple="" id="opportunities" control="list.accordion" 
     div.more-wrapper(ng-if="list.pageName === 'target-lists'")
     div.checkbox-sibling(column='12')
       div(column='3')
-        label(ng-click="list.sortBy('store.name')" ng-class="{ 'header-bold' : list.sortProperty === 'store.name'}")
+        label(ng-click="list.sortBy('opportunity.name')" ng-class="{ 'header-bold' : list.sortProperty === 'opportunity.name'}")
           | Store / Number
           span(ng-class="{ 'chevron-down-small' : list.storeChevron, 'chevron-up-small' : !list.storeChevron}").chevron-down-small
       div(column='4')
@@ -40,29 +42,29 @@ v-accordion.styled-list(multiple="" id="opportunities" control="list.accordion" 
         label(ng-click="list.sortBy('segmentation')" ng-class="{ 'header-bold' : list.sortProperty === 'segmentation'}")
           | Segmentation
           span(ng-class="{ 'chevron-down-small' : list.segmentationChevron, 'chevron-up-small' : !list.segmentationChevron}").chevron-down-small
-  //v-pane.list-item(row ng-repeat="opportunity in list.opportunities | orderBy:list.sortProperty:list.reverse" expanded="opportunity.isExpanded" ng-click="")
-  v-pane.list-item(row ng-repeat="store in list.stores | orderBy:list.sortProperty:list.reverse" expanded='store.isExpanded')
-    .action-overlay(ng-class="{'active': store.toggled, 'no-class': !store.toggled}" ng-if="list.pageName === 'target-lists'")
+  //v-pane.list-item(row ng-repeat="opportunity in list.opportunitiesService.model.opportunities | orderBy:list.sortProperty:list.reverse" expanded="opportunity.isExpanded" ng-click="")
+  v-pane.list-item(row ng-repeat="opportunity in list.opportunitiesService.model.opportunities | orderBy:list.sortProperty:list.reverse" expanded='opportunity.isExpanded')
+    .action-overlay(ng-class="{'active': opportunity.toggled, 'no-class': !opportunity.toggled}" ng-if="list.pageName === 'target-lists'")
       div.checkbox-wrapper
           md-checkbox(aria-label="Action Item Select" ng-checked="true")
       div.overlay-wrapper
         p Successfully sent to 3 people
-      div(ng-click="list.actionOverlay(store)").hide-wrapper.hide-icon-wrapper.hide-row
+      div(ng-click="list.actionOverlay(opportunity)").hide-wrapper.hide-icon-wrapper.hide-row
     .shadow-wrap.bottom
-      div.checkbox-wrapper(ng-click="list.toggle(store, list.selected)")
-        md-checkbox(aria-label="Select Item" ng-checked="list.exists(store, list.selected)")
+      div.checkbox-wrapper(ng-click="list.toggle(opportunity, list.selected)")
+        md-checkbox(aria-label="Select Item" ng-checked="list.exists(opportunity, list.selected)")
       div.hide-wrapper.hide-icon-wrapper.hide-row(ng-if="list.pageName !== 'target-lists'")
       div.more-wrapper(ng-if="list.pageName === 'target-lists'")
-        md-button.md-icon-button(aria-label="More" ng-click="list.actionOverlay(store)")
+        md-button.md-icon-button(aria-label="More" ng-click="list.actionOverlay(opportunity)")
           md-icon(md-svg-icon="../assets/img/icons/more.svg")
       v-pane-header.checkbox-sibling(column='12')
         div.cell-parent
-          div.pad-cell(column='3') {{store.store_name | titlecase}} <span class="supporting-text">\#{{store.tdlinx_number}}</span>
-          div.address(column='4') {{store.address | titlecase}} {{store.city | titlecase}}, {{store.state}}
-          div(column='2') {{store.opCount | number }} <span class="supporting-text">({{store.impact}} high)</span>
-          div(column='1') {{store.depletionsCYTD | number }}
-          div(column='1' class="value" ng-class="{'positive' : store.positiveValue, 'negative' : store.negativeValue}") <span ng-if="store.positiveValue">+</span>{{store.depletionTrendVsYA}}<span>%</span>
-          div(column='1') {{store.store.segmentation}}
+          div.pad-cell(column='3') {{::opportunity.store.name | titlecase}} <span class="supporting-text">\#{{::opportunity.store.id | uppercase}}</span>
+          div.address(column='4') {{::opportunity.store.address | titlecase}}
+          div(column='2') {{::opportunity.groupedOpportunities.length}} <span class="supporting-text">({{::opportunity.highImpactSum}} High)</span>
+          .text-center(column='1') {{::opportunity.currentYTDStoreVolume | number }}
+          .text-center(column='1' class="value" ng-class="{'positive' : opportunity.positiveValue, 'negative' : opportunity.negativeValue}") <span ng-if="opportunity.positiveValue">+</span>{{(opportunity.trend) | number:2}}<span>%</span>
+          .text-center(column='1') {{::opportunity.store.segmentation}}
       v-pane-content(column='12' class="products" ng-class="{'open' : open}")
         .shadow-wrap.top
           .hero-row(row)

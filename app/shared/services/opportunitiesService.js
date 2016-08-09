@@ -1,5 +1,5 @@
 module.exports =
-  function opportunitiesService($http, $q, productsService, distributorsService, apiHelperService) {
+  function opportunitiesService($http, $q, productsService, distributorsService, apiHelperService, filtersService) {
     // Temporary Data - Old Data we're currently using in controllers
     var tempData = {
       opportunities: [{
@@ -357,19 +357,19 @@ module.exports =
     };
 
     var model = {
-      opportunities: []
+      filterApplied: false,
+      opportunities: [],
+      opportunitiesSum: 0,
+      products: tempData.products
     };
 
-    model.products = tempData.products;
-
-    return {
-      all: function() {
+    var service = {
+      /* all: function() {
         return tempData.opportunities;
       },
       get: function(id) {
         return tempData[id];
-      },
-
+      },*/
       model: model,
       getOpportunities: getOpportunities,
       createOpportunity: createOpportunity,
@@ -378,6 +378,8 @@ module.exports =
       createOpportunityFeedback: createOpportunityFeedback,
       deleteOpportunityFeedback: deleteOpportunityFeedback
     };
+
+    return service;
 
     // Opportunities Methods
     /**
@@ -388,8 +390,17 @@ module.exports =
      * @memberOf andromeda.common.services
      */
     function getOpportunities(opportunityID) {
+      // get applied filters
+      var filterPayload = {type: 'opportunities'};
+      for (var key in filtersService.model.selected) {
+        if (filtersService.model.selected[key] !== '') {
+          filterPayload[key] = filtersService.model.selected[key];
+        }
+      }
+
+      // create promise, build url based on filters and if there is an opp id
       var opportunitiesPromise = $q.defer(),
-          url = opportunityID ? apiHelperService.request('/api/opportunities/' + opportunityID) : apiHelperService.request('/api/opportunities/');
+          url = opportunityID ? apiHelperService.request('/api/opportunities/' + opportunityID, filterPayload) : apiHelperService.request('/api/opportunities/', filterPayload);
 
       $http.get(url, {
         headers: {}
@@ -398,22 +409,55 @@ module.exports =
       .catch(getOpportunitiesFail);
 
       function getOpportunitiesSuccess(response) {
-        // Set positive or negative label for trend values
-        /* response.opportunities.forEach(function(item) {
-          var trend = item.depletionTrendVsYA;
-          if (trend > 0) {
-            item.positiveValue = true;
-          } else if (trend < 0) {
-            item.negativeValue = true;
-          }
-        });*/
-        // opportunitiesPromise.resolve(tempData.opportunities);
-        opportunitiesPromise.resolve(response.data);
+        // Group opportunities by store
+        var newOpportunityArr = [],
+            store,
+            storePlaceholder;
 
-        // console.log('[opportunitiesService.getOpportunities] mocked response: ', tempData.opportunities);
-        console.log('[opportunitiesService.getOpportunities] response: ', response);
-        // opportunitiesPromise.resolve(response.data);
-        // uncomment above and remove below when services are ready
+        for (var i = 0; i < response.data.opportunities.length; i++) {
+          var item = response.data.opportunities[i];
+
+          // if its a new store
+          if (!storePlaceholder || (storePlaceholder.address !== item.store.address || storePlaceholder.id !== item.store.id)) {
+            // push previous store in newOpportunityArr
+            if (i !== 0) newOpportunityArr.push(store);
+
+            // create grouped store object
+            store = angular.copy(item);
+            store.highImpactSum = 0;
+            store.depletionSum = 0;
+
+            // set store placeholder to new store
+            storePlaceholder = item.store;
+
+            // Set positive or negative label for trend values for store
+            store.trend = store.currentYTDStoreVolume - store.lastYTDStoreVolume;
+            if (store.trend > 0) {
+              store.positiveValue = true;
+            } else if (store.trend < 0) {
+              store.negativeValue = true;
+            }
+
+            // create groupedOpportunities arr so all opportunities for one store will be in a row
+            store.groupedOpportunities = [];
+            store.groupedOpportunities.push(item);
+          } else {
+            store.groupedOpportunities.push(item);
+          }
+
+          // sum high opportunities
+          if (item.impact.toLowerCase() === 'high') store.highImpactSum += 1;
+
+          // sum depletions - not in api yet - WJAY 8/8
+          // store.depletionSum += item.depletions
+
+          // push last store into newOpportunityArr
+          if (i + 1 === response.data.opportunities.length) newOpportunityArr.push(store);
+
+          model.opportunitiesSum += 1;
+        }; // end for each
+
+        opportunitiesPromise.resolve(newOpportunityArr);
       }
 
       function getOpportunitiesFail(error) {

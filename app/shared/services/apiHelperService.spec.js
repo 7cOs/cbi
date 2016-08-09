@@ -55,4 +55,32 @@ describe('[Services.apiHelperService]', function() {
     expect(result).toEqual(resultExpectation);
   });
 
+  it('[request] it should return store specific formatting when type = store', function() {
+    var mockObj = {
+      'masterSKU': '112154',
+      'premiseType': 'on',
+      'type': 'stores'
+    };
+    var url = 'http://localhost:3000/';
+    var resultExpectation = url + '?' + 'masterSKU=112154&premiseType=on';
+
+    var result = APIHelper.request(url, mockObj);
+
+    expect(result).toEqual(resultExpectation);
+  });
+
+  it('[request] it should return opportunities specific formatting when type = opportunities', function() {
+    var mockObj = {
+      'masterSKU': '112154',
+      'premiseType': 'on',
+      'type': 'opportunities'
+    };
+    var url = 'http://localhost:3000/';
+    var resultExpectation = url + '?' + encodeURIComponent('filter=limit:500,sort:store,masterSKU:112154,premiseType:on');
+
+    var result = APIHelper.request(url, mockObj);
+
+    expect(result).toEqual(resultExpectation);
+  });
+
 });
