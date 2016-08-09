@@ -390,6 +390,9 @@ module.exports =
      * @memberOf orion.common.services
      */
     function getOpportunities(opportunityID) {
+      // reset opportunities
+      model.opportunitiesSum = 0;
+
       // get applied filters
       var filterPayload = {type: 'opportunities'};
       for (var key in filtersService.model.selected) {
