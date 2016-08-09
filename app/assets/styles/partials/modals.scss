@@ -1,3 +1,11 @@
+.md-dialog-container {
+  overflow: auto;
+}
+
+md-dialog {
+  overflow: visible;
+}
+
 .modal {
   margin: 0 auto;
   width: 500px;
