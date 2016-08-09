@@ -160,10 +160,12 @@ div(column='12')
           div.modal-form
             div.modal-input
               label Name
-              md-autocomplete(md-selected-item="selectedItem" md-search-text="l.filtersService.model.brandSearchTex t" md-items="brand in l.brandQuerySearch(l.filtersService.model.brandSearchText)" md-item-text="brand.name" md-min-length="1" placeholder="by Store or Account" md-selected-item-change="l.chipsService.addAutocompleteChip(brand.name, 'brandSearchText')")
+              md-autocomplete(ng-disabled="isDisabled" md-no-cache="noCache" md-selected-item="selectedItem" md-search-text-change="searchTextChange(searchText)" md-search-text="searchText" md-selected-item-change="selectedItemChange(item)" md-items="item in querySearch(searchText)" md-item-text="item.name" md-min-length="0" placeholder="by Name or Account" md-menu-class="autocomplete-custom-template")
             div.modal-input
-              label Description
+              label Description (optional)
               textarea
+            div.modal-input
+              md-checkbox Allow Collaborators to invite others
             button.btn-action Save
             p.cancel.accent X Cancel
           div.modal-footer.clearfix
