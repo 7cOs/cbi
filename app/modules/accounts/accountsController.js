@@ -12,22 +12,31 @@ module.exports =
     vm.distributionData = myperformanceService.distributionModel();
     vm.marketData = myperformanceService.marketData();
     vm.chartData = [{'values': vm.marketData.distributors}];
-    vm.brandData = myperformanceService.brandData();
+    vm.brandSkus = myperformanceService.brandSkus();
 
     // Expose public methods
     vm.isNegative = isNegative;
     vm.isPositive = isPositive;
-    vm.addTab = addTab;
     vm.removeTab = removeTab;
     vm.overviewOpen = false;
     vm.idSelected = null;
     vm.setSelected = setSelected;
     vm.openSelect = openSelect;
     vm.setChartData = setChartData;
+    vm.selectItem = selectItem;
 
     // Tab content
-    vm.brandTabs = [];
-    vm.marketTabs = [];
+    vm.brandTabs = {
+      brands: vm.distributionData.performance,
+      skus: vm.brandSkus
+    };
+    // vm.marketTabs = [
+    //   'distributors': [],
+    //   'accounts': [],
+    //   'sub-accounts': [],
+    //   'stores': []
+    // ];
+
     vm.selected = null;
     vm.previous = null;
     vm.selectedIndex = 0;
@@ -84,28 +93,22 @@ module.exports =
 
     // Public methods
 
+    // When a row item is clicked in brands / market widgets
+    function selectItem(item, parent, parentIndex) {
+      var parentLength = Object.keys(parent).length;
+      if (parentIndex + 1 === parentLength) {
+        // We're on the deepest level of current tab list
+        setSelected(item.name);
+      }
+      nextTab();
+    }
+
     function nextTab() {
       vm.selectedIndex = vm.selectedIndex + 1;
     }
 
     function prevTab() {
       vm.selectedIndex = vm.selectedIndex - 1;
-    }
-
-    function addTab(brand, tabList) {
-      var selectedTabs;
-      switch (tabList) {
-        case 'brandTabs':
-          vm.brandWidgetTitle = brand.name;
-          selectedTabs = vm.brandTabs;
-          break;
-        case 'marketTabs':
-          selectedTabs = vm.marketTabs;
-          break;
-        default:
-          break;
-      }
-      selectedTabs.push({content: ''});
     }
 
     function removeTab(tabList) {

@@ -215,7 +215,7 @@ module.exports =
       }]
     };
 
-    var brandData = [
+    var brandSkus = [
       {
         'name': '1/2 Bl Keg',
         'measures': {
@@ -695,8 +695,8 @@ module.exports =
       marketData: function() {
         return marketData;
       },
-      brandData: function() {
-        return brandData;
+      brandSkus: function() {
+        return brandSkus;
       },
       distributionModel: function() {
         return distributionData;
