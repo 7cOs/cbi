@@ -151,7 +151,7 @@
     color: $gray-3;
 
     &.market {
-      padding: 0.4em 0 0.3em 2em;
+      padding: 0.4em 0 0.1em 2em;
     }
 
     span {
@@ -208,8 +208,15 @@
     border-bottom: 0;
     float: left;
     position: relative;
-    table-layout: fixed;
     width: 50%;
+  }
+
+  .fixed-layout {
+    table-layout: fixed;
+
+    &:last-child {
+      border-top: none;
+    }
   }
 
   tr.market-value {
@@ -227,8 +234,15 @@
       }
     }
 
-    &.store td {
-      padding: 0.5em 1em 0.25em 0.75em;
+    &.store {
+
+      .dist-label {
+        color: $gray-1;
+      }
+
+      td {
+        padding: 0.5em 1em 0.25em 0.75em;
+      }
     }
 
     .store-number {
@@ -291,6 +305,7 @@
 }
 
 .dist-label {
+  color: $blue;
   width: 70%;
 }
 

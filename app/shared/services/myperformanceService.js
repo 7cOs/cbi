@@ -589,7 +589,7 @@ module.exports =
       'stores': [
         {
           'label': 'Walmart #1167',
-          'value': 15,
+          'value': 12,
           'title': 'Walmart',
           'address': '3500 Brumb... Kenosha, WA',
           'storeNum': 1167,
@@ -609,7 +609,7 @@ module.exports =
           'velocity': 2834
         }, {
           'label': 'Walmart #166',
-          'value': 9,
+          'value': 7,
           'title': 'Walmart',
           'address': '1433 S Sam... , Houston, MO',
           'storeNum': 166,
@@ -619,7 +619,7 @@ module.exports =
           'velocity': 9283
         }, {
           'label': 'Walmart #3395',
-          'value': 4,
+          'value': -2,
           'title': 'Walmart',
           'address': '3501 S Loc... , Grand Island, NE',
           'storeNum': 3395,
@@ -629,7 +629,7 @@ module.exports =
           'velocity': 78673
         }, {
           'label': 'Walmart #1471',
-          'value': -10,
+          'value': -8,
           'title': 'Walmart',
           'address': '1717 N Sha... , New London, WI',
           'storeNum': 1471,
@@ -649,7 +649,7 @@ module.exports =
           'velocity': 81273
         }, {
           'label': 'Walmart #2738',
-          'value': -3,
+          'value': -4,
           'title': 'Walmart',
           'address': '400 Juncti... , Glen Carbon, IL',
           'storeNum': 2738,
@@ -659,7 +659,7 @@ module.exports =
           'velocity': 92744
         }, {
           'label': 'Walmart #2089',
-          'value': 11,
+          'value': 5,
           'title': 'Walmart',
           'address': '3001 W Bro... , Coumbia, MO',
           'storeNum': 2089,

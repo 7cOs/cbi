@@ -164,22 +164,24 @@ div(row)
         md-select(ng-model="a.filtersService.model.selected.accountTypes" md-on-open="a.openSelect(true)" md-on-close="a.openSelect(false)" ng-change="a.setChartData()" placeholder="{{a.filtersService.model.selected.accountTypes || a.accountTypesDefault}}")
           md-option(ng-repeat="filter in a.filters.accountTypes" aria-label="filter.name" value="{{filter.name}}") {{filter.name}}
     .widget-content.clearfix
-      table.chart-data(cellspacing="0" cellpadding="0")
-        thead
-          tr
-            th.top.dist-label(colspan=2)
-              p.accent.bold.left Distributors
-              p &nbsp;
-            th.top.dark.market-label
-              p.accent.bold {{a.filtersService.model.selected.accountMarkets}}
-        tbody(ng-repeat="obj in a.chartData")
-          tr.market-value(ng-repeat="value in obj.values" ng-class="{'store': a.filtersService.model.selected.accountTypes === 'Stores'}")
-              td(colspan=2) {{value.title}} <span ng-if="a.filtersService.model.selected.accountTypes === 'Stores'" class="store-number">\#{{value.storeNum}}</span><span ng-if="a.filtersService.model.selected.accountTypes === 'Stores'" class="address">{{value.address}}</span>
-              td.dark
-                span(ng-if="a.filtersService.model.selected.accountMarkets === 'Depletions'") {{value.depletions}}
-                span(ng-if="a.filtersService.model.selected.accountMarkets === 'Distribution (simple)'") {{value.distSimple}}
-                span(ng-if="a.filtersService.model.selected.accountMarkets === 'Distribution (effective)'") {{value.distEffective}}
-                span(ng-if="a.filtersService.model.selected.accountMarkets === 'Velocity'") {{value.velocity}}
+      .chart-data
+        table.fixed-layout(cellspacing="0" cellpadding="0")
+          thead
+            tr
+              th.top.dist-label(colspan=2)
+                p.accent.bold.left Distributors
+                p &nbsp;
+              th.top.dark.market-label
+                p.accent.bold {{a.filtersService.model.selected.accountMarkets}}
+        table.fixed-layout(cellspacing="0" cellpadding="0")
+          tbody(ng-repeat="obj in a.chartData")
+            tr.market-value(ng-repeat="value in obj.values" ng-class="{'store': a.filtersService.model.selected.accountTypes === 'Stores'}")
+                td.dist-label(colspan=2) {{value.title}} <span ng-if="a.filtersService.model.selected.accountTypes === 'Stores'" class="store-number">\#{{value.storeNum}}</span><span ng-if="a.filtersService.model.selected.accountTypes === 'Stores'" class="address">{{value.address}}</span>
+                td.dark.market-label
+                  span(ng-if="a.filtersService.model.selected.accountMarkets === 'Depletions'") {{value.depletions}}
+                  span(ng-if="a.filtersService.model.selected.accountMarkets === 'Distribution (simple)'") {{value.distSimple}}
+                  span(ng-if="a.filtersService.model.selected.accountMarkets === 'Distribution (effective)'") {{value.distEffective}}
+                  span(ng-if="a.filtersService.model.selected.accountMarkets === 'Velocity'") {{value.velocity}}
       .chart
         table.no-top-border(cellspacing="0" cellpadding="0")
           thead
