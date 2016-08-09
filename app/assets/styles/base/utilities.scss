@@ -43,18 +43,22 @@
 
 .chevron-down-small {
   @include chevron(5px, 1px, 135deg, 0%, 4px);
+  display: inline;
 }
 
 .chevron-left-small {
   @include chevron(5px, 1px, -135deg, 4px, 35%);
+  display: inline;
 }
 
 .chevron-right-small {
   @include chevron(5px, 1px, 45deg, 4px, 35%);
+  display: inline;
 }
 
 .chevron-up-small {
   @include chevron(5px, 1px, -45deg, 35%, 4px);
+  display: inline;
 }
 
 .back-chevron {
@@ -84,4 +88,11 @@
 
 .text-center {
   text-align: center;
+}
+
+.member-icon {
+  height: 10px;
+  width: 10px;
+  position: relative;
+  top: 30px;
 }

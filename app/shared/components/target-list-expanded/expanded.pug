@@ -14,31 +14,51 @@ div.expanded-target-lists
           div.checkbox-wrapper.placeholder
           div.checkbox-sibling-target(column="12")
             div(row).target-list-count-container
-              h5(column="5").accent.completed.left  <br />List Name
-              h5(column="2").accent <br />Collaborators
-              h5(column="1").accent Last Updated
-              h5(column="1").accent Closed Opportunities
-              h5(column="1").accent Total Opportunities
-              h5(column="2").accent Depletions Since <br />Closed (CE)
+              div(column='4')
+                label.completed.left(ng-click="expanded.sortBy('name')" ng-class="{ 'header-bold' : expanded.sortProperty === 'listName'}")
+                  | <br />List Name
+                  span(ng-class="{ 'chevron-down-small' : !expanded.listChevron, 'chevron-up-small' : expanded.listChevron}").chevron-down-small
+              div(column='2')
+                label(ng-click="expanded.sortBy('members.length')" ng-class="{ 'header-bold' : expanded.sortProperty === 'collaborators'}")
+                  | <br />Collaborators
+                  span(ng-class="{ 'chevron-down-small' : !expanded.collaboratorsChevron, 'chevron-up-small' : expanded.collaboratorsChevron}").chevron-down-small
+              div(column='2')
+                label(ng-click="expanded.sortBy('created')" ng-class="{ 'header-bold' : expanded.sortProperty === 'lastUpdated'}")
+                  | <br />Last Updated
+                  span(ng-class="{ 'chevron-down-small' : !expanded.lastUpdatedChevron, 'chevron-up-small' : expanded.lastUpdatedChevron}").chevron-down-small
+              div(column='1')
+                label(ng-click="expanded.sortBy('closedOpportunities')" ng-class="{ 'header-bold' : expanded.sortProperty === 'closedOpportunities'}")
+                  | Closed Opps
+                  span(ng-class="{ 'chevron-down-small' : !expanded.closedOpportunitiesChevron, 'chevron-up-small' : expanded.closedOpportunitiesChevron}").chevron-down-small
+              div(column='1')
+                label(ng-click="expanded.sortBy('opportunities')" ng-class="{ 'header-bold' : expanded.sortProperty === 'totalOpportunites'}")
+                  | Total Opps
+                  span(ng-class="{ 'chevron-down-small' : expanded.totalOpportunitesChevron, 'chevron-up-small' : !expanded.totalOpportunitesChevron}").chevron-down-small
+              div(column='2')
+                label(ng-click="expanded.sortBy('depletions')" ng-class="{ 'header-bold' : expanded.sortProperty === 'depletions'}")
+                  | Depletions <br />Since Closed (CE)
+                  span(ng-class="{ 'chevron-down-small' : expanded.depletionsChevron, 'chevron-up-small' : !expanded.depletionsChevron}").chevron-down-small
         div(row).target-list-detail-container
           div(ng-show="!expanded.namedFilters.length").no-opportunites
             h4 No Opportunities have been added yet
             p Try Searching for <span>Opportunities</span> and add them to your list
           ul
-            li(ng-repeat="list in expanded.namedFilters").clearfix
+            li(ng-repeat="list in expanded.namedFilters | orderBy:expanded.sortProperty:expanded.reverse").clearfix
               div.checkbox-wrapper.named-target-list(ng-click="list.toggle(opportunity, list.selected)")
                 md-checkbox(aria-label="Select Item" ng-checked="list.exists(opportunity, list.selected)")
               div.checkbox-sibling(column="12")
                 div(row)
-                  h4(column="5").left {{list.name}}
-                  h5(column="2").accent.gray.dropdown-menu-trigger {{list.members.length + 1}} members
-                    ul.dropdown-menu
-                      li.member.creator {{list.creator}}
-                      li.member(ng-repeat="collaborator in list.members") {{collaborator}}
-                  h5(column="1").accent.gray {{list.created}}
+                  h4(column="4").left {{list.name}}
+                  div(column="2")
+                    img(src="../assets/img/icons/person.svg").member-icon
+                    h5.accent.gray.dropdown-menu-trigger {{list.members.length + 1}} collaborators
+                      ul.dropdown-menu
+                        li.member.creator {{list.creator}}
+                        li.member(ng-repeat="collaborator in list.members") {{collaborator}}
+                  h5(column="2").accent.gray {{list.created}}
                   h4(column="1").closed {{list.closedOpportunities | number}}
                   h4(column="1") {{list.opportunities | number}}
-                  h4(column="2") {{273000 | number}}
+                  h4(column="2") {{list.depletions | number}}
                 div(row).creator
                   h5(column="3").accent.left {{list.creator}}
                 div(row)
@@ -48,23 +68,46 @@ div.expanded-target-lists
         div(row)
           div(column="12")
             div(row).target-list-count-container
-              h5(column="5").accent.completed.left  <br />List Name
-              h5(column="2").accent <br />Collaborators
-              h5(column="1").accent Last Updated
-              h5(column="1").accent Closed Opportunities
-              h5(column="1").accent Total Opportunities
-              h5(column="2").accent Depletions Since <br />Closed (CE)
+              div(column='4')
+                label.completed.left(ng-click="expanded.sortBy('name')" ng-class="{ 'header-bold' : expanded.sortProperty === 'listName'}")
+                  | <br />List Name
+                  span(ng-class="{ 'chevron-down-small' : !expanded.listChevron, 'chevron-up-small' : expanded.listChevron}").chevron-down-small
+              div(column='2')
+                label(ng-click="expanded.sortBy('members.length')" ng-class="{ 'header-bold' : expanded.sortProperty === 'collaborators'}")
+                  | <br />Collaborators
+                  span(ng-class="{ 'chevron-down-small' : !expanded.collaboratorsChevron, 'chevron-up-small' : expanded.collaboratorsChevron}").chevron-down-small
+              div(column='2')
+                label(ng-click="expanded.sortBy('created')" ng-class="{ 'header-bold' : expanded.sortProperty === 'lastUpdated'}")
+                  | <br />Last Updated
+                  span(ng-class="{ 'chevron-down-small' : !expanded.lastUpdatedChevron, 'chevron-up-small' : expanded.lastUpdatedChevron}").chevron-down-small
+              div(column='1')
+                label(ng-click="expanded.sortBy('closedOpportunities')" ng-class="{ 'header-bold' : expanded.sortProperty === 'closedOpportunities'}")
+                  | Closed Opps
+                  span(ng-class="{ 'chevron-down-small' : !expanded.closedOpportunitiesChevron, 'chevron-up-small' : expanded.closedOpportunitiesChevron}").chevron-down-small
+              div(column='1')
+                label(ng-click="expanded.sortBy('opportunities')" ng-class="{ 'header-bold' : expanded.sortProperty === 'totalOpportunites'}")
+                  | Total Opps
+                  span(ng-class="{ 'chevron-down-small' : expanded.totalOpportunitesChevron, 'chevron-up-small' : !expanded.totalOpportunitesChevron}").chevron-down-small
+              div(column='2')
+                label(ng-click="expanded.sortBy('depletions')" ng-class="{ 'header-bold' : expanded.sortProperty === 'depletions'}")
+                  | Depletions <br />Since Closed (CE)
+                  span(ng-class="{ 'chevron-down-small' : expanded.depletionsChevron, 'chevron-up-small' : !expanded.depletionsChevron}").chevron-down-small
         div(row).target-list-detail-container
           div(ng-show="!expanded.sharedFilters.length").no-opportunites
             h4 No Opportunities have been shared with you yet
             p Try Searching for <span>Opportunities</span> and add them to your list
           ul
-            li(ng-repeat="list in expanded.sharedFilters").clearfix
+            li(ng-repeat="list in expanded.sharedFilters | orderBy:expanded.sortProperty:expanded.reverse").clearfix
               div(column="12")
                 div(row)
-                  h4(column="5").left {{list.name}}
-                  h5(column="2").accent.gray {{list.members.length}} members
-                  h5(column="1").accent.gray {{list.created}}
+                  h4(column="4").left {{list.name}}
+                  div(column="2")
+                    img(src="../assets/img/icons/person.svg").member-icon
+                    h5.accent.gray.dropdown-menu-trigger {{list.members.length + 1}} collaborators
+                      ul.dropdown-menu
+                        li.member.creator {{list.creator}}
+                        li.member(ng-repeat="collaborator in list.members") {{collaborator}}
+                  h5(column="2").accent.gray {{list.created}}
                   h4(column="1").closed {{list.closedOpportunities | number}}
                   h4(column="1") {{list.opportunities | number}}
                   h4(column="2") {{273000 | number}}
@@ -78,26 +121,48 @@ div.expanded-target-lists
           div.checkbox-wrapper.placeholder
           div.checkbox-sibling-target(column="12")
             div(row).target-list-count-container
-              h5(column="5").accent.completed.left  <br />List Name
-              h5(column="2").accent <br />Collaborators
-              h5(column="1").accent Last Updated
-              h5(column="1").accent Closed Opportunities
-              h5(column="1").accent Total Opportunities
-              h5(column="2").accent Depletions Since <br />Closed (CE)
-
+              div(column='4')
+                label.completed.left(ng-click="expanded.sortBy('name')" ng-class="{ 'header-bold' : expanded.sortProperty === 'listName'}")
+                  | <br />List Name
+                  span(ng-class="{ 'chevron-down-small' : !expanded.listChevron, 'chevron-up-small' : expanded.listChevron}").chevron-down-small
+              div(column='2')
+                label(ng-click="expanded.sortBy('members.length')" ng-class="{ 'header-bold' : expanded.sortProperty === 'collaborators'}")
+                  | <br />Collaborators
+                  span(ng-class="{ 'chevron-down-small' : !expanded.collaboratorsChevron, 'chevron-up-small' : expanded.collaboratorsChevron}").chevron-down-small
+              div(column='2')
+                label(ng-click="expanded.sortBy('created')" ng-class="{ 'header-bold' : expanded.sortProperty === 'lastUpdated'}")
+                  | <br />Last Updated
+                  span(ng-class="{ 'chevron-down-small' : !expanded.lastUpdatedChevron, 'chevron-up-small' : expanded.lastUpdatedChevron}").chevron-down-small
+              div(column='1')
+                label(ng-click="expanded.sortBy('closedOpportunities')" ng-class="{ 'header-bold' : expanded.sortProperty === 'closedOpportunities'}")
+                  | Closed Opps
+                  span(ng-class="{ 'chevron-down-small' : !expanded.closedOpportunitiesChevron, 'chevron-up-small' : expanded.closedOpportunitiesChevron}").chevron-down-small
+              div(column='1')
+                label(ng-click="expanded.sortBy('opportunities')" ng-class="{ 'header-bold' : expanded.sortProperty === 'totalOpportunites'}")
+                  | Total Opps
+                  span(ng-class="{ 'chevron-down-small' : expanded.totalOpportunitesChevron, 'chevron-up-small' : !expanded.totalOpportunitesChevron}").chevron-down-small
+              div(column='2')
+                label(ng-click="expanded.sortBy('depletions')" ng-class="{ 'header-bold' : expanded.sortProperty === 'depletions'}")
+                  | Depletions <br />Since Closed (CE)
+                  span(ng-class="{ 'chevron-down-small' : expanded.depletionsChevron, 'chevron-up-small' : !expanded.depletionsChevron}").chevron-down-small
         div(row).target-list-detail-container
           div(ng-show="!expanded.archivedFilters.length").no-opportunites
             h4 No Opportunities to remove
             p Try Searching for <span>Opportunities</span> and add them to your list
           ul
-            li(ng-repeat="list in expanded.archivedFilters").clearfix
+            li(ng-repeat="list in expanded.archivedFilters | orderBy:expanded.sortProperty:expanded.reverse").clearfix
               div.checkbox-wrapper(ng-click="list.toggle(opportunity, list.selected)")
                 md-checkbox(aria-label="Select Item" ng-checked="list.exists(opportunity, list.selected)")
               div.checkbox-sibling(column="12").archived
                 div(row)
-                  h4(column="5").left {{list.name}}
-                  h5(column="2").accent.gray {{list.members.length}} members
-                  h5(column="1").accent.gray {{list.created}}
+                  h4(column="4").left {{list.name}}
+                  div(column="2")
+                    img(src="../assets/img/icons/person.svg").member-icon
+                    h5.accent.gray.dropdown-menu-trigger {{list.members.length + 1}} collaborators
+                      ul.dropdown-menu
+                        li.member.creator {{list.creator}}
+                        li.member(ng-repeat="collaborator in list.members") {{collaborator}}
+                  h5(column="2").accent.gray {{list.created}}
                   h4(column="1").closed {{list.closedOpportunities | number}}
                   h4(column="1") {{list.opportunities | number}}
                   h4(column="2") {{273000 | number}}
