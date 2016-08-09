@@ -208,19 +208,27 @@
     border-bottom: 0;
     float: left;
     position: relative;
+    table-layout: fixed;
     width: 50%;
   }
 
-  tr.store {
+  tr.market-value {
     border-bottom: 0;
 
     td {
-      padding: 0.5em 0 0.25em;
+      padding: 1.25em 1em 1.25em 0.75em;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
 
       &:first-child {
         padding-left: 1em;
         text-align: left;
       }
+    }
+
+    &.store td {
+      padding: 0.5em 1em 0.25em 0.75em;
     }
 
     .store-number {

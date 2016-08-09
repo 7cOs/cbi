@@ -161,7 +161,7 @@ div(row)
       .header-selector
         md-select.market(ng-model="a.filtersService.model.selected.valuesVsTrend" md-on-open="a.openSelect(true)" md-on-close="a.openSelect(false)" placeholder="Top 10 (Values)")
           md-option(ng-repeat="filter in a.filters.valuesVsTrend" aria-label="filter.name" value="{{filter.name}}") {{filter.name}}
-        md-select(ng-model="a.filtersService.model.selected.accountTypes" md-on-open="a.openSelect(true)" md-on-close="a.openSelect(false)" placeholder="{{a.filtersService.model.selected.accountTypes || a.accountTypesDefault}}")
+        md-select(ng-model="a.filtersService.model.selected.accountTypes" md-on-open="a.openSelect(true)" md-on-close="a.openSelect(false)" ng-change="a.setChartData()" placeholder="{{a.filtersService.model.selected.accountTypes || a.accountTypesDefault}}")
           md-option(ng-repeat="filter in a.filters.accountTypes" aria-label="filter.name" value="{{filter.name}}") {{filter.name}}
     .widget-content.clearfix
       table.chart-data(cellspacing="0" cellpadding="0")
@@ -173,8 +173,8 @@ div(row)
             th.top.dark.market-label
               p.accent.bold {{a.filtersService.model.selected.accountMarkets}}
         tbody(ng-repeat="obj in a.chartData")
-          tr.store(ng-repeat="value in obj.values")
-              td(colspan=2) {{value.title}} <span class="store-number">\#{{value.storeNum}}</span><span class="address">{{value.address}}</span>
+          tr.market-value(ng-repeat="value in obj.values" ng-class="{'store': a.filtersService.model.selected.accountTypes === 'Stores'}")
+              td(colspan=2) {{value.title}} <span ng-if="a.filtersService.model.selected.accountTypes === 'Stores'" class="store-number">\#{{value.storeNum}}</span><span ng-if="a.filtersService.model.selected.accountTypes === 'Stores'" class="address">{{value.address}}</span>
               td.dark
                 span(ng-if="a.filtersService.model.selected.accountMarkets === 'Depletions'") {{value.depletions}}
                 span(ng-if="a.filtersService.model.selected.accountMarkets === 'Distribution (simple)'") {{value.distSimple}}
