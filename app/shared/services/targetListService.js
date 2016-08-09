@@ -303,7 +303,7 @@ module.exports =
       deleteTargetListSharesResponse: {'status': 200}
     };
 
-    return {
+    var service = {
       getTargetList: getTargetList,
       updateTargetList: updateTargetList,
       deleteTargetList: deleteTargetList,
@@ -314,6 +314,8 @@ module.exports =
       addTargetListShares: addTargetListShares,
       deleteTargetListShares: deleteTargetListShares
     };
+
+    return service;
 
     /**
      * @name getTargetList

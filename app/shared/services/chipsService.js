@@ -5,7 +5,7 @@ module.exports =
 
     var model = [];
 
-    return {
+    var service = {
       model: model,
       addAutocompleteChip: addAutocompleteChip,
       addChip: addChip,
@@ -13,6 +13,8 @@ module.exports =
       removeFromFilterService: removeFromFilterService,
       updateChip: updateChip
     };
+
+    return service;
 
     /**
      * @name addAutocompleteChip
