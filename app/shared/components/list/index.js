@@ -7,6 +7,7 @@ function ListController($scope, $state, opportunitiesService, storesService) {
 
   // Map public methods to scope
   vm.actionOverlay = actionOverlay;
+  vm.displayBrandIcon = displayBrandIcon;
   vm.exists = exists;
   vm.isChecked = isChecked;
   vm.sortBy = sortBy;
@@ -37,6 +38,10 @@ function ListController($scope, $state, opportunitiesService, storesService) {
   function actionOverlay(opportunity) {
     opportunity.toggled = !opportunity.toggled;
   };
+
+  function displayBrandIcon(haystack, needle) {
+    return haystack.indexOf(needle) !== -1;
+  }
 
   // Check if list item exists and is selected
   function exists(item, list) {
