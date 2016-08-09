@@ -90,7 +90,7 @@ v-accordion.styled-list(multiple="" id="opportunities" control="list.accordion" 
                 div(column='4')
                   label Simple
                   div(row)
-                    div(column='12') {{::opportunity.last90DaysVolume | number:0}} <span class="percentage">2</span>%
+                    div(column='12') {{::opportunity.groupedOpportunities.length | number:0}} <span class="percentage">2</span>%
                 div(column='8')
                   label Effective
                   div(row)
@@ -128,11 +128,11 @@ v-accordion.styled-list(multiple="" id="opportunities" control="list.accordion" 
                 div(column='1').sub-item-select
                   md-checkbox(aria-label="Select Item" ng-click="$event.stopPropagation();")
                 div(column='2').pad-cell
-                  span.product-title {{product.product.brand}} <br>
-                  | {{product.product.name}}
-                div.type(column='2') {{product.type}}
-                div(column='4') {{product.rationale}}
-                div(column='1') {{product.status}}
+                  span.product-title {{::product.product.brand}} <br>
+                  | {{::product.product.name}}
+                div.type(column='2') {{::product.type}}
+                div(column='4') {{::product.rationale}}
+                div(column='1') {{::product.status}}
                 div(column='1' class="impact {{product.impact}}")
                 div(column='1').hide-row
             .shadow-wrap.top
@@ -147,4 +147,4 @@ v-accordion.styled-list(multiple="" id="opportunities" control="list.accordion" 
                     span {{6256 | number }}
                   div(column="2")
                     label Trend vs Ya
-                    span 10%
+                    span {{::product.volumeTrend}}
