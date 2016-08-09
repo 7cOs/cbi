@@ -22,7 +22,7 @@ else
     runSequence [
       'compile'
       'serve'
-      'karma'
+      'tdd'
     ],
 
 # COMPILE ALL THE THINGZ

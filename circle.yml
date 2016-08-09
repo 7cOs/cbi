@@ -1,0 +1,28 @@
+machine:
+  node:
+    version: v5.1.1
+dependencies:
+  pre:
+    - npm install -g gulp
+
+test:
+  override:
+    # runs karma tests
+    - gulp test
+
+deployment:
+  develop:
+    branch: develop
+    heroku:
+      # push the code to app-orion-dev
+      appname: app-orion-dev
+  qa:
+    branch: master
+    heroku:
+      # push the code to app-orion-qa
+      appname: app-orion-qa
+  production:
+    branch: master
+    heroku:
+      # push the code to app-orion-prod
+      appname: app-orion-prod
