@@ -45,7 +45,7 @@ module.exports = function(app) {
 
   //  Angular routes
   app.get('*', function (req, res) {
-    if (req.isAuthenticated() || process.env.NODE_ENV === 'development' || process.env.NODE_ENV === 'heroku-dev') {
+    if (req.isAuthenticated() || process.env.NODE_ENV === 'development' || process.env.NODE_ENV === 'andromeda-dev') {
       res.render('main', {
         config: app.get('config')
       });

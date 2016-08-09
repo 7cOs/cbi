@@ -55,8 +55,8 @@ let config = {
 
 config.auth = {
   htpasswd: {
-    use: false, // APACHE STYLE HTPASSWD AUTH
-    file: rootPath + 'server/_config/users.htpasswd',
+    use: process.env.NODE_ENV === 'andromeda-dev', // APACHE STYLE HTPASSWD AUTH
+    file: rootPath + '/server/_config/users.htpasswd',
     realm: 'User'
   },
   passport: {
