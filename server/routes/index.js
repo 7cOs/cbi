@@ -7,11 +7,24 @@ module.exports = function(app) {
   const passport = require('passport');
 
   // API catchall
-  app.get('/api/*', function(req, res) {
-    console.log(req.url);
-    var signed = util.sign(req.url);
-    req.pipe(request(signed)).pipe(res);
-  });
+  app.route('/api/*')
+    .get(function(req, res) {
+      // console.log(req.url);
+      var signed = util.sign(req.url);
+      req.pipe(request(signed)).pipe(res);
+    })
+    .post(function(req, res) {
+      var signed = util.sign(req.url);
+      request.post(signed, {body: req.body, json: true}).pipe(res);
+    })
+    .put(function(req, res) {
+      var signed = util.sign(req.url);
+      request.put(signed, {body: req.body, json: true}).pipe(res);
+    })
+    .patch(function(req, res) {
+      var signed = util.sign(req.url);
+      request.patch(signed, {body: req.body, json: true}).pipe(res);
+    });
 
   // Auth stuff
   app.get('/auth/login',
