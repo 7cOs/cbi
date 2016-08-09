@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports =
-  angular.module('andromeda.modules', [
+  angular.module('orion.modules', [
     require('./landing').name,
     require('./accounts').name,
     require('./opportunities').name,

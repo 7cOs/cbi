@@ -11,7 +11,7 @@ module.exports =
      * @name getProducts
      * @desc Get products from API
      * @returns {Object}
-     * @memberOf andromeda.common.services
+     * @memberOf orion.common.services
      */
     function getProducts() {
       var productsPromise = $q.defer(),

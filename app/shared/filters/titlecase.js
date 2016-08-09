@@ -7,7 +7,7 @@ module.exports =
      * @desc convert string to title case
      * @params {String} str - string to be converted
      * @returns {String} - capitalized string
-     * @memberOf andromeda.common.services
+     * @memberOf orion.common.services
      */
     return function(str) {
       if (str === '') return '';

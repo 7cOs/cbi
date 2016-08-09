@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports =
-  angular.module('andromeda.common.services', [])
+  angular.module('orion.common.services', [])
     .factory('myperformanceService', require('./myperformanceService'))
     .factory('opportunitiesService', require('./opportunitiesService'))
     .factory('notificationsService', require('./notificationsService'))

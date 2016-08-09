@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports =
-  angular.module('andromeda.modules.landing', [
+  angular.module('orion.modules.landing', [
     // load your sample submodules here, e.g.:
     // require('./bar').name
   ])

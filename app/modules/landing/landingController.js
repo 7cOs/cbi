@@ -69,7 +69,7 @@ module.exports =
      * @params {String} q - query string
      * @params {Array} properties - array of strings that are the properties to be searched in the object
      * @returns {String}
-     * @memberOf andromeda.common.services
+     * @memberOf orion.common.services
      */
     function filterQuery(q, properties) {
       var lowercaseQuery = angular.lowercase(q);

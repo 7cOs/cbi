@@ -17,7 +17,7 @@ module.exports =
      * @desc mark a notification as read
      * @params {String} filterId - id of filter
      * @returns {Object} - Status object
-     * @memberOf andromeda.common.services
+     * @memberOf orion.common.services
      */
     function deleteOpportunityFilter(filterId) {
       var opportunityFilterPromise = $q.defer(),

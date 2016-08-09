@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports =
-  angular.module('andromeda.modules.accounts', [
+  angular.module('orion.modules.accounts', [
     // load your sample submodules here, e.g.:
     // require('./bar').name
   ])

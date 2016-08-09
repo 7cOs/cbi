@@ -387,7 +387,7 @@ module.exports =
      * @desc Get opportunities from API
      * @params {String} opportunityID - ID of opportunity [optional]
      * @returns {Object}
-     * @memberOf andromeda.common.services
+     * @memberOf orion.common.services
      */
     function getOpportunities(opportunityID) {
       // get applied filters
@@ -471,7 +471,7 @@ module.exports =
      * @name createOpportunity
      * @desc create an opportunity
      * @returns {Object}
-     * @memberOf andromeda.common.services
+     * @memberOf orion.common.services
      */
     function createOpportunity() {
       var opportunitiesPromise = $q.defer(),
@@ -504,7 +504,7 @@ module.exports =
      * @params {String} opportunityID - opportunity id
      * @params {Object} data - opportunity data
      * @returns {Object}
-     * @memberOf andromeda.common.services
+     * @memberOf orion.common.services
      */
     function updateOpportunity(url, opportunityID, data) {
       var opportunitiesPromise = $q.defer();
@@ -536,7 +536,7 @@ module.exports =
      * @desc Get opportunity feedback from API
      * @params {String} opportunityID - ID of opportunity [required]
      * @returns {Object}
-     * @memberOf andromeda.common.services
+     * @memberOf orion.common.services
      */
     function getOpportunityFeedback(opportunityID) {
       var opportunitiesPromise = $q.defer(),
@@ -567,7 +567,7 @@ module.exports =
      * @params {String} url - url to hit the api with [this could end up being static]
      * @params {String} opportunityID - ID of opportunity [required]
      * @returns {Object}
-     * @memberOf andromeda.common.services
+     * @memberOf orion.common.services
      */
     function createOpportunityFeedback(url, opportunityID, data) {
       var opportunitiesPromise = $q.defer();
@@ -601,7 +601,7 @@ module.exports =
      * @params {String} opportunityID - ID of opportunity [required]
      * @params {String} feedbackID - ID of feedback [required]
      * @returns {Object}
-     * @memberOf andromeda.common.services
+     * @memberOf orion.common.services
      */
     function deleteOpportunityFeedback(url, opportunityID, feedbackID) {
       var opportunitiesPromise = $q.defer();

@@ -2,7 +2,7 @@ describe('Unit: timeAgo Filter', function() {
   var filter, yearsDown, yearsUp, months, days;
 
   beforeEach(function() {
-    angular.mock.module('andromeda.common.filters');
+    angular.mock.module('orion.common.filters');
 
     inject(function(_timeAgoFilter_) {
       filter = _timeAgoFilter_;

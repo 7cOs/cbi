@@ -72,7 +72,7 @@ module.exports =
      * @desc Get stores from API
      * @params {String} tdlinxNumber - store id [optional]
      * @returns {Object}
-     * @memberOf andromeda.common.services
+     * @memberOf orion.common.services
      */
     function getStores(tdlinxNumber) {
       var storesPromise = $q.defer(),
@@ -117,7 +117,7 @@ module.exports =
      * @desc Get store opportunities from API
      * @params {String} tdlinxNumber - store id [required]
      * @returns {Object}
-     * @memberOf andromeda.common.services
+     * @memberOf orion.common.services
      */
     function getStoreOpportunities(tdlinxNumber) {
       var storesOpportunitiesPromise = $q.defer(),
