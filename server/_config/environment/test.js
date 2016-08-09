@@ -3,8 +3,8 @@
 module.exports = function (config) {
 
   // global settings
-  config.domain = 'app-orion-dev.herokuapp.com';
-  config.env = 'app-orion-dev';
+  config.domain = 'app-orion-qa.herokuapp.com';
+  config.env = 'test';
   config.address = 'https://' + config.domain + '/'; // base url
 
   // directories

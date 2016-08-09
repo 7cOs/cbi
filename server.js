@@ -1,6 +1,6 @@
 'use strict';
 
-process.env.NODE_ENV = process.env.NODE_ENV || 'development'; // SET DEFAULT ENVIRONMENT
+process.env.NODE_ENV = process.env.NODE_ENV || 'local'; // SET DEFAULT ENVIRONMENT
 
 // Define our constants
 const express  = require('express'),
