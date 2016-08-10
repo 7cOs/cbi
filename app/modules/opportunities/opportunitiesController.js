@@ -93,15 +93,10 @@ module.exports =
     }
 
     function init() {
-      // set user model
-      userService.getUsers('A1B2').then(function(data) {
-        userService.model = data;
-
-        // get saved filters
-        userService.getOpportunityFilters(userService.model.id).then(function(data) {
-          userService.model.opportunityFilters = data.filters;
-        });
-      });
+      // get saved filters -- this should be passed from user data when its ready
+      /* userService.getOpportunityFilters(userService.model.id).then(function(data) {
+        userService.model.opportunityFilters = data.filters;
+      });*/
     }
 
     /* function parseFilterObj() {

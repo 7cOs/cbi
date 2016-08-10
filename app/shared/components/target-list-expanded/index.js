@@ -1,6 +1,6 @@
 'use strict';
 
-function ExpandedTargetListController($scope, $state) {
+function ExpandedTargetListController($state, targetListService) {
   var vm = this;
 
   vm.pageName = $state.current.name;
@@ -16,6 +16,8 @@ function ExpandedTargetListController($scope, $state) {
   vm.closedOpportunitiesChevron = false;
   vm.totalOpportunitesChevron = true;
   vm.depletionsChevron = true;
+
+  init();
 
   function selector(tab) {
     vm.buttonState = tab;
@@ -87,6 +89,12 @@ function ExpandedTargetListController($scope, $state) {
     'closedOpportunities': 490,
     'opportunities': 521
   }];
+
+  function init() {
+    targetListService.getTargetList('1323ss').then(function(data) {
+      console.log(data);
+    });
+  }
 
 }
 

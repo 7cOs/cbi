@@ -326,7 +326,7 @@ module.exports =
      */
     function getTargetList(targetListId) {
       var targetListPromise = $q.defer(),
-          url = apiHelperService.formatQueryString({'foo': 'bar'});
+          url = apiHelperService.request('/api/targetLists/' + targetListId);
 
       $http.get(url, {
         headers: {}
@@ -337,7 +337,6 @@ module.exports =
       function getTargetListSuccess(response) {
         console.log('[targetListService.getTargetList] response: ', response);
         // targetListPromise.resolve(response.data);
-        // uncomment above and remove below when services are ready
         targetListPromise.resolve(tempData.getTargetListResponse);
       }
 

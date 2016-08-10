@@ -15,9 +15,9 @@ module.exports =
     vm.accountQuerySearch = accountQuerySearch;
     vm.distributorQuerySearch = distributorQuerySearch;
 
-    userService.getPerformanceSummary('A1B2').then(function(data) {
+    /* userService.getPerformanceSummary('A1B2').then(function(data) {
       console.log(data.performance);
-    });
+    });*/
 
     // Broadcast current page name for other scopes
     $rootScope.$broadcast('page:loaded', $state.current.name);
