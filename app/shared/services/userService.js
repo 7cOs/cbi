@@ -37,16 +37,17 @@ module.exports =
       }
     };
 
-    /* var model = {
-      id: 'A1B2',
-      firstName: 'Joe',
-      lastName: 'Cerveza',
-      email: 'jCerveza@cbrands.com',
-      phone: '1234567890',
-      role: 'CBBD MDM',
-      accounts: ['Wal-mart', 'PCC']
-    };*/
-    var model,
+    var model = {
+          currentUser: {
+            id: 'A1B2',
+            firstName: 'Joe',
+            lastName: 'Cerveza',
+            email: 'jCerveza@cbrands.com',
+            phone: '1234567890',
+            role: 'CBBD MDM',
+            accounts: ['Wal-mart', 'PCC']
+          }
+        },
         service = {
           model: model,
           getUsers: getUsers,
@@ -466,7 +467,17 @@ module.exports =
       .catch(getTargetListsFail);
 
       function getTargetListsSuccess(response) {
-        console.log('[userService.getTargetLists] response: ', response);
+        var sharedArchivedCount = 0,
+            sharedNotArchivedCount = 0;
+
+        for (var i = 0; i < response.data.sharedWithMe.length; i++) {
+          if (response.data.sharedWithMe.archived) sharedArchivedCount++;
+          else sharedNotArchivedCount++;
+        }
+
+        response.data.sharedArchivedCount = sharedArchivedCount;
+        response.data.sharedNotArchivedCount = sharedNotArchivedCount;
+
         targetListPromise.resolve(response.data);
       }
 

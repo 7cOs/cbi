@@ -1,29 +1,38 @@
 'use strict';
 
-function ExpandedTargetListController($scope, $state) {
+function ExpandedTargetListController($state, userService) {
   var vm = this;
 
+  // Variables
+  vm.buttonState = 'named';
+  vm.closedOpportunitiesChevron = false;
+  vm.collaboratorsChevron = false;
+  vm.depletionsChevron = true;
   vm.pageName = $state.current.name;
+  vm.lastUpdatedChevron = false;
+  vm.listChevron = true;
+  vm.totalOpportunitesChevron = true;
+
+  // Scope Methods
   vm.ratio = ratio;
   vm.selector = selector;
-  vm.buttonState = 'named';
   vm.sortBy = sortBy;
 
-  // Variables for sorting
-  vm.listChevron = true;
-  vm.collaboratorsChevron = false;
-  vm.lastUpdatedChevron = false;
-  vm.closedOpportunitiesChevron = false;
-  vm.totalOpportunitesChevron = true;
-  vm.depletionsChevron = true;
+  // Services
+  vm.userService = userService;
 
-  function selector(tab) {
-    vm.buttonState = tab;
-  };
+  // Init
+  init();
+
+  // Public Methods
 
   function ratio(closed, total) {
     var result = closed / total * 100;
     return result;
+  };
+
+  function selector(tab) {
+    vm.buttonState = tab;
   };
 
   function sortBy(property) {
@@ -36,7 +45,7 @@ function ExpandedTargetListController($scope, $state) {
     vm.closedOpportunitiesChevron = (property === 'closedOpportunities') ? !vm.closedOpportunitiesChevron : vm.closedOpportunitiesChevron;
     vm.totalOpportunitesChevron = (property === 'Opportunites') ? !vm.totalOpportunitesChevron : vm.totalOpportunitesChevron;
     vm.depletionsChevron = (property === 'depletions') ? !vm.depletionsChevron : vm.depletionsChevron;
-  }
+  };
 
   vm.namedFilters = [{
     'name': 'California - Wine Shops',
@@ -87,6 +96,17 @@ function ExpandedTargetListController($scope, $state) {
     'closedOpportunities': 490,
     'opportunities': 521
   }];
+
+  // Private Methods
+  function init() {
+    /* targetListService.getTargetList('1323ss').then(function(data) {
+      console.log(data);
+    });*/
+    userService.getTargetLists('1').then(function(data) {
+      userService.model.targetLists = data;
+      console.log(userService.model.targetLists);
+    });
+  }
 
 }
 
