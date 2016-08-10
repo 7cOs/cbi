@@ -46,7 +46,7 @@ module.exports =
       role: 'CBBD MDM',
       accounts: ['Wal-mart', 'PCC']
     };*/
-    var model,
+    var model = {},
         service = {
           model: model,
           getUsers: getUsers,

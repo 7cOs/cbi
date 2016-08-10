@@ -5,7 +5,7 @@
     button(disabled="disabled" ng-if="expanded.buttonState === 'named'").btn-action Archive
     button(disabled="disabled" ng-if="expanded.buttonState !== 'shared'").btn-action Delete
     button.btn-action Create a New List
-
+div Hi: {{expanded.userService}}
 div.expanded-target-lists
   md-tabs(md-dynamic-height='' md-border-bottom)
     md-tab(label='My Target Lists' md-on-select="expanded.selector('named')")
@@ -39,11 +39,11 @@ div.expanded-target-lists
                   | Depletions <br />Since Closed (CE)
                   span(ng-class="{ 'chevron-down-small' : expanded.depletionsChevron, 'chevron-up-small' : !expanded.depletionsChevron}").chevron-down-small
         div(row).target-list-detail-container
-          div(ng-show="!expanded.namedFilters.length").no-opportunites
+          div(ng-show="!expanded.userService.model.targetLists.owned.length").no-opportunites
             h4 No Opportunities have been added yet
             p Try Searching for <span>Opportunities</span> and add them to your list
           ul
-            li(ng-repeat="list in expanded.namedFilters | orderBy:expanded.sortProperty:expanded.reverse").clearfix
+            li(ng-repeat="list in expanded.userService.model.targetLists.owned | orderBy:expanded.sortProperty:expanded.reverse").clearfix
               div.checkbox-wrapper.named-target-list(ng-click="list.toggle(opportunity, list.selected)")
                 md-checkbox(aria-label="Select Item" ng-checked="list.exists(opportunity, list.selected)")
               div.checkbox-sibling(column="12")
@@ -51,18 +51,18 @@ div.expanded-target-lists
                   h4(column="4").left {{list.name}}
                   div(column="2")
                     img(src="../assets/img/icons/person.svg").member-icon
-                    h5.accent.gray.dropdown-menu-trigger {{list.members.length + 1}} collaborators
+                    h5.accent.gray.dropdown-menu-trigger {{list.collaborators.length + 1}} collaborators
                       ul.dropdown-menu
                         li.member.creator {{list.creator}}
-                        li.member(ng-repeat="collaborator in list.members") {{collaborator}}
-                  h5(column="2").accent.gray {{list.created}}
-                  h4(column="1").closed {{list.closedOpportunities | number}}
+                        li.member(ng-repeat="collaborator in list.collaborators") {{collaborator.user.firstName}} {{collaborator.user.lastName}}
+                  h5(column="2").accent.gray {{list.createdAt | timeAgo}}
+                  h4(column="1").closed {{list.opportunitiesSummary.closedOpportunitiesCount | number}}
                   h4(column="1") {{list.opportunities | number}}
-                  h4(column="2") {{list.depletions | number}}
+                  h4(column="2") {{list.opportunitiesSummary.totalClosedDepletions | number}}
                 div(row).creator
                   h5(column="3").accent.left {{list.creator}}
                 div(row)
-                  md-progress-linear(md-mode="determinate" ng-value="expanded.ratio(list.closedOpportunities, list.opportunities)")
+                  md-progress-linear(md-mode="determinate" ng-value="expanded.ratio(list.opportunitiesSummary.closedOpportunitiesCount, list.opportunities)")
     md-tab(label='Shared with Me' md-on-select="expanded.selector('shared')")
       md-content.md-padding
         div(row)
