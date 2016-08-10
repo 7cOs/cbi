@@ -102,7 +102,7 @@ function ExpandedTargetListController($state, userService) {
     /* targetListService.getTargetList('1323ss').then(function(data) {
       console.log(data);
     });*/
-    userService.getTargetLists('1323ss').then(function(data) {
+    userService.getTargetLists('1').then(function(data) {
       userService.model.targetLists = data;
       console.log(userService.model.targetLists);
     });

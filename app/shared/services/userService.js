@@ -467,7 +467,17 @@ module.exports =
       .catch(getTargetListsFail);
 
       function getTargetListsSuccess(response) {
-        console.log('[userService.getTargetLists] response: ', response);
+        var sharedArchivedCount = 0,
+            sharedNotArchivedCount = 0;
+
+        for (var i = 0; i < response.data.sharedWithMe.length; i++) {
+          if (response.data.sharedWithMe.archived) sharedArchivedCount++;
+          else sharedNotArchivedCount++;
+        }
+
+        response.data.sharedArchivedCount = sharedArchivedCount;
+        response.data.sharedNotArchivedCount = sharedNotArchivedCount;
+
         targetListPromise.resolve(response.data);
       }
 
