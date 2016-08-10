@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports =
-  function targetListDetailController($rootScope, $state, chipsService, filtersService, $mdDialog) {
+  function targetListDetailController($rootScope, $state, $mdDialog, chipsService, filtersService) {
     var vm = this;
 
     vm.modalManageTargetList = modalManageTargetList;
