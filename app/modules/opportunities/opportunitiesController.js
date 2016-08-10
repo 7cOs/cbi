@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports =
-  function opportunitiesController($rootScope, $state, opportunitiesService, chipsService, filtersService, userService, $mdDialog) {
+  function opportunitiesController($rootScope, $state, $mdDialog, opportunitiesService, chipsService, filtersService, userService) {
     var vm = this;
 
     // Services exposed in View
