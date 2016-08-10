@@ -19,7 +19,6 @@ module.exports =
     vm.isPositive = isPositive;
     vm.overviewOpen = false;
     vm.idSelected = null;
-    vm.setSelected = setSelected;
     vm.openSelect = openSelect;
     vm.setMarketTab = setMarketTab;
     vm.selectItem = selectItem;
@@ -98,7 +97,8 @@ module.exports =
       var parentLength = Object.keys(parent).length;
       if (parentIndex + 1 === parentLength) {
         // We're on the deepest level of current tab list
-        setSelected(item.name);
+        if (widget === 'brands') { setSelected(item.name); }
+        if (widget === 'markets') { setSelected(item.label); }
       } else {
         if (widget === 'brands') { vm.brandWidgetTitle = item.name; }
         nextTab(widget);
@@ -117,11 +117,6 @@ module.exports =
     function prevTab() {
       vm.brandSelectedIndex = vm.brandSelectedIndex - 1;
       vm.brandWidgetTitle = vm.brandWidgetTitleDefault;
-    }
-
-    // Add 'selected' class to item furthest possible drill-down tab level
-    function setSelected(idSelected) {
-      vm.idSelected = idSelected;
     }
 
     // Set proper tab and skip animation when chosen from market select box
@@ -166,6 +161,11 @@ module.exports =
     // Handle required formatting for chart data
     function setChartData(data) {
       vm.chartData = [{'values': data}];
+    }
+
+    // Add 'selected' class to item furthest possible drill-down tab level
+    function setSelected(idSelected) {
+      vm.idSelected = idSelected;
     }
 
     // Set element class for market overview

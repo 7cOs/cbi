@@ -104,7 +104,10 @@
       &.selected,
       &.selected .dark,
       &.selected .data-brand,
-      &.selected .negative {
+      &.selected .negative,
+      &.selected.store .dist-label,
+      &.selected.store .store-number,
+      &.selected.store .address {
         background: $dark-blue-2;
         color: $white;
         transition: none;
