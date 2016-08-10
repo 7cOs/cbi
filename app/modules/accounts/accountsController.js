@@ -17,41 +17,41 @@ module.exports =
     // Expose public methods
     vm.isNegative = isNegative;
     vm.isPositive = isPositive;
-    vm.removeTab = removeTab;
     vm.overviewOpen = false;
     vm.idSelected = null;
     vm.setSelected = setSelected;
     vm.openSelect = openSelect;
-    vm.setChartData = setChartData;
+    vm.setMarketTab = setMarketTab;
     vm.selectItem = selectItem;
+    vm.prevTab = prevTab;
 
-    // Tab content
+    // Widget / tab contents
     vm.brandTabs = {
       brands: vm.distributionData.performance,
       skus: vm.brandSkus
     };
-    // vm.marketTabs = [
-    //   'distributors': [],
-    //   'accounts': [],
-    //   'sub-accounts': [],
-    //   'stores': []
-    // ];
+    vm.marketTabs = {
+      distributors: vm.marketData.distributors,
+      accounts: vm.marketData.accounts,
+      subAccounts: vm.marketData.subAccounts,
+      stores: vm.marketData.stores
+    };
 
+    // Set selected tabs
     vm.selected = null;
     vm.previous = null;
-    vm.selectedIndex = 0;
-    vm.nextTab = nextTab;
-    vm.prevTab = prevTab;
-    vm.newTabContent = '';
+    vm.brandSelectedIndex = 0;
+    vm.marketSelectedIndex = 0;
 
     // Set default values
     vm.accountTypesDefault = 'Distributors';
     vm.brandWidgetTitleDefault = 'All Brands';
     vm.brandWidgetTitle = vm.brandWidgetTitleDefault;
+    vm.filtersService.model.selected.accountBrands = 'Distribution (simple)';
     vm.filtersService.model.selected.accountMarkets = 'Depletions';
     vm.selectOpen = false;
-    vm.brandDrillDown = null;
     vm.disableAnimation = false;
+    vm.marketStoresView = false;
 
     // Broadcast current page name for other scopes
     $rootScope.$broadcast('page:loaded', $state.current.name);
@@ -91,37 +91,52 @@ module.exports =
       }
     };
 
-    // Public methods
+    // PUBLIC METHODS
 
     // When a row item is clicked in brands / market widgets
-    function selectItem(item, parent, parentIndex) {
+    function selectItem(widget, item, parent, parentIndex) {
       var parentLength = Object.keys(parent).length;
       if (parentIndex + 1 === parentLength) {
         // We're on the deepest level of current tab list
         setSelected(item.name);
+      } else {
+        if (widget === 'brands') { vm.brandWidgetTitle = item.name; }
+        nextTab(widget);
       }
-      nextTab();
+      if (widget === 'markets') { getActiveTab(); }
     }
 
-    function nextTab() {
-      vm.selectedIndex = vm.selectedIndex + 1;
+    // Move to next indexed tab
+    function nextTab(widget) {
+      vm.disableAnimation = false;
+      if (widget === 'brands') { vm.brandSelectedIndex = vm.brandSelectedIndex + 1; }
+      if (widget === 'markets') { vm.marketSelectedIndex = vm.marketSelectedIndex + 1; }
     }
 
+    // Move to previously indexed tab (only used for brands)
     function prevTab() {
-      vm.selectedIndex = vm.selectedIndex - 1;
-    }
-
-    function removeTab(tabList) {
-      var lastItem = vm.brandTabs.length - 1;
+      vm.brandSelectedIndex = vm.brandSelectedIndex - 1;
       vm.brandWidgetTitle = vm.brandWidgetTitleDefault;
-      vm.brandTabs.splice(lastItem, 1);
-      vm.idSelected = null;
-      vm.brandDrillDown = null;
     }
 
+    // Add 'selected' class to item furthest possible drill-down tab level
     function setSelected(idSelected) {
       vm.idSelected = idSelected;
-      vm.brandDrillDown = vm.idSelected;
+    }
+
+    // Set proper tab and skip animation when chosen from market select box
+    function setMarketTab(selectValue) {
+      vm.disableAnimation = true;
+      if (selectValue === 'Distributors') { vm.marketSelectedIndex = 0; }
+      if (selectValue === 'Accounts') { vm.marketSelectedIndex = 1; }
+      if (selectValue === 'Sub-Accounts') { vm.marketSelectedIndex = 2; }
+      if (selectValue === 'Stores') { vm.marketSelectedIndex = 3; }
+      getActiveTab();
+    }
+
+    // Set variable when select box is open (for bug in scroll binding)
+    function openSelect(value) {
+      vm.selectOpen = value;
     }
 
     function isNegative(salesData) {
@@ -138,22 +153,25 @@ module.exports =
       return false;
     };
 
-    // Used to set element class for market overview
+    // PRIVATE METHODS
+
+    // Checks active tab, updates model, passes data to chart (markets only)
+    function getActiveTab() {
+      if (vm.marketSelectedIndex === 0) { vm.filtersService.model.selected.accountTypes = 'Distributors'; setChartData(vm.marketData.distributors); }
+      if (vm.marketSelectedIndex === 1) { vm.filtersService.model.selected.accountTypes = 'Accounts'; setChartData(vm.marketData.accounts); }
+      if (vm.marketSelectedIndex === 2) { vm.filtersService.model.selected.accountTypes = 'Sub-Accounts'; setChartData(vm.marketData.subAccounts); }
+      if (vm.marketSelectedIndex === 3) { vm.filtersService.model.selected.accountTypes = 'Stores'; setChartData(vm.marketData.stores); }
+    }
+
+    // Handle required formatting for chart data
+    function setChartData(data) {
+      vm.chartData = [{'values': data}];
+    }
+
+    // Set element class for market overview
     function setOverviewDisplay(value) {
       vm.overviewOpen = value;
       $scope.$apply();
-    }
-
-    function openSelect(value) {
-      vm.selectOpen = value;
-    }
-
-    function setChartData() {
-      var dataSet = vm.filtersService.model.selected.accountTypes;
-      if (dataSet === 'Distributors') { vm.chartData = [{'values': vm.marketData.distributors}]; }
-      if (dataSet === 'Accounts') { vm.chartData = [{'values': vm.marketData.accounts}]; }
-      if (dataSet === 'Sub-Accounts') { vm.chartData = [{'values': vm.marketData.subAccounts}]; }
-      if (dataSet === 'Stores') { vm.chartData = [{'values': vm.marketData.stores}]; }
     }
 
     // Check if market overview is scrolled out of view
