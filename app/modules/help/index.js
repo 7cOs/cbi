@@ -11,7 +11,7 @@ module.exports =
       url: '/help',
       templateUrl: './app/modules/help/layout.html',
       controller: 'helpController',
-      controllerAs: 's'
+      controllerAs: 'help'
     });
   })
   .controller('helpController', require('./helpController'));
