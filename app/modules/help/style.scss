@@ -1,0 +1,158 @@
+.help {
+
+  .help-header {
+    border: 1px solid $gray-4;
+    float: none;
+    display: block;
+    padding: 0.25em 0.25em 0.25em 0;
+    background: $gray-4;
+
+    p {
+      padding-left: 16px;
+      font-size: 1.4em;
+      color: $gray-1;
+    }
+
+  }
+
+  .questions {
+    background-color: $gray-4;
+  }
+
+  .help-table {
+    margin-bottom: 1.5em;
+
+    .help-content {
+
+      table {
+        border-collapse: collapse;
+        border-top: 1px solid $black;
+        border-bottom: 1px solid $black;
+        width: 100%;
+      }
+
+      tbody {
+
+        td {
+          padding: 30px 8px;
+        }
+
+        tr {
+          border-bottom: 1px solid $gray-9;
+          background: $white;
+          outline: 0;
+          transition: background 0.3s;
+
+          .dark {
+            background: $gray-4;
+            transition: background 0.3s;
+          }
+
+          &:hover {
+            background: $light-blue-4;
+            transition: background 0.3s;
+
+            .dark {
+              background: $smoke;
+              transition: background 0.3s;
+            }
+          }
+
+          &.selected,
+          &.selected .dark,
+          &.selected .data-brand,
+          &.selected .negative {
+            background: $dark-blue-2;
+            color: $white;
+            transition: none;
+
+            &:hover {
+              background: $dark-blue-2;
+              transition: none;
+            }
+          }
+
+          &.selected .dark {
+            background: $dark-blue-3;
+            color: $white;
+
+            &:hover {
+              background: $dark-blue-3;
+            }
+          }
+        }
+      }
+
+      tr {
+        background: $white;
+      }
+
+      td {
+        text-align: center;
+        padding: 0 8px;
+
+        a .link-icon {
+          background-image: url('../assets/img/icons/external-link.svg');
+          width: 15px;
+          height: 15px;
+          background-position: 0 center;
+          background-repeat: no-repeat;
+          background-size: 15px;
+          content: '';
+          display: block;
+        }
+      }
+
+      .cell-align-right {
+        text-align: right;
+      }
+
+      .cell-align-left {
+        text-align: left;
+      }
+
+      .left {
+        padding-left: 16px;
+        color: $black;
+      }
+
+      .right {
+        padding-right: 16px;
+        font-size: 0.7em;
+        color: $gray-2;
+      }
+    }
+  }
+
+  .help-footer {
+    font-size: 0.75em;
+    margin-top: -20px;
+    line-height: 0.5;
+
+    .faq {
+      background: $gray-4;
+      padding: 15px;
+
+      .faq-download-info {
+        img {
+          height: 45px;
+          float: left;
+          margin-right: 10px;
+        }
+
+        button {
+          font-size: 1.3em;
+          margin: 0;
+          float: right;
+        }
+      }
+
+      h4 {
+        margin-top: 5px;
+        margin-bottom: 10px;
+        padding-top: 12px;
+        font-weight: $regular;
+      }
+    }
+  }
+}
