@@ -1,0 +1,18 @@
+div.modal
+  div.title
+    h4 Manage Collaborators
+  div.modal-form
+    div.modal-input
+      label collaborators
+      //- TODO....replace textarea with proper input
+      textarea
+    div.modal-input.clearfix
+      md-checkbox Allow Collaborators to invite others
+    div.modal-input
+      label Add Recipient
+      input(ng-model="tempPlaceholder" placeholder="Enter names or CBI Email addresses")
+    button(disabled).btn-action Save
+    p.cancel.accent X Cancel
+  div.modal-footer.clearfix
+    p Archive List
+    p Delete List

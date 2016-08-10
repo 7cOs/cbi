@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports =
-  function opportunitiesController($rootScope, $state, opportunitiesService, chipsService, filtersService, userService) {
+  function opportunitiesController($rootScope, $state, opportunitiesService, chipsService, filtersService, userService, $mdDialog) {
     var vm = this;
 
     // Services exposed in View
@@ -16,6 +16,8 @@ module.exports =
     vm.applyFilter = applyFilter;
     vm.brandQuerySearch = brandQuerySearch;
     vm.distributorQuerySearch = distributorQuerySearch;
+    vm.modalForm = modalForm;
+    vm.modalAddOpportunityForm = modalAddOpportunityForm;
 
     // Broadcast current page name for other scopes
     $rootScope.$broadcast('page:loaded', $state.current.name);
@@ -23,6 +25,26 @@ module.exports =
     init();
 
     // ///////////////////////////////////////////////////////// Public Methods
+    function modalForm(ev) {
+      var parentEl = angular.element(document.body);
+      $mdDialog.show({
+        clickOutsideToClose: true,
+        parent: parentEl,
+        targetEvent: ev,
+        templateUrl: './app/modules/opportunities/modal.html'
+      });
+    }
+
+    function modalAddOpportunityForm(ev) {
+      var parentEl = angular.element(document.body);
+      $mdDialog.show({
+        clickOutsideToClose: true,
+        parent: parentEl,
+        targetEvent: ev,
+        templateUrl: './app/modules/opportunities/modal-add-opportunity-form.html'
+      });
+    }
+
     function accountQuerySearch(searchText) {
       // update to accounts
       var results = filtersService.model.stores.filter(filterQuery(searchText, ['account', 'sub_account', 'store_name']));
