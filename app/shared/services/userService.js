@@ -37,16 +37,17 @@ module.exports =
       }
     };
 
-    /* var model = {
-      id: 'A1B2',
-      firstName: 'Joe',
-      lastName: 'Cerveza',
-      email: 'jCerveza@cbrands.com',
-      phone: '1234567890',
-      role: 'CBBD MDM',
-      accounts: ['Wal-mart', 'PCC']
-    };*/
-    var model = {},
+    var model = {
+          currentUser: {
+            id: 'A1B2',
+            firstName: 'Joe',
+            lastName: 'Cerveza',
+            email: 'jCerveza@cbrands.com',
+            phone: '1234567890',
+            role: 'CBBD MDM',
+            accounts: ['Wal-mart', 'PCC']
+          }
+        },
         service = {
           model: model,
           getUsers: getUsers,
