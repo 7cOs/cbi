@@ -1,5 +1,5 @@
 describe('Unit: timeAgo Filter', function() {
-  var filter, yearsDown, yearsUp, months, days;
+  var filter;
 
   beforeEach(function() {
     angular.mock.module('orion.common.filters');
@@ -8,45 +8,104 @@ describe('Unit: timeAgo Filter', function() {
       filter = _timeAgoFilter_;
     });
 
-    // create a dynamic dates so it wont error out every month
-    yearsDown = new Date();
-    yearsDown.setYear(yearsDown.getFullYear() - 10);
-
-    yearsUp = new Date();
-    yearsUp.setYear(yearsUp.getFullYear() - 10.7);
-
-    months = new Date();
-    months.setMonth(months.getMonth() - 3);
-
-    days = new Date();
-    days.setDate(days.getDate() - 7);
   });
 
   it('should exist', function() {
     expect(filter).toBeDefined();
   });
 
-  it('should round to the nearest year if greater than one year ago', function() {
-    expect(filter(yearsDown)).toEqual('10 years ago');
-    expect(filter(yearsUp)).toEqual('11 years ago');
+  describe('type: daysOnly', function() {
+    var sixHours, fiveDays, thirtyTwoDays, twoHundredDays, threeHundredSeventyDays;
+    beforeEach(function() {
+      sixHours = new Date();
+      sixHours.setHours(sixHours.getHours() - 6);
+
+      fiveDays = new Date();
+      fiveDays.setDate(fiveDays.getDate() - 5);
+
+      thirtyTwoDays = new Date();
+      thirtyTwoDays.setDate(thirtyTwoDays.getDate() - 32);
+
+      twoHundredDays = new Date();
+      twoHundredDays.setDate(twoHundredDays.getDate() - 200);
+
+      threeHundredSeventyDays = new Date();
+      threeHundredSeventyDays.setDate(threeHundredSeventyDays.getDate() - 370);
+    });
+
+    it('should return hours if under one day', function() {
+      expect(filter(sixHours, 'daysOnly')).toEqual('6 hours ago');
+    });
+    it('should return 5 days ago', function() {
+      expect(filter(fiveDays, 'daysOnly')).toEqual('5 days ago');
+    });
+    it('should return 32 days ago', function() {
+      expect(filter(thirtyTwoDays, 'daysOnly')).toEqual('32 days ago');
+    });
+    it('should return 200 days ago', function() {
+      expect(filter(twoHundredDays, 'daysOnly')).toEqual('200 days ago');
+    });
+    it('should return 370 days ago', function() {
+      expect(filter(threeHundredSeventyDays, 'daysOnly')).toEqual('370 days ago');
+    });
   });
 
-  it('should only add an "s" if it is more than one month ago', function() {
-    yearsDown.setYear(yearsDown.getFullYear() + 9);
-    expect(filter(yearsDown)).toEqual('1 year ago');
+  describe('type: relative', function() {
+    var oneMinute, twentyFourMinutes, oneHour, sixHours, twoDays, dateNoTime;
+    beforeEach(function() {
+      oneMinute = new Date();
+      oneMinute.setMinutes(oneMinute.getMinutes() - 1);
+
+      twentyFourMinutes = new Date();
+      twentyFourMinutes.setMinutes(twentyFourMinutes.getMinutes() - 24);
+
+      oneHour = new Date();
+      oneHour.setMinutes(oneHour.getMinutes() - 61);
+
+      sixHours = new Date();
+      sixHours.setHours(sixHours.getHours() - 6);
+
+      twoDays = new Date();
+      twoDays.setDate(twoDays.getDate() - 2);
+
+      dateNoTime = new Date(2015, 0, 1);
+    });
+
+    it('should return one minute ago', function() {
+      expect(filter(oneMinute, 'relative')).toEqual('1 minute ago');
+    });
+
+    it('should return minutes ago', function() {
+      expect(filter(twentyFourMinutes, 'relative')).toEqual('24 minutes ago');
+    });
+
+    it('should return 1 hour ago', function() {
+      expect(filter(oneHour, 'relative')).toEqual('1 hour ago');
+    });
+
+    it('should return 6 hours ago', function() {
+      expect(filter(sixHours, 'relative')).toEqual('6 hours ago');
+    });
+
+    it('should return 2 days ago', function() {
+      expect(filter(twoDays, 'relative')).toEqual('2 days ago');
+    });
+
+    it('should return month day, year', function() {
+      expect(filter(dateNoTime, 'relative')).toEqual('January 1, 2015');
+    });
+
   });
 
-  it('should round to the nearest month if less than a year but more than 30 days', function() {
-    expect(filter(months)).toEqual('3 months ago');
-  });
+  describe('type: relative with time', function() {
+    var dateTime;
+    beforeEach(function() {
+      dateTime = new Date(2015, 0, 1, 9, 0);
+    });
 
-  it('should only add an "s" if it is more than one month ago', function() {
-    months.setMonth(months.getMonth() + 2);
-    expect(filter(months)).toEqual('1 month ago');
-  });
-
-  it('should round to the nearest day if less than a month', function() {
-    expect(filter(days)).toEqual('7 days ago');
+    it('should return month day, year at time', function() {
+      expect(filter(dateTime, 'relativeTime')).toEqual('January 1, 2015 at 9:00 AM');
+    });
   });
 
 });
