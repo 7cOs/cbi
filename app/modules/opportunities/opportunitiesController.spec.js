@@ -3,6 +3,7 @@ describe('Unit: opportunitiesController', function() {
 
   beforeEach(function() {
     angular.mock.module('ui.router');
+    angular.mock.module('ngMaterial');
     angular.mock.module('orion.common.services');
     angular.mock.module('orion.modules.opportunities');
 
