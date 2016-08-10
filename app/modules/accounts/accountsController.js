@@ -52,6 +52,7 @@ module.exports =
     vm.selectOpen = false;
     vm.disableAnimation = false;
     vm.marketStoresView = false;
+    vm.marketIdSelected = false;
 
     // Broadcast current page name for other scopes
     $rootScope.$broadcast('page:loaded', $state.current.name);
@@ -156,9 +157,9 @@ module.exports =
 
     // Checks active tab, updates model, passes data to chart (markets only)
     function getActiveTab() {
-      if (vm.marketSelectedIndex === 0) { vm.filtersService.model.selected.accountTypes = 'Distributors'; setChartData(vm.marketData.distributors); }
-      if (vm.marketSelectedIndex === 1) { vm.filtersService.model.selected.accountTypes = 'Accounts'; setChartData(vm.marketData.accounts); }
-      if (vm.marketSelectedIndex === 2) { vm.filtersService.model.selected.accountTypes = 'Sub-Accounts'; setChartData(vm.marketData.subAccounts); }
+      if (vm.marketSelectedIndex === 0) { vm.filtersService.model.selected.accountTypes = 'Distributors'; setChartData(vm.marketData.distributors); deselectMarketId(); }
+      if (vm.marketSelectedIndex === 1) { vm.filtersService.model.selected.accountTypes = 'Accounts'; setChartData(vm.marketData.accounts); deselectMarketId(); }
+      if (vm.marketSelectedIndex === 2) { vm.filtersService.model.selected.accountTypes = 'Sub-Accounts'; setChartData(vm.marketData.subAccounts); deselectMarketId(); }
       if (vm.marketSelectedIndex === 3) { vm.filtersService.model.selected.accountTypes = 'Stores'; setChartData(vm.marketData.stores); }
     }
 
@@ -171,7 +172,14 @@ module.exports =
     function setSelected(idSelected, widget) {
       vm.idSelected = idSelected;
       if (widget === 'brands') { vm.brandIdSelected = idSelected; }
-      if (widget === 'markets') { prevTab(); }
+      if (widget === 'markets') { vm.marketIdSelected = true; prevTab(); }
+    }
+
+    function deselectMarketId() {
+      if (vm.marketIdSelected === true) {
+        vm.idSelected = null;
+        vm.marketIdSelected = false;
+      }
     }
 
     // Set element class for market overview
