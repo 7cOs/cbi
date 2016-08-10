@@ -32,71 +32,74 @@ div.my-scorecards
         thead
           tr
             th.top
-              p.accent.bold.left.single-line Brand
-            th.top.dark
-              p.accent.bold.single-line
-                | Depletions <br />
+              p.accent.bold.left Brand
+            th.top.dark-blue
+              p.accent.bold
+                | Depletions -<br />
                 | FYTD
-            th(colspan=4).top
+            th(colspan=2).top.blue
               p.accent.bold vs Year Ago
-            th(colspan=2).top.dark
+            th(colspan=2).top
+              p.accent.bold BU vs Year Ago
+            th(colspan=2).top
               p.accent vs Plan
             th(colspan=2).top
               p.accent.bold Contribution to Volume
-            th(colspan=2).top.dark
+            th(colspan=2).top
               p.accent.bold Contribution to Growth &nbsp;
           tr
             th
               p.accent &nbsp;
-            th.dark
+            th.dark-blue
               p.accent &nbsp;
-            th
+            th.blue
               p.accent gap
-            th
+            th.blue
               p.accent %Trend
             th
               p.accent %BU Trend
             th
               p.accent MY% vs BU%
-            th.dark
+            th
               p.accent Gap #
-            th.dark
+            th
               p.accent Gap %
             th
               p.accent To my total %
             th
-              p.accent to % total %
-            th.dark
+              p.accent to BU total %
+            th
               p.accent to my total %
-            th.dark
+            th
               p.accent to bu total %
         tbody
           tr
-            td.column-total.left TOTAL
-            td.column-total.dark {{273400 | number }}
-            td.column-total {{1532 | number }}
-            td.column-total 7.5%
+            td.column-total.left.no-border TOTAL
+            td.column-total.dark-blue.no-border {{273400 | number }}
+            td.column-total.blue.no-border {{1532 | number }}
+            td.column-total.blue.no-border 7.5%
             td.column-total 1%
-            td.column-total.positive &#9650;
-            td.column-total.dark {{1532 | number }}
-            td.column-total.dark 4%
+            td.column-total.positive.no-border &#9650;
+            td.column-total {{1532 | number }}
+            td.column-total.no-border 4%
             td.column-total 100%
-            td.column-total 12%
-            td.column-total.dark 100%
-            td.column-total.dark 12%
+            td.column-total.no-border 12%
+            td.column-total 100%
+            td.column-total.no-border 12%
           tr(ng-repeat="depletion in s.depletionsData.performance")
             td.left.data-brand {{depletion.name}}
             td(ng-class="{'negative': s.isNegative(depletion.measures.depletions)}").dark             {{depletion.measures.depletions | number }}
-            td(ng-class="{'negative': s.isNegative(depletion.measures.yearAgoGap)}")                  {{depletion.measures.yearAgoGap | number }}
-            td(ng-class="{'negative': s.isNegative(depletion.measures.yearAgoTrend)}")                {{depletion.measures.yearAgoTrend}}%
+            td(ng-class="{'negative': s.isNegative(depletion.measures.yearAgoGap)}").medium-dark      {{depletion.measures.yearAgoGap | number }}
+            td(ng-class="{'negative': s.isNegative(depletion.measures.yearAgoTrend)}").medium-dark.no-border    {{depletion.measures.yearAgoTrend}}%
             td(ng-class="{'negative': s.isNegative(depletion.measures.yearAgoBuTrend)}")              {{depletion.measures.yearAgoBuTrend}}%
-            td(ng-class="{'negative': s.isNegative(depletion.measures.yearAgoTrend - depletion.measures.yearAgoBuTrend)}") &#9660;
-            td(ng-class="{'negative': s.isNegative(depletion.measures.vsPlanNumber)}").dark           {{depletion.measures.vsPlanNumber | number }}
-            td(ng-class="{'negative': s.isNegative(depletion.measures.vsPlanPercent)}").dark          {{depletion.measures.vsPlanPercent}}%
+            //- TODO come back to this logic
+            td(ng-class="{'negative': s.isNegative(depletion.measures.yearAgoTrend - depletion.measures.yearAgoBuTrend), 'positive': !s.isNegative(depletion.measures.yearAgoTrend - depletion.measures.yearAgoBuTrend)}").no-border &#9660;
+            td(ng-class="{'negative': s.isNegative(depletion.measures.vsPlanNumber)}")           {{depletion.measures.vsPlanNumber | number }}
+            td(ng-class="{'negative': s.isNegative(depletion.measures.vsPlanPercent)}").no-border          {{depletion.measures.vsPlanPercent}}%
             td(ng-class="{'negative': s.isNegative(depletion.measures.volumeContribution)}")          {{depletion.measures.volumeContribution}}%
-            td(ng-class="{'negative': s.isNegative(depletion.measures.volumeContributionBu)}")        {{depletion.measures.volumeContributionBu}}%
-            td(ng-class="{'negative': s.isNegative(depletion.measures.growthContribution)}").dark     {{depletion.measures.growthContribution}}%
-            td(ng-class="{'negative': s.isNegative(depletion.measures.growthContributionBu)}").dark   {{depletion.measures.growthContributionBu}}%
+            td(ng-class="{'negative': s.isNegative(depletion.measures.volumeContributionBu)}").no-border        {{depletion.measures.volumeContributionBu}}%
+            td(ng-class="{'negative': s.isNegative(depletion.measures.growthContribution)}")     {{depletion.measures.growthContribution}}%
+            td(ng-class="{'negative': s.isNegative(depletion.measures.growthContributionBu)}").no-border   {{depletion.measures.growthContributionBu}}%
 
   section.distributions-scorecard
     div.scorecard-header.clearfix
@@ -120,68 +123,81 @@ div.my-scorecards
         thead
           tr
             th.top
-              p.accent.bold.left.single-line Brand
-            th.top.dark
-              p.accent.bold.single-line
-                | Distributions <br />
+              p.accent.bold.left Brand
+            th.top.dark-blue
+              p.accent.bold
+                | Distribution <br />
                 | FYTD
-            th(colspan=4).top
+            th(colspan=2).top.blue
               p.accent.bold vs Year Ago
-            th(colspan=2).top.dark
+            th(colspan=2).top
+              p.accent.bold BU vs Year Ago
+            th(colspan=2).top
               p.accent vs Plan
             th(colspan=2).top
               p.accent.bold Contribution to Volume
-            th(colspan=2).top.dark
+            th(colspan=2).top
               p.accent.bold Contribution to Growth &nbsp;
           tr
             th
               p.accent &nbsp;
-            th.dark
+            th.dark-blue
               p.accent &nbsp;
-            th
+            th.blue
               p.accent gap
-            th
+            th.blue
               p.accent %Trend
             th
               p.accent %BU Trend
             th
               p.accent MY% vs BU%
-            th.dark
+            th
               p.accent Gap #
-            th.dark
+            th
               p.accent Gap %
             th
               p.accent To my total %
             th
-              p.accent to % total %
-            th.dark
+              p.accent to BU total %
+            th
               p.accent to my total %
-            th.dark
+            th
               p.accent to bu total %
         tbody
           tr
-            td.column-total.left TOTAL
-            td.column-total.dark {{273400 | number }}
-            td.column-total {{1532 | number }}
-            td.column-total 7.5%
+            td.column-total.left.no-border TOTAL
+            td.column-total.dark-blue.no-border {{273400 | number }}
+            td.column-total.blue.no-border {{1532 | number }}
+            td.column-total.blue.no-border 7.5%
             td.column-total 1%
-            td.column-total.positive &#9650;
-            td.column-total.dark {{1532 | number }}
-            td.column-total.dark 4%
+            td.column-total.positive.no-border &#9650;
+            td.column-total {{1532 | number }}
+            td.column-total.no-border 4%
             td.column-total 100%
-            td.column-total 12%
-            td.column-total.dark 100%
-            td.column-total.dark 12%
+            td.column-total.no-border 12%
+            td.column-total 100%
+            td.column-total.no-border 12%
           tr(ng-repeat="distribution in s.distributionData.performance")
             td.left.data-brand {{distribution.name}}
             td(ng-class="{'negative': s.isNegative(distribution.measures.distributions)}").dark         {{distribution.measures.distributions | number }}
-            td(ng-class="{'negative': s.isNegative(distribution.measures.yearAgoGap)}")                 {{distribution.measures.yearAgoGap | number }}
-            td(ng-class="{'negative': s.isNegative(distribution.measures.yearAgoTrend) }")              {{distribution.measures.yearAgoTrend}}%
+            td(ng-class="{'negative': s.isNegative(distribution.measures.yearAgoGap)}").medium-dark                {{distribution.measures.yearAgoGap | number }}
+            td(ng-class="{'negative': s.isNegative(distribution.measures.yearAgoTrend) }").medium-dark.no-border              {{distribution.measures.yearAgoTrend}}%
             td(ng-class="{'negative': s.isNegative(distribution.measures.yearAgoBuTrend)}")             {{distribution.measures.yearAgoBuTrend}}%
-            td(ng-class="{'negative': s.isNegative(distribution.measures.yearAgoTrend - distribution.measures.yearAgoBuTrend) }") &#9660;
-            td(ng-class="{'negative': s.isNegative(distribution.measures.vsPlanNumber)}").dark          {{distribution.measures.vsPlanNumber | number }}
-            td(ng-class="{'negative': s.isNegative(distribution.measures.vsPlanPercent)}").dark         {{distribution.measures.vsPlanPercent}}%
+            td(ng-class="{'negative': s.isNegative(distribution.measures.yearAgoTrend - distribution.measures.yearAgoBuTrend),'positive': !s.isNegative(distribution.measures.yearAgoTrend - distribution.measures.yearAgoBuTrend) }").no-border &#9660;
+            td(ng-class="{'negative': s.isNegative(distribution.measures.vsPlanNumber)}")          {{distribution.measures.vsPlanNumber | number }}
+            td(ng-class="{'negative': s.isNegative(distribution.measures.vsPlanPercent)}").no-border         {{distribution.measures.vsPlanPercent}}%
             td(ng-class="{'negative': s.isNegative(distribution.measures.volumeContribution)}")         {{distribution.measures.volumeContribution}}%
-            td(ng-class="{'negative': s.isNegative(distribution.measures.volumeContributionBu)}")       {{distribution.measures.volumeContributionBu}}%
-            td(ng-class="{'negative': s.isNegative(distribution.measures.growthContribution)}").dark    {{distribution.measures.growthContribution}}%
-            td(ng-class="{'negative': s.isNegative(distribution.measures.growthContributionBu)}").dark  {{distribution.measures.growthContributionBu}}%
+            td(ng-class="{'negative': s.isNegative(distribution.measures.volumeContributionBu)}").no-border       {{distribution.measures.volumeContributionBu}}%
+            td(ng-class="{'negative': s.isNegative(distribution.measures.growthContribution)}")    {{distribution.measures.growthContribution}}%
+            td(ng-class="{'negative': s.isNegative(distribution.measures.growthContributionBu)}").no-border  {{distribution.measures.growthContributionBu}}%
+  .scorecard-footer
+    div(column="2").left
+      p Support
+      p 1-888-670-8888
+      <br />
+      p Help@support.com
+    div(column="5 +1").right
+      p Contellation and its trademarks are in use by such and such
+      p All names and brands are trademarks to their respective owners
+      <br />
+      p All Rights Reserved
