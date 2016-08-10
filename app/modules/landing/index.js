@@ -9,6 +9,7 @@ module.exports =
     $stateProvider
     .state('landing', {
       url: '/',
+      title: 'Welcome',
       templateUrl: './app/modules/landing/layout.html',
       controller: 'landingController',
       controllerAs: 'l'

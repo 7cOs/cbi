@@ -9,10 +9,10 @@ module.exports =
     $stateProvider
     .state('accounts', {
       url: '/accounts',
+      title: 'Accounts',
       templateUrl: './app/modules/accounts/layout.html',
       controller: 'accountsController',
       controllerAs: 'a'
     });
   })
   .controller('accountsController', require('./accountsController'));
-

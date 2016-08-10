@@ -7,6 +7,7 @@ module.exports =
     $stateProvider
     .state('style-guide', {
       url: '/style-guide',
+      title: 'Style Guide',
       templateUrl: './app/modules/style-guide/layout.html',
       controller: 'styleGuideController'
     });

@@ -9,6 +9,7 @@ module.exports =
     $stateProvider
     .state('target-lists', {
       url: '/target-lists',
+      title: 'Target Lists',
       templateUrl: './app/modules/target-lists/layout.html',
       controller: 'targetListsController',
       controllerAs: 't'

@@ -4,6 +4,9 @@ module.exports =
   function targetListDetailController($rootScope, $state, $mdDialog, chipsService, filtersService) {
     var vm = this;
 
+    $rootScope.$broadcast('page:loaded', $state.current.name);
+    $rootScope.pageTitle = $state.current.title;
+
     vm.modalManageTargetList = modalManageTargetList;
     vm.modalManageCollaborators = modalManageCollaborators;
     vm.modalSendOpportunity = modalSendOpportunity;

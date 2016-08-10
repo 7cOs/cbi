@@ -21,6 +21,7 @@ module.exports =
 
     // Broadcast current page name for other scopes
     $rootScope.$broadcast('page:loaded', $state.current.name);
+    $rootScope.pageTitle = $state.current.title;
 
     /* commenting out until API is better
     userService.getTargetLists('A1B2C3').then(function(data) {

@@ -5,5 +5,6 @@ module.exports =
 
     // Broadcast current page name for other scopes
     $rootScope.$broadcast('page:loaded', $state.current.name);
+    $rootScope.pageTitle = $state.current.title;
 
   };
