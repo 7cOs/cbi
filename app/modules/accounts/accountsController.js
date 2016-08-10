@@ -19,6 +19,7 @@ module.exports =
     vm.isPositive = isPositive;
     vm.overviewOpen = false;
     vm.idSelected = null;
+    vm.brandIdSelected = null;
     vm.openSelect = openSelect;
     vm.setMarketTab = setMarketTab;
     vm.selectItem = selectItem;
@@ -97,8 +98,8 @@ module.exports =
       var parentLength = Object.keys(parent).length;
       if (parentIndex + 1 === parentLength) {
         // We're on the deepest level of current tab list
-        if (widget === 'brands') { setSelected(item.name); }
-        if (widget === 'markets') { setSelected(item.label); }
+        if (widget === 'brands') { setSelected(item.name, 'brands'); }
+        if (widget === 'markets') { setSelected(item.label, 'markets'); }
       } else {
         if (widget === 'brands') { vm.brandWidgetTitle = item.name; }
         nextTab(widget);
@@ -115,8 +116,11 @@ module.exports =
 
     // Move to previously indexed tab (only used for brands)
     function prevTab() {
-      vm.brandSelectedIndex = vm.brandSelectedIndex - 1;
-      vm.brandWidgetTitle = vm.brandWidgetTitleDefault;
+      if (vm.brandSelectedIndex > 0) {
+        vm.brandSelectedIndex = vm.brandSelectedIndex - 1;
+        vm.brandWidgetTitle = vm.brandWidgetTitleDefault;
+        vm.brandIdSelected = null;
+      }
     }
 
     // Set proper tab and skip animation when chosen from market select box
@@ -164,8 +168,10 @@ module.exports =
     }
 
     // Add 'selected' class to item furthest possible drill-down tab level
-    function setSelected(idSelected) {
+    function setSelected(idSelected, widget) {
       vm.idSelected = idSelected;
+      if (widget === 'brands') { vm.brandIdSelected = idSelected; }
+      if (widget === 'markets') { prevTab(); }
     }
 
     // Set element class for market overview

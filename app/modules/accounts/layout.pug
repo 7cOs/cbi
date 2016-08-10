@@ -8,14 +8,14 @@
           label My Accounts
           label On &amp; Off Premise
         .brands
-          p {{a.brandWidgetTitle}}<span ng-if="a.idSelected"> - {{a.idSelected}}</span>
+          p {{a.brandWidgetTitle}}<span ng-if="a.brandIdSelected"> - {{a.brandIdSelected}}</span>
         .market
           p {{a.filtersService.model.selected.accountTypes || a.accountTypesDefault}}
         .notes
           p <a href="#"></a>
       .market-overview.clearfix
         .brands
-          p {{a.brandWidgetTitle}}<span ng-if="a.idSelected"> - {{a.idSelected}}</span>
+          p {{a.brandWidgetTitle}}<span ng-if="a.brandIdSelected"> - {{a.brandIdSelected}}</span>
         .market
           p {{a.filtersService.model.selected.accountTypes || a.accountTypesDefault}}
         .notes
