@@ -81,7 +81,6 @@
   }
 }
 
-
 .align-right {
   text-align: right;
 }
@@ -95,4 +94,12 @@
   width: 10px;
   position: relative;
   top: 30px;
+}
+
+.animate-disabled {
+
+  .ng-enter, .ng-leave, .ng-animate {
+    -webkit-transition: none !important;
+    transition: none !important;
+  }
 }
