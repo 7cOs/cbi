@@ -1,2 +1,4 @@
 md-toast
-  p This is a custom toast for list demo! <a ng-click="listdemo.closeToast()">Close it</a>
+  .wrapper
+    a.hide-row(ng-click="listdemo.closeToast()")
+    p You have triggered a multi-item action! <a ng-click="listdemo.undoAction()">Undo</a>

@@ -3,6 +3,9 @@
 function ListDemoController($rootScope, $scope, $mdToast) {
   var vm = this;
 
+  // Used for $mdToast close
+  var isDlgOpen;
+
   // Map public methods to scope
   vm.actionOverlay = actionOverlay;
   vm.displayBrandIcon = displayBrandIcon;
@@ -11,7 +14,11 @@ function ListDemoController($rootScope, $scope, $mdToast) {
   vm.toggle = toggle;
   vm.selected = [];
   vm.topLevelToast = topLevelToast;
+  vm.undoAction = undoAction;
   vm.closeToast = closeToast;
+
+  // Set defaults
+  vm.actionUndone = false;
 
   function topLevelToast() {
     $mdToast.show({
@@ -22,8 +29,23 @@ function ListDemoController($rootScope, $scope, $mdToast) {
     });
   };
 
+  function undoAction() {
+    vm.actionUndone = true;
+    if (isDlgOpen) return;
+    $mdToast
+      .hide()
+      .then(function() {
+        isDlgOpen = false;
+      });
+  }
+
   function closeToast() {
-    $mdToast.hide();
+    if (isDlgOpen) return;
+    $mdToast
+      .hide()
+      .then(function() {
+        isDlgOpen = false;
+      });
   };
 
   vm.demoOpps = [{

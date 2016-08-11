@@ -7,10 +7,17 @@ md-toast {
   .md-toast-content {
     background: $green;
     border-radius: 0;
+    margin: 0 -15px;
     min-height: 45px;
 
     &:before {
       min-height: 45px;
+    }
+
+    .wrapper {
+      margin: 0 auto;
+      position: relative;
+      width: 80.75em;
     }
   }
 
@@ -18,7 +25,31 @@ md-toast {
     color: $white;
   }
 
+  a {
+    font-weight: $bold;
+    margin-left: 2em;
+  }
+
   a:hover {
     color: $white;
   }
+
+  .hide-row {
+    height: 20px;
+    position: absolute;
+    right: 0;
+    top: 1em;
+    width: 20px;
+
+    &:before,
+    &:after {
+      background-color: $green-3;
+      left: 2px;
+      top: 8px;
+    }
+  }
+}
+
+.undo {
+  margin-left: 1em;
 }
