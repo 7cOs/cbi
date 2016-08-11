@@ -1,6 +1,6 @@
 'use strict';
 
-function ListController($scope, $state, opportunitiesService, storesService) {
+function ListController($scope, $state, opportunitiesService, storesService, $mdDialog) {
   var vm = this;
 
   vm.pageName = $state.current.name;

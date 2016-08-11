@@ -14,8 +14,14 @@ v-accordion.styled-list(multiple="" id="opportunities" control="listdemo.accordi
         md-checkbox(aria-label="Select Item" ng-checked="listdemo.exists(opportunity, listdemo.selected)")
       //- div.hide-wrapper.hide-icon-wrapper.hide-row
       div.more-wrapper
-        md-button.md-icon-button(aria-label="More" ng-click="listdemo.actionOverlay(opportunity)")
-          md-icon(md-svg-icon="../assets/img/icons/more.svg")
+        md-menu(md-position-mode="target-right target")
+          md-button.md-icon-button(aria-label="More" md-menu-origin ng-click="$mdOpenMenu($event)")
+            md-icon(md-svg-icon="../assets/img/icons/more.svg")
+          md-menu-content(width="4")
+            md-menu-item
+              p(ng-click="listdemo.actionOverlay(opportunity)") Option 1
+            md-menu-item
+              p(ng-click="listdemo.actionOverlay(opportunity)") Option 2
       v-pane-header.checkbox-sibling(column='12')
         div.cell-parent
           div.pad-cell(column='3') {{opportunity.store.name}} <span class="supporting-text">\#{{opportunity.id}}</span>

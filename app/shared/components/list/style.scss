@@ -121,6 +121,10 @@
 
 .hide-icon-wrapper {
   padding: 2em 15px 1em 0;
+
+  &:hover {
+    cursor: hand;
+  }
 }
 
 .header-row {

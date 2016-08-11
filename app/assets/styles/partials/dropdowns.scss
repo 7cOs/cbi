@@ -62,3 +62,17 @@ md-select {
 ._md-select-value ._md-select-icon:after {
   display: inline;
 }
+
+md-menu-item {
+
+  p {
+    transition: background 300ms ease;
+    margin: 0;
+    outline: 0;
+    padding: 1em;
+
+    &:hover {
+      background: $gray-4;
+    }
+  }
+}
