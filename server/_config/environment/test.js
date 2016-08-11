@@ -17,8 +17,8 @@ module.exports = function (config) {
   };
 
   config.saml = {
-    entryPoint: 'https://ssodev.cbrands.com/oamfed/idp/initiatesso?providerid=SP-Orion',
-    issuer: 'https://orion-dev.cbrands.com',
+    entryPoint: 'https://ssodev.cbrands.com/oamfed/idp/initiatesso?providerid=SP-Orion-QA',
+    issuer: 'https://app-orion-qa.herokuapp.com',
     cert: '',
     privateCert: '',
     signatureAlgorithm: 'sha1'
