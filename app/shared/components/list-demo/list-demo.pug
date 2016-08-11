@@ -1,5 +1,4 @@
-//- button(ng-disabled="listdemo.selected.length < 2" ng-click="listdemo.topLevelToast()") Multiple Item Action
-button(ng-click="listdemo.topLevelToast()") Multiple Item Action
+button(ng-disabled="listdemo.selected.length < 2" ng-click="listdemo.topLevelToast()") Multiple Item Action
 
 v-accordion.styled-list(multiple="" id="opportunities" control="listdemo.accordion" onexpand="listdemo.expandCallback(item)" oncollapse="listdemo.collapseCallback(item)" column='12')
   v-pane.list-item(row expanded='opportunity.isExpanded' ng-repeat="opportunity in listdemo.demoOpps")
