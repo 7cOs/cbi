@@ -22,6 +22,12 @@ module.exports =
     vm.modalForm = modalForm;
     vm.modalAddOpportunityForm = modalAddOpportunityForm;
     vm.saveFilter = saveFilter;
+<<<<<<< HEAD
+=======
+
+    // Broadcast current page name for other scopes
+    $rootScope.$broadcast('page:loaded', $state.current.name);
+>>>>>>> e08761a0aedc8a76328ef58be697096f23f9d6b5
 
     init();
 
