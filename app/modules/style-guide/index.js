@@ -9,7 +9,8 @@ module.exports =
       url: '/style-guide',
       title: 'Style Guide',
       templateUrl: './app/modules/style-guide/layout.html',
-      controller: 'styleGuideController'
+      controller: 'styleGuideController',
+      controllerAs: 'sg'
     });
   })
   .controller('styleGuideController', require('./styleGuideController'));

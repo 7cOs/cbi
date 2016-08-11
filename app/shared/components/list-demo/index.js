@@ -30,6 +30,7 @@ function ListDemoController($rootScope, $scope, $mdToast) {
   };
 
   function undoAction() {
+    vm.selected = [];
     vm.actionUndone = true;
     if (isDlgOpen) return;
     $mdToast
