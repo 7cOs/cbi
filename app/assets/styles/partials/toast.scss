@@ -44,8 +44,9 @@ md-toast {
     &:before,
     &:after {
       background-color: $green-3;
+      height: 2px;
       left: 2px;
-      top: 8px;
+      top: 6px;
     }
   }
 }
