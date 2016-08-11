@@ -1,0 +1,106 @@
+//- button(ng-disabled="listdemo.selected.length < 2" ng-click="listdemo.topLevelToast()") Multiple Item Action
+button(ng-click="listdemo.topLevelToast()") Multiple Item Action
+
+v-accordion.styled-list(multiple="" id="opportunities" control="listdemo.accordion" onexpand="listdemo.expandCallback(item)" oncollapse="listdemo.collapseCallback(item)" column='12')
+  v-pane.list-item(row expanded='opportunity.isExpanded' ng-repeat="opportunity in listdemo.demoOpps")
+    .action-overlay(ng-class="{'active': opportunity.toggled, 'no-class': !opportunity.toggled}")
+      div.checkbox-wrapper
+          md-checkbox(aria-label="Action Item Select" ng-checked="true")
+      div.overlay-wrapper
+        p Successfully sent to 3 people
+      div(ng-click="listdemo.actionOverlay(opportunity)").hide-wrapper.hide-icon-wrapper.hide-row
+    .shadow-wrap.bottom
+      div.checkbox-wrapper(ng-click="listdemo.toggle(opportunity, listdemo.selected)")
+        md-checkbox(aria-label="Select Item" ng-checked="listdemo.exists(opportunity, listdemo.selected)")
+      //- div.hide-wrapper.hide-icon-wrapper.hide-row
+      div.more-wrapper
+        md-button.md-icon-button(aria-label="More" ng-click="listdemo.actionOverlay(opportunity)")
+          md-icon(md-svg-icon="../assets/img/icons/more.svg")
+      v-pane-header.checkbox-sibling(column='12')
+        div.cell-parent
+          div.pad-cell(column='3') {{opportunity.store.name}} <span class="supporting-text">\#{{opportunity.id}}</span>
+          div.address(column='4') {{opportunity.store.address}}
+          div(column='2') {{opportunity.impact}} <span class="supporting-text">(1 High)</span>
+          .text-center(column='1') {{opportunity.opCount}}
+          .text-center(column='1' class="value positive") <span>+</span>24.99<span>%</span>
+          .text-center(column='1') B
+      v-pane-content(column='12' class="products" ng-class="{'open' : open}")
+        .shadow-wrap.top
+          .hero-row(row)
+            div(column='3').pad-cell.brand-icons
+              div
+                img(src='assets/img/brands/brand-lg-coronaextra.svg')
+                img(src='assets/img/brands/brand-lg-coronalite.svg')
+                img(src='assets/img/brands/brand-lg-modelo.svg')
+                img(src='assets/img/brands/brand-lg-negramodelo.svg')
+                img(src='assets/img/brands/brand-lg-modelolite.svg')
+              div.small-icons
+                img(src='assets/img/brands/brand-sm-ballastpoint.svg')
+                img(src='assets/img/brands/brand-sm-modelochelada.svg')
+                img(src='assets/img/brands/brand-sm-modelolite.svg')
+                img(src='assets/img/brands/brand-sm-negramodelo.svg')
+                img(src='assets/img/brands/brand-sm-pacifico.svg')
+                img(src='assets/img/brands/brand-sm-pacificolite.svg')
+                img(src='assets/img/brands/brand-sm-tecate.svg')
+            div(column='3').no-pad
+              label.bold Distribution L90
+              div(row)
+                div(column='4')
+                  label Simple
+                  div(row)
+                    div(column='12') 2 <span class="percentage">2</span>%
+                div(column='8')
+                  label Effective
+                  div(row)
+                    div(column='12') 12 <span class="percentage">5.2</span>%
+            div(column='2')
+              label Velocity
+              div(row)
+                div(column='12') 51 <span class="percentage">7.6</span>%
+            div(column='2')
+              label Tdlinx Submission Code
+              div(row)
+                div(column='12') AABB
+            div(column='2')
+              a(href="#").details-link.accent Full Details
+        .title-row(row)
+          div(column='1') &nbsp;
+          div(column='2')
+            label.bold Product
+          div(column='2')
+            label.bold Type
+          div(column='4')
+            label.bold Rationale
+          div(column='1')
+            label.bold Status
+          div(column='1')
+            label.bold Impact
+          div(column='1')
+            label.bold Hide
+        v-accordion(multiple="" class="nested-accordion")
+          v-pane.styled-list
+            v-pane-header
+              div.cell-parent.sub-item(row)
+                div(column='1').sub-item-select
+                  md-checkbox(aria-label="Select Item" ng-click="$event.stopPropagation();")
+                div(column='2').pad-cell
+                  span.product-title Corona <br>
+                  | 12-pack bottles
+                div.type(column='2') Non-Buy
+                div(column='4') This is a good opportunity
+                div(column='1') New
+                div(column='1' class="impact high")
+                div(column='1').hide-row
+            .shadow-wrap.top
+              v-pane-content
+                div(row)
+                  div(column="1") &nbsp;
+                  div(column="4").pad-cell
+                    label Last Depletion
+                    span 68 days ago
+                  div(column="2")
+                    label Depletions CYTD
+                    span {{6256 | number }}
+                  div(column="2")
+                    label Trend vs Ya
+                    span 32.33
