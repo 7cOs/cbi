@@ -65,7 +65,7 @@ section.landing-page
         h2 Opportunities
         h3 Saved Filters
         div.filter-container.first
-          md-select(ng-model="l.filter.selected.savedFilters" aria-label="Saved Filter"  placeholder="Select Saved Filters")
+          md-select(ng-model="l.filter.selected.savedFilters" aria-label="Saved Filter"  placeholder="Select Saved Filterset")
             md-option(ng-repeat="type in l.filter.savedFilters" aria-label="type.name" value="{{type.name}}") {{type.name}}
 
         h3 New Search
@@ -85,7 +85,7 @@ section.landing-page
                 div(md-highlight-text="l.filtersService.model.brandSearchText" md-highlight-flags="^i") {{::brand.name}} - {{::brand.brand}}
           div.filter-item
             label Account / Store
-            md-autocomplete(md-search-text="l.filter.accountSearchText" md-items="account in l.filter.accounts | filter:l.filter.accountSearchText" md-item-text="account.name" placeholder="By Account, Sub account" md-selected-item-change="chip.methods.addAutocompleteChip(account.name, 'accountSearchText')")
+            md-autocomplete(md-search-text="l.filter.accountSearchText" md-items="account in l.filter.accounts | filter:l.filter.accountSearchText" md-item-text="account.name" placeholder="by Store or Sub Account" md-selected-item-change="chip.methods.addAutocompleteChip(account.name, 'accountSearchText')")
               md-item-template
               div(md-highlight-text="l.filter.accountSearchText" md-highlight-flags="^i") {{account.name}} - {{account.subAccount}}
           div.filter-item
