@@ -4,7 +4,7 @@ module.exports =
   function targetListDetailController($rootScope, $state, $mdDialog, chipsService, filtersService) {
     var vm = this;
 
-    $rootScope.$broadcast('page:loaded', $state.current.name);
+    // Set page title for head and nav
     $rootScope.pageTitle = $state.current.title;
 
     vm.modalManageTargetList = modalManageTargetList;

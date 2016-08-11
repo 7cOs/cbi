@@ -30,6 +30,6 @@ div(container)
         //- "Hidden" link to the secret client thing
         a(href="/auth/logout" target="_self")
           img(src="assets/img/icons/nav-gear.svg" ).nav-icon
-    ul.nav-sub-menu(ng-if="pageName === 'accounts' || pageName === 'scorecards'")
+    ul.nav-sub-menu(ng-if="$root.pageTitle === 'Accounts' || $root.pageTitle === 'Scorecards'")
       li.accent #[a(ui-sref="scorecards" ui-sref-active="active") My Scorecards]
       li.accent #[a(ui-sref="accounts" ui-sref-active="active") My Accounts]

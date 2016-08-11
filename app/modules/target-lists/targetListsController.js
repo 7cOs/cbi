@@ -4,13 +4,12 @@ module.exports =
   function targetListsController($rootScope, $state, chipsService, filtersService) {
     var vm = this;
 
+    // Set page title for head and nav
+    $rootScope.pageTitle = $state.current.title;
+
     // Services available in View
     vm.chipsService = chipsService;
     vm.filtersService = filtersService;
-
-    // Broadcast current page name for other scopes
-    $rootScope.$broadcast('page:loaded', $state.current.name);
-    $rootScope.pageTitle = $state.current.title;
 
     // Simulated returned user data to show saved filters
     vm.userData = {
