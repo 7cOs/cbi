@@ -18,6 +18,7 @@ module.exports =
     vm.distributorQuerySearch = distributorQuerySearch;
     vm.modalForm = modalForm;
     vm.modalAddOpportunityForm = modalAddOpportunityForm;
+    vm.saveFilter = saveFilter;
 
     // Broadcast current page name for other scopes
     $rootScope.$broadcast('page:loaded', $state.current.name);
@@ -73,6 +74,19 @@ module.exports =
       return results;
     }
 
+    function saveFilter() {
+
+      console.log('poop');
+      // get applied filters
+      var filterPayload = filtersService.getAppliedFilters('opportunities');
+
+      console.log(filterPayload);
+
+      userService.saveOpportunityFilter(filterPayload).then(function(response) {
+        console.log(response);
+      });
+    }
+
     // ///////////////////////////////////////////////////////// Private Methods
     /**
      * @name filterQuery
@@ -94,9 +108,9 @@ module.exports =
 
     function init() {
       // get saved filters -- this should be passed from user data when its ready
-      /* userService.getOpportunityFilters(userService.model.id).then(function(data) {
+      userService.getOpportunityFilters(userService.model.currentUser.id).then(function(data) {
         userService.model.opportunityFilters = data.filters;
-      });*/
+      });
     }
 
     /* function parseFilterObj() {
