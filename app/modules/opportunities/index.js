@@ -7,6 +7,7 @@ module.exports =
     $stateProvider
     .state('opportunities', {
       url: '/opportunities',
+      title: 'Opportunities',
       templateUrl: './app/modules/opportunities/layout.html',
       controller: 'opportunitiesController',
       controllerAs: 'o'

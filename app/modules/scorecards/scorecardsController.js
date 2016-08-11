@@ -4,11 +4,11 @@ module.exports =
   function scorecardsController($rootScope, $scope, $state, myperformanceService, opportunitiesService) {
     var vm = this;
 
+    // Set page title for head and nav
+    $rootScope.pageTitle = $state.current.title;
+
     vm.isNegative = isNegative;
     vm.isPositive = isPositive;
-
-    // Broadcast current page name for other scopes
-    $rootScope.$broadcast('page:loaded', $state.current.name);
 
     vm.performanceData = myperformanceService.model();
     vm.depletionsData = myperformanceService.depletionModel();

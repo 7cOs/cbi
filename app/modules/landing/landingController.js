@@ -4,6 +4,9 @@ module.exports =
   function landingController($rootScope, $state, filtersService, chipsService, myperformanceService, userService) {
     var vm = this;
 
+    // Set page title for head and nav
+    $rootScope.pageTitle = $state.current.title;
+
     // Map public methods to scope
     vm.isNegative = isNegative;
     vm.isPositive = isPositive;
@@ -18,9 +21,6 @@ module.exports =
     /* userService.getPerformanceSummary('A1B2').then(function(data) {
       console.log(data.performance);
     });*/
-
-    // Broadcast current page name for other scopes
-    $rootScope.$broadcast('page:loaded', $state.current.name);
 
     /* commenting out until API is better
     userService.getTargetLists('A1B2C3').then(function(data) {

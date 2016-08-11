@@ -4,6 +4,9 @@ module.exports =
   function opportunitiesController($rootScope, $state, $mdDialog, opportunitiesService, chipsService, filtersService, userService) {
     var vm = this;
 
+    // Set page title for head and nav
+    $rootScope.pageTitle = $state.current.title;
+
     // Services exposed in View
     vm.chipsService = chipsService;
     vm.filtersService = filtersService;
@@ -18,9 +21,6 @@ module.exports =
     vm.distributorQuerySearch = distributorQuerySearch;
     vm.modalForm = modalForm;
     vm.modalAddOpportunityForm = modalAddOpportunityForm;
-
-    // Broadcast current page name for other scopes
-    $rootScope.$broadcast('page:loaded', $state.current.name);
 
     init();
 

@@ -3,8 +3,8 @@
 module.exports =
   function styleGuideController($rootScope, $scope, $state, $mdDialog) {
 
-    // Broadcast current page name for other scopes
-    $rootScope.$broadcast('page:loaded', $state.current.name);
+    // Set page title for head and nav
+    $rootScope.pageTitle = $state.current.title;
 
     $scope.pageTitle = 'Style Guide';
 

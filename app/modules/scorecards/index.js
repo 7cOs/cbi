@@ -9,6 +9,7 @@ module.exports =
     $stateProvider
     .state('scorecards', {
       url: '/scorecards',
+      title: 'Scorecards',
       templateUrl: './app/modules/scorecards/layout.html',
       controller: 'scorecardsController',
       controllerAs: 's'

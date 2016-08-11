@@ -1,8 +1,5 @@
 meta(charset="utf-8")
-if data && data.title
-  title #{data.title}
-else
-  title Welcome
+title(ng-bind="pageTitle")
 
 meta(name='viewport', content='width=device-width, initial-scale=1')
 base(href='/')

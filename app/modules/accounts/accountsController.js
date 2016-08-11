@@ -4,6 +4,9 @@ module.exports =
   function accountsController($rootScope, $scope, $state, $log, $window, myperformanceService, chipsService, filtersService, userService) {
     var vm = this;
 
+    // Set page title for head and nav
+    $rootScope.pageTitle = $state.current.title;
+
     // Services available in View
     vm.chipsService = chipsService;
     vm.filtersService = filtersService;
@@ -53,9 +56,6 @@ module.exports =
     vm.disableAnimation = false;
     vm.marketStoresView = false;
     vm.marketIdSelected = false;
-
-    // Broadcast current page name for other scopes
-    $rootScope.$broadcast('page:loaded', $state.current.name);
 
     // Chart Options
     vm.chartOptions = {
