@@ -39,7 +39,7 @@ module.exports =
 
     var model = {
           currentUser: {
-            id: 'A1B2',
+            id: '1',
             firstName: 'Joe',
             lastName: 'Cerveza',
             email: 'jCerveza@cbrands.com',
@@ -274,27 +274,43 @@ module.exports =
     /**
      * @name saveOpportunityFilter
      * @desc save new filter for a user
-     * @params {String} id - id of a user
-     * @params {Object} payload - filter settings to be saved
+     * @params {String} filters - filters to be saved
      * @returns {Object} - Status Object
      * @memberOf orion.common.services
      */
-    function saveOpportunityFilter(id) {
+    function saveOpportunityFilter(filters) {
       var opportunityFilterPromise = $q.defer(),
-          url = apiHelperService.request('/api/users/' + id + '/opportunityFilters/'),
-          payload = {};
+          url = apiHelperService.request('/api/users/' + model.currentUser.id + '/opportunityFilters/'),
+          payload = {
+            name: 'Super Filter',
+            filterString: filters
+            /* 'type': 'object',
+            '$schema': 'http://json-schema.org/draft-03/schema',
+            'required': 'true',
+            'id': 'filterSchema',
+            'properties': {
+              'name': {
+                'type': 'string',
+                'required': 'true',
+                'description': 'Super Filter'
+              },
+              'filterString': {
+                'type': 'string',
+                'required': 'true',
+                'description': filters // The URL-encoded filter string that's generated from all the different filters in the filter set.
+              }
+            }*/
+          };
 
-      $http.post(url, payload, {
-        headers: {}
-      })
-      .then(saveOpportunityFilterSuccess)
-      .catch(saveOpportunityFilterFail);
+      console.log(payload);
+
+      $http.post(url, payload)
+        .then(saveOpportunityFilterSuccess)
+        .catch(saveOpportunityFilterFail);
 
       function saveOpportunityFilterSuccess(response) {
         console.log('[userService.saveOpportunityFilter] response: ', response);
-        // opportunityFilterPromise.resolve(response.data);
-        // uncomment above and remove below when services are ready
-        opportunityFilterPromise.resolve(tempData.postOpportunityFilterResponse);
+        opportunityFilterPromise.resolve(response.data);
       }
 
       function saveOpportunityFilterFail(error) {
@@ -498,19 +514,33 @@ module.exports =
     function addTargetList(id) {
       var targetListPromise = $q.defer(),
           url = apiHelperService.request('/api/users/' + id + '/targetLists/'),
-          payload = tempData.postTargetListPayload;
+          payload = {
+            name: 'fancy cat',
+            opportunities: []
+          /* payload = {
+            'type': 'object',
+            '$schema': 'http://json-schema.org/draft-03/schema',
+            'id': 'targetListCreateSchema',
+            'required': true,
+            'properties': {
+              'name': {
+                'type': 'string',
+                'required': 'true',
+                'description': 'Name of the Target List.'
+              },
+              'opportunities': {
+                '$ref': 'opportunityIDListSchema'
+              }
+            }*/
+          };
 
-      $http.post(url, payload, {
-        headers: {}
-      })
-      .then(addTargetListSuccess)
-      .catch(addTargetListFail);
+      $http.post(url, payload)
+        .then(addTargetListSuccess)
+        .catch(addTargetListFail);
 
       function addTargetListSuccess(response) {
         console.log('[userService.addTargetList] response: ', response);
-        // targetListPromise.resolve(response.data);
-        // uncomment above and remove below when services are ready
-        targetListPromise.resolve(tempData.postTargetListResponse);
+        targetListPromise.resolve(response.data);
       }
 
       function addTargetListFail(error) {

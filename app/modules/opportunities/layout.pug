@@ -11,7 +11,7 @@ div#fancy-cat
 .chips(ng-if="o.chipsService.model.length")
   label Active Filters
   span
-    a(ng-click="o.chipsService.applyFilters()") Save Filterset
+    a(ng-click="o.saveFilter()") Save Filterset
   md-chips(ng-model="o.chipsService.model" name="Active Filters" md-on-remove="o.chipsService.removeFromFilterService($chip)")
     input(disabled="true")
     md-chip-template(custom-chip="")
