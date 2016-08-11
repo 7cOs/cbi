@@ -515,6 +515,9 @@ module.exports =
       var targetListPromise = $q.defer(),
           url = apiHelperService.request('/api/users/' + id + '/targetLists/'),
           payload = {
+            name: 'fancy cat',
+            opportunities: []
+          /* payload = {
             'type': 'object',
             '$schema': 'http://json-schema.org/draft-03/schema',
             'id': 'targetListCreateSchema',
@@ -528,7 +531,7 @@ module.exports =
               'opportunities': {
                 '$ref': 'opportunityIDListSchema'
               }
-            }
+            }*/
           };
 
       $http.post(url, payload)
