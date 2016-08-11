@@ -78,8 +78,21 @@ module.exports =
     };
 
     var service = {
-      model: model
+      model: model,
+      getAppliedFilters: getAppliedFilters
     };
 
     return service;
+
+    function getAppliedFilters(type) {
+      // get applied filters
+      var filterPayload = {type: type};
+      for (var key in model.selected) {
+        if (model.selected[key] !== '') {
+          filterPayload[key] = model.selected[key];
+        }
+      }
+
+      return filterPayload;
+    }
   };

@@ -394,12 +394,7 @@ module.exports =
       model.opportunitiesSum = 0;
 
       // get applied filters
-      var filterPayload = {type: 'opportunities'};
-      for (var key in filtersService.model.selected) {
-        if (filtersService.model.selected[key] !== '') {
-          filterPayload[key] = filtersService.model.selected[key];
-        }
-      }
+      var filterPayload = filtersService.getAppliedFilters('opportunities');
 
       // create promise, build url based on filters and if there is an opp id
       var opportunitiesPromise = $q.defer(),
