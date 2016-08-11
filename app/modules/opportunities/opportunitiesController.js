@@ -75,12 +75,8 @@ module.exports =
     }
 
     function saveFilter() {
-
-      console.log('poop');
       // get applied filters
       var filterPayload = filtersService.getAppliedFilters('opportunities');
-
-      console.log(filterPayload);
 
       userService.saveOpportunityFilter(filterPayload).then(function(response) {
         console.log(response);
