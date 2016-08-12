@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports =
-  function opportunitiesController($rootScope, $state, $mdDialog, opportunitiesService, chipsService, filtersService, userService) {
+  function opportunitiesController($rootScope, $scope, $state, $mdDialog, opportunitiesService, chipsService, filtersService, userService) {
     var vm = this;
 
     // Set page title for head and nav
@@ -19,8 +19,8 @@ module.exports =
     vm.applyFilter = applyFilter;
     vm.brandQuerySearch = brandQuerySearch;
     vm.distributorQuerySearch = distributorQuerySearch;
-    vm.modalForm = modalForm;
     vm.modalAddOpportunityForm = modalAddOpportunityForm;
+    vm.modalSaveOpportunityFilter = modalSaveOpportunityFilter;
     vm.saveFilter = saveFilter;
 
     // Broadcast current page name for other scopes
@@ -29,11 +29,12 @@ module.exports =
     init();
 
     // ///////////////////////////////////////////////////////// Public Methods
-    function modalForm(ev) {
+    function modalSaveOpportunityFilter(ev) {
       var parentEl = angular.element(document.body);
       $mdDialog.show({
-        clickOutsideToClose: true,
+        clickOutsideToClose: false,
         parent: parentEl,
+        scope: $scope.$new(),
         targetEvent: ev,
         templateUrl: './app/modules/opportunities/modal.html'
       });
@@ -82,7 +83,10 @@ module.exports =
       var filterPayload = filtersService.getAppliedFilters('opportunities');
 
       userService.saveOpportunityFilter(filterPayload).then(function(response) {
-        console.log(response);
+        // push to filter dropdown
+
+        // close modal
+        $mdDialog.hide();
       });
     }
 
@@ -108,7 +112,7 @@ module.exports =
     function init() {
       // get saved filters -- this should be passed from user data when its ready
       userService.getOpportunityFilters(userService.model.currentUser.id).then(function(data) {
-        userService.model.opportunityFilters = data.filters;
+        userService.model.opportunityFilters = data.dataContent;
       });
     }
 

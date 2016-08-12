@@ -15,6 +15,7 @@ module.exports = function(app) {
     })
     .post(function(req, res) {
       var signed = util.sign(req.url);
+      console.log(req.body);
       request.post(signed, {body: req.body, json: true}).pipe(res);
     })
     .put(function(req, res) {
