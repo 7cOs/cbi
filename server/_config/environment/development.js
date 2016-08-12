@@ -3,7 +3,7 @@
 module.exports = function (config) {
 
   // global settings
-  config.domain = 'app-orion-dev.herokuapp.com';
+  config.domain = 'orion-dev.cbrands.com';
   config.env = 'development';
   config.address = 'https://' + config.domain + '/'; // base url
 

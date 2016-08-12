@@ -35,7 +35,7 @@ module.exports = function(app) {
     });
   app.get('/auth/logout', function (req, res) {
     req.logout();
-    res.redirect('https://ssodev.cbrands.com/oam/server/logout?end_url=http://orion-dev.cbrands.com');
+    res.redirect('https://ssodev.cbrands.com/oam/server/logout?end_url=' + app.get('config').address);
   });
   app.post('/auth/callback',
     passport.authenticate('saml', {failureRedirect: '/auth/login'}),
