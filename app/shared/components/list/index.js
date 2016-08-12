@@ -36,8 +36,8 @@ function ListController($scope, $state, opportunitiesService, storesService, $md
 
   // Overlay Controls
   function actionOverlay(opportunity, state) {
+    if (state === 'fail') { opportunity.failState = true; } else { opportunity.failState = false; }
     opportunity.toggled = !opportunity.toggled;
-    if (state === 'fail') { opportunity.failState = true; }
   };
 
   function displayBrandIcon(haystack, needle) {
