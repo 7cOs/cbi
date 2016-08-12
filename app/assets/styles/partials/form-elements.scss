@@ -45,6 +45,7 @@ md-checkbox {
       background-color: $blue;
 
       &:after {
+        display: block;
         border-color: $gray-4;
       }
     }
