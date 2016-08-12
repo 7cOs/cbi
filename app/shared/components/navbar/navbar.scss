@@ -66,11 +66,18 @@ navbar {
 
         li {
           font-size: 10px; // TODO change hard coded size
+
+          &:hover {
+
+            a {
+              color: $light-blue-2;
+            }
+          }
         }
 
-        a:hover {
+        /* a:hover {
           color: $light-blue-2;
-        }
+        }*/
       }
     }
   }
@@ -78,6 +85,10 @@ navbar {
   .top-level-menu:hover,
   .nav-sub-menu:hover {
     cursor: pointer;
+
+    a {
+      color: $dark-blue;
+    }
   }
 
   .dropdown {
