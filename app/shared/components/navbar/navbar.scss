@@ -68,16 +68,11 @@ navbar {
           font-size: 10px; // TODO change hard coded size
 
           &:hover {
-
             a {
               color: $light-blue-2;
             }
           }
         }
-
-        /* a:hover {
-          color: $light-blue-2;
-        }*/
       }
     }
   }
