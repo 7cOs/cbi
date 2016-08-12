@@ -162,5 +162,13 @@ div(column='12')
         tabs
 
       section
+        section
+          h3.section-title Toasts
+          div(row)
+            div(column='7')
+              p To enable actions for multiple items, select more than one list component below. For single-item actions, use the action button on the right side of each row.
+        listdemo
+
+      section
         h3.section-title Modal Window
-        button.btn.action(ng-click="showAdvanced($event)") Modal Demo
+        button.btn.action(ng-click="sg.showModal($event)") Modal Demo

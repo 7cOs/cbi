@@ -1,6 +1,6 @@
 'use strict';
 
-function ListController($scope, $state, opportunitiesService, storesService) {
+function ListController($scope, $state, opportunitiesService, storesService, $mdDialog) {
   var vm = this;
 
   vm.pageName = $state.current.name;
@@ -35,8 +35,9 @@ function ListController($scope, $state, opportunitiesService, storesService) {
   // ///////////////////////////////////////////////////////// Public Methods
 
   // Overlay Controls
-  function actionOverlay(opportunity) {
+  function actionOverlay(opportunity, state) {
     opportunity.toggled = !opportunity.toggled;
+    if (state === 'fail') { opportunity.failState = true; }
   };
 
   function displayBrandIcon(haystack, needle) {

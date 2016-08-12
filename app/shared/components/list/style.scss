@@ -1,6 +1,6 @@
 .styled-list {
   list-style-type: none;
-  margin-bottom: 1em;
+  margin-bottom: 4em;
 
   .list-item {
     background: $white;
@@ -37,7 +37,6 @@
 
     &:first-child {
       padding-bottom: 0;
-      padding-top: 1.25em;
     }
 
     &.products {
@@ -51,6 +50,17 @@
 
   .styled-list {
     margin-bottom: 0;
+  }
+
+  .md-button.md-icon-button {
+    padding: 0;
+  }
+
+  md-icon {
+    height: 34px;
+    width: 34px;
+    min-height: 34px;
+    min-width: 34px;
   }
 }
 
@@ -111,6 +121,10 @@
 
 .hide-icon-wrapper {
   padding: 2em 15px 1em 0;
+
+  &:hover {
+    cursor: hand;
+  }
 }
 
 .header-row {

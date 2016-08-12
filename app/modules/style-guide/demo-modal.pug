@@ -1,5 +1,6 @@
 div.modal
   div.title
+    a.hide-row(ng-click="sg.closeModal()")
     h4 Manage Target List
   div.modal-form
     div.modal-input
@@ -11,7 +12,7 @@ div.modal
     div.modal-input
       md-checkbox Allow Collaborators to invite others
     button.btn-action Save
-    p.cancel.accent X Cancel
+    p(ng-click="sg.closeModal()").cancel.accent X Cancel
   div.modal-footer.clearfix
     p Archive List
     p Delete List

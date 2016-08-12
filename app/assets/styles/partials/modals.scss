@@ -19,9 +19,27 @@ md-dialog {
   .title {
     background: linear-gradient(to right, $light-blue-5, $light-blue-6);
     padding: 2px 20px;
+    position: relative;
 
     h4 {
       color: $white;
+    }
+  }
+
+  .hide-row {
+    height: 20px;
+    position: absolute;
+    right: 2em;
+    top: 2em;
+    width: 20px;
+
+    &:before,
+    &:after {
+      background-color: $white;
+      height: 2px;
+      left: 3px;
+      top: 9px;
+      width: 20px;
     }
   }
 

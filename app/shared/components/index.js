@@ -10,5 +10,6 @@ module.exports =
     require('./dropdown').name,
     require('./list').name,
     require('./target').name,
-    require('./target-list-expanded').name
+    require('./target-list-expanded').name,
+    require('./list-demo').name
   ]);
