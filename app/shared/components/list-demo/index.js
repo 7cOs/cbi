@@ -16,38 +16,10 @@ function ListDemoController($rootScope, $scope, $mdToast) {
   vm.topLevelToast = topLevelToast;
   vm.undoAction = undoAction;
   vm.closeToast = closeToast;
+  vm.multiFailState = true;
 
   // Set defaults
   vm.actionUndone = false;
-
-  function topLevelToast() {
-    $mdToast.show({
-      hideDelay: 0,
-      position: 'top left',
-      scope: $scope.$new(),
-      templateUrl: './app/shared/components/list-demo/toast.html'
-    });
-  };
-
-  function undoAction() {
-    vm.selected = [];
-    vm.actionUndone = true;
-    if (isDlgOpen) return;
-    $mdToast
-      .hide()
-      .then(function() {
-        isDlgOpen = false;
-      });
-  }
-
-  function closeToast() {
-    if (isDlgOpen) return;
-    $mdToast
-      .hide()
-      .then(function() {
-        isDlgOpen = false;
-      });
-  };
 
   vm.demoOpps = [{
     'id': '123',
@@ -76,6 +48,39 @@ function ListDemoController($rootScope, $scope, $mdToast) {
   }];
 
   // ///////////////////////////////////////////////////////// Public Methods
+
+  // Trigger top-level toast notification
+  function topLevelToast(state) {
+    if (state === 'fail') { vm.multiFailState = true; } else { vm.multiFailState = false; }
+    $mdToast.show({
+      hideDelay: 0,
+      position: 'top left',
+      scope: $scope.$new(),
+      templateUrl: './app/shared/components/list-demo/toast.html'
+    });
+  };
+
+  // Trigger action undo and close top-level toast
+  function undoAction() {
+    vm.selected = [];
+    vm.actionUndone = true;
+    if (isDlgOpen) return;
+    $mdToast
+      .hide()
+      .then(function() {
+        isDlgOpen = false;
+      });
+  }
+
+  // Close top-level toast
+  function closeToast() {
+    if (isDlgOpen) return;
+    $mdToast
+      .hide()
+      .then(function() {
+        isDlgOpen = false;
+      });
+  };
 
   // Overlay Controls
   function actionOverlay(opportunity, state) {

@@ -1,4 +1,5 @@
-md-toast
+md-toast(ng-class="{'fail': listdemo.multiFailState}")
   .wrapper
     a.hide-row(ng-click="listdemo.closeToast()")
-    p You have triggered a multi-item action! <a ng-click="listdemo.undoAction()">Undo</a>
+    p(ng-if="!listdemo.multiFailState") You have triggered a multi-item action! <a ng-click="listdemo.undoAction()">Undo</a>
+    p(ng-if="listdemo.multiFailState") Whatever you just tried didn't work

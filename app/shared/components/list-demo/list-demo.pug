@@ -1,4 +1,5 @@
-button(ng-disabled="listdemo.selected.length < 2" ng-click="listdemo.topLevelToast()") Multiple Item Action
+button(ng-disabled="listdemo.selected.length < 2" ng-click="listdemo.topLevelToast()") Successful Action
+button(ng-disabled="listdemo.selected.length < 2" ng-click="listdemo.topLevelToast('fail')") Failed Action
 span.undo(ng-if="listdemo.actionUndone") Action Un-done! <a class="undo" ng-click="listdemo.actionUndone = false;">clear</a>
 
 v-accordion.styled-list(multiple="" id="opportunities" control="listdemo.accordion" onexpand="listdemo.expandCallback(item)" oncollapse="listdemo.collapseCallback(item)" column='12')

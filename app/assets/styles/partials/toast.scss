@@ -49,6 +49,21 @@ md-toast {
       top: 6px;
     }
   }
+
+  &.fail {
+
+    .md-toast-content {
+      background: $red;
+    }
+
+    .hide-row {
+
+      &:before,
+      &:after {
+        background-color: $white;
+      }
+    }
+  }
 }
 
 .undo {
