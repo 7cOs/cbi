@@ -22,14 +22,21 @@ div(container)
           div.inner
             span #[a(ui-sref="help") Help]
       div.nav-icon-container
-        img(src="assets/img/icons/nav-search.svg").nav-icon
-        a(href="https://iqweb.cbrands.com" target="_self")
-          img(src="assets/img/icons/nav-add-opportunity.svg").nav-icon
-        //- "Hidden" link to the style guide (remove whenever needed)
-        img(src="assets/img/icons/nav-notify.svg" ui-sref="style-guide").nav-icon
-        //- "Hidden" link to the secret client thing
-        a(href="/auth/logout" target="_self")
-          img(src="assets/img/icons/nav-gear.svg" ).nav-icon
+        a.nav-icon.search(ui-sref="style-guide")
+        a.nav-icon.add-opportunity(href="https://iqweb.cbrands.com" target="_self")
+        md-menu(md-position-mode="target-right target" md-offset="-30 62")
+          a.nav-icon.notifications(href="#" md-menu-origin ng-click="$mdOpenMenu($event)")
+          md-menu-content(width="2")
+            .nav-flyout
+              p {{nb.noNotifications}}
+        md-menu(md-position-mode="target-right target" md-offset="-30 62")
+          a.nav-icon.settings(href="#" md-menu-origin ng-click="$mdOpenMenu($event)")
+          md-menu-content(width="2")
+            .nav-flyout
+              p Logged in as
+              p <strong>John Cervesa</strong>
+              a(href="/auth/logout" target="_self")
+                button.btn-action Logout
     ul.nav-sub-menu(ng-if="$root.pageTitle === 'Accounts' || $root.pageTitle === 'Scorecards'")
       li.accent #[a(ui-sref="scorecards" ui-sref-active="active") My Scorecards]
       li.accent #[a(ui-sref="accounts" ui-sref-active="active") My Accounts]

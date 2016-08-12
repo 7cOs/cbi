@@ -1,0 +1,19 @@
+md-menu-content {
+  background: $gray-4;
+  overflow: visible;
+}
+
+md-menu-item {
+
+  p {
+    transition: background 300ms ease;
+    margin: 0;
+    outline: 0;
+    padding: 1em;
+
+    &:hover {
+      background: $gray-9;
+      cursor: hand;
+    }
+  }
+}

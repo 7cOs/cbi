@@ -15,9 +15,87 @@ navbar {
 }
 
 .nav-icon {
-  width: 28px;
-  height: 28px;
-  margin: 0 2px;
+  background-repeat: no-repeat;
+  background-size: 30px 30px;
+  background-position: 0 0;
+  display: block;
+  width: 30px;
+  height: 30px;
+  margin: 0 4px;
+  outline: 0;
+  float: left;
+
+  &.search {
+    background-image: url('../assets/img/icons/nav-search.svg');
+
+    &:hover {
+      background-image: url('../assets/img/icons/nav-search-active.svg');
+    }
+  }
+
+  &.add-opportunity {
+    background-image: url('../assets/img/icons/nav-add-opportunity.svg');
+
+    &:hover {
+      background-image: url('../assets/img/icons/nav-add-opportunity-active.svg');
+    }
+  }
+
+  &.notifications {
+    background-image: url('../assets/img/icons/nav-notify.svg');
+
+    &:hover {
+      background-image: url('../assets/img/icons/nav-notify-active.svg');
+    }
+  }
+
+  &.settings {
+    background-image: url('../assets/img/icons/nav-gear.svg');
+
+    &:hover {
+      background-image: url('../assets/img/icons/nav-gear-active.svg');
+    }
+  }
+}
+
+._md-open {
+
+  .nav-icon {
+
+    &.search {
+      background-image: url('../assets/img/icons/nav-search-active.svg');
+    }
+
+    &.add-opportunity {
+      background-image: url('../assets/img/icons/nav-add-opportunity-active.svg');
+    }
+
+    &.notifications {
+      background-image: url('../assets/img/icons/nav-notify-active.svg');
+    }
+
+    &.settings {
+      background-image: url('../assets/img/icons/nav-gear-active.svg');
+    }
+  }
+}
+
+.nav-flyout {
+  padding: 0 2em;
+  position: relative;
+
+  &:after {
+    border-bottom: 4px solid $gray-9;
+    border-left: 8px solid transparent;
+    border-right: 8px solid transparent;
+    content: '';
+    display: block;
+    height: 0;
+    position: absolute;
+    right: 9px;
+    top: -14px;
+    width: 0;
+  }
 }
 
 .inner {
