@@ -88,7 +88,7 @@ module.exports =
       var filterPayload = filtersService.getAppliedFilters('opportunities');
 
       userService.saveOpportunityFilter(filterPayload).then(function(data) {
-        // push to filter dropdown
+        // push new filter to filter dropdown
         userService.model.opportunityFilters.push(data.dataContent);
 
         // close modal
