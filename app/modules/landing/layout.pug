@@ -65,9 +65,10 @@ section.landing-page
         h2 Opportunities
         h3 Saved Filters
         div.filter-container.first
-          md-select(ng-model="l.filter.selected.savedFilters" aria-label="Saved Filter"  placeholder="Select Saved Filterset")
-            md-option(ng-repeat="type in l.filter.savedFilters" aria-label="type.name" value="{{type.name}}") {{type.name}}
-
+          .dropdown-filter
+            .dropdown
+              md-select(ng-model="l.filter.selected.savedFilters" aria-label="Saved Filter"  placeholder="Select Saved Filterset")
+                md-option(ng-repeat="type in l.filter.savedFilters" aria-label="type.name" value="{{type.name}}") {{type.name}}
         h3 New Search
         div.filter-container
           div
@@ -75,9 +76,11 @@ section.landing-page
             md-radio-group(ng-model="l.filter.selected.premiseType")
               md-radio-button(ng-repeat="p in l.filter.premises" class="md-primary" ng-value="p.name" aria-label="p.name") {{p.name}}
           div.filter-item
-            label opportunity type
-            md-select(ng-model="l.filter.selected.opportunitiesTypes" aria-label="Opportunity Type" placeholder="Show All Types")
-              md-option(ng-repeat="type in l.filter.opportunitiesTypes" aria-label="type.name" value="{{type.name}}") {{type.name}}
+            .dropdown-filter
+              .dropdown
+                label opportunity typeof
+                md-select(ng-model="l.filter.selected.opportunitiesTypes" aria-label="Opportunity Type" placeholder="Show All Types")
+                  md-option(ng-repeat="type in l.filter.opportunitiesTypes" aria-label="type.name" value="{{type.name}}") {{type.name}}
           div.filter-item
             label Brand / Master SKU
             md-autocomplete(md-selected-item="selectedItem" md-search-text="l.filtersService.model.brandSearchText" md-items="brand in l.brandQuerySearch(l.filtersService.model.brandSearchText)" md-item-text="brand.name" md-min-length="1" placeholder="by Brand or SKU" md-selected-item-change="l.chipsService.addAutocompleteChip(brand.name, 'brandSearchText')")

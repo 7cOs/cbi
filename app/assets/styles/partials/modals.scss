@@ -42,6 +42,20 @@ md-dialog {
       }
     }
 
+    .icon-container {
+      
+      text-align: left;
+
+      img {
+        width: 10px;
+        display: inline;
+      }
+
+      p {
+        display: inline;
+      }
+    }
+
     label {
       text-align: left;
       padding-bottom: 5px;

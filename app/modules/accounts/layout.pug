@@ -24,7 +24,9 @@
 .chips(ng-if="a.chipsService.model.length")
   label Active Filters
   span
-    a(ng-click="a.chipsService.applyFilters()") Save Filterset
+    a(ng-click="a.chipsService.applyFilters()")
+      img(src="../assets/img/icons/save-filterset.svg")
+      | Save Filterset
   md-chips(ng-model="a.chipsService.model" name="Active Filters" md-on-remove="a.chipsService.removeFromFilterService($chip)")
     input(disabled="true")
     md-chip-template(custom-chip="")
@@ -77,7 +79,7 @@
           div(md-highlight-text="a.filtersService.model.brandSearchText" md-highlight-flags="^i") {{brand.name}} - {{brand.brand}}
     div(column='3')
       label Account / Store
-      md-autocomplete(md-search-text="a.filtersService.model.accountSearchText" md-items="account in a.filtersService.model.accounts" md-item-text="account.name" placeholder="By Account, Sub account" md-selected-item-change="a.chipsService.addAutocompleteChip(account.name, 'accountSearchText')")
+      md-autocomplete(md-search-text="a.filtersService.model.accountSearchText" md-items="account in a.filtersService.model.accounts" md-item-text="account.name" placeholder="by Account, Sub account" md-selected-item-change="a.chipsService.addAutocompleteChip(account.name, 'accountSearchText')")
         md-item-template
           div(md-highlight-text="a.filtersService.model.accountSearchText" md-highlight-flags="^i") {{account.name}} - {{account.subAccount}}
     div(column='3')
