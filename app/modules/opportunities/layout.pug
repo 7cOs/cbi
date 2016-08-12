@@ -3,9 +3,11 @@
     h1(column='9' ng-click="o.modalAddOpportunityForm($event)") Opportunities
     .saved-filter-select(column='3')
       md-input-container
-        label Saved Filters
-        md-select(ng-model="o.filtersService.model.selected.currentFilter")
-          md-option(ng-repeat="savedFilter in o.userService.model.opportunityFilters" value="{{::savedFilter.id}}") {{::savedFilter.name}}
+        .dropdown-filter
+          .dropdown
+            label Saved Filters
+            md-select(ng-model="o.filtersService.model.selected.currentFilter")
+              md-option(ng-repeat="savedFilter in o.userService.model.opportunityFilters" value="{{::savedFilter.id}}") {{::savedFilter.name}}
 div#fancy-cat
   button(ng-click="o.addOpportunity()") Api Plz
 .chips(ng-if="o.chipsService.model.length")
@@ -99,7 +101,5 @@ div#fancy-cat
         input(type="text" ng-model="o.filtersService.model.selected.cbbdContact")
     div(column='12' class='apply-filters')
       button(value='Apply Filters' type="button" class="btn-action" ng-click="o.chipsService.applyFilters()" ng-disabled="o.filtersService.model.filtersApplied") Apply Filters
-      button(value='Apply Filters' type="button" class="btn-action" ng-disabled="a.chipsService.model.length <= 0" ng-click="a.chipsService.applyFilters()") Apply Filters
-
 
 list
