@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports =
-  function userService($http, $q, apiHelperService) {
+  function userService($http, $q, apiHelperService, filtersService) {
 
     var tempData = {
       hideOpportunityPostResponse: {'status': 200},
@@ -274,7 +274,7 @@ module.exports =
     /**
      * @name saveOpportunityFilter
      * @desc save new filter for a user
-     * @params {String} filters - filters to be saved
+     * @params {Object} filters - filters to be saved
      * @returns {Object} - Status Object
      * @memberOf orion.common.services
      */
@@ -282,34 +282,19 @@ module.exports =
       var opportunityFilterPromise = $q.defer(),
           url = apiHelperService.request('/api/users/' + model.currentUser.id + '/opportunityFilters/'),
           payload = {
-            name: 'Super Filter',
-            filterString: filters
-            /* 'type': 'object',
-            '$schema': 'http://json-schema.org/draft-03/schema',
-            'required': 'true',
-            'id': 'filterSchema',
-            'properties': {
-              'name': {
-                'type': 'string',
-                'required': 'true',
-                'description': 'Super Filter'
-              },
-              'filterString': {
-                'type': 'string',
-                'required': 'true',
-                'description': filters // The URL-encoded filter string that's generated from all the different filters in the filter set.
-              }
-            }*/
+            name: filtersService.model.newServiceName,
+            filterString: apiHelperService.formatQueryString(filters)
           };
-
-      console.log(payload);
 
       $http.post(url, payload)
         .then(saveOpportunityFilterSuccess)
         .catch(saveOpportunityFilterFail);
 
       function saveOpportunityFilterSuccess(response) {
-        console.log('[userService.saveOpportunityFilter] response: ', response);
+        // reset new service name
+        filtersService.model.newServiceName = null;
+
+        // resolve promise
         opportunityFilterPromise.resolve(response.data);
       }
 

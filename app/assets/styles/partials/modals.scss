@@ -127,6 +127,10 @@ md-dialog {
     .cancel {
       color: $blue;
       margin: 20px 0 -10px;
+
+      &:hover {
+        cursor: pointer;
+      }
     }
   }
 

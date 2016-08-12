@@ -13,7 +13,7 @@ div#fancy-cat
 .chips(ng-if="o.chipsService.model.length")
   label Active Filters
   span
-    a(ng-click="o.chipsService.applyFilters()")
+    a(ng-click="o.modalSaveOpportunityFilter($event)")
       img(src="../assets/img/icons/save-filterset.svg")
       | Save Filterset
   md-chips(ng-model="o.chipsService.model" name="Active Filters" md-on-remove="o.chipsService.removeFromFilterService($chip)")

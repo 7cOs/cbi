@@ -9,7 +9,6 @@ module.exports = function(app) {
   // API catchall
   app.route('/api/*')
     .get(function(req, res) {
-      // console.log(req.url);
       var signed = util.sign(req.url);
       req.pipe(request(signed)).pipe(res);
     })
