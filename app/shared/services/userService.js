@@ -286,15 +286,15 @@ module.exports =
             filterString: apiHelperService.formatQueryString(filters)
           };
 
-      console.log(filtersService.model.newServiceName);
-
       $http.post(url, payload)
         .then(saveOpportunityFilterSuccess)
         .catch(saveOpportunityFilterFail);
 
       function saveOpportunityFilterSuccess(response) {
+        // reset new service name
         filtersService.model.newServiceName = null;
-        console.log('[userService.saveOpportunityFilter] response: ', response);
+
+        // resolve promise
         opportunityFilterPromise.resolve(response.data);
       }
 

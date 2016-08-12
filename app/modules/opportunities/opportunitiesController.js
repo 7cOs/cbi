@@ -18,6 +18,7 @@ module.exports =
     vm.addOpportunity = addOpportunity;
     vm.applyFilter = applyFilter;
     vm.brandQuerySearch = brandQuerySearch;
+    vm.closeModal = closeModal;
     vm.distributorQuerySearch = distributorQuerySearch;
     vm.modalAddOpportunityForm = modalAddOpportunityForm;
     vm.modalSaveOpportunityFilter = modalSaveOpportunityFilter;
@@ -73,6 +74,10 @@ module.exports =
       return results;
     }
 
+    function closeModal() {
+      $mdDialog.hide();
+    }
+
     function distributorQuerySearch(searchText) {
       var results = filtersService.model.distributors.filter(filterQuery(searchText, ['name', 'address', 'id']));
       return results;
@@ -82,11 +87,12 @@ module.exports =
       // get applied filters
       var filterPayload = filtersService.getAppliedFilters('opportunities');
 
-      userService.saveOpportunityFilter(filterPayload).then(function(response) {
+      userService.saveOpportunityFilter(filterPayload).then(function(data) {
         // push to filter dropdown
+        userService.model.opportunityFilters.push(data.dataContent);
 
         // close modal
-        $mdDialog.hide();
+        closeModal();
       });
     }
 

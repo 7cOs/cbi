@@ -2,12 +2,12 @@ div.modal
   h4 Name this Filterset
   div.modal-form
     div.modal-input
-      input(ng-model="o.filtersService.model.newServiceName")
+      input(ng-model="o.filtersService.model.newServiceName" placeholder="New Filter Name")
     div.modal-input
       .dropdown-filter
         .dropdown
-          md-select(ng-model="o.userService.model.opportunityFilters" aria-label="filter name dropdown" placeholder="Save as New Filterset")
-            md-option(aria-label="filter name modal form" value="")
+          md-select(ng-model="o.userService.model.newServiceSelect" aria-label="filter name dropdown" placeholder="Save as New Filterset")
+            md-option(ng-repeat="savedFilter in o.userService.model.opportunityFilters track by savedFilter.id" aria-label="filter name modal form" ng-value="savedFilter.id") {{::savedFilter.name}}
 
     button.btn-action(ng-click="o.saveFilter()" ng-disabled="o.filtersService.model.newServiceName === ''") Save
-    p.cancel.accent X Cancel
+    p.cancel.accent(ng-click="o.closeModal()") X Cancel
