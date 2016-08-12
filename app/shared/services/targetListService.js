@@ -328,16 +328,12 @@ module.exports =
       var targetListPromise = $q.defer(),
           url = apiHelperService.request('/api/targetLists/' + targetListId);
 
-      $http.get(url, {
-        headers: {}
-      })
-      .then(getTargetListSuccess)
-      .catch(getTargetListFail);
+      $http.get(url)
+        .then(getTargetListSuccess)
+        .catch(getTargetListFail);
 
       function getTargetListSuccess(response) {
-        console.log('[targetListService.getTargetList] response: ', response);
-        // targetListPromise.resolve(response.data);
-        targetListPromise.resolve(tempData.getTargetListResponse);
+        targetListPromise.resolve(response.data);
       }
 
       function getTargetListFail(error) {
@@ -510,24 +506,21 @@ module.exports =
      * @name deleteTargetListOpportunities
      * @desc delete target list opportunities
      * @params {String} targetListId - id of target list
+     * @params {Number} int - int to be returned [Optional]
      * @returns {Object} - shares object
      * @memberOf orion.common.services
      */
-    function getTargetListShares(targetListId) {
+    function getTargetListShares(targetListId, int) {
       var targetListPromise = $q.defer(),
-          url = '';
+          url = apiHelperService.request('/api/targetLists/' + targetListId + '/shares/');
 
-      $http.get(url, {
-        headers: {}
-      })
-      .then(getTargetListSharesSuccess)
-      .catch(getTargetListSharesFail);
+      $http.get(url)
+        .then(getTargetListSharesSuccess)
+        .catch(getTargetListSharesFail);
 
       function getTargetListSharesSuccess(response) {
-        console.log('[targetListService.getTargetListShares] response: ', response);
-        // targetListPromise.resolve(response.data);
-        // uncomment above and remove below when services are ready
-        targetListPromise.resolve(tempData.getTargetListSharesResponse);
+        if (!isNaN(int)) response.int = int;
+        targetListPromise.resolve(response);
       }
 
       function getTargetListSharesFail(error) {

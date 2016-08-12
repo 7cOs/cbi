@@ -111,7 +111,7 @@ div.expanded-target-lists
                   h4(column="1") {{list.opportunities | number}}
                   h4(column="2") {{list.opportunitiesSummary.totalClosedDepletions | number}}
                 div(row).creator
-                  h5(column="3").accent.left Nils Frahm
+                  h5(column="3").accent.left {{list.collaborators[0].user.firstName}} {{list.collaborators[0].user.lastName}}
                 div(row)
                   md-progress-linear(md-mode="determinate" ng-value="expanded.ratio(list.opportunitiesSummary.closedOpportunitiesCount, list.opportunities)")
     md-tab(label='Archived' md-on-select="expanded.selector('archived')")
@@ -166,6 +166,6 @@ div.expanded-target-lists
                   h4(column="1") {{list.opportunities | number}}
                   h4(column="2") {{273000 | number}}
                 div(row).creator
-                  h5(column="3").accent.left Nils Frahm
+                  h5(column="3").accent.left {{list.collaborators[0].user.firstName}} {{list.collaborators[0].user.lastName}}
                 div(row)
                   md-progress-linear(md-mode="determinate" ng-value="expanded.ratio(list.closedOpportunities, list.opportunities)")

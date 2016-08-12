@@ -1,6 +1,6 @@
 'use strict';
 
-function ExpandedTargetListController($state, userService) {
+function ExpandedTargetListController($state, userService, targetListService) {
   var vm = this;
 
   // Variables
@@ -47,7 +47,7 @@ function ExpandedTargetListController($state, userService) {
     vm.depletionsChevron = (property === 'depletions') ? !vm.depletionsChevron : vm.depletionsChevron;
   };
 
-  vm.namedFilters = [{
+  /* vm.namedFilters = [{
     'name': 'California - Wine Shops',
     'creator': 'Will Jay',
     'members': ['James Norton', 'Rebecca Norton', 'Eric Schiller'],
@@ -95,16 +95,26 @@ function ExpandedTargetListController($state, userService) {
     'created': 'One Year Ago',
     'closedOpportunities': 490,
     'opportunities': 521
-  }];
+  }];*/
 
   // Private Methods
   function init() {
-    /* targetListService.getTargetList('1323ss').then(function(data) {
-      console.log(data);
-    });*/
     userService.getTargetLists('1').then(function(data) {
+      var i = 0;
       userService.model.targetLists = data;
-      console.log(userService.model.targetLists);
+
+      for (i = 0; i < userService.model.targetLists.owned.length; i++) {
+        targetListService.getTargetListShares(userService.model.targetLists.owned[i].id, i).then(function(response) {
+          userService.model.targetLists.owned[response.int].collaborators = response.data;
+          console.log(response.data);
+        });
+      }
+
+      for (i = 0; i < userService.model.targetLists.sharedWithMe.length; i++) {
+        targetListService.getTargetListShares(userService.model.targetLists.sharedWithMe[i].id, i).then(function(response) {
+          userService.model.targetLists.sharedWithMe[response.int].collaborators = response.data;
+        });
+      }
     });
   }
 
