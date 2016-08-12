@@ -1,6 +1,6 @@
 .opportunity-header
   div(row)
-    h1(column='9') Opportunities
+    h1(column='9' ng-click="o.modalAddOpportunityForm($event)") Opportunities
     .saved-filter-select(column='3')
       md-input-container
         label Saved Filters
@@ -11,7 +11,9 @@ div#fancy-cat
 .chips(ng-if="o.chipsService.model.length")
   label Active Filters
   span
-    a(ng-click="o.saveFilter()") Save Filterset
+    a(ng-click="o.chipsService.applyFilters()")
+      img(src="../assets/img/icons/save-filterset.svg")
+      | Save Filterset
   md-chips(ng-model="o.chipsService.model" name="Active Filters" md-on-remove="o.chipsService.removeFromFilterService($chip)")
     input(disabled="true")
     md-chip-template(custom-chip="")
@@ -48,7 +50,7 @@ div#fancy-cat
           div(md-highlight-text="o.filtersService.model.brandSearchText" md-highlight-flags="^i") {{::brand.name}} - {{::brand.brand}}
     div(column='3')
       label Account / Store
-      md-autocomplete(md-search-text="o.filtersService.model.accountSearchText" md-items="account in o.accountQuerySearch(o.filtersService.model.accountSearchText)" md-item-text="account.name" placeholder="By Account, Sub account" md-selected-item-change="o.chipsService.addAutocompleteChip(account.name, 'accountSearchText')")
+      md-autocomplete(md-search-text="o.filtersService.model.accountSearchText" md-items="account in o.accountQuerySearch(o.filtersService.model.accountSearchText)" md-item-text="account.name" placeholder="by Account, Sub account" md-selected-item-change="o.chipsService.addAutocompleteChip(account.name, 'accountSearchText')")
         md-item-template
           div(md-highlight-text="o.filtersService.model.accountSearchText" md-highlight-flags="^i") {{::account.account}} - {{::account.sub_account}}
     div(column='3')
@@ -97,5 +99,7 @@ div#fancy-cat
         input(type="text" ng-model="o.filtersService.model.selected.cbbdContact")
     div(column='12' class='apply-filters')
       button(value='Apply Filters' type="button" class="btn-action" ng-click="o.chipsService.applyFilters()" ng-disabled="o.filtersService.model.filtersApplied") Apply Filters
+      button(value='Apply Filters' type="button" class="btn-action" ng-disabled="a.chipsService.model.length <= 0" ng-click="a.chipsService.applyFilters()") Apply Filters
+
 
 list
