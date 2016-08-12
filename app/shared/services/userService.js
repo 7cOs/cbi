@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports =
-  function userService($http, $q, apiHelperService, filtersService) {
+  function userService($http, $q, apiHelperService, filtersService, targetListService) {
 
     var tempData = {
       hideOpportunityPostResponse: {'status': 200},
@@ -461,11 +461,9 @@ module.exports =
       var targetListPromise = $q.defer(),
           url = apiHelperService.request('/api/users/' + id + '/targetLists/');
 
-      $http.get(url, {
-        headers: {}
-      })
-      .then(getTargetListsSuccess)
-      .catch(getTargetListsFail);
+      $http.get(url)
+        .then(getTargetListsSuccess)
+        .catch(getTargetListsFail);
 
       function getTargetListsSuccess(response) {
         var sharedArchivedCount = 0,
