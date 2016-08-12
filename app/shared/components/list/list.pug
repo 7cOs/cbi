@@ -43,19 +43,25 @@ v-accordion.styled-list(multiple="" id="opportunities" control="list.accordion" 
           | Segmentation
           span(ng-class="{ 'chevron-down-small' : list.segmentationChevron, 'chevron-up-small' : !list.segmentationChevron}").chevron-down-small
   v-pane.list-item(row ng-repeat="opportunity in list.opportunitiesService.model.opportunities | orderBy:list.sortProperty:list.reverse" expanded='opportunity.isExpanded')
-    .action-overlay(ng-class="{'active': opportunity.toggled, 'no-class': !opportunity.toggled}" ng-if="list.pageName === 'target-lists'")
+    .action-overlay(ng-class="{'active': opportunity.toggled, 'fail': opportunity.failState}")
       div.checkbox-wrapper
           md-checkbox(aria-label="Action Item Select" ng-checked="true")
       div.overlay-wrapper
-        p Successfully sent to 3 people
+        p(ng-if="!opportunity.failState") Successfully sent to 3 people
+        p(ng-if="opportunity.failState") Whatever you just tried didn't work
       div(ng-click="list.actionOverlay(opportunity)").hide-wrapper.hide-icon-wrapper.hide-row
     .shadow-wrap.bottom
       div.checkbox-wrapper(ng-click="list.toggle(opportunity, list.selected)")
         md-checkbox(aria-label="Select Item" ng-checked="list.exists(opportunity, list.selected)")
-      div.hide-wrapper.hide-icon-wrapper.hide-row(ng-if="list.pageName !== 'target-lists'")
-      div.more-wrapper(ng-if="list.pageName === 'target-lists'")
-        md-button.md-icon-button(aria-label="More" ng-click="list.actionOverlay(opportunity)")
-          md-icon(md-svg-icon="../assets/img/icons/more.svg")
+      div.more-wrapper
+        md-menu(md-position-mode="target-right target")
+          md-button.md-icon-button(aria-label="More" md-menu-origin ng-click="$mdOpenMenu($event)")
+            md-icon(md-svg-icon="../assets/img/icons/more.svg")
+          md-menu-content(width="4")
+            md-menu-item
+              p(ng-click="list.actionOverlay(opportunity)") Successful Action
+            md-menu-item
+              p(ng-click="list.actionOverlay(opportunity, 'fail')") Failed Action
       v-pane-header.checkbox-sibling(column='12')
         div.cell-parent
           div.pad-cell(column='3') {{::opportunity.store.name | titlecase}} <span class="supporting-text">\#{{::opportunity.store.id | uppercase}}</span>

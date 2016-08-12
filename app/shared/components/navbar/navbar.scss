@@ -24,18 +24,18 @@ navbar {
   padding: 5px 0 10px;
 }
 
-.active {
-  border-bottom: 4px solid transparent;
-  border-top: 0 solid transparent;
-  border-left: 0 solid transparent;
-  border-right: 0 solid transparent;
-  border-image: linear-gradient(to left, $blue 0%, $light-blue-3 100%);
-  border-image-slice: 1;
-}
-
 .main-nav {
   margin-top: -4px;
   list-style: none;
+
+  .active {
+    border-bottom: 4px solid transparent;
+    border-top: 0 solid transparent;
+    border-left: 0 solid transparent;
+    border-right: 0 solid transparent;
+    border-image: linear-gradient(to left, $blue 0%, $light-blue-3 100%);
+    border-image-slice: 1;
+  }
 
   .top-level-menu {
     display: inline-block;

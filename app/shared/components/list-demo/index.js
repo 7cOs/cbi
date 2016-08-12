@@ -78,8 +78,9 @@ function ListDemoController($rootScope, $scope, $mdToast) {
   // ///////////////////////////////////////////////////////// Public Methods
 
   // Overlay Controls
-  function actionOverlay(opportunity) {
+  function actionOverlay(opportunity, state) {
     opportunity.toggled = !opportunity.toggled;
+    if (state === 'fail') { opportunity.failState = true; }
   };
 
   function displayBrandIcon(haystack, needle) {

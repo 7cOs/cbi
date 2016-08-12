@@ -3,11 +3,12 @@ span.undo(ng-if="listdemo.actionUndone") Action Un-done! <a class="undo" ng-clic
 
 v-accordion.styled-list(multiple="" id="opportunities" control="listdemo.accordion" onexpand="listdemo.expandCallback(item)" oncollapse="listdemo.collapseCallback(item)" column='12')
   v-pane.list-item(row expanded='opportunity.isExpanded' ng-repeat="opportunity in listdemo.demoOpps")
-    .action-overlay(ng-class="{'active': opportunity.toggled, 'no-class': !opportunity.toggled}")
+    .action-overlay(ng-class="{'active': opportunity.toggled, 'fail': opportunity.failState}")
       div.checkbox-wrapper
           md-checkbox(aria-label="Action Item Select" ng-checked="true")
       div.overlay-wrapper
-        p Successfully sent to 3 people
+        p(ng-if="!opportunity.failState") Successfully sent to 3 people
+        p(ng-if="opportunity.failState") Whatever you just tried didn't work
       div(ng-click="listdemo.actionOverlay(opportunity)").hide-wrapper.hide-icon-wrapper.hide-row
     .shadow-wrap.bottom
       div.checkbox-wrapper(ng-click="listdemo.toggle(opportunity, listdemo.selected)")
@@ -19,9 +20,9 @@ v-accordion.styled-list(multiple="" id="opportunities" control="listdemo.accordi
             md-icon(md-svg-icon="../assets/img/icons/more.svg")
           md-menu-content(width="4")
             md-menu-item
-              p(ng-click="listdemo.actionOverlay(opportunity)") Option 1
+              p(ng-click="listdemo.actionOverlay(opportunity)") Successful Action
             md-menu-item
-              p(ng-click="listdemo.actionOverlay(opportunity)") Option 2
+              p(ng-click="listdemo.actionOverlay(opportunity, 'fail')") Failed Action
       v-pane-header.checkbox-sibling(column='12')
         div.cell-parent
           div.pad-cell(column='3') {{opportunity.store.name}} <span class="supporting-text">\#{{opportunity.id}}</span>
