@@ -115,7 +115,7 @@ div(row)
             th(colspan=2).top
               p.accent {{a.filtersService.model.selected.accountBrands === 'Velocity' ? 'Velocity' : 'Distribution(s) - L90'}}
           tr
-            th
+            th.title-col
               p.accent &nbsp;
             th.dark
               p.accent Value
@@ -127,7 +127,7 @@ div(row)
               p.accent %Trend
         tbody
           tr
-            td.column-total.left TOTAL
+            td.column-total.title-col.left TOTAL
             td.column-total.dark {{1532 | number }}
             td.column-total.dark 7.5%
             td.column-total {{1532 | number }}
