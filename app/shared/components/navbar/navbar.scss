@@ -28,7 +28,7 @@ navbar {
   &.search {
     background-image: url('../assets/img/icons/nav-search.svg');
 
-    &:hover, &.active {
+    &:hover {
       background-image: url('../assets/img/icons/nav-search-active.svg');
     }
   }
@@ -36,7 +36,7 @@ navbar {
   &.add-opportunity {
     background-image: url('../assets/img/icons/nav-add-opportunity.svg');
 
-    &:hover, &.active {
+    &:hover {
       background-image: url('../assets/img/icons/nav-add-opportunity-active.svg');
     }
   }
@@ -44,7 +44,7 @@ navbar {
   &.notifications {
     background-image: url('../assets/img/icons/nav-notify.svg');
 
-    &:hover, &.active {
+    &:hover {
       background-image: url('../assets/img/icons/nav-notify-active.svg');
     }
   }
@@ -52,10 +52,36 @@ navbar {
   &.settings {
     background-image: url('../assets/img/icons/nav-gear.svg');
 
-    &:hover, &.active {
+    &:hover {
       background-image: url('../assets/img/icons/nav-gear-active.svg');
     }
   }
+}
+
+._md-open {
+
+  .nav-icon {
+
+    &.search {
+      background-image: url('../assets/img/icons/nav-search-active.svg');
+    }
+
+    &.add-opportunity {
+      background-image: url('../assets/img/icons/nav-add-opportunity-active.svg');
+    }
+
+    &.notifications {
+      background-image: url('../assets/img/icons/nav-notify-active.svg');
+    }
+
+    &.settings {
+      background-image: url('../assets/img/icons/nav-gear-active.svg');
+    }
+  }
+}
+
+.nav-flyout {
+  padding: 0 2em;
 }
 
 .inner {
