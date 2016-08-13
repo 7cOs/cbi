@@ -370,6 +370,7 @@ function queryAccountNotes(app, req, res) {
 };
 
 exports.promiseAccountNotes = function(app, req, res) {
+  console.log(req.session.assertion);
   var promise = new Promise(function (resolve, reject) {
     var records = queryAccountNotes(app, req, res);
     if (records) {
