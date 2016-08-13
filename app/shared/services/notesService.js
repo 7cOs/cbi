@@ -39,19 +39,17 @@ module.exports =
       return notesPromise.promise;
     }
 
-    function accountNotes(noteId) {
+    function accountNotes(id) {
       var notesPromise = $q.defer(),
-          url = urlBase + 'note',
-          data = {'read': true};
+          url = urlBase + 'accountNotes' + '?accountId=1432999';
 
-      $http.get(url, data)
+      $http.get(url)
         .then(accountNotesSuccess)
         .catch(accountNotesFail);
 
       function accountNotesSuccess(response) {
-        // notesPromise.resolve(response.data);
-        // uncomment above and remove below when services are ready
-        notesPromise.resolve(tempData.noteGetResponse);
+        console.log(response.data[1]);
+        notesPromise.resolve(response.data);
       }
 
       function accountNotesFail(error) {
@@ -71,9 +69,7 @@ module.exports =
         .catch(searchAccountsFail);
 
       function searchAccountsSuccess(response) {
-        // notesPromise.resolve(response.data);
-        // uncomment above and remove below when services are ready
-        notesPromise.resolve(tempData.noteGetResponse);
+        notesPromise.resolve(response.data);
       }
 
       function searchAccountsFail(error) {
@@ -96,9 +92,7 @@ module.exports =
 
       function createNoteSuccess(response) {
         console.log('[noteService.createNote] response: ', response);
-        // notePromise.resolve(response.data);
-        // uncomment above and remove below when services are ready
-        notePromise.resolve();
+        notePromise.resolve(response.data);
       }
 
       function createNoteFail(error) {
@@ -121,9 +115,7 @@ module.exports =
 
       function deleteAttachSuccess(response) {
         console.log('[noteService.deleteAttach] response: ', response);
-        // notePromise.resolve(response.data);
-        // uncomment above and remove below when services are ready
-        notePromise.resolve();
+        notePromise.resolve(response.data);
       }
 
       function deleteAttachFail(error) {
@@ -146,9 +138,7 @@ module.exports =
 
       function deleteNoteSuccess(response) {
         console.log('[noteService.deleteNote] response: ', response);
-        // notePromise.resolve(response.data);
-        // uncomment above and remove below when services are ready
-        notePromise.resolve();
+        notePromise.resolve(response.data);
       }
 
       function deleteNoteFail(error) {
