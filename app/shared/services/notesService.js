@@ -1,35 +1,161 @@
 'use strict';
 
 module.exports =
-  function notesService($http, $q, apiHelperService) {
+  function notesService($http, $q) {
+
+    var urlBase = '/sfdc/';
 
     var tempData = {
-      notePatchResponse: {'status': 200}
     };
 
     return {
-      markNoteAsRead: markNoteAsRead
+      getNote: getNote,
+      deleteNote: deleteNote,
+      createNote: createNote,
+      deleteAttach: deleteAttach,
+      searchAccounts: searchAccounts,
+      accountNotes: accountNotes
     };
 
-    function markNoteAsRead(noteId) {
+    function getNote(noteId) {
       var notesPromise = $q.defer(),
-          url = apiHelperService.request('/api/notes/' + noteId),
+          url = urlBase + 'note',
           data = {'read': true};
 
-      $http.patch(url, data)
-        .then(markNoteAsReadSuccess)
-        .catch(markNoteAsReadFail);
+      $http.get(url, data)
+        .then(getNoteSuccess)
+        .catch(getNoteFail);
 
-      function markNoteAsReadSuccess(response) {
+      function getNoteSuccess(response) {
         // notesPromise.resolve(response.data);
         // uncomment above and remove below when services are ready
-        notesPromise.resolve(tempData.notePatchResponse);
+        notesPromise.resolve(tempData.noteGetResponse);
       }
 
-      function markNoteAsReadFail(error) {
+      function getNoteFail(error) {
         notesPromise.reject(error);
       }
 
       return notesPromise.promise;
     }
+
+    function accountNotes(noteId) {
+      var notesPromise = $q.defer(),
+          url = urlBase + 'note',
+          data = {'read': true};
+
+      $http.get(url, data)
+        .then(accountNotesSuccess)
+        .catch(accountNotesFail);
+
+      function accountNotesSuccess(response) {
+        // notesPromise.resolve(response.data);
+        // uncomment above and remove below when services are ready
+        notesPromise.resolve(tempData.noteGetResponse);
+      }
+
+      function accountNotesFail(error) {
+        notesPromise.reject(error);
+      }
+
+      return notesPromise.promise;
+    }
+
+    function searchAccounts(noteId) {
+      var notesPromise = $q.defer(),
+          url = urlBase + 'note',
+          data = {'read': true};
+
+      $http.get(url, data)
+        .then(searchAccountsSuccess)
+        .catch(searchAccountsFail);
+
+      function searchAccountsSuccess(response) {
+        // notesPromise.resolve(response.data);
+        // uncomment above and remove below when services are ready
+        notesPromise.resolve(tempData.noteGetResponse);
+      }
+
+      function searchAccountsFail(error) {
+        notesPromise.reject(error);
+      }
+
+      return notesPromise.promise;
+    }
+
+    function createNote(noteId) {
+      var notePromise = $q.defer(),
+          url = urlBase + 'create-note',
+          payload = {};
+
+      $http.post(url, payload, {
+        headers: {}
+      })
+      .then(createNoteSuccess)
+      .catch(createNoteFail);
+
+      function createNoteSuccess(response) {
+        console.log('[noteService.createNote] response: ', response);
+        // notePromise.resolve(response.data);
+        // uncomment above and remove below when services are ready
+        notePromise.resolve();
+      }
+
+      function createNoteFail(error) {
+        notePromise.reject(error);
+      }
+
+      return notePromise.promise;
+    }
+
+    function deleteAttach(noteId) {
+      var notePromise = $q.defer(),
+          url = urlBase + 'create-note',
+          payload = {};
+
+      $http.delete(url, payload, {
+        headers: {}
+      })
+      .then(deleteAttachSuccess)
+      .catch(deleteAttachFail);
+
+      function deleteAttachSuccess(response) {
+        console.log('[noteService.deleteAttach] response: ', response);
+        // notePromise.resolve(response.data);
+        // uncomment above and remove below when services are ready
+        notePromise.resolve();
+      }
+
+      function deleteAttachFail(error) {
+        notePromise.reject(error);
+      }
+
+      return notePromise.promise;
+    }
+
+    function deleteNote(noteId) {
+      var notePromise = $q.defer(),
+          url = urlBase + 'create-note',
+          payload = {};
+
+      $http.delete(url, payload, {
+        headers: {}
+      })
+      .then(deleteNoteSuccess)
+      .catch(deleteNoteFail);
+
+      function deleteNoteSuccess(response) {
+        console.log('[noteService.deleteNote] response: ', response);
+        // notePromise.resolve(response.data);
+        // uncomment above and remove below when services are ready
+        notePromise.resolve();
+      }
+
+      function deleteNoteFail(error) {
+        notePromise.reject(error);
+      }
+
+      return notePromise.promise;
+    }
+
   };
