@@ -20,9 +20,9 @@ var SFDC_USERID = 'scromie@deloitte.com.cbeerdev';
 var SFDC_PASSWORD = 'P455w0rd';
 var SFDC_SECURITY_TOKEN = 'bWwvZxEPdoCzd14l7YJC82bOZ';
 
-/*  // console.log('clientId is: ' + oauth2.clientId);
-  // console.log('clientSecret is: ' + oauth2.clientSecret);
-  // console.log('redirectUri is ' + oauth2.redirectUri);
+/*  console.log('clientId is: ' + oauth2.clientId);
+  console.log('clientSecret is: ' + oauth2.clientSecret);
+  console.log('redirectUri is ' + oauth2.redirectUri);
 */
 if (env === 'Development') {
 // if username/password is required, use this connection
@@ -33,9 +33,8 @@ if (env === 'Development') {
     if (err) {
       return console.error(err);
     }
-    // console.log('Access Token is: ' + conn.accessToken);
-    // console.log('instanceURL is: ' + conn.instanceUrl);
-    // console.log('sessionId is: ' + conn.sessionId);
+//    console.log('Access Token is: ' + conn.accessToken);
+//    console.log('instanceURL is: ' + conn.instanceUrl);
   });
 };
 
@@ -51,14 +50,14 @@ var oauth2 = new sfdc.OAuth2({
   clientSecret: SFDC_APIKEY_CLIENT_SECRET,
   redirectUri: SFDC_APIKEY_REDIRECT_URI
 });
-  // console.log('oauth2 created - ready to call SFDC');
+  console.log('oauth2 created - ready to call SFDC');
   app.get('/oauth/auth', function (req, res) {
     res.redirect(oauth2.getAuthorizationUrl({
       scope: 'api id web'
     }));
   });
   app.get('/oauth/callback', function (req, res) {
-    // console.log('successfully called back');
+    console.log('successfully called back');
     var conn = new sfdc.Connection({
       oauth2: oauth2
     });
@@ -67,10 +66,10 @@ var oauth2 = new sfdc.OAuth2({
       if (err) {
         return console.error(err);
       }
-      // console.log('Access Token: ' + conn.accessToken);
-      // console.log('Instance URL: ' + conn.instanceUrl);
-      // console.log('User ID: ' + userInfo.id);
-      // console.log('Org ID: ' + userInfo.organizationId);
+      console.log('Access Token: ' + conn.accessToken);
+      console.log('Instance URL: ' + conn.instanceUrl);
+      console.log('User ID: ' + userInfo.id);
+      console.log('Org ID: ' + userInfo.organizationId);
       req.session.accessToken = conn.accessToken;
       req.session.instanceUrl = conn.instanceUrl;
     });
@@ -79,13 +78,11 @@ var oauth2 = new sfdc.OAuth2({
 */
 
 exports.createNote = function(app, req, res) {
-  // console.log('in CreateNote with data ' + req.NoteData);
+
   conn.sobject('Note__c').create([{
-    Title__c: 'Test Note 1',
-    Account__c: '001m000000WSmZU'
-  }, {
-    Title__c: 'Test Note 2',
-    Account__c: '001m000000WSmZU'
+    Title__c: req.query.title,
+    Comments_RTF__c: req.query.body,
+    CreatedDate: req.query.date
   }],
     function (err, rets) {
       if (err) {
@@ -93,27 +90,28 @@ exports.createNote = function(app, req, res) {
       }
       for (var i = 0; i < rets.length; i++) {
         if (rets[i].success) {
-          // console.log('Created record id : ' + rets[i].id);
+//          console.log('Created record id : ' + rets[i].id);
         }
       }
-    }
-  );
+      res.send(rets);
+//      return console.log('Successfully created note');
+    });
 };
 
 function deleteNote(app, req, res) {
-  // console.log('in deleteNote with ' + req.query.noteId);
+//  console.log('in deleteNote with ' + req.query.noteId);
   var response = '';
   if (req.query.noteId) {
-    // console.log('There is a note Id: ' + req.query.noteId);
+//    console.log('There is a note Id: ' + req.query.noteId);
     var noteId = req.query.noteId;
     response = conn.sobject('Note__c')
       .delete(noteId,
         function (err, ret) {
           if (err || !ret.success) {
-            console.error(err, ret);
+//            console.error(err, ret);
             return (err);
           }
-          // console.log('Deleted NoteId ' + noteId + ' successfully');
+//          console.log('Deleted NoteId ' + noteId + ' successfully');
           return (ret);
         });
     if (response !== '') {
@@ -128,12 +126,12 @@ function deleteNote(app, req, res) {
 };
 
 exports.promiseDeleteNote = function(app, req, res) {
-  // console.log('in promiseDeleteNote with ' + req.query.noteId);
+//  console.log('in promiseDeleteNote with ' + req.query.noteId);
   var promise = new Promise(function (resolve, reject) {
-    // console.log('Starting deleteNote');
+//    console.log('Starting deleteNote');
     var response = deleteNote(app, req, res);
     if (response) {
-      // console.log('The response from SFDC was: ' + JSON.stringify(response, null, ''));
+//      console.log('The response from SFDC was: ' + JSON.stringify(response, null, ''));
       resolve(response);
     } else {
       reject(Error('There was no response from SFDC: ' + res.statusText));
@@ -147,17 +145,17 @@ exports.promiseDeleteNote = function(app, req, res) {
     var strResponse = JSON.stringify(err, null, '');
     res.write(strResponse);
     res.end();
-    // console.log(err);
+//    console.log(err);
   });
 };
 
 /* The REST API doesn't allow for undeletes - will implement later through an Apex call.
 
 function unDeleteNote(app, req, res) {
-  // console.log('in unDeleteNote with ' + req.query.noteId);
+  console.log('in unDeleteNote with ' + req.query.noteId);
   var response = '';
   if (req.query.noteId) {
-    // console.log('There is a note Id: ' + req.query.noteId);
+    console.log('There is a note Id: ' + req.query.noteId);
     var noteId = req.query.noteId;
     response = conn.sobject('Note__c')
       .undelete(noteId,
@@ -166,7 +164,7 @@ function unDeleteNote(app, req, res) {
             console.error(err, ret);
             return (err);
           }
-          // console.log('Successfully restored NoteId ' + noteId);
+          console.log('Successfully restored NoteId ' + noteId);
           return ([{
             'isSuccess': 'True',
             'sfdcMessage': ret
@@ -189,12 +187,12 @@ function unDeleteNote(app, req, res) {
 };
 
 exports.promiseUnDeleteNote = function(app, req, res) {
-  // console.log('in promiseUnDeleteNote with ' + req.query.noteId);
+  console.log('in promiseUnDeleteNote with ' + req.query.noteId);
   var promise = new Promise(function (resolve, reject) {
-    // console.log('Starting unDeleteNote');
+    console.log('Starting unDeleteNote');
     var response = unDeleteNote(app, req, res);
     if (response) {
-      // console.log('The response from SFDC was: ' + JSON.stringify(response, null, ''));
+      console.log('The response from SFDC was: ' + JSON.stringify(response, null, ''));
       resolve(response);
     } else {
       reject(Error('There was no response from SFDC: ' + res.statusText));
@@ -208,7 +206,7 @@ exports.promiseUnDeleteNote = function(app, req, res) {
     var strResponse = JSON.stringify(err, null, '');
     res.write(strResponse);
     res.end();
-    // console.log(err);
+    console.log(err);
   });
 };
 */
@@ -217,7 +215,7 @@ exports.promiseUnDeleteNote = function(app, req, res) {
    will revisit if we have time
 */
 function deleteAttach (app, req, res) {
-  // console.log('in deleteAttach with ' + req.query.attachId);
+//  console.log('in deleteAttach with ' + req.query.attachId);
   var response = '';
   if (req.query.attachId) {
     var attachId = req.query.attachId;
@@ -225,10 +223,10 @@ function deleteAttach (app, req, res) {
       .delete(attachId,
         function (err, ret) {
           if (err || !ret.success) {
-            console.error(err, ret);
+//            console.error(err, ret);
             return (err);
           }
-          // console.log('Deleted AttachId ' + attachId + ' successfully : ');
+//          console.log('Deleted AttachId ' + attachId + ' successfully : ');
           return (ret);
         });
     if (response !== '') {
@@ -244,10 +242,10 @@ function deleteAttach (app, req, res) {
 
 exports.promiseDeleteAttach = function (app, req, res) {
   var promise = new Promise(function (resolve, reject) {
-    // console.log('Starting deleteAttach');
+//    console.log('Starting deleteAttach');
     var response = deleteAttach(app, req, res);
     if (response) {
-      // console.log('The response from SFDC was: ' + JSON.stringify(response, null, ''));
+//      console.log('The response from SFDC was: ' + JSON.stringify(response, null, ''));
       resolve(response);
     } else {
       reject(Error('There was no response from SFDC: ' + res.statusText));
@@ -262,7 +260,7 @@ exports.promiseDeleteAttach = function (app, req, res) {
     var strResponse = JSON.stringify(err, null, '');
     res.write(strResponse);
     res.end();
-    // console.log(err);
+//    console.log(err);
   });
 };
 
@@ -276,11 +274,11 @@ function searchAccounts (app, req, res) {
           return console.error(err);
         }
         var jsonData = JSON.stringify(res.searchRecords, null, '');
-        // console.log('jsonData is: ' + jsonData);
+//        console.log('jsonData is: ' + jsonData);
         return jsonData;
-          //                                  // console.log(res);
-          //                                  // console.log(res.searchRecords);
-          //                                  // console.log(JSON.stringify(res.searchRecords));
+          //                                  console.log(res);
+          //                                  console.log(res.searchRecords);
+          //                                  console.log(JSON.stringify(res.searchRecords));
       });
     if (response !== '') {
       return (response);
@@ -296,23 +294,23 @@ function searchAccounts (app, req, res) {
 exports.promiseSearchAccounts = function (app, req, res) {
   var promise = new Promise(function (resolve, reject) {
     var records = searchAccounts(app, req, res);
-    // console.log('Finished getting Accounts');
+//    console.log('Finished getting Accounts');
     if (records) {
-      // console.log('The response from SFDC was: ' + JSON.stringify(records, null, ''));
+//      console.log('The response from SFDC was: ' + JSON.stringify(records, null, ''));
       resolve(records);
     } else {
       reject(Error('There was no response from SFDC: ' + res.statusText));
     };
     promise.then(function (result) {
       var strResponse = JSON.stringify(result, null, '');
-      // console.log('Abount to send ' + strResponse + ' to the browser.');
+//      console.log('Abount to send ' + strResponse + ' to the browser.');
       res.write(strResponse);
       res.end();
     }, function (err) {
       var strResponse = JSON.stringify(err, null, '');
       res.write(strResponse);
       res.end();
-      // console.log(err);
+//      console.log(err);
     });
   });
 };
@@ -344,27 +342,30 @@ function queryAccountNotes(app, req, res) {
             }
 // set the URL on the image to include the url and session id
  //           var notes = JSON.parse(records);
- //           // console.log(notes);
- //           // console.log("")
+ //           console.log(notes);
+ //           console.log("")
             for (var note in records) {
-              // console.log(records[note].Account__r.attributes.type);
+//              console.log(records[note].Account__r.attributes.type);
               if (records[note].Attachments) {
-                // console.log('totalSize is ' + records[note].Attachments.totalSize + ' for attachments for note ' + records[note].Comments_RTF__c);
-                // console.log('done is ' + records[note].Attachments.done);
-                // console.log('the attachment metadata is: ' + records[note].Attachments.records);
+//                console.log('totalSize is ' + records[note].Attachments.totalSize + ' for attachments for note ' + records[note].Comments_RTF__c);
+//                console.log('done is ' + records[note].Attachments.done);
+//                console.log('the attachment metadata is: ' + records[note].Attachments.records);
                 for (var theAtt in records[note].Attachments.records) {
                   records[note].Attachments.records[theAtt].attributes.url = conn.instanceUrl + records[note].Attachments.records[theAtt].attributes.url + '&sessionId=' + conn.sessionId;
-                  // console.log('the attachment is ' + records[note].Attachments.records[theAtt]);
-                  // console.log('the url is ' + records[note].Attachments.records[theAtt].attributes.url);
+//                  console.log('the attachment is ' + records[note].Attachments.records[theAtt]);
+//                  console.log('the url is ' + records[note].Attachments.records[theAtt].attributes.url);
+                  var attachBlob = conn.sobject('Attachment').record(records[note].Attachments.records[theAtt].Id).blob('Body');
+//                  console.log('the attachment blob is: ' + attachBlob);
+                  records[note].Attachments.records[theAtt].attributes.blobData = attachBlob;
                 }
               }
             }
             return (records);
           })
     );
-    //                         // console.log("records are still: " + records);
+    //                         console.log("records are still: " + records);
   } catch (err) {
-    console.error(err);
+//    console.error(err);
     return JSON.stringify(err, null, '');
   }
 };
@@ -387,6 +388,28 @@ exports.promiseAccountNotes = function(app, req, res) {
     var strResponse = JSON.stringify(err, null, '');
     res.write(strResponse);
     res.end();
-    // console.log(err);
+//    console.log(err);
   });
+/*
+  exports.promiseAttachmentData = function(app, req, res) {
+    var promise = new Promise(function (resolve, reject) {
+      var blobData = getAttachment(app, req, res);
+      if (blobData) {
+        resolve(blobData);
+      } else {
+        reject(Error('There are no attachments with this Id: ' + res.statusText));
+      }
+    });
+    promise.then(function (result) {
+      var strResponse = JSON.stringify(result, null, '\t');
+      res.write(strResponse);
+      res.end();
+    }, function (err) {
+      var strResponse = JSON.stringify(err, null, '');
+      res.write(strResponse);
+      res.end();
+      console.log(err);
+    });
+  };
+*/
 };

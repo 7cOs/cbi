@@ -3,7 +3,7 @@
 module.exports = function(app) {
   var sfdc = require('../controllers/sfdc');
 
-  app.get('/sfdc/createNote', function (req, res) {
+  app.post('/sfdc/createNote', function (req, res) {
     sfdc['createNote'](app, req, res);
   });
 
@@ -25,6 +25,10 @@ module.exports = function(app) {
 
   app.get('/sfdc/accountNotes', function (req, res) {
     sfdc['promiseAccountNotes'](app, req, res);
+  });
+
+  app.get('/sfdc/getAttachments', function(req, res) {
+    sfdc['promiseAttachmentData'](app, req, res);
   });
 
 };
