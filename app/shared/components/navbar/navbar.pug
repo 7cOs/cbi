@@ -25,8 +25,8 @@ div(container)
           div.inner
             span #[a(ui-sref="help") Help]
       div.nav-icon-container
-        .notification-count-badge(ng-if="nb.notifications.length > 0")
-          span {{nb.notifications.length}}
+        .notification-count-badge(ng-if="nb.unreadNotifications > 0")
+          span {{nb.unreadNotifications}}
         a.nav-icon.search(href="#")
         a.nav-icon.add-opportunity(ui-sref="style-guide")
         md-menu(md-position-mode="target-right target" md-offset="2 38")
@@ -34,7 +34,7 @@ div(container)
           md-menu-content
             .nav-flyout
               .content.nopad
-                div.notification-card(ng-repeat="notification in nb.notifications")
+                div.notification-card(md-prevent-menu-close ng-repeat="notification in nb.notifications" ng-class="{'read': notification.read}" ng-click="nb.markRead(notification)")
                   p {{notification.title}}
         md-menu(md-position-mode="target-right target" md-offset="2 54")
           a.nav-icon.settings(href="#" md-menu-origin ng-click="$mdOpenMenu($event)")

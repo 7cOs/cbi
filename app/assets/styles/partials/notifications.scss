@@ -18,9 +18,27 @@
 .notification-card {
   background: $white;
   border-bottom: 1px solid $gray-4;
+  outline: 0;
   padding: 1em;
 
   p {
     margin: 0;
+  }
+
+  &.read {
+    background: $gray-4;
+    color: $gray-8;
+
+    p {
+      color: $gray-8;
+    }
+
+    &:hover {
+      cursor: default;
+    }
+  }
+
+  &:hover {
+    cursor: hand;
   }
 }

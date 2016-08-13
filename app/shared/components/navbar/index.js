@@ -13,7 +13,33 @@ function NavbarController($rootScope, $scope, $mdPanel, notificationsService) {
   vm.notifications = vm.notificationsService.notifications;
 
   // Default values
+  vm.unreadNotifications = getUnreadCount();
   vm.noNotifications = 'No unread notifications.';
+
+  // Expose public methods
+  vm.markRead = markRead;
+
+  // PUBLIC METHODS
+
+  // Mark notification as read on click
+  function markRead(notification) {
+    // Patch to mark read would go here
+    notification.read = true;
+    getUnreadCount();
+  }
+
+  // Get unread notification count and set initial badge value
+  function getUnreadCount() {
+    var n = 0;
+
+    angular.forEach(vm.notifications, function(value) {
+      if (value.read === false) {
+        n++;
+      }
+    });
+    vm.unreadNotifications = n;
+    return n;
+  }
 }
 
 module.exports =
