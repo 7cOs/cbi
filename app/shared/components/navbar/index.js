@@ -1,7 +1,11 @@
 'use strict';
 
-function NavbarController($scope, $mdPanel) {
-  var vm = this;
+function NavbarController($rootScope, $scope, $mdPanel) {
+  var vm = this,
+      userAgent = navigator.userAgent;
+
+  $rootScope.isIE = (/Trident\/7\./g).test(userAgent);
+  $rootScope.isEdge = (/(?:\bEdge\/)(\d+)/g).test(userAgent);
 
   // Default values
   vm.noNotifications = 'No unread notifications.';

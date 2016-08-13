@@ -1,0 +1,21 @@
+/* This sucks, but so does IE. */
+
+.ie,
+.edge {
+
+  // Disable box shadow on market overview overlay header
+  .market-overview,
+  .widget-header {
+
+    &.expanded {
+      box-shadow: none;
+    }
+  }
+
+  // Fix page jumping to top when select box is open
+  &[style] {
+    position: inherit !important;
+    top: inherit !important;
+    width: inherit !important;
+  }
+}
