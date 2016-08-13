@@ -23,7 +23,7 @@ module.exports = function(app) {
     cert: fs.readFileSync('./server/_config/passport/certs/development.crt', 'utf-8'),
     signatureAlgorithm: app.get('config').saml.signatureAlgorithm
   }, function(req, profile, done) {
-    console.log(req.body.SAMLResponse);
+    req.session.assertion = req.body.SAMLResponse;
     /* app.set('config').saml.assertion = req.body.SAMLResponse;
     console.log(app.get('config').saml.assertion);
     */
