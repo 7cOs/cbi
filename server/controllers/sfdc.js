@@ -35,6 +35,7 @@ if (env === 'Development') {
     }
     console.log('Access Token is: ' + conn.accessToken);
     console.log('instanceURL is: ' + conn.instanceUrl);
+    console.log('sessionId is: ' + conn.sessionId);
   });
 };
 
@@ -331,7 +332,7 @@ function queryAccountNotes(app, req, res) {
   try {
     return (
       conn.sobject('Note__c')
-          .select('Account__r.TDLinx_Id__c, Account__r.JDE_Address_Book_Number__c,  Type__c, Title__c, Soft_Delete__c, Private__c, OwnerId, Other_Type__c, Name, IsDeleted, Id, Comments_RTF__c, Account__c')
+          .select('Account__r.TDLinx_Id__c, Account__r.JDE_Address_Book_Number__c,  Type__c, Title__c, Soft_Delete__c, Private__c, OwnerId, Other_Type__c, Name, IsDeleted, Id, Comments_RTF__c, Account__c, CreatedDate, CreatedBy.Name')
           .include('Attachments')
           .select('Id, Name, CreatedDate')
           .orderby('CreatedDate', 'DESC')
@@ -352,7 +353,7 @@ function queryAccountNotes(app, req, res) {
                 console.log('done is ' + records[note].Attachments.done);
                 console.log('the attachment metadata is: ' + records[note].Attachments.records);
                 for (var theAtt in records[note].Attachments.records) {
-                  records[note].Attachments.records[theAtt].attributes.url = conn.instanceUrl + records[note].Attachments.records[theAtt].attributes.url + '&sessionId=' + conn.accessToken;
+                  records[note].Attachments.records[theAtt].attributes.url = conn.instanceUrl + records[note].Attachments.records[theAtt].attributes.url + '&sessionId=' + conn.sessionId;
                   console.log('the attachment is ' + records[note].Attachments.records[theAtt]);
                   console.log('the url is ' + records[note].Attachments.records[theAtt].attributes.url);
                 }
