@@ -13,4 +13,5 @@ module.exports =
     .factory('apiHelperService', require('./apiHelperService'))
     .factory('filtersService', require('./filtersService'))
     .factory('opportunityFiltersService', require('./opportunityFiltersService'))
+    .factory('notesService', require('./notesService'))
     .factory('chipsService', require('./chipsService'));
