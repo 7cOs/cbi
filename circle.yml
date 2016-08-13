@@ -7,7 +7,8 @@ dependencies:
 
 test:
   override:
-    # runs karma tests
+    - gulp vet:js
+    - gulp vet:sass
     - gulp test
 
 deployment:
@@ -17,7 +18,7 @@ deployment:
       # push the code to app-orion-dev
       - git push git@heroku.com:app-orion-dev.git $CIRCLE_SHA1:master -f
   qa:
-    branch: master
+    branch: test
     commands:
       # push the code to app-orion-dev
       - git push git@heroku.com:app-orion-qa.git $CIRCLE_SHA1:master -f
