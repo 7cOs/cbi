@@ -29,13 +29,19 @@ div(container)
           span {{nb.unreadNotifications}}
         a.nav-icon.search(href="#")
         a.nav-icon.add-opportunity(ui-sref="style-guide")
-        md-menu(md-position-mode="target-right target" md-offset="2 38")
+        md-menu(md-position-mode="target-right target" md-offset="1 38")
           a.nav-icon.notifications(href="#" md-menu-origin ng-click="$mdOpenMenu($event)")
           md-menu-content
             .nav-flyout
               .content.nopad
-                div.notification-card(md-prevent-menu-close ng-repeat="notification in nb.notifications" ng-class="{'read': notification.read}" ng-click="nb.markRead(notification)")
-                  p {{notification.title}}
+                div.notification-card.clearfix(md-prevent-menu-close ng-repeat="notification in nb.notifications" ng-class="{'read': notification.read}" ng-click="nb.markRead(notification)" class="{{notification.type}}")
+                  .details
+                    p {{notification.title}}
+                    p.source {{notification.source}}
+                    p.sku {{notification.sku}} <span>{{notification.status}}</span>
+                  .info
+                    label {{notification.date}}
+                    label.bold {{notification.user}}
         md-menu(md-position-mode="target-right target" md-offset="2 54")
           a.nav-icon.settings(href="#" md-menu-origin ng-click="$mdOpenMenu($event)")
           md-menu-content

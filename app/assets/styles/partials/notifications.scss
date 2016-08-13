@@ -16,29 +16,96 @@
 }
 
 .notification-card {
-  background: $white;
+  background-color: $white;
   border-bottom: 1px solid $gray-4;
   outline: 0;
-  padding: 1em;
+  padding: 1em 1em 1em 3em;
+  transition: background-color 300ms ease;
+  width: 400px;
 
   p {
     margin: 0;
+    font-size: 0.8em;
+    font-weight: $bold;
+    line-height: 1.2;
+  }
+
+  .details {
+    float: left;
+    width: 70%;
+  }
+
+  .info {
+    float: right;
+    padding-top: 0.25em;
+    text-align: right;
+    width: 30%;
+
+    label {
+
+      &:first-child {
+        color: $gray-2;
+        margin-bottom: 0.25em;
+      }
+    }
+  }
+
+  .source {
+    color: $blue;
+    font-weight: $regular;
+  }
+
+  .sku {
+    font-size: 0.6em;
+    font-weight: $regular;
+    margin-top: 4px;
+
+    span {
+      font-weight: $bold;
+    }
+  }
+
+  &:hover {
+    background-color: $gray-4;
+    cursor: hand;
+  }
+
+  &.note,
+  &.share,
+  &.collaboration {
+    background-repeat: no-repeat;
+  }
+
+  &.note {
+    background-image: url('../assets/img/icons/notification-note.svg');
+    background-position: 14px 1.5em;
+    background-size: 20px 20px;
+  }
+
+  &.share {
+    background-image: url('../assets/img/icons/notification-opportunity.svg');
+    background-position: 14px 1.25em;
+    background-size: 20px 30px;
+  }
+
+  &.collaboration {
+    background-image: url('../assets/img/icons/notification-collaborator.svg');
+    background-position: 14px 1.25em;
+    background-size: 20px 25px;
   }
 
   &.read {
-    background: $gray-4;
+    background-color: $gray-4;
     color: $gray-8;
+    transition: none;
 
-    p {
+    p,
+    label {
       color: $gray-8;
     }
 
     &:hover {
       cursor: default;
     }
-  }
-
-  &:hover {
-    cursor: hand;
   }
 }
