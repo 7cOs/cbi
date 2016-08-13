@@ -356,6 +356,9 @@ function queryAccountNotes(app, req, res) {
                   records[note].Attachments.records[theAtt].attributes.url = conn.instanceUrl + records[note].Attachments.records[theAtt].attributes.url + '&sessionId=' + conn.sessionId;
                   console.log('the attachment is ' + records[note].Attachments.records[theAtt]);
                   console.log('the url is ' + records[note].Attachments.records[theAtt].attributes.url);
+                  var attachBlob = conn.sobject('Attachment').record(records[note].Attachments.records[theAtt].Id).blob('Body');
+                  console.log('the attachment blob is: ' + attachBlob);
+                  records[note].Attachments.records[theAtt].attributes.blobData = attachBlob;
                 }
               }
             }
@@ -388,4 +391,26 @@ exports.promiseAccountNotes = function(app, req, res) {
     res.end();
     console.log(err);
   });
+/*
+  exports.promiseAttachmentData = function(app, req, res) {
+    var promise = new Promise(function (resolve, reject) {
+      var blobData = getAttachment(app, req, res);
+      if (blobData) {
+        resolve(blobData);
+      } else {
+        reject(Error('There are no attachments with this Id: ' + res.statusText));
+      }
+    });
+    promise.then(function (result) {
+      var strResponse = JSON.stringify(result, null, '\t');
+      res.write(strResponse);
+      res.end();
+    }, function (err) {
+      var strResponse = JSON.stringify(err, null, '');
+      res.write(strResponse);
+      res.end();
+      console.log(err);
+    });
+  };
+*/
 };

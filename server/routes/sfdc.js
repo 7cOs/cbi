@@ -29,4 +29,8 @@ module.exports = function(app) {
     sfdc['promiseAccountNotes'](app, req, res);
   });
 
+  app.get('/sfdc/getAttachments', function(req, res) {
+    sfdc['promiseAttachmentData'](app, req, res);
+  });
+
 };
