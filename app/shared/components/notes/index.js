@@ -1,6 +1,6 @@
 'use strict';
 
-function NotesController($scope, $state, $mdDialog) {
+function NotesController($scope, $state, $mdDialog, notesService) {
   var vm = this;
 
   vm.pageName = $state.current.name;
@@ -39,7 +39,11 @@ function NotesController($scope, $state, $mdDialog) {
   }
 
   function init() {
+    notesService.accountNotes().then(function(success) {
+      vm.notes = success;
+    });
   }
+<<<<<<< HEAD
 
   // Mock Data for bindings
   vm.notes = [
@@ -68,6 +72,8 @@ function NotesController($scope, $state, $mdDialog) {
       'date': '12 July, 2016 at 12:01 PM'
     }
   ];
+=======
+>>>>>>> origin/develop
 }
 
 module.exports =

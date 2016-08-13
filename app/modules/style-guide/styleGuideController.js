@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports =
-  function styleGuideController($rootScope, $scope, $state, $mdDialog) {
+  function styleGuideController($rootScope, $scope, $state, $mdDialog, notesService) {
     var vm = this;
 
     // Set page title for head and nav
@@ -11,6 +11,9 @@ module.exports =
     vm.showModal = showModal;
     vm.closeModal = closeModal;
 
+    notesService.accountNotes().then(function(success) {
+      vm.notes = success;
+    });
     function showModal(ev) {
       var parentEl = angular.element(document.body);
       $mdDialog.show({

@@ -2,10 +2,12 @@ html(ng-app='orion')
   head
     include assets/templates/head
 
-  body
+  md-content
+    body(ng-class="{'ie': $root.isIE, 'edge': $root.isEdge}")
 
-    navbar
-    div(container)
-      div(ui-view='' row)
+      navbar
+      div(container)
+        div(ui-view='' row)
 
-    include assets/templates/foot
+      include assets/templates/foot
+

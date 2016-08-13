@@ -24,6 +24,8 @@
 @import './assets/styles/partials/toast.scss';
 @import './assets/styles/partials/menus.scss';
 
+// Browser fixes
+@import './assets/styles/ie.scss';
 
 // Modules
 @import './modules/**/*.scss';
