@@ -27,12 +27,13 @@ div(container)
       div.nav-icon-container
         a.nav-icon.search(href="#")
         a.nav-icon.add-opportunity(ui-sref="style-guide")
-        md-menu(md-position-mode="target-right target" md-offset="-30 62")
+        md-menu(md-position-mode="target-right target" md-offset="-30 54")
           a.nav-icon.notifications(href="#" md-menu-origin ng-click="$mdOpenMenu($event)")
           md-menu-content(width="2")
             .nav-flyout
               p {{nb.noNotifications}}
-        md-menu(md-position-mode="target-right target" md-offset="-30 62")
+              p {{nb.tempData}}
+        md-menu(md-position-mode="target-right target" md-offset="-30 54")
           a.nav-icon.settings(href="#" md-menu-origin ng-click="$mdOpenMenu($event)")
           md-menu-content(width="2")
             .nav-flyout

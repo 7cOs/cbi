@@ -1,6 +1,6 @@
 'use strict';
 
-function NavbarController($rootScope, $scope, $mdPanel) {
+function NavbarController($rootScope, $scope, $mdPanel, notificationsService) {
   var vm = this,
       userAgent = navigator.userAgent;
 
@@ -9,6 +9,7 @@ function NavbarController($rootScope, $scope, $mdPanel) {
 
   // Default values
   vm.noNotifications = 'No unread notifications.';
+  vm.tempData = notificationsService.tempData();
 }
 
 module.exports =
