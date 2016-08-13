@@ -1,10 +1,8 @@
 .notes {
   width: 600px;
-  max-height: 600px;
   position: fixed;
   right: 0;
   z-index: 800;
-  overflow-y: scroll;
 
   .note-body,
   .note-container {
@@ -29,6 +27,8 @@
   .note-container {
     text-align: left;
     background: $gray-4;
+    overflow-y: scroll;
+    max-height: 600px;
   }
 
   .new-note {
