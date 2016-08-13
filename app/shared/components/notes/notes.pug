@@ -10,7 +10,10 @@ div.modal.notes
       p.bold <span>+</span> New Note
     div.note-body(ng-repeat="note in n.notes")
       h4 {{note.Title__c}}
-      p {{note.Comments_RTF__c}}
+      p {{note.Comments_RTF__c | limitTo: n.numLimit}} <span class="read-more" ng-if="n.numLimit <= 150" ng-click="n.readMore()")>...Read More</span>
+      p(ng-if="n.numLimit > 150" ng-click="n.readLess()").read-less Read Less
+
+
       .note-body-footer
         p by {{note.author}}  <span class="note-date">{{note.date}}</span>
         .icons

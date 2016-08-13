@@ -12,6 +12,13 @@
 
   .note-body {
     margin: 12px 0;
+
+    .read-more,
+    .read-less {
+      color: $blue;
+      display: inline;
+    }
+
   }
 
   .note-body-footer {

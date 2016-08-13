@@ -9,6 +9,9 @@ function NotesController($scope, $state, $mdDialog) {
   vm.isEditing = isEditing;
   vm.openNotes = openNotes;
   vm.editMode = false;
+  vm.numLimit = 150;
+  vm.readMore = readMore;
+  vm.readLess = readLess;
 
   init();
 
@@ -26,6 +29,14 @@ function NotesController($scope, $state, $mdDialog) {
       scope: $scope.$new(),
       targetEvent: ev
     });
+  }
+
+  function readMore() {
+    vm.numLimit = 9999;
+  }
+
+  function readLess() {
+    vm.numLimit = 150;
   }
 
   function init() {
