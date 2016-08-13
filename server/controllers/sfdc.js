@@ -79,6 +79,7 @@ var oauth2 = new sfdc.OAuth2({
 */
 
 exports.createNote = function(app, req, res) {
+  console.log('in CreateNote with data ' + req.NoteData);
   conn.sobject('Note__c').create([{
     Title__c: 'Test Note 1',
     Account__c: '001m000000WSmZU'
@@ -98,10 +99,12 @@ exports.createNote = function(app, req, res) {
     }
   );
 };
-//      res.send('<HTML><HEAD></HEAD><BODY>The /deleteNote endpoint is not ready yet.</BODY></HTML>');
+
 function deleteNote(app, req, res) {
+  console.log('in deleteNote with ' + req.query.noteId);
   var response = '';
   if (req.query.noteId) {
+    console.log('There is a note Id: ' + req.query.noteId);
     var noteId = req.query.noteId;
     response = conn.sobject('Note__c')
       .delete(noteId,
@@ -125,6 +128,7 @@ function deleteNote(app, req, res) {
 };
 
 exports.promiseDeleteNote = function(app, req, res) {
+  console.log('in promiseDeleteNote with ' + req.query.noteId);
   var promise = new Promise(function (resolve, reject) {
     console.log('Starting deleteNote');
     var response = deleteNote(app, req, res);
@@ -147,7 +151,73 @@ exports.promiseDeleteNote = function(app, req, res) {
   });
 };
 
+/* The REST API doesn't allow for undeletes - will implement later through an Apex call.
+
+function unDeleteNote(app, req, res) {
+  console.log('in unDeleteNote with ' + req.query.noteId);
+  var response = '';
+  if (req.query.noteId) {
+    console.log('There is a note Id: ' + req.query.noteId);
+    var noteId = req.query.noteId;
+    response = conn.sobject('Note__c')
+      .undelete(noteId,
+        function (err, ret) {
+          if (err || !ret.success) {
+            console.error(err, ret);
+            return (err);
+          }
+          console.log('Successfully restored NoteId ' + noteId);
+          return ([{
+            'isSuccess': 'True',
+            'sfdcMessage': ret
+          }]);
+        });
+    if (response !== '') {
+      return (response);
+    } else {
+      return ([{
+        'isSuccess': 'False',
+        'ErrorString': 'Salesforce did not return valid information from undelete()'
+      }]);
+    }
+  } else {
+    return ([{
+      'isSuccess': 'False',
+      'ErrorString': 'No noteId Id was present in the URL'
+    }]);
+  }
+};
+
+exports.promiseUnDeleteNote = function(app, req, res) {
+  console.log('in promiseUnDeleteNote with ' + req.query.noteId);
+  var promise = new Promise(function (resolve, reject) {
+    console.log('Starting unDeleteNote');
+    var response = unDeleteNote(app, req, res);
+    if (response) {
+      console.log('The response from SFDC was: ' + JSON.stringify(response, null, ''));
+      resolve(response);
+    } else {
+      reject(Error('There was no response from SFDC: ' + res.statusText));
+    }
+  });
+  promise.then(function (result) {
+    var strResponse = JSON.stringify(result, null, '');
+    res.write(strResponse);
+    res.end();
+  }, function (err) {
+    var strResponse = JSON.stringify(err, null, '');
+    res.write(strResponse);
+    res.end();
+    console.log(err);
+  });
+};
+*/
+/*
+    TODO: There is a better way to write this: bring in the object and id, that can account for attachments and notes
+   will revisit if we have time
+*/
 function deleteAttach (app, req, res) {
+  console.log('in deleteAttach with ' + req.query.attachId);
   var response = '';
   if (req.query.attachId) {
     var attachId = req.query.attachId;
