@@ -19,7 +19,7 @@ v-accordion.styled-list(multiple="" id="opportunities" control="list.accordion" 
   div.header-row(row)
     div.checkbox-wrapper.placeholder(ng-click="list.toggle(opportunity, list.selected)")
     div.hide-wrapper(ng-if="list.pageName !== 'target-lists'")
-      label Hide
+      label
     div.more-wrapper(ng-if="list.pageName === 'target-lists'")
     div.checkbox-sibling(column='12')
       div(column='3')
@@ -37,7 +37,7 @@ v-accordion.styled-list(multiple="" id="opportunities" control="list.accordion" 
           | Depletions
           span(ng-class="{ 'chevron-down-small' : !list.depletionsChevron, 'chevron-up-small' : list.depletionsChevron}").chevron-down-small
       div(column='1')
-        label Trend vs Ya
+        label vs Ya%
       div(column='1')
         label(ng-click="list.sortBy('segmentation')" ng-class="{ 'header-bold' : list.sortProperty === 'segmentation'}")
           | Segmentation
