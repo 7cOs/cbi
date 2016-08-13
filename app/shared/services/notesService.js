@@ -48,7 +48,6 @@ module.exports =
         .catch(accountNotesFail);
 
       function accountNotesSuccess(response) {
-        console.log(response.data[1]);
         notesPromise.resolve(response.data);
       }
 

@@ -5,9 +5,9 @@ div.modal.notes
   div.note-container
     div.new-note
       p.bold <span>+</span> New Note
-    div.note-body(ng-repeat="note in notes.notes")
+    div.note-body(ng-repeat="note in n.notes")
       h4 {{note.title}}
-      p {{note.text}}
+      p {{note.body}}
       p by {{note.author}}  <span class="note-date">{{note.date}}</span>
     div.notes-editing(ng-if="notes.isEditing()")
       div.main-note-section
