@@ -1,4 +1,7 @@
 div(container)
+  .external-link
+    img(src="../assets/img/icons/nav-iq.svg")
+    a(href="https://iqweb.cbrands.com" target="_self") Go to IQ
   div(row)
     img(src="assets/img/logos/CBI_Logo.png", ui-sref="landing").nav-logo
     div.nav-link-wrapper
@@ -22,8 +25,8 @@ div(container)
           div.inner
             span #[a(ui-sref="help") Help]
       div.nav-icon-container
-        a.nav-icon.search(ui-sref="style-guide")
-        a.nav-icon.add-opportunity(href="https://iqweb.cbrands.com" target="_self")
+        a.nav-icon.search(href="#")
+        a.nav-icon.add-opportunity(ui-sref="style-guide")
         md-menu(md-position-mode="target-right target" md-offset="-30 62")
           a.nav-icon.notifications(href="#" md-menu-origin ng-click="$mdOpenMenu($event)")
           md-menu-content(width="2")
