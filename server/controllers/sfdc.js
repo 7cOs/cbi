@@ -11,7 +11,6 @@ J. Scott Cromie
 // Setup dependencies
 var sfdc = require('jsforce');
 var env = 'Development';
-var url = require('url');
 
 // Constants
 // todo: move these to a parameter file for easier and safer management
@@ -342,6 +341,23 @@ function queryAccountNotes(app, req, res) {
             if (err) {
               return console.error(err);
             }
+// set the URL on the image to include the url and session id
+ //           var notes = JSON.parse(records);
+ //           console.log(notes);
+ //           console.log("")
+            for (var note in records) {
+              console.log(records[note].Account__r.attributes.type);
+              if (records[note].Attachments) {
+                console.log('totalSize is ' + records[note].Attachments.totalSize + ' for attachments for note ' + records[note].Comments_RTF__c);
+                console.log('done is ' + records[note].Attachments.done);
+                console.log('the attachment metadata is: ' + records[note].Attachments.records);
+                for (var theAtt in records[note].Attachments.records) {
+                  records[note].Attachments.records[theAtt].attributes.url = conn.instanceUrl + records[note].Attachments.records[theAtt].attributes.url + '&sessionId=' + conn.accessToken;
+                  console.log('the attachment is ' + records[note].Attachments.records[theAtt]);
+                  console.log('the url is ' + records[note].Attachments.records[theAtt].attributes.url);
+                }
+              }
+            }
             return (records);
           })
     );
@@ -362,7 +378,7 @@ exports.promiseAccountNotes = function(app, req, res) {
     }
   });
   promise.then(function (result) {
-    var strResponse = JSON.stringify(result, null, '');
+    var strResponse = JSON.stringify(result, null, '\t');
     res.write(strResponse);
     res.end();
   }, function (err) {
