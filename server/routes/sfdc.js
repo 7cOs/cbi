@@ -8,12 +8,10 @@ module.exports = function(app) {
   });
 
   app.get('/sfdc/deleteNote', function (req, res) {
-    console.log('calling sfdc.promiseDeleteNote');
     sfdc['promiseDeleteNote'](app, req, res);
   });
 
   app.get('/sfdc/undeleteNote', function (req, res) {
-    console.log('calling.sfdc.promiseUnDeleteNote');
     sfdc['promiseUnDeleteNote'](app, req, res);
   });
 
