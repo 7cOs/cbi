@@ -1,0 +1,142 @@
+.notes {
+  width: 600px;
+  max-height: 600px;
+  position: fixed;
+  right: 0;
+  z-index: 800;
+  overflow-y: scroll;
+
+  .note-body,
+  .note-container {
+    padding: 24px;
+    background: $white;
+  }
+
+  .note-body {
+    margin: 12px 0;
+  }
+
+  .note-container {
+    text-align: left;
+    background: $gray-4;
+  }
+
+  .new-note {
+    background: $white;
+    color: $blue;
+    padding: 6px 12px;
+    margin-bottom: 12px;
+
+    span {
+      font-weight: $bold;
+      font-size: 1.5em;
+    }
+
+    p {
+      color: $blue;
+    }
+  }
+
+  .main-note-section {
+
+    text-align: left;
+    background: $white;
+    padding: 12px;
+
+    a p {
+      color: $blue;
+    }
+
+    p {
+      font-size: 0.7em;
+    }
+
+    label {
+      margin-bottom: 12px;
+    }
+
+    textarea {
+      width: 100%;
+    }
+  }
+
+  .notes-icon,
+  .photo,
+  .attachments,
+  .add-attachments,
+  .download-all,
+  .delete-note,
+  .edit-note,
+  .share-note {
+    background-repeat: no-repeat;
+    background-size: 12px;
+    padding-left: 1.5em;
+    margin-left: 0.1em;
+    padding-bottom: 4px;
+    background-position: 1px 1px;
+  }
+
+  .notes-icon {
+    background-image: url('../assets/img/icons/photo-attachment.svg');
+  }
+
+  .photo {
+    background-image: url('../assets/img/icons/photo-attachment.svg');
+  }
+
+  .attachments {
+    background-image: url('../assets/img/icons/attachment.svg');
+    background-size: 10px;
+  }
+
+  .add-attachments {
+    background-image: url('../assets/img/icons/add-attachment.svg');
+  }
+
+  .download-all {
+    background-image: url('../assets/img/icons/download-attachment.svg');
+  }
+
+  .delete-note {
+    background-image: url('../assets/img/icons/add-attachment.svg');
+  }
+
+  .edit-note {
+    background-image: url('../assets/img/icons/add-attachment.svg');
+  }
+
+  .share-note {
+    background-image: url('../assets/img/icons/add-attachment.svg');
+  }
+
+  .inline-container {
+    margin-top: 12px;
+
+    div,
+    p {
+      display: inline;
+    }
+  }
+
+  .short {
+    width: 40%;
+  }
+
+  .notes-buttons {
+    button, p {
+      display: inline-block;
+      margin-right: 20px;
+    }
+
+    p {
+      font-size: 1em;
+      color: $blue;
+    }
+  }
+
+  li {
+    p {
+      margin: 4px 0;
+    }
+  }
+}
