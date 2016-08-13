@@ -48,7 +48,16 @@ module.exports =
         .catch(accountNotesFail);
 
       function accountNotesSuccess(response) {
-        notesPromise.resolve(response.data);
+        var data = [];
+        angular.forEach(response.data, function(arr) {
+          data.push({
+            title: arr.Title__c,
+            body: arr.Comments_RTF__c,
+            author: arr.CreatedBy.Name,
+            date: arr.CreatedDate
+          });
+        });
+        notesPromise.resolve(data);
       }
 
       function accountNotesFail(error) {
