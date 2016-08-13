@@ -24,6 +24,9 @@ module.exports = function(app) {
     signatureAlgorithm: app.get('config').saml.signatureAlgorithm
   }, function(req, profile, done) {
     console.log(req.body.SAMLResponse);
+    /* app.set('config').saml.assertion = req.body.SAMLResponse;
+    console.log(app.get('config').saml.assertion);
+    */
     return done(null, profile);
   });
 
