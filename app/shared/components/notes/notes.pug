@@ -8,7 +8,7 @@ div.modal.notes
     div.note-body(ng-repeat="note in n.notes")
       h4 {{note.title}}
       p {{note.body}}
-      p by {{note.author}}  <span class="note-date">{{note.date}}</span>
+      p by {{note.author}}  <span class="note-date">{{note.date | date:"dd MMMM, yyyy 'at' h:mm a"}}</span>
     div.notes-editing(ng-if="notes.isEditing()")
       div.main-note-section
         div
