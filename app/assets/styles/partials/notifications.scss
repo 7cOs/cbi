@@ -1,0 +1,44 @@
+.notification-count-badge {
+  position: absolute;
+  right: 36px;
+  top: -0.5em;
+
+  span {
+    background: $black;
+    border-radius: 50%;
+    color: $white;
+    display: block;
+    font-size: 0.7em;
+    min-width: 1.1em;
+    padding: 0.25em;
+    text-align: center;
+  }
+}
+
+.notification-card {
+  background: $white;
+  border-bottom: 1px solid $gray-4;
+  outline: 0;
+  padding: 1em;
+
+  p {
+    margin: 0;
+  }
+
+  &.read {
+    background: $gray-4;
+    color: $gray-8;
+
+    p {
+      color: $gray-8;
+    }
+
+    &:hover {
+      cursor: default;
+    }
+  }
+
+  &:hover {
+    cursor: hand;
+  }
+}

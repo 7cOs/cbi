@@ -1,14 +1,45 @@
 'use strict';
 
-function NavbarController($rootScope, $scope, $mdPanel) {
+function NavbarController($rootScope, $scope, $mdPanel, notificationsService) {
   var vm = this,
       userAgent = navigator.userAgent;
 
+  // User Agent Detection for IE fixes
   $rootScope.isIE = (/Trident\/7\./g).test(userAgent);
   $rootScope.isEdge = (/(?:\bEdge\/)(\d+)/g).test(userAgent);
 
+  // Services
+  vm.notificationsService = notificationsService.tempData();
+  vm.notifications = vm.notificationsService.notifications;
+
   // Default values
+  vm.unreadNotifications = getUnreadCount();
   vm.noNotifications = 'No unread notifications.';
+
+  // Expose public methods
+  vm.markRead = markRead;
+
+  // PUBLIC METHODS
+
+  // Mark notification as read on click
+  function markRead(notification) {
+    // Patch to mark read would go here
+    notification.read = true;
+    getUnreadCount();
+  }
+
+  // Get unread notification count and set initial badge value
+  function getUnreadCount() {
+    var n = 0;
+
+    angular.forEach(vm.notifications, function(value) {
+      if (value.read === false) {
+        n++;
+      }
+    });
+    vm.unreadNotifications = n;
+    return n;
+  }
 }
 
 module.exports =

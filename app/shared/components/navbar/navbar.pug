@@ -25,21 +25,26 @@ div(container)
           div.inner
             span #[a(ui-sref="help") Help]
       div.nav-icon-container
+        .notification-count-badge(ng-if="nb.unreadNotifications > 0")
+          span {{nb.unreadNotifications}}
         a.nav-icon.search(href="#")
         a.nav-icon.add-opportunity(ui-sref="style-guide")
-        md-menu(md-position-mode="target-right target" md-offset="-30 62")
+        md-menu(md-position-mode="target-right target" md-offset="2 38")
           a.nav-icon.notifications(href="#" md-menu-origin ng-click="$mdOpenMenu($event)")
-          md-menu-content(width="2")
+          md-menu-content
             .nav-flyout
-              p {{nb.noNotifications}}
-        md-menu(md-position-mode="target-right target" md-offset="-30 62")
+              .content.nopad
+                div.notification-card(md-prevent-menu-close ng-repeat="notification in nb.notifications" ng-class="{'read': notification.read}" ng-click="nb.markRead(notification)")
+                  p {{notification.title}}
+        md-menu(md-position-mode="target-right target" md-offset="2 54")
           a.nav-icon.settings(href="#" md-menu-origin ng-click="$mdOpenMenu($event)")
-          md-menu-content(width="2")
+          md-menu-content
             .nav-flyout
-              p Logged in as
-              p <strong>John Cervesa</strong>
-              a(href="/auth/logout" target="_self")
-                button.btn-action Logout
+              .content
+                p Logged in as
+                p <strong>John Cervesa</strong>
+                a(href="/auth/logout" target="_self")
+                  button.btn-action Logout
     ul.nav-sub-menu(ng-if="$root.pageTitle === 'Accounts' || $root.pageTitle === 'Scorecards'")
       li.accent #[a(ui-sref="scorecards" ui-sref-active="active") My Scorecards]
       li.accent #[a(ui-sref="accounts" ui-sref-active="active") My Accounts]
