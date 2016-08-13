@@ -7,40 +7,15 @@ div.modal.notes
     button.btn-action + New note
   div.note-container(ng-if="n.notes.length > 0")
     div.new-note
-      p.bold <span>+</span> New Note
+      p(ng-click="n.openCreateNote()").bold <span>+</span> New Note
+      div(ng-if="n.creatingNote")
+        p create a note
     div.note-body(ng-repeat="note in n.notes")
       h4 {{note.title}}
       p {{note.body | limitTo: n.numLimit}} <span class="read-more" ng-if="n.numLimit <= 150" ng-click="n.readMore()")>...Read More</span>
       p(ng-if="n.numLimit > 150" ng-click="n.readLess()").read-less Read Less
-      p by {{note.author}}  <span class="note-date">{{note.date | date:"dd MMMM, yyyy 'at' h:mm a"}}</span>
-    div.notes-editing(ng-if="notes.isEditing()")
-      div.main-note-section
-        div
-          label Topic
-          .dropdown-filter
-            .dropdown
-              md-select(ng-model="o.somethingInTheFuture" aria-label="rationale dropdown" placeholder="Select an option").short
-                md-option(aria-label="rationale modal form" value="")
-        label Details
-        textarea
-        div.inline-container
-          .attachments
-            p.accent Attachments
-          .download-all
-            p Download All
-        ul
-          li
-            .photo
-              p IMG1009.PNG (3.3 MB)
-          li
-            .photo
-              p IMG1010.PNG (4.3 MB)
-        div
-          .add-attachments
-            p Add an attachment
-
       .note-body-footer
-        p by {{note.author}}  <span class="note-date">{{note.date}}</span>
+        p by {{note.author}}  <span class="note-date">{{note.date | date:"dd MMMM, yyyy 'at' h:mm a"}}</span>
         .icons
           .delete-note
           .edit-note(ng-click="n.isEditing(note)")
