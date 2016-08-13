@@ -18,7 +18,6 @@ function NotesController($scope, $state, $mdDialog) {
   // ///////////////////////////////////////////////////////// Public Methods
   function isEditing(note) {
     note.editMode = !note.editMode;
-    console.log(vm.editMode);
   }
 
   function openNotes(ev) {
