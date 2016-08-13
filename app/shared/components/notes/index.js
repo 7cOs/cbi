@@ -1,6 +1,6 @@
 'use strict';
 
-function NotesController($scope, $state, $mdDialog) {
+function NotesController($scope, $state, $mdDialog, notesService) {
   var vm = this;
 
   vm.pageName = $state.current.name;
@@ -27,23 +27,10 @@ function NotesController($scope, $state, $mdDialog) {
   }
 
   function init() {
+    notesService.accountNotes().then(function(success) {
+      vm.notes = success;
+    });
   }
-
-  // Mock Data for bindings
-  vm.notes = [
-    {
-      'title': 'New Note About Beer',
-      'text': 'Furthermore, a miserly ESB prays, and the Ballast Point related to an Ipswich Ale almost knows a Mango Beer behind a dude. An overpriced micro brew procrastinates, and a Modelo wastedly goes deep sea fishing with a King Henry. When you see a Corona Extra, it means that a bottle about a Fosters feels nagging remorse.',
-      'author': 'Me',
-      'date': '12 July, 2016 at 12:01 PM'
-    },
-    {
-      'title': 'Another Not About This Account',
-      'text': 'Not much to write',
-      'author': 'RJ LaCount',
-      'date': '13 August at 10:22 AM'
-    }
-  ];
 }
 
 module.exports =
@@ -51,5 +38,5 @@ module.exports =
   .component('notes', {
     templateUrl: './app/shared/components/notes/notes.html',
     controller: NotesController,
-    controllerAs: 'notes'
+    controllerAs: 'n'
   });
