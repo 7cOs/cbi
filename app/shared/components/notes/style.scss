@@ -16,6 +16,16 @@
     margin: 12px 0;
   }
 
+  .note-body-footer {
+    p, div {
+      display: inline;
+    }
+
+    .icons {
+      float: right;
+    }
+  }
+
   .note-container {
     text-align: left;
     background: $gray-4;
@@ -67,7 +77,7 @@
   .download-all,
   .delete-note,
   .edit-note,
-  .share-note {
+  .email-note {
     background-repeat: no-repeat;
     background-size: 12px;
     padding-left: 1.5em;
@@ -98,15 +108,17 @@
   }
 
   .delete-note {
-    background-image: url('../assets/img/icons/add-attachment.svg');
+    background-image: url('../assets/img/icons/delete-note.svg');
   }
 
   .edit-note {
-    background-image: url('../assets/img/icons/add-attachment.svg');
+    background-image: url('../assets/img/icons/edit-note.svg');
+    background-size: 16px;
   }
 
-  .share-note {
-    background-image: url('../assets/img/icons/add-attachment.svg');
+  .email-note {
+    background-image: url('../assets/img/icons/email-note.svg');
+    background-size: 20px;
   }
 
   .inline-container {

@@ -8,7 +8,12 @@ div.modal.notes
     div.note-body(ng-repeat="note in notes.notes")
       h4 {{note.title}}
       p {{note.text}}
-      p by {{note.author}}  <span class="note-date">{{note.date}}</span>
+      .note-body-footer
+        p by {{note.author}}  <span class="note-date">{{note.date}}</span>
+        .icons
+          .delete-note
+          .edit-note
+          .email-note
     div.notes-editing(ng-if="notes.isEditing()")
       div.main-note-section
         div
@@ -34,6 +39,7 @@ div.modal.notes
         div
           .add-attachments
             p Add an attachment
+
 
 
 
