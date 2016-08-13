@@ -82,7 +82,6 @@ navbar {
 }
 
 .nav-flyout {
-  padding: 0 2em;
   position: relative;
 
   &:after {
@@ -96,6 +95,14 @@ navbar {
     right: 9px;
     top: -5px;
     width: 0;
+  }
+
+  .content {
+    padding: 0 2em;
+
+    &.nopad {
+      padding: 0;
+    }
   }
 }
 
@@ -183,6 +190,7 @@ navbar {
 
 .nav-icon-container {
   float: right;
+  position: relative;
 }
 
 div.nav-link-wrapper {
