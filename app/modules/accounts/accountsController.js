@@ -56,6 +56,7 @@ module.exports =
     vm.disableAnimation = false;
     vm.marketStoresView = false;
     vm.marketIdSelected = false;
+    vm.selectedStore = null;
 
     // Chart Options
     vm.chartOptions = {
@@ -171,8 +172,9 @@ module.exports =
     // Add 'selected' class to item furthest possible drill-down tab level
     function setSelected(idSelected, widget) {
       vm.idSelected = idSelected;
+      if (vm.selectedStore) { vm.selectedStore = null; }
       if (widget === 'brands') { vm.brandIdSelected = idSelected; }
-      if (widget === 'markets') { vm.marketIdSelected = true; prevTab(); }
+      if (widget === 'markets') { vm.marketIdSelected = true; vm.selectedStore = idSelected; prevTab(); }
     }
 
     function deselectMarketId() {

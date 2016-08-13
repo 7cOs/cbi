@@ -11,5 +11,6 @@ module.exports =
     require('./list').name,
     require('./target').name,
     require('./target-list-expanded').name,
-    require('./list-demo').name
+    require('./list-demo').name,
+    require('./notes').name
   ]);

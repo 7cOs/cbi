@@ -4,6 +4,10 @@ p Here's the style guide page, where all shared / demo components will live
 div(column='12')
   section
     div(row)
+      h2 Notes
+      button.btn-action(ng-click="sg.openNotes($event)") Notes
+      notes
+    div(row)
       h2 IQ Links
       section
         p
