@@ -20,7 +20,6 @@ module.exports =
     vm.brandQuerySearch = brandQuerySearch;
     vm.closeModal = closeModal;
     vm.distributorQuerySearch = distributorQuerySearch;
-    vm.modalAddOpportunityForm = modalAddOpportunityForm;
     vm.modalSaveOpportunityFilter = modalSaveOpportunityFilter;
     vm.saveFilter = saveFilter;
 
@@ -38,16 +37,6 @@ module.exports =
         scope: $scope.$new(),
         targetEvent: ev,
         templateUrl: './app/modules/opportunities/modal.html'
-      });
-    }
-
-    function modalAddOpportunityForm(ev) {
-      var parentEl = angular.element(document.body);
-      $mdDialog.show({
-        clickOutsideToClose: true,
-        parent: parentEl,
-        targetEvent: ev,
-        templateUrl: './app/modules/opportunities/modal-add-opportunity-form.html'
       });
     }
 

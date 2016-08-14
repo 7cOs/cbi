@@ -1,5 +1,23 @@
 .landing-page {
   background: $body-bg;
+  padding: 0;
+
+  .greeting {
+    padding-top: 0;
+  }
+
+  .announcement-widget {
+    text-align: center;
+
+    h2 {
+      font-weight: $regular;
+      font-size: 1.3em;
+    }
+
+    p {
+      padding: 0.25em 1.5em;
+    }
+  }
 
   .landing-page-data {
     padding: 0;
@@ -111,7 +129,7 @@
         .md-padding {
           background: $body-bg;
           padding-top: 0;
-          padding: 25px 15px;
+          padding: 10px 15px;
         }
 
         .target-list-count-container {
@@ -161,7 +179,7 @@
     .opportunities {
 
       h2 {
-        margin-top: 21px;
+        margin-top: 0.25em;
         margin-bottom: 0;
       }
 

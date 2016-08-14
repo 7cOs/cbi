@@ -2,6 +2,12 @@
 
 module.exports =
   function landingController($rootScope, $state, filtersService, chipsService, myperformanceService, userService) {
+
+    // ****************
+    // CONTROLLER SETUP
+    // ****************
+
+    // Initial variables
     var vm = this;
 
     // Set page title for head and nav
@@ -17,6 +23,9 @@ module.exports =
     vm.accountQuerySearch = accountQuerySearch;
     vm.distributorQuerySearch = distributorQuerySearch;
 
+    // Set values
+    vm.greeting = getGreeting();
+
     /* userService.getPerformanceSummary('A1B2').then(function(data) {
       console.log(data.performance);
     });*/
@@ -31,6 +40,10 @@ module.exports =
       console.log(vm.sharedFilters);
       console.log('shared with me response', data.sharedWithMe);
     });*/
+
+    // **************
+    // PUBLIC METHODS
+    // **************
 
     function isPositive(salesData) {
       if (salesData >= 0) {
@@ -53,6 +66,26 @@ module.exports =
     function distributorQuerySearch(searchText) {
       var results = filtersService.model.distributors.filter(filterQuery(searchText, ['name', 'address', 'id']));
       return results;
+    }
+
+    // ***************
+    // PRIVATE METHODS
+    // ***************
+
+    function getGreeting() {
+      var myDate = new Date(),
+          hrs = myDate.getHours(),
+          greet;
+
+      if (hrs < 12) {
+        greet = 'Good morning';
+      } else if (hrs >= 12 && hrs <= 17) {
+        greet = 'Good afternoon';
+      } else if (hrs >= 17 && hrs <= 24) {
+        greet = 'Good evening';
+      }
+
+      return greet;
     }
 
     /**

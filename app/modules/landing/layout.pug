@@ -1,97 +1,97 @@
 section.landing-page
-  div
-    h1 Good afternoon, Chad
 
   section.landing-page-data(column="12")
-    div
+    div(row)
       section.my-performance(column="7")
-        div
-          div(row)
-            h2 My Performance
-
-          div(row)
-            div.depletions(column="4")
-              h3 Depletions FYTD
-              table(cellspacing="0" cellpadding="0")
-                tr
-                  td.accent CE
-                  td &nbsp;
-                tr
-                  td
-                    h3 {{l.performanceData.performance[0].measures[4].value | number}}
-                  td
-                    h3.bold <span ng-if="l.isPositive(l.performanceData.performance[0].measures[4].percentChange)">+</span>{{l.performanceData.performance[0].measures[4].percentChange}}<span>%</span>
-                tr
-                  td
-                    h3 &nbsp;
-                  td
-                    h3 &nbsp;
-
-            div.distribution(column="8")
-              h3 Distribution L90
-              h4.accent % Trend Vs YA
-              table(cellspacing="0" cellpadding="0")
-                tr
-                  td.accent Simple
-                  td &nbsp;
-                  td &nbsp;
-                  td.accent Effective
-                  td &nbsp;
-                tr
-                  td
-                    h3 {{l.performanceData.performance[3].measures[2].value | number}}
-                  td
-                    h3.bold <span ng-if="l.isPositive(l.performanceData.performance[3].measures[2].percentChange)">+</span>{{l.performanceData.performance[3].measures[2].percentChange}}<span>%</span>
-                  td.accent.table-spacer on
-                  td
-                    h3 {{l.performanceData.performance[4].measures[2].value | number}}
-                  td
-                    h3.bold <span ng-if="l.isPositive(l.performanceData.performance[4].measures[2].percentChange)">+</span>{{l.performanceData.performance[4].measures[2].percentChange}}<span>%</span>
-                tr
-                  td
-                    h3 {{l.performanceData.performance[1].measures[2].value | number}}
-                  td
-                    h3.bold <span ng-if="l.isPositive(l.performanceData.performance[1].measures[2].percentChange)">+</span>{{l.performanceData.performance[1].measures[2].percentChange}}<span>%</span>
-                  td.accent.table-spacer off
-                  td
-                    h3 {{l.performanceData.performance[2].measures[2].value | number}}
-                  td
-                    h3.bold <span ng-if="l.isPositive(l.performanceData.performance[2].measures[2].percentChange)">+</span>{{l.performanceData.performance[2].measures[2].percentChange}}<span>%</span>
-        p.accent.action-item #[a(href="#") View Details &#9654;]
-
+        section.greeting
+          h1 {{l.greeting}}, Chad
+        h2 My Performance
+        .depletions(column="4")
+          h3 Depletions FYTD
+          table(cellspacing="0" cellpadding="0")
+            tr
+              td.accent CE
+              td &nbsp;
+            tr
+              td
+                h3 {{l.performanceData.performance[0].measures[4].value | number}}
+              td
+                h3.bold <span ng-if="l.isPositive(l.performanceData.performance[0].measures[4].percentChange)">+</span>{{l.performanceData.performance[0].measures[4].percentChange}}<span>%</span>
+            tr
+              td
+                h3 &nbsp;
+              td
+                h3 &nbsp;
+        .distribution(column="8")
+          h3 Distribution L90
+          h4.accent % Trend Vs YA
+          table(cellspacing="0" cellpadding="0")
+            tr
+              td.accent Simple
+              td &nbsp;
+              td &nbsp;
+              td.accent Effective
+              td &nbsp;
+            tr
+              td
+                h3 {{l.performanceData.performance[3].measures[2].value | number}}
+              td
+                h3.bold <span ng-if="l.isPositive(l.performanceData.performance[3].measures[2].percentChange)">+</span>{{l.performanceData.performance[3].measures[2].percentChange}}<span>%</span>
+              td.accent.table-spacer on
+              td
+                h3 {{l.performanceData.performance[4].measures[2].value | number}}
+              td
+                h3.bold <span ng-if="l.isPositive(l.performanceData.performance[4].measures[2].percentChange)">+</span>{{l.performanceData.performance[4].measures[2].percentChange}}<span>%</span>
+            tr
+              td
+                h3 {{l.performanceData.performance[1].measures[2].value | number}}
+              td
+                h3.bold <span ng-if="l.isPositive(l.performanceData.performance[1].measures[2].percentChange)">+</span>{{l.performanceData.performance[1].measures[2].percentChange}}<span>%</span>
+              td.accent.table-spacer off
+              td
+                h3 {{l.performanceData.performance[2].measures[2].value | number}}
+              td
+                h3.bold <span ng-if="l.isPositive(l.performanceData.performance[2].measures[2].percentChange)">+</span>{{l.performanceData.performance[2].measures[2].percentChange}}<span>%</span>
+        p.accent.action-item #[a(href="#" ui-sref="scorecards") View Details &#9654;]
+      section(column="4 +1")
+        .announcement-widget
+          img(src="../assets/img/icons/announcement-help.svg" width="80" height="80")
+          h2 Welcome to Orion! Need Help?
+          p Learn about what makes Orion so great and how to get started with our tutorial videos &amp; FAQ.
+          p.accent.action-item #[a(href="#" ui-sref="help") View all videos &amp; tutorials &#9654;]
+    div(row)
+      section.my-performance(column="7")
         target
-
       section.opportunities(column="4 +1")
         h2 Opportunities
         h3 Saved Filters
-        div.filter-container.first
+        .filter-container.first
           .dropdown-filter
             .dropdown
               md-select(ng-model="l.filter.selected.savedFilters" aria-label="Saved Filter"  placeholder="Select Saved Filterset")
                 md-option(ng-repeat="type in l.filter.savedFilters" aria-label="type.name" value="{{type.name}}") {{type.name}}
         h3 New Search
-        div.filter-container
-          div
-            label
-            md-radio-group(ng-model="l.filter.selected.premiseType")
-              md-radio-button(ng-repeat="p in l.filter.premises" class="md-primary" ng-value="p.name" aria-label="p.name") {{p.name}}
-          div.filter-item
+        .filter-container
+          label
+          md-radio-group(ng-model="l.filter.selected.premiseType")
+            md-radio-button(ng-repeat="p in l.filter.premises" class="md-primary" ng-value="p.name" aria-label="p.name") {{p.name}}
+          .filter-item
             .dropdown-filter
               .dropdown
                 label opportunity typeof
                 md-select(ng-model="l.filter.selected.opportunitiesTypes" aria-label="Opportunity Type" placeholder="Show All Types")
                   md-option(ng-repeat="type in l.filter.opportunitiesTypes" aria-label="type.name" value="{{type.name}}") {{type.name}}
-          div.filter-item
+          .filter-item
             label Brand / Master SKU
             md-autocomplete(md-selected-item="selectedItem" md-search-text="l.filtersService.model.brandSearchText" md-items="brand in l.brandQuerySearch(l.filtersService.model.brandSearchText)" md-item-text="brand.name" md-min-length="1" placeholder="by Brand or SKU" md-selected-item-change="l.chipsService.addAutocompleteChip(brand.name, 'brandSearchText')")
               md-item-template
                 div(md-highlight-text="l.filtersService.model.brandSearchText" md-highlight-flags="^i") {{::brand.name}} - {{::brand.brand}}
-          div.filter-item
+          .filter-item
             label Account / Store
             md-autocomplete(md-search-text="l.filter.accountSearchText" md-items="account in l.filter.accounts | filter:l.filter.accountSearchText" md-item-text="account.name" placeholder="by Store or Sub Account" md-selected-item-change="chip.methods.addAutocompleteChip(account.name, 'accountSearchText')")
               md-item-template
               div(md-highlight-text="l.filter.accountSearchText" md-highlight-flags="^i") {{account.name}} - {{account.subAccount}}
-          div.filter-item
+          .filter-item
             label Distributor
             md-autocomplete(md-search-text="l.filter.distributorSearchText" md-items="distributor in l.filter.distributors | filter:l.filter.distributorSearchText" md-item-text="distributor.name" placeholder="by Name")
               md-item-template
