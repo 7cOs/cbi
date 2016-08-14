@@ -6,6 +6,19 @@
     margin-bottom: 3em;
   }
 
+  .announcement-widget {
+    text-align: center;
+
+    h2 {
+      font-weight: $regular;
+      font-size: 1.3em;
+    }
+
+    p {
+      padding: 0.25em 1.5em;
+    }
+  }
+
   .landing-page-data {
     padding: 0;
 

@@ -52,12 +52,13 @@ section.landing-page
                 h3 {{l.performanceData.performance[2].measures[2].value | number}}
               td
                 h3.bold <span ng-if="l.isPositive(l.performanceData.performance[2].measures[2].percentChange)">+</span>{{l.performanceData.performance[2].measures[2].percentChange}}<span>%</span>
-        p.accent.action-item #[a(href="#") View Details &#9654;]
+        p.accent.action-item #[a(href="#" ui-sref="scorecards") View Details &#9654;]
       section(column="4 +1")
         .announcement-widget
+          img(src="../assets/img/icons/announcement-help.svg" width="80" height="80")
           h2 Welcome to Orion! Need Help?
           p Learn about what makes Orion so great and how to get started with our tutorial videos &amp; FAQ.
-          a.dest-link(href="#" ui-sref="help") View all videos &amp; tutorials
+          p.accent.action-item #[a(href="#" ui-sref="help") View all videos &amp; tutorials &#9654;]
     div(row)
       section.my-performance(column="7")
         target
