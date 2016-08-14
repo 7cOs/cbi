@@ -87,10 +87,10 @@ module.exports =
       return notesPromise.promise;
     }
 
-    function createNote(noteId) {
+    function createNote(body) {
       var notePromise = $q.defer(),
-          url = urlBase + 'create-note',
-          payload = {};
+          url = urlBase + 'createNote' + '?accountId=1432999',
+          payload = body;
 
       $http.post(url, payload, {
         headers: {}

@@ -14,6 +14,9 @@ function NotesController($scope, $state, $mdDialog, notesService) {
   vm.readLess = readLess;
   vm.openCreateNote = openCreateNote;
   vm.creatingNote = false;
+  vm.createNote = createNote;
+  vm.cancelNewNote = cancelNewNote;
+  vm.updateNote = updateNote;
 
   init();
 
@@ -36,6 +39,28 @@ function NotesController($scope, $state, $mdDialog, notesService) {
       scope: $scope.$new(),
       targetEvent: ev
     });
+  }
+
+  function createNote(data, accountId) {
+    console.log(data);
+    data.author = 'James Norton';
+    data.date = Date.now();
+    notesService.createNote().then(function(success) {
+      vm.notes.push(data);
+      vm.newNote = {};
+    });
+  }
+
+  function updateNote (note) {
+    // TOTO real functionality, update to DB
+    // add a cancel build out a temp buffer
+    note.editMode = false;
+
+  }
+
+  function cancelNewNote(note) {
+    vm.newNote = {};
+    vm.creatingNote = false;
   }
 
   function readMore() {
