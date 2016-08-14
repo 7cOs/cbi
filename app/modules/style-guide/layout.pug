@@ -6,7 +6,7 @@ div(column='12')
     div(row)
       h2 Notes
       button.btn-action(ng-click="sg.openNotes($event)") Notes
-      notes
+      notes(ng-if="sg.noteOpenState")
     div(row)
       h2 IQ Links
       section
