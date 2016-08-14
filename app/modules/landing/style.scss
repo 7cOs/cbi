@@ -3,7 +3,7 @@
   padding: 0;
 
   .greeting {
-    margin-bottom: 3em;
+    padding-top: 0;
   }
 
   .announcement-widget {
@@ -129,7 +129,7 @@
         .md-padding {
           background: $body-bg;
           padding-top: 0;
-          padding: 25px 15px;
+          padding: 10px 15px;
         }
 
         .target-list-count-container {
