@@ -27,8 +27,8 @@ div(container)
       div.nav-icon-container
         .notification-count-badge(ng-if="nb.unreadNotifications > 0")
           span {{nb.unreadNotifications}}
-        a.nav-icon.search(href="#")
-        a.nav-icon.add-opportunity(ui-sref="style-guide")
+        a.nav-icon.search(ui-sref="style-guide")
+        a.nav-icon.add-opportunity(ng-click="nb.modalAddOpportunityForm()")
         md-menu(md-position-mode="target-right target" md-offset="1 38")
           a.nav-icon.notifications(href="#" md-menu-origin ng-click="$mdOpenMenu($event)")
           md-menu-content

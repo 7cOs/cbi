@@ -1,6 +1,12 @@
 'use strict';
 
-function NavbarController($rootScope, $scope, $mdPanel, notificationsService) {
+function NavbarController($rootScope, $scope, $mdPanel, $mdDialog, notificationsService) {
+
+  // ****************
+  // CONTROLLER SETUP
+  // ****************
+
+  // Initial variables
   var vm = this,
       userAgent = navigator.userAgent;
 
@@ -12,14 +18,18 @@ function NavbarController($rootScope, $scope, $mdPanel, notificationsService) {
   vm.notificationsService = notificationsService.tempData();
   vm.notifications = vm.notificationsService.notifications;
 
-  // Default values
+  // Defaults
   vm.unreadNotifications = getUnreadCount();
   vm.noNotifications = 'No unread notifications.';
 
   // Expose public methods
   vm.markRead = markRead;
+  vm.modalAddOpportunityForm = modalAddOpportunityForm;
+  vm.closeModal = closeModal;
 
+  // **************
   // PUBLIC METHODS
+  // **************
 
   // Mark notification as read on click
   function markRead(notification) {
@@ -27,6 +37,24 @@ function NavbarController($rootScope, $scope, $mdPanel, notificationsService) {
     notification.read = true;
     getUnreadCount();
   }
+
+  // "Add Opportunity" modal
+  function modalAddOpportunityForm() {
+    $mdDialog.show({
+      clickOutsideToClose: true,
+      scope: $scope.$new(),
+      templateUrl: './app/shared/components/navbar/modal-add-opportunity-form.html'
+    });
+  }
+
+  // Close "Add Opportunity" modal
+  function closeModal() {
+    $mdDialog.hide();
+  }
+
+  // ***************
+  // PRIVATE METHODS
+  // ***************
 
   // Get unread notification count and set initial badge value
   function getUnreadCount() {

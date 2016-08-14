@@ -37,4 +37,4 @@ div.modal
         md-radio-button Add to target list
         input(ng-model="tempPlaceholder" placeholder="Type the name of a target list").medium-short
     button(disabled).btn-action Add
-    p.cancel.accent X Cancel
+    p.cancel.accent(ng-click="nb.closeModal()") X Cancel
