@@ -7,7 +7,6 @@ sassLint    = require('gulp-sass-lint')
 gulp.task 'vet:js', ->
   jsPath = config.gulp.src.assets.js
   jsPath.push('./server/**/*.js')
-  jsPath.push('./lib/**/*.js')
   jsPath.push('./config/**/*.js')
   jsPath.push('./server.js')
   return gulp.src(jsPath)

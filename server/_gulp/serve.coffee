@@ -7,14 +7,11 @@ gulp.task 'serve', (cb) ->
   called = false
   nodemon(
     script: config.dir.server.script
-    watch: config.dir.app
+    verbose: false,
+    watch: ['./server/*', './public/**/*.js'],
     ignore: [
-      'README.md'
-      'node_modules/**'
-      '.DS_Store'
-      'public/lib'
-      'public/_build'
-      'public/js/**/*.min.js'
+      './app/*',
+      '*.html'
     ]).on('start', ->
       if !called
         runSequence [

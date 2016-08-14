@@ -15,8 +15,8 @@ module.exports = function(config) {
       'app/main.js',
       './node_modules/angular-mocks/angular-mocks.js',
       './node_modules/angular-material/angular-material-mocks.js',
-      'app/modules/**/*.spec.js',
-      'app/shared/**/**/*.spec.js'
+      {pattern: 'app/modules/**/*.spec.js', included: true},
+      {pattern: 'app/shared/**/**/*.spec.js', included: true}
     ],
 
     // list of files to exclude
@@ -40,7 +40,16 @@ module.exports = function(config) {
     // test results reporter to use
     // possible values: 'dots', 'progress'
     // available reporters: https://npmjs.org/browse/keyword/karma-reporter
-    reporters: ['nyan', 'progress', 'coverage'],
+    reporters: ['mocha', 'nyan', 'coverage'],
+
+    nyanReporter: {
+      numberOfRainbowLines: 4,
+      renderOnRunCompleteOnly: true
+    },
+
+    mochaReporter: {
+      output: 'autowatch'
+    },
 
     coverageReporter: {
       type: 'html',
@@ -50,19 +59,15 @@ module.exports = function(config) {
     // web server port
     port: 9876,
 
-
     // enable / disable colors in the output (reporters and logs)
     colors: true,
-
 
     // level of logging
     // possible values: config.LOG_DISABLE || config.LOG_ERROR || config.LOG_WARN || config.LOG_INFO || config.LOG_DEBUG
     logLevel: config.LOG_ERROR,
 
-
     // enable / disable watching file and executing tests whenever any file changes
     autoWatch: true,
-
 
     // start these browsers
     // available browser launchers: https://npmjs.org/browse/keyword/karma-launcher
@@ -73,9 +78,8 @@ module.exports = function(config) {
       exitOnResourceError: true
     },
 
-
     // Continuous Integration mode
     // if true, Karma captures browsers, runs the tests and exits
     singleRun: false
-  })
-}
+  });
+};
