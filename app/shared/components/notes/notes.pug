@@ -10,16 +10,16 @@ div.modal.notes
       p(ng-click="n.openCreateNote()").bold <span>+</span> New Note
       div(ng-if="n.creatingNote").create-new-note
         label Topic
-        input(ng-model="n.newNote.title")
+        input#title(ng-model="n.newNote.title")
         label details
-        textarea(ng-model="n.newNote.body")
-        button(ng-click="n.submit()").btn-action Save
-        p.cancel.accent X Cancel
+        textarea#body(ng-model="n.newNote.body")
+        button(ng-click="n.createNote(n.newNote)").btn-action Save
+        p(ng-click="n.cancelNewNote(n.newNote)").cancel.accent X Cancel
 
     div.note-body(ng-repeat="note in n.notes")
       h4 {{note.title}}
-      p {{note.body | limitTo: n.numLimit}} <span class="read-more" ng-if="n.numLimit <= 150" ng-click="n.readMore()")>...Read More</span>
-      p(ng-if="n.numLimit > 150" ng-click="n.readLess()").read-less Read Less
+      p {{note.body | limitTo: n.numLimit}} <span class="read-more" ng-if="n.numLimit <= 150 && note.body.length >= 150" ng-click="n.readMore()")>...Read More</span>
+      p(ng-if="n.numLimit > 150 && note.body.length >= 150" ng-click="n.readLess()").read-less Read Less
       .note-body-footer
         p by {{note.author}}  <span class="note-date">{{note.date | date:"dd MMMM, yyyy 'at' h:mm a"}}</span>
         .icons
@@ -35,7 +35,8 @@ div.modal.notes
                 md-select(ng-model="o.somethingInTheFuture" aria-label="rationale dropdown" placeholder="Select an option").short
                   md-option(aria-label="rationale modal form" value="")
           label Details
-          textarea
+          textarea(ng-model="note.body")
+          button(ng-click="n.updateNote(note)").btn-action Save
           div.inline-container
             .attachments
               p.accent Attachments
