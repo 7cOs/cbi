@@ -18,7 +18,6 @@ module.exports =
     vm.brandSkus = myperformanceService.brandSkus();
 
     // Expose public methods
-    vm.isNegative = isNegative;
     vm.isPositive = isPositive;
     vm.overviewOpen = false;
     vm.idSelected = null;
@@ -139,13 +138,6 @@ module.exports =
     function openSelect(value) {
       vm.selectOpen = value;
     }
-
-    function isNegative(salesData) {
-      if (salesData >= 0) {
-        return false;
-      }
-      return true;
-    };
 
     function isPositive(salesData) {
       if (salesData >= 0) {

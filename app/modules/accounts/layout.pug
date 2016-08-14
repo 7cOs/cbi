@@ -138,12 +138,12 @@ div(row)
             tbody
               tr.clickable(ng-repeat="item in data" ng-click="a.selectItem('brands', item, a.brandTabs, $parent.$index)" ng-class="{selected: item.name === a.idSelected}")
                 td.left.data-brand.title-col {{item.name}}
-                td(ng-class="{'negative': a.isNegative(item.measures.yearAgoGap)}").dark      {{item.measures.yearAgoGap | number }}
-                td(ng-class="{'negative': a.isNegative(item.measures.yearAgoTrend) }").dark   {{item.measures.yearAgoTrend}}%
-                td(ng-if="a.filtersService.model.selected.accountBrands === 'Velocity'" ng-class="{'negative': a.isNegative(item.measures.velocityNumber)}") {{item.measures.velocityNumber | number }}
-                td(ng-if="a.filtersService.model.selected.accountBrands !== 'Velocity'" ng-class="{'negative': a.isNegative(item.measures.vsPlanNumber)}") {{item.measures.vsPlanNumber | number }}
-                td(ng-if="a.filtersService.model.selected.accountBrands === 'Velocity'" ng-class="{'negative': a.isNegative(item.measures.velocityPercent)}") {{item.measures.velocityPercent}}%
-                td(ng-if="a.filtersService.model.selected.accountBrands !== 'Velocity'" ng-class="{'negative': a.isNegative(item.measures.vsPlanPercent)}") {{item.measures.vsPlanPercent}}%
+                td(ng-class="{'negative': !a.isPositive(item.measures.yearAgoGap)}").dark      {{item.measures.yearAgoGap | number }}
+                td(ng-class="{'negative': !a.isPositive(item.measures.yearAgoTrend) }").dark   {{item.measures.yearAgoTrend}}%
+                td(ng-if="a.filtersService.model.selected.accountBrands === 'Velocity'" ng-class="{'negative': !a.isPositive(item.measures.velocityNumber)}") {{item.measures.velocityNumber | number }}
+                td(ng-if="a.filtersService.model.selected.accountBrands !== 'Velocity'" ng-class="{'negative': !a.isPositive(item.measures.vsPlanNumber)}") {{item.measures.vsPlanNumber | number }}
+                td(ng-if="a.filtersService.model.selected.accountBrands === 'Velocity'" ng-class="{'negative': !a.isPositive(item.measures.velocityPercent)}") {{item.measures.velocityPercent}}%
+                td(ng-if="a.filtersService.model.selected.accountBrands !== 'Velocity'" ng-class="{'negative': !a.isPositive(item.measures.vsPlanPercent)}") {{item.measures.vsPlanPercent}}%
   div.scorecard-chart(column='7')
     .widget-header
       .dropdown-filter.narrow

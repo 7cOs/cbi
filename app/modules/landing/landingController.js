@@ -8,7 +8,6 @@ module.exports =
     $rootScope.pageTitle = $state.current.title;
 
     // Map public methods to scope
-    vm.isNegative = isNegative;
     vm.isPositive = isPositive;
     vm.filter = filtersService.model;
     vm.chipsService = chipsService;
@@ -32,13 +31,6 @@ module.exports =
       console.log(vm.sharedFilters);
       console.log('shared with me response', data.sharedWithMe);
     });*/
-
-    function isNegative(salesData) {
-      if (salesData >= 0) {
-        return false;
-      }
-      return true;
-    };
 
     function isPositive(salesData) {
       if (salesData >= 0) {
