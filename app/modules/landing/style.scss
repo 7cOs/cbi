@@ -1,5 +1,10 @@
 .landing-page {
   background: $body-bg;
+  padding: 0;
+
+  .greeting {
+    margin-bottom: 3em;
+  }
 
   .landing-page-data {
     padding: 0;
@@ -161,7 +166,7 @@
     .opportunities {
 
       h2 {
-        margin-top: 21px;
+        margin-top: 0.25em;
         margin-bottom: 0;
       }
 
