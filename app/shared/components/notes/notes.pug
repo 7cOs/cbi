@@ -10,9 +10,9 @@ div.modal.notes
       p(ng-click="n.openCreateNote()").bold <span>+</span> New Note
       div(ng-if="n.creatingNote").create-new-note
         label Topic
-        input#title(ng-model="n.newNote.title")
+        input(ng-model="n.newNote.title")
         label details
-        textarea#body(ng-model="n.newNote.body")
+        textarea(ng-model="n.newNote.body")
         button(ng-click="n.createNote(n.newNote)").btn-action Save
         p(ng-click="n.cancelNewNote(n.newNote)").cancel.accent X Cancel
 
