@@ -4,7 +4,9 @@ module.exports = function(app) {
 
   const passport      = require('passport'),
         SamlStrategy = require('passport-saml').Strategy,
-        fs = require('fs');
+        fs = require('fs'),
+        util = require('../../_lib/util'),
+        request = require('request');
 
   passport.serializeUser(function(user, done) {
     done(null, user);
@@ -26,6 +28,17 @@ module.exports = function(app) {
     signatureAlgorithm: app.get('config').saml.signatureAlgorithm
   }, function(req, profile, done) {
     req.session.assertion = req.body.SAMLResponse;
+
+    var signed = util.sign('/auth');
+    request.post(signed, {body: req.body, json: true}, function(err, httpResponse, body) {
+      if (err) {
+        console.log(err);
+      } else {
+        console.log(body);
+        req.session.authKey = body;
+      }
+    });
+
     /* app.set('config').saml.assertion = req.body.SAMLResponse;
     console.log(app.get('config').saml.assertion);
     */
