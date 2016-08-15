@@ -3,6 +3,15 @@
   right: 0;
   z-index: 800;
 
+  .no-notes-image {
+    margin-top: 12px;
+    width: 245px;
+  }
+
+  .no-notes {
+    padding: 25px 0 68px;
+  }
+
   md-progress-circular {
     z-index: 901;
     left: -50px;
@@ -38,6 +47,14 @@
   .note-body {
     margin: 12px 0;
 
+    h4 {
+      margin-top: 0;
+    }
+
+    .attachments {
+      background-position: 10px 4px;
+    }
+
     .read-more,
     .read-less {
       color: $blue;
@@ -67,7 +84,11 @@
     }
 
     .note-attachments {
-      margin-top: 24px;
+      margin: 36px 0;
+
+      .attachment-header {
+        margin-bottom: 36px;
+      }
 
       .attachments,
       .download-all {
@@ -84,6 +105,11 @@
         margin-bottom: 10px;
       }
     }
+
+    .file-name {
+      color: $blue;
+      font-size: 0.8em;
+    }
   }
 
   .note-body-footer {
@@ -91,18 +117,23 @@
       display: inline;
     }
 
+    p {
+      font-size: 0.7em;
+    }
+
     .icons {
       float: right;
+      font-size: 1em;
     }
 
     .note-author {
       color: $blue;
-      padding-right: 12px;
-      font-size: 0.7em;
+      padding-right: 4px;
+      font-size: 1em;
     }
 
     .note-date {
-      font-size: 0.7em;
+      font-size: 1em;
     }
   }
 
@@ -154,6 +185,7 @@
   .download-all,
   .delete-note,
   .edit-note,
+  .edit-note-active,
   .email-note,
   .chevron-down {
     background-repeat: no-repeat;
@@ -167,10 +199,17 @@
     background-image: url('../assets/img/icons/photo-attachment.svg');
   }
 
-  .photo {
-    background-image: url('../assets/img/icons/photo-attachment.svg');
+  .photo,
+  .spreadsheet,
+  .pdf,
+  .document,
+  .audio,
+  .video,
+  .zip,
+  .other,
+  .powerpoint {
     position: relative;
-    padding-bottom: 0;
+    padding: 0;
     background-size: 15px;
 
     .chevron-down,
@@ -183,13 +222,18 @@
       position: absolute;
       padding-left: 10px;
       display: inline;
-      top: 3px;
+      top: 9px;
       color: $gray-8;
       outline: none;
     }
 
     img {
       width: 100%;
+    }
+
+    .thumbnail {
+      width: 24px;
+      height: 24px;
     }
   }
 
@@ -218,6 +262,11 @@
 
   .edit-note {
     background-image: url('../assets/img/icons/edit-note.svg');
+    background-size: 16px;
+  }
+
+  .edit-note-active {
+    background-image: url('../assets/img/icons/edit-note-blue.svg');
     background-size: 16px;
   }
 
