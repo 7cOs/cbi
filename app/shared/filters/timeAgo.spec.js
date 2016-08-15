@@ -14,6 +14,24 @@ describe('Unit: timeAgo Filter', function() {
     expect(filter).toBeDefined();
   });
 
+  it('should return an empty string if display date is NaN', function() {
+    var string = 'Hello world',
+        obj = {hello: 'world'},
+        blank = '';
+
+    expect(filter(string, 'relative')).toEqual('');
+    expect(filter(string, 'relativeTime')).toEqual('');
+    expect(filter(string, 'daysOnly')).toEqual('');
+
+    expect(filter(obj, 'relative')).toEqual('');
+    expect(filter(obj, 'relativeTime')).toEqual('');
+    expect(filter(obj, 'daysOnly')).toEqual('');
+
+    expect(filter(blank, 'relative')).toEqual('');
+    expect(filter(blank, 'relativeTime')).toEqual('');
+    expect(filter(blank, 'daysOnly')).toEqual('');
+  });
+
   describe('type: daysOnly', function() {
     var sixHours, fiveDays, thirtyTwoDays, twoHundredDays, threeHundredSeventyDays;
     beforeEach(function() {
