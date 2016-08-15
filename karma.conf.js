@@ -15,8 +15,8 @@ module.exports = function(config) {
       'app/main.js',
       './node_modules/angular-mocks/angular-mocks.js',
       './node_modules/angular-material/angular-material-mocks.js',
-      {pattern: 'app/modules/**/*.spec.js', included: true},
-      {pattern: 'app/shared/**/**/*.spec.js', included: true}
+      'app/modules/**/*.spec.js',
+      'app/shared/**/**/*.spec.js'
     ],
 
     // list of files to exclude
