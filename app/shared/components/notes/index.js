@@ -29,13 +29,65 @@ function NotesController($scope, $state, $mdDialog, notesService) {
   vm.attachments = [
     {
       name: 'IMG1009.PNG',
+      fileType: 'PNG',
       fileSize: '3.4 MB',
+      thumbnail: 'https://scontent.xx.fbcdn.net/t31.0-8/13653130_733144425894_7777495390696756765_o.jpg',
       url: 'https://scontent.xx.fbcdn.net/t31.0-8/13653130_733144425894_7777495390696756765_o.jpg'
     },
     {
       name: 'IMG1008.PNG',
+      fileType: 'PNG',
       fileSize: '2.3 MB',
+      thumbnail: 'http://r.ddmcdn.com/s_f/o_1/APL/uploads/2015/04/150896.001.01.197_20150429_121257.jpg',
       url: 'http://r.ddmcdn.com/s_f/o_1/APL/uploads/2015/04/150896.001.01.197_20150429_121257.jpg'
+    },
+    {
+      name: 'DOC1976.DOC',
+      fileType: 'DOC',
+      fileSize: '1.4 KB',
+      url: ''
+    },
+    {
+      name: 'DOC5150.XLS',
+      fileType: 'XLS',
+      fileSize: '9.6 KB',
+      url: ''
+    },
+    {
+      name: 'DOC1980.MP4',
+      fileType: 'MP4',
+      fileSize: '12.4 KB',
+      url: ''
+    },
+    {
+      name: 'DOC5150.MP3',
+      fileType: 'MP3',
+      fileSize: '9.6 KB',
+      url: ''
+    },
+    {
+      name: 'DOC5150.TXT',
+      fileType: 'OTHER',
+      fileSize: '9.6 KB',
+      url: ''
+    },
+    {
+      name: 'DOC5150.PDF',
+      fileType: 'PDF',
+      fileSize: '9.6 KB',
+      url: ''
+    },
+    {
+      name: 'DOC5150.PPT',
+      fileType: 'PPT',
+      fileSize: '9.6 KB',
+      url: ''
+    },
+    {
+      name: 'DOC5150.ZIP',
+      fileType: 'ZIP',
+      fileSize: '9.6 KB',
+      url: ''
     }
   ];
 

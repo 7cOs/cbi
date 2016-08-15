@@ -2,9 +2,11 @@ div.modal.notes
   div.title
     a.hide-row(ng-click="sg.closeNotes()")
     h4 Walmed & Feller Notes
-  div.no-notes(ng-if="n.notes.length === 0")
-    h5 There are no notes for this acccount yet.
+  div.no-notes(ng-if="n.notes.length <= 0")
+    h5 There are no notes for this <br />account yet.
     button.btn-action + New note
+    br
+    img(src="../assets/img/icons/no-notes.svg").no-notes-image
   md-progress-circular(ng-if="n.loading" md-mode="indeterminate" md-diameter="100").md-accent
   div.note-container(ng-if="n.notes.length > 0")
     div.new-note
@@ -29,30 +31,56 @@ div.modal.notes
           button(ng-click="n.deleteNote(note)").btn-action Yes
           p(ng-click="n.toggleDelete(note)").cancel.accent X Cancel
       div(ng-if="!note.deleteConfirmation")
-        h4 {{note.title}}
+        h4 {{note.title}} <span ng-if="note.attachments" class="attachments"></span>
         p {{note.body | limitTo: n.numLimit}} <span class="read-more" ng-if="note.numLimit <= 150 || !note.numLimit" ng-click="n.readMore(note)")>...Read More</span>
         .note-attachments(ng-if="note.noteDetails")
-          .attachments
-            p.accent Attachments
-          .download-all
-            a(href="#") Download All
+          div.attachement-header
+            .attachments
+              p.accent Attachments
+            .download-all
+              a(href="#") Download All
           ul
             //- This will need to be upodated with API
+            //- TODO This needs to be refactored to be less DRY
             li(ng-repeat="attachment in n.attachments")
-              .photo
-                p.file-name {{attachment.name}}&nbsp;({{attachment.fileSize}})
-                div(ng-click="n.showImage(attachment)" ng-class="{'chevron-down': !attachment.visible, 'chevron-up': attachment.visible}")
-                  hi
-                img(src="{{attachment.url}}" ng-if="attachment.visible")
+              div.attached-files
+                .photo(ng-if="attachment.fileType === 'PNG'")
+                  img.thumbnail(src="{{attachment.thumbnail}}")
+                  p.file-name {{attachment.name}}&nbsp;({{attachment.fileSize}})
+                  div(ng-click="n.showImage(attachment)" ng-class="{'chevron-down': !attachment.visible, 'chevron-up': attachment.visible}")
+                  img(src="{{attachment.url}}" ng-if="attachment.visible")
+                .spreadsheet(ng-if="attachment.fileType === 'XLS'")
+                  img.thumbnail(src="../assets/img/icons/download-xls-c.svg")
+                  p.file-name {{attachment.name}}&nbsp;({{attachment.fileSize}})
+                .video(ng-if="attachment.fileType === 'MP4'")
+                  img.thumbnail(src="../assets/img/icons/download-mov-c.svg")
+                  p.file-name {{attachment.name}}&nbsp;({{attachment.fileSize}})
+                .audio(ng-if="attachment.fileType === 'MP3'")
+                  img.thumbnail(src="../assets/img/icons/download-mp3-c.svg")
+                  p.file-name {{attachment.name}}&nbsp;({{attachment.fileSize}})
+                .other(ng-if="attachment.fileType === 'OTHER'")
+                  img.thumbnail(src="../assets/img/icons/download-other-c.svg")
+                  p.file-name {{attachment.name}}&nbsp;({{attachment.fileSize}})
+                .pdf(ng-if="attachment.fileType === 'PDF'")
+                  img.thumbnail(src="../assets/img/icons/download-pdf-c.svg")
+                  p.file-name {{attachment.name}}&nbsp;({{attachment.fileSize}})
+                .powerpoint(ng-if="attachment.fileType === 'PPT'")
+                  img.thumbnail(src="../assets/img/icons/download-ppt-c.svg")
+                  p.file-name {{attachment.name}}&nbsp;({{attachment.fileSize}})
+                .zip(ng-if="attachment.fileType === 'ZIP'")
+                  img.thumbnail(src="../assets/img/icons/download-zip-c.svg")
+                  p.file-name {{attachment.name}}&nbsp;({{attachment.fileSize}})
+                .document(ng-if="attachment.fileType === 'DOC'")
+                  img.thumbnail(src="../assets/img/icons/download-doc-c.svg")
+                  p.file-name {{attachment.name}}&nbsp;({{attachment.fileSize}})
           div
             .add-attachments(ng-if="note.author === 'Me'")
               p Add an attachment
-
         .note-body-footer
           p by <span class="note-author"> {{note.author}}</span>  <span class="note-date">{{note.date | date:"dd MMMM, yyyy 'at' h:mm a"}}</span>
           .icons
             .delete-note(ng-if="note.author === 'Me'" ng-click="n.toggleDelete(note)")
-            .edit-note(ng-if="note.author === 'Me'" ng-click="n.isEditing(note)")
+            div(ng-if="note.author === 'Me'" ng-click="n.isEditing(note)" ng-class="{'edit-note': !note.editMode, 'edit-note-active': note.editMode}")
             .email-note
         div.notes-editing(ng-if="note.editMode")
           div.main-note-section
@@ -66,7 +94,6 @@ div.modal.notes
               input(ng-if="n.inputToggle" ng-model="note.title")
             label Details
             textarea(ng-model="note.body")
-            button(ng-click="n.updateNote(note)").btn-action Save
             div.inline-container
               .attachments
                 p.accent Attachments
