@@ -2,14 +2,25 @@
 
 module.exports =
   function targetListDetailController($rootScope, $state, $mdDialog, chipsService, filtersService) {
+
+    // ****************
+    // CONTROLLER SETUP
+    // ****************
+
+    // Initial variables
     var vm = this;
 
     // Set page title for head and nav
     $rootScope.pageTitle = $state.current.title;
 
+    // Expose public methods
     vm.modalManageTargetList = modalManageTargetList;
     vm.modalManageCollaborators = modalManageCollaborators;
     vm.modalSendOpportunity = modalSendOpportunity;
+
+    // **************
+    // PUBLIC METHODS
+    // **************
 
     function modalManageTargetList(ev) {
       var parentEl = angular.element(document.body);

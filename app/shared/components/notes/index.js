@@ -1,30 +1,23 @@
 'use strict';
 
 function NotesController($scope, $state, $mdDialog, notesService) {
+
+  // ****************
+  // CONTROLLER SETUP
+  // ****************
+
+  // Initial variables
   var vm = this;
 
-  vm.pageName = $state.current.name;
-
-  // Map public methods to scope
+  // Defaults
   vm.loading = true;
-  vm.isEditing = isEditing;
-  vm.openNotes = openNotes;
   vm.editMode = false;
   vm.numLimit = 150;
-  vm.readMore = readMore;
-  vm.readLess = readLess;
-  vm.openCreateNote = openCreateNote;
   vm.creatingNote = false;
-  vm.createNote = createNote;
-  vm.deleteNote = deleteNote;
-  vm.toggleDelete = toggleDelete;
   vm.deleteConfirmation = false;
-  vm.cancelNewNote = cancelNewNote;
-  vm.updateNote = updateNote;
-  vm.showInput = showInput;
   vm.inputToggle = false;
-  vm.showImage = showImage;
 
+  // Temp data
   vm.noteTopics = [
     'Distribution',
     'Display',
@@ -33,7 +26,6 @@ function NotesController($scope, $state, $mdDialog, notesService) {
     'Account information',
     'General visit'
   ];
-
   vm.attachments = [
     {
       name: 'IMG1009.PNG',
@@ -47,9 +39,26 @@ function NotesController($scope, $state, $mdDialog, notesService) {
     }
   ];
 
+  // Expose public methods
+  vm.isEditing = isEditing;
+  vm.openNotes = openNotes;
+  vm.readMore = readMore;
+  vm.readLess = readLess;
+  vm.openCreateNote = openCreateNote;
+  vm.createNote = createNote;
+  vm.deleteNote = deleteNote;
+  vm.toggleDelete = toggleDelete;
+  vm.cancelNewNote = cancelNewNote;
+  vm.updateNote = updateNote;
+  vm.showInput = showInput;
+  vm.showImage = showImage;
+
   init();
 
-  // ///////////////////////////////////////////////////////// Public Methods
+  // **************
+  // PUBLIC METHODS
+  // **************
+
   function showInput() {
     vm.inputToggle = !vm.inputToggle;
   }
@@ -121,6 +130,10 @@ function NotesController($scope, $state, $mdDialog, notesService) {
     note.noteDetails = false;
 
   }
+
+  // ***************
+  // PRIVATE METHODS
+  // ***************
 
   function init() {
     notesService.accountNotes().then(function(success) {

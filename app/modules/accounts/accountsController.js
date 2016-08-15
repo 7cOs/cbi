@@ -2,30 +2,24 @@
 
 module.exports =
   function accountsController($rootScope, $scope, $state, $log, $window, myperformanceService, chipsService, filtersService, userService) {
+
+    // ****************
+    // CONTROLLER SETUP
+    // ****************
+
+    // Initial variables
     var vm = this;
 
     // Set page title for head and nav
     $rootScope.pageTitle = $state.current.title;
 
-    // Services available in View
+    // Services
     vm.chipsService = chipsService;
     vm.filtersService = filtersService;
-
     vm.filters = myperformanceService.filter();
     vm.distributionData = myperformanceService.distributionModel();
     vm.marketData = myperformanceService.marketData();
-    vm.chartData = [{'values': vm.marketData.distributors}];
     vm.brandSkus = myperformanceService.brandSkus();
-
-    // Expose public methods
-    vm.isPositive = isPositive;
-    vm.overviewOpen = false;
-    vm.idSelected = null;
-    vm.brandIdSelected = null;
-    vm.openSelect = openSelect;
-    vm.setMarketTab = setMarketTab;
-    vm.selectItem = selectItem;
-    vm.prevTab = prevTab;
 
     // Widget / tab contents
     vm.brandTabs = {
@@ -57,7 +51,8 @@ module.exports =
     vm.marketIdSelected = false;
     vm.selectedStore = null;
 
-    // Chart Options
+    // Chart Setup
+    vm.chartData = [{'values': vm.marketData.distributors}];
     vm.chartOptions = {
       chart: {
         type: 'multiBarHorizontalChart',
@@ -92,7 +87,19 @@ module.exports =
       }
     };
 
+    // Expose public methods
+    vm.isPositive = isPositive;
+    vm.overviewOpen = false;
+    vm.idSelected = null;
+    vm.brandIdSelected = null;
+    vm.openSelect = openSelect;
+    vm.setMarketTab = setMarketTab;
+    vm.selectItem = selectItem;
+    vm.prevTab = prevTab;
+
+    // **************
     // PUBLIC METHODS
+    // **************
 
     // When a row item is clicked in brands / market widgets
     function selectItem(widget, item, parent, parentIndex) {
@@ -139,6 +146,7 @@ module.exports =
       vm.selectOpen = value;
     }
 
+    // Check if sales data value is positive (for display in UI)
     function isPositive(salesData) {
       if (salesData >= 0) {
         return true;
@@ -146,7 +154,9 @@ module.exports =
       return false;
     };
 
+    // ***************
     // PRIVATE METHODS
+    // ***************
 
     // Checks active tab, updates model, passes data to chart (markets only)
     function getActiveTab() {

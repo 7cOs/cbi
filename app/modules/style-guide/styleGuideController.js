@@ -2,20 +2,32 @@
 
 module.exports =
   function styleGuideController($rootScope, $scope, $state, $mdDialog, notesService) {
+
+    // ****************
+    // CONTROLLER SETUP
+    // ****************
+
+    // Initial variables
     var vm = this;
 
     // Set page title for head and nav
     $rootScope.pageTitle = $state.current.title;
 
-    // Map public methods to scope
+    // Services
+    notesService.accountNotes().then(function(success) {
+      vm.notes = success;
+    });
+
+    // Expose public methods
     vm.showModal = showModal;
     vm.closeModal = closeModal;
     vm.openNotes = openNotes;
     vm.noteOpenState = false;
 
-    notesService.accountNotes().then(function(success) {
-      vm.notes = success;
-    });
+    // **************
+    // PUBLIC METHODS
+    // **************
+
     function showModal(ev) {
       var parentEl = angular.element(document.body);
       $mdDialog.show({

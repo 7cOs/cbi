@@ -2,18 +2,24 @@
 
 module.exports =
   function opportunitiesController($rootScope, $scope, $state, $mdDialog, opportunitiesService, chipsService, filtersService, userService) {
+
+    // ****************
+    // CONTROLLER SETUP
+    // ****************
+
+    // Initial variables
     var vm = this;
 
     // Set page title for head and nav
     $rootScope.pageTitle = $state.current.title;
 
-    // Services exposed in View
+    // Services
     vm.chipsService = chipsService;
     vm.filtersService = filtersService;
     vm.userService = userService;
     vm.opportunitiesService = opportunitiesService;
 
-    // Controller Methods
+    // Expose public methods
     vm.accountQuerySearch = accountQuerySearch;
     vm.addOpportunity = addOpportunity;
     vm.applyFilter = applyFilter;
@@ -23,12 +29,12 @@ module.exports =
     vm.modalSaveOpportunityFilter = modalSaveOpportunityFilter;
     vm.saveFilter = saveFilter;
 
-    // Broadcast current page name for other scopes
-    $rootScope.$broadcast('page:loaded', $state.current.name);
-
     init();
 
-    // ///////////////////////////////////////////////////////// Public Methods
+    // **************
+    // PUBLIC METHODS
+    // **************
+
     function modalSaveOpportunityFilter(ev) {
       var parentEl = angular.element(document.body);
       $mdDialog.show({
@@ -85,7 +91,10 @@ module.exports =
       });
     }
 
-    // ///////////////////////////////////////////////////////// Private Methods
+    // ***************
+    // PRIVATE METHODS
+    // ***************
+
     /**
      * @name filterQuery
      * @desc filter data using query from md-autocomplete
