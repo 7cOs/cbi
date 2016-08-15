@@ -31,7 +31,7 @@ module.exports = function(app) {
 
     var signed = util.sign('/api/auth');
     console.log(req.body.SAMLResponse);
-    request.post(signed, {body: req.body.SAMLResponse, json: true}, function(err, httpResponse, body) {
+    request.post(signed, {body: req.body.SAMLResponse}, function(err, httpResponse, body) {
       if (err) {
         console.log(httpResponse);
         console.log(err);
