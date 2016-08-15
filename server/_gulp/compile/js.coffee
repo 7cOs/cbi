@@ -1,11 +1,12 @@
 babelify    = require('babelify')
 browserify  = require('browserify')
+browserifyInc = require('browserify-incremental')
 config      = require('../../../server/_config/app')
 fs          = require('fs')
 gulp        = require('gulp')
 
 gulp.task 'compile:js', ['vet:js'], ->
-  browserify({ debug: true })
+  browserifyInc({ debug: true, cacheFile: './browserify-cache.json' })
     .transform(babelify.configure({
         presets: 'es2015'
       }))

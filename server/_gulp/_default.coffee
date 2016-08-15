@@ -18,21 +18,12 @@ if release
       'serve'
     ],
 else
-  gulp.task 'default', ->
-    runSequence [
-      'compile'
-      'serve'
-      'tdd'
-    ],
+  gulp.task 'default', (cb) ->
+    runSequence 'compile', ['serve', 'tdd'], cb
 
 # COMPILE ALL THE THINGZ
-gulp.task 'compile', ->
-  runSequence [
-    'compile:pug'
-    'compile:js'
-    'compile:sass'
-    'compile:img'
-  ]
+gulp.task 'compile', (cb) ->
+  runSequence ['compile:pug', 'compile:js', 'compile:sass', 'compile:img'], cb
 
 # CLEAN UP BEFORE BUILDS
 gulp.task 'clean', ->

@@ -87,11 +87,12 @@ config.dir = {
 config.gulp = {
   browserSync: {
     baseDir: 'public',
-    files: [ 'public/**/*.*', 'server/**/*.*', 'server/**/*.*', 'app/**/*.js', 'app/**/*.jade' ],
-    ignore: [ 'public/lib', 'public/js/**/*.min.js' ],
+    files: 'public/*',
+    // files: [ 'app/**/*.scss', 'server/**/*.*', 'app/**/*.js', 'app/**/*.pug' ],
+    // ignore: [ 'public' ],
     open: false,
     port: 3000,
-    reloadDelay: 2000
+    reloadDelay: 500
   },
   src: {
     assets: {
@@ -104,7 +105,7 @@ config.gulp = {
       img: ['./app/assets/img/**/*.jpg', './app/assets/img/**/*.jpg', './app/assets/img/**/*.png', './app/assets/img/**/*.svg'],
       js: ['./app/**/*.js'],
       jsMain: './app/main.js',
-      sass: ['./app/**/*.scss', '!./app/common/**/*.scss', '!./app/main.scss'],
+      sass: ['./app/**/*.scss', '!./app/common/**/*.scss', './app/main.scss'],
       sassMain: './app/main.scss',
       ts: ['./app/**/*.ts']
     },
