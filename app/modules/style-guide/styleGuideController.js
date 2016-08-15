@@ -10,6 +10,8 @@ module.exports =
     // Map public methods to scope
     vm.showModal = showModal;
     vm.closeModal = closeModal;
+    vm.openNotes = openNotes;
+    vm.noteOpenState = false;
 
     notesService.accountNotes().then(function(success) {
       vm.notes = success;
@@ -24,6 +26,10 @@ module.exports =
         templateUrl: './app/modules/style-guide/demo-modal.html'
       });
     };
+
+    function openNotes() {
+      vm.noteOpenState = !vm.noteOpenState;
+    }
 
     function closeModal() {
       $mdDialog.hide();
