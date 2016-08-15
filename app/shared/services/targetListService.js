@@ -510,7 +510,7 @@ module.exports =
      * @returns {Object} - shares object
      * @memberOf orion.common.services
      */
-    function getTargetListShares(targetListId, int) {
+    function getTargetListShares(targetListId) {
       var targetListPromise = $q.defer(),
           url = apiHelperService.request('/api/targetLists/' + targetListId + '/shares/');
 
@@ -519,7 +519,6 @@ module.exports =
         .catch(getTargetListSharesFail);
 
       function getTargetListSharesSuccess(response) {
-        if (!isNaN(int)) response.int = int;
         targetListPromise.resolve(response);
       }
 

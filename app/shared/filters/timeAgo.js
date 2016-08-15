@@ -15,6 +15,8 @@ module.exports =
           d = new Date(displayDate),
           returnStr = '';
 
+      if (isNaN(Date.parse(d))) return '';
+
       if (type === 'daysOnly') {
         var hoursPast = Math.round((currentDate - d) / (1000 * 60 * 60));
 

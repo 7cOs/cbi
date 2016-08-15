@@ -50,11 +50,11 @@ div.expanded-target-lists
                   h4(column="4").left {{list.name}}
                   div(column="2")
                     img(src="../assets/img/icons/person.svg").member-icon
-                    h5.accent.gray.dropdown-menu-trigger {{list.collaborators.length + 1}} collaborators
+                    h5.accent.gray.dropdown-menu-trigger {{list.collaborators.length}} collaborators
                       ul.dropdown-menu
                         li.member.creator {{expanded.userService.model.currentUser.firstName}} {{userService.model.currentUser.lastName}}
                         li.member(ng-repeat="collaborator in list.collaborators") {{collaborator.user.firstName}} {{collaborator.user.lastName}}
-                  h5(column="2").accent.gray {{list.createdAt | timeAgo}}
+                  h5(column="2").accent.gray {{list.lastUpdated | timeAgo : 'relative'}}
                   h4(column="1").closed {{list.opportunitiesSummary.closedOpportunitiesCount | number}}
                   h4(column="1") {{list.opportunities | number}}
                   h4(column="2") {{list.opportunitiesSummary.totalClosedDepletions | number}}
@@ -102,11 +102,11 @@ div.expanded-target-lists
                   h4(column="4").left {{list.name}}
                   div(column="2")
                     img(src="../assets/img/icons/person.svg").member-icon
-                    h5.accent.gray.dropdown-menu-trigger {{list.collaborators.length + 1}} collaborators
+                    h5.accent.gray.dropdown-menu-trigger {{list.collaborators.length}} collaborators
                       ul.dropdown-menu
-                        li.member.creator {{list.creator}}
-                        li.member(ng-repeat="collaborator in list.members") {{collaborator}}
-                  h5(column="2").accent.gray {{list.createdAt | timeAgo}}
+                        li.member.creator(ng-repeat="user in list.collaborators | filter: {permissionLevel: 'Author'}") {{user.user.firstName}} {{user.user.lastName}}
+                        li.member(ng-repeat="collaborator in list.collaborators") {{collaborator.user.firstName}} {{collaborator.user.lastName}}
+                  h5(column="2").accent.gray {{list.lastUpdated | timeAgo : 'relative'}}
                   h4(column="1").closed {{list.opportunitiesSummary.closedOpportunitiesCount | number}}
                   h4(column="1") {{list.opportunities | number}}
                   h4(column="2") {{list.opportunitiesSummary.totalClosedDepletions | number}}
@@ -157,11 +157,11 @@ div.expanded-target-lists
                   h4(column="4").left {{list.name}}
                   div(column="2")
                     img(src="../assets/img/icons/person.svg").member-icon
-                    h5.accent.gray.dropdown-menu-trigger {{list.members.length + 1}} collaborators
+                    h5.accent.gray.dropdown-menu-trigger {{list.members.length}} collaborators
                       ul.dropdown-menu
-                        li.member.creator {{list.creator}}
-                        li.member(ng-repeat="collaborator in list.members") {{collaborator}}
-                  h5(column="2").accent.gray {{list.created}}
+                        li.member.creator(ng-repeat="user in list.collaborators | filter: {permissionLevel: 'Author'}") {{user.user.firstName}} {{user.user.lastName}}
+                        li.member(ng-repeat="collaborator in list.collaborators") {{collaborator.user.firstName}} {{collaborator.user.lastName}}
+                  h5(column="2").accent.gray {{list.lastUpdated | timeAgo : 'relative'}}
                   h4(column="1").closed {{list.closedOpportunities | number}}
                   h4(column="1") {{list.opportunities | number}}
                   h4(column="2") {{273000 | number}}

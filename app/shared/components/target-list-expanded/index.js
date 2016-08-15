@@ -1,6 +1,6 @@
 'use strict';
 
-function ExpandedTargetListController($state, userService, targetListService) {
+function ExpandedTargetListController($state, $q, userService, targetListService) {
 
   // ****************
   // CONTROLLER SETUP
@@ -60,21 +60,32 @@ function ExpandedTargetListController($state, userService, targetListService) {
 
   function init() {
     userService.getTargetLists('1').then(function(data) {
-      var i = 0;
+      var ownedPromises = [],
+          sharedPromises = [];
       userService.model.targetLists = data;
 
-      for (i = 0; i < userService.model.targetLists.owned.length; i++) {
-        targetListService.getTargetListShares(userService.model.targetLists.owned[i].id, i).then(function(response) {
-          userService.model.targetLists.owned[response.int].collaborators = response.data;
-          console.log(response.data);
-        });
-      }
+      // get collaborators for owned target lists
+      ownedPromises = userService.model.targetLists.owned.map(function(targetList) {
+        return targetListService.getTargetListShares(targetList.id);
+      });
 
-      for (i = 0; i < userService.model.targetLists.sharedWithMe.length; i++) {
-        targetListService.getTargetListShares(userService.model.targetLists.sharedWithMe[i].id, i).then(function(response) {
-          userService.model.targetLists.sharedWithMe[response.int].collaborators = response.data;
+      $q.all(ownedPromises).then(function(response) {
+        console.log(response);
+        angular.forEach(userService.model.targetLists.owned, function(targetList, key) {
+          targetList.collaborators = response[key].data;
         });
-      }
+      });
+
+      // get collaborators for shared target lists
+      sharedPromises = userService.model.targetLists.sharedWithMe.map(function(targetList) {
+        return targetListService.getTargetListShares(targetList.id);
+      });
+
+      $q.all(sharedPromises).then(function(response) {
+        angular.forEach(userService.model.targetLists.sharedWithMe, function(targetList, key) {
+          targetList.collaborators = response[key].data;
+        });
+      });
     });
   }
 
