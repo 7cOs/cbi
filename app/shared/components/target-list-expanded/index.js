@@ -77,7 +77,8 @@ function ExpandedTargetListController($state, $scope, $mdDialog, $q, userService
   }
 
   function searchOpportunities(e) {
-    console.log('hi 2');
+    closeModal();
+    $state.go('opportunities');
   }
 
   function selector(tab) {
