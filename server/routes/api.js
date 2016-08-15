@@ -6,7 +6,7 @@ module.exports = function(app) {
 
   app.route('/api/*')
     .get(function(req, res) {
-      // console.log(req.url);
+      console.log(req.url);
       var signed = util.sign(req.url);
       req.pipe(request(signed)).pipe(res);
     })

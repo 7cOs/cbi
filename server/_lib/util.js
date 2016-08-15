@@ -19,37 +19,12 @@ module.exports = function(app) {
       uri = uri.split('?')[0];
       var en = '/' + app.get('config').api.version + '/' + uri.split('api/')[1];
       var signature = crypto.enc.Base64.stringify(crypto.HmacSHA256(en + app.get('config').api.apiKey, app.get('config').api.key));
-      var url = app.get('config').api.url + en + '?signature=' + signature + '&apiKey=' + app.get('config').api.apiKey + '&useTestData=true';
+      var url = app.get('config').api.url + en + '?signature=' + signature + '&apiKey=' + app.get('config').api.apiKey;
       if (params) {
         url = url + '&' + params;
       }
       console.log(url);
       return url;
     }
-<<<<<<< b20fd12cdccc122a3485a9ea6fbb2cbb2b7acd97
-    return newstr.join(' ');
-  },
-
-  // URL Signing
-  sign: function(uri) {
-    const crypto = require('crypto-js');
-    var params = uri.split('?')[1];
-    uri = uri.split('?')[0];
-    var en = '/v2/' + uri.split('api/')[1];
-    var key = 'U1NCc2FXdGxJSFJ2SUVodlpHOXlMQ0JJYjJSdmNpd2dTRzlrYjNJc0lFaHZaRzl5Y3lCaGJtUWdTRzlrYjNKekxnPT0=';
-    var apiKey = 'test';
-    var baseUrl = 'http://cbrands-deloitte-dev.herokuapp.com';
-    var signature = crypto.enc.Base64.stringify(crypto.HmacSHA256(en + apiKey, key));
-    // var url = baseUrl + en + '?signature=' + signature + '&apiKey=' + apiKey + '&useTestData=true';
-    var url = baseUrl + en + '?signature=' + signature + '&apiKey=' + apiKey;
-    if (params) {
-      url = url + '&' + params;
-    }
-    console.log(url);
-    return url;
-  }
-
-=======
   };
->>>>>>> api configs across the board
 };

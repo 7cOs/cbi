@@ -29,10 +29,11 @@ module.exports = function(app) {
   }, function(req, profile, done) {
     req.session.assertion = req.body.SAMLResponse;
 
-    var signed = util.sign('/auth');
-    console.log('signed');
-    request.post(signed, {body: req.body.SAMLResponse}, function(err, httpResponse, body) {
+    var signed = util.sign('/api/auth');
+    console.log(req.body.SAMLResponse);
+    request.post(signed, {body: req.body.SAMLResponse, json: true}, function(err, httpResponse, body) {
       if (err) {
+        console.log(httpResponse);
         console.log(err);
         return done(err);
       } else {
