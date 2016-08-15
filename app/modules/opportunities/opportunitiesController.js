@@ -116,7 +116,7 @@ module.exports =
     function init() {
       // get saved filters -- this should be passed from user data when its ready
       userService.getOpportunityFilters(userService.model.currentUser.id).then(function(data) {
-        userService.model.opportunityFilters = data.dataContent;
+        userService.model.opportunityFilters = data;
       });
     }
 

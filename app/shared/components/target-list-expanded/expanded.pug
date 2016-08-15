@@ -4,7 +4,7 @@
   .target-action-buttons
     button(disabled="disabled" ng-if="expanded.buttonState === 'named'").btn-action Archive
     button(disabled="disabled" ng-if="expanded.buttonState !== 'shared'").btn-action Delete
-    button.btn-action Create a New List
+    button.btn-action(ng-click="expanded.createTargetList($event)") Create a New List
 div.expanded-target-lists
   md-tabs(md-dynamic-height='' md-border-bottom)
     md-tab(label='My Target Lists' md-on-select="expanded.selector('named')")
@@ -43,9 +43,11 @@ div.expanded-target-lists
             p Try Searching for <span>Opportunities</span> and add them to your list
           ul
             li(ng-repeat="list in expanded.userService.model.targetLists.owned | orderBy:expanded.sortProperty:expanded.reverse").clearfix
-              div.checkbox-wrapper.named-target-list(ng-click="list.toggle(opportunity, list.selected)")
-                md-checkbox(aria-label="Select Item" ng-checked="list.exists(opportunity, list.selected)")
-              div.checkbox-sibling(column="12")
+              // div.checkbox-wrapper.named-target-list(ng-click="expanded.toggle(opportunity, list.selected)")
+                md-checkbox(aria-label="Select Item" ng-checked="expanded.exists(opportunity, list.selected)")
+              div.checkbox-wrapper.named-target-list
+                md-checkbox(aria-label="Select Item")
+              div.checkbox-sibling(column="12" ng-click="expanded.openTLDetails()")
                 div(row)
                   h4(column="4").left {{list.name}}
                   div(column="2")

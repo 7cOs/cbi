@@ -1,6 +1,6 @@
 'use strict';
 
-function ExpandedTargetListController($state, $q, userService, targetListService) {
+function ExpandedTargetListController($state, $scope, $mdDialog, $q, userService, targetListService) {
 
   // ****************
   // CONTROLLER SETUP
@@ -20,12 +20,21 @@ function ExpandedTargetListController($state, $q, userService, targetListService
   vm.pageName = $state.current.name;
   vm.lastUpdatedChevron = false;
   vm.listChevron = true;
+  vm.newList = {};
   vm.totalOpportunitesChevron = true;
 
   // Expose public methods
+  vm.createNewList = createNewList;
+  vm.createTargetList = createTargetList;
+  vm.closeModal = closeModal;
+  vm.exists = exists;
+  vm.openTLDetails = openTLDetails;
   vm.ratio = ratio;
+  vm.saveNewList = saveNewList;
+  vm.searchOpportunities = searchOpportunities;
   vm.selector = selector;
   vm.sortBy = sortBy;
+  vm.toggle = toggle;
 
   init();
 
@@ -33,14 +42,60 @@ function ExpandedTargetListController($state, $q, userService, targetListService
   // PUBLIC METHODS
   // **************
 
+  function createNewList(e) {
+    var parentEl = angular.element(document.body);
+    $mdDialog.show({
+      clickOutsideToClose: true,
+      parent: parentEl,
+      scope: $scope.$new(),
+      targetEvent: e,
+      templateUrl: './app/shared/components/target-list-expanded/create-target-list-modal.html'
+    });
+  }
+
+  function createTargetList(e) {
+    var parentEl = angular.element(document.body);
+    $mdDialog.show({
+      clickOutsideToClose: true,
+      parent: parentEl,
+      scope: $scope.$new(),
+      targetEvent: e,
+      templateUrl: './app/shared/components/target-list-expanded/target-list-switch-modal.html'
+    });
+  }
+
+  function closeModal() {
+    $mdDialog.hide();
+  }
+
+  function exists(item, list) {
+    console.log(item, list);
+    return list.indexOf(item) > -1;
+  }
+
+  function openTLDetails() {
+    $state.go('target-list-detail');
+  }
+
   function ratio(closed, total) {
     var result = closed / total * 100;
     return result;
-  };
+  }
+
+  function saveNewList(e) {
+    userService.addTargetList(vm.newList).then(function(response) {
+      console.log('happy happy');
+    });
+  }
+
+  function searchOpportunities(e) {
+    closeModal();
+    $state.go('opportunities');
+  }
 
   function selector(tab) {
     vm.buttonState = tab;
-  };
+  }
 
   function sortBy(property) {
     vm.reverse = (vm.sortProperty === property) ? !vm.reverse : false;
@@ -52,7 +107,16 @@ function ExpandedTargetListController($state, $q, userService, targetListService
     vm.closedOpportunitiesChevron = (property === 'closedOpportunities') ? !vm.closedOpportunitiesChevron : vm.closedOpportunitiesChevron;
     vm.totalOpportunitesChevron = (property === 'Opportunites') ? !vm.totalOpportunitesChevron : vm.totalOpportunitesChevron;
     vm.depletionsChevron = (property === 'depletions') ? !vm.depletionsChevron : vm.depletionsChevron;
-  };
+  }
+
+  function toggle(item, list) {
+    var idx = list.indexOf(item);
+    if (idx > -1) {
+      list.splice(idx, 1);
+    } else {
+      list.push(item);
+    }
+  }
 
   // ***************
   // PRIVATE METHODS
@@ -70,7 +134,6 @@ function ExpandedTargetListController($state, $q, userService, targetListService
       });
 
       $q.all(ownedPromises).then(function(response) {
-        console.log(response);
         angular.forEach(userService.model.targetLists.owned, function(targetList, key) {
           targetList.collaborators = response[key].data;
         });
