@@ -104,6 +104,12 @@
   }
 }
 
+.link {
+  &:hover {
+    cursor: pointer;
+  }
+}
+
 ul {
   -webkit-padding-start: 0;
 }

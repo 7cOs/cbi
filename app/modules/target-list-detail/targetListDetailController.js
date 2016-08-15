@@ -17,6 +17,7 @@ module.exports =
     vm.modalManageTargetList = modalManageTargetList;
     vm.modalManageCollaborators = modalManageCollaborators;
     vm.modalSendOpportunity = modalSendOpportunity;
+    vm.navigateToTL = navigateToTL;
 
     // **************
     // PUBLIC METHODS
@@ -50,5 +51,9 @@ module.exports =
         targetEvent: ev,
         templateUrl: './app/modules/target-list-detail/modal-send-opportunity.html'
       });
+    }
+
+    function navigateToTL() {
+      $state.go('target-lists');
     }
   };

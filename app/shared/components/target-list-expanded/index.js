@@ -27,11 +27,14 @@ function ExpandedTargetListController($state, $scope, $mdDialog, $q, userService
   vm.createNewList = createNewList;
   vm.createTargetList = createTargetList;
   vm.closeModal = closeModal;
+  vm.exists = exists;
+  vm.openTLDetails = openTLDetails;
   vm.ratio = ratio;
   vm.saveNewList = saveNewList;
   vm.searchOpportunities = searchOpportunities;
   vm.selector = selector;
   vm.sortBy = sortBy;
+  vm.toggle = toggle;
 
   init();
 
@@ -65,6 +68,15 @@ function ExpandedTargetListController($state, $scope, $mdDialog, $q, userService
     $mdDialog.hide();
   }
 
+  function exists(item, list) {
+    console.log(item, list);
+    return list.indexOf(item) > -1;
+  }
+
+  function openTLDetails() {
+    $state.go('target-list-detail');
+  }
+
   function ratio(closed, total) {
     var result = closed / total * 100;
     return result;
@@ -95,6 +107,15 @@ function ExpandedTargetListController($state, $scope, $mdDialog, $q, userService
     vm.closedOpportunitiesChevron = (property === 'closedOpportunities') ? !vm.closedOpportunitiesChevron : vm.closedOpportunitiesChevron;
     vm.totalOpportunitesChevron = (property === 'Opportunites') ? !vm.totalOpportunitesChevron : vm.totalOpportunitesChevron;
     vm.depletionsChevron = (property === 'depletions') ? !vm.depletionsChevron : vm.depletionsChevron;
+  }
+
+  function toggle(item, list) {
+    var idx = list.indexOf(item);
+    if (idx > -1) {
+      list.splice(idx, 1);
+    } else {
+      list.push(item);
+    }
   }
 
   // ***************
