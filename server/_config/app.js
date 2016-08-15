@@ -105,7 +105,7 @@ config.gulp = {
       img: ['./app/assets/img/**/*.jpg', './app/assets/img/**/*.jpg', './app/assets/img/**/*.png', './app/assets/img/**/*.svg'],
       js: ['./app/**/*.js'],
       jsMain: './app/main.js',
-      sass: ['./app/**/*.scss', '!./app/common/**/*.scss', '!./app/main.scss'],
+      sass: ['./app/**/*.scss', '!./app/common/**/*.scss', './app/main.scss'],
       sassMain: './app/main.scss',
       ts: ['./app/**/*.ts']
     },
