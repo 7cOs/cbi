@@ -13,7 +13,7 @@ module.exports =
     // Set page title for head and nav
     $rootScope.pageTitle = $state.current.title;
 
-    // Map public methods to scope
+    // Expose public methods
     vm.isPositive = isPositive;
     vm.filter = filtersService.model;
     vm.chipsService = chipsService;

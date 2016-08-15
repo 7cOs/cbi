@@ -1,16 +1,18 @@
 'use strict';
 
 function TargetListController($scope, $state) {
+
+  // ****************
+  // CONTROLLER SETUP
+  // ****************
+
+  // Initial variables
   var vm = this;
 
+  // Defaults
   vm.pageName = $state.current.name;
-  vm.ratio = ratio;
 
-  function ratio(closed, total) {
-    var result = closed / total * 100;
-    return result;
-  };
-
+  // Temp data
   vm.namedFilters = [{
     'name': 'California - Whiskey Bars',
     'creator': 'Will Jay',
@@ -71,6 +73,17 @@ function TargetListController($scope, $state) {
     'opportunities': 521
   }];
 
+  // Expose public methods
+  vm.ratio = ratio;
+
+  // **************
+  // PUBLIC METHODS
+  // **************
+
+  function ratio(closed, total) {
+    var result = closed / total * 100;
+    return result;
+  };
 }
 
 module.exports =

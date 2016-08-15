@@ -1,20 +1,20 @@
 'use strict';
 
 function ListController($scope, $state, opportunitiesService, storesService, $mdDialog) {
+
+  // ****************
+  // CONTROLLER SETUP
+  // ****************
+
+  // Initial variables
   var vm = this;
 
+  // Services
+  vm.opportunitiesService = opportunitiesService;
+  // vm.storesService = storesService;
+
+  // Defaults
   vm.pageName = $state.current.name;
-
-  // Map public methods to scope
-  vm.actionOverlay = actionOverlay;
-  vm.displayBrandIcon = displayBrandIcon;
-  vm.exists = exists;
-  vm.isChecked = isChecked;
-  vm.sortBy = sortBy;
-  vm.toggle = toggle;
-  vm.toggleAll = toggleAll;
-
-  // Controller Variables for Sorting
   vm.depletionsChevron = false;
   vm.expandedOpportunities = [];
   vm.opportunitiesChevron = false;
@@ -26,13 +26,20 @@ function ListController($scope, $state, opportunitiesService, storesService, $md
   vm.sortProperty = 'store.name';
   vm.storeChevron = true;
 
-  // Services
-  vm.opportunitiesService = opportunitiesService;
-  // vm.storesService = storesService;
+  // Expose public methods
+  vm.actionOverlay = actionOverlay;
+  vm.displayBrandIcon = displayBrandIcon;
+  vm.exists = exists;
+  vm.isChecked = isChecked;
+  vm.sortBy = sortBy;
+  vm.toggle = toggle;
+  vm.toggleAll = toggleAll;
 
   init();
 
-  // ///////////////////////////////////////////////////////// Public Methods
+  // **************
+  // PUBLIC METHODS
+  // **************
 
   // Overlay Controls
   function actionOverlay(opportunity, state) {

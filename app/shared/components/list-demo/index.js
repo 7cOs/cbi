@@ -1,26 +1,19 @@
 'use strict';
 
 function ListDemoController($rootScope, $scope, $mdToast) {
-  var vm = this;
 
-  // Used for $mdToast close
-  var isDlgOpen;
+  // ****************
+  // CONTROLLER SETUP
+  // ****************
 
-  // Map public methods to scope
-  vm.actionOverlay = actionOverlay;
-  vm.displayBrandIcon = displayBrandIcon;
-  vm.exists = exists;
-  vm.isChecked = isChecked;
-  vm.toggle = toggle;
-  vm.selected = [];
-  vm.topLevelToast = topLevelToast;
-  vm.undoAction = undoAction;
-  vm.closeToast = closeToast;
-  vm.multiFailState = true;
+  // Initial variables
+  var vm = this,
+      isDlgOpen;
 
-  // Set defaults
+  // Defaults
   vm.actionUndone = false;
 
+  // Temp data
   vm.demoOpps = [{
     'id': '123',
     'store': {
@@ -47,7 +40,21 @@ function ListDemoController($rootScope, $scope, $mdToast) {
     'depletionTrendVsYA': -5
   }];
 
-  // ///////////////////////////////////////////////////////// Public Methods
+  // Expose public methods
+  vm.actionOverlay = actionOverlay;
+  vm.displayBrandIcon = displayBrandIcon;
+  vm.exists = exists;
+  vm.isChecked = isChecked;
+  vm.toggle = toggle;
+  vm.selected = [];
+  vm.topLevelToast = topLevelToast;
+  vm.undoAction = undoAction;
+  vm.closeToast = closeToast;
+  vm.multiFailState = true;
+
+  // **************
+  // PUBLIC METHODS
+  // **************
 
   // Trigger top-level toast notification
   function topLevelToast(state) {

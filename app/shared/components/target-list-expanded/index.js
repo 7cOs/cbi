@@ -1,9 +1,18 @@
 'use strict';
 
 function ExpandedTargetListController($state, userService, targetListService) {
+
+  // ****************
+  // CONTROLLER SETUP
+  // ****************
+
+  // Initial variables
   var vm = this;
 
-  // Variables
+  // Services
+  vm.userService = userService;
+
+  // Defaults
   vm.buttonState = 'named';
   vm.closedOpportunitiesChevron = false;
   vm.collaboratorsChevron = false;
@@ -13,18 +22,16 @@ function ExpandedTargetListController($state, userService, targetListService) {
   vm.listChevron = true;
   vm.totalOpportunitesChevron = true;
 
-  // Scope Methods
+  // Expose public methods
   vm.ratio = ratio;
   vm.selector = selector;
   vm.sortBy = sortBy;
 
-  // Services
-  vm.userService = userService;
-
-  // Init
   init();
 
-  // Public Methods
+  // **************
+  // PUBLIC METHODS
+  // **************
 
   function ratio(closed, total) {
     var result = closed / total * 100;
@@ -47,57 +54,10 @@ function ExpandedTargetListController($state, userService, targetListService) {
     vm.depletionsChevron = (property === 'depletions') ? !vm.depletionsChevron : vm.depletionsChevron;
   };
 
-  /* vm.namedFilters = [{
-    'name': 'California - Wine Shops',
-    'creator': 'Will Jay',
-    'members': ['James Norton', 'Rebecca Norton', 'Eric Schiller'],
-    'created': 'One Minute Ago',
-    'closedOpportunities': 520,
-    'opportunities': 2251,
-    'depletions': 1222
-  }, {
-    'name': 'Alabama - Beer Shops',
-    'creator': 'RJ LaCount',
-    'members': ['Scott Moffat', 'John Rozsnyai'],
-    'created': 'One Minute Ago',
-    'closedOpportunities': 320,
-    'opportunities': 451,
-    'depletions': 2256
-  }, {
-    'name': 'Florida - Negroni Bars',
-    'creator': 'Nick Bradsaw',
-    'members': ['Elizabeth Stephenson', 'Karen Wittekind', 'Michael Phelps'],
-    'created': 'One Year Ago',
-    'closedOpportunities': 1989,
-    'opportunities': 2251,
-    'depletions': 22879
-  }, {
-    'name': 'Oregon - Pinball Bars',
-    'creator': 'RJ LaCount',
-    'members': ['Jimmy Fallon', 'Seth Rogan', 'Papa Murphey', 'Neil Armstrong'],
-    'created': 'One Minute Ago',
-    'closedOpportunities': 587,
-    'opportunities': 3251,
-    'depletions': 22348
-  }];
-  vm.sharedFilters = [];
-  vm.archivedFilters = [{
-    'name': 'Umi Sake House',
-    'creator': 'Ali Harkless',
-    'members': ['David Ostler', 'Todd Alkema', 'Patti Horigan'],
-    'created': 'One Day Ago',
-    'closedOpportunities': 1984,
-    'opportunities': 2251
-  }, {
-    'name': 'Tacoma Grocery',
-    'creator': 'Lilli Marlene',
-    'members': ['James Conrick', 'Tom Andersen', 'Paul Wagner', 'Trish LaPaglia'],
-    'created': 'One Year Ago',
-    'closedOpportunities': 490,
-    'opportunities': 521
-  }];*/
+  // ***************
+  // PRIVATE METHODS
+  // ***************
 
-  // Private Methods
   function init() {
     userService.getTargetLists('1').then(function(data) {
       var i = 0;
