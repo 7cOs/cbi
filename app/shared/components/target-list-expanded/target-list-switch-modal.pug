@@ -1,0 +1,9 @@
+div.modal.target-list-switch-modal
+  h4 Create Target List
+  div.modal-form
+    div.text-center Creating target lists can help you organize and keep track of the opportunities you want to foxus on. To get started, you can either...
+
+    .row
+      button.btn-action.col-6(ng-click="expanded.createNewList($event)") Create New List
+      button(class="btn-action col-6" ng-click="expanded.searchOpportunities($event)") Search Opportunities
+    p.cancel.accent(ng-click="expanded.closeModal()") X Cancel

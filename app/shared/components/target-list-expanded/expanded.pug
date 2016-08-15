@@ -4,7 +4,7 @@
   .target-action-buttons
     button(disabled="disabled" ng-if="expanded.buttonState === 'named'").btn-action Archive
     button(disabled="disabled" ng-if="expanded.buttonState !== 'shared'").btn-action Delete
-    button.btn-action Create a New List
+    button.btn-action(ng-click="expanded.createTargetList($event)") Create a New List
 div.expanded-target-lists
   md-tabs(md-dynamic-height='' md-border-bottom)
     md-tab(label='My Target Lists' md-on-select="expanded.selector('named')")

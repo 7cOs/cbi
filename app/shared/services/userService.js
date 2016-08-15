@@ -490,31 +490,16 @@ module.exports =
     /**
      * @name addTargetList
      * @desc add target list for a user
-     * @params {String} id - id of a user
+     * @params {Object} p - target list information payload
      * @returns {Object} - newly added target list
      * @memberOf orion.common.services
      */
-    function addTargetList(id) {
+    function addTargetList(p) {
       var targetListPromise = $q.defer(),
-          url = apiHelperService.request('/api/users/' + id + '/targetLists/'),
+          url = apiHelperService.request('/api/users/' + model.currentUser.id + '/targetLists/'),
           payload = {
-            name: 'fancy cat',
-            opportunities: []
-          /* payload = {
-            'type': 'object',
-            '$schema': 'http://json-schema.org/draft-03/schema',
-            'id': 'targetListCreateSchema',
-            'required': true,
-            'properties': {
-              'name': {
-                'type': 'string',
-                'required': 'true',
-                'description': 'Name of the Target List.'
-              },
-              'opportunities': {
-                '$ref': 'opportunityIDListSchema'
-              }
-            }*/
+            name: p.name,
+            opportunities: [] // opportunity id's to be included
           };
 
       $http.post(url, payload)
