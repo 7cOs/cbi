@@ -16,6 +16,13 @@ module.exports = function (config) {
     js: config.address + 'js/'
   };
 
+  config.api = {
+    url: 'http://cbi-api-test.herokuapp.com',
+    key: 'U1NCc2FXdGxJSFJ2SUVodlpHOXlMQ0JJYjJSdmNpd2dTRzlrYjNJc0lFaHZaRzl5Y3lCaGJtUWdTRzlrYjNKekxnPT0=',
+    apiKey: 'test',
+    version: 'v2'
+  };
+
   config.saml = {
     entryPoint: 'https://ssodev.cbrands.com/oamfed/idp/samlv20',
     issuer: 'https://orion-qa.cbrands.com',

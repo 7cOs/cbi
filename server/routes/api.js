@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports = function(app) {
-  const util = require('../_lib/util');
+  const util = require('../_lib/util')(app);
   const request = require('request');
 
   app.route('/api/*')

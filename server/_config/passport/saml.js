@@ -5,7 +5,7 @@ module.exports = function(app) {
   const passport      = require('passport'),
         SamlStrategy = require('passport-saml').Strategy,
         fs = require('fs'),
-        util = require('../../_lib/util'),
+        util = require('../../_lib/util')(app),
         request = require('request');
 
   passport.serializeUser(function(user, done) {
