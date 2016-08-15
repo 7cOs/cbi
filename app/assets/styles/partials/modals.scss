@@ -101,6 +101,15 @@ md-dialog {
     button {
       width: 100%;
       margin-bottom: 0;
+
+      &.col-6 {
+        margin: 10px 2% 10px 0;
+        width: 46%;
+
+        &:last-child {
+          margin-right: 0;
+        }
+      }
     }
 
     .horizontal-layout {

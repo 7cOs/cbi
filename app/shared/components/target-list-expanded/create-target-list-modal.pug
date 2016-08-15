@@ -1,0 +1,17 @@
+div.modal
+  h4 Create Target List
+  div.modal-form
+    div.modal-input
+      label Name
+      input(ng-model="expanded.newList.name" placeholder="Enter List Name")
+    div.modal-input
+      label Description (Optional)
+      input(ng-model="expanded.newList.description" placeholder="Enter Description")
+    div.modal-input
+      label Add Collaborators (Optional)
+      input(ng-model="expanded.newList.collaborators" placeholder="Add Collaborators")
+    div.modal-input
+      md-checkbox(ng-model="expanded.newList.allowInvites" aria-label="Allow Collaborators to Invite Others") Allow Collaborators to Invite Others
+
+    button.btn-action(ng-click="expanded.saveNewList($event)" ng-disabled="!expanded.newList.name") Save
+    p.cancel.accent(ng-click="expanded.closeModal()") X Cancel
