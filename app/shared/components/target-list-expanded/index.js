@@ -86,8 +86,6 @@ function ExpandedTargetListController($state, $q, userService, targetListService
           targetList.collaborators = response[key].data;
         });
       });
-
-      console.log(userService.model.targetLists);
     });
   }
 
