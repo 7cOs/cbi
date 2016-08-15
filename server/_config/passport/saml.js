@@ -30,19 +30,21 @@ module.exports = function(app) {
     req.session.assertion = req.body.SAMLResponse;
 
     var signed = util.sign('/auth');
+    console.log('signed');
     request.post(signed, {body: req.body, json: true}, function(err, httpResponse, body) {
       if (err) {
         console.log(err);
+        return done(err);
       } else {
         console.log(body);
         req.session.authKey = body;
+        return done(null, body);
       }
     });
 
     /* app.set('config').saml.assertion = req.body.SAMLResponse;
     console.log(app.get('config').saml.assertion);
     */
-    return done(null, profile);
   });
 
 };
