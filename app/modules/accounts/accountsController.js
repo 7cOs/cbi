@@ -96,6 +96,7 @@ module.exports =
     vm.setMarketTab = setMarketTab;
     vm.selectItem = selectItem;
     vm.prevTab = prevTab;
+    vm.openNotes = openNotes;
 
     // **************
     // PUBLIC METHODS
@@ -153,6 +154,11 @@ module.exports =
       }
       return false;
     };
+
+    // Make notes available to the page
+    function openNotes(val) {
+      $rootScope.$broadcast('notes:opened', val);
+    }
 
     // ***************
     // PRIVATE METHODS

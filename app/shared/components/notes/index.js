@@ -16,6 +16,8 @@ function NotesController($scope, $state, $mdDialog, notesService) {
   vm.creatingNote = false;
   vm.deleteConfirmation = false;
   vm.inputToggle = false;
+  vm.notesOpen = false;
+  vm.notesClose = notesClose;
 
   // Temp data
   vm.noteTopics = [
@@ -111,6 +113,10 @@ function NotesController($scope, $state, $mdDialog, notesService) {
   // PUBLIC METHODS
   // **************
 
+  function notesClose() {
+    $scope.notesOpen = false;
+  }
+
   function showInput() {
     vm.inputToggle = !vm.inputToggle;
   }
@@ -193,6 +199,10 @@ function NotesController($scope, $state, $mdDialog, notesService) {
       vm.loading = false;
     });
   }
+
+  $scope.$on('notes:opened', function(event, data) {
+    $scope.notesOpen = data;
+  });
 }
 
 module.exports =

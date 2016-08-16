@@ -23,6 +23,7 @@ module.exports =
     vm.closeModal = closeModal;
     vm.openNotes = openNotes;
     vm.noteOpenState = false;
+    vm.openNotes = openNotes;
 
     // **************
     // PUBLIC METHODS
@@ -39,11 +40,12 @@ module.exports =
       });
     };
 
-    function openNotes() {
-      vm.noteOpenState = !vm.noteOpenState;
-    }
-
     function closeModal() {
       $mdDialog.hide();
+    }
+
+    // Make notes available to the page
+    function openNotes(val) {
+      $rootScope.$broadcast('notes:opened', val);
     }
   };
