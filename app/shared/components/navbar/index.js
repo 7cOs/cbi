@@ -22,6 +22,19 @@ function NavbarController($rootScope, $scope, $mdPanel, $mdDialog, notifications
   vm.unreadNotifications = getUnreadCount();
   vm.noNotifications = 'No unread notifications.';
 
+  // Mock data
+  vm.someFutureSelections = [
+    {
+      'name': 'Distributor'
+    },
+    {
+      'name': 'Chain'
+    },
+    {
+      'name': 'Store'
+    }
+  ];
+
   // Expose public methods
   vm.markRead = markRead;
   vm.modalAddOpportunityForm = modalAddOpportunityForm;
