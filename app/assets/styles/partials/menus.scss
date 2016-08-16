@@ -18,3 +18,8 @@ md-menu-item {
     }
   }
 }
+
+// Active md-selects should be on top of everything
+._md-active {
+  z-index: 999;
+}
