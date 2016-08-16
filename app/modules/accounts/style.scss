@@ -129,6 +129,11 @@
 
     &.narrow {
       width: 150px;
+
+      @media (max-width: $bp-large) {
+        width: 135px;
+        font-size: 0.9em;
+      }
     }
 
     md-select {
@@ -162,7 +167,7 @@
     color: $gray-3;
 
     &.market {
-      padding: 0.4em 0 0.1em 2em;
+      padding: 0.4em 0 0 2em;
     }
 
     span {
@@ -179,6 +184,7 @@
 
       ._md-select-icon:after {
         background-size: 14px;
+        padding-top: 0.2em;
       }
     }
   }
