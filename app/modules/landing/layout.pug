@@ -4,7 +4,7 @@ section.landing-page
     div(row)
       section.my-performance(column="7")
         section.greeting
-          h1 {{l.greeting}}, Chad
+          h1 {{l.greeting}}, Chad!
         h2 My Performance
         .depletions(column="4")
           h3 Depletions FYTD
@@ -52,12 +52,12 @@ section.landing-page
                 h3 {{l.performanceData.performance[2].measures[2].value | number}}
               td
                 h3.bold <span ng-if="l.isPositive(l.performanceData.performance[2].measures[2].percentChange)">+</span>{{l.performanceData.performance[2].measures[2].percentChange}}<span>%</span>
-        p.accent.action-item #[a(href="#" ui-sref="scorecards") View Details &#9654;]
+        p.accent.action-item #[a(href="#" ui-sref="scorecards") Show Details &#9654;]
       section(column="4 +1")
         .announcement-widget
           img(src="../assets/img/icons/announcement-help.svg" width="80" height="80")
           h2 Welcome to Orion! Need Help?
-          p Learn about what makes Orion so great and how to get started with our tutorial videos &amp; FAQ.
+          p Check out our tutorial videos! These will tell you more about Orion and how to get started!
           p.accent.action-item #[a(href="#" ui-sref="help") View all videos &amp; tutorials &#9654;]
     div(row)
       section.my-performance(column="7")
@@ -68,7 +68,7 @@ section.landing-page
         .filter-container.first
           .dropdown-filter
             .dropdown
-              md-select(ng-model="l.filter.selected.savedFilters" aria-label="Saved Filter"  placeholder="Select Saved Filterset")
+              md-select(ng-model="l.filter.selected.savedFilters" aria-label="Saved Filter"  placeholder="Select Saved Report")
                 md-option(ng-repeat="type in l.filter.savedFilters" aria-label="type.name" value="{{type.name}}") {{type.name}}
         h3 New Search
         .filter-container
@@ -79,7 +79,7 @@ section.landing-page
             .dropdown-filter
               .dropdown
                 label opportunity typeof
-                md-select(ng-model="l.filter.selected.opportunitiesTypes" aria-label="Opportunity Type" placeholder="Show All Types")
+                md-select(ng-model="l.filter.selected.opportunitiesTypes" aria-label="Opportunity Type" placeholder="All Types")
                   md-option(ng-repeat="type in l.filter.opportunitiesTypes" aria-label="type.name" value="{{type.name}}") {{type.name}}
           .filter-item
             label Brand / Master SKU
@@ -88,7 +88,7 @@ section.landing-page
                 div(md-highlight-text="l.filtersService.model.brandSearchText" md-highlight-flags="^i") {{::brand.name}} - {{::brand.brand}}
           .filter-item
             label Account / Store
-            md-autocomplete(md-search-text="l.filter.accountSearchText" md-items="account in l.filter.accounts | filter:l.filter.accountSearchText" md-item-text="account.name" placeholder="by Store or Sub Account" md-selected-item-change="chip.methods.addAutocompleteChip(account.name, 'accountSearchText')")
+            md-autocomplete(md-search-text="l.filter.accountSearchText" md-items="account in l.filter.accounts | filter:l.filter.accountSearchText" md-item-text="account.name" placeholder="Store, account, or subaccount namey" md-selected-item-change="chip.methods.addAutocompleteChip(account.name, 'accountSearchText')")
               md-item-template
               div(md-highlight-text="l.filter.accountSearchText" md-highlight-flags="^i") {{account.name}} - {{account.subAccount}}
           .filter-item

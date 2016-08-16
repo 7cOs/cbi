@@ -1,10 +1,10 @@
 div.modal.notes
   div.title
     a.hide-row(ng-click="sg.closeNotes()")
-    h4 Walmed & Feller Notes
+    h4 Notes For Walmed & Feller
   div.no-notes(ng-if="n.notes.length <= 0")
     h5 There are no notes for this <br />account yet.
-    button.btn-action + New note
+    button.btn-action + Add A New Note
     br
     img(src="../assets/img/icons/no-notes.svg").no-notes-image
   md-progress-circular(ng-if="n.loading" md-mode="indeterminate" md-diameter="100").md-accent
