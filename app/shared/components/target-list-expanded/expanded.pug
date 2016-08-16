@@ -47,7 +47,7 @@ div.expanded-target-lists
                 md-checkbox(aria-label="Select Item" ng-checked="expanded.exists(opportunity, list.selected)")
               div.checkbox-wrapper.named-target-list
                 md-checkbox(aria-label="Select Item")
-              div.checkbox-sibling(column="12" ng-click="expanded.openTLDetails()")
+              div.checkbox-sibling(column="12" ng-click="expanded.openTLDetails(list.id)")
                 div(row)
                   h4(column="4").left {{list.name}}
                   div(column="2")

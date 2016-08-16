@@ -69,11 +69,11 @@ function ExpandedTargetListController($state, $scope, $mdDialog, $q, userService
   }
 
   function exists(item, list) {
-    console.log(item, list);
     return list.indexOf(item) > -1;
   }
 
-  function openTLDetails() {
+  function openTLDetails(listId) {
+    targetListService.model.currentList = listId;
     $state.go('target-list-detail');
   }
 
@@ -84,7 +84,8 @@ function ExpandedTargetListController($state, $scope, $mdDialog, $q, userService
 
   function saveNewList(e) {
     userService.addTargetList(vm.newList).then(function(response) {
-      console.log('happy happy');
+      closeModal();
+      userService.model.targetLists.owned.push(response);
     });
   }
 
