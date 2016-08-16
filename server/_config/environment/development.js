@@ -17,7 +17,7 @@ module.exports = function (config) {
   };
 
   config.saml = {
-    entryPoint: 'https://ssodev.cbrands.com/oamfed/idp/initiatesso?providerid=SP-Orion',
+    entryPoint: 'https://ssodev.cbrands.com/oamfed/idp/samlv20?providerid=SP-Orion',
     issuer: 'https://orion-dev.cbrands.com',
     cert: '',
     privateCert: '',
