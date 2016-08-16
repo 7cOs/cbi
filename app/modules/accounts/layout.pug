@@ -1,3 +1,4 @@
+notes(ng-if="a.showNotes")
 .account-header
   div(row)
     div(column='6')
@@ -18,7 +19,7 @@
           p {{a.brandWidgetTitle}}<span ng-if="a.brandIdSelected"> - {{a.brandIdSelected}}</span>
         .market
           p {{a.selectedStore || a.filtersService.model.selected.accountTypes || a.accountTypesDefault}}
-        .notes
+        .notes(ng-click="a.toggleNotesVisible()")
           p <a href="#">Notes</a>
 
 .chips(ng-if="a.chipsService.model.length")

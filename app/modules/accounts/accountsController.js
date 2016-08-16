@@ -96,6 +96,7 @@ module.exports =
     vm.setMarketTab = setMarketTab;
     vm.selectItem = selectItem;
     vm.prevTab = prevTab;
+    vm.toggleNotesVisible = toggleNotesVisible;
 
     // **************
     // PUBLIC METHODS
@@ -153,6 +154,11 @@ module.exports =
       }
       return false;
     };
+
+    // Show notes
+    function toggleNotesVisible() {
+      vm.showNotes = !vm.showNotes;
+    }
 
     // ***************
     // PRIVATE METHODS
