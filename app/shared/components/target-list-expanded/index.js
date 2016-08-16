@@ -69,7 +69,6 @@ function ExpandedTargetListController($state, $scope, $mdDialog, $q, userService
   }
 
   function exists(item, list) {
-    console.log(item, list);
     return list.indexOf(item) > -1;
   }
 

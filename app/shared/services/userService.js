@@ -461,9 +461,13 @@ module.exports =
       var targetListPromise = $q.defer(),
           url = apiHelperService.request('/api/users/' + id + '/targetLists/');
 
-      $http.get(url)
-        .then(getTargetListsSuccess)
-        .catch(getTargetListsFail);
+      if (!service.model.targetLists) {
+        $http.get(url)
+          .then(getTargetListsSuccess)
+          .catch(getTargetListsFail);
+      } else {
+        targetListPromise.resolve(service.model.targetLists);
+      }
 
       function getTargetListsSuccess(response) {
         var sharedArchivedCount = 0,
