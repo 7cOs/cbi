@@ -386,20 +386,16 @@ module.exports =
      */
     function deleteTargetList(targetListId) {
       var targetListPromise = $q.defer(),
-          url = apiHelperService.formatQueryString({'foo': 'bar'}),
+          url = apiHelperService.request('/api/targetLists/' + targetListId),
           payload = {targetListID: targetListId};
 
-      $http.delete(url, payload, {
-        headers: {}
-      })
-      .then(deleteTargetListSuccess)
-      .catch(deleteTargetListFail);
+      $http.delete(url, payload)
+        .then(deleteTargetListSuccess)
+        .catch(deleteTargetListFail);
 
       function deleteTargetListSuccess(response) {
         console.log('[targetListService.deleteTargetList] response: ', response);
-        // targetListPromise.resolve(response.data);
-        // uncomment above and remove below when services are ready
-        targetListPromise.resolve(tempData.deleteTargetListResponse);
+        targetListPromise.resolve(response.data);
       }
 
       function deleteTargetListFail(error) {

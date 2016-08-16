@@ -10,6 +10,10 @@ module.exports = function(app) {
       var signed = util.sign(req.url);
       req.pipe(request(signed)).pipe(res);
     })
+    .delete(function(req, res) {
+      var signed = util.sign(req.url);
+      request.del(signed, {body: req.body, json: true}).pipe(res);
+    })
     .post(function(req, res) {
       var signed = util.sign(req.url);
       request.post(signed, {body: req.body, json: true}).pipe(res);

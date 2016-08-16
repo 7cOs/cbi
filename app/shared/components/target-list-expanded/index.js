@@ -1,6 +1,6 @@
 'use strict';
 
-function ExpandedTargetListController($state, $scope, $mdDialog, $q, userService, targetListService) {
+function ExpandedTargetListController($state, $scope, $filter, $mdDialog, $q, userService, targetListService) {
 
   // ****************
   // CONTROLLER SETUP
@@ -27,6 +27,7 @@ function ExpandedTargetListController($state, $scope, $mdDialog, $q, userService
   vm.createNewList = createNewList;
   vm.createTargetList = createTargetList;
   vm.closeModal = closeModal;
+  vm.deleteTargetList = deleteTargetList;
   vm.exists = exists;
   vm.openTLDetails = openTLDetails;
   vm.ratio = ratio;
@@ -66,6 +67,24 @@ function ExpandedTargetListController($state, $scope, $mdDialog, $q, userService
 
   function closeModal() {
     $mdDialog.hide();
+  }
+
+  function deleteTargetList() {
+    var selectedItems = $filter('filter')(userService.model.targetLists.owned, {selected: true}),
+        deleteTargetListPromises = [];
+
+    // get selected target list ids and their promises
+    deleteTargetListPromises = selectedItems.map(function(targetList) {
+      return targetListService.deleteTargetList(targetList.id);
+    });
+
+    // run all delete requests at the same time
+    $q.all(deleteTargetListPromises).then(function(response) {
+      // splice from list arr
+      angular.forEach(selectedItems, function(item, key) {
+        userService.model.targetLists.owned.splice(userService.model.targetLists.owned.indexOf(item), 1);
+      });
+    });
   }
 
   function exists(item, list) {
