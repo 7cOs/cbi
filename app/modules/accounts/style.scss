@@ -103,6 +103,7 @@
   display: block;
   padding: 0.25em 0.25em 0.25em 0;
   background: $gray-4;
+  height: 3em;
 
   .brands,
   .market,
@@ -166,9 +167,19 @@
 
     span {
       color: $gray-3;
-      font-size: 1em;
+      font-size: 0.9em;
       font-style: normal;
       padding: 0 0 3px;
+    }
+
+    @media (max-width: $bp-large) {
+      span {
+        font-size: 0.7em;
+      }
+
+      ._md-select-icon:after {
+        background-size: 14px;
+      }
     }
   }
 }
