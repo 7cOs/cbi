@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports =
-  function targetListDetailController($rootScope, $state, $mdDialog, chipsService, filtersService) {
+  function targetListDetailController($rootScope, $scope, $state, $mdDialog, chipsService, filtersService) {
 
     // ****************
     // CONTROLLER SETUP
@@ -14,6 +14,7 @@ module.exports =
     $rootScope.pageTitle = $state.current.title;
 
     // Expose public methods
+    vm.closeModal = closeModal;
     vm.modalManageTargetList = modalManageTargetList;
     vm.modalManageCollaborators = modalManageCollaborators;
     vm.modalSendOpportunity = modalSendOpportunity;
@@ -22,6 +23,10 @@ module.exports =
     // **************
     // PUBLIC METHODS
     // **************
+
+    function closeModal() {
+      $mdDialog.hide();
+    }
 
     function modalManageTargetList(ev) {
       var parentEl = angular.element(document.body);
@@ -38,6 +43,7 @@ module.exports =
       $mdDialog.show({
         clickOutsideToClose: true,
         parent: parentEl,
+        scope: $scope.$new(),
         targetEvent: ev,
         templateUrl: './app/modules/target-list-detail/modal-manage-collaborators.html'
       });

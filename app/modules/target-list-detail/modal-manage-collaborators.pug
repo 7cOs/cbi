@@ -12,7 +12,7 @@ div.modal
       label Add Recipient
       input(ng-model="tempPlaceholder" placeholder="Enter names or CBI Email addresses")
     button(disabled).btn-action Save
-    p.cancel.accent X Cancel
+    p.cancel.accent(ng-click="tld.closeModal()") X Cancel
   div.modal-footer.clearfix
     p Archive List
     p Delete List

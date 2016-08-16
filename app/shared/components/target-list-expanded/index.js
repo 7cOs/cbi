@@ -84,7 +84,7 @@ function ExpandedTargetListController($state, $scope, $mdDialog, $q, userService
   function saveNewList(e) {
     userService.addTargetList(vm.newList).then(function(response) {
       closeModal();
-      userService.model.targetLists.owned.push(response.data);
+      userService.model.targetLists.owned.push(response);
     });
   }
 
