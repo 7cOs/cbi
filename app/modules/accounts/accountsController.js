@@ -13,13 +13,6 @@ module.exports =
     // Set page title for head and nav
     $rootScope.pageTitle = $state.current.title;
 
-    // Make notes available to the page
-    vm.openNotes = openNotes;
-
-    function openNotes(val) {
-      $rootScope.$broadcast('notes:opened', val);
-    }
-
     // Services
     vm.chipsService = chipsService;
     vm.filtersService = filtersService;
@@ -103,6 +96,7 @@ module.exports =
     vm.setMarketTab = setMarketTab;
     vm.selectItem = selectItem;
     vm.prevTab = prevTab;
+    vm.openNotes = openNotes;
 
     // **************
     // PUBLIC METHODS
@@ -160,6 +154,11 @@ module.exports =
       }
       return false;
     };
+
+    // Make notes available to the page
+    function openNotes(val) {
+      $rootScope.$broadcast('notes:opened', val);
+    }
 
     // ***************
     // PRIVATE METHODS
