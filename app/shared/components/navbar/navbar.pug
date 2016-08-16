@@ -27,7 +27,19 @@ div(container)
       div.nav-icon-container
         .notification-count-badge(ng-if="nb.unreadNotifications > 0")
           span {{nb.unreadNotifications}}
-        a.nav-icon.search(ui-sref="style-guide")
+        md-menu(md-position-mode="target-right target" md-offset="54 80")
+          a.nav-icon.search(href="#" ng-click="$mdOpenMenu($event)")
+          md-menu-content
+            .nav-flyout-search
+              .content
+                p <strong>Account Selector</strong>
+                md-checkbox(ng-model="nb.aFutureBinding" aria-label="My Accounts Only") My Accounts Only
+                .dropdown-filter
+                  .dropdown
+                    md-select(ng-model="nb.someFutureBinding" aria-label="Account Type selector"  placeholder="Store, account, or subaccount name")
+                      md-option(ng-repeat="type in nb.someFutureSelections" aria-label="type.name" value="{{type.name}}") {{type.name}}
+                md-autocomplete(md-prevent-menu-close="md-prevent-menu-close" md-selected-item="selectedItem" md-search-text="nb.yetAnotherFutureBinding" md-items="brand in nb.filtersService.yetAnotherFutureBinding" md-item-text="brand.name" md-min-length="1" placeholder="by Account or subaccount")
+
         a.nav-icon.add-opportunity(ng-click="nb.modalAddOpportunityForm()")
         md-menu(md-position-mode="target-right target" md-offset="1 38")
           a.nav-icon.notifications(href="#" md-menu-origin ng-click="$mdOpenMenu($event)")
