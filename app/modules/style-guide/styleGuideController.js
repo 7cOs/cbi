@@ -13,6 +13,13 @@ module.exports =
     // Set page title for head and nav
     $rootScope.pageTitle = $state.current.title;
 
+    // Make notes available to the page
+    vm.openNotes = openNotes;
+
+    function openNotes(val) {
+      $rootScope.$broadcast('notes:opened', val);
+    }
+
     // Services
     notesService.accountNotes().then(function(success) {
       vm.notes = success;
@@ -38,10 +45,6 @@ module.exports =
         templateUrl: './app/modules/style-guide/demo-modal.html'
       });
     };
-
-    function openNotes() {
-      vm.noteOpenState = !vm.noteOpenState;
-    }
 
     function closeModal() {
       $mdDialog.hide();

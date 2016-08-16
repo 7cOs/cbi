@@ -16,6 +16,17 @@ function NotesController($scope, $state, $mdDialog, notesService) {
   vm.creatingNote = false;
   vm.deleteConfirmation = false;
   vm.inputToggle = false;
+  vm.notesOpen = false;
+  vm.notesClose = notesClose;
+
+  function notesClose() {
+    $scope.notesOpen = false;
+  }
+
+  $scope.$on('notes:opened', function(event, data) {
+    console.log(data);
+    $scope.notesOpen = data;
+  });
 
   // Temp data
   vm.noteTopics = [

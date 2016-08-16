@@ -1,6 +1,6 @@
-div.modal.notes
+div.modal.notes(ng-if="notesOpen")
   div.title
-    a.hide-row(ng-click="sg.closeNotes()")
+    a.hide-row(ng-click="n.notesClose()")
     h4 Walmed & Feller Notes
   div.no-notes(ng-if="n.notes.length <= 0")
     h5 There are no notes for this <br />account yet.

@@ -13,6 +13,13 @@ module.exports =
     // Set page title for head and nav
     $rootScope.pageTitle = $state.current.title;
 
+    // Make notes available to the page
+    vm.openNotes = openNotes;
+
+    function openNotes(val) {
+      $rootScope.$broadcast('notes:opened', val);
+    }
+
     // Services
     vm.chipsService = chipsService;
     vm.filtersService = filtersService;
