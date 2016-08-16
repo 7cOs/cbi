@@ -27,9 +27,22 @@ div(container)
       div.nav-icon-container
         .notification-count-badge(ng-if="nb.unreadNotifications > 0")
           span {{nb.unreadNotifications}}
-        a.nav-icon.search(ui-sref="style-guide")
+        md-menu(md-position-mode="target-right target" md-offset="54 80")
+          a.nav-icon.search(href="#" ng-click="$mdOpenMenu($event)")
+          md-menu-content
+            .nav-flyout-search
+              .content
+                p <strong>Account Selector</strong>
+                md-checkbox(ng-model="o.filtersService.model.selected.accountScope" aria-label="My Accounts Only" ng-click="10 38") My Accounts Only
+                .dropdown-filter
+                  .dropdown
+                    md-select(ng-model="l.filter.selected.savedFilters" aria-label="Saved Filter"  placeholder="Select Saved Report")
+                      md-option(ng-repeat="type in l.filter.savedFilters" aria-label="type.name" value="{{type.name}}") {{type.name}}
+                md-autocomplete(md-selected-item="selectedItem" md-search-text="t.filtersService.model.brandSearchText" md-items="brand in t.filtersService.model.brands" md-item-text="brand.name" md-min-length="1" placeholder="by Brand or SKU" md-selected-item-change="t.chipsService.addAutocompleteChip(brand.name, 'brandSearchText')")
+
+
         a.nav-icon.add-opportunity(ng-click="nb.modalAddOpportunityForm()")
-        md-menu(md-position-mode="target-right target" md-offset="1 38")
+        md-menu(md-position-mode="target-right target" md-offset="")
           a.nav-icon.notifications(href="#" md-menu-origin ng-click="$mdOpenMenu($event)")
           md-menu-content
             .nav-flyout

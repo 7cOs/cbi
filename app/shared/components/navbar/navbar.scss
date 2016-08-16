@@ -106,6 +106,47 @@ navbar {
   }
 }
 
+.nav-flyout-search {
+  padding: 25px 10px 10px;
+  position: relative;
+  width: 325px;
+  height: 230px;
+
+  ._md-label {
+    font-size: 1em;
+  }
+
+  p {
+    text-align: center;
+    margin-bottom: 36px;
+  }
+
+  strong {
+    color: $black;
+  }
+
+  &:after {
+    border-bottom: 4px solid $gray-9;
+    border-left: 8px solid transparent;
+    border-right: 8px solid transparent;
+    content: '';
+    display: block;
+    height: 0;
+    position: absolute;
+    right: 72px;
+    top: -5px;
+    width: 0;
+  }
+
+  .content {
+    padding: 0 2em;
+
+    &.nopad {
+      padding: 0;
+    }
+  }
+}
+
 .inner {
   padding: 8px 0;
 }
