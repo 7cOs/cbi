@@ -26,12 +26,14 @@ module.exports =
     vm.openNotes = openNotes;
     vm.inlineSearchAction = inlineSearchAction;
     vm.inlineSearchValue = '';
+    vm.inlineSearchShowResults = false;
 
     // **************
     // PUBLIC METHODS
     // **************
 
     function inlineSearchAction() {
+      vm.inlineSearchShowResults = true;
       console.log(vm.inlineSearchValue);
     }
 

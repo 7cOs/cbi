@@ -148,9 +148,11 @@ div(column='12')
         h3.section-title Inline Search
         div(row)
           div(column='4')
-            form(ng-submit="sg.inlineSearchAction()").inline-search
-              input(ng-model="sg.inlineSearchValue" type="text" placeholder="Enter name")
-              input(type="submit")
+              form.inline-search
+                input(ng-model="sg.inlineSearchValue" type="text" placeholder="Enter name")
+                input(type="submit" ng-click="sg.inlineSearchAction();")
+                .results(ng-class="{'open': sg.inlineSearchShowResults}")
+                  span {{sg.inlineSearchValue}}
 
       section
         h3.section-title Typeahead
