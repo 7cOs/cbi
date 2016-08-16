@@ -3,7 +3,7 @@
 
   .target-action-buttons
     button(disabled="disabled" ng-if="expanded.buttonState === 'named'").btn-action Archive
-    button(disabled="disabled" ng-if="expanded.buttonState !== 'shared'").btn-action Delete
+    button(ng-if="expanded.buttonState !== 'shared'" ng-click="expanded.deleteTargetList()").btn-action Delete
     button.btn-action(ng-click="expanded.createTargetList($event)") Create a New List
 div.expanded-target-lists
   md-tabs(md-dynamic-height='' md-border-bottom)
@@ -46,7 +46,7 @@ div.expanded-target-lists
               // div.checkbox-wrapper.named-target-list(ng-click="expanded.toggle(opportunity, list.selected)")
                 md-checkbox(aria-label="Select Item" ng-checked="expanded.exists(opportunity, list.selected)")
               div.checkbox-wrapper.named-target-list
-                md-checkbox(aria-label="Select Item")
+                md-checkbox(aria-label="Select Item" ng-model="list.selected")
               div.checkbox-sibling(column="12" ng-click="expanded.openTLDetails(list.id)")
                 div(row)
                   h4(column="4").left {{list.name}}
