@@ -24,10 +24,16 @@ module.exports =
     vm.openNotes = openNotes;
     vm.noteOpenState = false;
     vm.openNotes = openNotes;
+    vm.inlineSearchAction = inlineSearchAction;
+    vm.inlineSearchValue = '';
 
     // **************
     // PUBLIC METHODS
     // **************
+
+    function inlineSearchAction() {
+      console.log(vm.inlineSearchValue);
+    }
 
     function showModal(ev) {
       var parentEl = angular.element(document.body);

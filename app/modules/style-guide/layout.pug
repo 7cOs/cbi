@@ -145,6 +145,14 @@ div(column='12')
           loader
 
       section
+        h3.section-title Inline Search
+        div(row)
+          div(column='4')
+            form(ng-submit="sg.inlineSearchAction()").inline-search
+              input(ng-model="sg.inlineSearchValue" type="text" placeholder="Enter name")
+              input(type="submit")
+
+      section
         h3.section-title Typeahead
         typeahead
 
