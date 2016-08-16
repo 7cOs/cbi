@@ -15,11 +15,13 @@ module.exports = function(app) {
   });
 
   return new SamlStrategy({
+    protocol: 'https://',
     path: '/auth/callback',
     logoutUrl: '/auth/logout',
-    issuer: 'passport-saml',
+    issuer: app.get('config').saml.issuer,
     passReqToCallback: true,
     entryPoint: app.get('config').saml.entryPoint,
+    identifierFormat: 'urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified',
     cert: fs.readFileSync('./server/_config/passport/certs/development.crt', 'utf-8'),
     signatureAlgorithm: app.get('config').saml.signatureAlgorithm
   }, function(req, profile, done) {
