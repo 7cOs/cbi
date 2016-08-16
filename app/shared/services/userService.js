@@ -503,7 +503,7 @@ module.exports =
           url = apiHelperService.request('/api/users/' + model.currentUser.id + '/targetLists/'),
           payload = {
             name: p.name,
-            opportunities: [] // opportunity id's to be included
+            opportunityIds: [] // opportunity id's to be included
           };
 
       $http.post(url, payload)
