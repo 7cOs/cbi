@@ -302,8 +302,10 @@ module.exports =
       },
       deleteTargetListSharesResponse: {'status': 200}
     };
+    var model = {};
 
     var service = {
+      model: model,
       getTargetList: getTargetList,
       updateTargetList: updateTargetList,
       deleteTargetList: deleteTargetList,
@@ -533,25 +535,27 @@ module.exports =
      * @name addTargetListShares
      * @desc add target list shares
      * @params {String} targetListId - id of target list
+     * @params {Object} p - payload information
      * @returns {Object} - target shares including new object
      * @memberOf orion.common.services
      */
-    function addTargetListShares(targetListId) {
+    function addTargetListShares(targetListId, p) {
       var targetListPromise = $q.defer(),
-          url = '',
-          payload = tempData.addTargetListSharesPayload;
+          url = apiHelperService.request('/api/targetLists/' + targetListId + '/shares'),
+          payload = [{
+            personId: Number(p.newCollaboratorId),
+            permissionLevel: p.permissionLevel
+          }];
 
-      $http.post(url, payload, {
-        headers: {}
-      })
-      .then(addTargetListSharesSuccess)
-      .catch(addTargetListSharesFail);
+      $http.post(url, payload)
+        .then(addTargetListSharesSuccess)
+        .catch(addTargetListSharesFail);
 
       function addTargetListSharesSuccess(response) {
         console.log('[targetListService.addTargetListShares] response: ', response);
-        // targetListPromise.resolve(response.data);
+        targetListPromise.resolve(response);
         // uncomment above and remove below when services are ready
-        targetListPromise.resolve(tempData.addTargetListSharesResponse);
+        // targetListPromise.resolve(tempData.addTargetListSharesResponse);
       }
 
       function addTargetListSharesFail(error) {

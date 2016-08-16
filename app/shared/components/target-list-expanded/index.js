@@ -72,7 +72,8 @@ function ExpandedTargetListController($state, $scope, $mdDialog, $q, userService
     return list.indexOf(item) > -1;
   }
 
-  function openTLDetails() {
+  function openTLDetails(listId) {
+    targetListService.model.currentList = listId;
     $state.go('target-list-detail');
   }
 

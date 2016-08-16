@@ -22,7 +22,8 @@ module.exports = {
     var apiKey = 'test';
     var baseUrl = 'http://cbrands-deloitte-dev.herokuapp.com';
     var signature = crypto.enc.Base64.stringify(crypto.HmacSHA256(en + apiKey, key));
-    var url = baseUrl + en + '?signature=' + signature + '&apiKey=' + apiKey + '&useTestData=true';
+    // var url = baseUrl + en + '?signature=' + signature + '&apiKey=' + apiKey + '&useTestData=true';
+    var url = baseUrl + en + '?signature=' + signature + '&apiKey=' + apiKey;
     if (params) {
       url = url + '&' + params;
     }

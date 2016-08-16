@@ -10,8 +10,8 @@ div.modal
       md-checkbox Allow Collaborators to invite others
     div.modal-input
       label Add Recipient
-      input(ng-model="tempPlaceholder" placeholder="Enter names or CBI Email addresses")
-    button(disabled).btn-action Save
+      input(type="email" ng-model="tld.collaborators.newCollaborator" placeholder="Enter names or CBI Email addresses")
+    button(ng-disabled="!tld.collaborators.newCollaborator" ng-click="tld.addCollaborators()").btn-action Save
     p.cancel.accent(ng-click="tld.closeModal()") X Cancel
   div.modal-footer.clearfix
     p Archive List
