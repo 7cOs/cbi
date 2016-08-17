@@ -1,0 +1,8 @@
+form.inline-search
+  input(ng-model="is.input" type="text" placeholder="Enter name")
+  input(type="submit" ng-click="is.action();" ng-class="{'visible': is.input !== ''}")
+  .results-container(ng-class="{'open': is.showResults}")
+    md-progress-circular(ng-show="is.loading" md-mode="indeterminate")
+    ul.results(ng-show="!is.loading")
+      li(ng-repeat="result in is.parsedResults track by $index" ng-click="is.resultChosen(result)") {{result}}
+p(ng-if="is.chosenResult !== ''") You chose {{is.chosenResult}}!
