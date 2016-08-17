@@ -19,9 +19,6 @@ module.exports =
     });
 
     // Defaults
-    vm.inlineSearchInput = '';
-    vm.inlineSearchShowResults = false;
-    vm.inlineSearchLoading = false;
     vm.inlineSearchResults = [
       'Result one',
       'Result two',
@@ -30,7 +27,6 @@ module.exports =
       'Result five',
       'Result six'
     ];
-    vm.inlineSearchChosenResult = '';
 
     // Expose public methods
     vm.showModal = showModal;
@@ -38,27 +34,10 @@ module.exports =
     vm.openNotes = openNotes;
     vm.noteOpenState = false;
     vm.openNotes = openNotes;
-    vm.inlineSearchAction = inlineSearchAction;
-    vm.inlineSearchResultChosen = inlineSearchResultChosen;
-    vm.inlineSearchClose = inlineSearchClose;
 
     // **************
     // PUBLIC METHODS
     // **************
-
-    function inlineSearchAction() {
-      vm.inlineSearchLoading = true;
-      vm.inlineSearchShowResults = true;
-      $timeout(function() {
-        vm.inlineSearchLoading = false;
-      }, 2000);
-    }
-
-    function inlineSearchResultChosen(result) {
-      vm.inlineSearchChosenResult = result;
-      vm.inlineSearchInput = '';
-      inlineSearchClose();
-    }
 
     function showModal(ev) {
       var parentEl = angular.element(document.body);
@@ -82,9 +61,5 @@ module.exports =
     // Make notes available to the page
     function openNotes(val) {
       $rootScope.$broadcast('notes:opened', val);
-    }
-
-    function inlineSearchClose() {
-      vm.inlineSearchShowResults = false;
     }
   };
