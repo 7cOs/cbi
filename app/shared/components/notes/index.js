@@ -1,6 +1,6 @@
 'use strict';
 
-function NotesController($scope, $state, $mdDialog, notesService) {
+function NotesController($scope, $state, $mdDialog, $timeout, notesService, Upload) {
 
   // ****************
   // CONTROLLER SETUP
@@ -18,6 +18,8 @@ function NotesController($scope, $state, $mdDialog, notesService) {
   vm.inputToggle = false;
   vm.notesOpen = false;
   vm.notesClose = notesClose;
+  vm.fileUploadActive = true;
+  vm.uploadFiles = uploadFiles;
 
   // Temp data
   vm.noteTopics = [
@@ -186,7 +188,33 @@ function NotesController($scope, $state, $mdDialog, notesService) {
   function readLess(note) {
     note.numLimit = 150;
     note.noteDetails = false;
+  }
 
+  // Upload files to Salesforce
+  // This is a temporary function based on the plugin-demo
+  // TODO make active with SF
+  function uploadFiles(files) {
+    vm.fileUploading = true;
+    vm.files = files;
+    if (files && files.length) {
+      Upload.upload({
+        url: 'https://angular-file-upload-cors-srv.appspot.com/upload',
+        data: {
+          files: files
+        }
+      }).then(function(response) {
+        $timeout(function() {
+          vm.result = response.data;
+        });
+      }, function(response) {
+        if (response.status > 0) {
+          vm.errorMsg = response.status + ': ' + response.data;
+        }
+      });
+    }
+
+    // Needs to flip after success or failure
+    // vm.fileUploading = false;
   }
 
   // ***************

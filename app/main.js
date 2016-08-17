@@ -8,6 +8,7 @@ angular.module('orion', [
   require('angular-animate'),
   require('v-accordion'),
   require('angular-nvd3'),
+  require('ng-file-upload'),
   require('angular-sanitize'),
   require('ng-csv'),
   require('./shared').name,

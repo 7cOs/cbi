@@ -2,13 +2,17 @@ div.modal.notes(ng-if="notesOpen")
   div.title
     a.hide-row(ng-click="n.notesClose()")
     h4 Notes For Walmed & Feller
-
   div.no-notes(ng-if="n.notes.length <= 0")
     h5 There are no notes for this <br />account yet.
     button.btn-action + Add A New Note
     br
     img(src="../assets/img/icons/no-notes.svg").no-notes-image
-  md-progress-circular(ng-if="n.loading" md-mode="indeterminate" md-diameter="100").md-accent
+  div(ng-if="n.loading").progress-container
+    md-progress-circular(ng-if="n.loading" md-mode="indeterminate" md-diameter="100").md-accent
+    h5 Loading...
+  div(ng-if="n.fileUploading").progress-container
+    md-progress-circular(ng-if="n.fileUploading" md-mode="indeterminate" md-diameter="100").md-accent
+    h5 Uploading...
   div.note-container(ng-if="n.notes.length > 0")
     div.new-note
       p(ng-click="n.openCreateNote()").bold <span>+</span> New Note
@@ -24,7 +28,6 @@ div.modal.notes(ng-if="notesOpen")
         textarea(ng-model="n.newNote.body")
         button(ng-click="n.createNote(n.newNote)").btn-action Save
         p(ng-click="n.cancelNewNote(n.newNote)").cancel.accent X Cancel
-
     div.note-body(ng-repeat="note in n.notes | orderBy:'date'")
       div(ng-if="note.deleteConfirmation").delete-confirm
         h4 Are you sure you want to delete this note?
@@ -75,8 +78,9 @@ div.modal.notes(ng-if="notesOpen")
                   img.thumbnail(src="../assets/img/icons/download-doc-c.svg")
                   p.file-name {{attachment.name}}&nbsp;({{attachment.fileSize}})
           div
-            .add-attachments(ng-if="note.author === 'Me'")
+            .add-attachments(ng-if="note.author === 'Me'" ngf-select="n.uploadFiles($files)" multiple accept="image/*")
               p Add an attachment
+              p {{n.errorMsg}}
         .note-body-footer
           p by <span class="note-author"> {{note.author}}</span>  <span class="note-date">{{note.date | date:"dd MMMM, yyyy 'at' h:mm a"}}</span>
           .icons
@@ -108,5 +112,6 @@ div.modal.notes(ng-if="notesOpen")
                 .photo
                   p IMG1010.PNG (4.3 MB)
             div
-              .add-attachments
+              .add-attachments(ng-if="note.author === 'Me'" ngf-select="n.uploadFiles($files)" multiple accept="image/*")
                 p Add an attachment
+                p {{n.errorMsg}}
