@@ -23,7 +23,7 @@ module.exports = function (config) {
   config.address = 'http://' + config.domain + ':'  + config.port + '/'; // base url
 
   config.saml = {
-    entryPoint: 'https://ssodev.cbrands.com/oamfed/idp/samlv20?providerid=SP-Orion',
+    entryPoint: 'https://ssodev.cbrands.com/oamfed/idp/samlv20',
     issuer: 'https://orion-dev.cbrands.com',
     cert: '',
     privateCert: '',
