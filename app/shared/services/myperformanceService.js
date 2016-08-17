@@ -280,7 +280,14 @@ module.exports =
       }, {
         name: 'Last Closed Month'
       }],
+      trend: [{
+        name: 'vs YA'
+      }, {
+        name: 'va Plan'
+      }],
       premises: [{
+        name: 'All'
+      }, {
         name: 'On Premise'
       }, {
         name: 'Off Premise'
