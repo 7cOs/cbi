@@ -36,6 +36,7 @@ module.exports =
         {name: 'Effective'}
       ],
       premises: [
+        {name: 'All'},
         {name: 'Off Premise'},
         {name: 'On Premise'}
       ],
@@ -69,11 +70,16 @@ module.exports =
         tradeChannelMilitary: '',
         tradeChannelOther: '',
         tradeChannelRecreation: '',
+        trend: '',
         valuesVsTrend: ''
       },
       timePeriod: [
         {name: 'Current Month to Date'},
         {name: 'Last Closed Month'}
+      ],
+      trend: [
+        {name: 'vs YA'},
+        {name: 'va Plan'}
       ]
     };
 
