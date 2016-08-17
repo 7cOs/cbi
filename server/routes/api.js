@@ -1,12 +1,12 @@
 'use strict';
 
 module.exports = function(app) {
-  const util = require('../_lib/util');
+  const util = require('../_lib/util')(app);
   const request = require('request');
 
   app.route('/api/*')
     .get(function(req, res) {
-      // console.log(req.url);
+      console.log(req.url);
       var signed = util.sign(req.url);
       req.pipe(request(signed)).pipe(res);
     })
