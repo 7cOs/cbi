@@ -75,13 +75,23 @@ div.modal.notes(ng-if="notesOpen")
                   img.thumbnail(src="../assets/img/icons/download-doc-c.svg")
                   p.file-name {{attachment.name}}&nbsp;({{attachment.fileSize}})
           div
-            .add-attachments(ng-if="note.author === 'Me'")
+            //- .add-attachments(ng-if="note.author === 'Me'")
+            .add-attachments()
               p Add an attachment
+              div(ng-if="n.fileUploadActive")
+                form(name="fileUpload")
+                    fieldset
+                      legend Upload a fileType
+                      label File
+                      input(type="file" n.ngf-select ng-model="picFile" name="file" accept="image/*" required)
+                      br
+                      button(ng-click="n.uploadPic(picFile)").btn-action Submit
         .note-body-footer
           p by <span class="note-author"> {{note.author}}</span>  <span class="note-date">{{note.date | date:"dd MMMM, yyyy 'at' h:mm a"}}</span>
           .icons
             .delete-note(ng-if="note.author === 'Me'" ng-click="n.toggleDelete(note)")
-            div(ng-if="note.author === 'Me'" ng-click="n.isEditing(note)" ng-class="{'edit-note': !note.editMode, 'edit-note-active': note.editMode}")
+            div(ng-click="n.isEditing(note)" ng-class="{'edit-note': !note.editMode, 'edit-note-active': note.editMode}")
+            //- div(ng-if="note.author === 'Me'" ng-click="n.isEditing(note)" ng-class="{'edit-note': !note.editMode, 'edit-note-active': note.editMode}")
             .email-note
         div.notes-editing(ng-if="note.editMode")
           div.main-note-section
