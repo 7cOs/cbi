@@ -194,6 +194,7 @@ function NotesController($scope, $state, $mdDialog, $timeout, notesService, Uplo
   // This is a temporary function based on the plugin-demo
   // TODO make active with SF
   function uploadFiles(files) {
+    vm.fileUploading = true;
     vm.files = files;
     if (files && files.length) {
       Upload.upload({
@@ -211,6 +212,9 @@ function NotesController($scope, $state, $mdDialog, $timeout, notesService, Uplo
         }
       });
     }
+
+    // Needs to flip after success or failure
+    // vm.fileUploading = false;
   }
 
   // ***************

@@ -16,6 +16,21 @@
     padding: 25px 0 68px;
   }
 
+  .progress-container {
+    height: 600px;
+    background: $light-blue-5;
+
+    h5 {
+      display: block;
+      width: 100px;
+      margin: 0 auto;
+      color: $white;
+      position: absolute;
+      top: 450;
+      left: calc(50% - 50px);
+    }
+  }
+
   md-progress-circular {
     z-index: 901;
     left: -50px;
