@@ -5,7 +5,8 @@ module.exports =
     var directive = {
       restrict: 'EA',
       scope: {
-        results: '@'
+        placeholder: '@',
+        results: '='
       },
       controller: InlineSearchController,
       controllerAs: 'is',
@@ -27,8 +28,14 @@ module.exports =
       vm.input = '';
       vm.showResults = false;
       vm.loading = false;
-      vm.chosenResult = '';
-      vm.parsedResults = JSON.parse(vm.results);
+      vm.results = [
+        'Result one',
+        'Result two',
+        'Result three',
+        'Result four',
+        'Result five',
+        'Result six'
+      ];
 
       // Expose public methods
       vm.action = action;
@@ -48,8 +55,7 @@ module.exports =
       }
 
       function resultChosen(result) {
-        vm.chosenResult = result;
-        vm.input = '';
+        vm.input = result;
         close();
       }
 
