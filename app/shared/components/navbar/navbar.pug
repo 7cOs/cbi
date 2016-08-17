@@ -36,9 +36,11 @@ div(container)
                 md-checkbox(ng-model="nb.aFutureBinding" aria-label="My Accounts Only") My Accounts Only
                 .dropdown-filter
                   .dropdown
-                    md-select(ng-model="nb.someFutureBinding" aria-label="Account Type selector"  placeholder="Store, account, or subaccount name")
-                      md-option(ng-repeat="type in nb.someFutureSelections" aria-label="type.name" value="{{type.name}}") {{type.name}}
-                inline-search(placeholder="Search for a user" results="nb.searchResults")
+                    md-select(ng-model="nb.accountSelectorSelected" aria-label="Account Type selector"  placeholder="Store, account, or subaccount name")
+                      md-option(ng-repeat="type in nb.accountSelectorOptions" aria-label="type.name" value="{{type.name}}") {{type.name}}
+                inline-search(ng-if="nb.accountSelectorSelected === 'Distributor'" placeholder="Search for a distributor" results="nb.searchResults")
+                inline-search(ng-if="nb.accountSelectorSelected === 'Chain'" placeholder="Search for a chain" results="nb.searchResults")
+                inline-search(ng-if="nb.accountSelectorSelected === 'Store'" placeholder="Search for a store" results="nb.searchResults")
         a.nav-icon.add-opportunity(ng-click="nb.modalAddOpportunityForm()")
         md-menu(md-position-mode="target-right target" md-offset="1 38")
           a.nav-icon.notifications(href="#" md-menu-origin ng-click="$mdOpenMenu($event)")
