@@ -145,6 +145,19 @@ div(column='12')
           loader
 
       section
+        h3.section-title Inline Search
+        div(row)
+          div(column='4')
+            form.inline-search
+              input(ng-model="sg.inlineSearchInput" type="text" placeholder="Enter name")
+              input(type="submit" ng-click="sg.inlineSearchAction();" ng-class="{'visible': sg.inlineSearchInput !== ''}")
+              .results-container(ng-class="{'open': sg.inlineSearchShowResults}")
+                md-progress-circular(ng-show="sg.inlineSearchLoading" md-mode="indeterminate")
+                ul.results(ng-show="!sg.inlineSearchLoading")
+                  li(ng-repeat="result in sg.inlineSearchResults" ng-click="sg.inlineSearchResultChosen(result)") {{result}}
+            p(ng-if="sg.inlineSearchChosenResult !== ''") You chose {{sg.inlineSearchChosenResult}}!
+
+      section
         h3.section-title Typeahead
         typeahead
 

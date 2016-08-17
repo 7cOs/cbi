@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports =
-  function styleGuideController($rootScope, $scope, $state, $mdDialog, notesService) {
+  function styleGuideController($rootScope, $scope, $timeout, $state, $mdDialog, notesService) {
 
     // ****************
     // CONTROLLER SETUP
@@ -18,16 +18,47 @@ module.exports =
       vm.notes = success;
     });
 
+    // Defaults
+    vm.inlineSearchInput = '';
+    vm.inlineSearchShowResults = false;
+    vm.inlineSearchLoading = false;
+    vm.inlineSearchResults = [
+      'Result one',
+      'Result two',
+      'Result three',
+      'Result four',
+      'Result five',
+      'Result six'
+    ];
+    vm.inlineSearchChosenResult = '';
+
     // Expose public methods
     vm.showModal = showModal;
     vm.closeModal = closeModal;
     vm.openNotes = openNotes;
     vm.noteOpenState = false;
     vm.openNotes = openNotes;
+    vm.inlineSearchAction = inlineSearchAction;
+    vm.inlineSearchResultChosen = inlineSearchResultChosen;
+    vm.inlineSearchClose = inlineSearchClose;
 
     // **************
     // PUBLIC METHODS
     // **************
+
+    function inlineSearchAction() {
+      vm.inlineSearchLoading = true;
+      vm.inlineSearchShowResults = true;
+      $timeout(function() {
+        vm.inlineSearchLoading = false;
+      }, 2000);
+    }
+
+    function inlineSearchResultChosen(result) {
+      vm.inlineSearchChosenResult = result;
+      vm.inlineSearchInput = '';
+      inlineSearchClose();
+    }
 
     function showModal(ev) {
       var parentEl = angular.element(document.body);
@@ -44,8 +75,16 @@ module.exports =
       $mdDialog.hide();
     }
 
+    // ***************
+    // PRIVATE METHODS
+    // ***************
+
     // Make notes available to the page
     function openNotes(val) {
       $rootScope.$broadcast('notes:opened', val);
+    }
+
+    function inlineSearchClose() {
+      vm.inlineSearchShowResults = false;
     }
   };
