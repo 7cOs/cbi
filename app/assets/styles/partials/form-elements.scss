@@ -96,6 +96,7 @@ md-checkbox {
     top: 2.45em;
     transition: all 300ms ease;
     width: 100%;
+    z-index: -1;
 
     &.open {
       min-height: 9em;
@@ -132,6 +133,15 @@ md-checkbox {
       path {
         stroke: $blue;
       }
+    }
+  }
+
+  input[type='submit'] {
+    opacity: 0;
+    transition: opacity 300ms ease;
+
+    &.visible {
+      opacity: 1;
     }
   }
 }
