@@ -23,6 +23,7 @@ module.exports =
     vm.addCollaborators = addCollaborators;
     vm.changeCollaboratorLevel = changeCollaboratorLevel;
     vm.closeModal = closeModal;
+    vm.makeOwner = makeOwner;
     vm.modalManageTargetList = modalManageTargetList;
     vm.modalManageCollaborators = modalManageCollaborators;
     vm.modalSendOpportunity = modalSendOpportunity;
@@ -50,6 +51,13 @@ module.exports =
 
     function closeModal() {
       $mdDialog.hide();
+    }
+
+    function makeOwner(collaboratorId) {
+      targetListService.addTargetListShares(targetListService.model.currentList.id, {newCollaboratorId: collaboratorId, permissionLevel: 'author'}).then(function() {
+        console.log('owner now w00t');
+      });
+      // update in array
     }
 
     function modalManageTargetList(ev) {
