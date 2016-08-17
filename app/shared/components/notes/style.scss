@@ -1,9 +1,11 @@
 .notes {
-  bottom: 0;
   position: fixed;
   width: 600px;
   right: 0;
+  top: 50%;
+  transform: translateY(-50%);
   z-index: 10;
+
 
   .no-notes-image {
     margin-top: 12px;
@@ -143,7 +145,8 @@
     text-align: left;
     background: $gray-4;
     overflow-y: scroll;
-    max-height: 600px;
+    min-height: 600px;
+    height: 600px;
   }
 
   .new-note {
@@ -248,6 +251,7 @@
   .add-attachments {
     background-image: url('../assets/img/icons/add-attachment.svg');
     background-size: 12px;
+    cursor: pointer;
   }
 
   .download-all {
@@ -311,6 +315,14 @@
   li {
     p {
       margin: 4px 0;
+    }
+  }
+
+  form {
+    background: pink;
+
+    fieldset {
+      border: none;
     }
   }
 }

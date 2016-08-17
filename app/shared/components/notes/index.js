@@ -19,7 +19,7 @@ function NotesController($scope, $state, $mdDialog, $timeout, notesService, Uplo
   vm.notesOpen = false;
   vm.notesClose = notesClose;
   vm.fileUploadActive = true;
-  vm.uploadPic = uploadPic;
+  vm.uploadFiles = uploadFiles;
 
   // Temp data
   vm.noteTopics = [
@@ -190,27 +190,27 @@ function NotesController($scope, $state, $mdDialog, $timeout, notesService, Uplo
     note.noteDetails = false;
   }
 
-  function uploadPic(file) {
-    // file.upload = Upload.upload({
-    //   url: 'https://angular-file-upload-cors-srv.appspot.com/upload',
-    //   data: {
-    //     file: file
-    //   }
-    // });
-    //
-    // file.upload.then(function(response) {
-    //   $timeout(function () {
-    //     file.result = response.data;
-    //   });
-    // }, function(response) {
-    //   if (response.status > 0) {
-    //     $scope.errorMsg = response.status + ': ' + response.data;
-    //   }
-    // }, function(evt) {
-    //   file.progress = Math.min(100, parseInt(100.0 * evt.loaded / evt.total));
-    // });
-
-    console.log(file);
+  // Upload files to Salesforce
+  // This is a temporary function based on the plugin-demo
+  // TODO make active with SF
+  function uploadFiles(files) {
+    vm.files = files;
+    if (files && files.length) {
+      Upload.upload({
+        url: 'https://angular-file-upload-cors-srv.appspot.com/upload',
+        data: {
+          files: files
+        }
+      }).then(function(response) {
+        $timeout(function() {
+          vm.result = response.data;
+        });
+      }, function(response) {
+        if (response.status > 0) {
+          vm.errorMsg = response.status + ': ' + response.data;
+        }
+      });
+    }
   }
 
   // ***************
