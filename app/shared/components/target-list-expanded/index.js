@@ -92,7 +92,7 @@ function ExpandedTargetListController($state, $scope, $filter, $mdDialog, $q, us
   }
 
   function openTLDetails(listId) {
-    targetListService.model.currentList = listId;
+    targetListService.model.currentList.id = listId;
     $state.go('target-list-detail');
   }
 

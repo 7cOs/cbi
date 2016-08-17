@@ -1,18 +1,23 @@
-div.modal
+div.modal.collaborators-modal
   div.title
     h4 Manage Collaborators
   div.modal-form
     div.modal-input
       label collaborators
       //- TODO....replace textarea with proper input
-      textarea
+      //- textarea
+      div.collaborator-list
+        .collaborator(ng-repeat="collaborator in tld.targetListService.model.currentList.collaborators")
+          .align-left {{collaborator.user.firstName | titlecase}} {{collaborator.user.lastName | titlecase}}
+          .align-right {{collaborator.permissionLevel | titlecase}}
+          .close-icon(ng-click="tld.removeCollaborator(collaborator.user.id)")
     div.modal-input.clearfix
-      md-checkbox Allow Collaborators to invite others
+      md-checkbox(ng-model="tld.collaborator.permissionLevel" ng-true-value="'collaborateandinvite'" ng-false-value="'collaborate'" ng-click="tld.changeCollaboratorLevel()") Allow Collaborators to invite others
     div.modal-input
       label Add Recipient
       input(type="email" ng-model="tld.collaborators.newCollaborator" placeholder="Enter names or CBI Email addresses")
     button(ng-disabled="!tld.collaborators.newCollaborator" ng-click="tld.addCollaborators()").btn-action Save
-    p.cancel.accent(ng-click="tld.closeModal()") X Cancel
+    p.cancel.accent(ng-click="tld.closeModal()")
   div.modal-footer.clearfix
     p Archive List
     p Delete List
