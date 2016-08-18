@@ -99,7 +99,7 @@ config.gulp = {
       angular: {
         css: ['./app/**/*.scss']
       },
-      fonts: ['./app/assets/fonts/**/*'],
+      fonts: ['./app/assets/fonts/**/*.{ttf,woff,woff2,eof,svg}'],
       img: ['./app/assets/img/**/*.jpg', './app/assets/img/**/*.jpg', './app/assets/img/**/*.png', './app/assets/img/**/*.svg'],
       js: ['./app/**/*.js'],
       jsMain: './app/main.js',
@@ -121,7 +121,7 @@ config.gulp = {
         css: './public/app/'
       },
       css: './public/css/',
-      fonts: './public/fonts/',
+      fonts: './public/assets/fonts/',
       img: './public/assets/img/',
       js: './public/app/',
       jsMain: './public/app/main.min.js',
