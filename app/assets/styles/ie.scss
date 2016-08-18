@@ -18,4 +18,14 @@
     top: inherit !important;
     width: inherit !important;
   }
+
+  .landing-page {
+    .dropdown-filter md-select-value span {
+      color: $gray-3;
+    }
+
+    .filter-item input {
+      color: $gray-8;
+    }
+  }
 }
