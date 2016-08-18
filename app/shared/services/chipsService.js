@@ -11,7 +11,8 @@ module.exports =
       addChip: addChip,
       applyFilters: applyFilters,
       removeFromFilterService: removeFromFilterService,
-      updateChip: updateChip
+      updateChip: updateChip,
+      resetChipsFilters: resetChipsFilters
     };
 
     return service;
@@ -27,7 +28,7 @@ module.exports =
     function addAutocompleteChip(chip, filter) {
       if (chip) {
         // Add to Chip Model
-        model.push({
+        service.model.push({
           name: chip,
           applied: false
         });
@@ -52,7 +53,7 @@ module.exports =
       if (chip) {
         if (onlyOneAllowed) removeChip(type);
         // Add to Chip Model
-        model.push({
+        service.model.push({
           name: chip,
           type: type,
           applied: false
@@ -87,7 +88,7 @@ module.exports =
     function removeChip(type) {
       for (var i = 0; i < model.length; i++) {
         if (model[i].type === type) {
-          model.splice(i, 1);
+          service.model.splice(i, 1);
           break;
         }
       }
@@ -119,6 +120,13 @@ module.exports =
      */
     function updateChip(chipType, displayName) {
       filtersService.model.selected[chipType] === true ? removeChip(chipType) : addChip(displayName, chipType, true);
+    }
+
+    function resetChipsFilters(chips) {
+      for (var i = 0; i < chips.length; i++) {
+        removeFromFilterService(chips[i]);
+      }
+      return [];
     }
 
   };
