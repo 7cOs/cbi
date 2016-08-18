@@ -47,6 +47,16 @@ module.exports = function (config) {
     js: config.address + 'js/'
   };
 
+  config.sfdcSec = {
+// sfdc parameters
+    clientID: '3MVG9RHx1QGZ7OsgFDGg9AANEHmXyFGysbxOwi9Sg4.8o5ocZmlElMbhO36DRBmT8otkqgxiJX7P5PCFoYvUQ',
+    clientSecret: '5793586792947030890',
+    callbackURL: 'https://localhost:3000/sfdc/token',
+    authorizationURL: 'https://cbrands--CBeerDev.cs20.my.salesforce.com/services/oauth2/authorize',
+    tokenURL: 'https://cbrands--CBeerDev.cs20.my.salesforce.com/services/oauth2/token?so=00Dm00000008fCJ',
+    profileURL: 'https://cbrands--CBeerDev.cs20.my.salesforce.com/services/oauth2/userinfo'
+  };
+
   return config;
 
 };
