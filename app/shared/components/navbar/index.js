@@ -23,15 +23,16 @@ function NavbarController($rootScope, $scope, $mdPanel, $mdDialog, notifications
   vm.noNotifications = 'No unread notifications.';
 
   // Mock data
-  vm.someFutureSelections = [
+  vm.accountSelectorSelected = 'Distributor';
+  vm.accountSelectorOptions = [
     {
-      'name': 'Distributor'
+      name: 'Distributor'
     },
     {
-      'name': 'Chain'
+      name: 'Chain'
     },
     {
-      'name': 'Store'
+      name: 'Store'
     }
   ];
 
