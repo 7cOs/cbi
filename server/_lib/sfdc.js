@@ -2,49 +2,10 @@
 var sfdc = require('jsforce');
 var conn = {};
 
-function ensureAuthenticated(req, res, next) {
-  if (req.isAuthenticated()) {
-    return next();
-  }
-
-  res.redirect('/login');
-}
-
 function fnCreateConn (app) {
 
   console.log('in fnCreateConn');
-  var passport      = require('passport');
-  var ForceDotComStrategy = require('passport-forcedotcom').Strategy;
   var config = app.get('config').sfdcSec;
-
-  passport.serializeUser(function(user, done) {
-    done(null, user);
-  });
-
-  passport.deserializeUser(function(obj, done) {
-    done(null, obj);
-  });
-
-  console.log('About to apply the strategy');
-  var sfStrategy = new ForceDotComStrategy({
-    clientID: config.clientID,
-    clientSecret: config.clientSecret,
-    callbackURL: config.callbackURL,
-    authorizationURL: config.authorizationURL,
-    tokenURL: config.tokenURL
-  }, function(accessToken, refreshToken, profile, done) {
-    process.nextTick(function() {
-      delete profile._raw;
-      return done(null, profile);
-    });
-  });
-  passport.use(sfStrategy);
-  console.log('About to authenticate at SFDC');
-  passport.authenticate('forcedotcom', function(req, res) {});
-
-  console.log('Finished authenticating at SFDC');
-// Now that the authentication has returned, create the connection in jsforce to work with the data.
-  conn = sfdc.connection({});
 };
 
 function fnCreateNote (app, req, res) {

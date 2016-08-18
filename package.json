@@ -58,6 +58,7 @@
     "karma-mocha-reporter": "2.1.0",
     "karma-nyan-reporter": "0.2.4",
     "karma-phantomjs-launcher": "1.0.1",
+    "lazy-proxy": "0.0.1",
     "minifyify": "^7.3.3",
     "multer": "1.1.0",
     "ng-csv": "0.3.6",
