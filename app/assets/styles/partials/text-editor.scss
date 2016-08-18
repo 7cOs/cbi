@@ -1,0 +1,25 @@
+.text-editor {
+
+  .ta-editor {
+    overflow: auto;
+    font-family: inherit;
+    font-size: 1em;
+    border: 1px solid $gray-8;
+    border-top: none;
+    margin: 0 0 25px;
+  }
+
+  .btn-toolbar {
+    background: $gray-10;
+  }
+
+  button {
+    margin: 0;
+    border: none;
+    background: $gray-10;
+  }
+
+  li {
+    list-style: circle;
+  }
+}
