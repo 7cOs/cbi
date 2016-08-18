@@ -120,7 +120,7 @@ module.exports =
     function init() {
       // targetListService.getTargetList(targetListService.model.currentList.id).then(function(response) {
       // TEMPORARY -- IF I LEAVE THIS IN, DECLINE THE PR OUTRIGHT
-      targetListService.getTargetList('f6988ab8-eaf6-4ea6-8717-5155ad716147').then(function(response) {
+      targetListService.getTargetList('89bc8d73-ec67-4160-92c1-9210c610eca9').then(function(response) {
         console.log('[targetListService.getTargetList]', response);
         targetListService.model.currentList = response;
       });

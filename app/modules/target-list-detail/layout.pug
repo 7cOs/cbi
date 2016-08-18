@@ -11,22 +11,22 @@
 
   div(row)
     div(column="12")
-      h1(ng-click="tld.modalSendOpportunity($event)").hero-title Modgelo Especial 12-Pack Bottles On-Premise Distribution
+      h1(ng-click="tld.modalSendOpportunity($event)").hero-title {{tld.targetListService.model.currentList.name}}
       label.accent.bold.accent-blue You are the owner
 
   div(row)
     div(column="5")
-      p Walmart regional list for general 6-pack sales. Primarily for Jerry B, but if you have more ideas, please add them and either ping Jerry or Michelle.
+      p {{tld.targetListService.model.currentList.description}}
 
     div(column="6 +1").hero-info
       div
-        span.bold {{273400 | number }}<span class="unit">CE</span>
+        span.bold {{tld.targetListService.model.currentList.opportunitiesSummary.totalClosedDepletions | number }}<span class="unit">CE</span>
         label.accent.accent-blue Depletions<br />Since Closed
       div
-        span {{841 | number }}
+        span {{tld.targetListService.model.currentList.opportunitiesSummary.closedOpportunitiesCount | number }}
         label.accent.accent-blue Closed<br />Opportunities
       div
-        span {{2251 | number }}
+        span {{tld.targetListService.model.currentList.opportunitiesSummary.opportunitiesCount | number }}
         label.accent.accent-blue Total<br />Opportunities
 
 .chips(ng-if="t.chipsService.model.length && t.filtersService.model.show")
