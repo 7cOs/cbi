@@ -1,6 +1,6 @@
 'use strict';
 
-function TargetListController($scope, $state) {
+function TargetListController($scope, $state, userService) {
 
   // ****************
   // CONTROLLER SETUP
@@ -75,6 +75,16 @@ function TargetListController($scope, $state) {
 
   // Expose public methods
   vm.ratio = ratio;
+
+  userService.getTargetLists('1').then(function(data) {
+    vm.namedFilters = data.owned;
+    console.log(vm.namedFilters);
+    console.log('owned by me response', data.owned);
+
+    vm.sharedFilters = data.sharedWithMe;
+    console.log(vm.sharedFilters);
+    console.log('shared with me response', data.sharedWithMe);
+  });
 
   // **************
   // PUBLIC METHODS

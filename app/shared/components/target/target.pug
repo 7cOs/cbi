@@ -17,11 +17,11 @@ div.target-lists
                 h3 {{list.name}}
                 p.accent {{list.creator}}
                 p.accent &#9746; {{list.members.length}} members
-                p.accent {{list.created}}
+                p.accent {{list.createdAt | timeAgo: 'relative'}}
               div(column="4")
-                h4(column="6").completed.right {{list.closedOpportunities | number}}
-                h4(column="6").right {{list.opportunities | number}}
-              md-progress-linear(md-mode="determinate" ng-value="target.ratio(list.closedOpportunities, list.opportunities)")
+                h4(column="6").completed.right {{list.opportunitiesSummary.closedOpportunitiesCount | number}}
+                h4(column="6").right {{list.opportunitiesSummary.opportunitiesCount | number}}
+              md-progress-linear(md-mode="determinate" ng-value="target.ratio(list.opportunitiesSummary.closedOpportunitiesCount, list.opportunitiesSummary.opportunitiesCount)")
         div(row)
           p.accent.action-item #[a(href="#") Show All &#9654;]
     md-tab(label='Shared with Me')
@@ -41,11 +41,11 @@ div.target-lists
                 h3 {{list.name}}
                 p.accent {{list.creator}}
                 p.accent &#9746; {{list.members.length}} members
-                p.accent {{list.created}}
+                p.accent {{list.createdAt | timeAgo: 'relative'}}
               div(column="4")
-                h4(column="6").completed.right {{list.closedOpportunities | number}}
-                h4(column="6").right {{list.opportunities | number}}
-              md-progress-linear(md-mode="determinate" ng-value="target.ratio(list.closedOpportunities, list.opportunities)")
+                h4(column="6").completed.right {{list.opportunitiesSummary.closedOpportunitiesCount | number}}
+                h4(column="6").right {{list.opportunitiesSummary.opportunitiesCount | number}}
+              md-progress-linear(md-mode="determinate" ng-value="target.ratio(list.opportunitiesSummary.closedOpportunitiesCount, list.opportunitiesSummary.opportunitiesCount)")
     md-tab(label='Archived' ng-if="target.pageName === 'target-lists'")
       md-content.md-padding
         div(row).target-list-count-container
@@ -63,10 +63,10 @@ div.target-lists
                 h3 {{list.name}}
                 p.accent {{list.creator}}
                 p.accent &#9746; {{list.members.length}} members
-                p.accent {{list.created}}
+                p.accent {{list.createdAt | timeAgo: 'relative'}}
               div(column="4")
-                h4(column="6").completed.right {{list.closedOpportunities | number}}
-                h4(column="6").right {{list.opportunities | number}}
-              md-progress-linear(md-mode="determinate" ng-value="target.ratio(list.closedOpportunities, list.opportunities)")
+                h4(column="6").completed.right {{list.opportunitiesSummary.closedOpportunitiesCount | number}}
+                h4(column="6").right {{list.opportunitiesSummary.opportunitiesCount | number}}
+              md-progress-linear(md-mode="determinate" ng-value="target.ratio(list.opportunitiesSummary.closedOpportunitiesCount, list.opportunitiesSummary.opportunitiesCount)")
         div(row)
           p.accent.action-item #[a(href="#") Show All &#9654;]

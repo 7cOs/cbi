@@ -30,17 +30,6 @@ module.exports =
       console.log(data.performance);
     });*/
 
-    /* commenting out until API is better
-    userService.getTargetLists('A1B2C3').then(function(data) {
-      vm.namedFilters = data.owned;
-      console.log(vm.namedFilters);
-      console.log('shared with me response', data.owned);
-
-      vm.sharedFilters = data.sharedWithMe;
-      console.log(vm.sharedFilters);
-      console.log('shared with me response', data.sharedWithMe);
-    });*/
-
     // **************
     // PUBLIC METHODS
     // **************
