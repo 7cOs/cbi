@@ -106,6 +106,7 @@ config.gulp = {
       js: ['./app/**/*.js'],
       jsMain: './app/main.js',
       sass: ['./app/**/*.scss', '!./app/common/**/*.scss', './app/main.scss'],
+      sassLint: ['./app/**/*.scss', '!./app/assets/styles/lib/**/*.scss', './app/main.scss'],
       sassMain: './app/main.scss',
       ts: ['./app/**/*.ts']
     },

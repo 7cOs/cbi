@@ -16,7 +16,7 @@ gulp.task 'vet:js', ->
 
 # LINT SASS
 gulp.task 'vet:sass', ->
-  sassPath = config.gulp.src.assets.sass
+  sassPath = config.gulp.src.assets.sassLint
   return gulp.src(sassPath)
     .pipe(sassLint())
     .pipe(sassLint.format())
