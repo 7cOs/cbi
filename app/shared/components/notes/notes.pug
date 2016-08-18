@@ -10,12 +10,14 @@ div.modal.notes(ng-if="notesOpen")
   div(ng-if="n.loading").progress-container
     md-progress-circular(ng-if="n.loading" md-mode="indeterminate" md-diameter="100").md-accent
     h5 Loading...
-  div(ng-if="n.fileUploading").progress-container
+
+  div(ng-if="n.fileUploading").progress-container.uploader
     md-progress-circular(ng-if="n.fileUploading" md-mode="indeterminate" md-diameter="100").md-accent
     h5 Uploading...
-  div.note-container(ng-if="n.notes.length > 0")
+  div.note-container(ng-if="n.notes.length > 0 && !n.fileUploading")
+
     div.new-note
-      p(ng-click="n.openCreateNote()").bold <span>+</span> New Note
+      p(ng-click="n.openCreateNote()").bold.add-note <span>+</span> New Note
       div(ng-if="n.creatingNote").create-new-note
         label Topic
         .dropdown-filter
@@ -25,9 +27,15 @@ div.modal.notes(ng-if="notesOpen")
               md-option(aria-label="note title selector" value="" ng-click="n.showInput()") + Add a new topic >
         input(ng-if="n.inputToggle" ng-model="n.newNote.title")
         label details
-        textarea(ng-model="n.newNote.body")
+        div.text-editor
+          text-angular(ta-toolbar="[['bold','italics', 'underline', 'ul']]" ta-text-editor-class="form-content" ng-model="n.newNote.body").text-editor
+        div
+          .add-attachments(ngf-select="n.uploadFiles($files)" multiple accept="image/*")
+            p Add an attachment
+            p {{n.errorMsg}}
         button(ng-click="n.createNote(n.newNote)").btn-action Save
         p(ng-click="n.cancelNewNote(n.newNote)").cancel.accent X Cancel
+
     div.note-body(ng-repeat="note in n.notes | orderBy:'date'")
       div(ng-if="note.deleteConfirmation").delete-confirm
         h4 Are you sure you want to delete this note?
@@ -35,8 +43,8 @@ div.modal.notes(ng-if="notesOpen")
           button(ng-click="n.deleteNote(note)").btn-action Yes
           p(ng-click="n.toggleDelete(note)").cancel.accent X Cancel
       div(ng-if="!note.deleteConfirmation")
-        h4 {{note.title}} <span ng-if="note.attachments" class="attachments"></span>
-        p {{note.body | limitTo: n.numLimit}} <span class="read-more" ng-if="note.numLimit <= 150 || !note.numLimit" ng-click="n.readMore(note)")>...Read More</span>
+        h4(ng-if="!note.editMode") {{note.title}} <span ng-if="note.attachments" class="attachments"></span>
+        p(ng-if="!note.editMode") <span ta-bind ng-model="note.body"></span> <span class="read-more" ng-if="note.numLimit <= 150 || !note.numLimit" ng-click="n.readMore(note)")>...Read More</span>
         .note-attachments(ng-if="note.noteDetails")
           div.attachement-header
             .attachments
@@ -81,7 +89,7 @@ div.modal.notes(ng-if="notesOpen")
             .add-attachments(ng-if="note.author === 'Me'" ngf-select="n.uploadFiles($files)" multiple accept="image/*")
               p Add an attachment
               p {{n.errorMsg}}
-        .note-body-footer
+        .note-body-footer(ng-if="!note.editMode")
           p by <span class="note-author"> {{note.author}}</span>  <span class="note-date">{{note.date | date:"dd MMMM, yyyy 'at' h:mm a"}}</span>
           .icons
             .delete-note(ng-if="note.author === 'Me'" ng-click="n.toggleDelete(note)")
@@ -97,21 +105,50 @@ div.modal.notes(ng-if="notesOpen")
                     md-option(aria-label="note title selector" value="{{option}}" ng-model="note.title" ng-repeat="option in n.noteTopics") {{option}}
                     md-option(aria-label="note title selector" value="" ng-click="n.showInput()") + Add a new topic >
               input(ng-if="n.inputToggle" ng-model="note.title")
+
             label Details
-            textarea(ng-model="note.body")
+            div.text-editor
+              text-angular(ta-toolbar="[['bold','italics', 'underline', 'ul']]" ng-model="note.body").text-editor
             div.inline-container
               .attachments
                 p.accent Attachments
               .download-all
                 p Download All
             ul
-              li
-                .photo
-                  p IMG1009.PNG (3.3 MB)
-              li
-                .photo
-                  p IMG1010.PNG (4.3 MB)
+              li(ng-repeat="attachment in n.attachments")
+                div.attached-files
+                  .photo(ng-if="attachment.fileType === 'PNG'")
+                    img.thumbnail(src="{{attachment.thumbnail}}")
+                    p.file-name {{attachment.name}}&nbsp;({{attachment.fileSize}})
+                    div(ng-click="n.showImage(attachment)" ng-class="{'chevron-down': !attachment.visible, 'chevron-up': attachment.visible}")
+                    img(src="{{attachment.url}}" ng-if="attachment.visible")
+                  .spreadsheet(ng-if="attachment.fileType === 'XLS'")
+                    img.thumbnail(src="../assets/img/icons/download-xls-c.svg")
+                    p.file-name {{attachment.name}}&nbsp;({{attachment.fileSize}})
+                  .video(ng-if="attachment.fileType === 'MP4'")
+                    img.thumbnail(src="../assets/img/icons/download-mov-c.svg")
+                    p.file-name {{attachment.name}}&nbsp;({{attachment.fileSize}})
+                  .audio(ng-if="attachment.fileType === 'MP3'")
+                    img.thumbnail(src="../assets/img/icons/download-mp3-c.svg")
+                    p.file-name {{attachment.name}}&nbsp;({{attachment.fileSize}})
+                  .other(ng-if="attachment.fileType === 'OTHER'")
+                    img.thumbnail(src="../assets/img/icons/download-other-c.svg")
+                    p.file-name {{attachment.name}}&nbsp;({{attachment.fileSize}})
+                  .pdf(ng-if="attachment.fileType === 'PDF'")
+                    img.thumbnail(src="../assets/img/icons/download-pdf-c.svg")
+                    p.file-name {{attachment.name}}&nbsp;({{attachment.fileSize}})
+                  .powerpoint(ng-if="attachment.fileType === 'PPT'")
+                    img.thumbnail(src="../assets/img/icons/download-ppt-c.svg")
+                    p.file-name {{attachment.name}}&nbsp;({{attachment.fileSize}})
+                  .zip(ng-if="attachment.fileType === 'ZIP'")
+                    img.thumbnail(src="../assets/img/icons/download-zip-c.svg")
+                    p.file-name {{attachment.name}}&nbsp;({{attachment.fileSize}})
+                  .document(ng-if="attachment.fileType === 'DOC'")
+                    img.thumbnail(src="../assets/img/icons/download-doc-c.svg")
+                    p.file-name {{attachment.name}}&nbsp;({{attachment.fileSize}})
             div
               .add-attachments(ng-if="note.author === 'Me'" ngf-select="n.uploadFiles($files)" multiple accept="image/*")
                 p Add an attachment
                 p {{n.errorMsg}}
+            button(ng-click="n.isEditing(note)").btn-action Save
+            p(ng-click="n.isEditing(note)").cancel.accent X Cancel
