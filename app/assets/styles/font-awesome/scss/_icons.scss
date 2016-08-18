@@ -1,0 +1,23 @@
+/* Font Awesome uses the Unicode Private Use Area (PUA) to ensure screen
+   readers do not read off random characters that represent icons */
+
+.#{$fa-css-prefix}-font:before {
+  content: $fa-var-font;
+}
+
+.#{$fa-css-prefix}-bold:before {
+  content: $fa-var-bold;
+}
+
+.#{$fa-css-prefix}-italic:before {
+  content: $fa-var-italic;
+}
+
+.#{$fa-css-prefix}-list:before {
+  content: $fa-var-list;
+}
+
+.#{$fa-css-prefix}-fa:before,
+.#{$fa-css-prefix}-font-awesome:before {
+  content: $fa-var-font-awesome;
+}
