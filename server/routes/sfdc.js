@@ -10,7 +10,7 @@ module.exports = function(app) {
   var jsforce = require('jsforce');
 
   var config = app.get('config').sfdcSec;
-
+  console.log('config is: ' + config);
   var oauth2  = new jsforce.OAuth2({
     loginUrl: config.authorizationURL,
     clientID: config.clientID,
@@ -46,17 +46,6 @@ module.exports = function(app) {
   }
   ));
 */
-  sfdcPassport.use(new Pptsfdc({
-    clientID: config.clientID,
-    clientSecret: config.clientSecret,
-    callbackURL: config.callbackURL,
-    authorizationURL: config.authorizationURL,
-    tokenURL: config.tokenURL
-  }, function(token, tokenSecret, profile, done) {
-    console.log(profile);
-    done(null, profile);
-  }
-  ));
 
   sfdcPassport.serializeUser(function(user, done) {
     done(null, user);
@@ -100,18 +89,37 @@ module.exports = function(app) {
 
   });
 
-  app.get('/sfdc/login', function(req, res) {
-    res.redirect(oauth2.getAuthorizationUrl({ scope: 'api id web' }));
+// example found at https://github.com/joshbirk/passport-forcedotcom
+  sfdcPassport.use(new ForceDotComStrategy({
+    clientID: config.clientID,
+    clientSecret: config.clientSecret,
+    callbackURL: config.callbackURL,
+    authorizationURL: config.authorizationURL,
+    tokenURL: config.tokenURL
+  }, function verify(token, refreshToken, profile, done) {
+    console.log(profile);
+    return done(null, profile);
+  }
+  ));
 
-  });
-
-//  sfdcPassport.authenticate('salesforce'));
+  app.get('/sfdc/login', sfdcPassport.authenticate('forcedotcom', { failureRedirect: '/sfdc/error',
+                                                                    successRedirect: 'https://www.google.com' }), function (req, res) {});
 
   app.get('/sfdc/error', function (req, res) {
     res.send('<HTML><HEAD><TITLE>Testing</TITLE></HEAD><BODY><H1>YOU JUST GOT AN ERROR.</H1></BODY></HTML>');
   });
 
-  app.get('/sfdc/token', function(req, res) {
+  app.get('/sfdc/token',
+    sfdcPassport.authenticate('forcedotcom', { failureRedirect: '/sfdc/error',
+                                               successRedirect: 'https://www.google.com' }),
+    function(req, res) {
+      res.send('<HTML><HEAD></HEAD><BODY>You have connected successfully</BODY></HTML>');
+    }
+  );
+
+/*
+    function(req, res) {
+
     var conn = new jsforce.Connection({oauth2: oauth2});
     var code = req.param('code');
     conn.authorize(code, function(err, userInfo) {
@@ -123,6 +131,8 @@ module.exports = function(app) {
       console.log('User ID: ' + userInfo.id);
       console.log('Org ID: ' + userInfo.organization);
     });
+
+// example found at https://github.com/joshbirk/passport-forcedotcom
 /*
     console.log(req);
     res.send('<HTML><HEAD><TITLE>The End</TITLE></HEAD><BODY><H1>Testing the token endpoint.</H1></BODY></HTML>');
@@ -131,8 +141,8 @@ module.exports = function(app) {
       req.session['forcedotcom'] = req.session['passport']['user'];
      console.log(req);
    }
-  */ });
-
+  });
+*/
   app.all('/:label/yahoo',
     // ensureAuthenticated,
     function(req, res) {
