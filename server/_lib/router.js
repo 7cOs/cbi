@@ -2,7 +2,7 @@
 
 module.exports = function(app) {
 
-  const fs = require('fs'),
+  const fs = require('graceful-fs'),
         routes = fs.readdirSync('./server/routes/');
 
   // REQUIRE ALL ROUTES IN /ROUTES DIR

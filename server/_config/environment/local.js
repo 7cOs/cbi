@@ -22,6 +22,8 @@ module.exports = function (config) {
   config.env = 'development';
   config.address = 'http://' + config.domain + ':'  + config.port + '/'; // base url
 
+  config.iq = 'http://iqweb.cbrands.com';
+
   config.api = {
     url: 'https://cbi-api-internal-qa.herokuapp.com',
     key: 'U1NCc2FXdGxJSFJ2SUVodlpHOXlMQ0JJYjJSdmNpd2dTRzlrYjNJc0lFaHZaRzl5Y3lCaGJtUWdTRzlrYjNKekxnPT0=',

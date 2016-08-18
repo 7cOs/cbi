@@ -8,7 +8,7 @@ module.exports = function(app) {
     .get(function(req, res) {
       console.log(req.url);
       var signed = util.sign(req.url);
-      req.pipe(request(signed)).pipe(res);
+      req.pipe(request(signed), {headers: {Authorization: 'Bearer ' + req.user.jwt}}).pipe(res);
     })
     .delete(function(req, res) {
       var signed = util.sign(req.url);

@@ -2,7 +2,7 @@ babelify    = require('babelify')
 browserify  = require('browserify')
 browserifyInc = require('browserify-incremental')
 config      = require('../../../server/_config/app')
-fs          = require('fs')
+fs          = require('graceful-fs')
 gulp        = require('gulp')
 
 gulp.task 'compile:js', ['vet:js'], ->
