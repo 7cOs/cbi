@@ -1,9 +1,21 @@
 .collaborators-modal {
+  .title {
+    h4 {
+      margin-top: 20px;
+      margin-bottom: 20px;
+    }
+
+    .hide-row {
+      top: 1.5em;
+    }
+  }
+
   .collaborator-list {
     background-color: $white;
     display: inline-block;
     margin-left: -15px;
     margin-right: -15px;
+    position: relative;
     width: 100%;
 
     .collaborator {
@@ -16,44 +28,49 @@
 
       div {
         float: left;
-        width: 40%;
+        width: 45%;
       }
 
-      .close-icon {
-        position: relative;
-        display: inline-block;
-        width: 10%;
-        height: 22px;
-        overflow: hidden;
+      a {
         float: right;
-
-        &:hover {
-          cursor: pointer;
-
-          &:before, &:after {
-            background: $dark-blue;
-          }
-        }
-
-        &:before, &:after {
-          content: '';
-          position: absolute;
-          height: 1px;
-          width: 15px;
-          top: 45%;
-          left: 11px;
-          margin-top: -1px;
-          background: $black;
-        }
-
-        &:before {
-          transform: rotate(45deg);
-        }
-
-        &:after {
-          transform: rotate(-45deg);
-        }
+        position: relative;
+        top: 2px;
+        width: 5%;
       }
     }
   }
+
+  /* .close-icon {
+    position: relative;
+    display: inline-block;
+    width: 10%;
+    height: 22px;
+    overflow: hidden;
+
+    &:hover {
+      cursor: pointer;
+
+      &:before, &:after {
+        background: $dark-blue;
+      }
+    }
+
+    &:before, &:after {
+      content: '';
+      position: absolute;
+      height: 1px;
+      width: 15px;
+      top: 45%;
+      left: 11px;
+      margin-top: -1px;
+    }
+
+    &:before {
+      transform: rotate(45deg);
+    }
+
+    &:after {
+      transform: rotate(-45deg);
+    }
+  }*/
 }

@@ -14,6 +14,18 @@ module.exports =
       newCollaboratorId: '2',
       permissionLevel: 'collaborate'
     };
+    vm.collaboratorDropdown = [
+      {
+        name: 'Collaborator',
+        value: 'collaborator'
+      }, {
+        name: 'Make Owner',
+        value: 'owner'
+      }, {
+        name: 'remove',
+        value: 'remove'
+      }
+    ];
     vm.targetListService = targetListService;
 
     // Set page title for head and nav
@@ -106,7 +118,9 @@ module.exports =
     // **************
 
     function init() {
-      targetListService.getTargetList(targetListService.model.currentList.id).then(function(response) {
+      // targetListService.getTargetList(targetListService.model.currentList.id).then(function(response) {
+      // TEMPORARY -- IF I LEAVE THIS IN, DECLINE THE PR OUTRIGHT
+      targetListService.getTargetList('f6988ab8-eaf6-4ea6-8717-5155ad716147').then(function(response) {
         console.log('[targetListService.getTargetList]', response);
         targetListService.model.currentList = response;
       });
