@@ -99,12 +99,13 @@ config.gulp = {
       angular: {
         css: ['./app/**/*.scss']
       },
-      pug: {
-        templates: ['./app/**/*.pug', './app/modules/**/*.pug', '!./app/templates']
-      },
+      fonts: ['./app/assets/fonts/**/*'],
       img: ['./app/assets/img/**/*.jpg', './app/assets/img/**/*.jpg', './app/assets/img/**/*.png', './app/assets/img/**/*.svg'],
       js: ['./app/**/*.js'],
       jsMain: './app/main.js',
+      pug: {
+        templates: ['./app/**/*.pug', './app/modules/**/*.pug', '!./app/templates']
+      },
       sass: ['./app/**/*.scss', '!./app/common/**/*.scss', './app/main.scss'],
       sassLint: ['./app/**/*.scss', '!./app/assets/styles/lib/**/*.scss', './app/main.scss'],
       sassMain: './app/main.scss',
@@ -120,6 +121,7 @@ config.gulp = {
         css: './public/app/'
       },
       css: './public/css/',
+      fonts: './public/fonts/',
       img: './public/assets/img/',
       js: './public/app/',
       jsMain: './public/app/main.min.js',
