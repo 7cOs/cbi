@@ -64,7 +64,6 @@ module.exports =
 
     function applyFilters() {
       opportunitiesService.getOpportunities().then(function(data) {
-        console.log(data);
         opportunitiesService.model.opportunities = data;
 
         for (var i = 0; i < model.length; i++) {

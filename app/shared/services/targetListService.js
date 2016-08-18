@@ -302,7 +302,9 @@ module.exports =
       },
       deleteTargetListSharesResponse: {'status': 200}
     };
-    var model = {};
+    var model = {
+      currentList: {}
+    };
 
     var service = {
       model: model,
@@ -314,6 +316,7 @@ module.exports =
       deleteTargetListOpportunities: deleteTargetListOpportunities,
       getTargetListShares: getTargetListShares,
       addTargetListShares: addTargetListShares,
+      updateTargetListShares: updateTargetListShares,
       deleteTargetListShares: deleteTargetListShares
     };
 
@@ -562,28 +565,61 @@ module.exports =
     }
 
     /**
+     * @name updateTargetListShares
+     * @desc update collaborator permission level
+     * @params {String} targetListId - id of target list
+     * @params {Object} p - collaborator object
+     * @returns {Object} - collaborator response
+     * @memberOf orion.common.services
+     */
+    function updateTargetListShares(targetListId, p) {
+      var targetListPromise = $q.defer(),
+          url = apiHelperService.request('/api/targetLists/' + targetListId + '/shares'),
+          payload = {
+            userId: p.newCollaboratorId,
+            permissionLevel: p.permissionLevel
+          };
+
+      console.log(url, payload);
+
+      $http.patch(url, payload)
+        .then(updateTargetListSharesSuccess)
+        .catch(updateTargetListSharesFail);
+
+      function updateTargetListSharesSuccess(response) {
+        console.log('[targetListService.updateTargetListShares] response: ', response);
+        targetListPromise.resolve(response.data);
+      }
+
+      function updateTargetListSharesFail(error) {
+        targetListPromise.reject(error);
+      }
+
+      return targetListPromise.promise;
+    }
+
+    /**
      * @name deleteTargetListShares
      * @desc delete target list shares
      * @params {String} targetListId - id of target list
+     * @params {String} p - id of collaborator to be deleted
      * @returns {Object} - status object
      * @memberOf orion.common.services
      */
-    function deleteTargetListShares(targetListId) {
+    function deleteTargetListShares(targetListId, p) {
       var targetListPromise = $q.defer(),
-          url = '',
-          payload = tempData.deleteTargetListSharesPayload;
+          url = apiHelperService.request('/api/targetLists/' + targetListId + '/shares'),
+          payload = {
+            personId: p
+          };
 
-      $http.delete(url, payload, {
-        headers: {}
-      })
-      .then(deleteTargetListSharesSuccess)
-      .catch(deleteTargetListSharesFail);
+      $http.delete(url, payload)
+        .then(deleteTargetListSharesSuccess)
+        .catch(deleteTargetListSharesFail);
 
       function deleteTargetListSharesSuccess(response) {
         console.log('[targetListService.deleteTargetListShares] response: ', response);
-        // targetListPromise.resolve(response.data);
-        // uncomment above and remove below when services are ready
-        targetListPromise.resolve(tempData.deleteTargetListSharesResponse);
+        targetListPromise.resolve(response.data);
       }
 
       function deleteTargetListSharesFail(error) {

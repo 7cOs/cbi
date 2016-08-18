@@ -14,17 +14,21 @@ module.exports =
       newCollaboratorId: '2',
       permissionLevel: 'collaborate'
     };
+    vm.targetListService = targetListService;
 
     // Set page title for head and nav
     $rootScope.pageTitle = $state.current.title;
 
     // Expose public methods
     vm.addCollaborators = addCollaborators;
+    vm.changeCollaboratorLevel = changeCollaboratorLevel;
     vm.closeModal = closeModal;
+    vm.makeOwner = makeOwner;
     vm.modalManageTargetList = modalManageTargetList;
     vm.modalManageCollaborators = modalManageCollaborators;
     vm.modalSendOpportunity = modalSendOpportunity;
     vm.navigateToTL = navigateToTL;
+    vm.removeCollaborator = removeCollaborator;
 
     init();
 
@@ -33,14 +37,27 @@ module.exports =
     // **************
 
     function addCollaborators() {
-      targetListService.addTargetListShares(targetListService.model.currentList, vm.collaborator).then(function(response) {
+      targetListService.addTargetListShares(targetListService.model.currentList.id, vm.collaborator).then(function(response) {
         console.log('Collaborator Added!');
         // push to target list collaborator array
       });
     }
 
+    function changeCollaboratorLevel() {
+      targetListService.updateTargetListShares(targetListService.model.currentList.id, vm.collaborator).then(function(response) {
+        console.log('Collaborator Permissions Updated!');
+      });
+    }
+
     function closeModal() {
       $mdDialog.hide();
+    }
+
+    function makeOwner(collaboratorId) {
+      targetListService.addTargetListShares(targetListService.model.currentList.id, {newCollaboratorId: collaboratorId, permissionLevel: 'author'}).then(function() {
+        console.log('owner now w00t');
+      });
+      // update in array
     }
 
     function modalManageTargetList(ev) {
@@ -78,13 +95,20 @@ module.exports =
       $state.go('target-lists');
     }
 
+    function removeCollaborator(collaboratorId) {
+      targetListService.deleteTargetListShares(targetListService.model.currentList.id, collaboratorId).then(function(response) {
+        console.log('done');
+      });
+    }
+
     // **************
     // PRIVATE METHODS
     // **************
 
     function init() {
-      targetListService.getTargetList(targetListService.model.currentList).then(function(response) {
+      targetListService.getTargetList(targetListService.model.currentList.id).then(function(response) {
         console.log('[targetListService.getTargetList]', response);
+        targetListService.model.currentList = response;
       });
     }
   };
