@@ -4,12 +4,6 @@ p Here's the style guide page, where all shared / demo components will live
 div(column='12')
   section
     div(row)
-      h3.section-title Text Editor
-      div.text-editor
-        text-angular(ta-toolbar="[['bold','italics', 'underline', 'ul']]" ng-model="sg.fuckthisform").text-editor
-        p(ta-bind ng-model="sg.fuckthisform")
-  section
-    div(row)
       h2 IQ Links
       section
         p
@@ -188,3 +182,8 @@ div(column='12')
         h2 Notes
         button.btn-action(ng-click="sg.openNotes(true)") Notes
         notes
+
+      section
+        h3.section-title Text Editor
+        div.text-editor
+          text-angular(ta-toolbar="[['bold','italics', 'underline', 'ul']]" ng-model="sg.richTextEditor").text-editor
