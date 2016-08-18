@@ -88,7 +88,7 @@ section.landing-page
                 div(md-highlight-text="l.filtersService.model.brandSearchText" md-highlight-flags="^i") {{::brand.name}} - {{::brand.brand}}
           .filter-item
             label Account / Store
-            md-autocomplete(md-search-text="l.filter.accountSearchText" md-items="account in l.filter.accounts | filter:l.filter.accountSearchText" md-item-text="account.name" placeholder="Store, account, or subaccount namey" md-selected-item-change="chip.methods.addAutocompleteChip(account.name, 'accountSearchText')")
+            md-autocomplete(md-search-text="l.filter.accountSearchText" md-items="account in l.filter.accounts | filter:l.filter.accountSearchText" md-item-text="account.name" placeholder="Store, account, or subaccount name" md-selected-item-change="chip.methods.addAutocompleteChip(account.name, 'accountSearchText')")
               md-item-template
               div(md-highlight-text="l.filter.accountSearchText" md-highlight-flags="^i") {{account.name}} - {{account.subAccount}}
           .filter-item
