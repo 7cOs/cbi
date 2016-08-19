@@ -21,6 +21,7 @@ module.exports = function(app) {
       res.redirect('/');
     });
   app.get('/auth/user', function (req, res) {
-    res.send(req.user.jwtmap);
+    console.log(req.user);
+    res.send(req.user);
   });
 };
