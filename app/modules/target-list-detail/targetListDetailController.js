@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports =
-  function targetListDetailController($rootScope, $scope, $state, $mdDialog, targetListService, chipsService, filtersService) {
+  function targetListDetailController($rootScope, $scope, $state, $mdDialog, targetListService, chipsService, filtersService, userService) {
 
     // ****************
     // CONTROLLER SETUP
@@ -14,18 +14,6 @@ module.exports =
       newCollaboratorId: '2',
       permissionLevel: 'collaborate'
     };
-    vm.collaboratorDropdown = [
-      {
-        name: 'Collaborator',
-        value: 'collaborator'
-      }, {
-        name: 'Make Owner',
-        value: 'owner'
-      }, {
-        name: 'remove',
-        value: 'remove'
-      }
-    ];
     vm.targetListService = targetListService;
 
     // Set page title for head and nav
@@ -35,12 +23,14 @@ module.exports =
     vm.addCollaborators = addCollaborators;
     vm.changeCollaboratorLevel = changeCollaboratorLevel;
     vm.closeModal = closeModal;
+    vm.deleteList = deleteList;
     vm.makeOwner = makeOwner;
     vm.modalManageTargetList = modalManageTargetList;
     vm.modalManageCollaborators = modalManageCollaborators;
     vm.modalSendOpportunity = modalSendOpportunity;
     vm.navigateToTL = navigateToTL;
     vm.removeCollaborator = removeCollaborator;
+    vm.updateList = updateList;
 
     init();
 
@@ -51,6 +41,7 @@ module.exports =
     function addCollaborators() {
       targetListService.addTargetListShares(targetListService.model.currentList.id, vm.collaborator).then(function(response) {
         console.log('Collaborator Added!');
+
         // push to target list collaborator array
       });
     }
@@ -65,10 +56,20 @@ module.exports =
       $mdDialog.hide();
     }
 
-    function makeOwner(collaboratorId) {
-      targetListService.addTargetListShares(targetListService.model.currentList.id, {newCollaboratorId: collaboratorId, permissionLevel: 'author'}).then(function() {
-        console.log('owner now w00t');
+    function deleteList() {
+      targetListService.deleteTargetList(targetListService.model.currentList.id).then(function(response) {
+        console.log('Target list deleted!');
+
+        // TO DO
+        // userService.model.targetLists.splice(,1)
       });
+    }
+
+    function makeOwner(collaboratorId) {
+      /* targetListService.addTargetListShares(targetListService.model.currentList.id, {newCollaboratorId: collaboratorId, permissionLevel: 'author'}).then(function() {
+        console.log('owner now w00t');
+      });*/
+      console.log('sup');
       // update in array
     }
 
@@ -110,6 +111,21 @@ module.exports =
     function removeCollaborator(collaboratorId) {
       targetListService.deleteTargetListShares(targetListService.model.currentList.id, collaboratorId).then(function(response) {
         console.log('done');
+
+        // TO DO
+        // remove from collaborators list in model
+      });
+    }
+
+    function updateList(method) {
+      var payload = {
+        archived: method === 'archive',
+        description: targetListService.model.currentList.description,
+        name: targetListService.model.currentList.name
+      };
+
+      targetListService.updateTargetList(targetListService.model.currentList.id, payload).then(function(response) {
+        console.log('Target List Updated: ', response);
       });
     }
 
@@ -118,11 +134,11 @@ module.exports =
     // **************
 
     function init() {
-      // targetListService.getTargetList(targetListService.model.currentList.id).then(function(response) {
-      // TEMPORARY -- IF I LEAVE THIS IN, DECLINE THE PR OUTRIGHT
-      targetListService.getTargetList('89bc8d73-ec67-4160-92c1-9210c610eca9').then(function(response) {
+      targetListService.getTargetList(targetListService.model.currentList.id).then(function(response) {
         console.log('[targetListService.getTargetList]', response);
         targetListService.model.currentList = response;
+      }, function(err) {
+        console.log('[targetListController.init], Error: ' + err.statusText + '. Code: ' + err.status);
       });
     }
   };

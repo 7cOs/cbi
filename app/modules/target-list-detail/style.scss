@@ -20,22 +20,41 @@
 
     .collaborator {
       height: 30px;
-      padding: 15px 15px 0;
+      padding: 10px 15px 5px;
 
       &:hover {
         background-color: $light-blue;
       }
 
-      div {
+      > div, md-menu {
         float: left;
-        width: 45%;
+        height: 25px;
+        line-height: 25px;
+        width: 50%;
       }
 
-      a {
-        float: right;
-        position: relative;
-        top: 2px;
-        width: 5%;
+      md-menu {
+        padding: 0;
+
+        a {
+          position: relative;
+          right: -20px;
+          top: -3px;
+        }
+
+        button {
+          height: 25px;
+          margin: 0;
+          min-height: 0;
+        }
+
+        span {
+          line-height: 25px;
+        }
+
+        .md-ripple-container {
+          height: 25px;
+        }
       }
     }
   }
@@ -73,4 +92,24 @@
       transform: rotate(-45deg);
     }
   }*/
+}
+
+// Modal style -- This is outside the scope of the template
+.collaborator-options {
+  background-color: $white;
+  border: 1px solid $gray-9;
+  min-width: 200px;
+  position: absolute;
+  top: 60px;
+
+  md-menu-item {
+    border-bottom: 1px dashed $gray-4;
+    line-height: 48px;
+    padding: 0 10px;
+
+    &:hover {
+      background-color: $gray-9;
+      cursor: pointer;
+    }
+  }
 }
