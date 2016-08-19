@@ -4,8 +4,6 @@ module.exports =
   function($mdThemingProvider, $locationProvider) {
     $mdThemingProvider.theme('default')
       .primaryPalette('grey')
-      .accentPalette('light-blue', {
-        'default': '50'
-      });
+      .accentPalette('light-blue');
     $locationProvider.html5Mode(true);
   };

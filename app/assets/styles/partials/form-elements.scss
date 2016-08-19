@@ -74,6 +74,7 @@ md-checkbox {
       &:after {
         display: block;
         border-color: $gray-4;
+        border-width: 1px;
       }
     }
   }

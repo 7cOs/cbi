@@ -8,8 +8,8 @@ div.modal
     div.modal-input.clearfix
       label Opportunity Type
       md-radio-group.horizontal-layout(ng-model="nb.newOpportunity.properties.distributionType.type")
-        md-radio-button(value="new") New Distribution
-        md-radio-button(value="other") Other
+        md-radio-button.md-primary(value="new") New Distribution
+        md-radio-button.md-primary(value="other") Other
         input(ng-model="nb.newOpportunity.properties.distributionType.description" ).short
     div.modal-input
       label Recommended Brand or Package/ SKU
