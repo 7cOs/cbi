@@ -1,64 +1,18 @@
 div.target-lists
   md-tabs(md-dynamic-height='' md-border-bottom)
-    md-tab(label='My Target List')
+    md-tab(ng-repeat="type in target.types" label="{{type.name}}")
       md-content.md-padding
         div(row).target-list-count-container
-          h5.accent.right Displaying Recent (3 of 3)
+          h5.accent.right Displaying Recent ({{type.records.length}} of {{type.total}})
           div(column="4 +6").target-list-count
-            h5(column="6").accent.completed.right  closed
+            h5(column="6").accent.completed.right closed
             h5(column="6").accent.right opportunities
         div(row).target-list
-          div(ng-show="!target.namedFilters.length").no-opportunites
+          div(ng-show="!type.records.length").no-opportunites
             h4 No Opportunities have been added yet
             p Try Searching for <span>Opportunities</span> and add them to your list
           ul
-            li(ng-repeat="list in target.namedFilters")
-              div(column="8")
-                h3 {{list.name}}
-                p.accent {{list.creator}}
-                p.accent &#9746; {{list.members.length}} members
-                p.accent {{list.createdAt | timeAgo: 'relative'}}
-              div(column="4")
-                h4(column="6").completed.right {{list.opportunitiesSummary.closedOpportunitiesCount | number}}
-                h4(column="6").right {{list.opportunitiesSummary.opportunitiesCount | number}}
-              md-progress-linear(md-mode="determinate" ng-value="target.ratio(list.opportunitiesSummary.closedOpportunitiesCount, list.opportunitiesSummary.opportunitiesCount)")
-        div(row)
-          p.accent.action-item #[a(href="#") Show All &#9654;]
-    md-tab(label='Shared with Me')
-      md-content.md-padding
-        div(row).target-list-count-container
-          h5.accent.right Displaying Recent (3 of 3)
-          div(column="4 +6").target-list-count
-            h5(column="6").accent.completed.right  closed
-            h5(column="6").accent.right opportunities
-        div(row).target-list
-          div(ng-show="!target.sharedFilters.length").no-opportunites
-            h4 No Opportunities have been shared with you yet
-            p Try Searching for <span>Opportunities</span> and add them to your list
-          ul
-            li(ng-repeat="list in target.sharedFilters")
-              div(column="8")
-                h3 {{list.name}}
-                p.accent {{list.creator}}
-                p.accent &#9746; {{list.members.length}} members
-                p.accent {{list.createdAt | timeAgo: 'relative'}}
-              div(column="4")
-                h4(column="6").completed.right {{list.opportunitiesSummary.closedOpportunitiesCount | number}}
-                h4(column="6").right {{list.opportunitiesSummary.opportunitiesCount | number}}
-              md-progress-linear(md-mode="determinate" ng-value="target.ratio(list.opportunitiesSummary.closedOpportunitiesCount, list.opportunitiesSummary.opportunitiesCount)")
-    md-tab(label='Archived' ng-if="target.pageName === 'target-lists'")
-      md-content.md-padding
-        div(row).target-list-count-container
-          h5.accent.right Displaying Recent (3 of 3)
-          div(column="4 +6").target-list-count
-            h5(column="6").accent.completed.right  closed
-            h5(column="6").accent.right opportunities
-        div(row).target-list
-          div(ng-show="!target.archivedFilters.length").no-opportunites
-            h4 No Opportunities to remove
-            p Try Searching for <span>Opportunities</span> and add them to your list
-          ul
-            li(ng-repeat="list in target.archivedFilters")
+            li(ng-repeat="list in type.records")
               div(column="8")
                 h3 {{list.name}}
                 p.accent {{list.creator}}
