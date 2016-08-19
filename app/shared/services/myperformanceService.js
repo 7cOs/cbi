@@ -337,6 +337,11 @@ module.exports =
         name: 'Sub-Accounts'
       }, {
         name: 'Stores'
+      }],
+      storeTypes: [{
+        name: 'Chain'
+      }, {
+        name: 'Independent'
       }]
     };
 
