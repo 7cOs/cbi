@@ -38,11 +38,11 @@ notes
     div(column='2')
       label Trend
       md-radio-group(ng-model="a.filtersService.model.selected.trend")
-        md-radio-button(ng-repeat="filter in a.filters.trend" class="md-primary" ng-value="filter.name" aria-label="Trend") {{filter.name}}
+        md-radio-button(ng-repeat="filter in a.filters.trend" class="md-primary" ng-value="filter.name" aria-label="Trend" ng-click="a.chipsService.addChip(filter.name, 'trend', true)") {{filter.name}}
     div(column='3')
       label Ending Time Period
       md-radio-group(ng-model="a.filtersService.model.selected.timePeriod")
-        md-radio-button(ng-repeat="filter in a.filters.timePeriod" class="md-primary" ng-value="filter.name" aria-label="Ending Time Period") {{filter.name}}
+        md-radio-button(ng-repeat="filter in a.filters.timePeriod" class="md-primary" ng-value="filter.name" aria-label="Ending Time Period" ng-click="a.chipsService.addChip(filter.name, 'timePeriod', true)") {{filter.name}}
     div(column='7')
       div(row).dropdown-filter
         div(column='6').dropdown

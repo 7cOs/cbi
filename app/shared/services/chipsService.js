@@ -86,8 +86,8 @@ module.exports =
      * @private
      */
     function removeChip(type) {
-      for (var i = 0; i < model.length; i++) {
-        if (model[i].type === type) {
+      for (var i = 0; i < service.model.length; i++) {
+        if (service.model[i].type === type) {
           service.model.splice(i, 1);
           break;
         }
