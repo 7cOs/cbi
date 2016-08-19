@@ -23,7 +23,7 @@ else
 
 # COMPILE ALL THE THINGZ
 gulp.task 'compile', (cb) ->
-  runSequence ['compile:pug', 'compile:js', 'compile:sass', 'compile:img'], cb
+  runSequence ['compile:pug', 'compile:js', 'compile:fonts', 'compile:sass', 'compile:img'], cb
 
 # CLEAN UP BEFORE BUILDS
 gulp.task 'clean', ->

@@ -8,6 +8,11 @@
 @import './assets/styles/base/variables';
 @import './assets/styles/base/utilities';
 
+// Font Awesome for Text Editor
+@import './assets/styles/lib/font-awesome/font-awesome.scss';
+@import './assets/styles/liv/text-angular/text-angular.scss';
+
+
 // Partials
 @import './assets/styles/partials/layout';
 @import './assets/styles/partials/typography';
@@ -23,6 +28,7 @@
 @import './assets/styles/partials/modals.scss';
 @import './assets/styles/partials/toast.scss';
 @import './assets/styles/partials/menus.scss';
+@import './assets/styles/partials/text-editor.scss';
 @import './assets/styles/partials/notifications.scss';
 
 // Browser fixes
