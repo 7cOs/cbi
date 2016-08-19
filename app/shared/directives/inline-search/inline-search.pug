@@ -4,4 +4,6 @@ form.inline-search
   .results-container(ng-class="{'open': is.showResults}")
     md-progress-circular(ng-show="is.loading" md-mode="indeterminate")
     ul.results(ng-show="!is.loading")
-      li(md-prevent-menu-close ng-repeat="result in is.results" ng-click="is.resultChosen(result)") {{result}}
+      li(md-prevent-menu-close ng-repeat="result in is.results" ng-click="is.resultChosen(result.name)") {{result.name}}
+    p.no-results(ng-if="!is.loading && !is.errorMessage && is.results.length === 0") No results found
+    p.no-results(ng-if="is.errorMessage") Something went wrong.<br>Please try again.

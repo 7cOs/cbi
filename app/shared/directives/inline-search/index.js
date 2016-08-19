@@ -15,7 +15,7 @@ module.exports =
       link: function(scope, elem, attrs) {}
     };
 
-    function InlineSearchController($scope, $timeout) {
+    function InlineSearchController($scope, $timeout, searchService) {
 
       // ****************
       // CONTROLLER SETUP
@@ -28,14 +28,6 @@ module.exports =
       vm.input = '';
       vm.showResults = false;
       vm.loading = false;
-      vm.results = [
-        'Result one',
-        'Result two',
-        'Result three',
-        'Result four',
-        'Result five',
-        'Result six'
-      ];
 
       // Expose public methods
       vm.action = action;
@@ -47,11 +39,18 @@ module.exports =
       // **************
 
       function action() {
+        vm.results = [];
+        vm.errorMessage = null;
         vm.loading = true;
         vm.showResults = true;
-        $timeout(function() {
+
+        searchService.getDistributors(vm.input).then(function(data) {
           vm.loading = false;
-        }, 2000);
+          vm.results = data;
+        }, function(reason) {
+          vm.loading = false;
+          vm.errorMessage = reason;
+        });
       }
 
       function resultChosen(result) {

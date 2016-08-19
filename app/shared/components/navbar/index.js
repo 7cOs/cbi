@@ -21,6 +21,7 @@ function NavbarController($rootScope, $scope, $mdPanel, $mdDialog, notifications
   // Defaults
   vm.unreadNotifications = getUnreadCount();
   vm.noNotifications = 'No unread notifications.';
+  vm.myAccountsOnly = true;
 
   // Mock data
   vm.accountSelectorSelected = 'Distributor';
