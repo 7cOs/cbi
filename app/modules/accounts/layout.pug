@@ -63,20 +63,26 @@ notes
       label Premise Type
       md-radio-group(ng-model="a.filtersService.model.selected.premiseType")
         md-radio-button(ng-repeat="p in a.filtersService.model.premises" class="md-primary" ng-value="p.name" aria-label="p.name" ng-click="a.chipsService.addChip(p.name, 'premiseType', true)") {{p.name}}
-    div(column='3')
+    div(column='2')
       label Distributor
       md-autocomplete(md-search-text="a.filtersService.model.distributorSearchText" md-items="distributor in a.filtersService.model.distributors" md-item-text="distributor.name" placeholder="by Name" md-selected-item-change="a.chipsService.addAutocompleteChip(distributor.name, 'distributorSearchText')")
         md-item-template
           div(md-highlight-text="a.filtersService.model.distributorSearchText" md-highlight-flags="^i") {{distributor.name}}
     div(column='2')
       label Store Type
-      md-checkbox(ng-model="o.filtersService.model.selected.storeTypeIndependent" aria-label="Store Type Independent" ng-click="o.chipsService.updateChip('storeTypeIndependent', 'Store Type Independent')") Independent
-      md-checkbox(ng-model="o.filtersService.model.selected.storeTypeCBBD" aria-label="Store Type CBBD" ng-click="o.chipsService.updateChip('storeTypeCBBD', 'Store Type CBBD')") CBBD Chain
-    div(column='3')
-      label Account / Store
-      md-autocomplete(md-search-text="a.filtersService.model.accountSearchText" md-items="account in a.filtersService.model.accounts" md-item-text="account.name" placeholder="by Account, Sub account" md-selected-item-change="a.chipsService.addAutocompleteChip(account.name, 'accountSearchText')")
-        md-item-template
-          div(md-highlight-text="a.filtersService.model.accountSearchText" md-highlight-flags="^i") {{account.name}} - {{account.subAccount}}
+      md-checkbox(ng-model="o.filtersService.model.selected.storeTypeCBBD" aria-label="Store Type CBBD" ng-click="o.chipsService.updateChip('storeTypeCBBD', 'Store Type Chain')") Chains
+      md-checkbox(ng-model="o.filtersService.model.selected.storeTypeIndependent" aria-label="Store Type Independent" ng-click="o.chipsService.updateChip('storeTypeIndependent', 'Store Type Independent')") Independent Stores
+    div(column='4').chain-store
+      label Chain / Store
+      div(row).dropdown-filter
+        div(column='4').dropdown
+          md-select(ng-model="a.filtersService.model.selected.storeTypes" md-on-open="a.openSelect(true)" md-on-close="a.openSelect(false)" aria-label="Store Type Filter"  placeholder="Chain")
+            md-option(ng-repeat="filter in a.filters.storeTypes" aria-label="filter.name" value="{{filter.name}}") {{filter.name}}
+        div(column='4')
+          md-autocomplete(md-search-text="a.filtersService.model.accountSearchText" md-items="account in a.filtersService.model.accounts" md-item-text="account.name" placeholder="by Chain/Store Name" md-selected-item-change="a.chipsService.addAutocompleteChip(account.name, 'accountSearchText')")
+            md-item-template
+              div(md-highlight-text="a.filtersService.model.accountSearchText" md-highlight-flags="^i") {{account.name}} - {{account.subAccount}}
+        div(column='5') &nbsp;
 
   div(row)
     div(column='12' class='apply-filters')
