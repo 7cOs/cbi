@@ -1,0 +1,112 @@
+'use strict';
+
+// Endpoints used for sfdc authorization
+var saml2 = require('saml2-js');
+var fs = require('fs');
+var nameId, sessionIndex;
+//  var config = app.get('config').sfdcSec;
+
+function isConnected (app, req, res) {
+  console.log('Connecting to SFDC through sfdc.isConnected');
+
+  var spOptions = {
+    entity_id: 'https://dev-salesforce.cbrands.com',
+    private_key: fs.readFileSync('../config/sfdcsecurity/key-file.pem').toString(),
+    certificate: fs.readFileSync('../config/sfdcsecurity/cert-file.crt').toString(),
+    assert_enddpoint: 'https://ssodev.cbrands.com/oamfed/idp/samlv20'
+  };
+
+  var idpOptions = {
+    sso_login_url: 'https://ssodev.cbrands.com/oamfed/idp/samlv20',
+    sso_logout_url: 'https://ssodev.cbrands.com/oam/server/logout?end_url=http://www.cbrands.com',
+    certificates: [fs.readFileSync('./server/_config/passport/certs/development.crt').toString()],
+    force_authn: true,
+    sign_get_request: false,
+    allow_unencrypted_assertion: true
+  };
+
+  if (saml2 !== null) {
+    console.log('Creating service provider proxy');
+    var sp = new saml2.ServiceProvider(spOptions);
+    if (sp !== null) console.log('Service Provider is created: ' + sp);
+    console.log('Creating identity provider proxy');
+    var idp = new saml2.IdentityProvider(idpOptions);
+    if (idp !== null) console.log('Identity Provider is created: ' + idp);
+
+    return {'isSuccess': true,
+             'sp': sp,
+             'idp': idp
+           };
+  } else {
+    return {'isSuccess': false,
+            'ErrorMessage': 'The saml2 library is not installed properly.  Please check with your portal\'s administrator.'};
+  }
+};
+
+exports.getMetadata = function(app, req, res) {
+  console.log('in sfdcauth.getMetadata');
+  var mdPromise = new Promise(function (resolve, reject) {
+    var spIdp = isConnected(app, req, res);
+    if (spIdp) {
+      var sp = spIdp.sp;
+      var idp = spIdp.idp;
+      console('sp is:' + sp);
+      console('idp is: ' + idp);
+      console.log('Both sides created.  Now creating the Service Provider metadata');
+      var md = sp.create_metadata();  // can this be asynchronous or do I have to use a promise for it?
+      if (md !== null) {
+        console.log('Metadata is created: ' + md);
+        resolve(md);
+      } else {
+        reject(Error('No metadata was found: '));
+      };
+      mdPromise.then(function (result) {
+        var strResponse = JSON.stringify(result, null, '\t');
+        res.write(strResponse);
+        res.end();
+      }, function (err) {
+        console.log('There was an error getting metadata for the idP: ' + err);
+      });
+    };
+  });
+};
+
+exports.login = function(app, req, res) {
+  console.log('In /sfdc/login');
+  var spIdp = isConnected(app, req, res);
+  spIdp.sp.create_login_request_url(spIdp.idp, {}, function(err, loginUrl, requestId) {
+    if (err != null) {
+      return res.send(500);
+    }
+    console.log('returned ' + loginUrl);
+    res.send(200);
+  //  res.redirect(loginUrl);
+  });
+};
+
+exports.assert =  function(app, req, res) {
+  var options = {request_body: req.body};
+  var spIdp = isConnected(app, req, res);
+  spIdp.sp.post_assert(spIdp.idp, options, function(err, samlResponse) {
+    if (err !== null) {
+      nameId = samlResponse.user.name_id;
+      sessionIndex = samlResponse.user.session_index;
+      res.send('Hello #{saml_response.user.name_id}!');
+      return res.send(500);
+    };
+  });
+};
+
+exports.logout = function(app, req, res) {
+  var options = {
+    name_id: nameId,
+    session_index: sessionIndex
+  };
+  var spIdp = isConnected(app, req, res);
+  spIdp.sp.create_logout_request_url(spIdp.idp, options, function(err, logoutUrl) {
+    if (err != null) {
+      return res.send(500);
+    }
+    res.redirect(logoutUrl);
+  });
+};

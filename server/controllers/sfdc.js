@@ -6,6 +6,7 @@ J. Scott Cromie
 ***********************************************************/
 
 var sfdc = require('../_lib/sfdc.js');
+// var sfdcAuth = require('../_lib/sfdcauth.js');
 
 exports.getAttachmentData = function(app, req, res) {
 
@@ -134,9 +135,3 @@ exports.accountNotes = function(app, req, res) {
   });
 };
 
-exports.authorizeSFDC = function(app, req, res) {
-  console.log('In controllers.authorizeSFDC');
-  for (var param in req.query) {
-    console.log(param.key + ' is ' + param.value);
-  };
-};
