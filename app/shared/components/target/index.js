@@ -35,12 +35,25 @@ function TargetListController($scope, $state, userService) {
   };
 
   userService.getTargetLists('1').then(function(data) {
-    console.log('response', data);
+    // split things into categories, but ignore archived
+    var mine = data.owned.filter(curriedFilterByArchived(false));
+    var shared = data.sharedWithMe.filter(curriedFilterByArchived(false));
 
-    vm.types.mine.records = data.owned.slice(0, 4);
-    vm.types.mine.total = data.owned.length;
-    vm.types.shared.records = data.sharedWithMe.slice(0, 4);
-    vm.types.shared.total = data.sharedWithMe.length;
+    // Get archived
+    var archived = data.owned.filter(curriedFilterByArchived(true));
+
+    // Uncomment this if we want shared archived included with my archived
+    // archived = archived.concat(
+    //   data.sharedWithMe.filter(curriedFilterByArchived(true))
+    // );
+
+    // Send to model
+    vm.types.mine.records = mine.slice(0, 4);
+    vm.types.mine.total = mine.length;
+    vm.types.shared.records = shared.slice(0, 4);
+    vm.types.shared.total = shared.length;
+    vm.types.archived.records = archived.slice(0, 4);
+    vm.types.archived.total = archived.length;
   });
 
   // **************
@@ -51,6 +64,18 @@ function TargetListController($scope, $state, userService) {
     var result = closed / total * 100;
     return result;
   };
+
+  // **************
+  // PRIVATE METHODS
+  // **************
+
+  function curriedFilterByArchived(yes) {
+    return function(item) {
+      /* eslint eqeqeq: 0 */
+      /* needed this so as to allow coercion */
+      return item.archived == yes;
+    };
+  }
 }
 
 module.exports =
