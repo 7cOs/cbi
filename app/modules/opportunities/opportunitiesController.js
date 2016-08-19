@@ -118,6 +118,10 @@ module.exports =
       userService.getOpportunityFilters(userService.model.currentUser.id).then(function(data) {
         userService.model.opportunityFilters = data;
       });
+
+      // reset all chips and filters on page init
+      chipsService.model = chipsService.resetChipsFilters(chipsService.model);
+
     }
 
     /* function parseFilterObj() {

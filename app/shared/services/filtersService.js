@@ -62,6 +62,7 @@ module.exports =
         storeSegmentationC: '',
         storeTypeCBBD: '',
         storeTypeIndependent: '',
+        timePeriod: '',
         tradeChannelConvenience: '',
         tradeChannelDrug: '',
         tradeChannelGrocery: '',

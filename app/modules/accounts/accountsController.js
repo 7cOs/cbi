@@ -98,6 +98,8 @@ module.exports =
     vm.prevTab = prevTab;
     vm.openNotes = openNotes;
 
+    init();
+
     // **************
     // PUBLIC METHODS
     // **************
@@ -221,4 +223,9 @@ module.exports =
         vm.scrolledBelowHeader = false;
       }
     });
+
+    function init() {
+      // reset all chips and filters on page init
+      chipsService.model = chipsService.resetChipsFilters(chipsService.model);
+    }
   };
