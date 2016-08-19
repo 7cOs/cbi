@@ -8,22 +8,32 @@ module.exports = function(app) {
     .get(function(req, res) {
       console.log(req.url);
       var signed = util.sign(req.url);
-      req.pipe(request(signed), {headers: {Authorization: 'Bearer ' + req.user.jwt}}).pipe(res);
+      req.pipe(request(signed), {headers: {"Authorization": "Bearer " + req.user.jwt}}, function(err) {
+        console.log(err);
+      }).pipe(res);
     })
     .delete(function(req, res) {
       var signed = util.sign(req.url);
-      request.del(signed, {body: req.body, json: true}).pipe(res);
+      request.del(signed, {body: req.body, json: true}, function(err) {
+        console.log(err);
+      }).pipe(res);
     })
     .post(function(req, res) {
       var signed = util.sign(req.url);
-      request.post(signed, {body: req.body, json: true}).pipe(res);
+      request.post(signed, {body: req.body, json: true}, function(err) {
+        console.log(err);
+      }).pipe(res);
     })
     .put(function(req, res) {
       var signed = util.sign(req.url);
-      request.put(signed, {body: req.body, json: true}).pipe(res);
+      request.put(signed, {body: req.body, json: true}, function(err) {
+        console.log(err);
+      }).pipe(res);
     })
     .patch(function(req, res) {
       var signed = util.sign(req.url);
-      request.patch(signed, {body: req.body, json: true}).pipe(res);
+      request.patch(signed, {body: req.body, json: true}, function(err) {
+        console.log(err);
+      }).pipe(res);
     });
 };

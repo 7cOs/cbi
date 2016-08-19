@@ -22,6 +22,6 @@ module.exports = function(app) {
     });
   app.get('/auth/user', function (req, res) {
     console.log(req.user);
-    res.send(req.user);
+    res.send(req.user.jwtmap);
   });
 };
