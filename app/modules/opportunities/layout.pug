@@ -33,7 +33,7 @@ div#fancy-cat
     div(column='3')
       label Premise Type
       md-radio-group(ng-model="o.filtersService.model.selected.premiseType")
-        md-radio-button(ng-repeat="p in o.filtersService.model.premises" class="md-primary" ng-value="p.name" aria-label="p.name" ng-click="o.chipsService.addChip(p.name, 'premiseType', true)") {{::p.name}}
+        md-radio-button(ng-repeat="p in o.filtersService.model.premises | filter: '!All'" class="md-primary" ng-value="p.name" aria-label="p.name" ng-click="o.chipsService.addChip(p.name, 'premiseType', true)") {{::p.name}}
     div(column='6')
       label Opportunity Status
       md-radio-group(ng-model="o.filtersService.model.selected.opportunitiesStatus")

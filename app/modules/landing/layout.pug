@@ -74,7 +74,7 @@ section.landing-page
         .filter-container
           label
           md-radio-group(ng-model="l.filter.selected.premiseType")
-            md-radio-button(ng-repeat="p in l.filter.premises" class="md-primary" ng-value="p.name" aria-label="p.name") {{p.name}}
+            md-radio-button(ng-repeat="p in l.filter.premises | filter: '!All'" class="md-primary" ng-value="p.name" aria-label="p.name") {{p.name}}
           .filter-item
             .dropdown-filter
               .dropdown
