@@ -4,37 +4,45 @@ div.modal
   div.modal-form
     div.modal-input
       label Account
-      input(ng-model="tempPlaceholder")
+      input(ng-model="nb.newOpportunity.properties.store.description")
     div.modal-input.clearfix
       label Opportunity Type
-      md-radio-group.horizontal-layout
-        md-radio-button New Distribution
-        md-radio-button Other
-        input(ng-model="tempPlaceholder").short
+      md-radio-group.horizontal-layout(ng-model="nb.newOpportunity.properties.distributionType.type")
+        md-radio-button(value="new") New Distribution
+        md-radio-button(value="other") Other
+        input(ng-model="nb.newOpportunity.properties.distributionType.description" ).short
     div.modal-input
       label Recommended Brand or Package/ SKU
-      input(ng-model="tempPlaceholder")
+      input(ng-model="nb.newOpportunity.properties.product.type")
     div.modal-input
       label Rationale
       .dropdown-filter
         .dropdown
-          md-select(ng-model="o.somethingInTheFuture" aria-label="rationale dropdown" placeholder="Select an option")
-            md-option(aria-label="rationale modal form" value="")
+          md-select(ng-model="nb.newOpportunity.properties.rationale.description" aria-label="rationale dropdown" placeholder="Select an option")
+            md-option(ng-repeat="rationale in nb.rationales" aria-label="rationale modal form" value="") {{rationale.type}}
+            md-option(aria-label="add new rationale modal form" ng-click="nb.showNewRationaleInput()") + Add a new rationale
+          input(ng-if="nb.addNewRationale" ng-model="nb.newOpportunity.properties.rationale.description")
     div.modal-input
       label Impact
       .dropdown-filter.half-width
         .dropdown.short
-          md-select(ng-model="o.somethingInTheFuture" aria-label="impact dropdown" placeholder="Select an option")
-            md-option(aria-label="impact modal form" value="high") High
-            md-option(aria-label="impact modal form" value="medium") Medium
-            md-option(aria-label="impact modal form" value="low") Low
+          md-select(ng-model="nb.newOpportunity.properties.impact.enum" aria-label="impact dropdown" placeholder="Select an option")
+            md-option(aria-label="impact modal form" value="high") High <md-icon md-svg-src="./assets/img/icons/impact-high.svg" ></md-icon>
+            md-option(aria-label="impact modal form" value="MEDIUM") Medium <md-icon md-svg-src="./assets/img/icons/impact-medium.svg" ></md-icon>
+            md-option(aria-label="impact modal form" value="LOW") Low  <md-icon md-svg-src="./assets/img/icons/impact-low.svg" ></md-icon>
     div.modal-input.icon-container
       img(src="../assets/img/icons/overview-overall-market.svg")
       p.accent.left Add another opportunity for this store
     div.modal-input.clearfix
       label Add to target list (optional)
-      md-radio-group.horizontal-layout
-        md-radio-button Add to target list
-        input(ng-model="tempPlaceholder" placeholder="Type the name of a target list").medium-short
-    button(disabled).btn-action Add
+      .horizontal-layout
+        md-checkbox Add to target list
+        //- Temporary until inline search is ready to implement
+        .dropdown-filter
+          .dropdown
+            md-select(ng-model="nb.something" aria-label="target list dropdown" placeholder="Add a new Target List")
+              md-option(ng-repeat="list in nb.targetLists" aria-label="target list" value="{{list.name}}" ng-click="ng.addToTargetList(nb.newOpportunity)") {{list.name}}
+              md-option(aria-label="add newrationale modal form") + Add a new Target List
+
+    button(ng-click="nb.addNewOpportunity(nb.newOpportunity)").btn-action Add
     p.cancel.accent(ng-click="nb.closeModal()") X Cancel

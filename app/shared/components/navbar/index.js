@@ -1,6 +1,6 @@
 'use strict';
 
-function NavbarController($rootScope, $scope, $mdPanel, $mdDialog, notificationsService) {
+function NavbarController($rootScope, $scope, $mdPanel, $mdDialog, notificationsService, opportunitiesService, targetListService) {
 
   // ****************
   // CONTROLLER SETUP
@@ -37,10 +37,30 @@ function NavbarController($rootScope, $scope, $mdPanel, $mdDialog, notifications
     }
   ];
 
+  vm.rationales = [
+    {
+      'type': 'New Buyer'
+    }
+  ];
+
+  vm.targetLists = [
+    {
+      name: 'Irish Pubs'
+    },
+    {
+      name: 'Grocery Stores'
+    }
+  ];
+
   // Expose public methods
   vm.markRead = markRead;
   vm.modalAddOpportunityForm = modalAddOpportunityForm;
   vm.closeModal = closeModal;
+  vm.addNewOpportunity = addNewOpportunity;
+  vm.newOpportunity = {};
+  vm.showNewRationaleInput = showNewRationaleInput;
+  vm.addNewRationale = false;
+  vm.addToTargetList = addToTargetList;
 
   // **************
   // PUBLIC METHODS
@@ -62,9 +82,29 @@ function NavbarController($rootScope, $scope, $mdPanel, $mdDialog, notifications
     });
   }
 
+  // Add Opportunity
+  function addNewOpportunity(opportunity) {
+    // TODO will need to be called properly
+    // opportunitiesService.createOpportunity();
+    vm.newOpportunity = {};
+    $mdDialog.hide();
+  }
+
+  function addToTargetList(opportunity) {
+    // TODO will need to be called properly
+    // Not sure if this even the correct service call
+    // targetListService.addTargetListOpportunities();
+    console.log(opportunity + 'success');
+  }
+
   // Close "Add Opportunity" modal
   function closeModal() {
     $mdDialog.hide();
+  }
+
+  // Show inputs if a new item is needed
+  function showNewRationaleInput()  {
+    vm.addNewRationale = true;
   }
 
   // ***************
