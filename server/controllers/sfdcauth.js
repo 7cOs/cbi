@@ -2,27 +2,25 @@
 
 // Endpoints used for sfdc authorization
 var saml2 = require('saml2-js');
-var fs = require('fs');
 var nameId, sessionIndex;
-//  var config = app.get('config').sfdcSec;
 
 function isConnected (app, req, res) {
   console.log('Connecting to SFDC through sfdc.isConnected');
-
+  var sfdcConfig = app.get('config').sfdcSec;
   var spOptions = {
-    entity_id: 'https://dev-salesforce.cbrands.com',
-    private_key: fs.readFileSync('../config/sfdcsecurity/key-file.pem').toString(),
-    certificate: fs.readFileSync('../config/sfdcsecurity/cert-file.crt').toString(),
-    assert_enddpoint: 'https://ssodev.cbrands.com/oamfed/idp/samlv20'
+    entity_id: sfdcConfig.spEntityId,
+    private_key: sfdcConfig.spPrivateKey, // fs.readFileSync('../config/sfdcsecurity/key-file.pem').toString(),
+    certificate: sfdcConfig.spCertificate, // fs.readFileSync('../config/sfdcsecurity/cert-file.crt').toString(),
+    assert_enddpoint: sfdcConfig.spAssertEndpoint // 'https://ssodev.cbrands.com/oamfed/idp/samlv20'
   };
 
   var idpOptions = {
-    sso_login_url: 'https://ssodev.cbrands.com/oamfed/idp/samlv20',
-    sso_logout_url: 'https://ssodev.cbrands.com/oam/server/logout?end_url=http://www.cbrands.com',
-    certificates: [fs.readFileSync('./server/_config/passport/certs/development.crt').toString()],
-    force_authn: true,
-    sign_get_request: false,
-    allow_unencrypted_assertion: true
+    sso_login_url: sfdcConfig.idpSSOLoginURL, //   'https://ssodev.cbrands.com/oamfed/idp/samlv20',
+    sso_logout_url: sfdcConfig.idpSSOLogoutURL, // 'https://ssodev.cbrands.com/oam/server/logout?end_url=http://www.cbrands.com',
+    certificates: sfdcConfig.idpCertificates, // [fs.readFileSync('./server/_config/passport/certs/development.crt').toString()],
+    force_authn: sfdcConfig.idpForceAuthn, // true,
+    sign_get_request: sfdcConfig.idpSignGetRequest, // false,
+    allow_unencrypted_assertion: sfdcConfig.idpAllowUnencryptedAssertion // true
   };
 
   if (saml2 !== null) {

@@ -41,7 +41,8 @@ module.exports = function(app) {
 
   app.get('/sfdcauth/getConfig', function(req, res) {
     if (sfdcConfig !== null) {
-      res.send(JSON.stringify(sfdcConfig, null, '\t'));
+      res.type('json');
+      res.send(sfdcConfig);
     } else {
       res.send('<div>The SFDC Configuration is not present. Please check your configuration file for this environment</div>');
     }

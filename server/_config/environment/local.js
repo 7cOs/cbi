@@ -1,6 +1,7 @@
 'use strict';
 
 const os = require('os');
+var fs = require('fs');
 
 module.exports = function (config) {
 
@@ -49,6 +50,22 @@ module.exports = function (config) {
 
   config.sfdcSec = {
 // sfdc parameters
+
+// SP (Service Provider (i.e. Salesforce.com)) details
+    spEntityId: 'https://dev-salesforce.cbrands.com',
+    spPrivateKey: [fs.readFileSync('./server/_config/environment/sfdcsecurity/' + config.env + '/key-file.pem').toString()],
+    spCertificate: [fs.readFileSync('./server/_config/environment/sfdcsecurity/' + config.env + '/cert-file.crt').toString()],
+    spAssertEndpoint: 'https://cbrands--CBeerDev.cs20.my.salesforce.com/services/oauth2/token?so=00Dm00000008fCJ',
+
+// IDP (Identity Provider (i.e. OAM)) details
+    idpSSOLoginURL: 'https://ssodev.cbrands.com/oamfed/idp/samlv20',
+    idpSSOLogoutURL: 'https://ssodev.cbrands.com/oam/server/logout?end_url=http://www.cbrands.com',
+    idpCertificates: [fs.readFileSync('./server/_config/passport/certs/development.crt').toString()],
+    idpForceAuthn: true,
+    idpSignGetRequest: false,
+    idpAllowUnencryptedAssertion: true,
+
+// oAuth details
     clientID: '3MVG9RHx1QGZ7OsgFDGg9AANEHmXyFGysbxOwi9Sg4.8o5ocZmlElMbhO36DRBmT8otkqgxiJX7P5PCFoYvUQ',
     clientSecret: '5793586792947030890',
     callbackURL: 'https://orion-dev.cbrands.com/sfdc/token',
