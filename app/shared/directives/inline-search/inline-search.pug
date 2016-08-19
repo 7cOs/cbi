@@ -1,9 +1,10 @@
 form.inline-search
   input(ng-model="is.input" type="text" placeholder="{{is.placeholder}}")
-  input(md-prevent-menu-close type="submit" ng-click="is.action();" ng-class="{'visible': is.input !== ''}")
+  input(md-prevent-menu-close type="submit" ng-click="is.action(is.type);" ng-class="{'visible': is.input !== ''}")
   .results-container(ng-class="{'open': is.showResults}")
     md-progress-circular(ng-show="is.loading" md-mode="indeterminate")
     ul.results(ng-show="!is.loading")
-      li(md-prevent-menu-close ng-repeat="result in is.results" ng-click="is.resultChosen(result.name)") {{result.name}}
+      li(ng-if="is.type === 'distributor'" md-prevent-menu-close ng-repeat="result in is.results track by $index" ng-click="is.resultChosen(result.name)") {{result.name}}
+      li(ng-if="is.type === 'store' || is.type === 'chain'" md-prevent-menu-close ng-repeat="result in is.results track by $index" ng-click="is.resultChosen(result.store_name)") {{result.store_name}}
     p.no-results(ng-if="!is.loading && !is.errorMessage && is.results.length === 0") No results found
     p.no-results(ng-if="is.errorMessage") Something went wrong.<br>Please try again.
