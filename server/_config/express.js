@@ -59,15 +59,10 @@ module.exports =  function(app) {
   if (config.session.use) {
     // SESSION
     app.use(session({
-      cookie: {
-        httpOnly: config.session.httpOnly,
-        secret: config.security.secret,
-        secure: config.session.secure
-      },
       genid: function(req) {
         return uuid.v4(); // use UUIDs for session IDs
       },
-      name: 'my-app.sid',
+      name: 'orion.sid',
       resave: config.session.resave,
       rolling: config.session.rolling,
       saveUninitialized: config.session.saveUninitialized,
@@ -83,12 +78,6 @@ module.exports =  function(app) {
 
     passport.use(require('../../server/_config/' + config.auth.passport.strategy)(app));
     app.use(passport.initialize());
-    app.use(session({
-      secret: 'keyboard cat',
-      resave: false,
-      saveUninitialized: true,
-      cookie: { secure: false }
-    }));
     app.use(passport.session());
     app.set('passport', passport);
   }

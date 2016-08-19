@@ -20,6 +20,7 @@
     "compression": "1.6.1",
     "connect-flash": "0.1.1",
     "connect-redis": "3.0.2",
+    "cookie-session": "^2.0.0-alpha.1",
     "cors": "2.7.1",
     "crypto-js": "3.1.6",
     "d3": "3.5.6",
@@ -84,7 +85,7 @@
   },
   "scripts": {
     "lint": "eslint **/*.js && gulp vet:sass",
-    "postinstall": "gulp compile --release",
+    "heroku-postbuild": "gulp compile --release",
     "start": "node server"
   }
 }
