@@ -52,7 +52,7 @@
     div(column='3')
       label Premise Type
       md-radio-group(ng-model="t.filtersService.model.selected.premiseType")
-        md-radio-button(ng-repeat="p in t.filtersService.model.premises" class="md-primary" ng-value="p.name" aria-label="p.name" ng-click="t.chipsService.addChip(p.name, 'premiseType', true)") {{p.name}}
+        md-radio-button(ng-repeat="p in t.filtersService.model.premises | filter: '!All'" class="md-primary" ng-value="p.name" aria-label="p.name" ng-click="t.chipsService.addChip(p.name, 'premiseType', true)") {{p.name}}
     div(column='6')
       label Opportunity Status
       md-radio-group(ng-model="t.filtersService.model.selected.opportunitiesStatus")
