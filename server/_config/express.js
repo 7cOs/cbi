@@ -83,6 +83,12 @@ module.exports =  function(app) {
 
     passport.use(require('../../server/_config/' + config.auth.passport.strategy)(app));
     app.use(passport.initialize());
+    app.use(session({
+      secret: 'keyboard cat',
+      resave: false,
+      saveUninitialized: true,
+      cookie: { secure: false }
+    }));
     app.use(passport.session());
     app.set('passport', passport);
   }

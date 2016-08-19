@@ -35,7 +35,6 @@ module.exports = function(app) {
         console.log(err);
         return done(null, false);
       } else {
-        console.log(body);
         return done(null, body);
       }
     });

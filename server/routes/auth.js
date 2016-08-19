@@ -6,7 +6,7 @@ module.exports = function(app) {
 
   // Auth stuff
   app.get('/auth/login',
-    passport.authenticate('saml'),
+    passport.authenticate('saml', {session: true}),
     function(req, res) {
       // Successful authentication, redirect home.
       res.redirect('/');
