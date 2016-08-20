@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports =
-  function targetListDetailController($rootScope, $scope, $state, $timeout, $mdDialog, targetListService, chipsService, filtersService, userService) {
+  function targetListDetailController($rootScope, $scope, $state, $timeout, $filter, $mdDialog, targetListService, chipsService, filtersService, userService) {
 
     // ****************
     // CONTROLLER SETUP
@@ -17,6 +17,7 @@ module.exports =
     vm.deleting = false;
     vm.archiving = false;
     vm.confirmToast = false;
+    vm.changed = false;
     /* vm.manageTargetList = {
       name: '',
       description: '',
@@ -35,6 +36,7 @@ module.exports =
     vm.closeModal = closeModal;
     vm.deleteList = deleteList;
     vm.footerToast = footerToast;
+    vm.listChanged = listChanged;
     vm.makeOwner = makeOwner;
     vm.modalManageTargetList = modalManageTargetList;
     vm.modalManageCollaborators = modalManageCollaborators;
@@ -52,16 +54,16 @@ module.exports =
 
     function addCollaborators() {
       targetListService.addTargetListShares(targetListService.model.currentList.id, vm.collaborator).then(function(response) {
-        console.log('Collaborator Added!');
-
         // push to target list collaborator array
+        var collaboratorList = $filter('filter')(userService.model.targetLists.owned, {id: targetListService.model.currentList.id});
+        collaboratorList[0].collaborators = response.data;
+
+        closeModal();
       });
     }
 
     function changeCollaboratorLevel() {
-      targetListService.updateTargetListShares(targetListService.model.currentList.id, vm.collaborator).then(function(response) {
-        console.log('Collaborator Permissions Updated!');
-      });
+      targetListService.updateTargetListShares(targetListService.model.currentList.id, vm.collaborator).then();
     }
 
     function closeModal() {
@@ -92,12 +94,15 @@ module.exports =
       else if (method === 'archive') vm.archiving = true;
     }
 
+    function listChanged() {
+      vm.changed = true;
+    }
+
     function makeOwner(collaboratorId) {
-      /* targetListService.addTargetListShares(targetListService.model.currentList.id, {newCollaboratorId: collaboratorId, permissionLevel: 'author'}).then(function() {
+      targetListService.addTargetListShares(targetListService.model.currentList.id, {newCollaboratorId: collaboratorId, permissionLevel: 'author'}).then(function(response) {
         console.log('owner now w00t');
-      });*/
-      console.log('sup');
-      // update in array
+        // update in array
+      });
     }
 
     function modalManageTargetList(ev) {
@@ -171,9 +176,6 @@ module.exports =
       targetListService.getTargetList(targetListService.model.currentList.id).then(function(response) {
         console.log('[targetListService.getTargetList]', response);
         targetListService.model.currentList = response;
-
-        // REMOVE BEFORE COMMIT
-        targetListService.model.currentList.archived = true;
       }, function(err) {
         console.log('[targetListController.init], Error: ' + err.statusText + '. Code: ' + err.status);
       });
