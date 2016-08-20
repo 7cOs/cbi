@@ -7,8 +7,8 @@ dump.rdb
 _build/
 node_modules/
 bower_components/
-browserify-cache.json
-server/_gulp/compile/.cache
+server/_gulp/compile/cache/
+
 
 typings/
 public/app/

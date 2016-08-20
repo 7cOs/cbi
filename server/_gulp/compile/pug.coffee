@@ -4,7 +4,7 @@ pug         = require('gulp-pug')
 runSequence = require('run-sequence')
 changed     = require('gulp-changed')
 cache = require("gulp-cache-money")({
-  cacheFile: __dirname + "/.cache"
+  cacheFile: __dirname + "/cache/.cache-money"
 })
 
 # COMPILE JADE TEMPLATES

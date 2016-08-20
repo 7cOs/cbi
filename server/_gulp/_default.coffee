@@ -27,3 +27,4 @@ gulp.task 'compile', (cb) ->
 # CLEAN UP BEFORE BUILDS
 gulp.task 'clean', ->
   del 'public/**/*'
+  del 'server/_gulp/compile/cache/*'
