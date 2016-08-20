@@ -22,6 +22,3 @@ div.modal.target-list-modal
       input(type="email" ng-model="tld.collaborators.newCollaborator" placeholder="Enter names or CBI Email addresses")
     button(ng-disabled="!tld.collaborators.newCollaborator" ng-click="tld.addCollaborators()").btn-action Save
     p.cancel.accent(ng-click="tld.closeModal()")
-  div.modal-footer.clearfix
-    p.link(ng-click="tld.updateList('archive')") Archive List
-    p.link(ng-click="tld.deleteList()") Delete List

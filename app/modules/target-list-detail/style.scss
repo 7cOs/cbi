@@ -1,4 +1,24 @@
+.archived-header {
+  background-color: $red;
+  color: $white;
+  width: 100%;
+  font-size: 14px;
+  font-weight: bold;
+  height: 30px;
+  position: absolute;
+  top: 88px;
+  line-height: 30px;
+  text-align: center;
+  left: 0;
+}
+
+.archived-hero {
+  background: transparent;
+}
+
 .target-list-modal {
+  position: relative;
+
   .title {
     h4 {
       margin-top: 20px;
@@ -68,7 +88,7 @@
     }
 
     .toast {
-      background-color: $green-2;
+      background-color: $red;
       font-size: 14px;
       height: 52px;
       margin-left: -34px;
@@ -84,12 +104,16 @@
       p {
         color: $white;
         float: none;
-        margin: 5px 0 0 0;
+        margin: 5px 0 0;
         text-align: left;
         width: 100%;
 
         &:first-child {
           margin-top: 10px;
+        }
+
+        a {
+          color: $white;
         }
       }
 
@@ -110,6 +134,36 @@
       &.ng-hide {
         opacity: 0;
       }
+    }
+  }
+
+  .success {
+    background-color: $green-2;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    width: 101%;
+    z-index: 11;
+
+    h4 {
+      color: $white;
+      position: relative;
+      top: 20%;
+    }
+
+    p {
+      color: $white;
+      margin: 15px 0 40px;
+      padding: 0 50px;
+      position: relative;
+      text-align: center;
+      top: 20%;
+    }
+
+    img {
+      width: 110px;
+      position: relative;
+      margin-top: 30%;
     }
   }
 

@@ -16,6 +16,7 @@ module.exports =
     };
     vm.deleting = false;
     vm.archiving = false;
+    vm.confirmToast = false;
     /* vm.manageTargetList = {
       name: '',
       description: '',
@@ -69,7 +70,15 @@ module.exports =
 
     function deleteList() {
       targetListService.deleteTargetList(targetListService.model.currentList.id).then(function(response) {
-        console.log('Target list deleted!');
+        console.log('Target List Deleted: ', response);
+
+        vm.confirmToast = true;
+        removeFooterToast();
+
+        $timeout(function() {
+          vm.confirmToast = false;
+          navigateToTL();
+        }, 2000);
 
         // TO DO
         // userService.model.targetLists.splice(,1)
@@ -147,12 +156,11 @@ module.exports =
         name: targetListService.model.currentList.name
       };
 
-      /* targetListService.updateTargetList(targetListService.model.currentList.id, payload).then(function(response) {
+      targetListService.updateTargetList(targetListService.model.currentList.id, payload).then(function(response) {
         console.log('Target List Updated: ', response);
-      });*/
-      $timeout(function() {
 
-      }, 2000);
+        removeFooterToast();
+      });
     }
 
     // **************
@@ -163,6 +171,9 @@ module.exports =
       targetListService.getTargetList(targetListService.model.currentList.id).then(function(response) {
         console.log('[targetListService.getTargetList]', response);
         targetListService.model.currentList = response;
+
+        // REMOVE BEFORE COMMIT
+        targetListService.model.currentList.archived = true;
       }, function(err) {
         console.log('[targetListController.init], Error: ' + err.statusText + '. Code: ' + err.status);
       });

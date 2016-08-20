@@ -32,6 +32,12 @@ div.modal.target-list-modal
     p.link.align-right(ng-click="tld.footerToast('delete')") Delete List
     .toast(ng-hide="!tld.showToast")
       p Are you sure you want to <span ng-if="tld.deleting">delete</span><span ng-if="tld.archiving">archive</span> this target list?
-      p.bold.link(ng-if="tld.deleting" ng-click="tld.deleteList()") Yes, Delete
-      p.bold.link(ng-if="tld.archiving" ng-click="tld.updateList('archive')") Yes, Archive
+      p.bold.link(ng-if="tld.deleting && !tld.confirmToast")
+        a(ng-click="tld.deleteList()") Yes, Delete
+      p.bold.link(ng-if="tld.archiving && !tld.confirmToast")
+        a(ng-click="tld.updateList('archive')") Yes, Archive
       a.hide-row(ng-click="tld.removeFooterToast()")
+  div.success(ng-if="tld.confirmToast")
+    h4 Success!
+    p You have deleted this target list. You will be redirected to the Target List Library momentarily.
+    img(src="assets/img/icons/delete_target_list.svg")
