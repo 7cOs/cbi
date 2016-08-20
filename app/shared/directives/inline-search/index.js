@@ -7,7 +7,7 @@ module.exports =
       scope: {
         type: '@',
         placeholder: '@',
-        results: '='
+        chosenResult: '='
       },
       controller: InlineSearchController,
       controllerAs: 'is',
@@ -42,6 +42,7 @@ module.exports =
       function action(type) {
         var method;
         vm.results = [];
+        vm.chosenResult = {};
         vm.errorMessage = null;
         vm.loading = true;
         vm.showResults = true;
@@ -78,6 +79,7 @@ module.exports =
 
       function resultChosen(result) {
         vm.input = result;
+        vm.chosenResult = result;
         close();
       }
 
