@@ -30,6 +30,12 @@ module.exports =
       console.log(data.performance);
     });*/
 
+    userService
+      .getOpportunityFilters('1')
+      .then(function(res) {
+        vm.savedFilters = res;
+      });
+
     // **************
     // PUBLIC METHODS
     // **************

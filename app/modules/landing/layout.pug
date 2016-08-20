@@ -69,7 +69,7 @@ section.landing-page
           .dropdown-filter
             .dropdown
               md-select(ng-model="l.filter.selected.savedFilters" aria-label="Saved Filter"  placeholder="Select Saved Report")
-                md-option(ng-repeat="type in l.filter.savedFilters" aria-label="type.name" value="{{type.name}}") {{type.name}}
+                md-option(ng-repeat="savedFilter in l.savedFilters" value="{{savedFilter.id}}") {{savedFilter.name}}
         h3 New Search
         .filter-container
           label
