@@ -8,7 +8,7 @@ module.exports = function(app) {
     .get(function(req, res) {
       console.log(req.url);
       var signed = util.sign(req.url);
-      var jwtToken = req.user.jwt ? req.user.jwt : app.get('config').api;
+      var jwtToken = req.user ? req.user.jwt : app.get('config').api;
       req.pipe(request(signed), {headers: {'Authorization': 'Bearer ' + jwtToken}}, function(err) {
         console.log(err);
       }).pipe(res);
