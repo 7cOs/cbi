@@ -8,7 +8,8 @@ module.exports = function(app) {
     .get(function(req, res) {
       console.log(req.url);
       var signed = util.sign(req.url);
-      req.pipe(request(signed), /* {headers: {'Authorization': 'Bearer ' + req.user.jwt}}, */ function(err) {
+      var jwtToken = req.user ? req.user.jwt : app.get('config').api;
+      req.pipe(request(signed), {headers: {'Authorization': 'Bearer ' + jwtToken}}, function(err) {
         console.log(err);
       }).pipe(res);
     })
