@@ -144,6 +144,10 @@ md-dialog {
     }
   }
 
+  .icon-container {
+    cursor: pointer;
+  }
+
   .modal-footer {
     padding: 4px 34px;
     border-top: 1px solid $gray-9;
