@@ -54,7 +54,7 @@ module.exports =
       .catch(getProductsFail);
 
       function getProductsSuccess(response) {
-        searchPromise.resolve(response.data);
+        searchPromise.resolve(response.data.products);
       }
 
       function getProductsFail(error) {

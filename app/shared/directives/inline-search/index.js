@@ -7,7 +7,8 @@ module.exports =
       scope: {
         type: '@',
         placeholder: '@',
-        results: '='
+        chosenResult: '=',
+        nav: '@'
       },
       controller: InlineSearchController,
       controllerAs: 'is',
@@ -16,7 +17,7 @@ module.exports =
       link: function(scope, elem, attrs) {}
     };
 
-    function InlineSearchController($scope, $timeout, searchService) {
+    function InlineSearchController($scope, $timeout, searchService, $location) {
 
       // ****************
       // CONTROLLER SETUP
@@ -42,6 +43,7 @@ module.exports =
       function action(type) {
         var method;
         vm.results = [];
+        vm.chosenResult = {};
         vm.errorMessage = null;
         vm.loading = true;
         vm.showResults = true;
@@ -76,8 +78,13 @@ module.exports =
         });
       }
 
-      function resultChosen(result) {
+      function resultChosen(result, nav) {
         vm.input = result;
+        vm.chosenResult = result;
+        if (nav) {
+          // We'll need to pass result for filtering once Accounts is integrated
+          $location.url('/accounts');
+        }
         close();
       }
 
