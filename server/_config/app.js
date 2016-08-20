@@ -27,7 +27,7 @@ let config = {
 
   // REDIS
   redis: {
-    use: false,
+    use: true,
     url: 'redis://127.0.0.1:6379'
   },
 

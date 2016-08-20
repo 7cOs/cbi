@@ -28,8 +28,8 @@ module.exports = function (config) {
     url: 'http://cbi-api-test.herokuapp.com',
     key: 'U1NCc2FXdGxJSFJ2SUVodlpHOXlMQ0JJYjJSdmNpd2dTRzlrYjNJc0lFaHZaRzl5Y3lCaGJtUWdTRzlrYjNKekxnPT0=',
     apiKey: 'test',
-    version: 'v2'
-
+    version: 'v2',
+    jwt: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJmaXJzdE5hbWUiOiJKQU1FUyIsImxhc3ROYW1lIjoiTydORUlMIiwiaXNzIjoiaHR0cHM6Ly9vcmlvbi5jYnJhbmRzLmNvbS8iLCJwZXJzb25JRCI6MTYwMSwiZW1wbG95ZWVJRCI6IjEwMDI0MTciLCJleHAiOjE0NzQyNTk2MTAsImlhdCI6MTQ3MTY2NzYxMCwiZW1haWwiOiJqaW0ub25laWxAY2JyYW5kcy5jb20ifQ.Ka6cbtODyMiaV_PsQeK8cTKIofX3_9rhNm04rXuhwQE'
   };
 
   config.saml = {

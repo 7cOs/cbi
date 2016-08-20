@@ -27,16 +27,18 @@ module.exports = function(app) {
     cert: fs.readFileSync('./server/_config/passport/certs/development.crt', 'utf-8'),
     signatureAlgorithm: app.get('config').saml.signatureAlgorithm
   }, function(req, profile, done) {
-    req.session.assertion = req.body.SAMLResponse;
 
     var signed = util.sign('/api/auth');
     request.post(signed, {body: req.body.SAMLResponse}, function(err, httpResponse, body) {
       if (err) {
-        console.log(err);
+        console.log('error ' + err);
         return done(null, false);
       } else {
-        return done(null, body);
+        var user = JSON.parse(body);
+        console.log(user);
+        return done(null, user);
       }
     });
   });
 };
+

@@ -15,7 +15,6 @@ if release
   gulp.task 'default', ->
     runSequence [
       'compile'
-      'serve'
     ],
 else
   gulp.task 'default', (cb) ->
