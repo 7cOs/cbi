@@ -50,9 +50,7 @@ module.exports = function(app) {
 
   app.get('/sfdcauth/metadata.xml', function(app, req, res) {
     if (sfdcauth != null) {
-      console.log('---> Entering sfdcauth');
       sfdcauth['getMetadata'](app, req, res);
-      console.log('---> Finished with sfdcauth');
     } else {
       res.send('<div>The SFDC Authorization module is not installed.  Please contact your administrator.</div>');
     }

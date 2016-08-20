@@ -61,7 +61,7 @@ module.exports = function (config) {
     idpSSOLoginURL: 'https://ssodev.cbrands.com/oamfed/idp/samlv20',
     idpSSOLogoutURL: 'https://ssodev.cbrands.com/oam/server/logout?end_url=http://www.cbrands.com',
     idpCertificates: [fs.readFileSync('./server/_config/passport/certs/development.crt').toString()],
-    idpForceAuthn: true,
+    idpForceAuthn: false,
     idpSignGetRequest: false,
     idpAllowUnencryptedAssertion: true,
 
