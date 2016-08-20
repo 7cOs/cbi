@@ -13,27 +13,35 @@ module.exports = function(app) {
         console.log(err);
       }).pipe(res);
     })
+
     .delete(function(req, res) {
       var signed = util.sign(req.url);
-      request.del(signed, {body: req.body, json: true}, function(err) {
+      var jwtToken = req.user ? req.user.jwt : app.get('config').api;
+      request.del(signed, {headers: {'Authorization': 'Bearer ' + jwtToken}, body: req.body, json: true}, function(err) {
         console.log(err);
       }).pipe(res);
     })
+
     .post(function(req, res) {
       var signed = util.sign(req.url);
-      request.post(signed, {body: req.body, json: true}, function(err) {
+      var jwtToken = req.user ? req.user.jwt : app.get('config').api;
+      request.post(signed, {headers: {'Authorization': 'Bearer ' + jwtToken}, body: req.body, json: true}, function(err) {
         console.log(err);
       }).pipe(res);
     })
+
     .put(function(req, res) {
       var signed = util.sign(req.url);
-      request.put(signed, {body: req.body, json: true}, function(err) {
+      var jwtToken = req.user ? req.user.jwt : app.get('config').api;
+      request.put(signed, {headers: {'Authorization': 'Bearer ' + jwtToken}, body: req.body, json: true}, function(err) {
         console.log(err);
       }).pipe(res);
     })
+
     .patch(function(req, res) {
       var signed = util.sign(req.url);
-      request.patch(signed, {body: req.body, json: true}, function(err) {
+      var jwtToken = req.user ? req.user.jwt : app.get('config').api;
+      request.patch(signed, {headers: {'Authorization': 'Bearer ' + jwtToken}, body: req.body, json: true}, function(err) {
         console.log(err);
       }).pipe(res);
     });
