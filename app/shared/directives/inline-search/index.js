@@ -5,6 +5,7 @@ module.exports =
     var directive = {
       restrict: 'EA',
       scope: {
+        type: '@',
         placeholder: '@',
         results: '='
       },
@@ -38,13 +39,35 @@ module.exports =
       // PUBLIC METHODS
       // **************
 
-      function action() {
+      function action(type) {
+        var method;
         vm.results = [];
         vm.errorMessage = null;
         vm.loading = true;
         vm.showResults = true;
 
-        searchService.getDistributors(vm.input).then(function(data) {
+        switch (type) {
+          case 'user':
+            method = 'getUsers';
+            break;
+          case 'product':
+            method = 'getProducts';
+            break;
+          case 'store':
+            method = 'getStores';
+            break;
+          case 'distributor':
+            method = 'getDistributors';
+            break;
+          case 'chain': // This should probably be an endpoint, waiting for answer from API
+            method = 'getStores';
+            break;
+          default:
+            console.log('Please specify a search type');
+            break;
+        }
+
+        searchService[method](vm.input).then(function(data) {
           vm.loading = false;
           vm.results = data;
         }, function(reason) {
