@@ -1,13 +1,14 @@
-.hero
+.archived-header(ng-if="tld.targetListService.model.currentList.archived") Archived - Only limited functionality will be available
+.hero(ng-class="{'archived-hero': tld.targetListService.model.currentList.archived}")
   div(row)
     div(column="2")
       span.chevron-left-small
       span.accent.white.link(ng-click="tld.navigateToTL()") Target Lists
     div(column="10").align-right
       .hero-actions
-        button.btn-action(ng-click="tld.modalManageCollaborators()") Collaborate
+        button.btn-action(ng-click="tld.modalManageCollaborators()" ng-if="!tld.targetListService.model.currentList.archived") Collaborate
         button.btn-action Download
-        button.btn-action Manage
+        button.btn-action(ng-click="tld.modalManageTargetList()" ng-if="!tld.targetListService.model.currentList.archived") Manage
 
   div(row)
     div(column="12")

@@ -1,24 +1,43 @@
-div.modal
+div.modal.target-list-modal
   div.title
     h4 Manage Target list
   div.modal-form
     div.modal-input
       label name
-      input(ng-model="tempPlaceholder")
+      input(ng-model="tld.targetListService.model.currentList.name" ng-change="tld.listChanged()")
     div.modal-input
       label Description (optional)
-      textarea
+      textarea(ng-model="tld.targetListService.model.currentList.description" ng-change="tld.listChanged()")
     div.modal-input
       label collaborators
-      //- TODO....replace textarea with proper input
-      textarea
+      div.collaborator-list
+        .collaborator(ng-repeat="collaborator in tld.targetListService.model.currentList.collaborators track by $index")
+          .align-left {{collaborator.user.firstName | titlecase}} {{collaborator.user.lastName | titlecase}}
+          md-menu
+            md-button(ng-click="$mdOpenMenu($event)" aria-label="Collaborator Options")
+              span {{collaborator.permissionLevel | titlecase}}
+              a.chevron-down(ng-click="tld.dropdown")
+            md-menu-content.collaborator-options
+              md-menu-item(ng-click="tld.makeOwner(collaborator.user.id)") Make Owner
+              md-menu-item(ng-click="tld.removeCollaborator(collaborator.user.id)") Remove
     div.modal-input.clearfix
-      md-checkbox Allow Collaborators to invite others
+      md-checkbox(ng-model="tld.collaborator.permissionLevel" ng-true-value="'collaborateandinvite'" ng-false-value="'collaborate'" ng-click="tld.changeCollaboratorLevel()") Allow Collaborators to invite others
     div.modal-input
       label Add Recipient
-      input(ng-model="tempPlaceholder" placeholder="Enter names or DBI Email Addresses")
-    button(disabled).btn-action Save
-    p.cancel.accent X Cancel
-  div.modal-footer.clearfix
-    p Archive List
-    p Delete List
+      input(type="email" ng-model="tld.collaborators.newCollaborator" ng-change="tld.listChanged()" placeholder="Enter names or CBI Email addresses")
+    button(ng-disabled="tld.changed" ng-click="tld.addCollaborators()").btn-action Save
+    p.cancel.accent(ng-click="tld.closeModal()")
+  div.modal-footer.clearfix(ng-class="{'toasted': tld.showToast}")
+    p.link.align-left(ng-click="tld.footerToast('archive')") Archive List
+    p.link.align-right(ng-click="tld.footerToast('delete')") Delete List
+    .toast(ng-hide="!tld.showToast")
+      p Are you sure you want to <span ng-if="tld.deleting">delete</span><span ng-if="tld.archiving">archive</span> this target list?
+      p.bold.link(ng-if="tld.deleting && !tld.confirmToast")
+        a(ng-click="tld.deleteList()") Yes, Delete
+      p.bold.link(ng-if="tld.archiving && !tld.confirmToast")
+        a(ng-click="tld.updateList('archive')") Yes, Archive
+      a.hide-row(ng-click="tld.removeFooterToast()")
+  div.success(ng-if="tld.confirmToast")
+    h4 Success!
+    p You have deleted this target list. You will be redirected to the Target List Library momentarily.
+    img(src="assets/img/icons/delete_target_list.svg")

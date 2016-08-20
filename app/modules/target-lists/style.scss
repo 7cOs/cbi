@@ -19,6 +19,14 @@
   .accent-blue {
     color: $dark-blue;
   }
+
+  &.archived-hero {
+    background: transparent;
+
+    h1, .accent-blue, span {
+      color: $gray-2;
+    }
+  }
 }
 
 .hero-info {
