@@ -58,6 +58,8 @@ function NavbarController($rootScope, $scope, $mdPanel, $mdDialog, notifications
   vm.closeModal = closeModal;
   vm.addNewOpportunity = addNewOpportunity;
   vm.newOpportunity = {};
+  vm.newOpportunityArray = [];
+  vm.addToTargetListArray = addToTargetListArray;
   vm.showNewRationaleInput = showNewRationaleInput;
   vm.addNewRationale = false;
   vm.addToTargetList = addToTargetList;
@@ -83,11 +85,22 @@ function NavbarController($rootScope, $scope, $mdPanel, $mdDialog, notifications
   }
 
   // Add Opportunity
-  function addNewOpportunity(opportunity) {
-    // TODO will need to be called properly
-    // opportunitiesService.createOpportunity();
+  function addNewOpportunity(opportunityList) {
+    addToTargetListArray(vm.newOpportunity);
+    vm.newOpportunityArray.forEach(function(opportunity) {
+      // TODO will need to be called properly
+      // opportunitiesService.createOpportunity();
+      console.log(opportunity);
+    });
+
     vm.newOpportunity = {};
     $mdDialog.hide();
+  }
+
+  function addToTargetListArray (opportunity) {
+    vm.newOpportunityArray.push(opportunity);
+    vm.newOpportunity = {};
+    vm.newOpportunity.
   }
 
   function addToTargetList(opportunity) {
