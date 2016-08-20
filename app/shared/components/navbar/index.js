@@ -58,6 +58,8 @@ function NavbarController($rootScope, $scope, $mdPanel, $mdDialog, notifications
   vm.closeModal = closeModal;
   vm.addNewOpportunity = addNewOpportunity;
   vm.newOpportunity = {};
+  vm.newOpportunityArray = [];
+  vm.addToTargetListArray = addToTargetListArray;
   vm.showNewRationaleInput = showNewRationaleInput;
   vm.addNewRationale = false;
   vm.addToTargetList = addToTargetList;
@@ -83,18 +85,40 @@ function NavbarController($rootScope, $scope, $mdPanel, $mdDialog, notifications
   }
 
   // Add Opportunity
-  function addNewOpportunity(opportunity) {
-    // TODO will need to be called properly
-    // opportunitiesService.createOpportunity();
+  function addNewOpportunity(opportunityList) {
+    addToTargetListArray(vm.newOpportunity);
+
+    vm.newOpportunityArray.forEach(function(opportunity) {
+
+      // TODO will need to be called properly
+      // opportunitiesService.createOpportunity();
+    });
+
     vm.newOpportunity = {};
     $mdDialog.hide();
+  }
+
+  // Adds opportunities to an array with the same account name
+  function addToTargetListArray (opportunity) {
+    var accountName;
+
+    vm.newOpportunityArray.push(opportunity);
+
+    accountName = opportunity.properties.store.description;
+
+    vm.newOpportunity =   {
+      properties: {
+        store: {
+          description: accountName
+        }
+      }
+    };
   }
 
   function addToTargetList(opportunity) {
     // TODO will need to be called properly
     // Not sure if this even the correct service call
     // targetListService.addTargetListOpportunities();
-    console.log(opportunity + 'success');
   }
 
   // Close "Add Opportunity" modal
