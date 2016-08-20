@@ -6,7 +6,7 @@ fs          = require('graceful-fs')
 gulp        = require('gulp')
 
 gulp.task 'compile:js', ['vet:js'], ->
-  browserifyInc({ debug: true, cacheFile: './browserify-cache.json' })
+  browserifyInc({ debug: true, cacheFile: __dirname + '/cache/.browserify-cache.json' })
     .transform(babelify.configure({
         presets: 'es2015'
       }))
