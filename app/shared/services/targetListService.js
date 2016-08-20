@@ -355,22 +355,23 @@ module.exports =
      * @returns {Object} - updated target list
      * @memberOf orion.common.services
      */
-    function updateTargetList(targetListId) {
+    function updateTargetList(targetListId, p) {
       var targetListPromise = $q.defer(),
-          url = apiHelperService.formatQueryString({'foo': 'bar'}),
-          payload = tempData.updateTargetListPayload;
+          url = apiHelperService.request('/api/targetLists/' + targetListId),
+          payload = {};
 
-      $http.patch(url, payload, {
-        headers: {}
-      })
-      .then(updateTargetListSuccess)
-      .catch(updateTargetListFail);
+      if (p.archived) payload.archived = p.archived;
+      if (p.deleted) payload.deleted = p.deleted;
+      if (p.description) payload.description = p.description;
+      if (p.name) payload.name = p.name;
+
+      $http.patch(url, payload)
+        .then(updateTargetListSuccess)
+        .catch(updateTargetListFail);
 
       function updateTargetListSuccess(response) {
         console.log('[targetListService.updateTargetList] response: ', response);
         // targetListPromise.resolve(response.data);
-        // uncomment above and remove below when services are ready
-        targetListPromise.resolve(tempData.updateTargetListResponse);
       }
 
       function updateTargetListFail(error) {
@@ -389,10 +390,9 @@ module.exports =
      */
     function deleteTargetList(targetListId) {
       var targetListPromise = $q.defer(),
-          url = apiHelperService.request('/api/targetLists/' + targetListId),
-          payload = {targetListID: targetListId};
+          url = apiHelperService.request('/api/targetLists/' + targetListId);
 
-      $http.delete(url, payload)
+      $http.delete(url)
         .then(deleteTargetListSuccess)
         .catch(deleteTargetListFail);
 

@@ -2,7 +2,7 @@
   button.icon.select-all Select All
 
   .target-action-buttons
-    button(disabled="disabled" ng-if="expanded.buttonState === 'named'").btn-action Archive
+    button(ng-if="expanded.buttonState === 'named'" ng-click="expanded.archiveTargetList()").btn-action Archive
     button(ng-if="expanded.buttonState !== 'shared'" ng-click="expanded.deleteTargetList()").btn-action Delete
     button.btn-action(ng-click="expanded.createTargetList($event)") Create a New List
 div.expanded-target-lists
