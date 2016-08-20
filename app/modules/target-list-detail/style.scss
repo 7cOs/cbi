@@ -1,4 +1,4 @@
-.collaborators-modal {
+.target-list-modal {
   .title {
     h4 {
       margin-top: 20px;
@@ -55,6 +55,60 @@
         .md-ripple-container {
           height: 25px;
         }
+      }
+    }
+  }
+
+  .modal-footer {
+    position: relative;
+
+    p {
+      float: left;
+      width: 50%;
+    }
+
+    .toast {
+      background-color: $green-2;
+      font-size: 14px;
+      height: 52px;
+      margin-left: -34px;
+      margin-right: -34px;
+      opacity: 1;
+      padding: 0 30px;
+      position: absolute;
+      transition: opacity 300ms;
+      top: 0;
+      width: calc(100% - 60px);
+      z-index: 10;
+
+      p {
+        color: $white;
+        float: none;
+        margin: 5px 0 0 0;
+        text-align: left;
+        width: 100%;
+
+        &:first-child {
+          margin-top: 10px;
+        }
+      }
+
+      .bold {
+        font-weight: bold;
+      }
+
+      .hide-row {
+        position: absolute;
+        right: 25px;
+        top: 30%;
+
+        &:before, &:after {
+          width: 15px;
+        }
+      }
+
+      &.ng-hide {
+        opacity: 0;
       }
     }
   }
