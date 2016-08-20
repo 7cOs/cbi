@@ -68,19 +68,13 @@
               md-option(ng-repeat="type in t.filtersService.model.opportunitiesTypes" aria-label="type.name" value="{{type.name}}") {{type.name}}
       div(column='3')
         label Brand / Master SKU
-        md-autocomplete(md-selected-item="selectedItem" md-search-text="t.filtersService.model.brandSearchText" md-items="brand in t.filtersService.model.brands" md-item-text="brand.name" md-min-length="1" placeholder="by Brand or SKU" md-selected-item-change="t.chipsService.addAutocompleteChip(brand.name, 'brandSearchText')")
-          md-item-template
-            div(md-highlight-text="t.filtersService.model.brandSearchText" md-highlight-flags="^i") {{brand.name}} - {{brand.brand}}
+        inline-search(type="product" placeholder="Brand or SKU/Package" chosen-result="t.filtersService.model.brandSearchText")
       div(column='3')
         label Account / Store
-        md-autocomplete(md-search-text="t.filtersService.model.accountSearchText" md-items="account in t.filtersService.model.accounts" md-item-text="account.name" placeholder="By Account, Sub account" md-selected-item-change="t.chipsService.addAutocompleteChip(account.name, 'accountSearchText')")
-          md-item-template
-            div(md-highlight-text="t.filtersService.model.accountSearchText" md-highlight-flags="^i") {{account.name}} - {{account.subAccount}}
+        inline-search(type="store" placeholder="By account, Sub account" chosen-result="t.filtersService.model.accountSearchText")
       div(column='3')
         label Distributor
-        md-autocomplete(md-search-text="t.filtersService.model.distributorSearchText" md-items="distributor in t.filtersService.model.distributors" md-item-text="distributor.name" placeholder="by Name" md-selected-item-change="t.chipsService.addAutocompleteChip(distributor.name, 'distributorSearchText')")
-          md-item-template
-            div(md-highlight-text="t.filtersService.model.distributorSearchText" md-highlight-flags="^i") {{distributor.name}}
+        inline-search(type="distributor" placeholder="Name" chosen-result="t.filtersService.model.distributorSearchText")
     div(row)
       div(column='3').predicted-impact
         label Predicted Impact

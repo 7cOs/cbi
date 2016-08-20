@@ -172,6 +172,18 @@ module.exports =
     // PRIVATE METHODS
     // **************
 
+    // Add chip for inline search value watchers
+    function addInlineSearchChip(val) {
+      if (typeof val === 'string' && val !== '') {
+        chipsService.addAutocompleteChip(val, 'searchText');
+      }
+    }
+
+    // Watch for inline search value changes
+    $scope.$watch('t.filtersService.model.brandSearchText', function (val) { addInlineSearchChip(val); });
+    $scope.$watch('t.filtersService.model.accountSearchText', function (val) { addInlineSearchChip(val); });
+    $scope.$watch('t.filtersService.model.distributorSearchText', function (val) { addInlineSearchChip(val); });
+
     function init() {
       targetListService.getTargetList(targetListService.model.currentList.id).then(function(response) {
         console.log('[targetListService.getTargetList]', response);
@@ -179,5 +191,8 @@ module.exports =
       }, function(err) {
         console.log('[targetListController.init], Error: ' + err.statusText + '. Code: ' + err.status);
       });
+
+      // reset all chips and filters on page init
+      chipsService.model = chipsService.resetChipsFilters(chipsService.model);
     }
   };
