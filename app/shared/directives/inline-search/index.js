@@ -88,7 +88,10 @@ module.exports =
         close();
       }
 
-      function close() {
+      function close(clear) {
+        if (clear) {
+          vm.input = '';
+        }
         vm.showResults = false;
       }
     }
