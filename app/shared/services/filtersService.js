@@ -41,7 +41,7 @@ module.exports =
         {name: 'On Premise'}
       ],
       selected: {
-        accountScope: false,
+        accountScope: true,
         accountBrands: '',
         accountMarkets: '',
         accountTypes: '',
@@ -53,7 +53,7 @@ module.exports =
         predictedImpactHigh: '',
         predictedImpactMedium: '',
         predictedImpactLow: '',
-        premiseType: '',
+        premiseType: 'true',
         productTypeFeatured: '',
         productTypePriority: '',
         productTypeAuthorized: '',

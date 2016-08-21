@@ -37,11 +37,11 @@ notes
   div(row)
     div(column='2')
       label Trend
-      md-radio-group(ng-model="a.filtersService.model.selected.trend")
+      md-radio-group(ng-model="a.filtersService.model.selected.trend" ng-init="a.filtersService.model.selected.trend = 'vs YA'")
         md-radio-button(ng-repeat="filter in a.filters.trend" class="md-primary" ng-value="filter.name" aria-label="Trend" ng-click="a.chipsService.addChip(filter.name, 'trend', true)") {{filter.name}}
     div(column='3')
       label Ending Time Period
-      md-radio-group(ng-model="a.filtersService.model.selected.timePeriod")
+      md-radio-group(ng-model="a.filtersService.model.selected.timePeriod" ng-init="a.filtersService.model.selected.timePeriod = 'Current Month to Date'")
         md-radio-button(ng-repeat="filter in a.filters.timePeriod" class="md-primary" ng-value="filter.name" aria-label="Ending Time Period" ng-click="a.chipsService.addChip(filter.name, 'timePeriod', true)") {{filter.name}}
     div(column='7')
       div(row).dropdown-filter
@@ -61,7 +61,7 @@ notes
       md-checkbox(ng-model="a.filtersService.model.selected.accountScope" aria-label="My Accounts" ng-click="a.chipsService.updateChip('accountScope', 'My Accounts Only')") My Accounts Only
     div(column='2')
       label Premise Type
-      md-radio-group(ng-model="a.filtersService.model.selected.premiseType")
+      md-radio-group(ng-model="a.filtersService.model.selected.premiseType" ng-init="a.filtersService.model.selected.premiseType = 'All'")
         md-radio-button(ng-repeat="p in a.filtersService.model.premises" class="md-primary" ng-value="p.name" aria-label="p.name" ng-click="a.chipsService.addChip(p.name, 'premiseType', true)") {{p.name}}
     div(column='2')
       label Distributor
