@@ -96,7 +96,9 @@
 }
 
 .reset-icon,
-.save-filterset-icon {
+.save-filterset-icon,
+.reset-icon-disabled,
+.save-filterset-icon-disabled  {
 
   &:before {
     background-position: 0 0;
@@ -113,11 +115,21 @@
 .reset-icon:before {
   background-image: url('../assets/img/icons/reset-arrow.svg');
   background-size: 12px;
-
 }
 
 .save-filterset-icon:before {
   background-image: url('../assets/img/icons/save-filterset.svg');
+  background-size: 14px;
+  left: -20px;
+}
+
+.reset-icon-disabled:before {
+  background-image: url('../assets/img/icons/reset-arrow-disabled.svg');
+  background-size: 12px;
+}
+
+.save-filterset-icon-disabled:before {
+  background-image: url('../assets/img/icons/save-filterset-icon-disabled.svg');
   background-size: 14px;
   left: -20px;
 }

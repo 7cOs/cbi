@@ -96,7 +96,7 @@ div#fancy-cat
     div(column='12' class='apply-filters')
       button(value='Apply Filters' type="button" class="btn-action" ng-click="o.chipsService.applyFilters()" ng-disabled="o.filtersService.model.filtersApplied") Apply Filters
         .secondary-button-container
-          a(href="").accent.save-filterset-icon Save Report
-          a(href="").accent.reset-icon Reset
+          a(ng-click="o.saveReport()" ng-disabled="o.filtersService.model.filtersApplied" ng-class="{'disabled save-filterset-icon-disabled': o.filtersService.model.filtersApplied}").accent.save-filterset-icon Save Report
+          a(ng-click="o.resetFilters()" ng-disabled="o.filtersService.model.filtersApplied" ng-class="{'disabled reset-icon-disabled': o.filtersService.model.filtersApplied}").accent.reset-icon Reset
 
 list
