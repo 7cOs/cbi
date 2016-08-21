@@ -72,12 +72,12 @@ div#fancy-cat
           md-checkbox(ng-model="o.filtersService.model.selected.storeTypeIndependent" aria-label="Store Type Independent" ng-click="o.chipsService.updateChip('storeTypeIndependent', 'Store Type Independent')") Independent
           md-checkbox(ng-model="o.filtersService.model.selected.storeTypeCBBD" aria-label="Store Type CBBD" ng-click="o.chipsService.updateChip('storeTypeCBBD', 'Store Type CBBD')") CBBD Chain
         div(column='12' class="store-segmentation")
-          label Store Segmentation
+          label.vertical Store Segmentation
           md-checkbox(column='3' ng-model="o.filtersService.model.selected.storeSegmentationA" aria-label="Store Segmentation A" ng-click="o.chipsService.updateChip('storeSegmentationA', 'Store Segmentation A')") A
           md-checkbox(column='3' ng-model="o.filtersService.model.selected.storeSegmentationB" aria-label="Store Segmentation B" ng-click="o.chipsService.updateChip('storeSegmentationB', 'Store Segmentation B')") B
           md-checkbox(column='3' ng-model="o.filtersService.model.selected.storeSegmentationC" aria-label="Store Segmentation C" ng-click="o.chipsService.updateChip('storeSegmentationC', 'Store Segmentation C')") C
         div(column='12' class="trade-channel")
-          label Trade Channel
+          label.vertical Trade Channel
           md-checkbox(column='5' ng-model="o.filtersService.model.selected.tradeChannelGrocery" aria-label="Trade Channel Grocery" ng-click="o.chipsService.updateChip('tradeChannelGrocery', 'Trade Channel Grocery')") Grocery
           md-checkbox(column='5' ng-model="o.filtersService.model.selected.tradeChannelConvenience" aria-label="Trade Channel Convenience" ng-click="o.chipsService.updateChip('tradeChannelConvenience', 'Trade Channel Convenience')") Convenience
           md-checkbox(column='5' ng-model="o.filtersService.model.selected.tradeChannelDrug" aria-label="Trade Channel Drug" ng-click="o.chipsService.updateChip('tradeChannelDrug', 'Trade Channel Drug')") Drug

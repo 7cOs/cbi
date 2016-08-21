@@ -61,6 +61,11 @@
     display: block;
     font-size: 14px;
     width: 100%;
+    margin-bottom: 6px;
+
+    &.vertical {
+      margin-top: 18px;
+    }
   }
 
   md-input-container {
@@ -83,8 +88,6 @@
   md-radio-button,
   md-checkbox {
     font-size: 12px;
-    margin-bottom: 10px;
-    margin-top: 10px;
 
     &:focus {
       outline: none;
@@ -102,6 +105,7 @@
 
   md-checkbox {
     width: 100%;
+    margin-bottom: 6px;
 
     ._md-container,
     ._md-icon {
