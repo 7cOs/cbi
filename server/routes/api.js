@@ -8,7 +8,7 @@ module.exports = function(app) {
     .get(function(req, res) {
       console.log(req.url);
       var signed = util.sign(req.url);
-      var jwtToken = req.user ? req.user.jwt : app.get('config').api;
+      var jwtToken = req.user ? req.user.jwt : app.get('config').api.jwt;
       req.pipe(request(signed), {headers: {'Authorization': 'Bearer ' + jwtToken}}, function(err) {
         console.log(err);
       }).pipe(res);
@@ -16,7 +16,7 @@ module.exports = function(app) {
 
     .delete(function(req, res) {
       var signed = util.sign(req.url);
-      var jwtToken = req.user ? req.user.jwt : app.get('config').api;
+      var jwtToken = req.user ? req.user.jwt : app.get('config').api.jwt;
       request.del(signed, {headers: {'Authorization': 'Bearer ' + jwtToken}, body: req.body, json: true}, function(err) {
         console.log(err);
       }).pipe(res);
@@ -24,7 +24,7 @@ module.exports = function(app) {
 
     .post(function(req, res) {
       var signed = util.sign(req.url);
-      var jwtToken = req.user ? req.user.jwt : app.get('config').api;
+      var jwtToken = req.user ? req.user.jwt : app.get('config').api.jwt;
       request.post(signed, {headers: {'Authorization': 'Bearer ' + jwtToken}, body: req.body, json: true}, function(err) {
         console.log(err);
       }).pipe(res);
@@ -32,7 +32,7 @@ module.exports = function(app) {
 
     .put(function(req, res) {
       var signed = util.sign(req.url);
-      var jwtToken = req.user ? req.user.jwt : app.get('config').api;
+      var jwtToken = req.user ? req.user.jwt : app.get('config').api.jwt;
       request.put(signed, {headers: {'Authorization': 'Bearer ' + jwtToken}, body: req.body, json: true}, function(err) {
         console.log(err);
       }).pipe(res);
@@ -40,7 +40,7 @@ module.exports = function(app) {
 
     .patch(function(req, res) {
       var signed = util.sign(req.url);
-      var jwtToken = req.user ? req.user.jwt : app.get('config').api;
+      var jwtToken = req.user ? req.user.jwt : app.get('config').api.jwt;
       request.patch(signed, {headers: {'Authorization': 'Bearer ' + jwtToken}, body: req.body, json: true}, function(err) {
         console.log(err);
       }).pipe(res);
