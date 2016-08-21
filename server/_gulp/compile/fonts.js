@@ -9,8 +9,8 @@
 
   gulp.task('compile:fonts', function() {
     return gulp.src(config.gulp.src.assets.fonts)
-      .pipe(fontmin())
       .pipe(cache())
+      .pipe(fontmin())
       .pipe(gulp.dest(config.gulp.dest.assets.fonts));
   });
 
