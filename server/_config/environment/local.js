@@ -24,12 +24,13 @@ module.exports = function (config) {
 
   config.iq = 'http://iqweb.cbrands.com';
 
+  // if you change this server, you need to get a different JWT.
   config.api = {
     url: 'http://cbi-api-test.herokuapp.com',
     key: 'U1NCc2FXdGxJSFJ2SUVodlpHOXlMQ0JJYjJSdmNpd2dTRzlrYjNJc0lFaHZaRzl5Y3lCaGJtUWdTRzlrYjNKekxnPT0=',
     apiKey: 'test',
     version: 'v2',
-    jwt: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJmaXJzdE5hbWUiOiJKQU1FUyIsImxhc3ROYW1lIjoiTydORUlMIiwiaXNzIjoiaHR0cHM6Ly9vcmlvbi5jYnJhbmRzLmNvbS8iLCJwZXJzb25JRCI6MTYwMSwiZW1wbG95ZWVJRCI6IjEwMDI0MTciLCJleHAiOjE0NzQyNTk2MTAsImlhdCI6MTQ3MTY2NzYxMCwiZW1haWwiOiJqaW0ub25laWxAY2JyYW5kcy5jb20ifQ.Ka6cbtODyMiaV_PsQeK8cTKIofX3_9rhNm04rXuhwQE'
+    jwt: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJmaXJzdE5hbWUiOiJST0JFUlQiLCJsYXN0TmFtZSI6IlNIQU5OT04iLCJpc3MiOiJodHRwczovL29yaW9uLmNicmFuZHMuY29tIiwicGVyc29uSUQiOjE4NzUsImVtcGxveWVlSUQiOiIxMDA5MjkzIiwiZXhwIjoxNDc2OTkwNjQzNzAwLCJpYXQiOjE0NzE4MDY2NDM3MDAsImVtYWlsIjoiYm9iLnNoYW5ub25AY2JyYW5kcy5jb20ifQ.8fOc38TRqIk7Yv7s5KH2-fdGLQBRDjFkqoC_AUlj6qU'
   };
 
   config.saml = {

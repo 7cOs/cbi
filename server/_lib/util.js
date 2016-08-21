@@ -23,7 +23,6 @@ module.exports = function(app) {
       if (params) {
         url = url + '&' + params;
       }
-      console.log(url);
       return url;
     }
   };
