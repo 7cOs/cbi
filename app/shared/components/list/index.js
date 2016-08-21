@@ -34,12 +34,44 @@ function ListController($scope, $state, opportunitiesService, storesService, $md
   vm.sortBy = sortBy;
   vm.toggle = toggle;
   vm.toggleAll = toggleAll;
+  vm.showCorporateMemoModal = showCorporateMemoModal;
+  vm.closeCorporateMemoModal = closeCorporateMemoModal;
+
+  // Mock Data for memo modal
+  vm.limitedTime = {
+    title: 'Limited Time Only',
+    startDate: '07/09/16',
+    endDate: '08/31/16',
+    resetStart: 'None',
+    resetEnd: 'None',
+    price: 12.99,
+    onMenu: 'Yes',
+    notes: 'A Home brew from a miller light starts reminiscing about a lost buzz, because a childlike bottle learns a hard lesson from a Sierra Nevada Pale Ale. When you see some Sam Adams for a spudgun, it means that a bill behind the Hops Alligator Ale daydreams. The Long Trail Ale around a broken bottle seeks an Amarillo Pale Ale over a sake bomb.',
+    mandateIcon: 'featured'
+  };
 
   init();
 
   // **************
   // PUBLIC METHODS
   // **************
+
+  // Show corporate memo modal
+
+  function showCorporateMemoModal(ev) {
+    var parentEl = angular.element(document.body);
+    $mdDialog.show({
+      clickOutsideToClose: true,
+      parent: parentEl,
+      scope: $scope.$new(),
+      targetEvent: ev,
+      templateUrl: './app/shared/components/list/modal-corporate-memo.html'
+    });
+  };
+
+  function closeCorporateMemoModal() {
+    $mdDialog.hide();
+  }
 
   // Overlay Controls
   function actionOverlay(opportunity, state) {

@@ -43,6 +43,7 @@ md-radio-button {
   ._md-off {
     height: 16px;
     width: 16px;
+    border-width: 1px;
   }
 }
 
@@ -62,6 +63,7 @@ md-checkbox {
 
   ._md-icon {
     border-radius: 50%;
+    border-width: 1px;
   }
 
   &.md-checked {
@@ -78,11 +80,4 @@ md-checkbox {
       }
     }
   }
-}
-
-/* MD Select Icons */
-
-md-icon {
-  position: absolute;
-  right: 15px;
 }

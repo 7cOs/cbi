@@ -1,0 +1,33 @@
+.modal.corporate-memo
+  .title
+    a.hide-row(ng-click="list.closeCorporateMemoModal()")
+    h4 {{list.limitedTime.title}}
+  div.modal-form.clearfix
+    div(column="12").regional-status.mandate-icon
+      div(ng-class="list.limitedTime.mandateIcon")
+    div(row).clearfix
+      div(column="6").date
+        div(column="6")
+          label Start date
+          h3 {{list.limitedTime.startDate}}
+        div(column="6")
+          label End date
+          h3 {{list.limitedTime.endDate}}
+      div(column="6").start-end
+        div(column="4 +2")
+          label Reset
+          h3 {{list.limitedTime.resetStart}}
+        div(column="5 +1")
+          label Reset End
+          h3 {{list.limitedTime.resetEnd}}
+    div(row).clearfix
+      div(column="6").price-info
+        div(column="6")
+          label Price
+          h3 {{list.limitedTime.price | currency}}
+        div(column="6")
+          label On menu
+          h3 {{list.limitedTime.onMenu}}
+    div(column="12")
+      label Additional notes
+      p {{list.limitedTime.notes}}
