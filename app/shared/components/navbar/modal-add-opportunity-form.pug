@@ -38,12 +38,5 @@ div.modal
       .horizontal-layout
         md-checkbox Add to target list
         inline-search(placeholder="Select a Target List" results="nb.searchResults")
-        //- Temporary until inline search is ready to implement
-        //- .dropdown-filter
-        //-   .dropdown
-        //-     md-select(ng-model="nb.something" aria-label="target list dropdown" placeholder="Add a new Target List")
-        //-       md-option(ng-repeat="list in nb.targetLists" aria-label="target list" value="{{list.name}}" ng-click="ng.addToTargetList(nb.newOpportunity)") {{list.name}}
-        //-       md-option(aria-label="add newrationale modal form") + Add a new Target List
-
     button(ng-click="nb.addNewOpportunity(nb.newOpportunity, nb.newOpportunityArray)").btn-action Add
     p.cancel.accent(ng-click="nb.closeModal()") X Cancel

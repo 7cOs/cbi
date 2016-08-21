@@ -13,8 +13,6 @@ button.icon.select-all(ng-click="list.toggleAll()")
 button.icon.expand-all(ng-click="list.accordion.expandAll()" ng-disabled="list.expandedOpportunities.length === list.opportunitiesService.model.opportunities.length") Expand All
 button.icon.collapse-all(ng-click="list.accordion.collapseAll()" ng-disabled="list.expandedOpportunities.length < 2") Collapse All
 
-button.btn-primary(ng-click="list.showCorporateMemoModal(event)") Corporate Mandate Demo
-
 div(ng-if="!list.opportunitiesService.model.filterApplied") [Ratul] Pls apply a filter to see the list
 
 v-accordion.styled-list(multiple="" id="opportunities" control="list.accordion" onexpand="list.expandCallback(item)" oncollapse="list.collapseCallback(item)" column='12' ng-if="list.opportunitiesService.model.filterApplied")
