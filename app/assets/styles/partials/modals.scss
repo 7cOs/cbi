@@ -115,6 +115,20 @@ md-dialog {
 
     .horizontal-layout {
 
+      inline-search {
+        display: inline-block;
+        float: right;
+        width: 60%;
+
+        input {
+          height: 45px;
+        }
+
+        input[type='submit'] {
+          width: 45px;
+        }
+      }
+
       md-radio-button {
         display: inline-block;
         float: left;
@@ -164,5 +178,38 @@ md-dialog {
     p:last-child {
       float: right;
     }
+  }
+}
+
+.corporate-memo {
+  width: 600px;
+
+  p {
+    text-align: left;
+  }
+
+  h3 {
+    margin-top: 0;
+    text-align: left;
+  }
+
+  .date,
+  .price-info {
+    float: left;
+  }
+
+  .start-end,
+  .on-menu {
+    float: right;
+  }
+
+  .price-info {
+    float: left;
+  }
+
+  .date,
+  .start-end,
+  .price-info {
+    display: inline-block;
   }
 }
