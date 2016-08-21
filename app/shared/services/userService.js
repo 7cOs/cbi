@@ -39,7 +39,7 @@ module.exports =
 
     var model = {
           currentUser: {
-            id: '1',
+            id: '1601',
             firstName: 'Joe',
             lastName: 'Cerveza',
             email: 'jCerveza@cbrands.com',

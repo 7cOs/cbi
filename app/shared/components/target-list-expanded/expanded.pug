@@ -42,7 +42,7 @@ div.expanded-target-lists
             h4 No Opportunities have been added yet
             p Try Searching for <span>Opportunities</span> and add them to your list
           ul
-            li(ng-repeat="list in expanded.userService.model.targetLists.owned | orderBy:expanded.sortProperty:expanded.reverse").clearfix
+            li(ng-repeat="list in expanded.userService.model.targetLists.owned | filter:{archived:false} | orderBy:expanded.sortProperty:expanded.reverse").clearfix
               // div.checkbox-wrapper.named-target-list(ng-click="expanded.toggle(opportunity, list.selected)")
                 md-checkbox(aria-label="Select Item" ng-checked="expanded.exists(opportunity, list.selected)")
               div.checkbox-wrapper.named-target-list
@@ -98,7 +98,7 @@ div.expanded-target-lists
             h4 No Opportunities have been shared with you yet
             p Try Searching for <span>Opportunities</span> and add them to your list
           ul
-            li(ng-repeat="list in expanded.userService.model.targetLists.sharedWithMe | filter:{archived:false} | orderBy:expanded.sortProperty:expanded.reverse").clearfix
+            li(ng-repeat="list in expanded.userService.model.targetLists.sharedWithMe | orderBy:expanded.sortProperty:expanded.reverse").clearfix
               div(column="12")
                 div(row)
                   h4(column="4").left {{list.name}}
@@ -151,7 +151,7 @@ div.expanded-target-lists
             h4 No Opportunities to remove
             p Try Searching for <span>Opportunities</span> and add them to your list
           ul
-            li(ng-repeat="list in expanded.userService.model.targetLists.sharedWithMe | filter:{archived:true} | orderBy:expanded.sortProperty:expanded.reverse").clearfix
+            li(ng-repeat="list in expanded.userService.model.targetLists.owned | filter:{archived:true} | orderBy:expanded.sortProperty:expanded.reverse").clearfix
               div.checkbox-wrapper(ng-click="list.toggle(opportunity, list.selected)")
                 md-checkbox(aria-label="Select Item" ng-checked="list.exists(opportunity, list.selected)")
               div.checkbox-sibling(column="12").archived
