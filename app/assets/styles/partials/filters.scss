@@ -10,11 +10,27 @@
   }
 
   .apply-filters {
+    text-align: center;
 
     button {
-      display: block;
       font-size: 14px;
       margin: 0 auto;
+    }
+
+    .secondary-button-container,
+    button {
+      display: inline-block;
+    }
+
+    .secondary-button-container {
+      text-align: left;
+      position: relative;
+      top: -36px;
+      left: 162px;
+
+      a {
+        color: $blue;
+      }
     }
   }
 

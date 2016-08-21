@@ -95,5 +95,8 @@ div#fancy-cat
         input(type="text" ng-model="o.filtersService.model.selected.cbbdContact")
     div(column='12' class='apply-filters')
       button(value='Apply Filters' type="button" class="btn-action" ng-click="o.chipsService.applyFilters()" ng-disabled="o.filtersService.model.filtersApplied") Apply Filters
+        .secondary-button-container
+          a(href="").accent.save-filterset-icon Save Report
+          a(href="").accent.reset-icon Reset
 
 list
