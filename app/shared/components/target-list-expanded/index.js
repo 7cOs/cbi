@@ -61,11 +61,13 @@ function ExpandedTargetListController($state, $scope, $filter, $mdDialog, $q, us
     $q.all(archiveTargetListPromises).then(function(response) {
       angular.forEach(selectedTargetLists, function(item, key) {
         // this may work or i may need to do the object. cant test due to api issues.
-        console.log(item, key);
         item.archived = true;
+
+        userService.model.targetLists.ownedArchived++;
+        userService.model.targetLists.ownedNotArchived--;
       });
 
-      console.log(userService.model.targetLists.owned);
+      console.log(userService.model.targetLists);
     });
   }
 
@@ -130,8 +132,9 @@ function ExpandedTargetListController($state, $scope, $filter, $mdDialog, $q, us
   function saveNewList(e) {
     userService.addTargetList(vm.newList).then(function(response) {
       closeModal();
-      console.log(response);
       userService.model.targetLists.owned.unshift(response);
+      userService.model.targetLists.ownedArchived++;
+      userService.model.targetLists.ownedNotArchived--;
     });
   }
 

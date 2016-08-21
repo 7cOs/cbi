@@ -71,6 +71,7 @@ module.exports =
 
         searchService[method](vm.input).then(function(data) {
           vm.loading = false;
+          console.log(data);
           vm.results = data;
         }, function(reason) {
           vm.loading = false;

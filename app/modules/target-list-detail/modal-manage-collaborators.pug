@@ -19,6 +19,7 @@ div.modal.target-list-modal
       md-checkbox(ng-model="tld.collaborator.permissionLevel" ng-true-value="'collaborateandinvite'" ng-false-value="'collaborate'" ng-click="tld.changeCollaboratorLevel()") Allow Collaborators to invite others
     div.modal-input
       label Add Recipient
-      input(type="email" ng-model="tld.collaborators.newCollaborator" placeholder="Enter names or CBI Email addresses")
+      // input(type="email" ng-model="tld.collaborators.newCollaborator" placeholder="Enter names or CBI Email addresses")
+      inline-search(type="user" placeholder="Search users" chosen-result="tld.collaborators.newCollaborator")
     button(ng-disabled="!tld.collaborators.newCollaborator" ng-click="tld.addCollaborators()").btn-action Save
     p.cancel.accent(ng-click="tld.closeModal()")

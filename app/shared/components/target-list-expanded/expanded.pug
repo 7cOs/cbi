@@ -38,7 +38,7 @@ div.expanded-target-lists
                   | Depletions <br />Since Closed (CE)
                   span(ng-class="{ 'chevron-down-small' : expanded.depletionsChevron, 'chevron-up-small' : !expanded.depletionsChevron}").chevron-down-small
         div(row).target-list-detail-container
-          div(ng-show="!expanded.userService.model.targetLists.owned.length").no-opportunites
+          div(ng-show="!expanded.userService.model.targetLists.owned.length || expanded.userService.model.targetLists.owned.length === 0").no-opportunites
             h4 No Opportunities have been added yet
             p Try Searching for <span>Opportunities</span> and add them to your list
           ul

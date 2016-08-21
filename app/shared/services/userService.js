@@ -462,8 +462,6 @@ module.exports =
       var targetListPromise = $q.defer(),
           url = apiHelperService.request('/api/users/' + id + '/targetLists/', p);
 
-      console.log(url);
-
       if (!service.model.targetLists) {
         $http.get(url)
           .then(getTargetListsSuccess)
@@ -474,13 +472,24 @@ module.exports =
 
       function getTargetListsSuccess(response) {
         var sharedArchivedCount = 0,
-            sharedNotArchivedCount = 0;
+            sharedNotArchivedCount = 0,
+            ownedNotArchived = 0,
+            ownedArchived = 0;
 
-        for (var i = 0; i < response.data.sharedWithMe.length; i++) {
-          if (response.data.sharedWithMe.archived) sharedArchivedCount++;
+        console.log(response);
+
+        for (var i = 0; i < response.data.owned.length; i++) {
+          if (response.data.owned[i].archived) ownedArchived++;
+          else ownedNotArchived++;
+        }
+
+        for (i = 0; i < response.data.sharedWithMe.length; i++) {
+          if (response.data.sharedWithMe[i].archived) sharedArchivedCount++;
           else sharedNotArchivedCount++;
         }
 
+        response.data.ownedArchived = ownedArchived;
+        response.data.ownedNotArchived = ownedNotArchived;
         response.data.sharedArchivedCount = sharedArchivedCount;
         response.data.sharedNotArchivedCount = sharedNotArchivedCount;
 
