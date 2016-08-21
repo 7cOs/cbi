@@ -326,12 +326,15 @@ module.exports =
      * @name getTargetList
      * @desc get target list from web service
      * @params {String} targetListId - id of target list
+     * @params {Object} p - query parameters
      * @returns {Object} - target list
      * @memberOf orion.common.services
      */
-    function getTargetList(targetListId) {
+    function getTargetList(targetListId, p) {
       var targetListPromise = $q.defer(),
-          url = apiHelperService.request('/api/targetLists/' + targetListId);
+          url = apiHelperService.request('/api/targetLists/' + targetListId, p);
+
+      console.log(url);
 
       $http.get(url)
         .then(getTargetListSuccess)
@@ -370,8 +373,7 @@ module.exports =
         .catch(updateTargetListFail);
 
       function updateTargetListSuccess(response) {
-        console.log('[targetListService.updateTargetList] response: ', response);
-        // targetListPromise.resolve(response.data);
+        targetListPromise.resolve(response.data);
       }
 
       function updateTargetListFail(error) {

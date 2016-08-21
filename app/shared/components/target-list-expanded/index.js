@@ -130,7 +130,7 @@ function ExpandedTargetListController($state, $scope, $filter, $mdDialog, $q, us
     userService.addTargetList(vm.newList).then(function(response) {
       closeModal();
       console.log(response);
-      userService.model.targetLists.owned.push(response);
+      userService.model.targetLists.owned.unshift(response);
     });
   }
 
@@ -169,7 +169,7 @@ function ExpandedTargetListController($state, $scope, $filter, $mdDialog, $q, us
   // ***************
 
   function init() {
-    userService.getTargetLists('1').then(function(data) {
+    userService.getTargetLists('1', {'type': 'targetLists'}).then(function(data) {
       var ownedPromises = [],
           sharedPromises = [];
       userService.model.targetLists = data;
@@ -195,6 +195,8 @@ function ExpandedTargetListController($state, $scope, $filter, $mdDialog, $q, us
           targetList.collaborators = response[key].data;
         });
       });
+
+      console.log(userService.model.targetLists);
     });
   }
 

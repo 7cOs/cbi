@@ -454,12 +454,15 @@ module.exports =
      * @name getTargetLists
      * @desc get target list for a user
      * @params {String} id - id of a user
+     * @params {Object} p - query params
      * @returns {Object} - user target lists
      * @memberOf orion.common.services
      */
-    function getTargetLists(id) {
+    function getTargetLists(id, p) {
       var targetListPromise = $q.defer(),
-          url = apiHelperService.request('/api/users/' + id + '/targetLists/');
+          url = apiHelperService.request('/api/users/' + id + '/targetLists/', p);
+
+      console.log(url);
 
       if (!service.model.targetLists) {
         $http.get(url)

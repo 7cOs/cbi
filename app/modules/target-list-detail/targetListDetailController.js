@@ -162,9 +162,11 @@ module.exports =
       };
 
       targetListService.updateTargetList(targetListService.model.currentList.id, payload).then(function(response) {
-        console.log('Target List Updated: ', response);
+        targetListService.model.currentList = response;
 
         removeFooterToast();
+
+        closeModal();
       });
     }
 
