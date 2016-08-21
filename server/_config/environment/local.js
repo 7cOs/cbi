@@ -56,13 +56,16 @@ module.exports = function (config) {
     spPrivateKey: [fs.readFileSync('./server/_config/environment/sfdcsecurity/' + config.env + '/key-file.pem').toString()],
     spCertificate: [fs.readFileSync('./server/_config/environment/sfdcsecurity/' + config.env + '/cert-file.crt').toString()],
     spAssertEndpoint: 'https://cbrands--CBeerDev.cs20.my.salesforce.com/services/oauth2/token?so=00Dm00000008fCJ',
+    spMetadataLocation: './server/_config/environment/sfdcsecurity/' + config.env + '/sp.xml',
+    idpMetadataLocation: './server/_config/environment/sfdcsecurity/' + config.env + '/idp.xml',
 
 // IDP (Identity Provider (i.e. OAM)) details
     idpSSOLoginURL: 'https://ssodev.cbrands.com/oamfed/idp/samlv20',
     idpSSOLogoutURL: 'https://ssodev.cbrands.com/oam/server/logout?end_url=http://www.cbrands.com',
-    idpCertificates: [fs.readFileSync('./server/_config/passport/certs/development.crt').toString()],
-    idpForceAuthn: false,
-    idpSignGetRequest: false,
+    idpCertificates: [fs.readFileSync('./server/_config/environment/sfdcsecurity/' + config.env + '/cert-file.crt').toString()],
+//    idpCertificates: [fs.readFileSync('./server/_config/passport/certs/development.crt').toString()],
+    idpForceAuthn: true,
+    idpSignGetRequest: true,
     idpAllowUnencryptedAssertion: true,
 
 // oAuth details

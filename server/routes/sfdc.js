@@ -65,6 +65,6 @@ module.exports = function(app) {
   });
 
   app.get('/sfdcauth/assert', function(req, res) {
-    sfdcauth['getAssert'](app, req, res);
+    sfdcauth['assert'](app, req, res);
   });
 };
