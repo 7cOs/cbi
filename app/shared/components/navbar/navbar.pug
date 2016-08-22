@@ -47,14 +47,14 @@ div(container)
           md-menu-content
             .nav-flyout
               .content.nopad
-                div.notification-card.clearfix(md-prevent-menu-close ng-repeat="notification in nb.notifications" ng-class="{'read': notification.read}" ng-click="nb.markRead(notification)" class="{{notification.type}}")
+                div.notification-card.clearfix(md-prevent-menu-close ng-repeat="notification in nb.notifications" ng-class="{'read': notification.status === notificationsService.status.READ}" ng-click="nb.markRead(notification)" class="{{notification.action}}")
                   .details
-                    p {{notification.title}}
-                    p.source {{notification.source}}
-                    p.sku {{notification.sku}} <span>{{notification.status}}</span>
+                    p {{notification.shortenedObject.name}}
+                    p.source {{notification.shortenedObject.store.name}}
+                    p.sku {{notification.shortenedObject.product.name}} <span>{{notification.shortenedObject.type}}</span>
                   .info
-                    label {{notification.date}}
-                    label.bold {{notification.user}}
+                    label {{notification.dateUpdated | timeAgo: 'relative'}}
+                    label.bold {{notification.creator.firstName}} {{notification.creator.lastName}}
         md-menu(md-position-mode="target-right target" md-offset="2 54")
           a.nav-icon.settings(href="#" md-menu-origin ng-click="$mdOpenMenu($event)", aria-label="Settings")
           md-menu-content

@@ -70,25 +70,27 @@
     cursor: hand;
   }
 
-  &.note,
-  &.share,
-  &.collaboration {
+  &.ADDED_NOTE,
+  &.SHARE_OPPORTUNITY,
+  &.SHARE_TARGET_LIST,
+  &.ARCHIVE_TARGET_LIST {
     background-repeat: no-repeat;
   }
 
-  &.note {
+  &.ADDED_NOTE {
     background-image: url('../assets/img/icons/notification-note.svg');
     background-position: 14px 1.5em;
     background-size: 20px 20px;
   }
 
-  &.share {
+  &.SHARE_OPPORTUNITY {
     background-image: url('../assets/img/icons/notification-opportunity.svg');
     background-position: 14px 1.25em;
     background-size: 20px 30px;
   }
 
-  &.collaboration {
+  &.SHARE_TARGET_LIST,
+  &.ARCHIVE_TARGET_LIST {
     background-image: url('../assets/img/icons/notification-collaborator.svg');
     background-position: 14px 1.25em;
     background-size: 20px 25px;
