@@ -28,4 +28,10 @@
       color: $gray-8;
     }
   }
+
+  // Replace dashed SVG with PNG on IE for target list progress
+  .target-lists ._md-container {
+    background-image: url('../../assets/img/icons/stripes.png');
+    background-repeat: repeat-x;
+  }
 }
