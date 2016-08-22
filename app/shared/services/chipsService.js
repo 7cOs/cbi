@@ -71,6 +71,8 @@ module.exports =
           model[i].applied = true;
         }
 
+        console.log(data);
+
         filtersService.model.filtersApplied = true;
         opportunitiesService.model.filterApplied = true;
 
