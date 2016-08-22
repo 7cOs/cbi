@@ -26,9 +26,10 @@ module.exports =
     // Set values
     vm.greeting = getGreeting();
 
-    /* userService.getPerformanceSummary('A1B2').then(function(data) {
-      console.log(data.performance);
-    });*/
+    userService.getPerformanceSummary('1705').then(function(data) {
+      console.log(data);
+      vm.performanceData = data;
+    });
 
     userService
       .getOpportunityFilters('1')
