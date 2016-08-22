@@ -33,18 +33,18 @@ div#fancy-cat
     div(column='3')
       label Premise Type
       md-radio-group(ng-model="o.filtersService.model.selected.premiseType")
-        md-radio-button(ng-repeat="p in o.filtersService.model.premises | filter: '!All'" class="md-primary" ng-value="p.name" aria-label="p.name" ng-click="o.chipsService.addChip(p.name, 'premiseType', true)") {{::p.name}}
+        md-radio-button(ng-repeat="p in o.filtersService.model.premises | filter: '!All'" class="md-primary" ng-value="p.name" aria-label="{{p.name}}" ng-click="o.chipsService.addChip(p.name, 'premiseType', true)") {{::p.name}}
     div(column='6')
       label Opportunity Status
       md-radio-group(ng-model="o.filtersService.model.selected.opportunitiesStatus")
-        md-radio-button(ng-repeat="opportunity in o.filtersService.model.opportunitiesStatus" class="md-primary" ng-value="opportunity.name" aria-label="opportunity.name" ng-click="o.chipsService.addChip(opportunity.name, 'opportunitiesStatus', true)") {{::opportunity.name}}
+        md-radio-button(ng-repeat="opportunity in o.filtersService.model.opportunitiesStatus" class="md-primary" ng-value="opportunity.name" aria-label="{{opportunity.name}}" ng-click="o.chipsService.addChip(opportunity.name, 'opportunitiesStatus', true)") {{::opportunity.name}}
   div(row)
     div(column='3')
       label Opportunity Type
       .dropdown-filter
         .dropdown
-          md-select(ng-model="o.filtersService.model.selected.opportunitiesTypes" aria-label="Opportunity Type" md-on-close="o.chipsService.addChip(o.filtersService.model.selected.opportunitiesTypes, 'opportunitiesTypes', false)" placeholder="All Types")
-            md-option(ng-repeat="type in o.filtersService.model.opportunitiesTypes" aria-label="type.name" value="{{type.name}}") {{::type.name}}
+          md-select(ng-model="o.filtersService.model.selected.opportunitiesTypes" md-on-close="o.chipsService.addChip(o.filtersService.model.selected.opportunitiesTypes, 'opportunitiesTypes', false)" placeholder="All Types")
+            md-option(ng-repeat="type in o.filtersService.model.opportunitiesTypes" aria-label="{{type.name}}" value="{{type.name}}") {{::type.name}}
     div(column='3')
       label Brand / Master SKU
       inline-search(type="product" placeholder="Brand or SKU/Package" chosen-result="o.filtersService.model.brandSearchText")
@@ -87,12 +87,10 @@ div#fancy-cat
           md-checkbox(column='5' ng-model="o.filtersService.model.selected.tradeChannelRecreation" aria-label="Trade Channel Recreation" ng-click="o.chipsService.updateChip('tradeChannelRecreation', 'Trade Channel Recreation')") Recreation
           md-checkbox(column='5' ng-model="o.filtersService.model.selected.tradeChannelOther" aria-label="Trade Channel Other" ng-click="o.chipsService.updateChip('tradeChannelOther', 'Trade Channel Other')") Other
     div(column='3' ng-show="o.filtersService.model.expanded")
-      md-input-container
-        label Location
-        input(type="text" ng-model="o.filtersService.model.selected.location")
-      md-input-container
-        label Name of CBBD Contact
-        input(type="text" ng-model="o.filtersService.model.selected.cbbdContact")
+      label Location
+        input(type="text" placeholder="by City, State, or Zip" ng-model="o.filtersService.model.selected.location")
+      label.cbbd-contact CBBD Contact
+        input(type="text" placeholder="by Name" ng-model="o.filtersService.model.selected.cbbdContact")
     div(column='12' class='apply-filters')
       button(value='Apply Filters' type="button" class="btn-action" ng-click="o.chipsService.applyFilters()" ng-disabled="o.filtersService.model.filtersApplied") Apply Filters
         .secondary-button-container
