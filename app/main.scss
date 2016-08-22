@@ -1,6 +1,6 @@
 // Libs
 @import '../node_modules/angular-material/angular-material.scss';
-@import '../node_modules/v-accordion/src/vAccordion/styles/vAccordion.scss';
+@import '../node_modules/v-accordion/src/vAccordion/styles/vAccordion';
 
 // Base
 @import './assets/styles/base/normalize';
@@ -9,34 +9,34 @@
 @import './assets/styles/base/utilities';
 
 // Font Awesome for Text Editor
-@import './assets/styles/lib/font-awesome/font-awesome.scss';
-@import './assets/styles/lib/text-angular/text-angular.scss';
+@import './assets/styles/lib/font-awesome/font-awesome';
+@import './assets/styles/lib/text-angular/text-angular';
 
 
 // Partials
+@import './assets/styles/partials/fonts';
 @import './assets/styles/partials/layout';
 @import './assets/styles/partials/typography';
 @import './assets/styles/partials/buttons';
-@import './assets/styles/partials/data-table.scss';
-@import './assets/styles/partials/filters.scss';
-@import './assets/styles/partials/accordion.scss';
-@import './assets/styles/partials/chips.scss';
-@import './assets/styles/partials/form-elements.scss';
-@import './assets/styles/partials/nvd3.scss';
-@import './assets/styles/partials/dropdowns.scss';
-@import './assets/styles/partials/alert-message.scss';
-@import './assets/styles/partials/modals.scss';
-@import './assets/styles/partials/toast.scss';
-@import './assets/styles/partials/menus.scss';
-@import './assets/styles/partials/text-editor.scss';
-@import './assets/styles/partials/notifications.scss';
+@import './assets/styles/partials/data-table';
+@import './assets/styles/partials/filters';
+@import './assets/styles/partials/accordion';
+@import './assets/styles/partials/chips';
+@import './assets/styles/partials/form-elements';
+@import './assets/styles/partials/nvd3';
+@import './assets/styles/partials/dropdowns';
+@import './assets/styles/partials/alert-message';
+@import './assets/styles/partials/modals';
+@import './assets/styles/partials/toast';
+@import './assets/styles/partials/menus';
+@import './assets/styles/partials/text-editor';
+@import './assets/styles/partials/notifications';
 
 // Browser fixes
-@import './assets/styles/ie.scss';
+@import './assets/styles/ie';
 
 // Modules
 @import './modules/**/*.scss';
 
 // Components
 @import './shared/**/*.scss';
-// @import './components/**/*.scss';
