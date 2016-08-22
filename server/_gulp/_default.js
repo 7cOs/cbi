@@ -10,7 +10,7 @@
 
   if (release) {
     gulp.task('default', function() {
-      return runSequence(['compile']);
+      return runSequence(['compile:release']);
     });
   } else {
     gulp.task('default', function(cb) {
@@ -19,12 +19,17 @@
   }
 
   gulp.task('compile', function(cb) {
-    return runSequence(['compile:pug', 'compile:js', 'compile:fonts', 'compile:sass', 'compile:img'], cb);
+    return runSequence(['compile:pug', 'compile:js:development', 'compile:fonts', 'compile:sass', 'compile:img'], cb);
+  });
+
+  gulp.task('compile:release', function(cb) {
+    return runSequence(['compile:pug', 'compile:js:production', 'compile:fonts', 'compile:sass', 'compile:img'], cb);
   });
 
   gulp.task('clean', function() {
     del('public/**/*');
-    return del('server/_gulp/compile/cache/*');
+    del('server/_gulp/compile/cache/.browserify-cache.json');
+    del('server/_gulp/compile/cache/.cache-money');
   });
 
 }).call(this);
