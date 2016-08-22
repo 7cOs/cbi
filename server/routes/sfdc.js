@@ -4,6 +4,8 @@ module.exports = function(app) {
   var sfdc = require('../controllers/sfdc');
   var utility = require('util');
   var request = require('request');
+  var jsdom = require('jsdom');
+  var DOMParser = require('xmldom').DOMParser;
 //  var base64util = require('base64util');
 
 //  var sfdcauth = require('../controllers/sfdcauth');
@@ -46,21 +48,22 @@ module.exports = function(app) {
       res.send('<div>The SFDC Configuration is not present. Please check your configuration file for this environment</div>');
     }
   });
-
+// https://github.com/request/request#forms
   app.get('/sfdcauth/login', function(req, res) {
     console.log('----------------------> In /sfdcauth/login <----------------');
     console.log('---------> Calling ' + sfdcConfig.spSAMLRequestEndpoint + ' <---------');
+    request.debug = true;
     try {
       request(sfdcConfig.spSAMLRequestEndpoint, function (error, response, body) {
-        if (!error && response.statusCode === 200) {
-          console.log(body);
-          res.send(body);
-          console.log(utility.inspect(res, null, ''));
-          console.log(utility.inspect(app, null, ''));
+        if (error) {
+          console.Error(error);
+        } else {
+          var doc = new DOMParser().parseFromString(body);
+          console.log(utility.inspect(doc, null, ''));
         }
       });
     } catch (Error) {
       console.log(Error);
-    }
+    };
   });
 };
