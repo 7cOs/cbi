@@ -222,10 +222,16 @@
     margin: 0;
     border: none;
     background: $gray-10;
+    color: $black;
   }
 
   li {
     list-style: disc;
     margin-left: 24px;
+  }
+
+  .active {
+    background: $gray-7;
+    color: $white;
   }
 }
