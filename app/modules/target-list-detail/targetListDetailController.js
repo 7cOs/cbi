@@ -9,11 +9,8 @@ module.exports =
 
     // Initial variables
     var vm = this;
-    vm.collaborator = {
-      newCollaborator: '',
-      newCollaboratorId: '2',
-      permissionLevel: 'collaborate'
-    };
+    vm.collaborator = {};
+    vm.permissionLevel = 'collaborate';
     vm.deleting = false;
     vm.archiving = false;
     vm.confirmToast = false;
@@ -53,6 +50,7 @@ module.exports =
     // **************
 
     function addCollaborators() {
+      vm.collaborator.permissionLevel = vm.permissionLevel;
       targetListService.addTargetListShares(targetListService.model.currentList.id, vm.collaborator).then(function(response) {
         // push to target list collaborator array
         var collaboratorList = $filter('filter')(userService.model.targetLists.owned, {id: targetListService.model.currentList.id});

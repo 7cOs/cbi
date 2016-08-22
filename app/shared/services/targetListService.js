@@ -544,7 +544,7 @@ module.exports =
       var targetListPromise = $q.defer(),
           url = apiHelperService.request('/api/targetLists/' + targetListId + '/shares'),
           payload = [{
-            personId: Number(p.newCollaboratorId),
+            personId: Number(p.id),
             permissionLevel: p.permissionLevel
           }];
 
