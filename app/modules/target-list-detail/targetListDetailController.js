@@ -54,7 +54,7 @@ module.exports =
       targetListService.addTargetListShares(targetListService.model.currentList.id, vm.collaborator).then(function(response) {
         // push to target list collaborator array
         var collaboratorList = $filter('filter')(userService.model.targetLists.owned, {id: targetListService.model.currentList.id});
-        collaboratorList[0].collaborators = response.data;
+        collaboratorList[0].collaborators = targetListService.model.currentList.collaborators = response.data;
 
         closeModal();
       });
@@ -97,9 +97,26 @@ module.exports =
     }
 
     function makeOwner(collaboratorId) {
-      targetListService.addTargetListShares(targetListService.model.currentList.id, {newCollaboratorId: collaboratorId, permissionLevel: 'author'}).then(function(response) {
-        console.log('owner now w00t');
-        // update in array
+      targetListService.addTargetListShares(targetListService.model.currentList.id, {id: collaboratorId, permissionLevel: 'author'}).then(function(response) {
+        console.log('new owner specified');
+
+        // change permission in targetListService.model.currentList so reflected in ui
+        angular.forEach(targetListService.model.currentList.collaborators, function(item, key) {
+          if (item.user.id === collaboratorId) item.permissionLevel = 'author';
+        });
+
+        // change permission in userService.model.targetLists.owned so reflected in ui
+        var keepGoing = true,
+            list = $filter('filter')(userService.model.targetLists.owned, {id: targetListService.model.currentList.id});
+        angular.forEach(list.collaborators, function(item, key) {
+          if (keepGoing) {
+            if (item.user.id === collaboratorId) {
+              item.permissionLevel = 'author';
+              keepGoing = false;
+            }
+          }
+        });
+
       });
     }
 
@@ -141,10 +158,25 @@ module.exports =
 
     function removeCollaborator(collaboratorId) {
       targetListService.deleteTargetListShares(targetListService.model.currentList.id, collaboratorId).then(function(response) {
-        console.log('done');
+        console.log('collaborator removed');
 
-        // TO DO
-        // remove from collaborators list in model
+        // remove from user model and UI - target list service
+        angular.forEach(targetListService.model.currentList.collaborators, function(item, key) {
+          if (item.user.id === collaboratorId) targetListService.model.currentList.collaborators.splice(targetListService.model.currentList.collaborators.indexOf(item), 1);
+        });
+
+        // remove from user model and UI - user service
+        var keepGoing = true,
+            list = $filter('filter')(userService.model.targetLists.owned, {id: targetListService.model.currentList.id});
+        angular.forEach(list.collaborators, function(item, key) {
+          if (keepGoing) {
+            if (item.user.id === collaboratorId) {
+              list.collaborators.splice(list.collaborators.indexOf(item), 1);
+              keepGoing = false;
+            }
+          }
+        });
+
       });
     }
 

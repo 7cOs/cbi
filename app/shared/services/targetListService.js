@@ -548,6 +548,8 @@ module.exports =
             permissionLevel: p.permissionLevel
           }];
 
+      console.log(payload);
+
       $http.post(url, payload)
         .then(addTargetListSharesSuccess)
         .catch(addTargetListSharesFail);
@@ -555,8 +557,6 @@ module.exports =
       function addTargetListSharesSuccess(response) {
         console.log('[targetListService.addTargetListShares] response: ', response);
         targetListPromise.resolve(response);
-        // uncomment above and remove below when services are ready
-        // targetListPromise.resolve(tempData.addTargetListSharesResponse);
       }
 
       function addTargetListSharesFail(error) {
@@ -604,16 +604,18 @@ module.exports =
      * @name deleteTargetListShares
      * @desc delete target list shares
      * @params {String} targetListId - id of target list
-     * @params {String} p - id of collaborator to be deleted
+     * @params {String} id - array of user ids of collaborators to be removed
      * @returns {Object} - status object
      * @memberOf orion.common.services
      */
-    function deleteTargetListShares(targetListId, p) {
+    function deleteTargetListShares(targetListId, id) {
       var targetListPromise = $q.defer(),
           url = apiHelperService.request('/api/targetLists/' + targetListId + '/shares'),
-          payload = {
-            personId: p
-          };
+          payload = [
+            Number(id)
+          ];
+
+      console.log(payload);
 
       $http.delete(url, payload)
         .then(deleteTargetListSharesSuccess)
