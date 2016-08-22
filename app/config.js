@@ -1,6 +1,6 @@
 'use strict';
 
-module.exports =
+module.exports = /*  @ngInject */
   function($mdThemingProvider, $locationProvider) {
     $mdThemingProvider.theme('default')
       .primaryPalette('grey')

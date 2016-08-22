@@ -1,6 +1,6 @@
 'use strict';
 
-module.exports =
+module.exports = /*  @ngInject */
   function landingController($rootScope, $state, filtersService, chipsService, myperformanceService, userService) {
 
     // ****************

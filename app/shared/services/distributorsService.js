@@ -1,6 +1,6 @@
 'use strict';
 
-module.exports =
+module.exports = /*  @ngInject */
   function distributorsService($http, $q, apiHelperService) {
 
     return {

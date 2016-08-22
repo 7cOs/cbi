@@ -17,6 +17,7 @@ module.exports =
       link: function(scope, elem, attrs) {}
     };
 
+    /*  @ngInject */
     function InlineSearchController($scope, $timeout, $filter, searchService, $location) {
 
       // ****************
