@@ -1,11 +1,52 @@
-.trade-channel {
-  margin-top: 4ex;
+.retailer {
+  > div:first-child {
+    padding-left: 0.9em;
+  }
+
+  > div {
+    padding: 0;
+  }
+
+  md-select-value span {
+    padding: 0 0.6em;
+  }
+}
+
+.predicted-impact-opps {
+  md-checkbox ._md-label {
+    span, md-icon {
+      display: inline-block;
+    }
+
+    span {
+      width: 3.75em;
+    }
+  }
 }
 
 .store-segmentation {
-  margin-top: 1ex;
+  margin-top: 2ex;
+
+  _md-label span {
+    margin-left: -3em;
+  }
 }
 
-.cbbd-contact {
+.trade-channel {
   margin-top: 3ex;
+
+  md-checkbox {
+    margin-right: 0;
+  }
+}
+
+.location-contact-opps {
+  input {
+    height: 40px;
+    font-size: 1.3em;
+  }
+
+  .cbbd-contact {
+    margin-top: 3ex;
+  }
 }
