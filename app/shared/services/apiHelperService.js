@@ -44,14 +44,20 @@ module.exports =
         }
 
         return '?' + encodeURIComponent(queryParams);
+      } else if (obj.type && obj.type === 'targetLists') {
+        delete obj.type;
+
+        queryParams += '?archived=true';
+
+        return queryParams;
       } else {
         queryParams += 'filter=';
 
         // remove type obj
         delete obj.type;
 
-        for (var key3 in obj) {
-          queryParams += key3 + ':' + obj[key3];
+        for (var key4 in obj) {
+          queryParams += key4 + ':' + obj[key4];
           if (i !== z) queryParams += ',';
           i++;
         }

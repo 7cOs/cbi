@@ -62,9 +62,12 @@ function ExpandedTargetListController($state, $scope, $filter, $mdDialog, $q, us
       angular.forEach(selectedTargetLists, function(item, key) {
         // this may work or i may need to do the object. cant test due to api issues.
         item.archived = true;
+
+        userService.model.targetLists.ownedArchived++;
+        userService.model.targetLists.ownedNotArchived--;
       });
 
-      console.log(userService.model.targetLists.owned);
+      console.log(userService.model.targetLists);
     });
   }
 
@@ -129,8 +132,9 @@ function ExpandedTargetListController($state, $scope, $filter, $mdDialog, $q, us
   function saveNewList(e) {
     userService.addTargetList(vm.newList).then(function(response) {
       closeModal();
-      console.log(response);
-      userService.model.targetLists.owned.push(response);
+      userService.model.targetLists.owned.unshift(response);
+      userService.model.targetLists.ownedArchived++;
+      userService.model.targetLists.ownedNotArchived--;
     });
   }
 
@@ -169,7 +173,8 @@ function ExpandedTargetListController($state, $scope, $filter, $mdDialog, $q, us
   // ***************
 
   function init() {
-    userService.getTargetLists('1').then(function(data) {
+    // userService.getTargetLists('1601', {'type': 'targetLists'}).then(function(data) {
+    userService.getTargetLists('1601', {'type': 'targetLists'}).then(function(data) {
       var ownedPromises = [],
           sharedPromises = [];
       userService.model.targetLists = data;
@@ -194,6 +199,7 @@ function ExpandedTargetListController($state, $scope, $filter, $mdDialog, $q, us
         angular.forEach(userService.model.targetLists.sharedWithMe, function(targetList, key) {
           targetList.collaborators = response[key].data;
         });
+        console.log(userService.model.targetLists);
       });
     });
   }

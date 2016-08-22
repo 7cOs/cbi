@@ -17,7 +17,7 @@ module.exports =
       link: function(scope, elem, attrs) {}
     };
 
-    function InlineSearchController($scope, $timeout, searchService, $location) {
+    function InlineSearchController($scope, $timeout, $filter, searchService, $location) {
 
       // ****************
       // CONTROLLER SETUP
@@ -30,6 +30,7 @@ module.exports =
       vm.input = '';
       vm.showResults = false;
       vm.loading = false;
+      vm.type = '';
 
       // Expose public methods
       vm.action = action;
@@ -47,6 +48,7 @@ module.exports =
         vm.errorMessage = null;
         vm.loading = true;
         vm.showResults = true;
+        vm.type = type;
 
         switch (type) {
           case 'user':
@@ -79,7 +81,9 @@ module.exports =
       }
 
       function resultChosen(result, nav) {
-        vm.input = result;
+        if (vm.type === 'user') vm.input = $filter('titlecase')(result.firstName) + ' ' + $filter('titlecase')(result.lastName);
+        else vm.input = result;
+
         vm.chosenResult = result;
         if (nav) {
           // We'll need to pass result for filtering once Accounts is integrated
