@@ -56,6 +56,7 @@ module.exports = function (config) {
     spPrivateKey: [fs.readFileSync('./server/_config/environment/sfdcsecurity/' + config.env + '/key-file.pem').toString()],
     spCertificate: [fs.readFileSync('./server/_config/environment/sfdcsecurity/' + config.env + '/cert-file.crt').toString()],
     spAssertEndpoint: 'https://cbrands--CBeerDev.cs20.my.salesforce.com/services/oauth2/token?so=00Dm00000008fCJ',
+    spSAMLRequestEndpoint: 'https://cbrands--CBeerDev.cs20.my.salesforce.com?so=00Dm00000008fCJ',
     spMetadataLocation: './server/_config/environment/sfdcsecurity/' + config.env + '/sp.xml',
     idpMetadataLocation: './server/_config/environment/sfdcsecurity/' + config.env + '/idp.xml',
 

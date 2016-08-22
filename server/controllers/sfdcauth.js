@@ -3,25 +3,43 @@
 // Endpoints used for sfdc authorization
 // var saml2 = require('saml2-js');
 var saml = require('express-saml2');
+const util = require('util');
 var nameId, sessionIndex;
 
 function isConnected(app, req, res) {
   console.log('-----> in isConnected');
   var sfdcConfig =  app.get('config').sfdcSec;
-//  console.log('-----> sfdcConfig is ' + JSON.stringify(sfdcConfig, null, '') + '\r\n');
+  console.log('-----> sfdcConfig is ' + JSON.stringify(sfdcConfig, null, '') + '\r\n');
   var sp = saml.ServiceProvider(sfdcConfig.spMetadataLocation);
-//  console.log('-----> sp is ' + JSON.stringify(sp, null, '') + '\r\n');
+  console.log('-----> sp is ' + JSON.stringify(sp, null, '') + '\r\n');
   var idp = saml.IdentityProvider(sfdcConfig.idpMetadataLocation);
-//  console.log('-----> idp is ' + JSON.stringify(sp, null, '') + '\r\n');
+  console.log('-----> idp is ' + JSON.stringify(sp, null, '') + '\r\n');
   sp.sendLoginRequest(idp, 'post', function(request) {
     res.render('templates/sfdcLoginForm.pug', request);
   });
 };
 
 exports.login = function(app, req, res) {
-  console.log('In /sfdc/login');
-  isConnected(app, req, res);
-  console.log('Returned from isConnected with: ');
+  console.log('-----> In /sfdc/login');
+  var loginPromise = new Promise(function (resolve, reject) {
+    try {
+      console.log('-----> Attempting to login by calling isConnected.');
+      isConnected(app, req, res);
+      console.log('-----> After login, res is: ');
+      console.log('----->' + util.inspect(res, false, null));
+    } catch (Error) {
+      console.Error('There was an error getting connected' + Error);
+      res.send(500);
+    }
+    loginPromise.then(function(result) {
+      console.log(util.inspect(result, false, null));
+//      res.write(strResponse);
+//      res.end();
+    }, function (err) {
+      console.log('There was an error getting connected' + err);
+    });
+  });
+  console.log('Returned from isConnected with: ' + util.inspect(res, false, null));
 };
 
 exports.getMetadata = function(app, req, res) {

@@ -1,0 +1,16 @@
+if('#{web}')
+  h3('#{web}')
+else
+  h3(es2-Idp Login Portal)
+div(id='form-wrapper')
+  form(id='idp-login', method='post', action='/sfdcauth/sso', autocomplete='off')
+    input(type='hidden', name='_csrf', value='#{_csrf}')
+    input(type='empId', name='empId', placeholder='Employee Id', value='7005936')
+    if('{{target}}')
+      input(type='hidden', name='target', value='#{target}')
+    if('{{method}}')
+      input(type='hidden', name='method', value='#{method}')
+    if('{{appId}}')
+      input(type='hidden', name='appId', value='#{appId}')
+    input(type='password', name='password', placeholder='Password', value='')
+    button(type='submit' form='idp-login' value='Submit') Login

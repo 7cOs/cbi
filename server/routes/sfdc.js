@@ -2,14 +2,13 @@
 
 module.exports = function(app) {
   var sfdc = require('../controllers/sfdc');
-  var sfdcauth = require('../controllers/sfdcauth');
-  var sfdcConfig = app.get('config').sfdcSec;
+  var utility = require('util');
+  var request = require('request');
+//  var base64util = require('base64util');
 
-//  var lazyproxy = require('lazy-proxy');
-//  var port = process.env.PORT || 3000;
-//  var sfdcPassport = require('passport');
-//  var ForceDotComStrategy = require('passport-forcedotcom').Strategy;
-//  var Pptsfdc = require('passport-salesforce').Strategy;
+//  var sfdcauth = require('../controllers/sfdcauth');
+  var sfdcConfig = app.get('config').sfdcSec;
+  var saml = require('express-saml2');
 
   app.post('/sfdc/createNote', function (req, res) {
     sfdc['createNote'](app, req, res);
@@ -48,23 +47,20 @@ module.exports = function(app) {
     }
   });
 
-  app.get('/sfdcauth/metadata.xml', function(app, req, res) {
-    if (sfdcauth != null) {
-      sfdcauth['getMetadata'](app, req, res);
-    } else {
-      res.send('<div>The SFDC Authorization module is not installed.  Please contact your administrator.</div>');
+  app.get('/sfdcauth/login', function(req, res) {
+    console.log('----------------------> In /sfdcauth/login <----------------');
+    console.log('---------> Calling ' + sfdcConfig.spSAMLRequestEndpoint + ' <---------');
+    try {
+      request(sfdcConfig.spSAMLRequestEndpoint, function (error, response, body) {
+        if (!error && response.statusCode === 200) {
+          console.log(body);
+          res.send(body);
+          console.log(utility.inspect(res, null, ''));
+          console.log(utility.inspect(app, null, ''));
+        }
+      });
+    } catch (Error) {
+      console.log(Error);
     }
-  });
-
-  app.get('/sfdcauth/callSFDCLogin', function(req, res) {
-    sfdcauth['login'](app, req, res);
-  });
-
-  app.get('/sfdcauth/callSFDClogout', function(req, res) {
-    sfdcauth['logout'](app, req, res);
-  });
-
-  app.get('/sfdcauth/assert', function(req, res) {
-    sfdcauth['assert'](app, req, res);
   });
 };
