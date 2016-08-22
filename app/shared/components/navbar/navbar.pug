@@ -3,7 +3,7 @@ div(container)
     img(src="../assets/img/icons/nav-iq.svg")
     a(href="/ext/iq" target="_self") Go to IQ
   div(row)
-    img(src="assets/img/logos/CBI_Logo.png", ui-sref="landing").nav-logo
+    img(src="assets/img/logos/CBI_Logo.png", ui-sref="landing", alt="Home").nav-logo
     div.nav-link-wrapper
       ul(column='8').main-nav
         li.top-level-menu(ui-sref-active="active")
@@ -28,7 +28,7 @@ div(container)
         .notification-count-badge(ng-if="nb.unreadNotifications > 0")
           span {{nb.unreadNotifications}}
         md-menu(md-position-mode="target-right target" md-offset="54 80")
-          a.nav-icon.search(href="#" ng-click="$mdOpenMenu($event)")
+          a.nav-icon.search(href="#" ng-click="$mdOpenMenu($event)" aria-label="Search")
           md-menu-content
             .nav-flyout-search
               .content
@@ -43,7 +43,7 @@ div(container)
                 inline-search(ng-if="nb.accountSelectorSelected === 'Store'" type="store" placeholder="Search for a store" chosen-result="nb.searchResult" nav="true")
         a.nav-icon.add-opportunity(ng-click="nb.modalAddOpportunityForm()")
         md-menu(md-position-mode="target-right target" md-offset="1 38")
-          a.nav-icon.notifications(href="#" md-menu-origin ng-click="$mdOpenMenu($event)")
+          a.nav-icon.notifications(href="#" md-menu-origin ng-click="$mdOpenMenu($event)", aria-label="Notifications")
           md-menu-content
             .nav-flyout
               .content.nopad
@@ -56,7 +56,7 @@ div(container)
                     label {{notification.date}}
                     label.bold {{notification.user}}
         md-menu(md-position-mode="target-right target" md-offset="2 54")
-          a.nav-icon.settings(href="#" md-menu-origin ng-click="$mdOpenMenu($event)")
+          a.nav-icon.settings(href="#" md-menu-origin ng-click="$mdOpenMenu($event)", aria-label="Settings")
           md-menu-content
             .nav-flyout
               .content

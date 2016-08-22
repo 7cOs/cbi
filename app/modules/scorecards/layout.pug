@@ -5,17 +5,17 @@ div.my-scorecards
     div.radio-filters
       label Ending Time Period
       md-radio-group(ng-model="filters.selected.timePeriod")
-        md-radio-button(ng-repeat="filter in s.filters.timePeriod" class="md-primary block" ng-value="filter.name" aria-label="Ending Time Period") {{filter.name}}
+        md-radio-button(ng-repeat="filter in s.filters.timePeriod" class="md-primary block" ng-value="filter.name" aria-label="{{filter.name}}") {{filter.name}}
 
     div.dropdown-filter
       div.dropdown
         label Depletions Time Period
-        md-select(ng-model="filters.selected.depletionsTimeFilter" aria-label="Depletions Time Range Filter"  placeholder="FYTD May 1, 2016 - June 29, 2016")
-          md-option(ng-repeat="filter in s.filters.depletionsTimePeriod" aria-label="filter.name" value="{{filter.name}}") {{filter.name}}
+        md-select(ng-model="filters.selected.depletionsTimeFilter" placeholder="FYTD May 1, 2016 - June 29, 2016")
+          md-option(ng-repeat="filter in s.filters.depletionsTimePeriod" aria-label="{{filter.name}}" value="{{filter.name}}") {{filter.name}}
       div.dropdown
         label Distribution Time Period
-        md-select(ng-model="filters.selected.distributionTimeFilter" aria-label="Distribution Time Range Filter"  placeholder="L90 Days April 1, 2016 - June 29, 2016")
-          md-option(ng-repeat="filter in s.filters.distributionTimePeriod" aria-label="filter.name" value="{{filter.name}}") {{filter.name}}
+        md-select(ng-model="filters.selected.distributionTimeFilter" placeholder="L90 Days April 1, 2016 - June 29, 2016")
+          md-option(ng-repeat="filter in s.filters.distributionTimePeriod" aria-label="{{filter.name}}" value="{{filter.name}}") {{filter.name}}
 
   section.depeletions-scorecard
     div.scorecard-header.clearfix
@@ -112,11 +112,11 @@ div.my-scorecards
           div.value.positive(ng-class="{'negative': !s.isPositive(s.performanceData.performance[1].measures[0].percentChange)}") <span ng-if="s.isPositive(s.performanceData.performance[1].measures[0].percentChange)">+</span>{{s.performanceData.performance[1].measures[0].percentChange}}<span>%</span>
     div.scorecard-filter
       div.radio-button-group
-        md-radio-group(ng-model="filters.selected.onOffPremise")
-          md-radio-button(ng-repeat="filter in s.filters.premises | orderBy:'name' | filter: '!All'" class="md-primary" ng-value="filter.name" aria-label="filter.name") {{filter.name}}
+        md-radio-group(ng-model="filters.selected.onOffPremise" aria-label="Premise Filter")
+          md-radio-button(ng-repeat="filter in s.filters.premises | orderBy: 'name' | filter: '!All'" class="md-primary" ng-value="filter.name" aria-label="{{filter.name}}") {{filter.name}}
       div.radio-button-group
-        md-radio-group(ng-model="filters.selected.placementType")
-          md-radio-button(ng-repeat="filter in s.filters.placementType" class="md-primary" ng-value="filter.name" aria-label="filter.name") {{filter.name}}
+        md-radio-group(ng-model="filters.selected.placementType" aria-label="Placement Type Filter")
+          md-radio-button(ng-repeat="filter in s.filters.placementType" class="md-primary" ng-value="filter.name" aria-label="{{filter.name}}") {{filter.name}}
 
     div.scorecard-table
       table(cellspacing="0" cellpadding="0")

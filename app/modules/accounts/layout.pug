@@ -47,12 +47,12 @@ notes
       div(row).dropdown-filter
         div(column='6').dropdown
           label Depletions Time Period
-          md-select(ng-model="a.filtersService.model.selected.depletionsTimeFilter" md-on-open="a.openSelect(true)" md-on-close="a.openSelect(false)" aria-label="Depletions Time Range Filter"  placeholder="FYTD May 1, 2016 - June 29, 2016")
-            md-option(ng-repeat="filter in a.filters.depletionsTimePeriod" aria-label="filter.name" value="{{filter.name}}") {{filter.name}}
+          md-select(ng-model="a.filtersService.model.selected.depletionsTimeFilter" md-on-open="a.openSelect(true)" md-on-close="a.openSelect(false)" placeholder="FYTD May 1, 2016 - June 29, 2016")
+            md-option(ng-repeat="filter in a.filters.depletionsTimePeriod" aria-label="{{filter.name}}" value="{{filter.name}}") {{filter.name}}
         div(column='6').dropdown
           label Distribution Time Period
-          md-select(ng-model="a.filtersService.model.selected.distributionTimeFilter" md-on-open="a.openSelect(true)" md-on-close="a.openSelect(false)" aria-label="Distribution Time Range Filter"  placeholder="L90 Days April 1, 2016 - June 29, 2016")
-            md-option(ng-repeat="filter in a.filters.distributionTimePeriod" aria-label="filter.name" value="{{filter.name}}") {{filter.name}}
+          md-select(ng-model="a.filtersService.model.selected.distributionTimeFilter" md-on-open="a.openSelect(true)" md-on-close="a.openSelect(false)" placeholder="L90 Days April 1, 2016 - June 29, 2016")
+            md-option(ng-repeat="filter in a.filters.distributionTimePeriod" aria-label="{{filter.name}}" value="{{filter.name}}") {{filter.name}}
 
 .filters(column='12')
   div(row)
@@ -62,7 +62,7 @@ notes
     div(column='2')
       label Premise Type
       md-radio-group(ng-model="a.filtersService.model.selected.premiseType" ng-init="a.filtersService.model.selected.premiseType = 'All'")
-        md-radio-button(ng-repeat="p in a.filtersService.model.premises" class="md-primary" ng-value="p.name" aria-label="p.name" ng-click="a.chipsService.addChip(p.name, 'premiseType', true)") {{p.name}}
+        md-radio-button(ng-repeat="p in a.filtersService.model.premises" class="md-primary" ng-value="p.name" aria-label="{{p.name}}" ng-click="a.chipsService.addChip(p.name, 'premiseType', true)") {{p.name}}
     div(column='2')
       label Distributor
       md-autocomplete(md-search-text="a.filtersService.model.distributorSearchText" md-items="distributor in a.filtersService.model.distributors" md-item-text="distributor.name" placeholder="by Name" md-selected-item-change="a.chipsService.addAutocompleteChip(distributor.name, 'distributorSearchText')")
@@ -70,14 +70,14 @@ notes
           div(md-highlight-text="a.filtersService.model.distributorSearchText" md-highlight-flags="^i") {{distributor.name}}
     div(column='2')
       label Store Type
-      md-checkbox(ng-model="o.filtersService.model.selected.storeTypeCBBD" aria-label="Store Type CBBD" ng-click="o.chipsService.updateChip('storeTypeCBBD', 'Store Type Chain')") Chains
+      md-checkbox(ng-model="o.filtersService.model.selected.storeTypeCBBD" aria-label="Store Type Chain" ng-click="o.chipsService.updateChip('storeTypeCBBD', 'Store Type Chain')") Chains
       md-checkbox(ng-model="o.filtersService.model.selected.storeTypeIndependent" aria-label="Store Type Independent" ng-click="o.chipsService.updateChip('storeTypeIndependent', 'Store Type Independent')") Independent Stores
     div(column='4').chain-store
       label Chain / Store
       div(row).dropdown-filter
         div(column='4').dropdown
           md-select(ng-model="a.filtersService.model.selected.storeTypes" md-on-open="a.openSelect(true)" md-on-close="a.openSelect(false)" aria-label="Store Type Filter"  placeholder="Chain")
-            md-option(ng-repeat="filter in a.filters.storeTypes" aria-label="filter.name" value="{{filter.name}}") {{filter.name}}
+            md-option(ng-repeat="filter in a.filters.storeTypes" aria-label="{{filter.name}}" value="{{filter.name}}") {{filter.name}}
         div(column='4')
           md-autocomplete(md-search-text="a.filtersService.model.accountSearchText" md-items="account in a.filtersService.model.accounts" md-item-text="account.name" placeholder="by Chain/Store Name" md-selected-item-change="a.chipsService.addAutocompleteChip(account.name, 'accountSearchText')")
             md-item-template
@@ -99,7 +99,7 @@ div(row)
     .widget-header
       .dropdown-filter
         md-select(ng-model="a.filtersService.model.selected.accountBrands" md-on-open="a.openSelect(true)" md-on-close="a.openSelect(false)" aria-label="Account Brands Filter"  placeholder="Distribution (simple)")
-          md-option(ng-repeat="filter in a.filters.accountBrands" aria-label="filter.name" value="{{filter.name}}") {{filter.name}}
+          md-option(ng-repeat="filter in a.filters.accountBrands" aria-label="{{filter.name}}" value="{{filter.name}}") {{filter.name}}
       span.back-chevron(ng-if="a.brandSelectedIndex === 1" ng-click="a.prevTab()")
       p.brands {{a.brandWidgetTitle || 'All Brands'}}
     .widget-content
@@ -146,12 +146,12 @@ div(row)
     .widget-header
       .dropdown-filter.narrow
         md-select(ng-model="a.filtersService.model.selected.accountMarkets" md-on-open="a.openSelect(true)" md-on-close="a.openSelect(false)" aria-label="Account Markets Filter")
-          md-option(ng-repeat="filter in a.filters.accountMarkets" aria-label="filter.name" value="{{filter.name}}") {{filter.name}}
+          md-option(ng-repeat="filter in a.filters.accountMarkets" aria-label="{{filter.name}}" value="{{filter.name}}") {{filter.name}}
       .header-selector
-        md-select.market(ng-model="a.filtersService.model.selected.valuesVsTrend" md-on-open="a.openSelect(true)" md-on-close="a.openSelect(false)" placeholder="Top 10 (Values)")
-          md-option(ng-repeat="filter in a.filters.valuesVsTrend" aria-label="filter.name" value="{{filter.name}}") {{filter.name}}
-        md-select(ng-model="a.filtersService.model.selected.accountTypes" md-on-open="a.openSelect(true)" md-on-close="a.openSelect(false)" ng-change="a.setMarketTab(a.filtersService.model.selected.accountTypes)" placeholder="{{a.filtersService.model.selected.accountTypes || a.accountTypesDefault}}")
-          md-option(ng-repeat="filter in a.filters.accountTypes" aria-label="filter.name" value="{{filter.name}}") {{filter.name}}
+        md-select.market(ng-model="a.filtersService.model.selected.valuesVsTrend" md-on-open="a.openSelect(true)" md-on-close="a.openSelect(false)" placeholder="Top 10 (Values)" aria-label="Values versus Trends Filter")
+          md-option(ng-repeat="filter in a.filters.valuesVsTrend" aria-label="{{filter.name}}" value="{{filter.name}}") {{filter.name}}
+        md-select(ng-model="a.filtersService.model.selected.accountTypes" md-on-open="a.openSelect(true)" md-on-close="a.openSelect(false)" ng-change="a.setMarketTab(a.filtersService.model.selected.accountTypes)" placeholder="{{a.filtersService.model.selected.accountTypes || a.accountTypesDefault}}" aria-label="Account Type Filter")
+          md-option(ng-repeat="filter in a.filters.accountTypes" aria-label="{{filter.name}}" value="{{filter.name}}") {{filter.name}}
     .widget-content.clearfix
       .chart-data
         table.fixed-layout(cellspacing="0" cellpadding="0")

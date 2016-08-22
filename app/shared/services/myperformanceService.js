@@ -288,9 +288,9 @@ module.exports =
       premises: [{
         name: 'All'
       }, {
-        name: 'On Premise'
-      }, {
         name: 'Off Premise'
+      }, {
+        name: 'On Premise'
       }],
       depletionsTimePeriod: [{
         name: 'MTD July 1 - July 31'
