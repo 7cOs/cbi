@@ -395,9 +395,6 @@ module.exports =
           url = opportunityID ? apiHelperService.request('/api/opportunities/' + opportunityID, filterPayload) : apiHelperService.request('/api/opportunities/', filterPayload);
 
       console.log(url);
-      var temp = 'opportunityStatus:open';
-      url = 'api/opportunities/?limit=500&sort=store&filter=' + encodeURIComponent(temp);
-      console.log(url);
 
       $http.get(url)
         .then(getOpportunitiesSuccess)

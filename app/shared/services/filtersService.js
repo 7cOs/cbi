@@ -31,11 +31,7 @@ module.exports =
         {name: 'New Placement (No Rebuy)'},
         {name: 'Manual'}
       ],
-      savedFilters: [
-        {name: 'Wine Shops'},
-        {name: 'Costco No Buy'},
-        {name: 'Circle K - Fremont'}
-      ],
+      savedFilters: [],
       placementType: [
         {name: 'Simple'},
         {name: 'Effective'}
