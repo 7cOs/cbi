@@ -125,7 +125,7 @@
         display: block;
         text-align: right;
         position: relative;
-        margin-right: 16px;
+        margin-right: 21px;
       }
 
       .go-arrow:after {
@@ -140,82 +140,6 @@
         bottom: 0;
         height: 14px;
         width: 14px;
-      }
-
-      .target-lists {
-
-        h3 {
-          color: $blue;
-        }
-
-        h5 {
-          text-align: right;
-          padding-right: 0;
-        }
-
-        .md-tab.md-active {
-          background-color: $body-bg;
-          border: 1px solid $gray-9;
-          padding: 13px 21px;
-          box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
-        }
-
-        ._md-bar {
-          background-color: $yellow;
-        }
-
-        ._md-container {
-          background-image: url('../../assets/img/icons/stripes.svg');
-          border-bottom: 5px solid $body-bg;
-        }
-
-        .md-padding {
-          background: $body-bg;
-          padding-top: 0;
-          padding: 10px 15px;
-        }
-
-        .target-list-count-container {
-          background: $body-bg;
-
-          h3 {
-            padding: 0;
-          }
-
-          h5 {
-            margin: 0.5em 0;
-          }
-
-          .target-list-count {
-
-            float: right;
-            padding: 0 0 10px;
-            background: $body-bg;
-
-            p {
-              display: inline;
-              font-size: 0.85em;
-              text-align: center;
-            }
-          }
-        }
-
-        .target-list {
-          background: $white;
-          margin-bottom: 12px;
-
-          ul {
-
-            div {
-              margin-bottom: 12px;
-
-              p {
-                display: inline;
-                margin-right: 24px;
-              }
-            }
-          }
-        }
       }
     }
 
