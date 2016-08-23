@@ -1,360 +1,5 @@
 module.exports = /*  @ngInject */
   function opportunitiesService($http, $q, distributorsService, apiHelperService, filtersService) {
-    // Temporary Data - Old Data we're currently using in controllers
-    var tempData = {
-      opportunities: [{
-        'id': '123',
-        'store': {
-          'id': 'dsd82',
-          'name': 'Walmart',
-          'address': '123 Elm St., San Jose, CA - 88779',
-          'segmentation': 'A'
-        },
-        'impact': 3,
-        'opCount': 4,
-        'depletionsCYTD': 12657,
-        'depletionTrendVsYA': 0.3
-      }, {
-        'id': '123',
-        'store': {
-          'id': 'dsd82',
-          'name': 'Walgreens',
-          'address': '9 Jones st., San Francisco, CA - 98989',
-          'segmentation': 'A'
-        },
-        'impact': 5,
-        'opCount': 9,
-        'depletionsCYTD': 1002,
-        'depletionTrendVsYA': -5
-      }, {
-        'id': '123',
-        'store': {
-          'id': 'dsd82',
-          'name': 'Circle K',
-          'address': '3524 Walden Dr, Santa Clara, CA - 89898',
-          'segmentation': 'A'
-        },
-        'impact': 10,
-        'opCount': 25,
-        'depletionsCYTD': 78,
-        'depletionTrendVsYA': 5
-      }, {
-        'id': '123',
-        'store': {
-          'id': 'dsd82',
-          'name': 'Circle K',
-          'address': '136 Route 4 Boca Raton, CA - 33428',
-          'segmentation': 'B'
-        },
-        'impact': 3,
-        'opCount': 8,
-        'depletionsCYTD': 20,
-        'depletionTrendVsYA': -5
-      }, {
-        'id': '123',
-        'store': {
-          'id': 'dsd82',
-          'name': 'Redding',
-          'address': '35 Chapel Stree Bayonne, CA - 07002',
-          'segmentation': 'B'
-        },
-        'impact': 1,
-        'opCount': 1,
-        'depletionsCYTD': 10,
-        'depletionTrendVsYA': 5
-      }],
-      products: [
-        {id: 0, product: 'Corona LT', detail: '12 Pk -12 oz BT', type: 'At risk', rationale: 'Similar <class of trade> accounts, currently growing SKU at <X%>', status: 'new', predictedImpact: 'high', regionalStatus: 'featured'},
-        {id: 1, product: 'Modelo', detail: '12 Pk -12 oz BT', type: 'At risk', rationale: 'Similar <class of trade> accounts, currently growing SKU at <X%>', status: 'new', predictedImpact: 'high', regionalStatus: 'mandatory'},
-        {id: 2, product: 'Victoria', detail: '12 Pk -12 oz BT', type: 'Non-buy', rationale: 'Similar <class of trade> accounts, currently growing SKU at <X%>', status: 'new', predictedImpact: 'high', regionalStatus: 'both'},
-        {id: 3, product: 'Pacifico', detail: '12 Pk -12 oz BT', type: 'Non-buy', rationale: 'Similar <class of trade> accounts, currently growing SKU at <X%>', status: 'new', predictedImpact: 'low'},
-        {id: 4, product: 'N. Modelo', detail: '12 Pk -12 oz BT', type: 'Low Velocity', rationale: 'Similar <class of trade> accounts, currently growing SKU at <X%>', status: 'new', predictedImpact: 'medium'},
-        {id: 5, product: 'Corona LT', detail: '12 Pk -12 oz BT', type: 'Low Velocity', rationale: 'Similar <class of trade> accounts, currently growing SKU at <X%>', status: 'new', predictedImpact: 'low'}
-      ]
-    };
-
-    // Temporary Data - Data used to mock API (from spec: http://clients.ddhive.com/cbi/#)
-    var data = {
-      opportunitiesGetResponse: {
-        'count': 351,
-        'storesCount': 42,
-        'opportunities': [{
-          'id': 'SbBGk',
-          'product': {
-            'id': '2234gg',
-            'name': 'Corona',
-            'type': 'package',
-            'brand': 'Brand Name',
-            'description': 'Product description Lorem ipsum sit dolor amet',
-            'price': 12.11,
-            'quantity': 233
-          },
-          'type': ['Non-Buy', 'At Risk', 'Low Velocity', 'New Placement (Quality)', 'New Placement (No Rebuy)', 'Manual'],
-          'rank': 1,
-          'impact': 'High',
-          'status': 'Discussed',
-          'rationale': 'Rationale 1',
-          'store': {
-            'id': 'dsd82',
-            'name': 'Store 1',
-            'address': '1221 11th St NE, City, ST 12345',
-            'premise': true,
-            'segmentation': 'A'
-          },
-          'itemAuthorization': {
-            'id': 'jij23',
-            'type': 'tbd',
-            'subType': 'tbd'
-          },
-          'currentYTDStoreVolume': 54.11,
-          'lastYTDStoreVolume': 29.12,
-          'volumeTrend': 32.33,
-          'storeVelocity': 50.50,
-          'storeDistribution': 12.0,
-          'last90DaysVolume': 33.11,
-          'lastInvoiceDate': '2016-11-05T13:15:30Z'
-        }, {
-          'id': 'sdsd12',
-          'product': {
-            'id': '9878dj',
-            'name': 'Budweiser',
-            'type': 'package',
-            'brand': 'Brand Name',
-            'description': 'Product description Lorem ipsum sit dolor amet',
-            'price': 12.11,
-            'quantity': 233
-          },
-          'type': ['AtRisk', 'LowVelocity'],
-          'rank': 2,
-          'impact': 'Medium',
-          'status': 'Discussed',
-          'rationale': 'Rationale 1',
-          'store': {
-            'id': 'dsd82',
-            'name': 'Store 1',
-            'address': '1221 11th St NE, City, ST 12345',
-            'premise': true,
-            'segmentation': 'B'
-          },
-          'itemAuthorization': {
-            'id': 'jij23',
-            'type': 'tbd',
-            'subType': 'tbd'
-          },
-          'currentYTDStoreVolume': 54.11,
-          'lastYTDStoreVolume': 29.12,
-          'volumeTrend': 32.33,
-          'storeVelocity': 50.50,
-          'storeDistribution': 12.0,
-          'last90DaysVolume': 33.11,
-          'lastInvoiceDate': '2016-11-05T13:15:30Z'
-        }]
-      },
-      opportunityGetResponse: {
-        'id': 'SbBGk',
-        'product': {
-          'id': '2234gg',
-          'name': 'Corona',
-          'type': 'package',
-          'brand': 'Brand Name',
-          'description': 'Product description Lorem ipsum sit dolor amet',
-          'price': 12.11,
-          'quantity': 233
-        },
-        'type': ['Non-Buy', 'At Risk', 'Low Velocity', 'New Placement (Quality)', 'New Placement (No Rebuy)', 'Manual'],
-        'rank': 1,
-        'impact': 'High',
-        'status': 'Discussed',
-        'rationale': 'Rationale 1',
-        'store': {
-          'id': 'dsd82',
-          'name': 'Store 1',
-          'address': '1221 11th St NE, City, ST 12345',
-          'premise': true,
-          'segmentation': 'A'
-        },
-        'itemAuthorization': {
-          'id': 'jij23',
-          'type': 'tbd',
-          'subType': 'tbd'
-        },
-        'currentYTDStoreVolume': 54.11,
-        'lastYTDStoreVolume': 29.12,
-        'volumeTrend': 32.33,
-        'storeVelocity': 50.50,
-        'storeDistribution': 12.0,
-        'last90DaysVolume': 33.11,
-        'lastInvoiceDate': '2016-11-05T13:15:30Z'
-      },
-      opportunitiesPostPayload: {
-        'type': 'object',
-        '$schema': 'http://json-schema.org/draft-03/schema',
-        'id': 'opportunitySchema',
-        'required': true,
-        'properties': {
-          'product': {
-            'type': 'string',
-            'required': 'true',
-            'description': 'Product ID'
-          },
-          'type': {
-            'type': 'array',
-            'items': {
-              'enum': ['NonBuy', 'LowVelocity', 'AtRisk', 'Manual', 'Other']
-            },
-            'minItems': 1,
-            'uniqueItems': true,
-            'required': 'true',
-            'description': 'List of types that apply to this opportunity.'
-          },
-          'rationale': {
-            'type': 'string',
-            'required': 'false',
-            'description': 'Descriptions about why this opportunity is being presented to the user'
-          },
-          'store': {
-            'type': 'string',
-            'required': 'true',
-            'description': 'Store ID'
-          }
-        }
-      },
-      opportunityPutPayload: {
-        'type': 'object',
-        '$schema': 'http://json-schema.org/draft-03/schema',
-        'id': 'opportunitySchema',
-        'required': true,
-        'properties': {
-          'product': {
-            'type': 'string',
-            'required': 'true',
-            'description': 'Product ID'
-          },
-          'type': {
-            'type': 'array',
-            'items': {
-              'enum': ['NonBuy', 'LowVelocity', 'AtRisk', 'Manual', 'Other']
-            },
-            'minItems': 1,
-            'uniqueItems': true,
-            'required': 'true',
-            'description': 'List of types that apply to this opportunity.'
-          },
-          'rationale': {
-            'type': 'string',
-            'required': 'false',
-            'description': 'Descriptions about why this opportunity is being presented to the user'
-          },
-          'store': {
-            'type': 'string',
-            'required': 'true',
-            'description': 'Store ID'
-          }
-        }
-      },
-      opportunitiesPostResponse: {
-        'id': 'SbBGk',
-        'product': {
-          'id': '2234gg',
-          'name': 'Corona',
-          'type': 'package',
-          'brand': 'Brand Name',
-          'description': 'Product description Lorem ipsum sit dolor amet',
-          'price': 12.11,
-          'quantity': 233
-        },
-        'type': ['Non-Buy', 'At Risk', 'Low Velocity', 'New Placement (Quality)', 'New Placement (No Rebuy)', 'Manual'],
-        'rank': 1,
-        'impact': 'High',
-        'status': 'Discussed',
-        'rationale': 'Rationale 1',
-        'store': {
-          'id': 'dsd82',
-          'name': 'Store 1',
-          'address': '1221 11th St NE, City, ST 12345',
-          'premise': true,
-          'segmentation': 'A'
-        },
-        'itemAuthorization': {
-          'id': 'jij23',
-          'type': 'tbd',
-          'subType': 'tbd'
-        },
-        'currentYTDStoreVolume': 54.11,
-        'lastYTDStoreVolume': 29.12,
-        'volumeTrend': 32.33,
-        'storeVelocity': 50.50,
-        'storeDistribution': 12.0,
-        'last90DaysVolume': 33.11,
-        'lastInvoiceDate': '2016-11-05T13:15:30Z'
-      },
-      opportunityPutResponse: {
-        'id': 'SbBGk',
-        'product': {
-          'id': '2234gg',
-          'name': 'Corona',
-          'type': 'package',
-          'brand': 'Brand Name',
-          'description': 'Product description Lorem ipsum sit dolor amet',
-          'price': 12.11,
-          'quantity': 233
-        },
-        'type': ['Non-Buy', 'At Risk', 'Low Velocity', 'New Placement (Quality)', 'New Placement (No Rebuy)', 'Manual'],
-        'rank': 1,
-        'impact': 'High',
-        'status': 'Discussed',
-        'rationale': 'Rationale 1',
-        'store': {
-          'id': 'dsd82',
-          'name': 'Store 1',
-          'address': '1221 11th St NE, City, ST 12345',
-          'premise': true,
-          'segmentation': 'A'
-        },
-        'itemAuthorization': {
-          'id': 'jij23',
-          'type': 'tbd',
-          'subType': 'tbd'
-        },
-        'currentYTDStoreVolume': 54.11,
-        'lastYTDStoreVolume': 29.12,
-        'volumeTrend': 32.33,
-        'storeVelocity': 50.50,
-        'storeDistribution': 12.0,
-        'last90DaysVolume': 33.11,
-        'lastInvoiceDate': '2016-11-05T13:15:30Z'
-      },
-      feedbackGetResponse: {
-        'id': 'SbBGk',
-        'opportunity': '8798hbj',
-        'message': 'Lorem ipsum sit dolor amet',
-        'user': {
-          'id': 'A1B2',
-          'firstName': 'Joe',
-          'lastName': 'Cerveza',
-          'email': 'jCerveza@cbrands.com',
-          'phone': '1234567890',
-          'role': 'CBBD MDM',
-          'accounts': ['Wal-mart', 'PCC']
-        }
-      },
-      feedbackPostPayload: {
-        'type': 'object',
-        '$schema': 'http://json-schema.org/draft-03/schema',
-        'required': 'true',
-        'id': 'feedbackSchema',
-        'properties': {
-          'message': {
-            'type': 'string',
-            'required': 'true',
-            'description': 'The user\'s reasoning for a negative feedback.'
-          }
-        }
-      },
-      feedbackPostResponse: {'status': 201},
-      feedbackDeletePayload: {}, // Not specified
-      feedbackDeleteResponse: {'status': 200}
-    };
 
     var model = {
       filterApplied: false,
@@ -471,7 +116,7 @@ module.exports = /*  @ngInject */
     function createOpportunity() {
       var opportunitiesPromise = $q.defer(),
           url = apiHelperService.request('/api/opportunities/'),
-          payload = data.opportunitiesPostPayload;
+          payload = {};
 
       $http.post(url, payload, {
         headers: {}
@@ -486,39 +131,6 @@ module.exports = /*  @ngInject */
       }
 
       function createOpportunitiesFail(error) {
-        opportunitiesPromise.reject(error);
-      }
-
-      return opportunitiesPromise.promise;
-    }
-
-    /**
-     * @name updateOpportunity
-     * @desc updates an opportunity
-     * @params {String} url - url to hit the api with [this could end up being static]
-     * @params {String} opportunityID - opportunity id
-     * @params {Object} data - opportunity data
-     * @returns {Object}
-     * @memberOf orion.common.services
-     */
-    function updateOpportunity(url, opportunityID, data) {
-      var opportunitiesPromise = $q.defer();
-      var payload = data.opportunityPutPayload;
-
-      $http.put(url, payload, {
-        headers: {}
-      })
-      .then(updateOpportunitiesSuccess)
-      .catch(updateOpportunitiesFail);
-
-      function updateOpportunitiesSuccess(response) {
-        console.log('[opportunitiesService.updateOpportunity] response: ', response);
-        // opportunitiesPromise.resolve(response.data);
-        // uncomment above and remove below when services are ready
-        opportunitiesPromise.resolve(data.opportunityPutResponse);
-      }
-
-      function updateOpportunitiesFail(error) {
         opportunitiesPromise.reject(error);
       }
 
@@ -566,7 +178,7 @@ module.exports = /*  @ngInject */
      */
     function createOpportunityFeedback(url, opportunityID, data) {
       var opportunitiesPromise = $q.defer();
-      var payload = data.feedbackPostPayload;
+      var payload = {};
 
       $http.post(url, payload, {
         headers: {}
@@ -576,9 +188,7 @@ module.exports = /*  @ngInject */
 
       function getOpportunitiesFeedbackSuccess(response) {
         console.log('[opportunitiesService.getOpportunityFeedback] response: ', response);
-        // opportunitiesPromise.resolve(response.data);
-        // uncomment above and remove below when services are ready
-        opportunitiesPromise.resolve(data.feedbackPostResponse);
+        opportunitiesPromise.resolve(response.data);
       }
 
       function getOpportunitiesFeedbackFail(error) {
@@ -599,20 +209,16 @@ module.exports = /*  @ngInject */
      * @memberOf orion.common.services
      */
     function deleteOpportunityFeedback(url, opportunityID, feedbackID) {
-      var opportunitiesPromise = $q.defer();
-      var payload = data.feedbackDeletePayload;
+      var opportunitiesPromise = $q.defer(),
+          payload = {};
 
-      $http.post(url, payload, {
-        headers: {}
-      })
-      .then(deleteOpportunitiesFeedbackSuccess)
-      .catch(deleteOpportunitiesFeedbackFail);
+      $http.post(url, payload)
+        .then(deleteOpportunitiesFeedbackSuccess)
+        .catch(deleteOpportunitiesFeedbackFail);
 
       function deleteOpportunitiesFeedbackSuccess(response) {
         console.log('[opportunitiesService.getOpportunityFeedback] response: ', response);
-        // opportunitiesPromise.resolve(response.data);
-        // uncomment above and remove below when services are ready
-        opportunitiesPromise.resolve(data.feedbackDeleteResponse);
+        opportunitiesPromise.resolve(response.data);
       }
 
       function deleteOpportunitiesFeedbackFail(error) {
