@@ -14,6 +14,9 @@ function NavbarController($rootScope, $scope, $state, $mdPanel, $mdDialog, $mdMe
   $rootScope.isIE = (/Trident\/7\./g).test(userAgent);
   $rootScope.isEdge = (/(?:\bEdge\/)(\d+)/g).test(userAgent);
 
+  // Currently logged in user (for analytics)
+  $window.currentUserId = userService.model.currentUser.id;
+
   // Services
   vm.notificationsService = notificationsService;
   vm.notifications = [];
