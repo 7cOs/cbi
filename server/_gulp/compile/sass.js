@@ -1,5 +1,5 @@
 (function() {
-  var autoprefixer, browserSync, changed, config, gulp, sass, sassGlob, sourcemaps;
+  var autoprefixer, browserSync, changed, config, gulp, sass, sassGlob, sourcemaps, cleanCSS;
   browserSync = require('browser-sync');
   config = require('../../../server/_config/app');
   gulp = require('gulp');
@@ -8,6 +8,7 @@
   sassGlob = require('gulp-sass-glob');
   autoprefixer = require('gulp-autoprefixer');
   changed = require('gulp-changed');
+  cleanCSS = require('gulp-clean-css');
 
   gulp.task('compile:sass', ['vet:sass'], function() {
     return gulp.src(config.gulp.src.assets.sassMain)
@@ -15,6 +16,7 @@
       .pipe(sassGlob())
       .pipe(sourcemaps.init())
       .pipe(sass({outputStyle: 'compressed'})).on('error', sass.logError)
+      .pipe(cleanCSS())
       .pipe(autoprefixer()).pipe(browserSync.stream())
       .pipe(sourcemaps.write('.'))
       .pipe(gulp.dest(config.gulp.dest.assets.sass));

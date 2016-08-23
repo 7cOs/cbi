@@ -8,7 +8,8 @@ module.exports =  function(app) {
         flash         = require('connect-flash'),
         multer        = require('multer'), // ENABLE MULTI-PART FORM UPLOADS
         session       = require('express-session'), // ENABLE SESSIONS
-        uuid          = require('uuid'); // CONTENFUL API CONFIG
+        uuid          = require('uuid'), // CONTENFUL API CONFIG
+        compression   = require('compression');
 
   let sessionStore = '';
 
@@ -28,6 +29,7 @@ module.exports =  function(app) {
   app.set('upload', multer()); // ENABLE MULTI-PART FORMS
   app.use(bodyParser.json()); // ENABLE application/json
   app.use(bodyParser.urlencoded({ extended: false })); // ENABLE application/x-www-form-urlencoded
+  app.use(compression());
   app.locals.pretty = config.prettify;
   app.use(flash());
 
