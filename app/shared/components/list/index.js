@@ -1,6 +1,6 @@
 'use strict';
 
-function ListController($scope, $state, opportunitiesService, targetListService, storesService, userService, $mdDialog) {
+function ListController($scope, $state, $q, opportunitiesService, targetListService, storesService, userService, $mdDialog) {
 
   // ****************
   // CONTROLLER SETUP
@@ -64,10 +64,21 @@ function ListController($scope, $state, opportunitiesService, targetListService,
   }
 
   function addToTargetList(listId) {
-    console.log(vm.selected);
-    /* targetListService.addTargetListOpportunities(listId, vm.selected).then(function(data) {
-      storesService
-    });*/
+    var opportunityIds = [];
+
+    // add opportunity ids into array to be posted
+    for (var i = 0; i < vm.selected.length; i++) {
+      for (var j = 0; j < vm.selected[i].groupedOpportunities.length; j++) {
+        opportunityIds.push(vm.selected[i].groupedOpportunities[j].id);
+      }
+    }
+
+    console.log(opportunityIds);
+
+    targetListService.addTargetListOpportunities(listId, opportunityIds).then(function(data) {
+      console.log('Done Adding');
+      // to do - update view and model
+    });
   }
 
   function closeCorporateMemoModal() {

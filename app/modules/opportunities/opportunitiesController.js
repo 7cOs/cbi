@@ -21,11 +21,11 @@ module.exports = /*  @ngInject */
 
     // Expose public methods
     vm.addToTargetList = addToTargetList;
-    vm.accountQuerySearch = accountQuerySearch;
+    // vm.accountQuerySearch = accountQuerySearch;
     vm.applyFilter = applyFilter;
-    vm.brandQuerySearch = brandQuerySearch;
+    // vm.brandQuerySearch = brandQuerySearch;
     vm.closeModal = closeModal;
-    vm.distributorQuerySearch = distributorQuerySearch;
+    // vm.distributorQuerySearch = distributorQuerySearch;
     vm.modalSaveOpportunityFilter = modalSaveOpportunityFilter;
     vm.saveFilter = saveFilter;
 
@@ -39,29 +39,33 @@ module.exports = /*  @ngInject */
       console.log('adding');
     }
 
-    function accountQuerySearch(searchText) {
+    /* function addToSelected(list) {
+      filtersService.model.selected[list].push(filtersService.model[list]);
+    }*/
+
+    /* function accountQuerySearch(searchText) {
       // update to accounts
       var results = filtersService.model.stores.filter(filterQuery(searchText, ['account', 'sub_account', 'store_name']));
       return results;
-    }
+    }*/
 
     function applyFilter(filterStr) {
       console.log('add filter');
     }
 
-    function brandQuerySearch(searchText) {
+    /* function brandQuerySearch(searchText) {
       var results = filtersService.model.brands.filter(filterQuery(searchText, ['name', 'brand', 'quantity']));
       return results;
-    }
+    }*/
 
     function closeModal() {
       $mdDialog.hide();
     }
 
-    function distributorQuerySearch(searchText) {
+    /* function distributorQuerySearch(searchText) {
       var results = filtersService.model.distributors.filter(filterQuery(searchText, ['name', 'address', 'id']));
       return results;
-    }
+    }*/
 
     function modalSaveOpportunityFilter(ev) {
       var parentEl = angular.element(document.body);
@@ -99,7 +103,7 @@ module.exports = /*  @ngInject */
      * @returns {String}
      * @memberOf orion.common.services
      */
-    function filterQuery(q, properties) {
+    /* function filterQuery(q, properties) {
       var lowercaseQuery = angular.lowercase(q);
       return function filterFn(data) {
 
@@ -107,7 +111,7 @@ module.exports = /*  @ngInject */
           if ((angular.lowercase('' + data[properties[i]])).indexOf(lowercaseQuery) === 0) return (angular.lowercase('' + data[properties[i]])).indexOf(lowercaseQuery) === 0;
         }
       };
-    }
+    }*/
 
     // Add chip for inline search value watchers
     function addInlineSearchChip(val) {
@@ -117,9 +121,9 @@ module.exports = /*  @ngInject */
     }
 
     // Watch for inline search value changes
-    $scope.$watch('o.filtersService.model.brandSearchText', function (val) { addInlineSearchChip(val); });
-    $scope.$watch('o.filtersService.model.accountSearchText', function (val) { addInlineSearchChip(val); });
-    $scope.$watch('o.filtersService.model.distributorSearchText', function (val) { addInlineSearchChip(val); });
+    $scope.$watch('o.filtersService.model.brand', function (val) { addInlineSearchChip(val); });
+    $scope.$watch('o.filtersService.model.store', function (val) { addInlineSearchChip(val); });
+    $scope.$watch('o.filtersService.model.chain', function (val) { addInlineSearchChip(val); });
 
     function init() {
       // get saved filters -- this should be passed from user data when its ready

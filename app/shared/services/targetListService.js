@@ -144,13 +144,14 @@ module.exports = /*  @ngInject */
      * @name addTargetListOpportunities
      * @desc add target list opportunities
      * @params {String} targetListId - id of target list
+     * @params {Object} opportunityIds - array of opportunity ids
      * @returns {Object} - status object
      * @memberOf orion.common.services
      */
-    function addTargetListOpportunities(targetListId) {
+    function addTargetListOpportunities(targetListId, opportunityIds) {
       var targetListPromise = $q.defer(),
           url = apiHelperService.request('/api/targetLists/' + targetListId + '/opportunities/'),
-          payload = {};
+          payload = opportunityIds;
 
       $http.post(url, payload)
         .then(addTargetListOpportunitiesSuccess)
