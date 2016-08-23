@@ -163,6 +163,10 @@ navbar {
     border-right: 0 solid transparent;
     border-image: linear-gradient(to left, $blue 0%, $light-blue-3 100%);
     border-image-slice: 1;
+
+    .inner a {
+      font-weight: 500;
+    }
   }
 
   .top-level-menu {
@@ -173,7 +177,9 @@ navbar {
     position: relative;
 
     a {
-      color: $gray-7;
+      color: $gray-1;
+      font-size: 0.938em;
+      font-weight: $light;
 
       &:hover {
         color: $dark-blue;
@@ -289,6 +295,10 @@ div.nav-link-wrapper {
 
   &:hover {
     background-color: $gray-9;
+  }
+
+  a {
+    font-size: 0.75em;
   }
 
   a:hover {

@@ -27,7 +27,6 @@ md-option {
 
 md-select {
   margin: 0 0 1em;
-  font-style: italic;
 
   span {
     font-size: 14px;
@@ -63,4 +62,9 @@ md-select {
 
 ._md-select-value ._md-select-icon:after {
   display: inline;
+}
+
+md-select-menu ._md-text {
+  font-size: 0.9em;
+  color: $gray-1;
 }
