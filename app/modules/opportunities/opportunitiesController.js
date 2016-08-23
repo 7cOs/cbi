@@ -1,6 +1,6 @@
 'use strict';
 
-module.exports =
+module.exports = /*  @ngInject */
   function opportunitiesController($rootScope, $scope, $state, $mdDialog, opportunitiesService, chipsService, filtersService, userService) {
 
     // ****************

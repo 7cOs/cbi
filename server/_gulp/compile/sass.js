@@ -14,7 +14,7 @@
       .pipe(changed(config.gulp.dest.assets.sass))
       .pipe(sassGlob())
       .pipe(sourcemaps.init())
-      .pipe(sass()).on('error', sass.logError)
+      .pipe(sass({outputStyle: 'compressed'})).on('error', sass.logError)
       .pipe(autoprefixer()).pipe(browserSync.stream())
       .pipe(sourcemaps.write('.'))
       .pipe(gulp.dest(config.gulp.dest.assets.sass));

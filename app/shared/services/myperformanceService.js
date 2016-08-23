@@ -1,4 +1,4 @@
-module.exports =
+module.exports = /*  @ngInject */
   function myperformanceService() {
     var performanceData = {
       'performance': [{

@@ -16,3 +16,4 @@ module.exports =
     });
   })
   .controller('landingController', require('./landingController'));
+

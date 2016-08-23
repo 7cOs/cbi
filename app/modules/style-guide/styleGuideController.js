@@ -1,6 +1,6 @@
 'use strict';
 
-module.exports =
+module.exports = /*  @ngInject */
   function styleGuideController($rootScope, $scope, $timeout, $state, $mdDialog, notesService) {
 
     // ****************

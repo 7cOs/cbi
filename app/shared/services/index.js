@@ -7,7 +7,6 @@ module.exports =
     .factory('notificationsService', require('./notificationsService'))
     .factory('storesService', require('./storesService'))
     .factory('targetListService', require('./targetListService'))
-    .factory('userNotesService', require('./userNotesService'))
     .factory('distributorsService', require('./distributorsService'))
     .factory('userService', require('./userService'))
     .factory('apiHelperService', require('./apiHelperService'))

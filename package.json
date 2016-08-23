@@ -16,6 +16,7 @@
     "browser-sync": "2.11.1",
     "browserify": "13.0.0",
     "browserify-incremental": "3.1.1",
+    "browserify-ngannotate": "^2.0.0",
     "compression": "1.6.1",
     "connect-flash": "0.1.1",
     "connect-redis": "3.0.2",
@@ -56,6 +57,7 @@
     "karma-mocha-reporter": "2.1.0",
     "karma-nyan-reporter": "0.2.4",
     "karma-phantomjs-launcher": "1.0.1",
+    "minifyify": "^7.3.3",
     "multer": "1.1.0",
     "ng-csv": "0.3.6",
     "ng-file-upload": "^12.0.4",
@@ -82,7 +84,7 @@
   },
   "scripts": {
     "lint": "eslint **/*.js && gulp vet:sass",
-    "heroku-postbuild": "gulp compile --release",
+    "heroku-postbuild": "gulp --release",
     "start": "node server"
   }
 }

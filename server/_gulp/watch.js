@@ -12,7 +12,7 @@
       return runSequence('compile:sass', 'reload');
     });
     gulp.watch(config.gulp.src.assets.js, function() {
-      return runSequence('compile:js', 'reload');
+      return runSequence('compile:js:development', 'reload');
     });
     gulp.watch(config.gulp.src.assets.pug.templates, function() {
       return runSequence('compile:pug', 'reload');
