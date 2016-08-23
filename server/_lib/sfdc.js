@@ -3,14 +3,36 @@ var sfdc = require('jsforce');
 var request = require('request');
 var htmlparser = require('htmlparser2');
 var conn = {};
+var utility = require('util');
 
 function fnCreateConn(app) {
   return conn;
 };
 
-function getOAMResult(commands) {
-  console.log('in getOAMResult now with ' + commands.action + ' ' + commands.RelayState + ' ' + commands.SAMLRequest);
-  return (commands);
+function getOAMResult(commands, app, req, res) {
+
+  var result = request.post(commands.action,
+              {form: {'RelayState': commands.RelayState,
+                      'SAMLRequest': commands.SAMLRequest}},
+                function(error, response, oamBody) {
+                  if (error) {
+                    console.log('Error is: ' + error);
+                    return {'isSuccess': false,
+                            'error': error};
+                  } else {
+                    console.log('OAM returned: ' + oamBody);
+                    res.send(oamBody);
+                    return {'isSuccess': true,
+                            'response': response,
+                            'body': oamBody};
+                  }
+                }
+
+              );
+
+  console.log('The result is\n\n' + utility.inspect(result, null, ''));
+
+  return (result);
 }
 
 exports.sendAuthnRequest = function(app, req, res) {
@@ -52,9 +74,10 @@ exports.sendAuthnRequest = function(app, req, res) {
     parser.end();
     console.log('The commands object now contains: ' + commands.RelayState + ' ' + commands.SAMLRequest);
 
-    var OAMResult = getOAMResult(commands);
+    var OAMResult = getOAMResult(commands, app, req, res);
     console.log('Went to getOAMResult to talk to OAM: ' + OAMResult);
-    return (commands);
+    return ({'isSuccess': true,
+             'errorMessage': ''});
   }, function(err) {
     var error = {'isSuccess': false,
                  'errorMessage': err};
