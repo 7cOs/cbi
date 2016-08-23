@@ -32,7 +32,7 @@ module.exports =
 
         return '?' + queryParams;
       } else if (obj.type && obj.type === 'opportunities') {
-        queryParams += 'filter=limit:500,sort:store,';
+        queryParams += '';
 
         // remove type obj
         delete obj.type;
@@ -43,7 +43,7 @@ module.exports =
           i++;
         }
 
-        return '?' + encodeURIComponent(queryParams);
+        return '?limit=500&sort=store&filter=' + encodeURIComponent(queryParams);
       } else if (obj.type && obj.type === 'targetLists') {
         delete obj.type;
 
