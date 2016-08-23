@@ -155,5 +155,17 @@
         font-weight: $regular;
       }
     }
+
+    .footer-right {
+      padding: 0;
+
+      .data {
+        color: $gray-1;
+      }
+
+      @media (max-width: $bp-large) {
+        font-size: 0.9em;
+      }
+    }
   }
 }
