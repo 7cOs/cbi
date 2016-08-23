@@ -21,7 +21,6 @@ module.exports = /*  @ngInject */
 
     // Expose public methods
     vm.accountQuerySearch = accountQuerySearch;
-    vm.addOpportunity = addOpportunity;
     vm.applyFilter = applyFilter;
     vm.brandQuerySearch = brandQuerySearch;
     vm.closeModal = closeModal;
@@ -51,14 +50,6 @@ module.exports = /*  @ngInject */
       // update to accounts
       var results = filtersService.model.stores.filter(filterQuery(searchText, ['account', 'sub_account', 'store_name']));
       return results;
-    }
-
-    function addOpportunity() {
-      opportunitiesService.createOpportunity().then(function(response) {
-        console.log('Thanks, Ratul.', response);
-      }, function(reason) {
-        console.log('Ratul. Plz.', reason);
-      });
     }
 
     function applyFilter(filterStr) {

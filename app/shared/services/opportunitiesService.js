@@ -394,8 +394,6 @@ module.exports = /*  @ngInject */
       var opportunitiesPromise = $q.defer(),
           url = opportunityID ? apiHelperService.request('/api/opportunities/' + opportunityID, filterPayload) : apiHelperService.request('/api/opportunities/', filterPayload);
 
-      console.log(url);
-
       $http.get(url)
         .then(getOpportunitiesSuccess)
         .catch(getOpportunitiesFail);
