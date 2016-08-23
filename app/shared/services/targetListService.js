@@ -120,13 +120,11 @@ module.exports = /*  @ngInject */
      */
     function getTargetListOpportunities(targetListId) {
       var targetListPromise = $q.defer(),
-          url = apiHelperService.formatQueryString({'foo': 'bar'});
+          url = apiHelperService.request('/api/targetLists/' + targetListId + '/opportunities');
 
-      $http.get(url, {
-        headers: {}
-      })
-      .then(getTargetListOpportunitiesSuccess)
-      .catch(getTargetListOpportunitiesFail);
+      $http.get(url)
+        .then(getTargetListOpportunitiesSuccess)
+        .catch(getTargetListOpportunitiesFail);
 
       function getTargetListOpportunitiesSuccess(response) {
         console.log('[targetListService.getTargetListOpportunities] response: ', response);

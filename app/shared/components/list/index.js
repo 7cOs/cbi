@@ -73,11 +73,11 @@ function ListController($scope, $state, $q, opportunitiesService, targetListServ
       }
     }
 
-    console.log(opportunityIds);
-
     targetListService.addTargetListOpportunities(listId, opportunityIds).then(function(data) {
-      console.log('Done Adding');
+      console.log('Done Adding these ids: ', opportunityIds);
       // to do - update view and model
+    }, function(err) {
+      console.log('Error adding these ids: ', opportunityIds, ' Responded with error: ', err);
     });
   }
 
@@ -149,7 +149,7 @@ function ListController($scope, $state, $q, opportunitiesService, targetListServ
 
   function init() {
     // get target lists
-    userService.getTargetLists(userService.model.currentUser.id, {'type': 'targetLists'}).then(function(data) {
+    userService.getTargetLists(userService.model.currentUser.personID, {'type': 'targetLists'}).then(function(data) {
       userService.model.targetLists = data;
     });
   }

@@ -20,12 +20,8 @@ module.exports = /*  @ngInject */
     vm.opportunitiesService = opportunitiesService;
 
     // Expose public methods
-    vm.addToTargetList = addToTargetList;
-    // vm.accountQuerySearch = accountQuerySearch;
     vm.applyFilter = applyFilter;
-    // vm.brandQuerySearch = brandQuerySearch;
     vm.closeModal = closeModal;
-    // vm.distributorQuerySearch = distributorQuerySearch;
     vm.modalSaveOpportunityFilter = modalSaveOpportunityFilter;
     vm.saveFilter = saveFilter;
 
@@ -35,37 +31,18 @@ module.exports = /*  @ngInject */
     // PUBLIC METHODS
     // **************
 
-    function addToTargetList() {
-      console.log('adding');
-    }
-
     /* function addToSelected(list) {
       filtersService.model.selected[list].push(filtersService.model[list]);
     }*/
 
-    /* function accountQuerySearch(searchText) {
-      // update to accounts
-      var results = filtersService.model.stores.filter(filterQuery(searchText, ['account', 'sub_account', 'store_name']));
-      return results;
-    }*/
 
     function applyFilter(filterStr) {
       console.log('add filter');
     }
 
-    /* function brandQuerySearch(searchText) {
-      var results = filtersService.model.brands.filter(filterQuery(searchText, ['name', 'brand', 'quantity']));
-      return results;
-    }*/
-
     function closeModal() {
       $mdDialog.hide();
     }
-
-    /* function distributorQuerySearch(searchText) {
-      var results = filtersService.model.distributors.filter(filterQuery(searchText, ['name', 'address', 'id']));
-      return results;
-    }*/
 
     function modalSaveOpportunityFilter(ev) {
       var parentEl = angular.element(document.body);
@@ -95,24 +72,6 @@ module.exports = /*  @ngInject */
     // PRIVATE METHODS
     // ***************
 
-    /**
-     * @name filterQuery
-     * @desc filter data using query from md-autocomplete
-     * @params {String} q - query string
-     * @params {Array} properties - array of strings that are the properties to be searched in the object
-     * @returns {String}
-     * @memberOf orion.common.services
-     */
-    /* function filterQuery(q, properties) {
-      var lowercaseQuery = angular.lowercase(q);
-      return function filterFn(data) {
-
-        for (var i = 0; i < properties.length; i++) {
-          if ((angular.lowercase('' + data[properties[i]])).indexOf(lowercaseQuery) === 0) return (angular.lowercase('' + data[properties[i]])).indexOf(lowercaseQuery) === 0;
-        }
-      };
-    }*/
-
     // Add chip for inline search value watchers
     function addInlineSearchChip(val) {
       if (typeof val === 'string' && val !== '') {
@@ -127,21 +86,11 @@ module.exports = /*  @ngInject */
 
     function init() {
       // get saved filters -- this should be passed from user data when its ready
-      userService.getOpportunityFilters(userService.model.currentUser.id).then(function(data) {
+      userService.getOpportunityFilters(userService.model.currentUser.personID).then(function(data) {
         userService.model.opportunityFilters = data;
       });
 
       // reset all chips and filters on page init
       chipsService.model = chipsService.resetChipsFilters(chipsService.model);
-
     }
-
-    /* function parseFilterObj() {
-      var prettyPayload = {
-        key: 'value'
-      };
-      // iterate through chipsService.model and get it formatted correctly
-      // probably should move to chipsService
-      return prettyPayload;
-    }*/
   };

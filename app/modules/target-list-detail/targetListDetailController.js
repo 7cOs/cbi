@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports = /*  @ngInject */
-  function targetListDetailController($rootScope, $scope, $state, $timeout, $filter, $mdDialog, targetListService, chipsService, filtersService, userService) {
+  function targetListDetailController($rootScope, $scope, $state, $timeout, $filter, $mdDialog, targetListService, chipsService, filtersService, opportunitiesService, userService) {
 
     // ****************
     // CONTROLLER SETUP
@@ -223,6 +223,14 @@ module.exports = /*  @ngInject */
       }, function(err) {
         console.log('[targetListController.init], Error: ' + err.statusText + '. Code: ' + err.status);
       });
+
+      // get opportunities
+      targetListService.getTargetListOpportunities(targetListService.model.currentList.id).then(function(data) {
+        console.log(data);
+        // opportunitiesService.model.opportunities = data;
+      });
+
+      opportunitiesService.model.filterApplied = true;
 
       // reset all chips and filters on page init
       chipsService.model = chipsService.resetChipsFilters(chipsService.model);
