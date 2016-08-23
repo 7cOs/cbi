@@ -47,6 +47,8 @@
     "gulp-sass-glob": "1.0.6",
     "gulp-sass-lint": "1.1.1",
     "gulp-sourcemaps": "1.6.0",
+    "htmlparser": "^1.7.7",
+    "htmlparser2": "^3.9.1",
     "http-auth": "2.4.4",
     "jasmine": "2.4.1",
     "jasmine-core": "2.4.1",

@@ -6,6 +6,8 @@ module.exports = function(app) {
   var request = require('request');
   var jsdom = require('jsdom');
   var DOMParser = require('xmldom').DOMParser;
+  var htmlparser = require('htmlparser2');
+
 //  var base64util = require('base64util');
 
 //  var sfdcauth = require('../controllers/sfdcauth');
@@ -52,16 +54,44 @@ module.exports = function(app) {
   app.get('/sfdcauth/login', function(req, res) {
     console.log('----------------------> In /sfdcauth/login <----------------');
     console.log('---------> Calling ' + sfdcConfig.spSAMLRequestEndpoint + ' <---------');
-    request.debug = true;
+    // request.debug = true;
     try {
+      var commands = {};
+      // Step 1 - send original SAML Request
       request(sfdcConfig.spSAMLRequestEndpoint, function (error, response, body) {
         if (error) {
           console.Error(error);
         } else {
-          var doc = new DOMParser().parseFromString(body);
-          console.log(utility.inspect(doc, null, ''));
-        }
+          var parser = new htmlparser.Parser({
+            onopentag: function(name, attribs) {
+              if (name === 'form') {
+                commands['action'] = attribs.action;
+              } else if (name === 'input') {
+                if (attribs.name === 'RelayState') {
+                  commands['RelayState'] = attribs.value;
+                } else if (attribs.name === 'SAMLRequest') {
+                  commands['SAMLRequest'] = attribs.value;
+                }
+              }
+            }});
+          parser.write(body);
+          parser.end();
+        };
+        console.log(JSON.stringify(commands, null, '\t'));
       });
+      // Step 2 - build SAML request submission to OAM
+      request.post(commands.action,
+                  {form: {'RelayState': commands.RelayState,
+                          'SAMLRequest': commands.SAMLRequest}},
+                  function (err, httpResponse, body) {
+                    if (err) {
+                      console.error(err);
+                    } else {
+                      console.log('-----------------> The response from OAM is: <--------------------');
+                      console.log(body);
+                      console.log('--------------------> End OAM Response <--------------------------');
+                    };
+                  });
     } catch (Error) {
       console.log(Error);
     };
