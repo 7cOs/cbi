@@ -4,15 +4,13 @@ module.exports = /*  @ngInject */
     var model = {
       filterApplied: false,
       opportunities: [],
-      opportunitiesSum: 0,
-      products: tempData.products
+      opportunitiesSum: 0
     };
 
     var service = {
       model: model,
       getOpportunities: getOpportunities,
       createOpportunity: createOpportunity,
-      updateOpportunity: updateOpportunity,
       getOpportunitiyFeedback: getOpportunityFeedback,
       createOpportunityFeedback: createOpportunityFeedback,
       deleteOpportunityFeedback: deleteOpportunityFeedback
