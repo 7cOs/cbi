@@ -36,6 +36,7 @@ module.exports = /*  @ngInject */
     // **************
 
     function modalSaveOpportunityFilter(ev) {
+
       var parentEl = angular.element(document.body);
       $mdDialog.show({
         clickOutsideToClose: false,
