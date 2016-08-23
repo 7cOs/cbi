@@ -1,12 +1,93 @@
 // Setup dependencies
 var sfdc = require('jsforce');
+var request = require('request');
+var htmlparser = require('htmlparser2');
 var conn = {};
 
-function fnCreateConn (app) {
-
-  console.log('in fnCreateConn');
-  var config = app.get('config').sfdcSec;
+function fnCreateConn(app) {
+  return conn;
 };
+
+function getOAMResult(commands) {
+  console.log('in getOAMResult now with ' + commands.action + ' ' + commands.RelayState + ' ' + commands.SAMLRequest);
+  return (commands);
+}
+
+exports.sendAuthnRequest = function(app, req, res) {
+  console.log('In sendAuthnRequest');
+  var sfdcConfig = app.get('config').sfdcSec;
+
+  console.log('Trying to create the auth promise');
+
+  var authnPromise = new Promise(function (resolve, reject) {
+    console.log('Within the auth promise');
+    request(sfdcConfig.spSAMLRequestEndpoint, function (error, response, body) {
+      if (error) {
+        console.Error('The error after getting the endpoint is: ' + error);
+        reject(error);
+      } else {
+        resolve(body);
+      }
+    });
+  });
+// Promise defined.  Now do something with it.
+
+  authnPromise.then(function(result) {
+    var body = result;
+    var commands = {};
+    var parser = new htmlparser.Parser({
+      onopentag: function(name, attribs) {
+        if (name === 'form') {
+          commands['action'] = attribs.action; // SFDC Auth request url
+        } else if (name === 'input') {
+          if (attribs.name === 'RelayState') {
+            commands['RelayState'] = attribs.value;
+          } else if (attribs.name === 'SAMLRequest') {
+            commands['SAMLRequest'] = attribs.value;
+          }
+        }
+      }
+    });
+    parser.write(body);
+    parser.end();
+    console.log('The commands object now contains: ' + commands.RelayState + ' ' + commands.SAMLRequest);
+
+    var OAMResult = getOAMResult(commands);
+    console.log('Went to getOAMResult to talk to OAM: ' + OAMResult);
+    return (commands);
+  }, function(err) {
+    var error = {'isSuccess': false,
+                 'errorMessage': err};
+    return error;
+  });
+};
+/*
+      console.log(utility.inspect(result));
+      // Step 2 - build SAML request submission to OAM
+      var commands = result;
+      request.post(commands.action,
+                   {form: {'RelayState': commands.RelayState,
+                           'SAMLRequest': commands.SAMLRequest}},
+                   function (err, httpResponse, body) {
+                     if (err) {
+                       console.error(err);
+                     } else {
+                       console.log('-----------------> The response from OAM is: <--------------------');
+                       console.log(body);
+                       console.log('--------------------> End OAM Response <--------------------------');
+                     };
+                     return body;
+                   });
+    }, function(error) {
+      console.log('There was an error in the promise: ' + error);
+      return error;
+    });
+  } catch (Error) {
+    console.error(Error);
+    return Error;
+  };
+}
+*/
 
 function fnCreateNote (app, req, res) {
    // get the Account Id

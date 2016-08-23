@@ -6,7 +6,30 @@ J. Scott Cromie
 ***********************************************************/
 
 var sfdc = require('../_lib/sfdc.js');
-// var sfdcAuth = require('../_lib/sfdcauth.js');
+var utility = require('util');
+
+exports.SSOlogin = function(app, req, res) {
+  var SSOLoginPromise = new Promise(function (resolve, reject) {
+    var authnRequest = sfdc.sendAuthnRequest(app, req, res);
+    console.log('Called sendAuthnRequest');
+
+    if (authnRequest !== null) {
+      console.log(utility.inspect(authnRequest, null, ''));
+      resolve(authnRequest);
+    } else {
+      var err = 'There was an error trying to login: ' + err;
+      reject(err);
+    }
+  });
+
+  SSOLoginPromise.then(function (result) {
+    console.log('Returned from sendAuthnRequest with ' + utility.inspect(result, null, ''));
+    console.log('Will get Auth Token and Session Id next');                                      //  getAuthToken();                                        //  getSessionId();
+  },
+  function (err) {
+    console.log(err);
+  });
+};
 
 exports.getAttachmentData = function(app, req, res) {
 
@@ -113,7 +136,7 @@ exports.accountNotes = function(app, req, res) {
 
 // if (req.session.assertion !== undefined) console.log(req.session.assertion);
 
-  console.log(req.session.assertion);
+//  console.log(req.session.assertion);
   var promise = new Promise(function (resolve, reject) {
     var records = sfdc.queryAccountNotes(app, req, res);
     if (records) {
@@ -134,4 +157,3 @@ exports.accountNotes = function(app, req, res) {
 //    console.log(err);
   });
 };
-
