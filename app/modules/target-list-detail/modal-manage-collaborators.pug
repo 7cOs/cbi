@@ -11,7 +11,7 @@ div.modal.target-list-modal
           md-menu
             md-button(ng-click="$mdOpenMenu($event)" aria-label="Collaborator Options")
               span {{collaborator.permissionLevel | titlecase}}
-              a.chevron-down(ng-click="tld.dropdown")
+              a.chevron-down
             md-menu-content.collaborator-options
               md-menu-item(ng-click="tld.makeOwner(collaborator.user.id)") Make Owner
               md-menu-item(ng-click="tld.removeCollaborator(collaborator.user.id)") Remove

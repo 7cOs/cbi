@@ -20,6 +20,7 @@ module.exports = /*  @ngInject */
     vm.opportunitiesService = opportunitiesService;
 
     // Expose public methods
+    vm.addToTargetList = addToTargetList;
     vm.accountQuerySearch = accountQuerySearch;
     vm.applyFilter = applyFilter;
     vm.brandQuerySearch = brandQuerySearch;
@@ -34,16 +35,8 @@ module.exports = /*  @ngInject */
     // PUBLIC METHODS
     // **************
 
-    function modalSaveOpportunityFilter(ev) {
-
-      var parentEl = angular.element(document.body);
-      $mdDialog.show({
-        clickOutsideToClose: false,
-        parent: parentEl,
-        scope: $scope.$new(),
-        targetEvent: ev,
-        templateUrl: './app/modules/opportunities/modal.html'
-      });
+    function addToTargetList() {
+      console.log('adding');
     }
 
     function accountQuerySearch(searchText) {
@@ -68,6 +61,17 @@ module.exports = /*  @ngInject */
     function distributorQuerySearch(searchText) {
       var results = filtersService.model.distributors.filter(filterQuery(searchText, ['name', 'address', 'id']));
       return results;
+    }
+
+    function modalSaveOpportunityFilter(ev) {
+      var parentEl = angular.element(document.body);
+      $mdDialog.show({
+        clickOutsideToClose: false,
+        parent: parentEl,
+        scope: $scope.$new(),
+        targetEvent: ev,
+        templateUrl: './app/modules/opportunities/modal.html'
+      });
     }
 
     function saveFilter() {

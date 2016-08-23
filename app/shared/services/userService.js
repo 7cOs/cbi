@@ -3,40 +3,6 @@
 module.exports = /*  @ngInject */
   function userService($http, $q, apiHelperService, filtersService, targetListService) {
 
-    var tempData = {
-      hideOpportunityPostResponse: {'status': 200},
-      deleteHiddenOpportunityDeleteResponse: {'status': 200},
-      postOpportunityFilterResponse: {'status': 200},
-      postTargetListPayload: {
-        'type': 'object',
-        '$schema': 'http://json-schema.org/draft-03/schema',
-        'id': 'targetListCreateSchema',
-        'required': true,
-        'properties': {
-          'name': {
-            'type': 'string',
-            'required': 'true',
-            'description': 'Name of the Target List.'
-          },
-          'opportunities': {
-            '$ref': 'opportunityIDListSchema'
-          }
-        }
-      },
-      postTargetListResponse: {
-        'id': '1323ss',
-        'name': 'Pacific Northwest Opportunities',
-        'archived:': false,
-        'opportunitiesSummary': {
-          'storesCount': 12,
-          'targetedOpportunitiesCount': 20,
-          'committedOpportunitiesCount': 5,
-          'closedOpportunitiesCount': 10,
-          'totalClosedDepletions': 352
-        }
-      }
-    };
-
     var model = {
           currentUser: {
             id: '1601',
@@ -159,9 +125,7 @@ module.exports = /*  @ngInject */
 
       function hideOpportunitySuccess(response) {
         console.log('[userService.hideOpportunity] response: ', response);
-        // hideOpportunityPromise.resolve(response.data);
-        // uncomment above and remove below when services are ready
-        hideOpportunityPromise.resolve(tempData.hideOpportunityPostResponse);
+        hideOpportunityPromise.resolve(response.data);
       }
 
       function hideOpportunityFail(error) {
@@ -201,9 +165,7 @@ module.exports = /*  @ngInject */
 
       function deleteHiddenOpportunitySuccess(response) {
         console.log('[userService.deleteHiddenOpportunity] response: ', response);
-        // deleteHiddenOpportunityPromise.resolve(response.data);
-        // uncomment above and remove below when services are ready
-        deleteHiddenOpportunityPromise.resolve(tempData.deleteHiddenOpportunityDeleteResponse);
+        deleteHiddenOpportunityPromise.resolve(response.data);
       }
 
       function deleteHiddenOpportunityFail(error) {
@@ -475,8 +437,6 @@ module.exports = /*  @ngInject */
             sharedNotArchivedCount = 0,
             ownedNotArchived = 0,
             ownedArchived = 0;
-
-        console.log(response);
 
         for (var i = 0; i < response.data.owned.length; i++) {
           if (response.data.owned[i].archived) ownedArchived++;

@@ -174,7 +174,7 @@ function ExpandedTargetListController($state, $scope, $filter, $mdDialog, $q, us
 
   function init() {
     // userService.getTargetLists('1601', {'type': 'targetLists'}).then(function(data) {
-    userService.getTargetLists('1601', {'type': 'targetLists'}).then(function(data) {
+    userService.getTargetLists(userService.model.currentUser.id, {'type': 'targetLists'}).then(function(data) {
       var ownedPromises = [],
           sharedPromises = [];
       userService.model.targetLists = data;
@@ -199,7 +199,6 @@ function ExpandedTargetListController($state, $scope, $filter, $mdDialog, $q, us
         angular.forEach(userService.model.targetLists.sharedWithMe, function(targetList, key) {
           targetList.collaborators = response[key].data;
         });
-        console.log(userService.model.targetLists);
       });
     });
   }

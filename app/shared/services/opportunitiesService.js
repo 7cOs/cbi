@@ -95,6 +95,8 @@ module.exports = /*  @ngInject */
           model.opportunitiesSum += 1;
         }; // end for each
 
+        console.log(newOpportunityArr);
+
         opportunitiesPromise.resolve(newOpportunityArr);
       }
 

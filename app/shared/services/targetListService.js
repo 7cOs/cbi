@@ -3,305 +3,6 @@
 module.exports = /*  @ngInject */
   function targetListService($http, $q, apiHelperService) {
 
-    var tempData = {
-      getTargetListResponse: {
-        'id': '1323ss',
-        'name': 'Pacific Northwest Opportunities',
-        'archived:': false,
-        'opportunitiesSummary': {
-          'storesCount': 12,
-          'targetedOpportunitiesCount': 20,
-          'committedOpportunitiesCount': 5,
-          'closedOpportunitiesCount': 10,
-          'totalClosedDepletions': 352
-        },
-        'collaborators': [{
-          'id': '13782b',
-          'user': {
-            'id': 'A1B2',
-            'firstName': 'Joe',
-            'lastName': 'Cerveza',
-            'email': 'jCerveza@cbrands.com',
-            'phone': '1234567890',
-            'role': 'CBBD MDM',
-            'accounts': ['Wal-mart', 'PCC']
-          },
-          'permissionLevel': 'Author',
-          'lastViewed': '2015-07-16T19:20:30.45+01:00'
-        }, {
-          'id': '1212jf',
-          'user': {
-            'id': 'A1B3',
-            'firstName': 'John',
-            'lastName': 'Cerveza',
-            'email': 'jCerveza2@cbrands.com',
-            'phone': '1234567890',
-            'role': 'CBBD MDM',
-            'accounts': ['Wal-mart', 'PCC']
-          },
-          'permissionLevel': 'CollaborateAndInvite',
-          'lastViewed': '2015-07-16T19:20:30.45+01:00'
-        }, {
-          'id': 'hkjl88',
-          'user': {
-            'id': 'A1B4',
-            'firstName': 'Jane',
-            'lastName': 'Cerveza',
-            'email': 'jCerveza3@cbrands.com',
-            'phone': '1234567890',
-            'role': 'CBBD MDM',
-            'accounts': ['Wal-mart', 'PCC']
-          },
-          'permissionLevel': 'Collaborate',
-          'lastViewed': '2015-07-16T19:20:30.45+01:00'
-        }]
-      },
-      updateTargetListPayload: {
-        'type': 'object',
-        '$schema': 'http://json-schema.org/draft-03/schema',
-        'id': 'targetListEditSchema',
-        'required': true,
-        'properties': {
-          'name': {
-            'type': 'string',
-            'required': 'false',
-            'description': 'Name of the Target List.'
-          },
-          'lastViewed': {
-            'type': 'dateString',
-            'required': 'false',
-            'description': 'Date this Target List was last viewed by the User.'
-          },
-          'archived': {
-            'type': 'boolean',
-            'required': 'false',
-            'description': 'Indicates whether or not this Target List has been archived by the User.'
-          }
-        }
-      },
-      updateTargetListResponse: {
-        'id': '1323ss',
-        'name': 'Pacific Northwest Opportunities',
-        'archived:': false,
-        'opportunitiesSummary': {
-          'storesCount': 12,
-          'targetedOpportunitiesCount': 20,
-          'committedOpportunitiesCount': 5,
-          'closedOpportunitiesCount': 10,
-          'totalClosedDepletions': 352
-        }
-      },
-      deleteTargetListResponse: {'status': 200},
-      getTargetListOpportunitiesResponse: {
-        'count': 351,
-        'storesCount': 42,
-        'opportunities': [{
-          'id': 'SbBGk',
-          'product': {
-            'id': '2234gg',
-            'name': 'Corona',
-            'type': 'package',
-            'brand': 'Brand Name',
-            'description': 'Product description Lorem ipsum sit dolor amet',
-            'price': 12.11,
-            'quantity': 233
-          },
-          'type': 'Non-Buy',
-          'rank': 1,
-          'impact': 'High',
-          'status': 'Discussed',
-          'rationale': 'Rationale 1',
-          'store': {
-            'id': 'dsd82',
-            'name': 'Store 1',
-            'address': '1221 11th St NE, City, ST 12345',
-            'premise': true,
-            'segmentation': 'A',
-            'latitude': 41.8831,
-            'longitude': -87.6259
-          },
-          'itemAuthorizationCode': 'jij23',
-          'currentYTDStoreVolume': 54.11,
-          'lastYTDStoreVolume': 29.12,
-          'volumeTrend': 32.33,
-          'storeVelocity': 50.50,
-          'storeDistribution': 12.0,
-          'last90DaysVolume': 33.11,
-          'lastInvoiceDate': '2016-11-05T13:15:30Z'
-        }, {
-          'id': 'sdsd12',
-          'product': {
-            'id': '9878dj',
-            'name': 'Budweiser',
-            'type': 'package',
-            'brand': 'Brand Name',
-            'description': 'Product description Lorem ipsum sit dolor amet',
-            'price': 12.11,
-            'quantity': 233
-          },
-          'type': 'AtRisk',
-          'rank': 2,
-          'impact': 'Medium',
-          'status': 'Discussed',
-          'rationale': 'Rationale 1',
-          'store': {
-            'id': 'dsd82',
-            'name': 'Store 1',
-            'address': '1221 11th St NE, City, ST 12345',
-            'premise': true,
-            'segmentation': 'B',
-            'latitude': 41.8831,
-            'longitude': -87.6259
-          },
-          'itemAuthorizationCode': 'jij23',
-          'currentYTDStoreVolume': 54.11,
-          'lastYTDStoreVolume': 29.12,
-          'volumeTrend': 32.33,
-          'storeVelocity': 50.50,
-          'storeDistribution': 12.0,
-          'last90DaysVolume': 33.11,
-          'lastInvoiceDate': '2016-11-05T13:15:30Z'
-        }]
-      },
-      addDeleteTargetListOpportunitiesPayload: {
-        'required': 'true',
-        '$schema': 'http://json-schema.org/draft-03/schema',
-        'id': 'opportunityIDListSchema',
-        'type': 'array',
-        'items': {
-          'type': 'string',
-          'description': 'Opportunity ID string'
-        }
-      },
-      addDeleteTargetListOpportunitiesResponse: {'status': 200},
-      getTargetListSharesResponse: [{
-        'id': '13782b',
-        'user': {
-          'id': 'A1B2',
-          'firstName': 'Joe',
-          'lastName': 'Cerveza',
-          'email': 'jCerveza@cbrands.com',
-          'phone': '1234567890',
-          'role': 'CBBD MDM',
-          'accounts': ['Wal-mart', 'PCC']
-        },
-        'permissionLevel': 'Author',
-        'lastViewed': '2015-07-16T19:20:30.45+01:00'
-      }, {
-        'id': '1212jf',
-        'user': {
-          'id': 'A1B3',
-          'firstName': 'John',
-          'lastName': 'Cerveza',
-          'email': 'jCerveza2@cbrands.com',
-          'phone': '1234567890',
-          'role': 'CBBD MDM',
-          'accounts': ['Wal-mart', 'PCC']
-        },
-        'permissionLevel': 'CollaborateAndInvite',
-        'lastViewed': '2015-07-16T19:20:30.45+01:00'
-      }, {
-        'id': 'hkjl88',
-        'user': {
-          'id': 'A1B4',
-          'firstName': 'Jane',
-          'lastName': 'Cerveza',
-          'email': 'jCerveza3@cbrands.com',
-          'phone': '1234567890',
-          'role': 'CBBD MDM',
-          'accounts': ['Wal-mart', 'PCC']
-        },
-        'permissionLevel': 'Collaborate',
-        'lastViewed': '2015-07-16T19:20:30.45+01:00'
-      }],
-      addTargetListSharesPayload: {
-        'type': 'array',
-        '$schema': 'http://json-schema.org/draft-03/schema',
-        'required': 'true',
-        'description': 'List of user profile IDs to share an object with and their corresponding permission levels.',
-        'id': 'sharedUsersSchema',
-        'items': {
-          'type': 'object',
-          'required': true,
-          'properties': {
-            'user': {
-              'type': 'string',
-              'required': 'true',
-              'description': 'User ID'
-            },
-            'permissionLevel': {
-              'enum': ['Author', 'CollaborateAndInvite', 'Collaborate'],
-              'required': 'true',
-              'description': 'Defines the permission level of the specified user for accessing and editing the target list.'
-            }
-          }
-        }
-      },
-      addTargetListSharesResponse: [{
-        'id': '13782b',
-        'user': {
-          'id': 'A1B2',
-          'firstName': 'Joe',
-          'lastName': 'Cerveza',
-          'email': 'jCerveza@cbrands.com',
-          'phone': '1234567890',
-          'role': 'CBBD MDM',
-          'accounts': ['Wal-mart', 'PCC']
-        },
-        'permissionLevel': 'Author',
-        'lastViewed': '2015-07-16T19:20:30.45+01:00'
-      }, {
-        'id': '1212jf',
-        'user': {
-          'id': 'A1B3',
-          'firstName': 'John',
-          'lastName': 'Cerveza',
-          'email': 'jCerveza2@cbrands.com',
-          'phone': '1234567890',
-          'role': 'CBBD MDM',
-          'accounts': ['Wal-mart', 'PCC']
-        },
-        'permissionLevel': 'CollaborateAndInvite',
-        'lastViewed': '2015-07-16T19:20:30.45+01:00'
-      }, {
-        'id': 'hkjl88',
-        'user': {
-          'id': 'A1B4',
-          'firstName': 'Jane',
-          'lastName': 'Cerveza',
-          'email': 'jCerveza3@cbrands.com',
-          'phone': '1234567890',
-          'role': 'CBBD MDM',
-          'accounts': ['Wal-mart', 'PCC']
-        },
-        'permissionLevel': 'Collaborate',
-        'lastViewed': '2015-07-16T19:20:30.45+01:00'
-      }],
-      deleteTargetListSharesPayload: {
-        'type': 'array',
-        '$schema': 'http://json-schema.org/draft-03/schema',
-        'required': 'true',
-        'description': 'List of user profile IDs to share an object with and their corresponding permission levels.',
-        'id': 'sharedUsersSchema',
-        'items': {
-          'type': 'object',
-          'required': true,
-          'properties': {
-            'user': {
-              'type': 'string',
-              'required': 'true',
-              'description': 'User ID'
-            },
-            'permissionLevel': {
-              'enum': ['Author', 'CollaborateAndInvite', 'Collaborate'],
-              'required': 'true',
-              'description': 'Defines the permission level of the specified user for accessing and editing the target list.'
-            }
-          }
-        }
-      },
-      deleteTargetListSharesResponse: {'status': 200}
-    };
     var model = {
       currentList: {}
     };
@@ -429,9 +130,7 @@ module.exports = /*  @ngInject */
 
       function getTargetListOpportunitiesSuccess(response) {
         console.log('[targetListService.getTargetListOpportunities] response: ', response);
-        // targetListPromise.resolve(response.data);
-        // uncomment above and remove below when services are ready
-        targetListPromise.resolve(tempData.getTargetListOpportunitiesResponse);
+        targetListPromise.resolve(response.data);
       }
 
       function getTargetListOpportunitiesFail(error) {
@@ -450,20 +149,16 @@ module.exports = /*  @ngInject */
      */
     function addTargetListOpportunities(targetListId) {
       var targetListPromise = $q.defer(),
-          url = '',
-          payload = tempData.addDeleteTargetListOpportunitiesPayload;
+          url = apiHelperService.request('/api/targetLists/' + targetListId + '/opportunities/'),
+          payload = {};
 
-      $http.post(url, payload, {
-        headers: {}
-      })
-      .then(addTargetListOpportunitiesSuccess)
-      .catch(addTargetListOpportunitiesFail);
+      $http.post(url, payload)
+        .then(addTargetListOpportunitiesSuccess)
+        .catch(addTargetListOpportunitiesFail);
 
       function addTargetListOpportunitiesSuccess(response) {
         console.log('[targetListService.addTargetListOpportunities] response: ', response);
-        // targetListPromise.resolve(response.data);
-        // uncomment above and remove below when services are ready
-        targetListPromise.resolve(tempData.addDeleteTargetListOpportunitiesResponse);
+        targetListPromise.resolve(response.data);
       }
 
       function addTargetListOpportunitiesFail(error) {
@@ -483,19 +178,15 @@ module.exports = /*  @ngInject */
     function deleteTargetListOpportunities(targetListId) {
       var targetListPromise = $q.defer(),
           url = '',
-          payload = tempData.addDeleteTargetListOpportunitiesPayload;
+          payload = {};
 
-      $http.delete(url, payload, {
-        headers: {}
-      })
-      .then(deleteTargetListOpportunitiesSuccess)
-      .catch(deleteTargetListOpportunitiesFail);
+      $http.delete(url, payload)
+        .then(deleteTargetListOpportunitiesSuccess)
+        .catch(deleteTargetListOpportunitiesFail);
 
       function deleteTargetListOpportunitiesSuccess(response) {
         console.log('[targetListService.deleteTargetListOpportunities] response: ', response);
-        // targetListPromise.resolve(response.data);
-        // uncomment above and remove below when services are ready
-        targetListPromise.resolve(tempData.addDeleteTargetListOpportunitiesResponse);
+        targetListPromise.resolve(response.data);
       }
 
       function deleteTargetListOpportunitiesFail(error) {

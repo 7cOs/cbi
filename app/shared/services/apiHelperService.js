@@ -43,7 +43,7 @@ module.exports = /*  @ngInject */
           i++;
         }
 
-        return '?limit=500&sort=store&filter=' + encodeURIComponent(queryParams);
+        return '?limit=200&sort=store&filter=' + encodeURIComponent(queryParams);
       } else if (obj.type && obj.type === 'targetLists') {
         delete obj.type;
 
