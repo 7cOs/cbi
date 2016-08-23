@@ -14,7 +14,6 @@ function ListController($scope, $state, $q, opportunitiesService, targetListServ
   vm.userService = userService;
 
   // Defaults
-  vm.pageName = $state.current.name;
   vm.depletionsChevron = false;
   vm.expandedOpportunities = [];
   vm.opportunitiesChevron = false;
@@ -33,6 +32,8 @@ function ListController($scope, $state, $q, opportunitiesService, targetListServ
   vm.displayBrandIcon = displayBrandIcon;
   vm.exists = exists;
   vm.isChecked = isChecked;
+  vm.pageName = pageName;
+  vm.removeOpportunity = removeOpportunity;
   vm.sortBy = sortBy;
   vm.toggle = toggle;
   vm.toggleAll = toggleAll;
@@ -96,30 +97,34 @@ function ListController($scope, $state, $q, opportunitiesService, targetListServ
 
   // Check if all items are selected
   function isChecked() {
-    // return vm.selected.length === vm.opportunities.length;
-    return vm.selected.length === vm.opportunitiesService.model.opportunities.length;
-  };
-
-  // Select or deselect individual list item
-  function toggle(item, list) {
-    var idx = list.indexOf(item);
-    if (idx > -1) {
-      list.splice(idx, 1);
-    } else {
-      list.push(item);
-    }
+    return vm.selected.length === opportunitiesService.model.opportunities.length;
   }
 
-  // Select or deselect all list items
-  function toggleAll() {
-    // if (vm.selected.length === vm.opportunities.length) {
-    if (vm.selected.length === vm.opportunitiesService.model.opportunities.length) {
-      vm.selected = [];
-    } else if (vm.selected.length === 0 || vm.selected.length > 0) {
-      // vm.selected = vm.opportunities.slice(0);
-      vm.selected = vm.opportunitiesService.model.opportunities.slice(0);
+  function pageName() {
+    if ($state.current.name === 'target-lists' || $state.current.name === 'target-list-detail') {
+      return false;
     }
-  };
+
+    return true;
+  }
+
+  function removeOpportunity() {
+    var opportunityIds = [];
+
+    // add opportunity ids into array to be posted
+    for (var i = 0; i < vm.selected.length; i++) {
+      for (var j = 0; j < vm.selected[i].groupedOpportunities.length; j++) {
+        opportunityIds.push(vm.selected[i].groupedOpportunities[j].id);
+      }
+    }
+
+    targetListService.deleteTargetListOpportunities(targetListService.model.currentList.id, opportunityIds).then(function(data) {
+      console.log('Done deleting these ids: ', opportunityIds);
+      // to do - update view and model
+    }, function(err) {
+      console.log('Error deleting these ids: ', opportunityIds, ' Responded with error: ', err);
+    });
+  }
 
   function showCorporateMemoModal(ev) {
     var parentEl = angular.element(document.body);
@@ -141,6 +146,25 @@ function ListController($scope, $state, $q, opportunitiesService, targetListServ
     vm.opportunitiesChevron = (property === 'opCount') ? !vm.opportunitiesChevron : vm.opportunitiesChevron;
     vm.depletionsChevron = (property === 'depletionsCYTD') ? !vm.depletionsChevron : vm.depletionsChevron;
     vm.segmentationChevron = (property === 'segmentation') ? !vm.segmentationChevron : vm.storeChevron;
+  }
+
+  // Select or deselect individual list item
+  function toggle(item, list) {
+    var idx = list.indexOf(item);
+    if (idx > -1) {
+      list.splice(idx, 1);
+    } else {
+      list.push(item);
+    }
+  }
+
+  // Select or deselect all list items
+  function toggleAll() {
+    if (vm.selected.length === opportunitiesService.model.opportunities.length) {
+      vm.selected = [];
+    } else if (vm.selected.length === 0 || vm.selected.length > 0) {
+      vm.selected = opportunitiesService.model.opportunities.slice(0);
+    }
   }
 
   // **************

@@ -94,10 +94,8 @@ module.exports = /*  @ngInject */
           // push last store into newOpportunityArr
           if (i + 1 === response.data.opportunities.length) newOpportunityArr.push(store);
 
-          model.opportunitiesSum += 1;
+          service.model.opportunitiesSum += 1;
         }; // end for each
-
-        console.log(newOpportunityArr);
 
         opportunitiesPromise.resolve(newOpportunityArr);
       }

@@ -212,22 +212,20 @@ module.exports = /*  @ngInject */
     }
 
     // Watch for inline search value changes
-    $scope.$watch('t.filtersService.model.brandSearchText', function (val) { addInlineSearchChip(val); });
-    $scope.$watch('t.filtersService.model.accountSearchText', function (val) { addInlineSearchChip(val); });
-    $scope.$watch('t.filtersService.model.distributorSearchText', function (val) { addInlineSearchChip(val); });
+    $scope.$watch('t.filtersService.model.brands', function (val) { addInlineSearchChip(val); });
+    $scope.$watch('t.filtersService.model.chains', function (val) { addInlineSearchChip(val); });
+    $scope.$watch('t.filtersService.model.stores', function (val) { addInlineSearchChip(val); });
 
     function init() {
       targetListService.getTargetList(targetListService.model.currentList.id).then(function(response) {
-        console.log('[targetListService.getTargetList]', response);
         targetListService.model.currentList = response;
       }, function(err) {
         console.log('[targetListController.init], Error: ' + err.statusText + '. Code: ' + err.status);
       });
 
       // get opportunities
-      targetListService.getTargetListOpportunities(targetListService.model.currentList.id).then(function(data) {
-        console.log(data);
-        // opportunitiesService.model.opportunities = data;
+      targetListService.getTargetListOpportunities(targetListService.model.currentList.id, {type: 'opportunities'}).then(function(data) {
+        opportunitiesService.model.opportunities = data;
       });
 
       opportunitiesService.model.filterApplied = true;

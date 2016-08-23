@@ -14,14 +14,14 @@ module.exports = /*  @ngInject */
             accounts: ['Wal-mart', 'PCC']
           }*/
           currentUser: {
-            "firstName": "JAMES",
-            "lastName": "O'NEIL",
-            "iss": "https://orion.cbrands.com",
-            "personID": 1601,
-            "employeeID": "1002417",
-            "exp": 1477168596733,
-            "iat": 1471984596737,
-            "email": "jim.oneil@cbrands.com"
+            'firstName': 'JAMES',
+            'lastName': 'O\'NEIL',
+            'iss': 'https://orion.cbrands.com',
+            'personID': 1601,
+            'employeeID': '1002417',
+            'exp': 1477168596733,
+            'iat': 1471984596737,
+            'email': 'jim.oneil@cbrands.com'
           }
         },
         service = {

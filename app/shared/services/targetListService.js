@@ -127,8 +127,62 @@ module.exports = /*  @ngInject */
         .catch(getTargetListOpportunitiesFail);
 
       function getTargetListOpportunitiesSuccess(response) {
-        console.log('[targetListService.getTargetListOpportunities] response: ', response);
-        targetListPromise.resolve(response.data);
+        // Group opportunities by store
+        var newOpportunityArr = [],
+            store,
+            storePlaceholder;
+
+        for (var i = 0; i < response.data.opportunities.length; i++) {
+          var item = response.data.opportunities[i];
+
+          // if its a new store
+          if (!storePlaceholder || (storePlaceholder.address !== item.store.address || storePlaceholder.id !== item.store.id)) {
+            // push previous store in newOpportunityArr
+            if (i !== 0) newOpportunityArr.push(store);
+
+            // create grouped store object
+            store = angular.copy(item);
+            store.highImpactSum = 0;
+            store.depletionSum = 0;
+            store.brands = [];
+
+            // set store placeholder to new store
+            storePlaceholder = item.store;
+
+            // Set positive or negative label for trend values for store
+            store.trend = store.currentYTDStoreVolume - store.lastYTDStoreVolume;
+            if (store.trend > 0) {
+              store.positiveValue = true;
+            } else if (store.trend < 0) {
+              store.negativeValue = true;
+            }
+
+            // create groupedOpportunities arr so all opportunities for one store will be in a row
+            store.groupedOpportunities = [];
+            store.groupedOpportunities.push(item);
+          } else {
+            store.groupedOpportunities.push(item);
+          }
+
+          // add brand to array
+          store.brands.push(item.product.brand.toLowerCase());
+
+          // sum high opportunities
+          item.impact = item.impact.toLowerCase();
+          if (item.impact === 'high') store.highImpactSum += 1;
+
+          // sum depletions - not in api yet - WJAY 8/8
+          // store.depletionSum += item.depletions
+
+          // push last store into newOpportunityArr
+          if (i + 1 === response.data.opportunities.length) newOpportunityArr.push(store);
+
+          model.opportunitiesSum += 1;
+        }; // end for each
+
+        console.log(newOpportunityArr);
+
+        targetListPromise.resolve(newOpportunityArr);
       }
 
       function getTargetListOpportunitiesFail(error) {
@@ -174,10 +228,12 @@ module.exports = /*  @ngInject */
      * @returns {Object} - status object
      * @memberOf orion.common.services
      */
-    function deleteTargetListOpportunities(targetListId) {
+    function deleteTargetListOpportunities(targetListId, opportunityIds) {
       var targetListPromise = $q.defer(),
-          url = '',
-          payload = {};
+          url = apiHelperService.request('/api/targetLists/' + targetListId + '/opportunities/'),
+          payload = opportunityIds;
+
+      console.log('delete', url, payload);
 
       $http.delete(url, payload)
         .then(deleteTargetListOpportunitiesSuccess)

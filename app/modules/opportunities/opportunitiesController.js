@@ -31,11 +31,6 @@ module.exports = /*  @ngInject */
     // PUBLIC METHODS
     // **************
 
-    /* function addToSelected(list) {
-      filtersService.model.selected[list].push(filtersService.model[list]);
-    }*/
-
-
     function applyFilter(filterStr) {
       console.log('add filter');
     }

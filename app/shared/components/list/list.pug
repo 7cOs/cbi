@@ -2,12 +2,13 @@ h3(ng-if="list.pageName === 'accounts'") Top opportunities <a class="accent" ui-
 h3(ng-if="list.pageName === 'opportunities'" ng-hide="list.opportunitiesService.model.opportunities.length === 0") <strong>{{list.opportunitiesService.model.opportunitiesSum}} opportunities</strong> across {{list.opportunitiesService.model.opportunities.length}} stores
 
 .action-buttons
-  md-menu(md-offset="0 45" ng-if="list.pageName !== 'target-lists'")
+  md-menu(md-offset="0 45" ng-if="list.pageName()")
     button.btn-action(ng-disabled="list.selected < 1" aria-label="Add to Target List" ng-click="$mdOpenMenu($event)") Add to Target List
     md-menu-content.target-list-menu
       md-menu-item(ng-repeat="targetList in list.userService.model.targetLists.owned" ng-click="list.addToTargetList(targetList.id)") 
         p {{targetList.name}}
-  button.btn-action(ng-disabled="list.selected < 1" ng-if="list.pageName === 'target-lists'") Copy to Target List
+  button.btn-action(ng-disabled="list.selected < 1" ng-if="list.pageName()") Copy to Target List
+  button.btn-action(ng-disabled="list.selected < 1" ng-if="!list.pageName()" ng-click="list.removeOpportunity()") Delete
   button.btn-action(ng-disabled="list.selected < 1" ng-csv="list.selected" filename="opportunities.csv" csv-header="['Account', 'Sub Account', 'Tolinx Number', 'Store Name', 'Store Number', 'Address', 'City', 'State', 'Postal CD', 'Phone Number', 'Latitude', 'Longitude', 'Last Update', 'High Impact', 'Unsold Account', 'Premise Type', 'Trade Classification', 'Planning Group', '', 'Negative Value', 'Is Expanded']") Download
   button.btn-action(ng-disabled="list.selected < 1") Send To
 
@@ -22,9 +23,9 @@ div(ng-if="!list.opportunitiesService.model.filterApplied") [Ratul] Pls apply a 
 v-accordion.styled-list(multiple="" id="opportunities" control="list.accordion" onexpand="list.expandCallback(item)" oncollapse="list.collapseCallback(item)" column='12' ng-if="list.opportunitiesService.model.filterApplied")
   div.header-row(row)
     div.checkbox-wrapper.placeholder(ng-click="list.toggle(opportunity, list.selected)")
-    div.hide-wrapper(ng-if="list.pageName !== 'target-lists'")
+    div.hide-wrapper(ng-if="list.pageName()")
       label
-    div.more-wrapper(ng-if="list.pageName === 'target-lists'")
+    div.more-wrapper(ng-if="!list.pageName()")
     div.checkbox-sibling(column='12')
       div(column='3')
         label(ng-click="list.sortBy('opportunity.name')" ng-class="{ 'header-bold' : list.sortProperty === 'opportunity.name'}")
