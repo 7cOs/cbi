@@ -70,6 +70,8 @@ function NavbarController($rootScope, $scope, $mdPanel, $mdDialog, notifications
   vm.showNewRationaleInput = showNewRationaleInput;
   vm.addNewRationale = false;
   vm.addToTargetList = addToTargetList;
+  vm.showMixedBrandRadio = showMixedBrandRadio;
+  vm.mixedBrand = false;
 
   // **************
   // PUBLIC METHODS
@@ -139,6 +141,10 @@ function NavbarController($rootScope, $scope, $mdPanel, $mdDialog, notifications
   // Show inputs if a new item is needed
   function showNewRationaleInput()  {
     vm.addNewRationale = true;
+  }
+
+  function showMixedBrandRadio() {
+    vm.mixedBrand = true;
   }
 
   // ***************

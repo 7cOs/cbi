@@ -134,11 +134,28 @@ md-dialog {
       }
 
       .short {
-        width: 40%;
+        width: 45%;
       }
 
       .medium-short {
+        width: 55%;
+      }
+    }
+
+    div[layout=row] {
+      md-radio-group:first-child {
+        margin-top: 3ex;
+      }
+
+      input {
         width: 60%;
+      }
+
+      md-radio-group:last-child {
+        md-radio-button {
+          margin-left: 2em;
+          margin-top: 2ex;
+        }
       }
     }
 
