@@ -3,7 +3,7 @@
 module.exports = function(app) {
   const passport = require('passport');
   const logoutUrl = 'https://ssodev.cbrands.com/oam/server/logout?end_url=' + app.get('config').address;
-  const util = require('../_lib/util');
+  const util = require('../_lib/util')(app);
 
   // Auth stuff
   app.get('/auth/login',
@@ -24,7 +24,7 @@ module.exports = function(app) {
     });
 
   app.get('/auth/user', function (req, res) {
-    if (util.isAuthenticated()) {
+    if (util.isAuthenticated(req)) {
       res.send(req.user.jwtmap);
     } else {
       res.redirect('/auth/login');
