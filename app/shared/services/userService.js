@@ -252,7 +252,7 @@ module.exports = /*  @ngInject */
      */
     function saveOpportunityFilter(filters) {
       var opportunityFilterPromise = $q.defer(),
-          url = apiHelperService.request('/api/users/' + model.currentUser.id + '/opportunityFilters/'),
+          url = apiHelperService.request('/api/users/' + service.model.currentUser.personID + '/opportunityFilters/'),
           payload = {
             name: filtersService.model.newServiceName,
             filterString: apiHelperService.formatQueryString(filters)

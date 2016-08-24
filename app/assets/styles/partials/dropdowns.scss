@@ -23,6 +23,7 @@
 
 md-option {
   border-bottom: 1px dotted $gray-4;
+  padding: 5px;
 }
 
 md-select {
@@ -63,4 +64,20 @@ md-select {
 
 ._md-select-value ._md-select-icon:after {
   display: inline;
+}
+
+.md-input-has-value {
+  img {
+    display: none;
+  }
+}
+
+.saved-filter-option {
+  img {
+    margin-bottom: 0;
+    position: absolute;
+    right: 10px;
+    top: 10px;
+    width: 40px;
+  }
 }
