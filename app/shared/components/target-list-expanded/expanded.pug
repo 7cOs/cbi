@@ -1,5 +1,7 @@
 .clearfix
-  button.icon.select-all Select All
+  button.icon.select-all(ng-click="expanded.toggleAll()")
+    span(ng-if='expanded.isChecked()') Un-
+    | Select All
 
   .target-action-buttons
     button(ng-if="expanded.buttonState === 'named'" ng-click="expanded.archiveTargetList()").btn-action Archive
@@ -43,9 +45,9 @@ div.expanded-target-lists
             p Try Searching for <span>Opportunities</span> and add them to your list
           ul
             li(ng-repeat="list in expanded.userService.model.targetLists.owned | filter:{archived:false} | orderBy:expanded.sortProperty:expanded.reverse").clearfix
-              // div.checkbox-wrapper.named-target-list(ng-click="expanded.toggle(opportunity, list.selected)")
-                md-checkbox(aria-label="Select Item" ng-checked="expanded.exists(opportunity, list.selected)")
-              div.checkbox-wrapper.named-target-list
+              div.checkbox-wrapper.named-target-list(ng-click="expanded.toggle(list, expanded.selected)")
+                md-checkbox(aria-label="Select Item" ng-checked="expanded.exists(list, expanded.selected)")
+              // div.checkbox-wrapper.named-target-list
                 md-checkbox(aria-label="Select Item" ng-model="list.selected")
               div.checkbox-sibling(column="12" ng-click="expanded.openTLDetails(list.id)")
                 div(row)
