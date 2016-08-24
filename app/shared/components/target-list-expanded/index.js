@@ -183,11 +183,9 @@ function ExpandedTargetListController($state, $scope, $filter, $mdDialog, $q, us
 
   // Select or deselect all list items
   function toggleAll() {
-    // if (vm.selected.length === vm.opportunities.length) {
     if (vm.selected.length === vm.userService.model.targetLists.owned.length) {
       vm.selected = [];
     } else if (vm.selected.length === 0 || vm.selected.length > 0) {
-      // vm.selected = vm.opportunities.slice(0);
       vm.selected = vm.userService.model.targetLists.owned.slice(0);
     }
   };
