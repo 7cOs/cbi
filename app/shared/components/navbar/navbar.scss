@@ -186,31 +186,49 @@ navbar {
       }
     }
 
-    &.parent:hover {
-      background: $dark-blue-2;
-      box-shadow: 0 2px 1px #000000;
-      padding: 5px 28px 0;
-      margin-left: -15px;
-      margin-right: -15px;
+    &.parent {
 
-      a {
-        color: $white;
-      }
+      &:hover {
+        background: $dark-blue-2;
+        box-shadow: 0 2px 1px #000000;
+        padding: 5px 26px 0 25px;
+        margin-left: -15px;
+        margin-right: -15px;
 
-      .dropdown {
-        padding: 4px 6px 0;
-        height: auto;
-        box-shadow: 0 1px 1px #000000;
+        .inner {
 
-        li {
-          font-size: 0.7em;
-          font-family: $rajdhani;
-          font-weight: $bold;
-          padding-left: 1em;
+          a {
+            font-weight: $regular;
+          }
+        }
 
-          &:hover {
-            a {
-              color: $light-blue-2;
+        .sub-menu {
+
+          a {
+            font-weight: $semibold;
+            font-size: 1em;
+          }
+        }
+
+        a {
+          color: $white;
+        }
+
+        .dropdown {
+          padding: 4px 6px 0;
+          height: auto;
+          box-shadow: 0 1px 1px #000000;
+
+          li {
+            font-size: 0.7em;
+            font-family: $rajdhani;
+            font-weight: $bold;
+            padding-left: 1em;
+
+            &:hover {
+              a {
+                color: $light-blue-2;
+              }
             }
           }
         }
