@@ -9,7 +9,8 @@ module.exports =  function(app) {
         multer        = require('multer'), // ENABLE MULTI-PART FORM UPLOADS
         session       = require('express-session'), // ENABLE SESSIONS
         uuid          = require('uuid'), // CONTENFUL API CONFIG
-        compression   = require('compression');
+        compression   = require('compression'),
+        enforce = require('express-sslify');
 
   let sessionStore = '';
 
@@ -32,6 +33,9 @@ module.exports =  function(app) {
   app.use(compression());
   app.locals.pretty = config.prettify;
   app.use(flash());
+
+  //  Forces SSL for production
+  if (process.env.NODE_ENV !== 'local') app.use(enforce.HTTPS({ trustProtoHeader: true }));
 
   // CONFIG BASED SETTINGS
   if (config.cors) app.use(require('cors')()); // ENABLE CORS
