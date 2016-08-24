@@ -23,6 +23,7 @@
 
 md-option {
   border-bottom: 1px dotted $gray-4;
+  padding: 5px;
 }
 
 md-select {
@@ -67,4 +68,20 @@ md-select {
 md-select-menu ._md-text {
   font-size: 0.9em;
   color: $gray-1;
+}
+
+.md-input-has-value {
+  img {
+    display: none;
+  }
+}
+
+.saved-filter-option {
+  img {
+    margin-bottom: 0;
+    position: absolute;
+    right: 10px;
+    top: 10px;
+    width: 40px;
+  }
 }

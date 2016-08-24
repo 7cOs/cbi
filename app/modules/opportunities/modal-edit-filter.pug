@@ -1,0 +1,9 @@
+div.modal
+  h4 Filter Options
+  div.modal-form
+    div.modal-input
+      input(ng-model="o.currentFilter[0].name" placeholder="Filter Name")
+    button.btn-action Save
+    p.cancel.accent(ng-click="o.closeEditModal()") X Cancel
+  div.modal-footer.clearfix
+    p.link.align-center(ng-click="o.deleteSavedFilter(o.currentFilter[0].id)") Delete List

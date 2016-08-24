@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports = /*  @ngInject */
-  function opportunitiesController($rootScope, $scope, $state, $mdDialog, opportunitiesService, chipsService, filtersService, userService) {
+  function opportunitiesController($rootScope, $scope, $state, $filter, $mdDialog, opportunitiesService, opportunityFiltersService, chipsService, filtersService, userService) {
 
     // ****************
     // CONTROLLER SETUP
@@ -9,6 +9,7 @@ module.exports = /*  @ngInject */
 
     // Initial variables
     var vm = this;
+    vm.currentFilter = {};
 
     // Set page title for head and nav
     $rootScope.pageTitle = $state.current.title;
@@ -21,7 +22,10 @@ module.exports = /*  @ngInject */
 
     // Expose public methods
     vm.applyFilter = applyFilter;
+    vm.closeEditModal = closeEditModal;
     vm.closeModal = closeModal;
+    vm.deleteSavedFilter = deleteSavedFilter;
+    vm.editFilterModal = editFilterModal;
     vm.modalSaveOpportunityFilter = modalSaveOpportunityFilter;
     vm.saveFilter = saveFilter;
 
@@ -37,6 +41,35 @@ module.exports = /*  @ngInject */
 
     function closeModal() {
       $mdDialog.hide();
+    }
+
+    function closeEditModal() {
+      vm.currentFilter = {};
+      closeModal();
+    }
+
+    function editFilterModal(filterId, ev) {
+      vm.currentFilter = $filter('filter')(userService.model.opportunityFilters, {id: filterId});
+
+      var parentEl = angular.element(document.body);
+      $mdDialog.show({
+        clickOutsideToClose: true,
+        parent: parentEl,
+        scope: $scope.$new(),
+        targetEvent: ev,
+        templateUrl: './app/modules/opportunities/modal-edit-filter.html'
+      });
+    }
+
+    function deleteSavedFilter(filterId) {
+      opportunityFiltersService.deleteOpportunityFilter(filterId).then(function(data) {
+        // remove from user model and UI
+        angular.forEach(userService.model.opportunityFilters, function(item, key) {
+          if (item.id === filterId) userService.model.opportunityFilters.splice(userService.model.opportunityFilters.indexOf(item), 1);
+        });
+
+        closeModal();
+      });
     }
 
     function modalSaveOpportunityFilter(ev) {
@@ -56,7 +89,8 @@ module.exports = /*  @ngInject */
 
       userService.saveOpportunityFilter(filterPayload).then(function(data) {
         // push new filter to filter dropdown
-        userService.model.opportunityFilters.push(data.dataContent);
+        console.log(data);
+        userService.model.opportunityFilters.push(data);
 
         // close modal
         closeModal();
