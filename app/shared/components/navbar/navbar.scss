@@ -7,13 +7,27 @@ navbar {
 }
 
 .nav-logo {
-  width: 60px;
+  width: 70px;
   float: left;
   z-index: 1;
+  position: relative;
 
   &:hover {
     cursor: hand;
   }
+}
+
+.nav-logo-background {
+  background: transparent;
+  height: 67px;
+  width: 67px;
+  border-radius: 50px;
+  box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.5);
+  display: inline-block;
+  position: absolute;
+  left: 35px;
+  top: 51px;
+  z-index: 0;
 }
 
 .nav-icon {
