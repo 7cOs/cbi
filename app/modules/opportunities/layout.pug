@@ -7,7 +7,9 @@
           .dropdown
             label Select Saved Report
             md-select(ng-model="o.filtersService.model.selected.currentFilter")
-              md-option(ng-repeat="savedFilter in o.userService.model.opportunityFilters" value="{{::savedFilter.id}}") {{::savedFilter.name}}
+              md-option(class="saved-filter-option" ng-repeat="savedFilter in o.userService.model.opportunityFilters" value="{{::savedFilter.id}}")
+                span {{::savedFilter.name}}
+                img(ng-click="o.editFilterModal(savedFilter.id)" src="../assets/img/icons/more.svg")
 .chips(ng-if="o.chipsService.model.length")
   label Active Filters
   span
@@ -15,6 +17,7 @@
       img(src="../assets/img/icons/save-filterset.svg")
       | Save Report
   md-chips(ng-model="o.chipsService.model" name="Active Filters" md-on-remove="o.chipsService.removeFromFilterService($chip)")
+    input(class="hidden" disabled="true")
     md-chip-template(custom-chip="")
       div {{$chip.name}}
 .filters(column='12')
