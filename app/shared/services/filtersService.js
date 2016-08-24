@@ -24,7 +24,7 @@ module.exports = /*  @ngInject */
       ],
       opportunitiesTypes: [
         {name: 'All Types'},
-        {name: 'Non-buy'},
+        {name: 'Non-Buy'},
         {name: 'At Risk'},
         {name: 'Low Velocity'},
         {name: 'New Placement (Quality)'},
@@ -47,6 +47,10 @@ module.exports = /*  @ngInject */
           name: 'On Premise',
           value: 'on'
         }],
+      retailer: [
+        {name: 'Store'},
+        {name: 'Chain'}
+      ],
       selected: {
         myAccountsOnly: true,
         accountBrands: '',
@@ -67,6 +71,7 @@ module.exports = /*  @ngInject */
         productTypePriority: '',
         productTypeAuthorized: '',
         stores: '',
+        retailer: '',
         storeSegmentationA: '',
         storeSegmentationB: '',
         storeSegmentationC: '',
