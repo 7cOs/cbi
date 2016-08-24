@@ -2,19 +2,41 @@
   background: $body-bg;
   padding: 0;
 
+  .go-arrow:after {
+    background-position: 0 center;
+    background-repeat: no-repeat;
+    background-image: url('../../assets/img/icons/go-arrow.svg');
+    background-size: 12px 12px;
+    content: '';
+    display: block;
+    position: absolute;
+    right: -21px;
+    bottom: 0;
+    height: 14px;
+    width: 14px;
+  }
+
+
   .greeting {
     padding-top: 0;
   }
 
   .announcement-widget {
+    margin-top: 60px;
     text-align: center;
 
+    .go-arrow:after {
+      right: 74px;
+      top: 3px;
+    }
+
     h2 {
-      font-weight: $regular;
-      font-size: 1.3em;
+      font-weight: $semibold;
+      font-size: 1.2em;
     }
 
     p {
+      position: relative;
       padding: 0.25em 1.5em;
     }
   }
@@ -43,9 +65,14 @@
         padding: 12px;
         background: $white;
 
+        .accent {
+          text-align: left;
+          color: $gray-1;
+        }
 
         h3 {
           margin: 5px 0;
+          font-size: 1.375em;
 
           &.bold {
             font-weight: $bold;
@@ -53,7 +80,7 @@
 
           span {
             font-size: 0.75em;
-            font-weight: $regular;
+            font-weight: $semibold;
           }
         }
 
@@ -69,7 +96,7 @@
 
         h3 {
           margin-top: 8px;
-          margin-bottom: 16px;
+          margin-bottom: 8px;
         }
       }
 
@@ -79,11 +106,11 @@
         h3 {
           float: left;
           margin-top: 8px;
-          margin-bottom: 16px;
+          margin-bottom: 8px;
         }
 
         h4 {
-          margin: 24px 24px 15px 0;
+          margin: 14px 24px 8px 0;
           float: right;
         }
       }
@@ -97,6 +124,22 @@
         color: $blue;
         display: block;
         text-align: right;
+        position: relative;
+        margin-right: 21px;
+      }
+
+      .go-arrow:after {
+        background-position: 0 center;
+        background-repeat: no-repeat;
+        background-image: url('../../assets/img/icons/go-arrow.svg');
+        background-size: 12px 12px;
+        content: '';
+        display: block;
+        position: absolute;
+        right: -21px;
+        bottom: 0;
+        height: 14px;
+        width: 14px;
       }
     }
 

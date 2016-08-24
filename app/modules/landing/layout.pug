@@ -10,55 +10,56 @@ section.landing-page
           h3 Depletions FYTD
           table(cellspacing="0" cellpadding="0")
             tr
-              td.accent CE
-              td &nbsp;
+              th.accent CE
+              th &nbsp;
             tr
               td
                 h3 {{l.performanceData.performance[0].measures[0].value | number}}
               td
-                h3.bold <span ng-if="l.isPositive(l.performanceData.performance[0].measures[0].percentChange | number:2)">+</span>{{l.performanceData.performance[0].measures[0].percentChange | number:2}}<span>%</span>
+                h3(ng-class="l.isPositive(l.performanceData.performance[0].measures[0].percentChange) ? 'positive' : 'negative'").bold <span ng-if="l.isPositive(l.performanceData.performance[0].measures[0].percentChange | number:2)">+</span>{{l.performanceData.performance[0].measures[0].percentChange | number:2}}<span>%</span>
             tr
               td
                 h3 &nbsp;
               td
                 h3 &nbsp;
         .distribution(column="8")
-          h3 Distribution L90
-          h4.accent % Trend Vs YA
+          div.clearfix
+            h3 Distribution L90
+            h4.accent VS  YA%
           table(cellspacing="0" cellpadding="0")
             tr
-              td.accent Simple
-              td &nbsp;
-              td &nbsp;
-              td.accent Effective
-              td &nbsp;
+              th.accent Simple
+              th &nbsp;
+              th &nbsp;
+              th.accent Effective
+              th &nbsp;
             tr
               td
                 h3 {{l.performanceData.performance[3].measures[0].value | number}}
               td
-                h3.bold <span ng-if="l.isPositive(l.performanceData.performance[3].measures[0].percentChange | number:2)">+</span>{{l.performanceData.performance[3].measures[0].percentChange | number:2}}<span>%</span>
+                h3(ng-class="l.isPositive(l.performanceData.performance[3].measures[0].percentChange) ? 'positive' : 'negative'").bold <span ng-if="l.isPositive(l.performanceData.performance[3].measures[0].percentChange | number:2)">+</span>{{l.performanceData.performance[3].measures[0].percentChange | number:2}}<span>%</span>
               td.accent.table-spacer on
               td
                 h3 {{l.performanceData.performance[4].measures[0].value | number}}
               td
-                h3.bold <span ng-if="l.isPositive(l.performanceData.performance[4].measures[0].percentChange | number:2)">+</span>{{l.performanceData.performance[4].measures[0].percentChange | number:2}}<span>%</span>
+                h3(ng-class="l.isPositive(l.performanceData.performance[4].measures[0].percentChange) ? 'positive' : 'negative'").bold <span ng-if="l.isPositive(l.performanceData.performance[4].measures[0].percentChange | number:2)">+</span>{{l.performanceData.performance[4].measures[0].percentChange | number:2}}<span>%</span>
             tr
               td
                 h3 {{l.performanceData.performance[1].measures[0].value | number}}
               td
-                h3.bold <span ng-if="l.isPositive(l.performanceData.performance[1].measures[0].percentChange | number:2)">+</span>{{l.performanceData.performance[1].measures[0].percentChange | number:2}}<span>%</span>
+                h3(ng-class="l.isPositive(l.performanceData.performance[1].measures[0].percentChange) ? 'positive' : 'negative'").bold <span ng-if="l.isPositive(l.performanceData.performance[1].measures[0].percentChange | number:2)">+</span>{{l.performanceData.performance[1].measures[0].percentChange | number:2}}<span>%</span>
               td.accent.table-spacer off
               td
                 h3 {{l.performanceData.performance[2].measures[0].value | number}}
               td
-                h3.bold <span ng-if="l.isPositive(l.performanceData.performance[2].measures[0].percentChange | number:2)">+</span>{{l.performanceData.performance[2].measures[0].percentChange | number:2}}<span>%</span>
-        p.accent.action-item #[a(href="#" ui-sref="scorecards") Show Details &#9654;]
+                h3(ng-class="l.isPositive(l.performanceData.performance[2].measures[0].percentChange) ? 'positive' : 'negative'").bold <span ng-if="l.isPositive(l.performanceData.performance[2].measures[2].percentChange)">+</span>{{l.performanceData.performance[2].measures[2].percentChange}}<span>%</span>
+        p.accent.action-item.go-arrow #[a(href="#" ui-sref="scorecards") Show Details]
       section(column="4 +1")
         .announcement-widget
           img(src="../assets/img/icons/announcement-help.svg" width="80" height="80")
-          h2 Welcome to Orion! Need Help?
-          p Check out our tutorial videos! These will tell you more about Orion and how to get started!
-          p.accent.action-item #[a(href="#" ui-sref="help") View all videos &amp; tutorials &#9654;]
+          h2 Welcome to Compass! Need Help?
+          p Check out our tutorial videos! Learn about what makes the online version of Compass so great and how to get started!"
+          p.accent.action-item.go-arrow #[a(href="#" ui-sref="help") View all videos &amp; tutorials]
     div(row)
       section.my-performance(column="7")
         target
@@ -68,7 +69,7 @@ section.landing-page
         .filter-container.first
           .dropdown-filter
             .dropdown
-              md-select(ng-model="l.filter.selected.savedFilters" aria-label="Saved Filter"  placeholder="Select Saved Report")
+              md-select(ng-model="l.filter.selected.savedFilters" aria-label="Saved Filter"  placeholder="Select saved report")
                 md-option(ng-repeat="savedFilter in l.savedFilters" value="{{savedFilter.id}}") {{savedFilter.name}}
         h3 New Search
         .filter-container
@@ -78,17 +79,17 @@ section.landing-page
           .filter-item
             .dropdown-filter
               .dropdown
-                label opportunity typeof
-                md-select(ng-model="l.filter.selected.opportunitiesTypes" aria-label="Opportunity Type" placeholder="All Types")
+                label opportunity type
+                md-select(ng-model="l.filter.selected.opportunitiesTypes" aria-label="Opportunity Type" placeholder="Show all types")
                   md-option(ng-repeat="type in l.filter.opportunitiesTypes" aria-label="type.name" value="{{type.name}}") {{type.name}}
           .filter-item
             label Brand / Master SKU
-            inline-search(type="product" placeholder="Brand or SKU/Package" chosen-result="l.filtersService.model.brandSearchText")
+            inline-search(type="product" placeholder="By brand or SKU" chosen-result="l.filtersService.model.brandSearchText")
           .filter-item
             label Account / Store
-            inline-search(type="store" placeholder="By account, Sub account" chosen-result="l.filtersService.model.accountSearchText")
+            inline-search(type="store" placeholder="By store or sub account" chosen-result="l.filtersService.model.accountSearchText")
           .filter-item
             label Distributor
-            inline-search(type="distributor" placeholder="Name" chosen-result="o.filtersService.model.distributorSearchText")
+            inline-search(type="distributor" placeholder="By name" chosen-result="o.filtersService.model.distributorSearchText")
 
           button.btn-action Find Opportunities
