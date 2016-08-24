@@ -26,6 +26,7 @@ function ExpandedTargetListController($state, $scope, $filter, $mdDialog, $q, us
     opportunities: []
   };
   vm.totalOpportunitesChevron = true;
+  vm.selected = [];
 
   // Expose public methods
   vm.archiveTargetList = archiveTargetList;
@@ -41,6 +42,8 @@ function ExpandedTargetListController($state, $scope, $filter, $mdDialog, $q, us
   vm.selector = selector;
   vm.sortBy = sortBy;
   vm.toggle = toggle;
+  vm.isChecked = isChecked;
+  vm.toggleAll = toggleAll;
 
   init();
 
@@ -168,6 +171,27 @@ function ExpandedTargetListController($state, $scope, $filter, $mdDialog, $q, us
     }
   }
 
+  // Check if all items are selected
+  function isChecked() {
+    // If the promise isn't resolved returns false
+    if (vm.userService.model.targetLists) {
+      return vm.selected.length === vm.userService.model.targetLists.owned.length;
+    } else {
+      return false;
+    }
+  };
+
+  // Select or deselect all list items
+  function toggleAll() {
+    // if (vm.selected.length === vm.opportunities.length) {
+    if (vm.selected.length === vm.userService.model.targetLists.owned.length) {
+      vm.selected = [];
+    } else if (vm.selected.length === 0 || vm.selected.length > 0) {
+      // vm.selected = vm.opportunities.slice(0);
+      vm.selected = vm.userService.model.targetLists.owned.slice(0);
+    }
+  };
+
   // ***************
   // PRIVATE METHODS
   // ***************
@@ -177,6 +201,7 @@ function ExpandedTargetListController($state, $scope, $filter, $mdDialog, $q, us
     userService.getTargetLists('1601', {'type': 'targetLists'}).then(function(data) {
       var ownedPromises = [],
           sharedPromises = [];
+
       userService.model.targetLists = data;
 
       // get collaborators for owned target lists
