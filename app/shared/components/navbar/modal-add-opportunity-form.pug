@@ -4,35 +4,40 @@ div.modal
   div.modal-form
     div.modal-input
       label Account
-      input(ng-model="nb.newOpportunity.properties.store.description")
+      input(ng-model="nb.newOpportunity.properties.store.description" placeholder="Type store name or location (city, ZIP or street)")
     div.modal-input.clearfix
       label Opportunity Type
       md-radio-group.horizontal-layout(ng-model="nb.newOpportunity.properties.distributionType.type")
         md-radio-button.md-primary(value="new") New Distribution
-        md-radio-button.md-primary(value="other") Other
-        input(ng-model="nb.newOpportunity.properties.distributionType.description" aria-label="Opportunity Description").short
-    div.modal-input
+        md-radio-button.md-primary(value="other" ng-click="nb.showMixedBrandRadio()") Other
+        input(ng-model="nb.newOpportunity.properties.distributionType.description" aria-label="Opportunity Description" placeholder="Input type").short
+    div.modal-input.clearfix
       label Recommended Brand or Package/ SKU
-      input(ng-model="nb.newOpportunity.properties.product.type")
+      div(layout="row")
+        md-radio-group(ng-if="nb.mixedBrand")
+          md-radio-button.md-primary(value="")
+        input(ng-model="nb.newOpportunity.properties.product.type" placeholder="Type brand or package name, or master SKU")
+        md-radio-group
+          md-radio-button.md-primary(ng-if="nb.mixedBrand" value="") Mixed Brands
     div.modal-input
       label Rationale
       .dropdown-filter
         .dropdown
-          md-select(ng-model="nb.newOpportunity.properties.rationale.description" aria-label="rationale dropdown" placeholder="Select an option")
+          md-select.left(ng-model="nb.newOpportunity.properties.rationale.description" aria-label="rationale dropdown" placeholder="Select Rationale")
             md-option(ng-repeat="rationale in nb.rationales" aria-label="{{rationale.type}}" value="") {{rationale.type}}
-            md-option(aria-label="Add New Rationale" ng-click="nb.showNewRationaleInput()" value="") + Add a new rationale
-          input(ng-if="nb.addNewRationale" ng-model="nb.newOpportunity.properties.rationale.description" aria-label="Input New Rationale")
+            md-option(aria-label="Add New Rationale" ng-click="nb.showNewRationaleInput()" value="") + Add Other Rationale
+          input(ng-if="nb.addNewRationale" ng-model="nb.newOpportunity.properties.rationale.description" aria-label="Input New Rationale" placeholder="Add Other Rationale")
     div.modal-input
       label Impact
       .dropdown-filter.half-width
         .dropdown.short
-          md-select(ng-model="nb.newOpportunity.properties.impact.enum" aria-label="impact dropdown" placeholder="Select an option")
+          md-select.left(ng-model="nb.newOpportunity.properties.impact.enum" aria-label="impact dropdown" placeholder="Select Impact")
             md-option(aria-label="High Impact" value="HIGH") High <md-icon md-svg-src="./assets/img/icons/impact-high.svg" ></md-icon>
             md-option(aria-label="Medium Impact form" value="MEDIUM") Medium <md-icon md-svg-src="./assets/img/icons/impact-medium.svg" ></md-icon>
             md-option(aria-label="Low Impact" value="LOW") Low  <md-icon md-svg-src="./assets/img/icons/impact-low.svg" ></md-icon>
     div(ng-click="nb.addToTargetListArray(nb.newOpportunity)").modal-input.icon-container
       img(src="../assets/img/icons/overview-overall-market.svg")
-      p.accent.left Add another opportunity for this store
+      p.accent.left Add another opportunity
     div.modal-input.clearfix
       label Add to target list (optional)
       .horizontal-layout
