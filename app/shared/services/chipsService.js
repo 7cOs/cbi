@@ -34,6 +34,7 @@ module.exports = /*  @ngInject */
         });
 
         filtersService.model.filtersApplied = false;
+        opportunitiesService.model.filterApplied = false;
 
         // Empty Input
         if (filter) filtersService.model[filter] = '';
@@ -60,6 +61,7 @@ module.exports = /*  @ngInject */
         });
 
         filtersService.model.filtersApplied = false;
+        opportunitiesService.model.filterApplied = false;
       }
     }
 
@@ -67,11 +69,9 @@ module.exports = /*  @ngInject */
       opportunitiesService.getOpportunities().then(function(data) {
         opportunitiesService.model.opportunities = data;
 
-        for (var i = 0; i < model.length; i++) {
-          model[i].applied = true;
+        for (var i = 0; i < service.model.length; i++) {
+          service.model[i].applied = true;
         }
-
-        console.log(data);
 
         filtersService.model.filtersApplied = true;
         opportunitiesService.model.filterApplied = true;
@@ -96,6 +96,7 @@ module.exports = /*  @ngInject */
       }
 
       filtersService.model.filtersApplied = false;
+      opportunitiesService.model.filterApplied = false;
     }
 
     /**
@@ -110,6 +111,7 @@ module.exports = /*  @ngInject */
       if (chip.type) filtersService.model.selected[chip.type] = false;
 
       filtersService.model.filtersApplied = false;
+      opportunitiesService.model.filterApplied = false;
     }
 
     /**

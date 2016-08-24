@@ -1,6 +1,6 @@
 'use strict';
 
-function ListController($scope, $state, opportunitiesService, storesService, $mdDialog) {
+function ListController($scope, $state, $q, opportunitiesService, targetListService, storesService, userService, $mdDialog) {
 
   // ****************
   // CONTROLLER SETUP
@@ -11,10 +11,9 @@ function ListController($scope, $state, opportunitiesService, storesService, $md
 
   // Services
   vm.opportunitiesService = opportunitiesService;
-  // vm.storesService = storesService;
+  vm.userService = userService;
 
   // Defaults
-  vm.pageName = $state.current.name;
   vm.depletionsChevron = false;
   vm.expandedOpportunities = [];
   vm.opportunitiesChevron = false;
@@ -28,14 +27,17 @@ function ListController($scope, $state, opportunitiesService, storesService, $md
 
   // Expose public methods
   vm.actionOverlay = actionOverlay;
+  vm.addToTargetList = addToTargetList;
+  vm.closeCorporateMemoModal = closeCorporateMemoModal;
   vm.displayBrandIcon = displayBrandIcon;
   vm.exists = exists;
   vm.isChecked = isChecked;
+  vm.pageName = pageName;
+  vm.removeOpportunity = removeOpportunity;
   vm.sortBy = sortBy;
   vm.toggle = toggle;
   vm.toggleAll = toggleAll;
   vm.showCorporateMemoModal = showCorporateMemoModal;
-  vm.closeCorporateMemoModal = closeCorporateMemoModal;
 
   // Mock Data for memo modal
   vm.limitedTime = {
@@ -56,28 +58,33 @@ function ListController($scope, $state, opportunitiesService, storesService, $md
   // PUBLIC METHODS
   // **************
 
-  // Show corporate memo modal
-
-  function showCorporateMemoModal(ev) {
-    var parentEl = angular.element(document.body);
-    $mdDialog.show({
-      clickOutsideToClose: true,
-      parent: parentEl,
-      scope: $scope.$new(),
-      targetEvent: ev,
-      templateUrl: './app/shared/components/list/modal-corporate-memo.html'
-    });
-  };
-
-  function closeCorporateMemoModal() {
-    $mdDialog.hide();
-  }
-
   // Overlay Controls
   function actionOverlay(opportunity, state) {
     if (state === 'fail') { opportunity.failState = true; } else { opportunity.failState = false; }
     opportunity.toggled = !opportunity.toggled;
-  };
+  }
+
+  function addToTargetList(listId) {
+    var opportunityIds = [];
+
+    // add opportunity ids into array to be posted
+    for (var i = 0; i < vm.selected.length; i++) {
+      for (var j = 0; j < vm.selected[i].groupedOpportunities.length; j++) {
+        opportunityIds.push(vm.selected[i].groupedOpportunities[j].id);
+      }
+    }
+
+    targetListService.addTargetListOpportunities(listId, opportunityIds).then(function(data) {
+      console.log('Done Adding these ids: ', opportunityIds);
+      // to do - update view and model
+    }, function(err) {
+      console.log('Error adding these ids: ', opportunityIds, ' Responded with error: ', err);
+    });
+  }
+
+  function closeCorporateMemoModal() {
+    $mdDialog.hide();
+  }
 
   function displayBrandIcon(haystack, needle) {
     return haystack.indexOf(needle) !== -1;
@@ -90,30 +97,45 @@ function ListController($scope, $state, opportunitiesService, storesService, $md
 
   // Check if all items are selected
   function isChecked() {
-    // return vm.selected.length === vm.opportunities.length;
-    return vm.selected.length === vm.opportunitiesService.model.opportunities.length;
-  };
+    return vm.selected.length === opportunitiesService.model.opportunities.length;
+  }
 
-  // Select or deselect all list items
-  function toggleAll() {
-    // if (vm.selected.length === vm.opportunities.length) {
-    if (vm.selected.length === vm.opportunitiesService.model.opportunities.length) {
-      vm.selected = [];
-    } else if (vm.selected.length === 0 || vm.selected.length > 0) {
-      // vm.selected = vm.opportunities.slice(0);
-      vm.selected = vm.opportunitiesService.model.opportunities.slice(0);
+  function pageName() {
+    if ($state.current.name === 'target-lists' || $state.current.name === 'target-list-detail') {
+      return false;
     }
-  };
 
-  // Select or deselect individual list item
-  function toggle(item, list) {
-    var idx = list.indexOf(item);
-    if (idx > -1) {
-      list.splice(idx, 1);
-    } else {
-      list.push(item);
+    return true;
+  }
+
+  function removeOpportunity() {
+    var opportunityIds = [];
+
+    // add opportunity ids into array to be posted
+    for (var i = 0; i < vm.selected.length; i++) {
+      for (var j = 0; j < vm.selected[i].groupedOpportunities.length; j++) {
+        opportunityIds.push(vm.selected[i].groupedOpportunities[j].id);
+      }
     }
-  };
+
+    targetListService.deleteTargetListOpportunities(targetListService.model.currentList.id, opportunityIds).then(function(data) {
+      console.log('Done deleting these ids: ', opportunityIds);
+      // to do - update view and model
+    }, function(err) {
+      console.log('Error deleting these ids: ', opportunityIds, ' Responded with error: ', err);
+    });
+  }
+
+  function showCorporateMemoModal(ev) {
+    var parentEl = angular.element(document.body);
+    $mdDialog.show({
+      clickOutsideToClose: true,
+      parent: parentEl,
+      scope: $scope.$new(),
+      targetEvent: ev,
+      templateUrl: './app/shared/components/list/modal-corporate-memo.html'
+    });
+  }
 
   // Sort by selected property
   function sortBy(property) {
@@ -126,11 +148,34 @@ function ListController($scope, $state, opportunitiesService, storesService, $md
     vm.segmentationChevron = (property === 'segmentation') ? !vm.segmentationChevron : vm.storeChevron;
   }
 
+  // Select or deselect individual list item
+  function toggle(item, list) {
+    var idx = list.indexOf(item);
+    if (idx > -1) {
+      list.splice(idx, 1);
+    } else {
+      list.push(item);
+    }
+  }
+
+  // Select or deselect all list items
+  function toggleAll() {
+    if (vm.selected.length === opportunitiesService.model.opportunities.length) {
+      vm.selected = [];
+    } else if (vm.selected.length === 0 || vm.selected.length > 0) {
+      vm.selected = opportunitiesService.model.opportunities.slice(0);
+    }
+  }
+
+  // **************
+  // PRIVATE METHODS
+  // **************
+
   function init() {
-    // Get opportunities and products data
-    /* opportunitiesService.getOpportunities().then(function(data) {
-      opportunitiesService.model.opportunities = data;
-    });*/
+    // get target lists
+    userService.getTargetLists(userService.model.currentUser.personID, {'type': 'targetLists'}).then(function(data) {
+      userService.model.targetLists = data;
+    });
   }
 
   // Set positive or negative label for trend values
