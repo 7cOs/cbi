@@ -1,6 +1,6 @@
 div.target-lists
   md-tabs(md-dynamic-height='' md-border-bottom)
-    md-tab(ng-repeat="type in target.types" label="{{type.name}}")
+    md-tab(ng-repeat="type in target.types" ng-if="target.tabFilter(type)" label="{{type.name}}")
       md-content.md-padding
         div(row).target-list-count-container.clearfix
           h5.accent Displaying Recent Opportunities ({{type.records.length}} of {{type.total}})
