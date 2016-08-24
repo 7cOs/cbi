@@ -89,7 +89,6 @@ module.exports = /*  @ngInject */
 
       userService.saveOpportunityFilter(filterPayload).then(function(data) {
         // push new filter to filter dropdown
-        console.log(data);
         userService.model.opportunityFilters.push(data);
 
         // close modal

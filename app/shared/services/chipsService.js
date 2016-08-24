@@ -34,7 +34,6 @@ module.exports = /*  @ngInject */
         });
 
         filtersService.model.filtersApplied = false;
-        // opportunitiesService.model.filterApplied = false;
 
         // Empty Input
         if (filter) filtersService.model[filter] = '';
@@ -61,7 +60,6 @@ module.exports = /*  @ngInject */
         });
 
         filtersService.model.filtersApplied = false;
-        // opportunitiesService.model.filterApplied = false;
       }
     }
 
@@ -96,7 +94,6 @@ module.exports = /*  @ngInject */
       }
 
       filtersService.model.filtersApplied = false;
-      // opportunitiesService.model.filterApplied = false;
     }
 
     /**
@@ -111,7 +108,6 @@ module.exports = /*  @ngInject */
       if (chip.type) filtersService.model.selected[chip.type] = false;
 
       filtersService.model.filtersApplied = false;
-      // opportunitiesService.model.filterApplied = false;
     }
 
     /**
