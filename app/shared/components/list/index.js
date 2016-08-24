@@ -102,15 +102,8 @@ function ListController($scope, $state, $q, opportunitiesService, targetListServ
 
   // arr of pages to be hidden on
   function pageName(arr) {
-    /* if ($state.current.name === 'target-lists' || $state.current.name === 'target-list-detail') {
-      return false;
-    }*/
     for (var i = 0; i < arr.length; i++) {
-      if ($state.current.name === arr[i]) {
-        console.log('returning');
-        return false;
-      }
-      console.log('no no');
+      if ($state.current.name === arr[i]) return false;
     }
 
     return true;
