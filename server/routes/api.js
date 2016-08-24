@@ -5,10 +5,21 @@ module.exports = function(app) {
   const request = require('request');
 
   app.route('/api/*')
+    .all(function apiAuth(req, res, next) {
+      if (util.isAuthenticated(req)) {
+        app.locals.apiAuth = {
+          signed: util.sign(req.url),
+          jwtToken: req.user ? req.user.jwt : app.get('config').api.jwt
+        };
+        next();
+      } else {
+        res.sendStatus(403);
+      }
+    })
     .get(function(req, res) {
-      var signed = util.sign(req.url);
-      var jwtToken = req.user ? req.user.jwt : app.get('config').api.jwt;
-      req.pipe(request(signed).auth(null, null, true, jwtToken))
+      const auth = app.locals.apiAuth;
+
+      req.pipe(request(auth.signed).auth(null, null, true, auth.jwtToken))
       .on('err', function(err) {
         console.log(err);
       })
@@ -16,9 +27,9 @@ module.exports = function(app) {
     })
 
     .delete(function(req, res) {
-      var signed = util.sign(req.url);
-      var jwtToken = req.user ? req.user.jwt : app.get('config').api.jwt;
-      request.del(signed, {body: req.body, json: true}).auth(null, null, true, jwtToken)
+      const auth = app.locals.apiAuth;
+
+      request.del(auth.signed, {body: req.body, json: true}).auth(null, null, true, auth.jwtToken)
       .on('err', function(err) {
         console.log(err);
       })
@@ -26,9 +37,9 @@ module.exports = function(app) {
     })
 
     .post(function(req, res) {
-      var signed = util.sign(req.url);
-      var jwtToken = req.user ? req.user.jwt : app.get('config').api.jwt;
-      request.post(signed, {body: req.body, json: true}).auth(null, null, true, jwtToken)
+      const auth = app.locals.apiAuth;
+
+      request.post(auth.signed, {body: req.body, json: true}).auth(null, null, true, auth.jwtToken)
       .on('err', function(err) {
         console.log(err);
       })
@@ -36,9 +47,9 @@ module.exports = function(app) {
     })
 
     .put(function(req, res) {
-      var signed = util.sign(req.url);
-      var jwtToken = req.user ? req.user.jwt : app.get('config').api.jwt;
-      request.put(signed, {body: req.body, json: true}).auth(null, null, true, jwtToken)
+      const auth = app.locals.apiAuth;
+
+      request.put(auth.signed, {body: req.body, json: true}).auth(null, null, true, auth.jwtToken)
       .on('err', function(err) {
         console.log(err);
       })
@@ -46,9 +57,9 @@ module.exports = function(app) {
     })
 
     .patch(function(req, res) {
-      var signed = util.sign(req.url);
-      var jwtToken = req.user ? req.user.jwt : app.get('config').api.jwt;
-      request.patch(signed, {body: req.body, json: true}).auth(null, null, true, jwtToken)
+      const auth = app.locals.apiAuth;
+
+      request.patch(auth.signed, {body: req.body, json: true}).auth(null, null, true, auth.jwtToken)
       .on('err', function(err) {
         console.log(err);
       })
