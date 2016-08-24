@@ -16,11 +16,11 @@ function NavbarController($rootScope, $scope, $mdPanel, $mdDialog, notifications
 
   // Services
   vm.notificationsService = notificationsService;
-  vm.notifications = {};
+  vm.notifications = [];
   vm.unreadNotifications = 0;
 
   userService
-    .getNotifications('1')
+    .getNotifications(userService.model.currentUser.personID)
     .then(function(result) {
       vm.notifications = result.notifications;
       setUnreadCount(result.totalUnseenNotifications);

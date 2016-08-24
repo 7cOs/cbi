@@ -55,6 +55,9 @@ div(container)
                   .info
                     label {{notification.dateUpdated | timeAgo: 'relative'}}
                     label.bold {{notification.creator.firstName}} {{notification.creator.lastName}}
+                div.notification-card.clearfix(ng-if="nb.unreadNotifications < 1")
+                  .details
+                    p {{nb.noNotifications}}
         md-menu(md-position-mode="target-right target" md-offset="2 54")
           a.nav-icon.settings(href="#" md-menu-origin ng-click="$mdOpenMenu($event)", aria-label="Settings")
           md-menu-content
