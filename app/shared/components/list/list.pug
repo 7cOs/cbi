@@ -10,7 +10,6 @@ h3(ng-if="list.pageName(['opportunities'])" ng-hide="list.opportunitiesService.m
   button.btn-action(ng-disabled="list.selected < 1" ng-if="list.pageName(['opportunities'])") Copy to Target List
   button.btn-action(ng-disabled="list.selected < 1" ng-if="" ng-click="list.removeOpportunity()") Delete
   button.btn-action(ng-disabled="list.selected < 1" ng-csv="list.selected" filename="opportunities.csv" csv-header="['Account', 'Sub Account', 'Tolinx Number', 'Store Name', 'Store Number', 'Address', 'City', 'State', 'Postal CD', 'Phone Number', 'Latitude', 'Longitude', 'Last Update', 'High Impact', 'Unsold Account', 'Premise Type', 'Trade Classification', 'Planning Group', '', 'Negative Value', 'Is Expanded']") Download
-  button.btn-action(ng-disabled="list.selected < 1") Send To
 
 button.icon.select-all(ng-click="list.toggleAll()")
   span(ng-if='list.isChecked()') Un-
