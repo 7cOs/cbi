@@ -518,7 +518,6 @@ module.exports = /*  @ngInject */
       var oPromise = $q.defer(),
           url = apiHelperService.request('/api/users/' + uId + '/sharedOpportunities/'),
           payload = [oId];
-      console.log(payload);
 
       $http.post(url, payload)
         .then(sendOppSuccess)

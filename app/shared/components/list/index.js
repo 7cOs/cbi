@@ -123,9 +123,7 @@ function ListController($scope, $state, $q, opportunitiesService, targetListServ
   }
 
   function shareOpportunity() {
-    console.log('sending ' + vm.currentOpportunityId + ' opportunity to ', vm.sharedCollaborators);
-    vm.sharedCollaborators = '1602';
-    userService.sendOpportunity(vm.sharedCollaborators, vm.currentOpportunityId).then(function(data) {
+    userService.sendOpportunity(vm.collaborator.id, vm.currentOpportunityId).then(function(data) {
       console.log('shared');
     });
   }
