@@ -2,7 +2,7 @@ describe('[Services.apiHelperService]', function() {
   var APIHelper;
 
   beforeEach(function() {
-    angular.mock.module('orion.common.services');
+    angular.mock.module('cf.common.services');
 
     inject(function(apiHelperService) {
       APIHelper = apiHelperService;

@@ -3,7 +3,7 @@ var angular = require('angular');
 window.nv = require('nvd3');
 
 require('textangular/dist/textAngular-sanitize.min');
-angular.module('orion', [
+angular.module('cf', [
   require('angular-ui-router'),
   require('angular-material'),
   require('angular-animate'),

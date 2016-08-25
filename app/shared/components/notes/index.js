@@ -234,7 +234,7 @@ function NotesController($scope, $state, $mdDialog, $timeout, notesService, Uplo
 }
 
 module.exports =
-  angular.module('orion.common.components.notes', [])
+  angular.module('cf.common.components.notes', [])
   .component('notes', {
     templateUrl: './app/shared/components/notes/notes.html',
     controller: NotesController,

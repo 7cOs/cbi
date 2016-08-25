@@ -14,7 +14,7 @@ module.exports = /*  @ngInject */
      * @name getUsers
      * @desc Get users from API via Inline Search
      * @returns [array]
-     * @memberOf orion.common.services
+     * @memberOf cf.common.services
      */
     function getUsers(searchTerm) {
       var searchPromise = $q.defer(),
@@ -41,7 +41,7 @@ module.exports = /*  @ngInject */
      * @name getProducts
      * @desc Get products from API via Inline Search
      * @returns [array]
-     * @memberOf orion.common.services
+     * @memberOf cf.common.services
      */
     function getProducts(searchTerm) {
       var searchPromise = $q.defer(),
@@ -68,7 +68,7 @@ module.exports = /*  @ngInject */
      * @name getStores
      * @desc Get stores from API via Inline Search
      * @returns [array]
-     * @memberOf orion.common.services
+     * @memberOf cf.common.services
      */
     function getStores(searchTerm) {
       var searchPromise = $q.defer(),
@@ -95,7 +95,7 @@ module.exports = /*  @ngInject */
      * @name getDistributors
      * @desc Get distributors from API via Inline Search
      * @returns [array]
-     * @memberOf orion.common.services
+     * @memberOf cf.common.services
      */
     function getDistributors(searchTerm) {
       var searchPromise = $q.defer(),

@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports =
-  angular.module('orion.modules.targetListDetail', [
+  angular.module('cf.modules.targetListDetail', [
     // load your sample submodules here, e.g.:
     // require('./bar').name
   ])

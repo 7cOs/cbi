@@ -192,7 +192,7 @@ function ListController($scope, $state, $q, opportunitiesService, targetListServ
 }
 
 module.exports =
-  angular.module('orion.common.components.list', [])
+  angular.module('cf.common.components.list', [])
   .component('list', {
     templateUrl: './app/shared/components/list/list.html',
     controller: ListController,

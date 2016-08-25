@@ -4,8 +4,8 @@ describe('Unit: opportunitiesController', function() {
   beforeEach(function() {
     angular.mock.module('ui.router');
     angular.mock.module('ngMaterial');
-    angular.mock.module('orion.common.services');
-    angular.mock.module('orion.modules.opportunities');
+    angular.mock.module('cf.common.services');
+    angular.mock.module('cf.modules.opportunities');
 
     inject(function($rootScope, $controller, $q, opportunitiesService, _userService_) {
       scope = $rootScope.$new();

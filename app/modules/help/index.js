@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports =
-  angular.module('orion.modules.help', [
+  angular.module('cf.modules.help', [
     // load your sample submodules here, e.g.:
     // require('./bar').name
   ])

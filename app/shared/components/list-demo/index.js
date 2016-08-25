@@ -121,7 +121,7 @@ function ListDemoController($rootScope, $scope, $mdToast) {
 }
 
 module.exports =
-  angular.module('orion.common.components.list-demo', [])
+  angular.module('cf.common.components.list-demo', [])
   .component('listdemo', {
     templateUrl: './app/shared/components/list-demo/list-demo.html',
     controller: ListDemoController,

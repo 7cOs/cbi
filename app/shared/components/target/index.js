@@ -88,7 +88,7 @@ function TargetListController($scope, $state, userService) {
 }
 
 module.exports =
-  angular.module('orion.common.components.target', [])
+  angular.module('cf.common.components.target', [])
   .component('target', {
     templateUrl: './app/shared/components/target/target.html',
     controller: TargetListController,

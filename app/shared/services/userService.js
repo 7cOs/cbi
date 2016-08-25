@@ -16,7 +16,7 @@ module.exports = /*  @ngInject */
           currentUser: {
             'firstName': 'JAMES',
             'lastName': 'O\'NEIL',
-            'iss': 'https://orion.cbrands.com',
+            'iss': 'https://cf.cbrands.com',
             'personID': 1601,
             'employeeID': '1002417',
             'exp': 1477168596733,
@@ -49,7 +49,7 @@ module.exports = /*  @ngInject */
      * @desc get data for all users or one user
      * @params {String} id - id of a user [Optional]
      * @returns {Array or Object} - Array of all users or object of one user
-     * @memberOf orion.common.services
+     * @memberOf cf.common.services
      */
     function getUsers(id) {
       var usersPromise = $q.defer(),
@@ -82,7 +82,7 @@ module.exports = /*  @ngInject */
      * @desc get hidden opportunities for a user
      * @params {String} id - id of a user [required]
      * @returns {Object} - opportunities object
-     * @memberOf orion.common.services
+     * @memberOf cf.common.services
      */
     function getHiddenOpportunities(id) {
       var hiddenOpportunitiesPromise = $q.defer(),
@@ -111,7 +111,7 @@ module.exports = /*  @ngInject */
      * @desc get hidden opportunities for a user
      * @params {String} id - id of a user [required]
      * @returns {Object} - status object
-     * @memberOf orion.common.services
+     * @memberOf cf.common.services
      */
     function hideOpportunity(id) {
       var hideOpportunityPromise = $q.defer(),
@@ -151,7 +151,7 @@ module.exports = /*  @ngInject */
      * @params {String} id - id of a user [required]
      * @params {String} opportunityId - id of the opportunity to be deleted
      * @returns {Object} - status object
-     * @memberOf orion.common.services
+     * @memberOf cf.common.services
      */
     function deleteHiddenOpportunity(id) {
       var deleteHiddenOpportunityPromise = $q.defer(),
@@ -190,7 +190,7 @@ module.exports = /*  @ngInject */
      * @desc get notifications for a user
      * @params {String} id - id of a user
      * @returns {Array} - Array of all notifications for a user
-     * @memberOf orion.common.services
+     * @memberOf cf.common.services
      */
     function getNotifications(id) {
       var notificationsPromise = $q.defer(),
@@ -219,7 +219,7 @@ module.exports = /*  @ngInject */
      * @desc get all opportunity filters for a user
      * @params {String} id - id of a user
      * @returns {Array} - Array of all opportunity filters for a user
-     * @memberOf orion.common.services
+     * @memberOf cf.common.services
      */
     function getOpportunityFilters(id) {
       var opportunityFilterPromise = $q.defer(),
@@ -248,7 +248,7 @@ module.exports = /*  @ngInject */
      * @desc save new filter for a user
      * @params {Object} filters - filters to be saved
      * @returns {Object} - Status Object
-     * @memberOf orion.common.services
+     * @memberOf cf.common.services
      */
     function saveOpportunityFilter(filters) {
       var opportunityFilterPromise = $q.defer(),
@@ -282,7 +282,7 @@ module.exports = /*  @ngInject */
      * @desc get performance summary for a user
      * @params {String} id - id of a user
      * @returns {Object} - performance summary
-     * @memberOf orion.common.services
+     * @memberOf cf.common.services
      */
     function getPerformanceSummary(id) {
       var performancePromise = $q.defer(),
@@ -311,7 +311,7 @@ module.exports = /*  @ngInject */
      * @desc get performance depletion for a user
      * @params {String} id - id of a user
      * @returns {Object} - user performance depletion
-     * @memberOf orion.common.services
+     * @memberOf cf.common.services
      */
     function getPerformanceDepletion(id) {
       var performancePromise = $q.defer(),
@@ -340,7 +340,7 @@ module.exports = /*  @ngInject */
      * @desc get performance distribution for a user
      * @params {String} id - id of a user
      * @returns {Object} - user performance distribution
-     * @memberOf orion.common.services
+     * @memberOf cf.common.services
      */
     function getPerformanceDistribution(id) {
       var performancePromise = $q.defer(),
@@ -369,7 +369,7 @@ module.exports = /*  @ngInject */
      * @desc get performance brand for a user
      * @params {String} id - id of a user
      * @returns {Object} - user performance brand
-     * @memberOf orion.common.services
+     * @memberOf cf.common.services
      */
     function getPerformanceBrand(id) {
       var performancePromise = $q.defer(),
@@ -398,7 +398,7 @@ module.exports = /*  @ngInject */
      * @desc get performance top bottom snapshot for a user
      * @params {String} id - id of a user
      * @returns {Object} - user performance top bottom snapshot
-     * @memberOf orion.common.services
+     * @memberOf cf.common.services
      */
     function getPerformanceTopBottom(id) {
       var performancePromise = $q.defer(),
@@ -428,7 +428,7 @@ module.exports = /*  @ngInject */
      * @params {String} id - id of a user
      * @params {Object} p - query params
      * @returns {Object} - user target lists
-     * @memberOf orion.common.services
+     * @memberOf cf.common.services
      */
     function getTargetLists(id, p) {
       var targetListPromise = $q.defer(),
@@ -478,7 +478,7 @@ module.exports = /*  @ngInject */
      * @desc add target list for a user
      * @params {Object} p - target list information payload
      * @returns {Object} - newly added target list
-     * @memberOf orion.common.services
+     * @memberOf cf.common.services
      */
     function addTargetList(p) {
       var targetListPromise = $q.defer(),

@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports =
-  angular.module('orion.modules.styleGuide', [
+  angular.module('cf.modules.styleGuide', [
   ])
   .config(function ($stateProvider) {
     $stateProvider
