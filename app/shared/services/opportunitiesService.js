@@ -24,7 +24,7 @@ module.exports = /*  @ngInject */
      * @desc Get opportunities from API
      * @params {String} opportunityID - ID of opportunity [optional]
      * @returns {Object}
-     * @memberOf orion.common.services
+     * @memberOf cf.common.services
      */
     function getOpportunities(opportunityID) {
       // reset opportunities
@@ -111,7 +111,7 @@ module.exports = /*  @ngInject */
      * @name createOpportunity
      * @desc create an opportunity
      * @returns {Object}
-     * @memberOf orion.common.services
+     * @memberOf cf.common.services
      */
     function createOpportunity() {
       var opportunitiesPromise = $q.defer(),
@@ -143,7 +143,7 @@ module.exports = /*  @ngInject */
      * @desc Get opportunity feedback from API
      * @params {String} opportunityID - ID of opportunity [required]
      * @returns {Object}
-     * @memberOf orion.common.services
+     * @memberOf cf.common.services
      */
     function getOpportunityFeedback(opportunityID) {
       var opportunitiesPromise = $q.defer(),
@@ -174,7 +174,7 @@ module.exports = /*  @ngInject */
      * @params {String} url - url to hit the api with [this could end up being static]
      * @params {String} opportunityID - ID of opportunity [required]
      * @returns {Object}
-     * @memberOf orion.common.services
+     * @memberOf cf.common.services
      */
     function createOpportunityFeedback(url, opportunityID, data) {
       var opportunitiesPromise = $q.defer();
@@ -206,7 +206,7 @@ module.exports = /*  @ngInject */
      * @params {String} opportunityID - ID of opportunity [required]
      * @params {String} feedbackID - ID of feedback [required]
      * @returns {Object}
-     * @memberOf orion.common.services
+     * @memberOf cf.common.services
      */
     function deleteOpportunityFeedback(url, opportunityID, feedbackID) {
       var opportunitiesPromise = $q.defer(),

@@ -61,7 +61,7 @@ function TypeaheadController($scope, $timeout, $q, $log) {
 }
 
 module.exports =
-  angular.module('orion.common.components.typeahead', [])
+  angular.module('cf.common.components.typeahead', [])
   .component('typeahead', {
     templateUrl: './app/shared/components/typeahead/typeahead.html',
     controller: TypeaheadController

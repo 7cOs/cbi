@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports =
-  angular.module('orion.modules.opportunities', [
+  angular.module('cf.modules.opportunities', [
   ])
   .config(function ($stateProvider) {
     $stateProvider

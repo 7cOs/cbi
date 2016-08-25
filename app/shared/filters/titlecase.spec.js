@@ -2,7 +2,7 @@ describe('Unit: titlecase Filter', function() {
   var filter;
 
   beforeEach(function() {
-    angular.mock.module('orion.common.filters');
+    angular.mock.module('cf.common.filters');
 
     inject(function(_titlecaseFilter_) {
       filter = _titlecaseFilter_;

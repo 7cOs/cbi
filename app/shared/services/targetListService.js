@@ -29,7 +29,7 @@ module.exports = /*  @ngInject */
      * @params {String} targetListId - id of target list
      * @params {Object} p - query parameters
      * @returns {Object} - target list
-     * @memberOf orion.common.services
+     * @memberOf cf.common.services
      */
     function getTargetList(targetListId, p) {
       var targetListPromise = $q.defer(),
@@ -57,7 +57,7 @@ module.exports = /*  @ngInject */
      * @desc update target list
      * @params {String} targetListId - id of target list
      * @returns {Object} - updated target list
-     * @memberOf orion.common.services
+     * @memberOf cf.common.services
      */
     function updateTargetList(targetListId, p) {
       var targetListPromise = $q.defer(),
@@ -89,7 +89,7 @@ module.exports = /*  @ngInject */
      * @desc delete target list
      * @params {String} targetListId - id of target list
      * @returns {Object} - status object
-     * @memberOf orion.common.services
+     * @memberOf cf.common.services
      */
     function deleteTargetList(targetListId) {
       var targetListPromise = $q.defer(),
@@ -116,7 +116,7 @@ module.exports = /*  @ngInject */
      * @desc get target list opportunities
      * @params {String} targetListId - id of target list
      * @returns {Object} - target list opportunities
-     * @memberOf orion.common.services
+     * @memberOf cf.common.services
      */
     function getTargetListOpportunities(targetListId) {
       var targetListPromise = $q.defer(),
@@ -198,7 +198,7 @@ module.exports = /*  @ngInject */
      * @params {String} targetListId - id of target list
      * @params {Object} opportunityIds - array of opportunity ids
      * @returns {Object} - status object
-     * @memberOf orion.common.services
+     * @memberOf cf.common.services
      */
     function addTargetListOpportunities(targetListId, opportunityIds) {
       var targetListPromise = $q.defer(),
@@ -226,7 +226,7 @@ module.exports = /*  @ngInject */
      * @desc delete target list opportunities
      * @params {String} targetListId - id of target list
      * @returns {Object} - status object
-     * @memberOf orion.common.services
+     * @memberOf cf.common.services
      */
     function deleteTargetListOpportunities(targetListId, opportunityIds) {
       var targetListPromise = $q.defer(),
@@ -257,7 +257,7 @@ module.exports = /*  @ngInject */
      * @params {String} targetListId - id of target list
      * @params {Number} int - int to be returned [Optional]
      * @returns {Object} - shares object
-     * @memberOf orion.common.services
+     * @memberOf cf.common.services
      */
     function getTargetListShares(targetListId) {
       var targetListPromise = $q.defer(),
@@ -284,7 +284,7 @@ module.exports = /*  @ngInject */
      * @params {String} targetListId - id of target list
      * @params {Object} p - payload information
      * @returns {Object} - target shares including new object
-     * @memberOf orion.common.services
+     * @memberOf cf.common.services
      */
     function addTargetListShares(targetListId, p) {
       var targetListPromise = $q.defer(),
@@ -318,7 +318,7 @@ module.exports = /*  @ngInject */
      * @params {String} targetListId - id of target list
      * @params {Object} p - collaborator object
      * @returns {Object} - collaborator response
-     * @memberOf orion.common.services
+     * @memberOf cf.common.services
      */
     function updateTargetListShares(targetListId, p) {
       var targetListPromise = $q.defer(),
@@ -352,7 +352,7 @@ module.exports = /*  @ngInject */
      * @params {String} targetListId - id of target list
      * @params {String} id - array of user ids of collaborators to be removed
      * @returns {Object} - status object
-     * @memberOf orion.common.services
+     * @memberOf cf.common.services
      */
     function deleteTargetListShares(targetListId, id) {
       var targetListPromise = $q.defer(),

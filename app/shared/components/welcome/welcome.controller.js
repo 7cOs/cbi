@@ -1,6 +1,6 @@
 'use strict';
 
 module.exports = function($scope) {
-  $scope.title = 'orion';
+  $scope.title = 'cf';
   $scope.message = 'Hello there.';
 };

@@ -67,7 +67,7 @@ module.exports =  function(app) {
       genid: function(req) {
         return uuid.v4(); // use UUIDs for session IDs
       },
-      name: 'orion.sid',
+      name: 'cf.sid',
       resave: config.session.resave,
       rolling: config.session.rolling,
       saveUninitialized: config.session.saveUninitialized,

@@ -90,7 +90,7 @@ module.exports = /*  @ngInject */
      * @params {String} q - query string
      * @params {Array} properties - array of strings that are the properties to be searched in the object
      * @returns {String}
-     * @memberOf orion.common.services
+     * @memberOf cf.common.services
      */
     function filterQuery(q, properties) {
       var lowercaseQuery = angular.lowercase(q);

@@ -11,7 +11,7 @@ module.exports = /*  @ngInject */
      * @name getDistributors
      * @desc Get distributors from API
      * @returns {Object}
-     * @memberOf orion.common.services
+     * @memberOf cf.common.services
      */
     function getDistributors() {
       var distributorsPromise = $q.defer(),

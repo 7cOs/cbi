@@ -1,4 +1,4 @@
-# Orion Portal
+# Compass Portal
 
 ## Prerequisites
 - [Install Node.js](https://docs.npmjs.com/getting-started/installing-node)
@@ -24,3 +24,4 @@ If you're using Atom, you should add these packages:
   - [ES Lint](https://atom.io/packages/linter-eslint): `apm install linter-eslint`
 
 #### Troubleshooting
+- Ask Ratul.

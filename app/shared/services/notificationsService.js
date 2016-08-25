@@ -17,7 +17,7 @@ module.exports = /*  @ngInject */
      * @desc mark a notification as read
      * @params {String} notificationId - id of notification for that user
      * @returns {Object} - Status object
-     * @memberOf orion.common.services
+     * @memberOf cf.common.services
      */
     function markNotification(notificationId, state) {
       var notificationsPromise = $q.defer(),

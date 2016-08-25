@@ -7,7 +7,7 @@ module.exports = /*  @ngInject */
      * @desc convert string to title case
      * @params {String} str - string to be converted
      * @returns {String} - capitalized string
-     * @memberOf orion.common.filters
+     * @memberOf cf.common.filters
      */
     return function(str) {
       if (str === '') return '';

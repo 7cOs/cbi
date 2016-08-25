@@ -158,7 +158,7 @@ function NavbarController($rootScope, $scope, $mdPanel, $mdDialog, notifications
 }
 
 module.exports =
-  angular.module('orion.common.components.navbar', [])
+  angular.module('cf.common.components.navbar', [])
   .component('navbar', {
     templateUrl: './app/shared/components/navbar/navbar.html',
     controller: NavbarController,

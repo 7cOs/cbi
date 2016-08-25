@@ -6,7 +6,7 @@ const path = require('path'),
 let config = {
 
   // NAME OF APPLICATION
-  name: 'orion',
+  name: 'cf',
 
   // CACHE
   cache: false,
@@ -14,7 +14,7 @@ let config = {
   // CORS
   cors: false,
 
-  namespace: 'orion',
+  namespace: 'cf',
 
   // PORT TO RUN ON
   port: 1980,
@@ -38,7 +38,7 @@ let config = {
 
   session: {
     use: true,
-    name: 'orion.sid',
+    name: 'cf.sid',
     httpOnly: false,
     secure: false,
     resave: true,

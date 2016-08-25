@@ -14,7 +14,7 @@ module.exports = /*  @ngInject */
      * @desc mark a notification as read
      * @params {String} filterId - id of filter
      * @returns {Object} - Status object
-     * @memberOf orion.common.services
+     * @memberOf cf.common.services
      */
     function deleteOpportunityFilter(filterId) {
       var opportunityFilterPromise = $q.defer(),

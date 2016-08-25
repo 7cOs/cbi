@@ -8,7 +8,7 @@ module.exports = /*  @ngInject */
      * @params {String} displayDate - date string to be converted
      * @params {String} type - type of date - possible options are 'relative', 'relativeTime' and 'daysOnly'
      * @returns {String} - returns how many days, months, or years it has been since the displayDate
-     * @memberOf orion.common.filters
+     * @memberOf cf.common.filters
      */
     return function(displayDate, type) {
       var currentDate = new Date(),

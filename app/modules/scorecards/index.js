@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports =
-  angular.module('orion.modules.scorecards', [
+  angular.module('cf.modules.scorecards', [
     // load your sample submodules here, e.g.:
     // require('./bar').name
   ])
