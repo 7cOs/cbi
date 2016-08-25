@@ -12,8 +12,6 @@ module.exports =  function(app) {
         compression   = require('compression'),
         enforce = require('express-sslify');
 
-  let sessionStore = '';
-
   // SAVE CONFIG AS GLOBAL APP VARIABLE
   app.set('config', config);
 
@@ -40,18 +38,9 @@ module.exports =  function(app) {
   // CONFIG BASED SETTINGS
   if (config.cors) app.use(require('cors')()); // ENABLE CORS
 
-  // ENABLE HTTPAUTH
-  if (config.auth.htpasswd.use) {
-    const auth = require('http-auth');
-    let basic = auth.basic({
-      realm: config.auth.htpasswd.realm,
-      file: config.auth.htpasswd.file
-    });
-    app.use(auth.connect(basic));
-  }
-
   // ENABLE REDIS
-  if (config.redis.use) {
+  let sessionStore = null;
+  if (process.env.REDIS_URL) {
     const redis         = require('redis'),
           redisClient   = redis.createClient(process.env.REDIS_URL),
           RedisStore    = require('connect-redis')(session);
@@ -61,37 +50,32 @@ module.exports =  function(app) {
     });
   }
 
-  if (config.session.use) {
-    // SESSION
-    app.use(session({
-      genid: function(req) {
-        return uuid.v4(); // use UUIDs for session IDs
-      },
-      name: 'cf.sid',
-      resave: config.session.resave,
-      rolling: config.session.rolling,
-      saveUninitialized: config.session.saveUninitialized,
-      secret: config.security.secret,
-      store: sessionStore
-    }));
-  }
+  // SESSION
+  app.use(session({
+    genid: function(req) {
+      return uuid.v4(); // use UUIDs for session IDs
+    },
+    name: 'cf.sid',
+    resave: config.session.resave,
+    rolling: config.session.rolling,
+    saveUninitialized: config.session.saveUninitialized,
+    secret: config.security.secret,
+    store: sessionStore
+  }));
 
   // PASSPORT
-  if (config.auth.passport.use) {
+  const passport = require('passport');
+  app.use(passport.initialize());
+  app.use(passport.session());
+  app.set('passport', passport);
 
-    const passport = require('passport');
-
-    passport.use(require('../../server/_config/' + config.auth.passport.strategy)(app));
-    app.use(passport.initialize());
-    app.use(session({
-      secret: '2l3kj4l2hcic991101CaTfAnCY2mfkj#L#JFeAsT$J4lk3rAtuLplSj2lk21j1jj',
-      resave: false,
-      saveUninitialized: true,
-      cookie: { secure: false }
-    }));
-    app.use(passport.session());
-    app.set('passport', passport);
-  }
+  passport.use(require('../../server/_config/passport/' + config.auth.strategy)(app));
+  passport.serializeUser(function(user, done) {
+    done(null, user);
+  });
+  passport.deserializeUser(function(user, done) {
+    done(null, user);
+  });
 
   // INCLUDE APP LEVEL CONFIG
   require('../../server/_config/_custom.js');

@@ -24,9 +24,6 @@ module.exports = function(app) {
         url = url + '&' + params;
       }
       return url;
-    },
-    isAuthenticated: function(req) {
-      return req.isAuthenticated() || process.env.NODE_ENV === 'local' || process.env.NODE_ENV === 'andromeda-dev';
     }
   };
 };

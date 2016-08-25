@@ -6,7 +6,7 @@ module.exports = function(app) {
 
   app.route('/api/*')
     .all(function apiAuth(req, res, next) {
-      if (util.isAuthenticated(req)) {
+      if (req.isAuthenticated()) {
         app.locals.apiAuth = {
           signed: util.sign(req.url),
           jwtToken: req.user ? req.user.jwt : app.get('config').api.jwt
