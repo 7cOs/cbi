@@ -26,6 +26,7 @@ function ListController($scope, $state, $q, opportunitiesService, targetListServ
   // sortProperty is set to default sort on page load
   vm.sortProperty = 'store.name';
   vm.storeChevron = true;
+  vm.showSubMenu = false;
 
   // Expose public methods
   vm.addToSharedCollaborators = addToSharedCollaborators;
@@ -43,6 +44,9 @@ function ListController($scope, $state, $q, opportunitiesService, targetListServ
   vm.toggle = toggle;
   vm.toggleAll = toggleAll;
   vm.showCorporateMemoModal = showCorporateMemoModal;
+  vm.showFlyout = showFlyout;
+  vm.submitFeedback = submitFeedback;
+  vm.cancelFeedback = cancelFeedback;
 
   // Mock Data for memo modal
   vm.limitedTime = {
@@ -65,6 +69,30 @@ function ListController($scope, $state, $q, opportunitiesService, targetListServ
 
   function addToSharedCollaborators() {
     vm.sharedCollaborators.push(vm.collaborator);
+  }
+
+  // Show Flyout Menu
+  function showFlyout(opportunity, action) {
+    vm.showSubMenu = true;
+    actionOverlay(opportunity, action);
+  }
+
+  function submitFeedback(opportunity) {
+    vm.showSubMenu = false;
+  }
+
+  function cancelFeedback(opportunity) {
+    vm.showSubMenu = false;
+  }
+
+  // Overlay Controls
+  function actionOverlay(method, opportunityId) {
+    console.log(opportunityId);
+    if (method === 'send') {
+      console.log('send');
+    } else if (method === 'dismiss') {
+      console.log('dismiss');
+    }
   }
 
   function addToTargetList(listId) {
