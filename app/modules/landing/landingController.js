@@ -80,8 +80,11 @@ module.exports = /*  @ngInject */
       } else if (hrs >= 17 && hrs <= 24) {
         greet = 'Good evening';
       }
+      var people = ['Nitin', 'Mike', 'Colleen', 'Brian', 'Chad'];
 
-      return greet;
+      var person = people[Math.floor(Math.random() * people.length)];
+
+      return greet + ', ' + person + '!';
     }
 
     /**
