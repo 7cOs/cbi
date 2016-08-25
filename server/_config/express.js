@@ -18,6 +18,7 @@ module.exports =  function(app) {
   app.set('config', config);
 
   // SET PUBLIC DIR
+  app.use(compression());
   app.use('/', express.static(config.dir.public));
 
   // SAVE SOME SETTING TO APP CONFIG FOR EASY ACCESS LATER
@@ -30,7 +31,6 @@ module.exports =  function(app) {
   app.set('upload', multer()); // ENABLE MULTI-PART FORMS
   app.use(bodyParser.json()); // ENABLE application/json
   app.use(bodyParser.urlencoded({ extended: false })); // ENABLE application/x-www-form-urlencoded
-  app.use(compression());
   app.locals.pretty = config.prettify;
   app.use(flash());
 
@@ -39,7 +39,6 @@ module.exports =  function(app) {
 
   // CONFIG BASED SETTINGS
   if (config.cors) app.use(require('cors')()); // ENABLE CORS
-  if (config.gzip) app.use(require('compression')()); // ENABLE GZIP
 
   // ENABLE HTTPAUTH
   if (config.auth.htpasswd.use) {
@@ -85,7 +84,7 @@ module.exports =  function(app) {
     passport.use(require('../../server/_config/' + config.auth.passport.strategy)(app));
     app.use(passport.initialize());
     app.use(session({
-      secret: 'keyboard cat',
+      secret: '2l3kj4l2hcic99110102mfkj#L#J$J4lk3j2lk21j1jj',
       resave: false,
       saveUninitialized: true,
       cookie: { secure: false }
