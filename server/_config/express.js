@@ -84,7 +84,7 @@ module.exports =  function(app) {
     passport.use(require('../../server/_config/' + config.auth.passport.strategy)(app));
     app.use(passport.initialize());
     app.use(session({
-      secret: '2l3kj4l2hcic99110102mfkj#L#J$J4lk3j2lk21j1jj',
+      secret: '2l3kj4l2hcic991101CaTfAnCY2mfkj#L#JFeAsT$J4lk3rAtuLplSj2lk21j1jj',
       resave: false,
       saveUninitialized: true,
       cookie: { secure: false }
