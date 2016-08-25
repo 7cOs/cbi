@@ -506,6 +506,7 @@ module.exports = /*  @ngInject */
     }
 
     /**
+     * /users/{userID}/sharedOpportunities
      * @name sendOpportunity
      * @desc send an opp to another user
      * @params {Object} uId - user to be sent opp
@@ -515,8 +516,9 @@ module.exports = /*  @ngInject */
      */
     function sendOpportunity(uId, oId) {
       var oPromise = $q.defer(),
-          url = apiHelperService.request('/api/users/' + uId + '/targetLists/'),
+          url = apiHelperService.request('/api/users/' + uId + '/sharedOpportunities/'),
           payload = [oId];
+      console.log(payload);
 
       $http.post(url, payload)
         .then(sendOppSuccess)

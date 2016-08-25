@@ -124,7 +124,10 @@ function ListController($scope, $state, $q, opportunitiesService, targetListServ
 
   function shareOpportunity() {
     console.log('sending ' + vm.currentOpportunityId + ' opportunity to ', vm.sharedCollaborators);
-    // what are we supposed to do with this send button? route? notification?
+    vm.sharedCollaborators = '1602';
+    userService.sendOpportunity(vm.sharedCollaborators, vm.currentOpportunityId).then(function(data) {
+      console.log('shared');
+    });
   }
 
   // arr of pages to be hidden on
