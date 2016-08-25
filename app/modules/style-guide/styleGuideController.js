@@ -34,6 +34,8 @@ module.exports = /*  @ngInject */
     vm.openNotes = openNotes;
     vm.noteOpenState = false;
     vm.openNotes = openNotes;
+    vm.showFlyout = showFlyout;
+    vm.showSubMenu = false;
 
     // **************
     // PUBLIC METHODS
@@ -49,6 +51,10 @@ module.exports = /*  @ngInject */
         templateUrl: './app/modules/style-guide/demo-modal.html'
       });
     };
+
+    function showFlyout() {
+      vm.showSubMenu = !vm.showSubMenu;
+    }
 
     function closeModal() {
       $mdDialog.hide();
