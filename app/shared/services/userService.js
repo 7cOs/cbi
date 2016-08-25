@@ -39,7 +39,8 @@ module.exports = /*  @ngInject */
           getPerformanceBrand: getPerformanceBrand,
           getPerformanceTopBottom: getPerformanceTopBottom,
           getTargetLists: getTargetLists,
-          addTargetList: addTargetList
+          addTargetList: addTargetList,
+          sendOpportunity: sendOpportunity
         };
 
     return service;
@@ -502,5 +503,33 @@ module.exports = /*  @ngInject */
       }
 
       return targetListPromise.promise;
+    }
+
+    /**
+     * @name sendOpportunity
+     * @desc send an opp to another user
+     * @params {Object} uId - user to be sent opp
+     * @params {Object} oId - opportunity id
+     * @returns {Object} - 201
+     * @memberOf orion.common.services
+     */
+    function sendOpportunity(uId, oId) {
+      var oPromise = $q.defer(),
+          url = apiHelperService.request('/api/users/' + uId + '/targetLists/'),
+          payload = [oId];
+
+      $http.post(url, payload)
+        .then(sendOppSuccess)
+        .catch(sendOppFail);
+
+      function sendOppSuccess(response) {
+        console.log('[userService.sendOpportunity] response: ', response);
+        oPromise.resolve(response.data);
+      }
+      function sendOppFail(error) {
+        oPromise.reject(error);
+      }
+
+      return oPromise.promise;
     }
   };

@@ -63,9 +63,9 @@ v-accordion.styled-list(multiple="" id="opportunities" control="list.accordion" 
             md-icon(md-svg-icon="../assets/img/icons/more.svg")
           md-menu-content(width="4")
             md-menu-item
-              p(ng-click="list.actionOverlay('send', opportunity.id)") Send To
+              p(ng-click="list.openShareModal(opportunity.id)") Send To
             md-menu-item
-              p(ng-click="list.actionOverlay('dismiss', opportunity.id)") Dismiss
+              p(ng-click="list.dismissOpportunity('dismiss', opportunity.id)") Dismiss
       v-pane-header.checkbox-sibling(column='12')
         div.cell-parent
           div.pad-cell(column='3') {{::opportunity.store.name | titlecase}} <span class="supporting-text">\#{{::opportunity.store.id | uppercase}}</span>
