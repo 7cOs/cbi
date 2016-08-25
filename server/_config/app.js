@@ -14,9 +14,6 @@ let config = {
   // CORS
   cors: false,
 
-  // GZIP
-  gzip: true,
-
   namespace: 'orion',
 
   // PORT TO RUN ON
