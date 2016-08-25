@@ -3,6 +3,8 @@
 const path = require('path'),
       rootPath = path.normalize(__dirname + '/../..');
 
+process.env.NODE_ENV = process.env.NODE_ENV || 'local'; // SET DEFAULT ENVIRONMENT
+
 let config = {
 
   // NAME OF APPLICATION
@@ -37,8 +39,8 @@ let config = {
   },
 
   session: {
-    use: true,
     name: 'cf.sid',
+    secret: '2l3kj4l2hcic991101CaTfAnCY2mfkj#L#JFeAsT$J4lk3rAtuLplSj2lk21j1jj',
     httpOnly: false,
     secure: false,
     resave: true,
@@ -51,15 +53,7 @@ let config = {
 };
 
 config.auth = {
-  htpasswd: {
-    use: process.env.NODE_ENV === 'andromeda-dev', // APACHE STYLE HTPASSWD AUTH
-    file: rootPath + '/server/_config/users.htpasswd',
-    realm: 'User'
-  },
-  passport: {
-    use: true,
-    strategy: 'passport/saml'
-  }
+  strategy: 'saml'
 };
 
 // DIRECTORY MAP
@@ -138,12 +132,6 @@ config.gulp = {
 };
 
 // PULL IN ENVIRONMENT SETTING & APPEND TO MAIN CONFIG
-if (typeof process.env.NODE_ENV !== 'undefined') {
-  config = require(rootPath + '/server/_config/environment/' + process.env.NODE_ENV + '.js')(config);
-}
-
-if (config.redis && typeof process.env.REDIS_URL === 'undefined') {
-  process.env.REDIS_URL = config.redis;
-}
+config = require(rootPath + '/server/_config/environment/' + process.env.NODE_ENV + '.js')(config);
 
 module.exports = config;

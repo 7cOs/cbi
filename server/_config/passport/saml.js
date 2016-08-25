@@ -1,20 +1,10 @@
 'use strict';
 
 module.exports = function(app) {
-
-  const passport      = require('passport'),
-        SamlStrategy = require('passport-saml').Strategy,
+  const SamlStrategy = require('passport-saml').Strategy,
         fs = require('graceful-fs'),
         util = require('../../_lib/util')(app),
         request = require('request');
-
-  passport.serializeUser(function(user, done) {
-    done(null, user);
-  });
-
-  passport.deserializeUser(function(user, done) {
-    done(null, user);
-  });
 
   return new SamlStrategy({
     protocol: 'https://',
