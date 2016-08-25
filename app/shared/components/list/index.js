@@ -14,26 +14,31 @@ function ListController($scope, $state, $q, opportunitiesService, targetListServ
   vm.userService = userService;
 
   // Defaults
+  vm.currentOpportunityId = '';
   vm.depletionsChevron = false;
   vm.expandedOpportunities = [];
   vm.opportunitiesChevron = false;
   vm.reverse = false;
   vm.segmentationChevron = false;
   vm.selected = [];
+  vm.sharedCollaborators = [];
   vm.stores = [];
   // sortProperty is set to default sort on page load
   vm.sortProperty = 'store.name';
   vm.storeChevron = true;
 
   // Expose public methods
-  vm.actionOverlay = actionOverlay;
+  vm.addToSharedCollaborators = addToSharedCollaborators;
   vm.addToTargetList = addToTargetList;
-  vm.closeCorporateMemoModal = closeCorporateMemoModal;
+  vm.closeModal = closeModal;
+  vm.dismissOpportunity = dismissOpportunity;
   vm.displayBrandIcon = displayBrandIcon;
   vm.exists = exists;
   vm.isChecked = isChecked;
+  vm.openShareModal = openShareModal;
   vm.pageName = pageName;
   vm.removeOpportunity = removeOpportunity;
+  vm.shareOpportunity = shareOpportunity;
   vm.sortBy = sortBy;
   vm.toggle = toggle;
   vm.toggleAll = toggleAll;
@@ -58,15 +63,8 @@ function ListController($scope, $state, $q, opportunitiesService, targetListServ
   // PUBLIC METHODS
   // **************
 
-  // Overlay Controls
-  function actionOverlay(method, opportunityId) {
-    console.log(opportunityId);
-    if (method === 'send') {
-      console.log('send');
-    } else if (method === 'dismiss') {
-      console.log('dismiss');
-    }
-    // opportunity.toggled = !opportunity.toggled;
+  function addToSharedCollaborators() {
+    vm.sharedCollaborators.push(vm.collaborator);
   }
 
   function addToTargetList(listId) {
@@ -87,8 +85,13 @@ function ListController($scope, $state, $q, opportunitiesService, targetListServ
     });
   }
 
-  function closeCorporateMemoModal() {
+  function closeModal() {
     $mdDialog.hide();
+  }
+
+  function dismissOpportunity(oId) {
+    console.log(oId);
+    // no route for this in API yet
   }
 
   function displayBrandIcon(haystack, needle) {
@@ -103,6 +106,26 @@ function ListController($scope, $state, $q, opportunitiesService, targetListServ
   // Check if all items are selected
   function isChecked() {
     return vm.selected.length === opportunitiesService.model.opportunities.length;
+  }
+
+  function openShareModal(oId, ev) {
+    vm.currentOpportunityId = oId;
+    vm.sharedCollaborators = [];
+
+    var parentEl = angular.element(document.body);
+    $mdDialog.show({
+      clickOutsideToClose: true,
+      parent: parentEl,
+      scope: $scope.$new(),
+      targetEvent: ev,
+      templateUrl: './app/shared/components/list/modal-share-opportunity.html'
+    });
+  }
+
+  function shareOpportunity() {
+    userService.sendOpportunity(vm.collaborator.id, vm.currentOpportunityId).then(function(data) {
+      console.log('shared');
+    });
   }
 
   // arr of pages to be hidden on
