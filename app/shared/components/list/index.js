@@ -59,9 +59,14 @@ function ListController($scope, $state, $q, opportunitiesService, targetListServ
   // **************
 
   // Overlay Controls
-  function actionOverlay(opportunity, state) {
-    if (state === 'fail') { opportunity.failState = true; } else { opportunity.failState = false; }
-    opportunity.toggled = !opportunity.toggled;
+  function actionOverlay(method, opportunityId) {
+    console.log(opportunityId);
+    if (method === 'send') {
+      console.log('send');
+    } else if (method === 'dismiss') {
+      console.log('dismiss');
+    }
+    // opportunity.toggled = !opportunity.toggled;
   }
 
   function addToTargetList(listId) {

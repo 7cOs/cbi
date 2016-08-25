@@ -29,7 +29,7 @@ notes
       img(src="../assets/img/icons/save-filterset.svg")
       | Save Filterset
   md-chips(ng-model="a.chipsService.model" name="Active Filters" md-on-remove="a.chipsService.removeFromFilterService($chip)")
-    input(disabled="true")
+    input(class="hidden" disabled="true")
     md-chip-template(custom-chip="")
       div {{$chip.name}}
 
