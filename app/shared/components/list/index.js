@@ -1,6 +1,6 @@
 'use strict';
 
-function ListController($scope, $state, $q, opportunitiesService, targetListService, storesService, userService, $mdDialog) {
+function ListController($scope, $state, $q, $mdDialog, opportunitiesService, targetListService, storesService, userService) {
 
   // ****************
   // CONTROLLER SETUP
@@ -66,6 +66,10 @@ function ListController($scope, $state, $q, opportunitiesService, targetListServ
   // **************
   // PUBLIC METHODS
   // **************
+  //
+  $scope.$on('$mdMenuClose', function() {
+    vm.showSubMenu = false;
+  });
 
   function addToSharedCollaborators() {
     vm.sharedCollaborators.push(vm.collaborator);
