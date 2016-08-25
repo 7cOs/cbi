@@ -13,7 +13,7 @@ module.exports = function(app) {
         };
         next();
       } else {
-        res.sendStatus(403);
+        res.status(403).end();
       }
     })
     .get(function(req, res) {
