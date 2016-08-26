@@ -12,9 +12,45 @@ to generate the SAML Assertion.  The plan is to port
 the generation code over.
 
 ************************************************/
-exports.getSAMLAssertion = function (app, req, res, encoding, empId) {
-  console.log('encoding is: ' + encoding);
-  console.log('empId is: ' + empId);
+module.exports = {
+  getSFDCSessionId: getSFDCSessionId,
+  getSAMLAssertion: getSAMLAssertion
+};
+
+function getSFDCSessionId(app, req, res) {
+  var utility = require('util');
+  try {
+    var sfdcConfig =  app.get('config').sfdcSec;
+  } catch (e) {
+    console.log('e is: ' + e);
+  }
+  console.log('in getSFDCSessionId with ' + sfdcConfig);
+  console.log('About to get an assertion for employeeID ' + req.user.employeeID);
+  var assertion = getSAMLAssertion(app, req, res, 'u64', req.user.employeeID);
+  console.log('Assertion is: ' + assertion);
+  try {
+    var options = {method: 'POST',
+      url: sfdcConfig.spAssertEndpoint,
+      qs:
+      {
+        'grant_type': 'assertion',
+        'assertion_type': 'urn%3Aoasis%3Anames%3Atc%3ASAML%3A2.0%3Aprofiles%3ASSO%3Abrowser',
+        'assertion': assertion
+      },
+      headers:
+      {
+        'Content-Type': 'application/x-www-form-urlencoded'
+      }
+    };
+  } catch (err) {
+    throw (err);
+  };
+
+  console.log(utility.inspect(options));
+  return (options);
+};
+
+function getSAMLAssertion (app, req, res, encoding, empId) {
   var request = require('request');
   var cheerio = require('cheerio');
   var he = require('he');
@@ -40,7 +76,7 @@ exports.getSAMLAssertion = function (app, req, res, encoding, empId) {
     headers:
      { 'postman-token': 'ba6870cc-5a9c-0746-c136-9c028b2ed51c',
        'cache-control': 'no-cache' } };
-  request(options, function (error, response, body) {
+  var assertion = request(options, function (error, response, body) {
     if (error) console.log('The error is: \n' + u.inspect(error));
     var $ = cheerio.load(body);
     var s = $('textarea').html();
@@ -62,7 +98,6 @@ exports.getSAMLAssertion = function (app, req, res, encoding, empId) {
       return ('Invalid encoding: ' + encoding);
     }
     if (retValue !== '') {
-      console.log('retValue is: ' + retValue);
       return (retValue);
     } else {
       return ({'isSuccess': false,
@@ -70,4 +105,5 @@ exports.getSAMLAssertion = function (app, req, res, encoding, empId) {
     }
 
   });
+  return assertion;
 };

@@ -4,6 +4,7 @@ module.exports = function(app) {
 
   var sfdc = require('../controllers/sfdc');
   var sfdcConfig =  app.get('config').sfdcSec;
+  var utility = require('util');
 
   app.post('/sfdc/createNote', function (req, res) {
     sfdc['createNote'](app, req, res);
@@ -36,13 +37,17 @@ module.exports = function(app) {
   app.get('/sfdcauth/getConfig', function(req, res) {
     if (sfdcConfig !== null) {
       res.type('json');
-      res.send(sfdcConfig);
+      res.send(utility.inspect(sfdcConfig, null, '\t'));
     } else {
       res.send('<div>The SFDC Configuration is not present. Please check your configuration file for this environment</div>');
     }
   });
 
   app.get('/sfdcauth/getSessionId', function(app, req, res) {
+    sfdc['getSessionId'](app, req, res);
+  });
+
+  app.get('/sfdcauth/getAssertion', function(app, req, res) {
     sfdc['getAssertion'](app, req, res);
   });
 };
