@@ -41,15 +41,21 @@ module.exports = /*  @ngInject */
           name: 'All',
           value: 'all'
         }, {
-          name: 'Off Premise',
+          name: 'Off-Premise',
           value: 'off'
         }, {
-          name: 'On Premise',
+          name: 'On-Premise',
           value: 'on'
         }],
       retailer: [
-        {name: 'Store'},
-        {name: 'Chain'}
+        {
+          name: 'Store',
+          hintText: 'Name, Address, TDLinx, or Store#'
+        },
+        {
+          name: 'Chain',
+          hintText: 'Account or Subaccount Name'
+        }
       ],
       selected: {
         myAccountsOnly: true,
