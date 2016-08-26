@@ -4,16 +4,7 @@ module.exports = /*  @ngInject */
   function userService($http, $q, apiHelperService, filtersService, targetListService) {
 
     var model = {
-          currentUser: {
-            'firstName': 'NITIN',
-            'lastName': 'O\'NEIL',
-            'iss': 'https://cf.cbrands.com',
-            'personID': 1601,
-            'employeeID': '1002417',
-            'exp': 1477168596733,
-            'iat': 1471984596737,
-            'email': 'jim.oneil@cbrands.com'
-          }
+          currentUser: {}
         },
         service = {
           model: model,
