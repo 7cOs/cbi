@@ -62,9 +62,9 @@
   div(row)
     div.predicted-impact-opps(column='3' ng-show="o.filtersService.model.expanded")
       label Predicted Impact
-      md-checkbox(ng-model="o.filtersService.model.selected.predictedImpactHigh" aria-label="Predicted Impact High" ng-click="o.chipsService.updateChip('predictedImpactHigh', 'Predicted Impact High')" name="high") <span>High</span> <md-icon md-svg-src="./assets/img/icons/impact-high-small.svg" ></md-icon>
-      md-checkbox(ng-model="o.filtersService.model.selected.predictedImpactMedium" aria-label="Predicted Impact Medium" ng-click="o.chipsService.updateChip('predictedImpactMedium', 'Predicted Impact Medium')") <span>Medium</span> <md-icon md-svg-src="./assets/img/icons/impact-medium-small.svg" ></md-icon>
-      md-checkbox(ng-model="o.filtersService.model.selected.predictedImpactLow" aria-label="Predicted Impact Low" ng-click="o.chipsService.updateChip('predictedImpactLow', 'Predicted Impact Low')") <span>Low</span> <md-icon md-svg-src="./assets/img/icons/impact-low-small.svg" ></md-icon>
+      md-checkbox(ng-model="o.filtersService.model.selected.predictedImpactHigh" aria-label="Predicted Impact High" ng-click="o.chipsService.updateChip('predictedImpactHigh', 'Predicted Impact High')" name="high") <span>High</span> <img class="impact-icon" src="./assets/img/icons/impact-high-small.svg")>
+      md-checkbox(ng-model="o.filtersService.model.selected.predictedImpactMedium" aria-label="Predicted Impact Medium" ng-click="o.chipsService.updateChip('predictedImpactMedium', 'Predicted Impact Medium')") <span>Medium</span> <img class="impact-icon" src="./assets/img/icons/impact-medium-small.svg")>
+      md-checkbox(ng-model="o.filtersService.model.selected.predictedImpactLow" aria-label="Predicted Impact Low" ng-click="o.chipsService.updateChip('predictedImpactLow', 'Predicted Impact Low')") <span>Low</span> <img class="impact-icon" src="./assets/img/icons/impact-low-small.svg">
     div(column='3' ng-show="o.filtersService.model.expanded")
       label Product Type
       md-checkbox(ng-model="o.filtersService.model.selected.productTypeFeatured" aria-label="Product Type Featured" ng-click="o.chipsService.updateChip('productTypeFeatured', 'Product Type Featured')") Featured
