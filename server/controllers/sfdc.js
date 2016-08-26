@@ -4,61 +4,48 @@ Salesforce integration
 J. Scott Cromie
 8/9/16
 ***********************************************************/
-<<<<<<< HEAD
-
 var sfdc = require('../_lib/sfdc.js');
 var saml = require('../_lib/ssoSAML.js');
-var utility = require('util');
+// var u = require('util');
 
 exports.getAssertion = function(app, req, res) {
-  res.send(saml.getSAMLAssertion('base64+URL', '7005936'));
-  return true;
-};
-
-exports.SSOlogin = function(app, req, res) {
-  var SSOLoginPromise = new Promise(function (resolve, reject) {
-    var authnRequest = sfdc.sendAuthnRequest(app, req, res);
-    console.log('Called sendAuthnRequest');
-
-    if (authnRequest !== null) {
-      console.log(utility.inspect(authnRequest, null, ''));
-      resolve(authnRequest);
+  var assertPromise = new Promise(function (resolve, reject) {
+    var assertion = saml.getSAMLAssertion(app, req, res, 'base64+URL', '7005936');
+    if (assertion) {
+      resolve(assertion);
     } else {
-      var err = 'There was an error trying to login: ' + err;
-      reject(err);
+      reject(Error('Could not generate an assertion for 7005936'));
     }
   });
-
-  SSOLoginPromise.then(function (result) {
-    console.log('Returned from sendAuthnRequest with ' + utility.inspect(result, null, ''));
-    console.log('Will get Auth Token and Session Id next');                                      //  getAuthToken();                                        //  getSessionId();
-  },
-  function (err) {
-=======
-
-var sfdc = require('../_lib/sfdc.js');
-
-exports.getAttachmentData = function(app, req, res) {
-
-  var promise = new Promise(function (resolve, reject) {
-    var blobData = sfdc.getAttachment(app, req, res);
-    if (blobData) {
-      resolve(blobData);
-    } else {
-      reject(Error('There are no attachments with this ParentId: ' + req.query.attachId));
-    }
-  });
-  promise.then(function (result) {
+  assertPromise.then(function (result) {
+    var strResponse = JSON.stringify(result, null, '\t');
+    res.send(strResponse);
+    // console.log('The assertion is: ' + strResponse);
   }, function (err) {
-    console.log('There was an error getting the attachment');
->>>>>>> bc84d25056e22d39bec37e7c5dad7791e7610e38
-    console.log(err);
+    console.err('There was an error: ' + err);
+  });
+  res.send('<div>Complete</div>');
+};
+
+exports.getSessionId = function(app, req, res) {
+  var sessionPromise = new Promise(function (resolve, reject) {
+    var sessionId = saml.getSFDCSessionId(app, req, res);
+    if (sessionId) {
+      resolve(sessionId);
+    } else {
+      reject(Error('Could not generate a session id for this user'));
+    }
+  });
+  sessionPromise.then(function (result) {
+    var strResponse = JSON.stringify(result, null, '\t');
+    console.log('The session Id is ' + strResponse);
+  }, function (err) {
+    console.err({'isSuccess': false,
+                 'errorMessage': err});
   });
 };
 
-<<<<<<< HEAD
 exports.getAttachmentData = function(app, req, res) {
-
   var promise = new Promise(function (resolve, reject) {
     var blobData = sfdc.getAttachment(app, req, res);
     if (blobData) {
@@ -74,12 +61,9 @@ exports.getAttachmentData = function(app, req, res) {
   });
 };
 
-=======
->>>>>>> bc84d25056e22d39bec37e7c5dad7791e7610e38
 exports.createNote = function(app, req, res) {
   var promise = new Promise(function (resolve, reject) {
-    var records = sfdc.fnCreateNote(app, req, res);
-
+    var records = sfdc.createNote(app, req, res);
     if (records) {
       resolve(records);
     } else {
@@ -100,7 +84,6 @@ exports.createNote = function(app, req, res) {
 exports.deleteNote = function(app, req, res) {
   var promise = new Promise(function (resolve, reject) {
     var response = sfdc.fnDeleteNote(app, req, res);
-
     if (response) {
       resolve(response);
     } else {
@@ -118,10 +101,9 @@ exports.deleteNote = function(app, req, res) {
   });
 };
 
-exports.deleteAttach = function (app, req, res) {
+exports.deleteAttach = function(app, req, res) {
   var promise = new Promise(function (resolve, reject) {
     var response = sfdc.fnDeleteAttach(app, req, res);
-
     if (response) {
       resolve(response);
     } else {
@@ -139,7 +121,7 @@ exports.deleteAttach = function (app, req, res) {
   });
 };
 
-exports.searchAccounts = function (app, req, res) {
+exports.searchAccounts = function(app, req, res) {
   var promise = new Promise(function (resolve, reject) {
     var records = sfdc.fnSearchAccounts(app, req, res);
     if (records) {
@@ -161,14 +143,6 @@ exports.searchAccounts = function (app, req, res) {
 };
 
 exports.accountNotes = function(app, req, res) {
-
-// if (req.session.assertion !== undefined) console.log(req.session.assertion);
-
-<<<<<<< HEAD
-//  console.log(req.session.assertion);
-=======
-  console.log(req.session.assertion);
->>>>>>> bc84d25056e22d39bec37e7c5dad7791e7610e38
   var promise = new Promise(function (resolve, reject) {
     var records = sfdc.queryAccountNotes(app, req, res);
     if (records) {
@@ -186,16 +160,6 @@ exports.accountNotes = function(app, req, res) {
     var strResponse = JSON.stringify(err, null, '');
     res.write(strResponse);
     res.end();
-//    console.log(err);
   });
-<<<<<<< HEAD
-=======
 };
 
-exports.authorizeSFDC = function(app, req, res) {
-  console.log('In controllers.authorizeSFDC');
-  for (var param in req.query) {
-    console.log(param.key + ' is ' + param.value);
-  };
->>>>>>> bc84d25056e22d39bec37e7c5dad7791e7610e38
-};
