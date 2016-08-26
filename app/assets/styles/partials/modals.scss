@@ -117,6 +117,7 @@ md-dialog {
       inline-search {
         display: inline-block;
         width: 60%;
+        position: relative;
 
         input[type='submit'] {
           width: 45px;
@@ -142,20 +143,36 @@ md-dialog {
       }
     }
 
-    div[layout=row] {
-      md-radio-group:first-child {
-        margin-top: 3ex;
+    md-radio-group[layout=row] {
+      md-radio-button {
+        margin-right: 0;
+      }
+
+      ._md-container {
+        top: 50%;
       }
 
       input {
-        width: 60%;
+        width: 20em;
       }
 
-      md-radio-group:last-child {
-        md-radio-button {
-          margin-left: 2em;
-          margin-top: 2ex;
+      md-radio-button:last-child {
+        margin-left: 1.5em;
+
+        ._md-label {
+          margin-top: 1.5ex;
         }
+      }
+    }
+
+    .error-message {
+      color: $red;
+      font-family: $rajdhani;
+
+      img {
+        width: 10px;
+        height: 10px;
+        padding-right: 0.2em;
       }
     }
 
