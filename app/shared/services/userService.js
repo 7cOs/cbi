@@ -4,7 +4,16 @@ module.exports = /*  @ngInject */
   function userService($http, $q, apiHelperService, filtersService, targetListService) {
 
     var model = {
-          currentUser: {}
+          currentUser: {
+            'firstName': 'NITIN',
+            'lastName': 'O\'NEIL',
+            'iss': 'https://cf.cbrands.com',
+            'personID': 1601,
+            'employeeID': '1002417',
+            'exp': 1477168596733,
+            'iat': 1471984596737,
+            'email': 'jim.oneil@cbrands.com'
+          }
         },
         service = {
           model: model,
@@ -208,11 +217,9 @@ module.exports = /*  @ngInject */
       var opportunityFilterPromise = $q.defer(),
           url = apiHelperService.request('/api/users/' + id + '/opportunityFilters/');
 
-      $http.get(url, {
-        headers: {}
-      })
-      .then(getOpportunityFiltersSuccess)
-      .catch(getOpportunityFiltersFail);
+      $http.get(url)
+        .then(getOpportunityFiltersSuccess)
+        .catch(getOpportunityFiltersFail);
 
       function getOpportunityFiltersSuccess(response) {
         console.log('[userService.getOpportunityFilters] response: ', response);
