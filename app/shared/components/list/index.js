@@ -1,6 +1,6 @@
 'use strict';
 
-function ListController($scope, $state, $q, $mdDialog, opportunitiesService, targetListService, storesService, userService) {
+function ListController($scope, $state, $q, $mdDialog, opportunitiesService, targetListService, storesService, userService, closedOpportunitiesService) {
 
   // ****************
   // CONTROLLER SETUP
@@ -32,7 +32,6 @@ function ListController($scope, $state, $q, $mdDialog, opportunitiesService, tar
   vm.addToSharedCollaborators = addToSharedCollaborators;
   vm.addToTargetList = addToTargetList;
   vm.closeModal = closeModal;
-  vm.dismissOpportunity = dismissOpportunity;
   vm.displayBrandIcon = displayBrandIcon;
   vm.exists = exists;
   vm.isChecked = isChecked;
@@ -75,29 +74,19 @@ function ListController($scope, $state, $q, $mdDialog, opportunitiesService, tar
     vm.sharedCollaborators.push(vm.collaborator);
   }
 
-  // Show Flyout Menu
-  function showFlyout(opportunity, action) {
-    vm.showSubMenu = true;
-    actionOverlay(opportunity, action);
-  }
-
-  function submitFeedback(opportunity) {
-    vm.showSubMenu = false;
-  }
-
   function cancelFeedback(opportunity) {
     vm.showSubMenu = false;
   }
 
   // Overlay Controls
-  function actionOverlay(method, opportunityId) {
+  /* function actionOverlay(method, opportunityId) {
     console.log(opportunityId);
     if (method === 'send') {
       console.log('send');
     } else if (method === 'dismiss') {
       console.log('dismiss');
     }
-  }
+  }*/
 
   function addToTargetList(listId) {
     var opportunityIds = [];
@@ -119,11 +108,6 @@ function ListController($scope, $state, $q, $mdDialog, opportunitiesService, tar
 
   function closeModal() {
     $mdDialog.hide();
-  }
-
-  function dismissOpportunity(oId) {
-    console.log(oId);
-    // no route for this in API yet
   }
 
   function displayBrandIcon(haystack, needle) {
@@ -158,6 +142,17 @@ function ListController($scope, $state, $q, $mdDialog, opportunitiesService, tar
     userService.sendOpportunity(vm.collaborator.id, vm.currentOpportunityId).then(function(data) {
       console.log('shared');
     });
+  }
+
+  // Show Flyout Menu
+  function showFlyout(opportunity) {
+    vm.showSubMenu = true;
+    // actionOverlay(opportunity, action);
+  }
+
+  function submitFeedback(opportunity) {
+    vm.showSubMenu = false;
+    dismissOpportunity(opportunity.id);
   }
 
   // arr of pages to be hidden on
@@ -232,6 +227,13 @@ function ListController($scope, $state, $q, $mdDialog, opportunitiesService, tar
   // **************
   // PRIVATE METHODS
   // **************
+
+  function dismissOpportunity(oId) {
+    console.log(oId);
+    closedOpportunitiesService.closeOpportunity(oId).then(function(data) {
+      console.log('Closed');
+    });
+  }
 
   function init() {
     // get target lists

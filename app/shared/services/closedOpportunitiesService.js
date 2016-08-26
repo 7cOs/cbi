@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports = /*  @ngInject */
-  function closedOpportunities($q, $http, apiHelperService) {
+  function closedOpportunitiesService($q, $http, apiHelperService) {
 
     var service = {
       closeOpportunity: closeOpportunity
