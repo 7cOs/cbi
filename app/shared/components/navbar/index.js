@@ -70,8 +70,6 @@ function NavbarController($rootScope, $scope, $mdPanel, $mdDialog, notifications
   vm.showNewRationaleInput = showNewRationaleInput;
   vm.addNewRationale = false;
   vm.addToTargetList = addToTargetList;
-  vm.showMixedBrandRadio = showMixedBrandRadio;
-  vm.mixedBrand = false;
 
   // **************
   // PUBLIC METHODS
@@ -98,6 +96,10 @@ function NavbarController($rootScope, $scope, $mdPanel, $mdDialog, notifications
 
   // Add Opportunity
   function addNewOpportunity(opportunityList) {
+    if (vm.addOpportunityForm.$invalid) {
+      return false;
+    }
+
     addToTargetListArray(vm.newOpportunity);
 
     vm.newOpportunityArray.forEach(function(opportunity) {
@@ -135,16 +137,13 @@ function NavbarController($rootScope, $scope, $mdPanel, $mdDialog, notifications
 
   // Close "Add Opportunity" modal
   function closeModal() {
+    vm.newOpportunity = {};
     $mdDialog.hide();
   }
 
   // Show inputs if a new item is needed
   function showNewRationaleInput()  {
     vm.addNewRationale = true;
-  }
-
-  function showMixedBrandRadio() {
-    vm.mixedBrand = true;
   }
 
   // ***************
