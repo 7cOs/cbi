@@ -15,4 +15,5 @@ angular.module('cf', [
   require('./shared').name,
   require('./modules').name
 ])
-.config(require('./config'));
+.config(require('./config'))
+.run(require('./run'));
