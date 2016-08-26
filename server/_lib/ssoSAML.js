@@ -12,14 +12,17 @@ to generate the SAML Assertion.  The plan is to port
 the generation code over.
 
 ************************************************/
-exports.getSAMLAssertion = function(encoding, empId) {
-
+exports.getSAMLAssertion = function (app, req, res, encoding, empId) {
+  console.log('encoding is: ' + encoding);
+  console.log('empId is: ' + empId);
   var request = require('request');
   var cheerio = require('cheerio');
   var he = require('he');
   var urlencode = require('urlencode');
   var b64url = require('base64url');
   var b, raw, b64, u64, b64u;
+  var u = require('util');
+  var retValue = '';
 
   var options = { method: 'POST',
     url: 'http://axiomsso.herokuapp.com/GenerateSamlResponse.action',
@@ -37,29 +40,34 @@ exports.getSAMLAssertion = function(encoding, empId) {
     headers:
      { 'postman-token': 'ba6870cc-5a9c-0746-c136-9c028b2ed51c',
        'cache-control': 'no-cache' } };
-
   request(options, function (error, response, body) {
-    if (error) throw new Error(error);
+    if (error) console.log('The error is: \n' + u.inspect(error));
     var $ = cheerio.load(body);
-
     var s = $('textarea').html();
+
     b = new Buffer(he.decode(s));
     raw = b;
     b64 = b.toString('base64');
     u64 = urlencode(b64);
     b64u = b64url(raw);
-    var enc = 'u64';
-
-    if (enc === 'raw') {
-      return raw;
-    } else if (enc === 'base64') {
-      return b64;
-    } else if (enc === 'base64+URL') {
-      return u64;
-    } else if (enc === 'base64Url') {
-      return b64u;
+    if (encoding === 'raw') {
+      retValue = raw;
+    } else if (encoding === 'base64') {
+      retValue = b64;
+    } else if (encoding === 'base64+URL') {
+      retValue = u64;
+    } else if (encoding === 'base64Url') {
+      retValue = b64u;
     } else  {
-      return ('Invalid encoding: ' + enc);
+      return ('Invalid encoding: ' + encoding);
     }
+    if (retValue !== '') {
+      console.log('retValue is: ' + retValue);
+      return (retValue);
+    } else {
+      return ({'isSuccess': false,
+              'errMessage': 'The SAML Assertion could not be generated.'});
+    }
+
   });
 };
