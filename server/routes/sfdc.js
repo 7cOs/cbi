@@ -41,20 +41,8 @@ module.exports = function(app) {
       res.send('<div>The SFDC Configuration is not present. Please check your configuration file for this environment</div>');
     }
   });
-// https://github.com/request/request#forms
-  app.get('/sfdcauth/login', function(req, res) {
-    sfdc['SSOlogin'](app, req, res);
-  });
 
-  app.get('/sfdcauth/logintest', function(req, res) {
-    sfdc['SSOLoginTest'](app, req, res);
-  });
-
-  app.get('/sfdcauth/nodetest', function(req, res) {
-    sfdc['SSONodeTest'](app, req, res);
-  });
-
-  app.get('/sfdcauth/getAssertion', function(app, req, res) {
+  app.get('/sfdcauth/getSessionId', function(app, req, res) {
     sfdc['getAssertion'](app, req, res);
   });
 };
