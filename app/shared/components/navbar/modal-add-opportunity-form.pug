@@ -29,12 +29,12 @@ div.modal
       .dropdown-filter
         .dropdown
           md-select.left(ng-model="nb.newOpportunity.properties.rationale.description" aria-label="rationale dropdown" placeholder="Select Rationale" name="rationaleDropdown" required)
-            md-option(ng-repeat="rationale in nb.rationales" aria-label="{{rationale.type}}" value="{{rationale.type}}") {{rationale.type}}
-            md-option(aria-label="Add New Rationale" ng-click="nb.showNewRationaleInput()" value="") + Add Other Rationale
+            md-option(ng-repeat="rationale in nb.rationales" aria-label="{{rationale.type}}" ng-click="nb.showNewRationaleInput(false)" value="{{rationale.type}}") {{rationale.type}}
+            md-option(aria-label="Add New Rationale" ng-click="nb.showNewRationaleInput(true)" value="other") + Add Other Rationale
         div(ng-show="nb.addOpportunityForm.$invalid && nb.addOpportunityForm.$submitted")
           p.error-message.accent(ng-show="nb.addOpportunityForm.rationaleDropdown.$error.required") <img src="./assets/img/icons/error.svg">Please select a Rationale, or add another one.
       label(ng-if="nb.addNewRationale") Add Other Rationale
-      input(ng-if="nb.addNewRationale" ng-model="nb.newOpportunity.properties.rationale.description" aria-label="Input New Rationale" placeholder="Add Other Rationale" name="addRationale" required)
+      input(ng-if="nb.addNewRationale" ng-model="nb.newOpportunity.properties.rationale.other" aria-label="Input New Rationale" placeholder="Add Other Rationale" name="addRationale" required)
       div(ng-show="nb.addOpportunityForm.$invalid && nb.addOpportunityForm.$submitted")
         p.error-message.accent(ng-show="nb.addOpportunityForm.addRationale.$error.required") <img src="./assets/img/icons/error.svg">Please enter a Rationale.
     div.modal-input
@@ -52,6 +52,9 @@ div.modal
       label Add to target list (optional)
       .horizontal-layout
         md-checkbox Add to target list
-        inline-search(placeholder="Select a Target List" results="nb.searchResults")
+        .dropdown-filter
+          .dropdown
+            md-select.left(ng-model="nb.newOpportunity.properties.targetList" aria-label="target list dropdown" placeholder="Select a target list" name="rationaleDropdown")
+              md-option(ng-repeat="targetList in nb.targetLists" aria-label="{{targetList.name}}" value="{{targetList.type}}") {{targetList.name}}
     button(type="submit" ng-click="nb.addNewOpportunity(nb.newOpportunity, nb.newOpportunityArray)").btn-action Add
     p.cancel.accent(ng-click="nb.closeModal()") X Cancel

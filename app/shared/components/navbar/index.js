@@ -46,9 +46,11 @@ function NavbarController($rootScope, $scope, $state, $mdPanel, $mdDialog, $mdMe
 
   vm.targetLists = [
     {
+      id: 'some crazy GUID',
       name: 'Irish Pubs'
     },
     {
+      id: 'some crazy GUID',
       name: 'Grocery Stores'
     }
   ];
@@ -157,8 +159,8 @@ function NavbarController($rootScope, $scope, $state, $mdPanel, $mdDialog, $mdMe
   }
 
   // Show inputs if a new item is needed
-  function showNewRationaleInput()  {
-    vm.addNewRationale = true;
+  function showNewRationaleInput(yes)  {
+    vm.addNewRationale = yes;
   }
 
   function hideBadge() {
