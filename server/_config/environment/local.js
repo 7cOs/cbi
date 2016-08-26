@@ -50,6 +50,10 @@ module.exports = function (config) {
 
   config.sfdcSec = {
 // sfdc parameters
+    sfUserName: 'scromie@deloitte.com.cbeerdev',
+    sfPassword: 'P455w0rd',
+    sfSecToken: 'bWwvZxEPdoCzd14l7YJC82bOZ',
+    sfLoginEndpoint: 'test.salesforce.com',
 
 // SP (Service Provider (i.e. Salesforce.com)) details
     spEntityId: 'https://dev-salesforce.cbrands.com',
@@ -65,8 +69,8 @@ module.exports = function (config) {
 // IDP (Identity Provider (i.e. OAM)) details
     idpSSOLoginURL: 'https://ssodev.cbrands.com/oamfed/idp/samlv20',
     idpSSOLogoutURL: 'https://ssodev.cbrands.com/oam/server/logout?end_url=http://www.cbrands.com',
-    idpCertificates: [fs.readFileSync('./server/_config/environment/sfdcsecurity/' + config.env + '/cert-file.crt').toString()],
-//    idpCertificates: [fs.readFileSync('./server/_config/passport/certs/development.crt').toString()],
+    idpCert: [fs.readFileSync('./server/_config/environment/sfdcsecurity/' + config.env + '/idp-public-cert.pem').toString()],
+    idpPrivateKey: [fs.readFileSync('./server/_config/environment/sfdcsecurity/' + config.env + '/idp-private-key.pem').toString()],
     idpForceAuthn: true,
     idpSignGetRequest: true,
     idpAllowUnencryptedAssertion: true,

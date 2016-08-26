@@ -1,9 +1,9 @@
 'use strict';
 
 module.exports = function(app) {
-  var sfdc = require('../controllers/sfdc');
 
-  var sfdcConfig = app.get('config').sfdcSec;
+  var sfdc = require('../controllers/sfdc');
+  var sfdcConfig =  app.get('config').sfdcSec;
 
   app.post('/sfdc/createNote', function (req, res) {
     sfdc['createNote'](app, req, res);
@@ -44,5 +44,17 @@ module.exports = function(app) {
 // https://github.com/request/request#forms
   app.get('/sfdcauth/login', function(req, res) {
     sfdc['SSOlogin'](app, req, res);
+  });
+
+  app.get('/sfdcauth/logintest', function(req, res) {
+    sfdc['SSOLoginTest'](app, req, res);
+  });
+
+  app.get('/sfdcauth/nodetest', function(req, res) {
+    sfdc['SSONodeTest'](app, req, res);
+  });
+
+  app.get('/sfdcauth/getAssertion', function(app, req, res) {
+    sfdc['getAssertion'](app, req, res);
   });
 };
