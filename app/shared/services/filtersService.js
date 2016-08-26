@@ -75,7 +75,7 @@ module.exports = /*  @ngInject */
         chains: '',
         currentFilter: '',
         depletionsTimeFilter: 'MTD July 1 - July 31',
-        distributionTimeFilter: 'L30 Days June 21 - July 21',
+        distributionTimeFilter: 'L90 Days April 22, 2016 - July 21, 2016',
         location: '',
         opportunitiesStatus: '',
         opportunitiesTypes: '',
