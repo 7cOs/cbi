@@ -8,7 +8,6 @@ module.exports = /*  @ngInject */
         },
         service = {
           model: model,
-          initCurrentUser: initCurrentUser,
           getUsers: getUsers,
           getHiddenOpportunities: getHiddenOpportunities,
           hideOpportunity: hideOpportunity,
@@ -27,34 +26,6 @@ module.exports = /*  @ngInject */
         };
 
     return service;
-
-    /**
-     * @name initCurrentUser
-     * @desc init the user
-     * @params none
-     * @returns {object} - User info
-     * @memberOf cf.common.services
-      */
-    function initCurrentUser() {
-      var usersPromise = $q.defer(),
-          url = apiHelperService.request('/auth/user/');
-
-      $http.get(url, {
-        headers: {}
-      })
-      .then(initCurrentUserSuccess)
-      .catch(initCurrentUserFail);
-
-      function initCurrentUserSuccess(response) {
-        console.log('[userService.getCurrentUser] response: ', response);
-        usersPromise.resolve(response.data);
-      }
-
-      function initCurrentUserFail(error) {
-        usersPromise.reject(error);
-      }
-      return usersPromise.promise;
-    }
 
     /**
      * @name getUsers
