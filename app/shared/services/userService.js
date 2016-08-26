@@ -208,11 +208,9 @@ module.exports = /*  @ngInject */
       var opportunityFilterPromise = $q.defer(),
           url = apiHelperService.request('/api/users/' + id + '/opportunityFilters/');
 
-      $http.get(url, {
-        headers: {}
-      })
-      .then(getOpportunityFiltersSuccess)
-      .catch(getOpportunityFiltersFail);
+      $http.get(url)
+        .then(getOpportunityFiltersSuccess)
+        .catch(getOpportunityFiltersFail);
 
       function getOpportunityFiltersSuccess(response) {
         console.log('[userService.getOpportunityFilters] response: ', response);

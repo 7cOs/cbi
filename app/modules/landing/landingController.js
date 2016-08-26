@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports = /*  @ngInject */
-  function landingController($rootScope, $state, filtersService, chipsService, myperformanceService, userService) {
+  function landingController($rootScope, $state, $filter, filtersService, chipsService, myperformanceService, userService) {
 
     // ****************
     // CONTROLLER SETUP
@@ -26,16 +26,7 @@ module.exports = /*  @ngInject */
     // Set values
     vm.greeting = getGreeting();
 
-    userService.getPerformanceSummary('1705').then(function(data) {
-      console.log(data);
-      vm.performanceData = data;
-    });
-
-    userService
-      .getOpportunityFilters(userService.model.currentUser.personID)
-      .then(function(res) {
-        vm.savedFilters = res;
-      });
+    init();
 
     // **************
     // PUBLIC METHODS
@@ -80,9 +71,10 @@ module.exports = /*  @ngInject */
       } else if (hrs >= 17 && hrs <= 24) {
         greet = 'Good evening';
       }
-      var people = ['Nitin', 'Mike', 'Colleen', 'Brian', 'Chad'];
+      /* var people = ['Nitin', 'Mike', 'Colleen', 'Brian', 'Chad'];
 
-      var person = people[Math.floor(Math.random() * people.length)];
+      var person = people[Math.floor(Math.random() * people.length)];*/
+      var person = $filter('titlecase')(userService.model.currentUser.firstName);
 
       return greet + ', ' + person + '!';
     }
@@ -103,5 +95,18 @@ module.exports = /*  @ngInject */
           if ((angular.lowercase('' + data[properties[i]])).indexOf(lowercaseQuery) === 0) return (angular.lowercase('' + data[properties[i]])).indexOf(lowercaseQuery) === 0;
         }
       };
+    }
+
+    function init() {
+      userService.getPerformanceSummary(userService.model.currentUser.personID).then(function(data) {
+        console.log(data);
+        vm.performanceData = data;
+      });
+
+      userService
+        .getOpportunityFilters(userService.model.currentUser.personID)
+        .then(function(res) {
+          vm.savedFilters = res;
+        });
     }
   };

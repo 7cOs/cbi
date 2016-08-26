@@ -13,7 +13,7 @@ div.target-lists
             p Try Searching for <span>Opportunities</span> and add them to your list
           ul
             a(sref="")
-              li(ng-repeat="list in type.records").target-list
+              li(ng-repeat="list in type.records" ng-click="target.navigateToTargetList(list)").target-list
                 div.target-list-row-one.clearfix
                   h3.target-list-name {{list.name}}
                   div.target-list-data
