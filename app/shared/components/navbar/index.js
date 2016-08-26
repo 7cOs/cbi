@@ -1,6 +1,6 @@
 'use strict';
 
-function NavbarController($rootScope, $scope, $mdPanel, $mdDialog, notificationsService, opportunitiesService, targetListService) {
+function NavbarController($rootScope, $scope, $mdPanel, $mdDialog, notificationsService, opportunitiesService, targetListService, userService) {
 
   // ****************
   // CONTROLLER SETUP
@@ -15,11 +15,18 @@ function NavbarController($rootScope, $scope, $mdPanel, $mdDialog, notifications
   $rootScope.isEdge = (/(?:\bEdge\/)(\d+)/g).test(userAgent);
 
   // Services
-  vm.notificationsService = notificationsService.tempData();
-  vm.notifications = vm.notificationsService.notifications;
+  vm.notificationsService = notificationsService;
+  vm.notifications = [];
+  vm.unreadNotifications = 0;
+
+  userService
+    .getNotifications(userService.model.currentUser.personID)
+    .then(function(result) {
+      vm.notifications = result.notifications;
+      setUnreadCount(result.totalUnseenNotifications);
+    });
 
   // Defaults
-  vm.unreadNotifications = getUnreadCount();
   vm.noNotifications = 'No unread notifications.';
   vm.myAccountsOnly = true;
 
@@ -70,9 +77,12 @@ function NavbarController($rootScope, $scope, $mdPanel, $mdDialog, notifications
 
   // Mark notification as read on click
   function markRead(notification) {
-    // Patch to mark read would go here
-    notification.read = true;
-    getUnreadCount();
+    vm.notificationsService
+      .markNotification(notification.id, vm.notificationsService.status.READ)
+      .then(function() {
+        notification.status = vm.notificationsService.status.READ;
+        setUnreadCount(vm.unreadNotifications - 1);
+      });
   }
 
   // "Add Opportunity" modal
@@ -86,6 +96,10 @@ function NavbarController($rootScope, $scope, $mdPanel, $mdDialog, notifications
 
   // Add Opportunity
   function addNewOpportunity(opportunityList) {
+    if (vm.addOpportunityForm.$invalid) {
+      return false;
+    }
+
     addToTargetListArray(vm.newOpportunity);
 
     vm.newOpportunityArray.forEach(function(opportunity) {
@@ -123,6 +137,7 @@ function NavbarController($rootScope, $scope, $mdPanel, $mdDialog, notifications
 
   // Close "Add Opportunity" modal
   function closeModal() {
+    vm.newOpportunity = {};
     $mdDialog.hide();
   }
 
@@ -136,21 +151,13 @@ function NavbarController($rootScope, $scope, $mdPanel, $mdDialog, notifications
   // ***************
 
   // Get unread notification count and set initial badge value
-  function getUnreadCount() {
-    var n = 0;
-
-    angular.forEach(vm.notifications, function(value) {
-      if (value.read === false) {
-        n++;
-      }
-    });
-    vm.unreadNotifications = n;
-    return n;
+  function setUnreadCount(value) {
+    vm.unreadNotifications = value;
   }
 }
 
 module.exports =
-  angular.module('orion.common.components.navbar', [])
+  angular.module('cf.common.components.navbar', [])
   .component('navbar', {
     templateUrl: './app/shared/components/navbar/navbar.html',
     controller: NavbarController,

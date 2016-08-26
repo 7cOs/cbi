@@ -17,7 +17,13 @@
     }
 
     md-icon {
-      color: $gray-9;
+      color: $gray-6;
+
+      svg {
+        height: 80%;
+        width: 80%;
+        padding-top: 10%;
+      }
     }
   }
 

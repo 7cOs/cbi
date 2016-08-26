@@ -6,26 +6,29 @@ md-tabs md-ink-bar {
   z-index: -1;
 }
 
-md-tabs .md-tab.md-active {
-  color: $gray-1;
-  font-weight: $semibold;
-  padding: 14px 22px;
+md-tabs-canvas {
+  margin-left: 3px;
+  overflow: visible;
 }
 
 .md-tab {
-  font-size: 1.25em;
+  font-size: 1.125em;
   line-height: 14px;
   padding: 14px 24px;
   text-transform: none;
+  font-weight: $regular;
+  color: $gray-4;
+}
+
+md-tabs .md-tab.md-active {
+  color: $gray-1;
+  font-weight: $regular;
+  padding: 14px 22px;
 }
 
 md-pagination-wrapper,
 md-tabs-canvas {
   height: 38px;
-}
-
-md-tabs-canvas {
-  overflow: visible;
 }
 
 md-tab-content md-content {

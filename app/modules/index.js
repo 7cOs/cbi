@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports =
-  angular.module('orion.modules', [
+  angular.module('cf.modules', [
     require('./landing').name,
     require('./accounts').name,
     require('./opportunities').name,

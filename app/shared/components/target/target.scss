@@ -4,11 +4,6 @@
     color: $blue;
   }
 
-  h5 {
-    text-align: right;
-    padding-right: 0;
-  }
-
   .md-tab.md-active {
     background-color: $body-bg;
     border: 1px solid $gray-9;
@@ -32,43 +27,96 @@
   }
 
   .target-list-count-container {
+    padding-left: 20px;
     background: $body-bg;
-
-    h3 {
-      padding: 0;
-    }
 
     h5 {
       margin: 0.5em 0;
+      float: left;
+    }
+
+    .completed {
+      margin-right: 12px;
     }
 
     .target-list-count {
-
       float: right;
       padding: 0 0 10px;
       background: $body-bg;
 
-      p {
-        display: inline;
-        font-size: 0.85em;
-        text-align: center;
+      h5 {
+        text-align: left;
+        padding-right: 9px;
+      }
+
+      .right {
+        padding-right: 6px;
       }
     }
   }
 
-  .target-list {
-    background: $white;
-    margin-bottom: 12px;
+  .target-list-container {
+    background: $body-bg;
 
-    ul {
+    .target-list {
+      background: $white;
+      height: 85px;
+      margin: 6px 0;
+      position: relative;
 
-      div {
-        margin-bottom: 12px;
+      h3 {
+        color: $gray-1;
+        margin-bottom: 1px;
+      }
+
+      .target-list-name {
+        color: $blue;
+        float: left;
+      }
+
+      .closed {
+        font-weight: $bold;
+        color: $yellow;
+        margin-right: 42px;
+      }
+
+      .target-list-data {
+        float: right;
+
+        h3 {
+          display: inline-block;
+        }
+      }
+
+      .collaborators:before {
+        background-position: 0 center;
+        background-repeat: no-repeat;
+        background-image: url('../../assets/img/icons/person.svg');
+        content: '';
+        display: inline-block;
+        position: relative;
+        right: 4px;
+        bottom: 0;
+        height: 9px;
+        width: 9px;
+      }
+
+      .target-list-row-one {
+        padding: 5px 20px 2px;
+      }
+
+      .target-list-row-two {
+        position: relative;
+        padding: 5px 20px 2px;
 
         p {
           display: inline;
-          margin-right: 24px;
+          margin-right: 20px;
         }
+      }
+
+      md-progress-linear {
+        bottom: -5px;
       }
     }
   }

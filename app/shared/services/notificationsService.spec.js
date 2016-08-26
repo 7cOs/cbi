@@ -2,7 +2,7 @@ describe('[Services.notificationsService]', function() {
   var apiHelperService, notificationsService, $q, $httpBackend;
 
   beforeEach(function() {
-    angular.mock.module('orion.common.services');
+    angular.mock.module('cf.common.services');
 
     inject(function(_apiHelperService_, _notificationsService_, _$q_, _$httpBackend_) {
       apiHelperService = _apiHelperService_;
@@ -12,6 +12,31 @@ describe('[Services.notificationsService]', function() {
     });
   });
 
+  beforeEach(inject(function($injector) {
+    $httpBackend = $injector.get('$httpBackend');
+    var statuses = notificationsService.status;
+
+    $httpBackend
+      .whenPATCH('/api/notifications')
+      .respond(function(method, url, data, headers, params) {
+        try {
+          return JSON
+            .parse(data)
+            .reduce(function(result, input) {
+              var status = input.status;
+
+              if (!(statuses[status] === status)) {
+                return [400];
+              } else {
+                return result;
+              }
+            }, [200]);
+        } catch (e) {
+          return [400];
+        }
+      });
+  }));
+
   it('should exist', function() {
     expect(apiHelperService).toBeDefined();
     expect(notificationsService).toBeDefined();
@@ -20,29 +45,41 @@ describe('[Services.notificationsService]', function() {
   });
 
   it('it\'s methods should exist', function() {
-    expect(notificationsService.markNotificationAsRead).toBeDefined();
+    expect(notificationsService.markNotification).toBeDefined();
   });
 
   it('should return a promise', function() {
-    var result = notificationsService.markNotificationAsRead('/notifications/1');
+    var result = notificationsService.markNotification('1');
     var promiseResult = $q.defer().promise;
 
     expect(result).toEqual(promiseResult);
   });
 
-  it('should send a request and return status 200', function() {
-    $httpBackend.expect('PATCH', '/api/notifications/1', {read: true}).respond(200, {
-      status: 'success'
-    });
+  it('should resolve when status set to a valid value', function(done) {
+    var id = 'b928d31a-7eb7-41ac-ba94-3303d78cd44a';
+    var status = notificationsService.status.READ;
 
-    var result;
-    notificationsService.markNotificationAsRead('1').then(function() {
-      result = true;
-    });
+    notificationsService
+      .markNotification(id, status)
+      .then(function(test) {
+        expect(test.status).toBe(200);
+        done();
+      });
 
     $httpBackend.flush();
-
-    expect(result).toBeTruthy();
   });
 
+  it('should reject when status set to an invalid value', function(done) {
+    var id = 'b928d31a-7eb7-41ac-ba94-3303d78cd44a';
+    var status = 'INVALID';
+
+    notificationsService
+      .markNotification(id, status)
+      .catch(function(test) {
+        expect(test.status).toBe(400);
+        done();
+      });
+
+    $httpBackend.flush();
+  });
 });

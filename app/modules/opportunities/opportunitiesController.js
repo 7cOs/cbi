@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports = /*  @ngInject */
-  function opportunitiesController($rootScope, $scope, $state, $mdDialog, opportunitiesService, chipsService, filtersService, userService) {
+  function opportunitiesController($rootScope, $scope, $state, $filter, $mdDialog, opportunitiesService, opportunityFiltersService, chipsService, filtersService, userService) {
 
     // ****************
     // CONTROLLER SETUP
@@ -9,6 +9,7 @@ module.exports = /*  @ngInject */
 
     // Initial variables
     var vm = this;
+    vm.currentFilter = {};
 
     // Set page title for head and nav
     $rootScope.pageTitle = $state.current.title;
@@ -20,12 +21,11 @@ module.exports = /*  @ngInject */
     vm.opportunitiesService = opportunitiesService;
 
     // Expose public methods
-    vm.accountQuerySearch = accountQuerySearch;
-    vm.addOpportunity = addOpportunity;
     vm.applyFilter = applyFilter;
-    vm.brandQuerySearch = brandQuerySearch;
+    vm.closeEditModal = closeEditModal;
     vm.closeModal = closeModal;
-    vm.distributorQuerySearch = distributorQuerySearch;
+    vm.deleteSavedFilter = deleteSavedFilter;
+    vm.editFilterModal = editFilterModal;
     vm.modalSaveOpportunityFilter = modalSaveOpportunityFilter;
     vm.saveFilter = saveFilter;
 
@@ -34,6 +34,43 @@ module.exports = /*  @ngInject */
     // **************
     // PUBLIC METHODS
     // **************
+
+    function applyFilter(filterStr) {
+      console.log('add filter');
+    }
+
+    function closeModal() {
+      $mdDialog.hide();
+    }
+
+    function closeEditModal() {
+      vm.currentFilter = {};
+      closeModal();
+    }
+
+    function editFilterModal(filterId, ev) {
+      vm.currentFilter = $filter('filter')(userService.model.opportunityFilters, {id: filterId});
+
+      var parentEl = angular.element(document.body);
+      $mdDialog.show({
+        clickOutsideToClose: true,
+        parent: parentEl,
+        scope: $scope.$new(),
+        targetEvent: ev,
+        templateUrl: './app/modules/opportunities/modal-edit-filter.html'
+      });
+    }
+
+    function deleteSavedFilter(filterId) {
+      opportunityFiltersService.deleteOpportunityFilter(filterId).then(function(data) {
+        // remove from user model and UI
+        angular.forEach(userService.model.opportunityFilters, function(item, key) {
+          if (item.id === filterId) userService.model.opportunityFilters.splice(userService.model.opportunityFilters.indexOf(item), 1);
+        });
+
+        closeModal();
+      });
+    }
 
     function modalSaveOpportunityFilter(ev) {
       var parentEl = angular.element(document.body);
@@ -46,45 +83,13 @@ module.exports = /*  @ngInject */
       });
     }
 
-    function accountQuerySearch(searchText) {
-      // update to accounts
-      var results = filtersService.model.stores.filter(filterQuery(searchText, ['account', 'sub_account', 'store_name']));
-      return results;
-    }
-
-    function addOpportunity() {
-      opportunitiesService.createOpportunity().then(function(response) {
-        console.log('Thanks, Ratul.', response);
-      }, function(reason) {
-        console.log('Ratul. Plz.', reason);
-      });
-    }
-
-    function applyFilter(filterStr) {
-      console.log('add filter');
-    }
-
-    function brandQuerySearch(searchText) {
-      var results = filtersService.model.brands.filter(filterQuery(searchText, ['name', 'brand', 'quantity']));
-      return results;
-    }
-
-    function closeModal() {
-      $mdDialog.hide();
-    }
-
-    function distributorQuerySearch(searchText) {
-      var results = filtersService.model.distributors.filter(filterQuery(searchText, ['name', 'address', 'id']));
-      return results;
-    }
-
     function saveFilter() {
       // get applied filters
       var filterPayload = filtersService.getAppliedFilters('opportunities');
 
       userService.saveOpportunityFilter(filterPayload).then(function(data) {
         // push new filter to filter dropdown
-        userService.model.opportunityFilters.push(data.dataContent);
+        userService.model.opportunityFilters.push(data);
 
         // close modal
         closeModal();
@@ -95,24 +100,6 @@ module.exports = /*  @ngInject */
     // PRIVATE METHODS
     // ***************
 
-    /**
-     * @name filterQuery
-     * @desc filter data using query from md-autocomplete
-     * @params {String} q - query string
-     * @params {Array} properties - array of strings that are the properties to be searched in the object
-     * @returns {String}
-     * @memberOf orion.common.services
-     */
-    function filterQuery(q, properties) {
-      var lowercaseQuery = angular.lowercase(q);
-      return function filterFn(data) {
-
-        for (var i = 0; i < properties.length; i++) {
-          if ((angular.lowercase('' + data[properties[i]])).indexOf(lowercaseQuery) === 0) return (angular.lowercase('' + data[properties[i]])).indexOf(lowercaseQuery) === 0;
-        }
-      };
-    }
-
     // Add chip for inline search value watchers
     function addInlineSearchChip(val) {
       if (typeof val === 'string' && val !== '') {
@@ -121,27 +108,17 @@ module.exports = /*  @ngInject */
     }
 
     // Watch for inline search value changes
-    $scope.$watch('o.filtersService.model.brandSearchText', function (val) { addInlineSearchChip(val); });
-    $scope.$watch('o.filtersService.model.accountSearchText', function (val) { addInlineSearchChip(val); });
-    $scope.$watch('o.filtersService.model.distributorSearchText', function (val) { addInlineSearchChip(val); });
+    $scope.$watch('o.filtersService.model.brand', function (val) { addInlineSearchChip(val); });
+    $scope.$watch('o.filtersService.model.store', function (val) { addInlineSearchChip(val); });
+    $scope.$watch('o.filtersService.model.chain', function (val) { addInlineSearchChip(val); });
 
     function init() {
       // get saved filters -- this should be passed from user data when its ready
-      userService.getOpportunityFilters(userService.model.currentUser.id).then(function(data) {
+      userService.getOpportunityFilters(userService.model.currentUser.personID).then(function(data) {
         userService.model.opportunityFilters = data;
       });
 
       // reset all chips and filters on page init
       chipsService.model = chipsService.resetChipsFilters(chipsService.model);
-
     }
-
-    /* function parseFilterObj() {
-      var prettyPayload = {
-        key: 'value'
-      };
-      // iterate through chipsService.model and get it formatted correctly
-      // probably should move to chipsService
-      return prettyPayload;
-    }*/
   };

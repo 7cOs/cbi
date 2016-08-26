@@ -9,14 +9,14 @@ module.exports =  function(app) {
         multer        = require('multer'), // ENABLE MULTI-PART FORM UPLOADS
         session       = require('express-session'), // ENABLE SESSIONS
         uuid          = require('uuid'), // CONTENFUL API CONFIG
-        compression   = require('compression');
-
-  let sessionStore = '';
+        compression   = require('compression'),
+        enforce = require('express-sslify');
 
   // SAVE CONFIG AS GLOBAL APP VARIABLE
   app.set('config', config);
 
   // SET PUBLIC DIR
+  app.use(compression());
   app.use('/', express.static(config.dir.public));
 
   // SAVE SOME SETTING TO APP CONFIG FOR EASY ACCESS LATER
@@ -29,26 +29,18 @@ module.exports =  function(app) {
   app.set('upload', multer()); // ENABLE MULTI-PART FORMS
   app.use(bodyParser.json()); // ENABLE application/json
   app.use(bodyParser.urlencoded({ extended: false })); // ENABLE application/x-www-form-urlencoded
-  app.use(compression());
   app.locals.pretty = config.prettify;
   app.use(flash());
 
+  //  Forces SSL for production
+  if (process.env.NODE_ENV !== 'local') app.use(enforce.HTTPS({ trustProtoHeader: true }));
+
   // CONFIG BASED SETTINGS
   if (config.cors) app.use(require('cors')()); // ENABLE CORS
-  if (config.gzip) app.use(require('compression')()); // ENABLE GZIP
-
-  // ENABLE HTTPAUTH
-  if (config.auth.htpasswd.use) {
-    const auth = require('http-auth');
-    let basic = auth.basic({
-      realm: config.auth.htpasswd.realm,
-      file: config.auth.htpasswd.file
-    });
-    app.use(auth.connect(basic));
-  }
 
   // ENABLE REDIS
-  if (config.redis.use) {
+  let sessionStore = null;
+  if (process.env.REDIS_URL) {
     const redis         = require('redis'),
           redisClient   = redis.createClient(process.env.REDIS_URL),
           RedisStore    = require('connect-redis')(session);
@@ -58,37 +50,32 @@ module.exports =  function(app) {
     });
   }
 
-  if (config.session.use) {
-    // SESSION
-    app.use(session({
-      genid: function(req) {
-        return uuid.v4(); // use UUIDs for session IDs
-      },
-      name: 'orion.sid',
-      resave: config.session.resave,
-      rolling: config.session.rolling,
-      saveUninitialized: config.session.saveUninitialized,
-      secret: config.security.secret,
-      store: sessionStore
-    }));
-  }
+  // SESSION
+  app.use(session({
+    genid: function(req) {
+      return uuid.v4(); // use UUIDs for session IDs
+    },
+    name: 'cf.sid',
+    resave: config.session.resave,
+    rolling: config.session.rolling,
+    saveUninitialized: config.session.saveUninitialized,
+    secret: config.security.secret,
+    store: sessionStore
+  }));
 
   // PASSPORT
-  if (config.auth.passport.use) {
+  const passport = require('passport');
+  app.use(passport.initialize());
+  app.use(passport.session());
+  app.set('passport', passport);
 
-    const passport = require('passport');
-
-    passport.use(require('../../server/_config/' + config.auth.passport.strategy)(app));
-    app.use(passport.initialize());
-    app.use(session({
-      secret: 'keyboard cat',
-      resave: false,
-      saveUninitialized: true,
-      cookie: { secure: false }
-    }));
-    app.use(passport.session());
-    app.set('passport', passport);
-  }
+  passport.use(require('../../server/_config/passport/' + config.auth.strategy)(app));
+  passport.serializeUser(function(user, done) {
+    done(null, user);
+  });
+  passport.deserializeUser(function(user, done) {
+    done(null, user);
+  });
 
   // INCLUDE APP LEVEL CONFIG
   require('../../server/_config/_custom.js');

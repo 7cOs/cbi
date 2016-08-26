@@ -1,11 +1,15 @@
-h3(ng-if="list.pageName === 'accounts'") Top opportunities <a class="accent" ui-sref="opportunities">See all opportunities</a>
-h3(ng-if="list.pageName === 'opportunities'" ng-hide="list.opportunitiesService.model.opportunities.length === 0") <strong>{{list.opportunitiesService.model.opportunitiesSum}} opportunities</strong> across {{list.opportunitiesService.model.opportunities.length}} stores
+h3(ng-if="list.pageName(['accounts'])") Top opportunities <a class="accent" ui-sref="opportunities">See all opportunities</a>
+h3(ng-if="list.pageName(['opportunities'])" ng-hide="list.opportunitiesService.model.opportunities.length === 0") <strong>{{list.opportunitiesService.model.opportunitiesSum}} opportunities</strong> across {{list.opportunitiesService.model.opportunities.length}} stores
 
 .action-buttons
-  button.btn-action(ng-disabled="list.selected < 1" ng-if="list.pageName !== 'target-lists'") Add to Target List
-  button.btn-action(ng-disabled="list.selected < 1" ng-if="list.pageName === 'target-lists'") Copy to Target List
+  md-menu(md-offset="0 45" ng-if="list.pageName(['target-lists', 'target-list-detail'])")
+    button.btn-action(ng-disabled="list.selected < 1" aria-label="Add to Target List" ng-click="$mdOpenMenu($event)") Add to Target List
+    md-menu-content.target-list-menu
+      md-menu-item(ng-repeat="targetList in list.userService.model.targetLists.owned" ng-click="list.addToTargetList(targetList.id)")
+        p {{targetList.name}}
+  button.btn-action(ng-disabled="list.selected < 1" ng-if="list.pageName(['opportunities'])") Copy to Target List
+  button.btn-action(ng-disabled="list.selected < 1" ng-if="" ng-click="list.removeOpportunity()") Delete
   button.btn-action(ng-disabled="list.selected < 1" ng-csv="list.selected" filename="opportunities.csv" csv-header="['Account', 'Sub Account', 'Tolinx Number', 'Store Name', 'Store Number', 'Address', 'City', 'State', 'Postal CD', 'Phone Number', 'Latitude', 'Longitude', 'Last Update', 'High Impact', 'Unsold Account', 'Premise Type', 'Trade Classification', 'Planning Group', '', 'Negative Value', 'Is Expanded']") Download
-  button.btn-action(ng-disabled="list.selected < 1") Send To
 
 button.icon.select-all(ng-click="list.toggleAll()")
   span(ng-if='list.isChecked()') Un-
@@ -18,9 +22,9 @@ div(ng-if="!list.opportunitiesService.model.filterApplied") [Ratul] Pls apply a 
 v-accordion.styled-list(multiple="" id="opportunities" control="list.accordion" onexpand="list.expandCallback(item)" oncollapse="list.collapseCallback(item)" column='12' ng-if="list.opportunitiesService.model.filterApplied")
   div.header-row(row)
     div.checkbox-wrapper.placeholder(ng-click="list.toggle(opportunity, list.selected)")
-    div.hide-wrapper(ng-if="list.pageName !== 'target-lists'")
+    div.hide-wrapper(ng-if="list.pageName()")
       label
-    div.more-wrapper(ng-if="list.pageName === 'target-lists'")
+    div.more-wrapper(ng-if="!list.pageName()")
     div.checkbox-sibling(column='12')
       div(column='3')
         label(ng-click="list.sortBy('opportunity.name')" ng-class="{ 'header-bold' : list.sortProperty === 'opportunity.name'}")
@@ -59,9 +63,25 @@ v-accordion.styled-list(multiple="" id="opportunities" control="list.accordion" 
             md-icon(md-svg-icon="../assets/img/icons/more.svg")
           md-menu-content(width="4")
             md-menu-item
-              p(ng-click="list.actionOverlay(opportunity)") Successful Action
+              p(ng-click="list.openShareModal(opportunity.id)") Send To
             md-menu-item
-              p(ng-click="list.actionOverlay(opportunity, 'fail')") Failed Action
+              p(ng-click="list.showFlyout(opportunity)" md-prevent-menu-close) Dismiss
+              .sub-menu-flyout(ng-if="list.showSubMenu")
+                h4.title Dismiss
+                .hide-row(ng-click="list.cancelFeedback()" md-prevent-menu-close)
+                .sub-menu-content-container
+                  .sub-menu-content
+                    p If opportunity is dismissed, opportunities for that Package/SKU at that account will not reappear for 90 days
+                  .sub-menu-content
+                    md-radio-group(ng-model="list.opportunity.feedback.selector" ng-init="list.opportunity.feedback.selector = 'other'")
+                      md-radio-button.md-primary(ng-value="notRelevant") Opportunity not relevant
+                      md-radio-button.md-primary(ng-value="other") Other
+                  .sub-menu-content
+                    label Additional Feedback
+                    textarea(ng-model="list.opportunity.feedback.text").feedback
+                  .sub-menu-content
+                    button.btn-action(ng-click="list.submitFeedback(opportunity)" md-prevent-menu-close) Submit
+                    p.cancel.accent(ng-click="list.cancelFeedback()" md-prevent-menu-close) X Cancel
       v-pane-header.checkbox-sibling(column='12')
         div.cell-parent
           div.pad-cell(column='3') {{::opportunity.store.name | titlecase}} <span class="supporting-text">\#{{::opportunity.store.id | uppercase}}</span>

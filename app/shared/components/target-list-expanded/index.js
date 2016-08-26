@@ -26,6 +26,7 @@ function ExpandedTargetListController($state, $scope, $filter, $mdDialog, $q, us
     opportunities: []
   };
   vm.totalOpportunitesChevron = true;
+  vm.selected = [];
 
   // Expose public methods
   vm.archiveTargetList = archiveTargetList;
@@ -41,6 +42,8 @@ function ExpandedTargetListController($state, $scope, $filter, $mdDialog, $q, us
   vm.selector = selector;
   vm.sortBy = sortBy;
   vm.toggle = toggle;
+  vm.isChecked = isChecked;
+  vm.toggleAll = toggleAll;
 
   init();
 
@@ -168,15 +171,35 @@ function ExpandedTargetListController($state, $scope, $filter, $mdDialog, $q, us
     }
   }
 
+  // Check if all items are selected
+  function isChecked() {
+    // If the promise isn't resolved returns false
+    if (vm.userService.model.targetLists) {
+      return vm.selected.length === vm.userService.model.targetLists.owned.length;
+    } else {
+      return false;
+    }
+  };
+
+  // Select or deselect all list items
+  function toggleAll() {
+    if (vm.selected.length === vm.userService.model.targetLists.owned.length) {
+      vm.selected = [];
+    } else if (vm.selected.length === 0 || vm.selected.length > 0) {
+      vm.selected = vm.userService.model.targetLists.owned.slice(0);
+    }
+  };
+
   // ***************
   // PRIVATE METHODS
   // ***************
 
   function init() {
     // userService.getTargetLists('1601', {'type': 'targetLists'}).then(function(data) {
-    userService.getTargetLists('1601', {'type': 'targetLists'}).then(function(data) {
+    userService.getTargetLists(userService.model.currentUser.personID, {'type': 'targetLists'}).then(function(data) {
       var ownedPromises = [],
           sharedPromises = [];
+
       userService.model.targetLists = data;
 
       // get collaborators for owned target lists
@@ -199,7 +222,6 @@ function ExpandedTargetListController($state, $scope, $filter, $mdDialog, $q, us
         angular.forEach(userService.model.targetLists.sharedWithMe, function(targetList, key) {
           targetList.collaborators = response[key].data;
         });
-        console.log(userService.model.targetLists);
       });
     });
   }
@@ -207,7 +229,7 @@ function ExpandedTargetListController($state, $scope, $filter, $mdDialog, $q, us
 }
 
 module.exports =
-  angular.module('orion.common.components.expanded', [])
+  angular.module('cf.common.components.expanded', [])
   .component('expanded', {
     templateUrl: './app/shared/components/target-list-expanded/expanded.html',
     controller: ExpandedTargetListController,

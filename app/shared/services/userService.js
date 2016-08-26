@@ -3,42 +3,8 @@
 module.exports = /*  @ngInject */
   function userService($http, $q, apiHelperService, filtersService, targetListService) {
 
-    var tempData = {
-      hideOpportunityPostResponse: {'status': 200},
-      deleteHiddenOpportunityDeleteResponse: {'status': 200},
-      postOpportunityFilterResponse: {'status': 200},
-      postTargetListPayload: {
-        'type': 'object',
-        '$schema': 'http://json-schema.org/draft-03/schema',
-        'id': 'targetListCreateSchema',
-        'required': true,
-        'properties': {
-          'name': {
-            'type': 'string',
-            'required': 'true',
-            'description': 'Name of the Target List.'
-          },
-          'opportunities': {
-            '$ref': 'opportunityIDListSchema'
-          }
-        }
-      },
-      postTargetListResponse: {
-        'id': '1323ss',
-        'name': 'Pacific Northwest Opportunities',
-        'archived:': false,
-        'opportunitiesSummary': {
-          'storesCount': 12,
-          'targetedOpportunitiesCount': 20,
-          'committedOpportunitiesCount': 5,
-          'closedOpportunitiesCount': 10,
-          'totalClosedDepletions': 352
-        }
-      }
-    };
-
     var model = {
-          currentUser: {
+          /* currentUser: {
             id: '1601',
             firstName: 'Joe',
             lastName: 'Cerveza',
@@ -46,6 +12,16 @@ module.exports = /*  @ngInject */
             phone: '1234567890',
             role: 'CBBD MDM',
             accounts: ['Wal-mart', 'PCC']
+          }*/
+          currentUser: {
+            'firstName': 'JAMES',
+            'lastName': 'O\'NEIL',
+            'iss': 'https://cf.cbrands.com',
+            'personID': 1601,
+            'employeeID': '1002417',
+            'exp': 1477168596733,
+            'iat': 1471984596737,
+            'email': 'jim.oneil@cbrands.com'
           }
         },
         service = {
@@ -63,7 +39,8 @@ module.exports = /*  @ngInject */
           getPerformanceBrand: getPerformanceBrand,
           getPerformanceTopBottom: getPerformanceTopBottom,
           getTargetLists: getTargetLists,
-          addTargetList: addTargetList
+          addTargetList: addTargetList,
+          sendOpportunity: sendOpportunity
         };
 
     return service;
@@ -73,7 +50,7 @@ module.exports = /*  @ngInject */
      * @desc get data for all users or one user
      * @params {String} id - id of a user [Optional]
      * @returns {Array or Object} - Array of all users or object of one user
-     * @memberOf orion.common.services
+     * @memberOf cf.common.services
      */
     function getUsers(id) {
       var usersPromise = $q.defer(),
@@ -106,7 +83,7 @@ module.exports = /*  @ngInject */
      * @desc get hidden opportunities for a user
      * @params {String} id - id of a user [required]
      * @returns {Object} - opportunities object
-     * @memberOf orion.common.services
+     * @memberOf cf.common.services
      */
     function getHiddenOpportunities(id) {
       var hiddenOpportunitiesPromise = $q.defer(),
@@ -135,7 +112,7 @@ module.exports = /*  @ngInject */
      * @desc get hidden opportunities for a user
      * @params {String} id - id of a user [required]
      * @returns {Object} - status object
-     * @memberOf orion.common.services
+     * @memberOf cf.common.services
      */
     function hideOpportunity(id) {
       var hideOpportunityPromise = $q.defer(),
@@ -159,9 +136,7 @@ module.exports = /*  @ngInject */
 
       function hideOpportunitySuccess(response) {
         console.log('[userService.hideOpportunity] response: ', response);
-        // hideOpportunityPromise.resolve(response.data);
-        // uncomment above and remove below when services are ready
-        hideOpportunityPromise.resolve(tempData.hideOpportunityPostResponse);
+        hideOpportunityPromise.resolve(response.data);
       }
 
       function hideOpportunityFail(error) {
@@ -177,7 +152,7 @@ module.exports = /*  @ngInject */
      * @params {String} id - id of a user [required]
      * @params {String} opportunityId - id of the opportunity to be deleted
      * @returns {Object} - status object
-     * @memberOf orion.common.services
+     * @memberOf cf.common.services
      */
     function deleteHiddenOpportunity(id) {
       var deleteHiddenOpportunityPromise = $q.defer(),
@@ -201,9 +176,7 @@ module.exports = /*  @ngInject */
 
       function deleteHiddenOpportunitySuccess(response) {
         console.log('[userService.deleteHiddenOpportunity] response: ', response);
-        // deleteHiddenOpportunityPromise.resolve(response.data);
-        // uncomment above and remove below when services are ready
-        deleteHiddenOpportunityPromise.resolve(tempData.deleteHiddenOpportunityDeleteResponse);
+        deleteHiddenOpportunityPromise.resolve(response.data);
       }
 
       function deleteHiddenOpportunityFail(error) {
@@ -218,7 +191,7 @@ module.exports = /*  @ngInject */
      * @desc get notifications for a user
      * @params {String} id - id of a user
      * @returns {Array} - Array of all notifications for a user
-     * @memberOf orion.common.services
+     * @memberOf cf.common.services
      */
     function getNotifications(id) {
       var notificationsPromise = $q.defer(),
@@ -247,7 +220,7 @@ module.exports = /*  @ngInject */
      * @desc get all opportunity filters for a user
      * @params {String} id - id of a user
      * @returns {Array} - Array of all opportunity filters for a user
-     * @memberOf orion.common.services
+     * @memberOf cf.common.services
      */
     function getOpportunityFilters(id) {
       var opportunityFilterPromise = $q.defer(),
@@ -276,11 +249,11 @@ module.exports = /*  @ngInject */
      * @desc save new filter for a user
      * @params {Object} filters - filters to be saved
      * @returns {Object} - Status Object
-     * @memberOf orion.common.services
+     * @memberOf cf.common.services
      */
     function saveOpportunityFilter(filters) {
       var opportunityFilterPromise = $q.defer(),
-          url = apiHelperService.request('/api/users/' + model.currentUser.id + '/opportunityFilters/'),
+          url = apiHelperService.request('/api/users/' + service.model.currentUser.personID + '/opportunityFilters/'),
           payload = {
             name: filtersService.model.newServiceName,
             filterString: apiHelperService.formatQueryString(filters)
@@ -310,7 +283,7 @@ module.exports = /*  @ngInject */
      * @desc get performance summary for a user
      * @params {String} id - id of a user
      * @returns {Object} - performance summary
-     * @memberOf orion.common.services
+     * @memberOf cf.common.services
      */
     function getPerformanceSummary(id) {
       var performancePromise = $q.defer(),
@@ -339,7 +312,7 @@ module.exports = /*  @ngInject */
      * @desc get performance depletion for a user
      * @params {String} id - id of a user
      * @returns {Object} - user performance depletion
-     * @memberOf orion.common.services
+     * @memberOf cf.common.services
      */
     function getPerformanceDepletion(id) {
       var performancePromise = $q.defer(),
@@ -368,7 +341,7 @@ module.exports = /*  @ngInject */
      * @desc get performance distribution for a user
      * @params {String} id - id of a user
      * @returns {Object} - user performance distribution
-     * @memberOf orion.common.services
+     * @memberOf cf.common.services
      */
     function getPerformanceDistribution(id) {
       var performancePromise = $q.defer(),
@@ -397,7 +370,7 @@ module.exports = /*  @ngInject */
      * @desc get performance brand for a user
      * @params {String} id - id of a user
      * @returns {Object} - user performance brand
-     * @memberOf orion.common.services
+     * @memberOf cf.common.services
      */
     function getPerformanceBrand(id) {
       var performancePromise = $q.defer(),
@@ -426,7 +399,7 @@ module.exports = /*  @ngInject */
      * @desc get performance top bottom snapshot for a user
      * @params {String} id - id of a user
      * @returns {Object} - user performance top bottom snapshot
-     * @memberOf orion.common.services
+     * @memberOf cf.common.services
      */
     function getPerformanceTopBottom(id) {
       var performancePromise = $q.defer(),
@@ -456,7 +429,7 @@ module.exports = /*  @ngInject */
      * @params {String} id - id of a user
      * @params {Object} p - query params
      * @returns {Object} - user target lists
-     * @memberOf orion.common.services
+     * @memberOf cf.common.services
      */
     function getTargetLists(id, p) {
       var targetListPromise = $q.defer(),
@@ -475,8 +448,6 @@ module.exports = /*  @ngInject */
             sharedNotArchivedCount = 0,
             ownedNotArchived = 0,
             ownedArchived = 0;
-
-        console.log(response);
 
         for (var i = 0; i < response.data.owned.length; i++) {
           if (response.data.owned[i].archived) ownedArchived++;
@@ -508,7 +479,7 @@ module.exports = /*  @ngInject */
      * @desc add target list for a user
      * @params {Object} p - target list information payload
      * @returns {Object} - newly added target list
-     * @memberOf orion.common.services
+     * @memberOf cf.common.services
      */
     function addTargetList(p) {
       var targetListPromise = $q.defer(),
@@ -532,5 +503,34 @@ module.exports = /*  @ngInject */
       }
 
       return targetListPromise.promise;
+    }
+
+    /**
+     * /users/{userID}/sharedOpportunities
+     * @name sendOpportunity
+     * @desc send an opp to another user
+     * @params {Object} uId - user to be sent opp
+     * @params {Object} oId - opportunity id
+     * @returns {Object} - 201
+     * @memberOf orion.common.services
+     */
+    function sendOpportunity(uId, oId) {
+      var oPromise = $q.defer(),
+          url = apiHelperService.request('/api/users/' + uId + '/sharedOpportunities/'),
+          payload = [oId];
+
+      $http.post(url, payload)
+        .then(sendOppSuccess)
+        .catch(sendOppFail);
+
+      function sendOppSuccess(response) {
+        console.log('[userService.sendOpportunity] response: ', response);
+        oPromise.resolve(response.data);
+      }
+      function sendOppFail(error) {
+        oPromise.reject(error);
+      }
+
+      return oPromise.promise;
     }
   };

@@ -14,6 +14,7 @@ function TargetListController($scope, $state, userService) {
 
   // Expose public methods
   vm.ratio = ratio;
+  vm.tabFilter = tabFilter;
 
   // tab names
   vm.types = {
@@ -60,6 +61,14 @@ function TargetListController($scope, $state, userService) {
   // PUBLIC METHODS
   // **************
 
+  // Only shows Target List tabs needed on the page
+  function tabFilter(tab) {
+    if (tab.name === 'Archived') {
+      return false;
+    }
+    return true;
+  }
+
   function ratio(closed, total) {
     var result = closed / total * 100;
     return result;
@@ -79,7 +88,7 @@ function TargetListController($scope, $state, userService) {
 }
 
 module.exports =
-  angular.module('orion.common.components.target', [])
+  angular.module('cf.common.components.target', [])
   .component('target', {
     templateUrl: './app/shared/components/target/target.html',
     controller: TargetListController,

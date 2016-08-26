@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports =
-  angular.module('orion.common', [
+  angular.module('cf.common', [
     require('./components').name,
     require('./directives').name,
     require('./filters').name,

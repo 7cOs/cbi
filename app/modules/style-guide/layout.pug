@@ -187,3 +187,19 @@ div(column='12')
         h3.section-title Text Editor
         div.text-editor
           text-angular(ta-toolbar="[['bold','italics', 'underline', 'ul']]" ng-model="sg.richTextEditor").text-editor
+
+      section
+        h3.section-title Sub Menu Fly Out
+        div(row)
+          button.btn-action.fly-out-trigger(ng-click="sg.showFlyout()") Sub Menu
+          .sub-menu-flyout(ng-if="sg.showSubMenu")
+            p If opportunity is dismissed, opportunities for that Package/SKU at that account will not reappear for 90 days
+            .sub-menu-content
+              md-radio-group(ng-model="sg.fakeData")
+                md-radio-button.md-primary(ng-value="one") Opportunity not relevant
+                md-radio-button.md-primary(ng-value="two") Other
+            .sub-menu-content
+              label Additional Feedback
+              textarea.feedback
+            .sub-menu-content
+              button.btn-action Submit

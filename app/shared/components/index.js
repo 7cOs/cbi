@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports =
-  angular.module('orion.common.components', [
+  angular.module('cf.common.components', [
     require('./loader').name,
     require('./navbar').name,
     require('./datepicker').name,

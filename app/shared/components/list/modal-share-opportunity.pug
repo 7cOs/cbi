@@ -1,0 +1,11 @@
+div.modal
+  .title
+    a.hide-row(ng-click="list.closeModal()")
+    h4 Share Opportunity
+  div.modal-form
+    div
+      p(ng-repeat="collaborator in list.sharedCollaborators") {{collaborator.name}}
+    div.modal-input
+      label Add Recipient
+      inline-search(type="user" placeholder="Search users" chosen-result="list.collaborator")
+    button.btn-action(ng-click="list.shareOpportunity()") Send

@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports =
-  angular.module('orion.modules.landing', [
+  angular.module('cf.modules.landing', [
     // load your sample submodules here, e.g.:
     // require('./bar').name
   ])

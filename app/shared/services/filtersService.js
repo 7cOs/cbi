@@ -24,7 +24,7 @@ module.exports = /*  @ngInject */
       ],
       opportunitiesTypes: [
         {name: 'All Types'},
-        {name: 'Non-buy'},
+        {name: 'Non-Buy'},
         {name: 'At Risk'},
         {name: 'Low Velocity'},
         {name: 'New Placement (Quality)'},
@@ -47,12 +47,18 @@ module.exports = /*  @ngInject */
           name: 'On Premise',
           value: 'on'
         }],
+      retailer: [
+        {name: 'Store'},
+        {name: 'Chain'}
+      ],
       selected: {
         myAccountsOnly: true,
         accountBrands: '',
         accountMarkets: '',
         accountTypes: '',
+        brands: '',
         cbbdContact: '',
+        chains: '',
         currentFilter: '',
         location: '',
         opportunitiesStatus: '',
@@ -64,6 +70,8 @@ module.exports = /*  @ngInject */
         productTypeFeatured: '',
         productTypePriority: '',
         productTypeAuthorized: '',
+        stores: '',
+        retailer: '',
         storeSegmentationA: '',
         storeSegmentationB: '',
         storeSegmentationC: '',
@@ -101,9 +109,11 @@ module.exports = /*  @ngInject */
     function getAppliedFilters(type) {
       // get applied filters
       var filterPayload = {type: type};
-      for (var key in model.selected) {
-        if (model.selected[key] !== '') {
-          filterPayload[key] = model.selected[key];
+      for (var key in service.model.selected) {
+        /* if (service.model.selected[key].constructor === Array) {
+          // to do for brands, stores, chains
+        } else */if (service.model.selected[key] !== '') {
+          filterPayload[key] = service.model.selected[key];
         }
       }
 

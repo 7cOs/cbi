@@ -1,7 +1,7 @@
 'use strict';
 
-const os = require('os');
-var fs = require('fs');
+const os = require('os'),
+      fs = require('fs');
 
 module.exports = function (config) {
 
@@ -34,12 +34,27 @@ module.exports = function (config) {
     jwt: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJmaXJzdE5hbWUiOiJST0JFUlQiLCJsYXN0TmFtZSI6IlNIQU5OT04iLCJpc3MiOiJodHRwczovL29yaW9uLmNicmFuZHMuY29tIiwicGVyc29uSUQiOjE4NzUsImVtcGxveWVlSUQiOiIxMDA5MjkzIiwiZXhwIjoxNDc2OTkwNjQzNzAwLCJpYXQiOjE0NzE4MDY2NDM3MDAsImVtYWlsIjoiYm9iLnNoYW5ub25AY2JyYW5kcy5jb20ifQ.8fOc38TRqIk7Yv7s5KH2-fdGLQBRDjFkqoC_AUlj6qU'
   };
 
-  config.saml = {
-    entryPoint: 'https://ssodev.cbrands.com/oamfed/idp/samlv20',
-    issuer: 'https://orion-dev.cbrands.com',
-    cert: '',
-    privateCert: '',
-    signatureAlgorithm: 'sha1'
+  config.auth = {
+    strategy: 'no-auth',
+    user: {
+      jwt: config.api.jwt,
+      jwtmap: {
+        firstName: 'JAMES',
+        lastName: 'O\'NEIL',
+        groupingCode: '133',
+        iss: 'https://orion.cbrands.com',
+        personID: 1601,
+        employeeID: '1002417',
+        exp: 1477332952290,
+        iat: 1472148952296,
+        email: 'JIM.ONEIL@CBRANDS.COM',
+        srcTypeCd: [
+          'ON_HIER',
+          'OFF_HIER',
+          'SALES_HIER'
+        ]
+      }
+    }
   };
 
   // directories

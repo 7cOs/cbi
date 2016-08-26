@@ -66,17 +66,17 @@ h1, h3, h5 {
 }
 
 h1 {
-  font-size: 2.5em;
+  font-size: 2.25em;
   margin-top: 0;
 }
 
 h2 {
-  font-size: 1.5em;
+  font-size: 1.125em;
   font-weight: $semibold;
 }
 
 h3 {
-  font-size: 1.5em;
+  font-size: 1.125em;
 }
 
 h4 {
@@ -88,10 +88,16 @@ h5 {
   font-size: 1.25em;
 }
 
+p {
+  font-size: 0.9em;
+  color: $gray-1;
+  font-weight: $regular;
+}
+
 label,
 .accent {
   display: block;
-  color: $gray-3;
+  color: $gray-1;
   font-family: $rajdhani;
   font-weight: $semibold;
   font-size: 0.7em;
@@ -135,8 +141,13 @@ li {
   color: $yellow;
 }
 
-.error {
+.error,
+.negative {
   color: $red;
+}
+
+.postive {
+  color: $green;
 }
 
 .larger {

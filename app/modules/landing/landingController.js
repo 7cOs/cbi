@@ -80,8 +80,11 @@ module.exports = /*  @ngInject */
       } else if (hrs >= 17 && hrs <= 24) {
         greet = 'Good evening';
       }
+      var people = ['Nitin', 'Mike', 'Colleen', 'Brian', 'Chad'];
 
-      return greet;
+      var person = people[Math.floor(Math.random() * people.length)];
+
+      return greet + ', ' + person + '!';
     }
 
     /**
@@ -90,7 +93,7 @@ module.exports = /*  @ngInject */
      * @params {String} q - query string
      * @params {Array} properties - array of strings that are the properties to be searched in the object
      * @returns {String}
-     * @memberOf orion.common.services
+     * @memberOf cf.common.services
      */
     function filterQuery(q, properties) {
       var lowercaseQuery = angular.lowercase(q);

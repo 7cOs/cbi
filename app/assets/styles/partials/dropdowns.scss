@@ -7,6 +7,7 @@
     height: 40px;
     box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.2), 0 1px 1px 0 rgba(0, 0, 0, 0.14), 0 2px 1px -1px rgba(0, 0, 0, 0.12);
     width: 100%;
+    font-style: initial;
 
     span {
       font-size: 0.85em;
@@ -19,15 +20,19 @@
       text-align: center;
     }
   }
+
+  ._md-select-placeholder {
+    font-style: italic;
+  }
 }
 
 md-option {
   border-bottom: 1px dotted $gray-4;
+  padding: 5px;
 }
 
 md-select {
   margin: 0 0 1em;
-  font-style: italic;
 
   span {
     font-size: 14px;
@@ -63,4 +68,25 @@ md-select {
 
 ._md-select-value ._md-select-icon:after {
   display: inline;
+}
+
+md-select-menu ._md-text {
+  font-size: 0.9em;
+  color: $gray-1;
+}
+
+.md-input-has-value {
+  img {
+    display: none;
+  }
+}
+
+.saved-filter-option {
+  img {
+    margin-bottom: 0;
+    position: absolute;
+    right: 10px;
+    top: 10px;
+    width: 40px;
+  }
 }

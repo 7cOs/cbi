@@ -16,7 +16,7 @@ div.modal.target-list-modal
           md-menu
             md-button(ng-click="$mdOpenMenu($event)" aria-label="Collaborator Options")
               span {{collaborator.permissionLevel | titlecase}}
-              a.chevron-down(ng-click="tld.dropdown")
+              a.chevron-down
             md-menu-content.collaborator-options
               md-menu-item(ng-click="tld.makeOwner(collaborator.user.id)") Make Owner
               md-menu-item(ng-click="tld.removeCollaborator(collaborator.user.id)") Remove
@@ -26,7 +26,7 @@ div.modal.target-list-modal
       label Add Recipient
       input(type="email" ng-model="tld.collaborators.newCollaborator" ng-change="tld.listChanged()" placeholder="Enter names or CBI Email addresses")
     button(ng-disabled="tld.changed" ng-click="tld.addCollaborators()").btn-action Save
-    p.cancel.accent(ng-click="tld.closeModal()")
+    p.cancel.accent(ng-click="tld.closeModal()") X Cancel
   div.modal-footer.clearfix(ng-class="{'toasted': tld.showToast}")
     p.link.align-left(ng-click="tld.footerToast('archive')") Archive List
     p.link.align-right(ng-click="tld.footerToast('delete')") Delete List

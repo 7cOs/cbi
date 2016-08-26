@@ -1,6 +1,6 @@
 'use strict';
 
-function ListController($scope, $state, opportunitiesService, storesService, $mdDialog) {
+function ListController($scope, $state, $q, $mdDialog, opportunitiesService, targetListService, storesService, userService) {
 
   // ****************
   // CONTROLLER SETUP
@@ -11,31 +11,42 @@ function ListController($scope, $state, opportunitiesService, storesService, $md
 
   // Services
   vm.opportunitiesService = opportunitiesService;
-  // vm.storesService = storesService;
+  vm.userService = userService;
 
   // Defaults
-  vm.pageName = $state.current.name;
+  vm.currentOpportunityId = '';
   vm.depletionsChevron = false;
   vm.expandedOpportunities = [];
   vm.opportunitiesChevron = false;
   vm.reverse = false;
   vm.segmentationChevron = false;
   vm.selected = [];
+  vm.sharedCollaborators = [];
   vm.stores = [];
   // sortProperty is set to default sort on page load
   vm.sortProperty = 'store.name';
   vm.storeChevron = true;
+  vm.showSubMenu = false;
 
   // Expose public methods
-  vm.actionOverlay = actionOverlay;
+  vm.addToSharedCollaborators = addToSharedCollaborators;
+  vm.addToTargetList = addToTargetList;
+  vm.closeModal = closeModal;
+  vm.dismissOpportunity = dismissOpportunity;
   vm.displayBrandIcon = displayBrandIcon;
   vm.exists = exists;
   vm.isChecked = isChecked;
+  vm.openShareModal = openShareModal;
+  vm.pageName = pageName;
+  vm.removeOpportunity = removeOpportunity;
+  vm.shareOpportunity = shareOpportunity;
   vm.sortBy = sortBy;
   vm.toggle = toggle;
   vm.toggleAll = toggleAll;
   vm.showCorporateMemoModal = showCorporateMemoModal;
-  vm.closeCorporateMemoModal = closeCorporateMemoModal;
+  vm.showFlyout = showFlyout;
+  vm.submitFeedback = submitFeedback;
+  vm.cancelFeedback = cancelFeedback;
 
   // Mock Data for memo modal
   vm.limitedTime = {
@@ -55,29 +66,65 @@ function ListController($scope, $state, opportunitiesService, storesService, $md
   // **************
   // PUBLIC METHODS
   // **************
+  //
+  $scope.$on('$mdMenuClose', function() {
+    vm.showSubMenu = false;
+  });
 
-  // Show corporate memo modal
+  function addToSharedCollaborators() {
+    vm.sharedCollaborators.push(vm.collaborator);
+  }
 
-  function showCorporateMemoModal(ev) {
-    var parentEl = angular.element(document.body);
-    $mdDialog.show({
-      clickOutsideToClose: true,
-      parent: parentEl,
-      scope: $scope.$new(),
-      targetEvent: ev,
-      templateUrl: './app/shared/components/list/modal-corporate-memo.html'
-    });
-  };
+  // Show Flyout Menu
+  function showFlyout(opportunity, action) {
+    vm.showSubMenu = true;
+    actionOverlay(opportunity, action);
+  }
 
-  function closeCorporateMemoModal() {
-    $mdDialog.hide();
+  function submitFeedback(opportunity) {
+    vm.showSubMenu = false;
+  }
+
+  function cancelFeedback(opportunity) {
+    vm.showSubMenu = false;
   }
 
   // Overlay Controls
-  function actionOverlay(opportunity, state) {
-    if (state === 'fail') { opportunity.failState = true; } else { opportunity.failState = false; }
-    opportunity.toggled = !opportunity.toggled;
-  };
+  function actionOverlay(method, opportunityId) {
+    console.log(opportunityId);
+    if (method === 'send') {
+      console.log('send');
+    } else if (method === 'dismiss') {
+      console.log('dismiss');
+    }
+  }
+
+  function addToTargetList(listId) {
+    var opportunityIds = [];
+
+    // add opportunity ids into array to be posted
+    for (var i = 0; i < vm.selected.length; i++) {
+      for (var j = 0; j < vm.selected[i].groupedOpportunities.length; j++) {
+        opportunityIds.push(vm.selected[i].groupedOpportunities[j].id);
+      }
+    }
+
+    targetListService.addTargetListOpportunities(listId, opportunityIds).then(function(data) {
+      console.log('Done Adding these ids: ', opportunityIds);
+      // to do - update view and model
+    }, function(err) {
+      console.log('Error adding these ids: ', opportunityIds, ' Responded with error: ', err);
+    });
+  }
+
+  function closeModal() {
+    $mdDialog.hide();
+  }
+
+  function dismissOpportunity(oId) {
+    console.log(oId);
+    // no route for this in API yet
+  }
 
   function displayBrandIcon(haystack, needle) {
     return haystack.indexOf(needle) !== -1;
@@ -90,30 +137,67 @@ function ListController($scope, $state, opportunitiesService, storesService, $md
 
   // Check if all items are selected
   function isChecked() {
-    // return vm.selected.length === vm.opportunities.length;
-    return vm.selected.length === vm.opportunitiesService.model.opportunities.length;
-  };
+    return vm.selected.length === opportunitiesService.model.opportunities.length;
+  }
 
-  // Select or deselect all list items
-  function toggleAll() {
-    // if (vm.selected.length === vm.opportunities.length) {
-    if (vm.selected.length === vm.opportunitiesService.model.opportunities.length) {
-      vm.selected = [];
-    } else if (vm.selected.length === 0 || vm.selected.length > 0) {
-      // vm.selected = vm.opportunities.slice(0);
-      vm.selected = vm.opportunitiesService.model.opportunities.slice(0);
-    }
-  };
+  function openShareModal(oId, ev) {
+    vm.currentOpportunityId = oId;
+    vm.sharedCollaborators = [];
 
-  // Select or deselect individual list item
-  function toggle(item, list) {
-    var idx = list.indexOf(item);
-    if (idx > -1) {
-      list.splice(idx, 1);
-    } else {
-      list.push(item);
+    var parentEl = angular.element(document.body);
+    $mdDialog.show({
+      clickOutsideToClose: true,
+      parent: parentEl,
+      scope: $scope.$new(),
+      targetEvent: ev,
+      templateUrl: './app/shared/components/list/modal-share-opportunity.html'
+    });
+  }
+
+  function shareOpportunity() {
+    userService.sendOpportunity(vm.collaborator.id, vm.currentOpportunityId).then(function(data) {
+      console.log('shared');
+    });
+  }
+
+  // arr of pages to be hidden on
+  function pageName(arr) {
+    arr = arr || [];
+    for (var i = 0; i < arr.length; i++) {
+      if ($state.current.name === arr[i]) return false;
     }
-  };
+
+    return true;
+  }
+
+  function removeOpportunity() {
+    var opportunityIds = [];
+
+    // add opportunity ids into array to be posted
+    for (var i = 0; i < vm.selected.length; i++) {
+      for (var j = 0; j < vm.selected[i].groupedOpportunities.length; j++) {
+        opportunityIds.push(vm.selected[i].groupedOpportunities[j].id);
+      }
+    }
+
+    targetListService.deleteTargetListOpportunities(targetListService.model.currentList.id, opportunityIds).then(function(data) {
+      console.log('Done deleting these ids: ', opportunityIds);
+      // to do - update view and model
+    }, function(err) {
+      console.log('Error deleting these ids: ', opportunityIds, ' Responded with error: ', err);
+    });
+  }
+
+  function showCorporateMemoModal(ev) {
+    var parentEl = angular.element(document.body);
+    $mdDialog.show({
+      clickOutsideToClose: true,
+      parent: parentEl,
+      scope: $scope.$new(),
+      targetEvent: ev,
+      templateUrl: './app/shared/components/list/modal-corporate-memo.html'
+    });
+  }
 
   // Sort by selected property
   function sortBy(property) {
@@ -126,11 +210,34 @@ function ListController($scope, $state, opportunitiesService, storesService, $md
     vm.segmentationChevron = (property === 'segmentation') ? !vm.segmentationChevron : vm.storeChevron;
   }
 
+  // Select or deselect individual list item
+  function toggle(item, list) {
+    var idx = list.indexOf(item);
+    if (idx > -1) {
+      list.splice(idx, 1);
+    } else {
+      list.push(item);
+    }
+  }
+
+  // Select or deselect all list items
+  function toggleAll() {
+    if (vm.selected.length === opportunitiesService.model.opportunities.length) {
+      vm.selected = [];
+    } else if (vm.selected.length === 0 || vm.selected.length > 0) {
+      vm.selected = opportunitiesService.model.opportunities.slice(0);
+    }
+  }
+
+  // **************
+  // PRIVATE METHODS
+  // **************
+
   function init() {
-    // Get opportunities and products data
-    /* opportunitiesService.getOpportunities().then(function(data) {
-      opportunitiesService.model.opportunities = data;
-    });*/
+    // get target lists
+    userService.getTargetLists(userService.model.currentUser.personID, {'type': 'targetLists'}).then(function(data) {
+      userService.model.targetLists = data;
+    });
   }
 
   // Set positive or negative label for trend values
@@ -140,7 +247,7 @@ function ListController($scope, $state, opportunitiesService, storesService, $md
 }
 
 module.exports =
-  angular.module('orion.common.components.list', [])
+  angular.module('cf.common.components.list', [])
   .component('list', {
     templateUrl: './app/shared/components/list/list.html',
     controller: ListController,

@@ -72,7 +72,7 @@ module.exports = /*  @ngInject */
      * @desc Get stores from API
      * @params {String} tdlinxNumber - store id [optional]
      * @returns {Object}
-     * @memberOf orion.common.services
+     * @memberOf cf.common.services
      */
     function getStores(tdlinxNumber) {
       var storesPromise = $q.defer(),
@@ -117,7 +117,7 @@ module.exports = /*  @ngInject */
      * @desc Get store opportunities from API
      * @params {String} tdlinxNumber - store id [required]
      * @returns {Object}
-     * @memberOf orion.common.services
+     * @memberOf cf.common.services
      */
     function getStoreOpportunities(tdlinxNumber) {
       var storesOpportunitiesPromise = $q.defer(),

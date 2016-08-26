@@ -5,6 +5,8 @@ md-menu-content {
 }
 
 md-menu-item {
+  position: relative;
+  outline: 0;
 
   p {
     transition: background 300ms ease;
