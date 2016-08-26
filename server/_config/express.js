@@ -8,7 +8,8 @@ module.exports =  function(app) {
         flash         = require('connect-flash'),
         multer        = require('multer'), // ENABLE MULTI-PART FORM UPLOADS
         session       = require('express-session'), // ENABLE SESSIONS
-        uuid          = require('uuid'); // CONTENFUL API CONFIG
+        uuid          = require('uuid'), // CONTENFUL API CONFIG
+        compression   = require('compression');
 
   let sessionStore = '';
 
@@ -28,6 +29,7 @@ module.exports =  function(app) {
   app.set('upload', multer()); // ENABLE MULTI-PART FORMS
   app.use(bodyParser.json()); // ENABLE application/json
   app.use(bodyParser.urlencoded({ extended: false })); // ENABLE application/x-www-form-urlencoded
+  app.use(compression());
   app.locals.pretty = config.prettify;
   app.use(flash());
 
@@ -59,15 +61,10 @@ module.exports =  function(app) {
   if (config.session.use) {
     // SESSION
     app.use(session({
-      cookie: {
-        httpOnly: config.session.httpOnly,
-        secret: config.security.secret,
-        secure: config.session.secure
-      },
       genid: function(req) {
         return uuid.v4(); // use UUIDs for session IDs
       },
-      name: 'my-app.sid',
+      name: 'orion.sid',
       resave: config.session.resave,
       rolling: config.session.rolling,
       saveUninitialized: config.session.saveUninitialized,
@@ -83,6 +80,12 @@ module.exports =  function(app) {
 
     passport.use(require('../../server/_config/' + config.auth.passport.strategy)(app));
     app.use(passport.initialize());
+    app.use(session({
+      secret: 'keyboard cat',
+      resave: false,
+      saveUninitialized: true,
+      cookie: { secure: false }
+    }));
     app.use(passport.session());
     app.set('passport', passport);
   }

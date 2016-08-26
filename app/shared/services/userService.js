@@ -1,6 +1,6 @@
 'use strict';
 
-module.exports =
+module.exports = /*  @ngInject */
   function userService($http, $q, apiHelperService, filtersService, targetListService) {
 
     var tempData = {
@@ -39,7 +39,7 @@ module.exports =
 
     var model = {
           currentUser: {
-            id: '1',
+            id: '1601',
             firstName: 'Joe',
             lastName: 'Cerveza',
             email: 'jCerveza@cbrands.com',
@@ -454,12 +454,13 @@ module.exports =
      * @name getTargetLists
      * @desc get target list for a user
      * @params {String} id - id of a user
+     * @params {Object} p - query params
      * @returns {Object} - user target lists
      * @memberOf orion.common.services
      */
-    function getTargetLists(id) {
+    function getTargetLists(id, p) {
       var targetListPromise = $q.defer(),
-          url = apiHelperService.request('/api/users/' + id + '/targetLists/');
+          url = apiHelperService.request('/api/users/' + id + '/targetLists/', p);
 
       if (!service.model.targetLists) {
         $http.get(url)
@@ -471,13 +472,24 @@ module.exports =
 
       function getTargetListsSuccess(response) {
         var sharedArchivedCount = 0,
-            sharedNotArchivedCount = 0;
+            sharedNotArchivedCount = 0,
+            ownedNotArchived = 0,
+            ownedArchived = 0;
 
-        for (var i = 0; i < response.data.sharedWithMe.length; i++) {
-          if (response.data.sharedWithMe.archived) sharedArchivedCount++;
+        console.log(response);
+
+        for (var i = 0; i < response.data.owned.length; i++) {
+          if (response.data.owned[i].archived) ownedArchived++;
+          else ownedNotArchived++;
+        }
+
+        for (i = 0; i < response.data.sharedWithMe.length; i++) {
+          if (response.data.sharedWithMe[i].archived) sharedArchivedCount++;
           else sharedNotArchivedCount++;
         }
 
+        response.data.ownedArchived = ownedArchived;
+        response.data.ownedNotArchived = ownedNotArchived;
         response.data.sharedArchivedCount = sharedArchivedCount;
         response.data.sharedNotArchivedCount = sharedNotArchivedCount;
 

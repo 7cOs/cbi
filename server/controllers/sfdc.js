@@ -4,6 +4,7 @@ Salesforce integration
 J. Scott Cromie
 8/9/16
 ***********************************************************/
+<<<<<<< HEAD
 
 var sfdc = require('../_lib/sfdc.js');
 var saml = require('../_lib/ssoSAML.js');
@@ -33,10 +34,29 @@ exports.SSOlogin = function(app, req, res) {
     console.log('Will get Auth Token and Session Id next');                                      //  getAuthToken();                                        //  getSessionId();
   },
   function (err) {
+=======
+
+var sfdc = require('../_lib/sfdc.js');
+
+exports.getAttachmentData = function(app, req, res) {
+
+  var promise = new Promise(function (resolve, reject) {
+    var blobData = sfdc.getAttachment(app, req, res);
+    if (blobData) {
+      resolve(blobData);
+    } else {
+      reject(Error('There are no attachments with this ParentId: ' + req.query.attachId));
+    }
+  });
+  promise.then(function (result) {
+  }, function (err) {
+    console.log('There was an error getting the attachment');
+>>>>>>> bc84d25056e22d39bec37e7c5dad7791e7610e38
     console.log(err);
   });
 };
 
+<<<<<<< HEAD
 exports.getAttachmentData = function(app, req, res) {
 
   var promise = new Promise(function (resolve, reject) {
@@ -54,6 +74,8 @@ exports.getAttachmentData = function(app, req, res) {
   });
 };
 
+=======
+>>>>>>> bc84d25056e22d39bec37e7c5dad7791e7610e38
 exports.createNote = function(app, req, res) {
   var promise = new Promise(function (resolve, reject) {
     var records = sfdc.fnCreateNote(app, req, res);
@@ -142,7 +164,11 @@ exports.accountNotes = function(app, req, res) {
 
 // if (req.session.assertion !== undefined) console.log(req.session.assertion);
 
+<<<<<<< HEAD
 //  console.log(req.session.assertion);
+=======
+  console.log(req.session.assertion);
+>>>>>>> bc84d25056e22d39bec37e7c5dad7791e7610e38
   var promise = new Promise(function (resolve, reject) {
     var records = sfdc.queryAccountNotes(app, req, res);
     if (records) {
@@ -162,4 +188,14 @@ exports.accountNotes = function(app, req, res) {
     res.end();
 //    console.log(err);
   });
+<<<<<<< HEAD
+=======
+};
+
+exports.authorizeSFDC = function(app, req, res) {
+  console.log('In controllers.authorizeSFDC');
+  for (var param in req.query) {
+    console.log(param.key + ' is ' + param.value);
+  };
+>>>>>>> bc84d25056e22d39bec37e7c5dad7791e7610e38
 };

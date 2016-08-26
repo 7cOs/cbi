@@ -1,6 +1,6 @@
 'use strict';
 
-function NavbarController($rootScope, $scope, $mdPanel, $mdDialog, notificationsService) {
+function NavbarController($rootScope, $scope, $mdPanel, $mdDialog, notificationsService, opportunitiesService, targetListService) {
 
   // ****************
   // CONTROLLER SETUP
@@ -21,6 +21,7 @@ function NavbarController($rootScope, $scope, $mdPanel, $mdDialog, notifications
   // Defaults
   vm.unreadNotifications = getUnreadCount();
   vm.noNotifications = 'No unread notifications.';
+  vm.myAccountsOnly = true;
 
   // Mock data
   vm.accountSelectorSelected = 'Distributor';
@@ -36,10 +37,32 @@ function NavbarController($rootScope, $scope, $mdPanel, $mdDialog, notifications
     }
   ];
 
+  vm.rationales = [
+    {
+      'type': 'New Buyer'
+    }
+  ];
+
+  vm.targetLists = [
+    {
+      name: 'Irish Pubs'
+    },
+    {
+      name: 'Grocery Stores'
+    }
+  ];
+
   // Expose public methods
   vm.markRead = markRead;
   vm.modalAddOpportunityForm = modalAddOpportunityForm;
   vm.closeModal = closeModal;
+  vm.addNewOpportunity = addNewOpportunity;
+  vm.newOpportunity = {};
+  vm.newOpportunityArray = [];
+  vm.addToTargetListArray = addToTargetListArray;
+  vm.showNewRationaleInput = showNewRationaleInput;
+  vm.addNewRationale = false;
+  vm.addToTargetList = addToTargetList;
 
   // **************
   // PUBLIC METHODS
@@ -61,9 +84,51 @@ function NavbarController($rootScope, $scope, $mdPanel, $mdDialog, notifications
     });
   }
 
+  // Add Opportunity
+  function addNewOpportunity(opportunityList) {
+    addToTargetListArray(vm.newOpportunity);
+
+    vm.newOpportunityArray.forEach(function(opportunity) {
+
+      // TODO will need to be called properly
+      // opportunitiesService.createOpportunity();
+    });
+
+    vm.newOpportunity = {};
+    $mdDialog.hide();
+  }
+
+  // Adds opportunities to an array with the same account name
+  function addToTargetListArray (opportunity) {
+    var accountName;
+
+    vm.newOpportunityArray.push(opportunity);
+
+    accountName = opportunity.properties.store.description;
+
+    vm.newOpportunity =   {
+      properties: {
+        store: {
+          description: accountName
+        }
+      }
+    };
+  }
+
+  function addToTargetList(opportunity) {
+    // TODO will need to be called properly
+    // Not sure if this even the correct service call
+    // targetListService.addTargetListOpportunities();
+  }
+
   // Close "Add Opportunity" modal
   function closeModal() {
     $mdDialog.hide();
+  }
+
+  // Show inputs if a new item is needed
+  function showNewRationaleInput()  {
+    vm.addNewRationale = true;
   }
 
   // ***************

@@ -1,6 +1,6 @@
 'use strict';
 
-module.exports =
+module.exports = /*  @ngInject */
   function opportunitiesController($rootScope, $scope, $state, $mdDialog, opportunitiesService, chipsService, filtersService, userService) {
 
     // ****************
@@ -113,11 +113,27 @@ module.exports =
       };
     }
 
+    // Add chip for inline search value watchers
+    function addInlineSearchChip(val) {
+      if (typeof val === 'string' && val !== '') {
+        vm.chipsService.addAutocompleteChip(val, 'searchText');
+      }
+    }
+
+    // Watch for inline search value changes
+    $scope.$watch('o.filtersService.model.brandSearchText', function (val) { addInlineSearchChip(val); });
+    $scope.$watch('o.filtersService.model.accountSearchText', function (val) { addInlineSearchChip(val); });
+    $scope.$watch('o.filtersService.model.distributorSearchText', function (val) { addInlineSearchChip(val); });
+
     function init() {
       // get saved filters -- this should be passed from user data when its ready
       userService.getOpportunityFilters(userService.model.currentUser.id).then(function(data) {
         userService.model.opportunityFilters = data;
       });
+
+      // reset all chips and filters on page init
+      chipsService.model = chipsService.resetChipsFilters(chipsService.model);
+
     }
 
     /* function parseFilterObj() {

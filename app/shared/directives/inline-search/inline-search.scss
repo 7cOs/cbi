@@ -63,4 +63,27 @@
       z-index: 1;
     }
   }
+
+  .no-results {
+    left: 50%;
+    margin: 0;
+    position: absolute;
+    text-align: center;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 100%;
+  }
+
+  .close-btn {
+    color: $blue;
+    font-weight: $light;
+    outline: 0;
+    position: absolute;
+    right: 1em;
+    top: 0.75em;
+
+    &:hover {
+      cursor: hand;
+    }
+  }
 }

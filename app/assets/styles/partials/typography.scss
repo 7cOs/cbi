@@ -3,8 +3,7 @@ $rajdhani: 'Rajdhani', Arial, sans-serif;
 
 $light: 300; // Work Sans only
 $regular: 400; // Work Sans & Rajdhani
-$medium: 600; // Work Sans only
-$semibold: 600; // Rajdhani only
+$semibold: 600; // Work Sans & Rajdhani
 $bold: 700; // Rajdhani only
 
 ::selection {
@@ -73,7 +72,7 @@ h1 {
 
 h2 {
   font-size: 1.5em;
-  font-weight: $medium;
+  font-weight: $semibold;
 }
 
 h3 {
@@ -82,7 +81,7 @@ h3 {
 
 h4 {
   font-size: 1.25em;
-  font-weight: $medium;
+  font-weight: $semibold;
 }
 
 h5 {
@@ -119,13 +118,13 @@ li {
 .supporting-text {
   text-transform: uppercase;
   font-size: 0.65em;
-  font-weight: $medium;
+  font-weight: $semibold;
   color: $gray-2;
 }
 
 .value {
   color: $gray-3;
-  font-weight: $medium;
+  font-weight: $semibold;
 
   span {
     font-weight: $light;

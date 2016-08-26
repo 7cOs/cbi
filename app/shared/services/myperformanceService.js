@@ -1,4 +1,4 @@
-module.exports =
+module.exports = /*  @ngInject */
   function myperformanceService() {
     var performanceData = {
       'performance': [{
@@ -288,9 +288,9 @@ module.exports =
       premises: [{
         name: 'All'
       }, {
-        name: 'On Premise'
-      }, {
         name: 'Off Premise'
+      }, {
+        name: 'On Premise'
       }],
       depletionsTimePeriod: [{
         name: 'MTD July 1 - July 31'
@@ -337,6 +337,11 @@ module.exports =
         name: 'Sub-Accounts'
       }, {
         name: 'Stores'
+      }],
+      storeTypes: [{
+        name: 'Chain'
+      }, {
+        name: 'Independent'
       }]
     };
 

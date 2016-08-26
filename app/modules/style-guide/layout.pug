@@ -148,7 +148,7 @@ div(column='12')
         h3.section-title Inline Search
         div(row)
           div(column="4")
-            inline-search(placeholder="Style guide search" results="sg.searchResults")
+            inline-search(type="distributor" placeholder="Search distributors" chosen-result="sg.searchResult")
 
       section
         h3.section-title Typeahead
@@ -182,3 +182,8 @@ div(column='12')
         h2 Notes
         button.btn-action(ng-click="sg.openNotes(true)") Notes
         notes
+
+      section
+        h3.section-title Text Editor
+        div.text-editor
+          text-angular(ta-toolbar="[['bold','italics', 'underline', 'ul']]" ng-model="sg.richTextEditor").text-editor

@@ -1,6 +1,6 @@
 'use strict';
 
-module.exports =
+module.exports = /*  @ngInject */
   function notesService($http, $q) {
 
     var urlBase = '/sfdc/';

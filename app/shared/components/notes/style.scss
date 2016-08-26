@@ -5,7 +5,7 @@
   top: 50%;
   transform: translateY(-50%);
   z-index: 10;
-
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
 
   .no-notes-image {
     margin-top: 12px;
@@ -17,7 +17,7 @@
   }
 
   .progress-container {
-    height: 600px;
+    height: 400px;
     background: $light-blue-5;
 
     h5 {
@@ -34,7 +34,15 @@
   md-progress-circular {
     z-index: 901;
     left: -50px;
-    top: 200;
+    top: 100;
+
+    .uploader {
+      top: 50;
+    }
+
+    path {
+      stroke: $white;
+    }
   }
 
   .create-new-note {
@@ -49,11 +57,18 @@
       margin: 12px 0;
     }
 
+    button i {
+      color: $black;
+    }
+
     button,
     p {
-      margin-right: 24px;
       display: inline;
       font-size: 1em;
+    }
+
+    .cancel {
+      margin-left: 24px;
     }
   }
 
@@ -160,18 +175,21 @@
     text-align: left;
     background: $gray-4;
     overflow-y: scroll;
-    min-height: 600px;
-    height: 600px;
+    min-height: 400px;
+    height: 400px;
   }
 
   .new-note {
     background: $white;
-    color: $blue;
     padding: 6px 12px;
     margin-bottom: 12px;
 
-    p {
+    .add-note {
       color: $blue;
+    }
+
+    p {
+      color: $black;
     }
   }
 
@@ -261,12 +279,14 @@
     background-image: url('../assets/img/icons/attachment.svg');
     background-size: 9px;
     background-position: 4px 6px;
+    margin-left: -8px;
   }
 
   .add-attachments {
     background-image: url('../assets/img/icons/add-attachment.svg');
     background-size: 12px;
     cursor: pointer;
+    margin-bottom: 12px;
   }
 
   .download-all {
@@ -331,5 +351,10 @@
     p {
       margin: 4px 0;
     }
+  }
+
+  button {
+    margin: 0;
+    padding: 0.7em;
   }
 }

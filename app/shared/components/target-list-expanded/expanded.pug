@@ -2,7 +2,7 @@
   button.icon.select-all Select All
 
   .target-action-buttons
-    button(disabled="disabled" ng-if="expanded.buttonState === 'named'").btn-action Archive
+    button(ng-if="expanded.buttonState === 'named'" ng-click="expanded.archiveTargetList()").btn-action Archive
     button(ng-if="expanded.buttonState !== 'shared'" ng-click="expanded.deleteTargetList()").btn-action Delete
     button.btn-action(ng-click="expanded.createTargetList($event)") Create a New List
 div.expanded-target-lists
@@ -38,11 +38,11 @@ div.expanded-target-lists
                   | Depletions <br />Since Closed (CE)
                   span(ng-class="{ 'chevron-down-small' : expanded.depletionsChevron, 'chevron-up-small' : !expanded.depletionsChevron}").chevron-down-small
         div(row).target-list-detail-container
-          div(ng-show="!expanded.userService.model.targetLists.owned.length").no-opportunites
+          div(ng-show="!expanded.userService.model.targetLists.owned.length || expanded.userService.model.targetLists.owned.length === 0").no-opportunites
             h4 No Opportunities have been added yet
             p Try Searching for <span>Opportunities</span> and add them to your list
           ul
-            li(ng-repeat="list in expanded.userService.model.targetLists.owned | orderBy:expanded.sortProperty:expanded.reverse").clearfix
+            li(ng-repeat="list in expanded.userService.model.targetLists.owned | filter:{archived:false} | orderBy:expanded.sortProperty:expanded.reverse").clearfix
               // div.checkbox-wrapper.named-target-list(ng-click="expanded.toggle(opportunity, list.selected)")
                 md-checkbox(aria-label="Select Item" ng-checked="expanded.exists(opportunity, list.selected)")
               div.checkbox-wrapper.named-target-list
@@ -52,11 +52,11 @@ div.expanded-target-lists
                   h4(column="4").left {{list.name}}
                   div(column="2")
                     img(src="../assets/img/icons/person.svg").member-icon
-                    h5.accent.gray.dropdown-menu-trigger {{list.collaborators.length}} collaborators
+                    h5.accent.dropdown-menu-trigger {{list.collaborators.length}} collaborators
                       ul.dropdown-menu
                         li.member.creator {{expanded.userService.model.currentUser.firstName}} {{userService.model.currentUser.lastName}}
                         li.member(ng-repeat="collaborator in list.collaborators") {{collaborator.user.firstName}} {{collaborator.user.lastName}}
-                  h5(column="2").accent.gray {{list.lastUpdated | timeAgo : 'relative'}}
+                  h5(column="2").accent {{list.lastUpdated | timeAgo : 'relative'}}
                   h4(column="1").closed {{list.opportunitiesSummary.closedOpportunitiesCount | number}}
                   h4(column="1") {{list.opportunities | number}}
                   h4(column="2") {{list.opportunitiesSummary.totalClosedDepletions | number}}
@@ -98,7 +98,7 @@ div.expanded-target-lists
             h4 No Opportunities have been shared with you yet
             p Try Searching for <span>Opportunities</span> and add them to your list
           ul
-            li(ng-repeat="list in expanded.userService.model.targetLists.sharedWithMe | filter:{archived:false} | orderBy:expanded.sortProperty:expanded.reverse").clearfix
+            li(ng-repeat="list in expanded.userService.model.targetLists.sharedWithMe | orderBy:expanded.sortProperty:expanded.reverse").clearfix
               div(column="12")
                 div(row)
                   h4(column="4").left {{list.name}}
@@ -151,7 +151,7 @@ div.expanded-target-lists
             h4 No Opportunities to remove
             p Try Searching for <span>Opportunities</span> and add them to your list
           ul
-            li(ng-repeat="list in expanded.userService.model.targetLists.sharedWithMe | filter:{archived:true} | orderBy:expanded.sortProperty:expanded.reverse").clearfix
+            li(ng-repeat="list in expanded.userService.model.targetLists.owned | filter:{archived:true} | orderBy:expanded.sortProperty:expanded.reverse").clearfix
               div.checkbox-wrapper(ng-click="list.toggle(opportunity, list.selected)")
                 md-checkbox(aria-label="Select Item" ng-checked="list.exists(opportunity, list.selected)")
               div.checkbox-sibling(column="12").archived

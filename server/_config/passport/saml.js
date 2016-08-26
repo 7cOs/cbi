@@ -4,7 +4,7 @@ module.exports = function(app) {
 
   const passport      = require('passport'),
         SamlStrategy = require('passport-saml').Strategy,
-        fs = require('fs'),
+        fs = require('graceful-fs'),
         util = require('../../_lib/util')(app),
         request = require('request');
 
@@ -27,25 +27,18 @@ module.exports = function(app) {
     cert: fs.readFileSync('./server/_config/passport/certs/development.crt', 'utf-8'),
     signatureAlgorithm: app.get('config').saml.signatureAlgorithm
   }, function(req, profile, done) {
-    req.session.assertion = req.body.SAMLResponse;
 
     var signed = util.sign('/api/auth');
-    console.log(req.body.SAMLResponse);
-    request.post(signed, {body: req.body.SAMLResponse, json: true}, function(err, httpResponse, body) {
+    request.post(signed, {body: req.body.SAMLResponse}, function(err, httpResponse, body) {
       if (err) {
-        console.log(httpResponse);
-        console.log(err);
-        return done(err);
+        console.log('error ' + err);
+        return done(null, false);
       } else {
-        console.log(body);
-        req.session.authKey = body;
-        return done(null, body);
+        var user = JSON.parse(body);
+        console.log(user);
+        return done(null, user);
       }
     });
-
-    /* app.set('config').saml.assertion = req.body.SAMLResponse;
-    console.log(app.get('config').saml.assertion);
-    */
   });
-
 };
+

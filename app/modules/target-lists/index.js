@@ -1,6 +1,6 @@
 'use strict';
 
-module.exports =
+module.exports = /*  @ngInject */
   angular.module('orion.modules.targetLists', [
     // load your sample submodules here, e.g.:
     // require('./bar').name

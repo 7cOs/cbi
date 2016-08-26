@@ -1,6 +1,6 @@
 'use strict';
 
-module.exports =
+module.exports = /*  @ngInject */
   function filtersService() {
     var model = {
       accounts: [
@@ -13,9 +13,14 @@ module.exports =
       distributors: [],
       expanded: false,
       filtersApplied: true,
-      opportunitiesStatus: [
-        {name: 'Open'},
-        {name: 'Targeted'}
+      opportunityStatus: [
+        {
+          name: 'Open',
+          value: 'open'
+        }, {
+          name: 'Targeted',
+          value: 'targeted'
+        }
       ],
       opportunitiesTypes: [
         {name: 'All Types'},
@@ -26,22 +31,24 @@ module.exports =
         {name: 'New Placement (No Rebuy)'},
         {name: 'Manual'}
       ],
-      savedFilters: [
-        {name: 'Wine Shops'},
-        {name: 'Costco No Buy'},
-        {name: 'Circle K - Fremont'}
-      ],
+      savedFilters: [],
       placementType: [
         {name: 'Simple'},
         {name: 'Effective'}
       ],
       premises: [
-        {name: 'All'},
-        {name: 'Off Premise'},
-        {name: 'On Premise'}
-      ],
+        {
+          name: 'All',
+          value: 'all'
+        }, {
+          name: 'Off Premise',
+          value: 'off'
+        }, {
+          name: 'On Premise',
+          value: 'on'
+        }],
       selected: {
-        accountScope: false,
+        myAccountsOnly: true,
         accountBrands: '',
         accountMarkets: '',
         accountTypes: '',
@@ -62,6 +69,7 @@ module.exports =
         storeSegmentationC: '',
         storeTypeCBBD: '',
         storeTypeIndependent: '',
+        timePeriod: '',
         tradeChannelConvenience: '',
         tradeChannelDrug: '',
         tradeChannelGrocery: '',

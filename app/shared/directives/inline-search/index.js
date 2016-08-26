@@ -5,8 +5,10 @@ module.exports =
     var directive = {
       restrict: 'EA',
       scope: {
+        type: '@',
         placeholder: '@',
-        results: '='
+        chosenResult: '=',
+        nav: '@'
       },
       controller: InlineSearchController,
       controllerAs: 'is',
@@ -15,7 +17,8 @@ module.exports =
       link: function(scope, elem, attrs) {}
     };
 
-    function InlineSearchController($scope, $timeout) {
+    /*  @ngInject */
+    function InlineSearchController($scope, $timeout, $filter, searchService, $location) {
 
       // ****************
       // CONTROLLER SETUP
@@ -28,14 +31,7 @@ module.exports =
       vm.input = '';
       vm.showResults = false;
       vm.loading = false;
-      vm.results = [
-        'Result one',
-        'Result two',
-        'Result three',
-        'Result four',
-        'Result five',
-        'Result six'
-      ];
+      vm.type = '';
 
       // Expose public methods
       vm.action = action;
@@ -46,20 +42,61 @@ module.exports =
       // PUBLIC METHODS
       // **************
 
-      function action() {
+      function action(type) {
+        var method;
+        vm.results = [];
+        vm.chosenResult = {};
+        vm.errorMessage = null;
         vm.loading = true;
         vm.showResults = true;
-        $timeout(function() {
+        vm.type = type;
+
+        switch (type) {
+          case 'user':
+            method = 'getUsers';
+            break;
+          case 'product':
+            method = 'getProducts';
+            break;
+          case 'store':
+            method = 'getStores';
+            break;
+          case 'distributor':
+            method = 'getDistributors';
+            break;
+          case 'chain': // This should probably be an endpoint, waiting for answer from API
+            method = 'getStores';
+            break;
+          default:
+            console.log('Please specify a search type');
+            break;
+        }
+
+        searchService[method](vm.input).then(function(data) {
           vm.loading = false;
-        }, 2000);
+          vm.results = data;
+        }, function(reason) {
+          vm.loading = false;
+          vm.errorMessage = reason;
+        });
       }
 
-      function resultChosen(result) {
-        vm.input = result;
+      function resultChosen(result, nav) {
+        if (vm.type === 'user') vm.input = $filter('titlecase')(result.firstName) + ' ' + $filter('titlecase')(result.lastName);
+        else vm.input = result;
+
+        vm.chosenResult = result;
+        if (nav) {
+          // We'll need to pass result for filtering once Accounts is integrated
+          $location.url('/accounts');
+        }
         close();
       }
 
-      function close() {
+      function close(clear) {
+        if (clear) {
+          vm.input = '';
+        }
         vm.showResults = false;
       }
     }

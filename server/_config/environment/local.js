@@ -23,12 +23,15 @@ module.exports = function (config) {
   config.env = 'development';
   config.address = 'http://' + config.domain + ':'  + config.port + '/'; // base url
 
+  config.iq = 'http://iqweb.cbrands.com';
+
+  // if you change this server, you need to get a different JWT.
   config.api = {
     url: 'http://cbi-api-test.herokuapp.com',
     key: 'U1NCc2FXdGxJSFJ2SUVodlpHOXlMQ0JJYjJSdmNpd2dTRzlrYjNJc0lFaHZaRzl5Y3lCaGJtUWdTRzlrYjNKekxnPT0=',
     apiKey: 'test',
-    version: 'v2'
-
+    version: 'v2',
+    jwt: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJmaXJzdE5hbWUiOiJST0JFUlQiLCJsYXN0TmFtZSI6IlNIQU5OT04iLCJpc3MiOiJodHRwczovL29yaW9uLmNicmFuZHMuY29tIiwicGVyc29uSUQiOjE4NzUsImVtcGxveWVlSUQiOiIxMDA5MjkzIiwiZXhwIjoxNDc2OTkwNjQzNzAwLCJpYXQiOjE0NzE4MDY2NDM3MDAsImVtYWlsIjoiYm9iLnNoYW5ub25AY2JyYW5kcy5jb20ifQ.8fOc38TRqIk7Yv7s5KH2-fdGLQBRDjFkqoC_AUlj6qU'
   };
 
   config.saml = {

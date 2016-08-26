@@ -1,4 +1,4 @@
-module.exports =
+module.exports = /*  @ngInject */
   function opportunitiesService($http, $q, distributorsService, apiHelperService, filtersService) {
     // Temporary Data - Old Data we're currently using in controllers
     var tempData = {
@@ -364,12 +364,6 @@ module.exports =
     };
 
     var service = {
-      /* all: function() {
-        return tempData.opportunities;
-      },
-      get: function(id) {
-        return tempData[id];
-      },*/
       model: model,
       getOpportunities: getOpportunities,
       createOpportunity: createOpportunity,
@@ -400,11 +394,11 @@ module.exports =
       var opportunitiesPromise = $q.defer(),
           url = opportunityID ? apiHelperService.request('/api/opportunities/' + opportunityID, filterPayload) : apiHelperService.request('/api/opportunities/', filterPayload);
 
-      $http.get(url, {
-        headers: {}
-      })
-      .then(getOpportunitiesSuccess)
-      .catch(getOpportunitiesFail);
+      console.log(url);
+
+      $http.get(url)
+        .then(getOpportunitiesSuccess)
+        .catch(getOpportunitiesFail);
 
       function getOpportunitiesSuccess(response) {
         // Group opportunities by store

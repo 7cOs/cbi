@@ -212,9 +212,9 @@ function NotesController($scope, $state, $mdDialog, $timeout, notesService, Uplo
         }
       });
     }
-
     // Needs to flip after success or failure
     // vm.fileUploading = false;
+
   }
 
   // ***************

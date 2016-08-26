@@ -6,24 +6,52 @@ module.exports = function(app) {
 
   app.route('/api/*')
     .get(function(req, res) {
-      console.log(req.url);
       var signed = util.sign(req.url);
-      req.pipe(request(signed)).pipe(res);
+      var jwtToken = req.user ? req.user.jwt : app.get('config').api.jwt;
+      req.pipe(request(signed).auth(null, null, true, jwtToken))
+      .on('err', function(err) {
+        console.log(err);
+      })
+      .pipe(res);
     })
+
     .delete(function(req, res) {
       var signed = util.sign(req.url);
-      request.del(signed, {body: req.body, json: true}).pipe(res);
+      var jwtToken = req.user ? req.user.jwt : app.get('config').api.jwt;
+      request.del(signed, {body: req.body, json: true}).auth(null, null, true, jwtToken)
+      .on('err', function(err) {
+        console.log(err);
+      })
+      .pipe(res);
     })
+
     .post(function(req, res) {
       var signed = util.sign(req.url);
-      request.post(signed, {body: req.body, json: true}).pipe(res);
+      var jwtToken = req.user ? req.user.jwt : app.get('config').api.jwt;
+      request.post(signed, {body: req.body, json: true}).auth(null, null, true, jwtToken)
+      .on('err', function(err) {
+        console.log(err);
+      })
+      .pipe(res);
     })
+
     .put(function(req, res) {
       var signed = util.sign(req.url);
-      request.put(signed, {body: req.body, json: true}).pipe(res);
+      var jwtToken = req.user ? req.user.jwt : app.get('config').api.jwt;
+      request.put(signed, {body: req.body, json: true}).auth(null, null, true, jwtToken)
+      .on('err', function(err) {
+        console.log(err);
+      })
+      .pipe(res);
     })
+
     .patch(function(req, res) {
       var signed = util.sign(req.url);
-      request.patch(signed, {body: req.body, json: true}).pipe(res);
+      var jwtToken = req.user ? req.user.jwt : app.get('config').api.jwt;
+      request.patch(signed, {body: req.body, json: true}).auth(null, null, true, jwtToken)
+      .on('err', function(err) {
+        console.log(err);
+      })
+      .pipe(res);
     });
 };

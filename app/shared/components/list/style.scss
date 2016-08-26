@@ -262,7 +262,7 @@
   a {
     text-transform: uppercase;
     font-size: 0.8em;
-    font-weight: $medium;
+    font-weight: $semibold;
   }
 }
 
@@ -272,7 +272,7 @@
 }
 
 .type {
-  font-weight: $medium;
+  font-weight: $semibold;
 }
 
 .positive {
@@ -311,6 +311,11 @@
   }
 }
 
+.mandate-icon {
+  top: 81px;
+  left: -5px;
+}
+
 .opportunity-header {
   margin: 0.67em 0;
 
@@ -341,7 +346,7 @@
 }
 
 .percentage {
-  font-weight: $medium;
+  font-weight: $semibold;
   padding-left: 0.5em;
 }
 

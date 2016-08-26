@@ -1,6 +1,6 @@
 'use strict';
 
-module.exports =
+module.exports = /*  @ngInject */
   function landingController($rootScope, $state, filtersService, chipsService, myperformanceService, userService) {
 
     // ****************
@@ -26,20 +26,16 @@ module.exports =
     // Set values
     vm.greeting = getGreeting();
 
-    /* userService.getPerformanceSummary('A1B2').then(function(data) {
-      console.log(data.performance);
-    });*/
+    userService.getPerformanceSummary('1705').then(function(data) {
+      console.log(data);
+      vm.performanceData = data;
+    });
 
-    /* commenting out until API is better
-    userService.getTargetLists('A1B2C3').then(function(data) {
-      vm.namedFilters = data.owned;
-      console.log(vm.namedFilters);
-      console.log('shared with me response', data.owned);
-
-      vm.sharedFilters = data.sharedWithMe;
-      console.log(vm.sharedFilters);
-      console.log('shared with me response', data.sharedWithMe);
-    });*/
+    userService
+      .getOpportunityFilters('1')
+      .then(function(res) {
+        vm.savedFilters = res;
+      });
 
     // **************
     // PUBLIC METHODS

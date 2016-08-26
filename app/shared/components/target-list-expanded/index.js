@@ -20,10 +20,15 @@ function ExpandedTargetListController($state, $scope, $filter, $mdDialog, $q, us
   vm.pageName = $state.current.name;
   vm.lastUpdatedChevron = false;
   vm.listChevron = true;
-  vm.newList = {};
+  vm.newList = {
+    name: '',
+    description: '',
+    opportunities: []
+  };
   vm.totalOpportunitesChevron = true;
 
   // Expose public methods
+  vm.archiveTargetList = archiveTargetList;
   vm.createNewList = createNewList;
   vm.createTargetList = createTargetList;
   vm.closeModal = closeModal;
@@ -42,6 +47,29 @@ function ExpandedTargetListController($state, $scope, $filter, $mdDialog, $q, us
   // **************
   // PUBLIC METHODS
   // **************
+
+  function archiveTargetList() {
+    var selectedTargetLists = $filter('filter')(userService.model.targetLists.owned, {selected: true}),
+        archiveTargetListPromises = [];
+
+    // get selected target list ids and their promises
+    archiveTargetListPromises = selectedTargetLists.map(function(targetList) {
+      return targetListService.updateTargetList(targetList.id, {archived: true});
+    });
+
+    // run all archive requests at the same time
+    $q.all(archiveTargetListPromises).then(function(response) {
+      angular.forEach(selectedTargetLists, function(item, key) {
+        // this may work or i may need to do the object. cant test due to api issues.
+        item.archived = true;
+
+        userService.model.targetLists.ownedArchived++;
+        userService.model.targetLists.ownedNotArchived--;
+      });
+
+      console.log(userService.model.targetLists);
+    });
+  }
 
   function createNewList(e) {
     var parentEl = angular.element(document.body);
@@ -104,7 +132,9 @@ function ExpandedTargetListController($state, $scope, $filter, $mdDialog, $q, us
   function saveNewList(e) {
     userService.addTargetList(vm.newList).then(function(response) {
       closeModal();
-      userService.model.targetLists.owned.push(response);
+      userService.model.targetLists.owned.unshift(response);
+      userService.model.targetLists.ownedArchived++;
+      userService.model.targetLists.ownedNotArchived--;
     });
   }
 
@@ -143,7 +173,8 @@ function ExpandedTargetListController($state, $scope, $filter, $mdDialog, $q, us
   // ***************
 
   function init() {
-    userService.getTargetLists('1').then(function(data) {
+    // userService.getTargetLists('1601', {'type': 'targetLists'}).then(function(data) {
+    userService.getTargetLists('1601', {'type': 'targetLists'}).then(function(data) {
       var ownedPromises = [],
           sharedPromises = [];
       userService.model.targetLists = data;
@@ -168,6 +199,7 @@ function ExpandedTargetListController($state, $scope, $filter, $mdDialog, $q, us
         angular.forEach(userService.model.targetLists.sharedWithMe, function(targetList, key) {
           targetList.collaborators = response[key].data;
         });
+        console.log(userService.model.targetLists);
       });
     });
   }

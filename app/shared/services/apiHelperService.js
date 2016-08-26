@@ -1,6 +1,6 @@
 'use strict';
 
-module.exports =
+module.exports = /*  @ngInject */
   function apiHelperService() {
 
     return {
@@ -32,7 +32,7 @@ module.exports =
 
         return '?' + queryParams;
       } else if (obj.type && obj.type === 'opportunities') {
-        queryParams += 'filter=limit:500,sort:store,';
+        queryParams += '';
 
         // remove type obj
         delete obj.type;
@@ -43,15 +43,21 @@ module.exports =
           i++;
         }
 
-        return '?' + encodeURIComponent(queryParams);
+        return '?limit=500&sort=store&filter=' + encodeURIComponent(queryParams);
+      } else if (obj.type && obj.type === 'targetLists') {
+        delete obj.type;
+
+        queryParams += '?archived=true';
+
+        return queryParams;
       } else {
         queryParams += 'filter=';
 
         // remove type obj
         delete obj.type;
 
-        for (var key3 in obj) {
-          queryParams += key3 + ':' + obj[key3];
+        for (var key4 in obj) {
+          queryParams += key4 + ':' + obj[key4];
           if (i !== z) queryParams += ',';
           i++;
         }

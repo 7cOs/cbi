@@ -1,6 +1,6 @@
 'use strict';
 
-function TargetListController($scope, $state) {
+function TargetListController($scope, $state, userService) {
 
   // ****************
   // CONTROLLER SETUP
@@ -12,69 +12,49 @@ function TargetListController($scope, $state) {
   // Defaults
   vm.pageName = $state.current.name;
 
-  // Temp data
-  vm.namedFilters = [{
-    'name': 'California - Whiskey Bars',
-    'creator': 'Will Jay',
-    'members': ['James Norton', 'RJ LaCount', 'Eric Schiller'],
-    'created': 'One Minute Ago',
-    'closedOpportunities': 520,
-    'opportunities': 2251
-  }, {
-    'name': 'California - Wine Shops',
-    'creator': 'Pete Mitchell',
-    'members': ['James Norton', 'Eric Schiller'],
-    'created': 'One Minute Ago',
-    'closedOpportunities': 320,
-    'opportunities': 451
-  }, {
-    'name': 'California - Negroni Bars',
-    'creator': 'Nick Bradsaw',
-    'members': ['James Norton', 'RJ LaCount', 'Eric Schiller', 'Holly Perkins'],
-    'created': 'One Year Ago',
-    'closedOpportunities': 1989,
-    'opportunities': 2251
-  }, {
-    'name': 'California - Beer Stores',
-    'creator': 'RJ LaCount',
-    'members': ['James Norton', 'Adwait Nerlikar', 'RJ LaCount', 'Eric Schiller'],
-    'created': 'One Minute Ago',
-    'closedOpportunities': 587,
-    'opportunities': 2251
-  }];
-  vm.sharedFilters = [{
-    'name': 'Whidbey Island Restaurants',
-    'creator': 'Sam Carvey',
-    'members': ['David Ostler', 'Todd Alkema'],
-    'created': 'One Hour Ago',
-    'closedOpportunities': 20,
-    'opportunities': 2251
-  }, {
-    'name': 'West Seattle C-Stores',
-    'creator': 'Patti Horigan',
-    'members': ['James Conrick', 'Tom Andersen', 'Paul Wagner'],
-    'created': 'One Week Ago',
-    'closedOpportunities': 4390,
-    'opportunities': 5251
-  }];
-  vm.archivedFilters = [{
-    'name': 'Umi Sake House',
-    'creator': 'Ali Harkless',
-    'members': ['David Ostler', 'Todd Alkema', 'Patti Horigan'],
-    'created': 'One Day Ago',
-    'closedOpportunities': 1984,
-    'opportunities': 2251
-  }, {
-    'name': 'Tacoma Grocery',
-    'creator': 'Lilli Marlene',
-    'members': ['James Conrick', 'Tom Andersen', 'Paul Wagner', 'Trish LaPaglia'],
-    'created': 'One Year Ago',
-    'closedOpportunities': 490,
-    'opportunities': 521
-  }];
-
   // Expose public methods
   vm.ratio = ratio;
+
+  // tab names
+  vm.types = {
+    'mine': {
+      'name': 'My Target List',
+      'records': [],
+      'total': 0
+    },
+    'shared': {
+      'name': 'Shared with Me',
+      'records': [],
+      'total': 0
+    },
+    'archived': {
+      'name': 'Archived',
+      'records': [],
+      'total': 0
+    }
+  };
+
+  userService.getTargetLists('1').then(function(data) {
+    // split things into categories, but ignore archived
+    var mine = data.owned.filter(curriedFilterByArchived(false));
+    var shared = data.sharedWithMe.filter(curriedFilterByArchived(false));
+
+    // Get archived
+    var archived = data.owned.filter(curriedFilterByArchived(true));
+
+    // Uncomment this if we want shared archived included with my archived
+    // archived = archived.concat(
+    //   data.sharedWithMe.filter(curriedFilterByArchived(true))
+    // );
+
+    // Send to model
+    vm.types.mine.records = mine.slice(0, 4);
+    vm.types.mine.total = mine.length;
+    vm.types.shared.records = shared.slice(0, 4);
+    vm.types.shared.total = shared.length;
+    vm.types.archived.records = archived.slice(0, 4);
+    vm.types.archived.total = archived.length;
+  });
 
   // **************
   // PUBLIC METHODS
@@ -84,6 +64,18 @@ function TargetListController($scope, $state) {
     var result = closed / total * 100;
     return result;
   };
+
+  // **************
+  // PRIVATE METHODS
+  // **************
+
+  function curriedFilterByArchived(yes) {
+    return function(item) {
+      /* eslint eqeqeq: 0 */
+      /* needed this so as to allow coercion */
+      return item.archived == yes;
+    };
+  }
 }
 
 module.exports =

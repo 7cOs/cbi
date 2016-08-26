@@ -16,8 +16,10 @@ module.exports = function (config) {
     js: config.address + 'js/'
   };
 
+  config.iq = 'http://test-iqweb.cbrands.com';
+
   config.api = {
-    url: 'http://cbi-api-test.herokuapp.com',
+    url: 'https://cbi-api-internal-qa.herokuapp.com',
     key: 'U1NCc2FXdGxJSFJ2SUVodlpHOXlMQ0JJYjJSdmNpd2dTRzlrYjNJc0lFaHZaRzl5Y3lCaGJtUWdTRzlrYjNKekxnPT0=',
     apiKey: 'test',
     version: 'v2'
