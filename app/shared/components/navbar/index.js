@@ -18,13 +18,7 @@ function NavbarController($rootScope, $scope, $mdPanel, $mdDialog, notifications
   vm.notificationsService = notificationsService;
   vm.notifications = [];
   vm.unreadNotifications = 0;
-
-  userService
-    .getNotifications(userService.model.currentUser.personID)
-    .then(function(result) {
-      vm.notifications = result.notifications;
-      setUnreadCount(result.totalUnseenNotifications);
-    });
+  vm.userService = userService;
 
   // Defaults
   vm.noNotifications = 'No unread notifications.';
@@ -70,6 +64,8 @@ function NavbarController($rootScope, $scope, $mdPanel, $mdDialog, notifications
   vm.showNewRationaleInput = showNewRationaleInput;
   vm.addNewRationale = false;
   vm.addToTargetList = addToTargetList;
+
+  init();
 
   // **************
   // PUBLIC METHODS
@@ -149,6 +145,15 @@ function NavbarController($rootScope, $scope, $mdPanel, $mdDialog, notifications
   // ***************
   // PRIVATE METHODS
   // ***************
+
+  function init() {
+    userService
+    .getNotifications(userService.model.currentUser.personID)
+    .then(function(result) {
+      vm.notifications = result.notifications;
+      setUnreadCount(result.totalUnseenNotifications);
+    });
+  }
 
   // Get unread notification count and set initial badge value
   function setUnreadCount(value) {
