@@ -53,7 +53,7 @@ v-accordion.styled-list(multiple="" id="opportunities" control="list.accordion" 
       div.overlay-wrapper
         p(ng-if="!opportunity.failState") Successfully sent to 3 people
         p(ng-if="opportunity.failState") Whatever you just tried didn't work
-      div(ng-click="list.actionOverlay(opportunity)").hide-wrapper.hide-icon-wrapper.hide-row
+      div(ng-click="list.showFlyout(opportunity)").hide-wrapper.hide-icon-wrapper.hide-row
     .shadow-wrap.bottom
       div.checkbox-wrapper(ng-click="list.toggle(opportunity, list.selected)")
         md-checkbox(aria-label="Select Item" ng-checked="list.exists(opportunity, list.selected)")
