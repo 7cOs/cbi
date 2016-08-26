@@ -275,11 +275,6 @@ module.exports = /*  @ngInject */
       }, {
         name: 'Effective'
       }],
-      timePeriod: [{
-        name: 'Current Month to Date'
-      }, {
-        name: 'Last Closed Month'
-      }],
       trend: [{
         name: 'vs YA'
       }, {
@@ -291,20 +286,6 @@ module.exports = /*  @ngInject */
         name: 'Off Premise'
       }, {
         name: 'On Premise'
-      }],
-      depletionsTimePeriod: [{
-        name: 'MTD July 1 - July 31'
-      }, {
-        name: 'CYTD Jan 1 - July 21'
-      }, {
-        name: 'FYTD May 1, 2016 - July 21, 2016'
-      }],
-      distributionTimePeriod: [{
-        name: 'L30 Days June 21 - July 21'
-      }, {
-        name: 'L60 May 21, 2016 - July 21, 2016'
-      }, {
-        name: 'L90 Days April 22, 2016 - July 21, 2016'
       }],
       accountBrands: [{
         name: 'Distributions (simple)'

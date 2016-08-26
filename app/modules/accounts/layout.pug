@@ -41,18 +41,18 @@ notes
         md-radio-button(ng-repeat="filter in a.filters.trend" class="md-primary" ng-value="filter.name" aria-label="Trend" ng-click="a.chipsService.addChip(filter.name, 'trend', true)") {{filter.name}}
     div(column='3')
       label Ending Time Period
-      md-radio-group(ng-model="a.filtersService.model.selected.timePeriod" ng-init="a.filtersService.model.selected.timePeriod = 'Current Month to Date'")
-        md-radio-button(ng-repeat="filter in a.filters.timePeriod" class="md-primary" ng-value="filter.name" aria-label="Ending Time Period" ng-click="a.chipsService.addChip(filter.name, 'timePeriod', true)") {{filter.name}}
+      md-radio-group(ng-model="a.filtersService.model.selected.timePeriod")
+        md-radio-button(ng-repeat="filter in a.filtersService.model.timePeriod" class="md-primary" ng-value="filter.name" aria-label="Ending Time Period" ng-click="a.chipsService.addChip(filter.name, 'timePeriod', true)") {{filter.name}}
     div(column='7')
       div(row).dropdown-filter
         div(column='6').dropdown
           label Depletions Time Period
           md-select(ng-model="a.filtersService.model.selected.depletionsTimeFilter" md-on-open="a.openSelect(true)" md-on-close="a.openSelect(false)" placeholder="FYTD May 1, 2016 - June 29, 2016")
-            md-option(ng-repeat="filter in a.filters.depletionsTimePeriod" aria-label="{{filter.name}}" value="{{filter.name}}") {{filter.name}}
+            md-option(ng-repeat="filter in a.filtersService.model.depletionsTimePeriod" aria-label="{{filter.name}}" value="{{filter.name}}") {{filter.name}}
         div(column='6').dropdown
           label Distribution Time Period
           md-select(ng-model="a.filtersService.model.selected.distributionTimeFilter" md-on-open="a.openSelect(true)" md-on-close="a.openSelect(false)" placeholder="L90 Days April 1, 2016 - June 29, 2016")
-            md-option(ng-repeat="filter in a.filters.distributionTimePeriod" aria-label="{{filter.name}}" value="{{filter.name}}") {{filter.name}}
+            md-option(ng-repeat="filter in a.filtersService.model.distributionTimePeriod" aria-label="{{filter.name}}" value="{{filter.name}}") {{filter.name}}
 
 .filters(column='12')
   div(row)
