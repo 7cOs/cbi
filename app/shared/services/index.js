@@ -14,4 +14,5 @@ module.exports =
     .factory('opportunityFiltersService', require('./opportunityFiltersService'))
     .factory('notesService', require('./notesService'))
     .factory('chipsService', require('./chipsService'))
+    .factory('closedOpportunities', require('./closedOpportunitiesService'))
     .factory('searchService', require('./searchService'));
