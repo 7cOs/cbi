@@ -4,25 +4,7 @@ module.exports = /*  @ngInject */
   function userService($http, $q, apiHelperService, filtersService, targetListService) {
 
     var model = {
-          /* currentUser: {
-            id: '1601',
-            firstName: 'Joe',
-            lastName: 'Cerveza',
-            email: 'jCerveza@cbrands.com',
-            phone: '1234567890',
-            role: 'CBBD MDM',
-            accounts: ['Wal-mart', 'PCC']
-          }*/
-          currentUser: {
-            'firstName': 'JAMES',
-            'lastName': 'O\'NEIL',
-            'iss': 'https://cf.cbrands.com',
-            'personID': 1601,
-            'employeeID': '1002417',
-            'exp': 1477168596733,
-            'iat': 1471984596737,
-            'email': 'jim.oneil@cbrands.com'
-          }
+          currentUser: {}
         },
         service = {
           model: model,
@@ -483,7 +465,7 @@ module.exports = /*  @ngInject */
      */
     function addTargetList(p) {
       var targetListPromise = $q.defer(),
-          url = apiHelperService.request('/api/users/' + model.currentUser.id + '/targetLists/'),
+          url = apiHelperService.request('/api/users/' + model.currentUser.personID + '/targetLists/'),
           payload = {
             name: p.name,
             opportunityIds: [] // opportunity id's to be included

@@ -32,7 +32,7 @@ module.exports = /*  @ngInject */
     });
 
     userService
-      .getOpportunityFilters('1')
+      .getOpportunityFilters(userService.model.currentUser.personID)
       .then(function(res) {
         vm.savedFilters = res;
       });
