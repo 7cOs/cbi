@@ -1,7 +1,7 @@
 div(container)
   .external-link
     img(src="../assets/img/icons/nav-iq.svg")
-    a(href="/ext/iq" target="_self") Go to IQ
+    a(href="/ext/iq" target="_blank") Go to IQ
   div(row)
     img(src="assets/img/logos/Compass_logo.svg", ui-sref="landing", alt="Home").nav-logo
     .nav-logo-background
@@ -65,7 +65,7 @@ div(container)
             .nav-flyout
               .content
                 p Logged in as
-                p <strong>John Cervesa</strong>
+                p <strong>{{nb.userService.model.currentUser.firstName | titlecase}} {{nb.userService.model.currentUser.lastName | titlecase}}</strong>
                 a(href="/auth/logout" target="_self")
                   button.btn-action Logout
     ul.nav-sub-menu(ng-if="$root.pageTitle === 'Accounts' || $root.pageTitle === 'Scorecards'")
