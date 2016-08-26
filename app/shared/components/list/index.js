@@ -231,11 +231,6 @@ function ListController($scope, $state, $q, $mdDialog, opportunitiesService, tar
       userService.model.targetLists = data;
     });
   }
-
-  // Set positive or negative label for trend values
-  /* Should be handled in factory
-  vm.opportunities.forEach(function(item) {
-  });*/
 }
 
 module.exports =
