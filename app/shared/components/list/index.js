@@ -78,16 +78,6 @@ function ListController($scope, $state, $q, $mdDialog, opportunitiesService, tar
     vm.showSubMenu = false;
   }
 
-  // Overlay Controls
-  /* function actionOverlay(method, opportunityId) {
-    console.log(opportunityId);
-    if (method === 'send') {
-      console.log('send');
-    } else if (method === 'dismiss') {
-      console.log('dismiss');
-    }
-  }*/
-
   function addToTargetList(listId) {
     var opportunityIds = [];
 
