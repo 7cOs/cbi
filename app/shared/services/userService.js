@@ -179,11 +179,9 @@ module.exports = /*  @ngInject */
       var notificationsPromise = $q.defer(),
           url = apiHelperService.request('/api/users/' + id + '/notifications/');
 
-      $http.get(url, {
-        headers: {}
-      })
-      .then(getNotificationsSuccess)
-      .catch(getNotificationsFail);
+      $http.get(url)
+        .then(getNotificationsSuccess)
+        .catch(getNotificationsFail);
 
       function getNotificationsSuccess(response) {
         console.log('[userService.getNotifications] response: ', response);
