@@ -5,7 +5,7 @@ module.exports = function (config) {
   // global settings
   config.domain = 'orion-dev.cbrands.com';
   config.env = 'development';
-  config.address = 'https://' + config.domain + '/'; // base url
+  config.address = 'https://' + config.domain + ''; // base url
 
   // directories
   config.public = {
@@ -16,7 +16,7 @@ module.exports = function (config) {
     js: config.address + 'js/'
   };
 
-  config.iq = 'http://dev-iqweb.cbrands.com';
+  config.iq = 'http://dev-iqweb.cbrands.com/MicroStrategy/servlet/mstrWeb?server=CBIGDC-DMSTK801&project=Beer+Analytics&evt=2001&folderID=DC6B34544F13E47DFEA3AEB328B149A3';
 
   config.api = {
     url: 'https://cbi-api-test.herokuapp.com',
