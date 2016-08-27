@@ -4,18 +4,18 @@ div.my-scorecards
   section.scorecard-filters.filters.clearfix
     div.radio-filters
       label Ending Time Period
-      md-radio-group(ng-model="filters.selected.timePeriod")
-        md-radio-button(ng-repeat="filter in s.filters.timePeriod" class="md-primary block" ng-value="filter.name" aria-label="{{filter.name}}") {{filter.name}}
+      md-radio-group(ng-model="s.filtersService.model.selected.timePeriod")
+        md-radio-button(ng-repeat="filter in s.filtersService.model.timePeriod" class="md-primary block" ng-value="filter.name" aria-label="{{filter.name}}") {{filter.name}}
 
     div.dropdown-filter
       div.dropdown
         label Depletions Time Period
-        md-select(ng-model="filters.selected.depletionsTimeFilter" placeholder="FYTD May 1, 2016 - June 29, 2016")
-          md-option(ng-repeat="filter in s.filters.depletionsTimePeriod" aria-label="{{filter.name}}" value="{{filter.name}}") {{filter.name}}
+        md-select(ng-model="s.filtersService.model.selected.depletionsTimeFilter" placeholder="FYTD May 1, 2016 - June 29, 2016")
+          md-option(ng-repeat="filter in s.filtersService.model.depletionsTimePeriod" aria-label="{{filter.name}}" value="{{filter.name}}") {{filter.name}}
       div.dropdown
         label Distribution Time Period
-        md-select(ng-model="filters.selected.distributionTimeFilter" placeholder="L90 Days April 1, 2016 - June 29, 2016")
-          md-option(ng-repeat="filter in s.filters.distributionTimePeriod" aria-label="{{filter.name}}" value="{{filter.name}}") {{filter.name}}
+        md-select(ng-model="s.filtersService.model.selected.distributionTimeFilter" placeholder="L90 Days April 1, 2016 - June 29, 2016")
+          md-option(ng-repeat="filter in s.filtersService.model.distributionTimePeriod" aria-label="{{filter.name}}" value="{{filter.name}}") {{filter.name}}
 
   section.depeletions-scorecard
     div.scorecard-header.clearfix
