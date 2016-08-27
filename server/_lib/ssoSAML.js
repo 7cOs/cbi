@@ -13,52 +13,25 @@ the generation code over.
 
 ************************************************/
 module.exports = {
-  getSFDCSessionId: getSFDCSessionId,
-  getSAMLAssertion: getSAMLAssertion
+  getSFDCSession: getSFDCSession
 };
 
-function getSFDCSessionId(app, req, res) {
-  var utility = require('util');
-  try {
-    var sfdcConfig =  app.get('config').sfdcSec;
-  } catch (e) {
-    console.log('e is: ' + e);
-  }
-  console.log('in getSFDCSessionId with ' + sfdcConfig);
-  console.log('About to get an assertion for employeeID ' + req.user.employeeID);
-  var assertion = getSAMLAssertion(app, req, res, 'u64', req.user.employeeID);
-  console.log('Assertion is: ' + assertion);
-  try {
-    var options = {method: 'POST',
-      url: sfdcConfig.spAssertEndpoint,
-      qs:
-      {
-        'grant_type': 'assertion',
-        'assertion_type': 'urn%3Aoasis%3Anames%3Atc%3ASAML%3A2.0%3Aprofiles%3ASSO%3Abrowser',
-        'assertion': assertion
-      },
-      headers:
-      {
-        'Content-Type': 'application/x-www-form-urlencoded'
-      }
-    };
-  } catch (err) {
-    throw (err);
-  };
-
-  console.log(utility.inspect(options));
-  return (options);
-};
-
-function getSAMLAssertion (app, req, res, encoding, empId) {
+function getSFDCSession (app, req, res) {
   var request = require('request');
   var cheerio = require('cheerio');
   var he = require('he');
   var urlencode = require('urlencode');
   var b64url = require('base64url');
   var b, raw, b64, u64, b64u;
+  var sfdcConfig = app.get('config').sfdcSec;
+  var empId = req.user.jwtmap.employeeID;
   var u = require('util');
-  var retValue = '';
+  console.log('employee is: ' + empId);
+
+//  console.log('req.user is: ' + JSON.stringify(empId, null, ''));
+  var encoding = sfdcConfig.baseEncoding;
+
+  var theAssertion, sessionIdMessage;
 
   var options = { method: 'POST',
     url: 'http://axiomsso.herokuapp.com/GenerateSamlResponse.action',
@@ -72,38 +45,60 @@ function getSAMLAssertion (app, req, res, encoding, empId) {
        'idpConfig.startURL': '',
        'idpConfig.logoutURL': '',
        'idpConfig.userType': 'STANDARD',
-       'idpConfig.additionalAttributes': '' },
-    headers:
-     { 'postman-token': 'ba6870cc-5a9c-0746-c136-9c028b2ed51c',
-       'cache-control': 'no-cache' } };
-  var assertion = request(options, function (error, response, body) {
-    if (error) console.log('The error is: \n' + u.inspect(error));
-    var $ = cheerio.load(body);
-    var s = $('textarea').html();
-
-    b = new Buffer(he.decode(s));
-    raw = b;
-    b64 = b.toString('base64');
-    u64 = urlencode(b64);
-    b64u = b64url(raw);
-    if (encoding === 'raw') {
-      retValue = raw;
-    } else if (encoding === 'base64') {
-      retValue = b64;
-    } else if (encoding === 'base64+URL') {
-      retValue = u64;
-    } else if (encoding === 'base64Url') {
-      retValue = b64u;
-    } else  {
-      return ('Invalid encoding: ' + encoding);
-    }
-    if (retValue !== '') {
-      return (retValue);
+       'idpConfig.additionalAttributes': ''}
+     };
+  request(options, function (error, response, body) {
+    if (error) {
+      console.err('Error is: ' + error);
     } else {
-      return ({'isSuccess': false,
-              'errMessage': 'The SAML Assertion could not be generated.'});
-    }
+      var $ = cheerio.load(body);
 
+      var s = $('textarea').html();
+
+      b = new Buffer(he.decode(s));
+
+      raw = b;
+      b64 = b.toString('base64');
+      u64 = urlencode(b64);
+      b64u = b64url(raw);
+
+      if (encoding === 'raw') {
+        theAssertion = raw;
+      } else if (encoding === 'base64') {
+        theAssertion = b64;
+      } else if (encoding === 'base64+URL') {
+        theAssertion = u64;
+      } else if (encoding === 'base64Url') {
+        theAssertion = b64u;
+      } else  {
+        console.log('The encoding was invalid: ' + encoding);
+        return ('Invalid encoding: ' + encoding);
+      }
+
+//      res.write('<div>The assertion is: ' + theAsserton + '</div>');
+      var bodyString = 'grant_type=assertion';
+      bodyString = bodyString + '&assertion_type=' + urlencode('urn:oasis:names:tc:SAML:2.0:profiles:SSO:browser');
+      bodyString = bodyString + '&assertion=' + theAssertion;
+      var SessionIDOptions = {method: 'POST',
+                              url: sfdcConfig.spAssertEndpoint,
+                              headers:
+                              {
+                                'Content-Type': 'application/x-www-form-urlencoded'
+                              },
+                              body: bodyString
+                             };
+      res.send('<div>SessionIDOptions = \n' + u.inspect(SessionIDOptions, null, '') + '<p/> body = ' + u.inspect(SessionIDOptions.body, null, '') +  '<p/> headers = ' + u.inspect(SessionIDOptions.headers, null, '') + '\n</div>');
+      request(SessionIDOptions, function (error, response, body) {
+        if (error) {
+          console.err('Error is: ' + error);
+        } else {
+          console.log('The Session ID message is: ' + u.inspect(body, null, '') + '----------------------------------');
+          sessionIdMessage = JSON.stringify(body, null, '');
+          console.log(sessionIdMessage);
+        }
+      });
+    };
+    return ({'isSuccess': true,
+             'retValue': sessionIdMessage});
   });
-  return assertion;
 };
