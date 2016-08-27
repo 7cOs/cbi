@@ -25,8 +25,8 @@
     div(class='more-filters')
       a(ng-click="o.filtersService.model.expanded = o.filtersService.model.expanded ? false : true")
         span(ng-class="{ 'chevron-up': o.filtersService.model.expanded, 'chevron-down': !o.filtersService.model.expanded}")
-        span(ng-if="o.filtersService.model.expanded") Less Filters
-        span(ng-if="!o.filtersService.model.expanded") More Filters
+        span.accent(ng-if="o.filtersService.model.expanded") Less Filters
+        span.accent(ng-if="!o.filtersService.model.expanded") More Filters
     div(column='3')
       label Account Scope
       md-checkbox(ng-model="o.filtersService.model.selected.myAccountsOnly" aria-label="My Accounts" ng-click="o.chipsService.updateChip('myAccountsOnly', 'My Accounts Only')") My Accounts Only
@@ -53,9 +53,9 @@
       div(row).retailer.dropdown-filter
         div(column='5').dropdown
           md-select(ng-model="o.filtersService.model.selected.retailer" md-on-close="o.chipsService.addChip(o.filtersService.model.selected.retailer, 'retailer', false)" placeholder="Store" ng-init="o.filtersService.model.selected.retailer = 'Store'")
-            md-option(ng-repeat="type in o.filtersService.model.retailer" aria-label="{{type.name}}" value="{{type.name}}") {{::type.name}}
+            md-option(ng-repeat="type in o.filtersService.model.retailer" ng-click="o.placeholderSelect(type.hintText)" aria-label="{{type.name}}" value="{{type.name}}") {{::type.name}}
         div(column='7')
-          inline-search(type="store" placeholder="By Name, Address, TDLinx, or Store #" chosen-result="o.filtersService.model.selected.store")
+          inline-search(type="store" placeholder="{{o.hintTextPlaceholder}}" chosen-result="o.filtersService.model.selected.store")
     div(column='3')
       label Distributor
       inline-search(type="distributor" placeholder="Name" chosen-result="o.filtersService.model.selected.chain")
@@ -93,9 +93,9 @@
           md-checkbox(column='5' ng-model="o.filtersService.model.selected.tradeChannelOther" aria-label="Trade Channel Other" ng-click="o.chipsService.updateChip('tradeChannelOther', 'Trade Channel Other')") Other
     div.location-contact-opps(column='3' ng-show="o.filtersService.model.expanded")
       label Location
-        input(type="text" placeholder="by City, State, or Zip" ng-model="o.filtersService.model.selected.location")
+        input(type="text" placeholder="City, State, or Zip" ng-model="o.filtersService.model.selected.location")
       label.cbbd-contact CBBD Contact
-        input(type="text" placeholder="by Name" ng-model="o.filtersService.model.selected.cbbdContact")
+        input(type="text" placeholder="Name" ng-model="o.filtersService.model.selected.cbbdContact")
     div(column='12' class='apply-filters')
       button(value='Apply Filters' type="button" class="btn-action" ng-click="o.chipsService.applyFilters()" ng-disabled="o.filtersService.model.filtersApplied") Apply Filters
         .secondary-button-container

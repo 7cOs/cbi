@@ -5,7 +5,8 @@
     md-chip {
       background: $gray-1;
       border-radius: 3px;
-      color: $gray-9;
+      font-size: 0.7em;
+      font-weight: $regular;
 
       ._md-chip-remove-container {
         left: 0;
@@ -14,15 +15,19 @@
       &._active {
         background-color: $gray-12;
       }
+
+      ._md-chip-content {
+        color: $body-bg;
+      }
     }
 
     md-icon {
-      color: $gray-6;
+      color: $body-bg;
 
       svg {
-        height: 80%;
-        width: 80%;
-        padding-top: 10%;
+        height: 18px;
+        width: 18px;
+        padding-top: 3px;
       }
     }
   }

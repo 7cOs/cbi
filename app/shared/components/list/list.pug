@@ -14,12 +14,12 @@ h3(ng-if="list.pageName(['opportunities'])" ng-hide="list.opportunitiesService.m
 button.icon.select-all(ng-click="list.toggleAll()")
   span(ng-if='list.isChecked()') Un-
   | Select All
-button.icon.expand-all(ng-click="list.accordion.expandAll()" ng-disabled="list.expandedOpportunities.length === list.opportunitiesService.model.opportunities.length") Expand All
-button.icon.collapse-all(ng-click="list.accordion.collapseAll()" ng-disabled="list.expandedOpportunities.length < 2") Collapse All
+button.icon.narrow-icon.expand-all(ng-click="list.accordion.expandAll()" ng-disabled="list.expandedOpportunities.length === list.opportunitiesService.model.opportunities.length") Expand All
+button.icon.narrow-icon.collapse-all(ng-click="list.accordion.collapseAll()" ng-disabled="list.expandedOpportunities.length < 2") Collapse All
 
-div(ng-if="!list.opportunitiesService.model.filterApplied") [Ratul] Pls apply a filter to see the list
+//- div(ng-if="!list.opportunitiesService.model.filterApplied") [Ratul] Pls apply a filter to see the list
 
-v-accordion.styled-list(multiple="" id="opportunities" control="list.accordion" onexpand="list.expandCallback(item)" oncollapse="list.collapseCallback(item)" column='12' ng-if="list.opportunitiesService.model.filterApplied")
+v-accordion.styled-list(multiple="" id="opportunities" control="list.accordion" onexpand="list.expandCallback(item)" oncollapse="list.collapseCallback(item)" column='12' )
   div.header-row(row)
     div.checkbox-wrapper.placeholder(ng-click="list.toggle(opportunity, list.selected)")
     div.hide-wrapper(ng-if="list.pageName()")
@@ -47,6 +47,9 @@ v-accordion.styled-list(multiple="" id="opportunities" control="list.accordion" 
           | Segmentation
           span(ng-class="{ 'chevron-down-small' : list.segmentationChevron, 'chevron-up-small' : !list.segmentationChevron}").chevron-down-small
   v-pane.list-item(row ng-repeat="opportunity in list.opportunitiesService.model.opportunities | orderBy:list.sortProperty:list.reverse" expanded='opportunity.isExpanded')
+    div(ng-if="!list.opportunitiesService.model.opportunities.length").no-opportunites
+      h4 No Opportunities have been added yet
+      p Try Searching for <span>Opportunities</span> and add them to your list
     .action-overlay(ng-class="{'active': opportunity.toggled, 'fail': opportunity.failState}")
       div.checkbox-wrapper
           md-checkbox(aria-label="Action Item Select" ng-checked="true")

@@ -24,6 +24,10 @@ list {
     &:last-child {
       border-bottom: 1px solid $gray-3;
     }
+
+    &:first-child {
+      border-top: none;
+    }
   }
 
   .checkbox-sibling {
@@ -136,6 +140,7 @@ list {
   color: $gray-1;
   font-size: 0.7em;
   text-transform: uppercase;
+  border-bottom: 1px solid $gray-3;
 
   label {
     display: inline-block;

@@ -3,15 +3,16 @@ button {
   border: 1px solid $gray-4;
   color: $blue;
   font-size: 0.7em;
+  font-family: $rajdhani;
   font-weight: $semibold;
   margin-bottom: 2em;
   outline: 0;
-  padding: 1.5em;
+  padding: 1.5em 1.5em 1.5em 1.75em;
   position: relative;
   text-transform: uppercase;
 
   &.icon {
-    padding-left: 3em;
+    padding-left: 3.5em;
 
     &:before {
       background-position: 0 center;
@@ -21,9 +22,13 @@ button {
       display: block;
       height: 15px;
       position: absolute;
-      left: 1em;
+      left: 1.5em;
       top: calc(50% - 8px);
       width: 15px;
+    }
+
+    &.narrow-icon {
+      padding-left: 3em;
     }
   }
 

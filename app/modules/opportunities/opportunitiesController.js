@@ -10,6 +10,7 @@ module.exports = /*  @ngInject */
     // Initial variables
     var vm = this;
     vm.currentFilter = {};
+    vm.hintTextPlaceholder = 'Name, Address, TDLinkx, or Store#';
 
     // Set page title for head and nav
     $rootScope.pageTitle = $state.current.title;
@@ -28,12 +29,17 @@ module.exports = /*  @ngInject */
     vm.editFilterModal = editFilterModal;
     vm.modalSaveOpportunityFilter = modalSaveOpportunityFilter;
     vm.saveFilter = saveFilter;
+    vm.placeholderSelect = placeholderSelect;
 
     init();
 
     // **************
     // PUBLIC METHODS
     // **************
+
+    function placeholderSelect(data) {
+      vm.hintTextPlaceholder = data;
+    }
 
     function applyFilter(filterStr) {
       console.log('add filter');
