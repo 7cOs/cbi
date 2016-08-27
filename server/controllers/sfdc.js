@@ -7,29 +7,41 @@ J. Scott Cromie
 var sfdc = require('../_lib/sfdc.js');
 var saml = require('../_lib/ssoSAML.js');
 // var u = require('util');
-
-exports.getAssertion = function(app, req, res) {
-  var assertPromise = new Promise(function (resolve, reject) {
-    var assertion = saml.getSAMLAssertion(app, req, res, 'base64+URL', '7005936');
-    if (assertion) {
-      resolve(assertion);
-    } else {
-      reject(Error('Could not generate an assertion for 7005936'));
-    }
-  });
-  assertPromise.then(function (result) {
-    var strResponse = JSON.stringify(result, null, '\t');
-    res.send(strResponse);
-    // console.log('The assertion is: ' + strResponse);
-  }, function (err) {
-    console.err('There was an error: ' + err);
-  });
-  res.send('<div>Complete</div>');
+module.exports = {
+  getSFDCSession: getSFDCSession,
+  getAttachmentData: getAttachmentData,
+  createNote: createNote,
+  deleteNote: deleteNote,
+  deleteAttach: deleteAttach,
+  searchAccounts: searchAccounts,
+  accountNotes: accountNotes,
+  testSFDCConn: testSFDCConn
 };
 
-exports.getSessionId = function(app, req, res) {
+var u = require('util');
+
+function testSFDCConn(app, req, res) {
+  var sfdcConnPromise = new Promise(function (resolve, reject) {
+    var result = sfdc.testSFDCConn(app, req, res);
+    if (result.isSuccess) {
+      resolve(result);
+    } else {
+      reject(Error('Could not create a SFDC connection: ' + result.errorMessage));
+    }
+  });
+
+  sfdcConnPromise.then(function (result) {
+    console.log('The SFDC Connection is \n' + JSON.stringify(result.sfdcConn, null, '\t'));
+    return result.sfdcConn;
+  }, function (err) {
+    console.err(err);
+    return err;
+  });
+};
+
+function getSFDCSession(app, req, res) {
   var sessionPromise = new Promise(function (resolve, reject) {
-    var sessionId = saml.getSFDCSessionId(app, req, res);
+    var sessionId = saml.getSFDCSession(app, req, res);
     if (sessionId) {
       resolve(sessionId);
     } else {
@@ -39,13 +51,15 @@ exports.getSessionId = function(app, req, res) {
   sessionPromise.then(function (result) {
     var strResponse = JSON.stringify(result, null, '\t');
     console.log('The session Id is ' + strResponse);
+    return strResponse;
   }, function (err) {
     console.err({'isSuccess': false,
                  'errorMessage': err});
+    return err;
   });
 };
 
-exports.getAttachmentData = function(app, req, res) {
+function getAttachmentData(app, req, res) {
   var promise = new Promise(function (resolve, reject) {
     var blobData = sfdc.getAttachment(app, req, res);
     if (blobData) {
@@ -61,7 +75,7 @@ exports.getAttachmentData = function(app, req, res) {
   });
 };
 
-exports.createNote = function(app, req, res) {
+function createNote(app, req, res) {
   var promise = new Promise(function (resolve, reject) {
     var records = sfdc.createNote(app, req, res);
     if (records) {
@@ -81,7 +95,7 @@ exports.createNote = function(app, req, res) {
   });
 };
 
-exports.deleteNote = function(app, req, res) {
+function deleteNote(app, req, res) {
   var promise = new Promise(function (resolve, reject) {
     var response = sfdc.fnDeleteNote(app, req, res);
     if (response) {
@@ -101,7 +115,7 @@ exports.deleteNote = function(app, req, res) {
   });
 };
 
-exports.deleteAttach = function(app, req, res) {
+function deleteAttach(app, req, res) {
   var promise = new Promise(function (resolve, reject) {
     var response = sfdc.fnDeleteAttach(app, req, res);
     if (response) {
@@ -121,7 +135,7 @@ exports.deleteAttach = function(app, req, res) {
   });
 };
 
-exports.searchAccounts = function(app, req, res) {
+function searchAccounts(app, req, res) {
   var promise = new Promise(function (resolve, reject) {
     var records = sfdc.fnSearchAccounts(app, req, res);
     if (records) {
@@ -142,24 +156,24 @@ exports.searchAccounts = function(app, req, res) {
   });
 };
 
-exports.accountNotes = function(app, req, res) {
+function accountNotes(app, req, res) {
+
   var promise = new Promise(function (resolve, reject) {
-    var records = sfdc.queryAccountNotes(app, req, res);
-    if (records) {
-      resolve(records);
+    var result = sfdc.queryAccountNotes(app, req, res);
+    if (result) {
+      resolve(result);
     } else {
       reject(Error('There was no response from SFDC: ' + res.statusText));
     }
   });
   promise.then(function (result) {
-    console.log('records were returned from sfdc');
-    var strResponse = JSON.stringify(result, null, '\t');
-    res.write(strResponse);
-    res.end();
+    console.log('\n\n\n\n\n');
+    console.log(result);
+    console.log('\n\n\n\n\n');
+    return result;
   }, function (err) {
-    var strResponse = JSON.stringify(err, null, '');
-    res.write(strResponse);
-    res.end();
+    console.log(err);
+    return err;
   });
 };
 

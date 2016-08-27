@@ -37,17 +37,17 @@ module.exports = function(app) {
   app.get('/sfdcauth/getConfig', function(req, res) {
     if (sfdcConfig !== null) {
       res.type('json');
-      res.send(utility.inspect(sfdcConfig, null, '\t'));
+      res.send(utility.inspect(sfdcConfig, null, '\t') + utility.inspect(req.user.jwtmap, null, '\t'));
     } else {
       res.send('<div>The SFDC Configuration is not present. Please check your configuration file for this environment</div>');
     }
   });
 
-  app.get('/sfdcauth/getSessionId', function(app, req, res) {
-    sfdc['getSessionId'](app, req, res);
+  app.get('/sfdcauth/getSFDCSession', function(req, res) {
+    sfdc['getSFDCSession'](app, req, res);
   });
 
-  app.get('/sfdcauth/getAssertion', function(app, req, res) {
-    sfdc['getAssertion'](app, req, res);
+  app.get('/sfdcauth/getSFDCConnTest', function(req, res) {
+    sfdc['testSFDCConn'](app, req, res);
   });
 };

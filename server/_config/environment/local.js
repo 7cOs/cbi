@@ -67,11 +67,8 @@ module.exports = function (config) {
   };
 
   config.sfdcSec = {
+    baseEncoding: 'base64+URL',
 // sfdc parameters
-    sfUserName: 'scromie@deloitte.com.cbeerdev',
-    sfPassword: 'P455w0rd',
-    sfSecToken: 'bWwvZxEPdoCzd14l7YJC82bOZ',
-    sfLoginEndpoint: 'test.salesforce.com',
 
 // SP (Service Provider (i.e. Salesforce.com)) details
     spEntityId: 'https://dev-salesforce.cbrands.com',
