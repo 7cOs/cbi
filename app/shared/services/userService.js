@@ -13,6 +13,7 @@ module.exports = /*  @ngInject */
           hideOpportunity: hideOpportunity,
           deleteHiddenOpportunity: deleteHiddenOpportunity,
           getNotifications: getNotifications,
+          createNotification: createNotification,
           getOpportunityFilters: getOpportunityFilters,
           saveOpportunityFilter: saveOpportunityFilter,
           getPerformanceSummary: getPerformanceSummary,
@@ -207,7 +208,9 @@ module.exports = /*  @ngInject */
       var notificationsPromise = $q.defer(),
           url = apiHelperService.request('/api/users/' + id + '/notifications/'),
           payload = {
-
+            creator: id,
+            action: p.action,
+            objectType: p.objectType
           };
 
       $http.post(url, payload)
