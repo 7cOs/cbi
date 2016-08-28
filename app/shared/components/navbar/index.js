@@ -1,6 +1,6 @@
 'use strict';
 
-function NavbarController($rootScope, $scope, $state, $mdPanel, $mdDialog, $window, $mdMenu, $mdSelect, notificationsService, opportunitiesService, targetListService, userService) {
+function NavbarController($rootScope, $scope, $state, $mdPanel, $mdDialog, $mdMenu, $mdSelect, notificationsService, opportunitiesService, targetListService, userService) {
 
   // ****************
   // CONTROLLER SETUP
@@ -68,9 +68,6 @@ function NavbarController($rootScope, $scope, $state, $mdPanel, $mdDialog, $wind
   vm.hideBadge = hideBadge;
 
   init();
-
-  /* $window.addEventListener('onfocusout', function() {
-  });*/
 
   // **************
   // PUBLIC METHODS
