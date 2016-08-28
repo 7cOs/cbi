@@ -15,6 +15,7 @@ the generation code over.
 // var u = require('util');
 // var $scope;
 var rp = require('request-promise');
+var u = require('util');
 
 module.exports = {
   getSFDCSession: getSFDCSession
@@ -22,8 +23,9 @@ module.exports = {
 
 // var u = require('util');
 
-var getSFDCSession = function(app, req, res, $scope) {
-
+function getSFDCSession(app, req, res) {
+  console.log('\n\n In getSFDCSession \n');
+  var $scope = {};
   var cheerio = require('cheerio');
   var he = require('he');
   var urlencode = require('urlencode');
@@ -33,7 +35,9 @@ var getSFDCSession = function(app, req, res, $scope) {
   var empId = req.user.jwtmap.employeeID;
   var encoding = sfdcConfig.baseEncoding;
   var theAssertion = '';
+
   var loadAssertion = function(empId) {
+        console.log('\n\nin loadAssertion\n');
         var options = { method: 'POST',
     url: 'http://axiomsso.herokuapp.com/GenerateSamlResponse.action',
     qs:
@@ -57,6 +61,7 @@ var getSFDCSession = function(app, req, res, $scope) {
       },
 
       loadSession = function() {
+        console.log('\n\nin loadSession\n');
         var $ = cheerio.load($scope.assertion);
 
         var s = $('textarea').html();
@@ -97,9 +102,11 @@ var getSFDCSession = function(app, req, res, $scope) {
         return rp(SessionIDOptions)
              .then(function(body) {
                $scope.sfdcSession = body;
+               console.log('\n\nsession is: \n' + u.inspect($scope.sfdcSession, null, '\t'));
                return body;
              });
       };
+  console.log('loading the Assertion now');
   loadAssertion(empId)
     .then(loadSession);
 
