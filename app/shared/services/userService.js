@@ -196,6 +196,37 @@ module.exports = /*  @ngInject */
     }
 
     /**
+     * @name createNotification
+     * @desc create notifications for a user
+     * @params {String} id - id of a user
+     * @params {Object} p - params to be used in creation of notification
+     * @returns {Array} - Newly created notification
+     * @memberOf cf.common.services
+     */
+    function createNotification(id, p) {
+      var notificationsPromise = $q.defer(),
+          url = apiHelperService.request('/api/users/' + id + '/notifications/'),
+          payload = {
+
+          };
+
+      $http.post(url, payload)
+        .then(createNotificationSuccess)
+        .catch(createNotificationFail);
+
+      function createNotificationSuccess(response) {
+        console.log('[userService.createNotification] response: ', response);
+        notificationsPromise.resolve(response.data);
+      }
+
+      function createNotificationFail(error) {
+        notificationsPromise.reject(error);
+      }
+
+      return notificationsPromise.promise;
+    }
+
+    /**
      * @name getOpportunityFilters
      * @desc get all opportunity filters for a user
      * @params {String} id - id of a user
