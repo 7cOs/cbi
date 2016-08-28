@@ -47,7 +47,7 @@ function getSFDCSession (app, req, res) {
        'idpConfig.userType': 'STANDARD',
        'idpConfig.additionalAttributes': ''}
      };
-  request(options, function (error, response, body) {
+  var sfdcSession = request(options, function (error, response, body) {
     if (error) {
       console.err('Error is: ' + error);
     } else {
@@ -91,14 +91,17 @@ function getSFDCSession (app, req, res) {
       request(SessionIDOptions, function (error, response, body) {
         if (error) {
           console.err('Error is: ' + error);
+          return error;
         } else {
           console.log('The Session ID message is: ' + u.inspect(body, null, '') + '----------------------------------');
           sessionIdMessage = JSON.stringify(body, null, '');
           console.log(sessionIdMessage);
+          return body;
         }
       });
     };
     return ({'isSuccess': true,
-             'retValue': sessionIdMessage});
+             'sfdcSession': sfdcSession});
   });
+  return sfdcSession;
 };

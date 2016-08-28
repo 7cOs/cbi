@@ -4,112 +4,147 @@ Salesforce integration Library
 J. Scott Cromie
 8/9/16
 ***********************************************************/
-module.exports = function(app) {
-  function isConnected (app) {
-    return app.isSFDCConnected;
+module.exports = {
+  sfdcConn: sfdcConn,
+  testSFDCConn: testSFDCConn,
+  createNote: createNote,
+  queryAccountNotes: queryAccountNotes,
+  searchAccounts: searchAccounts,
+  deleteAttach: deleteAttach,
+  getAttachment: getAttachment,
+  deleteNote: deleteNote
+};
+
+function sfdcConn(app, req, res) {
+  var saml = require('../_lib/ssoSAML.js');
+  if (!req.user.sfdcConn) {
+    try {
+      req.user.sfdcConn = saml.getSFDCSession(app, req, res);
+      return {'isSuccess': true,
+              'theSesssion': req.user.sfdcConn};
+    } catch (e) {
+      return {'isSuccess': false,
+              'errorMessage': 'Could not establish an SFDC Connection: ' + e};
+    }
+  } else {
+    return {'isSuccess': true,
+            'theSession': req.user.sfdcConn};
   }
+};
 
-  function createConn(app, req, res) {
+function testSFDCConn(app, req, res) {
+  var jsforce = require('jsforce');
+  var sfdcSession = sfdcConn(app, req, res);
 
-    // Implement SFDC Connection
-    return {};
+  if (sfdcSession.isSuccess) {
+    var conn = new jsforce.Connection({
+      instanceURL: sfdcSession.theSession.instanceURL,
+      accessToken: sfdcSession.theSession.accessToken
+    });
+    console.log('User ID: ' + conn.userInfo.id);
+    console.log('Org ID: ' + conn.userInfo.organizationId);
+    return {'isSuccess': true,
+            'sfdcConn': conn};
+  } else {
+    return {'isSuccess': false,
+            'errorMessage': sfdcSession.errorMessage};
   }
+};
 
-  return {
-    createNote: function(app, req, res) {
-   // get the Account Id
-      var conn = {};
-      if (!isConnected) {
-        conn = createConn(app, req, res);
+function createNote(app, req, res) {
+
+  var sfdc = sfdcConn(app, req, res);
+  if (sfdc.isSuccess) {
+    var conn = sfdc.theSession;
+    var theAccount = conn.search('FIND {' + req.query.accountid + '} IN ALL FIELDS RETURNING Account(Id, Name)',
+      function (err, res) {
+        if (err) {
+          console.log('The account Id could not be found');
+          return console.error(err);
+        }
+        return res;
+      });
+
+    theAccount.then(function (result) {
+      var accountId = result.searchRecords[0].Id;  // Only uses the first account it finds.
+      if (accountId === null || accountId === undefined) {
+        return console('There was no account specified for the Id provided (' + req.accountId + '.');
       } else {
-        conn = app.sfdc;
-      };
-      var theAccount = conn.search('FIND {' + req.query.accountid + '} IN ALL FIELDS RETURNING Account(Id, Name)',
-        function (err, res) {
-          if (err) {
-            console.log('The account Id could not be found');
-            return console.error(err);
-          }
-          return res;
-        });
-      theAccount.then(function (result) {
-        var accountId = result.searchRecords[0].Id;  // Only uses the first account it finds.
-        if (accountId === null || accountId === undefined) {
-          return console('There was no account specified for the Id provided (' + req.accountId + '.');
-        } else {
-          conn.sobject('Note__c').create([{
-            Account__c: accountId,
-            Comments_RTF__c: req.query.body,
-            Conversion_Flag__c: req.query.conversionflag,
+        conn.sobject('Note__c').create([{
+          Account__c: accountId,
+          Comments_RTF__c: req.query.body,
+          Conversion_Flag__c: req.query.conversionflag,
       // CreatedById, CreatedDate, Id, IsDeleted, LastModifiedById, LastModifiedDate are system generated.
-            Other_Type__c: req.query.othertype,
-            Private__c: req.query.private,
-            Soft_Delete__c: req.query.softdelete,
-            Title__c: req.query.title,
-            Type__c: req.query.type
-          }],
-            function (err, ret) {
-              if (err) {
-                console.log('Returning an error from createNote: ' + JSON.stringify(err, null, ''));
-                return err;
+          Other_Type__c: req.query.othertype,
+          Private__c: req.query.private,
+          Soft_Delete__c: req.query.softdelete,
+          Title__c: req.query.title,
+          Type__c: req.query.type
+        }],
+        function (err, ret) {
+          if (err) {
+            console.log('Returning an error from createNote: ' + JSON.stringify(err, null, ''));
+            return err;
 /*  This is returning the reverse of what it should.  ret.success should be true, yet
     it thinks it's false.  Please verify.
                        }  else if (!ret.success) {
             console.log('There was an unknown error with the logic');
   */
-              } else {
-                return ret;
-              }
-            });
-        };
-      }, function (err) {
-        var strResponse = JSON.stringify(err, null, '');
-        console.log('ERROR:' + strResponse);
-        return err;
-      });
-    },
-
-    deleteNote: function(app, req, res) {
-      var conn = {};
-      if (!isConnected) {
-        conn = createConn(app, req, res);
-      } else {
-        conn = app.sfdc;
+          } else {
+            return ret;
+          }
+        });
       };
-      var response = '';
-      if (req.query.noteId) {
-        var noteId = req.query.noteId;
-        response = conn.sobject('Note__c')
-          .delete(noteId,
-            function (err, ret) {
-              if (err || !ret.success) {
-                return (err);
-              }
-              return (ret);
-            });
-        if (response !== '') {
-          return (response);
-        } else return ('Salesforce did not return valid information');
-      } else {
-        return ([{
-          'isSuccess': 'False',
-          'ErrorString': 'No noteId Id was present in the URL'
-        }]);
-      }
-    },
+    }, function (err) {
+      var strResponse = JSON.stringify(err, null, '');
+      console.log('ERROR:' + strResponse);
+      return err;
+    });
+  } else {
+    return sfdc;
+  }
+};
 
-    getAttachment: function(app, req, res) {
-      var conn = {};
-      if (!isConnected) {
-        conn = createConn(app, req, res);
-      } else {
-        conn = app.sfdc;
-      };
+function deleteNote(app, req, res) {
+  var sfdc = sfdcConn(app, req, res);
+  if (sfdc.isSuccess) {
+    var conn = sfdc.theSession;
+    var response = '';
+    if (req.query.noteId) {
+      var noteId = req.query.noteId;
+      response = conn.sobject('Note__c')
+                     .delete(noteId,
+                             function (err, ret) {
+                               if (err || !ret.success) {
+                                 return (err);
+                               }
+                               return (ret);
+                             });
+      if (response !== '') {
+        return (response);
+      } else return ('Salesforce did not return valid information');
+    } else {
+      return ([{
+        'isSuccess': 'False',
+        'ErrorString': 'No noteId Id was present in the URL'
+      }]);
+    }
+  } else {
+    return sfdc;
+  }
+};
 
-      var theURL = '';
-      var theId = req.query.noteId;
-      var atts = conn.query('Select a.Owner.Name, a.Owner.Username, a.OwnerId, a.Name, a.IsPrivate, a.Id, a.Description, a.CreatedDate, a.CreatedById, a.ContentType, a.BodyLength, a.Body From Attachment a where ParentId = \'' + theId + '\'', function(err, result) {
+function getAttachment(app, req, res) {
+  var sfdc = sfdcConn(app, req, res);
+  if (sfdc.isSuccess) {
+    var conn = sfdc.theSession;
+    var theURL = '';
+    var theId = req.query.noteId;
+
+    var atts = conn.query('Select a.Owner.Name, a.Owner.Username, a.OwnerId, a.Name, a.IsPrivate, a.Id, a.Description, a.CreatedDate, a.CreatedById, a.ContentType, a.BodyLength, a.Body From Attachment a where ParentId = \'' + theId + '\'',
+      function(err, result) {
         var retValue = '';
+
         if (err) { return console.error(err); }
 
         retValue = '{"Attachments": [';
@@ -132,28 +167,28 @@ module.exports = function(app) {
           retValue += '"BodyLength": "' + result.records[att].BodyLength + '",';
           retValue += '"Body": "' + result.records[att].Body + '"},';
         }
+
         retValue = retValue.slice(0, -1);  // remove the trailing comma
         retValue += ']}';
         res.write(retValue);
         return (theURL);
-      });
-      atts.then(function(result) {
-        res.end();
-        return (result);
-      });
-    },
+      }
+    );
+
+    atts.then(function(result) {
+      res.end();
+      return (result);
+    }, function(err) {
+      return (err);
+    });
+  }
+};
 
 /*
     TODO: There is a better way to write this: bring in the object and id, that can account for attachments and notes
    will revisit if we have time
 */
-    deleteAttach: function(app, req, res) {
-      var conn = {};
-      if (!isConnected) {
-        conn = createConn(app, req, res);
-      } else {
-        conn = app.sfdc;
-      };
+    function deleteAttach(app, req, res) {
       var response = '';
       if (req.query.attachId) {
         var attachId = req.query.attachId;
@@ -174,9 +209,9 @@ module.exports = function(app) {
           'ErrorString': 'No attachment Id was present in the URL'
         }]);
       }
-    },
+    };
 
-    searchAccounts: function(app, req, res) {
+    function searchAccounts(app, req, res) {
       var conn = {};
       if (!isConnected) {
         conn = createConn(app, req, res);
@@ -208,15 +243,9 @@ module.exports = function(app) {
           'ErrorString': 'No search term was present in the URL'
         }]);
       }
-    },
+    };
 
-    queryAccountNotes: function(app, req, res) {
-      var conn = {};
-      if (!isConnected) {
-        conn = createConn(app, req, res);
-      } else {
-        conn = app.sfdc;
-      }
+    function queryAccountNotes(app, req, res) {
       var strId = '';
 
 //  var conn = fnCreateConn(app);
@@ -264,6 +293,4 @@ module.exports = function(app) {
         console.error('There was an error in queryAccountNotes: ' + JSON.stringify(err, null, ''));
         return JSON.stringify(err, null, '');
       }
-    }
-  };
-};
+    };
