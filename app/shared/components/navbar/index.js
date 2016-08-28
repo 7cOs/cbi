@@ -150,13 +150,19 @@ function NavbarController($rootScope, $scope, $mdPanel, $mdDialog, notifications
     userService
     .getNotifications(userService.model.currentUser.personID)
     .then(function(result) {
-      vm.notifications = result.notifications;
-      setUnreadCount(result.totalUnseenNotifications);
+      vm.notifications = result;
+      setUnreadCount(vm.notifications);
+      console.log(vm.notifications);
+      console.log(vm.unreadNotifications);
     });
   }
 
   // Get unread notification count and set initial badge value
-  function setUnreadCount(value) {
+  function setUnreadCount(arr) {
+    var value = 0;
+    for (var i = 0; i < arr.length; i++) {
+      if (arr[i].status.toUpperCase() === 'UNSEEN') value++;
+    }
     vm.unreadNotifications = value;
   }
 }
