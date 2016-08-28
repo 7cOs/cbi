@@ -4,7 +4,8 @@ module.exports = /*  @ngInject */
     var model = {
       filterApplied: false,
       opportunities: [],
-      opportunitiesSum: 0
+      opportunitiesSum: 0,
+      opportunityId: null
     };
 
     var service = {
@@ -27,15 +28,17 @@ module.exports = /*  @ngInject */
      * @memberOf cf.common.services
      */
     function getOpportunities(opportunityID) {
+      if (!opportunityID) {
+        // get applied filters
+        var filterPayload = filtersService.getAppliedFilters('opportunities');
+      }
+
       // reset opportunities
       model.opportunitiesSum = 0;
 
-      // get applied filters
-      var filterPayload = filtersService.getAppliedFilters('opportunities');
-
       // create promise, build url based on filters and if there is an opp id
       var opportunitiesPromise = $q.defer(),
-          url = opportunityID ? apiHelperService.request('/api/opportunities/' + opportunityID, filterPayload) : apiHelperService.request('/api/opportunities/', filterPayload);
+          url = opportunityID ? apiHelperService.request('/api/opportunities/' + opportunityID) : apiHelperService.request('/api/opportunities/', filterPayload);
 
       console.log(url);
 
@@ -48,6 +51,9 @@ module.exports = /*  @ngInject */
         var newOpportunityArr = [],
             store,
             storePlaceholder;
+
+        // make opp array instead of obj if oppId provided
+        if (opportunityID) { response.data.opportunities = [response.data]; };
 
         for (var i = 0; i < response.data.opportunities.length; i++) {
           var item = response.data.opportunities[i];
