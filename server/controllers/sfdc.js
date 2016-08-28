@@ -6,7 +6,6 @@ J. Scott Cromie
 ***********************************************************/
 var sfdc = require('../_lib/sfdc.js');
 var saml = require('../_lib/ssoSAML.js');
-var Promise = require('promise');
 // var u = require('util');
 module.exports = {
   getSFDCSession: getSFDCSession,
