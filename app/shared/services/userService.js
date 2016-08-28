@@ -13,6 +13,7 @@ module.exports = /*  @ngInject */
           hideOpportunity: hideOpportunity,
           deleteHiddenOpportunity: deleteHiddenOpportunity,
           getNotifications: getNotifications,
+          createNotification: createNotification,
           getOpportunityFilters: getOpportunityFilters,
           saveOpportunityFilter: saveOpportunityFilter,
           getPerformanceSummary: getPerformanceSummary,
@@ -179,11 +180,9 @@ module.exports = /*  @ngInject */
       var notificationsPromise = $q.defer(),
           url = apiHelperService.request('/api/users/' + id + '/notifications/');
 
-      $http.get(url, {
-        headers: {}
-      })
-      .then(getNotificationsSuccess)
-      .catch(getNotificationsFail);
+      $http.get(url)
+        .then(getNotificationsSuccess)
+        .catch(getNotificationsFail);
 
       function getNotificationsSuccess(response) {
         console.log('[userService.getNotifications] response: ', response);
@@ -191,6 +190,39 @@ module.exports = /*  @ngInject */
       }
 
       function getNotificationsFail(error) {
+        notificationsPromise.reject(error);
+      }
+
+      return notificationsPromise.promise;
+    }
+
+    /**
+     * @name createNotification
+     * @desc create notifications for a user
+     * @params {String} id - id of a user
+     * @params {Object} p - params to be used in creation of notification
+     * @returns {Array} - Newly created notification
+     * @memberOf cf.common.services
+     */
+    function createNotification(id, p) {
+      var notificationsPromise = $q.defer(),
+          url = apiHelperService.request('/api/users/' + id + '/notifications/'),
+          payload = {
+            creator: id,
+            action: p.action,
+            objectType: p.objectType
+          };
+
+      $http.post(url, payload)
+        .then(createNotificationSuccess)
+        .catch(createNotificationFail);
+
+      function createNotificationSuccess(response) {
+        console.log('[userService.createNotification] response: ', response);
+        notificationsPromise.resolve(response.data);
+      }
+
+      function createNotificationFail(error) {
         notificationsPromise.reject(error);
       }
 

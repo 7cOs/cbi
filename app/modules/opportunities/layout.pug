@@ -98,8 +98,8 @@
         input(type="text" placeholder="Name" ng-model="o.filtersService.model.selected.cbbdContact")
     div(column='12' class='apply-filters')
       button(value='Apply Filters' type="button" class="btn-action" ng-click="o.chipsService.applyFilters()" ng-disabled="o.filtersService.model.filtersApplied") Apply Filters
-        .secondary-button-container
-          a(ng-click="o.saveReport()" ng-disabled="o.filtersService.model.filtersApplied" ng-class="{'disabled save-filterset-icon-disabled': o.filtersService.model.filtersApplied}").accent.save-filterset-icon Save Report
-          a(ng-click="o.resetFilters()" ng-disabled="o.filtersService.model.filtersApplied" ng-class="{'disabled reset-icon-disabled': o.filtersService.model.filtersApplied}").accent.reset-icon Reset
+      .secondary-button-container
+        a(ng-click="o.saveReport()" ng-disabled="o.filtersService.model.filtersApplied" ng-class="{'disabled save-filterset-icon-disabled': o.filtersService.model.filtersApplied}").accent.save-filterset-icon Save Report
+        a(ng-click="o.resetFilters()" ng-disabled="o.filtersService.model.filtersApplied" ng-class="{'disabled reset-icon-disabled': o.filtersService.model.filtersApplied}").accent.reset-icon Reset
 
 list

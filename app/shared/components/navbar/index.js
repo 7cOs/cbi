@@ -1,6 +1,6 @@
 'use strict';
 
-function NavbarController($rootScope, $scope, $mdPanel, $mdDialog, notificationsService, opportunitiesService, targetListService, userService) {
+function NavbarController($rootScope, $scope, $state, $mdPanel, $mdDialog, notificationsService, opportunitiesService, targetListService, userService) {
 
   // ****************
   // CONTROLLER SETUP
@@ -64,6 +64,7 @@ function NavbarController($rootScope, $scope, $mdPanel, $mdDialog, notifications
   vm.showNewRationaleInput = showNewRationaleInput;
   vm.addNewRationale = false;
   vm.addToTargetList = addToTargetList;
+  vm.hideBadge = hideBadge;
 
   init();
 
@@ -73,11 +74,21 @@ function NavbarController($rootScope, $scope, $mdPanel, $mdDialog, notifications
 
   // Mark notification as read on click
   function markRead(notification) {
+    console.log(notification);
+
     vm.notificationsService
       .markNotification(notification.id, vm.notificationsService.status.READ)
       .then(function() {
         notification.status = vm.notificationsService.status.READ;
         setUnreadCount(vm.unreadNotifications - 1);
+
+        if (notification.objectType.toUpperCase() === 'TARGET_LIST') {
+          targetListService.model.currentList.id = notification.objectId;
+          $state.go('target-list-detail');
+        } else if (notification.objectType.toUpperCase() === 'OPPORTUNITY') {
+          opportunitiesService.model.opportunityId = notification.objectId;
+          $state.go('opportunities');
+        }
       });
   }
 
@@ -142,6 +153,10 @@ function NavbarController($rootScope, $scope, $mdPanel, $mdDialog, notifications
     vm.addNewRationale = true;
   }
 
+  function hideBadge() {
+    vm.notificationHelper.showBadge = false;
+  }
+
   // ***************
   // PRIVATE METHODS
   // ***************
@@ -150,14 +165,24 @@ function NavbarController($rootScope, $scope, $mdPanel, $mdDialog, notifications
     userService
     .getNotifications(userService.model.currentUser.personID)
     .then(function(result) {
-      vm.notifications = result.notifications;
-      setUnreadCount(result.totalUnseenNotifications);
+      vm.notifications = result;
+      setUnreadCount(vm.notifications);
     });
   }
 
   // Get unread notification count and set initial badge value
-  function setUnreadCount(value) {
-    vm.unreadNotifications = value;
+  function setUnreadCount(arr) {
+    var value = 0;
+    for (var i = 0; i < arr.length; i++) {
+      if (arr[i].status.toUpperCase() === 'UNSEEN') value++;
+    }
+
+    vm.notificationHelper = {
+      unreadNotifications: value,
+      showBadge: true
+    };
+
+    if (value < 1) vm.notificationHelper.showBadge = false;
   }
 }
 

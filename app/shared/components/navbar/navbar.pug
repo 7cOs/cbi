@@ -26,8 +26,8 @@ div(container)
           div.inner
             span #[a(ui-sref="help") Help]
       div.nav-icon-container
-        .notification-count-badge(ng-if="nb.unreadNotifications > 0")
-          span {{nb.unreadNotifications}}
+        .notification-count-badge(ng-if="nb.notificationHelper.showBadge")
+          span {{nb.notificationHelper.unreadNotifications}}
         md-menu(md-position-mode="target-right target" md-offset="54 80")
           a.nav-icon.search(href="#" ng-click="$mdOpenMenu($event)" aria-label="Search")
           md-menu-content
@@ -44,7 +44,7 @@ div(container)
                 inline-search(ng-if="nb.accountSelectorSelected === 'Store'" type="store" placeholder="Search for a store" chosen-result="nb.searchResult" nav="true")
         a.nav-icon.add-opportunity(ng-click="nb.modalAddOpportunityForm()")
         md-menu(md-position-mode="target-right target" md-offset="1 38")
-          a.nav-icon.notifications(href="#" md-menu-origin ng-click="$mdOpenMenu($event)", aria-label="Notifications")
+          a.nav-icon.notifications(href="#" md-menu-origin ng-click="$mdOpenMenu($event); nb.hideBadge()", aria-label="Notifications")
           md-menu-content
             .nav-flyout
               .content.nopad
@@ -56,7 +56,7 @@ div(container)
                   .info
                     label {{notification.dateUpdated | timeAgo: 'relative'}}
                     label.bold {{notification.creator.firstName}} {{notification.creator.lastName}}
-                div.notification-card.clearfix(ng-if="nb.unreadNotifications < 1")
+                div.notification-card.clearfix(ng-if="nb.notificationHelper.unreadNotifications < 1")
                   .details
                     p {{nb.noNotifications}}
         md-menu(md-position-mode="target-right target" md-offset="2 54")
