@@ -20,7 +20,6 @@ module.exports = function(app) {
       var en = '/' + app.get('config').api.version + '/' + uri.split('api/')[1];
       var signature = crypto.enc.Base64.stringify(crypto.HmacSHA256(en + app.get('config').api.apiKey, app.get('config').api.key));
       var url = app.get('config').api.url + en + '?signature=' + signature + '&apiKey=' + app.get('config').api.apiKey;
-      console.log(url);
       if (params) {
         url = url + '&' + params;
       }
