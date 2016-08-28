@@ -1,6 +1,6 @@
 'use strict';
 
-function NavbarController($rootScope, $scope, $state, $mdPanel, $mdDialog, notificationsService, opportunitiesService, targetListService, userService) {
+function NavbarController($rootScope, $scope, $state, $mdPanel, $mdDialog, $window, $mdMenu, $mdSelect, notificationsService, opportunitiesService, targetListService, userService) {
 
   // ****************
   // CONTROLLER SETUP
@@ -57,6 +57,7 @@ function NavbarController($rootScope, $scope, $state, $mdPanel, $mdDialog, notif
   vm.markRead = markRead;
   vm.modalAddOpportunityForm = modalAddOpportunityForm;
   vm.closeModal = closeModal;
+  vm.closeMenus = closeMenus;
   vm.addNewOpportunity = addNewOpportunity;
   vm.newOpportunity = {};
   vm.newOpportunityArray = [];
@@ -67,6 +68,9 @@ function NavbarController($rootScope, $scope, $state, $mdPanel, $mdDialog, notif
   vm.hideBadge = hideBadge;
 
   init();
+
+  /* $window.addEventListener('onfocusout', function() {
+  });*/
 
   // **************
   // PUBLIC METHODS
@@ -146,6 +150,13 @@ function NavbarController($rootScope, $scope, $state, $mdPanel, $mdDialog, notif
   function closeModal() {
     vm.newOpportunity = {};
     $mdDialog.hide();
+  }
+
+  function closeMenus($event) {
+    if ($event.relatedTarget === null) {
+      $mdSelect.hide();
+      $mdMenu.hide();
+    }
   }
 
   // Show inputs if a new item is needed
