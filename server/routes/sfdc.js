@@ -46,4 +46,8 @@ module.exports = function(app) {
   app.get('/sfdcauth/getSFDCSession', function(req, res) {
     sfdc['getSFDCSession'](app, req, res);
   });
+
+  app.get('/sfdcauth/getSFDCConnTest', function(req, res) {
+    sfdc['testSFDCConn'](app, req, res);
+  });
 };

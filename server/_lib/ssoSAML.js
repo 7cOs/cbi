@@ -16,6 +16,8 @@ module.exports = {
   getSFDCSession: getSFDCSession
 };
 
+var u = require('util');
+
 function getSFDCSession (app, req, res) {
   var request = require('request');
   var cheerio = require('cheerio');
@@ -25,13 +27,9 @@ function getSFDCSession (app, req, res) {
   var b, raw, b64, u64, b64u;
   var sfdcConfig = app.get('config').sfdcSec;
   var empId = req.user.jwtmap.employeeID;
-  var u = require('util');
-  console.log('employee is: ' + empId);
-
-//  console.log('req.user is: ' + JSON.stringify(empId, null, ''));
   var encoding = sfdcConfig.baseEncoding;
 
-  var theAssertion, sessionIdMessage;
+  var theAssertion;
 
   var options = { method: 'POST',
     url: 'http://axiomsso.herokuapp.com/GenerateSamlResponse.action',
@@ -45,11 +43,15 @@ function getSFDCSession (app, req, res) {
        'idpConfig.startURL': '',
        'idpConfig.logoutURL': '',
        'idpConfig.userType': 'STANDARD',
-       'idpConfig.additionalAttributes': ''}
-     };
-  var sfdcSession = request(options, function (error, response, body) {
+       'idpConfig.additionalAttributes': ''
+     }
+  };
+
+  request(options, function (error, response, body) {
     if (error) {
       console.err('Error is: ' + error);
+      return {'isSuccess': false,
+              'errorMessage': 'request() library error: ' + error};
     } else {
       var $ = cheerio.load(body);
 
@@ -72,10 +74,11 @@ function getSFDCSession (app, req, res) {
         theAssertion = b64u;
       } else  {
         console.log('The encoding was invalid: ' + encoding);
-        return ('Invalid encoding: ' + encoding);
+        return {
+          'isSuccess': false,
+          'errorMessage': 'Invalid encoding: ' + encoding};
       }
 
-//      res.write('<div>The assertion is: ' + theAsserton + '</div>');
       var bodyString = 'grant_type=assertion';
       bodyString = bodyString + '&assertion_type=' + urlencode('urn:oasis:names:tc:SAML:2.0:profiles:SSO:browser');
       bodyString = bodyString + '&assertion=' + theAssertion;
@@ -87,21 +90,30 @@ function getSFDCSession (app, req, res) {
                               },
                               body: bodyString
                              };
-      res.send('<div>SessionIDOptions = \n' + u.inspect(SessionIDOptions, null, '') + '<p/> body = ' + u.inspect(SessionIDOptions.body, null, '') +  '<p/> headers = ' + u.inspect(SessionIDOptions.headers, null, '') + '\n</div>');
-      request(SessionIDOptions, function (error, response, body) {
-        if (error) {
-          console.err('Error is: ' + error);
-          return error;
-        } else {
-          console.log('The Session ID message is: ' + u.inspect(body, null, '') + '----------------------------------');
-          sessionIdMessage = JSON.stringify(body, null, '');
-          console.log(sessionIdMessage);
-          return body;
-        }
+      var sfdcPromise = new Promise(function(resolve, reject) {
+        request(SessionIDOptions, function (error, response, body) {
+          if (error) {
+            reject({
+              'isSuccess': false,
+              'errorMessage': 'SFDC Session error: ' + error
+            });
+          } else {
+            resolve({
+              'isSuccess': true,
+              'sfdcSession': body
+            });
+          };
+        });
+      });
+
+      sfdcPromise.then(function(result) {
+        console.log('\n\nOutside Connection scope: \n' + u.inspect(result, null, '\t'));
+        req.user.sfdcConn = result;
+      }, function(err) {
+        console.log('\n\nThere was an error generating the SFDC Connection: \n' + u.inspect(err));
+        req.user.sfdcConn = err;
       });
     };
-    return ({'isSuccess': true,
-             'sfdcSession': sfdcSession});
   });
-  return sfdcSession;
 };
+

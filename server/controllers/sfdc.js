@@ -14,7 +14,27 @@ module.exports = {
   deleteNote: deleteNote,
   deleteAttach: deleteAttach,
   searchAccounts: searchAccounts,
-  accountNotes: accountNotes
+  accountNotes: accountNotes,
+  testSFDCConn: testSFDCConn
+};
+
+function testSFDCConn(app, req, res) {
+  var sfdcConnPromise = new Promise(function (resolve, reject) {
+    var result = sfdc.testSFDCConn(app, req, res);
+    if (result.isSuccess) {
+      resolve(result);
+    } else {
+      reject(Error('Could not create a SFDC connection: ' + result.errorMessage));
+    }
+  });
+
+  sfdcConnPromise.then(function (result) {
+    console.log('The SFDC Connection is \n' + JSON.stringify(result.sfdcConn, null, '\t'));
+    return result.sfdcConn;
+  }, function (err) {
+    console.err(err);
+    return err;
+  });
 };
 
 function getSFDCSession(app, req, res) {
