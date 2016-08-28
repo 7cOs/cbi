@@ -91,7 +91,7 @@ function getSFDCSession (app, req, res) {
                               body: bodyString
                              };
       var sfdcPromise = new Promise(function(resolve, reject) {
-        request(SessionIDOptions, function (error, response, body) {
+        request(SessionIDOptions,    function (error, response, body) {
           if (error) {
             reject({
               'isSuccess': false,
