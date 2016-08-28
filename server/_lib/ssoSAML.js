@@ -12,6 +12,8 @@ to generate the SAML Assertion.  The plan is to port
 the generation code over.
 
 ************************************************/
+var Promise = require('promise');
+
 module.exports = {
   getSFDCSession: getSFDCSession
 };
@@ -47,7 +49,7 @@ function getSFDCSession (app, req, res) {
      }
   };
 
-  request(options, function (error, response, body) {
+  var sfdcResult = request(options, function (error, response, body) {
     if (error) {
       console.err('Error is: ' + error);
       return {'isSuccess': false,
@@ -91,7 +93,7 @@ function getSFDCSession (app, req, res) {
                               body: bodyString
                              };
       var sfdcPromise = new Promise(function(resolve, reject) {
-        request(SessionIDOptions,    function (error, response, body) {
+        request(SessionIDOptions, function (error, response, body) {
           if (error) {
             reject({
               'isSuccess': false,
@@ -106,14 +108,17 @@ function getSFDCSession (app, req, res) {
         });
       });
 
-      sfdcPromise.then(function(result) {
+      var sfdcSession = sfdcPromise.done(function(result) {
         console.log('\n\nOutside Connection scope: \n' + u.inspect(result, null, '\t'));
-        req.user.sfdcConn = result;
+        return result;
       }, function(err) {
         console.log('\n\nThere was an error generating the SFDC Connection: \n' + u.inspect(err));
-        req.user.sfdcConn = err;
+        return err;
       });
+      console.log('\n\nFinished generating sfdcSession: ' + u.inspect(sfdcSession, null, '\t'));
     };
   });
+  console.log('\n\nOutside promise context: \n' + u.inspect(sfdcResult, null, '\t'));
+  return sfdcResult;
 };
 

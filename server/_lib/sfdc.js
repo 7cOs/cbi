@@ -27,7 +27,7 @@ function sfdcConn(app, req, res) {
     if (!req.user.sfdcConn) {
       try {
         console.log('\n\nNo connection already established.  Create the connection');
-        saml.getSFDCSession(app, req, res);
+        req.user.sfdcConn = saml.getSFDCSession(app, req, res);
         console.log('\n\nsfdcConnection stored in req.user: \n' + JSON.stringify(req.user.sfdcConn, null, '\t'));
         return {'isSuccess': true,
                 'theSesssion': req.user.sfdcConn};
