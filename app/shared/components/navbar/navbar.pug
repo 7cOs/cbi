@@ -44,7 +44,7 @@ div(container)
                 inline-search(ng-if="nb.accountSelectorSelected === 'Store'" type="store" placeholder="Search for a store" chosen-result="nb.searchResult" nav="true")
         a.nav-icon.add-opportunity(ng-click="nb.modalAddOpportunityForm()")
         md-menu(md-position-mode="target-right target" md-offset="1 38")
-          a.nav-icon.notifications(href="#" md-menu-origin ng-click="$mdOpenMenu($event); nb.hideBadge()", aria-label="Notifications")
+          a.nav-icon.notifications(href="#" md-menu-origin ng-click="$mdOpenMenu($event); nb.markSeen(nb.notifications)", aria-label="Notifications")
           md-menu-content
             .nav-flyout
               .content.nopad

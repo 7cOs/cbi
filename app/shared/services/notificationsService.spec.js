@@ -45,22 +45,24 @@ describe('[Services.notificationsService]', function() {
   });
 
   it('it\'s methods should exist', function() {
-    expect(notificationsService.markNotification).toBeDefined();
+    expect(notificationsService.markNotifications).toBeDefined();
   });
 
   it('should return a promise', function() {
-    var result = notificationsService.markNotification('1');
+    var result = notificationsService.markNotifications('1');
     var promiseResult = $q.defer().promise;
 
     expect(result).toEqual(promiseResult);
   });
 
   it('should resolve when status set to a valid value', function(done) {
-    var id = 'b928d31a-7eb7-41ac-ba94-3303d78cd44a';
-    var status = notificationsService.status.READ;
+    var payload = [{
+      id: 'b928d31a-7eb7-41ac-ba94-3303d78cd44a',
+      status: notificationsService.status.READ
+    }];
 
     notificationsService
-      .markNotification(id, status)
+      .markNotifications(payload)
       .then(function(test) {
         expect(test.status).toBe(200);
         done();
@@ -70,11 +72,13 @@ describe('[Services.notificationsService]', function() {
   });
 
   it('should reject when status set to an invalid value', function(done) {
-    var id = 'b928d31a-7eb7-41ac-ba94-3303d78cd44a';
-    var status = 'INVALID';
+    var payload = [{
+      id: 'b928d31a-7eb7-41ac-ba94-3303d78cd44a',
+      status: 'INVALID'
+    }];
 
     notificationsService
-      .markNotification(id, status)
+      .markNotifications(payload)
       .catch(function(test) {
         expect(test.status).toBe(400);
         done();

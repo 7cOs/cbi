@@ -58,7 +58,7 @@ function NavbarController($rootScope, $scope, $state, $mdPanel, $mdDialog, $mdMe
   vm.showNewRationaleInput = showNewRationaleInput;
   vm.addNewRationale = false;
   vm.addToTargetList = addToTargetList;
-  vm.hideBadge = hideBadge;
+  vm.markSeen = markSeen;
 
   init();
 
@@ -68,21 +68,42 @@ function NavbarController($rootScope, $scope, $state, $mdPanel, $mdDialog, $mdMe
 
   // Mark notification as read on click
   function markRead(notification) {
-    console.log(notification);
-
     vm.notificationsService
-      .markNotification(notification.id, vm.notificationsService.status.READ)
+      .markNotifications([{
+        id: notification.id,
+        status: vm.notificationsService.status.READ
+      }])
       .then(function() {
         notification.status = vm.notificationsService.status.READ;
         setUnreadCount(vm.unreadNotifications - 1);
+      });
 
-        if (notification.objectType.toUpperCase() === 'TARGET_LIST') {
-          targetListService.model.currentList.id = notification.objectId;
-          $state.go('target-list-detail');
-        } else if (notification.objectType.toUpperCase() === 'OPPORTUNITY') {
-          opportunitiesService.model.opportunityId = notification.objectId;
-          $state.go('opportunities');
-        }
+    if (notification.objectType.toUpperCase() === 'TARGET_LIST') {
+      targetListService.model.currentList.id = notification.objectId;
+      $state.go('target-list-detail');
+    } else if (notification.objectType.toUpperCase() === 'OPPORTUNITY') {
+      opportunitiesService.model.opportunityId = notification.objectId;
+      $state.go('opportunities');
+    }
+  }
+
+  // Mark notification as seen when opened
+  function markSeen(notifications) {
+    var toMarkSeen = notifications
+      .filter(function(i) {
+        return i.status === vm.notificationsService.status.UNSEEN;
+      })
+      .map(function(i) {
+        return {
+          'id': i.id,
+          'status': vm.notificationsService.status.SEEN
+        };
+      });
+
+    vm.notificationsService
+      .markNotifications(toMarkSeen)
+      .then(function() {
+        vm.notificationHelper.showBadge = false;
       });
   }
 
@@ -162,10 +183,6 @@ function NavbarController($rootScope, $scope, $state, $mdPanel, $mdDialog, $mdMe
       $mdSelect.hide();
       $mdMenu.hide();
     }
-  }
-
-  function hideBadge() {
-    vm.notificationHelper.showBadge = false;
   }
 
   // ***************
