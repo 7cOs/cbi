@@ -21,11 +21,8 @@ module.exports = {
   getSFDCSession: getSFDCSession
 };
 
-// var u = require('util');
-
 function getSFDCSession(app, req, res) {
-  console.log('\n\n In getSFDCSession \n');
-  var $scope = {};
+//  console.log('\n\n In getSFDCSession \n');
   var cheerio = require('cheerio');
   var he = require('he');
   var urlencode = require('urlencode');
@@ -37,7 +34,7 @@ function getSFDCSession(app, req, res) {
   var theAssertion = '';
 
   var loadAssertion = function(empId) {
-        console.log('\n\nin loadAssertion\n');
+//        console.log('\n\nin loadAssertion\n');
         var options = { method: 'POST',
     url: 'http://axiomsso.herokuapp.com/GenerateSamlResponse.action',
     qs:
@@ -53,76 +50,11 @@ function getSFDCSession(app, req, res) {
        'idpConfig.additionalAttributes': ''
      }
     };
-        return rp(options)
-          .then(function(body) {
-            $scope.assertion = body;
-            return body;
-          });
+        return rp(options);
       },
 
-      loadSession = function() {
-        console.log('\n\nin loadSession\n');
-        var $ = cheerio.load($scope.assertion);
-
-        var s = $('textarea').html();
-
-        b = new Buffer(he.decode(s));
-
-        raw = b;
-        b64 = b.toString('base64');
-        u64 = urlencode(b64);
-        b64u = b64url(raw);
-
-        if (encoding === 'raw') {
-          theAssertion = raw;
-        } else if (encoding === 'base64') {
-          theAssertion = b64;
-        } else if (encoding === 'base64+URL') {
-          theAssertion = u64;
-        } else if (encoding === 'base64Url') {
-          theAssertion = b64u;
-        } else  {
-          console.log('The encoding was invalid: ' + encoding);
-          return {
-            'isSuccess': false,
-            'errorMessage': 'Invalid encoding: ' + encoding};
-        }
-
-        var bodyString = 'grant_type=assertion';
-        bodyString = bodyString + '&assertion_type=' + urlencode('urn:oasis:names:tc:SAML:2.0:profiles:SSO:browser');
-        bodyString = bodyString + '&assertion=' + theAssertion;
-        var SessionIDOptions = {method: 'POST',
-                              url: sfdcConfig.spAssertEndpoint,
-                              headers:
-                              {
-                                'Content-Type': 'application/x-www-form-urlencoded'
-                              },
-                              body: bodyString
-                             };
-        return rp(SessionIDOptions)
-             .then(function(body) {
-               $scope.sfdcSession = body;
-               console.log('\n\nsession is: \n' + u.inspect($scope.sfdcSession, null, '\t'));
-               return body;
-             });
-      };
-  console.log('loading the Assertion now');
-  loadAssertion(empId)
-    .then(loadSession);
-
-  $scope.empId = empId;
-  $scope.assertion = null;
-  $scope.sfdcSession = null;
-};
-
-/*
-
-    , function (error, response, body) {
-      if (error) {
-        console.err('Error is: ' + error);
-        return {'isSuccess': false,
-                'errorMessage': 'request() library error: ' + error};
-      } else {
+      loadSession = function(body) {
+//        console.log('\n\nin loadSession\n');
         var $ = cheerio.load(body);
 
         var s = $('textarea').html();
@@ -143,51 +75,32 @@ function getSFDCSession(app, req, res) {
         } else if (encoding === 'base64Url') {
           theAssertion = b64u;
         } else  {
-          console.log('The encoding was invalid: ' + encoding);
+//          console.log('The encoding was invalid: ' + encoding);
           return {
             'isSuccess': false,
             'errorMessage': 'Invalid encoding: ' + encoding};
         }
+
         var bodyString = 'grant_type=assertion';
         bodyString = bodyString + '&assertion_type=' + urlencode('urn:oasis:names:tc:SAML:2.0:profiles:SSO:browser');
         bodyString = bodyString + '&assertion=' + theAssertion;
         var SessionIDOptions = {method: 'POST',
-                                url: sfdcConfig.spAssertEndpoint,
-                                headers:
-                                {
-                                  'Content-Type': 'application/x-www-form-urlencoded'
-                                },
-                               body: bodyString
-                               };
-        var sfdcSession = new Promise(function(resolve, reject) {
-          request(SessionIDOptions, function (error, response, body) {
-            if (error) {
-              reject({
-                'isSuccess': false,
-                'errorMessage': 'SFDC Session error: ' + error
-              });
-            } else {
-              resolve({
-                'isSuccess': true,
-                'sfdcSession': body
-              });
-            };
-          });
-        });
-        return sfdcSession;
-      }
+                              url: sfdcConfig.spAssertEndpoint,
+                              headers:
+                              {
+                                'Content-Type': 'application/x-www-form-urlencoded'
+                              },
+                              body: bodyString
+                             };
+        return rp(SessionIDOptions)
+             .then(function(body) {
+               console.log('\n\nsession is: \n' + u.inspect(body, null, '\t'));
+               return body;
+             });
+      };
+//  console.log('loading the Assertion now');
+  loadAssertion(empId)
+    .then(function(body) {
+      return loadSession(body);
     });
-  });
-
-  var p = sfdcPromise.then(function (result) {
-    console.log('The result is: ' + u.inspect(result, null, ''));
-    return result;
-  }, function (err) {
-    console.Error(err);
-    return err;
-  });
-  console.log('The result 2 is: ' + u.inspect(p, null, ''));
-  return p;
-
 };
-*/
