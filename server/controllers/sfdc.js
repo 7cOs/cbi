@@ -18,7 +18,7 @@ module.exports = {
   testSFDCConn: testSFDCConn
 };
 
-// var u = require('util');
+var u = require('util');
 
 function testSFDCConn(app, req, res) {
   var sfdcConnPromise = new Promise(function (resolve, reject) {
@@ -157,27 +157,23 @@ function searchAccounts(app, req, res) {
 };
 
 function accountNotes(app, req, res) {
-  var returner = [];
-  var anPromise = sfdc.queryAccountNotes(app, req, res);
-  if (anPromise.isSuccess) {
-    var ctr = 0;
-    anPromise.then(function (result) {
-      try {
-        result = sfdc.ss(result);
-        console.log('Result: ' + result);
-        for (var note in result) {
-          returner[ctr] = note;
-          ctr++;
-        }
-        console.log('\n\nReturning: \n' + returner);
-        res.send('<div>' + returner + '</div>');
-        return result;
-      } catch (e) {
-        console.log('The error is: ' + e);
-      }
-    }, function (err) {
-      console.log(err);
-      return err;
-    });
-  }
+
+  var promise = new Promise(function (resolve, reject) {
+    var result = sfdc.queryAccountNotes(app, req, res);
+    if (result) {
+      resolve(result);
+    } else {
+      reject(Error('There was no response from SFDC: ' + res.statusText));
+    }
+  });
+  promise.then(function (result) {
+    console.log('\n\n\n\n\n');
+    console.log(result);
+    console.log('\n\n\n\n\n');
+    return result;
+  }, function (err) {
+    console.log(err);
+    return err;
+  });
 };
+
