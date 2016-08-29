@@ -9,7 +9,7 @@
             md-select(ng-model="o.filtersService.model.selected.currentFilter")
               md-option(class="saved-filter-option" ng-repeat="savedFilter in o.userService.model.opportunityFilters" value="{{::savedFilter.id}}")
                 span {{::savedFilter.name}}
-                img(ng-click="o.editFilterModal(savedFilter.id)" src="../assets/img/icons/more.svg")
+                img(ng-click="o.editFilterModal(savedFilter.id)" src="../assets/img/icons/action-menu_roll.svg")
 .chips(ng-if="o.chipsService.model.length")
   label Active Filters
   span
