@@ -60,7 +60,7 @@ function sfdcConn(app, req, res) {
         return sfdcConnection;
       });
     } else {
-      console.log('Reusing existing connection: ' + req.user.sfdcConn);
+    //  console.log('Reusing existing connection: ' + req.user.sfdcConn);
       return req.user.sfdcConn;
     }
   }
@@ -335,6 +335,7 @@ function queryAccountNotes(app, req, res) {
             .orderby('CreatedDate', 'DESC')
             .end()
             .where('Account__r.TDLinx_Id__c = \'' + strId + '\' or Account__r.JDE_Address_Book_Number__c = \'' + strId + '\'')
+            // .limit(10)
             .execute(function (err, records) {
               if (err) {
                 return console.error(err);

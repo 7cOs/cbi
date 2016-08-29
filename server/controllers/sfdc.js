@@ -157,24 +157,21 @@ function searchAccounts(app, req, res) {
 };
 
 function accountNotes(app, req, res) {
+
   var promise = new Promise(function (resolve, reject) {
-    var records = sfdc.queryAccountNotes(app, req, res);
-    if (records) {
-      resolve(records);
+    var result = sfdc.queryAccountNotes(app, req, res);
+    if (result) {
+      resolve(result);
     } else {
       reject(Error('There was no response from SFDC: ' + res.statusText));
     }
   });
   promise.then(function (result) {
-    console.log('records were returned from sfdc: ' + u.inspect(result, null, '\t'));
-    var strResponse = JSON.stringify(result, null, '\t');
-    console.log('strResponse is: ' + strResponse);
-    res.write(strResponse);
-    res.end();
+    console.log(result);
+    return result;
   }, function (err) {
-    var strResponse = JSON.stringify(err, null, '');
-    res.write(strResponse);
-    res.end();
+    console.log(err);
+    return err;
   });
 };
 
