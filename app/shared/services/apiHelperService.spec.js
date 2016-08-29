@@ -76,7 +76,7 @@ describe('[Services.apiHelperService]', function() {
       'type': 'opportunities'
     };
     var url = 'http://localhost:3000/';
-    var resultExpectation = url + '?limit=200&sort=store&filter=' + encodeURIComponent('masterSKU:112154,premiseType:on');
+    var resultExpectation = url + '?limit=2000&sort=store&filter=' + encodeURIComponent('masterSKU:112154,premiseType:on');
 
     var result = APIHelper.request(url, mockObj);
 

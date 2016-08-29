@@ -123,7 +123,9 @@ module.exports = /*  @ngInject */
 
     var service = {
       model: model,
-      getAppliedFilters: getAppliedFilters
+      getAppliedFilters: getAppliedFilters,
+      resetFilters: resetFilters,
+      saveReport: saveReport
     };
 
     return service;
@@ -141,4 +143,8 @@ module.exports = /*  @ngInject */
 
       return filterPayload;
     }
+
+    function resetFilters() {}
+
+    function saveReport() {}
   };
