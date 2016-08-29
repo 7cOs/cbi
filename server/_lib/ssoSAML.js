@@ -15,7 +15,6 @@ the generation code over.
 // var u = require('util');
 // var $scope;
 var rp = require('request-promise');
-var u = require('util');
 
 module.exports = {
   getSFDCSession: getSFDCSession
@@ -93,13 +92,11 @@ function getSFDCSession(app, req, res) {
                               body: bodyString
                              };
         var sessionPromise = rp(SessionIDOptions);
-        console.log('sessionPromise is: ' + u.inspect(sessionPromise, null, ''));
         return sessionPromise;
       };
-//  console.log('loading the Assertion now');
-  loadAssertion(empId)
+  var returnThisPromise = loadAssertion(empId)
     .then(function(body) {
-      console.log('\n\nbody from loadAssertion is: \n' + u.inspect(body, null, '\t'));
       return loadSession(body);
     });
+  return returnThisPromise;
 };

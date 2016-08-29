@@ -18,6 +18,8 @@ module.exports = {
   testSFDCConn: testSFDCConn
 };
 
+var u = require('util');
+
 function testSFDCConn(app, req, res) {
   var sfdcConnPromise = new Promise(function (resolve, reject) {
     var result = sfdc.testSFDCConn(app, req, res);
@@ -164,8 +166,9 @@ function accountNotes(app, req, res) {
     }
   });
   promise.then(function (result) {
-    console.log('records were returned from sfdc');
+    console.log('records were returned from sfdc: ' + u.inspect(result, null, '\t'));
     var strResponse = JSON.stringify(result, null, '\t');
+    console.log('strResponse is: ' + strResponse);
     res.write(strResponse);
     res.end();
   }, function (err) {

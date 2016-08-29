@@ -18,73 +18,86 @@ module.exports = {
 var u = require('util');
 
 function sfdcConn(app, req, res) {
-  console.log('\n\nIn sfdcConn');
-  var saml = require('../_lib/ssoSAML.js');
+//  console.log('In sfdcConn - establishing the connection');
+  try {
+    var saml = require('./ssoSAML.js');
+    var jsforce = require('jsforce');
+  } catch (e) {
+    console.log('There was an error requiring the libraries: ' + e);
+  };
+
+//  console.log('Libraries initiated.');
+
   if (req.user === undefined) {
-    res.redirect('/'); // redirect to the home page to get logged in.  This should NEVER HAPPEN in the wild, it's just here for testing purposes.
+    res.redirect('/');
   } else {
-    console.log('\n\nreq.user.sfdcConn is: ' + u.inspect(req.user.sfdcConn));
-    if (!req.user.sfdcConn) {
-      try {
-        console.log('\n\nNo connection already established.  Create the connection');
-
-        var getSFDCSession = saml.getSFDCSession(app, req, res);
-        console.log('getSFDCSession returned ' + u.inspect(getSFDCSession));
-        getSFDCSession.then(function (result) {
-          console.log('\n\n getSFDCSession is: \n' + u.inspect(result, null, '\t'));
-          req.user.sfdcConn = result;
-
-        }, function (err) {
-
-          req.user.sfdcConn = err;
-
+//    console.log('Getting the connection.  req.user.sfdcConn is ' + u.inspect(req.user.sfdcConn, null, ''));
+    if (!req.user.sfdcConn || req.user.sfdcConn === undefined) {
+  // Get session promise from library
+//      console.log('No connection present.  Creating one now');
+      var creatingSfdcSession = saml.getSFDCSession(app, req, res);
+      /* sfdc connection is similar to
+      {'access_token': '00Dm00000008fCJ!AQwAQIdgCEeNSQz1ZAZfyrtYqYLmLOnZdnOaQZLK1ON8NP6HVnEP9noL_9jFTP8Y9Xb2OqEy9tLLO4OevJQojKZsgvPShGcs',
+      'instance_url: 'https://cbrands--CBeerDev.cs20.my.salesforce.com',
+      'id': 'https://test.salesforce.com/id/00Dm00000008fCJEAY/005G0000004eNiRIAU',
+      'token_type': 'Bearer'}
+      */
+      var creatingSfdcConnection = creatingSfdcSession.then(function(sfdcSession) {
+        sfdcSession = JSON.parse(sfdcSession);
+ /*       console.log('access_token: ' + sfdcSession.access_token);
+        console.log('instance_url: ' + sfdcSession.instance_url);
+        console.log('id: ' + sfdcSession.id);
+        console.log('token_type: ' + sfdcSession.token_type);
+*/
+        return new jsforce.Connection({
+          instanceUrl: sfdcSession.instance_url,
+          accessToken: sfdcSession.access_token
         });
-        console.log('\n\nsfdcConnection stored in req.user: \n' + JSON.stringify(req.user.sfdcConn, null, '\t'));
-        return {'isSuccess': true,
-                'theSesssion': req.user.sfdcConn};
-      } catch (e) {
-        console.log('\n\ncould not establish an SFDC Connection: \n' + e);
-        return {'isSuccess': false,
-                'errorMessage': 'Could not establish an SFDC Connection: ' + e};
-      }
+      });
+
+      return creatingSfdcConnection.then(function(sfdcConnection) {
+        req.user.sfdcConn = sfdcConnection;
+        return sfdcConnection;
+      });
     } else {
-      console.log('\n\nreusing existing SFDC connection: \n' + JSON.stringify(req.user.sfdcConn, null, '\t'));
-      return {'isSuccess': true,
-              'theSession': req.user.sfdcConn};
+      console.log('Reusing existing connection: ' + req.user.sfdcConn);
+      return req.user.sfdcConn;
     }
   }
-};
+  return {'isSuccess': true,
+          'sfdcConn': req.user.sfdcConn};
+}
 
 function testSFDCConn(app, req, res) {
-  console.log('\n\nIn testSFDCConn');
-  var jsforce = require('jsforce');
-  console.log('\n\nAbout to establish the SFDC Session');
-  var sfdcSession = sfdcConn(app, req, res);
+  var sfdcConnPromise = new Promise(function (resolve, reject) {
+    try {
+      var result = sfdcConn(app, req, res);
+      resolve(result);
+    } catch (e) {
+      reject(('Could not create a SFDC connection: ' + e));
+    }
+  });
 
-  if (sfdcSession.isSuccess) {
-    console.log('\n\nThe SFDC Session was established: ' + u.inspect(sfdcSession.theSession, null, '\t'));
-    var conn = new jsforce.Connection({
-      instanceURL: sfdcSession.theSession.instanceURL,
-      accessToken: sfdcSession.theSession.accessToken
-    });
-
-    console.log('\n\nThe Connection is: \n' + u.inspect(conn, null, '\t'));
-    res.sendStatus(200);
-    return {'isSuccess': true,
-            'sfdcConn': conn};
-  } else {
-    console.log('The SFDC Connection was not successful');
-    res.sendStattus(200);
-    return {'isSuccess': false,
-            'errorMessage': sfdcSession.errorMessage};
-  }
+  sfdcConnPromise.then(function (result) {
+    console.log('\n\n<---------------------------------------Connection Is ------------------------------------------>\n' + u.inspect(result) + '\n<---------------------------------------Connection Finished ------------------------------------------>');
+    try {
+      result.query('SELECT Id, Name FROM Account', function(err, res) {
+        if (err) { return console.error(err); }
+        console.log(res);
+      });
+    } catch (e) {
+      res.send(e);
+    }
+  }, function (err) {
+    res.send(err);
+  });
 };
 
 function createNote(app, req, res) {
 
   var sfdc = sfdcConn(app, req, res);
   if (sfdc.isSuccess) {
-    var conn = sfdc.theSession;
+    var conn = sfdc.sfdcConn;
     var theAccount = conn.search('FIND {' + req.query.accountid + '} IN ALL FIELDS RETURNING Account(Id, Name)',
       function (err, res) {
         if (err) {
@@ -290,23 +303,30 @@ function searchAccounts(app, req, res) {
 };
 
 function queryAccountNotes(app, req, res) {
-  var sfdc = sfdcConn(app, req, res);
-  if (sfdc.isSuccess) {
-    var conn = sfdc.theSession;
-    var strId = '';
-    console.log('In _lib.queryAccountNotes with ');
-    if (app !== undefined) console.log('---------> app: ' + JSON.stringify(app, null, ''));
-    if (req !== undefined) console.log('---------> req: ' + JSON.stringify(req.query, null, ''));
-    if (res !== undefined) console.log('---------> res: ' + JSON.stringify(res.query, null, ''));
-    if (req.query.accountId) {
-      strId  = (req.query.accountId || req.query.TDLinx_Id__c);
-    } else {
-      return {
-        'isSuccess': 'False',
-        'ErrorMessage': 'There was no account Id'
-      };
-    }
+  var sfdcConnPromise = new Promise(function (resolve, reject) {
     try {
+      var result = sfdcConn(app, req, res);
+      resolve(result);
+    } catch (e) {
+      reject(('Could not create a SFDC connection: ' + e));
+    }
+  });
+
+  var acctNotes = sfdcConnPromise.then(function (result) {
+ //   console.log('\n\n<---------------------------------------Account Notes Connection Is ------------------------------------------>\n' + u.inspect(result) + '\n<---------------------------------------Connection Finished ------------------------------------------>');
+    try {
+      var conn = result;
+      var strId = '';
+
+      if (req.query.accountId) {
+        strId  = (req.query.accountId || req.query.TDLinx_Id__c);
+      } else {
+        return {
+          'isSuccess': 'False',
+          'ErrorMessage': 'There was no account Id'
+        };
+      }
+
       return (
         conn.sobject('Note__c')
             .select('Account__r.TDLinx_Id__c, Account__r.JDE_Address_Book_Number__c,  Type__c, Title__c, Soft_Delete__c, Private__c, OwnerId, Other_Type__c, Name, IsDeleted, Id, Comments_RTF__c, Account__c, CreatedDate, CreatedBy.Name')
@@ -333,10 +353,14 @@ function queryAccountNotes(app, req, res) {
             })
       );
     } catch (err) {
-      console.error('There was an error in queryAccountNotes: ' + JSON.stringify(err, null, ''));
-      return JSON.stringify(err, null, '');
+      var errMessage = 'There was an error in queryAccountNotes: ' + JSON.stringify(err, null, '');
+      console.error(errMessage);
+      return {'isSuccess': false,
+              'errorMessage': errMessage};
     }
-  } else {
-    return sfdc;
-  }
-}
+  }, function (err) {
+    return {'isSuccess': false,
+            'errorMessage': 'A connection to Salesforce could not be established: ' + err};
+  });
+  return acctNotes;
+};
