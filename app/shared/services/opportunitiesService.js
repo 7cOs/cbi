@@ -119,10 +119,9 @@ module.exports = /*  @ngInject */
      * @returns {Object}
      * @memberOf cf.common.services
      */
-    function createOpportunity() {
+    function createOpportunity(payload) {
       var opportunitiesPromise = $q.defer(),
-          url = apiHelperService.request('/api/opportunities/'),
-          payload = {};
+          url = apiHelperService.request('/api/opportunities');
 
       $http.post(url, payload, {
         headers: {}
@@ -133,7 +132,6 @@ module.exports = /*  @ngInject */
       function createOpportunitiesSuccess(response) {
         console.log('[opportunitiesService.createOpportunity] response: ', response);
         opportunitiesPromise.resolve(response.data);
-        // opportunitiesPromise.resolve(data.opportunitiesPostResponse); // Mock Data
       }
 
       function createOpportunitiesFail(error) {
