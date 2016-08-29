@@ -20,7 +20,7 @@ module.exports = /*  @ngInject */
           params = {
             type: 'stores',
             /* lowerRightBound: '38.820450,-77.050552',
-            upperLeftBound: '44.986656,-93.258133'*/
+            upperLeftBound: '44.986656,-93.258133' */
             lowerRightBound: '47,-122',
             upperLeftBound: '46,-120'
           },
@@ -42,7 +42,7 @@ module.exports = /*  @ngInject */
           } else if (response.data[i].store_rank_wine.delta < 0) {
             response.data[i].negativeValue = true;
           }
-        }*/
+        } */
         storesPromise.resolve(response.data.slice(0, 5));
       }
 
