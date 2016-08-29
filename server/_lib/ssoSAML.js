@@ -101,6 +101,11 @@ function getSFDCSession(app, req, res) {
 //  console.log('loading the Assertion now');
   loadAssertion(empId)
     .then(function(body) {
-      return loadSession(body);
+      console.log('\n\nbody from loadAssertion is: \n' + u.inspect(body, null, '\t'));
+      return loadSession(body)
+      .then(function(body) {
+        console.log('\n\nbody from loadSession is: \n' + u.inspect(body, null, '\t'));
+        return body;
+      });
     });
 };
