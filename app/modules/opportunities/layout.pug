@@ -36,14 +36,14 @@
         md-radio-button(ng-repeat="p in o.filtersService.model.premises | filter: '!All'"  class="md-primary" ng-value="p.value" aria-label="{{p.name}}" ng-click="o.chipsService.addChip(p.name, 'premiseType', true)") {{::p.name}}
     div(column='6')
       label Opportunity Status
-      md-radio-group(ng-model="o.filtersService.model.selected.opportunityStatus" ng-init="o.filtersService.model.selected.opportunityStatus = 'open'")
+      md-radio-group(ng-model="o.filtersService.model.selected.opportunityStatus")
         md-radio-button(ng-repeat="opportunity in o.filtersService.model.opportunityStatus" class="md-primary" ng-value="opportunity.value" aria-label="{{opportunity.name}}" ng-click="o.chipsService.addChip(opportunity.name, 'opportunityStatus', true)") {{::opportunity.name}}
   div(row)
     div(column='3')
       label Opportunity Type
       .dropdown-filter
         .dropdown
-          md-select(ng-model="o.filtersService.model.selected.opportunitiesTypes" md-on-close="o.chipsService.addChip(o.filtersService.model.selected.opportunitiesTypes, 'opportunitiesTypes', false)" placeholder="All Types")
+          md-select(ng-model="o.filtersService.model.selected.opportunitiesTypes" md-on-close="o.chipsService.addChip(o.filtersService.model.selected.opportunitiesTypes, 'opportunitiesTypes', false)" placeholder="All Types" ng-init="o.filtersService.model.selected.opportunitiesTypes = 'All Types'")
             md-option(ng-repeat="type in o.filtersService.model.opportunitiesTypes" aria-label="{{type.name}}" value="{{type.name}}") {{::type.name}}
     div(column='3')
       label Brand / Master SKU
@@ -52,7 +52,7 @@
       label Retailer
       div(row).retailer.dropdown-filter
         div(column='5').dropdown
-          md-select(ng-model="o.filtersService.model.selected.retailer" md-on-close="o.chipsService.addChip(o.filtersService.model.selected.retailer, 'retailer', false)" placeholder="Store" ng-init="o.filtersService.model.selected.retailer = 'Store'")
+          md-select(ng-model="o.filtersService.model.selected.retailer" md-on-close="o.chipsService.addChip(o.filtersService.model.selected.retailer, 'retailer', false)" placeholder="Store" ng-init="o.filtersService.model.selected.retailer = 'Chain'")
             md-option(ng-repeat="type in o.filtersService.model.retailer" ng-click="o.placeholderSelect(type.hintText)" aria-label="{{type.name}}" value="{{type.name}}") {{::type.name}}
         div(column='7')
           inline-search(type="store" placeholder="{{o.hintTextPlaceholder}}" chosen-result="o.filtersService.model.selected.store")
@@ -88,7 +88,7 @@
           md-checkbox(column='5' ng-model="o.filtersService.model.selected.tradeChannelDrug" aria-label="Trade Channel Drug" ng-click="o.chipsService.updateChip('tradeChannelDrug', 'Trade Channel Drug')") Drug
           md-checkbox(column='5' ng-model="o.filtersService.model.selected.tradeChannelMassMerchandiser" aria-label="Trade Channel Mass Merchandiser" ng-click="o.chipsService.updateChip('tradeChannelMassMerchandiser', 'Trade Channel Mass Merchandiser')") Mass Merchandiser
           md-checkbox(column='5' ng-model="o.filtersService.model.selected.tradeChannelLiquor" aria-label="Trade Channel Liquor" ng-click="o.chipsService.updateChip('tradeChannelLiquor', 'Trade Channel Liquor')") Liquor
-          md-checkbox(column='5' ng-model="o.filtersService.model.selected.tradeChannelMilitary" aria-label="Trade Channel Military" ng-click="o.chipsService.updateChip('tradeChannelMilitary', 'Trade Channel Military')") Military
+          md-checkbox(column='5' ng-model="o.filtersService.model.selected.tradeChannelMilitary" aria-label="Trade Channel Military" ng-click="o.chipsService.updateChip('tradeChannelMilitary', 'Trade Channel Military')") Military Off Premise
           md-checkbox(column='5' ng-model="o.filtersService.model.selected.tradeChannelRecreation" aria-label="Trade Channel Recreation" ng-click="o.chipsService.updateChip('tradeChannelRecreation', 'Trade Channel Recreation')") Recreation
           md-checkbox(column='5' ng-model="o.filtersService.model.selected.tradeChannelOther" aria-label="Trade Channel Other" ng-click="o.chipsService.updateChip('tradeChannelOther', 'Trade Channel Other')") Other
     div.location-contact-opps(column='3' ng-show="o.filtersService.model.expanded")

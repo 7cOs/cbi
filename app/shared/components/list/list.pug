@@ -1,5 +1,6 @@
-h3(ng-if="list.pageName(['accounts'])") Top opportunities <a class="accent" ui-sref="opportunities">See all opportunities</a>
-h3(ng-if="list.pageName(['opportunities'])" ng-hide="list.opportunitiesService.model.opportunities.length === 0") <strong>{{list.opportunitiesService.model.opportunitiesSum}} opportunities</strong> across {{list.opportunitiesService.model.opportunities.length}} stores
+.total-opportunities
+  h4(ng-if="list.pageName(['accounts'])") 300 opportunities <span>across 24 stores</span> 
+  h3(ng-if="list.pageName(['opportunities'])" ng-hide="list.opportunitiesService.model.opportunities.length === 0") <strong>{{list.opportunitiesService.model.opportunitiesSum}} opportunities</strong> across {{list.opportunitiesService.model.opportunities.length}} stores
 
 .action-buttons
   md-menu(md-offset="0 45" ng-if="list.pageName(['target-lists', 'target-list-detail'])")
@@ -16,8 +17,6 @@ button.icon.select-all(ng-click="list.toggleAll()")
   | Select All
 button.icon.narrow-icon.expand-all(ng-click="list.accordion.expandAll()" ng-disabled="list.expandedOpportunities.length === list.opportunitiesService.model.opportunities.length") Expand All
 button.icon.narrow-icon.collapse-all(ng-click="list.accordion.collapseAll()" ng-disabled="list.expandedOpportunities.length < 2") Collapse All
-
-//- div(ng-if="!list.opportunitiesService.model.filterApplied") [Ratul] Pls apply a filter to see the list
 
 v-accordion.styled-list(multiple="" id="opportunities" control="list.accordion" onexpand="list.expandCallback(item)" oncollapse="list.collapseCallback(item)" column='12' )
   div.header-row(row)
