@@ -14,8 +14,8 @@ h3(ng-if="list.pageName(['opportunities'])" ng-hide="list.opportunitiesService.m
 button.icon.select-all(ng-click="list.toggleAll()")
   span(ng-if='list.isChecked()') Un-
   | Select All
-button.icon.narrow-icon.expand-all(ng-click="list.accordion.expandAll()" ng-disabled="list.expandedOpportunities.length === list.opportunitiesService.model.opportunities.length") Expand All
-button.icon.narrow-icon.collapse-all(ng-click="list.accordion.collapseAll()" ng-disabled="list.expandedOpportunities.length < 2") Collapse All
+button.icon.narrow-icon.expand-all(ng-click="list.accordion.expandAll()" ng-disabled="list.expandedOpportunities === list.opportunitiesService.model.opportunities.length") Expand All
+button.icon.narrow-icon.collapse-all(ng-click="list.accordion.collapseAll()" ng-disabled="list.expandedOpportunities === 0") Collapse All
 
 //- div(ng-if="!list.opportunitiesService.model.filterApplied") [Ratul] Pls apply a filter to see the list
 
