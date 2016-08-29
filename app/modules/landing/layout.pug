@@ -75,7 +75,7 @@ section.landing-page
         .filter-container
           label
           md-radio-group(ng-model="l.filter.selected.premiseType")
-            md-radio-button(ng-repeat="p in l.filter.premises | filter: '!All'" class="md-primary" ng-value="p.name" aria-label="p.name") {{p.name}}
+            md-radio-button(ng-repeat="p in l.filter.premises | filter: '!All'" class="md-primary" ng-value="p.value" aria-label="p.name") {{p.name}}
           .filter-item
             .dropdown-filter
               .dropdown
@@ -86,8 +86,8 @@ section.landing-page
             label Brand / Master SKU
             inline-search(type="product" placeholder="By brand or SKU" chosen-result="l.filtersService.model.brandSearchText")
           .filter-item
-            label Account / Store
-            inline-search(type="store" placeholder="By store or sub account" chosen-result="l.filtersService.model.accountSearchText")
+            label Retailer
+            inline-search(type="store" placeholder="Store, account, or subaccount name" chosen-result="l.filtersService.model.accountSearchText")
           .filter-item
             label Distributor
             inline-search(type="distributor" placeholder="By name" chosen-result="o.filtersService.model.distributorSearchText")

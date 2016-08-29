@@ -88,7 +88,7 @@ module.exports = /*  @ngInject */
         predictedImpactHigh: '',
         predictedImpactMedium: '',
         predictedImpactLow: '',
-        premiseType: '',
+        premiseType: 'off',
         productTypeFeatured: '',
         productTypePriority: '',
         productTypeAuthorized: '',
