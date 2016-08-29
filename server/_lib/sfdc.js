@@ -29,7 +29,7 @@ function sfdcConn(app, req, res) {
         console.log('\n\nNo connection already established.  Create the connection');
 
         var getSFDCSession = saml.getSFDCSession(app, req, res);
-        console.log('\n\n getSFDCSession object is: ' + u.inspect(getSFDCSession));
+        console.log('getSFDCSession returned ' + u.inspect(getSFDCSession));
         getSFDCSession.then(function (result) {
           console.log('\n\n getSFDCSession is: \n' + u.inspect(result, null, '\t'));
           req.user.sfdcConn = result;
@@ -69,12 +69,12 @@ function testSFDCConn(app, req, res) {
     });
 
     console.log('\n\nThe Connection is: \n' + u.inspect(conn, null, '\t'));
-    res.send(200);
+    res.sendStatus(200);
     return {'isSuccess': true,
             'sfdcConn': conn};
   } else {
     console.log('The SFDC Connection was not successful');
-    res.send(200);
+    res.sendStattus(200);
     return {'isSuccess': false,
             'errorMessage': sfdcSession.errorMessage};
   }
