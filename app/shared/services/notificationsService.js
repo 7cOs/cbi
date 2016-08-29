@@ -9,7 +9,7 @@ module.exports = /*  @ngInject */
         SEEN: 'SEEN',
         READ: 'READ'
       },
-      markNotification: markNotification
+      markNotifications: markNotifications
     };
 
     /**
@@ -19,17 +19,11 @@ module.exports = /*  @ngInject */
      * @returns {Object} - Status object
      * @memberOf cf.common.services
      */
-    function markNotification(notificationId, state) {
+    function markNotifications(notifications) {
       var notificationsPromise = $q.defer(),
-          url = apiHelperService.request('/api/notifications'),
-          data = [
-            {
-              'id': notificationId,
-              'status': state
-            }
-          ];
+          url = apiHelperService.request('/api/notifications');
 
-      $http.patch(url, data)
+      $http.patch(url, notifications)
         .then(
           notificationsPromise.resolve,
           notificationsPromise.reject
