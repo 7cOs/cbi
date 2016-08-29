@@ -126,6 +126,8 @@ module.exports = /*  @ngInject */
       getAppliedFilters: getAppliedFilters
     };
 
+    console.log(service.model);
+
     return service;
 
     function getAppliedFilters(type) {

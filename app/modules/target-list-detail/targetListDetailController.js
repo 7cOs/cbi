@@ -23,6 +23,8 @@ module.exports = /*  @ngInject */
       addRecipient: ''
     };*/
     vm.targetListService = targetListService;
+    vm.filtersService = filtersService;
+    vm.chipsService = chipsService;
 
     // Set page title for head and nav
     $rootScope.pageTitle = $state.current.title;

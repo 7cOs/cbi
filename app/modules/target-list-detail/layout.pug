@@ -30,97 +30,101 @@
         span {{tld.targetListService.model.currentList.opportunitiesSummary.opportunitiesCount | number }}
         label.accent.accent-blue Total<br />Opportunities
 
-.chips(ng-if="t.chipsService.model.length && t.filtersService.model.show")
+.chips(ng-if="tld.chipsService.model.length && tld.filtersService.model.show")
   label Active Filters
   span
-    a(ng-click="t.chipsService.applyFilters()") Save Filterset
-  md-chips(ng-model="t.chipsService.model" name="Active Filters" md-on-remove="t.chipsService.removeFromFilterService($chip)")
+    a(ng-click="tld.chipsService.applyFilters()") Save Filterset
+  md-chips(ng-model="tld.chipsService.model" name="Active Filters" md-on-remove="tld.chipsService.removeFromFilterService($chip)")
     input(disabled="true")
     md-chip-template(custom-chip="")
       div {{$chip.name}}
-.filters(column='12' ng-class="{ 'no-filter': !t.filtersService.model.show}")
+.filters(column='12' ng-class="{ 'no-filter': !tld.filtersService.model.show}")
   div(row)
     div(class='more-filters')
-      a(ng-click="t.filtersService.model.show = t.filtersService.model.show ? false : true")
-        span(ng-class="{ 'chevron-up': t.filtersService.model.show, 'chevron-down': !t.filtersService.model.show }")
-        span(ng-if="!t.filtersService.model.show").accent.accent-blue Show Filters
-        span(ng-if="t.filtersService.model.show").accent.accent-blue Hide Filters
-  div(row ng-if="t.filtersService.model.show")
-
+      a(ng-click="tld.filtersService.model.show = tld.filtersService.model.show ? false : true")
+        span(ng-class="{ 'chevron-up': tld.filtersService.model.show, 'chevron-down': !tld.filtersService.model.show }")
+        span(ng-if="!tld.filtersService.model.show").accent.accent-blue Show Filters
+        span(ng-if="tld.filtersService.model.show").accent.accent-blue Hide Filters
+  div(row ng-if="tld.filtersService.model.show")
     div(column='3')
       label Account Scope
-      md-checkbox(ng-model="t.filtersService.model.selected.myAccountsOnly" aria-label="My Accounts" ng-click="t.chipsService.updateChip('myAccountsOnly', 'My Accounts Only')") My Accounts Only
+      md-checkbox(ng-model="tld.filtersService.model.selected.myAccountsOnly" aria-label="My Accounts" ng-click="tld.chipsService.updateChip('myAccountsOnly', 'My Accounts Only')") My Accounts Only
     div(column='3')
       label Premise Type
-      md-radio-group(ng-model="t.filtersService.model.selected.premiseType")
-        md-radio-button(ng-repeat="p in t.filtersService.model.premises | filter: '!All'" class="md-primary" ng-value="p.name" aria-label="p.name" ng-click="t.chipsService.addChip(p.name, 'premiseType', true)") {{p.name}}
+      md-radio-group(ng-model="tld.filtersService.model.selected.premiseType")
+        md-radio-button(ng-repeat="p in tld.filtersService.model.premises | filter: '!All'" class="md-primary" ng-value="p.name" aria-label="p.name" ng-click="tld.chipsService.addChip(p.name, 'premiseType', true)") {{p.name}}
     div(column='6')
       label Opportunity Status
-      md-radio-group(ng-model="t.filtersService.model.selected.opportunitiesStatus")
-        md-radio-button(ng-repeat="opportunity in t.filtersService.model.opportunitiesStatus" class="md-primary" ng-value="opportunity.name" aria-label="opportunity.name" ng-click="t.chipsService.addChip(opportunity.name, 'opportunitiesStatus', true)") {{opportunity.name}}
-  div(row ng-if="t.filtersService.model.show")
+      md-radio-group(ng-model="tld.filtersService.model.selected.opportunitiesStatus")
+        md-radio-button(ng-repeat="opportunity in tld.filtersService.model.opportunitiesStatus" class="md-primary" ng-value="opportunity.name" aria-label="opportunity.name" ng-click="tld.chipsService.addChip(opportunity.name, 'opportunitiesStatus', true)") {{opportunity.name}}
+  div(row ng-if="tld.filtersService.model.show")
     div(row)
       div(column='3')
         label Opportunity Type
         .dropdown-filter
           .dropdown
-            md-select(ng-model="t.filtersService.model.selected.opportunitiesTypes" aria-label="Opportunity Type" md-on-close="t.chipsService.addChip(t.filtersService.model.selected.opportunitiesTypes, 'opportunitiesTypes', false)" placeholder="All Types")
-              md-option(ng-repeat="type in t.filtersService.model.opportunitiesTypes" aria-label="type.name" value="{{type.name}}") {{type.name}}
+            md-select(ng-model="tld.filtersService.model.selected.opportunitiesTypes" md-on-close="tld.chipsService.addChip(tld.filtersService.model.selected.opportunitiesTypes, 'opportunitiesTypes', false)" placeholder="All Types")
+              md-option(ng-repeat="type in tld.filtersService.model.opportunitiesTypes" aria-label="{{type.name}}" value="{{type.name}}") {{::type.name}}
       div(column='3')
         label Brand / Master SKU
-        inline-search(type="product" placeholder="Brand or SKU/Package" chosen-result="t.filtersService.model.brandSearchText")
+        inline-search(type="product" placeholder="Brand or SKU/Package" chosen-result="tld.filtersService.model.brandSearchText")
       div(column='3')
-        label Account / Store
-        inline-search(type="store" placeholder="By account, Sub account" chosen-result="t.filtersService.model.accountSearchText")
+        label Retailer
+        div(row).retailer.dropdown-filter
+          div(column='5').dropdown
+            md-select(ng-model="tld.filtersService.model.selected.retailer" md-on-close="tld.chipsService.addChip(tld.filtersService.model.selected.retailer, 'retailer', false)" placeholder="Store" ng-init="tld.filtersService.model.selected.retailer = 'Store'")
+              md-option(ng-repeat="type in tld.filtersService.model.retailer" ng-click="tld.placeholderSelect(type.hintText)" aria-label="{{type.name}}" value="{{type.name}}") {{::type.name}}
+          div(column='7')
+            inline-search(type="store" placeholder="{{tld.hintTextPlaceholder}}" chosen-result="tld.filtersService.model.selected.store")
       div(column='3')
         label Distributor
-        inline-search(type="distributor" placeholder="Name" chosen-result="t.filtersService.model.distributorSearchText")
+        inline-search(type="distributor" placeholder="Name" chosen-result="tld.filtersService.model.distributorSearchText")
     div(row)
       div(column='3').predicted-impact
         label Predicted Impact
-        md-checkbox(ng-model="t.filtersService.model.selected.predictedImpactHigh" aria-label="Predicted Impact High" ng-click="t.chipsService.updateChip('predictedImpactHigh', 'Predicted Impact High')")
+        md-checkbox(ng-model="tld.filtersService.model.selected.predictedImpactHigh" aria-label="Predicted Impact High" ng-click="tld.chipsService.updateChip('predictedImpactHigh', 'Predicted Impact High')")
           | High
           span.impact.high-small
-        md-checkbox(ng-model="t.filtersService.model.selected.predictedImpactMedium" aria-label="Predicted Impact Medium" ng-click="t.chipsService.updateChip('predictedImpactMedium', 'Predicted Impact Medium')")
+        md-checkbox(ng-model="tld.filtersService.model.selected.predictedImpactMedium" aria-label="Predicted Impact Medium" ng-click="tld.chipsService.updateChip('predictedImpactMedium', 'Predicted Impact Medium')")
           | Medium
           span.impact.medium-small
-        md-checkbox(ng-model="t.filtersService.model.selected.predictedImpactLow" aria-label="Predicted Impact Low" ng-click="t.chipsService.updateChip('predictedImpactLow', 'Predicted Impact Low')")
+        md-checkbox(ng-model="tld.filtersService.model.selected.predictedImpactLow" aria-label="Predicted Impact Low" ng-click="tld.chipsService.updateChip('predictedImpactLow', 'Predicted Impact Low')")
           | Low
           span.impact.low-small
       div(column='3')
         label Product Type
-        md-checkbox(ng-model="t.filtersService.model.selected.productTypeFeatured" aria-label="Product Type Featured" ng-click="t.chipsService.updateChip('productTypeFeatured', 'Product Type Featured')") Featured
-        md-checkbox(ng-model="t.filtersService.model.selected.productTypePriority" aria-label="Product Type Priority Packages" ng-click="t.chipsService.updateChip('productTypePriority', 'Product Type Priority')") Priority Packages
-        md-checkbox(ng-model="t.filtersService.model.selected.productTypeAuthorized" aria-label="Product Type Authorized" ng-click="t.chipsService.updateChip('productTypeAuthorized', 'Product Type Authorized')") Authorized
+        md-checkbox(ng-model="tld.filtersService.model.selected.productTypeFeatured" aria-label="Product Type Featured" ng-click="tld.chipsService.updateChip('productTypeFeatured', 'Product Type Featured')") Featured
+        md-checkbox(ng-model="tld.filtersService.model.selected.productTypePriority" aria-label="Product Type Priority Packages" ng-click="tld.chipsService.updateChip('productTypePriority', 'Product Type Priority')") Priority Packages
+        md-checkbox(ng-model="tld.filtersService.model.selected.productTypeAuthorized" aria-label="Product Type Authorized" ng-click="tld.chipsService.updateChip('productTypeAuthorized', 'Product Type Authorized')") Authorized
       div(column='3')
         div(row)
           div(column='12')
             label Store Type
-            md-checkbox(ng-model="t.filtersService.model.selected.storeTypeIndependent" aria-label="Store Type Independent" ng-click="t.chipsService.updateChip('storeTypeIndependent', 'Store Type Independent')") Independent
-            md-checkbox(ng-model="t.filtersService.model.selected.storeTypeCBBD" aria-label="Store Type CBBD" ng-click="t.chipsService.updateChip('storeTypeCBBD', 'Store Type CBBD')") CBBD Chain
+            md-checkbox(ng-model="tld.filtersService.model.selected.storeTypeIndependent" aria-label="Store Type Independent" ng-click="tld.chipsService.updateChip('storeTypeIndependent', 'Store Type Independent')") Independent
+            md-checkbox(ng-model="tld.filtersService.model.selected.storeTypeCBBD" aria-label="Store Type CBBD" ng-click="tld.chipsService.updateChip('storeTypeCBBD', 'Store Type CBBD')") CBBD Chain
           div(column='12' class="store-segmentation")
             label Store Segmentation
-            md-checkbox(column='3' ng-model="t.filtersService.model.selected.storeSegmentationA" aria-label="Store Segmentation A" ng-click="t.chipsService.updateChip('storeSegmentationA', 'Store Segmentation A')") A
-            md-checkbox(column='3' ng-model="t.filtersService.model.selected.storeSegmentationB" aria-label="Store Segmentation B" ng-click="t.chipsService.updateChip('storeSegmentationB', 'Store Segmentation B')") B
-            md-checkbox(column='3' ng-model="t.filtersService.model.selected.storeSegmentationC" aria-label="Store Segmentation C" ng-click="t.chipsService.updateChip('storeSegmentationC', 'Store Segmentation C')") C
+            md-checkbox(column='3' ng-model="tld.filtersService.model.selected.storeSegmentationA" aria-label="Store Segmentation A" ng-click="tld.chipsService.updateChip('storeSegmentationA', 'Store Segmentation A')") A
+            md-checkbox(column='3' ng-model="tld.filtersService.model.selected.storeSegmentationB" aria-label="Store Segmentation B" ng-click="tld.chipsService.updateChip('storeSegmentationB', 'Store Segmentation B')") B
+            md-checkbox(column='3' ng-model="tld.filtersService.model.selected.storeSegmentationC" aria-label="Store Segmentation C" ng-click="tld.chipsService.updateChip('storeSegmentationC', 'Store Segmentation C')") C
           div(column='12' class="trade-channel")
             label Trade Channel
-            md-checkbox(column='5' ng-model="t.filtersService.model.selected.tradeChannelGrocery" aria-label="Trade Channel Grocery" ng-click="t.chipsService.updateChip('tradeChannelGrocery', 'Trade Channel Grocery')") Grocery
-            md-checkbox(column='5' ng-model="t.filtersService.model.selected.tradeChannelConvenience" aria-label="Trade Channel Convenience" ng-click="t.chipsService.updateChip('tradeChannelConvenience', 'Trade Channel Convenience')") Convenience
-            md-checkbox(column='5' ng-model="t.filtersService.model.selected.tradeChannelDrug" aria-label="Trade Channel Drug" ng-click="t.chipsService.updateChip('tradeChannelDrug', 'Trade Channel Drug')") Drug
-            md-checkbox(column='5' ng-model="t.filtersService.model.selected.tradeChannelMassMerchandiser" aria-label="Trade Channel Mass Merchandiser" ng-click="t.chipsService.updateChip('tradeChannelMassMerchandiser', 'Trade Channel Mass Merchandiser')") Mass Merchandiser
-            md-checkbox(column='5' ng-model="t.filtersService.model.selected.tradeChannelLiquor" aria-label="Trade Channel Liquor" ng-click="t.chipsService.updateChip('tradeChannelLiquor', 'Trade Channel Liquor')") Liquor
-            md-checkbox(column='5' ng-model="t.filtersService.model.selected.tradeChannelMilitary" aria-label="Trade Channel Military" ng-click="t.chipsService.updateChip('tradeChannelMilitary', 'Trade Channel Military')") Military
-            md-checkbox(column='5' ng-model="t.filtersService.model.selected.tradeChannelRecreation" aria-label="Trade Channel Recreation" ng-click="t.chipsService.updateChip('tradeChannelRecreation', 'Trade Channel Recreation')") Recreation
-            md-checkbox(column='5' ng-model="t.filtersService.model.selected.tradeChannelOther" aria-label="Trade Channel Other" ng-click="t.chipsService.updateChip('tradeChannelOther', 'Trade Channel Other')") Other
+            md-checkbox(column='5' ng-model="tld.filtersService.model.selected.tradeChannelGrocery" aria-label="Trade Channel Grocery" ng-click="tld.chipsService.updateChip('tradeChannelGrocery', 'Trade Channel Grocery')") Grocery
+            md-checkbox(column='5' ng-model="tld.filtersService.model.selected.tradeChannelConvenience" aria-label="Trade Channel Convenience" ng-click="tld.chipsService.updateChip('tradeChannelConvenience', 'Trade Channel Convenience')") Convenience
+            md-checkbox(column='5' ng-model="tld.filtersService.model.selected.tradeChannelDrug" aria-label="Trade Channel Drug" ng-click="tld.chipsService.updateChip('tradeChannelDrug', 'Trade Channel Drug')") Drug
+            md-checkbox(column='5' ng-model="tld.filtersService.model.selected.tradeChannelMassMerchandiser" aria-label="Trade Channel Mass Merchandiser" ng-click="tld.chipsService.updateChip('tradeChannelMassMerchandiser', 'Trade Channel Mass Merchandiser')") Mass Merchandiser
+            md-checkbox(column='5' ng-model="tld.filtersService.model.selected.tradeChannelLiquor" aria-label="Trade Channel Liquor" ng-click="tld.chipsService.updateChip('tradeChannelLiquor', 'Trade Channel Liquor')") Liquor
+            md-checkbox(column='5' ng-model="tld.filtersService.model.selected.tradeChannelMilitary" aria-label="Trade Channel Military" ng-click="tld.chipsService.updateChip('tradeChannelMilitary', 'Trade Channel Military')") Military
+            md-checkbox(column='5' ng-model="tld.filtersService.model.selected.tradeChannelRecreation" aria-label="Trade Channel Recreation" ng-click="tld.chipsService.updateChip('tradeChannelRecreation', 'Trade Channel Recreation')") Recreation
+            md-checkbox(column='5' ng-model="tld.filtersService.model.selected.tradeChannelOther" aria-label="Trade Channel Other" ng-click="tld.chipsService.updateChip('tradeChannelOther', 'Trade Channel Other')") Other
       div(column='3')
         //- TODO these need to be hooked into the API
         label Location
-        md-autocomplete.larger-margin(md-search-text="t.filtersService.model.distributorSearchText" md-items="distributor in t.filtersService.model.distributors" md-item-text="distributor.name" placeholder="by Name" md-selected-item-change="t.chipsService.addAutocompleteChip(distributor.name, 'distributorSearchText')")
+        md-autocomplete.larger-margin(md-search-text="tld.filtersService.model.distributorSearchText" md-items="distributor in tld.filtersService.model.distributors" md-item-text="distributor.name" placeholder="by Name" md-selected-item-change="tld.chipsService.addAutocompleteChip(distributor.name, 'distributorSearchText')")
         label CBBD Contact
-        md-autocomplete(md-search-text="t.filtersService.model.distributorSearchText" md-items="distributor in t.filtersService.model.distributors" md-item-text="distributor.name" placeholder="by Name" md-selected-item-change="t.chipsService.addAutocompleteChip(distributor.name, 'distributorSearchText')")
-    div(column='12' class='apply-filters' ng-if="t.filtersService.model.show")
-      button(value='Apply Filters' type="button" class="btn-action" ng-disabled="t.chipsService.model.length <= 0" ng-click="t.chipsService.applyFilters()") Apply Filters
+        md-autocomplete(md-search-text="tld.filtersService.model.distributorSearchText" md-items="distributor in tld.filtersService.model.distributors" md-item-text="distributor.name" placeholder="by Name" md-selected-item-change="tld.chipsService.addAutocompleteChip(distributor.name, 'distributorSearchText')")
+    div(column='12' class='apply-filters' ng-if="tld.filtersService.model.show")
+      button(value='Apply Filters' type="button" class="btn-action" ng-disabled="tld.chipsService.model.length <= 0" ng-click="tld.chipsService.applyFilters()") Apply Filters
       .reset-filters
         a(ng-click="")
         span.reset-icon
