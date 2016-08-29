@@ -24,6 +24,7 @@
 md-tooltip {
   overflow: visible;
   font-size: 0.8em;
+  z-index: 999;
 
   ._md-content {
     background: $light-blue;
@@ -49,8 +50,28 @@ md-tooltip {
       line-height: 1.25;
     }
 
-    ol {
+    ol, ul {
       font-size: 0.75em;
+      list-style-type: default;
+      text-align: left;
+    }
+  }
+}
+
+.scorecard-table {
+
+  .tooltip-wrap {
+
+    .tooltip {
+      right: 0.5em;
+      top: -0.5em;
+    }
+
+    &.outer {
+
+      .tooltip {
+        right: -0.5em;
+      }
     }
   }
 }
