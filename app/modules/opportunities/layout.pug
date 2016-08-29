@@ -40,7 +40,12 @@
         md-radio-button(ng-repeat="opportunity in o.filtersService.model.opportunityStatus" class="md-primary" ng-value="opportunity.value" aria-label="{{opportunity.name}}" ng-click="o.chipsService.addChip(opportunity.name, 'opportunityStatus', true)") {{::opportunity.name}}
   div(row)
     div(column='3')
-      label Opportunity Type
+      .tooltip-wrap
+        label Opportunity Type
+          .tooltip
+            img(src="../assets/img/icons/help-tooltip.svg")
+            md-tooltip(md-direction="right")
+              span Lorem ipsum dolor sit amet
       .dropdown-filter
         .dropdown
           md-select(ng-model="o.filtersService.model.selected.opportunitiesTypes" md-on-close="o.chipsService.addChip(o.filtersService.model.selected.opportunitiesTypes, 'opportunitiesTypes', false)" placeholder="All Types" ng-init="o.filtersService.model.selected.opportunitiesTypes = 'All Types'")

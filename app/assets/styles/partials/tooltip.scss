@@ -1,0 +1,22 @@
+.tooltip-wrap {
+  display: block;
+  position: relative;
+  width: 100%;
+
+  .tooltip {
+    position: absolute;
+    right: -1.75em;
+    top: -0.5em;
+
+    img {
+      height: 15px;
+      width: 15px;
+    }
+  }
+
+  label {
+    display: inline-block;
+    position: relative;
+    width: auto;
+  }
+}
