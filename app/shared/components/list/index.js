@@ -16,7 +16,7 @@ function ListController($scope, $state, $q, $mdDialog, opportunitiesService, tar
   // Defaults
   vm.currentOpportunityId = '';
   vm.depletionsChevron = false;
-  vm.expandedOpportunities = [];
+  vm.expandedOpportunities = 0;
   vm.opportunitiesChevron = false;
   vm.reverse = false;
   vm.segmentationChevron = false;
@@ -46,6 +46,9 @@ function ListController($scope, $state, $q, $mdDialog, opportunitiesService, tar
   vm.showFlyout = showFlyout;
   vm.submitFeedback = submitFeedback;
   vm.cancelFeedback = cancelFeedback;
+
+  vm.expandCallback = expandCallback;
+  vm.collapseCallback = collapseCallback;
 
   // Mock Data for memo modal
   vm.limitedTime = {
@@ -212,6 +215,14 @@ function ListController($scope, $state, $q, $mdDialog, opportunitiesService, tar
     } else if (vm.selected.length === 0 || vm.selected.length > 0) {
       vm.selected = opportunitiesService.model.opportunities.slice(0);
     }
+  }
+
+  function expandCallback(item) {
+    vm.expandedOpportunities++;
+  }
+
+  function collapseCallback(item) {
+    vm.expandedOpportunities--;
   }
 
   // **************
