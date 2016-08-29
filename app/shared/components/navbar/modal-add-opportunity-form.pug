@@ -55,6 +55,6 @@ div.modal
         .dropdown-filter
           .dropdown
             md-select.left(ng-model="nb.newOpportunity.properties.targetList" aria-label="target list dropdown" placeholder="Select a target list" name="rationaleDropdown")
-              md-option(ng-repeat="targetList in nb.targetLists | filter:{archived:false}:true" aria-label="{{targetList.name}}" value="{{targetList.id}}") {{targetList.name}}
+              md-option(ng-repeat="targetList in nb.targetLists | filter:{archived:false, deleted: false}:true" aria-label="{{targetList.name}}" value="{{targetList.id}}") {{targetList.name}}
     button(type="submit" ng-click="nb.addOpportunity(nb.newOpportunity)").btn-action Add
     p.cancel.accent(ng-click="nb.closeModal()") X Cancel
