@@ -12,7 +12,8 @@ module.exports = {
   searchAccounts: searchAccounts,
   deleteAttach: deleteAttach,
   getAttachment: getAttachment,
-  deleteNote: deleteNote
+  deleteNote: deleteNote,
+  ss: simpleStringify
 };
 
 var u = require('util');
@@ -363,5 +364,23 @@ function queryAccountNotes(app, req, res) {
     return {'isSuccess': false,
             'errorMessage': 'A connection to Salesforce could not be established: ' + err};
   });
-  return acctNotes;
+  return {'isSuccess': true,
+          'theNotes': acctNotes};
+};
+
+function simpleStringify (object) {
+  var simpleObject = {};
+  for (var prop in object) {
+    if (!object.hasOwnProperty(prop)) {
+      continue;
+    }
+    if (typeof (object[prop]) === 'object') {
+      continue;
+    }
+    if (typeof (object[prop]) === 'function') {
+      continue;
+    }
+    simpleObject[prop] = object[prop];
+  }
+  return JSON.stringify(simpleObject);
 };
