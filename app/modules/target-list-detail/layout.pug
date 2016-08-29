@@ -55,8 +55,8 @@
         md-radio-button(ng-repeat="p in tld.filtersService.model.premises | filter: '!All'" class="md-primary" ng-value="p.name" aria-label="p.name" ng-click="tld.chipsService.addChip(p.name, 'premiseType', true)") {{p.name}}
     div(column='6')
       label Opportunity Status
-      md-radio-group(ng-model="tld.filtersService.model.selected.opportunitiesStatus")
-        md-radio-button(ng-repeat="opportunity in tld.filtersService.model.opportunitiesStatus" class="md-primary" ng-value="opportunity.name" aria-label="opportunity.name" ng-click="tld.chipsService.addChip(opportunity.name, 'opportunitiesStatus', true)") {{opportunity.name}}
+      md-radio-group(ng-model="tld.filtersService.model.selected.opportunityStatus" ng-init="tld.filtersService.model.selected.opportunityStatus = 'open'")
+        md-radio-button(ng-repeat="opportunity in tld.filtersService.model.opportunityStatus" class="md-primary" ng-value="opportunity.value" aria-label="{{opportunity.name}}" ng-click="tld.chipsService.addChip(opportunity.name, 'opportunityStatus', true)") {{::opportunity.name}}
   div(row ng-if="tld.filtersService.model.show")
     div(row)
       div(column='3')
@@ -117,17 +117,15 @@
             md-checkbox(column='5' ng-model="tld.filtersService.model.selected.tradeChannelMilitary" aria-label="Trade Channel Military" ng-click="tld.chipsService.updateChip('tradeChannelMilitary', 'Trade Channel Military')") Military
             md-checkbox(column='5' ng-model="tld.filtersService.model.selected.tradeChannelRecreation" aria-label="Trade Channel Recreation" ng-click="tld.chipsService.updateChip('tradeChannelRecreation', 'Trade Channel Recreation')") Recreation
             md-checkbox(column='5' ng-model="tld.filtersService.model.selected.tradeChannelOther" aria-label="Trade Channel Other" ng-click="tld.chipsService.updateChip('tradeChannelOther', 'Trade Channel Other')") Other
-      div(column='3')
-        //- TODO these need to be hooked into the API
+      div.location-contact-opps(column='3')
         label Location
-        md-autocomplete.larger-margin(md-search-text="tld.filtersService.model.distributorSearchText" md-items="distributor in tld.filtersService.model.distributors" md-item-text="distributor.name" placeholder="by Name" md-selected-item-change="tld.chipsService.addAutocompleteChip(distributor.name, 'distributorSearchText')")
-        label CBBD Contact
-        md-autocomplete(md-search-text="tld.filtersService.model.distributorSearchText" md-items="distributor in tld.filtersService.model.distributors" md-item-text="distributor.name" placeholder="by Name" md-selected-item-change="tld.chipsService.addAutocompleteChip(distributor.name, 'distributorSearchText')")
+          input(type="text" placeholder="City, State, or Zip" ng-model="tld.filtersService.model.selected.location")
+        label.cbbd-contact CBBD Contact
+          input(type="text" placeholder="Name" ng-model="tld.filtersService.model.selected.cbbdContact")
     div(column='12' class='apply-filters' ng-if="tld.filtersService.model.show")
-      button(value='Apply Filters' type="button" class="btn-action" ng-disabled="tld.chipsService.model.length <= 0" ng-click="tld.chipsService.applyFilters()") Apply Filters
-      .reset-filters
-        a(ng-click="")
-        span.reset-icon
-        span.accent.accent-blue Reset
+      button(value='Apply Filters' type="button" class="btn-action" ng-click="tld.chipsService.applyFilters()" ng-disabled="tld.filtersService.model.filtersApplied") Apply Filters
+      .secondary-button-container
+        a(ng-click="tld.filtersService.saveReport()" ng-disabled="tld.filtersService.model.filtersApplied" ng-class="{'disabled save-filterset-icon-disabled': tld.filtersService.model.filtersApplied}").accent.save-filterset-icon Save Report
+        a(ng-click="tld.filtersService.resetFilters()" ng-disabled="tld.filtersService.model.filtersApplied" ng-class="{'disabled reset-icon-disabled': tld.filtersService.model.filtersApplied}").accent.reset-icon Reset
 
 list
