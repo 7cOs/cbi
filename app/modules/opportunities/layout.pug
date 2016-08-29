@@ -44,8 +44,17 @@
         label Opportunity Type
           .tooltip
             img(src="../assets/img/icons/help-tooltip.svg")
-            md-tooltip(md-direction="right")
-              span Lorem ipsum dolor sit amet
+            md-tooltip(md-direction="bottom")
+              label Filter Set
+              h3 Opportunities List
+              p Opportunities are defined as follows:
+              ol
+                li <strong>Non-Buy</strong>: SKU/Package has not reported depletions at this account within L90 days AND is currently reporting depletions at Similar Stores. <em>Note: for SKU/Packages that are Chain-mandated, a non-buy opportunity will be triggered if no depletions in L30 days</em>
+                li <strong>At Risk</strong>: SKU/Package has reported depletions within L90 days, but not within L60 days
+                li <strong>New Placement (Quality)</strong>: SKU/Package reported first depletion within L60-90 days AND has been reordered in L60 days
+                li <strong>New Placement (No-Rebuy)</strong>: SKU/Package reported first depletion within L60-90 days AND has not been reordered since first depletion date
+                li <strong>Low Velocity</strong>: Velocity of identified SKU/Package underperforming vs. Similar Stores (falls within the bottom 25% percentile)
+                li <strong>Custom</strong>: Field-generated opportunity for “New Distribution” or “Other,” which can be further defined in free-form text (e.g., Display opportunity or Space opportunity)
       .dropdown-filter
         .dropdown
           md-select(ng-model="o.filtersService.model.selected.opportunitiesTypes" md-on-close="o.chipsService.addChip(o.filtersService.model.selected.opportunitiesTypes, 'opportunitiesTypes', false)" placeholder="All Types" ng-init="o.filtersService.model.selected.opportunitiesTypes = 'All Types'")
