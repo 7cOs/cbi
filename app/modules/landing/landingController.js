@@ -71,9 +71,7 @@ module.exports = /*  @ngInject */
       } else if (hrs >= 17 && hrs <= 24) {
         greet = 'Good evening';
       }
-      /* var people = ['Nitin', 'Mike', 'Colleen', 'Brian', 'Chad'];
 
-      var person = people[Math.floor(Math.random() * people.length)];*/
       var person = $filter('titlecase')(userService.model.currentUser.firstName);
 
       return greet + ', ' + person + '!';

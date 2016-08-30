@@ -21,7 +21,7 @@ module.exports = /*  @ngInject */
       collaborators: [],
       allowInvite: null,
       addRecipient: ''
-    };*/
+    }; */
     vm.targetListService = targetListService;
     vm.filtersService = filtersService;
     vm.chipsService = chipsService;
