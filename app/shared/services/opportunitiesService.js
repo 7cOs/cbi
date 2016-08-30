@@ -11,7 +11,7 @@ module.exports = /*  @ngInject */
         align: 'center center',
         current: 1,
         pages: [],
-        pageChanged: pageChanged,
+        // pageChanged: pageChanged, // This function fires at the start of page change. It also fires on pagination load.
         steps: 10
       }
     };
@@ -245,21 +245,5 @@ module.exports = /*  @ngInject */
       }
 
       return opportunitiesPromise.promise;
-    }
-
-    // **************
-    // PRIVATE METHODS
-    // **************
-
-    function pageChanged() {
-      /* if (!vm.paging.total) vm.paging.total = Math.round(opportunitiesService.model.opportunities.length / vm.paging.steps);
-
-      var currentPageIndexEnd = (vm.paging.steps * vm.paging.current) - 1;
-      var currentPageIndexStart = (vm.paging.steps * (vm.paging.current - 1));
-
-      console.log(currentPageIndexStart, currentPageIndexEnd);
-      opportunitiesService.model.opportunitiesDisplay = opportunitiesService.model.opportunities.splice(currentPageIndexStart, currentPageIndexEnd);
-      console.log(opportunitiesService.model.opportunitiesDisplay);
-      console.log(opportunitiesService.model.opportunities); */
     }
   };

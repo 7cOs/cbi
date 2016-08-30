@@ -19,6 +19,11 @@
  *
  */
 
+/**
+ * Modified from material-angular-paging
+ * https://github.com/Crawlink/material-angular-paging
+ */
+
 'use strict';
 
 module.exports =
