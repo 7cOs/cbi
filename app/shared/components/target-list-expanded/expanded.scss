@@ -3,6 +3,10 @@
 
   label {
     outline: none;
+
+    &:hover {
+      color: $dark-blue-5;
+    }
   }
 
   md-tabs,

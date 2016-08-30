@@ -11,6 +11,8 @@ module.exports = /*  @ngInject */
     var vm = this;
     vm.currentFilter = {};
     vm.hintTextPlaceholder = 'Name, Address, TDLinkx, or Store#';
+    vm.isHoveringSave = false;
+    vm.isHoveringReset = false;
 
     // Set page title for head and nav
     $rootScope.pageTitle = $state.current.title;
@@ -30,12 +32,23 @@ module.exports = /*  @ngInject */
     vm.modalSaveOpportunityFilter = modalSaveOpportunityFilter;
     vm.saveFilter = saveFilter;
     vm.placeholderSelect = placeholderSelect;
+    vm.hoverState = hoverState;
 
     init();
 
     // **************
     // PUBLIC METHODS
     // **************
+
+    function hoverState(icon) {
+      if (icon === 'reset') {
+        vm.isHoveringReset = !vm.isHoveringReset;
+      } else {
+        vm.isHoveringSave = !vm.isHoveringSave;
+      }
+      console.log(icon);
+      console.log(vm.isHoveringReset);
+    }
 
     function placeholderSelect(data) {
       vm.hintTextPlaceholder = data;

@@ -49,20 +49,30 @@ md-radio-button {
 
   ._md-on,
   ._md-off {
-    height: 14px;
-    width: 14px;
-    border-width: 1px;
+    height: 16px;
+    width: 16px;
+    background: $gray-9;
+    border: 1px solid $gray-9;
+    box-shadow: inset 0 0 0 3px $white;
+
+    &:hover {
+      box-shadow: inset 0 0 0 1px $white;
+      background: $dark-blue-5;
+      border: 3px solid $dark-blue-5;
+    }
   }
 }
 
 /* Selected */
 
 md-radio-button:not([disabled]).md-primary.md-checked ._md-off {
-  border-color: $blue;
+  border: 5px solid $blue;
 }
 
 md-radio-button:not([disabled]).md-primary.md-checked ._md-on {
+  box-shadow: inset 0 0 0 2px $white;
   background-color: $blue;
+  border: none;
 }
 
 /* Checkboxes */
@@ -72,6 +82,12 @@ md-checkbox {
   ._md-icon {
     border-radius: 50%;
     border-width: 1px;
+  }
+
+  ._md-container:hover {
+    ._md-icon {
+      background: $dark-blue-5;
+    }
   }
 
   &.md-checked {

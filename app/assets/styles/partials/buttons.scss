@@ -32,6 +32,10 @@ button {
     }
   }
 
+  &:hover {
+    color: $dark-blue-6;
+  }
+
   &.expand-all,
   &.collapse-all {
 
@@ -49,6 +53,13 @@ button {
     }
   }
 
+  &.expand-all:hover {
+
+    &:before {
+      background-image: url('../assets/img/icons/btn-expand-all_roll.svg');
+    }
+  }
+
   &.collapse-all {
 
     &:before {
@@ -56,10 +67,24 @@ button {
     }
   }
 
+  &.collapse-all:hover {
+
+    &:before {
+      background-image: url('../assets/img/icons/btn-collapse-all_roll.svg');
+    }
+  }
+
   &.select-all {
 
     &:before {
       background-image: url('../assets/img/icons/btn-select-all.svg');
+    }
+  }
+
+  &.select-all:hover {
+
+    &:before {
+      background-image: url('../assets/img/icons/btn-select-all_roll.svg');
     }
   }
 
@@ -96,10 +121,17 @@ button {
   text-transform: none;
   width: 180px;
 
-  &[disabled] {
+  &[disabled],
+  &[disabled]:hover {
     color: $gray-8;
     background-color: $gray-10;
     border-bottom: 4px solid $gray-11;
+  }
+
+  &:hover {
+    background-color: $dark-blue-4;
+    border-bottom: 4px solid $dark-blue-5;
+    color: $white;
   }
 }
 
