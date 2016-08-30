@@ -110,5 +110,12 @@ v-accordion.styled-list(multiple="" id="opportunities" control="listdemo.accordi
                     label Depletions CYTD
                     span {{6256 | number }}
                   div(column="2")
-                    label Trend vs Ya
+                    .tooltip-wrap
+                      label Trend vs Ya
+                        .tooltip
+                          img(src="../assets/img/icons/help-tooltip.svg")
+                          md-tooltip(md-direction="bottom")
+                            label Opportunity List
+                            h3 Trend vs Ya
+                            p Monthly velocity for this account, calculated by taking the total volume over the selected time period (e.g. L90) and dividing by number of 30 day periods (3). “% vs YA” indicates the trend of velocity this year vs. same time period last year.
                     span 32.33
