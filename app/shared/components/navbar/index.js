@@ -15,7 +15,8 @@ function NavbarController($rootScope, $scope, $state, $window, $mdPanel, $mdDial
   $rootScope.isEdge = (/(?:\bEdge\/)(\d+)/g).test(userAgent);
 
   // Currently logged in user (for analytics)
-  $window.currentUserId = userService.model.currentUser.id;
+  $window.currentUserId = userService.model.currentUser.personID;
+  $window.analyticsId = $rootScope.analytics.id;
 
   // Services
   vm.notificationsService = notificationsService;

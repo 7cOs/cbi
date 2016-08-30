@@ -16,6 +16,10 @@ module.exports = function (config) {
     js: config.address + 'js/'
   };
 
+  config.analytics = {
+    id: 'UA-77300343-6'
+  };
+
   config.iq = 'http://dev-iqweb.cbrands.com/MicroStrategy/servlet/mstrWeb?server=CBIGDC-DMSTK801&project=Beer+Analytics&evt=2001&folderID=DC6B34544F13E47DFEA3AEB328B149A3';
 
   config.api = {
