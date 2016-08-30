@@ -19,6 +19,12 @@
     width: inherit !important;
   }
 
+  // Placeholder font color
+  ::-ms-input-placeholder, :-ms-input-placeholder {
+    color: $gray-2;
+    opacity: 1;
+  }
+
   .landing-page {
     .dropdown-filter md-select-value span {
       color: $gray-3;
