@@ -78,8 +78,8 @@ notes
               h3 Store Type
               p Chain = Chain retailers directly called on by CBBD National or Key Accounts teams (On and Off-Premise)
               p Independent = Retailers not directly called on by CBBD’s National or Key Accounts teams
-      md-checkbox(ng-model="o.filtersService.model.selected.storeTypeCBBD" aria-label="Store Type Chain" ng-click="o.chipsService.updateChip('storeTypeCBBD', 'Store Type Chain')") Chains
-      md-checkbox(ng-model="o.filtersService.model.selected.storeTypeIndependent" aria-label="Store Type Independent" ng-click="o.chipsService.updateChip('storeTypeIndependent', 'Store Type Independent')") Independent Stores
+      md-checkbox(ng-model="a.filtersService.model.selected.storeTypeCBBD" aria-label="Store Type Chain" ng-click="a.chipsService.updateChip('storeTypeCBBD', 'Store Type Chain')") Chains
+      md-checkbox(ng-model="a.filtersService.model.selected.storeTypeIndependent" aria-label="Store Type Independent" ng-click="a.chipsService.updateChip('storeTypeIndependent', 'Store Type Independent')") Independent Stores
     div(column='4').chain-store
       label Chain / Store
       div(row).dropdown-filter
@@ -94,7 +94,7 @@ notes
 
   div(row)
     div(column='12' class='apply-filters')
-      button(value='Apply Filters' type="button" class="btn-action" ng-disabled="a.chipsService.model.length <= 0" ng-click="a.chipsService.applyFilters()") Apply Filters
+      button(value='Apply Filters' type="button" class="btn-action" ng-disabled="a.filtersService.model.filtersApplied" ng-click="a.chipsService.applyFilters()") Apply Filters
 
 div(row)
   div(column='12')
