@@ -15,6 +15,8 @@ module.exports = {
   deleteNote: deleteNote
 };
 
+// var u = require('util');
+
 function sfdcConn(app, req, res) {
 //  console.log('In sfdcConn - establishing the connection');
   try {
@@ -25,26 +27,24 @@ function sfdcConn(app, req, res) {
   };
 
   if (req.user === undefined) {
-    res.redirect('/');
-  } else {
-//    console.log('Getting the connection.  req.user.sfdcConn is ' + u.inspect(req.user.sfdcConn, null, ''));
-    if (!req.user.sfdcConn || req.user.sfdcConn === undefined) {
+    req.user = app.get('config').auth.user;
+  };
+
+  console.log('Getting the connection.  req.user.sfdcConn is ' + JSON.stringify(req.user.sfdcConn));
+  if (!req.user.sfdcConn || req.user.sfdcConn === undefined) {
   // Get session promise from library
 //      console.log('No connection present.  Creating one now');
-      return saml.getSFDCSession(app, req, res).then(function(sfdcSession) {
-        sfdcSession = JSON.parse(sfdcSession);
-        return new jsforce.Connection({
-          instanceUrl: sfdcSession.instance_url,
-          accessToken: sfdcSession.access_token
-        });
+    return saml.getSFDCSession(app, req, res).then(function(sfdcSession) {
+      sfdcSession = JSON.parse(sfdcSession);
+      return new jsforce.Connection({
+        instanceUrl: sfdcSession.instance_url,
+        accessToken: sfdcSession.access_token
       });
-    } else {
+    });
+  } else {
     //  console.log('Reusing existing connection: ' + req.user.sfdcConn);
-      return req.user.sfdcConn;
-    }
+    return req.user.sfdcConn;
   }
-  return {'isSuccess': true,
-          'sfdcConn': req.user.sfdcConn};
 }
 
 function testSFDCConn(app, req, res) {
@@ -72,57 +72,62 @@ function testSFDCConn(app, req, res) {
 };
 
 function createNote(app, req, res) {
-
-  var sfdc = sfdcConn(app, req, res);
-  if (sfdc.isSuccess) {
-    var conn = sfdc.sfdcConn;
-    var theAccount = conn.search('FIND {' + req.query.accountid + '} IN ALL FIELDS RETURNING Account(Id, Name)',
-      function (err, res) {
-        if (err) {
-          console.log('The account Id could not be found');
-          return console.error(err);
-        }
-        return res;
-      });
-
-    theAccount.then(function (result) {
-      var accountId = result.searchRecords[0].Id;  // Only uses the first account it finds.
-      if (accountId === null || accountId === undefined) {
-        return console('There was no account specified for the Id provided (' + req.accountId + '.');
-      } else {
-        conn.sobject('Note__c').create([{
-          Account__c: accountId,
-          Comments_RTF__c: req.query.body,
-          Conversion_Flag__c: req.query.conversionflag,
-          // CreatedById, CreatedDate, Id, IsDeleted, LastModifiedById, LastModifiedDate are system generated.
-          Other_Type__c: req.query.othertype,
-          Private__c: req.query.private,
-          Soft_Delete__c: req.query.softdelete,
-          Title__c: req.query.title,
-          Type__c: req.query.type
-        }],
-        function (err, ret) {
+  return sfdcConn(app, req, res).then(function(result) {
+    try {
+      var conn = result;
+// Search for the correct Account Id
+      console.log('searching for account id: ' + req.body.accountId + '\n');
+      var theAccount = conn.search('FIND {' + req.body.accountId + '} IN ALL FIELDS RETURNING Account(Id, Name)',
+        function (err, res) {
           if (err) {
-            console.log('Returning an error from createNote: ' + JSON.stringify(err, null, ''));
-            return err;
+            console.log('The account Id could not be found');
+            return console.error(err);
+          }
+          return res;
+        });
+// Once you have the correct account id, create a note and attach to that account Id.
+ //     console.dir(req, { depth: null });
+      theAccount.then(function (result) {
+        console.dir(result);
+
+        var accountId = result.searchRecords[0].Id;  // Only uses the first account it finds.
+        if (accountId === null || accountId === undefined) {
+          return console('There was no account specified for the Id provided (' + req.body.accountId + '.');
+        } else {
+          conn.sobject('Note__c').create([{
+            Account__c: accountId,
+            Comments_RTF__c: req.body.body,
+            Conversion_Flag__c: req.body.conversionflag,
+            // CreatedById, CreatedDate, Id, IsDeleted, LastModifiedById, LastModifiedDate are system generated.
+            Other_Type__c: req.body.othertype,
+            Private__c: req.body.private,
+            Soft_Delete__c: req.body.softdelete,
+            Title__c: req.body.title,
+            Type__c: req.body.type
+          }],
+          function (err, ret) {
+            if (err) {
+              console.log('Returning an error from createNote: ' + JSON.stringify(err, null, ''));
+              return err;
 /*  This is returning the reverse of what it should.  ret.success should be true, yet
     it thinks it's false.  Please verify.
                        }  else if (!ret.success) {
             console.log('There was an unknown error with the logic');
   */
-          } else {
-            return ret;
-          }
-        });
-      };
-    }, function (err) {
-      var strResponse = JSON.stringify(err, null, '');
-      console.log('ERROR:' + strResponse);
-      return err;
-    });
-  } else {
-    return sfdc;
-  }
+            } else {
+              return ret;
+            }
+          });
+        };
+      }, function (err) {
+        var strResponse = JSON.stringify(err, null, '');
+        console.log('ERROR:' + strResponse);
+        return err;
+      });
+    } catch (err) {
+      console.log(err);
+    };
+  });
 };
 
 function deleteNote(app, req, res) {

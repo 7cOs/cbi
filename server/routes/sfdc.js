@@ -6,16 +6,22 @@ module.exports = function(app) {
   var sfdcConfig =  app.get('config').sfdcSec;
   var utility = require('util');
 
+  app.get('/sfdc/accountNotes', function (req, res) {
+    sfdc['accountNotes'](app, req, res);
+  });
+
   app.post('/sfdc/createNote', function (req, res) {
     sfdc['createNote'](app, req, res);
   });
 
   app.get('/sfdc/deleteNote', function (req, res) {
-    sfdc['deleteNote'](app, req, res);
+    res.send('<h1>deleteNote is not functional yet</h1>');
+    // sfdc['deleteNote'](app, req, res);
   });
 
   app.get('/sfdc/undeleteNote', function (req, res) {
-    sfdc['unDeleteNote'](app, req, res);
+    res.send('<h1>undeleteNote is not functional yet</h1>');
+    //     sfdc['unDeleteNote'](app, req, res);
   });
 
   app.get('/sfdc/deleteAttach', function (req, res) {
@@ -24,10 +30,6 @@ module.exports = function(app) {
 
   app.get('/sfdc/searchAccounts', function (req, res) {
     sfdc['searchAccounts'](app, req, res);
-  });
-
-  app.get('/sfdc/accountNotes', function (req, res) {
-    sfdc['accountNotes'](app, req, res);
   });
 
   app.get('/sfdc/getAttachments', function(req, res) {

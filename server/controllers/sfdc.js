@@ -73,26 +73,6 @@ function getAttachmentData(app, req, res) {
   });
 };
 
-function createNote(app, req, res) {
-  var promise = new Promise(function (resolve, reject) {
-    var records = sfdc.createNote(app, req, res);
-    if (records) {
-      resolve(records);
-    } else {
-      reject(Error('There was no response from SFDC: ' + res.statusText));
-    }
-  });
-  promise.then(function (result) {
-    var strResponse = JSON.stringify(result, null, '\t');
-    res.write(strResponse);
-    res.end();
-  }, function (err) {
-    var strResponse = JSON.stringify(err, null, '');
-    res.write(strResponse);
-    res.end();
-  });
-};
-
 function deleteNote(app, req, res) {
   var promise = new Promise(function (resolve, reject) {
     var response = sfdc.fnDeleteNote(app, req, res);
@@ -154,13 +134,25 @@ function searchAccounts(app, req, res) {
   });
 };
 
+function createNote(app, req, res) {
+
+  sfdc.createNote(app, req, res).then(function(result) {
+    try {
+      res.send(result);
+    } catch (err) {
+      console.log(err);
+    };
+  }, function (err) {
+    console.log(err);
+  });
+};
+
 function accountNotes(app, req, res) {
 
   sfdc.queryAccountNotes(app, req, res).then(function(result) {
     try {
       res.send(result);
     } catch (err) {
-      console.log('ish be fck');
       console.log(err);
     };
   }, function (err) {
