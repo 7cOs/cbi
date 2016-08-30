@@ -35,8 +35,6 @@ module.exports = /*  @ngInject */
       var targetListPromise = $q.defer(),
           url = apiHelperService.request('/api/targetLists/' + targetListId, p);
 
-      console.log(url);
-
       $http.get(url)
         .then(getTargetListSuccess)
         .catch(getTargetListFail);

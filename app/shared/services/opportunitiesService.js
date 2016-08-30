@@ -4,8 +4,16 @@ module.exports = /*  @ngInject */
     var model = {
       filterApplied: false,
       opportunities: [],
+      opportunitiesDisplay: [],
       opportunitiesSum: 0,
-      opportunityId: null
+      opportunityId: null,
+      paging: {
+        align: 'center center',
+        current: 1,
+        pages: [],
+        pageChanged: pageChanged,
+        steps: 10
+      }
     };
 
     var service = {
@@ -39,8 +47,6 @@ module.exports = /*  @ngInject */
       // create promise, build url based on filters and if there is an opp id
       var opportunitiesPromise = $q.defer(),
           url = opportunityID ? apiHelperService.request('/api/opportunities/' + opportunityID) : apiHelperService.request('/api/opportunities/', filterPayload);
-
-      console.log(url);
 
       $http.get(url)
         .then(getOpportunitiesSuccess)
@@ -102,6 +108,15 @@ module.exports = /*  @ngInject */
 
           service.model.opportunitiesSum += 1;
         }; // end for each
+
+        // set data for pagination
+        for (i = 0; i < newOpportunityArr.length; i = i + 20) {
+          var page = newOpportunityArr.slice(i, i + 20);
+          service.model.opportunitiesDisplay.push(page);
+        }
+        service.model.paging.pages = service.model.opportunitiesDisplay.length - 1;
+
+        service.model.opportunities = newOpportunityArr;
 
         opportunitiesPromise.resolve(newOpportunityArr);
       }
@@ -230,5 +245,21 @@ module.exports = /*  @ngInject */
       }
 
       return opportunitiesPromise.promise;
+    }
+
+    // **************
+    // PRIVATE METHODS
+    // **************
+
+    function pageChanged() {
+      /* if (!vm.paging.total) vm.paging.total = Math.round(opportunitiesService.model.opportunities.length / vm.paging.steps);
+
+      var currentPageIndexEnd = (vm.paging.steps * vm.paging.current) - 1;
+      var currentPageIndexStart = (vm.paging.steps * (vm.paging.current - 1));
+
+      console.log(currentPageIndexStart, currentPageIndexEnd);
+      opportunitiesService.model.opportunitiesDisplay = opportunitiesService.model.opportunities.splice(currentPageIndexStart, currentPageIndexEnd);
+      console.log(opportunitiesService.model.opportunitiesDisplay);
+      console.log(opportunitiesService.model.opportunities); */
     }
   };

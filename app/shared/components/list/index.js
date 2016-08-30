@@ -241,6 +241,8 @@ function ListController($scope, $state, $q, $mdDialog, opportunitiesService, tar
     userService.getTargetLists(userService.model.currentUser.personID, {'type': 'targetLists'}).then(function(data) {
       userService.model.targetLists = data;
     });
+
+    opportunitiesService.model.opportunitiesDisplay = [];
   }
 }
 

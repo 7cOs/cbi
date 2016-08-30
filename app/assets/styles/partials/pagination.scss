@@ -1,0 +1,20 @@
+cl-paging {
+  /* !important used here because the md-theming adds style definitions in the <head></head> and theyre hard to overwrite */
+  .selected {
+    background-color: $dark-blue !important;
+    color: $white !important;
+  }
+
+  .accent {
+    background-color: $blue !important;
+    color: $white !important;
+  }
+
+  .md-button {
+    &:hover {
+      background-color: $dark-blue !important;
+      color: $white !important;
+    }
+  }
+
+}

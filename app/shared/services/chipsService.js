@@ -65,15 +65,12 @@ module.exports = /*  @ngInject */
 
     function applyFilters() {
       opportunitiesService.getOpportunities().then(function(data) {
-        opportunitiesService.model.opportunities = data;
-
         for (var i = 0; i < service.model.length; i++) {
           service.model[i].applied = true;
         }
 
         filtersService.model.filtersApplied = true;
         opportunitiesService.model.filterApplied = true;
-
       });
     }
 
