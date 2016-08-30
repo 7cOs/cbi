@@ -6,7 +6,7 @@ module.exports = function(app) {
   var sfdcConfig =  app.get('config').sfdcSec;
   var utility = require('util');
 
-  app.get('/sfdc/accountNotes', function (req, res) {
+  app.post('/sfdc/accountNotes', function (req, res) {
     sfdc['accountNotes'](app, req, res);
   });
 
@@ -14,9 +14,8 @@ module.exports = function(app) {
     sfdc['createNote'](app, req, res);
   });
 
-  app.get('/sfdc/deleteNote', function (req, res) {
-    res.send('<h1>deleteNote is not functional yet</h1>');
-    // sfdc['deleteNote'](app, req, res);
+  app.post('/sfdc/deleteNote', function (req, res) {
+    sfdc['deleteNote'](app, req, res);
   });
 
   app.get('/sfdc/undeleteNote', function (req, res) {

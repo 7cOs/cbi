@@ -71,6 +71,46 @@ function testSFDCConn(app, req, res) {
   });
 };
 
+function deleteNote(app, req, res) {
+  return sfdcConn(app, req, res).then(function(result) {
+    try {
+      var conn = result;
+      if (req.body.noteId) {
+        var noteId = req.body.noteId;
+        return conn.sobject('Note__c').delete(noteId,
+                                    function (err, res) {
+                                      if (err) {
+                                        return {
+                                          'isSuccess': false,
+                                          'errorMessage': err  // return the error from Salesforce
+                                        };
+                                      } else {
+                                        return {
+                                          'isSuccess': true,
+                                          'searchRecords': res.searchRecords
+                                        };
+                                      }
+                                    }).then(function(result) {
+                                      return result;
+                                    }, function(err) {
+                                      return err;
+                                    });
+      } else {
+        var badNoteIdError = {
+          'isSuccess': 'False',
+          'ErrorString': 'No noteId Id was present in the request'
+        };
+        throw badNoteIdError;
+      }
+    } catch (err) {
+      console.dir(err);
+      var generalError = {'isSuccess': false,
+                      'errorMessage': err};
+    }
+    throw generalError;
+  });
+};
+
 function searchAccounts(app, req, res) {
   return sfdcConn(app, req, res).then(function(result) {
     try {
@@ -228,35 +268,6 @@ function createNote(app, req, res) {
       return err;
     };
   });
-};
-
-function deleteNote(app, req, res) {
-  var sfdc = sfdcConn(app, req, res);
-  if (sfdc.isSuccess) {
-    var conn = sfdc.theSession;
-    var response = '';
-    if (req.query.noteId) {
-      var noteId = req.query.noteId;
-      response = conn.sobject('Note__c')
-                     .delete(noteId,
-                             function (err, ret) {
-                               if (err || !ret.success) {
-                                 return (err);
-                               }
-                               return (ret);
-                             });
-      if (response !== '') {
-        return (response);
-      } else return ('Salesforce did not return valid information');
-    } else {
-      return ([{
-        'isSuccess': 'False',
-        'ErrorString': 'No noteId Id was present in the URL'
-      }]);
-    }
-  } else {
-    return sfdc;
-  }
 };
 
 function getAttachment(app, req, res) {
