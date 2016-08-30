@@ -114,23 +114,17 @@ function deleteAttach(app, req, res) {
 };
 
 function searchAccounts(app, req, res) {
-  var promise = new Promise(function (resolve, reject) {
-    var records = sfdc.fnSearchAccounts(app, req, res);
-    if (records) {
-      resolve(records);
-    } else {
-      reject(Error('There was no response from SFDC: ' + res.statusText));
+  sfdc.searchAccounts(app, req, res).then(function(result) {
+    try {
+      res.send(result);
+    } catch (err) {
+      // if there is a problem sending the response.
+      console.log(err);
+      res.send(err);
     };
-    promise.then(function (result) {
-      var strResponse = JSON.stringify(result, null, '');
-      res.write(strResponse);
-      res.end();
-    }, function (err) {
-      console.err('ERROR in promiseSearchAccounts: ' + JSON.stringify(err, null, ''));
-      var strResponse = JSON.stringify(err, null, '');
-      res.write(strResponse);
-      res.end();
-    });
+  }, function (err) {
+    console.log(err);
+    res.send(err);
   });
 };
 
@@ -156,10 +150,13 @@ function accountNotes(app, req, res) {
     try {
       res.send(result);
     } catch (err) {
+      // if there is a problem sending the response.
       console.log(err);
+      res.send(err);
     };
   }, function (err) {
     console.log(err);
+    res.send(err);
   });
 };
 

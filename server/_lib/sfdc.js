@@ -71,18 +71,114 @@ function testSFDCConn(app, req, res) {
   });
 };
 
+function searchAccounts(app, req, res) {
+  return sfdcConn(app, req, res).then(function(result) {
+    try {
+      var conn = result;
+      var searchTerm = req.query.searchTerm;
+      if (searchTerm !== '') {
+        return conn.search('FIND {' + searchTerm + '} IN ALL FIELDS RETURNING Account(Id, Name)',
+                                    function (err, res) {
+                                      if (err) {
+                                        return {
+                                          'isSuccess': false,
+                                          'errorMessage': err  // return the error from Salesforce
+                                        };
+                                      } else {
+                                        return {
+                                          'isSuccess': true,
+                                          'searchRecords': res.searchRecords
+                                        };
+                                      }
+                                    }).then(function(result) {
+                                      return result;
+                                    }, function(err) {
+                                      return err;
+                                    });
+      } else {
+        return {
+          'isSuccess': 'False',
+          'errorMessage': 'No search term was present in the URL'
+        };
+      }
+    } catch (err) {
+      var theError = {'isSuccess': false,
+                      'errorMessage': err};
+    }
+    throw theError;
+  });
+};
+
+function queryAccountNotes(app, req, res) {
+  return sfdcConn(app, req, res).then(function(result) {
+    try {
+      var conn = result;
+      var strId = '';
+
+      if (req.query.accountId) {
+        strId  = (req.query.accountId || req.query.TDLinx_Id__c);
+      } else {
+        return {
+          'isSuccess': 'False',
+          'ErrorMessage': 'There was no account Id'
+        };
+      }
+      return (
+        conn.sobject('Note__c')
+            .select('Account__r.TDLinx_Id__c, Account__r.JDE_Address_Book_Number__c,  Type__c, Title__c, Soft_Delete__c, Private__c, OwnerId, Other_Type__c, Name, IsDeleted, Id, Comments_RTF__c, Account__c, CreatedDate, CreatedBy.Name')
+            .include('Attachments')
+            .select('Id, Name, CreatedDate')
+            .orderby('CreatedDate', 'DESC')
+            .end()
+            .where('Account__r.TDLinx_Id__c = \'' + strId + '\' or Account__r.JDE_Address_Book_Number__c = \'' + strId + '\'')
+            // .limit(10)
+            .execute(function (err, records) {
+              if (err) {
+                return console.error(err);
+              }
+              // set the URL on the image to include the url and session id
+              for (var note in records) {
+                if (records[note].Attachments) {
+                  for (var theAtt in records[note].Attachments.records) {
+                    records[note].Attachments.records[theAtt].attributes.url = conn.instanceUrl + records[note].Attachments.records[theAtt].attributes.url + '&sessionId=' + conn.sessionId;
+                    var attachBlob = conn.sobject('Attachment').record(records[note].Attachments.records[theAtt].Id).blob('Body');
+                    records[note].Attachments.records[theAtt].attributes.blobData = attachBlob;
+                  }
+                }
+              }
+              return records;
+            })
+    );
+    } catch (err) {
+      var errMessage = 'There was an error in queryAccountNotes: ' + JSON.stringify(err, null, '');
+      console.error(errMessage);
+      return {'isSuccess': false,
+              'errorMessage': errMessage};
+    }
+  }, function (err) {
+    return {'isSuccess': false,
+            'errorMessage': 'A connection to Salesforce could not be established: ' + err};
+  });
+};
+
 function createNote(app, req, res) {
   return sfdcConn(app, req, res).then(function(result) {
     try {
       var conn = result;
 // Search for the correct Account Id
-      if (req.body.accountId === null || req.body.accountId === undefined || req.body.accountId === '') {
+      if (!(req.query.accountId) && !(req.body.accountId)) {
         var badAccountIdError = {'isSuccess': false,
                                  'errorMessage': 'There was no valid account id submitted.  Please make sure you have an account id (i.e. TD Linx Id)'
                                 };
         throw badAccountIdError;
       } else {
-        var theAccount = conn.search('FIND {' + req.body.accountId + '} IN ALL FIELDS RETURNING Account(Id, Name)',
+        var acctId;
+        if (req.body.accountId) {
+          acctId = req.body.accountId;
+        } else {
+          acctId = req.query.accountId;
+        }
+        var theAccount = conn.search('FIND {' + acctId + '} IN ALL FIELDS RETURNING Account(Id, Name)',
           function (err, res) {
             if (err) {
               console.log('The account Id could not be found');
@@ -115,8 +211,8 @@ function createNote(app, req, res) {
                 console.log('Returning an error from createNote: ' + JSON.stringify(err, null, ''));
                 return err;
               } else {
-                console.log('\n\nResponse from Salesforce.com:');
-                console.dir(ret, null);
+//                console.log('\n\nResponse from Salesforce.com:');
+//                console.dir(ret, null);
                 return ret;
               }
             });
@@ -252,91 +348,4 @@ function deleteAttach(app, req, res) {
   } else {
     return sfdc;
   }
-};
-
-function searchAccounts(app, req, res) {
-  var sfdc = sfdcConn(app, req, res);
-  if (sfdc.isSuccess) {
-    var conn = sfdc.theSession;
-    var searchTerm = req.query.searchTerm;
-    var response = '';
-    if (searchTerm !== '') {
-      response = conn.search('FIND {' + searchTerm + '} IN ALL FIELDS RETURNING Account(Id, Name)',
-                              function (err, res) {
-                                if (err) {
-                                  return console.error('There was an error in searchAccounts: ' + err);
-                                }
-                                var jsonData = JSON.stringify(res.searchRecords, null, '');
-                                return jsonData;
-                              }
-                            );
-      if (response !== '') {
-        res.send(response);
-      } else {
-        return {
-          'isSuccess': false,
-          'ErrorString': 'Salesforce did not return valid information'
-        };
-      }
-    } else {
-      return {
-        'isSuccess': 'False',
-        'ErrorString': 'No search term was present in the URL'
-      };
-    }
-  } else {
-    return sfdc;
-  }
-};
-
-function queryAccountNotes(app, req, res) {
-  return sfdcConn(app, req, res).then(function(result) {
-    try {
-      var conn = result;
-      var strId = '';
-
-      if (req.query.accountId) {
-        strId  = (req.query.accountId || req.query.TDLinx_Id__c);
-      } else {
-        return {
-          'isSuccess': 'False',
-          'ErrorMessage': 'There was no account Id'
-        };
-      }
-      return (
-        conn.sobject('Note__c')
-            .select('Account__r.TDLinx_Id__c, Account__r.JDE_Address_Book_Number__c,  Type__c, Title__c, Soft_Delete__c, Private__c, OwnerId, Other_Type__c, Name, IsDeleted, Id, Comments_RTF__c, Account__c, CreatedDate, CreatedBy.Name')
-            .include('Attachments')
-            .select('Id, Name, CreatedDate')
-            .orderby('CreatedDate', 'DESC')
-            .end()
-            .where('Account__r.TDLinx_Id__c = \'' + strId + '\' or Account__r.JDE_Address_Book_Number__c = \'' + strId + '\'')
-            // .limit(10)
-            .execute(function (err, records) {
-              if (err) {
-                return console.error(err);
-              }
-              // set the URL on the image to include the url and session id
-              for (var note in records) {
-                if (records[note].Attachments) {
-                  for (var theAtt in records[note].Attachments.records) {
-                    records[note].Attachments.records[theAtt].attributes.url = conn.instanceUrl + records[note].Attachments.records[theAtt].attributes.url + '&sessionId=' + conn.sessionId;
-                    var attachBlob = conn.sobject('Attachment').record(records[note].Attachments.records[theAtt].Id).blob('Body');
-                    records[note].Attachments.records[theAtt].attributes.blobData = attachBlob;
-                  }
-                }
-              }
-              return records;
-            })
-    );
-    } catch (err) {
-      var errMessage = 'There was an error in queryAccountNotes: ' + JSON.stringify(err, null, '');
-      console.error(errMessage);
-      return {'isSuccess': false,
-              'errorMessage': errMessage};
-    }
-  }, function (err) {
-    return {'isSuccess': false,
-            'errorMessage': 'A connection to Salesforce could not be established: ' + err};
-  });
 };
