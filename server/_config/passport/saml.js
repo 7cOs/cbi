@@ -25,7 +25,6 @@ module.exports = function(app) {
         return done(null, false);
       } else {
         var user = JSON.parse(body);
-        console.log(user);
         return done(null, user);
       }
     });

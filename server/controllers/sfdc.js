@@ -18,8 +18,6 @@ module.exports = {
   testSFDCConn: testSFDCConn
 };
 
-var u = require('util');
-
 function testSFDCConn(app, req, res) {
   var sfdcConnPromise = new Promise(function (resolve, reject) {
     var result = sfdc.testSFDCConn(app, req, res);

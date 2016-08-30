@@ -1,3 +1,8 @@
+list {
+  display: block;
+  margin-top: 2em;
+}
+
 .styled-list {
   list-style-type: none;
   margin-bottom: 4em;
@@ -18,6 +23,10 @@
 
     &:last-child {
       border-bottom: 1px solid $gray-3;
+    }
+
+    &:first-child {
+      border-top: none;
     }
   }
 
@@ -55,13 +64,6 @@
   .md-button.md-icon-button {
     padding: 0;
   }
-
-  md-icon {
-    height: 34px;
-    width: 34px;
-    min-height: 34px;
-    min-width: 34px;
-  }
 }
 
 .checkbox-wrapper {
@@ -85,6 +87,15 @@
   }
 }
 
+.total-opportunities {
+  margin-bottom: 32px;
+
+  span {
+    font-size: 0.85em;
+    font-weight: $light;
+  }
+}
+
 .more-wrapper {
   float: right;
   outline: 0;
@@ -99,6 +110,19 @@
   p {
     border: 1px solid $gray-10;
     border-radius: 3px;
+  }
+
+  md-icon {
+    min-width: 18px;
+    min-height: 18px;
+    height: 18px;
+    width: 18px;
+    border: 1px solid $gray-4;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    padding-left: 4px;
+    padding-right: 4px;
+    background: $white;
   }
 }
 
@@ -131,6 +155,7 @@
   color: $gray-1;
   font-size: 0.7em;
   text-transform: uppercase;
+  border-bottom: 1px solid $gray-3;
 
   label {
     display: inline-block;

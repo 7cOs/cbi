@@ -1,5 +1,6 @@
-h3(ng-if="list.pageName(['accounts'])") Top opportunities <a class="accent" ui-sref="opportunities">See all opportunities</a>
-h3(ng-if="list.pageName(['opportunities'])" ng-hide="list.opportunitiesService.model.opportunities.length === 0") <strong>{{list.opportunitiesService.model.opportunitiesSum}} opportunities</strong> across {{list.opportunitiesService.model.opportunities.length}} stores
+.total-opportunities
+  h4(ng-if="list.pageName(['accounts'])") 300 opportunities <span>across 24 stores</span>
+  h3(ng-if="list.pageName(['opportunities'])" ng-hide="list.opportunitiesService.model.opportunities.length === 0") <strong>{{list.opportunitiesService.model.opportunitiesSum}} opportunities</strong> across {{list.opportunitiesService.model.opportunities.length}} stores
 
 .action-buttons
   md-menu(md-offset="0 45" ng-if="list.pageName(['target-lists', 'target-list-detail'])")
@@ -14,12 +15,10 @@ h3(ng-if="list.pageName(['opportunities'])" ng-hide="list.opportunitiesService.m
 button.icon.select-all(ng-click="list.toggleAll()")
   span(ng-if='list.isChecked()') Un-
   | Select All
-button.icon.expand-all(ng-click="list.accordion.expandAll()" ng-disabled="list.expandedOpportunities.length === list.opportunitiesService.model.opportunities.length") Expand All
-button.icon.collapse-all(ng-click="list.accordion.collapseAll()" ng-disabled="list.expandedOpportunities.length < 2") Collapse All
+button.icon.narrow-icon.expand-all(ng-click="list.accordion.expandAll()" ng-disabled="list.expandedOpportunities === list.opportunitiesService.model.opportunities.length") Expand All
+button.icon.narrow-icon.collapse-all(ng-click="list.accordion.collapseAll()" ng-disabled="list.expandedOpportunities === 0") Collapse All
 
-div(ng-if="!list.opportunitiesService.model.filterApplied") [Ratul] Pls apply a filter to see the list
-
-v-accordion.styled-list(multiple="" id="opportunities" control="list.accordion" onexpand="list.expandCallback(item)" oncollapse="list.collapseCallback(item)" column='12' ng-if="list.opportunitiesService.model.filterApplied")
+v-accordion.styled-list(multiple="" id="opportunities" control="list.accordion" onexpand="list.expandCallback(item)" oncollapse="list.collapseCallback(item)" column='12' )
   div.header-row(row)
     div.checkbox-wrapper.placeholder(ng-click="list.toggle(opportunity, list.selected)")
     div.hide-wrapper(ng-if="list.pageName()")
@@ -47,20 +46,23 @@ v-accordion.styled-list(multiple="" id="opportunities" control="list.accordion" 
           | Segmentation
           span(ng-class="{ 'chevron-down-small' : list.segmentationChevron, 'chevron-up-small' : !list.segmentationChevron}").chevron-down-small
   v-pane.list-item(row ng-repeat="opportunity in list.opportunitiesService.model.opportunities | orderBy:list.sortProperty:list.reverse" expanded='opportunity.isExpanded')
+    div(ng-if="!list.opportunitiesService.model.opportunities.length").no-opportunites
+      h4 No Opportunities have been added yet
+      p Try Searching for <span>Opportunities</span> and add them to your list
     .action-overlay(ng-class="{'active': opportunity.toggled, 'fail': opportunity.failState}")
       div.checkbox-wrapper
           md-checkbox(aria-label="Action Item Select" ng-checked="true")
       div.overlay-wrapper
         p(ng-if="!opportunity.failState") Successfully sent to 3 people
         p(ng-if="opportunity.failState") Whatever you just tried didn't work
-      div(ng-click="list.actionOverlay(opportunity)").hide-wrapper.hide-icon-wrapper.hide-row
+      div(ng-click="list.showFlyout(opportunity)").hide-wrapper.hide-icon-wrapper.hide-row
     .shadow-wrap.bottom
       div.checkbox-wrapper(ng-click="list.toggle(opportunity, list.selected)")
         md-checkbox(aria-label="Select Item" ng-checked="list.exists(opportunity, list.selected)")
       div.more-wrapper
         md-menu(md-position-mode="target-right target")
           md-button.md-icon-button(aria-label="More" md-menu-origin ng-click="$mdOpenMenu($event)")
-            md-icon(md-svg-icon="../assets/img/icons/more.svg")
+            md-icon(md-svg-icon="../assets/img/icons/action-menu_roll.svg")
           md-menu-content(width="4")
             md-menu-item
               p(ng-click="list.openShareModal(opportunity.id)") Send To
@@ -172,5 +174,12 @@ v-accordion.styled-list(multiple="" id="opportunities" control="list.accordion" 
                     label Depletions CYTD
                     span {{6256 | number }}
                   div(column="2")
-                    label Trend vs Ya
+                    .tooltip-wrap
+                      label Trend vs Ya
+                        .tooltip
+                          img(src="../assets/img/icons/help-tooltip.svg")
+                          md-tooltip(md-direction="bottom")
+                            label Opportunity List
+                            h3 Trend vs Ya
+                            p Monthly velocity for this account, calculated by taking the total volume over the selected time period (e.g. L90) and dividing by number of 30 day periods (3). “% vs YA” indicates the trend of velocity this year vs. same time period last year.
                     span {{::product.volumeTrend}}

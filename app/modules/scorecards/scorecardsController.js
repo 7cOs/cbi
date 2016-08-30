@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports = /*  @ngInject */
-  function scorecardsController($rootScope, $scope, $state, myperformanceService, opportunitiesService) {
+  function scorecardsController($rootScope, $scope, $state, filtersService, myperformanceService, opportunitiesService) {
 
     // ****************
     // CONTROLLER SETUP
@@ -18,6 +18,7 @@ module.exports = /*  @ngInject */
     vm.depletionsData = myperformanceService.depletionModel();
     vm.distributionData = myperformanceService.distributionModel();
     vm.filters = myperformanceService.filter();
+    vm.filtersService = filtersService;
 
     // Expose public methods
     vm.isPositive = isPositive;

@@ -29,7 +29,7 @@ module.exports = /*  @ngInject */
         {name: 'Low Velocity'},
         {name: 'New Placement (Quality)'},
         {name: 'New Placement (No Rebuy)'},
-        {name: 'Manual'}
+        {name: 'Custom'}
       ],
       savedFilters: [],
       placementType: [
@@ -41,16 +41,36 @@ module.exports = /*  @ngInject */
           name: 'All',
           value: 'all'
         }, {
-          name: 'Off Premise',
+          name: 'Off-Premise',
           value: 'off'
         }, {
-          name: 'On Premise',
+          name: 'On-Premise',
           value: 'on'
         }],
       retailer: [
-        {name: 'Store'},
-        {name: 'Chain'}
+        {
+          name: 'Store',
+          hintText: 'Name, Address, TDLinx, or Store#'
+        },
+        {
+          name: 'Chain',
+          hintText: 'Account or Subaccount Name'
+        }
       ],
+      depletionsTimePeriod: [{
+        name: 'MTD July 1 - July 31'
+      }, {
+        name: 'CYTD Jan 1 - July 21'
+      }, {
+        name: 'FYTD May 1, 2016 - July 21, 2016'
+      }],
+      distributionTimePeriod: [{
+        name: 'L30 Days June 21 - July 21'
+      }, {
+        name: 'L60 May 21, 2016 - July 21, 2016'
+      }, {
+        name: 'L90 Days April 22, 2016 - July 21, 2016'
+      }],
       selected: {
         myAccountsOnly: true,
         accountBrands: '',
@@ -60,13 +80,15 @@ module.exports = /*  @ngInject */
         cbbdContact: '',
         chains: '',
         currentFilter: '',
+        depletionsTimeFilter: 'MTD July 1 - July 31',
+        distributionTimeFilter: 'L90 Days April 22, 2016 - July 21, 2016',
         location: '',
         opportunitiesStatus: '',
         opportunitiesTypes: '',
         predictedImpactHigh: '',
         predictedImpactMedium: '',
         predictedImpactLow: '',
-        premiseType: '',
+        premiseType: 'off',
         productTypeFeatured: '',
         productTypePriority: '',
         productTypeAuthorized: '',
@@ -77,7 +99,7 @@ module.exports = /*  @ngInject */
         storeSegmentationC: '',
         storeTypeCBBD: '',
         storeTypeIndependent: '',
-        timePeriod: '',
+        timePeriod: 'Current Month to Date',
         tradeChannelConvenience: '',
         tradeChannelDrug: '',
         tradeChannelGrocery: '',
@@ -101,7 +123,9 @@ module.exports = /*  @ngInject */
 
     var service = {
       model: model,
-      getAppliedFilters: getAppliedFilters
+      getAppliedFilters: getAppliedFilters,
+      resetFilters: resetFilters,
+      saveReport: saveReport
     };
 
     return service;
@@ -119,4 +143,8 @@ module.exports = /*  @ngInject */
 
       return filterPayload;
     }
+
+    function resetFilters() {}
+
+    function saveReport() {}
   };

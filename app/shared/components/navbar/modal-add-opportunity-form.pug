@@ -10,7 +10,7 @@ div.modal
     div.modal-input.clearfix
       label Opportunity Type
       md-radio-group.horizontal-layout(ng-model="nb.newOpportunity.properties.distributionType.type" name="opportunityType" required)
-        md-radio-button.md-primary(value="new" aria-label="New Distribution") New Distribution
+        md-radio-button.md-primary(value="new" aria-label="New Distribution" class="md-checked") New Distribution
         md-radio-button.md-primary(value="other" aria-label="Other") Other
         input(ng-model="nb.newOpportunity.properties.distributionType.description" aria-label="Opportunity Description" placeholder="Input type" name="otherOpportunityInput").short
     div(ng-show="nb.addOpportunityForm.$invalid && nb.addOpportunityForm.$submitted")
@@ -18,10 +18,10 @@ div.modal
     div.modal-input.clearfix
       label Recommended Brand or Package/ SKU
       div
-        md-radio-group(layout="row" required)
-          md-radio-button.md-primary(value="" aria-label="Search for brand or package/SKU")
-          input(ng-model="nb.newOpportunity.properties.product.type" placeholder="Type brand or package name, or master SKU" name="recommendedBrand" required)
-          md-radio-button.md-primary(ng-if="nb.newOpportunity.properties.distributionType.type === 'other'" aria-label="Mixed Brands") Mixed Brands
+        md-radio-group(ng-model="nb.newOpportunity.properties.product.type" layout="row" required)
+          md-radio-button.md-primary(value="sku" aria-label="Search for brand or package/SKU")
+          input(ng-model="nb.newOpportunity.properties.product.text" placeholder="Type brand or package name, or master SKU" name="recommendedBrand" required)
+          md-radio-button.md-primary(value="mixed" ng-if="nb.newOpportunity.properties.distributionType.type === 'other'" aria-label="Mixed Brands") Mixed Brands
         div(ng-show="nb.addOpportunityForm.$invalid && nb.addOpportunityForm.$submitted")
           p.error-message.accent(ng-show="nb.addOpportunityForm.recommendedBrand.$error.required") <img src="./assets/img/icons/error.svg">Please enter a Recommended Brand or Select Mixed Brands.
     div.modal-input
@@ -29,12 +29,12 @@ div.modal
       .dropdown-filter
         .dropdown
           md-select.left(ng-model="nb.newOpportunity.properties.rationale.description" aria-label="rationale dropdown" placeholder="Select Rationale" name="rationaleDropdown" required)
-            md-option(ng-repeat="rationale in nb.rationales" aria-label="{{rationale.type}}" value="{{rationale.type}}") {{rationale.type}}
-            md-option(aria-label="Add New Rationale" ng-click="nb.showNewRationaleInput()" value="") + Add Other Rationale
+            md-option(ng-repeat="rationale in nb.rationales" aria-label="{{rationale.type}}" ng-click="nb.showNewRationaleInput(false)" value="{{rationale.type}}") {{rationale.type}}
+            md-option(aria-label="Add New Rationale" ng-click="nb.showNewRationaleInput(true)" value="other") + Add Other Rationale
         div(ng-show="nb.addOpportunityForm.$invalid && nb.addOpportunityForm.$submitted")
           p.error-message.accent(ng-show="nb.addOpportunityForm.rationaleDropdown.$error.required") <img src="./assets/img/icons/error.svg">Please select a Rationale, or add another one.
       label(ng-if="nb.addNewRationale") Add Other Rationale
-      input(ng-if="nb.addNewRationale" ng-model="nb.newOpportunity.properties.rationale.description" aria-label="Input New Rationale" placeholder="Add Other Rationale" name="addRationale" required)
+      input(ng-if="nb.addNewRationale" ng-model="nb.newOpportunity.properties.rationale.other" aria-label="Input New Rationale" placeholder="Add Other Rationale" name="addRationale" required)
       div(ng-show="nb.addOpportunityForm.$invalid && nb.addOpportunityForm.$submitted")
         p.error-message.accent(ng-show="nb.addOpportunityForm.addRationale.$error.required") <img src="./assets/img/icons/error.svg">Please enter a Rationale.
     div.modal-input
@@ -42,16 +42,19 @@ div.modal
       .dropdown-filter.half-width
         .dropdown.short
           md-select.left(ng-model="nb.newOpportunity.properties.impact.enum" aria-label="impact dropdown" placeholder="Select Impact")
-            md-option(aria-label="High Impact" value="HIGH") <span class="impact-text">High</span> <img class="impact-icon" src="./assets/img/icons/impact-high.svg">
-            md-option(aria-label="Medium Impact form" value="MEDIUM") <span class="impact-text">Medium</span> <img class="impact-icon" src="./assets/img/icons/impact-medium.svg">
-            md-option(aria-label="Low Impact" value="LOW") <span class="impact-text">Low</span> <img class="impact-icon" src="./assets/img/icons/impact-low.svg">
-    div(ng-click="nb.addToTargetListArray(nb.newOpportunity)").modal-input.icon-container
+            md-option(aria-label="High Impact" value="H") <span class="impact-text">High</span> <img class="impact-icon" src="./assets/img/icons/impact-high.svg">
+            md-option(aria-label="Medium Impact form" value="M") <span class="impact-text">Medium</span> <img class="impact-icon" src="./assets/img/icons/impact-medium.svg">
+            md-option(aria-label="Low Impact" value="L") <span class="impact-text">Low</span> <img class="impact-icon" src="./assets/img/icons/impact-low.svg">
+    button(type="submit" ng-click="nb.addAnotherOpportunity(nb.newOpportunity)").modal-input.icon-container
       img(src="../assets/img/icons/overview-overall-market.svg")
       p.accent.left Add another opportunity
     div.modal-input.clearfix
       label Add to target list (optional)
       .horizontal-layout
         md-checkbox Add to target list
-        inline-search(placeholder="Select a Target List" results="nb.searchResults")
-    button(type="submit" ng-click="nb.addNewOpportunity(nb.newOpportunity, nb.newOpportunityArray)").btn-action Add
+        .dropdown-filter
+          .dropdown
+            md-select.left(ng-model="nb.newOpportunity.properties.targetList" aria-label="target list dropdown" placeholder="Select a target list" name="rationaleDropdown")
+              md-option(ng-repeat="targetList in nb.targetLists | filter:{archived:false, deleted: false}:true" aria-label="{{targetList.name}}" value="{{targetList.id}}") {{targetList.name}}
+    button(type="submit" ng-click="nb.addOpportunity(nb.newOpportunity)").btn-action Add
     p.cancel.accent(ng-click="nb.closeModal()") X Cancel

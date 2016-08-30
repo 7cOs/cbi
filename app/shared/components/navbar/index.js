@@ -1,6 +1,6 @@
 'use strict';
 
-function NavbarController($rootScope, $scope, $mdPanel, $mdDialog, notificationsService, opportunitiesService, targetListService, userService) {
+function NavbarController($rootScope, $scope, $state, $mdPanel, $mdDialog, $mdMenu, $mdSelect, notificationsService, opportunitiesService, targetListService, userService) {
 
   // ****************
   // CONTROLLER SETUP
@@ -18,13 +18,7 @@ function NavbarController($rootScope, $scope, $mdPanel, $mdDialog, notifications
   vm.notificationsService = notificationsService;
   vm.notifications = [];
   vm.unreadNotifications = 0;
-
-  userService
-    .getNotifications(userService.model.currentUser.personID)
-    .then(function(result) {
-      vm.notifications = result.notifications;
-      setUnreadCount(result.totalUnseenNotifications);
-    });
+  vm.userService = userService;
 
   // Defaults
   vm.noNotifications = 'No unread notifications.';
@@ -50,26 +44,23 @@ function NavbarController($rootScope, $scope, $mdPanel, $mdDialog, notifications
     }
   ];
 
-  vm.targetLists = [
-    {
-      name: 'Irish Pubs'
-    },
-    {
-      name: 'Grocery Stores'
-    }
-  ];
+  vm.targetLists = [];
 
   // Expose public methods
   vm.markRead = markRead;
   vm.modalAddOpportunityForm = modalAddOpportunityForm;
   vm.closeModal = closeModal;
-  vm.addNewOpportunity = addNewOpportunity;
+  vm.closeMenus = closeMenus;
+  vm.addOpportunity = addOpportunity;
+  vm.addAnotherOpportunity = addAnotherOpportunity;
   vm.newOpportunity = {};
   vm.newOpportunityArray = [];
-  vm.addToTargetListArray = addToTargetListArray;
   vm.showNewRationaleInput = showNewRationaleInput;
   vm.addNewRationale = false;
   vm.addToTargetList = addToTargetList;
+  vm.markSeen = markSeen;
+
+  init();
 
   // **************
   // PUBLIC METHODS
@@ -78,10 +69,41 @@ function NavbarController($rootScope, $scope, $mdPanel, $mdDialog, notifications
   // Mark notification as read on click
   function markRead(notification) {
     vm.notificationsService
-      .markNotification(notification.id, vm.notificationsService.status.READ)
+      .markNotifications([{
+        id: notification.id,
+        status: vm.notificationsService.status.READ
+      }])
       .then(function() {
         notification.status = vm.notificationsService.status.READ;
         setUnreadCount(vm.unreadNotifications - 1);
+      });
+
+    if (notification.objectType.toUpperCase() === 'TARGET_LIST') {
+      targetListService.model.currentList.id = notification.objectId;
+      $state.go('target-list-detail');
+    } else if (notification.objectType.toUpperCase() === 'OPPORTUNITY') {
+      opportunitiesService.model.opportunityId = notification.objectId;
+      $state.go('opportunities');
+    }
+  }
+
+  // Mark notification as seen when opened
+  function markSeen(notifications) {
+    var toMarkSeen = notifications
+      .filter(function(i) {
+        return i.status === vm.notificationsService.status.UNSEEN;
+      })
+      .map(function(i) {
+        return {
+          'id': i.id,
+          'status': vm.notificationsService.status.SEEN
+        };
+      });
+
+    vm.notificationsService
+      .markNotifications(toMarkSeen)
+      .then(function() {
+        vm.notificationHelper.showBadge = false;
       });
   }
 
@@ -95,44 +117,59 @@ function NavbarController($rootScope, $scope, $mdPanel, $mdDialog, notifications
   }
 
   // Add Opportunity
-  function addNewOpportunity(opportunityList) {
-    if (vm.addOpportunityForm.$invalid) {
-      return false;
+  function addOpportunity(opportunity) {
+    if (saveOpportunity(opportunity)) {
+      vm.newOpportunity = {};
+      $mdDialog.hide();
     }
-
-    addToTargetListArray(vm.newOpportunity);
-
-    vm.newOpportunityArray.forEach(function(opportunity) {
-
-      // TODO will need to be called properly
-      // opportunitiesService.createOpportunity();
-    });
-
-    vm.newOpportunity = {};
-    $mdDialog.hide();
   }
 
   // Adds opportunities to an array with the same account name
-  function addToTargetListArray (opportunity) {
-    var accountName;
-
-    vm.newOpportunityArray.push(opportunity);
-
-    accountName = opportunity.properties.store.description;
-
-    vm.newOpportunity =   {
-      properties: {
-        store: {
-          description: accountName
+  function addAnotherOpportunity(opportunity) {
+    if (saveOpportunity(opportunity)) {
+      vm.newOpportunity = {
+        properties: {
+          store: {
+            description: opportunity.properties.store.description
+          }
         }
-      }
-    };
+      };
+    }
   }
 
-  function addToTargetList(opportunity) {
-    // TODO will need to be called properly
-    // Not sure if this even the correct service call
-    // targetListService.addTargetListOpportunities();
+  function saveOpportunity(opportunity) {
+    console.log('saving', vm.addOpportunityForm);
+    if (vm.addOpportunityForm.$invalid === true) {
+      return false;
+    }
+
+    var isDistribution = opportunity.properties.distributionType.type === 'new';
+    var oppSubType = isDistribution ? 'ND001' : opportunity.properties.distributionType.description;
+    var isMixedType = !isDistribution && opportunity.properties.product.type === 'mixed';
+    var targetList = opportunity.properties.targetList;
+
+    var payload = {
+      'store': opportunity.properties.store.description,
+      'product': !isMixedType && opportunity.properties.product.text,
+      'mixedBrand': isMixedType,
+      'rationale': opportunity.properties.rationale.description,
+      'impactCode': opportunity.properties.impact.enum,
+      'oppSubType': oppSubType
+    };
+
+    opportunitiesService
+      .createOpportunity(payload)
+      .then(function(result) {
+        if (targetList) {
+          addToTargetList(targetList, result);
+        }
+      });
+
+    return true;
+  }
+
+  function addToTargetList(targetList, opportunity) {
+    targetListService.addTargetListOpportunities(targetList, [opportunity.id]);
   }
 
   // Close "Add Opportunity" modal
@@ -141,18 +178,50 @@ function NavbarController($rootScope, $scope, $mdPanel, $mdDialog, notifications
     $mdDialog.hide();
   }
 
-  // Show inputs if a new item is needed
-  function showNewRationaleInput()  {
-    vm.addNewRationale = true;
+  function closeMenus($event) {
+    if ($event.relatedTarget === null) {
+      $mdSelect.hide();
+      $mdMenu.hide();
+    }
   }
 
   // ***************
   // PRIVATE METHODS
   // ***************
 
+  function init() {
+    userService
+    .getNotifications(userService.model.currentUser.personID)
+    .then(function(result) {
+      vm.notifications = result;
+      setUnreadCount(vm.notifications);
+    });
+
+    userService
+    .getTargetLists(userService.model.currentUser.personID)
+    .then(function(result) {
+      vm.targetLists = result.owned;
+    });
+  }
+
   // Get unread notification count and set initial badge value
-  function setUnreadCount(value) {
-    vm.unreadNotifications = value;
+  function setUnreadCount(arr) {
+    var value = 0;
+    for (var i = 0; i < arr.length; i++) {
+      if (arr[i].status.toUpperCase() === 'UNSEEN') value++;
+    }
+
+    vm.notificationHelper = {
+      unreadNotifications: value,
+      showBadge: true
+    };
+
+    if (value < 1) vm.notificationHelper.showBadge = false;
+  }
+
+  // Show inputs if a new item is needed
+  function showNewRationaleInput(yes)  {
+    vm.addNewRationale = yes;
   }
 }
 

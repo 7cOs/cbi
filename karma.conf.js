@@ -48,7 +48,7 @@ module.exports = function(config) {
     },
 
     mochaReporter: {
-      output: 'autowatch'
+      output: 'minimal'
     },
 
     coverageReporter: {

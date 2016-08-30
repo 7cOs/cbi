@@ -25,7 +25,7 @@ div.modal.target-list-modal
     div.modal-input
       label Add Recipient
       input(type="email" ng-model="tld.collaborators.newCollaborator" ng-change="tld.listChanged()" placeholder="Enter names or CBI Email addresses")
-    button(ng-disabled="tld.changed" ng-click="tld.addCollaborators()").btn-action Save
+    button(ng-disabled="!tld.changed" ng-click="tld.addCollaborators()").btn-action Save
     p.cancel.accent(ng-click="tld.closeModal()") X Cancel
   div.modal-footer.clearfix(ng-class="{'toasted': tld.showToast}")
     p.link.align-left(ng-click="tld.footerToast('archive')") Archive List

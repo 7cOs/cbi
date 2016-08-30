@@ -3,9 +3,9 @@
 module.exports = function (config) {
 
   // global settings
-  config.domain = 'app-orion-qa.herokuapp.com';
+  config.domain = 'orion-qa.cbrands.com';
   config.env = 'test';
-  config.address = 'https://' + config.domain + '/'; // base url
+  config.address = 'https://' + config.domain + ''; // base url
 
   // directories
   config.public = {
@@ -16,7 +16,7 @@ module.exports = function (config) {
     js: config.address + 'js/'
   };
 
-  config.iq = 'http://test-iqweb.cbrands.com';
+  config.iq = 'http://test-iqweb.cbrands.com/MicroStrategy/servlet/mstrWeb?server=CBIGDC-IMSTK801&project=Beer+Analytics&evt=2001&folderID=DC6B34544F13E47DFEA3AEB328B149A3';
 
   config.api = {
     url: 'https://cbi-api-internal-qa.herokuapp.com',

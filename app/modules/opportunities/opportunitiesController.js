@@ -10,6 +10,7 @@ module.exports = /*  @ngInject */
     // Initial variables
     var vm = this;
     vm.currentFilter = {};
+    vm.hintTextPlaceholder = 'Name, Address, TDLinkx, or Store#';
 
     // Set page title for head and nav
     $rootScope.pageTitle = $state.current.title;
@@ -28,12 +29,17 @@ module.exports = /*  @ngInject */
     vm.editFilterModal = editFilterModal;
     vm.modalSaveOpportunityFilter = modalSaveOpportunityFilter;
     vm.saveFilter = saveFilter;
+    vm.placeholderSelect = placeholderSelect;
 
     init();
 
     // **************
     // PUBLIC METHODS
     // **************
+
+    function placeholderSelect(data) {
+      vm.hintTextPlaceholder = data;
+    }
 
     function applyFilter(filterStr) {
       console.log('add filter');
@@ -120,5 +126,15 @@ module.exports = /*  @ngInject */
 
       // reset all chips and filters on page init
       chipsService.model = chipsService.resetChipsFilters(chipsService.model);
-    }
-  };
+
+      // go to a specific opportunity on load and then set to null if specified
+      if (opportunitiesService.model.opportunityId !== null) {
+        opportunitiesService.getOpportunities(opportunitiesService.model.opportunityId).then(function(data) {
+          opportunitiesService.model.opportunities = data;
+          opportunitiesService.model.opportunityId = null;
+        });
+      }
+
+    } // end init
+
+  }; // end controller

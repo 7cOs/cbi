@@ -25,7 +25,7 @@ function NotesController($scope, $state, $mdDialog, $timeout, notesService, Uplo
   vm.noteTopics = [
     'Distribution',
     'Display',
-    'Cold box / shelf',
+    'Space Management',
     'Price',
     'Account information',
     'General visit'

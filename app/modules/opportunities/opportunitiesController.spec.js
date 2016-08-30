@@ -50,11 +50,11 @@ describe('Unit: opportunitiesController', function() {
     // assertions
     expect(ctrl.opportunitiesService.createOpportunity).toHaveBeenCalled();
     expect(ctrl.opportunitiesService.createOpportunity.calls.count()).toEqual(1);
-  });*/
+  });  */
 
   it('[init], it should call userService.getOpportunityFilters on init', function() {
     /* expect(ctrl.userService.getOpportunityFilters).toHaveBeenCalled();
-    expect(ctrl.userService.getOpportunityFilters.calls.count()).toEqual(1);*/
+    expect(ctrl.userService.getOpportunityFilters.calls.count()).toEqual(1); */
   });
 
 });

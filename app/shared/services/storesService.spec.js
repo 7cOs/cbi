@@ -85,6 +85,6 @@ describe('[Services.storesService]', function() {
 
       expect(result).toBeTruthy();
     });
-  });*/
+  });  */
 
 });

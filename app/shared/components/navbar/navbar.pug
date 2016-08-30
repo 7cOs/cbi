@@ -1,7 +1,7 @@
 div(container)
   .external-link
     img(src="../assets/img/icons/nav-iq.svg")
-    a(href="/ext/iq" target="_self") Go to IQ
+    a(href="/ext/iq" target="_blank") Go to IQ
   div(row)
     img(src="assets/img/logos/Compass_logo.svg", ui-sref="landing", alt="Home").nav-logo
     .nav-logo-background
@@ -26,25 +26,32 @@ div(container)
           div.inner
             span #[a(ui-sref="help") Help]
       div.nav-icon-container
-        .notification-count-badge(ng-if="nb.unreadNotifications > 0")
-          span {{nb.unreadNotifications}}
+        .notification-count-badge(ng-if="nb.notificationHelper.showBadge")
+          span {{nb.notificationHelper.unreadNotifications}}
         md-menu(md-position-mode="target-right target" md-offset="54 80")
           a.nav-icon.search(href="#" ng-click="$mdOpenMenu($event)" aria-label="Search")
           md-menu-content
             .nav-flyout-search
               .content
                 p <strong>Account Selector</strong>
-                md-checkbox(ng-model="nb.myAccountsOnly" aria-label="My Accounts Only") My Accounts Only
+                .tooltip-wrap
+                  md-checkbox(ng-model="nb.myAccountsOnly" aria-label="My Accounts Only") My Accounts Only
+                    .tooltip
+                      img(src="../assets/img/icons/help-tooltip.svg")
+                      md-tooltip(md-direction="bottom")
+                        label Global Account Selector
+                        h3 My Accounts Only
+                        p By default, you will only see the data that’s relevant to you (based on your role, market, and account scope).  You can deselect this option to expand your view or search beyond your own market.
                 .dropdown-filter
                   .dropdown
                     md-select(ng-model="nb.accountSelectorSelected" aria-label="Account Type selector"  placeholder="Store, account, or subaccount name")
-                      md-option(ng-repeat="type in nb.accountSelectorOptions" aria-label="type.name" value="{{type.name}}") {{type.name}}
+                      md-option(ng-repeat="type in nb.accountSelectorOptions" ng-blur="nb.closeMenus($event)" aria-label="type.name" value="{{type.name}}") {{type.name}}
                 inline-search(ng-if="nb.accountSelectorSelected === 'Distributor'" type="distributor" placeholder="Search for a distributor" chosen-result="nb.searchResult" nav="true")
                 inline-search(ng-if="nb.accountSelectorSelected === 'Chain'" type="chain" placeholder="Search for a chain" chosen-result="nb.searchResult" nav="true")
                 inline-search(ng-if="nb.accountSelectorSelected === 'Store'" type="store" placeholder="Search for a store" chosen-result="nb.searchResult" nav="true")
         a.nav-icon.add-opportunity(ng-click="nb.modalAddOpportunityForm()")
         md-menu(md-position-mode="target-right target" md-offset="1 38")
-          a.nav-icon.notifications(href="#" md-menu-origin ng-click="$mdOpenMenu($event)", aria-label="Notifications")
+          a.nav-icon.notifications(href="#" md-menu-origin ng-click="$mdOpenMenu($event); nb.markSeen(nb.notifications)", aria-label="Notifications")
           md-menu-content
             .nav-flyout
               .content.nopad
@@ -56,7 +63,7 @@ div(container)
                   .info
                     label {{notification.dateUpdated | timeAgo: 'relative'}}
                     label.bold {{notification.creator.firstName}} {{notification.creator.lastName}}
-                div.notification-card.clearfix(ng-if="nb.unreadNotifications < 1")
+                div.notification-card.clearfix(ng-if="nb.notificationHelper.unreadNotifications < 1")
                   .details
                     p {{nb.noNotifications}}
         md-menu(md-position-mode="target-right target" md-offset="2 54")
@@ -65,7 +72,7 @@ div(container)
             .nav-flyout
               .content
                 p Logged in as
-                p <strong>John Cervesa</strong>
+                p <strong>{{nb.userService.model.currentUser.firstName | titlecase}} {{nb.userService.model.currentUser.lastName | titlecase}}</strong>
                 a(href="/auth/logout" target="_self")
                   button.btn-action Logout
     ul.nav-sub-menu(ng-if="$root.pageTitle === 'Accounts' || $root.pageTitle === 'Scorecards'")

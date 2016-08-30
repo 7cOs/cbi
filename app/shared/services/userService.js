@@ -4,25 +4,7 @@ module.exports = /*  @ngInject */
   function userService($http, $q, apiHelperService, filtersService, targetListService) {
 
     var model = {
-          /* currentUser: {
-            id: '1601',
-            firstName: 'Joe',
-            lastName: 'Cerveza',
-            email: 'jCerveza@cbrands.com',
-            phone: '1234567890',
-            role: 'CBBD MDM',
-            accounts: ['Wal-mart', 'PCC']
-          }*/
-          currentUser: {
-            'firstName': 'JAMES',
-            'lastName': 'O\'NEIL',
-            'iss': 'https://cf.cbrands.com',
-            'personID': 1601,
-            'employeeID': '1002417',
-            'exp': 1477168596733,
-            'iat': 1471984596737,
-            'email': 'jim.oneil@cbrands.com'
-          }
+          currentUser: {}
         },
         service = {
           model: model,
@@ -31,6 +13,7 @@ module.exports = /*  @ngInject */
           hideOpportunity: hideOpportunity,
           deleteHiddenOpportunity: deleteHiddenOpportunity,
           getNotifications: getNotifications,
+          createNotification: createNotification,
           getOpportunityFilters: getOpportunityFilters,
           saveOpportunityFilter: saveOpportunityFilter,
           getPerformanceSummary: getPerformanceSummary,
@@ -197,11 +180,9 @@ module.exports = /*  @ngInject */
       var notificationsPromise = $q.defer(),
           url = apiHelperService.request('/api/users/' + id + '/notifications/');
 
-      $http.get(url, {
-        headers: {}
-      })
-      .then(getNotificationsSuccess)
-      .catch(getNotificationsFail);
+      $http.get(url)
+        .then(getNotificationsSuccess)
+        .catch(getNotificationsFail);
 
       function getNotificationsSuccess(response) {
         console.log('[userService.getNotifications] response: ', response);
@@ -209,6 +190,39 @@ module.exports = /*  @ngInject */
       }
 
       function getNotificationsFail(error) {
+        notificationsPromise.reject(error);
+      }
+
+      return notificationsPromise.promise;
+    }
+
+    /**
+     * @name createNotification
+     * @desc create notifications for a user
+     * @params {String} id - id of a user
+     * @params {Object} p - params to be used in creation of notification
+     * @returns {Array} - Newly created notification
+     * @memberOf cf.common.services
+     */
+    function createNotification(id, p) {
+      var notificationsPromise = $q.defer(),
+          url = apiHelperService.request('/api/users/' + id + '/notifications/'),
+          payload = {
+            creator: id,
+            action: p.action,
+            objectType: p.objectType
+          };
+
+      $http.post(url, payload)
+        .then(createNotificationSuccess)
+        .catch(createNotificationFail);
+
+      function createNotificationSuccess(response) {
+        console.log('[userService.createNotification] response: ', response);
+        notificationsPromise.resolve(response.data);
+      }
+
+      function createNotificationFail(error) {
         notificationsPromise.reject(error);
       }
 
@@ -226,11 +240,9 @@ module.exports = /*  @ngInject */
       var opportunityFilterPromise = $q.defer(),
           url = apiHelperService.request('/api/users/' + id + '/opportunityFilters/');
 
-      $http.get(url, {
-        headers: {}
-      })
-      .then(getOpportunityFiltersSuccess)
-      .catch(getOpportunityFiltersFail);
+      $http.get(url)
+        .then(getOpportunityFiltersSuccess)
+        .catch(getOpportunityFiltersFail);
 
       function getOpportunityFiltersSuccess(response) {
         console.log('[userService.getOpportunityFilters] response: ', response);
@@ -483,7 +495,7 @@ module.exports = /*  @ngInject */
      */
     function addTargetList(p) {
       var targetListPromise = $q.defer(),
-          url = apiHelperService.request('/api/users/' + model.currentUser.id + '/targetLists/'),
+          url = apiHelperService.request('/api/users/' + model.currentUser.personID + '/targetLists/'),
           payload = {
             name: p.name,
             opportunityIds: [] // opportunity id's to be included

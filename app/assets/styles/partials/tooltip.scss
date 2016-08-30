@@ -1,0 +1,77 @@
+.tooltip-wrap {
+  display: block;
+  position: relative;
+  width: 100%;
+
+  .tooltip {
+    position: absolute;
+    right: -1.75em;
+    top: -0.5em;
+
+    img {
+      height: 15px;
+      width: 15px;
+    }
+  }
+
+  label {
+    display: inline-block;
+    position: relative;
+    width: auto;
+  }
+}
+
+md-tooltip {
+  overflow: visible;
+  font-size: 0.8em;
+  z-index: 999;
+
+  ._md-content {
+    background: $light-blue;
+    box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.2);
+    color: $gray-1;
+    height: auto;
+    padding: 1em;
+    text-align: center;
+    white-space: normal;
+    width: 220px;
+
+    label {
+      margin-bottom: -0.25em;
+    }
+
+    h2, h3 {
+      font-weight: $bold;
+      line-height: 1;
+      margin: 0;
+    }
+
+    p {
+      line-height: 1.25;
+    }
+
+    ol, ul {
+      font-size: 0.75em;
+      list-style-type: default;
+      text-align: left;
+    }
+  }
+}
+
+.scorecard-table {
+
+  .tooltip-wrap {
+
+    .tooltip {
+      right: 0.5em;
+      top: -0.5em;
+    }
+
+    &.outer {
+
+      .tooltip {
+        right: -0.5em;
+      }
+    }
+  }
+}
