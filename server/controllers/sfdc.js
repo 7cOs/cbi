@@ -140,10 +140,13 @@ function createNote(app, req, res) {
     try {
       res.send(result);
     } catch (err) {
+      // if there is a problem sending the response.
       console.log(err);
+      res.send(err);
     };
   }, function (err) {
     console.log(err);
+    res.send(err);
   });
 };
 

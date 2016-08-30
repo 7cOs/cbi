@@ -30,7 +30,7 @@ function sfdcConn(app, req, res) {
     req.user = app.get('config').auth.user;
   };
 
-  console.log('Getting the connection.  req.user.sfdcConn is ' + JSON.stringify(req.user.sfdcConn));
+  // console.log('Getting the connection.  req.user.sfdcConn is ' + JSON.stringify(req.user.sfdcConn));
   if (!req.user.sfdcConn || req.user.sfdcConn === undefined) {
   // Get session promise from library
 //      console.log('No connection present.  Creating one now');
@@ -76,56 +76,60 @@ function createNote(app, req, res) {
     try {
       var conn = result;
 // Search for the correct Account Id
-      console.log('searching for account id: ' + req.body.accountId + '\n');
-      var theAccount = conn.search('FIND {' + req.body.accountId + '} IN ALL FIELDS RETURNING Account(Id, Name)',
-        function (err, res) {
-          if (err) {
-            console.log('The account Id could not be found');
-            return console.error(err);
-          }
-          return res;
-        });
+      if (req.body.accountId === null || req.body.accountId === undefined || req.body.accountId === '') {
+        var badAccountIdError = {'isSuccess': false,
+                                 'errorMessage': 'There was no valid account id submitted.  Please make sure you have an account id (i.e. TD Linx Id)'
+                                };
+        throw badAccountIdError;
+      } else {
+        var theAccount = conn.search('FIND {' + req.body.accountId + '} IN ALL FIELDS RETURNING Account(Id, Name)',
+          function (err, res) {
+            if (err) {
+              console.log('The account Id could not be found');
+              return console.error(err);
+            }
+            return res;
+          });
 // Once you have the correct account id, create a note and attach to that account Id.
  //     console.dir(req, { depth: null });
-      theAccount.then(function (result) {
-        console.dir(result);
+        theAccount.then(function (result) {
+          console.dir(result);
 
-        var accountId = result.searchRecords[0].Id;  // Only uses the first account it finds.
-        if (accountId === null || accountId === undefined) {
-          return console('There was no account specified for the Id provided (' + req.body.accountId + '.');
-        } else {
-          conn.sobject('Note__c').create([{
-            Account__c: accountId,
-            Comments_RTF__c: req.body.body,
-            Conversion_Flag__c: req.body.conversionflag,
-            // CreatedById, CreatedDate, Id, IsDeleted, LastModifiedById, LastModifiedDate are system generated.
-            Other_Type__c: req.body.othertype,
-            Private__c: req.body.private,
-            Soft_Delete__c: req.body.softdelete,
-            Title__c: req.body.title,
-            Type__c: req.body.type
-          }],
-          function (err, ret) {
-            if (err) {
-              console.log('Returning an error from createNote: ' + JSON.stringify(err, null, ''));
-              return err;
-/*  This is returning the reverse of what it should.  ret.success should be true, yet
-    it thinks it's false.  Please verify.
-                       }  else if (!ret.success) {
-            console.log('There was an unknown error with the logic');
-  */
-            } else {
-              return ret;
-            }
-          });
-        };
-      }, function (err) {
-        var strResponse = JSON.stringify(err, null, '');
-        console.log('ERROR:' + strResponse);
-        return err;
-      });
+          var accountId = result.searchRecords[0].Id;  // Only uses the first account it finds.
+          if (accountId === null || accountId === undefined) {
+            return console('There was no account specified for the Id provided (' + req.body.accountId + '.');
+          } else {
+            conn.sobject('Note__c').create([{
+              Account__c: accountId,
+              Comments_RTF__c: req.body.body,
+              Conversion_Flag__c: req.body.conversionflag,
+              // CreatedById, CreatedDate, Id, IsDeleted, LastModifiedById, LastModifiedDate are system generated.
+              Other_Type__c: req.body.othertype,
+              Private__c: req.body.private,
+              Soft_Delete__c: req.body.softdelete,
+              Title__c: req.body.title,
+              Type__c: req.body.type
+            }],
+            function (err, ret) {
+              if (err) {
+                console.log('Returning an error from createNote: ' + JSON.stringify(err, null, ''));
+                return err;
+              } else {
+                console.log('\n\nResponse from Salesforce.com:');
+                console.dir(ret, null);
+                return ret;
+              }
+            });
+          };
+        }, function (err) {
+          var strResponse = JSON.stringify(err, null, '');
+          console.log('ERROR:' + strResponse);
+          return err;
+        });
+      };
     } catch (err) {
       console.log(err);
+      return err;
     };
   });
 };
