@@ -30,6 +30,10 @@
 
       a {
         color: $blue;
+
+        &:hover {
+          color: $dark-blue-5;
+        }
       }
 
       a.disabled {
@@ -57,6 +61,13 @@
 
     &:hover {
       cursor: pointer;
+
+      a {
+
+        span {
+          color: $dark-blue-5;
+        }
+      }
     }
   }
 

@@ -13,9 +13,7 @@
 .chips(ng-if="o.chipsService.model.length")
   label Active Filters
   span
-    a(ng-click="o.modalSaveOpportunityFilter($event)")
-      img(src="../assets/img/icons/save-filterset.svg")
-      | Save Report
+    a(ng-click="o.modalSaveOpportunityFilter($event)") &nbsp;
   md-chips(ng-model="o.chipsService.model" name="Active Filters" md-on-remove="o.chipsService.removeFromFilterService($chip)")
     input(class="hidden" disabled="true")
     md-chip-template(custom-chip="")
@@ -106,7 +104,7 @@
     div(column='12' class='apply-filters')
       button(value='Apply Filters' type="button" class="btn-action" ng-click="o.chipsService.applyFilters()" ng-disabled="o.filtersService.model.filtersApplied") Apply Filters
       .secondary-button-container
-        a(ng-click="o.filtersService.saveReport()" ng-disabled="o.filtersService.model.filtersApplied" ng-class="{'disabled save-filterset-icon-disabled': o.filtersService.model.filtersApplied}").accent.save-filterset-icon Save Report
-        a(ng-click="o.filtersService.resetFilters()" ng-disabled="o.filtersService.model.filtersApplied" ng-class="{'disabled reset-icon-disabled': o.filtersService.model.filtersApplied}").accent.reset-icon Reset
+        a(ng-click="o.saveReport()" ng-disabled="o.filtersService.model.filtersApplied" ng-mouseover="o.hoverState('save')" ng-mouseleave="o.hoverState('save')" ng-class="{'disabled save-filterset-icon-disabled': o.filtersService.model.filtersApplied, 'save-report-hover': o.isHoveringSave && !o.filtersService.model.filtersApplied}").accent.save-filterset-icon Save Report
+        a(ng-click="o.resetFilters()" ng-disabled="o.filtersService.model.filtersApplied" ng-mouseover="o.hoverState('reset')" ng-mouseleave="o.hoverState('reset')" ng-class="{'disabled reset-icon-disabled': o.filtersService.model.filtersApplied, 'reset-icon-hover': o.isHoveringReset && !o.filtersService.model.filtersApplied}").accent.reset-icon Reset
 
 list

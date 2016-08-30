@@ -165,6 +165,10 @@ list {
     &:focus {
       outline: none;
     }
+
+    &:hover {
+      color: $dark-blue-5;
+    }
   }
 
   .chevron-up-small,

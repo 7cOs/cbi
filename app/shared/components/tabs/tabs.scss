@@ -18,11 +18,15 @@ md-tabs-canvas {
   text-transform: none;
   font-weight: $regular;
   color: $gray-4;
+
+  &:hover {
+    color: $blue;
+  }
 }
 
 md-tabs .md-tab.md-active {
   color: $gray-1;
-  font-weight: $regular;
+  font-weight: $semibold;
   padding: 14px 22px;
 }
 
