@@ -53,7 +53,13 @@ function NavbarController($rootScope, $scope, $state, $mdPanel, $mdDialog, $mdMe
   vm.closeMenus = closeMenus;
   vm.addOpportunity = addOpportunity;
   vm.addAnotherOpportunity = addAnotherOpportunity;
-  vm.newOpportunity = {};
+  vm.newOpportunity = {
+    properties: {
+      product: {
+        type: 'sku'
+      }
+    }
+  };
   vm.newOpportunityArray = [];
   vm.showNewRationaleInput = showNewRationaleInput;
   vm.addNewRationale = false;
