@@ -159,4 +159,3 @@ function accountNotes(app, req, res) {
     res.send(err);
   });
 };
-
