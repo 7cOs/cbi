@@ -1,5 +1,5 @@
 .total-opportunities
-  h4(ng-if="list.pageName(['accounts'])") 300 opportunities <span>across 24 stores</span>
+  h4(ng-if="list.pageName(['accounts'])") {{list.opportunitiesService.model.opportunitiesSum | number:0 }} opportunities <span>across {{list.opportunitiesService.model.opportunities.length}} stores</span>
   h3(ng-if="list.pageName(['opportunities'])" ng-hide="list.opportunitiesService.model.opportunities.length === 0") <strong>{{list.opportunitiesService.model.opportunitiesSum}} opportunities</strong> across {{list.opportunitiesService.model.opportunities.length}} stores
 
 .action-buttons
@@ -45,7 +45,7 @@ v-accordion.styled-list(multiple="" id="opportunities" control="list.accordion" 
         label(ng-click="list.sortBy('segmentation')" ng-class="{ 'header-bold' : list.sortProperty === 'segmentation'}")
           | Segmentation
           span(ng-class="{ 'chevron-down-small' : list.segmentationChevron, 'chevron-up-small' : !list.segmentationChevron}").chevron-down-small
-  v-pane.list-item(row ng-repeat="opportunity in list.opportunitiesService.model.opportunities | orderBy:list.sortProperty:list.reverse" expanded='opportunity.isExpanded')
+  v-pane.list-item(row ng-repeat="opportunity in list.opportunitiesService.model.opportunitiesDisplay[list.opportunitiesService.model.paging.current] | orderBy:list.sortProperty:list.reverse" expanded='opportunity.isExpanded')
     div(ng-if="!list.opportunitiesService.model.opportunities.length").no-opportunites
       h4 No Opportunities have been added yet
       p Try Searching for <span>Opportunities</span> and add them to your list
@@ -183,3 +183,6 @@ v-accordion.styled-list(multiple="" id="opportunities" control="list.accordion" 
                             h3 Trend vs Ya
                             p Monthly velocity for this account, calculated by taking the total volume over the selected time period (e.g. L90) and dividing by number of 30 day periods (3). “% vs YA” indicates the trend of velocity this year vs. same time period last year.
                     span {{::product.volumeTrend}}
+
+div(column=12)
+  cl-paging(layout="row" flex cl-pages="list.opportunitiesService.model.paging.pages" cl-steps="list.opportunitiesService.model.paging.steps" layout-align="{{list.opportunitiesService.model.paging.align}}" cl-current-page="list.opportunitiesService.model.paging.current" ng-if="list.opportunitiesService.model.opportunitiesDisplay.length > 0")
