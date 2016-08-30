@@ -13,14 +13,14 @@ notes
         .market
           p {{a.selectedStore || a.filtersService.model.selected.accountTypes || a.accountTypesDefault}}
         .notes-icon
-          p <a href="#"></a>
+          p <a href="#" ng-click="a.openNotes(true)" analytics-on="click" analytics-event="Notes Tab"></a>
       .market-overview.clearfix
         .brands
           p {{a.brandWidgetTitle}}<span ng-if="a.brandIdSelected"> - {{a.brandIdSelected}}</span>
         .market
           p {{a.selectedStore || a.filtersService.model.selected.accountTypes || a.accountTypesDefault}}
-        .notes-icon(ng-click="a.openNotes(true)")
-          p <a href="#">Notes</a>
+        .notes-icon
+          p <a href="#" ng-click="a.openNotes(true)" analytics-on="click" analytics-event="Notes Tab">Notes</a>
 
 .chips(ng-if="a.chipsService.model.length")
   label Active Filters

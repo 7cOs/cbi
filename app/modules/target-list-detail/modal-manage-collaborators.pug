@@ -20,5 +20,5 @@ div.modal.target-list-modal
     div.modal-input
       label Add Recipient
       inline-search(type="user" placeholder="Search users" chosen-result="tld.collaborator")
-    button(ng-disabled="!tld.collaborator" ng-click="tld.addCollaborators()").btn-action Save
+    button(ng-disabled="!tld.collaborator" ng-click="tld.addCollaborators()" analytics-on="click" analytics-event="Share Target List").btn-action Save
     p.cancel.accent(ng-click="tld.closeModal()") X Cancel

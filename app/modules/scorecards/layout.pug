@@ -108,7 +108,7 @@ div.my-scorecards
             td.column-total 100%
             td.column-total.no-border 12%
           tr(ng-repeat="depletion in s.depletionsData.performance")
-            td.left.data-brand {{depletion.name}}
+            td.left.data-brand(analytics-on="click" analytics-event="Brand Performance") {{depletion.name}}
             td(ng-class="{'negative': !s.isPositive(depletion.measures.depletions)}").dark             {{depletion.measures.depletions | number }}
             td(ng-class="{'negative': !s.isPositive(depletion.measures.yearAgoGap)}").medium-dark      {{depletion.measures.yearAgoGap | number }}
             td(ng-class="{'negative': !s.isPositive(depletion.measures.yearAgoTrend)}").medium-dark.no-border    {{depletion.measures.yearAgoTrend}}%
@@ -220,7 +220,7 @@ div.my-scorecards
             td.column-total 100%
             td.column-total.no-border 12%
           tr(ng-repeat="distribution in s.distributionData.performance")
-            td.left.data-brand {{distribution.name}}
+            td.left.data-brand(analytics-on="click" analytics-event="Brand Performance") {{distribution.name}}
             td(ng-class="{'negative': !s.isPositive(distribution.measures.distributions)}").dark         {{distribution.measures.distributions | number }}
             td(ng-class="{'negative': !s.isPositive(distribution.measures.yearAgoGap)}").medium-dark                {{distribution.measures.yearAgoGap | number }}
             td(ng-class="{'negative': !s.isPositive(distribution.measures.yearAgoTrend) }").medium-dark.no-border              {{distribution.measures.yearAgoTrend}}%
