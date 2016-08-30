@@ -46,8 +46,6 @@ module.exports = /*  @ngInject */
       } else {
         vm.isHoveringSave = !vm.isHoveringSave;
       }
-      console.log(icon);
-      console.log(vm.isHoveringReset);
     }
 
     function placeholderSelect(data) {
