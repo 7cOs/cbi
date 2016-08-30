@@ -158,22 +158,15 @@ function searchAccounts(app, req, res) {
 
 function accountNotes(app, req, res) {
 
-  var promise = new Promise(function (resolve, reject) {
-    var result = sfdc.queryAccountNotes(app, req, res);
-    if (result) {
-      resolve(result);
-    } else {
-      reject(Error('There was no response from SFDC: ' + res.statusText));
-    }
-  });
-  promise.then(function (result) {
-    console.log('\n\n\n\n\n');
-    console.log(result);
-    console.log('\n\n\n\n\n');
-    return result;
+  sfdc.queryAccountNotes(app, req, res).then(function(result) {
+    try {
+      res.send(result);
+    } catch (err) {
+      console.log('ish be fck');
+      console.log(err);
+    };
   }, function (err) {
     console.log(err);
-    return err;
   });
 };
 

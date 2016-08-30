@@ -15,8 +15,6 @@ module.exports = {
   deleteNote: deleteNote
 };
 
-var u = require('util');
-
 function sfdcConn(app, req, res) {
 //  console.log('In sfdcConn - establishing the connection');
   try {
@@ -26,8 +24,6 @@ function sfdcConn(app, req, res) {
     console.log('There was an error requiring the libraries: ' + e);
   };
 
-//  console.log('Libraries initiated.');
-
   if (req.user === undefined) {
     res.redirect('/');
   } else {
@@ -35,29 +31,12 @@ function sfdcConn(app, req, res) {
     if (!req.user.sfdcConn || req.user.sfdcConn === undefined) {
   // Get session promise from library
 //      console.log('No connection present.  Creating one now');
-      var creatingSfdcSession = saml.getSFDCSession(app, req, res);
-      /* sfdc connection is similar to
-      {'access_token': '00Dm00000008fCJ!AQwAQIdgCEeNSQz1ZAZfyrtYqYLmLOnZdnOaQZLK1ON8NP6HVnEP9noL_9jFTP8Y9Xb2OqEy9tLLO4OevJQojKZsgvPShGcs',
-      'instance_url: 'https://cbrands--CBeerDev.cs20.my.salesforce.com',
-      'id': 'https://test.salesforce.com/id/00Dm00000008fCJEAY/005G0000004eNiRIAU',
-      'token_type': 'Bearer'}
-      */
-      var creatingSfdcConnection = creatingSfdcSession.then(function(sfdcSession) {
+      return saml.getSFDCSession(app, req, res).then(function(sfdcSession) {
         sfdcSession = JSON.parse(sfdcSession);
- /*       console.log('access_token: ' + sfdcSession.access_token);
-        console.log('instance_url: ' + sfdcSession.instance_url);
-        console.log('id: ' + sfdcSession.id);
-        console.log('token_type: ' + sfdcSession.token_type);
-*/
         return new jsforce.Connection({
           instanceUrl: sfdcSession.instance_url,
           accessToken: sfdcSession.access_token
         });
-      });
-
-      return creatingSfdcConnection.then(function(sfdcConnection) {
-        req.user.sfdcConn = sfdcConnection;
-        return sfdcConnection;
       });
     } else {
     //  console.log('Reusing existing connection: ' + req.user.sfdcConn);
@@ -79,7 +58,6 @@ function testSFDCConn(app, req, res) {
   });
 
   sfdcConnPromise.then(function (result) {
-    console.log('\n\n<---------------------------------------Connection Is ------------------------------------------>\n' + u.inspect(result) + '\n<---------------------------------------Connection Finished ------------------------------------------>');
     try {
       result.query('SELECT Id, Name FROM Account', function(err, res) {
         if (err) { return console.error(err); }
@@ -116,7 +94,7 @@ function createNote(app, req, res) {
           Account__c: accountId,
           Comments_RTF__c: req.query.body,
           Conversion_Flag__c: req.query.conversionflag,
-      // CreatedById, CreatedDate, Id, IsDeleted, LastModifiedById, LastModifiedDate are system generated.
+          // CreatedById, CreatedDate, Id, IsDeleted, LastModifiedById, LastModifiedDate are system generated.
           Other_Type__c: req.query.othertype,
           Private__c: req.query.private,
           Soft_Delete__c: req.query.softdelete,
@@ -303,17 +281,7 @@ function searchAccounts(app, req, res) {
 };
 
 function queryAccountNotes(app, req, res) {
-  var sfdcConnPromise = new Promise(function (resolve, reject) {
-    try {
-      var result = sfdcConn(app, req, res);
-      resolve(result);
-    } catch (e) {
-      reject(('Could not create a SFDC connection: ' + e));
-    }
-  });
-
-  var acctNotes = sfdcConnPromise.then(function (result) {
- //   console.log('\n\n<---------------------------------------Account Notes Connection Is ------------------------------------------>\n' + u.inspect(result) + '\n<---------------------------------------Connection Finished ------------------------------------------>');
+  return sfdcConn(app, req, res).then(function(result) {
     try {
       var conn = result;
       var strId = '';
@@ -326,7 +294,6 @@ function queryAccountNotes(app, req, res) {
           'ErrorMessage': 'There was no account Id'
         };
       }
-
       return (
         conn.sobject('Note__c')
             .select('Account__r.TDLinx_Id__c, Account__r.JDE_Address_Book_Number__c,  Type__c, Title__c, Soft_Delete__c, Private__c, OwnerId, Other_Type__c, Name, IsDeleted, Id, Comments_RTF__c, Account__c, CreatedDate, CreatedBy.Name')
@@ -340,7 +307,7 @@ function queryAccountNotes(app, req, res) {
               if (err) {
                 return console.error(err);
               }
-// set the URL on the image to include the url and session id
+              // set the URL on the image to include the url and session id
               for (var note in records) {
                 if (records[note].Attachments) {
                   for (var theAtt in records[note].Attachments.records) {
@@ -350,9 +317,9 @@ function queryAccountNotes(app, req, res) {
                   }
                 }
               }
-              return (records);
+              return records;
             })
-      );
+    );
     } catch (err) {
       var errMessage = 'There was an error in queryAccountNotes: ' + JSON.stringify(err, null, '');
       console.error(errMessage);
@@ -363,6 +330,4 @@ function queryAccountNotes(app, req, res) {
     return {'isSuccess': false,
             'errorMessage': 'A connection to Salesforce could not be established: ' + err};
   });
-  return {'isSuccess': true,
-          'theNotes': acctNotes};
 };
