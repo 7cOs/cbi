@@ -64,7 +64,11 @@
     button,
     p {
       display: inline;
-      font-size: 1em;
+    }
+
+    a {
+      color: $blue;
+      padding-top: 4px;
     }
 
     .cancel {
