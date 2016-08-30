@@ -10,7 +10,7 @@ div.modal
     div.modal-input.clearfix
       label Opportunity Type
       md-radio-group.horizontal-layout(ng-model="nb.newOpportunity.properties.distributionType.type" name="opportunityType" required)
-        md-radio-button.md-primary(value="new" aria-label="New Distribution" class="md-checked") New Distribution
+        md-radio-button.md-primary(value="new" aria-label="New Distribution" checked) New Distribution
         md-radio-button.md-primary(value="other" aria-label="Other") Other
         input(ng-model="nb.newOpportunity.properties.distributionType.description" aria-label="Opportunity Description" placeholder="Input type" name="otherOpportunityInput").short
     div(ng-show="nb.addOpportunityForm.$invalid && nb.addOpportunityForm.$submitted")
@@ -18,7 +18,7 @@ div.modal
     div.modal-input.clearfix
       label Recommended Brand or Package/ SKU
       div
-        md-radio-group(ng-model="nb.newOpportunity.properties.product.type" layout="row" required)
+        md-radio-group(ng-model="nb.newOpportunity.properties.product.type" layout="row")
           md-radio-button.md-primary(value="sku" aria-label="Search for brand or package/SKU")
           input(ng-model="nb.newOpportunity.properties.product.text" placeholder="Type brand or package name, or master SKU" name="recommendedBrand" required)
           md-radio-button.md-primary(value="mixed" ng-if="nb.newOpportunity.properties.distributionType.type === 'other'" aria-label="Mixed Brands") Mixed Brands
