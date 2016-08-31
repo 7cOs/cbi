@@ -112,17 +112,24 @@ list {
     border-radius: 3px;
   }
 
-  md-icon {
-    min-width: 18px;
-    min-height: 18px;
-    height: 18px;
-    width: 18px;
+  .md-icon-button {
+    border-radius: 0;
+  }
+
+
+  .more-icon  {
     border: 1px solid $gray-4;
-    padding-top: 5px;
-    padding-bottom: 5px;
-    padding-left: 4px;
-    padding-right: 4px;
-    background: $white;
+    background: url('../assets/img/icons/action-menu.svg') $white;
+    background-position: center;
+    background-size: 17px 17px;
+    background-repeat: no-repeat;
+    height: 28px;
+    width: 28px;
+    padding: 5px;
+
+    &:hover {
+      background-image: url('../assets/img/icons/action-menu_roll.svg');
+    }
   }
 }
 
