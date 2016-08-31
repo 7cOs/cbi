@@ -61,6 +61,12 @@ md-radio-button {
       border: 3px solid $dark-blue-5;
     }
   }
+
+  &.md-checked {
+    ._md-label span {
+      color: $blue;
+    }
+  }
 }
 
 /* Selected */
