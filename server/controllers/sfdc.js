@@ -74,22 +74,17 @@ function getAttachmentData(app, req, res) {
 };
 
 function deleteAttach(app, req, res) {
-  var promise = new Promise(function (resolve, reject) {
-    var response = sfdc.fnDeleteAttach(app, req, res);
-    if (response) {
-      resolve(response);
-    } else {
-      reject(Error('There was no response from SFDC: ' + res.statusText));
-    }
-  });
-  promise.then(function (result) {
-    var strResponse = JSON.stringify(result, null, '');
-    res.write(strResponse);
-    res.end();
+  sfdc.deleteAttach(app, req, res).then(function(result) {
+    try {
+      res.send(result);
+    } catch (err) {
+      // if there is a problem sending the response.
+      console.log(err);
+      res.send(err);
+    };
   }, function (err) {
-    var strResponse = JSON.stringify(err, null, '');
-    res.write(strResponse);
-    res.end();
+    console.log(err);
+    res.send(err);
   });
 };
 

@@ -6,7 +6,7 @@ module.exports = function(app) {
   var sfdcConfig =  app.get('config').sfdcSec;
   var utility = require('util');
 
-  app.post('/sfdc/accountNotes', function (req, res) {
+  app.get('/sfdc/accountNotes', function (req, res) {
     sfdc['accountNotes'](app, req, res);
   });
 
@@ -14,7 +14,7 @@ module.exports = function(app) {
     sfdc['createNote'](app, req, res);
   });
 
-  app.post('/sfdc/deleteNote', function (req, res) {
+  app.delete('/sfdc/deleteNote', function (req, res) {
     sfdc['deleteNote'](app, req, res);
   });
 
@@ -23,7 +23,7 @@ module.exports = function(app) {
     //     sfdc['unDeleteNote'](app, req, res);
   });
 
-  app.get('/sfdc/deleteAttach', function (req, res) {
+  app.delete('/sfdc/deleteAttach', function (req, res) {
     sfdc['deleteAttach'](app, req, res);
   });
 

@@ -71,15 +71,61 @@ function testSFDCConn(app, req, res) {
   });
 };
 
+function deleteAttach(app, req, res) {
+  return sfdcConn(app, req, res).then(function(result) {
+    console.dir(req);
+    try {
+      var conn = result;
+      console.dir(conn);
+      if (req.query.attachId) {
+        var attachId = req.query.attachId;
+        return conn.sobject('Attachment').delete(attachId,
+                                        function (err, res) {
+                                          if (err || !res.success) {
+                                            console.log('SFDC gave an error:');
+                                            console.dir(err);
+                                            return {
+                                              'isSuccess': false,
+                                              'errorMessage': err  // return the error from Salesforce
+                                            };
+                                          } else {
+                                            console.log('The response from SFDC was:');
+                                            console.dir(res);
+                                            return {
+                                              'isSuccess': true,
+                                              'searchRecords': res.searchRecords
+                                            };
+                                          }
+                                        }).then(function(result) {
+                                          return result;
+                                        }, function(err) {
+                                          return err;
+                                        });
+      } else {
+        var badNoteIdError = {
+          'isSuccess': 'False',
+          'ErrorString': 'No noteId Id was present for delete.'
+        };
+        throw badNoteIdError;
+      }
+    } catch (err) {
+      console.dir(err);
+      var generalError = {'isSuccess': false,
+                          'errorMessage': err};
+    }
+    throw generalError;
+  });
+};
+
 function deleteNote(app, req, res) {
   return sfdcConn(app, req, res).then(function(result) {
     try {
       var conn = result;
-      if (req.body.noteId) {
-        var noteId = req.body.noteId;
+      if (req.query.noteId) {
+        var noteId = req.query.noteId;
         return conn.sobject('Note__c').delete(noteId,
                                     function (err, res) {
-                                      if (err) {
+                                      if (err || !res.success) {
                                         return {
                                           'isSuccess': false,
                                           'errorMessage': err  // return the error from Salesforce
@@ -98,14 +144,14 @@ function deleteNote(app, req, res) {
       } else {
         var badNoteIdError = {
           'isSuccess': 'False',
-          'ErrorString': 'No noteId Id was present in the request'
+          'ErrorString': 'No noteId Id was present for delete.'
         };
         throw badNoteIdError;
       }
     } catch (err) {
       console.dir(err);
       var generalError = {'isSuccess': false,
-                      'errorMessage': err};
+                          'errorMessage': err};
     }
     throw generalError;
   });
@@ -116,7 +162,7 @@ function searchAccounts(app, req, res) {
     try {
       var conn = result;
       var searchTerm = req.query.searchTerm;
-      if (searchTerm !== '') {
+      if (searchTerm) {
         return conn.search('FIND {' + searchTerm + '} IN ALL FIELDS RETURNING Account(Id, Name)',
                                     function (err, res) {
                                       if (err) {
@@ -156,12 +202,13 @@ function queryAccountNotes(app, req, res) {
       var strId = '';
 
       if (req.query.accountId) {
-        strId  = (req.query.accountId || req.query.TDLinx_Id__c);
+        strId  = req.query.accountId;
       } else {
-        return {
+        var badAccountIdError = {
           'isSuccess': 'False',
           'ErrorMessage': 'There was no account Id'
         };
+        throw badAccountIdError;
       }
       return (
         conn.sobject('Note__c')
@@ -206,7 +253,7 @@ function createNote(app, req, res) {
     try {
       var conn = result;
 // Search for the correct Account Id
-      if (!(req.query.accountId) && !(req.body.accountId)) {
+      if (!(req.body.accountId)) {
         var badAccountIdError = {'isSuccess': false,
                                  'errorMessage': 'There was no valid account id submitted.  Please make sure you have an account id (i.e. TD Linx Id)'
                                 };
@@ -326,37 +373,4 @@ function getAttachment(app, req, res) {
     TODO: There is a better way to write this: bring in the object and id, that can account for attachments and notes
    will revisit if we have time
 */
-function deleteAttach(app, req, res) {
-  var sfdc = sfdcConn(app, req, res);
-  if (sfdc.isSuccess) {
-    var conn = sfdc.theSession;
-    var response = '';
-    if (req.query.attachId) {
-      var attachId = req.query.attachId;
-      response = conn.sobject('Attachment')
-                     .delete(attachId,
-                                      function (err, ret) {
-                                        if (err || !ret.success) {
-                                          return (err);
-                                        }
-                                        return (ret);
-                                      }
-                             );
-      if (response !== '') {
-        return (response);
-      } else {
-        return {
-          'isSuccess': 'false',
-          'errorMessage': 'Salesforce did not return valid information'
-        };
-      }
-    } else {
-      return {
-        'isSuccess': 'False',
-        'ErrorString': 'No attachment Id was present in the URL'
-      };
-    }
-  } else {
-    return sfdc;
-  }
-};
+
