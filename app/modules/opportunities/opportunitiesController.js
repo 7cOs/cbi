@@ -34,6 +34,7 @@ module.exports = /*  @ngInject */
     vm.placeholderSelect = placeholderSelect;
     vm.hoverState = hoverState;
     vm.searchCallback = searchCallback;
+    vm.resetFilters = resetFilters;
 
     init();
 
@@ -116,6 +117,12 @@ module.exports = /*  @ngInject */
 
     function searchCallback() {
       console.log(filtersService.model.selected.store);
+    }
+
+    function resetFilters() {
+      // reset all chips and filters
+      chipsService.model = chipsService.resetChipsFilters(chipsService.model);
+      userService.model.opportunityFilters = null;
     }
 
     // ***************
