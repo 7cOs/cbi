@@ -6,7 +6,6 @@ J. Scott Cromie
 ***********************************************************/
 module.exports = {
   sfdcConn: sfdcConn,
-  testSFDCConn: testSFDCConn,
   createNote: createNote,
   queryAccountNotes: queryAccountNotes,
   searchAccounts: searchAccounts,
@@ -47,36 +46,10 @@ function sfdcConn(app, req, res) {
   }
 }
 
-function testSFDCConn(app, req, res) {
-  var sfdcConnPromise = new Promise(function (resolve, reject) {
-    try {
-      var result = sfdcConn(app, req, res);
-      resolve(result);
-    } catch (e) {
-      reject(('Could not create a SFDC connection: ' + e));
-    }
-  });
-
-  sfdcConnPromise.then(function (result) {
-    try {
-      result.query('SELECT Id, Name FROM Account', function(err, res) {
-        if (err) { return console.error(err); }
-        console.log(res);
-      });
-    } catch (e) {
-      res.send(e);
-    }
-  }, function (err) {
-    res.send(err);
-  });
-};
-
 function deleteAttach(app, req, res) {
   return sfdcConn(app, req, res).then(function(result) {
-    console.dir(req);
     try {
       var conn = result;
-      console.dir(conn);
       if (req.query.attachId) {
         var attachId = req.query.attachId;
         return conn.sobject('Attachment').delete(attachId,
@@ -89,8 +62,6 @@ function deleteAttach(app, req, res) {
                                               'errorMessage': err  // return the error from Salesforce
                                             };
                                           } else {
-                                            console.log('The response from SFDC was:');
-                                            console.dir(res);
                                             return {
                                               'isSuccess': true,
                                               'searchRecords': res.searchRecords
@@ -109,7 +80,6 @@ function deleteAttach(app, req, res) {
         throw badNoteIdError;
       }
     } catch (err) {
-      console.dir(err);
       var generalError = {'isSuccess': false,
                           'errorMessage': err};
     }
@@ -149,7 +119,6 @@ function deleteNote(app, req, res) {
         throw badNoteIdError;
       }
     } catch (err) {
-      console.dir(err);
       var generalError = {'isSuccess': false,
                           'errorMessage': err};
     }
@@ -274,9 +243,8 @@ function createNote(app, req, res) {
             return res;
           });
 // Once you have the correct account id, create a note and attach to that account Id.
- //     console.dir(req, { depth: null });
+
         theAccount.then(function (result) {
-          console.dir(result);
 
           var accountId = result.searchRecords[0].Id;  // Only uses the first account it finds.
           if (accountId === null || accountId === undefined) {
