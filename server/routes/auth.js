@@ -9,8 +9,6 @@ module.exports = function(app) {
   app.get('/auth/login',
     passport.authenticate(authType, {session: true}), function(req, res) {
       // Successful authentication, redirect home.
-      res.cookie('user', JSON.stringify(req.user.jwtmap), { path: '/', maxAge: 604800000 }); // 7 days
-      res.cookie('ga', JSON.stringify(app.get('config').analytics), { path: '/', maxAge: 604800000 }); // 7 days
       res.redirect('/');
     });
 
@@ -23,6 +21,7 @@ module.exports = function(app) {
     passport.authenticate(authType, {failureRedirect: logoutUrl}),
     function(req, res) {
       res.cookie('user', JSON.stringify(req.user.jwtmap), { path: '/', maxAge: 604800000 }); // 7 days
+      res.cookie('ga', JSON.stringify(app.get('config').analytics), { path: '/', maxAge: 604800000 }); // 7 days
       res.redirect('/');
     });
 
