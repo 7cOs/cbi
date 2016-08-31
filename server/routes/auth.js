@@ -5,10 +5,16 @@ module.exports = function(app) {
   const authType = app.get('config').auth.strategy;
   const logoutUrl = 'https://ssodev.cbrands.com/oam/server/logout?end_url=' + app.get('config').address;
 
+  function setCookies (req, res) {
+    res.cookie('user', JSON.stringify(req.user.jwtmap), { path: '/', maxAge: 604800000 }); // 7 days
+    res.cookie('ga', JSON.stringify(app.get('config').analytics), { path: '/', maxAge: 604800000 }); // 7 days
+  }
+
   // Auth stuff
   app.get('/auth/login',
     passport.authenticate(authType, {session: true}), function(req, res) {
       // Successful authentication, redirect home.
+      setCookies(req, res);
       res.redirect('/');
     });
 
@@ -20,8 +26,7 @@ module.exports = function(app) {
   app.post('/auth/callback',
     passport.authenticate(authType, {failureRedirect: logoutUrl}),
     function(req, res) {
-      res.cookie('user', JSON.stringify(req.user.jwtmap), { path: '/', maxAge: 604800000 }); // 7 days
-      res.cookie('ga', JSON.stringify(app.get('config').analytics), { path: '/', maxAge: 604800000 }); // 7 days
+      setCookies(req, res);
       res.redirect('/');
     });
 
