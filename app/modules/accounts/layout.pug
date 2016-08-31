@@ -22,17 +22,6 @@ notes
         .notes-icon
           p <a href="#" ng-click="a.openNotes(true)" analytics-on="click" analytics-event="Notes Tab">Notes</a>
 
-.chips(ng-if="a.chipsService.model.length")
-  label Active Filters
-  span
-    a(ng-click="a.chipsService.applyFilters()")
-      img(src="../assets/img/icons/save-filterset.svg")
-      | Save Filterset
-  md-chips(ng-model="a.chipsService.model" name="Active Filters" md-on-remove="a.chipsService.removeFromFilterService($chip)")
-    input(class="hidden" disabled="true")
-    md-chip-template(custom-chip="")
-      div {{$chip.name}}
-
 .filters.top(column='12')
   div(row)
     div(column='2')
@@ -95,6 +84,8 @@ notes
   div(row)
     div(column='12' class='apply-filters')
       button(value='Apply Filters' type="button" class="btn-action" ng-disabled="a.filtersService.model.filtersApplied" ng-click="a.chipsService.applyFilters()") Apply Filters
+      .secondary-button-container.account-filter-reset
+        a(ng-click="a.chipsService.resetChipsFilters(a.chipsService.model)" ng-disabled="!a.filtersService.model.filtersApplied" ng-class="{'disabled reset-icon-disabled': !a.filtersService.model.filtersApplied}").accent.reset-icon Reset
 
 div(row)
   div(column='12')

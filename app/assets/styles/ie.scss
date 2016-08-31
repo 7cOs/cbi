@@ -20,7 +20,12 @@
   }
 
   // Placeholder font color
-  ::-ms-input-placeholder, :-ms-input-placeholder {
+  ::-ms-input-placeholder {
+    color: $gray-2;
+    opacity: 1;
+  }
+
+  :-ms-input-placeholder {
     color: $gray-2;
     opacity: 1;
   }
