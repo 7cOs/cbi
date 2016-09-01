@@ -45,7 +45,7 @@ v-accordion.styled-list(multiple="" id="opportunities" control="list.accordion" 
         label(ng-click="list.sortBy('segmentation')" ng-class="{ 'header-bold' : list.sortProperty === 'segmentation'}")
           | Segmentation
           span(ng-class="{ 'chevron-down-small' : list.segmentationChevron, 'chevron-up-small' : !list.segmentationChevron}").chevron-down-small
-  v-pane.list-item(row ng-repeat="opportunity in list.opportunitiesService.model.opportunitiesDisplay[list.opportunitiesService.model.paging.current] | orderBy:list.sortProperty:list.reverse" expanded='opportunity.isExpanded')
+  v-pane.list-item(row ng-repeat="opportunity in list.opportunitiesService.model.opportunitiesDisplay[list.opportunitiesService.model.paging.current-1] | orderBy:list.sortProperty:list.reverse" expanded='opportunity.isExpanded')
     div(ng-if="!list.opportunitiesService.model.opportunities.length").no-opportunites
       h4 No Opportunities have been added yet
       p Try Searching for <span>Opportunities</span> and add them to your list

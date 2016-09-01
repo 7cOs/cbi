@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports = /*  @ngInject */
-  function targetListService($http, $q, apiHelperService) {
+  function targetListService($http, $q, apiHelperService, opportunitiesService) {
 
     var model = {
       currentList: {}
@@ -129,6 +129,8 @@ module.exports = /*  @ngInject */
         var newOpportunityArr = [],
             store,
             storePlaceholder;
+        opportunitiesService.model.opportunities = [];
+        opportunitiesService.model.opportunitiesDisplay = [];
 
         for (var i = 0; i < response.data.opportunities.length; i++) {
           var item = response.data.opportunities[i];
@@ -178,7 +180,12 @@ module.exports = /*  @ngInject */
           model.opportunitiesSum += 1;
         }; // end for each
 
-        console.log(newOpportunityArr);
+        // set data for pagination
+        for (i = 0; i < newOpportunityArr.length; i = i + opportunitiesService.model.paging.itemsPerPage) {
+          var page = newOpportunityArr.slice(i, i + opportunitiesService.model.paging.itemsPerPage);
+          opportunitiesService.model.opportunitiesDisplay.push(page);
+        }
+        opportunitiesService.model.paging.pages = opportunitiesService.model.opportunitiesDisplay.length - 1;
 
         targetListPromise.resolve(newOpportunityArr);
       }
