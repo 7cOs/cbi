@@ -5,7 +5,7 @@ section.landing-page
       section.my-performance(column="7")
         section.greeting
           h1 {{l.greeting}}
-        h2 My Performance
+        h2 #[a(href="#" ui-sref="scorecards") My Performance]
         .depletions(column="4")
           h3 Depletions FYTD
           table(cellspacing="0" cellpadding="0")
@@ -64,7 +64,7 @@ section.landing-page
       section.my-performance(column="7")
         target
       section.opportunities(column="4 +1")
-        h2 Opportunities
+        h2 #[a(href="#" ui-sref="opportunities") Opportunities]
         h3 Saved Filters
         .filter-container.first
           .dropdown-filter
