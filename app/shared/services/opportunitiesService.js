@@ -10,7 +10,7 @@ module.exports = /*  @ngInject */
       paging: {
         align: 'center center',
         current: 1,
-        pages: [],
+        pages: 0,
         // pageChanged: pageChanged, // This function fires at the start of page change. It also fires on pagination load.
         steps: 10,
         itemsPerPage: 15
@@ -117,7 +117,7 @@ module.exports = /*  @ngInject */
           var page = newOpportunityArr.slice(i, i + service.model.paging.itemsPerPage);
           service.model.opportunitiesDisplay.push(page);
         }
-        service.model.paging.pages = service.model.opportunitiesDisplay.length - 1;
+        service.model.paging.pages = service.model.opportunitiesDisplay.length;
 
         service.model.opportunities = newOpportunityArr;
 
