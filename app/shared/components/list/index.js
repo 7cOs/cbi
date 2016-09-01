@@ -1,6 +1,6 @@
 'use strict';
 
-function ListController($scope, $state, $q, $mdDialog, opportunitiesService, targetListService, storesService, userService, closedOpportunitiesService) {
+function ListController($scope, $state, $q, $location, $anchorScroll, $mdDialog, opportunitiesService, targetListService, storesService, userService, closedOpportunitiesService) {
 
   // ****************
   // CONTROLLER SETUP
@@ -46,6 +46,7 @@ function ListController($scope, $state, $q, $mdDialog, opportunitiesService, tar
   vm.showFlyout = showFlyout;
   vm.submitFeedback = submitFeedback;
   vm.cancelFeedback = cancelFeedback;
+  vm.pageChanged = pageChanged;
 
   vm.expandCallback = expandCallback;
   vm.collapseCallback = collapseCallback;
@@ -223,6 +224,12 @@ function ListController($scope, $state, $q, $mdDialog, opportunitiesService, tar
 
   function collapseCallback(item) {
     vm.expandedOpportunities--;
+  }
+
+  function pageChanged() {
+    $location.hash('opportunities');
+
+    $anchorScroll();
   }
 
   // **************

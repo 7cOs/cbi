@@ -12,7 +12,8 @@ module.exports = /*  @ngInject */
         current: 1,
         pages: [],
         // pageChanged: pageChanged, // This function fires at the start of page change. It also fires on pagination load.
-        steps: 10
+        steps: 10,
+        itemsPerPage: 15
       }
     };
 
@@ -110,8 +111,8 @@ module.exports = /*  @ngInject */
         }; // end for each
 
         // set data for pagination
-        for (i = 0; i < newOpportunityArr.length; i = i + 20) {
-          var page = newOpportunityArr.slice(i, i + 20);
+        for (i = 0; i < newOpportunityArr.length; i = i + service.model.paging.itemsPerPage) {
+          var page = newOpportunityArr.slice(i, i + service.model.paging.itemsPerPage);
           service.model.opportunitiesDisplay.push(page);
         }
         service.model.paging.pages = service.model.opportunitiesDisplay.length - 1;
