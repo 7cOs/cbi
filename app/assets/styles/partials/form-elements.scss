@@ -79,6 +79,12 @@ md-radio-button:not([disabled]).md-primary.md-checked ._md-on {
 
 md-checkbox {
 
+  ._md-container,
+  ._md-icon {
+    width: 16px;
+    height: 16px;
+  }
+
   ._md-icon {
     border-radius: 50%;
     border-width: 1px;
@@ -86,12 +92,47 @@ md-checkbox {
 
   ._md-container:hover {
     ._md-icon {
-      background: $dark-blue-5;
+      background-color: $dark-blue-5;
+
+      &:after {
+        box-sizing: border-box;
+        -webkit-transform: rotate(45deg);
+        transform: rotate(45deg);
+        position: absolute;
+        border-style: solid;
+        border-top: 0;
+        border-left: 0;
+        content: '';
+        display: block;
+        border-color: $gray-4;
+        height: 9px;
+        border-width: 1px;
+        height: 9px;
+        left: 5px;
+        top: 2px;
+        width: 4px;
+      }
     }
   }
 
   &.md-checked {
     font-weight: $semibold;
+
+    ._md-container:hover {
+      ._md-icon {
+        background-color: $blue;
+
+        &:after {
+          display: block;
+          border-color: $gray-4;
+          border-width: 1px;
+          left: 6px;
+          top: 3px;
+          width: 4px;
+          height: 9px;
+        }
+      }
+    }
 
     ._md-icon {
       box-shadow: 0 2px 0 $gray-1;

@@ -112,6 +112,16 @@ md-dialog {
       }
     }
 
+    .add-opportunity {
+      background: $gray-4;
+      padding: 0;
+      margin-bottom: 0;
+
+      p {
+        font-size: 1em;
+      }
+    }
+
     .horizontal-layout {
 
       inline-search {
@@ -128,6 +138,10 @@ md-dialog {
         display: inline-block;
         float: left;
         margin: 12px 16px;
+      }
+
+      md-select-value {
+        margin-left: 24px;
       }
 
       input {

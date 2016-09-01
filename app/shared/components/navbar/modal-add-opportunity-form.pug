@@ -45,15 +45,16 @@ div.modal
             md-option(aria-label="High Impact" value="H") <span class="impact-text">High</span> <img class="impact-icon" src="./assets/img/icons/impact-high.svg">
             md-option(aria-label="Medium Impact form" value="M") <span class="impact-text">Medium</span> <img class="impact-icon" src="./assets/img/icons/impact-medium.svg">
             md-option(aria-label="Low Impact" value="L") <span class="impact-text">Low</span> <img class="impact-icon" src="./assets/img/icons/impact-low.svg">
-    button(type="submit" ng-click="nb.addAnotherOpportunity(nb.newOpportunity)").modal-input.icon-container
-      img(src="../assets/img/icons/overview-overall-market.svg")
-      p.accent.left Add another opportunity
+    div.modal-input
+      button(type="submit" ng-click="nb.addAnotherOpportunity(nb.newOpportunity)").modal-input.icon-container.add-opportunity
+        img(src="../assets/img/icons/overview-overall-market.svg")
+        p.accent.left Add another opportunity
     div.modal-input.clearfix
       label Add to target list (optional)
       .horizontal-layout
-        md-checkbox Add to target list
         .dropdown-filter
           .dropdown
+            md-checkbox Add to target list
             md-select.left(ng-model="nb.newOpportunity.properties.targetList" aria-label="target list dropdown" placeholder="Select a target list" name="rationaleDropdown")
               md-option(ng-repeat="targetList in nb.targetLists | filter:{archived:false, deleted: false}:true" aria-label="{{targetList.name}}" value="{{targetList.id}}") {{targetList.name}}
     button(type="submit" ng-click="nb.addOpportunity(nb.newOpportunity)").btn-action Add
