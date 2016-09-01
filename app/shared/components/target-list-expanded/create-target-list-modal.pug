@@ -13,5 +13,5 @@ div.modal
     div.modal-input
       md-checkbox(ng-model="expanded.newList.allowInvites" aria-label="Allow Collaborators to Invite Others") Allow Collaborators to Invite Others
 
-    button.btn-action(ng-click="expanded.saveNewList($event)" ng-disabled="!expanded.newList.name") Save
+    button.btn-action(ng-click="expanded.saveNewList($event)" ng-disabled="!expanded.newList.name || expanded.buttonDiabled") Save
     p.cancel.accent(ng-click="expanded.closeModal()") X Cancel
