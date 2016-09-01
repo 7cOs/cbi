@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports = /*  @ngInject */
-  function chipsService(filtersService, opportunitiesService) {
+  function chipsService(filtersService, opportunitiesService, targetListService) {
 
     var model = [];
 
@@ -63,15 +63,25 @@ module.exports = /*  @ngInject */
       }
     }
 
-    function applyFilters() {
-      opportunitiesService.getOpportunities().then(function(data) {
+    function applyFilters(isTargetList) {
+      if (!isTargetList) {
+        opportunitiesService.getOpportunities().then(function(data) {
+          finishGet(data);
+        });
+      } else if (isTargetList) {
+        targetListService.getTargetListOpportunities(targetListService.model.currentList.id, {type: 'opportunities'}).then(function(data) {
+          finishGet(data);
+        });
+      }
+
+      function finishGet(data) {
         for (var i = 0; i < service.model.length; i++) {
           service.model[i].applied = true;
         }
 
         filtersService.model.filtersApplied = true;
         opportunitiesService.model.filterApplied = true;
-      });
+      }
     }
 
     /**

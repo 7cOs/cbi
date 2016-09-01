@@ -35,7 +35,7 @@
   span
     a(ng-click="tld.chipsService.applyFilters()") Save Filterset
   md-chips(ng-model="tld.chipsService.model" name="Active Filters" md-on-remove="tld.chipsService.removeFromFilterService($chip)")
-    input(disabled="true")
+    input(class="hidden" disabled="true")
     md-chip-template(custom-chip="")
       div {{$chip.name}}
 .filters(column='12' ng-class="{ 'no-filter': !tld.filtersService.model.show}")
@@ -123,7 +123,7 @@
         label.cbbd-contact CBBD Contact
           input(type="text" placeholder="Name" ng-model="tld.filtersService.model.selected.cbbdContact")
     div(column='12' class='apply-filters' ng-if="tld.filtersService.model.show")
-      button(value='Apply Filters' type="button" class="btn-action" ng-click="tld.chipsService.applyFilters()" ng-disabled="tld.filtersService.model.filtersApplied") Apply Filters
+      button(value='Apply Filters' type="button" class="btn-action" ng-click="tld.chipsService.applyFilters(true)" ng-disabled="tld.filtersService.model.filtersApplied") Apply Filters
       .secondary-button-container
         a(ng-click="tld.filtersService.saveReport()" ng-disabled="tld.filtersService.model.filtersApplied" ng-class="{'disabled save-filterset-icon-disabled': tld.filtersService.model.filtersApplied}").accent.save-filterset-icon Save Report
         a(ng-click="tld.resetFilters()" ng-disabled="tld.filtersService.model.filtersApplied" ng-class="{'disabled reset-icon-disabled': tld.filtersService.model.filtersApplied}").accent.reset-icon Reset

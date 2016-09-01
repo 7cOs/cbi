@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports = /*  @ngInject */
-  function targetListService($http, $q, apiHelperService, opportunitiesService) {
+  function targetListService($http, $q, apiHelperService, opportunitiesService, filtersService) {
 
     var model = {
       currentList: {}
@@ -116,9 +116,14 @@ module.exports = /*  @ngInject */
      * @returns {Object} - target list opportunities
      * @memberOf cf.common.services
      */
-    function getTargetListOpportunities(targetListId) {
+    function getTargetListOpportunities(targetListId, params) {
+      var filterPayload;
+      if (params) filterPayload = filtersService.getAppliedFilters('opportunities');
+
       var targetListPromise = $q.defer(),
-          url = apiHelperService.request('/api/targetLists/' + targetListId + '/opportunities');
+          url = apiHelperService.request('/api/targetLists/' + targetListId + '/opportunities', filterPayload);
+
+      console.log('[targetListService.getTargetListOpportunities url]', url);
 
       // reset opportunities
       opportunitiesService.model.opportunitiesSum = 0;
@@ -189,7 +194,7 @@ module.exports = /*  @ngInject */
           opportunitiesService.model.opportunitiesDisplay.push(page);
         }
         opportunitiesService.model.paging.pages = opportunitiesService.model.opportunitiesDisplay.length - 1;
-
+        opportunitiesService.model.opportunities = newOpportunityArr;
         targetListPromise.resolve(newOpportunityArr);
       }
 
