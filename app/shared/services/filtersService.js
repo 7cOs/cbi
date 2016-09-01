@@ -111,6 +111,46 @@ module.exports = /*  @ngInject */
         trend: '',
         valuesVsTrend: ''
       },
+      selectedTemplate: {
+        myAccountsOnly: true,
+        accountBrands: '',
+        accountMarkets: '',
+        accountTypes: '',
+        brands: '',
+        cbbdContact: '',
+        chains: '',
+        currentFilter: '',
+        depletionsTimeFilter: 'MTD July 1 - July 31',
+        distributionTimeFilter: 'L90 Days April 22, 2016 - July 21, 2016',
+        location: '',
+        opportunitiesStatus: '',
+        opportunitiesTypes: '',
+        predictedImpactHigh: '',
+        predictedImpactMedium: '',
+        predictedImpactLow: '',
+        premiseType: 'off',
+        productTypeFeatured: '',
+        productTypePriority: '',
+        productTypeAuthorized: '',
+        stores: '',
+        retailer: '',
+        storeSegmentationA: '',
+        storeSegmentationB: '',
+        storeSegmentationC: '',
+        storeTypeCBBD: '',
+        storeTypeIndependent: '',
+        timePeriod: 'Current Month to Date',
+        tradeChannelConvenience: '',
+        tradeChannelDrug: '',
+        tradeChannelGrocery: '',
+        tradeChannelLiquor: '',
+        tradeChannelMassMerchandiser: '',
+        tradeChannelMilitary: '',
+        tradeChannelOther: '',
+        tradeChannelRecreation: '',
+        trend: '',
+        valuesVsTrend: ''
+      },
       timePeriod: [
         {name: 'Current Month to Date'},
         {name: 'Last Closed Month'}
@@ -144,7 +184,9 @@ module.exports = /*  @ngInject */
       return filterPayload;
     }
 
-    function resetFilters() {}
+    function resetFilters() {
+      service.model.selected = angular.copy(service.model.selectedTemplate);
+    }
 
     function saveReport() {}
   };

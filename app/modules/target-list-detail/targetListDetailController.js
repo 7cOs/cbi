@@ -15,13 +15,8 @@ module.exports = /*  @ngInject */
     vm.archiving = false;
     vm.confirmToast = false;
     vm.changed = false;
-    /* vm.manageTargetList = {
-      name: '',
-      description: '',
-      collaborators: [],
-      allowInvite: null,
-      addRecipient: ''
-    }; */
+
+    // Services
     vm.targetListService = targetListService;
     vm.filtersService = filtersService;
     vm.chipsService = chipsService;
@@ -70,7 +65,8 @@ module.exports = /*  @ngInject */
     function resetFilters() {
       // reset all chips and filters
       chipsService.model = chipsService.resetChipsFilters(chipsService.model);
-      userService.model.opportunityFilters = null;
+      // userService.model.opportunityFilters = null;
+      filtersService.resetFilters();
     }
 
     function closeModal() {
@@ -233,8 +229,8 @@ module.exports = /*  @ngInject */
       });
 
       // get opportunities
-      targetListService.getTargetListOpportunities(targetListService.model.currentList.id, {type: 'opportunities'}).then(function(data) {
-        opportunitiesService.model.opportunities = data;
+      targetListService.getTargetListOpportunities(targetListService.model.currentList.id).then(function(data) {
+        // opportunitiesService.model.opportunities = data;
       });
 
       opportunitiesService.model.filterApplied = true;
