@@ -138,6 +138,11 @@ function ExpandedTargetListController($state, $scope, $filter, $mdDialog, $q, us
     userService.addTargetList(vm.newList).then(function(response) {
       closeModal();
       vm.buttonDiabled = false;
+      vm.newList = {
+        name: '',
+        description: '',
+        opportunities: []
+      };
       userService.model.targetLists.owned.unshift(response);
       userService.model.targetLists.ownedArchived++;
       userService.model.targetLists.ownedNotArchived--;
