@@ -200,8 +200,14 @@ function ListController($scope, $state, $q, $location, $anchorScroll, $mdDialog,
   }
 
   // Select or deselect individual list item
-  function toggle(item, list) {
+  function toggle(item, list, subitem) {
     var idx = list.indexOf(item);
+
+    // this needs to be refactored, just allowing a subitem to select the parent for now
+    if (subitem && idx > -1) {
+      return;
+    }
+
     if (idx > -1) {
       list.splice(idx, 1);
     } else {
