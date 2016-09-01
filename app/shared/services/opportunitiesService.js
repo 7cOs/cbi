@@ -58,6 +58,8 @@ module.exports = /*  @ngInject */
         var newOpportunityArr = [],
             store,
             storePlaceholder;
+        service.model.opportunities = [];
+        service.model.opportunitiesDisplay = [];
 
         // make opp array instead of obj if oppId provided
         if (opportunityID) { response.data.opportunities = [response.data]; };

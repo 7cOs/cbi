@@ -214,9 +214,9 @@ module.exports = /*  @ngInject */
     }
 
     // Watch for inline search value changes
-    $scope.$watch('t.filtersService.model.brands', function (val) { addInlineSearchChip(val); });
-    $scope.$watch('t.filtersService.model.chains', function (val) { addInlineSearchChip(val); });
-    $scope.$watch('t.filtersService.model.stores', function (val) { addInlineSearchChip(val); });
+    $scope.$watch('tld.filtersService.model.brands', function (val) { addInlineSearchChip(val); });
+    $scope.$watch('tld.filtersService.model.chains', function (val) { addInlineSearchChip(val); });
+    $scope.$watch('tld.filtersService.model.stores', function (val) { addInlineSearchChip(val); });
 
     function init() {
       targetListService.getTargetList(targetListService.model.currentList.id).then(function(response) {

@@ -8,6 +8,7 @@ module.exports =
         type: '@',
         placeholder: '@',
         chosenResult: '=',
+        callback: '&',
         nav: '@'
       },
       controller: InlineSearchController,
@@ -90,6 +91,7 @@ module.exports =
           // We'll need to pass result for filtering once Accounts is integrated
           $location.url('/accounts');
         }
+        vm.callback();
         close();
       }
 
