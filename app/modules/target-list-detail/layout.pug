@@ -126,6 +126,6 @@
       button(value='Apply Filters' type="button" class="btn-action" ng-click="tld.chipsService.applyFilters()" ng-disabled="tld.filtersService.model.filtersApplied") Apply Filters
       .secondary-button-container
         a(ng-click="tld.filtersService.saveReport()" ng-disabled="tld.filtersService.model.filtersApplied" ng-class="{'disabled save-filterset-icon-disabled': tld.filtersService.model.filtersApplied}").accent.save-filterset-icon Save Report
-        a(ng-click="tld.filtersService.resetFilters()" ng-disabled="tld.filtersService.model.filtersApplied" ng-class="{'disabled reset-icon-disabled': tld.filtersService.model.filtersApplied}").accent.reset-icon Reset
+        a(ng-click="tld.resetFilters()" ng-disabled="tld.filtersService.model.filtersApplied" ng-class="{'disabled reset-icon-disabled': tld.filtersService.model.filtersApplied}").accent.reset-icon Reset
 
 list

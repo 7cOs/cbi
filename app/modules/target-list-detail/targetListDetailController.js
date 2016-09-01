@@ -44,6 +44,7 @@ module.exports = /*  @ngInject */
     vm.removeCollaborator = removeCollaborator;
     vm.removeFooterToast = removeFooterToast;
     vm.updateList = updateList;
+    vm.resetFilters = resetFilters;
 
     init();
 
@@ -64,6 +65,12 @@ module.exports = /*  @ngInject */
 
     function changeCollaboratorLevel() {
       targetListService.updateTargetListShares(targetListService.model.currentList.id, vm.collaborator).then();
+    }
+
+    function resetFilters() {
+      // reset all chips and filters
+      chipsService.model = chipsService.resetChipsFilters(chipsService.model);
+      userService.model.opportunityFilters = null;
     }
 
     function closeModal() {
