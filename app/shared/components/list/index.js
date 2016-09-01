@@ -227,9 +227,9 @@ function ListController($scope, $state, $q, $location, $anchorScroll, $mdDialog,
   }
 
   function pageChanged() {
-    $location.hash('opportunities');
+    // $location.hash('opportunities');
 
-    $anchorScroll();
+    // $anchorScroll();
   }
 
   // **************

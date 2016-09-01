@@ -33,6 +33,7 @@ module.exports = /*  @ngInject */
     vm.saveFilter = saveFilter;
     vm.placeholderSelect = placeholderSelect;
     vm.hoverState = hoverState;
+    vm.searchCallback = searchCallback;
 
     init();
 
@@ -111,6 +112,10 @@ module.exports = /*  @ngInject */
         // close modal
         closeModal();
       });
+    }
+
+    function searchCallback() {
+      console.log(filtersService.model.selected.store);
     }
 
     // ***************
