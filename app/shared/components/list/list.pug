@@ -1,6 +1,6 @@
 .total-opportunities
   h4(ng-if="list.pageName(['accounts']) || list.pageName(['target-list-detail'])") {{list.opportunitiesService.model.opportunitiesSum | number:0 }} opportunities <span>across {{list.opportunitiesService.model.opportunities.length}} stores</span>
-  h3(ng-if="list.pageName(['opportunities']) || !list.pageName(['target-list-detail']" ng-hide="list.opportunitiesService.model.opportunities.length === 0") <strong>{{list.opportunitiesService.model.opportunitiesSum}} opportunities</strong> across {{list.opportunitiesService.model.opportunities.length}} stores
+  h3(ng-if="list.pageName(['opportunities']) || !list.pageName(['target-list-detail'])" ng-hide="list.opportunitiesService.model.opportunities.length === 0") <strong>{{list.opportunitiesService.model.opportunitiesSum}} opportunities</strong> across {{list.opportunitiesService.model.opportunities.length}} stores
   p {{list.pageName}}
 .action-buttons
   md-menu(md-offset="0 45" ng-if="list.pageName(['target-lists', 'target-list-detail'])")
