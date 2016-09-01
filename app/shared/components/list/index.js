@@ -33,6 +33,7 @@ function ListController($scope, $state, $q, $location, $anchorScroll, $mdDialog,
   vm.addToTargetList = addToTargetList;
   vm.closeModal = closeModal;
   vm.displayBrandIcon = displayBrandIcon;
+  vm.displayPagination = displayPagination;
   vm.exists = exists;
   vm.isChecked = isChecked;
   vm.openShareModal = openShareModal;
@@ -106,6 +107,12 @@ function ListController($scope, $state, $q, $location, $anchorScroll, $mdDialog,
 
   function displayBrandIcon(haystack, needle) {
     return haystack.indexOf(needle) !== -1;
+  }
+
+  function displayPagination() {
+    if (opportunitiesService.model.opportunitiesDisplay.length > 1) return true;
+
+    return false;
   }
 
   // Check if list item exists and is selected

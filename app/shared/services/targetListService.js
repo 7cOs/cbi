@@ -120,6 +120,9 @@ module.exports = /*  @ngInject */
       var targetListPromise = $q.defer(),
           url = apiHelperService.request('/api/targetLists/' + targetListId + '/opportunities');
 
+      // reset opportunities
+      opportunitiesService.model.opportunitiesSum = 0;
+
       $http.get(url)
         .then(getTargetListOpportunitiesSuccess)
         .catch(getTargetListOpportunitiesFail);
@@ -177,7 +180,7 @@ module.exports = /*  @ngInject */
           // push last store into newOpportunityArr
           if (i + 1 === response.data.opportunities.length) newOpportunityArr.push(store);
 
-          model.opportunitiesSum += 1;
+          opportunitiesService.model.opportunitiesSum += 1;
         }; // end for each
 
         // set data for pagination
