@@ -27,6 +27,7 @@ function ExpandedTargetListController($state, $scope, $filter, $mdDialog, $q, us
   };
   vm.totalOpportunitesChevron = true;
   vm.selected = [];
+  vm.buttonDiabled = false;
 
   // Expose public methods
   vm.archiveTargetList = archiveTargetList;
@@ -133,8 +134,15 @@ function ExpandedTargetListController($state, $scope, $filter, $mdDialog, $q, us
   }
 
   function saveNewList(e) {
+    vm.buttonDiabled = true;
     userService.addTargetList(vm.newList).then(function(response) {
       closeModal();
+      vm.buttonDiabled = false;
+      vm.newList = {
+        name: '',
+        description: '',
+        opportunities: []
+      };
       userService.model.targetLists.owned.unshift(response);
       userService.model.targetLists.ownedArchived++;
       userService.model.targetLists.ownedNotArchived--;
