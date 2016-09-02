@@ -75,6 +75,7 @@ div(container)
                 p <strong>{{nb.userService.model.currentUser.firstName | titlecase}} {{nb.userService.model.currentUser.lastName | titlecase}}</strong>
                 a(href="/auth/logout" target="_self")
                   button.btn-action Logout
+        div.version {{nb.versionService.model.version.hash}} | {{nb.versionService.model.version.version}}
     ul.nav-sub-menu(ng-if="$root.pageTitle === 'Accounts' || $root.pageTitle === 'Scorecards'")
       li.accent #[a(ui-sref="scorecards" ui-sref-active="active") My Scorecards]
       li.accent #[a(ui-sref="accounts" ui-sref-active="active") My Accounts]

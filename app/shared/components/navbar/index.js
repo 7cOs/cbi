@@ -1,6 +1,6 @@
 'use strict';
 
-function NavbarController($rootScope, $scope, $state, $window, $mdPanel, $mdDialog, $mdMenu, $mdSelect, notificationsService, opportunitiesService, targetListService, userService) {
+function NavbarController($rootScope, $scope, $state, $window, $mdPanel, $mdDialog, $mdMenu, $mdSelect, notificationsService, opportunitiesService, targetListService, userService, versionService) {
 
   // ****************
   // CONTROLLER SETUP
@@ -23,6 +23,7 @@ function NavbarController($rootScope, $scope, $state, $window, $mdPanel, $mdDial
   vm.notifications = [];
   vm.unreadNotifications = 0;
   vm.userService = userService;
+  vm.versionService = versionService;
 
   // Defaults
   vm.noNotifications = 'No unread notifications.';
@@ -212,7 +213,10 @@ function NavbarController($rootScope, $scope, $state, $window, $mdPanel, $mdDial
     .then(function(result) {
       vm.targetLists = result.owned;
     });
-  }
+    versionService.getVersion().then(function(data) {
+      versionService.model.version = data;
+    });
+  };
 
   // Get unread notification count and set initial badge value
   function setUnreadCount(arr) {
