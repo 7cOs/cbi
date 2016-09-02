@@ -30,7 +30,7 @@ p.list-disabled-message {{list.disabledMessage}}
 
 v-accordion.styled-list(multiple="" id="opportunities" control="list.accordion" onexpand="list.expandCallback(item)" oncollapse="list.collapseCallback(item)" column='12' )
   div.header-row(row)
-    div.checkbox-wrapper.placeholder(ng-click="list.toggle(opportunity, list.selected)")
+    div.checkbox-wrapper.placeholder
     div.hide-wrapper(ng-if="list.pageName()")
       label
     div.more-wrapper(ng-if="!list.pageName()")
@@ -67,8 +67,9 @@ v-accordion.styled-list(multiple="" id="opportunities" control="list.accordion" 
         p(ng-if="opportunity.failState") Whatever you just tried didn't work
       div(ng-click="list.showFlyout(opportunity)").hide-wrapper.hide-icon-wrapper.hide-row
     .shadow-wrap.bottom
-      div.checkbox-wrapper(ng-click="list.toggle(opportunity, list.selected)")
-        md-checkbox(aria-label="Select Item" ng-checked="list.exists(opportunity, list.selected)")
+      // Parent level opportunity
+      div.checkbox-wrapper(ng-click="list.selectAllOpportunities(opportunity, list.selected)")
+        md-checkbox(aria-label="Select Item" ng-checked="opportunity.selectedOpportunities === opportunity.groupedOpportunities.length")
       div.more-wrapper
         md-menu(md-position-mode="target-right target")
           md-button.md-icon-button(aria-label="More" md-menu-origin ng-click="$mdOpenMenu($event)")
@@ -163,8 +164,9 @@ v-accordion.styled-list(multiple="" id="opportunities" control="list.accordion" 
               div.cell-parent.sub-item(row)
                 .regional-status(ng-if="product.regionalStatus")
                   div(class="{{product.regionalStatus}}")
+                // Actual opportunity
                 div(column='1').sub-item-select
-                  md-checkbox(aria-label="Select Item" ng-click="list.toggle(opportunity, list.selected, true); $event.stopPropagation();")
+                  md-checkbox(aria-label="Select Item" ng-click="list.toggle($event, opportunity, product, list.selected);" ng-checked="product.selected")
                 div(column='2').pad-cell
                   span.product-title {{::product.product.brand}} <br>
                   | {{::product.product.name}}

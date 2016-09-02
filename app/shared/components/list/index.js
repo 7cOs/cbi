@@ -52,6 +52,7 @@ function ListController($scope, $state, $q, $location, $anchorScroll, $mdDialog,
   vm.allOpportunitiesExpanded = allOpportunitiesExpanded;
   vm.noOpportunitiesExpanded = noOpportunitiesExpanded;
   vm.showDisabled = showDisabled;
+  vm.selectAllOpportunities = selectAllOpportunities;
 
   vm.expandCallback = expandCallback;
   vm.collapseCallback = collapseCallback;
@@ -92,9 +93,7 @@ function ListController($scope, $state, $q, $location, $anchorScroll, $mdDialog,
 
     // add opportunity ids into array to be posted
     for (var i = 0; i < vm.selected.length; i++) {
-      for (var j = 0; j < vm.selected[i].groupedOpportunities.length; j++) {
-        opportunityIds.push(vm.selected[i].groupedOpportunities[j].id);
-      }
+      opportunityIds.push(vm.selected[i].id);
     }
 
     targetListService.addTargetListOpportunities(listId, opportunityIds).then(function(data) {
@@ -211,18 +210,31 @@ function ListController($scope, $state, $q, $location, $anchorScroll, $mdDialog,
   }
 
   // Select or deselect individual list item
-  function toggle(item, list, subitem) {
-    var idx = list.indexOf(item);
-
-    // this needs to be refactored, just allowing a subitem to select the parent for now
-    if (subitem && idx > -1) {
-      return;
-    }
+  function toggle(event, parent, item, list) {
+    var idx = list.indexOf(item),
+        groupedCount = 0;
 
     if (idx > -1) {
+      item.selected = false;
       list.splice(idx, 1);
     } else {
+      item.selected = true;
       list.push(item);
+    }
+    event.stopPropagation();
+
+    for (var key in parent.groupedOpportunities) {
+      var obj = parent.groupedOpportunities[key];
+      if (obj.selected === true) { groupedCount++; }
+    }
+    parent.selectedOpportunities = groupedCount;
+  }
+
+  function selectAllOpportunities(parent, list) {
+    for (var key in parent.groupedOpportunities) {
+      var obj = parent.groupedOpportunities[key];
+      obj.selected = true;
+      parent.selectedOpportunities = parent.groupedOpportunities.length;
     }
   }
 
