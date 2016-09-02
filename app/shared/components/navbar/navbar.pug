@@ -45,7 +45,7 @@ div(container)
                 .dropdown-filter
                   .dropdown
                     md-select(ng-model="nb.accountSelectorSelected" aria-label="Account Type selector"  placeholder="Store, account, or subaccount name")
-                      md-option(ng-repeat="type in nb.accountSelectorOptions" ng-blur="nb.closeMenus($event)" aria-label="type.name" value="{{type.name}}") {{type.name}}
+                      md-option(ng-repeat="type in nb.accountSelectorOptions" aria-label="{{type.name}}" value="{{type.name}}" md-prevent-menu-close) {{type.name}}
                 inline-search(ng-if="nb.accountSelectorSelected === 'Distributor'" type="distributor" placeholder="Search for a distributor" chosen-result="nb.searchResult" nav="true")
                 inline-search(ng-if="nb.accountSelectorSelected === 'Chain'" type="chain" placeholder="Search for a chain" chosen-result="nb.searchResult" nav="true")
                 inline-search(ng-if="nb.accountSelectorSelected === 'Store'" type="store" placeholder="Search for a store" chosen-result="nb.searchResult" nav="true")
