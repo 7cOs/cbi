@@ -431,3 +431,18 @@ list {
 .target-list-menu {
   width: 180px;
 }
+
+.list-disabled-message {
+  background: url('../assets/img/icons/error.svg') 0 0 no-repeat;
+  background-size: 15px;
+  color: $red;
+  float: right;
+  font-size: 0.7em;
+  font-family: $rajdhani;
+  font-weight: $semibold;
+  line-height: 1.5;
+  margin-right: 2em;
+  margin-top: 1.3em;
+  padding-left: 2em;
+  text-transform: uppercase;
+}

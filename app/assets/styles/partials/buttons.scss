@@ -88,7 +88,8 @@ button {
     }
   }
 
-  &[disabled] {
+  &[disabled],
+  &.disabled {
     color: $gray-2;
 
     &.expand-all {
@@ -103,6 +104,10 @@ button {
       &:before {
         background-image: url('../assets/img/icons/btn-collapse-disabled.svg');
       }
+    }
+
+    &:hover {
+      cursor: default;
     }
   }
 }
@@ -122,7 +127,9 @@ button {
   width: 180px;
 
   &[disabled],
-  &[disabled]:hover {
+  &.disabled,
+  &[disabled]:hover,
+  &.disabled:hover {
     color: $gray-8;
     background-color: $gray-10;
     border-bottom: 4px solid $gray-11;

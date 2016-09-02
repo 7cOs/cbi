@@ -27,6 +27,7 @@ function ListController($scope, $state, $q, $location, $anchorScroll, $mdDialog,
   vm.sortProperty = 'store.name';
   vm.storeChevron = true;
   vm.showSubMenu = false;
+  vm.disabledMessage = '';
 
   // Expose public methods
   vm.addToSharedCollaborators = addToSharedCollaborators;
@@ -48,6 +49,9 @@ function ListController($scope, $state, $q, $location, $anchorScroll, $mdDialog,
   vm.submitFeedback = submitFeedback;
   vm.cancelFeedback = cancelFeedback;
   vm.pageChanged = pageChanged;
+  vm.allOpportunitiesExpanded = allOpportunitiesExpanded;
+  vm.noOpportunitiesExpanded = noOpportunitiesExpanded;
+  vm.showDisabled = showDisabled;
 
   vm.expandCallback = expandCallback;
   vm.collapseCallback = collapseCallback;
@@ -245,9 +249,29 @@ function ListController($scope, $state, $q, $location, $anchorScroll, $mdDialog,
     // $anchorScroll();
   }
 
-  // **************
+  function allOpportunitiesExpanded() {
+    return vm.expandedOpportunities === opportunitiesService.model.opportunities.length;
+  }
+
+  function noOpportunitiesExpanded() {
+    return vm.expandedOpportunities === 0;
+  }
+
+  function showDisabled(message) {
+    vm.disabledMessage = message;
+  }
+
+  // ***************
   // PRIVATE METHODS
-  // **************
+  // ***************
+
+  $scope.$on('$mdMenuClose', function() {
+    vm.showSubMenu = false;
+  });
+
+  $scope.$watch('list.expandedOpportunities', function() {
+    vm.disabledMessage = '';
+  });
 
   function dismissOpportunity(oId) {
     console.log(oId);
