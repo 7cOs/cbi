@@ -3,14 +3,21 @@
   h3(ng-if="list.pageName(['opportunities']) || !list.pageName(['target-list-detail'])" ng-hide="list.opportunitiesService.model.opportunities.length === 0") <strong>{{list.opportunitiesService.model.opportunitiesSum}} opportunities</strong> across {{list.opportunitiesService.model.opportunities.length}} stores
 
 .action-buttons
-  md-menu(md-offset="0 45" ng-if="list.pageName(['target-lists', 'target-list-detail'])")
-    button.btn-action(ng-class="{'disabled': list.selected < 1}" aria-label="Add to Target List" ng-click="list.selected < 1 ? $mdOpenMenu($event) : angular.noop()" analytics-on="click" analytics-event="Add Opportunity") Add to Target List
-    md-menu-content.target-list-menu
-      md-menu-item(ng-repeat="targetList in list.userService.model.targetLists.owned" ng-click="list.addToTargetList(targetList.id)")
-        p {{targetList.name}}
-  button.btn-action(ng-class="{'disabled': list.selected < 1}" ng-if="list.pageName(['opportunities'])" analytics-on="click" analytics-event="Add to Target List") Copy to Target List
-  button.btn-action(ng-class="{'disabled': list.selected < 1}" ng-if="" ng-click="list.removeOpportunity()") Delete
-  button.btn-action(ng-class="{'disabled': list.selected < 1}" ng-csv="list.selected < 1 ? list.selected : angular.noop()" filename="opportunities.csv" analytics-on="click" analytics-event="Opportunity List Export" csv-header="['Account', 'Sub Account', 'Tolinx Number', 'Store Name', 'Store Number', 'Address', 'City', 'State', 'Postal CD', 'Phone Number', 'Latitude', 'Longitude', 'Last Update', 'High Impact', 'Unsold Account', 'Premise Type', 'Trade Classification', 'Planning Group', '', 'Negative Value', 'Is Expanded']") Download
+  span(ng-switch="list.selected < 1")
+    span(ng-switch-when="true")
+      button.btn-action.disabled(ng-if="list.pageName(['target-lists', 'target-list-detail'])" ng-click="list.showDisabled('No opportunities are selected')") Add to Target List
+      button.btn-action.disabled(ng-if="list.pageName(['opportunities'])" ng-click="list.showDisabled('No opportunities are selected')") Copy to Target List
+      button.btn-action.disabled(ng-if="" ng-click="list.showDisabled('No opportunities are selected')") Delete
+      button.btn-action.disabled(ng-click="list.showDisabled('No opportunities are selected')") Download
+    span(ng-switch-when="false")
+      md-menu(md-offset="0 45" ng-if="list.pageName(['target-lists', 'target-list-detail'])")
+        button.btn-action(aria-label="Add to Target List" ng-click="$mdOpenMenu($event)" analytics-on="click" analytics-event="Add Opportunity") Add to Target List
+        md-menu-content.target-list-menu
+          md-menu-item(ng-repeat="targetList in list.userService.model.targetLists.owned" ng-click="list.addToTargetList(targetList.id)")
+            p {{targetList.name}}
+      button.btn-action(ng-class="{'disabled': list.selected < 1}" ng-if="list.pageName(['opportunities'])" analytics-on="click" analytics-event="Add to Target List") Copy to Target List
+      button.btn-action(ng-if="" ng-click="list.removeOpportunity()") Delete
+      button.btn-action(ng-csv="list.selected" filename="opportunities.csv" analytics-on="click" analytics-event="Opportunity List Export" csv-header="['Account', 'Sub Account', 'Tolinx Number', 'Store Name', 'Store Number', 'Address', 'City', 'State', 'Postal CD', 'Phone Number', 'Latitude', 'Longitude', 'Last Update', 'High Impact', 'Unsold Account', 'Premise Type', 'Trade Classification', 'Planning Group', '', 'Negative Value', 'Is Expanded']") Download
 
 button.icon.select-all(ng-click="list.toggleAll()")
   span(ng-if='list.isChecked()') Un-
