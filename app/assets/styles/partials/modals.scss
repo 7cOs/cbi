@@ -59,6 +59,11 @@ md-dialog {
         font-weight: $regular;
         margin-top: 12px;
       }
+
+    }
+
+    .larger-input {
+      height: 90px;
     }
 
     .icon-container {
@@ -254,4 +259,22 @@ md-dialog {
   .price-info {
     display: inline-block;
   }
+}
+
+.target-list-switch-modal {
+
+  .modal-form {
+    .text {
+      padding-bottom: 25px;
+      text-align: center;
+      color: $gray-3;
+    }
+  }
+}
+
+.collaborator-list {
+  width: 100%;
+  background: $white;
+  height: 200px;
+  margin-top: -15px;
 }

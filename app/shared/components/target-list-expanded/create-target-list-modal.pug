@@ -1,15 +1,19 @@
 div.modal
-  h4 Create Target List
+  div.title
+    h4 Create Target List
+    a.hide-row(ng-click="expanded.closeModal()")
   div.modal-form
     div.modal-input
       label Name
       input(ng-model="expanded.newList.name" placeholder="Enter List Name")
     div.modal-input
       label Description (Optional)
-      input(ng-model="expanded.newList.description" placeholder="Enter Description")
+      input(ng-model="expanded.newList.description" placeholder="Enter Description").larger-input
     div.modal-input
       label Add Collaborators (Optional)
-      input(ng-model="expanded.newList.collaborators" placeholder="Add Collaborators")
+      inline-search(type="user" placeholder="Name or CBI email address" chosen-result="expanded.collaborator")
+      div(ng-if="true === true").collaborator-list
+        p(ng-repeat="collaborator in expanded.collaborators")
     div.modal-input
       md-checkbox(ng-model="expanded.newList.allowInvites" aria-label="Allow Collaborators to Invite Others") Allow Collaborators to Invite Others
 
