@@ -338,3 +338,13 @@ div.nav-link-wrapper {
     color: $blue;
   }
 }
+
+.version {
+  top: 48px;
+  position: absolute;
+  font-size: 10px;
+  width: 120px;
+  right: 7px;
+  text-align: right;
+  color: $gray-12;
+}

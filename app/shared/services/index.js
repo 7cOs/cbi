@@ -15,4 +15,5 @@ module.exports =
     .factory('notesService', require('./notesService'))
     .factory('chipsService', require('./chipsService'))
     .factory('closedOpportunitiesService', require('./closedOpportunitiesService'))
+    .factory('versionService', require('./versionService'))
     .factory('searchService', require('./searchService'));
