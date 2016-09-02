@@ -498,6 +498,7 @@ module.exports = /*  @ngInject */
           url = apiHelperService.request('/api/users/' + model.currentUser.personID + '/targetLists/'),
           payload = {
             name: p.name,
+            description: p.description,
             opportunityIds: [] // opportunity id's to be included
           };
 
