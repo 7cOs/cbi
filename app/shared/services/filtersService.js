@@ -91,7 +91,7 @@ module.exports = /*  @ngInject */
         premiseType: 'off',
         productTypeFeatured: '',
         productTypePriority: '',
-        productTypeAuthorized: '',
+        productTypeAuthorized: true,
         stores: '',
         retailer: '',
         storeSegmentationA: '',
