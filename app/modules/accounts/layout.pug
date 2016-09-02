@@ -69,13 +69,13 @@ notes
               p Independent = Retailers not directly called on by CBBD’s National or Key Accounts teams
       md-checkbox(ng-model="a.filtersService.model.selected.storeTypeCBBD" aria-label="Store Type Chain" ng-click="a.chipsService.updateChip('storeTypeCBBD', 'Store Type Chain')") Chains
       md-checkbox(ng-model="a.filtersService.model.selected.storeTypeIndependent" aria-label="Store Type Independent" ng-click="a.chipsService.updateChip('storeTypeIndependent', 'Store Type Independent')") Independent Stores
-    div(column='4').chain-store
+    div(column='4')
       label Chain / Store
-      div(row).dropdown-filter
+      div(row).dropdown-filter.chain-store
         div(column='4').dropdown
           md-select(ng-model="a.filtersService.model.selected.storeTypes" md-on-open="a.openSelect(true)" md-on-close="a.openSelect(false)" aria-label="Store Type Filter"  placeholder="Chain")
             md-option(ng-repeat="filter in a.filters.storeTypes" aria-label="{{filter.name}}" value="{{filter.name}}") {{filter.name}}
-        div(column='4')
+        div(column='6')
           md-autocomplete(md-search-text="a.filtersService.model.accountSearchText" md-items="account in a.filtersService.model.accounts" md-item-text="account.name" placeholder="by Chain/Store Name" md-selected-item-change="a.chipsService.addAutocompleteChip(account.name, 'accountSearchText')")
             md-item-template
               div(md-highlight-text="a.filtersService.model.accountSearchText" md-highlight-flags="^i") {{account.name}} - {{account.subAccount}}

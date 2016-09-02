@@ -157,7 +157,22 @@
     margin-bottom: 0.7em;
   }
 
+  .retailer, .chain-store {
+    > div:first-child {
+      padding-left: 0.9em;
+    }
+
+    > div {
+      padding: 0;
+    }
+  }
+
   .retailer {
     margin-bottom: 0;
   }
+
+  .chain-store {
+
+  }
+
 }
