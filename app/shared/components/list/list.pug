@@ -84,8 +84,8 @@ v-accordion.styled-list(multiple="" id="opportunities" control="list.accordion" 
                     p If opportunity is dismissed, opportunities for that Package/SKU at that account will not reappear for 90 days
                   .sub-menu-content
                     md-radio-group(ng-model="list.opportunity.feedback.selector" ng-init="list.opportunity.feedback.selector = 'other'")
-                      md-radio-button.md-primary(ng-value="notRelevant") Opportunity not relevant
-                      md-radio-button.md-primary(ng-value="other") Other
+                      md-radio-button.md-primary(value="notRelevant") Opportunity not relevant
+                      md-radio-button.md-primary(value="other") Other
                   .sub-menu-content
                     label Additional Feedback
                     textarea(ng-model="list.opportunity.feedback.text").feedback
