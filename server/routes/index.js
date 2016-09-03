@@ -9,10 +9,10 @@ module.exports = function(app) {
   });
 
   app.get('/version', function (req, res) {
+    var hash = process.env.HEROKU_SLUG_DESCRIPTION || git.short();
     var data = {
-      hash: git.short(),
-      version: pjson.version,
-      branch: git.branch()
+      hash: hash,
+      version: pjson.version
     };
     res.send(JSON.stringify(data));
 
