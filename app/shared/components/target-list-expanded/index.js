@@ -23,7 +23,8 @@ function ExpandedTargetListController($state, $scope, $filter, $mdDialog, $q, us
   vm.newList = {
     name: '',
     description: '',
-    opportunities: []
+    opportunities: [],
+    collaborators: []
   };
   vm.totalOpportunitesChevron = true;
   vm.selected = [];
@@ -45,12 +46,18 @@ function ExpandedTargetListController($state, $scope, $filter, $mdDialog, $q, us
   vm.toggle = toggle;
   vm.isChecked = isChecked;
   vm.toggleAll = toggleAll;
+  vm.addCollaborator = addCollaborator;
 
   init();
 
   // **************
   // PUBLIC METHODS
   // **************
+
+  function addCollaborator(e) {
+    vm.newList.collaborators.push(e);
+    console.log(vm.newList.collaborators);
+  }
 
   function archiveTargetList() {
     var selectedTargetLists = $filter('filter')(userService.model.targetLists.owned, {selected: true}),
@@ -141,7 +148,8 @@ function ExpandedTargetListController($state, $scope, $filter, $mdDialog, $q, us
       vm.newList = {
         name: '',
         description: '',
-        opportunities: []
+        opportunities: [],
+        collaborators: []
       };
       userService.model.targetLists.owned.unshift(response);
       userService.model.targetLists.ownedArchived++;
