@@ -121,8 +121,8 @@ module.exports = /*  @ngInject */
 
     function resetFilters() {
       // reset all chips and filters
-      chipsService.model = chipsService.resetChipsFilters(chipsService.model);
-      userService.model.opportunityFilters = null;
+      chipsService.resetChipsFilters(chipsService.model);
+      filtersService.resetFilters();
     }
 
     // ***************
@@ -148,7 +148,7 @@ module.exports = /*  @ngInject */
       });
 
       // reset all chips and filters on page init
-      chipsService.model = chipsService.resetChipsFilters(chipsService.model);
+      chipsService.resetChipsFilters(chipsService.model);
 
       // go to a specific opportunity on load and then set to null if specified
       if (opportunitiesService.model.opportunityId !== null) {

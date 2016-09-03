@@ -3,6 +3,24 @@
 module.exports = /*  @ngInject */
   function chipsService(filtersService, opportunitiesService, targetListService) {
 
+    var chipsTemplate = [
+      {
+        'name': 'My Accounts Only',
+        'type': 'myAccountsOnly',
+        'applied': false
+      },
+      {
+        'name': 'Off-Premise',
+        'type': 'premiseType',
+        'applied': false
+      },
+      {
+        'name': 'Product Type Authorized',
+        'type': 'productTypeAuthorized',
+        'applied': false
+      }
+    ];
+
     var model = [];
 
     var service = {
@@ -133,7 +151,7 @@ module.exports = /*  @ngInject */
       for (var i = 0; i < chips.length; i++) {
         removeFromFilterService(chips[i]);
       }
-      return [];
+      angular.copy(chipsTemplate, model);
     }
 
   };
