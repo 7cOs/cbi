@@ -42,8 +42,8 @@ function ListController($scope, $state, $q, $location, $anchorScroll, $mdDialog,
   vm.removeOpportunity = removeOpportunity;
   vm.shareOpportunity = shareOpportunity;
   vm.sortBy = sortBy;
-  vm.toggle = toggle;
-  vm.toggleAll = toggleAll;
+  vm.selectOpportunity = selectOpportunity;
+  vm.selectAllParents = selectAllParents;
   vm.showCorporateMemoModal = showCorporateMemoModal;
   vm.showFlyout = showFlyout;
   vm.submitFeedback = submitFeedback;
@@ -52,6 +52,7 @@ function ListController($scope, $state, $q, $location, $anchorScroll, $mdDialog,
   vm.allOpportunitiesExpanded = allOpportunitiesExpanded;
   vm.noOpportunitiesExpanded = noOpportunitiesExpanded;
   vm.showDisabled = showDisabled;
+  vm.selectAllOpportunities = selectAllOpportunities;
 
   vm.expandCallback = expandCallback;
   vm.collapseCallback = collapseCallback;
@@ -92,9 +93,7 @@ function ListController($scope, $state, $q, $location, $anchorScroll, $mdDialog,
 
     // add opportunity ids into array to be posted
     for (var i = 0; i < vm.selected.length; i++) {
-      for (var j = 0; j < vm.selected[i].groupedOpportunities.length; j++) {
-        opportunityIds.push(vm.selected[i].groupedOpportunities[j].id);
-      }
+      opportunityIds.push(vm.selected[i].id);
     }
 
     targetListService.addTargetListOpportunities(listId, opportunityIds).then(function(data) {
@@ -211,28 +210,49 @@ function ListController($scope, $state, $q, $location, $anchorScroll, $mdDialog,
   }
 
   // Select or deselect individual list item
-  function toggle(item, list, subitem) {
-    var idx = list.indexOf(item);
-
-    // this needs to be refactored, just allowing a subitem to select the parent for now
-    if (subitem && idx > -1) {
-      return;
-    }
+  function selectOpportunity(event, parent, item, list) {
+    var idx = list.indexOf(item),
+        groupedCount = 0;
 
     if (idx > -1) {
-      list.splice(idx, 1);
+      removeItem(item, list, idx);
     } else {
-      list.push(item);
+      addItem(item, list);
     }
+    event.stopPropagation();
+
+    // Get selected opportunity count
+    for (var key in parent.groupedOpportunities) {
+      var obj = parent.groupedOpportunities[key];
+      if (obj.selected === true) { groupedCount++; }
+    }
+    parent.selectedOpportunities = groupedCount;
   }
 
-  // Select or deselect all list items
-  function toggleAll() {
-    if (vm.selected.length === opportunitiesService.model.opportunities.length) {
-      vm.selected = [];
-    } else if (vm.selected.length === 0 || vm.selected.length > 0) {
-      vm.selected = opportunitiesService.model.opportunities.slice(0);
+  // Parent-level select to select all children opportunities
+  function selectAllOpportunities(parent, list) {
+
+    if (parent.selectedOpportunities === parent.groupedOpportunities.length) {
+      var allOpportunitiesSelected = true;
     }
+
+    for (var key in parent.groupedOpportunities) {
+      var obj = parent.groupedOpportunities[key],
+          idx = list.indexOf(obj);
+      if (allOpportunitiesSelected) {
+        removeItem(obj, list, idx);
+      } else if (!obj.selected) {
+        addItem(obj, list);
+      }
+    }
+    parent.selectedOpportunities = allOpportunitiesSelected ? 0 : parent.groupedOpportunities.length;
+  }
+
+  // Select or deselect all opportunity parents
+  function selectAllParents() {
+    angular.forEach(opportunitiesService.model.opportunities, function(value, key) {
+      selectAllOpportunities(value, vm.selected);
+    });
   }
 
   function expandCallback(item) {
@@ -272,6 +292,20 @@ function ListController($scope, $state, $q, $location, $anchorScroll, $mdDialog,
   $scope.$watch('list.expandedOpportunities', function() {
     vm.disabledMessage = '';
   });
+
+  $scope.$watch('list.opportunitiesService.model.opportunities', function() {
+    vm.disabledMessage = '';
+  });
+
+  function removeItem(item, list, idx) {
+    item.selected = false;
+    list.splice(idx, 1);
+  }
+
+  function addItem(item, list) {
+    item.selected = true;
+    list.push(item);
+  }
 
   function dismissOpportunity(oId) {
     console.log(oId);
