@@ -9,11 +9,12 @@ div.modal
     div.modal-input
       label Description (Optional)
       input(ng-model="expanded.newList.description" placeholder="Enter Description").larger-input
-    div.modal-input
+    div.modal-input.add-collaborators
       label Add Collaborators (Optional)
-      inline-search(type="user" placeholder="Name or CBI email address" chosen-result="expanded.collaborator")
-      div(ng-if="true === true").collaborator-list
-        p(ng-repeat="collaborator in expanded.collaborators")
+      inline-search(type="user" placeholder="Name or CBI email address" chosen-result="expanded.tempName" ng-click="addCollaborator(expanded.tempName)")
+      div.collaborator-list
+        p You <span class="accent">Owner</span>
+        p(ng-repeat="collaborator in expanded.newList.collaborators") {{collaborator}}
     div.modal-input
       md-checkbox(ng-model="expanded.newList.allowInvites" aria-label="Allow Collaborators to Invite Others") Allow Collaborators to Invite Others
 

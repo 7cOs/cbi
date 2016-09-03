@@ -53,6 +53,10 @@ md-dialog {
     .modal-input {
       margin-bottom: 36px;
 
+      &.add-collaborators {
+        margin-bottom: 12px;
+      }
+
       md-checkbox {
         float: left;
         font-size: 0.85em;
@@ -273,8 +277,20 @@ md-dialog {
 }
 
 .collaborator-list {
-  width: 100%;
+  width: calc(100% - 48px);
   background: $white;
   height: 200px;
   margin-top: -15px;
+  padding: 12px 24px;
+  text-align: left;
+
+  span,
+  p {
+    display: inline;
+  }
+
+  span {
+    float: right;
+    margin-top: 4px;
+  }
 }
