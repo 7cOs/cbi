@@ -52,25 +52,31 @@
             md-option(ng-repeat="type in o.filtersService.model.opportunitiesTypes" aria-label="{{type.name}}" value="{{type.name}}") {{::type.name}}
     div(column='3')
       label Brand / Master SKU
-      inline-search(type="product" placeholder="Brand or SKU/Package" chosen-result="o.filtersService.model.selected.brand")
+      inline-search(type="product" placeholder="Brand or SKU/Package" chosen-result="o.filtersService.model.brandSearchText")
     div(column='3')
       label Retailer
       div(row).retailer.dropdown-filter
         div(column='5').dropdown
           //-md-select(ng-model="o.filtersService.model.selected.retailer" md-on-close="o.chipsService.addChip(o.filtersService.model.selected.retailer, 'retailer', false)" placeholder="Store" ng-init="o.filtersService.model.selected.retailer = 'Chain'")
-          md-select(ng-model="o.filtersService.model.selected.retailer" placeholder="Store" ng-init="o.filtersService.model.selected.retailer = 'Chain'")
+          md-select(ng-model="o.filtersService.model.selected.retailer" placeholder="Chain" ng-init="o.filtersService.model.selected.retailer = 'Chain'")
             md-option(ng-repeat="type in o.filtersService.model.retailer" ng-click="o.placeholderSelect(type.hintText)" aria-label="{{type.name}}" value="{{type.name}}") {{::type.name}}
         div(column='7')
           inline-search(type="store" placeholder="{{o.hintTextPlaceholder}}" callback="o.searchCallback()" chosen-result="o.filtersService.model.selected.store")
     div(column='3')
       label Distributor
-      inline-search(type="distributor" placeholder="Name" chosen-result="o.filtersService.model.selected.chain")
+      inline-search(type="distributor" placeholder="Name" chosen-result="o.filtersService.model.distributorSearchText")
   div(row)
-    div.predicted-impact-opps(column='3' ng-show="o.filtersService.model.expanded")
+    div.predicted-impact(column='3' ng-show="o.filtersService.model.expanded")
       label Predicted Impact
-      md-checkbox(ng-model="o.filtersService.model.selected.predictedImpactHigh" aria-label="Predicted Impact High" ng-click="o.chipsService.updateChip('predictedImpactHigh', 'High Impact')" name="high") <span>High</span> <img class="impact-icon" src="./assets/img/icons/impact-high-small.svg">
-      md-checkbox(ng-model="o.filtersService.model.selected.predictedImpactMedium" aria-label="Predicted Impact Medium" ng-click="o.chipsService.updateChip('predictedImpactMedium', 'Medium Impact')") <span>Medium</span> <img class="impact-icon" src="./assets/img/icons/impact-medium-small.svg">
-      md-checkbox(ng-model="o.filtersService.model.selected.predictedImpactLow" aria-label="Predicted Impact Low" ng-click="o.chipsService.updateChip('predictedImpactLow', 'Low Impact')") <span>Low</span> <img class="impact-icon" src="./assets/img/icons/impact-low-small.svg">
+      md-checkbox(ng-model="o.filtersService.model.selected.predictedImpactHigh" aria-label="Predicted Impact High" ng-click="o.chipsService.updateChip('predictedImpactHigh', 'High Impact')" name="high")
+        | High
+        span.impact.high-small
+      md-checkbox(ng-model="o.filtersService.model.selected.predictedImpactMedium" aria-label="Predicted Impact Medium" ng-click="o.chipsService.updateChip('predictedImpactMedium', 'Medium Impact')")
+        | Medium
+        span.impact.medium-small
+      md-checkbox(ng-model="o.filtersService.model.selected.predictedImpactLow" aria-label="Predicted Impact Low" ng-click="o.chipsService.updateChip('predictedImpactLow', 'Low Impact')")
+        | Low
+        span.impact.low-small
     div(column='3' ng-show="o.filtersService.model.expanded")
       label Product Type
       md-checkbox(ng-model="o.filtersService.model.selected.productTypeFeatured" aria-label="Product Type Featured" ng-click="o.chipsService.updateChip('productTypeFeatured', 'Product Type Featured')") Featured
