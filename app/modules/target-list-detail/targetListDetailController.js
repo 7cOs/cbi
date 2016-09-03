@@ -64,7 +64,8 @@ module.exports = /*  @ngInject */
 
     function resetFilters() {
       // reset all chips and filters
-      chipsService.model = chipsService.resetChipsFilters(chipsService.model);
+      chipsService.resetChipsFilters(chipsService.model);
+
       // userService.model.opportunityFilters = null;
       filtersService.resetFilters();
     }
@@ -236,6 +237,6 @@ module.exports = /*  @ngInject */
       opportunitiesService.model.filterApplied = true;
 
       // reset all chips and filters on page init
-      chipsService.model = chipsService.resetChipsFilters(chipsService.model);
+      chipsService.resetChipsFilters(chipsService.model);
     }
   };

@@ -226,6 +226,6 @@ module.exports = /*  @ngInject */
 
     function init() {
       // reset all chips and filters on page init
-      chipsService.model = chipsService.resetChipsFilters(chipsService.model);
+      chipsService.resetChipsFilters(chipsService.model);
     }
   };
