@@ -43,7 +43,7 @@ function ListController($scope, $state, $q, $location, $anchorScroll, $mdDialog,
   vm.shareOpportunity = shareOpportunity;
   vm.sortBy = sortBy;
   vm.selectOpportunity = selectOpportunity;
-  vm.toggleAll = toggleAll;
+  vm.selectAllParents = selectAllParents;
   vm.showCorporateMemoModal = showCorporateMemoModal;
   vm.showFlyout = showFlyout;
   vm.submitFeedback = submitFeedback;
@@ -249,12 +249,10 @@ function ListController($scope, $state, $q, $location, $anchorScroll, $mdDialog,
   }
 
   // Select or deselect all opportunity parents
-  function toggleAll() {
-    if (vm.selected.length === opportunitiesService.model.opportunities.length) {
-      vm.selected = [];
-    } else if (vm.selected.length === 0 || vm.selected.length > 0) {
-      vm.selected = opportunitiesService.model.opportunities.slice(0);
-    }
+  function selectAllParents() {
+    angular.forEach(opportunitiesService.model.opportunities, function(value, key) {
+      selectAllOpportunities(value, vm.selected);
+    });
   }
 
   function expandCallback(item) {
@@ -287,6 +285,18 @@ function ListController($scope, $state, $q, $location, $anchorScroll, $mdDialog,
   // PRIVATE METHODS
   // ***************
 
+  $scope.$on('$mdMenuClose', function() {
+    vm.showSubMenu = false;
+  });
+
+  $scope.$watch('list.expandedOpportunities', function() {
+    vm.disabledMessage = '';
+  });
+
+  $scope.$watch('list.opportunitiesService.model.opportunities', function() {
+    vm.disabledMessage = '';
+  });
+
   function removeItem(item, list, idx) {
     item.selected = false;
     list.splice(idx, 1);
@@ -296,14 +306,6 @@ function ListController($scope, $state, $q, $location, $anchorScroll, $mdDialog,
     item.selected = true;
     list.push(item);
   }
-
-  $scope.$on('$mdMenuClose', function() {
-    vm.showSubMenu = false;
-  });
-
-  $scope.$watch('list.expandedOpportunities', function() {
-    vm.disabledMessage = '';
-  });
 
   function dismissOpportunity(oId) {
     console.log(oId);

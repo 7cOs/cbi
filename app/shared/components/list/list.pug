@@ -19,9 +19,7 @@
       button.btn-action(ng-if="" ng-click="list.removeOpportunity()") Delete
       button.btn-action(ng-csv="list.selected" filename="opportunities.csv" analytics-on="click" analytics-event="Opportunity List Export" csv-header="['Account', 'Sub Account', 'Tolinx Number', 'Store Name', 'Store Number', 'Address', 'City', 'State', 'Postal CD', 'Phone Number', 'Latitude', 'Longitude', 'Last Update', 'High Impact', 'Unsold Account', 'Premise Type', 'Trade Classification', 'Planning Group', '', 'Negative Value', 'Is Expanded']") Download
 
-button.icon.select-all(ng-click="list.toggleAll()")
-  span(ng-if='list.isChecked()') Un-
-  | Select All
+button.icon.select-all(ng-class="{'disabled': list.isChecked()}" ng-click="list.isChecked() ? list.showDisabled('No opportunities are listed') : list.selectAllParents()") Select All
 
 button.icon.narrow-icon.expand-all(ng-click="list.allOpportunitiesExpanded() ? list.showDisabled('All opportunities are expanded') : list.accordion.expandAll()" ng-class="{'disabled': list.allOpportunitiesExpanded()}") Expand All
 button.icon.narrow-icon.collapse-all(ng-click="list.noOpportunitiesExpanded() ? list.showDisabled('No opportunities are expanded') : list.accordion.collapseAll()" ng-class="{'disabled': list.noOpportunitiesExpanded()}") Collapse All
@@ -67,7 +65,6 @@ v-accordion.styled-list(multiple="" id="opportunities" control="list.accordion" 
         p(ng-if="opportunity.failState") Whatever you just tried didn't work
       div(ng-click="list.showFlyout(opportunity)").hide-wrapper.hide-icon-wrapper.hide-row
     .shadow-wrap.bottom
-      // Parent level opportunity
       div.checkbox-wrapper(ng-click="list.selectAllOpportunities(opportunity, list.selected)")
         md-checkbox(aria-label="Select Item" ng-checked="opportunity.selectedOpportunities === opportunity.groupedOpportunities.length")
       div.more-wrapper
@@ -164,7 +161,6 @@ v-accordion.styled-list(multiple="" id="opportunities" control="list.accordion" 
               div.cell-parent.sub-item(row)
                 .regional-status(ng-if="product.regionalStatus")
                   div(class="{{product.regionalStatus}}")
-                // Actual opportunity
                 div(column='1').sub-item-select
                   md-checkbox(aria-label="Select Item" ng-click="list.selectOpportunity($event, opportunity, product, list.selected);" ng-checked="product.selected")
                 div(column='2').pad-cell

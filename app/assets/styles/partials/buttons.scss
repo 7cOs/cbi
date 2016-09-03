@@ -106,6 +106,13 @@ button {
       }
     }
 
+    &.select-all {
+
+      &:before {
+        background-image: url('../assets/img/icons/btn-select-all-disabled.svg');
+      }
+    }
+
     &:hover {
       cursor: default;
     }
