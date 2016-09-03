@@ -166,7 +166,7 @@ v-accordion.styled-list(multiple="" id="opportunities" control="list.accordion" 
                   div(class="{{product.regionalStatus}}")
                 // Actual opportunity
                 div(column='1').sub-item-select
-                  md-checkbox(aria-label="Select Item" ng-click="list.toggle($event, opportunity, product, list.selected);" ng-checked="product.selected")
+                  md-checkbox(aria-label="Select Item" ng-click="list.selectOpportunity($event, opportunity, product, list.selected);" ng-checked="product.selected")
                 div(column='2').pad-cell
                   span.product-title {{::product.product.brand}} <br>
                   | {{::product.product.name}}

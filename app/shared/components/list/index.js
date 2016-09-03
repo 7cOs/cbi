@@ -42,7 +42,7 @@ function ListController($scope, $state, $q, $location, $anchorScroll, $mdDialog,
   vm.removeOpportunity = removeOpportunity;
   vm.shareOpportunity = shareOpportunity;
   vm.sortBy = sortBy;
-  vm.toggle = toggle;
+  vm.selectOpportunity = selectOpportunity;
   vm.toggleAll = toggleAll;
   vm.showCorporateMemoModal = showCorporateMemoModal;
   vm.showFlyout = showFlyout;
@@ -210,19 +210,18 @@ function ListController($scope, $state, $q, $location, $anchorScroll, $mdDialog,
   }
 
   // Select or deselect individual list item
-  function toggle(event, parent, item, list) {
+  function selectOpportunity(event, parent, item, list) {
     var idx = list.indexOf(item),
         groupedCount = 0;
 
     if (idx > -1) {
-      item.selected = false;
-      list.splice(idx, 1);
+      removeItem(item, list, idx);
     } else {
-      item.selected = true;
-      list.push(item);
+      addItem(item, list);
     }
     event.stopPropagation();
 
+    // Get selected opportunity count
     for (var key in parent.groupedOpportunities) {
       var obj = parent.groupedOpportunities[key];
       if (obj.selected === true) { groupedCount++; }
@@ -230,15 +229,26 @@ function ListController($scope, $state, $q, $location, $anchorScroll, $mdDialog,
     parent.selectedOpportunities = groupedCount;
   }
 
+  // Parent-level select to select all children opportunities
   function selectAllOpportunities(parent, list) {
-    for (var key in parent.groupedOpportunities) {
-      var obj = parent.groupedOpportunities[key];
-      obj.selected = true;
-      parent.selectedOpportunities = parent.groupedOpportunities.length;
+
+    if (parent.selectedOpportunities === parent.groupedOpportunities.length) {
+      var allOpportunitiesSelected = true;
     }
+
+    for (var key in parent.groupedOpportunities) {
+      var obj = parent.groupedOpportunities[key],
+          idx = list.indexOf(obj);
+      if (allOpportunitiesSelected) {
+        removeItem(obj, list, idx);
+      } else if (!obj.selected) {
+        addItem(obj, list);
+      }
+    }
+    parent.selectedOpportunities = allOpportunitiesSelected ? 0 : parent.groupedOpportunities.length;
   }
 
-  // Select or deselect all list items
+  // Select or deselect all opportunity parents
   function toggleAll() {
     if (vm.selected.length === opportunitiesService.model.opportunities.length) {
       vm.selected = [];
@@ -276,6 +286,16 @@ function ListController($scope, $state, $q, $location, $anchorScroll, $mdDialog,
   // ***************
   // PRIVATE METHODS
   // ***************
+
+  function removeItem(item, list, idx) {
+    item.selected = false;
+    list.splice(idx, 1);
+  }
+
+  function addItem(item, list) {
+    item.selected = true;
+    list.push(item);
+  }
 
   $scope.$on('$mdMenuClose', function() {
     vm.showSubMenu = false;
