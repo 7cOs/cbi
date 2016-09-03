@@ -51,11 +51,11 @@
       md-checkbox(ng-model="tld.filtersService.model.selected.myAccountsOnly" aria-label="My Accounts" ng-click="tld.chipsService.updateChip('myAccountsOnly', 'My Accounts Only')") My Accounts Only
     div(column='3')
       label Premise Type
-      md-radio-group(ng-model="tld.filtersService.model.selected.premiseType")
-        md-radio-button(ng-repeat="p in tld.filtersService.model.premises | filter: '!All'" class="md-primary" ng-value="p.name" aria-label="p.name" ng-click="tld.chipsService.addChip(p.name, 'premiseType', true)") {{p.name}}
+      md-radio-group(ng-model="tld.filtersService.model.selected.premiseType" ng-init="tld.filtersService.model.selected.premiseType = 'off'")
+        md-radio-button(ng-repeat="p in tld.filtersService.model.premises | filter: '!All'" class="md-primary" ng-value="p.value" aria-label="{{p.name}}" ng-click="tld.chipsService.addChip(p.name, 'premiseType', true)") {{::p.name}}
     div(column='6')
       label Opportunity Status
-      md-radio-group(ng-model="tld.filtersService.model.selected.opportunityStatus" ng-init="tld.filtersService.model.selected.opportunityStatus = 'open'")
+      md-radio-group(ng-model="tld.filtersService.model.selected.opportunityStatus")
         md-radio-button(ng-repeat="opportunity in tld.filtersService.model.opportunityStatus" class="md-primary" ng-value="opportunity.value" aria-label="{{opportunity.name}}" ng-click="tld.chipsService.addChip(opportunity.name, 'opportunityStatus', true)") {{::opportunity.name}}
   div(row ng-if="tld.filtersService.model.show")
     div(row)
@@ -63,7 +63,7 @@
         label Opportunity Type
         .dropdown-filter
           .dropdown
-            md-select(ng-model="tld.filtersService.model.selected.opportunitiesTypes" md-on-close="tld.chipsService.addChip(tld.filtersService.model.selected.opportunitiesTypes, 'opportunitiesTypes', false)" placeholder="All Types")
+            md-select(ng-model="tld.filtersService.model.selected.opportunitiesTypes" md-on-close="tld.chipsService.addChip(tld.filtersService.model.selected.opportunitiesTypes, 'opportunitiesTypes', false)" placeholder="All Types" ng-init="tld.filtersService.model.selected.opportunitiesTypes = 'All Types'")
               md-option(ng-repeat="type in tld.filtersService.model.opportunitiesTypes" aria-label="{{type.name}}" value="{{type.name}}") {{::type.name}}
       div(column='3')
         label Brand / Master SKU
@@ -72,7 +72,7 @@
         label Retailer
         div(row).retailer.dropdown-filter
           div(column='5').dropdown
-            md-select(ng-model="tld.filtersService.model.selected.retailer" md-on-close="tld.chipsService.addChip(tld.filtersService.model.selected.retailer, 'retailer', false)" placeholder="Store" ng-init="tld.filtersService.model.selected.retailer = 'Store'")
+            md-select(ng-model="tld.filtersService.model.selected.retailer" md-on-close="tld.chipsService.addChip(tld.filtersService.model.selected.retailer, 'retailer', false)" placeholder="Chain" ng-init="tld.filtersService.model.selected.retailer = 'Chain'")
               md-option(ng-repeat="type in tld.filtersService.model.retailer" ng-click="tld.placeholderSelect(type.hintText)" aria-label="{{type.name}}" value="{{type.name}}") {{::type.name}}
           div(column='7')
             inline-search(type="store" placeholder="{{tld.hintTextPlaceholder}}" chosen-result="tld.filtersService.model.selected.store")
@@ -82,7 +82,7 @@
     div(row)
       div(column='3').predicted-impact
         label Predicted Impact
-        md-checkbox(ng-model="tld.filtersService.model.selected.predictedImpactHigh" aria-label="Predicted Impact High" ng-click="tld.chipsService.updateChip('predictedImpactHigh', 'Predicted Impact High')")
+        md-checkbox(ng-model="tld.filtersService.model.selected.predictedImpactHigh" aria-label="Predicted Impact High" ng-click="tld.chipsService.updateChip('predictedImpactHigh', 'High Impact')")
           | High
           span.impact.high-small
         md-checkbox(ng-model="tld.filtersService.model.selected.predictedImpactMedium" aria-label="Predicted Impact Medium" ng-click="tld.chipsService.updateChip('predictedImpactMedium', 'Predicted Impact Medium')")
