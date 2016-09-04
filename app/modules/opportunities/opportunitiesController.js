@@ -149,6 +149,7 @@ module.exports = /*  @ngInject */
 
       // reset all chips and filters on page init
       chipsService.resetChipsFilters(chipsService.model);
+      chipsService.applyFilters();
 
       // go to a specific opportunity on load and then set to null if specified
       if (opportunitiesService.model.opportunityId !== null) {
@@ -157,7 +158,6 @@ module.exports = /*  @ngInject */
           opportunitiesService.model.opportunityId = null;
         });
       }
-
     } // end init
 
   }; // end controller

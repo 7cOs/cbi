@@ -125,7 +125,7 @@
     div(column='12' class='apply-filters' ng-if="tld.filtersService.model.show")
       button(value='Apply Filters' type="button" class="btn-action" ng-click="tld.chipsService.applyFilters(true)" ng-disabled="tld.filtersService.model.filtersApplied") Apply Filters
       .secondary-button-container
-        a(ng-click="tld.filtersService.saveReport()" ng-disabled="tld.filtersService.model.filtersApplied" ng-class="{'disabled save-filterset-icon-disabled': tld.filtersService.model.filtersApplied}").accent.save-filterset-icon Save Report
-        a(ng-click="tld.resetFilters()" ng-disabled="tld.filtersService.model.filtersApplied" ng-class="{'disabled reset-icon-disabled': tld.filtersService.model.filtersApplied}").accent.reset-icon Reset
+        a(ng-click="tld.filtersService.model.filtersApplied || tld.saveReport()" ng-disabled="tld.filtersService.model.filtersApplied" ng-mouseover="tld.hoverState('save')" ng-mouseleave="tld.hoverState('save')" ng-class="{'disabled save-filterset-icon-disabled': tld.filtersService.model.filtersApplied, 'save-report-hover': tld.isHoveringSave && !tld.filtersService.model.filtersApplied}").accent.save-filterset-icon Save Report
+        a(ng-click="tld.filtersService.model.filtersDefault || tld.resetFilters()" ng-disabled="tld.filtersService.model.filtersDefault" ng-mouseover="tld.hoverState('reset')" ng-mouseleave="tld.hoverState('reset')" ng-class="{'disabled reset-icon-disabled': tld.filtersService.model.filtersDefault, 'reset-icon-hover': tld.isHoveringReset && !tld.filtersService.model.filtersApplied}").accent.reset-icon Reset
 
 list
