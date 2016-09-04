@@ -13,7 +13,6 @@ function TargetListController($scope, $state, targetListService, userService) {
   vm.pageName = $state.current.name;
 
   // Expose public methods
-  vm.navigateToTargetList = navigateToTargetList;
   vm.ratio = ratio;
   vm.tabFilter = tabFilter;
 
@@ -41,11 +40,6 @@ function TargetListController($scope, $state, targetListService, userService) {
   // **************
   // PUBLIC METHODS
   // **************
-
-  function navigateToTargetList(list) {
-    targetListService.model.currentList = list;
-    $state.go('target-list-detail');
-  }
 
   // Only shows Target List tabs needed on the page
   function tabFilter(tab) {
@@ -87,11 +81,11 @@ function TargetListController($scope, $state, targetListService, userService) {
       // );
 
       // Send to model
-      vm.types.mine.records = mine.slice(0, 4);
+      vm.types.mine.records = mine.slice(0, 5);
       vm.types.mine.total = mine.length;
-      vm.types.shared.records = shared.slice(0, 4);
+      vm.types.shared.records = shared.slice(0, 5);
       vm.types.shared.total = shared.length;
-      vm.types.archived.records = archived.slice(0, 4);
+      vm.types.archived.records = archived.slice(0, 5);
       vm.types.archived.total = archived.length;
     });
   }

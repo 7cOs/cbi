@@ -47,7 +47,7 @@ module.exports = function (config) {
         lastName: 'O\'NEIL',
         groupingCode: '133',
         iss: 'https://orion.cbrands.com',
-        personID: 1601,
+        personID: 5545,
         employeeID: '1002417',
         exp: 1477332952290,
         iat: 1472148952296,

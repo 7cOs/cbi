@@ -37,7 +37,6 @@ function ExpandedTargetListController($state, $scope, $filter, $mdDialog, $q, us
   vm.closeModal = closeModal;
   vm.deleteTargetList = deleteTargetList;
   vm.exists = exists;
-  vm.openTLDetails = openTLDetails;
   vm.ratio = ratio;
   vm.saveNewList = saveNewList;
   vm.searchOpportunities = searchOpportunities;
@@ -130,11 +129,6 @@ function ExpandedTargetListController($state, $scope, $filter, $mdDialog, $q, us
     return list.indexOf(item) > -1;
   }
 
-  function openTLDetails(listId) {
-    targetListService.model.currentList.id = listId;
-    $state.go('target-list-detail');
-  }
-
   function ratio(closed, total) {
     var result = closed / total * 100;
     return result;
@@ -211,7 +205,7 @@ function ExpandedTargetListController($state, $scope, $filter, $mdDialog, $q, us
   // ***************
 
   function init() {
-    // userService.getTargetLists('1601', {'type': 'targetLists'}).then(function(data) {
+    targetListService.model.currentList = {};
     userService.getTargetLists(userService.model.currentUser.personID, {'type': 'targetLists'}).then(function(data) {
       var ownedPromises = [],
           sharedPromises = [];
