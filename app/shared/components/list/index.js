@@ -53,6 +53,7 @@ function ListController($scope, $state, $q, $location, $anchorScroll, $mdDialog,
   vm.noOpportunitiesExpanded = noOpportunitiesExpanded;
   vm.showDisabled = showDisabled;
   vm.selectAllOpportunities = selectAllOpportunities;
+  vm.flattenOpportunity = flattenOpportunity;
 
   vm.expandCallback = expandCallback;
   vm.collapseCallback = collapseCallback;
@@ -279,6 +280,24 @@ function ListController($scope, $state, $q, $location, $anchorScroll, $mdDialog,
 
   function showDisabled(message) {
     vm.disabledMessage = message;
+  }
+
+  function flattenOpportunity(obj) {
+    var data = [];
+    angular.forEach(obj, function(value, key) {
+      var item = {};
+      angular.copy(value, item);
+      item.productName = item.product.name;
+      item.TDLinx = item.store.id;
+      item.storeName = item.store.name;
+      item.storeAddress = item.store.address;
+      delete item.brands;
+      delete item.store;
+      delete item.groupedOpportunities;
+      delete item.product;
+      data.push(item);
+    });
+    return data;
   }
 
   // ***************
