@@ -50,6 +50,7 @@
     "gulp-sass-lint": "1.2.0",
     "gulp-sourcemaps": "1.6.0",
     "he": "^1.1.0",
+    "image-blobber": "^1.1.0",
     "jsforce": "1.7.0",
     "minifyify": "7.3.3",
     "multer": "^1.2.0",

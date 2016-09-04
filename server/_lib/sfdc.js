@@ -82,8 +82,8 @@ function deleteAttach(app, req, res) {
     } catch (err) {
       var generalError = {'isSuccess': false,
                           'errorMessage': err};
+      throw generalError;
     }
-    throw generalError;
   });
 };
 
@@ -121,8 +121,8 @@ function deleteNote(app, req, res) {
     } catch (err) {
       var generalError = {'isSuccess': false,
                           'errorMessage': err};
+      throw generalError;
     }
-    throw generalError;
   });
 };
 
@@ -196,9 +196,9 @@ function queryAccountNotes(app, req, res) {
               for (var note in records) {
                 if (records[note].Attachments) {
                   for (var theAtt in records[note].Attachments.records) {
-                    records[note].Attachments.records[theAtt].attributes.url = conn.instanceUrl + records[note].Attachments.records[theAtt].attributes.url + '&sessionId=' + conn.sessionId;
-                    var attachBlob = conn.sobject('Attachment').record(records[note].Attachments.records[theAtt].Id).blob('Body');
-                    records[note].Attachments.records[theAtt].attributes.blobData = attachBlob;
+                    var thisAtt = records[note].Attachments.records[theAtt];
+                    var clickableLink = app.get('config').address + 'sfdc/getAttachment?attachId=' + thisAtt.Id;
+                    thisAtt.attributes.url = clickableLink;
                   }
                 }
               }
@@ -266,8 +266,6 @@ function createNote(app, req, res) {
                 console.log('Returning an error from createNote: ' + JSON.stringify(err, null, ''));
                 return err;
               } else {
-//                console.log('\n\nResponse from Salesforce.com:');
-//                console.dir(ret, null);
                 return ret;
               }
             });
@@ -279,66 +277,34 @@ function createNote(app, req, res) {
         });
       };
     } catch (err) {
-      console.log(err);
+      console.error(err);
       return err;
     };
   });
 };
 
 function getAttachment(app, req, res) {
-  var sfdc = sfdcConn(app, req, res);
-  if (sfdc.isSuccess) {
-    var conn = sfdc.theSession;
-    var theURL = '';
-    var theId = req.query.noteId;
-
-    var atts = conn.query('Select a.Owner.Name, a.Owner.Username, a.OwnerId, a.Name, a.IsPrivate, a.Id, a.Description, a.CreatedDate, a.CreatedById, a.ContentType, a.BodyLength, a.Body From Attachment a where ParentId = \'' + theId + '\'',
-      function(err, result) {
-        var retValue = '';
-
-        if (err) { return console.error(err); }
-
-        retValue = '{"Attachments": [';
-        for (var att in result.records) {
-
-          theURL = conn.instanceUrl + '/servlet/servlet.FileDownload?file=' + result.records[att].Id + '&sessionId=' + conn.accessToken;
-
-          retValue = retValue + '{"Id": "' + result.records[att].Id + '",';
-
-          retValue += '"Name": "' + result.records[att].Name + '",';
-          retValue += '"attachmentURL": "' + theURL + '",';
-          retValue += '"OwnerName": "' + result.records[att].Owner.Name + '",';
-          retValue += '"OwnerUsername": "' + result.records[att].Owner.Username + '",';
-          retValue += '"OwnerId": "' + result.records[att].OwnerId + '",';
-          retValue += '"IsPrivate": "' + result.records[att].IsPrivate + '",';
-          retValue += '"Description": "' + result.records[att].Description + '",';
-          retValue += '"CreatedDate": "' + result.records[att].CreatedDate + '",';
-          retValue += '"CreatedById": "' + result.records[att].CreatedById + '",';
-          retValue += '"ContentType": "' + result.records[att].ContentType + '",';
-          retValue += '"BodyLength": "' + result.records[att].BodyLength + '",';
-          retValue += '"Body": "' + result.records[att].Body + '"},';
-        }
-
-        retValue = retValue.slice(0, -1);  // remove the trailing comma
-        retValue += ']}';
-        res.write(retValue);
-        return (theURL);
-      }
-    );
-
-    atts.then(function(result) {
-      res.end();
-      return (result);
+  try {
+    return sfdcConn(app, req, res).then(function(result) {
+    // In order to return a clickable link we need to issue a GET from our server
+      var conn = result;
+      var theAtt = conn.sobject('Attachment').record(req.query.attachId);
+      var attBlob = theAtt.blob('Body');
+      var buf = [];
+      attBlob.on('data', function(data) {
+        buf.push(data);
+      });
+      attBlob.on('end', function() {
+        var contentStr = Buffer.concat(buf);
+        res.send(contentStr);
+      });
     }, function(err) {
-      return (err);
+      throw (err);
     });
-  } else {
-    return sfdc;
+  } catch (err) {
+    console.error(err);
+    return {'isSuccess': false,
+            'errorMessage': 'No connection could be made to Salesforce.com: ' + err};
   }
 };
-
-/*
-    TODO: There is a better way to write this: bring in the object and id, that can account for attachments and notes
-   will revisit if we have time
-*/
 

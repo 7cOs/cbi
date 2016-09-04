@@ -1,0 +1,31 @@
+*   Trying 96.43.150.107...
+* Connected to cbrands--CBeerDev.cs20.my.salesforce.com (96.43.150.107) port 443 (#0)
+* TLS 1.2 connection using TLS_RSA_WITH_AES_256_CBC_SHA256
+* Server certificate: *.cs20.my.salesforce.com
+* Server certificate: Symantec Class 3 Secure Server CA - G4
+* Server certificate: VeriSign Class 3 Public Primary Certification Authority - G5
+> GET /services/data/v37.0/sobjects/Attachment/00Pm0000009RZFzEA/Body HTTP/1.1
+> Host: cbrands--CBeerDev.cs20.my.salesforce.com
+> User-Agent: Mozilla/4.0 (compatible; MSIE 7.0b; Windows NT 5.1; .NET CLR 1.1.4322; .NET CLR 2.0.50727)
+> Accept: image/jpeg
+> Accept-Charset: utf-8
+> Accept-Language: en-US,en;q=0.8
+> Authorization: Bearer 00Dm00000008fCJ!AQwAQOihHIV5v7hLmsxUGroY51mUlGxeqBldJzs5.Zm7L2FOcq_yBjqHnkcspm5Ws_LEYxJ1VMXUyQz9WbOJWfQHMlLpCC6n
+> Content-Type: image/jpeg
+> 
+< HTTP/1.1 404 Not Found
+< Date: Sat, 03 Sep 2016 14:30:50 GMT
+< Content-Security-Policy-Report-Only: default-src https:; script-src https: 'unsafe-inline' 'unsafe-eval'; style-src https: 'unsafe-inline'; img-src https: data:; font-src https: data:; report-uri /_/ContentDomainCSPNoAuth?type=mydomain
+< Strict-Transport-Security: max-age=31536000; includeSubDomains
+< Set-Cookie: BrowserId=3e3nFBnyTiKyF_KFAw7Dww;Path=/;Domain=.salesforce.com;Expires=Wed, 02-Nov-2016 14:30:50 GMT
+< Expires: Thu, 01 Jan 1970 00:00:00 GMT
+< Sforce-Limit-Info: api-usage=15730/5120000
+< Content-Type: application/json;charset=UTF-8
+< Transfer-Encoding: chunked
+< 
+{ [127 bytes data]
+* Connection #0 to host cbrands--CBeerDev.cs20.my.salesforce.com left intact
+* Rebuilt URL to: GET/
+* Could not resolve host: GET
+* Closing connection 1
+curl: (6) Could not resolve host: GET

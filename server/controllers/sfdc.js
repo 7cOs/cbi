@@ -5,7 +5,6 @@ J. Scott Cromie
 8/9/16
 ***********************************************************/
 var sfdc = require('../_lib/sfdc.js');
-
 module.exports = {
   getAttachmentData: getAttachmentData,
   createNote: createNote,
@@ -16,20 +15,12 @@ module.exports = {
 };
 
 function getAttachmentData(app, req, res) {
-  var promise = new Promise(function (resolve, reject) {
-    var blobData = sfdc.getAttachment(app, req, res);
-    if (blobData) {
-      resolve(blobData);
-    } else {
-      reject(Error('There are no attachments with this ParentId: ' + req.query.attachId));
-    }
-  });
-  promise.then(function (result) {
-  }, function (err) {
-    console.log('There was an error getting the attachment');
-    console.log(err);
-  });
-};
+  try {
+    sfdc.getAttachment(app, req, res);
+  } catch (e) {
+    console.error('There was an error getting attachments: ' + e);
+  }
+}
 
 function deleteAttach(app, req, res) {
   sfdc.deleteAttach(app, req, res).then(function(result) {
