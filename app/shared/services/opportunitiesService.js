@@ -82,6 +82,7 @@ module.exports = /*  @ngInject */
             storePlaceholder = item.store;
 
             // Set positive or negative label for trend values for store
+            // I think this is no longer relevant to the app.
             store.trend = store.currentYTDStoreVolume - store.lastYTDStoreVolume;
             if (store.trend > 0) {
               store.positiveValue = true;
