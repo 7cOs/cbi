@@ -131,7 +131,6 @@ module.exports = /*  @ngInject */
      */
     function removeFromFilterService(chip) {
       if (chip.type) filtersService.model.selected[chip.type] = false;
-
       filtersService.model.filtersApplied = false;
     }
 
@@ -148,9 +147,7 @@ module.exports = /*  @ngInject */
     }
 
     function resetChipsFilters(chips) {
-      for (var i = 0; i < chips.length; i++) {
-        removeFromFilterService(chips[i]);
-      }
+      filtersService.resetFilters();
       angular.copy(chipsTemplate, model);
     }
 

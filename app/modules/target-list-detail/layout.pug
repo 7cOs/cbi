@@ -51,7 +51,7 @@
       md-checkbox(ng-model="tld.filtersService.model.selected.myAccountsOnly" aria-label="My Accounts" ng-click="tld.chipsService.updateChip('myAccountsOnly', 'My Accounts Only')") My Accounts Only
     div(column='3')
       label Premise Type
-      md-radio-group(ng-model="tld.filtersService.model.selected.premiseType" ng-init="tld.filtersService.model.selected.premiseType = 'off'")
+      md-radio-group(ng-model="tld.filtersService.model.selected.premiseType")
         md-radio-button(ng-repeat="p in tld.filtersService.model.premises | filter: '!All'" class="md-primary" ng-value="p.value" aria-label="{{p.name}}" ng-click="tld.chipsService.addChip(p.name, 'premiseType', true)") {{::p.name}}
     div(column='6')
       label Opportunity Status
