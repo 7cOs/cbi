@@ -13,6 +13,7 @@ module.exports = /*  @ngInject */
       distributors: [],
       expanded: false,
       filtersApplied: true,
+      filtersDefault: true,
       opportunityStatus: [
         {
           name: 'Open',
@@ -146,6 +147,8 @@ module.exports = /*  @ngInject */
 
     function resetFilters() {
       service.model.selected = angular.copy(service.model.selectedTemplate);
+      service.model.filtersApplied = false;
+      service.model.filtersDefault = true;
     }
 
     function saveReport() {}

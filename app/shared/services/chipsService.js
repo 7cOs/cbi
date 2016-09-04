@@ -78,6 +78,7 @@ module.exports = /*  @ngInject */
         });
 
         filtersService.model.filtersApplied = false;
+        filtersService.model.filtersDefault = false;
       }
     }
 
@@ -119,6 +120,7 @@ module.exports = /*  @ngInject */
       }
 
       filtersService.model.filtersApplied = false;
+      filtersService.model.filtersDefault = false;
     }
 
     /**
