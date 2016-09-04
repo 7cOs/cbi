@@ -8,7 +8,7 @@ module.exports =
   .config(function($stateProvider) {
     $stateProvider
     .state('target-list-detail', {
-      url: '/target-list-detail',
+      url: '/target-lists/:id',
       title: 'Target List',
       templateUrl: './app/modules/target-list-detail/layout.html',
       controller: 'targetListDetailController',

@@ -223,6 +223,8 @@ module.exports = /*  @ngInject */
     $scope.$watch('tld.filtersService.model.stores', function (val) { addInlineSearchChip(val); });
 
     function init() {
+      targetListService.model.currentList.id = $state.params.id;
+
       targetListService.getTargetList(targetListService.model.currentList.id).then(function(response) {
         targetListService.model.currentList = response;
       }, function(err) {
