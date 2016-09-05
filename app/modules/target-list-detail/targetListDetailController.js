@@ -210,17 +210,19 @@ module.exports = /*  @ngInject */
     // PRIVATE METHODS
     // **************
 
-    // Add chip for inline search value watchers
-    function addInlineSearchChip(val) {
-      if (typeof val === 'string' && val !== '') {
-        chipsService.addAutocompleteChip(val, 'searchText');
+    /*
+      // Add chip for inline search value watchers
+      function addInlineSearchChip(val) {
+        if (typeof val === 'string' && val !== '') {
+          chipsService.addAutocompleteChip(val, 'searchText');
+        }
       }
-    }
 
-    // Watch for inline search value changes
-    $scope.$watch('tld.filtersService.model.brands', function (val) { addInlineSearchChip(val); });
-    $scope.$watch('tld.filtersService.model.chains', function (val) { addInlineSearchChip(val); });
-    $scope.$watch('tld.filtersService.model.stores', function (val) { addInlineSearchChip(val); });
+      // Watch for inline search value changes
+      $scope.$watch('tld.filtersService.model.brands', function (val) { addInlineSearchChip(val); });
+      $scope.$watch('tld.filtersService.model.chains', function (val) { addInlineSearchChip(val); });
+      $scope.$watch('tld.filtersService.model.stores', function (val) { addInlineSearchChip(val); });
+    */
 
     function init() {
       targetListService.model.currentList.id = $state.params.id;

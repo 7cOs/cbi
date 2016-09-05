@@ -7,17 +7,20 @@ module.exports = /*  @ngInject */
       {
         'name': 'My Accounts Only',
         'type': 'myAccountsOnly',
-        'applied': false
+        'applied': false,
+        'removable': false
       },
       {
         'name': 'Off-Premise',
         'type': 'premiseType',
-        'applied': false
+        'applied': false,
+        'removable': false
       },
       {
-        'name': 'Product Type Authorized',
+        'name': 'Authorized',
         'type': 'productTypeAuthorized',
-        'applied': false
+        'applied': false,
+        'removable': false
       }
     ];
 
@@ -132,7 +135,11 @@ module.exports = /*  @ngInject */
      * @memberOf cf.common.services
      */
     function removeFromFilterService(chip) {
-      if (chip.type) filtersService.model.selected[chip.type] = false;
+      if (chip.type === 'brandSearchText' || chip.type === 'store' || chip.type === 'distributorSearchText') {
+        filtersService.model.selected[chip.type] = '';
+      } else if (chip.type) {
+        filtersService.model.selected[chip.type] = false;
+      }
       filtersService.model.filtersApplied = false;
     }
 
