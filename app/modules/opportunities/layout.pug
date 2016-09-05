@@ -52,7 +52,7 @@
             md-option(ng-repeat="type in o.filtersService.model.opportunitiesTypes" aria-label="{{type.name}}" value="{{type.name}}") {{::type.name}}
     div(column='3')
       label Brand / Master SKU
-      inline-search(type="product" placeholder="Brand or SKU/Package" input="o.filtersService.model.selected.brandSearchText" callback="o.chipsService.addChip(result, 'brandSearchText', false)")
+      inline-search(type="product" placeholder="Brand or SKU/Package" bind="o.filtersService.model.selected.brandSearchText" callback="o.chipsService.addChip(result, 'brandSearchText', false)")
     div(column='3')
       label Retailer
       div(row).retailer.dropdown-filter
@@ -61,10 +61,10 @@
           md-select(ng-model="o.filtersService.model.selected.retailer" placeholder="Chain" ng-init="o.filtersService.model.selected.retailer = 'Chain'")
             md-option(ng-repeat="type in o.filtersService.model.retailer" ng-click="o.placeholderSelect(type.hintText)" aria-label="{{type.name}}" value="{{type.name}}") {{::type.name}}
         div(column='7')
-          inline-search(type="store" placeholder="{{o.hintTextPlaceholder}}" callback="o.searchCallback()" chosen-result="o.filtersService.model.selected.store")
+          inline-search(type="store" placeholder="{{o.hintTextPlaceholder}}" bind="o.filtersService.model.selected.store" callback="o.chipsService.addChip(result, 'store', false)")
     div(column='3')
-      label Distributor {{o.filtersService.model.selected.distributorSearchText}}
-      inline-search(type="distributor" placeholder="Name" chosen-result="o.filtersService.model.selected.distributorSearchText" callback="o.chipsService.addChip(result, 'distributorSearchText', false)")
+      label Distributor
+      inline-search(type="distributor" placeholder="Name" bind="o.filtersService.model.selected.distributorSearchText" callback="o.chipsService.addChip(result, 'distributorSearchText', false)")
   div(row)
     div.predicted-impact(column='3' ng-show="o.filtersService.model.expanded")
       label Predicted Impact

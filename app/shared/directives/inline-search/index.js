@@ -7,7 +7,7 @@ module.exports =
       bindToController: {
         type: '@',
         placeholder: '@',
-        input: '=',
+        input: '=bind',
         callback: '&',
         nav: '@'
       },
