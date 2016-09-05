@@ -7,17 +7,20 @@ module.exports = /*  @ngInject */
       {
         'name': 'My Accounts Only',
         'type': 'myAccountsOnly',
-        'applied': false
+        'applied': false,
+        'removable': false
       },
       {
         'name': 'Off-Premise',
         'type': 'premiseType',
-        'applied': false
+        'applied': false,
+        'removable': false
       },
       {
-        'name': 'Product Type Authorized',
+        'name': 'Authorized',
         'type': 'productTypeAuthorized',
-        'applied': false
+        'applied': false,
+        'removable': false
       }
     ];
 

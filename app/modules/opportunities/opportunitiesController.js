@@ -124,17 +124,19 @@ module.exports = /*  @ngInject */
     // PRIVATE METHODS
     // ***************
 
-    // Add chip for inline search value watchers
-    function addInlineSearchChip(val) {
-      if (typeof val === 'string' && val !== '') {
-        vm.chipsService.addAutocompleteChip(val, 'searchText');
+    /* Not longer necesary?
+      // Add chip for inline search vaaddAutocompleteChiplue watchers
+      function addInlineSearchChip(val) {
+        if (typeof val === 'string' && val !== '') {
+          vm.chipsService.addAutocompleteChip(val, 'searchText');
+        }
       }
-    }
 
-    // Watch for inline search value changes
-    $scope.$watch('o.filtersService.model.selected.brand', function (val) { addInlineSearchChip(val); });
-    $scope.$watch('o.filtersService.model.store', function (val) { addInlineSearchChip(val); });
-    $scope.$watch('o.filtersService.model.chain', function (val) { addInlineSearchChip(val); });
+      // Watch for inline search value changes
+      $scope.$watch('o.filtersService.model.selected.brand', function (val) { addInlineSearchChip(val); });
+      $scope.$watch('o.filtersService.model.store', function (val) { addInlineSearchChip(val); });
+      $scope.$watch('o.filtersService.model.chain', function (val) { addInlineSearchChip(val); });
+    */
 
     function init() {
       // get saved filters -- this should be passed from user data when its ready
@@ -144,7 +146,9 @@ module.exports = /*  @ngInject */
 
       // reset all chips and filters on page init
       chipsService.resetChipsFilters(chipsService.model);
-      chipsService.applyFilters();
+
+      // Set this to have a list load with the page
+      // chipsService.applyFilters();
 
       // go to a specific opportunity on load and then set to null if specified
       if (opportunitiesService.model.opportunityId !== null) {

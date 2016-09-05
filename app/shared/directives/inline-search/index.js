@@ -7,7 +7,7 @@ module.exports =
       bindToController: {
         type: '@',
         placeholder: '@',
-        input: '=bind',
+        input: '=chosenResult',
         callback: '&',
         nav: '@'
       },
@@ -19,7 +19,7 @@ module.exports =
     };
 
     /*  @ngInject */
-    function InlineSearchController($scope, $timeout, $filter, searchService, chipsService, $location) {
+    function InlineSearchController($scope, $timeout, $filter, searchService, $location) {
 
       // ****************
       // CONTROLLER SETUP
@@ -91,6 +91,7 @@ module.exports =
           $location.url('/accounts');
         }
         vm.callback({result: result});
+        vm.chosenResult = result;
         close();
       }
 
