@@ -132,7 +132,7 @@ module.exports = /*  @ngInject */
     }
 
     // Watch for inline search value changes
-    $scope.$watch('o.filtersService.model.brand', function (val) { addInlineSearchChip(val); });
+    $scope.$watch('o.filtersService.model.selected.brand', function (val) { addInlineSearchChip(val); });
     $scope.$watch('o.filtersService.model.store', function (val) { addInlineSearchChip(val); });
     $scope.$watch('o.filtersService.model.chain', function (val) { addInlineSearchChip(val); });
 
