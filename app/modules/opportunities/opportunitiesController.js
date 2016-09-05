@@ -143,7 +143,7 @@ module.exports = /*  @ngInject */
 
     function init() {
       // get saved filters -- this should be passed from user data when its ready
-      userService.getOpportunityFilters(userService.model.currentUser.personID).then(function(data) {
+      userService.getOpportunityFilters(userService.model.currentUser.employeeID).then(function(data) {
         userService.model.opportunityFilters = data;
       });
 

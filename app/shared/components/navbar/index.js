@@ -15,7 +15,7 @@ function NavbarController($rootScope, $scope, $state, $window, $mdPanel, $mdDial
   $rootScope.isEdge = (/(?:\bEdge\/)(\d+)/g).test(userAgent);
 
   // Currently logged in user (for analytics)
-  $window.currentUserId = userService.model.currentUser.personID;
+  $window.currentUserId = userService.model.currentUser.employeeID;
   $window.analyticsId = $rootScope.analytics.id;
 
   // Services
@@ -202,14 +202,14 @@ function NavbarController($rootScope, $scope, $state, $window, $mdPanel, $mdDial
 
   function init() {
     userService
-    .getNotifications(userService.model.currentUser.personID)
+    .getNotifications(userService.model.currentUser.employeeID)
     .then(function(result) {
       vm.notifications = result;
       setUnreadCount(vm.notifications);
     });
 
     userService
-    .getTargetLists(userService.model.currentUser.personID)
+    .getTargetLists(userService.model.currentUser.employeeID)
     .then(function(result) {
       vm.targetLists = result.owned;
     });
