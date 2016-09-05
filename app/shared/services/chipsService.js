@@ -132,7 +132,11 @@ module.exports = /*  @ngInject */
      * @memberOf cf.common.services
      */
     function removeFromFilterService(chip) {
-      if (chip.type) filtersService.model.selected[chip.type] = false;
+      if (chip.type === 'brandSearchText') {
+        filtersService.model.selected[chip.type] = '';
+      } else if (chip.type) {
+        filtersService.model.selected[chip.type] = false;
+      }
       filtersService.model.filtersApplied = false;
     }
 
