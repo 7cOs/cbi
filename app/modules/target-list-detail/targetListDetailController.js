@@ -10,6 +10,7 @@ module.exports = /*  @ngInject */
     // Initial variables
     var vm = this;
     vm.collaborator = {};
+    vm.collaboratorName = '';
     vm.permissionLevel = 'collaborate';
     vm.deleting = false;
     vm.archiving = false;
@@ -26,6 +27,7 @@ module.exports = /*  @ngInject */
 
     // Expose public methods
     vm.addCollaborators = addCollaborators;
+    vm.addCollaboratorClick = addCollaboratorClick;
     vm.changeCollaboratorLevel = changeCollaboratorLevel;
     vm.closeModal = closeModal;
     vm.deleteList = deleteList;
@@ -56,6 +58,10 @@ module.exports = /*  @ngInject */
 
         closeModal();
       });
+    }
+
+    function addCollaboratorClick(result) {
+      vm.collaborator = result;
     }
 
     function changeCollaboratorLevel() {

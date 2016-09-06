@@ -227,5 +227,18 @@ module.exports = /*  @ngInject */
     function init() {
       // reset all chips and filters on page init
       chipsService.resetChipsFilters(chipsService.model);
+
+      userService.getPerformanceSummary().then(function(data) {
+        console.log('summary done');
+      });
+
+      userService.getPerformanceDepletion().then(function(data) {
+        userService.model.depletion = data;
+      });
+
+      userService.getPerformanceDistribution().then(function(data) {
+        userService.model.distribution = data;
+        console.log('[userService.model]', userService.model);
+      });
     }
   };

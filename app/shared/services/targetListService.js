@@ -307,8 +307,6 @@ module.exports = /*  @ngInject */
             permissionLevel: p.permissionLevel
           }];
 
-      console.log(payload);
-
       $http.post(url, payload)
         .then(addTargetListSharesSuccess)
         .catch(addTargetListSharesFail);
