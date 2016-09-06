@@ -34,6 +34,7 @@ module.exports = /*  @ngInject */
     vm.footerToast = footerToast;
     vm.listChanged = listChanged;
     vm.makeOwner = makeOwner;
+    vm.manageCollaborators = manageCollaborators;
     vm.modalManageTargetList = modalManageTargetList;
     vm.modalManageCollaborators = modalManageCollaborators;
     vm.modalSendOpportunity = modalSendOpportunity;
@@ -129,6 +130,30 @@ module.exports = /*  @ngInject */
           }
         });
 
+      });
+    }
+
+    // inline adding of collaborator
+    function manageCollaborators(result) {
+      // add loader
+      console.log('Pls add Ratul to the target list.');
+      targetListService.model.currentList.loading = true;
+
+      result.permissionLevel = vm.permissionLevel;
+      targetListService.addTargetListShares(targetListService.model.currentList.id, result).then(function(response) {
+        // push to target list collaborator array
+        var collaboratorList = $filter('filter')(userService.model.targetLists.owned, {id: targetListService.model.currentList.id});
+        collaboratorList[0].collaborators = targetListService.model.currentList.collaborators = response.data;
+
+        // clear name from inline search
+        vm.manageListCollaboratorName = '';
+
+        // remove loader
+        console.log('Ratul has been added to the target list.');
+        targetListService.model.currentList.loading = false;
+      }, function(err) {
+        console.log('Ratul has gone on paternity leave. Sry.', err);
+        targetListService.model.currentList.loading = false;
       });
     }
 
@@ -235,6 +260,7 @@ module.exports = /*  @ngInject */
 
       targetListService.getTargetList(targetListService.model.currentList.id).then(function(response) {
         targetListService.model.currentList = response;
+        targetListService.model.currentList.loading = false;
       }, function(err) {
         console.log('[targetListController.init], Error: ' + err.statusText + '. Code: ' + err.status);
       });
