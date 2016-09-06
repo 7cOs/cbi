@@ -106,9 +106,9 @@
           md-checkbox(column='5' ng-model="o.filtersService.model.selected.tradeChannelOther" aria-label="Trade Channel Other" ng-click="o.chipsService.updateChip('tradeChannelOther', 'Other Trade Channel')") Other
     div.location-contact-opps(column='3' ng-show="o.filtersService.model.expanded")
       label Location
-        input(type="text" placeholder="City, State, or Zip" ng-model="o.filtersService.model.selected.location")
+        input(type="text" placeholder="City, State, or Zip" ng-model="o.filtersService.model.selected.location", ng-keypress="($event.which === 13)?o.chipsService.addChip(o.filtersService.model.selected.location, 'location', true):0" ng-blur="o.chipsService.addChip(o.filtersService.model.selected.location, 'location', true)")
       label.cbbd-contact CBBD Contact
-        input(type="text" placeholder="Name" ng-model="o.filtersService.model.selected.cbbdContact")
+        input(type="text" placeholder="Name" ng-model="o.filtersService.model.selected.cbbdContact" ng-keypress="($event.which === 13)?o.chipsService.addChip(o.filtersService.model.selected.cbbdContact, 'location', true):0" ng-blur="o.chipsService.addChip(o.filtersService.model.selected.cbbdContact, 'cbbdContact', true)")
     div(column='12' class='apply-filters')
       button(value='Apply Filters' type="button" class="btn-action" ng-click="o.chipsService.applyFilters()" ng-disabled="o.filtersService.model.filtersApplied") Apply Filters
       .secondary-button-container
