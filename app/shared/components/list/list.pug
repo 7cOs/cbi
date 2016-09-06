@@ -98,7 +98,7 @@ v-accordion.styled-list(multiple="" id="opportunities" control="list.accordion" 
           div.address(column='4') {{::opportunity.store.address | titlecase}}
           div(column='2') {{::opportunity.groupedOpportunities.length}} <span class="supporting-text">({{::opportunity.highImpactSum}} High)</span>
           .text-center(column='1') {{::opportunity.store.depletionsCurrentYearToDate | number }}
-          .text-center(column='1' class="value") {{(opportunity.store.depletionsCurrentYearToDateYA) | number}}%
+          .text-center(column='1' ng-class="opportunity.depletionsCurrentYearToDateYA >= 0 ? 'positive' : 'negative'").bold <span ng-if="opportunity.depletionsCurrentYearToDateYA >= 0 | number:2">+</span>{{opportunity.depletionsCurrentYearToDateYA | number:2}}<span>%</span>
           .text-center(column='1') {{::opportunity.store.segmentation}}
       v-pane-content(column='12' class="products" ng-class="{'open' : open}")
         .shadow-wrap.top
@@ -111,7 +111,7 @@ v-accordion.styled-list(multiple="" id="opportunities" control="list.accordion" 
                 img(ng-if='list.displayBrandIcon(opportunity.brands, "negra modelo")' src='assets/img/brands/brand-lg-negramodelo.svg')
                 img(ng-if='list.displayBrandIcon(opportunity.brands, "brand")' src='assets/img/brands/brand-lg-modelolite.svg')
               div.small-icons
-                img(ng-if='!list.displayBrandIcon(opportunity.brands, "corona")' src='assets/img/brands/brand-sm-coronaextra.svg')
+                //- img(ng-if='!list.displayBrandIcon(opportunity.brands, "corona")' src='assets/img/brands/brand-sm-coronaextra.svg')
                 img(ng-if='!list.displayBrandIcon(opportunity.brands, "corona light")' src='assets/img/brands/brand-sm-coronalite.svg')
                 img(ng-if='!list.displayBrandIcon(opportunity.brands, "ballast point")' src='assets/img/brands/brand-sm-ballastpoint.svg')
                 img(ng-if='!list.displayBrandIcon(opportunity.brands, "modelo chelada")' src='assets/img/brands/brand-sm-modelochelada.svg')
@@ -126,15 +126,15 @@ v-accordion.styled-list(multiple="" id="opportunities" control="list.accordion" 
                 div(column='4')
                   label Simple
                   div(row)
-                    div(column='12') {{::opportunity.store.distributionL90Simple| number}} <span class="percentage">{{::opportunity.store.distributionL90SimpleYA | number}}</span>%
+                    div(column='12') {{::opportunity.store.distributionL90Simple | number:0}}<span class="percentage">{{::opportunity.store.distributionL90SimpleYA | number:1}}</span>%
                 div(column='8')
                   label Effective
                   div(row)
-                    div(column='12') {{::opportunity.store.distributionL90Effective| number}} <span class="percentage">{{::opportunity.store.distributionL90EffectiveYA | number}}</span>%
+                    div(column='12') {{::opportunity.store.distributionL90Effective | number:0}}<span class="percentage">{{::opportunity.store.distributionL90EffectiveYA | number:1}}</span>%
             div(column='2')
-              label Velocity
+              label Velocity (VS YA%)
               div(row)
-                div(column='12') {{::opportunity.store.velocity | number}} <span class="percentage">{{::opportunity.store.velocityYA | number}}</span>%
+                div(column='12') {{::opportunity.store.velocity | number:0}}<span class="percentage">{{::opportunity.store.velocityYA | number:1}}</span>%
             div(column='2')
               label Tdlinx Submission Code
               div(row)
@@ -154,7 +154,7 @@ v-accordion.styled-list(multiple="" id="opportunities" control="list.accordion" 
           div(column='1')
             label.bold Impact
           div(column='1')
-            label.bold Actions
+            label.bold Dismiss
         v-accordion(multiple="" class="nested-accordion")
           v-pane.styled-list(ng-repeat="product in opportunity.groupedOpportunities")
             v-pane-header
@@ -170,14 +170,39 @@ v-accordion.styled-list(multiple="" id="opportunities" control="list.accordion" 
                 div(column='4') {{::product.rationale}}
                 div(column='1') {{::product.status}}
                 div(column='1' class="impact {{product.impact}}")
-                div(column='1').hide-row
+                div(column='1').bottom.dismiss-product
+                  div.more-wrapper
+                    md-menu(md-position-mode="target-right target")
+                      md-button.md-icon-button(aria-label="More" md-menu-origin ng-click="$mdOpenMenu($event)")
+                        .more-icon
+                      md-menu-content(width="4")
+                        md-menu-item
+                          p(ng-click="list.openShareModal(product.id)") Send To
+                        md-menu-item
+                          p(ng-click="list.showFlyout(product)" md-prevent-menu-close) Dismiss
+                          .sub-menu-flyout(ng-if="list.showSubMenu")
+                            h4.title Dismiss
+                            .hide-row(ng-click="list.cancelFeedback()" md-prevent-menu-close)
+                            .sub-menu-content-container
+                              .sub-menu-content
+                                p If opportunity is dismissed, opportunities for that Package/SKU at that account will not reappear for 90 days
+                              .sub-menu-content
+                                md-radio-group(ng-model="list.opportunity.feedback.selector" ng-init="list.opportunity.feedback.selector = 'other'")
+                                  md-radio-button.md-primary(value="notRelevant") Opportunity not relevant
+                                  md-radio-button.md-primary(value="other") Other
+                              .sub-menu-content
+                                label Additional Feedback
+                                textarea(ng-model="list.opportunity.feedback.text").feedback
+                              .sub-menu-content
+                                button.btn-action(ng-click="list.submitFeedback(opportunity)" md-prevent-menu-close) Submit
+                                p.cancel.accent(ng-click="list.cancelFeedback()" md-prevent-menu-close) X Cancel
             .shadow-wrap.top
               v-pane-content
                 div(row)
                   div(column="1") &nbsp;
                   div(column="4").pad-cell
                     label Last Depletion
-                    span {{::product.lastDepletionDate | timeAgo: 'daysOnly' }}
+                    span {{::product.lastDepletionDate | timeAgo: 'daysOnly' }} <span class="depletion-date">{{::product.lastDepletionDate | date}}</span>
                   div(column="2")
                     label Depletions CYTD
                     span {{::product.depletionsCurrentYearToDate | number }}
@@ -191,6 +216,7 @@ v-accordion.styled-list(multiple="" id="opportunities" control="list.accordion" 
                             h3 vs YA %
                             p Monthly velocity for this account, calculated by taking the total volume over the selected time period (e.g. L90) and dividing by number of 30 day periods (3). “% vs YA” indicates the trend of velocity this year vs. same time period last year.
                     span {{::opportunity.store.velocityYA}}
-
 div(ng-if="list.displayPagination()" column="12")
   cl-paging(layout="row" flex cl-pages="list.opportunitiesService.model.paging.pages" cl-steps="list.opportunitiesService.model.paging.steps" layout-align="{{list.opportunitiesService.model.paging.align}}" cl-current-page="list.opportunitiesService.model.paging.current" cl-page-changed="list.pageChanged()")
+
+
