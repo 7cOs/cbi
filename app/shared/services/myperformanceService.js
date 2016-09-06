@@ -647,8 +647,7 @@ module.exports = /*  @ngInject */
       ]
     };
 
-    return {
-
+    var service = {
       model: function() {
         return performanceData;
       },
@@ -673,4 +672,6 @@ module.exports = /*  @ngInject */
         };
       }
     };
+
+    return service;
   };
