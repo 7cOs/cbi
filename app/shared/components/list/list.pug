@@ -98,7 +98,7 @@ v-accordion.styled-list(multiple="" id="opportunities" control="list.accordion" 
           div.address(column='4') {{::opportunity.store.address | titlecase}}
           div(column='2') {{::opportunity.groupedOpportunities.length}} <span class="supporting-text">({{::opportunity.highImpactSum}} High)</span>
           .text-center(column='1') {{::opportunity.store.depletionsCurrentYearToDate | number }}
-          .text-center(column='1' class="value") {{(opportunity.depletionsCurrentYearToDateYA) | number}}%
+          .text-center(column='1' class="value") {{(opportunity.store.depletionsCurrentYearToDateYA) | number}}%
           .text-center(column='1') {{::opportunity.store.segmentation}}
       v-pane-content(column='12' class="products" ng-class="{'open' : open}")
         .shadow-wrap.top
@@ -180,17 +180,17 @@ v-accordion.styled-list(multiple="" id="opportunities" control="list.accordion" 
                     span 68 days ago
                   div(column="2")
                     label Depletions CYTD
-                    span {{6256 | number }}
+                    span {{::product.depletionsCurrentYearToDate | number }}
                   div(column="2")
                     .tooltip-wrap
-                      label Trend vs Ya
+                      label vs YA %
                         .tooltip
                           img(src="../assets/img/icons/help-tooltip.svg")
                           md-tooltip(md-direction="bottom")
                             label Opportunity List
-                            h3 Trend vs Ya
+                            h3 vs YA %
                             p Monthly velocity for this account, calculated by taking the total volume over the selected time period (e.g. L90) and dividing by number of 30 day periods (3). “% vs YA” indicates the trend of velocity this year vs. same time period last year.
-                    span {{::product.volumeTrend}}
+                    span {{::opportunity.store.velocityYA}}
 
 div(ng-if="list.displayPagination()" column="12")
   cl-paging(layout="row" flex cl-pages="list.opportunitiesService.model.paging.pages" cl-steps="list.opportunitiesService.model.paging.steps" layout-align="{{list.opportunitiesService.model.paging.align}}" cl-current-page="list.opportunitiesService.model.paging.current" cl-page-changed="list.pageChanged()")
