@@ -202,7 +202,7 @@ v-accordion.styled-list(multiple="" id="opportunities" control="list.accordion" 
                   div(column="1") &nbsp;
                   div(column="4").pad-cell
                     label Last Depletion
-                    span {{::product.lastDepletionDate | timeAgo: 'daysOnly' }}
+                    span {{::product.lastDepletionDate | timeAgo: 'daysOnly' }} <span class="depletion-date">{{::product.lastDepletionDate | date}}</span>
                   div(column="2")
                     label Depletions CYTD
                     span {{::product.depletionsCurrentYearToDate | number }}
