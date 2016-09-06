@@ -94,20 +94,17 @@
         background-image: url('../../assets/img/icons/person.svg');
         content: '';
         display: inline-block;
-        position: relative;
-        right: 4px;
-        bottom: 0;
         height: 9px;
         width: 9px;
+        margin-right: 4px;
       }
 
-      .target-list-row-one {
+      [class^=target-list-row] {
         padding: 5px 20px 2px;
       }
 
       .target-list-row-two {
         position: relative;
-        padding: 5px 20px 2px;
 
         p {
           display: inline;

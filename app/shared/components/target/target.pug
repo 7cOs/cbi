@@ -20,7 +20,7 @@ div.target-lists
                     h3.closed {{list.opportunitiesSummary.closedOpportunitiesCount | number}}
                     h3 {{list.opportunitiesSummary.opportunitiesCount | number}}
                 div.target-list-row-two
-                  p.accent {{list.creator}}
+                  p.accent(ng-if="list.creator") {{list.creator}}
                   p.accent.collaborators {{list.members.length}} collaborators
                   p.accent {{list.createdAt | timeAgo: 'relative'}}
                 div
