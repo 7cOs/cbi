@@ -254,11 +254,7 @@
     padding: 30px;
 
     .radio-filters {
-      margin-right: 0;
-    }
-
-    .dropdown-filter {
-      float: right;
+      margin-right: 60px;
     }
   }
 
@@ -270,15 +266,26 @@
   }
 
   .scorecard-filter {
-    padding: 10px 0;
+    padding: 0;
   }
 
   md-radio-button {
     font-size: 0.9em;
+    margin: 1em;
+  }
+
+  .scorecard-header-left {
+    h3 {
+      margin: 12px 0;
+    }
   }
 
   .scorecard-header-right {
     text-align: right;
+
+    p {
+      margin: 28px 0 0;
+    }
   }
 
   h3 {
