@@ -138,15 +138,11 @@ module.exports = /*  @ngInject */
      * @memberOf cf.common.services
      */
     function removeFromFilterService(chip) {
-      console.log(chip);
       if (chip.search) {
         var arr = filtersService.model.selected[chip.type];
-        console.log(arr);
         for (var i = 0; i < arr.length; i++) {
           if (arr[i] === chip.name) {
-            console.log(chip.name);
             arr.splice(i, 1);
-            console.log(arr);
           }
         }
       } else if (typeof chip.type === 'string') {
