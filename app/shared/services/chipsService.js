@@ -51,10 +51,13 @@ module.exports = /*  @ngInject */
         // Add to Chip Model
         service.model.push({
           name: chip,
+          type: filter,
+          search: true,
           applied: false
         });
 
         filtersService.model.filtersApplied = false;
+        filtersService.model.filtersDefault = false;
 
         // Empty Input
         if (filter) filtersService.model[filter] = '';
@@ -135,7 +138,18 @@ module.exports = /*  @ngInject */
      * @memberOf cf.common.services
      */
     function removeFromFilterService(chip) {
-      if (typeof chip.type === 'string') {
+      console.log(chip);
+      if (chip.search) {
+        var arr = filtersService.model.selected[chip.type];
+        console.log(arr);
+        for (var i = 0; i < arr.length; i++) {
+          if (arr[i] === chip.name) {
+            console.log(chip.name);
+            arr.splice(i, 1);
+            console.log(arr);
+          }
+        }
+      } else if (typeof chip.type === 'string') {
         filtersService.model.selected[chip.type] = '';
       } else if (typeof chip.type === 'boolean') {
         filtersService.model.selected[chip.type] = false;

@@ -25,6 +25,7 @@ module.exports = /*  @ngInject */
 
     // Expose public methods
     vm.applyFilter = applyFilter;
+    vm.applyFilterArr = applyFilterArr;
     vm.closeEditModal = closeEditModal;
     vm.closeModal = closeModal;
     vm.deleteSavedFilter = deleteSavedFilter;
@@ -55,6 +56,16 @@ module.exports = /*  @ngInject */
 
     function applyFilter(filterStr) {
       console.log('add filter');
+    }
+
+    function applyFilterArr(model, result, filter) {
+      if (model.indexOf(result) > -1) {
+        vm.filtersService.model[filter] = '';
+      } else {
+        vm.chipsService.addAutocompleteChip(result, filter);
+        vm.filtersService.model[filter] = '';
+        model.push(result);
+      }
     }
 
     function closeModal() {
