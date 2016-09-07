@@ -64,6 +64,7 @@ module.exports = /*  @ngInject */
       if (result.length === 0) {
         vm.chipsService.addChip('All Types', 'opportunitiesTypes', false);
         vm.filtersService.model.selected[filter] = ['All Types'];
+        vm.filtersService.model.opportunityTypes = ['All Types'];
 
       } else {
         for (var i = 0; i < result.length; i++) {

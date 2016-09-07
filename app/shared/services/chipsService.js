@@ -21,6 +21,12 @@ module.exports = /*  @ngInject */
         'type': 'productTypeAuthorized',
         'applied': false,
         'removable': false
+      },
+      {
+        'name': 'All Types',
+        'type': 'opportunitiesTypes',
+        'applied': false,
+        'removable': true
       }
     ];
 

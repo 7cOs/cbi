@@ -24,7 +24,7 @@ module.exports = /*  @ngInject */
           value: 'targeted'
         }
       ],
-      opportunityTypes: [],
+      opportunityTypes: ['All Types'],
       opportunitiesTypes: [
         {name: 'All Types'},
         {name: 'Non-Buy'},
