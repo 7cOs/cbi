@@ -9,7 +9,7 @@ module.exports =
     $stateProvider
     .state('accounts', {
       url: '/accounts',
-      title: 'Accounts',
+      title: 'Account Dashboard',
       templateUrl: './app/modules/accounts/layout.html',
       controller: 'accountsController',
       controllerAs: 'a'

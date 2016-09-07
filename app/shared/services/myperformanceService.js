@@ -283,9 +283,9 @@ module.exports = /*  @ngInject */
       premises: [{
         name: 'All'
       }, {
-        name: 'Off Premise'
+        name: 'Off-Premise'
       }, {
-        name: 'On Premise'
+        name: 'On-Premise'
       }],
       accountBrands: [{
         name: 'Distributions (simple)'
@@ -647,8 +647,7 @@ module.exports = /*  @ngInject */
       ]
     };
 
-    return {
-
+    var service = {
       model: function() {
         return performanceData;
       },
@@ -673,4 +672,6 @@ module.exports = /*  @ngInject */
         };
       }
     };
+
+    return service;
   };

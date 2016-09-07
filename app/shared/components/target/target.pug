@@ -12,18 +12,18 @@ div.target-lists
             h4 No Opportunities have been added yet
             p Try Searching for <span>Opportunities</span> and add them to your list
           ul
-            a(sref="")
-              li(ng-repeat="list in type.records" ng-click="target.navigateToTargetList(list)").target-list
+            li(ng-repeat="list in type.records").target-list
+              a(ui-sref="target-list-detail({id: list.id})")
                 div.target-list-row-one.clearfix
                   h3.target-list-name {{list.name}}
                   div.target-list-data
                     h3.closed {{list.opportunitiesSummary.closedOpportunitiesCount | number}}
                     h3 {{list.opportunitiesSummary.opportunitiesCount | number}}
                 div.target-list-row-two
-                  p.accent {{list.creator}}
+                  p.accent(ng-if="list.creator") {{list.creator}}
                   p.accent.collaborators {{list.members.length}} collaborators
                   p.accent {{list.createdAt | timeAgo: 'relative'}}
                 div
                   md-progress-linear(md-mode="determinate" ng-value="target.ratio(list.opportunitiesSummary.closedOpportunitiesCount, list.opportunitiesSummary.opportunitiesCount)")
         div(row)
-          p(ng-if="type.total.length !== 5").accent.action-item.go-arrow #[a(href="#") Show All]
+          p(ng-if="type.total.length !== 5").accent.action-item.go-arrow #[a(ui-sref="target-lists" analytics-on="click" analytics-event="Target List Link Click") Show All]

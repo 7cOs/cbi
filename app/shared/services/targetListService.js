@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports = /*  @ngInject */
-  function targetListService($http, $q, apiHelperService) {
+  function targetListService($http, $q, apiHelperService, opportunitiesService, filtersService) {
 
     var model = {
       currentList: {}
@@ -34,8 +34,6 @@ module.exports = /*  @ngInject */
     function getTargetList(targetListId, p) {
       var targetListPromise = $q.defer(),
           url = apiHelperService.request('/api/targetLists/' + targetListId, p);
-
-      console.log(url);
 
       $http.get(url)
         .then(getTargetListSuccess)
@@ -118,9 +116,17 @@ module.exports = /*  @ngInject */
      * @returns {Object} - target list opportunities
      * @memberOf cf.common.services
      */
-    function getTargetListOpportunities(targetListId) {
+    function getTargetListOpportunities(targetListId, params) {
+      var filterPayload;
+      if (params) filterPayload = filtersService.getAppliedFilters('opportunities');
+
       var targetListPromise = $q.defer(),
-          url = apiHelperService.request('/api/targetLists/' + targetListId + '/opportunities');
+          url = apiHelperService.request('/api/targetLists/' + targetListId + '/opportunities', filterPayload);
+
+      console.log('[targetListService.getTargetListOpportunities url]', url);
+
+      // reset opportunities
+      opportunitiesService.model.opportunitiesSum = 0;
 
       $http.get(url)
         .then(getTargetListOpportunitiesSuccess)
@@ -131,6 +137,8 @@ module.exports = /*  @ngInject */
         var newOpportunityArr = [],
             store,
             storePlaceholder;
+        opportunitiesService.model.opportunities = [];
+        opportunitiesService.model.opportunitiesDisplay = [];
 
         for (var i = 0; i < response.data.opportunities.length; i++) {
           var item = response.data.opportunities[i];
@@ -177,11 +185,16 @@ module.exports = /*  @ngInject */
           // push last store into newOpportunityArr
           if (i + 1 === response.data.opportunities.length) newOpportunityArr.push(store);
 
-          model.opportunitiesSum += 1;
+          opportunitiesService.model.opportunitiesSum += 1;
         }; // end for each
 
-        console.log(newOpportunityArr);
-
+        // set data for pagination
+        for (i = 0; i < newOpportunityArr.length; i = i + opportunitiesService.model.paging.itemsPerPage) {
+          var page = newOpportunityArr.slice(i, i + opportunitiesService.model.paging.itemsPerPage);
+          opportunitiesService.model.opportunitiesDisplay.push(page);
+        }
+        opportunitiesService.model.paging.pages = opportunitiesService.model.opportunitiesDisplay.length - 1;
+        opportunitiesService.model.opportunities = newOpportunityArr;
         targetListPromise.resolve(newOpportunityArr);
       }
 
@@ -260,9 +273,10 @@ module.exports = /*  @ngInject */
      * @memberOf cf.common.services
      */
     function getTargetListShares(targetListId) {
-      var targetListPromise = $q.defer(),
-          url = apiHelperService.request('/api/targetLists/' + targetListId + '/shares/');
+      var targetListPromise = $q.defer();
+      // var url = apiHelperService.request('/api/targetLists/' + targetListId + '/shares/');
 
+      /* killing shares query for now
       $http.get(url)
         .then(getTargetListSharesSuccess)
         .catch(getTargetListSharesFail);
@@ -274,7 +288,8 @@ module.exports = /*  @ngInject */
       function getTargetListSharesFail(error) {
         targetListPromise.reject(error);
       }
-
+      */
+      targetListPromise.resolve({});
       return targetListPromise.promise;
     }
 
@@ -293,8 +308,6 @@ module.exports = /*  @ngInject */
             personId: Number(p.id),
             permissionLevel: p.permissionLevel
           }];
-
-      console.log(payload);
 
       $http.post(url, payload)
         .then(addTargetListSharesSuccess)

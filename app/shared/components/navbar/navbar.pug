@@ -9,19 +9,19 @@ div(container)
       ul(column='8').main-nav
         li.top-level-menu(ui-sref-active="active")
           div.inner
-            span #[a(ui-sref="landing") Home]
+            span #[a(ui-sref="landing" analytics-on="click" analytics-event="Home Page Link Click") Home]
         li.top-level-menu.parent(ui-sref-active="active")
           div.inner
             span #[a My Performance]
           ul.dropdown
-            li.sub-menu(ui-sref="scorecards") #[a My Scorecards]
-            li.sub-menu(ui-sref="accounts") #[a My Accounts]
+            li.sub-menu(ui-sref="scorecards" analytics-on="click" analytics-event="My Scorecard Link Click") #[a My Scorecards]
+            li.sub-menu(ui-sref="accounts" analytics-on="click" analytics-event="My Accounts Link Click") #[a Account Dashboard]
         li.top-level-menu(ui-sref-active="active")
           div.inner
-            span #[a(ui-sref="opportunities") Opportunities]
+            span #[a(ui-sref="opportunities" analytics-on="click" analytics-event="Opportunity List Link Click") Opportunities]
         li.top-level-menu(ui-sref-active="active")
           div.inner
-            span #[a(ui-sref="target-lists") Target Lists]
+            span #[a(ui-sref="target-lists" analytics-on="click" analytics-event="Target List Link Click") Target Lists]
         li.top-level-menu(ui-sref-active="active")
           div.inner
             span #[a(ui-sref="help") Help]
@@ -29,7 +29,7 @@ div(container)
         .notification-count-badge(ng-if="nb.notificationHelper.showBadge")
           span {{nb.notificationHelper.unreadNotifications}}
         md-menu(md-position-mode="target-right target" md-offset="54 80")
-          a.nav-icon.search(href="#" ng-click="$mdOpenMenu($event)" aria-label="Search")
+          a.nav-icon.search(href="#" ng-click="$mdOpenMenu($event)" aria-label="Search" analytics-on="click" analytics-event="Search Bar")
           md-menu-content
             .nav-flyout-search
               .content
@@ -45,13 +45,13 @@ div(container)
                 .dropdown-filter
                   .dropdown
                     md-select(ng-model="nb.accountSelectorSelected" aria-label="Account Type selector"  placeholder="Store, account, or subaccount name")
-                      md-option(ng-repeat="type in nb.accountSelectorOptions" ng-blur="nb.closeMenus($event)" aria-label="type.name" value="{{type.name}}") {{type.name}}
+                      md-option(ng-repeat="type in nb.accountSelectorOptions" aria-label="{{type.name}}" value="{{type.name}}" md-prevent-menu-close) {{type.name}}
                 inline-search(ng-if="nb.accountSelectorSelected === 'Distributor'" type="distributor" placeholder="Search for a distributor" chosen-result="nb.searchResult" nav="true")
                 inline-search(ng-if="nb.accountSelectorSelected === 'Chain'" type="chain" placeholder="Search for a chain" chosen-result="nb.searchResult" nav="true")
                 inline-search(ng-if="nb.accountSelectorSelected === 'Store'" type="store" placeholder="Search for a store" chosen-result="nb.searchResult" nav="true")
         a.nav-icon.add-opportunity(ng-click="nb.modalAddOpportunityForm()")
         md-menu(md-position-mode="target-right target" md-offset="1 38")
-          a.nav-icon.notifications(href="#" md-menu-origin ng-click="$mdOpenMenu($event); nb.markSeen(nb.notifications)", aria-label="Notifications")
+          a.nav-icon.notifications(href="#" md-menu-origin ng-click="$mdOpenMenu($event); nb.markSeen(nb.notifications)", aria-label="Notifications" analytics-on="click" analytics-event="Notifications Click")
           md-menu-content
             .nav-flyout
               .content.nopad
@@ -75,6 +75,7 @@ div(container)
                 p <strong>{{nb.userService.model.currentUser.firstName | titlecase}} {{nb.userService.model.currentUser.lastName | titlecase}}</strong>
                 a(href="/auth/logout" target="_self")
                   button.btn-action Logout
+        div.version {{nb.versionService.model.version.hash}} | {{nb.versionService.model.version.version}}
     ul.nav-sub-menu(ng-if="$root.pageTitle === 'Accounts' || $root.pageTitle === 'Scorecards'")
       li.accent #[a(ui-sref="scorecards" ui-sref-active="active") My Scorecards]
       li.accent #[a(ui-sref="accounts" ui-sref-active="active") My Accounts]

@@ -9,10 +9,12 @@ module.exports = /*  @ngInject */
         {name: 'Walmart', subAccount: 'South'},
         {name: 'Walmart', subAccount: 'East'}
       ],
-      brands: [],
-      distributors: [],
+      brands: '',
+      cbbdContact: '',
+      distributors: '',
       expanded: false,
       filtersApplied: true,
+      filtersDefault: true,
       opportunityStatus: [
         {
           name: 'Open',
@@ -71,16 +73,18 @@ module.exports = /*  @ngInject */
       }, {
         name: 'L90 Days April 22, 2016 - July 21, 2016'
       }],
-      selected: {
+      selected: {},
+      selectedTemplate: {
         myAccountsOnly: true,
         accountBrands: '',
         accountMarkets: '',
         accountTypes: '',
-        brands: '',
-        cbbdContact: '',
+        brands: [],
+        cbbdContact: [],
         chains: '',
         currentFilter: '',
         depletionsTimeFilter: 'MTD July 1 - July 31',
+        distributors: [],
         distributionTimeFilter: 'L90 Days April 22, 2016 - July 21, 2016',
         location: '',
         opportunitiesStatus: '',
@@ -91,14 +95,14 @@ module.exports = /*  @ngInject */
         premiseType: 'off',
         productTypeFeatured: '',
         productTypePriority: '',
-        productTypeAuthorized: '',
-        stores: '',
+        productTypeAuthorized: true,
+        stores: [],
         retailer: '',
+        storeSearchText: '',
         storeSegmentationA: '',
         storeSegmentationB: '',
         storeSegmentationC: '',
-        storeTypeCBBD: '',
-        storeTypeIndependent: '',
+        storeType: '',
         timePeriod: 'Current Month to Date',
         tradeChannelConvenience: '',
         tradeChannelDrug: '',
@@ -134,17 +138,19 @@ module.exports = /*  @ngInject */
       // get applied filters
       var filterPayload = {type: type};
       for (var key in service.model.selected) {
-        /* if (service.model.selected[key].constructor === Array) {
-          // to do for brands, stores, chains
-        } else */if (service.model.selected[key] !== '') {
+        if (service.model.selected[key].constructor === Array) {
+        } else if (service.model.selected[key] !== '') {
           filterPayload[key] = service.model.selected[key];
         }
       }
-
       return filterPayload;
     }
 
-    function resetFilters() {}
+    function resetFilters() {
+      service.model.selected = angular.copy(service.model.selectedTemplate);
+      service.model.filtersApplied = false;
+      service.model.filtersDefault = true;
+    }
 
     function saveReport() {}
   };

@@ -1,0 +1,6 @@
+div(layout="row"  layout-wrap layout-align="{{ paging.clAlign || paging.clAlignModel }}")
+  md-button(class="md-icon-button md-raised accent" aria-label="First" ng-click="paging.gotoFirst()") {{ paging.first }}
+  md-button(class="md-icon-button md-raised" aria-label="Previous" ng-click="paging.gotoPrev()" ng-show="paging.index - 1 >= 0") &#8230;
+  md-button(class="md-icon-button md-raised" aria-label="Go to page {{i+1}}" ng-repeat="i in paging.stepInfo" ng-click="paging.goto(paging.index + i)" ng-show="paging.page[paging.index + i]" ng-class="{'selected': paging.page[paging.index + i] == paging.clCurrentPage}") {{ paging.page[paging.index + i] }}
+  md-button(class="md-icon-button md-raised" aria-label="Next" ng-click="paging.gotoNext()" ng-show="paging.index + paging.clSteps < paging.clPages") &#8230;
+  md-button(class="md-icon-button md-raised accent" aria-label="Last" ng-click="paging.gotoLast()") {{ paging.last }}

@@ -1,8 +1,8 @@
 form.inline-search
-  input(ng-model="is.input" type="text" placeholder="{{is.placeholder}}" ng-blur="is.close(true)")
-  input(md-prevent-menu-close type="submit" ng-click="is.action(is.type);" ng-class="{'visible': is.input !== ''}")
+  input(ng-model="is.input" type="text" placeholder="{{is.placeholder}}" ng-blur="is.close()")
+  input(md-prevent-menu-close type="submit" ng-click="is.action(is.type);" ng-class="{'visible': is.input !== ''}" value="")
   .results-container(ng-class="{'open': is.showResults}")
-    .close-btn(md-prevent-menu-close ng-if="!is.loading && is.results.length === 0" ng-click="is.close(true)") x
+    .close-btn(md-prevent-menu-close ng-if="!is.loading && is.results.length === 0" ng-click="is.close(true)" aria-label="Close") x
     md-progress-circular(ng-show="is.loading" md-mode="indeterminate")
     ul.results(ng-show="!is.loading")
       li(ng-if="is.type === 'distributor' || is.type === 'product'" ng-repeat="result in is.results track by $index" ng-click="is.nav ? is.resultChosen(result.name, true) : is.resultChosen(result.name)") {{result.name}}

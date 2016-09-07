@@ -53,12 +53,21 @@ md-dialog {
     .modal-input {
       margin-bottom: 36px;
 
+      &.add-collaborators {
+        margin-bottom: 12px;
+      }
+
       md-checkbox {
         float: left;
         font-size: 0.85em;
         font-weight: $regular;
         margin-top: 12px;
       }
+
+    }
+
+    .larger-input {
+      height: 90px;
     }
 
     .icon-container {
@@ -112,6 +121,16 @@ md-dialog {
       }
     }
 
+    .add-opportunity {
+      background: $gray-4;
+      padding: 0;
+      margin-bottom: 0;
+
+      p {
+        font-size: 1em;
+      }
+    }
+
     .horizontal-layout {
 
       inline-search {
@@ -128,6 +147,10 @@ md-dialog {
         display: inline-block;
         float: left;
         margin: 12px 16px;
+      }
+
+      md-select-value {
+        margin-left: 24px;
       }
 
       input {
@@ -239,5 +262,35 @@ md-dialog {
   .start-end,
   .price-info {
     display: inline-block;
+  }
+}
+
+.target-list-switch-modal {
+
+  .modal-form {
+    .text {
+      padding-bottom: 25px;
+      text-align: center;
+      color: $gray-3;
+    }
+  }
+}
+
+.collaborator-list {
+  width: calc(100% - 48px);
+  background: $white;
+  height: 200px;
+  margin-top: -15px;
+  padding: 12px 24px;
+  text-align: left;
+
+  span,
+  p {
+    display: inline;
+  }
+
+  span {
+    float: right;
+    margin-top: 4px;
   }
 }

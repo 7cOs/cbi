@@ -4,8 +4,17 @@ module.exports = /*  @ngInject */
     var model = {
       filterApplied: false,
       opportunities: [],
+      opportunitiesDisplay: [],
       opportunitiesSum: 0,
-      opportunityId: null
+      opportunityId: null,
+      paging: {
+        align: 'center center',
+        current: 1,
+        pages: 0,
+        // pageChanged: pageChanged, // This function fires at the start of page change. It also fires on pagination load.
+        steps: 10,
+        itemsPerPage: 15
+      }
     };
 
     var service = {
@@ -40,8 +49,6 @@ module.exports = /*  @ngInject */
       var opportunitiesPromise = $q.defer(),
           url = opportunityID ? apiHelperService.request('/api/opportunities/' + opportunityID) : apiHelperService.request('/api/opportunities/', filterPayload);
 
-      console.log(url);
-
       $http.get(url)
         .then(getOpportunitiesSuccess)
         .catch(getOpportunitiesFail);
@@ -51,6 +58,8 @@ module.exports = /*  @ngInject */
         var newOpportunityArr = [],
             store,
             storePlaceholder;
+        service.model.opportunities = [];
+        service.model.opportunitiesDisplay = [];
 
         // make opp array instead of obj if oppId provided
         if (opportunityID) { response.data.opportunities = [response.data]; };
@@ -73,6 +82,7 @@ module.exports = /*  @ngInject */
             storePlaceholder = item.store;
 
             // Set positive or negative label for trend values for store
+            // I think this is no longer relevant to the app.
             store.trend = store.currentYTDStoreVolume - store.lastYTDStoreVolume;
             if (store.trend > 0) {
               store.positiveValue = true;
@@ -102,6 +112,15 @@ module.exports = /*  @ngInject */
 
           service.model.opportunitiesSum += 1;
         }; // end for each
+
+        // set data for pagination
+        for (i = 0; i < newOpportunityArr.length; i = i + service.model.paging.itemsPerPage) {
+          var page = newOpportunityArr.slice(i, i + service.model.paging.itemsPerPage);
+          service.model.opportunitiesDisplay.push(page);
+        }
+        service.model.paging.pages = service.model.opportunitiesDisplay.length;
+
+        service.model.opportunities = newOpportunityArr;
 
         opportunitiesPromise.resolve(newOpportunityArr);
       }

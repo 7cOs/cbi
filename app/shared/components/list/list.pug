@@ -1,26 +1,34 @@
 .total-opportunities
-  h4(ng-if="list.pageName(['accounts'])") 300 opportunities <span>across 24 stores</span>
-  h3(ng-if="list.pageName(['opportunities'])" ng-hide="list.opportunitiesService.model.opportunities.length === 0") <strong>{{list.opportunitiesService.model.opportunitiesSum}} opportunities</strong> across {{list.opportunitiesService.model.opportunities.length}} stores
+  h4(ng-if="list.pageName(['accounts']) || list.pageName(['target-list-detail'])" ng-hide="list.opportunitiesService.model.opportunitiesDisplay.length < 1") {{list.opportunitiesService.model.opportunitiesSum | number:0 }} opportunities <span>across {{list.opportunitiesService.model.opportunities.length}} stores</span>
+  // h3(ng-if="list.pageName(['opportunities']) || !list.pageName(['target-list-detail'])" ng-hide="list.opportunitiesService.model.opportunities.length === 0") <strong>{{list.opportunitiesService.model.opportunitiesSum}} opportunities</strong> across {{list.opportunitiesService.model.opportunities.length}} stores
 
 .action-buttons
-  md-menu(md-offset="0 45" ng-if="list.pageName(['target-lists', 'target-list-detail'])")
-    button.btn-action(ng-disabled="list.selected < 1" aria-label="Add to Target List" ng-click="$mdOpenMenu($event)") Add to Target List
-    md-menu-content.target-list-menu
-      md-menu-item(ng-repeat="targetList in list.userService.model.targetLists.owned" ng-click="list.addToTargetList(targetList.id)")
-        p {{targetList.name}}
-  button.btn-action(ng-disabled="list.selected < 1" ng-if="list.pageName(['opportunities'])") Copy to Target List
-  button.btn-action(ng-disabled="list.selected < 1" ng-if="" ng-click="list.removeOpportunity()") Delete
-  button.btn-action(ng-disabled="list.selected < 1" ng-csv="list.selected" filename="opportunities.csv" csv-header="['Account', 'Sub Account', 'Tolinx Number', 'Store Name', 'Store Number', 'Address', 'City', 'State', 'Postal CD', 'Phone Number', 'Latitude', 'Longitude', 'Last Update', 'High Impact', 'Unsold Account', 'Premise Type', 'Trade Classification', 'Planning Group', '', 'Negative Value', 'Is Expanded']") Download
+  span(ng-switch="list.selected < 1")
+    span(ng-switch-when="true")
+      button.btn-action.disabled(ng-if="list.pageName(['target-lists', 'target-list-detail'])" ng-click="list.showDisabled('No opportunities are selected')") Add to Target List
+      button.btn-action.disabled(ng-if="list.pageName(['opportunities'])" ng-click="list.showDisabled('No opportunities are selected')") Copy to Target List
+      button.btn-action.disabled(ng-if="" ng-click="list.showDisabled('No opportunities are selected')") Delete
+      button.btn-action.disabled(ng-click="list.showDisabled('No opportunities are selected')") Download
+    span(ng-switch-when="false")
+      md-menu(md-offset="0 45" ng-if="list.pageName(['target-lists', 'target-list-detail'])")
+        button.btn-action(aria-label="Add to Target List" ng-click="$mdOpenMenu($event)" analytics-on="click" analytics-event="Add Opportunity") Add to Target List
+        md-menu-content.target-list-menu
+          md-menu-item(ng-repeat="targetList in list.userService.model.targetLists.owned" ng-click="list.addToTargetList(targetList.id)")
+            p {{targetList.name}}
+      button.btn-action(ng-class="{'disabled': list.selected < 1}" ng-if="list.pageName(['opportunities'])" analytics-on="click" analytics-event="Add to Target List") Copy to Target List
+      button.btn-action(ng-if="" ng-click="list.removeOpportunity()") Delete
+      button.btn-action(ng-disabled="list.selected < 1" ng-csv="list.flattenOpportunity(list.selected)" filename="opportunities.csv" csv-label="true") Download
 
-button.icon.select-all(ng-click="list.toggleAll()")
-  span(ng-if='list.isChecked()') Un-
-  | Select All
-button.icon.narrow-icon.expand-all(ng-click="list.accordion.expandAll()" ng-disabled="list.expandedOpportunities === list.opportunitiesService.model.opportunities.length") Expand All
-button.icon.narrow-icon.collapse-all(ng-click="list.accordion.collapseAll()" ng-disabled="list.expandedOpportunities === 0") Collapse All
+button.icon.select-all(ng-class="{'disabled': list.isChecked()}" ng-click="list.isChecked() ? list.showDisabled('No opportunities are listed') : list.selectAllParents()") Select All
+
+button.icon.narrow-icon.expand-all(ng-click="list.allOpportunitiesExpanded() ? list.showDisabled('All opportunities are expanded') : list.accordion.expandAll()" ng-class="{'disabled': list.allOpportunitiesExpanded()}") Expand All
+button.icon.narrow-icon.collapse-all(ng-click="list.noOpportunitiesExpanded() ? list.showDisabled('No opportunities are expanded') : list.accordion.collapseAll()" ng-class="{'disabled': list.noOpportunitiesExpanded()}") Collapse All
+
+p.list-disabled-message {{list.disabledMessage}}
 
 v-accordion.styled-list(multiple="" id="opportunities" control="list.accordion" onexpand="list.expandCallback(item)" oncollapse="list.collapseCallback(item)" column='12' )
   div.header-row(row)
-    div.checkbox-wrapper.placeholder(ng-click="list.toggle(opportunity, list.selected)")
+    div.checkbox-wrapper.placeholder
     div.hide-wrapper(ng-if="list.pageName()")
       label
     div.more-wrapper(ng-if="!list.pageName()")
@@ -37,7 +45,7 @@ v-accordion.styled-list(multiple="" id="opportunities" control="list.accordion" 
           span(ng-class="{ 'chevron-down-small' : !list.opportunitiesChevron, 'chevron-up-small' : list.opportunitiesChevron}").chevron-down-small
       div(column='1')
         label(ng-click="list.sortBy('depletionsCYTD')" ng-class="{ 'header-bold' : list.sortProperty === 'depletionsCYTD'}")
-          | Depletions
+          | Depletions CYTD
           span(ng-class="{ 'chevron-down-small' : !list.depletionsChevron, 'chevron-up-small' : list.depletionsChevron}").chevron-down-small
       div(column='1')
         label vs Ya%
@@ -45,8 +53,8 @@ v-accordion.styled-list(multiple="" id="opportunities" control="list.accordion" 
         label(ng-click="list.sortBy('segmentation')" ng-class="{ 'header-bold' : list.sortProperty === 'segmentation'}")
           | Segmentation
           span(ng-class="{ 'chevron-down-small' : list.segmentationChevron, 'chevron-up-small' : !list.segmentationChevron}").chevron-down-small
-  v-pane.list-item(row ng-repeat="opportunity in list.opportunitiesService.model.opportunities | orderBy:list.sortProperty:list.reverse" expanded='opportunity.isExpanded')
-    div(ng-if="!list.opportunitiesService.model.opportunities.length").no-opportunites
+  v-pane.list-item(row ng-repeat="opportunity in list.opportunitiesService.model.opportunitiesDisplay[list.opportunitiesService.model.paging.current-1] | orderBy:list.sortProperty:list.reverse" expanded='opportunity.isExpanded')
+    div(ng-if="list.opportunitiesService.model.opportunitiesDisplay.length < 1").no-opportunites
       h4 No Opportunities have been added yet
       p Try Searching for <span>Opportunities</span> and add them to your list
     .action-overlay(ng-class="{'active': opportunity.toggled, 'fail': opportunity.failState}")
@@ -57,12 +65,12 @@ v-accordion.styled-list(multiple="" id="opportunities" control="list.accordion" 
         p(ng-if="opportunity.failState") Whatever you just tried didn't work
       div(ng-click="list.showFlyout(opportunity)").hide-wrapper.hide-icon-wrapper.hide-row
     .shadow-wrap.bottom
-      div.checkbox-wrapper(ng-click="list.toggle(opportunity, list.selected)")
-        md-checkbox(aria-label="Select Item" ng-checked="list.exists(opportunity, list.selected)")
+      div.checkbox-wrapper(ng-click="list.selectAllOpportunities(opportunity, list.selected)")
+        md-checkbox(aria-label="Select Item" ng-checked="opportunity.selectedOpportunities === opportunity.groupedOpportunities.length")
       div.more-wrapper
         md-menu(md-position-mode="target-right target")
           md-button.md-icon-button(aria-label="More" md-menu-origin ng-click="$mdOpenMenu($event)")
-            md-icon(md-svg-icon="../assets/img/icons/action-menu_roll.svg")
+            .more-icon
           md-menu-content(width="4")
             md-menu-item
               p(ng-click="list.openShareModal(opportunity.id)") Send To
@@ -76,8 +84,8 @@ v-accordion.styled-list(multiple="" id="opportunities" control="list.accordion" 
                     p If opportunity is dismissed, opportunities for that Package/SKU at that account will not reappear for 90 days
                   .sub-menu-content
                     md-radio-group(ng-model="list.opportunity.feedback.selector" ng-init="list.opportunity.feedback.selector = 'other'")
-                      md-radio-button.md-primary(ng-value="notRelevant") Opportunity not relevant
-                      md-radio-button.md-primary(ng-value="other") Other
+                      md-radio-button.md-primary(value="notRelevant") Opportunity not relevant
+                      md-radio-button.md-primary(value="other") Other
                   .sub-menu-content
                     label Additional Feedback
                     textarea(ng-model="list.opportunity.feedback.text").feedback
@@ -89,8 +97,8 @@ v-accordion.styled-list(multiple="" id="opportunities" control="list.accordion" 
           div.pad-cell(column='3') {{::opportunity.store.name | titlecase}} <span class="supporting-text">\#{{::opportunity.store.id | uppercase}}</span>
           div.address(column='4') {{::opportunity.store.address | titlecase}}
           div(column='2') {{::opportunity.groupedOpportunities.length}} <span class="supporting-text">({{::opportunity.highImpactSum}} High)</span>
-          .text-center(column='1') {{::opportunity.currentYTDStoreVolume | number }}
-          .text-center(column='1' class="value" ng-class="{'positive' : opportunity.positiveValue, 'negative' : opportunity.negativeValue}") <span ng-if="opportunity.positiveValue">+</span>{{(opportunity.trend) | number:2}}<span>%</span>
+          .text-center(column='1') {{::opportunity.store.depletionsCurrentYearToDate | number }}
+          .text-center(column='1' ng-class="opportunity.store.depletionsCurrentYearToDateYA >= 0 ? 'positive' : 'negative'").bold <span ng-if="opportunity.store.depletionsCurrentYearToDateYA >= 0 | number:2">+</span>{{opportunity.store.depletionsCurrentYearToDateYA | number:2}}<span>%</span>
           .text-center(column='1') {{::opportunity.store.segmentation}}
       v-pane-content(column='12' class="products" ng-class="{'open' : open}")
         .shadow-wrap.top
@@ -103,7 +111,7 @@ v-accordion.styled-list(multiple="" id="opportunities" control="list.accordion" 
                 img(ng-if='list.displayBrandIcon(opportunity.brands, "negra modelo")' src='assets/img/brands/brand-lg-negramodelo.svg')
                 img(ng-if='list.displayBrandIcon(opportunity.brands, "brand")' src='assets/img/brands/brand-lg-modelolite.svg')
               div.small-icons
-                img(ng-if='!list.displayBrandIcon(opportunity.brands, "corona")' src='assets/img/brands/brand-sm-coronaextra.svg')
+                //- img(ng-if='!list.displayBrandIcon(opportunity.brands, "corona")' src='assets/img/brands/brand-sm-coronaextra.svg')
                 img(ng-if='!list.displayBrandIcon(opportunity.brands, "corona light")' src='assets/img/brands/brand-sm-coronalite.svg')
                 img(ng-if='!list.displayBrandIcon(opportunity.brands, "ballast point")' src='assets/img/brands/brand-sm-ballastpoint.svg')
                 img(ng-if='!list.displayBrandIcon(opportunity.brands, "modelo chelada")' src='assets/img/brands/brand-sm-modelochelada.svg')
@@ -118,15 +126,15 @@ v-accordion.styled-list(multiple="" id="opportunities" control="list.accordion" 
                 div(column='4')
                   label Simple
                   div(row)
-                    div(column='12') {{::opportunity.groupedOpportunities.length | number:0}} <span class="percentage">2</span>%
+                    div(column='12') {{::opportunity.store.distributionL90Simple | number:0}}<span class="percentage">{{::opportunity.store.distributionL90SimpleYA | number:1}}</span>%
                 div(column='8')
                   label Effective
                   div(row)
-                    div(column='12') 12 <span class="percentage">5.2</span>%
+                    div(column='12') {{::opportunity.store.distributionL90Effective | number:0}}<span class="percentage">{{::opportunity.store.distributionL90EffectiveYA | number:1}}</span>%
             div(column='2')
-              label Velocity
+              label Velocity (VS YA%)
               div(row)
-                div(column='12') {{::opportunity.storeVelocity | number:0}} <span class="percentage">7.6</span>%
+                div(column='12') {{::opportunity.store.velocity | number:0}}<span class="percentage">{{::opportunity.store.velocityYA | number:1}}</span>%
             div(column='2')
               label Tdlinx Submission Code
               div(row)
@@ -146,7 +154,7 @@ v-accordion.styled-list(multiple="" id="opportunities" control="list.accordion" 
           div(column='1')
             label.bold Impact
           div(column='1')
-            label.bold Hide
+            label.bold Dismiss
         v-accordion(multiple="" class="nested-accordion")
           v-pane.styled-list(ng-repeat="product in opportunity.groupedOpportunities")
             v-pane-header
@@ -154,7 +162,7 @@ v-accordion.styled-list(multiple="" id="opportunities" control="list.accordion" 
                 .regional-status(ng-if="product.regionalStatus")
                   div(class="{{product.regionalStatus}}")
                 div(column='1').sub-item-select
-                  md-checkbox(aria-label="Select Item" ng-click="$event.stopPropagation();")
+                  md-checkbox(aria-label="Select Item" ng-click="list.selectOpportunity($event, opportunity, product, list.selected);" ng-checked="product.selected")
                 div(column='2').pad-cell
                   span.product-title {{::product.product.brand}} <br>
                   | {{::product.product.name}}
@@ -162,24 +170,53 @@ v-accordion.styled-list(multiple="" id="opportunities" control="list.accordion" 
                 div(column='4') {{::product.rationale}}
                 div(column='1') {{::product.status}}
                 div(column='1' class="impact {{product.impact}}")
-                div(column='1').hide-row
+                div(column='1').bottom.dismiss-product
+                  div.more-wrapper
+                    md-menu(md-position-mode="target-right target")
+                      md-button.md-icon-button(aria-label="More" md-menu-origin ng-click="$mdOpenMenu($event)")
+                        .more-icon
+                      md-menu-content(width="4")
+                        md-menu-item
+                          p(ng-click="list.openShareModal(product.id)") Send To
+                        md-menu-item
+                          p(ng-click="list.showFlyout(product)" md-prevent-menu-close) Dismiss
+                          .sub-menu-flyout(ng-if="list.showSubMenu")
+                            h4.title Dismiss
+                            .hide-row(ng-click="list.cancelFeedback()" md-prevent-menu-close)
+                            .sub-menu-content-container
+                              .sub-menu-content
+                                p If opportunity is dismissed, opportunities for that Package/SKU at that account will not reappear for 90 days
+                              .sub-menu-content
+                                md-radio-group(ng-model="list.opportunity.feedback.selector" ng-init="list.opportunity.feedback.selector = 'other'")
+                                  md-radio-button.md-primary(value="notRelevant") Opportunity not relevant
+                                  md-radio-button.md-primary(value="other") Other
+                              .sub-menu-content
+                                label Additional Feedback
+                                textarea(ng-model="list.opportunity.feedback.text").feedback
+                              .sub-menu-content
+                                button.btn-action(ng-click="list.submitFeedback(opportunity)" md-prevent-menu-close) Submit
+                                p.cancel.accent(ng-click="list.cancelFeedback()" md-prevent-menu-close) X Cancel
             .shadow-wrap.top
               v-pane-content
                 div(row)
                   div(column="1") &nbsp;
                   div(column="4").pad-cell
                     label Last Depletion
-                    span 68 days ago
+                    span {{::product.lastDepletionDate | timeAgo: 'daysOnly' }} <span class="depletion-date">{{::product.lastDepletionDate | date}}</span>
                   div(column="2")
                     label Depletions CYTD
-                    span {{6256 | number }}
+                    span {{::product.depletionsCurrentYearToDate | number }}
                   div(column="2")
                     .tooltip-wrap
-                      label Trend vs Ya
+                      label vs YA %
                         .tooltip
                           img(src="../assets/img/icons/help-tooltip.svg")
                           md-tooltip(md-direction="bottom")
                             label Opportunity List
-                            h3 Trend vs Ya
+                            h3 vs YA %
                             p Monthly velocity for this account, calculated by taking the total volume over the selected time period (e.g. L90) and dividing by number of 30 day periods (3). “% vs YA” indicates the trend of velocity this year vs. same time period last year.
-                    span {{::product.volumeTrend}}
+                    span {{::opportunity.store.velocityYA}}
+div(ng-if="list.displayPagination()" column="12")
+  cl-paging(layout="row" flex cl-pages="list.opportunitiesService.model.paging.pages" cl-steps="list.opportunitiesService.model.paging.steps" layout-align="{{list.opportunitiesService.model.paging.align}}" cl-current-page="list.opportunitiesService.model.paging.current" cl-page-changed="list.pageChanged()")
+
+

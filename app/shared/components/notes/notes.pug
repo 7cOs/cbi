@@ -31,7 +31,7 @@ div.modal.notes(ng-if="notesOpen")
           text-angular(ta-toolbar="[['bold','italics', 'underline', 'ul']]" ta-text-editor-class="form-content" ng-model="n.newNote.body").text-editor
         div
           .add-attachments(ngf-select="n.uploadFiles($files)" multiple accept="image/*")
-            p Add an attachment
+            a(href="#").accent Add an attachment
             p {{n.errorMsg}}
         button(ng-click="n.createNote(n.newNote)").btn-action Save
         p(ng-click="n.cancelNewNote(n.newNote)").cancel.accent X Cancel

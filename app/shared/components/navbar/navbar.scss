@@ -293,7 +293,7 @@ div.nav-link-wrapper {
     display: inline;
     font-size: 10px; // TODO change hard coded size
     text-transform: uppercase;
-    margin: 0 10px 0 14px;
+    margin: 0 0 0 28px;
   }
 
   a {
@@ -337,4 +337,14 @@ div.nav-link-wrapper {
   a:hover {
     color: $blue;
   }
+}
+
+.version {
+  top: 48px;
+  position: absolute;
+  font-size: 10px;
+  width: 120px;
+  right: 7px;
+  text-align: right;
+  color: $gray-12;
 }

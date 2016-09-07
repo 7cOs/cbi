@@ -30,6 +30,10 @@
 
       a {
         color: $blue;
+
+        &:hover {
+          color: $dark-blue-5;
+        }
       }
 
       a.disabled {
@@ -57,6 +61,13 @@
 
     &:hover {
       cursor: pointer;
+
+      a {
+
+        span {
+          color: $dark-blue-5;
+        }
+      }
     }
   }
 
@@ -110,7 +121,7 @@
 
   md-radio-button,
   md-checkbox {
-    font-size: 12px;
+    font-size: 0.9em;
 
     &:focus {
       outline: none;
@@ -128,12 +139,6 @@
   md-checkbox {
     width: 100%;
     margin-bottom: 2px;
-
-    ._md-container,
-    ._md-icon {
-      width: 15px;
-      height: 15px;
-    }
   }
 
   md-checkbox.md-checked ._md-icon:after {
@@ -152,7 +157,22 @@
     margin-bottom: 0.7em;
   }
 
+  .retailer, .chain-store {
+    > div:first-child {
+      padding-left: 0.9em;
+    }
+
+    > div {
+      padding: 0;
+    }
+  }
+
   .retailer {
     margin-bottom: 0;
   }
+
+  .chain-store {
+
+  }
+
 }

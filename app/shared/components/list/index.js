@@ -1,6 +1,6 @@
 'use strict';
 
-function ListController($scope, $state, $q, $mdDialog, opportunitiesService, targetListService, storesService, userService, closedOpportunitiesService) {
+function ListController($scope, $state, $q, $location, $anchorScroll, $mdDialog, opportunitiesService, targetListService, storesService, userService, closedOpportunitiesService) {
 
   // ****************
   // CONTROLLER SETUP
@@ -27,12 +27,14 @@ function ListController($scope, $state, $q, $mdDialog, opportunitiesService, tar
   vm.sortProperty = 'store.name';
   vm.storeChevron = true;
   vm.showSubMenu = false;
+  vm.disabledMessage = '';
 
   // Expose public methods
   vm.addToSharedCollaborators = addToSharedCollaborators;
   vm.addToTargetList = addToTargetList;
   vm.closeModal = closeModal;
   vm.displayBrandIcon = displayBrandIcon;
+  vm.displayPagination = displayPagination;
   vm.exists = exists;
   vm.isChecked = isChecked;
   vm.openShareModal = openShareModal;
@@ -40,12 +42,18 @@ function ListController($scope, $state, $q, $mdDialog, opportunitiesService, tar
   vm.removeOpportunity = removeOpportunity;
   vm.shareOpportunity = shareOpportunity;
   vm.sortBy = sortBy;
-  vm.toggle = toggle;
-  vm.toggleAll = toggleAll;
+  vm.selectOpportunity = selectOpportunity;
+  vm.selectAllParents = selectAllParents;
   vm.showCorporateMemoModal = showCorporateMemoModal;
   vm.showFlyout = showFlyout;
   vm.submitFeedback = submitFeedback;
   vm.cancelFeedback = cancelFeedback;
+  vm.pageChanged = pageChanged;
+  vm.allOpportunitiesExpanded = allOpportunitiesExpanded;
+  vm.noOpportunitiesExpanded = noOpportunitiesExpanded;
+  vm.showDisabled = showDisabled;
+  vm.selectAllOpportunities = selectAllOpportunities;
+  vm.flattenOpportunity = flattenOpportunity;
 
   vm.expandCallback = expandCallback;
   vm.collapseCallback = collapseCallback;
@@ -86,9 +94,7 @@ function ListController($scope, $state, $q, $mdDialog, opportunitiesService, tar
 
     // add opportunity ids into array to be posted
     for (var i = 0; i < vm.selected.length; i++) {
-      for (var j = 0; j < vm.selected[i].groupedOpportunities.length; j++) {
-        opportunityIds.push(vm.selected[i].groupedOpportunities[j].id);
-      }
+      opportunityIds.push(vm.selected[i].id);
     }
 
     targetListService.addTargetListOpportunities(listId, opportunityIds).then(function(data) {
@@ -105,6 +111,12 @@ function ListController($scope, $state, $q, $mdDialog, opportunitiesService, tar
 
   function displayBrandIcon(haystack, needle) {
     return haystack.indexOf(needle) !== -1;
+  }
+
+  function displayPagination() {
+    if (opportunitiesService.model.opportunitiesDisplay.length > 1) return true;
+
+    return false;
   }
 
   // Check if list item exists and is selected
@@ -199,22 +211,49 @@ function ListController($scope, $state, $q, $mdDialog, opportunitiesService, tar
   }
 
   // Select or deselect individual list item
-  function toggle(item, list) {
-    var idx = list.indexOf(item);
+  function selectOpportunity(event, parent, item, list) {
+    var idx = list.indexOf(item),
+        groupedCount = 0;
+
     if (idx > -1) {
-      list.splice(idx, 1);
+      removeItem(item, list, idx);
     } else {
-      list.push(item);
+      addItem(item, list);
     }
+    event.stopPropagation();
+
+    // Get selected opportunity count
+    for (var key in parent.groupedOpportunities) {
+      var obj = parent.groupedOpportunities[key];
+      if (obj.selected === true) { groupedCount++; }
+    }
+    parent.selectedOpportunities = groupedCount;
   }
 
-  // Select or deselect all list items
-  function toggleAll() {
-    if (vm.selected.length === opportunitiesService.model.opportunities.length) {
-      vm.selected = [];
-    } else if (vm.selected.length === 0 || vm.selected.length > 0) {
-      vm.selected = opportunitiesService.model.opportunities.slice(0);
+  // Parent-level select to select all children opportunities
+  function selectAllOpportunities(parent, list) {
+
+    if (parent.selectedOpportunities === parent.groupedOpportunities.length) {
+      var allOpportunitiesSelected = true;
     }
+
+    for (var key in parent.groupedOpportunities) {
+      var obj = parent.groupedOpportunities[key],
+          idx = list.indexOf(obj);
+      if (allOpportunitiesSelected) {
+        removeItem(obj, list, idx);
+      } else if (!obj.selected) {
+        addItem(obj, list);
+      }
+    }
+    parent.selectedOpportunities = allOpportunitiesSelected ? 0 : parent.groupedOpportunities.length;
+  }
+
+  // Select or deselect all opportunity parents
+  function selectAllParents() {
+    angular.forEach(opportunitiesService.model.opportunities, function(value, key) {
+      selectAllOpportunities(value, vm.selected);
+    });
   }
 
   function expandCallback(item) {
@@ -225,9 +264,67 @@ function ListController($scope, $state, $q, $mdDialog, opportunitiesService, tar
     vm.expandedOpportunities--;
   }
 
-  // **************
+  function pageChanged() {
+    // $location.hash('opportunities');
+
+    // $anchorScroll();
+  }
+
+  function allOpportunitiesExpanded() {
+    return vm.expandedOpportunities === opportunitiesService.model.opportunities.length;
+  }
+
+  function noOpportunitiesExpanded() {
+    return vm.expandedOpportunities === 0;
+  }
+
+  function showDisabled(message) {
+    vm.disabledMessage = message;
+  }
+
+  function flattenOpportunity(obj) {
+    var data = [];
+    angular.forEach(obj, function(value, key) {
+      var item = {};
+      angular.copy(value, item);
+      item.productName = item.product.name;
+      item.TDLinx = item.store.id;
+      item.storeName = item.store.name;
+      item.storeAddress = item.store.address;
+      delete item.brands;
+      delete item.store;
+      delete item.groupedOpportunities;
+      delete item.product;
+      data.push(item);
+    });
+    return data;
+  }
+
+  // ***************
   // PRIVATE METHODS
-  // **************
+  // ***************
+
+  $scope.$on('$mdMenuClose', function() {
+    vm.showSubMenu = false;
+  });
+
+  $scope.$watch('list.expandedOpportunities', function() {
+    vm.disabledMessage = '';
+  });
+
+  $scope.$watch('list.opportunitiesService.model.opportunities', function() {
+    vm.disabledMessage = '';
+  });
+
+  function removeItem(item, list, idx) {
+    item.selected = false;
+    list.splice(idx, 1);
+  }
+
+  function addItem(item, list) {
+    item.selected = true;
+    list.push(item);
+  }
 
   function dismissOpportunity(oId) {
     console.log(oId);
@@ -241,6 +338,8 @@ function ListController($scope, $state, $q, $mdDialog, opportunitiesService, tar
     userService.getTargetLists(userService.model.currentUser.personID, {'type': 'targetLists'}).then(function(data) {
       userService.model.targetLists = data;
     });
+
+    opportunitiesService.model.opportunitiesDisplay = [];
   }
 }
 

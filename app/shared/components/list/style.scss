@@ -28,6 +28,24 @@ list {
     &:first-child {
       border-top: none;
     }
+
+    &.is-expanded .dismiss-product .more-wrapper {
+      padding: 0;
+      background: $white;
+
+      .md-icon-button {
+        margin: 0 0 0 -2em;
+      }
+    }
+
+    &:hover .dismiss-product .more-wrapper {
+      padding: 0;
+      background: inherit;
+    }
+
+    .depletion-date {
+      font-size: 0.7em;
+    }
   }
 
   .checkbox-sibling {
@@ -85,6 +103,32 @@ list {
   md-checkbox {
     margin-bottom: 0;
   }
+
+  ._md-icon {
+    height: 20px;
+    width: 20px;
+  }
+
+  ._md-container:hover ._md-icon:after {
+    display: block;
+    border-color: $gray-4;
+    border-width: 1px;
+    left: 6px;
+    top: 4px;
+    width: 5px;
+    height: 10px;
+  }
+
+  md-checkbox.md-checked ._md-container ._md-icon:after,
+  md-checkbox.md-checked ._md-container:hover ._md-icon:after {
+    display: block;
+    border-color: $gray-4;
+    border-width: 1px;
+    left: 7px;
+    top: 5px;
+    width: 5px;
+    height: 10px;
+  }
 }
 
 .total-opportunities {
@@ -112,17 +156,28 @@ list {
     border-radius: 3px;
   }
 
-  md-icon {
-    min-width: 18px;
-    min-height: 18px;
-    height: 18px;
-    width: 18px;
+  .md-icon-button {
+    border-radius: 0;
+  }
+
+  &.dismiss-product {
+    padding: 0;
+  }
+
+
+  .more-icon  {
     border: 1px solid $gray-4;
-    padding-top: 5px;
-    padding-bottom: 5px;
-    padding-left: 4px;
-    padding-right: 4px;
-    background: $white;
+    background: url('../assets/img/icons/action-menu.svg') $white;
+    background-position: center;
+    background-size: 17px 17px;
+    background-repeat: no-repeat;
+    height: 28px;
+    width: 28px;
+    padding: 5px;
+
+    &:hover {
+      background-image: url('../assets/img/icons/action-menu_roll.svg');
+    }
   }
 }
 
@@ -164,6 +219,10 @@ list {
 
     &:focus {
       outline: none;
+    }
+
+    &:hover {
+      color: $dark-blue-5;
     }
   }
 
@@ -419,4 +478,19 @@ list {
 
 .target-list-menu {
   width: 180px;
+}
+
+.list-disabled-message {
+  background: url('../assets/img/icons/error.svg') 0 0 no-repeat;
+  background-size: 15px;
+  color: $red;
+  float: right;
+  font-size: 0.7em;
+  font-family: $rajdhani;
+  font-weight: $semibold;
+  line-height: 1.5;
+  margin-right: 2em;
+  margin-top: 1.3em;
+  padding-left: 2em;
+  text-transform: uppercase;
 }

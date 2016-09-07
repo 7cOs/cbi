@@ -4,7 +4,10 @@ module.exports = /*  @ngInject */
   function userService($http, $q, apiHelperService, filtersService, targetListService) {
 
     var model = {
-          currentUser: {}
+          currentUser: {},
+          summary: [],
+          depletion: [],
+          distribution: []
         },
         service = {
           model: model,
@@ -293,22 +296,19 @@ module.exports = /*  @ngInject */
     /**
      * @name getPerformanceSummary
      * @desc get performance summary for a user
-     * @params {String} id - id of a user
      * @returns {Object} - performance summary
      * @memberOf cf.common.services
      */
-    function getPerformanceSummary(id) {
+    function getPerformanceSummary() {
       var performancePromise = $q.defer(),
-          url = apiHelperService.request('/api/users/' + id + '/performance/summary/');
+          url = apiHelperService.request('/api/users/' + service.model.currentUser.personID + '/performance/summary/');
 
-      $http.get(url, {
-        headers: {}
-      })
-      .then(getPerformanceSummarySuccess)
-      .catch(getPerformanceSummaryFail);
+      $http.get(url)
+        .then(getPerformanceSummarySuccess)
+        .catch(getPerformanceSummaryFail);
 
       function getPerformanceSummarySuccess(response) {
-        console.log('[userService.getPerformanceSummary] response: ', response);
+        console.log('[userService.getPerformanceSummary] response: ', response.data);
         performancePromise.resolve(response.data);
       }
 
@@ -322,23 +322,24 @@ module.exports = /*  @ngInject */
     /**
      * @name getPerformanceDepletion
      * @desc get performance depletion for a user
-     * @params {String} id - id of a user
      * @returns {Object} - user performance depletion
      * @memberOf cf.common.services
      */
-    function getPerformanceDepletion(id) {
+    function getPerformanceDepletion() {
       var performancePromise = $q.defer(),
-          url = apiHelperService.request('/api/users/' + id + '/performance/depletionScorecard/');
+          url = apiHelperService.request('/api/users/' + service.model.currentUser.personID + '/performance/depletionScorecard/');
 
-      $http.get(url, {
-        headers: {}
-      })
-      .then(getPerformanceDepletionSuccess)
-      .catch(getPerformanceDepletionFail);
+      if (service.model.depletion.length < 1) {
+        $http.get(url)
+          .then(getPerformanceDepletionSuccess)
+          .catch(getPerformanceDepletionFail);
+      } else {
+        performancePromise.resolve(service.model.depletion);
+      }
 
       function getPerformanceDepletionSuccess(response) {
-        console.log('[userService.getPerformanceDepletion] response: ', response);
-        performancePromise.resolve(response.data);
+        console.log('[userService.getPerformanceDepletion] response: ', response.data);
+        performancePromise.resolve(response.data.performance);
       }
 
       function getPerformanceDepletionFail(error) {
@@ -351,23 +352,24 @@ module.exports = /*  @ngInject */
     /**
      * @name getPerformanceDistribution
      * @desc get performance distribution for a user
-     * @params {String} id - id of a user
      * @returns {Object} - user performance distribution
      * @memberOf cf.common.services
      */
     function getPerformanceDistribution(id) {
       var performancePromise = $q.defer(),
-          url = apiHelperService.request('/api/users/' + id + '/performance/distributionScorecard/');
+          url = apiHelperService.request('/api/users/' + service.model.currentUser.personID + '/performance/distributionScorecard/');
 
-      $http.get(url, {
-        headers: {}
-      })
-      .then(getPerformanceDistributionSuccess)
-      .catch(getPerformanceDistributionFail);
+      if (service.model.distribution.length < 1) {
+        $http.get(url)
+          .then(getPerformanceDistributionSuccess)
+          .catch(getPerformanceDistributionFail);
+      } else {
+        performancePromise.resolve(service.model.distribution);
+      }
 
       function getPerformanceDistributionSuccess(response) {
-        console.log('[userService.getPerformanceDistribution] response: ', response);
-        performancePromise.resolve(response.data);
+        console.log('[userService.getPerformanceDistribution] response: ', response.data);
+        performancePromise.resolve(response.data.performance);
       }
 
       function getPerformanceDistributionFail(error) {
@@ -498,6 +500,7 @@ module.exports = /*  @ngInject */
           url = apiHelperService.request('/api/users/' + model.currentUser.personID + '/targetLists/'),
           payload = {
             name: p.name,
+            description: p.description,
             opportunityIds: [] // opportunity id's to be included
           };
 

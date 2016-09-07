@@ -4,16 +4,17 @@ module.exports =
   function inlineSearch() {
     var directive = {
       restrict: 'EA',
-      scope: {
+      bindToController: {
         type: '@',
         placeholder: '@',
-        chosenResult: '=',
+        input: '=chosenResult',
+        callback: '&',
         nav: '@'
       },
       controller: InlineSearchController,
       controllerAs: 'is',
       templateUrl: 'app/shared/directives/inline-search/inline-search.html',
-      bindToController: true,
+      scope: {},
       link: function(scope, elem, attrs) {}
     };
 
@@ -85,11 +86,12 @@ module.exports =
         if (vm.type === 'user') vm.input = $filter('titlecase')(result.firstName) + ' ' + $filter('titlecase')(result.lastName);
         else vm.input = result;
 
-        vm.chosenResult = result;
         if (nav) {
           // We'll need to pass result for filtering once Accounts is integrated
           $location.url('/accounts');
         }
+        vm.callback({result: result});
+        vm.chosenResult = result;
         close();
       }
 

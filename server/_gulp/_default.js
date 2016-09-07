@@ -23,6 +23,7 @@
   });
 
   gulp.task('compile:release', function(cb) {
+    console.log('release compilation');
     return runSequence(['compile:pug', 'compile:js:production', 'compile:fonts', 'compile:sass', 'compile:img'], cb);
   });
 

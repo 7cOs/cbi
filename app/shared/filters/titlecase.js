@@ -10,7 +10,7 @@ module.exports = /*  @ngInject */
      * @memberOf cf.common.filters
      */
     return function(str) {
-      if (str === '') return '';
+      if (!str || str === '') return '';
 
       var newStr = '',
           strArr = str.split(' ');

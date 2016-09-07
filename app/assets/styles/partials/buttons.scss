@@ -32,6 +32,10 @@ button {
     }
   }
 
+  &:hover {
+    color: $dark-blue-6;
+  }
+
   &.expand-all,
   &.collapse-all {
 
@@ -49,10 +53,24 @@ button {
     }
   }
 
+  &.expand-all:hover {
+
+    &:before {
+      background-image: url('../assets/img/icons/btn-expand-all_roll.svg');
+    }
+  }
+
   &.collapse-all {
 
     &:before {
       background-image: url('../assets/img/icons/btn-collapse.svg');
+    }
+  }
+
+  &.collapse-all:hover {
+
+    &:before {
+      background-image: url('../assets/img/icons/btn-collapse-all_roll.svg');
     }
   }
 
@@ -63,7 +81,15 @@ button {
     }
   }
 
-  &[disabled] {
+  &.select-all:hover {
+
+    &:before {
+      background-image: url('../assets/img/icons/btn-select-all_roll.svg');
+    }
+  }
+
+  &[disabled],
+  &.disabled {
     color: $gray-2;
 
     &.expand-all {
@@ -78,6 +104,17 @@ button {
       &:before {
         background-image: url('../assets/img/icons/btn-collapse-disabled.svg');
       }
+    }
+
+    &.select-all {
+
+      &:before {
+        background-image: url('../assets/img/icons/btn-select-all-disabled.svg');
+      }
+    }
+
+    &:hover {
+      cursor: default;
     }
   }
 }
@@ -96,10 +133,19 @@ button {
   text-transform: none;
   width: 180px;
 
-  &[disabled] {
+  &[disabled],
+  &.disabled,
+  &[disabled]:hover,
+  &.disabled:hover {
     color: $gray-8;
     background-color: $gray-10;
     border-bottom: 4px solid $gray-11;
+  }
+
+  &:hover {
+    background-color: $dark-blue-4;
+    border-bottom: 4px solid $dark-blue-5;
+    color: $white;
   }
 }
 

@@ -1,7 +1,28 @@
 'use strict';
 
 module.exports = /*  @ngInject */
-  function chipsService(filtersService, opportunitiesService) {
+  function chipsService(filtersService, opportunitiesService, targetListService) {
+
+    var chipsTemplate = [
+      {
+        'name': 'My Accounts Only',
+        'type': 'myAccountsOnly',
+        'applied': false,
+        'removable': false
+      },
+      {
+        'name': 'Off-Premise',
+        'type': 'premiseType',
+        'applied': false,
+        'removable': false
+      },
+      {
+        'name': 'Authorized',
+        'type': 'productTypeAuthorized',
+        'applied': false,
+        'removable': false
+      }
+    ];
 
     var model = [];
 
@@ -30,10 +51,13 @@ module.exports = /*  @ngInject */
         // Add to Chip Model
         service.model.push({
           name: chip,
+          type: filter,
+          search: true,
           applied: false
         });
 
         filtersService.model.filtersApplied = false;
+        filtersService.model.filtersDefault = false;
 
         // Empty Input
         if (filter) filtersService.model[filter] = '';
@@ -60,21 +84,29 @@ module.exports = /*  @ngInject */
         });
 
         filtersService.model.filtersApplied = false;
+        filtersService.model.filtersDefault = false;
       }
     }
 
-    function applyFilters() {
-      opportunitiesService.getOpportunities().then(function(data) {
-        opportunitiesService.model.opportunities = data;
+    function applyFilters(isTargetList) {
+      if (!isTargetList) {
+        opportunitiesService.getOpportunities().then(function(data) {
+          finishGet(data);
+        });
+      } else if (isTargetList) {
+        targetListService.getTargetListOpportunities(targetListService.model.currentList.id, {type: 'opportunities'}).then(function(data) {
+          finishGet(data);
+        });
+      }
 
+      function finishGet(data) {
         for (var i = 0; i < service.model.length; i++) {
           service.model[i].applied = true;
         }
 
         filtersService.model.filtersApplied = true;
         opportunitiesService.model.filterApplied = true;
-
-      });
+      }
     }
 
     /**
@@ -94,6 +126,7 @@ module.exports = /*  @ngInject */
       }
 
       filtersService.model.filtersApplied = false;
+      filtersService.model.filtersDefault = false;
     }
 
     /**
@@ -105,8 +138,18 @@ module.exports = /*  @ngInject */
      * @memberOf cf.common.services
      */
     function removeFromFilterService(chip) {
-      if (chip.type) filtersService.model.selected[chip.type] = false;
-
+      if (chip.search) {
+        var arr = filtersService.model.selected[chip.type];
+        for (var i = 0; i < arr.length; i++) {
+          if (arr[i] === chip.name) {
+            arr.splice(i, 1);
+          }
+        }
+      } else if (typeof chip.type === 'string') {
+        filtersService.model.selected[chip.type] = '';
+      } else if (typeof chip.type === 'boolean') {
+        filtersService.model.selected[chip.type] = false;
+      }
       filtersService.model.filtersApplied = false;
     }
 
@@ -123,10 +166,8 @@ module.exports = /*  @ngInject */
     }
 
     function resetChipsFilters(chips) {
-      for (var i = 0; i < chips.length; i++) {
-        removeFromFilterService(chips[i]);
-      }
-      return [];
+      filtersService.resetFilters();
+      angular.copy(chipsTemplate, model);
     }
 
   };

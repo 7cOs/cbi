@@ -11,6 +11,8 @@ module.exports = /*  @ngInject */
     var vm = this;
     vm.currentFilter = {};
     vm.hintTextPlaceholder = 'Name, Address, TDLinkx, or Store#';
+    vm.isHoveringSave = false;
+    vm.isHoveringReset = false;
 
     // Set page title for head and nav
     $rootScope.pageTitle = $state.current.title;
@@ -23,6 +25,7 @@ module.exports = /*  @ngInject */
 
     // Expose public methods
     vm.applyFilter = applyFilter;
+    vm.applyFilterArr = applyFilterArr;
     vm.closeEditModal = closeEditModal;
     vm.closeModal = closeModal;
     vm.deleteSavedFilter = deleteSavedFilter;
@@ -30,6 +33,8 @@ module.exports = /*  @ngInject */
     vm.modalSaveOpportunityFilter = modalSaveOpportunityFilter;
     vm.saveFilter = saveFilter;
     vm.placeholderSelect = placeholderSelect;
+    vm.hoverState = hoverState;
+    vm.resetFilters = resetFilters;
 
     init();
 
@@ -37,12 +42,30 @@ module.exports = /*  @ngInject */
     // PUBLIC METHODS
     // **************
 
+    function hoverState(icon) {
+      if (icon === 'reset') {
+        vm.isHoveringReset = !vm.isHoveringReset;
+      } else {
+        vm.isHoveringSave = !vm.isHoveringSave;
+      }
+    }
+
     function placeholderSelect(data) {
       vm.hintTextPlaceholder = data;
     }
 
     function applyFilter(filterStr) {
       console.log('add filter');
+    }
+
+    function applyFilterArr(model, result, filter) {
+      if (model.indexOf(result) > -1) {
+        vm.filtersService.model[filter] = '';
+      } else {
+        vm.chipsService.addAutocompleteChip(result, filter);
+        vm.filtersService.model[filter] = '';
+        model.push(result);
+      }
     }
 
     function closeModal() {
@@ -102,21 +125,29 @@ module.exports = /*  @ngInject */
       });
     }
 
+    function resetFilters() {
+      // reset all chips and filters
+      chipsService.resetChipsFilters(chipsService.model);
+      filtersService.resetFilters();
+    }
+
     // ***************
     // PRIVATE METHODS
     // ***************
 
-    // Add chip for inline search value watchers
-    function addInlineSearchChip(val) {
-      if (typeof val === 'string' && val !== '') {
-        vm.chipsService.addAutocompleteChip(val, 'searchText');
+    /* Not longer necesary?
+      // Add chip for inline search vaaddAutocompleteChiplue watchers
+      function addInlineSearchChip(val) {
+        if (typeof val === 'string' && val !== '') {
+          vm.chipsService.addAutocompleteChip(val, 'searchText');
+        }
       }
-    }
 
-    // Watch for inline search value changes
-    $scope.$watch('o.filtersService.model.brand', function (val) { addInlineSearchChip(val); });
-    $scope.$watch('o.filtersService.model.store', function (val) { addInlineSearchChip(val); });
-    $scope.$watch('o.filtersService.model.chain', function (val) { addInlineSearchChip(val); });
+      // Watch for inline search value changes
+      $scope.$watch('o.filtersService.model.selected.brand', function (val) { addInlineSearchChip(val); });
+      $scope.$watch('o.filtersService.model.store', function (val) { addInlineSearchChip(val); });
+      $scope.$watch('o.filtersService.model.chain', function (val) { addInlineSearchChip(val); });
+    */
 
     function init() {
       // get saved filters -- this should be passed from user data when its ready
@@ -125,7 +156,10 @@ module.exports = /*  @ngInject */
       });
 
       // reset all chips and filters on page init
-      chipsService.model = chipsService.resetChipsFilters(chipsService.model);
+      chipsService.resetChipsFilters(chipsService.model);
+
+      // Set this to have a list load with the page
+      // chipsService.applyFilters();
 
       // go to a specific opportunity on load and then set to null if specified
       if (opportunitiesService.model.opportunityId !== null) {
@@ -134,7 +168,6 @@ module.exports = /*  @ngInject */
           opportunitiesService.model.opportunityId = null;
         });
       }
-
     } // end init
 
   }; // end controller

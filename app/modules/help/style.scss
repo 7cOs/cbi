@@ -33,6 +33,14 @@
 
       tbody {
 
+        tr td:first-child {
+          width: 1.5em;
+        }
+
+        tr td:nth-child(2) {
+          width: 15em;
+        }
+
         td {
           padding: 30px 8px;
         }
@@ -88,7 +96,7 @@
       }
 
       td {
-        text-align: center;
+        text-align: left;
         padding: 0 8px;
 
         a .link-icon {

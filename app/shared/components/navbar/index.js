@@ -1,6 +1,6 @@
 'use strict';
 
-function NavbarController($rootScope, $scope, $state, $mdPanel, $mdDialog, $mdMenu, $mdSelect, notificationsService, opportunitiesService, targetListService, userService) {
+function NavbarController($rootScope, $scope, $state, $window, $mdPanel, $mdDialog, $mdMenu, $mdSelect, notificationsService, opportunitiesService, targetListService, userService, versionService) {
 
   // ****************
   // CONTROLLER SETUP
@@ -14,11 +14,16 @@ function NavbarController($rootScope, $scope, $state, $mdPanel, $mdDialog, $mdMe
   $rootScope.isIE = (/Trident\/7\./g).test(userAgent);
   $rootScope.isEdge = (/(?:\bEdge\/)(\d+)/g).test(userAgent);
 
+  // Currently logged in user (for analytics)
+  $window.currentUserId = userService.model.currentUser.personID;
+  $window.analyticsId = $rootScope.analytics.id;
+
   // Services
   vm.notificationsService = notificationsService;
   vm.notifications = [];
   vm.unreadNotifications = 0;
   vm.userService = userService;
+  vm.versionService = versionService;
 
   // Defaults
   vm.noNotifications = 'No unread notifications.';
@@ -53,7 +58,13 @@ function NavbarController($rootScope, $scope, $state, $mdPanel, $mdDialog, $mdMe
   vm.closeMenus = closeMenus;
   vm.addOpportunity = addOpportunity;
   vm.addAnotherOpportunity = addAnotherOpportunity;
-  vm.newOpportunity = {};
+  vm.newOpportunity = {
+    properties: {
+      product: {
+        type: 'sku'
+      }
+    }
+  };
   vm.newOpportunityArray = [];
   vm.showNewRationaleInput = showNewRationaleInput;
   vm.addNewRationale = false;
@@ -202,7 +213,10 @@ function NavbarController($rootScope, $scope, $state, $mdPanel, $mdDialog, $mdMe
     .then(function(result) {
       vm.targetLists = result.owned;
     });
-  }
+    versionService.getVersion().then(function(data) {
+      versionService.model.version = data;
+    });
+  };
 
   // Get unread notification count and set initial badge value
   function setUnreadCount(arr) {

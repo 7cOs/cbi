@@ -23,10 +23,12 @@ function ExpandedTargetListController($state, $scope, $filter, $mdDialog, $q, us
   vm.newList = {
     name: '',
     description: '',
-    opportunities: []
+    opportunities: [],
+    collaborators: []
   };
   vm.totalOpportunitesChevron = true;
   vm.selected = [];
+  vm.buttonDiabled = false;
 
   // Expose public methods
   vm.archiveTargetList = archiveTargetList;
@@ -35,7 +37,6 @@ function ExpandedTargetListController($state, $scope, $filter, $mdDialog, $q, us
   vm.closeModal = closeModal;
   vm.deleteTargetList = deleteTargetList;
   vm.exists = exists;
-  vm.openTLDetails = openTLDetails;
   vm.ratio = ratio;
   vm.saveNewList = saveNewList;
   vm.searchOpportunities = searchOpportunities;
@@ -44,12 +45,18 @@ function ExpandedTargetListController($state, $scope, $filter, $mdDialog, $q, us
   vm.toggle = toggle;
   vm.isChecked = isChecked;
   vm.toggleAll = toggleAll;
+  vm.addCollaborator = addCollaborator;
 
   init();
 
   // **************
   // PUBLIC METHODS
   // **************
+
+  function addCollaborator(e) {
+    vm.newList.collaborators.push(e);
+    console.log(vm.newList.collaborators);
+  }
 
   function archiveTargetList() {
     var selectedTargetLists = $filter('filter')(userService.model.targetLists.owned, {selected: true}),
@@ -122,19 +129,22 @@ function ExpandedTargetListController($state, $scope, $filter, $mdDialog, $q, us
     return list.indexOf(item) > -1;
   }
 
-  function openTLDetails(listId) {
-    targetListService.model.currentList.id = listId;
-    $state.go('target-list-detail');
-  }
-
   function ratio(closed, total) {
     var result = closed / total * 100;
     return result;
   }
 
   function saveNewList(e) {
+    vm.buttonDiabled = true;
     userService.addTargetList(vm.newList).then(function(response) {
       closeModal();
+      vm.buttonDiabled = false;
+      vm.newList = {
+        name: '',
+        description: '',
+        opportunities: [],
+        collaborators: []
+      };
       userService.model.targetLists.owned.unshift(response);
       userService.model.targetLists.ownedArchived++;
       userService.model.targetLists.ownedNotArchived--;
@@ -195,7 +205,7 @@ function ExpandedTargetListController($state, $scope, $filter, $mdDialog, $q, us
   // ***************
 
   function init() {
-    // userService.getTargetLists('1601', {'type': 'targetLists'}).then(function(data) {
+    targetListService.model.currentList = {};
     userService.getTargetLists(userService.model.currentUser.personID, {'type': 'targetLists'}).then(function(data) {
       var ownedPromises = [],
           sharedPromises = [];

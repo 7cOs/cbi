@@ -2,7 +2,7 @@ notes
 .account-header
   div(row)
     div(column='6')
-      h1 My Accounts
+      h1 Account Dashboard
     div(column='6')
       .market-overview.expanded(ng-class="{'visible': a.overviewOpen}")
         .overview
@@ -13,25 +13,14 @@ notes
         .market
           p {{a.selectedStore || a.filtersService.model.selected.accountTypes || a.accountTypesDefault}}
         .notes-icon
-          p <a href="#"></a>
+          p <a href="#" ng-click="a.openNotes(true)" analytics-on="click" analytics-event="Notes Tab"></a>
       .market-overview.clearfix
         .brands
           p {{a.brandWidgetTitle}}<span ng-if="a.brandIdSelected"> - {{a.brandIdSelected}}</span>
         .market
           p {{a.selectedStore || a.filtersService.model.selected.accountTypes || a.accountTypesDefault}}
-        .notes-icon(ng-click="a.openNotes(true)")
-          p <a href="#">Notes</a>
-
-.chips(ng-if="a.chipsService.model.length")
-  label Active Filters
-  span
-    a(ng-click="a.chipsService.applyFilters()")
-      img(src="../assets/img/icons/save-filterset.svg")
-      | Save Filterset
-  md-chips(ng-model="a.chipsService.model" name="Active Filters" md-on-remove="a.chipsService.removeFromFilterService($chip)")
-    input(class="hidden" disabled="true")
-    md-chip-template(custom-chip="")
-      div {{$chip.name}}
+        .notes-icon
+          p <a href="#" ng-click="a.openNotes(true)" analytics-on="click" analytics-event="Notes Tab">Notes</a>
 
 .filters.top(column='12')
   div(row)
@@ -78,15 +67,15 @@ notes
               h3 Store Type
               p Chain = Chain retailers directly called on by CBBD National or Key Accounts teams (On and Off-Premise)
               p Independent = Retailers not directly called on by CBBD’s National or Key Accounts teams
-      md-checkbox(ng-model="o.filtersService.model.selected.storeTypeCBBD" aria-label="Store Type Chain" ng-click="o.chipsService.updateChip('storeTypeCBBD', 'Store Type Chain')") Chains
-      md-checkbox(ng-model="o.filtersService.model.selected.storeTypeIndependent" aria-label="Store Type Independent" ng-click="o.chipsService.updateChip('storeTypeIndependent', 'Store Type Independent')") Independent Stores
-    div(column='4').chain-store
+      md-checkbox(ng-model="a.filtersService.model.selected.storeTypeCBBD" aria-label="Store Type Chain" ng-click="a.chipsService.updateChip('storeTypeCBBD', 'Store Type Chain')") Chains
+      md-checkbox(ng-model="a.filtersService.model.selected.storeTypeIndependent" aria-label="Store Type Independent" ng-click="a.chipsService.updateChip('storeTypeIndependent', 'Store Type Independent')") Independent Stores
+    div(column='4')
       label Chain / Store
-      div(row).dropdown-filter
+      div(row).dropdown-filter.chain-store
         div(column='4').dropdown
           md-select(ng-model="a.filtersService.model.selected.storeTypes" md-on-open="a.openSelect(true)" md-on-close="a.openSelect(false)" aria-label="Store Type Filter"  placeholder="Chain")
             md-option(ng-repeat="filter in a.filters.storeTypes" aria-label="{{filter.name}}" value="{{filter.name}}") {{filter.name}}
-        div(column='4')
+        div(column='6')
           md-autocomplete(md-search-text="a.filtersService.model.accountSearchText" md-items="account in a.filtersService.model.accounts" md-item-text="account.name" placeholder="by Chain/Store Name" md-selected-item-change="a.chipsService.addAutocompleteChip(account.name, 'accountSearchText')")
             md-item-template
               div(md-highlight-text="a.filtersService.model.accountSearchText" md-highlight-flags="^i") {{account.name}} - {{account.subAccount}}
@@ -94,7 +83,9 @@ notes
 
   div(row)
     div(column='12' class='apply-filters')
-      button(value='Apply Filters' type="button" class="btn-action" ng-disabled="a.chipsService.model.length <= 0" ng-click="a.chipsService.applyFilters()") Apply Filters
+      button(value='Apply Filters' type="button" class="btn-action" ng-disabled="a.filtersService.model.filtersApplied" ng-click="a.chipsService.applyFilters()") Apply Filters
+      .secondary-button-container.account-filter-reset
+        a(ng-click="a.chipsService.resetChipsFilters(a.chipsService.model)" ng-disabled="!a.filtersService.model.filtersApplied" ng-class="{'disabled reset-icon-disabled': !a.filtersService.model.filtersApplied}").accent.reset-icon Reset
 
 div(row)
   div(column='12')

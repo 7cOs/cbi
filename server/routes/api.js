@@ -1,8 +1,8 @@
 'use strict';
 
 module.exports = function(app) {
-  const util = require('../_lib/util')(app);
-  const request = require('request');
+  const util = require('../_lib/util')(app),
+        request = require('request');
 
   app.route('/api/*')
     .all(function apiAuth(req, res, next) {

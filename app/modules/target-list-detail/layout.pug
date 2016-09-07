@@ -7,7 +7,7 @@
     div(column="10").align-right
       .hero-actions
         button.btn-action(ng-click="tld.modalManageCollaborators()" ng-if="!tld.targetListService.model.currentList.archived") Collaborate
-        button.btn-action Download
+        button.btn-action(analytics-on="click" analytics-event="Target List Export") Download
         button.btn-action(ng-click="tld.modalManageTargetList()" ng-if="!tld.targetListService.model.currentList.archived") Manage
 
   div(row)
@@ -35,7 +35,7 @@
   span
     a(ng-click="tld.chipsService.applyFilters()") Save Filterset
   md-chips(ng-model="tld.chipsService.model" name="Active Filters" md-on-remove="tld.chipsService.removeFromFilterService($chip)")
-    input(disabled="true")
+    input(class="hidden" disabled="true")
     md-chip-template(custom-chip="")
       div {{$chip.name}}
 .filters(column='12' ng-class="{ 'no-filter': !tld.filtersService.model.show}")
@@ -52,10 +52,10 @@
     div(column='3')
       label Premise Type
       md-radio-group(ng-model="tld.filtersService.model.selected.premiseType")
-        md-radio-button(ng-repeat="p in tld.filtersService.model.premises | filter: '!All'" class="md-primary" ng-value="p.name" aria-label="p.name" ng-click="tld.chipsService.addChip(p.name, 'premiseType', true)") {{p.name}}
+        md-radio-button(ng-repeat="p in tld.filtersService.model.premises | filter: '!All'" class="md-primary" ng-value="p.value" aria-label="{{p.name}}" ng-click="tld.chipsService.addChip(p.name, 'premiseType', true)") {{::p.name}}
     div(column='6')
       label Opportunity Status
-      md-radio-group(ng-model="tld.filtersService.model.selected.opportunityStatus" ng-init="tld.filtersService.model.selected.opportunityStatus = 'open'")
+      md-radio-group(ng-model="tld.filtersService.model.selected.opportunityStatus")
         md-radio-button(ng-repeat="opportunity in tld.filtersService.model.opportunityStatus" class="md-primary" ng-value="opportunity.value" aria-label="{{opportunity.name}}" ng-click="tld.chipsService.addChip(opportunity.name, 'opportunityStatus', true)") {{::opportunity.name}}
   div(row ng-if="tld.filtersService.model.show")
     div(row)
@@ -63,26 +63,26 @@
         label Opportunity Type
         .dropdown-filter
           .dropdown
-            md-select(ng-model="tld.filtersService.model.selected.opportunitiesTypes" md-on-close="tld.chipsService.addChip(tld.filtersService.model.selected.opportunitiesTypes, 'opportunitiesTypes', false)" placeholder="All Types")
+            md-select(ng-model="tld.filtersService.model.selected.opportunitiesTypes" md-on-close="tld.chipsService.addChip(tld.filtersService.model.selected.opportunitiesTypes, 'opportunitiesTypes', false)" placeholder="All Types" ng-init="tld.filtersService.model.selected.opportunitiesTypes = 'All Types'")
               md-option(ng-repeat="type in tld.filtersService.model.opportunitiesTypes" aria-label="{{type.name}}" value="{{type.name}}") {{::type.name}}
       div(column='3')
         label Brand / Master SKU
-        inline-search(type="product" placeholder="Brand or SKU/Package" chosen-result="tld.filtersService.model.brandSearchText")
+        inline-search(type="product" placeholder="Brand or SKU/Package" chosen-result="tld.filtersService.model.selected.brandSearchText" callback="tld.chipsService.addChip(result, 'brandSearchText', false)")
       div(column='3')
         label Retailer
         div(row).retailer.dropdown-filter
           div(column='5').dropdown
-            md-select(ng-model="tld.filtersService.model.selected.retailer" md-on-close="tld.chipsService.addChip(tld.filtersService.model.selected.retailer, 'retailer', false)" placeholder="Store" ng-init="tld.filtersService.model.selected.retailer = 'Store'")
+            md-select(ng-model="tld.filtersService.model.selected.retailer" md-on-close="tld.chipsService.addChip(tld.filtersService.model.selected.retailer, 'retailer', false)" placeholder="Chain" ng-init="tld.filtersService.model.selected.retailer = 'Chain'")
               md-option(ng-repeat="type in tld.filtersService.model.retailer" ng-click="tld.placeholderSelect(type.hintText)" aria-label="{{type.name}}" value="{{type.name}}") {{::type.name}}
           div(column='7')
-            inline-search(type="store" placeholder="{{tld.hintTextPlaceholder}}" chosen-result="tld.filtersService.model.selected.store")
+            inline-search(type="store" placeholder="{{tld.hintTextPlaceholder}}" chosen-result="tld.filtersService.model.selected.store" callback="o.chipsService.addChip(result, 'store', false)")
       div(column='3')
         label Distributor
-        inline-search(type="distributor" placeholder="Name" chosen-result="tld.filtersService.model.distributorSearchText")
+        inline-search(type="distributor" placeholder="Name" chosen-result="tld.filtersService.model.selected.distributorSearchText" callback="tld.chipsService.addChip(result, 'distributorSearchText', false)")
     div(row)
       div(column='3').predicted-impact
         label Predicted Impact
-        md-checkbox(ng-model="tld.filtersService.model.selected.predictedImpactHigh" aria-label="Predicted Impact High" ng-click="tld.chipsService.updateChip('predictedImpactHigh', 'Predicted Impact High')")
+        md-checkbox(ng-model="tld.filtersService.model.selected.predictedImpactHigh" aria-label="Predicted Impact High" ng-click="tld.chipsService.updateChip('predictedImpactHigh', 'High Impact')")
           | High
           span.impact.high-small
         md-checkbox(ng-model="tld.filtersService.model.selected.predictedImpactMedium" aria-label="Predicted Impact Medium" ng-click="tld.chipsService.updateChip('predictedImpactMedium', 'Predicted Impact Medium')")
@@ -123,9 +123,9 @@
         label.cbbd-contact CBBD Contact
           input(type="text" placeholder="Name" ng-model="tld.filtersService.model.selected.cbbdContact")
     div(column='12' class='apply-filters' ng-if="tld.filtersService.model.show")
-      button(value='Apply Filters' type="button" class="btn-action" ng-click="tld.chipsService.applyFilters()" ng-disabled="tld.filtersService.model.filtersApplied") Apply Filters
+      button(value='Apply Filters' type="button" class="btn-action" ng-click="tld.chipsService.applyFilters(true)" ng-disabled="tld.filtersService.model.filtersApplied") Apply Filters
       .secondary-button-container
-        a(ng-click="tld.filtersService.saveReport()" ng-disabled="tld.filtersService.model.filtersApplied" ng-class="{'disabled save-filterset-icon-disabled': tld.filtersService.model.filtersApplied}").accent.save-filterset-icon Save Report
-        a(ng-click="tld.filtersService.resetFilters()" ng-disabled="tld.filtersService.model.filtersApplied" ng-class="{'disabled reset-icon-disabled': tld.filtersService.model.filtersApplied}").accent.reset-icon Reset
+        a(ng-click="tld.filtersService.model.filtersApplied || tld.saveReport()" ng-disabled="tld.filtersService.model.filtersApplied" ng-mouseover="tld.hoverState('save')" ng-mouseleave="tld.hoverState('save')" ng-class="{'disabled save-filterset-icon-disabled': tld.filtersService.model.filtersApplied, 'save-report-hover': tld.isHoveringSave && !tld.filtersService.model.filtersApplied}").accent.save-filterset-icon Save Report
+        a(ng-click="tld.filtersService.model.filtersDefault || tld.resetFilters()" ng-disabled="tld.filtersService.model.filtersDefault" ng-mouseover="tld.hoverState('reset')" ng-mouseleave="tld.hoverState('reset')" ng-class="{'disabled reset-icon-disabled': tld.filtersService.model.filtersDefault, 'reset-icon-hover': tld.isHoveringReset && !tld.filtersService.model.filtersApplied}").accent.reset-icon Reset
 
 list

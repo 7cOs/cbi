@@ -10,18 +10,14 @@ module.exports = /*  @ngInject */
     // Initial variables
     var vm = this;
     vm.collaborator = {};
+    vm.collaboratorName = '';
     vm.permissionLevel = 'collaborate';
     vm.deleting = false;
     vm.archiving = false;
     vm.confirmToast = false;
     vm.changed = false;
-    /* vm.manageTargetList = {
-      name: '',
-      description: '',
-      collaborators: [],
-      allowInvite: null,
-      addRecipient: ''
-    }; */
+
+    // Services
     vm.targetListService = targetListService;
     vm.filtersService = filtersService;
     vm.chipsService = chipsService;
@@ -31,12 +27,14 @@ module.exports = /*  @ngInject */
 
     // Expose public methods
     vm.addCollaborators = addCollaborators;
+    vm.addCollaboratorClick = addCollaboratorClick;
     vm.changeCollaboratorLevel = changeCollaboratorLevel;
     vm.closeModal = closeModal;
     vm.deleteList = deleteList;
     vm.footerToast = footerToast;
     vm.listChanged = listChanged;
     vm.makeOwner = makeOwner;
+    vm.manageCollaborators = manageCollaborators;
     vm.modalManageTargetList = modalManageTargetList;
     vm.modalManageCollaborators = modalManageCollaborators;
     vm.modalSendOpportunity = modalSendOpportunity;
@@ -44,6 +42,7 @@ module.exports = /*  @ngInject */
     vm.removeCollaborator = removeCollaborator;
     vm.removeFooterToast = removeFooterToast;
     vm.updateList = updateList;
+    vm.resetFilters = resetFilters;
 
     init();
 
@@ -62,8 +61,20 @@ module.exports = /*  @ngInject */
       });
     }
 
+    function addCollaboratorClick(result) {
+      vm.collaborator = result;
+    }
+
     function changeCollaboratorLevel() {
       targetListService.updateTargetListShares(targetListService.model.currentList.id, vm.collaborator).then();
+    }
+
+    function resetFilters() {
+      // reset all chips and filters
+      chipsService.resetChipsFilters(chipsService.model);
+
+      // userService.model.opportunityFilters = null;
+      filtersService.resetFilters();
     }
 
     function closeModal() {
@@ -119,6 +130,30 @@ module.exports = /*  @ngInject */
           }
         });
 
+      });
+    }
+
+    // inline adding of collaborator
+    function manageCollaborators(result) {
+      // add loader
+      console.log('Pls add Ratul to the target list.');
+      targetListService.model.currentList.loading = true;
+
+      result.permissionLevel = vm.permissionLevel;
+      targetListService.addTargetListShares(targetListService.model.currentList.id, result).then(function(response) {
+        // push to target list collaborator array
+        var collaboratorList = $filter('filter')(userService.model.targetLists.owned, {id: targetListService.model.currentList.id});
+        collaboratorList[0].collaborators = targetListService.model.currentList.collaborators = response.data;
+
+        // clear name from inline search
+        vm.manageListCollaboratorName = '';
+
+        // remove loader
+        console.log('Ratul has been added to the target list.');
+        targetListService.model.currentList.loading = false;
+      }, function(err) {
+        console.log('Ratul has gone on paternity leave. Sry.', err);
+        targetListService.model.currentList.loading = false;
       });
     }
 
@@ -206,33 +241,38 @@ module.exports = /*  @ngInject */
     // PRIVATE METHODS
     // **************
 
-    // Add chip for inline search value watchers
-    function addInlineSearchChip(val) {
-      if (typeof val === 'string' && val !== '') {
-        chipsService.addAutocompleteChip(val, 'searchText');
+    /*
+      // Add chip for inline search value watchers
+      function addInlineSearchChip(val) {
+        if (typeof val === 'string' && val !== '') {
+          chipsService.addAutocompleteChip(val, 'searchText');
+        }
       }
-    }
 
-    // Watch for inline search value changes
-    $scope.$watch('t.filtersService.model.brands', function (val) { addInlineSearchChip(val); });
-    $scope.$watch('t.filtersService.model.chains', function (val) { addInlineSearchChip(val); });
-    $scope.$watch('t.filtersService.model.stores', function (val) { addInlineSearchChip(val); });
+      // Watch for inline search value changes
+      $scope.$watch('tld.filtersService.model.brands', function (val) { addInlineSearchChip(val); });
+      $scope.$watch('tld.filtersService.model.chains', function (val) { addInlineSearchChip(val); });
+      $scope.$watch('tld.filtersService.model.stores', function (val) { addInlineSearchChip(val); });
+    */
 
     function init() {
+      targetListService.model.currentList.id = $state.params.id;
+
       targetListService.getTargetList(targetListService.model.currentList.id).then(function(response) {
         targetListService.model.currentList = response;
+        targetListService.model.currentList.loading = false;
       }, function(err) {
         console.log('[targetListController.init], Error: ' + err.statusText + '. Code: ' + err.status);
       });
 
       // get opportunities
-      targetListService.getTargetListOpportunities(targetListService.model.currentList.id, {type: 'opportunities'}).then(function(data) {
-        opportunitiesService.model.opportunities = data;
+      targetListService.getTargetListOpportunities(targetListService.model.currentList.id).then(function(data) {
+        // opportunitiesService.model.opportunities = data;
       });
 
       opportunitiesService.model.filterApplied = true;
 
       // reset all chips and filters on page init
-      chipsService.model = chipsService.resetChipsFilters(chipsService.model);
+      chipsService.resetChipsFilters(chipsService.model);
     }
   };

@@ -98,7 +98,9 @@
 .reset-icon,
 .save-filterset-icon,
 .reset-icon-disabled,
-.save-filterset-icon-disabled  {
+.save-filterset-icon-disabled,
+.save-report-hover,
+.reset-icon-hover  {
 
   &:before {
     background-position: 0 0;
@@ -113,8 +115,18 @@
 }
 
 .reset-icon:before {
-  background-image: url('../assets/img/icons/reset-arrow.svg');
-  background-size: 12px;
+  background-image: url('../assets/img/icons/reset.svg');
+  background-size: 11px;
+}
+
+.reset-icon-hover:before {
+  background-image: url('../assets/img/icons/reset_roll.svg');
+  background-size: 11px;
+}
+
+.reset-icon-disabled:before {
+  background-image: url('../assets/img/icons/reset-arrow-disabled.svg');
+  background-size: 11px;
 }
 
 .save-filterset-icon:before {
@@ -123,13 +135,14 @@
   left: -20px;
 }
 
-.reset-icon-disabled:before {
-  background-image: url('../assets/img/icons/reset-arrow-disabled.svg');
-  background-size: 12px;
-}
-
 .save-filterset-icon-disabled:before {
   background-image: url('../assets/img/icons/save-filterset-icon-disabled.svg');
+  background-size: 14px;
+  left: -20px;
+}
+
+.save-report-hover:before {
+  background-image: url('../assets/img/icons/save-filterset_roll.svg');
   background-size: 14px;
   left: -20px;
 }
