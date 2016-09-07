@@ -8,7 +8,7 @@
       font-size: 0.7em;
       font-weight: $regular;
 
-      ._md-chip-remove-container {
+      .md-chip-remove-container {
         left: 0;
       }
 
@@ -16,7 +16,7 @@
         background-color: $gray-12;
       }
 
-      ._md-chip-content {
+      .md-chip-content {
         color: $body-bg;
       }
     }
@@ -37,7 +37,7 @@
     padding-right: 0;
   }
 
-  .md-chips:not(.md-readonly) md-chip:not(.md-readonly) ._md-chip-content {
+  .md-chips:not(.md-readonly) md-chip:not(.md-readonly) .md-chip-content {
     padding-left: 8px;
     padding-right: 8px;
   }

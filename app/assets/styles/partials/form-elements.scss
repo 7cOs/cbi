@@ -5,7 +5,7 @@ input {
   box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.2), 0 1px 1px 0 rgba(0, 0, 0, 0.14), 0 2px 1px -1px rgba(0, 0, 0, 0.12);
   font-size: 0.9em;
   outline: none;
-  padding: 0.75em 1em;
+  padding: 0.76em 1em;
   width: 100%;
   color: $gray-1;
 
@@ -32,11 +32,11 @@ md-radio-button {
   margin-bottom: 8px;
   font-size: 0.75em;
 
-  ._md-container {
+  .md-container {
     top: 80%;
   }
 
-  ._md-label {
+  .md-label {
     margin-left: 20px;
 
     span {
@@ -47,8 +47,8 @@ md-radio-button {
     }
   }
 
-  ._md-on,
-  ._md-off {
+  .md-on,
+  .md-off {
     height: 16px;
     width: 16px;
     background: $gray-9;
@@ -63,7 +63,7 @@ md-radio-button {
   }
 
   &.md-checked {
-    ._md-label span {
+    .md-label span {
       color: $blue;
     }
   }
@@ -71,11 +71,11 @@ md-radio-button {
 
 /* Selected */
 
-md-radio-button:not([disabled]).md-primary.md-checked ._md-off {
+md-radio-button:not([disabled]).md-primary.md-checked .md-off {
   border: 5px solid $blue;
 }
 
-md-radio-button:not([disabled]).md-primary.md-checked ._md-on {
+md-radio-button:not([disabled]).md-primary.md-checked .md-on {
   box-shadow: inset 0 0 0 2px $white;
   background-color: $blue;
   border: none;
@@ -85,19 +85,19 @@ md-radio-button:not([disabled]).md-primary.md-checked ._md-on {
 
 md-checkbox {
 
-  ._md-container,
-  ._md-icon {
+  .md-container,
+  .md-icon {
     width: 16px;
     height: 16px;
   }
 
-  ._md-icon {
+  .md-icon {
     border-radius: 50%;
     border-width: 1px;
   }
 
-  ._md-container:hover {
-    ._md-icon {
+  .md-container:hover {
+    .md-icon {
       background-color: $dark-blue-5;
 
       &:after {
@@ -122,24 +122,24 @@ md-checkbox {
   &.md-checked {
     font-weight: $semibold;
 
-    ._md-container,
-    ._md-container:hover {
-      ._md-icon {
+    .md-container,
+    .md-container:hover {
+      .md-icon {
         background-color: $blue;
 
         &:after {
           display: block;
           border-color: $gray-4;
           border-width: 1px;
-          left: 6px;
-          top: 3px;
+          left: 5px;
+          top: 2px;
           width: 4px;
           height: 9px;
         }
       }
     }
 
-    ._md-icon {
+    .md-icon {
       box-shadow: 0 2px 0 $gray-1;
       background-color: $blue;
 

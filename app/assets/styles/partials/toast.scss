@@ -3,6 +3,7 @@ md-toast {
   position: fixed;
   top: 0;
   width: 100%;
+  z-index: 1000;
 
   .md-toast-content {
     background: $green;
@@ -91,7 +92,7 @@ md-toast {
   .checkbox-wrapper {
     background-color: $green-2;
 
-    md-checkbox.md-checked ._md-icon {
+    md-checkbox.md-checked .md-icon {
       box-shadow: none;
       background-color: $green-2;
     }

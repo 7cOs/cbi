@@ -14,14 +14,14 @@
       display: inline-block;
     }
 
-    ._md-select-icon {
-      margin: 1px 0 3px;
-      padding: 12px 10px;
+    .md-select-icon {
+      margin: 8px 0 3px;
+      padding: 10px 10px 15px;
       text-align: center;
     }
   }
 
-  ._md-select-placeholder {
+  .md-select-placeholder {
     font-style: italic;
   }
 }
@@ -42,7 +42,7 @@ md-select {
 }
 
 
-._md-select-icon {
+.md-select-icon {
   background: $gray-4;
   margin: 1px 0 3px;
   padding: 12px 7px;
@@ -60,17 +60,17 @@ md-select {
 
 .header-selector {
 
-  ._md-select-icon:after {
-    background-size: 18px;
-    background-position: 3px 9px;
+  .md-select-icon:after {
+    background-size: 14px;
+    background-position: -1px 4px;
   }
 }
 
-._md-select-value ._md-select-icon:after {
+.md-select-value .md-select-icon:after {
   display: inline;
 }
 
-md-select-menu ._md-text {
+md-select-menu .md-text {
   font-size: 0.9em;
   color: $gray-1;
 }

@@ -42,11 +42,11 @@
 
   .target-list-detail-container {
 
-    ._md-bar {
+    .md-bar {
       background-color: $yellow;
     }
 
-    ._md-container {
+    .md-container {
       background-image: url('../../assets/img/icons/stripes.svg');
     }
 
@@ -158,7 +158,7 @@
       margin-bottom: 0;
     }
 
-    ._md-container {
+    .md-container {
       background-image: none;
     }
   }

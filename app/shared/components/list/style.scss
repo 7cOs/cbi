@@ -104,28 +104,28 @@ list {
     margin-bottom: 0;
   }
 
-  ._md-icon {
+  .md-icon {
     height: 20px;
     width: 20px;
   }
 
-  ._md-container:hover ._md-icon:after {
+  .md-container:hover .md-icon:after {
     display: block;
     border-color: $gray-4;
     border-width: 1px;
-    left: 6px;
+    left: 7px;
     top: 4px;
     width: 5px;
     height: 10px;
   }
 
-  md-checkbox.md-checked ._md-container ._md-icon:after,
-  md-checkbox.md-checked ._md-container:hover ._md-icon:after {
+  md-checkbox.md-checked .md-container .md-icon:after,
+  md-checkbox.md-checked .md-container:hover .md-icon:after {
     display: block;
     border-color: $gray-4;
     border-width: 1px;
     left: 7px;
-    top: 5px;
+    top: 3px;
     width: 5px;
     height: 10px;
   }
