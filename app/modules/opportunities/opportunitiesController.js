@@ -26,6 +26,7 @@ module.exports = /*  @ngInject */
     // Expose public methods
     vm.applyFilter = applyFilter;
     vm.applyFilterArr = applyFilterArr;
+    vm.applyFilterMulti = applyFilterMulti;
     vm.closeEditModal = closeEditModal;
     vm.closeModal = closeModal;
     vm.deleteSavedFilter = deleteSavedFilter;
@@ -58,6 +59,20 @@ module.exports = /*  @ngInject */
       console.log('add filter');
     }
 
+    function applyFilterMulti(model, result, filter) {
+      vm.chipsService.removeChip('opportunitiesTypes');
+      if (result.length === 0) {
+        vm.chipsService.addChip('All Types', 'opportunitiesTypes', false);
+        vm.filtersService.model.selected[filter] = ['All Types'];
+
+      } else {
+        for (var i = 0; i < result.length; i++) {
+          vm.chipsService.addChip(result[i], 'opportunitiesTypes', false);
+        }
+        vm.filtersService.model.selected[filter] = result;
+      }
+
+    }
     function applyFilterArr(model, result, filter) {
       if (model.indexOf(result) > -1) {
         vm.filtersService.model[filter] = '';

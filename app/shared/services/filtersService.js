@@ -24,6 +24,7 @@ module.exports = /*  @ngInject */
           value: 'targeted'
         }
       ],
+      opportunityTypes: [],
       opportunitiesTypes: [
         {name: 'All Types'},
         {name: 'Non-Buy'},
@@ -88,7 +89,7 @@ module.exports = /*  @ngInject */
         distributionTimeFilter: 'L90 Days April 22, 2016 - July 21, 2016',
         location: '',
         opportunitiesStatus: '',
-        opportunitiesTypes: '',
+        opportunitiesTypes: [],
         predictedImpactHigh: '',
         predictedImpactMedium: '',
         predictedImpactLow: '',
