@@ -98,7 +98,7 @@ v-accordion.styled-list(multiple="" id="opportunities" control="list.accordion" 
           div.address(column='4') {{::opportunity.store.address | titlecase}}
           div(column='2') {{::opportunity.groupedOpportunities.length}} <span class="supporting-text">({{::opportunity.highImpactSum}} High)</span>
           .text-center(column='1') {{::opportunity.store.depletionsCurrentYearToDate | number }}
-          .text-center(column='1' ng-class="opportunity.depletionsCurrentYearToDateYA >= 0 ? 'positive' : 'negative'").bold <span ng-if="opportunity.depletionsCurrentYearToDateYA >= 0 | number:2">+</span>{{opportunity.depletionsCurrentYearToDateYA | number:2}}<span>%</span>
+          .text-center(column='1' ng-class="opportunity.store.depletionsCurrentYearToDateYA >= 0 ? 'positive' : 'negative'").bold <span ng-if="opportunity.store.depletionsCurrentYearToDateYA >= 0 | number:2">+</span>{{opportunity.store.depletionsCurrentYearToDateYA | number:2}}<span>%</span>
           .text-center(column='1') {{::opportunity.store.segmentation}}
       v-pane-content(column='12' class="products" ng-class="{'open' : open}")
         .shadow-wrap.top

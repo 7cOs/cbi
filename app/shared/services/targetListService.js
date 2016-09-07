@@ -276,6 +276,7 @@ module.exports = /*  @ngInject */
       var targetListPromise = $q.defer(),
           url = apiHelperService.request('/api/targetLists/' + targetListId + '/shares/');
 
+      /* killing shares query for now
       $http.get(url)
         .then(getTargetListSharesSuccess)
         .catch(getTargetListSharesFail);
@@ -287,7 +288,8 @@ module.exports = /*  @ngInject */
       function getTargetListSharesFail(error) {
         targetListPromise.reject(error);
       }
-
+      */
+      targetListPromise.resolve({});
       return targetListPromise.promise;
     }
 
