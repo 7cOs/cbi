@@ -67,8 +67,22 @@ module.exports = function (config) {
   };
 
   config.sfdcSec = {
-    baseEncoding: 'base64+URL',
+    /**/  baseEncoding: 'base64+URL',
 // sfdc parameters
+//  SAML Configuration Parameters
+    idpConfig: {
+      url: 'http://axiomsso.herokuapp.com/GenerateSamlResponse.action',
+      samlVersion: '_2_0',
+      userId: '',
+      samlUserIdLocation: 'SUBJECT',
+      issuer: 'compass-portal',
+      recipient: 'https://cbrands-CBeerDev.cs20.my.salesforce.com?so=00Dm00000008fCJ',
+      ssoStartPage: 'RequestSamlResponse.action',
+      startURL: '',
+      logoutURL: '',
+      userType: 'STANDARD',
+      additionalAttributes: ''
+    },
 
 // SP (Service Provider (i.e. Salesforce.com)) details
     spEntityId: 'https://dev-salesforce.cbrands.com',
