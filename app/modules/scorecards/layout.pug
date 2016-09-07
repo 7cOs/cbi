@@ -32,9 +32,25 @@ div.my-scorecards
         thead
           tr
             th.accent.brand.border Brand
-            th(colspan=7).accent.top.border Depletions
-            th(colspan=2).accent.top.border CTV
-            th(colspan=2).accent.top CTG
+            th(colspan=7).accent.border Depletions
+            th(colspan=2).border
+              .tooltip-wrap
+                 p.accent CTV
+                   .tooltip.abbreviation-tooltip
+                     img(src="../assets/img/icons/help-tooltip.svg")
+                     md-tooltip(md-direction="bottom")
+                       label Scorecard
+                       h3 Contribution to Volume
+                       p Contribution to Volume (CTV) indicates the brand mix, or the % contribution of a brand to Total volume.
+            th(colspan=2)
+              .tooltip-wrap
+                p.accent.bold CTG
+                .tooltip.abbreviation-tooltip
+                    img(src="../assets/img/icons/help-tooltip.svg")
+                    md-tooltip(md-direction="bottom")
+                      label Scorecard
+                      h3 Contribution to Growth
+                      p Contribution to Growth (CTG) indicates the % contribution of a brand to Total growth (for the selected time period TY vs. YA). To determine CTG, calculate incremental volume (TY – YA) for each brand and divide by the Total (net).  Only positive numbers (as those are the growth indicators) are taken into account.
           tr
             th.accent.border &nbsp;
             th.accent FYTD
@@ -43,7 +59,7 @@ div.my-scorecards
             th.accent VS ABP
             th.accent VS ABP %
             th.accent BU vs YA %
-            th.accent.border MY % vs BU%
+            th.accent.border MY % vs BU %
             th.accent To My Total %
             th.accent.border To BU Total %
             th.accent To My Total %
@@ -51,30 +67,30 @@ div.my-scorecards
         tbody
           tr
             td.column-total.left.no-border TOTAL
-            td.column-total.highlight {{273400 | number }}
+            td.column-total.highlight.border {{273400 | number }}
             td.column-total.highlight {{1532 | number }}
-            td.column-total.highlight {{7.5 | number:1}}%
+            td.column-total.highlight.no-border {{7.5 | number:1}}%
             td.column-total.highlight 1532
-            td.column-total.highlight {{4.5 | number:1}}%
+            td.column-total.highlight.no-border {{4.5 | number:1}}%
             td.column-total {{1 | number:1}}%
             td.column-total.positive.no-border &#9650;
             td.column-total {{100 | number:1}}%
-            td.column-total {{12 | number:1}}%
+            td.column-total.no-border {{12 | number:1}}%
             td.column-total {{100 | number:1}}%
-            td.column-total {{12 | number:1}}%
+            td.column-total.no-border {{12 | number:1}}%
           tr(ng-repeat="depletion in s.depletionsData.performance")
-            td.left.data-brand(analytics-on="click" analytics-event="Brand Performance") {{depletion.name}}
+            td.left.data-brand.no-border(analytics-on="click" analytics-event="Brand Performance") {{depletion.name}}
             td(ng-class="{'negative': !s.isPositive(depletion.measures.depletions)}").highlight             {{depletion.measures.depletions | number }}
             td(ng-class="{'negative': !s.isPositive(depletion.measures.yearAgoGap)}").highlight      {{depletion.measures.yearAgoGap | number }}
-            td(ng-class="{'negative': !s.isPositive(depletion.measures.yearAgoTrend)}").highlight   {{depletion.measures.yearAgoTrend}}%
+            td(ng-class="{'negative': !s.isPositive(depletion.measures.yearAgoTrend)}").highlight.no-border   {{depletion.measures.yearAgoTrend}}%
             td(ng-class="{'negative': !s.isPositive(depletion.measures.vsPlanNumber)}").highlight           {{depletion.measures.vsPlanNumber | number }}
-            td(ng-class="{'negative': !s.isPositive(depletion.measures.yearAgoBuTrend)}").highlight              {{depletion.measures.yearAgoBuTrend | number:1}}%
+            td(ng-class="{'negative': !s.isPositive(depletion.measures.yearAgoBuTrend)}").highlight.no-border  {{depletion.measures.yearAgoBuTrend | number:1}}%
             td(ng-class="{'negative': !s.isPositive(depletion.measures.vsPlanPercent)}")          {{depletion.measures.vsPlanPercent | number:1}}%
             td(ng-class="{'negative': !s.isPositive(depletion.measures.yearAgoTrend - depletion.measures.yearAgoBuTrend), 'positive': s.isPositive(depletion.measures.yearAgoTrend - depletion.measures.yearAgoBuTrend)}").no-border &#9660;
             td(ng-class="{'negative': !s.isPositive(depletion.measures.volumeContribution)}")          {{depletion.measures.volumeContribution | number:1}}%
-            td(ng-class="{'negative': !s.isPositive(depletion.measures.volumeContributionBu)}")       {{depletion.measures.volumeContributionBu | number:1}}%
+            td(ng-class="{'negative': !s.isPositive(depletion.measures.volumeContributionBu)}").no-border       {{depletion.measures.volumeContributionBu | number:1}}%
             td(ng-class="{'negative': !s.isPositive(depletion.measures.growthContribution)}")     {{depletion.measures.growthContribution | number:1}}%
-            td(ng-class="{'negative': !s.isPositive(depletion.measures.growthContributionBu)}")   {{depletion.measures.growthContributionBu | number:1}}%
+            td(ng-class="{'negative': !s.isPositive(depletion.measures.growthContributionBu)}").no-border   {{depletion.measures.growthContributionBu | number:1}}%
 
   section.distributions-scorecard
     div.scorecard-header.clearfix
@@ -98,9 +114,26 @@ div.my-scorecards
         thead
           tr
             th.accent.brand.border Brand
-            th(colspan=7).accent.top.border Points of Distribution
-            th(colspan=2).accent.top.border Contribution To Volume
-            th(colspan=2).accent.top Contribution To Growth
+            th(colspan=7).accent.border Points of Distribution
+            th(colspan=2).accent.border
+              .tooltip-wrap
+                 p.accent.border Contribution To Volume
+                   .tooltip
+                     img(src="../assets/img/icons/help-tooltip.svg")
+                     md-tooltip(md-direction="bottom")
+                       label Scorecard
+                       h3 Contribution to Volume
+                       p Contribution to Volume (CTV) indicates the brand mix, or the % contribution of a brand to Total volume.
+            th(colspan=2)
+              .tooltip-wrap
+                p.accent.bold Contribution To Growth
+                  .tooltip
+                    img(src="../assets/img/icons/help-tooltip.svg")
+                    md-tooltip(md-direction="bottom")
+                      label Scorecard
+                      h3 Contribution to Growth
+                      p Contribution to Growth (CTG) indicates the % contribution of a brand to Total growth (for the selected time period TY vs. YA). To determine CTG, calculate incremental volume (TY – YA) for each brand and divide by the Total (net).  Only positive numbers (as those are the growth indicators) are taken into account.
+
           tr
             th.accent.border &nbsp;
             th.accent L90
@@ -109,7 +142,7 @@ div.my-scorecards
             th.accent VS ABP
             th.accent VS ABP %
             th.accent BU vs YA %
-            th.accent.border MY % vs BU%
+            th.accent.border MY % vs BU %
             th.accent To My Total %
             th.accent.border To BU Total %
             th.accent To My Total %
@@ -119,25 +152,25 @@ div.my-scorecards
             td.column-total.left.no-border TOTAL
             td.column-total.highlight {{273400 | number }}
             td.column-total.highlight {{1532 | number }}
-            td.column-total.highlight {{7.5 | number:1}}%
+            td.column-total.highlight.no-border {{7.5 | number:1}}%
             td.column-total.highlight {{1532 | number }}
-            td.column-total.highlight {{1 | number:1}}%
+            td.column-total.highlight.no-border {{1 | number:1}}%
             td.column-total {{4 | number:1}}%
             td.column-total.positive.no-border &#9650;
             td.column-total {{100 | number:1}}%
-            td.column-total {{12 | number:1}}%
+            td.column-total.no-border {{12 | number:1}}%
             td.column-total {{100 | number:1}}%
-            td.column-total {{12 | number:1}}%
+            td.column-total.no-border {{12 | number:1}}%
           tr(ng-repeat="distribution in s.distributionData.performance")
-            td.left.data-brand(analytics-on="click" analytics-event="Brand Performance") {{distribution.name}}
+            td.no-border.left.data-brand(analytics-on="click" analytics-event="Brand Performance") {{distribution.name}}
             td(ng-class="{'negative': !s.isPositive(distribution.measures.distributions)}").highlight         {{distribution.measures.distributions | number }}
             td(ng-class="{'negative': !s.isPositive(distribution.measures.yearAgoGap)}").highlight               {{distribution.measures.yearAgoGap | number }}
-            td(ng-class="{'negative': !s.isPositive(distribution.measures.yearAgoTrend) }").highlight          {{distribution.measures.yearAgoTrend | number:1}}%
+            td(ng-class="{'negative': !s.isPositive(distribution.measures.yearAgoTrend) }").highlight.no-border          {{distribution.measures.yearAgoTrend | number:1}}%
             td(ng-class="{'negative': !s.isPositive(distribution.measures.vsPlanNumber)}").highlight          {{distribution.measures.vsPlanNumber | number }}
-            td(ng-class="{'negative': !s.isPositive(distribution.measures.yearAgoBuTrend)}").highlight             {{distribution.measures.yearAgoBuTrend | number:1}}%
+            td(ng-class="{'negative': !s.isPositive(distribution.measures.yearAgoBuTrend)}").highlight.no-border             {{distribution.measures.yearAgoBuTrend | number:1}}%
             td(ng-class="{'negative': !s.isPositive(distribution.measures.vsPlanPercent)}")        {{distribution.measures.vsPlanPercent}}%
             td(ng-class="{'negative': !s.isPositive(distribution.measures.yearAgoTrend - distribution.measures.yearAgoBuTrend),'positive': !!s.isPositive(distribution.measures.yearAgoTrend - distribution.measures.yearAgoBuTrend) }").no-border &#9660;
             td(ng-class="{'negative': !s.isPositive(distribution.measures.volumeContribution)}")         {{distribution.measures.volumeContribution | number:1}}%
-            td(ng-class="{'negative': !s.isPositive(distribution.measures.volumeContributionBu)}")       {{distribution.measures.volumeContributionBu | number:1}}%
+            td(ng-class="{'negative': !s.isPositive(distribution.measures.volumeContributionBu)}").no-border       {{distribution.measures.volumeContributionBu | number:1}}%
             td(ng-class="{'negative': !s.isPositive(distribution.measures.growthContribution)}")    {{distribution.measures.growthContribution | number:1}}%
-            td(ng-class="{'negative': !s.isPositive(distribution.measures.growthContributionBu)}") {{distribution.measures.growthContributionBu | number:1}}%
+            td(ng-class="{'negative': !s.isPositive(distribution.measures.growthContributionBu)}").no-border {{distribution.measures.growthContributionBu | number:1}}%

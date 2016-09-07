@@ -93,7 +93,7 @@
 
     td {
       padding: 20px 10px;
-      border-left: 1px solid $gray-4;
+      border-left: 1px solid $gray-9;
     }
 
     .no-border {
@@ -122,6 +122,11 @@
     border-top: 2px solid $gray-3;
     border-bottom: 2px solid $gray-3;
 
+    p {
+      color: $white;
+      font-size: 11px;
+    }
+
     th {
       padding-top: 20px;
       padding-bottom: 10px;
@@ -133,6 +138,11 @@
       &.brand {
         text-align: left;
         padding: 24px 18px 0;
+      }
+
+      &.no-border {
+        border-left: none;
+        background: orange;
       }
 
       &.border {
@@ -148,7 +158,6 @@
   }
 
   .column-total {
-    border-top: 1px solid $black;
     font-family: $work-sans;
     font-size: 1.125em;
     font-weight: $semibold;
