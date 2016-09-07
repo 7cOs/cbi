@@ -67,11 +67,8 @@ md-tooltip {
       top: -0.5em;
     }
 
-    &.outer {
-
-      .tooltip {
-        right: -0.5em;
-      }
+    .abbreviation-tooltip {
+      right: 6em;
     }
   }
 }
