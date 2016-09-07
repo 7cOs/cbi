@@ -1,5 +1,5 @@
 .predicted-impact-opps {
-  md-checkbox ._md-label {
+  md-checkbox .md-label {
     span, md-icon {
       display: inline-block;
     }
@@ -17,7 +17,7 @@ md-content {
 .store-segmentation {
   margin-top: 2ex;
 
-  _md-label span {
+  md-label span {
     margin-left: -3em;
   }
 }
