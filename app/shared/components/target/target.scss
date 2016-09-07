@@ -65,8 +65,9 @@
       position: relative;
 
       h3 {
-        color: $gray-1;
+        color: $gray-12;
         margin-bottom: 1px;
+        font-size: 1.25em;
       }
 
       .target-list-name {
@@ -88,6 +89,10 @@
         }
       }
 
+      .accent {
+        color: $gray-12;
+      }
+
       .collaborators:before {
         background-position: 0 center;
         background-repeat: no-repeat;
@@ -97,6 +102,7 @@
         height: 9px;
         width: 9px;
         margin-right: 4px;
+        fill: currentColor;
       }
 
       [class^=target-list-row] {
