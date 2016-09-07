@@ -1,6 +1,6 @@
 .scorecard-filters {
   background: $gray-4;
-  padding: 30px;
+  padding: 40px;
 
   .radio-filters,
   .dropdown-filter {
@@ -21,17 +21,11 @@
       margin: 0;
       width: 320px;
     }
-
-    ._md-select-placeholder {
-      font-style: normal;
-      color: $gray-1;
-    }
   }
 }
 
 .scorecard-filter {
   background: $gray-4;
-  padding: 10px 0;
 
   .radio-button-group {
     display: inline-block;
@@ -39,9 +33,8 @@
   }
 
   md-radio-button {
-    display: inline;
+    display: inline-block;
     font-weight: $regular;
-    font-size: 0.9em;
     margin: 1em 2em;
   }
 }
@@ -52,17 +45,14 @@
 
 .scorecard-header-right {
   float: right;
-  text-align: right;
 
   p {
-    margin-top: 14px;
-    margin-bottom: 16px;
+    margin: 50px 0 0;
   }
 
   h3 {
     margin: 10px 0 0;
     text-align: right;
-    font-size: 1.625em;
   }
 
   div {
@@ -75,25 +65,19 @@
   }
 }
 
-.scorecard-table {
+.scorecard-table,
+.scorecard-chart {
 
   table {
     border-collapse: collapse;
     width: 100%;
-    background: linear-gradient(to right, $dark-blue, $dark-blue 3%, $blue 60%);
-    border-top: 1px solid $gray-3;
-    border-bottom: 1px solid $gray-3;
-
-    .highlight {
-      background: $gray-4;
-    }
   }
 
   tbody {
 
     td {
       padding: 20px 10px;
-      border-left: 1px solid $gray-9;
+      border-left: 1px solid $gray-4;
     }
 
     .no-border {
@@ -106,58 +90,105 @@
       outline: 0;
       transition: background 0.3s;
 
+      .dark {
+        background: $gray-4;
+        transition: background 0.3s;
+      }
+
+      .medium-dark {
+        background: $body-bg;
+      }
+
+      .blue {
+        background: $dark-blue-3;
+        color: $white;
+      }
+
+      .dark-blue {
+        background: $dark-blue-2;
+        color: $white;
+      }
+
+
       &:hover {
         background: $light-blue-4;
         transition: background 0.3s;
 
-        .highlight {
+        .dark {
           background: $smoke;
           transition: background 0.3s;
+        }
+
+        .medium-dark {
+          background: $light-blue-4;
+          transition: background 0.3s;
+        }
+      }
+
+      &.selected,
+      &.selected .dark,
+      &.selected .data-brand,
+      &.selected .negative,
+      &.selected.store .dist-label,
+      &.selected.store .store-number,
+      &.selected.store .address {
+        background: $dark-blue-2;
+        color: $white;
+        transition: none;
+
+        &:hover {
+          background: $dark-blue-2;
+          transition: none;
+        }
+      }
+
+      &.selected .dark {
+        background: $dark-blue-3;
+        color: $white;
+
+        &:hover {
+          background: $dark-blue-3;
         }
       }
     }
   }
 
   thead {
-    border-top: 2px solid $gray-3;
-    border-bottom: 2px solid $gray-3;
+    border-top: 2px solid $gray-8;
+    border-bottom: 2px solid $gray-8;
 
-    p {
+    .dark {
+      background: $gray-4;
+    }
+
+    .blue {
+      background: $dark-blue-3;
+    }
+
+    .dark-blue {
+      background: $dark-blue-2;
+    }
+
+    .blue > p,
+    .dark-blue > p {
       color: $white;
-      font-size: 11px;
     }
 
     th {
-      padding-top: 20px;
+      padding-top: 10px;
       padding-bottom: 10px;
       vertical-align: top;
       color: $white;
       display: table-cell;
-      font-size: 11px;
-
-      &.brand {
-        text-align: left;
-        padding: 24px 18px 0;
-      }
-
-      &.no-border {
-        border-left: none;
-        background: $orange;
-      }
-
-      &.border {
-        border-right: 1px solid $gray-9;
-      }
     }
 
-    tr:nth-child(2) th {
-      padding-top: 0;
-      padding-bottom: 8px;
-      font-size: 10px;
+    th.top {
+      padding-bottom: 0;
     }
   }
 
   .column-total {
+    border-top: 1px solid $black;
     font-family: $work-sans;
     font-size: 1.125em;
     font-weight: $semibold;
@@ -171,6 +202,10 @@
 
   .data-brand {
     color: $blue;
+  }
+
+  tr {
+    background: $white;
   }
 
   td {
@@ -194,6 +229,121 @@
 
     table {
       border: 0;
+    }
+  }
+}
+
+.my-scorecards {
+
+  .scorecard-filters {
+    padding: 30px;
+
+    .radio-filters {
+      margin-right: 60px;
+    }
+  }
+
+  .dropdown {
+    ._md-select-placeholder {
+      font-style: normal;
+      color: $gray-1;
+    }
+  }
+
+  .scorecard-filter {
+    padding: 0;
+  }
+
+  md-radio-button {
+    font-size: 0.9em;
+    margin: 1em;
+  }
+
+  .scorecard-header-left {
+    h3 {
+      margin: 12px 0;
+    }
+  }
+
+  .scorecard-header-right {
+    text-align: right;
+
+    p {
+      margin: 28px 0 0;
+    }
+  }
+
+  h3 {
+    font-size: 1.625em;
+  }
+
+  .scorecard-table {
+
+    table {
+      background: linear-gradient(to right, $dark-blue, $dark-blue 3%, $blue 60%);
+      border-top: 1px solid $gray-3;
+      border-bottom: 1px solid $gray-3;
+
+      .highlight {
+        background: $gray-4;
+      }
+    }
+
+    tbody {
+
+      .highlight {
+        background: $smoke;
+        transition: background 0.3s;
+      }
+
+      td {
+        border-left: 1px solid $gray-9;
+
+        &.no-border {
+          border-left: none;
+        }
+      }
+    }
+
+    thead {
+      border-top: 2px solid $gray-3;
+      border-bottom: 2px solid $gray-3;
+
+      p {
+        color: $white;
+        font-size: 11px;
+      }
+
+      &.no-border {
+        border-left: none;
+      }
+
+      tr {
+        background: none;
+      }
+
+      th {
+        padding-top: 20px;
+        color: $white;
+        display: table-cell;
+        font-size: 11px;
+        vertical-align: bottom;
+
+        &.brand {
+          text-align: left;
+          padding: 24px 18px 10px;
+        }
+
+        &.border {
+          border-right: 1px solid $gray-9;
+        }
+      }
+
+      tr:nth-child(2) th {
+        padding-top: 0;
+        padding-bottom: 8px;
+        font-size: 10px;
+      }
     }
   }
 }
