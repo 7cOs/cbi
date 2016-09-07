@@ -180,21 +180,6 @@
       vertical-align: top;
       color: $white;
       display: table-cell;
-      font-size: 11px;
-
-      &.brand {
-        text-align: left;
-        padding: 24px 18px 0;
-      }
-
-      &.no-border {
-        border-left: none;
-        background: $orange;
-      }
-
-      &.border {
-        border-right: 1px solid $gray-9;
-      }
     }
 
     th.top {
