@@ -12,12 +12,14 @@
     }
   }
 
+
   // Fix page jumping to top when select box is open
   &[style] {
     position: inherit !important;
     top: inherit !important;
     width: inherit !important;
   }
+
 
   // Placeholder font color
   ::-ms-input-placeholder {
@@ -39,6 +41,30 @@
       color: $gray-8;
     }
   }
+
+
+  // Adjust Save Report and Reset icons on Opportunities and Target List Filters
+
+  // .reset-icon,
+  .save-filterset-icon,
+  .reset-icon-disabled,
+  .save-filterset-icon-disabled,
+  .save-report-hover,
+  .reset-icon-hover  {
+
+    &::before {
+      background-position: 0 0;
+      background-repeat: no-repeat;
+      content: '';
+      display: block;
+      height: 65px;
+      left: -18px;
+      top: 13px;
+      position: relative;
+      margin-bottom: -52px;
+    }
+  }
+
 
   // Replace dashed SVG with PNG on IE for target list progress
   .target-lists ._md-container {
