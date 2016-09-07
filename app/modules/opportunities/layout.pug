@@ -52,7 +52,7 @@
             md-option(ng-repeat="type in o.filtersService.model.opportunitiesTypes" aria-label="{{type.name}}" value="{{type.name}}") {{::type.name}}
     div(column='3')
       label Brand / Master SKU
-      inline-search(type="product" placeholder="Brand or SKU/Package" chosen-result="o.filtersService.model.selected.brandSearchText" callback="o.chipsService.addChip(result, 'brandSearchText', false)")
+      inline-search(type="product" placeholder="Brand or SKU/Package" chosen-result="o.filtersService.model.brands" callback="o.applyFilterArr(o.filtersService.model.selected.brands, result, 'brands')")
     div(column='3')
       label Retailer
       div(row).retailer.dropdown-filter
@@ -61,10 +61,10 @@
           md-select(ng-model="o.filtersService.model.selected.retailer" placeholder="Chain" ng-init="o.filtersService.model.selected.retailer = 'Chain'")
             md-option(ng-repeat="type in o.filtersService.model.retailer" ng-click="o.placeholderSelect(type.hintText)" aria-label="{{type.name}}" value="{{type.name}}") {{::type.name}}
         div(column='7')
-          inline-search(type="store" placeholder="{{o.hintTextPlaceholder}}" chosen-result="o.filtersService.model.selected.storeSearchText" callback="o.chipsService.addChip(result, 'store', false)")
+          inline-search(type="store" placeholder="{{o.hintTextPlaceholder}}" chosen-result="o.filtersService.model.stores" callback="o.applyFilterArr(o.filtersService.model.selected.stores, result, 'stores')")
     div(column='3')
       label Distributor
-      inline-search(type="distributor" placeholder="Name" chosen-result="o.filtersService.model.selected.distributorSearchText" callback="o.chipsService.addChip(result, 'distributorSearchText', false)")
+      inline-search(type="distributor" placeholder="Name" chosen-result="o.filtersService.model.distributors" callback="o.applyFilterArr(o.filtersService.model.selected.distributors, result, 'distributors')")
   div(row)
     div.predicted-impact(column='3' ng-show="o.filtersService.model.expanded")
       label Predicted Impact
@@ -106,9 +106,9 @@
           md-checkbox(column='5' ng-model="o.filtersService.model.selected.tradeChannelOther" aria-label="Trade Channel Other" ng-click="o.chipsService.updateChip('tradeChannelOther', 'Other Trade Channel')") Other
     div.location-contact-opps(column='3' ng-show="o.filtersService.model.expanded")
       label Location
-        input(type="text" placeholder="City, State, or Zip" ng-model="o.filtersService.model.selected.location", ng-keypress="($event.which === 13)?o.chipsService.addChip(o.filtersService.model.selected.location, 'location', true):0" ng-blur="o.chipsService.addChip(o.filtersService.model.selected.location, 'location', true)")
+        input(type="text" placeholder="City, State, or Zip" ng-model="o.filtersService.model.location", ng-keypress="($event.which === 13)?o.applyFilterArr(o.filtersService.model.selected.location, o.filtersService.model.location, 'location'):0")
       label.cbbd-contact CBBD Contact
-        input(type="text" placeholder="Name" ng-model="o.filtersService.model.selected.cbbdContact" ng-keypress="($event.which === 13)?o.chipsService.addChip(o.filtersService.model.selected.cbbdContact, 'location', true):0" ng-blur="o.chipsService.addChip(o.filtersService.model.selected.cbbdContact, 'cbbdContact', true)")
+        input(type="text" placeholder="Name" ng-model="o.filtersService.model.cbbdContact" ng-keypress="($event.which === 13)?o.applyFilterArr(o.filtersService.model.selected.cbbdContact, o.filtersService.model.cbbdContact, 'cbbdContact'):0")
     div(column='12' class='apply-filters')
       button(value='Apply Filters' type="button" class="btn-action" ng-click="o.chipsService.applyFilters()" ng-disabled="o.filtersService.model.filtersApplied") Apply Filters
       .secondary-button-container

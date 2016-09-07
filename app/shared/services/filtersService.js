@@ -9,8 +9,9 @@ module.exports = /*  @ngInject */
         {name: 'Walmart', subAccount: 'South'},
         {name: 'Walmart', subAccount: 'East'}
       ],
-      brands: [],
-      distributors: [],
+      brands: '',
+      cbbdContact: '',
+      distributors: '',
       expanded: false,
       filtersApplied: true,
       filtersDefault: true,
@@ -78,13 +79,12 @@ module.exports = /*  @ngInject */
         accountBrands: '',
         accountMarkets: '',
         accountTypes: '',
-        brands: '',
-        brandSearchText: '',
-        cbbdContact: '',
+        brands: [],
+        cbbdContact: [],
         chains: '',
         currentFilter: '',
         depletionsTimeFilter: 'MTD July 1 - July 31',
-        distributorSearchText: '',
+        distributors: [],
         distributionTimeFilter: 'L90 Days April 22, 2016 - July 21, 2016',
         location: '',
         opportunitiesStatus: '',
@@ -96,7 +96,7 @@ module.exports = /*  @ngInject */
         productTypeFeatured: '',
         productTypePriority: '',
         productTypeAuthorized: true,
-        stores: '',
+        stores: [],
         retailer: '',
         storeSearchText: '',
         storeSegmentationA: '',
@@ -138,13 +138,11 @@ module.exports = /*  @ngInject */
       // get applied filters
       var filterPayload = {type: type};
       for (var key in service.model.selected) {
-        /* if (service.model.selected[key].constructor === Array) {
-          // to do for brands, stores, chains
-        } else */if (service.model.selected[key] !== '') {
+        if (service.model.selected[key].constructor === Array) {
+        } else if (service.model.selected[key] !== '') {
           filterPayload[key] = service.model.selected[key];
         }
       }
-
       return filterPayload;
     }
 
