@@ -83,7 +83,9 @@ md-radio-button:not([disabled]).md-primary.md-checked .md-on {
 
 /* Checkboxes */
 
-md-checkbox {
+md-checkbox,
+md-select-menu[multiple] md-option,
+md-select-menu[multiple] md-option.md-checkbox-enabled {
 
   .md-container,
   .md-icon {
@@ -119,7 +121,8 @@ md-checkbox {
     }
   }
 
-  &.md-checked {
+  &.md-checked,
+  &[selected='selected'] {
     font-weight: $semibold;
 
     .md-container,
