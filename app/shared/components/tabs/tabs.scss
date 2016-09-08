@@ -38,3 +38,7 @@ md-tabs-canvas {
 md-tab-content md-content {
   background: $gray-4;
 }
+
+md-tabs.md-dynamic-height md-tabs-content-wrapper {
+  z-index: 0;
+}
