@@ -61,16 +61,16 @@ module.exports = /*  @ngInject */
         }
       ],
       depletionsTimePeriod: [{
-        name: 'MTD July 1 - July 31'
+        name: 'MTD July 1, 2016 - July 31, 2016'
       }, {
-        name: 'CYTD Jan 1 - July 21'
+        name: 'CYTD Jan 1, 2016 - July 21, 2016'
       }, {
         name: 'FYTD May 1, 2016 - July 21, 2016'
       }],
       distributionTimePeriod: [{
-        name: 'L30 Days June 21 - July 21'
+        name: 'L30 Days June 21, 2016 - July 21, 2016'
       }, {
-        name: 'L60 May 21, 2016 - July 21, 2016'
+        name: 'L60 Days May 21, 2016 - July 21, 2016'
       }, {
         name: 'L90 Days April 22, 2016 - July 21, 2016'
       }],
@@ -84,7 +84,7 @@ module.exports = /*  @ngInject */
         cbbdContact: [],
         chains: '',
         currentFilter: '',
-        depletionsTimeFilter: 'MTD July 1 - July 31',
+        depletionsTimeFilter: 'MTD July 1, 2016- July 31, 2016',
         distributors: [],
         distributionTimeFilter: 'L90 Days April 22, 2016 - July 21, 2016',
         location: '',
