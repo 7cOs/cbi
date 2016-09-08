@@ -5,7 +5,7 @@
 
   .target-action-buttons
     button(ng-if="expanded.buttonState === 'named'" ng-disabled="expanded.selected.length === 0" ng-click="expanded.archiveTargetList()").btn-action Archive
-    button(ng-if="expanded.buttonState !== 'shared'" ng-disabled="expanded.selected.length === 0" ng-click="expanded.deleteTargetList()").btn-action Delete
+    button(ng-if="expanded.buttonState !== 'shared'" ng-disabled="expanded.selected.length === 0" ng-click="expanded.deleteTargetList(expanded.selected)").btn-action Delete
     button.btn-action(ng-click="expanded.createTargetList($event)") Create a New List
 div.expanded-target-lists
   md-tabs(md-dynamic-height='' md-border-bottom)
@@ -44,7 +44,7 @@ div.expanded-target-lists
             h4 No Opportunities have been added yet
             p Try Searching for <span>Opportunities</span> and add them to your list
           ul
-            li(ng-repeat="list in expanded.userService.model.targetLists.owned | filter:{archived:false} | orderBy:expanded.sortProperty:expanded.reverse").clearfix
+            li(ng-repeat="list in expanded.userService.model.targetLists.owned | filter:{archived:false} | filter:{deleted:false} | orderBy:expanded.sortProperty:expanded.reverse").clearfix
               div.checkbox-wrapper.named-target-list(ng-click="expanded.toggle(list, expanded.selected)")
                 md-checkbox(aria-label="Select Item" ng-checked="expanded.exists(list, expanded.selected)")
               // div.checkbox-wrapper.named-target-list

@@ -108,8 +108,8 @@ function ExpandedTargetListController($state, $scope, $filter, $mdDialog, $q, us
   }
 
   function deleteTargetList() {
-    var selectedItems = $filter('filter')(userService.model.targetLists.owned, {selected: true}),
-        deleteTargetListPromises = [];
+    var deleteTargetListPromises = [],
+        selectedItems = vm.selected;
 
     // get selected target list ids and their promises
     deleteTargetListPromises = selectedItems.map(function(targetList) {
@@ -122,7 +122,7 @@ function ExpandedTargetListController($state, $scope, $filter, $mdDialog, $q, us
       angular.forEach(selectedItems, function(item, key) {
         userService.model.targetLists.owned.splice(userService.model.targetLists.owned.indexOf(item), 1);
       });
-    });
+    }).then(vm.selected = []);
   }
 
   function exists(item, list) {
