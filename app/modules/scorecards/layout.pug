@@ -155,12 +155,21 @@ div.my-scorecards
         tbody
           tr
             td.column-total.left.no-border TOTAL
+<<<<<<< 8f43b7853613bfdbd84e1495f093e79e44e34974
             td.column-total.highlight {{273400 | number }}
             td.column-total.highlight {{1532 | number }}
             td.column-total.highlight.no-border {{7.5 | number:1}}%
             td.column-total.highlight {{1532 | number }}
             td.column-total.highlight.no-border {{1 | number:1}}%
             td.column-total {{4 | number:1}}%
+=======
+            td.column-total.dark-blue.no-border
+              span(ng-if="s.distributionRadioOptions.selected.placementType === 'Effective'" ng-class="{'negative': !s.isPositive(s.totalDistributions[0].distributionsEffective)}") {{s.totalDistributions[0].distributionsEffective | number:0 }}
+              span(ng-if="s.distributionRadioOptions.selected.placementType === 'Simple'" ng-class="{'negative': !s.isPositive(s.totalDistributions[0].distributionsSimple)}") {{s.totalDistributions[0].distributionsSimple | number:0 }}
+            td.column-total.blue.no-border {{1532 | number }}
+            td.column-total.blue.no-border 7.5%
+            td.column-total 1%
+>>>>>>> filtered out and added total row to distribution scorecard
             td.column-total.positive.no-border &#9650;
             td.column-total {{1532 | number }}
             td.column-total.no-border 4%
@@ -181,9 +190,11 @@ div.my-scorecards
             td(ng-class="{'negative': !s.isPositive(distribution.measures.volumeContributionBu)}").no-border       {{distribution.measures.volumeContributionBu}}%
             td(ng-class="{'negative': !s.isPositive(distribution.measures.growthContribution)}")    {{distribution.measures.growthContribution}}%
             td(ng-class="{'negative': !s.isPositive(distribution.measures.growthContributionBu)}").no-border  {{distribution.measures.growthContributionBu}}%
-          tr(ng-repeat="distribution in s.userService.model.distribution")
+          tr(ng-repeat="distribution in s.userService.model.distribution | filter: {type: '!Total'}: true")
             td.left.data-brand(analytics-on="click" analytics-event="Brand Performance") {{distribution.name}}
-            td.dark(ng-repeat-start="measure in distribution.measures | filter: {timeframe: s.distributionTimeframe}: true" ng-class="{'negative': !s.isPositive(distribution.measures.distributions)}") {{distribution.measures.distributions | number }}
+            td.dark(ng-repeat-start="measure in distribution.measures | filter: {timeframe: s.distributionSelectOptions.selected}: true")
+              span(ng-if="s.distributionRadioOptions.selected.placementType === 'Simple'" ng-class="{'negative': !s.isPositive(measure.distributionsSimple)}") {{measure.distributionsSimple | number:0}}
+              span(ng-if="s.distributionRadioOptions.selected.placementType === 'Effective'" ng-class="{'negative': !s.isPositive(measure.distributionsEffective)}") {{measure.distributionsEffective | number:0}}
             //-td.medium-dark(ng-class="{'negative': !s.isPositive(distribution.measures.yearAgoGap)}") {{distribution.measures.yearAgoGap | number }}
             //-td.medium-dark.no-border(ng-class="{'negative': !s.isPositive(distribution.measures.yearAgoTrend) }") {{distribution.measures.yearAgoTrend}}%
             //-td(ng-class="{'negative': !s.isPositive(distribution.measures.yearAgoBuTrend)}") {{distribution.measures.yearAgoBuTrend}}%

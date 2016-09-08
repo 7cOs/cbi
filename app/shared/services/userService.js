@@ -386,20 +386,6 @@ module.exports = /*  @ngInject */
         .catch(getPerformanceDistributionFail);
 
       function getPerformanceDistributionSuccess(response) {
-        for (var i = 0; i < response.data.performance.length; i++) {
-          var totalSimpleDepletion = 0,
-              totalEffectiveDepletion = 0;
-
-          for (var j = 0; j < response.data.performance[i].measures.length; j++) {
-            console.log(response.data.performance[i].measures[j]);
-          }
-        }
-
-        response.data.performance.totals = {
-          totalSimpleDepletion: totalSimpleDepletion,
-          totalEffectiveDepletion: totalEffectiveDepletion
-        };
-
         performancePromise.resolve(response.data.performance);
       }
 

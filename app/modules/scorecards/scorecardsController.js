@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports = /*  @ngInject */
-  function scorecardsController($rootScope, $scope, $q, $state, filtersService, myperformanceService, opportunitiesService, userService) {
+  function scorecardsController($rootScope, $scope, $q, $filter, $state, filtersService, myperformanceService, opportunitiesService, userService) {
 
     // ****************
     // CONTROLLER SETUP
@@ -42,10 +42,10 @@ module.exports = /*  @ngInject */
     };
     vm.distributionSelectOptions = {
       values: [
-        {name: 'L30', value: 'l30'},
-        {name: 'L60', value: 'l60'},
-        {name: 'L90', value: 'l90'},
-        {name: 'L120', value: 'l120'}
+        {name: 'Last 3 Months', value: 'L03'},
+        {name: 'Last 60 Days', value: 'L60'},
+        {name: 'Last 90 Days', value: 'L90'},
+        {name: 'Last 120 Days', value: 'L120'}
       ],
       selected: {}
     };
@@ -62,7 +62,6 @@ module.exports = /*  @ngInject */
       growthPercent: 100,
       growthBU: 0
     };
-    vm.totalRowDistributionTemplate = {};
 
     // Set page title for head and nav
     $rootScope.pageTitle = $state.current.title;
@@ -131,14 +130,14 @@ module.exports = /*  @ngInject */
 
         updateTotalRowDepletions();
 
-        console.log('[scorecardsController.init - userService.model.distribution]', userService.model.distribution);
-
         // distribution
         vm.distributionRadioOptions.selected.placementType = 'Simple';
         vm.distributionRadioOptions.selected.onOffPremise = 'Off Premise';
-        vm.distributionSelectOptions.selected = 'l30';
+        vm.distributionSelectOptions.selected = 'L03';
 
         updateTotalRowDistributions();
+
+        console.log('[scorecardsController.init - userService.model.distribution]', userService.model.distribution);
       });
     }
 
@@ -165,6 +164,8 @@ module.exports = /*  @ngInject */
     }
 
     function updateTotalRowDistributions() {
-      vm.totalRowDistribution = angular.copy(vm.totalRowDistributionTemplate);
+      var totalObj = $filter('filter')(userService.model.distribution, {type: 'Total'});
+      vm.totalDistributions = $filter('filter')(totalObj[0].measures, {timeframe: vm.distributionSelectOptions.selected});
+      console.log(vm.totalDistributions);
     }
   };
