@@ -48,8 +48,9 @@
               p SKU/Package has not reported depletions at this account within L90 days AND is currently reporting depletions at Similar Stores. Note: for SKU/Packages that are Chain-mandated, a non-buy opportunity will be triggered if no depletions in L30 days
       .dropdown-filter
         .dropdown
-          md-select(ng-model="o.filtersService.model.selected.opportunitiesTypes" md-on-close="o.chipsService.addChip(o.filtersService.model.selected.opportunitiesTypes, 'opportunitiesTypes', false)" placeholder="All Types" ng-init="o.filtersService.model.selected.opportunitiesTypes = 'All Types'")
+          md-select(ng-model="o.filtersService.model.opportunityTypes"  multiple="true" md-on-close="o.applyFilterMulti(o.filtersService.model.selected.opportunitiesTypes, o.filtersService.model.opportunityTypes, 'opportunitiesTypes')")
             md-option(ng-repeat="type in o.filtersService.model.opportunitiesTypes" aria-label="{{type.name}}" value="{{type.name}}") {{::type.name}}
+            .done-btn(ng-click="o.closeSelect()") Done
     div(column='3')
       label Brand / Master SKU
       inline-search(type="product" placeholder="Brand or SKU/Package" chosen-result="o.filtersService.model.brands" callback="o.applyFilterArr(o.filtersService.model.selected.brands, result, 'brands')")

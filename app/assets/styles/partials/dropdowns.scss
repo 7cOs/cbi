@@ -90,3 +90,21 @@ md-select-menu .md-text {
     width: 40px;
   }
 }
+
+.done-btn {
+  background: $white;
+  color: $blue;
+  font-family: $rajdhani;
+  font-size: 0.7em;
+  font-weight: $bold;
+  outline: none;
+  padding: 1.75em;
+  text-align: center;
+  text-transform: uppercase;
+  transition: background 300ms ease;
+
+  &:hover {
+    background: $gray-4;
+    cursor: hand;
+  }
+}

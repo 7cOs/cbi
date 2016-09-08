@@ -21,6 +21,12 @@ module.exports = /*  @ngInject */
         'type': 'productTypeAuthorized',
         'applied': false,
         'removable': false
+      },
+      {
+        'name': 'All Types',
+        'type': 'opportunitiesTypes',
+        'applied': false,
+        'removable': true
       }
     ];
 
@@ -30,6 +36,7 @@ module.exports = /*  @ngInject */
       model: model,
       addAutocompleteChip: addAutocompleteChip,
       addChip: addChip,
+      removeChip: removeChip,
       applyFilters: applyFilters,
       removeFromFilterService: removeFromFilterService,
       updateChip: updateChip,
@@ -118,10 +125,11 @@ module.exports = /*  @ngInject */
      * @private
      */
     function removeChip(type) {
-      for (var i = 0; i < service.model.length; i++) {
+      console.log(service.model);
+      var i = service.model.length;
+      while (i--) {
         if (service.model[i].type === type) {
           service.model.splice(i, 1);
-          break;
         }
       }
 
@@ -138,9 +146,10 @@ module.exports = /*  @ngInject */
      * @memberOf cf.common.services
      */
     function removeFromFilterService(chip) {
-      if (chip.search) {
+      if (chip.search || chip.type === 'opportunitiesTypes') {
         var arr = filtersService.model.selected[chip.type];
-        for (var i = 0; i < arr.length; i++) {
+        var i = arr.length;
+        while (i--) {
           if (arr[i] === chip.name) {
             arr.splice(i, 1);
           }

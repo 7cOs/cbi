@@ -32,7 +32,7 @@ describe('Unit: opportunitiesController', function() {
 
   it('should have controller methods accessible', function() {
     // expect(ctrl.accountQuerySearch).not.toBeUndefined();
-    expect(ctrl.applyFilter).not.toBeUndefined();
+    // expect(ctrl.applyFilter).not.toBeUndefined();
     // expect(ctrl.brandQuerySearch).not.toBeUndefined();
     // expect(ctrl.distributorQuerySearch).not.toBeUndefined();
   });

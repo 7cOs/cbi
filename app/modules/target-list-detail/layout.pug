@@ -63,8 +63,9 @@
         label Opportunity Type
         .dropdown-filter
           .dropdown
-            md-select(ng-model="tld.filtersService.model.selected.opportunitiesTypes" md-on-close="tld.chipsService.addChip(tld.filtersService.model.selected.opportunitiesTypes, 'opportunitiesTypes', false)" placeholder="All Types" ng-init="tld.filtersService.model.selected.opportunitiesTypes = 'All Types'")
+            md-select(ng-model="tld.filtersService.model.opportunityTypes"  multiple="true" md-on-close="tld.applyFilterMulti(tld.filtersService.model.selected.opportunitiesTypes, tld.filtersService.model.opportunityTypes, 'opportunitiesTypes')")
               md-option(ng-repeat="type in tld.filtersService.model.opportunitiesTypes" aria-label="{{type.name}}" value="{{type.name}}") {{::type.name}}
+              .done-btn(ng-click="tld.closeSelect()") Done
       div(column='3')
         label Brand / Master SKU
         inline-search(type="product" placeholder="Brand or SKU/Package" chosen-result="tld.filtersService.model.selected.brandSearchText" callback="tld.chipsService.addChip(result, 'brandSearchText', false)")
@@ -75,7 +76,7 @@
             md-select(ng-model="tld.filtersService.model.selected.retailer" md-on-close="tld.chipsService.addChip(tld.filtersService.model.selected.retailer, 'retailer', false)" placeholder="Chain" ng-init="tld.filtersService.model.selected.retailer = 'Chain'")
               md-option(ng-repeat="type in tld.filtersService.model.retailer" ng-click="tld.placeholderSelect(type.hintText)" aria-label="{{type.name}}" value="{{type.name}}") {{::type.name}}
           div(column='7')
-            inline-search(type="store" placeholder="{{tld.hintTextPlaceholder}}" chosen-result="tld.filtersService.model.selected.store" callback="o.chipsService.addChip(result, 'store', false)")
+            inline-search(type="store" placeholder="{{tld.hintTextPlaceholder}}" chosen-result="tld.filtersService.model.selected.store" callback="tld.chipsService.addChip(result, 'store', false)")
       div(column='3')
         label Distributor
         inline-search(type="distributor" placeholder="Name" chosen-result="tld.filtersService.model.selected.distributorSearchText" callback="tld.chipsService.addChip(result, 'distributorSearchText', false)")

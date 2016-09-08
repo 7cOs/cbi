@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports = /*  @ngInject */
-  function opportunitiesController($rootScope, $scope, $state, $filter, $mdDialog, opportunitiesService, opportunityFiltersService, chipsService, filtersService, userService) {
+  function opportunitiesController($rootScope, $scope, $state, $filter, $mdDialog, $mdSelect, opportunitiesService, opportunityFiltersService, chipsService, filtersService, userService) {
 
     // ****************
     // CONTROLLER SETUP
@@ -24,8 +24,8 @@ module.exports = /*  @ngInject */
     vm.opportunitiesService = opportunitiesService;
 
     // Expose public methods
-    vm.applyFilter = applyFilter;
     vm.applyFilterArr = applyFilterArr;
+    vm.applyFilterMulti = applyFilterMulti;
     vm.closeEditModal = closeEditModal;
     vm.closeModal = closeModal;
     vm.deleteSavedFilter = deleteSavedFilter;
@@ -35,12 +35,17 @@ module.exports = /*  @ngInject */
     vm.placeholderSelect = placeholderSelect;
     vm.hoverState = hoverState;
     vm.resetFilters = resetFilters;
+    vm.closeSelect = closeSelect;
 
     init();
 
     // **************
     // PUBLIC METHODS
     // **************
+
+    function closeSelect() {
+      $mdSelect.hide();
+    }
 
     function hoverState(icon) {
       if (icon === 'reset') {
@@ -54,10 +59,21 @@ module.exports = /*  @ngInject */
       vm.hintTextPlaceholder = data;
     }
 
-    function applyFilter(filterStr) {
-      console.log('add filter');
-    }
+    function applyFilterMulti(model, result, filter) {
+      vm.chipsService.removeChip('opportunitiesTypes');
+      if (result.length === 0) {
+        vm.chipsService.addChip('All Types', 'opportunitiesTypes', false);
+        vm.filtersService.model.selected[filter] = ['All Types'];
+        vm.filtersService.model.opportunityTypes = ['All Types'];
 
+      } else {
+        for (var i = 0; i < result.length; i++) {
+          vm.chipsService.addChip(result[i], 'opportunitiesTypes', false);
+        }
+        vm.filtersService.model.selected[filter] = result;
+      }
+
+    }
     function applyFilterArr(model, result, filter) {
       if (model.indexOf(result) > -1) {
         vm.filtersService.model[filter] = '';
