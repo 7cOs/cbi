@@ -36,6 +36,7 @@ module.exports = /*  @ngInject */
     vm.hoverState = hoverState;
     vm.resetFilters = resetFilters;
     vm.closeSelect = closeSelect;
+    vm.resetTradeChannels = resetTradeChannels;
 
     init();
 
@@ -145,6 +146,14 @@ module.exports = /*  @ngInject */
       // reset all chips and filters
       chipsService.resetChipsFilters(chipsService.model);
       filtersService.resetFilters();
+    }
+    function resetTradeChannels() {
+      var arr = vm.filtersService.model.tradeChannels[vm.filtersService.model.selected.premiseType];
+      for (var i = 0; i < arr.length; i++) {
+        var name =  'tradeChannel' + arr[i].name;
+        vm.filtersService.model.selected[name] = false;
+        vm.chipsService.removeChip(name);
+      }
     }
 
     // ***************
