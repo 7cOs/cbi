@@ -48,7 +48,7 @@
               p SKU/Package has not reported depletions at this account within L90 days AND is currently reporting depletions at Similar Stores. Note: for SKU/Packages that are Chain-mandated, a non-buy opportunity will be triggered if no depletions in L30 days
       .dropdown-filter
         .dropdown
-          md-select(ng-model="o.filtersService.model.opportunityTypes"  multiple="true" md-on-close="o.applyFilterMulti(o.filtersService.model.selected.opportunitiesTypes, o.filtersService.model.opportunityTypes, 'opportunitiesTypes')")
+          md-select(ng-model="o.filtersService.model.selected.opportunityTypes"  multiple="true" md-on-close="o.applyFilterMulti(o.filtersService.model.selected.opportunitiesTypes, o.filtersService.model.selected.opportunityTypes, 'opportunitiesTypes')")
             md-option(ng-repeat="type in o.filtersService.model.opportunitiesTypes" aria-label="{{type.name}}" value="{{type.name}}") {{::type.name}}
             .done-btn(ng-click="o.closeSelect()") Done
     div(column='3')
