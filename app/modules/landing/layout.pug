@@ -79,7 +79,7 @@ section.landing-page
           .filter-item
             .dropdown-filter
               .dropdown
-                md-select(ng-model="l.filtersService.model.opportunityTypes"  multiple="true" md-on-close="l.applyFilterMulti(l.filtersService.model.selected.opportunitiesTypes, l.filtersService.model.opportunityTypes, 'opportunitiesTypes')")
+                md-select(ng-model="l.filtersService.model.opportunityTypes"  multiple="true" md-on-close="l.applyFilterMulti(l.filtersService.model.selected.opportunitiesTypes, l.filtersService.model.opportunityTypes, 'opportunitiesTypes')" aria-label="Opportunity Type Dropdown")
                   md-option(ng-repeat="type in l.filtersService.model.opportunitiesTypes" aria-label="{{type.name}}" value="{{type.name}}") {{::type.name}}
                   .done-btn(ng-click="l.closeSelect()") Done
           .filter-item
