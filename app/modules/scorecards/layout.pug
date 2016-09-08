@@ -111,11 +111,9 @@ div.my-scorecards
             span {{s.totalDistributions[0].distributionsSimpleTrend | number:1}}%
     div.scorecard-filter
       div.radio-button-group
-        div {{s.distributionRadioOptions.selected.onOffPremise}}
         md-radio-group(ng-model="s.distributionRadioOptions.selected.onOffPremise" aria-label="Premise Filter" ng-change="s.changePremise();")
           md-radio-button(ng-repeat="filter in s.distributionRadioOptions.premises | orderBy: 'name'" class="md-primary" ng-value="filter.name" aria-label="{{filter.name}}") {{filter.name}}
       div.radio-button-group
-        div {{s.distributionRadioOptions.selected.placementType}}
         md-radio-group(ng-model="s.distributionRadioOptions.selected.placementType" aria-label="Placement Type Filter")
           md-radio-button(ng-repeat="filter in s.distributionRadioOptions.placementType" class="md-primary" ng-value="filter.name" aria-label="{{filter.name}}") {{filter.name}}
 
