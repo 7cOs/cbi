@@ -1,0 +1,17 @@
+div.modal
+  .title
+    h4 Dismiss
+    a.hide-row(ng-click="list.closeModal()")
+  .modal-container
+    .modal-content
+      p If opportunity is dismissed, opportunities for that Package/SKU at that account will not reappear for 90 days
+    .modal-content
+      md-radio-group(ng-model="list.opportunity.feedback.selector" ng-init="list.opportunity.feedback.selector = 'other'")
+        md-radio-button.md-primary(value="notRelevant") Opportunity not relevant
+        md-radio-button.md-primary(value="other") Other
+    .modal-content
+      label Additional Feedback
+      textarea(ng-model="list.opportunity.feedback.text").feedback
+    .modal-content
+      button.btn-action(ng-click="list.submitFeedback(opportunity)") Submit
+      p.cancel.accent(ng-click="list.closeModal()") X Cancel
