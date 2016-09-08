@@ -97,6 +97,8 @@ module.exports = /*  @ngInject */
       else payload.premiseType = 'off';
 
       userService.getPerformanceDistribution(payload).then(function(data) {
+        userService.model.distribution = data;
+
         updateTotalRowDistributions();
       });
     }
