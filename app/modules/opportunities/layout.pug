@@ -98,7 +98,7 @@
       label Location
         input(type="text" placeholder="City, State, or Zip" ng-model="o.filtersService.model.location", ng-keypress="($event.which === 13)?o.applyFilterArr(o.filtersService.model.selected.location, o.filtersService.model.location, 'location'):0")
       label.cbbd-contact CBBD Contact
-        input(type="text" placeholder="Name" ng-model="o.filtersService.model.cbbdContact" ng-keypress="($event.which === 13)?o.applyFilterArr(o.filtersService.model.selected.cbbdContact, o.filtersService.model.cbbdContact, 'cbbdContact'):0")
+          inline-search(type="user" placeholder="Name" chosen-result="o.filtersService.model.cbbdContact" callback="o.applyFilterArr(o.filtersService.model.selected.cbbdContact, result.firstName + ' ' + result.lastName, 'cbbdContact')")
   div(row ng-show="o.filtersService.model.expanded")
     div(column='4 +6' class="trade-channel")
       label.vertical Trade Channel
