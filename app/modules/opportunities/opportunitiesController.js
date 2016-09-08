@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports = /*  @ngInject */
-  function opportunitiesController($rootScope, $scope, $state, $filter, $mdDialog, opportunitiesService, opportunityFiltersService, chipsService, filtersService, userService) {
+  function opportunitiesController($rootScope, $scope, $state, $filter, $mdDialog, $mdSelect, opportunitiesService, opportunityFiltersService, chipsService, filtersService, userService) {
 
     // ****************
     // CONTROLLER SETUP
@@ -36,12 +36,17 @@ module.exports = /*  @ngInject */
     vm.placeholderSelect = placeholderSelect;
     vm.hoverState = hoverState;
     vm.resetFilters = resetFilters;
+    vm.closeSelect = closeSelect;
 
     init();
 
     // **************
     // PUBLIC METHODS
     // **************
+
+    function closeSelect() {
+      $mdSelect.hide();
+    }
 
     function hoverState(icon) {
       if (icon === 'reset') {
