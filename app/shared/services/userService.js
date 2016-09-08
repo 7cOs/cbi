@@ -381,17 +381,25 @@ module.exports = /*  @ngInject */
       var performancePromise = $q.defer(),
           url = apiHelperService.request('/api/users/' + service.model.currentUser.personID + '/performance/distributionScorecard/', params);
 
-      console.log(url);
-      if (service.model.distribution.length < 1) {
-        $http.get(url)
-          .then(getPerformanceDistributionSuccess)
-          .catch(getPerformanceDistributionFail);
-      } else {
-        performancePromise.resolve(service.model.distribution);
-      }
+      $http.get(url)
+        .then(getPerformanceDistributionSuccess)
+        .catch(getPerformanceDistributionFail);
 
       function getPerformanceDistributionSuccess(response) {
-        console.log('[userService.getPerformanceDistribution] response: ', response.data);
+        for (var i = 0; i < response.data.performance.length; i++) {
+          var totalSimpleDepletion = 0,
+              totalEffectiveDepletion = 0;
+
+          for (var j = 0; j < response.data.performance[i].measures.length; j++) {
+            console.log(response.data.performance[i].measures[j]);
+          }
+        }
+
+        response.data.performance.totals = {
+          totalSimpleDepletion: totalSimpleDepletion,
+          totalEffectiveDepletion: totalEffectiveDepletion
+        };
+
         performancePromise.resolve(response.data.performance);
       }
 

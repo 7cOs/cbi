@@ -27,6 +27,28 @@ module.exports = /*  @ngInject */
         name: 'FYTD'
       }]
     };
+    vm.distributionRadioOptions = {
+      placementType: [{
+        name: 'Simple'
+      }, {
+        name: 'Effective'
+      }],
+      premises: [{
+        name: 'Off Premise'
+      }, {
+        name: 'On Premise'
+      }],
+      selected: {}
+    };
+    vm.distributionSelectOptions = {
+      values: [
+        {name: 'L30', value: 'l30'},
+        {name: 'L60', value: 'l60'},
+        {name: 'L90', value: 'l90'},
+        {name: 'L120', value: 'l120'}
+      ],
+      selected: {}
+    };
     vm.totalRowTemplate = {
       depletions: 0,
       depletionsBU: 0,
@@ -40,6 +62,7 @@ module.exports = /*  @ngInject */
       growthPercent: 100,
       growthBU: 0
     };
+    vm.totalRowDistributionTemplate = {};
 
     // Set page title for head and nav
     $rootScope.pageTitle = $state.current.title;
@@ -54,6 +77,7 @@ module.exports = /*  @ngInject */
 
     // Expose public methods
     vm.changeDepletionScorecard = changeDepletionScorecard;
+    vm.changePremise = changePremise;
     vm.isPositive = isPositive;
 
     init();
@@ -66,6 +90,16 @@ module.exports = /*  @ngInject */
       if (bool) vm.depletionSelect = vm.depletionSelectOptions[vm.depletionRadio][0].name;
 
       updateTotalRowDepletions();
+    }
+
+    function changePremise() {
+      var payload = {'type': 'noencode'};
+      if (vm.distributionRadioOptions.selected.onOffPremise === 'On Premise') payload.premiseType = 'on';
+      else payload.premiseType = 'off';
+
+      userService.getPerformanceDistribution(payload).then(function(data) {
+        updateTotalRowDistributions();
+      });
     }
 
     function isPositive(salesData) {
@@ -91,13 +125,20 @@ module.exports = /*  @ngInject */
         userService.model.distribution = values[2];
 
         // init vars when all requests are finished
+        // depletions
         vm.depletionRadio = 'year';
         vm.depletionSelect = 'FYTD';
 
         updateTotalRowDepletions();
 
-        console.log('[scorecardsController.init - userService.model.depletion]', userService.model.depletion);
-        console.log(vm.totalRow);
+        console.log('[scorecardsController.init - userService.model.distribution]', userService.model.distribution);
+
+        // distribution
+        vm.distributionRadioOptions.selected.placementType = 'Simple';
+        vm.distributionRadioOptions.selected.onOffPremise = 'Off Premise';
+        vm.distributionSelectOptions.selected = 'l30';
+
+        updateTotalRowDistributions();
       });
     }
 
@@ -121,5 +162,9 @@ module.exports = /*  @ngInject */
       vm.totalRow.percentTrend = (vm.totalRow.gap / vm.totalRow.depletions) * 100;
       vm.totalRow.percentBUTrend = (vm.totalRow.gap / vm.totalRow.depletions) * 100;
       vm.totalRow.percentGapVsPlan = (vm.totalRow.gapVsPlan / vm.totalRow.depletions) * 100;
+    }
+
+    function updateTotalRowDistributions() {
+      vm.totalRowDistribution = angular.copy(vm.totalRowDistributionTemplate);
     }
   };
