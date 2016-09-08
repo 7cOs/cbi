@@ -18,7 +18,7 @@ module.exports = /*  @ngInject */
      */
     function closeOpportunity(oId) {
       var closeOpportunityPromise = $q.defer(),
-          url = apiHelperService.request('/closedOpportunities/' + oId);
+          url = apiHelperService.request('/api/closedOpportunities/' + oId);
 
       $http.patch(url)
         .then(closeOpportunitySuccess)

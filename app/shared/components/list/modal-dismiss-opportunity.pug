@@ -13,5 +13,5 @@ div.modal
       label Additional Feedback
       textarea(ng-model="list.opportunity.feedback.text").feedback
     .modal-content
-      button.btn-action(ng-click="list.submitFeedback(opportunity)") Submit
+      button.btn-action(ng-click="list.submitFeedback(list.currentOpportunityId)") Submit
       p.cancel.accent(ng-click="list.closeModal()") X Cancel

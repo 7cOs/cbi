@@ -89,7 +89,7 @@ module.exports = /*  @ngInject */
         distributionTimeFilter: 'L90 Days April 22, 2016 - July 21, 2016',
         location: '',
         opportunitiesStatus: '',
-        opportunitiesTypes: [],
+        opportunityTypes: ['All Types'],
         predictedImpactHigh: '',
         predictedImpactMedium: '',
         predictedImpactLow: '',
