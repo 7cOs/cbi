@@ -91,17 +91,28 @@ md-select-menu .md-text {
   }
 }
 
+md-select-menu[multiple] {
+  background: $white;
+  box-sizing: border-box;
+  padding-bottom: 3em;
+}
+
 .done-btn {
   background: $white;
+  bottom: 0;
+  box-sizing: border-box;
   color: $blue;
   font-family: $rajdhani;
   font-size: 0.7em;
   font-weight: $bold;
+  left: 0;
   outline: none;
   padding: 1.75em;
+  position: absolute;
   text-align: center;
   text-transform: uppercase;
   transition: background 300ms ease;
+  width: 100%;
 
   &:hover {
     background: $gray-4;
