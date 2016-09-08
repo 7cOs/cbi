@@ -34,13 +34,17 @@ list {
       background: $white;
 
       .md-icon-button {
-        margin: 0 0 0 -2em;
+        margin: 0 0 0 -4px;
       }
     }
 
     &:hover .dismiss-product .more-wrapper {
       padding: 0;
       background: inherit;
+    }
+
+    .bottom.dismiss-product {
+      margin-left: -25px;
     }
 
     .depletion-date {
