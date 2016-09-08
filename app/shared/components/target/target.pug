@@ -3,7 +3,7 @@ div.target-lists
     md-tab(ng-repeat="type in target.types" ng-if="target.tabFilter(type)" label="{{type.name}}")
       md-content.md-padding
         div(row).target-list-count-container.clearfix
-          h5.accent Displaying Recent Opportunities ({{type.records.length}} of {{type.total}})
+          h5.accent Displaying Most Recent ({{type.records.length}} of {{type.total}})
           div.target-list-count
             h5.accent.completed Closed
             h5.accent Total

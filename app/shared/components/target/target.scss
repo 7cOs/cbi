@@ -93,17 +93,6 @@
         color: $gray-12;
       }
 
-      .collaborators:before {
-        background-position: 0 center;
-        background-repeat: no-repeat;
-        background-image: url('../../assets/img/icons/person.svg');
-        content: '';
-        display: inline-block;
-        height: 9px;
-        width: 9px;
-        margin-right: 4px;
-      }
-
       [class^=target-list-row] {
         padding: 5px 20px 2px;
       }
@@ -122,4 +111,15 @@
       }
     }
   }
+}
+
+.collaborators:before {
+  background-position: 0 center;
+  background-repeat: no-repeat;
+  background-image: url('../../assets/img/icons/person.svg');
+  content: '';
+  display: inline-block;
+  height: 9px;
+  width: 9px;
+  margin-right: 4px;
 }

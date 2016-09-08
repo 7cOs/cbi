@@ -105,7 +105,7 @@ module.exports = /*  @ngInject */
         storeSegmentationC: '',
         storeType: '',
         timePeriod: 'Current Month to Date',
-        tradeChannelConvenience: '',
+        tradeChannelConvenience: false,
         tradeChannelDrug: '',
         tradeChannelGrocery: '',
         tradeChannelLiquor: '',
@@ -120,6 +120,28 @@ module.exports = /*  @ngInject */
         {name: 'Current Month to Date'},
         {name: 'Last Closed Month'}
       ],
+      tradeChannels: {
+        on: [
+          {label: 'Dining', name: 'Dining'},
+          {label: 'Bar / Nightclub', name: 'Bar'},
+          {label: 'Recreation', name: 'Recreation'},
+          {label: 'Lodging', name: 'Lodging'},
+          {label: 'Transportation', name: 'Transportation'},
+          {label: 'Military On Premise', name: 'Military'},
+          {label: 'Other', name: 'Other'}
+        ],
+        off: [
+          {label: 'Convenience', name: 'Convenience'},
+          {label: 'Mass Merchandiser', name: 'Mass'},
+          {label: 'Grocery', name: 'Grocery'},
+          {label: 'Drug', name: 'Drug'},
+          {label: 'Liquor', name: 'Liquor'},
+          {label: 'Military Off Premise', name: 'Military'},
+          {label: 'Recreation', name: 'Recreation'},
+          {label: 'Other', name: 'Other'}
+        ]
+
+      },
       trend: [
         {name: 'vs YA'},
         {name: 'va Plan'}

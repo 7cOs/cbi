@@ -50,15 +50,13 @@ div.expanded-target-lists
               // div.checkbox-wrapper.named-target-list
                 md-checkbox(aria-label="Select Item" ng-model="list.selected")
               div.checkbox-sibling(column="12" ui-sref="target-list-detail({id: list.id})")
-                div(row)
+                div(row).stats
                   h4(column="4").left {{list.name}}
-                  div(column="2")
-                    img(src="../assets/img/icons/person.svg").member-icon
-                    h5.accent.dropdown-menu-trigger {{list.collaborators.length}} collaborators
-                      ul.dropdown-menu
-                        li.member.creator {{expanded.userService.model.currentUser.firstName}} {{userService.model.currentUser.lastName}}
-                        li.member(ng-repeat="collaborator in list.collaborators") {{collaborator.user.firstName}} {{collaborator.user.lastName}}
-                  h5(column="2").accent {{list.lastUpdated | timeAgo : 'relative'}}
+                  h5(column="2").accent.dropdown-menu-trigger.collaborators {{list.collaborators.length}} collaborators
+                    ul.dropdown-menu
+                      li.member.creator {{expanded.userService.model.currentUser.firstName}} {{userService.model.currentUser.lastName}}
+                      li.member(ng-repeat="collaborator in list.collaborators") {{collaborator.user.firstName}} {{collaborator.user.lastName}}
+                  h5(column="2").accent {{list.dateOpportunitiesUpdated | timeAgo : 'relative'}}
                   h4(column="1").closed {{list.opportunitiesSummary.closedOpportunitiesCount | number}}
                   h4(column="1") {{list.opportunities | number}}
                   h4(column="2") {{list.opportunitiesSummary.totalClosedDepletions | number}}
@@ -105,8 +103,7 @@ div.expanded-target-lists
                 div(row)
                   h4(column="4").left {{list.name}}
                   div(column="2")
-                    img(src="../assets/img/icons/person.svg").member-icon
-                    h5.accent.gray.dropdown-menu-trigger {{list.collaborators.length}} collaborators
+                    h5.accent.gray.dropdown-menu-trigger.collaborators {{list.collaborators.length}} collaborators
                       ul.dropdown-menu
                         li.member.creator(ng-repeat="user in list.collaborators | filter: {permissionLevel: 'Author'}") {{user.user.firstName}} {{user.user.lastName}}
                         li.member(ng-repeat="collaborator in list.collaborators") {{collaborator.user.firstName}} {{collaborator.user.lastName}}
@@ -160,8 +157,7 @@ div.expanded-target-lists
                 div(row)
                   h4(column="4").left {{list.name}}
                   div(column="2")
-                    img(src="../assets/img/icons/person.svg").member-icon
-                    h5.accent.gray.dropdown-menu-trigger {{list.members.length}} collaborators
+                    h5.accent.gray.dropdown-menu-trigger.collaborators {{list.members.length}} collaborators
                       ul.dropdown-menu
                         li.member.creator(ng-repeat="user in list.collaborators | filter: {permissionLevel: 'Author'}") {{user.user.firstName}} {{user.user.lastName}}
                         li.member(ng-repeat="collaborator in list.collaborators") {{collaborator.user.firstName}} {{collaborator.user.lastName}}

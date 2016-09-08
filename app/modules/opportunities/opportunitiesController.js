@@ -36,12 +36,27 @@ module.exports = /*  @ngInject */
     vm.hoverState = hoverState;
     vm.resetFilters = resetFilters;
     vm.closeSelect = closeSelect;
+    vm.resetTradeChannels = resetTradeChannels;
+    vm.appendDoneButton = appendDoneButton;
+    vm.closeDoneButton = closeDoneButton;
 
     init();
 
     // **************
     // PUBLIC METHODS
     // **************
+
+    function appendDoneButton() {
+      // We have to do this so the done button is a sibling of md-select-menu
+      angular.element(document.getElementsByClassName('md-select-menu-container'))
+        .append('<div class="done-btn">Done</div>').bind('click', function(e) {
+          $mdSelect.hide();
+        });
+    }
+
+    function closeDoneButton() {
+      angular.element(document.getElementsByClassName('done-btn')).remove();
+    }
 
     function closeSelect() {
       $mdSelect.hide();
@@ -145,6 +160,14 @@ module.exports = /*  @ngInject */
       // reset all chips and filters
       chipsService.resetChipsFilters(chipsService.model);
       filtersService.resetFilters();
+    }
+    function resetTradeChannels() {
+      var arr = vm.filtersService.model.tradeChannels[vm.filtersService.model.selected.premiseType];
+      for (var i = 0; i < arr.length; i++) {
+        var name =  'tradeChannel' + arr[i].name;
+        vm.filtersService.model.selected[name] = false;
+        vm.chipsService.removeChip(name);
+      }
     }
 
     // ***************

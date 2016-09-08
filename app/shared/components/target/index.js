@@ -19,7 +19,7 @@ function TargetListController($scope, $state, targetListService, userService) {
   // tab names
   vm.types = {
     'mine': {
-      'name': 'My Target List',
+      'name': 'My Target Lists',
       'records': [],
       'total': 0
     },
