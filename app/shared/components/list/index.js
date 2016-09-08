@@ -38,6 +38,7 @@ function ListController($scope, $state, $q, $location, $anchorScroll, $mdDialog,
   vm.exists = exists;
   vm.isChecked = isChecked;
   vm.openShareModal = openShareModal;
+  vm.openDismissModal = openDismissModal;
   vm.pageName = pageName;
   vm.removeOpportunity = removeOpportunity;
   vm.shareOpportunity = shareOpportunity;
@@ -45,7 +46,6 @@ function ListController($scope, $state, $q, $location, $anchorScroll, $mdDialog,
   vm.selectOpportunity = selectOpportunity;
   vm.selectAllParents = selectAllParents;
   vm.showCorporateMemoModal = showCorporateMemoModal;
-  vm.showFlyout = showFlyout;
   vm.submitFeedback = submitFeedback;
   vm.cancelFeedback = cancelFeedback;
   vm.pageChanged = pageChanged;
@@ -83,10 +83,6 @@ function ListController($scope, $state, $q, $location, $anchorScroll, $mdDialog,
 
   function addToSharedCollaborators() {
     vm.sharedCollaborators.push(vm.collaborator);
-  }
-
-  function cancelFeedback(opportunity) {
-    vm.showSubMenu = false;
   }
 
   function addToTargetList(listId) {
@@ -149,15 +145,26 @@ function ListController($scope, $state, $q, $location, $anchorScroll, $mdDialog,
     });
   }
 
-  // Show Flyout Menu
-  function showFlyout(opportunity) {
-    vm.showSubMenu = true;
+  function openDismissModal(oId, ev) {
+    vm.currentOpportunityId = oId;
     // actionOverlay(opportunity, action);
+    var parentEl = angular.element(document.body);
+    $mdDialog.show({
+      clickOutsideToClose: true,
+      parent: parentEl,
+      scope: $scope.$new(),
+      targetEvent: ev,
+      templateUrl: './app/shared/components/list/modal-dismiss-opportunity.html'
+    });
   }
 
   function submitFeedback(opportunity) {
-    vm.showSubMenu = false;
+    $mdDialog.hide();
     dismissOpportunity(opportunity.id);
+  }
+
+  function cancelFeedback(opportunity) {
+    closeModal();
   }
 
   // arr of pages to be hidden on

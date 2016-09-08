@@ -43,8 +43,26 @@ md-dialog {
     }
   }
 
-  .modal-form {
+  .modal-form, .modal-container {
     padding: 34px;
+
+    .modal-content {
+      margin-bottom: 4ex;
+
+      > md-radio-group {
+        text-align: left;
+      }
+
+      &:first-child {
+        > p {
+          margin-top: 0;
+        }
+      }
+
+      &:last-child {
+        margin-bottom: 0;
+      }
+    }
 
     .left {
       text-align: left;
