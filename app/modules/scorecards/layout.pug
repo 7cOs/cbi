@@ -166,8 +166,12 @@ div.my-scorecards
             td.column-total.dark-blue.no-border
               span(ng-if="s.distributionRadioOptions.selected.placementType === 'Effective'" ng-class="{'negative': !s.isPositive(s.totalDistributions[0].distributionsEffective)}") {{s.totalDistributions[0].distributionsEffective | number:0 }}
               span(ng-if="s.distributionRadioOptions.selected.placementType === 'Simple'" ng-class="{'negative': !s.isPositive(s.totalDistributions[0].distributionsSimple)}") {{s.totalDistributions[0].distributionsSimple | number:0 }}
-            td.column-total.blue.no-border {{1532 | number }}
-            td.column-total.blue.no-border 7.5%
+            td.column-total.blue.no-border
+              span(ng-if="s.distributionRadioOptions.selected.placementType === 'Effective'" ng-class="{'negative': !s.isPositive(s.totalDistributions[0].distributionsEffective * s.totalDistributions[0].distributionsEffectiveTrend)}") {{(s.totalDistributions[0].distributionsEffective * s.totalDistributions[0].distributionsEffectiveTrend) / 100 | number:0 }}
+              span(ng-if="s.distributionRadioOptions.selected.placementType === 'Simple'" ng-class="{'negative': !s.isPositive(s.totalDistributions[0].distributionsSimple * s.totalDistributions[0].distributionsSimpleTrend)}") {{(s.totalDistributions[0].distributionsSimple * s.totalDistributions[0].distributionsSimpleTrend) / 100 | number:0 }}
+            td.column-total.blue.no-border
+              span(ng-if="s.distributionRadioOptions.selected.placementType === 'Effective'" ng-class="{'negative': !s.isPositive(s.totalDistributions[0].distributionsEffectiveTrend)}") {{s.totalDistributions[0].distributionsEffectiveTrend | number:1 }}%
+              span(ng-if="s.distributionRadioOptions.selected.placementType === 'Simple'" ng-class="{'negative': !s.isPositive(s.totalDistributions[0].distributionsSimpleTrend)}") {{s.totalDistributions[0].distributionsSimpleTrend | number:1 }}%
             td.column-total 1%
 >>>>>>> filtered out and added total row to distribution scorecard
             td.column-total.positive.no-border &#9650;
