@@ -295,7 +295,10 @@ function ListController($scope, $state, $q, $location, $anchorScroll, $mdDialog,
       var item = {};
       angular.copy(value, item);
       item.productName = item.product.name;
-      item.TDLinx = item.store.id;
+      item.TDLinx = item.product.id;
+      item.segmentation = item.store.segmentation;
+      item.velocity = item.store.velocity;
+      item.velocityYA = item.store.velocityYA;
       item.storeName = item.store.name;
       item.storeAddress = item.store.address;
       delete item.brands;
