@@ -63,9 +63,8 @@
         label Opportunity Type
         .dropdown-filter
           .dropdown
-            md-select(ng-model="tld.filtersService.model.opportunityTypes"  multiple="true" md-on-close="tld.applyFilterMulti(tld.filtersService.model.selected.opportunitiesTypes, tld.filtersService.model.opportunityTypes, 'opportunitiesTypes')")
+            md-select(md-on-open="tld.appendDoneButton()" ng-model="tld.filtersService.model.opportunityTypes"  multiple="true" md-on-close="tld.applyFilterMulti(tld.filtersService.model.selected.opportunitiesTypes, tld.filtersService.model.opportunityTypes, 'opportunitiesTypes'); tld.closeDoneButton()")
               md-option(ng-repeat="type in tld.filtersService.model.opportunitiesTypes" aria-label="{{type.name}}" value="{{type.name}}") {{::type.name}}
-              .done-btn(ng-click="tld.closeSelect()") Done
       div(column='3')
         label Brand / Master SKU
         inline-search(type="product" placeholder="Brand or SKU/Package" chosen-result="tld.filtersService.model.selected.brandSearchText" callback="tld.chipsService.addChip(result, 'brandSearchText', false)")
