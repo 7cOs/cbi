@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports = /*  @ngInject */
-  function targetListDetailController($rootScope, $scope, $state, $timeout, $filter, $mdDialog, targetListService, chipsService, filtersService, opportunitiesService, userService) {
+  function targetListDetailController($rootScope, $scope, $state, $timeout, $filter, $mdDialog, $mdSelect, targetListService, chipsService, filtersService, opportunitiesService, userService) {
 
     // ****************
     // CONTROLLER SETUP
@@ -26,6 +26,8 @@ module.exports = /*  @ngInject */
     $rootScope.pageTitle = $state.current.title;
 
     // Expose public methods
+    vm.applyFilterArr = applyFilterArr;
+    vm.applyFilterMulti = applyFilterMulti;
     vm.addCollaborators = addCollaborators;
     vm.addCollaboratorClick = addCollaboratorClick;
     vm.changeCollaboratorLevel = changeCollaboratorLevel;
@@ -43,12 +45,42 @@ module.exports = /*  @ngInject */
     vm.removeFooterToast = removeFooterToast;
     vm.updateList = updateList;
     vm.resetFilters = resetFilters;
+    vm.closeSelect = closeSelect;
 
     init();
 
     // **************
     // PUBLIC METHODS
     // **************
+
+    function closeSelect() {
+      $mdSelect.hide();
+    }
+
+    function applyFilterMulti(model, result, filter) {
+      vm.chipsService.removeChip('opportunitiesTypes');
+      if (result.length === 0) {
+        vm.chipsService.addChip('All Types', 'opportunitiesTypes', false);
+        vm.filtersService.model.selected[filter] = ['All Types'];
+        vm.filtersService.model.opportunityTypes = ['All Types'];
+
+      } else {
+        for (var i = 0; i < result.length; i++) {
+          vm.chipsService.addChip(result[i], 'opportunitiesTypes', false);
+        }
+        vm.filtersService.model.selected[filter] = result;
+      }
+
+    }
+    function applyFilterArr(model, result, filter) {
+      if (model.indexOf(result) > -1) {
+        vm.filtersService.model[filter] = '';
+      } else {
+        vm.chipsService.addAutocompleteChip(result, filter);
+        vm.filtersService.model[filter] = '';
+        model.push(result);
+      }
+    }
 
     function addCollaborators() {
       vm.collaborator.permissionLevel = vm.permissionLevel;

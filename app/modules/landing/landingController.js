@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports = /*  @ngInject */
-  function landingController($rootScope, $state, $filter, filtersService, chipsService, myperformanceService, userService) {
+  function landingController($rootScope, $state, $filter, $mdSelect, filtersService, chipsService, myperformanceService, userService) {
 
     // ****************
     // CONTROLLER SETUP
@@ -22,6 +22,7 @@ module.exports = /*  @ngInject */
     vm.brandQuerySearch = brandQuerySearch;
     vm.accountQuerySearch = accountQuerySearch;
     vm.distributorQuerySearch = distributorQuerySearch;
+    vm.closeSelect = closeSelect;
 
     // Set values
     vm.greeting = getGreeting();
@@ -31,6 +32,10 @@ module.exports = /*  @ngInject */
     // **************
     // PUBLIC METHODS
     // **************
+
+    function closeSelect() {
+      $mdSelect.hide();
+    }
 
     function isPositive(salesData) {
       if (salesData >= 0) {

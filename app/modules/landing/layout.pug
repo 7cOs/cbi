@@ -79,9 +79,9 @@ section.landing-page
           .filter-item
             .dropdown-filter
               .dropdown
-                label opportunity type
-                md-select(ng-model="l.filter.selected.opportunitiesTypes" aria-label="Opportunity Type" placeholder="Show all types")
-                  md-option(ng-repeat="type in l.filter.opportunitiesTypes" aria-label="type.name" value="{{type.name}}") {{type.name}}
+                md-select(ng-model="l.filtersService.model.opportunityTypes"  multiple="true" md-on-close="l.applyFilterMulti(l.filtersService.model.selected.opportunitiesTypes, l.filtersService.model.opportunityTypes, 'opportunitiesTypes')")
+                  md-option(ng-repeat="type in l.filtersService.model.opportunitiesTypes" aria-label="{{type.name}}" value="{{type.name}}") {{::type.name}}
+                  .done-btn(ng-click="l.closeSelect()") Done
           .filter-item
             label Brand / Master SKU
             inline-search(type="product" placeholder="By brand or SKU" chosen-result="l.filtersService.model.brandSearchText")
@@ -90,6 +90,6 @@ section.landing-page
             inline-search(type="store" placeholder="Store, account, or subaccount name" chosen-result="l.filtersService.model.accountSearchText")
           .filter-item
             label Distributor
-            inline-search(type="distributor" placeholder="By name" chosen-result="o.filtersService.model.distributorSearchText")
+            inline-search(type="distributor" placeholder="By name" chosen-result="l.filtersService.model.distributorSearchText")
 
           button.btn-action(analytics-on="click" analytics-event="Opportunity List Link Click") Find Opportunities

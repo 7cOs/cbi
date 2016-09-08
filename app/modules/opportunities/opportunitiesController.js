@@ -24,7 +24,6 @@ module.exports = /*  @ngInject */
     vm.opportunitiesService = opportunitiesService;
 
     // Expose public methods
-    vm.applyFilter = applyFilter;
     vm.applyFilterArr = applyFilterArr;
     vm.applyFilterMulti = applyFilterMulti;
     vm.closeEditModal = closeEditModal;
@@ -58,10 +57,6 @@ module.exports = /*  @ngInject */
 
     function placeholderSelect(data) {
       vm.hintTextPlaceholder = data;
-    }
-
-    function applyFilter(filterStr) {
-      console.log('add filter');
     }
 
     function applyFilterMulti(model, result, filter) {
