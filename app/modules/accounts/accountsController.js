@@ -229,16 +229,15 @@ module.exports = /*  @ngInject */
       chipsService.resetChipsFilters(chipsService.model);
 
       userService.getPerformanceSummary().then(function(data) {
-        console.log('summary done');
+        userService.model.summary = data;
       });
 
       userService.getPerformanceDepletion().then(function(data) {
         userService.model.depletion = data;
       });
 
-      userService.getPerformanceDistribution().then(function(data) {
+      userService.getPerformanceDistribution({'type': 'noencode', 'premiseType': 'off'}).then(function(data) {
         userService.model.distribution = data;
-        console.log('[userService.model]', userService.model);
       });
     }
   };

@@ -50,7 +50,7 @@ module.exports = /*  @ngInject */
         queryParams += '?archived=true';
 
         return queryParams;
-      } else {
+      } else if (obj.type && obj.type === 'noencode') {
         queryParams += 'filter=';
 
         // remove type obj
@@ -58,6 +58,19 @@ module.exports = /*  @ngInject */
 
         for (var key4 in obj) {
           queryParams += key4 + ':' + obj[key4];
+          if (i !== z) queryParams += ',';
+          i++;
+        }
+
+        return '?' + queryParams;
+      } else {
+        queryParams += 'filter=';
+
+        // remove type obj
+        delete obj.type;
+
+        for (var key5 in obj) {
+          queryParams += key5 + ':' + obj[key5];
           if (i !== z) queryParams += ',';
           i++;
         }

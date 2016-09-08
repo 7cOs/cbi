@@ -60,13 +60,22 @@ module.exports = /*  @ngInject */
           hintText: 'Account or Subaccount Name'
         }
       ],
-      depletionsTimePeriod: [{
-        name: 'MTD July 1, 2016 - July 31, 2016'
-      }, {
-        name: 'CYTD Jan 1, 2016 - July 21, 2016'
-      }, {
-        name: 'FYTD May 1, 2016 - July 21, 2016'
-      }],
+      depletionsTimePeriod: {
+        month: [{
+          name: 'CMTH'
+        }, {
+          name: 'CYTM'
+        }, {
+          name: 'FYTM'
+        }],
+        year: [{
+          name: 'MTD'
+        }, {
+          name: 'CYTD'
+        }, {
+          name: 'FYTD'
+        }]
+      },
       distributionTimePeriod: [{
         name: 'L30 Days June 21, 2016 - July 21, 2016'
       }, {
@@ -117,8 +126,10 @@ module.exports = /*  @ngInject */
         valuesVsTrend: ''
       },
       timePeriod: [
-        {name: 'Current Month to Date'},
-        {name: 'Last Closed Month'}
+        {name: 'Current Month to Date',
+         value: 'month'},
+        {name: 'Last Closed Month',
+         value: 'year'}
       ],
       tradeChannels: {
         on: [

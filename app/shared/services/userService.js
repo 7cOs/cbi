@@ -4,30 +4,30 @@ module.exports = /*  @ngInject */
   function userService($http, $q, apiHelperService, filtersService, targetListService) {
 
     var model = {
-          currentUser: {},
-          summary: [],
-          depletion: [],
-          distribution: []
-        },
-        service = {
-          model: model,
-          getUsers: getUsers,
-          getHiddenOpportunities: getHiddenOpportunities,
-          hideOpportunity: hideOpportunity,
-          deleteHiddenOpportunity: deleteHiddenOpportunity,
-          getNotifications: getNotifications,
-          createNotification: createNotification,
-          getOpportunityFilters: getOpportunityFilters,
-          saveOpportunityFilter: saveOpportunityFilter,
-          getPerformanceSummary: getPerformanceSummary,
-          getPerformanceDepletion: getPerformanceDepletion,
-          getPerformanceDistribution: getPerformanceDistribution,
-          getPerformanceBrand: getPerformanceBrand,
-          getPerformanceTopBottom: getPerformanceTopBottom,
-          getTargetLists: getTargetLists,
-          addTargetList: addTargetList,
-          sendOpportunity: sendOpportunity
-        };
+      currentUser: {},
+      summary: [],
+      depletion: [],
+      distribution: []
+    };
+    var service = {
+      model: model,
+      getUsers: getUsers,
+      getHiddenOpportunities: getHiddenOpportunities,
+      hideOpportunity: hideOpportunity,
+      deleteHiddenOpportunity: deleteHiddenOpportunity,
+      getNotifications: getNotifications,
+      createNotification: createNotification,
+      getOpportunityFilters: getOpportunityFilters,
+      saveOpportunityFilter: saveOpportunityFilter,
+      getPerformanceSummary: getPerformanceSummary,
+      getPerformanceDepletion: getPerformanceDepletion,
+      getPerformanceDistribution: getPerformanceDistribution,
+      getPerformanceBrand: getPerformanceBrand,
+      getPerformanceTopBottom: getPerformanceTopBottom,
+      getTargetLists: getTargetLists,
+      addTargetList: addTargetList,
+      sendOpportunity: sendOpportunity
+    };
 
     return service;
 
@@ -338,7 +338,28 @@ module.exports = /*  @ngInject */
       }
 
       function getPerformanceDepletionSuccess(response) {
-        console.log('[userService.getPerformanceDepletion] response: ', response.data);
+        // sum depletions and bu depletions
+        for (var i = 0; i < response.data.performance.length; i++) {
+          var totalDepletion = 0,
+              totalBUDepletion = 0;
+
+          for (var j = 0; j < response.data.performance[i].measures.length; j++) {
+            var depletions = response.data.performance[i].measures[j].depletions,
+                depletionTrend = response.data.performance[i].measures[j].depletionsTrend,
+                plan = response.data.performance[i].measures[j].plan;
+
+            totalDepletion += depletions;
+            totalBUDepletion += response.data.performance[i].measures[j].depletionsBU;
+
+            // Add Table Data
+            response.data.performance[i].measures[j].depletionsGap = depletions * (depletionTrend / 100);
+            response.data.performance[i].measures[j].vsPlan = plan - depletions;
+            response.data.performance[i].measures[j].vsPlanPercent = (response.data.performance[i].measures[j].vsPlan / plan) * 100;
+          }
+
+          response.data.performance[i].depletionTotal = totalDepletion;
+          response.data.performance[i].depletionBUTotal = totalBUDepletion;
+        }
         performancePromise.resolve(response.data.performance);
       }
 
@@ -352,13 +373,15 @@ module.exports = /*  @ngInject */
     /**
      * @name getPerformanceDistribution
      * @desc get performance distribution for a user
+     * @params {Object} params - &filter=premiseType:off or &filter=premiseType:on
      * @returns {Object} - user performance distribution
      * @memberOf cf.common.services
      */
-    function getPerformanceDistribution(id) {
+    function getPerformanceDistribution(params) {
       var performancePromise = $q.defer(),
-          url = apiHelperService.request('/api/users/' + service.model.currentUser.personID + '/performance/distributionScorecard/');
+          url = apiHelperService.request('/api/users/' + service.model.currentUser.personID + '/performance/distributionScorecard/', params);
 
+      console.log(url);
       if (service.model.distribution.length < 1) {
         $http.get(url)
           .then(getPerformanceDistributionSuccess)
