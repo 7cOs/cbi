@@ -160,7 +160,7 @@ function ListController($scope, $state, $q, $location, $anchorScroll, $mdDialog,
 
   function submitFeedback(opportunity) {
     $mdDialog.hide();
-    dismissOpportunity(opportunity.id);
+    dismissOpportunity(opportunity);
   }
 
   function cancelFeedback(opportunity) {
@@ -337,9 +337,12 @@ function ListController($scope, $state, $q, $location, $anchorScroll, $mdDialog,
   }
 
   function dismissOpportunity(oId) {
-    console.log(oId);
     closedOpportunitiesService.closeOpportunity(oId).then(function(data) {
-      console.log('Closed');
+      angular.forEach(vm.opportunitiesService.model.opportunitiesDisplay[0], function(value, key) {
+        if (value.id === oId) {
+          vm.opportunitiesService.model.opportunities = vm.opportunitiesService.model.opportunitiesDisplay[0].splice(key, 1);
+        }
+      });
     });
   }
 

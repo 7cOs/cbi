@@ -365,6 +365,10 @@ list {
 
 .positive {
   color: $green;
+
+  &.rotate {
+    transform: rotate(180deg);
+  }
 }
 
 .negative {
@@ -481,6 +485,7 @@ list {
 }
 
 .target-list-menu {
+  overflow: auto;
   width: 180px;
 }
 

@@ -5,7 +5,7 @@
 
   .target-action-buttons
     button(ng-if="expanded.buttonState === 'named'" ng-disabled="expanded.selected.length === 0" ng-click="expanded.archiveTargetList()").btn-action Archive
-    button(ng-if="expanded.buttonState !== 'shared'" ng-disabled="expanded.selected.length === 0" ng-click="expanded.deleteTargetList()").btn-action Delete
+    button(ng-if="expanded.buttonState !== 'shared'" ng-disabled="expanded.selected.length === 0" ng-click="expanded.deleteTargetList(expanded.selected)").btn-action Delete
     button.btn-action(ng-click="expanded.createTargetList($event)") Create a New List
 div.expanded-target-lists
   md-tabs(md-dynamic-height='' md-border-bottom)
@@ -44,7 +44,7 @@ div.expanded-target-lists
             h4 No Opportunities have been added yet
             p Try Searching for <span>Opportunities</span> and add them to your list
           ul
-            li(ng-repeat="list in expanded.userService.model.targetLists.owned | filter:{archived:false} | orderBy:expanded.sortProperty:expanded.reverse").clearfix
+            li(ng-repeat="list in expanded.userService.model.targetLists.owned | filter:{archived:false} | filter:{deleted:false} | orderBy:expanded.sortProperty:expanded.reverse").clearfix
               div.checkbox-wrapper.named-target-list(ng-click="expanded.toggle(list, expanded.selected)")
                 md-checkbox(aria-label="Select Item" ng-checked="expanded.exists(list, expanded.selected)")
               // div.checkbox-wrapper.named-target-list
@@ -58,7 +58,7 @@ div.expanded-target-lists
                       li.member(ng-repeat="collaborator in list.collaborators") {{collaborator.user.firstName}} {{collaborator.user.lastName}}
                   h5(column="2").accent {{list.dateOpportunitiesUpdated | timeAgo : 'relative'}}
                   h4(column="1").closed {{list.opportunitiesSummary.closedOpportunitiesCount | number}}
-                  h4(column="1") {{list.opportunities | number}}
+                  h4(column="1") {{list.opportunitiesSummary.opportunitiesCount | number}}
                   h4(column="2") {{list.opportunitiesSummary.totalClosedDepletions | number}}
                 div(row).creator
                   h5(column="3").accent.left {{expanded.userService.model.currentUser.firstName}} {{expanded.userService.model.currentUser.lastName}}
