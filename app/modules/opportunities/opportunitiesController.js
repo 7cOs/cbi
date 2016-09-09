@@ -93,6 +93,7 @@ module.exports = /*  @ngInject */
       if (model.indexOf(result) > -1) {
         vm.filtersService.model[filter] = '';
       } else {
+        result = $filter('lowercase')(result);
         vm.chipsService.addAutocompleteChip(result, filter);
         vm.filtersService.model[filter] = '';
         model.push(result);
