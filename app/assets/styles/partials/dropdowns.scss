@@ -24,6 +24,12 @@
   .md-select-placeholder {
     font-style: italic;
   }
+
+}
+
+md-input-container.md-input-focused:not([md-no-float]) .md-select-placeholder span:first-child {
+  -webkit-transform: translateY(-45px) translateX(-2px) scale(0.75);
+  transform: translateY(-45px) translateX(-2px) scale(0.75);
 }
 
 md-option {
@@ -88,6 +94,12 @@ md-select-menu .md-text {
     right: 10px;
     top: 10px;
     width: 40px;
+  }
+
+  .go-arrow:after {
+    right: 0;
+    top: 40%;
+    bottom: initial;
   }
 }
 

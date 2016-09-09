@@ -69,8 +69,9 @@ section.landing-page
         .filter-container.first
           .dropdown-filter
             .dropdown
-              md-select(ng-model="l.filter.selected.savedFilters" aria-label="Saved Filter"  placeholder="Select saved report")
-                md-option(ng-repeat="savedFilter in l.savedFilters" value="{{savedFilter.id}}") {{savedFilter.name}}
+              md-select(ng-model="l.filter.selected.savedFilters" aria-label="Saved Filter Dropdown"  placeholder="Select Saved Report")
+                md-option(class="saved-filter-option" ng-repeat="savedFilter in l.savedFilters" value="{{::savedFilter.id}}" ng-class="{'show-span': hover}" ng-mouseenter="hover = true" ng-mouseleave="hover = false") {{::savedFilter.name}}
+                  span.go-arrow(ng-if="hover" ng-click="")
         h3 New Search
         .filter-container
           label

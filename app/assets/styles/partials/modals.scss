@@ -248,6 +248,29 @@ md-dialog {
       float: right;
     }
   }
+
+  &.save-report {
+    .title {
+      h4, p {
+        display: inline-block;
+      }
+
+      p {
+        color: $ghost-white;
+        float: right;
+        font-size: 1.5em;
+        font-weight: bold;
+
+        &:hover {
+          cursor: pointer;
+        }
+      }
+    }
+
+    label.disabled {
+      color: $gray-2;
+    }
+  }
 }
 
 .corporate-memo {
