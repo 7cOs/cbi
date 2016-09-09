@@ -26,7 +26,7 @@ module.exports = /*  @ngInject */
         'name': 'All Types',
         'type': 'opportunitiesTypes',
         'applied': false,
-        'removable': true
+        'removable': false
       }
     ];
 
@@ -60,7 +60,8 @@ module.exports = /*  @ngInject */
           name: chip,
           type: filter,
           search: true,
-          applied: false
+          applied: false,
+          removable: true
         });
 
         filtersService.model.filtersApplied = false;
@@ -80,16 +81,16 @@ module.exports = /*  @ngInject */
      * @returns null
      * @memberOf cf.common.services
      */
-    function addChip(chip, type, onlyOneAllowed) {
+    function addChip(chip, type, onlyOneAllowed, removable) {
       if (chip) {
         if (onlyOneAllowed) removeChip(type);
-        // Add to Chip Model
+        if (removable === undefined) removable = true;
         service.model.push({
           name: chip,
           type: type,
-          applied: false
+          applied: false,
+          removable: removable
         });
-
         filtersService.model.filtersApplied = false;
         filtersService.model.filtersDefault = false;
       }
@@ -125,7 +126,6 @@ module.exports = /*  @ngInject */
      * @private
      */
     function removeChip(type) {
-      console.log(service.model);
       var i = service.model.length;
       while (i--) {
         if (service.model[i].type === type) {

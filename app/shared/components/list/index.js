@@ -348,7 +348,7 @@ function ListController($scope, $state, $q, $location, $anchorScroll, $mdDialog,
 
   function init() {
     // get target lists
-    userService.getTargetLists(userService.model.currentUser.personID, {'type': 'targetLists'}).then(function(data) {
+    userService.getTargetLists(userService.model.currentUser.employeeID, {'type': 'targetLists'}).then(function(data) {
       userService.model.targetLists = data;
     });
 

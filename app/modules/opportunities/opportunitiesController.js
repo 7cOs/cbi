@@ -76,16 +76,21 @@ module.exports = /*  @ngInject */
 
     function applyFilterMulti(model, result, filter) {
       vm.chipsService.removeChip('opportunitiesTypes');
-      if (result.length === 0) {
-        vm.chipsService.addChip('All Types', 'opportunitiesTypes', false);
+      if (result.length === 0 || result[0] === 'All Types' && result.length === 1) {
+        vm.chipsService.addChip('All Types', 'opportunitiesTypes', false, false);
         vm.filtersService.model.selected[filter] = ['All Types'];
-        vm.filtersService.model.opportunityTypes = ['All Types'];
+        vm.filtersService.model.selected.opportunityTypes = ['All Types'];
 
       } else {
+        var chips = [];
         for (var i = 0; i < result.length; i++) {
-          vm.chipsService.addChip(result[i], 'opportunitiesTypes', false);
+          if (result[i] !== 'All Types') {
+            vm.chipsService.addChip(result[i], 'opportunitiesTypes', false);
+            chips.push(result[i]);
+          }
         }
-        vm.filtersService.model.selected[filter] = result;
+        vm.filtersService.model.selected[filter] = chips;
+        vm.filtersService.model.selected.opportunityTypes = chips;
       }
 
     }
@@ -93,6 +98,7 @@ module.exports = /*  @ngInject */
       if (model.indexOf(result) > -1) {
         vm.filtersService.model[filter] = '';
       } else {
+        result = $filter('lowercase')(result);
         vm.chipsService.addAutocompleteChip(result, filter);
         vm.filtersService.model[filter] = '';
         model.push(result);
@@ -190,7 +196,7 @@ module.exports = /*  @ngInject */
 
     function init() {
       // get saved filters -- this should be passed from user data when its ready
-      userService.getOpportunityFilters(userService.model.currentUser.personID).then(function(data) {
+      userService.getOpportunityFilters(userService.model.currentUser.employeeID).then(function(data) {
         userService.model.opportunityFilters = data;
       });
 

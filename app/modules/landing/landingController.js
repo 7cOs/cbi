@@ -115,13 +115,13 @@ module.exports = /*  @ngInject */
     }
 
     function init() {
-      userService.getPerformanceSummary(userService.model.currentUser.personID).then(function(data) {
+      userService.getPerformanceSummary(userService.model.currentUser.employeeID).then(function(data) {
         console.log(data);
         vm.performanceData = data;
       });
 
       userService
-        .getOpportunityFilters(userService.model.currentUser.personID)
+        .getOpportunityFilters(userService.model.currentUser.employeeID)
         .then(function(res) {
           vm.savedFilters = res;
         });
