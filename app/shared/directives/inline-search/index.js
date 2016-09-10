@@ -9,7 +9,8 @@ module.exports =
         placeholder: '@',
         input: '=chosenResult',
         callback: '&',
-        nav: '@'
+        nav: '@',
+        variety: '@'
       },
       controller: InlineSearchController,
       controllerAs: 'is',
@@ -75,7 +76,17 @@ module.exports =
 
         searchService[method](vm.input).then(function(data) {
           vm.loading = false;
-          vm.results = data;
+          if (vm.type === 'product') {
+            var products = [];
+            angular.forEach(data, function(value, key) {
+              if (value.type === vm.variety) {
+                products.push(value);
+              }
+            });
+            vm.results = products;
+          } else {
+            vm.results = data;
+          };
         }, function(reason) {
           vm.loading = false;
           vm.errorMessage = reason;
@@ -83,8 +94,9 @@ module.exports =
       }
 
       function resultChosen(result, nav) {
-        if (vm.type === 'user') vm.input = $filter('titlecase')(result.firstName) + ' ' + $filter('titlecase')(result.lastName);
-        else vm.input = result;
+        if (vm.type === 'user') {
+          vm.input = $filter('titlecase')(result.firstName) + ' ' + $filter('titlecase')(result.lastName);
+        } else { vm.input = result; };
 
         if (nav) {
           // We'll need to pass result for filtering once Accounts is integrated
