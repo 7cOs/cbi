@@ -43,7 +43,7 @@ module.exports = /*  @ngInject */
      * @returns [array]
      * @memberOf cf.common.services
      */
-    function getProducts(searchTerm) {
+    function getProducts(searchTerm, variety) {
       var searchPromise = $q.defer(),
           url = apiHelperService.request('/api/search/products?searchTerm=' + encodeURIComponent(searchTerm));
 

@@ -52,9 +52,12 @@
         .dropdown
           md-select(md-on-open="o.appendDoneButton()" ng-model="o.filtersService.model.selected.opportunityTypes"  multiple="true" md-on-close="o.applyFilterMulti(o.filtersService.model.selected.opportunitiesTypes, o.filtersService.model.selected.opportunityTypes, 'opportunitiesTypes'); o.closeDoneButton()" aria-label="Opportunity Type Dropdown")
             md-option(ng-repeat="type in o.filtersService.model.opportunitiesTypes" aria-label="{{type.name}}" value="{{type.name}}") {{::type.name}}
-    div(column='3')
+    div(column='3' ng-if="o.filtersService.model.selected.premiseType === 'off'")
       label Brand / Master SKU
-      inline-search(type="product" placeholder="Brand or SKU/Package" chosen-result="o.filtersService.model.brands" callback="o.applyFilterArr(o.filtersService.model.selected.brands, result, 'brands')")
+      inline-search(type="product" variety="sku" placeholder="Brand or SKU" chosen-result="o.filtersService.model.brands" callback="o.applyFilterArr(o.filtersService.model.selected.brands, result, 'brands')")
+    div(column='3' ng-if="o.filtersService.model.selected.premiseType === 'on'")
+      label Brand / Package
+      inline-search(type="product" variety="package" placeholder="Brand or Package" chosen-result="o.filtersService.model.brands" callback="o.applyFilterArr(o.filtersService.model.selected.brands, result, 'brands')")
     div(column='3')
       label Retailer
       div(row).retailer.dropdown-filter
