@@ -42,9 +42,9 @@ div.modal
       .dropdown-filter.half-width
         .dropdown.short
           md-select.left(ng-model="nb.newOpportunity.properties.impact.enum" aria-label="impact dropdown" placeholder="Select Impact")
-            md-option(aria-label="High Impact" value="H") <span class="impact-text">High</span> <img class="impact-icon" src="./assets/img/icons/impact-high.svg">
-            md-option(aria-label="Medium Impact form" value="M") <span class="impact-text">Medium</span> <img class="impact-icon" src="./assets/img/icons/impact-medium.svg">
-            md-option(aria-label="Low Impact" value="L") <span class="impact-text">Low</span> <img class="impact-icon" src="./assets/img/icons/impact-low.svg">
+            md-option(aria-label="High Impact" value="HIGH") <span class="impact-text">High</span> <img class="impact-icon" src="./assets/img/icons/impact-high.svg">
+            md-option(aria-label="Medium Impact form" value="MEDIUM") <span class="impact-text">Medium</span> <img class="impact-icon" src="./assets/img/icons/impact-medium.svg">
+            md-option(aria-label="Low Impact" value="LOW") <span class="impact-text">Low</span> <img class="impact-icon" src="./assets/img/icons/impact-low.svg">
     div.modal-input
       button(type="submit" ng-click="nb.addAnotherOpportunity(nb.newOpportunity)").modal-input.icon-container.add-opportunity
         img(src="../assets/img/icons/overview-overall-market.svg")
