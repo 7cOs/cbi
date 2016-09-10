@@ -30,23 +30,23 @@ function getSFDCSession(app, req, res) {
   var sfdcConfig = app.get('config').sfdcSec;
   var empId = req.user.jwtmap.employeeID;
   var encoding = sfdcConfig.baseEncoding;
-  var idpConfig = sfdcConfig.idpConfig;
   var theAssertion = '';
 
   var loadAssertion = function(empId) {
+//        console.log('\n\nin loadAssertion\n');
         var options = { method: 'POST',
-    url: idpConfig.url,
+    url: 'http://axiomsso.herokuapp.com/GenerateSamlResponse.action',
     qs:
-     { 'idpConfig.samlVersion': idpConfig.samlVersion,
+     { 'idpConfig.samlVersion': '_2_0',
        'idpConfig.userId': empId,
-       'idpConfig.samlUserIdLocation': idpConfig.samlUserIdLocation,
-       'idpConfig.issuer': idpConfig.issuer,
-       'idpConfig.recipient': idpConfig.recipient,
-       'idpConfig.ssoStartPage': idpConfig.ssoStartPage,
-       'idpConfig.startURL': idpConfig.startURL,
-       'idpConfig.logoutURL': idpConfig.logoutURL,
-       'idpConfig.userType': idpConfig.userType,
-       'idpConfig.additionalAttributes': idpConfig.additionalAttributes
+       'idpConfig.samlUserIdLocation': 'SUBJECT',
+       'idpConfig.issuer': 'https://axiomsso.herokuapp.com',
+       'idpConfig.recipient': 'https://cbrands--CBeerDev.cs20.my.salesforce.com?so=00Dm00000008fCJ',
+       'idpConfig.ssoStartPage': 'http://axiomsso.herokuapp.com/RequestSamlResponse.action',
+       'idpConfig.startURL': '',
+       'idpConfig.logoutURL': '',
+       'idpConfig.userType': 'STANDARD',
+       'idpConfig.additionalAttributes': ''
      }
     };
         return rp(options);
@@ -57,9 +57,7 @@ function getSFDCSession(app, req, res) {
         var $ = cheerio.load(body);
 
         var s = $('textarea').html();
-        console.log('<--------------------------Assertion is------------------------>');
-        console.log(s);
-        console.log('<-------------------------------------------------------------->');
+
         b = new Buffer(he.decode(s));
 
         raw = b;
