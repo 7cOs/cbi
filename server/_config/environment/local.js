@@ -89,6 +89,17 @@ module.exports = function (config) {
       userType: 'STANDARD',
       additionalAttributes: ''
     },
+    samlBuilder: {
+      baseEncoding: 'base64+URL',
+      privateKey: fs.readFileSync('./server/_config/environment/sfdcsecurity/' + config.env + '/signingKey.pem').toString(),
+      certfile: fs.readFileSync('./server/_config/environment/sfdcsecurity/' + config.env + '/certificate.crt').toString(),
+      issuer: 'compass-portal',
+      recipient: 'https://cbrands--CBeerDev.cs20.my.salesforce.com?so=00Dm00000008fCJ',
+      audience: 'https://saml.salesforce.com',
+      signatureAlgorithm: 'rsa-sha256',
+      digestAlgorithm: 'sha256',
+      ssoStartPage: 'compass-portal'
+    },
 
 // SP (Service Provider (i.e. Salesforce.com)) details
     spEntityId: 'https://dev-salesforce.cbrands.com',

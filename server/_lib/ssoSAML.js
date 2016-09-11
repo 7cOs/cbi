@@ -12,9 +12,10 @@ to generate the SAML Assertion.  The plan is to port
 the generation code over.
 
 ************************************************/
-// var u = require('util');
+var u = require('util');
 // var $scope;
 var rp = require('request-promise');
+var samlBuilder = require('./samlBuilder');
 
 module.exports = {
   getSFDCSession: getSFDCSession
@@ -31,9 +32,10 @@ function getSFDCSession(app, req, res) {
   var empId = req.user.jwtmap.employeeID;
   var encoding = sfdcConfig.baseEncoding;
   var theAssertion = '';
+  var theBuiltAssertion = samlBuilder.getSAMLAssertion(app, req, res);
 
   var loadAssertion = function(empId) {
-//        console.log('\n\nin loadAssertion\n');
+
         var options = { method: 'POST',
     url: 'http://axiomsso.herokuapp.com/GenerateSamlResponse.action',
     qs:
@@ -54,16 +56,30 @@ function getSFDCSession(app, req, res) {
 
       loadSession = function(body) {
 //        console.log('\n\nin loadSession\n');
-        var $ = cheerio.load(body);
+//        console.log('<----------------------------------Assertion built within samlBuilder-------------------------->');
+//        console.log(body);
+//        console.log('<---------------------------------------------------------------------------------------------->');
+        var htmlLead = '<html><head></head><body><textarea>';
+        var htmlEnd = '</textarea></body></html>';
+        var assertionDoc = htmlLead + theBuiltAssertion + htmlEnd;
+        var $ = cheerio.load(assertionDoc);
 
         var s = $('textarea').html();
-
+        console.log('<----------------------------------Assertion coming from samlBuilder as html doc--------------->');
+        console.log(s);
+        console.log('<---------------------------------------------------------------------------------------------->');
         b = new Buffer(he.decode(s));
 
         raw = b;
         b64 = b.toString('base64');
         u64 = urlencode(b64);
         b64u = b64url(raw);
+
+        //  Use this piece to debug an assertion at http://test.salesforce.com/setup/secur/SAMLValidationPage.apexp
+
+        console.log('<----------------------------------base64url encoded assertion--------------------------------->');
+        console.log(b64);
+        console.log('<---------------------------------------------------------------------------------------------->');
 
         if (encoding === 'raw') {
           theAssertion = raw;
@@ -91,6 +107,7 @@ function getSFDCSession(app, req, res) {
                               },
                               body: bodyString
                              };
+//        console.log(u.inspect(SessionIDOptions));
         var sessionPromise = rp(SessionIDOptions);
         return sessionPromise;
       };
