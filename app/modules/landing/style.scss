@@ -2,21 +2,6 @@
   background: $body-bg;
   padding: 0;
 
-  .go-arrow:after {
-    background-position: 0 center;
-    background-repeat: no-repeat;
-    background-image: url('../../assets/img/icons/go-arrow.svg');
-    background-size: 12px 12px;
-    content: '';
-    display: block;
-    position: absolute;
-    right: -21px;
-    bottom: 0;
-    height: 14px;
-    width: 14px;
-  }
-
-
   .greeting {
     padding-top: 0;
   }
@@ -26,7 +11,7 @@
     text-align: center;
 
     .go-arrow:after {
-      right: 74px;
+      left: 80%;
       top: 3px;
     }
 
@@ -126,20 +111,6 @@
         text-align: right;
         position: relative;
         margin-right: 21px;
-      }
-
-      .go-arrow:after {
-        background-position: 0 center;
-        background-repeat: no-repeat;
-        background-image: url('../../assets/img/icons/go-arrow.svg');
-        background-size: 12px 12px;
-        content: '';
-        display: block;
-        position: absolute;
-        right: -21px;
-        bottom: 0;
-        height: 14px;
-        width: 14px;
       }
     }
 

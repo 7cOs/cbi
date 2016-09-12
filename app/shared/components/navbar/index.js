@@ -161,11 +161,12 @@ function NavbarController($rootScope, $scope, $state, $window, $mdPanel, $mdDial
 
     var payload = {
       'store': opportunity.properties.store.description,
-      'product': !isMixedType && opportunity.properties.product.text,
+      'itemId': !isMixedType && opportunity.properties.product.text,
+      'itemType': 'BRAND',
       'mixedBrand': isMixedType,
       'rationale': opportunity.properties.rationale.description,
       'impactCode': opportunity.properties.impact.enum,
-      'oppSubType': oppSubType
+      'subType': oppSubType
     };
 
     opportunitiesService
