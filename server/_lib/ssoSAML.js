@@ -12,7 +12,7 @@ to generate the SAML Assertion.  The plan is to port
 the generation code over.
 
 ************************************************/
-var u = require('util');
+
 // var $scope;
 var rp = require('request-promise');
 var samlBuilder = require('./samlBuilder');
@@ -32,26 +32,20 @@ function getSFDCSession(app, req, res) {
   var empId = req.user.jwtmap.employeeID;
   var encoding = sfdcConfig.baseEncoding;
   var theAssertion = '';
-  var theBuiltAssertion = samlBuilder.getSAMLAssertion(app, req, res);
 
   var loadAssertion = function(empId) {
 
-        var options = { method: 'POST',
-    url: 'http://axiomsso.herokuapp.com/GenerateSamlResponse.action',
-    qs:
-     { 'idpConfig.samlVersion': '_2_0',
-       'idpConfig.userId': empId,
-       'idpConfig.samlUserIdLocation': 'SUBJECT',
-       'idpConfig.issuer': 'https://axiomsso.herokuapp.com',
-       'idpConfig.recipient': 'https://cbrands--CBeerDev.cs20.my.salesforce.com?so=00Dm00000008fCJ',
-       'idpConfig.ssoStartPage': 'http://axiomsso.herokuapp.com/RequestSamlResponse.action',
-       'idpConfig.startURL': '',
-       'idpConfig.logoutURL': '',
-       'idpConfig.userType': 'STANDARD',
-       'idpConfig.additionalAttributes': ''
-     }
-    };
-        return rp(options);
+        return new Promise(function(resolve, reject) {
+          var theBuiltAssertion = samlBuilder.getSAMLAssertion(app, req, res);
+          if (theBuiltAssertion) {
+            resolve(theBuiltAssertion);
+          } else {
+            reject({
+              'isSuccess': false,
+              'errorMessage': 'The assertion was not able to be constructed'
+            });
+          }
+        });
       },
 
       loadSession = function(body) {
@@ -61,7 +55,7 @@ function getSFDCSession(app, req, res) {
 //        console.log('<---------------------------------------------------------------------------------------------->');
         var htmlLead = '<html><head></head><body><textarea>';
         var htmlEnd = '</textarea></body></html>';
-        var assertionDoc = htmlLead + theBuiltAssertion + htmlEnd;
+        var assertionDoc = htmlLead + body + htmlEnd;
         var $ = cheerio.load(assertionDoc);
 
         var s = $('textarea').html();

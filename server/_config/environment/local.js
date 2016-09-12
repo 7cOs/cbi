@@ -103,8 +103,8 @@ module.exports = function (config) {
 
 // SP (Service Provider (i.e. Salesforce.com)) details
     spEntityId: 'https://dev-salesforce.cbrands.com',
-    spPrivateKey: [fs.readFileSync('./server/_config/environment/sfdcsecurity/' + config.env + '/key-file.pem').toString()],
-    spCertificate: [fs.readFileSync('./server/_config/environment/sfdcsecurity/' + config.env + '/cert-file.crt').toString()],
+//    spPrivateKey: [fs.readFileSync('./server/_config/environment/sfdcsecurity/' + config.env + '/key-file.pem').toString()],
+//    spCertificate: [fs.readFileSync('./server/_config/environment/sfdcsecurity/' + config.env + '/cert-file.crt').toString()],
     spAssertEndpoint: 'https://cbrands--CBeerDev.cs20.my.salesforce.com/services/oauth2/token?so=00Dm00000008fCJ',
     spSAMLRequestEndpoint: 'https://cbrands--CBeerDev.cs20.my.salesforce.com?so=00Dm00000008fCJ',
     spSAMLRequestServer: 'cbrands--CBeerDev.cs20.my.salesforce.com',
@@ -115,8 +115,8 @@ module.exports = function (config) {
 // IDP (Identity Provider (i.e. OAM)) details
     idpSSOLoginURL: 'https://ssodev.cbrands.com/oamfed/idp/samlv20',
     idpSSOLogoutURL: 'https://ssodev.cbrands.com/oam/server/logout?end_url=http://www.cbrands.com',
-    idpCert: [fs.readFileSync('./server/_config/environment/sfdcsecurity/' + config.env + '/idp-public-cert.pem').toString()],
-    idpPrivateKey: [fs.readFileSync('./server/_config/environment/sfdcsecurity/' + config.env + '/idp-private-key.pem').toString()],
+//    idpCert: [fs.readFileSync('./server/_config/environment/sfdcsecurity/' + config.env + '/idp-public-cert.pem').toString()],
+//    idpPrivateKey: [fs.readFileSync('./server/_config/environment/sfdcsecurity/' + config.env + '/idp-private-key.pem').toString()],
     idpForceAuthn: true,
     idpSignGetRequest: true,
     idpAllowUnencryptedAssertion: true,
