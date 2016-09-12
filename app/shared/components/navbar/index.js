@@ -45,7 +45,7 @@ function NavbarController($rootScope, $scope, $state, $window, $mdPanel, $mdDial
 
   vm.rationales = [
     {
-      'type': 'New Buyer'
+      'type': 'Based on account visit / discussion with decision-maker'
     }
   ];
 
