@@ -29,6 +29,7 @@ function ExpandedTargetListController($state, $scope, $filter, $mdDialog, $q, us
   vm.totalOpportunitesChevron = true;
   vm.selected = [];
   vm.buttonDiabled = false;
+  vm.selectedTab = 0;
 
   // Expose public methods
   vm.archiveTargetList = archiveTargetList;
@@ -205,6 +206,9 @@ function ExpandedTargetListController($state, $scope, $filter, $mdDialog, $q, us
   // ***************
 
   function init() {
+
+    vm.selectedTab = $state.params.obj.index;
+
     targetListService.model.currentList = {};
     userService.getTargetLists(userService.model.currentUser.employeeID, {'type': 'targetLists'}).then(function(data) {
       var ownedPromises = [],

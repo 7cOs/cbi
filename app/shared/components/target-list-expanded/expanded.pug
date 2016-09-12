@@ -8,7 +8,7 @@
     button(ng-if="expanded.buttonState !== 'shared'" ng-disabled="expanded.selected.length === 0" ng-click="expanded.deleteTargetList(expanded.selected)").btn-action Delete
     button.btn-action(ng-click="expanded.createTargetList($event)") Create a New List
 div.expanded-target-lists
-  md-tabs(md-dynamic-height='' md-border-bottom)
+  md-tabs(md-dynamic-height='' md-border-bottom md-selected="expanded.selectedTab")
     md-tab(label='My Target Lists' md-on-select="expanded.selector('named')")
       md-content.md-padding
         div(row).clearfix

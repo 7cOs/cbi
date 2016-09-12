@@ -10,6 +10,9 @@ module.exports = /*  @ngInject */
     .state('target-lists', {
       url: '/target-lists',
       title: 'Target Lists',
+      params: {
+        obj: 0
+      },
       templateUrl: './app/modules/target-lists/layout.html',
       controller: 'targetListsController',
       controllerAs: 't'
