@@ -15,23 +15,29 @@ function TargetListController($scope, $state, targetListService, userService) {
   // Expose public methods
   vm.ratio = ratio;
   vm.tabFilter = tabFilter;
+  vm.goToTab = goToTab;
 
   // tab names
   vm.types = {
     'mine': {
       'name': 'My Target Lists',
       'records': [],
-      'total': 0
+      'total': 0,
+      'index': 0
     },
     'shared': {
       'name': 'Shared with Me',
       'records': [],
-      'total': 0
+      'total': 0,
+      'index': 1
+
     },
     'archived': {
       'name': 'Archived',
       'records': [],
-      'total': 0
+      'total': 0,
+      'index': 2
+
     }
   };
 
@@ -40,6 +46,15 @@ function TargetListController($scope, $state, targetListService, userService) {
   // **************
   // PUBLIC METHODS
   // **************
+
+  // Link to a specific tab in target list pageName
+  function goToTab(tab) {
+    $state.go('target-lists', {
+      obj: {
+        index: tab
+      }
+    });
+  }
 
   // Only shows Target List tabs needed on the page
   function tabFilter(tab) {
