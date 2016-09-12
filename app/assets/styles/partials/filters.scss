@@ -80,6 +80,7 @@
   .trade-channel {
     md-checkbox {
       width: 40%;
+      margin-bottom: 0.4em;
     }
 
     .md-label {
@@ -108,7 +109,7 @@
 
   md-radio-button {
     float: left;
-    margin-right: 2em;
+    margin-right: 1em;
 
     .md-container {
       top: 70%;
@@ -121,14 +122,7 @@
 
   md-radio-button,
   md-checkbox {
-    font-size: 0.9em;
-
-    &:focus {
-      outline: none;
-    }
-
     .md-label {
-
       span {
         margin-top: 2px;
         display: block;
@@ -160,10 +154,11 @@
   .retailer, .chain-store {
     > div:first-child {
       padding-left: 0.9em;
+      padding-right: 0;
     }
 
     > div {
-      padding: 0;
+      padding-left: 0;
     }
   }
 

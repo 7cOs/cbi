@@ -3,7 +3,7 @@
 }
 
 .filters .apply-filters .secondary-button-container {
-  top: 0;
+  top: 15px;
 }
 
 .market-overview,
@@ -191,6 +191,11 @@
         background-size: 14px;
         padding-top: 0.2em;
       }
+    }
+
+
+    md-select-value.md-select-placeholder span {
+      font-family: $work-sans;
     }
   }
 }
