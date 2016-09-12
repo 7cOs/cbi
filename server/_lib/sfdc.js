@@ -1,9 +1,5 @@
 'use strict';
-/** ********************************************************
-Salesforce integration Library
-J. Scott Cromie
-8/9/16
-***********************************************************/
+
 module.exports = {
   sfdcConn: sfdcConn,
   createNote: createNote,
@@ -14,10 +10,19 @@ module.exports = {
   deleteNote: deleteNote
 };
 
-// var u = require('util');
+/**
+* sfdc.js: This controller contains the logic for the Salesforce.com endpoints
+* @author J. Scott Cromie
+* @version 1.0
+* @since 2016-09-11
+*/
 
 function sfdcConn(app, req, res) {
-//  console.log('In sfdcConn - establishing the connection');
+  /**
+  * sfdcConn: Create the Salesforce.com connection, or return the existing
+  *           connection.
+  */
+
   try {
     var saml = require('./ssoSAML.js');
     var jsforce = require('jsforce');
@@ -29,10 +34,9 @@ function sfdcConn(app, req, res) {
     req.user = app.get('config').auth.user;
   };
 
-  // console.log('Getting the connection.  req.user.sfdcConn is ' + JSON.stringify(req.user.sfdcConn));
   if (!req.user.sfdcConn || req.user.sfdcConn === undefined) {
   // Get session promise from library
-//      console.log('No connection present.  Creating one now');
+
     return saml.getSFDCSession(app, req, res).then(function(sfdcSession) {
       sfdcSession = JSON.parse(sfdcSession);
       return new jsforce.Connection({
@@ -41,12 +45,15 @@ function sfdcConn(app, req, res) {
       });
     });
   } else {
-    //  console.log('Reusing existing connection: ' + req.user.sfdcConn);
     return req.user.sfdcConn;
   }
 }
 
 function deleteAttach(app, req, res) {
+  /**
+  * deleteAttach: deletes an attachment identified by the query parameter "attachId"
+  *
+  */
   return sfdcConn(app, req, res).then(function(result) {
     try {
       var conn = result;
@@ -88,6 +95,10 @@ function deleteAttach(app, req, res) {
 };
 
 function deleteNote(app, req, res) {
+  /**
+  * deleteNote: deletes an attachment identified by the query parameter "noteId"
+  *
+  */
   return sfdcConn(app, req, res).then(function(result) {
     try {
       var conn = result;
@@ -127,6 +138,11 @@ function deleteNote(app, req, res) {
 };
 
 function searchAccounts(app, req, res) {
+  /**
+  * searchAccounts: searches for an account using the search term in the "searchTerm" query parameter.
+  *                 This uses Salesforce's SOSL querying language
+  *                 (https://developer.salesforce.com/docs/atlas.en-us.soql_sosl.meta/soql_sosl/sforce_api_calls_sosl_about.htm)
+  */
   return sfdcConn(app, req, res).then(function(result) {
     try {
       var conn = result;
@@ -165,6 +181,14 @@ function searchAccounts(app, req, res) {
 };
 
 function queryAccountNotes(app, req, res) {
+  /**
+  * queryAccountNotes: searches for the notes and associated attachments using the query parameter "accountId"
+  *                    This accountId can either be the TDLinx_Id__c Id or
+  *                      the JDE_Address_Book_Number__c for the account.  This will then return the note and attachemnt
+  *                      data.  The attachment data comes back in the form of a clickable link, which can then be embedded
+  *                      into the resultant page by using it in an <img src=""> tag.
+  *
+  */
   return sfdcConn(app, req, res).then(function(result) {
     try {
       var conn = result;
@@ -187,7 +211,6 @@ function queryAccountNotes(app, req, res) {
             .orderby('CreatedDate', 'DESC')
             .end()
             .where('Account__r.TDLinx_Id__c = \'' + strId + '\' or Account__r.JDE_Address_Book_Number__c = \'' + strId + '\'')
-            // .limit(10)
             .execute(function (err, records) {
               if (err) {
                 return console.error(err);
@@ -218,6 +241,10 @@ function queryAccountNotes(app, req, res) {
 };
 
 function createNote(app, req, res) {
+  /**
+  * createNote: Creates a new note for the account whose Id is passed in through the accountId query parameter.
+  *
+  */
   return sfdcConn(app, req, res).then(function(result) {
     try {
       var conn = result;
@@ -228,12 +255,7 @@ function createNote(app, req, res) {
                                 };
         throw badAccountIdError;
       } else {
-        var acctId;
-        if (req.body.accountId) {
-          acctId = req.body.accountId;
-        } else {
-          acctId = req.query.accountId;
-        }
+        var acctId = req.query.accountId;
         var theAccount = conn.search('FIND {' + acctId + '} IN ALL FIELDS RETURNING Account(Id, Name)',
           function (err, res) {
             if (err) {
@@ -284,6 +306,12 @@ function createNote(app, req, res) {
 };
 
 function getAttachment(app, req, res) {
+  /**
+  * getAttachments: gets a specific attachment based on the attachId query parameter.
+  *                 You need to translate the binary data coming in to a form that can
+  *                 be passed through a web service.
+  *
+  */
   try {
     return sfdcConn(app, req, res).then(function(result) {
     // In order to return a clickable link we need to issue a GET from our server

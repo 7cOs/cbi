@@ -1,40 +1,33 @@
 'use strict';
-/* **********************************************
-J. Scott Cromie - 8/26/2016
-
-This script will produce a valid SAML assertion.  It
-runs under node.js, so that, npm, and the node
-modules request, cheerio, he, and urlencode must be
-installed for it to work.
-
-Currently it also relies on the webservice from Axiom
-to generate the SAML Assertion.  The plan is to port
-the generation code over.
-
-************************************************/
-
-// var $scope;
-var rp = require('request-promise');
-var samlBuilder = require('./samlBuilder');
 
 module.exports = {
   getSFDCSession: getSFDCSession
 };
 
+/**
+* getSFDCSession: This will return a promise which will contain a new SFDC session
+*                 This module requires an employee to be authenticated against an
+*                 identity provider prior to using it.  The employee Id returned
+*                 from the authentication step is used to login and access salesforce
+*                 in that user's context.
+* @author J. Scott Cromie
+* @version 1.0
+* @since 2016-09-11
+*/
+
 function getSFDCSession(app, req, res) {
-//  console.log('\n\n In getSFDCSession \n');
-  var cheerio = require('cheerio');
-  var he = require('he');
-  var urlencode = require('urlencode');
-  var b64url = require('base64url');
-  var b, raw, b64, u64, b64u;
-  var sfdcConfig = app.get('config').sfdcSec;
-  var empId = req.user.jwtmap.employeeID;
-  var encoding = sfdcConfig.baseEncoding;
-  var theAssertion = '';
+  var rp = require('request-promise');          // Combines request and promise.  Very useful!
+  var samlBuilder = require('./samlBuilder');   // This builds the SAML Assertion
+  var cheerio = require('cheerio');             // Very much like jQuery for node.js
+  var he = require('he');                       // html encoding helper class
+  var urlencode = require('urlencode');         // used for urlencoding the assertion to get the session id
+  var b, b64, u64;
+  var sfdcConfig = app.get('config').sfdcSec;   // get the environment variables for this server.
+  var empId = req.user.jwtmap.employeeID;       // get the employee Id for the currently logged in user.
+  var theAssertion = '';                        // initialize theAssertion
 
   var loadAssertion = function(empId) {
-
+  // In this first section, get the assertion from samlBuilder.
         return new Promise(function(resolve, reject) {
           var theBuiltAssertion = samlBuilder.getSAMLAssertion(app, req, res);
           if (theBuiltAssertion) {
@@ -49,47 +42,28 @@ function getSFDCSession(app, req, res) {
       },
 
       loadSession = function(body) {
-//        console.log('\n\nin loadSession\n');
-//        console.log('<----------------------------------Assertion built within samlBuilder-------------------------->');
-//        console.log(body);
-//        console.log('<---------------------------------------------------------------------------------------------->');
+      // loadSession gets the session from Salesforce.com using the promised assertion from loadAssertion
+      // In order to make this work properly I had to "fake it" as an html document.  If I don't do it this
+      // way the assertion becomes invalid.
         var htmlLead = '<html><head></head><body><textarea>';
         var htmlEnd = '</textarea></body></html>';
         var assertionDoc = htmlLead + body + htmlEnd;
         var $ = cheerio.load(assertionDoc);
 
         var s = $('textarea').html();
-        console.log('<----------------------------------Assertion coming from samlBuilder as html doc--------------->');
-        console.log(s);
-        console.log('<---------------------------------------------------------------------------------------------->');
         b = new Buffer(he.decode(s));
-
-        raw = b;
         b64 = b.toString('base64');
         u64 = urlencode(b64);
-        b64u = b64url(raw);
 
-        //  Use this piece to debug an assertion at http://test.salesforce.com/setup/secur/SAMLValidationPage.apexp
+    /* //  Use this piece to debug an assertion at http://test.salesforce.com/setup/secur/SAMLValidationPage.apexp
 
         console.log('<----------------------------------base64url encoded assertion--------------------------------->');
         console.log(b64);
         console.log('<---------------------------------------------------------------------------------------------->');
+    */
+        theAssertion = u64;
 
-        if (encoding === 'raw') {
-          theAssertion = raw;
-        } else if (encoding === 'base64') {
-          theAssertion = b64;
-        } else if (encoding === 'base64+URL') {
-          theAssertion = u64;
-        } else if (encoding === 'base64Url') {
-          theAssertion = b64u;
-        } else  {
-//          console.log('The encoding was invalid: ' + encoding);
-          return {
-            'isSuccess': false,
-            'errorMessage': 'Invalid encoding: ' + encoding};
-        }
-
+        // Build the options for request-promise.
         var bodyString = 'grant_type=assertion';
         bodyString = bodyString + '&assertion_type=' + urlencode('urn:oasis:names:tc:SAML:2.0:profiles:SSO:browser');
         bodyString = bodyString + '&assertion=' + theAssertion;
@@ -101,10 +75,10 @@ function getSFDCSession(app, req, res) {
                               },
                               body: bodyString
                              };
-//        console.log(u.inspect(SessionIDOptions));
         var sessionPromise = rp(SessionIDOptions);
         return sessionPromise;
       };
+  // Returns the promise to the calling function.
   var returnThisPromise = loadAssertion(empId)
     .then(function(body) {
       return loadSession(body);
