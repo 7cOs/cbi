@@ -1,5 +1,6 @@
 .inline-search {
   position: relative;
+  text-align: left;
 
   .results-container {
     background: $white;
@@ -32,8 +33,11 @@
         font-size: 0.9em;
         font-weight: $regular;
         outline: 0;
+        overflow: hidden;
         padding: 0.66em 1em;
+        text-overflow: ellipsis;
         transition: background 300ms ease;
+        white-space: nowrap;
 
         &:hover {
           background: $gray-4;
@@ -52,6 +56,11 @@
         stroke: $blue;
       }
     }
+  }
+
+  .store-address {
+    color: $gray-2;
+    padding-left: 1em;
   }
 
   input[type='submit'] {

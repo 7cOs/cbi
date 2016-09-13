@@ -10,7 +10,9 @@ module.exports =
         input: '=chosenResult',
         callback: '&',
         nav: '@',
-        variety: '@'
+        variety: '@',
+        isRequired: '@',
+        showAddress: '@'
       },
       controller: InlineSearchController,
       controllerAs: 'is',
@@ -39,6 +41,7 @@ module.exports =
       vm.action = action;
       vm.resultChosen = resultChosen;
       vm.close = close;
+      vm.onKeypress = onKeypress;
 
       // **************
       // PUBLIC METHODS
@@ -112,6 +115,13 @@ module.exports =
           vm.input = '';
         }
         vm.showResults = false;
+      }
+
+      function onKeypress(event) {
+        // If enter key, submit search
+        if (event.charCode === 13) {
+          vm.action(vm.type);
+        }
       }
     }
 
