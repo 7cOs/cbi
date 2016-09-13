@@ -1,6 +1,6 @@
 .inline-search
   input(ng-model="is.input" type="text" placeholder="{{is.placeholder}}" ng-keypress="is.onKeypress($event)" ng-required="{{is.isRequired}}")
-  input(md-prevent-menu-close type="submit" ng-click="is.action(is.type);" ng-class="{'visible': is.input !== ''}" value="" ng-blur="is.close(true)")
+  input.submit-btn(md-prevent-menu-close ng-click="is.action(is.type);" ng-class="{'visible': is.input !== ''}" ng-blur="is.close()")
   .results-container(ng-class="{'open': is.showResults}")
     .close-btn(md-prevent-menu-close ng-if="!is.loading && is.results.length === 0" ng-click="is.close(true)" aria-label="Close") x
     md-progress-circular(ng-show="is.loading" md-mode="indeterminate")

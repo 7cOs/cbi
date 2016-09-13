@@ -1,6 +1,7 @@
 .inline-search {
   position: relative;
   text-align: left;
+  z-index: 2;
 
   .results-container {
     background: $white;
@@ -63,7 +64,7 @@
     padding-left: 1em;
   }
 
-  input[type='submit'] {
+  .submit-btn {
     opacity: 0;
     transition: opacity 300ms ease;
 
@@ -94,5 +95,26 @@
     &:hover {
       cursor: hand;
     }
+  }
+}
+
+.inline-search-radio {
+
+  md-radio-group,
+  inline-search {
+    float: left;
+  }
+
+  md-radio-group {
+    padding-top: 0.75em;
+
+    &:last-child {
+      margin-left: 0;
+    }
+  }
+
+  inline-search {
+    margin-right: 1em;
+    width: 280px;
   }
 }

@@ -62,6 +62,9 @@ function NavbarController($rootScope, $scope, $state, $window, $mdPanel, $mdDial
     properties: {
       product: {
         type: 'sku'
+      },
+      distributionType: {
+        type: 'new'
       }
     }
   };
