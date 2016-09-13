@@ -107,7 +107,7 @@
   div(row ng-show="o.filtersService.model.expanded")
     div(column='5 +6' class="trade-channel")
       label.vertical Trade Channel
-      md-checkbox(ng-repeat="channel in o.filtersService.model.tradeChannels[o.filtersService.model.selected.premiseType]" ng-model="o.filtersService.model.selected['tradeChannel' + channel.name]" aria-label="Trade Channel {{channel.name}}" ng-click="o.chipsService.updateChip('tradeChannel' + channel.name, channel.name)") {{channel.label}}
+      md-checkbox(ng-repeat="channel in o.filtersService.model.tradeChannels[o.filtersService.model.selected.premiseType]" ng-model="o.filtersService.model.selected['tradeChannel' + channel.name]" aria-label="Trade Channel {{channel.name}}" ng-click="o.chipsService.updateChip('tradeChannel' + channel.name, channel.label)") {{channel.label}}
   div(row)
     div(column='12' class='apply-filters')
       button(value='Apply Filters' type="button" class="btn-action" ng-click="o.chipsService.applyFilters()" ng-disabled="o.filtersService.model.filtersApplied") Apply Filters
