@@ -277,6 +277,8 @@ module.exports = /*  @ngInject */
       targetListService.updateTargetList(targetListService.model.currentList.id, payload).then(function(response) {
         targetListService.model.currentList = response;
 
+        // to do: update model
+
         removeFooterToast();
 
         closeModal();
