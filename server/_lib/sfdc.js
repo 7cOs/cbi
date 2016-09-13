@@ -9,7 +9,7 @@ module.exports = {
   getAttachment: getAttachment,
   deleteNote: deleteNote
 };
-
+// var u = require('util');
 /**
 * sfdc.js: This controller contains the logic for the Salesforce.com endpoints
 * @author J. Scott Cromie
@@ -207,13 +207,14 @@ function queryAccountNotes(app, req, res) {
         conn.sobject('Note__c')
             .select('Account__r.TDLinx_Id__c, Account__r.JDE_Address_Book_Number__c,  Type__c, Title__c, Soft_Delete__c, Private__c, OwnerId, Other_Type__c, Name, IsDeleted, Id, Comments_RTF__c, Account__c, CreatedDate, CreatedBy.Name')
             .include('Attachments')
-            .select('Id, Name, CreatedDate')
+            .select('Id, Name, CreatedDate, BodyLength, ContentType, Description, LastModifiedDate, OwnerId, ParentId')
             .orderby('CreatedDate', 'DESC')
             .end()
             .where('Account__r.TDLinx_Id__c = \'' + strId + '\' or Account__r.JDE_Address_Book_Number__c = \'' + strId + '\'')
             .execute(function (err, records) {
               if (err) {
-                return console.error(err);
+                return {'isSuccess': false,
+                        'errorMessage': 'There was an SFDC API error retrieving the notes for this account: ' + err};
               }
               // set the URL on the image to include the url and session id
               for (var note in records) {
@@ -225,7 +226,9 @@ function queryAccountNotes(app, req, res) {
                   }
                 }
               }
-              return records;
+              res.send({'isSuccess': true,
+                      'successReturnValue': records
+                     });
             })
     );
     } catch (err) {
@@ -245,11 +248,12 @@ function createNote(app, req, res) {
   * createNote: Creates a new note for the account whose Id is passed in through the accountId query parameter.
   *
   */
+
   return sfdcConn(app, req, res).then(function(result) {
     try {
       var conn = result;
 // Search for the correct Account Id
-      if (!(req.body.accountId)) {
+      if (!(req.query.accountId)) {
         var badAccountIdError = {'isSuccess': false,
                                  'errorMessage': 'There was no valid account id submitted.  Please make sure you have an account id (i.e. TD Linx Id)'
                                 };
@@ -259,18 +263,25 @@ function createNote(app, req, res) {
         var theAccount = conn.search('FIND {' + acctId + '} IN ALL FIELDS RETURNING Account(Id, Name)',
           function (err, res) {
             if (err) {
-              console.log('The account Id could not be found');
-              return console.error(err);
+              var badAccountIdInSFDCError = {'isSuccess': false,
+                                             'errorMessage': 'There was no account in SFDC found with TDLinx Id or JDE Address Book Number ' + acctId + ': ' +  err
+                                            };
+              throw badAccountIdInSFDCError;
+            } else {
+              return res;
             }
-            return res;
-          });
+          }
+        );
 // Once you have the correct account id, create a note and attach to that account Id.
 
         theAccount.then(function (result) {
 
           var accountId = result.searchRecords[0].Id;  // Only uses the first account it finds.
           if (accountId === null || accountId === undefined) {
-            return console('There was no account specified for the Id provided (' + req.body.accountId + '.');
+            var badAccountIdInSFDCError = {'isSuccess': false,
+                                           'errorMessage': 'There was no account in SFDC found with TDLinx Id or JDE Address Book Number ' + acctId
+                                          };
+            throw badAccountIdInSFDCError;
           } else {
             conn.sobject('Note__c').create([{
               Account__c: accountId,
@@ -285,22 +296,33 @@ function createNote(app, req, res) {
             }],
             function (err, ret) {
               if (err) {
-                console.log('Returning an error from createNote: ' + JSON.stringify(err, null, ''));
-                return err;
+                var badNoteCreationError = {'isSuccess': false,
+                                            'errorMessage': 'Error creating an note: ' + err};
+                throw badNoteCreationError;
               } else {
-                return ret;
+                try {
+                  res.send({
+                    'isSuccess': true,
+                    'successReturnValue': result
+                  });
+                  return ret;
+                } catch (err) {
+                  var badReturnError = {'isSuccess': false,
+                                       'errorMessage': 'There was an error returning the successful result: ' + err};
+                  throw badReturnError;
+                }
               }
             });
           };
         }, function (err) {
-          var strResponse = JSON.stringify(err, null, '');
-          console.log('ERROR:' + strResponse);
-          return err;
+          var badSFDCAccountError = {'isSuccess': false,
+                                     'errorMessage': 'There was an error finding the correct account: ' + err};
+          throw badSFDCAccountError;
         });
       };
     } catch (err) {
-      console.error(err);
-      return err;
+      console.error('Error creating a note: ' + err);
+      res.send(err);
     };
   });
 };

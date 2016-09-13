@@ -22,7 +22,7 @@ module.exports = {
 
 function getSAMLAssertion(app, req, res) {
 // generates the SAML Assertion, and then signs the assertion to prepare for presentation to SFDC.
-  var sfdcConfig = app.get('config').sfdcSec.samlBuilder;  // All admin-configurable parameters come from /server/_config/environment files.
+  var sfdcConfig = app.get('config').sfdcSec;  // All admin-configurable parameters come from /server/_config/environment files.
   var empId = req.user.jwtmap.employeeID;  // The user has already logged in to the IdP at this point.  We use the employee Id to build the assertion.
 
   var responseID = '_' + utils.uid(8) + '-' + utils.uid(8);
@@ -170,8 +170,6 @@ function getSAMLAssertion(app, req, res) {
   sig.computeSignature(xmlString, {
     location: { reference: '//*[local-name(.)=\'Issuer\']', action: 'after' }
   });
-  console.log('<------------------------>The Raw Signed Assertion is:<----------------------------------->');
-  console.log(sig.getSignedXml());
   var retValue = utils.samlStrConvert(sig.getSignedXml());
   return retValue;
 };

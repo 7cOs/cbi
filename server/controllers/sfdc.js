@@ -70,13 +70,10 @@ function searchAccounts(app, req, res) {
 function createNote(app, req, res) {
 
   sfdc.createNote(app, req, res).then(function(result) {
-    try {
-      res.send(result);
-    } catch (err) {
-      // if there is a problem sending the response.
-      console.log(err);
-      res.send(err);
-    };
+    if (!result.isSuccess) {
+      console.log(result.errorMessage);
+      res.send(result.errorMessage);
+    }
   }, function (err) {
     console.log(err);
     res.send(err);

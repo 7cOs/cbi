@@ -26,8 +26,8 @@ use the above password to export the key pair
 
 To convert to .pem from .p12 use the openssl command:
 
-openssl pkcs12 -in path.p12 -out certificate.crt -clcerts -nokeys
-openssl pkcs12 -in path.p12 -out signingKey.pem -nocerts -nodes
+openssl pkcs12 -in compass_portal.p12 -out certificate.crt -clcerts -nokeys
+openssl pkcs12 -in compass_portal.p12 -out signingKey.pem -nocerts -nodes
 
 
-Then, import the certificate (the .cer file) into the SAML Single Sign-On Settings.
+Then, import the certificate (the .crt file) into the SAML Single Sign-On Settings.

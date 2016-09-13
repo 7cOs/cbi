@@ -71,61 +71,22 @@ module.exports = function (config) {
     lib: config.address + 'lib/',
     js: config.address + 'js/'
   };
-
   config.sfdcSec = {
-    /**/  baseEncoding: 'base64+URL',
-// sfdc parameters
-//  SAML Configuration Parameters
-    idpConfig: {
-      url: 'http://axiomsso.herokuapp.com/GenerateSamlResponse.action',
-      samlVersion: '_2_0',
-      userId: '',
-      samlUserIdLocation: 'SUBJECT',
-      issuer: 'compass-portal',
-      recipient: 'https://cbrands-CBeerDev.cs20.my.salesforce.com?so=00Dm00000008fCJ',
-      ssoStartPage: 'RequestSamlResponse.action',
-      startURL: '',
-      logoutURL: '',
-      userType: 'STANDARD',
-      additionalAttributes: ''
-    },
-    samlBuilder: {
-      baseEncoding: 'base64+URL',
-      privateKey: fs.readFileSync('./server/_config/environment/sfdcsecurity/' + config.env + '/signingKey.pem').toString(),
-      certfile: fs.readFileSync('./server/_config/environment/sfdcsecurity/' + config.env + '/certificate.crt').toString(),
-      issuer: 'compass-portal',
-      recipient: 'https://cbrands--CBeerDev.cs20.my.salesforce.com?so=00Dm00000008fCJ',
-      audience: 'https://saml.salesforce.com',
-      signatureAlgorithm: 'rsa-sha256',
-      digestAlgorithm: 'sha256',
-      ssoStartPage: 'compass-portal'
-    },
-
-// SP (Service Provider (i.e. Salesforce.com)) details
-    spEntityId: 'https://dev-salesforce.cbrands.com',
-//    spPrivateKey: [fs.readFileSync('./server/_config/environment/sfdcsecurity/' + config.env + '/key-file.pem').toString()],
-//    spCertificate: [fs.readFileSync('./server/_config/environment/sfdcsecurity/' + config.env + '/cert-file.crt').toString()],
-    spAssertEndpoint: 'https://cbrands--CBeerDev.cs20.my.salesforce.com/services/oauth2/token?so=00Dm00000008fCJ',
-    spSAMLRequestEndpoint: 'https://cbrands--CBeerDev.cs20.my.salesforce.com?so=00Dm00000008fCJ',
-    spSAMLRequestServer: 'cbrands--CBeerDev.cs20.my.salesforce.com',
-    spSAMLRequestSO: 'so=00Dm00000008fCJ',
-    spMetadataLocation: './server/_config/environment/sfdcsecurity/' + config.env + '/sp.xml',
-    idpMetadataLocation: './server/_config/environment/sfdcsecurity/' + config.env + '/idp.xml',
-
-// IDP (Identity Provider (i.e. OAM)) details
-    idpSSOLoginURL: 'https://ssodev.cbrands.com/oamfed/idp/samlv20',
-    idpSSOLogoutURL: 'https://ssodev.cbrands.com/oam/server/logout?end_url=http://www.cbrands.com',
-//    idpCert: [fs.readFileSync('./server/_config/environment/sfdcsecurity/' + config.env + '/idp-public-cert.pem').toString()],
-//    idpPrivateKey: [fs.readFileSync('./server/_config/environment/sfdcsecurity/' + config.env + '/idp-private-key.pem').toString()],
-    idpForceAuthn: true,
-    idpSignGetRequest: true,
-    idpAllowUnencryptedAssertion: true,
-
-// oAuth details
-    clientID: '3MVG9RHx1QGZ7OsgFDGg9AANEHmXyFGysbxOwi9Sg4.8o5ocZmlElMbhO36DRBmT8otkqgxiJX7P5PCFoYvUQ',
-    clientSecret: '5793586792947030890',
-    callbackURL: 'https://orion-dev.cbrands.com/sfdc/token',
-    profileURL: 'https://cbrands--CBeerDev.cs20.my.salesforce.com/services/oauth2/userinfo'
+    // assertionEndpoint: the endpoint you connect to in order to get the session token.
+    assertionEndpoint: 'https://cbrands--CBeerDev.cs20.my.salesforce.com/services/oauth2/token?so=00Dm00000008fCJ',
+    // privateKey and certfile: keys generated from SFDC's Key and Certificate Management area
+    privateKey: fs.readFileSync('./server/_config/environment/sfdcsecurity/' + config.env + '/signingKey.pem').toString(),
+    certfile: fs.readFileSync('./server/_config/environment/sfdcsecurity/' + config.env + '/certificate.crt').toString(),
+    // issuer, recipient: can be anything, but must match between the SFDC Single Sign-On Configuration and this value.
+    issuer: 'compass-portal',
+    recipient: 'https://cbrands--CBeerDev.cs20.my.salesforce.com?so=00Dm00000008fCJ',
+    // This value matches with the Entity Id value in the SFDC Single Sign-On Configuration
+    audience: 'https://saml.salesforce.com',
+    // These algorithms should not be touched.  They are used to encrypt the certificates.
+    signatureAlgorithm: 'rsa-sha256',
+    digestAlgorithm: 'sha256',
+    // Used in samlBuilder as an attribute in the Assertion creation.
+    ssoStartPage: 'compass-portal'
   };
 
   return config;
