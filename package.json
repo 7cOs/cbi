@@ -1,10 +1,6 @@
 {
   "name": "compass",
-<<<<<<< HEAD
   "version": "0.0.9",
-=======
-  "version": "0.0.8",
->>>>>>> 9b1f1fe71ab42bfda894d87087f6289bae8df6d3
   "dependencies": {
     "angular": "1.5.8",
     "angular-animate": "1.5.8",
