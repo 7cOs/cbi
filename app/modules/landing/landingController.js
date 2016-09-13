@@ -13,18 +13,18 @@ module.exports = /*  @ngInject */
     // Set page title for head and nav
     $rootScope.pageTitle = $state.current.title;
 
-    // Expose public methods
-    vm.isPositive = isPositive;
-    vm.filter = filtersService.model;
+    // Expose services to view
     vm.chipsService = chipsService;
     vm.filtersService = filtersService;
+
+    /* REMOVE THIS */
     vm.performanceData = myperformanceService.model();
-    vm.brandQuerySearch = brandQuerySearch;
-    vm.accountQuerySearch = accountQuerySearch;
-    vm.distributorQuerySearch = distributorQuerySearch;
-    vm.closeSelect = closeSelect;
+
+    // Expose public methods
     vm.appendDoneButton = appendDoneButton;
     vm.closeDoneButton = closeDoneButton;
+    vm.closeSelect = closeSelect;
+    vm.isPositive = isPositive;
 
     // Set values
     vm.greeting = getGreeting();
@@ -52,27 +52,12 @@ module.exports = /*  @ngInject */
     }
 
     function isPositive(salesData) {
-      if (salesData >= 0) {
-        return true;
-      }
+      if (salesData && typeof salesData === 'string') salesData = Number(salesData);
+
+      if (salesData >= 0 && !isNaN(salesData)) return true;
+
       return false;
     };
-
-    function brandQuerySearch(searchText) {
-      var results = filtersService.model.brands.filter(filterQuery(searchText, ['name', 'brand', 'quantity']));
-      return results;
-    }
-
-    function accountQuerySearch(searchText) {
-      // update to accounts
-      var results = filtersService.model.stores.filter(filterQuery(searchText, ['account', 'sub_account', 'store_name']));
-      return results;
-    }
-
-    function distributorQuerySearch(searchText) {
-      var results = filtersService.model.distributors.filter(filterQuery(searchText, ['name', 'address', 'id']));
-      return results;
-    }
 
     // ***************
     // PRIVATE METHODS
@@ -94,24 +79,6 @@ module.exports = /*  @ngInject */
       var person = $filter('titlecase')(userService.model.currentUser.firstName);
 
       return greet + ', ' + person + '!';
-    }
-
-    /**
-     * @name filterQuery
-     * @desc filter data using query from md-autocomplete
-     * @params {String} q - query string
-     * @params {Array} properties - array of strings that are the properties to be searched in the object
-     * @returns {String}
-     * @memberOf cf.common.services
-     */
-    function filterQuery(q, properties) {
-      var lowercaseQuery = angular.lowercase(q);
-      return function filterFn(data) {
-
-        for (var i = 0; i < properties.length; i++) {
-          if ((angular.lowercase('' + data[properties[i]])).indexOf(lowercaseQuery) === 0) return (angular.lowercase('' + data[properties[i]])).indexOf(lowercaseQuery) === 0;
-        }
-      };
     }
 
     function init() {
