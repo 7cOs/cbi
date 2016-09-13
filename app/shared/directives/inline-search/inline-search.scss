@@ -1,7 +1,6 @@
 .inline-search {
   position: relative;
   text-align: left;
-  z-index: 2;
 
   .results-container {
     background: $white;
@@ -23,7 +22,7 @@
       max-height: 9em;
       opacity: 1;
       overflow: auto;
-      z-index: 1;
+      z-index: 2;
     }
 
     ul {
