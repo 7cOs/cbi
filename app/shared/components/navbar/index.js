@@ -73,6 +73,7 @@ function NavbarController($rootScope, $scope, $state, $window, $mdPanel, $mdDial
   vm.addNewRationale = false;
   vm.addToTargetList = addToTargetList;
   vm.markSeen = markSeen;
+  vm.getTargetLists = getTargetLists;
 
   init();
 
@@ -200,6 +201,16 @@ function NavbarController($rootScope, $scope, $state, $window, $mdPanel, $mdDial
     }
   }
 
+  function getTargetLists() {
+    if (vm.targetLists.length < 1) {
+      userService
+      .getTargetLists(userService.model.currentUser.employeeID)
+      .then(function(result) {
+        vm.targetLists = result.owned;
+      });
+    }
+  }
+
   // ***************
   // PRIVATE METHODS
   // ***************
@@ -212,11 +223,6 @@ function NavbarController($rootScope, $scope, $state, $window, $mdPanel, $mdDial
       setUnreadCount(vm.notifications);
     });
 
-    userService
-    .getTargetLists(userService.model.currentUser.employeeID)
-    .then(function(result) {
-      vm.targetLists = result.owned;
-    });
     versionService.getVersion().then(function(data) {
       versionService.model.version = data;
     });
