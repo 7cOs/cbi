@@ -142,10 +142,10 @@ module.exports = /*  @ngInject */
           {label: 'Other', name: 'Other'}
         ],
         off: [
-          {label: 'Convenience', name: 'Convenience'},
-          {label: 'Mass Merchandiser', name: 'Mass'},
           {label: 'Grocery', name: 'Grocery'},
+          {label: 'Convenience', name: 'Convenience'},
           {label: 'Drug', name: 'Drug'},
+          {label: 'Mass Merchandiser', name: 'Mass'},
           {label: 'Liquor', name: 'Liquor'},
           {label: 'Military Off Premise', name: 'Military'},
           {label: 'Recreation', name: 'Recreation'},

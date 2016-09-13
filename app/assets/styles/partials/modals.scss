@@ -77,7 +77,6 @@ md-dialog {
 
       md-checkbox {
         float: left;
-        font-size: 0.85em;
         font-weight: $regular;
         margin-top: 12px;
       }
@@ -139,51 +138,6 @@ md-dialog {
       }
     }
 
-    .add-opportunity {
-      background: $gray-4;
-      padding: 0;
-      margin-bottom: 0;
-
-      p {
-        font-size: 1em;
-      }
-    }
-
-    .horizontal-layout {
-
-      inline-search {
-        display: inline-block;
-        width: 60%;
-        position: relative;
-
-        input[type='submit'] {
-          width: 45px;
-        }
-      }
-
-      md-radio-button {
-        display: inline-block;
-        float: left;
-        margin: 12px 16px;
-      }
-
-      md-select-value {
-        margin-left: 24px;
-      }
-
-      input {
-        float: right;
-      }
-
-      .short {
-        width: 45%;
-      }
-
-      .medium-short {
-        width: 55%;
-      }
-    }
-
     md-radio-group[layout=row] {
       md-radio-button {
         margin-right: 0;
@@ -223,6 +177,57 @@ md-dialog {
 
       &:hover {
         cursor: pointer;
+      }
+    }
+  }
+
+  &.add-opportunity {
+    .horizontal-layout {
+      inline-search {
+        display: inline-block;
+        width: 60%;
+        position: relative;
+
+        input[type='submit'] {
+          width: 45px;
+        }
+      }
+
+      md-radio-button {
+        display: inline-block;
+        float: left;
+        margin: 12px 16px 0 0;
+      }
+
+      md-select-value {
+        margin-left: 24px;
+      }
+
+      input {
+        float: right;
+      }
+
+      .short {
+        width: 45%;
+      }
+
+      .medium-short {
+        width: 55%;
+      }
+    }
+
+    .select-opportunity-error {
+      margin-top: -25px;
+      margin-bottom: 40px;
+    }
+
+    .add-another-opportunity {
+      background: $gray-4;
+      padding: 0;
+      margin-bottom: 0;
+
+      p {
+        font-size: 1em;
       }
     }
   }

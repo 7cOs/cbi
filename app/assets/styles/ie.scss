@@ -21,15 +21,21 @@
   }
 
 
-  // Placeholder font color
+  // Placeholder font
   ::-ms-input-placeholder {
     color: $gray-2;
+    font-family: $roboto;
+    font-size: 0.83em;
     opacity: 1;
+    padding: 0.87em 1em;
   }
 
   :-ms-input-placeholder {
     color: $gray-2;
+    font-family: $roboto;
+    font-size: 0.83em;
     opacity: 1;
+    padding: 0.87em 1em;
   }
 
   .landing-page {

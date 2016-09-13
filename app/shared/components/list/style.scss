@@ -282,9 +282,10 @@ list {
     content: '';
     display: block;
     height: 26px;
-    left: 15px;
+    left: 30px;
     position: relative;
     width: 10px;
+    bottom: -3px;
   }
 
   &.low {
