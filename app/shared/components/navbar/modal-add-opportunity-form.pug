@@ -17,10 +17,11 @@ div.modal.add-opportunity
       p.error-message.accent.select-opportunity-error(ng-show="nb.addOpportunityForm.opportunityType.$error.required") <img src="./assets/img/icons/error.svg">Please select an Opportunity Type.
     div.modal-input.clearfix
       label Recommended Brand or Package/ SKU
-      div
-        md-radio-group(ng-model="nb.newOpportunity.properties.product.type" layout="row" required)
-          md-radio-button.md-primary(value="sku" aria-label="Search for brand or package/SKU")
-          input(ng-model="nb.newOpportunity.properties.product.text" placeholder="Type brand or package name, or master SKU" name="recommendedBrand")
+      .inline-search-radio
+        md-radio-group(ng-model="nb.newOpportunity.properties.product.type" required)
+          md-radio-button.md-primary(value="sku" aria-label="Search for brand or package/SKU") &nbsp;
+        inline-search(type="store" placeholder="Type brand or package name, or master SKU" chosen-result="nb.newOpportunity.properties.product.text")
+        md-radio-group(ng-model="nb.newOpportunity.properties.product.type" required)
           md-radio-button.md-primary(value="mixed" ng-if="nb.newOpportunity.properties.distributionType.type === 'other'" aria-label="Mixed Brands") Mixed Brands
         div(ng-show="nb.addOpportunityForm.$invalid && nb.addOpportunityForm.$submitted")
           p.error-message.accent(ng-show="nb.addOpportunityForm.recommendedBrand.$error.required") <img src="./assets/img/icons/error.svg">Please enter a Recommended Brand or Select Mixed Brands.
