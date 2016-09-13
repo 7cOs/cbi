@@ -11,7 +11,8 @@ module.exports =
         callback: '&',
         nav: '@',
         variety: '@',
-        isRequired: '@'
+        isRequired: '@',
+        showAddress: '@'
       },
       controller: InlineSearchController,
       controllerAs: 'is',
@@ -118,7 +119,7 @@ module.exports =
 
       function onKeypress(event) {
         // If enter key, submit search
-        if (event.charCode == 13) {
+        if (event.charCode === 13) {
           vm.action(vm.type);
         }
       }

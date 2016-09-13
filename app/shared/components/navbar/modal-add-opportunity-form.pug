@@ -4,7 +4,7 @@ div.modal
   form.modal-form(name="nb.addOpportunityForm" novalidate)
     div.modal-input
       label Account
-      inline-search(type="store" placeholder="Store Name or Location (City, Zip, or State)" chosen-result="nb.newOpportunity.properties.store.description" is-required="true")
+      inline-search(type="store" placeholder="Store Name or Location (City, Zip, or State)" chosen-result="nb.newOpportunity.properties.store.description" is-required="true" show-address="true")
       div(ng-show="nb.addOpportunityForm.$invalid && nb.addOpportunityForm.$submitted")
         p.error-message.accent(ng-show="nb.addOpportunityForm.accountInput.$error.required") <img src="./assets/img/icons/error.svg">Please select an Account.
     div.modal-input.clearfix
