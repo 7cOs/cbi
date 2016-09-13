@@ -10,7 +10,7 @@ div.modal.add-opportunity
     div.modal-input.clearfix
       label Opportunity Type
       md-radio-group.horizontal-layout(ng-model="nb.newOpportunity.properties.distributionType.type" name="opportunityType" required)
-        md-radio-button.md-primary(value="new" aria-label="New Distribution" checked) New Distribution
+        md-radio-button.md-primary(value="new" aria-label="New Distribution") New Distribution
         md-radio-button.md-primary(value="other" aria-label="Other") Other
         input(ng-model="nb.newOpportunity.properties.distributionType.description" aria-label="Opportunity Description" placeholder="Input type" name="otherOpportunityInput").short
     div(ng-show="nb.addOpportunityForm.$invalid && nb.addOpportunityForm.$submitted")
