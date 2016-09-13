@@ -81,6 +81,10 @@ md-dialog {
         margin-top: 12px;
       }
 
+      textarea {
+        max-width: 432px;
+      }
+
     }
 
     .larger-input {
@@ -276,6 +280,33 @@ md-dialog {
       color: $gray-2;
     }
   }
+
+  &.create-target-list {
+    .collaborator-list {
+      width: calc(100% - 48px);
+      background: $white;
+      height: 200px;
+      padding: 12px 24px;
+      text-align: left;
+
+      span,
+      p {
+        display: inline;
+      }
+
+      span {
+        float: right;
+        margin-top: 4px;
+      }
+    }
+
+    .allow-invites {
+      .md-label {
+        bottom: -2px;
+        margin-left: 23px;
+      }
+    }
+  }
 }
 
 .corporate-memo {
@@ -319,24 +350,5 @@ md-dialog {
       text-align: center;
       color: $gray-3;
     }
-  }
-}
-
-.collaborator-list {
-  width: calc(100% - 48px);
-  background: $white;
-  height: 200px;
-  margin-top: -15px;
-  padding: 12px 24px;
-  text-align: left;
-
-  span,
-  p {
-    display: inline;
-  }
-
-  span {
-    float: right;
-    margin-top: 4px;
   }
 }
