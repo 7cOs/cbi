@@ -15,6 +15,9 @@ function FilterController($state, $scope, $mdSelect, chipsService, filtersServic
 
   vm.appendDoneButton = appendDoneButton;
   vm.closeDoneButton = closeDoneButton;
+  vm.expandDropdown = expandDropdown;
+
+  init();
 
   // **************
   // PUBLIC METHODS
@@ -30,6 +33,22 @@ function FilterController($state, $scope, $mdSelect, chipsService, filtersServic
 
   function closeDoneButton() {
     angular.element(document.getElementsByClassName('done-btn')).remove();
+  }
+
+  function expandDropdown() {
+    if ($state.current.name === 'target-list-detail') {
+      vm.opportunities ? vm.opportunities = false : vm.opportunities = true;
+    }
+
+    filtersService.model.expanded ? filtersService.model.expanded = false : filtersService.model.expanded = true;
+  }
+
+  function init() {
+    if ($state.current.name === 'target-list-detail') {
+      vm.opportunities = true;
+    } else {
+      vm.opportunities = false;
+    }
   }
 }
 
