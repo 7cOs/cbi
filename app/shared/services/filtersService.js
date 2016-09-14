@@ -171,11 +171,13 @@ module.exports = /*  @ngInject */
       // get applied filters
       var filterPayload = {type: type};
       for (var key in service.model.selected) {
-        if (service.model.selected[key].constructor === Array) {
+        if (service.model.selected[key].constructor === Array && service.model.selected[key].length > 0) {
+          filterPayload[key] = service.model.selected[key];
         } else if (service.model.selected[key] !== '') {
           filterPayload[key] = service.model.selected[key];
         }
       }
+
       return filterPayload;
     }
 

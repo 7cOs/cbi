@@ -36,12 +36,25 @@ module.exports = /*  @ngInject */
 
         // remove type obj
         delete obj.type;
-
         for (var key2 in obj) {
-          queryParams += key2 + ':' + obj[key2];
+          if (obj[key2].constructor === Array && obj[key2].length > 0) {
+            queryParams += key2 + ':';
+            // iterate over arrays
+            for (var k = 0; k < obj[key2].length; k++) {
+              queryParams += obj[key2][k];
+
+              // add separator if it's not last item
+              if (obj[key2].length - 1 !== k) queryParams += '|';
+            }
+          } else {
+            queryParams += key2 + ':' + obj[key2];
+          }
+
           if (i !== (z - 1)) queryParams += ',';
           i++;
         }
+
+        console.log('[apiHelperService.formatQueryString]', queryParams);
 
         return '?limit=2000&sort=store&filter=' + encodeURIComponent(queryParams);
       } else if (obj.type && obj.type === 'targetLists') {

@@ -40,6 +40,8 @@ module.exports = /*  @ngInject */
       if (!opportunityID) {
         // get applied filters
         var filterPayload = filtersService.getAppliedFilters('opportunities');
+
+        console.log('[opportunitiesService.getOpportunities.filterPayload]', filterPayload);
       }
 
       // reset opportunities
@@ -49,9 +51,9 @@ module.exports = /*  @ngInject */
       var opportunitiesPromise = $q.defer(),
           url = opportunityID ? apiHelperService.request('/api/opportunities/' + opportunityID) : apiHelperService.request('/api/opportunities/', filterPayload);
 
-      $http.get(url)
+      /* $http.get(url)
         .then(getOpportunitiesSuccess)
-        .catch(getOpportunitiesFail);
+        .catch(getOpportunitiesFail); */
 
       function getOpportunitiesSuccess(response) {
         // Group opportunities by store
