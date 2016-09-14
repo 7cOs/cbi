@@ -30,14 +30,12 @@ function TargetListController($scope, $state, targetListService, userService) {
       'records': [],
       'total': 0,
       'index': 1
-
     },
     'archived': {
       'name': 'Archived',
       'records': [],
       'total': 0,
       'index': 2
-
     }
   };
 
