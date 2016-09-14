@@ -25,6 +25,7 @@ module.exports = /*  @ngInject */
     vm.closeDoneButton = closeDoneButton;
     vm.closeSelect = closeSelect;
     vm.isPositive = isPositive;
+    vm.findOpportunities = findOpportunities;
 
     // Set values
     vm.greeting = getGreeting();
@@ -58,6 +59,12 @@ module.exports = /*  @ngInject */
 
       return false;
     };
+
+    function findOpportunities() {
+      $state.go('opportunities', {
+        resetFiltersOnLoad: false
+      });
+    }
 
     // ***************
     // PRIVATE METHODS
