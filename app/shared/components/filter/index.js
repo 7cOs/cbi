@@ -18,6 +18,7 @@ function FilterController($state, $scope, $mdDialog, $mdSelect, chipsService, fi
   vm.applyFilterMulti = applyFilterMulti;
   vm.closeDoneButton = closeDoneButton;
   vm.closeModal = closeModal;
+  vm.closeSelect = closeSelect;
   vm.expandDropdown = expandDropdown;
   vm.hoverState = hoverState;
   vm.modalSaveOpportunityFilter = modalSaveOpportunityFilter;
@@ -70,6 +71,10 @@ function FilterController($state, $scope, $mdDialog, $mdSelect, chipsService, fi
 
   function closeModal() {
     $mdDialog.hide();
+  }
+
+  function closeSelect() {
+    $mdSelect.hide();
   }
 
   function expandDropdown() {

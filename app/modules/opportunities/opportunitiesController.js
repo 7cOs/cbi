@@ -29,7 +29,6 @@ module.exports = /*  @ngInject */
     vm.deleteSavedFilter = deleteSavedFilter;
     vm.editFilterModal = editFilterModal;
     vm.placeholderSelect = placeholderSelect;
-    vm.closeSelect = closeSelect;
     vm.resetTradeChannels = resetTradeChannels;
 
     init();
@@ -37,10 +36,6 @@ module.exports = /*  @ngInject */
     // **************
     // PUBLIC METHODS
     // **************
-
-    function closeSelect() {
-      $mdSelect.hide();
-    }
 
     function placeholderSelect(data) {
       vm.hintTextPlaceholder = data;

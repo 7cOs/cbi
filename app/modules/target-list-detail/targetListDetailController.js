@@ -42,13 +42,8 @@ module.exports = /*  @ngInject */
     vm.removeCollaborator = removeCollaborator;
     vm.removeFooterToast = removeFooterToast;
     vm.updateList = updateList;
-    vm.closeSelect = closeSelect;
 
     init();
-
-    function closeSelect() {
-      $mdSelect.hide();
-    }
 
     function addCollaborators() {
       vm.collaborator.permissionLevel = vm.permissionLevel;
