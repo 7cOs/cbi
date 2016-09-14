@@ -77,25 +77,25 @@ module.exports = /*  @ngInject */
         }]
       },
       distributionTimePeriod: [{
-        name: 'L30 Days June 21, 2016 - July 21, 2016'
+        name: 'L30 Days'
       }, {
-        name: 'L60 Days May 21, 2016 - July 21, 2016'
+        name: 'L60 Days'
       }, {
-        name: 'L90 Days April 22, 2016 - July 21, 2016'
+        name: 'L90 Days'
       }],
       selected: {},
       selectedTemplate: {
         myAccountsOnly: true,
-        accountBrands: '',
-        accountMarkets: '',
+        accountBrands: 'Distribution (simple)',
+        accountMarkets: 'Depletions',
         accountTypes: '',
         brands: [],
         cbbdContact: [],
         chains: '',
         currentFilter: '',
-        depletionsTimeFilter: 'MTD July 1, 2016- July 31, 2016',
+        depletionsTimeFilter: 'FYTD',
         distributors: [],
-        distributionTimeFilter: 'L90 Days April 22, 2016 - July 21, 2016',
+        distributionTimeFilter: 'L90 Days',
         location: '',
         opportunitiesStatus: '',
         opportunityTypes: ['All Types'],
@@ -155,7 +155,7 @@ module.exports = /*  @ngInject */
       },
       trend: [
         {name: 'vs YA'},
-        {name: 'va Plan'}
+        {name: 'vs ABP'}
       ]
     };
 

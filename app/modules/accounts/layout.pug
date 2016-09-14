@@ -7,7 +7,7 @@ notes
       .market-overview.expanded(ng-class="{'visible': a.overviewOpen}")
         .overview
           label My Accounts
-          label On &amp; Off Premise
+          label On- &amp; Off-Premise
         .brands
           p {{a.brandWidgetTitle}}<span ng-if="a.brandIdSelected"> - {{a.brandIdSelected}}</span>
         .market
@@ -24,7 +24,7 @@ notes
 
 .filters.top(column='12')
   div(row)
-    div(column='2')
+    div.trend(column='2')
       label Trend
       md-radio-group(ng-model="a.filtersService.model.selected.trend" ng-init="a.filtersService.model.selected.trend = 'vs YA'")
         md-radio-button(ng-repeat="filter in a.filters.trend" class="md-primary" ng-value="filter.name" aria-label="Trend" ng-click="a.chipsService.addChip(filter.name, 'trend', true)") {{filter.name}}
@@ -36,8 +36,9 @@ notes
       div(row).dropdown-filter
         div(column='6').dropdown
           label Depletions Time Period
-          md-select(ng-model="a.filtersService.model.selected.depletionsTimeFilter" md-on-open="a.openSelect(true)" md-on-close="a.openSelect(false)" placeholder="FYTD May 1, 2016 - June 29, 2016")
-            md-option(ng-repeat="filter in a.filtersService.model.depletionsTimePeriod" aria-label="{{filter.name}}" value="{{filter.name}}") {{filter.name}}
+          md-select(ng-model="a.filtersService.model.selected.depletionsTimeFilter" md-on-open="a.openSelect(true)" md-on-close="a.openSelect(false)" placeholder="FYTD")
+            md-option(ng-repeat="filter in a.filtersService.model.depletionsTimePeriod.month" aria-label="{{filter.name}}" value="{{filter.name}}") {{filter.name}}
+            md-option(ng-repeat="filter in a.filtersService.model.depletionsTimePeriod.year" aria-label="{{filter.name}}" value="{{filter.name}}") {{filter.name}}
         div(column='6').dropdown
           label Distribution Time Period
           md-select(ng-model="a.filtersService.model.selected.distributionTimeFilter" md-on-open="a.openSelect(true)" md-on-close="a.openSelect(false)" placeholder="L90 Days April 1, 2016 - June 29, 2016")
@@ -67,19 +68,16 @@ notes
               h3 Store Type
               p Chain = Chain retailers directly called on by CBBD National or Key Accounts teams (On and Off-Premise)
               p Independent = Retailers not directly called on by CBBD’s National or Key Accounts teams
-      md-checkbox(ng-model="a.filtersService.model.selected.storeTypeCBBD" aria-label="Store Type Chain" ng-click="a.chipsService.updateChip('storeTypeCBBD', 'Store Type Chain')") Chains
-      md-checkbox(ng-model="a.filtersService.model.selected.storeTypeIndependent" aria-label="Store Type Independent" ng-click="a.chipsService.updateChip('storeTypeIndependent', 'Store Type Independent')") Independent Stores
+      md-checkbox(ng-model="a.filtersService.model.selected.storeTypeCBBD" aria-label="Store Type Chain" ng-click="a.chipsService.updateChip('storeTypeCBBD', 'Store Type Chain')") Chain
+      md-checkbox(ng-model="a.filtersService.model.selected.storeTypeIndependent" aria-label="Store Type Independent" ng-click="a.chipsService.updateChip('storeTypeIndependent', 'Store Type Independent')") Independent
     div(column='4')
-      label Chain / Store
+      label Retailer
       div(row).dropdown-filter.chain-store
         div(column='4').dropdown
-          md-select(ng-model="a.filtersService.model.selected.storeTypes" md-on-open="a.openSelect(true)" md-on-close="a.openSelect(false)" aria-label="Store Type Filter"  placeholder="Chain")
-            md-option(ng-repeat="filter in a.filters.storeTypes" aria-label="{{filter.name}}" value="{{filter.name}}") {{filter.name}}
-        div(column='6')
-          md-autocomplete(md-search-text="a.filtersService.model.accountSearchText" md-items="account in a.filtersService.model.accounts" md-item-text="account.name" placeholder="by Chain/Store Name" md-selected-item-change="a.chipsService.addAutocompleteChip(account.name, 'accountSearchText')")
-            md-item-template
-              div(md-highlight-text="a.filtersService.model.accountSearchText" md-highlight-flags="^i") {{account.name}} - {{account.subAccount}}
-        div(column='5') &nbsp;
+          md-select(ng-model="a.filtersService.model.selected.retailer" placeholder="Chain" ng-init="a.filtersService.model.selected.retailer = 'Chain'" md-on-open="a.openSelect(true)" md-on-close="a.openSelect(false)" aria-label="Store Type Filter")
+            md-option(ng-repeat="type in a.filtersService.model.retailer" ng-click="a.placeholderSelect(type.hintText)" aria-label="{{type.name}}" value="{{type.name}}") {{type.name}}
+        div(column='8')
+          inline-search(type="store" placeholder="{{a.hintTextPlaceholder}}" chosen-result="a.filtersService.model.stores" callback="a.applyFilterArr(filter.filtersService.model.selected.stores, result, 'stores')")
 
   div(row)
     div(column='12' class='apply-filters')
@@ -94,7 +92,7 @@ div(row)
       label Effective Pods: 15 (5.2%)
 
 div(row)
-  div.scorecard-table(column='5')
+  div.scorecard-table.scorecard-table-accounts(column='5')
     .widget-header
       .dropdown-filter
         md-select(ng-model="a.filtersService.model.selected.accountBrands" md-on-open="a.openSelect(true)" md-on-close="a.openSelect(false)" aria-label="Account Brands Filter"  placeholder="Distribution (simple)")
@@ -108,39 +106,40 @@ div(row)
             th.top.title-col
               p.accent.bold.left.single-line Brand / SKU
             th(colspan=2).top.dark
-              p.accent.bold Depletions - FYTD
+              p.accent.bold Depletions
             th(colspan=2).top
               p.accent {{a.filtersService.model.selected.accountBrands === 'Velocity' ? 'Velocity' : 'Distribution(s) - L90'}}
           tr
-            th.title-col
+            th
               p.accent &nbsp;
             th.dark
-              p.accent Value
+              p.accent FYTD
             th.dark
-              p.accent %Trend
+              p.accent vs YA%
             th
-              p.accent Value
+              p.accent L90
             th
-              p.accent %Trend
+              p.accent vs YA%
         tbody
           tr
             td.column-total.title-col.left TOTAL
             td.column-total.dark {{1532 | number }}
-            td.column-total.dark 7.5%
+            td.column-total.dark <span class="percentage">{{7.5 | number:1}}</span>%
             td.column-total {{1532 | number }}
-            td.column-total 4%
+            td.column-total <span class="percentage">{{4.0 | number:1}}</span>%
+
       md-tabs(md-selected="a.brandSelectedIndex" ng-class="{'animate-disabled': a.disableAnimation}" md-autoselect md-dynamic-height)
         md-tab(ng-repeat="(key, data) in a.brandTabs" label="{{key}}")
           table.depletions-table.fixed-layout(cellspacing="0" cellpadding="0")
             tbody
               tr.clickable(ng-repeat="item in data" ng-click="a.selectItem('brands', item, a.brandTabs, $parent.$index)" ng-class="{selected: item.name === a.idSelected}")
                 td.left.data-brand.title-col {{item.name}}
-                td(ng-class="{'negative': !a.isPositive(item.measures.yearAgoGap)}").dark      {{item.measures.yearAgoGap | number }}
-                td(ng-class="{'negative': !a.isPositive(item.measures.yearAgoTrend) }").dark   {{item.measures.yearAgoTrend}}%
+                td(ng-class="{'negative': !a.isPositive(item.measures.yearAgoGap)}").dark.depletions-value {{item.measures.yearAgoGap | number }}
+                td(ng-class="{'negative': !a.isPositive(item.measures.yearAgoTrend) }").dark.depletions-value <span class="percentage">{{item.measures.yearAgoTrend | number:1}}</span>%
                 td(ng-if="a.filtersService.model.selected.accountBrands === 'Velocity'" ng-class="{'negative': !a.isPositive(item.measures.velocityNumber)}") {{item.measures.velocityNumber | number }}
                 td(ng-if="a.filtersService.model.selected.accountBrands !== 'Velocity'" ng-class="{'negative': !a.isPositive(item.measures.vsPlanNumber)}") {{item.measures.vsPlanNumber | number }}
-                td(ng-if="a.filtersService.model.selected.accountBrands === 'Velocity'" ng-class="{'negative': !a.isPositive(item.measures.velocityPercent)}") {{item.measures.velocityPercent}}%
-                td(ng-if="a.filtersService.model.selected.accountBrands !== 'Velocity'" ng-class="{'negative': !a.isPositive(item.measures.vsPlanPercent)}") {{item.measures.vsPlanPercent}}%
+                td(ng-if="a.filtersService.model.selected.accountBrands === 'Velocity'" ng-class="{'negative': !a.isPositive(item.measures.velocityPercent)}") <span class="percentage">{{item.measures.velocityPercent | number:1}}</span>%
+                td(ng-if="a.filtersService.model.selected.accountBrands !== 'Velocity'" ng-class="{'negative': !a.isPositive(item.measures.vsPlanPercent)}") <span class="percentage">{{item.measures.vsPlanPercent | number:1}}</span>%
   div.scorecard-chart(column='7')
     .widget-header
       .dropdown-filter.narrow
@@ -156,11 +155,12 @@ div(row)
         table.fixed-layout(cellspacing="0" cellpadding="0")
           thead
             tr
-              th.top.dist-label(colspan=2)
+              th.top.title-col.dist-label(colspan=2)
                 p.accent.bold.left Distributors
                 p &nbsp;
               th.top.dark.market-label
                 p.accent.bold {{a.filtersService.model.selected.accountMarkets}}
+                p.accent.bold {{a.filtersService.model.selected.depletionsTimeFilter}}
         md-tabs(md-selected="a.marketSelectedIndex" ng-class="{'animate-disabled': a.disableAnimation}" md-autoselect)
           md-tab(ng-repeat="(key, data) in a.marketTabs" label="{{key}}")
             table.fixed-layout(cellspacing="0" cellpadding="0")
@@ -168,7 +168,7 @@ div(row)
                 tr.clickable.market-value(ng-repeat="item in data" ng-class="{'store': item.address, 'selected': item.label === a.idSelected}" ng-click="a.selectItem('markets', item, a.marketTabs, $parent.$index)")
                   td.dist-label(colspan=2) {{item.title}} <span ng-if="item.storeNum" class="store-number">\#{{item.storeNum}}</span><span ng-if="item.address" class="address">{{item.address}}</span>
                   td.dark.market-label
-                    span(ng-if="a.filtersService.model.selected.accountMarkets === 'Depletions'") {{item.depletions}}
+                    span(ng-if="a.filtersService.model.selected.accountMarkets === 'Depletions'") {{item.depletions | number}}
                     span(ng-if="a.filtersService.model.selected.accountMarkets === 'Distribution (simple)'") {{item.distSimple}}
                     span(ng-if="a.filtersService.model.selected.accountMarkets === 'Distribution (effective)'") {{item.distEffective}}
                     span(ng-if="a.filtersService.model.selected.accountMarkets === 'Velocity'") {{item.velocity}}
@@ -176,9 +176,12 @@ div(row)
         table.no-top-border(cellspacing="0" cellpadding="0")
           thead
             tr
-              th.top.chart-title
-                p.accent.bold Trends (vs YA) - FYTD
-                p &nbsp;
+              th.top.title-col.chart-title
+                p.accent.bold Trends
+            tr
+              th
+                p.accent FYTD - vs YA%
         nvd3.nvd(options="a.chartOptions" data="a.chartData")
 
-list
+h3 Top Opportunities
+list.account-dashboard-opps
