@@ -27,7 +27,7 @@ module.exports = function (config) {
     key: 'U1NCc2FXdGxJSFJ2SUVodlpHOXlMQ0JJYjJSdmNpd2dTRzlrYjNJc0lFaHZaRzl5Y3lCaGJtUWdTRzlrYjNKekxnPT0=',
     apiKey: 'test',
     version: 'v2',
-    jwt: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJsYXN0TmFtZSI6Ik8nTkVJTCIsImlzcyI6Imh0dHBzOi8vb3Jpb24uY2JyYW5kcy5jb20iLCJlbXBsb3llZUlEIjoiMTAwMjQxNyIsImZpcnN0TmFtZSI6IkpBTUVTIiwiZ3JvdXBpbmdDb2RlIjoiMTMzIiwiY29ycG9yYXRlVXNlciI6dHJ1ZSwicGVyc29uSUQiOjU0NTksImV4cCI6MTQ3ODkxMzE3NDY2NywiaWF0IjoxNDczNzI5MTc0NjY3LCJ1c2VyR3JvdXAiOlsiY2JpLXJvbGUtaXEtYXBwLXVzZXJzIiwiY2JpIGVtcGxveWVlcyIsInVnLWNiaWdkYy1yb2xlLWVjcm93bmFwcHVzZXJjb3Jwb3JhdGV2aWV3IiwiY2JpIHVzZXJzIiwiY2JpLWFkZW5hYmxlZGFjY291bnRzIl0sImVtYWlsIjoiSklNLk9ORUlMQENCUkFORFMuQ09NIiwic3JjVHlwZUNkIjpbIlNBTEVTX0hJRVIiXX0.TBC1TVC0hG91P5RrEx3lMKoeGaL4oqt9RKNg1LaQ3NY'
+    jwt: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJsYXN0TmFtZSI6IldJTExJQU1TIiwiaXNzIjoiaHR0cHM6Ly9vcmlvbi5jYnJhbmRzLmNvbSIsImVtcGxveWVlSUQiOiIxMDEyMTM1IiwiZmlyc3ROYW1lIjoiQ0hSSVNUT1BIRVIiLCJncm91cGluZ0NvZGUiOiIyMzQiLCJjb3Jwb3JhdGVVc2VyIjp0cnVlLCJwZXJzb25JRCI6NTU0NSwiZXhwIjoxNDc5MDc5MDA2NDc5LCJpYXQiOjE0NzM4OTUwMDY0NzksInVzZXJHcm91cCI6WyJjYmktcm9sZS1pcS1hcHAtdXNlcnMiLCJjYmkgZW1wbG95ZWVzIiwidWctY2JpZ2RjLWJpei1yb2xlLWJ1c3VuaXR2cCIsImNiaSB1c2VycyIsImNiaS1hZGVuYWJsZWRhY2NvdW50cyJdLCJlbWFpbCI6IkNIUklTLldJTExJQU1TQENCUkFORFMuQ09NIiwic3JjVHlwZUNkIjpbIlNBTEVTX0hJRVIiXX0.qVSQ-dRcq0cMf7AuO8e9_Sjp_hseij5Z6pPinRSt4T8'
   };
 
   config.auth = {
@@ -35,15 +35,15 @@ module.exports = function (config) {
     user: {
       jwt: config.api.jwt,
       jwtmap: {
-        firstName: 'JAMES',
-        lastName: 'O\'NEIL',
+        firstName: 'CHRISTOPHER',
+        lastName: 'WILLIAMS',
         groupingCode: '133',
         iss: 'https://orion.cbrands.com',
         personID: 5545,
-        employeeID: '1002417',
+        employeeID: '1012135',
         exp: 1477332952290,
         iat: 1472148952296,
-        email: 'JIM.ONEIL@CBRANDS.COM',
+        email: 'CHRIS.WILLIAMS@CBRANDS.COM',
         srcTypeCd: [
           'ON_HIER',
           'OFF_HIER',
