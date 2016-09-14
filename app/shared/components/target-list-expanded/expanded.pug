@@ -7,7 +7,7 @@
     | Select All
 
   .target-action-buttons
-    button(ng-if="expanded.buttonState === 'named'" ng-disabled="expanded.selected.length === 0" ng-click="expanded.archiveTargetList()").btn-action Archive
+    button(ng-if="expanded.buttonState === 'named'" ng-disabled="expanded.selected.length === 0" ng-click="expanded.archiveTargetList(expanded.selected)").btn-action Archive
     button(ng-if="expanded.buttonState !== 'shared'" ng-disabled="expanded.selected.length === 0" ng-click="expanded.deleteTargetList(expanded.selected)").btn-action Delete
     button.btn-action(ng-click="expanded.createTargetList($event)") Create a New List
 div.expanded-target-lists
@@ -149,11 +149,11 @@ div.expanded-target-lists
                   | Depletions <br />Since Closed (CE)
                   span(ng-class="{ 'chevron-down-small' : expanded.depletionsChevron, 'chevron-up-small' : !expanded.depletionsChevron}").chevron-down-small
         div(row).target-list-detail-container
-          div(ng-show="expanded.userService.model.targetLists.sharedArchivedCount === 0").no-opportunites
+          div(ng-show="expanded.userService.model.targetLists.sharedArchivedCount === 0 || expanded.userService.model.targetLists.ownedArchived === 0").no-opportunites
             h4 No Opportunities to remove
             p Try Searching for <span>Opportunities</span> and add them to your list
           ul
-            li(ng-repeat="list in expanded.userService.model.targetLists.owned | filter:{archived:true} | orderBy:expanded.sortProperty:expanded.reverse").clearfix
+            li(ng-repeat="list in expanded.userService.model.targetLists.owned | filter:{archived:false} | orderBy:expanded.sortProperty:expanded.reverse").clearfix
               div.checkbox-wrapper(ng-click="list.toggle(opportunity, list.selected)")
                 md-checkbox(aria-label="Select Item" ng-checked="list.exists(opportunity, list.selected)")
               div.checkbox-sibling(column="12").archived
