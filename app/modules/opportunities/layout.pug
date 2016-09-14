@@ -8,7 +8,7 @@
             md-select(ng-model="o.filtersService.model.selected.currentFilter" placeholder="Select Saved Report")
               md-option(class="saved-filter-option" ng-repeat="savedFilter in o.userService.model.opportunityFilters" value="{{::savedFilter.id}}" ng-class="{'show-span': hover}" ng-mouseenter="hover = true" ng-mouseleave="hover = false") {{::savedFilter.name}}
                 span.go-arrow(ng-if="hover" ng-click="o.editFilterModal(savedFilter.id)")
-.chips(ng-if="o.chipsService.model.length")
+//-.chips(ng-if="o.chipsService.model.length")
   label Active Filters
   span &nbsp;
   md-chips(ng-model="o.chipsService.model" md-removable="true" name="Active Filters" md-on-remove="o.chipsService.removeFromFilterService($chip)")
@@ -20,7 +20,7 @@
             path(d='M19 6.41l-1.41-1.41-5.59 5.59-5.59-5.59-1.41 1.41 5.59 5.59-5.59 5.59 1.41 1.41 5.59-5.59 5.59 5.59 1.41-1.41-5.59-5.59z')
     md-chip-template(custom-chip="" ng-class="{closable: $chip.removable}")
       div {{$chip.name}}
-.filters(column='12')
+//-.filters(column='12')
   div(row)
     div(class='more-filters')
       a(ng-click="o.filtersService.model.expanded = o.filtersService.model.expanded ? false : true")
@@ -114,4 +114,7 @@
       .secondary-button-container
         a(ng-click="!o.filtersService.model.filtersApplied || o.modalSaveOpportunityFilter($event)" ng-disabled="!o.filtersService.model.filtersApplied" ng-mouseover="o.hoverState('save')" ng-mouseleave="o.hoverState('save')" ng-class="{'disabled save-filterset-icon-disabled': !o.filtersService.model.filtersApplied, 'save-report-hover': o.isHoveringSave && !o.filtersService.model.filtersApplied}").accent.save-filterset-icon Save Report
         a(ng-click="o.filtersService.model.filtersDefault || o.resetFilters()" ng-disabled="o.filtersService.model.filtersDefault" ng-mouseover="o.hoverState('reset')" ng-mouseleave="o.hoverState('reset')" ng-class="{'disabled reset-icon-disabled': o.filtersService.model.filtersDefault, 'reset-icon-hover': o.isHoveringReset && !o.filtersService.model.filtersApplied}").accent.reset-icon Reset
+
+filter
+
 list
