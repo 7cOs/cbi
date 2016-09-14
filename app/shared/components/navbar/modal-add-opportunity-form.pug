@@ -1,4 +1,4 @@
-div.modal
+div.modal.add-opportunity
   div.title
     h4 Add Opportunity
   form.modal-form(name="nb.addOpportunityForm" novalidate)
@@ -10,17 +10,18 @@ div.modal
     div.modal-input.clearfix
       label Opportunity Type
       md-radio-group.horizontal-layout(ng-model="nb.newOpportunity.properties.distributionType.type" name="opportunityType" required)
-        md-radio-button.md-primary(value="new" aria-label="New Distribution" checked) New Distribution
+        md-radio-button.md-primary(value="new" aria-label="New Distribution") New Distribution
         md-radio-button.md-primary(value="other" aria-label="Other") Other
         input(ng-model="nb.newOpportunity.properties.distributionType.description" aria-label="Opportunity Description" placeholder="Input type" name="otherOpportunityInput").short
     div(ng-show="nb.addOpportunityForm.$invalid && nb.addOpportunityForm.$submitted")
-      p.error-message.accent(ng-show="nb.addOpportunityForm.opportunityType.$error.required") <img src="./assets/img/icons/error.svg">Please select an Opportunity Type.
+      p.error-message.accent.select-opportunity-error(ng-show="nb.addOpportunityForm.opportunityType.$error.required") <img src="./assets/img/icons/error.svg">Please select an Opportunity Type.
     div.modal-input.clearfix
       label Recommended Brand or Package/ SKU
-      div
-        md-radio-group(ng-model="nb.newOpportunity.properties.product.type" layout="row" required)
-          md-radio-button.md-primary(value="sku" aria-label="Search for brand or package/SKU")
-          input(ng-model="nb.newOpportunity.properties.product.text" placeholder="Type brand or package name, or master SKU" name="recommendedBrand")
+      .inline-search-radio
+        md-radio-group(ng-model="nb.newOpportunity.properties.product.type" required)
+          md-radio-button.md-primary(value="sku" aria-label="Search for brand or package/SKU") &nbsp;
+        inline-search(type="store" placeholder="Type brand or package name, or master SKU" chosen-result="nb.newOpportunity.properties.product.text")
+        md-radio-group(ng-model="nb.newOpportunity.properties.product.type" required)
           md-radio-button.md-primary(value="mixed" ng-if="nb.newOpportunity.properties.distributionType.type === 'other'" aria-label="Mixed Brands") Mixed Brands
         div(ng-show="nb.addOpportunityForm.$invalid && nb.addOpportunityForm.$submitted")
           p.error-message.accent(ng-show="nb.addOpportunityForm.recommendedBrand.$error.required") <img src="./assets/img/icons/error.svg">Please enter a Recommended Brand or Select Mixed Brands.
@@ -41,12 +42,12 @@ div.modal
       label Impact
       .dropdown-filter.half-width
         .dropdown.short
-          md-select.left(ng-model="nb.newOpportunity.properties.impact.enum" aria-label="impact dropdown" placeholder="Select Impact")
+          md-select.left(ng-model="nb.newOpportunity.properties.impact.enum" aria-label="impact dropdown" placeholder="Select Impact" required)
             md-option(aria-label="High Impact" value="HIGH") <span class="impact-text">High</span> <img class="impact-icon" src="./assets/img/icons/impact-high.svg">
             md-option(aria-label="Medium Impact form" value="MEDIUM") <span class="impact-text">Medium</span> <img class="impact-icon" src="./assets/img/icons/impact-medium.svg">
             md-option(aria-label="Low Impact" value="LOW") <span class="impact-text">Low</span> <img class="impact-icon" src="./assets/img/icons/impact-low.svg">
     div.modal-input
-      button(type="submit" ng-click="nb.addAnotherOpportunity(nb.newOpportunity)").modal-input.icon-container.add-opportunity
+      button(type="submit" ng-click="nb.addAnotherOpportunity(nb.newOpportunity)").modal-input.icon-container.add-another-opportunity
         img(src="../assets/img/icons/overview-overall-market.svg")
         p.accent.left Add another opportunity
     div.modal-input.clearfix

@@ -1,10 +1,15 @@
 $work-sans: 'Work Sans', Arial, sans-serif;
 $rajdhani: 'Rajdhani', Arial, sans-serif;
+$roboto: 'Roboto', Arial, sans-serif;
 
 $light: 300; // Work Sans only
 $regular: 400; // Work Sans & Rajdhani
 $semibold: 600; // Work Sans & Rajdhani
 $bold: 700; // Rajdhani only
+
+body {
+  font-size: 16px;
+}
 
 ::selection {
   background: $magenta;
@@ -163,8 +168,11 @@ li {
 
 ::placeholder,
 md-select-value.md-select-placeholder {
-  font-style: italic;
   color: $gray-2;
+  font-family: $roboto;
+  font-weight: 200;
+  font-size: 0.95em;
+  font-style: italic;
 }
 
 ol {

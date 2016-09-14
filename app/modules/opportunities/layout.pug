@@ -34,7 +34,7 @@
       label Premise Type
       md-radio-group(ng-model="o.filtersService.model.selected.premiseType")
         md-radio-button(ng-repeat="p in o.filtersService.model.premises | filter: '!All'"  class="md-primary" ng-value="p.value" aria-label="{{p.name}}" ng-click="o.chipsService.addChip(p.name, 'premiseType', true, false); o.resetTradeChannels()") {{::p.name}}
-    div(column='6')
+    div(column='4')
       label Opportunity Status
       md-radio-group(ng-model="o.filtersService.model.selected.opportunityStatus")
         md-radio-button(ng-repeat="opportunity in o.filtersService.model.opportunityStatus" class="md-primary" ng-value="opportunity.value" aria-label="{{opportunity.name}}" ng-click="o.chipsService.addChip(opportunity.name, 'opportunityStatus', true)") {{::opportunity.name}}
@@ -58,16 +58,16 @@
     div(column='3' ng-if="o.filtersService.model.selected.premiseType === 'on'")
       label Brand / Package
       inline-search(type="product" variety="package" placeholder="Brand or Package" chosen-result="o.filtersService.model.brands" callback="o.applyFilterArr(o.filtersService.model.selected.brands, result, 'brands')")
-    div(column='3')
+    div(column='4')
       label Retailer
       div(row).retailer.dropdown-filter
-        div(column='5').dropdown
+        div(column='4').dropdown
           //-md-select(ng-model="o.filtersService.model.selected.retailer" md-on-close="o.chipsService.addChip(o.filtersService.model.selected.retailer, 'retailer', false)" placeholder="Store" ng-init="o.filtersService.model.selected.retailer = 'Chain'")
           md-select(ng-model="o.filtersService.model.selected.retailer" placeholder="Chain" ng-init="o.filtersService.model.selected.retailer = 'Chain'")
             md-option(ng-repeat="type in o.filtersService.model.retailer" ng-click="o.placeholderSelect(type.hintText)" aria-label="{{type.name}}" value="{{type.name}}") {{::type.name}}
-        div(column='7')
+        div(column='8')
           inline-search(type="store" placeholder="{{o.hintTextPlaceholder}}" chosen-result="o.filtersService.model.stores" callback="o.applyFilterArr(o.filtersService.model.selected.stores, result, 'stores')")
-    div(column='3')
+    div(column='2')
       label Distributor
       inline-search(type="distributor" placeholder="Name" chosen-result="o.filtersService.model.distributors" callback="o.applyFilterArr(o.filtersService.model.selected.distributors, result, 'distributors')")
   div(row)
@@ -87,27 +87,27 @@
       md-checkbox(ng-model="o.filtersService.model.selected.productTypeFeatured" aria-label="Product Type Featured" ng-click="o.chipsService.updateChip('productTypeFeatured', 'Featured')") Featured
       md-checkbox(ng-model="o.filtersService.model.selected.productTypePriority" aria-label="Product Type Priority Packages" ng-click="o.chipsService.updateChip('productTypePriority', 'Priority')") Priority Packages
       md-checkbox(ng-model="o.filtersService.model.selected.productTypeAuthorized" aria-label="Product Type Authorized" ng-click="o.chipsService.updateChip('productTypeAuthorized', 'Authorized')") Authorized
-    div(column='3' ng-show="o.filtersService.model.expanded")
+    div(column='4' ng-show="o.filtersService.model.expanded")
       div(row)
-        div(column='12')
+        div(column='7')
           label Store Type
           md-radio-group(ng-model="o.filtersService.model.selected.storeType")
             md-radio-button.md-primary(aria-label="Store Type Independent" value="independent" ng-click="o.chipsService.updateChip('storeType', 'Store Type Independent', true)") Independent
             md-radio-button.md-primary(aria-label="Store Type CBBD" value="CBBD" ng-click="o.chipsService.updateChip('storeType', 'Store Type CBBD', true)") CBBD Chain
-        div(column='12' class="store-segmentation")
+        div(column='8' class="store-segmentation")
           label Store Segmentation
-          md-checkbox(column='3' ng-model="o.filtersService.model.selected.storeSegmentationA" aria-label="Store Segmentation A" ng-click="o.chipsService.updateChip('storeSegmentationA', 'Segment A')") A
-          md-checkbox(column='3' ng-model="o.filtersService.model.selected.storeSegmentationB" aria-label="Store Segmentation B" ng-click="o.chipsService.updateChip('storeSegmentationB', 'Segment B')") B
-          md-checkbox(column='3' ng-model="o.filtersService.model.selected.storeSegmentationC" aria-label="Store Segmentation C" ng-click="o.chipsService.updateChip('storeSegmentationC', 'Segment C')") C
-    div.location-contact-opps(column='3' ng-show="o.filtersService.model.expanded")
+          md-checkbox(ng-model="o.filtersService.model.selected.storeSegmentationA" aria-label="Store Segmentation A" ng-click="o.chipsService.updateChip('storeSegmentationA', 'Segment A')") A
+          md-checkbox(ng-model="o.filtersService.model.selected.storeSegmentationB" aria-label="Store Segmentation B" ng-click="o.chipsService.updateChip('storeSegmentationB', 'Segment B')") B
+          md-checkbox(ng-model="o.filtersService.model.selected.storeSegmentationC" aria-label="Store Segmentation C" ng-click="o.chipsService.updateChip('storeSegmentationC', 'Segment C')") C
+    div.location-contact-opps(column='2' ng-show="o.filtersService.model.expanded")
       label Location
         input(type="text" placeholder="City, State, or Zip" ng-model="o.filtersService.model.location", ng-keypress="($event.which === 13)?o.applyFilterArr(o.filtersService.model.selected.location, o.filtersService.model.location, 'location'):0")
       label.cbbd-contact CBBD Contact
           inline-search(type="user" placeholder="Name" chosen-result="o.filtersService.model.cbbdContact" callback="o.applyFilterArr(o.filtersService.model.selected.cbbdContact, result.firstName + ' ' + result.lastName, 'cbbdContact')")
   div(row ng-show="o.filtersService.model.expanded")
-    div(column='4 +6' class="trade-channel")
+    div(column='5 +6' class="trade-channel")
       label.vertical Trade Channel
-      md-checkbox(column='6' ng-repeat="channel in o.filtersService.model.tradeChannels[o.filtersService.model.selected.premiseType]" ng-model="o.filtersService.model.selected['tradeChannel' + channel.name]" aria-label="Trade Channel {{channel.name}}" ng-click="o.chipsService.updateChip('tradeChannel' + channel.name, channel.name)") {{channel.label}}
+      md-checkbox(ng-repeat="channel in o.filtersService.model.tradeChannels[o.filtersService.model.selected.premiseType]" ng-model="o.filtersService.model.selected['tradeChannel' + channel.name]" aria-label="Trade Channel {{channel.name}}" ng-click="o.chipsService.updateChip('tradeChannel' + channel.name, channel.label)") {{channel.label}}
   div(row)
     div(column='12' class='apply-filters')
       button(value='Apply Filters' type="button" class="btn-action" ng-click="o.chipsService.applyFilters()" ng-disabled="o.filtersService.model.filtersApplied") Apply Filters

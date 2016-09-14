@@ -4,12 +4,13 @@ input {
   border: 1px solid $gray-4;
   box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.2), 0 1px 1px 0 rgba(0, 0, 0, 0.14), 0 2px 1px -1px rgba(0, 0, 0, 0.12);
   font-size: 0.9em;
-  outline: none;
+  outline: 0;
   padding: 0.76em 1em;
   width: 100%;
   color: $gray-1;
 
-  &[type='submit'] {
+  &[type='submit'],
+  &.submit-btn {
     background-color: $gray-4;
     background-image: url('../assets/img/icons/inline-search.svg');
     background-position: center center;
@@ -29,8 +30,12 @@ input {
 /* Radio Buttons */
 
 md-radio-button {
+  font-size: 0.8em;
   margin-bottom: 8px;
-  font-size: 0.75em;
+
+  &:focus {
+    outline: 0;
+  }
 
   .md-container {
     top: 80%;
@@ -41,7 +46,6 @@ md-radio-button {
 
     span {
       color: $gray-1;
-      font-size: 0.9em;
       display: block;
       margin-top: 4px;
     }
@@ -86,6 +90,11 @@ md-radio-button:not([disabled]).md-primary.md-checked .md-on {
 md-checkbox,
 md-select-menu[multiple] md-option,
 md-select-menu[multiple] md-option.md-checkbox-enabled {
+  font-size: 0.8em;
+
+  &:focus {
+    outline: 0;
+  }
 
   .md-container,
   .md-icon {

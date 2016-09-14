@@ -10,7 +10,7 @@ module.exports = /*  @ngInject */
     // Initial variables
     var vm = this;
     vm.currentFilter = {};
-    vm.hintTextPlaceholder = 'Name, Address, TDLinkx, or Store#';
+    vm.hintTextPlaceholder = 'Account or Subaccount Name';
     vm.isHoveringSave = false;
     vm.isHoveringReset = false;
 

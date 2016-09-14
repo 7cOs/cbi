@@ -69,14 +69,14 @@ section.landing-page
         .filter-container.first
           .dropdown-filter
             .dropdown
-              md-select(ng-model="l.filter.selected.savedFilters" aria-label="Saved Filter Dropdown"  placeholder="Select Saved Report")
+              md-select(ng-model="l.filtersService.model.selected.savedFilters" aria-label="Saved Filter Dropdown"  placeholder="Select Saved Report")
                 md-option(class="saved-filter-option" ng-repeat="savedFilter in l.savedFilters" value="{{::savedFilter.id}}" ng-class="{'show-span': hover}" ng-mouseenter="hover = true" ng-mouseleave="hover = false") {{::savedFilter.name}}
                   span.go-arrow(ng-if="hover" ng-click="")
         h3 New Search
         .filter-container
           label
-          md-radio-group(ng-model="l.filter.selected.premiseType")
-            md-radio-button(ng-repeat="p in l.filter.premises | filter: '!All'" class="md-primary" ng-value="p.value" aria-label="p.name") {{p.name}}
+          md-radio-group(ng-model="l.filtersService.model.selected.premiseType")
+            md-radio-button(ng-repeat="p in l.filtersService.model.premises | filter: '!All'" class="md-primary" ng-value="p.value" aria-label="p.name") {{p.name}}
           .filter-item
             .dropdown-filter
               .dropdown
@@ -92,4 +92,4 @@ section.landing-page
             label Distributor
             inline-search(type="distributor" placeholder="By name" chosen-result="l.filtersService.model.distributorSearchText")
 
-          button.btn-action(analytics-on="click" analytics-event="Opportunity List Link Click") Find Opportunities
+          button.btn-action(ui-sref="opportunities" analytics-on="click" analytics-event="Opportunity List Link Click") Find Opportunities
