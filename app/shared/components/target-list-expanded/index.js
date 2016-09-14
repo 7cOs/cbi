@@ -60,26 +60,26 @@ function ExpandedTargetListController($state, $scope, $filter, $mdDialog, $q, us
   }
 
   function archiveTargetList() {
-    var selectedTargetLists = $filter('filter')(userService.model.targetLists.owned, {selected: true}),
-        archiveTargetListPromises = [];
+    var archiveTargetListPromises = [],
+        selectedItems = vm.selected;
 
     // get selected target list ids and their promises
-    archiveTargetListPromises = selectedTargetLists.map(function(targetList) {
+    archiveTargetListPromises = selectedItems.map(function(targetList) {
+      console.log('fired');
+      console.log(targetList);
       return targetListService.updateTargetList(targetList.id, {archived: true});
     });
 
     // run all archive requests at the same time
     $q.all(archiveTargetListPromises).then(function(response) {
-      angular.forEach(selectedTargetLists, function(item, key) {
-        // this may work or i may need to do the object. cant test due to api issues.
+      angular.forEach(selectedItems, function(item, key) {
+
         item.archived = true;
 
         userService.model.targetLists.ownedArchived++;
         userService.model.targetLists.ownedNotArchived--;
       });
-
-      console.log(userService.model.targetLists);
-    });
+    }).then(vm.selected = []);
   }
 
   function createNewList(e) {
