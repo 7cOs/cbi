@@ -52,39 +52,13 @@ div.modal.notes(ng-if="notesOpen")
             .download-all
               a(href="#") Download All
           ul
-            //- This will need to be upodated with API
-            //- TODO This needs to be refactored to be less DRY
-            li(ng-repeat="attachment in n.attachments")
+            li(ng-repeat="attachment in note.attachments")
               div.attached-files
-                .photo(ng-if="attachment.fileType === 'PNG'")
-                  img.thumbnail(src="{{attachment.thumbnail}}")
-                  p.file-name {{attachment.name}}&nbsp;({{attachment.fileSize}})
-                  div(ng-click="n.showImage(attachment)" ng-class="{'chevron-down': !attachment.visible, 'chevron-up': attachment.visible}")
-                  img(src="{{attachment.url}}" ng-if="attachment.visible")
-                .spreadsheet(ng-if="attachment.fileType === 'XLS'")
-                  img.thumbnail(src="../assets/img/icons/download-xls-c.svg")
-                  p.file-name {{attachment.name}}&nbsp;({{attachment.fileSize}})
-                .video(ng-if="attachment.fileType === 'MP4'")
-                  img.thumbnail(src="../assets/img/icons/download-mov-c.svg")
-                  p.file-name {{attachment.name}}&nbsp;({{attachment.fileSize}})
-                .audio(ng-if="attachment.fileType === 'MP3'")
-                  img.thumbnail(src="../assets/img/icons/download-mp3-c.svg")
-                  p.file-name {{attachment.name}}&nbsp;({{attachment.fileSize}})
-                .other(ng-if="attachment.fileType === 'OTHER'")
-                  img.thumbnail(src="../assets/img/icons/download-other-c.svg")
-                  p.file-name {{attachment.name}}&nbsp;({{attachment.fileSize}})
-                .pdf(ng-if="attachment.fileType === 'PDF'")
-                  img.thumbnail(src="../assets/img/icons/download-pdf-c.svg")
-                  p.file-name {{attachment.name}}&nbsp;({{attachment.fileSize}})
-                .powerpoint(ng-if="attachment.fileType === 'PPT'")
-                  img.thumbnail(src="../assets/img/icons/download-ppt-c.svg")
-                  p.file-name {{attachment.name}}&nbsp;({{attachment.fileSize}})
-                .zip(ng-if="attachment.fileType === 'ZIP'")
-                  img.thumbnail(src="../assets/img/icons/download-zip-c.svg")
-                  p.file-name {{attachment.name}}&nbsp;({{attachment.fileSize}})
-                .document(ng-if="attachment.fileType === 'DOC'")
-                  img.thumbnail(src="../assets/img/icons/download-doc-c.svg")
-                  p.file-name {{attachment.name}}&nbsp;({{attachment.fileSize}})
+                .photo
+                  img.thumbnail(src="{{attachment.url}}")
+                  p.file-name <a ng-href="{{attachment.url}}" target="_self">{{attachment.fileName}}</a>&nbsp;{{attachment.fileSize}}
+                  //- div(ng-click="n.showImage(attachment)" ng-class="{'chevron-down': !attachment.visible, 'chevron-up': attachment.visible}")
+                  //- img(src="{{attachment.url}}" ng-if="attachment.visible")
           div
             .add-attachments(ng-if="note.author === 'Me'" ngf-select="n.uploadFiles($files)" multiple accept="image/*")
               p Add an attachment
@@ -114,7 +88,7 @@ div.modal.notes(ng-if="notesOpen")
                 p.accent Attachments
               .download-all
                 p Download All
-            ul
+            //- ul
               li(ng-repeat="attachment in n.attachments")
                 div.attached-files
                   .photo(ng-if="attachment.fileType === 'PNG'")
