@@ -30,8 +30,9 @@ input {
 /* Radio Buttons */
 
 md-radio-button {
-  font-size: 0.8em;
+  font-size: 0.9em;
   margin-bottom: 8px;
+  color: $gray-1;
 
   &:focus {
     outline: 0;
@@ -45,7 +46,6 @@ md-radio-button {
     margin-left: 20px;
 
     span {
-      color: $gray-1;
       display: block;
       margin-top: 4px;
     }
@@ -90,10 +90,15 @@ md-radio-button:not([disabled]).md-primary.md-checked .md-on {
 md-checkbox,
 md-select-menu[multiple] md-option,
 md-select-menu[multiple] md-option.md-checkbox-enabled {
-  font-size: 0.8em;
+  font-size: 0.9em;
+  color: $gray-1;
 
   &:focus {
     outline: 0;
+  }
+
+  .md-label {
+    margin-left: 20px;
   }
 
   .md-container,

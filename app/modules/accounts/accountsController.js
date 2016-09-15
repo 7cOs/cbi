@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports = /*  @ngInject */
-  function accountsController($rootScope, $scope, $state, $log, $window, myperformanceService, chipsService, filtersService, userService) {
+  function accountsController($rootScope, $scope, $state, $log, $window, $filter, myperformanceService, chipsService, filtersService, userService) {
 
     // ****************
     // CONTROLLER SETUP
@@ -50,6 +50,7 @@ module.exports = /*  @ngInject */
     vm.marketStoresView = false;
     vm.marketIdSelected = false;
     vm.selectedStore = null;
+    vm.hintTextPlaceholder = 'Account or Subaccount Name';
 
     // Chart Setup
     vm.chartData = [{'values': vm.marketData.distributors}];
@@ -97,6 +98,7 @@ module.exports = /*  @ngInject */
     vm.selectItem = selectItem;
     vm.prevTab = prevTab;
     vm.openNotes = openNotes;
+    vm.placeholderSelect = placeholderSelect;
 
     init();
 
@@ -160,6 +162,10 @@ module.exports = /*  @ngInject */
     // Make notes available to the page
     function openNotes(val) {
       $rootScope.$broadcast('notes:opened', val);
+    }
+
+    function placeholderSelect(data) {
+      vm.hintTextPlaceholder = data;
     }
 
     // ***************
