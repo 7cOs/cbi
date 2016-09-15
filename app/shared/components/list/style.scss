@@ -220,6 +220,9 @@ list {
     display: inline-block;
     position: relative;
     font-size: 10px;
+    font-weight: $semibold;
+    color: $black-2;
+    text-align: center;
 
     &:focus {
       outline: none;
