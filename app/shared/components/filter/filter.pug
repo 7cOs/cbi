@@ -59,7 +59,7 @@
           inline-search(type="store" placeholder="{{filter.hintTextPlaceholder}}" chosen-result="filter.filtersService.model.stores" callback="filter.applyFilterArr(filter.filtersService.model.selected.stores, result, 'stores')")
     div(column='2')
       label Distributor
-      inline-search(type="distributor" placeholder="Name" chosen-result="filter.filtersService.model.distributors" callback="filter.applyFilterArr(filter.filtersService.model.selected.distributors, result, 'distributors')")
+      inline-search(type="distributor" placeholder="Name" chosen-result="filter.filtersService.model.distributor" callback="filter.applyFilterArr(filter.filtersService.model.selected.distributor, result, 'distributor')")
   div(row)
     div.predicted-impact(column='3' ng-show="filter.filtersService.model.expanded")
       label Predicted Impact
