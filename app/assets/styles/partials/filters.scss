@@ -166,8 +166,24 @@
     margin-bottom: 0;
   }
 
-  .chain-store {
+  &.target-list {
+    .expand {
+      > div {
+        display: none;
+      }
 
+      .more-filters {
+        display: block;
+      }
+    }
+
+    > div {
+      display: none;
+
+      &.expand {
+        display: block;
+      }
+    }
   }
 
 }
