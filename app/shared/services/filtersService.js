@@ -106,7 +106,7 @@ module.exports = /*  @ngInject */
         productTypeFeatured: '',
         productTypePriority: '',
         productTypeAuthorized: true,
-        stores: [],
+        store: [],
         retailer: '',
         storeSearchText: '',
         storeSegmentationA: '',

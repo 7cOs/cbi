@@ -87,7 +87,7 @@ section.landing-page
             inline-search(type="product" variety="sku" placeholder="By brand or SKU" chosen-result="l.filtersService.model.brandSearchText" callback="l.applyFilterArr(l.filtersService.model.selected.brands, result, 'brands')")
           .filter-item
             label Retailer
-            inline-search(type="store" placeholder="Store, account, or subaccount name" chosen-result="l.filtersService.model.accountSearchText" callback="l.applyFilterArr(l.filtersService.model.selected.stores, result, 'stores')")
+            inline-search(type="store" placeholder="Store, account, or subaccount name" chosen-result="l.filtersService.model.accountSearchText" callback="l.applyFilterArr(l.filtersService.model.selected.store, result, 'store')")
           .filter-item
             label Distributor
             inline-search(type="distributor" placeholder="By name" chosen-result="l.filtersService.model.distributorSearchText" callback="l.applyFilterArr(l.filtersService.model.selected.distributor, result, 'distributor')")

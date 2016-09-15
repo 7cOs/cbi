@@ -20,7 +20,7 @@ module.exports = /*  @ngInject */
           i = 0,
           z = Object.keys(obj).length - 1;
 
-      if (obj.type && obj.type === 'stores') {
+      if (obj.type && obj.type === 'store') {
         // remove type obj
         delete obj.type;
 
