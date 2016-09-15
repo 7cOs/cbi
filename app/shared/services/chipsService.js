@@ -194,9 +194,17 @@ module.exports = /*  @ngInject */
       if (model.indexOf(result) > -1) {
         filtersService.model[filter] = '';
       } else {
-        addAutocompleteChip(result, filter);
         filtersService.model[filter] = '';
-        model.push(result);
+        if (filter === 'stores') {
+          addAutocompleteChip(result.store_name, filter);
+          model.push(result.tdlinx_number);
+        } else if (filter === 'distributor') {
+          addAutocompleteChip(result.name, filter);
+          model.push(result.id);
+        } else {
+          addAutocompleteChip(result, filter);
+          model.push(result);
+        }
       }
     }
 
@@ -216,7 +224,6 @@ module.exports = /*  @ngInject */
         addChip('All Types', 'opportunitiesTypes', false);
         filtersService.model.selected[filter] = ['All Types'];
         filtersService.model.opportunityTypes = ['All Types'];
-
       } else {
         for (var i = 0; i < result.length; i++) {
           addChip(result[i], 'opportunitiesTypes', false);

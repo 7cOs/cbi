@@ -54,7 +54,7 @@ notes
         md-radio-button(ng-repeat="p in a.filtersService.model.premises" class="md-primary" ng-value="p.name" aria-label="{{p.name}}" ng-click="a.chipsService.addChip(p.name, 'premiseType', true)") {{p.name}}
     div(column='2')
       label Distributor
-      md-autocomplete(md-search-text="a.filtersService.model.distributorSearchText" md-items="distributor in a.filtersService.model.distributors" md-item-text="distributor.name" placeholder="by Name" md-selected-item-change="a.chipsService.addAutocompleteChip(distributor.name, 'distributorSearchText')")
+      md-autocomplete(md-search-text="a.filtersService.model.distributorSearchText" md-items="distributor in a.filtersService.model.distributor" md-item-text="distributor.name" placeholder="by Name" md-selected-item-change="a.chipsService.addAutocompleteChip(distributor.name, 'distributorSearchText')")
         md-item-template
           div(md-highlight-text="a.filtersService.model.distributorSearchText" md-highlight-flags="^i") {{distributor.name}}
     div(column='2')
