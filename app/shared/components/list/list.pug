@@ -199,7 +199,7 @@ v-accordion.styled-list(multiple="" id="opportunities" control="list.accordion" 
                             label Opportunity List
                             h3 vs YA %
                             p Monthly velocity for this account, calculated by taking the total volume over the selected time period (e.g. L90) and dividing by number of 30 day periods (3). “% vs YA” indicates the trend of velocity this year vs. same time period last year.
-                    span {{::opportunity.store.depletionsCurrentYearToDateYA}}
+                    span {{::product.depletionsCurrentYearToDateYA}}
 div(ng-if="list.displayPagination()" column="12")
   cl-paging(layout="row" flex cl-pages="list.opportunitiesService.model.paging.pages" cl-steps="list.opportunitiesService.model.paging.steps" layout-align="{{list.opportunitiesService.model.paging.align}}" cl-current-page="list.opportunitiesService.model.paging.current" cl-page-changed="list.pageChanged()")
 
