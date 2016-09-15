@@ -181,6 +181,15 @@ module.exports = /*  @ngInject */
       angular.copy(chipsTemplate, model);
     }
 
+    /**
+     * @name applyFilterArr
+     * @desc takes Object and creates chips and adds the info to the provided model, intented for inline-search
+     * @params {Array} model - filters model to recieve result
+     * @params {Object} result - selected search result
+     * @params {String} filter - the relevant filter
+     * @returns null
+     * @memberOf cf.common.services
+     */
     function applyFilterArr(model, result, filter) {
       if (model.indexOf(result) > -1) {
         filtersService.model[filter] = '';
@@ -190,6 +199,16 @@ module.exports = /*  @ngInject */
         model.push(result);
       }
     }
+
+    /**
+     * @name applyFilterMulti
+     * @desc takes array and creates chips and adds the info to the provided model, intended for multi-selects
+     * @params {Array} model - filters model to recieve result
+     * @params {Array} result - array of filters to be applied
+     * @params {String} filter - the relevant filter
+     * @returns null
+     * @memberOf cf.common.services
+     */
 
     function applyFilterMulti(model, result, filter) {
       removeChip('opportunitiesTypes');
