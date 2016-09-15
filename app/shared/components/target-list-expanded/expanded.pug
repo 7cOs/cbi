@@ -59,7 +59,7 @@ div.expanded-target-lists
                     ul.dropdown-menu
                       li.member.creator {{expanded.userService.model.currentUser.firstName}} {{userService.model.currentUser.lastName}}
                       li.member(ng-repeat="collaborator in list.collaborators") {{collaborator.user.firstName}} {{collaborator.user.lastName}}
-                  h5(column="2").accent {{list.dateOpportunitiesUpdated | timeAgo : 'relative'}}
+                  h5(column="2").accent {{(list.dateOpportunitiesUpdated ? list.dateOpportunitiesUpdated : list.createdAt) | timeAgo : 'relative'}}
                   h4(column="1").closed {{list.opportunitiesSummary.closedOpportunitiesCount | number}}
                   h4(column="1") {{list.opportunitiesSummary.opportunitiesCount | number}}
                   h4(column="2") {{list.opportunitiesSummary.totalClosedDepletions | number}}
