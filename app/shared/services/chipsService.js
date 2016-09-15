@@ -195,7 +195,7 @@ module.exports = /*  @ngInject */
         filtersService.model[filter] = '';
       } else {
         filtersService.model[filter] = '';
-        if (filter === 'stores') {
+        if (filter === 'store') {
           addAutocompleteChip(result.store_name, filter);
           model.push(result.tdlinx_number);
         } else if (filter === 'distributor') {
