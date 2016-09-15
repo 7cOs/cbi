@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports = /*  @ngInject */
-  function targetListDetailController($rootScope, $scope, $state, $timeout, $filter, $mdDialog, $mdSelect, targetListService, chipsService, filtersService, opportunitiesService, userService) {
+  function targetListDetailController($rootScope, $scope, $state, $timeout, $filter, $mdDialog, $mdSelect, $window, targetListService, chipsService, filtersService, opportunitiesService, userService) {
 
     // ****************
     // CONTROLLER SETUP
@@ -177,7 +177,7 @@ module.exports = /*  @ngInject */
     }
 
     function navigateToTL() {
-      $state.go('target-lists');
+      $window.location.href = '/target-lists';
     }
 
     function removeCollaborator(collaboratorId) {
