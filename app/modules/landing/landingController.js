@@ -21,6 +21,8 @@ module.exports = /*  @ngInject */
     vm.performanceData = myperformanceService.model();
 
     // Expose public methods
+    vm.applyFilterArr = chipsService.applyFilterArr;
+    vm.applyFilterMulti = chipsService.applyFilterMulti;
     vm.appendDoneButton = appendDoneButton;
     vm.closeDoneButton = closeDoneButton;
     vm.closeSelect = closeSelect;
