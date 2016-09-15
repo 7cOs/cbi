@@ -24,6 +24,8 @@ function FilterController($state, $scope, $mdDialog, $mdSelect, chipsService, fi
   vm.modalSaveOpportunityFilter = modalSaveOpportunityFilter;
   vm.resetFilters = resetFilters;
   vm.saveFilter = saveFilter;
+  vm.hintTextPlaceholder = 'Account or Subaccount Name';
+  vm.placeholderSelect = placeholderSelect;
 
   init();
 
@@ -123,6 +125,10 @@ function FilterController($state, $scope, $mdDialog, $mdSelect, chipsService, fi
       // close modal
       closeModal();
     });
+  }
+
+  function placeholderSelect(data) {
+    vm.hintTextPlaceholder = data;
   }
 
   // **************
