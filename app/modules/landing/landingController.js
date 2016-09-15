@@ -101,5 +101,8 @@ module.exports = /*  @ngInject */
         .then(function(res) {
           vm.savedFilters = res;
         });
+
+      // Set default filters for opportunities widget
+      chipsService.resetChipsFilters(chipsService.model);
     }
   };
