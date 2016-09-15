@@ -13,6 +13,7 @@ module.exports = /*  @ngInject */
     vm.hintTextPlaceholder = 'Account or Subaccount Name';
     vm.isHoveringSave = false;
     vm.isHoveringReset = false;
+    vm.resetFiltersOnLoad = $state.params.resetFiltersOnLoad;
 
     // Set page title for head and nav
     $rootScope.pageTitle = $state.current.title;
@@ -108,7 +109,11 @@ module.exports = /*  @ngInject */
       });
 
       // reset all chips and filters on page init
-      chipsService.resetChipsFilters(chipsService.model);
+      if (vm.resetFiltersOnLoad) {
+        chipsService.resetChipsFilters(chipsService.model);
+      } else {
+        chipsService.applyFilters();
+      }
 
       // Set this to have a list load with the page
       // chipsService.applyFilters();

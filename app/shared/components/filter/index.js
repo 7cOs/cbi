@@ -14,8 +14,8 @@ function FilterController($state, $scope, $mdDialog, $mdSelect, chipsService, fi
   vm.filtersService = filtersService;
 
   vm.appendDoneButton = appendDoneButton;
-  vm.applyFilterArr = applyFilterArr;
-  vm.applyFilterMulti = applyFilterMulti;
+  vm.applyFilterArr = chipsService.applyFilterArr;
+  vm.applyFilterMulti = chipsService.applyFilterMulti;
   vm.closeDoneButton = closeDoneButton;
   vm.closeModal = closeModal;
   vm.closeSelect = closeSelect;
@@ -39,32 +39,6 @@ function FilterController($state, $scope, $mdDialog, $mdSelect, chipsService, fi
       .append('<div class="done-btn">Done</div>').bind('click', function(e) {
         $mdSelect.hide();
       });
-  }
-
-  function applyFilterArr(model, result, filter) {
-    if (model.indexOf(result) > -1) {
-      vm.filtersService.model[filter] = '';
-    } else {
-      vm.chipsService.addAutocompleteChip(result, filter);
-      vm.filtersService.model[filter] = '';
-      model.push(result);
-    }
-  }
-
-  function applyFilterMulti(model, result, filter) {
-    vm.chipsService.removeChip('opportunitiesTypes');
-    if (result.length === 0) {
-      vm.chipsService.addChip('All Types', 'opportunitiesTypes', false);
-      vm.filtersService.model.selected[filter] = ['All Types'];
-      vm.filtersService.model.opportunityTypes = ['All Types'];
-
-    } else {
-      for (var i = 0; i < result.length; i++) {
-        vm.chipsService.addChip(result[i], 'opportunitiesTypes', false);
-      }
-      vm.filtersService.model.selected[filter] = result;
-    }
-
   }
 
   function closeDoneButton() {

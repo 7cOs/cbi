@@ -8,6 +8,9 @@ module.exports =
     .state('opportunities', {
       url: '/opportunities',
       title: 'Opportunities',
+      params: {
+        resetFiltersOnLoad: true
+      },
       templateUrl: './app/modules/opportunities/layout.html',
       controller: 'opportunitiesController',
       controllerAs: 'o'
