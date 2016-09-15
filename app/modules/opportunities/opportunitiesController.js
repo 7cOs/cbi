@@ -111,9 +111,6 @@ module.exports = /*  @ngInject */
       // reset all chips and filters on page init
       if (vm.resetFiltersOnLoad) {
         chipsService.resetChipsFilters(chipsService.model);
-      } else {
-        applyFilterMulti(vm.filtersService.model.selected.opportunitiesTypes, vm.filtersService.model.selected.opportunityTypes, 'opportunitiesTypes');
-        // chipsService.applyFilters();
       }
 
       // Set this to have a list load with the page

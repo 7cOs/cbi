@@ -40,7 +40,9 @@ module.exports = /*  @ngInject */
       applyFilters: applyFilters,
       removeFromFilterService: removeFromFilterService,
       updateChip: updateChip,
-      resetChipsFilters: resetChipsFilters
+      resetChipsFilters: resetChipsFilters,
+      applyFilterArr: applyFilterArr,
+      applyFilterMulti: applyFilterMulti
     };
 
     return service;
@@ -177,6 +179,31 @@ module.exports = /*  @ngInject */
     function resetChipsFilters(chips) {
       filtersService.resetFilters();
       angular.copy(chipsTemplate, model);
+    }
+
+    function applyFilterArr(model, result, filter) {
+      if (model.indexOf(result) > -1) {
+        filtersService.model[filter] = '';
+      } else {
+        addAutocompleteChip(result, filter);
+        filtersService.model[filter] = '';
+        model.push(result);
+      }
+    }
+
+    function applyFilterMulti(model, result, filter) {
+      removeChip('opportunitiesTypes');
+      if (result.length === 0) {
+        addChip('All Types', 'opportunitiesTypes', false);
+        filtersService.model.selected[filter] = ['All Types'];
+        filtersService.model.opportunityTypes = ['All Types'];
+
+      } else {
+        for (var i = 0; i < result.length; i++) {
+          addChip(result[i], 'opportunitiesTypes', false);
+        }
+        filtersService.model.selected[filter] = result;
+      }
     }
 
   };
