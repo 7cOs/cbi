@@ -40,8 +40,6 @@ module.exports = /*  @ngInject */
       if (!opportunityID) {
         // get applied filters
         var filterPayload = filtersService.getAppliedFilters('opportunities');
-
-        console.log('[opportunitiesService.getOpportunities.filterPayload]', filterPayload);
       }
 
       // reset opportunities
