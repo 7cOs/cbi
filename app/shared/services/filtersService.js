@@ -15,6 +15,7 @@ module.exports = /*  @ngInject */
       expanded: false,
       filtersApplied: true,
       filtersDefault: true,
+      impact: {},
       opportunityStatus: [
         {
           name: 'Open',
@@ -90,12 +91,15 @@ module.exports = /*  @ngInject */
         accountMarkets: 'Depletions',
         accountTypes: '',
         brands: [],
+        cbbdChain: false,
         cbbdContact: [],
         chains: '',
         currentFilter: '',
         depletionsTimeFilter: 'FYTD',
         distributor: [],
         distributionTimeFilter: 'L90 Days',
+        impact: {},
+        independent: false,
         location: '',
         opportunitiesStatus: '',
         opportunityTypes: ['All Types'],
@@ -112,7 +116,6 @@ module.exports = /*  @ngInject */
         storeSegmentationA: '',
         storeSegmentationB: '',
         storeSegmentationC: '',
-        storeType: '',
         timePeriod: 'Current Month to Date',
         tradeChannelConvenience: false,
         tradeChannelDrug: '',
@@ -142,13 +145,13 @@ module.exports = /*  @ngInject */
           {label: 'Other', name: 'Other'}
         ],
         off: [
-          {label: 'Grocery', name: 'Grocery'},
-          {label: 'Convenience', name: 'Convenience'},
-          {label: 'Drug', name: 'Drug'},
-          {label: 'Mass Merchandiser', name: 'Mass'},
-          {label: 'Liquor', name: 'Liquor'},
-          {label: 'Military', name: 'Military'},
-          {label: 'Recreation', name: 'Recreation'},
+          {label: 'Grocery', name: 'Grocery', value: '05'},
+          {label: 'Convenience', name: 'Convenience', value: '07'},
+          {label: 'Drug', name: 'Drug', value: '03'},
+          {label: 'Mass Merchandiser', name: 'Mass', value: '08'},
+          {label: 'Liquor', name: 'Liquor', value: '02'},
+          {label: 'Military', name: 'Military', value: 'MF'},
+          {label: 'Recreation', name: 'Recreation', value: '53'},
           {label: 'Other', name: 'Other'}
         ]
 

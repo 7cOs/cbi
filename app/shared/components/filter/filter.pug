@@ -63,7 +63,7 @@
   div(row)
     div.predicted-impact(column='3' ng-show="filter.filtersService.model.expanded")
       label Predicted Impact
-      md-checkbox(ng-model="filter.filtersService.model.selected.predictedImpactHigh" aria-label="Predicted Impact High" ng-click="filter.chipsService.updateChip('predictedImpactHigh', 'High Impact')" name="high")
+      md-checkbox(ng-model="filter.filtersService.model.selected.predictedImpactHigh" aria-label="Predicted Impact High" ng-click="filter.chipsService.updateChip('predictedImpactHigh', 'High Impact')")
         | High
         span.impact.high-small
       md-checkbox(ng-model="filter.filtersService.model.selected.predictedImpactMedium" aria-label="Predicted Impact Medium" ng-click="filter.chipsService.updateChip('predictedImpactMedium', 'Medium Impact')")
@@ -81,9 +81,8 @@
       div(row)
         div(column='7')
           label Store Type
-          md-radio-group(ng-model="filter.filtersService.model.selected.storeType")
-            md-radio-button.md-primary(aria-label="Store Type Independent" value="independent" ng-click="filter.chipsService.updateChip('storeType', 'Store Type Independent', true)") Independent
-            md-radio-button.md-primary(aria-label="Store Type CBBD" value="CBBD" ng-click="filter.chipsService.updateChip('storeType', 'Store Type CBBD', true)") CBBD Chain
+          md-checkbox(ng-model="filter.filtersService.model.selected.independent" aria-label="Store Type Independent" value="independent" ng-click="filter.chipsService.updateChip('independent', 'Independent', true)") Independent
+          md-checkbox(ng-model="filter.filtersService.model.selected.cbbdChain" aria-label="Store Type CBBD" value="CBBD" ng-click="filter.chipsService.updateChip('cbbdChain', 'CBBD', true)") CBBD Chain
         div(column='8' class="store-segmentation")
           label Store Segmentation
           md-checkbox(ng-model="filter.filtersService.model.selected.storeSegmentationA" aria-label="Store Segmentation A" ng-click="filter.chipsService.updateChip('storeSegmentationA', 'Segment A')") A
@@ -93,11 +92,11 @@
       label Location
         input(type="text" placeholder="City, State, or Zip" ng-model="filter.filtersService.model.location", ng-keypress="($event.which === 13)?filter.applyFilterArr(filter.filtersService.model.selected.location, filter.filtersService.model.location, 'location'):0")
       label.cbbd-contact CBBD Contact
-          inline-search(type="user" placeholder="Name" chosen-result="filter.filtersService.model.cbbdContact" callback="filter.applyFilterArr(filter.filtersService.model.selected.cbbdContact, result.firstName + ' ' + result.lastName, 'cbbdContact')")
+          inline-search(type="user" placeholder="Name" chosen-result="filter.filtersService.model.cbbdContact" callback="filter.applyFilterArr(filter.filtersService.model.selected.cbbdContact, result, 'cbbdContact')")
   div(row ng-show="filter.filtersService.model.expanded")
     div(column='5 +6' class="trade-channel")
       label.vertical Trade Channel
-      md-checkbox(ng-repeat="channel in filter.filtersService.model.tradeChannels[filter.filtersService.model.selected.premiseType]" ng-model="filter.filtersService.model.selected['tradeChannel' + channel.name]" aria-label="Trade Channel {{channel.name}}" ng-click="filter.chipsService.updateChip('tradeChannel' + channel.name, channel.label)") {{channel.label}}
+      md-checkbox(ng-repeat="channel in filter.filtersService.model.tradeChannels[filter.filtersService.model.selected.premiseType]" ng-true-value="{{channel.value}}" ng-model="filter.filtersService.model.selected['tradeChannel' + channel.name]" aria-label="Trade Channel {{channel.name}}" ng-click="filter.chipsService.updateChip('tradeChannel' + channel.name, channel.label)") {{channel.label}}
   div(row)
     div(column='12' class='apply-filters')
       button(value='Apply Filters' type="button" class="btn-action" ng-click="filter.chipsService.applyFilters()" ng-disabled="filter.filtersService.model.filtersApplied") Apply Filters

@@ -198,6 +198,9 @@ module.exports = /*  @ngInject */
         if (filter === 'store') {
           addAutocompleteChip(result.store_name, filter);
           model.push(result.tdlinx_number);
+        } else if (filter === 'cbbdContact') {
+          addAutocompleteChip(result.firstName + ' ' + result.lastName, filter);
+          model.push(result.id);
         } else if (filter === 'distributor') {
           addAutocompleteChip(result.name, filter);
           model.push(result.id);
