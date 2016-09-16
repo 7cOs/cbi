@@ -40,8 +40,6 @@ module.exports = /*  @ngInject */
       if (!opportunityID) {
         // get applied filters
         var filterPayload = filtersService.getAppliedFilters('opportunities');
-
-        console.log('[opportunitiesService.getOpportunities.filterPayload]', filterPayload);
       }
 
       // reset opportunities
@@ -103,8 +101,7 @@ module.exports = /*  @ngInject */
           store.brands.push(item.product.brand.toLowerCase());
 
           // sum high opportunities
-          item.impact = item.impactDescription.toLowerCase();
-          if (item.impact === 'high') store.highImpactSum += 1;
+          // if (item.impact === 'high') store.highImpactSum += 1;
 
           // sum depletions - not in api yet - WJAY 8/8
           // store.depletionSum += item.depletions

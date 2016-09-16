@@ -59,7 +59,7 @@ describe('[Services.apiHelperService]', function() {
     var mockObj = {
       'masterSKU': '112154',
       'premiseType': 'on',
-      'type': 'stores'
+      'type': 'store'
     };
     var url = 'http://localhost:3000/';
     var resultExpectation = url + '?' + 'masterSKU=112154&premiseType=on';
