@@ -163,23 +163,7 @@ v-accordion.styled-list(multiple="" id="opportunities" control="list.accordion" 
                         md-menu-item
                           p(ng-click="list.openShareModal(product.id)") Send To
                         md-menu-item
-                          p(ng-click="list.showFlyout(product)" md-prevent-menu-close) Dismiss
-                          .sub-menu-flyout(ng-if="list.showSubMenu")
-                            h4.title Dismiss
-                            .hide-row(ng-click="list.cancelFeedback()" md-prevent-menu-close)
-                            .sub-menu-content-container
-                              .sub-menu-content
-                                p If opportunity is dismissed, opportunities for that Package/SKU at that account will not reappear for 90 days
-                              .sub-menu-content
-                                md-radio-group(ng-model="list.opportunity.feedback.selector" ng-init="list.opportunity.feedback.selector = 'other'")
-                                  md-radio-button.md-primary(value="notRelevant") Opportunity not relevant
-                                  md-radio-button.md-primary(value="other") Other
-                              .sub-menu-content
-                                label Additional Feedback
-                                textarea(ng-model="list.opportunity.feedback.text").feedback
-                              .sub-menu-content
-                                button.btn-action(ng-click="list.submitFeedback(opportunity)" md-prevent-menu-close) Submit
-                                p.cancel.accent(ng-click="list.cancelFeedback()" md-prevent-menu-close) X Cancel
+                          p(ng-click="list.openDismissModal(product.id)") Dismiss
             .shadow-wrap.top
               v-pane-content
                 div(row)
