@@ -103,7 +103,7 @@ module.exports = /*  @ngInject */
           store.brands.push(item.product.brand.toLowerCase());
 
           // sum high opportunities
-          item.impact = item.impact.toLowerCase();
+          item.impact = item.impactDescription.toLowerCase();
           if (item.impact === 'high') store.highImpactSum += 1;
 
           // sum depletions - not in api yet - WJAY 8/8
