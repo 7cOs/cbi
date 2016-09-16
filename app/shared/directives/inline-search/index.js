@@ -42,6 +42,7 @@ module.exports =
       vm.resultChosen = resultChosen;
       vm.close = close;
       vm.onKeypress = onKeypress;
+      vm.userDataFormat = userDataFormat;
 
       // **************
       // PUBLIC METHODS
@@ -139,6 +140,16 @@ module.exports =
         if (event.charCode === 13) {
           event.preventDefault();
           vm.action(vm.type);
+        }
+      }
+
+      function userDataFormat(user) {
+        if (user) {
+          if (user.roles.length > 0) {
+            return $filter('titlecase')(user.roles[0]) + ' | ' + $filter('lowercase')(user.email);
+          } else {
+            return $filter('lowercase')(user.email);
+          }
         }
       }
     }

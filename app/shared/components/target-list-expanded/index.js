@@ -28,7 +28,7 @@ function ExpandedTargetListController($state, $scope, $filter, $mdDialog, $q, us
   };
   vm.totalOpportunitesChevron = true;
   vm.selected = [];
-  vm.buttonDiabled = false;
+  vm.buttonDisabled = false;
   vm.selectedTab = 0;
 
   // Expose public methods
