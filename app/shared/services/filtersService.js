@@ -15,7 +15,7 @@ module.exports = /*  @ngInject */
       expanded: false,
       filtersApplied: true,
       filtersDefault: true,
-      impact: {},
+      impact: '',
       opportunityStatus: [
         {
           name: 'Open',
@@ -98,7 +98,7 @@ module.exports = /*  @ngInject */
         depletionsTimeFilter: 'FYTD',
         distributor: [],
         distributionTimeFilter: 'L90 Days',
-        impact: {},
+        impact: '',
         independent: false,
         location: '',
         opportunitiesStatus: '',
