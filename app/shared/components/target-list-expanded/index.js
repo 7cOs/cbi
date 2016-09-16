@@ -65,7 +65,6 @@ function ExpandedTargetListController($state, $scope, $filter, $mdDialog, $q, us
 
     // get selected target list ids and their promises
     archiveTargetListPromises = selectedItems.map(function(targetList) {
-      console.log('fired');
       console.log(targetList);
       return targetListService.updateTargetList(targetList.id, {archived: true});
     });
