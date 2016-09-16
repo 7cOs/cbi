@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports = /*  @ngInject */
-  function chipsService(filtersService, opportunitiesService, targetListService) {
+  function chipsService(filtersService, opportunitiesService, targetListService, $filter) {
 
     var chipsTemplate = [
       {
@@ -199,10 +199,14 @@ module.exports = /*  @ngInject */
           addAutocompleteChip(result.store_name, filter);
           model.push(result.tdlinx_number);
         } else if (filter === 'cbbdContact') {
-          addAutocompleteChip(result.firstName + ' ' + result.lastName, filter);
+          addAutocompleteChip($filter('titlecase')(result.firstName + ' ' + result.lastName), filter);
+          model.push(result.id);
+        } else if (filter === 'subaccount' || filter === 'account') {
+          filtersService.model.chain = '';
+          addAutocompleteChip($filter('titlecase')(result.name), filter);
           model.push(result.id);
         } else if (filter === 'distributor' || filter === 'brands') {
-          addAutocompleteChip(result.name, filter);
+          addAutocompleteChip($filter('titlecase')(result.name), filter);
           model.push(result.id);
         } else {
           addAutocompleteChip(result, filter);
@@ -222,14 +226,18 @@ module.exports = /*  @ngInject */
      */
 
     function applyFilterMulti(model, result, filter) {
-      removeChip('opportunitiesTypes');
+      removeChip('opportunitiesType');
       if (result.length === 0) {
-        addChip('All Types', 'opportunitiesTypes', false);
+        addChip('All Types', 'opportunitiesType', false);
         filtersService.model.selected[filter] = ['All Types'];
-        filtersService.model.opportunityTypes = ['All Types'];
+        filtersService.model.opportunityType = ['All Types'];
       } else {
         for (var i = 0; i < result.length; i++) {
-          addChip(result[i], 'opportunitiesTypes', false);
+          if (result[i] === 'All Types') {
+            result.splice(result.indexOf('All Types'), 1);
+          } else {
+            addChip(result[i], 'opportunitiesType', false);
+          }
         }
         filtersService.model.selected[filter] = result;
       }

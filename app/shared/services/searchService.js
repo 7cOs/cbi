@@ -7,7 +7,8 @@ module.exports = /*  @ngInject */
       getUsers: getUsers,
       getProducts: getProducts,
       getStores: getStores,
-      getDistributors: getDistributors
+      getDistributors: getDistributors,
+      getChains: getChains
     };
 
     /**
@@ -112,6 +113,33 @@ module.exports = /*  @ngInject */
       }
 
       function getDistributorsFail(error) {
+        searchPromise.reject(error);
+      }
+
+      return searchPromise.promise;
+    }
+
+    /**
+     * @name getChains
+     * @desc Get chains from API via Inline Search
+     * @returns [array]
+     * @memberOf cf.common.services
+     */
+    function getChains(searchTerm) {
+      var searchPromise = $q.defer(),
+          url = apiHelperService.request('/api/search/chains?searchTerm=' + encodeURIComponent(searchTerm));
+
+      $http.get(url, {
+        headers: {}
+      })
+      .then(getChainsSuccess)
+      .catch(getChainsFail);
+
+      function getChainsSuccess(response) {
+        searchPromise.resolve(response.data.chains);
+      }
+
+      function getChainsFail(error) {
         searchPromise.reject(error);
       }
 

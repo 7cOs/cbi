@@ -3,6 +3,8 @@
 module.exports = /*  @ngInject */
   function filtersService() {
     var model = {
+      account: [],
+      subaccount: [],
       accounts: [
         {name: 'Walmart', subAccount: 'North East'},
         {name: 'Walmart', subAccount: 'West'},
@@ -25,8 +27,8 @@ module.exports = /*  @ngInject */
           value: 'targeted'
         }
       ],
-      opportunityTypes: ['All Types'],
-      opportunitiesTypes: [
+      opportunityType: ['All Types'],
+      opportunitiesType: [
         {name: 'All Types'},
         {name: 'Non-Buy'},
         {name: 'At Risk'},
@@ -87,13 +89,14 @@ module.exports = /*  @ngInject */
       selected: {},
       selectedTemplate: {
         myAccountsOnly: true,
+        account: [],
+        subaccount: [],
         accountBrands: 'Distribution (simple)',
         accountMarkets: 'Depletions',
         accountTypes: '',
         brands: [],
         cbbdChain: false,
         cbbdContact: [],
-        chains: '',
         currentFilter: '',
         depletionsTimeFilter: 'FYTD',
         distributor: [],
@@ -102,7 +105,7 @@ module.exports = /*  @ngInject */
         independent: false,
         location: '',
         opportunitiesStatus: '',
-        opportunityTypes: ['All Types'],
+        opportunityType: ['All Types'],
         predictedImpactHigh: '',
         predictedImpactMedium: '',
         predictedImpactLow: '',
@@ -111,7 +114,7 @@ module.exports = /*  @ngInject */
         productTypePriority: '',
         productTypeAuthorized: true,
         store: [],
-        retailer: '',
+        retailer: 'Chain',
         storeSearchText: '',
         storeSegmentationA: '',
         storeSegmentationB: '',
