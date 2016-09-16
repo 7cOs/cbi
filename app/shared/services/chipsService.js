@@ -201,7 +201,7 @@ module.exports = /*  @ngInject */
         } else if (filter === 'cbbdContact') {
           addAutocompleteChip(result.firstName + ' ' + result.lastName, filter);
           model.push(result.id);
-        } else if (filter === 'distributor') {
+        } else if (filter === 'distributor' || filter === 'brands') {
           addAutocompleteChip(result.name, filter);
           model.push(result.id);
         } else {
