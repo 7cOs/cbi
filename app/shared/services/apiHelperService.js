@@ -46,8 +46,8 @@ module.exports = /*  @ngInject */
               if (k === 0) queryParams += key2 + ':';
 
               // transform opp types to db format
-              if (key2 === 'opportunityTypes') {
-                queryParams += obj[key2][k].replace(/-|\s/, '_').toUpperCase();
+              if (key2 === 'opportunityType') {
+                queryParams += obj[key2][k].replace(/["'()]/g, '').replace(/[__-\s]/g, '_').toUpperCase();
               } else {
                 queryParams += obj[key2][k];
               }

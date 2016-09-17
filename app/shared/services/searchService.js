@@ -136,7 +136,7 @@ module.exports = /*  @ngInject */
       .catch(getChainsFail);
 
       function getChainsSuccess(response) {
-        searchPromise.resolve(response.data.chains);
+        searchPromise.resolve(response.data);
       }
 
       function getChainsFail(error) {

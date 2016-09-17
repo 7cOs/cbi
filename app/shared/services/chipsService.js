@@ -24,7 +24,7 @@ module.exports = /*  @ngInject */
       },
       {
         'name': 'All Types',
-        'type': 'opportunitiesTypes',
+        'type': 'opportunitiesType',
         'applied': false,
         'removable': false
       }
@@ -232,14 +232,16 @@ module.exports = /*  @ngInject */
         filtersService.model.selected[filter] = ['All Types'];
         filtersService.model.opportunityType = ['All Types'];
       } else {
-        for (var i = 0; i < result.length; i++) {
-          if (result[i] === 'All Types') {
-            result.splice(result.indexOf('All Types'), 1);
+        var results = [];
+        angular.forEach(result, function(value, key) {
+          if (value === 'All Types') {
           } else {
-            addChip(result[i], 'opportunitiesType', false);
+            addChip(value, 'opportunitiesType', false);
+            results.push(value);
           }
-        }
-        filtersService.model.selected[filter] = result;
+        });
+        filtersService.model.selected[filter] = results;
+        // filtersService.model.selected.opportunityType = [];
       }
     }
 
