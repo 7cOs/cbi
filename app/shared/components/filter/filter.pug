@@ -82,8 +82,9 @@
       div(row)
         div(column='7')
           label Store Type
-          md-checkbox(ng-model="filter.filtersService.model.selected.independent" aria-label="Store Type Independent" value="independent" ng-click="filter.chipsService.updateChip('independent', 'Independent', true)") Independent
-          md-checkbox(ng-model="filter.filtersService.model.selected.cbbdChain" aria-label="Store Type CBBD" value="CBBD" ng-click="filter.chipsService.updateChip('cbbdChain', 'CBBD', true)") CBBD Chain
+          md-radio-group(ng-model="filter.filtersService.model.selected.storeType")
+            md-radio-button.md-primary(aria-label="Store Type Independent" value="independent" ng-click="filter.chipsService.updateChip('storeType', 'Store Type Independent', true)") Independent
+            md-radio-button.md-primary(aria-label="Store Type CBBD" value="CBBD" ng-click="filter.chipsService.updateChip('storeType', 'Store Type CBBD', true)") CBBD Chain
         div(column='8' class="store-segmentation")
           label Store Segmentation
           md-checkbox(ng-model="filter.filtersService.model.selected.storeSegmentationA" aria-label="Store Segmentation A" ng-click="filter.chipsService.updateChip('storeSegmentationA', 'Segment A')") A
