@@ -60,7 +60,7 @@ module.exports =  function(app) {
     rolling: config.session.rolling,
     maxAge: config.session.maxAge,
     httpOnly: config.session.httpOnly,
-    secure: config.session.secure,
+    cookie: config.session.cookie,
     saveUninitialized: config.session.saveUninitialized,
     secret: config.session.secret,
     store: sessionStore
