@@ -97,9 +97,22 @@ module.exports =
       }
 
       function resultChosen(result, nav) {
-        if (vm.type === 'user') {
-          vm.input = $filter('titlecase')(result.firstName) + ' ' + $filter('titlecase')(result.lastName);
-        } else { vm.input = result; };
+        switch (vm.type) {
+          case 'user':
+            vm.input = $filter('titlecase')(result.firstName) + ' ' + $filter('titlecase')(result.lastName);
+            break;
+          case 'chain':
+          case 'distributor':
+          case 'product':
+            vm.input = result.name;
+            break;
+          case 'store':
+            vm.input = result.account;
+            break;
+          default:
+            vm.input = result;
+            break;
+        }
 
         if (nav) {
           // We'll need to pass result for filtering once Accounts is integrated
