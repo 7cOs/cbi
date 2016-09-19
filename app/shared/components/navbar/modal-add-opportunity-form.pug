@@ -20,7 +20,7 @@ div.modal.add-opportunity
       .inline-search-radio
         md-radio-group(ng-model="nb.newOpportunity.properties.product.type" required)
           md-radio-button.md-primary(value="sku" aria-label="Search for brand or package/SKU") &nbsp;
-        inline-search(type="store" placeholder="Type brand or package name, or master SKU" chosen-result="nb.newOpportunity.properties.product.text")
+        inline-search(type="product" variety="sku" placeholder="Type brand or package name, or master SKU" chosen-result="nb.newOpportunity.properties.product.text")
         md-radio-group(ng-model="nb.newOpportunity.properties.product.type" required)
           md-radio-button.md-primary(value="mixed" ng-if="nb.newOpportunity.properties.distributionType.type === 'other'" aria-label="Mixed Brands") Mixed Brands
         div(ng-show="nb.addOpportunityForm.$invalid && nb.addOpportunityForm.$submitted")
