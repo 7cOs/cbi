@@ -10,7 +10,6 @@
     font-style: initial;
 
     span {
-      font-size: 0.85em;
       display: inline-block;
     }
 
@@ -61,14 +60,6 @@ md-select {
     background-size: contain;
     background-position: center;
     background-image: url('../assets/img/icons/drop-chevron.svg');
-  }
-}
-
-.header-selector {
-
-  .md-select-icon:after {
-    background-size: 14px;
-    background-position: -1px 4px;
   }
 }
 

@@ -7,7 +7,7 @@ div.modal
       p(ng-repeat="collaborator in list.sharedCollaborators") {{collaborator.name}}
     div.modal-input
       label Add Recipient
-      inline-search(type="user" placeholder="Search users" chosen-result="list.collaborator")
+      inline-search(type="user" placeholder="Enter Names or CBI email Address" chosen-result="list.collaborator")
     button.btn-action(ng-click="list.shareOpportunity()") Send
     p.cancel.accent(ng-click="o.closeEditModal()") X Cancel
   .modal-footer

@@ -2,8 +2,10 @@
   margin-bottom: 1em;
 }
 
-.filters .apply-filters .secondary-button-container {
-  top: 15px;
+.trend {
+  md-radio-button {
+    float: initial;
+  }
 }
 
 .market-overview,
@@ -201,7 +203,6 @@
 }
 
 .pod-overview {
-
   label {
     display: inline-block;
     margin-bottom: 1em;
@@ -217,7 +218,7 @@
   table {
     border-top: 0;
     position: relative;
-    z-index: 2;
+    z-index: 1;
   }
 
   md-tabs-wrapper {
@@ -237,7 +238,12 @@
   }
 }
 
+.scorecard-table-accounts {
+  padding-right: 0.5em;
+}
+
 .scorecard-chart {
+  padding-left: 0;
 
   .chart,
   .chart-data {
@@ -246,6 +252,7 @@
     float: left;
     position: relative;
     width: 50%;
+    z-index: 1;
   }
 
   .fixed-layout {
@@ -329,7 +336,7 @@
 .nvd {
   height: 620px;
   position: absolute;
-  top: 14px;
+  top: 37px;
   width: 100%;
   z-index: 1;
 
@@ -349,6 +356,11 @@
   }
 }
 
+.dist-label,
+.market-label {
+  height: 65px;
+}
+
 .dist-label {
   color: $blue;
   width: 70%;
@@ -360,4 +372,8 @@
 
 md-autocomplete.ng-isolate-scope {
   min-width: 0;
+}
+
+.title-col {
+  height: 30px;
 }

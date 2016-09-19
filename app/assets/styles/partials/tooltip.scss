@@ -3,15 +3,15 @@
   position: relative;
   width: 100%;
 
+  .accent,
   .tooltip {
-    position: absolute;
-    right: -1.75em;
-    top: -0.5em;
+    display: inline;
+  }
 
-    img {
-      height: 15px;
-      width: 15px;
-    }
+  .tooltip img {
+    height: 15px;
+    width: 15px;
+    vertical-align: text-bottom;
   }
 
   label {
@@ -54,21 +54,6 @@ md-tooltip {
       font-size: 0.75em;
       list-style-type: default;
       text-align: left;
-    }
-  }
-}
-
-.scorecard-table {
-
-  .tooltip-wrap {
-
-    .tooltip {
-      right: 0.25em;
-      top: -1em;
-    }
-
-    .abbreviation-tooltip {
-      right: 4em;
     }
   }
 }

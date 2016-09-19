@@ -30,14 +30,12 @@ function TargetListController($scope, $state, targetListService, userService) {
       'records': [],
       'total': 0,
       'index': 1
-
     },
     'archived': {
       'name': 'Archived',
       'records': [],
       'total': 0,
       'index': 2
-
     }
   };
 
@@ -81,6 +79,17 @@ function TargetListController($scope, $state, targetListService, userService) {
     };
   }
 
+  // Filter archived or deleted target lists
+  function filterTargetLists(list) {
+    var filteredList = [];
+    angular.forEach(list, function(value, key) {
+      if (!(value.deleted || value.archived)) {
+        filteredList.push(value);
+      }
+    });
+    return filteredList;
+  }
+
   function init() {
     userService.getTargetLists(userService.model.currentUser.employeeID).then(function(data) {
       // split things into categories, but ignore archived
@@ -96,11 +105,11 @@ function TargetListController($scope, $state, targetListService, userService) {
       // );
 
       // Send to model
-      vm.types.mine.records = mine.slice(0, 5);
+      vm.types.mine.records = filterTargetLists(mine).slice(0, 5);
       vm.types.mine.total = mine.length;
-      vm.types.shared.records = shared.slice(0, 5);
+      vm.types.shared.records = filterTargetLists(shared).slice(0, 5);
       vm.types.shared.total = shared.length;
-      vm.types.archived.records = archived.slice(0, 5);
+      vm.types.archived.records = filterTargetLists(archived).slice(0, 5);
       vm.types.archived.total = archived.length;
     });
   }

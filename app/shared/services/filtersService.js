@@ -3,6 +3,8 @@
 module.exports = /*  @ngInject */
   function filtersService() {
     var model = {
+      account: [],
+      subaccount: [],
       accounts: [
         {name: 'Walmart', subAccount: 'North East'},
         {name: 'Walmart', subAccount: 'West'},
@@ -11,10 +13,11 @@ module.exports = /*  @ngInject */
       ],
       brands: '',
       cbbdContact: '',
-      distributors: '',
+      distributor: '',
       expanded: false,
       filtersApplied: true,
       filtersDefault: true,
+      impact: '',
       opportunityStatus: [
         {
           name: 'Open',
@@ -24,8 +27,8 @@ module.exports = /*  @ngInject */
           value: 'targeted'
         }
       ],
-      opportunityTypes: ['All Types'],
-      opportunitiesTypes: [
+      opportunityType: ['All Types'],
+      opportunitiesType: [
         {name: 'All Types'},
         {name: 'Non-Buy'},
         {name: 'At Risk'},
@@ -77,28 +80,32 @@ module.exports = /*  @ngInject */
         }]
       },
       distributionTimePeriod: [{
-        name: 'L30 Days June 21, 2016 - July 21, 2016'
+        name: 'L30 Days'
       }, {
-        name: 'L60 Days May 21, 2016 - July 21, 2016'
+        name: 'L60 Days'
       }, {
-        name: 'L90 Days April 22, 2016 - July 21, 2016'
+        name: 'L90 Days'
       }],
       selected: {},
       selectedTemplate: {
         myAccountsOnly: true,
-        accountBrands: '',
-        accountMarkets: '',
+        account: [],
+        subaccount: [],
+        accountBrands: 'Distribution (simple)',
+        accountMarkets: 'Depletions',
         accountTypes: '',
         brands: [],
+        cbbdChain: false,
         cbbdContact: [],
-        chains: '',
         currentFilter: '',
-        depletionsTimeFilter: 'MTD July 1, 2016- July 31, 2016',
-        distributors: [],
-        distributionTimeFilter: 'L90 Days April 22, 2016 - July 21, 2016',
+        depletionsTimeFilter: 'FYTD',
+        distributor: [],
+        distributionTimeFilter: 'L90 Days',
+        impact: '',
+        independent: false,
         location: '',
         opportunitiesStatus: '',
-        opportunityTypes: ['All Types'],
+        opportunityType: ['All Types'],
         predictedImpactHigh: '',
         predictedImpactMedium: '',
         predictedImpactLow: '',
@@ -106,22 +113,14 @@ module.exports = /*  @ngInject */
         productTypeFeatured: '',
         productTypePriority: '',
         productTypeAuthorized: true,
-        stores: [],
-        retailer: '',
+        store: [],
+        retailer: 'Chain',
         storeSearchText: '',
         storeSegmentationA: '',
         storeSegmentationB: '',
         storeSegmentationC: '',
         storeType: '',
         timePeriod: 'Current Month to Date',
-        tradeChannelConvenience: false,
-        tradeChannelDrug: '',
-        tradeChannelGrocery: '',
-        tradeChannelLiquor: '',
-        tradeChannelMassMerchandiser: '',
-        tradeChannelMilitary: '',
-        tradeChannelOther: '',
-        tradeChannelRecreation: '',
         trend: '',
         valuesVsTrend: ''
       },
@@ -142,20 +141,20 @@ module.exports = /*  @ngInject */
           {label: 'Other', name: 'Other'}
         ],
         off: [
-          {label: 'Grocery', name: 'Grocery'},
-          {label: 'Convenience', name: 'Convenience'},
-          {label: 'Drug', name: 'Drug'},
-          {label: 'Mass Merchandiser', name: 'Mass'},
-          {label: 'Liquor', name: 'Liquor'},
-          {label: 'Military', name: 'Military'},
-          {label: 'Recreation', name: 'Recreation'},
+          {label: 'Grocery', name: 'Grocery', value: '05'},
+          {label: 'Convenience', name: 'Convenience', value: '07'},
+          {label: 'Drug', name: 'Drug', value: '03'},
+          {label: 'Mass Merchandiser', name: 'Mass', value: '08'},
+          {label: 'Liquor', name: 'Liquor', value: '02'},
+          {label: 'Military', name: 'Military', value: 'MF'},
+          {label: 'Recreation', name: 'Recreation', value: '53'},
           {label: 'Other', name: 'Other'}
         ]
 
       },
       trend: [
         {name: 'vs YA'},
-        {name: 'va Plan'}
+        {name: 'vs ABP'}
       ]
     };
 
@@ -171,11 +170,13 @@ module.exports = /*  @ngInject */
       // get applied filters
       var filterPayload = {type: type};
       for (var key in service.model.selected) {
-        if (service.model.selected[key].constructor === Array) {
+        if (service.model.selected[key].constructor === Array && service.model.selected[key].length > 0) {
+          filterPayload[key] = service.model.selected[key];
         } else if (service.model.selected[key] !== '') {
           filterPayload[key] = service.model.selected[key];
         }
       }
+
       return filterPayload;
     }
 

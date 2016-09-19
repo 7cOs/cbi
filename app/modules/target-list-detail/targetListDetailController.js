@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports = /*  @ngInject */
-  function targetListDetailController($rootScope, $scope, $state, $timeout, $filter, $mdDialog, $mdSelect, targetListService, chipsService, filtersService, opportunitiesService, userService) {
+  function targetListDetailController($rootScope, $scope, $state, $timeout, $filter, $mdDialog, $mdSelect, $window, targetListService, chipsService, filtersService, opportunitiesService, userService) {
 
     // ****************
     // CONTROLLER SETUP
@@ -26,8 +26,6 @@ module.exports = /*  @ngInject */
     $rootScope.pageTitle = $state.current.title;
 
     // Expose public methods
-    vm.applyFilterArr = applyFilterArr;
-    vm.applyFilterMulti = applyFilterMulti;
     vm.addCollaborators = addCollaborators;
     vm.addCollaboratorClick = addCollaboratorClick;
     vm.changeCollaboratorLevel = changeCollaboratorLevel;
@@ -44,57 +42,8 @@ module.exports = /*  @ngInject */
     vm.removeCollaborator = removeCollaborator;
     vm.removeFooterToast = removeFooterToast;
     vm.updateList = updateList;
-    vm.resetFilters = resetFilters;
-    vm.closeSelect = closeSelect;
-    vm.appendDoneButton = appendDoneButton;
-    vm.closeDoneButton = closeDoneButton;
 
     init();
-
-    // **************
-    // PUBLIC METHODS
-    // **************
-
-    function appendDoneButton() {
-      // We have to do this so the done button is a sibling of md-select-menu
-      angular.element(document.getElementsByClassName('md-select-menu-container'))
-        .append('<div class="done-btn">Done</div>').bind('click', function(e) {
-          $mdSelect.hide();
-        });
-    }
-
-    function closeDoneButton() {
-      angular.element(document.getElementsByClassName('done-btn')).remove();
-    }
-
-    function closeSelect() {
-      $mdSelect.hide();
-    }
-
-    function applyFilterMulti(model, result, filter) {
-      vm.chipsService.removeChip('opportunitiesTypes');
-      if (result.length === 0) {
-        vm.chipsService.addChip('All Types', 'opportunitiesTypes', false);
-        vm.filtersService.model.selected[filter] = ['All Types'];
-        vm.filtersService.model.opportunityTypes = ['All Types'];
-
-      } else {
-        for (var i = 0; i < result.length; i++) {
-          vm.chipsService.addChip(result[i], 'opportunitiesTypes', false);
-        }
-        vm.filtersService.model.selected[filter] = result;
-      }
-
-    }
-    function applyFilterArr(model, result, filter) {
-      if (model.indexOf(result) > -1) {
-        vm.filtersService.model[filter] = '';
-      } else {
-        vm.chipsService.addAutocompleteChip(result, filter);
-        vm.filtersService.model[filter] = '';
-        model.push(result);
-      }
-    }
 
     function addCollaborators() {
       vm.collaborator.permissionLevel = vm.permissionLevel;
@@ -113,14 +62,6 @@ module.exports = /*  @ngInject */
 
     function changeCollaboratorLevel() {
       targetListService.updateTargetListShares(targetListService.model.currentList.id, vm.collaborator).then();
-    }
-
-    function resetFilters() {
-      // reset all chips and filters
-      chipsService.resetChipsFilters(chipsService.model);
-
-      // userService.model.opportunityFilters = null;
-      filtersService.resetFilters();
     }
 
     function closeModal() {
@@ -236,7 +177,7 @@ module.exports = /*  @ngInject */
     }
 
     function navigateToTL() {
-      $state.go('target-lists');
+      $window.location.href = '/target-lists';
     }
 
     function removeCollaborator(collaboratorId) {

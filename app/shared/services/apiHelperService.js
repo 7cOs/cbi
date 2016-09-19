@@ -20,7 +20,7 @@ module.exports = /*  @ngInject */
           i = 0,
           z = Object.keys(obj).length - 1;
 
-      if (obj.type && obj.type === 'stores') {
+      if (obj.type && obj.type === 'store') {
         // remove type obj
         delete obj.type;
 
@@ -36,12 +36,37 @@ module.exports = /*  @ngInject */
 
         // remove type obj
         delete obj.type;
-
         for (var key2 in obj) {
-          queryParams += key2 + ':' + obj[key2];
-          if (i !== (z - 1)) queryParams += ',';
+          var somethingAdded = false;
+          if (obj[key2].constructor === Array && obj[key2].length > 0) {
+
+            // iterate over arrays
+            for (var k = 0; k < obj[key2].length; k++) {
+              if (obj[key2][k].toUpperCase() === 'ALL TYPES') break;
+              if (k === 0) queryParams += key2 + ':';
+
+              // transform opp types to db format
+              if (key2 === 'opportunityType') {
+                queryParams += obj[key2][k].replace(/["'()]/g, '').replace(/[__-\s]/g, '_').toUpperCase();
+              } else {
+                queryParams += obj[key2][k];
+              }
+
+              // add separator if it's not last item
+              if (obj[key2].length - 1 !== k) queryParams += '|';
+
+              somethingAdded = true;
+            }
+          } else if (obj[key2].constructor !== Array) {
+            queryParams += key2 + ':' + obj[key2];
+            somethingAdded = true;
+          }
+
+          if (i !== (z - 1) && somethingAdded) queryParams += ',';
           i++;
         }
+
+        console.log('[apiHelperService.formatQueryString]', queryParams);
 
         return '?limit=2000&sort=store&filter=' + encodeURIComponent(queryParams);
       } else if (obj.type && obj.type === 'targetLists') {

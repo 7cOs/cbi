@@ -278,7 +278,7 @@ module.exports = /*  @ngInject */
       trend: [{
         name: 'vs YA'
       }, {
-        name: 'va Plan'
+        name: 'vs ABP'
       }],
       premises: [{
         name: 'All'
@@ -288,7 +288,7 @@ module.exports = /*  @ngInject */
         name: 'On-Premise'
       }],
       accountBrands: [{
-        name: 'Distributions (simple)'
+        name: 'Distribution (simple)'
       }, {
         name: 'Velocity'
       }],

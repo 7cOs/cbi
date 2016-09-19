@@ -21,10 +21,13 @@ module.exports = /*  @ngInject */
     vm.performanceData = myperformanceService.model();
 
     // Expose public methods
+    vm.applyFilterArr = chipsService.applyFilterArr;
+    vm.applyFilterMulti = chipsService.applyFilterMulti;
     vm.appendDoneButton = appendDoneButton;
     vm.closeDoneButton = closeDoneButton;
     vm.closeSelect = closeSelect;
     vm.isPositive = isPositive;
+    vm.findOpportunities = findOpportunities;
 
     // Set values
     vm.greeting = getGreeting();
@@ -59,6 +62,12 @@ module.exports = /*  @ngInject */
       return false;
     };
 
+    function findOpportunities() {
+      $state.go('opportunities', {
+        resetFiltersOnLoad: false
+      });
+    }
+
     // ***************
     // PRIVATE METHODS
     // ***************
@@ -92,5 +101,8 @@ module.exports = /*  @ngInject */
         .then(function(res) {
           vm.savedFilters = res;
         });
+
+      // Set default filters for opportunities widget
+      chipsService.resetChipsFilters(chipsService.model);
     }
   };

@@ -5,7 +5,7 @@ module.exports = function(app) {
 
   return new Strategy(
     function(username, password, cb) {
-      if (username === 'ratul' && password === 'pls') {
+      if (username === 'cbi' && password === 'cbsc') {
         return cb(null, app.get('config').auth.user);
       } else {
         return cb(null, false);

@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports = /*  @ngInject */
-  function chipsService(filtersService, opportunitiesService, targetListService) {
+  function chipsService(filtersService, opportunitiesService, targetListService, $filter) {
 
     var chipsTemplate = [
       {
@@ -24,7 +24,7 @@ module.exports = /*  @ngInject */
       },
       {
         'name': 'All Types',
-        'type': 'opportunitiesTypes',
+        'type': 'opportunitiesType',
         'applied': false,
         'removable': false
       }
@@ -40,7 +40,9 @@ module.exports = /*  @ngInject */
       applyFilters: applyFilters,
       removeFromFilterService: removeFromFilterService,
       updateChip: updateChip,
-      resetChipsFilters: resetChipsFilters
+      resetChipsFilters: resetChipsFilters,
+      applyFilterArr: applyFilterArr,
+      applyFilterMulti: applyFilterMulti
     };
 
     return service;
@@ -177,6 +179,70 @@ module.exports = /*  @ngInject */
     function resetChipsFilters(chips) {
       filtersService.resetFilters();
       angular.copy(chipsTemplate, model);
+    }
+
+    /**
+     * @name applyFilterArr
+     * @desc takes Object and creates chips and adds the info to the provided model, intented for inline-search
+     * @params {Array} model - filters model to recieve result
+     * @params {Object} result - selected search result
+     * @params {String} filter - the relevant filter
+     * @returns null
+     * @memberOf cf.common.services
+     */
+    function applyFilterArr(model, result, filter) {
+      if (model.indexOf(result) > -1) {
+        filtersService.model[filter] = '';
+      } else {
+        filtersService.model[filter] = '';
+        if (filter === 'store') {
+          addAutocompleteChip(result.store_name, filter);
+          model.push(result.tdlinx_number);
+        } else if (filter === 'cbbdContact') {
+          addAutocompleteChip($filter('titlecase')(result.firstName + ' ' + result.lastName), filter);
+          model.push(result.id);
+        } else if (filter === 'subaccount' || filter === 'account') {
+          filtersService.model.chain = '';
+          addAutocompleteChip($filter('titlecase')(result.name), filter);
+          model.push(result.id);
+        } else if (filter === 'distributor' || filter === 'brands') {
+          addAutocompleteChip($filter('titlecase')(result.name), filter);
+          model.push(result.id);
+        } else {
+          addAutocompleteChip(result, filter);
+          model.push(result);
+        }
+      }
+    }
+
+    /**
+     * @name applyFilterMulti
+     * @desc takes array and creates chips and adds the info to the provided model, intended for multi-selects
+     * @params {Array} model - filters model to recieve result
+     * @params {Array} result - array of filters to be applied
+     * @params {String} filter - the relevant filter
+     * @returns null
+     * @memberOf cf.common.services
+     */
+
+    function applyFilterMulti(model, result, filter) {
+      removeChip('opportunitiesType');
+      if (result.length === 0) {
+        addChip('All Types', 'opportunitiesType', false);
+        filtersService.model.selected[filter] = ['All Types'];
+        filtersService.model.opportunityType = ['All Types'];
+      } else {
+        var results = [];
+        angular.forEach(result, function(value, key) {
+          if (value === 'All Types') {
+          } else {
+            addChip(value, 'opportunitiesType', false);
+            results.push(value);
+          }
+        });
+        filtersService.model.selected[filter] = results;
+        // filtersService.model.selected.opportunityType = [];
+      }
     }
 
   };

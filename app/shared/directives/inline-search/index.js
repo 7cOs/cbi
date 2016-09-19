@@ -69,8 +69,8 @@ module.exports =
           case 'distributor':
             method = 'getDistributors';
             break;
-          case 'chain': // This should probably be an endpoint, waiting for answer from API
-            method = 'getStores';
+          case 'chain':
+            method = 'getChains';
             break;
           default:
             console.log('Please specify a search type');

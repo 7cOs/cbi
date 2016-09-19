@@ -36,12 +36,12 @@ div(container)
                 p <strong>Account Selector</strong>
                 .tooltip-wrap
                   md-checkbox(ng-model="nb.myAccountsOnly" aria-label="My Accounts Only") My Accounts Only
-                    .tooltip
-                      img(src="../assets/img/icons/help-tooltip.svg")
-                      md-tooltip(md-direction="bottom")
-                        label Global Account Selector
-                        h3 My Accounts Only
-                        p By default, you will only see the data that’s relevant to you (based on your role, market, and account scope).  You can deselect this option to expand your view or search beyond your own market.
+                  .tooltip
+                    img(src="../assets/img/icons/help-tooltip.svg")
+                    md-tooltip(md-direction="bottom")
+                      label Global Account Selector
+                      h3 My Accounts Only
+                      p By default, you will only see the data that’s relevant to you (based on your role, market, and account scope).  You can deselect this option to expand your view or search beyond your own market.
                 .dropdown-filter
                   .dropdown
                     md-select(ng-model="nb.accountSelectorSelected" aria-label="Account Type selector"  placeholder="Store, account, or subaccount name")

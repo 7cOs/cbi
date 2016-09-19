@@ -39,6 +39,10 @@
       a.disabled {
         color: $gray-8;
       }
+
+      &.account-filter-reset {
+        top: 0;
+      }
     }
   }
 
@@ -81,10 +85,6 @@
     md-checkbox {
       width: 40%;
       margin-bottom: 0.4em;
-    }
-
-    .md-label {
-      margin-left: 20px;
     }
   }
 
@@ -166,8 +166,23 @@
     margin-bottom: 0;
   }
 
-  .chain-store {
+  &.target-list {
+    .expand {
+      > div {
+        display: none;
+      }
 
+      .more-filters {
+        display: block;
+      }
+    }
+
+    > div {
+      display: none;
+
+      &.expand {
+        display: block;
+      }
+    }
   }
-
 }

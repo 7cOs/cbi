@@ -1,0 +1,107 @@
+.chips(ng-if="filter.chipsService.model.length")
+  label Active Filters
+  span &nbsp;
+  md-chips(ng-model="filter.chipsService.model" md-removable="true" name="Active Filters" md-on-remove="filter.chipsService.removeFromFilterService($chip)")
+    input(class="hidden" disabled="true")
+    div.md-chip-remove(md-chip-remove ng-if="$chip.removable")
+      md-icon(md-svg-src='data:image/svg+xml;base64,PHN2ZyB2ZXJzaW9uPSIxLjEiIHg9IjBweCIgeT0iMHB4IiB2aWV3Qm94PSIwIDAgMjQgMjQiPjxnPjxwYXRoIGQ9Ik0xOSA2LjQxbC0xLjQxLTEuNDEtNS41OSA1LjU5LTUuNTktNS41OS0xLjQxIDEuNDEgNS41OSA1LjU5LTUuNTkgNS41OSAxLjQxIDEuNDEgNS41OS01LjU5IDUuNTkgNS41OSAxLjQxLTEuNDEtNS41OS01LjU5eiIvPjwvZz48L3N2Zz4=', aria-hidden='true')
+        svg(version='1.1', x='0px', y='0px', viewbox='0 0 24 24', fit='', height='100%', width='100%', preserveaspectratio='xMidYMid meet', focusable='false')
+          g
+            path(d='M19 6.41l-1.41-1.41-5.59 5.59-5.59-5.59-1.41 1.41 5.59 5.59-5.59 5.59 1.41 1.41 5.59-5.59 5.59 5.59 1.41-1.41-5.59-5.59z')
+    md-chip-template(custom-chip="" ng-class="{closable: $chip.removable}")
+      div {{$chip.name}}
+.filters(column='12' ng-class="{'target-list': filter.opportunities}")
+  div.expand(row)
+    div(class='more-filters')
+      a(ng-click="filter.expandDropdown();")
+        span(ng-class="{ 'chevron-up': filter.filtersService.model.expanded, 'chevron-down': !filter.filtersService.model.expanded}")
+        span.accent(ng-if="filter.filtersService.model.expanded") Show Less Filters
+        span.accent(ng-if="!filter.filtersService.model.expanded") Show More Filters
+    div(column='3')
+      label Account Scope
+      md-checkbox(ng-model="filter.filtersService.model.selected.myAccountsOnly" aria-label="My Accounts" ng-click="filter.chipsService.updateChip('myAccountsOnly', 'My Accounts Only')") My Accounts Only
+    div(column='3')
+      label Premise Type
+      md-radio-group(ng-model="filter.filtersService.model.selected.premiseType")
+        md-radio-button(ng-repeat="p in filter.filtersService.model.premises | filter: '!All'"  class="md-primary" ng-value="p.value" aria-label="{{p.name}}" ng-click="filter.chipsService.addChip(p.name, 'premiseType', true, false); filter.resetTradeChannels()") {{::p.name}}
+    div(column='4')
+      label Opportunity Status
+      md-radio-group(ng-model="filter.filtersService.model.selected.opportunityStatus")
+        md-radio-button(ng-repeat="opportunity in filter.filtersService.model.opportunityStatus" class="md-primary" ng-value="opportunity.value" aria-label="{{opportunity.name}}" ng-click="filter.chipsService.addChip(opportunity.name, 'opportunityStatus', true)") {{::opportunity.name}}
+  div(row)
+    div(column='3')
+      .tooltip-wrap
+        label Opportunity Type
+          .tooltip
+            img(src="../assets/img/icons/help-tooltip.svg")
+            md-tooltip(md-direction="bottom")
+              label Filter Set
+              h3 Opportunities List
+              p SKU/Package has not reported depletions at this account within L90 days AND is currently reporting depletions at Similar Stores. Note: for SKU/Packages that are Chain-mandated, a non-buy opportunity will be triggered if no depletions in L30 days
+      .dropdown-filter
+        .dropdown
+          md-select(md-on-open="filter.appendDoneButton()" ng-model="filter.filtersService.model.selected.opportunityType"  multiple="true" md-on-close="filter.applyFilterMulti(filter.filtersService.model.selected.opportunityType, filter.filtersService.model.selected.opportunityType, 'opportunityType'); filter.closeDoneButton()" aria-label="Opportunity Type Dropdown")
+            md-option(ng-repeat="type in filter.filtersService.model.opportunitiesType" aria-label="{{type.name}}" value="{{type.name}}") {{::type.name}}
+    div(column='3' ng-if="filter.filtersService.model.selected.premiseType === 'off'")
+      label Brand / Master SKU
+      inline-search(type="product" variety="sku" placeholder="Brand or SKU" chosen-result="filter.filtersService.model.brands" callback="filter.applyFilterArr(filter.filtersService.model.selected.brands, result, 'brands')")
+    div(column='3' ng-if="filter.filtersService.model.selected.premiseType === 'on'")
+      label Brand / Package
+      inline-search(type="product" variety="package" placeholder="Brand or Package" chosen-result="filter.filtersService.model.brands" callback="filter.applyFilterArr(filter.filtersService.model.selected.brands, result, 'brands')")
+    div(column='4')
+      label Retailer
+      div(row).retailer.dropdown-filter
+        div(column='4').dropdown
+          //-md-select(ng-model="filter.filtersService.model.selected.retailer" md-on-close="filter.chipsService.addChip(filter.filtersService.model.selected.retailer, 'retailer', false)" placeholder="Store" ng-init="filter.filtersService.model.selected.retailer = 'Chain'")
+          md-select(ng-model="filter.filtersService.model.selected.retailer" placeholder="Chain" ng-init="filter.filtersService.model.selected.retailer = 'Chain'")
+            md-option(ng-repeat="type in filter.filtersService.model.retailer" ng-click="filter.placeholderSelect(type.hintText)" aria-label="{{type.name}}" value="{{type.name}}") {{::type.name}}
+        div(column='8')
+          inline-search(ng-if="filter.filtersService.model.selected.retailer === 'Store'" type="store" placeholder="{{filter.hintTextPlaceholder}}" chosen-result="filter.filtersService.model.store" show-address="true" callback="filter.applyFilterArr(filter.filtersService.model.selected.store, result, 'store')")
+          inline-search(ng-if="filter.filtersService.model.selected.retailer === 'Chain'" type="chain" placeholder="{{filter.hintTextPlaceholder}}" chosen-result="filter.filtersService.model.chain" callback="filter.applyFilterArr(filter.filtersService.model.selected[result.type], result, result.type)")
+    div(column='2')
+      label Distributor
+      inline-search(type="distributor" placeholder="Name" chosen-result="filter.filtersService.model.distributor" callback="filter.applyFilterArr(filter.filtersService.model.selected.distributor, result, 'distributor')")
+  div(row)
+    div.predicted-impact(column='3' ng-show="filter.filtersService.model.expanded")
+      label Predicted Impact
+      md-checkbox(ng-model="filter.filtersService.model.selected.predictedImpactHigh" aria-label="Predicted Impact High" ng-click="filter.chipsService.updateChip('predictedImpactHigh', 'High Impact')")
+        | High
+        span.impact.high-small
+      md-checkbox(ng-model="filter.filtersService.model.selected.predictedImpactMedium" aria-label="Predicted Impact Medium" ng-click="filter.chipsService.updateChip('predictedImpactMedium', 'Medium Impact')")
+        | Medium
+        span.impact.medium-small
+      md-checkbox(ng-model="filter.filtersService.model.selected.predictedImpactLow" aria-label="Predicted Impact Low" ng-click="filter.chipsService.updateChip('predictedImpactLow', 'Low Impact')")
+        | Low
+        span.impact.low-small
+    div(column='3' ng-show="filter.filtersService.model.expanded")
+      label Product Type
+      md-checkbox(ng-model="filter.filtersService.model.selected.productTypeFeatured" aria-label="Product Type Featured" ng-click="filter.chipsService.updateChip('productTypeFeatured', 'Featured')") Featured
+      md-checkbox(ng-model="filter.filtersService.model.selected.productTypePriority" aria-label="Product Type Priority Packages" ng-click="filter.chipsService.updateChip('productTypePriority', 'Priority')") Priority Packages
+      md-checkbox(ng-model="filter.filtersService.model.selected.productTypeAuthorized" aria-label="Product Type Authorized" ng-click="filter.chipsService.updateChip('productTypeAuthorized', 'Authorized')") Authorized
+    div(column='4' ng-show="filter.filtersService.model.expanded")
+      div(row)
+        div(column='7')
+          label Store Type
+          md-radio-group(ng-model="filter.filtersService.model.selected.storeType")
+            md-radio-button.md-primary(aria-label="Store Type Independent" value="independent" ng-click="filter.chipsService.updateChip('storeType', 'Store Type Independent', true)") Independent
+            md-radio-button.md-primary(aria-label="Store Type CBBD" value="CBBD" ng-click="filter.chipsService.updateChip('storeType', 'Store Type CBBD', true)") CBBD Chain
+        div(column='8' class="store-segmentation")
+          label Store Segmentation
+          md-checkbox(ng-model="filter.filtersService.model.selected.storeSegmentationA" aria-label="Store Segmentation A" ng-click="filter.chipsService.updateChip('storeSegmentationA', 'Segment A')") A
+          md-checkbox(ng-model="filter.filtersService.model.selected.storeSegmentationB" aria-label="Store Segmentation B" ng-click="filter.chipsService.updateChip('storeSegmentationB', 'Segment B')") B
+          md-checkbox(ng-model="filter.filtersService.model.selected.storeSegmentationC" aria-label="Store Segmentation C" ng-click="filter.chipsService.updateChip('storeSegmentationC', 'Segment C')") C
+    div.location-contact-opps(column='2' ng-show="filter.filtersService.model.expanded")
+      label Location
+        input(type="text" placeholder="City, State, or Zip" ng-model="filter.filtersService.model.location", ng-keypress="($event.which === 13)?filter.applyFilterArr(filter.filtersService.model.selected.location, filter.filtersService.model.location, 'location'):0")
+      label.cbbd-contact CBBD Contact
+          inline-search(type="user" placeholder="Name" chosen-result="filter.filtersService.model.cbbdContact" callback="filter.applyFilterArr(filter.filtersService.model.selected.cbbdContact, result, 'cbbdContact')")
+  div(row ng-show="filter.filtersService.model.expanded")
+    div(column='5 +6' class="trade-channel")
+      label.vertical Trade Channel
+      md-checkbox(ng-repeat="channel in filter.filtersService.model.tradeChannels[filter.filtersService.model.selected.premiseType]" ng-model="filter.filtersService.model.selected['tradeChannel' + channel.name]" aria-label="Trade Channel {{channel.name}}" ng-click="filter.chipsService.updateChip('tradeChannel' + channel.name, channel.label)") {{channel.label}}
+  div(row)
+    div(column='12' class='apply-filters')
+      button(value='Apply Filters' type="button" class="btn-action" ng-click="filter.chipsService.applyFilters()" ng-disabled="filter.filtersService.model.filtersApplied") Apply Filters
+      .secondary-button-container
+        a(ng-click="!filter.filtersService.model.filtersApplied || filter.modalSaveOpportunityFilter($event)" ng-disabled="!filter.filtersService.model.filtersApplied" ng-mouseover="filter.hoverState('save')" ng-mouseleave="filter.hoverState('save')" ng-class="{'disabled save-filterset-icon-disabled': !filter.filtersService.model.filtersApplied, 'save-report-hover': filter.isHoveringSave && !filter.filtersService.model.filtersApplied}").accent.save-filterset-icon Save Report
+        a(ng-click="filter.filtersService.model.filtersDefault || filter.resetFilters()" ng-disabled="filter.filtersService.model.filtersDefault" ng-mouseover="filter.hoverState('reset')" ng-mouseleave="filter.hoverState('reset')" ng-class="{'disabled reset-icon-disabled': filter.filtersService.model.filtersDefault, 'reset-icon-hover': filter.isHoveringReset && !filter.filtersService.model.filtersApplied}").accent.reset-icon Reset
