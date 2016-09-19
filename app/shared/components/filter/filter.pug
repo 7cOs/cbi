@@ -82,14 +82,14 @@
       div(row)
         div(column='7')
           label Store Type
-          md-radio-group(ng-model="filter.filtersService.model.selected.storeType")
-            md-radio-button.md-primary(aria-label="Store Type Independent" value="independent" ng-click="filter.chipsService.updateChip('storeType', 'Store Type Independent', true)") Independent
-            md-radio-button.md-primary(aria-label="Store Type CBBD" value="CBBD" ng-click="filter.chipsService.updateChip('storeType', 'Store Type CBBD', true)") CBBD Chain
+          md-radio-group(ng-model="filter.filtersService.model.selected.cbbdChain")
+            md-radio-button.md-primary(aria-label="Store Type Independent" value="false" ng-click="filter.chipsService.updateChip('storeType', 'Store Type Independent', true)") Independent
+            md-radio-button.md-primary(aria-label="Store Type CBBD" value="true" ng-click="filter.chipsService.updateChip('storeType', 'Store Type CBBD', true)") CBBD Chain
         div(column='8' class="store-segmentation")
           label Store Segmentation
-          md-checkbox(ng-model="filter.filtersService.model.selected.storeSegmentationA" aria-label="Store Segmentation A" ng-click="filter.chipsService.updateChip('storeSegmentationA', 'Segment A')") A
-          md-checkbox(ng-model="filter.filtersService.model.selected.storeSegmentationB" aria-label="Store Segmentation B" ng-click="filter.chipsService.updateChip('storeSegmentationB', 'Segment B')") B
-          md-checkbox(ng-model="filter.filtersService.model.selected.storeSegmentationC" aria-label="Store Segmentation C" ng-click="filter.chipsService.updateChip('storeSegmentationC', 'Segment C')") C
+          md-checkbox(ng-model="filter.filtersService.model.storeSegmentationA" value="A" aria-label="Store Segmentation A" ng-click="filter.applyFilterArr(filter.filtersService.model.selected.segmentation, 'A', 'segmentation')") A
+          md-checkbox(ng-model="filter.filtersService.model.storeSegmentationB" value="B" aria-label="Store Segmentation B" ng-click="filter.applyFilterArr(filter.filtersService.model.selected.segmentation, 'B', 'segmentation')") B
+          md-checkbox(ng-model="filter.filtersService.model.storeSegmentationC" value="C" aria-label="Store Segmentation C" ng-click="filter.applyFilterArr(filter.filtersService.model.selected.segmentation, 'C', 'segmentation')") C
     div.location-contact-opps(column='2' ng-show="filter.filtersService.model.expanded")
       label Location
         input(type="text" placeholder="City, State, or Zip" ng-model="filter.filtersService.model.location", ng-keypress="($event.which === 13)?filter.applyFilterArr(filter.filtersService.model.selected.location, filter.filtersService.model.location, 'location'):0")
