@@ -151,9 +151,20 @@ module.exports = /*  @ngInject */
       if (chip.search || chip.type === 'opportunitiesTypes') {
         var arr = filtersService.model.selected[chip.type];
         var i = arr.length;
-        while (i--) {
-          if (arr[i] === chip.name) {
-            arr.splice(i, 1);
+        if (chip.type === 'segmentation') {
+          while (i--) {
+            var segment = chip.name.split('Segmentation ')[1];
+            if (arr[i] === segment) {
+              arr.splice(i, 1);
+              filtersService.model['storeSegmentation' + segment] = false;
+              break;
+            }
+          }
+        } else {
+          while (i--) {
+            if (arr[i] === chip.name) {
+              arr.splice(i, 1);
+            }
           }
         }
       } else if (typeof chip.type === 'string') {
@@ -191,8 +202,6 @@ module.exports = /*  @ngInject */
      * @memberOf cf.common.services
      */
     function applyFilterArr(model, result, filter) {
-      console.log('[applyStart]', model, result, filter);
-
       if (model.indexOf(result) > -1) {
         if (filter === 'segmentation') {
           // remove from array
@@ -226,8 +235,6 @@ module.exports = /*  @ngInject */
           model.push(result);
         }
       }
-
-      console.log('[applyFinish]', model);
     }
 
     /**
