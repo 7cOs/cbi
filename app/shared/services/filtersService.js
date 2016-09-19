@@ -102,7 +102,6 @@ module.exports = /*  @ngInject */
         distributor: [],
         distributionTimeFilter: 'L90 Days',
         impact: '',
-        independent: false,
         location: '',
         opportunitiesStatus: '',
         opportunityType: ['All Types'],
