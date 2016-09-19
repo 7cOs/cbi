@@ -2,7 +2,7 @@
 
 module.exports = /*  @ngInject */
   function timeAgo($filter) {
-    var timeZoneDifference = 7;
+    var offset = new Date().getTimezoneOffset();
     /**
      * @name timeAgo
      * @desc calculate how much time has gone by since the update
@@ -44,10 +44,10 @@ module.exports = /*  @ngInject */
         } else if (daysAgo > 1) { // 1 - 7 days
           returnStr = Math.round(daysAgo) + ' days ago';
         } else if (daysAgo < 1 && (daysAgo * 24) > 1) { // 61 minutes to 24 hours
-          var hours = Math.round(daysAgo * 24) + timeZoneDifference;
+          var hours = Math.round(daysAgo * 24) + (offset / 60);
           returnStr = hours < 2 ? hours + ' hour ago' : hours + ' hours ago';
         } else { // 0-60 minutes
-          var minutes = Math.round(daysAgo * 24 * 60) + (timeZoneDifference * 60);
+          var minutes = Math.round(daysAgo * 24 * 60) + offset;
           returnStr = minutes < 2 ? minutes + ' minute ago' : minutes + ' minutes ago';
         }
       }
