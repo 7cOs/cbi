@@ -191,8 +191,18 @@ module.exports = /*  @ngInject */
      * @memberOf cf.common.services
      */
     function applyFilterArr(model, result, filter) {
+      console.log('[applyStart]', model, result, filter);
+
       if (model.indexOf(result) > -1) {
-        filtersService.model[filter] = '';
+        if (filter === 'segmentation') {
+          // remove from array
+          model.splice(model.indexOf(result), 1);
+          // remove from chip model
+          var index = service.model.map(function(e) { return e.name; }).indexOf('Segmentation ' + result);
+          service.model.splice(index, 1);
+        } else {
+          filtersService.model[filter] = '';
+        }
       } else {
         filtersService.model[filter] = '';
         if (filter === 'store') {
@@ -216,6 +226,8 @@ module.exports = /*  @ngInject */
           model.push(result);
         }
       }
+
+      console.log('[applyFinish]', model);
     }
 
     /**
