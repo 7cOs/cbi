@@ -60,8 +60,9 @@ module.exports =  function(app) {
     rolling: config.session.rolling,
     maxAge: config.session.maxAge,
     httpOnly: config.session.httpOnly,
+    secure: config.session.secure,
     saveUninitialized: config.session.saveUninitialized,
-    secret: config.security.secret,
+    secret: config.session.secret,
     store: sessionStore
   }));
 
