@@ -3,7 +3,8 @@
 module.exports = /*  @ngInject */
   function notesService($http, $q) {
 
-    var urlBase = '/sfdc/';
+    var urlBase = '/sfdc/',
+        accountId = '610291028';
 
     var tempData = {
     };
@@ -41,7 +42,7 @@ module.exports = /*  @ngInject */
 
     function accountNotes(id) {
       var notesPromise = $q.defer(),
-          url = urlBase + 'accountNotes' + '?accountId=1432999';
+          url = urlBase + 'accountNotes' + '?accountId=' + accountId;
 
       $http.get(url)
         .then(accountNotesSuccess)
@@ -49,12 +50,28 @@ module.exports = /*  @ngInject */
 
       function accountNotesSuccess(response) {
         var data = [];
-        angular.forEach(response.data, function(arr) {
+        angular.forEach(response.data.successReturnValue, function(arr) {
+          var noteAttachments = [];
+
+          if (arr.Attachments !== null) {
+
+            for (var i = 0; i < arr.Attachments.records.length; i++) {
+              noteAttachments.push(
+                {
+                  fileName: arr.Attachments.records[i].Name,
+                  fileSize: filesizeFilter(arr.Attachments.records[i].BodyLength / 1000),
+                  url: arr.Attachments.records[i].attributes.url
+                }
+              );
+            };
+          }
+
           data.push({
             title: arr.Title__c,
             body: arr.Comments_RTF__c,
             author: arr.CreatedBy.Name,
-            date: arr.CreatedDate
+            date: arr.CreatedDate,
+            attachments: noteAttachments
           });
         });
         notesPromise.resolve(data);
@@ -156,4 +173,10 @@ module.exports = /*  @ngInject */
       return notePromise.promise;
     }
 
+    function filesizeFilter(number) {
+      if (number > 1000) {
+        return (number / 1000).toFixed(2) + ' MB';
+      }
+      return number.toFixed(0) + ' KB';
+    }
   };

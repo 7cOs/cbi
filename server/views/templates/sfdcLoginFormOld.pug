@@ -1,0 +1,8 @@
+form(id='saml-form', method='post', action='{{entityEndpoint}}', autocomplete='off')
+  input(type='hidden', name='{{actionType}}', value='{{actionValue}}')
+  if ('{{relayState}}' !== null)
+    input(type='hidden', name='RelayState' value='{{relayState}}')
+script(type='text/javascript').
+  function(){
+    document.forms[0].submit();
+  }

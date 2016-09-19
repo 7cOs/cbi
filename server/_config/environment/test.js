@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports = function (config) {
-
+  const fs = require('fs');
   // global settings
   config.domain = 'orion-qa.cbrands.com';
   config.env = 'test';
@@ -35,6 +35,24 @@ module.exports = function (config) {
     cert: '',
     privateCert: '',
     signatureAlgorithm: 'sha1'
+  };
+
+  config.sfdcSec = {
+    // assertionEndpoint: the endpoint you connect to in order to get the session token.
+    assertionEndpoint: 'https://cbrands--full.cs20.my.salesforce.com/services/oauth2/token?so=00Dm00000008hN8',
+    // privateKey and certfile: keys generated from SFDC's Key and Certificate Management area
+    privateKey: fs.readFileSync('./server/_config/environment/sfdcsecurity/' + config.env + '/signingKey.pem').toString(),
+    certfile: fs.readFileSync('./server/_config/environment/sfdcsecurity/' + config.env + '/certificate.crt').toString(),
+    // issuer, recipient: can be anything, but must match between the SFDC Single Sign-On Configuration and this value.
+    issuer: 'compass-portal',
+    recipient: 'https://cbrands--CBeerDev.cs20.my.salesforce.com?so=00Dm00000008hN8',
+    // This value matches with the Entity Id value in the SFDC Single Sign-On Configuration
+    audience: 'https://saml.salesforce.com',
+    // These algorithms should not be touched.  They are used to encrypt the certificates.
+    signatureAlgorithm: 'rsa-sha256',
+    digestAlgorithm: 'sha256',
+    // Used in samlBuilder as an attribute in the Assertion creation.
+    ssoStartPage: 'compass-portal'
   };
 
   return config;
