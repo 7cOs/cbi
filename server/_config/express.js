@@ -58,6 +58,8 @@ module.exports =  function(app) {
     name: 'cf.sid',
     resave: config.session.resave,
     rolling: config.session.rolling,
+    maxAge: config.session.maxAge,
+    httpOnly: config.session.httpOnly,
     saveUninitialized: config.session.saveUninitialized,
     secret: config.security.secret,
     store: sessionStore
