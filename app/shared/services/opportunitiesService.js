@@ -198,9 +198,10 @@ module.exports = /*  @ngInject */
      * @returns {Object}
      * @memberOf cf.common.services
      */
-    function createOpportunityFeedback(url, opportunityID, data) {
-      var opportunitiesPromise = $q.defer();
-      var payload = {};
+    function createOpportunityFeedback(opportunityID, data) {
+      var opportunitiesPromise = $q.defer(),
+          url = apiHelperService.request('/api/opportunities/' + opportunityID + '/feedback/'),
+          payload = data;
 
       $http.post(url, payload, {
         headers: {}

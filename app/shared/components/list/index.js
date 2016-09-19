@@ -158,9 +158,9 @@ function ListController($scope, $state, $q, $location, $anchorScroll, $mdDialog,
     });
   }
 
-  function submitFeedback(opportunity) {
+  function submitFeedback(opportunity, data) {
     $mdDialog.hide();
-    dismissOpportunity(opportunity);
+    dismissOpportunity(opportunity, data);
   }
 
   function cancelFeedback(opportunity) {
@@ -336,8 +336,8 @@ function ListController($scope, $state, $q, $location, $anchorScroll, $mdDialog,
     list.push(item);
   }
 
-  function dismissOpportunity(oId) {
-    closedOpportunitiesService.closeOpportunity(oId).then(function(data) {
+  function dismissOpportunity(oId, payload) {
+    opportunitiesService.createOpportunityFeedback(oId, payload).then(function(data) {
       angular.forEach(vm.opportunitiesService.model.opportunitiesDisplay[0], function(value, key) {
         if (value.id === oId) {
           vm.opportunitiesService.model.opportunities = vm.opportunitiesService.model.opportunitiesDisplay[0].splice(key, 1);
