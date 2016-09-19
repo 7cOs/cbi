@@ -208,6 +208,9 @@ module.exports = /*  @ngInject */
         } else if (filter === 'distributor' || filter === 'brands') {
           addAutocompleteChip($filter('titlecase')(result.name), filter);
           model.push(result.id);
+        } else if (filter === 'segmentation') {
+          addAutocompleteChip('Segmentation ' + result, filter);
+          model.push(result);
         } else {
           addAutocompleteChip(result, filter);
           model.push(result);

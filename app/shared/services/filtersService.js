@@ -115,9 +115,10 @@ module.exports = /*  @ngInject */
         store: [],
         retailer: 'Chain',
         storeSearchText: '',
-        storeSegmentationA: '',
+        /* storeSegmentationA: '',
         storeSegmentationB: '',
-        storeSegmentationC: '',
+        storeSegmentationC: '', */
+        segmentation: [],
         storeType: '',
         timePeriod: 'Current Month to Date',
         trend: '',
