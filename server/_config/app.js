@@ -44,7 +44,7 @@ let config = {
     httpOnly: false,
     cookie: {
       maxAge: 7200000,
-      secure: true
+      secure: false
     },
     resave: true,
     rolling: false,
