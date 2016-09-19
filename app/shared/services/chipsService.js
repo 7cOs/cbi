@@ -151,9 +151,15 @@ module.exports = /*  @ngInject */
       if (chip.search || chip.type === 'opportunitiesTypes') {
         var arr = filtersService.model.selected[chip.type];
         var i = arr.length;
+
         while (i--) {
-          if (arr[i] === chip.name) {
+          if (chip.type === 'segmentation' && arr[i] === chip.name.split('Segmentation ')[1]) {
             arr.splice(i, 1);
+            filtersService.model['storeSegmentation' + chip.name.split('Segmentation ')[1]] = false;
+            break;
+          } else if (arr[i] === chip.name) {
+            arr.splice(i, 1);
+            break;
           }
         }
       } else if (typeof chip.type === 'string') {
@@ -192,7 +198,15 @@ module.exports = /*  @ngInject */
      */
     function applyFilterArr(model, result, filter) {
       if (model.indexOf(result) > -1) {
-        filtersService.model[filter] = '';
+        if (filter === 'segmentation') {
+          // remove from array
+          model.splice(model.indexOf(result), 1);
+          // remove from chip model
+          var index = service.model.map(function(e) { return e.name; }).indexOf('Segmentation ' + result);
+          service.model.splice(index, 1);
+        } else {
+          filtersService.model[filter] = '';
+        }
       } else {
         filtersService.model[filter] = '';
         if (filter === 'store') {
