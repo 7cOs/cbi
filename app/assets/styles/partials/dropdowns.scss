@@ -98,16 +98,12 @@ md-select-menu .md-text {
 md-select-menu[multiple] {
   background: $white;
   box-sizing: border-box;
+  padding-bottom: 3em;
+
 
   md-option:last-child {
     margin-bottom: 3em;
   }
-}
-
-md-select-menu[multiple] {
-  background: $white;
-  box-sizing: border-box;
-  padding-bottom: 3em;
 }
 
 .done-btn {
