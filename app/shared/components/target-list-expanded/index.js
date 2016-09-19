@@ -210,6 +210,8 @@ function ExpandedTargetListController($state, $scope, $filter, $mdDialog, $q, us
     vm.selectedTab = $state.params.obj.index;
 
     targetListService.model.currentList = {};
+    userService.model.targetLists = null;
+
     userService.getTargetLists(userService.model.currentUser.employeeID, {'type': 'targetLists'}).then(function(data) {
       var ownedPromises = [],
           sharedPromises = [];
