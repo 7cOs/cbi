@@ -52,7 +52,6 @@
       label Retailer
       div(row).retailer.dropdown-filter
         div(column='4').dropdown
-          //-md-select(ng-model="filter.filtersService.model.selected.retailer" md-on-close="filter.chipsService.addChip(filter.filtersService.model.selected.retailer, 'retailer', false)" placeholder="Store" ng-init="filter.filtersService.model.selected.retailer = 'Chain'")
           md-select(ng-model="filter.filtersService.model.selected.retailer" placeholder="Chain" ng-init="filter.filtersService.model.selected.retailer = 'Chain'")
             md-option(ng-repeat="type in filter.filtersService.model.retailer" ng-click="filter.placeholderSelect(type.hintText)" aria-label="{{type.name}}" value="{{type.name}}") {{::type.name}}
         div(column='8')
@@ -98,7 +97,8 @@
   div(row ng-show="filter.filtersService.model.expanded")
     div(column='5 +6' class="trade-channel")
       label.vertical Trade Channel
-      md-checkbox(ng-repeat="channel in filter.filtersService.model.tradeChannels[filter.filtersService.model.selected.premiseType]" ng-model="filter.filtersService.model.selected['tradeChannel' + channel.name]" aria-label="Trade Channel {{channel.name}}" ng-click="filter.chipsService.updateChip('tradeChannel' + channel.name, channel.label)") {{channel.label}}
+      //-md-checkbox(ng-repeat="channel in filter.filtersService.model.tradeChannels[filter.filtersService.model.selected.premiseType]" ng-model="filter.filtersService.model['tradeChannel' + channel.name]" aria-label="Trade Channel {{channel.name}}" ng-click="filter.chipsService.updateChip('tradeChannel' + channel.name, channel.label)") {{channel.label}}
+      md-checkbox(ng-repeat="channel in filter.filtersService.model.tradeChannels[filter.filtersService.model.selected.premiseType]" ng-model="filter.filtersService.model['tradeChannel' + channel.name]" aria-label="Trade Channel {{channel.name}}" ng-change="filter.applyFilterArr(filter.filtersService.model.selected.tradeChannel, channel.name, 'tradeChannel')") {{channel.label}}
   div(row)
     div(column='12' class='apply-filters')
       button(value='Apply Filters' type="button" class="btn-action" ng-click="filter.chipsService.applyFilters()" ng-disabled="filter.filtersService.model.filtersApplied") Apply Filters

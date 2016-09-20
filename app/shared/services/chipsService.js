@@ -52,10 +52,11 @@ module.exports = /*  @ngInject */
      * @desc add autocomplete chip to model
      * @params {Object} chip - chip object to be added
      * @params {String} filter - name of property in filter model
+     * @params {Boolean} tradeChannel - if is specific to a tradeChannel [optional]
      * @returns null
      * @memberOf cf.common.services
      */
-    function addAutocompleteChip(chip, filter) {
+    function addAutocompleteChip(chip, filter, tradeChannel) {
       if (chip) {
         // Add to Chip Model
         service.model.push({
@@ -63,7 +64,8 @@ module.exports = /*  @ngInject */
           type: filter,
           search: true,
           applied: false,
-          removable: true
+          removable: true,
+          tradeChannel: tradeChannel || false
         });
 
         filtersService.model.filtersApplied = false;
@@ -166,6 +168,7 @@ module.exports = /*  @ngInject */
             arr.splice(i, 1);
             // update model
             if (chip.type === 'productType') filtersService.model['productType' + $filter('titlecase')(chip.name)] = false;
+            if (chip.type === 'tradeChannel') filtersService.model['tradeChannel' + chip.name] = false;
             break;
           }
         }
@@ -221,6 +224,11 @@ module.exports = /*  @ngInject */
           // remove from chip model
           var iIndex = service.model.map(function(e) { return e.name; }).indexOf(result + ' Impact');
           service.model.splice(iIndex, 1);
+        } else if (filter === 'tradeChannel') {
+          model.splice(model.indexOf(result), 1);
+          // remove from chip model
+          var tIndex = service.model.map(function(e) { return e.name; }).indexOf(result);
+          service.model.splice(tIndex, 1);
         } else {
           filtersService.model[filter] = '';
         }
@@ -244,6 +252,9 @@ module.exports = /*  @ngInject */
           model.push(result);
         } else if (filter === 'impact') {
           addAutocompleteChip(result + ' Impact', filter);
+          model.push(result);
+        } else if (filter === 'tradeChannel') {
+          addAutocompleteChip(result, filter, true);
           model.push(result);
         } else {
           addAutocompleteChip(result, filter);

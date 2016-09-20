@@ -26,6 +26,7 @@ function FilterController($state, $scope, $mdDialog, $mdSelect, chipsService, fi
   vm.saveFilter = saveFilter;
   vm.hintTextPlaceholder = 'Account or Subaccount Name';
   vm.placeholderSelect = placeholderSelect;
+  vm.resetTradeChannels = resetTradeChannels;
 
   init();
 
@@ -86,6 +87,26 @@ function FilterController($state, $scope, $mdDialog, $mdSelect, chipsService, fi
 
     // userService.model.opportunityFilters = null;
     filtersService.resetFilters();
+
+    resetTradeChannels('on');
+    resetTradeChannels('off');
+  }
+
+  function resetTradeChannels(str) {
+    var arr = filtersService.model.tradeChannels[str || filtersService.model.selected.premiseType];
+    for (var i = 0; i < arr.length; i++) {
+      var name =  'tradeChannel' + arr[i].name;
+      filtersService.model[name] = false;
+    }
+    filtersService.model.selected.tradeChannel = [];
+
+    // reset chips
+    for (i = 0; i < chipsService.model.length; i++) {
+      if (chipsService.model[i].tradeChannel === true) {
+        chipsService.model.splice(i, 1);
+        i--;
+      }
+    }
   }
 
   function saveFilter() {

@@ -30,7 +30,6 @@ module.exports = /*  @ngInject */
     vm.deleteSavedFilter = deleteSavedFilter;
     vm.editFilterModal = editFilterModal;
     vm.placeholderSelect = placeholderSelect;
-    vm.resetTradeChannels = resetTradeChannels;
 
     init();
 
@@ -73,15 +72,6 @@ module.exports = /*  @ngInject */
 
         closeModal();
       });
-    }
-
-    function resetTradeChannels() {
-      var arr = vm.filtersService.model.tradeChannels[vm.filtersService.model.selected.premiseType];
-      for (var i = 0; i < arr.length; i++) {
-        var name =  'tradeChannel' + arr[i].name;
-        vm.filtersService.model.selected[name] = false;
-        vm.chipsService.removeChip(name);
-      }
     }
 
     // ***************

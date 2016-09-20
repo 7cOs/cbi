@@ -112,6 +112,7 @@ module.exports = /*  @ngInject */
         storeSearchText: '',
         segmentation: [],
         storeType: '',
+        tradeChannel: [],
         timePeriod: 'Current Month to Date',
         trend: '',
         valuesVsTrend: ''
@@ -124,19 +125,19 @@ module.exports = /*  @ngInject */
       ],
       tradeChannels: {
         on: [
-          {label: 'Dining', name: 'Dining'},
-          {label: 'Bar / Nightclub', name: 'Bar'},
-          {label: 'Recreation', name: 'Recreation'},
-          {label: 'Lodging', name: 'Lodging'},
-          {label: 'Transportation', name: 'Transportation'},
-          {label: 'Military', name: 'Military'},
+          {label: 'Dining', name: 'Dining', value: '50'},
+          {label: 'Bar / Nightclub', name: 'Bar', value: '51'},
+          {label: 'Recreation', name: 'Recreation', value: '53'},
+          {label: 'Lodging', name: 'Lodging', value: '52'},
+          {label: 'Transportation', name: 'Transportation', value: '54'},
+          {label: 'Military', name: 'Military', value: '57'},
           {label: 'Other', name: 'Other'}
         ],
         off: [
           {label: 'Grocery', name: 'Grocery', value: '05'},
           {label: 'Convenience', name: 'Convenience', value: '07'},
           {label: 'Drug', name: 'Drug', value: '03'},
-          {label: 'Mass Merchandiser', name: 'Mass', value: '08'},
+          {label: 'Mass Merchandiser', name: 'Merchandiser', value: '08'},
           {label: 'Liquor', name: 'Liquor', value: '02'},
           {label: 'Military', name: 'Military', value: 'MF'},
           {label: 'Recreation', name: 'Recreation', value: '53'},

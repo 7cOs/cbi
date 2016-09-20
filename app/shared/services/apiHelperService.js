@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports = /*  @ngInject */
-  function apiHelperService() {
+  function apiHelperService(filtersService) {
 
     return {
       formatQueryString: formatQueryString,
@@ -50,6 +50,13 @@ module.exports = /*  @ngInject */
                 queryParams += obj[key2][k].replace(/["'()]/g, '').replace(/[__-\s]/g, '_').toUpperCase();
               } else if (key2 === 'impact') {
                 queryParams += obj[key2][k].slice(0, 1);
+              } else if (key2 === 'tradeChannel') {
+                var tradeChannelValue = filtersService.model.tradeChannels[filtersService.model.selected.premiseType].map(function(e) {
+                  if (e.name === obj[key2][k]) return e.value;
+                });
+                for (var l = 0; l < tradeChannelValue.length; l++) {
+                  if (tradeChannelValue[l]) queryParams += tradeChannelValue[l];
+                }
               } else {
                 queryParams += obj[key2][k];
               }
