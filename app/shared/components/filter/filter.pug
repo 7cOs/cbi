@@ -64,20 +64,20 @@
   div(row)
     div.predicted-impact(column='3' ng-show="filter.filtersService.model.expanded")
       label Predicted Impact
-      md-checkbox(ng-model="filter.filtersService.model.selected.predictedImpactHigh" aria-label="Predicted Impact High" ng-click="filter.chipsService.updateChip('predictedImpactHigh', 'High Impact')")
+      md-checkbox(ng-model="filter.filtersService.model.predictedImpactHigh" aria-label="Predicted Impact High" ng-change="filter.applyFilterArr(filter.filtersService.model.selected.impact, 'High', 'impact')")
         | High
         span.impact.high-small
-      md-checkbox(ng-model="filter.filtersService.model.selected.predictedImpactMedium" aria-label="Predicted Impact Medium" ng-click="filter.chipsService.updateChip('predictedImpactMedium', 'Medium Impact')")
+      md-checkbox(ng-model="filter.filtersService.model.predictedImpactMedium" aria-label="Predicted Impact Medium" ng-change="filter.applyFilterArr(filter.filtersService.model.selected.impact, 'Medium', 'impact')")
         | Medium
         span.impact.medium-small
-      md-checkbox(ng-model="filter.filtersService.model.selected.predictedImpactLow" aria-label="Predicted Impact Low" ng-click="filter.chipsService.updateChip('predictedImpactLow', 'Low Impact')")
+      md-checkbox(ng-model="filter.filtersService.model.predictedImpactLow" aria-label="Predicted Impact Low" ng-change="filter.applyFilterArr(filter.filtersService.model.selected.impact, 'Low', 'impact')")
         | Low
         span.impact.low-small
     div(column='3' ng-show="filter.filtersService.model.expanded")
       label Product Type
-      md-checkbox(ng-model="filter.filtersService.model.selected.productTypeFeatured" aria-label="Product Type Featured" ng-click="filter.chipsService.updateChip('productTypeFeatured', 'Featured')") Featured
-      md-checkbox(ng-model="filter.filtersService.model.selected.productTypePriority" aria-label="Product Type Priority Packages" ng-click="filter.chipsService.updateChip('productTypePriority', 'Priority')") Priority Packages
-      md-checkbox(ng-model="filter.filtersService.model.selected.productTypeAuthorized" aria-label="Product Type Authorized" ng-click="filter.chipsService.updateChip('productTypeAuthorized', 'Authorized')") Authorized
+      md-checkbox(ng-model="filter.filtersService.model.productTypeFeatured" aria-label="Product Type Featured" ng-change="filter.applyFilterArr(filter.filtersService.model.selected.productType, 'featured', 'productType')") Featured
+      md-checkbox(ng-model="filter.filtersService.model.productTypePriority" aria-label="Product Type Priority Packages" ng-change="filter.applyFilterArr(filter.filtersService.model.selected.productType, 'priority', 'productType')") Priority Packages
+      md-checkbox(ng-model="filter.filtersService.model.productTypeAuthorized" aria-label="Product Type Authorized" ng-change="filter.applyFilterArr(filter.filtersService.model.selected.productType, 'authorized', 'productType')") Authorized
     div(column='4' ng-show="filter.filtersService.model.expanded")
       div(row)
         div(column='7')
