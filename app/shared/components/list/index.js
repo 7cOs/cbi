@@ -83,7 +83,6 @@ function ListController($scope, $state, $q, $location, $anchorScroll, $mdDialog,
 
   function addToSharedCollaborators(person) {
     vm.sharedCollaborators.push(person);
-    console.log(vm.sharedCollaborators);
   }
 
   function addToTargetList(listId) {
@@ -146,6 +145,7 @@ function ListController($scope, $state, $q, $location, $anchorScroll, $mdDialog,
         console.log('shared');
       });
     }
+    closeModal();
   }
 
   function openDismissModal(oId, ev) {

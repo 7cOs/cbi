@@ -479,7 +479,6 @@ module.exports = /*  @ngInject */
       }
 
       function getTargetListsSuccess(response) {
-        console.log('getTLSuccessResponse: ', response);
         var sharedArchivedCount = 0,
             sharedNotArchivedCount = 0,
             ownedNotArchived = 0,
