@@ -91,13 +91,12 @@
           md-checkbox(ng-model="filter.filtersService.model.storeSegmentationC" aria-label="Store Segmentation C" ng-change="filter.applyFilterArr(filter.filtersService.model.selected.segmentation, 'C', 'segmentation')") C
     div.location-contact-opps(column='2' ng-show="filter.filtersService.model.expanded")
       label Location
-        input(type="text" placeholder="City, State, or Zip" ng-model="filter.filtersService.model.location", ng-keypress="($event.which === 13)?filter.applyFilterArr(filter.filtersService.model.selected.location, filter.filtersService.model.location, 'location'):0")
+        inline-search(type="location" placeholder="City, State, or Zip" chosen-result="filter.filtersService.model.location" callback="filter.applyLocations(result)")
       label.cbbd-contact CBBD Contact
-          inline-search(type="user" placeholder="Name" chosen-result="filter.filtersService.model.cbbdContact" callback="filter.applyFilterArr(filter.filtersService.model.selected.cbbdContact, result, 'cbbdContact')")
+        inline-search(type="user" placeholder="Name" chosen-result="filter.filtersService.model.cbbdContact" callback="filter.applyFilterArr(filter.filtersService.model.selected.cbbdContact, result, 'cbbdContact')")
   div(row ng-show="filter.filtersService.model.expanded")
     div(column='5 +6' class="trade-channel")
       label.vertical Trade Channel
-      //-md-checkbox(ng-repeat="channel in filter.filtersService.model.tradeChannels[filter.filtersService.model.selected.premiseType]" ng-model="filter.filtersService.model['tradeChannel' + channel.name]" aria-label="Trade Channel {{channel.name}}" ng-click="filter.chipsService.updateChip('tradeChannel' + channel.name, channel.label)") {{channel.label}}
       md-checkbox(ng-repeat="channel in filter.filtersService.model.tradeChannels[filter.filtersService.model.selected.premiseType]" ng-model="filter.filtersService.model['tradeChannel' + channel.name]" aria-label="Trade Channel {{channel.name}}" ng-change="filter.applyFilterArr(filter.filtersService.model.selected.tradeChannel, channel.name, 'tradeChannel')") {{channel.label}}
   div(row)
     div(column='12' class='apply-filters')

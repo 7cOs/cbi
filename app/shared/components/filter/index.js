@@ -16,6 +16,7 @@ function FilterController($state, $scope, $mdDialog, $mdSelect, chipsService, fi
   vm.appendDoneButton = appendDoneButton;
   vm.applyFilterArr = chipsService.applyFilterArr;
   vm.applyFilterMulti = chipsService.applyFilterMulti;
+  vm.applyLocations = applyLocations;
   vm.closeDoneButton = closeDoneButton;
   vm.closeModal = closeModal;
   vm.closeSelect = closeSelect;
@@ -40,6 +41,10 @@ function FilterController($state, $scope, $mdDialog, $mdSelect, chipsService, fi
       .append('<div class="done-btn">Done</div>').bind('click', function(e) {
         $mdSelect.hide();
       });
+  }
+
+  function applyLocations(result) {
+    console.log(result);
   }
 
   function closeDoneButton() {
