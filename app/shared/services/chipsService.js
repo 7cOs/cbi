@@ -159,6 +159,8 @@ module.exports = /*  @ngInject */
             break;
           } else if (arr[i] === chip.name) {
             arr.splice(i, 1);
+            // update model
+            if (chip.type === 'productType') filtersService.model['productType' + $filter('titlecase')(chip.name)] = false;
             break;
           }
         }
@@ -204,6 +206,11 @@ module.exports = /*  @ngInject */
           // remove from chip model
           var index = service.model.map(function(e) { return e.name; }).indexOf('Segmentation ' + result);
           service.model.splice(index, 1);
+        } else if (filter === 'productType') {
+          model.splice(model.indexOf(result), 1);
+          // remove from chip model
+          var pIndex = service.model.map(function(e) { return e.name; }).indexOf(result);
+          service.model.splice(pIndex, 1);
         } else {
           filtersService.model[filter] = '';
         }

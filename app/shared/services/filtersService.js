@@ -109,9 +109,10 @@ module.exports = /*  @ngInject */
         predictedImpactMedium: '',
         predictedImpactLow: '',
         premiseType: 'off',
-        productTypeFeatured: '',
+        /* productTypeFeatured: '',
         productTypePriority: '',
-        productTypeAuthorized: true,
+        productTypeAuthorized: true, */
+        productType: [],
         store: [],
         retailer: 'Chain',
         storeSearchText: '',
