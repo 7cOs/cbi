@@ -157,6 +157,11 @@ module.exports = /*  @ngInject */
             arr.splice(i, 1);
             filtersService.model['storeSegmentation' + chip.name.split('Segmentation ')[1]] = false;
             break;
+          } else if (chip.type === 'impact' && arr[i] === chip.name.split(' Impact')[0]) {
+            arr.splice(i, 1);
+            // update model
+            filtersService.model['predictedImpact' + chip.name.split(' Impact')[0]] = false;
+            break;
           } else if (arr[i] === chip.name) {
             arr.splice(i, 1);
             // update model
@@ -211,6 +216,11 @@ module.exports = /*  @ngInject */
           // remove from chip model
           var pIndex = service.model.map(function(e) { return e.name; }).indexOf(result);
           service.model.splice(pIndex, 1);
+        } else if (filter === 'impact') {
+          model.splice(model.indexOf(result), 1);
+          // remove from chip model
+          var iIndex = service.model.map(function(e) { return e.name; }).indexOf(result + ' Impact');
+          service.model.splice(iIndex, 1);
         } else {
           filtersService.model[filter] = '';
         }
@@ -231,6 +241,9 @@ module.exports = /*  @ngInject */
           model.push(result.id);
         } else if (filter === 'segmentation') {
           addAutocompleteChip('Segmentation ' + result, filter);
+          model.push(result);
+        } else if (filter === 'impact') {
+          addAutocompleteChip(result + ' Impact', filter);
           model.push(result);
         } else {
           addAutocompleteChip(result, filter);
