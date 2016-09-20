@@ -60,7 +60,7 @@ function ExpandedTargetListController($state, $scope, $filter, $mdDialog, $q, us
   }
 
   function archiveTargetList() {
-    var selectedTargetLists = $filter('filter')(userService.model.targetLists.owned, {selected: true}),
+    var selectedTargetLists = vm.selected,
         archiveTargetListPromises = [];
 
     // get selected target list ids and their promises
