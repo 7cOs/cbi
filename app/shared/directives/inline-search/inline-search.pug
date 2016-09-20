@@ -5,10 +5,10 @@
     .close-btn(md-prevent-menu-close ng-if="!is.loading && is.results.length === 0" ng-click="is.close(true)" aria-label="Close") x
     md-progress-circular(ng-show="is.loading" md-mode="indeterminate")
     ul.results(ng-show="!is.loading")
-      li(ng-if="is.type === 'distributor' || is.type === 'product'" ng-repeat="result in is.results track by $index" ng-click="is.nav ? is.resultChosen(result, true) : is.resultChosen(result)") {{result.name}}
-      li(ng-if="is.type === 'location'" ng-repeat="result in is.results track by $index" ng-click="is.nav ? is.resultChosen(result, true) : is.resultChosen(result)") {{result.name}}
-      li(ng-if="is.type === 'store'" ng-repeat="result in is.results track by $index" ng-click="is.nav ? is.resultChosen(result, true) : is.resultChosen(result)") {{result.store_name}} <span class="store-address" ng-if="is.showAddress">{{result.address}}, {{result.city}}, {{result.state}}</span>
-      li(ng-if="is.type === 'chain'" ng-repeat="result in is.results track by $index" ng-click="is.nav ? is.resultChosen(result, true) : is.resultChosen(result)") {{result.name}}
-      li(ng-if="is.type === 'user'" ng-repeat="result in is.results track by $index" ng-click="is.nav ? is.resultChosen(result, true) : is.resultChosen(result)") {{result.firstName | titlecase}} {{result.lastName | titlecase}}
+      li(ng-if="is.type === 'distributor' || is.type === 'product'" ng-repeat="result in is.results track by $index" ng-click="is.nav ? is.resultChosen(result, true) : is.resultChosen(result)") {{::result.name}}
+      li(ng-if="is.type === 'location'" ng-repeat="result in is.results track by $index" ng-click="is.nav ? is.resultChosen(result, true) : is.resultChosen(result)") {{::result.name}}
+      li(ng-if="is.type === 'store'" ng-repeat="result in is.results track by $index" ng-click="is.nav ? is.resultChosen(result, true) : is.resultChosen(result)") {{::result.store_name}} <span class="store-address" ng-if="is.showAddress">{{::result.address}}, {{::result.city}}, {{::result.state}}</span>
+      li(ng-if="is.type === 'chain'" ng-repeat="result in is.results track by $index" ng-click="is.nav ? is.resultChosen(result, true) : is.resultChosen(result)") {{::result.name}}
+      li(ng-if="is.type === 'user'" ng-repeat="result in is.results track by $index" ng-click="is.nav ? is.resultChosen(result, true) : is.resultChosen(result)") {{::result.firstName | titlecase}} {{::result.lastName | titlecase}}
     p.no-results(ng-if="!is.loading && !is.errorMessage && is.results.length === 0") No results found
     p.no-results(ng-if="is.errorMessage") Something went wrong.<br>Please try again.
