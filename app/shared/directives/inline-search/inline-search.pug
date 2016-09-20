@@ -6,6 +6,7 @@
     md-progress-circular(ng-show="is.loading" md-mode="indeterminate")
     ul.results(ng-show="!is.loading")
       li(ng-if="is.type === 'distributor' || is.type === 'product'" ng-repeat="result in is.results track by $index" ng-click="is.nav ? is.resultChosen(result, true) : is.resultChosen(result)") {{result.name}}
+      li(ng-if="is.type === 'location'" ng-repeat="result in is.results track by $index" ng-click="is.nav ? is.resultChosen(result, true) : is.resultChosen(result)") {{result.name}}
       li(ng-if="is.type === 'store'" ng-repeat="result in is.results track by $index" ng-click="is.nav ? is.resultChosen(result, true) : is.resultChosen(result)") {{result.store_name}} <span class="store-address" ng-if="is.showAddress">{{result.address}}, {{result.city}}, {{result.state}}</span>
       li(ng-if="is.type === 'chain'" ng-repeat="result in is.results track by $index" ng-click="is.nav ? is.resultChosen(result, true) : is.resultChosen(result)") {{result.name}}
       li(ng-if="is.type === 'user'" ng-repeat="result in is.results track by $index" ng-click="is.nav ? is.resultChosen(result, true) : is.resultChosen(result)") {{result.firstName | titlecase}} {{result.lastName | titlecase}}

@@ -3,13 +3,16 @@
 module.exports = /*  @ngInject */
   function searchService($http, $q, apiHelperService) {
 
-    return {
+    var service = {
       getUsers: getUsers,
       getProducts: getProducts,
       getStores: getStores,
       getDistributors: getDistributors,
-      getChains: getChains
+      getChains: getChains,
+      getLocations: getLocations
     };
+
+    return service;
 
     /**
      * @name getUsers
@@ -140,6 +143,31 @@ module.exports = /*  @ngInject */
       }
 
       function getChainsFail(error) {
+        searchPromise.reject(error);
+      }
+
+      return searchPromise.promise;
+    }
+
+    /**
+     * @name getLocations
+     * @desc Get locations from API via Inline Search
+     * @returns [array]
+     * @memberOf cf.common.services
+     */
+    function getLocations(searchTerm) {
+      var searchPromise = $q.defer(),
+          url = apiHelperService.request('/api/search/locations?searchTerm=' + encodeURIComponent(searchTerm));
+
+      $http.get(url)
+        .then(getLocationsSuccess)
+        .catch(getLocationsFail);
+
+      function getLocationsSuccess(response) {
+        searchPromise.resolve(response.data);
+      }
+
+      function getLocationsFail(error) {
         searchPromise.reject(error);
       }
 

@@ -72,6 +72,9 @@ module.exports =
           case 'chain':
             method = 'getChains';
             break;
+          case 'location':
+            method = 'getLocations';
+            break;
           default:
             console.log('Please specify a search type');
             break;
@@ -104,6 +107,7 @@ module.exports =
           case 'chain':
           case 'distributor':
           case 'product':
+          case 'location':
             vm.input = result.name;
             break;
           case 'store':

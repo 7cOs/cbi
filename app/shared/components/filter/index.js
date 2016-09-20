@@ -16,6 +16,7 @@ function FilterController($state, $scope, $mdDialog, $mdSelect, chipsService, fi
   vm.appendDoneButton = appendDoneButton;
   vm.applyFilterArr = chipsService.applyFilterArr;
   vm.applyFilterMulti = chipsService.applyFilterMulti;
+  vm.applyLocations = applyLocations;
   vm.closeDoneButton = closeDoneButton;
   vm.closeModal = closeModal;
   vm.closeSelect = closeSelect;
@@ -26,6 +27,7 @@ function FilterController($state, $scope, $mdDialog, $mdSelect, chipsService, fi
   vm.saveFilter = saveFilter;
   vm.hintTextPlaceholder = 'Account or Subaccount Name';
   vm.placeholderSelect = placeholderSelect;
+  vm.resetTradeChannels = resetTradeChannels;
 
   init();
 
@@ -39,6 +41,16 @@ function FilterController($state, $scope, $mdDialog, $mdSelect, chipsService, fi
       .append('<div class="done-btn">Done</div>').bind('click', function(e) {
         $mdSelect.hide();
       });
+  }
+
+  function applyLocations(result) {
+    if (result.type === 'zipcode') {
+      chipsService.applyFilterArr(filtersService.model.selected.zipCode, result.name, 'zipCode');
+    } else if (result.type === 'city') {
+      chipsService.applyFilterArr(filtersService.model.selected.city, result.name, 'city');
+    } else if (result.type === 'state') {
+      chipsService.applyFilterArr(filtersService.model.selected.state, result.name, 'state');
+    }
   }
 
   function closeDoneButton() {
@@ -86,6 +98,26 @@ function FilterController($state, $scope, $mdDialog, $mdSelect, chipsService, fi
 
     // userService.model.opportunityFilters = null;
     filtersService.resetFilters();
+
+    resetTradeChannels('on');
+    resetTradeChannels('off');
+  }
+
+  function resetTradeChannels(str) {
+    var arr = filtersService.model.tradeChannels[str || filtersService.model.selected.premiseType];
+    for (var i = 0; i < arr.length; i++) {
+      var name =  'tradeChannel' + arr[i].name;
+      filtersService.model[name] = false;
+    }
+    filtersService.model.selected.tradeChannel = [];
+
+    // reset chips
+    for (i = 0; i < chipsService.model.length; i++) {
+      if (chipsService.model[i].tradeChannel === true) {
+        chipsService.model.splice(i, 1);
+        i--;
+      }
+    }
   }
 
   function saveFilter() {
