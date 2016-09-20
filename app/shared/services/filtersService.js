@@ -86,22 +86,25 @@ module.exports = /*  @ngInject */
       }, {
         name: 'L90 Days'
       }],
+      accountSelected: {
+        accountBrands: 'Distribution (simple)',
+        accountMarkets: 'Depletions',
+        depletionsTimeFilter: 'FYTD',
+        distributionTimeFilter: 'L90 Days',
+        timePeriod: 'Current Month to Date'
+      },
       selected: {},
       selectedTemplate: {
         myAccountsOnly: true,
         account: [],
         subaccount: [],
-        accountBrands: 'Distribution (simple)',
-        accountMarkets: 'Depletions',
         accountTypes: '',
         brands: [],
         cbbdChain: false,
         cbbdContact: [],
         city: [],
         currentFilter: '',
-        depletionsTimeFilter: 'FYTD',
         distributor: [],
-        distributionTimeFilter: 'L90 Days',
         impact: [],
         opportunitiesStatus: '',
         opportunityType: ['All Types'],
@@ -114,7 +117,6 @@ module.exports = /*  @ngInject */
         state: [],
         storeType: '',
         tradeChannel: [],
-        timePeriod: 'Current Month to Date',
         trend: '',
         valuesVsTrend: '',
         zipCode: []

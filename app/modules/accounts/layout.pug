@@ -30,18 +30,18 @@ notes
         md-radio-button(ng-repeat="filter in a.filters.trend" class="md-primary" ng-value="filter.name" aria-label="Trend" ng-click="a.chipsService.addChip(filter.name, 'trend', true)") {{filter.name}}
     div(column='3')
       label Ending Time Period
-      md-radio-group(ng-model="a.filtersService.model.selected.timePeriod")
+      md-radio-group(ng-model="a.filtersService.model.accountSelected.timePeriod")
         md-radio-button(ng-repeat="filter in a.filtersService.model.timePeriod" class="md-primary" ng-value="filter.name" aria-label="Ending Time Period" ng-click="a.chipsService.addChip(filter.name, 'timePeriod', true)") {{filter.name}}
     div(column='7')
       div(row).dropdown-filter
         div(column='6').dropdown
           label Depletions Time Period
-          md-select(ng-model="a.filtersService.model.selected.depletionsTimeFilter" md-on-open="a.openSelect(true)" md-on-close="a.openSelect(false)" placeholder="FYTD")
+          md-select(ng-model="a.filtersService.model.accountSelected.depletionsTimeFilter" md-on-open="a.openSelect(true)" md-on-close="a.openSelect(false)" placeholder="FYTD")
             md-option(ng-repeat="filter in a.filtersService.model.depletionsTimePeriod.month" aria-label="{{filter.name}}" value="{{filter.name}}") {{filter.name}}
             md-option(ng-repeat="filter in a.filtersService.model.depletionsTimePeriod.year" aria-label="{{filter.name}}" value="{{filter.name}}") {{filter.name}}
         div(column='6').dropdown
           label Distribution Time Period
-          md-select(ng-model="a.filtersService.model.selected.distributionTimeFilter" md-on-open="a.openSelect(true)" md-on-close="a.openSelect(false)" placeholder="L90 Days April 1, 2016 - June 29, 2016")
+          md-select(ng-model="a.filtersService.model.accountSelected.distributionTimeFilter" md-on-open="a.openSelect(true)" md-on-close="a.openSelect(false)" placeholder="L90 Days April 1, 2016 - June 29, 2016")
             md-option(ng-repeat="filter in a.filtersService.model.distributionTimePeriod" aria-label="{{filter.name}}" value="{{filter.name}}") {{filter.name}}
 
 .filters(column='12')
@@ -95,7 +95,7 @@ div(row)
   div.scorecard-table.scorecard-table-accounts(column='5')
     .widget-header
       .dropdown-filter
-        md-select(ng-model="a.filtersService.model.selected.accountBrands" md-on-open="a.openSelect(true)" md-on-close="a.openSelect(false)" aria-label="Account Brands Filter"  placeholder="Distribution (simple)")
+        md-select(ng-model="a.filtersService.model.accountSelected.accountBrands" md-on-open="a.openSelect(true)" md-on-close="a.openSelect(false)" aria-label="Account Brands Filter"  placeholder="Distribution (simple)")
           md-option(ng-repeat="filter in a.filters.accountBrands" aria-label="{{filter.name}}" value="{{filter.name}}") {{filter.name}}
       span.back-chevron(ng-if="a.brandSelectedIndex === 1" ng-click="a.prevTab()")
       p.brands {{a.brandWidgetTitle || 'All Brands'}}
@@ -108,7 +108,7 @@ div(row)
             th(colspan=2).top.dark
               p.accent.bold Depletions
             th(colspan=2).top
-              p.accent {{a.filtersService.model.selected.accountBrands === 'Velocity' ? 'Velocity' : 'Distribution(s) - L90'}}
+              p.accent {{a.filtersService.model.accountSelected.accountBrands === 'Velocity' ? 'Velocity' : 'Distribution(s) - L90'}}
           tr
             th
               p.accent &nbsp;
@@ -136,14 +136,14 @@ div(row)
                 td.left.data-brand.title-col {{item.name}}
                 td(ng-class="{'negative': !a.isPositive(item.measures.yearAgoGap)}").dark.depletions-value {{item.measures.yearAgoGap | number }}
                 td(ng-class="{'negative': !a.isPositive(item.measures.yearAgoTrend) }").dark.depletions-value <span class="percentage">{{item.measures.yearAgoTrend | number:1}}</span>%
-                td(ng-if="a.filtersService.model.selected.accountBrands === 'Velocity'" ng-class="{'negative': !a.isPositive(item.measures.velocityNumber)}") {{item.measures.velocityNumber | number }}
-                td(ng-if="a.filtersService.model.selected.accountBrands !== 'Velocity'" ng-class="{'negative': !a.isPositive(item.measures.vsPlanNumber)}") {{item.measures.vsPlanNumber | number }}
-                td(ng-if="a.filtersService.model.selected.accountBrands === 'Velocity'" ng-class="{'negative': !a.isPositive(item.measures.velocityPercent)}") <span class="percentage">{{item.measures.velocityPercent | number:1}}</span>%
-                td(ng-if="a.filtersService.model.selected.accountBrands !== 'Velocity'" ng-class="{'negative': !a.isPositive(item.measures.vsPlanPercent)}") <span class="percentage">{{item.measures.vsPlanPercent | number:1}}</span>%
+                td(ng-if="a.filtersService.model.accountSelected.accountBrands === 'Velocity'" ng-class="{'negative': !a.isPositive(item.measures.velocityNumber)}") {{item.measures.velocityNumber | number }}
+                td(ng-if="a.filtersService.model.accountSelected.accountBrands !== 'Velocity'" ng-class="{'negative': !a.isPositive(item.measures.vsPlanNumber)}") {{item.measures.vsPlanNumber | number }}
+                td(ng-if="a.filtersService.model.accountSelected.accountBrands === 'Velocity'" ng-class="{'negative': !a.isPositive(item.measures.velocityPercent)}") <span class="percentage">{{item.measures.velocityPercent | number:1}}</span>%
+                td(ng-if="a.filtersService.model.accountSelected.accountBrands !== 'Velocity'" ng-class="{'negative': !a.isPositive(item.measures.vsPlanPercent)}") <span class="percentage">{{item.measures.vsPlanPercent | number:1}}</span>%
   div.scorecard-chart(column='7')
     .widget-header
       .dropdown-filter.narrow
-        md-select(ng-model="a.filtersService.model.selected.accountMarkets" md-on-open="a.openSelect(true)" md-on-close="a.openSelect(false)" aria-label="Account Markets Filter")
+        md-select(ng-model="a.filtersService.model.accountSelected.accountMarkets" md-on-open="a.openSelect(true)" md-on-close="a.openSelect(false)" aria-label="Account Markets Filter")
           md-option(ng-repeat="filter in a.filters.accountMarkets" aria-label="{{filter.name}}" value="{{filter.name}}") {{filter.name}}
       .header-selector
         md-select.market(ng-model="a.filtersService.model.selected.valuesVsTrend" md-on-open="a.openSelect(true)" md-on-close="a.openSelect(false)" placeholder="Top 10 (Values)" aria-label="Values versus Trends Filter")
@@ -159,8 +159,8 @@ div(row)
                 p.accent.bold.left Distributors
                 p &nbsp;
               th.top.dark.market-label
-                p.accent.bold {{a.filtersService.model.selected.accountMarkets}}
-                p.accent.bold {{a.filtersService.model.selected.depletionsTimeFilter}}
+                p.accent.bold {{a.filtersService.model.accountSelected.accountMarkets}}
+                p.accent.bold {{a.filtersService.model.depletionsTimeFilter.depletionsTimeFilter}}
         md-tabs(md-selected="a.marketSelectedIndex" ng-class="{'animate-disabled': a.disableAnimation}" md-autoselect)
           md-tab(ng-repeat="(key, data) in a.marketTabs" label="{{key}}")
             table.fixed-layout(cellspacing="0" cellpadding="0")
@@ -168,10 +168,10 @@ div(row)
                 tr.clickable.market-value(ng-repeat="item in data" ng-class="{'store': item.address, 'selected': item.label === a.idSelected}" ng-click="a.selectItem('markets', item, a.marketTabs, $parent.$index)")
                   td.dist-label(colspan=2) {{item.title}} <span ng-if="item.storeNum" class="store-number">\#{{item.storeNum}}</span><span ng-if="item.address" class="address">{{item.address}}</span>
                   td.dark.market-label
-                    span(ng-if="a.filtersService.model.selected.accountMarkets === 'Depletions'") {{item.depletions | number}}
-                    span(ng-if="a.filtersService.model.selected.accountMarkets === 'Distribution (simple)'") {{item.distSimple}}
-                    span(ng-if="a.filtersService.model.selected.accountMarkets === 'Distribution (effective)'") {{item.distEffective}}
-                    span(ng-if="a.filtersService.model.selected.accountMarkets === 'Velocity'") {{item.velocity}}
+                    span(ng-if="a.filtersService.model.accountSelected.accountMarkets === 'Depletions'") {{item.depletions | number}}
+                    span(ng-if="a.filtersService.model.accountSelected.accountMarkets === 'Distribution (simple)'") {{item.distSimple}}
+                    span(ng-if="a.filtersService.model.accountSelected.accountMarkets === 'Distribution (effective)'") {{item.distEffective}}
+                    span(ng-if="a.filtersService.model.accountSelected.accountMarkets === 'Velocity'") {{item.velocity}}
       .chart
         table.no-top-border(cellspacing="0" cellpadding="0")
           thead
