@@ -281,7 +281,8 @@ md-dialog {
     }
   }
 
-  &.create-target-list {
+  &.create-target-list,
+  &.share-opportunity {
     .collaborator-list {
       width: calc(100% - 48px);
       background: $white;

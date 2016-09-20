@@ -11,6 +11,7 @@ function ExpandedTargetListController($state, $scope, $filter, $mdDialog, $q, us
 
   // Services
   vm.userService = userService;
+  vm.targetListService = targetListService;
 
   // Defaults
   vm.buttonState = 'named';
@@ -24,7 +25,8 @@ function ExpandedTargetListController($state, $scope, $filter, $mdDialog, $q, us
     name: '',
     description: '',
     opportunities: [],
-    collaborators: []
+    collaborators: [],
+    targetListShares: []
   };
   vm.totalOpportunitesChevron = true;
   vm.selected = [];
@@ -56,7 +58,11 @@ function ExpandedTargetListController($state, $scope, $filter, $mdDialog, $q, us
 
   function addCollaborator(e) {
     vm.newList.collaborators.push(e);
-    console.log(vm.newList.collaborators);
+    var share = {
+      employeeId: e.employeeId,
+      permissionLevel: 'Collaborate'
+    };
+    vm.newList.targetListShares.push(share);
   }
 
   function archiveTargetList() {
@@ -105,6 +111,12 @@ function ExpandedTargetListController($state, $scope, $filter, $mdDialog, $q, us
   }
 
   function closeModal() {
+    vm.newList = {
+      name: '',
+      description: '',
+      opportunities: [],
+      collaborators: []
+    };
     $mdDialog.hide();
   }
 
@@ -136,11 +148,11 @@ function ExpandedTargetListController($state, $scope, $filter, $mdDialog, $q, us
   }
 
   function saveNewList(e) {
-    vm.buttonDiabled = true;
-
+    vm.buttonDisabled = true;
     userService.addTargetList(vm.newList).then(function(response) {
+      targetListService.addTargetListShares(response.id, vm.newList.targetListShares);
       closeModal();
-      vm.buttonDiabled = false;
+      vm.buttonDisabled = false;
       vm.newList = {
         name: '',
         description: '',

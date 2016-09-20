@@ -301,13 +301,10 @@ module.exports = /*  @ngInject */
      * @returns {Object} - target shares including new object
      * @memberOf cf.common.services
      */
-    function addTargetListShares(targetListId, p) {
+    function addTargetListShares(targetListId, collaborators) {
       var targetListPromise = $q.defer(),
           url = apiHelperService.request('/api/targetLists/' + targetListId + '/shares'),
-          payload = [{
-            personId: Number(p.id),
-            permissionLevel: p.permissionLevel
-          }];
+          payload = collaborators;
 
       $http.post(url, payload)
         .then(addTargetListSharesSuccess)
