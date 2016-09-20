@@ -77,6 +77,8 @@ function ExpandedTargetListController($state, $scope, $filter, $mdDialog, $q, us
         userService.model.targetLists.ownedArchived++;
         userService.model.targetLists.ownedNotArchived--;
       });
+
+      vm.selected = [];
     });
   }
 
