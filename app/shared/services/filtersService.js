@@ -97,12 +97,12 @@ module.exports = /*  @ngInject */
         brands: [],
         cbbdChain: false,
         cbbdContact: [],
+        city: [],
         currentFilter: '',
         depletionsTimeFilter: 'FYTD',
         distributor: [],
         distributionTimeFilter: 'L90 Days',
         impact: [],
-        location: '',
         opportunitiesStatus: '',
         opportunityType: ['All Types'],
         premiseType: 'off',
@@ -111,11 +111,13 @@ module.exports = /*  @ngInject */
         retailer: 'Chain',
         storeSearchText: '',
         segmentation: [],
+        state: [],
         storeType: '',
         tradeChannel: [],
         timePeriod: 'Current Month to Date',
         trend: '',
-        valuesVsTrend: ''
+        valuesVsTrend: '',
+        zipCode: []
       },
       timePeriod: [
         {name: 'Current Month to Date',

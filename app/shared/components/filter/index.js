@@ -44,7 +44,13 @@ function FilterController($state, $scope, $mdDialog, $mdSelect, chipsService, fi
   }
 
   function applyLocations(result) {
-    console.log(result);
+    if (result.type === 'zipcode') {
+      chipsService.applyFilterArr(filtersService.model.selected.zipCode, result.name, 'zipCode');
+    } else if (result.type === 'city') {
+      chipsService.applyFilterArr(filtersService.model.selected.city, result.name, 'city');
+    } else if (result.type === 'state') {
+      chipsService.applyFilterArr(filtersService.model.selected.state, result.name, 'state');
+    }
   }
 
   function closeDoneButton() {
