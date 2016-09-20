@@ -7,7 +7,11 @@ module.exports = /*  @ngInject */
       currentUser: {},
       summary: [],
       depletion: [],
-      distribution: []
+      distribution: [],
+      archived: [],
+      targetListArray: {
+        owned: []
+      }
     };
     var service = {
       model: model,
@@ -480,6 +484,13 @@ module.exports = /*  @ngInject */
             ownedNotArchived = 0,
             ownedArchived = 0;
 
+        angular.forEach(response.data, function(value, key) {
+
+          angular.forEach(value, function(value, key) {
+            model.targetListArray.owned.push(value);
+          });
+        });
+
         for (var i = 0; i < response.data.owned.length; i++) {
           if (response.data.owned[i].archived) ownedArchived++;
           else ownedNotArchived++;
@@ -495,7 +506,7 @@ module.exports = /*  @ngInject */
         response.data.sharedArchivedCount = sharedArchivedCount;
         response.data.sharedNotArchivedCount = sharedNotArchivedCount;
 
-        targetListPromise.resolve(response.data);
+        targetListPromise.resolve(model.targetListArray);
       }
 
       function getTargetListsFail(error) {

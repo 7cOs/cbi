@@ -60,25 +60,24 @@ function ExpandedTargetListController($state, $scope, $filter, $mdDialog, $q, us
   }
 
   function archiveTargetList() {
-    var archiveTargetListPromises = [],
-        selectedItems = vm.selected;
+    var selectedTargetLists = $filter('filter')(userService.model.targetLists.owned, {selected: true}),
+        archiveTargetListPromises = [];
 
     // get selected target list ids and their promises
-    archiveTargetListPromises = selectedItems.map(function(targetList) {
-      console.log(targetList);
+    archiveTargetListPromises = selectedTargetLists.map(function(targetList) {
       return targetListService.updateTargetList(targetList.id, {archived: true});
     });
 
     // run all archive requests at the same time
     $q.all(archiveTargetListPromises).then(function(response) {
-      angular.forEach(selectedItems, function(item, key) {
-
+      angular.forEach(selectedTargetLists, function(item, key) {
+        // this may work or i may need to do the object. cant test due to api issues.
         item.archived = true;
 
         userService.model.targetLists.ownedArchived++;
         userService.model.targetLists.ownedNotArchived--;
       });
-    }).then(vm.selected = []);
+    });
   }
 
   function createNewList(e) {
@@ -229,9 +228,10 @@ function ExpandedTargetListController($state, $scope, $filter, $mdDialog, $q, us
       });
 
       // get collaborators for shared target lists
-      sharedPromises = userService.model.targetLists.sharedWithMe.map(function(targetList) {
-        return targetListService.getTargetListShares(targetList.id);
-      });
+      // TODO currently not being used, this needs to be implememtned
+      // sharedPromises = userService.model.targetLists.sharedWithMe.map(function(targetList) {
+      //   return targetListService.getTargetListShares(targetList.id);
+      // });
 
       $q.all(sharedPromises).then(function(response) {
         angular.forEach(userService.model.targetLists.sharedWithMe, function(targetList, key) {
