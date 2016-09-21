@@ -281,13 +281,15 @@ md-dialog {
     }
   }
 
-  &.create-target-list {
+  &.create-target-list,
+  &.share-opportunity {
     .collaborator-list {
       width: calc(100% - 48px);
       background: $white;
       height: 200px;
       padding: 12px 24px;
       text-align: left;
+      overflow: auto;
 
       span,
       p {
@@ -297,6 +299,19 @@ md-dialog {
       span {
         float: right;
         margin-top: 4px;
+      }
+
+      .break {
+        width: 450px;
+        border-bottom: dotted $gray-4;
+        height: 1em;
+        margin-bottom: 1em;
+        margin-top: 0;
+        margin-right: -24px;
+      }
+
+      .collaborator {
+        font-size: 0.9em;
       }
     }
 

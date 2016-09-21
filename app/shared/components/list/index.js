@@ -81,8 +81,8 @@ function ListController($scope, $state, $q, $location, $anchorScroll, $mdDialog,
     vm.showSubMenu = false;
   });
 
-  function addToSharedCollaborators() {
-    vm.sharedCollaborators.push(vm.collaborator);
+  function addToSharedCollaborators(person) {
+    vm.sharedCollaborators.push(person);
   }
 
   function addToTargetList(listId) {
@@ -140,9 +140,12 @@ function ListController($scope, $state, $q, $location, $anchorScroll, $mdDialog,
   }
 
   function shareOpportunity() {
-    userService.sendOpportunity(vm.collaborator.id, vm.currentOpportunityId).then(function(data) {
-      console.log('shared');
-    });
+    for (var i = 0; i < vm.sharedCollaborators.length; i++) {
+      userService.sendOpportunity(vm.sharedCollaborators[i].employeeId, vm.currentOpportunityId).then(function(data) {
+        console.log('shared');
+      });
+    }
+    closeModal();
   }
 
   function openDismissModal(oId, ev) {
