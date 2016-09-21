@@ -45,6 +45,7 @@ module.exports = /*  @ngInject */
     vm.removeCollaborator = removeCollaborator;
     vm.removeFooterToast = removeFooterToast;
     vm.updateList = updateList;
+    vm.initTargetLists = initTargetLists;
 
     init();
 
@@ -61,13 +62,13 @@ module.exports = /*  @ngInject */
     }
 
     function addCollaboratorClick(result) {
-      console.log('clicked');
       vm.collaborator = {
         employeeId: result.employeeId,
         permissionLevel: vm.permissionLevel
       };
 
       vm.targetListShares.push(vm.collaborator);
+
       vm.pendingShares.push({
         employee: result,
         permissionLevel: 'Collaborate'
@@ -162,13 +163,10 @@ module.exports = /*  @ngInject */
 
     function modalManageTargetList(ev) {
       var parentEl = angular.element(document.body);
+
       vm.pendingShares = [];
-      targetListService.getTargetList(targetListService.model.currentList.id).then(function(response) {
-        targetListService.model.currentList = response;
-        targetListService.model.currentList.loading = false;
-      }, function(err) {
-        console.log('[targetListController.init], Error: ' + err.statusText + '. Code: ' + err.status);
-      });
+      initTargetLists();
+
       $mdDialog.show({
         clickOutsideToClose: true,
         parent: parentEl,
@@ -180,13 +178,10 @@ module.exports = /*  @ngInject */
 
     function modalManageCollaborators(ev) {
       var parentEl = angular.element(document.body);
+
       vm.pendingShares = [];
-      targetListService.getTargetList(targetListService.model.currentList.id).then(function(response) {
-        targetListService.model.currentList = response;
-        targetListService.model.currentList.loading = false;
-      }, function(err) {
-        console.log('[targetListController.init], Error: ' + err.statusText + '. Code: ' + err.status);
-      });
+      initTargetLists();
+
       $mdDialog.show({
         clickOutsideToClose: true,
         parent: parentEl,
@@ -258,6 +253,15 @@ module.exports = /*  @ngInject */
       });
     }
 
+    function initTargetLists() {
+      targetListService.getTargetList(targetListService.model.currentList.id).then(function(response) {
+        targetListService.model.currentList = response;
+        targetListService.model.currentList.loading = false;
+      }, function(err) {
+        console.log('[targetListController.init], Error: ' + err.statusText + '. Code: ' + err.status);
+      });
+    }
+
     // **************
     // PRIVATE METHODS
     // **************
@@ -265,12 +269,7 @@ module.exports = /*  @ngInject */
     function init() {
       targetListService.model.currentList.id = $state.params.id;
 
-      targetListService.getTargetList(targetListService.model.currentList.id).then(function(response) {
-        targetListService.model.currentList = response;
-        targetListService.model.currentList.loading = false;
-      }, function(err) {
-        console.log('[targetListController.init], Error: ' + err.statusText + '. Code: ' + err.status);
-      });
+      initTargetLists();
 
       // get opportunities
       targetListService.getTargetListOpportunities(targetListService.model.currentList.id).then(function(data) {

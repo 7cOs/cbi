@@ -41,6 +41,10 @@
       text-align: left;
       border-bottom: dotted $gray-4;
 
+      &.collaborator:last-child {
+        border-bottom: none;
+      }
+
       &:hover {
         background-color: $light-blue;
       }
