@@ -15,7 +15,6 @@ div.modal.notes(ng-if="notesOpen")
     md-progress-circular(ng-if="n.fileUploading" md-mode="indeterminate" md-diameter="100").md-accent
     h5 Uploading...
   div.note-container(ng-if="n.notes.length > 0 && !n.fileUploading")
-
     div.new-note
       p(ng-click="n.openCreateNote()").bold.add-note <span>+</span> New Note
       div(ng-if="n.creatingNote").create-new-note
@@ -23,8 +22,8 @@ div.modal.notes(ng-if="notesOpen")
         .dropdown-filter
           .dropdown
             md-select(ng-model="n.newNote.title" aria-label="rationale dropdown" placeholder="Select a topic").short
-              md-option(aria-label="note title selector" value="{{option}}" ng-model="n.newNote.title" ng-repeat="option in n.noteTopics") {{option}}
-              md-option(aria-label="note title selector" value="" ng-click="n.showInput()") + Add a new topic >
+              md-option(ng-repeat="topic in n.noteTopics" aria-label="note title selector" value="{{topic}}") {{topic}}
+              md-option(aria-label="note title selector" ng-value="" ng-click="n.showInput()") + Add a new topic >
         input(ng-if="n.inputToggle" ng-model="n.newNote.title")
         label details
         div.text-editor
@@ -35,15 +34,14 @@ div.modal.notes(ng-if="notesOpen")
             p {{n.errorMsg}}
         button(ng-click="n.createNote(n.newNote)").btn-action Save
         p(ng-click="n.cancelNewNote(n.newNote)").cancel.accent X Cancel
-
-    div.note-body(ng-repeat="note in n.notes | orderBy:'date'")
+    div.note-body(ng-repeat="note in n.notes | orderBy:'-date'")
       div(ng-if="note.deleteConfirmation").delete-confirm
         h4 Are you sure you want to delete this note?
         div.buttons
           button(ng-click="n.deleteNote(note)").btn-action Yes
           p(ng-click="n.toggleDelete(note)").cancel.accent X Cancel
       div(ng-if="!note.deleteConfirmation")
-        h4(ng-if="!note.editMode") {{note.title}} <span ng-if="note.attachments" class="attachments"></span>
+        h4(ng-if="!note.editMode") {{note.title}} <span ng-if="note.attachments.length" class="attachments"></span>
         p(ng-if="!note.editMode") <span ta-bind ng-model="note.body"></span> <span class="read-more" ng-if="note.numLimit <= 150 || !note.numLimit" ng-click="n.readMore(note)")>...Read More</span>
         .note-attachments(ng-if="note.noteDetails")
           div.attachement-header

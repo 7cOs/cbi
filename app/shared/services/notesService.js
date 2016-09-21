@@ -20,7 +20,7 @@ module.exports = /*  @ngInject */
 
     function getNote(noteId) {
       var notesPromise = $q.defer(),
-          url = urlBase + 'note',
+          url = urlBase + 'createNote?accountId=' + accountId,
           data = {'read': true};
 
       $http.get(url, data)
@@ -106,7 +106,7 @@ module.exports = /*  @ngInject */
 
     function createNote(body) {
       var notePromise = $q.defer(),
-          url = urlBase + 'createNote' + '?accountId=1432999',
+          url = urlBase + 'createNote?accountId=' + accountId,
           payload = body;
 
       $http.post(url, payload, {
