@@ -18,24 +18,6 @@ module.exports = /*  @ngInject */
       filtersApplied: true,
       filtersDefault: true,
       impact: '',
-      opportunityStatus: [
-        {
-          name: 'Open',
-          value: 'open'
-        }, {
-          name: 'Targeted',
-          value: 'targeted'
-        }
-      ],
-      opportunityStatusTL: [
-        {
-          name: 'Open',
-          value: 'open'
-        }, {
-          name: 'Closed',
-          value: 'targeted'
-        }
-      ],
       opportunityType: ['All Types'],
       opportunitiesType: [
         {name: 'All Types'},
@@ -109,13 +91,13 @@ module.exports = /*  @ngInject */
         subaccount: [],
         accountTypes: '',
         brands: [],
-        cbbdChain: false,
+        cbbdChain: [],
         cbbdContact: [],
         city: [],
         currentFilter: '',
         distributor: [],
         impact: [],
-        opportunitiesStatus: '',
+        opportunityStatus: [],
         opportunityType: ['All Types'],
         premiseType: 'off',
         productType: [],
@@ -124,7 +106,6 @@ module.exports = /*  @ngInject */
         storeSearchText: '',
         segmentation: [],
         state: [],
-        storeType: '',
         tradeChannel: [],
         trend: '',
         valuesVsTrend: '',
