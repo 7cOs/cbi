@@ -24,10 +24,11 @@
       label Premise Type
       md-radio-group(ng-model="filter.filtersService.model.selected.premiseType")
         md-radio-button(ng-repeat="p in filter.filtersService.model.premises | filter: '!All'"  class="md-primary" ng-value="p.value" aria-label="{{p.name}}" ng-click="filter.chipsService.addChip(p.name, 'premiseType', true, false); filter.resetTradeChannels()") {{::p.name}}
-    div(column='4')
+    div.opportunityStatus(column='4')
       label Opportunity Status
-      md-radio-group(ng-model="filter.filtersService.model.selected.opportunityStatus")
-        md-radio-button(ng-repeat="opportunity in filter.opportunityStatusSwitch()" class="md-primary" ng-value="opportunity.value" aria-label="{{opportunity.name}}" ng-click="filter.chipsService.addChip(opportunity.name, 'opportunityStatus', true)") {{::opportunity.name}}
+      md-checkbox(ng-model="filter.filtersService.model.opportunityStatusOpen" aria-label="Open" ng-change="filter.applyFilterArr(filter.filtersService.model.selected.opportunityStatus, 'Open', 'opportunityStatus')") Open
+      md-checkbox(ng-model="filter.filtersService.model.opportunityStatusTargeted" aria-label="Targeted" ng-change="filter.applyFilterArr(filter.filtersService.model.selected.opportunityStatus, 'Targeted', 'opportunityStatus')" ng-if="!filter.opportunitySwitch()") Targeted
+      md-checkbox(ng-model="filter.filtersService.model.opportunityStatusClosed" aria-label="Closed" ng-change="filter.applyFilterArr(filter.filtersService.model.selected.opportunityStatus, 'Closed', 'opportunityStatus')" ng-if="filter.opportunitySwitch()") Closed
   div(row)
     div(column='3')
       .tooltip-wrap
@@ -81,9 +82,8 @@
       div(row)
         div(column='7')
           label Store Type
-          md-radio-group(ng-model="filter.filtersService.model.selected.cbbdChain")
-            md-radio-button.md-primary(aria-label="Store Type Independent" value="false" ng-click="filter.chipsService.updateChip('storeType', 'Store Type Independent', true)") Independent
-            md-radio-button.md-primary(aria-label="Store Type CBBD" value="true" ng-click="filter.chipsService.updateChip('storeType', 'Store Type CBBD', true)") CBBD Chain
+          md-checkbox(ng-model="filter.filtersService.model.cbbdChainIndependent" aria-label="Independent" ng-change="filter.applyFilterArr(filter.filtersService.model.selected.cbbdChain, 'Independent', 'cbbdChain')") Independent
+          md-checkbox(ng-model="filter.filtersService.model.cbbdChainCBBD" aria-label="CBBD Chain" ng-change="filter.applyFilterArr(filter.filtersService.model.selected.cbbdChain, 'CBBD Chain', 'cbbdChain')") CBBD Chain
         div(column='8' class="store-segmentation")
           label Store Segmentation
           md-checkbox(ng-model="filter.filtersService.model.storeSegmentationA" aria-label="Store Segmentation A" ng-change="filter.applyFilterArr(filter.filtersService.model.selected.segmentation, 'A', 'segmentation')") A

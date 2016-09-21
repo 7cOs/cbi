@@ -94,8 +94,11 @@ function FilterController($state, $scope, $mdDialog, $mdSelect, chipsService, fi
   }
 
   function opportunityStatusSwitch() {
-    if ($state.current.name === 'target-list-detail') return filtersService.model.opportunityStatusTL;
-    else return filtersService.model.opportunityStatus;
+    if ($state.current.name === 'target-list-detail') {
+      return true;
+    } else {
+      return false;
+    }
   }
 
   function placeholderSelect(data) {

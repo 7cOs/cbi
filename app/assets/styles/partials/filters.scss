@@ -166,6 +166,13 @@
     margin-bottom: 0;
   }
 
+  .opportunityStatus {
+    md-checkbox {
+      float: left;
+      width: 40%;
+    }
+  }
+
   &.target-list {
     .expand {
       > div {

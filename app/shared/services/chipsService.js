@@ -169,6 +169,8 @@ module.exports = /*  @ngInject */
             // update model
             if (chip.type === 'productType') filtersService.model['productType' + $filter('titlecase')(chip.name)] = false;
             if (chip.type === 'tradeChannel') filtersService.model['tradeChannel' + chip.name] = false;
+            if (chip.type === 'opportunityStatus') filtersService.model['opportunityStatus' + chip.name] = false;
+            if (chip.type === 'cbbdChain') filtersService.model['cbbdChain' + chip.name.split(' ')[0]] = false;
             break;
           }
         }
@@ -224,7 +226,7 @@ module.exports = /*  @ngInject */
           // remove from chip model
           var iIndex = service.model.map(function(e) { return e.name; }).indexOf(result + ' Impact');
           service.model.splice(iIndex, 1);
-        } else if (filter === 'tradeChannel') {
+        } else if (filter === 'tradeChannel' || filter === 'opportunityStatus' || filter === 'cbbdChain') {
           model.splice(model.indexOf(result), 1);
           // remove from chip model
           var tIndex = service.model.map(function(e) { return e.name; }).indexOf(result);
