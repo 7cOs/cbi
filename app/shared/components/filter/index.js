@@ -21,13 +21,14 @@ function FilterController($state, $scope, $mdDialog, $mdSelect, chipsService, fi
   vm.closeModal = closeModal;
   vm.closeSelect = closeSelect;
   vm.expandDropdown = expandDropdown;
+  vm.hintTextPlaceholder = 'Account or Subaccount Name';
   vm.hoverState = hoverState;
   vm.modalSaveOpportunityFilter = modalSaveOpportunityFilter;
-  vm.resetFilters = resetFilters;
-  vm.saveFilter = saveFilter;
-  vm.hintTextPlaceholder = 'Account or Subaccount Name';
+  vm.opportunityStatusSwitch = opportunityStatusSwitch;
   vm.placeholderSelect = placeholderSelect;
+  vm.resetFilters = resetFilters;
   vm.resetTradeChannels = resetTradeChannels;
+  vm.saveFilter = saveFilter;
 
   init();
 
@@ -92,6 +93,15 @@ function FilterController($state, $scope, $mdDialog, $mdSelect, chipsService, fi
     });
   }
 
+  function opportunityStatusSwitch() {
+    if ($state.current.name === 'target-list-detail') return filtersService.model.opportunityStatusTL;
+    else return filtersService.model.opportunityStatus;
+  }
+
+  function placeholderSelect(data) {
+    vm.hintTextPlaceholder = data;
+  }
+
   function resetFilters() {
     // reset all chips and filters
     chipsService.resetChipsFilters(chipsService.model);
@@ -131,10 +141,6 @@ function FilterController($state, $scope, $mdDialog, $mdSelect, chipsService, fi
       // close modal
       closeModal();
     });
-  }
-
-  function placeholderSelect(data) {
-    vm.hintTextPlaceholder = data;
   }
 
   // **************
