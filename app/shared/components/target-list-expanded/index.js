@@ -60,7 +60,7 @@ function ExpandedTargetListController($state, $scope, $filter, $mdDialog, $q, us
   }
 
   function archiveTargetList() {
-    var selectedTargetLists = $filter('filter')(userService.model.targetLists.owned, {selected: true}),
+    var selectedTargetLists = vm.selected,
         archiveTargetListPromises = [];
 
     // get selected target list ids and their promises
@@ -78,7 +78,7 @@ function ExpandedTargetListController($state, $scope, $filter, $mdDialog, $q, us
         userService.model.targetLists.ownedNotArchived--;
       });
 
-      console.log(userService.model.targetLists);
+      vm.selected = [];
     });
   }
 
@@ -137,6 +137,7 @@ function ExpandedTargetListController($state, $scope, $filter, $mdDialog, $q, us
 
   function saveNewList(e) {
     vm.buttonDiabled = true;
+
     userService.addTargetList(vm.newList).then(function(response) {
       closeModal();
       vm.buttonDiabled = false;
@@ -146,6 +147,14 @@ function ExpandedTargetListController($state, $scope, $filter, $mdDialog, $q, us
         opportunities: [],
         collaborators: []
       };
+
+      // We should be getting these values in the response
+      response.createdAt = response.dateCreated;
+      response.opportunitiesSummary = {};
+      response.opportunitiesSummary.closedOpportunitiesCount = 0;
+      response.opportunitiesSummary.opportunitiesCount = 0;
+      response.opportunitiesSummary.totalClosedDepletions = 0;
+
       userService.model.targetLists.owned.unshift(response);
       userService.model.targetLists.ownedArchived++;
       userService.model.targetLists.ownedNotArchived--;
@@ -230,9 +239,10 @@ function ExpandedTargetListController($state, $scope, $filter, $mdDialog, $q, us
       });
 
       // get collaborators for shared target lists
-      sharedPromises = userService.model.targetLists.sharedWithMe.map(function(targetList) {
-        return targetListService.getTargetListShares(targetList.id);
-      });
+      // TODO currently not being used, this needs to be implememtned
+      // sharedPromises = userService.model.targetLists.sharedWithMe.map(function(targetList) {
+      //   return targetListService.getTargetListShares(targetList.id);
+      // });
 
       $q.all(sharedPromises).then(function(response) {
         angular.forEach(userService.model.targetLists.sharedWithMe, function(targetList, key) {
