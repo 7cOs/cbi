@@ -27,6 +27,15 @@ module.exports = /*  @ngInject */
           value: 'targeted'
         }
       ],
+      opportunityStatusTL: [
+        {
+          name: 'Open',
+          value: 'open'
+        }, {
+          name: 'Closed',
+          value: 'targeted'
+        }
+      ],
       opportunityType: ['All Types'],
       opportunitiesType: [
         {name: 'All Types'},
