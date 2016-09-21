@@ -148,6 +148,14 @@ function ExpandedTargetListController($state, $scope, $filter, $mdDialog, $q, us
         opportunities: [],
         collaborators: []
       };
+
+      // We should be getting these values in the response
+      response.createdAt = response.dateCreated;
+      response.opportunitiesSummary = {};
+      response.opportunitiesSummary.closedOpportunitiesCount = 0;
+      response.opportunitiesSummary.opportunitiesCount = 0;
+      response.opportunitiesSummary.totalClosedDepletions = 0;
+
       userService.model.targetLists.owned.unshift(response);
       userService.model.targetLists.ownedArchived++;
       userService.model.targetLists.ownedNotArchived--;
