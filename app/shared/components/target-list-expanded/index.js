@@ -138,7 +138,6 @@ function ExpandedTargetListController($state, $scope, $filter, $mdDialog, $q, us
   function saveNewList(e) {
     vm.buttonDiabled = true;
 
-    console.log(vm.newList);
     userService.addTargetList(vm.newList).then(function(response) {
       closeModal();
       vm.buttonDiabled = false;
