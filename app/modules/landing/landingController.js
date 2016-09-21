@@ -17,9 +17,6 @@ module.exports = /*  @ngInject */
     vm.chipsService = chipsService;
     vm.filtersService = filtersService;
 
-    /* REMOVE THIS */
-    // vm.performanceData = myperformanceService.model();
-
     // Expose public methods
     vm.applyFilterArr = chipsService.applyFilterArr;
     vm.applyFilterMulti = chipsService.applyFilterMulti;
