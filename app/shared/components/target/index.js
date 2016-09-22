@@ -94,7 +94,7 @@ function TargetListController($scope, $state, targetListService, userService) {
     userService.getTargetLists(userService.model.currentUser.employeeID).then(function(data) {
       // split things into categories, but ignore archived
       var mine = data.owned.filter(curriedFilterByArchived(false));
-      var shared = data.sharedWithMe.filter(curriedFilterByArchived(false));
+      if (data.sharedWithMe) var shared = data.sharedWithMe.filter(curriedFilterByArchived(false));
 
       // Get archived
       var archived = data.owned.filter(curriedFilterByArchived(true));

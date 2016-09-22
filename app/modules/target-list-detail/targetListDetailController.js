@@ -278,6 +278,9 @@ module.exports = /*  @ngInject */
 
       opportunitiesService.model.filterApplied = true;
 
+      // closes filter box
+      filtersService.model.expanded = false;
+
       // reset all chips and filters on page init
       chipsService.resetChipsFilters(chipsService.model);
     }

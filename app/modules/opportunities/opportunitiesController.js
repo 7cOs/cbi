@@ -105,6 +105,9 @@ module.exports = /*  @ngInject */
         chipsService.applyFilters();
       }
 
+      // closes filter box
+      filtersService.model.expanded = false;
+
       // Set this to have a list load with the page
       // chipsService.applyFilters();
 
