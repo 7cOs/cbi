@@ -149,7 +149,6 @@ function NotesController($scope, $state, $mdDialog, $timeout, notesService, Uplo
 
     data.author = 'Me';
     data.date = Date.now();
-    console.log(data);
 
     notesService.createNote(data, accountId).then(function(success) {
       vm.notes.unshift(data);
