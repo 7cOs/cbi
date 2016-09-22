@@ -60,11 +60,6 @@ list {
       font-weight: $bold;
       color: $black-2;
     }
-
-    &.header-disabled .sortable {
-      pointer-events: none;
-      color: $gray-8;
-    }
   }
 
   .cell-parent > div {
@@ -243,6 +238,11 @@ list {
     position: absolute;
     right: -12px;
     top: 0;
+  }
+
+  &.header-disabled label {
+    pointer-events: none;
+    color: $gray-8;
   }
 }
 
