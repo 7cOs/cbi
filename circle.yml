@@ -23,6 +23,11 @@ deployment:
       # push the code to app-orion-dev
       - git push git@heroku.com:app-orion-qa.git $CIRCLE_SHA1:master -f
       - git push git@heroku.com:app-compass-loadtest.git $CIRCLE_SHA1:master -f
+  poc:
+    branch: poc
+    commands:
+      # push the code to poc
+      - git push git@heroku.com:app-compass-poc.git $CIRCLE_SHA1:master -f
   production:
     branch: master
     commands:
