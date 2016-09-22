@@ -61,7 +61,7 @@ list {
       color: $black-2;
     }
 
-    .header-disabled {
+    &.header-disabled .sortable {
       pointer-events: none;
       color: $gray-8;
     }
