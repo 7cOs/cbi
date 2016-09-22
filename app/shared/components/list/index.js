@@ -54,7 +54,7 @@ function ListController($scope, $state, $q, $location, $anchorScroll, $mdDialog,
   vm.showDisabled = showDisabled;
   vm.selectAllOpportunities = selectAllOpportunities;
   vm.flattenOpportunity = flattenOpportunity;
-
+  vm.getTargetLists = getTargetLists;
   vm.expandCallback = expandCallback;
   vm.collapseCallback = collapseCallback;
 
@@ -238,6 +238,7 @@ function ListController($scope, $state, $q, $location, $anchorScroll, $mdDialog,
       if (obj.selected === true) { groupedCount++; }
     }
     parent.selectedOpportunities = groupedCount;
+    getTargetLists();
   }
 
   // Parent-level select to select all children opportunities
@@ -257,6 +258,7 @@ function ListController($scope, $state, $q, $location, $anchorScroll, $mdDialog,
       }
     }
     parent.selectedOpportunities = allOpportunitiesSelected ? 0 : parent.groupedOpportunities.length;
+    getTargetLists();
   }
 
   // Select or deselect all opportunity parents
@@ -313,6 +315,15 @@ function ListController($scope, $state, $q, $location, $anchorScroll, $mdDialog,
     return data;
   }
 
+  function getTargetLists() {
+    if (userService.model.targetLists.length < 1) {
+       // get target lists
+      userService.getTargetLists(userService.model.currentUser.employeeID, {'type': 'targetLists'}).then(function(data) {
+        userService.model.targetLists = data;
+      });
+    }
+  }
+
   // ***************
   // PRIVATE METHODS
   // ***************
@@ -350,11 +361,6 @@ function ListController($scope, $state, $q, $location, $anchorScroll, $mdDialog,
   }
 
   function init() {
-    // get target lists
-    userService.getTargetLists(userService.model.currentUser.employeeID, {'type': 'targetLists'}).then(function(data) {
-      userService.model.targetLists = data;
-    });
-
     opportunitiesService.model.opportunitiesDisplay = [];
   }
 }
