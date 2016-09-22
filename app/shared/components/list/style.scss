@@ -60,6 +60,11 @@ list {
       font-weight: $bold;
       color: $black-2;
     }
+
+    .header-disabled {
+      pointer-events: none;
+      color: $gray-8;
+    }
   }
 
   .cell-parent > div {

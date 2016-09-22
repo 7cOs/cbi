@@ -34,23 +34,23 @@ v-accordion.styled-list(multiple="" id="opportunities" control="list.accordion" 
     div.more-wrapper(ng-if="!list.pageName()")
     div.checkbox-sibling(column='12')
       div(column='3')
-        label(ng-click="list.sortBy('opportunity.name')" ng-class="{ 'header-bold' : list.sortProperty === 'opportunity.name'}")
+        label(ng-click="list.sortBy('opportunity.name')" ng-class="{ 'header-disabled': list.opportunitiesService.model.opportunitiesSum === 0, 'header-bold' : list.sortProperty === 'opportunity.name'}").disabled
           | Store / Number
           span(ng-class="{ 'chevron-down-small' : list.storeChevron, 'chevron-up-small' : !list.storeChevron}").chevron-down-small
       div(column='4')
         label Address
       div(column='2')
-        label(ng-click="list.sortBy('groupedOpportunities.length')" ng-class="{ 'header-bold' : list.sortProperty === 'groupedOpportunities.length'}")
+        label(ng-click="list.sortBy('groupedOpportunities.length')" ng-class="{ 'header-disabled': list.opportunitiesService.model.opportunitiesSum === 0, 'header-bold' : list.sortProperty === 'groupedOpportunities.length'}")
           | Opportunities
           span(ng-class="{ 'chevron-down-small' : !list.opportunitiesChevron, 'chevron-up-small' : list.opportunitiesChevron}").chevron-down-small
       div(column='1')
-        label(ng-click="list.sortBy('depletionsCYTD')" ng-class="{ 'header-bold' : list.sortProperty === 'depletionsCYTD'}")
+        label(ng-click="list.sortBy('depletionsCYTD')" ng-class="{ 'header-disabled': list.opportunitiesService.model.opportunitiesSum === 0, 'header-bold' : list.sortProperty === 'depletionsCYTD'}")
           | Depletions CYTD
           span(ng-class="{ 'chevron-down-small' : !list.depletionsChevron, 'chevron-up-small' : list.depletionsChevron}").chevron-down-small
       div(column='1')
         label vs Ya%
       div(column='1')
-        label(ng-click="list.sortBy('segmentation')" ng-class="{ 'header-bold' : list.sortProperty === 'segmentation'}")
+        label(ng-click="list.sortBy('segmentation')" ng-class="{ 'header-disabled': list.opportunitiesService.model.opportunitiesSum === 0, 'header-bold' : list.sortProperty === 'segmentation'}")
           | Segmentation
           span(ng-class="{ 'chevron-down-small' : list.segmentationChevron, 'chevron-up-small' : !list.segmentationChevron}").chevron-down-small
   v-pane.list-item(row ng-repeat="opportunity in list.opportunitiesService.model.opportunitiesDisplay[list.opportunitiesService.model.paging.current-1] | orderBy:list.sortProperty:list.reverse" expanded='opportunity.isExpanded')
