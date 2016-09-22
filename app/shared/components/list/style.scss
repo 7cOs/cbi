@@ -239,6 +239,11 @@ list {
     right: -12px;
     top: 0;
   }
+
+  &.header-disabled label {
+    pointer-events: none;
+    color: $gray-8;
+  }
 }
 
 .cell-center {
