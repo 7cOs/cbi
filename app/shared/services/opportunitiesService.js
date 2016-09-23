@@ -14,7 +14,8 @@ module.exports = /*  @ngInject */
         // pageChanged: pageChanged, // This function fires at the start of page change. It also fires on pagination load.
         steps: 10,
         itemsPerPage: 15
-      }
+      },
+      noOpportunitiesFound: false
     };
 
     var service = {
@@ -60,6 +61,9 @@ module.exports = /*  @ngInject */
             storePlaceholder;
         service.model.opportunities = [];
         service.model.opportunitiesDisplay = [];
+
+        // trigger no opps modal
+        if (response.data.opportunities.length < 1) { model.noOpportunitiesFound = true; };
 
         // make opp array instead of obj if oppId provided
         if (opportunityID) { response.data.opportunities = [response.data]; };
