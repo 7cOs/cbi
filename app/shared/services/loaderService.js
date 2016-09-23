@@ -4,7 +4,8 @@ module.exports = /*  @ngInject */
   function loaderService(scrollService) {
 
     var model = {
-      loadingFilters: false
+      loadingFilters: false,
+      scrollDisabled: false
     };
 
     var service = {
@@ -15,13 +16,18 @@ module.exports = /*  @ngInject */
 
     return service;
 
-    function openLoader() {
+    function openLoader(disableScroll) {
       model.loadingFilters = true;
-      scrollService.disableScroll();
+      if (disableScroll) {
+        scrollService.disableScroll();
+        model.scrollDisabled = true;
+      }
     }
 
     function closeLoader() {
       model.loadingFilters = false;
-      scrollService.enableScroll();
+      if (model.scrollDisabled) {
+        scrollService.enableScroll();
+      }
     }
   };

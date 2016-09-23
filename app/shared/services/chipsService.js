@@ -101,7 +101,7 @@ module.exports = /*  @ngInject */
     }
 
     function applyFilters(isTargetList) {
-      loaderService.openLoader();
+      loaderService.openLoader(true);
       if (!isTargetList) {
         opportunitiesService.getOpportunities().then(function(data) {
           loaderService.closeLoader();
