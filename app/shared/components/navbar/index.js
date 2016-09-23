@@ -1,6 +1,6 @@
 'use strict';
 
-function NavbarController($rootScope, $scope, $state, $window, $mdPanel, $mdDialog, $mdMenu, $mdSelect, notificationsService, opportunitiesService, targetListService, userService, versionService) {
+function NavbarController($rootScope, $scope, $state, $window, $mdPanel, $mdDialog, $mdMenu, $mdSelect, notificationsService, opportunitiesService, targetListService, userService, versionService, loaderService) {
 
   // ****************
   // CONTROLLER SETUP
@@ -13,6 +13,11 @@ function NavbarController($rootScope, $scope, $state, $window, $mdPanel, $mdDial
   // User Agent Detection for IE fixes
   $rootScope.isIE = (/Trident\/7\./g).test(userAgent);
   $rootScope.isEdge = (/(?:\bEdge\/)(\d+)/g).test(userAgent);
+
+  // Reset any active loaders on state change
+  $rootScope.$on('$stateChangeStart', function() {
+    loaderService.closeLoader();
+  });
 
   // Currently logged in user (for analytics)
   $window.currentUserId = userService.model.currentUser.employeeID;

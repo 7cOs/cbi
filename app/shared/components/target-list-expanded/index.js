@@ -1,6 +1,6 @@
 'use strict';
 
-function ExpandedTargetListController($state, $scope, $filter, $mdDialog, $q, userService, targetListService) {
+function ExpandedTargetListController($state, $scope, $filter, $mdDialog, $q, userService, targetListService, loaderService) {
 
   // ****************
   // CONTROLLER SETUP
@@ -12,6 +12,7 @@ function ExpandedTargetListController($state, $scope, $filter, $mdDialog, $q, us
   // Services
   vm.userService = userService;
   vm.targetListService = targetListService;
+  vm.loaderService = loaderService;
 
   // Defaults
   vm.buttonState = 'named';
@@ -232,10 +233,11 @@ function ExpandedTargetListController($state, $scope, $filter, $mdDialog, $q, us
 
     targetListService.model.currentList = {};
     userService.model.targetLists = null;
-    console.log('doin');
+    loaderService.openLoader();
 
     // userService.getTargetLists(userService.model.currentUser.employeeID, {'type': 'targetLists'}).then(function(data) {
     userService.getTargetLists(userService.model.currentUser.employeeID).then(function(data) {
+      loaderService.closeLoader();
       var ownedPromises = [],
           sharedPromises = [];
 
