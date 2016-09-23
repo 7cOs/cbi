@@ -265,6 +265,9 @@ function ExpandedTargetListController($state, $scope, $filter, $mdDialog, $q, us
           targetList.collaborators = response[key].data;
         });
       });
+    }, function(reason) {
+      console.log('Error: ' + reason);
+      loaderService.closeLoader();
     });
   }
 
