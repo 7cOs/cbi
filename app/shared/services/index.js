@@ -16,4 +16,5 @@ module.exports =
     .factory('chipsService', require('./chipsService'))
     .factory('closedOpportunitiesService', require('./closedOpportunitiesService'))
     .factory('versionService', require('./versionService'))
-    .factory('searchService', require('./searchService'));
+    .factory('searchService', require('./searchService'))
+    .factory('loaderService', require('./loaderService'));

@@ -1,3 +1,14 @@
+@keyframes fadeIn {
+
+  0% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}
+
 @keyframes load {
 
   0% {
@@ -113,13 +124,34 @@
   }
 }
 
+.loader-wrap {
+  height: 0;
+  left: 0;
+  overflow: hidden;
+  opacity: 0;
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 9999;
+
+  &.active {
+    animation: fadeIn 300ms;
+    height: 100%;
+    opacity: 1;
+  }
+
+  &.inline {
+    position: absolute;
+  }
+}
+
 .loader {
-  background: $body-bg;
+  background: $gray-4;
   bottom: 0;
   display: block;
   height: 100%;
   left: 0;
-  opacity: 0.75;
+  opacity: 0.9;
   position: absolute;
   right: 0;
   top: 0;
@@ -127,7 +159,7 @@
   z-index: 2;
 
   .glass {
-    background: $body-bg;
+    background: $gray-4;
     border-radius: 0.09rem;
     box-shadow: 0 0 0 0.2rem #DFEBFE;
     display: inline-block;
@@ -140,7 +172,7 @@
     width: 2.25rem;
 
     &:before {
-      background: $body-bg;
+      background: $gray-4;
       border-radius: 0.18rem;
       content: '';
       height: 0.5375rem;
@@ -177,7 +209,7 @@
     &:after {
       content: '';
       display: block;
-      background: $body-bg;
+      background: $gray-4;
       height: 40px;
       position: absolute;
       left: 9px;

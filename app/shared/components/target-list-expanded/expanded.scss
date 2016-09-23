@@ -28,7 +28,6 @@
   }
 
   .target-list-count-container {
-
     background: $body-bg;
     text-align: center;
 
@@ -45,6 +44,9 @@
   }
 
   .target-list-detail-container {
+    margin-top: 1em;
+    min-height: 13em;
+    position: relative;
 
     .md-bar {
       background-color: $yellow;
@@ -60,6 +62,10 @@
 
     .stats > .accent {
       margin-top: 3em;
+    }
+
+    ul {
+      margin-top: 0;
     }
 
     ul.dropdown-menu li {

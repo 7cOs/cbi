@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports = /*  @ngInject */
-  function opportunitiesController($rootScope, $scope, $state, $filter, $mdDialog, $mdSelect, opportunitiesService, opportunityFiltersService, chipsService, filtersService, userService) {
+  function opportunitiesController($rootScope, $scope, $state, $filter, $mdDialog, $mdSelect, opportunitiesService, opportunityFiltersService, chipsService, filtersService, userService, loaderService) {
 
     // ****************
     // CONTROLLER SETUP
@@ -23,6 +23,7 @@ module.exports = /*  @ngInject */
     vm.filtersService = filtersService;
     vm.userService = userService;
     vm.opportunitiesService = opportunitiesService;
+    vm.loaderService = loaderService;
 
     // Expose public methods
     vm.closeEditModal = closeEditModal;
