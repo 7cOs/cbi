@@ -116,6 +116,9 @@ function TargetListController($scope, $state, targetListService, userService, lo
       vm.types.shared.total = shared.length;
       vm.types.archived.records = filterTargetLists(archived).slice(0, 5);
       vm.types.archived.total = archived.length;
+    }, function(reason) {
+      console.log('Error: ' + reason);
+      loaderService.closeLoader();
     });
   }
 }

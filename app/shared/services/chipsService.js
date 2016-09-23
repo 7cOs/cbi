@@ -106,11 +106,17 @@ module.exports = /*  @ngInject */
         opportunitiesService.getOpportunities().then(function(data) {
           loaderService.closeLoader();
           finishGet(data);
+        }, function(reason) {
+          console.log('Error: ' + reason);
+          loaderService.closeLoader();
         });
       } else if (isTargetList) {
         targetListService.getTargetListOpportunities(targetListService.model.currentList.id, {type: 'opportunities'}).then(function(data) {
           loaderService.closeLoader();
           finishGet(data);
+        }, function(reason) {
+          console.log('Error: ' + reason);
+          loaderService.closeLoader();
         });
       }
 
