@@ -53,10 +53,10 @@ v-accordion.styled-list(multiple="" id="opportunities" control="list.accordion" 
         label(ng-click="list.sortBy('segmentation')" ng-class="{ 'header-bold' : list.sortProperty === 'segmentation'}")
           | Segmentation
           span(ng-class="{ 'chevron-down-small' : !list.segmentationChevron, 'chevron-up-small' : list.segmentationChevron}").chevron-down-small
+  div(ng-if="list.opportunitiesService.model.noOpportunitiesFound === true").no-opportunites
+    h4 No Opportunities have been added yet
+    p Try Searching for <span>Opportunities</span> and add them to your list
   v-pane.list-item(row ng-repeat="opportunity in list.opportunitiesService.model.opportunitiesDisplay[list.opportunitiesService.model.paging.current-1] | orderBy:list.sortProperty:list.reverse" expanded='opportunity.isExpanded')
-    div(ng-if="list.opportunitiesService.model.opportunitiesDisplay.length < 1").no-opportunites
-      h4 No Opportunities have been added yet
-      p Try Searching for <span>Opportunities</span> and add them to your list
     .action-overlay(ng-class="{'active': opportunity.toggled, 'fail': opportunity.failState}")
       div.checkbox-wrapper
           md-checkbox(aria-label="Action Item Select" ng-checked="true")
