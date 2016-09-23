@@ -8,7 +8,9 @@ div.target-lists
             h5.accent.completed Closed
             h5.accent Total
         div(row).target-list-container
-          div(ng-show="!type.records.length").no-opportunites
+          .loader-wrap.inline(ng-class="{'active': target.loaderService.model.loadingFilters}")
+            loader
+          div(ng-show="!target.loaderService.model.loadingFilters && !type.records.length").no-opportunites
             h4 No Opportunities have been added yet
             p Try Searching for <span>Opportunities</span> and add them to your list
           ul

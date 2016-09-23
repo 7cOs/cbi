@@ -61,6 +61,13 @@
 
   .target-list-container {
     background: $body-bg;
+    margin-top: 1em;
+    min-height: 13em;
+    position: relative;
+
+    ul {
+      margin-top: 0;
+    }
 
     .target-list {
       background: $white;

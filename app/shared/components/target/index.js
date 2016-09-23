@@ -1,6 +1,6 @@
 'use strict';
 
-function TargetListController($scope, $state, targetListService, userService) {
+function TargetListController($scope, $state, targetListService, userService, loaderService) {
 
   // ****************
   // CONTROLLER SETUP
@@ -8,6 +8,9 @@ function TargetListController($scope, $state, targetListService, userService) {
 
   // Initial variables
   var vm = this;
+
+  // Services
+  vm.loaderService = loaderService;
 
   // Defaults
   vm.pageName = $state.current.name;
@@ -91,7 +94,9 @@ function TargetListController($scope, $state, targetListService, userService) {
   }
 
   function init() {
+    loaderService.openLoader();
     userService.getTargetLists(userService.model.currentUser.employeeID).then(function(data) {
+      loaderService.closeLoader();
       // split things into categories, but ignore archived
       var mine = data.owned.filter(curriedFilterByArchived(false));
       if (data.sharedWithMe) var shared = data.sharedWithMe.filter(curriedFilterByArchived(false));
