@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports = /*  @ngInject */
-  function loaderService() {
+  function loaderService(scrollService) {
 
     var model = {
       loadingFilters: false
@@ -16,12 +16,12 @@ module.exports = /*  @ngInject */
     return service;
 
     function openLoader() {
-      // Set loader true
       model.loadingFilters = true;
+      scrollService.disableScroll();
     }
 
     function closeLoader() {
-      // Set loader false
       model.loadingFilters = false;
+      scrollService.enableScroll();
     }
   };
