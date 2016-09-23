@@ -16,6 +16,12 @@ module.exports = /*  @ngInject */
 
     return service;
 
+    /**
+     * @name openLoader
+     * @desc Display beer glass loader
+     * @params {String} disableScroll - Optionally disable page scroll (for full-page overlay loader)
+     * @memberOf cf.common.services
+     */
     function openLoader(disableScroll) {
       model.loadingFilters = true;
       if (disableScroll) {
@@ -24,6 +30,11 @@ module.exports = /*  @ngInject */
       }
     }
 
+    /**
+     * @name closeLoader
+     * @desc Close beer glass loader
+     * @memberOf cf.common.services
+     */
     function closeLoader() {
       model.loadingFilters = false;
       if (model.scrollDisabled) {
