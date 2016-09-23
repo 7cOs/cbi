@@ -27,8 +27,8 @@
     div.opportunityStatus(column='4')
       label Opportunity Status
       md-checkbox(ng-model="filter.filtersService.model.opportunityStatusOpen" aria-label="Open" ng-change="filter.applyFilterArr(filter.filtersService.model.selected.opportunityStatus, 'Open', 'opportunityStatus')") Open
-      md-checkbox(ng-model="filter.filtersService.model.opportunityStatusTargeted" aria-label="Targeted" ng-change="filter.applyFilterArr(filter.filtersService.model.selected.opportunityStatus, 'Targeted', 'opportunityStatus')" ng-if="!filter.opportunitySwitch()") Targeted
-      md-checkbox(ng-model="filter.filtersService.model.opportunityStatusClosed" aria-label="Closed" ng-change="filter.applyFilterArr(filter.filtersService.model.selected.opportunityStatus, 'Closed', 'opportunityStatus')" ng-if="filter.opportunitySwitch()") Closed
+      md-checkbox(ng-model="filter.filtersService.model.opportunityStatusTargeted" aria-label="Targeted" ng-change="filter.applyFilterArr(filter.filtersService.model.selected.opportunityStatus, 'Targeted', 'opportunityStatus')" ng-if="!filter.opportunityStatusSwitch()") Targeted
+      md-checkbox(ng-model="filter.filtersService.model.opportunityStatusClosed" aria-label="Closed" ng-change="filter.applyFilterArr(filter.filtersService.model.selected.opportunityStatus, 'Closed', 'opportunityStatus')" ng-if="filter.opportunityStatusSwitch()") Closed
   div(row)
     div(column='3')
       .tooltip-wrap
