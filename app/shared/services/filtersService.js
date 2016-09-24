@@ -11,7 +11,7 @@ module.exports = /*  @ngInject */
         {name: 'Walmart', subAccount: 'South'},
         {name: 'Walmart', subAccount: 'East'}
       ],
-      brands: '',
+      brand: '',
       cbbdContact: '',
       distributor: '',
       expanded: false,
@@ -90,7 +90,7 @@ module.exports = /*  @ngInject */
         account: [],
         subaccount: [],
         accountTypes: '',
-        brands: [],
+        brand: [],
         cbbdChain: [],
         cbbdContact: [],
         city: [],
