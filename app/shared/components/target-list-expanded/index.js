@@ -260,13 +260,11 @@ function ExpandedTargetListController($state, $scope, $filter, $mdDialog, $q, us
       //   return targetListService.getTargetListShares(targetList.id);
       // });
 
-      /*
       $q.all(sharedPromises).then(function(response) {
         angular.forEach(userService.model.targetLists.sharedWithMe, function(targetList, key) {
-          targetList.collaborators = response[key].data;
+          // targetList.collaborators = response[key].data;
         });
       });
-      */
     }, function(reason) {
       console.log('Error: ' + reason);
       loaderService.closeLoader();
