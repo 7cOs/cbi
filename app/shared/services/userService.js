@@ -10,7 +10,8 @@ module.exports = /*  @ngInject */
       distribution: [],
       archived: [],
       targetListArray: {
-        owned: []
+        owned: [],
+        sharedWithMe: []
       }
     };
     var service = {
@@ -485,9 +486,11 @@ module.exports = /*  @ngInject */
             ownedArchived = 0;
 
         angular.forEach(response.data, function(value, key) {
+          var targetType = key;
 
+          model.targetListArray[targetType] = [];
           angular.forEach(value, function(value, key) {
-            model.targetListArray.owned.push(value);
+            model.targetListArray[targetType].push(value);
           });
         });
 
@@ -501,10 +504,10 @@ module.exports = /*  @ngInject */
           else sharedNotArchivedCount++;
         }
 
-        response.data.ownedArchived = ownedArchived;
-        response.data.ownedNotArchived = ownedNotArchived;
-        response.data.sharedArchivedCount = sharedArchivedCount;
-        response.data.sharedNotArchivedCount = sharedNotArchivedCount;
+        model.targetListArray.ownedArchived = ownedArchived;
+        model.targetListArray.ownedNotArchived = ownedNotArchived;
+        model.targetListArray.sharedArchivedCount = sharedArchivedCount;
+        model.targetListArray.sharedNotArchivedCount = sharedNotArchivedCount;
 
         targetListPromise.resolve(model.targetListArray);
       }
