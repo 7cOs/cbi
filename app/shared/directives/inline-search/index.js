@@ -86,8 +86,14 @@ module.exports =
           if (vm.type === 'product') {
             var products = [];
             angular.forEach(data, function(value, key) {
-              if (value.type === 'sku' || value.type === 'brand') {
-                products.push(value);
+              if (vm.variety === 'sku') {
+                if (value.type !== 'package') {
+                  products.push(value);
+                }
+              } else if (vm.variety === 'package') {
+                if (value.type !== 'sku') {
+                  products.push(value);
+                }
               }
             });
             vm.results = products;

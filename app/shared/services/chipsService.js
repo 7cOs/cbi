@@ -255,7 +255,13 @@ module.exports = /*  @ngInject */
           filtersService.model.chain = '';
           addAutocompleteChip($filter('titlecase')(result.name), filter);
           model.push(result.id);
-        } else if (filter === 'distributor' || filter === 'brands') {
+        } else if (filter === 'distributor') {
+          addAutocompleteChip($filter('titlecase')(result.name), filter);
+          model.push(result.id);
+        } else if (filter === 'brand' && result.id === null) {
+          addAutocompleteChip($filter('titlecase')(result.brand), filter);
+          model.push(result.brandCode);
+        } else if (filter === 'brand' && result.id !== null) {
           addAutocompleteChip($filter('titlecase')(result.name), filter);
           model.push(result.id);
         } else if (filter === 'segmentation') {
