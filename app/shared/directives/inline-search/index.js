@@ -94,6 +94,12 @@ module.exports =
                 if (value.type !== 'sku') {
                   products.push(value);
                 }
+              } else if (vm.variety === 'non-brand') {
+                if (value.type !== 'brand') {
+                  products.push(value);
+                }
+              } else {
+                products.push(value);
               }
             });
             vm.results = products;
