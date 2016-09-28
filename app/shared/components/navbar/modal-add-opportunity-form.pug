@@ -25,14 +25,14 @@ div.modal.add-opportunity
 
         inline-search(ng-if="nb.newOpportunity.properties.distributionType.type === 'new'" type="product" variety="non-brand" placeholder="Type package name, or master SKU" chosen-result="nb.newOpportunity.properties.product.text")
 
-        inline-search(ng-if="nb.newOpportunity.properties.distributionType.type === 'other'" type="product" placeholder="Type brand, package name, or master SKU" chosen-result="nb.newOpportunity.properties.product.text")
+        inline-search.all-product-search(ng-if="nb.newOpportunity.properties.distributionType.type === 'other'" type="product" placeholder="Type brand, package name, or master SKU" chosen-result="nb.newOpportunity.properties.product.text")
 
         md-radio-group(ng-model="nb.newOpportunity.properties.product.type" required)
-          md-radio-button.md-primary(value="mixed" ng-if="nb.newOpportunity.properties.distributionType.type === 'other'" aria-label="Mixed Brands") Mixed Brands
+          md-radio-button.mixed-brands.md-primary(value="mixed" ng-if="nb.newOpportunity.properties.distributionType.type === 'other'" aria-label="Mixed Brands") Mixed Brands
         div(ng-show="nb.addOpportunityForm.$invalid && nb.addOpportunityForm.$submitted")
           p.error-message.accent(ng-show="nb.addOpportunityForm.recommendedBrand.$error.required") <img src="./assets/img/icons/error.svg">Please enter a Recommended Brand or Select Mixed Brands.
 
-    div.modal-input
+    div.modal-input.rationale
       label Rationale
       .dropdown-filter
         .dropdown
