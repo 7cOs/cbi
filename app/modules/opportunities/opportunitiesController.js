@@ -79,20 +79,6 @@ module.exports = /*  @ngInject */
     // PRIVATE METHODS
     // ***************
 
-    /* Not longer necesary?
-      // Add chip for inline search vaaddAutocompleteChiplue watchers
-      function addInlineSearchChip(val) {
-        if (typeof val === 'string' && val !== '') {
-          vm.chipsService.addAutocompleteChip(val, 'searchText');
-        }
-      }
-
-      // Watch for inline search value changes
-      $scope.$watch('o.filtersService.model.selected.brand', function (val) { addInlineSearchChip(val); });
-      $scope.$watch('o.filtersService.model.store', function (val) { addInlineSearchChip(val); });
-      $scope.$watch('o.filtersService.model.chain', function (val) { addInlineSearchChip(val); });
-    */
-
     function init() {
       // get saved filters -- this should be passed from user data when its ready
       userService.getOpportunityFilters(userService.model.currentUser.employeeID).then(function(data) {

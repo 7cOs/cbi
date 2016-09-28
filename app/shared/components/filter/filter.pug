@@ -45,10 +45,10 @@
             md-option(ng-repeat="type in filter.filtersService.model.opportunitiesType" aria-label="{{type.name}}" value="{{type.name}}") {{::type.name}}
     div(column='3' ng-if="filter.filtersService.model.selected.premiseType === 'off'")
       label Brand / Master SKU
-      inline-search(type="product" variety="sku" placeholder="Brand or SKU" chosen-result="filter.filtersService.model.brand" callback="filter.applyFilterArr(filter.filtersService.model.selected.brand, result, 'brand')")
+      inline-search(type="product" variety="sku" placeholder="Brand or SKU" chosen-result="filter.filtersService.model.brand" callback="filter.applyFilterArr(filter.filtersService.model.selected.masterSKU, result, 'brand')")
     div(column='3' ng-if="filter.filtersService.model.selected.premiseType === 'on'")
       label Brand / Package
-      inline-search(type="product" variety="package" placeholder="Brand or Package" chosen-result="filter.filtersService.model.brand" callback="filter.applyFilterArr(filter.filtersService.model.selected.brand, result, 'brand')")
+      inline-search(type="product" variety="package" placeholder="Brand or Package" chosen-result="filter.filtersService.model.brand" callback="filter.applyFilterArr(filter.filtersService.model.selected.masterSKU, result, 'brand')")
     div(column='4')
       label Retailer
       div(row).retailer.dropdown-filter

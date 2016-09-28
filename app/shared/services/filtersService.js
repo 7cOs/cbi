@@ -26,7 +26,7 @@ module.exports = /*  @ngInject */
         {name: 'Low Velocity'},
         {name: 'New Placement (Quality)'},
         {name: 'New Placement (No Rebuy)'},
-        {name: 'Custom'}
+        {name: 'Manual'}
       ],
       savedFilters: [],
       placementType: [
@@ -90,7 +90,8 @@ module.exports = /*  @ngInject */
         account: [],
         subaccount: [],
         accountTypes: '',
-        brand: [],
+        // brand: [],
+        masterSKU: [],
         cbbdChain: [],
         cbbdContact: [],
         city: [],

@@ -82,7 +82,7 @@ module.exports = /*  @ngInject */
                 somethingAdded = true;
               }
             }
-          } else if (obj[key2].constructor !== Array) {
+          } else if (obj[key2].constructor !== Array && key2 !== 'retailer') {
             queryParams += key2 + ':' + obj[key2];
             somethingAdded = true;
           }

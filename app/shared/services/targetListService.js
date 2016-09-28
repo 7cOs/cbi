@@ -373,7 +373,7 @@ module.exports = /*  @ngInject */
       $http({ url: url,
         method: 'DELETE',
         data: payload,
-        headers: {"Content-Type": "application/json;charset=utf-8"}
+        headers: {'Content-Type': 'application/json;charset=utf-8'}
       })
         .then(deleteTargetListSharesSuccess)
         .catch(deleteTargetListSharesFail);
