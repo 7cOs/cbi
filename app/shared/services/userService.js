@@ -9,9 +9,13 @@ module.exports = /*  @ngInject */
       depletion: [],
       distribution: [],
       archived: [],
-      targetListArray: {
-        owned: [],
-        sharedWithMe: []
+      combinedTargetList: {
+        'owned': [],
+        'sharedWithMe': [],
+        'sharedArchivedCount': 0,
+        'sharedNotArchivedCount': 0,
+        'ownedNotArchived': 0,
+        'ownedArchived': 0
       }
     };
     var service = {
@@ -469,10 +473,11 @@ module.exports = /*  @ngInject */
      */
     function getTargetLists(id, p) {
       var targetListPromise = $q.defer(),
+          urlArchive = apiHelperService.request('/api/users/' + id + '/targetLists?archived=true', p),
           url = apiHelperService.request('/api/users/' + id + '/targetLists/', p);
 
       if (!service.model.targetLists) {
-        $http.get(url)
+        $q.all([$http.get(urlArchive), $http.get(url)])
           .then(getTargetListsSuccess)
           .catch(getTargetListsFail);
       } else {
@@ -480,36 +485,29 @@ module.exports = /*  @ngInject */
       }
 
       function getTargetListsSuccess(response) {
-        var sharedArchivedCount = 0,
-            sharedNotArchivedCount = 0,
-            ownedNotArchived = 0,
-            ownedArchived = 0;
 
-        angular.forEach(response.data, function(value, key) {
-          var targetType = key;
+        for (var i = 0; i < response.length; i++) {
 
-          model.targetListArray[targetType] = [];
-          angular.forEach(value, function(value, key) {
-            model.targetListArray[targetType].push(value);
-          });
-        });
+          for (var j = 0; j < response[i].data.owned.length; j++) {
+            model.combinedTargetList.owned.push(response[i].data.owned[j]);
+            if (response[i].data.owned[j].archived) {
+              model.combinedTargetList.ownedArchived++;
+            } else {
+              model.combinedTargetList.ownedNotArchived++;
+            }
+          }
 
-        for (var i = 0; i < response.data.owned.length; i++) {
-          if (response.data.owned[i].archived) ownedArchived++;
-          else ownedNotArchived++;
+          for (j = 0; j < response[i].data.sharedWithMe.length; j++) {
+            model.combinedTargetList.sharedWithMe.push(response[i].data.sharedWithMe[j]);
+            if (response[i].data.sharedWithMe[j].archived) {
+              model.combinedTargetList.sharedArchivedCount++;
+            } else {
+              model.combinedTargetList.sharedNotArchivedCount++;
+            }
+          }
         }
 
-        for (i = 0; i < response.data.sharedWithMe.length; i++) {
-          if (response.data.sharedWithMe[i].archived) sharedArchivedCount++;
-          else sharedNotArchivedCount++;
-        }
-
-        model.targetListArray.ownedArchived = ownedArchived;
-        model.targetListArray.ownedNotArchived = ownedNotArchived;
-        model.targetListArray.sharedArchivedCount = sharedArchivedCount;
-        model.targetListArray.sharedNotArchivedCount = sharedNotArchivedCount;
-
-        targetListPromise.resolve(model.targetListArray);
+        targetListPromise.resolve(model.combinedTargetList);
       }
 
       function getTargetListsFail(error) {
