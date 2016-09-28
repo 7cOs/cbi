@@ -10,8 +10,8 @@ module.exports = /*  @ngInject */
       distribution: [],
       archived: [],
       combinedTargetList: {
-        'targetListsOwned': [],
-        'targetListsShared': [],
+        'owned': [],
+        'sharedWithMe': [],
         'sharedArchivedCount': 0,
         'sharedNotArchivedCount': 0,
         'ownedNotArchived': 0,
@@ -486,8 +486,9 @@ module.exports = /*  @ngInject */
 
       function getTargetListsSuccess(response) {
 
+        // Owned
         for (var n = 0; n < response[0].data.owned.length; n++) {
-          model.combinedTargetList.targetListsOwned.push(response[0].data.owned[n]);
+          model.combinedTargetList.owned.push(response[0].data.owned[n]);
           if (response[0].data.owned[n].archived) {
             model.combinedTargetList.ownedArchived++;
           } else {
@@ -496,7 +497,7 @@ module.exports = /*  @ngInject */
         }
 
         for (n = 0; n < response[1].data.owned.length; n++) {
-          model.combinedTargetList.targetListsOwned.push(response[1].data.owned[n]);
+          model.combinedTargetList.owned.push(response[1].data.owned[n]);
           if (response[1].data.owned[n].archived) {
             model.combinedTargetList.ownedArchived++;
           } else {
@@ -505,7 +506,7 @@ module.exports = /*  @ngInject */
         }
 
         for (n = 0; n < response[0].data.sharedWithMe.length; n++) {
-          model.combinedTargetList.targetListsShared.push(response[0].data.sharedWithMe[n]);
+          model.combinedTargetList.sharedWithMe.push(response[0].data.sharedWithMe[n]);
           if (response[0].data.sharedWithMe[n].archived) {
             model.combinedTargetList.sharedArchivedCount++;
           } else {
@@ -514,7 +515,7 @@ module.exports = /*  @ngInject */
         }
 
         for (n = 0; n < response[1].data.sharedWithMe.length; n++) {
-          model.combinedTargetList.targetListsShared.push(response[1].data.sharedWithMe[n]);
+          model.combinedTargetList.sharedWithMe.push(response[1].data.sharedWithMe[n]);
           if (response[1].data.sharedWithMe[n].archived) {
             model.combinedTargetList.sharedArchivedCount++;
           } else {
