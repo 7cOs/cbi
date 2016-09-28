@@ -5,12 +5,6 @@ module.exports = /*  @ngInject */
     var model = {
       account: [],
       subaccount: [],
-      accounts: [
-        {name: 'Walmart', subAccount: 'North East'},
-        {name: 'Walmart', subAccount: 'West'},
-        {name: 'Walmart', subAccount: 'South'},
-        {name: 'Walmart', subAccount: 'East'}
-      ],
       brand: '',
       cbbdContact: '',
       distributor: '',
@@ -137,7 +131,6 @@ module.exports = /*  @ngInject */
           {label: 'Recreation', name: 'Recreation', value: '53'},
           {label: 'Other', name: 'Other'}
         ]
-
       },
       trend: [
         {name: 'vs YA'},
@@ -169,7 +162,16 @@ module.exports = /*  @ngInject */
 
     function resetFilters() {
       service.model.selected = angular.copy(service.model.selectedTemplate);
+      resetModel(); // reset view model bindings
       service.model.filtersApplied = false;
       service.model.filtersDefault = true;
+    }
+
+    function resetModel() {
+      for (var prop in service.model) {
+        if (service.model[prop].constructor !== Array && service.model[prop] === true) {
+          service.model[prop] = false;
+        }
+      }
     }
   };

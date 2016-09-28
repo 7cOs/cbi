@@ -91,6 +91,7 @@ module.exports = /*  @ngInject */
       } else {
         chipsService.applyFilters();
       }
+      $state.params.resetFiltersOnLoad = true;
 
       // closes filter box
       filtersService.model.expanded = false;
