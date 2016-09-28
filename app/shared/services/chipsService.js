@@ -205,7 +205,7 @@ module.exports = /*  @ngInject */
 
     function resetChipsFilters(chips) {
       filtersService.resetFilters();
-      angular.copy(chipsTemplate, model);
+      angular.copy(chipsTemplate, service.model);
     }
 
     /**
