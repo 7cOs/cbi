@@ -486,20 +486,20 @@ module.exports = /*  @ngInject */
 
       function getTargetListsSuccess(response) {
 
-        for (var value of response) {
+        for (var i = 0; i < response.length; i++) {
 
-          for (var i = 0; i < value.data.owned.length; i++) {
-            model.combinedTargetList.owned.push(value.data.owned[i]);
-            if (value.data.owned[i].archived) {
+          for (var j = 0; j < response[i].data.owned.length; j++) {
+            model.combinedTargetList.owned.push(response[i].data.owned[j]);
+            if (response[i].data.owned[j].archived) {
               model.combinedTargetList.ownedArchived++;
             } else {
               model.combinedTargetList.ownedNotArchived++;
             }
           }
 
-          for (i = 0; i < value.data.sharedWithMe.length; i++) {
-            model.combinedTargetList.sharedWithMe.push(value.data.sharedWithMe[i]);
-            if (value.data.sharedWithMe[i].archived) {
+          for (j = 0; j < response[i].data.sharedWithMe.length; j++) {
+            model.combinedTargetList.sharedWithMe.push(response[i].data.sharedWithMe[j]);
+            if (response[i].data.sharedWithMe[j].archived) {
               model.combinedTargetList.sharedArchivedCount++;
             } else {
               model.combinedTargetList.sharedNotArchivedCount++;

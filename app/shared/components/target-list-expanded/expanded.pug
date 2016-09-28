@@ -45,7 +45,7 @@ div.expanded-target-lists
         div(row).target-list-detail-container
           .loader-wrap.inline(ng-class="{'active': expanded.loaderService.model.loadingFilters}")
             loader
-          div(ng-show="!expanded.loaderService.model.loadingFilters && !expanded.userService.model.targetLists.owned.length || expanded.userService.model.targetLists.owned.length === 0").no-opportunites
+          div(ng-show="!expanded.loaderService.model.loadingFilters && !expanded.userService.model.targetLists.owned.length || expanded.userService.model.targetLists.owned.length === 0 || !expanded.loaderService.model.loadingFilters  && !expanded.userService.model.targetLists.ownedNotArchived").no-opportunites
             h4 No Opportunities have been added yet
             p Try Searching for <span>Opportunities</span> and add them to your list
           ul
