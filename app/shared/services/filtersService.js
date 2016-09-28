@@ -90,7 +90,6 @@ module.exports = /*  @ngInject */
         account: [],
         subaccount: [],
         accountTypes: '',
-        // brand: [],
         masterSKU: [],
         cbbdChain: [],
         cbbdContact: [],
