@@ -136,7 +136,6 @@ function ExpandedTargetListController($state, $scope, $filter, $mdDialog, $q, us
       angular.forEach(selectedItems, function(item, key) {
         if (item.archived) {
           userService.model.targetLists.ownedNotArchived--;
-          console.log(userService.model.targetLists.ownedNotArchived + ' new');
         }
         userService.model.targetLists.owned.splice(userService.model.targetLists.owned.indexOf(item), 1);
       });
