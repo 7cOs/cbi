@@ -15,17 +15,24 @@ div.modal.add-opportunity
         input(ng-model="nb.newOpportunity.properties.distributionType.description" aria-label="Opportunity Description" placeholder="Input type" name="otherOpportunityInput").short
     div(ng-show="nb.addOpportunityForm.$invalid && nb.addOpportunityForm.$submitted")
       p.error-message.accent.select-opportunity-error(ng-show="nb.addOpportunityForm.opportunityType.$error.required") <img src="./assets/img/icons/error.svg">Please select an Opportunity Type.
+
     div.modal-input.clearfix
-      label Recommended Brand or Package/ SKU
-      .inline-search-radio
+      label(ng-if="nb.newOpportunity.properties.distributionType.type === 'new'") Recommended Package/ SKU
+      label(ng-if="nb.newOpportunity.properties.distributionType.type === 'other'") Recommended Brand or Package/ SKU
+      .inline-search-radio(layout="row")
         md-radio-group(ng-model="nb.newOpportunity.properties.product.type" required)
           md-radio-button.md-primary(value="sku" aria-label="Search for brand or package/SKU") &nbsp;
-        inline-search(type="product" variety="sku" placeholder="Type brand or package name, or master SKU" chosen-result="nb.newOpportunity.properties.product.text")
+
+        inline-search(ng-if="nb.newOpportunity.properties.distributionType.type === 'new'" type="product" variety="non-brand" placeholder="Type package name, or master SKU" chosen-result="nb.newOpportunity.properties.product.text")
+
+        inline-search.all-product-search(ng-if="nb.newOpportunity.properties.distributionType.type === 'other'" type="product" placeholder="Type brand, package name, or master SKU" chosen-result="nb.newOpportunity.properties.product.text")
+
         md-radio-group(ng-model="nb.newOpportunity.properties.product.type" required)
-          md-radio-button.md-primary(value="mixed" ng-if="nb.newOpportunity.properties.distributionType.type === 'other'" aria-label="Mixed Brands") Mixed Brands
+          md-radio-button.mixed-brands.md-primary(value="mixed" ng-if="nb.newOpportunity.properties.distributionType.type === 'other'" aria-label="Mixed Brands") Mixed Brands
         div(ng-show="nb.addOpportunityForm.$invalid && nb.addOpportunityForm.$submitted")
           p.error-message.accent(ng-show="nb.addOpportunityForm.recommendedBrand.$error.required") <img src="./assets/img/icons/error.svg">Please enter a Recommended Brand or Select Mixed Brands.
-    div.modal-input
+
+    div.modal-input.rationale
       label Rationale
       .dropdown-filter
         .dropdown
