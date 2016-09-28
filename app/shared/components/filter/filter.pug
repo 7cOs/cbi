@@ -26,8 +26,8 @@
         md-radio-button(ng-repeat="p in filter.filtersService.model.premises | filter: '!All'"  class="md-primary" ng-value="p.value" aria-label="{{p.name}}" ng-click="filter.chipsService.addChip(p.name, 'premiseType', true, false); filter.resetTradeChannels()") {{::p.name}}
     div.opportunityStatus(column='4')
       label Opportunity Status
-      md-checkbox(ng-model="filter.filtersService.model.opportunityStatusOpen" aria-label="Open" ng-change="filter.applyFilterArr(filter.filtersService.model.selected.opportunityStatus, 'Open', 'opportunityStatus')") Open
-      md-checkbox(ng-model="filter.filtersService.model.opportunityStatusTargeted" aria-label="Targeted" ng-change="filter.applyFilterArr(filter.filtersService.model.selected.opportunityStatus, 'Targeted', 'opportunityStatus')" ng-if="!filter.opportunityStatusSwitch()") Targeted
+      md-checkbox(ng-model="filter.filtersService.model.opportunityStatusOpen" aria-label="Open" ng-change="filter.applyFilterArr(filter.filtersService.model.selected.opportunityStatus, 'Open', 'opportunityStatus')" ng-if="!filter.opportunityStatusSwitch()") Open
+      md-checkbox(ng-model="filter.filtersService.model.opportunityStatusTargeted" aria-label="Targeted" ng-change="filter.applyFilterArr(filter.filtersService.model.selected.opportunityStatus, 'Targeted', 'opportunityStatus')") Targeted
       md-checkbox(ng-model="filter.filtersService.model.opportunityStatusClosed" aria-label="Closed" ng-change="filter.applyFilterArr(filter.filtersService.model.selected.opportunityStatus, 'Closed', 'opportunityStatus')" ng-if="filter.opportunityStatusSwitch()") Closed
   div(row)
     div(column='3')
