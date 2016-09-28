@@ -72,6 +72,7 @@ module.exports = /*  @ngInject */
         .catch(updateTargetListFail);
 
       function updateTargetListSuccess(response) {
+        console.log('[targetListService.updateTargetList.response]', response);
         targetListPromise.resolve(response.data);
       }
 
@@ -367,13 +368,13 @@ module.exports = /*  @ngInject */
     function deleteTargetListShares(targetListId, id) {
       var targetListPromise = $q.defer(),
           url = apiHelperService.request('/api/targetLists/' + targetListId + '/shares'),
-          payload = [
-            Number(id)
-          ];
+          payload = [id];
 
-      console.log(payload);
-
-      $http.delete(url, payload)
+      $http({ url: url,
+        method: 'DELETE',
+        data: payload,
+        headers: {"Content-Type": "application/json;charset=utf-8"}
+      })
         .then(deleteTargetListSharesSuccess)
         .catch(deleteTargetListSharesFail);
 
@@ -383,6 +384,7 @@ module.exports = /*  @ngInject */
       }
 
       function deleteTargetListSharesFail(error) {
+        console.warn('[targetListService.deleteTargetListShares.error]', error);
         targetListPromise.reject(error);
       }
 

@@ -52,7 +52,8 @@ module.exports = /*  @ngInject */
     function addCollaborators() {
       targetListService.addTargetListShares(targetListService.model.currentList.id, vm.targetListShares).then(function(response) {
         // push to target list collaborator array
-        var collaboratorList = $filter('filter')(userService.model.targetLists.owned, {id: targetListService.model.currentList.id});
+        // var collaboratorList = $filter('filter')(userService.model.targetListArray.owned, {id: targetListService.model.currentList.id});
+        var collaboratorList = targetListService.model.currentList;
         if (collaboratorList.length) {
           collaboratorList[0].collaborators = targetListService.model.currentList.collaborators = response.data;
         }
@@ -124,7 +125,7 @@ module.exports = /*  @ngInject */
 
         // change permission in userService.model.targetLists.owned so reflected in ui
         var keepGoing = true,
-            list = $filter('filter')(userService.model.targetLists.owned, {id: targetListService.model.currentList.id});
+            list = $filter('filter')(userService.model.targetListArray.owned, {id: targetListService.model.currentList.id});
         angular.forEach(list.collaborators, function(item, key) {
           if (keepGoing) {
             if (item.user.id === collaboratorId) {
@@ -146,7 +147,7 @@ module.exports = /*  @ngInject */
       result.permissionLevel = vm.permissionLevel;
       targetListService.addTargetListShares(targetListService.model.currentList.id, result).then(function(response) {
         // push to target list collaborator array
-        var collaboratorList = $filter('filter')(userService.model.targetLists.owned, {id: targetListService.model.currentList.id});
+        var collaboratorList = $filter('filter')(userService.model.targetListArray.owned, {id: targetListService.model.currentList.id});
         collaboratorList[0].collaborators = targetListService.model.currentList.collaborators = response.data;
 
         // clear name from inline search
@@ -211,20 +212,21 @@ module.exports = /*  @ngInject */
 
         // remove from user model and UI - target list service
         angular.forEach(targetListService.model.currentList.collaborators, function(item, key) {
-          if (item.user.id === collaboratorId) targetListService.model.currentList.collaborators.splice(targetListService.model.currentList.collaborators.indexOf(item), 1);
+          if (item.user.employeeId === collaboratorId) targetListService.model.currentList.collaborators.splice(targetListService.model.currentList.collaborators.indexOf(item), 1);
         });
 
         // remove from user model and UI - user service
+        /* Doesnt look like we're using this anymore
         var keepGoing = true,
-            list = $filter('filter')(userService.model.targetLists.owned, {id: targetListService.model.currentList.id});
+            list = $filter('filter')(userService.model.targetListArray.owned, {id: targetListService.model.currentList.id});
         angular.forEach(list.collaborators, function(item, key) {
           if (keepGoing) {
-            if (item.user.id === collaboratorId) {
+            if (item.user.employeeId === collaboratorId) {
               list.collaborators.splice(list.collaborators.indexOf(item), 1);
               keepGoing = false;
             }
           }
-        });
+        }); */
 
       });
     }
@@ -241,6 +243,7 @@ module.exports = /*  @ngInject */
       };
 
       targetListService.updateTargetList(targetListService.model.currentList.id, payload).then(function(response) {
+        console.log('[targetListDetailController.updateList.response', response);
         targetListService.model.currentList = response;
 
         if (vm.pendingShares.length > 0) {
