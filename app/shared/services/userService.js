@@ -486,40 +486,24 @@ module.exports = /*  @ngInject */
 
       function getTargetListsSuccess(response) {
 
-        // Owned
-        for (var n = 0; n < response[0].data.owned.length; n++) {
-          model.combinedTargetList.owned.push(response[0].data.owned[n]);
-          if (response[0].data.owned[n].archived) {
-            model.combinedTargetList.ownedArchived++;
-          } else {
-            model.combinedTargetList.ownedNotArchived++;
-          }
-        }
+        for (var value of response) {
 
-        for (n = 0; n < response[1].data.owned.length; n++) {
-          model.combinedTargetList.owned.push(response[1].data.owned[n]);
-          if (response[1].data.owned[n].archived) {
-            model.combinedTargetList.ownedArchived++;
-          } else {
-            model.combinedTargetList.ownedNotArchived++;
+          for (var i = 0; i < value.data.owned.length; i++) {
+            model.combinedTargetList.owned.push(value.data.owned[i]);
+            if (value.data.owned[i].archived) {
+              model.combinedTargetList.ownedArchived++;
+            } else {
+              model.combinedTargetList.ownedNotArchived++;
+            }
           }
-        }
 
-        for (n = 0; n < response[0].data.sharedWithMe.length; n++) {
-          model.combinedTargetList.sharedWithMe.push(response[0].data.sharedWithMe[n]);
-          if (response[0].data.sharedWithMe[n].archived) {
-            model.combinedTargetList.sharedArchivedCount++;
-          } else {
-            model.combinedTargetList.sharedNotArchivedCount++;
-          }
-        }
-
-        for (n = 0; n < response[1].data.sharedWithMe.length; n++) {
-          model.combinedTargetList.sharedWithMe.push(response[1].data.sharedWithMe[n]);
-          if (response[1].data.sharedWithMe[n].archived) {
-            model.combinedTargetList.sharedArchivedCount++;
-          } else {
-            model.combinedTargetList.sharedNotArchivedCount++;
+          for (i = 0; i < value.data.sharedWithMe.length; i++) {
+            model.combinedTargetList.sharedWithMe.push(value.data.sharedWithMe[i]);
+            if (value.data.sharedWithMe[i].archived) {
+              model.combinedTargetList.sharedArchivedCount++;
+            } else {
+              model.combinedTargetList.sharedNotArchivedCount++;
+            }
           }
         }
 
