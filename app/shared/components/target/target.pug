@@ -24,7 +24,8 @@ div.target-lists
                 div.target-list-row-two
                   p.accent(ng-if="list.creator") {{list.creator}}
                   p.accent.collaborators {{list.members.length}} collaborators
-                  p.accent {{list.createdAt | timeAgo: 'relative'}}
+                  p(column="2" am-time-ago="(list.dateOpportunitiesUpdated ? list.dateOpportunitiesUpdated : list.createdAt)").accent
+
                 div
                   md-progress-linear(md-mode="determinate" ng-value="target.ratio(list.opportunitiesSummary.closedOpportunitiesCount, list.opportunitiesSummary.opportunitiesCount)")
         div(row)

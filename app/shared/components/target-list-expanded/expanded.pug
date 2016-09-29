@@ -61,7 +61,7 @@ div.expanded-target-lists
                     ul.dropdown-menu
                       li.member.creator {{expanded.userService.model.currentUser.firstName}} {{userService.model.currentUser.lastName}}
                       li.member(ng-repeat="collaborator in list.collaborators") {{collaborator.user.firstName}} {{collaborator.user.lastName}}
-                  h5(column="2").accent {{(list.dateOpportunitiesUpdated ? list.dateOpportunitiesUpdated : list.createdAt) | timeAgo : 'relative'}}
+                  h5(column="2" am-time-ago="(list.dateOpportunitiesUpdated ? list.dateOpportunitiesUpdated : list.createdAt | amUtc | amLocal)").accent
                   h4(column="1").closed {{list.opportunitiesSummary.closedOpportunitiesCount | number}}
                   h4(column="1") {{list.opportunitiesSummary.opportunitiesCount | number}}
                   h4(column="2") {{list.opportunitiesSummary.totalClosedDepletions | number}}
@@ -112,7 +112,7 @@ div.expanded-target-lists
                       ul.dropdown-menu
                         li.member.creator(ng-repeat="user in list.collaborators | filter: {permissionLevel: 'Author'}") {{user.user.firstName}} {{user.user.lastName}}
                         li.member(ng-repeat="collaborator in list.collaborators") {{collaborator.user.firstName}} {{collaborator.user.lastName}}
-                  h5(column="2").accent.gray {{list.lastUpdated | timeAgo : 'relative'}}
+                  h5(column="2" am-time-ago="(list.dateOpportunitiesUpdated ? list.dateOpportunitiesUpdated : list.createdAt | amUtc | amLocal)").accent.gray
                   h4(column="1").closed {{list.opportunitiesSummary.closedOpportunitiesCount | number}}
                   h4(column="1") {{list.opportunities | number}}
                   h4(column="2") {{list.opportunitiesSummary.totalClosedDepletions | number}}
@@ -166,7 +166,7 @@ div.expanded-target-lists
                       ul.dropdown-menu
                         li.member.creator(ng-repeat="user in list.collaborators | filter: {permissionLevel: 'Author'}") {{user.user.firstName}} {{user.user.lastName}}
                         li.member(ng-repeat="collaborator in list.collaborators") {{collaborator.user.firstName}} {{collaborator.user.lastName}}
-                  h5(column="2").accent.gray {{list.dateUpdated | timeAgo : 'relative'}}
+                  h5(column="2" am-time-ago="(list.dateOpportunitiesUpdated ? list.dateOpportunitiesUpdated : list.createdAt | amUtc | amLocal)").accent
                   h4(column="1").closed {{list.closedOpportunities | number}}
                   h4(column="1") {{list.opportunities | number}}
                   h4(column="2") {{273000 | number}}

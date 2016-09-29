@@ -36,7 +36,6 @@ module.exports = /*  @ngInject */
       } else if (type === 'relative' || type === 'relativeTime') {
         var daysAgo = (currentDate - d) / (1000 * 60 * 60 * 24);
 
-        console.log(daysAgo);
         // if (!daysAgo) return 'Just now';
 
         if (daysAgo > 7) { // 7+ days
