@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports = /*  @ngInject */
-  function styleGuideController($rootScope, $scope, $timeout, $state, $mdDialog, notesService, moment) {
+  function styleGuideController($rootScope, $scope, $timeout, $state, $mdDialog, notesService) {
 
     // ****************
     // CONTROLLER SETUP
@@ -27,7 +27,6 @@ module.exports = /*  @ngInject */
       'Result five',
       'Result six'
     ];
-    vm.timeTest = moment().format('MMMM Do YYYY, h:mm:ss a');
 
     // Expose public methods
     vm.showModal = showModal;

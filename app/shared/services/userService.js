@@ -513,7 +513,7 @@ module.exports = /*  @ngInject */
       function getTargetListsFail(error) {
         targetListPromise.reject(error);
       }
-      console.log(model.combinedTargetList);
+
       return targetListPromise.promise;
     }
 
