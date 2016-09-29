@@ -231,8 +231,6 @@ function ExpandedTargetListController($state, $scope, $filter, $mdDialog, $q, us
   // ***************
 
   function init() {
-    console.log('tl init');
-
     vm.selectedTab = $state.params.obj.index;
 
     targetListService.model.currentList = {};
