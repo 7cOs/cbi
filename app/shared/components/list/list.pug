@@ -57,13 +57,6 @@ v-accordion.styled-list(multiple="" id="opportunities" control="list.accordion" 
     h4 No Opportunities have been added yet
     p Try Searching for <span>Opportunities</span> and add them to your list
   v-pane.list-item(row ng-repeat="opportunity in list.opportunitiesService.model.opportunitiesDisplay[list.opportunitiesService.model.paging.current-1] | orderBy:list.sortProperty:list.reverse" expanded='opportunity.isExpanded')
-    .action-overlay(ng-class="{'active': opportunity.toggled, 'fail': opportunity.failState}")
-      div.checkbox-wrapper
-          md-checkbox(aria-label="Action Item Select" ng-checked="true")
-      div.overlay-wrapper
-        p(ng-if="!opportunity.failState") Successfully sent to 3 people
-        p(ng-if="opportunity.failState") Whatever you just tried didn't work
-      div(ng-click="list.showFlyout(opportunity)").hide-wrapper.hide-icon-wrapper.hide-row
     .shadow-wrap.bottom
       div.checkbox-wrapper(ng-click="list.selectAllOpportunities(opportunity, list.selected)")
         md-checkbox(aria-label="Select Item" ng-checked="opportunity.selectedOpportunities === opportunity.groupedOpportunities.length")
@@ -155,6 +148,15 @@ v-accordion.styled-list(multiple="" id="opportunities" control="list.accordion" 
                           p(ng-click="list.openShareModal(product.id)") Send To
                         md-menu-item
                           p(ng-click="list.openDismissModal(product.id)") Dismiss
+
+              .action-overlay(ng-class="{'active': list.opportunityShared && product.id === list.currentOpportunityId}")
+                div.checkbox-wrapper
+                    md-checkbox(aria-label="Action Item Select" ng-checked="true")
+                div.overlay-wrapper
+                  p(ng-if="list.opportunityShared") Successfully sent to {{list.sharedCollaborators.length}} {{list.sharedCollaborators.length === 1 ? 'person' : 'people'}}
+                  p(ng-if="!list.opportunityShared") Whatever you just tried didn't work
+                div(ng-click="list.currentOpportunityId = ''").hide-wrapper.hide-icon-wrapper.hide-row
+
             .shadow-wrap.top
               v-pane-content
                 div(row)

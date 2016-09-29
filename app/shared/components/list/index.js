@@ -28,6 +28,7 @@ function ListController($scope, $state, $q, $location, $anchorScroll, $mdDialog,
   vm.storeChevron = true;
   vm.showSubMenu = false;
   vm.disabledMessage = '';
+  vm.opportunityShared = false;
 
   // Expose public methods
   vm.addToSharedCollaborators = addToSharedCollaborators;
@@ -128,6 +129,7 @@ function ListController($scope, $state, $q, $location, $anchorScroll, $mdDialog,
   function openShareModal(oId, ev) {
     vm.currentOpportunityId = oId;
     vm.sharedCollaborators = [];
+    vm.opportunityShared = false;
 
     var parentEl = angular.element(document.body);
     $mdDialog.show({
@@ -142,6 +144,7 @@ function ListController($scope, $state, $q, $location, $anchorScroll, $mdDialog,
   function shareOpportunity() {
     for (var i = 0; i < vm.sharedCollaborators.length; i++) {
       userService.sendOpportunity(vm.sharedCollaborators[i].employeeId, vm.currentOpportunityId).then(function(data) {
+        vm.opportunityShared = true;
         console.log('shared');
       });
     }
