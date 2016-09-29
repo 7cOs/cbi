@@ -179,7 +179,7 @@ module.exports = /*  @ngInject */
 
     function resetModel() {
       for (var prop in service.model) {
-        if (service.model[prop].constructor !== Array && service.model[prop] === true) {
+        if (service.model[prop] && service.model[prop].constructor !== Array && service.model[prop] === true) {
           service.model[prop] = false;
         }
       }
