@@ -85,7 +85,7 @@ section.landing-page
                   md-option(ng-repeat="type in l.filtersService.model.opportunitiesType" aria-label="{{type.name}}" value="{{type.name}}") {{::type.name}}
           .filter-item
             label Brand / Master SKU
-            inline-search(type="product" variety="sku" placeholder="By brand or SKU" chosen-result="l.filtersService.model.brandSearchText" callback="l.applyFilterArr(l.filtersService.model.selected.masterSKU, result, 'brand')")
+            inline-search(type="product" variety="sku" placeholder="By brand or SKU" chosen-result="l.filtersService.model.brandSearchText" callback="l.applyFilterArr(l.filtersService.model.selected.masterSKU, result, 'masterSKU')")
           .filter-item
             label Retailer
             inline-search(type="store" placeholder="Store, account, or subaccount name" chosen-result="l.filtersService.model.storeSearchText" callback="l.applyFilterArr(l.filtersService.model.selected.store, result, 'store')" show-address="true")

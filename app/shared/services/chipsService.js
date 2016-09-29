@@ -157,6 +157,7 @@ module.exports = /*  @ngInject */
     function removeFromFilterService(chip) {
       if (chip.search || chip.type === 'opportunitiesTypes') {
         var arr = filtersService.model.selected[chip.type];
+        // console.log(filtersService.model.selected[chip.type]);
         var i = arr.length;
 
         while (i--) {
@@ -254,10 +255,10 @@ module.exports = /*  @ngInject */
         } else if (filter === 'distributor') {
           addAutocompleteChip($filter('titlecase')(result.name), filter);
           model.push(result.id);
-        } else if (filter === 'brand' && result.id === null) {
+        } else if (filter === 'masterSKU' && result.id === null) {
           addAutocompleteChip($filter('titlecase')(result.brand), filter);
           model.push(result.brandCode);
-        } else if (filter === 'brand' && result.id !== null) {
+        } else if (filter === 'masterSKU' && result.id !== null) {
           addAutocompleteChip($filter('titlecase')(result.name), filter);
           model.push(result.id);
         } else if (filter === 'segmentation') {

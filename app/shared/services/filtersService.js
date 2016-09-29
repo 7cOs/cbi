@@ -5,7 +5,8 @@ module.exports = /*  @ngInject */
     var model = {
       account: [],
       subaccount: [],
-      brand: '',
+      // brand: '',
+      masterSKU: '',
       cbbdContact: '',
       distributor: '',
       expanded: false,
