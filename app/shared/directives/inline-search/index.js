@@ -118,13 +118,19 @@ module.exports =
             vm.input = $filter('titlecase')(result.firstName) + ' ' + $filter('titlecase')(result.lastName);
             break;
           case 'chain':
+            vm.input = $filter('titlecase')(result.name);
+            break;
           case 'distributor':
+            vm.input = $filter('titlecase')(result.name);
+            break;
           case 'product':
+            vm.input = $filter('titlecase')(result.name);
+            break;
           case 'location':
-            vm.input = result.name;
+            vm.input = $filter('titlecase')(result.name);
             break;
           case 'store':
-            vm.input = result.account;
+            vm.input = $filter('titlecase')(result.store_name);
             break;
           default:
             vm.input = result;
