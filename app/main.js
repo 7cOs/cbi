@@ -14,6 +14,7 @@ angular.module('cf', [
   require('ng-file-upload'),
   require('textangular'),
   require('ng-csv'),
+  require('angular-moment'),
   require('angulartics'),
   require('angulartics-google-analytics'),
   require('./shared').name,
