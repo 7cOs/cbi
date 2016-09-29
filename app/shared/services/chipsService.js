@@ -185,7 +185,6 @@ module.exports = /*  @ngInject */
         filtersService.model.selected[chip.type] = false;
       }
       filtersService.disableFilters(false, false, true);
-      // disableFilters(filtersAppliedBool, filtersDefaultBool, disableResetBool)
     }
 
     /**
@@ -303,7 +302,6 @@ module.exports = /*  @ngInject */
           }
         });
         filtersService.model.selected[filter] = results;
-        // filtersService.model.selected.opportunityType = [];
       }
     }
 
