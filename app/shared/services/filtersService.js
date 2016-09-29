@@ -9,8 +9,10 @@ module.exports = /*  @ngInject */
       cbbdContact: '',
       distributor: '',
       expanded: false,
+      disableReset: false,
       filtersApplied: true,
       filtersDefault: true,
+      disableSaveFilter: false,
       impact: '',
       opportunityType: ['All Types'],
       opportunitiesType: [
@@ -140,6 +142,7 @@ module.exports = /*  @ngInject */
 
     var service = {
       model: model,
+      disableFilters: disableFilters,
       getAppliedFilters: getAppliedFilters,
       resetFilters: resetFilters
     };
@@ -158,6 +161,13 @@ module.exports = /*  @ngInject */
       }
 
       return filterPayload;
+    }
+
+    function disableFilters(filtersAppliedBool, filtersDefaultBool, disableResetBool, disableSaveFilterBool) {
+      service.model.filtersApplied = filtersAppliedBool;
+      service.model.filtersDefault = filtersDefaultBool;
+      service.model.disableReset = disableResetBool;
+      service.model.disableSaveFilter = disableSaveFilterBool;
     }
 
     function resetFilters() {

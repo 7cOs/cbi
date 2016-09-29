@@ -68,8 +68,7 @@ module.exports = /*  @ngInject */
           tradeChannel: tradeChannel || false
         });
 
-        filtersService.model.filtersApplied = false;
-        filtersService.model.filtersDefault = false;
+        filtersService.disableFilters(false, false, true);
 
         // Empty Input
         if (filter) filtersService.model[filter] = '';
@@ -95,8 +94,7 @@ module.exports = /*  @ngInject */
           applied: false,
           removable: removable
         });
-        filtersService.model.filtersApplied = false;
-        filtersService.model.filtersDefault = false;
+        filtersService.disableFilters(false, false, true);
       }
     }
 
@@ -124,9 +122,8 @@ module.exports = /*  @ngInject */
         for (var i = 0; i < service.model.length; i++) {
           service.model[i].applied = true;
         }
-
-        filtersService.model.filtersApplied = true;
         opportunitiesService.model.filterApplied = true;
+        filtersService.disableFilters(true, false, true, true);
       }
     }
 
@@ -146,8 +143,7 @@ module.exports = /*  @ngInject */
         }
       }
 
-      filtersService.model.filtersApplied = false;
-      filtersService.model.filtersDefault = false;
+      filtersService.disableFilters(false, false, true);
     }
 
     /**
@@ -188,7 +184,8 @@ module.exports = /*  @ngInject */
       } else if (typeof chip.type === 'boolean') {
         filtersService.model.selected[chip.type] = false;
       }
-      filtersService.model.filtersApplied = false;
+      filtersService.disableFilters(false, false, true);
+      // disableFilters(filtersAppliedBool, filtersDefaultBool, disableResetBool)
     }
 
     /**
