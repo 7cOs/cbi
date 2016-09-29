@@ -476,12 +476,12 @@ module.exports = /*  @ngInject */
           urlArchive = apiHelperService.request('/api/users/' + id + '/targetLists?archived=true', p),
           url = apiHelperService.request('/api/users/' + id + '/targetLists/', p);
 
-      if (!service.model.targetLists) {
+      if (service.model.combinedTargetList.owned.length <= 1) {
         $q.all([$http.get(urlArchive), $http.get(url)])
           .then(getTargetListsSuccess)
           .catch(getTargetListsFail);
       } else {
-        targetListPromise.resolve(service.model.targetLists);
+        targetListPromise.resolve(service.model.combinedTargetList);
       }
 
       function getTargetListsSuccess(response) {
