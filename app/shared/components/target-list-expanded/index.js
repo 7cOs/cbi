@@ -270,7 +270,7 @@ function ExpandedTargetListController($state, $scope, $filter, $mdDialog, $q, us
           combinedTargetList.sharedWithMe.push(data[i].sharedWithMe[j]);
 
           if (data[i].sharedWithMe[j].archived) {
-            combinedTargetList.sharedNotArchivedCount++;
+            combinedTargetList.sharedArchivedCount++;
           } else {
             combinedTargetList.sharedNotArchivedCount++;
           }

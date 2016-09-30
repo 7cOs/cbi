@@ -470,8 +470,6 @@ module.exports = /*  @ngInject */
         url = apiHelperService.request('/api/users/' + id + '/targetLists' + p);
       }
 
-      console.log(url);
-
       if (!service.model.targetLists) {
         $http.get(url)
           .then(getTargetListsSuccess)
