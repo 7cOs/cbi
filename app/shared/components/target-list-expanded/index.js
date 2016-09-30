@@ -244,7 +244,6 @@ function ExpandedTargetListController($state, $scope, $filter, $mdDialog, $q, us
 
     $q.all(promiseArray).then(function(data) {
       loaderService.closeLoader();
-      console.log(data);
 
       var combinedTargetList = {
         'owned': [],
@@ -278,7 +277,6 @@ function ExpandedTargetListController($state, $scope, $filter, $mdDialog, $q, us
         };
       }
 
-      console.log(combinedTargetList);
       userService.model.targetLists = combinedTargetList;
     });
   }
