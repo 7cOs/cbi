@@ -38,6 +38,7 @@ module.exports = /*  @ngInject */
      * @memberOf cf.common.services
      */
     function getOpportunities(opportunityID) {
+      model.noOpportunitiesFound = false;
       if (!opportunityID) {
         // get applied filters
         var filterPayload = filtersService.getAppliedFilters('opportunities');
