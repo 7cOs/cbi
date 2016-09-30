@@ -34,7 +34,7 @@ v-accordion.styled-list(multiple="" id="opportunities" control="list.accordion" 
     div.more-wrapper(ng-if="!list.pageName()")
     div.checkbox-sibling(column='12')
       div(column='3')
-        label(ng-click="list.sortBy('opportunity.name')" ng-class="{  'header-bold' : list.sortProperty === 'opportunity.name'}")
+        label(ng-click="list.sortBy('opportunity.store.name')" ng-class="{ 'header-bold' : list.sortProperty === 'opportunity.store.name'}")
           | Store / Number
           span(ng-class="{ 'chevron-down-small' : list.storeChevron, 'chevron-up-small' : !list.storeChevron}").chevron-down-small
       div(column='4')
@@ -44,7 +44,7 @@ v-accordion.styled-list(multiple="" id="opportunities" control="list.accordion" 
           | Opportunities
           span(ng-class="{ 'chevron-down-small' : !list.opportunitiesChevron, 'chevron-up-small' : list.opportunitiesChevron}").chevron-down-small
       div(column='1')
-        label(ng-click="list.sortBy('depletionsCYTD')" ng-class="{ 'header-bold' : list.sortProperty === 'depletionsCYTD'}")
+        label(ng-click="list.sortBy('depletionsCurrentYearToDate')" ng-class="{ 'header-bold' : list.sortProperty === 'depletionsCurrentYearToDate'}")
           | Depletions CYTD
           span(ng-class="{ 'chevron-down-small' : !list.depletionsChevron, 'chevron-up-small' : list.depletionsChevron}").chevron-down-small
       div(column='1')

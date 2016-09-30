@@ -240,9 +240,11 @@ list {
     top: 0;
   }
 
-  &.header-disabled label {
+  &.header-disabled label,
+  &.header-disabled label.header-bold {
     pointer-events: none;
     color: $gray-8;
+    font-weight: $semibold;
   }
 }
 
