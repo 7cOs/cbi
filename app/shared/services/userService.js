@@ -7,8 +7,7 @@ module.exports = /*  @ngInject */
       currentUser: {},
       summary: [],
       depletion: [],
-      distribution: [],
-      archived: []
+      distribution: []
     };
     var service = {
       model: model,
@@ -269,7 +268,7 @@ module.exports = /*  @ngInject */
      */
     function saveOpportunityFilter(filters) {
       var opportunityFilterPromise = $q.defer(),
-          url = apiHelperService.request('/api/users/' + service.model.currentUser.employeeID + '/opportunityFilters/'),
+          url = apiHelperService.request('/api/users/' + service.model.currentUser.personID + '/opportunityFilters/'),
           payload = {
             name: filtersService.model.newServiceName,
             filterString: apiHelperService.formatQueryString(filters)
@@ -468,21 +467,20 @@ module.exports = /*  @ngInject */
           url = apiHelperService.request('/api/users/' + id + '/targetLists/', p);
 
       if (p) {
-        url += p;
+        url = apiHelperService.request('/api/users/' + id + '/targetLists' + p);
       }
 
       console.log(url);
 
-      if (service.model.combinedTargetList.owned.length <= 1) {
+      if (!service.model.targetLists) {
         $http.get(url)
           .then(getTargetListsSuccess)
           .catch(getTargetListsFail);
       } else {
-        targetListPromise.resolve(service.model.combinedTargetList);
+        targetListPromise.resolve(service.model.targetLists);
       }
 
       function getTargetListsSuccess(response) {
-
         var sharedArchivedCount = 0,
             sharedNotArchivedCount = 0,
             ownedNotArchived = 0,
@@ -503,13 +501,12 @@ module.exports = /*  @ngInject */
         response.data.sharedArchivedCount = sharedArchivedCount;
         response.data.sharedNotArchivedCount = sharedNotArchivedCount;
 
-        targetListPromise.resolve(model.combinedTargetList);
+        targetListPromise.resolve(response.data);
       }
 
       function getTargetListsFail(error) {
         targetListPromise.reject(error);
       }
-
       return targetListPromise.promise;
     }
 
@@ -522,7 +519,7 @@ module.exports = /*  @ngInject */
      */
     function addTargetList(p) {
       var targetListPromise = $q.defer(),
-          url = apiHelperService.request('/api/users/' + model.currentUser.employeeID + '/targetLists/'),
+          url = apiHelperService.request('/api/users/' + model.currentUser.personID + '/targetLists/'),
           payload = {
             name: p.name,
             description: p.description,
