@@ -214,9 +214,9 @@ function ListController($scope, $state, $q, $location, $anchorScroll, $mdDialog,
     vm.reverse = (vm.sortProperty === property) ? !vm.reverse : false;
     vm.sortProperty = property;
 
-    vm.storeChevron = (property === 'opportunity.name') ? !vm.storeChevron : vm.storeChevron;
+    vm.storeChevron = (property === 'opportunity.store.name') ? !vm.storeChevron : vm.storeChevron;
     vm.opportunitiesChevron = (property === 'groupedOpportunities.length') ? !vm.opportunitiesChevron : vm.opportunitiesChevron;
-    vm.depletionsChevron = (property === 'depletionsCYTD') ? !vm.depletionsChevron : vm.depletionsChevron;
+    vm.depletionsChevron = (property === 'depletionsCurrentYearToDate') ? !vm.depletionsChevron : vm.depletionsChevron;
     vm.segmentationChevron = (property === 'segmentation') ? !vm.segmentationChevron : vm.storeChevron;
   }
 
