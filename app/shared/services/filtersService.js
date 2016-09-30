@@ -5,12 +5,14 @@ module.exports = /*  @ngInject */
     var model = {
       account: [],
       subaccount: [],
-      brand: '',
+      masterSKU: '',
       cbbdContact: '',
       distributor: '',
       expanded: false,
+      disableReset: false,
       filtersApplied: true,
       filtersDefault: true,
+      disableSaveFilter: false,
       impact: '',
       opportunityType: ['All Types'],
       opportunitiesType: [
@@ -84,6 +86,7 @@ module.exports = /*  @ngInject */
         account: [],
         subaccount: [],
         accountTypes: '',
+        brand: [],
         masterSKU: [],
         cbbdChain: [],
         cbbdContact: [],
@@ -94,7 +97,7 @@ module.exports = /*  @ngInject */
         opportunityStatus: [],
         opportunityType: ['All Types'],
         premiseType: 'off',
-        productType: [],
+        productType: ['authorized'],
         store: [],
         retailer: 'Chain',
         storeSearchText: '',
@@ -140,6 +143,7 @@ module.exports = /*  @ngInject */
 
     var service = {
       model: model,
+      disableFilters: disableFilters,
       getAppliedFilters: getAppliedFilters,
       resetFilters: resetFilters
     };
@@ -160,6 +164,13 @@ module.exports = /*  @ngInject */
       return filterPayload;
     }
 
+    function disableFilters(filtersAppliedBool, filtersDefaultBool, disableResetBool, disableSaveFilterBool) {
+      service.model.filtersApplied = filtersAppliedBool;
+      service.model.filtersDefault = filtersDefaultBool;
+      service.model.disableReset = disableResetBool;
+      service.model.disableSaveFilter = disableSaveFilterBool;
+    }
+
     function resetFilters() {
       service.model.selected = angular.copy(service.model.selectedTemplate);
       resetModel(); // reset view model bindings
@@ -169,7 +180,7 @@ module.exports = /*  @ngInject */
 
     function resetModel() {
       for (var prop in service.model) {
-        if (service.model[prop].constructor !== Array && service.model[prop] === true) {
+        if (service.model[prop] && service.model[prop].constructor !== Array && service.model[prop] === true) {
           service.model[prop] = false;
         }
       }

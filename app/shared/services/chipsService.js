@@ -56,11 +56,13 @@ module.exports = /*  @ngInject */
      * @returns null
      * @memberOf cf.common.services
      */
-    function addAutocompleteChip(chip, filter, tradeChannel) {
+    function addAutocompleteChip(chip, filter, tradeChannel, id) {
       if (chip) {
         // Add to Chip Model
+        if (id && id.length < 5) filter === 'brand';
         service.model.push({
           name: chip,
+          id: id,
           type: filter,
           search: true,
           applied: false,
@@ -68,8 +70,7 @@ module.exports = /*  @ngInject */
           tradeChannel: tradeChannel || false
         });
 
-        filtersService.model.filtersApplied = false;
-        filtersService.model.filtersDefault = false;
+        filtersService.disableFilters(false, false, true);
 
         // Empty Input
         if (filter) filtersService.model[filter] = '';
@@ -95,8 +96,7 @@ module.exports = /*  @ngInject */
           applied: false,
           removable: removable
         });
-        filtersService.model.filtersApplied = false;
-        filtersService.model.filtersDefault = false;
+        filtersService.disableFilters(false, false, true);
       }
     }
 
@@ -124,9 +124,8 @@ module.exports = /*  @ngInject */
         for (var i = 0; i < service.model.length; i++) {
           service.model[i].applied = true;
         }
-
-        filtersService.model.filtersApplied = true;
         opportunitiesService.model.filterApplied = true;
+        filtersService.disableFilters(true, false, true, true);
       }
     }
 
@@ -146,8 +145,7 @@ module.exports = /*  @ngInject */
         }
       }
 
-      filtersService.model.filtersApplied = false;
-      filtersService.model.filtersDefault = false;
+      filtersService.disableFilters(false, false, true);
     }
 
     /**
@@ -173,6 +171,9 @@ module.exports = /*  @ngInject */
             // update model
             filtersService.model['predictedImpact' + chip.name.split(' Impact')[0]] = false;
             break;
+          } else if ((chip.type === 'masterSKU' || chip.type === 'brand') && chip.id === arr[i]) {
+            arr.splice(i, 1);
+            break;
           } else if (arr[i] === chip.name) {
             arr.splice(i, 1);
             // update model
@@ -188,7 +189,7 @@ module.exports = /*  @ngInject */
       } else if (typeof chip.type === 'boolean') {
         filtersService.model.selected[chip.type] = false;
       }
-      filtersService.model.filtersApplied = false;
+      filtersService.disableFilters(false, false, true);
     }
 
     /**
@@ -228,7 +229,8 @@ module.exports = /*  @ngInject */
         } else if (filter === 'productType') {
           model.splice(model.indexOf(result), 1);
           // remove from chip model
-          var pIndex = service.model.map(function(e) { return e.name; }).indexOf(result);
+          var pIndex = service.model.map(function(e) { return e.name; }).indexOf($filter('titlecase')(result));
+          console.log(pIndex);
           service.model.splice(pIndex, 1);
         } else if (filter === 'impact') {
           model.splice(model.indexOf(result), 1);
@@ -258,11 +260,11 @@ module.exports = /*  @ngInject */
         } else if (filter === 'distributor') {
           addAutocompleteChip($filter('titlecase')(result.name), filter);
           model.push(result.id);
-        } else if (filter === 'brand' && result.id === null) {
-          addAutocompleteChip($filter('titlecase')(result.brand), filter);
-          model.push(result.brandCode);
-        } else if (filter === 'brand' && result.id !== null) {
-          addAutocompleteChip($filter('titlecase')(result.name), filter);
+        } else if (filter === 'masterSKU' && result.id === null) {
+          addAutocompleteChip($filter('titlecase')(result.brand), 'brand', null, result.brandCode);
+          filtersService.model.selected.brand.push(result.brandCode);
+        } else if (filter === 'masterSKU' && result.id !== null) {
+          addAutocompleteChip($filter('titlecase')(result.name), filter, null, result.id);
           model.push(result.id);
         } else if (filter === 'segmentation') {
           addAutocompleteChip('Segmentation ' + result, filter);
@@ -306,7 +308,6 @@ module.exports = /*  @ngInject */
           }
         });
         filtersService.model.selected[filter] = results;
-        // filtersService.model.selected.opportunityType = [];
       }
     }
 

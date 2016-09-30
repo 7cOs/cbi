@@ -141,6 +141,8 @@ function FilterController($state, $scope, $mdDialog, $mdSelect, chipsService, fi
       // push new filter to filter dropdown
       userService.model.opportunityFilters.push(data);
 
+      filtersService.disableFilters(true, false, true, false);
+
       // close modal
       closeModal();
     });

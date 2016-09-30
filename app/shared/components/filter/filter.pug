@@ -45,10 +45,10 @@
             md-option(ng-repeat="type in filter.filtersService.model.opportunitiesType" aria-label="{{type.name}}" value="{{type.name}}") {{::type.name}}
     div(column='3' ng-if="filter.filtersService.model.selected.premiseType === 'off'")
       label Brand / Master SKU
-      inline-search(type="product" variety="sku" placeholder="Brand or SKU" chosen-result="filter.filtersService.model.brand" callback="filter.applyFilterArr(filter.filtersService.model.selected.masterSKU, result, 'brand')")
+      inline-search(type="product" variety="sku" placeholder="Brand or SKU" chosen-result="filter.filtersService.model.masterSKU" callback="filter.applyFilterArr(filter.filtersService.model.selected.masterSKU, result, 'masterSKU')")
     div(column='3' ng-if="filter.filtersService.model.selected.premiseType === 'on'")
       label Brand / Package
-      inline-search(type="product" variety="package" placeholder="Brand or Package" chosen-result="filter.filtersService.model.brand" callback="filter.applyFilterArr(filter.filtersService.model.selected.masterSKU, result, 'brand')")
+      inline-search(type="product" variety="package" placeholder="Brand or Package" chosen-result="filter.filtersService.model.masterSKU" callback="filter.applyFilterArr(filter.filtersService.model.selected.masterSKU, result, 'masterSKU')")
     div(column='4')
       label Retailer
       div(row).retailer.dropdown-filter
@@ -77,7 +77,7 @@
       label Product Type
       md-checkbox(ng-model="filter.filtersService.model.productTypeFeatured" aria-label="Product Type Featured" ng-change="filter.applyFilterArr(filter.filtersService.model.selected.productType, 'featured', 'productType')") Featured
       md-checkbox(ng-model="filter.filtersService.model.productTypePriority" aria-label="Product Type Priority Packages" ng-change="filter.applyFilterArr(filter.filtersService.model.selected.productType, 'priority packages', 'productType')") Priority Packages
-      md-checkbox(ng-model="filter.filtersService.model.productTypeAuthorized" aria-label="Product Type Authorized" ng-change="filter.applyFilterArr(filter.filtersService.model.selected.productType, 'authorized', 'productType')") Authorized
+      md-checkbox(ng-model="filter.filtersService.model.productTypeAuthorized" aria-label="Product Type Authorized" ng-change="filter.applyFilterArr(filter.filtersService.model.selected.productType, 'authorized', 'productType')" ng-init="filter.filtersService.model.productTypeAuthorized = true") Authorized
     div(column='4' ng-show="filter.filtersService.model.expanded")
       div(row)
         div(column='7')
@@ -102,5 +102,5 @@
     div(column='12' class='apply-filters')
       button(value='Apply Filters' type="button" class="btn-action" ng-click="filter.chipsService.applyFilters()" ng-disabled="filter.filtersService.model.filtersApplied") Apply Filters
       .secondary-button-container
-        a(ng-click="!filter.filtersService.model.filtersApplied || filter.modalSaveOpportunityFilter($event)" ng-disabled="!filter.filtersService.model.filtersApplied" ng-mouseover="filter.hoverState('save')" ng-mouseleave="filter.hoverState('save')" ng-class="{'disabled save-filterset-icon-disabled': !filter.filtersService.model.filtersApplied, 'save-report-hover': filter.isHoveringSave && !filter.filtersService.model.filtersApplied}").accent.save-filterset-icon Save Report
-        a(ng-click="filter.resetFilters()" ng-disabled="!filter.filtersService.model.filtersApplied" ng-mouseover="filter.hoverState('reset')" ng-mouseleave="filter.hoverState('reset')" ng-class="{'disabled reset-icon-disabled': !filter.filtersService.model.filtersApplied, 'reset-icon-hover': filter.isHoveringReset && !filter.filtersService.model.filtersApplied}").accent.reset-icon Reset
+        a(ng-click="!filter.filtersService.model.filtersApplied || filter.modalSaveOpportunityFilter($event)" ng-disabled="!filter.filtersService.model.disableSaveFilter" ng-mouseover="filter.hoverState('save')" ng-mouseleave="filter.hoverState('save')" ng-class="{'disabled save-filterset-icon-disabled': !filter.filtersService.model.disableSaveFilter, 'save-report-hover':filter.isHoveringSave && filter.filtersService.model.disableSaveFilter}").accent.save-filterset-icon Save Report
+        a(ng-click="filter.resetFilters()" ng-disabled="!filter.filtersService.model.disableReset" ng-mouseover="filter.hoverState('reset')" ng-mouseleave="filter.hoverState('reset')" ng-class="{'disabled reset-icon-disabled': !filter.filtersService.model.disableReset, 'reset-icon-hover': filter.isHoveringReset && !filter.filtersService.model.disableReset}").accent.reset-icon Reset
