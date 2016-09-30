@@ -77,7 +77,7 @@
       label Product Type
       md-checkbox(ng-model="filter.filtersService.model.productTypeFeatured" aria-label="Product Type Featured" ng-change="filter.applyFilterArr(filter.filtersService.model.selected.productType, 'featured', 'productType')") Featured
       md-checkbox(ng-model="filter.filtersService.model.productTypePriority" aria-label="Product Type Priority Packages" ng-change="filter.applyFilterArr(filter.filtersService.model.selected.productType, 'priority packages', 'productType')") Priority Packages
-      md-checkbox(ng-model="filter.filtersService.model.productTypeAuthorized" aria-label="Product Type Authorized" ng-change="filter.applyFilterArr(filter.filtersService.model.selected.productType, 'authorized', 'productType')") Authorized
+      md-checkbox(ng-model="filter.filtersService.model.productTypeAuthorized" aria-label="Product Type Authorized" ng-change="filter.applyFilterArr(filter.filtersService.model.selected.productType, 'authorized', 'productType')" ng-init="filter.filtersService.model.productTypeAuthorized = true") Authorized
     div(column='4' ng-show="filter.filtersService.model.expanded")
       div(row)
         div(column='7')

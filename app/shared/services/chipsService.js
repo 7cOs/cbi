@@ -229,7 +229,8 @@ module.exports = /*  @ngInject */
         } else if (filter === 'productType') {
           model.splice(model.indexOf(result), 1);
           // remove from chip model
-          var pIndex = service.model.map(function(e) { return e.name; }).indexOf(result);
+          var pIndex = service.model.map(function(e) { return e.name; }).indexOf($filter('titlecase')(result));
+          console.log(pIndex);
           service.model.splice(pIndex, 1);
         } else if (filter === 'impact') {
           model.splice(model.indexOf(result), 1);
