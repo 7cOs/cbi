@@ -268,7 +268,7 @@ module.exports = /*  @ngInject */
      */
     function saveOpportunityFilter(filters) {
       var opportunityFilterPromise = $q.defer(),
-          url = apiHelperService.request('/api/users/' + service.model.currentUser.personID + '/opportunityFilters/'),
+          url = apiHelperService.request('/api/users/' + service.model.currentUser.employeeID + '/opportunityFilters/'),
           payload = {
             name: filtersService.model.newServiceName,
             filterString: apiHelperService.formatQueryString(filters)
@@ -519,7 +519,7 @@ module.exports = /*  @ngInject */
      */
     function addTargetList(p) {
       var targetListPromise = $q.defer(),
-          url = apiHelperService.request('/api/users/' + model.currentUser.personID + '/targetLists/'),
+          url = apiHelperService.request('/api/users/' + model.currentUser.employeeID + '/targetLists/'),
           payload = {
             name: p.name,
             description: p.description,

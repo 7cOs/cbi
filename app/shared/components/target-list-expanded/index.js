@@ -281,42 +281,6 @@ function ExpandedTargetListController($state, $scope, $filter, $mdDialog, $q, us
       console.log(combinedTargetList);
       userService.model.targetLists = combinedTargetList;
     });
-
-    // userService.getTargetLists(userService.model.currentUser.employeeID, {'type': 'targetLists'}).then(function(data) {
-    // userService.getTargetLists(userService.model.currentUser.employeeID).then(function(data) {
-    //   loaderService.closeLoader();
-    //   var ownedPromises = [],
-    //       sharedPromises = [];
-    //
-    //   userService.model.targetLists = data;
-    //   console.log('data');
-    //
-    //   // get collaborators for owned target lists
-    //   // ownedPromises = userService.model.targetLists.owned.map(function(targetList) {
-    //   //   return targetListService.getTargetListShares(targetList.id);
-    //   // });
-    //   //
-    //   // $q.all(ownedPromises).then(function(response) {
-    //   //   angular.forEach(userService.model.targetLists.owned, function(targetList, key) {
-    //   //     targetList.collaborators = response[key].data;
-    //   //   });
-    //   // });
-    //
-    //   // get collaborators for shared target lists
-    //   // TODO currently not being used, this needs to be implememtned
-    //   // sharedPromises = userService.model.targetLists.sharedWithMe.map(function(targetList) {
-    //   //   return targetListService.getTargetListShares(targetList.id);
-    //   // });
-    //
-    //   // $q.all(sharedPromises).then(function(response) {
-    //   //   angular.forEach(userService.model.targetLists.sharedWithMe, function(targetList, key) {
-    //   //     // targetList.collaborators = response[key].data;
-    //   //   });
-    //   // });
-    // }, function(reason) {
-    //   console.log('Error: ' + reason);
-    //   loaderService.closeLoader();
-    // });
   }
 
 }
