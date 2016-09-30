@@ -27,12 +27,10 @@
 
   .zero line,
   line.zero {
-    stroke-opacity: 0.75;
+    stroke-opacity: 1;
   }
 
   .nv-zeroLine line {
-    color: $black;
-    stroke: $black;
     stroke-opacity: 1;
   }
 
@@ -48,5 +46,20 @@
 .x, .x2, .x3 {
   .nv-axis .nv-axisMaxMin text {
     text-anchor: middle;
+  }
+}
+
+.nv-y .nv-axis .tick {
+  line {
+    stroke-dasharray: 8;
+    stroke-dashoffset: 4;
+  }
+
+  &.zero {
+    line {
+      stroke-dasharray: 0;
+      stroke: $gray-8;
+      stroke-width: 2px;
+    }
   }
 }

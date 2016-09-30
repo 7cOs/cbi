@@ -60,6 +60,12 @@ module.exports = /*  @ngInject */
         groupSpacing: 0.65,
         x: function(d) { return d.label; },
         y: function(d) { return d.value; },
+        xAxis: {
+          showMaxMin: false
+        },
+        yAxis: {
+          showMaxMin: false
+        },
         showControls: false,
         showValues: true,
         duration: 500,
