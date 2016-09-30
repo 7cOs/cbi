@@ -37,16 +37,6 @@ module.exports = /*  @ngInject */
         // remove type obj
         delete obj.type;
 
-        // parse brands from masterSKU
-        /* if (obj.masterSKU && obj.masterSKU.length > 0) {
-          angular.forEach(obj.masterSKU, function(value, key) {
-            if (value.length < 5) {
-              obj.masterSKU.splice(key, 1);
-              obj.brand.push(value);
-            }
-          });
-        } */
-
         for (var key2 in obj) {
           var somethingAdded = false;
           if (obj[key2].constructor === Array && obj[key2].length > 0) {
