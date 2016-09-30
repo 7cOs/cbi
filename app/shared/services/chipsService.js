@@ -56,11 +56,13 @@ module.exports = /*  @ngInject */
      * @returns null
      * @memberOf cf.common.services
      */
-    function addAutocompleteChip(chip, filter, tradeChannel) {
+    function addAutocompleteChip(chip, filter, tradeChannel, id) {
       if (chip) {
         // Add to Chip Model
+        if (id && id.length < 5) filter === 'brand';
         service.model.push({
           name: chip,
+          id: id,
           type: filter,
           search: true,
           applied: false,
@@ -157,7 +159,6 @@ module.exports = /*  @ngInject */
     function removeFromFilterService(chip) {
       if (chip.search || chip.type === 'opportunitiesTypes') {
         var arr = filtersService.model.selected[chip.type];
-        // console.log(filtersService.model.selected[chip.type]);
         var i = arr.length;
 
         while (i--) {
@@ -169,6 +170,9 @@ module.exports = /*  @ngInject */
             arr.splice(i, 1);
             // update model
             filtersService.model['predictedImpact' + chip.name.split(' Impact')[0]] = false;
+            break;
+          } else if ((chip.type === 'masterSKU' || chip.type === 'brand') && chip.id === arr[i]) {
+            arr.splice(i, 1);
             break;
           } else if (arr[i] === chip.name) {
             arr.splice(i, 1);
@@ -256,10 +260,10 @@ module.exports = /*  @ngInject */
           addAutocompleteChip($filter('titlecase')(result.name), filter);
           model.push(result.id);
         } else if (filter === 'masterSKU' && result.id === null) {
-          addAutocompleteChip($filter('titlecase')(result.brand), filter);
-          model.push(result.brandCode);
+          addAutocompleteChip($filter('titlecase')(result.brand), 'brand', null, result.brandCode);
+          filtersService.model.selected.brand.push(result.brandCode);
         } else if (filter === 'masterSKU' && result.id !== null) {
-          addAutocompleteChip($filter('titlecase')(result.name), filter);
+          addAutocompleteChip($filter('titlecase')(result.name), filter, null, result.id);
           model.push(result.id);
         } else if (filter === 'segmentation') {
           addAutocompleteChip('Segmentation ' + result, filter);
