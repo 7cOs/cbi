@@ -39,10 +39,6 @@
       float: left;
     }
 
-    .completed {
-      margin-right: 12px;
-    }
-
     .target-list-count {
       float: right;
       padding: 0 0 10px;
@@ -50,7 +46,6 @@
 
       h5 {
         text-align: left;
-        padding-right: 9px;
       }
 
       .right {
@@ -84,20 +79,20 @@
       .target-list-name {
         color: $blue;
         float: left;
-        margin-top: 17px
+        margin-top: 17px;
       }
 
       .closed {
         font-weight: $bold;
         color: $yellow;
-        margin-right: 42px;
       }
 
       .target-list-data {
         float: right;
+        padding: 0;
 
         h3 {
-          display: inline-block;
+          text-align: center;
         }
       }
 
@@ -106,7 +101,7 @@
       }
 
       [class^=target-list-row] {
-        padding: 0 20px 0;
+        padding: 0 0 0 20px;
       }
 
       .target-list-row-two {
