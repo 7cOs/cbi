@@ -7,16 +7,7 @@ module.exports = /*  @ngInject */
       currentUser: {},
       summary: [],
       depletion: [],
-      distribution: [],
-      archived: [],
-      combinedTargetList: {
-        'owned': [],
-        'sharedWithMe': [],
-        'sharedArchivedCount': 0,
-        'sharedNotArchivedCount': 0,
-        'ownedNotArchived': 0,
-        'ownedArchived': 0
-      }
+      distribution: []
     };
     var service = {
       model: model,
@@ -473,47 +464,47 @@ module.exports = /*  @ngInject */
      */
     function getTargetLists(id, p) {
       var targetListPromise = $q.defer(),
-          urlArchive = apiHelperService.request('/api/users/' + id + '/targetLists?archived=true', p),
           url = apiHelperService.request('/api/users/' + id + '/targetLists/', p);
 
-      if (service.model.combinedTargetList.owned.length <= 1) {
-        $q.all([$http.get(urlArchive), $http.get(url)])
+      if (p) {
+        url = apiHelperService.request('/api/users/' + id + '/targetLists' + p);
+      }
+
+      if (!service.model.targetLists) {
+        $http.get(url)
           .then(getTargetListsSuccess)
           .catch(getTargetListsFail);
       } else {
-        targetListPromise.resolve(service.model.combinedTargetList);
+        targetListPromise.resolve(service.model.targetLists);
       }
 
       function getTargetListsSuccess(response) {
+        var sharedArchivedCount = 0,
+            sharedNotArchivedCount = 0,
+            ownedNotArchived = 0,
+            ownedArchived = 0;
 
-        for (var i = 0; i < response.length; i++) {
-
-          for (var j = 0; j < response[i].data.owned.length; j++) {
-            model.combinedTargetList.owned.push(response[i].data.owned[j]);
-            if (response[i].data.owned[j].archived) {
-              model.combinedTargetList.ownedArchived++;
-            } else {
-              model.combinedTargetList.ownedNotArchived++;
-            }
-          }
-
-          for (j = 0; j < response[i].data.sharedWithMe.length; j++) {
-            model.combinedTargetList.sharedWithMe.push(response[i].data.sharedWithMe[j]);
-            if (response[i].data.sharedWithMe[j].archived) {
-              model.combinedTargetList.sharedArchivedCount++;
-            } else {
-              model.combinedTargetList.sharedNotArchivedCount++;
-            }
-          }
+        for (var i = 0; i < response.data.owned.length; i++) {
+          if (response.data.owned[i].archived) ownedArchived++;
+          else ownedNotArchived++;
         }
 
-        targetListPromise.resolve(model.combinedTargetList);
+        for (i = 0; i < response.data.sharedWithMe.length; i++) {
+          if (response.data.sharedWithMe[i].archived) sharedArchivedCount++;
+          else sharedNotArchivedCount++;
+        }
+
+        response.data.ownedArchived = ownedArchived;
+        response.data.ownedNotArchived = ownedNotArchived;
+        response.data.sharedArchivedCount = sharedArchivedCount;
+        response.data.sharedNotArchivedCount = sharedNotArchivedCount;
+
+        targetListPromise.resolve(response.data);
       }
 
       function getTargetListsFail(error) {
         targetListPromise.reject(error);
       }
-
       return targetListPromise.promise;
     }
 

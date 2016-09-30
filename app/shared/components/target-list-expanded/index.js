@@ -237,39 +237,47 @@ function ExpandedTargetListController($state, $scope, $filter, $mdDialog, $q, us
     userService.model.targetLists = null;
     loaderService.openLoader();
 
-    // userService.getTargetLists(userService.model.currentUser.employeeID, {'type': 'targetLists'}).then(function(data) {
-    userService.getTargetLists(userService.model.currentUser.employeeID).then(function(data) {
+    var promise1 = userService.getTargetLists(userService.model.currentUser.employeeID);
+    var promise2 = userService.getTargetLists(userService.model.currentUser.employeeID, '?archived=true');
+
+    var promiseArray = [promise1, promise2];
+
+    $q.all(promiseArray).then(function(data) {
       loaderService.closeLoader();
-      var ownedPromises = [],
-          sharedPromises = [];
 
-      userService.model.targetLists = data;
+      var combinedTargetList = {
+        'owned': [],
+        'sharedWithMe': [],
+        'sharedArchivedCount': 0,
+        'sharedNotArchivedCount': 0,
+        'ownedNotArchived': 0,
+        'ownedArchived': 0
+      };
 
-      // get collaborators for owned target lists
-      ownedPromises = userService.model.targetLists.owned.map(function(targetList) {
-        return targetListService.getTargetListShares(targetList.id);
-      });
+      for (var i = 0; i < data.length; i++) {
+        for (var j = 0; j < data[i].owned.length; j++) {
 
-      $q.all(ownedPromises).then(function(response) {
-        angular.forEach(userService.model.targetLists.owned, function(targetList, key) {
-          targetList.collaborators = response[key].data;
-        });
-      });
+          combinedTargetList.owned.push(data[i].owned[j]);
 
-      // get collaborators for shared target lists
-      // TODO currently not being used, this needs to be implememtned
-      // sharedPromises = userService.model.targetLists.sharedWithMe.map(function(targetList) {
-      //   return targetListService.getTargetListShares(targetList.id);
-      // });
+          if (data[i].owned[j].archived) {
+            combinedTargetList.ownedArchived++;
+          } else {
+            combinedTargetList.ownedNotArchived++;
+          }
+        }
 
-      $q.all(sharedPromises).then(function(response) {
-        angular.forEach(userService.model.targetLists.sharedWithMe, function(targetList, key) {
-          // targetList.collaborators = response[key].data;
-        });
-      });
-    }, function(reason) {
-      console.log('Error: ' + reason);
-      loaderService.closeLoader();
+        for (j = 0; j < data[i].sharedWithMe.length; j++) {
+          combinedTargetList.sharedWithMe.push(data[i].sharedWithMe[j]);
+
+          if (data[i].sharedWithMe[j].archived) {
+            combinedTargetList.sharedArchivedCount++;
+          } else {
+            combinedTargetList.sharedNotArchivedCount++;
+          }
+        };
+      }
+
+      userService.model.targetLists = combinedTargetList;
     });
   }
 

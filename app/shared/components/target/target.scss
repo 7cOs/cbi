@@ -101,7 +101,7 @@
       }
 
       [class^=target-list-row] {
-        padding: 0 0 0 20px;
+        padding: 2px 0 0 20px;
       }
 
       .target-list-row-two {
@@ -110,6 +110,8 @@
         p {
           display: inline;
           margin-right: 20px;
+          margin-top: 0;
+          padding: 0;
         }
       }
 
