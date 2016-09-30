@@ -84,6 +84,7 @@
       .target-list-name {
         color: $blue;
         float: left;
+        margin-top: 17px
       }
 
       .closed {
@@ -105,7 +106,7 @@
       }
 
       [class^=target-list-row] {
-        padding: 5px 20px 2px;
+        padding: 0 20px 0;
       }
 
       .target-list-row-two {
