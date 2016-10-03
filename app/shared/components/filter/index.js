@@ -52,6 +52,7 @@ function FilterController($state, $scope, $mdDialog, $mdSelect, chipsService, fi
     } else if (result.type === 'state') {
       chipsService.applyFilterArr(filtersService.model.selected.state, result.name, 'state');
     }
+    filtersService.model.location = '';
   }
 
   function closeDoneButton() {

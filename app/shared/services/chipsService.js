@@ -162,9 +162,9 @@ module.exports = /*  @ngInject */
         var i = arr.length;
 
         while (i--) {
-          if (chip.type === 'segmentation' && arr[i] === chip.name.split('Segmentation ')[1]) {
+          if (chip.type === 'segmentation' && arr[i] === chip.name.split(' Segmentation')[0]) {
             arr.splice(i, 1);
-            filtersService.model['storeSegmentation' + chip.name.split('Segmentation ')[1]] = false;
+            filtersService.model['storeSegmentation' + chip.name.split(' Segmentation')[0]] = false;
             break;
           } else if (chip.type === 'impact' && arr[i] === chip.name.split(' Impact')[0]) {
             arr.splice(i, 1);
@@ -174,10 +174,10 @@ module.exports = /*  @ngInject */
           } else if ((chip.type === 'masterSKU' || chip.type === 'brand') && chip.id === arr[i]) {
             arr.splice(i, 1);
             break;
-          } else if (arr[i] === chip.name) {
+          } else if ($filter('titlecase')(arr[i]) === chip.name.split(' ')[0]) {
             arr.splice(i, 1);
             // update model
-            if (chip.type === 'productType') filtersService.model['productType' + $filter('titlecase')(chip.name)] = false;
+            if (chip.type === 'productType') filtersService.model['productType' + chip.name.split(' ')[0]] = false;
             if (chip.type === 'tradeChannel') filtersService.model['tradeChannel' + chip.name] = false;
             if (chip.type === 'opportunityStatus') filtersService.model['opportunityStatus' + chip.name] = false;
             if (chip.type === 'cbbdChain') filtersService.model['cbbdChain' + chip.name.split(' ')[0]] = false;
@@ -219,48 +219,24 @@ module.exports = /*  @ngInject */
      * @memberOf cf.common.services
      */
 
-    // note to self, re-write this before sudden death
-    function applyFilterArr(model, result, filter) {
+    function applyFilterArr(model, result, filter, displayName) {
+      //  fall back to result if displayName is undefined
+      if (!displayName) displayName = result;
+
       if (model.indexOf(result) > -1) {
-        if (filter === 'segmentation') {
-          // remove from array
-          model.splice(model.indexOf(result), 1);
-          // remove from chip model
-          var index = service.model.map(function(e) { return e.name; }).indexOf('Segmentation ' + result);
-          service.model.splice(index, 1);
-        } else if (filter === 'productType') {
-          model.splice(model.indexOf(result), 1);
-          // remove from chip model
-          var pIndex = service.model.map(function(e) { return e.name; }).indexOf($filter('titlecase')(result));
-          console.log(pIndex);
-          service.model.splice(pIndex, 1);
-        } else if (filter === 'impact') {
-          model.splice(model.indexOf(result), 1);
-          // remove from chip model
-          var iIndex = service.model.map(function(e) { return e.name; }).indexOf(result + ' Impact');
-          service.model.splice(iIndex, 1);
-        } else if (filter === 'tradeChannel' || filter === 'opportunityStatus' || filter === 'cbbdChain') {
-          model.splice(model.indexOf(result), 1);
-          // remove from chip model
-          var tIndex = service.model.map(function(e) { return e.name; }).indexOf(result);
-          service.model.splice(tIndex, 1);
-        } else {
-          filtersService.model[filter] = '';
-        }
+        // deleting
+        var index = service.model.map(function(e) { return e.name; }).indexOf($filter('titlecase')(displayName));
+        service.model.splice(index, 1);
+        model.splice(model.indexOf(result), 1);
       } else {
-        filtersService.model[filter] = '';
+        // adding
         switch (filter) {
-          case 'cbbdContact':
-            addAutocompleteChip($filter('titlecase')(result.firstName + ' ' + result.lastName), filter);
-            model.push(result.id);
-            break;
           case 'subaccount':
           case 'account':
           case 'store':
           case 'distributor':
-            filtersService.model.chain = '';
-            filtersService.model.store = '';
-            addAutocompleteChip($filter('titlecase')(result.name), filter);
+          case 'cbbdContact':
+            addAutocompleteChip($filter('titlecase')(displayName), filter);
             model.push(result.id);
             break;
           case 'masterSKU':
@@ -272,20 +248,16 @@ module.exports = /*  @ngInject */
               model.push(result.id);
             }
             break;
-          case 'segmentation':
-          case 'impact':
-            addAutocompleteChip(result + ' ' + filter, filter);
-            model.push(result);
-            break;
           case 'tradeChannel':
-            addAutocompleteChip(result, filter, true);
+            addAutocompleteChip(displayName, filter, true);
             model.push(result);
             break;
           default:
-            addAutocompleteChip(result, filter);
+            addAutocompleteChip($filter('titlecase')(displayName), filter);
             model.push(result);
         }
       }
+      filtersService.model[filter] = '';
     }
 
     /**

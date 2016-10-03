@@ -56,44 +56,44 @@
           md-select(ng-model="filter.filtersService.model.selected.retailer" placeholder="Chain" ng-init="filter.filtersService.model.selected.retailer = 'Chain'")
             md-option(ng-repeat="type in filter.filtersService.model.retailer" ng-click="filter.placeholderSelect(type.hintText)" aria-label="{{type.name}}" value="{{type.name}}") {{::type.name}}
         div(column='8')
-          inline-search(ng-if="filter.filtersService.model.selected.retailer === 'Store'" type="store" placeholder="{{filter.hintTextPlaceholder}}" chosen-result="filter.filtersService.model.store" show-address="true" callback="filter.applyFilterArr(filter.filtersService.model.selected.store, result, 'store')")
-          inline-search(ng-if="filter.filtersService.model.selected.retailer === 'Chain'" type="chain" placeholder="{{filter.hintTextPlaceholder}}" chosen-result="filter.filtersService.model.chain" callback="filter.applyFilterArr(filter.filtersService.model.selected[result.type], result, result.type)")
+          inline-search(ng-if="filter.filtersService.model.selected.retailer === 'Store'" type="store" placeholder="{{filter.hintTextPlaceholder}}" chosen-result="filter.filtersService.model.store" show-address="true" callback="filter.applyFilterArr(filter.filtersService.model.selected.store, result, 'store', result.name)")
+          inline-search(ng-if="filter.filtersService.model.selected.retailer === 'Chain'" type="chain" placeholder="{{filter.hintTextPlaceholder}}" chosen-result="filter.filtersService.model.chain" callback="filter.applyFilterArr(filter.filtersService.model.selected[result.type], result, result.type, result.name)")
     div(column='2')
       label Distributor
-      inline-search(type="distributor" placeholder="Name" chosen-result="filter.filtersService.model.distributor" callback="filter.applyFilterArr(filter.filtersService.model.selected.distributor, result, 'distributor')")
+      inline-search(type="distributor" placeholder="Name" chosen-result="filter.filtersService.model.distributor" callback="filter.applyFilterArr(filter.filtersService.model.selected.distributor, result, 'distributor', result.name)")
   div(row)
     div.predicted-impact(column='3' ng-show="filter.filtersService.model.expanded")
       label Predicted Impact
-      md-checkbox(ng-model="filter.filtersService.model.predictedImpactHigh" aria-label="Predicted Impact High" ng-change="filter.applyFilterArr(filter.filtersService.model.selected.impact, 'High', 'impact')")
+      md-checkbox(ng-model="filter.filtersService.model.predictedImpactHigh" aria-label="Predicted Impact High" ng-change="filter.applyFilterArr(filter.filtersService.model.selected.impact, 'High', 'impact', 'High Impact')")
         | High
         span.impact.high-small
-      md-checkbox(ng-model="filter.filtersService.model.predictedImpactMedium" aria-label="Predicted Impact Medium" ng-change="filter.applyFilterArr(filter.filtersService.model.selected.impact, 'Medium', 'impact')")
+      md-checkbox(ng-model="filter.filtersService.model.predictedImpactMedium" aria-label="Predicted Impact Medium" ng-change="filter.applyFilterArr(filter.filtersService.model.selected.impact, 'Medium', 'impact', 'Medium Impact')")
         | Medium
         span.impact.medium-small
-      md-checkbox(ng-model="filter.filtersService.model.predictedImpactLow" aria-label="Predicted Impact Low" ng-change="filter.applyFilterArr(filter.filtersService.model.selected.impact, 'Low', 'impact')")
+      md-checkbox(ng-model="filter.filtersService.model.predictedImpactLow" aria-label="Predicted Impact Low" ng-change="filter.applyFilterArr(filter.filtersService.model.selected.impact, 'Low', 'impact', 'Low Impact')")
         | Low
         span.impact.low-small
     div(column='3' ng-show="filter.filtersService.model.expanded")
       label Product Type
       md-checkbox(ng-model="filter.filtersService.model.productTypeFeatured" aria-label="Product Type Featured" ng-change="filter.applyFilterArr(filter.filtersService.model.selected.productType, 'featured', 'productType')") Featured
-      md-checkbox(ng-model="filter.filtersService.model.productTypePriority" aria-label="Product Type Priority Packages" ng-change="filter.applyFilterArr(filter.filtersService.model.selected.productType, 'priority packages', 'productType')") Priority Packages
+      md-checkbox(ng-model="filter.filtersService.model.productTypePriority" aria-label="Product Type Priority Packages" ng-change="filter.applyFilterArr(filter.filtersService.model.selected.productType, 'priority', 'productType', 'priority packages')") Priority Packages
       md-checkbox(ng-model="filter.filtersService.model.productTypeAuthorized" aria-label="Product Type Authorized" ng-change="filter.applyFilterArr(filter.filtersService.model.selected.productType, 'authorized', 'productType')" ng-init="filter.filtersService.model.productTypeAuthorized = true") Authorized
     div(column='4' ng-show="filter.filtersService.model.expanded")
       div(row)
         div(column='7')
           label Store Type
           md-checkbox(ng-model="filter.filtersService.model.cbbdChainIndependent" aria-label="Independent" ng-change="filter.applyFilterArr(filter.filtersService.model.selected.cbbdChain, 'Independent', 'cbbdChain')") Independent
-          md-checkbox(ng-model="filter.filtersService.model.cbbdChainCBBD" aria-label="CBBD Chain" ng-change="filter.applyFilterArr(filter.filtersService.model.selected.cbbdChain, 'CBBD Chain', 'cbbdChain')") CBBD Chain
+          md-checkbox(ng-model="filter.filtersService.model.cbbdChainCbbd" aria-label="CBBD Chain" ng-change="filter.applyFilterArr(filter.filtersService.model.selected.cbbdChain, 'Cbbd', 'cbbdChain', 'cbbd chain')") CBBD Chain
         div(column='8' class="store-segmentation")
           label Store Segmentation
-          md-checkbox(ng-model="filter.filtersService.model.storeSegmentationA" aria-label="Store Segmentation A" ng-change="filter.applyFilterArr(filter.filtersService.model.selected.segmentation, 'A', 'segmentation')") A
-          md-checkbox(ng-model="filter.filtersService.model.storeSegmentationB" aria-label="Store Segmentation B" ng-change="filter.applyFilterArr(filter.filtersService.model.selected.segmentation, 'B', 'segmentation')") B
-          md-checkbox(ng-model="filter.filtersService.model.storeSegmentationC" aria-label="Store Segmentation C" ng-change="filter.applyFilterArr(filter.filtersService.model.selected.segmentation, 'C', 'segmentation')") C
+          md-checkbox(ng-model="filter.filtersService.model.storeSegmentationA" aria-label="Store Segmentation A" ng-change="filter.applyFilterArr(filter.filtersService.model.selected.segmentation, 'A', 'segmentation', 'A Segmentation')") A
+          md-checkbox(ng-model="filter.filtersService.model.storeSegmentationB" aria-label="Store Segmentation B" ng-change="filter.applyFilterArr(filter.filtersService.model.selected.segmentation, 'B', 'segmentation', 'B Segmentation')") B
+          md-checkbox(ng-model="filter.filtersService.model.storeSegmentationC" aria-label="Store Segmentation C" ng-change="filter.applyFilterArr(filter.filtersService.model.selected.segmentation, 'C', 'segmentation', 'C Segmentation')") C
     div.location-contact-opps(column='2' ng-show="filter.filtersService.model.expanded")
       label Location
         inline-search(type="location" placeholder="City, State, or Zip" chosen-result="filter.filtersService.model.location" callback="filter.applyLocations(result)")
       label.cbbd-contact CBBD Contact
-        inline-search(type="user" placeholder="Name" chosen-result="filter.filtersService.model.cbbdContact" callback="filter.applyFilterArr(filter.filtersService.model.selected.cbbdContact, result, 'cbbdContact')")
+        inline-search(type="user" placeholder="Name" chosen-result="filter.filtersService.model.cbbdContact" callback="filter.applyFilterArr(filter.filtersService.model.selected.cbbdContact, result, 'cbbdContact', result.firstName + ' ' + result.lastName)")
   div(row ng-show="filter.filtersService.model.expanded")
     div(column='5 +6' class="trade-channel")
       label.vertical Trade Channel
