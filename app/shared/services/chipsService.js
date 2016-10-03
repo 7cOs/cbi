@@ -218,6 +218,8 @@ module.exports = /*  @ngInject */
      * @returns null
      * @memberOf cf.common.services
      */
+
+    // note to self, re-write this before sudden death
     function applyFilterArr(model, result, filter) {
       if (model.indexOf(result) > -1) {
         if (filter === 'segmentation') {
@@ -248,8 +250,8 @@ module.exports = /*  @ngInject */
       } else {
         filtersService.model[filter] = '';
         if (filter === 'store') {
-          addAutocompleteChip(result.store_name, filter);
-          model.push(result.tdlinx_number);
+          addAutocompleteChip(result.name, filter);
+          model.push(result.id);
         } else if (filter === 'cbbdContact') {
           addAutocompleteChip($filter('titlecase')(result.firstName + ' ' + result.lastName), filter);
           model.push(result.id);
