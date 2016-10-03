@@ -249,37 +249,41 @@ module.exports = /*  @ngInject */
         }
       } else {
         filtersService.model[filter] = '';
-        if (filter === 'store') {
-          addAutocompleteChip(result.name, filter);
-          model.push(result.id);
-        } else if (filter === 'cbbdContact') {
-          addAutocompleteChip($filter('titlecase')(result.firstName + ' ' + result.lastName), filter);
-          model.push(result.id);
-        } else if (filter === 'subaccount' || filter === 'account') {
-          filtersService.model.chain = '';
-          addAutocompleteChip($filter('titlecase')(result.name), filter);
-          model.push(result.id);
-        } else if (filter === 'distributor') {
-          addAutocompleteChip($filter('titlecase')(result.name), filter);
-          model.push(result.id);
-        } else if (filter === 'masterSKU' && result.id === null) {
-          addAutocompleteChip($filter('titlecase')(result.brand), 'brand', null, result.brandCode);
-          filtersService.model.selected.brand.push(result.brandCode);
-        } else if (filter === 'masterSKU' && result.id !== null) {
-          addAutocompleteChip($filter('titlecase')(result.name), filter, null, result.id);
-          model.push(result.id);
-        } else if (filter === 'segmentation') {
-          addAutocompleteChip('Segmentation ' + result, filter);
-          model.push(result);
-        } else if (filter === 'impact') {
-          addAutocompleteChip(result + ' Impact', filter);
-          model.push(result);
-        } else if (filter === 'tradeChannel') {
-          addAutocompleteChip(result, filter, true);
-          model.push(result);
-        } else {
-          addAutocompleteChip(result, filter);
-          model.push(result);
+        switch (filter) {
+          case 'cbbdContact':
+            addAutocompleteChip($filter('titlecase')(result.firstName + ' ' + result.lastName), filter);
+            model.push(result.id);
+            break;
+          case 'subaccount':
+          case 'account':
+          case 'store':
+          case 'distributor':
+            filtersService.model.chain = '';
+            filtersService.model.store = '';
+            addAutocompleteChip($filter('titlecase')(result.name), filter);
+            model.push(result.id);
+            break;
+          case 'masterSKU':
+            if (result.id === null) {
+              addAutocompleteChip($filter('titlecase')(result.brand), 'brand', null, result.brandCode);
+              filtersService.model.selected.brand.push(result.brandCode);
+            } else if (result.id !== null) {
+              addAutocompleteChip($filter('titlecase')(result.name), filter, null, result.id);
+              model.push(result.id);
+            }
+            break;
+          case 'segmentation':
+          case 'impact':
+            addAutocompleteChip(result + ' ' + filter, filter);
+            model.push(result);
+            break;
+          case 'tradeChannel':
+            addAutocompleteChip(result, filter, true);
+            model.push(result);
+            break;
+          default:
+            addAutocompleteChip(result, filter);
+            model.push(result);
         }
       }
     }
