@@ -318,7 +318,7 @@ function ListController($scope, $state, $q, $location, $anchorScroll, $mdDialog,
   function getTargetLists() {
     if (userService.model.targetLists.length < 1) {
        // get target lists
-      userService.getTargetLists(userService.model.currentUser.employeeID, {'type': 'targetLists'}).then(function(data) {
+      userService.getTargetLists(userService.model.currentUser.employeeID).then(function(data) {
         userService.model.targetLists = data;
       });
     }
