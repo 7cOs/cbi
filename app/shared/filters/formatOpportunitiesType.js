@@ -3,7 +3,7 @@
 module.exports = /*  @ngInject */
   function formatOpportunitiesType() {
     /**
-     * @name opportunitiesType
+     * @name formatOpportunitiesType
      * @desc convert string to custom format
      * @params {String} str - string to be converted
      * @returns {String} - replace string
