@@ -29,6 +29,7 @@ function ListController($scope, $state, $q, $location, $anchorScroll, $mdDialog,
   vm.showSubMenu = false;
   vm.disabledMessage = '';
   vm.opportunityShared = false;
+  vm.shareOpportunityFail = false;
 
   // Expose public methods
   vm.addToSharedCollaborators = addToSharedCollaborators;
@@ -130,6 +131,7 @@ function ListController($scope, $state, $q, $location, $anchorScroll, $mdDialog,
     vm.currentOpportunityId = oId;
     vm.sharedCollaborators = [];
     vm.opportunityShared = false;
+    vm.shareOpportunityFail = false;
 
     var parentEl = angular.element(document.body);
     $mdDialog.show({
@@ -142,17 +144,25 @@ function ListController($scope, $state, $q, $location, $anchorScroll, $mdDialog,
   }
 
   function shareOpportunity() {
-    for (var i = 0; i < vm.sharedCollaborators.length; i++) {
-      userService.sendOpportunity(vm.sharedCollaborators[i].employeeId, vm.currentOpportunityId).then(function(data) {
-        vm.opportunityShared = true;
-        console.log('shared');
-      });
+    if (vm.sharedCollaborators.length > 0) {
+      for (var i = 0; i < vm.sharedCollaborators.length; i++) {
+        userService.sendOpportunity(vm.sharedCollaborators[i].employeeId, vm.currentOpportunityId).then(function(data) {
+          vm.opportunityShared = true;
+          console.log('shared');
+        });
+      }
+    } else {
+      vm.opportunityShared = false;
+      vm.shareOpportunityFail = true;
     }
     closeModal();
   }
 
   function openDismissModal(oId, ev) {
     vm.currentOpportunityId = oId;
+    vm.opportunityShared = false;
+    vm.shareOpportunityFail = false;
+
     // actionOverlay(opportunity, action);
     var parentEl = angular.element(document.body);
     $mdDialog.show({
