@@ -10,7 +10,7 @@ module.exports = /*  @ngInject */
      * @memberOf cf.common.filters
      */
     return function(str) {
-      let map = {
+      var map = {
         'MANUAL': 'Manual',
         'AT_RISK': 'At Risk',
         'NON_BUY': 'Non-Buy',
