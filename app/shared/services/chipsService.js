@@ -222,10 +222,11 @@ module.exports = /*  @ngInject */
     function applyFilterArr(model, result, filter, displayName) {
       //  fall back to result if displayName is undefined
       if (!displayName) displayName = result;
+      displayName = $filter('titlecase')(displayName);
 
       if (model.indexOf(result) > -1) {
         // deleting
-        var index = service.model.map(function(e) { return e.name; }).indexOf($filter('titlecase')(displayName));
+        var index = service.model.map(function(e) { return e.name; }).indexOf(displayName);
         service.model.splice(index, 1);
         model.splice(model.indexOf(result), 1);
       } else {
@@ -236,7 +237,7 @@ module.exports = /*  @ngInject */
           case 'store':
           case 'distributor':
           case 'cbbdContact':
-            addAutocompleteChip($filter('titlecase')(displayName), filter);
+            addAutocompleteChip(displayName, filter);
             model.push(result.id);
             break;
           case 'masterSKU':
@@ -253,7 +254,7 @@ module.exports = /*  @ngInject */
             model.push(result);
             break;
           default:
-            addAutocompleteChip($filter('titlecase')(displayName), filter);
+            addAutocompleteChip(displayName, filter);
             model.push(result);
         }
       }
