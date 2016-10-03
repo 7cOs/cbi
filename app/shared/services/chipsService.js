@@ -268,11 +268,8 @@ module.exports = /*  @ngInject */
         } else if (filter === 'masterSKU' && result.id !== null) {
           addAutocompleteChip($filter('titlecase')(result.name), filter, null, result.id);
           model.push(result.id);
-        } else if (filter === 'segmentation') {
-          addAutocompleteChip('Segmentation ' + result, filter);
-          model.push(result);
-        } else if (filter === 'impact') {
-          addAutocompleteChip(result + ' Impact', filter);
+        } else if (filter === 'segmentation' || filter === 'impact') {
+          addAutocompleteChip(result + ' ' + filter, filter);
           model.push(result);
         } else if (filter === 'tradeChannel') {
           addAutocompleteChip(result, filter, true);
