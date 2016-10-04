@@ -96,8 +96,8 @@ module.exports = /*  @ngInject */
 
         filtersService.model.appliedFilter.appliedFilter = queryParams;
 
-        console.log('[apiHelperService.formatQueryString.queryStr]', '?' + 'limit=2000' + s + p + '&filter=' + filtersService.model.appliedFilter.appliedFilter);
-        queryStr = '?' + 'limit=2000' + encodeURIComponent(s) + p + '&filter=' + encodeURIComponent(filtersService.model.appliedFilter.appliedFilter);
+        console.log('[apiHelperService.formatQueryString.queryStr]', '?' + 'limit=200' + s + p + '&filter=' + filtersService.model.appliedFilter.appliedFilter);
+        queryStr = '?' + 'limit=200' + s + p + '&filter=' + encodeURIComponent(filtersService.model.appliedFilter.appliedFilter);
 
         return queryStr;
       } else if (obj.type && obj.type === 'targetLists') {

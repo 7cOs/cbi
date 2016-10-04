@@ -1,0 +1,6 @@
+div(ng-if="page.displayPagination()" column="12")
+  //- cl-paging(layout="row" flex cl-pages="list.opportunitiesService.model.paging.pages" cl-steps="list.opportunitiesService.model.paging.steps" layout-align="{{list.opportunitiesService.model.paging.align}}" cl-current-page="list.opportunitiesService.model.paging.current" cl-page-changed="list.pageChanged()")
+  h3 Pagination
+  div(ng-click="page.pageChanged(1)") Page 1
+  div(ng-click="page.pageChanged(2)") Page 2
+  div(ng-click="page.pageChanged(3)") Page 3

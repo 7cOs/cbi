@@ -4,17 +4,17 @@ module.exports = /*  @ngInject */
     var model = {
       filterApplied: false,
       opportunities: [],
-      opportunitiesDisplay: [],
+      // opportunitiesDisplay: [],
       opportunitiesSum: 0,
       opportunityId: null,
-      paging: {
+      /* paging: {
         align: 'center center',
         current: 1,
         pages: 0,
         // pageChanged: pageChanged, // This function fires at the start of page change. It also fires on pagination load.
         steps: 10,
         itemsPerPage: 15
-      },
+      }, */
       noOpportunitiesFound: false
     };
 
@@ -61,7 +61,7 @@ module.exports = /*  @ngInject */
             store,
             storePlaceholder;
         service.model.opportunities = [];
-        service.model.opportunitiesDisplay = [];
+        // service.model.opportunitiesDisplay = [];
 
         // trigger no opps modal
         if (response.data.opportunities.length < 1) { model.noOpportunitiesFound = true; };
@@ -118,11 +118,11 @@ module.exports = /*  @ngInject */
         }; // end for each
 
         // set data for pagination
-        for (i = 0; i < newOpportunityArr.length; i = i + service.model.paging.itemsPerPage) {
+        /* for (i = 0; i < newOpportunityArr.length; i = i + service.model.paging.itemsPerPage) {
           var page = newOpportunityArr.slice(i, i + service.model.paging.itemsPerPage);
           service.model.opportunitiesDisplay.push(page);
-        }
-        service.model.paging.pages = service.model.opportunitiesDisplay.length;
+        } */
+        // service.model.paging.pages = service.model.opportunitiesDisplay.length;
 
         service.model.opportunities = newOpportunityArr;
 
@@ -130,6 +130,7 @@ module.exports = /*  @ngInject */
       }
 
       function getOpportunitiesFail(error) {
+        console.warn('[opportunitiesService.getOpportunities]... Error getting opportunities... Err: ', error);
         opportunitiesPromise.reject(error);
       }
 

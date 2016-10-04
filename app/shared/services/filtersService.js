@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports = /*  @ngInject */
-  function filtersService() {
+  function filtersService($filter) {
     var model = {
       account: [],
       appliedFilter: {
@@ -161,12 +161,24 @@ module.exports = /*  @ngInject */
 
     var service = {
       model: model,
+      addSortFilter: addSortFilter,
       disableFilters: disableFilters,
       getAppliedFilters: getAppliedFilters,
       resetFilters: resetFilters
     };
 
     return service;
+
+    function addSortFilter(name) {
+      var filterExists = $filter('filter')(service.model.appliedFilter.sort.sortArr, {str: name});
+
+      if (filterExists.length > 0) {
+        filterExists[0].asc = filterExists[0].asc ? filterExists[0].asc = false : filterExists[0].asc = true;
+      } else {
+        service.model.appliedFilter.sort.sortArr = []; // Comment out this line to sort mulitple fields
+        service.model.appliedFilter.sort.sortArr.push({str: name, asc: true});
+      }
+    }
 
     function getAppliedFilters(type) {
       // get applied filters

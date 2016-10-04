@@ -1,6 +1,6 @@
 'use strict';
 
-function ListController($scope, $state, $q, $location, $anchorScroll, $mdDialog, opportunitiesService, targetListService, storesService, userService, closedOpportunitiesService) {
+function ListController($scope, $state, $q, $location, $anchorScroll, $mdDialog, filtersService, opportunitiesService, targetListService, storesService, userService, closedOpportunitiesService) {
 
   // ****************
   // CONTROLLER SETUP
@@ -24,7 +24,7 @@ function ListController($scope, $state, $q, $location, $anchorScroll, $mdDialog,
   vm.sharedCollaborators = [];
   vm.stores = [];
   // sortProperty is set to default sort on page load
-  vm.sortProperty = 'store.name';
+  // vm.sortProperty = 'store.name';
   vm.storeChevron = true;
   vm.showSubMenu = false;
   vm.disabledMessage = '';
@@ -36,7 +36,6 @@ function ListController($scope, $state, $q, $location, $anchorScroll, $mdDialog,
   vm.addToTargetList = addToTargetList;
   vm.closeModal = closeModal;
   vm.displayBrandIcon = displayBrandIcon;
-  vm.displayPagination = displayPagination;
   vm.exists = exists;
   vm.isChecked = isChecked;
   vm.openShareModal = openShareModal;
@@ -50,7 +49,6 @@ function ListController($scope, $state, $q, $location, $anchorScroll, $mdDialog,
   vm.showCorporateMemoModal = showCorporateMemoModal;
   vm.submitFeedback = submitFeedback;
   vm.cancelFeedback = cancelFeedback;
-  vm.pageChanged = pageChanged;
   vm.allOpportunitiesExpanded = allOpportunitiesExpanded;
   vm.noOpportunitiesExpanded = noOpportunitiesExpanded;
   vm.showDisabled = showDisabled;
@@ -109,12 +107,6 @@ function ListController($scope, $state, $q, $location, $anchorScroll, $mdDialog,
 
   function displayBrandIcon(haystack, needle) {
     return haystack.indexOf(needle) !== -1;
-  }
-
-  function displayPagination() {
-    if (opportunitiesService.model.opportunitiesDisplay.length > 1) return true;
-
-    return false;
   }
 
   // Check if list item exists and is selected
@@ -223,7 +215,15 @@ function ListController($scope, $state, $q, $location, $anchorScroll, $mdDialog,
   }
 
   // Sort by selected property
-  function sortBy(property) {
+  function sortBy(name) {
+    filtersService.addSortFilter(name);
+
+    // To Do: add loading icon
+    opportunitiesService.getOpportunities().then(function(data) {
+      // To Do: remove loading icon
+    });
+  }
+  /* function sortBy(property) {
     vm.reverse = (vm.sortProperty === property) ? !vm.reverse : false;
     vm.sortProperty = property;
 
@@ -231,7 +231,7 @@ function ListController($scope, $state, $q, $location, $anchorScroll, $mdDialog,
     vm.opportunitiesChevron = (property === 'groupedOpportunities.length') ? !vm.opportunitiesChevron : vm.opportunitiesChevron;
     vm.depletionsChevron = (property === 'depletionsCurrentYearToDate') ? !vm.depletionsChevron : vm.depletionsChevron;
     vm.segmentationChevron = (property === 'segmentation') ? !vm.segmentationChevron : vm.storeChevron;
-  }
+  } */
 
   // Select or deselect individual list item
   function selectOpportunity(event, parent, item, list) {
@@ -287,12 +287,6 @@ function ListController($scope, $state, $q, $location, $anchorScroll, $mdDialog,
 
   function collapseCallback(item) {
     vm.expandedOpportunities--;
-  }
-
-  function pageChanged() {
-    // $location.hash('opportunities');
-
-    // $anchorScroll();
   }
 
   function allOpportunitiesExpanded() {
@@ -365,16 +359,16 @@ function ListController($scope, $state, $q, $location, $anchorScroll, $mdDialog,
 
   function dismissOpportunity(oId, payload) {
     opportunitiesService.createOpportunityFeedback(oId, payload).then(function(data) {
-      angular.forEach(vm.opportunitiesService.model.opportunitiesDisplay[0], function(value, key) {
+      /* angular.forEach(vm.opportunitiesService.model.opportunitiesDisplay[0], function(value, key) {
         if (value.id === oId) {
           vm.opportunitiesService.model.opportunities = vm.opportunitiesService.model.opportunitiesDisplay[0].splice(key, 1);
         }
-      });
+      }); */
     });
   }
 
   function init() {
-    opportunitiesService.model.opportunitiesDisplay = [];
+    // opportunitiesService.model.opportunitiesDisplay = [];
   }
 }
 
