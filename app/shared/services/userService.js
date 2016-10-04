@@ -301,14 +301,14 @@ module.exports = /*  @ngInject */
      */
     function getPerformanceSummary() {
       var performancePromise = $q.defer(),
-          url = apiHelperService.request('/api/users/' + service.model.currentUser.personID + '/performance/summary/');
+          url = apiHelperService.request('/api/users/' + service.model.currentUser.employeeID + '/performance/summary');
 
       $http.get(url)
         .then(getPerformanceSummarySuccess)
         .catch(getPerformanceSummaryFail);
 
       function getPerformanceSummarySuccess(response) {
-        console.log('[userService.getPerformanceSummary] response: ', response.data);
+        console.log('[userService.getPerformanceSummary] response: ', response);
         performancePromise.resolve(response.data);
       }
 
@@ -477,6 +477,7 @@ module.exports = /*  @ngInject */
           .then(getTargetListsSuccess)
           .catch(getTargetListsFail);
       } else {
+        console.log('stuff');
         targetListPromise.resolve(service.model.targetLists);
       }
 

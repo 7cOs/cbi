@@ -19,7 +19,8 @@ module.exports = function(app) {
       uri = uri.split('?')[0];
       var en = '/' + app.get('config').api.version + '/' + uri.split('api/')[1];
       var signature = crypto.enc.Base64.stringify(crypto.HmacSHA256(en + app.get('config').api.apiKey, app.get('config').api.key));
-      var url = app.get('config').api.url + en + '?signature=' + signature + '&apiKey=' + app.get('config').api.apiKey;
+      // Adedd encodeURIComponent as signature is supposed to be encoded - WJAY 10/3
+      var url = app.get('config').api.url + en + '?signature=' + encodeURIComponent(signature) + '&apiKey=' + app.get('config').api.apiKey;
       if (params) {
         url = url + '&' + params;
       }

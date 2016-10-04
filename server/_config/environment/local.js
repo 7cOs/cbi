@@ -43,7 +43,48 @@ module.exports = function (config) {
   config.auth = {
     strategy: 'no-auth',
     user: {
-      jwt: config.api.jwt,
+      'personId': 5648,
+      'employeeID': '1012132',
+      'firstName': 'FRED',
+      'lastName': 'BERRIOS',
+      'email': 'FRED.BERRIOS@CBRANDS.COM',
+      'srcTypeCd': [
+        'SALES_HIER'
+      ],
+      'groupingCode': '133',
+      'corporateUser': true,
+      'userGroup': [
+        'cbi-role-iq-app-users',
+        'cbi employees',
+        'cbi users',
+        'cbi-adenabledaccounts',
+        'ug-cbigdc-biz-role-genmgr'
+      ],
+      'issuer': 'https://orion.cbrands.com',
+      'jwt': 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJsYXN0TmFtZSI6IkJFUlJJT1MiLCJpc3MiOiJodHRwczovL29yaW9uLmNicmFuZHMuY29tIiwiZW1wbG95ZWVJRCI6IjEwMTIxMzIiLCJmaXJzdE5hbWUiOiJGUkVEIiwiZ3JvdXBpbmdDb2RlIjoiMTMzIiwiY29ycG9yYXRlVXNlciI6dHJ1ZSwicGVyc29uSUQiOjU2NDgsImV4cCI6MTQ4MDcwNzY0MTE1MCwiaWF0IjoxNDc1NTIzNjQxMTUxLCJ1c2VyR3JvdXAiOlsiY2JpLXJvbGUtaXEtYXBwLXVzZXJzIiwiY2JpIGVtcGxveWVlcyIsImNiaSB1c2VycyIsImNiaS1hZGVuYWJsZWRhY2NvdW50cyIsInVnLWNiaWdkYy1iaXotcm9sZS1nZW5tZ3IiXSwiZW1haWwiOiJGUkVELkJFUlJJT1NAQ0JSQU5EUy5DT00iLCJzcmNUeXBlQ2QiOlsiU0FMRVNfSElFUiJdfQ.UZtqPfAFi8Ss9jF_4tmyrKRGW1JGwsvABS4OXujvK6k',
+      'jwtmap': {
+        'firstName': 'FRED',
+        'lastName': 'BERRIOS',
+        'groupingCode': '133',
+        'corporateUser': true,
+        'iss': 'https://orion.cbrands.com',
+        'personID': 5648,
+        'employeeID': '1012132',
+        'exp': 1480707641150,
+        'iat': 1475523641152,
+        'userGroup': [
+          'cbi-role-iq-app-users',
+          'cbi employees',
+          'cbi users',
+          'cbi-adenabledaccounts',
+          'ug-cbigdc-biz-role-genmgr'
+        ],
+        'email': 'FRED.BERRIOS@CBRANDS.COM',
+        'srcTypeCd': [
+          'SALES_HIER'
+        ]
+      }
+      /* jwt: config.api.jwt,
       jwtmap: {
         firstName: 'SHAWN',
         lastName: 'O\'NEIL',
@@ -59,7 +100,7 @@ module.exports = function (config) {
           'OFF_HIER',
           'SALES_HIER'
         ]
-      }
+      } */
     }
   };
 
