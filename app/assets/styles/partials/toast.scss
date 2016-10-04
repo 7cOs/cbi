@@ -72,14 +72,17 @@ md-toast {
 }
 
 .action-overlay {
-  width: 100%;
+  width: 103%;
   height: 100%;
   background: $green-2;
   position: absolute;
   top: 0;
-  left: 0;
+  left: -1.5%;
   opacity: 0;
   transition: all 300ms ease-in;
+  z-index: -1;
+  cursor: default;
+  outline: 0;
 
   div {
     display: inline-block;
@@ -100,6 +103,9 @@ md-toast {
     display: none;
   }
 
+  .hide-icon-wrapper {
+    cursor: pointer;
+  }
 
   p {
     color: $white;

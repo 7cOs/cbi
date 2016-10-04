@@ -125,14 +125,14 @@ v-accordion.styled-list(multiple="" id="opportunities" control="list.accordion" 
             label.bold Dismiss
         v-accordion(multiple class="nested-accordion")
           v-pane.styled-list(ng-repeat="product in opportunity.groupedOpportunities")
-            .action-overlay(ng-class="{'active': list.opportunityShared && product.id === list.currentOpportunityId, 'fail': list.shareOpportunityFail && product.id === list.currentOpportunityId}")
-              div.checkbox-wrapper
-                md-checkbox(aria-label="Action Item Select" ng-checked="true")
-              div.overlay-wrapper
-                p(ng-if="list.opportunityShared") Successfully sent to {{list.sharedCollaborators.length}} {{list.sharedCollaborators.length === 1 ? 'person' : 'people'}}
-                p(ng-if="list.shareOpportunityFail") Whatever you just tried didn't work
-              div(ng-click="list.currentOpportunityId = ''").hide-wrapper.hide-icon-wrapper.hide-row
             v-pane-header
+              .action-overlay(ng-class="{'active': list.opportunityShared && product.id === list.currentOpportunityId, 'fail': list.shareOpportunityFail && product.id === list.currentOpportunityId}" ng-click="$event.stopPropagation()")
+                div.checkbox-wrapper
+                  md-checkbox(aria-label="Action Item Select" ng-checked="true")
+                div.overlay-wrapper
+                  p(ng-if="list.opportunityShared") Successfully sent to {{list.sharedCollaborators.length}} {{list.sharedCollaborators.length === 1 ? 'person' : 'people'}}
+                  p(ng-if="list.shareOpportunityFail") Whatever you just tried didn't work
+                div(ng-click="list.currentOpportunityId = ''").hide-wrapper.hide-icon-wrapper.hide-row
               div.cell-parent.sub-item(row)
                 .regional-status(ng-if="product.regionalStatus")
                   div(class="{{product.regionalStatus}}")
@@ -152,9 +152,9 @@ v-accordion.styled-list(multiple="" id="opportunities" control="list.accordion" 
                         .more-icon
                       md-menu-content(width="4")
                         md-menu-item
-                          p(ng-click="list.openShareModal(product.id)") Send To
+                          p(ng-click="list.openShareModal(product.id); $pane.collapse()") Send To
                         md-menu-item
-                          p(ng-click="list.openDismissModal(product.id)") Dismiss
+                          p(ng-click="list.openDismissModal(product.id); $pane.collapse()") Dismiss
             .shadow-wrap.top
               v-pane-content
                 div(row)
