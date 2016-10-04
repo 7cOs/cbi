@@ -30,8 +30,11 @@ module.exports = /*  @ngInject */
           i++;
         }
 
-        return '?' + queryParams;
+        return '?' + encodeURIComponent(queryParams);
       } else if (obj.type && obj.type === 'opportunities') {
+        var p = applyPage(),
+            s = applySort(),
+            queryStr = '';
         queryParams += '';
 
         // remove type obj
@@ -91,15 +94,18 @@ module.exports = /*  @ngInject */
           i++;
         }
 
-        console.log('[apiHelperService.formatQueryString]', queryParams);
+        filtersService.model.appliedFilter.appliedFilter = queryParams;
 
-        return '?limit=2000&sort=store&filter=' + encodeURIComponent(queryParams);
+        console.log('[apiHelperService.formatQueryString.queryStr]', '?' + 'limit=2000' + s + p + '&filter=' + filtersService.model.appliedFilter.appliedFilter);
+        queryStr = '?' + 'limit=2000' + encodeURIComponent(s) + p + '&filter=' + encodeURIComponent(filtersService.model.appliedFilter.appliedFilter);
+
+        return queryStr;
       } else if (obj.type && obj.type === 'targetLists') {
         delete obj.type;
 
-        queryParams += '?archived=true';
+        queryParams += 'archived=true';
 
-        return queryParams;
+        return '?' + queryParams;
       } else if (obj.type && obj.type === 'noencode') {
         queryParams += 'filter=';
 
@@ -143,5 +149,38 @@ module.exports = /*  @ngInject */
       if (paramsObj) q = formatQueryString(paramsObj);
 
       return base + q;
+    }
+
+    /* Private Methods */
+    /**
+     * @name applyPage
+     * @desc applies a page to opportunities request
+     * @returns {String} - formatted query
+     * @memberOf cf.common.services
+     */
+    function applyPage() {
+      return '&offset=' + filtersService.model.appliedFilter.pagination.currentPage;
+    }
+
+    /**
+     * @name applySort
+     * @desc applies a sort to opportunities request
+     * @returns {String} - formatted query
+     * @memberOf cf.common.services
+     */
+    function applySort() {
+      var arr = angular.copy(filtersService.model.appliedFilter.sort.sortArr),
+          str = '';
+
+      for (var i = 0; i < arr.length; i++) {
+        if (arr[i].asc) {
+          str += arr[i].str + ':ascending';
+        } else {
+          str += arr[i].str + ':descending';
+        }
+
+        if (arr.length - 1 !== i) str += ',';
+      }
+      return '&sort=' + str;
     }
   };

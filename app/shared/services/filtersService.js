@@ -4,6 +4,22 @@ module.exports = /*  @ngInject */
   function filtersService() {
     var model = {
       account: [],
+      appliedFilter: {
+        appliedFilter: '',
+        pagination: {
+          currentPage: 1,
+          totalPages: 1,
+          default: true
+        },
+        sort: {
+          sortArr: [
+            {
+              str: 'store',
+              asc: true
+            }
+          ]
+        }
+      },
       subaccount: [],
       masterSKU: '',
       cbbdContact: '',
