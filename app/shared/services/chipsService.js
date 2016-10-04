@@ -176,11 +176,16 @@ module.exports = /*  @ngInject */
             break;
           } else if ($filter('titlecase')(arr[i]) === chip.name.split(' ')[0]) {
             arr.splice(i, 1);
+
             // update model
             if (chip.type === 'productType') filtersService.model['productType' + chip.name.split(' ')[0]] = false;
             if (chip.type === 'tradeChannel') filtersService.model['tradeChannel' + chip.name] = false;
             if (chip.type === 'opportunityStatus') filtersService.model['opportunityStatus' + chip.name] = false;
             if (chip.type === 'cbbdChain') filtersService.model['cbbdChain' + chip.name.split(' ')[0]] = false;
+            break;
+          } else if (chip.type === 'distributor' || chip.type === 'account' || chip.type === 'subaccount' || chip.type === 'store' || chip.type === 'cbbdContact') {
+            var index = arr.indexOf(chip.id);
+            arr.splice(index, 1);
             break;
           }
         }
@@ -237,8 +242,10 @@ module.exports = /*  @ngInject */
           case 'store':
           case 'distributor':
           case 'cbbdContact':
-            addAutocompleteChip(displayName, filter);
+            addAutocompleteChip(displayName, filter, null, result.id);
             model.push(result.id);
+            filtersService.model.chain = '';
+            filtersService.model.store = '';
             break;
           case 'masterSKU':
             if (result.id === null) {
