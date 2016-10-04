@@ -226,7 +226,13 @@ module.exports = /*  @ngInject */
 
     function applyFilterArr(model, result, filter, displayName) {
       //  fall back to result if displayName is undefined
-      if (!displayName) displayName = result;
+      if (!displayName) {
+        if (result.brand) {
+          displayName = result.brand;
+        } else {
+          displayName = result;
+        }
+      }
       displayName = $filter('titlecase')(displayName);
 
       if (model.indexOf(result) > -1) {

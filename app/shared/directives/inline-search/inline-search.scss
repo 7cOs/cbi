@@ -42,6 +42,20 @@
           background: $gray-4;
           cursor: hand;
         }
+
+        .result {
+          float: left;
+          width: 75%;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+        }
+
+        .result-type {
+          float: right;
+          position: relative;
+          top: 4px;
+        }
       }
 
       .user-data {
