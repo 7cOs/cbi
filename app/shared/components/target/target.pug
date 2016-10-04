@@ -22,8 +22,8 @@ div.target-lists
                     h3(column="6").closed {{list.opportunitiesSummary.closedOpportunitiesCount | number}}
                     h3(column="6") {{list.opportunitiesSummary.opportunitiesCount | number}}
                 div.target-list-row-two
-                  p.accent(ng-if="list.creator") {{list.creator}}
-                  p.accent.collaborators {{list.members.length}} collaborators
+                  p(column="3").accent(ng-if="list.creator") {{list.creator}}
+                  p(column="3").accent.collaborators {{list.members.length}} collaborators
                   p(column="3" am-time-ago="(list.dateOpportunitiesUpdated ? list.dateOpportunitiesUpdated : list.createdAt | amUtc | amLocal)").accent
 
                 div
