@@ -99,6 +99,7 @@ navbar {
 
 .nav-flyout {
   position: relative;
+  overflow: auto;
 
   &:after {
     border-bottom: 4px solid $gray-9;

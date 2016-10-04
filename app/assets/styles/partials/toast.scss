@@ -72,40 +72,57 @@ md-toast {
 }
 
 .action-overlay {
-  width: 100%;
-  height: 73px;
+  width: 103%;
+  height: 100%;
   background: $green-2;
   position: absolute;
   top: 0;
-  left: 0;
+  left: -1.5%;
   opacity: 0;
   transition: all 300ms ease-in;
+  z-index: -1;
+  cursor: default;
+  outline: 0;
 
   div {
     display: inline-block;
+    margin-top: 3.5%;
+    padding-top: 0;
   }
 
   .overlay-wrapper {
-    padding: 15px 25px 0;
+    padding: 0 25px 15px;
+
+    p {
+      margin-top: 6px;
+      font-size: inherit;
+    }
   }
 
   .checkbox-wrapper {
-    background-color: $green-2;
+    display: none;
+  }
 
-    md-checkbox.md-checked .md-icon {
-      box-shadow: none;
-      background-color: $green-2;
-    }
+  .hide-icon-wrapper {
+    cursor: pointer;
   }
 
   p {
     color: $white;
-    font-size: 0.8em;
   }
 
   &.active {
     z-index: 2;
     opacity: 1;
+
+    .checkbox-wrapper {
+      background-color: $green-2;
+
+      md-checkbox.md-checked .md-icon {
+        box-shadow: none;
+        background-color: $green-2;
+      }
+    }
   }
 
   .hide-row {
@@ -117,10 +134,18 @@ md-toast {
   }
 
   &.fail {
+    z-index: 2;
+    opacity: 1;
     background: $red;
 
     .checkbox-wrapper {
+      background-color: $red;
       display: none;
+
+      md-checkbox.md-checked .md-icon {
+        box-shadow: none;
+        background-color: $red;
+      }
     }
 
     .hide-row {

@@ -77,6 +77,10 @@ list {
     &.regional-status {
       padding: 0;
     }
+
+    &.action-overlay {
+      padding-top: 0;
+    }
   }
 
   .styled-list {
@@ -85,6 +89,7 @@ list {
 
   .md-button.md-icon-button {
     padding: 0;
+    // z-index: 1;
   }
 }
 
@@ -203,7 +208,7 @@ list {
 }
 
 .hide-icon-wrapper {
-  padding: 2em 15px 1em 0;
+  padding: 2em 53px 1em 0;
 
   &:hover {
     cursor: hand;
