@@ -250,7 +250,9 @@ module.exports = /*  @ngInject */
     function createOpportunityFeedback(opportunityID, data) {
       var opportunitiesPromise = $q.defer(),
           url = apiHelperService.request('/api/opportunities/' + opportunityID + '/feedback/'),
-          payload = data;
+          payload = {
+            'feedback': data.type
+          };
 
       $http.post(url, payload, {
         headers: {}
@@ -280,11 +282,14 @@ module.exports = /*  @ngInject */
      * @returns {Object}
      * @memberOf cf.common.services
      */
-    function deleteOpportunityFeedback(url, opportunityID, feedbackID) {
+    function deleteOpportunityFeedback(opportunityID) {
       var opportunitiesPromise = $q.defer(),
-          payload = {};
+          url = apiHelperService.request('/api/opportunities/' + opportunityID + '/feedback/'),
+          payload = {
+            'feedback': ''
+          };
 
-      $http.post(url, payload)
+      $http.delete(url, payload)
         .then(deleteOpportunitiesFeedbackSuccess)
         .catch(deleteOpportunitiesFeedbackFail);
 
