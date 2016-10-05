@@ -64,5 +64,15 @@ module.exports = function(app) {
         console.log(err);
       })
       .pipe(res);
+    })
+
+    .head(function(req, res) {
+      const auth = app.locals.apiAuth;
+
+      request.head(auth.signed).auth(null, null, true, auth.jwtToken)
+      .on('err', function(err) {
+        console.log(err);
+      })
+      .pipe(res);
     });
 };

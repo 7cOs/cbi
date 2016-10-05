@@ -12,6 +12,7 @@ function ListController($scope, $state, $q, $location, $anchorScroll, $mdDialog,
   // Services
   vm.opportunitiesService = opportunitiesService;
   vm.userService = userService;
+  vm.filtersService = filtersService;
 
   // Defaults
   vm.currentOpportunityId = '';

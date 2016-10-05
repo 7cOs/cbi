@@ -127,7 +127,7 @@ module.exports = /*  @ngInject */
       console.log('[targetListService.getTargetListOpportunities url]', url);
 
       // reset opportunities
-      opportunitiesService.model.opportunitiesSum = 0;
+      // opportunitiesService.model.opportunitiesSum = 0;
 
       $http.get(url)
         .then(getTargetListOpportunitiesSuccess)
@@ -186,7 +186,7 @@ module.exports = /*  @ngInject */
           // push last store into newOpportunityArr
           if (i + 1 === response.data.opportunities.length) newOpportunityArr.push(store);
 
-          opportunitiesService.model.opportunitiesSum += 1;
+          // opportunitiesService.model.opportunitiesSum += 1;
         }; // end for each
 
         // set data for pagination

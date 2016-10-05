@@ -103,6 +103,11 @@ module.exports = /*  @ngInject */
     function applyFilters(isTargetList) {
       loaderService.openLoader(true);
       if (!isTargetList) {
+        // To Do: $q.all
+        opportunitiesService.getOpportunitiesHeaders().then(function(data) {
+          console.log(filtersService.model.appliedFilter.pagination);
+        });
+
         opportunitiesService.getOpportunities().then(function(data) {
           loaderService.closeLoader();
           finishGet(data);
