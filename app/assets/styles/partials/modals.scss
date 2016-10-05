@@ -291,8 +291,12 @@ md-dialog {
     }
 
     input.disabled {
-      background: $gray-4;
-    }
+      background: $gray-13;
+
+      &::placeholder {
+        color: $gray-2;
+      }
+}
   }
 
   &.create-target-list,
