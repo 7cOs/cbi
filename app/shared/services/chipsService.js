@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports = /*  @ngInject */
-  function chipsService($filter, loaderService, filtersService, opportunitiesService, targetListService) {
+  function chipsService($filter, $q, loaderService, filtersService, opportunitiesService, targetListService) {
 
     var chipsTemplate = [
       {
@@ -104,9 +104,16 @@ module.exports = /*  @ngInject */
       loaderService.openLoader(true);
       if (!isTargetList) {
         // To Do: $q.all
-        opportunitiesService.getOpportunitiesHeaders().then(function(data) {
-          console.log(filtersService.model.appliedFilter.pagination);
+        var promiseArr = [opportunitiesService.getOpportunities(), opportunitiesService.getOpportunitiesHeaders()];
+
+        $q.all(promiseArr).then(function(data) {
+          loaderService.closeLoader();
+          finishGet(data[0]);
+        }, function(reason) {
+          console.log('Error: ' + reason);
+          loaderService.closeLoader();
         });
+        /* opportunitiesService.getOpportunitiesHeaders().then(function(data) {});
 
         opportunitiesService.getOpportunities().then(function(data) {
           loaderService.closeLoader();
@@ -114,7 +121,7 @@ module.exports = /*  @ngInject */
         }, function(reason) {
           console.log('Error: ' + reason);
           loaderService.closeLoader();
-        });
+        }); */
       } else if (isTargetList) {
         targetListService.getTargetListOpportunities(targetListService.model.currentList.id, {type: 'opportunities'}).then(function(data) {
           loaderService.closeLoader();
