@@ -11,7 +11,7 @@ module.exports = /*  @ngInject */
      */
     return function(str) {
       var map = {
-        'MANUAL': 'Manual',
+        'CUSTOM': 'Custom',
         'AT_RISK': 'At Risk',
         'NON_BUY': 'Non-Buy',
         'NEW_PLACEMENT_NO_REBUY': 'New Placement No Rebuy',
