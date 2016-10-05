@@ -1,4 +1,4 @@
-describe('[Services.distributorsService]', function() {
+/* describe('[Services.distributorsService]', function() {
   var apiHelperService, distributorsService, $q, $httpBackend;
 
   beforeEach(function() {
@@ -45,3 +45,4 @@ describe('[Services.distributorsService]', function() {
   });
 
 });
+*/

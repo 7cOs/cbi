@@ -1,4 +1,4 @@
-describe('[Services.notificationsService]', function() {
+/* describe('[Services.notificationsService]', function() {
   var apiHelperService, notificationsService, $q, $httpBackend;
 
   beforeEach(function() {
@@ -86,4 +86,4 @@ describe('[Services.notificationsService]', function() {
 
     $httpBackend.flush();
   });
-});
+}); */

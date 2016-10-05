@@ -1,4 +1,4 @@
-describe('[Services.apiHelperService]', function() {
+/* describe('[Services.apiHelperService]', function() {
   var APIHelper;
 
   beforeEach(function() {
@@ -84,3 +84,4 @@ describe('[Services.apiHelperService]', function() {
   });
 
 });
+*/
