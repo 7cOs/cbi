@@ -1,6 +1,6 @@
 'use strict';
 
-function ListController($scope, $state, $q, $location, $anchorScroll, $mdDialog, filtersService, opportunitiesService, targetListService, storesService, userService, closedOpportunitiesService) {
+function ListController($scope, $state, $q, $location, $anchorScroll, $mdDialog, filtersService, loaderService, opportunitiesService, targetListService, storesService, userService, closedOpportunitiesService) {
 
   // ****************
   // CONTROLLER SETUP
@@ -219,9 +219,9 @@ function ListController($scope, $state, $q, $location, $anchorScroll, $mdDialog,
   function sortBy(name) {
     filtersService.addSortFilter(name);
 
-    // To Do: add loading icon
+    loaderService.openLoader(true);
     opportunitiesService.getOpportunities().then(function(data) {
-      // To Do: remove loading icon
+      loaderService.closeLoader();
     });
   }
   /* function sortBy(property) {

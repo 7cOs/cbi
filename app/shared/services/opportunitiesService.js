@@ -4,7 +4,6 @@ module.exports = /*  @ngInject */
     var model = {
       filterApplied: false,
       opportunities: [],
-      // opportunitiesSum: 0,
       opportunityId: null,
       noOpportunitiesFound: false
     };
