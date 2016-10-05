@@ -12,6 +12,7 @@ function FilterController($state, $scope, $mdDialog, $mdSelect, chipsService, fi
 
   vm.chipsService = chipsService;
   vm.filtersService = filtersService;
+  vm.userService = userService;
 
   vm.appendDoneButton = appendDoneButton;
   vm.applyFilterArr = chipsService.applyFilterArr;
