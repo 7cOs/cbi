@@ -142,8 +142,7 @@ module.exports = /*  @ngInject */
         filtersService.model.appliedFilter.pagination.totalOpportunities = response.headers()['opportunity-count'];
         filtersService.model.appliedFilter.pagination.totalStores = response.headers()['store-count'];
 
-        filtersService.model.appliedFilter.pagination.totalPages = (filtersService.model.appliedFilter.pagination.totalOpportunities / 100);
-        console.log(filtersService.model.appliedFilter.pagination.totalPages);
+        filtersService.model.appliedFilter.pagination.totalPages = Math.ceil(filtersService.model.appliedFilter.pagination.totalOpportunities / 100);
 
         console.log('[opportunitiesService.getOpportunitiesHeaders] response: ', response.headers());
         opportunitiesPromise.resolve(response.headers());
