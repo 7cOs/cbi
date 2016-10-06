@@ -1,6 +1,6 @@
 'use strict';
 
-function PageController($scope, $state, filtersService, opportunitiesService) {
+function PageController($scope, $state, filtersService, loaderService, opportunitiesService) {
   // Initial variables
   var vm = this;
 
@@ -11,8 +11,6 @@ function PageController($scope, $state, filtersService, opportunitiesService) {
   vm.displayPagination = displayPagination;
   vm.getNumber = getNumber;
   vm.pageChanged = pageChanged;
-
-  init();
 
   // Public Methods
   function displayPagination() {
@@ -53,19 +51,10 @@ function PageController($scope, $state, filtersService, opportunitiesService) {
   function pageChanged(pageNumber) {
     filtersService.model.appliedFilter.pagination.currentPage = pageNumber;
 
-    // Add loader
+    loaderService.openLoader(true);
     opportunitiesService.getOpportunities().then(function(data) {
-      updatePaginationButtons();
-      // Close loader
+      loaderService.closeLoader();
     });
-  }
-
-  // Private Methods
-  function updatePaginationButtons() {
-    console.log(filtersService.model.appliedFilter.pagination.currentPage);
-  }
-
-  function init() {
   }
 }
 
