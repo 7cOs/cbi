@@ -8,7 +8,7 @@ module.exports = /*  @ngInject */
     }
 
     // IE Workaround to correct incorrect caching by IE
-    $httpProvider.defaults.headers.get['If-Modified-Since'] = 'Mon, 26 Jul 1997 05:00:00 GMT';
+    $httpProvider.defaults.headers.get['If-Modified-Since'] = 'Fri, 19 Aug 2016 05:00:00 GMT';
 
     $mdThemingProvider.theme('default')
       .primaryPalette('grey')
