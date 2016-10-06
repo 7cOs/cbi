@@ -9,6 +9,7 @@ function PageController($scope, $state, filtersService, opportunitiesService) {
 
   // Methods
   vm.displayPagination = displayPagination;
+  vm.getNumber = getNumber;
   vm.pageChanged = pageChanged;
 
   // Public Methods
@@ -16,6 +17,11 @@ function PageController($scope, $state, filtersService, opportunitiesService) {
     if (opportunitiesService.model.opportunities.length > 0) return true;
 
     return false;
+  }
+
+  function getNumber(num) {
+    if (num < 10) return new Array(num);
+    else return new Array(10);
   }
 
   function pageChanged(pageNumber) {
