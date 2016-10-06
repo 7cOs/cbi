@@ -3,6 +3,8 @@
   justify-content: center;
 
   .md-button {
-    background-color: $blue;
+    // because of the way the styles are loaded, the default colors are overwriting our added styles. - wjay
+    background-color: $dark-blue !important;
+    color: $white !important;
   }
 }
