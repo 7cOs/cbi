@@ -126,8 +126,9 @@ module.exports = /*  @ngInject */
 
       console.log('[targetListService.getTargetListOpportunities url]', url);
 
-      // reset opportunities
-      opportunitiesService.model.opportunitiesSum = 0;
+      // reset opportunities counts
+      filtersService.model.appliedFilter.pagination.totalOpportunities = 0;
+      filtersService.model.appliedFilter.pagination.totalStores = 0;
 
       $http.get(url)
         .then(getTargetListOpportunitiesSuccess)
@@ -139,7 +140,6 @@ module.exports = /*  @ngInject */
             store,
             storePlaceholder;
         opportunitiesService.model.opportunities = [];
-        opportunitiesService.model.opportunitiesDisplay = [];
 
         for (var i = 0; i < response.data.opportunities.length; i++) {
           var item = response.data.opportunities[i];
@@ -147,7 +147,10 @@ module.exports = /*  @ngInject */
           // if its a new store
           if (!storePlaceholder || (storePlaceholder.address !== item.store.address || storePlaceholder.id !== item.store.id)) {
             // push previous store in newOpportunityArr
-            if (i !== 0) newOpportunityArr.push(store);
+            if (i !== 0) {
+              newOpportunityArr.push(store);
+              filtersService.model.appliedFilter.pagination.totalStores += 1;
+            }
 
             // create grouped store object
             store = angular.copy(item);
@@ -184,17 +187,15 @@ module.exports = /*  @ngInject */
           // store.depletionSum += item.depletions
 
           // push last store into newOpportunityArr
-          if (i + 1 === response.data.opportunities.length) newOpportunityArr.push(store);
+          if (i + 1 === response.data.opportunities.length) {
+            newOpportunityArr.push(store);
+            filtersService.model.appliedFilter.pagination.totalStores += 1;
+          }
 
-          opportunitiesService.model.opportunitiesSum += 1;
+          // opportunitiesService.model.opportunitiesSum += 1;
+          filtersService.model.appliedFilter.pagination.totalOpportunities += 1;
         }; // end for each
 
-        // set data for pagination
-        for (i = 0; i < newOpportunityArr.length; i = i + opportunitiesService.model.paging.itemsPerPage) {
-          var page = newOpportunityArr.slice(i, i + opportunitiesService.model.paging.itemsPerPage);
-          opportunitiesService.model.opportunitiesDisplay.push(page);
-        }
-        opportunitiesService.model.paging.pages = opportunitiesService.model.opportunitiesDisplay.length - 1;
         opportunitiesService.model.opportunities = newOpportunityArr;
         targetListPromise.resolve(newOpportunityArr);
       }

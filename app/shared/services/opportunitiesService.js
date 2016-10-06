@@ -4,23 +4,14 @@ module.exports = /*  @ngInject */
     var model = {
       filterApplied: false,
       opportunities: [],
-      // opportunitiesDisplay: [],
-      opportunitiesSum: 0,
       opportunityId: null,
-      /* paging: {
-        align: 'center center',
-        current: 1,
-        pages: 0,
-        // pageChanged: pageChanged, // This function fires at the start of page change. It also fires on pagination load.
-        steps: 10,
-        itemsPerPage: 15
-      }, */
       noOpportunitiesFound: false
     };
 
     var service = {
       model: model,
       getOpportunities: getOpportunities,
+      getOpportunitiesHeaders: getOpportunitiesHeaders,
       createOpportunity: createOpportunity,
       getOpportunitiyFeedback: getOpportunityFeedback,
       createOpportunityFeedback: createOpportunityFeedback,
@@ -38,14 +29,14 @@ module.exports = /*  @ngInject */
      * @memberOf cf.common.services
      */
     function getOpportunities(opportunityID) {
-      model.noOpportunitiesFound = false;
+      service.model.noOpportunitiesFound = false;
       if (!opportunityID) {
         // get applied filters
         var filterPayload = filtersService.getAppliedFilters('opportunities');
       }
 
       // reset opportunities
-      model.opportunitiesSum = 0;
+      // model.opportunitiesSum = 0;
 
       // create promise, build url based on filters and if there is an opp id
       var opportunitiesPromise = $q.defer(),
@@ -56,6 +47,8 @@ module.exports = /*  @ngInject */
         .catch(getOpportunitiesFail);
 
       function getOpportunitiesSuccess(response) {
+        console.log(response);
+
         // Group opportunities by store
         var newOpportunityArr = [],
             store,
@@ -114,16 +107,10 @@ module.exports = /*  @ngInject */
           // push last store into newOpportunityArr
           if (i + 1 === response.data.opportunities.length) newOpportunityArr.push(store);
 
-          service.model.opportunitiesSum += 1;
+          // service.model.opportunitiesSum += 1;
         }; // end for each
 
         // set data for pagination
-        /* for (i = 0; i < newOpportunityArr.length; i = i + service.model.paging.itemsPerPage) {
-          var page = newOpportunityArr.slice(i, i + service.model.paging.itemsPerPage);
-          service.model.opportunitiesDisplay.push(page);
-        } */
-        // service.model.paging.pages = service.model.opportunitiesDisplay.length;
-
         service.model.opportunities = newOpportunityArr;
 
         opportunitiesPromise.resolve(newOpportunityArr);
@@ -131,6 +118,39 @@ module.exports = /*  @ngInject */
 
       function getOpportunitiesFail(error) {
         console.warn('[opportunitiesService.getOpportunities]... Error getting opportunities... Err: ', error);
+        opportunitiesPromise.reject(error);
+      }
+
+      return opportunitiesPromise.promise;
+    }
+
+    /**
+     * @name getOpportunityHeaders
+     * @desc get the opportunity headers
+     * @returns {Object}
+     * @memberOf cf.common.services
+    */
+    function getOpportunitiesHeaders() {
+      var opportunitiesPromise = $q.defer(),
+          url = apiHelperService.request('/api/opportunities/', filtersService.getAppliedFilters('opportunities'));
+
+      $http.head(url)
+        .then(getOpportunitiesHeadersSuccess)
+        .catch(getOpportunitiesHeadersFail);
+
+      function getOpportunitiesHeadersSuccess(response) {
+        filtersService.model.appliedFilter.pagination.totalOpportunities = response.headers()['opportunity-count'];
+        filtersService.model.appliedFilter.pagination.totalStores = response.headers()['store-count'];
+
+        filtersService.model.appliedFilter.pagination.totalPages = (filtersService.model.appliedFilter.pagination.totalOpportunities / 100);
+        console.log(filtersService.model.appliedFilter.pagination.totalPages);
+
+        console.log('[opportunitiesService.getOpportunitiesHeaders] response: ', response.headers());
+        opportunitiesPromise.resolve(response.headers());
+      }
+
+      function getOpportunitiesHeadersFail(error) {
+        console.warn('[opportunitiesService.getOpportunitiesHeaders] Failed with err: ', error);
         opportunitiesPromise.reject(error);
       }
 

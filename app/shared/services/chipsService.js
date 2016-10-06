@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports = /*  @ngInject */
-  function chipsService($filter, loaderService, filtersService, opportunitiesService, targetListService) {
+  function chipsService($filter, $state, $q, loaderService, filtersService, opportunitiesService, targetListService) {
 
     var chipsTemplate = [
       {
@@ -100,12 +100,16 @@ module.exports = /*  @ngInject */
       }
     }
 
-    function applyFilters(isTargetList) {
+    function applyFilters() {
+      var isTargetList = false;
+      if ($state.current.name === 'target-list-detail') isTargetList = true;
+
       loaderService.openLoader(true);
+
       if (!isTargetList) {
-        opportunitiesService.getOpportunities().then(function(data) {
+        $q.all([opportunitiesService.getOpportunities(), opportunitiesService.getOpportunitiesHeaders()]).then(function(data) {
           loaderService.closeLoader();
-          finishGet(data);
+          finishGet(data[0]);
         }, function(reason) {
           console.log('Error: ' + reason);
           loaderService.closeLoader();

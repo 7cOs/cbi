@@ -9,7 +9,9 @@ module.exports = /*  @ngInject */
         pagination: {
           currentPage: 1,
           totalPages: 1,
-          default: true
+          default: true,
+          totalOpportunities: 0,
+          totalStores: 0
         },
         sort: {
           sortArr: [

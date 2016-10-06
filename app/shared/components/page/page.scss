@@ -1,0 +1,10 @@
+.pagination {
+  display: flex;
+  justify-content: center;
+
+  .md-button {
+    // because of the way the styles are loaded, the default colors are overwriting our added styles. - wjay
+    background-color: $dark-blue !important;
+    color: $white !important;
+  }
+}

@@ -1,6 +1,6 @@
 .total-opportunities
-  h4(ng-if="list.pageName(['accounts']) || list.pageName(['target-list-detail'])" ng-hide="list.opportunitiesService.model.opportunities.length < 1") {{list.opportunitiesService.model.opportunitiesSum | number:0 }} opportunities <span>across {{list.opportunitiesService.model.opportunities.length}} stores</span>
-  // h3(ng-if="list.pageName(['opportunities']) || !list.pageName(['target-list-detail'])" ng-hide="list.opportunitiesService.model.opportunities.length === 0") <strong>{{list.opportunitiesService.model.opportunitiesSum}} opportunities</strong> across {{list.opportunitiesService.model.opportunities.length}} stores
+  h4(ng-if="list.pageName(['accounts']) || list.pageName(['target-list-detail'])" ng-hide="list.opportunitiesService.model.opportunities.length < 1") {{list.filtersService.model.appliedFilter.pagination.totalOpportunities | number:0 }} opportunities <span>across {{list.filtersService.model.appliedFilter.pagination.totalStores | number:0}} stores</span>
+  //- h3(ng-if="list.pageName(['opportunities']) || !list.pageName(['target-list-detail'])" ng-hide="list.opportunitiesService.model.opportunities.length === 0") <strong>{{list.opportunitiesService.model.opportunitiesSum}} opportunities</strong> across {{list.opportunitiesService.model.opportunities.length}} stores
 
 .action-buttons
   span(ng-switch="list.selected < 1")
@@ -27,30 +27,30 @@ button.icon.narrow-icon.collapse-all(ng-click="list.noOpportunitiesExpanded() ? 
 p.list-disabled-message {{list.disabledMessage}}
 
 v-accordion.styled-list(multiple="" id="opportunities" control="list.accordion" onexpand="list.expandCallback(item)" oncollapse="list.collapseCallback(item)" column='12' )
-  div.header-row(row ng-class="{'header-disabled': list.opportunitiesService.model.opportunitiesSum === 0}")
+  div.header-row(row ng-class="{'header-disabled': list.filtersService.model.appliedFilter.pagination.totalOpportunities === 0}")
     div.checkbox-wrapper.placeholder
     div.hide-wrapper(ng-if="list.pageName()")
       label
     div.more-wrapper(ng-if="!list.pageName()")
     div.checkbox-sibling(column='12')
       div(column='3')
-        label(ng-click="list.sortBy('store')" ng-class="{ 'header-bold' : list.sortProperty === 'opportunity.store.name'}")
+        label(ng-click="list.sortBy('store')" ng-class="{ 'header-bold' : list.filtersService.model.appliedFilter.sort.sortArr[0].str === 'store'}")
           | Store / Number
-          span(ng-class="{ 'chevron-down-small' : list.storeChevron, 'chevron-up-small' : !list.storeChevron}").chevron-down-small
+          span(ng-class="{ 'chevron-down-small' : (list.filtersService.model.appliedFilter.sort.sortArr[0].asc && list.filtersService.model.appliedFilter.sort.sortArr[0].str === 'store'), 'chevron-up-small' : (!list.filtersService.model.appliedFilter.sort.sortArr[0].asc && list.filtersService.model.appliedFilter.sort.sortArr[0].str === 'store')}").chevron-down-small
       div(column='4')
         label Address
       div(column='2')
         label Opportunities
       div(column='1')
-        label(ng-click="list.sortBy('depletions')" ng-class="{ 'header-bold' : list.sortProperty === 'depletionsCurrentYearToDate'}")
+        label(ng-click="list.sortBy('depletions')" ng-class="{ 'header-bold' : list.filtersService.model.appliedFilter.sort.sortArr[0].str === 'depletions'}")
           | Depletions CYTD
-          span(ng-class="{ 'chevron-down-small' : !list.depletionsChevron, 'chevron-up-small' : list.depletionsChevron}").chevron-down-small
+          span(ng-class="{ 'chevron-down-small' : (list.filtersService.model.appliedFilter.sort.sortArr[0].asc && list.filtersService.model.appliedFilter.sort.sortArr[0].str === 'depletions'), 'chevron-up-small' : (!list.filtersService.model.appliedFilter.sort.sortArr[0].asc && list.filtersService.model.appliedFilter.sort.sortArr[0].str === 'depletions')}").chevron-down-small
       div(column='1')
         label vs Ya%
       div(column='1')
-        label(ng-click="list.sortBy('segmentation')" ng-class="{ 'header-bold' : list.sortProperty === 'segmentation'}")
+        label(ng-click="list.sortBy('segmentation')" ng-class="{ 'header-bold' : list.filtersService.model.appliedFilter.sort.sortArr[0].str === 'segmentation'}")
           | Segmentation
-          span(ng-class="{ 'chevron-down-small' : !list.segmentationChevron, 'chevron-up-small' : list.segmentationChevron}").chevron-down-small
+          span(ng-class="{ 'chevron-down-small' : (list.filtersService.model.appliedFilter.sort.sortArr[0].asc && list.filtersService.model.appliedFilter.sort.sortArr[0].str === 'segmentation'), 'chevron-up-small' : (!list.filtersService.model.appliedFilter.sort.sortArr[0].asc && list.filtersService.model.appliedFilter.sort.sortArr[0].str === 'segmentation')}").chevron-down-small
   div(ng-if="list.opportunitiesService.model.noOpportunitiesFound === true").no-opportunites
     h4 No Opportunities have been added yet
     p Try Searching for <span>Opportunities</span> and add them to your list
