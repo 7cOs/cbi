@@ -200,7 +200,7 @@ module.exports = /*  @ngInject */
       service.model.filtersApplied = filtersAppliedBool;
       service.model.filtersDefault = filtersDefaultBool;
       service.model.disableReset = disableResetBool;
-      service.model.disableSaveFilter = !service.model.filtersApplied;
+      service.model.disableSaveFilter = disableSaveFilterBool;
     }
 
     function resetFilters() {

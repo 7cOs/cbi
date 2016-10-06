@@ -198,7 +198,7 @@ module.exports = /*  @ngInject */
       } else if (typeof chip.type === 'boolean') {
         filtersService.model.selected[chip.type] = false;
       }
-      filtersService.disableFilters(false, false, true);
+      filtersService.disableFilters(false, false, true, true);
     }
 
     /**
@@ -276,6 +276,7 @@ module.exports = /*  @ngInject */
         }
       }
       filtersService.model[filter] = '';
+      filtersService.disableFilters(false, false, true, true);
     }
 
     /**
