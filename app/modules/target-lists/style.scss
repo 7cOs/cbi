@@ -119,6 +119,7 @@
 .reset-icon-disabled:before {
   background-image: url('../assets/img/icons/reset-arrow-disabled.svg');
   background-size: 11px;
+  cursor: default;
 }
 
 .save-filterset-icon:before {
@@ -131,6 +132,7 @@
   background-image: url('../assets/img/icons/save-filterset-icon-disabled.svg');
   background-size: 14px;
   left: -20px;
+  cursor: default;
 }
 
 .save-report-hover:before {
