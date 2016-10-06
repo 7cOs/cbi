@@ -1,6 +1,6 @@
 'use strict';
 
-function PageController($scope, $state, filtersService, opportunitiesService) {
+function PageController($scope, $state, filtersService, loaderService, opportunitiesService) {
   // Initial variables
   var vm = this;
 
@@ -19,15 +19,41 @@ function PageController($scope, $state, filtersService, opportunitiesService) {
     return false;
   }
 
-  function getNumber(num) {
-    if (num < 10) return new Array(num);
-    else return new Array(10);
+  function getNumber() {
+    var start = 1,
+        end = 1,
+        currentPage = filtersService.model.appliedFilter.pagination.currentPage,
+        totalPages = filtersService.model.appliedFilter.pagination.totalPages;
+
+    if (currentPage < 5) {
+      start = 1;
+      end = 10;
+    } else if (currentPage > totalPages - 10) {
+      start = totalPages - 9;
+      end = totalPages;
+    } else {
+      start = currentPage - 4;
+      end = currentPage + 5;
+    }
+
+    if (totalPages < 10) return new Array(totalPages);
+    else {
+      var arr = [];
+
+      for (; start < end + 1; start++) {
+        arr.push(start);
+      }
+
+      return arr;
+    }
   }
 
   function pageChanged(pageNumber) {
     filtersService.model.appliedFilter.pagination.currentPage = pageNumber;
 
+    loaderService.openLoader(true);
     opportunitiesService.getOpportunities().then(function(data) {
+      loaderService.closeLoader();
     });
   }
 }
