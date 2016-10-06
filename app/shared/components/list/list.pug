@@ -55,7 +55,7 @@ v-accordion.styled-list(multiple="" id="opportunities" control="list.accordion" 
   div(ng-if="list.opportunitiesService.model.noOpportunitiesFound === true").no-opportunites
     h4 Dang!
     p We were unable to find any opportunities that met your search criteria. Try broadening your search a little bit!
-  v-pane.list-item(row ng-repeat="opportunity in list.opportunitiesService.model.opportunities" expanded='opportunity.isExpanded')
+  v-pane.list-item(row ng-repeat="opportunity in list.opportunitiesService.model.opportunities | filter : {'dismissed': false}" expanded='opportunity.isExpanded')
     .shadow-wrap.bottom
       div.checkbox-wrapper(ng-click="list.toggleOpportunitiesInStores(opportunity, list.selected)")
         md-checkbox(aria-label="Select Item" ng-checked="opportunity.selectedOpportunities === opportunity.groupedOpportunities.length")
@@ -146,14 +146,15 @@ v-accordion.styled-list(multiple="" id="opportunities" control="list.accordion" 
         v-accordion(multiple class="nested-accordion")
           v-pane.styled-list(ng-repeat="product in opportunity.groupedOpportunities | orderBy: list.impactSort : true | filter : {'dismissed': false}")
             v-pane-header
-              .action-overlay(ng-class="{'active': list.opportunityShared && product.id === list.currentOpportunityId, 'fail': list.shareOpportunityFail && product.id === list.currentOpportunityId}" ng-click="$event.stopPropagation()")
+              .action-overlay(ng-class="{'active': (list.opportunityShared || list.opportunityDismissTrigger) && product.id === list.currentOpportunityId, 'fail': list.shareOpportunityFail && product.id === list.currentOpportunityId}" ng-click="$event.stopPropagation()")
                 div.checkbox-wrapper
                   md-checkbox(aria-label="Action Item Select" ng-checked="true")
                 div.overlay-wrapper
                   p(ng-if="list.opportunityShared") Successfully sent to {{list.sharedCollaborators.length}} {{list.sharedCollaborators.length === 1 ? 'person' : 'people'}}
-                  p(ng-if="list.opportunityDismissed === true")
+                  p(ng-if="list.opportunityDismissTrigger" ng-click="list.submitFeedback(list.currentOpportunityId, list.opportunity.feedback)") Opportunity Dismissed!
+                    a(ng-click="list.cancelFeedback(list.currentOpportunityId); list.opportunityDismissTrigger = false") UNDO
                   p(ng-if="list.shareOpportunityFail") Whatever you just tried didn't work
-                div(ng-click="list.currentOpportunityId = ''").hide-wrapper.hide-icon-wrapper.hide-row
+                div(ng-if="list.opportunityShared || list.shareOpportunityFail" ng-click="list.currentOpportunityId = ''").hide-wrapper.hide-icon-wrapper.hide-row
               div.cell-parent.sub-item(row)
                 .regional-status(ng-if="product.regionalStatus")
                   div(class="{{product.regionalStatus}}")

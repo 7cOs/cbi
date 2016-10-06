@@ -89,6 +89,7 @@ module.exports = /*  @ngInject */
             // create groupedOpportunities arr so all opportunities for one store will be in a row
             store.groupedOpportunities = [];
             store.groupedOpportunities.push(item);
+
           } else {
             store.groupedOpportunities.push(item);
           }
@@ -166,7 +167,8 @@ module.exports = /*  @ngInject */
         filtersService.model.appliedFilter.pagination.totalOpportunities = response.headers()['opportunity-count'];
         filtersService.model.appliedFilter.pagination.totalStores = response.headers()['store-count'];
 
-        filtersService.model.appliedFilter.pagination.totalPages = Math.floor(filtersService.model.appliedFilter.pagination.totalOpportunities / 100);
+        filtersService.model.appliedFilter.pagination.totalPages = (filtersService.model.appliedFilter.pagination.totalOpportunities / 100);
+        console.log(filtersService.model.appliedFilter.pagination.totalPages);
 
         console.log('[opportunitiesService.getOpportunitiesHeaders] response: ', response.headers());
         opportunitiesPromise.resolve(response.headers());
@@ -262,7 +264,7 @@ module.exports = /*  @ngInject */
 
       function getOpportunitiesFeedbackSuccess(response) {
         console.log('[opportunitiesService.getOpportunityFeedback] response: ', response);
-        opportunitiesPromise.resolve(response.data);
+        opportunitiesPromise.resolve(response);
       }
 
       function getOpportunitiesFeedbackFail(error) {
