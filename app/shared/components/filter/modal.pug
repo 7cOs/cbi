@@ -12,7 +12,7 @@ div.modal.save-report
             md-option(ng-repeat="savedFilter in filter.userService.model.opportunityFilters track by savedFilter.id" ng-value="savedFilter.id" aria-label="{{savedFilter.id}}") {{::savedFilter.name}}
     div.modal-input
       label(ng-class="{disabled: filter.userService.model.newServiceSelect !== 'new'}") Name
-      input(ng-model="filter.filtersService.model.newServiceName" placeholder="Enter a name" ng-disabled="filter.userService.model.newServiceSelect !=='new'")
+      input(ng-class="{disabled: filter.userService.model.newServiceSelect !== 'new'}" ng-model="filter.filtersService.model.newServiceName" placeholder="Enter a name" ng-disabled="filter.userService.model.newServiceSelect !=='new'")
     button.btn-action(ng-if="filter.userService.model.newServiceSelect ==='new'" ng-click="filter.saveFilter()" ng-disabled="filter.filtersService.model.newServiceName === ''") Save Report
     button.btn-action(ng-if="filter.userService.model.newServiceSelect !=='new'" ng-click="filter.saveFilter()" ng-disabled="filter.filtersService.model.newServiceName === ''") Update Report
     p.cancel.accent(ng-click="filter.closeModal()") X Cancel
