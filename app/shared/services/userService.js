@@ -301,7 +301,6 @@ module.exports = /*  @ngInject */
     * @returns {Object} - Status Object* @memberOf cf.common.services
     **/
     function updateOpportunityFilter(newFilterString, filterId) {
-      console.log(filterId);
 
       var opportunityFilterPromise = $q.defer(),
           url = apiHelperService.request('/api/opportunityFilters/' + filterId),
