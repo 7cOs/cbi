@@ -59,6 +59,7 @@ module.exports = /*  @ngInject */
     vm.getTargetLists = getTargetLists;
     vm.expandCallback = expandCallback;
     vm.collapseCallback = collapseCallback;
+    vm.getDate = getDate;
 
     // Mock Data for memo modal
     vm.limitedTime = {
@@ -85,6 +86,10 @@ module.exports = /*  @ngInject */
 
     function addToSharedCollaborators(person) {
       vm.sharedCollaborators.push(person);
+    }
+
+    function getDate() {
+      return new Date();
     }
 
     function addToTargetList(listId) {
