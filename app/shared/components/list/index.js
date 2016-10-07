@@ -6,4 +6,5 @@ module.exports =
     templateUrl: './app/shared/components/list/list.html',
     controller: 'listController',
     controllerAs: 'list'
-  });
+  })
+  .controller('listController', require('./listController'));
