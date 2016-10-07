@@ -10,26 +10,40 @@
             path(d='M19 6.41l-1.41-1.41-5.59 5.59-5.59-5.59-1.41 1.41 5.59 5.59-5.59 5.59 1.41 1.41 5.59-5.59 5.59 5.59 1.41-1.41-5.59-5.59z')
     md-chip-template(custom-chip="" ng-class="{closable: $chip.removable}")
       div {{$chip.name | titlecase}}
-.filters(column='12' ng-class="{'target-list': filter.opportunities}")
+form.filters(column='12' ng-class="{'target-list': filter.opportunities}")
   div.expand(row)
     div(class='more-filters')
       a(ng-click="filter.expandDropdown();")
         span(ng-class="{ 'chevron-up': filter.filtersService.model.expanded, 'chevron-down': !filter.filtersService.model.expanded}")
         span.accent(ng-if="filter.filtersService.model.expanded") Show Less Filters
         span.accent(ng-if="!filter.filtersService.model.expanded") Show More Filters
-    div(column='3')
-      label Account Scope
-      md-checkbox(ng-model="filter.filtersService.model.selected.myAccountsOnly" aria-label="My Accounts" ng-click="filter.chipsService.updateChip('myAccountsOnly', 'My Accounts Only')") My Accounts Only
+  div(row)
+    legend Select <strong>premise type</strong> followed by a <strong>retailer</strong> and/or <strong>distributor</strong> to begin your search
     div(column='3')
       label Premise Type
       md-radio-group(ng-model="filter.filtersService.model.selected.premiseType")
         md-radio-button(ng-repeat="p in filter.filtersService.model.premises | filter: '!All'"  class="md-primary" ng-value="p.value" aria-label="{{p.name}}" ng-click="filter.chipsService.addChip(p.name, 'premiseType', true, false); filter.resetTradeChannels()") {{::p.name}}
-    div.opportunityStatus(column='4')
+    div(column='4')
+      label Retailer
+      div(row).retailer.dropdown-filter
+        div(column='4').dropdown
+          md-select(ng-model="filter.filtersService.model.selected.retailer" placeholder="Chain" ng-init="filter.filtersService.model.selected.retailer = 'Chain'")
+            md-option(ng-repeat="type in filter.filtersService.model.retailer" ng-click="filter.placeholderSelect(type.hintText)" aria-label="{{type.name}}" value="{{type.name}}") {{::type.name}}
+        div(column='8')
+          inline-search(ng-if="filter.filtersService.model.selected.retailer === 'Store'" type="store" placeholder="{{filter.hintTextPlaceholder}}" chosen-result="filter.filtersService.model.store" show-address="true" callback="filter.applyFilterArr(filter.filtersService.model.selected.store, result, 'store', result.name)")
+          inline-search(ng-if="filter.filtersService.model.selected.retailer === 'Chain'" type="chain" placeholder="{{filter.hintTextPlaceholder}}" chosen-result="filter.filtersService.model.chain" callback="filter.applyFilterArr(filter.filtersService.model.selected[result.type], result, result.type, result.name)")
+    div(column='2')
+      label Distributor
+      inline-search(type="distributor" placeholder="Name" chosen-result="filter.filtersService.model.distributor" callback="filter.applyFilterArr(filter.filtersService.model.selected.distributor, result, 'distributor', result.name)")
+    div(column='3')
+      label Account Scope
+      md-checkbox(ng-model="filter.filtersService.model.selected.myAccountsOnly" aria-label="My Accounts" ng-click="filter.chipsService.updateChip('myAccountsOnly', 'My Accounts Only')") My Accounts Only
+  div(row)
+    div.checkbox-inline(column='3')
       label Opportunity Status
       md-checkbox(ng-model="filter.filtersService.model.opportunityStatusOpen" aria-label="Open" ng-change="filter.applyFilterArr(filter.filtersService.model.selected.opportunityStatus, 'Open', 'opportunityStatus')" ng-if="!filter.opportunityStatusSwitch()") Open
       md-checkbox(ng-model="filter.filtersService.model.opportunityStatusTargeted" aria-label="Targeted" ng-change="filter.applyFilterArr(filter.filtersService.model.selected.opportunityStatus, 'Targeted', 'opportunityStatus')") Targeted
       md-checkbox(ng-model="filter.filtersService.model.opportunityStatusClosed" aria-label="Closed" ng-change="filter.applyFilterArr(filter.filtersService.model.selected.opportunityStatus, 'Closed', 'opportunityStatus')" ng-if="filter.opportunityStatusSwitch()") Closed
-  div(row)
     div(column='3')
       .tooltip-wrap
         label Opportunity Type
@@ -49,18 +63,10 @@
     div(column='3' ng-if="filter.filtersService.model.selected.premiseType === 'on'")
       label Brand / Package
       inline-search(type="product" variety="package" placeholder="Brand or Package" chosen-result="filter.filtersService.model.masterSKU" callback="filter.applyFilterArr(filter.filtersService.model.selected.masterSKU, result, 'masterSKU', result.name)")
-    div(column='4')
-      label Retailer
-      div(row).retailer.dropdown-filter
-        div(column='4').dropdown
-          md-select(ng-model="filter.filtersService.model.selected.retailer" placeholder="Chain" ng-init="filter.filtersService.model.selected.retailer = 'Chain'")
-            md-option(ng-repeat="type in filter.filtersService.model.retailer" ng-click="filter.placeholderSelect(type.hintText)" aria-label="{{type.name}}" value="{{type.name}}") {{::type.name}}
-        div(column='8')
-          inline-search(ng-if="filter.filtersService.model.selected.retailer === 'Store'" type="store" placeholder="{{filter.hintTextPlaceholder}}" chosen-result="filter.filtersService.model.store" show-address="true" callback="filter.applyFilterArr(filter.filtersService.model.selected.store, result, 'store', result.name)")
-          inline-search(ng-if="filter.filtersService.model.selected.retailer === 'Chain'" type="chain" placeholder="{{filter.hintTextPlaceholder}}" chosen-result="filter.filtersService.model.chain" callback="filter.applyFilterArr(filter.filtersService.model.selected[result.type], result, result.type, result.name)")
-    div(column='2')
-      label Distributor
-      inline-search(type="distributor" placeholder="Name" chosen-result="filter.filtersService.model.distributor" callback="filter.applyFilterArr(filter.filtersService.model.selected.distributor, result, 'distributor', result.name)")
+    div.checkbox-inline(column='3')
+      label Store Type
+      md-checkbox(ng-model="filter.filtersService.model.cbbdChainIndependent" aria-label="Independent" ng-change="filter.applyFilterArr(filter.filtersService.model.selected.cbbdChain, 'Independent', 'cbbdChain')") Independent
+      md-checkbox(ng-model="filter.filtersService.model.cbbdChainCbbd" aria-label="CBBD Chain" ng-change="filter.applyFilterArr(filter.filtersService.model.selected.cbbdChain, 'Cbbd', 'cbbdChain', 'cbbd chain')") CBBD Chain
   div(row)
     div.predicted-impact(column='3' ng-show="filter.filtersService.model.expanded")
       label Predicted Impact
@@ -78,29 +84,23 @@
       md-checkbox(ng-model="filter.filtersService.model.productTypeFeatured" aria-label="Product Type Featured" ng-change="filter.applyFilterArr(filter.filtersService.model.selected.productType, 'featured', 'productType')") Featured
       md-checkbox(ng-model="filter.filtersService.model.productTypePriority" aria-label="Product Type Priority Packages" ng-change="filter.applyFilterArr(filter.filtersService.model.selected.productType, 'priority', 'productType', 'priority packages')") Priority Packages
       md-checkbox(ng-model="filter.filtersService.model.productTypeAuthorized" aria-label="Product Type Authorized" ng-change="filter.applyFilterArr(filter.filtersService.model.selected.productType, 'authorized', 'productType')" ng-init="filter.filtersService.model.productTypeAuthorized = true") Authorized
-    div(column='4' ng-show="filter.filtersService.model.expanded")
-      div(row)
-        div(column='7')
-          label Store Type
-          md-checkbox(ng-model="filter.filtersService.model.cbbdChainIndependent" aria-label="Independent" ng-change="filter.applyFilterArr(filter.filtersService.model.selected.cbbdChain, 'Independent', 'cbbdChain')") Independent
-          md-checkbox(ng-model="filter.filtersService.model.cbbdChainCbbd" aria-label="CBBD Chain" ng-change="filter.applyFilterArr(filter.filtersService.model.selected.cbbdChain, 'Cbbd', 'cbbdChain', 'cbbd chain')") CBBD Chain
-        div(column='8' class="store-segmentation")
-          label Store Segmentation
-          md-checkbox(ng-model="filter.filtersService.model.storeSegmentationA" aria-label="Store Segmentation A" ng-change="filter.applyFilterArr(filter.filtersService.model.selected.segmentation, 'A', 'segmentation', 'A Segmentation')") A
-          md-checkbox(ng-model="filter.filtersService.model.storeSegmentationB" aria-label="Store Segmentation B" ng-change="filter.applyFilterArr(filter.filtersService.model.selected.segmentation, 'B', 'segmentation', 'B Segmentation')") B
-          md-checkbox(ng-model="filter.filtersService.model.storeSegmentationC" aria-label="Store Segmentation C" ng-change="filter.applyFilterArr(filter.filtersService.model.selected.segmentation, 'C', 'segmentation', 'C Segmentation')") C
+    div.checkbox-inline(column='3' ng-show="filter.filtersService.model.expanded")
+      label Store Segmentation
+      md-checkbox(ng-model="filter.filtersService.model.storeSegmentationA" aria-label="Store Segmentation A" ng-change="filter.applyFilterArr(filter.filtersService.model.selected.segmentation, 'A', 'segmentation', 'A Segmentation')") A
+      md-checkbox(ng-model="filter.filtersService.model.storeSegmentationB" aria-label="Store Segmentation B" ng-change="filter.applyFilterArr(filter.filtersService.model.selected.segmentation, 'B', 'segmentation', 'B Segmentation')") B
+      md-checkbox(ng-model="filter.filtersService.model.storeSegmentationC" aria-label="Store Segmentation C" ng-change="filter.applyFilterArr(filter.filtersService.model.selected.segmentation, 'C', 'segmentation', 'C Segmentation')") C
     div.location-contact-opps(column='2' ng-show="filter.filtersService.model.expanded")
       label Location
         inline-search(type="location" placeholder="City, State, or Zip" chosen-result="filter.filtersService.model.location" callback="filter.applyLocations(result)")
       label.cbbd-contact CBBD Contact
         inline-search(type="user" placeholder="Name" chosen-result="filter.filtersService.model.cbbdContact" callback="filter.applyFilterArr(filter.filtersService.model.selected.cbbdContact, result, 'cbbdContact', result.firstName + ' ' + result.lastName)")
-  div(row ng-show="filter.filtersService.model.expanded")
-    div(column='5 +6' class="trade-channel")
+  div(row)
+    div.checkbox-inline.trade-channel(column='4 +3' ng-show="filter.filtersService.model.expanded")
       label.vertical Trade Channel
       md-checkbox(ng-repeat="channel in filter.filtersService.model.tradeChannels[filter.filtersService.model.selected.premiseType]" ng-model="filter.filtersService.model['tradeChannel' + channel.name]" aria-label="Trade Channel {{channel.name}}" ng-change="filter.applyFilterArr(filter.filtersService.model.selected.tradeChannel, channel.name, 'tradeChannel')") {{channel.label}}
   div(row)
     div(column='12' class='apply-filters')
-      button(value='Apply Filters' type="button" class="btn-action" ng-click="filter.chipsService.applyFilters()" ng-disabled="filter.filtersService.model.filtersApplied") Apply Filters
+      button(value='Apply Filters' type="submit" class="btn-action" ng-click="filter.chipsService.applyFilters()" ng-disabled="filter.filtersService.model.filtersApplied") Apply Filters
       .secondary-button-container
         a(ng-click="!filter.filtersService.model.disableSaveFilter || filter.modalSaveOpportunityFilter($event)" ng-disabled="!filter.filtersService.model.disableSaveFilter" ng-mouseover="filter.hoverState('save')" ng-mouseleave="filter.hoverState('save')" ng-class="{'disabled save-filterset-icon-disabled': !filter.filtersService.model.disableSaveFilter, 'save-report-hover':filter.isHoveringSave && filter.filtersService.model.disableSaveFilter}").accent.save-filterset-icon Save Report
         a(ng-click="filter.resetFilters()" ng-disabled="!filter.filtersService.model.disableReset" ng-mouseover="filter.hoverState('reset')" ng-mouseleave="filter.hoverState('reset')" ng-class="{'disabled reset-icon-disabled': !filter.filtersService.model.disableReset, 'reset-icon-hover': filter.isHoveringReset && !filter.filtersService.model.disableReset}").accent.reset-icon Reset
