@@ -60,7 +60,7 @@ module.exports = /*  @ngInject */
       if (chip) {
         // Add to Chip Model
         if (id && id.length < 5) filter === 'brand';
-        service.model.push({
+        var tempChip = {
           name: chip,
           id: id,
           type: filter,
@@ -68,7 +68,11 @@ module.exports = /*  @ngInject */
           applied: false,
           removable: true,
           tradeChannel: tradeChannel || false
-        });
+        };
+        console.log(service.model);
+        if ($filter('filter')(service.model, {name: tempChip.name}, true).length !== 1 && $filter('filter')(service.model, {id: tempChip.id}, true).length !== 1) {
+          service.model.push(tempChip);
+        }
 
         filtersService.disableFilters(false, false, true);
 
