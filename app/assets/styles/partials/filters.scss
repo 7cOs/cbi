@@ -1,7 +1,7 @@
 .filters {
   background: $gray-4;
   margin-bottom: 2em;
-  padding: 2em 2em 1em;
+  padding: 2em 1.5em 1em;
   position: relative;
 
   &.top {
@@ -47,11 +47,19 @@
     }
   }
 
+  legend {
+    font-size: 0.875rem;
+    color: $gray-1;
+    position: absolute;
+    top: 12px;
+    left: 23px;
+  }
+
   .more-filters {
     position: absolute;
     right: 10px;
     text-transform: uppercase;
-    top: 10px;
+    top: 12px;
     font-size: 0.7em;
 
     a {
@@ -76,15 +84,11 @@
     }
   }
 
-  .store-segmentation {
-    md-checkbox {
-      width: 25%;
-    }
-  }
-
   .trade-channel {
+    margin-top: -2.5em;
+
     md-checkbox {
-      width: 40%;
+      width: 46%;
       margin-bottom: 0.4em;
     }
   }
@@ -132,7 +136,7 @@
   }
 
   md-checkbox {
-    width: 100%;
+    display: block;
     margin-bottom: 2px;
   }
 
@@ -142,6 +146,10 @@
     left: 6px;
     top: 3px;
     width: 4px;
+  }
+
+  .checkbox-inline md-checkbox {
+    display: inline-block;
   }
 
   md-option {
@@ -167,15 +175,10 @@
     margin-bottom: 0;
   }
 
-  .opportunityStatus {
-    md-checkbox {
-      float: left;
-      width: 40%;
-    }
-  }
-
   &.target-list {
     .expand {
+      margin: 0;
+
       > div {
         display: none;
       }
