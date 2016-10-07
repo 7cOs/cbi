@@ -60,7 +60,7 @@ module.exports = /*  @ngInject */
       if (chip) {
         // Add to Chip Model
         if (id && id.length < 5) filter === 'brand';
-        service.model.push({
+        var tempChip = {
           name: chip,
           id: id,
           type: filter,
@@ -68,7 +68,10 @@ module.exports = /*  @ngInject */
           applied: false,
           removable: true,
           tradeChannel: tradeChannel || false
-        });
+        };
+        if ($filter('filter')(service.model, {name: tempChip.name}, true).length !== 1 && $filter('filter')(service.model, {id: tempChip.id}, true).length !== 1) {
+          service.model.push(tempChip);
+        }
 
         filtersService.disableFilters(false, false, true);
 
@@ -253,26 +256,26 @@ module.exports = /*  @ngInject */
           case 'distributor':
           case 'cbbdContact':
             addAutocompleteChip(displayName, filter, null, result.id);
-            model.push(result.id);
+            if (model.indexOf(result.id) === -1) model.push(result.id);
             filtersService.model.chain = '';
             filtersService.model.store = '';
             break;
           case 'masterSKU':
             if (result.id === null) {
               addAutocompleteChip($filter('titlecase')(result.brand), 'brand', null, result.brandCode);
-              filtersService.model.selected.brand.push(result.brandCode);
+              if (filtersService.model.selected.brand.indexOf(result.brandCode) === -1) filtersService.model.selected.brand.push(result.brandCode);
             } else if (result.id !== null) {
               addAutocompleteChip($filter('titlecase')(result.name), filter, null, result.id);
-              model.push(result.id);
+              if (model.indexOf(result.id) === -1) model.push(result.id);
             }
             break;
           case 'tradeChannel':
             addAutocompleteChip(displayName, filter, true);
-            model.push(result);
+            if (model.indexOf(result) === -1) model.push(result);
             break;
           default:
             addAutocompleteChip(displayName, filter);
-            model.push(result);
+            if (model.indexOf(result) === -1) model.push(result);
         }
       }
       filtersService.model[filter] = '';
