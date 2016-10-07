@@ -1,5 +1,4 @@
 div(ng-if="page.displayPagination()" column="12" class="pagination")
-  //- cl-paging(layout="row" flex cl-pages="list.opportunitiesService.model.paging.pages" cl-steps="list.opportunitiesService.model.paging.steps" layout-align="{{list.opportunitiesService.model.paging.align}}" cl-current-page="list.opportunitiesService.model.paging.current" cl-page-changed="list.pageChanged()")
   md-button(class="md-fab md-primary" aria-label="Back to first page" ng-click="page.pageChanged(1)" ng-if="page.filtersService.model.appliedFilter.pagination.totalPages > 10") 
     | <<
   md-button(class="md-fab md-primary" aria-label="Page Control" ng-click="page.pageChanged(p)" ng-repeat="p in page.getNumber() track by $index") {{p}}
