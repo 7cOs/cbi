@@ -142,7 +142,7 @@ module.exports = /*  @ngInject */
           {label: 'Lodging', name: 'Lodging', value: '52'},
           {label: 'Transportation', name: 'Transportation', value: '54'},
           {label: 'Military', name: 'Military', value: '57'},
-          {label: 'Other', name: 'Other'}
+          {label: 'Other', name: 'Other Trade Channel'}
         ],
         off: [
           {label: 'Grocery', name: 'Grocery', value: '05'},
@@ -152,7 +152,7 @@ module.exports = /*  @ngInject */
           {label: 'Liquor', name: 'Liquor', value: '02'},
           {label: 'Military', name: 'Military', value: 'MF'},
           {label: 'Recreation', name: 'Recreation', value: '53'},
-          {label: 'Other', name: 'Other'}
+          {label: 'Other', name: 'Other Trade Channel'}
         ]
       },
       trend: [
