@@ -30,6 +30,7 @@ function FilterController($state, $scope, $mdDialog, $mdSelect, chipsService, fi
   vm.resetFilters = resetFilters;
   vm.resetTradeChannels = resetTradeChannels;
   vm.saveFilter = saveFilter;
+  vm.updateFilter = updateFilter;
 
   init();
 
@@ -146,6 +147,18 @@ function FilterController($state, $scope, $mdDialog, $mdSelect, chipsService, fi
       filtersService.disableFilters(true, false, true, false);
 
       // close modal
+      closeModal();
+    });
+  }
+
+  function updateFilter() {
+    // get applied filters
+    var filterPayload = filtersService.getAppliedFilters('opportunities'),
+        currentFilter = userService.model.newServiceSelect;
+
+    userService.updateOpportunityFilter(filterPayload, currentFilter).then(function(data) {
+      filtersService.disableFilters(true, false, true, false);
+
       closeModal();
     });
   }
