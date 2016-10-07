@@ -24,7 +24,7 @@ module.exports = /*  @ngInject */
       },
       {
         'name': 'All Types',
-        'type': 'opportunitiesType',
+        'type': 'opportunityType',
         'applied': false,
         'removable': false
       }
@@ -164,11 +164,12 @@ module.exports = /*  @ngInject */
      * @memberOf cf.common.services
      */
     function removeFromFilterService(chip) {
-      if (chip.search || chip.type === 'opportunitiesTypes') {
+      if (chip.search || chip.type === 'opportunityType') {
         var arr = filtersService.model.selected[chip.type];
         var i = arr.length;
 
         while (i--) {
+          console.log(chip.type);
           if (chip.type === 'segmentation' && arr[i] === chip.name.split(' Segmentation')[0]) {
             arr.splice(i, 1);
             filtersService.model['storeSegmentation' + chip.name.split(' Segmentation')[0]] = false;
@@ -193,6 +194,15 @@ module.exports = /*  @ngInject */
           } else if (chip.type === 'distributor' || chip.type === 'account' || chip.type === 'subaccount' || chip.type === 'store' || chip.type === 'cbbdContact') {
             var index = arr.indexOf(chip.id);
             arr.splice(index, 1);
+            break;
+          } else if (chip.type === 'opportunityType') {
+            index = arr.indexOf(chip.id);
+            arr.splice(index, 1);
+            if (arr.length === 0) {
+              addChip('All Types', 'opportunityType', false, false);
+              filtersService.model.selected.opportunityType = ['All Types'];
+              filtersService.model.opportunityType = ['All Types'];
+            }
             break;
           }
         }
@@ -293,9 +303,10 @@ module.exports = /*  @ngInject */
      */
 
     function applyFilterMulti(model, result, filter) {
-      removeChip('opportunitiesType');
-      if (result.length === 0) {
-        addChip('All Types', 'opportunitiesType', false);
+      removeChip('opportunityType');
+      console.log(result);
+      if (result.length === 0 || (result.length <= 1 && result[0] === 'All Types')) {
+        addChip('All Types', 'opportunityType', false, false);
         filtersService.model.selected[filter] = ['All Types'];
         filtersService.model.opportunityType = ['All Types'];
       } else {
@@ -303,7 +314,7 @@ module.exports = /*  @ngInject */
         angular.forEach(result, function(value, key) {
           if (value === 'All Types') {
           } else {
-            addChip(value, 'opportunitiesType', false);
+            addChip(value, 'opportunityType', false);
             results.push(value);
           }
         });
