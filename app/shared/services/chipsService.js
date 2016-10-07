@@ -246,6 +246,8 @@ module.exports = /*  @ngInject */
       if (!displayName) {
         if (result.brand) {
           displayName = result.brand;
+        } else if (result.name) {
+          displayName = result.name;
         } else {
           displayName = result;
         }
