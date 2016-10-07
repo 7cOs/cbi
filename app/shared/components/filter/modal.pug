@@ -14,5 +14,5 @@ div.modal.save-report
       label(ng-class="{disabled: filter.userService.model.newServiceSelect !== 'new'}") Name
       input(ng-class="{disabled: filter.userService.model.newServiceSelect !== 'new'}" ng-model="filter.filtersService.model.newServiceName" placeholder="Enter a name" ng-disabled="filter.userService.model.newServiceSelect !=='new'")
     button.btn-action(ng-if="filter.userService.model.newServiceSelect ==='new'" ng-click="filter.saveFilter()" ng-disabled="filter.filtersService.model.newServiceName === ''") Save Report
-    button.btn-action(ng-if="filter.userService.model.newServiceSelect !=='new'" ng-click="filter.saveFilter()" ng-disabled="filter.filtersService.model.newServiceName === ''") Update Report
+    button.btn-action(ng-if="filter.userService.model.newServiceSelect !=='new'" ng-click="filter.updateFilter()" ng-disabled="filter.filtersService.model.newServiceName === ''") Update Report
     p.cancel.accent(ng-click="filter.closeModal()") X Cancel
