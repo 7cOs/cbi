@@ -21,17 +21,17 @@ module.exports = /*  @ngInject */
     }
 
     function getNumber() {
-      var start = 1,
-          end = 1,
+      var start = 0,
+          end = 0,
           currentPage = filtersService.model.appliedFilter.pagination.currentPage,
           totalPages = filtersService.model.appliedFilter.pagination.totalPages;
 
       if (totalPages < 10) {
-        start = 1;
+        start = 0;
         end = totalPages;
       } else if (currentPage < 5) {
-        start = 1;
-        end = totalPages < 10 ? totalPages : 10;
+        start = 0;
+        end = totalPages < 9 ? totalPages : 9;
       } else if (currentPage > totalPages - 5) {
         start = totalPages - 9;
         end = totalPages;

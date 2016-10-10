@@ -35,9 +35,6 @@ module.exports = /*  @ngInject */
         var filterPayload = filtersService.getAppliedFilters('opportunities');
       }
 
-      // reset opportunities
-      // model.opportunitiesSum = 0;
-
       // create promise, build url based on filters and if there is an opp id
       var opportunitiesPromise = $q.defer(),
           url = opportunityID ? apiHelperService.request('/api/opportunities/' + opportunityID) : apiHelperService.request('/api/opportunities/', filterPayload);
@@ -54,16 +51,18 @@ module.exports = /*  @ngInject */
             store,
             storePlaceholder;
         service.model.opportunities = [];
-        // service.model.opportunitiesDisplay = [];
 
         // trigger no opps modal
-        if (response.data.opportunities.length < 1) { model.noOpportunitiesFound = true; };
+        if (response.data.opportunities.length < 1) { service.model.noOpportunitiesFound = true; };
 
         // make opp array instead of obj if oppId provided
         if (opportunityID) { response.data.opportunities = [response.data]; };
 
         for (var i = 0; i < response.data.opportunities.length; i++) {
           var item = response.data.opportunities[i];
+
+          // Set depletionsCurrentYearToDateYAPercent
+          item.depletionsCurrentYearToDateYAPercent = setVsYAPercent(item);
 
           // if its a new store
           if (!storePlaceholder || (storePlaceholder.address !== item.store.address || storePlaceholder.id !== item.store.id)) {
@@ -106,8 +105,6 @@ module.exports = /*  @ngInject */
 
           // push last store into newOpportunityArr
           if (i + 1 === response.data.opportunities.length) newOpportunityArr.push(store);
-
-          // service.model.opportunitiesSum += 1;
         }; // end for each
 
         // set data for pagination
@@ -119,6 +116,19 @@ module.exports = /*  @ngInject */
       function getOpportunitiesFail(error) {
         console.warn('[opportunitiesService.getOpportunities]... Error getting opportunities... Err: ', error);
         opportunitiesPromise.reject(error);
+      }
+
+      function setVsYAPercent(item) {
+        var vsYAPercent = 0;
+        if (item.depletionsCurrentYearToDateYA === 0) {
+          // if item.depletionsCurrentYearToDateYA, you cant make a percentage
+          vsYAPercent = '-';
+        } else {
+          // 100 - Calculated percent
+          vsYAPercent = -100 + ((item.depletionsCurrentYearToDate / item.depletionsCurrentYearToDateYA) * 100);
+          vsYAPercent = vsYAPercent.toFixed(0);
+        }
+        return vsYAPercent;
       }
 
       return opportunitiesPromise.promise;

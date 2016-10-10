@@ -7,8 +7,8 @@ module.exports = /*  @ngInject */
       appliedFilter: {
         appliedFilter: '',
         pagination: {
-          currentPage: 1,
-          totalPages: 1,
+          currentPage: 0,
+          totalPages: 0,
           default: true,
           totalOpportunities: 0,
           totalStores: 0
