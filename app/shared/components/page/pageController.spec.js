@@ -133,36 +133,36 @@ describe('Unit: page controller', function() {
     });
 
     beforeEach(function() {
-      filtersService.model.appliedFilter.pagination.currentPage = 1;
-      filtersService.model.appliedFilter.pagination.totalPages = 8;
+      filtersService.model.appliedFilter.pagination.currentPage = 0;
+      filtersService.model.appliedFilter.pagination.totalPages = 7;
     });
 
     it('should return an arr of 8 items', function() {
       var array = ctrl.getNumber();
       expect(array.length).toEqual(8);
-      expect(array).toEqual([1, 2, 3, 4, 5, 6, 7, 8]);
+      expect(array).toEqual([0, 1, 2, 3, 4, 5, 6, 7]);
     });
 
     it('should return an arr of 8 items even if current page is 5', function() {
       filtersService.model.appliedFilter.pagination.currentPage = 5;
       var array = ctrl.getNumber();
       expect(array.length).toEqual(8);
-      expect(array).toEqual([1, 2, 3, 4, 5, 6, 7, 8]);
+      expect(array).toEqual([0, 1, 2, 3, 4, 5, 6, 7]);
     });
 
-    it('should return an arr of 8 items even if current page is 8', function() {
-      filtersService.model.appliedFilter.pagination.currentPage = 8;
+    it('should return an arr of 8 items even if current page is 7', function() {
+      filtersService.model.appliedFilter.pagination.currentPage = 7;
       var array = ctrl.getNumber();
       expect(array.length).toEqual(8);
-      expect(array).toEqual([1, 2, 3, 4, 5, 6, 7, 8]);
+      expect(array).toEqual([0, 1, 2, 3, 4, 5, 6, 7]);
     });
 
     it('should return an arr of 10 items', function() {
-      filtersService.model.appliedFilter.pagination.currentPage = 1;
+      filtersService.model.appliedFilter.pagination.currentPage = 0;
       filtersService.model.appliedFilter.pagination.totalPages = 15;
       var array = ctrl.getNumber();
       expect(array.length).toEqual(10);
-      expect(array).toEqual([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]);
+      expect(array).toEqual([0, 1, 2, 3, 4, 5, 6, 7, 8, 9]);
     });
 
     it('should return an arr of 10 items, but start at 2 when current page is 6', function() {
@@ -213,7 +213,7 @@ describe('Unit: page controller', function() {
     });
 
     beforeEach(function() {
-      filtersService.model.appliedFilter.pagination.currentPage = 1;
+      filtersService.model.appliedFilter.pagination.currentPage = 0;
 
       // Spies
       spyOn(loaderService, 'openLoader').and.callFake(function() {
@@ -226,7 +226,7 @@ describe('Unit: page controller', function() {
     });
 
     it('should update the current page', function() {
-      expect(filtersService.model.appliedFilter.pagination.currentPage).toEqual(1);
+      expect(filtersService.model.appliedFilter.pagination.currentPage).toEqual(0);
 
       ctrl.pageChanged(2);
 

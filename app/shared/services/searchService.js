@@ -89,6 +89,7 @@ module.exports = /*  @ngInject */
       }
 
       function getStoresFail(error) {
+        console.warn('[searchService.getStoresFail.error] ', error);
         searchPromise.reject(error);
       }
 
