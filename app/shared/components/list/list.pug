@@ -163,7 +163,7 @@ v-accordion.styled-list(multiple="" id="opportunities" control="list.accordion" 
                     span(ng-if='product.lastDepletionDate !== null') {{::product.lastDepletionDate | timeAgo: 'daysOnly' }} <span class="depletion-date">{{::product.lastDepletionDate | date}}</span>
                   div(column="2")
                     label Depletions CYTD
-                    span {{::product.depletionsCurrentYearToDate | number:0 }} {{::product.depletionsCurrentYearToDateYA | number:0 }}
+                    span {{::product.depletionsCurrentYearToDate | number:0 }}
                   div(column="2")
                     .tooltip-wrap
                       label vs YA %
