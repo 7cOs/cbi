@@ -86,9 +86,9 @@ form.filters(column='12' ng-class="{'target-list': filter.opportunities}")
       md-checkbox(ng-model="filter.filtersService.model.productTypeAuthorized" aria-label="Product Type Authorized" ng-change="filter.applyFilterArr(filter.filtersService.model.selected.productType, 'authorized', 'productType')" ng-init="filter.filtersService.model.productTypeAuthorized = true") Authorized
     div.checkbox-inline(column='3' ng-show="filter.filtersService.model.expanded")
       label Store Segmentation
-      md-checkbox(ng-model="filter.filtersService.model.storeSegmentationA" aria-label="Store Segmentation A" ng-change="filter.applyFilterArr(filter.filtersService.model.selected.segmentation, 'A', 'segmentation', 'A Segmentation')") A
-      md-checkbox(ng-model="filter.filtersService.model.storeSegmentationB" aria-label="Store Segmentation B" ng-change="filter.applyFilterArr(filter.filtersService.model.selected.segmentation, 'B', 'segmentation', 'B Segmentation')") B
-      md-checkbox(ng-model="filter.filtersService.model.storeSegmentationC" aria-label="Store Segmentation C" ng-change="filter.applyFilterArr(filter.filtersService.model.selected.segmentation, 'C', 'segmentation', 'C Segmentation')") C
+      md-checkbox(ng-model="filter.filtersService.model.storeSegmentationA" aria-label="Store Segmentation A" ng-change="filter.applyFilterArr(filter.filtersService.model.selected.segmentation, 'A', 'segmentation', 'Segment A')") A
+      md-checkbox(ng-model="filter.filtersService.model.storeSegmentationB" aria-label="Store Segmentation B" ng-change="filter.applyFilterArr(filter.filtersService.model.selected.segmentation, 'B', 'segmentation', 'Segment B')") B
+      md-checkbox(ng-model="filter.filtersService.model.storeSegmentationC" aria-label="Store Segmentation C" ng-change="filter.applyFilterArr(filter.filtersService.model.selected.segmentation, 'C', 'segmentation', 'Segment C')") C
     div.location-contact-opps(column='2' ng-show="filter.filtersService.model.expanded")
       label Location
         inline-search(type="location" placeholder="City, State, or Zip" chosen-result="filter.filtersService.model.location" callback="filter.applyLocations(result)")
