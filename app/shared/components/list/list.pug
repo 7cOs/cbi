@@ -19,10 +19,10 @@
       button.btn-action(ng-if="" ng-click="list.removeOpportunity()") Delete
       button.btn-action(ng-disabled="list.selected < 1" ng-csv="list.flattenOpportunity(list.selected)" filename="{{list.getDate() | date:'yyyy-MM-dd'}}.csv" csv-label="true") Download
 
-button.icon.select-all(ng-disabled="list.isChecked()" ng-click="list.toggleSelectAllStores()") Select All
+button.icon.select-all(ng-disabled="list.isChecked()" ng-click="list.toggleSelectAllStores()") {{!list.isSelectAllActivated ? 'Select All' : 'Un-Select All'}}
 
-button.icon.narrow-icon.expand-all(ng-click="list.allOpportunitiesExpanded() ? list.showDisabled('All opportunities are expanded') : list.accordion.expandAll()" ng-disabled="list.allOpportunitiesExpanded()") Expand All
-button.icon.narrow-icon.collapse-all(ng-click="list.noOpportunitiesExpanded() ? list.showDisabled('No opportunities are expanded') : list.accordion.collapseAll()" ng-disabled="list.noOpportunitiesExpanded()") Collapse All
+button.icon.narrow-icon.expand-all(ng-click="list.accordion.expandAll()" ng-disabled="list.allOpportunitiesExpanded()") Expand All
+button.icon.narrow-icon.collapse-all(ng-click="list.accordion.collapseAll()" ng-disabled="list.noOpportunitiesExpanded()") Collapse All
 
 p.list-disabled-message {{list.disabledMessage}}
 
