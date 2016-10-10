@@ -86,7 +86,19 @@ module.exports = /*  @ngInject */
     });
 
     function addToSharedCollaborators(person) {
-      vm.sharedCollaborators.push(person);
+      var match = false;
+      if (!vm.sharedCollaborators.length) {
+        vm.sharedCollaborators.push(person);
+      } else {
+        vm.sharedCollaborators.forEach(function(collab, key) {
+          if (person.employeeId === collab.employeeId) {
+            match = true;
+          }
+        });
+        if (!match) {
+          vm.sharedCollaborators.push(person);
+        }
+      }
     }
 
     function getDate() {
