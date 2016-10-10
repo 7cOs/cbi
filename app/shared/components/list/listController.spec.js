@@ -217,25 +217,25 @@ describe('Unit: list controller', function() {
       ctrl.selected = [];
     });
 
-    it('should return the store selected store', function() {
+    it('should return the store that has been selected', function() {
       var storeToBeAdded = opportunitiesService.model.opportunities[0];
       ctrl.toggleOpportunitiesInStores(storeToBeAdded, ctrl.selected);
       expect(ctrl.selected[0].id).toEqual(storeToBeAdded.id);
     });
 
-    it('should remove the selected store', function() {
+    it('should remove the store from the selection', function() {
       var storeToBeAdded = opportunitiesService.model.opportunities[0];
       ctrl.toggleOpportunitiesInStores(storeToBeAdded, ctrl.selected);
       ctrl.toggleOpportunitiesInStores(storeToBeAdded, ctrl.selected);
       expect(ctrl.selected[0]).toBeUndefined();
     });
 
-    it('should add all stores to the selection', function() {
+    it('should add all stores in the page to the selection', function() {
       ctrl.toggleSelectAllStores();
       expect(ctrl.selected.length).toEqual(2);
     });
 
-    it('should remove all stores that are selected', function() {
+    it('should remove all the stores in the page that are selected', function() {
       ctrl.toggleSelectAllStores();
       ctrl.toggleSelectAllStores();
       expect(ctrl.selected.length).toEqual(0);
