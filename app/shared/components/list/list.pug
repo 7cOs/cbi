@@ -60,7 +60,7 @@ v-accordion.styled-list(multiple="" id="opportunities" control="list.accordion" 
       div.checkbox-wrapper(ng-click="list.toggleOpportunitiesInStores(opportunity, list.selected)")
         md-checkbox(aria-label="Select Item" ng-checked="opportunity.selectedOpportunities === opportunity.groupedOpportunities.length")
       v-pane-header.checkbox-sibling(column='12')
-        div.cell-parent
+        div(ng-class="{long: opportunity.store.name.length > 21}").cell-parent
           div.pad-cell(column='3') {{::opportunity.store.name | titlecase}} <span class="supporting-text" ng-if="opportunity.store.storeNumber">\#{{::opportunity.store.storeNumber | uppercase}}</span>
           div.address(column='4') {{::opportunity.store.address | titlecase}}
           div(column='2') {{::opportunity.groupedOpportunities.length}} <span class="supporting-text">({{::opportunity.highImpactSum}} High)</span>
@@ -72,11 +72,11 @@ v-accordion.styled-list(multiple="" id="opportunities" control="list.accordion" 
           .hero-row(row)
             div(column='3').pad-cell.brand-icons
               div
-                img(ng-if='list.displayBrandIcon(opportunity.brands, "corona")' src='assets/img/brands/brand-lg-coronaextra.svg')
+                img(ng-if='list.displayBrandIcon(opportunity.brands, "corona extra")' src='assets/img/brands/brand-lg-coronaextra.svg')
                 img(ng-if='list.displayBrandIcon(opportunity.brands, "corona light")' src='assets/img/brands/brand-lg-coronalite.svg')
-                img(ng-if='list.displayBrandIcon(opportunity.brands, "modelo")' src='assets/img/brands/brand-lg-modelo.svg')
+                img(ng-if='list.displayBrandIcon(opportunity.brands, "modelo especial")' src='assets/img/brands/brand-lg-modelo.svg')
                 img(ng-if='list.displayBrandIcon(opportunity.brands, "negra modelo")' src='assets/img/brands/brand-lg-negramodelo.svg')
-                img(ng-if='list.displayBrandIcon(opportunity.brands, "brand")' src='assets/img/brands/brand-lg-modelolite.svg')
+                img(ng-if='list.displayBrandIcon(opportunity.brands, "modelo light")' src='assets/img/brands/brand-lg-modelolite.svg')
               div.small-icons
                 //- img(ng-if='!list.displayBrandIcon(opportunity.brands, "corona")' src='assets/img/brands/brand-sm-coronaextra.svg')
                 img(ng-if='!list.displayBrandIcon(opportunity.brands, "corona light")' src='assets/img/brands/brand-sm-coronalite.svg')
@@ -142,7 +142,7 @@ v-accordion.styled-list(multiple="" id="opportunities" control="list.accordion" 
                   | {{::product.product.name}}
                 div.type(column='2') {{::product.type | formatOpportunitiesType}}
                 div(column='4') {{::product.rationale}}
-                div(column='1') {{::product.status}}
+                div(column='1') {{::product.status | titlecase}}
                 div(column='1' class="impact {{product.impactDescription | lowercase}}")
                 div(column='1').bottom.dismiss-product
                   div.more-wrapper
