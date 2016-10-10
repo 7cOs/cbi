@@ -118,9 +118,9 @@ v-accordion.styled-list(multiple="" id="opportunities" control="list.accordion" 
           div(column='1')
             label.bold Status
           div(column='1')
-            label.bold Impact
+            label.bold.text-center Impact
           div(column='1')
-            label.bold Dismiss
+            label.bold.text-center Dismiss
         v-accordion(multiple class="nested-accordion")
           v-pane.styled-list(ng-repeat="product in opportunity.groupedOpportunities")
             v-pane-header
@@ -142,7 +142,7 @@ v-accordion.styled-list(multiple="" id="opportunities" control="list.accordion" 
                 div.type(column='2') {{::product.type | formatOpportunitiesType}}
                 div(column='4') {{::product.rationale}}
                 div(column='1') {{::product.status}}
-                div(column='1' class="impact {{product.impact}}")
+                div(column='1' class="impact {{product.impactDescription | lowercase}}")
                 div(column='1').bottom.dismiss-product
                   div.more-wrapper
                     md-menu(md-position-mode="target-right target")
