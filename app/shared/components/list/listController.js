@@ -47,19 +47,20 @@ module.exports = /*  @ngInject */
     vm.shareOpportunity = shareOpportunity;
     vm.sortBy = sortBy;
     vm.selectOpportunity = selectOpportunity;
-    vm.selectAllParents = selectAllParents;
     vm.showCorporateMemoModal = showCorporateMemoModal;
     vm.submitFeedback = submitFeedback;
     vm.cancelFeedback = cancelFeedback;
     vm.allOpportunitiesExpanded = allOpportunitiesExpanded;
     vm.noOpportunitiesExpanded = noOpportunitiesExpanded;
     vm.showDisabled = showDisabled;
-    vm.selectAllOpportunities = selectAllOpportunities;
     vm.flattenOpportunity = flattenOpportunity;
     vm.getTargetLists = getTargetLists;
     vm.expandCallback = expandCallback;
     vm.collapseCallback = collapseCallback;
     vm.getDate = getDate;
+    vm.toggleOpportunitiesInStores = toggleOpportunitiesInStores;
+    vm.toggleSelectAllStores = toggleSelectAllStores;
+    vm.isSelectAllActivated = false;
 
     // Mock Data for memo modal
     vm.limitedTime = {
@@ -119,7 +120,7 @@ module.exports = /*  @ngInject */
     // Check if list item exists and is selected
     function exists(item, list) {
       return list.indexOf(item) > -1;
-    };
+    }
 
     // Check if all items are selected
     function isChecked() {
@@ -261,33 +262,6 @@ module.exports = /*  @ngInject */
       getTargetLists();
     }
 
-    // Parent-level select to select all children opportunities
-    function selectAllOpportunities(parent, list) {
-
-      if (parent.selectedOpportunities === parent.groupedOpportunities.length) {
-        var allOpportunitiesSelected = true;
-      }
-
-      for (var key in parent.groupedOpportunities) {
-        var obj = parent.groupedOpportunities[key],
-            idx = list.indexOf(obj);
-        if (allOpportunitiesSelected) {
-          removeItem(obj, list, idx);
-        } else if (!obj.selected) {
-          addItem(obj, list);
-        }
-      }
-      parent.selectedOpportunities = allOpportunitiesSelected ? 0 : parent.groupedOpportunities.length;
-      getTargetLists();
-    }
-
-    // Select or deselect all opportunity parents
-    function selectAllParents() {
-      angular.forEach(opportunitiesService.model.opportunities, function(value, key) {
-        selectAllOpportunities(value, vm.selected);
-      });
-    }
-
     function expandCallback(item) {
       vm.expandedOpportunities++;
     }
@@ -330,12 +304,69 @@ module.exports = /*  @ngInject */
     }
 
     function getTargetLists() {
-      if (userService.model.combinedTargetList.owned.length < 1) {
+      if (userService.model.targetLists && userService.model.targetLists.owned.length < 1) {
          // get target lists
         userService.getTargetLists(userService.model.currentUser.employeeID).then(function(data) {
           userService.model.targetLists = data;
         });
       }
+    }
+
+    /**
+     * Toggles selection of all opportunites in the store and the store itself
+     */
+    function toggleSelectAllStores () {
+      angular.forEach(opportunitiesService.model.opportunities, function(store, key) {
+        if (vm.isSelectAllActivated) {
+          deselectAllOpportunitiesInStore(store, vm.selected);
+        } else {
+          selectAllOpportunitiesInStore(store, vm.selected);
+        }
+        getTargetLists();
+      });
+      vm.isSelectAllActivated = !vm.isSelectAllActivated;
+    }
+
+    /**
+     * Toggles selection of all opportunites in the store and the store itself
+     * @param {object} store Store that needs to be toggled
+     * @param {Array} currentSelectionList Array of all currently selected items
+     */
+    function toggleOpportunitiesInStores (store, currentSelectionList) {
+      vm.isSelectAllActivated = false;
+      if (store.selectedOpportunities === store.groupedOpportunities.length) {
+        deselectAllOpportunitiesInStore(store, currentSelectionList);
+      } else {
+        selectAllOpportunitiesInStore(store, currentSelectionList);
+      }
+      getTargetLists();
+    }
+
+    /**
+     * Selects all opportunities in a store passed to this function
+     * @param {object} store Store that needs to be toggled
+     * @param {Array} currentSelectionList Array of all currently selected items
+     */
+    function selectAllOpportunitiesInStore(store, currentSelectionList) {
+      for (var key in store.groupedOpportunities) {
+        var opportunity = store.groupedOpportunities[key];
+        addItem(opportunity, currentSelectionList);
+      }
+      store.selectedOpportunities = store.groupedOpportunities.length;
+    }
+
+    /**
+     * Deselects all opportunities in a store passed to this function
+     * @param {object} store Store that needs to be toggled
+     * @param {Array} currentSelectionList Array of all currently selected items
+     */
+    function deselectAllOpportunitiesInStore(store, currentSelectionList) {
+      for (var key in store.groupedOpportunities) {
+        var opportunity = store.groupedOpportunities[key],
+            idx = currentSelectionList.indexOf(opportunity);
+        removeItem(opportunity, currentSelectionList, idx);
+      }
+      store.selectedOpportunities = 0;
     }
 
     // ***************
