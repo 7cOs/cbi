@@ -19,7 +19,7 @@
       button.btn-action(ng-if="" ng-click="list.removeOpportunity()") Delete
       button.btn-action(ng-disabled="list.selected < 1" ng-csv="list.flattenOpportunity(list.selected)" filename="{{list.getDate() | date:'yyyy-MM-dd'}}.csv" csv-label="true") Download
 
-button.icon.select-all(ng-class="{'disabled': list.isChecked()}" ng-click="list.isChecked() ? list.showDisabled('No opportunities are listed') : list.selectAllParents()") Select All
+button.icon.select-all(ng-class="{'disabled': list.isChecked()}" ng-click="list.isChecked() ? list.showDisabled('No opportunities are listed') : list.toggleSelectAllStores()") Select All
 
 button.icon.narrow-icon.expand-all(ng-click="list.allOpportunitiesExpanded() ? list.showDisabled('All opportunities are expanded') : list.accordion.expandAll()" ng-class="{'disabled': list.allOpportunitiesExpanded()}") Expand All
 button.icon.narrow-icon.collapse-all(ng-click="list.noOpportunitiesExpanded() ? list.showDisabled('No opportunities are expanded') : list.accordion.collapseAll()" ng-class="{'disabled': list.noOpportunitiesExpanded()}") Collapse All
@@ -56,7 +56,7 @@ v-accordion.styled-list(multiple="" id="opportunities" control="list.accordion" 
     p Try Searching for <span>Opportunities</span> and add them to your list
   v-pane.list-item(row ng-repeat="opportunity in list.opportunitiesService.model.opportunities" expanded='opportunity.isExpanded')
     .shadow-wrap.bottom
-      div.checkbox-wrapper(ng-click="list.selectAllOpportunities(opportunity, list.selected)")
+      div.checkbox-wrapper(ng-click="list.toggleOpportunitiesInStores(opportunity, list.selected)")
         md-checkbox(aria-label="Select Item" ng-checked="opportunity.selectedOpportunities === opportunity.groupedOpportunities.length")
       v-pane-header.checkbox-sibling(column='12')
         div.cell-parent
