@@ -212,8 +212,10 @@ module.exports = /*  @ngInject */
 
     function resetModel() {
       for (var prop in service.model) {
-        if (service.model[prop] && service.model[prop].constructor !== Array && service.model[prop] === true && prop !== 'expanded') {
+        if (service.model[prop] && service.model[prop].constructor !== Array && service.model[prop] === true && prop !== 'expanded' && prop !== 'productTypeAuthorized') {
           service.model[prop] = false;
+        } else if (prop === 'productTypeAuthorized') {
+          service.model[prop] = true;
         }
       }
     }
