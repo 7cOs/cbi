@@ -115,6 +115,7 @@ describe('Unit: list controller', function() {
             'cbbdChain': false
           },
           'trend': null,
+          'selectedOpportunities': 0,
           'groupedOpportunities': [
             {
               'id': '1430039___80014014___20160929',
@@ -167,6 +168,7 @@ describe('Unit: list controller', function() {
             'corona light'
           ],
           'trend': null,
+          'selectedOpportunities': 0,
           'groupedOpportunities': [
             {
               'id': '0080993___80013466___20160929',
@@ -237,6 +239,26 @@ describe('Unit: list controller', function() {
       ctrl.toggleSelectAllStores();
       ctrl.toggleSelectAllStores();
       expect(ctrl.selected.length).toEqual(0);
+    });
+
+    it('should toggle select all option', function() {
+      ctrl.isSelectAllActivated = false;
+      ctrl.toggleSelectAllStores();
+      ctrl.toggleSelectAllStores();
+      expect(ctrl.isSelectAllActivated).toBeFalsy();
+    });
+
+    it('should select all opportunities inside a store', function() {
+      var storeToBeAdded = opportunitiesService.model.opportunities[0];
+      ctrl.toggleOpportunitiesInStores(storeToBeAdded, ctrl.selected);
+      expect(storeToBeAdded.selectedOpportunities).toEqual(storeToBeAdded.groupedOpportunities.length);
+    });
+
+    it('should deselect all opportunities inside a store', function() {
+      var storeToBeAdded = opportunitiesService.model.opportunities[0];
+      ctrl.toggleOpportunitiesInStores(storeToBeAdded, ctrl.selected);
+      ctrl.toggleOpportunitiesInStores(storeToBeAdded, ctrl.selected);
+      expect(storeToBeAdded.selectedOpportunities).toEqual(0);
     });
   });
 

@@ -47,14 +47,12 @@ module.exports = /*  @ngInject */
     vm.shareOpportunity = shareOpportunity;
     vm.sortBy = sortBy;
     vm.selectOpportunity = selectOpportunity;
-    vm.selectAllParents = selectAllParents;
     vm.showCorporateMemoModal = showCorporateMemoModal;
     vm.submitFeedback = submitFeedback;
     vm.cancelFeedback = cancelFeedback;
     vm.allOpportunitiesExpanded = allOpportunitiesExpanded;
     vm.noOpportunitiesExpanded = noOpportunitiesExpanded;
     vm.showDisabled = showDisabled;
-    vm.selectAllOpportunities = selectAllOpportunities;
     vm.flattenOpportunity = flattenOpportunity;
     vm.getTargetLists = getTargetLists;
     vm.expandCallback = expandCallback;
@@ -262,37 +260,6 @@ module.exports = /*  @ngInject */
       }
       parent.selectedOpportunities = groupedCount;
       getTargetLists();
-    }
-
-    // Parent-level select to select all children opportunities
-    function selectAllOpportunities(parent, list) {
-      console.log(parent.groupedOpportunities);
-
-      if (parent.selectedOpportunities === parent.groupedOpportunities.length) {
-        var allOpportunitiesSelected = true;
-      }
-
-      for (var key in parent.groupedOpportunities) {
-        var obj = parent.groupedOpportunities[key],
-            idx = list.indexOf(obj);
-        if (allOpportunitiesSelected) {
-          removeItem(obj, list, idx);
-        } else if (!obj.selected) {
-          addItem(obj, list);
-        }
-      }
-      parent.selectedOpportunities = allOpportunitiesSelected ? 0 : parent.groupedOpportunities.length;
-      getTargetLists();
-    }
-
-    // Select or deselect all opportunity parents
-    function selectAllParents() {
-      angular.forEach(opportunitiesService.model.opportunities, function(value, key) {
-        if (key === 1 || key === 2) {
-          console.log(value);
-        }
-        selectAllOpportunities(value, vm.selected);
-      });
     }
 
     function expandCallback(item) {
