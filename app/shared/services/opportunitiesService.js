@@ -126,7 +126,7 @@ module.exports = /*  @ngInject */
         } else {
           // 100 - Calculated percent
           vsYAPercent = -100 + ((item.depletionsCurrentYearToDate / item.depletionsCurrentYearToDateYA) * 100);
-          vsYAPercent = vsYAPercent.toFixed(0);
+          vsYAPercent = vsYAPercent.toFixed(0) + '%';
         }
         return vsYAPercent;
       }
