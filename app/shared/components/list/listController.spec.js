@@ -211,8 +211,32 @@ describe('Unit: list controller', function() {
       ];
     });
 
-    it('should have opportunity service stores loaded', function() {
-      expect(opportunitiesService.model.opportunities).not.toBeUndefined();
+    afterEach(function() {
+      ctrl.selected = [];
+    });
+
+    it('should return the store selected store', function() {
+      var storeToBeAdded = opportunitiesService.model.opportunities[0];
+      ctrl.toggleOpportunitiesInStores(storeToBeAdded, ctrl.selected);
+      expect(ctrl.selected[0].id).toEqual(storeToBeAdded.id);
+    });
+
+    it('should remove the selected store', function() {
+      var storeToBeAdded = opportunitiesService.model.opportunities[0];
+      ctrl.toggleOpportunitiesInStores(storeToBeAdded, ctrl.selected);
+      ctrl.toggleOpportunitiesInStores(storeToBeAdded, ctrl.selected);
+      expect(ctrl.selected[0]).toBeUndefined();
+    });
+
+    it('should add all stores to the selection', function() {
+      ctrl.toggleSelectAllStores();
+      expect(ctrl.selected.length).toEqual(2);
+    });
+
+    it('should remove all stores that are selected', function() {
+      ctrl.toggleSelectAllStores();
+      ctrl.toggleSelectAllStores();
+      expect(ctrl.selected.length).toEqual(0);
     });
   });
 
