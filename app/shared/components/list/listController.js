@@ -60,6 +60,7 @@ module.exports = /*  @ngInject */
     vm.getDate = getDate;
     vm.toggleOpportunitiesInStores = toggleOpportunitiesInStores;
     vm.toggleSelectAllStores = toggleSelectAllStores;
+    vm.removeSharedCollaborator = removeSharedCollaborator;
     vm.isSelectAllActivated = false;
 
     // Mock Data for memo modal
@@ -99,6 +100,14 @@ module.exports = /*  @ngInject */
           vm.sharedCollaborators.push(person);
         }
       }
+    }
+
+    function removeSharedCollaborator(person) {
+      vm.sharedCollaborators.forEach(function(collab, key) {
+        if (person.employeeId === collab.employeeId) {
+          vm.sharedCollaborators.splice(key, 1);
+        }
+      });
     }
 
     function getDate() {

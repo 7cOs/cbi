@@ -339,6 +339,12 @@ md-dialog {
       }
     }
   }
+
+  &.share-opportunity {
+    .accent:hover {
+      cursor: pointer;
+    }
+  }
 }
 
 .corporate-memo {
