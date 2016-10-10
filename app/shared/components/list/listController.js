@@ -319,6 +319,7 @@ module.exports = /*  @ngInject */
       angular.forEach(opportunitiesService.model.opportunities, function(store, key) {
         if (vm.isSelectAllActivated) {
           deselectAllOpportunitiesInStore(store, vm.selected);
+          vm.selected = [];
         } else {
           selectAllOpportunitiesInStore(store, vm.selected);
         }
@@ -385,14 +386,28 @@ module.exports = /*  @ngInject */
       vm.disabledMessage = '';
     });
 
+    /**
+     * Check if opprtunity is in the opportunities selection array
+     * @param {object} opportunity Opportunity object
+     * @param {Array} currentSelectionList Array of all currently selected items
+     * @returns {Boolean}
+     */
+    function isItemInList(opportunity, currentSelectionList) {
+      return currentSelectionList.indexOf(opportunity) !== -1;
+    }
+
     function removeItem(item, list, idx) {
-      item.selected = false;
-      list.splice(idx, 1);
+      if (isItemInList(item, list)) {
+        item.selected = false;
+        list.splice(idx, 1);
+      }
     }
 
     function addItem(item, list) {
-      item.selected = true;
-      list.push(item);
+      if (!isItemInList(item, list)) {
+        item.selected = true;
+        list.push(item);
+      }
     }
 
     function dismissOpportunity(oId, payload) {
