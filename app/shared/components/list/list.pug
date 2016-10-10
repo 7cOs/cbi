@@ -5,10 +5,10 @@
 .action-buttons
   span(ng-switch="list.selected < 1")
     span(ng-switch-when="true")
-      button.btn-action.disabled(ng-if="list.pageName(['target-lists', 'target-list-detail'])" ng-click="list.showDisabled('No opportunities are selected')") Add to Target List
-      button.btn-action.disabled(ng-if="list.pageName(['opportunities'])" ng-click="list.showDisabled('No opportunities are selected')") Copy to Target List
-      button.btn-action.disabled(ng-if="" ng-click="list.showDisabled('No opportunities are selected')") Delete
-      button.btn-action.disabled(ng-click="list.showDisabled('No opportunities are selected')") Download
+      button.btn-action(ng-if="list.pageName(['target-lists', 'target-list-detail'])" ng-disabled="true") Add to Target List
+      button.btn-action(ng-if="list.pageName(['opportunities'])" ng-disabled="true") Copy to Target List
+      button.btn-action(ng-disabled="true") Delete
+      button.btn-action(ng-disabled="true") Download
     span(ng-switch-when="false")
       md-menu(md-offset="0 45" ng-if="list.pageName(['target-lists', 'target-list-detail'])")
         button.btn-action(aria-label="Add to Target List" ng-click="$mdOpenMenu($event)" analytics-on="click" analytics-event="Add Opportunity") Add to Target List
@@ -19,10 +19,10 @@
       button.btn-action(ng-if="" ng-click="list.removeOpportunity()") Delete
       button.btn-action(ng-disabled="list.selected < 1" ng-csv="list.flattenOpportunity(list.selected)" filename="{{list.getDate() | date:'yyyy-MM-dd'}}.csv" csv-label="true") Download
 
-button.icon.select-all(ng-class="{'disabled': list.isChecked()}" ng-click="list.isChecked() ? list.showDisabled('No opportunities are listed') : list.toggleSelectAllStores()") Select All
+button.icon.select-all(ng-disabled="list.isChecked()" ng-click="list.toggleSelectAllStores()") {{!list.isSelectAllActivated ? 'Select All' : 'Un-Select All'}}
 
-button.icon.narrow-icon.expand-all(ng-click="list.allOpportunitiesExpanded() ? list.showDisabled('All opportunities are expanded') : list.accordion.expandAll()" ng-class="{'disabled': list.allOpportunitiesExpanded()}") Expand All
-button.icon.narrow-icon.collapse-all(ng-click="list.noOpportunitiesExpanded() ? list.showDisabled('No opportunities are expanded') : list.accordion.collapseAll()" ng-class="{'disabled': list.noOpportunitiesExpanded()}") Collapse All
+button.icon.narrow-icon.expand-all(ng-click="list.accordion.expandAll()" ng-disabled="list.allOpportunitiesExpanded()") Expand All
+button.icon.narrow-icon.collapse-all(ng-click="list.accordion.collapseAll()" ng-disabled="list.noOpportunitiesExpanded()") Collapse All
 
 p.list-disabled-message {{list.disabledMessage}}
 
