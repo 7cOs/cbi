@@ -169,7 +169,6 @@ module.exports = /*  @ngInject */
         var i = arr.length;
 
         while (i--) {
-          console.log(chip.type);
           if (chip.type === 'segmentation' && arr[i] === chip.name.split(' Segmentation')[0]) {
             arr.splice(i, 1);
             filtersService.model['storeSegmentation' + chip.name.split(' Segmentation')[0]] = false;
@@ -194,6 +193,7 @@ module.exports = /*  @ngInject */
           } else if (chip.type === 'distributor' || chip.type === 'account' || chip.type === 'subaccount' || chip.type === 'store' || chip.type === 'cbbdContact') {
             var index = arr.indexOf(chip.id);
             arr.splice(index, 1);
+            if (chip.type !== 'cbbdContact') filtersService.model.filtersValidCount--;
             break;
           } else if (chip.type === 'opportunityType') {
             index = arr.indexOf(chip.id);
@@ -264,13 +264,17 @@ module.exports = /*  @ngInject */
         switch (filter) {
           case 'subaccount':
           case 'account':
-          case 'store':
           case 'distributor':
-          case 'cbbdContact':
+          case 'store':
             addAutocompleteChip(displayName, filter, null, result.id);
             if (model.indexOf(result.id) === -1) model.push(result.id);
             filtersService.model.chain = '';
             filtersService.model.store = '';
+            filtersService.model.filtersValidCount++;
+            break;
+          case 'cbbdContact':
+            addAutocompleteChip(displayName, filter, null, result.id);
+            if (model.indexOf(result.id) === -1) model.push(result.id);
             break;
           case 'masterSKU':
             if (result.id === null) {
