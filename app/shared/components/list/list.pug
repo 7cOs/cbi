@@ -126,7 +126,7 @@ v-accordion.styled-list(multiple="" id="opportunities" control="list.accordion" 
               div(row)
                 div(column='12') {{::opportunity.store.distributors[0] | titlecase}}
             div(column='2')
-              a(href="#").details-link.accent Full Details
+              a(ui-sref="accounts({id: opportunity.store.id})" ui-sref-active="active").details-link.accent Full Details
         .title-row(row)
           div(column='1') &nbsp;
           div(column='2')
