@@ -31,6 +31,7 @@ module.exports = /*  @ngInject */
       filtersApplied: true,
       filtersDefault: true,
       disableSaveFilter: false,
+      filtersValidCount: 0,
       impact: '',
       opportunityType: ['All Types'],
       opportunitiesType: [
@@ -208,6 +209,7 @@ module.exports = /*  @ngInject */
       resetModel(); // reset view model bindings
       service.model.filtersApplied = false;
       service.model.filtersDefault = true;
+      service.model.filtersValidCount = 0;
     }
 
     function resetModel() {
