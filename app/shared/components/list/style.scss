@@ -66,8 +66,8 @@ list {
   }
 
   .cell-parent > div {
-    padding-top: 2em;
-    padding-bottom: 1.5em;
+    padding-top: 1.5rem;
+    padding-bottom: 1.5rem;
 
     &:first-child {
       padding-bottom: 0;
@@ -236,6 +236,7 @@ list {
   font-size: 0.7em;
   text-transform: uppercase;
   border-bottom: 1px solid $gray-3;
+  padding-bottom: 0.5rem;
 
   label {
     display: inline-block;
@@ -378,8 +379,8 @@ list {
 }
 
 .address {
-  font-size: 0.8em;
-  line-height: 2.25;
+  font-size: 0.75rem;
+  line-height: 1.25;
   color: $gray-2;
 
   a {
