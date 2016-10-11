@@ -18,8 +18,10 @@ module.exports = /* @ngInject */
 
       if (str.length === 9) {
         tempStr = str.slice(0, 5) + '-' + str.slice(5);
+        return tempStr;
       }
 
-      return tempStr;
+      return str;
+
     };
   };
