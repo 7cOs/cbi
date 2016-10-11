@@ -111,7 +111,15 @@ v-accordion.styled-list(multiple="" id="opportunities" control="list.accordion" 
                   div(row)
                     div(column='12') {{::opportunity.store.distributionL90Effective | number:0}}<span class="percentage">{{::opportunity.store.distributionL90EffectiveYA | number:1}}</span>%
             div(column='2')
-              label Velocity (VS YA%)
+              .tooltip-wrap
+                label Velocity (VS YA%)
+                  .tooltip
+                    img(src="../assets/img/icons/help-tooltip.svg")
+                    md-tooltip(md-direction="bottom")
+                      label Filter Set
+                      h3 Store Type
+                      p Chain = Chain retailers directly called on by CBBD National or Key Accounts teams (On and Off-Premise)
+                      p Independent = Retailers not directly called on by CBBD’s National or Key Accounts teams
               div(row)
                 div(column='12') {{::opportunity.store.velocity | number:0}}<span class="percentage">{{::opportunity.store.velocityYA | number:1}}</span>%
             div(column='2')
