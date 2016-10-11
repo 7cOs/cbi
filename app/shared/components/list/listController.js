@@ -409,9 +409,6 @@ module.exports = /*  @ngInject */
       vm.disabledMessage = '';
     });
 
-    $scope.$watch('list.filtersService.model', function(oldval, newval) {
-    });
-
     /**
      * Check if opprtunity is in the opportunities selection array
      * @param {object} opportunity Opportunity object
