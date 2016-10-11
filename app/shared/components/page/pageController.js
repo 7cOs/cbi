@@ -15,7 +15,7 @@ module.exports = /*  @ngInject */
 
     // Public Methods
     function displayPagination() {
-      if (opportunitiesService.model.opportunities.length > 0) return true;
+      if (filtersService.model.appliedFilter.pagination.totalPages > 0) return true;
 
       return false;
     }

@@ -44,8 +44,6 @@ module.exports = /*  @ngInject */
         .catch(getOpportunitiesFail);
 
       function getOpportunitiesSuccess(response) {
-        console.log(response);
-
         // Group opportunities by store
         var newOpportunityArr = [],
             store,
