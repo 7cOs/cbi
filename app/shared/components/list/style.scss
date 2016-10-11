@@ -13,6 +13,7 @@ list {
     font-size: 1.1em;
     transition: background 300ms ease;
     position: relative;
+    height: 90px;
 
     &:hover,
     &:hover .more-wrapper,
@@ -21,7 +22,13 @@ list {
       background: $light-blue-4;
     }
 
+    &.is-expanded,
+    &.is-expanded .more-wrapper  {
+      height: auto;
+    }
+
     &:last-child {
+      padding-bottom: 1px;
       border-bottom: 1px solid $gray-3;
     }
 
@@ -59,7 +66,7 @@ list {
   }
 
   .cell-parent > div {
-    padding-top: 1.5em;
+    padding-top: 2em;
     padding-bottom: 1.5em;
 
     &:first-child {
@@ -87,13 +94,17 @@ list {
     padding: 0;
     // z-index: 1;
   }
+
+  .long > div {
+    padding-top: 1.5em;
+  }
 }
 
 .checkbox-wrapper {
   background: $gray-4;
   float: left;
   outline: 0;
-  padding: 1.5em 0 1.5em 15px;
+  padding: 2em 0 2em 15px;
   width: 35px;
 
   &.placeholder {
@@ -308,7 +319,8 @@ list {
     margin: 0 auto;
   }
 
-  &.low {
+  &.low,
+  &.L {
 
     &:before {
       background-image: url('../assets/img/icons/impact-low.svg');
@@ -323,7 +335,8 @@ list {
   }
 
 
-  &.medium {
+  &.medium,
+  &.M {
 
     &:before {
       background-image: url('../assets/img/icons/impact-medium.svg');
@@ -337,7 +350,8 @@ list {
     }
   }
 
-  &.high {
+  &.high,
+  &.H {
 
     &:before {
       background-image: url('../assets/img/icons/impact-high.svg');
