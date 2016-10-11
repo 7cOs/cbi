@@ -111,7 +111,14 @@ v-accordion.styled-list(multiple="" id="opportunities" control="list.accordion" 
                   div(row)
                     div(column='12') {{::opportunity.store.distributionL90Effective | number:0}}<span class="percentage">{{::opportunity.store.distributionL90EffectiveYA | number:1}}</span>%
             div(column='2')
-              label Velocity (VS YA%)
+              .tooltip-wrap
+                label Velocity (VS YA%)
+                  .tooltip
+                    img(src="../assets/img/icons/help-tooltip.svg")
+                    md-tooltip(md-direction="bottom")
+                      label Opportunity List
+                      h3 vs YA %
+                      p Monthly velocity for this account, calculated by taking the total volume over the selected time period (e.g. L90) and dividing by number of 30 day periods (3). “% vs YA” indicates the trend of velocity this year vs. same time period last year.
               div(row)
                 div(column='12') {{::opportunity.store.velocity | number:0}}<span class="percentage">{{::opportunity.store.velocityYA | number:1}}</span>%
             div(column='2')
@@ -178,13 +185,6 @@ v-accordion.styled-list(multiple="" id="opportunities" control="list.accordion" 
                     label Depletions CYTD
                     span {{::product.depletionsCurrentYearToDate | number:0 }}
                   div(column="2")
-                    .tooltip-wrap
-                      label vs YA %
-                        .tooltip
-                          img(src="../assets/img/icons/help-tooltip.svg")
-                          md-tooltip(md-direction="bottom")
-                            label Opportunity List
-                            h3 vs YA %
-                            p Monthly velocity for this account, calculated by taking the total volume over the selected time period (e.g. L90) and dividing by number of 30 day periods (3). “% vs YA” indicates the trend of velocity this year vs. same time period last year.
+                    label vs YA %
                     span {{::product.depletionsCurrentYearToDateYAPercent}}
 page
