@@ -175,6 +175,9 @@ module.exports = /*  @ngInject */
     function addSortFilter(name) {
       var filterExists = $filter('filter')(service.model.appliedFilter.sort.sortArr, {str: name});
 
+      // Set page offset back to 0
+      service.model.appliedFilter.pagination.currentPage = 0;
+
       if (filterExists.length > 0) {
         filterExists[0].asc = filterExists[0].asc ? filterExists[0].asc = false : filterExists[0].asc = true;
       } else {
