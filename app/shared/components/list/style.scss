@@ -66,7 +66,7 @@ list {
   }
 
   .cell-parent > div {
-    padding-top: 1.5rem;
+    padding-top: 2.125rem;
     padding-bottom: 1.5rem;
 
     &:first-child {
@@ -188,7 +188,6 @@ list {
   &.dismiss-product {
     padding: 0;
   }
-
 
   .more-icon  {
     border: 1px solid $gray-4;
