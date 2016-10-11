@@ -50,10 +50,6 @@ list {
       background: inherit;
     }
 
-    .bottom.dismiss-product {
-      margin-left: -25px;
-    }
-
     .depletion-date {
       font-size: 0.7em;
     }
@@ -158,13 +154,22 @@ list {
     font-size: 0.85em;
     font-weight: $light;
   }
+
+  .opportunites-count {
+    margin-bottom: 4px;
+  }
+
+  .opportunities-selected-count {
+    font-size: 1em;
+    margin-left: 3px;
+  }
 }
 
 .more-wrapper {
-  float: right;
   outline: 0;
   padding: 1em 15px 0 0;
   width: 35px;
+  margin: 0 auto;
   transition: background 300ms ease;
 
   + .checkbox-sibling {
@@ -304,14 +309,14 @@ list {
   &:before {
     background-position: 0 0;
     background-repeat: no-repeat;
-    background-size: 10px;
+    background-size: 100%;
     content: '';
     display: block;
-    height: 26px;
-    left: 30px;
+    height: 28px;
     position: relative;
-    width: 10px;
-    bottom: -3px;
+    width: 11px;
+    bottom: -6px;
+    margin: 0 auto;
   }
 
   &.low,
