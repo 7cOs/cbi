@@ -404,7 +404,12 @@ module.exports = /*  @ngInject */
     });
 
     $scope.$watch('list.opportunitiesService.model.opportunities', function() {
+      vm.selected = [];
+      vm.isSelectAllActivated = false;
       vm.disabledMessage = '';
+    });
+
+    $scope.$watch('list.filtersService.model', function(oldval, newval) {
     });
 
     /**
