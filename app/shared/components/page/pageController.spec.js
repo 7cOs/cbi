@@ -26,6 +26,7 @@ describe('Unit: page controller', function() {
 
   describe('displayPagination', function() {
     beforeEach(function() {
+      filtersService.model.appliedFilter.pagination.totalPages = 1;
       opportunitiesService.model.opportunities = [{
         'id': 'SbBGk',
         'product': {
@@ -121,7 +122,7 @@ describe('Unit: page controller', function() {
     });
 
     it('should return false if there are opportunities', function() {
-      opportunitiesService.model.opportunities = [];
+      filtersService.model.appliedFilter.pagination.totalPages = 0;
       expect(ctrl.displayPagination()).toEqual(false);
     });
   });
