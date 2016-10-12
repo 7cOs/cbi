@@ -142,8 +142,14 @@ module.exports = /*  @ngInject */
       // var filterPayload = filtersService.getAppliedFilters('opportunities');
 
       userService.saveOpportunityFilter().then(function(data) {
-        // push new filter to filter dropdown -- the response is 200, not sure why we would push this
-        userService.model.opportunityFilters.push(data);
+        // push new filter to filter dropdown
+        userService.model.opportunityFilters.unshift({
+          filterString: encodeURIComponent(filtersService.model.appliedFilter.appliedFilter),
+          name: filtersService.model.newServiceName
+        });
+
+        // reset new service name
+        filtersService.model.newServiceName = null;
 
         filtersService.disableFilters(true, false, true, false);
 

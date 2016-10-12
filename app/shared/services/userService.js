@@ -278,9 +278,6 @@ module.exports = /*  @ngInject */
         .catch(saveOpportunityFilterFail);
 
       function saveOpportunityFilterSuccess(response) {
-        // reset new service name
-        filtersService.model.newServiceName = null;
-
         // resolve promise
         opportunityFilterPromise.resolve(response.data);
       }
