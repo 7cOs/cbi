@@ -66,11 +66,16 @@ list {
   }
 
   .cell-parent > div {
-    padding-top: 1.25em;
+    padding-top: 2em;
     padding-bottom: 1.25em;
 
     &:first-child {
+      padding-top: 1.5em;
       padding-bottom: 0;
+    }
+
+    &:nth-child(2) {
+      padding-top: 1.25em;
     }
 
     &.products {
@@ -86,6 +91,18 @@ list {
     }
   }
 
+  .short-address > div {
+    padding-top: 2em;
+
+    &:first-child {
+      padding-top: 2em;
+    }
+
+    &:nth-child(2) {
+      padding-top: 1.25em;
+    }
+  }
+
   .styled-list {
     margin-bottom: 0;
   }
@@ -93,10 +110,6 @@ list {
   .md-button.md-icon-button {
     padding: 0;
     // z-index: 1;
-  }
-
-  .long > div {
-    padding-top: 1.5em;
   }
 }
 

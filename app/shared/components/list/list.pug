@@ -60,7 +60,7 @@ v-accordion.styled-list(multiple="" id="opportunities" control="list.accordion" 
       div.checkbox-wrapper(ng-click="list.toggleOpportunitiesInStores(opportunity, list.selected)")
         md-checkbox(aria-label="Select Item" ng-checked="opportunity.selectedOpportunities === opportunity.groupedOpportunities.length")
       v-pane-header.checkbox-sibling(column='12')
-        div.cell-parent
+        div(ng-class="{'short-address' : opportunity.store.name.length <= 20}" ).cell-parent
           div.pad-cell(column='3') {{::opportunity.store.name | titlecase}} <span class="supporting-text" ng-if="opportunity.store.storeNumber">\#{{::opportunity.store.storeNumber | uppercase}}</span>
           div.address(column='4') {{::opportunity.store.streetAddress | titlecase}} <br /> {{::opportunity.store.city | titlecase}}, {{::opportunity.store.state}} {{::opportunity.store.zip | zipcode}}
           div(column='2') {{::opportunity.groupedOpportunities.length}} <span class="supporting-text">({{::opportunity.highImpactSum}} High)</span>
