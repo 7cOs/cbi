@@ -335,9 +335,11 @@ module.exports = /*  @ngInject */
       return data;
     }
 
+    /**
+     * Initializes the target lists for the user
+     */
     function getTargetLists() {
-      if (userService.model.targetLists && userService.model.targetLists.owned.length < 1) {
-         // get target lists
+      if (!userService.model.targetLists || userService.model.targetLists.owned.length < 1) {
         userService.getTargetLists(userService.model.currentUser.employeeID).then(function(data) {
           userService.model.targetLists = data;
         });
@@ -355,7 +357,6 @@ module.exports = /*  @ngInject */
         } else {
           selectAllOpportunitiesInStore(store, vm.selected);
         }
-        getTargetLists();
       });
       vm.isSelectAllActivated = !vm.isSelectAllActivated;
     }
@@ -372,7 +373,6 @@ module.exports = /*  @ngInject */
       } else {
         selectAllOpportunitiesInStore(store, currentSelectionList);
       }
-      getTargetLists();
     }
 
     /**
@@ -455,6 +455,7 @@ module.exports = /*  @ngInject */
     }
 
     function init() {
-      // opportunitiesService.model.opportunitiesDisplay = [];
+      // Initialize the target lists for the user Id
+      getTargetLists();
     }
   };
