@@ -135,19 +135,19 @@ module.exports = /*  @ngInject */
     }
 
     function addToTargetList(listId) {
-      var opportunityIds = [];
+      if (listId && vm.selected.length > 0) {
+        var opportunityIds = [];
+        // add opportunity ids into array to be posted
+        for (var i = 0; i < vm.selected.length; i++) {
+          opportunityIds.push(vm.selected[i].id);
+        }
 
-      // add opportunity ids into array to be posted
-      for (var i = 0; i < vm.selected.length; i++) {
-        opportunityIds.push(vm.selected[i].id);
+        targetListService.addTargetListOpportunities(listId, opportunityIds).then(function(data) {
+          // to do - update view and model
+        }, function(err) {
+          console.log('Error adding these ids: ', opportunityIds, ' Responded with error: ', err);
+        });
       }
-
-      targetListService.addTargetListOpportunities(listId, opportunityIds).then(function(data) {
-        console.log('Done Adding these ids: ', opportunityIds);
-        // to do - update view and model
-      }, function(err) {
-        console.log('Error adding these ids: ', opportunityIds, ' Responded with error: ', err);
-      });
     }
 
     function closeModal() {
