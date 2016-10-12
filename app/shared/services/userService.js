@@ -295,39 +295,6 @@ module.exports = /*  @ngInject */
     }
 
     /**
-    * @name updateFilter
-    * @desc update a filter for a user
-    * @params {Object} filters - filte to be updated
-    * @returns {Object} - Status Object* @memberOf cf.common.services
-    **/
-    function updateOpportunityFilter(newFilterString, filterId) {
-
-      var opportunityFilterPromise = $q.defer(),
-          url = apiHelperService.request('/api/opportunityFilters/' + filterId),
-          payload = {
-            filterString: apiHelperService.formatQueryString(newFilterString)
-          };
-
-      $http.patch(url, payload)
-        .then(updateOpportunityFilterSuccess)
-        .catch(updateOpportunityFilterFail);
-
-      function updateOpportunityFilterSuccess(response) {
-        // reset new service name
-        filtersService.model.newServiceName = null;
-
-        // resolve promise
-        opportunityFilterPromise.resolve(response.data);
-      }
-
-      function updateOpportunityFilterFail(error) {
-        opportunityFilterPromise.resolve(error);
-      }
-
-      return opportunityFilterPromise.promise;
-    }
-
-    /**
      * @name getPerformanceSummary
      * @desc get performance summary for a user
      * @returns {Object} - performance summary
