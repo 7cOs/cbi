@@ -149,6 +149,60 @@ describe('Unit: filter controller (opportunities)', function() {
     });
   });
 
+  describe('[method.expandDropdown]', function() {
+    it('shouldnt toggle ctrl.opportunities when state.current.name is "opportunities"', function() {
+      expect(ctrl.opportunities).toEqual(false);
+      ctrl.expandDropdown();
+      expect(ctrl.opportunities).toEqual(false);
+    });
+
+    it('should toggle filtersService.model.expanded', function() {
+      expect(filtersService.model.expanded).toEqual(false);
+      ctrl.expandDropdown();
+      expect(filtersService.model.expanded).toEqual(true);
+      ctrl.expandDropdown();
+      expect(filtersService.model.expanded).toEqual(false);
+    });
+  });
+
+  describe('[method.hoverState]', function() {
+    it('should toggle ctrl.isHoveringReset if icon equals "hover"', function() {
+      expect(ctrl.isHoveringReset).toBeUndefined();
+      ctrl.hoverState('reset');
+      expect(ctrl.isHoveringReset).toEqual(true);
+      ctrl.hoverState('reset');
+      expect(ctrl.isHoveringReset).toEqual(false);
+      ctrl.hoverState('reset');
+      expect(ctrl.isHoveringReset).toEqual(true);
+    });
+
+    it('should toggle ctrl.isHoveringSave if icon doesnt equal "hover"', function() {
+      expect(ctrl.isHoveringSave).toBeUndefined();
+      ctrl.hoverState();
+      expect(ctrl.isHoveringSave).toEqual(true);
+      ctrl.hoverState();
+      expect(ctrl.isHoveringSave).toEqual(false);
+      ctrl.hoverState();
+      expect(ctrl.isHoveringSave).toEqual(true);
+    });
+  });
+
+  describe('[method.modalSaveOpportunityFilter]', function() {
+    beforeEach(function() {
+      spyOn(mdDialog, 'show').and.callFake(function() {
+        return true;
+      });
+    });
+
+    it('should open a dialog', function() {
+      expect(mdDialog.show).not.toHaveBeenCalled();
+      expect(mdDialog.show.calls.count()).toEqual(0);
+      ctrl.modalSaveOpportunityFilter();
+      expect(mdDialog.show).toHaveBeenCalled();
+      expect(mdDialog.show.calls.count()).toEqual(1);
+    });
+  });
+
 });
 
 describe('Unit: filter controller (state = target-list-detail)', function() {
@@ -174,6 +228,16 @@ describe('Unit: filter controller (state = target-list-detail)', function() {
 
   describe('init target list details filter', function() {
     it('should set opportunities to true if state is "target-list-detail"', function() {
+      expect(ctrl.opportunities).toEqual(true);
+    });
+  });
+
+  describe('[method.expandDropdown]', function() {
+    it('should toggle ctrl.opportunities when state.current.name is "target-list-detail"', function() {
+      expect(ctrl.opportunities).toEqual(true);
+      ctrl.expandDropdown();
+      expect(ctrl.opportunities).toEqual(false);
+      ctrl.expandDropdown();
       expect(ctrl.opportunities).toEqual(true);
     });
   });
