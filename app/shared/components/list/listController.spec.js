@@ -477,12 +477,12 @@ describe('Unit: list controller', function() {
       expect(targetListService.addTargetListOpportunities).toHaveBeenCalled();
     });
 
-    it('should not add to target service if opportunites are not selected', function() {
+    it('should not call addToTargetService if opportunites are not selected', function() {
       ctrl.addToTargetList(listId);
       expect(targetListService.addTargetListOpportunities).not.toHaveBeenCalled();
     });
 
-    it('should not add to target service if target list id is null', function() {
+    it('should not call addToTargetService if target list id is null', function() {
       listId = null;
       ctrl.toggleSelectAllStores();
       ctrl.addToTargetList(listId);
