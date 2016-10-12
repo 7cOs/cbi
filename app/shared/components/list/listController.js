@@ -86,28 +86,48 @@ module.exports = /*  @ngInject */
       vm.showSubMenu = false;
     });
 
+    /**
+     * Add a person to a list of collaboraters
+     * @param {object} person The person who needs to be added to the list of collaborators
+     */
     function addToSharedCollaborators(person) {
-      var match = false;
       if (!vm.sharedCollaborators.length) {
         vm.sharedCollaborators.push(person);
       } else {
-        vm.sharedCollaborators.forEach(function(collab, key) {
-          if (person.employeeId === collab.employeeId) {
-            match = true;
-          }
-        });
-        if (!match) {
+        var matchedPerson = checkIfPersonIsAddedToCollaborators(person);
+        if (!matchedPerson) {
           vm.sharedCollaborators.push(person);
         }
       }
     }
 
-    function removeSharedCollaborator(person) {
+    /**
+     * Check if a person already exists amongst a list of collaboraters
+     * @param {object} person The person who needs to be added to the list of collaborators
+     * @returns {object} matchedPerson Returns the matchedPerson if the object exists or returns null
+     */
+    function checkIfPersonIsAddedToCollaborators(person) {
+      var matchedPerson = null;
       vm.sharedCollaborators.forEach(function(collab, key) {
-        if (person.employeeId === collab.employeeId) {
-          vm.sharedCollaborators.splice(key, 1);
+        if (!matchedPerson && person.employeeId === collab.employeeId) {
+          matchedPerson = {
+            'obj': collab,
+            'key': key
+          };
         }
       });
+      return matchedPerson;
+    }
+
+    /**
+     * Remove a person from a list of collaboraters if the object exists
+     * @param {object} person The person who needs to be added to the list of collaborators
+     */
+    function removeSharedCollaborator(person) {
+      var matchedPerson = checkIfPersonIsAddedToCollaborators(person);
+      if (matchedPerson) {
+        vm.sharedCollaborators.splice(matchedPerson.key, 1);
+      }
     }
 
     function getDate() {
@@ -252,15 +272,6 @@ module.exports = /*  @ngInject */
         loaderService.closeLoader();
       });
     }
-    /* function sortBy(property) {
-      vm.reverse = (vm.sortProperty === property) ? !vm.reverse : false;
-      vm.sortProperty = property;
-
-      vm.storeChevron = (property === 'opportunity.store.name') ? !vm.storeChevron : vm.storeChevron;
-      vm.opportunitiesChevron = (property === 'groupedOpportunities.length') ? !vm.opportunitiesChevron : vm.opportunitiesChevron;
-      vm.depletionsChevron = (property === 'depletionsCurrentYearToDate') ? !vm.depletionsChevron : vm.depletionsChevron;
-      vm.segmentationChevron = (property === 'segmentation') ? !vm.segmentationChevron : vm.storeChevron;
-    } */
 
     // Select or deselect individual list item
     function selectOpportunity(event, parent, item, list) {

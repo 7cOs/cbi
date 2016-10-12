@@ -262,4 +262,61 @@ describe('Unit: list controller', function() {
     });
   });
 
+  describe('Collaborators functionality', function() {
+    var collaboratorsArr = [];
+
+    beforeEach(function() {
+      collaboratorsArr = [
+        {
+          'id': '634',
+          'employeeId': 'X004243',
+          'firstName': 'JOE',
+          'lastName': 'DURBIN',
+          'email': 'JOE.DURBIN@NORTHFLORIDASALES.COM',
+          'roles': [],
+          'accounts': []
+        },
+        {
+          'id': '258',
+          'employeeId': 'X003984',
+          'firstName': 'DALE',
+          'lastName': 'ADKINS',
+          'email': 'DALE@CHAMPAGNEBEVERAGE.COM',
+          'roles': [],
+          'accounts': []
+        }
+      ];
+    });
+
+    afterEach(function() {
+      ctrl.sharedCollaborators = [];
+    });
+
+    it('should add a person only once to list of collaborators', function() {
+      ctrl.addToSharedCollaborators(collaboratorsArr[0]);
+      ctrl.addToSharedCollaborators(collaboratorsArr[0]);
+      expect(ctrl.sharedCollaborators.length).toEqual(1);
+    });
+
+    it('should add distinct person objects to list of collaborators', function() {
+      ctrl.addToSharedCollaborators(collaboratorsArr[0]);
+      ctrl.addToSharedCollaborators(collaboratorsArr[1]);
+      expect(ctrl.sharedCollaborators.length).toEqual(2);
+    });
+
+    it('should remove a person from the list of collaborators', function() {
+      ctrl.addToSharedCollaborators(collaboratorsArr[0]);
+      ctrl.addToSharedCollaborators(collaboratorsArr[1]);
+      ctrl.removeSharedCollaborator(collaboratorsArr[1]);
+      expect(ctrl.sharedCollaborators.length).toEqual(1);
+    });
+
+    it('should remove the correct person from the list of collaborators', function() {
+      ctrl.addToSharedCollaborators(collaboratorsArr[0]);
+      ctrl.addToSharedCollaborators(collaboratorsArr[1]);
+      ctrl.removeSharedCollaborator(collaboratorsArr[0]);
+      expect(ctrl.sharedCollaborators[0].id).toEqual(collaboratorsArr[1].id);
+    });
+  });
+
 });
