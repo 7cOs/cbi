@@ -134,18 +134,22 @@ module.exports = /*  @ngInject */
       return new Date();
     }
 
+    // TODO Update view and model and show success or error message
+    /**
+     * This function adds the selected opportunities to target list
+     * @param {string} listId Guid of the target list
+     */
     function addToTargetList(listId) {
       if (listId && vm.selected.length > 0) {
         var opportunityIds = [];
-        // add opportunity ids into array to be posted
         for (var i = 0; i < vm.selected.length; i++) {
           opportunityIds.push(vm.selected[i].id);
         }
-
         targetListService.addTargetListOpportunities(listId, opportunityIds).then(function(data) {
-          // to do - update view and model
+          return data;
         }, function(err) {
           console.log('Error adding these ids: ', opportunityIds, ' Responded with error: ', err);
+          return err;
         });
       }
     }
