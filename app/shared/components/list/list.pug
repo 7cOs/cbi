@@ -40,7 +40,7 @@ v-accordion.styled-list(multiple="" id="opportunities" control="list.accordion" 
           span(ng-class="{'chevron-up-small' : (!list.filtersService.model.appliedFilter.sort.sortArr[0].asc && list.filtersService.model.appliedFilter.sort.sortArr[0].str === 'store')}").chevron-down-small
       div(column='4')
         label Address
-      div(column='2')
+      div.text-center(column='2')
         label Opportunities
       div(column='1')
         label(ng-click="list.sortBy('depletions')" ng-class="{ 'header-bold' : list.filtersService.model.appliedFilter.sort.sortArr[0].str === 'depletions'}")
@@ -61,12 +61,12 @@ v-accordion.styled-list(multiple="" id="opportunities" control="list.accordion" 
         md-checkbox(aria-label="Select Item" ng-checked="opportunity.selectedOpportunities === opportunity.groupedOpportunities.length")
       v-pane-header.checkbox-sibling(column='12')
         div(ng-class="{long: opportunity.store.name.length > 21}").cell-parent
-          div.pad-cell(column='3') {{::opportunity.store.name | titlecase}} <span class="supporting-text" ng-if="opportunity.store.storeNumber">\#{{::opportunity.store.storeNumber | uppercase}}</span>
+          div.pad-cell.semi-bold(column='3') {{::opportunity.store.name | titlecase}} <span class="supporting-text" ng-if="opportunity.store.storeNumber">\#{{::opportunity.store.storeNumber | uppercase}}</span>
           div.address(column='4') {{::opportunity.store.address | titlecase}}
-          div(column='2') {{::opportunity.groupedOpportunities.length}} <span class="supporting-text">({{::opportunity.highImpactSum}} High)</span>
-          .text-center(column='1') {{::opportunity.store.depletionsCurrentYearToDate | number }}
-          .text-center(column='1' ng-class="opportunity.store.depletionsCurrentYearToDateYA >= 0 ? 'positive' : 'negative'").bold <span ng-if="opportunity.store.depletionsCurrentYearToDateYA >= 0 | number:2">+</span>{{opportunity.store.depletionsCurrentYearToDateYA | number:1}}<span>%</span>
-          .text-center(column='1') {{::opportunity.store.segmentation}}
+          .text-center.semi-bold(column='2') {{::opportunity.groupedOpportunities.length}} <span class="supporting-text">({{::opportunity.highImpactSum}} High)</span>
+          .text-center.semi-bold(column='1') {{::opportunity.store.depletionsCurrentYearToDate | number }}
+          .text-center.semi-bold(column='1' ng-class="opportunity.store.depletionsCurrentYearToDateYA >= 0 ? 'positive' : 'negative'") <span ng-if="opportunity.store.depletionsCurrentYearToDateYA >= 0 | number:2">+</span>{{opportunity.store.depletionsCurrentYearToDateYA | number:1}}<span>%</span>
+          .text-center.semi-bold(column='1') {{::opportunity.store.segmentation}}
       v-pane-content(column='12' class="products" ng-class="{'open' : open}")
         .shadow-wrap.top
           .hero-row(row)

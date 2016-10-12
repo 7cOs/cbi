@@ -118,6 +118,10 @@ label,
   font-weight: $bold;
 }
 
+.semi-bold {
+  font-weight: $semibold;
+}
+
 li {
   list-style: none;
 }
@@ -129,7 +133,8 @@ li {
 .supporting-text {
   text-transform: uppercase;
   font-size: 0.65em;
-  font-weight: $semibold;
+  font-family: $rajdhani;
+  font-weight: $bold;
   color: $gray-2;
 }
 
