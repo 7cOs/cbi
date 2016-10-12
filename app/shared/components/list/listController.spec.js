@@ -315,7 +315,7 @@ describe('Unit: list controller', function() {
       ctrl.addToSharedCollaborators(collaboratorsArr[0]);
       ctrl.addToSharedCollaborators(collaboratorsArr[1]);
       ctrl.removeSharedCollaborator(collaboratorsArr[0]);
-      expect(ctrl.sharedCollaborators[0].id).toEqual(collaboratorsArr[1].id);
+      expect(ctrl.sharedCollaborators[0]).toEqual(collaboratorsArr[1]);
     });
   });
 
