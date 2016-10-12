@@ -19,7 +19,6 @@ module.exports = /*  @ngInject */
       createNotification: createNotification,
       getOpportunityFilters: getOpportunityFilters,
       saveOpportunityFilter: saveOpportunityFilter,
-      updateOpportunityFilter: updateOpportunityFilter,
       getPerformanceSummary: getPerformanceSummary,
       getPerformanceDepletion: getPerformanceDepletion,
       getPerformanceDistribution: getPerformanceDistribution,
@@ -263,16 +262,15 @@ module.exports = /*  @ngInject */
     /**
      * @name saveOpportunityFilter
      * @desc save new filter for a user
-     * @params {Object} filters - filters to be saved
      * @returns {Object} - Status Object
      * @memberOf cf.common.services
      */
-    function saveOpportunityFilter(filters) {
+    function saveOpportunityFilter() {
       var opportunityFilterPromise = $q.defer(),
           url = apiHelperService.request('/api/users/' + service.model.currentUser.employeeID + '/opportunityFilters/'),
           payload = {
             name: filtersService.model.newServiceName,
-            filterString: apiHelperService.formatQueryString(filters)
+            filterString: encodeURIComponent(filtersService.model.appliedFilter.appliedFilter)
           };
 
       $http.post(url, payload)
@@ -280,48 +278,12 @@ module.exports = /*  @ngInject */
         .catch(saveOpportunityFilterFail);
 
       function saveOpportunityFilterSuccess(response) {
-        // reset new service name
-        filtersService.model.newServiceName = null;
-
         // resolve promise
         opportunityFilterPromise.resolve(response.data);
       }
 
       function saveOpportunityFilterFail(error) {
         opportunityFilterPromise.reject(error);
-      }
-
-      return opportunityFilterPromise.promise;
-    }
-
-    /**
-    * @name updateFilter
-    * @desc update a filter for a user
-    * @params {Object} filters - filte to be updated
-    * @returns {Object} - Status Object* @memberOf cf.common.services
-    **/
-    function updateOpportunityFilter(newFilterString, filterId) {
-
-      var opportunityFilterPromise = $q.defer(),
-          url = apiHelperService.request('/api/opportunityFilters/' + filterId),
-          payload = {
-            filterString: apiHelperService.formatQueryString(newFilterString)
-          };
-
-      $http.patch(url, payload)
-        .then(updateOpportunityFilterSuccess)
-        .catch(updateOpportunityFilterFail);
-
-      function updateOpportunityFilterSuccess(response) {
-        // reset new service name
-        filtersService.model.newServiceName = null;
-
-        // resolve promise
-        opportunityFilterPromise.resolve(response.data);
-      }
-
-      function updateOpportunityFilterFail(error) {
-        opportunityFilterPromise.resolve(error);
       }
 
       return opportunityFilterPromise.promise;

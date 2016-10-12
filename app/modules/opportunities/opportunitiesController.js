@@ -26,6 +26,7 @@ module.exports = /*  @ngInject */
     vm.loaderService = loaderService;
 
     // Expose public methods
+    vm.applySavedFilter = applySavedFilter;
     vm.closeEditModal = closeEditModal;
     vm.closeModal = closeModal;
     vm.deleteSavedFilter = deleteSavedFilter;
@@ -38,8 +39,23 @@ module.exports = /*  @ngInject */
     // PUBLIC METHODS
     // **************
 
-    function placeholderSelect(data) {
-      vm.hintTextPlaceholder = data;
+    function applySavedFilter(ev, filter) {
+      if (ev.srcElement.nodeName === 'SPAN') {
+        ev.preventDefault();
+      } else {
+        // set filters based on query string
+        var arr = decodeURIComponent(filter.filterString).split(',');
+
+        for (var i = 0; i < arr.length; i++) {
+          if (arr[i].length > 0) {
+            var prop = arr[i].split(':');
+
+            filtersService.model.selected[prop[0]] = prop[1];
+          }
+        }
+
+        chipsService.applyFilters();
+      }
     }
 
     function closeModal() {
@@ -73,6 +89,10 @@ module.exports = /*  @ngInject */
 
         closeModal();
       });
+    }
+
+    function placeholderSelect(data) {
+      vm.hintTextPlaceholder = data;
     }
 
     // ***************
