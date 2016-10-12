@@ -106,6 +106,10 @@
   }
 }
 
+.secondary-button-container > a.disabled {
+  cursor: default;
+}
+
 .reset-icon:before {
   background-image: url('../assets/img/icons/reset.svg');
   background-size: 11px;
