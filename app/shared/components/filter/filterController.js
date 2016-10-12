@@ -10,11 +10,14 @@ module.exports = /*  @ngInject */
     // Initial variables
     var vm = this;
     vm.opportunities = true;
+    vm.hintTextPlaceholder = 'Account or Subaccount Name';
 
+    // Expose Needed Services
     vm.chipsService = chipsService;
     vm.filtersService = filtersService;
     vm.userService = userService;
 
+    // Expose Methods
     vm.appendDoneButton = appendDoneButton;
     vm.applyFilterArr = chipsService.applyFilterArr;
     vm.applyFilterMulti = chipsService.applyFilterMulti;
@@ -23,7 +26,6 @@ module.exports = /*  @ngInject */
     vm.closeModal = closeModal;
     vm.closeSelect = closeSelect;
     vm.expandDropdown = expandDropdown;
-    vm.hintTextPlaceholder = 'Account or Subaccount Name';
     vm.hoverState = hoverState;
     vm.modalSaveOpportunityFilter = modalSaveOpportunityFilter;
     vm.opportunityStatusSwitch = opportunityStatusSwitch;
