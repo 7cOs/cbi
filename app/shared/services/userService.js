@@ -19,7 +19,6 @@ module.exports = /*  @ngInject */
       createNotification: createNotification,
       getOpportunityFilters: getOpportunityFilters,
       saveOpportunityFilter: saveOpportunityFilter,
-      updateOpportunityFilter: updateOpportunityFilter,
       getPerformanceSummary: getPerformanceSummary,
       getPerformanceDepletion: getPerformanceDepletion,
       getPerformanceDistribution: getPerformanceDistribution,
@@ -263,16 +262,15 @@ module.exports = /*  @ngInject */
     /**
      * @name saveOpportunityFilter
      * @desc save new filter for a user
-     * @params {Object} filters - filters to be saved
      * @returns {Object} - Status Object
      * @memberOf cf.common.services
      */
-    function saveOpportunityFilter(filters) {
+    function saveOpportunityFilter() {
       var opportunityFilterPromise = $q.defer(),
           url = apiHelperService.request('/api/users/' + service.model.currentUser.employeeID + '/opportunityFilters/'),
           payload = {
             name: filtersService.model.newServiceName,
-            filterString: apiHelperService.formatQueryString(filters)
+            filterString: encodeURIComponent(filtersService.model.appliedFilter.appliedFilter)
           };
 
       $http.post(url, payload)

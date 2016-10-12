@@ -138,10 +138,10 @@ function FilterController($state, $scope, $mdDialog, $mdSelect, chipsService, fi
 
   function saveFilter() {
     // get applied filters
-    var filterPayload = filtersService.getAppliedFilters('opportunities');
+    // var filterPayload = filtersService.getAppliedFilters('opportunities');
 
-    userService.saveOpportunityFilter(filterPayload).then(function(data) {
-      // push new filter to filter dropdown
+    userService.saveOpportunityFilter().then(function(data) {
+      // push new filter to filter dropdown -- the response is 200, not sure why we would push this
       userService.model.opportunityFilters.push(data);
 
       filtersService.disableFilters(true, false, true, false);
