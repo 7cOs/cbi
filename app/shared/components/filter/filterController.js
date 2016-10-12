@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports = /*  @ngInject */
-  function filterController($state, $scope, $mdDialog, $mdSelect, loaderService, chipsService, filtersService, userService) {
+  function filterController($state, $scope, $mdDialog, $mdSelect, loaderService, chipsService, filtersService, opportunityFiltersService, userService) {
 
     // ****************
     // CONTROLLER SETUP
@@ -155,18 +155,24 @@ module.exports = /*  @ngInject */
 
         // close modal
         closeModal();
+      }, function(err) {
+        console.warn(err);
+        loaderService.closeLoader();
       });
     }
 
     function updateFilter() {
-      // get applied filters
-      var filterPayload = filtersService.getAppliedFilters('opportunities'),
-          currentFilter = userService.model.newServiceSelect;
+      var currentFilter = userService.model.newServiceSelect;
 
-      userService.updateOpportunityFilter(filterPayload, currentFilter).then(function(data) {
+      loaderService.openLoader(true);
+      // userService.updateOpportunityFilter(filterPayload, currentFilter).then(function(data) {
+      opportunityFiltersService.updateOpportunityFilter(currentFilter).then(function(data) {
         filtersService.disableFilters(true, false, true, false);
-
+        loaderService.closeLoader();
         closeModal();
+      }, function(err) {
+        console.warn(err);
+        loaderService.closeLoader();
       });
     }
 
