@@ -21,8 +21,6 @@ module.exports = /*  @ngInject */
 
     // Services
     vm.targetListService = targetListService;
-    vm.filtersService = filtersService;
-    vm.chipsService = chipsService;
     vm.userService = userService;
 
     // Set page title for head and nav
@@ -40,7 +38,6 @@ module.exports = /*  @ngInject */
     vm.manageCollaborators = manageCollaborators;
     vm.modalManageTargetList = modalManageTargetList;
     vm.modalManageCollaborators = modalManageCollaborators;
-    vm.modalSendOpportunity = modalSendOpportunity;
     vm.navigateToTL = navigateToTL;
     vm.removeCollaborator = removeCollaborator;
     vm.removeFooterToast = removeFooterToast;
@@ -189,16 +186,6 @@ module.exports = /*  @ngInject */
         scope: $scope.$new(),
         targetEvent: ev,
         templateUrl: './app/modules/target-list-detail/modal-manage-collaborators.html'
-      });
-    }
-
-    function modalSendOpportunity(ev) {
-      var parentEl = angular.element(document.body);
-      $mdDialog.show({
-        clickOutsideToClose: true,
-        parent: parentEl,
-        targetEvent: ev,
-        templateUrl: './app/modules/target-list-detail/modal-send-opportunity.html'
       });
     }
 
