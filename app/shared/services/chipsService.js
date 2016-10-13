@@ -69,7 +69,6 @@ module.exports = /*  @ngInject */
           removable: true,
           tradeChannel: tradeChannel || false
         };
-        console.log(tempChip);
         if ($filter('filter')(service.model, {name: tempChip.name}, true).length !== 1 && $filter('filter')(service.model, {id: tempChip.id}, true).length !== 1) {
           service.model.push(tempChip);
         }
