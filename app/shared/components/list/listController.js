@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports = /*  @ngInject */
-  function listController($scope, $state, $q, $location, $anchorScroll, $mdDialog, filtersService, loaderService, opportunitiesService, targetListService, storesService, userService, closedOpportunitiesService) {
+  function listController($scope, $state, $q, $location, $anchorScroll, $mdDialog, $timeout, filtersService, loaderService, opportunitiesService, targetListService, storesService, userService, closedOpportunitiesService) {
 
     // ****************
     // CONTROLLER SETUP
@@ -32,6 +32,8 @@ module.exports = /*  @ngInject */
     vm.disabledMessage = '';
     vm.opportunityShared = false;
     vm.shareOpportunityFail = false;
+    vm.opportunityDismissTrigger = false;
+    vm.undoClicked = false;
 
     // Expose public methods
     vm.addToSharedCollaborators = addToSharedCollaborators;
@@ -208,6 +210,8 @@ module.exports = /*  @ngInject */
       vm.currentOpportunityId = oId;
       vm.opportunityShared = false;
       vm.shareOpportunityFail = false;
+      vm.opportunityDismissTrigger = false;
+      vm.undoClicked = false;
 
       // actionOverlay(opportunity, action);
       var parentEl = angular.element(document.body);
@@ -221,8 +225,9 @@ module.exports = /*  @ngInject */
     }
 
     function submitFeedback(opportunity, data) {
-      $mdDialog.hide();
       dismissOpportunity(opportunity, data);
+      vm.opportunityDismissTrigger = true;
+      $mdDialog.hide();
     }
 
     function cancelFeedback(opportunity) {
@@ -450,13 +455,27 @@ module.exports = /*  @ngInject */
     }
 
     function dismissOpportunity(oId, payload) {
-      opportunitiesService.createOpportunityFeedback(oId, payload).then(function(data) {
-        /* angular.forEach(vm.opportunitiesService.model.opportunitiesDisplay[0], function(value, key) {
-          if (value.id === oId) {
-            vm.opportunitiesService.model.opportunities = vm.opportunitiesService.model.opportunitiesDisplay[0].splice(key, 1);
-          }
-        }); */
-      });
+      vm.opportunityDismissTrigger = true;
+
+      if (!vm.undoClicked) {
+        $timeout(function() {
+          opportunitiesService.createOpportunityFeedback(oId, payload).then(function() {
+            vm.opportunitiesService.model.opportunities.forEach(function(store, key) {
+              var storeGroup = store.groupedOpportunities;
+              storeGroup.forEach(function(opportunity, key) {
+                if (opportunity.id === oId) {
+                  storeGroup.splice(key, 1);
+                }
+              });
+              if (storeGroup.length < 1) {
+                vm.opportunitiesService.model.opportunities.splice(key, 1);
+              }
+            });
+          });
+          vm.undoClicked = false;
+          vm.opportunityDismissTrigger = false;
+        }, 4000);
+      }
     }
 
     function impactSort (item) {

@@ -151,8 +151,8 @@ v-accordion.styled-list(multiple="" id="opportunities" control="list.accordion" 
                   md-checkbox(aria-label="Action Item Select" ng-checked="true")
                 div.overlay-wrapper
                   p(ng-if="list.opportunityShared") Successfully sent to {{list.sharedCollaborators.length}} {{list.sharedCollaborators.length === 1 ? 'person' : 'people'}}
-                  p(ng-if="list.opportunityDismissTrigger" ng-click="list.submitFeedback(list.currentOpportunityId, list.opportunity.feedback)") Opportunity Dismissed!
-                    a(ng-click="list.cancelFeedback(list.currentOpportunityId); list.opportunityDismissTrigger = false") UNDO
+                  p(ng-if="list.opportunityDismissTrigger") Opportunity Dismissed!
+                    a(ng-click="list.opportunityDismissTrigger = false; list.undoClicked = true") UNDO
                   p(ng-if="list.shareOpportunityFail") Whatever you just tried didn't work
                 div(ng-if="list.opportunityShared || list.shareOpportunityFail" ng-click="list.currentOpportunityId = ''").hide-wrapper.hide-icon-wrapper.hide-row
               div.cell-parent.sub-item(row)
@@ -177,8 +177,6 @@ v-accordion.styled-list(multiple="" id="opportunities" control="list.accordion" 
                           p(ng-click="list.openShareModal(product.id); $pane.collapse()") Send To
                         md-menu-item
                           p(ng-click="list.openDismissModal(product.id); $pane.collapse()") Dismiss
-                        md-menu-item
-                          p(ng-click="list.cancelFeedback(product.id)") Undo Feedback
             .shadow-wrap.top
               v-pane-content
                 div(row)
