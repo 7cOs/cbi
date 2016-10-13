@@ -55,6 +55,22 @@ describe('Unit: filter controller (opportunities)', function() {
     });
   });
 
+  describe('[method.appendDoneButton', function() {
+    beforeEach(function() {
+      spyOn(angular, 'element').and.callThrough();
+    });
+
+    it('should call angular.element', function() {
+      expect(angular.element).not.toHaveBeenCalled();
+      expect(angular.element.calls.count()).toEqual(0);
+
+      ctrl.appendDoneButton();
+
+      expect(angular.element).toHaveBeenCalledWith(document.getElementsByClassName('md-select-menu-container'));
+      expect(angular.element.calls.count()).toEqual(1);
+    });
+  });
+
   describe('[method.applyLocations]', function() {
     beforeEach(function() {
       filtersService.model = {
@@ -116,6 +132,22 @@ describe('Unit: filter controller (opportunities)', function() {
       ctrl.applyLocations(result);
 
       expect(filtersService.model.location).toEqual('');
+    });
+  });
+
+  describe('[method.closeDoneButton]', function() {
+    beforeEach(function() {
+      spyOn(angular, 'element').and.callThrough();
+    });
+
+    it('should call angular.element', function() {
+      expect(angular.element).not.toHaveBeenCalled();
+      expect(angular.element.calls.count()).toEqual(0);
+
+      ctrl.closeDoneButton();
+
+      expect(angular.element).toHaveBeenCalledWith(document.getElementsByClassName('done-btn'));
+      expect(angular.element.calls.count()).toEqual(1);
     });
   });
 
@@ -203,6 +235,273 @@ describe('Unit: filter controller (opportunities)', function() {
     });
   });
 
+  describe('[method.opportunityStatusSwitch]', function() {
+    it('should return false if not "target-list-detail"', function() {
+      var test = ctrl.opportunityStatusSwitch();
+      expect(test).toEqual(false);
+    });
+  });
+
+  describe('[method.placeholderSelect]', function() {
+    it('should set hintTextPlaceholder', function() {
+      expect(ctrl.hintTextPlaceholder).toEqual('Account or Subaccount Name');
+      ctrl.placeholderSelect('Test 1');
+      expect(ctrl.hintTextPlaceholder).toEqual('Test 1');
+      ctrl.placeholderSelect('Test 10');
+      expect(ctrl.hintTextPlaceholder).toEqual('Test 10');
+    });
+  });
+
+  describe('[method.resetFilters]', function() {
+    beforeEach(function() {
+      spyOn(chipsService, 'resetChipsFilters').and.callFake(function() {
+        return true;
+      });
+      spyOn(filtersService, 'resetFilters').and.callFake(function() {
+        return true;
+      });
+      spyOn(ctrl, 'resetTradeChannels').and.callFake(function() {
+        return true;
+      });
+    });
+
+    it('should call services when initiated', function() {
+      expect(chipsService.resetChipsFilters).not.toHaveBeenCalled();
+      expect(chipsService.resetChipsFilters.calls.count()).toEqual(0);
+
+      expect(filtersService.resetFilters).not.toHaveBeenCalled();
+      expect(filtersService.resetFilters.calls.count()).toEqual(0);
+
+      ctrl.resetFilters();
+
+      expect(chipsService.resetChipsFilters).toHaveBeenCalled();
+      expect(chipsService.resetChipsFilters.calls.count()).toEqual(1);
+
+      expect(filtersService.resetFilters).toHaveBeenCalled();
+      expect(filtersService.resetFilters.calls.count()).toEqual(1);
+    });
+
+    it('should call resetTradeChannels', function() {
+      expect(ctrl.resetTradeChannels).not.toHaveBeenCalled();
+      expect(ctrl.resetTradeChannels.calls.count()).toEqual(0);
+
+      ctrl.resetTradeChannels();
+
+      expect(ctrl.resetTradeChannels).toHaveBeenCalled();
+      expect(ctrl.resetTradeChannels.calls.count()).toEqual(1);
+    });
+  });
+
+  describe('[method.resetTradeChannels]', function() {
+    it('should reset filtersService.model selected on channels if true and str="on"', function() {
+      var model = {
+        tradeChannelDining: true,
+        tradeChannels: {
+          on: [
+            {label: 'Dining', name: 'Dining', value: '50'},
+            {label: 'Bar / Nightclub', name: 'Bar', value: '51'},
+            {label: 'Recreation', name: 'Recreation', value: '53'},
+            {label: 'Lodging', name: 'Lodging', value: '52'},
+            {label: 'Transportation', name: 'Transportation', value: '54'},
+            {label: 'Military', name: 'Military', value: '57'},
+            {label: 'Other', name: 'Other Trade Channel'}
+          ],
+          off: [
+            {label: 'Grocery', name: 'Grocery', value: '05'},
+            {label: 'Convenience', name: 'Convenience', value: '07'},
+            {label: 'Drug', name: 'Drug', value: '03'},
+            {label: 'Mass Merchandiser', name: 'Merchandiser', value: '08'},
+            {label: 'Liquor', name: 'Liquor', value: '02'},
+            {label: 'Military', name: 'Military', value: 'MF'},
+            {label: 'Recreation', name: 'Recreation', value: '53'},
+            {label: 'Other', name: 'Other Trade Channel'}
+          ]
+        },
+        selected: {
+          premiseType: 'on'
+        }
+      };
+
+      filtersService.model = model;
+
+      expect(filtersService.model).toEqual(model);
+
+      ctrl.resetTradeChannels('on');
+
+      expect(filtersService.model.tradeChannelDining).toEqual(false);
+      expect(filtersService.model.tradeChannels).toEqual(model.tradeChannels);
+      expect(filtersService.model.selected).toEqual(model.selected);
+    });
+
+    it('should reset filtersService.model selected on channels if true and no str is specified', function() {
+      var model = {
+        tradeChannelDining: true,
+        tradeChannels: {
+          on: [
+            {label: 'Dining', name: 'Dining', value: '50'},
+            {label: 'Bar / Nightclub', name: 'Bar', value: '51'},
+            {label: 'Recreation', name: 'Recreation', value: '53'},
+            {label: 'Lodging', name: 'Lodging', value: '52'},
+            {label: 'Transportation', name: 'Transportation', value: '54'},
+            {label: 'Military', name: 'Military', value: '57'},
+            {label: 'Other', name: 'Other Trade Channel'}
+          ],
+          off: [
+            {label: 'Grocery', name: 'Grocery', value: '05'},
+            {label: 'Convenience', name: 'Convenience', value: '07'},
+            {label: 'Drug', name: 'Drug', value: '03'},
+            {label: 'Mass Merchandiser', name: 'Merchandiser', value: '08'},
+            {label: 'Liquor', name: 'Liquor', value: '02'},
+            {label: 'Military', name: 'Military', value: 'MF'},
+            {label: 'Recreation', name: 'Recreation', value: '53'},
+            {label: 'Other', name: 'Other Trade Channel'}
+          ]
+        },
+        selected: {
+          premiseType: 'on'
+        }
+      };
+
+      filtersService.model = model;
+
+      expect(filtersService.model).toEqual(model);
+
+      ctrl.resetTradeChannels();
+
+      expect(filtersService.model.tradeChannelDining).toEqual(false);
+      expect(filtersService.model.tradeChannels).toEqual(model.tradeChannels);
+      expect(filtersService.model.selected).toEqual(model.selected);
+    });
+
+    it('should reset filtersService.model selected on channels if true and str="off" is specified. str should also take precident over premiseType', function() {
+      var model = {
+        tradeChannelGrocery: true,
+        tradeChannels: {
+          on: [
+            {label: 'Dining', name: 'Dining', value: '50'},
+            {label: 'Bar / Nightclub', name: 'Bar', value: '51'},
+            {label: 'Recreation', name: 'Recreation', value: '53'},
+            {label: 'Lodging', name: 'Lodging', value: '52'},
+            {label: 'Transportation', name: 'Transportation', value: '54'},
+            {label: 'Military', name: 'Military', value: '57'},
+            {label: 'Other', name: 'Other Trade Channel'}
+          ],
+          off: [
+            {label: 'Grocery', name: 'Grocery', value: '05'},
+            {label: 'Convenience', name: 'Convenience', value: '07'},
+            {label: 'Drug', name: 'Drug', value: '03'},
+            {label: 'Mass Merchandiser', name: 'Merchandiser', value: '08'},
+            {label: 'Liquor', name: 'Liquor', value: '02'},
+            {label: 'Military', name: 'Military', value: 'MF'},
+            {label: 'Recreation', name: 'Recreation', value: '53'},
+            {label: 'Other', name: 'Other Trade Channel'}
+          ]
+        },
+        selected: {
+          premiseType: 'on'
+        }
+      };
+
+      filtersService.model = model;
+
+      expect(filtersService.model).toEqual(model);
+
+      ctrl.resetTradeChannels('off');
+
+      expect(filtersService.model.tradeChannelGrocery).toEqual(false);
+      expect(filtersService.model.tradeChannels).toEqual(model.tradeChannels);
+      expect(filtersService.model.selected).toEqual(model.selected);
+    });
+
+    it('should empty filtersService.model.selected channels', function() {
+      filtersService.model.selected = {
+        tradeChannel: ['test 1']
+      };
+
+      expect(filtersService.model.selected.tradeChannel).toEqual(['test 1']);
+
+      ctrl.resetTradeChannels('on');
+
+      expect(filtersService.model.selected.tradeChannel).toEqual([]);
+    });
+
+    it('should reset the chips', function() {
+      var model = [{
+        'name': 'Merchandiser',
+        'type': 'tradeChannel',
+        'applied': false,
+        'tradeChannel': true,
+        'removable': false,
+        'search': true
+      }];
+      chipsService.model = model;
+
+      expect(chipsService.model).toEqual(model);
+
+      ctrl.resetTradeChannels('on');
+
+      expect(chipsService.model).toEqual([]);
+    });
+  });
+
+  describe('[method.saveFilter]', function() {
+    beforeEach(function() {
+      spyOn(loaderService, 'openLoader').and.callFake(function() {
+        return true;
+      });
+      spyOn(userService, 'saveOpportunityFilter').and.callFake(function() {
+        var deferred = q.defer();
+        return deferred.promise;
+      });
+    });
+
+    it('should call loaderService.openLoader and userService.saveOpportunityFilter', function() {
+      expect(loaderService.openLoader).not.toHaveBeenCalled();
+      expect(loaderService.openLoader.calls.count()).toEqual(0);
+      expect(userService.saveOpportunityFilter).not.toHaveBeenCalled();
+      expect(userService.saveOpportunityFilter.calls.count()).toEqual(0);
+
+      ctrl.saveFilter();
+
+      expect(loaderService.openLoader).toHaveBeenCalledWith(true);
+      expect(loaderService.openLoader.calls.count()).toEqual(1);
+      expect(userService.saveOpportunityFilter).toHaveBeenCalled();
+      expect(userService.saveOpportunityFilter.calls.count()).toEqual(1);
+    });
+
+    it('should call userService.saveOpportunityFilter', function() {});
+  });
+
+  describe('[method.updateFilter]', function() {
+    beforeEach(function() {
+      spyOn(loaderService, 'openLoader').and.callFake(function() {
+        return true;
+      });
+      spyOn(opportunityFiltersService, 'updateOpportunityFilter').and.callFake(function() {
+        var deferred = q.defer();
+        return deferred.promise;
+      });
+    });
+
+    it('should call loaderService.openLoader and opportunityFiltersService.updateOpportunityFilter', function() {
+      userService.model.newServiceSelect = 'test 1';
+
+      expect(loaderService.openLoader).not.toHaveBeenCalled();
+      expect(loaderService.openLoader.calls.count()).toEqual(0);
+      expect(opportunityFiltersService.updateOpportunityFilter).not.toHaveBeenCalled();
+      expect(opportunityFiltersService.updateOpportunityFilter.calls.count()).toEqual(0);
+
+      ctrl.updateFilter();
+
+      expect(loaderService.openLoader).toHaveBeenCalledWith(true);
+      expect(loaderService.openLoader.calls.count()).toEqual(1);
+      expect(opportunityFiltersService.updateOpportunityFilter).toHaveBeenCalledWith('test 1');
+      expect(opportunityFiltersService.updateOpportunityFilter.calls.count()).toEqual(1);
+    });
+
+    it('should call userService.saveOpportunityFilter', function() {});
+  });
+
 });
 
 describe('Unit: filter controller (state = target-list-detail)', function() {
@@ -239,6 +538,13 @@ describe('Unit: filter controller (state = target-list-detail)', function() {
       expect(ctrl.opportunities).toEqual(false);
       ctrl.expandDropdown();
       expect(ctrl.opportunities).toEqual(true);
+    });
+  });
+
+  describe('[method.opportunityStatusSwitch]', function() {
+    it('should return true if "target-list-detail"', function() {
+      var test = ctrl.opportunityStatusSwitch();
+      expect(test).toEqual(true);
     });
   });
 });
