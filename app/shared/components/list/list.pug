@@ -53,8 +53,8 @@ v-accordion.styled-list(multiple="" id="opportunities" control="list.accordion" 
           | Segmentation
           span(ng-class="{'chevron-up-small' : (!list.filtersService.model.appliedFilter.sort.sortArr[0].asc && list.filtersService.model.appliedFilter.sort.sortArr[0].str === 'segmentation')}").chevron-down-small
   div(ng-if="list.opportunitiesService.model.noOpportunitiesFound === true").no-opportunites
-    h4 Whoa!
-    p That's really specific, maybe ease up on the number of filters or try to broaden your approach
+    h4 Dang
+    p We were unable to find any opportunities that met your search criteria! Try broadening your search a little bit!
   v-pane.list-item(row ng-repeat="opportunity in list.opportunitiesService.model.opportunities" expanded='opportunity.isExpanded')
     .shadow-wrap.bottom
       div.checkbox-wrapper(ng-click="list.toggleOpportunitiesInStores(opportunity, list.selected)")
