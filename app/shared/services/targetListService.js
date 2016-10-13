@@ -124,8 +124,6 @@ module.exports = /*  @ngInject */
       var targetListPromise = $q.defer(),
           url = apiHelperService.request('/api/targetLists/' + targetListId + '/opportunities', filterPayload);
 
-      console.log('[targetListService.getTargetListOpportunities url]', url);
-
       // reset opportunities counts
       filtersService.model.appliedFilter.pagination.totalOpportunities = 0;
       filtersService.model.appliedFilter.pagination.totalStores = 0;
