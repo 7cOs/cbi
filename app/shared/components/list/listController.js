@@ -62,6 +62,7 @@ module.exports = /*  @ngInject */
     vm.toggleSelectAllStores = toggleSelectAllStores;
     vm.removeSharedCollaborator = removeSharedCollaborator;
     vm.isSelectAllActivated = false;
+    vm.impactSort = impactSort;
 
     // Mock Data for memo modal
     vm.limitedTime = {
@@ -456,6 +457,19 @@ module.exports = /*  @ngInject */
           }
         }); */
       });
+    }
+
+    function impactSort (i1, i2) {
+      function calcLetter (letter) {
+        if (letter === 'H') return 2;
+        if (letter === 'M') return 1;
+        if (letter === 'L') return 0;
+      }
+
+      i1.value = calcLetter(i1.value);
+      i2.value = calcLetter(i2.value);
+      return (i1.value < i2.value) ? -1 : 1;
+
     }
 
     function init() {

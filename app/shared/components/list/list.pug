@@ -144,7 +144,7 @@ v-accordion.styled-list(multiple="" id="opportunities" control="list.accordion" 
           div(column='1')
             label.bold.text-center Dismiss
         v-accordion(multiple class="nested-accordion")
-          v-pane.styled-list(ng-repeat="product in opportunity.groupedOpportunities")
+          v-pane.styled-list(ng-repeat="product in opportunity.groupedOpportunities | orderBy:'impact' : false : list.impactSort")
             v-pane-header
               .action-overlay(ng-class="{'active': list.opportunityShared && product.id === list.currentOpportunityId, 'fail': list.shareOpportunityFail && product.id === list.currentOpportunityId}" ng-click="$event.stopPropagation()")
                 div.checkbox-wrapper
@@ -159,7 +159,7 @@ v-accordion.styled-list(multiple="" id="opportunities" control="list.accordion" 
                 div(column='1').sub-item-select
                   md-checkbox(aria-label="Select Item" ng-click="list.selectOpportunity($event, opportunity, product, list.selected);" ng-checked="product.selected")
                 div(column='2').pad-cell
-                  span.product-title {{::product.product.brand}} <br>
+                  span.product-title {{::product.impact}} <br>
                   | {{::product.product.name}}
                 div.type(column='2') {{::product.type | formatOpportunitiesType}}
                 div(column='4') {{::product.rationale}}
