@@ -79,6 +79,28 @@ module.exports = /*  @ngInject */
       mandateIcon: 'featured'
     };
 
+    // Custom Headers for CSV export
+    vm.csvHeader = [
+      'Distributor',
+      'TDLinx',
+      'Store Name',
+      'Address',
+      'City',
+      'ZIP',
+      'Current YTD Store Volume',
+      'Last YTD Store Volume',
+      'Volume Trend for Store CYTD vs CYTD Last Year',
+      'Segmentation',
+      'Opportunity Type',
+      'Product',
+      'Item Authorization',
+      'Chain Mandate',
+      'On Feature',
+      'Opportunity Rationale',
+      'Opportunity Status',
+      'Opportunity Predicted Impact'
+    ];
+
     init();
 
     // **************
@@ -326,22 +348,60 @@ module.exports = /*  @ngInject */
 
     function flattenOpportunity(obj) {
       var data = [];
+
       angular.forEach(obj, function(value, key) {
         var item = {};
         angular.copy(value, item);
-        item.productName = item.product.name;
+        item.storeDistributor = item.store.distributors[0];
         item.TDLinx = item.product.id;
-        item.segmentation = item.store.segmentation;
-        item.velocity = item.store.velocity;
-        item.velocityYA = item.store.velocityYA;
         item.storeName = item.store.name;
-        item.storeAddress = item.store.address;
+        item.storeAddress = item.store.streetAddress;
+        item.storeCity = item.store.city;
+        item.storeZip = item.store.zip;
+        item.storeDepletionsCTD = item.store.depletionsCurrentYearToDate;
+        item.storeDepletionsCTDYA = item.store.depletionsCurrentYearToDateYA;
+        item.storeDepletionsCTDYAPercent = item.store.depletionsCurrentYearToDateYAPercent;
+        item.storeSegmentation = item.store.segmentation;
+        item.opportunityType = item.type;
+        item.productName = item.product.name;
+        item.itemAuthorization = item.isItemAuthorization;
+        item.chainMandate = item.isChainMandate;
+        item.onFeature = item.isOnFeature;
+        item.opportunityRationale = item.rationale;
+        item.opportunityStatus = item.status;
+        item.impactPredicted = item.impactDescription;
+
+        delete item.id;
+        delete item.type;
+        delete item.subType;
+        delete item.impact;
+        delete item.impactDescription;
+        delete item.status;
+        delete item.rationale;
+        delete item.dismissed;
+        delete item.selected;
+        delete item.isItemAuthorization;
+        delete item.isChainMandate;
+        delete item.itemAuthorizationCode;
+        delete item.itemAuthorizationDesc;
+        delete item.depletionsCurrentYearToDate;
+        delete item.depletionsCurrentYearToDateYA;
+        delete item.lastDepletionDate;
+        delete item.depletionsCurrentYearToDateYAPercent;
+        delete item.depletionsCurrentYearToDateYAPercentNegative;
+        delete item.isOnFeature;
+        delete item.featureTypeCode;
+        delete item.featureTypeDesc;
+        delete item.priorityPackageFlag;
         delete item.brands;
-        delete item.store;
         delete item.groupedOpportunities;
         delete item.product;
+        delete item.store;
+
         data.push(item);
       });
+      console.log(data);
+
       return data;
     }
 

@@ -61,6 +61,23 @@ module.exports = /*  @ngInject */
 
           // Set depletionsCurrentYearToDateYAPercent
           item = setVsYAPercent(item);
+          item.store = setVsYAPercent(item.store);
+
+          // Check Authorization/Feature for CSV
+          item.isItemAuthorization = 'N';
+          if (item.itemAuthorizationCode !== null) {
+            item.isItemAuthorization = 'Y';
+          }
+
+          item.isChainMandate = 'N';
+          if (item.itemAuthorizationCode === 'CM') {
+            item.isChainMandate = 'Y';
+          }
+
+          item.isOnFeature = 'N';
+          if (item.featureTypeCode !== null) {
+            item.isOnFeature = 'Y';
+          }
 
           // if its a new store
           if (!storePlaceholder || (storePlaceholder.address !== item.store.address || storePlaceholder.id !== item.store.id)) {

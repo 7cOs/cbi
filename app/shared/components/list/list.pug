@@ -19,7 +19,7 @@
             p {{targetList.name}}
       button.btn-action(ng-class="{'disabled': list.selected < 1}" ng-if="list.pageName(['opportunities'])" analytics-on="click" analytics-event="Add to Target List") Copy to Target List
       button.btn-action(ng-if="" ng-click="list.removeOpportunity()") Delete
-      button.btn-action(ng-disabled="list.selected < 1" ng-csv="list.flattenOpportunity(list.selected)" filename="{{list.getDate() | date:'yyyy-MM-dd'}}.csv" csv-label="true") Download
+      button.btn-action(ng-disabled="list.selected < 1" ng-csv="list.flattenOpportunity(list.selected)" filename="{{list.getDate() | date:'yyyy-MM-dd'}}.csv" csv-header="list.csvHeader") Download
 
 button.icon.select-all(ng-disabled="list.isChecked()" ng-click="list.toggleSelectAllStores()") {{!list.isSelectAllActivated ? 'Select All' : 'Un-Select All'}}
 
