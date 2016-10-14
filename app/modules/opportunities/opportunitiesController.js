@@ -109,22 +109,20 @@ module.exports = /*  @ngInject */
       if (vm.resetFiltersOnLoad) {
         chipsService.resetChipsFilters(chipsService.model);
       } else {
-        chipsService.applyFilters();
+
+        if (filtersService.model.selected.currentFilter) {
+          console.log('win');
+          var filter = filtersService.model.selected.currentFilter;
+          var ev = filter.ev;
+
+          applySavedFilter(ev, filter);
+        }
+        // chipsService.applyFilters();
       }
       $state.params.resetFiltersOnLoad = true;
 
       // closes filter box
       filtersService.model.expanded = false;
-
-      if (filtersService.model.selected.currentFilter) {
-        console.log('win');
-        var filter = filtersService.model.selected.currentFilter;
-        var ev = filter.ev;
-
-        applySavedFilter(ev, filter);
-      }
-
-      console.log(filtersService.model.selected.currentFilter.ev);
 
       // Set this to have a list load with the page
       // chipsService.applyFilters();
