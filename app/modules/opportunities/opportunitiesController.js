@@ -40,6 +40,7 @@ module.exports = /*  @ngInject */
     // **************
 
     function applySavedFilter(ev, filter) {
+      chipsService.resetChipsFilters(chipsService.model);
       if (ev.srcElement.nodeName === 'SPAN') {
         ev.preventDefault();
       } else {
@@ -111,7 +112,6 @@ module.exports = /*  @ngInject */
       } else {
 
         if (filtersService.model.selected.currentFilter) {
-          console.log('win');
           var filter = filtersService.model.selected.currentFilter;
           var ev = filter.ev;
 
