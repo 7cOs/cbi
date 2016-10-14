@@ -1,6 +1,6 @@
-.inline-search
-  input(ng-model="is.input" type="text" placeholder="{{is.placeholder}}" ng-keypress="is.onKeypress($event)" ng-required="{{is.isRequired}}" ng-blur="is.close()")
-  input.submit-btn(md-prevent-menu-close ng-click="is.action(is.type);" ng-class="{'visible': is.input !== ''}" ng-blur="is.close()")
+.inline-search(input-val='sdf')
+  input(ng-model="is.input" type="text" placeholder="{{is.placeholder}}" ng-keypress="is.onKeypress($event)" ng-required="{{is.isRequired}}")
+  input.submit-btn(md-prevent-menu-close ng-click="is.action(is.type);" ng-class="{'visible': is.input !== ''}")
   .results-container(ng-class="{'open': is.showResults}" ng-hide="!is.showResults")
     .close-btn(md-prevent-menu-close ng-if="!is.loading && is.results.length === 0" ng-click="is.close(true)" aria-label="Close") x
     md-progress-circular(ng-show="is.loading" md-mode="indeterminate")
