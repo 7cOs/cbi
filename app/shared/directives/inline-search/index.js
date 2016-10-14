@@ -173,8 +173,10 @@ module.exports =
        */
       function onDocumentClick() {
         if (vm.showResults === true) {
-          close();
-          $scope.$apply();
+          // This $timeout trick is necessary to run the Angular digest cycle as we are using vanilla javascript on click events
+          $timeout(function() {
+            close();
+          });
         }
       }
 
