@@ -30,7 +30,7 @@ form.filters(column='12' ng-class="{'target-list': filter.opportunities}")
           md-select(ng-model="filter.filtersService.model.selected.retailer" placeholder="Chain" ng-init="filter.filtersService.model.selected.retailer = 'Chain'")
             md-option(ng-repeat="type in filter.filtersService.model.retailer" ng-click="filter.placeholderSelect(type.hintText)" aria-label="{{type.name}}" value="{{type.name}}") {{::type.name}}
         div(column='8')
-          inline-search(ng-if="filter.filtersService.model.selected.retailer === 'Store'" type="store" placeholder="{{filter.hintTextPlaceholder}}" chosen-result="filter.filtersService.model.store" show-address="true" callback="filter.applyFilterArr(filter.filtersService.model.selected.store, result, 'store', result.name)")
+          inline-search(ng-if="filter.filtersService.model.selected.retailer === 'Store'" type="store" placeholder="{{filter.hintTextPlaceholder}}" chosen-result="filter.filtersService.model.store" show-address="true" callback="filter.applyFilterArr(filter.filtersService.model.selected.store, result, 'store', result.name + ' ' + result.address)")
           inline-search(ng-if="filter.filtersService.model.selected.retailer === 'Chain'" type="chain" placeholder="{{filter.hintTextPlaceholder}}" chosen-result="filter.filtersService.model.chain" callback="filter.applyFilterArr(filter.filtersService.model.selected[result.type], result, result.type, result.name)")
     div(column='3')
       label Distributor
