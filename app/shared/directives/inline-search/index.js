@@ -12,7 +12,8 @@ module.exports =
         nav: '@',
         variety: '@',
         isRequired: '@',
-        showAddress: '@'
+        showAddress: '@',
+        multipleRecipients: '=?'
       },
       controller: InlineSearchController,
       controllerAs: 'is',
@@ -141,6 +142,16 @@ module.exports =
         vm.callback({result: result});
         vm.chosenResult = result;
         close();
+        clearPreviousSelection();
+      }
+
+      /**
+       * Close inline search if clicked anywhere outside the directive
+       */
+      function clearPreviousSelection() {
+        if (typeof vm.multipleRecipients === 'boolean' && vm.multipleRecipients === true) {
+          vm.input = '';
+        }
       }
 
       function close(clear) {
