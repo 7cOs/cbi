@@ -60,7 +60,7 @@ module.exports = /*  @ngInject */
           var item = response.data.opportunities[i];
 
           // Set depletionsCurrentYearToDateYAPercent
-          item.depletionsCurrentYearToDateYAPercent = setVsYAPercent(item);
+          item = setVsYAPercent(item);
 
           // if its a new store
           if (!storePlaceholder || (storePlaceholder.address !== item.store.address || storePlaceholder.id !== item.store.id)) {
@@ -117,16 +117,31 @@ module.exports = /*  @ngInject */
       }
 
       function setVsYAPercent(item) {
-        var vsYAPercent = 0;
+        // defined in DE2970
+        var vsYAPercent = 0,
+            negative = false;
         if (item.depletionsCurrentYearToDateYA === 0) {
-          // if item.depletionsCurrentYearToDateYA, you cant make a percentage
-          vsYAPercent = '-';
+          vsYAPercent = '100%';
+        } else if (item.depletionsCurrentYearToDate === 0) {
+          vsYAPercent = '-100%';
+          negative = true;
         } else {
-          // 100 - Calculated percent
-          vsYAPercent = -100 + ((item.depletionsCurrentYearToDate / item.depletionsCurrentYearToDateYA) * 100);
-          vsYAPercent = vsYAPercent.toFixed(0) + '%';
+          // vsYAPercent = -100 + ((item.depletionsCurrentYearToDate / item.depletionsCurrentYearToDateYA) * 100);
+          vsYAPercent = ((item.depletionsCurrentYearToDate - item.depletionsCurrentYearToDateYA) / item.depletionsCurrentYearToDateYA) * 100;
+          if (vsYAPercent > 999) {
+            vsYAPercent = '999%';
+          } else if (vsYAPercent < -999) {
+            vsYAPercent = '-999%';
+            negative = true;
+          } else {
+            if (vsYAPercent.toFixed(0) < 0) negative = true;
+            vsYAPercent = vsYAPercent.toFixed(0) + '%';
+          }
         }
-        return vsYAPercent;
+        item.depletionsCurrentYearToDateYAPercent = vsYAPercent;
+        item.depletionsCurrentYearToDateYAPercentNegative = negative;
+
+        return item;
       }
 
       return opportunitiesPromise.promise;

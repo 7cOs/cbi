@@ -186,5 +186,5 @@ v-accordion.styled-list(multiple="" id="opportunities" control="list.accordion" 
                     span {{::product.depletionsCurrentYearToDate | number:0 }}
                   div(column="2")
                     label vs YA %
-                    span {{::product.depletionsCurrentYearToDateYAPercent}}
+                    span(class='positive' ng-class="{'negative': product.depletionsCurrentYearToDateYAPercentNegative}") {{::product.depletionsCurrentYearToDateYAPercent}}
 page
