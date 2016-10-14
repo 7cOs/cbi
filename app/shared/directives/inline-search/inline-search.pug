@@ -1,4 +1,4 @@
-.inline-search(input-val='sdf')
+.inline-search
   input(ng-model="is.input" type="text" placeholder="{{is.placeholder}}" ng-keypress="is.onKeypress($event)" ng-required="{{is.isRequired}}")
   input.submit-btn(md-prevent-menu-close ng-click="is.action(is.type);" ng-class="{'visible': is.input !== ''}")
   .results-container(ng-class="{'open': is.showResults}" ng-hide="!is.showResults")
