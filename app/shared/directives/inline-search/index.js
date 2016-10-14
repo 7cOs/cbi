@@ -12,17 +12,23 @@ module.exports =
         nav: '@',
         variety: '@',
         isRequired: '@',
-        showAddress: '@'
+        showAddress: '@',
+        multipleRecipients: '=?'
       },
       controller: InlineSearchController,
       controllerAs: 'is',
       templateUrl: 'app/shared/directives/inline-search/inline-search.html',
-      scope: {},
-      link: function(scope, elem, attrs) {}
+      scope: {
+      },
+      link: function(scope, elem, attrs) {
+        elem.on('click', function(event) {
+          event.stopPropagation();
+        });
+      }
     };
 
     /*  @ngInject */
-    function InlineSearchController($scope, $timeout, $filter, searchService, $location) {
+    function InlineSearchController($scope, $timeout, $filter, searchService, $location, $document) {
 
       // ****************
       // CONTROLLER SETUP
@@ -105,7 +111,7 @@ module.exports =
             vm.results = products;
           } else {
             vm.results = data;
-          };
+          }
         }, function(reason) {
           vm.loading = false;
           vm.errorMessage = reason;
@@ -136,6 +142,16 @@ module.exports =
         vm.callback({result: result});
         vm.chosenResult = result;
         close();
+        clearPreviousSelection();
+      }
+
+      /**
+       * Close inline search if clicked anywhere outside the directive
+       */
+      function clearPreviousSelection() {
+        if (typeof vm.multipleRecipients === 'boolean' && vm.multipleRecipients === true) {
+          vm.input = '';
+        }
       }
 
       function close(clear) {
@@ -162,7 +178,28 @@ module.exports =
           }
         }
       }
-    }
 
+      /**
+       * Close inline search if clicked anywhere outside the directive
+       */
+      function onDocumentClick() {
+        if (vm.showResults === true) {
+          // This $timeout trick is necessary to run the Angular digest cycle as we are using vanilla javascript on click events
+          $timeout(function() {
+            close();
+          });
+        }
+      }
+
+      function initListeners() {
+        $document.on('click', onDocumentClick);
+      }
+
+      function activate() {
+        initListeners();
+      }
+
+      activate();
+    }
     return directive;
   };
