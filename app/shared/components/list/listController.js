@@ -457,8 +457,8 @@ module.exports = /*  @ngInject */
     function dismissOpportunity(oId, payload) {
       vm.opportunityDismissTrigger = true;
 
-      if (!vm.undoClicked) {
-        $timeout(function() {
+      $timeout(function() {
+        if (!vm.undoClicked) {
           opportunitiesService.createOpportunityFeedback(oId, payload).then(function() {
             vm.opportunitiesService.model.opportunities.forEach(function(store, key) {
               var storeGroup = store.groupedOpportunities;
@@ -472,10 +472,9 @@ module.exports = /*  @ngInject */
               }
             });
           });
-          vm.undoClicked = false;
-          vm.opportunityDismissTrigger = false;
-        }, 4000);
-      }
+        }
+        vm.opportunityDismissTrigger = false;
+      }, 4000);
     }
 
     function impactSort (item) {

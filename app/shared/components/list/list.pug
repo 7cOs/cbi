@@ -151,7 +151,8 @@ v-accordion.styled-list(multiple="" id="opportunities" control="list.accordion" 
                   md-checkbox(aria-label="Action Item Select" ng-checked="true")
                 div.overlay-wrapper
                   p(ng-if="list.opportunityShared") Successfully sent to {{list.sharedCollaborators.length}} {{list.sharedCollaborators.length === 1 ? 'person' : 'people'}}
-                  p(ng-if="list.opportunityDismissTrigger") Opportunity Dismissed!
+                  .dismissed-overlay(ng-if="list.opportunityDismissTrigger")
+                    p Opportunity Dismissed!
                     a(ng-click="list.opportunityDismissTrigger = false; list.undoClicked = true") UNDO
                   p(ng-if="list.shareOpportunityFail") Whatever you just tried didn't work
                 div(ng-if="list.opportunityShared || list.shareOpportunityFail" ng-click="list.currentOpportunityId = ''").hide-wrapper.hide-icon-wrapper.hide-row
