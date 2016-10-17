@@ -13,10 +13,6 @@ module.exports = /* @ngInject */
         code: 'AK'
       },
       {
-        name: 'American Samoa',
-        code: 'AS'
-      },
-      {
         name: 'Arizona',
         code: 'AZ'
       },
@@ -45,20 +41,12 @@ module.exports = /* @ngInject */
         code: 'DC'
       },
       {
-        name: 'Federated States Of Micronesia',
-        code: 'FM'
-      },
-      {
         name: 'Florida',
         code: 'FL'
       },
       {
         name: 'Georgia',
         code: 'GA'
-      },
-      {
-        name: 'Guam',
-        code: 'GU'
       },
       {
         name: 'Hawaii',
@@ -95,10 +83,6 @@ module.exports = /* @ngInject */
       {
         name: 'Maine',
         code: 'ME'
-      },
-      {
-        name: 'Marshall Islands',
-        code: 'MH'
       },
       {
         name: 'Maryland',
@@ -161,10 +145,6 @@ module.exports = /* @ngInject */
         code: 'ND'
       },
       {
-        name: 'Northern Mariana Islands',
-        code: 'MP'
-      },
-      {
         name: 'Ohio',
         code: 'OH'
       },
@@ -177,16 +157,8 @@ module.exports = /* @ngInject */
         code: 'OR'
       },
       {
-        name: 'Palau',
-        code: 'PW'
-      },
-      {
         name: 'Pennsylvania',
         code: 'PA'
-      },
-      {
-        name: 'Puerto Rico',
-        code: 'PR'
       },
       {
         name: 'Rhode Island',
@@ -215,10 +187,6 @@ module.exports = /* @ngInject */
       {
         name: 'Vermont',
         code: 'VT'
-      },
-      {
-        name: 'Virgin Islands',
-        code: 'VI'
       },
       {
         name: 'Virginia',
