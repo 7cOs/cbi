@@ -274,7 +274,7 @@ module.exports = /*  @ngInject */
             break;
           case 'cbbdContact':
             addAutocompleteChip(displayName, filter, null, result.id);
-            if (model.indexOf(result.id) === -1) model.push(result.id);
+            if (service.model.indexOf(result.id) === -1) model.push(result.id);
             break;
           case 'masterSKU':
             if (result.id === null) {
