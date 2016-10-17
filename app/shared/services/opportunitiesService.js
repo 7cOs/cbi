@@ -108,7 +108,6 @@ module.exports = /*  @ngInject */
 
         // set data for pagination
         service.model.opportunities = newOpportunityArr;
-        console.log(newOpportunityArr);
 
         opportunitiesPromise.resolve(newOpportunityArr);
       }
@@ -140,7 +139,7 @@ module.exports = /*  @ngInject */
             vsYAPercent = vsYAPercent.toFixed(0) + '%';
           }
         }
-        item.depletionsCurrentYearToDateYAPercent = vsYAPercent;
+        item.depletionsCurrentYearToDateYAPercent = negative ? vsYAPercent : '+' + vsYAPercent;
         item.depletionsCurrentYearToDateYAPercentNegative = negative;
 
         return item;
