@@ -65,7 +65,7 @@ v-accordion.styled-list(multiple="" id="opportunities" control="list.accordion" 
           div.address(column='4') {{::opportunity.store.streetAddress | titlecase}} {{::opportunity.store.city | titlecase}}, {{::opportunity.store.state}} {{::opportunity.store.zip | zipcode}}
           .text-center.semi-bold(column='2') {{::opportunity.groupedOpportunities.length}} <span class="supporting-text">({{::opportunity.highImpactSum}} High)</span>
           .text-center.semi-bold(column='1') {{::opportunity.store.depletionsCurrentYearToDate | number }}
-          .text-center.semi-bold(column='1' ng-class="opportunity.store.depletionsCurrentYearToDateYA >= 0 ? 'positive' : 'negative'") <span ng-if="opportunity.store.depletionsCurrentYearToDateYA >= 0 | number:2">+</span>{{opportunity.store.depletionsCurrentYearToDateYA | number:1}}<span>%</span>
+          .text-center.semi-bold(column='1' ng-class="opportunity.store.depletionsCurrentYearToDateYAPercentNegative ? 'negative' : 'positive'") {{::opportunity.store.depletionsCurrentYearToDateYAPercent}}
           .text-center.semi-bold(column='1') {{::opportunity.store.segmentation}}
       v-pane-content(column='12' class="products" ng-class="{'open' : open}")
         .shadow-wrap.top
@@ -125,6 +125,8 @@ v-accordion.styled-list(multiple="" id="opportunities" control="list.accordion" 
               label Distributor
               div(row)
                 div(column='12') {{::opportunity.store.distributors[0] | titlecase}}
+                  md-tooltip
+                    div(class="align-left" ng-repeat="d in opportunity.store.distributors track by $index") {{::d}}
             div(column='2')
               a(ui-sref="accounts({id: opportunity.store.id})" ui-sref-active="active").details-link.accent Full Details
         .title-row(row)

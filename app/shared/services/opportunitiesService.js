@@ -72,6 +72,7 @@ module.exports = /*  @ngInject */
             store.highImpactSum = 0;
             store.depletionSum = 0;
             store.brands = [];
+            store.store = setVsYAPercent(store.store);
 
             // set store placeholder to new store
             storePlaceholder = item.store;
@@ -138,7 +139,7 @@ module.exports = /*  @ngInject */
             vsYAPercent = vsYAPercent.toFixed(0) + '%';
           }
         }
-        item.depletionsCurrentYearToDateYAPercent = vsYAPercent;
+        item.depletionsCurrentYearToDateYAPercent = negative ? vsYAPercent : '+' + vsYAPercent;
         item.depletionsCurrentYearToDateYAPercentNegative = negative;
 
         return item;
