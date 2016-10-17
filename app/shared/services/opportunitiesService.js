@@ -72,6 +72,7 @@ module.exports = /*  @ngInject */
             store.highImpactSum = 0;
             store.depletionSum = 0;
             store.brands = [];
+            store.store = setVsYAPercent(store.store);
 
             // set store placeholder to new store
             storePlaceholder = item.store;
@@ -107,6 +108,7 @@ module.exports = /*  @ngInject */
 
         // set data for pagination
         service.model.opportunities = newOpportunityArr;
+        console.log(newOpportunityArr);
 
         opportunitiesPromise.resolve(newOpportunityArr);
       }
