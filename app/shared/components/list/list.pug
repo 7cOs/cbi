@@ -125,6 +125,8 @@ v-accordion.styled-list(multiple="" id="opportunities" control="list.accordion" 
               label Distributor
               div(row)
                 div(column='12') {{::opportunity.store.distributors[0] | titlecase}}
+                  md-tooltip
+                    div(class="align-left" ng-repeat="d in opportunity.store.distributors track by $index") {{::d}}
             div(column='2')
               a(ui-sref="accounts({id: opportunity.store.id})" ui-sref-active="active").details-link.accent Full Details
         .title-row(row)
