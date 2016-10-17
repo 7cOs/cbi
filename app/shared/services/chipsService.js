@@ -267,7 +267,7 @@ module.exports = /*  @ngInject */
           case 'distributor':
           case 'store':
             addAutocompleteChip(displayName, filter, null, result.id);
-            if (model.indexOf(result.id) === -1) model.push(result.id);
+            if (service.model.indexOf(result.id) === -1) model.push(result.id);
             filtersService.model.chain = '';
             filtersService.model.store = '';
             filtersService.model.filtersValidCount++;
@@ -282,16 +282,16 @@ module.exports = /*  @ngInject */
               if (filtersService.model.selected.brand.indexOf(result.brandCode) === -1) filtersService.model.selected.brand.push(result.brandCode);
             } else if (result.id !== null) {
               addAutocompleteChip($filter('titlecase')(result.name), filter, null, result.id);
-              if (model.indexOf(result.id) === -1) model.push(result.id);
+              if (service.model.indexOf(result.id) === -1) model.push(result.id);
             }
             break;
           case 'tradeChannel':
             addAutocompleteChip(displayName, filter, true);
-            if (model.indexOf(result) === -1) model.push(result);
+            if (service.model.indexOf(result) === -1) model.push(result);
             break;
           default:
             addAutocompleteChip(displayName, filter);
-            if (model.indexOf(result) === -1) model.push(result);
+            if (service.model.indexOf(result) === -1) model.push(result);
         }
       }
       filtersService.model[filter] = '';
