@@ -40,6 +40,7 @@ module.exports = /*  @ngInject */
     // **************
 
     function applySavedFilter(ev, filter) {
+      chipsService.resetChipsFilters(chipsService.model);
       if (ev.srcElement.nodeName === 'SPAN') {
         ev.preventDefault();
       } else {
@@ -55,6 +56,7 @@ module.exports = /*  @ngInject */
         }
 
         chipsService.applyFilters();
+        filtersService.model.selected.currentFilter = filter.id;
       }
     }
 
@@ -109,7 +111,9 @@ module.exports = /*  @ngInject */
       if (vm.resetFiltersOnLoad) {
         chipsService.resetChipsFilters(chipsService.model);
       } else {
-        chipsService.applyFilters();
+        if (filtersService.model.selected.currentFilter) {
+          applySavedFilter(filtersService.model.currentFilter.ev, filtersService.model.currentFilter);
+        }
       }
       $state.params.resetFiltersOnLoad = true;
 
