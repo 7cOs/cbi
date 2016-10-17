@@ -25,6 +25,7 @@ module.exports = /*  @ngInject */
     vm.closeSelect = closeSelect;
     vm.isPositive = isPositive;
     vm.findOpportunities = findOpportunities;
+    vm.goToSavedFilter = goToSavedFilter;
 
     // Set values
     vm.greeting = getGreeting();
@@ -60,6 +61,16 @@ module.exports = /*  @ngInject */
     };
 
     function findOpportunities() {
+      $state.go('opportunities', {
+        resetFiltersOnLoad: false
+      });
+    }
+
+    function goToSavedFilter(ev, filter) {
+      filtersService.model.currentFilter = filter;
+      filtersService.model.currentFilter.ev = ev;
+      filtersService.model.selected.currentFilter = filter.id;
+
       $state.go('opportunities', {
         resetFiltersOnLoad: false
       });
