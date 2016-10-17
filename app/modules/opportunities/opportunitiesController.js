@@ -56,6 +56,7 @@ module.exports = /*  @ngInject */
         }
 
         chipsService.applyFilters();
+        filtersService.model.selected.currentFilter = filter.id;
       }
     }
 
@@ -110,14 +111,9 @@ module.exports = /*  @ngInject */
       if (vm.resetFiltersOnLoad) {
         chipsService.resetChipsFilters(chipsService.model);
       } else {
-
         if (filtersService.model.selected.currentFilter) {
-          var filter = filtersService.model.selected.currentFilter;
-          var ev = filter.ev;
-
-          applySavedFilter(ev, filter);
+          applySavedFilter(filtersService.model.currentFilter.ev, filtersService.model.currentFilter);
         }
-        // chipsService.applyFilters();
       }
       $state.params.resetFiltersOnLoad = true;
 

@@ -67,8 +67,9 @@ module.exports = /*  @ngInject */
     }
 
     function goToSavedFilter(ev, filter) {
-      filtersService.model.selected.currentFilter = filter;
-      filtersService.model.selected.currentFilter.ev = ev;
+      filtersService.model.currentFilter = filter;
+      filtersService.model.currentFilter.ev = ev;
+      filtersService.model.selected.currentFilter = filter.id;
 
       $state.go('opportunities', {
         resetFiltersOnLoad: false
