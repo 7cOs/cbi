@@ -459,17 +459,20 @@ module.exports = /*  @ngInject */
       });
     }
 
-    function impactSort (i1, i2) {
-      function calcLetter (letter) {
-        if (letter === 'H') return 2;
-        if (letter === 'M') return 1;
-        if (letter === 'L') return 0;
+    function impactSort (item) {
+      var result;
+      switch (item.impact) {
+        case 'H':
+          result = 2;
+          break;
+        case 'M':
+          result = 1;
+          break;
+        case 'L':
+          result = 0;
+          break;
       }
-
-      i1.value = calcLetter(i1.value);
-      i2.value = calcLetter(i2.value);
-      return (i1.value < i2.value) ? -1 : 1;
-
+      return result;
     }
 
     function init() {
