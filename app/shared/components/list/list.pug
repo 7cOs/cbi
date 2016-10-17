@@ -144,7 +144,7 @@ v-accordion.styled-list(multiple="" id="opportunities" control="list.accordion" 
           div(column='1')
             label.bold.text-center Dismiss
         v-accordion(multiple class="nested-accordion")
-          v-pane.styled-list(ng-repeat="product in opportunity.groupedOpportunities")
+          v-pane.styled-list(ng-repeat="product in opportunity.groupedOpportunities | orderBy: list.impactSort : true")
             v-pane-header
               .action-overlay(ng-class="{'active': list.opportunityShared && product.id === list.currentOpportunityId, 'fail': list.shareOpportunityFail && product.id === list.currentOpportunityId}" ng-click="$event.stopPropagation()")
                 div.checkbox-wrapper

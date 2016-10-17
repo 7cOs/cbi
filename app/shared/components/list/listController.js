@@ -62,6 +62,7 @@ module.exports = /*  @ngInject */
     vm.toggleSelectAllStores = toggleSelectAllStores;
     vm.removeSharedCollaborator = removeSharedCollaborator;
     vm.isSelectAllActivated = false;
+    vm.impactSort = impactSort;
 
     // Mock Data for memo modal
     vm.limitedTime = {
@@ -456,6 +457,22 @@ module.exports = /*  @ngInject */
           }
         }); */
       });
+    }
+
+    function impactSort (item) {
+      var result;
+      switch (item.impact) {
+        case 'H':
+          result = 2;
+          break;
+        case 'M':
+          result = 1;
+          break;
+        case 'L':
+          result = 0;
+          break;
+      }
+      return result;
     }
 
     function init() {
