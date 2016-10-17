@@ -273,9 +273,8 @@ module.exports = /*  @ngInject */
             filtersService.model.filtersValidCount++;
             break;
           case 'cbbdContact':
-            console.log(result);
             addAutocompleteChip(displayName, filter, null, result.employeeId);
-            if (model.indexOf(result.employeeId) === -1) model.push(result.employeeId);
+            if (service.model.indexOf(result.employeeId) === -1) model.push(result.employeeId);
             break;
           case 'masterSKU':
             if (result.id === null) {
