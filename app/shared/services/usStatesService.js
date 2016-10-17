@@ -3,7 +3,7 @@
 module.exports = /* @ngInject */
   function usStatesService() {
 
-    var states = [
+    var model = [
       {
         name: 'Alabama',
         code: 'AL'
@@ -242,5 +242,5 @@ module.exports = /* @ngInject */
       }
     ];
 
-    return states;
+    return model;
   };
