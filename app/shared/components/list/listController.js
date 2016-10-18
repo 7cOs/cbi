@@ -469,11 +469,13 @@ module.exports = /*  @ngInject */
               });
               if (storeGroup.length < 1) {
                 vm.opportunitiesService.model.opportunities.splice(key, 1);
+                vm.filtersService.model.appliedFilter.pagination.totalStores -= 1;
               }
             });
           });
         }
         vm.opportunityDismissTrigger = false;
+        vm.filtersService.model.appliedFilter.pagination.totalOpportunities -= 1;
       }, 4000);
     }
 
