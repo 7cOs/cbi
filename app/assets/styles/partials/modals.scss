@@ -253,8 +253,11 @@ md-dialog {
   .modal-footer {
     padding: 4px 34px;
     border-top: 1px solid $gray-9;
+    position: relative;
 
     p {
+      float: left;
+      width: 50%;
       color: $blue;
       font-size: 0.85em;
     }
@@ -265,6 +268,85 @@ md-dialog {
 
     p:last-child {
       float: right;
+    }
+
+    .toast {
+      background-color: $red;
+      font-size: 14px;
+      height: 52px;
+      margin-left: -34px;
+      margin-right: -34px;
+      opacity: 1;
+      padding: 0 30px;
+      position: absolute;
+      transition: opacity 300ms;
+      top: 0;
+      width: calc(100% - 60px);
+      z-index: 10;
+
+      p {
+        color: $white;
+        float: none;
+        margin: 5px 0 0;
+        text-align: left;
+        width: 100%;
+
+        &:first-child {
+          margin-top: 10px;
+        }
+
+        a {
+          color: $white;
+        }
+      }
+
+      .bold {
+        font-weight: bold;
+      }
+
+      .hide-row {
+        position: absolute;
+        right: 25px;
+        top: 30%;
+
+        &:before, &:after {
+          width: 15px;
+        }
+      }
+
+      &.ng-hide {
+        opacity: 0;
+      }
+    }
+  }
+
+  .success {
+    background-color: $green-2;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    width: 101%;
+    z-index: 11;
+
+    h4 {
+      color: $white;
+      position: relative;
+      top: 20%;
+    }
+
+    p {
+      color: $white;
+      margin: 15px 0 40px;
+      padding: 0 50px;
+      position: relative;
+      text-align: center;
+      top: 20%;
+    }
+
+    img {
+      width: 110px;
+      position: relative;
+      margin-top: 30%;
     }
   }
 

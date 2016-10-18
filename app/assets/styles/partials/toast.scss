@@ -97,6 +97,13 @@ md-toast {
       margin-top: 6px;
       font-size: inherit;
     }
+
+    .dismissed-overlay {
+      text-align: center;
+      position: absolute;
+      width: 100%;
+      margin: 0 0 -2.5%;
+    }
   }
 
   .checkbox-wrapper {
