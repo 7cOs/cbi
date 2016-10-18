@@ -22,7 +22,7 @@ module.exports = /*  @ngInject */
     vm.applyFilterArr = chipsService.applyFilterArr;
     vm.applyFilterMulti = chipsService.applyFilterMulti;
     vm.applyLocations = applyLocations;
-    vm.applyCities = applyCities;
+    vm.applyStates = applyStates;
     vm.closeDoneButton = closeDoneButton;
     vm.closeModal = closeModal;
     vm.closeSelect = closeSelect;
@@ -56,13 +56,12 @@ module.exports = /*  @ngInject */
         chipsService.applyFilterArr(filtersService.model.selected.zipCode, result.name, 'zipCode');
       } else if (result.type === 'city') {
         chipsService.applyFilterArr(filtersService.model.selected.city, result.name, 'city');
-      } else if (result === 'state') {
-        chipsService.applyFilterMulti(filtersService.model.state, result, 'state');
       }
+
       filtersService.model.location = '';
     }
 
-    function applyCities(result) {
+    function applyStates(result) {
       chipsService.applyFilterMulti(filtersService.model.state, result, 'state');
     }
 

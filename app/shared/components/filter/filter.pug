@@ -95,7 +95,7 @@ form.filters(column='12' ng-class="{'target-list': filter.opportunities}")
       label.state State
         .dropdown-filter
           .dropdown.state-dropdown
-            md-select.state-dropdown(md-on-open="filter.appendDoneButton()" ng-model="filter.filtersService.model.states" multiple="true" placeholder="State" md-on-close="filter.applyCities(filter.filtersService.model.states); filter.closeDoneButton()" aria-label="State Dropdown")
+            md-select.state-dropdown(md-on-open="filter.appendDoneButton()" ng-model="filter.filtersService.model.states" multiple="true" placeholder="State" md-on-close="filter.applyStates(filter.filtersService.model.states); filter.closeDoneButton()" aria-label="State Dropdown")
               md-option(ng-repeat="state in filter.states" aria-label="{{state.name}}" value="{{state.code}}" type="state") {{::state.name}}
       label.cbbd-contact CBBD Contact
         inline-search(type="user" placeholder="Name" chosen-result="filter.filtersService.model.cbbdContact" callback="filter.applyFilterArr(filter.filtersService.model.selected.cbbdContact, result, 'cbbdContact', result.firstName + ' ' + result.lastName)")
