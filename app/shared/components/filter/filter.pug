@@ -89,9 +89,14 @@ form.filters(column='12' ng-class="{'target-list': filter.opportunities}")
       md-checkbox(ng-model="filter.filtersService.model.storeSegmentationA" aria-label="Store Segmentation A" ng-change="filter.applyFilterArr(filter.filtersService.model.selected.segmentation, 'A', 'segmentation', 'Segment A')") A
       md-checkbox(ng-model="filter.filtersService.model.storeSegmentationB" aria-label="Store Segmentation B" ng-change="filter.applyFilterArr(filter.filtersService.model.selected.segmentation, 'B', 'segmentation', 'Segment B')") B
       md-checkbox(ng-model="filter.filtersService.model.storeSegmentationC" aria-label="Store Segmentation C" ng-change="filter.applyFilterArr(filter.filtersService.model.selected.segmentation, 'C', 'segmentation', 'Segment C')") C
-    div.location-contact-opps(column='2' ng-show="filter.filtersService.model.expanded")
+    div.location-contact-opps(column='3' ng-show="filter.filtersService.model.expanded")
       label Location
-        inline-search(type="location" placeholder="City, State, or Zip" chosen-result="filter.filtersService.model.location" callback="filter.applyLocations(result)")
+        inline-search(type="location" placeholder="City or Zip" chosen-result="filter.filtersService.model.location" callback="filter.applyLocations(result)")
+      label.state State
+        .dropdown-filter
+          .dropdown.state-dropdown
+            md-select.state-dropdown(md-on-open="filter.appendDoneButton()" ng-model="filter.filtersService.model.states" multiple="true" placeholder="State" md-on-close="filter.applyStates(filter.filtersService.model.states); filter.closeDoneButton()" aria-label="State Dropdown")
+              md-option(ng-repeat="state in filter.states" aria-label="{{state.name}}" value="{{state.code}}" type="state") {{::state.name}}
       label.cbbd-contact CBBD Contact
         inline-search(type="user" placeholder="Name" chosen-result="filter.filtersService.model.cbbdContact" callback="filter.applyFilterArr(filter.filtersService.model.selected.cbbdContact, result, 'cbbdContact', result.firstName + ' ' + result.lastName)")
   div(row)

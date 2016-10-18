@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports = /*  @ngInject */
-  function filterController($state, $scope, $mdDialog, $mdSelect, loaderService, chipsService, filtersService, opportunityFiltersService, userService) {
+  function filterController($state, $scope, $mdDialog, $mdSelect, loaderService, chipsService, filtersService, opportunityFiltersService, userService, usStatesService) {
 
     // ****************
     // CONTROLLER SETUP
@@ -22,6 +22,7 @@ module.exports = /*  @ngInject */
     vm.applyFilterArr = chipsService.applyFilterArr;
     vm.applyFilterMulti = chipsService.applyFilterMulti;
     vm.applyLocations = applyLocations;
+    vm.applyStates = applyStates;
     vm.closeDoneButton = closeDoneButton;
     vm.closeModal = closeModal;
     vm.closeSelect = closeSelect;
@@ -34,6 +35,7 @@ module.exports = /*  @ngInject */
     vm.resetTradeChannels = resetTradeChannels;
     vm.saveFilter = saveFilter;
     vm.updateFilter = updateFilter;
+    vm.states = usStatesService;
 
     init();
 
@@ -54,10 +56,13 @@ module.exports = /*  @ngInject */
         chipsService.applyFilterArr(filtersService.model.selected.zipCode, result.name, 'zipCode');
       } else if (result.type === 'city') {
         chipsService.applyFilterArr(filtersService.model.selected.city, result.name, 'city');
-      } else if (result.type === 'state') {
-        chipsService.applyFilterArr(filtersService.model.selected.state, result.name, 'state');
       }
+
       filtersService.model.location = '';
+    }
+
+    function applyStates(result) {
+      chipsService.applyFilterMulti(filtersService.model.state, result, 'state');
     }
 
     function closeDoneButton() {
