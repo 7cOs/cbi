@@ -210,6 +210,7 @@ module.exports = /*  @ngInject */
     function resetFilters() {
       service.model.selected = angular.copy(service.model.selectedTemplate);
       resetModel(); // reset view model bindings
+      service.model.states = [];
       service.model.filtersApplied = false;
       service.model.filtersDefault = true;
       service.model.filtersValidCount = 0;
