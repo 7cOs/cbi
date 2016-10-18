@@ -1,15 +1,16 @@
 describe('Unit: list controller', function() {
-  var scope, ctrl, q, filtersService, loaderService, opportunitiesService, targetListService;
+  var scope, ctrl, q, mdDialog, filtersService, loaderService, opportunitiesService, targetListService;
 
   beforeEach(function() {
     angular.mock.module('ui.router');
     angular.mock.module('ngMaterial');
     angular.mock.module('cf.common.services');
     angular.mock.module('cf.common.components.list');
-    // filtersService, loaderService, opportunitiesService, targetListService, storesService, userService, closedOpportunitiesService
-    inject(function($rootScope, _$q_, $controller, _filtersService_, _loaderService_, _opportunitiesService_, _targetListService_) {
+
+    inject(function($rootScope, _$q_, _$mdDialog_, $controller, _filtersService_, _loaderService_, _opportunitiesService_, _targetListService_, _userService_) {
       scope = $rootScope.$new();
       q = _$q_;
+      mdDialog = _$mdDialog_;
 
       filtersService = _filtersService_;
       loaderService = _loaderService_;
@@ -20,19 +21,104 @@ describe('Unit: list controller', function() {
     });
   });
 
-  it('should have services defined', function() {
+  it('should expose public services', function() {
     expect(ctrl.filtersService).not.toBeUndefined();
     expect(typeof (ctrl.filtersService)).toEqual('object');
+
     expect(ctrl.opportunitiesService).not.toBeUndefined();
     expect(typeof (ctrl.opportunitiesService)).toEqual('object');
+
+    expect(ctrl.userService).not.toBeUndefined();
+    expect(typeof (ctrl.userService)).toEqual('object');
+  });
+
+  it('should expose public methods', function() {
+    expect(ctrl.addToSharedCollaborators).not.toBeUndefined();
+    expect(typeof (ctrl.addToSharedCollaborators)).toEqual('function');
+
+    expect(ctrl.addToTargetList).not.toBeUndefined();
+    expect(typeof (ctrl.addToTargetList)).toEqual('function');
+
+    expect(ctrl.closeModal).not.toBeUndefined();
+    expect(typeof (ctrl.closeModal)).toEqual('function');
+
+    expect(ctrl.displayBrandIcon).not.toBeUndefined();
+    expect(typeof (ctrl.displayBrandIcon)).toEqual('function');
+
+    expect(ctrl.exists).not.toBeUndefined();
+    expect(typeof (ctrl.exists)).toEqual('function');
+
+    expect(ctrl.isChecked).not.toBeUndefined();
+    expect(typeof (ctrl.isChecked)).toEqual('function');
+
+    expect(ctrl.openShareModal).not.toBeUndefined();
+    expect(typeof (ctrl.openShareModal)).toEqual('function');
+
+    expect(ctrl.openDismissModal).not.toBeUndefined();
+    expect(typeof (ctrl.openDismissModal)).toEqual('function');
+
+    expect(ctrl.pageName).not.toBeUndefined();
+    expect(typeof (ctrl.pageName)).toEqual('function');
+
+    expect(ctrl.removeOpportunity).not.toBeUndefined();
+    expect(typeof (ctrl.removeOpportunity)).toEqual('function');
+
+    expect(ctrl.shareOpportunity).not.toBeUndefined();
+    expect(typeof (ctrl.shareOpportunity)).toEqual('function');
+
+    expect(ctrl.sortBy).not.toBeUndefined();
+    expect(typeof (ctrl.sortBy)).toEqual('function');
+
+    expect(ctrl.selectOpportunity).not.toBeUndefined();
+    expect(typeof (ctrl.selectOpportunity)).toEqual('function');
+
+    expect(ctrl.showCorporateMemoModal).not.toBeUndefined();
+    expect(typeof (ctrl.showCorporateMemoModal)).toEqual('function');
+
+    expect(ctrl.submitFeedback).not.toBeUndefined();
+    expect(typeof (ctrl.submitFeedback)).toEqual('function');
+
+    expect(ctrl.cancelFeedback).not.toBeUndefined();
+    expect(typeof (ctrl.cancelFeedback)).toEqual('function');
+
+    expect(ctrl.allOpportunitiesExpanded).not.toBeUndefined();
+    expect(typeof (ctrl.allOpportunitiesExpanded)).toEqual('function');
+
+    expect(ctrl.noOpportunitiesExpanded).not.toBeUndefined();
+    expect(typeof (ctrl.noOpportunitiesExpanded)).toEqual('function');
+
+    expect(ctrl.showDisabled).not.toBeUndefined();
+    expect(typeof (ctrl.showDisabled)).toEqual('function');
+
+    expect(ctrl.flattenOpportunity).not.toBeUndefined();
+    expect(typeof (ctrl.flattenOpportunity)).toEqual('function');
+
+    expect(ctrl.getTargetLists).not.toBeUndefined();
+    expect(typeof (ctrl.getTargetLists)).toEqual('function');
+
+    expect(ctrl.expandCallback).not.toBeUndefined();
+    expect(typeof (ctrl.expandCallback)).toEqual('function');
+
+    expect(ctrl.collapseCallback).not.toBeUndefined();
+    expect(typeof (ctrl.collapseCallback)).toEqual('function');
+
+    expect(ctrl.getDate).not.toBeUndefined();
+    expect(typeof (ctrl.getDate)).toEqual('function');
+
+    expect(ctrl.toggleOpportunitiesInStores).not.toBeUndefined();
+    expect(typeof (ctrl.toggleOpportunitiesInStores)).toEqual('function');
+
+    expect(ctrl.toggleSelectAllStores).not.toBeUndefined();
+    expect(typeof (ctrl.toggleSelectAllStores)).toEqual('function');
+
+    expect(ctrl.removeSharedCollaborator).not.toBeUndefined();
+    expect(typeof (ctrl.removeSharedCollaborator)).toEqual('function');
+
+    expect(ctrl.impactSort).not.toBeUndefined();
+    expect(typeof (ctrl.impactSort)).toEqual('function');
   });
 
   describe('sortBy method', function() {
-    it('should exist', function() {
-      expect(ctrl.sortBy).not.toBeUndefined();
-      expect(typeof (ctrl.sortBy)).toEqual('function');
-    });
-
     it('should have default sort settings applied (store ascending)', function() {
       expect(filtersService.model.appliedFilter.sort.sortArr[0].str).toEqual('store');
       expect(filtersService.model.appliedFilter.sort.sortArr[0].asc).toEqual(true);
@@ -487,6 +573,19 @@ describe('Unit: list controller', function() {
       ctrl.toggleSelectAllStores();
       ctrl.addToTargetList(listId);
       expect(targetListService.addTargetListOpportunities).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('[list.openDismissModal]', function() {
+    beforeEach(function() {
+      spyOn(mdDialog, 'show').and.callThrough();
+
+      ctrl.openDismissModal();
+    });
+
+    it('should open the dismiss opps modal', function() {
+      expect(mdDialog.show).toHaveBeenCalled();
+      expect(mdDialog.show.calls.count()).toEqual(1);
     });
   });
 

@@ -34,6 +34,7 @@ module.exports = /*  @ngInject */
     vm.shareOpportunityFail = false;
     vm.opportunityDismissTrigger = false;
     vm.undoClicked = false;
+    vm.isSelectAllActivated = false;
 
     // Expose public methods
     vm.addToSharedCollaborators = addToSharedCollaborators;
@@ -63,7 +64,6 @@ module.exports = /*  @ngInject */
     vm.toggleOpportunitiesInStores = toggleOpportunitiesInStores;
     vm.toggleSelectAllStores = toggleSelectAllStores;
     vm.removeSharedCollaborator = removeSharedCollaborator;
-    vm.isSelectAllActivated = false;
     vm.impactSort = impactSort;
 
     // Mock Data for memo modal
