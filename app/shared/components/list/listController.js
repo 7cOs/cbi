@@ -358,11 +358,14 @@ module.exports = /*  @ngInject */
       angular.forEach(opportunitiesService.model.opportunities, function(store, key) {
         if (vm.isSelectAllActivated) {
           deselectAllOpportunitiesInStore(store, vm.selected);
-          vm.selected = [];
         } else {
           selectAllOpportunitiesInStore(store, vm.selected);
         }
       });
+
+      if (vm.isSelectAllActivated) {
+        vm.selected = [];
+      }
       vm.isSelectAllActivated = !vm.isSelectAllActivated;
     }
 
