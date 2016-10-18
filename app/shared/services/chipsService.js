@@ -310,7 +310,6 @@ module.exports = /*  @ngInject */
 
     function applyFilterMulti(model, result, filter) {
       removeChip('opportunityType');
-      console.log(result);
       if (result.length === 0 || (result.length <= 1 && result[0] === 'All Types')) {
         addChip('All Types', 'opportunityType', false, false);
         filtersService.model.selected[filter] = ['All Types'];
@@ -325,6 +324,7 @@ module.exports = /*  @ngInject */
           }
         });
         filtersService.model.selected[filter] = results;
+        filtersService.disableFilters(false, false, true, true);
       }
     }
 
