@@ -129,6 +129,8 @@ module.exports = /*  @ngInject */
       }
 
       function finishGet(data) {
+        console.log('Service Model');
+        console.log(service.model);
         for (var i = 0; i < service.model.length; i++) {
           service.model[i].applied = true;
         }
@@ -302,6 +304,8 @@ module.exports = /*  @ngInject */
       }
       filtersService.model[filter] = '';
       filtersService.disableFilters(false, false, true, true);
+      console.log('Current Srvice model');
+      console.log(service.model);
     }
 
     /**
