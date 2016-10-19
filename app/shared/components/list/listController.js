@@ -486,13 +486,13 @@ module.exports = /*  @ngInject */
       var result;
       switch (item.impact) {
         case 'H':
-          result = 2;
+          result = 0;
           break;
         case 'M':
           result = 1;
           break;
         case 'L':
-          result = 0;
+          result = 2;
           break;
       }
       return result;
