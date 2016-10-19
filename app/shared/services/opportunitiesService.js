@@ -137,7 +137,7 @@ module.exports = /*  @ngInject */
             negative = true;
           } else {
             if (vsYAPercent.toFixed(0) < 0) negative = true;
-            vsYAPercent = vsYAPercent.toFixed(0) + '%';
+            vsYAPercent = vsYAPercent.toFixed(1) + '%';
           }
         }
         item.depletionsCurrentYearToDateYAPercent = negative ? vsYAPercent : '+' + vsYAPercent;
