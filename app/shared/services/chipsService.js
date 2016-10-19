@@ -30,10 +30,266 @@ module.exports = /*  @ngInject */
       }
     ];
 
+    var filterToChipTemplate = {
+      'premiseType': {
+        'on': {
+          'name': 'On-Premise',
+          'type': 'premiseType',
+          'applied': false,
+          'removable': false
+        },
+        'off': {
+          'name': 'Off-Premise',
+          'type': 'premiseType',
+          'applied': false,
+          'removable': false
+        }
+      },
+      'myAccountsOnly': {
+        'name': 'My Accounts Only',
+        'type': 'myAccountsOnly',
+        'applied': false,
+        'removable': false
+      },
+      'opportunityStatus': {
+        'open': {
+          'name': 'Open',
+          'type': 'opportunityStatus',
+          'search': true,
+          'applied': false,
+          'removable': true,
+          'tradeChannel': false
+        },
+        'targeted': {
+          'name': 'Targeted',
+          'type': 'opportunityStatus',
+          'search': true,
+          'applied': false,
+          'removable': true,
+          'tradeChannel': false
+        }
+      },
+      'opportunityType': {
+        'NON_BUY': {
+          'name': 'Non-Buy',
+          'type': 'opportunityType',
+          'applied': false,
+          'removable': true
+        },
+        'AT_RISK': {
+          'name': 'At Risk',
+          'type': 'opportunityType',
+          'applied': false,
+          'removable': true
+        },
+        'LOW_VELOCITY': {
+          'name': 'Low Velocity',
+          'type': 'opportunityType',
+          'applied': false,
+          'removable': true
+        },
+        'MANUAL': {
+          'name': 'Manual',
+          'type': 'opportunityType',
+          'applied': false,
+          'removable': true
+        },
+        'NEW_PLACEMENT_NO_REBUY': {
+          'name': 'New Placement (No Rebuy)',
+          'type': 'opportunityType',
+          'applied': false,
+          'removable': true
+        },
+        'NEW_PLACEMENT_QUALITY': {
+          'name': 'New Placement (Quality)',
+          'type': 'opportunityType',
+          'applied': false,
+          'removable': true
+        }
+      },
+      'impact': {
+        'H': {
+          'name': 'High Impact',
+          'type': 'impact',
+          'search': true,
+          'applied': false,
+          'removable': true,
+          'tradeChannel': false
+        },
+        'M': {
+          'name': 'Medium Impact',
+          'type': 'impact',
+          'search': true,
+          'applied': false,
+          'removable': true,
+          'tradeChannel': false
+        },
+        'L': {
+          'name': 'Low Impact',
+          'type': 'impact',
+          'search': true,
+          'applied': false,
+          'removable': true,
+          'tradeChannel': false
+        }
+      },
+      'segmentation': {
+        'A': {
+          'name': 'Segment A',
+          'type': 'segmentation',
+          'search': true,
+          'applied': false,
+          'removable': true,
+          'tradeChannel': false
+        },
+        'B': {
+          'name': 'Segment B',
+          'type': 'segmentation',
+          'search': true,
+          'applied': false,
+          'removable': true,
+          'tradeChannel': false
+        },
+        'C': {
+          'name': 'Segment C',
+          'type': 'segmentation',
+          'search': true,
+          'applied': false,
+          'removable': true,
+          'tradeChannel': false
+        }
+      },
+      'tradeChannel': {
+        '07': {
+          'name': 'Convenience',
+          'type': 'tradeChannel',
+          'search': true,
+          'applied': false,
+          'removable': true,
+          'tradeChannel': true
+        },
+        '02': {
+          'name': 'Liquor',
+          'type': 'tradeChannel',
+          'search': true,
+          'applied': false,
+          'removable': true,
+          'tradeChannel': true
+        },
+        '05': {
+          'name': 'Grocery',
+          'type': 'tradeChannel',
+          'search': true,
+          'applied': false,
+          'removable': true,
+          'tradeChannel': true
+        },
+        '53': {
+          'name': 'Recreation',
+          'type': 'tradeChannel',
+          'search': true,
+          'applied': false,
+          'removable': true,
+          'tradeChannel': true
+        },
+        '57': {
+          'name': 'Military, on-premise',
+          'type': 'tradeChannel',
+          'search': true,
+          'applied': false,
+          'removable': true,
+          'tradeChannel': true
+        },
+        'MF': {
+          'name': 'Military, off-premise',
+          'type': 'tradeChannel',
+          'search': true,
+          'applied': false,
+          'removable': true,
+          'tradeChannel': true
+        },
+        '08': {
+          'name': 'Mass Merchandiser',
+          'type': 'tradeChannel',
+          'search': true,
+          'applied': false,
+          'removable': true,
+          'tradeChannel': true
+        },
+        '03': {
+          'name': 'Drug',
+          'type': 'tradeChannel',
+          'search': true,
+          'applied': false,
+          'removable': true,
+          'tradeChannel': true
+        },
+        '50': {
+          'name': 'Dining',
+          'type': 'tradeChannel',
+          'search': true,
+          'applied': false,
+          'removable': true,
+          'tradeChannel': true
+        },
+        '54': {
+          'name': 'Transportation',
+          'type': 'tradeChannel',
+          'search': true,
+          'applied': false,
+          'removable': true,
+          'tradeChannel': true
+        },
+        '51': {
+          'name': 'Bar/Nightclub',
+          'type': 'tradeChannel',
+          'search': true,
+          'applied': false,
+          'removable': true,
+          'tradeChannel': true
+        },
+        '52': {
+          'name': 'Lodging',
+          'type': 'tradeChannel',
+          'search': true,
+          'applied': false,
+          'removable': true,
+          'tradeChannel': true
+        }
+      },
+      'productType': {
+        'featured': {
+          'name': 'Featured',
+          'type': 'productType',
+          'search': true,
+          'applied': false,
+          'removable': true,
+          'tradeChannel': false
+        },
+        'priority': {
+          'name': 'Priority Packages',
+          'type': 'productType',
+          'search': true,
+          'applied': false,
+          'removable': true,
+          'tradeChannel': false
+        },
+        'authorized': {
+          'name': 'Authorized',
+          'type': 'productType',
+          'search': true,
+          'applied': false,
+          'removable': true,
+          'tradeChannel': false
+        }
+      }
+    };
     var model = [];
+    var filterToChipModel = [];
 
     var service = {
       model: model,
+      filterToChipModel: filterToChipModel,
       addAutocompleteChip: addAutocompleteChip,
       addChip: addChip,
       removeChip: removeChip,

@@ -183,6 +183,11 @@ module.exports = /*  @ngInject */
       });
     }
 
+    $scope.$watch('filter.chipsService.model', function(newVal, oldVal) {
+      console.log('Model change');
+      console.log(newVal);
+    }, true);
+
     // **************
     // PRIVATE METHODS
     // **************
