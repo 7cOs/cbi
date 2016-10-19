@@ -48,6 +48,16 @@
     }
   }
 
+  .location-contact-opps {
+    ::-ms-input-placeholder {
+      font-size: 1.2em;
+    }
+
+    :-ms-input-placeholder {
+      font-size: 1.2em;
+    }
+  }
+
 
   // Adjust Save Report and Reset icons on Opportunities and Target List Filters
 
@@ -77,5 +87,10 @@
     background-image: url('../../assets/img/icons/stripes.png');
     background-repeat: repeat-x;
     background-size: 8px;
+  }
+
+  // Adjust size of results container when none found
+  .inline-search .results-container {
+    width: auto;
   }
 }
