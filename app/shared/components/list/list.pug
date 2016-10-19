@@ -176,7 +176,7 @@ v-accordion.styled-list(multiple="" id="opportunities" control="list.accordion" 
                       md-menu-content(width="4")
                         md-menu-item
                           p(ng-click="list.openShareModal(product.id); $pane.collapse()") Send To
-                        md-menu-item
+                        md-menu-item(ng-show="product.status !== 'TARGETED'")
                           p(ng-click="list.openDismissModal(product.id); $pane.collapse()") Dismiss
             .shadow-wrap.top
               v-pane-content

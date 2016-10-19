@@ -103,8 +103,6 @@ form.filters(column='12' ng-class="{'target-list': filter.opportunities}")
       label.cbbd-contact CBBD Contact
         inline-search(type="user" placeholder="Name" chosen-result="filter.filtersService.model.contact" callback="filter.applyFilterArr(filter.filtersService.model.selected.contact, result, 'contact', result.firstName + ' ' + result.lastName)")
   div(row)
-    div.checkbox-inline.trade-channel(column='4 +3' ng-show="filter.filtersService.model.expanded")
-  div(row)
     div(column='12' class='apply-filters')
       button(value='Apply Filters' type="submit" class="btn-action" ng-click="filter.chipsService.applyFilters()" ng-disabled="filter.filtersService.model.filtersApplied || filter.filtersService.model.filtersValidCount === 0") Apply Filters
       .secondary-button-container
