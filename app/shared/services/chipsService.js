@@ -190,10 +190,10 @@ module.exports = /*  @ngInject */
             if (chip.type === 'opportunityStatus') filtersService.model['opportunityStatus' + chip.name] = false;
             if (chip.type === 'cbbdChain') filtersService.model['cbbdChain' + chip.name.split(' ')[0]] = false;
             break;
-          } else if (chip.type === 'distributor' || chip.type === 'account' || chip.type === 'subaccount' || chip.type === 'store' || chip.type === 'cbbdContact') {
+          } else if (chip.type === 'distributor' || chip.type === 'account' || chip.type === 'subaccount' || chip.type === 'store' || chip.type === 'contact') {
             var index = arr.indexOf(chip.id);
             arr.splice(index, 1);
-            if (chip.type !== 'cbbdContact') filtersService.model.filtersValidCount--;
+            if (chip.type !== 'contact') filtersService.model.filtersValidCount--;
             break;
           } else if (chip.type === 'opportunityType') {
             index = arr.indexOf(chip.id);
@@ -272,7 +272,7 @@ module.exports = /*  @ngInject */
             filtersService.model.store = '';
             filtersService.model.filtersValidCount++;
             break;
-          case 'cbbdContact':
+          case 'contact':
             addAutocompleteChip(displayName, filter, null, result.employeeId);
             if (service.model.indexOf(result.employeeId) === -1) model.push(result.employeeId);
             break;

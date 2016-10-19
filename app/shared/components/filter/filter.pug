@@ -98,7 +98,7 @@ form.filters(column='12' ng-class="{'target-list': filter.opportunities}")
             md-select.state-dropdown(md-on-open="filter.appendDoneButton()" ng-model="filter.filtersService.model.states" multiple="true" placeholder="State" md-on-close="filter.applyStates(filter.filtersService.model.states); filter.closeDoneButton()" aria-label="State Dropdown")
               md-option(ng-repeat="state in filter.states" aria-label="{{state.name}}" value="{{state.code}}" type="state") {{::state.name}}
       label.cbbd-contact CBBD Contact
-        inline-search(type="user" placeholder="Name" chosen-result="filter.filtersService.model.cbbdContact" callback="filter.applyFilterArr(filter.filtersService.model.selected.cbbdContact, result, 'cbbdContact', result.firstName + ' ' + result.lastName)")
+        inline-search(type="user" placeholder="Name" chosen-result="filter.filtersService.model.contact" callback="filter.applyFilterArr(filter.filtersService.model.selected.contact, result, 'contact', result.firstName + ' ' + result.lastName)")
   div(row)
     div.checkbox-inline.trade-channel(column='4 +3' ng-show="filter.filtersService.model.expanded")
       label.vertical Trade Channel
