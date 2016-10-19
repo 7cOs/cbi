@@ -94,4 +94,4 @@ section.landing-page
             label Brand / Master SKU
             inline-search(type="product" variety="sku" placeholder="By brand or SKU" chosen-result="l.filtersService.model.brandSearchText" callback="l.applyFilterArr(l.filtersService.model.selected.masterSKU, result, 'masterSKU', result.name)")
 
-          button.btn-action(ng-click="l.findOpportunities()" analytics-on="click" analytics-event="Opportunity List Link Click") Find Opportunities
+          button.btn-action(ng-click="l.findOpportunities()" ng-disabled="l.filtersService.model.filtersApplied || l.filtersService.model.filtersValidCount === 0" analytics-on="click" analytics-event="Opportunity List Link Click") Find Opportunities
