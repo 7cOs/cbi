@@ -18,4 +18,5 @@ module.exports =
     .factory('versionService', require('./versionService'))
     .factory('searchService', require('./searchService'))
     .factory('scrollService', require('./scrollService'))
+    .factory('usStatesService', require('./usStatesService'))
     .factory('loaderService', require('./loaderService'));

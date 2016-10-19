@@ -111,27 +111,24 @@ describe('Unit: filter controller (opportunities)', function() {
 
       expect(chipsService.applyFilterArr).toHaveBeenCalledWith('Denver', 'test', 'city');
     });
+  });
 
-    it('should call apply locations with state', function() {
-      var result = {
-        name: 'test',
-        type: 'state'
+  describe('[method.applyStates]', function() {
+    beforeEach(function() {
+      filtersService.model = {
+        state: 'WA'
       };
 
-      ctrl.applyLocations(result);
-
-      expect(chipsService.applyFilterArr).toHaveBeenCalledWith('CO', 'test', 'state');
+      spyOn(chipsService, 'applyFilterMulti').and.callFake(function() {
+        return true;
+      });
     });
 
-    it('should reset filter.model.location', function() {
-      var result = {
-        name: 'test',
-        type: 'state'
-      };
+    it('should apply a state search', function() {
 
-      ctrl.applyLocations(result);
+      ctrl.applyStates(filtersService.model.state);
 
-      expect(filtersService.model.location).toEqual('');
+      expect(chipsService.applyFilterMulti).toHaveBeenCalledWith('WA', 'WA', 'state');
     });
   });
 
