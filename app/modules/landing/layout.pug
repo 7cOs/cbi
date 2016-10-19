@@ -74,9 +74,16 @@ section.landing-page
                   span.go-arrow(ng-if="hover" ng-click="")
         h3 New Search
         .filter-container
-          label
+          legend Select <strong>premise type</strong> followed by a <strong>retailer</strong> and/or <strong>distributor</strong> to begin your search
+          label Premise Type
           md-radio-group(ng-model="l.filtersService.model.selected.premiseType")
             md-radio-button(ng-repeat="p in l.filtersService.model.premises | filter: '!All'" class="md-primary" ng-click="l.chipsService.addChip(p.name, 'premiseType', true, false)" ng-value="p.value" aria-label="p.name") {{p.name}}
+          .filter-item
+            label Retailer
+            inline-search(type="store" placeholder="Store, account, or subaccount name" chosen-result="l.filtersService.model.storeSearchText" callback="l.applyFilterArr(l.filtersService.model.selected.store, result, 'store', result.name)" show-address="true")
+          .filter-item
+            label Distributor
+            inline-search(type="distributor" placeholder="Name" chosen-result="l.filtersService.model.distributorSearchText" callback="l.applyFilterArr(l.filtersService.model.selected.distributor, result, 'distributor', result.name)")
           .filter-item
             label Opportunity Type
             .dropdown-filter
@@ -86,11 +93,5 @@ section.landing-page
           .filter-item
             label Brand / Master SKU
             inline-search(type="product" variety="sku" placeholder="By brand or SKU" chosen-result="l.filtersService.model.brandSearchText" callback="l.applyFilterArr(l.filtersService.model.selected.masterSKU, result, 'masterSKU', result.name)")
-          .filter-item
-            label Retailer
-            inline-search(type="store" placeholder="Store, account, or subaccount name" chosen-result="l.filtersService.model.storeSearchText" callback="l.applyFilterArr(l.filtersService.model.selected.store, result, 'store', result.name)" show-address="true")
-          .filter-item
-            label Distributor
-            inline-search(type="distributor" placeholder="Name" chosen-result="l.filtersService.model.distributorSearchText" callback="l.applyFilterArr(l.filtersService.model.selected.distributor, result, 'distributor', result.name)")
 
           button.btn-action(ng-click="l.findOpportunities()" analytics-on="click" analytics-event="Opportunity List Link Click") Find Opportunities

@@ -45,7 +45,7 @@ div.expanded-target-lists
         div(row).target-list-detail-container
           .loader-wrap.inline(ng-class="{'active': expanded.loaderService.model.loadingFilters}")
             loader
-          div(ng-show="!expanded.loaderService.model.loadingFilters && !expanded.userService.model.targetLists.owned.length || expanded.userService.model.targetLists.owned.length === 0 || !expanded.loaderService.model.loadingFilters  && !expanded.userService.model.targetLists.ownedNotArchived").no-opportunites
+          div(ng-show="!expanded.loaderService.model.loadingFilters && !expanded.userService.model.targetLists.owned.length || expanded.userService.model.targetLists.owned.length === 0 || !expanded.loaderService.model.loadingFilters  && !expanded.userService.model.targetLists.ownedNotArchived").no-opportunities
             h4 No Opportunities have been added yet
             p Try Searching for <span>Opportunities</span> and add them to your list
           ul
@@ -99,7 +99,7 @@ div.expanded-target-lists
                   | Depletions <br />Since Closed (CE)
                   span(ng-class="{ 'chevron-down-small' : expanded.depletionsChevron, 'chevron-up-small' : !expanded.depletionsChevron}").chevron-down-small
         div(row).target-list-detail-container
-          div(ng-show="expanded.userService.model.targetLists.sharedNotArchivedCount === 0").no-opportunites
+          div(ng-show="expanded.userService.model.targetLists.sharedNotArchivedCount === 0").no-opportunities
             h4 No Opportunities have been shared with you yet
             p Try Searching for <span>Opportunities</span> and add them to your list
           ul
@@ -151,7 +151,7 @@ div.expanded-target-lists
                   | Depletions <br />Since Closed (CE)
                   span(ng-class="{ 'chevron-down-small' : expanded.depletionsChevron, 'chevron-up-small' : !expanded.depletionsChevron}").chevron-down-small
         div(row).target-list-detail-container
-          div(ng-show="expanded.userService.model.targetLists.sharedArchivedCount === 0 && expanded.userService.model.targetLists.ownedArchived === 0").no-opportunites
+          div(ng-show="expanded.userService.model.targetLists.sharedArchivedCount === 0 && expanded.userService.model.targetLists.ownedArchived === 0").no-opportunities
             h4 No Opportunities to remove
             p Try Searching for <span>Opportunities</span> and add them to your list
           ul

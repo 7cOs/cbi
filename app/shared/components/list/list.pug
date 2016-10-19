@@ -1,5 +1,6 @@
 .total-opportunities
-  h4.opportunites-count(ng-if="list.pageName(['accounts']) || list.pageName(['target-list-detail'])" ng-hide="!list.opportunitiesService.model.filterApplied") {{list.filtersService.model.appliedFilter.pagination.totalOpportunities | number:0 }} opportunities <span>across {{list.filtersService.model.appliedFilter.pagination.totalStores | number:0}} stores</span>
+  h4.opportunities-count(ng-if="!list.opportunitiesService.model.filterApplied" ng-hide="list.opportunitiesService.model.filterApplied") 0 opportunities <span>across 0 stores</span>
+  h4.opportunities-count(ng-if="list.pageName(['accounts']) || list.pageName(['target-list-detail'])" ng-hide="!list.opportunitiesService.model.filterApplied") {{list.filtersService.model.appliedFilter.pagination.totalOpportunities | number:0 }} opportunities <span>across {{list.filtersService.model.appliedFilter.pagination.totalStores | number:0}} stores</span>
   span.opportunities-selected-count(ng-hide="!list.selected || list.selected.length === 0")
     ng-pluralize(count="list.selected.length" when="{'1' : '1 opportunity selected', 'other': '{{list.selected.length}} opportunities selected'}")
 
@@ -52,9 +53,15 @@ v-accordion.styled-list(multiple="" id="opportunities" control="list.accordion" 
         label(ng-click="list.sortBy('segmentation')" ng-class="{ 'header-bold' : list.filtersService.model.appliedFilter.sort.sortArr[0].str === 'segmentation'}")
           | Segmentation
           span(ng-class="{'chevron-up-small' : (!list.filtersService.model.appliedFilter.sort.sortArr[0].asc && list.filtersService.model.appliedFilter.sort.sortArr[0].str === 'segmentation')}").chevron-down-small
-  div(ng-if="list.opportunitiesService.model.noOpportunitiesFound === true").no-opportunites
-    h4 Dang!
-    p We were unable to find any opportunities that met your search criteria. Try broadening your search a little bit!
+  div(ng-if="!list.opportunitiesService.model.filterApplied").no-opportunities
+    h4 To get started, select some filters!
+    p Narrow your opportunities by selecting a <strong>Retailer</strong> and/or a <strong>Distributor</strong>.
+  div(ng-if="list.opportunitiesService.model.noOpportunitiesFound === true").no-opportunities
+    h4 Dang! We found too many opportunities that met your search criteria.
+    p Try narrowing your search by using:
+    ul
+      li Maximum of 5 <strong>Distributors</strong> and/or
+      li Maximum of 10 <strong> Retailers</strong>
   v-pane.list-item(row ng-repeat="opportunity in list.opportunitiesService.model.opportunities | filter : {'dismissed': false}" expanded='opportunity.isExpanded')
     .shadow-wrap.bottom
       div.checkbox-wrapper(ng-click="list.toggleOpportunitiesInStores(opportunity, list.selected)")
