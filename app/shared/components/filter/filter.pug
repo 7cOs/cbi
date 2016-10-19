@@ -68,7 +68,7 @@ form.filters(column='12' ng-class="{'target-list': filter.opportunities}")
       md-checkbox(ng-model="filter.filtersService.model.cbbdChainIndependent" aria-label="Independent" ng-change="filter.applyFilterArr(filter.filtersService.model.selected.cbbdChain, 'Independent', 'cbbdChain')") Independent
       md-checkbox(ng-model="filter.filtersService.model.cbbdChainCbbd" aria-label="CBBD Chain" ng-change="filter.applyFilterArr(filter.filtersService.model.selected.cbbdChain, 'Cbbd', 'cbbdChain', 'cbbd chain')") CBBD Chain
   div(row)
-    div.predicted-impact(column='3' ng-show="filter.filtersService.model.expanded")
+    div.predicted-impact(column='2' ng-show="filter.filtersService.model.expanded")
       label Predicted Impact
       md-checkbox(ng-model="filter.filtersService.model.predictedImpactHigh" aria-label="Predicted Impact High" ng-change="filter.applyFilterArr(filter.filtersService.model.selected.impact, 'High', 'impact', 'High Impact')")
         | High
@@ -79,17 +79,20 @@ form.filters(column='12' ng-class="{'target-list': filter.opportunities}")
       md-checkbox(ng-model="filter.filtersService.model.predictedImpactLow" aria-label="Predicted Impact Low" ng-change="filter.applyFilterArr(filter.filtersService.model.selected.impact, 'Low', 'impact', 'Low Impact')")
         | Low
         span.impact.low-small
-    div(column='3' ng-show="filter.filtersService.model.expanded")
+    div(column='4' ng-show="filter.filtersService.model.expanded")
       label Product Type
       md-checkbox(ng-model="filter.filtersService.model.productTypeFeatured" aria-label="Product Type Featured" ng-change="filter.applyFilterArr(filter.filtersService.model.selected.productType, 'featured', 'productType')") Featured
       md-checkbox(ng-model="filter.filtersService.model.productTypePriority" aria-label="Product Type Priority Packages" ng-change="filter.applyFilterArr(filter.filtersService.model.selected.productType, 'priority', 'productType', 'priority packages')") Priority Packages
       md-checkbox(ng-model="filter.filtersService.model.productTypeAuthorized" aria-label="Product Type Authorized" ng-change="filter.applyFilterArr(filter.filtersService.model.selected.productType, 'authorized', 'productType')" ng-init="filter.filtersService.model.productTypeAuthorized = true") Authorized
-    div.checkbox-inline(column='3' ng-show="filter.filtersService.model.expanded")
+      div.checkbox-inline.trade-channel
+        label.vertical Trade Channel
+        md-checkbox(ng-repeat="channel in filter.filtersService.model.tradeChannels[filter.filtersService.model.selected.premiseType]" ng-model="filter.filtersService.model['tradeChannel' + channel.name]" aria-label="Trade Channel {{channel.name}}" ng-change="filter.applyFilterArr(filter.filtersService.model.selected.tradeChannel, channel.name, 'tradeChannel')") {{channel.label}}
+    div.checkbox-inline(column='2' ng-show="filter.filtersService.model.expanded")
       label Store Segmentation
       md-checkbox(ng-model="filter.filtersService.model.storeSegmentationA" aria-label="Store Segmentation A" ng-change="filter.applyFilterArr(filter.filtersService.model.selected.segmentation, 'A', 'segmentation', 'Segment A')") A
       md-checkbox(ng-model="filter.filtersService.model.storeSegmentationB" aria-label="Store Segmentation B" ng-change="filter.applyFilterArr(filter.filtersService.model.selected.segmentation, 'B', 'segmentation', 'Segment B')") B
       md-checkbox(ng-model="filter.filtersService.model.storeSegmentationC" aria-label="Store Segmentation C" ng-change="filter.applyFilterArr(filter.filtersService.model.selected.segmentation, 'C', 'segmentation', 'Segment C')") C
-    div.location-contact-opps(column='3' ng-show="filter.filtersService.model.expanded")
+    div.location-contact-opps(column='4' ng-show="filter.filtersService.model.expanded")
       label Location
         inline-search(type="location" placeholder="City or Zip" chosen-result="filter.filtersService.model.location" callback="filter.applyLocations(result)")
       label.state State
@@ -99,10 +102,6 @@ form.filters(column='12' ng-class="{'target-list': filter.opportunities}")
               md-option(ng-repeat="state in filter.states" aria-label="{{state.name}}" value="{{state.code}}" type="state") {{::state.name}}
       label.cbbd-contact CBBD Contact
         inline-search(type="user" placeholder="Name" chosen-result="filter.filtersService.model.contact" callback="filter.applyFilterArr(filter.filtersService.model.selected.contact, result, 'contact', result.firstName + ' ' + result.lastName)")
-  div(row)
-    div.checkbox-inline.trade-channel(column='4 +3' ng-show="filter.filtersService.model.expanded")
-      label.vertical Trade Channel
-      md-checkbox(ng-repeat="channel in filter.filtersService.model.tradeChannels[filter.filtersService.model.selected.premiseType]" ng-model="filter.filtersService.model['tradeChannel' + channel.name]" aria-label="Trade Channel {{channel.name}}" ng-change="filter.applyFilterArr(filter.filtersService.model.selected.tradeChannel, channel.name, 'tradeChannel')") {{channel.label}}
   div(row)
     div(column='12' class='apply-filters')
       button(value='Apply Filters' type="submit" class="btn-action" ng-click="filter.chipsService.applyFilters()" ng-disabled="filter.filtersService.model.filtersApplied || filter.filtersService.model.filtersValidCount === 0") Apply Filters
