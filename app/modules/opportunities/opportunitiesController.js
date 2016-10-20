@@ -57,7 +57,6 @@ module.exports = /*  @ngInject */
             }
           }
         }
-
         // By default the authorization flag is set on filtersService.model. We are just checking if there is a productType filter in the filter string. If not we need to reset productType array
         if (resetDefaultAuthorizationFlag) {
           filtersService.model.selected.productType = [];

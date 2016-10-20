@@ -282,6 +282,43 @@ module.exports = /*  @ngInject */
           'removable': true,
           'tradeChannel': false
         }
+      },
+      'state': {
+        'chip': {
+          'name': 'CO',
+          'type': 'opportunityType',
+          'applied': false,
+          'removable': true
+        },
+        set: function(val) {
+          this.obj.name = val;
+        }
+      },
+      'city': {
+        'chip': {
+          'name': 'Denver',
+          'type': 'city',
+          'search': true,
+          'applied': false,
+          'removable': true,
+          'tradeChannel': false
+        },
+        set: function(val) {
+          this.obj.name = val;
+        }
+      },
+      'zipcode': {
+        'chip': {
+          'name': '80203',
+          'type': 'zipCode',
+          'search': true,
+          'applied': false,
+          'removable': true,
+          'tradeChannel': false
+        },
+        set: function(val) {
+          this.obj.name = val;
+        }
       }
     };
     var model = [];
@@ -299,7 +336,13 @@ module.exports = /*  @ngInject */
       resetChipsFilters: resetChipsFilters,
       applyFilterArr: applyFilterArr,
       applyFilterMulti: applyFilterMulti,
-      applyStatesFilter: applyStatesFilter
+      applyStatesFilter: applyStatesFilter,
+      isBooleanFilter: isBooleanFilter,
+      returnChipForBooleanFilter: returnChipForBooleanFilter,
+      isMultipleValuedFilter: isMultipleValuedFilter,
+      returnChipForMultipleValuedFilter: returnChipForMultipleValuedFilter,
+      isTextSearchFilter: isTextSearchFilter,
+      returnChipForTextSearchFilter: returnChipForTextSearchFilter
     };
 
     return service;
@@ -394,6 +437,58 @@ module.exports = /*  @ngInject */
         filtersService.disableFilters(true, false, true, true);
       }
     }
+
+    // Chips functionality
+    //
+    function isBooleanFilter(filterValue) {
+      return filterValue === 'true' ||  filterValue === 'false';
+    }
+
+    function returnChipForBooleanFilter(filterName, filterValue) {
+      if (isPropertyInObject(filterToChipModel, filterName) && filterValue === true) {
+        return filterToChipModel[filterName];
+      }
+    }
+
+    function isMultipleValuedFilter(filterName) {
+      var multiValuedFilters = ['opportunityType', 'premiseType', 'impact', 'opportunityStatus', 'segmentation', 'productType', 'tradeChannel'];
+      return multiValuedFilters.indexOf(filterName) !== -1 && isPropertyInObject(filterToChipModel, filterName);
+    }
+
+    function returnChipForMultipleValuedFilter(filterName, filterValue) {
+      var chips = [];
+      var arrFilterValues = filterValue.split('|');
+      angular.forEach(arrFilterValues, function(val, key) {
+        if (isPropertyInObject(filterToChipModel[filterName], val)) {
+          chips.push(filterToChipModel[filterName][val]);
+        }
+      });
+      return chips;
+    }
+
+    function isTextSearchFilter(filterName) {
+      var textSearchFilters = ['state', 'city', 'zipCode'];
+      return textSearchFilters.indexOf(filterName) !== -1 && isPropertyInObject(filterToChipModel, filterName);
+    }
+
+    function returnChipForTextSearchFilter(filterName, value) {
+      filterToChipTemplate[filterName].set(value);
+      return filterToChipTemplate[filterName].chip;
+    }
+
+    function returnChipForOtherFilters() {
+
+    }
+
+    /** TODO We need to create a Utility service for these functions
+     * @desc Function returns true if property exists inside the object
+     * @params {Array} filterArr - Array containing filters and their values
+     * @returns {Boolean}
+     */
+    function isPropertyInObject(obj, propertyName) {
+      return obj.hasOwnProperty(propertyName);
+    }
+    // End of chips functionality
 
     /**
      * @name removeChip
