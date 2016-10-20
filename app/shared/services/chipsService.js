@@ -206,7 +206,9 @@ module.exports = /*  @ngInject */
             }
             break;
           } else if (chip.type === 'state') {
+            console.log(arr);
             index = arr.indexOf(chip.name);
+            console.log(index);
             arr.splice(index, 1);
             filtersService.model.states.splice(index, 1);
             break;
@@ -344,7 +346,6 @@ module.exports = /*  @ngInject */
      */
 
     function applyStatesFilter(model, result, filter) {
-      var results = [];
 
       angular.forEach(result, function(value, key) {
         var matched = false;
@@ -358,10 +359,10 @@ module.exports = /*  @ngInject */
 
         if (matched === false) {
           addChip(value, 'state', false);
-          results.push(value);
+          filtersService.model.selected[filter].push(value);
         }
       });
-      filtersService.model.selected[filter] = results;
       filtersService.disableFilters(false, false, true, true);
+      console.log(filtersService.model.selected);
     }
   };
