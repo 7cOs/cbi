@@ -345,10 +345,21 @@ module.exports = /*  @ngInject */
 
     function applyStatesFilter(model, result, filter) {
       var results = [];
+
       angular.forEach(result, function(value, key) {
-        console.log(value);
-        addChip(value, 'state', false);
-        results.push(value);
+        var matched = false;
+
+        for (var i = 0; i < service.model.length; i++) {
+
+          if (value === service.model[i].name) {
+            matched = true;
+          }
+        }
+
+        if (matched === false) {
+          addChip(value, 'state', false);
+          results.push(value);
+        }
       });
       filtersService.model.selected[filter] = results;
       filtersService.disableFilters(false, false, true, true);
