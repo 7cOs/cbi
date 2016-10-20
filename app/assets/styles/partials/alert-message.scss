@@ -14,4 +14,26 @@
   span {
     color: $blue;
   }
+
+  &.filter-error {
+    width: 400px;
+
+    p {
+      margin-bottom: -1em;
+    }
+
+    li {
+      list-style: initial;
+      list-style-position: inside;
+      font-size: 0.9em;
+      color: #4A4A4A;
+      font-weight: 400;
+
+      span {
+        position: relative;
+        margin-left: -20px;
+        color: inherit;
+      }
+    }
+  }
 }
