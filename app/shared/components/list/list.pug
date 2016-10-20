@@ -168,7 +168,7 @@ v-accordion.styled-list(multiple="" id="opportunities" control="list.accordion" 
               div.cell-parent.sub-item(row)
                 .regional-status(ng-if="product.regionalStatus")
                   div(class="{{product.regionalStatus}}")
-                .sub-item-select.flag-both(column='1', ng-class="{'flag-yellow': product.featureTypeCode && !product.itemAuthorizationDesc, 'flag-green': !product.featureTypeCode && product.itemAuthorizationDesc}")
+                .sub-item-select(column='1', ng-class="{'flag-yellow': product.featureTypeCode && !product.itemAuthorizationDesc, 'flag-green': !product.featureTypeCode && product.itemAuthorizationDesc, 'flag-both': product.featureTypeCode && product.itemAuthorizationDesc}")
                   md-checkbox(aria-label="Select Item" ng-click="list.selectOpportunity($event, opportunity, product, list.selected);" ng-checked="product.selected")
                 div(column='2').pad-cell
                   span.product-title {{::product.product.brand}} <br>
