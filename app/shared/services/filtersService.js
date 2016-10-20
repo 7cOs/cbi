@@ -28,7 +28,7 @@ module.exports = /*  @ngInject */
       distributor: '',
       expanded: false,
       disableReset: false,
-      filtersApplied: true,
+      filtersApplied: false,
       filtersDefault: true,
       disableSaveFilter: false,
       filtersValidCount: 0,
