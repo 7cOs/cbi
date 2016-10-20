@@ -40,6 +40,7 @@ module.exports = /*  @ngInject */
     // **************
 
     function applySavedFilter(ev, filter) {
+      var resetDefaultAuthorizationFlag = true;
       chipsService.resetChipsFilters(chipsService.model);
       if (ev.srcElement.nodeName === 'SPAN') {
         ev.preventDefault();
@@ -50,11 +51,17 @@ module.exports = /*  @ngInject */
         for (var i = 0; i < arr.length; i++) {
           if (arr[i].length > 0) {
             var prop = arr[i].split(':');
-
             filtersService.model.selected[prop[0]] = prop[1];
+            if (prop[0] === 'productType') {
+              resetDefaultAuthorizationFlag = false;
+            }
           }
         }
 
+        // By default the authorization flag is set on filtersService.model. We are just checking if there is a productType filter in the filter string. If not we need to reset productType array
+        if (resetDefaultAuthorizationFlag) {
+          filtersService.model.selected.productType = [];
+        }
         chipsService.applyFilters();
         filtersService.model.selected.currentFilter = filter.id;
       }
