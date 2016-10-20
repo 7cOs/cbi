@@ -42,7 +42,8 @@ module.exports = /*  @ngInject */
       updateChip: updateChip,
       resetChipsFilters: resetChipsFilters,
       applyFilterArr: applyFilterArr,
-      applyFilterMulti: applyFilterMulti
+      applyFilterMulti: applyFilterMulti,
+      applyStatesFilter: applyStatesFilter
     };
 
     return service;
@@ -164,7 +165,7 @@ module.exports = /*  @ngInject */
      * @memberOf cf.common.services
      */
     function removeFromFilterService(chip) {
-      if (chip.search || chip.type === 'opportunityType') {
+      if (chip.search || chip.type === 'opportunityType' || chip.type === 'state') {
         var arr = filtersService.model.selected[chip.type];
         var i = arr.length;
 
@@ -204,7 +205,12 @@ module.exports = /*  @ngInject */
               filtersService.model.opportunityType = ['All Types'];
             }
             break;
-          }
+          } else if (chip.type === 'state') {
+            index = arr.indexOf(chip.name);
+            arr.splice(index, 1);
+            filtersService.model.states.splice(index, 1);
+            break;
+          };
         }
       } else if (typeof chip.type === 'string') {
         filtersService.model.selected[chip.type] = '';
@@ -328,4 +334,23 @@ module.exports = /*  @ngInject */
       }
     }
 
+    /**
+     * @name applyStatesFilter
+     * @desc takes array and creates chips and adds the info to the provided model, intended for multi-selects
+     * @params {Array} model - filters model to recieve result
+     * @params {Array} result - array of filters to be applied
+     * @returns null
+     * @memberOf cf.common.services
+     */
+
+    function applyStatesFilter(model, result, filter) {
+      var results = [];
+      angular.forEach(result, function(value, key) {
+        console.log(value);
+        addChip(value, 'state', false);
+        results.push(value);
+      });
+      filtersService.model.selected[filter] = results;
+      filtersService.disableFilters(false, false, true, true);
+    }
   };

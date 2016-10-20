@@ -119,7 +119,7 @@ describe('Unit: filter controller (opportunities)', function() {
         state: 'WA'
       };
 
-      spyOn(chipsService, 'applyFilterMulti').and.callFake(function() {
+      spyOn(chipsService, 'applyStatesFilter').and.callFake(function() {
         return true;
       });
     });
@@ -128,7 +128,7 @@ describe('Unit: filter controller (opportunities)', function() {
 
       ctrl.applyStates(filtersService.model.state);
 
-      expect(chipsService.applyFilterMulti).toHaveBeenCalledWith('WA', 'WA', 'state');
+      expect(chipsService.applyStatesFilter).toHaveBeenCalledWith('WA', 'WA', 'state');
     });
   });
 

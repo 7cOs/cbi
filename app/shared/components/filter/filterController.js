@@ -62,7 +62,7 @@ module.exports = /*  @ngInject */
     }
 
     function applyStates(result) {
-      chipsService.applyFilterMulti(filtersService.model.state, result, 'state');
+      chipsService.applyStatesFilter(filtersService.model.state, result, 'state');
     }
 
     function closeDoneButton() {
