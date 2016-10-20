@@ -291,7 +291,7 @@ module.exports = /*  @ngInject */
           'removable': true
         },
         set: function(val) {
-          this.obj.name = val;
+          this.chip.name = val;
         }
       },
       'city': {
@@ -304,7 +304,7 @@ module.exports = /*  @ngInject */
           'tradeChannel': false
         },
         set: function(val) {
-          this.obj.name = val;
+          this.chip.name = val;
         }
       },
       'zipcode': {
@@ -317,7 +317,7 @@ module.exports = /*  @ngInject */
           'tradeChannel': false
         },
         set: function(val) {
-          this.obj.name = val;
+          this.chip.name = val;
         }
       }
     };
@@ -342,7 +342,9 @@ module.exports = /*  @ngInject */
       isMultipleValuedFilter: isMultipleValuedFilter,
       returnChipForMultipleValuedFilter: returnChipForMultipleValuedFilter,
       isTextSearchFilter: isTextSearchFilter,
-      returnChipForTextSearchFilter: returnChipForTextSearchFilter
+      returnChipForTextSearchFilter: returnChipForTextSearchFilter,
+      initFilterToChipModel: initFilterToChipModel,
+      addChipsArray: addChipsArray
     };
 
     return service;
@@ -403,6 +405,13 @@ module.exports = /*  @ngInject */
       }
     }
 
+    function addChipsArray(chipsCollection) {
+      service.model = [];
+      angular.forEach(chipsCollection, function (val, key) {
+        service.model.push(val);
+      });
+    }
+
     function applyFilters() {
       var isTargetList = false;
       if ($state.current.name === 'target-list-detail') isTargetList = true;
@@ -428,8 +437,6 @@ module.exports = /*  @ngInject */
       }
 
       function finishGet(data) {
-        console.log('Service Model');
-        console.log(service.model);
         for (var i = 0; i < service.model.length; i++) {
           service.model[i].applied = true;
         }
@@ -440,14 +447,16 @@ module.exports = /*  @ngInject */
 
     // Chips functionality
     //
-    function isBooleanFilter(filterValue) {
+    function isBooleanFilter(filterName, filterValue) {
       return filterValue === 'true' ||  filterValue === 'false';
     }
 
     function returnChipForBooleanFilter(filterName, filterValue) {
-      if (isPropertyInObject(filterToChipModel, filterName) && filterValue === true) {
-        return filterToChipModel[filterName];
+      var chip = null;
+      if (isPropertyInObject(filterToChipModel, filterName) && filterValue === 'true') {
+        chip = angular.copy(filterToChipModel[filterName]);
       }
+      return chip;
     }
 
     function isMultipleValuedFilter(filterName) {
@@ -460,7 +469,7 @@ module.exports = /*  @ngInject */
       var arrFilterValues = filterValue.split('|');
       angular.forEach(arrFilterValues, function(val, key) {
         if (isPropertyInObject(filterToChipModel[filterName], val)) {
-          chips.push(filterToChipModel[filterName][val]);
+          chips.push(angular.copy(filterToChipModel[filterName][val]));
         }
       });
       return chips;
@@ -471,13 +480,22 @@ module.exports = /*  @ngInject */
       return textSearchFilters.indexOf(filterName) !== -1 && isPropertyInObject(filterToChipModel, filterName);
     }
 
-    function returnChipForTextSearchFilter(filterName, value) {
-      filterToChipTemplate[filterName].set(value);
-      return filterToChipTemplate[filterName].chip;
+    function returnChipForTextSearchFilter(filterName, filterValue) {
+      var chips = [];
+      var arrFilterValues = filterValue.split('|');
+      angular.forEach(arrFilterValues, function(val, key) {
+        filterToChipTemplate[filterName].set(val);
+        chips.push(angular.copy(filterToChipModel[filterName].chip));
+      });
+      return chips;
     }
 
-    function returnChipForOtherFilters() {
+    // function returnChipForOtherFilters() {
+    //
+    // }
 
+    function initFilterToChipModel() {
+      angular.copy(filterToChipTemplate, filterToChipModel);
     }
 
     /** TODO We need to create a Utility service for these functions
