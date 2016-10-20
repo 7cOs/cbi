@@ -17,6 +17,7 @@ deployment:
     commands:
       # push the code to app-orion-dev
       - git push git@heroku.com:app-orion-dev.git $CIRCLE_SHA1:master -f
+      - git push git@heroku.com:app-compass-deloitte-qa.git $CIRCLE_SHA1:master -f
   qa:
     branch: test
     commands:
