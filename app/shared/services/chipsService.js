@@ -206,9 +206,7 @@ module.exports = /*  @ngInject */
             }
             break;
           } else if (chip.type === 'state') {
-            console.log(arr);
             index = arr.indexOf(chip.name);
-            console.log(index);
             arr.splice(index, 1);
             filtersService.model.states.splice(index, 1);
             break;
@@ -363,6 +361,5 @@ module.exports = /*  @ngInject */
         }
       });
       filtersService.disableFilters(false, false, true, true);
-      console.log(filtersService.model.selected);
     }
   };
