@@ -344,21 +344,13 @@ module.exports = /*  @ngInject */
      */
 
     function applyStatesFilter(model, result, filter) {
-      console.log(result);
-      if (result.length === 0 || (result.length <= 1 && result[0] === 'All Types')) {
-        addChip('State', 'state', false, false);
-        filtersService.model.selected[filter] = ['State'];
-        filtersService.model.opportunityType = ['State'];
-      } else {
-        var results = [];
-        angular.forEach(result, function(value, key) {
-          console.log(value);
-          addChip(value, 'state', false);
-          results.push(value);
-        });
-        filtersService.model.selected[filter] = results;
-        filtersService.disableFilters(false, false, true, true);
-      }
+      var results = [];
+      angular.forEach(result, function(value, key) {
+        console.log(value);
+        addChip(value, 'state', false);
+        results.push(value);
+      });
+      filtersService.model.selected[filter] = results;
+      filtersService.disableFilters(false, false, true, true);
     }
-
   };
