@@ -3,6 +3,8 @@
 ## Prerequisites
 - [Install Node.js](https://docs.npmjs.com/getting-started/installing-node)
 - Install Gulp `npm install -g gulp`
+- All clients can receive gzip
+- All endpoints send gzip compressed json
 
 
 ## Install
@@ -24,4 +26,4 @@ If you're using Atom, you should add these packages:
   - [ES Lint](https://atom.io/packages/linter-eslint): `apm install linter-eslint`
 
 #### Troubleshooting
-- Ask Ratul.
+- TBD
