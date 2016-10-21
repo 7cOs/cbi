@@ -280,7 +280,7 @@ module.exports = /*  @ngInject */
             break;
           case 'contact':
             addAutocompleteChip(displayName, filter, null, result.employeeId);
-            if (service.model.indexOf(result.employeeId) === -1) model.push(result.employeeId);
+            if (service.model.indexOf(result.id) === -1) model.push(result.id);
             break;
           case 'masterSKU':
             if (result.id === null) {
