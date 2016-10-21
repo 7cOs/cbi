@@ -1,5 +1,5 @@
 describe('Unit: opportunitiesController', function() {
-  var scope, q, ctrl, userService, chipsService, filtersService;
+  var scope, q, ctrl, userService, chipsService;
 
   beforeEach(function() {
     angular.mock.module('ui.router');
@@ -12,7 +12,8 @@ describe('Unit: opportunitiesController', function() {
       q = $q;
       userService = _userService_;
       chipsService = _chipsService_;
-      filtersService = _filtersService_;
+      // Currently not required but will be in future test cases
+      // filtersService = _filtersService_;
 
       spyOn(userService, 'getOpportunityFilters').and.callFake(function() {
         var deferred = q.defer();

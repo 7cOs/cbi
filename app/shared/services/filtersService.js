@@ -188,10 +188,19 @@ module.exports = /*  @ngInject */
       }
     }
 
+    /**
+     * Checks if product type is present. If yes the authorization flag does not need to be reset
+     * @params {Object} propertyName - Name of the filter
+     * @returns {Boolean}
+     */
     function checkForAuthorizationFlag(propertyName) {
       return propertyName === 'productType';
     }
 
+    /**
+     * This function converts the query string to appropriate selected model in the filter
+     * @params {Object} filterProp - Name of the filter
+     */
     function updateSelectedFilterModel(filterProp) {
       var propName = filterProp[0];
       var propValue = filterProp[1];
