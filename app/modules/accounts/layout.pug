@@ -26,38 +26,36 @@ notes
   div(row)
     div.trend(column='2')
       label Trend
-      md-radio-group(ng-model="a.filtersService.model.selected.trend" ng-init="a.filtersService.model.selected.trend = 'vs YA'")
-        md-radio-button(ng-repeat="filter in a.filters.trend" class="md-primary" ng-value="filter.name" aria-label="Trend" ng-click="a.chipsService.addChip(filter.name, 'trend', true)") {{filter.name}}
+      md-radio-group(ng-model="a.filterModel.trend")
+        md-radio-button(ng-repeat="filter in a.filtersService.model.trend" class="md-primary" ng-value="filter.name" aria-label="Trend") {{filter.name}}
     div(column='3')
       label Ending Time Period
-      md-radio-group(ng-model="a.filtersService.model.accountSelected.timePeriod")
-        md-radio-button(ng-repeat="filter in a.filtersService.model.timePeriod" class="md-primary" ng-value="filter.name" aria-label="Ending Time Period" ng-click="a.chipsService.addChip(filter.name, 'timePeriod', true)") {{filter.name}}
+      md-radio-group(ng-model="a.filterModel.endingTimePeriod")
+        md-radio-button(ng-repeat="filter in a.filtersService.model.timePeriod track by $index" class="md-primary" ng-value="filter.name" aria-label="Ending Time Period" ) {{filter.name}}
     div(column='7')
       div(row).dropdown-filter
         div(column='6').dropdown
           label Depletions Time Period
-          md-select(ng-model="a.filtersService.model.accountSelected.depletionsTimeFilter" md-on-open="a.openSelect(true)" md-on-close="a.openSelect(false)" placeholder="FYTD")
-            md-option(ng-repeat="filter in a.filtersService.model.depletionsTimePeriod.month" aria-label="{{filter.name}}" value="{{filter.name}}") {{filter.name}}
-            md-option(ng-repeat="filter in a.filtersService.model.depletionsTimePeriod.year" aria-label="{{filter.name}}" value="{{filter.name}}") {{filter.name}}
+          md-select(ng-model="a.filterModel.depletionsTimePeriod" md-on-open="a.openSelect(true)" md-on-close="a.openSelect(false)" aria-label="Select a depletion time period")
+            md-option(ng-repeat="filter in a.filtersService.model.depletionsTimePeriod.month track by $index" aria-label="{{filter.name}}" value="{{filter.name}}") {{filter.name}}
+            md-option(ng-repeat="filter in a.filtersService.model.depletionsTimePeriod.year track by $index" aria-label="{{filter.name}}" value="{{filter.name}}") {{filter.name}}
         div(column='6').dropdown
           label Distribution Time Period
-          md-select(ng-model="a.filtersService.model.accountSelected.distributionTimeFilter" md-on-open="a.openSelect(true)" md-on-close="a.openSelect(false)" placeholder="L90 Days April 1, 2016 - June 29, 2016")
+          md-select(ng-model="a.filterModel.distributionTimePeriod" md-on-open="a.openSelect(true)" md-on-close="a.openSelect(false)" aria-label="Select a distribution time period")
             md-option(ng-repeat="filter in a.filtersService.model.distributionTimePeriod" aria-label="{{filter.name}}" value="{{filter.name}}") {{filter.name}}
 
 .filters(column='12')
   div(row)
     div(column='2')
       label Account Scope
-      md-checkbox(ng-model="a.filtersService.model.selected.myAccountsOnly" aria-label="My Accounts" ng-click="a.chipsService.updateChip('myAccountsOnly', 'My Accounts Only')") My Accounts Only
+      md-checkbox(ng-model="a.filterModel.myAccountsOnly" aria-label="My Accounts") My Accounts Only
     div(column='2')
       label Premise Type
-      md-radio-group(ng-model="a.filtersService.model.selected.premiseType" ng-init="a.filtersService.model.selected.premiseType = 'All'")
-        md-radio-button(ng-repeat="p in a.filtersService.model.premises" class="md-primary" ng-value="p.name" aria-label="{{p.name}}" ng-click="a.chipsService.addChip(p.name, 'premiseType', true)") {{p.name}}
+      md-radio-group(ng-model="a.filterModel.premiseType")
+        md-radio-button(ng-repeat="p in a.filtersService.model.premises track by $index" class="md-primary" ng-value="p.name" aria-label="{{p.name}}") {{p.name}}
     div(column='2')
       label Distributor
-      md-autocomplete(md-search-text="a.filtersService.model.distributorSearchText" md-items="distributor in a.filtersService.model.distributor" md-item-text="distributor.name" placeholder="by Name" md-selected-item-change="a.chipsService.addAutocompleteChip(distributor.name, 'distributorSearchText')")
-        md-item-template
-          div(md-highlight-text="a.filtersService.model.distributorSearchText" md-highlight-flags="^i") {{distributor.name}}
+      inline-search(type="distributor" placeholder="Name" chosen-result="a.filterModel.distributor" callback="")
     div(column='2')
       .tooltip-wrap
         label Store Type
@@ -68,8 +66,8 @@ notes
               h3 Store Type
               p Chain = Chain retailers directly called on by CBBD National or Key Accounts teams (On and Off-Premise)
               p Independent = Retailers not directly called on by CBBD’s National or Key Accounts teams
-      md-checkbox(ng-model="a.filtersService.model.selected.storeTypeCBBD" aria-label="Store Type Chain" ng-click="a.chipsService.updateChip('storeTypeCBBD', 'Store Type Chain')") Chain
-      md-checkbox(ng-model="a.filtersService.model.selected.storeTypeIndependent" aria-label="Store Type Independent" ng-click="a.chipsService.updateChip('storeTypeIndependent', 'Store Type Independent')") Independent
+      md-checkbox(ng-model="a.filterModel.storeTypeCBBD" aria-label="Store Type Chain") Chain
+      md-checkbox(ng-model="a.filterModel.storeTypeIndependent" aria-label="Store Type Independent") Independent
     div(column='4')
       label Retailer
       div(row).dropdown-filter.chain-store
@@ -77,7 +75,7 @@ notes
           md-select(ng-model="a.filtersService.model.selected.retailer" placeholder="Chain" ng-init="a.filtersService.model.selected.retailer = 'Chain'" md-on-open="a.openSelect(true)" md-on-close="a.openSelect(false)" aria-label="Store Type Filter")
             md-option(ng-repeat="type in a.filtersService.model.retailer" ng-click="a.placeholderSelect(type.hintText)" aria-label="{{type.name}}" value="{{type.name}}") {{type.name}}
         div(column='8')
-          inline-search(type="store" placeholder="{{a.hintTextPlaceholder}}" chosen-result="a.filtersService.model.stores" callback="a.applyFilterArr(filter.filtersService.model.selected.stores, result, 'stores')")
+          inline-search(type="store" placeholder="{{a.hintTextPlaceholder}}" chosen-result="a.filterModel.retailer" callback="")
 
   div(row)
     div(column='12' class='apply-filters')

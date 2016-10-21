@@ -16,10 +16,25 @@ module.exports = /*  @ngInject */
     // Services
     vm.chipsService = chipsService;
     vm.filtersService = filtersService;
+    /* Need to remove these */
     vm.filters = myperformanceService.filter();
     vm.distributionData = myperformanceService.distributionModel();
     vm.marketData = myperformanceService.marketData();
     vm.brandSkus = myperformanceService.brandSkus();
+
+    // Filter Model - Keeping this out of filterService as its not needed anywhere else
+    vm.filterModel = {
+      trend: filtersService.model.trend[0].name,
+      endingTimePeriod: filtersService.model.timePeriod[0].name,
+      depletionsTimePeriod: filtersService.model.depletionsTimePeriod.month[0].name,
+      distributionTimePeriod: filtersService.model.distributionTimePeriod[0].name,
+      myAccountsOnly: true,
+      premiseType: filtersService.model.premises[1].name,
+      distributor: '',
+      storeTypeCBBD: false,
+      storeTypeIndependent: false,
+      retailer: ''
+    };
 
     // Widget / tab contents
     vm.brandTabs = {
