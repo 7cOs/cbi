@@ -361,9 +361,10 @@ list {
   }
 }
 
-.flag-both {
+.flag-both,
+.flag-green,
+.flag-yellow {
   &:before {
-    background-image: url('../assets/img/icons/status-both.svg');
     background-position: 0 0;
     background-repeat: no-repeat;
     background-size: 30%;
@@ -374,17 +375,23 @@ list {
     top: 0;
     left: 2%;
   }
+}
 
-  &.flag-green {
-    &:before {
-      background-image: url('../assets/img/icons/status-featured.svg');
-    }
+.flag-both {
+  &:before {
+    background-image: url('../assets/img/icons/status-both.svg');
   }
+}
 
-  &.flag-yellow {
-    &:before {
-      background-image: url('../assets/img/icons/status-mandatory.svg');
-    }
+.flag-green {
+  &:before {
+    background-image: url('../assets/img/icons/status-featured.svg');
+  }
+}
+
+.flag-yellow {
+  &:before {
+    background-image: url('../assets/img/icons/status-mandatory.svg');
   }
 }
 
