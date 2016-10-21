@@ -23,7 +23,7 @@ module.exports = /*  @ngInject */
     vm.brandSkus = myperformanceService.brandSkus();
 
     // Filter Model - Keeping this out of filterService as its not needed anywhere else
-    vm.filterModel = {
+    var filterModelTemplate = {
       trend: filtersService.model.trend[0].name,
       endingTimePeriod: filtersService.model.timePeriod[0].name,
       depletionsTimePeriod: filtersService.model.depletionsTimePeriod.month[0].name,
@@ -35,6 +35,7 @@ module.exports = /*  @ngInject */
       storeTypeIndependent: false,
       retailer: ''
     };
+    vm.filterModel = angular.copy(filterModelTemplate);
 
     // Widget / tab contents
     vm.brandTabs = {
@@ -120,6 +121,7 @@ module.exports = /*  @ngInject */
     vm.prevTab = prevTab;
     vm.openNotes = openNotes;
     vm.placeholderSelect = placeholderSelect;
+    vm.resetFilters = resetFilters;
 
     init();
 
@@ -187,6 +189,10 @@ module.exports = /*  @ngInject */
 
     function placeholderSelect(data) {
       vm.hintTextPlaceholder = data;
+    }
+
+    function resetFilters() {
+      vm.filterModel = angular.copy(filterModelTemplate);
     }
 
     // ***************
