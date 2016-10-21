@@ -299,7 +299,7 @@ module.exports = /*  @ngInject */
       'state': {
         'chip': {
           'name': 'CO',
-          'type': 'opportunityType',
+          'type': 'state',
           'applied': false,
           'removable': true
         },
