@@ -146,9 +146,6 @@ module.exports = /*  @ngInject */
     function saveFilter() {
       loaderService.openLoader(true);
       userService.saveOpportunityFilter().then(function(data) {
-        // push new filter to filter dropdown
-        console.log('QueryParams1' + filtersService.model.appliedFilter);
-        console.log('QueryParams' + filtersService.model.appliedFilter.appliedFilter);
         userService.model.opportunityFilters.unshift({
           filterString: encodeURIComponent(filtersService.model.appliedFilter.appliedFilter),
           name: filtersService.model.newServiceName
@@ -183,11 +180,6 @@ module.exports = /*  @ngInject */
         loaderService.closeLoader();
       });
     }
-
-    $scope.$watch('filter.chipsService.model', function(newVal, oldVal) {
-      console.log('Model change');
-      console.log(newVal);
-    }, true);
 
     // **************
     // PRIVATE METHODS

@@ -130,8 +130,6 @@ module.exports = /*  @ngInject */
       // get saved filters -- this should be passed from user data when its ready
       userService.getOpportunityFilters(userService.model.currentUser.employeeID).then(function(data) {
         userService.model.opportunityFilters = data;
-        console.log('Filters');
-        console.log(userService.model.opportunityFilters);
       });
 
       // reset all chips and filters on page init
