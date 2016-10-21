@@ -439,6 +439,7 @@ module.exports = /*  @ngInject */
 
     function applyFilters() {
       var isTargetList = false;
+      filtersService.resetSort();
       if ($state.current.name === 'target-list-detail') isTargetList = true;
 
       loaderService.openLoader(true);
