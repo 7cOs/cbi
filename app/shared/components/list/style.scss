@@ -363,27 +363,27 @@ list {
 
 .flag-both {
   &:before {
-    background-image: url('../assets/img/icons/flags-both.svg');
+    background-image: url('../assets/img/icons/status-both.svg');
     background-position: 0 0;
     background-repeat: no-repeat;
-    background-size: 105%;
+    background-size: 30%;
     content: '';
-    height: 34px;
+    height: 45px;
     position: absolute;
     width: (100% / 12);
-    top: -12px;
-    left: 0;
+    top: 0;
+    left: 2%;
   }
 
   &.flag-green {
     &:before {
-      background-image: url('../assets/img/icons/flags-green.svg');
+      background-image: url('../assets/img/icons/status-featured.svg');
     }
   }
 
   &.flag-yellow {
     &:before {
-      background-image: url('../assets/img/icons/flags-yellow.svg');
+      background-image: url('../assets/img/icons/status-mandatory.svg');
     }
   }
 }
@@ -430,6 +430,10 @@ list {
 
 .negative {
   color: $red;
+}
+
+.vs-ya {
+  padding-left: 0;
 }
 
 .opportunity-header {
@@ -526,4 +530,14 @@ list {
   margin-top: 1.3em;
   padding-left: 2em;
   text-transform: uppercase;
+}
+
+.open-memo {
+  color: $blue;
+  font-size: 0.75em;
+  line-height: 3.5ex;
+
+  &:hover {
+    cursor: pointer;
+  }
 }

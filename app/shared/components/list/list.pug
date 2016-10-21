@@ -22,7 +22,6 @@
       button.btn-action(ng-disabled="list.selected < 1" ng-csv="list.flattenOpportunity(list.selected)" filename="{{list.getDate() | date:'yyyy-MM-dd'}}.csv" csv-header="list.csvHeader") Download
 
 button.icon.select-all(ng-disabled="list.isChecked()" ng-click="list.toggleSelectAllStores()") {{!list.isSelectAllActivated ? 'Select All' : 'Un-Select All'}}
-
 button.icon.narrow-icon.expand-all(ng-click="list.accordion.expandAll()" ng-disabled="list.allOpportunitiesExpanded()") Expand All
 button.icon.narrow-icon.collapse-all(ng-click="list.accordion.collapseAll()" ng-disabled="list.noOpportunitiesExpanded()") Collapse All
 
@@ -168,7 +167,7 @@ v-accordion.styled-list(multiple="" id="opportunities" control="list.accordion" 
               div.cell-parent.sub-item(row)
                 .regional-status(ng-if="product.regionalStatus")
                   div(class="{{product.regionalStatus}}")
-                .sub-item-select(column='1', ng-class="{'flag-yellow': product.featureTypeCode && !product.itemAuthorizationDesc, 'flag-green': !product.featureTypeCode && product.itemAuthorizationDesc, 'flag-both': product.featureTypeCode && product.itemAuthorizationDesc}")
+                .sub-item-select(column='1', ng-class="{'flag-yellow': product.featureTypeCode === null && product.itemAuthorizationDesc !== null, 'flag-green': product.featureTypeCode !== null && product.itemAuthorizationDesc === null, 'flag-both': product.featureTypeCode !== null && product.itemAuthorizationDesc !== null}").flag-both
                   md-checkbox(aria-label="Select Item" ng-click="list.selectOpportunity($event, opportunity, product, list.selected);" ng-checked="product.selected")
                 div(column='2').pad-cell
                   span.product-title {{::product.product.brand}} <br>
@@ -194,11 +193,17 @@ v-accordion.styled-list(multiple="" id="opportunities" control="list.accordion" 
                   div(column="4").pad-cell
                     label Last Depletion
                     span(ng-if='product.lastDepletionDate === null') &ndash;
-                    span(ng-if='product.lastDepletionDate !== null') {{::product.lastDepletionDate | timeAgo: 'daysOnly' }} <span class="depletion-date">{{::product.lastDepletionDate | date}}</span>
+                    span(ng-if='product.lastDepletionDate !== null') {{::product.lastDepletionDate | timeAgo: 'daysOnly' }} <span class="depletion-date">{{::product.lastDepletionDate | date:'MM/dd/yy'}}</span>
                   div(column="2")
                     label Depletions CYTD
                     span {{::product.depletionsCurrentYearToDate | number:0 }}
-                  div(column="2")
+                  div(column="1").vs-ya
                     label vs YA %
                     span(class='positive' ng-class="{'negative': product.depletionsCurrentYearToDateYAPercentNegative}") {{::product.depletionsCurrentYearToDateYAPercent}}
+                  div(column="2" ng-if="product.itemAuthorizationCode !== null")
+                    label Authorization Type
+                    span(ng-click="list.showOpportunityMemoModal()").open-memo {{::product.itemAuthorizationDesc}}
+                  div(column="2" ng-if="product.featureTypeCode !== null")
+                    label Feature Type
+                    span(ng-click="list.showOpportunityMemoModal()").open-memo {{::product.featureTypeDesc}}
 page
