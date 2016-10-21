@@ -304,7 +304,7 @@ module.exports = /*  @ngInject */
           'removable': true
         },
         set: function(val) {
-          this.chip.name = val;
+          this.chip.name = val.toUpperCase();
         }
       },
       'city': {
@@ -368,7 +368,8 @@ module.exports = /*  @ngInject */
       filterTypeEnum: filterTypeEnum,
       getChipsAssociatedWithFilter: getChipsAssociatedWithFilter,
       checkForOpportunityTypeFilter: checkForOpportunityTypeFilter,
-      getDefaultOpportunityTypeFilter: getDefaultOpportunityTypeFilter
+      getDefaultOpportunityTypeFilter: getDefaultOpportunityTypeFilter,
+      filterToChipModel: filterToChipModel
     };
 
     return service;

@@ -45,7 +45,7 @@ module.exports = /*  @ngInject */
       var chipsMappedFromFilter = [];
 
       chipsService.resetChipsFilters(chipsService.model);
-      if (ev.srcElement.nodeName === 'SPAN') {
+      if (ev && ev.srcElement.nodeName === 'SPAN') {
         ev.preventDefault();
       } else {
         var arr = decodeURIComponent(filter.filterString).split(',');
