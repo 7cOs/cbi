@@ -1,5 +1,5 @@
 describe('Unit: opportunitiesController', function() {
-  var scope, q, ctrl, userService;
+  var scope, q, ctrl, userService, chipsService;
 
   beforeEach(function() {
     angular.mock.module('ui.router');
@@ -7,10 +7,14 @@ describe('Unit: opportunitiesController', function() {
     angular.mock.module('cf.common.services');
     angular.mock.module('cf.modules.opportunities');
 
-    inject(function($rootScope, $controller, $q, opportunitiesService, _userService_) {
+    inject(function($rootScope, $controller, $q, opportunitiesService, _userService_, _chipsService_, _filtersService_) {
       scope = $rootScope.$new();
       q = $q;
       userService = _userService_;
+      chipsService = _chipsService_;
+      // Currently not required but will be in future test cases
+      // filtersService = _filtersService_;
+
       spyOn(userService, 'getOpportunityFilters').and.callFake(function() {
         var deferred = q.defer();
         return deferred.promise;
@@ -30,31 +34,111 @@ describe('Unit: opportunitiesController', function() {
     expect(typeof (ctrl.opportunitiesService)).toEqual('object');
   });
 
-  it('should have controller methods accessible', function() {
-    // expect(ctrl.accountQuerySearch).not.toBeUndefined();
-    // expect(ctrl.applyFilter).not.toBeUndefined();
-    // expect(ctrl.brandQuerySearch).not.toBeUndefined();
-    // expect(ctrl.distributorQuerySearch).not.toBeUndefined();
-  });
-
-  /* it('[addOpportunity], it should call opportunitiesService.createOpportunity()', function() {
-    // create service method spy
-    spyOn(ctrl.opportunitiesService, 'createOpportunity').and.callFake(function() {
-      var deferred = q.defer();
-      return deferred.promise;
+  describe('Apply saved report functionality', function() {
+    // By default opportunity type filter is added at the end
+    beforeEach(function() {
+      // chipsService.resetChipsFilters();
+      // filtersService.resetFilters();
     });
 
-    // run controller function
-    ctrl.addOpportunity();
+    function matchElementsInTwoArraysByFilterName(arr1, filteredArr) {
+      var results = arr1.filter(function(value) {
+        if (filteredArr.indexOf(value.name) !== -1) {
+          return true;
+        }
+      });
+      return results;
+    }
 
-    // assertions
-    expect(ctrl.opportunitiesService.createOpportunity).toHaveBeenCalled();
-    expect(ctrl.opportunitiesService.createOpportunity.calls.count()).toEqual(1);
-  });  */
+    it('Check if current filter is of type boolean', function() {
+      var boolFilter = {
+        'name': 'testFilter',
+        'filterString': 'myAccountsOnly%3Atrue'
+      };
+      ctrl.applySavedFilter(null, boolFilter);
+      var result = chipsService.model.filter(function(value) {
+        return value.name === chipsService.filterToChipModel.myAccountsOnly.name;
+      });
+      expect(result[0]).not.toBeUndefined();
+    });
 
-  it('[init], it should call userService.getOpportunityFilters on init', function() {
-    /* expect(ctrl.userService.getOpportunityFilters).toHaveBeenCalled();
-    expect(ctrl.userService.getOpportunityFilters.calls.count()).toEqual(1); */
+    it('Check if boolean filter is not added if false', function() {
+      var boolFilter = {
+        'name': 'testFilter',
+        'filterString': 'myAccountsOnly%3Afalse'
+      };
+      ctrl.applySavedFilter(null, boolFilter);
+      var result = chipsService.model.filter(function(value) {
+        return value.name === chipsService.filterToChipModel.myAccountsOnly.name;
+      });
+      expect(result[0]).toBeUndefined();
+    });
+
+    it('Check if text filters are added with correct names', function() {
+      var filterNames = ['DENVER'];
+      var textFilter = {
+        'name': 'testFilter',
+        'filterString': 'city%3ADENVER'
+      };
+      ctrl.applySavedFilter(null, textFilter);
+      var results = matchElementsInTwoArraysByFilterName(chipsService.model, filterNames);
+      expect(results.length).toEqual(filterNames.length);
+    });
+
+    it('Check if multiple text filters are added with correct names', function() {
+      var filterNames = ['DENVER', 'AK', 'AL', 'AZ'];
+      var textFilter = {
+        'name': 'testFilter',
+        'filterString': 'city%3ADENVER%2Cstate%3AAK%7CAL%7CAZ'
+      };
+      ctrl.applySavedFilter(null, textFilter);
+      var results = matchElementsInTwoArraysByFilterName(chipsService.model, filterNames);
+      expect(results.length).toEqual(filterNames.length);
+    });
+
+    it('Check if wrong text filters are not added', function() {
+      var filterNames = ['DENVER', 'AK', 'AL', 'AZ', 'CO'];
+      var textFilter = {
+        'name': 'testFilter',
+        'filterString': 'city%3ADENVER%2Cstate%3AAK%7CAL%7CAZ'
+      };
+      ctrl.applySavedFilter(null, textFilter);
+      var results = matchElementsInTwoArraysByFilterName(chipsService.model, filterNames);
+      expect(results.length).not.toEqual(filterNames.length);
+    });
+
+    it('Check if multi valued filters are added', function() {
+      var filterNames = ['Grocery', 'Drug', 'Liquor', 'Recreation', 'Convenience', 'Mass Merchandiser', 'Military, off-premise', 'Other'];
+      var multiValuedFilter = {
+        'name': 'testFilter',
+        'filterString': 'tradeChannel%3A05%7C03%7C02%7C53%7C07%7C08%7CMF%7C'
+      };
+      ctrl.applySavedFilter(null, multiValuedFilter);
+      var results = matchElementsInTwoArraysByFilterName(chipsService.model, filterNames);
+      expect(results.length).toEqual(filterNames.length);
+    });
+
+    it('Check if multi valued filters and boolean filters are added', function() {
+      var filterNames = ['My Accounts Only', 'Grocery', 'Drug', 'Liquor', 'Recreation', 'Convenience', 'Mass Merchandiser', 'Military, off-premise', 'Other'];
+      var multipleFilters = {
+        'name': 'testFilter',
+        'filterString': 'myAccountsOnly%3Atrue%2CtradeChannel%3A05%7C03%7C02%7C53%7C07%7C08%7CMF%7C'
+      };
+      ctrl.applySavedFilter(null, multipleFilters);
+      var results = matchElementsInTwoArraysByFilterName(chipsService.model, filterNames);
+      expect(results.length).toEqual(filterNames.length);
+    });
+
+    it('Check if multi valued filters,boolean filters and text filters are added', function() {
+      var filterNames = ['My Accounts Only', 'Grocery', 'Drug', 'Liquor', 'Recreation', 'Convenience', 'Mass Merchandiser', 'Military, off-premise', 'Other', 'DENVER', 'AK', 'AL', 'AZ'];
+      var multipleFilters = {
+        'name': 'testFilter',
+        'filterString': 'myAccountsOnly%3Atrue%2CtradeChannel%3A05%7C03%7C02%7C53%7C07%7C08%7CMF%7C%2Ccity%3ADENVER%2Cstate%3AAK%7CAL%7CAZ'
+      };
+      ctrl.applySavedFilter(null, multipleFilters);
+      var results = matchElementsInTwoArraysByFilterName(chipsService.model, filterNames);
+      expect(results.length).toEqual(filterNames.length);
+    });
   });
 
 });

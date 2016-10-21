@@ -146,7 +146,6 @@ module.exports = /*  @ngInject */
     function saveFilter() {
       loaderService.openLoader(true);
       userService.saveOpportunityFilter().then(function(data) {
-        // push new filter to filter dropdown
         userService.model.opportunityFilters.unshift({
           filterString: encodeURIComponent(filtersService.model.appliedFilter.appliedFilter),
           name: filtersService.model.newServiceName

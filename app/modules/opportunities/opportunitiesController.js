@@ -41,27 +41,45 @@ module.exports = /*  @ngInject */
 
     function applySavedFilter(ev, filter) {
       var resetDefaultAuthorizationFlag = true;
+      var applyDefaultOpportunityTypeFilter = true;
+      var chipsMappedFromFilter = [];
+
       chipsService.resetChipsFilters(chipsService.model);
-      if (ev.srcElement.nodeName === 'SPAN') {
+      if (ev && ev.srcElement.nodeName === 'SPAN') {
         ev.preventDefault();
       } else {
-        // set filters based on query string
         var arr = decodeURIComponent(filter.filterString).split(',');
 
         for (var i = 0; i < arr.length; i++) {
           if (arr[i].length > 0) {
             var prop = arr[i].split(':');
-            filtersService.model.selected[prop[0]] = prop[1];
-            if (prop[0] === 'productType') {
+            filtersService.updateSelectedFilterModel(prop);
+
+            if (filtersService.checkForAuthorizationFlag(prop[0])) {
               resetDefaultAuthorizationFlag = false;
+            }
+
+            if (chipsService.checkForOpportunityTypeFilter(prop[0])) {
+              applyDefaultOpportunityTypeFilter = false;
+            }
+
+            var matchedChips = chipsService.getChipsAssociatedWithFilter(prop);
+            if (matchedChips) {
+              Array.prototype.push.apply(chipsMappedFromFilter, matchedChips);
             }
           }
         }
-
         // By default the authorization flag is set on filtersService.model. We are just checking if there is a productType filter in the filter string. If not we need to reset productType array
         if (resetDefaultAuthorizationFlag) {
           filtersService.model.selected.productType = [];
         }
+
+        // The filter string does not contain an opportunity type key if 'All Types' is selected (default) under opportunity type
+        if (applyDefaultOpportunityTypeFilter) {
+          chipsMappedFromFilter.push(chipsService.getDefaultOpportunityTypeFilter());
+        }
+
+        chipsService.addChipsArray(chipsMappedFromFilter);
         chipsService.applyFilters();
         filtersService.model.selected.currentFilter = filter.id;
       }
