@@ -515,7 +515,7 @@ module.exports = /*  @ngInject */
     }
 
     /**
-     * This function returns a chip object if the value of the boolean filter is true
+     * This function returns chips objects for all the values seperated by |
      * @param {String} filterName Name of the filter
      * @param {String} filterValue Value of the filter sent from the query string
      * @returns {Object} Returns a chip object for the filter
