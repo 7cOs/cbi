@@ -101,6 +101,28 @@ module.exports = /*  @ngInject */
       'additionalNotes': 'New Mandates & Beverage Menu Listings: Corona Extra, Corona Light, Pacifico, Coronita.  CoronaRita featured in Margarita section of menu. Inclusion in website feature menu.'
     }];
 
+    // Custom Headers for CSV export
+    vm.csvHeader = [
+      'Distributor',
+      'TDLinx',
+      'Store Name',
+      'Address',
+      'City',
+      'ZIP',
+      'Current YTD Store Volume',
+      'Last YTD Store Volume',
+      'Volume Trend for Store CYTD vs CYTD Last Year',
+      'Segmentation',
+      'Opportunity Type',
+      'Product',
+      'Item Authorization',
+      'Chain Mandate',
+      'On Feature',
+      'Opportunity Rationale',
+      'Opportunity Status',
+      'Opportunity Predicted Impact'
+    ];
+
     init();
 
     // **************
@@ -348,22 +370,34 @@ module.exports = /*  @ngInject */
 
     function flattenOpportunity(obj) {
       var data = [];
+
       angular.forEach(obj, function(value, key) {
         var item = {};
+        var csvItem = {};
         angular.copy(value, item);
-        item.productName = item.product.name;
-        item.TDLinx = item.product.id;
-        item.segmentation = item.store.segmentation;
-        item.velocity = item.store.velocity;
-        item.velocityYA = item.store.velocityYA;
-        item.storeName = item.store.name;
-        item.storeAddress = item.store.address;
-        delete item.brands;
-        delete item.store;
-        delete item.groupedOpportunities;
-        delete item.product;
-        data.push(item);
+        csvItem.storeDistributor = item.store.distributors[0];
+        csvItem.TDLinx = item.product.id;
+        csvItem.storeName = item.store.name;
+        csvItem.storeAddress = item.store.streetAddress;
+        csvItem.storeCity = item.store.city;
+        csvItem.storeZip = item.store.zip;
+        csvItem.storeDepletionsCTD = item.store.depletionsCurrentYearToDate;
+        csvItem.storeDepletionsCTDYA = item.store.depletionsCurrentYearToDateYA;
+        csvItem.storeDepletionsCTDYAPercent = item.store.depletionsCurrentYearToDateYAPercent;
+        csvItem.storeSegmentation = item.store.segmentation;
+        csvItem.opportunityType = item.type;
+        csvItem.productName = item.product.name;
+        csvItem.itemAuthorization = item.isItemAuthorization;
+        csvItem.chainMandate = item.isChainMandate;
+        csvItem.onFeature = item.isOnFeature;
+        csvItem.opportunityRationale = item.rationale;
+        csvItem.opportunityStatus = item.status;
+        csvItem.impactPredicted = item.impactDescription;
+
+        data.push(csvItem);
+
       });
+
       return data;
     }
 
