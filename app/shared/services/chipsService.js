@@ -681,7 +681,7 @@ module.exports = /*  @ngInject */
             if (chip.type !== 'contact') filtersService.model.filtersValidCount--;
             break;
           } else if (chip.type === 'opportunityType') {
-            index = arr.indexOf(chip.id);
+            index = arr.indexOf(chip.name);
             arr.splice(index, 1);
             if (arr.length === 0) {
               addChip('All Types', 'opportunityType', false, false);
