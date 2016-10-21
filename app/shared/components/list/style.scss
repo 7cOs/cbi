@@ -405,39 +405,6 @@ list {
   color: $red;
 }
 
-.regional-status {
-  left: 50px;
-  height: 20px;
-  position: absolute;
-  top: 0;
-  width: 20px;
-
-  .featured,
-  .mandatory,
-  .both {
-    display: block;
-    width: 20px;
-    height: 20px;
-  }
-
-  .featured {
-    background: url('../assets/img/icons/status-featured.svg') 0 0 no-repeat;
-  }
-
-  .mandatory {
-    background: url('../assets/img/icons/status-mandatory.svg') 0 0 no-repeat;
-  }
-
-  .both {
-    background: url('../assets/img/icons/status-both.svg') 0 0 no-repeat;
-  }
-}
-
-.mandate-icon {
-  top: 81px;
-  left: -5px;
-}
-
 .opportunity-header {
   margin: 0.67em 0;
 
