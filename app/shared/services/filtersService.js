@@ -167,7 +167,9 @@ module.exports = /*  @ngInject */
       addSortFilter: addSortFilter,
       disableFilters: disableFilters,
       getAppliedFilters: getAppliedFilters,
-      resetFilters: resetFilters
+      resetFilters: resetFilters,
+      updateSelectedFilterModel: updateSelectedFilterModel,
+      checkForAuthorizationFlag: checkForAuthorizationFlag
     };
 
     return service;
@@ -183,6 +185,26 @@ module.exports = /*  @ngInject */
       } else {
         service.model.appliedFilter.sort.sortArr = []; // Comment out this line to sort mulitple fields
         service.model.appliedFilter.sort.sortArr.push({str: name, asc: true});
+      }
+    }
+
+    function checkForAuthorizationFlag(propertyName) {
+      return propertyName === 'productType';
+    }
+
+    function updateSelectedFilterModel(filterProp) {
+      var propName = filterProp[0];
+      var propValue = filterProp[1];
+      var filterSelectionModel = model.selected;
+      if (filterSelectionModel.hasOwnProperty(propName)) {
+        if (Array.isArray(filterSelectionModel[propName])) {
+          var propValuesSplit = propValue.split('|');
+          angular.forEach(propValuesSplit, function (val, key) {
+            filterSelectionModel[propName].push(val);
+          });
+        } else {
+          filterSelectionModel[propName] = propValue;
+        }
       }
     }
 

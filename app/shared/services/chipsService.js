@@ -69,6 +69,12 @@ module.exports = /*  @ngInject */
         }
       },
       'opportunityType': {
+        'ALL_TYPES': {
+          'name': 'All Types',
+          'type': 'opportunityType',
+          'applied': false,
+          'removable': false
+        },
         'NON_BUY': {
           'name': 'Non-Buy',
           'type': 'opportunityType',
@@ -329,19 +335,24 @@ module.exports = /*  @ngInject */
       }
     };
     var model = [];
+
+    // Enums for filter types
     var filterTypeEnum = {
       booleanFilter: 1,
       multiValuedFilter: 2,
       textFilter: 3,
       idBasedFilters: 4
     };
+
+    // All filters which have values seperated by '|' are added to this array
     var multiValuedFilters =
     ['opportunityType', 'premiseType', 'impact', 'opportunityStatus', 'segmentation', 'productType', 'tradeChannel'];
+
+    // All filters which have a chip model and just need the name property in the chip replaced are placed here
     var textSearchFilters = ['state', 'city', 'zipCode'];
 
     var service = {
       model: model,
-      filterToChipModel: filterToChipModel,
       addAutocompleteChip: addAutocompleteChip,
       addChip: addChip,
       removeChip: removeChip,
@@ -352,15 +363,12 @@ module.exports = /*  @ngInject */
       applyFilterArr: applyFilterArr,
       applyFilterMulti: applyFilterMulti,
       applyStatesFilter: applyStatesFilter,
-      isBooleanFilter: isBooleanFilter,
-      returnChipForBooleanFilter: returnChipForBooleanFilter,
-      isMultipleValuedFilter: isMultipleValuedFilter,
-      returnChipForMultipleValuedFilter: returnChipForMultipleValuedFilter,
-      isTextSearchFilter: isTextSearchFilter,
-      returnChipForTextSearchFilter: returnChipForTextSearchFilter,
       getTypeOfFilter: getTypeOfFilter,
       addChipsArray: addChipsArray,
-      filterTypeEnum: filterTypeEnum
+      filterTypeEnum: filterTypeEnum,
+      getChipsAssociatedWithFilter: getChipsAssociatedWithFilter,
+      checkForOpportunityTypeFilter: checkForOpportunityTypeFilter,
+      getDefaultOpportunityTypeFilter: getDefaultOpportunityTypeFilter
     };
 
     return service;
@@ -461,12 +469,33 @@ module.exports = /*  @ngInject */
       }
     }
 
-    // Chips functionality
-    //
+    // Filter model to Chips model functionality
+    /**
+     * Check if the current filter is of type 'opportunityType'
+     * @param {String} propName Name of the filter
+     * @returns {Boolean} Returns true or false
+     */
+
+    function checkForOpportunityTypeFilter(propName) {
+      return propName === 'opportunityType';
+    }
+
+    /**
+     * Check if the current filter is a Boolean filter ex accountOnly
+     * @param {String} filterName Name of the filter
+     * @param {String} filterValue Value of the filter sent from the query string
+     * @returns {Boolean} Returns true or false
+     */
     function isBooleanFilter(filterName, filterValue) {
       return filterValue === 'true' ||  filterValue === 'false';
     }
 
+    /**
+     * This function returns a chip object if the value of the boolean filter is true
+     * @param {String} filterName Name of the filter
+     * @param {String} filterValue Value of the filter sent from the query string
+     * @returns {Object} Returns a chip object for the filter
+     */
     function returnChipForBooleanFilter(filterName, filterValue) {
       var chip = null;
       if (isPropertyInObject(filterToChipModel, filterName) && filterValue === 'true') {
@@ -475,10 +504,21 @@ module.exports = /*  @ngInject */
       return chip;
     }
 
+    /**
+     * This function checks if the filtervalues are seperated by '|'. Check multiValuedFilters array for filters under this category
+     * @param {String} filterName Name of the filter
+     * @returns {Boolean} Returns true or false
+     */
     function isMultipleValuedFilter(filterName) {
       return multiValuedFilters.indexOf(filterName) !== -1 && isPropertyInObject(filterToChipModel, filterName);
     }
 
+    /**
+     * This function returns a chip object if the value of the boolean filter is true
+     * @param {String} filterName Name of the filter
+     * @param {String} filterValue Value of the filter sent from the query string
+     * @returns {Object} Returns a chip object for the filter
+     */
     function returnChipForMultipleValuedFilter(filterName, filterValue) {
       var chips = [];
       var arrFilterValues = filterValue.split('|');
@@ -490,10 +530,22 @@ module.exports = /*  @ngInject */
       return chips;
     }
 
+    /**
+     *  Check textSearchFilter array for filters under this category. These filters just have their name replaced in the the matching chip in filterToChipModel
+     * @param {String} filterName Name of the filter
+     * @param {String} filterValue Value of the filter sent from the query string
+     * @returns {Object} Returns a chip object for the filter
+     */
     function isTextSearchFilter(filterName) {
       return textSearchFilters.indexOf(filterName) !== -1 && isPropertyInObject(filterToChipModel, filterName);
     }
 
+    /**
+     * This function returns a chip object for filters in
+     * @param {String} filterName Name of the filter
+     * @param {String} filterValue Value of the filter sent from the query string
+     * @returns {Object} Returns a chip object for the filter
+     */
     function returnChipForTextSearchFilter(filterName, filterValue) {
       var chips = [];
       var arrFilterValues = filterValue.split('|');
@@ -504,6 +556,12 @@ module.exports = /*  @ngInject */
       return chips;
     }
 
+    /**
+     * Identifies the type of Filter. filterTypeEnum has hardcoded values for specific filter types
+     * @param {String} filterName Name of the filter
+     * @param {String} filterValue Value of the filter sent from the query string
+     * @returns {Object} Returns a value indicating the type of filter.
+     */
     function getTypeOfFilter(filterName, filterValue) {
       if (isBooleanFilter(filterName, filterValue)) {
         return filterTypeEnum.booleanFilter;
@@ -516,9 +574,41 @@ module.exports = /*  @ngInject */
       }
     }
 
-    // function returnChipForOtherFilters() {
-    //
-    // }
+    /**
+     * This function returns the matching chip for the filter 'All Types'
+     * @returns {Object} Returns the chip for opportunity type 'All Types'
+     */
+    function getDefaultOpportunityTypeFilter() {
+      return angular.copy(filterToChipModel.opportunityType.ALL_TYPES);
+    }
+
+    /**
+     * Given a filter property. This function takes care of identifying the filter type and returning the matching chip if found
+     * @returns {Array} matchedChips An array of muliple chips or one chip matching the filter property
+     */
+    function getChipsAssociatedWithFilter(filterProp) {
+      var matchedChips = [];
+      var filterType = getTypeOfFilter(filterProp[0], filterProp[1]);
+
+      switch (filterType) {
+        case filterTypeEnum.booleanFilter:
+          var chipObj = returnChipForBooleanFilter(filterProp[0], filterProp[1]);
+          if (chipObj) {
+            matchedChips.push(chipObj);
+          }
+          break;
+        case filterTypeEnum.multiValuedFilter:
+          matchedChips = returnChipForMultipleValuedFilter(filterProp[0], filterProp[1]);
+          break;
+        case filterTypeEnum.textFilter:
+          matchedChips = returnChipForTextSearchFilter(filterProp[0], filterProp[1]);
+          break;
+        case filterTypeEnum.idBasedFilters:
+        // TODO all filters that require an api call are implemented here
+          break;
+      }
+      return matchedChips;
+    }
 
     /** TODO We need to create a Utility service for these functions
      * @desc Function returns true if property exists inside the object

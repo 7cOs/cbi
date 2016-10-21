@@ -41,23 +41,29 @@ module.exports = /*  @ngInject */
 
     function applySavedFilter(ev, filter) {
       var resetDefaultAuthorizationFlag = true;
+      var applyDefaultOpportunityTypeFilter = true;
       var chipsMappedFromFilter = [];
+
       chipsService.resetChipsFilters(chipsService.model);
-      console.log('Filter string' + filter.filterString);
       if (ev.srcElement.nodeName === 'SPAN') {
         ev.preventDefault();
       } else {
-        // set filters based on query string
         var arr = decodeURIComponent(filter.filterString).split(',');
 
         for (var i = 0; i < arr.length; i++) {
           if (arr[i].length > 0) {
             var prop = arr[i].split(':');
-            filtersService.model.selected[prop[0]] = prop[1];
-            if (prop[0] === 'productType') {
+            filtersService.updateSelectedFilterModel(prop);
+
+            if (filtersService.checkForAuthorizationFlag(prop[0])) {
               resetDefaultAuthorizationFlag = false;
             }
-            var matchedChips = getChipsAssociatedWithFilter(prop);
+            console.log(chipsService.checkForOpportunityTypeFilter(prop[0]));
+            if (chipsService.checkForOpportunityTypeFilter(prop[0])) {
+              applyDefaultOpportunityTypeFilter = false;
+            }
+
+            var matchedChips = chipsService.getChipsAssociatedWithFilter(prop);
             if (matchedChips) {
               Array.prototype.push.apply(chipsMappedFromFilter, matchedChips);
             }
@@ -67,34 +73,16 @@ module.exports = /*  @ngInject */
         if (resetDefaultAuthorizationFlag) {
           filtersService.model.selected.productType = [];
         }
+
+        // The filter string does not contain an opportunity type key if 'All Types' is selected (default) under opportunity type
+        if (applyDefaultOpportunityTypeFilter) {
+          chipsMappedFromFilter.push(chipsService.getDefaultOpportunityTypeFilter());
+        }
+
         chipsService.addChipsArray(chipsMappedFromFilter);
         chipsService.applyFilters();
         filtersService.model.selected.currentFilter = filter.id;
       }
-    }
-
-    function getChipsAssociatedWithFilter(prop) {
-      var matchedChips = [];
-      var filterType = chipsService.getTypeOfFilter(prop[0], prop[1]);
-
-      switch (filterType) {
-        case chipsService.filterTypeEnum.booleanFilter:
-          var chipObj = chipsService.returnChipForBooleanFilter(prop[0], prop[1]);
-          if (chipObj) {
-            matchedChips.push(chipObj);
-          }
-          break;
-        case chipsService.filterTypeEnum.multiValuedFilter:
-          matchedChips = chipsService.returnChipForMultipleValuedFilter(prop[0], prop[1]);
-          break;
-        case chipsService.filterTypeEnum.textFilter:
-          matchedChips = chipsService.returnChipForTextSearchFilter(prop[0], prop[1]);
-          break;
-        case chipsService.filterTypeEnum.idBasedFilters:
-        // TODO all filters that require an api call are implemented here
-          break;
-      }
-      return matchedChips;
     }
 
     function closeModal() {
