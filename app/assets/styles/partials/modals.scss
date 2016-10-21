@@ -429,8 +429,8 @@ md-dialog {
   }
 }
 
-.corporate-memo {
-  width: 600px;
+.opportunity-memo {
+  width: 550px;
 
   p {
     text-align: left;
@@ -441,24 +441,49 @@ md-dialog {
     text-align: left;
   }
 
-  .date,
-  .price-info {
-    float: left;
+  .regional-status {
+    left: 50px;
+    height: 20px;
+    position: absolute;
+    top: 0;
+    width: 20px;
+
+    .featured,
+    .LP,
+    .LT,
+    .HH,
+    .BM {
+      background: url('../assets/img/icons/status-featured.svg') 0 0 no-repeat;
+    }
+
+    .mandatory,
+    .OS,
+    .CM {
+      background: url('../assets/img/icons/status-mandatory.svg') 0 0 no-repeat;
+    }
+
+    .both {
+      background: url('../assets/img/icons/status-both.svg') 0 0 no-repeat;
+    }
   }
 
-  .start-end,
-  .on-menu {
-    float: right;
+  .mandate-icon {
+    top: 81px;
+    left: -5px;
+
+    > div {
+      display: block;
+      width: 30px;
+      height: 30px;
+    }
   }
 
-  .price-info {
-    float: left;
+  .price-menu {
+    margin-top: 1.5ex;
   }
 
-  .date,
-  .start-end,
-  .price-info {
-    display: inline-block;
+  .memo-notes {
+    margin-top: 2ex;
   }
 }
 

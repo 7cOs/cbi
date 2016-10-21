@@ -72,8 +72,8 @@ describe('Unit: list controller', function() {
     expect(ctrl.selectOpportunity).not.toBeUndefined();
     expect(typeof (ctrl.selectOpportunity)).toEqual('function');
 
-    expect(ctrl.showCorporateMemoModal).not.toBeUndefined();
-    expect(typeof (ctrl.showCorporateMemoModal)).toEqual('function');
+    expect(ctrl.showOpportunityMemoModal).not.toBeUndefined();
+    expect(typeof (ctrl.showOpportunityMemoModal)).toEqual('function');
 
     expect(ctrl.submitFeedback).not.toBeUndefined();
     expect(typeof (ctrl.submitFeedback)).toEqual('function');

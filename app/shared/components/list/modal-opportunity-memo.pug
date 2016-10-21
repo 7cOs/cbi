@@ -1,0 +1,40 @@
+.modal.opportunity-memo
+  .title
+    a.hide-row(ng-click="list.closeModal()")
+    h4 {{list.features[0].typeDescription}}
+  div.modal-form.clearfix
+    div(column="12").regional-status.mandate-icon
+      div(ng-class="list.features[0].typeCode")
+    div(row).clearfix
+      div(column="6")
+        div(column="6")
+          label Start date
+          h3(ng-if="list.features[0].featurePeriodStartDate === null || list.features[0].setPeriodStartDate === null") &ndash;
+          h3(ng-if="list.features[0].featurePeriodStartDate !== undefined") {{list.features[0].featurePeriodStartDate | date:'MM/dd/yy'}}
+          h3(ng-if="list.features[0].setPeriodStartDate !== undefined") {{list.features[0].setPeriodStartDate | date:'MM/dd/yy'}}
+        div(column="6")
+          label End date
+          h3(ng-if="list.features[0].featurePeriodEndDate === null || list.features[0].setPeriodEndDate === null") &ndash;
+          h3(ng-if="list.features[0].featurePeriodEndDate !== undefined") {{list.features[0].featurePeriodEndDate | date:'MM/dd/yy'}}
+          h3(ng-if="list.features[0].setPeriodEndDate !== undefined") {{list.features[0].setPeriodEndDate | date:'MM/dd/yy'}}
+      div(column="6")
+        div(column="6")
+          label Reset Start
+          h3(ng-if="list.features[0].resetPeriodStartDate === null") &ndash;
+          h3(ng-if="list.features[0].resetPeriodStartDate !== null") {{list.features[0].resetPeriodStartDate | date:'MM/dd/yy'}}
+        div(column="6")
+          label Reset End
+          h3(ng-if="list.features[0].resetPeriodEndDate === null") &ndash;
+          h3(ng-if="list.features[0].resetPeriodEndDate !== null") {{list.features[0].resetPeriodEndDate | date:'MM/dd/yy'}}
+    div(row ng-if="list.features[0].price !== undefined").clearfix.price-menu
+      div(column="6")
+        div(column="6")
+          label Price
+          h3 {{list.features[0].price | currency}}
+        div(column="6")
+          label On menu
+          h3 {{list.features[0].onMenuFlag}}
+    div(column="12").memo-notes
+      label Additional notes
+      p(ng-if="list.features[0].additionalNotes === null") &ndash;
+      p(ng-if="list.features[0].additionalNotes !== null") {{list.features[0].additionalNotes}}

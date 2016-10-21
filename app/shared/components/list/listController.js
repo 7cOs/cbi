@@ -50,7 +50,7 @@ module.exports = /*  @ngInject */
     vm.shareOpportunity = shareOpportunity;
     vm.sortBy = sortBy;
     vm.selectOpportunity = selectOpportunity;
-    vm.showCorporateMemoModal = showCorporateMemoModal;
+    vm.showOpportunityMemoModal = showOpportunityMemoModal;
     vm.submitFeedback = submitFeedback;
     vm.cancelFeedback = cancelFeedback;
     vm.allOpportunitiesExpanded = allOpportunitiesExpanded;
@@ -66,18 +66,40 @@ module.exports = /*  @ngInject */
     vm.removeSharedCollaborator = removeSharedCollaborator;
     vm.impactSort = impactSort;
 
-    // Mock Data for memo modal
-    vm.limitedTime = {
-      title: 'Limited Time Only',
-      startDate: '07/09/16',
-      endDate: '08/31/16',
-      resetStart: 'None',
-      resetEnd: 'None',
-      price: 12.99,
-      onMenu: 'Yes',
-      notes: 'A Home brew from a miller light starts reminiscing about a lost buzz, because a childlike bottle learns a hard lesson from a Sierra Nevada Pale Ale. When you see some Sam Adams for a spudgun, it means that a bill behind the Hops Alligator Ale daydreams. The Long Trail Ale around a broken bottle seeks an Amarillo Pale Ale over a sake bomb.',
-      mandateIcon: 'featured'
-    };
+    // Mock Data for: Item Authorizations per Store
+    vm.itemAuthorizations = [{
+      'storeCode': '5586656',
+      'authorizationCode': 'a3Qm0000000EebdEAC',
+      'brandCode': '228',
+      'brandName': 'CORONA EXTRA',
+      'packageID': '228-539-100',
+      'packageName': 'CORONA EXTRA-7 OUNCE (BEER)-BOTTLE',
+      'typeCode': 'CM',
+      'typeDescription': 'Corporate Mandate',
+      'setPeriodStartDate': null,
+      'setPeriodEndDate': '2016-12-12',
+      'resetPeriodStartDate': '2016-08-09',
+      'resetPeriodEndDate': '2016-08-31',
+      'onMenuFlag': 'Y',
+      'additionalNotes': 'A Home brew from a miller light starts reminiscing about a lost buzz, because a childlike bottle learns a hard lesson from a Sierra Nevada Pale Ale. When you see some Sam Adams for a spudgun, it means that a bill behind the Hops Alligator Ale daydreams. The Long Trail Ale around a broken bottle seeks an Amarillo Pale Ale over a sake bomb.'
+    }];
+
+    // Mock Data for: Features per Store
+    vm.features = [{
+      'storeCode': '5597701',
+      'featureCode': 'a3Qm0000000EeYWEA0',
+      'packageID': '229-393-100',
+      'packageName': 'CORONA LIGHT-23.5X44-BOTTLE',
+      'typeCode': 'LP',
+      'typeDescription': 'Every Day Low Price',
+      'featurePeriodStartDate': '2015-08-04',
+      'featurePeriodEndDate': '2016-07-31',
+      'resetPeriodStartDate': null,
+      'resetPeriodEndDate': null,
+      'price': 0,
+      'onMenuFlag': 'Y',
+      'additionalNotes': 'New Mandates & Beverage Menu Listings: Corona Extra, Corona Light, Pacifico, Coronita.  CoronaRita featured in Margarita section of menu. Inclusion in website feature menu.'
+    }];
 
     init();
 
@@ -262,14 +284,14 @@ module.exports = /*  @ngInject */
       });
     }
 
-    function showCorporateMemoModal(ev) {
+    function showOpportunityMemoModal(ev) {
       var parentEl = angular.element(document.body);
       $mdDialog.show({
         clickOutsideToClose: true,
         parent: parentEl,
         scope: $scope.$new(),
         targetEvent: ev,
-        templateUrl: './app/shared/components/list/modal-corporate-memo.html'
+        templateUrl: './app/shared/components/list/modal-opportunity-memo.html'
       });
     }
 
