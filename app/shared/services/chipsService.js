@@ -786,8 +786,6 @@ module.exports = /*  @ngInject */
       }
       filtersService.model[filter] = '';
       filtersService.disableFilters(false, false, true, true);
-      console.log('Current Srvice model');
-      console.log(service.model);
     }
 
     /**
