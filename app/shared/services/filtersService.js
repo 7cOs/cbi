@@ -14,13 +14,12 @@ module.exports = /*  @ngInject */
           totalStores: 0
         },
         sort: {
-          sortArr: [
-            {
-              str: 'segmentation',
-              asc: true
-            }
-          ]
+          sortArr: []
         }
+      },
+      defaultSort: {
+        str: 'segmentation',
+        asc: true
       },
       subaccount: [],
       masterSKU: '',
@@ -169,7 +168,8 @@ module.exports = /*  @ngInject */
       getAppliedFilters: getAppliedFilters,
       resetFilters: resetFilters,
       updateSelectedFilterModel: updateSelectedFilterModel,
-      checkForAuthorizationFlag: checkForAuthorizationFlag
+      checkForAuthorizationFlag: checkForAuthorizationFlag,
+      resetSort: resetSort
     };
 
     return service;
@@ -245,6 +245,12 @@ module.exports = /*  @ngInject */
       service.model.filtersApplied = false;
       service.model.filtersDefault = true;
       service.model.filtersValidCount = 0;
+    }
+
+    function resetSort() {
+      service.model.appliedFilter.sort.sortArr = [];
+      service.model.appliedFilter.sort.sortArr.push(
+        angular.copy(service.model.defaultSort));
     }
 
     function resetModel() {
