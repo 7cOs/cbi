@@ -16,7 +16,7 @@ module.exports = /*  @ngInject */
         sort: {
           sortArr: [
             {
-              str: 'store',
+              str: 'segmentation',
               asc: true
             }
           ]
