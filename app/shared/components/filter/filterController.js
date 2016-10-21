@@ -147,6 +147,7 @@ module.exports = /*  @ngInject */
       loaderService.openLoader(true);
       userService.saveOpportunityFilter().then(function(data) {
         // push new filter to filter dropdown
+        console.log('QueryParams1' + filtersService.model.appliedFilter);
         console.log('QueryParams' + filtersService.model.appliedFilter.appliedFilter);
         userService.model.opportunityFilters.unshift({
           filterString: encodeURIComponent(filtersService.model.appliedFilter.appliedFilter),

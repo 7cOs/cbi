@@ -43,12 +43,12 @@ module.exports = /*  @ngInject */
       var resetDefaultAuthorizationFlag = true;
       var chipsMappedFromFilter = [];
       chipsService.resetChipsFilters(chipsService.model);
+      console.log('Filter string' + filter.filterString);
       if (ev.srcElement.nodeName === 'SPAN') {
         ev.preventDefault();
       } else {
         // set filters based on query string
         var arr = decodeURIComponent(filter.filterString).split(',');
-        chipsService.initFilterToChipModel();
 
         for (var i = 0; i < arr.length; i++) {
           if (arr[i].length > 0) {
@@ -63,8 +63,6 @@ module.exports = /*  @ngInject */
             }
           }
         }
-        console.log('Overall MATCHED CHIPS');
-        console.log(chipsMappedFromFilter);
         // By default the authorization flag is set on filtersService.model. We are just checking if there is a productType filter in the filter string. If not we need to reset productType array
         if (resetDefaultAuthorizationFlag) {
           filtersService.model.selected.productType = [];
@@ -76,34 +74,26 @@ module.exports = /*  @ngInject */
     }
 
     function getChipsAssociatedWithFilter(prop) {
-      console.log('current property');
-      console.log(prop);
       var matchedChips = [];
-      var isBooleanFilter = chipsService.isBooleanFilter(prop[0], prop[1]);
-      if (isBooleanFilter) {
-        var chipObj = chipsService.returnChipForBooleanFilter(prop[0], prop[1]);
-        if (chipObj) {
-          matchedChips.push(chipObj);
-        }
-      } else {
-        var isMultipleValuedFilter = chipsService.isMultipleValuedFilter(prop[0]);
-        if (isMultipleValuedFilter) {
-          var chipsMatched = chipsService.returnChipForMultipleValuedFilter(prop[0], prop[1]);
-          if (chipsMatched) {
-            Array.prototype.push.apply(matchedChips, chipsMatched);
+      var filterType = chipsService.getTypeOfFilter(prop[0], prop[1]);
+
+      switch (filterType) {
+        case chipsService.filterTypeEnum.booleanFilter:
+          var chipObj = chipsService.returnChipForBooleanFilter(prop[0], prop[1]);
+          if (chipObj) {
+            matchedChips.push(chipObj);
           }
-        } else {
-          var isTextSearchFilter = chipsService.isTextSearchFilter(prop[0]);
-          if (isTextSearchFilter) {
-            var chips = chipsService.returnChipForTextSearchFilter(prop[0], prop[1]);
-            if (chips) {
-              Array.prototype.push.apply(matchedChips, chips);
-            }
-          }
-        }
+          break;
+        case chipsService.filterTypeEnum.multiValuedFilter:
+          matchedChips = chipsService.returnChipForMultipleValuedFilter(prop[0], prop[1]);
+          break;
+        case chipsService.filterTypeEnum.textFilter:
+          matchedChips = chipsService.returnChipForTextSearchFilter(prop[0], prop[1]);
+          break;
+        case chipsService.filterTypeEnum.idBasedFilters:
+        // TODO all filters that require an api call are implemented here
+          break;
       }
-      console.log('Matched chips');
-      console.log(matchedChips);
       return matchedChips;
     }
 

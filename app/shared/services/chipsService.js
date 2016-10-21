@@ -29,8 +29,7 @@ module.exports = /*  @ngInject */
         'removable': false
       }
     ];
-
-    var filterToChipTemplate = {
+    var filterToChipModel = {
       'premiseType': {
         'on': {
           'name': 'On-Premise',
@@ -255,6 +254,14 @@ module.exports = /*  @ngInject */
           'applied': false,
           'removable': true,
           'tradeChannel': true
+        },
+        '': {
+          'name': 'Other',
+          'type': 'tradeChannel',
+          'search': true,
+          'applied': false,
+          'removable': true,
+          'tradeChannel': true
         }
       },
       'productType': {
@@ -307,7 +314,7 @@ module.exports = /*  @ngInject */
           this.chip.name = val;
         }
       },
-      'zipcode': {
+      'zipCode': {
         'chip': {
           'name': '80203',
           'type': 'zipCode',
@@ -322,7 +329,15 @@ module.exports = /*  @ngInject */
       }
     };
     var model = [];
-    var filterToChipModel = [];
+    var filterTypeEnum = {
+      booleanFilter: 1,
+      multiValuedFilter: 2,
+      textFilter: 3,
+      idBasedFilters: 4
+    };
+    var multiValuedFilters =
+    ['opportunityType', 'premiseType', 'impact', 'opportunityStatus', 'segmentation', 'productType', 'tradeChannel'];
+    var textSearchFilters = ['state', 'city', 'zipCode'];
 
     var service = {
       model: model,
@@ -343,8 +358,9 @@ module.exports = /*  @ngInject */
       returnChipForMultipleValuedFilter: returnChipForMultipleValuedFilter,
       isTextSearchFilter: isTextSearchFilter,
       returnChipForTextSearchFilter: returnChipForTextSearchFilter,
-      initFilterToChipModel: initFilterToChipModel,
-      addChipsArray: addChipsArray
+      getTypeOfFilter: getTypeOfFilter,
+      addChipsArray: addChipsArray,
+      filterTypeEnum: filterTypeEnum
     };
 
     return service;
@@ -460,7 +476,6 @@ module.exports = /*  @ngInject */
     }
 
     function isMultipleValuedFilter(filterName) {
-      var multiValuedFilters = ['opportunityType', 'premiseType', 'impact', 'opportunityStatus', 'segmentation', 'productType', 'tradeChannel'];
       return multiValuedFilters.indexOf(filterName) !== -1 && isPropertyInObject(filterToChipModel, filterName);
     }
 
@@ -476,7 +491,6 @@ module.exports = /*  @ngInject */
     }
 
     function isTextSearchFilter(filterName) {
-      var textSearchFilters = ['state', 'city', 'zipCode'];
       return textSearchFilters.indexOf(filterName) !== -1 && isPropertyInObject(filterToChipModel, filterName);
     }
 
@@ -484,19 +498,27 @@ module.exports = /*  @ngInject */
       var chips = [];
       var arrFilterValues = filterValue.split('|');
       angular.forEach(arrFilterValues, function(val, key) {
-        filterToChipTemplate[filterName].set(val);
+        filterToChipModel[filterName].set(val);
         chips.push(angular.copy(filterToChipModel[filterName].chip));
       });
       return chips;
     }
 
+    function getTypeOfFilter(filterName, filterValue) {
+      if (isBooleanFilter(filterName, filterValue)) {
+        return filterTypeEnum.booleanFilter;
+      } else if (isMultipleValuedFilter(filterName)) {
+        return filterTypeEnum.multiValuedFilter;
+      } else if (isTextSearchFilter(filterName)) {
+        return filterTypeEnum.textFilter;
+      } else {
+        return filterTypeEnum.idBasedFilters;
+      }
+    }
+
     // function returnChipForOtherFilters() {
     //
     // }
-
-    function initFilterToChipModel() {
-      angular.copy(filterToChipTemplate, filterToChipModel);
-    }
 
     /** TODO We need to create a Utility service for these functions
      * @desc Function returns true if property exists inside the object
