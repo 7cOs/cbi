@@ -232,6 +232,7 @@ module.exports = /*  @ngInject */
     }
 
     function disableFilters(filtersAppliedBool, filtersDefaultBool, disableResetBool, disableSaveFilterBool) {
+      // these are inverted booleans
       service.model.filtersApplied = filtersAppliedBool;
       service.model.filtersDefault = filtersDefaultBool;
       service.model.disableReset = disableResetBool;
