@@ -38,6 +38,7 @@ module.exports = /*  @ngInject */
       // create promise, build url based on filters and if there is an opp id
       var opportunitiesPromise = $q.defer(),
           url = opportunityID ? apiHelperService.request('/api/opportunities/' + opportunityID) : apiHelperService.request('/api/opportunities/', filterPayload);
+      console.log('opps get url', url);
 
       $http.get(url)
         .then(getOpportunitiesSuccess)

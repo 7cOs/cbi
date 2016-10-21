@@ -35,6 +35,7 @@ module.exports = /*  @ngInject */
     vm.opportunityDismissTrigger = false;
     vm.undoClicked = false;
     vm.isSelectAllActivated = false;
+    vm.itemAuthorization = {};
 
     // Expose public methods
     vm.addToSharedCollaborators = addToSharedCollaborators;
@@ -65,6 +66,8 @@ module.exports = /*  @ngInject */
     vm.toggleSelectAllStores = toggleSelectAllStores;
     vm.removeSharedCollaborator = removeSharedCollaborator;
     vm.impactSort = impactSort;
+    vm.populateItemAuthMemo = populateItemAuthMemo;
+    vm.populateFeatureMemo = populateFeatureMemo;
 
     // Mock Data for: Item Authorizations per Store
     vm.itemAuthorizations = [{
@@ -317,6 +320,25 @@ module.exports = /*  @ngInject */
         templateUrl: './app/shared/components/list/modal-opportunity-memo.html'
       });
     }
+
+    // write 1 function that runs the api calls
+    // then write 2nd function to deal with the response
+
+    // function populateItemAuthMemo(storeId, productId, type) {
+    //   if (type = 'itemAuth') {
+    //     storesService.getItemAuthorizations(storeId);
+    //   } else if (type = 'feature') {
+    //     storesService.getFeatures(storeId);
+    //   }
+
+    //   .then(function(response) {
+    //     response.forEach(function(memo) {
+    //       if (memo.packageID === productId) {
+    //         vm.itemAuthorization = memo;
+    //       }
+    //     });
+    //   });
+    // }
 
     // Sort by selected property
     function sortBy(name) {
