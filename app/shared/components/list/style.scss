@@ -361,6 +361,33 @@ list {
   }
 }
 
+.flag-both {
+  &:before {
+    background-image: url('../assets/img/icons/flags-both.svg');
+    background-position: 0 0;
+    background-repeat: no-repeat;
+    background-size: 105%;
+    content: '';
+    height: 34px;
+    position: absolute;
+    width: (100% / 12);
+    top: -12px;
+    left: 0;
+  }
+
+  &.flag-green {
+    &:before {
+      background-image: url('../assets/img/icons/flags-green.svg');
+    }
+  }
+
+  &.flag-yellow {
+    &:before {
+      background-image: url('../assets/img/icons/flags-yellow.svg');
+    }
+  }
+}
+
 .sub-item-select {
   border-right: 1px solid $gray-4;
   text-align: right;
