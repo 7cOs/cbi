@@ -58,7 +58,7 @@ module.exports = /*  @ngInject */
             if (filtersService.checkForAuthorizationFlag(prop[0])) {
               resetDefaultAuthorizationFlag = false;
             }
-            console.log(chipsService.checkForOpportunityTypeFilter(prop[0]));
+
             if (chipsService.checkForOpportunityTypeFilter(prop[0])) {
               applyDefaultOpportunityTypeFilter = false;
             }
