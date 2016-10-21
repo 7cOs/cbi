@@ -40,7 +40,7 @@ describe('Unit: opportunitiesController', function() {
       // filtersService.resetFilters();
     });
 
-    function matchElementsInTwoArrays(arr1, filteredArr) {
+    function matchElementsInTwoArraysByFilterName(arr1, filteredArr) {
       var results = arr1.filter(function(value) {
         if (filteredArr.indexOf(value.name) !== -1) {
           return true;
@@ -74,15 +74,36 @@ describe('Unit: opportunitiesController', function() {
     });
 
     it('Check if text filters are added with correct names', function() {
-      var boolFilter = {
+      var filterNames = ['DENVER'];
+      var textFilter = {
         'name': 'testFilter',
         'filterString': 'city%3ADENVER'
       };
-      ctrl.applySavedFilter(null, boolFilter);
-      var result = chipsService.model.filter(function(value) {
-        return value.name === chipsService.filterToChipModel.myAccountsOnly.name;
-      });
-      expect(result[0]).toBeUndefined();
+      ctrl.applySavedFilter(null, textFilter);
+      var results = matchElementsInTwoArraysByFilterName(chipsService.model, filterNames);
+      expect(results.length).toEqual(filterNames.length);
+    });
+
+    it('Check if multiple text filters are added with correct names', function() {
+      var filterNames = ['DENVER', 'AK', 'AL', 'AZ'];
+      var textFilter = {
+        'name': 'testFilter',
+        'filterString': 'city%3ADENVER%2Cstate%3AAK%7CAL%7CAZ'
+      };
+      ctrl.applySavedFilter(null, textFilter);
+      var results = matchElementsInTwoArraysByFilterName(chipsService.model, filterNames);
+      expect(results.length).toEqual(filterNames.length);
+    });
+
+    it('Check if wrong text filters are not added', function() {
+      var filterNames = ['DENVER', 'AK', 'AL', 'AZ', 'CO'];
+      var textFilter = {
+        'name': 'testFilter',
+        'filterString': 'city%3ADENVER%2Cstate%3AAK%7CAL%7CAZ'
+      };
+      ctrl.applySavedFilter(null, textFilter);
+      var results = matchElementsInTwoArraysByFilterName(chipsService.model, filterNames);
+      expect(results.length).not.toEqual(filterNames.length);
     });
 
     it('Check if multi valued filters are added', function() {
@@ -92,7 +113,7 @@ describe('Unit: opportunitiesController', function() {
         'filterString': 'tradeChannel%3A05%7C03%7C02%7C53%7C07%7C08%7CMF%7C'
       };
       ctrl.applySavedFilter(null, multiValuedFilter);
-      var results = matchElementsInTwoArrays(chipsService.model, filterNames);
+      var results = matchElementsInTwoArraysByFilterName(chipsService.model, filterNames);
       expect(results.length).toEqual(filterNames.length);
     });
 
@@ -103,7 +124,18 @@ describe('Unit: opportunitiesController', function() {
         'filterString': 'myAccountsOnly%3Atrue%2CtradeChannel%3A05%7C03%7C02%7C53%7C07%7C08%7CMF%7C'
       };
       ctrl.applySavedFilter(null, multipleFilters);
-      var results = matchElementsInTwoArrays(chipsService.model, filterNames);
+      var results = matchElementsInTwoArraysByFilterName(chipsService.model, filterNames);
+      expect(results.length).toEqual(filterNames.length);
+    });
+
+    it('Check if multi valued filters,boolean filters and text filters are added', function() {
+      var filterNames = ['My Accounts Only', 'Grocery', 'Drug', 'Liquor', 'Recreation', 'Convenience', 'Mass Merchandiser', 'Military, off-premise', 'Other', 'DENVER', 'AK', 'AL', 'AZ'];
+      var multipleFilters = {
+        'name': 'testFilter',
+        'filterString': 'myAccountsOnly%3Atrue%2CtradeChannel%3A05%7C03%7C02%7C53%7C07%7C08%7CMF%7C%2Ccity%3ADENVER%2Cstate%3AAK%7CAL%7CAZ'
+      };
+      ctrl.applySavedFilter(null, multipleFilters);
+      var results = matchElementsInTwoArraysByFilterName(chipsService.model, filterNames);
       expect(results.length).toEqual(filterNames.length);
     });
   });
