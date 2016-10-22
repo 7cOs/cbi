@@ -400,7 +400,7 @@ module.exports = /*  @ngInject */
           service.model.push(tempChip);
         }
 
-        filtersService.disableFilters(false, false, true);
+        filtersService.disableFilters(false, false, true, true);
 
         // Empty Input
         if (filter) filtersService.model[filter] = '';
@@ -426,7 +426,7 @@ module.exports = /*  @ngInject */
           applied: false,
           removable: removable
         });
-        filtersService.disableFilters(false, false, true);
+        filtersService.disableFilters(false, false, true, false);
       }
     }
 
@@ -638,7 +638,7 @@ module.exports = /*  @ngInject */
         }
       }
 
-      filtersService.disableFilters(false, false, true);
+      filtersService.disableFilters(false, false, true, false);
     }
 
     /**
@@ -702,7 +702,7 @@ module.exports = /*  @ngInject */
       } else if (typeof chip.type === 'boolean') {
         filtersService.model.selected[chip.type] = false;
       }
-      filtersService.disableFilters(false, false, true, true);
+      filtersService.disableFilters(false, false, true, false);
     }
 
     /**
@@ -786,7 +786,7 @@ module.exports = /*  @ngInject */
         }
       }
       filtersService.model[filter] = '';
-      filtersService.disableFilters(false, false, true, true);
+      filtersService.disableFilters(false, false, true, false);
     }
 
     /**
@@ -815,7 +815,7 @@ module.exports = /*  @ngInject */
           }
         });
         filtersService.model.selected[filter] = results;
-        filtersService.disableFilters(false, false, true, true);
+        filtersService.disableFilters(false, false, true, false);
       }
     }
 
@@ -845,6 +845,6 @@ module.exports = /*  @ngInject */
           filtersService.model.selected[filter].push(value);
         }
       });
-      filtersService.disableFilters(false, false, true, true);
+      filtersService.disableFilters(false, false, true, false);
     }
   };
