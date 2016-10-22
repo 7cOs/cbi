@@ -6,6 +6,9 @@ module.exports = /*  @ngInject */
     // ****************
     // CONTROLLER SETUP
     // ****************
+    // Private variables
+    var isAllOpportunityTypeClicked = null;
+    var allTypesOption = 'All Types';
 
     // Initial variables
     var vm = this;
@@ -36,6 +39,8 @@ module.exports = /*  @ngInject */
     vm.saveFilter = saveFilter;
     vm.updateFilter = updateFilter;
     vm.states = usStatesService;
+    vm.chooseOpportunityType = chooseOpportunityType;
+    vm.changeOpportunitySelection = changeOpportunitySelection;
 
     init();
 
@@ -102,6 +107,36 @@ module.exports = /*  @ngInject */
         targetEvent: ev,
         templateUrl: './app/shared/components/filter/modal.html'
       });
+    }
+
+    function chooseOpportunityType(currentSelection) {
+      isAllOpportunityTypeClicked = currentSelection === allTypesOption;
+    }
+
+    function addAllTypesOpportunityType() {
+      vm.filtersService.model.selected.opportunityType = [];
+      vm.filtersService.model.selected.opportunityType.push(allTypesOption);
+    }
+
+    function changeOpportunitySelection() {
+      var oppType = vm.filtersService.model.selected.opportunityType;
+      if (isAllOpportunityTypeClicked !== null) {
+        if (oppType.length === 0) {
+          // We always need to have atleast one option selected
+          addAllTypesOpportunityType();
+        } else {
+          var allTypesOptionIndex = oppType.indexOf(allTypesOption);
+          if (allTypesOptionIndex !== -1) {
+            if (!isAllOpportunityTypeClicked) {
+              // If alternate options are clicked we need to remove 'all types'
+              oppType.splice(allTypesOptionIndex, 1);
+            } else {
+              // We need to clear array and add only 'all types'
+              addAllTypesOpportunityType();
+            }
+          }
+        }
+      }
     }
 
     function opportunityStatusSwitch() {
