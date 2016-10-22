@@ -128,10 +128,10 @@ module.exports = /*  @ngInject */
           var allTypesOptionIndex = oppType.indexOf(allTypesOption);
           if (allTypesOptionIndex !== -1) {
             if (!isAllOpportunityTypeClicked) {
-              // If alternate options are clicked we need to remove all types
+              // If alternate options are clicked we need to remove 'all types'
               oppType.splice(allTypesOptionIndex, 1);
             } else {
-              // We need to clear array and add only all options
+              // We need to clear array and add only 'all types'
               addAllTypesOpportunityType();
             }
           }
