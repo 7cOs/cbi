@@ -5,7 +5,9 @@ module.exports = /*  @ngInject */
 
     return {
       getStores: getStores,
-      getStoreOpportunities: getStoreOpportunities
+      getStoreOpportunities: getStoreOpportunities,
+      getItemAuthorizations: getItemAuthorizations,
+      getFeatures: getFeatures
     };
 
     /**
@@ -79,5 +81,59 @@ module.exports = /*  @ngInject */
       }
 
       return storesOpportunitiesPromise.promise;
+    }
+
+    /**
+     * @name getItemAuthorizations
+     * @desc Get all item authorizations within a store from API
+     * @params {String} tdlinxNumber - store id [required]
+     * @returns {Object}
+     * @memberOf cf.common.services
+     */
+    function getItemAuthorizations(tdlinxNumber) {
+      var itemAuthorizationsPromise = $q.defer(),
+          url = apiHelperService.request('/api/stores/' + tdlinxNumber + '/itemAuthorizations');
+
+      $http.get(url)
+        .then(getItemAuthorizationsSuccess)
+        .catch(getItemAuthorizationsFail);
+
+      function getItemAuthorizationsSuccess(response) {
+        itemAuthorizationsPromise.resolve(response.data);
+      }
+
+      function getItemAuthorizationsFail(error) {
+        itemAuthorizationsPromise.resolve(error);
+      }
+
+      return itemAuthorizationsPromise.promise;
+    }
+
+    /**
+     * @name getFeatures
+     * @desc Get all product features within a store from API
+     * @params {String} tdlinxNumber - store id [required]
+     * @returns {Object}
+     * @memberOf cf.common.services
+     */
+    function getFeatures(tdlinxNumber) {
+      var getFeaturesPromise = $q.defer(),
+          url = apiHelperService.request('/api/stores/' + tdlinxNumber + '/features');
+
+      $http.get(url, {
+        headers: {}
+      })
+      .then(getFeaturesSuccess)
+      .catch(getFeaturesFail);
+
+      function getFeaturesSuccess(response) {
+        getFeaturesPromise.resolve(response.data);
+      }
+
+      function getFeaturesFail(error) {
+        getFeaturesPromise.resolve(error);
+      }
+
+      return getFeaturesPromise.promise;
     }
   };
