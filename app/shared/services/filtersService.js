@@ -40,7 +40,7 @@ module.exports = /*  @ngInject */
         {name: 'Low Velocity'},
         {name: 'New Placement (Quality)'},
         {name: 'New Placement (No Rebuy)'},
-        {name: 'Manual'}
+        {name: 'Custom'}
       ],
       savedFilters: [],
       placementType: [
