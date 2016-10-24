@@ -35,7 +35,7 @@ module.exports = /*  @ngInject */
     vm.opportunityDismissTrigger = false;
     vm.undoClicked = false;
     vm.isSelectAllActivated = false;
-    vm.itemAuthorization = {};
+    vm.memoData = {};
 
     // Expose public methods
     vm.addToSharedCollaborators = addToSharedCollaborators;
@@ -66,43 +66,8 @@ module.exports = /*  @ngInject */
     vm.toggleSelectAllStores = toggleSelectAllStores;
     vm.removeSharedCollaborator = removeSharedCollaborator;
     vm.impactSort = impactSort;
-    vm.populateItemAuthMemo = populateItemAuthMemo;
-    vm.populateFeatureMemo = populateFeatureMemo;
-
-    // Mock Data for: Item Authorizations per Store
-    vm.itemAuthorizations = [{
-      'storeCode': '5586656',
-      'authorizationCode': 'a3Qm0000000EebdEAC',
-      'brandCode': '228',
-      'brandName': 'CORONA EXTRA',
-      'packageID': '228-539-100',
-      'packageName': 'CORONA EXTRA-7 OUNCE (BEER)-BOTTLE',
-      'typeCode': 'CM',
-      'typeDescription': 'Corporate Mandate',
-      'setPeriodStartDate': null,
-      'setPeriodEndDate': '2016-12-12',
-      'resetPeriodStartDate': '2016-08-09',
-      'resetPeriodEndDate': '2016-08-31',
-      'onMenuFlag': 'Y',
-      'additionalNotes': 'A Home brew from a miller light starts reminiscing about a lost buzz, because a childlike bottle learns a hard lesson from a Sierra Nevada Pale Ale. When you see some Sam Adams for a spudgun, it means that a bill behind the Hops Alligator Ale daydreams. The Long Trail Ale around a broken bottle seeks an Amarillo Pale Ale over a sake bomb.'
-    }];
-
-    // Mock Data for: Features per Store
-    vm.features = [{
-      'storeCode': '5597701',
-      'featureCode': 'a3Qm0000000EeYWEA0',
-      'packageID': '229-393-100',
-      'packageName': 'CORONA LIGHT-23.5X44-BOTTLE',
-      'typeCode': 'LP',
-      'typeDescription': 'Every Day Low Price',
-      'featurePeriodStartDate': '2015-08-04',
-      'featurePeriodEndDate': '2016-07-31',
-      'resetPeriodStartDate': null,
-      'resetPeriodEndDate': null,
-      'price': 0,
-      'onMenuFlag': 'Y',
-      'additionalNotes': 'New Mandates & Beverage Menu Listings: Corona Extra, Corona Light, Pacifico, Coronita.  CoronaRita featured in Margarita section of menu. Inclusion in website feature menu.'
-    }];
+    vm.getMemos = getMemos;
+    vm.pickMemo = pickMemo;
 
     // Custom Headers for CSV export
     vm.csvHeader = [
@@ -321,24 +286,51 @@ module.exports = /*  @ngInject */
       });
     }
 
-    // write 1 function that runs the api calls
-    // then write 2nd function to deal with the response
+    // Make call to applicable API endpoint for memo information per product
+    // trigger population of memo with response data
+    function getMemos(storeId, productId, type) {
+      if (type === 'itemAuth') {
+        storesService.getItemAuthorizations(storeId).then(populateMemo);
+      } else {
+        storesService.getFeatures(storeId).then(populateMemo);
+      }
 
-    // function populateItemAuthMemo(storeId, productId, type) {
-    //   if (type = 'itemAuth') {
-    //     storesService.getItemAuthorizations(storeId);
-    //   } else if (type = 'feature') {
-    //     storesService.getFeatures(storeId);
-    //   }
+      function populateMemo(response) {
+        pickMemo(response, productId);
+      }
+    }
 
-    //   .then(function(response) {
-    //     response.forEach(function(memo) {
-    //       if (memo.packageID === productId) {
-    //         vm.itemAuthorization = memo;
-    //       }
-    //     });
-    //   });
-    // }
+    // Choose single memo from response/memo array based on most recent startDate
+    function pickMemo(memos, productId) {
+      var products = [];
+      memos.forEach(function(value, key) {
+        if (value.packageID === productId) {
+          products.push(value);
+        }
+      });
+
+      if (products[0].setPeriodStartDate !== undefined) {
+        products.sort(function(a, b) {
+          var setDateA = toDate(a.setPeriodStartDate);
+          var setDateB = toDate(b.setPeriodStartDate);
+          return setDateB - setDateA;
+        });
+        vm.memoData = products[0];
+      } else if (products[0].featurePeriodStartDate !== undefined) {
+        products.sort(function(a, b) {
+          var featDateA = toDate(a.featurePeriodStartDate);
+          var featDateB = toDate(b.featurePeriodStartDate);
+          return featDateB - featDateA;
+        });
+        vm.memoData = products[0];
+      }
+
+      // Convert strings to date objects for comparison
+      function toDate(string) {
+        var dateObj = new Date(string);
+        return dateObj;
+      }
+    }
 
     // Sort by selected property
     function sortBy(name) {
