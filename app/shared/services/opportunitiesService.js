@@ -266,10 +266,14 @@ module.exports = /*  @ngInject */
      * @memberOf cf.common.services
      */
     function createOpportunityFeedback(opportunityID, data) {
+      var feedback;
+      if (data.type === 'other') {
+        feedback = data.feedback;
+      } else { feedback = data.type; }
       var opportunitiesPromise = $q.defer(),
           url = apiHelperService.request('/api/opportunities/' + opportunityID + '/feedback/'),
           payload = {
-            'feedback': data.type
+            'feedback': feedback
           };
 
       $http.post(url, payload, {
