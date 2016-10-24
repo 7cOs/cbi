@@ -743,7 +743,9 @@ module.exports = /*  @ngInject */
           displayName = result;
         }
       }
-      displayName = $filter('titlecase')(displayName);
+      if (displayName !== 'CBBD Chain') {
+        displayName = $filter('titlecase')(displayName);
+      }
 
       if (model.indexOf(result) > -1) {
         // deleting
