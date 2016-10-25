@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports = /*  @ngInject */
-  function accountsController($rootScope, $scope, $state, $log, $window, $filter, myperformanceService, chipsService, filtersService, userService) {
+  function accountsController($rootScope, $scope, $state, $log, $q, $window, $filter, myperformanceService, chipsService, filtersService, userService) {
 
     // ****************
     // CONTROLLER SETUP
@@ -16,15 +16,30 @@ module.exports = /*  @ngInject */
     // Services
     vm.chipsService = chipsService;
     vm.filtersService = filtersService;
-    vm.filters = myperformanceService.filter();
-    vm.distributionData = myperformanceService.distributionModel();
+    vm.userService = userService;
+
+    /* Need to remove this */
     vm.marketData = myperformanceService.marketData();
-    vm.brandSkus = myperformanceService.brandSkus();
+
+    // Filter Model - Keeping this out of filterService as its not needed anywhere else
+    var filterModelTemplate = {
+      trend: filtersService.model.trend[0].name,
+      endingTimePeriod: filtersService.model.timePeriod[0].name,
+      depletionsTimePeriod: filtersService.model.depletionsTimePeriod.month[0].name,
+      distributionTimePeriod: filtersService.model.distributionTimePeriod[0].name,
+      myAccountsOnly: true,
+      premiseType: filtersService.model.premises[1].value,
+      distributor: '',
+      storeTypeCBBD: false,
+      storeTypeIndependent: false,
+      retailer: ''
+    };
+    vm.filterModel = angular.copy(filterModelTemplate);
 
     // Widget / tab contents
     vm.brandTabs = {
-      brands: vm.distributionData.performance,
-      skus: vm.brandSkus
+      brands: [],
+      skus: []
     };
     vm.marketTabs = {
       distributors: vm.marketData.distributors,
@@ -51,6 +66,9 @@ module.exports = /*  @ngInject */
     vm.marketIdSelected = false;
     vm.selectedStore = null;
     vm.hintTextPlaceholder = 'Account or Subaccount Name';
+    vm.overviewOpen = false;
+    vm.idSelected = null;
+    vm.brandIdSelected = null;
 
     // Chart Setup
     vm.chartData = [{'values': vm.marketData.distributors}];
@@ -95,16 +113,18 @@ module.exports = /*  @ngInject */
     };
 
     // Expose public methods
+    vm.brandTotal = brandTotal;
+    vm.displayBrandValue = displayBrandValue;
     vm.isPositive = isPositive;
-    vm.overviewOpen = false;
-    vm.idSelected = null;
-    vm.brandIdSelected = null;
     vm.openSelect = openSelect;
     vm.setMarketTab = setMarketTab;
     vm.selectItem = selectItem;
     vm.prevTab = prevTab;
     vm.openNotes = openNotes;
     vm.placeholderSelect = placeholderSelect;
+    vm.resetFilters = resetFilters;
+    vm.updateBrandSnapshot = updateBrandSnapshot;
+    vm.updateTopBottom = updateTopBottom;
 
     init();
 
@@ -112,9 +132,44 @@ module.exports = /*  @ngInject */
     // PUBLIC METHODS
     // **************
 
+    function brandTotal(measure, percentageBool) {
+      for (var i = 0; i < vm.brandTabs.brands.length; i++) {
+        if (vm.brandTabs.brands[i].type === 'Total') {
+          for (var j = 0; j < vm.brandTabs.brands[i].measures.length; j++) {
+            if (measure === 'depletions') {
+              if (vm.brandTabs.brands[i].measures[j].timeframe === vm.filterModel.depletionsTimePeriod) {
+                // return percentage if percentageBool
+                if (percentageBool) return vm.brandTabs.brands[i].measures[j].depletionsTrend;
+                else return vm.brandTabs.brands[i].measures[j].depletions;
+              }
+            } else if (measure === 'distributions') {
+              if (vm.brandTabs.brands[i].measures[j].timeframe === vm.filterModel.distributionTimePeriod) {
+                // return percentage if percentageBool
+                if (percentageBool) return vm.brandTabs.brands[i].measures[j].distributionsSimpleTrend;
+                else return vm.brandTabs.brands[i].measures[j].distributionsSimple;
+              }
+            } else if (measure === 'velocity') {
+              if (vm.brandTabs.brands[i].measures[j].timeframe === vm.filterModel.distributionTimePeriod) {
+                // return percentage if percentageBool
+                if (percentageBool) return vm.brandTabs.brands[i].measures[j].velocityTrend;
+                else return vm.brandTabs.brands[i].measures[j].velocity;
+              }
+            }
+          }
+        }
+      }
+    }
+
     // When a row item is clicked in brands / market widgets
     function selectItem(widget, item, parent, parentIndex) {
       var parentLength = Object.keys(parent).length;
+
+      // run loader
+      userService.getPerformanceBrand({premiseType: vm.filterModel.premiseType, brand: item.id}).then(function(data) {
+        console.log('[userService.getPerformanceBrand]', data);
+        vm.brandTabs.skus = data.performance;
+      });
+
       if (parentIndex + 1 === parentLength) {
         // We're on the deepest level of current tab list
         if (widget === 'brands') { setSelected(item.name, 'brands'); }
@@ -172,6 +227,45 @@ module.exports = /*  @ngInject */
 
     function placeholderSelect(data) {
       vm.hintTextPlaceholder = data;
+    }
+
+    function resetFilters() {
+      vm.filterModel = angular.copy(filterModelTemplate);
+    }
+
+    function updateBrandSnapshot() {
+      // console.log(filtersService.model.accountSelected.accountBrands); selected dropdown
+      // console.log(vm.filterModel);
+
+      if (vm.brandTabs.brands.length === 0) {
+        userService.getPerformanceBrand().then(function(data) {
+          vm.brandTabs.brands = data.performance;
+          console.log('[vm.brandTabs.brands]', vm.brandTabs.brands);
+        });
+      }
+    }
+
+    /*
+    ** @param {Array} brandMeasures - array of measures for a brand
+    ** @param {String} property - property to fetch from object depletions, depletionsTrend
+    ** @param {String} timePeriod - property to get from filterModel
+    */
+    function displayBrandValue(brandMeasures, property, timePeriod) {
+      for (var i = 0; i < brandMeasures.length; i++) {
+        if (brandMeasures[i].timeframe === vm.filterModel[timePeriod]) {
+          return brandMeasures[i][property];
+        }
+      }
+
+      // return brandMeasures.[property]
+    }
+
+    function updateTopBottom() {
+      var route = filtersService.model.selected.accountTypes.replace(/\W/g, '').toLowerCase();
+      userService.getTopBottom(route).then(function(data) {
+        userService.model.topBottom[route] = data;
+        console.log(userService.model.topBottom);
+      });
     }
 
     // ***************
@@ -240,7 +334,21 @@ module.exports = /*  @ngInject */
       // reset all chips and filters on page init
       chipsService.resetChipsFilters(chipsService.model);
 
-      userService.getPerformanceSummary().then(function(data) {
+      var promiseArr = [
+        userService.getPerformanceSummary(),
+        userService.getPerformanceDepletion(),
+        userService.getPerformanceDistribution({'type': 'noencode', 'premiseType': 'off'}),
+        userService.getPerformanceBrand()
+      ];
+
+      $q.all(promiseArr).then(function(data) {
+        userService.model.summary = data[0];
+        userService.model.depletion = data[1];
+        userService.model.distribution = data[2];
+        vm.brandTabs.brands = data[3].performance;
+      });
+
+      /* userService.getPerformanceSummary().then(function(data) {
         userService.model.summary = data;
       });
 
@@ -251,5 +359,9 @@ module.exports = /*  @ngInject */
       userService.getPerformanceDistribution({'type': 'noencode', 'premiseType': 'off'}).then(function(data) {
         userService.model.distribution = data;
       });
+
+      userService.getPerformanceBrand().then(function(data) {
+        vm.brandTabs.brands = data.performance;
+      }); */
     }
   };

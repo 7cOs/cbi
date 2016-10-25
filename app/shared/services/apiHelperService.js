@@ -130,8 +130,6 @@ module.exports = /*  @ngInject */
 
         return '?' + queryParams;
       } else {
-        queryParams += 'filter=';
-
         // remove type obj
         delete obj.type;
 
@@ -141,7 +139,7 @@ module.exports = /*  @ngInject */
           i++;
         }
 
-        return '?' + encodeURIComponent(queryParams);
+        return '?filter=' + encodeURIComponent(queryParams);
       }
     }
 
