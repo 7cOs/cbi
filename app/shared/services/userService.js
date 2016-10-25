@@ -7,7 +7,8 @@ module.exports = /*  @ngInject */
       currentUser: {},
       summary: [],
       depletion: [],
-      distribution: []
+      distribution: [],
+      topBottom: {}
     };
     var service = {
       model: model,
@@ -23,7 +24,7 @@ module.exports = /*  @ngInject */
       getPerformanceDepletion: getPerformanceDepletion,
       getPerformanceDistribution: getPerformanceDistribution,
       getPerformanceBrand: getPerformanceBrand,
-      getPerformanceTopBottom: getPerformanceTopBottom,
+      getTopBottom: getTopBottom,
       getTargetLists: getTargetLists,
       addTargetList: addTargetList,
       sendOpportunity: sendOpportunity
@@ -394,23 +395,20 @@ module.exports = /*  @ngInject */
 
     /**
      * @name getPerformanceBrand
-     * @desc get performance brand for a user
-     * @params {String} id - id of a user
+     * @desc get brand performance for a user
+     * @params {Object} params - params to be added to rest
      * @returns {Object} - user performance brand
      * @memberOf cf.common.services
      */
-    function getPerformanceBrand(id) {
+    function getPerformanceBrand(params) {
       var performancePromise = $q.defer(),
-          url = apiHelperService.request('/api/users/' + id + '/performance/brandSnapshot/');
+          url = apiHelperService.request('/api/users/' + service.model.currentUser.employeeID + '/performance/brandSnapshot', params);
 
-      $http.get(url, {
-        headers: {}
-      })
-      .then(getPerformanceBrandSuccess)
-      .catch(getPerformanceBrandFail);
+      $http.get(url)
+        .then(getPerformanceBrandSuccess)
+        .catch(getPerformanceBrandFail);
 
       function getPerformanceBrandSuccess(response) {
-        console.log('[userService.getPerformanceBrand] response: ', response);
         performancePromise.resolve(response.data);
       }
 
@@ -422,29 +420,50 @@ module.exports = /*  @ngInject */
     }
 
     /**
-     * @name getPerformanceTopBottom
+     * @name getTopBottom
      * @desc get performance top bottom snapshot for a user
      * @params {String} id - id of a user
      * @returns {Object} - user performance top bottom snapshot
      * @memberOf cf.common.services
      */
-    function getPerformanceTopBottom(id) {
+    function getTopBottom(route) {
       var performancePromise = $q.defer(),
-          url = apiHelperService.request('/api/users/' + id + '/performance/topBottomSnapshot/');
+          url = apiHelperService.request('/api/users/' + service.model.currentUser.employeeID + '/performance/topBottomSnapshot/' + route);
 
-      $http.get(url, {
-        headers: {}
-      })
-      .then(getPerformanceTopBottomSuccess)
-      .catch(getPerformanceTopBottomFail);
+      $http.get(url)
+        .then(getTopBottomSuccess)
+        .catch(getTopBottomFail);
 
-      function getPerformanceTopBottomSuccess(response) {
-        console.log('[userService.getPerformanceTopBottom] response: ', response);
-        performancePromise.resolve(response.data);
+      function getTopBottomSuccess(response) {
+        var responseData = addDisplayProperties(response.data);
+        performancePromise.resolve(responseData);
       }
 
-      function getPerformanceTopBottomFail(error) {
+      function getTopBottomFail(error) {
         performancePromise.reject(error);
+      }
+
+      function addDisplayProperties(data) {
+        for (var i = 0; i < data.length; i++) {
+          var depletions = 0,
+              distributionsSimple = 0,
+              distributionsEffective = 0,
+              velocity = 0;
+
+          for (var j = 0; j < data[i].measures.length; j++) {
+            if (data[i].measures[j].depletions) depletions += data[i].measures[j].depletions;
+            if (data[i].measures[j].distributionsSimple) distributionsSimple += data[i].measures[j].distributionsSimple;
+            if (data[i].measures[j].distributionsEffective) distributionsEffective += data[i].measures[j].distributionsEffective;
+            if (data[i].measures[j].velocity) velocity += data[i].measures[j].velocity;
+          }
+
+          data[i].depletions = depletions;
+          data[i].distributionsSimple = distributionsSimple;
+          data[i].distributionsEffective = distributionsEffective;
+          data[i].velocity = velocity;
+        }
+
+        return data;
       }
 
       return performancePromise.promise;
