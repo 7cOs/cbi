@@ -17,11 +17,9 @@ module.exports = /*  @ngInject */
     vm.chipsService = chipsService;
     vm.filtersService = filtersService;
     vm.userService = userService;
-    /* Need to remove these */
-    vm.filters = myperformanceService.filter();
-    vm.distributionData = myperformanceService.distributionModel();
+
+    /* Need to remove this */
     vm.marketData = myperformanceService.marketData();
-    vm.brandSkus = myperformanceService.brandSkus();
 
     // Filter Model - Keeping this out of filterService as its not needed anywhere else
     var filterModelTemplate = {

@@ -404,8 +404,6 @@ module.exports = /*  @ngInject */
       var performancePromise = $q.defer(),
           url = apiHelperService.request('/api/users/' + service.model.currentUser.employeeID + '/performance/brandSnapshot', params);
 
-      url = decodeURIComponent(url); // api not working with encoded url even though spec says it should
-
       $http.get(url)
         .then(getPerformanceBrandSuccess)
         .catch(getPerformanceBrandFail);
