@@ -85,11 +85,11 @@ module.exports = /*  @ngInject */
         }]
       },
       distributionTimePeriod: [{
-        name: 'L30 Days'
+        name: 'L60'
       }, {
-        name: 'L60 Days'
+        name: 'L90'
       }, {
-        name: 'L90 Days'
+        name: 'L120'
       }],
       accountSelected: {
         accountBrands: 'Distribution (simple)',

@@ -16,6 +16,7 @@ module.exports = /*  @ngInject */
     // Services
     vm.chipsService = chipsService;
     vm.filtersService = filtersService;
+    vm.userService = userService;
     /* Need to remove these */
     vm.filters = myperformanceService.filter();
     vm.distributionData = myperformanceService.distributionModel();
@@ -39,7 +40,7 @@ module.exports = /*  @ngInject */
 
     // Widget / tab contents
     vm.brandTabs = {
-      brands: vm.distributionData.performance,
+      brands: [],
       skus: vm.brandSkus
     };
     vm.marketTabs = {
@@ -67,6 +68,9 @@ module.exports = /*  @ngInject */
     vm.marketIdSelected = false;
     vm.selectedStore = null;
     vm.hintTextPlaceholder = 'Account or Subaccount Name';
+    vm.overviewOpen = false;
+    vm.idSelected = null;
+    vm.brandIdSelected = null;
 
     // Chart Setup
     vm.chartData = [{'values': vm.marketData.distributors}];
@@ -111,10 +115,9 @@ module.exports = /*  @ngInject */
     };
 
     // Expose public methods
+    vm.brandTotal = brandTotal;
+    vm.displayBrandValue = displayBrandValue;
     vm.isPositive = isPositive;
-    vm.overviewOpen = false;
-    vm.idSelected = null;
-    vm.brandIdSelected = null;
     vm.openSelect = openSelect;
     vm.setMarketTab = setMarketTab;
     vm.selectItem = selectItem;
@@ -122,12 +125,42 @@ module.exports = /*  @ngInject */
     vm.openNotes = openNotes;
     vm.placeholderSelect = placeholderSelect;
     vm.resetFilters = resetFilters;
+    vm.updateBrandSnapshot = updateBrandSnapshot;
+    vm.updateTopBottom = updateTopBottom;
 
     init();
 
     // **************
     // PUBLIC METHODS
     // **************
+
+    function brandTotal(measure, percentageBool) {
+      for (var i = 0; i < vm.brandTabs.brands.length; i++) {
+        if (vm.brandTabs.brands[i].type === 'Total') {
+          for (var j = 0; j < vm.brandTabs.brands[i].measures.length; j++) {
+            if (measure === 'depletions') {
+              if (vm.brandTabs.brands[i].measures[j].timeframe === vm.filterModel.depletionsTimePeriod) {
+                // return percentage if percentageBool
+                if (percentageBool) return vm.brandTabs.brands[i].measures[j].depletionsTrend;
+                else return vm.brandTabs.brands[i].measures[j].depletions;
+              }
+            } else if (measure === 'distributions') {
+              if (vm.brandTabs.brands[i].measures[j].timeframe === vm.filterModel.distributionTimePeriod) {
+                // return percentage if percentageBool
+                if (percentageBool) return vm.brandTabs.brands[i].measures[j].distributionsSimpleTrend;
+                else return vm.brandTabs.brands[i].measures[j].distributionsSimple;
+              }
+            } else if (measure === 'velocity') {
+              if (vm.brandTabs.brands[i].measures[j].timeframe === vm.filterModel.distributionTimePeriod) {
+                // return percentage if percentageBool
+                if (percentageBool) return vm.brandTabs.brands[i].measures[j].velocityTrend;
+                else return vm.brandTabs.brands[i].measures[j].velocity;
+              }
+            }
+          }
+        }
+      }
+    }
 
     // When a row item is clicked in brands / market widgets
     function selectItem(widget, item, parent, parentIndex) {
@@ -193,6 +226,41 @@ module.exports = /*  @ngInject */
 
     function resetFilters() {
       vm.filterModel = angular.copy(filterModelTemplate);
+    }
+
+    function updateBrandSnapshot() {
+      // console.log(filtersService.model.accountSelected.accountBrands); selected dropdown
+      console.log(vm.filterModel);
+
+      if (vm.brandTabs.brands.length === 0) {
+        userService.getPerformanceBrand().then(function(data) {
+          vm.brandTabs.brands = data.performance;
+          console.log('[vm.brandTabs.brands]', vm.brandTabs.brands);
+        });
+      }
+    }
+
+    /*
+    ** @param {Array} brandMeasures - array of measures for a brand
+    ** @param {String} property - property to fetch from object depletions, depletionsTrend
+    ** @param {String} timePeriod - property to get from filterModel
+    */
+    function displayBrandValue(brandMeasures, property, timePeriod) {
+      for (var i = 0; i < brandMeasures.length; i++) {
+        if (brandMeasures[i].timeframe === vm.filterModel[timePeriod]) {
+          return brandMeasures[i][property];
+        }
+      }
+
+      // return brandMeasures.[property]
+    }
+
+    function updateTopBottom() {
+      var route = filtersService.model.selected.accountTypes.replace(/\W/g, '').toLowerCase();
+      userService.getTopBottom(route).then(function(data) {
+        userService.model.topBottom[route] = data;
+        console.log(userService.model.topBottom);
+      });
     }
 
     // ***************
