@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports = /*  @ngInject */
-  function accountsController($rootScope, $scope, $state, $log, $window, $filter, myperformanceService, chipsService, filtersService, userService) {
+  function accountsController($rootScope, $scope, $state, $log, $q, $window, $filter, myperformanceService, chipsService, filtersService, userService) {
 
     // ****************
     // CONTROLLER SETUP
@@ -230,7 +230,7 @@ module.exports = /*  @ngInject */
 
     function updateBrandSnapshot() {
       // console.log(filtersService.model.accountSelected.accountBrands); selected dropdown
-      console.log(vm.filterModel);
+      // console.log(vm.filterModel);
 
       if (vm.brandTabs.brands.length === 0) {
         userService.getPerformanceBrand().then(function(data) {
@@ -329,7 +329,21 @@ module.exports = /*  @ngInject */
       // reset all chips and filters on page init
       chipsService.resetChipsFilters(chipsService.model);
 
-      userService.getPerformanceSummary().then(function(data) {
+      var promiseArr = [
+        userService.getPerformanceSummary(),
+        userService.getPerformanceDepletion(),
+        userService.getPerformanceDistribution({'type': 'noencode', 'premiseType': 'off'}),
+        userService.getPerformanceBrand()
+      ];
+
+      $q.all(promiseArr).then(function(data) {
+        userService.model.summary = data[0];
+        userService.model.depletion = data[1];
+        userService.model.distribution = data[2];
+        vm.brandTabs.brands = data[3].performance;
+      });
+
+      /* userService.getPerformanceSummary().then(function(data) {
         userService.model.summary = data;
       });
 
@@ -340,5 +354,9 @@ module.exports = /*  @ngInject */
       userService.getPerformanceDistribution({'type': 'noencode', 'premiseType': 'off'}).then(function(data) {
         userService.model.distribution = data;
       });
+
+      userService.getPerformanceBrand().then(function(data) {
+        vm.brandTabs.brands = data.performance;
+      }); */
     }
   };
