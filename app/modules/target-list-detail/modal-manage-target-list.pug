@@ -2,6 +2,7 @@ div.modal.target-list-modal
   loader(ng-show="tld.targetListService.model.currentList.loading")
   div.title
     h4 Manage Target List
+    a.hide-row(ng-click="tld.closeModal()")
   div.modal-form
     div.modal-input
       label name
