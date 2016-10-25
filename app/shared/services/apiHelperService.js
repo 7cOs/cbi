@@ -18,7 +18,17 @@ module.exports = /*  @ngInject */
     function formatQueryString(obj) {
       var queryParams = '',
           i = 0,
-          z = Object.keys(obj).length - 1;
+          z = getKeyLength(obj) - 1;
+
+      function getKeyLength(data) {
+        var l = 0;
+        for (var prop in data) {
+          if (data.hasOwnProperty(prop)) {
+            l++;
+          }
+        }
+        return l;
+      }
 
       if (obj.type && obj.type === 'store') {
         // remove type obj
