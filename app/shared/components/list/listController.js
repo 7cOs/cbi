@@ -239,7 +239,7 @@ module.exports = /*  @ngInject */
     function submitFeedback(opportunity, data) {
       dismissOpportunity(opportunity, data);
       vm.opportunityDismissTrigger = true;
-      vm.opportunity.feedback.feedback = '';
+      vm.opportunity.feedback = '';
       $mdDialog.hide();
     }
 
