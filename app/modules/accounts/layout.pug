@@ -52,7 +52,7 @@ notes
     div(column='2')
       label Premise Type
       md-radio-group(ng-model="a.filterModel.premiseType")
-        md-radio-button(ng-repeat="p in a.filtersService.model.premises track by $index" class="md-primary" ng-value="p.name" aria-label="{{p.name}}") {{p.name}}
+        md-radio-button(ng-repeat="p in a.filtersService.model.premises track by $index" class="md-primary" ng-value="p.value" aria-label="{{p.name}}") {{p.name}}
     div(column='2')
       label Distributor
       inline-search(type="distributor" placeholder="Name" chosen-result="a.filterModel.distributor" callback="")

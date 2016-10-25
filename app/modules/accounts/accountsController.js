@@ -30,7 +30,7 @@ module.exports = /*  @ngInject */
       depletionsTimePeriod: filtersService.model.depletionsTimePeriod.month[0].name,
       distributionTimePeriod: filtersService.model.distributionTimePeriod[0].name,
       myAccountsOnly: true,
-      premiseType: filtersService.model.premises[1].name,
+      premiseType: filtersService.model.premises[1].value,
       distributor: '',
       storeTypeCBBD: false,
       storeTypeIndependent: false,
@@ -41,7 +41,7 @@ module.exports = /*  @ngInject */
     // Widget / tab contents
     vm.brandTabs = {
       brands: [],
-      skus: vm.brandSkus
+      skus: []
     };
     vm.marketTabs = {
       distributors: vm.marketData.distributors,
@@ -165,6 +165,13 @@ module.exports = /*  @ngInject */
     // When a row item is clicked in brands / market widgets
     function selectItem(widget, item, parent, parentIndex) {
       var parentLength = Object.keys(parent).length;
+
+      // run loader
+      userService.getPerformanceBrand({premiseType: vm.filterModel.premiseType, brand: item.id}).then(function(data) {
+        console.log('[userService.getPerformanceBrand]', data);
+        vm.brandTabs.skus = data.performance;
+      });
+
       if (parentIndex + 1 === parentLength) {
         // We're on the deepest level of current tab list
         if (widget === 'brands') { setSelected(item.name, 'brands'); }
