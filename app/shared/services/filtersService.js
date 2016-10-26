@@ -2,6 +2,7 @@
 
 module.exports = /*  @ngInject */
   function filtersService($filter) {
+    var paramsNotIncludedInSaveFilter = [];
     var model = {
       account: [],
       appliedFilter: {
@@ -160,7 +161,6 @@ module.exports = /*  @ngInject */
         {name: 'vs ABP'}
       ]
     };
-
     var service = {
       model: model,
       addSortFilter: addSortFilter,
