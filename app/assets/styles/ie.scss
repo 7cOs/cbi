@@ -93,4 +93,13 @@
   .inline-search .results-container {
     width: auto;
   }
+
+  // Fix rendering of impact icons
+  .predicted-impact .md-label .impact {
+    top: -4px;
+
+    &:before {
+      height: 20px;
+    }
+  }
 }
