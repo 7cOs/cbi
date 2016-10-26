@@ -720,11 +720,8 @@ module.exports = /*  @ngInject */
           count = 0;
 
       for (var j = 0; j < service.model.length; j++) {
-        console.log(j);
-        console.log(service.model[j].name);
 
         if (service.model[j].name === 'My Accounts Only' || service.model[j].name === 'Off-Premise' ||  service.model[j].name === 'Authorized' ||  service.model[j].name === 'All Types') {
-          console.log(service.model[j].name);
           count++;
         }
 
