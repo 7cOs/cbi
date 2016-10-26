@@ -48,43 +48,38 @@ module.exports = /*  @ngInject */
         currentChipModel = filterDescription.chipsModel;
         currentFilterModel = filterDescription.filterModel;
       }
-      console.log('Filter desc');
-      console.log(filterDescription);
 
       chipsService.resetChipsFilters(chipsService.model);
       // vm.filtersService.model = currentFilterModel;
+      filtersService.updateSelectedFilterModel(currentFilterModel);
 
       if (ev && ev.srcElement.nodeName === 'SPAN') {
         ev.preventDefault();
       } else {
         var arr = decodeURIComponent(filter.filterString).split(',');
-
         for (var i = 0; i < arr.length; i++) {
           if (arr[i].length > 0) {
             var prop = arr[i].split(':');
-            filtersService.updateSelectedFilterModel(prop);
-
             if (filtersService.checkForAuthorizationFlag(prop[0])) {
               resetDefaultAuthorizationFlag = false;
             }
           }
         }
-        // By default the authorization flag is set on filtersService.model. We are just checking if there is a productType filter in the filter string. If not we need to reset productType array
-        if (resetDefaultAuthorizationFlag) {
-          filtersService.model.selected.productType = [];
-          filtersService.model.productTypeAuthorized = false;
-        }
-
-        if (filter.description) {
-          console.log(currentChipModel);
-          if (currentChipModel && currentChipModel.length > 0) {
-            chipsService.addChipsArray(currentChipModel);
-          }
-        }
-        chipsService.applyFilters();
-        filtersService.model.selected.currentFilter = filter.id;
       }
 
+      // By default the authorization flag is set on filtersService.model. We are just checking if there is a productType filter in the filter string. If not we need to reset productType array
+      if (resetDefaultAuthorizationFlag) {
+        filtersService.model.selected.productType = [];
+        filtersService.model.productTypeAuthorized = false;
+      }
+
+      if (filter.description) {
+        if (currentChipModel && currentChipModel.length > 0) {
+          chipsService.addChipsArray(currentChipModel);
+        }
+      }
+      chipsService.applyFilters();
+      filtersService.model.selected.currentFilter = filter.id;
       console.log(filtersService.model);
     }
 

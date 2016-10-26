@@ -170,7 +170,8 @@ module.exports = /*  @ngInject */
       resetFilters: resetFilters,
       updateSelectedFilterModel: updateSelectedFilterModel,
       checkForAuthorizationFlag: checkForAuthorizationFlag,
-      resetSort: resetSort
+      resetSort: resetSort,
+      paramsNotIncludedInSaveFilter: paramsNotIncludedInSaveFilter
     };
 
     return service;
@@ -202,18 +203,10 @@ module.exports = /*  @ngInject */
      * This function converts the query string to appropriate selected model in the filter
      * @params {Object} filterProp - Name of the filter
      */
-    function updateSelectedFilterModel(filterProp) {
-      var propName = filterProp[0];
-      var propValue = filterProp[1];
-      var filterSelectionModel = model.selected;
-      if (filterSelectionModel.hasOwnProperty(propName)) {
-        if (Array.isArray(filterSelectionModel[propName])) {
-          var propValuesSplit = propValue.split('|');
-          angular.forEach(propValuesSplit, function (val, key) {
-            filterSelectionModel[propName].push(val);
-          });
-        } else {
-          filterSelectionModel[propName] = propValue;
+    function updateSelectedFilterModel(filterModel) {
+      for (var property in filterModel) {
+        if (filterModel.hasOwnProperty(property)) {
+          service.model[property] = filterModel[property];
         }
       }
     }

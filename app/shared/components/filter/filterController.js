@@ -180,8 +180,9 @@ module.exports = /*  @ngInject */
 
     function getFilterModel(currentFilterModel) {
       var copyFilter = angular.copy(currentFilterModel);
-      var propsToBeRemoved = ['trend', 'tradeChannels', 'timePeriod', 'selectedTemplate',
-      'accountSelected', 'distributionTimePeriod', 'depletionsTimePeriod', 'retailer', 'premises', 'placementType', 'opportunitiesType', 'opportunityType', 'impact', 'disableSaveFilter', 'filtersDefault', 'filtersApplied', 'disableReset', 'expanded', 'distributor', 'defaultSort'];
+      var propsToBeRemoved = filtersService.paramsNotIncludedInSaveFilter;
+      console.log('Current Filter');
+      console.log(filtersService.model);
       angular.forEach(propsToBeRemoved, function(val, index) {
         if (copyFilter.hasOwnProperty(val)) {
           console.log('Deleted Property' + val);
@@ -205,26 +206,26 @@ module.exports = /*  @ngInject */
       loaderService.openLoader(true);
       var chipsDescription = getDescriptionForFilter(chipsService.model, filtersService.model);
       loaderService.closeLoader();
-      // userService.saveOpportunityFilter(chipsDescription).then(function(data) {
-      //   userService.model.opportunityFilters.unshift({
-      //     filterString: encodeURIComponent(filtersService.model.appliedFilter.appliedFilter),
-      //     name: filtersService.model.newServiceName,
-      //     description: data.description
-      //   });
-      //
-      //   // reset new service name
-      //   filtersService.model.newServiceName = null;
-      //
-      //   filtersService.disableFilters(true, false, true, false);
-      //
-      //   loaderService.closeLoader();
-      //
-      //   // close modal
-      //   closeModal();
-      // }, function(err) {
-      //   console.warn(err);
-      //   loaderService.closeLoader();
-      // });
+      userService.saveOpportunityFilter(chipsDescription).then(function(data) {
+        userService.model.opportunityFilters.unshift({
+          filterString: encodeURIComponent(filtersService.model.appliedFilter.appliedFilter),
+          name: filtersService.model.newServiceName,
+          description: data.description
+        });
+
+        // reset new service name
+        filtersService.model.newServiceName = null;
+
+        filtersService.disableFilters(true, false, true, false);
+
+        loaderService.closeLoader();
+
+        // close modal
+        closeModal();
+      }, function(err) {
+        console.warn(err);
+        loaderService.closeLoader();
+      });
       loaderService.closeLoader();
     }
 
