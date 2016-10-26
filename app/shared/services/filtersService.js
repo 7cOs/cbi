@@ -2,7 +2,8 @@
 
 module.exports = /*  @ngInject */
   function filtersService($filter) {
-    var paramsNotIncludedInSaveFilter = [];
+    var paramsNotIncludedInSaveFilter = ['trend', 'tradeChannels', 'timePeriod', 'selectedTemplate',
+      'accountSelected', 'distributionTimePeriod', 'depletionsTimePeriod', 'retailer', 'premises', 'placementType', 'opportunitiesType', 'opportunityType', 'impact', 'disableSaveFilter', 'filtersDefault', 'filtersApplied', 'disableReset', 'expanded', 'distributor', 'defaultSort'];
     var model = {
       account: [],
       appliedFilter: {
@@ -227,7 +228,6 @@ module.exports = /*  @ngInject */
           filterPayload[key] = service.model.selected[key];
         }
       }
-
       return filterPayload;
     }
 

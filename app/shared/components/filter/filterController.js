@@ -178,27 +178,54 @@ module.exports = /*  @ngInject */
       }
     }
 
+    function getFilterModel(currentFilterModel) {
+      var copyFilter = angular.copy(currentFilterModel);
+      var propsToBeRemoved = ['trend', 'tradeChannels', 'timePeriod', 'selectedTemplate',
+      'accountSelected', 'distributionTimePeriod', 'depletionsTimePeriod', 'retailer', 'premises', 'placementType', 'opportunitiesType', 'opportunityType', 'impact', 'disableSaveFilter', 'filtersDefault', 'filtersApplied', 'disableReset', 'expanded', 'distributor', 'defaultSort'];
+      angular.forEach(propsToBeRemoved, function(val, index) {
+        if (copyFilter.hasOwnProperty(val)) {
+          console.log('Deleted Property' + val);
+          delete copyFilter[val];
+        }
+      });
+      console.log('Copy Filter');
+      return copyFilter;
+    }
+
+    function getDescriptionForFilter(currentChipsModel, currentFilterModel) {
+      var modifiedFilterModel = getFilterModel(currentFilterModel);
+      var currentModel = {
+        filterModel: modifiedFilterModel,
+        chipsModel: currentChipsModel
+      };
+      return angular.toJson(currentModel);
+    }
+
     function saveFilter() {
       loaderService.openLoader(true);
-      userService.saveOpportunityFilter().then(function(data) {
-        userService.model.opportunityFilters.unshift({
-          filterString: encodeURIComponent(filtersService.model.appliedFilter.appliedFilter),
-          name: filtersService.model.newServiceName
-        });
-
-        // reset new service name
-        filtersService.model.newServiceName = null;
-
-        filtersService.disableFilters(true, false, true, false);
-
-        loaderService.closeLoader();
-
-        // close modal
-        closeModal();
-      }, function(err) {
-        console.warn(err);
-        loaderService.closeLoader();
-      });
+      var chipsDescription = getDescriptionForFilter(chipsService.model, filtersService.model);
+      loaderService.closeLoader();
+      // userService.saveOpportunityFilter(chipsDescription).then(function(data) {
+      //   userService.model.opportunityFilters.unshift({
+      //     filterString: encodeURIComponent(filtersService.model.appliedFilter.appliedFilter),
+      //     name: filtersService.model.newServiceName,
+      //     description: data.description
+      //   });
+      //
+      //   // reset new service name
+      //   filtersService.model.newServiceName = null;
+      //
+      //   filtersService.disableFilters(true, false, true, false);
+      //
+      //   loaderService.closeLoader();
+      //
+      //   // close modal
+      //   closeModal();
+      // }, function(err) {
+      //   console.warn(err);
+      //   loaderService.closeLoader();
+      // });
+      loaderService.closeLoader();
     }
 
     function updateFilter() {

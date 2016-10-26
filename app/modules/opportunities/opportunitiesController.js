@@ -41,10 +41,19 @@ module.exports = /*  @ngInject */
 
     function applySavedFilter(ev, filter) {
       var resetDefaultAuthorizationFlag = true;
-      var applyDefaultOpportunityTypeFilter = true;
-      var chipsMappedFromFilter = [];
+      var currentChipModel = null, currentFilterModel = null;
+
+      var filterDescription = IsJsonString(filter.description);
+      if (filterDescription) {
+        currentChipModel = filterDescription.chipsModel;
+        currentFilterModel = filterDescription.filterModel;
+      }
+      console.log('Filter desc');
+      console.log(filterDescription);
 
       chipsService.resetChipsFilters(chipsService.model);
+      // vm.filtersService.model = currentFilterModel;
+
       if (ev && ev.srcElement.nodeName === 'SPAN') {
         ev.preventDefault();
       } else {
@@ -58,15 +67,6 @@ module.exports = /*  @ngInject */
             if (filtersService.checkForAuthorizationFlag(prop[0])) {
               resetDefaultAuthorizationFlag = false;
             }
-
-            if (chipsService.checkForOpportunityTypeFilter(prop[0])) {
-              applyDefaultOpportunityTypeFilter = false;
-            }
-
-            var matchedChips = chipsService.getChipsAssociatedWithFilter(prop);
-            if (matchedChips) {
-              Array.prototype.push.apply(chipsMappedFromFilter, matchedChips);
-            }
           }
         }
         // By default the authorization flag is set on filtersService.model. We are just checking if there is a productType filter in the filter string. If not we need to reset productType array
@@ -75,15 +75,27 @@ module.exports = /*  @ngInject */
           filtersService.model.productTypeAuthorized = false;
         }
 
-        // The filter string does not contain an opportunity type key if 'All Types' is selected (default) under opportunity type
-        if (applyDefaultOpportunityTypeFilter) {
-          chipsMappedFromFilter.push(chipsService.getDefaultOpportunityTypeFilter());
+        if (filter.description) {
+          console.log(currentChipModel);
+          if (currentChipModel && currentChipModel.length > 0) {
+            chipsService.addChipsArray(currentChipModel);
+          }
         }
-
-        chipsService.addChipsArray(chipsMappedFromFilter);
         chipsService.applyFilters();
         filtersService.model.selected.currentFilter = filter.id;
       }
+
+      console.log(filtersService.model);
+    }
+
+    function IsJsonString(str) {
+      var chipsObj = [];
+      try {
+        chipsObj = JSON.parse(str);
+      } catch (e) {
+        chipsObj = null;
+      }
+      return chipsObj;
     }
 
     function closeModal() {
@@ -157,5 +169,9 @@ module.exports = /*  @ngInject */
         });
       }
     } // end init
+
+    $scope.$watch('o.filtersService.model', function(newVal) {
+      console.log(newVal);
+    }, true);
 
   }; // end controller
