@@ -42,6 +42,7 @@ module.exports =
       vm.showResults = false;
       vm.loading = false;
       vm.type = '';
+      vm.showSearchIcon = false;
 
       // Expose public methods
       vm.action = action;
@@ -62,6 +63,7 @@ module.exports =
         vm.loading = true;
         vm.showResults = true;
         vm.type = type;
+        vm.showSearchIcon = true;
 
         switch (type) {
           case 'user':
@@ -119,6 +121,8 @@ module.exports =
       }
 
       function resultChosen(result, nav) {
+        vm.showSearchIcon = false;
+
         switch (vm.type) {
           case 'user':
             vm.input = $filter('titlecase')(result.firstName) + ' ' + $filter('titlecase')(result.lastName);
