@@ -276,6 +276,7 @@ module.exports = /*  @ngInject */
     }
 
     function showOpportunityMemoModal(ev) {
+      vm.memoData = {};
       var parentEl = angular.element(document.body);
       $mdDialog.show({
         clickOutsideToClose: true,
