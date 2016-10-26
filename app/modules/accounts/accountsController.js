@@ -69,7 +69,7 @@ module.exports = /*  @ngInject */
     vm.overviewOpen = false;
     vm.idSelected = null;
     vm.brandIdSelected = null;
-    vm.loadingBrandSnapshot = false;
+    vm.loadingBrandSnapshot = true;
 
     // Chart Setup
     vm.chartData = [{'values': vm.marketData.distributors}];
@@ -341,8 +341,6 @@ module.exports = /*  @ngInject */
         userService.getPerformanceDistribution({'type': 'noencode', 'premiseType': 'off'}),
         userService.getPerformanceBrand()
       ];
-
-      vm.loadingBrandSnapshot = true;
 
       $q.all(promiseArr).then(function(data) {
         userService.model.summary = data[0];
