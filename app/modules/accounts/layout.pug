@@ -92,6 +92,8 @@ div(row)
 
 div(row)
   div.scorecard-table.scorecard-table-accounts(column='5')
+    .loader-wrap.inline(ng-class="{'active': a.loadingBrandSnapshot}")
+      loader
     .widget-header
       .dropdown-filter
         md-select(ng-model="a.filtersService.model.accountSelected.accountBrands" md-on-open="a.openSelect(true)" md-on-close="a.openSelect(false); a.updateBrandSnapshot()" aria-label="Account Brands Filter"  placeholder="Distribution (simple)")
