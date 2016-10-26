@@ -87,7 +87,12 @@
   .trade-channel {
     md-checkbox {
       width: 46%;
+      margin: 0 0 0.4em;
       margin-bottom: 0.4em;
+    }
+
+    .md-label span {
+      width: 140px;
     }
   }
 
@@ -149,6 +154,10 @@
   .checkbox-inline md-checkbox {
     display: inline-block;
     margin-bottom: 8px;
+
+    @media (max-width: $bp-large) {
+      margin-right: 8px;
+    }
   }
 
   md-option {

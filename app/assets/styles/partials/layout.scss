@@ -10,3 +10,10 @@ section {
 body {
   background: $body-bg;
 }
+
+body,
+html {
+  @media (max-width: $bp-medium) {
+    position: absolute;
+  }
+}
