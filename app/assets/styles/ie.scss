@@ -89,8 +89,9 @@
     background-size: 8px;
   }
 
-  // Adjust size of results container when none found
-  .inline-search .results-container {
-    width: auto;
+  // Adjust size of inline search results container
+  .inline-search .results-container.open {
+    height: 9em;
+    overflow-x: hidden;
   }
 }
