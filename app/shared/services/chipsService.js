@@ -363,7 +363,8 @@ module.exports = /*  @ngInject */
       getChipsAssociatedWithFilter: getChipsAssociatedWithFilter,
       checkForOpportunityTypeFilter: checkForOpportunityTypeFilter,
       getDefaultOpportunityTypeFilter: getDefaultOpportunityTypeFilter,
-      filterToChipModel: filterToChipModel
+      filterToChipModel: filterToChipModel,
+      isDefault: isDefault
     };
 
     return service;
@@ -625,6 +626,7 @@ module.exports = /*  @ngInject */
      * @private
      */
     function removeChip(type) {
+      console.log(service.model);
       var i = service.model.length;
       while (i--) {
         if (service.model[i].type === type) {
@@ -644,6 +646,7 @@ module.exports = /*  @ngInject */
      * @memberOf cf.common.services
      */
     function removeFromFilterService(chip) {
+
       if (chip.search || chip.type === 'opportunityType' || chip.type === 'state') {
         var arr = filtersService.model.selected[chip.type];
         var i = arr.length;
@@ -696,7 +699,40 @@ module.exports = /*  @ngInject */
       } else if (typeof chip.type === 'boolean') {
         filtersService.model.selected[chip.type] = false;
       }
-      filtersService.disableFilters(false, false, true, false);
+
+      if (service.model.length === 4 && isDefault(service.model)) {
+        filtersService.disableFilters(false, false, false, false);
+      } else {
+        filtersService.disableFilters(false, false, true, false);
+      }
+    }
+
+    /**
+     * @name isDefault
+     * @desc check to see if filters are at the default values
+     * @params {Object} service.model
+     * @returns boolean
+     * @memberOf cf.common.services
+     */
+
+    function isDefault(model) {
+      var checkForDefaultFilters = false,
+          count = 0;
+
+      for (var j = 0; j < service.model.length; j++) {
+        console.log(j);
+        console.log(service.model[j].name);
+
+        if (service.model[j].name === 'My Accounts Only' || service.model[j].name === 'Off-Premise' ||  service.model[j].name === 'Authorized' ||  service.model[j].name === 'All Types') {
+          console.log(service.model[j].name);
+          count++;
+        }
+
+        if (count === 4) {
+          checkForDefaultFilters = true;
+        };
+      }
+      return checkForDefaultFilters;
     }
 
     /**
