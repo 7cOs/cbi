@@ -94,4 +94,13 @@
     height: 9em;
     overflow-x: hidden;
   }
+
+  // Fix rendering of impact icons
+  .predicted-impact .md-label .impact {
+    top: -4px;
+
+    &:before {
+      height: 20px;
+    }
+  }
 }
