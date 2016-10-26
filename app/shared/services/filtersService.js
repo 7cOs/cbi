@@ -115,7 +115,7 @@ module.exports = /*  @ngInject */
         opportunityStatus: [],
         opportunityType: ['All Types'],
         premiseType: 'off',
-        productType: ['authorized'],
+        productType: [],
         store: [],
         retailer: 'Chain',
         brandSearchText: '',
