@@ -84,7 +84,7 @@ form.filters(column='12' ng-class="{'target-list': filter.opportunities}")
       label Product Type
       md-checkbox(ng-model="filter.filtersService.model.productTypeFeatured" aria-label="Product Type Featured" ng-change="filter.applyFilterArr(filter.filtersService.model.selected.productType, 'featured', 'productType')") Featured
       md-checkbox(ng-model="filter.filtersService.model.productTypePriority" aria-label="Product Type Priority Packages" ng-change="filter.applyFilterArr(filter.filtersService.model.selected.productType, 'priority', 'productType', 'priority packages')") Priority Packages
-      md-checkbox(ng-model="filter.filtersService.model.productTypeAuthorized" aria-label="Product Type Authorized" ng-change="filter.applyFilterArr(filter.filtersService.model.selected.productType, 'authorized', 'productType')" ng-init="filter.filtersService.model.productTypeAuthorized = true") Authorized
+      md-checkbox(ng-model="filter.filtersService.model.productTypeAuthorized" aria-label="Product Type Authorized" ng-change="filter.applyFilterArr(filter.filtersService.model.selected.productType, 'authorized', 'productType')") Authorized
       div.checkbox-inline.trade-channel
         label.vertical Trade Channel
         md-checkbox(ng-repeat="channel in filter.filtersService.model.tradeChannels[filter.filtersService.model.selected.premiseType]" ng-model="filter.filtersService.model['tradeChannel' + channel.name]" aria-label="Trade Channel {{channel.name}}" ng-change="filter.applyFilterArr(filter.filtersService.model.selected.tradeChannel, channel.name, 'tradeChannel')") {{channel.label}}
