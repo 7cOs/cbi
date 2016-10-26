@@ -126,6 +126,8 @@ module.exports =
           case 'chain':
           case 'distributor':
           case 'product':
+            result.name ? vm.input = $filter('titlecase')(result.name) : vm.input = $filter('titlecase')(result.brand);
+            break;
           case 'location':
           case 'store':
             vm.input = $filter('titlecase')(result.name);
