@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports = /*  @ngInject */
-  function accountsController($rootScope, $scope, $state, $log, $q, $window, $filter, myperformanceService, chipsService, filtersService, loaderService, userService) {
+  function accountsController($rootScope, $scope, $state, $log, $q, $window, $filter, myperformanceService, chipsService, filtersService, userService) {
 
     // ****************
     // CONTROLLER SETUP
@@ -16,7 +16,6 @@ module.exports = /*  @ngInject */
     // Services
     vm.chipsService = chipsService;
     vm.filtersService = filtersService;
-    vm.loaderService = loaderService;
     vm.userService = userService;
 
     /* Need to remove this */
