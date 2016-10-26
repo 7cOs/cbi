@@ -80,6 +80,10 @@
         color: $blue;
         float: left;
         margin-top: 17px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        width: 75%;
       }
 
       .closed {
