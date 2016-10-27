@@ -162,8 +162,4 @@ module.exports = /*  @ngInject */
       }
     } // end init
 
-    $scope.$watch('o.filtersService.model', function(newVal) {
-      console.log(newVal);
-    }, true);
-
   }; // end controller
