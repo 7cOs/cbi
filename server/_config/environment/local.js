@@ -47,7 +47,7 @@ module.exports = function (config) {
     user: {
       'personId': 5648,
       'employeeID': '1012132',
-      'firstName': ' FRED',
+      'firstName': 'FRED',
       'lastName': 'BERRIOS',
       'email': 'FRED.BERRIOS@CBRANDS.COM',
       'srcTypeCd': [
@@ -81,7 +81,7 @@ module.exports = function (config) {
           'cbi-adenabledaccounts',
           'ug-cbigdc-biz-role-genmgr'
         ],
-        'email': 'FREDBERRIOS@CBRANDS.COM',
+        'email': 'FRED.BERRIOS@CBRANDS.COM',
         'srcTypeCd': [
           'SALES_HIER'
         ]
