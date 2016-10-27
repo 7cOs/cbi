@@ -482,6 +482,7 @@ describe('Unit: filter controller (opportunities)', function() {
 
     it('should call loaderService.openLoader and opportunityFiltersService.updateOpportunityFilter', function() {
       userService.model.newServiceSelect = 'test 1';
+      var chipsDescription = ctrl.getDescriptionForFilter(chipsService.model, filtersService.model);
 
       expect(loaderService.openLoader).not.toHaveBeenCalled();
       expect(loaderService.openLoader.calls.count()).toEqual(0);
@@ -492,7 +493,7 @@ describe('Unit: filter controller (opportunities)', function() {
 
       expect(loaderService.openLoader).toHaveBeenCalledWith(true);
       expect(loaderService.openLoader.calls.count()).toEqual(1);
-      expect(opportunityFiltersService.updateOpportunityFilter).toHaveBeenCalledWith('test 1');
+      expect(opportunityFiltersService.updateOpportunityFilter).toHaveBeenCalledWith('test 1', chipsDescription);
       expect(opportunityFiltersService.updateOpportunityFilter.calls.count()).toEqual(1);
     });
 
