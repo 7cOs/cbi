@@ -14,6 +14,7 @@ module.exports = /*  @ngInject */
     var vm = this;
     vm.opportunities = true;
     vm.hintTextPlaceholder = 'Account or Subaccount Name';
+    vm.showSaveButton = true;
 
     // Expose Needed Services
     vm.chipsService = chipsService;
@@ -248,8 +249,10 @@ module.exports = /*  @ngInject */
     function init() {
       if ($state.current.name === 'target-list-detail') {
         vm.opportunities = true;
+        vm.showSaveButton = false;
       } else {
         vm.opportunities = false;
+        vm.showSaveButton = true;
       }
     }
   };
