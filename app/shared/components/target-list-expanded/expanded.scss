@@ -19,8 +19,10 @@
     overflow: visible;
   }
 
-  .gray {
-    color: $gray-4;
+  .accent.collaborators,
+  .date {
+    color: $gray-8;
+    margin-top: 3em;
   }
 
   .closed {
