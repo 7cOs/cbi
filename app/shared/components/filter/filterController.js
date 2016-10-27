@@ -178,12 +178,29 @@ module.exports = /*  @ngInject */
       }
     }
 
+    function getFilterModel(currentFilterModel) {
+      var copyFilter = angular.copy(currentFilterModel);
+      var cleanedUpFilterObj = filtersService.cleanUpSaveFilterObj(copyFilter);
+      return cleanedUpFilterObj;
+    }
+
+    function getDescriptionForFilter(currentChipsModel, currentFilterModel) {
+      var modifiedFilterModel = getFilterModel(currentFilterModel);
+      var currentModel = {
+        filterModel: modifiedFilterModel,
+        chipsModel: currentChipsModel
+      };
+      return angular.toJson(currentModel);
+    }
+
     function saveFilter() {
       loaderService.openLoader(true);
-      userService.saveOpportunityFilter().then(function(data) {
+      var chipsDescription = getDescriptionForFilter(chipsService.model, filtersService.model);
+      userService.saveOpportunityFilter(chipsDescription).then(function(data) {
         userService.model.opportunityFilters.unshift({
           filterString: encodeURIComponent(filtersService.model.appliedFilter.appliedFilter),
-          name: filtersService.model.newServiceName
+          name: filtersService.model.newServiceName,
+          description: data.description
         });
 
         // reset new service name
@@ -199,11 +216,11 @@ module.exports = /*  @ngInject */
         console.warn(err);
         loaderService.closeLoader();
       });
+      loaderService.closeLoader();
     }
 
     function updateFilter() {
       var currentFilter = userService.model.newServiceSelect;
-
       loaderService.openLoader(true);
       // userService.updateOpportunityFilter(filterPayload, currentFilter).then(function(data) {
       opportunityFiltersService.updateOpportunityFilter(currentFilter).then(function(data) {

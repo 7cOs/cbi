@@ -41,49 +41,53 @@ module.exports = /*  @ngInject */
 
     function applySavedFilter(ev, filter) {
       var resetDefaultAuthorizationFlag = true;
-      var applyDefaultOpportunityTypeFilter = true;
-      var chipsMappedFromFilter = [];
+      var currentChipModel = null, currentFilterModel = null;
+
+      var filterDescription = IsJsonString(filter.description);
+      if (filterDescription) {
+        currentChipModel = filterDescription.chipsModel;
+        currentFilterModel = filterDescription.filterModel;
+      }
 
       chipsService.resetChipsFilters(chipsService.model);
+      vm.filtersService.model.appliedFilter.appliedFilter = filter.filterString;
+      filtersService.updateSelectedFilterModel(currentFilterModel);
+
       if (ev && ev.srcElement.nodeName === 'SPAN') {
         ev.preventDefault();
       } else {
         var arr = decodeURIComponent(filter.filterString).split(',');
-
         for (var i = 0; i < arr.length; i++) {
           if (arr[i].length > 0) {
             var prop = arr[i].split(':');
-            filtersService.updateSelectedFilterModel(prop);
-
             if (filtersService.checkForAuthorizationFlag(prop[0])) {
               resetDefaultAuthorizationFlag = false;
             }
-
-            if (chipsService.checkForOpportunityTypeFilter(prop[0])) {
-              applyDefaultOpportunityTypeFilter = false;
-            }
-
-            var matchedChips = chipsService.getChipsAssociatedWithFilter(prop);
-            if (matchedChips) {
-              Array.prototype.push.apply(chipsMappedFromFilter, matchedChips);
-            }
           }
         }
-        // By default the authorization flag is set on filtersService.model. We are just checking if there is a productType filter in the filter string. If not we need to reset productType array
-        if (resetDefaultAuthorizationFlag) {
-          filtersService.model.selected.productType = [];
-          filtersService.model.productTypeAuthorized = false;
-        }
-
-        // The filter string does not contain an opportunity type key if 'All Types' is selected (default) under opportunity type
-        if (applyDefaultOpportunityTypeFilter) {
-          chipsMappedFromFilter.push(chipsService.getDefaultOpportunityTypeFilter());
-        }
-
-        chipsService.addChipsArray(chipsMappedFromFilter);
-        chipsService.applyFilters();
-        filtersService.model.selected.currentFilter = filter.id;
       }
+
+      // By default the authorization flag is set on filtersService.model. We are just checking if there is a productType filter in the filter string. If not we need to reset productType array
+      if (resetDefaultAuthorizationFlag) {
+        filtersService.model.selected.productType = [];
+        filtersService.model.productTypeAuthorized = false;
+      }
+
+      if (currentChipModel && currentChipModel.length > 0) {
+        chipsService.addChipsArray(currentChipModel);
+      }
+      chipsService.applyFilters();
+      filtersService.model.selected.currentFilter = filter.id;
+    };
+
+    function IsJsonString(str) {
+      var chipsObj = [];
+      try {
+        chipsObj = JSON.parse(str);
+      } catch (e) {
+        chipsObj = null;
+      }
+      return chipsObj;
     }
 
     function closeModal() {

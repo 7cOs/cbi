@@ -2,6 +2,7 @@
 
 module.exports = /*  @ngInject */
   function filtersService($filter) {
+    var paramsNotIncludedInSaveFilter = ['opportunityType', 'opportunitiesType', 'placementType', 'premises', 'retailer', 'depletionsTimePeriod', 'distributionTimePeriod', 'accountSelected', 'selectedTemplate', 'timePeriod', 'tradeChannels', 'trend', 'defaultSort', 'appliedFilter'];
     var model = {
       account: [],
       appliedFilter: {
@@ -160,7 +161,6 @@ module.exports = /*  @ngInject */
         {name: 'vs ABP'}
       ]
     };
-
     var service = {
       model: model,
       addSortFilter: addSortFilter,
@@ -169,7 +169,8 @@ module.exports = /*  @ngInject */
       resetFilters: resetFilters,
       updateSelectedFilterModel: updateSelectedFilterModel,
       checkForAuthorizationFlag: checkForAuthorizationFlag,
-      resetSort: resetSort
+      resetSort: resetSort,
+      cleanUpSaveFilterObj: cleanUpSaveFilterObj
     };
 
     return service;
@@ -201,18 +202,10 @@ module.exports = /*  @ngInject */
      * This function converts the query string to appropriate selected model in the filter
      * @params {Object} filterProp - Name of the filter
      */
-    function updateSelectedFilterModel(filterProp) {
-      var propName = filterProp[0];
-      var propValue = filterProp[1];
-      var filterSelectionModel = model.selected;
-      if (filterSelectionModel.hasOwnProperty(propName)) {
-        if (Array.isArray(filterSelectionModel[propName])) {
-          var propValuesSplit = propValue.split('|');
-          angular.forEach(propValuesSplit, function (val, key) {
-            filterSelectionModel[propName].push(val);
-          });
-        } else {
-          filterSelectionModel[propName] = propValue;
+    function updateSelectedFilterModel(filterModel) {
+      for (var property in filterModel) {
+        if (filterModel.hasOwnProperty(property)) {
+          service.model[property] = filterModel[property];
         }
       }
     }
@@ -227,7 +220,6 @@ module.exports = /*  @ngInject */
           filterPayload[key] = service.model.selected[key];
         }
       }
-
       return filterPayload;
     }
 
@@ -237,6 +229,28 @@ module.exports = /*  @ngInject */
       service.model.filtersDefault = filtersDefaultBool;
       service.model.disableReset = disableResetBool;
       service.model.disableSaveFilter = disableSaveFilterBool;
+    }
+
+    function cleanUpSaveFilterObj(currentFilterObj) {
+      // Remove all categories in the model that need be saved
+      angular.forEach(paramsNotIncludedInSaveFilter, function(val, index) {
+        if (currentFilterObj.hasOwnProperty(val)) {
+          delete currentFilterObj[val];
+        }
+      });
+
+      // Remove all empty and false properties of object
+      for (var prop in currentFilterObj) {
+        var propVal = currentFilterObj[prop];
+        if (currentFilterObj.hasOwnProperty(prop) && propVal !== '' && propVal !== 'false') {
+          if (Array.isArray(propVal) && propVal.length === 0) {
+            delete currentFilterObj[prop];
+          }
+        } else {
+          delete currentFilterObj[prop];
+        }
+      }
+      return currentFilterObj;
     }
 
     function resetFilters() {
