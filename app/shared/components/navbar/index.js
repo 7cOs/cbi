@@ -18,6 +18,10 @@ function NavbarController($rootScope, $scope, $state, $window, $mdPanel, $mdDial
   $rootScope.$on('$stateChangeStart', function() {
     loaderService.closeLoader();
   });
+  // fixes hanging selects in menu
+  $rootScope.$on('$mdMenuClose', function() {
+    $mdSelect.hide();
+  });
 
   // Currently logged in user (for analytics)
   $window.currentUserId = userService.model.currentUser.employeeID;
