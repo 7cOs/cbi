@@ -44,10 +44,13 @@ module.exports = /*  @ngInject */
      * @returns {Object} - Status object
      * @memberOf cf.common.services
      */
-    function updateOpportunityFilter(filterId) {
+    function updateOpportunityFilter(filterId, filterDescription) {
       var opportunityFilterPromise = $q.defer(),
           url = apiHelperService.request('api/opportunityFilters/' + filterId),
-          payload = {filterString: encodeURIComponent(filtersService.model.appliedFilter.appliedFilter)};
+          payload = {
+            filterString: encodeURIComponent(filtersService.model.appliedFilter.appliedFilter),
+            description: filterDescription
+          };
 
       $http.patch(url, payload)
         .then(updateOpportunityFilterSuccess)
