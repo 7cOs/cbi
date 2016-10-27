@@ -719,9 +719,14 @@ module.exports = /*  @ngInject */
       var checkForDefaultFilters = false,
           count = 0;
 
-      for (var j = 0; j < service.model.length; j++) {
+      if (model.length !== 4) {
+        checkForDefaultFilters = false;
+        return checkForDefaultFilters;
+      }
 
-        if (service.model[j].name === 'My Accounts Only' || service.model[j].name === 'Off-Premise' ||  service.model[j].name === 'Authorized' ||  service.model[j].name === 'All Types') {
+      for (var j = 0; j < model.length; j++) {
+
+        if (model[j].name === 'My Accounts Only' || model[j].name === 'Off-Premise' ||  model[j].name === 'Authorized' ||  model[j].name === 'All Types') {
           count++;
         }
 
