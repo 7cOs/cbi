@@ -25,9 +25,9 @@ describe('[Services.chipsService]', function() {
     {
       'name': 'Off-Premise'
     },
-    {
-      'name': 'Authorized'
-    },
+    // {
+    //   'name': 'Authorized'
+    // },
     {
       'name': 'All Types'
     },
@@ -43,9 +43,9 @@ describe('[Services.chipsService]', function() {
     {
       'name': 'Off-Premise'
     },
-    {
-      'name': 'Authorized'
-    },
+    // {
+    //   'name': 'Authorized'
+    // },
     {
       'name': 'All Types'
     }
@@ -60,10 +60,10 @@ describe('[Services.chipsService]', function() {
     },
     {
       'name': 'My Accounts Only'
-    },
-    {
-      'name': 'Authorized'
     }
+    // {
+    //   'name': 'Authorized'
+    // }
   ];
 
   it('should exist', function() {
