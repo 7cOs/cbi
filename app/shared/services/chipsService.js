@@ -345,6 +345,8 @@ module.exports = /*  @ngInject */
     // All filters which have a chip model and just need the name property in the chip replaced are placed here
     var textSearchFilters = ['state', 'city', 'zipCode'];
 
+    var defaultFilterArrayLength = 3;
+
     var service = {
       model: model,
       addAutocompleteChip: addAutocompleteChip,
@@ -422,7 +424,7 @@ module.exports = /*  @ngInject */
           removable: removable
         });
         // filtersService.disableFilters(false, false, true, false);
-        if (service.model.length === 3 && isDefault(service.model)) {
+        if (service.model.length === defaultFilterArrayLength && isDefault(service.model)) {
           filtersService.disableFilters(false, false, false, false);
         } else {
           filtersService.disableFilters(false, false, true, false);
@@ -705,7 +707,7 @@ module.exports = /*  @ngInject */
         filtersService.model.selected[chip.type] = false;
       }
 
-      if (service.model.length === 3 && isDefault(service.model)) {
+      if (service.model.length === defaultFilterArrayLength && isDefault(service.model)) {
         filtersService.disableFilters(false, false, false, false);
       } else {
         filtersService.disableFilters(false, false, true, false);
@@ -724,7 +726,7 @@ module.exports = /*  @ngInject */
       var checkForDefaultFilters = false,
           count = 0;
 
-      if (model.length !== 3) {
+      if (model.length !== defaultFilterArrayLength) {
         checkForDefaultFilters = false;
         return checkForDefaultFilters;
       }
@@ -735,7 +737,7 @@ module.exports = /*  @ngInject */
           count++;
         }
 
-        if (count === 3) {
+        if (count === defaultFilterArrayLength) {
           checkForDefaultFilters = true;
         };
       }
@@ -826,7 +828,7 @@ module.exports = /*  @ngInject */
       }
       filtersService.model[filter] = '';
       // filtersService.disableFilters(false, false, true, false);
-      if (service.model.length === 3 && isDefault(service.model)) {
+      if (service.model.length === defaultFilterArrayLength && isDefault(service.model)) {
         filtersService.disableFilters(false, false, false, false);
       } else {
         filtersService.disableFilters(false, false, true, false);
