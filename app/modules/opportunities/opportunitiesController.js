@@ -50,7 +50,7 @@ module.exports = /*  @ngInject */
       }
 
       chipsService.resetChipsFilters(chipsService.model);
-      // vm.filtersService.model = currentFilterModel;
+      vm.filtersService.model.appliedFilter.appliedFilter = filter.filterString;
       filtersService.updateSelectedFilterModel(currentFilterModel);
 
       if (ev && ev.srcElement.nodeName === 'SPAN') {

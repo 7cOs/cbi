@@ -180,17 +180,8 @@ module.exports = /*  @ngInject */
 
     function getFilterModel(currentFilterModel) {
       var copyFilter = angular.copy(currentFilterModel);
-      var propsToBeRemoved = filtersService.paramsNotIncludedInSaveFilter;
-      console.log('Current Filter');
-      console.log(filtersService.model);
-      angular.forEach(propsToBeRemoved, function(val, index) {
-        if (copyFilter.hasOwnProperty(val)) {
-          console.log('Deleted Property' + val);
-          delete copyFilter[val];
-        }
-      });
-      console.log('Copy Filter');
-      return copyFilter;
+      var cleanedUpFilterObj = filtersService.cleanUpSaveFilterObj(copyFilter);
+      return cleanedUpFilterObj;
     }
 
     function getDescriptionForFilter(currentChipsModel, currentFilterModel) {

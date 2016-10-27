@@ -2,8 +2,7 @@
 
 module.exports = /*  @ngInject */
   function filtersService($filter) {
-    var paramsNotIncludedInSaveFilter = ['trend', 'tradeChannels', 'timePeriod', 'selectedTemplate',
-      'accountSelected', 'distributionTimePeriod', 'depletionsTimePeriod', 'retailer', 'premises', 'placementType', 'opportunitiesType', 'opportunityType', 'impact', 'disableSaveFilter', 'filtersDefault', 'filtersApplied', 'disableReset', 'expanded', 'distributor', 'defaultSort'];
+    var paramsNotIncludedInSaveFilter = ['opportunityType', 'opportunitiesType', 'placementType', 'premises', 'retailer', 'depletionsTimePeriod', 'distributionTimePeriod', 'accountSelected', 'selectedTemplate', 'timePeriod', 'tradeChannels', 'trend', 'defaultSort', 'appliedFilter'];
     var model = {
       account: [],
       appliedFilter: {
@@ -171,7 +170,8 @@ module.exports = /*  @ngInject */
       updateSelectedFilterModel: updateSelectedFilterModel,
       checkForAuthorizationFlag: checkForAuthorizationFlag,
       resetSort: resetSort,
-      paramsNotIncludedInSaveFilter: paramsNotIncludedInSaveFilter
+      paramsNotIncludedInSaveFilter: paramsNotIncludedInSaveFilter,
+      cleanUpSaveFilterObj: cleanUpSaveFilterObj
     };
 
     return service;
@@ -230,6 +230,29 @@ module.exports = /*  @ngInject */
       service.model.filtersDefault = filtersDefaultBool;
       service.model.disableReset = disableResetBool;
       service.model.disableSaveFilter = disableSaveFilterBool;
+    }
+
+    function cleanUpSaveFilterObj(currentFilterObj) {
+      console.log(currentFilterObj);
+      angular.forEach(paramsNotIncludedInSaveFilter, function(val, index) {
+        if (currentFilterObj.hasOwnProperty(val)) {
+          delete currentFilterObj[val];
+        }
+      });
+
+      for (var prop in currentFilterObj) {
+        var propVal = currentFilterObj[prop];
+        if (currentFilterObj.hasOwnProperty(prop) && propVal !== '' && propVal !== 'false') {
+          if (Array.isArray(propVal) && propVal.length === 0) {
+            delete currentFilterObj[prop];
+          }
+        } else {
+          delete currentFilterObj[prop];
+        }
+      }
+      console.log('Current FilterObj');
+      console.log(currentFilterObj);
+      return currentFilterObj;
     }
 
     function resetFilters() {
