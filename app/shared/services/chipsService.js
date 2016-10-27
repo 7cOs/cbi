@@ -421,7 +421,12 @@ module.exports = /*  @ngInject */
           applied: false,
           removable: removable
         });
-        filtersService.disableFilters(false, false, true, false);
+        // filtersService.disableFilters(false, false, true, false);
+        if (service.model.length === 3 && isDefault(service.model)) {
+          filtersService.disableFilters(false, false, false, false);
+        } else {
+          filtersService.disableFilters(false, false, true, false);
+        }
       }
     }
 
@@ -820,7 +825,12 @@ module.exports = /*  @ngInject */
         }
       }
       filtersService.model[filter] = '';
-      filtersService.disableFilters(false, false, true, false);
+      // filtersService.disableFilters(false, false, true, false);
+      if (service.model.length === 3 && isDefault(service.model)) {
+        filtersService.disableFilters(false, false, false, false);
+      } else {
+        filtersService.disableFilters(false, false, true, false);
+      }
     }
 
     /**
