@@ -221,18 +221,7 @@ module.exports = /*  @ngInject */
 
     function updateFilter() {
       var currentFilter = userService.model.newServiceSelect;
-
       loaderService.openLoader(true);
-
-      var chipsDescription = getDescriptionForFilter(chipsService.model, filtersService.model);
-      loaderService.closeLoader();
-      userService.saveOpportunityFilter(chipsDescription).then(function(data) {
-        userService.model.opportunityFilters.unshift({
-          filterString: encodeURIComponent(filtersService.model.appliedFilter.appliedFilter),
-          name: filtersService.model.newServiceName,
-          description: data.description
-        });
-
       // userService.updateOpportunityFilter(filterPayload, currentFilter).then(function(data) {
       opportunityFiltersService.updateOpportunityFilter(currentFilter).then(function(data) {
         filtersService.disableFilters(true, false, true, false);
