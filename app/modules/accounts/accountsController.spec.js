@@ -112,4 +112,16 @@ describe('Unit: accountsController', function() {
       expect(typeof (ctrl.updateTopBottom)).toEqual('function');
     });
   });
+
+  describe('[Method] brandTotal', function() {
+    beforeEach(function() {
+      ctrl.brandTabs = [];
+    });
+
+    it('Should get totals for depletions', function() {});
+
+    it('Should get totals for distributions', function() {});
+
+    it('Should get totals for velocity', function() {});
+  });
 });
