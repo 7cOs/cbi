@@ -423,7 +423,6 @@ module.exports = /*  @ngInject */
           applied: false,
           removable: removable
         });
-        // filtersService.disableFilters(false, false, true, false);
         if (service.model.length === defaultFilterArrayLength && isDefault(service.model)) {
           filtersService.disableFilters(false, false, false, false);
         } else {
@@ -633,7 +632,6 @@ module.exports = /*  @ngInject */
      * @private
      */
     function removeChip(type) {
-      console.log(service.model);
       var i = service.model.length;
       while (i--) {
         if (service.model[i].type === type) {
@@ -653,7 +651,6 @@ module.exports = /*  @ngInject */
      * @memberOf cf.common.services
      */
     function removeFromFilterService(chip) {
-
       if (chip.search || chip.type === 'opportunityType' || chip.type === 'state') {
         var arr = filtersService.model.selected[chip.type];
         var i = arr.length;
@@ -827,7 +824,6 @@ module.exports = /*  @ngInject */
         }
       }
       filtersService.model[filter] = '';
-      // filtersService.disableFilters(false, false, true, false);
       if (service.model.length === defaultFilterArrayLength && isDefault(service.model)) {
         filtersService.disableFilters(false, false, false, false);
       } else {
