@@ -263,15 +263,17 @@ module.exports = /*  @ngInject */
     /**
      * @name saveOpportunityFilter
      * @desc save new filter for a user
+     * @param {String} filterDescription Stringified chips object is saved in description
      * @returns {Object} - Status Object
      * @memberOf cf.common.services
      */
-    function saveOpportunityFilter() {
+    function saveOpportunityFilter(filterDescription) {
       var opportunityFilterPromise = $q.defer(),
           url = apiHelperService.request('/api/users/' + service.model.currentUser.employeeID + '/opportunityFilters/'),
           payload = {
             name: filtersService.model.newServiceName,
-            filterString: encodeURIComponent(filtersService.model.appliedFilter.appliedFilter)
+            filterString: encodeURIComponent(filtersService.model.appliedFilter.appliedFilter),
+            description: filterDescription
           };
 
       $http.post(url, payload)
