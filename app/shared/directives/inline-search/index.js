@@ -50,10 +50,22 @@ module.exports =
       vm.close = close;
       vm.onKeypress = onKeypress;
       vm.userDataFormat = userDataFormat;
+      vm.inputFocused = inputFocused;
+
+      $scope.$watch(function() { return searchService.model.searchActive; }, function(newVal) {
+        if (!newVal) {
+          close();
+          searchService.setSearchActive(false);
+        }
+      }, true);
 
       // **************
       // PUBLIC METHODS
       // **************
+
+      function inputFocused() {
+        searchService.setSearchActive(false);
+      }
 
       function action(type) {
         var method;
@@ -64,6 +76,8 @@ module.exports =
         vm.showResults = true;
         vm.type = type;
         vm.showSearchIcon = true;
+
+        searchService.setSearchActive(true);
 
         switch (type) {
           case 'user':
