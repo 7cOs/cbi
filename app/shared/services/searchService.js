@@ -3,7 +3,13 @@
 module.exports = /*  @ngInject */
   function searchService($http, $q, apiHelperService) {
 
+    var model = {
+      searchActive: false
+    };
+
     var service = {
+      model: model,
+      setSearchActive: setSearchActive,
       getUsers: getUsers,
       getProducts: getProducts,
       getStores: getStores,
@@ -13,6 +19,10 @@ module.exports = /*  @ngInject */
     };
 
     return service;
+
+    function setSearchActive(value) {
+      model.searchActive = value;
+    }
 
     /**
      * @name getUsers
