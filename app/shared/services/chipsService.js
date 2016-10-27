@@ -705,7 +705,7 @@ module.exports = /*  @ngInject */
         filtersService.model.selected[chip.type] = false;
       }
 
-      if (service.model.length === 4 && isDefault(service.model)) {
+      if (service.model.length === 3 && isDefault(service.model)) {
         filtersService.disableFilters(false, false, false, false);
       } else {
         filtersService.disableFilters(false, false, true, false);
@@ -724,7 +724,7 @@ module.exports = /*  @ngInject */
       var checkForDefaultFilters = false,
           count = 0;
 
-      if (model.length !== 4) {
+      if (model.length !== 3) {
         checkForDefaultFilters = false;
         return checkForDefaultFilters;
       }
@@ -735,7 +735,7 @@ module.exports = /*  @ngInject */
           count++;
         }
 
-        if (count === 4) {
+        if (count === 3) {
           checkForDefaultFilters = true;
         };
       }
