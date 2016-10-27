@@ -73,15 +73,12 @@ module.exports = /*  @ngInject */
         filtersService.model.productTypeAuthorized = false;
       }
 
-      if (filter.description) {
-        if (currentChipModel && currentChipModel.length > 0) {
-          chipsService.addChipsArray(currentChipModel);
-        }
+      if (currentChipModel && currentChipModel.length > 0) {
+        chipsService.addChipsArray(currentChipModel);
       }
       chipsService.applyFilters();
       filtersService.model.selected.currentFilter = filter.id;
-      console.log(filtersService.model);
-    }
+    };
 
     function IsJsonString(str) {
       var chipsObj = [];

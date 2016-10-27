@@ -170,7 +170,6 @@ module.exports = /*  @ngInject */
       updateSelectedFilterModel: updateSelectedFilterModel,
       checkForAuthorizationFlag: checkForAuthorizationFlag,
       resetSort: resetSort,
-      paramsNotIncludedInSaveFilter: paramsNotIncludedInSaveFilter,
       cleanUpSaveFilterObj: cleanUpSaveFilterObj
     };
 
@@ -233,13 +232,14 @@ module.exports = /*  @ngInject */
     }
 
     function cleanUpSaveFilterObj(currentFilterObj) {
-      console.log(currentFilterObj);
+      // Remove all categories in the model that need be saved
       angular.forEach(paramsNotIncludedInSaveFilter, function(val, index) {
         if (currentFilterObj.hasOwnProperty(val)) {
           delete currentFilterObj[val];
         }
       });
 
+      // Remove all empty and false properties of object
       for (var prop in currentFilterObj) {
         var propVal = currentFilterObj[prop];
         if (currentFilterObj.hasOwnProperty(prop) && propVal !== '' && propVal !== 'false') {
@@ -250,8 +250,6 @@ module.exports = /*  @ngInject */
           delete currentFilterObj[prop];
         }
       }
-      console.log('Current FilterObj');
-      console.log(currentFilterObj);
       return currentFilterObj;
     }
 
