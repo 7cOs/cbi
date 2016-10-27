@@ -25,6 +25,8 @@ module.exports = /*  @ngInject */
     ];
     var model = [];
 
+    var defaultFilterArrayLength = 3;
+
     var service = {
       model: model,
       addAutocompleteChip: addAutocompleteChip,
@@ -37,7 +39,8 @@ module.exports = /*  @ngInject */
       applyFilterArr: applyFilterArr,
       applyFilterMulti: applyFilterMulti,
       applyStatesFilter: applyStatesFilter,
-      addChipsArray: addChipsArray
+      addChipsArray: addChipsArray,
+      isDefault: isDefault
     };
 
     return service;
@@ -94,7 +97,11 @@ module.exports = /*  @ngInject */
           applied: false,
           removable: removable
         });
-        filtersService.disableFilters(false, false, true, false);
+        if (service.model.length === defaultFilterArrayLength && isDefault(service.model)) {
+          filtersService.disableFilters(false, false, false, false);
+        } else {
+          filtersService.disableFilters(false, false, true, false);
+        }
       }
     }
 
@@ -219,7 +226,42 @@ module.exports = /*  @ngInject */
       } else if (typeof chip.type === 'boolean') {
         filtersService.model.selected[chip.type] = false;
       }
-      filtersService.disableFilters(false, false, true, false);
+
+      if (service.model.length === defaultFilterArrayLength && isDefault(service.model)) {
+        filtersService.disableFilters(false, false, false, false);
+      } else {
+        filtersService.disableFilters(false, false, true, false);
+      }
+    }
+
+    /**
+     * @name isDefault
+     * @desc check to see if filters are at the default values
+     * @params {Object} service.model
+     * @returns boolean
+     * @memberOf cf.common.services
+     */
+
+    function isDefault(model) {
+      var checkForDefaultFilters = false,
+          count = 0;
+
+      if (model.length !== defaultFilterArrayLength) {
+        checkForDefaultFilters = false;
+        return checkForDefaultFilters;
+      }
+
+      for (var j = 0; j < model.length; j++) {
+
+        if (model[j].name === 'My Accounts Only' || model[j].name === 'Off-Premise' ||  model[j].name === 'Authorized' ||  model[j].name === 'All Types') {
+          count++;
+        }
+
+        if (count === defaultFilterArrayLength) {
+          checkForDefaultFilters = true;
+        };
+      }
+      return checkForDefaultFilters;
     }
 
     /**
@@ -305,7 +347,11 @@ module.exports = /*  @ngInject */
         }
       }
       filtersService.model[filter] = '';
-      filtersService.disableFilters(false, false, true, false);
+      if (service.model.length === defaultFilterArrayLength && isDefault(service.model)) {
+        filtersService.disableFilters(false, false, false, false);
+      } else {
+        filtersService.disableFilters(false, false, true, false);
+      }
     }
 
     /**
