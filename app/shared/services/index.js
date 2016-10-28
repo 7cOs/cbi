@@ -19,4 +19,5 @@ module.exports =
     .factory('searchService', require('./searchService'))
     .factory('scrollService', require('./scrollService'))
     .factory('usStatesService', require('./usStatesService'))
-    .factory('loaderService', require('./loaderService'));
+    .factory('loaderService', require('./loaderService'))
+    .factory('ieHackService', require('./ieHackService'));

@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports = /*  @ngInject */
-  function listController($scope, $state, $q, $location, $anchorScroll, $mdDialog, $timeout, filtersService, loaderService, opportunitiesService, targetListService, storesService, userService, closedOpportunitiesService) {
+  function listController($scope, $state, $q, $location, $anchorScroll, $mdDialog, $timeout, filtersService, loaderService, opportunitiesService, targetListService, storesService, userService, closedOpportunitiesService, ieHackService) {
 
     // ****************
     // CONTROLLER SETUP
@@ -114,6 +114,7 @@ module.exports = /*  @ngInject */
           vm.sharedCollaborators.push(person);
         }
       }
+      ieHackService.forceRepaint();
     }
 
     /**

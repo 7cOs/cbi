@@ -1,18 +1,17 @@
 'use strict';
 
-function NavbarController($rootScope, $scope, $state, $window, $mdPanel, $mdDialog, $mdMenu, $mdSelect, notificationsService, opportunitiesService, targetListService, userService, versionService, loaderService) {
+function NavbarController($rootScope, $scope, $state, $window, $mdPanel, $mdDialog, $mdMenu, $mdSelect, notificationsService, opportunitiesService, targetListService, userService, versionService, loaderService, ieHackService) {
 
   // ****************
   // CONTROLLER SETUP
   // ****************
 
   // Initial variables
-  var vm = this,
-      userAgent = navigator.userAgent;
+  var vm = this;
 
   // User Agent Detection for IE fixes
-  $rootScope.isIE = (/Trident\/7\./g).test(userAgent);
-  $rootScope.isEdge = (/(?:\bEdge\/)(\d+)/g).test(userAgent);
+  $rootScope.isIE = ieHackService.isIE;
+  $rootScope.isEdge = ieHackService.isEdge;
 
   // Reset any active loaders on state change
   $rootScope.$on('$stateChangeStart', function() {
