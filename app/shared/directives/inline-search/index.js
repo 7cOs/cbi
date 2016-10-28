@@ -159,9 +159,10 @@ module.exports =
           // We'll need to pass result for filtering once Accounts is integrated
           $location.url('/accounts');
         }
+
         vm.callback({result: result});
         vm.chosenResult = result;
-        close();
+        vm.variety === 'manage-collaborators' ? close(true) : close();
         clearPreviousSelection();
       }
 
