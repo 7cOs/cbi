@@ -160,6 +160,8 @@ module.exports = /*  @ngInject */
           opportunitiesService.model.opportunityId = null;
         });
       }
+
+      console.log('[filtersService.model.selected]', filtersService.model.selected);
     } // end init
 
   }; // end controller
