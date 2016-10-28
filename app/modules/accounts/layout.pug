@@ -80,7 +80,7 @@ notes
   div(row)
     div(column='12' class='apply-filters')
       button(value='Apply Filters' type="button" class="btn-action" ng-disabled="a.filtersService.model.filtersApplied" ng-click="a.chipsService.applyFilters()") Apply Filters
-      .secondary-button-container.account-filter-reset
+      .secondary-button-container.reset-only
         //- a(ng-click="a.resetFilters()" ng-disabled="!a.filtersService.model.filtersApplied" ng-class="{'disabled reset-icon-disabled': !a.filtersService.model.filtersApplied}").accent.reset-icon Reset
         a(ng-click="a.resetFilters()").accent.reset-icon Reset
 
