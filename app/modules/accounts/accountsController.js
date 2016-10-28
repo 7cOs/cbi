@@ -69,6 +69,7 @@ module.exports = /*  @ngInject */
     vm.overviewOpen = false;
     vm.idSelected = null;
     vm.brandIdSelected = null;
+    vm.loadingBrandSnapshot = true;
 
     // Chart Setup
     vm.chartData = [{'values': vm.marketData.distributors}];
@@ -164,10 +165,10 @@ module.exports = /*  @ngInject */
     function selectItem(widget, item, parent, parentIndex) {
       var parentLength = Object.keys(parent).length;
 
-      // run loader
+      vm.loadingBrandSnapshot = true;
       userService.getPerformanceBrand({premiseType: vm.filterModel.premiseType, brand: item.id}).then(function(data) {
-        console.log('[userService.getPerformanceBrand]', data);
         vm.brandTabs.skus = data.performance;
+        vm.loadingBrandSnapshot = false;
       });
 
       if (parentIndex + 1 === parentLength) {
@@ -346,22 +347,8 @@ module.exports = /*  @ngInject */
         userService.model.depletion = data[1];
         userService.model.distribution = data[2];
         vm.brandTabs.brands = data[3].performance;
-      });
 
-      /* userService.getPerformanceSummary().then(function(data) {
-        userService.model.summary = data;
+        vm.loadingBrandSnapshot = false;
       });
-
-      userService.getPerformanceDepletion().then(function(data) {
-        userService.model.depletion = data;
-      });
-
-      userService.getPerformanceDistribution({'type': 'noencode', 'premiseType': 'off'}).then(function(data) {
-        userService.model.distribution = data;
-      });
-
-      userService.getPerformanceBrand().then(function(data) {
-        vm.brandTabs.brands = data.performance;
-      }); */
     }
   };
