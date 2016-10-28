@@ -263,9 +263,7 @@ module.exports = /*  @ngInject */
 
       // add opportunity ids into array to be posted
       for (var i = 0; i < vm.selected.length; i++) {
-        for (var j = 0; j < vm.selected[i].groupedOpportunities.length; j++) {
-          opportunityIds.push(vm.selected[i].groupedOpportunities[j].id);
-        }
+        opportunityIds.push(vm.selected[i].id);
       }
 
       targetListService.deleteTargetListOpportunities(targetListService.model.currentList.id, opportunityIds).then(function(data) {
