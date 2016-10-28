@@ -18,10 +18,66 @@ module.exports = /*  @ngInject */
     vm.filtersService = filtersService;
     vm.userService = userService;
 
+    vm.filters = {
+      placementType: [{
+        name: 'Simple'
+      }, {
+        name: 'Effective'
+      }],
+      trend: [{
+        name: 'vs YA'
+      }, {
+        name: 'vs ABP'
+      }],
+      premises: [{
+        name: 'All'
+      }, {
+        name: 'Off-Premise'
+      }, {
+        name: 'On-Premise'
+      }],
+      accountBrands: [{
+        name: 'Distribution (simple)'
+      }, {
+        name: 'Velocity'
+      }],
+      accountMarkets: [{
+        name: 'Depletions'
+      }, {
+        name: 'Distribution (simple)'
+      }, {
+        name: 'Distribution (effective)'
+      }, {
+        name: 'Velocity'
+      }],
+      valuesVsTrend: [{
+        name: 'Top 10 (Values)'
+      }, {
+        name: 'Top 10 (Trend)'
+      }, {
+        name: 'Bottom 10 (Values)'
+      }, {
+        name: 'Bottom 10 (Trend)'
+      }],
+      accountTypes: [{
+        name: 'Distributors'
+      }, {
+        name: 'Accounts'
+      }, {
+        name: 'Sub-Accounts'
+      }, {
+        name: 'Stores'
+      }],
+      storeTypes: [{
+        name: 'Chain'
+      }, {
+        name: 'Independent'
+      }]
+    };
     /* Need to remove this */
     vm.marketData = myperformanceService.marketData();
 
-    // Filter Model - Keeping this out of filterService as its not needed anywhere else
+    // Filter Model - Keeping this out of filtersService as its not needed anywhere else
     var filterModelTemplate = {
       trend: filtersService.model.trend[0].name,
       endingTimePeriod: filtersService.model.timePeriod[0].name,
@@ -32,8 +88,11 @@ module.exports = /*  @ngInject */
       distributor: '',
       storeTypeCBBD: false,
       storeTypeIndependent: false,
-      retailer: ''
+      retailer: '',
+      retailType: '',
+      brand: ''
     };
+    vm.filterModelDisplay = angular.copy(filterModelTemplate); // So we can display strings instead of ids for distributor, brnad, chain etc.
     vm.filterModel = angular.copy(filterModelTemplate);
 
     // Widget / tab contents
@@ -116,14 +175,16 @@ module.exports = /*  @ngInject */
     // Expose public methods
     vm.brandTotal = brandTotal;
     vm.displayBrandValue = displayBrandValue;
+    vm.goToOpportunities = goToOpportunities;
     vm.isPositive = isPositive;
-    vm.openSelect = openSelect;
-    vm.setMarketTab = setMarketTab;
-    vm.selectItem = selectItem;
-    vm.prevTab = prevTab;
     vm.openNotes = openNotes;
+    vm.openSelect = openSelect;
     vm.placeholderSelect = placeholderSelect;
+    vm.prevTab = prevTab;
     vm.resetFilters = resetFilters;
+    vm.selectItem = selectItem;
+    vm.setFilter = setFilter;
+    vm.setMarketTab = setMarketTab;
     vm.updateBrandSnapshot = updateBrandSnapshot;
     vm.updateTopBottom = updateTopBottom;
 
@@ -161,11 +222,82 @@ module.exports = /*  @ngInject */
       }
     }
 
+    /*
+    ** @param {Array} brandMeasures - array of measures for a brand
+    ** @param {String} property - property to fetch from object depletions, depletionsTrend
+    ** @param {String} timePeriod - property to get from filterModel
+    */
+    function displayBrandValue(brandMeasures, property, timePeriod) {
+      for (var i = 0; i < brandMeasures.length; i++) {
+        if (brandMeasures[i].timeframe === vm.filterModel[timePeriod]) {
+          return brandMeasures[i][property];
+        }
+      }
+
+      // return brandMeasures.[property]
+    }
+
+    function goToOpportunities() {
+      // reset selected filters to prevent unneeded stuff from entering
+      filtersService.resetFilters();
+
+      // Add filters from here to filtersService.model.selected so they can be consumed on init of opp controller
+      if (vm.filterModel.distributor !== '') filtersService.model.selected.distributor.push(vm.filterModel.distributor);
+      if (vm.filterModel.retailer !== '') filtersService.model.selected[vm.filterModelDisplay.retailType.toLowerCase()].push(vm.filterModel.retailer);
+      filtersService.model.selected.myAccountsOnly = vm.filterModel.myAccountsOnly;
+      filtersService.model.selected.premiseType = vm.filterModel.premiseType;
+      if (vm.filterModel.storeTypeCBBD) filtersService.model.selected.cbbdChain.push('Cbbd');
+      if (vm.filterModel.storeTypeIndependent) filtersService.model.selected.cbbdChain.push('Independent');
+      if (vm.filterModel.brand !== '') filtersService.model.selected.brand.push(vm.filterModel.brand);
+
+      $state.go('opportunities', {
+        resetFiltersOnLoad: false,
+        getDataOnLoad: true
+      });
+    }
+
+    // Check if sales data value is positive (for display in UI)
+    function isPositive(salesData) {
+      if (salesData >= 0) {
+        return true;
+      }
+      return false;
+    }
+
+    // Make notes available to the page
+    function openNotes(val) {
+      $rootScope.$broadcast('notes:opened', val);
+    }
+
+    // Set variable when select box is open (for bug in scroll binding)
+    function openSelect(value) {
+      vm.selectOpen = value;
+    }
+
+    function placeholderSelect(data) {
+      vm.hintTextPlaceholder = data;
+    }
+
+    // Move to previously indexed tab (only used for brands)
+    function prevTab() {
+      if (vm.brandSelectedIndex > 0) {
+        vm.brandSelectedIndex = vm.brandSelectedIndex - 1;
+        vm.brandWidgetTitle = vm.brandWidgetTitleDefault;
+        vm.brandIdSelected = null;
+        vm.filterModel.brand = '';
+      }
+    }
+
+    function resetFilters() {
+      vm.filterModel = angular.copy(filterModelTemplate);
+    }
+
     // When a row item is clicked in brands / market widgets
     function selectItem(widget, item, parent, parentIndex) {
       var parentLength = Object.keys(parent).length;
 
       vm.loadingBrandSnapshot = true;
+      vm.filterModel.brand = item.id;
       userService.getPerformanceBrand({premiseType: vm.filterModel.premiseType, brand: item.id}).then(function(data) {
         vm.brandTabs.skus = data.performance;
         vm.loadingBrandSnapshot = false;
@@ -182,20 +314,8 @@ module.exports = /*  @ngInject */
       if (widget === 'markets') { getActiveTab(); }
     }
 
-    // Move to next indexed tab
-    function nextTab(widget) {
-      vm.disableAnimation = false;
-      if (widget === 'brands') { vm.brandSelectedIndex = vm.brandSelectedIndex + 1; }
-      if (widget === 'markets') { vm.marketSelectedIndex = vm.marketSelectedIndex + 1; }
-    }
-
-    // Move to previously indexed tab (only used for brands)
-    function prevTab() {
-      if (vm.brandSelectedIndex > 0) {
-        vm.brandSelectedIndex = vm.brandSelectedIndex - 1;
-        vm.brandWidgetTitle = vm.brandWidgetTitleDefault;
-        vm.brandIdSelected = null;
-      }
+    function setFilter(result, filterModelProperty) {
+      vm.filterModel[filterModelProperty] = result.id;
     }
 
     // Set proper tab and skip animation when chosen from market select box
@@ -208,57 +328,13 @@ module.exports = /*  @ngInject */
       getActiveTab();
     }
 
-    // Set variable when select box is open (for bug in scroll binding)
-    function openSelect(value) {
-      vm.selectOpen = value;
-    }
-
-    // Check if sales data value is positive (for display in UI)
-    function isPositive(salesData) {
-      if (salesData >= 0) {
-        return true;
-      }
-      return false;
-    };
-
-    // Make notes available to the page
-    function openNotes(val) {
-      $rootScope.$broadcast('notes:opened', val);
-    }
-
-    function placeholderSelect(data) {
-      vm.hintTextPlaceholder = data;
-    }
-
-    function resetFilters() {
-      vm.filterModel = angular.copy(filterModelTemplate);
-    }
-
     function updateBrandSnapshot() {
-      // console.log(filtersService.model.accountSelected.accountBrands); selected dropdown
-      // console.log(vm.filterModel);
-
       if (vm.brandTabs.brands.length === 0) {
         userService.getPerformanceBrand().then(function(data) {
           vm.brandTabs.brands = data.performance;
           console.log('[vm.brandTabs.brands]', vm.brandTabs.brands);
         });
       }
-    }
-
-    /*
-    ** @param {Array} brandMeasures - array of measures for a brand
-    ** @param {String} property - property to fetch from object depletions, depletionsTrend
-    ** @param {String} timePeriod - property to get from filterModel
-    */
-    function displayBrandValue(brandMeasures, property, timePeriod) {
-      for (var i = 0; i < brandMeasures.length; i++) {
-        if (brandMeasures[i].timeframe === vm.filterModel[timePeriod]) {
-          return brandMeasures[i][property];
-        }
-      }
-
-      // return brandMeasures.[property]
     }
 
     function updateTopBottom() {
@@ -273,6 +349,13 @@ module.exports = /*  @ngInject */
     // PRIVATE METHODS
     // ***************
 
+    function deselectMarketId() {
+      if (vm.marketIdSelected === true) {
+        vm.idSelected = null;
+        vm.marketIdSelected = false;
+      }
+    }
+
     // Checks active tab, updates model, passes data to chart (markets only)
     function getActiveTab() {
       if (vm.marketSelectedIndex === 0) { vm.filtersService.model.selected.accountTypes = 'Distributors'; setChartData(vm.marketData.distributors); deselectMarketId(); }
@@ -281,9 +364,43 @@ module.exports = /*  @ngInject */
       if (vm.marketSelectedIndex === 3) { vm.filtersService.model.selected.accountTypes = 'Stores'; setChartData(vm.marketData.stores); }
     }
 
+    // Move to next indexed tab
+    function nextTab(widget) {
+      vm.disableAnimation = false;
+      if (widget === 'brands') { vm.brandSelectedIndex = vm.brandSelectedIndex + 1; }
+      if (widget === 'markets') { vm.marketSelectedIndex = vm.marketSelectedIndex + 1; }
+    }
+
+    function init() {
+      // reset all chips and filters on page init
+      chipsService.resetChipsFilters(chipsService.model);
+
+      var promiseArr = [
+        userService.getPerformanceSummary(),
+        userService.getPerformanceDepletion(),
+        userService.getPerformanceDistribution({'type': 'noencode', 'premiseType': 'off'}),
+        userService.getPerformanceBrand()
+      ];
+
+      $q.all(promiseArr).then(function(data) {
+        userService.model.summary = data[0];
+        userService.model.depletion = data[1];
+        userService.model.distribution = data[2];
+        vm.brandTabs.brands = data[3].performance;
+
+        vm.loadingBrandSnapshot = false;
+      });
+    }
+
     // Handle required formatting for chart data
     function setChartData(data) {
       vm.chartData = [{'values': data}];
+    }
+
+    // Set element class for market overview
+    function setOverviewDisplay(value) {
+      vm.overviewOpen = value;
+      $scope.$apply();
     }
 
     // Add 'selected' class to item furthest possible drill-down tab level
@@ -292,19 +409,6 @@ module.exports = /*  @ngInject */
       if (vm.selectedStore) { vm.selectedStore = null; }
       if (widget === 'brands') { vm.brandIdSelected = idSelected; }
       if (widget === 'markets') { vm.marketIdSelected = true; vm.selectedStore = idSelected; prevTab(); }
-    }
-
-    function deselectMarketId() {
-      if (vm.marketIdSelected === true) {
-        vm.idSelected = null;
-        vm.marketIdSelected = false;
-      }
-    }
-
-    // Set element class for market overview
-    function setOverviewDisplay(value) {
-      vm.overviewOpen = value;
-      $scope.$apply();
     }
 
     // Check if market overview is scrolled out of view
@@ -330,25 +434,4 @@ module.exports = /*  @ngInject */
         vm.scrolledBelowHeader = false;
       }
     });
-
-    function init() {
-      // reset all chips and filters on page init
-      chipsService.resetChipsFilters(chipsService.model);
-
-      var promiseArr = [
-        userService.getPerformanceSummary(),
-        userService.getPerformanceDepletion(),
-        userService.getPerformanceDistribution({'type': 'noencode', 'premiseType': 'off'}),
-        userService.getPerformanceBrand()
-      ];
-
-      $q.all(promiseArr).then(function(data) {
-        userService.model.summary = data[0];
-        userService.model.depletion = data[1];
-        userService.model.distribution = data[2];
-        vm.brandTabs.brands = data[3].performance;
-
-        vm.loadingBrandSnapshot = false;
-      });
-    }
   };

@@ -160,6 +160,12 @@ module.exports = /*  @ngInject */
           opportunitiesService.model.opportunityId = null;
         });
       }
+
+      if ($state.params.getDataOnLoad) {
+        chipsService.applyFilters();
+        // To Do: apply chips ui, apply selected filters ui
+        $state.params.getDataOnLoad = false;
+      }
     } // end init
 
   }; // end controller

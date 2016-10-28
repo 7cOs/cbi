@@ -120,6 +120,7 @@ module.exports = /*  @ngInject */
       loaderService.openLoader(true);
 
       if (!isTargetList) {
+        console.log(filtersService.model.selected);
         $q.all([opportunitiesService.getOpportunities(), opportunitiesService.getOpportunitiesHeaders()]).then(function(data) {
           loaderService.closeLoader();
           finishGet(data[0]);

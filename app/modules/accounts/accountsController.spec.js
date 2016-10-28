@@ -1,5 +1,5 @@
 describe('Unit: accountsController', function() {
-  var scope, ctrl, $q, chipsService, filtersService, userService;
+  var scope, ctrl, $state, $q, chipsService, filtersService, userService;
   // function accountsController($rootScope, $scope, $state, $log, $q, $window, $filter, chipsService, filtersService, userService) {
 
   beforeEach(function() {
@@ -9,11 +9,12 @@ describe('Unit: accountsController', function() {
     angular.mock.module('cf.common.services');
     angular.mock.module('cf.modules.accounts');
 
-    inject(function($rootScope, $controller, _$q_, _chipsService_, _filtersService_, _userService_) {
+    inject(function($rootScope, $controller, _$state_, _$q_, _chipsService_, _filtersService_, _userService_) {
       // Create scope
       scope = $rootScope.$new();
 
       // Get Required Services
+      $state = _$state_;
       $q = _$q_;
       chipsService = _chipsService_;
       filtersService = _filtersService_;
@@ -45,7 +46,9 @@ describe('Unit: accountsController', function() {
         distributor: '',
         storeTypeCBBD: false,
         storeTypeIndependent: false,
-        retailer: ''
+        retailer: '',
+        retailType: '',
+        brand: ''
       });
     });
 
@@ -80,6 +83,9 @@ describe('Unit: accountsController', function() {
 
       expect(ctrl.displayBrandValue).not.toBeUndefined();
       expect(typeof (ctrl.displayBrandValue)).toEqual('function');
+
+      expect(ctrl.goToOpportunities).not.toBeUndefined();
+      expect(typeof (ctrl.goToOpportunities)).toEqual('function');
 
       expect(ctrl.isPositive).not.toBeUndefined();
       expect(typeof (ctrl.isPositive)).toEqual('function');
@@ -123,5 +129,44 @@ describe('Unit: accountsController', function() {
     it('Should get totals for distributions', function() {});
 
     it('Should get totals for velocity', function() {});
+  });
+
+  describe('[Method] goToOpportunities', function() {
+    beforeEach(function() {
+      spyOn(filtersService, 'resetFilters').and.callThrough();
+      spyOn($state, 'go').and.callFake(function() {
+        return true;
+      });
+    });
+
+    it('Should reset filters service selected model', function() {
+      ctrl.filterModel.distributor = '111111';
+      ctrl.filterModel.myAccountsOnly = false;
+      ctrl.filterModel.storeTypeIndependent = true;
+
+      ctrl.goToOpportunities();
+
+      expect(filtersService.model.selected.distributor).toEqual(['111111']);
+      expect(filtersService.model.selected.myAccountsOnly).toEqual(false);
+      expect(filtersService.model.selected.cbbdChain).toEqual(['Independent']);
+
+      expect(filtersService.model.selected.brand).toEqual([]);
+      expect(filtersService.model.selected.premiseType).toEqual('off');
+    });
+
+    it('Should update filters service model selected after reset', function() {});
+
+    it('Should go to opportunities page with params', function() {
+      expect($state.go).not.toHaveBeenCalled();
+      expect($state.go.calls.count()).toEqual(0);
+
+      ctrl.goToOpportunities();
+
+      expect($state.go).toHaveBeenCalledWith('opportunities', {
+        resetFiltersOnLoad: false,
+        getDataOnLoad: true
+      });
+      expect($state.go.calls.count()).toEqual(1);
+    });
   });
 });
