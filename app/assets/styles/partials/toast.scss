@@ -91,18 +91,13 @@ md-toast {
   }
 
   .overlay-wrapper {
-    padding: 0 25px 15px;
+    text-align: center;
+    position: absolute;
+    width: 100%;
 
     p {
       margin-top: 6px;
       font-size: inherit;
-    }
-
-    .dismissed-overlay {
-      text-align: center;
-      position: absolute;
-      width: 100%;
-      margin: 0 0 -2.5%;
     }
   }
 
@@ -112,6 +107,8 @@ md-toast {
 
   .hide-icon-wrapper {
     cursor: pointer;
+    margin-top: 1%;
+    margin-right: -3%;
   }
 
   p {
