@@ -89,7 +89,8 @@ module.exports = /*  @ngInject */
       storeTypeCBBD: false,
       storeTypeIndependent: false,
       retailer: '',
-      retailType: ''
+      retailType: '',
+      brand: ''
     };
     vm.filterModelDisplay = angular.copy(filterModelTemplate); // So we can display strings instead of ids for distributor, brnad, chain etc.
     vm.filterModel = angular.copy(filterModelTemplate);
@@ -247,6 +248,7 @@ module.exports = /*  @ngInject */
       filtersService.model.selected.premiseType = vm.filterModel.premiseType;
       if (vm.filterModel.storeTypeCBBD) filtersService.model.selected.cbbdChain.push('Cbbd');
       if (vm.filterModel.storeTypeIndependent) filtersService.model.selected.cbbdChain.push('Independent');
+      if (vm.filterModel.brand !== '') filtersService.model.selected.brand.push(vm.filterModel.brand);
 
       $state.go('opportunities', {
         resetFiltersOnLoad: false,
@@ -282,6 +284,7 @@ module.exports = /*  @ngInject */
         vm.brandSelectedIndex = vm.brandSelectedIndex - 1;
         vm.brandWidgetTitle = vm.brandWidgetTitleDefault;
         vm.brandIdSelected = null;
+        vm.filterModel.brand = '';
       }
     }
 
@@ -294,6 +297,7 @@ module.exports = /*  @ngInject */
       var parentLength = Object.keys(parent).length;
 
       vm.loadingBrandSnapshot = true;
+      vm.filterModel.brand = item.id;
       userService.getPerformanceBrand({premiseType: vm.filterModel.premiseType, brand: item.id}).then(function(data) {
         vm.brandTabs.skus = data.performance;
         vm.loadingBrandSnapshot = false;
@@ -325,9 +329,6 @@ module.exports = /*  @ngInject */
     }
 
     function updateBrandSnapshot() {
-      // console.log(filtersService.model.accountSelected.accountBrands); selected dropdown
-      // console.log(vm.filterModel);
-
       if (vm.brandTabs.brands.length === 0) {
         userService.getPerformanceBrand().then(function(data) {
           vm.brandTabs.brands = data.performance;
