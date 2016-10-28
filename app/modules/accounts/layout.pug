@@ -55,7 +55,7 @@ notes
         md-radio-button(ng-repeat="p in a.filtersService.model.premises track by $index" class="md-primary" ng-value="p.value" aria-label="{{p.name}}") {{p.name}}
     div(column='2')
       label Distributor
-      inline-search(type="distributor" placeholder="Name" chosen-result="a.filterModel.distributor" callback="")
+      inline-search(type="distributor" placeholder="Name" chosen-result="a.filterModelDisplay.distributor" callback="a.setFilter(result, 'distributor')")
     div(column='2')
       .tooltip-wrap
         label Store Type
@@ -72,10 +72,10 @@ notes
       label Retailer
       div(row).dropdown-filter.chain-store
         div(column='4').dropdown
-          md-select(ng-model="a.filtersService.model.selected.retailer" placeholder="Chain" ng-init="a.filtersService.model.selected.retailer = 'Chain'" md-on-open="a.openSelect(true)" md-on-close="a.openSelect(false)" aria-label="Store Type Filter")
-            md-option(ng-repeat="type in a.filtersService.model.retailer" ng-click="a.placeholderSelect(type.hintText)" aria-label="{{type.name}}" value="{{type.name}}") {{type.name}}
+          md-select(ng-model="a.filterModelDisplay.retailType" ng-init="a.filterModelDisplay.retailType = 'Account'" md-on-open="a.openSelect(true)" md-on-close="a.openSelect(false)" aria-label="Store Type Filter")
+            md-option(ng-repeat="type in a.filtersService.model.retailer" ng-click="a.placeholderSelect(type.hintText)" aria-label="{{type.name}}" value="{{type.type}}") {{type.name}}
         div(column='8')
-          inline-search(type="store" placeholder="{{a.hintTextPlaceholder}}" chosen-result="a.filterModel.retailer" callback="")
+          inline-search(type="store" placeholder="{{a.hintTextPlaceholder}}" chosen-result="a.filterModelDisplay.retailer" callback="a.setFilter(result, 'retailer')")
 
   div(row)
     div(column='12' class='apply-filters')
@@ -96,7 +96,7 @@ div(row)
       loader
     .widget-header
       .dropdown-filter
-        md-select(ng-model="a.filtersService.model.accountSelected.accountBrands" md-on-open="a.openSelect(true)" md-on-close="a.openSelect(false); a.updateBrandSnapshot()" aria-label="Account Brands Filter"  placeholder="Distribution (simple)")
+        md-select(ng-model="a.filtersService.model.accountSelected.accountBrands" md-on-open="a.openSelect(true)" md-on-close="a.openSelect(false); a.updateBrandSnapshot()" aria-label="Account Brands Filter" placeholder="Distribution (simple)")
           md-option(ng-repeat="filter in a.filters.accountBrands" aria-label="{{filter.name}}" value="{{filter.name}}") {{filter.name}}
       span.back-chevron(ng-if="a.brandSelectedIndex === 1" ng-click="a.prevTab()")
       p.brands {{a.brandWidgetTitle || 'All Brands'}}

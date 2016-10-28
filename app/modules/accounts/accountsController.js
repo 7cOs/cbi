@@ -18,10 +18,66 @@ module.exports = /*  @ngInject */
     vm.filtersService = filtersService;
     vm.userService = userService;
 
+    vm.filters = {
+      placementType: [{
+        name: 'Simple'
+      }, {
+        name: 'Effective'
+      }],
+      trend: [{
+        name: 'vs YA'
+      }, {
+        name: 'vs ABP'
+      }],
+      premises: [{
+        name: 'All'
+      }, {
+        name: 'Off-Premise'
+      }, {
+        name: 'On-Premise'
+      }],
+      accountBrands: [{
+        name: 'Distribution (simple)'
+      }, {
+        name: 'Velocity'
+      }],
+      accountMarkets: [{
+        name: 'Depletions'
+      }, {
+        name: 'Distribution (simple)'
+      }, {
+        name: 'Distribution (effective)'
+      }, {
+        name: 'Velocity'
+      }],
+      valuesVsTrend: [{
+        name: 'Top 10 (Values)'
+      }, {
+        name: 'Top 10 (Trend)'
+      }, {
+        name: 'Bottom 10 (Values)'
+      }, {
+        name: 'Bottom 10 (Trend)'
+      }],
+      accountTypes: [{
+        name: 'Distributors'
+      }, {
+        name: 'Accounts'
+      }, {
+        name: 'Sub-Accounts'
+      }, {
+        name: 'Stores'
+      }],
+      storeTypes: [{
+        name: 'Chain'
+      }, {
+        name: 'Independent'
+      }]
+    };
     /* Need to remove this */
     vm.marketData = myperformanceService.marketData();
 
-    // Filter Model - Keeping this out of filterService as its not needed anywhere else
+    // Filter Model - Keeping this out of filtersService as its not needed anywhere else
     var filterModelTemplate = {
       trend: filtersService.model.trend[0].name,
       endingTimePeriod: filtersService.model.timePeriod[0].name,
@@ -32,8 +88,10 @@ module.exports = /*  @ngInject */
       distributor: '',
       storeTypeCBBD: false,
       storeTypeIndependent: false,
-      retailer: ''
+      retailer: '',
+      retailType: ''
     };
+    vm.filterModelDisplay = angular.copy(filterModelTemplate); // So we can display strings instead of ids for distributor, brnad, chain etc.
     vm.filterModel = angular.copy(filterModelTemplate);
 
     // Widget / tab contents
@@ -124,6 +182,7 @@ module.exports = /*  @ngInject */
     vm.prevTab = prevTab;
     vm.resetFilters = resetFilters;
     vm.selectItem = selectItem;
+    vm.setFilter = setFilter;
     vm.setMarketTab = setMarketTab;
     vm.updateBrandSnapshot = updateBrandSnapshot;
     vm.updateTopBottom = updateTopBottom;
@@ -178,12 +237,20 @@ module.exports = /*  @ngInject */
     }
 
     function goToOpportunities() {
-      // get applied filters and add to filter service
-      filtersService.model.selected.distributor.push(vm.filterModel.distributor);
-      console.log('[vm.filterModel.distributor]', vm.filterModel.distributor);
+      // reset selected filters to prevent unneeded stuff from entering
+      filtersService.resetFilters();
+
+      // Add filters from here to filtersService.model.selected so they can be consumed on init of opp controller
+      if (vm.filterModel.distributor !== '') filtersService.model.selected.distributor.push(vm.filterModel.distributor);
+      if (vm.filterModel.retailer !== '') filtersService.model.selected[vm.filterModelDisplay.retailType.toLowerCase()].push(vm.filterModel.retailer);
+      filtersService.model.selected.myAccountsOnly = vm.filterModel.myAccountsOnly;
+      filtersService.model.selected.premiseType = vm.filterModel.premiseType;
+      if (vm.filterModel.storeTypeCBBD) filtersService.model.selected.cbbdChain.push('Cbbd');
+      if (vm.filterModel.storeTypeIndependent) filtersService.model.selected.cbbdChain.push('Independent');
 
       $state.go('opportunities', {
-        resetFiltersOnLoad: false
+        resetFiltersOnLoad: false,
+        getDataOnLoad: true
       });
     }
 
@@ -241,6 +308,10 @@ module.exports = /*  @ngInject */
         nextTab(widget);
       }
       if (widget === 'markets') { getActiveTab(); }
+    }
+
+    function setFilter(result, filterModelProperty) {
+      vm.filterModel[filterModelProperty] = result.id;
     }
 
     // Set proper tab and skip animation when chosen from market select box

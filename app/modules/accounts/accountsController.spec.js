@@ -45,7 +45,8 @@ describe('Unit: accountsController', function() {
         distributor: '',
         storeTypeCBBD: false,
         storeTypeIndependent: false,
-        retailer: ''
+        retailer: '',
+        retailType: ''
       });
     });
 

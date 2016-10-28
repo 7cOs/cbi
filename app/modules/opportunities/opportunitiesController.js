@@ -161,7 +161,11 @@ module.exports = /*  @ngInject */
         });
       }
 
-      console.log('[filtersService.model.selected]', filtersService.model.selected);
+      if ($state.params.getDataOnLoad) {
+        chipsService.applyFilters();
+        // To Do: apply chips ui, apply selected filters ui
+        $state.params.getDataOnLoad = false;
+      }
     } // end init
 
   }; // end controller
