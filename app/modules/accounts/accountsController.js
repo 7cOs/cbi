@@ -17,7 +17,6 @@ module.exports = /*  @ngInject */
     vm.chipsService = chipsService;
     vm.filtersService = filtersService;
     vm.userService = userService;
-    vm.isFilterByMonth = false;
 
     vm.filters = {
       placementType: [{
@@ -130,7 +129,6 @@ module.exports = /*  @ngInject */
     vm.idSelected = null;
     vm.brandIdSelected = null;
     vm.loadingBrandSnapshot = true;
-    vm.checkIfFilterByMonth = checkIfFilterByMonth;
 
     // Chart Setup
     vm.chartData = [{'values': vm.marketData.distributors}];
@@ -339,26 +337,6 @@ module.exports = /*  @ngInject */
         });
       }
     }
-
-    function checkIfFilterByMonth() {
-      var currentEndingTimePeriod = vm.filterModel.endingTimePeriod;
-      var matchedTimePeriod = vm.filtersService.model.timePeriod.filter(function (timePeriodVal) {
-        return timePeriodVal.name === currentEndingTimePeriod;
-      });
-
-      if (matchedTimePeriod[0].value === 'month') {
-        vm.isFilterByMonth = true;
-        vm.filterModel.depletionsTimePeriod = vm.filtersService.model.depletionsTimePeriod.month[0].name;
-      } else {
-        vm.isFilterByMonth = false;
-        vm.filterModel.depletionsTimePeriod = vm.filtersService.model.depletionsTimePeriod.year[0].name;
-      }
-    }
-
-    $scope.$watch('a.filterModel.depletionsTimePeriod', function (newVal) {
-      console.log('Depletion TPeriod');
-      console.log(newVal);
-    }, true);
 
     function updateDistributionTimePeriod(value) {
       vm.filterModel.distributionTimePeriod = filtersService.model.distributionTimePeriod[value][0].name;
