@@ -1,5 +1,5 @@
 describe('Unit: accountsController', function() {
-  var scope, ctrl, $state, $q, chipsService, filtersService, userService;
+  var scope, ctrl, $state, filtersService;
   // function accountsController($rootScope, $scope, $state, $log, $q, $window, $filter, chipsService, filtersService, userService) {
 
   beforeEach(function() {
@@ -15,10 +15,7 @@ describe('Unit: accountsController', function() {
 
       // Get Required Services
       $state = _$state_;
-      $q = _$q_;
-      chipsService = _chipsService_;
       filtersService = _filtersService_;
-      userService = _userService_;
 
       // Create Controller
       ctrl = $controller('accountsController', {$scope: scope});
