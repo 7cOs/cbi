@@ -43,6 +43,7 @@ module.exports =
       vm.loading = false;
       vm.type = '';
       vm.showSearchIcon = false;
+      vm.showLengthError = false;
 
       // Expose public methods
       vm.action = action;
@@ -69,6 +70,12 @@ module.exports =
 
       function action(type) {
         var method;
+
+        if (vm.input.length < 3) {
+          vm.showLengthError = true;
+          return;
+        }
+
         vm.results = [];
         vm.chosenResult = {};
         vm.errorMessage = null;
@@ -187,6 +194,9 @@ module.exports =
         if (event.charCode === 13) {
           event.preventDefault();
           vm.action(vm.type);
+        } else {
+          vm.showLengthError = false;
+          vm.showResults = false;
         }
       }
 
