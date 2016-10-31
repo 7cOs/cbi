@@ -39,7 +39,7 @@ describe('Unit: accountsController', function() {
         trend: filtersService.model.trend[0].name,
         endingTimePeriod: filtersService.model.timePeriod[0].value,
         depletionsTimePeriod: filtersService.model.depletionsTimePeriod.month[0].name,
-        distributionTimePeriod: '',
+        distributionTimePeriod: filtersService.model.distributionTimePeriod.month[0].name,
         myAccountsOnly: true,
         premiseType: filtersService.model.premises[1].value,
         distributor: '',
@@ -304,5 +304,15 @@ describe('Unit: accountsController', function() {
       expect(userService.getPerformanceBrand.calls.count()).toEqual(1);
     });
 
+  });
+
+  describe('[Method] updateDistributionTimePeriod', function() {
+    it('Should set ctrl.filterModel.distributionTimePeriod', function() {
+      ctrl.updateDistributionTimePeriod('year');
+      expect(ctrl.filterModel.distributionTimePeriod).toEqual(filtersService.model.distributionTimePeriod['year'][0].name);
+
+      ctrl.updateDistributionTimePeriod('month');
+      expect(ctrl.filterModel.distributionTimePeriod).toEqual(filtersService.model.distributionTimePeriod['month'][0].name);
+    });
   });
 });

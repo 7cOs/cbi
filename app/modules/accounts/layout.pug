@@ -31,7 +31,7 @@ notes
     div(column='3')
       label Ending Time Period
       md-radio-group(ng-model="a.filterModel.endingTimePeriod")
-        md-radio-button(ng-repeat="filter in a.filtersService.model.timePeriod track by $index" class="md-primary" ng-value="filter.value" aria-label="Ending Time Period" ) {{filter.name}}
+        md-radio-button(ng-repeat="filter in a.filtersService.model.timePeriod track by $index" class="md-primary" ng-value="filter.value" aria-label="Ending Time Period" ng-click="a.updateDistributionTimePeriod(filter.value)") {{filter.name}}
     div(column='7')
       div(row).dropdown-filter
         div(column='6').dropdown
@@ -41,7 +41,7 @@ notes
             md-option(ng-repeat="filter in a.filtersService.model.depletionsTimePeriod.year track by $index" aria-label="{{filter.name}}" value="{{filter.name}}") {{filter.name}}
         div(column='6').dropdown
           label Distribution Time Period
-          md-select(ng-model="a.filterModel.distributionTimePeriod" md-on-open="a.openSelect(true)" md-on-close="a.openSelect(false)" aria-label="Select a distribution time period" ng-init="a.filtersService.model.depletionsTimePeriod[a.filterModel.endingTimePeriod][0].value")
+          md-select(ng-model="a.filterModel.distributionTimePeriod" md-on-open="a.openSelect(true)" md-on-close="a.openSelect(false)" aria-label="Select a distribution time period")
             md-option(ng-repeat="filter in a.filtersService.model.distributionTimePeriod[a.filterModel.endingTimePeriod]" aria-label="{{filter.name}}" value="{{filter.name}}") {{filter.name}} Days
 
 .filters(column='12')
