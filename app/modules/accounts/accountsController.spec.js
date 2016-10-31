@@ -1,5 +1,5 @@
 describe('Unit: accountsController', function() {
-  var scope, ctrl, $state, filtersService;
+  var scope, ctrl, $state, $q, filtersService, userService;
   // function accountsController($rootScope, $scope, $state, $log, $q, $window, $filter, chipsService, filtersService, userService) {
 
   beforeEach(function() {
@@ -9,12 +9,14 @@ describe('Unit: accountsController', function() {
     angular.mock.module('cf.common.services');
     angular.mock.module('cf.modules.accounts');
 
-    inject(function($rootScope, $controller, _$state_, _$q_, _chipsService_, _filtersService_, _userService_) {
+    inject(function($rootScope, $controller, _$state_, _$q_, _filtersService_, _userService_) {
       // Create scope
       scope = $rootScope.$new();
 
       // Get Required Services
       $state = _$state_;
+      $q = _$q_;
+      // chipsService = _chipsService_;
       filtersService = _filtersService_;
 
       // Create Controller
@@ -35,9 +37,9 @@ describe('Unit: accountsController', function() {
     it('Should create a filterModel', function() {
       expect(ctrl.filterModel).toEqual({
         trend: filtersService.model.trend[0].name,
-        endingTimePeriod: filtersService.model.timePeriod[0].name,
+        endingTimePeriod: filtersService.model.timePeriod[0].value,
         depletionsTimePeriod: filtersService.model.depletionsTimePeriod.month[0].name,
-        distributionTimePeriod: filtersService.model.distributionTimePeriod[0].name,
+        distributionTimePeriod: '',
         myAccountsOnly: true,
         premiseType: filtersService.model.premises[1].value,
         distributor: '',
@@ -165,5 +167,142 @@ describe('Unit: accountsController', function() {
       });
       expect($state.go.calls.count()).toEqual(1);
     });
+  });
+
+  describe('[Method] updateBrandSnapshot', function() {
+    beforeEach(function() {
+      spyOn(userService, 'getPerformanceBrand').and.callFake(function() {
+        var deferred = $q.defer();
+        return deferred.promise;
+      });
+    });
+
+    it('Should do nothing if there are brands', function() {
+      ctrl.brandTabs.brands = {
+        'type': 'Brand',
+        'id': '416',
+        'name': 'MODELO ESPECIAL',
+        'measures': [{
+          'timeframe': 'MTD',
+          'depletions': 169216.3238,
+          'depletionsTrend': -4.467688039055397,
+          'depletionsBU': null,
+          'depletionsBUTrend': null,
+          'plan': 397461.5977
+        }, {
+          'timeframe': 'CYTD',
+          'depletions': 2800898.6819,
+          'depletionsTrend': 3.430630640080394,
+          'depletionsBU': null,
+          'depletionsBUTrend': null,
+          'plan': 7314905.1623
+        }, {
+          'timeframe': 'FYTD',
+          'depletions': 2226380.265,
+          'depletionsTrend': 0.5947959229454935,
+          'depletionsBU': null,
+          'depletionsBUTrend': null,
+          'plan': 6742588.7227
+        }, {
+          'timeframe': 'CMTH',
+          'depletions': 469085.2109,
+          'depletionsTrend': -3.971677256660469,
+          'depletionsBU': null,
+          'depletionsBUTrend': null,
+          'plan': 1319983.9654
+        }, {
+          'timeframe': 'CYTM',
+          'depletions': 2631682.3581,
+          'depletionsTrend': 3.9834168904068137,
+          'depletionsBU': null,
+          'depletionsBUTrend': null,
+          'plan': 7886888.9828
+        }, {
+          'timeframe': 'FYTM',
+          'depletions': 2057163.9412,
+          'depletionsTrend': 1.0352082494789154,
+          'depletionsBU': null,
+          'depletionsBUTrend': null,
+          'plan': 5884445.6922
+        }, {
+          'timeframe': 'L60',
+          'distributionsSimple': 10924,
+          'distributionsSimpleTrend': -8.639290792004683,
+          'distributionsSimpleBU': null,
+          'distributionsSimpleBUTrend': null,
+          'distributionsEffective': 31424,
+          'distributionsEffectiveTrend': -6.709416933855837,
+          'distributionsEffectiveBU': null,
+          'distributionsEffectiveBUTrend': null,
+          'velocity': 4614.1987,
+          'velocityTrend': null,
+          'planSimple': 12716,
+          'planEffective': 38601
+        }, {
+          'timeframe': 'L90',
+          'distributionsSimple': 11259,
+          'distributionsSimpleTrend': -9.493569131832798,
+          'distributionsSimpleBU': null,
+          'distributionsSimpleBUTrend': null,
+          'distributionsEffective': 33545,
+          'distributionsEffectiveTrend': -6.720983260107892,
+          'distributionsEffectiveBU': null,
+          'distributionsEffectiveBUTrend': null,
+          'velocity': 9882.9284,
+          'velocityTrend': null,
+          'planSimple': 12716,
+          'planEffective': 38601
+        }, {
+          'timeframe': 'L120',
+          'distributionsSimple': 11666,
+          'distributionsSimpleTrend': -10.56424409690279,
+          'distributionsSimpleBU': null,
+          'distributionsSimpleBUTrend': null,
+          'distributionsEffective': 35557,
+          'distributionsEffectiveTrend': -6.4904667981591055,
+          'distributionsEffectiveBU': null,
+          'distributionsEffectiveBUTrend': null,
+          'velocity': 23128.6564,
+          'velocityTrend': null,
+          'planSimple': 12716,
+          'planEffective': 38601
+        }, {
+          'timeframe': 'L03',
+          'distributionsSimple': 11436,
+          'distributionsSimpleTrend': -8.62895493767977,
+          'distributionsSimpleBU': null,
+          'distributionsSimpleBUTrend': null,
+          'distributionsEffective': 34160,
+          'distributionsEffectiveTrend': -4.655576643965613,
+          'distributionsEffectiveBU': null,
+          'distributionsEffectiveBUTrend': null,
+          'velocity': 7869.0204,
+          'velocityTrend': null,
+          'planSimple': 12716,
+          'planEffective': 38601
+        }
+      ]};
+
+      expect(userService.getPerformanceBrand).not.toHaveBeenCalled();
+      expect(userService.getPerformanceBrand.calls.count()).toEqual(0);
+
+      ctrl.updateBrandSnapshot();
+
+      expect(userService.getPerformanceBrand).not.toHaveBeenCalled();
+      expect(userService.getPerformanceBrand.calls.count()).toEqual(0);
+    });
+
+    it('Should call userService.getPerformanceBrand if there are no brands', function() {
+      ctrl.brandTabs.brands = [];
+
+      expect(userService.getPerformanceBrand).not.toHaveBeenCalled();
+      expect(userService.getPerformanceBrand.calls.count()).toEqual(0);
+
+      ctrl.updateBrandSnapshot();
+
+      expect(userService.getPerformanceBrand).toHaveBeenCalled();
+      expect(userService.getPerformanceBrand.calls.count()).toEqual(1);
+    });
+
   });
 });

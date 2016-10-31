@@ -80,9 +80,10 @@ module.exports = /*  @ngInject */
     // Filter Model - Keeping this out of filtersService as its not needed anywhere else
     var filterModelTemplate = {
       trend: filtersService.model.trend[0].name,
-      endingTimePeriod: filtersService.model.timePeriod[0].name,
+      endingTimePeriod: filtersService.model.timePeriod[0].value,
       depletionsTimePeriod: filtersService.model.depletionsTimePeriod.month[0].name,
-      distributionTimePeriod: filtersService.model.distributionTimePeriod[0].name,
+      // distributionTimePeriod: filtersService.model.distributionTimePeriod.month[0].name,
+      distributionTimePeriod: '',
       myAccountsOnly: true,
       premiseType: filtersService.model.premises[1].value,
       distributor: '',
