@@ -80,9 +80,9 @@ module.exports = /*  @ngInject */
     // Filter Model - Keeping this out of filtersService as its not needed anywhere else
     var filterModelTemplate = {
       trend: filtersService.model.trend[0].name,
-      endingTimePeriod: filtersService.model.timePeriod[0].name,
+      endingTimePeriod: filtersService.model.timePeriod[0].value,
       depletionsTimePeriod: filtersService.model.depletionsTimePeriod.month[0].name,
-      distributionTimePeriod: filtersService.model.distributionTimePeriod[0].name,
+      distributionTimePeriod: filtersService.model.distributionTimePeriod.month[0].name,
       myAccountsOnly: true,
       premiseType: filtersService.model.premises[1].value,
       distributor: '',
@@ -186,6 +186,7 @@ module.exports = /*  @ngInject */
     vm.setFilter = setFilter;
     vm.setMarketTab = setMarketTab;
     vm.updateBrandSnapshot = updateBrandSnapshot;
+    vm.updateDistributionTimePeriod = updateDistributionTimePeriod;
     vm.updateTopBottom = updateTopBottom;
 
     init();
@@ -335,6 +336,10 @@ module.exports = /*  @ngInject */
           console.log('[vm.brandTabs.brands]', vm.brandTabs.brands);
         });
       }
+    }
+
+    function updateDistributionTimePeriod(value) {
+      vm.filterModel.distributionTimePeriod = filtersService.model.distributionTimePeriod[value][0].name;
     }
 
     function updateTopBottom() {
