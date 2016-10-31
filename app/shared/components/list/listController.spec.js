@@ -63,6 +63,9 @@ describe('Unit: list controller', function() {
     expect(ctrl.removeOpportunity).not.toBeUndefined();
     expect(typeof (ctrl.removeOpportunity)).toEqual('function');
 
+    expect(ctrl.updateOpportunityModel).not.toBeUndefined();
+    expect(typeof (ctrl.updateOpportunityModel)).toEqual('function');
+
     expect(ctrl.shareOpportunity).not.toBeUndefined();
     expect(typeof (ctrl.shareOpportunity)).toEqual('function');
 
