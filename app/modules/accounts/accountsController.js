@@ -362,7 +362,6 @@ module.exports = /*  @ngInject */
 
     function updateDistributionTimePeriod(value) {
       vm.filterModel.distributionTimePeriod = filtersService.model.distributionTimePeriod[value][0].name;
-      vm.filterModel.depletionsTimePeriod = filtersService.model.depletionsTimePeriod[value][1].name;
     }
 
     function updateTopBottom() {
