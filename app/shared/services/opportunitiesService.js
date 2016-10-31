@@ -1,5 +1,5 @@
 module.exports = /*  @ngInject */
-  function opportunitiesService($http, $q, distributorsService, apiHelperService, filtersService) {
+  function opportunitiesService($http, $q, distributorsService, apiHelperService, filtersService, ieHackService) {
 
     var model = {
       filterApplied: false,
@@ -186,7 +186,10 @@ module.exports = /*  @ngInject */
 
         filtersService.model.appliedFilter.pagination.totalPages = (filtersService.model.appliedFilter.pagination.totalOpportunities / 100);
 
-        console.log('[opportunitiesService.getOpportunitiesHeaders] response: ', response.headers());
+        if (!ieHackService.isIE) {
+          console.log('[opportunitiesService.getOpportunitiesHeaders] response: ', response.headers());
+        }
+
         opportunitiesPromise.resolve(response.headers());
       }
 
