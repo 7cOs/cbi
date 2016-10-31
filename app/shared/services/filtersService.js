@@ -87,13 +87,18 @@ module.exports = /*  @ngInject */
           name: 'FYTD'
         }]
       },
-      distributionTimePeriod: [{
-        name: 'L60'
-      }, {
-        name: 'L90'
-      }, {
-        name: 'L120'
-      }],
+      distributionTimePeriod: {
+        month: [{
+          name: 'L60'
+        }, {
+          name: 'L90'
+        }, {
+          name: 'L120'
+        }],
+        year: [{
+          name: 'L03'
+        }]
+      },
       accountSelected: {
         accountBrands: 'Distribution (simple)',
         accountMarkets: 'Depletions',
