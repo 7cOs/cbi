@@ -279,18 +279,22 @@ module.exports = /*  @ngInject */
       var opps  = opportunitiesService.model.opportunities;
 
       for (var i = 0; i < vm.selected.length; i++) {
-        for (var x = 0; x < opps.length; x++) {
-          for (var y = 0; y < opps[x].groupedOpportunities.length; y++) {
-            var oppId = opps[x].groupedOpportunities[y].id;
+        for (var j = 0; j < opps.length; j++) {
+          for (var k = 0; k < opps[j].groupedOpportunities.length; k++) {
+            var oppId = opps[j].groupedOpportunities[k].id;
 
             if (vm.selected[i].id === oppId) {
-              opps[x].groupedOpportunities.splice(y, 1);
+              opps[j].groupedOpportunities.splice(k, 1);
               break;
             }
           }
+          if (!opps[j].groupedOpportunities.length) {
+            opps.splice(j, 1);
+            filtersService.model.appliedFilter.pagination.totalStores--;
+          }
         }
+        filtersService.model.appliedFilter.pagination.totalOpportunities--;
       }
-
       vm.selected = [];
     }
 
