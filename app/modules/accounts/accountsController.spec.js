@@ -18,6 +18,7 @@ describe('Unit: accountsController', function() {
       $q = _$q_;
       // chipsService = _chipsService_;
       filtersService = _filtersService_;
+      userService = _userService_;
 
       // Create Controller
       ctrl = $controller('accountsController', {$scope: scope});
