@@ -48,6 +48,7 @@ module.exports = /*  @ngInject */
     vm.openDismissModal = openDismissModal;
     vm.pageName = pageName;
     vm.removeOpportunity = removeOpportunity;
+    vm.updateOpportunityModel = updateOpportunityModel;
     vm.shareOpportunity = shareOpportunity;
     vm.sortBy = sortBy;
     vm.selectOpportunity = selectOpportunity;
@@ -268,10 +269,29 @@ module.exports = /*  @ngInject */
 
       targetListService.deleteTargetListOpportunities(targetListService.model.currentList.id, opportunityIds).then(function(data) {
         console.log('Done deleting these ids: ', opportunityIds);
-        // to do - update view and model
+        updateOpportunityModel();
       }, function(err) {
         console.log('Error deleting these ids: ', opportunityIds, ' Responded with error: ', err);
       });
+    }
+
+    function updateOpportunityModel() {
+      var opps  = opportunitiesService.model.opportunities;
+
+      for (var i = 0; i < vm.selected.length; i++) {
+        for (var x = 0; x < opps.length; x++) {
+          for (var y = 0; y < opps[x].groupedOpportunities.length; y++) {
+            var oppId = opps[x].groupedOpportunities[y].id;
+
+            if (vm.selected[i].id === oppId) {
+              opps[x].groupedOpportunities.splice(y, 1);
+              break;
+            }
+          }
+        }
+      }
+
+      vm.selected = [];
     }
 
     function showOpportunityMemoModal(ev) {
@@ -423,6 +443,7 @@ module.exports = /*  @ngInject */
       if (!userService.model.targetLists || userService.model.targetLists.owned.length < 1) {
         userService.getTargetLists(userService.model.currentUser.employeeID).then(function(data) {
           userService.model.targetLists = data;
+          console.log(userService.model.targetLists);
         });
       }
     }
