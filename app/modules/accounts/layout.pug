@@ -66,8 +66,10 @@ notes
               h3 Store Type
               p Chain = Chain retailers directly called on by CBBD National or Key Accounts teams (On and Off-Premise)
               p Independent = Retailers not directly called on by CBBD’s National or Key Accounts teams
-      md-checkbox(ng-model="a.filterModel.storeTypeCBBD" aria-label="Store Type Chain") Chain
-      md-checkbox(ng-model="a.filterModel.storeTypeIndependent" aria-label="Store Type Independent") Independent
+      //-md-checkbox(ng-model="a.filterModel.storeTypeCBBD" aria-label="Store Type Chain") Chain
+      //-md-checkbox(ng-model="a.filterModel.storeTypeIndependent" aria-label="Store Type Independent") Independent
+      md-checkbox(ng-model="a.filtersService.model.cbbdChainIndependent" aria-label="Independent" ng-change="a.chipsService.applyFilterArr(a.filtersService.model.selected.cbbdChain, 'Independent', 'cbbdChain')") Independent
+      md-checkbox(ng-model="a.filtersService.model.cbbdChainCbbd" aria-label="CBBD Chain" ng-change="a.chipsService.applyFilterArr(a.filtersService.model.selected.cbbdChain, 'Cbbd', 'cbbdChain', 'CBBD Chain')") CBBD Chain
     div(column='4')
       label Retailer
       div(row).dropdown-filter.chain-store

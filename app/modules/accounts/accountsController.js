@@ -83,8 +83,8 @@ module.exports = /*  @ngInject */
       endingTimePeriod: filtersService.model.timePeriod[0].value,
       depletionsTimePeriod: filtersService.model.depletionsTimePeriod.month[0].name,
       distributionTimePeriod: filtersService.model.distributionTimePeriod.month[0].name,
-      storeTypeCBBD: false,
-      storeTypeIndependent: false,
+      // storeTypeCBBD: false,
+      // storeTypeIndependent: false,
       retailer: '',
       retailType: '',
       brand: ''
@@ -239,8 +239,8 @@ module.exports = /*  @ngInject */
       // Add filters from here to filtersService.model.selected so they can be consumed on init of opp controller
       if (vm.filterModel.distributor !== '') filtersService.model.selected.distributor.push(vm.filterModel.distributor);
       if (vm.filterModel.retailer !== '') filtersService.model.selected[vm.filterModelDisplay.retailType.toLowerCase()].push(vm.filterModel.retailer);
-      if (vm.filterModel.storeTypeCBBD) filtersService.model.selected.cbbdChain.push('Cbbd');
-      if (vm.filterModel.storeTypeIndependent) filtersService.model.selected.cbbdChain.push('Independent');
+      // if (vm.filterModel.storeTypeCBBD) filtersService.model.selected.cbbdChain.push('Cbbd');
+      // if (vm.filterModel.storeTypeIndependent) filtersService.model.selected.cbbdChain.push('Independent');
       if (vm.filterModel.brand !== '') filtersService.model.selected.brand.push(vm.filterModel.brand);
 
       $state.go('opportunities', {

@@ -58,7 +58,7 @@ module.exports = /*  @ngInject */
               if (obj[key2].length === 1 && obj[key2][0] === 'Independent') {
                 queryParams += 'cbbdChain:false';
                 somethingAdded = true;
-              } else if (obj[key2].length === 1 && obj[key2][0] === 'CBBD Chain') {
+              } else if (obj[key2].length === 1 && obj[key2][0] === 'Cbbd') {
                 queryParams += 'cbbdChain:true';
                 somethingAdded = true;
               }

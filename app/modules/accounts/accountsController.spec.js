@@ -41,8 +41,6 @@ describe('Unit: accountsController', function() {
         endingTimePeriod: filtersService.lastEndingTimePeriod.endingPeriodType,
         depletionsTimePeriod: filtersService.lastEndingTimePeriod.depletionValue,
         distributionTimePeriod: filtersService.lastEndingTimePeriod.timePeriodValue,
-        storeTypeCBBD: false,
-        storeTypeIndependent: false,
         retailer: '',
         retailType: '',
         brand: ''
