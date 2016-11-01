@@ -1,6 +1,6 @@
 'use strict';
 
-function NavbarController($rootScope, $scope, $state, $window, $mdPanel, $mdDialog, $mdMenu, $mdSelect, notificationsService, opportunitiesService, targetListService, userService, versionService, loaderService, ieHackService) {
+function NavbarController($rootScope, $scope, $state, $window, $mdPanel, $mdDialog, $mdMenu, $mdSelect, $anchorScroll, notificationsService, opportunitiesService, targetListService, userService, versionService, loaderService, ieHackService) {
 
   // ****************
   // CONTROLLER SETUP
@@ -13,10 +13,12 @@ function NavbarController($rootScope, $scope, $state, $window, $mdPanel, $mdDial
   $rootScope.isIE = ieHackService.isIE;
   $rootScope.isEdge = ieHackService.isEdge;
 
-  // Reset any active loaders on state change
+  // Reset any active loaders and scroll position on state change
   $rootScope.$on('$stateChangeStart', function() {
     loaderService.closeLoader();
+    $anchorScroll();
   });
+
   // fixes hanging selects in menu
   $rootScope.$on('$mdMenuClose', function() {
     $mdSelect.hide();

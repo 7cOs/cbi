@@ -62,7 +62,8 @@ module.exports = /*  @ngInject */
 
     function findOpportunities() {
       $state.go('opportunities', {
-        resetFiltersOnLoad: false
+        resetFiltersOnLoad: false,
+        applyFiltersOnLoad: true
       });
     }
 

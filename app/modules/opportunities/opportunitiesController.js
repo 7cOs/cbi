@@ -14,6 +14,7 @@ module.exports = /*  @ngInject */
     vm.isHoveringSave = false;
     vm.isHoveringReset = false;
     vm.resetFiltersOnLoad = $state.params.resetFiltersOnLoad;
+    vm.applyFiltersOnLoad = $state.params.applyFiltersOnLoad;
 
     // Set page title for head and nav
     $rootScope.pageTitle = $state.current.title;
@@ -146,6 +147,12 @@ module.exports = /*  @ngInject */
         }
       }
       $state.params.resetFiltersOnLoad = true;
+
+      // apply filters on init if requested
+      if (vm.applyFiltersOnLoad) {
+        chipsService.applyFilters();
+      }
+      $state.params.applyFiltersOnLoad = false;
 
       // closes filter box
       filtersService.model.expanded = false;
