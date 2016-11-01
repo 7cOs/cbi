@@ -77,7 +77,7 @@ module.exports = /*  @ngInject */
     vm.changePremise = changePremise;
     vm.isPositive = isPositive;
 
-    vm.updateDistributionTimePeriod = updateDistributionTimePeriod;
+    vm.updateEndingTimePeriod = updateEndingTimePeriod;
     vm.changeDistirbutionTimePeriod = changeDistirbutionTimePeriod;
     vm.changeDepletionOption = changeDepletionOption;
 
@@ -87,7 +87,7 @@ module.exports = /*  @ngInject */
     // PUBLIC METHODS
     // **************
 
-    function updateDistributionTimePeriod(value) {
+    function updateEndingTimePeriod(value) {
       vm.distributionSelectOptions.selected = vm.distributionSelectOptions[value][0].value;
       vm.depletionSelect = vm.depletionSelectOptions[value][0].name;
       updatedSelectionValuesInFilter(value, vm.depletionSelect, vm.distributionSelectOptions.selected);
@@ -156,8 +156,8 @@ module.exports = /*  @ngInject */
 
         // init vars when all requests are finished
         // depletions
-        vm.depletionRadio = vm.filtersService.lastEndingTimePeriod.endingPeriodType;
-        vm.depletionSelect = vm.filtersService.lastEndingTimePeriod.depletionValue;
+        vm.depletionRadio = 'year';
+        vm.depletionSelect = 'FYTD';
 
         updateTotalRowDepletions();
 

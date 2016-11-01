@@ -415,11 +415,6 @@ module.exports = /*  @ngInject */
       $scope.$apply();
     }
 
-    $scope.$watch('a.filterModel.endingTimePeriod', function (newVal) {
-      console.log('Ending Period');
-      console.log(newVal);
-    });
-
     // Add 'selected' class to item furthest possible drill-down tab level
     function setSelected(idSelected, widget) {
       vm.idSelected = idSelected;

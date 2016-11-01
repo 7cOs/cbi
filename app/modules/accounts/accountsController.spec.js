@@ -38,9 +38,9 @@ describe('Unit: accountsController', function() {
     it('Should create a filterModel', function() {
       expect(ctrl.filterModel).toEqual({
         trend: filtersService.model.trend[0].name,
-        endingTimePeriod: filtersService.model.timePeriod[0].value,
-        depletionsTimePeriod: filtersService.model.depletionsTimePeriod.month[0].name,
-        distributionTimePeriod: filtersService.model.distributionTimePeriod.month[0].name,
+        endingTimePeriod: filtersService.lastEndingTimePeriod.endingPeriodType,
+        depletionsTimePeriod: filtersService.lastEndingTimePeriod.depletionValue,
+        distributionTimePeriod: filtersService.lastEndingTimePeriod.timePeriodValue,
         myAccountsOnly: true,
         premiseType: filtersService.model.premises[1].value,
         distributor: '',
