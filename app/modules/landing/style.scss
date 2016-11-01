@@ -108,18 +108,13 @@
       .action-item {
         color: $blue;
         display: inline-block;
-        float: right;
         text-align: right;
         position: relative;
         margin-right: 21px;
 
         &:hover {
-<<<<<<< 0a113c9fa9fb6cda8acafed8141f2e9b1823e5f7
-          cursor: hand;
-=======
           color: $dark-blue;
           cursor: pointer;
->>>>>>> Update link to shared lists from landing
         }
       }
     }
