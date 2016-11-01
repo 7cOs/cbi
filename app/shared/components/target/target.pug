@@ -31,4 +31,5 @@ div.target-lists
                 div
                   md-progress-linear(md-mode="determinate" ng-value="target.ratio(list.opportunitiesSummary.closedOpportunitiesCount, list.opportunitiesSummary.opportunitiesCount)")
         div(row)
-          p(ng-if="!target.loaderService.model.loadingFilters && type.total >= 5" analytics-on="click" analytics-event="Target List Link Click" ng-click="target.goToTab(type.index)").accent.action-item.go-arrow  Show All
+          p(column="2 +10" ng-if="!target.loaderService.model.loadingFilters && type.total >= 5" analytics-on="click" analytics-event="Target List Link Click" ng-click="target.goToTab(type.index)").accent.action-item.go-arrow  Show All
+          p(column="2 +10" ng-if="!target.loaderService.model.loadingFilters && type.index === 1" analytics-on="click" analytics-event="Target List Link Click" ng-click="target.goToTab(type.index)").accent.action-item.go-arrow  Show All
