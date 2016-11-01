@@ -22,6 +22,7 @@
     }],
     // "no-console": 1,
     "no-multi-spaces": 0,
+    "no-debugger": 0,
     "no-path-concat": 0,
     "no-unused-vars": 1,
     "one-var": [0, "always"],
