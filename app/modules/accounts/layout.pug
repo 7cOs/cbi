@@ -48,14 +48,14 @@ notes
   div(row)
     div(column='2')
       label Account Scope
-      md-checkbox(ng-model="a.filterModel.myAccountsOnly" aria-label="My Accounts") My Accounts Only
+      md-checkbox(ng-model="a.filtersService.model.selected.myAccountsOnly" aria-label="My Accounts") My Accounts Only 
     div(column='2')
       label Premise Type
-      md-radio-group(ng-model="a.filterModel.premiseType")
+      md-radio-group(ng-model="a.filtersService.model.selected.premiseType")
         md-radio-button(ng-repeat="p in a.filtersService.model.premises track by $index" class="md-primary" ng-value="p.value" aria-label="{{p.name}}") {{p.name}}
     div(column='2')
       label Distributor
-      inline-search(type="distributor" placeholder="Name" chosen-result="a.filterModelDisplay.distributor" callback="a.setFilter(result, 'distributor')")
+      inline-search(type="distributor" placeholder="Name" chosen-result="a.filtersService.model.distributor" callback="a.setFilter(result, 'distributor')")
     div(column='2')
       .tooltip-wrap
         label Store Type

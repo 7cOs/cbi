@@ -96,6 +96,11 @@ module.exports = /*  @ngInject */
                 somethingAdded = true;
               }
             }
+          } else if (key2 === 'premiseType') {
+            if (obj[key2] !== 'all') {
+              queryParams += key2 + ':' + obj[key2];
+              somethingAdded = true;
+            }
           } else if (obj[key2].constructor !== Array && key2 !== 'retailer') {
             queryParams += key2 + ':' + obj[key2];
             somethingAdded = true;
@@ -108,6 +113,7 @@ module.exports = /*  @ngInject */
         filtersService.model.appliedFilter.appliedFilter = queryParams;
 
         queryStr = '?' + 'limit=100' + '&ignoreDismissed=true' + s + p + '&filter=' + encodeURIComponent(filtersService.model.appliedFilter.appliedFilter);
+        console.log(queryStr = '?' + 'limit=100' + '&ignoreDismissed=true' + s + p + '&filter=' + filtersService.model.appliedFilter.appliedFilter);
 
         return queryStr;
       } else if (obj.type && obj.type === 'targetLists') {
