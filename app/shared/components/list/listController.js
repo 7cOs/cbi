@@ -279,8 +279,6 @@ module.exports = /*  @ngInject */
       var opps  = opportunities,
           selectedArr = selected;
 
-      console.log(opps);
-
       for (var i = 0; i < selectedArr.length; i++) {
         for (var j = 0; j < opps.length; j++) {
           for (var k = 0; k < opps[j].groupedOpportunities.length; k++) {
