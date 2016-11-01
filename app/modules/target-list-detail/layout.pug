@@ -6,7 +6,6 @@
       span.accent.white.link(ng-click="tld.navigateToTL()") Target Lists
     div(column="10").align-right
       .hero-actions
-        button.btn-action(ng-click="tld.modalManageCollaborators()" ng-if="!tld.targetListService.model.currentList.archived") Collaborate
         button.btn-action(ng-click="tld.modalManageTargetList()" ng-if="!tld.targetListService.model.currentList.archived") Manage
 
   div(row)

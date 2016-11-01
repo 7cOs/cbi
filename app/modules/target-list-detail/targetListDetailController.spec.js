@@ -75,9 +75,6 @@ describe('Unit: targetListDetailController', function() {
     expect(ctrl.makeOwner).not.toBeUndefined();
     expect(typeof (ctrl.makeOwner)).toEqual('function');
 
-    expect(ctrl.modalManageCollaborators).not.toBeUndefined();
-    expect(typeof (ctrl.modalManageCollaborators)).toEqual('function');
-
     expect(ctrl.modalManageTargetList).not.toBeUndefined();
     expect(typeof (ctrl.modalManageTargetList)).toEqual('function');
 
@@ -166,19 +163,6 @@ describe('Unit: targetListDetailController', function() {
 
         expect($mdDialog.hide).toHaveBeenCalled();
         expect($mdDialog.hide.calls.count()).toEqual(1);
-      });
-    });
-
-    describe('[tld.modalManageCollaborators]', function() {
-      beforeEach(function() {
-        spyOn($mdDialog, 'show').and.callThrough();
-      });
-
-      it('should open the manage collaborators modal', function() {
-        ctrl.modalManageCollaborators();
-
-        expect($mdDialog.show).toHaveBeenCalled();
-        expect($mdDialog.show.calls.count()).toEqual(1);
       });
     });
 

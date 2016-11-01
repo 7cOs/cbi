@@ -38,7 +38,6 @@ module.exports = /*  @ngInject */
     vm.makeOwner = makeOwner;
     vm.manageCollaborators = manageCollaborators;
     vm.modalManageTargetList = modalManageTargetList;
-    vm.modalManageCollaborators = modalManageCollaborators;
     vm.navigateToTL = navigateToTL;
     vm.removeCollaborator = removeCollaborator;
     vm.removeFooterToast = removeFooterToast;
@@ -174,22 +173,6 @@ module.exports = /*  @ngInject */
         scope: $scope.$new(),
         targetEvent: ev,
         templateUrl: './app/modules/target-list-detail/modal-manage-target-list.html'
-      });
-    }
-
-    function modalManageCollaborators(ev) {
-      var parentEl = angular.element(document.body);
-
-      vm.pendingShares = [];
-      initTargetLists();
-      isAuthor();
-
-      $mdDialog.show({
-        clickOutsideToClose: true,
-        parent: parentEl,
-        scope: $scope.$new(),
-        targetEvent: ev,
-        templateUrl: './app/modules/target-list-detail/modal-manage-collaborators.html'
       });
     }
 
