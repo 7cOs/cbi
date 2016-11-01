@@ -158,13 +158,13 @@ module.exports = /*  @ngInject */
         // depletions
         vm.depletionRadio = 'year';
         vm.depletionSelect = 'FYTD';
-
         updateTotalRowDepletions();
 
         // distribution
         vm.distributionRadioOptions.selected.placementType = 'Simple';
         vm.distributionRadioOptions.selected.onOffPremise = 'Off Premise';
         vm.distributionSelectOptions.selected = vm.distributionSelectOptions[vm.depletionRadio][0].value;
+        updatedSelectionValuesInFilter(vm.depletionRadio, vm.depletionSelect, vm.distributionSelectOptions.selected);
 
         updateTotalRowDistributions();
 

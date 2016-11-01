@@ -5,7 +5,7 @@ div.my-scorecards
     div.radio-filters
       label Ending Time Period
       md-radio-group(ng-model="s.depletionRadio")
-        md-radio-button(ng-repeat="filter in s.filtersService.model.timePeriod" class="md-primary block" ng-value="filter.value" aria-label="{{filter.name}}" ng-click="s.updateDistributionTimePeriod(filter.value)") {{filter.name}}
+        md-radio-button(ng-repeat="filter in s.filtersService.model.timePeriod" class="md-primary block" ng-click="s.updateEndingTimePeriod(filter.value)" ng-value="filter.value" aria-label="{{filter.name}}") {{filter.name}}
 
     div.dropdown-filter
       div.dropdown
