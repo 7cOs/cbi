@@ -107,10 +107,15 @@
 
       .action-item {
         color: $blue;
-        display: block;
+        display: inline-block;
+        float: right;
         text-align: right;
         position: relative;
         margin-right: 21px;
+
+        &:hover {
+          cursor: hand;
+        }
       }
     }
 
