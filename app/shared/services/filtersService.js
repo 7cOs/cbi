@@ -88,14 +88,14 @@ module.exports = /*  @ngInject */
         }]
       },
       distributionTimePeriod: {
-        month: [{
+        year: [{
           name: 'L60'
         }, {
           name: 'L90'
         }, {
           name: 'L120'
         }],
-        year: [{
+        month: [{
           name: 'L03'
         }]
       },
@@ -138,9 +138,9 @@ module.exports = /*  @ngInject */
       },
       timePeriod: [
         {name: 'Current Month to Date',
-         value: 'month'},
+         value: 'year'},
         {name: 'Last Closed Month',
-         value: 'year'}
+         value: 'month'}
       ],
       tradeChannels: {
         on: [
@@ -168,6 +168,11 @@ module.exports = /*  @ngInject */
         {name: 'vs ABP'}
       ]
     };
+    var lastEndingTimePeriod = {
+      endingPeriodType: 'year',
+      depletionValue: 'FYTD',
+      timePeriodValue: 'L90'
+    };
     var service = {
       model: model,
       addSortFilter: addSortFilter,
@@ -177,7 +182,8 @@ module.exports = /*  @ngInject */
       updateSelectedFilterModel: updateSelectedFilterModel,
       checkForAuthorizationFlag: checkForAuthorizationFlag,
       resetSort: resetSort,
-      cleanUpSaveFilterObj: cleanUpSaveFilterObj
+      cleanUpSaveFilterObj: cleanUpSaveFilterObj,
+      lastEndingTimePeriod: lastEndingTimePeriod
     };
 
     return service;

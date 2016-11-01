@@ -378,6 +378,7 @@ module.exports = /*  @ngInject */
 
     function init() {
       // reset all chips and filters on page init
+      setDefaultEndingPeriodOptions();
       chipsService.resetChipsFilters(chipsService.model);
 
       var promiseArr = [
@@ -395,6 +396,12 @@ module.exports = /*  @ngInject */
 
         vm.loadingBrandSnapshot = false;
       });
+    }
+
+    function setDefaultEndingPeriodOptions() {
+      vm.filterModel.endingTimePeriod = vm.filtersService.lastEndingTimePeriod.endingPeriodType;
+      vm.filterModel.depletionsTimePeriod = vm.filtersService.lastEndingTimePeriod.depletionValue;
+      vm.filterModel.distributionTimePeriod = vm.filtersService.lastEndingTimePeriod.timePeriodValue;
     }
 
     // Handle required formatting for chart data
