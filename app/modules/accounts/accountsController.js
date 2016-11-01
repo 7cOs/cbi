@@ -82,10 +82,7 @@ module.exports = /*  @ngInject */
       trend: filtersService.model.trend[0].name,
       endingTimePeriod: filtersService.model.timePeriod[0].value,
       depletionsTimePeriod: filtersService.model.depletionsTimePeriod.month[0].name,
-      distributionTimePeriod: filtersService.model.distributionTimePeriod.month[0].name,
-      retailer: '',
-      retailType: '',
-      brand: ''
+      distributionTimePeriod: filtersService.model.distributionTimePeriod.month[0].name
     };
     vm.filterModelDisplay = angular.copy(filterModelTemplate); // So we can display strings instead of ids for distributor, brnad, chain etc.
     vm.filterModel = angular.copy(filterModelTemplate);
@@ -234,10 +231,6 @@ module.exports = /*  @ngInject */
     }
 
     function goToOpportunities() {
-      // Add filters from here to filtersService.model.selected so they can be consumed on init of opp controller
-      if (vm.filterModel.retailer !== '') filtersService.model.selected[vm.filterModelDisplay.retailType.toLowerCase()].push(vm.filterModel.retailer);
-      if (vm.filterModel.brand !== '') filtersService.model.selected.brand.push(vm.filterModel.brand);
-
       $state.go('opportunities', {
         resetFiltersOnLoad: false,
         getDataOnLoad: true

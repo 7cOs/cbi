@@ -40,10 +40,7 @@ describe('Unit: accountsController', function() {
         trend: filtersService.model.trend[0].name,
         endingTimePeriod: filtersService.lastEndingTimePeriod.endingPeriodType,
         depletionsTimePeriod: filtersService.lastEndingTimePeriod.depletionValue,
-        distributionTimePeriod: filtersService.lastEndingTimePeriod.timePeriodValue,
-        retailer: '',
-        retailType: '',
-        brand: ''
+        distributionTimePeriod: filtersService.lastEndingTimePeriod.timePeriodValue
       });
     });
 

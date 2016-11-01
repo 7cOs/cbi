@@ -69,13 +69,6 @@ notes
       md-checkbox(ng-model="a.filtersService.model.cbbdChainIndependent" aria-label="Independent" ng-change="a.chipsService.applyFilterArr(a.filtersService.model.selected.cbbdChain, 'Independent', 'cbbdChain')") Independent
       md-checkbox(ng-model="a.filtersService.model.cbbdChainCbbd" aria-label="CBBD Chain" ng-change="a.chipsService.applyFilterArr(a.filtersService.model.selected.cbbdChain, 'Cbbd', 'cbbdChain', 'CBBD Chain')") CBBD Chain
     div(column='4')
-      //- label Retailer
-      //-div(row).dropdown-filter.chain-store
-        div(column='4').dropdown
-          md-select(ng-model="a.filterModelDisplay.retailType" ng-init="a.filterModelDisplay.retailType = 'Account'" md-on-open="a.openSelect(true)" md-on-close="a.openSelect(false)" aria-label="Store Type Filter")
-            md-option(ng-repeat="type in a.filtersService.model.retailer" ng-click="a.placeholderSelect(type.hintText)" aria-label="{{type.name}}" value="{{type.type}}") {{type.name}}
-        div(column='8')
-          inline-search(type="store" placeholder="{{a.hintTextPlaceholder}}" chosen-result="a.filterModelDisplay.retailer" callback="a.setFilter(result, 'retailer')")
       label Retailer
       div(row).retailer.dropdown-filter
         div(column='4').dropdown
