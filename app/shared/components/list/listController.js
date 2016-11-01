@@ -269,23 +269,27 @@ module.exports = /*  @ngInject */
 
       targetListService.deleteTargetListOpportunities(targetListService.model.currentList.id, opportunityIds).then(function(data) {
         console.log('Done deleting these ids: ', opportunityIds);
-        updateOpportunityModel();
+        updateOpportunityModel(opportunitiesService.model.opportunities, vm.selected);
       }, function(err) {
         console.log('Error deleting these ids: ', opportunityIds, ' Responded with error: ', err);
       });
     }
 
-    function updateOpportunityModel() {
-      var opps  = opportunitiesService.model.opportunities;
+    function updateOpportunityModel(opportunities, selected) {
+      var opps  = opportunities,
+          selectedArr = selected;
 
-      for (var i = 0; i < vm.selected.length; i++) {
+      for (var i = 0; i < selectedArr.length; i++) {
         for (var j = 0; j < opps.length; j++) {
           for (var k = 0; k < opps[j].groupedOpportunities.length; k++) {
             var oppId = opps[j].groupedOpportunities[k].id;
 
-            if (vm.selected[i].id === oppId) {
+            if (selectedArr[i].id === oppId) {
+              console.log('matt');
               opps[j].groupedOpportunities.splice(k, 1);
               break;
+            } else {
+              console.log('NOPE');
             }
           }
           if (!opps[j].groupedOpportunities.length) {
@@ -295,7 +299,7 @@ module.exports = /*  @ngInject */
         }
         filtersService.model.appliedFilter.pagination.totalOpportunities--;
       }
-      vm.selected = [];
+      selectedArr = [];
     }
 
     function showOpportunityMemoModal(ev) {
