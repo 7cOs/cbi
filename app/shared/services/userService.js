@@ -513,14 +513,23 @@ module.exports = /*  @ngInject */
         }
 
         angular.forEach(response.data.sharedWithMe, function(value, key) {
-          var creator;
+          var creator,
+              newShare;
 
           angular.forEach(value.collaborators, function(value, key) {
+
+            // Set creator for shared list
             if (value.permissionLevel === 'author') {
               creator = value.user.firstName + ' ' + value.user.lastName;
             }
+
+            // If collaborator is current user, set whether share has been viewed
+            if (value.user.employeeId === model.currentUser.employeeID && !value.lastViewed) {
+              newShare = true;
+            }
           });
           value.creator = creator;
+          value.newShare = newShare;
         });
 
         response.data.ownedArchived = ownedArchived;
