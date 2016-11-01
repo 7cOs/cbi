@@ -9,8 +9,11 @@
           g
             path(d='M19 6.41l-1.41-1.41-5.59 5.59-5.59-5.59-1.41 1.41 5.59 5.59-5.59 5.59 1.41 1.41 5.59-5.59 5.59 5.59 1.41-1.41-5.59-5.59z')
     md-chip-template(custom-chip="" ng-class="{closable: $chip.removable}")
-      div(ng-if="$chip.type !== 'state' && $chip.type !== 'cbbdChain'") {{$chip.name | titlecase}}
-      div(ng-if="$chip.type === 'state' || $chip.type === 'cbbdChain'") {{$chip.name}}
+      div(ng-switch="$chip.type")
+        div(ng-switch-when="state") {{$chip.name}}
+        div(ng-switch-when="cbbdChain") {{$chip.name}}
+        div(ng-switch-when="zipCode") {{$chip.name | zipcode}}
+        div(ng-switch-default) {{$chip.name | titlecase}}
 form.filters(column='12' ng-class="{'target-list': filter.opportunities}")
   div.expand(row)
     div(class='more-filters')
