@@ -512,6 +512,17 @@ module.exports = /*  @ngInject */
           else sharedNotArchivedCount++;
         }
 
+        angular.forEach(response.data.sharedWithMe, function(value, key) {
+          var creator;
+
+          angular.forEach(value.collaborators, function(value, key) {
+            if (value.permissionLevel === 'author') {
+              creator = value.user.firstName + ' ' + value.user.lastName;
+            }
+          });
+          value.creator = creator;
+        });
+
         response.data.ownedArchived = ownedArchived;
         response.data.ownedNotArchived = ownedNotArchived;
         response.data.sharedArchivedCount = sharedArchivedCount;
