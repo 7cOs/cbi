@@ -58,7 +58,7 @@ module.exports = /*  @ngInject */
               if (obj[key2].length === 1 && obj[key2][0] === 'Independent') {
                 queryParams += 'cbbdChain:false';
                 somethingAdded = true;
-              } else if (obj[key2].length === 1 && obj[key2][0] === 'CBBD Chain') {
+              } else if (obj[key2].length === 1 && obj[key2][0] === 'Cbbd') {
                 queryParams += 'cbbdChain:true';
                 somethingAdded = true;
               }
@@ -95,6 +95,11 @@ module.exports = /*  @ngInject */
 
                 somethingAdded = true;
               }
+            }
+          } else if (key2 === 'premiseType') {
+            if (obj[key2] !== 'all') {
+              queryParams += key2 + ':' + obj[key2];
+              somethingAdded = true;
             }
           } else if (obj[key2].constructor !== Array && key2 !== 'retailer') {
             queryParams += key2 + ':' + obj[key2];

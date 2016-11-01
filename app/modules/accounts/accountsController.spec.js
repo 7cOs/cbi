@@ -40,15 +40,7 @@ describe('Unit: accountsController', function() {
         trend: filtersService.model.trend[0].name,
         endingTimePeriod: filtersService.lastEndingTimePeriod.endingPeriodType,
         depletionsTimePeriod: filtersService.lastEndingTimePeriod.depletionValue,
-        distributionTimePeriod: filtersService.lastEndingTimePeriod.timePeriodValue,
-        myAccountsOnly: true,
-        premiseType: filtersService.model.premises[1].value,
-        distributor: '',
-        storeTypeCBBD: false,
-        storeTypeIndependent: false,
-        retailer: '',
-        retailType: '',
-        brand: ''
+        distributionTimePeriod: filtersService.lastEndingTimePeriod.timePeriodValue
       });
     });
 
@@ -138,23 +130,6 @@ describe('Unit: accountsController', function() {
         return true;
       });
     });
-
-    it('Should reset filters service selected model', function() {
-      ctrl.filterModel.distributor = '111111';
-      ctrl.filterModel.myAccountsOnly = false;
-      ctrl.filterModel.storeTypeIndependent = true;
-
-      ctrl.goToOpportunities();
-
-      expect(filtersService.model.selected.distributor).toEqual(['111111']);
-      expect(filtersService.model.selected.myAccountsOnly).toEqual(false);
-      expect(filtersService.model.selected.cbbdChain).toEqual(['Independent']);
-
-      expect(filtersService.model.selected.brand).toEqual([]);
-      expect(filtersService.model.selected.premiseType).toEqual('off');
-    });
-
-    it('Should update filters service model selected after reset', function() {});
 
     it('Should go to opportunities page with params', function() {
       expect($state.go).not.toHaveBeenCalled();

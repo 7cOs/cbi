@@ -82,15 +82,7 @@ module.exports = /*  @ngInject */
       trend: filtersService.model.trend[0].name,
       endingTimePeriod: filtersService.model.timePeriod[0].value,
       depletionsTimePeriod: filtersService.model.depletionsTimePeriod.month[0].name,
-      distributionTimePeriod: filtersService.model.distributionTimePeriod.month[0].name,
-      myAccountsOnly: true,
-      premiseType: filtersService.model.premises[1].value,
-      distributor: '',
-      storeTypeCBBD: false,
-      storeTypeIndependent: false,
-      retailer: '',
-      retailType: '',
-      brand: ''
+      distributionTimePeriod: filtersService.model.distributionTimePeriod.month[0].name
     };
     vm.filterModelDisplay = angular.copy(filterModelTemplate); // So we can display strings instead of ids for distributor, brnad, chain etc.
     vm.filterModel = angular.copy(filterModelTemplate);
@@ -239,18 +231,6 @@ module.exports = /*  @ngInject */
     }
 
     function goToOpportunities() {
-      // reset selected filters to prevent unneeded stuff from entering
-      filtersService.resetFilters();
-
-      // Add filters from here to filtersService.model.selected so they can be consumed on init of opp controller
-      if (vm.filterModel.distributor !== '') filtersService.model.selected.distributor.push(vm.filterModel.distributor);
-      if (vm.filterModel.retailer !== '') filtersService.model.selected[vm.filterModelDisplay.retailType.toLowerCase()].push(vm.filterModel.retailer);
-      filtersService.model.selected.myAccountsOnly = vm.filterModel.myAccountsOnly;
-      filtersService.model.selected.premiseType = vm.filterModel.premiseType;
-      if (vm.filterModel.storeTypeCBBD) filtersService.model.selected.cbbdChain.push('Cbbd');
-      if (vm.filterModel.storeTypeIndependent) filtersService.model.selected.cbbdChain.push('Independent');
-      if (vm.filterModel.brand !== '') filtersService.model.selected.brand.push(vm.filterModel.brand);
-
       $state.go('opportunities', {
         resetFiltersOnLoad: false,
         getDataOnLoad: true
@@ -299,7 +279,7 @@ module.exports = /*  @ngInject */
 
       vm.loadingBrandSnapshot = true;
       vm.filterModel.brand = item.id;
-      userService.getPerformanceBrand({premiseType: vm.filterModel.premiseType, brand: item.id}).then(function(data) {
+      userService.getPerformanceBrand({premiseType: filtersService.model.selected.premiseType, brand: item.id}).then(function(data) {
         vm.brandTabs.skus = data.performance;
         vm.loadingBrandSnapshot = false;
       });
@@ -316,7 +296,17 @@ module.exports = /*  @ngInject */
     }
 
     function setFilter(result, filterModelProperty) {
-      vm.filterModel[filterModelProperty] = result.id;
+      filtersService.model.selected[filterModelProperty] = [result.id];
+
+      if (filterModelProperty === 'store') {
+        filtersService.model.selected.chain = [];
+        filtersService.model.chain = '';
+      } else if (filterModelProperty === 'chain') {
+        filtersService.model.selected.store = [];
+        filtersService.model.store = '';
+      }
+
+      console.log('[filtersService.model]', filtersService.model);
     }
 
     // Set proper tab and skip animation when chosen from market select box
