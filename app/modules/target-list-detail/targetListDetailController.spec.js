@@ -1,5 +1,5 @@
 describe('Unit: targetListDetailController', function() {
-  var scope, ctrl, $mdDialog, $q, targetListService, chipsService, filtersService, opportunitiesService;
+  var scope, ctrl, $mdDialog, $q, targetListService, chipsService, filtersService, opportunitiesService, userService;
 
   beforeEach(function() {
     angular.mock.module('ui.router');
@@ -17,6 +17,7 @@ describe('Unit: targetListDetailController', function() {
       chipsService = _chipsService_;
       filtersService = _filtersService_;
       opportunitiesService = _opportunitiesService_;
+      userService = _userService_;
     });
   });
 
@@ -61,6 +62,9 @@ describe('Unit: targetListDetailController', function() {
 
     expect(ctrl.initTargetLists).not.toBeUndefined();
     expect(typeof (ctrl.initTargetLists)).toEqual('function');
+
+    expect(ctrl.isAuthor).not.toBeUndefined();
+    expect(typeof (ctrl.isAuthor)).toEqual('function');
 
     expect(ctrl.listChanged).not.toBeUndefined();
     expect(typeof (ctrl.listChanged)).toEqual('function');
@@ -188,6 +192,90 @@ describe('Unit: targetListDetailController', function() {
 
         expect($mdDialog.show).toHaveBeenCalled();
         expect($mdDialog.show.calls.count()).toEqual(1);
+      });
+    });
+
+    describe('[tld.isAuthor]', function() {
+      beforeEach(function() {
+        ctrl.editable = false;
+      });
+
+      afterEach(function() {
+        ctrl.editable = false;
+      });
+
+      it('should leave editable variable false if current user is not TL author', function() {
+        targetListService.model.currentList.collaborators = [
+          {
+            user: {
+              id: '5648',
+              employeeId: '1012132',
+              firstName: 'FRED',
+              lastName: 'BERRIOS',
+              email: 'FRED.BERRIOS@CBRANDS.COM'
+            },
+            permissionLevel: 'collaborate',
+            lastViewed: null
+          },
+          {
+            user: {
+              id: '5545',
+              employeeId: '1012135',
+              firstName: 'CHRISTOPHER',
+              lastName: 'WILLIAMS',
+              email: 'CHRIS.WILLIAMS@CBRANDS.COM'
+            },
+            permissionLevel: 'author',
+            lastViewed: null
+          }
+        ];
+        userService.model.currentUser = {
+          email: 'FRED.BERRIOS@CBRANDS.COM',
+          employeeID: '1012132',
+          firstName: 'FRED',
+          lastName: 'BERRIOS'
+        };
+
+        ctrl.isAuthor();
+
+        expect(ctrl.editable).toEqual(false);
+      });
+
+      it('should update the editable variable to true if current user is TL author', function() {
+        targetListService.model.currentList.collaborators = [
+          {
+            user: {
+              id: '5648',
+              employeeId: '1012132',
+              firstName: 'FRED',
+              lastName: 'BERRIOS',
+              email: 'FRED.BERRIOS@CBRANDS.COM'
+            },
+            permissionLevel: 'author',
+            lastViewed: null
+          },
+          {
+            user: {
+              id: '5545',
+              employeeId: '1012135',
+              firstName: 'CHRISTOPHER',
+              lastName: 'WILLIAMS',
+              email: 'CHRIS.WILLIAMS@CBRANDS.COM'
+            },
+            permissionLevel: 'collaborate',
+            lastViewed: null
+          }
+        ];
+        userService.model.currentUser = {
+          email: 'FRED.BERRIOS@CBRANDS.COM',
+          employeeID: '1012132',
+          firstName: 'FRED',
+          lastName: 'BERRIOS'
+        };
+
+        ctrl.isAuthor();
+
+        expect(ctrl.editable).toEqual(true);
       });
     });
 

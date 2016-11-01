@@ -18,6 +18,7 @@ module.exports = /*  @ngInject */
     vm.changed = false;
     vm.targetListShares = [];
     vm.pendingShares = [];
+    vm.editable = false;
 
     // Services
     vm.targetListService = targetListService;
@@ -43,6 +44,7 @@ module.exports = /*  @ngInject */
     vm.removeFooterToast = removeFooterToast;
     vm.updateList = updateList;
     vm.initTargetLists = initTargetLists;
+    vm.isAuthor = isAuthor;
 
     init();
 
@@ -164,6 +166,7 @@ module.exports = /*  @ngInject */
 
       vm.pendingShares = [];
       initTargetLists();
+      isAuthor();
 
       $mdDialog.show({
         clickOutsideToClose: true,
@@ -179,6 +182,7 @@ module.exports = /*  @ngInject */
 
       vm.pendingShares = [];
       initTargetLists();
+      isAuthor();
 
       $mdDialog.show({
         clickOutsideToClose: true,
@@ -186,6 +190,18 @@ module.exports = /*  @ngInject */
         scope: $scope.$new(),
         targetEvent: ev,
         templateUrl: './app/modules/target-list-detail/modal-manage-collaborators.html'
+      });
+    }
+
+    function isAuthor() {
+      angular.forEach(targetListService.model.currentList.collaborators, function(value, key) {
+        if (vm.editable === false) {
+          if (value.user.employeeId === userService.model.currentUser.employeeID && value.permissionLevel === 'author') {
+            vm.editable = true;
+          } else {
+            vm.editable = false;
+          }
+        }
       });
     }
 
