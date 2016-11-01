@@ -279,19 +279,20 @@ module.exports = /*  @ngInject */
       var opps  = opportunities,
           selectedArr = selected;
 
+      console.log(opps);
+
       for (var i = 0; i < selectedArr.length; i++) {
         for (var j = 0; j < opps.length; j++) {
           for (var k = 0; k < opps[j].groupedOpportunities.length; k++) {
             var oppId = opps[j].groupedOpportunities[k].id;
 
             if (selectedArr[i].id === oppId) {
-              console.log('matt');
               opps[j].groupedOpportunities.splice(k, 1);
+              opps[j].brands.splice(k, 1);
               break;
-            } else {
-              console.log('NOPE');
             }
           }
+
           if (!opps[j].groupedOpportunities.length) {
             opps.splice(j, 1);
             filtersService.model.appliedFilter.pagination.totalStores--;
