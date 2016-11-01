@@ -54,6 +54,10 @@
     }
   }
 
+  .go-arrow:after {
+    right: -4px;
+  }
+
   .target-list-container {
     background: $body-bg;
     margin-top: 1em;
