@@ -113,7 +113,6 @@ module.exports = /*  @ngInject */
         filtersService.model.appliedFilter.appliedFilter = queryParams;
 
         queryStr = '?' + 'limit=100' + '&ignoreDismissed=true' + s + p + '&filter=' + encodeURIComponent(filtersService.model.appliedFilter.appliedFilter);
-        console.log(queryStr = '?' + 'limit=100' + '&ignoreDismissed=true' + s + p + '&filter=' + filtersService.model.appliedFilter.appliedFilter);
 
         return queryStr;
       } else if (obj.type && obj.type === 'targetLists') {
