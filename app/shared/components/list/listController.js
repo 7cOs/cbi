@@ -48,6 +48,7 @@ module.exports = /*  @ngInject */
     vm.openDismissModal = openDismissModal;
     vm.pageName = pageName;
     vm.removeOpportunity = removeOpportunity;
+    vm.updateOpportunityModel = updateOpportunityModel;
     vm.shareOpportunity = shareOpportunity;
     vm.sortBy = sortBy;
     vm.selectOpportunity = selectOpportunity;
@@ -263,17 +264,41 @@ module.exports = /*  @ngInject */
 
       // add opportunity ids into array to be posted
       for (var i = 0; i < vm.selected.length; i++) {
-        for (var j = 0; j < vm.selected[i].groupedOpportunities.length; j++) {
-          opportunityIds.push(vm.selected[i].groupedOpportunities[j].id);
-        }
+        opportunityIds.push(vm.selected[i].id);
       }
 
       targetListService.deleteTargetListOpportunities(targetListService.model.currentList.id, opportunityIds).then(function(data) {
         console.log('Done deleting these ids: ', opportunityIds);
-        // to do - update view and model
+        updateOpportunityModel(opportunitiesService.model.opportunities, vm.selected);
       }, function(err) {
         console.log('Error deleting these ids: ', opportunityIds, ' Responded with error: ', err);
       });
+    }
+
+    function updateOpportunityModel(opportunities, selected) {
+      var opps  = opportunities,
+          selectedArr = selected;
+
+      for (var i = 0; i < selectedArr.length; i++) {
+        for (var j = 0; j < opps.length; j++) {
+          for (var k = 0; k < opps[j].groupedOpportunities.length; k++) {
+            var oppId = opps[j].groupedOpportunities[k].id;
+
+            if (selectedArr[i].id === oppId) {
+              opps[j].groupedOpportunities.splice(k, 1);
+              opps[j].brands.splice(k, 1);
+              break;
+            }
+          }
+
+          if (!opps[j].groupedOpportunities.length) {
+            opps.splice(j, 1);
+            filtersService.model.appliedFilter.pagination.totalStores--;
+          }
+        }
+        filtersService.model.appliedFilter.pagination.totalOpportunities--;
+      }
+      selectedArr = [];
     }
 
     function showOpportunityMemoModal(ev) {

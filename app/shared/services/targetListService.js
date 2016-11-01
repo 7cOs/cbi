@@ -250,8 +250,11 @@ module.exports = /*  @ngInject */
 
       console.log('delete', url, payload);
 
-      $http.delete(url, payload)
-        .then(deleteTargetListOpportunitiesSuccess)
+      $http({ url: url,
+        method: 'DELETE',
+        data: payload,
+        headers: {'Content-Type': 'application/json;charset=utf-8'}
+      }).then(deleteTargetListOpportunitiesSuccess)
         .catch(deleteTargetListOpportunitiesFail);
 
       function deleteTargetListOpportunitiesSuccess(response) {
