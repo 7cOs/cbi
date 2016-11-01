@@ -48,7 +48,7 @@ v-pane-header,
     height: 1px;
     position: absolute;
     left: 15px;
-    top: 45px;
+    top: 50%;
     transform-origin: 50% 50%;
     transition: all 0.25s;
     width: 20px;
@@ -83,7 +83,7 @@ v-pane-header,
 
     &::after,
     &::before {
-      left: 90px;
+      left: 108px;
     }
   }
 
@@ -144,6 +144,26 @@ v-pane-header,
       position: absolute;
       width: calc(100% + 20px);
       z-index: 1;
+    }
+  }
+}
+
+v-pane-header {
+
+  > div {
+    width: 100%;
+  }
+
+  .cell-parent {
+    align-items: center;
+    display: flex;
+    margin: 0 auto;
+    min-height: 90px;
+    width: 100%;
+
+    > div {
+      padding-top: 10px;
+      padding-bottom: 10px;
     }
   }
 }
