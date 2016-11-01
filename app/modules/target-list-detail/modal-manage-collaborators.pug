@@ -8,9 +8,9 @@ div.modal.target-list-modal
       div.collaborator-list
         .collaborator(ng-repeat="collaborator in tld.targetListService.model.currentList.collaborators | orderBy: ['permissionLevel','user.firstName']") {{collaborator.user.firstName | titlecase}} {{collaborator.user.lastName | titlecase}}
           md-menu
-            md-button(ng-click="$mdOpenMenu($event)" aria-label="Collaborator Options")
+            md-button(ng-click="$mdOpenMenu($event)" aria-label="Collaborator Options" ng-disabled="!tld.editable")
               span {{collaborator.permissionLevel | titlecase}}
-              a.chevron-down
+              a(ng-hide="!tld.editable").chevron-down
             md-menu-content.collaborator-options
               md-menu-item(ng-click="tld.makeOwner(collaborator.user.employeeId)") Make Owner
               md-menu-item(ng-click="tld.removeCollaborator(collaborator.user.employeeId)") Remove
