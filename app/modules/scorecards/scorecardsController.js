@@ -41,12 +41,10 @@ module.exports = /*  @ngInject */
       selected: {}
     };
     vm.distributionSelectOptions = {
-      values: [
-        {name: 'Last 3 Months', value: 'L03'},
-        {name: 'Last 60 Days', value: 'L60'},
-        {name: 'Last 90 Days', value: 'L90'},
-        {name: 'Last 120 Days', value: 'L120'}
-      ],
+      year: [{name: 'Last 60 Days', value: 'L60'},
+      {name: 'Last 90 Days', value: 'L90'},
+      {name: 'Last 120 Days', value: 'L120'}],
+      month: [{name: 'Last 3 Months', value: 'L03'}],
       selected: {}
     };
     vm.totalRowTemplate = {
@@ -79,15 +77,46 @@ module.exports = /*  @ngInject */
     vm.changePremise = changePremise;
     vm.isPositive = isPositive;
 
+    vm.updateDistributionTimePeriod = updateDistributionTimePeriod;
+    vm.changeDistirbutionTimePeriod = changeDistirbutionTimePeriod;
+    vm.changeDepletionOption = changeDepletionOption;
+
     init();
 
     // **************
     // PUBLIC METHODS
     // **************
 
+    function updateDistributionTimePeriod(value) {
+      vm.distributionSelectOptions.selected = vm.distributionSelectOptions[value][0].value;
+      vm.depletionSelect = vm.depletionSelectOptions[value][0].name;
+      updatedSelectionValuesInFilter(value, vm.depletionSelect, vm.distributionSelectOptions.selected);
+    }
+
+    function updatedSelectionValuesInFilter(endingPeriod, depletionPeriod, distirbutionPeriod) {
+      if (endingPeriod) {
+        vm.filtersService.lastEndingTimePeriod.endingPeriodType = endingPeriod;
+      }
+
+      if (depletionPeriod) {
+        vm.filtersService.lastEndingTimePeriod.depletionValue = depletionPeriod;
+      }
+
+      if (distirbutionPeriod) {
+        vm.filtersService.lastEndingTimePeriod.timePeriodValue = distirbutionPeriod;
+      }
+    }
+
+    function changeDistirbutionTimePeriod(value) {
+      updatedSelectionValuesInFilter(null, null, value);
+    }
+
+    function changeDepletionOption(value) {
+      updatedSelectionValuesInFilter(null, value, null);
+    }
+
     function changeDepletionScorecard(bool) {
       if (bool) vm.depletionSelect = vm.depletionSelectOptions[vm.depletionRadio][0].name;
-
       updateTotalRowDepletions();
     }
 
@@ -127,15 +156,15 @@ module.exports = /*  @ngInject */
 
         // init vars when all requests are finished
         // depletions
-        vm.depletionRadio = 'year';
-        vm.depletionSelect = 'FYTD';
+        vm.depletionRadio = vm.filtersService.lastEndingTimePeriod.endingPeriodType;
+        vm.depletionSelect = vm.filtersService.lastEndingTimePeriod.depletionValue;
 
         updateTotalRowDepletions();
 
         // distribution
         vm.distributionRadioOptions.selected.placementType = 'Simple';
         vm.distributionRadioOptions.selected.onOffPremise = 'Off Premise';
-        vm.distributionSelectOptions.selected = 'L03';
+        vm.distributionSelectOptions.selected = vm.distributionSelectOptions[vm.depletionRadio][0].value;
 
         updateTotalRowDistributions();
 

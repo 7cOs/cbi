@@ -378,6 +378,7 @@ module.exports = /*  @ngInject */
 
     function init() {
       // reset all chips and filters on page init
+      setDefaultEndingPeriodOptions();
       chipsService.resetChipsFilters(chipsService.model);
 
       var promiseArr = [
@@ -397,6 +398,12 @@ module.exports = /*  @ngInject */
       });
     }
 
+    function setDefaultEndingPeriodOptions() {
+      vm.filterModel.endingTimePeriod = vm.filtersService.lastEndingTimePeriod.endingPeriodType;
+      vm.filterModel.depletionsTimePeriod = vm.filtersService.lastEndingTimePeriod.depletionValue;
+      vm.filterModel.distributionTimePeriod = vm.filtersService.lastEndingTimePeriod.timePeriodValue;
+    }
+
     // Handle required formatting for chart data
     function setChartData(data) {
       vm.chartData = [{'values': data}];
@@ -407,6 +414,11 @@ module.exports = /*  @ngInject */
       vm.overviewOpen = value;
       $scope.$apply();
     }
+
+    $scope.$watch('a.filterModel.endingTimePeriod', function (newVal) {
+      console.log('Ending Period');
+      console.log(newVal);
+    });
 
     // Add 'selected' class to item furthest possible drill-down tab level
     function setSelected(idSelected, widget) {

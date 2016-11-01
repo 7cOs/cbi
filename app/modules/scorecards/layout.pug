@@ -5,17 +5,17 @@ div.my-scorecards
     div.radio-filters
       label Ending Time Period
       md-radio-group(ng-model="s.depletionRadio")
-        md-radio-button(ng-repeat="filter in s.filtersService.model.timePeriod" class="md-primary block" ng-value="filter.value" aria-label="{{filter.name}}") {{filter.name}}
+        md-radio-button(ng-repeat="filter in s.filtersService.model.timePeriod" class="md-primary block" ng-value="filter.value" aria-label="{{filter.name}}" ng-click="s.updateDistributionTimePeriod(filter.value)") {{filter.name}}
 
     div.dropdown-filter
       div.dropdown
         label Depletions Time Period
         md-select(ng-model="s.depletionSelect" md-on-close="s.changeDepletionScorecard(false)" aria-label="Depletion Select")
-          md-option(ng-repeat="filter in s.depletionSelectOptions[s.depletionRadio]" aria-label="{{filter.name}}" value="{{filter.name}}") {{filter.name}}
+          md-option(ng-repeat="filter in s.depletionSelectOptions[s.depletionRadio]" aria-label="{{filter.name}}" value="{{filter.name}}" ng-click="s.changeDepletionOption(filter.name)") {{filter.name}}
       div.dropdown
         label Distribution Time Period
         md-select(ng-model="s.distributionSelectOptions.selected" placeholder="{{s.distributionSelectOptions.values[0].name}}")
-          md-option(ng-repeat="filter in s.distributionSelectOptions.values" aria-label="{{filter.name}}" value="{{filter.value}}") {{filter.name}}
+          md-option(ng-repeat="filter in s.distributionSelectOptions[s.depletionRadio]" aria-label="{{filter.name}}" value="{{filter.value}}" ng-click="s.changeDistirbutionTimePeriod(filter.value)") {{filter.name}}
 
   section.depeletions-scorecard
     div.scorecard-header.clearfix
