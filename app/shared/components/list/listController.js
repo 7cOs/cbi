@@ -450,7 +450,6 @@ module.exports = /*  @ngInject */
       if (!userService.model.targetLists || userService.model.targetLists.owned.length < 1) {
         userService.getTargetLists(userService.model.currentUser.employeeID).then(function(data) {
           userService.model.targetLists = data;
-          console.log(userService.model.targetLists);
         });
       }
     }
