@@ -301,19 +301,20 @@ describe('Unit: targetListDetailController', function() {
 
     describe('[tld.removeCollaborator]', function() {
       beforeEach(function() {
+        targetListService.model.currentList.collaborators = collaborators;
+        ctrl.pendingShares = pending;
+
         spyOn(targetListService, 'deleteTargetListShares').and.callFake(function() {
           var deferred = $q.defer();
           return deferred.promise;
         });
-
-        targetListService.model.currentList.collaborators = collaborators;
-        ctrl.pendingShares = pending;
       });
 
       it('should call the targetListService', function() {
         ctrl.removeCollaborator();
 
         expect(targetListService.deleteTargetListShares).toHaveBeenCalled();
+        expect(targetListService.deleteTargetListShares.calls.count()).toEqual(1);
       });
 
       it('should remove a collaborator from the collaborators & pendingShares arrays', function() {
