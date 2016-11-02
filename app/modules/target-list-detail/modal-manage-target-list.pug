@@ -13,15 +13,15 @@ div.modal.target-list-modal
     div.modal-input
       label collaborators
       div.collaborator-list
-        .collaborator.manage-list(ng-repeat="collaborator in tld.targetListService.model.currentList.collaborators track by $index")
+        .collaborator.manage-list(ng-repeat="collaborator in tld.targetListService.model.currentList.collaborators | orderBy: ['permissionLevel','user.firstName']")
           .align-left {{collaborator.user.firstName | titlecase}} {{collaborator.user.lastName | titlecase}}
           md-menu
-            md-button(ng-click="$mdOpenMenu($event)" aria-label="Collaborator Options")
-              span {{collaborator.permissionLevel | titlecase}}
-              a.chevron-down
+            md-button(ng-click="$mdOpenMenu($event)" aria-label="Collaborator Options" ng-disabled="!tld.editable")
+              span {{collaborator.permissionLevel}}
+              a(ng-hide="!tld.editable").chevron-down
             md-menu-content.collaborator-options
               md-menu-item(ng-click="tld.makeOwner(collaborator.user.id)") Make Owner
-              md-menu-item(ng-click="tld.removeCollaborator(collaborator.user.id)") Remove
+              md-menu-item(ng-click="tld.removeCollaborator(collaborator.user.employeeId)") Remove
         .collaborator.manage-list(ng-repeat="pending in tld.pendingShares")
           .align-left {{pending.employee.firstName | titlecase}} {{pending.employee.lastName | titlecase}}
           md-menu
