@@ -69,6 +69,7 @@ module.exports = /*  @ngInject */
     vm.impactSort = impactSort;
     vm.getMemos = getMemos;
     vm.pickMemo = pickMemo;
+    vm.depletionsVsYaPercent = depletionsVsYaPercent;
 
     // Custom Headers for CSV export
     vm.csvHeader = [
@@ -511,6 +512,28 @@ module.exports = /*  @ngInject */
         removeItem(opportunity, currentSelectionList, idx);
       }
       store.selectedOpportunities = 0;
+    }
+
+    function depletionsVsYaPercent(opportunity) {
+      var currentYearToDate = opportunity.store.depletionsCurrentYearToDate,
+          currentYearToDateYearAgo = opportunity.store.depletionsCurrentYearToDateYA,
+          yearAgoPercentValue = opportunity.store.depletionsCurrentYearToDateYAPercent;
+
+      if (currentYearToDateYearAgo === 0 && currentYearToDate !== 0) {
+        yearAgoPercentValue = 100;
+      } else if (currentYearToDateYearAgo !== 0 && currentYearToDate === 0) {
+        yearAgoPercentValue = -100;
+      } else if (currentYearToDateYearAgo > currentYearToDate) {
+        yearAgoPercentValue = (currentYearToDate / currentYearToDateYearAgo) * -100;
+      } else if (currentYearToDateYearAgo <= currentYearToDate) {
+        yearAgoPercentValue = (currentYearToDate / currentYearToDateYearAgo) * 100;
+      }
+
+      if (yearAgoPercentValue > 999) {
+        yearAgoPercentValue = 999;
+      }
+
+      return yearAgoPercentValue;
     }
 
     // ***************
