@@ -1,5 +1,5 @@
 describe('Unit: targetListDetailController', function() {
-  var scope, ctrl, $mdDialog, $q, targetListService, chipsService, filtersService, opportunitiesService, userService;
+  var scope, ctrl, $mdDialog, $q, targetListService, chipsService, filtersService, opportunitiesService, userService, collaborators, currentUser, pending;
 
   beforeEach(function() {
     angular.mock.module('ui.router');
@@ -19,6 +19,63 @@ describe('Unit: targetListDetailController', function() {
       opportunitiesService = _opportunitiesService_;
       userService = _userService_;
     });
+
+    collaborators = [
+      {
+        'user': {
+          'id': '5648',
+          'employeeId': '1012132',
+          'firstName': 'FRED',
+          'lastName': 'BERRIOS',
+          'email': 'FRED.BERRIOS@CBRANDS.COM'
+        },
+        'permissionLevel': 'author',
+        'lastViewed': null
+      },
+      {
+        'user': {
+          'id': '5545',
+          'employeeId': '1012135',
+          'firstName': 'CHRISTOPHER',
+          'lastName': 'WILLIAMS',
+          'email': 'CHRIS.WILLIAMS@CBRANDS.COM'
+        },
+        'permissionLevel': 'collaborate',
+        'lastViewed': null
+      }
+    ];
+
+    currentUser = {
+      'email': 'FRED.BERRIOS@CBRANDS.COM',
+      'employeeID': '1012132',
+      'firstName': 'FRED',
+      'lastName': 'BERRIOS'
+    };
+
+    pending = [
+      {
+        'user': {
+          'id': '5649',
+          'employeeId': '1009529',
+          'firstName': 'CARRIE',
+          'lastName': 'REID',
+          'email': 'CARRIE.REID@CBRANDS.COM'
+        },
+        'permissionLevel': 'author',
+        'lastViewed': '2016-10-14 18:40:03.954'
+      },
+      {
+        'user': {
+          'id': '5545',
+          'employeeId': '1012135',
+          'firstName': 'CHRISTOPHER',
+          'lastName': 'WILLIAMS',
+          'email': 'CHRIS.WILLIAMS@CBRANDS.COM'
+        },
+        'permissionLevel': 'collaborate',
+        'lastViewed': null
+      }
+    ];
   });
 
   it('should expose public services', function() {
@@ -191,34 +248,29 @@ describe('Unit: targetListDetailController', function() {
       it('should leave editable variable false if current user is not TL author', function() {
         targetListService.model.currentList.collaborators = [
           {
-            user: {
-              id: '5648',
-              employeeId: '1012132',
-              firstName: 'FRED',
-              lastName: 'BERRIOS',
-              email: 'FRED.BERRIOS@CBRANDS.COM'
+            'user': {
+              'id': '5648',
+              'employeeId': '1012132',
+              'firstName': 'FRED',
+              'lastName': 'BERRIOS',
+              'email': 'FRED.BERRIOS@CBRANDS.COM'
             },
-            permissionLevel: 'collaborate',
-            lastViewed: null
+            'permissionLevel': 'collaborate',
+            'lastViewed': null
           },
           {
-            user: {
-              id: '5545',
-              employeeId: '1012135',
-              firstName: 'CHRISTOPHER',
-              lastName: 'WILLIAMS',
-              email: 'CHRIS.WILLIAMS@CBRANDS.COM'
+            'user': {
+              'id': '5545',
+              'employeeId': '1012135',
+              'firstName': 'CHRISTOPHER',
+              'lastName': 'WILLIAMS',
+              'email': 'CHRIS.WILLIAMS@CBRANDS.COM'
             },
-            permissionLevel: 'author',
-            lastViewed: null
+            'permissionLevel': 'author',
+            'lastViewed': null
           }
         ];
-        userService.model.currentUser = {
-          email: 'FRED.BERRIOS@CBRANDS.COM',
-          employeeID: '1012132',
-          firstName: 'FRED',
-          lastName: 'BERRIOS'
-        };
+        userService.model.currentUser = currentUser;
 
         ctrl.isAuthor();
 
@@ -226,36 +278,8 @@ describe('Unit: targetListDetailController', function() {
       });
 
       it('should update the editable variable to true if current user is TL author', function() {
-        targetListService.model.currentList.collaborators = [
-          {
-            user: {
-              id: '5648',
-              employeeId: '1012132',
-              firstName: 'FRED',
-              lastName: 'BERRIOS',
-              email: 'FRED.BERRIOS@CBRANDS.COM'
-            },
-            permissionLevel: 'author',
-            lastViewed: null
-          },
-          {
-            user: {
-              id: '5545',
-              employeeId: '1012135',
-              firstName: 'CHRISTOPHER',
-              lastName: 'WILLIAMS',
-              email: 'CHRIS.WILLIAMS@CBRANDS.COM'
-            },
-            permissionLevel: 'collaborate',
-            lastViewed: null
-          }
-        ];
-        userService.model.currentUser = {
-          email: 'FRED.BERRIOS@CBRANDS.COM',
-          employeeID: '1012132',
-          firstName: 'FRED',
-          lastName: 'BERRIOS'
-        };
+        targetListService.model.currentList.collaborators = collaborators;
+        userService.model.currentUser = currentUser;
 
         ctrl.isAuthor();
 
@@ -272,6 +296,34 @@ describe('Unit: targetListDetailController', function() {
         ctrl.listChanged();
 
         expect(ctrl.changed).toEqual(true);
+      });
+    });
+
+    describe('[tld.removeCollaborator]', function() {
+      beforeEach(function() {
+        spyOn(targetListService, 'deleteTargetListShares').and.callFake(function() {
+          var deferred = $q.defer();
+          return deferred.promise;
+        });
+
+        targetListService.model.currentList.collaborators = collaborators;
+        ctrl.pendingShares = pending;
+      });
+
+      it('should call the targetListService', function() {
+        ctrl.removeCollaborator();
+
+        expect(targetListService.deleteTargetListShares).toHaveBeenCalled();
+      });
+
+      it('should remove a collaborator from the collaborators & pendingShares arrays', function() {
+        expect(targetListService.model.currentList.collaborators).toEqual(collaborators);
+        expect(ctrl.pendingShares).toEqual(pending);
+
+        ctrl.removeCollaborator('1012135');
+
+        // expect(targetListService.model.currentList.collaborators.length).toEqual(1);
+        // expect(ctrl.pendingShares.length).toEqual(1);
       });
     });
 

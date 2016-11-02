@@ -95,6 +95,13 @@
     }
   }
 
+  p.disabled {
+    color: $gray-2;
+    text-decoration: italic;
+    cursor: default;
+    outline: 0;
+  }
+
   /* .close-icon {
     position: relative;
     display: inline-block;
