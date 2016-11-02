@@ -395,17 +395,53 @@ module.exports = /*  @ngInject */
       return performancePromise.promise;
     }
 
+    /**
+     * @name calculatePlanDistirbutionTrend
+     * @desc Calculates plan(ABP) trend values for both Simple and Effective distirbutions
+     * @params {Object} measure - The current measure object in the response
+     * @returns {Object} - Returns true if the properties were calculated . Returns false if isNan
+     */
+    function calculatePlanDistirbutionTrend(measure) {
+      var isPlanValueCalculated = false;
+      var planSimpleVal = Number.parseFloat(measure.planSimple);
+      var planEffectiveVal = Number.parseFloat(measure.planEffective);
+      var temp = null;
+
+      var distirbutionSimpleVal = Number.parseFloat(measure.distributionsSimple);
+      var distirbutionEffectiveVal = Number.parseFloat(measure.distributionsSimple);
+      if (planSimpleVal && distirbutionSimpleVal) {
+        temp = ((planSimpleVal - distirbutionSimpleVal) / planSimpleVal);
+        measure.planDistirbutionSimpleTrend = (temp * 100);
+        isPlanValueCalculated = true;
+      }
+
+      if (planEffectiveVal && distirbutionEffectiveVal) {
+        temp = ((planEffectiveVal - distirbutionEffectiveVal) / planEffectiveVal);
+        measure.planDistirbutionEffectiveTrend = (temp * 100);
+        isPlanValueCalculated = isPlanValueCalculated && true;
+      }
+      return isPlanValueCalculated;
+    }
+
+    function calculatePlanDepletionTrend(measure) {
+      var isPlanValueCalculated = false;
+      var planVal = Number.parseFloat(measure.plan);
+      var depletionsVal = Number.parseFloat(measure.depletions);
+      if (planVal && depletionsVal) {
+        var temp = ((planVal - depletionsVal) / planVal);
+        measure.planDepletionTrend = (temp * 100);
+        isPlanValueCalculated = true;
+      }
+      return isPlanValueCalculated;
+    }
+
     function calculateTrendValuesForPlan(brands) {
       for (var i = 0, len = brands.length; i < len; i++) {
         var currentBrand = brands[i];
         angular.forEach(currentBrand.measures, function(measure, index) {
-          var planVal = Number.parseFloat(measure.plan);
-          var depletionsVal = Number.parseFloat(measure.depletions);
-          if (planVal && depletionsVal) {
-            var temp = ((planVal - depletionsVal) / planVal);
-            measure.planDepletionTrend = (temp * 100).toFixed(1);
-          } else {
-            measure.planDepletionTrend = null;
+          var isPlanDepletionTrend = calculatePlanDepletionTrend(measure);
+          if (!isPlanDepletionTrend) {
+            calculatePlanDistirbutionTrend(measure);
           }
         });
       }
