@@ -418,7 +418,7 @@ module.exports = /*  @ngInject */
         var csvItem = {};
         angular.copy(value, item);
         csvItem.storeDistributor = item.store.distributors[0];
-        csvItem.TDLinx = item.product.id;
+        csvItem.TDLinx = item.store.id;
         csvItem.storeName = item.store.name;
         csvItem.storeAddress = item.store.streetAddress;
         csvItem.storeCity = item.store.city;
