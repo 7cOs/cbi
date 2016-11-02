@@ -151,6 +151,7 @@ v-pane-header,
 v-pane-header {
 
   > div {
+    display: flex;
     width: 100%;
   }
 
