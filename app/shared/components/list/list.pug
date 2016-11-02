@@ -75,7 +75,7 @@ v-accordion.styled-list(multiple="" id="opportunities" control="list.accordion" 
         div(ng-class="{long: opportunity.store.name.length > 21}").cell-parent
           div.pad-cell.semi-bold(column='3') {{::opportunity.store.name | titlecase}} <span class="supporting-text" ng-if="opportunity.store.storeNumber">\#{{::opportunity.store.storeNumber | uppercase}}</span>
           div.address(column='4') {{::opportunity.store.streetAddress | titlecase}} {{::opportunity.store.city | titlecase}}, {{::opportunity.store.state}} {{::opportunity.store.zip | zipcode}}
-          .text-center.semi-bold(column='2') {{opportunity.groupedOpportunities.length}} <span class="supporting-text">({{::opportunity.highImpactSum}} High)</span>
+          .text-center.semi-bold(column='2') {{opportunity.groupedOpportunities.length}} <span class="supporting-text">({{::opportunity.store.highImpactOpportunityCount}} High)</span>
           .text-center.semi-bold(column='1') {{::opportunity.store.depletionsCurrentYearToDate | number }}
           .text-center.semi-bold(column='1' ng-class="opportunity.store.depletionsCurrentYearToDateYAPercentNegative ? 'negative' : 'positive'") {{::opportunity.store.depletionsCurrentYearToDateYAPercent}}
           .text-center.semi-bold(column='1') {{::opportunity.store.segmentation}}
