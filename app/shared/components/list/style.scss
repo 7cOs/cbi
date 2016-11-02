@@ -8,18 +8,26 @@ list {
   margin-bottom: 4em;
 
   .list-item {
-    background: $white;
+    background: $gray-4;
     border-top: 1px solid $gray-3;
     font-size: 1.1em;
     transition: background 300ms ease;
     position: relative;
-    height: 90px;
+
+    v-pane-header {
+      background: $white;
+    }
 
     &:hover,
     &:hover .more-wrapper,
     &.is-expanded,
     &.is-expanded .more-wrapper {
-      background: $light-blue-4;
+
+      v-pane-header,
+      .hero-row,
+      .depletion-details {
+        background: $light-blue-4;
+      }
     }
 
     &.is-expanded,
@@ -100,6 +108,8 @@ list {
 
   + .checkbox-sibling {
     width: calc(100% - 50px);
+    margin-left: 50px;
+    padding-right: 50px;
   }
 
   md-checkbox {
@@ -159,7 +169,7 @@ list {
   transition: background 300ms ease;
 
   + .checkbox-sibling {
-    width: calc(100% - 50px);
+    width: calc(100% - 100px);
   }
 
   p {
@@ -199,7 +209,7 @@ list {
   width: 35px;
 
   + .checkbox-sibling {
-    width: calc(100% - 50px);
+    width: calc(100% - 100px);
   }
 
   p {

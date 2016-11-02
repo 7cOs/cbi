@@ -167,3 +167,16 @@ v-pane-header {
     }
   }
 }
+
+.header-wrapper {
+  overflow: auto;
+  position: relative;
+
+  .checkbox-wrapper {
+    background: transparent;
+    padding: 0;
+    position: absolute;
+    top: calc(50% - 12px);
+    left: 15px;
+  }
+}
