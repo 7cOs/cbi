@@ -69,16 +69,17 @@ v-accordion.styled-list(multiple="" id="opportunities" control="list.accordion" 
         span Maximum of 10 <strong> Retailers</strong>
   v-pane.list-item(row ng-repeat="opportunity in list.opportunitiesService.model.opportunities | filter : {'dismissed': false}" expanded='opportunity.isExpanded')
     .shadow-wrap.bottom
-      div.checkbox-wrapper(ng-click="list.toggleOpportunitiesInStores(opportunity, list.selected)")
-        md-checkbox(aria-label="Select Item" ng-checked="opportunity.selectedOpportunities === opportunity.groupedOpportunities.length")
-      v-pane-header.checkbox-sibling(column='12')
-        div(ng-class="{long: opportunity.store.name.length > 21}").cell-parent
-          div.pad-cell.semi-bold(column='3') {{::opportunity.store.name | titlecase}} <span class="supporting-text" ng-if="opportunity.store.storeNumber">\#{{::opportunity.store.storeNumber | uppercase}}</span>
-          div.address(column='4') {{::opportunity.store.streetAddress | titlecase}} {{::opportunity.store.city | titlecase}}, {{::opportunity.store.state}} {{::opportunity.store.zip | zipcode}}
-          .text-center.semi-bold(column='2') {{opportunity.groupedOpportunities.length}} <span class="supporting-text">({{::opportunity.store.highImpactOpportunityCount}} High)</span>
-          .text-center.semi-bold(column='1') {{::opportunity.store.depletionsCurrentYearToDate | number }}
-          .text-center.semi-bold(column='1' ng-class="opportunity.store.depletionsCurrentYearToDateYAPercentNegative ? 'negative' : 'positive'") {{::opportunity.store.depletionsCurrentYearToDateYAPercent}}
-          .text-center.semi-bold(column='1') {{::opportunity.store.segmentation}}
+      .header-wrapper(ng-click="list.toggleOpportunitiesInStores(opportunity, list.selected)")
+        div.checkbox-wrapper(ng-click="list.toggleOpportunitiesInStores(opportunity, list.selected)")
+          md-checkbox(aria-label="Select Item" ng-click="list.toggleOpportunitiesInStores(opportunity, list.selected)" ng-checked="opportunity.selectedOpportunities === opportunity.groupedOpportunities.length")
+        v-pane-header.checkbox-sibling(column='12' ng-click="$event.stopPropagation()")
+          div(ng-class="{long: opportunity.store.name.length > 21}").cell-parent
+            div.pad-cell.semi-bold(column='3') {{::opportunity.store.name | titlecase}} <span class="supporting-text" ng-if="opportunity.store.storeNumber">\#{{::opportunity.store.storeNumber | uppercase}}</span>
+            div.address(column='4') {{::opportunity.store.streetAddress | titlecase}} {{::opportunity.store.city | titlecase}}, {{::opportunity.store.state}} {{::opportunity.store.zip | zipcode}}
+            .text-center.semi-bold(column='2') {{opportunity.groupedOpportunities.length}} <span class="supporting-text">({{::opportunity.store.highImpactOpportunityCount}} High)</span>
+            .text-center.semi-bold(column='1') {{::opportunity.store.depletionsCurrentYearToDate | number }}
+            .text-center.semi-bold(column='1' ng-class="opportunity.store.depletionsCurrentYearToDateYAPercentNegative ? 'negative' : 'positive'") {{::opportunity.store.depletionsCurrentYearToDateYAPercent}}
+            .text-center.semi-bold(column='1') {{::opportunity.store.segmentation}}
       v-pane-content(column='12' class="products" ng-class="{'open' : open}")
         .shadow-wrap.top
           .hero-row(row)
@@ -155,7 +156,7 @@ v-accordion.styled-list(multiple="" id="opportunities" control="list.accordion" 
             label.bold.text-center Impact
           div(column='1')
             label.bold.text-center
-        v-accordion(multiple class="nested-accordion")
+        v-accordion(multiple class="nested-accordion" row)
           v-pane.styled-list(ng-repeat="product in opportunity.groupedOpportunities | orderBy: [list.impactSort, 'product.name'] : false | filter : {'dismissed': false}")
             v-pane-header
               .action-overlay(ng-class="{'active': (list.opportunityShared || list.opportunityDismissTrigger) && product.id === list.currentOpportunityId, 'fail': list.shareOpportunityFail && product.id === list.currentOpportunityId}" ng-click="$event.stopPropagation()")
@@ -190,16 +191,16 @@ v-accordion.styled-list(multiple="" id="opportunities" control="list.accordion" 
                         md-menu-item(ng-show="product.status !== 'TARGETED'")
                           p(ng-click="list.openDismissModal(product.id); $pane.collapse()") Dismiss
             .shadow-wrap.top
-              v-pane-content
+              v-pane-content.depletion-details
                 div(row)
                   div(column="1") &nbsp;
-                  div(column="4").pad-cell
+                  div(column="4").pad-cell.more
                     label Last Depletion
                     span(ng-if='product.lastDepletionDate === null') &ndash;
-                    span(ng-if='product.lastDepletionDate !== null') {{::product.lastDepletionDate | timeAgo: 'daysOnly' }} <span class="depletion-date">{{::product.lastDepletionDate | date:'MM/dd/yy'}}</span>
+                    span.last-depletion(ng-if='product.lastDepletionDate !== null') {{::product.lastDepletionDate | timeAgo: 'daysOnly' }} <span class="depletion-date">{{::product.lastDepletionDate | date:'MM/dd/yy'}}</span>
                   div(column="2")
                     label Depletions CYTD
-                    span {{::product.depletionsCurrentYearToDate | number:0 }}
+                    span.last-depletion {{::product.depletionsCurrentYearToDate | number:0 }}
                   div(column="1").vs-ya
                     label vs YA %
                     span(class='positive' ng-class="{'negative': product.depletionsCurrentYearToDateYAPercentNegative}") {{::product.depletionsCurrentYearToDateYAPercent}}
