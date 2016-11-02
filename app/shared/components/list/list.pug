@@ -22,7 +22,13 @@
         md-menu-content.target-list-menu
           md-menu-item(ng-repeat="targetList in list.userService.model.targetLists.owned" ng-click="list.addToTargetList(targetList.id)")
             p {{targetList.name}}
-      button.btn-action(ng-disabled="list.selected < 1" ng-csv="list.flattenOpportunity(list.selected)" filename="{{list.getDate() | date:'yyyy-MM-dd'}}.csv" csv-header="list.csvHeader") Download
+      md-menu(md-offset="0 45")
+        button.btn-action(ng-click="$mdOpenMenu($event)" ng-disabled="list.selected < 1") Download
+        md-menu-content.target-list-menu
+          md-menu-item(ng-csv="list.flattenOpportunity(list.selected, true)" filename="{{list.getDate() | date:'yyyy-MM-dd'}}.csv" csv-header="list.csvHeaderRationale" ng-click="$mdCloseMenu($event)")
+            p With Rationale
+          md-menu-item(ng-csv="list.flattenOpportunity(list.selected)" filename="{{list.getDate() | date:'yyyy-MM-dd'}}.csv" csv-header="list.csvHeader" ng-click="$mdCloseMenu($event)")
+            p Without Rationale
       button.btn-action(ng-disabled="list.selected < 1" ng-click="list.removeOpportunity()") Remove
 
 button.icon.select-all(ng-disabled="list.isChecked()" ng-click="list.toggleSelectAllStores()") {{!list.isSelectAllActivated ? 'Select All' : 'Un-Select All'}}
