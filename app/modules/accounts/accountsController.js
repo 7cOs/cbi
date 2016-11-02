@@ -281,6 +281,8 @@ module.exports = /*  @ngInject */
       vm.filterModel.brand = item.id;
       userService.getPerformanceBrand({premiseType: filtersService.model.selected.premiseType, brand: item.id}).then(function(data) {
         vm.brandTabs.skus = data.performance;
+        console.log('Brand Selection Performance');
+        console.log(data.performance);
         vm.loadingBrandSnapshot = false;
       });
 
@@ -368,6 +370,7 @@ module.exports = /*  @ngInject */
 
     function init() {
       // reset all chips and filters on page init
+      vm.filterModel.trend = vm.filtersService.model.trend[0];
       setDefaultEndingPeriodOptions();
       chipsService.resetChipsFilters(chipsService.model);
 
@@ -383,6 +386,8 @@ module.exports = /*  @ngInject */
         userService.model.depletion = data[1];
         userService.model.distribution = data[2];
         vm.brandTabs.brands = data[3].performance;
+        console.log('Brands');
+        console.log(data[3]);
 
         vm.loadingBrandSnapshot = false;
       });

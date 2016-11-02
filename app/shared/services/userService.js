@@ -395,6 +395,23 @@ module.exports = /*  @ngInject */
       return performancePromise.promise;
     }
 
+    function calculateTrendValuesForPlan(brands) {
+      for (var i = 0, len = brands.length; i < len; i++) {
+        var currentBrand = brands[i];
+        angular.forEach(currentBrand.measures, function(measure, index) {
+          var planVal = Number.parseFloat(measure.plan);
+          var depletionsVal = Number.parseFloat(measure.depletions);
+          if (planVal && depletionsVal) {
+            var temp = ((planVal - depletionsVal) / planVal);
+            measure.planDepletionTrend = (temp * 100).toFixed(1);
+          } else {
+            measure.planDepletionTrend = null;
+          }
+        });
+      }
+      return brands;
+    }
+
     /**
      * @name getPerformanceBrand
      * @desc get brand performance for a user
@@ -411,6 +428,7 @@ module.exports = /*  @ngInject */
         .catch(getPerformanceBrandFail);
 
       function getPerformanceBrandSuccess(response) {
+        calculateTrendValuesForPlan(response.data.performance);
         performancePromise.resolve(response.data);
       }
 

@@ -27,7 +27,7 @@ notes
     div.trend(column='2')
       label Trend
       md-radio-group(ng-model="a.filterModel.trend")
-        md-radio-button(ng-repeat="filter in a.filtersService.model.trend" class="md-primary" ng-value="filter.name" aria-label="Trend") {{filter.name}}
+        md-radio-button(ng-repeat="filter in a.filtersService.model.trend" ng-click="updatePlanType(filter.name)" class="md-primary" ng-value="filter" aria-label="Trend") {{filter.name}}
     div(column='3')
       label Ending Time Period
       md-radio-group(ng-model="a.filterModel.endingTimePeriod")
@@ -48,7 +48,7 @@ notes
   div(row)
     div(column='2')
       label Account Scope
-      md-checkbox(ng-model="a.filtersService.model.selected.myAccountsOnly" aria-label="My Accounts") My Accounts Only 
+      md-checkbox(ng-model="a.filtersService.model.selected.myAccountsOnly" aria-label="My Accounts") My Accounts Only
     div(column='2')
       label Premise Type
       md-radio-group(ng-model="a.filtersService.model.selected.premiseType")
@@ -92,7 +92,7 @@ div(row)
       label Effective Pods: 15 (5.2%)
 
 div(row)
-  div.scorecard-table.scorecard-table-accounts(column='5')
+  div.scorecard-table.scorecard-table-accounts(column='6')
     .loader-wrap.inline(ng-class="{'active': a.loadingBrandSnapshot}")
       loader
     .widget-header
@@ -118,11 +118,11 @@ div(row)
             th.dark
               p.accent {{a.filterModel.depletionsTimePeriod}}
             th.dark
-              p.accent vs YA%
+              p.accent {{a.filterModel.trend.name + '%'}}
             th
               p.accent {{a.filterModel.distributionTimePeriod}}
             th
-              p.accent vs YA%
+              p.accent vs {{a.filterModel.trend.name + '%'}}
         tbody
           tr
             td.column-total.title-col.left TOTAL
@@ -145,7 +145,7 @@ div(row)
                 td.left.data-brand.title-col {{item.name}}
                 //- Depletion TDs
                 td(ng-class="{'negative': !a.isPositive(a.displayBrandValue(item.measures, 'depletions', 'depletionsTimePeriod'))}").dark.depletions-value {{a.displayBrandValue(item.measures, 'depletions', 'depletionsTimePeriod') | number:0 }}
-                td(ng-class="{'negative': !a.isPositive(a.displayBrandValue(item.measures, 'depletionsTrend', 'depletionsTimePeriod'))}").dark.depletions-value <span class="percentage">{{a.displayBrandValue(item.measures, 'depletionsTrend', 'depletionsTimePeriod') | number:1}} %</span>
+                td hello
 
                 //- Velocity TDs
                 td(ng-class="{'negative': !a.isPositive(a.displayBrandValue(item.measures, 'velocity', 'distributionTimePeriod'))}" ng-if="a.filtersService.model.accountSelected.accountBrands === 'Velocity'") {{a.displayBrandValue(item.measures, 'velocity', 'distributionTimePeriod') | number:0 }}
@@ -154,7 +154,7 @@ div(row)
                 //- Distributions TDs
                 td(ng-class="{'negative': !a.isPositive(a.displayBrandValue(item.measures, 'distributionsSimple', 'distributionTimePeriod'))}" ng-if="a.filtersService.model.accountSelected.accountBrands !== 'Velocity'") {{a.displayBrandValue(item.measures, 'distributionsSimple', 'distributionTimePeriod') | number:0 }}
                 td(ng-class="{'negative': !a.isPositive(a.displayBrandValue(item.measures, 'distributionsSimpleTrend', 'distributionTimePeriod'))}" ng-if="a.filtersService.model.accountSelected.accountBrands !== 'Velocity'") <span class="percentage" ng-if="a.displayBrandValue(item.measures, 'distributionsSimpleTrend', 'distributionTimePeriod')">{{a.displayBrandValue(item.measures, 'distributionsSimpleTrend', 'distributionTimePeriod') | number:1}} %</span><span ng-if="!a.displayBrandValue(item.measures, 'distributionsSimpleTrend', 'distributionTimePeriod')">-</span>
-  div.scorecard-chart(column='7')
+  div.scorecard-chart(column='6')
     .widget-header
       .dropdown-filter.narrow
         md-select(ng-model="a.filtersService.model.accountSelected.accountMarkets" md-on-open="a.openSelect(true)" md-on-close="a.openSelect(false)" aria-label="Account Markets Filter")
