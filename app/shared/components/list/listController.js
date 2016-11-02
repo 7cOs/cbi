@@ -69,6 +69,7 @@ module.exports = /*  @ngInject */
     vm.impactSort = impactSort;
     vm.getMemos = getMemos;
     vm.pickMemo = pickMemo;
+    vm.depletionsVsYaPercent = depletionsVsYaPercent;
 
     // Custom Headers for CSV export
     vm.csvHeader = [
@@ -511,6 +512,35 @@ module.exports = /*  @ngInject */
         removeItem(opportunity, currentSelectionList, idx);
       }
       store.selectedOpportunities = 0;
+    }
+
+    function depletionsVsYaPercent(opportunity) {
+      var cytd = opportunity.store.depletionsCurrentYearToDate,
+          cydtya = opportunity.store.depletionsCurrentYearToDateYA,
+          yaPercentValue = opportunity.store.depletionsCurrentYearToDateYAPercent;
+
+      if (cydtya === 0 && cytd !== 0) {
+        yaPercentValue = 100;
+        return yaPercentValue;
+      }
+
+      if (cydtya !== 0 && cytd === 0) {
+        yaPercentValue = -100;
+        return yaPercentValue;
+      }
+
+      if (cydtya > cytd) {
+        yaPercentValue = (cytd / cydtya) * -100;
+      } else {
+        yaPercentValue = (cytd / cydtya) * 100;
+      }
+
+      if (yaPercentValue > 999) {
+        yaPercentValue = 999;
+        return yaPercentValue;
+      }
+
+      return yaPercentValue;
     }
 
     // ***************
