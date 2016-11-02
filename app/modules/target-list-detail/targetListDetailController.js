@@ -198,7 +198,11 @@ module.exports = /*  @ngInject */
 
         // remove from user model and UI - target list service
         angular.forEach(targetListService.model.currentList.collaborators, function(item, key) {
-          if (item.user.employeeId === collaboratorId) targetListService.model.currentList.collaborators.splice(targetListService.model.currentList.collaborators.indexOf(item), 1);
+          if (item.user.employeeId === collaboratorId) targetListService.model.currentList.collaborators.splice(key, 1);
+        });
+
+        angular.forEach(vm.pendingShares, function(item, key) {
+          if (item.employee.employeeId === collaboratorId) vm.pendingShares.splice(key, 1);
         });
 
         // remove from user model and UI - user service
