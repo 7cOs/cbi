@@ -515,32 +515,25 @@ module.exports = /*  @ngInject */
     }
 
     function depletionsVsYaPercent(opportunity) {
-      var cytd = opportunity.store.depletionsCurrentYearToDate,
-          cydtya = opportunity.store.depletionsCurrentYearToDateYA,
-          yaPercentValue = opportunity.store.depletionsCurrentYearToDateYAPercent;
+      var currentYearToDate = opportunity.store.depletionsCurrentYearToDate,
+          currentYearToDateYearAgo = opportunity.store.depletionsCurrentYearToDateYA,
+          yearAgoPercentValue = opportunity.store.depletionsCurrentYearToDateYAPercent;
 
-      if (cydtya === 0 && cytd !== 0) {
-        yaPercentValue = 100;
-        return yaPercentValue;
+      if (currentYearToDateYearAgo === 0 && currentYearToDate !== 0) {
+        yearAgoPercentValue = 100;
+      } else if (currentYearToDateYearAgo !== 0 && currentYearToDate === 0) {
+        yearAgoPercentValue = -100;
+      } else if (currentYearToDateYearAgo > currentYearToDate) {
+        yearAgoPercentValue = (currentYearToDate / currentYearToDateYearAgo) * -100;
+      } else if (currentYearToDateYearAgo <= currentYearToDate) {
+        yearAgoPercentValue = (currentYearToDate / currentYearToDateYearAgo) * 100;
       }
 
-      if (cydtya !== 0 && cytd === 0) {
-        yaPercentValue = -100;
-        return yaPercentValue;
+      if (yearAgoPercentValue > 999) {
+        yearAgoPercentValue = 999;
       }
 
-      if (cydtya > cytd) {
-        yaPercentValue = (cytd / cydtya) * -100;
-      } else {
-        yaPercentValue = (cytd / cydtya) * 100;
-      }
-
-      if (yaPercentValue > 999) {
-        yaPercentValue = 999;
-        return yaPercentValue;
-      }
-
-      return yaPercentValue;
+      return yearAgoPercentValue;
     }
 
     // ***************
