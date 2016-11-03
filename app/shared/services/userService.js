@@ -492,7 +492,6 @@ module.exports = /*  @ngInject */
           .then(getTargetListsSuccess)
           .catch(getTargetListsFail);
       } else {
-        console.log('stuff');
         targetListPromise.resolve(service.model.targetLists);
       }
 

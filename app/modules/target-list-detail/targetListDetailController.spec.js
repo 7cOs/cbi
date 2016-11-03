@@ -196,21 +196,6 @@ describe('Unit: targetListDetailController', function() {
       });
     });
 
-    describe('[tld.changeCollaboratorLevel]', function() {
-      beforeEach(function() {
-        spyOn(targetListService, 'updateTargetListShares').and.callFake(function() {
-          var deferred = $q.defer();
-          return deferred.promise;
-        });
-
-        ctrl.changeCollaboratorLevel();
-      });
-
-      it('should call the targetListService', function() {
-        expect(targetListService.updateTargetListShares).toHaveBeenCalled();
-      });
-    });
-
     describe('[tld.closeModal]', function() {
       beforeEach(function() {
         spyOn($mdDialog, 'hide').and.callThrough();

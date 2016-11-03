@@ -77,7 +77,8 @@ module.exports = /*  @ngInject */
     }
 
     function changeCollaboratorLevel() {
-      targetListService.updateTargetListShares(targetListService.model.currentList.id, vm.collaborator).then();
+      // Commenting this out for now because this isn't the correct patch
+      // targetListService.updateTargetListShares(targetListService.model.currentList.id, vm.collaborator).then();
     }
 
     function closeModal() {
@@ -248,6 +249,7 @@ module.exports = /*  @ngInject */
       targetListService.getTargetList(targetListService.model.currentList.id).then(function(response) {
         targetListService.model.currentList = response;
         targetListService.model.currentList.loading = false;
+        targetListService.updateTargetListShares(targetListService.model.currentList.id, userService.model.currentUser.employeeID, true);
       }, function(err) {
         console.log('[targetListController.init], Error: ' + err.statusText + '. Code: ' + err.status);
       });

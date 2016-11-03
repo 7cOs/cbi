@@ -331,17 +331,18 @@ module.exports = /*  @ngInject */
      * @name updateTargetListShares
      * @desc update collaborator permission level
      * @params {String} targetListId - id of target list
-     * @params {Object} p - collaborator object
+     * @params {String} employeeId - id of employee
+     * @params {Boolean} updateLastViewed - update last viewed status
      * @returns {Object} - collaborator response
      * @memberOf cf.common.services
      */
-    function updateTargetListShares(targetListId, p) {
+    function updateTargetListShares(targetListId, employeeId, updateLastViewed) {
       var targetListPromise = $q.defer(),
           url = apiHelperService.request('/api/targetLists/' + targetListId + '/shares'),
-          payload = {
-            userId: p.newCollaboratorId,
-            permissionLevel: p.permissionLevel
-          };
+          payload = [{
+            employeeId: employeeId,
+            updateLastViewed: updateLastViewed
+          }];
 
       console.log(url, payload);
 
