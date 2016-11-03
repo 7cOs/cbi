@@ -1,5 +1,5 @@
 describe('Unit: targetListDetailController', function() {
-  var scope, ctrl, $mdDialog, $q, targetListService, chipsService, filtersService, opportunitiesService, userService, collaborators, currentUser, pending;
+  var scope, ctrl, $mdDialog, $q, $httpBackend, targetListService, chipsService, filtersService, opportunitiesService, userService, collaborators, currentUser, pending;
 
   beforeEach(function() {
     angular.mock.module('ui.router');
@@ -8,11 +8,12 @@ describe('Unit: targetListDetailController', function() {
     angular.mock.module('cf.common.filters');
     angular.mock.module('cf.modules.targetListDetail');
 
-    inject(function($rootScope, $controller, _$mdDialog_, _$window_, _$q_, _targetListService_, _chipsService_, _filtersService_, _opportunitiesService_, _userService_) {
+    inject(function($rootScope, $controller, _$mdDialog_, _$window_, _$q_, _$httpBackend_, _targetListService_, _chipsService_, _filtersService_, _opportunitiesService_, _userService_) {
       scope = $rootScope.$new();
       ctrl = $controller('targetListDetailController', {$scope: scope});
       $mdDialog = _$mdDialog_;
       $q = _$q_;
+      $httpBackend = _$httpBackend_;
       targetListService = _targetListService_;
       chipsService = _chipsService_;
       filtersService = _filtersService_;
@@ -54,7 +55,7 @@ describe('Unit: targetListDetailController', function() {
 
     pending = [
       {
-        'user': {
+        'employee': {
           'id': '5649',
           'employeeId': '1009529',
           'firstName': 'CARRIE',
@@ -65,7 +66,7 @@ describe('Unit: targetListDetailController', function() {
         'lastViewed': '2016-10-14 18:40:03.954'
       },
       {
-        'user': {
+        'employee': {
           'id': '5545',
           'employeeId': '1012135',
           'firstName': 'CHRISTOPHER',
@@ -302,29 +303,45 @@ describe('Unit: targetListDetailController', function() {
     describe('[tld.removeCollaborator]', function() {
       beforeEach(function() {
         targetListService.model.currentList.collaborators = collaborators;
+        targetListService.model.currentList.id = 1;
+
         ctrl.pendingShares = pending;
 
+        // init stuff that we dont care about - we dont need one for /api/targetLists/1 because real service is never actually called
+        $httpBackend.expectGET('/api/targetLists/undefined').respond(200);
+        $httpBackend.expectGET('/api/targetLists/undefined/opportunities').respond(200);
+      });
+
+      it('should call the service and run the script in .then()', function() {
+        // create promise and spy on service.method
+        var deferred = $q.defer();
         spyOn(targetListService, 'deleteTargetListShares').and.callFake(function() {
-          var deferred = $q.defer();
           return deferred.promise;
         });
-      });
 
-      it('should call the targetListService', function() {
-        ctrl.removeCollaborator();
+        // make sure everything is how we want it on start
+        expect(targetListService.deleteTargetListShares).not.toHaveBeenCalled();
+        expect(targetListService.model.currentList.collaborators.length).toEqual(2);
+        expect(ctrl.pendingShares.length).toEqual(2);
 
-        expect(targetListService.deleteTargetListShares).toHaveBeenCalled();
-        expect(targetListService.deleteTargetListShares.calls.count()).toEqual(1);
-      });
-
-      it('should remove a collaborator from the collaborators & pendingShares arrays', function() {
-        expect(targetListService.model.currentList.collaborators).toEqual(collaborators);
-        expect(ctrl.pendingShares).toEqual(pending);
-
+        // run method
         ctrl.removeCollaborator('1012135');
 
-        // expect(targetListService.model.currentList.collaborators.length).toEqual(1);
-        // expect(ctrl.pendingShares.length).toEqual(1);
+        // resolve promise so we can trigger then
+        deferred.resolve();
+        // trigger promise resolution
+        scope.$digest();
+
+        // assert that everything we wanted to happen has happened, and things we didnt want to happen havent happened
+        expect(targetListService.deleteTargetListShares).toHaveBeenCalledWith(1, '1012135');
+        expect(targetListService.model.currentList.collaborators.length).toEqual(1);
+        expect(ctrl.pendingShares.length).toEqual(1);
+      });
+
+      afterEach(function() {
+        // reset stuff we changed
+        targetListService.model.currentList.collaborators = collaborators;
+        ctrl.pendingShares = pending;
       });
     });
 

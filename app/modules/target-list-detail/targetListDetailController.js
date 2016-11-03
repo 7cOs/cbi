@@ -194,8 +194,6 @@ module.exports = /*  @ngInject */
 
     function removeCollaborator(collaboratorId) {
       targetListService.deleteTargetListShares(targetListService.model.currentList.id, collaboratorId).then(function(response) {
-        console.log('collaborator removed');
-
         // remove from user model and UI - target list service
         angular.forEach(targetListService.model.currentList.collaborators, function(item, key) {
           if (item.user.employeeId === collaboratorId) targetListService.model.currentList.collaborators.splice(key, 1);
