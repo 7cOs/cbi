@@ -37,18 +37,16 @@ module.exports = function (config) {
     user: {
       jwt: config.api.jwt,
       jwtmap: {
-        firstName: 'CHRISTOPHER',
-        lastName: 'WILLIAMS',
-        groupingCode: '133',
+        firstName: 'CARRIE',
+        lastName: 'REID',
+        groupingCode: '132',
         iss: 'https://orion.cbrands.com',
-        personID: 5545,
-        employeeID: '1012135',
-        exp: 1477332952290,
-        iat: 1472148952296,
-        email: 'CHRIS.WILLIAMS@CBRANDS.COM',
+        personId: 5649,
+        employeeID: '1009529',
+        exp: 1483373944017,
+        iat: 1478189944022,
+        email: 'CARRIE.REID@CBRANDS.COM',
         srcTypeCd: [
-          'ON_HIER',
-          'OFF_HIER',
           'SALES_HIER'
         ]
       }
