@@ -430,7 +430,7 @@ module.exports = /*  @ngInject */
       }
 
       if (currentTrendVal.value) {
-        currentTrendVal.displayValue = currentTrendVal.value.toFixed(1).toString() + '%';
+        currentTrendVal.displayValue = currentTrendVal.value.toFixed(1) + '%';
       } else {
         currentTrendVal.displayValue = '-';
       }
@@ -461,10 +461,6 @@ module.exports = /*  @ngInject */
       if (widget === 'brands') { vm.brandIdSelected = idSelected; }
       if (widget === 'markets') { vm.marketIdSelected = true; vm.selectedStore = idSelected; prevTab(); }
     }
-
-    $scope.$watch('a.filterModel.depletionsTimePeriod', function (newVal) {
-      console.log(newVal);
-    });
 
     // Check if market overview is scrolled out of view
     angular.element($window).bind('scroll', function() {
