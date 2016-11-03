@@ -118,21 +118,24 @@ describe('[Services.targetListService]', function() {
       expect(result).toEqual(promiseResult);
     });
 
-    /*
     it('should get target list opportunities if id is passed', function() {
-      $httpBackend.expect('GET', '/api/targetLists/1/opportunities').respond(200, {
-        status: 'success'
+      var filterPayload = filtersService.getAppliedFilters('opportunities'),
+          url = apiHelperService.request('/api/targetLists/1/opportunities', filterPayload);
+
+      $httpBackend.expect('GET', url).respond(200, {
+        status: 'success',
+        opportunities: []
       });
 
       var result;
-      targetListService.getTargetListOpportunities('1', {}).then(function() {
+      targetListService.getTargetListOpportunities('1', filterPayload).then(function() {
         result = true;
       });
 
       $httpBackend.flush();
 
       expect(result).toBeTruthy();
-    }); */
+    });
   });
 
   describe('[addTargetListOpportunities]', function() {
