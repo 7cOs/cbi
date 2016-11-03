@@ -92,6 +92,7 @@ module.exports = /*  @ngInject */
       'Opportunity Status',
       'Opportunity Predicted Impact'
     ];
+    vm.csvHeaderRationale = csvHeaderRationale();
 
     init();
 
@@ -411,7 +412,7 @@ module.exports = /*  @ngInject */
       vm.disabledMessage = message;
     }
 
-    function flattenOpportunity(obj) {
+    function flattenOpportunity(obj, rationale) {
       var data = [];
 
       angular.forEach(obj, function(value, key) {
@@ -436,6 +437,10 @@ module.exports = /*  @ngInject */
         csvItem.opportunityRationale = item.rationale;
         csvItem.opportunityStatus = item.status;
         csvItem.impactPredicted = item.impactDescription;
+
+        if (rationale) {
+          csvItem.rationale = item.rationale;
+        }
 
         data.push(csvItem);
 
@@ -562,6 +567,12 @@ module.exports = /*  @ngInject */
      */
     function isItemInList(opportunity, currentSelectionList) {
       return currentSelectionList.indexOf(opportunity) !== -1;
+    }
+
+    function csvHeaderRationale() {
+      var rationale = angular.copy(vm.csvHeader);
+      rationale.push('Rationale');
+      return rationale;
     }
 
     function removeItem(item, list, idx) {
