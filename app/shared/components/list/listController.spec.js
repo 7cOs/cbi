@@ -119,6 +119,9 @@ describe('Unit: list controller', function() {
 
     expect(ctrl.impactSort).not.toBeUndefined();
     expect(typeof (ctrl.impactSort)).toEqual('function');
+
+    expect(ctrl.depletionsVsYaPercent).not.toBeUndefined();
+    expect(typeof (ctrl.depletionsVsYaPercent)).toEqual('function');
   });
 
   describe('sortBy method', function() {
@@ -639,6 +642,67 @@ describe('Unit: list controller', function() {
     });
   });
 
+  describe('Depletions vs YA %', function() {
+    var opportunityArr = [];
+
+    beforeEach(function() {
+      opportunityArr = [
+        {
+          'store': {
+            'depletionsCurrentYearToDate': 5150,
+            'depletionsCurrentYearToDateYA': 2575
+          }
+        },
+        {
+          'store': {
+            'depletionsCurrentYearToDate': 2575,
+            'depletionsCurrentYearToDateYA': 5150
+          }
+        },
+        {
+          'store': {
+            'depletionsCurrentYearToDate': 5150,
+            'depletionsCurrentYearToDateYA': 0
+          }
+        },
+        {
+          'store': {
+            'depletionsCurrentYearToDate': 0,
+            'depletionsCurrentYearToDateYA': 5150
+          }
+        },
+        {
+          'store': {
+            'depletionsCurrentYearToDate': 5,
+            'depletionsCurrentYearToDateYA': 5150
+          }
+        },
+        {
+          'store': {
+            'depletionsCurrentYearToDate': 5150,
+            'depletionsCurrentYearToDateYA': 5
+          }
+        }
+      ];
+    });
+
+    it('should return a positive value', function() {
+      expect(ctrl.depletionsVsYaPercent(opportunityArr[0])).toEqual(200);
+    });
+    it('should return a negative value', function() {
+      expect(ctrl.depletionsVsYaPercent(opportunityArr[1])).toEqual(-50);
+    });
+    it('should return 100 percent', function() {
+      expect(ctrl.depletionsVsYaPercent(opportunityArr[2])).toEqual(100);
+    });
+    it('should return -100 percent', function() {
+      expect(ctrl.depletionsVsYaPercent(opportunityArr[3])).toEqual(-100);
+    });
+    it('should return 999 percent', function() {
+      expect(ctrl.depletionsVsYaPercent(opportunityArr[5])).toEqual(999);
+    });
+  });
+
   describe('Add to target list functionality', function() {
     var listId = 'fc1a0734-a16e-4953-97da-bba51c4690f6';
 
@@ -821,5 +885,4 @@ describe('Unit: list controller', function() {
       expect(mdDialog.show.calls.count()).toEqual(1);
     });
   });
-
 });

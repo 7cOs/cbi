@@ -254,6 +254,29 @@ md-dialog {
     padding: 4px 34px;
     border-top: 1px solid $gray-9;
     position: relative;
+    display: flex;
+    justify-content: space-between;
+
+    button {
+      border: 0;
+      color: $blue;
+      background: inherit;
+      flex: 1;
+      font-family: $work-sans;
+      font-size: 0.85em;
+      font-weight: 400;
+      margin: 0;
+      padding-right: 0;
+      padding-left: 0;
+      text-transform: none;
+    }
+
+    button[disabled] {
+      color: $gray-2;
+      text-decoration: italic;
+      cursor: default;
+      outline: 0;
+    }
 
     p {
       float: left;
