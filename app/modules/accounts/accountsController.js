@@ -74,6 +74,18 @@ module.exports = /*  @ngInject */
         name: 'Independent'
       }]
     };
+
+    var trendPropertyNames = {
+      'distributions': [
+        'planDistirbutionSimpleTrend',
+        'distributionsSimpleTrend'
+      ],
+      'depletions': [
+        'depletionsTrend',
+        'planDepletionTrend'
+      ]
+
+    };
     /* Need to remove this */
     vm.marketData = myperformanceService.marketData();
 
@@ -84,7 +96,6 @@ module.exports = /*  @ngInject */
       depletionsTimePeriod: filtersService.model.depletionsTimePeriod.month[0].name,
       distributionTimePeriod: filtersService.model.distributionTimePeriod.month[0].name
     };
-    vm.filterModelDisplay = angular.copy(filterModelTemplate); // So we can display strings instead of ids for distributor, brnad, chain etc.
     vm.filterModel = angular.copy(filterModelTemplate);
 
     // Widget / tab contents
@@ -180,6 +191,7 @@ module.exports = /*  @ngInject */
     vm.updateBrandSnapshot = updateBrandSnapshot;
     vm.updateDistributionTimePeriod = updateDistributionTimePeriod;
     vm.updateTopBottom = updateTopBottom;
+    vm.getTrendValues = getTrendValues;
 
     init();
 
@@ -331,6 +343,7 @@ module.exports = /*  @ngInject */
     }
 
     function updateDistributionTimePeriod(value) {
+      vm.filterModel.depletionsTimePeriod = filtersService.model.depletionsTimePeriod[value][0].name;
       vm.filterModel.distributionTimePeriod = filtersService.model.distributionTimePeriod[value][0].name;
     }
 
@@ -393,6 +406,37 @@ module.exports = /*  @ngInject */
       });
     }
 
+    function getTrendValues(measures, measureType, timePeriod) {
+      var currentTrendVal = {
+        value: null,
+        displayValue: ''
+      };
+      var measurePropertyName;
+      switch (vm.filterModel.trend.value) {
+        case 1:
+        // For YA
+          measurePropertyName = trendPropertyNames[measureType][0];
+          currentTrendVal.value = displayBrandValue(measures, measurePropertyName, timePeriod);
+          break;
+        case 2:
+          // For ABP
+          measurePropertyName = trendPropertyNames[measureType][1];
+          currentTrendVal.value = displayBrandValue(measures, measurePropertyName, timePeriod);
+          break;
+        case 3:
+        // TODO
+        // For Select Stores
+          break;
+      }
+
+      if (currentTrendVal.value) {
+        currentTrendVal.displayValue = currentTrendVal.value.toFixed(1).toString() + '%';
+      } else {
+        currentTrendVal.displayValue = '-';
+      }
+      return currentTrendVal;
+    }
+
     function setDefaultEndingPeriodOptions() {
       vm.filterModel.endingTimePeriod = vm.filtersService.lastEndingTimePeriod.endingPeriodType;
       vm.filterModel.depletionsTimePeriod = vm.filtersService.lastEndingTimePeriod.depletionValue;
@@ -417,6 +461,10 @@ module.exports = /*  @ngInject */
       if (widget === 'brands') { vm.brandIdSelected = idSelected; }
       if (widget === 'markets') { vm.marketIdSelected = true; vm.selectedStore = idSelected; prevTab(); }
     }
+
+    $scope.$watch('a.filterModel.depletionsTimePeriod', function (newVal) {
+      console.log(newVal);
+    });
 
     // Check if market overview is scrolled out of view
     angular.element($window).bind('scroll', function() {
