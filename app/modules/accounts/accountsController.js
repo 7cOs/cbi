@@ -37,9 +37,14 @@ module.exports = /*  @ngInject */
         name: 'On-Premise'
       }],
       accountBrands: [{
-        name: 'Distribution (simple)'
+        name: 'Distribution (simple)',
+        value: 1
       }, {
-        name: 'Velocity'
+        name: 'Velocity',
+        value: 2
+      }, {
+        name: 'Distribution (effective)',
+        value: 3
       }],
       accountMarkets: [{
         name: 'Depletions'
