@@ -1,6 +1,8 @@
 .archived-header {
   background-color: $red;
   color: $white;
+  opacity: 0;
+  transition: opacity linear 200ms;
   width: 100%;
   font-size: 14px;
   font-weight: bold;
@@ -11,6 +13,10 @@
   text-align: center;
   left: 0;
   z-index: 0;
+
+  &.visible {
+    opacity: 1;
+  }
 }
 
 .target-list-modal {
