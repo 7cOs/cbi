@@ -42,6 +42,9 @@ module.exports = /*  @ngInject */
       }, {
         name: 'Velocity',
         value: 2
+      }, {
+        name: 'Distribution (effective)',
+        value: 1
       }],
       accountMarkets: [{
         name: 'Depletions'
@@ -196,6 +199,7 @@ module.exports = /*  @ngInject */
     vm.updateDistributionTimePeriod = updateDistributionTimePeriod;
     vm.updateTopBottom = updateTopBottom;
     vm.getTrendValues = getTrendValues;
+    vm.isPackageView = false;
 
     init();
 
@@ -299,13 +303,6 @@ module.exports = /*  @ngInject */
     function selectItem(widget, item, parent, parentIndex) {
       var parentLength = Object.keys(parent).length;
 
-      vm.loadingBrandSnapshot = true;
-      vm.filterModel.brand = item.id;
-      userService.getPerformanceBrand({premiseType: filtersService.model.selected.premiseType, brand: item.id}).then(function(data) {
-        vm.brandTabs.skus = data.performance;
-        vm.loadingBrandSnapshot = false;
-      });
-
       if (parentIndex + 1 === parentLength) {
         // We're on the deepest level of current tab list
         if (widget === 'brands') { setSelected(item.name, 'brands'); }
@@ -313,6 +310,12 @@ module.exports = /*  @ngInject */
       } else {
         if (widget === 'brands') { vm.brandWidgetTitle = item.name; }
         nextTab(widget);
+        vm.loadingBrandSnapshot = true;
+        vm.filterModel.brand = item.id;
+        userService.getPerformanceBrand({premiseType: filtersService.model.selected.premiseType, brand: item.id}).then(function(data) {
+          vm.brandTabs.skus = data.performance;
+          vm.loadingBrandSnapshot = false;
+        });
       }
       if (widget === 'markets') { getActiveTab(); }
     }
