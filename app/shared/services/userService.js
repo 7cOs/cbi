@@ -396,6 +396,59 @@ module.exports = /*  @ngInject */
     }
 
     /**
+     * @name calculatePlanDistirbutionTrend
+     * @desc Calculates plan(ABP) trend values for both Simple and Effective distirbutions
+     * @params {Object} measure - The current measure object in the response
+     * @returns {Object} - Returns true if the properties were calculated . Returns false if isNan
+     */
+    function calculatePlanDistirbutionTrend(measure) {
+      var isPlanValueCalculated = false;
+      var planSimpleVal = Number.parseFloat(measure.planSimple);
+      var planEffectiveVal = Number.parseFloat(measure.planEffective);
+      var temp = null;
+
+      var distirbutionSimpleVal = Number.parseFloat(measure.distributionsSimple);
+      var distirbutionEffectiveVal = Number.parseFloat(measure.distributionsSimple);
+      if (planSimpleVal && distirbutionSimpleVal) {
+        temp = ((distirbutionSimpleVal - planSimpleVal) / planSimpleVal);
+        measure.planDistirbutionSimpleTrend = (temp * 100);
+        isPlanValueCalculated = true;
+      }
+
+      if (planEffectiveVal && distirbutionEffectiveVal) {
+        temp = ((distirbutionEffectiveVal - planEffectiveVal) / planEffectiveVal);
+        measure.planDistirbutionEffectiveTrend = (temp * 100);
+        isPlanValueCalculated = isPlanValueCalculated && true;
+      }
+      return isPlanValueCalculated;
+    }
+
+    function calculatePlanDepletionTrend(measure) {
+      var isPlanValueCalculated = false;
+      var planVal = Number.parseFloat(measure.plan);
+      var depletionsVal = Number.parseFloat(measure.depletions);
+      if (planVal && depletionsVal) {
+        var temp = ((depletionsVal - planVal) / planVal);
+        measure.planDepletionTrend = (temp * 100);
+        isPlanValueCalculated = true;
+      }
+      return isPlanValueCalculated;
+    }
+
+    function calculateTrendValuesForPlan(brands) {
+      for (var i = 0, len = brands.length; i < len; i++) {
+        var currentBrand = brands[i];
+        angular.forEach(currentBrand.measures, function(measure, index) {
+          var isPlanDepletionTrend = calculatePlanDepletionTrend(measure);
+          if (!isPlanDepletionTrend) {
+            calculatePlanDistirbutionTrend(measure);
+          }
+        });
+      }
+      return brands;
+    }
+
+    /**
      * @name getPerformanceBrand
      * @desc get brand performance for a user
      * @params {Object} params - params to be added to rest
@@ -411,6 +464,7 @@ module.exports = /*  @ngInject */
         .catch(getPerformanceBrandFail);
 
       function getPerformanceBrandSuccess(response) {
+        calculateTrendValuesForPlan(response.data.performance);
         performancePromise.resolve(response.data);
       }
 

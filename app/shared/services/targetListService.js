@@ -72,7 +72,6 @@ module.exports = /*  @ngInject */
         .catch(updateTargetListFail);
 
       function updateTargetListSuccess(response) {
-        console.log('[targetListService.updateTargetList.response]', response);
         targetListPromise.resolve(response.data);
       }
 
@@ -99,7 +98,6 @@ module.exports = /*  @ngInject */
         .catch(deleteTargetListFail);
 
       function deleteTargetListSuccess(response) {
-        console.log('[targetListService.deleteTargetList] response: ', response);
         targetListPromise.resolve(response.data);
       }
 
@@ -225,7 +223,6 @@ module.exports = /*  @ngInject */
         .catch(addTargetListOpportunitiesFail);
 
       function addTargetListOpportunitiesSuccess(response) {
-        console.log('[targetListService.addTargetListOpportunities] response: ', response);
         targetListPromise.resolve(response.data);
       }
 
@@ -248,8 +245,6 @@ module.exports = /*  @ngInject */
           url = apiHelperService.request('/api/targetLists/' + targetListId + '/opportunities/'),
           payload = opportunityIds;
 
-      console.log('delete', url, payload);
-
       $http({ url: url,
         method: 'DELETE',
         data: payload,
@@ -258,7 +253,6 @@ module.exports = /*  @ngInject */
         .catch(deleteTargetListOpportunitiesFail);
 
       function deleteTargetListOpportunitiesSuccess(response) {
-        console.log('[targetListService.deleteTargetListOpportunities] response: ', response);
         targetListPromise.resolve(response.data);
       }
 
@@ -316,7 +310,6 @@ module.exports = /*  @ngInject */
         .catch(addTargetListSharesFail);
 
       function addTargetListSharesSuccess(response) {
-        console.log('[targetListService.addTargetListShares] response: ', response);
         targetListPromise.resolve(response);
       }
 
@@ -344,14 +337,11 @@ module.exports = /*  @ngInject */
             updateLastViewed: updateLastViewed
           }];
 
-      console.log(url, payload);
-
       $http.patch(url, payload)
         .then(updateTargetListSharesSuccess)
         .catch(updateTargetListSharesFail);
 
       function updateTargetListSharesSuccess(response) {
-        console.log('[targetListService.updateTargetListShares] response: ', response);
         targetListPromise.resolve(response.data);
       }
 
@@ -384,12 +374,10 @@ module.exports = /*  @ngInject */
         .catch(deleteTargetListSharesFail);
 
       function deleteTargetListSharesSuccess(response) {
-        console.log('[targetListService.deleteTargetListShares] response: ', response);
         targetListPromise.resolve(response.data);
       }
 
       function deleteTargetListSharesFail(error) {
-        console.warn('[targetListService.deleteTargetListShares.error]', error);
         targetListPromise.reject(error);
       }
 

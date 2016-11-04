@@ -37,9 +37,11 @@ module.exports = /*  @ngInject */
         name: 'On-Premise'
       }],
       accountBrands: [{
-        name: 'Distribution (simple)'
+        name: 'Distribution (simple)',
+        value: 1
       }, {
-        name: 'Velocity'
+        name: 'Velocity',
+        value: 2
       }],
       accountMarkets: [{
         name: 'Depletions'
@@ -74,6 +76,18 @@ module.exports = /*  @ngInject */
         name: 'Independent'
       }]
     };
+
+    var trendPropertyNames = {
+      'distributions': [
+        'planDistirbutionSimpleTrend',
+        'distributionsSimpleTrend'
+      ],
+      'depletions': [
+        'depletionsTrend',
+        'planDepletionTrend'
+      ]
+
+    };
     /* Need to remove this */
     vm.marketData = myperformanceService.marketData();
 
@@ -84,7 +98,6 @@ module.exports = /*  @ngInject */
       depletionsTimePeriod: filtersService.model.depletionsTimePeriod.month[0].name,
       distributionTimePeriod: filtersService.model.distributionTimePeriod.month[0].name
     };
-    vm.filterModelDisplay = angular.copy(filterModelTemplate); // So we can display strings instead of ids for distributor, brnad, chain etc.
     vm.filterModel = angular.copy(filterModelTemplate);
 
     // Widget / tab contents
@@ -180,6 +193,7 @@ module.exports = /*  @ngInject */
     vm.updateBrandSnapshot = updateBrandSnapshot;
     vm.updateDistributionTimePeriod = updateDistributionTimePeriod;
     vm.updateTopBottom = updateTopBottom;
+    vm.getTrendValues = getTrendValues;
 
     init();
 
@@ -329,6 +343,7 @@ module.exports = /*  @ngInject */
     }
 
     function updateDistributionTimePeriod(value) {
+      vm.filterModel.depletionsTimePeriod = filtersService.model.depletionsTimePeriod[value][0].name;
       vm.filterModel.distributionTimePeriod = filtersService.model.distributionTimePeriod[value][0].name;
     }
 
@@ -368,6 +383,7 @@ module.exports = /*  @ngInject */
 
     function init() {
       // reset all chips and filters on page init
+      vm.filterModel.trend = vm.filtersService.model.trend[0];
       setDefaultEndingPeriodOptions();
       chipsService.resetChipsFilters(chipsService.model);
 
@@ -383,9 +399,42 @@ module.exports = /*  @ngInject */
         userService.model.depletion = data[1];
         userService.model.distribution = data[2];
         vm.brandTabs.brands = data[3].performance;
+        // console.log('Brands');
+        // console.log(data[3]);
 
         vm.loadingBrandSnapshot = false;
       });
+    }
+
+    function getTrendValues(measures, measureType, timePeriod) {
+      var currentTrendVal = {
+        value: null,
+        displayValue: ''
+      };
+      var measurePropertyName;
+      switch (vm.filterModel.trend.value) {
+        case 1:
+        // For YA
+          measurePropertyName = trendPropertyNames[measureType][0];
+          currentTrendVal.value = displayBrandValue(measures, measurePropertyName, timePeriod);
+          break;
+        case 2:
+          // For ABP
+          measurePropertyName = trendPropertyNames[measureType][1];
+          currentTrendVal.value = displayBrandValue(measures, measurePropertyName, timePeriod);
+          break;
+        case 3:
+        // TODO
+        // For Select Stores
+          break;
+      }
+
+      if (currentTrendVal.value) {
+        currentTrendVal.displayValue = currentTrendVal.value.toFixed(1) + '%';
+      } else {
+        currentTrendVal.displayValue = '-';
+      }
+      return currentTrendVal;
     }
 
     function setDefaultEndingPeriodOptions() {

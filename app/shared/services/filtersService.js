@@ -164,8 +164,14 @@ module.exports = /*  @ngInject */
         ]
       },
       trend: [
-        {name: 'vs YA'},
-        {name: 'vs ABP'}
+        {
+          name: 'vs YA',
+          value: 1
+        },
+        {
+          name: 'vs ABP',
+          value: 2
+        }
       ]
     };
     var lastEndingTimePeriod = {

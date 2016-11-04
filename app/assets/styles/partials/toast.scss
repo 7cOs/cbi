@@ -161,13 +161,3 @@ md-toast {
     }
   }
 }
-
-.fade {
-  transition: opacity linear 200ms;
-  opacity: 1;
-}
-
-.fade.ng-hide {
-  transition: opacity linear 200ms;
-  opacity: 0;
-}
