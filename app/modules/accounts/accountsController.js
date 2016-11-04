@@ -42,9 +42,6 @@ module.exports = /*  @ngInject */
       }, {
         name: 'Velocity',
         value: 2
-      }, {
-        name: 'Distribution (effective)',
-        value: 3
       }],
       accountMarkets: [{
         name: 'Depletions'
