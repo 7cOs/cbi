@@ -43,7 +43,6 @@ module.exports = /*  @ngInject */
     vm.closeModal = closeModal;
     vm.displayBrandIcon = displayBrandIcon;
     vm.exists = exists;
-    vm.isChecked = isChecked;
     vm.openShareModal = openShareModal;
     vm.openDismissModal = openDismissModal;
     vm.pageName = pageName;
@@ -187,9 +186,11 @@ module.exports = /*  @ngInject */
     }
 
     // Check if all items are selected
+    /* not useful when you can uncheck alt j
     function isChecked() {
       return vm.selected.length === opportunitiesService.model.opportunities.length;
     }
+    */
 
     function openShareModal(oId, ev) {
       vm.currentOpportunityId = oId;

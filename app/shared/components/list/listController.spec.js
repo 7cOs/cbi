@@ -48,9 +48,6 @@ describe('Unit: list controller', function() {
     expect(ctrl.exists).not.toBeUndefined();
     expect(typeof (ctrl.exists)).toEqual('function');
 
-    expect(ctrl.isChecked).not.toBeUndefined();
-    expect(typeof (ctrl.isChecked)).toEqual('function');
-
     expect(ctrl.openShareModal).not.toBeUndefined();
     expect(typeof (ctrl.openShareModal)).toEqual('function');
 

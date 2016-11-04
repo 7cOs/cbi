@@ -31,7 +31,7 @@
             p Without Rationale
       button.btn-action(ng-disabled="list.selected < 1" ng-click="list.removeOpportunity()" ng-if="list.pageName(['opportunities'])") Remove
 
-button.icon.select-all(ng-disabled="list.isChecked()" ng-click="list.toggleSelectAllStores()") {{!list.isSelectAllActivated ? 'Select All' : 'Un-Select All'}}
+button.icon.select-all(ng-click="list.toggleSelectAllStores()") {{!list.isSelectAllActivated ? 'Select All' : 'Un-Select All'}}
 button.icon.narrow-icon.expand-all(ng-click="list.accordion.expandAll()" ng-disabled="list.allOpportunitiesExpanded()") Expand All
 button.icon.narrow-icon.collapse-all(ng-click="list.accordion.collapseAll()" ng-disabled="list.noOpportunitiesExpanded()") Collapse All
 
