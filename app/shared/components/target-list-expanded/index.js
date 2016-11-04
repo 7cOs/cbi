@@ -86,8 +86,10 @@ function ExpandedTargetListController($state, $scope, $filter, $mdDialog, $q, $t
         userService.model.targetLists.ownedArchived++;
         userService.model.targetLists.ownedNotArchived--;
       });
-    }).then(vm.selected = [])
-      .then(fadeToast('archive', selectedTargetLists));
+
+      vm.selected = [];
+      fadeToast('archive', selectedTargetLists);
+    });
   }
 
   function fadeToast(targetListAction, selectedTargetLists) {
@@ -153,6 +155,7 @@ function ExpandedTargetListController($state, $scope, $filter, $mdDialog, $q, $t
 
     // run all delete requests at the same time
     $q.all(deleteTargetListPromises).then(function(response) {
+
       // splice from list arr
       angular.forEach(selectedItems, function(item, key) {
         if (item.archived) {
@@ -160,8 +163,10 @@ function ExpandedTargetListController($state, $scope, $filter, $mdDialog, $q, $t
         }
         userService.model.targetLists.owned.splice(userService.model.targetLists.owned.indexOf(item), 1);
       });
-    }).then(vm.selected = [])
-      .then(fadeToast('delete', selectedItems));
+
+      vm.selected = [];
+      fadeToast('delete', selectedItems);
+    });
   }
 
   function exists(item, list) {
