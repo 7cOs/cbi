@@ -73,7 +73,7 @@ v-accordion.styled-list(multiple="" id="opportunities" control="list.accordion" 
         span Maximum of 5 <strong>Distributors</strong> and/or
       li
         span Maximum of 10 <strong> Retailers</strong>
-  v-pane.list-item(row ng-repeat="opportunity in list.opportunitiesService.model.opportunities | filter : {'dismissed': false}" expanded='opportunity.isExpanded')
+  v-pane.list-item(row ng-repeat="opportunity in list.opportunitiesService.model.opportunities | orderBy: ['store.name', 'store.storeNumber'] | filter : {'dismissed': false}" expanded='opportunity.isExpanded')
     .shadow-wrap.bottom
       .header-wrapper(ng-click="list.toggleOpportunitiesInStores(opportunity, list.selected)")
         div.checkbox-wrapper(ng-click="list.toggleOpportunitiesInStores(opportunity, list.selected)")
