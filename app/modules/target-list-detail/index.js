@@ -12,7 +12,15 @@ module.exports =
       title: 'Target List',
       templateUrl: './app/modules/target-list-detail/layout.html',
       controller: 'targetListDetailController',
-      controllerAs: 'tld'
+      controllerAs: 'tld',
+      onExit: function(opportunitiesService) {
+        opportunitiesService.model = {
+          filterApplied: false,
+          opportunities: [],
+          opportunityId: null,
+          noOpportunitiesFound: false
+        };
+      }
     });
   })
   .controller('targetListDetailController', require('./targetListDetailController'));
