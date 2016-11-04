@@ -1,6 +1,6 @@
 'use strict';
 
-function ExpandedTargetListController($state, $scope, $filter, $mdDialog, $q, userService, targetListService, loaderService) {
+function ExpandedTargetListController($state, $scope, $filter, $mdDialog, $q, $timeout, userService, targetListService, loaderService) {
 
   // ****************
   // CONTROLLER SETUP
@@ -33,6 +33,7 @@ function ExpandedTargetListController($state, $scope, $filter, $mdDialog, $q, us
   vm.selected = [];
   vm.buttonDisabled = false;
   vm.selectedTab = 0;
+  vm.multipleTargetListsSelected = false;
 
   // Expose public methods
   vm.archiveTargetList = archiveTargetList;
@@ -50,6 +51,7 @@ function ExpandedTargetListController($state, $scope, $filter, $mdDialog, $q, us
   vm.isChecked = isChecked;
   vm.toggleAll = toggleAll;
   vm.addCollaborator = addCollaborator;
+  vm.fadeToast = fadeToast;
 
   init();
 
@@ -84,9 +86,28 @@ function ExpandedTargetListController($state, $scope, $filter, $mdDialog, $q, us
         userService.model.targetLists.ownedArchived++;
         userService.model.targetLists.ownedNotArchived--;
       });
+    }).then(vm.selected = [])
+      .then(fadeToast('archive', selectedTargetLists));
+  }
 
-      vm.selected = [];
-    });
+  function fadeToast(targetListAction, selectedTargetLists) {
+
+    if (selectedTargetLists.length > 1) {
+      vm.multipleTargetListsSelected = true;
+    }
+
+    if (targetListAction === 'archive') {
+      vm.archived = true;
+    } else if (targetListAction === 'delete') {
+      vm.deleted = true;
+    }
+
+    $timeout(function () {
+      // reset to default
+      vm.deleted = false;
+      vm.archived = false;
+      vm.multipleTargetListsSelected = false;
+    }, 3000);
   }
 
   function createNewList(e) {
@@ -139,7 +160,8 @@ function ExpandedTargetListController($state, $scope, $filter, $mdDialog, $q, us
         }
         userService.model.targetLists.owned.splice(userService.model.targetLists.owned.indexOf(item), 1);
       });
-    }).then(vm.selected = []);
+    }).then(vm.selected = [])
+      .then(fadeToast('delete', selectedItems));
   }
 
   function exists(item, list) {
