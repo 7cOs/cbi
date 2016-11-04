@@ -37,7 +37,7 @@ describe('Unit: accountsController', function() {
 
     it('Should create a filterModel', function() {
       expect(ctrl.filterModel).toEqual({
-        trend: filtersService.model.trend[0].name,
+        trend: filtersService.model.trend[0],
         endingTimePeriod: filtersService.lastEndingTimePeriod.endingPeriodType,
         depletionsTimePeriod: filtersService.lastEndingTimePeriod.depletionValue,
         distributionTimePeriod: filtersService.lastEndingTimePeriod.timePeriodValue
