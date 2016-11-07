@@ -209,6 +209,47 @@ describe('Unit: targetListDetailController', function() {
       });
     });
 
+    describe('[tld.footerToast]', function() {
+      beforeEach(function() {
+        ctrl.showToast = ctrl.deleting = ctrl.archiving = ctrl.leave = false;
+      });
+
+      it('should update showToast to true', function() {
+        ctrl.footerToast();
+        expect(ctrl.showToast).toBe(true);
+      });
+
+      it('should update deleting boolean to true', function() {
+        ctrl.footerToast('delete');
+        expect(ctrl.deleting).toBe(true);
+      });
+
+      it('should not update deleting boolean when not given as parameter', function() {
+        ctrl.footerToast('archive');
+        expect(ctrl.deleting).toBe(false);
+      });
+
+      it('should update archiving boolean to true', function() {
+        ctrl.footerToast('archive');
+        expect(ctrl.archiving).toBe(true);
+      });
+
+      it('should not update archiving boolean when not given as parameter', function() {
+        ctrl.footerToast('delete');
+        expect(ctrl.archiving).toBe(false);
+      });
+
+      it('should update leave boolean to true', function() {
+        ctrl.footerToast('leave');
+        expect(ctrl.leave).toBe(true);
+      });
+
+      it('should not update leave boolean when not given as parameter', function() {
+        ctrl.footerToast('archive');
+        expect(ctrl.leave).toBe(false);
+      });
+    });
+
     describe('[tld.modalManageTargetList]', function() {
       beforeEach(function() {
         spyOn($mdDialog, 'show').and.callThrough();
@@ -291,6 +332,7 @@ describe('Unit: targetListDetailController', function() {
         targetListService.model.currentList.id = 1;
 
         ctrl.pendingShares = pending;
+        ctrl.leave = false;
 
         // init stuff that we dont care about - we dont need one for /api/targetLists/1 because real service is never actually called
         $httpBackend.expectGET('/api/targetLists/undefined').respond(200);
@@ -321,6 +363,7 @@ describe('Unit: targetListDetailController', function() {
         expect(targetListService.deleteTargetListShares).toHaveBeenCalledWith(1, '1012135');
         expect(targetListService.model.currentList.collaborators.length).toEqual(1);
         expect(ctrl.pendingShares.length).toEqual(1);
+        expect(ctrl.leave).toBe(true);
       });
 
       afterEach(function() {
