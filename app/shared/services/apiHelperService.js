@@ -51,64 +51,7 @@ module.exports = /*  @ngInject */
         // remove type obj
         delete obj.type;
 
-        for (var key2 in obj) {
-          var somethingAdded = false;
-          if (obj[key2].constructor === Array && obj[key2].length > 0) {
-            if (key2 === 'cbbdChain') { // Both selected and None, leave blank
-              if (obj[key2].length === 1 && obj[key2][0] === 'Independent') {
-                queryParams += 'cbbdChain:false';
-                somethingAdded = true;
-              } else if (obj[key2].length === 1 && obj[key2][0] === 'Cbbd') {
-                queryParams += 'cbbdChain:true';
-                somethingAdded = true;
-              }
-            } else {
-              // iterate over arrays
-              for (var k = 0; k < obj[key2].length; k++) {
-                if (obj[key2][k].toUpperCase() === 'ALL TYPES') break;
-                if (k === 0) queryParams += key2 + ':';
-
-                // transform opp types to db format
-                if (key2 === 'opportunityType') {
-                  queryParams += obj[key2][k].replace(/["'()]/g, '').replace(/[__-\s]/g, '_').toUpperCase();
-                } else if (key2 === 'impact') {
-                  queryParams += obj[key2][k].slice(0, 1);
-                } else if (key2 === 'opportunityStatus') {
-                  if (obj[key2][k] === 'closed') {
-                    queryParams += 'targeted'; // closed is the same thing as targeted in api.
-                  } else {
-                    queryParams += obj[key2][k].toLowerCase();
-                  }
-                } else if (key2 === 'tradeChannel') {
-                  var tradeChannelValue = filtersService.model.tradeChannels[filtersService.model.selected.premiseType].map(function(e) {
-                    if (e.name === obj[key2][k]) return e.value;
-                  });
-                  for (var l = 0; l < tradeChannelValue.length; l++) {
-                    if (tradeChannelValue[l]) queryParams += tradeChannelValue[l];
-                  }
-                } else {
-                  queryParams += obj[key2][k];
-                }
-
-                // add separator if it's not last item
-                if (obj[key2].length - 1 !== k) queryParams += '|';
-
-                somethingAdded = true;
-              }
-            }
-          } else if (key2 === 'premiseType') {
-            if (obj[key2] !== 'all') {
-              queryParams += key2 + ':' + obj[key2];
-              somethingAdded = true;
-            }
-          } else if (obj[key2].constructor !== Array && key2 !== 'retailer') {
-            queryParams += key2 + ':' + obj[key2];
-            somethingAdded = true;
-          }
-
-          if (i !== (z - 1) && somethingAdded) queryParams += ',';
-          i++;
-        }
+        queryParams += parseAppliedFilters(obj, i, z);
 
         filtersService.model.appliedFilter.appliedFilter = queryParams;
 
@@ -134,6 +77,15 @@ module.exports = /*  @ngInject */
         }
 
         return '?' + queryParams;
+      } else if (obj.type && obj.type === 'brandSnapshot') {
+        queryParams += 'filter=';
+
+        // remove type obj
+        delete obj.type;
+
+        queryParams += parseAppliedFilters(obj, i, z);
+
+        return '?' + encodeURIComponent(queryParams);
       } else {
         // remove type obj
         delete obj.type;
@@ -195,5 +147,70 @@ module.exports = /*  @ngInject */
         if (arr.length - 1 !== i) str += ',';
       }
       return '&sort=' + str;
+    }
+
+    function parseAppliedFilters(obj, i, z) {
+      var queryParams = '';
+
+      for (var key2 in obj) {
+        var somethingAdded = false;
+        if (obj[key2].constructor === Array && obj[key2].length > 0) {
+          if (key2 === 'cbbdChain') { // Both selected and None, leave blank
+            if (obj[key2].length === 1 && obj[key2][0] === 'Independent') {
+              queryParams += 'cbbdChain:false';
+              somethingAdded = true;
+            } else if (obj[key2].length === 1 && obj[key2][0] === 'Cbbd') {
+              queryParams += 'cbbdChain:true';
+              somethingAdded = true;
+            }
+          } else {
+            // iterate over arrays
+            for (var k = 0; k < obj[key2].length; k++) {
+              if (obj[key2][k].toUpperCase() === 'ALL TYPES') break;
+              if (k === 0) queryParams += key2 + ':';
+
+              // transform opp types to db format
+              if (key2 === 'opportunityType') {
+                queryParams += obj[key2][k].replace(/["'()]/g, '').replace(/[__-\s]/g, '_').toUpperCase();
+              } else if (key2 === 'impact') {
+                queryParams += obj[key2][k].slice(0, 1);
+              } else if (key2 === 'opportunityStatus') {
+                if (obj[key2][k] === 'closed') {
+                  queryParams += 'targeted'; // closed is the same thing as targeted in api.
+                } else {
+                  queryParams += obj[key2][k].toLowerCase();
+                }
+              } else if (key2 === 'tradeChannel') {
+                var tradeChannelValue = filtersService.model.tradeChannels[filtersService.model.selected.premiseType].map(function(e) {
+                  if (e.name === obj[key2][k]) return e.value;
+                });
+                for (var l = 0; l < tradeChannelValue.length; l++) {
+                  if (tradeChannelValue[l]) queryParams += tradeChannelValue[l];
+                }
+              } else {
+                queryParams += obj[key2][k];
+              }
+
+              // add separator if it's not last item
+              if (obj[key2].length - 1 !== k) queryParams += '|';
+
+              somethingAdded = true;
+            }
+          }
+        } else if (key2 === 'premiseType') {
+          if (obj[key2] !== 'all') {
+            queryParams += key2 + ':' + obj[key2];
+            somethingAdded = true;
+          }
+        } else if (obj[key2].constructor !== Array && key2 !== 'retailer') {
+          queryParams += key2 + ':' + obj[key2];
+          somethingAdded = true;
+        }
+
+        if (i !== (z - 1) && somethingAdded) queryParams += ',';
+        i++;
+      }
+
+      return queryParams;
     }
   };

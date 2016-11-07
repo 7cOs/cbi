@@ -459,6 +459,8 @@ module.exports = /*  @ngInject */
       var performancePromise = $q.defer(),
           url = apiHelperService.request('/api/users/' + service.model.currentUser.employeeID + '/performance/brandSnapshot', params);
 
+      console.log(url);
+
       $http.get(url)
         .then(getPerformanceBrandSuccess)
         .catch(getPerformanceBrandFail);

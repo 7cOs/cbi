@@ -334,12 +334,12 @@ module.exports = /*  @ngInject */
     }
 
     function updateBrandSnapshot() {
-      if (vm.brandTabs.brands.length === 0) {
-        userService.getPerformanceBrand().then(function(data) {
-          vm.brandTabs.brands = data.performance;
-          console.log('[vm.brandTabs.brands]', vm.brandTabs.brands);
-        });
-      }
+      var params = filtersService.getAppliedFilters('brandSnapshot');
+
+      userService.getPerformanceBrand(params).then(function(data) {
+        vm.brandTabs.brands = data.performance;
+        console.log('[data.performance]', data.performance);
+      });
     }
 
     function updateDistributionTimePeriod(value) {

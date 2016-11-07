@@ -153,7 +153,7 @@ describe('Unit: accountsController', function() {
       });
     });
 
-    it('Should do nothing if there are brands', function() {
+    /* it('Should do nothing if there are brands', function() {
       ctrl.brandTabs.brands = {
         'type': 'Brand',
         'id': '416',
@@ -266,7 +266,7 @@ describe('Unit: accountsController', function() {
 
       expect(userService.getPerformanceBrand).not.toHaveBeenCalled();
       expect(userService.getPerformanceBrand.calls.count()).toEqual(0);
-    });
+    }); */
 
     it('Should call userService.getPerformanceBrand if there are no brands', function() {
       ctrl.brandTabs.brands = [];

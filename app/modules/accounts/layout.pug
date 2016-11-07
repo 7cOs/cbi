@@ -80,7 +80,7 @@ notes
 
   div(row)
     div(column='12' class='apply-filters')
-      button(value='Apply Filters' type="button" class="btn-action" ng-disabled="a.filtersService.model.filtersApplied" ng-click="a.chipsService.applyFilters()") Apply Filters
+      button(value='Apply Filters' type="button" class="btn-action" ng-disabled="a.filtersService.model.filtersApplied" ng-click="a.chipsService.applyFilters(); a.updateBrandSnapshot()") Apply Filters
       .secondary-button-container.reset-only
         //- a(ng-click="a.resetFilters()" ng-disabled="!a.filtersService.model.filtersApplied" ng-class="{'disabled reset-icon-disabled': !a.filtersService.model.filtersApplied}").accent.reset-icon Reset
         a(ng-click="a.resetFilters()").accent.reset-icon Reset
@@ -97,7 +97,7 @@ div(row)
       loader
     .widget-header
       .dropdown-filter
-        md-select(ng-model="a.filtersService.model.accountSelected.accountBrands" md-on-open="a.openSelect(true)" md-on-close="a.openSelect(false); a.updateBrandSnapshot()" aria-label="Account Brands Filter" placeholder="Distribution (simple)")
+        md-select(ng-model="a.filtersService.model.accountSelected.accountBrands" md-on-open="a.openSelect(true)" md-on-close="a.openSelect(false)" aria-label="Account Brands Filter" placeholder="Distribution (simple)")
           md-option(ng-repeat="filter in a.filters.accountBrands" aria-label="{{filter.name}}" value="{{filter.name}}") {{filter.name}}
       span.back-chevron(ng-if="a.brandSelectedIndex === 1" ng-click="a.prevTab()")
       p.brands {{a.brandWidgetTitle || 'All Brands'}}
