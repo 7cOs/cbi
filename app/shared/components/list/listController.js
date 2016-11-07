@@ -87,7 +87,6 @@ module.exports = /*  @ngInject */
       'Item Authorization',
       'Chain Mandate',
       'On Feature',
-      'Opportunity Rationale',
       'Opportunity Status',
       'Opportunity Predicted Impact'
     ];
@@ -435,7 +434,6 @@ module.exports = /*  @ngInject */
         csvItem.itemAuthorization = item.isItemAuthorization;
         csvItem.chainMandate = item.isChainMandate;
         csvItem.onFeature = item.isOnFeature;
-        csvItem.opportunityRationale = item.rationale;
         csvItem.opportunityStatus = item.status;
         csvItem.impactPredicted = item.impactDescription;
 
