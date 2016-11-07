@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports = /*  @ngInject */
-  function accountsController($rootScope, $scope, $state, $log, $q, $window, $filter, myperformanceService, chipsService, filtersService, userService) {
+  function accountsController($rootScope, $scope, $state, $log, $q, $window, $filter, myperformanceService, chipsService, filtersService, userService, $timeout) {
 
     // ****************
     // CONTROLLER SETUP
@@ -347,14 +347,16 @@ module.exports = /*  @ngInject */
         if (widget === 'markets') { setSelected(item.label, 'markets'); }
       } else {
         if (widget === 'brands') { vm.brandWidgetTitle = item.name; }
-        nextTab(widget);
         vm.loadingBrandSnapshot = true;
         vm.filterModel.brand = item.id;
         userService.getPerformanceBrand({premiseType: filtersService.model.selected.premiseType, brand: item.id}).then(function(data) {
           vm.brandTabs.skus = data.performance;
-          vm.loadingBrandSnapshot = false;
-          console.log('Sub brands');
-          console.log(data.performance);
+          nextTab(widget);
+          $timeout(function () {
+            vm.loadingBrandSnapshot = false;
+            console.log('Sub brands');
+            console.log(data.performance);
+          }, 500);
         });
       }
       if (widget === 'markets') { getActiveTab(); }
