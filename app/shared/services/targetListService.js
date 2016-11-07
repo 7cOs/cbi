@@ -140,6 +140,21 @@ module.exports = /*  @ngInject */
         for (var i = 0; i < response.data.opportunities.length; i++) {
           var item = response.data.opportunities[i];
 
+          item.isItemAuthorization = 'N';
+          if (item.itemAuthorizationCode !== null) {
+            item.isItemAuthorization = 'Y';
+          }
+
+          item.isChainMandate = 'N';
+          if (item.itemAuthorizationCode === 'CM') {
+            item.isChainMandate = 'Y';
+          }
+
+          item.isOnFeature = 'N';
+          if (item.featureTypeCode !== null) {
+            item.isOnFeature = 'Y';
+          }
+
           // if its a new store
           if (!storePlaceholder || (storePlaceholder.address !== item.store.address || storePlaceholder.id !== item.store.id)) {
             // push previous store in newOpportunityArr
