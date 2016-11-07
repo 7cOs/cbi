@@ -88,12 +88,12 @@ module.exports = /*  @ngInject */
 
     var trendPropertyNames = {
       'distributionsSimple': [
-        'planDistirbutionSimpleTrend',
-        'distributionsSimpleTrend'
+        'distributionsSimpleTrend',
+        'planDistirbutionSimpleTrend'
       ],
       'distributionsEffective': [
-        'planDistirbutionEffectiveTrend',
-        'distributionsEffectiveTrend'
+        'distributionsEffectiveTrend',
+        'planDistirbutionEffectiveTrend'
       ],
       'depletions': [
         'depletionsTrend',
