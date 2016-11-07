@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports = /*  @ngInject */
-  function expandedController($state, $scope, $filter, $mdDialog, $q, $timeout, userService, targetListService, loaderService) {
+  function expandedController($state, $scope, $filter, $mdDialog, $q, $timeout, userService, targetListService, loaderService, toastService) {
 
     // ****************
     // CONTROLLER SETUP
@@ -54,6 +54,12 @@ module.exports = /*  @ngInject */
     vm.toggleAll = toggleAll;
     vm.addCollaborator = addCollaborator;
 
+    $scope.$watch(function() { return toastService.model; }, function(newVal) {
+      vm.archived = newVal.archived;
+      vm.deleted = newVal.deleted;
+      vm.multipleTargetListsSelected = newVal.multipleTargetListsSelected;
+    }, true);
+
     init();
 
     // **************
@@ -88,6 +94,7 @@ module.exports = /*  @ngInject */
           userService.model.targetLists.ownedNotArchived--;
         });
 
+        toastService.showToast('archive', selectedTargetLists);
         vm.selected = [];
       });
     }
@@ -145,9 +152,11 @@ module.exports = /*  @ngInject */
             }
             userService.model.targetLists.owned.splice(userService.model.targetLists.owned.indexOf(item), 1);
           });
-        }).then(vm.selected = []);
+        }).then(function() {
+          toastService.showToast('delete', selectedItems);
+          vm.selected = [];
+        });
       }
-
     }
 
     function exists(item, list) {
