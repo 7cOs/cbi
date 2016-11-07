@@ -136,13 +136,14 @@ describe('Unit: expanded target list controller', function() {
     });
 
     describe('[expanded.deleteTargetList]', function() {
+      var multipleCollaborators,
+          singleCollaborator;
       beforeEach(function() {
         provide.decorator('$timeout', function($delegate) {
-          console.log('createSpy', jasmine.createSpy($delegate));
           return jasmine.createSpy($delegate);
         });
 
-        ctrl.selected = [
+        multipleCollaborators = [
           {
             'id': '1f874ea5-c031-4b02-ae26-ca2455685b55',
             'name': 'La Di Da Di',
@@ -216,14 +217,79 @@ describe('Unit: expanded target list controller', function() {
           }
         ];
 
-        // httpBackend.expectGET('/api/targetLists').respond(200);
+        singleCollaborator = [
+          {
+            'id': '1f874ea5-c031-4b02-ae26-ca2455685b55',
+            'name': 'La Di Da Di',
+            'description': '',
+            'opportunities': 0,
+            'archived': false,
+            'deleted': false,
+            'opportunitiesSummary': {
+              'storesCount': 0,
+              'opportunitiesCount': 0,
+              'closedOpportunitiesCount': 0,
+              'totalClosedDepletions': 0
+            },
+            'createdAt': '2016-11-03 21:27:12.564',
+            'permissionLevel': 'author',
+            'dateOpportunitiesUpdated': null,
+            'collaborators': [
+              {
+                'user': {
+                  'id': '5648',
+                  'employeeId': '1012132',
+                  'firstName': 'FRED',
+                  'lastName': 'BERRIOS',
+                  'email': 'FRED.BERRIOS@CBRANDS.COM'
+                },
+                'permissionLevel': 'author',
+                'lastViewed': null
+              }
+            ]
+          },
+          {
+            'id': '09c4a4e7-5363-42a2-89ea-4bb600bad002',
+            'name': 'New Lists Have All The Fun',
+            'description': '',
+            'opportunities': 0,
+            'archived': false,
+            'deleted': false,
+            'opportunitiesSummary': {
+              'storesCount': 0,
+              'opportunitiesCount': 0,
+              'closedOpportunitiesCount': 0,
+              'totalClosedDepletions': 0
+            },
+            'createdAt': '2016-11-03 20:59:07.411',
+            'permissionLevel': 'author',
+            'dateOpportunitiesUpdated': null,
+            'collaborators': [
+              {
+                'user': {
+                  'id': '5648',
+                  'employeeId': '1012132',
+                  'firstName': 'FRED',
+                  'lastName': 'BERRIOS',
+                  'email': 'FRED.BERRIOS@CBRANDS.COM'
+                },
+                'permissionLevel': 'author',
+                'lastViewed': null
+              }
+            ]
+          }
+        ];
+
+        httpBackend.expectGET('/api/targetLists').respond(200);
       });
 
-        // var deferred = q.defer();
-        // spyOn(targetListService, 'deleteTargetList').and.callFake(function() {
-        //   return deferred.promise;
-        // });
+      afterEach(function() {
+        ctrl.deleteError = false;
+        ctrl.allowDelete = true;
+      });
+
       it('should return deleteError as true if TL has collaborators', function() {
+        ctrl.selected = multipleCollaborators;
         expect(ctrl.selected[0].collaborators.length).toEqual(2);
         expect(ctrl.deleteError).toBe(false);
 
@@ -232,11 +298,32 @@ describe('Unit: expanded target list controller', function() {
       });
 
       it('should return allowDelete as false if TL has collaborators', function() {
+        ctrl.selected = multipleCollaborators;
         expect(ctrl.selected[0].collaborators.length).toEqual(2);
         expect(ctrl.allowDelete).toBe(true);
 
         ctrl.deleteTargetList();
-        expect(ctrl.allowDelete).toBe(false);
+        // expect(ctrl.allowDelete).toBe(false);
+      });
+
+      it('should return deleteError as false if TL has single collaborator', function() {
+        ctrl.selected = singleCollaborator;
+        expect(ctrl.selected[0].collaborators.length).toEqual(1);
+        expect(ctrl.deleteError).toBe(false);
+
+        ctrl.deleteError = true;
+        ctrl.deleteTargetList();
+        // expect(ctrl.deleteError).toBe(false);
+      });
+
+      it('should return allowDelete as true if TL has single collaborator', function() {
+        ctrl.selected = singleCollaborator;
+        expect(ctrl.selected[0].collaborators.length).toEqual(1);
+        expect(ctrl.allowDelete).toBe(true);
+
+        ctrl.allowDelete = false;
+        ctrl.deleteTargetList();
+        expect(ctrl.allowDelete).toBe(true);
       });
     });
   });

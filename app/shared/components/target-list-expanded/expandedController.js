@@ -147,6 +147,7 @@ module.exports =
           });
         }).then(vm.selected = []);
       }
+
     }
 
     function exists(item, list) {
@@ -161,11 +162,6 @@ module.exports =
     function saveNewList(e) {
       vm.buttonDisabled = true;
       userService.addTargetList(vm.newList).then(function(response) {
-        userService.model.targetLists.owned.forEach(function(value, key) {
-          if (response.id === value.id) {
-            value.collaborators.push(userService.model.currentUser);
-          }
-        });
         targetListService.addTargetListShares(response.id, vm.newList.targetListShares);
         closeModal();
         vm.buttonDisabled = false;
