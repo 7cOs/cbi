@@ -1,5 +1,6 @@
-.archived-header(ng-class="{'visible': expanded.archived}") Target<span ng-if="expanded.multipleTargetListsSelected">s</span> List Archived!
-.archived-header(ng-class="{'visible': expanded.deleted}") Target<span ng-if="expanded.multipleTargetListsSelected">s</span> List Deleted!
+.archived-header.fade(ng-cloak ng-hide="!expanded.archived") Target<span ng-if="expanded.multipleTargetListsSelected">s</span> List Archived!
+.archived-header.fade(ng-cloak ng-hide="!expanded.deleted") Target<span ng-if="expanded.multipleTargetListsSelected">s</span> List Deleted!
+.archived-header.visible(ng-if="expanded.deleteError") Sorry, you cannot delete a Target List that has Collaborators. Please remove all Collaborators from that list and try again.
 .target-lists-header
   div(row)
     h1(column='12') Target Lists
@@ -48,8 +49,8 @@ div.expanded-target-lists
           .loader-wrap.inline(ng-class="{'active': expanded.loaderService.model.loadingFilters}")
             loader
           div(ng-show="!expanded.loaderService.model.loadingFilters && !expanded.userService.model.targetLists.owned.length || expanded.userService.model.targetLists.owned.length === 0 || !expanded.loaderService.model.loadingFilters  && !expanded.userService.model.targetLists.ownedNotArchived").no-opportunities
-            h4 No Opportunities have been added yet
-            p Try Searching for <span>Opportunities</span> and add them to your list
+            h4 It seems that you haven't created any Target Lists yet
+            p Click <a ng-click="expanded.createTargetList($event)">Create a New List</a> to get started.
           ul
             li(ng-repeat="list in expanded.userService.model.targetLists.owned | filter:{archived:false} | filter:{deleted:false} | orderBy:expanded.sortProperty:expanded.reverse").clearfix
               div.checkbox-wrapper.named-target-list(ng-click="expanded.toggle(list, expanded.selected)")
@@ -57,7 +58,9 @@ div.expanded-target-lists
               div.checkbox-sibling(column="12" ui-sref="target-list-detail({id: list.id})")
                 div(row).stats
                   h4(column="4").left {{list.name}}
-                  h5(column="2").accent.dropdown-menu-trigger.collaborators {{list.collaborators.length}} collaborators
+                  h5(column="2").accent.dropdown-menu-trigger.collaborators {{list.collaborators.length}}
+                    span(ng-if="list.collaborators.length > 1")  collaborators
+                    span(ng-if="list.collaborators.length < 2")  collaborator
                     ul.dropdown-menu
                       li.member.creator {{expanded.userService.model.currentUser.firstName}} {{expanded.userService.model.currentUser.lastName}}
                       li.member(ng-repeat="collaborator in list.collaborators| filter: {permissionLevel: 'Collaborate'} | orderBy:'user.firstName'") {{collaborator.user.firstName | uppercase}} {{collaborator.user.lastName | uppercase}}

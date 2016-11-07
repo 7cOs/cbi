@@ -72,12 +72,11 @@ md-toast {
 }
 
 .action-overlay {
-  width: 103%;
+  width: 100%;
   height: 100%;
   background: $green-2;
   position: absolute;
-  top: 0;
-  left: -1.5%;
+  left: 0;
   opacity: 0;
   transition: all 300ms ease-in;
   z-index: -1;
@@ -86,7 +85,7 @@ md-toast {
 
   div {
     display: inline-block;
-    margin-top: 3.5%;
+    margin-top: 2.5%;
     padding-top: 0;
   }
 
