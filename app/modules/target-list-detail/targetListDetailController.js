@@ -19,6 +19,7 @@ module.exports = /*  @ngInject */
     vm.targetListShares = [];
     vm.pendingShares = [];
     vm.editable = false;
+    vm.leave = false;
 
     // Services
     vm.targetListService = targetListService;
@@ -107,6 +108,7 @@ module.exports = /*  @ngInject */
 
       if (method === 'delete') vm.deleting = true;
       else if (method === 'archive') vm.archiving = true;
+      else if (method === 'leave') vm.leave = true;
     }
 
     function listChanged() {
@@ -167,6 +169,7 @@ module.exports = /*  @ngInject */
       vm.pendingShares = [];
       initTargetLists();
       isAuthor();
+      removeFooterToast();
 
       $mdDialog.show({
         clickOutsideToClose: true,
@@ -218,6 +221,7 @@ module.exports = /*  @ngInject */
         }); */
 
       });
+      vm.leave = true;
     }
 
     function removeFooterToast() {
