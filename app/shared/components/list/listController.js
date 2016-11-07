@@ -289,6 +289,7 @@ module.exports = /*  @ngInject */
             if (selectedArr[i].id === oppId) {
               opps[j].groupedOpportunities.splice(k, 1);
               opps[j].brands.splice(k, 1);
+              filtersService.model.appliedFilter.pagination.totalOpportunities--;
               break;
             }
           }
@@ -298,8 +299,8 @@ module.exports = /*  @ngInject */
             filtersService.model.appliedFilter.pagination.totalStores--;
           }
         }
-        filtersService.model.appliedFilter.pagination.totalOpportunities--;
       }
+      vm.selected = [];
       selectedArr = [];
     }
 
