@@ -18,6 +18,12 @@ module.exports = /*  @ngInject */
     vm.filtersService = filtersService;
     vm.userService = userService;
 
+    vm.accountBrandEnum = {
+      'distirbutionSimple': 1,
+      'distirbutionEffective': 2,
+      'velocity': 3
+    };
+
     vm.filters = {
       placementType: [{
         name: 'Simple'
@@ -40,11 +46,11 @@ module.exports = /*  @ngInject */
         name: 'Distribution (simple)',
         value: 1
       }, {
-        name: 'Velocity',
+        name: 'Distribution (effective)',
         value: 2
       }, {
-        name: 'Distribution (effective)',
-        value: 1
+        name: 'Velocity',
+        value: 3
       }],
       accountMarkets: [{
         name: 'Depletions'
@@ -81,9 +87,13 @@ module.exports = /*  @ngInject */
     };
 
     var trendPropertyNames = {
-      'distributions': [
+      'distributionsSimple': [
         'planDistirbutionSimpleTrend',
         'distributionsSimpleTrend'
+      ],
+      'distributionsEffective': [
+        'planDistirbutionEffectiveTrend',
+        'distributionsEffectiveTrend'
       ],
       'depletions': [
         'depletionsTrend',
@@ -184,9 +194,10 @@ module.exports = /*  @ngInject */
     // Expose public methods
     vm.apply = apply;
     vm.brandTotal = brandTotal;
+    vm.removeOptionsBasedOnView = removeOptionsBasedOnView;
     vm.displayBrandValue = displayBrandValue;
     vm.goToOpportunities = goToOpportunities;
-    vm.isPositive = isPositive;
+    vm.getClassBasedOnValue = getClassBasedOnValue;
     vm.openNotes = openNotes;
     vm.openSelect = openSelect;
     vm.placeholderSelect = placeholderSelect;
@@ -200,6 +211,7 @@ module.exports = /*  @ngInject */
     vm.updateTopBottom = updateTopBottom;
     vm.getTrendValues = getTrendValues;
     vm.isPackageView = false;
+    vm.checkOnlyForNegativeValues = checkOnlyForNegativeValues;
 
     init();
 
@@ -239,6 +251,16 @@ module.exports = /*  @ngInject */
       }
     }
 
+    function removeOptionsBasedOnView(accountBrandObj) {
+      var isOptionHidden = false;
+      if (accountBrandObj.value === 1 && vm.brandSelectedIndex === 1) {
+        isOptionHidden = true;
+      } else if (accountBrandObj.value === 2 && vm.brandSelectedIndex === 0) {
+        isOptionHidden = true;
+      }
+      return isOptionHidden;
+    }
+
     /*
     ** @param {Array} brandMeasures - array of measures for a brand
     ** @param {String} property - property to fetch from object depletions, depletionsTrend
@@ -262,13 +284,28 @@ module.exports = /*  @ngInject */
     }
 
     // Check if sales data value is positive (for display in UI)
-    function isPositive(salesData) {
-      if (salesData >= 0) {
-        return true;
+    function checkOnlyForNegativeValues(salesData) {
+      var returnVal = false;
+      if (salesData) {
+        if (salesData < 0) {
+          returnVal = true;
+        }
       }
-      return false;
+      return returnVal;
     }
 
+    // Check if sales data value is positive (for display in UI)
+    function getClassBasedOnValue(salesData) {
+      var classToBeAdded = '';
+      if (!isNaN(salesData)) {
+        if (salesData >= 0) {
+          return 'positive';
+        } else {
+          return 'negative';
+        }
+      }
+      return classToBeAdded;
+    }
     // Make notes available to the page
     function openNotes(val) {
       $rootScope.$broadcast('notes:opened', val);
@@ -290,6 +327,7 @@ module.exports = /*  @ngInject */
         vm.brandWidgetTitle = vm.brandWidgetTitleDefault;
         vm.brandIdSelected = null;
         vm.filterModel.brand = '';
+        vm.filtersService.model.accountSelected.accountBrands = vm.filters.accountBrands[0];
       }
     }
 
@@ -315,6 +353,8 @@ module.exports = /*  @ngInject */
         userService.getPerformanceBrand({premiseType: filtersService.model.selected.premiseType, brand: item.id}).then(function(data) {
           vm.brandTabs.skus = data.performance;
           vm.loadingBrandSnapshot = false;
+          console.log('Sub brands');
+          console.log(data.performance);
         });
       }
       if (widget === 'markets') { getActiveTab(); }
@@ -388,13 +428,17 @@ module.exports = /*  @ngInject */
     // Move to next indexed tab
     function nextTab(widget) {
       vm.disableAnimation = false;
-      if (widget === 'brands') { vm.brandSelectedIndex = vm.brandSelectedIndex + 1; }
+      if (widget === 'brands') {
+        vm.brandSelectedIndex = vm.brandSelectedIndex + 1;
+        vm.filtersService.model.accountSelected.accountBrands = vm.filters.accountBrands[1];
+      }
       if (widget === 'markets') { vm.marketSelectedIndex = vm.marketSelectedIndex + 1; }
     }
 
     function init() {
       // reset all chips and filters on page init
       vm.filterModel.trend = vm.filtersService.model.trend[0];
+      vm.filtersService.model.accountSelected.accountBrands = vm.filters.accountBrands[0];
       setDefaultEndingPeriodOptions();
       chipsService.resetChipsFilters(chipsService.model);
 
@@ -410,7 +454,6 @@ module.exports = /*  @ngInject */
         userService.model.depletion = data[1];
         userService.model.distribution = data[2];
         vm.brandTabs.brands = data[3].performance;
-
         vm.loadingBrandSnapshot = false;
       });
     }
