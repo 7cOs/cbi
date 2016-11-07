@@ -7,6 +7,7 @@ module.exports = /*  @ngInject */
       archived: false,
       deleted: false,
       copied: false,
+      deleteError: false,
       multipleTargetListsSelected: false
     };
 
@@ -21,14 +22,18 @@ module.exports = /*  @ngInject */
      * @name showToast
      * @desc Shows toast for target list actions
      * @params {String} targetListAction - Action taken for appropriate toast
+     * @params {Array} selectedTargetLists (optional) - Currently selected list items
      * @memberOf cf.common.services
      */
     function showToast(targetListAction, selectedTargetLists) {
-      if (selectedTargetLists.length > 1) {
+
+      if (selectedTargetLists && selectedTargetLists.length > 1) {
         model.multipleTargetListsSelected = true;
       }
 
-      if (targetListAction === 'archive') {
+      if (targetListAction === 'deleteError') {
+        model.deleteError = true;
+      } else if (targetListAction === 'archive') {
         model.archived = true;
       } else if (targetListAction === 'delete') {
         model.deleted = true;
@@ -41,6 +46,7 @@ module.exports = /*  @ngInject */
         model.deleted = false;
         model.archived = false;
         model.copied = false;
+        model.deleteError = false;
       }, 3000);
 
       $timeout(function () {

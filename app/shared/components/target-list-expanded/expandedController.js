@@ -54,12 +54,6 @@ module.exports = /*  @ngInject */
     vm.toggleAll = toggleAll;
     vm.addCollaborator = addCollaborator;
 
-    $scope.$watch(function() { return toastService.model; }, function(newVal) {
-      vm.archived = newVal.archived;
-      vm.deleted = newVal.deleted;
-      vm.multipleTargetListsSelected = newVal.multipleTargetListsSelected;
-    }, true);
-
     init();
 
     // **************
@@ -152,10 +146,9 @@ module.exports = /*  @ngInject */
             }
             userService.model.targetLists.owned.splice(userService.model.targetLists.owned.indexOf(item), 1);
           });
-        }).then(function() {
-          toastService.showToast('delete', selectedItems);
-          vm.selected = [];
-        });
+        }).then(vm.selected = []);
+
+        toastService.showToast('delete', selectedItems);
       }
     }
 
@@ -309,6 +302,7 @@ module.exports = /*  @ngInject */
             vm.allowDelete = false;
             vm.keepGoing = false;
             vm.deleteError = true;
+            toastService.showToast('deleteError');
             $timeout(function() {
               vm.allowDelete = true;
               vm.deleteError = false;

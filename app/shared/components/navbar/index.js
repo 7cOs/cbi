@@ -1,6 +1,6 @@
 'use strict';
 
-function NavbarController($rootScope, $scope, $state, $window, $mdPanel, $mdDialog, $mdMenu, $mdSelect, $anchorScroll, notificationsService, opportunitiesService, targetListService, userService, versionService, loaderService, ieHackService) {
+function NavbarController($rootScope, $scope, $state, $window, $mdPanel, $mdDialog, $mdMenu, $mdSelect, $anchorScroll, notificationsService, opportunitiesService, targetListService, userService, versionService, loaderService, ieHackService, toastService) {
 
   // ****************
   // CONTROLLER SETUP
@@ -84,6 +84,14 @@ function NavbarController($rootScope, $scope, $state, $window, $mdPanel, $mdDial
   vm.addToTargetList = addToTargetList;
   vm.markSeen = markSeen;
   vm.getTargetLists = getTargetLists;
+
+  $scope.$watch(function() { return toastService.model; }, function(newVal) {
+    vm.archived = newVal.archived;
+    vm.deleted = newVal.deleted;
+    vm.copied = newVal.copied;
+    vm.deleteError = newVal.deleteError;
+    vm.multipleTargetListsSelected = newVal.multipleTargetListsSelected;
+  }, true);
 
   init();
 
