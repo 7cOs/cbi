@@ -1,5 +1,5 @@
 describe('Unit: expanded target list controller', function() {
-  var ctrl, state, scope, mdDialog, q, http, httpBackend, timeout, provide, userService, targetListService, loaderService;
+  var ctrl, state, scope, mdDialog, httpBackend, provide;
 
   beforeEach(angular.mock.module(function(_$provide_) {
     provide = _$provide_;
@@ -24,14 +24,7 @@ describe('Unit: expanded target list controller', function() {
       };
       scope = $rootScope.$new();
       mdDialog = _$mdDialog_;
-      q = _$q_;
-      http = _$http_;
       httpBackend = _$httpBackend_;
-      timeout = _$timeout_;
-
-      userService = _userService_;
-      targetListService = _targetListService_;
-      loaderService = _loaderService_;
 
       ctrl = $controller('expandedController', {$scope: scope, $state: state});
     });
