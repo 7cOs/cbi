@@ -55,7 +55,7 @@ describe('Unit: accountsController', function() {
       expect(ctrl.accountTypesDefault).toEqual('Distributors');
       expect(ctrl.brandWidgetTitleDefault).toEqual('All Brands');
       expect(ctrl.brandWidgetTitle).toEqual(ctrl.brandWidgetTitleDefault);
-      expect(ctrl.filtersService.model.accountSelected.accountBrands).toEqual('Distribution (simple)');
+      expect(ctrl.filtersService.model.accountSelected.accountBrands).toEqual({ name: 'Distribution (simple)', value: 1 });
       expect(ctrl.filtersService.model.accountSelected.accountMarkets).toEqual('Depletions');
       expect(ctrl.selectOpen).toEqual(false);
       expect(ctrl.disableAnimation).toEqual(false);
@@ -304,6 +304,35 @@ describe('Unit: accountsController', function() {
       ctrl.apply(false);
 
       expect(ctrl.disableApply).toEqual(false);
+    });
+  });
+
+  describe('Navigate to Package/SKU view', function() {
+    var widget = null, item, parent, parentIndex;
+
+    beforeEach(function() {
+      widget = 'brands';
+      item = {
+        'type': 'Brand',
+        'id': '416',
+        'name': 'MODELO ESPECIAL',
+        'measures': []
+      };
+      parent = {
+        'brands': [],
+        'skus': []
+      };
+      parentIndex = 0;
+      spyOn(userService, 'getPerformanceBrand').and.callFake(function() {
+        var deferred = $q.defer();
+        deferred.resolve('foo');
+        return deferred.promise;
+      });
+    });
+
+    it('Should get SKU/Packages for selected brand', function() {
+      ctrl.selectItem(widget, item, parent, parentIndex);
+      expect(userService.getPerformanceBrand).toHaveBeenCalled();
     });
   });
 });

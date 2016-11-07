@@ -340,6 +340,10 @@ module.exports = /*  @ngInject */
     // When a row item is clicked in brands / market widgets
     function selectItem(widget, item, parent, parentIndex) {
       var parentLength = Object.keys(parent).length;
+      console.log(widget);
+      console.log(item);
+      console.log(parent);
+      console.log(parentIndex);
 
       if (parentIndex + 1 === parentLength) {
         // We're on the deepest level of current tab list
