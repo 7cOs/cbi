@@ -151,10 +151,11 @@ describe('Unit: accountsController', function() {
         var deferred = $q.defer();
         return deferred.promise;
       });
+      spyOn(filtersService, 'getAppliedFilters').and.callThrough();
     });
 
-    /* it('Should do nothing if there are brands', function() {
-      ctrl.brandTabs.brands = {
+    it('Should get applied filters from filter service', function() {
+      /* ctrl.brandTabs.brands = {
         'type': 'Brand',
         'id': '416',
         'name': 'MODELO ESPECIAL',
@@ -257,16 +258,16 @@ describe('Unit: accountsController', function() {
           'planSimple': 12716,
           'planEffective': 38601
         }
-      ]};
+      ]}; leaving this in for unit tests that need brands. */
 
-      expect(userService.getPerformanceBrand).not.toHaveBeenCalled();
-      expect(userService.getPerformanceBrand.calls.count()).toEqual(0);
+      expect(filtersService.getAppliedFilters).not.toHaveBeenCalled();
+      expect(filtersService.getAppliedFilters.calls.count()).toEqual(0);
 
       ctrl.updateBrandSnapshot();
 
-      expect(userService.getPerformanceBrand).not.toHaveBeenCalled();
-      expect(userService.getPerformanceBrand.calls.count()).toEqual(0);
-    }); */
+      expect(filtersService.getAppliedFilters).toHaveBeenCalledWith('brandSnapshot');
+      expect(filtersService.getAppliedFilters.calls.count()).toEqual(1);
+    });
 
     it('Should call userService.getPerformanceBrand if there are no brands', function() {
       ctrl.brandTabs.brands = [];

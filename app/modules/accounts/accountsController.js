@@ -338,7 +338,6 @@ module.exports = /*  @ngInject */
 
       userService.getPerformanceBrand(params).then(function(data) {
         vm.brandTabs.brands = data.performance;
-        console.log('[data.performance]', data.performance);
       });
     }
 
