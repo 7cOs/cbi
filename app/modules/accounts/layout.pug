@@ -155,7 +155,7 @@ div(row)
                 td(ng-if="a.filtersService.model.accountSelected.accountBrands.value === a.accountBrandEnum.velocity") {{a.displayBrandValue(item.measures, 'velocity', 'distributionTimePeriod') | number:0 }}
 
                 //- Velocity Trend
-                td(ng-class="a.getClassBasedOnValue(a.displayBrandValue(item.measures, 'velocityTrend', 'distributionTimePeriod')" ng-if="a.filtersService.model.accountSelected.accountBrands.value === a.accountBrandEnum.velocity") <span class="percentage" ng-if="a.displayBrandValue(item.measures, 'velocityTrend', 'distributionTimePeriod')">{{a.displayBrandValue(item.measures, 'velocityTrend', 'distributionTimePeriod') | number:1}} %</span><span ng-if="!a.displayBrandValue(item.measures, 'velocityTrend', 'distributionTimePeriod')">-</span>
+                td(ng-if="a.filtersService.model.accountSelected.accountBrands.value === a.accountBrandEnum.velocity") <span class="percentage" ng-if="a.displayBrandValue(item.measures, 'velocityTrend', 'distributionTimePeriod')">{{a.displayBrandValue(item.measures, 'velocityTrend', 'distributionTimePeriod') | number:1}} %</span><span ng-if="!a.displayBrandValue(item.measures, 'velocityTrend', 'distributionTimePeriod')">-</span>
 
                 //- Distributions TDs
                 //- Distirbution value Simple

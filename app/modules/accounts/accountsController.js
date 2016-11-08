@@ -285,11 +285,11 @@ module.exports = /*  @ngInject */
     // Check if sales data value is positive (for display in UI)
     function getClassBasedOnValue(salesData) {
       var classToBeAdded = '';
-      if (!isNaN(salesData)) {
+      if (salesData && !isNaN(salesData)) {
         if (salesData >= 0) {
-          return 'positive';
+          classToBeAdded = 'positive';
         } else {
-          return 'negative';
+          classToBeAdded = 'negative';
         }
       }
       return classToBeAdded;
