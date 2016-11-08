@@ -564,6 +564,10 @@ list {
   .sub-item {
     color: $gray-8;
   }
+
+  .impact:before {
+    opacity: 0.5;
+  }
 }
 
 .not-authorized-label {
