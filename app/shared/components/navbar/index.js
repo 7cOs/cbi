@@ -68,7 +68,7 @@ function NavbarController($rootScope, $scope, $state, $window, $mdPanel, $mdDial
   vm.closeMenus = closeMenus;
   vm.addOpportunity = addOpportunity;
   vm.addAnotherOpportunity = addAnotherOpportunity;
-  vm.newOpportunity = {
+  vm.newOpportunityTemplate = {
     properties: {
       product: {
         type: 'sku'
@@ -78,6 +78,7 @@ function NavbarController($rootScope, $scope, $state, $window, $mdPanel, $mdDial
       }
     }
   };
+  vm.newOpportunity = vm.newOpportunityTemplate;
   vm.newOpportunityArray = [];
   vm.showNewRationaleInput = showNewRationaleInput;
   vm.addNewRationale = false;
@@ -208,7 +209,7 @@ function NavbarController($rootScope, $scope, $state, $window, $mdPanel, $mdDial
 
   // Close "Add Opportunity" modal
   function closeModal() {
-    vm.newOpportunity = {};
+    vm.newOpportunity = vm.newOpportunityTemplate;
     $mdDialog.hide();
   }
 
