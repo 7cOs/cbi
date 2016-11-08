@@ -1,6 +1,6 @@
 'use strict';
 
-module.exports =
+module.exports = /*  @ngInject */
   function expandedController($state, $scope, $filter, $mdDialog, $q, $timeout, userService, targetListService, loaderService) {
 
     // ****************
