@@ -78,14 +78,14 @@ module.exports = /*  @ngInject */
 
         return '?' + queryParams;
       } else if (obj.type && obj.type === 'brandSnapshot') {
-        queryParams += 'filter=';
+        // queryParams += 'filter=';
 
         // remove type obj
         delete obj.type;
 
         queryParams += parseAppliedFilters(obj, i, z);
 
-        return '?' + encodeURIComponent(queryParams);
+        return '?filter=' + encodeURIComponent(queryParams);
       } else {
         // remove type obj
         delete obj.type;

@@ -126,6 +126,7 @@ module.exports = /*  @ngInject */
     vm.filtersService.model.accountSelected.accountMarkets = 'Depletions';
     vm.selectOpen = false;
     vm.disableAnimation = false;
+    vm.disableApply = false;
     vm.marketStoresView = false;
     vm.marketIdSelected = false;
     vm.selectedStore = null;
@@ -178,6 +179,7 @@ module.exports = /*  @ngInject */
     };
 
     // Expose public methods
+    vm.apply = apply;
     vm.brandTotal = brandTotal;
     vm.displayBrandValue = displayBrandValue;
     vm.goToOpportunities = goToOpportunities;
@@ -200,6 +202,10 @@ module.exports = /*  @ngInject */
     // **************
     // PUBLIC METHODS
     // **************
+
+    function apply(bool) {
+      vm.disableApply = bool;
+    }
 
     function brandTotal(measure, percentageBool) {
       for (var i = 0; i < vm.brandTabs.brands.length; i++) {
@@ -285,6 +291,8 @@ module.exports = /*  @ngInject */
 
     function resetFilters() {
       vm.filterModel = angular.copy(filterModelTemplate);
+      filtersService.resetFilters();
+      apply(false);
     }
 
     // When a row item is clicked in brands / market widgets
@@ -320,7 +328,7 @@ module.exports = /*  @ngInject */
         filtersService.model.store = '';
       }
 
-      console.log('[filtersService.model]', filtersService.model);
+      apply(false);
     }
 
     // Set proper tab and skip animation when chosen from market select box
@@ -339,6 +347,8 @@ module.exports = /*  @ngInject */
       userService.getPerformanceBrand(params).then(function(data) {
         vm.brandTabs.brands = data.performance;
       });
+
+      apply(true);
     }
 
     function updateDistributionTimePeriod(value) {
@@ -350,7 +360,6 @@ module.exports = /*  @ngInject */
       var route = filtersService.model.selected.accountTypes.replace(/\W/g, '').toLowerCase();
       userService.getTopBottom(route).then(function(data) {
         userService.model.topBottom[route] = data;
-        console.log(userService.model.topBottom);
       });
     }
 
@@ -398,8 +407,6 @@ module.exports = /*  @ngInject */
         userService.model.depletion = data[1];
         userService.model.distribution = data[2];
         vm.brandTabs.brands = data[3].performance;
-        // console.log('Brands');
-        // console.log(data[3]);
 
         vm.loadingBrandSnapshot = false;
       });

@@ -48,11 +48,11 @@ notes
   div(row)
     div(column='2')
       label Account Scope
-      md-checkbox(ng-model="a.filtersService.model.selected.myAccountsOnly" aria-label="My Accounts") My Accounts Only
+      md-checkbox(ng-model="a.filtersService.model.selected.myAccountsOnly" aria-label="My Accounts" ng-click="a.apply(false)") My Accounts Only
     div(column='2')
       label Premise Type
       md-radio-group(ng-model="a.filtersService.model.selected.premiseType")
-        md-radio-button(ng-repeat="p in a.filtersService.model.premises track by $index" class="md-primary" ng-value="p.value" aria-label="{{p.name}}") {{p.name}}
+        md-radio-button(ng-repeat="p in a.filtersService.model.premises track by $index" class="md-primary" ng-value="p.value" aria-label="{{p.name}}" ng-click="a.apply(false)") {{p.name}}
     div(column='2')
       label Distributor
       inline-search(type="distributor" placeholder="Name" chosen-result="a.filtersService.model.distributor" callback="a.setFilter(result, 'distributor')")
@@ -66,8 +66,8 @@ notes
               h3 Store Type
               p Chain = Chain retailers directly called on by CBBD National or Key Accounts teams (On and Off-Premise)
               p Independent = Retailers not directly called on by CBBD’s National or Key Accounts teams
-      md-checkbox(ng-model="a.filtersService.model.cbbdChainIndependent" aria-label="Independent" ng-change="a.chipsService.applyFilterArr(a.filtersService.model.selected.cbbdChain, 'Independent', 'cbbdChain')") Independent
-      md-checkbox(ng-model="a.filtersService.model.cbbdChainCbbd" aria-label="CBBD Chain" ng-change="a.chipsService.applyFilterArr(a.filtersService.model.selected.cbbdChain, 'Cbbd', 'cbbdChain', 'CBBD Chain')") CBBD Chain
+      md-checkbox(ng-model="a.filtersService.model.cbbdChainIndependent" aria-label="Independent" ng-change="a.chipsService.applyFilterArr(a.filtersService.model.selected.cbbdChain, 'Independent', 'cbbdChain'); a.apply(false)") Independent
+      md-checkbox(ng-model="a.filtersService.model.cbbdChainCbbd" aria-label="CBBD Chain" ng-change="a.chipsService.applyFilterArr(a.filtersService.model.selected.cbbdChain, 'Cbbd', 'cbbdChain', 'CBBD Chain'); a.apply(false)") CBBD Chain
     div(column='4')
       label Retailer
       div(row).retailer.dropdown-filter
@@ -80,7 +80,7 @@ notes
 
   div(row)
     div(column='12' class='apply-filters')
-      button(value='Apply Filters' type="button" class="btn-action" ng-disabled="a.filtersService.model.filtersApplied" ng-click="a.chipsService.applyFilters(); a.updateBrandSnapshot()") Apply Filters
+      button(value='Apply Filters' type="button" class="btn-action" ng-disabled="a.disableApply" ng-click="a.chipsService.applyFilters(); a.updateBrandSnapshot()") Apply Filters
       .secondary-button-container.reset-only
         //- a(ng-click="a.resetFilters()" ng-disabled="!a.filtersService.model.filtersApplied" ng-class="{'disabled reset-icon-disabled': !a.filtersService.model.filtersApplied}").accent.reset-icon Reset
         a(ng-click="a.resetFilters()").accent.reset-icon Reset

@@ -292,4 +292,18 @@ describe('Unit: accountsController', function() {
       expect(ctrl.filterModel.distributionTimePeriod).toEqual(filtersService.model.distributionTimePeriod['month'][0].name);
     });
   });
+
+  describe('[Method] apply', function() {
+    it('Should set ctrl.disableApply to whatever is passed in', function() {
+      expect(ctrl.disableApply).toEqual(false);
+
+      ctrl.apply(true);
+
+      expect(ctrl.disableApply).toEqual(true);
+
+      ctrl.apply(false);
+
+      expect(ctrl.disableApply).toEqual(false);
+    });
+  });
 });
