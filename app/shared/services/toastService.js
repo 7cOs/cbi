@@ -35,10 +35,7 @@ module.exports = /*  @ngInject */
 
       // Reset defaults
       $timeout(function () {
-        model.deleted = false;
-        model.archived = false;
-        model.copied = false;
-        model.deleteError = false;
+        model[targetListAction] = false;
       }, 3000);
 
       $timeout(function () {
