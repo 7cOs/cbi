@@ -211,7 +211,6 @@ module.exports = /*  @ngInject */
     vm.updateTopBottom = updateTopBottom;
     vm.getTrendValues = getTrendValues;
     vm.isPackageView = false;
-    vm.checkOnlyForNegativeValues = checkOnlyForNegativeValues;
 
     init();
 
@@ -281,17 +280,6 @@ module.exports = /*  @ngInject */
         resetFiltersOnLoad: false,
         getDataOnLoad: true
       });
-    }
-
-    // Check if sales data value is positive (for display in UI)
-    function checkOnlyForNegativeValues(salesData) {
-      var returnVal = false;
-      if (salesData) {
-        if (salesData < 0) {
-          returnVal = true;
-        }
-      }
-      return returnVal;
     }
 
     // Check if sales data value is positive (for display in UI)
@@ -461,6 +449,7 @@ module.exports = /*  @ngInject */
     }
 
     function getTrendValues(measures, measureType, timePeriod) {
+      console.log(measures, measureType, timePeriod);
       var currentTrendVal = {
         value: null,
         displayValue: ''
