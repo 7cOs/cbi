@@ -104,4 +104,14 @@
       height: 20px;
     }
   }
+
+  // Hide br elements {
+  br {
+    color: transparent;
+  }
+
+  // Update button background color for TL's manage modal
+  .target-list-modal .modal-footer button {
+    background-color: $gray-4;
+  }
 }
