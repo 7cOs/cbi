@@ -404,6 +404,21 @@ describe('Unit: accountsController', function() {
       currentTrendVal = ctrl.getTrendValues(measuresArr, 'distributionsSimple', 'distributionTimePeriod');
       expect(currentTrendVal.displayValue).toEqual('-8.3%');
     });
+
+    it('Should return positive class', function() {
+      var result = ctrl.getClassBasedOnValue(23.5);
+      expect(result).toEqual('positive');
+    });
+
+    it('Should return negative class', function() {
+      var result = ctrl.getClassBasedOnValue(-23.5);
+      expect(result).toEqual('negative');
+    });
+
+    it('Should return empty string', function() {
+      var result = ctrl.getClassBasedOnValue(null);
+      expect(result).toEqual('');
+    });
   });
 
   describe('Navigate to Package/SKU view', function () {
