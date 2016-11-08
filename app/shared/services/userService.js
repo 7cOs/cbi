@@ -464,8 +464,12 @@ module.exports = /*  @ngInject */
         .catch(getPerformanceBrandFail);
 
       function getPerformanceBrandSuccess(response) {
+<<<<<<< c99f184f886656777b3c6a054d99e6d0364ae259
         console.log('[getPerformanceBrandSuccess.data.performance.length]', response.data.performance.length);
         calculateTrendValuesForPlan(response.data.performance);
+=======
+        // calculateTrendValuesForPlan(response.data.performance);
+>>>>>>> Working spec file
         performancePromise.resolve(response.data);
       }
 
