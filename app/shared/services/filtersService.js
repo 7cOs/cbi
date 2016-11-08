@@ -249,6 +249,7 @@ module.exports = /*  @ngInject */
           filterPayload[key] = service.model.selected[key];
         }
       }
+
       return filterPayload;
     }
 
