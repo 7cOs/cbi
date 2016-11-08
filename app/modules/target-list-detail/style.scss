@@ -17,6 +17,10 @@
   &.visible {
     opacity: 1;
   }
+
+  &.success {
+    background-color: $green;
+  }
 }
 
 .target-list-modal {
