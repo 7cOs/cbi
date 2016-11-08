@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports = /*  @ngInject */
-  function listController($scope, $state, $q, $location, $anchorScroll, $mdDialog, $timeout, filtersService, loaderService, opportunitiesService, targetListService, storesService, userService, closedOpportunitiesService, ieHackService) {
+  function listController($scope, $state, $q, $location, $anchorScroll, $mdDialog, $timeout, filtersService, loaderService, opportunitiesService, targetListService, storesService, userService, closedOpportunitiesService, ieHackService, toastService) {
 
     // ****************
     // CONTROLLER SETUP
@@ -163,6 +163,7 @@ module.exports = /*  @ngInject */
           opportunityIds.push(vm.selected[i].id);
         }
         targetListService.addTargetListOpportunities(listId, opportunityIds).then(function(data) {
+          toastService.showToast('copy', opportunityIds);
           return data;
         }, function(err) {
           console.log('Error adding these ids: ', opportunityIds, ' Responded with error: ', err);
