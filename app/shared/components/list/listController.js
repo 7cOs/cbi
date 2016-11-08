@@ -36,10 +36,21 @@ module.exports = /*  @ngInject */
     vm.undoClicked = false;
     vm.isSelectAllActivated = false;
     vm.memoData = {};
+    vm.newList = {
+      name: '',
+      description: '',
+      opportunities: [],
+      collaborators: [],
+      targetListShares: []
+    };
 
     // Expose public methods
     vm.addToSharedCollaborators = addToSharedCollaborators;
     vm.addToTargetList = addToTargetList;
+    vm.createNewList = createNewList;
+    vm.closeCreateTargetListModal = closeCreateTargetListModal;
+    vm.saveNewList = saveNewList;
+    vm.addCollaborator = addCollaborator;
     vm.closeModal = closeModal;
     vm.displayBrandIcon = displayBrandIcon;
     vm.exists = exists;
@@ -170,6 +181,63 @@ module.exports = /*  @ngInject */
           return err;
         });
       }
+    }
+
+    function createNewList(e) {
+      console.log('hit');
+      var parentEl = angular.element(document.body);
+      $mdDialog.show({
+        clickOutsideToClose: true,
+        parent: parentEl,
+        scope: $scope.$new(),
+        targetEvent: e,
+        templateUrl: './app/shared/components/list/create-target-list-modal.html'
+      });
+    }
+
+    function closeCreateTargetListModal() {
+      vm.newList = {
+        name: '',
+        description: '',
+        opportunities: [],
+        collaborators: []
+      };
+      $mdDialog.hide();
+    }
+
+    function saveNewList(e) {
+      vm.buttonDisabled = true;
+      userService.addTargetList(vm.newList).then(function(response) {
+        targetListService.addTargetListShares(response.id, vm.newList.targetListShares);
+        closeModal();
+        vm.buttonDisabled = false;
+        vm.newList = {
+          name: '',
+          description: '',
+          opportunities: [],
+          collaborators: []
+        };
+
+        // We should be getting these values in the response
+        response.createdAt = response.dateCreated;
+        response.opportunitiesSummary = {};
+        response.opportunitiesSummary.closedOpportunitiesCount = 0;
+        response.opportunitiesSummary.opportunitiesCount = 0;
+        response.opportunitiesSummary.totalClosedDepletions = 0;
+
+        userService.model.targetLists.owned.unshift(response);
+        userService.model.targetLists.ownedArchived++;
+        userService.model.targetLists.ownedNotArchived--;
+      });
+    }
+
+    function addCollaborator(e) {
+      vm.newList.collaborators.push(e);
+      var share = {
+        employeeId: e.employeeId,
+        permissionLevel: 'Collaborate'
+      };
+      vm.newList.targetListShares.push(share);
     }
 
     function closeModal() {

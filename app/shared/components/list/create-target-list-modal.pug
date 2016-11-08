@@ -1,0 +1,22 @@
+div.modal.create-target-list
+  div.title
+    h4 Create Target List
+    a.hide-row(ng-click="list.closeCreateTargetListModal()")
+  div.modal-form
+    div.modal-input
+      label Name
+      input(ng-model="list.newList.name" placeholder="Enter List Name")
+    div.modal-input
+      label Description (Optional)
+      textarea(ng-model="list.newList.description" placeholder="Enter Description").larger-input
+    div.modal-input.add-collaborators
+      label Add Collaborators (Optional)
+      inline-search(type="user" placeholder="Name or CBI email address" chosen-result="list.chosenResult" callback="list.addCollaborator(result)")
+      div.collaborator-list
+        p You <span class="accent">Owner</span><span class="break">&nbsp;</span>
+        .collaborator(ng-repeat="collaborator in list.newList.collaborators") {{collaborator.firstName | titlecase}} {{collaborator.lastName | titlecase}} <span class="accent">Collaborator</span><span class="break">&nbsp;</span>
+    div.modal-input
+      md-checkbox.allow-invites(ng-model="list.newList.allowInvites" aria-label="Allow Collaborators to Invite Others") Allow Collaborators to Invite Others
+
+    button.btn-action(ng-click="list.saveNewList($event)" ng-disabled="!list.newList.name || list.buttonDisabled") Save
+    p.cancel.accent(ng-click="list.closeCreateTargetListModal()") X Cancel
