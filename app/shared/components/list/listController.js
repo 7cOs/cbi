@@ -163,7 +163,7 @@ module.exports = /*  @ngInject */
           opportunityIds.push(vm.selected[i].id);
         }
         targetListService.addTargetListOpportunities(listId, opportunityIds).then(function(data) {
-          toastService.showToast('copy', opportunityIds);
+          toastService.showToast('copied', opportunityIds);
           return data;
         }, function(err) {
           console.log('Error adding these ids: ', opportunityIds, ' Responded with error: ', err);

@@ -88,7 +88,7 @@ module.exports = /*  @ngInject */
           userService.model.targetLists.ownedNotArchived--;
         });
 
-        toastService.showToast('archive', selectedTargetLists);
+        toastService.showToast('archived', selectedTargetLists);
         vm.selected = [];
       });
     }
@@ -148,7 +148,7 @@ module.exports = /*  @ngInject */
           });
         }).then(vm.selected = []);
 
-        toastService.showToast('delete', selectedItems);
+        toastService.showToast('deleted', selectedItems);
       }
     }
 
@@ -298,7 +298,7 @@ module.exports = /*  @ngInject */
 
       vm.selected.forEach(function(item, key) {
         if (keepGoing) {
-          if (item.collaborators.length > 1) {
+          if (item.collaborators && item.collaborators.length > 1) {
             vm.allowDelete = false;
             vm.keepGoing = false;
             vm.deleteError = true;

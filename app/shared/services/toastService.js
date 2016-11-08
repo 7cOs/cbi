@@ -31,15 +31,7 @@ module.exports = /*  @ngInject */
         model.multipleTargetListsSelected = true;
       }
 
-      if (targetListAction === 'deleteError') {
-        model.deleteError = true;
-      } else if (targetListAction === 'archive') {
-        model.archived = true;
-      } else if (targetListAction === 'delete') {
-        model.deleted = true;
-      } else if (targetListAction === 'copy') {
-        model.copied = true;
-      }
+      model[targetListAction] = true;
 
       // Reset defaults
       $timeout(function () {
