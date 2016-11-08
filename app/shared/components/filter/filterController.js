@@ -101,9 +101,10 @@ module.exports = /*  @ngInject */
     }
 
     function modalSaveOpportunityFilter(ev) {
+      filtersService.model.newServiceName = '';
       var parentEl = angular.element(document.body);
       $mdDialog.show({
-        clickOutsideToClose: false,
+        clickOutsideToClose: true,
         parent: parentEl,
         scope: $scope.$new(),
         targetEvent: ev,

@@ -374,34 +374,14 @@ md-dialog {
   }
 
   &.save-report {
-    .title {
-      h4, p {
-        display: inline-block;
-      }
+    .save-error {
+      padding: 1em 2em 2em;
 
       p {
-        color: $ghost-white;
-        float: right;
-        font-size: 1.5em;
-        font-weight: bold;
-
-        &:hover {
-          cursor: pointer;
-        }
+        padding: 0 2.5em;
+        line-height: 1.5em;
       }
     }
-
-    label.disabled {
-      color: $gray-2;
-    }
-
-    input.disabled {
-      background: $gray-13;
-
-      &::placeholder {
-        color: $gray-2;
-      }
-}
   }
 
   &.create-target-list,

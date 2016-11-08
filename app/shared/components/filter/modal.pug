@@ -1,8 +1,8 @@
 div.modal.save-report
   div.title
     h4 Save Report
-    p(ng-click="filter.closeModal()" aria-label="Cancel") X
-  div.modal-form
+    a.hide-row(ng-click="filter.closeModal()" aria-label="Cancel")
+  div.modal-form(ng-show="filter.userService.model.opportunityFilters.length < 10")
     div.modal-input
       .dropdown-filter
         .dropdown
@@ -16,3 +16,6 @@ div.modal.save-report
     button.btn-action(ng-if="filter.userService.model.newServiceSelect ==='new'" ng-click="filter.saveFilter()" ng-disabled="filter.filtersService.model.newServiceName === ''") Save Report
     button.btn-action(ng-if="filter.userService.model.newServiceSelect !=='new'" ng-click="filter.updateFilter()" ng-disabled="filter.filtersService.model.newServiceName === ''") Update Report
     p.cancel.accent(ng-click="filter.closeModal()") X Cancel
+  div(ng-hide="filter.userService.model.opportunityFilters.length < 10").save-error
+    h2 Sorry! You cannot save more than 10 reports.
+    p Please review your list of saved reports, delete some, and try again.
