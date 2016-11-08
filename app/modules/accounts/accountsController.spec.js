@@ -1,6 +1,5 @@
 describe('Unit: accountsController', function() {
-  var scope, ctrl, $state, $q, filtersService, userService, $httpBackend, performanceBrandObj;
-  // function accountsController($rootScope, $scope, $state, $log, $q, $window, $filter, chipsService, filtersService, userService) {
+  var scope, ctrl, $state, $q, filtersService, userService, packageSkuData, brandSpy;
 
   beforeEach(function() {
     // Get Mock Modules
@@ -9,18 +8,17 @@ describe('Unit: accountsController', function() {
     angular.mock.module('cf.common.services');
     angular.mock.module('cf.modules.accounts');
 
-    inject(function($rootScope, $controller, _$state_, _$q_, _filtersService_, _userService_,  _$httpBackend_) {
+    inject(function($rootScope, $controller, _$state_, _$q_, _filtersService_, _userService_) {
       // Create scope
       scope = $rootScope.$new();
       // Get Required Services
       $state = _$state_;
-      $httpBackend = _$httpBackend_;
       $q = _$q_;
       // chipsService = _chipsService_;
       filtersService = _filtersService_;
       userService = _userService_;
 
-      var brandPackageData = {
+      packageSkuData = {
         performance: [
           {
             'type': 'Package/SKU',
@@ -44,11 +42,12 @@ describe('Unit: accountsController', function() {
       spyOn(userService, 'getPerformanceDepletion').and.returnValue(fakePromise);
       spyOn(userService, 'getPerformanceDistribution').and.returnValue(fakePromise);
       spyOn(userService, 'getPerformanceSummary').and.returnValue(fakePromise);
-      performanceBrandObj = spyOn(userService, 'getPerformanceBrand');
-      performanceBrandObj.and.returnValue($q.when(brandPackageData));
+      brandSpy = spyOn(userService, 'getPerformanceBrand');
+      brandSpy.and.returnValue($q.when(packageSkuData));
 
       // Create Controller
       ctrl = $controller('accountsController', {$scope: scope});
+      scope.$digest();
     });
   });
 
@@ -93,49 +92,52 @@ describe('Unit: accountsController', function() {
       expect(ctrl.overviewOpen).toEqual(false);
       expect(ctrl.idSelected).toEqual(null);
       expect(ctrl.brandIdSelected).toEqual(null);
-      expect(ctrl.loadingBrandSnapshot).toEqual(true);
+      expect(ctrl.loadingBrandSnapshot).toEqual(false);
     });
 
-    // it('Should expose controller methods', function() {
-    //   expect(ctrl.brandTotal).not.toBeUndefined();
-    //   expect(typeof (ctrl.brandTotal)).toEqual('function');
-    //
-    //   expect(ctrl.displayBrandValue).not.toBeUndefined();
-    //   expect(typeof (ctrl.displayBrandValue)).toEqual('function');
-    //
-    //   expect(ctrl.goToOpportunities).not.toBeUndefined();
-    //   expect(typeof (ctrl.goToOpportunities)).toEqual('function');
-    //
-    //   expect(ctrl.isPositive).not.toBeUndefined();
-    //   expect(typeof (ctrl.isPositive)).toEqual('function');
-    //
-    //   expect(ctrl.openSelect).not.toBeUndefined();
-    //   expect(typeof (ctrl.openSelect)).toEqual('function');
-    //
-    //   expect(ctrl.setMarketTab).not.toBeUndefined();
-    //   expect(typeof (ctrl.setMarketTab)).toEqual('function');
-    //
-    //   expect(ctrl.selectItem).not.toBeUndefined();
-    //   expect(typeof (ctrl.selectItem)).toEqual('function');
-    //
-    //   expect(ctrl.prevTab).not.toBeUndefined();
-    //   expect(typeof (ctrl.prevTab)).toEqual('function');
-    //
-    //   expect(ctrl.openNotes).not.toBeUndefined();
-    //   expect(typeof (ctrl.openNotes)).toEqual('function');
-    //
-    //   expect(ctrl.placeholderSelect).not.toBeUndefined();
-    //   expect(typeof (ctrl.placeholderSelect)).toEqual('function');
-    //
-    //   expect(ctrl.resetFilters).not.toBeUndefined();
-    //   expect(typeof (ctrl.resetFilters)).toEqual('function');
-    //
-    //   expect(ctrl.updateBrandSnapshot).not.toBeUndefined();
-    //   expect(typeof (ctrl.updateBrandSnapshot)).toEqual('function');
-    //
-    //   expect(ctrl.updateTopBottom).not.toBeUndefined();
-    //   expect(typeof (ctrl.updateTopBottom)).toEqual('function');
-    // });
+    it('Should expose controller methods', function() {
+      expect(ctrl.brandTotal).not.toBeUndefined();
+      expect(typeof (ctrl.brandTotal)).toEqual('function');
+
+      expect(ctrl.displayBrandValue).not.toBeUndefined();
+      expect(typeof (ctrl.displayBrandValue)).toEqual('function');
+
+      expect(ctrl.getTrendValues).not.toBeUndefined();
+      expect(typeof (ctrl.getTrendValues)).toEqual('function');
+
+      expect(ctrl.goToOpportunities).not.toBeUndefined();
+      expect(typeof (ctrl.goToOpportunities)).toEqual('function');
+
+      expect(ctrl.getClassBasedOnValue).not.toBeUndefined();
+      expect(typeof (ctrl.getClassBasedOnValue)).toEqual('function');
+
+      expect(ctrl.openSelect).not.toBeUndefined();
+      expect(typeof (ctrl.openSelect)).toEqual('function');
+
+      expect(ctrl.setMarketTab).not.toBeUndefined();
+      expect(typeof (ctrl.setMarketTab)).toEqual('function');
+
+      expect(ctrl.selectItem).not.toBeUndefined();
+      expect(typeof (ctrl.selectItem)).toEqual('function');
+
+      expect(ctrl.prevTab).not.toBeUndefined();
+      expect(typeof (ctrl.prevTab)).toEqual('function');
+
+      expect(ctrl.openNotes).not.toBeUndefined();
+      expect(typeof (ctrl.openNotes)).toEqual('function');
+
+      expect(ctrl.placeholderSelect).not.toBeUndefined();
+      expect(typeof (ctrl.placeholderSelect)).toEqual('function');
+
+      expect(ctrl.resetFilters).not.toBeUndefined();
+      expect(typeof (ctrl.resetFilters)).toEqual('function');
+
+      expect(ctrl.updateBrandSnapshot).not.toBeUndefined();
+      expect(typeof (ctrl.updateBrandSnapshot)).toEqual('function');
+
+      expect(ctrl.updateTopBottom).not.toBeUndefined();
+      expect(typeof (ctrl.updateTopBottom)).toEqual('function');
+    });
   });
 
   describe('[Method] brandTotal', function() {
@@ -174,6 +176,7 @@ describe('Unit: accountsController', function() {
 
   describe('[Method] updateBrandSnapshot', function() {
     beforeEach(function() {
+<<<<<<< e74c28c060506183bf2ac5baab7f0eaa9e74395c
 <<<<<<< c99f184f886656777b3c6a054d99e6d0364ae259
       spyOn(userService, 'getPerformanceBrand').and.callFake(function() {
         var deferred = $q.defer();
@@ -297,18 +300,24 @@ describe('Unit: accountsController', function() {
 
       expect(filtersService.getAppliedFilters).toHaveBeenCalledWith('brandSnapshot');
       expect(filtersService.getAppliedFilters.calls.count()).toEqual(1);
+=======
+      brandSpy.calls.reset();
+    });
+
+    it('Should do nothing if there are brands', function() {
+      ctrl.updateBrandSnapshot();
+      scope.$digest();
+      expect(userService.getPerformanceBrand).not.toHaveBeenCalled();
+      expect(userService.getPerformanceBrand.calls.count()).toEqual(0);
+>>>>>>> Stable commit with all specs working
     });
 
     it('Should call userService.getPerformanceBrand if there are no brands', function() {
       ctrl.brandTabs.brands = [];
-
-      expect(userService.getPerformanceBrand).not.toHaveBeenCalled();
-      expect(userService.getPerformanceBrand.calls.count()).toEqual(0);
-
       ctrl.updateBrandSnapshot();
-
-      expect(userService.getPerformanceBrand).toHaveBeenCalled();
+      scope.$digest();
       expect(userService.getPerformanceBrand.calls.count()).toEqual(1);
+      expect(ctrl.brandTabs.brands).toEqual(packageSkuData.performance);
     });
 
   });
@@ -353,11 +362,15 @@ describe('Unit: accountsController', function() {
         'skus': []
       };
       parentIndex = 0;
+<<<<<<< e74c28c060506183bf2ac5baab7f0eaa9e74395c
     });
 
 <<<<<<< c99f184f886656777b3c6a054d99e6d0364ae259
 =======
     afterEach(function() {
+=======
+      brandSpy.calls.reset();
+>>>>>>> Stable commit with all specs working
     });
 
 >>>>>>> Working spec file

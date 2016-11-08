@@ -464,12 +464,16 @@ module.exports = /*  @ngInject */
         .catch(getPerformanceBrandFail);
 
       function getPerformanceBrandSuccess(response) {
+<<<<<<< e74c28c060506183bf2ac5baab7f0eaa9e74395c
 <<<<<<< c99f184f886656777b3c6a054d99e6d0364ae259
         console.log('[getPerformanceBrandSuccess.data.performance.length]', response.data.performance.length);
         calculateTrendValuesForPlan(response.data.performance);
 =======
         // calculateTrendValuesForPlan(response.data.performance);
 >>>>>>> Working spec file
+=======
+        calculateTrendValuesForPlan(response.data.performance);
+>>>>>>> Stable commit with all specs working
         performancePromise.resolve(response.data);
       }
 
