@@ -140,6 +140,10 @@ module.exports = /*  @ngInject */
         for (var i = 0; i < response.data.opportunities.length; i++) {
           var item = response.data.opportunities[i];
 
+          // Set depletionsCurrentYearToDateYAPercent
+          item = setVsYAPercent(item);
+          item.store = setVsYAPercent(item.store);
+
           item.isItemAuthorization = 'N';
           if (item.itemAuthorizationCode !== null) {
             item.isItemAuthorization = 'Y';
@@ -215,6 +219,34 @@ module.exports = /*  @ngInject */
 
       function getTargetListOpportunitiesFail(error) {
         targetListPromise.reject(error);
+      }
+
+      function setVsYAPercent(item) {
+        // defined in DE2970
+        var vsYAPercent = 0,
+            negative = false;
+        if (item.depletionsCurrentYearToDateYA === 0) {
+          vsYAPercent = '100%';
+        } else if (item.depletionsCurrentYearToDate === 0) {
+          vsYAPercent = '-100%';
+          negative = true;
+        } else {
+          // vsYAPercent = -100 + ((item.depletionsCurrentYearToDate / item.depletionsCurrentYearToDateYA) * 100);
+          vsYAPercent = ((item.depletionsCurrentYearToDate - item.depletionsCurrentYearToDateYA) / item.depletionsCurrentYearToDateYA) * 100;
+          if (vsYAPercent > 999) {
+            vsYAPercent = '999%';
+          } else if (vsYAPercent < -999) {
+            vsYAPercent = '-999%';
+            negative = true;
+          } else {
+            if (vsYAPercent.toFixed(0) < 0) negative = true;
+            vsYAPercent = vsYAPercent.toFixed(1) + '%';
+          }
+        }
+        item.depletionsCurrentYearToDateYAPercent = negative ? vsYAPercent : '+' + vsYAPercent;
+        item.depletionsCurrentYearToDateYAPercentNegative = negative;
+
+        return item;
       }
 
       return targetListPromise.promise;
