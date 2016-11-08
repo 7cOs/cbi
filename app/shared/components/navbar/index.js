@@ -88,6 +88,7 @@ function NavbarController($rootScope, $scope, $state, $window, $mdPanel, $mdDial
   $scope.$watch(function() { return toastService.model; }, function(newVal) {
     vm.archived = newVal.archived;
     vm.deleted = newVal.deleted;
+    vm.added = newVal.added;
     vm.copied = newVal.copied;
     vm.deleteError = newVal.deleteError;
     vm.multipleTargetListsSelected = newVal.multipleTargetListsSelected;
@@ -151,6 +152,8 @@ function NavbarController($rootScope, $scope, $state, $window, $mdPanel, $mdDial
 
   // Add Opportunity
   function addOpportunity(opportunity) {
+    opportunity.properties.store = vm.chosenStoreObject;
+    opportunity.properties.product = vm.chosenProductObject;
     if (saveOpportunity(opportunity)) {
       vm.newOpportunity = {};
       $mdDialog.hide();
@@ -182,12 +185,12 @@ function NavbarController($rootScope, $scope, $state, $window, $mdPanel, $mdDial
     var targetList = opportunity.properties.targetList;
 
     var payload = {
-      'store': opportunity.properties.store.description,
-      'itemId': !isMixedType && opportunity.properties.product.text,
+      'store': opportunity.properties.store.id,
+      'itemId': !isMixedType && opportunity.properties.product.brandCode,
       'itemType': 'BRAND',
       'mixedBrand': isMixedType,
       'rationale': opportunity.properties.rationale.description,
-      'impactCode': opportunity.properties.impact.enum,
+      'impact': opportunity.properties.impact.enum,
       'subType': oppSubType
     };
 
@@ -197,6 +200,7 @@ function NavbarController($rootScope, $scope, $state, $window, $mdPanel, $mdDial
         if (targetList) {
           addToTargetList(targetList, result);
         }
+        toastService.showToast('added');
       });
 
     return true;
