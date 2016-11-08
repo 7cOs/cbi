@@ -221,6 +221,7 @@ describe('Unit: filter controller (opportunities)', function() {
       spyOn(mdDialog, 'show').and.callFake(function() {
         return true;
       });
+
     });
 
     it('should open a dialog', function() {
@@ -229,6 +230,12 @@ describe('Unit: filter controller (opportunities)', function() {
       ctrl.modalSaveOpportunityFilter();
       expect(mdDialog.show).toHaveBeenCalled();
       expect(mdDialog.show.calls.count()).toEqual(1);
+    });
+
+    it('should ensure the newServiceName is blank on open', function() {
+      ctrl.filtersService.model.newServiceName = 'test';
+      ctrl.modalSaveOpportunityFilter();
+      expect(ctrl.filtersService.model.newServiceName).toEqual('');
     });
   });
 
