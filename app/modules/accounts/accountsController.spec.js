@@ -391,7 +391,7 @@ describe('Unit: accountsController', function() {
       expect(currentTrendVal.value).toBeUndefined();
     });
 
-    it('Should perform correct calculations for plan trend values', function() {
+    it('Should perform correct calculations for ABP% values', function() {
       ctrl.filterModel.trend = {
         name: 'vs ABP',
         value: 2
