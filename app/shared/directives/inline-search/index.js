@@ -8,6 +8,7 @@ module.exports =
         type: '@',
         placeholder: '@',
         input: '=chosenResult',
+        chosenResultObject: '=?',
         callback: '&',
         nav: '@',
         variety: '@',
@@ -39,6 +40,7 @@ module.exports =
 
       // Defaults
       vm.input = '';
+      vm.chosenResultObject = {};
       vm.showResults = false;
       vm.loading = false;
       vm.type = '';
@@ -169,6 +171,7 @@ module.exports =
 
         vm.callback({result: result});
         vm.chosenResult = result;
+        vm.chosenResultObject = result;
         vm.variety === 'manage-collaborators' ? close(true) : close();
         clearPreviousSelection();
       }

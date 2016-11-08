@@ -4,7 +4,7 @@ div.modal.add-opportunity
   form.modal-form(name="nb.addOpportunityForm" novalidate)
     div.modal-input
       label Account
-      inline-search(type="store" placeholder="Store Name or Location (City, Zip, or State)" chosen-result="nb.newOpportunity.properties.store.description" is-required="true" show-address="true")
+      inline-search(type="store" placeholder="Store Name or Location (City, Zip, or State)" chosen-result="nb.newOpportunity.properties.bob" chosen-result-object="nb.chosenStoreObject" is-required="true" show-address="true")
       div(ng-show="nb.addOpportunityForm.$invalid && nb.addOpportunityForm.$submitted")
         p.error-message.accent(ng-show="nb.addOpportunityForm.accountInput.$error.required") <img src="./assets/img/icons/error.svg">Please select an Account.
     div.modal-input.clearfix
@@ -23,7 +23,7 @@ div.modal.add-opportunity
         md-radio-group(ng-model="nb.newOpportunity.properties.product.type" required)
           md-radio-button.md-primary(value="sku" aria-label="Search for brand or package/SKU") &nbsp;
 
-        inline-search(ng-if="nb.newOpportunity.properties.distributionType.type === 'new'" type="product" variety="non-brand" placeholder="Type package name, or master SKU" chosen-result="nb.newOpportunity.properties.product.text")
+        inline-search(ng-if="nb.newOpportunity.properties.distributionType.type === 'new'" type="product" variety="non-brand" placeholder="Type package name, or master SKU" chosen-result="nb.newOpportunity.properties.product.text" chosen-result-object="nb.chosenProductObject")
 
         inline-search.all-product-search(ng-if="nb.newOpportunity.properties.distributionType.type === 'other'" type="product" placeholder="Type brand, package name, or master SKU" chosen-result="nb.newOpportunity.properties.product.text")
 
@@ -50,9 +50,9 @@ div.modal.add-opportunity
       .dropdown-filter.half-width
         .dropdown.short
           md-select.left(ng-model="nb.newOpportunity.properties.impact.enum" aria-label="impact dropdown" placeholder="Select Impact" required)
-            md-option(aria-label="High Impact" value="HIGH") <span class="impact-text">High</span> <img class="impact-icon" src="./assets/img/icons/impact-high.svg">
-            md-option(aria-label="Medium Impact form" value="MEDIUM") <span class="impact-text">Medium</span> <img class="impact-icon" src="./assets/img/icons/impact-medium.svg">
-            md-option(aria-label="Low Impact" value="LOW") <span class="impact-text">Low</span> <img class="impact-icon" src="./assets/img/icons/impact-low.svg">
+            md-option(aria-label="High Impact" value="H") <span class="impact-text">High</span> <img class="impact-icon" src="./assets/img/icons/impact-high.svg">
+            md-option(aria-label="Medium Impact form" value="M") <span class="impact-text">Medium</span> <img class="impact-icon" src="./assets/img/icons/impact-medium.svg">
+            md-option(aria-label="Low Impact" value="L") <span class="impact-text">Low</span> <img class="impact-icon" src="./assets/img/icons/impact-low.svg">
     div.modal-input
       button(type="submit" ng-click="nb.addAnotherOpportunity(nb.newOpportunity)").modal-input.icon-container.add-another-opportunity
         img(src="../assets/img/icons/overview-overall-market.svg")
