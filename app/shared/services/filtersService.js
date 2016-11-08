@@ -73,30 +73,40 @@ module.exports = /*  @ngInject */
       ],
       depletionsTimePeriod: {
         month: [{
-          name: 'CMTH'
+          name: 'CMTH',
+          displayValue: 'Clo Mth'
         }, {
-          name: 'CYTM'
+          name: 'CYTM',
+          displayValue: 'CYTM'
         }, {
-          name: 'FYTM'
+          name: 'FYTM',
+          displayValue: 'FYTM'
         }],
         year: [{
-          name: 'MTD'
+          name: 'MTD',
+          displayValue: 'MTD'
         }, {
-          name: 'CYTD'
+          name: 'CYTD',
+          displayValue: 'CYTD'
         }, {
-          name: 'FYTD'
+          name: 'FYTD',
+          displayValue: 'FYTD'
         }]
       },
       distributionTimePeriod: {
         year: [{
-          name: 'L60'
+          name: 'L60',
+          displayValue: 'L60'
         }, {
-          name: 'L90'
+          name: 'L90',
+          displayValue: 'L90'
         }, {
-          name: 'L120'
+          name: 'L120',
+          displayValue: 'L120'
         }],
         month: [{
-          name: 'L03'
+          name: 'L03',
+          displayValue: 'L03'
         }]
       },
       accountSelected: {

@@ -11,21 +11,8 @@ module.exports = /*  @ngInject */
     var vm = this;
     vm.depletionSelect;
     vm.depletionRadio;
-    vm.depletionSelectOptions = {
-      month: [{
-        name: 'CMTH'
-      }, {
-        name: 'CYTM'
-      }, {
-        name: 'FYTM'
-      }],
-      year: [{
-        name: 'MTD'
-      }, {
-        name: 'CYTD'
-      }, {
-        name: 'FYTD'
-      }]
+    vm.distributionSelectOptions = {
+      selected: ''
     };
     vm.distributionRadioOptions = {
       placementType: [{
@@ -38,13 +25,6 @@ module.exports = /*  @ngInject */
       }, {
         name: 'On Premise'
       }],
-      selected: {}
-    };
-    vm.distributionSelectOptions = {
-      year: [{name: 'Last 60 Days', value: 'L60'},
-      {name: 'Last 90 Days', value: 'L90'},
-      {name: 'Last 120 Days', value: 'L120'}],
-      month: [{name: 'Last 3 Months', value: 'L03'}],
       selected: {}
     };
     vm.totalRowTemplate = {
@@ -88,8 +68,8 @@ module.exports = /*  @ngInject */
     // **************
 
     function updateEndingTimePeriod(value) {
-      vm.distributionSelectOptions.selected = vm.distributionSelectOptions[value][0].value;
-      vm.depletionSelect = vm.depletionSelectOptions[value][0].name;
+      vm.distributionSelectOptions.selected = vm.filtersService.model.distributionTimePeriod[value][0].name;
+      vm.depletionSelect = vm.filtersService.model.depletionsTimePeriod[value][0].name;
       updatedSelectionValuesInFilter(value, vm.depletionSelect, vm.distributionSelectOptions.selected);
     }
 
@@ -158,12 +138,12 @@ module.exports = /*  @ngInject */
         // depletions
         vm.depletionRadio = 'year';
         vm.depletionSelect = 'FYTD';
+        vm.distributionSelectOptions.selected = vm.filtersService.model.distributionTimePeriod[vm.depletionRadio][0].name;
         updateTotalRowDepletions();
 
         // distribution
         vm.distributionRadioOptions.selected.placementType = 'Simple';
         vm.distributionRadioOptions.selected.onOffPremise = 'Off Premise';
-        vm.distributionSelectOptions.selected = vm.distributionSelectOptions[vm.depletionRadio][0].value;
         updatedSelectionValuesInFilter(vm.depletionRadio, vm.depletionSelect, vm.distributionSelectOptions.selected);
 
         updateTotalRowDistributions();

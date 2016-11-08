@@ -11,11 +11,11 @@ div.my-scorecards
       div.dropdown
         label Depletions Time Period
         md-select(ng-model="s.depletionSelect" md-on-close="s.changeDepletionScorecard(false)" aria-label="Depletion Select")
-          md-option(ng-repeat="filter in s.depletionSelectOptions[s.depletionRadio]" aria-label="{{filter.name}}" value="{{filter.name}}" ng-click="s.changeDepletionOption(filter.name)") {{filter.name}}
+          md-option(ng-repeat="filter in s.filtersService.model.depletionsTimePeriod[s.depletionRadio]" aria-label="{{filter.name}}" ng-value="filter.name" ng-click="s.changeDepletionOption(filter.name)") {{filter.displayValue}}
       div.dropdown
         label Distribution Time Period
-        md-select(ng-model="s.distributionSelectOptions.selected" placeholder="{{s.distributionSelectOptions.values[0].name}}")
-          md-option(ng-repeat="filter in s.distributionSelectOptions[s.depletionRadio]" aria-label="{{filter.name}}" value="{{filter.value}}" ng-click="s.changeDistirbutionTimePeriod(filter.value)") {{filter.name}}
+        md-select(ng-model="s.distributionSelectOptions.selected" aria-label="Distirbution Select")
+          md-option(ng-repeat="filter in s.filtersService.model.distributionTimePeriod[s.depletionRadio]" aria-label="{{filter.name}}" ng-value="filter.name" ng-click="s.changeDistirbutionTimePeriod(filter.name)") {{filter.displayValue}}
 
   section.depeletions-scorecard
     div.scorecard-header.clearfix

@@ -37,12 +37,12 @@ notes
         div(column='6').dropdown
           label Depletions Time Period
           md-select(ng-model="a.filterModel.depletionsTimePeriod" md-on-open="a.openSelect(true)" md-on-close="a.openSelect(false)" aria-label="Select a depletion time period")
-            md-option(ng-repeat="filter in a.filtersService.model.depletionsTimePeriod[a.filterModel.endingTimePeriod] track by $index" aria-label="{{filter.name}}" ng-value="filter.name") {{filter.name}}
+            md-option(ng-repeat="filter in a.filtersService.model.depletionsTimePeriod[a.filterModel.endingTimePeriod] track by $index" aria-label="{{filter.name}}" ng-value="filter.name") {{filter.displayValue}}
         div(column='6').dropdown
           label Distribution Time Period
           md-select(ng-model="a.filterModel.distributionTimePeriod" md-on-open="a.openSelect(true)" md-on-close="a.openSelect(false)" aria-label="Select a distribution time period")
             md-option(ng-repeat="filter in a.filtersService.model.distributionTimePeriod[a.filterModel.endingTimePeriod]" aria-label="{{filter.name}}" value="{{filter.name}}")
-              <span>{{a.filterModel.endingTimePeriod === 'month'? filter.name + ' Month' : filter.name + ' Days'}}</span>
+              <span>{{a.filterModel.endingTimePeriod === 'month'? filter.displayValue + ' Month' : filter.displayValue + ' Days'}}</span>
 
 .filters(column='12')
   div(row)
