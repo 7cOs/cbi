@@ -1,6 +1,5 @@
 describe('Unit: accountsController', function() {
   var scope, ctrl, $state, $q, filtersService, userService, packageSkuData, brandSpy;
-
   beforeEach(function() {
     // Get Mock Modules
     angular.mock.module('ui.router');
@@ -11,13 +10,13 @@ describe('Unit: accountsController', function() {
     inject(function($rootScope, $controller, _$state_, _$q_, _filtersService_, _userService_) {
       // Create scope
       scope = $rootScope.$new();
+
       // Get Required Services
       $state = _$state_;
       $q = _$q_;
       // chipsService = _chipsService_;
       filtersService = _filtersService_;
       userService = _userService_;
-
       packageSkuData = {
         performance: [
           {
@@ -44,7 +43,6 @@ describe('Unit: accountsController', function() {
       spyOn(userService, 'getPerformanceSummary').and.returnValue(fakePromise);
       brandSpy = spyOn(userService, 'getPerformanceBrand');
       brandSpy.and.returnValue($q.when(packageSkuData));
-
       // Create Controller
       ctrl = $controller('accountsController', {$scope: scope});
       scope.$digest();
@@ -175,124 +173,12 @@ describe('Unit: accountsController', function() {
   });
 
   describe('[Method] updateBrandSnapshot', function() {
-    beforeEach(function() {
-<<<<<<< e74c28c060506183bf2ac5baab7f0eaa9e74395c
-<<<<<<< c99f184f886656777b3c6a054d99e6d0364ae259
-      spyOn(userService, 'getPerformanceBrand').and.callFake(function() {
-        var deferred = $q.defer();
-        return deferred.promise;
-      });
+    beforeEach(function () {
+      brandSpy.calls.reset();
       spyOn(filtersService, 'getAppliedFilters').and.callThrough();
-=======
->>>>>>> Working spec file
     });
 
     it('Should get applied filters from filter service', function() {
-      /* ctrl.brandTabs.brands = {
-        'type': 'Brand',
-        'id': '416',
-        'name': 'MODELO ESPECIAL',
-        'measures': [{
-          'timeframe': 'MTD',
-          'depletions': 169216.3238,
-          'depletionsTrend': -4.467688039055397,
-          'depletionsBU': null,
-          'depletionsBUTrend': null,
-          'plan': 397461.5977
-        }, {
-          'timeframe': 'CYTD',
-          'depletions': 2800898.6819,
-          'depletionsTrend': 3.430630640080394,
-          'depletionsBU': null,
-          'depletionsBUTrend': null,
-          'plan': 7314905.1623
-        }, {
-          'timeframe': 'FYTD',
-          'depletions': 2226380.265,
-          'depletionsTrend': 0.5947959229454935,
-          'depletionsBU': null,
-          'depletionsBUTrend': null,
-          'plan': 6742588.7227
-        }, {
-          'timeframe': 'CMTH',
-          'depletions': 469085.2109,
-          'depletionsTrend': -3.971677256660469,
-          'depletionsBU': null,
-          'depletionsBUTrend': null,
-          'plan': 1319983.9654
-        }, {
-          'timeframe': 'CYTM',
-          'depletions': 2631682.3581,
-          'depletionsTrend': 3.9834168904068137,
-          'depletionsBU': null,
-          'depletionsBUTrend': null,
-          'plan': 7886888.9828
-        }, {
-          'timeframe': 'FYTM',
-          'depletions': 2057163.9412,
-          'depletionsTrend': 1.0352082494789154,
-          'depletionsBU': null,
-          'depletionsBUTrend': null,
-          'plan': 5884445.6922
-        }, {
-          'timeframe': 'L60',
-          'distributionsSimple': 10924,
-          'distributionsSimpleTrend': -8.639290792004683,
-          'distributionsSimpleBU': null,
-          'distributionsSimpleBUTrend': null,
-          'distributionsEffective': 31424,
-          'distributionsEffectiveTrend': -6.709416933855837,
-          'distributionsEffectiveBU': null,
-          'distributionsEffectiveBUTrend': null,
-          'velocity': 4614.1987,
-          'velocityTrend': null,
-          'planSimple': 12716,
-          'planEffective': 38601
-        }, {
-          'timeframe': 'L90',
-          'distributionsSimple': 11259,
-          'distributionsSimpleTrend': -9.493569131832798,
-          'distributionsSimpleBU': null,
-          'distributionsSimpleBUTrend': null,
-          'distributionsEffective': 33545,
-          'distributionsEffectiveTrend': -6.720983260107892,
-          'distributionsEffectiveBU': null,
-          'distributionsEffectiveBUTrend': null,
-          'velocity': 9882.9284,
-          'velocityTrend': null,
-          'planSimple': 12716,
-          'planEffective': 38601
-        }, {
-          'timeframe': 'L120',
-          'distributionsSimple': 11666,
-          'distributionsSimpleTrend': -10.56424409690279,
-          'distributionsSimpleBU': null,
-          'distributionsSimpleBUTrend': null,
-          'distributionsEffective': 35557,
-          'distributionsEffectiveTrend': -6.4904667981591055,
-          'distributionsEffectiveBU': null,
-          'distributionsEffectiveBUTrend': null,
-          'velocity': 23128.6564,
-          'velocityTrend': null,
-          'planSimple': 12716,
-          'planEffective': 38601
-        }, {
-          'timeframe': 'L03',
-          'distributionsSimple': 11436,
-          'distributionsSimpleTrend': -8.62895493767977,
-          'distributionsSimpleBU': null,
-          'distributionsSimpleBUTrend': null,
-          'distributionsEffective': 34160,
-          'distributionsEffectiveTrend': -4.655576643965613,
-          'distributionsEffectiveBU': null,
-          'distributionsEffectiveBUTrend': null,
-          'velocity': 7869.0204,
-          'velocityTrend': null,
-          'planSimple': 12716,
-          'planEffective': 38601
-        }
-      ]}; leaving this in for unit tests that need brands. */
-
       expect(filtersService.getAppliedFilters).not.toHaveBeenCalled();
       expect(filtersService.getAppliedFilters.calls.count()).toEqual(0);
 
@@ -300,24 +186,18 @@ describe('Unit: accountsController', function() {
 
       expect(filtersService.getAppliedFilters).toHaveBeenCalledWith('brandSnapshot');
       expect(filtersService.getAppliedFilters.calls.count()).toEqual(1);
-=======
-      brandSpy.calls.reset();
-    });
-
-    it('Should do nothing if there are brands', function() {
-      ctrl.updateBrandSnapshot();
-      scope.$digest();
-      expect(userService.getPerformanceBrand).not.toHaveBeenCalled();
-      expect(userService.getPerformanceBrand.calls.count()).toEqual(0);
->>>>>>> Stable commit with all specs working
     });
 
     it('Should call userService.getPerformanceBrand if there are no brands', function() {
       ctrl.brandTabs.brands = [];
+
+      expect(userService.getPerformanceBrand).not.toHaveBeenCalled();
+      expect(userService.getPerformanceBrand.calls.count()).toEqual(0);
+
       ctrl.updateBrandSnapshot();
-      scope.$digest();
+
+      expect(userService.getPerformanceBrand).toHaveBeenCalled();
       expect(userService.getPerformanceBrand.calls.count()).toEqual(1);
-      expect(ctrl.brandTabs.brands).toEqual(packageSkuData.performance);
     });
 
   });
@@ -343,42 +223,6 @@ describe('Unit: accountsController', function() {
       ctrl.apply(false);
 
       expect(ctrl.disableApply).toEqual(false);
-    });
-  });
-
-  describe('Navigate to Package/SKU view', function() {
-    var widget = null, item, parent, parentIndex;
-    beforeEach(function() {
-      userService.model.currentUser.employeeID = 1;
-      widget = 'brands';
-      item = {
-        'type': 'Brand',
-        'id': '416',
-        'name': 'MODELO ESPECIAL',
-        'measures': []
-      };
-      parent = {
-        'brands': [],
-        'skus': []
-      };
-      parentIndex = 0;
-<<<<<<< e74c28c060506183bf2ac5baab7f0eaa9e74395c
-    });
-
-<<<<<<< c99f184f886656777b3c6a054d99e6d0364ae259
-=======
-    afterEach(function() {
-=======
-      brandSpy.calls.reset();
->>>>>>> Stable commit with all specs working
-    });
-
->>>>>>> Working spec file
-    it('Should get SKU/Packages for selected brand', function() {
-      ctrl.selectItem(widget, item, parent, parentIndex);
-      scope.$digest();
-      expect(userService.getPerformanceBrand).toHaveBeenCalled();
-      expect(ctrl.brandTabs.skus[0]).toEqual(packageSkuData.performance[0]);
     });
   });
 
@@ -508,9 +352,6 @@ describe('Unit: accountsController', function() {
       }
     ];
 
-    beforeEach(function() {
-    });
-
     it('Should get correct YA% trend values for depletion and distirbution period', function() {
       ctrl.filterModel.depletionsTimePeriod = 'FYTD';
       var currentTrendVal = ctrl.getTrendValues(measuresArr, 'depletions', 'depletionsTimePeriod');
@@ -562,6 +403,34 @@ describe('Unit: accountsController', function() {
       ctrl.filterModel.distributionTimePeriod = 'L120';
       currentTrendVal = ctrl.getTrendValues(measuresArr, 'distributionsSimple', 'distributionTimePeriod');
       expect(currentTrendVal.displayValue).toEqual('-8.3%');
+    });
+  });
+
+  describe('Navigate to Package/SKU view', function () {
+    var widget = null, item, parent, parentIndex;
+
+    beforeEach(function () {
+      userService.model.currentUser.employeeID = 1;
+      widget = 'brands';
+      item = {
+        'type': 'Brand',
+        'id': '416',
+        'name': 'MODELO ESPECIAL',
+        'measures': []
+      };
+      parent = {
+        'brands': [],
+        'skus': []
+      };
+      parentIndex = 0;
+      brandSpy.calls.reset();
+    });
+
+    it('Should get SKU/Packages for selected brand', function () {
+      ctrl.selectItem(widget, item, parent, parentIndex);
+      scope.$digest();
+      expect(userService.getPerformanceBrand).toHaveBeenCalled();
+      expect(ctrl.brandTabs.skus[0]).toEqual(packageSkuData.performance[0]);
     });
   });
 });

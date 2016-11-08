@@ -342,8 +342,8 @@ module.exports = /*  @ngInject */
           nextTab(widget);
           $timeout(function () {
             vm.loadingBrandSnapshot = false;
-            console.log('Sub brands');
-            console.log(data.performance);
+            // console.log('Sub brands');
+            // console.log(data.performance);
           }, 500);
         });
       }
@@ -449,7 +449,6 @@ module.exports = /*  @ngInject */
     }
 
     function getTrendValues(measures, measureType, timePeriod) {
-      console.log(measures, measureType, timePeriod);
       var currentTrendVal = {
         value: null,
         displayValue: ''
