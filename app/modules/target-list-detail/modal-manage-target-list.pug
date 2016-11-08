@@ -4,10 +4,10 @@ div.modal.target-list-modal
     h4 Manage Target List
     a.hide-row(ng-click="tld.closeModal()")
   div.modal-form
-    div.modal-input
+    div(ng-hide="tld.targetListService.model.currentList.permissionLevel !== 'author'").modal-input
       label name
       input(ng-model="tld.targetListService.model.currentList.name" ng-change="tld.listChanged()")
-    div.modal-input
+    div(ng-hide="tld.targetListService.model.currentList.permissionLevel !== 'author'").modal-input
       label Description (optional)
       textarea(ng-model="tld.targetListService.model.currentList.description" ng-change="tld.listChanged()")
     div.modal-input
@@ -31,13 +31,21 @@ div.modal.target-list-modal
             md-menu-content.collaborator-options
               md-menu-item(ng-click="tld.makeOwner(pending.employee.employeeId)") Make Owner
               md-menu-item(ng-click="tld.removeCollaborator(pending.employee.employeeId)") Remove
-    div.modal-input.clearfix
+    div(ng-hide="tld.targetListService.model.currentList.permissionLevel === 'collaborate'").modal-input.clearfix
       md-checkbox(ng-model="tld.collaborator.permissionLevel" ng-true-value="'collaborateandinvite'" ng-false-value="'collaborate'" ng-click="tld.changeCollaboratorLevel()") Allow Collaborators to invite others
-    div.modal-input
+    div(ng-hide="tld.targetListService.model.currentList.permissionLevel === 'collaborate'").modal-input
       label Add Recipient
       inline-search(type="user" placeholder="Enter names or CBI Email addresses" chosen-result="tld.collaboratorName" callback="tld.addCollaboratorClick(result)")
-    button(ng-disabled="!tld.changed" ng-click="tld.updateList()" analytics-on="click" analytics-event="Share Target List").btn-action Save
-    p.cancel.accent(ng-click="tld.closeModal()") X Cancel
+    button(ng-if="tld.targetListService.model.currentList.permissionLevel !== 'collaborate'" ng-disabled="!tld.changed" ng-click="tld.updateList()" analytics-on="click" analytics-event="Share Target List").btn-action Save
+    button(ng-if="tld.targetListService.model.currentList.permissionLevel === 'collaborate'" ng-click="tld.closeModal()").btn-action Close
+    p.cancel.accent(ng-hide="tld.targetListService.model.currentList.permissionLevel === 'collaborate'" ng-click="tld.closeModal()") X Cancel
+  div.modal-footer.clearfix(ng-if="tld.targetListService.model.currentList.permissionLevel !== 'author'" ng-class="{'toasted': tld.showToast}")
+    button.link.align-left(ng-disabled="tld.leave" ng-click="tld.footerToast('leave')") Leave List
+    .toast(ng-hide="!tld.showToast")
+      p Are you sure you want to leave this target list?
+      p.bold.link(ng-if="!tld.confirmToast")
+        a(ng-click="tld.removeCollaborator(tld.userService.model.currentUser.employeeID); tld.removeFooterToast()") Yes, Leave
+      a.hide-row(ng-click="tld.removeFooterToast(); tld.leave = false")
   div.modal-footer.clearfix(ng-if="tld.editable" ng-class="{'toasted': tld.showToast}")
     button.link.align-left(ng-click="tld.footerToast('archive')") Archive List
     button.link.align-right(ng-click="tld.footerToast('delete')" ng-disabled="tld.targetListService.model.currentList.collaborators.length > 1 || tld.pendingShares.length > 0") Delete List
