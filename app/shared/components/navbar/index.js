@@ -88,6 +88,7 @@ function NavbarController($rootScope, $scope, $state, $window, $mdPanel, $mdDial
   $scope.$watch(function() { return toastService.model; }, function(newVal) {
     vm.archived = newVal.archived;
     vm.deleted = newVal.deleted;
+    vm.added = newVal.added;
     vm.copied = newVal.copied;
     vm.deleteError = newVal.deleteError;
     vm.multipleTargetListsSelected = newVal.multipleTargetListsSelected;
@@ -199,6 +200,7 @@ function NavbarController($rootScope, $scope, $state, $window, $mdPanel, $mdDial
         if (targetList) {
           addToTargetList(targetList, result);
         }
+        toastService.showToast('added');
       });
 
     return true;

@@ -7,6 +7,7 @@ module.exports = /*  @ngInject */
       archived: false,
       deleted: false,
       copied: false,
+      added: false,
       deleteError: false,
       multipleTargetListsSelected: false
     };
