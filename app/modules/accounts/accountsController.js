@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports = /*  @ngInject */
-  function accountsController($rootScope, $scope, $state, $log, $q, $window, $filter, myperformanceService, chipsService, filtersService, userService) {
+  function accountsController($rootScope, $scope, $state, $log, $q, $window, $filter, myperformanceService, chipsService, filtersService, userService, $timeout) {
 
     // ****************
     // CONTROLLER SETUP
@@ -17,6 +17,12 @@ module.exports = /*  @ngInject */
     vm.chipsService = chipsService;
     vm.filtersService = filtersService;
     vm.userService = userService;
+
+    vm.accountBrandEnum = {
+      'distirbutionSimple': 1,
+      'distirbutionEffective': 2,
+      'velocity': 3
+    };
 
     vm.filters = {
       placementType: [{
@@ -40,8 +46,11 @@ module.exports = /*  @ngInject */
         name: 'Distribution (simple)',
         value: 1
       }, {
-        name: 'Velocity',
+        name: 'Distribution (effective)',
         value: 2
+      }, {
+        name: 'Velocity',
+        value: 3
       }],
       accountMarkets: [{
         name: 'Depletions'
@@ -78,9 +87,13 @@ module.exports = /*  @ngInject */
     };
 
     var trendPropertyNames = {
-      'distributions': [
-        'planDistirbutionSimpleTrend',
-        'distributionsSimpleTrend'
+      'distributionsSimple': [
+        'distributionsSimpleTrend',
+        'planDistirbutionSimpleTrend'
+      ],
+      'distributionsEffective': [
+        'distributionsEffectiveTrend',
+        'planDistirbutionEffectiveTrend'
       ],
       'depletions': [
         'depletionsTrend',
@@ -181,9 +194,10 @@ module.exports = /*  @ngInject */
     // Expose public methods
     vm.apply = apply;
     vm.brandTotal = brandTotal;
+    vm.removeOptionsBasedOnView = removeOptionsBasedOnView;
     vm.displayBrandValue = displayBrandValue;
     vm.goToOpportunities = goToOpportunities;
-    vm.isPositive = isPositive;
+    vm.getClassBasedOnValue = getClassBasedOnValue;
     vm.openNotes = openNotes;
     vm.openSelect = openSelect;
     vm.placeholderSelect = placeholderSelect;
@@ -196,6 +210,7 @@ module.exports = /*  @ngInject */
     vm.updateDistributionTimePeriod = updateDistributionTimePeriod;
     vm.updateTopBottom = updateTopBottom;
     vm.getTrendValues = getTrendValues;
+    vm.isPackageView = false;
 
     init();
 
@@ -235,6 +250,16 @@ module.exports = /*  @ngInject */
       }
     }
 
+    function removeOptionsBasedOnView(accountBrandObj) {
+      var isOptionHidden = false;
+      if (accountBrandObj.value === 1 && vm.brandSelectedIndex === 1) {
+        isOptionHidden = true;
+      } else if (accountBrandObj.value === 2 && vm.brandSelectedIndex === 0) {
+        isOptionHidden = true;
+      }
+      return isOptionHidden;
+    }
+
     /*
     ** @param {Array} brandMeasures - array of measures for a brand
     ** @param {String} property - property to fetch from object depletions, depletionsTrend
@@ -258,13 +283,17 @@ module.exports = /*  @ngInject */
     }
 
     // Check if sales data value is positive (for display in UI)
-    function isPositive(salesData) {
-      if (salesData >= 0) {
-        return true;
+    function getClassBasedOnValue(salesData) {
+      var classToBeAdded = '';
+      if (salesData && !isNaN(salesData)) {
+        if (salesData >= 0) {
+          classToBeAdded = 'positive';
+        } else {
+          classToBeAdded = 'negative';
+        }
       }
-      return false;
+      return classToBeAdded;
     }
-
     // Make notes available to the page
     function openNotes(val) {
       $rootScope.$broadcast('notes:opened', val);
@@ -286,6 +315,7 @@ module.exports = /*  @ngInject */
         vm.brandWidgetTitle = vm.brandWidgetTitleDefault;
         vm.brandIdSelected = null;
         vm.filterModel.brand = '';
+        vm.filtersService.model.accountSelected.accountBrands = vm.filters.accountBrands[0];
       }
     }
 
@@ -299,20 +329,23 @@ module.exports = /*  @ngInject */
     function selectItem(widget, item, parent, parentIndex) {
       var parentLength = Object.keys(parent).length;
 
-      vm.loadingBrandSnapshot = true;
-      vm.filterModel.brand = item.id;
-      userService.getPerformanceBrand({premiseType: filtersService.model.selected.premiseType, brand: item.id}).then(function(data) {
-        vm.brandTabs.skus = data.performance;
-        vm.loadingBrandSnapshot = false;
-      });
-
       if (parentIndex + 1 === parentLength) {
         // We're on the deepest level of current tab list
         if (widget === 'brands') { setSelected(item.name, 'brands'); }
         if (widget === 'markets') { setSelected(item.label, 'markets'); }
       } else {
         if (widget === 'brands') { vm.brandWidgetTitle = item.name; }
-        nextTab(widget);
+        vm.loadingBrandSnapshot = true;
+        vm.filterModel.brand = item.id;
+        userService.getPerformanceBrand({premiseType: filtersService.model.selected.premiseType, brand: item.id}).then(function(data) {
+          vm.brandTabs.skus = data.performance;
+          nextTab(widget);
+          $timeout(function () {
+            vm.loadingBrandSnapshot = false;
+            // console.log('Sub brands');
+            // console.log(data.performance);
+          }, 500);
+        });
       }
       if (widget === 'markets') { getActiveTab(); }
     }
@@ -385,13 +418,17 @@ module.exports = /*  @ngInject */
     // Move to next indexed tab
     function nextTab(widget) {
       vm.disableAnimation = false;
-      if (widget === 'brands') { vm.brandSelectedIndex = vm.brandSelectedIndex + 1; }
+      if (widget === 'brands') {
+        vm.brandSelectedIndex = vm.brandSelectedIndex + 1;
+        vm.filtersService.model.accountSelected.accountBrands = vm.filters.accountBrands[1];
+      }
       if (widget === 'markets') { vm.marketSelectedIndex = vm.marketSelectedIndex + 1; }
     }
 
     function init() {
       // reset all chips and filters on page init
       vm.filterModel.trend = vm.filtersService.model.trend[0];
+      vm.filtersService.model.accountSelected.accountBrands = vm.filters.accountBrands[0];
       setDefaultEndingPeriodOptions();
       chipsService.resetChipsFilters(chipsService.model);
 
@@ -407,7 +444,6 @@ module.exports = /*  @ngInject */
         userService.model.depletion = data[1];
         userService.model.distribution = data[2];
         vm.brandTabs.brands = data[3].performance;
-
         vm.loadingBrandSnapshot = false;
       });
     }

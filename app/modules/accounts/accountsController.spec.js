@@ -1,7 +1,5 @@
 describe('Unit: accountsController', function() {
-  var scope, ctrl, $state, $q, filtersService, userService;
-  // function accountsController($rootScope, $scope, $state, $log, $q, $window, $filter, chipsService, filtersService, userService) {
-
+  var scope, ctrl, $state, $q, filtersService, userService, packageSkuData, brandSpy;
   beforeEach(function() {
     // Get Mock Modules
     angular.mock.module('ui.router');
@@ -19,9 +17,35 @@ describe('Unit: accountsController', function() {
       // chipsService = _chipsService_;
       filtersService = _filtersService_;
       userService = _userService_;
+      packageSkuData = {
+        performance: [
+          {
+            'type': 'Package/SKU',
+            'id': '80013993',
+            'name': 'MODELO ESP 24OZ BT',
+            'measures': [
+              {
+                'timeframe': 'MTD',
+                'depletions': 2786.4,
+                'depletionsTrend': -11.475409836065568,
+                'depletionsBU': null,
+                'depletionsBUTrend': null,
+                'plan': 6544.8
+              }
+            ]
+          }
+        ]
+      };
 
+      var fakePromise = $q.when();
+      spyOn(userService, 'getPerformanceDepletion').and.returnValue(fakePromise);
+      spyOn(userService, 'getPerformanceDistribution').and.returnValue(fakePromise);
+      spyOn(userService, 'getPerformanceSummary').and.returnValue(fakePromise);
+      brandSpy = spyOn(userService, 'getPerformanceBrand');
+      brandSpy.and.returnValue($q.when(packageSkuData));
       // Create Controller
       ctrl = $controller('accountsController', {$scope: scope});
+      scope.$digest();
     });
   });
 
@@ -55,7 +79,7 @@ describe('Unit: accountsController', function() {
       expect(ctrl.accountTypesDefault).toEqual('Distributors');
       expect(ctrl.brandWidgetTitleDefault).toEqual('All Brands');
       expect(ctrl.brandWidgetTitle).toEqual(ctrl.brandWidgetTitleDefault);
-      expect(ctrl.filtersService.model.accountSelected.accountBrands).toEqual('Distribution (simple)');
+      expect(ctrl.filtersService.model.accountSelected.accountBrands).toEqual({ name: 'Distribution (simple)', value: 1 });
       expect(ctrl.filtersService.model.accountSelected.accountMarkets).toEqual('Depletions');
       expect(ctrl.selectOpen).toEqual(false);
       expect(ctrl.disableAnimation).toEqual(false);
@@ -66,7 +90,7 @@ describe('Unit: accountsController', function() {
       expect(ctrl.overviewOpen).toEqual(false);
       expect(ctrl.idSelected).toEqual(null);
       expect(ctrl.brandIdSelected).toEqual(null);
-      expect(ctrl.loadingBrandSnapshot).toEqual(true);
+      expect(ctrl.loadingBrandSnapshot).toEqual(false);
     });
 
     it('Should expose controller methods', function() {
@@ -76,11 +100,14 @@ describe('Unit: accountsController', function() {
       expect(ctrl.displayBrandValue).not.toBeUndefined();
       expect(typeof (ctrl.displayBrandValue)).toEqual('function');
 
+      expect(ctrl.getTrendValues).not.toBeUndefined();
+      expect(typeof (ctrl.getTrendValues)).toEqual('function');
+
       expect(ctrl.goToOpportunities).not.toBeUndefined();
       expect(typeof (ctrl.goToOpportunities)).toEqual('function');
 
-      expect(ctrl.isPositive).not.toBeUndefined();
-      expect(typeof (ctrl.isPositive)).toEqual('function');
+      expect(ctrl.getClassBasedOnValue).not.toBeUndefined();
+      expect(typeof (ctrl.getClassBasedOnValue)).toEqual('function');
 
       expect(ctrl.openSelect).not.toBeUndefined();
       expect(typeof (ctrl.openSelect)).toEqual('function');
@@ -146,120 +173,12 @@ describe('Unit: accountsController', function() {
   });
 
   describe('[Method] updateBrandSnapshot', function() {
-    beforeEach(function() {
-      spyOn(userService, 'getPerformanceBrand').and.callFake(function() {
-        var deferred = $q.defer();
-        return deferred.promise;
-      });
+    beforeEach(function () {
+      brandSpy.calls.reset();
       spyOn(filtersService, 'getAppliedFilters').and.callThrough();
     });
 
     it('Should get applied filters from filter service', function() {
-      /* ctrl.brandTabs.brands = {
-        'type': 'Brand',
-        'id': '416',
-        'name': 'MODELO ESPECIAL',
-        'measures': [{
-          'timeframe': 'MTD',
-          'depletions': 169216.3238,
-          'depletionsTrend': -4.467688039055397,
-          'depletionsBU': null,
-          'depletionsBUTrend': null,
-          'plan': 397461.5977
-        }, {
-          'timeframe': 'CYTD',
-          'depletions': 2800898.6819,
-          'depletionsTrend': 3.430630640080394,
-          'depletionsBU': null,
-          'depletionsBUTrend': null,
-          'plan': 7314905.1623
-        }, {
-          'timeframe': 'FYTD',
-          'depletions': 2226380.265,
-          'depletionsTrend': 0.5947959229454935,
-          'depletionsBU': null,
-          'depletionsBUTrend': null,
-          'plan': 6742588.7227
-        }, {
-          'timeframe': 'CMTH',
-          'depletions': 469085.2109,
-          'depletionsTrend': -3.971677256660469,
-          'depletionsBU': null,
-          'depletionsBUTrend': null,
-          'plan': 1319983.9654
-        }, {
-          'timeframe': 'CYTM',
-          'depletions': 2631682.3581,
-          'depletionsTrend': 3.9834168904068137,
-          'depletionsBU': null,
-          'depletionsBUTrend': null,
-          'plan': 7886888.9828
-        }, {
-          'timeframe': 'FYTM',
-          'depletions': 2057163.9412,
-          'depletionsTrend': 1.0352082494789154,
-          'depletionsBU': null,
-          'depletionsBUTrend': null,
-          'plan': 5884445.6922
-        }, {
-          'timeframe': 'L60',
-          'distributionsSimple': 10924,
-          'distributionsSimpleTrend': -8.639290792004683,
-          'distributionsSimpleBU': null,
-          'distributionsSimpleBUTrend': null,
-          'distributionsEffective': 31424,
-          'distributionsEffectiveTrend': -6.709416933855837,
-          'distributionsEffectiveBU': null,
-          'distributionsEffectiveBUTrend': null,
-          'velocity': 4614.1987,
-          'velocityTrend': null,
-          'planSimple': 12716,
-          'planEffective': 38601
-        }, {
-          'timeframe': 'L90',
-          'distributionsSimple': 11259,
-          'distributionsSimpleTrend': -9.493569131832798,
-          'distributionsSimpleBU': null,
-          'distributionsSimpleBUTrend': null,
-          'distributionsEffective': 33545,
-          'distributionsEffectiveTrend': -6.720983260107892,
-          'distributionsEffectiveBU': null,
-          'distributionsEffectiveBUTrend': null,
-          'velocity': 9882.9284,
-          'velocityTrend': null,
-          'planSimple': 12716,
-          'planEffective': 38601
-        }, {
-          'timeframe': 'L120',
-          'distributionsSimple': 11666,
-          'distributionsSimpleTrend': -10.56424409690279,
-          'distributionsSimpleBU': null,
-          'distributionsSimpleBUTrend': null,
-          'distributionsEffective': 35557,
-          'distributionsEffectiveTrend': -6.4904667981591055,
-          'distributionsEffectiveBU': null,
-          'distributionsEffectiveBUTrend': null,
-          'velocity': 23128.6564,
-          'velocityTrend': null,
-          'planSimple': 12716,
-          'planEffective': 38601
-        }, {
-          'timeframe': 'L03',
-          'distributionsSimple': 11436,
-          'distributionsSimpleTrend': -8.62895493767977,
-          'distributionsSimpleBU': null,
-          'distributionsSimpleBUTrend': null,
-          'distributionsEffective': 34160,
-          'distributionsEffectiveTrend': -4.655576643965613,
-          'distributionsEffectiveBU': null,
-          'distributionsEffectiveBUTrend': null,
-          'velocity': 7869.0204,
-          'velocityTrend': null,
-          'planSimple': 12716,
-          'planEffective': 38601
-        }
-      ]}; leaving this in for unit tests that need brands. */
-
       expect(filtersService.getAppliedFilters).not.toHaveBeenCalled();
       expect(filtersService.getAppliedFilters.calls.count()).toEqual(0);
 
@@ -304,6 +223,229 @@ describe('Unit: accountsController', function() {
       ctrl.apply(false);
 
       expect(ctrl.disableApply).toEqual(false);
+    });
+  });
+
+  describe('YA and Plan Trend values', function() {
+    var measuresArr = [
+      {
+        'timeframe': 'MTD',
+        'depletions': 169216.3238,
+        'depletionsTrend': -4.467688039055397,
+        'depletionsBU': null,
+        'depletionsBUTrend': null,
+        'plan': 397461.5977,
+        'planDepletionTrend': -57.42574256753157
+      },
+      {
+        'timeframe': 'CYTD',
+        'depletions': 2800898.6819,
+        'depletionsTrend': 3.430630640080394,
+        'depletionsBU': null,
+        'depletionsBUTrend': null,
+        'plan': 7314905.1623,
+        'planDepletionTrend': -61.70970614444271
+      },
+      {
+        'timeframe': 'FYTD',
+        'depletions': 2226380.265,
+        'depletionsTrend': 0.5947959229454935,
+        'depletionsBU': null,
+        'depletionsBUTrend': null,
+        'plan': 6742588.7227,
+        'planDepletionTrend': -66.98033416298199
+      },
+      {
+        'timeframe': 'CMTH',
+        'depletions': 469085.2109,
+        'depletionsTrend': -3.971677256660469,
+        'depletionsBU': null,
+        'depletionsBUTrend': null,
+        'plan': 1319983.9654,
+        'planDepletionTrend': -64.46280991316048
+      },
+      {
+        'timeframe': 'CYTM',
+        'depletions': 2631682.3581,
+        'depletionsTrend': 3.9834168904068137,
+        'depletionsBU': null,
+        'depletionsBUTrend': null,
+        'plan': 7886888.9828,
+        'planDepletionTrend': -66.63218711662782
+      },
+      {
+        'timeframe': 'FYTM',
+        'depletions': 2057163.9412,
+        'depletionsTrend': 1.0352082494789154,
+        'depletionsBU': null,
+        'depletionsBUTrend': null,
+        'plan': 5884445.6922,
+        'planDepletionTrend': -65.04065040608957
+      },
+      {
+        'timeframe': 'L60',
+        'distributionsSimple': 10924,
+        'distributionsSimpleTrend': -8.639290792004683,
+        'distributionsSimpleBU': null,
+        'distributionsSimpleBUTrend': null,
+        'distributionsEffective': 31424,
+        'distributionsEffectiveTrend': -6.709416933855837,
+        'distributionsEffectiveBU': null,
+        'distributionsEffectiveBUTrend': null,
+        'velocity': 4614.1987,
+        'velocityTrend': null,
+        'planSimple': 12716,
+        'planEffective': 38601,
+        'planDistirbutionSimpleTrend': -14.092481912551117,
+        'planDistirbutionEffectiveTrend': -71.70021502033626
+      },
+      {
+        'timeframe': 'L90',
+        'distributionsSimple': 11259,
+        'distributionsSimpleTrend': -9.493569131832798,
+        'distributionsSimpleBU': null,
+        'distributionsSimpleBUTrend': null,
+        'distributionsEffective': 33545,
+        'distributionsEffectiveTrend': -6.720983260107892,
+        'distributionsEffectiveBU': null,
+        'distributionsEffectiveBUTrend': null,
+        'velocity': 9882.9284,
+        'velocityTrend': null,
+        'planSimple': 12716,
+        'planEffective': 38601,
+        'planDistirbutionSimpleTrend': -11.45800566215791,
+        'planDistirbutionEffectiveTrend': -70.83236185591046
+      },
+      {
+        'timeframe': 'L120',
+        'distributionsSimple': 11666,
+        'distributionsSimpleTrend': -10.56424409690279,
+        'distributionsSimpleBU': null,
+        'distributionsSimpleBUTrend': null,
+        'distributionsEffective': 35557,
+        'distributionsEffectiveTrend': -6.4904667981591055,
+        'distributionsEffectiveBU': null,
+        'distributionsEffectiveBUTrend': null,
+        'velocity': 23128.6564,
+        'velocityTrend': null,
+        'planSimple': 12716,
+        'planEffective': 38601,
+        'planDistirbutionSimpleTrend': -8.25731362063542,
+        'planDistirbutionEffectiveTrend': -69.77798502629466
+      },
+      {
+        'timeframe': 'L03',
+        'distributionsSimple': 11436,
+        'distributionsSimpleTrend': -8.62895493767977,
+        'distributionsSimpleBU': null,
+        'distributionsSimpleBUTrend': null,
+        'distributionsEffective': 34160,
+        'distributionsEffectiveTrend': -4.655576643965613,
+        'distributionsEffectiveBU': null,
+        'distributionsEffectiveBUTrend': null,
+        'velocity': 7869.0204,
+        'velocityTrend': null,
+        'planSimple': 12716,
+        'planEffective': 38601,
+        'planDistirbutionSimpleTrend': -10.066058508965083,
+        'planDistirbutionEffectiveTrend': -70.37382451231834
+      }
+    ];
+
+    it('Should get correct YA% trend values for depletion and distirbution period', function() {
+      ctrl.filterModel.depletionsTimePeriod = 'FYTD';
+      var currentTrendVal = ctrl.getTrendValues(measuresArr, 'depletions', 'depletionsTimePeriod');
+      expect(currentTrendVal.displayValue).toEqual('0.6%');
+
+      ctrl.filterModel.depletionsTimePeriod = 'CYTD';
+      currentTrendVal = ctrl.getTrendValues(measuresArr, 'depletions', 'depletionsTimePeriod');
+      expect(currentTrendVal.displayValue).toEqual('3.4%');
+
+      ctrl.filterModel.depletionsTimePeriod = 'CYTM';
+      currentTrendVal = ctrl.getTrendValues(measuresArr, 'depletions', 'depletionsTimePeriod');
+      expect(currentTrendVal.displayValue).toEqual('4.0%');
+
+      ctrl.filterModel.depletionsTimePeriod = 'CMTH';
+      currentTrendVal = ctrl.getTrendValues(measuresArr, 'depletions', 'depletionsTimePeriod');
+      expect(currentTrendVal.displayValue).toEqual('-4.0%');
+
+      ctrl.filterModel.distributionTimePeriod = 'L90';
+      currentTrendVal = ctrl.getTrendValues(measuresArr, 'distributionsSimple', 'distributionTimePeriod');
+      expect(currentTrendVal.displayValue).toEqual('-9.5%');
+
+      ctrl.filterModel.distributionTimePeriod = 'L120';
+      currentTrendVal = ctrl.getTrendValues(measuresArr, 'distributionsSimple', 'distributionTimePeriod');
+      expect(currentTrendVal.displayValue).toEqual('-10.6%');
+
+      // Negative tests
+      ctrl.filterModel.distributionTimePeriod = 'L120';
+      currentTrendVal = ctrl.getTrendValues(measuresArr, 'distributionsSimple', 'distributionTimePeriod');
+      expect(currentTrendVal.displayValue).not.toEqual('-10.56424409690279%');
+
+      ctrl.filterModel.distributionTimePeriod = 'L10000';
+      currentTrendVal = ctrl.getTrendValues(measuresArr, 'distributionsSimple', 'distributionTimePeriod');
+      expect(currentTrendVal.displayValue).toEqual('-');
+
+      ctrl.filterModel.distributionTimePeriod = 'L10000';
+      currentTrendVal = ctrl.getTrendValues(measuresArr, 'distributionsSimple', 'distributionTimePeriod');
+      expect(currentTrendVal.value).toBeUndefined();
+    });
+
+    it('Should perform correct calculations for ABP% values', function() {
+      ctrl.filterModel.trend = {
+        name: 'vs ABP',
+        value: 2
+      };
+      ctrl.filterModel.depletionsTimePeriod = 'FYTD';
+      var currentTrendVal = ctrl.getTrendValues(measuresArr, 'depletions', 'depletionsTimePeriod');
+      expect(currentTrendVal.displayValue).toEqual('-67.0%');
+
+      ctrl.filterModel.distributionTimePeriod = 'L120';
+      currentTrendVal = ctrl.getTrendValues(measuresArr, 'distributionsSimple', 'distributionTimePeriod');
+      expect(currentTrendVal.displayValue).toEqual('-8.3%');
+    });
+
+    it('Should return positive class', function() {
+      var result = ctrl.getClassBasedOnValue(23.5);
+      expect(result).toEqual('positive');
+    });
+
+    it('Should return negative class', function() {
+      var result = ctrl.getClassBasedOnValue(-23.5);
+      expect(result).toEqual('negative');
+    });
+
+    it('Should return empty string', function() {
+      var result = ctrl.getClassBasedOnValue(null);
+      expect(result).toEqual('');
+    });
+  });
+
+  describe('Navigate to Package/SKU view', function () {
+    var widget = null, item, parent, parentIndex;
+
+    beforeEach(function () {
+      userService.model.currentUser.employeeID = 1;
+      widget = 'brands';
+      item = {
+        'type': 'Brand',
+        'id': '416',
+        'name': 'MODELO ESPECIAL',
+        'measures': []
+      };
+      parent = {
+        'brands': [],
+        'skus': []
+      };
+      parentIndex = 0;
+      brandSpy.calls.reset();
+    });
+
+    it('Should get SKU/Packages for selected brand', function () {
+      ctrl.selectItem(widget, item, parent, parentIndex);
+      scope.$digest();
+      expect(userService.getPerformanceBrand).toHaveBeenCalled();
+      expect(ctrl.brandTabs.skus[0]).toEqual(packageSkuData.performance[0]);
     });
   });
 });

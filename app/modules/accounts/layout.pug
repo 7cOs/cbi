@@ -27,7 +27,7 @@ notes
     div.trend(column='2')
       label Trend
       md-radio-group(ng-model="a.filterModel.trend")
-        md-radio-button(ng-repeat="filter in a.filtersService.model.trend" ng-click="updatePlanType(filter.name)" class="md-primary" ng-value="filter" aria-label="Trend") {{filter.name}}
+        md-radio-button(ng-repeat="filter in a.filtersService.model.trend" class="md-primary" ng-value="filter" aria-label="Trend") {{filter.name}}
     div(column='3')
       label Ending Time Period
       md-radio-group(ng-model="a.filterModel.endingTimePeriod")
@@ -97,19 +97,19 @@ div(row)
       loader
     .widget-header
       .dropdown-filter
-        md-select(ng-model="a.filtersService.model.accountSelected.accountBrands" md-on-open="a.openSelect(true)" md-on-close="a.openSelect(false)" aria-label="Account Brands Filter" placeholder="Distribution (simple)")
-          md-option(ng-repeat="filter in a.filters.accountBrands" aria-label="{{filter.name}}" value="{{filter.name}}") {{filter.name}}
+        md-select(ng-model="a.filtersService.model.accountSelected.accountBrands" md-on-open="a.openSelect(true)" md-on-close="a.openSelect(false);" aria-label="Account Brands Filter" placeholder="Distribution (simple)")
+          md-option(ng-repeat="filter in a.filters.accountBrands" ng-if="!a.removeOptionsBasedOnView(filter)" aria-label="{{filter.name}}" ng-value="filter") {{filter.name}}
       span.back-chevron(ng-if="a.brandSelectedIndex === 1" ng-click="a.prevTab()")
       p.brands {{a.brandWidgetTitle || 'All Brands'}}
     .widget-content
       table.depletions-table(cellspacing="0" cellpadding="0")
         thead
           tr
-            th.top.title-col
+            th.top.title-col.brand-name-column
               p.accent.bold.left.single-line Brand / SKU
-            th(colspan=2).top.dark
+            th(colspan=2).top.dark.other-columns
               p.accent.bold Depletions
-            th(colspan=2).top
+            th(colspan=2).top.other-columns
               //- p.accent {{a.filtersService.model.accountSelected.accountBrands === 'Velocity' ? 'Velocity' : 'Distribution(s) - L90'}}
               p.accent Distribution(s) - {{a.filterModel.distributionTimePeriod}} Days
           tr
@@ -133,31 +133,44 @@ div(row)
             td.column-total(ng-if="a.filtersService.model.accountSelected.accountBrands === 'Velocity'") {{a.brandTotal('velocity', false) | number: 0}}
             td.column-total(ng-if="a.filtersService.model.accountSelected.accountBrands === 'Velocity'") <span class="percentage" ng-if="a.brandTotal('velocity', true)">{{a.brandTotal('velocity', true) | number:1}} %</span><span ng-if="!a.brandTotal('velocity', true)">-</span>
 
-      //-md-tabs(md-selected="a.brandSelectedIndex" ng-class="{'animate-disabled': a.disableAnimation}" md-autoselect md-dynamic-height)
-      //-div(ng-repeat="brand in a.userService.model.brandPerformance track by $index") {{brand.name}}
       md-tabs(md-selected="a.brandSelectedIndex" ng-class="{'animate-disabled': a.disableAnimation}" md-dynamic-height)
         //-md-tab(ng-repeat="brand in a.userService.model.brandPerformance track by $index" label="{{brand.name}}")
         md-tab(ng-repeat="(key, data) in a.brandTabs" label="{{key}}")
           table.depletions-table.fixed-layout(cellspacing="0" cellpadding="0")
             tbody
-              //-tr.clickable(ng-repeat="item in data" ng-click="a.selectItem('brands', item, a.brandTabs, $parent.$index)" ng-class="{selected: item.name === a.idSelected}")
               tr.clickable(ng-repeat="item in data | filter: {type: '!Total'} track by $index" ng-click="a.selectItem('brands', item, a.brandTabs, $parent.$index)" ng-class="{selected: item.name === a.idSelected}")
                 td.left.data-brand.title-col {{item.name}}
-                //- Depletion TDs
-                td(ng-class="{'negative': !a.isPositive(a.displayBrandValue(item.measures, 'depletions', 'depletionsTimePeriod'))}").dark.depletions-value {{a.displayBrandValue(item.measures, 'depletions', 'depletionsTimePeriod') | number:0 }}
+                //- Depletion TDs -
+                 Depletion value
+                //- Need to be checked if this class needs to be added  ng-class="a.getClassBasedOnValue(a.displayBrandValue(item.measures, 'depletions', 'depletionsTimePeriod'))"
+                td.dark.depletions-value {{a.displayBrandValue(item.measures, 'depletions', 'depletionsTimePeriod') | number:0 }}
 
-                //- TODO
-                td(ng-class="a.isPositive(a.getTrendValues(item.measures, 'depletions', 'depletionsTimePeriod').value) ? 'positive' : 'negative'") <span ng-bind="a.getTrendValues(item.measures, 'depletions', 'depletionsTimePeriod').displayValue"></span>
+                //- Depletion Trend
+                td(ng-class="a.getClassBasedOnValue(a.getTrendValues(item.measures, 'depletions', 'depletionsTimePeriod').value)") <span ng-bind="a.getTrendValues(item.measures, 'depletions', 'depletionsTimePeriod').displayValue"></span>
 
                 //- Velocity TDs
-                td(ng-class="{'negative': !a.isPositive(a.displayBrandValue(item.measures, 'velocity', 'distributionTimePeriod'))}" ng-if="a.filtersService.model.accountSelected.accountBrands === 'Velocity'") {{a.displayBrandValue(item.measures, 'velocity', 'distributionTimePeriod') | number:0 }}
-                td(ng-class="{'negative': !a.isPositive(a.displayBrandValue(item.measures, 'velocityTrend', 'distributionTimePeriod'))}" ng-if="a.filtersService.model.accountSelected.accountBrands === 'Velocity'") <span class="percentage" ng-if="a.displayBrandValue(item.measures, 'velocityTrend', 'distributionTimePeriod')">{{a.displayBrandValue(item.measures, 'velocityTrend', 'distributionTimePeriod') | number:1}} %</span><span ng-if="!a.displayBrandValue(item.measures, 'velocityTrend', 'distributionTimePeriod')">-</span>
+                //- Velocity value
+                //- Need to be checked if this class needs to be added
+                //- ng-class="a.getClassBasedOnValue(a.displayBrandValue(item.measures, 'velocity', 'distributionTimePeriod'))"
+                td(ng-if="a.filtersService.model.accountSelected.accountBrands.value === a.accountBrandEnum.velocity") {{a.displayBrandValue(item.measures, 'velocity', 'distributionTimePeriod') | number:0 }}
+
+                //- Velocity Trend
+                td(ng-if="a.filtersService.model.accountSelected.accountBrands.value === a.accountBrandEnum.velocity") <span class="percentage" ng-if="a.displayBrandValue(item.measures, 'velocityTrend', 'distributionTimePeriod')">{{a.displayBrandValue(item.measures, 'velocityTrend', 'distributionTimePeriod') | number:1}} %</span><span ng-if="!a.displayBrandValue(item.measures, 'velocityTrend', 'distributionTimePeriod')">-</span>
 
                 //- Distributions TDs
-                td(ng-class="{'negative': !a.isPositive(a.displayBrandValue(item.measures, 'distributionsSimple', 'distributionTimePeriod'))}" ng-if="a.filtersService.model.accountSelected.accountBrands !== 'Velocity'") {{a.displayBrandValue(item.measures, 'distributionsSimple', 'distributionTimePeriod') | number:0 }}
+                //- Distirbution value Simple
+                //- ng-class="a.getClassBasedOnValue(a.displayBrandValue(item.measures, 'distributionsSimple', 'distributionTimePeriod'))"
+                td(ng-if="a.filtersService.model.accountSelected.accountBrands.value === a.accountBrandEnum.distirbutionSimple") {{a.displayBrandValue(item.measures, 'distributionsSimple', 'distributionTimePeriod') | number:0 }}
 
-                //- TODO
-                td(ng-class="a.isPositive(a.getTrendValues(item.measures, 'distributions', 'distributionTimePeriod').value) ? 'positive' : 'negative'" ng-if="a.filtersService.model.accountSelected.accountBrands !== 'Velocity'") <span ng-bind="a.getTrendValues(item.measures, 'distributions', 'distributionTimePeriod').displayValue"></span>
+                //- Distirbution value Effective
+                //- ng-class="a.getClassBasedOnValue(a.displayBrandValue(item.measures, 'distributionsEffective', 'distributionTimePeriod'))"
+                td(ng-if="a.filtersService.model.accountSelected.accountBrands.value === a.accountBrandEnum.distirbutionEffective") {{a.displayBrandValue(item.measures, 'distributionsEffective', 'distributionTimePeriod') | number:0 }}
+
+                //- Distirbution Trend Simple
+                td(ng-class="a.getClassBasedOnValue(a.getTrendValues(item.measures, 'distributionsSimple', 'distributionTimePeriod').value)" ng-if="a.filtersService.model.accountSelected.accountBrands.value === a.accountBrandEnum.distirbutionSimple") <span ng-bind="a.getTrendValues(item.measures, 'distributionsSimple', 'distributionTimePeriod').displayValue"></span>
+
+                //- Distirbution Trend Effective
+                td(ng-class="a.getClassBasedOnValue(a.getTrendValues(item.measures, 'distributionsEffective', 'distributionTimePeriod').value)" ng-if="a.filtersService.model.accountSelected.accountBrands.value === a.accountBrandEnum.distirbutionEffective") <span ng-bind="a.getTrendValues(item.measures, 'distributionsEffective', 'distributionTimePeriod').displayValue"></span>
 
   div.scorecard-chart(column='6')
     .widget-header
