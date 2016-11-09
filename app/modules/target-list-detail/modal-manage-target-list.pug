@@ -25,8 +25,17 @@ div.modal.target-list-modal
               span {{tld.permissionLabel(collaborator.permissionLevel)}}
               a(ng-hide="!tld.editable").chevron-down
             md-menu-content.collaborator-options
-              md-menu-item(ng-click="tld.makeOwner(collaborator.user.id)") Make Owner
+              md-menu-item(ng-click="tld.makeOwner(collaborator.user.employeeId)") Make Owner
               md-menu-item(ng-click="tld.removeCollaborator(collaborator.user.employeeId)") Remove
+
+
+          .action-overlay(ng-class="{'active': true, 'fail': false}")
+            div.overlay-wrapper
+              p Are you sure... &nbsp;
+                a UNDO
+            div().hide-wrapper.hide-icon-wrapper.hide-row
+
+
         .collaborator.manage-list(ng-repeat="pending in tld.pendingShares")
           .align-left(ng-if="tld.userService.model.currentUser.employeeID !== pending.employee.employeeId") {{pending.employee.firstName | titlecase}} {{pending.employee.lastName | titlecase}}
           .align-left(ng-if="tld.userService.model.currentUser.employeeID === pending.employee.employeeId") You

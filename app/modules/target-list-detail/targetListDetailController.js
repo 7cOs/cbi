@@ -126,20 +126,25 @@ module.exports = /*  @ngInject */
     }
 
     function makeOwner(collaboratorId) {
-      targetListService.addTargetListShares(targetListService.model.currentList.id, {employeeId: collaboratorId, permissionLevel: 'Author'}).then(function(response) {
+      targetListService.updateTargetList(targetListService.model.currentList.id, {'newOwnerUserId': collaboratorId}).then(function(response) {
         console.log('new owner specified');
 
         // change permission in targetListService.model.currentList so reflected in ui
         angular.forEach(targetListService.model.currentList.collaborators, function(item, key) {
-          if (item.user.id === collaboratorId) item.permissionLevel = 'author';
+          if (item.user.employeeId === collaboratorId) item.permissionLevel = 'author';
+          if (item.user.employeeId === userService.model.currentUser.employeeID) {
+            item.permissionLevel = 'collaborate';
+            targetListService.model.currentList.permissionLevel = item.permissionLevel;
+            vm.editable = false;
+          }
         });
 
         // change permission in userService.model.targetLists.owned so reflected in ui
         var keepGoing = true,
-            list = $filter('filter')(userService.model.targetListArray.owned, {id: targetListService.model.currentList.id});
+            list = $filter('filter')(userService.model.targetLists.owned, {id: targetListService.model.currentList.id});
         angular.forEach(list.collaborators, function(item, key) {
           if (keepGoing) {
-            if (item.user.id === collaboratorId) {
+            if (item.user.employeeId === collaboratorId) {
               item.permissionLevel = 'author';
               keepGoing = false;
             }
