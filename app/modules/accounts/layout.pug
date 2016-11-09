@@ -105,11 +105,11 @@ div(row)
       table.depletions-table(cellspacing="0" cellpadding="0")
         thead
           tr
-            th.top.title-col
+            th(width="34%").top.title-col.brand-name-column
               p.accent.bold.left.single-line Brand / SKU
-            th(colspan=2).top.dark
+            th(colspan=2 width="33%").top.dark
               p.accent.bold Depletions
-            th(colspan=2).top
+            th(colspan=2 width="33%").top
               //- p.accent {{a.filtersService.model.accountSelected.accountBrands === 'Velocity' ? 'Velocity' : 'Distribution(s) - L90'}}
               p.accent Distribution(s) - {{a.filterModel.distributionTimePeriod}} Days
           tr

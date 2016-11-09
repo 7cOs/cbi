@@ -346,12 +346,13 @@
 }
 
 .depletions-table {
+  table-layout: fixed;
 
-  th, td {
-    width: 16.25%;
+  td {
+    width: 16.5%;
 
     &.title-col {
-      width: 35%;
+      width: 34%;
     }
   }
 }
