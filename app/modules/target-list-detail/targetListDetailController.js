@@ -45,6 +45,7 @@ module.exports = /*  @ngInject */
     vm.updateList = updateList;
     vm.initTargetLists = initTargetLists;
     vm.isAuthor = isAuthor;
+    vm.permissionLabel = permissionLabel;
 
     init();
 
@@ -75,6 +76,14 @@ module.exports = /*  @ngInject */
       });
 
       listChanged();
+    }
+
+    function permissionLabel(permissionLevel) {
+      if (permissionLevel === 'author') {
+        return 'owner';
+      } else {
+        return 'collaborator';
+      }
     }
 
     function changeCollaboratorLevel() {

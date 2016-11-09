@@ -37,6 +37,13 @@
     }
   }
 
+  .modal-form .modal-input {
+    md-checkbox {
+      margin-top: -20px;
+      margin-bottom: 0;
+    }
+  }
+
   .collaborator-list {
     background-color: $white;
     display: inline-block;
@@ -67,6 +74,14 @@
       }
 
       &.manage-list {
+        .accent {
+          width: 5em;
+          margin-left: 7em;
+          font-family: $work-sans;
+          font-weight: 500;
+          letter-spacing: 0.01em;
+        }
+
         > div, md-menu {
           float: left;
         }
