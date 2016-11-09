@@ -139,6 +139,9 @@ describe('Unit: targetListDetailController', function() {
     expect(ctrl.navigateToTL).not.toBeUndefined();
     expect(typeof (ctrl.navigateToTL)).toEqual('function');
 
+    expect(ctrl.permissionLabel).not.toBeUndefined();
+    expect(typeof (ctrl.permissionLabel)).toEqual('function');
+
     expect(ctrl.removeCollaborator).not.toBeUndefined();
     expect(typeof (ctrl.removeCollaborator)).toEqual('function');
 
@@ -323,6 +326,24 @@ describe('Unit: targetListDetailController', function() {
         ctrl.listChanged();
 
         expect(ctrl.changed).toEqual(true);
+      });
+    });
+
+    describe('[tld.permissionLabel]', function() {
+      it('should return "owner" if the permissionLevel is "author"', function() {
+        expect(ctrl.permissionLabel('author')).toEqual('owner');
+      });
+
+      it('should return "collaborator" if the permissionLevel is "collaborate"', function() {
+        expect(ctrl.permissionLabel('collaborate')).toEqual('collaborator');
+      });
+
+      it('should return "collaborator" if the permissionLevel is "collaborateandinvite"', function() {
+        expect(ctrl.permissionLabel('collaborateandinvite')).toEqual('collaborator');
+      });
+
+      it('should return "collaborator" if the permissionLevel is null', function() {
+        expect(ctrl.permissionLabel(null)).toEqual('collaborator');
       });
     });
 
