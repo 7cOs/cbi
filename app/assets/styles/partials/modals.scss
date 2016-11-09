@@ -374,13 +374,21 @@ md-dialog {
   }
 
   &.save-report {
-    .save-error {
-      padding: 1em 2em 2em;
+    label.disabled {
+      color: $gray-2;
+    }
 
-      p {
-        padding: 0 2.5em;
-        line-height: 1.5em;
+    input.disabled {
+      background: $gray-13;
+
+      &::placeholder {
+        color: $gray-2;
       }
+    }
+
+    .error-message.accent {
+      position: relative;
+      margin: -30px 20px 20px;
     }
   }
 

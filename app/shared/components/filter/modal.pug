@@ -2,20 +2,20 @@ div.modal.save-report
   div.title
     h4 Save Report
     a.hide-row(ng-click="filter.closeModal()" aria-label="Cancel")
-  div.modal-form(ng-show="filter.userService.model.opportunityFilters.length < 10")
+  div.modal-form
     div.modal-input
       .dropdown-filter
         .dropdown
           label Select an Option
-          md-select.left(ng-model="filter.userService.model.newServiceSelect" aria-label="Select New or Saved Report Dropdown")
+          md-select.left(ng-model="filter.userService.model.newServiceSelect" aria-label="Select New or Saved Report Dropdown" ng-change="filter.filtersService.model.newServiceName = ''")
             md-option(ng-model="filter.filtersService.model.newServiceName" value="new" ng-selected="true") Save New Report
-            md-option(ng-repeat="savedFilter in filter.userService.model.opportunityFilters track by savedFilter.id" ng-value="savedFilter.id" aria-label="{{savedFilter.id}}") {{::savedFilter.name}}
+            md-option(ng-repeat="savedFilter in filter.userService.model.opportunityFilters track by savedFilter.id" ng-value="savedFilter.id" aria-label="{{savedFilter.name}}") {{::savedFilter.name}}
+    p.error-message.accent(ng-hide="filter.userService.model.opportunityFilters.length < 10 || filter.userService.model.newServiceSelect !== 'new'") <img src="./assets/img/icons/error.svg"> You have reached the maximum number of saved reports (10). To save a new report, please delete any queries that you no longer need.
     div.modal-input
-      label(ng-class="{disabled: filter.userService.model.newServiceSelect !== 'new'}") Name
-      input(ng-class="{disabled: filter.userService.model.newServiceSelect !== 'new'}" ng-model="filter.filtersService.model.newServiceName" placeholder="Enter a name" ng-disabled="filter.userService.model.newServiceSelect !=='new'")
-    button.btn-action(ng-if="filter.userService.model.newServiceSelect ==='new'" ng-click="filter.saveFilter()" ng-disabled="filter.filtersService.model.newServiceName === ''") Save Report
-    button.btn-action(ng-if="filter.userService.model.newServiceSelect !=='new'" ng-click="filter.updateFilter()" ng-disabled="filter.filtersService.model.newServiceName === ''") Update Report
+      label(ng-class="{disabled: filter.userService.model.newServiceSelect === 'new' && filter.userService.model.opportunityFilters.length > 9 || filter.userService.model.newServiceSelect !== 'new'}") Name
+      input(ng-class="{disabled: filter.userService.model.newServiceSelect !== 'new'}" ng-model="filter.filtersService.model.newServiceName" placeholder="Enter a name"
+      ng-disabled="filter.userService.model.newServiceSelect === 'new' && filter.userService.model.opportunityFilters.length > 9 || filter.userService.model.newServiceSelect !== 'new'")
+    button.btn-action(ng-if="filter.userService.model.newServiceSelect ==='new'" ng-click="filter.saveFilter()"
+    ng-disabled="filter.userService.model.newServiceSelect ==='new' && filter.userService.model.opportunityFilters.length > 9 || filter.userService.model.newServiceSelect !== 'new'") Save Report
+    button.btn-action(ng-if="filter.userService.model.newServiceSelect !=='new'" ng-click="filter.updateFilter()") Update Report
     p.cancel.accent(ng-click="filter.closeModal()") X Cancel
-  div(ng-hide="filter.userService.model.opportunityFilters.length < 10").save-error
-    h2 Sorry! You cannot save more than 10 reports.
-    p Please review your list of saved reports, delete some, and try again.
