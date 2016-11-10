@@ -708,6 +708,5 @@ module.exports = /*  @ngInject */
     function init() {
       // Initialize the target lists for the user Id
       getTargetLists();
-      console.log(targetListService.model.currentList);
     }
   };
