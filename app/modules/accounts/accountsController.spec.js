@@ -94,9 +94,6 @@ describe('Unit: accountsController', function() {
     });
 
     it('Should expose controller methods', function() {
-      expect(ctrl.brandTotal).not.toBeUndefined();
-      expect(typeof (ctrl.brandTotal)).toEqual('function');
-
       expect(ctrl.displayBrandValue).not.toBeUndefined();
       expect(typeof (ctrl.displayBrandValue)).toEqual('function');
 

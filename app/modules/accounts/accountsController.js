@@ -230,7 +230,6 @@ module.exports = /*  @ngInject */
         return obj.type === 'Total';
       });
       vm.currentTotalsObject = matchedProperty[0];
-      console.log('Current Totals Object', vm.currentTotalsObject);
     }
 
     function removeOptionsBasedOnView(accountBrandObj) {
@@ -331,8 +330,8 @@ module.exports = /*  @ngInject */
         vm.filterModel.brand = item.id;
         userService.getPerformanceBrand({premiseType: filtersService.model.selected.premiseType, brand: item.id}).then(function(data) {
           vm.brandTabs.skus = data.performance;
-          console.log('Sub brands');
-          console.log(data.performance);
+          // console.log('Sub brands');
+          // console.log(data.performance);
           nextTab(widget);
           $timeout(function () {
             vm.loadingBrandSnapshot = false;
