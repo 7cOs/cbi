@@ -184,7 +184,6 @@ module.exports = /*  @ngInject */
     }
 
     function createNewList(e) {
-      console.log('hit');
       var parentEl = angular.element(document.body);
       $mdDialog.show({
         clickOutsideToClose: true,
@@ -207,7 +206,6 @@ module.exports = /*  @ngInject */
 
     function saveNewList(e) {
       vm.buttonDisabled = true;
-      console.log('flag');
 
       // getTargetListShares
       userService.addTargetList(vm.newList).then(function(response) {

@@ -164,14 +164,13 @@ module.exports = /*  @ngInject */
     function saveNewList(e) {
       vm.buttonDisabled = true;
 
-      // Create Collaborator Payload
+      // create collaborator payload
       var newPayload = [];
       for (var i = 0; i < vm.newList.collaborators.length; i++) {
-        var newUser = {
+        newPayload.push({
           employeeId: vm.newList.collaborators[i].employeeId,
           permissionLevel: vm.newList.allowInvites ? 'CollaborateAndInvite' : 'Collaborate'
-        };
-        newPayload.push(newUser);
+        });
       }
 
       // Create target list
