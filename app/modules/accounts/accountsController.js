@@ -193,7 +193,6 @@ module.exports = /*  @ngInject */
 
     // Expose public methods
     vm.apply = apply;
-    vm.brandTotal = brandTotal;
     vm.removeOptionsBasedOnView = removeOptionsBasedOnView;
     vm.displayBrandValue = displayBrandValue;
     vm.goToOpportunities = goToOpportunities;
@@ -211,6 +210,9 @@ module.exports = /*  @ngInject */
     vm.updateTopBottom = updateTopBottom;
     vm.getTrendValues = getTrendValues;
     vm.isPackageView = false;
+    vm.checkIfVelocityPresent = checkIfVelocityPresent;
+    vm.currentTotalsObject = vm.currentTotalsObject;
+    vm.checkForDepletionCount = checkForDepletionCount;
 
     init();
 
@@ -222,32 +224,12 @@ module.exports = /*  @ngInject */
       vm.disableApply = bool;
     }
 
-    function brandTotal(measure, percentageBool) {
-      for (var i = 0; i < vm.brandTabs.brands.length; i++) {
-        if (vm.brandTabs.brands[i].type === 'Total') {
-          for (var j = 0; j < vm.brandTabs.brands[i].measures.length; j++) {
-            if (measure === 'depletions') {
-              if (vm.brandTabs.brands[i].measures[j].timeframe === vm.filterModel.depletionsTimePeriod) {
-                // return percentage if percentageBool
-                if (percentageBool) return vm.brandTabs.brands[i].measures[j].depletionsTrend;
-                else return vm.brandTabs.brands[i].measures[j].depletions;
-              }
-            } else if (measure === 'distributions') {
-              if (vm.brandTabs.brands[i].measures[j].timeframe === vm.filterModel.distributionTimePeriod) {
-                // return percentage if percentageBool
-                if (percentageBool) return vm.brandTabs.brands[i].measures[j].distributionsSimpleTrend;
-                else return vm.brandTabs.brands[i].measures[j].distributionsSimple;
-              }
-            } else if (measure === 'velocity') {
-              if (vm.brandTabs.brands[i].measures[j].timeframe === vm.filterModel.distributionTimePeriod) {
-                // return percentage if percentageBool
-                if (percentageBool) return vm.brandTabs.brands[i].measures[j].velocityTrend;
-                else return vm.brandTabs.brands[i].measures[j].velocity;
-              }
-            }
-          }
-        }
-      }
+    function setCurrentTotalsObject() {
+      var currentTab = vm.brandSelectedIndex === 0 ? vm.brandTabs.brands : vm.brandTabs.skus;
+      var matchedProperty = currentTab.filter(function (obj) {
+        return obj.type === 'Total';
+      });
+      vm.currentTotalsObject = matchedProperty[0];
     }
 
     function removeOptionsBasedOnView(accountBrandObj) {
@@ -266,13 +248,14 @@ module.exports = /*  @ngInject */
     ** @param {String} timePeriod - property to get from filterModel
     */
     function displayBrandValue(brandMeasures, property, timePeriod) {
-      for (var i = 0; i < brandMeasures.length; i++) {
-        if (brandMeasures[i].timeframe === vm.filterModel[timePeriod]) {
-          return brandMeasures[i][property];
+      if (brandMeasures) {
+        var matchedMeasure = brandMeasures.filter(function(currentMeasure) {
+          return currentMeasure.timeframe === vm.filterModel[timePeriod];
+        });
+        if (matchedMeasure[0]) {
+          return matchedMeasure[0][property];
         }
       }
-
-      // return brandMeasures.[property]
     }
 
     function goToOpportunities() {
@@ -312,6 +295,7 @@ module.exports = /*  @ngInject */
     function prevTab() {
       if (vm.brandSelectedIndex > 0) {
         vm.brandSelectedIndex = vm.brandSelectedIndex - 1;
+        setCurrentTotalsObject();
         vm.brandWidgetTitle = vm.brandWidgetTitleDefault;
         vm.brandIdSelected = null;
         vm.filterModel.brand = '';
@@ -323,6 +307,13 @@ module.exports = /*  @ngInject */
       vm.filterModel = angular.copy(filterModelTemplate);
       filtersService.resetFilters();
       apply(false);
+    }
+
+    function checkIfVelocityPresent(item) {
+      // Only return true if its YA%. For APB velocityTrend should be blank
+      if (item && item.measures) {
+        return vm.filterModel.trend.value === 1 && vm.displayBrandValue(item.measures, 'velocityTrend', 'distributionTimePeriod');
+      }
     }
 
     // When a row item is clicked in brands / market widgets
@@ -339,11 +330,11 @@ module.exports = /*  @ngInject */
         vm.filterModel.brand = item.id;
         userService.getPerformanceBrand({premiseType: filtersService.model.selected.premiseType, brand: item.id}).then(function(data) {
           vm.brandTabs.skus = data.performance;
+          // console.log('Sub brands');
+          // console.log(data.performance);
           nextTab(widget);
           $timeout(function () {
             vm.loadingBrandSnapshot = false;
-            // console.log('Sub brands');
-            // console.log(data.performance);
           }, 500);
         });
       }
@@ -407,6 +398,11 @@ module.exports = /*  @ngInject */
       }
     }
 
+    function checkForDepletionCount(item) {
+      var val = vm.displayBrandValue(item.measures, 'depletions', 'depletionsTimePeriod');
+      return val > 0;
+    }
+
     // Checks active tab, updates model, passes data to chart (markets only)
     function getActiveTab() {
       if (vm.marketSelectedIndex === 0) { vm.filtersService.model.selected.accountTypes = 'Distributors'; setChartData(vm.marketData.distributors); deselectMarketId(); }
@@ -420,6 +416,7 @@ module.exports = /*  @ngInject */
       vm.disableAnimation = false;
       if (widget === 'brands') {
         vm.brandSelectedIndex = vm.brandSelectedIndex + 1;
+        setCurrentTotalsObject();
         vm.filtersService.model.accountSelected.accountBrands = vm.filters.accountBrands[1];
       }
       if (widget === 'markets') { vm.marketSelectedIndex = vm.marketSelectedIndex + 1; }
@@ -444,6 +441,7 @@ module.exports = /*  @ngInject */
         userService.model.depletion = data[1];
         userService.model.distribution = data[2];
         vm.brandTabs.brands = data[3].performance;
+        setCurrentTotalsObject();
         vm.loadingBrandSnapshot = false;
       });
     }
