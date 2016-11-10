@@ -163,27 +163,36 @@ module.exports = /*  @ngInject */
 
     function saveNewList(e) {
       vm.buttonDisabled = true;
+
+      // Create Collaborator Payload
+      var newPayload = [];
+      for (var i = 0; i < vm.newList.collaborators.length; i++) {
+        var newUser = {
+          employeeId: vm.newList.collaborators[i].employeeId,
+          permissionLevel: vm.newList.allowInvites ? 'CollaborateAndInvite' : 'Collaborate'
+        };
+        newPayload.push(newUser);
+      }
+
+      // Create target list
       userService.addTargetList(vm.newList).then(function(response) {
-        targetListService.addTargetListShares(response.id, vm.newList.targetListShares);
         closeModal();
         vm.buttonDisabled = false;
+
+        // add collaborators to newly created target list
+        return targetListService.addTargetListShares(response.id, newPayload);
+      })
+      .then(function(addCollaboratorResponse) {
+        userService.model.targetLists.owned[0].collaborators = addCollaboratorResponse.data;
+
+        // reset model
         vm.newList = {
           name: '',
           description: '',
           opportunities: [],
-          collaborators: []
+          collaborators: [],
+          allowInvites: false
         };
-
-        // We should be getting these values in the response
-        response.createdAt = response.dateCreated;
-        response.opportunitiesSummary = {};
-        response.opportunitiesSummary.closedOpportunitiesCount = 0;
-        response.opportunitiesSummary.opportunitiesCount = 0;
-        response.opportunitiesSummary.totalClosedDepletions = 0;
-
-        userService.model.targetLists.owned.unshift(response);
-        userService.model.targetLists.ownedArchived++;
-        userService.model.targetLists.ownedNotArchived--;
       });
     }
 

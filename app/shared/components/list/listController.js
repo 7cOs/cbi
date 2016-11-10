@@ -207,8 +207,12 @@ module.exports = /*  @ngInject */
 
     function saveNewList(e) {
       vm.buttonDisabled = true;
+      console.log('flag');
+
+      // getTargetListShares
       userService.addTargetList(vm.newList).then(function(response) {
-        targetListService.addTargetListShares(response.id, vm.newList.targetListShares);
+        // targetListService.addTargetListShares(response.id, vm.newList.targetListShares);
+
         closeModal();
         vm.buttonDisabled = false;
         vm.newList = {
