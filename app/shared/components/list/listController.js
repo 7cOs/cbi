@@ -14,6 +14,7 @@ module.exports = /*  @ngInject */
     vm.opportunitiesService = opportunitiesService;
     vm.userService = userService;
     vm.filtersService = filtersService;
+    vm.targetListService = targetListService;
 
     // Defaults
     vm.currentOpportunityId = '';
@@ -707,5 +708,6 @@ module.exports = /*  @ngInject */
     function init() {
       // Initialize the target lists for the user Id
       getTargetLists();
+      console.log(targetListService.model.currentList);
     }
   };

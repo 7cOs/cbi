@@ -246,6 +246,7 @@ module.exports = /*  @ngInject */
         } else {
           vm.targetListAuthor = findTargetListAuthor(response.collaborators);
         }
+        targetListService.model.currentList.archived = response.archived;
         targetListService.updateTargetListShares(targetListService.model.currentList.id, userService.model.currentUser.employeeID, true);
       }, function(err) {
         console.log('[targetListController.init], Error: ' + err.statusText + '. Code: ' + err.status);
