@@ -621,7 +621,17 @@ module.exports = /*  @ngInject */
         .catch(addTargetListFail);
 
       function addTargetListSuccess(response) {
-        console.log('[userService.addTargetList] response: ', response);
+        // We should be getting these values in the response
+        response.data.createdAt = response.dateCreated;
+        response.data.opportunitiesSummary = {};
+        response.data.opportunitiesSummary.closedOpportunitiesCount = 0;
+        response.data.opportunitiesSummary.opportunitiesCount = 0;
+        response.data.opportunitiesSummary.totalClosedDepletions = 0;
+
+        service.model.targetLists.owned.unshift(response.data);
+        service.model.targetLists.ownedArchived++;
+        service.model.targetLists.ownedNotArchived--;
+
         targetListPromise.resolve(response.data);
       }
 

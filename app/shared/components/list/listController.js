@@ -36,10 +36,21 @@ module.exports = /*  @ngInject */
     vm.undoClicked = false;
     vm.isSelectAllActivated = false;
     vm.memoData = {};
+    vm.newList = {
+      name: '',
+      description: '',
+      opportunities: [],
+      collaborators: [],
+      targetListShares: []
+    };
 
     // Expose public methods
     vm.addToSharedCollaborators = addToSharedCollaborators;
     vm.addToTargetList = addToTargetList;
+    vm.createNewList = createNewList;
+    vm.closeCreateTargetListModal = closeCreateTargetListModal;
+    vm.saveNewList = saveNewList;
+    vm.addCollaborator = addCollaborator;
     vm.closeModal = closeModal;
     vm.displayBrandIcon = displayBrandIcon;
     vm.exists = exists;
@@ -170,6 +181,68 @@ module.exports = /*  @ngInject */
           return err;
         });
       }
+    }
+
+    function createNewList(e) {
+      var parentEl = angular.element(document.body);
+      $mdDialog.show({
+        clickOutsideToClose: true,
+        parent: parentEl,
+        scope: $scope.$new(),
+        targetEvent: e,
+        templateUrl: './app/shared/components/list/create-target-list-modal.html'
+      });
+    }
+
+    function closeCreateTargetListModal() {
+      vm.newList = {
+        name: '',
+        description: '',
+        opportunities: [],
+        collaborators: []
+      };
+      $mdDialog.hide();
+    }
+
+    function saveNewList(e) {
+      vm.buttonDisabled = true;
+
+      // create collaborator payload
+      var newPayload = [];
+      for (var i = 0; i < vm.newList.collaborators.length; i++) {
+        newPayload.push({
+          employeeId: vm.newList.collaborators[i].employeeId,
+          permissionLevel: vm.newList.allowInvites ? 'CollaborateAndInvite' : 'Collaborate'
+        });
+      }
+
+      // Create target list
+      userService.addTargetList(vm.newList).then(function(response) {
+        closeModal();
+        vm.buttonDisabled = false;
+
+        return targetListService.addTargetListShares(response.id, newPayload);
+      })
+      .then(function(addCollaboratorResponse) {
+        userService.model.targetLists.owned[0].collaborators = addCollaboratorResponse.data;
+
+        vm.newList = {
+          name: '',
+          description: '',
+          opportunities: [],
+          collaborators: [],
+          allowInvites: false
+        };
+      });
+    }
+
+    function addCollaborator(e) {
+      vm.newList.collaborators.push(e);
+      var share = {
+        employeeId: e.employeeId,
+        permissionLevel: 'Collaborate'
+      };
+      vm.newList.targetListShares.push(share);
     }
 
     function closeModal() {

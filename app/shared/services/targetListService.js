@@ -319,23 +319,21 @@ module.exports = /*  @ngInject */
      * @memberOf cf.common.services
      */
     function getTargetListShares(targetListId) {
-      var targetListPromise = $q.defer();
-      // var url = apiHelperService.request('/api/targetLists/' + targetListId + '/shares/');
+      var targetListPromise = $q.defer(),
+          url = apiHelperService.request('/api/targetLists/' + targetListId + '/shares/');
 
-      /* killing shares query for now
       $http.get(url)
         .then(getTargetListSharesSuccess)
         .catch(getTargetListSharesFail);
 
       function getTargetListSharesSuccess(response) {
-        targetListPromise.resolve(response);
+        targetListPromise.resolve(response.data);
       }
 
       function getTargetListSharesFail(error) {
         targetListPromise.reject(error);
       }
-      */
-      targetListPromise.resolve({});
+
       return targetListPromise.promise;
     }
 
