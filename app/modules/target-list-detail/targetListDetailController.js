@@ -20,6 +20,7 @@ module.exports = /*  @ngInject */
     vm.pendingShares = [];
     vm.editable = false;
     vm.leave = false;
+    vm.selectedCollaboratorId = '';
 
     // Services
     vm.targetListService = targetListService;
@@ -127,7 +128,6 @@ module.exports = /*  @ngInject */
 
     function makeOwner(collaboratorId) {
       targetListService.updateTargetList(targetListService.model.currentList.id, {'newOwnerUserId': collaboratorId}).then(function(response) {
-        console.log('new owner specified');
 
         // change permission in targetListService.model.currentList so reflected in ui
         angular.forEach(targetListService.model.currentList.collaborators, function(item, key) {
@@ -142,6 +142,7 @@ module.exports = /*  @ngInject */
         // change permission in userService.model.targetLists.owned so reflected in ui
         var keepGoing = true,
             list = $filter('filter')(userService.model.targetLists.owned, {id: targetListService.model.currentList.id});
+        console.log(list);
         angular.forEach(list.collaborators, function(item, key) {
           if (keepGoing) {
             if (item.user.employeeId === collaboratorId) {
@@ -150,8 +151,8 @@ module.exports = /*  @ngInject */
             }
           }
         });
-
       });
+      vm.selectedCollaboratorId = '';
     }
 
     // inline adding of collaborator

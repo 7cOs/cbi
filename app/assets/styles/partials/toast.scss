@@ -51,7 +51,8 @@ md-toast {
     }
   }
 
-  &.fail {
+  &.fail,
+  &.confirm {
 
     .md-toast-content {
       background: $red;
@@ -136,7 +137,8 @@ md-toast {
     }
   }
 
-  &.fail {
+  &.fail,
+  &.confirm {
     z-index: 2;
     opacity: 1;
     background: $red;
