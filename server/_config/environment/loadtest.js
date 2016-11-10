@@ -33,7 +33,8 @@ module.exports = function (config) {
   };
 
   config.auth = {
-    strategy: 'basic',
+    strategy: 'saml'
+    /*
     user: {
       jwt: config.api.jwt,
       jwtmap: {
@@ -51,6 +52,7 @@ module.exports = function (config) {
         ]
       }
     }
+  */
   };
 
   config.saml = {
