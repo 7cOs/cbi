@@ -212,6 +212,7 @@ module.exports = /*  @ngInject */
     vm.isPackageView = false;
     vm.checkIfVelocityPresent = checkIfVelocityPresent;
     vm.currentTotalsObject = vm.currentTotalsObject;
+    vm.checkForDepletionCount = checkForDepletionCount;
 
     init();
 
@@ -396,6 +397,11 @@ module.exports = /*  @ngInject */
         vm.idSelected = null;
         vm.marketIdSelected = false;
       }
+    }
+
+    function checkForDepletionCount(item) {
+      var val = vm.displayBrandValue(item.measures, 'depletions', 'depletionsTimePeriod');
+      return val > 0;
     }
 
     // Checks active tab, updates model, passes data to chart (markets only)

@@ -1,9 +1,9 @@
 notes
 .account-header
   div(row)
-    div(column='6')
+    div(column='5')
       h1 Account Dashboard
-    div(column='6')
+    div(column='7')
       .market-overview.expanded(ng-class="{'visible': a.overviewOpen}")
         .overview
           label My Accounts
@@ -85,12 +85,6 @@ notes
         a(ng-click="a.resetFilters()").accent.reset-icon Reset
 
 div(row)
-  div(column='12')
-    .pod-overview
-      label Simple Pods: 7 (2%)
-      label Effective Pods: 15 (5.2%)
-
-div(row)
   div.scorecard-table.scorecard-table-accounts(column='6')
     .loader-wrap.inline(ng-class="{'active': a.loadingBrandSnapshot}")
       loader
@@ -162,7 +156,7 @@ div(row)
         md-tab(ng-repeat="(key, data) in a.brandTabs" label="{{key}}")
           table.depletions-table.fixed-layout(cellspacing="0" cellpadding="0")
             tbody
-              tr.clickable(ng-repeat="item in data | filter: {type: '!Total'} track by $index" ng-click="a.selectItem('brands', item, a.brandTabs, $parent.$index)" ng-class="{selected: item.name === a.idSelected}")
+              tr.clickable(ng-repeat="item in data | filter: {type: '!Total'} | orderBy:'name' track by $index" ng-show="a.checkForDepletionCount(item)" ng-click="a.selectItem('brands', item, a.brandTabs, $parent.$index)" ng-class="{selected: item.name === a.idSelected}")
                 td.left.data-brand.title-col {{item.name}}
                 //- Depletion TDs -
                  Depletion value
