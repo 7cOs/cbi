@@ -93,6 +93,7 @@ module.exports = /*  @ngInject */
 
     function closeModal() {
       $mdDialog.hide();
+      vm.changed = false;
     }
 
     function deleteList() {
@@ -230,6 +231,7 @@ module.exports = /*  @ngInject */
         }); */
 
       });
+      listChanged();
       vm.leave = true;
     }
 
