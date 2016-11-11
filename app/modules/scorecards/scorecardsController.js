@@ -73,17 +73,27 @@ module.exports = /*  @ngInject */
       updatedSelectionValuesInFilter(value, vm.depletionSelect, vm.distributionSelectOptions.selected);
     }
 
+    // TODO The models that are hooked up for depletion and distirbution need to be changed to use an object instead of a string in the next sprint
     function updatedSelectionValuesInFilter(endingPeriod, depletionPeriod, distirbutionPeriod) {
       if (endingPeriod) {
         vm.filtersService.lastEndingTimePeriod.endingPeriodType = endingPeriod;
       }
 
       if (depletionPeriod) {
-        vm.filtersService.lastEndingTimePeriod.depletionValue = depletionPeriod;
+        var depletionObj = filtersService.model.depletionsTimePeriod[vm.filtersService.lastEndingTimePeriod.endingPeriodType];
+        var matchedObj = depletionObj.filter(function(val) {
+          return val.name === depletionPeriod;
+        });
+
+        vm.filtersService.lastEndingTimePeriod.depletionValue = matchedObj[0];
       }
 
       if (distirbutionPeriod) {
-        vm.filtersService.lastEndingTimePeriod.timePeriodValue = distirbutionPeriod;
+        var distObj = filtersService.model.distributionTimePeriod[vm.filtersService.lastEndingTimePeriod.endingPeriodType];
+        var matchedDistObj = distObj.filter(function(val) {
+          return val.name === distirbutionPeriod;
+        });
+        vm.filtersService.lastEndingTimePeriod.timePeriodValue = matchedDistObj[0];
       }
     }
 

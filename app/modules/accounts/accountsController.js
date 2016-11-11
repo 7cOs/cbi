@@ -457,6 +457,7 @@ module.exports = /*  @ngInject */
       vm.filterModel.trend = vm.filtersService.model.trend[0];
       vm.filtersService.model.accountSelected.accountBrands = vm.filters.accountBrands[0];
       chipsService.resetChipsFilters(chipsService.model);
+      setDefaultEndingPeriodOptions();
 
       var promiseArr = [
         userService.getPerformanceSummary(),
@@ -472,7 +473,6 @@ module.exports = /*  @ngInject */
         vm.brandTabs.brands = data[3].performance;
         setCurrentTotalsObject();
         vm.loadingBrandSnapshot = false;
-        setDefaultEndingPeriodOptions();
       });
     }
 
