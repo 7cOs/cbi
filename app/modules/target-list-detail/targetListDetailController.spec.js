@@ -178,6 +178,7 @@ describe('Unit: targetListDetailController', function() {
     expect(ctrl.chipsService).toBeUndefined();
     expect(ctrl.filtersService).toBeUndefined();
     expect(ctrl.opportunitiesService).toBeUndefined();
+    expect(ctrl.addCollaborators).toBeUndefined();
   });
 
   it('should have access to private services', function() {
@@ -187,9 +188,6 @@ describe('Unit: targetListDetailController', function() {
   });
 
   it('should expose public methods', function() {
-    expect(ctrl.addCollaborators).not.toBeUndefined();
-    expect(typeof (ctrl.addCollaborators)).toEqual('function');
-
     expect(ctrl.addCollaboratorClick).not.toBeUndefined();
     expect(typeof (ctrl.addCollaboratorClick)).toEqual('function');
 
@@ -213,9 +211,6 @@ describe('Unit: targetListDetailController', function() {
 
     expect(ctrl.listChanged).not.toBeUndefined();
     expect(typeof (ctrl.listChanged)).toEqual('function');
-
-    expect(ctrl.manageCollaborators).not.toBeUndefined();
-    expect(typeof (ctrl.manageCollaborators)).toEqual('function');
 
     expect(ctrl.makeOwner).not.toBeUndefined();
     expect(typeof (ctrl.makeOwner)).toEqual('function');
@@ -243,20 +238,22 @@ describe('Unit: targetListDetailController', function() {
   });
 
   describe('Public Methods', function() {
-    describe('[tld.addCollaborators]', function() {
-      beforeEach(function() {
-        spyOn(targetListService, 'addTargetListShares').and.callFake(function() {
-          var deferred = $q.defer();
-          return deferred.promise;
-        });
 
-        ctrl.addCollaborators();
-      });
+    // this is not a public method and should be tested with updateList
+    // describe('[tld.addCollaborators]', function() {
+    //   beforeEach(function() {
+    //     spyOn(targetListService, 'addTargetListShares').and.callFake(function() {
+    //       var deferred = $q.defer();
+    //       return deferred.promise;
+    //     });
 
-      it('should call the Target List Service', function() {
-        expect(targetListService.addTargetListShares).toHaveBeenCalled();
-      });
-    });
+    //     ctrl.addCollaborators();
+    //   });
+
+    //   it('should call the Target List Service', function() {
+    //     expect(targetListService.addTargetListShares).toHaveBeenCalled();
+    //   });
+    // });
 
     describe('[tld.addCollaboratorClick]', function() {
       var result;
@@ -485,52 +482,52 @@ describe('Unit: targetListDetailController', function() {
       });
     });
 
-    describe('[tld.removeCollaborator]', function() {
-      beforeEach(function() {
-        targetListService.model.currentList.collaborators = collaborators;
-        targetListService.model.currentList.id = 1;
+    // describe('[tld.removeCollaborator]', function() {
+    //   beforeEach(function() {
+    //     targetListService.model.currentList.collaborators = collaborators;
+    //     targetListService.model.currentList.id = 1;
 
-        ctrl.pendingShares = pending;
-        ctrl.leave = false;
+    //     ctrl.pendingShares = pending;
+    //     ctrl.leave = false;
 
-        // init stuff that we dont care about - we dont need one for /api/targetLists/1 because real service is never actually called
-        $httpBackend.expectGET('/api/targetLists/undefined').respond(200);
-        $httpBackend.expectGET('/api/targetLists/undefined/opportunities').respond(200);
-      });
+    //     // init stuff that we dont care about - we dont need one for /api/targetLists/1 because real service is never actually called
+    //     $httpBackend.expectGET('/api/targetLists/undefined').respond(200);
+    //     $httpBackend.expectGET('/api/targetLists/undefined/opportunities').respond(200);
+    //   });
 
-      it('should call the service and run the script in .then()', function() {
-        // create promise and spy on service.method
-        var deferred = $q.defer();
-        spyOn(targetListService, 'deleteTargetListShares').and.callFake(function() {
-          return deferred.promise;
-        });
+    //   it('should call the service and run the script in .then()', function() {
+    //     // create promise and spy on service.method
+    //     var deferred = $q.defer();
+    //     spyOn(targetListService, 'deleteTargetListShares').and.callFake(function() {
+    //       return deferred.promise;
+    //     });
 
-        // make sure everything is how we want it on start
-        expect(targetListService.deleteTargetListShares).not.toHaveBeenCalled();
-        expect(targetListService.model.currentList.collaborators.length).toEqual(2);
-        expect(ctrl.pendingShares.length).toEqual(2);
+    //     // make sure everything is how we want it on start
+    //     expect(targetListService.deleteTargetListShares).not.toHaveBeenCalled();
+    //     expect(targetListService.model.currentList.collaborators.length).toEqual(2);
+    //     expect(ctrl.pendingShares.length).toEqual(2);
 
-        // run method
-        ctrl.removeCollaborator('1012135');
+    //     // run method
+    //     ctrl.removeCollaborator('1012135');
 
-        // resolve promise so we can trigger then
-        deferred.resolve();
-        // trigger promise resolution
-        scope.$digest();
+    //     // resolve promise so we can trigger then
+    //     deferred.resolve();
+    //     // trigger promise resolution
+    //     scope.$digest();
 
-        // assert that everything we wanted to happen has happened, and things we didnt want to happen havent happened
-        expect(targetListService.deleteTargetListShares).toHaveBeenCalledWith(1, '1012135');
-        expect(targetListService.model.currentList.collaborators.length).toEqual(1);
-        expect(ctrl.pendingShares.length).toEqual(1);
-        expect(ctrl.leave).toBe(true);
-      });
+    //     // assert that everything we wanted to happen has happened, and things we didnt want to happen havent happened
+    //     expect(targetListService.deleteTargetListShares).toHaveBeenCalledWith(1, '1012135');
+    //     expect(targetListService.model.currentList.collaborators.length).toEqual(1);
+    //     expect(ctrl.pendingShares.length).toEqual(1);
+    //     expect(ctrl.leave).toBe(true);
+    //   });
 
-      afterEach(function() {
-        // reset stuff we changed
-        targetListService.model.currentList.collaborators = collaborators;
-        ctrl.pendingShares = pending;
-      });
-    });
+    //   afterEach(function() {
+    //     // reset stuff we changed
+    //     targetListService.model.currentList.collaborators = collaborators;
+    //     ctrl.pendingShares = pending;
+    //   });
+    // });
 
     it('should find the author', function() {
       var collaboratorsTest = [

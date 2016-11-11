@@ -18,10 +18,12 @@ module.exports = /*  @ngInject */
     vm.changed = false;
     vm.targetListShares = [];
     vm.pendingShares = [];
+    vm.pendingRemovals = [];
     vm.editable = false;
     vm.leave = false;
     vm.selectedCollaboratorId = '';
     vm.targetListAuthor = '';
+    vm.originalList = {};
 
     // Services
     vm.targetListService = targetListService;
@@ -31,18 +33,20 @@ module.exports = /*  @ngInject */
     $rootScope.pageTitle = $state.current.title;
 
     // Expose public methods
-    vm.addCollaborators = addCollaborators;
     vm.addCollaboratorClick = addCollaboratorClick;
     vm.changeCollaboratorLevel = changeCollaboratorLevel;
     vm.closeModal = closeModal;
     vm.deleteList = deleteList;
     vm.footerToast = footerToast;
+    vm.initTargetLists = initTargetLists;
+    vm.isAuthor = isAuthor;
     vm.listChanged = listChanged;
     vm.makeOwner = makeOwner;
-    vm.manageCollaborators = manageCollaborators;
     vm.modalManageTargetList = modalManageTargetList;
     vm.navigateToTL = navigateToTL;
+    vm.permissionLabel = permissionLabel;
     vm.removeCollaborator = removeCollaborator;
+    vm.removeCollaboratorClick = removeCollaboratorClick;
     vm.removeFooterToast = removeFooterToast;
     vm.updateList = updateList;
     vm.initTargetLists = initTargetLists;
@@ -51,19 +55,6 @@ module.exports = /*  @ngInject */
     vm.findTargetListAuthor = findTargetListAuthor;
 
     init();
-
-    function addCollaborators() {
-      targetListService.addTargetListShares(targetListService.model.currentList.id, vm.targetListShares).then(function(response) {
-        // push to target list collaborator array
-        // var collaboratorList = $filter('filter')(userService.model.targetListArray.owned, {id: targetListService.model.currentList.id});
-        var collaboratorList = targetListService.model.currentList;
-        if (collaboratorList.length) {
-          collaboratorList[0].collaborators = targetListService.model.currentList.collaborators = response.data;
-        }
-
-        closeModal();
-      });
-    }
 
     function addCollaboratorClick(result) {
       vm.collaborator = {
@@ -81,6 +72,16 @@ module.exports = /*  @ngInject */
       listChanged();
     }
 
+    function removeCollaboratorClick(result) {
+      vm.pendingRemovals.push(result);
+      angular.forEach(vm.targetListService.model.currentList.collaborators, function(item, key) {
+        if (item.user.employeeId === result) {
+          vm.targetListService.model.currentList.collaborators.splice(key, 1);
+        }
+      });
+      listChanged();
+    }
+
     function permissionLabel(permissionLevel) {
       if (permissionLevel === 'author') {
         return 'owner';
@@ -94,7 +95,8 @@ module.exports = /*  @ngInject */
       // targetListService.updateTargetListShares(targetListService.model.currentList.id, vm.collaborator).then();
     }
 
-    function closeModal() {
+    function closeModal(revert) {
+      if (revert) targetListService.model.currentList = vm.originalList;
       $mdDialog.hide();
       vm.changed = false;
     }
@@ -156,37 +158,14 @@ module.exports = /*  @ngInject */
       vm.selectedCollaboratorId = '';
     }
 
-    // inline adding of collaborator
-    function manageCollaborators(result) {
-      // add loader
-      console.log('Pls add Ratul to the target list.');
-      targetListService.model.currentList.loading = true;
-
-      result.permissionLevel = vm.permissionLevel;
-      targetListService.addTargetListShares(targetListService.model.currentList.id, result).then(function(response) {
-        // push to target list collaborator array
-        var collaboratorList = $filter('filter')(userService.model.targetListArray.owned, {id: targetListService.model.currentList.id});
-        collaboratorList[0].collaborators = targetListService.model.currentList.collaborators = response.data;
-
-        // clear name from inline search
-        vm.manageListCollaboratorName = '';
-
-        // remove loader
-        console.log('Ratul has been added to the target list.');
-        targetListService.model.currentList.loading = false;
-      }, function(err) {
-        console.log('Ratul has gone on paternity leave. Sry.', err);
-        targetListService.model.currentList.loading = false;
-      });
-    }
-
     function modalManageTargetList(ev) {
       var parentEl = angular.element(document.body);
-
       vm.pendingShares = [];
+      vm.pendingRemovals = [];
       initTargetLists();
       isAuthor();
       removeFooterToast();
+      vm.originalList = targetListService.model.currentList;
 
       $mdDialog.show({
         clickOutsideToClose: true,
@@ -213,31 +192,18 @@ module.exports = /*  @ngInject */
       $window.location.href = '/target-lists';
     }
 
-    function removeCollaborator(collaboratorId) {
-      targetListService.deleteTargetListShares(targetListService.model.currentList.id, collaboratorId).then(function(response) {
-        // remove from user model and UI - target list service
-        angular.forEach(targetListService.model.currentList.collaborators, function(item, key) {
-          if (item.user.employeeId === collaboratorId) targetListService.model.currentList.collaborators.splice(key, 1);
+    function removeCollaborator(collaboratorIds) {
+      angular.forEach(collaboratorIds, function(collaboratorId, key) {
+        targetListService.deleteTargetListShares(targetListService.model.currentList.id, collaboratorId).then(function(response) {
+          angular.forEach(targetListService.model.currentList.collaborators, function(item, key) {
+            if (item.user.employeeId === collaboratorId) targetListService.model.currentList.collaborators.splice(key, 1);
+          });
+          angular.forEach(vm.pendingShares, function(item, key) {
+            if (item.employee.employeeId === collaboratorId) vm.pendingShares.splice(key, 1);
+          });
         });
-
-        angular.forEach(vm.pendingShares, function(item, key) {
-          if (item.employee.employeeId === collaboratorId) vm.pendingShares.splice(key, 1);
-        });
-
-        // remove from user model and UI - user service
-        /* Doesnt look like we're using this anymore
-        var keepGoing = true,
-            list = $filter('filter')(userService.model.targetListArray.owned, {id: targetListService.model.currentList.id});
-        angular.forEach(list.collaborators, function(item, key) {
-          if (keepGoing) {
-            if (item.user.employeeId === collaboratorId) {
-              list.collaborators.splice(list.collaborators.indexOf(item), 1);
-              keepGoing = false;
-            }
-          }
-        }); */
-
       });
+
       listChanged();
       vm.leave = true;
     }
@@ -261,8 +227,11 @@ module.exports = /*  @ngInject */
           addCollaborators();
         }
 
-        removeFooterToast();
+        if (vm.pendingRemovals.length > 0) {
+          removeCollaborator(vm.pendingRemovals);
+        }
 
+        removeFooterToast();
         closeModal();
       });
     }
@@ -317,5 +286,15 @@ module.exports = /*  @ngInject */
       // reset all chips and filters on page init
       chipsService.resetChipsFilters(chipsService.model);
 
+    }
+
+    function addCollaborators() {
+      targetListService.addTargetListShares(targetListService.model.currentList.id, vm.targetListShares).then(function(response) {
+        var collaboratorList = targetListService.model.currentList;
+        if (collaboratorList.length) {
+          collaboratorList[0].collaborators = targetListService.model.currentList.collaborators = response.data;
+        }
+        closeModal();
+      });
     }
   };
