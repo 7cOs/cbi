@@ -103,7 +103,7 @@ module.exports = /*  @ngInject */
 
       userService.getPerformanceSummary(userService.model.currentUser.employeeID).then(function(data) {
         // Set specific indexes to account for potential malformed data
-        var sortedData = {'performance': []};
+        var sortedData = {'performance': [{}, {}, {}, {}, {}]};
         angular.forEach(data.performance, function(item, key) {
           if (item.type === 'Depletions CE') sortedData.performance[0] = item;
           if (item.type === 'Distribution Points - On Premise, Simple') sortedData.performance[1] = item;
