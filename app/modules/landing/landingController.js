@@ -100,9 +100,18 @@ module.exports = /*  @ngInject */
     }
 
     function init() {
+
       userService.getPerformanceSummary(userService.model.currentUser.employeeID).then(function(data) {
-        console.log(data);
-        vm.performanceData = data;
+        // Set specific indexes to account for potential malformed data
+        var sortedData = {'performance': []};
+        angular.forEach(data.performance, function(item, key) {
+          if (item.type === 'Depletions CE') sortedData.performance[0] = item;
+          if (item.type === 'Distribution Points - On Premise, Simple') sortedData.performance[1] = item;
+          if (item.type === 'Distribution Points - On Premise, Effective') sortedData.performance[2] = item;
+          if (item.type === 'Distribution Points - Off Premise, Simple') sortedData.performance[3] = item;
+          if (item.type === 'Distribution Points - Off Premise, Effective') sortedData.performance[4] = item;
+        });
+        vm.performanceData = sortedData;
       });
 
       userService
