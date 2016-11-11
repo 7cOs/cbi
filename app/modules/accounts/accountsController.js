@@ -260,7 +260,7 @@ module.exports = /*  @ngInject */
     function displayBrandValue(brandMeasures, property, timePeriod) {
       if (brandMeasures) {
         var matchedMeasure = brandMeasures.filter(function(currentMeasure) {
-          return currentMeasure.timeframe === vm.filterModel[timePeriod];
+          return currentMeasure.timeframe === vm.filterModel[timePeriod].name;
         });
         if (matchedMeasure[0]) {
           return matchedMeasure[0][property];
@@ -396,9 +396,13 @@ module.exports = /*  @ngInject */
       apply(true);
     }
 
+    $scope.$watch('a.filterModel.depletionsTimePeriod', function (newVal) {
+      console.log('[Depl Val]', newVal);
+    });
+
     function updateDistributionTimePeriod(value) {
-      vm.filterModel.depletionsTimePeriod = filtersService.model.depletionsTimePeriod[value][0].name;
-      vm.filterModel.distributionTimePeriod = filtersService.model.distributionTimePeriod[value][0].name;
+      vm.filterModel.depletionsTimePeriod = filtersService.model.depletionsTimePeriod[value][0];
+      vm.filterModel.distributionTimePeriod = filtersService.model.distributionTimePeriod[value][0];
     }
 
     function updateTopBottom() {
@@ -452,7 +456,6 @@ module.exports = /*  @ngInject */
       // reset all chips and filters on page init
       vm.filterModel.trend = vm.filtersService.model.trend[0];
       vm.filtersService.model.accountSelected.accountBrands = vm.filters.accountBrands[0];
-      setDefaultEndingPeriodOptions();
       chipsService.resetChipsFilters(chipsService.model);
 
       var promiseArr = [
@@ -469,6 +472,7 @@ module.exports = /*  @ngInject */
         vm.brandTabs.brands = data[3].performance;
         setCurrentTotalsObject();
         vm.loadingBrandSnapshot = false;
+        setDefaultEndingPeriodOptions();
       });
     }
 
@@ -512,7 +516,7 @@ module.exports = /*  @ngInject */
 
     /**
      * Gets the default selections or the selections chosen in the Scorecard page
-     * @returns {Object} Sets the ending depletion and distirbution options
+     * @returns {Object} Sets the ending, depletion and distirbution optios
      */
     function setDefaultEndingPeriodOptions() {
       vm.filterModel.endingTimePeriod = vm.filtersService.lastEndingTimePeriod.endingPeriodType;

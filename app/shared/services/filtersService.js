@@ -74,23 +74,29 @@ module.exports = /*  @ngInject */
       depletionsTimePeriod: {
         month: [{
           name: 'CMTH',
-          displayValue: 'Clo Mth'
+          displayValue: 'Clo Mth',
+          id: 1
         }, {
           name: 'CYTM',
-          displayValue: 'CYTM'
+          displayValue: 'CYTM',
+          id: 2
         }, {
           name: 'FYTM',
-          displayValue: 'FYTM'
+          displayValue: 'FYTM',
+          id: 3
         }],
         year: [{
           name: 'MTD',
-          displayValue: 'MTD'
+          displayValue: 'MTD',
+          id: 4
         }, {
           name: 'CYTD',
-          displayValue: 'CYTD'
+          displayValue: 'CYTD',
+          id: 5
         }, {
           name: 'FYTD',
-          displayValue: 'FYTD'
+          displayValue: 'FYTD',
+          id: 6
         }]
       },
       distributionTimePeriod: {
@@ -186,8 +192,8 @@ module.exports = /*  @ngInject */
     };
     var lastEndingTimePeriod = {
       endingPeriodType: 'year',
-      depletionValue: 'FYTD',
-      timePeriodValue: 'L90'
+      depletionValue: model.depletionsTimePeriod.year[2],
+      timePeriodValue: model.distributionTimePeriod.year[1]
     };
     var service = {
       model: model,
