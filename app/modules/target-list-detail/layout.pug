@@ -11,7 +11,8 @@
   div(row)
     div(column="12")
       h1.hero-title {{tld.targetListService.model.currentList.name}}
-      label.accent.bold.accent-blue You are the owner
+      label(ng-if="tld.targetListAuthor === 'currentUser'").accent.bold.accent-blue You are the owner
+      label(ng-if="tld.targetListAuthor !== 'currentUser'").accent.bold.accent-blue {{::tld.targetListAuthor}} is the owner
 
   div(row)
     div(column="5")
