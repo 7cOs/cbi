@@ -433,6 +433,13 @@ md-dialog {
     }
   }
 
+  &.create-target-list {
+
+    .error {
+      margin-top: 1em;
+    }
+  }
+
   &.share-opportunity {
     .accent:hover {
       cursor: pointer;
