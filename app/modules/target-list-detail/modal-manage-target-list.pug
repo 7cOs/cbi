@@ -25,8 +25,13 @@ div.modal.target-list-modal
               span {{tld.permissionLabel(collaborator.permissionLevel)}}
               a(ng-hide="!tld.editable").chevron-down
             md-menu-content.collaborator-options
-              md-menu-item(ng-click="tld.makeOwner(collaborator.user.id)") Make Owner
+              md-menu-item(ng-click="tld.selectedCollaboratorId = collaborator.user.employeeId") Make Owner
               md-menu-item(ng-click="tld.removeCollaborator(collaborator.user.employeeId)") Remove
+          .action-overlay(ng-class="{'confirm': tld.selectedCollaboratorId === collaborator.user.employeeId}")
+            div.overlay-wrapper
+              p This will cause you to lose editing rights. &nbsp;
+                a(ng-click="tld.makeOwner(collaborator.user.employeeId)") Continue Transfer
+            div(ng-click="tld.selectedCollaboratorId = ''").hide-wrapper.hide-icon-wrapper.hide-row
         .collaborator.manage-list(ng-repeat="pending in tld.pendingShares")
           .align-left(ng-if="tld.userService.model.currentUser.employeeID !== pending.employee.employeeId") {{pending.employee.firstName | titlecase}} {{pending.employee.lastName | titlecase}}
           .align-left(ng-if="tld.userService.model.currentUser.employeeID === pending.employee.employeeId") You
@@ -35,7 +40,6 @@ div.modal.target-list-modal
               span {{tld.permissionLabel(pending.permissionLevel) | titlecase}}
               a.chevron-down
             md-menu-content.collaborator-options
-              md-menu-item(ng-click="tld.makeOwner(pending.employee.employeeId)") Make Owner
               md-menu-item(ng-click="tld.removeCollaborator(pending.employee.employeeId)") Remove
     div(ng-hide="tld.targetListService.model.currentList.permissionLevel !== 'author'").modal-input.clearfix
       md-checkbox(ng-model="tld.collaborator.permissionLevel" ng-true-value="'collaborateandinvite'" ng-false-value="'collaborate'" ng-click="tld.changeCollaboratorLevel()") Allow Collaborators to invite others

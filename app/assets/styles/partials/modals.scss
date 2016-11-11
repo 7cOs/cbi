@@ -504,3 +504,154 @@ md-dialog {
     }
   }
 }
+
+.target-list-modal {
+  position: relative;
+
+  .title {
+    h4 {
+      margin-top: 20px;
+      margin-bottom: 20px;
+    }
+
+    .hide-row {
+      top: 1.5em;
+    }
+  }
+
+  .modal-form .modal-input {
+    md-checkbox {
+      margin-top: -20px;
+      margin-bottom: 0;
+    }
+  }
+
+  .collaborator-list {
+    background-color: $white;
+    display: inline-block;
+    margin-left: -15px;
+    margin-right: -15px;
+    position: relative;
+    width: 100%;
+
+    .collaborator {
+      height: 30px;
+      padding: 10px 15px 5px;
+      text-align: left;
+      border-bottom: dotted $gray-4;
+
+      &.collaborator:last-child {
+        border-bottom: none;
+      }
+
+      &:hover {
+        background-color: $light-blue;
+      }
+
+      > div, md-menu {
+        float: right;
+        height: 25px;
+        line-height: 25px;
+        width: 50%;
+      }
+
+      &.manage-list {
+        .accent {
+          width: 5em;
+          margin-left: 7em;
+          font-family: $work-sans;
+          font-weight: 500;
+          letter-spacing: 0.01em;
+        }
+
+        > div, md-menu {
+          float: left;
+        }
+      }
+
+      md-menu {
+        padding: 0;
+
+        a {
+          position: relative;
+          right: -10px;
+          top: -4px;
+        }
+
+        button, .md-button {
+          height: 25px;
+          margin: 0;
+          min-height: 0;
+          font-size: 0.7em;
+        }
+
+        button.md-button.md-ink-ripple {
+          width: 130px;
+          float: right;
+          text-align: left;
+        }
+
+        span {
+          line-height: 25px;
+        }
+
+        .md-ripple-container {
+          height: 25px;
+        }
+      }
+
+      .action-overlay {
+        width: 100%;
+        height: 46px;
+        margin-top: -12px;
+
+        .overlay-wrapper p {
+          font-size: 0.8em;
+          margin-top: 0;
+          margin-left: -11px;
+          width: 100%;
+
+          a {
+            color: $white;
+            font-weight: 900;
+          }
+        }
+
+        .hide-icon-wrapper {
+          top: 10px;
+          margin-right: -25px;
+          padding: 0;
+
+        }
+
+        .hide-row:after,
+        .hide-row:before {
+          height: 1px;
+          width: 11px;
+        }
+      }
+    }
+  }
+}
+
+.collaborator-options {
+  background-color: $white;
+  border: 1px solid $gray-9;
+  min-width: 130px;
+  position: absolute;
+  top: 60px;
+  text-transform: uppercase;
+  font-size: 0.7em;
+  font-weight: 500;
+
+  md-menu-item {
+    border-bottom: 1px dashed $gray-4;
+    line-height: 48px;
+    padding: 0 10px;
+
+    &:hover {
+      background-color: $gray-9;
+      cursor: pointer;
+    }
+  }
+}

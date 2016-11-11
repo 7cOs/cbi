@@ -66,6 +66,7 @@ module.exports = /*  @ngInject */
       if (p.deleted) payload.deleted = p.deleted;
       if (p.description) payload.description = p.description;
       if (p.name) payload.name = p.name;
+      if (p.newOwnerUserId) payload.newOwnerUserId = p.newOwnerUserId;
 
       $http.patch(url, payload)
         .then(updateTargetListSuccess)

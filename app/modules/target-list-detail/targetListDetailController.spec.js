@@ -1,5 +1,5 @@
 describe('Unit: targetListDetailController', function() {
-  var scope, ctrl, $mdDialog, $q, $httpBackend, targetListService, chipsService, filtersService, opportunitiesService, userService, collaborators, currentUser, pending;
+  var scope, ctrl, $mdDialog, $q, $httpBackend, targetListService, chipsService, filtersService, opportunitiesService, userService, collaborators, currentUser, pending, ownedTargetLists;
 
   beforeEach(function() {
     angular.mock.module('ui.router');
@@ -77,6 +77,93 @@ describe('Unit: targetListDetailController', function() {
         'lastViewed': null
       }
     ];
+
+    ownedTargetLists = {
+      'owned': [
+        {
+          'id': '1',
+          'name': 'No....this james archived list',
+          'description': '',
+          'opportunities': 27,
+          'archived': false,
+          'deleted': false,
+          'opportunitiesSummary': {
+            'storesCount': 1,
+            'opportunitiesCount': 27,
+            'closedOpportunitiesCount': 0,
+            'totalClosedDepletions': 0
+          },
+          'createdAt': '2016-11-10 23:39:17.063',
+          'permissionLevel': 'author',
+          'dateOpportunitiesUpdated': '2016-11-10 23:39:34.848',
+          'collaborators': [
+            {
+              'user': {
+                'id': '5648',
+                'employeeId': '1012132',
+                'firstName': 'FRED',
+                'lastName': 'BERRIOS',
+                'email': 'FRED.BERRIOS@CBRANDS.COM'
+              },
+              'permissionLevel': 'author',
+              'lastViewed': null
+            },
+            {
+              'user': {
+                'id': '5545',
+                'employeeId': '1012135',
+                'firstName': 'CHRISTOPHER',
+                'lastName': 'WILLIAMS',
+                'email': 'CHRIS.WILLIAMS@CBRANDS.COM'
+              },
+              'permissionLevel': 'collaborate',
+              'lastViewed': null
+            }
+          ]
+        },
+        {
+          'id': '53bd39e4-d834-4d0e-87f3-e00f90001b27',
+          'name': 'James Archived List Test',
+          'description': 'Selling beer is hard work, but the samples are great.',
+          'opportunities': 0,
+          'archived': false,
+          'deleted': false,
+          'opportunitiesSummary': {
+            'storesCount': 0,
+            'opportunitiesCount': 0,
+            'closedOpportunitiesCount': 0,
+            'totalClosedDepletions': 0
+          },
+          'createdAt': '2016-11-10 22:44:28.709',
+          'permissionLevel': 'author',
+          'dateOpportunitiesUpdated': null,
+          'collaborators': [
+            {
+              'user': {
+                'id': '5660',
+                'employeeId': '1010332',
+                'firstName': 'JONES SHANNON',
+                'lastName': 'TILLEY',
+                'email': 'SHANNON.TILLEYJONES@CBRANDS.COM'
+              },
+              'permissionLevel': 'collaborate',
+              'lastViewed': null
+            },
+            {
+              'user': {
+                'id': '5648',
+                'employeeId': '1012132',
+                'firstName': 'FRED',
+                'lastName': 'BERRIOS',
+                'email': 'FRED.BERRIOS@CBRANDS.COM'
+              },
+              'permissionLevel': 'author',
+              'lastViewed': '2016-11-10 23:37:54.639'
+            }
+          ]
+        }
+      ]
+    };
   });
 
   it('should expose public services', function() {
@@ -250,6 +337,54 @@ describe('Unit: targetListDetailController', function() {
       it('should not update leave boolean when not given as parameter', function() {
         ctrl.footerToast('archive');
         expect(ctrl.leave).toBe(false);
+      });
+    });
+
+    describe('[tld.makeOwner]', function() {
+      beforeEach(function() {
+        targetListService.model.currentList.collaborators = collaborators;
+        targetListService.model.currentList.id = 1;
+        userService.model.currentUser.employeeID = '1012132';
+        userService.model.targetLists = ownedTargetLists;
+
+        // init stuff that we dont care about - we dont need one for /api/targetLists/1 because real service is never actually called
+        $httpBackend.expectGET('/api/targetLists/undefined').respond(200);
+        $httpBackend.expectGET('/api/targetLists/undefined/opportunities').respond(200);
+      });
+
+      it('should call the service and run .then()', function() {
+        // create promise and spy on service.method
+        var deferred = $q.defer();
+        spyOn(targetListService, 'updateTargetList').and.callFake(function() {
+          return deferred.promise;
+        });
+
+        expect(targetListService.updateTargetList).not.toHaveBeenCalled();
+        expect(targetListService.model.currentList.collaborators[0].permissionLevel).toEqual('author');
+        expect(targetListService.model.currentList.collaborators[1].permissionLevel).toEqual('collaborate');
+
+        ctrl.makeOwner('1012135');
+
+        // resolve promise so we can trigger then
+        deferred.resolve();
+        // trigger promise resolution
+        scope.$digest();
+
+        expect(targetListService.updateTargetList).toHaveBeenCalledWith(1, {'newOwnerUserId': '1012135'});
+        expect(targetListService.model.currentList.collaborators[0].permissionLevel).toEqual('collaborate');
+        expect(targetListService.model.currentList.collaborators[1].permissionLevel).toEqual('author');
+      });
+
+      it('should clear the selectedCollaboratorId', function() {
+        ctrl.selectedCollaboratorId = '1234';
+        ctrl.makeOwner('1012135');
+        expect(ctrl.selectedCollaboratorId).toEqual('');
+      });
+
+      afterEach(function() {
+        // reset stuff we changed
+        targetListService.model.currentList.collaborators = collaborators;
+        userService.model.targetLists = ownedTargetLists;
       });
     });
 
