@@ -91,7 +91,7 @@ div(row)
     .widget-header
       .dropdown-filter
         md-select(ng-model="a.filtersService.model.accountSelected.accountBrands" md-on-open="a.openSelect(true)" md-on-close="a.openSelect(false);" aria-label="Account Brands Filter" placeholder="Distribution (simple)")
-          md-option(ng-repeat="filter in a.filters.accountBrands" ng-if="!a.removeOptionsBasedOnView(filter)" aria-label="{{filter.name}}" ng-value="filter") {{filter.name}}
+          md-option(ng-repeat="filter in a.filters.accountBrands" ng-if="!a.removeDistOptionsBasedOnView(filter)" aria-label="{{filter.name}}" ng-value="filter") {{filter.name}}
       span.back-chevron(ng-if="a.brandSelectedIndex === 1" ng-click="a.prevTab()")
       p.brands {{a.brandWidgetTitle || 'All Brands'}}
     .widget-content
@@ -114,7 +114,7 @@ div(row)
             th
               p.accent {{a.filterModel.distributionTimePeriod}}
             th
-              p.accent vs {{a.filterModel.trend.name + '%'}}
+              p.accent {{a.filterModel.trend.name + '%'}}
         tbody
           tr
             td.column-total.title-col.left TOTAL
