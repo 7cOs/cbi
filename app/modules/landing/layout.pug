@@ -16,7 +16,7 @@ section.landing-page
               td
                 h3 {{l.performanceData.performance[0].measures[0].value | number:0}}
               td
-                h3(ng-class="l.isPositive(l.performanceData.performance[0].measures[0].percentChange)").bold <span ng-if="l.isPositive(l.performanceData.performance[0].measures[0].percentChange | number:2) === 'positive'`">+</span>{{l.performanceData.performance[0].measures[0].percentChange | number:1}}<span>%</span>
+                h3(ng-class="l.isPositive(l.performanceData.performance[0].measures[0].percentChange)").bold <span ng-if="l.isPositive(l.performanceData.performance[0].measures[0].percentChange | number:2) === 'positive'">+</span>{{l.performanceData.performance[0].measures[0].percentChange | number:1}}<span>%</span>
             tr
               td
                 h3 &nbsp;
