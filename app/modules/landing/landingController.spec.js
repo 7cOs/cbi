@@ -101,30 +101,30 @@ describe('Unit: landingController', function() {
     describe('[list.isPositive]', function() {
       it('should return true if the data is positive', function() {
         var test = ctrl.isPositive(1);
-        expect(test).toBeTruthy();
+        expect(test).toEqual('positive');
       });
 
       it('should return true if the data is 0', function() {
         var test = ctrl.isPositive(0);
-        expect(test).toBeTruthy();
+        expect(test).toEqual('neutral');
       });
 
       it('should return false if the data is negative', function() {
         var test = ctrl.isPositive(-1);
-        expect(test).toBeFalsy();
+        expect(test).toEqual('negative');
       });
 
       it('should evaluate correctly if a number in string format is passed in', function() {
         var test = ctrl.isPositive('1');
-        expect(test).toBeTruthy();
+        expect(test).toEqual('positive');
 
         test = ctrl.isPositive('-1');
-        expect(test).toBeFalsy();
+        expect(test).toEqual('negative');
       });
 
       it('should return false if data is NaN', function() {
         var test = ctrl.isPositive('string');
-        expect(test).toBeFalsy();
+        expect(test).toEqual('negative');
       });
     });
   });

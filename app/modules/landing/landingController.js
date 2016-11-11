@@ -55,9 +55,12 @@ module.exports = /*  @ngInject */
     function isPositive(salesData) {
       if (salesData && typeof salesData === 'string') salesData = Number(salesData);
 
-      if (salesData >= 0 && !isNaN(salesData)) return true;
+      if (!isNaN(salesData)) {
+        if (salesData === 0) return 'neutral';
+        if (salesData > 0) return 'positive';
+      }
 
-      return false;
+      return 'negative';
     };
 
     function findOpportunities() {
