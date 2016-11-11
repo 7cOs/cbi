@@ -49,7 +49,6 @@ module.exports = /*  @ngInject */
     vm.isAuthor = isAuthor;
     vm.permissionLabel = permissionLabel;
     vm.findTargetListAuthor = findTargetListAuthor;
-    vm.pageName = pageName;
 
     init();
 
@@ -292,15 +291,6 @@ module.exports = /*  @ngInject */
       });
     }
 
-    function pageName(arr) {
-      arr = arr || [];
-      for (var i = 0; i < arr.length; i++) {
-        if ($state.current.name === arr[i]) return true;
-      }
-
-      return false;
-    }
-
     // **************
     // PRIVATE METHODS
     // **************
@@ -322,8 +312,6 @@ module.exports = /*  @ngInject */
 
       // reset all chips and filters on page init
       chipsService.resetChipsFilters(chipsService.model);
-
-      console.log($state.current.name);
 
     }
   };
