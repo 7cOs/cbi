@@ -326,20 +326,20 @@ describe('Unit: accountsController', function() {
   describe('[Method] updateDistributionTimePeriod', function() {
     it('Should set ctrl.filterModel.distributionTimePeriod', function() {
       ctrl.updateDistributionTimePeriod('year');
-      expect(ctrl.filterModel.distributionTimePeriod).toEqual(filtersService.model.distributionTimePeriod['year'][0].name);
+      expect(ctrl.filterModel.distributionTimePeriod).toEqual(filtersService.model.distributionTimePeriod['year'][0]);
 
       ctrl.updateDistributionTimePeriod('month');
-      expect(ctrl.filterModel.distributionTimePeriod).toEqual(filtersService.model.distributionTimePeriod['month'][0].name);
+      expect(ctrl.filterModel.distributionTimePeriod).toEqual(filtersService.model.distributionTimePeriod['month'][0]);
     });
   });
 
   describe('[Method] updateDistributionTimePeriod', function() {
     it('Should set ctrl.filterModel.distributionTimePeriod', function() {
       ctrl.updateDistributionTimePeriod('year');
-      expect(ctrl.filterModel.distributionTimePeriod).toEqual(filtersService.model.distributionTimePeriod['year'][0].name);
+      expect(ctrl.filterModel.distributionTimePeriod).toEqual(filtersService.model.distributionTimePeriod['year'][0]);
 
       ctrl.updateDistributionTimePeriod('month');
-      expect(ctrl.filterModel.distributionTimePeriod).toEqual(filtersService.model.distributionTimePeriod['month'][0].name);
+      expect(ctrl.filterModel.distributionTimePeriod).toEqual(filtersService.model.distributionTimePeriod['month'][0]);
     });
   });
 
@@ -358,33 +358,77 @@ describe('Unit: accountsController', function() {
   });
 
   describe('YA and Plan Trend values', function() {
+    var depletionValues;
+    var distirbutionValues;
+    beforeEach(function () {
+      depletionValues = {
+        'CMTH': {
+          name: 'CMTH',
+          displayValue: 'Clo Mth',
+          id: 1
+        },
+        'CYTD': {
+          name: 'CYTD',
+          displayValue: 'CYTD',
+          id: 2
+        },
+        'FYTD': {
+          name: 'FYTD',
+          displayValue: 'FYTD',
+          id: 3
+        },
+        'CYTM': {
+          name: 'CYTM',
+          displayValue: 'CYTM',
+          id: 4
+        }
+      };
+
+      distirbutionValues =  {
+        'L60': {
+          name: 'L60',
+          displayValue: 'L60',
+          id: 1
+        },
+        'L90': {
+          name: 'L90',
+          displayValue: 'L90',
+          id: 2
+        },
+        'L120': {
+          name: 'L120',
+          displayValue: 'L120',
+          id: 3
+        }
+      };
+    });
     it('Should get correct YA% trend values for depletion and distirbution period', function() {
-      ctrl.filterModel.depletionsTimePeriod = 'FYTD';
+      ctrl.filterModel.depletionsTimePeriod = depletionValues.FYTD;
       var currentTrendVal = ctrl.getTrendValues(measuresArr, 'depletions', 'depletionsTimePeriod');
       expect(currentTrendVal.displayValue).toEqual('0.6%');
 
-      ctrl.filterModel.depletionsTimePeriod = 'CYTD';
+      ctrl.filterModel.depletionsTimePeriod = depletionValues.CYTD;
       currentTrendVal = ctrl.getTrendValues(measuresArr, 'depletions', 'depletionsTimePeriod');
       expect(currentTrendVal.displayValue).toEqual('3.4%');
 
-      ctrl.filterModel.depletionsTimePeriod = 'CYTM';
+      ctrl.filterModel.depletionsTimePeriod = depletionValues.CYTM;
       currentTrendVal = ctrl.getTrendValues(measuresArr, 'depletions', 'depletionsTimePeriod');
       expect(currentTrendVal.displayValue).toEqual('4.0%');
 
-      ctrl.filterModel.depletionsTimePeriod = 'CMTH';
+      ctrl.filterModel.depletionsTimePeriod = depletionValues.CMTH;
       currentTrendVal = ctrl.getTrendValues(measuresArr, 'depletions', 'depletionsTimePeriod');
       expect(currentTrendVal.displayValue).toEqual('-4.0%');
 
-      ctrl.filterModel.distributionTimePeriod = 'L90';
+      ctrl.filterModel.distributionTimePeriod = distirbutionValues['L90'];
       currentTrendVal = ctrl.getTrendValues(measuresArr, 'distributionsSimple', 'distributionTimePeriod');
       expect(currentTrendVal.displayValue).toEqual('-9.5%');
 
-      ctrl.filterModel.distributionTimePeriod = 'L120';
+      ctrl.filterModel.distributionTimePeriod = distirbutionValues['L120'];
       currentTrendVal = ctrl.getTrendValues(measuresArr, 'distributionsSimple', 'distributionTimePeriod');
       expect(currentTrendVal.displayValue).toEqual('-10.6%');
 
       // Negative tests
-      ctrl.filterModel.distributionTimePeriod = 'L120';
+      ctrl.filterModel.distributionTimePeriod = distirbutionValues['L120'];
       currentTrendVal = ctrl.getTrendValues(measuresArr, 'distributionsSimple', 'distributionTimePeriod');
       expect(currentTrendVal.displayValue).not.toEqual('-10.56424409690279%');
 
@@ -402,11 +446,11 @@ describe('Unit: accountsController', function() {
         name: 'vs ABP',
         value: 2
       };
-      ctrl.filterModel.depletionsTimePeriod = 'FYTD';
+      ctrl.filterModel.depletionsTimePeriod = depletionValues.FYTD;
       var currentTrendVal = ctrl.getTrendValues(measuresArr, 'depletions', 'depletionsTimePeriod');
       expect(currentTrendVal.displayValue).toEqual('-67.0%');
 
-      ctrl.filterModel.distributionTimePeriod = 'L120';
+      ctrl.filterModel.distributionTimePeriod = distirbutionValues['L120'];
       currentTrendVal = ctrl.getTrendValues(measuresArr, 'distributionsSimple', 'distributionTimePeriod');
       expect(currentTrendVal.displayValue).toEqual('-8.3%');
     });

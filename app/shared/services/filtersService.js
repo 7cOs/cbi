@@ -102,17 +102,21 @@ module.exports = /*  @ngInject */
       distributionTimePeriod: {
         year: [{
           name: 'L60',
-          displayValue: 'L60'
+          displayValue: 'L60',
+          id: 1
         }, {
           name: 'L90',
-          displayValue: 'L90'
+          displayValue: 'L90',
+          id: 2
         }, {
           name: 'L120',
-          displayValue: 'L120'
+          displayValue: 'L120',
+          id: 3
         }],
         month: [{
           name: 'L03',
-          displayValue: 'L03'
+          displayValue: 'L03',
+          id: 4
         }]
       },
       accountSelected: {

@@ -396,10 +396,6 @@ module.exports = /*  @ngInject */
       apply(true);
     }
 
-    $scope.$watch('a.filterModel.depletionsTimePeriod', function (newVal) {
-      console.log('[Depl Val]', newVal);
-    });
-
     function updateDistributionTimePeriod(value) {
       vm.filterModel.depletionsTimePeriod = filtersService.model.depletionsTimePeriod[value][0];
       vm.filterModel.distributionTimePeriod = filtersService.model.distributionTimePeriod[value][0];
