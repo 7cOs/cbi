@@ -252,7 +252,7 @@ module.exports = /*  @ngInject */
     }
 
     /**
-     * Checks if a value is positive or negative and returns empty string for null or undefined
+     * Returns the correct property from the measures array
      * @param {Array} brandMeasures - array of measures for a brand
      * @param {String} property - property to fetch from object depletions, depletionsTrend
      * @returns {String}  Property to get from filterModel
