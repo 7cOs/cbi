@@ -142,7 +142,6 @@ module.exports = /*  @ngInject */
         // change permission in userService.model.targetLists.owned so reflected in ui
         var keepGoing = true,
             list = $filter('filter')(userService.model.targetLists.owned, {id: targetListService.model.currentList.id});
-        console.log(list);
         angular.forEach(list.collaborators, function(item, key) {
           if (keepGoing) {
             if (item.user.employeeId === collaboratorId) {
