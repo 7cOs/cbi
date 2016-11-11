@@ -99,17 +99,17 @@ describe('Unit: landingController', function() {
     });
 
     describe('[list.isPositive]', function() {
-      it('should return true if the data is positive', function() {
+      it('should return positive if the data is positive', function() {
         var test = ctrl.isPositive(1);
         expect(test).toEqual('positive');
       });
 
-      it('should return true if the data is 0', function() {
+      it('should return neutral if the data is 0', function() {
         var test = ctrl.isPositive(0);
         expect(test).toEqual('neutral');
       });
 
-      it('should return false if the data is negative', function() {
+      it('should return negative if the data is negative', function() {
         var test = ctrl.isPositive(-1);
         expect(test).toEqual('negative');
       });
@@ -122,7 +122,7 @@ describe('Unit: landingController', function() {
         expect(test).toEqual('negative');
       });
 
-      it('should return false if data is NaN', function() {
+      it('should return negative if data is NaN', function() {
         var test = ctrl.isPositive('string');
         expect(test).toEqual('negative');
       });
