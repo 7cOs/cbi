@@ -464,6 +464,7 @@ describe('Unit: filter controller (opportunities)', function() {
       expect(loaderService.openLoader.calls.count()).toEqual(0);
       expect(userService.saveOpportunityFilter).not.toHaveBeenCalled();
       expect(userService.saveOpportunityFilter.calls.count()).toEqual(0);
+      expect(ctrl.tempId).toEqual(0);
 
       ctrl.saveFilter();
 
@@ -471,6 +472,7 @@ describe('Unit: filter controller (opportunities)', function() {
       expect(loaderService.openLoader.calls.count()).toEqual(1);
       expect(userService.saveOpportunityFilter).toHaveBeenCalled();
       expect(userService.saveOpportunityFilter.calls.count()).toEqual(1);
+      expect(ctrl.tempId).toEqual(1);
     });
 
     it('should call userService.saveOpportunityFilter', function() {});
