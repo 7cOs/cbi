@@ -16,7 +16,7 @@ section.landing-page
               td
                 h3 {{l.performanceData.performance[0].measures[0].value | number:0}}
               td
-                h3(ng-class="l.isPositive(l.performanceData.performance[0].measures[0].percentChange) ? 'positive' : 'negative'").bold <span ng-if="l.isPositive(l.performanceData.performance[0].measures[0].percentChange | number:2)">+</span>{{l.performanceData.performance[0].measures[0].percentChange | number:1}}<span>%</span>
+                h3(ng-class="l.isPositive(l.performanceData.performance[0].measures[0].percentChange)").bold <span ng-if="l.isPositive(l.performanceData.performance[0].measures[0].percentChange | number:2) === 'positive'`">+</span>{{l.performanceData.performance[0].measures[0].percentChange | number:1}}<span>%</span>
             tr
               td
                 h3 &nbsp;
@@ -33,27 +33,28 @@ section.landing-page
               th &nbsp;
               th.accent Effective
               th &nbsp;
-            tr
+            tr(ng-if="l.performanceData.performance[1] !== {} && l.performanceData.performance[2] !== {}")
               td
                 h3 {{l.performanceData.performance[1].measures[0].value | number:0}}
               td
-                h3(ng-class="l.isPositive(l.performanceData.performance[1].measures[0].percentChange) ? 'positive' : 'negative'").bold <span ng-if="l.isPositive(l.performanceData.performance[1].measures[0].percentChange | number:2)">+</span>{{l.performanceData.performance[1].measures[0].percentChange | number:1}}<span>%</span>
+                h3(ng-class="l.isPositive(l.performanceData.performance[1].measures[0].percentChange)").bold <span ng-if="l.isPositive(l.performanceData.performance[1].measures[0].percentChange | number:2) === 'positive'">+</span>{{l.performanceData.performance[1].measures[0].percentChange | number:1}}<span>%</span>
               td.accent.table-spacer on
               td
                 h3 {{l.performanceData.performance[2].measures[0].value | number:0}}
               td
-                h3(ng-class="l.isPositive(l.performanceData.performance[2].measures[0].percentChange) ? 'positive' : 'negative'").bold <span ng-if="l.isPositive(l.performanceData.performance[2].measures[0].percentChange | number:2)">+</span>{{l.performanceData.performance[2].measures[0].percentChange | number:1}}<span>%</span>
-            tr
+                h3(ng-class="l.isPositive(l.performanceData.performance[2].measures[0].percentChange)").bold <span ng-if="l.isPositive(l.performanceData.performance[2].measures[0].percentChange | number:2) === 'positive'">+</span>{{l.performanceData.performance[2].measures[0].percentChange | number:1}}<span>%</span>
+            tr(ng-if="l.performanceData.performance[3] !== {} && l.performanceData.performance[4] !== {}")
               td
                 h3 {{l.performanceData.performance[3].measures[0].value | number:0}}
               td
-                h3(ng-class="l.isPositive(l.performanceData.performance[3].measures[0].percentChange) ? 'positive' : 'negative'").bold <span ng-if="l.isPositive(l.performanceData.performance[3].measures[0].percentChange | number:2)">+</span>{{l.performanceData.performance[3].measures[0].percentChange | number:1}}<span>%</span>
+                h3(ng-class="l.isPositive(l.performanceData.performance[3].measures[0].percentChange)").bold <span ng-if="l.isPositive(l.performanceData.performance[3].measures[0].percentChange | number:2) === 'positive'">+</span>{{l.performanceData.performance[3].measures[0].percentChange | number:1}}<span>%</span>
               td.accent.table-spacer off
               td
                 h3 {{l.performanceData.performance[4].measures[0].value | number:0}}
               td
-                h3(ng-class="l.isPositive(l.performanceData.performance[4].measures[0].percentChange) ? 'positive' : 'negative'").bold <span ng-if="l.isPositive(l.performanceData.performance[4].measures[0].percentChange)">+</span>{{l.performanceData.performance[4].measures[0].percentChange | number:1}}<span>%</span>
-        p.accent.action-item.go-arrow #[a(href="#" ui-sref="scorecards") Show Details]
+                h3(ng-class="l.isPositive(l.performanceData.performance[4].measures[0].percentChange)").bold <span ng-if="l.isPositive(l.performanceData.performance[4].measures[0].percentChange) === 'positive'">+</span>{{l.performanceData.performance[4].measures[0].percentChange | number:1}}<span>%</span>
+        div(column="8 +4")
+          p.accent.action-item.go-arrow #[a(href="#" ui-sref="scorecards") Show Details]
       section(column="4 +1")
         .announcement-widget
           img(src="../assets/img/icons/announcement-help.svg" width="80" height="80")
