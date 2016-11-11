@@ -6,6 +6,7 @@ div.modal.create-target-list
     div.modal-input
       label Name
       input(ng-model="expanded.newList.name" placeholder="Enter List Name")
+      label.error(ng-show="expanded.newList.name.length > 40") List name cannot be greater than 40 characters. {{expanded.newList.name.length - 40}} over limit.
     div.modal-input
       label Description (Optional)
       textarea(ng-model="expanded.newList.description" placeholder="Enter Description").larger-input

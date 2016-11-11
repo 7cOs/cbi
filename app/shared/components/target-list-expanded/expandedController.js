@@ -162,6 +162,9 @@ module.exports = /*  @ngInject */
     }
 
     function saveNewList(e) {
+
+      if (vm.newList.name.length > 40) return;
+
       vm.buttonDisabled = true;
 
       // create collaborator payload
