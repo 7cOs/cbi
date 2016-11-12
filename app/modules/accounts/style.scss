@@ -348,6 +348,12 @@
 .depletions-table {
   table-layout: fixed;
 
+  .accent {
+    &.no-transform {
+      text-transform: none;
+    }
+  }
+
   th {
     &.brand-name-column {
       width: 32%;

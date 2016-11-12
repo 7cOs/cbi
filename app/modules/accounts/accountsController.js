@@ -193,7 +193,7 @@ module.exports = /*  @ngInject */
 
     // Expose public methods
     vm.apply = apply;
-    vm.removeOptionsBasedOnView = removeOptionsBasedOnView;
+    vm.removeDistOptionsBasedOnView = removeDistOptionsBasedOnView;
     vm.displayBrandValue = displayBrandValue;
     vm.goToOpportunities = goToOpportunities;
     vm.getClassBasedOnValue = getClassBasedOnValue;
@@ -224,6 +224,10 @@ module.exports = /*  @ngInject */
       vm.disableApply = bool;
     }
 
+    /**
+     * Function gets the 'totals' property from brands web service call or package/sku call
+     * @returns Sets the totals object to vm.currentTotalsObject
+     */
     function setCurrentTotalsObject() {
       var currentTab = vm.brandSelectedIndex === 0 ? vm.brandTabs.brands : vm.brandTabs.skus;
       var matchedProperty = currentTab.filter(function (obj) {
@@ -232,7 +236,12 @@ module.exports = /*  @ngInject */
       vm.currentTotalsObject = matchedProperty[0];
     }
 
-    function removeOptionsBasedOnView(accountBrandObj) {
+    /*
+    ** @param {Array} accountBrandObj - 'distirbutionSimple': 1,'distirbutionEffective': 2,'velocity': 3
+    ** @param {String} property - property to fetch from object depletions, depletionsTrend
+    ** @param {String} timePeriod - property to get from filterModel
+    */
+    function removeDistOptionsBasedOnView(accountBrandObj) {
       var isOptionHidden = false;
       if (accountBrandObj.value === 1 && vm.brandSelectedIndex === 1) {
         isOptionHidden = true;
@@ -242,15 +251,16 @@ module.exports = /*  @ngInject */
       return isOptionHidden;
     }
 
-    /*
-    ** @param {Array} brandMeasures - array of measures for a brand
-    ** @param {String} property - property to fetch from object depletions, depletionsTrend
-    ** @param {String} timePeriod - property to get from filterModel
-    */
+    /**
+     * Returns the correct property from the measures array
+     * @param {Array} brandMeasures - array of measures for a brand
+     * @param {String} property - property to fetch from object depletions, depletionsTrend
+     * @returns {String}  Property to get from filterModel
+     */
     function displayBrandValue(brandMeasures, property, timePeriod) {
       if (brandMeasures) {
         var matchedMeasure = brandMeasures.filter(function(currentMeasure) {
-          return currentMeasure.timeframe === vm.filterModel[timePeriod];
+          return currentMeasure.timeframe === vm.filterModel[timePeriod].name;
         });
         if (matchedMeasure[0]) {
           return matchedMeasure[0][property];
@@ -265,11 +275,16 @@ module.exports = /*  @ngInject */
       });
     }
 
-    // Check if sales data value is positive (for display in UI)
-    function getClassBasedOnValue(salesData) {
+    /**
+     * Checks if a value is positive or negative and returns empty string for null or undefined
+     * @param {Number} currentValue Opportunity object
+     * @param {String} classToBeAdded Array of all currently selected items
+     * @returns Returns 'positive' or 'negative' or ''
+     */
+    function getClassBasedOnValue(currentValue) {
       var classToBeAdded = '';
-      if (salesData && !isNaN(salesData)) {
-        if (salesData >= 0) {
+      if (currentValue && !isNaN(currentValue)) {
+        if (currentValue >= 0) {
           classToBeAdded = 'positive';
         } else {
           classToBeAdded = 'negative';
@@ -309,6 +324,12 @@ module.exports = /*  @ngInject */
       apply(false);
     }
 
+    /**
+     * Checks if a value is positive or negative and returns empty string for null or undefined
+     * @param {Object} currentValue Opportunity object
+     * @param {String} classToBeAdded Array of all currently selected items
+     * @returns 'positive' or 'negative' or ''
+     */
     function checkIfVelocityPresent(item) {
       // Only return true if its YA%. For APB velocityTrend should be blank
       if (item && item.measures) {
@@ -376,8 +397,8 @@ module.exports = /*  @ngInject */
     }
 
     function updateDistributionTimePeriod(value) {
-      vm.filterModel.depletionsTimePeriod = filtersService.model.depletionsTimePeriod[value][0].name;
-      vm.filterModel.distributionTimePeriod = filtersService.model.distributionTimePeriod[value][0].name;
+      vm.filterModel.depletionsTimePeriod = filtersService.model.depletionsTimePeriod[value][0];
+      vm.filterModel.distributionTimePeriod = filtersService.model.distributionTimePeriod[value][0];
     }
 
     function updateTopBottom() {
@@ -398,9 +419,14 @@ module.exports = /*  @ngInject */
       }
     }
 
+    /**
+     * Checks if value of Depletions for a Pacakge or Brand is greater than 0
+     * @param {Number} item Package or Brand
+     * @returns Returns true if value greater than 0
+     */
     function checkForDepletionCount(item) {
       var val = vm.displayBrandValue(item.measures, 'depletions', 'depletionsTimePeriod');
-      return val > 0;
+      return val && val > 0;
     }
 
     // Checks active tab, updates model, passes data to chart (markets only)
@@ -426,8 +452,8 @@ module.exports = /*  @ngInject */
       // reset all chips and filters on page init
       vm.filterModel.trend = vm.filtersService.model.trend[0];
       vm.filtersService.model.accountSelected.accountBrands = vm.filters.accountBrands[0];
-      setDefaultEndingPeriodOptions();
       chipsService.resetChipsFilters(chipsService.model);
+      setDefaultEndingPeriodOptions();
 
       var promiseArr = [
         userService.getPerformanceSummary(),
@@ -446,6 +472,13 @@ module.exports = /*  @ngInject */
       });
     }
 
+    /**
+     * Gets the trend values based on whether ABP or YA is selected
+     * @param {Array} measures Package or Brand
+     * @param {String} measureType depletions or Distribution
+     * @param {String} timePeriod L90, L120 etc
+     * @returns {Object} currentTrendVal Returns the trend display value as string and the actual float value
+     */
     function getTrendValues(measures, measureType, timePeriod) {
       var currentTrendVal = {
         value: null,
@@ -477,6 +510,10 @@ module.exports = /*  @ngInject */
       return currentTrendVal;
     }
 
+    /**
+     * Gets the default selections or the selections chosen in the Scorecard page
+     * @returns {Object} Sets the ending, depletion and distirbution optios
+     */
     function setDefaultEndingPeriodOptions() {
       vm.filterModel.endingTimePeriod = vm.filtersService.lastEndingTimePeriod.endingPeriodType;
       vm.filterModel.depletionsTimePeriod = vm.filtersService.lastEndingTimePeriod.depletionValue;

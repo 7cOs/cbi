@@ -1,5 +1,129 @@
 describe('Unit: accountsController', function() {
   var scope, ctrl, $state, $q, filtersService, userService, packageSkuData, brandSpy;
+  var measuresArr = [
+    {
+      'timeframe': 'MTD',
+      'depletions': 169216.3238,
+      'depletionsTrend': -4.467688039055397,
+      'depletionsBU': null,
+      'depletionsBUTrend': null,
+      'plan': 397461.5977,
+      'planDepletionTrend': -57.42574256753157
+    },
+    {
+      'timeframe': 'CYTD',
+      'depletions': 2800898.6819,
+      'depletionsTrend': 3.430630640080394,
+      'depletionsBU': null,
+      'depletionsBUTrend': null,
+      'plan': 7314905.1623,
+      'planDepletionTrend': -61.70970614444271
+    },
+    {
+      'timeframe': 'FYTD',
+      'depletions': 2226380.265,
+      'depletionsTrend': 0.5947959229454935,
+      'depletionsBU': null,
+      'depletionsBUTrend': null,
+      'plan': 6742588.7227,
+      'planDepletionTrend': -66.98033416298199
+    },
+    {
+      'timeframe': 'CMTH',
+      'depletions': 469085.2109,
+      'depletionsTrend': -3.971677256660469,
+      'depletionsBU': null,
+      'depletionsBUTrend': null,
+      'plan': 1319983.9654,
+      'planDepletionTrend': -64.46280991316048
+    },
+    {
+      'timeframe': 'CYTM',
+      'depletions': 2631682.3581,
+      'depletionsTrend': 3.9834168904068137,
+      'depletionsBU': null,
+      'depletionsBUTrend': null,
+      'plan': 7886888.9828,
+      'planDepletionTrend': -66.63218711662782
+    },
+    {
+      'timeframe': 'FYTM',
+      'depletions': 2057163.9412,
+      'depletionsTrend': 1.0352082494789154,
+      'depletionsBU': null,
+      'depletionsBUTrend': null,
+      'plan': 5884445.6922,
+      'planDepletionTrend': -65.04065040608957
+    },
+    {
+      'timeframe': 'L60',
+      'distributionsSimple': 10924,
+      'distributionsSimpleTrend': -8.639290792004683,
+      'distributionsSimpleBU': null,
+      'distributionsSimpleBUTrend': null,
+      'distributionsEffective': 31424,
+      'distributionsEffectiveTrend': -6.709416933855837,
+      'distributionsEffectiveBU': null,
+      'distributionsEffectiveBUTrend': null,
+      'velocity': 4614.1987,
+      'velocityTrend': null,
+      'planSimple': 12716,
+      'planEffective': 38601,
+      'planDistirbutionSimpleTrend': -14.092481912551117,
+      'planDistirbutionEffectiveTrend': -71.70021502033626
+    },
+    {
+      'timeframe': 'L90',
+      'distributionsSimple': 11259,
+      'distributionsSimpleTrend': -9.493569131832798,
+      'distributionsSimpleBU': null,
+      'distributionsSimpleBUTrend': null,
+      'distributionsEffective': 33545,
+      'distributionsEffectiveTrend': -6.720983260107892,
+      'distributionsEffectiveBU': null,
+      'distributionsEffectiveBUTrend': null,
+      'velocity': 9882.9284,
+      'velocityTrend': null,
+      'planSimple': 12716,
+      'planEffective': 38601,
+      'planDistirbutionSimpleTrend': -11.45800566215791,
+      'planDistirbutionEffectiveTrend': -70.83236185591046
+    },
+    {
+      'timeframe': 'L120',
+      'distributionsSimple': 11666,
+      'distributionsSimpleTrend': -10.56424409690279,
+      'distributionsSimpleBU': null,
+      'distributionsSimpleBUTrend': null,
+      'distributionsEffective': 35557,
+      'distributionsEffectiveTrend': -6.4904667981591055,
+      'distributionsEffectiveBU': null,
+      'distributionsEffectiveBUTrend': null,
+      'velocity': 23128.6564,
+      'velocityTrend': null,
+      'planSimple': 12716,
+      'planEffective': 38601,
+      'planDistirbutionSimpleTrend': -8.25731362063542,
+      'planDistirbutionEffectiveTrend': -69.77798502629466
+    },
+    {
+      'timeframe': 'L03',
+      'distributionsSimple': 11436,
+      'distributionsSimpleTrend': -8.62895493767977,
+      'distributionsSimpleBU': null,
+      'distributionsSimpleBUTrend': null,
+      'distributionsEffective': 34160,
+      'distributionsEffectiveTrend': -4.655576643965613,
+      'distributionsEffectiveBU': null,
+      'distributionsEffectiveBUTrend': null,
+      'velocity': 7869.0204,
+      'velocityTrend': null,
+      'planSimple': 12716,
+      'planEffective': 38601,
+      'planDistirbutionSimpleTrend': -10.066058508965083,
+      'planDistirbutionEffectiveTrend': -70.37382451231834
+    }
+  ];
   beforeEach(function() {
     // Get Mock Modules
     angular.mock.module('ui.router');
@@ -202,10 +326,20 @@ describe('Unit: accountsController', function() {
   describe('[Method] updateDistributionTimePeriod', function() {
     it('Should set ctrl.filterModel.distributionTimePeriod', function() {
       ctrl.updateDistributionTimePeriod('year');
-      expect(ctrl.filterModel.distributionTimePeriod).toEqual(filtersService.model.distributionTimePeriod['year'][0].name);
+      expect(ctrl.filterModel.distributionTimePeriod).toEqual(filtersService.model.distributionTimePeriod['year'][0]);
 
       ctrl.updateDistributionTimePeriod('month');
-      expect(ctrl.filterModel.distributionTimePeriod).toEqual(filtersService.model.distributionTimePeriod['month'][0].name);
+      expect(ctrl.filterModel.distributionTimePeriod).toEqual(filtersService.model.distributionTimePeriod['month'][0]);
+    });
+  });
+
+  describe('[Method] updateDistributionTimePeriod', function() {
+    it('Should set ctrl.filterModel.distributionTimePeriod', function() {
+      ctrl.updateDistributionTimePeriod('year');
+      expect(ctrl.filterModel.distributionTimePeriod).toEqual(filtersService.model.distributionTimePeriod['year'][0]);
+
+      ctrl.updateDistributionTimePeriod('month');
+      expect(ctrl.filterModel.distributionTimePeriod).toEqual(filtersService.model.distributionTimePeriod['month'][0]);
     });
   });
 
@@ -224,158 +358,77 @@ describe('Unit: accountsController', function() {
   });
 
   describe('YA and Plan Trend values', function() {
-    var measuresArr = [
-      {
-        'timeframe': 'MTD',
-        'depletions': 169216.3238,
-        'depletionsTrend': -4.467688039055397,
-        'depletionsBU': null,
-        'depletionsBUTrend': null,
-        'plan': 397461.5977,
-        'planDepletionTrend': -57.42574256753157
-      },
-      {
-        'timeframe': 'CYTD',
-        'depletions': 2800898.6819,
-        'depletionsTrend': 3.430630640080394,
-        'depletionsBU': null,
-        'depletionsBUTrend': null,
-        'plan': 7314905.1623,
-        'planDepletionTrend': -61.70970614444271
-      },
-      {
-        'timeframe': 'FYTD',
-        'depletions': 2226380.265,
-        'depletionsTrend': 0.5947959229454935,
-        'depletionsBU': null,
-        'depletionsBUTrend': null,
-        'plan': 6742588.7227,
-        'planDepletionTrend': -66.98033416298199
-      },
-      {
-        'timeframe': 'CMTH',
-        'depletions': 469085.2109,
-        'depletionsTrend': -3.971677256660469,
-        'depletionsBU': null,
-        'depletionsBUTrend': null,
-        'plan': 1319983.9654,
-        'planDepletionTrend': -64.46280991316048
-      },
-      {
-        'timeframe': 'CYTM',
-        'depletions': 2631682.3581,
-        'depletionsTrend': 3.9834168904068137,
-        'depletionsBU': null,
-        'depletionsBUTrend': null,
-        'plan': 7886888.9828,
-        'planDepletionTrend': -66.63218711662782
-      },
-      {
-        'timeframe': 'FYTM',
-        'depletions': 2057163.9412,
-        'depletionsTrend': 1.0352082494789154,
-        'depletionsBU': null,
-        'depletionsBUTrend': null,
-        'plan': 5884445.6922,
-        'planDepletionTrend': -65.04065040608957
-      },
-      {
-        'timeframe': 'L60',
-        'distributionsSimple': 10924,
-        'distributionsSimpleTrend': -8.639290792004683,
-        'distributionsSimpleBU': null,
-        'distributionsSimpleBUTrend': null,
-        'distributionsEffective': 31424,
-        'distributionsEffectiveTrend': -6.709416933855837,
-        'distributionsEffectiveBU': null,
-        'distributionsEffectiveBUTrend': null,
-        'velocity': 4614.1987,
-        'velocityTrend': null,
-        'planSimple': 12716,
-        'planEffective': 38601,
-        'planDistirbutionSimpleTrend': -14.092481912551117,
-        'planDistirbutionEffectiveTrend': -71.70021502033626
-      },
-      {
-        'timeframe': 'L90',
-        'distributionsSimple': 11259,
-        'distributionsSimpleTrend': -9.493569131832798,
-        'distributionsSimpleBU': null,
-        'distributionsSimpleBUTrend': null,
-        'distributionsEffective': 33545,
-        'distributionsEffectiveTrend': -6.720983260107892,
-        'distributionsEffectiveBU': null,
-        'distributionsEffectiveBUTrend': null,
-        'velocity': 9882.9284,
-        'velocityTrend': null,
-        'planSimple': 12716,
-        'planEffective': 38601,
-        'planDistirbutionSimpleTrend': -11.45800566215791,
-        'planDistirbutionEffectiveTrend': -70.83236185591046
-      },
-      {
-        'timeframe': 'L120',
-        'distributionsSimple': 11666,
-        'distributionsSimpleTrend': -10.56424409690279,
-        'distributionsSimpleBU': null,
-        'distributionsSimpleBUTrend': null,
-        'distributionsEffective': 35557,
-        'distributionsEffectiveTrend': -6.4904667981591055,
-        'distributionsEffectiveBU': null,
-        'distributionsEffectiveBUTrend': null,
-        'velocity': 23128.6564,
-        'velocityTrend': null,
-        'planSimple': 12716,
-        'planEffective': 38601,
-        'planDistirbutionSimpleTrend': -8.25731362063542,
-        'planDistirbutionEffectiveTrend': -69.77798502629466
-      },
-      {
-        'timeframe': 'L03',
-        'distributionsSimple': 11436,
-        'distributionsSimpleTrend': -8.62895493767977,
-        'distributionsSimpleBU': null,
-        'distributionsSimpleBUTrend': null,
-        'distributionsEffective': 34160,
-        'distributionsEffectiveTrend': -4.655576643965613,
-        'distributionsEffectiveBU': null,
-        'distributionsEffectiveBUTrend': null,
-        'velocity': 7869.0204,
-        'velocityTrend': null,
-        'planSimple': 12716,
-        'planEffective': 38601,
-        'planDistirbutionSimpleTrend': -10.066058508965083,
-        'planDistirbutionEffectiveTrend': -70.37382451231834
-      }
-    ];
+    var depletionValues;
+    var distirbutionValues;
+    beforeEach(function () {
+      depletionValues = {
+        'CMTH': {
+          name: 'CMTH',
+          displayValue: 'Clo Mth',
+          id: 1
+        },
+        'CYTD': {
+          name: 'CYTD',
+          displayValue: 'CYTD',
+          id: 2
+        },
+        'FYTD': {
+          name: 'FYTD',
+          displayValue: 'FYTD',
+          id: 3
+        },
+        'CYTM': {
+          name: 'CYTM',
+          displayValue: 'CYTM',
+          id: 4
+        }
+      };
 
+      distirbutionValues =  {
+        'L60': {
+          name: 'L60',
+          displayValue: 'L60',
+          id: 1
+        },
+        'L90': {
+          name: 'L90',
+          displayValue: 'L90',
+          id: 2
+        },
+        'L120': {
+          name: 'L120',
+          displayValue: 'L120',
+          id: 3
+        }
+      };
+    });
     it('Should get correct YA% trend values for depletion and distirbution period', function() {
-      ctrl.filterModel.depletionsTimePeriod = 'FYTD';
+      ctrl.filterModel.depletionsTimePeriod = depletionValues.FYTD;
       var currentTrendVal = ctrl.getTrendValues(measuresArr, 'depletions', 'depletionsTimePeriod');
       expect(currentTrendVal.displayValue).toEqual('0.6%');
 
-      ctrl.filterModel.depletionsTimePeriod = 'CYTD';
+      ctrl.filterModel.depletionsTimePeriod = depletionValues.CYTD;
       currentTrendVal = ctrl.getTrendValues(measuresArr, 'depletions', 'depletionsTimePeriod');
       expect(currentTrendVal.displayValue).toEqual('3.4%');
 
-      ctrl.filterModel.depletionsTimePeriod = 'CYTM';
+      ctrl.filterModel.depletionsTimePeriod = depletionValues.CYTM;
       currentTrendVal = ctrl.getTrendValues(measuresArr, 'depletions', 'depletionsTimePeriod');
       expect(currentTrendVal.displayValue).toEqual('4.0%');
 
-      ctrl.filterModel.depletionsTimePeriod = 'CMTH';
+      ctrl.filterModel.depletionsTimePeriod = depletionValues.CMTH;
       currentTrendVal = ctrl.getTrendValues(measuresArr, 'depletions', 'depletionsTimePeriod');
       expect(currentTrendVal.displayValue).toEqual('-4.0%');
 
-      ctrl.filterModel.distributionTimePeriod = 'L90';
+      ctrl.filterModel.distributionTimePeriod = distirbutionValues['L90'];
       currentTrendVal = ctrl.getTrendValues(measuresArr, 'distributionsSimple', 'distributionTimePeriod');
       expect(currentTrendVal.displayValue).toEqual('-9.5%');
 
-      ctrl.filterModel.distributionTimePeriod = 'L120';
+      ctrl.filterModel.distributionTimePeriod = distirbutionValues['L120'];
       currentTrendVal = ctrl.getTrendValues(measuresArr, 'distributionsSimple', 'distributionTimePeriod');
       expect(currentTrendVal.displayValue).toEqual('-10.6%');
 
       // Negative tests
-      ctrl.filterModel.distributionTimePeriod = 'L120';
+      ctrl.filterModel.distributionTimePeriod = distirbutionValues['L120'];
       currentTrendVal = ctrl.getTrendValues(measuresArr, 'distributionsSimple', 'distributionTimePeriod');
       expect(currentTrendVal.displayValue).not.toEqual('-10.56424409690279%');
 
@@ -393,11 +446,11 @@ describe('Unit: accountsController', function() {
         name: 'vs ABP',
         value: 2
       };
-      ctrl.filterModel.depletionsTimePeriod = 'FYTD';
+      ctrl.filterModel.depletionsTimePeriod = depletionValues.FYTD;
       var currentTrendVal = ctrl.getTrendValues(measuresArr, 'depletions', 'depletionsTimePeriod');
       expect(currentTrendVal.displayValue).toEqual('-67.0%');
 
-      ctrl.filterModel.distributionTimePeriod = 'L120';
+      ctrl.filterModel.distributionTimePeriod = distirbutionValues['L120'];
       currentTrendVal = ctrl.getTrendValues(measuresArr, 'distributionsSimple', 'distributionTimePeriod');
       expect(currentTrendVal.displayValue).toEqual('-8.3%');
     });

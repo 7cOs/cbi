@@ -36,12 +36,12 @@ notes
       div(row).dropdown-filter
         div(column='6').dropdown
           label Depletions Time Period
-          md-select(ng-model="a.filterModel.depletionsTimePeriod" md-on-open="a.openSelect(true)" md-on-close="a.openSelect(false)" aria-label="Select a depletion time period")
-            md-option(ng-repeat="filter in a.filtersService.model.depletionsTimePeriod[a.filterModel.endingTimePeriod] track by $index" aria-label="{{filter.name}}" ng-value="filter.name") {{filter.displayValue}}
+          md-select(ng-model="a.filterModel.depletionsTimePeriod" md-on-open="a.openSelect(true)" md-on-close="a.openSelect(false)" aria-label="Select a depletion time period" ng-model-options="{trackBy: '$value.id'}")
+            md-option(ng-repeat="filter in a.filtersService.model.depletionsTimePeriod[a.filterModel.endingTimePeriod]" aria-label="{{filter.name}}" ng-value="filter") {{filter.displayValue}}
         div(column='6').dropdown
           label Distribution Time Period
           md-select(ng-model="a.filterModel.distributionTimePeriod" md-on-open="a.openSelect(true)" md-on-close="a.openSelect(false)" aria-label="Select a distribution time period")
-            md-option(ng-repeat="filter in a.filtersService.model.distributionTimePeriod[a.filterModel.endingTimePeriod]" aria-label="{{filter.name}}" value="{{filter.name}}")
+            md-option(ng-repeat="filter in a.filtersService.model.distributionTimePeriod[a.filterModel.endingTimePeriod]" aria-label="{{filter.name}}" ng-value="filter")
               <span>{{a.filterModel.endingTimePeriod === 'month'? filter.displayValue + ' Month' : filter.displayValue + ' Days'}}</span>
 
 .filters(column='12')
@@ -91,7 +91,7 @@ div(row)
     .widget-header
       .dropdown-filter
         md-select(ng-model="a.filtersService.model.accountSelected.accountBrands" md-on-open="a.openSelect(true)" md-on-close="a.openSelect(false);" aria-label="Account Brands Filter" placeholder="Distribution (simple)")
-          md-option(ng-repeat="filter in a.filters.accountBrands" ng-if="!a.removeOptionsBasedOnView(filter)" aria-label="{{filter.name}}" ng-value="filter") {{filter.name}}
+          md-option(ng-repeat="filter in a.filters.accountBrands" ng-if="!a.removeDistOptionsBasedOnView(filter)" aria-label="{{filter.name}}" ng-value="filter") {{filter.name}}
       span.back-chevron(ng-if="a.brandSelectedIndex === 1" ng-click="a.prevTab()")
       p.brands {{a.brandWidgetTitle || 'All Brands'}}
     .widget-content
@@ -103,18 +103,18 @@ div(row)
             th(colspan=2).top.dark.other-columns
               p.accent.bold Depletions
             th(colspan=2).top.other-columns
-              p.accent Distribution(s) - {{a.filterModel.distributionTimePeriod}} Days
+              p.accent Distribution(s) - {{a.filterModel.distributionTimePeriod.displayValue}} Days
           tr
             th
               p.accent &nbsp;
             th.dark
-              p.accent {{a.filterModel.depletionsTimePeriod}}
+              p.accent.no-transform {{a.filterModel.depletionsTimePeriod.displayValue}}
             th.dark
               p.accent {{a.filterModel.trend.name + '%'}}
             th
-              p.accent {{a.filterModel.distributionTimePeriod}}
+              p.accent {{a.filterModel.distributionTimePeriod.displayValue}}
             th
-              p.accent vs {{a.filterModel.trend.name + '%'}}
+              p.accent {{a.filterModel.trend.name + '%'}}
         tbody
           tr
             td.column-total.title-col.left TOTAL

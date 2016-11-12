@@ -74,39 +74,49 @@ module.exports = /*  @ngInject */
       depletionsTimePeriod: {
         month: [{
           name: 'CMTH',
-          displayValue: 'Clo Mth'
+          displayValue: 'Clo Mth',
+          id: 1
         }, {
           name: 'CYTM',
-          displayValue: 'CYTM'
+          displayValue: 'CYTM',
+          id: 2
         }, {
           name: 'FYTM',
-          displayValue: 'FYTM'
+          displayValue: 'FYTM',
+          id: 3
         }],
         year: [{
           name: 'MTD',
-          displayValue: 'MTD'
+          displayValue: 'MTD',
+          id: 4
         }, {
           name: 'CYTD',
-          displayValue: 'CYTD'
+          displayValue: 'CYTD',
+          id: 5
         }, {
           name: 'FYTD',
-          displayValue: 'FYTD'
+          displayValue: 'FYTD',
+          id: 6
         }]
       },
       distributionTimePeriod: {
         year: [{
           name: 'L60',
-          displayValue: 'L60'
+          displayValue: 'L60',
+          id: 1
         }, {
           name: 'L90',
-          displayValue: 'L90'
+          displayValue: 'L90',
+          id: 2
         }, {
           name: 'L120',
-          displayValue: 'L120'
+          displayValue: 'L120',
+          id: 3
         }],
         month: [{
           name: 'L03',
-          displayValue: 'L03'
+          displayValue: 'L03',
+          id: 4
         }]
       },
       accountSelected: {
@@ -186,8 +196,8 @@ module.exports = /*  @ngInject */
     };
     var lastEndingTimePeriod = {
       endingPeriodType: 'year',
-      depletionValue: 'FYTD',
-      timePeriodValue: 'L90'
+      depletionValue: model.depletionsTimePeriod.year[2],
+      timePeriodValue: model.distributionTimePeriod.year[1]
     };
     var service = {
       model: model,
