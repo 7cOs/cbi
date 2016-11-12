@@ -250,11 +250,15 @@ module.exports = /*  @ngInject */
     };
 
     function findTargetListAuthor(collaborators) {
+      var author;
       angular.forEach(collaborators, function(value, key) {
         if (value.permissionLevel === 'author') {
-          vm.targetListAuthor = value.user.firstName + ' ' + value.user.lastName;
+          author = value.user.firstName + ' ' + value.user.lastName;
+          vm.targetListAuthor = author;
         }
       });
+
+      return author;
     }
 
     // ***************
