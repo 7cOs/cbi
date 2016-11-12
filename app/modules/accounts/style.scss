@@ -348,8 +348,10 @@
 .depletions-table {
   table-layout: fixed;
 
-  &.accent.remove-transform {
-    text-transform: none;
+  .accent {
+    &.no-transform {
+      text-transform: none;
+    }
   }
 
   th {
