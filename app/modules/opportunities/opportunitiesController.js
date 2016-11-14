@@ -33,6 +33,7 @@ module.exports = /*  @ngInject */
     vm.deleteSavedFilter = deleteSavedFilter;
     vm.editFilterModal = editFilterModal;
     vm.placeholderSelect = placeholderSelect;
+    vm.editReportName = editReportName;
 
     init();
 
@@ -101,9 +102,9 @@ module.exports = /*  @ngInject */
     }
 
     function editFilterModal(filterId, ev) {
+      var parentEl = angular.element(document.body);
       vm.currentFilter = $filter('filter')(userService.model.opportunityFilters, {id: filterId});
 
-      var parentEl = angular.element(document.body);
       $mdDialog.show({
         clickOutsideToClose: true,
         parent: parentEl,
@@ -126,6 +127,14 @@ module.exports = /*  @ngInject */
 
     function placeholderSelect(data) {
       vm.hintTextPlaceholder = data;
+    }
+
+    function editReportName() {
+      opportunityFiltersService.updateOpportunityFilter(vm.currentFilter[0].id, 'name', vm.currentFilter[0].name).then(function(data) {
+        console.log('yay', data);
+      }, function(err) {
+        console.warn(err);
+      });
     }
 
     // ***************

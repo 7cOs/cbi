@@ -229,7 +229,7 @@ module.exports = /*  @ngInject */
       var currentFilter = userService.model.newServiceSelect;
       loaderService.openLoader(true);
       var chipsDescription = getDescriptionForFilter(chipsService.model, filtersService.model);
-      opportunityFiltersService.updateOpportunityFilter(currentFilter, chipsDescription).then(function(data) {
+      opportunityFiltersService.updateOpportunityFilter(currentFilter, 'description', chipsDescription).then(function(data) {
         var selectedFilter = userService.model.opportunityFilters.filter(function(filterVal) {
           return filterVal.id === currentFilter;
         });
