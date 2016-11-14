@@ -1,5 +1,5 @@
 describe('Unit: accountsController', function() {
-  var scope, ctrl, $state, $q, filtersService, userService, packageSkuData, brandSpy;
+  var scope, ctrl, $state, $q, filtersService, userService, packageSkuData, brandSpy, brandPerformanceData;
   var measuresArr = [
     {
       'timeframe': 'MTD',
@@ -141,6 +141,32 @@ describe('Unit: accountsController', function() {
       // chipsService = _chipsService_;
       filtersService = _filtersService_;
       userService = _userService_;
+      brandPerformanceData = {
+        performance: [
+          {
+            'type': 'Brand',
+            'id': '416',
+            'name': 'MODELO ESPECIAL',
+            'measures': [
+              {
+                'timeframe': 'MTD',
+                'depletions': 2786.4,
+                'depletionsTrend': -11.475409836065568,
+                'depletionsBU': null,
+                'depletionsBUTrend': null,
+                'plan': 6544.8
+              }
+            ]
+          },
+          {
+            'type': 'Total',
+            'id': null,
+            'name': null,
+            'measures': []
+          }
+        ]
+      };
+
       packageSkuData = {
         performance: [
           {
@@ -172,7 +198,7 @@ describe('Unit: accountsController', function() {
       spyOn(userService, 'getPerformanceDistribution').and.returnValue(fakePromise);
       spyOn(userService, 'getPerformanceSummary').and.returnValue(fakePromise);
       brandSpy = spyOn(userService, 'getPerformanceBrand');
-      brandSpy.and.returnValue($q.when(packageSkuData));
+      brandSpy.and.returnValue($q.when(brandPerformanceData));
       // Create Controller
       ctrl = $controller('accountsController', {$scope: scope});
       scope.$digest();
@@ -504,6 +530,7 @@ describe('Unit: accountsController', function() {
     });
 
     it('Should get SKU/Packages for selected brand', function () {
+      brandSpy.and.returnValue($q.when(packageSkuData));
       ctrl.selectItem(widget, item, parent, parentIndex);
       scope.$digest();
       expect(userService.getPerformanceBrand).toHaveBeenCalled();
@@ -511,6 +538,7 @@ describe('Unit: accountsController', function() {
     });
 
     it('Should move to Package/SKU view', function () {
+      brandSpy.and.returnValue($q.when(packageSkuData));
       ctrl.selectItem(widget, item, parent, parentIndex);
       scope.$digest();
       expect(ctrl.brandSelectedIndex).toEqual(1);
