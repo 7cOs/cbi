@@ -273,9 +273,9 @@ module.exports = /*  @ngInject */
         targetListService.model.currentList.loading = false;
 
         if (response.permissionLevel === 'author') {
-          vm.targetListAuthor = 'currentUser';
+          vm.targetListAuthor = 'current user';
         } else {
-          findTargetListAuthor(response.collaborators);
+          vm.targetListAuthor = findTargetListAuthor(response.collaborators);
         }
         targetListService.updateTargetListShares(targetListService.model.currentList.id, userService.model.currentUser.employeeID, true);
       }, function(err) {
@@ -284,11 +284,15 @@ module.exports = /*  @ngInject */
     }
 
     function findTargetListAuthor(collaborators) {
+      var author;
+
       angular.forEach(collaborators, function(value, key) {
         if (value.permissionLevel === 'author') {
-          vm.targetListAuthor = value.user.firstName + ' ' + value.user.lastName;
+          author = value.user.firstName + ' ' + value.user.lastName;
         }
       });
+
+      return author;
     }
 
     // **************

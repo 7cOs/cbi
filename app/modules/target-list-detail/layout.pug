@@ -12,8 +12,8 @@
   div(row)
     div(column="12")
       h1.hero-title {{tld.targetListService.model.currentList.name}}
-      label(ng-if="tld.targetListAuthor === 'currentUser'").accent.bold.accent-blue You are the owner
-      label(ng-if="tld.targetListAuthor !== 'currentUser'").accent.bold.accent-blue <span ng-class="{'red-owner': tld.targetListService.model.currentList.archived}">{{tld.targetListAuthor}}</span> is the owner
+      label(ng-if="tld.targetListAuthor === 'current user'").accent.bold.accent-blue You are the owner
+      label(ng-if="tld.targetListAuthor !== 'current user'").accent.bold.accent-blue <span ng-class="{'red-owner': tld.targetListService.model.currentList.archived}">{{tld.targetListAuthor}}</span> is the owner
   div(row)
     div(column="5")
       p {{tld.targetListService.model.currentList.description}}

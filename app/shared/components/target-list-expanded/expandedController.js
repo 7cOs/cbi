@@ -254,7 +254,6 @@ module.exports = /*  @ngInject */
       angular.forEach(collaborators, function(value, key) {
         if (value.permissionLevel === 'author') {
           author = value.user.firstName + ' ' + value.user.lastName;
-          vm.targetListAuthor = author;
         }
       });
 
@@ -306,7 +305,7 @@ module.exports = /*  @ngInject */
           }
 
           for (j = 0; j < data[i].sharedWithMe.length; j++) {
-            findTargetListAuthor(data[i].sharedWithMe[j].collaborators);
+            vm.targetListAuthor = findTargetListAuthor(data[i].sharedWithMe[j].collaborators);
 
             data[i].sharedWithMe[j].targetListAuthor = vm.targetListAuthor;
 

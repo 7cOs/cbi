@@ -237,6 +237,9 @@ describe('Unit: targetListDetailController', function() {
 
     expect(ctrl.updateList).not.toBeUndefined();
     expect(typeof (ctrl.updateList)).toEqual('function');
+
+    expect(ctrl.findTargetListAuthor).not.toBeUndefined();
+    expect(typeof (ctrl.findTargetListAuthor)).toEqual('function');
   });
 
   describe('Public Methods', function() {
@@ -529,6 +532,25 @@ describe('Unit: targetListDetailController', function() {
       });
     });
 
-  });
+    it('should find the author', function() {
+      var collaboratorsTest = [
+        {
+          permissionLevel: 'collaborator',
+          user: {
+            firstName: 'CHARLIE',
+            lastName: 'BLACKWOOD'
+          }
+        },
+        {
+          permissionLevel: 'author',
+          user: {
+            firstName: 'RICK',
+            lastName: 'NEVEN'
+          }
+        }
+      ];
 
+      expect(ctrl.findTargetListAuthor(collaboratorsTest)).toEqual('RICK NEVEN');
+    });
+  });
 });
