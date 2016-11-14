@@ -104,7 +104,6 @@ module.exports = /*  @ngInject */
     function deleteList() {
       if (vm.pendingRemovals) removeCollaborator(vm.pendingRemovals);
       targetListService.deleteTargetList(targetListService.model.currentList.id).then(function(response) {
-        console.log('Target List Deleted: ', response);
 
         vm.confirmToast = true;
         removeFooterToast();
