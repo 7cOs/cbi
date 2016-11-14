@@ -211,7 +211,7 @@ module.exports = /*  @ngInject */
     vm.getTrendValues = getTrendValues;
     vm.isPackageView = false;
     vm.checkIfVelocityPresent = checkIfVelocityPresent;
-    vm.currentTotalsObject = vm.currentTotalsObject;
+    vm.currentTotalsObject = null;
     vm.checkForDepletionCount = checkForDepletionCount;
 
     init();

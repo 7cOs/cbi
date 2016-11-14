@@ -100,7 +100,7 @@ describe('Unit: accountsController', function() {
       'distributionsEffectiveBU': null,
       'distributionsEffectiveBUTrend': null,
       'velocity': 23128.6564,
-      'velocityTrend': null,
+      'velocityTrend': 4.5454,
       'planSimple': 12716,
       'planEffective': 38601,
       'planDistirbutionSimpleTrend': -8.25731362063542,
@@ -256,6 +256,12 @@ describe('Unit: accountsController', function() {
 
       expect(ctrl.updateTopBottom).not.toBeUndefined();
       expect(typeof (ctrl.updateTopBottom)).toEqual('function');
+    });
+
+    it('Should get default radio button options on init', function () {
+      expect(ctrl.filterModel.endingTimePeriod).toEqual('year');
+      expect(ctrl.filterModel.depletionsTimePeriod.name).toEqual('FYTD');
+      expect(ctrl.filterModel.distributionTimePeriod.name).toEqual('L90');
     });
   });
 
@@ -497,5 +503,66 @@ describe('Unit: accountsController', function() {
       expect(userService.getPerformanceBrand).toHaveBeenCalled();
       expect(ctrl.brandTabs.skus[0]).toEqual(packageSkuData.performance[0]);
     });
+  });
+
+  describe('Showing correct distirbution and velocity options', function () {
+    function getDistirbutionBasedOnValue(accountEnum) {
+      var matchedObj = ctrl.filters.accountBrands.filter(function (account) {
+        return account.value === accountEnum;
+      });
+      return matchedObj[0];
+    }
+    it('Should not hide distirbution Simple in brand view ', function () {
+      var distSimple = getDistirbutionBasedOnValue(ctrl.accountBrandEnum.distirbutionSimple);
+      var val = ctrl.removeDistOptionsBasedOnView(distSimple);
+      expect(val).toBeFalsy();
+    });
+
+    it('Should hide distirbution Effective in brand view ', function () {
+      var distSimple = getDistirbutionBasedOnValue(ctrl.accountBrandEnum.distirbutionEffective);
+      var val = ctrl.removeDistOptionsBasedOnView(distSimple);
+      expect(val).toBeTruthy();
+    });
+
+    it('Should hide distirbution Simple in package view ', function () {
+      ctrl.brandSelectedIndex++;
+      var distSimple = getDistirbutionBasedOnValue(ctrl.accountBrandEnum.distirbutionSimple);
+      var val = ctrl.removeDistOptionsBasedOnView(distSimple);
+      expect(val).toBeTruthy();
+    });
+
+    it('Should show distirbution Effective in package view ', function () {
+      ctrl.brandSelectedIndex++;
+      var distSimple = getDistirbutionBasedOnValue(ctrl.accountBrandEnum.distirbutionEffective);
+      var val = ctrl.removeDistOptionsBasedOnView(distSimple);
+      expect(val).toBeFalsy();
+    });
+
+    it('Should show Velocity in brand and package view ', function () {
+      var velocity = getDistirbutionBasedOnValue(ctrl.accountBrandEnum.velocity);
+      var val = ctrl.removeDistOptionsBasedOnView(velocity);
+      expect(val).toBeFalsy();
+
+      ctrl.brandSelectedIndex++;
+      val = ctrl.removeDistOptionsBasedOnView(velocity);
+      expect(val).toBeFalsy();
+    });
+
+    it('Should check if velocity is present ', function () {
+      var item = {
+        name: 'Modelo',
+        measures: measuresArr
+      };
+      // Selecting L90
+      ctrl.filterModel.distributionTimePeriod = ctrl.filtersService.model.distributionTimePeriod.year[1];
+      var val = ctrl.checkIfVelocityPresent(item);
+      expect(val).toBeFalsy();
+
+      // Selecting L120 as it has a velocity trend value and velocity
+      ctrl.filterModel.distributionTimePeriod = ctrl.filtersService.model.distributionTimePeriod.year[2];
+      val = ctrl.checkIfVelocityPresent(item);
+      expect(val).toBeTruthy();
+    });
+
   });
 });
