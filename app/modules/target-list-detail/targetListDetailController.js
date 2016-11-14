@@ -96,12 +96,16 @@ module.exports = /*  @ngInject */
     }
 
     function closeModal(revert) {
-      if (revert) targetListService.model.currentList = vm.originalList;
+      if (revert) {
+        targetListService.model.currentList.name = vm.originalList.name;
+        targetListService.model.currentList.description = vm.originalList.description;
+      }
       $mdDialog.hide();
       vm.changed = false;
     }
 
     function deleteList() {
+      if (vm.pendingRemovals) removeCollaborator(vm.pendingRemovals);
       targetListService.deleteTargetList(targetListService.model.currentList.id).then(function(response) {
         console.log('Target List Deleted: ', response);
 

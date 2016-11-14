@@ -25,7 +25,7 @@ div.modal.target-list-modal
               span {{tld.permissionLabel(collaborator.permissionLevel)}}
               a(ng-hide="!tld.editable").chevron-down
             md-menu-content.collaborator-options
-              md-menu-item(ng-click="tld.selectedCollaboratorId = collaborator.user.employeeId") Make Owner
+              md-menu-item(ng-click="tld.selectedCollaboratorId = collaborator.user.employeeId" ng-disabled="") Make Owner
               md-menu-item(ng-click="tld.removeCollaboratorClick(collaborator.user.employeeId)") Remove
           .action-overlay(ng-class="{'confirm': tld.selectedCollaboratorId === collaborator.user.employeeId}")
             div.overlay-wrapper
@@ -40,8 +40,7 @@ div.modal.target-list-modal
               span {{tld.permissionLabel(pending.permissionLevel) | titlecase}}
               a.chevron-down
             md-menu-content.collaborator-options
-              md-menu-item(ng-click="tld.makeOwner(pending.employee.employeeId)") Make Owner
-              md-menu-item(ng-click="tld.removeCollaboratorClick(pending.employee.employeeId)") Remove
+              md-menu-item(ng-click="tld.removeCollaborator([pending.employee.employeeId])") Remove
     div(ng-hide="tld.targetListService.model.currentList.permissionLevel !== 'author'").modal-input.clearfix
       md-checkbox(ng-model="tld.collaborator.permissionLevel" ng-true-value="'collaborateandinvite'" ng-false-value="'collaborate'" ng-click="tld.changeCollaboratorLevel()") Allow Collaborators to invite others
     div(ng-hide="tld.targetListService.model.currentList.permissionLevel === 'collaborate'").modal-input
