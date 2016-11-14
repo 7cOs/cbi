@@ -175,6 +175,7 @@ module.exports = /*  @ngInject */
      */
     function removeFromFilterService(chip) {
       if (chip.search || chip.type === 'opportunityType' || chip.type === 'state') {
+        // console.log('no no');
         var arr = filtersService.model.selected[chip.type];
         var i = arr.length;
 
@@ -225,9 +226,10 @@ module.exports = /*  @ngInject */
         }
       } else if (typeof chip.type === 'string') {
         filtersService.model.selected[chip.type] = '';
-      } else if (typeof chip.type === 'boolean') {
+      } /* else if (typeof chip.type === 'boolean') { // dont think this is used. leaving it in just in case i breaked something
+        console.log('hiya');
         filtersService.model.selected[chip.type] = false;
-      }
+      } */
 
       if (service.model.length === defaultFilterArrayLength && isDefault(service.model)) {
         filtersService.disableFilters(false, false, false, false);
