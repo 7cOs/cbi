@@ -107,6 +107,13 @@ module.exports = /*  @ngInject */
     }
 
     function createTargetList(e) {
+      vm.newList = {
+        name: '',
+        description: '',
+        opportunities: [],
+        collaborators: [],
+        targetListShares: []
+      };
       var parentEl = angular.element(document.body);
       $mdDialog.show({
         clickOutsideToClose: true,
