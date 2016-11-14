@@ -1,12 +1,13 @@
 describe('[Services.chipsService]', function() {
-  var chipsService;
+  var chipsService, filtersService;
 
   beforeEach(function() {
     angular.mock.module('ui.router');
     angular.mock.module('cf.common.services');
 
-    inject(function(_chipsService_) {
+    inject(function(_chipsService_, _filtersService_) {
       chipsService = _chipsService_;
+      filtersService = _filtersService_;
     });
   });
 
@@ -87,5 +88,79 @@ describe('[Services.chipsService]', function() {
 
   it('should accept a model with a shuffled order of chips', function() {
     expect(chipsService.isDefault(shuffledServiceModel)).toEqual(true);
+  });
+
+  describe('method.removeFromFilterService', function() {
+    var myAccountsOnlyChip = {
+      applied: false,
+      name: 'My Accounts Only',
+      removable: true,
+      type: 'myAccountsOnly'
+    };
+    var opportunityStatusChip = {
+      applied: false,
+      name: 'Open',
+      removable: true,
+      search: true,
+      tradeChannel: false,
+      type: 'opportunityStatus'
+    };
+    var chipsTemplate = [
+      {
+        'name': 'My Accounts Only',
+        'type': 'myAccountsOnly',
+        'applied': false,
+        'removable': false
+      },
+      {
+        'name': 'Off-Premise',
+        'type': 'premiseType',
+        'applied': false,
+        'removable': false
+      },
+      {
+        'name': 'All Types',
+        'type': 'opportunityType',
+        'applied': false,
+        'removable': false
+      }
+    ];
+
+    beforeEach(function() {
+      chipsService.model = angular.copy(chipsTemplate);
+      filtersService.resetFilters();
+      spyOn(filtersService, 'disableFilters').and.callFake(function() {
+        return true;
+      });
+    });
+
+    it('should call disable filters if myAccountsOnly chip is removed with default chips', function() {
+      expect(filtersService.disableFilters.calls.count()).toEqual(0);
+      expect(filtersService.disableFilters).not.toHaveBeenCalled();
+
+      chipsService.removeFromFilterService(myAccountsOnlyChip);
+
+      expect(filtersService.disableFilters.calls.count()).toEqual(1);
+      expect(filtersService.disableFilters).toHaveBeenCalledWith(false, false, false, false);
+    });
+
+    it('should call disable filters if a new chip is added and then removed', function() {
+      expect(filtersService.disableFilters.calls.count()).toEqual(0);
+      expect(filtersService.disableFilters).not.toHaveBeenCalled();
+
+      chipsService.model.push(opportunityStatusChip);
+
+      chipsService.removeFromFilterService(opportunityStatusChip);
+
+      expect(filtersService.disableFilters.calls.count()).toEqual(1);
+      expect(filtersService.disableFilters).toHaveBeenCalledWith(false, false, true, false);
+    });
+
+    it('should reset filtersService model if chip.type is string', function() {
+      // my accounts only is the only string
+      expect(filtersService.model.selected['myAccountsOnly']).toEqual(true);
+      chipsService.removeFromFilterService(myAccountsOnlyChip);
+      expect(filtersService.model.selected['myAccountsOnly']).toEqual('');
+    });
   });
 });
