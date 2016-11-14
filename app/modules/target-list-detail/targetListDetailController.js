@@ -37,6 +37,7 @@ module.exports = /*  @ngInject */
     vm.changeCollaboratorLevel = changeCollaboratorLevel;
     vm.closeModal = closeModal;
     vm.deleteList = deleteList;
+    vm.findTargetListAuthor = findTargetListAuthor;
     vm.footerToast = footerToast;
     vm.initTargetLists = initTargetLists;
     vm.isAuthor = isAuthor;
@@ -49,10 +50,6 @@ module.exports = /*  @ngInject */
     vm.removeCollaboratorClick = removeCollaboratorClick;
     vm.removeFooterToast = removeFooterToast;
     vm.updateList = updateList;
-    vm.initTargetLists = initTargetLists;
-    vm.isAuthor = isAuthor;
-    vm.permissionLabel = permissionLabel;
-    vm.findTargetListAuthor = findTargetListAuthor;
 
     init();
 

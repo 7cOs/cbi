@@ -43,6 +43,17 @@ describe('Unit: targetListDetailController', function() {
         },
         'permissionLevel': 'collaborate',
         'lastViewed': null
+      },
+      {
+        'user': {
+          'id': '1234',
+          'employeeId': '112233',
+          'firstName': 'SAM',
+          'lastName': 'ADAMS',
+          'email': 'SAM.ADAMS@CBRANDS.COM'
+        },
+        'permissionLevel': 'collaborate',
+        'lastViewed': null
       }
     ];
 
@@ -227,6 +238,9 @@ describe('Unit: targetListDetailController', function() {
     expect(ctrl.removeCollaborator).not.toBeUndefined();
     expect(typeof (ctrl.removeCollaborator)).toEqual('function');
 
+    expect(ctrl.removeCollaboratorClick).not.toBeUndefined();
+    expect(typeof (ctrl.removeCollaboratorClick)).toEqual('function');
+
     expect(ctrl.removeFooterToast).not.toBeUndefined();
     expect(typeof (ctrl.removeFooterToast)).toEqual('function');
 
@@ -238,23 +252,6 @@ describe('Unit: targetListDetailController', function() {
   });
 
   describe('Public Methods', function() {
-
-    // this is not a public method and should be tested with updateList
-    // describe('[tld.addCollaborators]', function() {
-    //   beforeEach(function() {
-    //     spyOn(targetListService, 'addTargetListShares').and.callFake(function() {
-    //       var deferred = $q.defer();
-    //       return deferred.promise;
-    //     });
-
-    //     ctrl.addCollaborators();
-    //   });
-
-    //   it('should call the Target List Service', function() {
-    //     expect(targetListService.addTargetListShares).toHaveBeenCalled();
-    //   });
-    // });
-
     describe('[tld.addCollaboratorClick]', function() {
       var result;
 
@@ -289,6 +286,17 @@ describe('Unit: targetListDetailController', function() {
     describe('[tld.closeModal]', function() {
       beforeEach(function() {
         spyOn($mdDialog, 'hide').and.callThrough();
+        targetListService.model.currentList.name = 'Updated Name';
+        targetListService.model.currentList.description = 'Updated Description';
+        ctrl.originalList.name = 'Original Name';
+        ctrl.originalList.description = 'Original Description';
+      });
+
+      afterEach(function() {
+        targetListService.model.currentList.name = 'Updated Name';
+        targetListService.model.currentList.description = 'Updated Description';
+        ctrl.originalList.name = 'Original Name';
+        ctrl.originalList.description = 'Original Description';
       });
 
       it('should close an open modal', function() {
@@ -296,6 +304,19 @@ describe('Unit: targetListDetailController', function() {
 
         expect($mdDialog.hide).toHaveBeenCalled();
         expect($mdDialog.hide.calls.count()).toEqual(1);
+      });
+
+      it('should revert the list name and description if passed true parameter', function() {
+        ctrl.closeModal(true);
+
+        expect(targetListService.model.currentList.name).toEqual('Original Name');
+        expect(targetListService.model.currentList.description).toEqual('Original Description');
+      });
+
+      it('should retain the updates to the current list if true is not passed', function() {
+        ctrl.closeModal();
+        expect(targetListService.model.currentList.name).toEqual('Updated Name');
+        expect(targetListService.model.currentList.description).toEqual('Updated Description');
       });
     });
 
@@ -391,13 +412,35 @@ describe('Unit: targetListDetailController', function() {
     describe('[tld.modalManageTargetList]', function() {
       beforeEach(function() {
         spyOn($mdDialog, 'show').and.callThrough();
+        ctrl.pendingShares = [1, 2, 3];
+        ctrl.pendingRemovals = [3, 2, 1];
+        ctrl.originalList = {};
+        targetListService.model.currentList = ownedTargetLists.owned[0];
+      });
+
+      afterEach(function() {
+        ctrl.pendingShares = [1, 2, 3];
+        ctrl.pendingRemovals = [3, 2, 1];
+        ctrl.originalList = {};
+        targetListService.model.currentList = ownedTargetLists.owned[0];
       });
 
       it('should open the manage target list modal', function() {
         ctrl.modalManageTargetList();
-
         expect($mdDialog.show).toHaveBeenCalled();
         expect($mdDialog.show.calls.count()).toEqual(1);
+      });
+
+      it('should reset pending shares & pending removals arrays', function() {
+        ctrl.modalManageTargetList();
+        expect(ctrl.pendingShares.length).toEqual(0);
+        expect(ctrl.pendingRemovals.length).toEqual(0);
+      });
+
+      it('should set the original list object to that of the current target list', function() {
+        expect(ctrl.originalList).toEqual({});
+        ctrl.modalManageTargetList();
+        expect(ctrl.originalList.name).toEqual('No....this james archived list');
       });
     });
 
@@ -482,52 +525,85 @@ describe('Unit: targetListDetailController', function() {
       });
     });
 
-    // describe('[tld.removeCollaborator]', function() {
-    //   beforeEach(function() {
-    //     targetListService.model.currentList.collaborators = collaborators;
-    //     targetListService.model.currentList.id = 1;
+    describe('[tld.removeCollaborator]', function() {
+      beforeEach(function() {
+        targetListService.model.currentList.collaborators = collaborators;
+        targetListService.model.currentList.id = 1;
 
-    //     ctrl.pendingShares = pending;
-    //     ctrl.leave = false;
+        ctrl.pendingShares = pending;
+        ctrl.leave = false;
 
-    //     // init stuff that we dont care about - we dont need one for /api/targetLists/1 because real service is never actually called
-    //     $httpBackend.expectGET('/api/targetLists/undefined').respond(200);
-    //     $httpBackend.expectGET('/api/targetLists/undefined/opportunities').respond(200);
-    //   });
+        // init stuff that we dont care about - we dont need one for /api/targetLists/1 because real service is never actually called
+        $httpBackend.expectGET('/api/targetLists/undefined').respond(200);
+        $httpBackend.expectGET('/api/targetLists/undefined/opportunities').respond(200);
+      });
 
-    //   it('should call the service and run the script in .then()', function() {
-    //     // create promise and spy on service.method
-    //     var deferred = $q.defer();
-    //     spyOn(targetListService, 'deleteTargetListShares').and.callFake(function() {
-    //       return deferred.promise;
-    //     });
+      it('should call the service and run the script in .then()', function() {
+        // create promise and spy on service.method
+        var deferred = $q.defer();
+        spyOn(targetListService, 'deleteTargetListShares').and.callFake(function() {
+          return deferred.promise;
+        });
 
-    //     // make sure everything is how we want it on start
-    //     expect(targetListService.deleteTargetListShares).not.toHaveBeenCalled();
-    //     expect(targetListService.model.currentList.collaborators.length).toEqual(2);
-    //     expect(ctrl.pendingShares.length).toEqual(2);
+        // make sure everything is how we want it on start
+        expect(targetListService.deleteTargetListShares).not.toHaveBeenCalled();
+        expect(targetListService.model.currentList.collaborators.length).toEqual(3);
+        expect(ctrl.pendingShares.length).toEqual(2);
 
-    //     // run method
-    //     ctrl.removeCollaborator('1012135');
+        // run method
+        ctrl.removeCollaborator(['1012135']);
 
-    //     // resolve promise so we can trigger then
-    //     deferred.resolve();
-    //     // trigger promise resolution
-    //     scope.$digest();
+        // resolve promise so we can trigger then
+        deferred.resolve();
+        // trigger promise resolution
+        scope.$digest();
 
-    //     // assert that everything we wanted to happen has happened, and things we didnt want to happen havent happened
-    //     expect(targetListService.deleteTargetListShares).toHaveBeenCalledWith(1, '1012135');
-    //     expect(targetListService.model.currentList.collaborators.length).toEqual(1);
-    //     expect(ctrl.pendingShares.length).toEqual(1);
-    //     expect(ctrl.leave).toBe(true);
-    //   });
+        // assert that everything we wanted to happen has happened, and things we didnt want to happen havent happened
+        expect(targetListService.deleteTargetListShares).toHaveBeenCalledWith(1, '1012135');
+        expect(targetListService.model.currentList.collaborators.length).toEqual(2);
+        expect(ctrl.pendingShares.length).toEqual(1);
+        expect(ctrl.leave).toBe(true);
+      });
 
-    //   afterEach(function() {
-    //     // reset stuff we changed
-    //     targetListService.model.currentList.collaborators = collaborators;
-    //     ctrl.pendingShares = pending;
-    //   });
-    // });
+      afterEach(function() {
+        // reset stuff we changed
+        targetListService.model.currentList.collaborators = collaborators;
+        ctrl.pendingShares = pending;
+      });
+    });
+
+    describe('[tld.removeCollaboratorClick]', function() {
+      var removeResult;
+
+      beforeEach(function() {
+        removeResult = '112233';
+        targetListService.model.currentList.collaborators = collaborators;
+
+        ctrl.changed = false;
+      });
+
+      afterEach(function() {
+        ctrl.changed = false;
+        targetListService.model.currentList.collaborators = collaborators;
+      });
+
+      it('should add a collaborator to the pendingRemovals array', function() {
+        expect(ctrl.pendingRemovals.length).toEqual(0);
+        ctrl.removeCollaboratorClick(removeResult);
+        expect(ctrl.pendingRemovals.length).toEqual(1);
+      });
+
+      it('should update the current list\'s collaborator array to reflect pending change in UI', function() {
+        expect(targetListService.model.currentList.collaborators.length).toEqual(3);
+        ctrl.removeCollaboratorClick(removeResult);
+        expect(targetListService.model.currentList.collaborators.length).toEqual(2);
+      });
+
+      it('should update the changed boolean to true', function() {
+        ctrl.removeCollaboratorClick(removeResult);
+        expect(ctrl.changed).toEqual(true);
+      });
+    });
 
     it('should find the author', function() {
       var collaboratorsTest = [
