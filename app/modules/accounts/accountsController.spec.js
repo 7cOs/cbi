@@ -157,6 +157,12 @@ describe('Unit: accountsController', function() {
                 'plan': 6544.8
               }
             ]
+          },
+          {
+            'type': 'Total',
+            'id': null,
+            'name': null,
+            'measures': []
           }
         ]
       };
@@ -502,6 +508,25 @@ describe('Unit: accountsController', function() {
       scope.$digest();
       expect(userService.getPerformanceBrand).toHaveBeenCalled();
       expect(ctrl.brandTabs.skus[0]).toEqual(packageSkuData.performance[0]);
+    });
+
+    it('Should move to Package/SKU view', function () {
+      ctrl.selectItem(widget, item, parent, parentIndex);
+      scope.$digest();
+      expect(ctrl.brandSelectedIndex).toEqual(1);
+    });
+
+    it('Should move back to Brand view', function () {
+      ctrl.brandSelectedIndex = 1;
+      ctrl.prevTab();
+      expect(ctrl.brandSelectedIndex).toEqual(0);
+      // Should reset back to Distirbution simple option
+      expect(ctrl.filtersService.model.accountSelected.accountBrands).toEqual(ctrl.filters.accountBrands[0]);
+    });
+
+    it('Should set the correct totals object on brands view', function () {
+      var totalsObj = packageSkuData.performance[1];
+      expect(totalsObj).toEqual(ctrl.currentTotalsObject);
     });
   });
 
