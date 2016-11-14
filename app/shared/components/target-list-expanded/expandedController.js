@@ -36,6 +36,7 @@ module.exports = /*  @ngInject */
     vm.selectedTab = 0;
     vm.allowDelete = true;
     vm.deleteError = false;
+    vm.targetListAuthor = '';
 
     // Expose public methods
     vm.archiveTargetList = archiveTargetList;
@@ -53,6 +54,7 @@ module.exports = /*  @ngInject */
     vm.isChecked = isChecked;
     vm.toggleAll = toggleAll;
     vm.addCollaborator = addCollaborator;
+    vm.findTargetListAuthor = findTargetListAuthor;
 
     init();
 
@@ -247,6 +249,17 @@ module.exports = /*  @ngInject */
       }
     };
 
+    function findTargetListAuthor(collaborators) {
+      var author;
+      angular.forEach(collaborators, function(value, key) {
+        if (value.permissionLevel === 'author') {
+          author = value.user.firstName + ' ' + value.user.lastName;
+        }
+      });
+
+      return author;
+    }
+
     // ***************
     // PRIVATE METHODS
     // ***************
@@ -280,6 +293,8 @@ module.exports = /*  @ngInject */
         for (var i = 0; i < data.length; i++) {
           for (var j = 0; j < data[i].owned.length; j++) {
 
+            data[i].owned[j].targetListAuthor = 'current user';
+
             combinedTargetList.owned.push(data[i].owned[j]);
 
             if (data[i].owned[j].archived) {
@@ -290,6 +305,10 @@ module.exports = /*  @ngInject */
           }
 
           for (j = 0; j < data[i].sharedWithMe.length; j++) {
+            vm.targetListAuthor = findTargetListAuthor(data[i].sharedWithMe[j].collaborators);
+
+            data[i].sharedWithMe[j].targetListAuthor = vm.targetListAuthor;
+
             combinedTargetList.sharedWithMe.push(data[i].sharedWithMe[j]);
 
             if (data[i].sharedWithMe[j].archived) {

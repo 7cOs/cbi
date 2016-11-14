@@ -66,7 +66,7 @@ div.expanded-target-lists
                   h4(column="1") {{list.opportunitiesSummary.opportunitiesCount | number}}
                   h4(column="2") {{list.opportunitiesSummary.totalClosedDepletions | number}}
                 div(row).creator
-                  h5(column="3").accent.left {{expanded.userService.model.currentUser.firstName}} {{expanded.userService.model.currentUser.lastName}}
+                  h5(column="3").accent.left &nbsp;
                 div(row)
                   md-progress-linear(md-mode="determinate" ng-value="expanded.ratio(list.opportunitiesSummary.closedOpportunitiesCount, list.opportunities)")
     md-tab(label='Shared with Me' md-on-select="expanded.selector('shared')")
@@ -117,7 +117,7 @@ div.expanded-target-lists
                   h4(column="1") {{list.opportunities | number}}
                   h4(column="2") {{list.opportunitiesSummary.totalClosedDepletions | number}}
                 div(row).creator
-                  h5(column="3").accent.left {{list.collaborators[0].user.firstName}} {{list.collaborators[0].user.lastName}}
+                  h5(ng-if="list.targetListAuthor" column="3").accent.left {{list.targetListAuthor}}
                 div(row)
                   md-progress-linear(md-mode="determinate" ng-value="expanded.ratio(list.opportunitiesSummary.closedOpportunitiesCount, list.opportunities)")
     md-tab(label='Archived' md-on-select="expanded.selector('archived')")
@@ -171,6 +171,7 @@ div.expanded-target-lists
                   h4(column="1") {{list.opportunities | number}}
                   h4(column="2") {{list.opportunitiesSummary.totalClosedDepletions | number}}
                 div(row).creator
-                  h5(column="3").accent.left {{list.collaborators[0].user.firstName}} {{list.collaborators[0].user.lastName}}
+                h5(column="3" ng-if="list.targetListAuthor === 'current user'").accent.left &nbsp;
+                h5(column="3" ng-if="list.targetListAuthor !== 'current user'").accent.left {{list.targetListAuthor}}
                 div(row)
                   md-progress-linear(md-mode="determinate" ng-value="expanded.ratio(list.closedOpportunities, list.opportunities)")

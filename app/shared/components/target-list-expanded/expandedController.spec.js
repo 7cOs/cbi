@@ -86,6 +86,9 @@ describe('Unit: expanded target list controller', function() {
 
     expect(ctrl.addCollaborator).not.toBeUndefined();
     expect(typeof (ctrl.addCollaborator)).toEqual('function');
+
+    expect(ctrl.findTargetListAuthor).not.toBeUndefined();
+    expect(typeof (ctrl.findTargetListAuthor)).toEqual('function');
   });
 
   describe('Public Methods', function() {
@@ -317,6 +320,28 @@ describe('Unit: expanded target list controller', function() {
         ctrl.allowDelete = false;
         ctrl.deleteTargetList();
         expect(ctrl.allowDelete).toBe(true);
+      });
+
+      it('should return proper authors for each target list', function() {
+        var collaboratorsTest = [
+          {
+            permissionLevel: 'collaborator',
+            user: {
+              firstName: 'NICK',
+              lastName: 'BRADSHAW'
+            }
+          },
+          {
+            permissionLevel: 'author',
+            user: {
+              firstName: 'PETE',
+              lastName: 'MITCHELL'
+            }
+          }
+        ];
+
+        expect(ctrl.findTargetListAuthor(collaboratorsTest)).toEqual('PETE MITCHELL');
+
       });
     });
   });

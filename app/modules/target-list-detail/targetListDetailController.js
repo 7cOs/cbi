@@ -21,6 +21,7 @@ module.exports = /*  @ngInject */
     vm.editable = false;
     vm.leave = false;
     vm.selectedCollaboratorId = '';
+    vm.targetListAuthor = '';
 
     // Services
     vm.targetListService = targetListService;
@@ -47,6 +48,7 @@ module.exports = /*  @ngInject */
     vm.initTargetLists = initTargetLists;
     vm.isAuthor = isAuthor;
     vm.permissionLabel = permissionLabel;
+    vm.findTargetListAuthor = findTargetListAuthor;
 
     init();
 
@@ -269,10 +271,28 @@ module.exports = /*  @ngInject */
       targetListService.getTargetList(targetListService.model.currentList.id).then(function(response) {
         targetListService.model.currentList = response;
         targetListService.model.currentList.loading = false;
+
+        if (response.permissionLevel === 'author') {
+          vm.targetListAuthor = 'current user';
+        } else {
+          vm.targetListAuthor = findTargetListAuthor(response.collaborators);
+        }
         targetListService.updateTargetListShares(targetListService.model.currentList.id, userService.model.currentUser.employeeID, true);
       }, function(err) {
         console.log('[targetListController.init], Error: ' + err.statusText + '. Code: ' + err.status);
       });
+    }
+
+    function findTargetListAuthor(collaborators) {
+      var author;
+
+      angular.forEach(collaborators, function(value, key) {
+        if (value.permissionLevel === 'author') {
+          author = value.user.firstName + ' ' + value.user.lastName;
+        }
+      });
+
+      return author;
     }
 
     // **************
@@ -296,5 +316,6 @@ module.exports = /*  @ngInject */
 
       // reset all chips and filters on page init
       chipsService.resetChipsFilters(chipsService.model);
+
     }
   };
