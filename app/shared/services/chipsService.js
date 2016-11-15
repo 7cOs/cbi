@@ -120,7 +120,6 @@ module.exports = /*  @ngInject */
       loaderService.openLoader(true);
 
       if (!isTargetList) {
-        console.log(filtersService.model.selected);
         $q.all([opportunitiesService.getOpportunities(), opportunitiesService.getOpportunitiesHeaders()]).then(function(data) {
           loaderService.closeLoader();
           finishGet(data[0]);
@@ -180,9 +179,9 @@ module.exports = /*  @ngInject */
         var i = arr.length;
 
         while (i--) {
-          if (chip.type === 'segmentation' && arr[i] === chip.name.split(' Segmentation')[0]) {
+          if (chip.type === 'segmentation' && arr[i] === chip.name.split('Segment ')[1]) {
             arr.splice(i, 1);
-            filtersService.model['storeSegmentation' + chip.name.split(' Segmentation')[0]] = false;
+            filtersService.model['storeSegmentation' + chip.name.split('Segment ')[1]] = false;
             break;
           } else if (chip.type === 'impact' && arr[i] === chip.name.split(' Impact')[0]) {
             arr.splice(i, 1);
@@ -192,14 +191,16 @@ module.exports = /*  @ngInject */
           } else if ((chip.type === 'masterSKU' || chip.type === 'brand') && chip.id === arr[i]) {
             arr.splice(i, 1);
             break;
+          } else if (chip.type === 'cbbdChain') {
+            arr.splice(i, 1);
+            filtersService.model['cbbdChain' + $filter('titlecase')(chip.name.split(' ')[0])] = false;
+            break;
           } else if ($filter('titlecase')(arr[i]) === chip.name.split(' ')[0]) {
             arr.splice(i, 1);
-
             // update model
             if (chip.type === 'productType') filtersService.model['productType' + chip.name.split(' ')[0]] = false;
             if (chip.type === 'tradeChannel') filtersService.model['tradeChannel' + chip.name] = false;
             if (chip.type === 'opportunityStatus') filtersService.model['opportunityStatus' + chip.name] = false;
-            if (chip.type === 'cbbdChain') filtersService.model['cbbdChain' + chip.name.split(' ')[0]] = false;
             break;
           } else if (chip.type === 'distributor' || chip.type === 'account' || chip.type === 'subaccount' || chip.type === 'store' || chip.type === 'contact') {
             var index = arr.indexOf(chip.id);
@@ -224,9 +225,10 @@ module.exports = /*  @ngInject */
         }
       } else if (typeof chip.type === 'string') {
         filtersService.model.selected[chip.type] = '';
-      } else if (typeof chip.type === 'boolean') {
+      } /* else if (typeof chip.type === 'boolean') { // dont think this is used. leaving it in just in case i breaked something
+        console.log('hiya');
         filtersService.model.selected[chip.type] = false;
-      }
+      } */
 
       if (service.model.length === defaultFilterArrayLength && isDefault(service.model)) {
         filtersService.disableFilters(false, false, false, false);
