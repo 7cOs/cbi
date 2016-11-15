@@ -235,7 +235,7 @@ describe('Unit: accountsController', function() {
       expect(ctrl.accountTypesDefault).toEqual('Distributors');
       expect(ctrl.brandWidgetTitleDefault).toEqual('All Brands');
       expect(ctrl.brandWidgetTitle).toEqual(ctrl.brandWidgetTitleDefault);
-      expect(ctrl.filtersService.model.accountSelected.accountBrands).toEqual({ name: 'Distribution (simple)', value: 1 });
+      expect(ctrl.filtersService.model.accountSelected.accountBrands).toEqual(ctrl.filters.accountBrands[0]);
       expect(ctrl.filtersService.model.accountSelected.accountMarkets).toEqual('Depletions');
       expect(ctrl.selectOpen).toEqual(false);
       expect(ctrl.disableAnimation).toEqual(false);
