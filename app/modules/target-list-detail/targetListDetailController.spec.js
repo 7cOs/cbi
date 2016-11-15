@@ -146,7 +146,7 @@ describe('Unit: targetListDetailController', function() {
             'totalClosedDepletions': 0
           },
           'createdAt': '2016-11-10 22:44:28.709',
-          'permissionLevel': 'author',
+          'permissionLevel': 'collaborate',
           'dateOpportunitiesUpdated': null,
           'collaborators': [
             {
@@ -202,14 +202,17 @@ describe('Unit: targetListDetailController', function() {
     expect(ctrl.addCollaboratorClick).not.toBeUndefined();
     expect(typeof (ctrl.addCollaboratorClick)).toEqual('function');
 
-    expect(ctrl.changeCollaboratorLevel).not.toBeUndefined();
-    expect(typeof (ctrl.changeCollaboratorLevel)).toEqual('function');
+    expect(ctrl.changePermissionClick).not.toBeUndefined();
+    expect(typeof (ctrl.changePermissionClick)).toEqual('function');
 
     expect(ctrl.closeModal).not.toBeUndefined();
     expect(typeof (ctrl.closeModal)).toEqual('function');
 
     expect(ctrl.deleteList).not.toBeUndefined();
     expect(typeof (ctrl.deleteList)).toEqual('function');
+
+    expect(ctrl.findTargetListAuthor).not.toBeUndefined();
+    expect(typeof (ctrl.findTargetListAuthor)).toEqual('function');
 
     expect(ctrl.footerToast).not.toBeUndefined();
     expect(typeof (ctrl.footerToast)).toEqual('function');
@@ -247,8 +250,6 @@ describe('Unit: targetListDetailController', function() {
     expect(ctrl.updateList).not.toBeUndefined();
     expect(typeof (ctrl.updateList)).toEqual('function');
 
-    expect(ctrl.findTargetListAuthor).not.toBeUndefined();
-    expect(typeof (ctrl.findTargetListAuthor)).toEqual('function');
   });
 
   describe('Public Methods', function() {
@@ -275,10 +276,31 @@ describe('Unit: targetListDetailController', function() {
 
       it('should add the collaborator share object to the pendingShares array', function() {
         expect(ctrl.pendingShares.length).toEqual(1);
-        expect(ctrl.pendingShares[0].permissionLevel).toEqual('Collaborate');
       });
 
       it('should update the changed boolean to true', function() {
+        expect(ctrl.changed).toEqual(true);
+      });
+    });
+
+    describe('[tld.changePermissionClick]', function() {
+      beforeEach(function() {
+        ctrl.changed = false;
+      });
+
+      it('should return true if current list\'s permission level is "collaborateandinvite"', function() {
+        targetListService.model.currentList.collaboratorPermissionLevel = 'collaborateandinvite';
+        expect(ctrl.changePermissionClick()).toEqual(true);
+      });
+
+      it('should return false if current list\'s permission level is not "collaborateandinvite"', function() {
+        targetListService.model.currentList.collaboratorPermissionLevel = 'collaborate';
+        expect(ctrl.changePermissionClick()).toEqual(false);
+      });
+
+      it('should update the changed boolean to true', function() {
+        expect(ctrl.changed).toEqual(false);
+        ctrl.changePermissionClick();
         expect(ctrl.changed).toEqual(true);
       });
     });
@@ -361,11 +383,34 @@ describe('Unit: targetListDetailController', function() {
       });
     });
 
+    describe('[tld.findTargetListAuthor]', function() {
+      it('should find the author', function() {
+        var collaboratorsTest = [
+          {
+            permissionLevel: 'collaborator',
+            user: {
+              firstName: 'CHARLIE',
+              lastName: 'BLACKWOOD'
+            }
+          },
+          {
+            permissionLevel: 'author',
+            user: {
+              firstName: 'RICK',
+              lastName: 'NEVEN'
+            }
+          }
+        ];
+
+        expect(ctrl.findTargetListAuthor(collaboratorsTest)).toEqual('RICK NEVEN');
+      });
+    });
+
     describe('[tld.makeOwner]', function() {
       beforeEach(function() {
         targetListService.model.currentList.collaborators = collaborators;
         targetListService.model.currentList.id = 1;
-        userService.model.currentUser.employeeID = '1012132';
+        userService.model.currentUser.employeeID = currentUser.employeeID;
         userService.model.targetLists = ownedTargetLists;
 
         // init stuff that we dont care about - we dont need one for /api/targetLists/1 because real service is never actually called
@@ -398,7 +443,7 @@ describe('Unit: targetListDetailController', function() {
 
       it('should clear the selectedCollaboratorId', function() {
         ctrl.selectedCollaboratorId = '1234';
-        ctrl.makeOwner('1012135');
+        ctrl.makeOwner(currentUser.employeeID);
         expect(ctrl.selectedCollaboratorId).toEqual('');
       });
 
@@ -453,44 +498,15 @@ describe('Unit: targetListDetailController', function() {
         ctrl.editable = false;
       });
 
-      it('should leave editable variable false if current user is not TL author', function() {
-        targetListService.model.currentList.collaborators = [
-          {
-            'user': {
-              'id': '5648',
-              'employeeId': '1012132',
-              'firstName': 'FRED',
-              'lastName': 'BERRIOS',
-              'email': 'FRED.BERRIOS@CBRANDS.COM'
-            },
-            'permissionLevel': 'collaborate',
-            'lastViewed': null
-          },
-          {
-            'user': {
-              'id': '5545',
-              'employeeId': '1012135',
-              'firstName': 'CHRISTOPHER',
-              'lastName': 'WILLIAMS',
-              'email': 'CHRIS.WILLIAMS@CBRANDS.COM'
-            },
-            'permissionLevel': 'author',
-            'lastViewed': null
-          }
-        ];
-        userService.model.currentUser = currentUser;
-
+      it('should leave editable variable false if list\'s permission level is not author', function() {
+        targetListService.model.currentList = ownedTargetLists.owned[1];
         ctrl.isAuthor();
-
         expect(ctrl.editable).toEqual(false);
       });
 
-      it('should update the editable variable to true if current user is TL author', function() {
-        targetListService.model.currentList.collaborators = collaborators;
-        userService.model.currentUser = currentUser;
-
+      it('should update the editable variable to true if current list\'s permission level is author', function() {
+        targetListService.model.currentList = ownedTargetLists.owned[0];
         ctrl.isAuthor();
-
         expect(ctrl.editable).toEqual(true);
       });
     });
@@ -605,25 +621,59 @@ describe('Unit: targetListDetailController', function() {
       });
     });
 
-    it('should find the author', function() {
-      var collaboratorsTest = [
-        {
-          permissionLevel: 'collaborator',
-          user: {
-            firstName: 'CHARLIE',
-            lastName: 'BLACKWOOD'
-          }
-        },
-        {
-          permissionLevel: 'author',
-          user: {
-            firstName: 'RICK',
-            lastName: 'NEVEN'
-          }
-        }
-      ];
+    // describe('[tld.updateList]', function() {
+    //   beforeEach(function() {
+    //     // init stuff that we dont care about - we dont need one for /api/targetLists/1 because real service is never actually called
+    //     $httpBackend.expectGET('/api/targetLists/undefined').respond(200);
+    //     $httpBackend.expectGET('/api/targetLists/undefined/opportunities').respond(200);
 
-      expect(ctrl.findTargetListAuthor(collaboratorsTest)).toEqual('RICK NEVEN');
-    });
+    //     // create promise and spy on service.method
+    //     var deferred = $q.defer();
+    //     spyOn(targetListService, 'updateTargetList').and.callFake(function() {
+    //       return deferred.promise;
+    //     });
+
+    //     // make sure everything is how we want it on start
+    //     expect(targetListService.updateTargetList).not.toHaveBeenCalled();
+
+    //     // run method
+    //     ctrl.updateList();
+
+    //     // resolve promise so we can trigger then
+    //     deferred.resolve();
+    //     // trigger promise resolution
+    //     scope.$digest();
+    //   });
+
+    //   it('should call the target list service updateTargetList method', function() {
+
+    //   });
+
+    //   it('should set the current list in the model to equal the api response data from the updateTargetList call', function() {
+
+    //   });
+
+    //   it('should call the changePermissionClick function', function() {
+
+    //   });
+
+    //   it('should call the addCollaborators function if there are pending collaborators', function() {
+
+    //   });
+
+    //   it('should call the removeCollaborator function if there are pending removals', function() {
+
+    //   });
+
+    //   it('should call the removeFooterToast function', function() {
+
+    //   });
+
+    //   it('should call the closeModal function', function() {
+    //     expect(ctrl.closeModal()).toHaveBeenCalled();
+    //     expect(ctrl.closeModal().calls.count()).toEqual(1);
+    //   });
+    // });
+
   });
 });
