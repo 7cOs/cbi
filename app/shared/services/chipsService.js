@@ -69,8 +69,6 @@ module.exports = /*  @ngInject */
         };
         if ($filter('filter')(service.model, {name: tempChip.name}, true).length !== 1 && $filter('filter')(service.model, {id: tempChip.id}, true).length !== 1) {
           service.model.push(tempChip);
-          console.log('[tempChip]', tempChip);
-          console.log('[filtersService.model]', filtersService.model);
         }
 
         filtersService.disableFilters(false, false, true, true);
