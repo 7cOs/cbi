@@ -613,7 +613,8 @@ module.exports = /*  @ngInject */
           payload = {
             name: p.name,
             description: p.description,
-            opportunityIds: [] // opportunity id's to be included
+            opportunityIds: [], // opportunity id's to be included
+            collaborateAndInvite: p.collaborateAndInvite
           };
 
       $http.post(url, payload)

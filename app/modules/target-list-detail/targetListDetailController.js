@@ -34,7 +34,7 @@ module.exports = /*  @ngInject */
 
     // Expose public methods
     vm.addCollaboratorClick = addCollaboratorClick;
-    vm.changeCollaboratorLevel = changeCollaboratorLevel;
+    vm.changePermissionClick = changePermissionClick;
     vm.closeModal = closeModal;
     vm.deleteList = deleteList;
     vm.findTargetListAuthor = findTargetListAuthor;
@@ -55,15 +55,13 @@ module.exports = /*  @ngInject */
 
     function addCollaboratorClick(result) {
       vm.collaborator = {
-        employeeId: result.employeeId,
-        permissionLevel: vm.permissionLevel
+        employeeId: result.employeeId
       };
 
       vm.targetListShares.push(vm.collaborator);
 
       vm.pendingShares.push({
-        employee: result,
-        permissionLevel: 'Collaborate'
+        employee: result
       });
 
       listChanged();
@@ -87,9 +85,13 @@ module.exports = /*  @ngInject */
       }
     }
 
-    function changeCollaboratorLevel() {
-      // Commenting this out for now because this isn't the correct patch
-      // targetListService.updateTargetListShares(targetListService.model.currentList.id, vm.collaborator).then();
+    function changePermissionClick() {
+      listChanged();
+      if (targetListService.model.currentList.collaboratorPermissionLevel === 'collaborateandinvite') {
+        return true;
+      } else {
+        return false;
+      }
     }
 
     function closeModal(revert) {
@@ -177,15 +179,7 @@ module.exports = /*  @ngInject */
     }
 
     function isAuthor() {
-      angular.forEach(targetListService.model.currentList.collaborators, function(value, key) {
-        if (vm.editable === false) {
-          if (value.user.employeeId === userService.model.currentUser.employeeID && value.permissionLevel === 'author') {
-            vm.editable = true;
-          } else {
-            vm.editable = false;
-          }
-        }
-      });
+      targetListService.model.currentList.permissionLevel === 'author' ? vm.editable = true : vm.editable = false;
     }
 
     function navigateToTL() {
@@ -216,11 +210,11 @@ module.exports = /*  @ngInject */
       var payload = {
         archived: method === 'archive',
         description: targetListService.model.currentList.description,
-        name: targetListService.model.currentList.name
+        name: targetListService.model.currentList.name,
+        collaborateAndInvite: changePermissionClick()
       };
 
       targetListService.updateTargetList(targetListService.model.currentList.id, payload).then(function(response) {
-        console.log('[targetListDetailController.updateList.response', response);
         targetListService.model.currentList = response;
 
         if (vm.pendingShares.length > 0) {
@@ -251,7 +245,7 @@ module.exports = /*  @ngInject */
         // Binding to rootscope to use on the outer shell
         $rootScope.isGrayedOut = response.archived;
 
-        targetListService.updateTargetListShares(targetListService.model.currentList.id, userService.model.currentUser.employeeID, true);
+        targetListService.updateTargetListShares(targetListService.model.currentList.id, userService.model.currentUser.employeeID, true, false);
       }, function(err) {
         console.log('[targetListController.init], Error: ' + err.statusText + '. Code: ' + err.status);
       });
