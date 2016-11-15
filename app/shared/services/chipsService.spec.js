@@ -162,5 +162,37 @@ describe('[Services.chipsService]', function() {
       chipsService.removeFromFilterService(myAccountsOnlyChip);
       expect(filtersService.model.selected['myAccountsOnly']).toEqual('');
     });
+
+    // if (chip.search || chip.type === 'opportunityType' || chip.type === 'state') {
+    it('should remove from filterService.model and chipsService.model if chip.type === "segmentation"', function() {
+      // scaffold
+      var segmentationChip = {
+        applied: false,
+        name: 'Segment A',
+        removable: true,
+        search: true,
+        tradeChannel: false,
+        type: 'segmentation'
+      };
+      chipsService.model.push(segmentationChip);
+      filtersService.model.selected.segmentation = ['A'];
+      filtersService.model.storeSegmentationA = true;
+
+      // assert initial conditions
+      expect(chipsService.model.length).toEqual(4);
+      expect(filtersService.model.selected.segmentation.length).toEqual(1);
+      expect(filtersService.model.storeSegmentationA).toEqual(true);
+
+      // run method
+      chipsService.removeFromFilterService(segmentationChip);
+      // manually remove as this is handled by md
+      chipsService.model.splice(3, 1);
+
+      // assert everything is correct
+      expect(chipsService.model.length).toEqual(3);
+      expect(chipsService.model).toEqual(chipsTemplate);
+      expect(filtersService.model.selected.segmentation.length).toEqual(0);
+      expect(filtersService.model.storeSegmentationA).toEqual(false);
+    });
   });
 });
