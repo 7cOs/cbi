@@ -1,15 +1,14 @@
 describe('[Services.chipsService]', function() {
-  var chipsService, filtersService, titlecaseFilter;
+  var chipsService, filtersService;
 
   beforeEach(function() {
     angular.mock.module('ui.router');
     angular.mock.module('cf.common.services');
     angular.mock.module('cf.common.filters');
 
-    inject(function(_chipsService_, _filtersService_, _titlecaseFilter_) {
+    inject(function(_chipsService_, _filtersService_) {
       chipsService = _chipsService_;
       filtersService = _filtersService_;
-      titlecaseFilter = _titlecaseFilter_;
     });
   });
 
