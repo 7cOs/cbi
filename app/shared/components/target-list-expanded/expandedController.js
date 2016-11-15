@@ -289,6 +289,7 @@ module.exports = /*  @ngInject */
         loaderService.closeLoader();
 
         var combinedTargetList = {
+          'allTargetLists': [],
           'owned': [],
           'sharedWithMe': [],
           'sharedArchivedCount': 0,
@@ -303,6 +304,7 @@ module.exports = /*  @ngInject */
             data[i].owned[j].targetListAuthor = 'current user';
 
             combinedTargetList.owned.push(data[i].owned[j]);
+            combinedTargetList.allTargetLists.push(data[i].owned[j]);
 
             if (data[i].owned[j].archived) {
               combinedTargetList.ownedArchived++;
@@ -317,6 +319,7 @@ module.exports = /*  @ngInject */
             data[i].sharedWithMe[j].targetListAuthor = vm.targetListAuthor;
 
             combinedTargetList.sharedWithMe.push(data[i].sharedWithMe[j]);
+            combinedTargetList.allTargetLists.push(data[i].sharedWithMe[j]);
 
             if (data[i].sharedWithMe[j].archived) {
               combinedTargetList.sharedArchivedCount++;

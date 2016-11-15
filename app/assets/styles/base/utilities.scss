@@ -127,6 +127,11 @@ ul {
   z-index: 1000;
 }
 
+.grayed-out,
+.grayed-out md-content {
+  background: $gray-14;
+}
+
 [ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
   display: none !important;
 }

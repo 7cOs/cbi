@@ -14,6 +14,7 @@ module.exports = /*  @ngInject */
     vm.opportunitiesService = opportunitiesService;
     vm.userService = userService;
     vm.filtersService = filtersService;
+    vm.targetListService = targetListService;
 
     // Defaults
     vm.currentOpportunityId = '';
