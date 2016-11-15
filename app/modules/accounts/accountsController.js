@@ -44,12 +44,15 @@ module.exports = /*  @ngInject */
       }],
       accountBrands: [{
         name: 'Distribution (simple)',
+        depletionTableHeaderText: 'Distribution(s)',
         value: 1
       }, {
         name: 'Distribution (effective)',
+        depletionTableHeaderText: 'Distribution(e)',
         value: 2
       }, {
         name: 'Velocity',
+        depletionTableHeaderText: 'Velocity',
         value: 3
       }],
       accountMarkets: [{
