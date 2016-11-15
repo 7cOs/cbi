@@ -28,7 +28,8 @@ module.exports = /*  @ngInject */
       description: '',
       opportunities: [],
       collaborators: [],
-      targetListShares: []
+      targetListShares: [],
+      collaborateAndInvite: false
     };
     vm.totalOpportunitesChevron = true;
     vm.selected = [];
@@ -39,22 +40,22 @@ module.exports = /*  @ngInject */
     vm.targetListAuthor = '';
 
     // Expose public methods
+    vm.addCollaborator = addCollaborator;
     vm.archiveTargetList = archiveTargetList;
+    vm.closeModal = closeModal;
     vm.createNewList = createNewList;
     vm.createTargetList = createTargetList;
-    vm.closeModal = closeModal;
     vm.deleteTargetList = deleteTargetList;
     vm.exists = exists;
+    vm.findTargetListAuthor = findTargetListAuthor;
+    vm.isChecked = isChecked;
     vm.ratio = ratio;
     vm.saveNewList = saveNewList;
     vm.searchOpportunities = searchOpportunities;
     vm.selector = selector;
     vm.sortBy = sortBy;
     vm.toggle = toggle;
-    vm.isChecked = isChecked;
     vm.toggleAll = toggleAll;
-    vm.addCollaborator = addCollaborator;
-    vm.findTargetListAuthor = findTargetListAuthor;
 
     init();
 
@@ -65,8 +66,7 @@ module.exports = /*  @ngInject */
     function addCollaborator(e) {
       vm.newList.collaborators.push(e);
       var share = {
-        employeeId: e.employeeId,
-        permissionLevel: 'Collaborate'
+        employeeId: e.employeeId
       };
       vm.newList.targetListShares.push(share);
     }
@@ -112,7 +112,8 @@ module.exports = /*  @ngInject */
         description: '',
         opportunities: [],
         collaborators: [],
-        targetListShares: []
+        targetListShares: [],
+        collaborateAndInvite: false
       };
       var parentEl = angular.element(document.body);
       $mdDialog.show({
@@ -129,7 +130,8 @@ module.exports = /*  @ngInject */
         name: '',
         description: '',
         opportunities: [],
-        collaborators: []
+        collaborators: [],
+        collaborateAndInvite: false
       };
       $mdDialog.hide();
     }
@@ -180,8 +182,7 @@ module.exports = /*  @ngInject */
       var newPayload = [];
       for (var i = 0; i < vm.newList.collaborators.length; i++) {
         newPayload.push({
-          employeeId: vm.newList.collaborators[i].employeeId,
-          permissionLevel: vm.newList.allowInvites ? 'CollaborateAndInvite' : 'Collaborate'
+          employeeId: vm.newList.collaborators[i].employeeId
         });
       }
 
@@ -202,7 +203,7 @@ module.exports = /*  @ngInject */
           description: '',
           opportunities: [],
           collaborators: [],
-          allowInvites: false
+          collaborateAndInvite: false
         };
       });
     }

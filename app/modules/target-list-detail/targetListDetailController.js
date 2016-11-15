@@ -55,15 +55,13 @@ module.exports = /*  @ngInject */
 
     function addCollaboratorClick(result) {
       vm.collaborator = {
-        employeeId: result.employeeId,
-        permissionLevel: vm.permissionLevel
+        employeeId: result.employeeId
       };
 
       vm.targetListShares.push(vm.collaborator);
 
       vm.pendingShares.push({
-        employee: result,
-        permissionLevel: 'Collaborate'
+        employee: result
       });
 
       listChanged();
@@ -181,15 +179,7 @@ module.exports = /*  @ngInject */
     }
 
     function isAuthor() {
-      angular.forEach(targetListService.model.currentList.collaborators, function(value, key) {
-        if (vm.editable === false) {
-          if (value.user.employeeId === userService.model.currentUser.employeeID && value.permissionLevel === 'author') {
-            vm.editable = true;
-          } else {
-            vm.editable = false;
-          }
-        }
-      });
+      targetListService.model.currentList.permissionLevel === 'author' ? vm.editable = true : vm.editable = false;
     }
 
     function navigateToTL() {
@@ -225,7 +215,6 @@ module.exports = /*  @ngInject */
       };
 
       targetListService.updateTargetList(targetListService.model.currentList.id, payload).then(function(response) {
-        console.log('[targetListDetailController.updateList.response', response);
         targetListService.model.currentList = response;
 
         if (vm.pendingShares.length > 0) {
