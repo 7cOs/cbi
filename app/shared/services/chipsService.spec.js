@@ -1,13 +1,15 @@
 describe('[Services.chipsService]', function() {
-  var chipsService, filtersService;
+  var chipsService, filtersService, titlecaseFilter;
 
   beforeEach(function() {
     angular.mock.module('ui.router');
     angular.mock.module('cf.common.services');
+    angular.mock.module('cf.common.filters');
 
-    inject(function(_chipsService_, _filtersService_) {
+    inject(function(_chipsService_, _filtersService_, _titlecaseFilter_) {
       chipsService = _chipsService_;
       filtersService = _filtersService_;
+      titlecaseFilter = _titlecaseFilter_;
     });
   });
 
@@ -163,7 +165,6 @@ describe('[Services.chipsService]', function() {
       expect(filtersService.model.selected['myAccountsOnly']).toEqual('');
     });
 
-    // if (chip.search || chip.type === 'opportunityType' || chip.type === 'state') {
     it('should remove from filterService.model and chipsService.model if chip.type === "segmentation"', function() {
       // scaffold
       var segmentationChip = {
@@ -193,6 +194,85 @@ describe('[Services.chipsService]', function() {
       expect(chipsService.model).toEqual(chipsTemplate);
       expect(filtersService.model.selected.segmentation.length).toEqual(0);
       expect(filtersService.model.storeSegmentationA).toEqual(false);
+    });
+
+    it('should remove from filterService.model and chipsService.model if chip.type === "impact"', function() {
+      // scaffold
+      var impactChip = {
+        applied: false,
+        name: 'High Impact',
+        removable: true,
+        search: true,
+        tradeChannel: false,
+        type: 'impact'
+      };
+      chipsService.model.push(impactChip);
+      filtersService.model.selected.impact = ['High'];
+      filtersService.model.predictedImpactHigh = true;
+
+      // assert initial conditions
+      expect(chipsService.model.length).toEqual(4);
+      expect(filtersService.model.selected.impact.length).toEqual(1);
+      expect(filtersService.model.predictedImpactHigh).toEqual(true);
+
+      // run method
+      chipsService.removeFromFilterService(impactChip);
+      // manually remove as this is handled by md
+      chipsService.model.splice(3, 1);
+
+      // assert everything is correct
+      expect(chipsService.model.length).toEqual(3);
+      expect(chipsService.model).toEqual(chipsTemplate);
+      expect(filtersService.model.selected.impact.length).toEqual(0);
+      expect(filtersService.model.predictedImpactHigh).toEqual(false);
+    });
+
+    it('should remove from filterService.model and chipsService.model if chip.type === "cbbdChain"', function() {
+      // scaffold
+      var cbbdChip = {
+        applied: false,
+        name: 'CBBD Chain',
+        removable: true,
+        search: true,
+        tradeChannel: false,
+        type: 'cbbdChain'
+      };
+      var independentChip = {
+        applied: false,
+        name: 'Independent',
+        removable: true,
+        search: true,
+        tradeChannel: false,
+        type: 'cbbdChain'
+      };
+
+      chipsService.model.push(cbbdChip);
+      chipsService.model.push(independentChip);
+      filtersService.model.selected.cbbdChain = ['Cbbd', 'Independent'];
+      filtersService.model.cbbdChainCbbd = true;
+      filtersService.model.cbbdChainIndependent = true;
+      chipsTemplate.push(independentChip);
+
+      // assert initial conditions
+      expect(chipsService.model.length).toEqual(5);
+      expect(filtersService.model.selected.cbbdChain.length).toEqual(2);
+      expect(filtersService.model.cbbdChainCbbd).toEqual(true);
+      expect(filtersService.model.cbbdChainIndependent).toEqual(true);
+
+      // run method
+      chipsService.removeFromFilterService(cbbdChip);
+      // manually remove as this is handled by md
+      chipsService.model.splice(3, 1);
+
+      // assert everything is correct
+      expect(chipsService.model.length).toEqual(4);
+      expect(chipsService.model).toEqual(chipsTemplate);
+      expect(filtersService.model.selected.cbbdChain.length).toEqual(1);
+      expect(filtersService.model.cbbdChainCbbd).toEqual(false);
+      expect(filtersService.model.cbbdChainIndependent).toEqual(true);
+
+      // remove independent
+      chipsService.model.splice(3, 1);
     });
   });
 });
