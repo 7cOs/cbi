@@ -19,16 +19,9 @@ navbar {
 }
 
 .outer-nav-wrapper {
-  background-color: $white;
-  // height: 120px;
+  background-color: $body-bg;
   position: relative;
-
-  // .inner-nav-wrapper {
-  //   position: absolute;
-  //   top: 35px;
-  //   left: 50%;
-  //   transform: translateX(-50%);
-  // }
+  margin-bottom: 30px;
 }
 
 
