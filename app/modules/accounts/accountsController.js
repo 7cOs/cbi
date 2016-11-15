@@ -392,7 +392,6 @@ module.exports = /*  @ngInject */
     }
 
     function updateBrandSnapshot() {
-      vm.chipsService.applyFilters();
       var params = filtersService.getAppliedFilters('brandSnapshot');
       vm.loadingBrandSnapshot = true;
 
@@ -547,11 +546,6 @@ module.exports = /*  @ngInject */
       if (widget === 'brands') { vm.brandIdSelected = idSelected; }
       if (widget === 'markets') { vm.marketIdSelected = true; vm.selectedStore = idSelected; prevTab(); }
     }
-
-    $scope.$watch('a.filtersService.model.selected.premiseType', function (newVal) {
-      console.log('selected Premis', newVal);
-      console.log('selected Model', vm.filtersService.model.selected);
-    });
 
     // Check if market overview is scrolled out of view
     angular.element($window).bind('scroll', function() {
