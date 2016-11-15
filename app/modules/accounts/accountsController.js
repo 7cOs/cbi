@@ -44,12 +44,15 @@ module.exports = /*  @ngInject */
       }],
       accountBrands: [{
         name: 'Distribution (simple)',
+        depletionTableHeaderText: 'Distribution(s)',
         value: 1
       }, {
         name: 'Distribution (effective)',
+        depletionTableHeaderText: 'Distribution(e)',
         value: 2
       }, {
         name: 'Velocity',
+        depletionTableHeaderText: 'Velocity',
         value: 3
       }],
       accountMarkets: [{
@@ -211,7 +214,7 @@ module.exports = /*  @ngInject */
     vm.getTrendValues = getTrendValues;
     vm.isPackageView = false;
     vm.checkIfVelocityPresent = checkIfVelocityPresent;
-    vm.currentTotalsObject = vm.currentTotalsObject;
+    vm.currentTotalsObject = null;
     vm.checkForDepletionCount = checkForDepletionCount;
 
     init();
@@ -230,10 +233,12 @@ module.exports = /*  @ngInject */
      */
     function setCurrentTotalsObject() {
       var currentTab = vm.brandSelectedIndex === 0 ? vm.brandTabs.brands : vm.brandTabs.skus;
-      var matchedProperty = currentTab.filter(function (obj) {
-        return obj.type === 'Total';
-      });
-      vm.currentTotalsObject = matchedProperty[0];
+      if (currentTab.filter) {
+        var matchedProperty = currentTab.filter(function (obj) {
+          return obj.type === 'Total';
+        });
+        vm.currentTotalsObject = matchedProperty[0];
+      }
     }
 
     /*
@@ -349,10 +354,10 @@ module.exports = /*  @ngInject */
         if (widget === 'brands') { vm.brandWidgetTitle = item.name; }
         vm.loadingBrandSnapshot = true;
         vm.filterModel.brand = item.id;
-        userService.getPerformanceBrand({premiseType: filtersService.model.selected.premiseType, brand: item.id}).then(function(data) {
+        var params = filtersService.getAppliedFilters('brandSnapshot');
+        params.brand = item.id;
+        userService.getPerformanceBrand(params).then(function(data) {
           vm.brandTabs.skus = data.performance;
-          // console.log('Sub brands');
-          // console.log(data.performance);
           nextTab(widget);
           $timeout(function () {
             vm.loadingBrandSnapshot = false;
@@ -388,9 +393,11 @@ module.exports = /*  @ngInject */
 
     function updateBrandSnapshot() {
       var params = filtersService.getAppliedFilters('brandSnapshot');
+      vm.loadingBrandSnapshot = true;
 
       userService.getPerformanceBrand(params).then(function(data) {
         vm.brandTabs.brands = data.performance;
+        vm.loadingBrandSnapshot = false;
       });
 
       apply(true);
@@ -454,12 +461,13 @@ module.exports = /*  @ngInject */
       vm.filtersService.model.accountSelected.accountBrands = vm.filters.accountBrands[0];
       chipsService.resetChipsFilters(chipsService.model);
       setDefaultEndingPeriodOptions();
+      var params = filtersService.getAppliedFilters('brandSnapshot');
 
       var promiseArr = [
         userService.getPerformanceSummary(),
         userService.getPerformanceDepletion(),
         userService.getPerformanceDistribution({'type': 'noencode', 'premiseType': 'off'}),
-        userService.getPerformanceBrand()
+        userService.getPerformanceBrand(params)
       ];
 
       $q.all(promiseArr).then(function(data) {
@@ -541,7 +549,6 @@ module.exports = /*  @ngInject */
 
     // Check if market overview is scrolled out of view
     angular.element($window).bind('scroll', function() {
-
       if (vm.selectOpen) {
         return;
       }

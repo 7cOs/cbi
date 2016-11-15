@@ -1,5 +1,5 @@
 describe('Unit: accountsController', function() {
-  var scope, ctrl, $state, $q, filtersService, userService, packageSkuData, brandSpy;
+  var scope, ctrl, $state, $q, filtersService, userService, packageSkuData, brandSpy, brandPerformanceData;
   var measuresArr = [
     {
       'timeframe': 'MTD',
@@ -100,7 +100,7 @@ describe('Unit: accountsController', function() {
       'distributionsEffectiveBU': null,
       'distributionsEffectiveBUTrend': null,
       'velocity': 23128.6564,
-      'velocityTrend': null,
+      'velocityTrend': 4.5454,
       'planSimple': 12716,
       'planEffective': 38601,
       'planDistirbutionSimpleTrend': -8.25731362063542,
@@ -141,6 +141,32 @@ describe('Unit: accountsController', function() {
       // chipsService = _chipsService_;
       filtersService = _filtersService_;
       userService = _userService_;
+      brandPerformanceData = {
+        performance: [
+          {
+            'type': 'Brand',
+            'id': '416',
+            'name': 'MODELO ESPECIAL',
+            'measures': [
+              {
+                'timeframe': 'MTD',
+                'depletions': 2786.4,
+                'depletionsTrend': -11.475409836065568,
+                'depletionsBU': null,
+                'depletionsBUTrend': null,
+                'plan': 6544.8
+              }
+            ]
+          },
+          {
+            'type': 'Total',
+            'id': null,
+            'name': null,
+            'measures': []
+          }
+        ]
+      };
+
       packageSkuData = {
         performance: [
           {
@@ -157,6 +183,12 @@ describe('Unit: accountsController', function() {
                 'plan': 6544.8
               }
             ]
+          },
+          {
+            'type': 'Total',
+            'id': null,
+            'name': null,
+            'measures': []
           }
         ]
       };
@@ -166,7 +198,7 @@ describe('Unit: accountsController', function() {
       spyOn(userService, 'getPerformanceDistribution').and.returnValue(fakePromise);
       spyOn(userService, 'getPerformanceSummary').and.returnValue(fakePromise);
       brandSpy = spyOn(userService, 'getPerformanceBrand');
-      brandSpy.and.returnValue($q.when(packageSkuData));
+      brandSpy.and.returnValue($q.when(brandPerformanceData));
       // Create Controller
       ctrl = $controller('accountsController', {$scope: scope});
       scope.$digest();
@@ -203,7 +235,7 @@ describe('Unit: accountsController', function() {
       expect(ctrl.accountTypesDefault).toEqual('Distributors');
       expect(ctrl.brandWidgetTitleDefault).toEqual('All Brands');
       expect(ctrl.brandWidgetTitle).toEqual(ctrl.brandWidgetTitleDefault);
-      expect(ctrl.filtersService.model.accountSelected.accountBrands).toEqual({ name: 'Distribution (simple)', value: 1 });
+      expect(ctrl.filtersService.model.accountSelected.accountBrands).toEqual(ctrl.filters.accountBrands[0]);
       expect(ctrl.filtersService.model.accountSelected.accountMarkets).toEqual('Depletions');
       expect(ctrl.selectOpen).toEqual(false);
       expect(ctrl.disableAnimation).toEqual(false);
@@ -256,6 +288,12 @@ describe('Unit: accountsController', function() {
 
       expect(ctrl.updateTopBottom).not.toBeUndefined();
       expect(typeof (ctrl.updateTopBottom)).toEqual('function');
+    });
+
+    it('Should get default radio button options on init', function () {
+      expect(ctrl.filterModel.endingTimePeriod).toEqual('year');
+      expect(ctrl.filterModel.depletionsTimePeriod.name).toEqual('FYTD');
+      expect(ctrl.filterModel.distributionTimePeriod.name).toEqual('L90');
     });
   });
 
@@ -492,10 +530,92 @@ describe('Unit: accountsController', function() {
     });
 
     it('Should get SKU/Packages for selected brand', function () {
+      brandSpy.and.returnValue($q.when(packageSkuData));
       ctrl.selectItem(widget, item, parent, parentIndex);
       scope.$digest();
       expect(userService.getPerformanceBrand).toHaveBeenCalled();
       expect(ctrl.brandTabs.skus[0]).toEqual(packageSkuData.performance[0]);
     });
+
+    it('Should move to Package/SKU view', function () {
+      brandSpy.and.returnValue($q.when(packageSkuData));
+      ctrl.selectItem(widget, item, parent, parentIndex);
+      scope.$digest();
+      expect(ctrl.brandSelectedIndex).toEqual(1);
+    });
+
+    it('Should move back to Brand view', function () {
+      ctrl.brandSelectedIndex = 1;
+      ctrl.prevTab();
+      expect(ctrl.brandSelectedIndex).toEqual(0);
+      // Should reset back to Distirbution simple option
+      expect(ctrl.filtersService.model.accountSelected.accountBrands).toEqual(ctrl.filters.accountBrands[0]);
+    });
+
+    it('Should set the correct totals object on brands view', function () {
+      var totalsObj = packageSkuData.performance[1];
+      expect(totalsObj).toEqual(ctrl.currentTotalsObject);
+    });
+  });
+
+  describe('Showing correct distirbution and velocity options', function () {
+    function getDistirbutionBasedOnValue(accountEnum) {
+      var matchedObj = ctrl.filters.accountBrands.filter(function (account) {
+        return account.value === accountEnum;
+      });
+      return matchedObj[0];
+    }
+    it('Should not hide distirbution Simple in brand view ', function () {
+      var distSimple = getDistirbutionBasedOnValue(ctrl.accountBrandEnum.distirbutionSimple);
+      var val = ctrl.removeDistOptionsBasedOnView(distSimple);
+      expect(val).toBeFalsy();
+    });
+
+    it('Should hide distirbution Effective in brand view ', function () {
+      var distSimple = getDistirbutionBasedOnValue(ctrl.accountBrandEnum.distirbutionEffective);
+      var val = ctrl.removeDistOptionsBasedOnView(distSimple);
+      expect(val).toBeTruthy();
+    });
+
+    it('Should hide distirbution Simple in package view ', function () {
+      ctrl.brandSelectedIndex++;
+      var distSimple = getDistirbutionBasedOnValue(ctrl.accountBrandEnum.distirbutionSimple);
+      var val = ctrl.removeDistOptionsBasedOnView(distSimple);
+      expect(val).toBeTruthy();
+    });
+
+    it('Should show distirbution Effective in package view ', function () {
+      ctrl.brandSelectedIndex++;
+      var distSimple = getDistirbutionBasedOnValue(ctrl.accountBrandEnum.distirbutionEffective);
+      var val = ctrl.removeDistOptionsBasedOnView(distSimple);
+      expect(val).toBeFalsy();
+    });
+
+    it('Should show Velocity in brand and package view ', function () {
+      var velocity = getDistirbutionBasedOnValue(ctrl.accountBrandEnum.velocity);
+      var val = ctrl.removeDistOptionsBasedOnView(velocity);
+      expect(val).toBeFalsy();
+
+      ctrl.brandSelectedIndex++;
+      val = ctrl.removeDistOptionsBasedOnView(velocity);
+      expect(val).toBeFalsy();
+    });
+
+    it('Should check if velocity is present ', function () {
+      var item = {
+        name: 'Modelo',
+        measures: measuresArr
+      };
+      // Selecting L90
+      ctrl.filterModel.distributionTimePeriod = ctrl.filtersService.model.distributionTimePeriod.year[1];
+      var val = ctrl.checkIfVelocityPresent(item);
+      expect(val).toBeFalsy();
+
+      // Selecting L120 as it has a velocity trend value and velocity
+      ctrl.filterModel.distributionTimePeriod = ctrl.filtersService.model.distributionTimePeriod.year[2];
+      val = ctrl.checkIfVelocityPresent(item);
+      expect(val).toBeTruthy();
+    });
+
   });
 });

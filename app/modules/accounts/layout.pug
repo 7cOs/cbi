@@ -80,7 +80,7 @@ notes
 
   div(row)
     div(column='12' class='apply-filters')
-      button(value='Apply Filters' type="button" class="btn-action" ng-disabled="a.disableApply" ng-click="a.chipsService.applyFilters(); a.updateBrandSnapshot()") Apply Filters
+      button(value='Apply Filters' type="button" class="btn-action" ng-disabled="a.disableApply" ng-click="a.updateBrandSnapshot();") Apply Filters
       .secondary-button-container.reset-only
         a(ng-click="a.resetFilters()").accent.reset-icon Reset
 
@@ -103,7 +103,7 @@ div(row)
             th(colspan=2).top.dark.other-columns
               p.accent.bold Depletions
             th(colspan=2).top.other-columns
-              p.accent Distribution(s) - {{a.filterModel.distributionTimePeriod.displayValue}} Days
+              p.accent  {{a.filtersService.model.accountSelected.accountBrands.depletionTableHeaderText}} - {{a.filterModel.distributionTimePeriod.displayValue}} Days
           tr
             th
               p.accent &nbsp;
