@@ -354,11 +354,10 @@ module.exports = /*  @ngInject */
         if (widget === 'brands') { vm.brandWidgetTitle = item.name; }
         vm.loadingBrandSnapshot = true;
         vm.filterModel.brand = item.id;
-        userService.getPerformanceBrand({premiseType: filtersService.model.selected.premiseType, brand: item.id}).then(function(data) {
-          // vm.brandTabs.skus = data.performance
+        var params = filtersService.getAppliedFilters('brandSnapshot');
+        params.brand = item.id;
+        userService.getPerformanceBrand(params).then(function(data) {
           vm.brandTabs.skus = data.performance;
-          // console.log('Sub brands');
-          // console.log(data.performance);
           nextTab(widget);
           $timeout(function () {
             vm.loadingBrandSnapshot = false;
@@ -463,12 +462,13 @@ module.exports = /*  @ngInject */
       vm.filtersService.model.accountSelected.accountBrands = vm.filters.accountBrands[0];
       chipsService.resetChipsFilters(chipsService.model);
       setDefaultEndingPeriodOptions();
+      var params = filtersService.getAppliedFilters('brandSnapshot');
 
       var promiseArr = [
         userService.getPerformanceSummary(),
         userService.getPerformanceDepletion(),
         userService.getPerformanceDistribution({'type': 'noencode', 'premiseType': 'off'}),
-        userService.getPerformanceBrand()
+        userService.getPerformanceBrand(params)
       ];
 
       $q.all(promiseArr).then(function(data) {
@@ -547,6 +547,11 @@ module.exports = /*  @ngInject */
       if (widget === 'brands') { vm.brandIdSelected = idSelected; }
       if (widget === 'markets') { vm.marketIdSelected = true; vm.selectedStore = idSelected; prevTab(); }
     }
+
+    $scope.$watch('a.filtersService.model.selected.premiseType', function (newVal) {
+      console.log('selected Premis', newVal);
+      console.log('selected Model', vm.filtersService.model.selected);
+    });
 
     // Check if market overview is scrolled out of view
     angular.element($window).bind('scroll', function() {
