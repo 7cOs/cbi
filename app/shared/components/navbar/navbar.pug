@@ -4,64 +4,65 @@
 .archived-header.success(ng-class="{'visible': nb.copied}") <span>{{nb.multipleTargetListsSelected ? 'Opportunities' : 'Opportunity'}}</span> added to target list!
 .archived-header(ng-class="{'visible': nb.deleteError}") Sorry, you cannot delete a Target List that has Collaborators. Please remove all Collaborators from that list and try again.
 
-div(container)
-  .external-link
-    img(src="../assets/img/icons/nav-iq.svg")
-    a(href="/ext/iq" target="_blank") Go to IQ
-  div(row)
-    img(src="assets/img/logos/Compass_logo.svg", ui-sref="landing", alt="Home").nav-logo
-    .nav-logo-background
-    div.nav-link-wrapper
-      ul(column='8').main-nav
-        li.top-level-menu(ui-sref-active="active")
-          div.inner
-            span #[a(ui-sref="landing" analytics-on="click" analytics-event="Home Page Link Click") Home]
-        li.top-level-menu.parent(ui-sref-active="active")
-          div.inner
-            span #[a My Performance]
-          ul.dropdown
-            li.sub-menu(ui-sref="scorecards" analytics-on="click" analytics-event="My Scorecard Link Click") #[a My Scorecards]
-            li.sub-menu(ui-sref="accounts" analytics-on="click" analytics-event="My Accounts Link Click") #[a Account Dashboard]
-        li.top-level-menu(ui-sref-active="active")
-          div.inner
-            span #[a(ui-sref="opportunities" analytics-on="click" analytics-event="Opportunity List Link Click") Opportunities]
-        li.top-level-menu(ui-sref-active="active")
-          div.inner
-            span #[a(ui-sref="target-lists" analytics-on="click" analytics-event="Target List Link Click") Target Lists]
-        li.top-level-menu(ui-sref-active="active")
-          div.inner
-            span #[a(ui-sref="help") Help]
-      div.nav-icon-container
-        .notification-count-badge(ng-if="nb.notificationHelper.showBadge")
-          span {{nb.notificationHelper.unreadNotifications}}
-        a.nav-icon.add-opportunity(ng-click="nb.modalAddOpportunityForm(); nb.getTargetLists()")
-          inline-search(ng-if="nb.accountSelectorSelected === 'Store'" type="store" placeholder="Search for a store" chosen-result="nb.searchResult" nav="true")
-        md-menu(md-position-mode="target-right target" md-offset="1 38")
-          a.nav-icon.notifications(href="#" md-menu-origin ng-click="$mdOpenMenu($event); nb.markSeen(nb.notifications)", aria-label="Notifications" analytics-on="click" analytics-event="Notifications Click")
-          md-menu-content
-            .nav-flyout
-              .content.nopad
-                div.notification-card.clearfix(md-prevent-menu-close ng-repeat="notification in nb.notifications" ng-class="{'read': notification.status === notificationsService.status.READ}" ng-click="nb.markRead(notification)" class="{{notification.action}}")
-                  .details
-                    p {{notification.shortenedObject.name}}
-                    p.source {{notification.shortenedObject.store.name}}
-                    p.sku {{notification.shortenedObject.product.name}} <span>{{notification.shortenedObject.type}}</span>
-                  .info
-                    label {{notification.dateUpdated | timeAgo: 'relative'}}
-                    label.bold {{notification.creator.firstName}} {{notification.creator.lastName}}
-                div.notification-card.clearfix(ng-if="nb.notificationHelper.unreadNotifications < 1")
-                  .details
-                    p {{nb.noNotifications}}
-        md-menu(md-position-mode="target-right target" md-offset="2 54")
-          a.nav-icon.settings(href="#" md-menu-origin ng-click="$mdOpenMenu($event)", aria-label="Settings")
-          md-menu-content
-            .nav-flyout
-              .content
-                p You've logged in as
-                p <strong>{{nb.userService.model.currentUser.firstName | titlecase}} {{nb.userService.model.currentUser.lastName | titlecase}}</strong>
-                a(href="/auth/logout" target="_self")
-                  button.btn-action Logout
-        div.version {{nb.versionService.model.version.hash}} | {{nb.versionService.model.version.version}}
-    ul.nav-sub-menu(ng-if="$root.pageTitle === 'Account Dashboard' || $root.pageTitle === 'Scorecards'")
-      li.accent #[a(ui-sref="scorecards" ui-sref-active="active") My Scorecards]
-      li.accent #[a(ui-sref="accounts" ui-sref-active="active") My Accounts]
+div.outer-nav-wrapper
+  div.inner-nav-wrapper(container)
+    .external-link
+      img(src="../assets/img/icons/nav-iq.svg")
+      a(href="/ext/iq" target="_blank") Go to IQ
+    div(row)
+      img(src="assets/img/logos/Compass_logo.svg", ui-sref="landing", alt="Home").nav-logo
+      .nav-logo-background
+      div.nav-link-wrapper
+        ul(column='8').main-nav
+          li.top-level-menu(ui-sref-active="active")
+            div.inner
+              span #[a(ui-sref="landing" analytics-on="click" analytics-event="Home Page Link Click") Home]
+          li.top-level-menu.parent(ui-sref-active="active")
+            div.inner
+              span #[a My Performance]
+            ul.dropdown
+              li.sub-menu(ui-sref="scorecards" analytics-on="click" analytics-event="My Scorecard Link Click") #[a My Scorecards]
+              li.sub-menu(ui-sref="accounts" analytics-on="click" analytics-event="My Accounts Link Click") #[a Account Dashboard]
+          li.top-level-menu(ui-sref-active="active")
+            div.inner
+              span #[a(ui-sref="opportunities" analytics-on="click" analytics-event="Opportunity List Link Click") Opportunities]
+          li.top-level-menu(ui-sref-active="active")
+            div.inner
+              span #[a(ui-sref="target-lists" analytics-on="click" analytics-event="Target List Link Click") Target Lists]
+          li.top-level-menu(ui-sref-active="active")
+            div.inner
+              span #[a(ui-sref="help") Help]
+        div.nav-icon-container
+          .notification-count-badge(ng-if="nb.notificationHelper.showBadge")
+            span {{nb.notificationHelper.unreadNotifications}}
+          a.nav-icon.add-opportunity(ng-click="nb.modalAddOpportunityForm(); nb.getTargetLists()")
+            inline-search(ng-if="nb.accountSelectorSelected === 'Store'" type="store" placeholder="Search for a store" chosen-result="nb.searchResult" nav="true")
+          md-menu(md-position-mode="target-right target" md-offset="1 38")
+            a.nav-icon.notifications(href="#" md-menu-origin ng-click="$mdOpenMenu($event); nb.markSeen(nb.notifications)", aria-label="Notifications" analytics-on="click" analytics-event="Notifications Click")
+            md-menu-content
+              .nav-flyout
+                .content.nopad
+                  div.notification-card.clearfix(md-prevent-menu-close ng-repeat="notification in nb.notifications" ng-class="{'read': notification.status === notificationsService.status.READ}" ng-click="nb.markRead(notification)" class="{{notification.action}}")
+                    .details
+                      p {{notification.shortenedObject.name}}
+                      p.source {{notification.shortenedObject.store.name}}
+                      p.sku {{notification.shortenedObject.product.name}} <span>{{notification.shortenedObject.type}}</span>
+                    .info
+                      label {{notification.dateUpdated | timeAgo: 'relative'}}
+                      label.bold {{notification.creator.firstName}} {{notification.creator.lastName}}
+                  div.notification-card.clearfix(ng-if="nb.notificationHelper.unreadNotifications < 1")
+                    .details
+                      p {{nb.noNotifications}}
+          md-menu(md-position-mode="target-right target" md-offset="2 54")
+            a.nav-icon.settings(href="#" md-menu-origin ng-click="$mdOpenMenu($event)", aria-label="Settings")
+            md-menu-content
+              .nav-flyout
+                .content
+                  p You've logged in as
+                  p <strong>{{nb.userService.model.currentUser.firstName | titlecase}} {{nb.userService.model.currentUser.lastName | titlecase}}</strong>
+                  a(href="/auth/logout" target="_self")
+                    button.btn-action Logout
+          div.version {{nb.versionService.model.version.hash}} | {{nb.versionService.model.version.version}}
+      ul.nav-sub-menu(ng-if="$root.pageTitle === 'Account Dashboard' || $root.pageTitle === 'Scorecards'")
+        li.accent #[a(ui-sref="scorecards" ui-sref-active="active") My Scorecards]
+        li.accent #[a(ui-sref="accounts" ui-sref-active="active") My Accounts]

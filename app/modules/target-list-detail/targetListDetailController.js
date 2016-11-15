@@ -247,6 +247,10 @@ module.exports = /*  @ngInject */
           vm.targetListAuthor = findTargetListAuthor(response.collaborators);
         }
         targetListService.model.currentList.archived = response.archived;
+
+        // Binding to rootscope to use on the outer shell
+        $rootScope.isGrayedOut = response.archived;
+
         targetListService.updateTargetListShares(targetListService.model.currentList.id, userService.model.currentUser.employeeID, true);
       }, function(err) {
         console.log('[targetListController.init], Error: ' + err.statusText + '. Code: ' + err.status);

@@ -13,7 +13,9 @@ module.exports =
       templateUrl: './app/modules/target-list-detail/layout.html',
       controller: 'targetListDetailController',
       controllerAs: 'tld',
-      onExit: function(opportunitiesService) {
+      onExit: function($rootScope, opportunitiesService) {
+        $rootScope.isGrayedOut = false;
+
         opportunitiesService.model = {
           filterApplied: false,
           opportunities: [],

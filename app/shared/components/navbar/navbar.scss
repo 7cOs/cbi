@@ -10,13 +10,27 @@ navbar {
   width: 70px;
   float: left;
   z-index: 1;
-  position: relative;
-  top: -3px;
+  position: absolute  ;
+  top: 47px;
 
   &:hover {
     cursor: hand;
   }
 }
+
+.outer-nav-wrapper {
+  background-color: $white;
+  // height: 120px;
+  position: relative;
+
+  // .inner-nav-wrapper {
+  //   position: absolute;
+  //   top: 35px;
+  //   left: 50%;
+  //   transform: translateX(-50%);
+  // }
+}
+
 
 .nav-logo-background {
   background: transparent;
@@ -278,6 +292,7 @@ navbar {
 }
 
 div.nav-link-wrapper {
+  padding-left: 70px;
   height: 36px;
   border-bottom: 2px solid $gray-9;
   box-shadow: 0 8px 6px -2px rgba(225, 225, 227, 0.5);
