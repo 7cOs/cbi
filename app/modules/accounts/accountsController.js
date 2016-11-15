@@ -230,10 +230,12 @@ module.exports = /*  @ngInject */
      */
     function setCurrentTotalsObject() {
       var currentTab = vm.brandSelectedIndex === 0 ? vm.brandTabs.brands : vm.brandTabs.skus;
-      var matchedProperty = currentTab.filter(function (obj) {
-        return obj.type === 'Total';
-      });
-      vm.currentTotalsObject = matchedProperty[0];
+      if (currentTab.filter) {
+        var matchedProperty = currentTab.filter(function (obj) {
+          return obj.type === 'Total';
+        });
+        vm.currentTotalsObject = matchedProperty[0];
+      }
     }
 
     /*
@@ -350,6 +352,7 @@ module.exports = /*  @ngInject */
         vm.loadingBrandSnapshot = true;
         vm.filterModel.brand = item.id;
         userService.getPerformanceBrand({premiseType: filtersService.model.selected.premiseType, brand: item.id}).then(function(data) {
+          // vm.brandTabs.skus = data.performance
           vm.brandTabs.skus = data.performance;
           // console.log('Sub brands');
           // console.log(data.performance);
@@ -388,9 +391,11 @@ module.exports = /*  @ngInject */
 
     function updateBrandSnapshot() {
       var params = filtersService.getAppliedFilters('brandSnapshot');
+      vm.loadingBrandSnapshot = true;
 
       userService.getPerformanceBrand(params).then(function(data) {
         vm.brandTabs.brands = data.performance;
+        vm.loadingBrandSnapshot = false;
       });
 
       apply(true);
