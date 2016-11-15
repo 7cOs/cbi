@@ -393,6 +393,7 @@ module.exports = /*  @ngInject */
     }
 
     function updateBrandSnapshot() {
+      vm.chipsService.applyFilters();
       var params = filtersService.getAppliedFilters('brandSnapshot');
       vm.loadingBrandSnapshot = true;
 
@@ -549,7 +550,6 @@ module.exports = /*  @ngInject */
 
     // Check if market overview is scrolled out of view
     angular.element($window).bind('scroll', function() {
-
       if (vm.selectOpen) {
         return;
       }
