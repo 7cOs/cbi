@@ -67,6 +67,7 @@ module.exports = /*  @ngInject */
       if (p.description) payload.description = p.description;
       if (p.name) payload.name = p.name;
       if (p.newOwnerUserId) payload.newOwnerUserId = p.newOwnerUserId;
+      payload.collaborateAndInvite = p.collaborateAndInvite;
 
       $http.patch(url, payload)
         .then(updateTargetListSuccess)
