@@ -115,6 +115,25 @@ module.exports = /*  @ngInject */
           if (item.type === 'Distribution Points - Off Premise, Effective') sortedData.performance[4] = item;
         });
         vm.performanceData = sortedData;
+        console.log(vm.performanceData);
+
+        // display on/off in column if needed
+        if (vm.performanceData.performance[1].measures && vm.performanceData.performance[3].measures) {
+          vm.performanceData.onPremiseColumn = 'on';
+          vm.performanceData.offPremiseColumn = 'off';
+        } else {
+          vm.performanceData.onPremiseColumn = ' ';
+          vm.performanceData.offPremiseColumn = ' ';
+        }
+
+        // display time frame for distribution if only on premise, or only off premise
+        if (!vm.performanceData.performance[1].measures && vm.performanceData.performance[3].measures) {
+          vm.performanceData.timespan = 'Off Premise';
+        } else if (vm.performanceData.performance[1].measures && !vm.performanceData.performance[3].measures) {
+          vm.performanceData.timespan = 'On Premise ';
+        } else {
+          vm.performanceData.timespan = '';
+        }
       });
 
       userService

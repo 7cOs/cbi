@@ -24,7 +24,7 @@ section.landing-page
                 h3 &nbsp;
         .distribution(column="8")
           div.clearfix
-            h3 Distribution L90
+            h3 {{l.performanceData.timespan}} Distribution L90
             h4.accent VS  YA%
           table(cellspacing="0" cellpadding="0")
             tr
@@ -38,7 +38,7 @@ section.landing-page
                 h3 {{l.performanceData.performance[1].measures[0].value | number:0}}
               td
                 h3(ng-class="l.isPositive(l.performanceData.performance[1].measures[0].percentChange)").bold <span ng-if="l.isPositive(l.performanceData.performance[1].measures[0].percentChange | number:2) === 'positive'">+</span>{{l.performanceData.performance[1].measures[0].percentChange | number:1}}<span>%</span>
-              td.accent.table-spacer on
+              td.accent.table-spacer {{l.performanceData.onPremiseColumn}}
               td
                 h3 {{l.performanceData.performance[2].measures[0].value | number:0}}
               td
@@ -48,7 +48,7 @@ section.landing-page
                 h3 {{l.performanceData.performance[3].measures[0].value | number:0}}
               td
                 h3(ng-class="l.isPositive(l.performanceData.performance[3].measures[0].percentChange)").bold <span ng-if="l.isPositive(l.performanceData.performance[3].measures[0].percentChange | number:2) === 'positive'">+</span>{{l.performanceData.performance[3].measures[0].percentChange | number:1}}<span>%</span>
-              td.accent.table-spacer off
+              td.accent.table-spacer {{l.performanceData.offPremiseColumn}}
               td
                 h3 {{l.performanceData.performance[4].measures[0].value | number:0}}
               td
