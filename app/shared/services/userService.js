@@ -403,12 +403,12 @@ module.exports = /*  @ngInject */
      */
     function calculatePlanDistirbutionTrend(measure) {
       var isPlanValueCalculated = false;
-      var planSimpleVal = Number.parseFloat(measure.planSimple);
-      var planEffectiveVal = Number.parseFloat(measure.planEffective);
+      var planSimpleVal = Number(measure.planSimple);
+      var planEffectiveVal = Number(measure.planEffective);
       var temp = null;
 
-      var distirbutionSimpleVal = Number.parseFloat(measure.distributionsSimple);
-      var distirbutionEffectiveVal = Number.parseFloat(measure.distributionsSimple);
+      var distirbutionSimpleVal = Number(measure.distributionsSimple);
+      var distirbutionEffectiveVal = Number(measure.distributionsSimple);
       if (planSimpleVal && distirbutionSimpleVal) {
         temp = ((distirbutionSimpleVal - planSimpleVal) / planSimpleVal);
         measure.planDistirbutionSimpleTrend = (temp * 100);
@@ -425,8 +425,8 @@ module.exports = /*  @ngInject */
 
     function calculatePlanDepletionTrend(measure) {
       var isPlanValueCalculated = false;
-      var planVal = Number.parseFloat(measure.plan);
-      var depletionsVal = Number.parseFloat(measure.depletions);
+      var planVal = Number(measure.plan);
+      var depletionsVal = Number(measure.depletions);
       if (planVal && depletionsVal) {
         var temp = ((depletionsVal - planVal) / planVal);
         measure.planDepletionTrend = (temp * 100);
