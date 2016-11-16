@@ -131,7 +131,7 @@ module.exports = /*  @ngInject */
 
     function editReportName() {
       opportunityFiltersService.updateOpportunityFilter(vm.currentFilter[0].id, 'name', vm.currentFilter[0].name).then(function(data) {
-        console.log('yay', data);
+        closeModal();
       }, function(err) {
         console.warn(err);
       });
