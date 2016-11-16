@@ -116,25 +116,21 @@ module.exports = /*  @ngInject */
         });
         vm.performanceData = sortedData;
 
-        // display on/off in column if needed
-        if ((vm.performanceData.performance[1].measures || vm.performanceData.performance[2].measures) && (vm.performanceData.performance[3].measures || vm.performanceData.performance[4].measures)) {
-          vm.performanceData.onPremiseColumn = 'on';
-          vm.performanceData.offPremiseColumn = 'off';
-        } else {
-          vm.performanceData.onPremiseColumn = ' ';
-          vm.performanceData.offPremiseColumn = ' ';
-        }
-
         if ((!vm.performanceData.performance[1].measures || !vm.performanceData.performance[2].measures) && (vm.performanceData.performance[3].measures || vm.performanceData.performance[4].measures)) {
           vm.performanceData.timespan = 'Off Premise';
           vm.performanceData.distribution = 'offPremise';
+          vm.performanceData.offPremiseColumn = ' ';
+
         } else if ((vm.performanceData.performance[1].measures || vm.performanceData.performance[2].measures) && (!vm.performanceData.performance[3].measures || !vm.performanceData.performance[4].measures)) {
           vm.performanceData.timespan = 'On Premise ';
           vm.performanceData.distribution = 'onPremise';
+          vm.performanceData.onPremiseColumn = ' ';
+
         } else {
           vm.performanceData.timespan = '';
           vm.performanceData.distribution = 'allPremise';
-
+          vm.performanceData.onPremiseColumn = 'on';
+          vm.performanceData.offPremiseColumn = 'off';
         }
       });
 
