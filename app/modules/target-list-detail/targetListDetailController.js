@@ -53,9 +53,12 @@ module.exports = /*  @ngInject */
     init();
 
     function addCollaboratorClick(result) {
+      console.log('result', result);
       vm.pendingShares.push({
         employee: result
       });
+
+      console.log(vm.pendingShares[0].employee);
 
       listChanged();
     }
