@@ -126,13 +126,16 @@ module.exports = /*  @ngInject */
           vm.performanceData.offPremiseColumn = ' ';
         }
 
-        // display time frame for distribution if only on premise, or only off premise
         if ((!vm.performanceData.performance[1].measures || !vm.performanceData.performance[2].measures) && (vm.performanceData.performance[3].measures || vm.performanceData.performance[4].measures)) {
           vm.performanceData.timespan = 'Off Premise';
+          vm.performanceData.distribution = 'offPremise';
         } else if ((vm.performanceData.performance[1].measures || vm.performanceData.performance[2].measures) && (!vm.performanceData.performance[3].measures || !vm.performanceData.performance[4].measures)) {
           vm.performanceData.timespan = 'On Premise ';
+          vm.performanceData.distribution = 'onPremise';
         } else {
           vm.performanceData.timespan = '';
+          vm.performanceData.distribution = 'allPremise';
+
         }
       });
 
