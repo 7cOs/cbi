@@ -17,7 +17,7 @@ section.landing-page
                 h3 {{l.performanceData.performance[0].measures[0].value | number:0}}
               td
                 h3(ng-class="l.isPositive(l.performanceData.performance[0].measures[0].percentChange)").bold <span ng-if="l.isPositive(l.performanceData.performance[0].measures[0].percentChange | number:2) === 'positive'">+</span>{{l.performanceData.performance[0].measures[0].percentChange | number:1}}<span>%</span>
-            tr
+            tr(ng-if="l.performanceData[1] === {} && l.performanceData[3] === {}")
               td
                 h3 &nbsp;
               td
@@ -33,7 +33,7 @@ section.landing-page
               th &nbsp;
               th.accent Effective
               th &nbsp;
-            tr(ng-if="l.performanceData.performance[1] !== {} && l.performanceData.performance[2] !== {}")
+            tr(ng-if="l.performanceData[1] !== {} }")
               td
                 h3 {{l.performanceData.performance[1].measures[0].value | number:0}}
               td
@@ -43,7 +43,7 @@ section.landing-page
                 h3 {{l.performanceData.performance[2].measures[0].value | number:0}}
               td
                 h3(ng-class="l.isPositive(l.performanceData.performance[2].measures[0].percentChange)").bold <span ng-if="l.isPositive(l.performanceData.performance[2].measures[0].percentChange | number:2) === 'positive'">+</span>{{l.performanceData.performance[2].measures[0].percentChange | number:1}}<span>%</span>
-            tr(ng-if="l.performanceData.performance[3] !== {} && l.performanceData.performance[4] !== {}")
+            tr(ng-if="l.performanceData[3] !== {}")
               td
                 h3 {{l.performanceData.performance[3].measures[0].value | number:0}}
               td
@@ -53,6 +53,7 @@ section.landing-page
                 h3 {{l.performanceData.performance[4].measures[0].value | number:0}}
               td
                 h3(ng-class="l.isPositive(l.performanceData.performance[4].measures[0].percentChange)").bold <span ng-if="l.isPositive(l.performanceData.performance[4].measures[0].percentChange) === 'positive'">+</span>{{l.performanceData.performance[4].measures[0].percentChange | number:1}}<span>%</span>
+
         div(column="8 +4")
           p.accent.action-item.go-arrow #[a(href="#" ui-sref="scorecards") Show Details]
       section(column="4 +1")
