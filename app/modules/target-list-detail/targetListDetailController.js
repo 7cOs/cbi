@@ -9,21 +9,20 @@ module.exports = /*  @ngInject */
 
     // Initial variables
     var vm = this;
-    vm.collaborator = {};
-    vm.collaboratorName = '';
-    vm.permissionLevel = 'Collaborate';
-    vm.deleting = false;
     vm.archiving = false;
-    vm.confirmToast = false;
     vm.changed = false;
-    vm.targetListShares = [];
-    vm.pendingShares = [];
-    vm.pendingRemovals = [];
+    vm.collaboratorName = '';
+    vm.confirmToast = false;
+    vm.deleting = false;
     vm.editable = false;
     vm.leave = false;
+    vm.originalList = {};
+    vm.pendingShares = [];
+    vm.pendingSharesPayload = [];
+    vm.pendingRemovals = [];
+    vm.permissionLevel = 'Collaborate';
     vm.selectedCollaboratorId = '';
     vm.targetListAuthor = '';
-    vm.originalList = {};
 
     // Services
     vm.targetListService = targetListService;
@@ -54,12 +53,6 @@ module.exports = /*  @ngInject */
     init();
 
     function addCollaboratorClick(result) {
-      vm.collaborator = {
-        employeeId: result.employeeId
-      };
-
-      vm.targetListShares.push(vm.collaborator);
-
       vm.pendingShares.push({
         employee: result
       });
@@ -217,13 +210,9 @@ module.exports = /*  @ngInject */
       targetListService.updateTargetList(targetListService.model.currentList.id, payload).then(function(response) {
         targetListService.model.currentList = response;
 
-        if (vm.pendingShares.length > 0) {
-          addCollaborators();
-        }
+        if (vm.pendingShares.length > 0) addCollaborators();
 
-        if (vm.pendingRemovals.length > 0) {
-          removeCollaborator(vm.pendingRemovals);
-        }
+        if (vm.pendingRemovals.length > 0) removeCollaborator(vm.pendingRemovals);
 
         removeFooterToast();
         closeModal();
@@ -288,12 +277,16 @@ module.exports = /*  @ngInject */
     }
 
     function addCollaborators() {
-      targetListService.addTargetListShares(targetListService.model.currentList.id, vm.targetListShares).then(function(response) {
-        var collaboratorList = targetListService.model.currentList;
-        if (collaboratorList.length) {
-          collaboratorList[0].collaborators = targetListService.model.currentList.collaborators = response.data;
-        }
-        closeModal();
+      vm.pendingShares.forEach(function(item, key) {
+        vm.pendingSharesPayload.push(item.employee.employeeId);
       });
+
+      targetListService.addTargetListShares(targetListService.model.currentList.id, vm.pendingSharesPayload).then(function(response) {
+        targetListService.model.currentList.collaborators = response.data;
+      });
+
+      vm.pendingSharesPayload = [];
+
+      closeModal();
     }
   };
