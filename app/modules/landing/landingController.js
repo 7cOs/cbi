@@ -115,7 +115,6 @@ module.exports = /*  @ngInject */
           if (item.type === 'Distribution Points - Off Premise, Effective') sortedData.performance[4] = item;
         });
         vm.performanceData = sortedData;
-        console.log(vm.performanceData);
 
         // display on/off in column if needed
         if ((vm.performanceData.performance[1].measures || vm.performanceData.performance[2].measures) && (vm.performanceData.performance[3].measures || vm.performanceData.performance[4].measures)) {
