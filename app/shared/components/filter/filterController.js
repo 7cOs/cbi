@@ -233,11 +233,14 @@ module.exports = /*  @ngInject */
         var selectedFilter = userService.model.opportunityFilters.filter(function(filterVal) {
           return filterVal.id === currentFilter;
         });
-        selectedFilter.unshift({
-          filterString: encodeURIComponent(filtersService.model.appliedFilter.appliedFilter),
-          description: chipsDescription
-        });
-        filtersService.disableFilters(true, false, true, false);
+        var matchedFilter = selectedFilter[0];
+        if (matchedFilter) {
+          matchedFilter.filterString = encodeURIComponent(filtersService.model.appliedFilter.appliedFilter);
+          matchedFilter.description = chipsDescription;
+          filtersService.disableFilters(true, false, true, false);
+        } else {
+          console.warn('[filterController.updateFilter] - filter could not be updated', currentFilter.id);
+        }
         loaderService.closeLoader();
         closeModal();
       }, function(err) {
