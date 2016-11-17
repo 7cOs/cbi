@@ -115,6 +115,23 @@ module.exports = /*  @ngInject */
           if (item.type === 'Distribution Points - Off Premise, Effective') sortedData.performance[4] = item;
         });
         vm.performanceData = sortedData;
+
+        if ((!vm.performanceData.performance[1].measures || !vm.performanceData.performance[2].measures) && (vm.performanceData.performance[3].measures || vm.performanceData.performance[4].measures)) {
+          vm.performanceData.timespan = 'Off Premise';
+          vm.performanceData.distribution = 'offPremise';
+          vm.performanceData.offPremiseColumn = ' ';
+
+        } else if ((vm.performanceData.performance[1].measures || vm.performanceData.performance[2].measures) && (!vm.performanceData.performance[3].measures || !vm.performanceData.performance[4].measures)) {
+          vm.performanceData.timespan = 'On Premise ';
+          vm.performanceData.distribution = 'onPremise';
+          vm.performanceData.onPremiseColumn = ' ';
+
+        } else {
+          vm.performanceData.timespan = '';
+          vm.performanceData.distribution = 'allPremise';
+          vm.performanceData.onPremiseColumn = 'on';
+          vm.performanceData.offPremiseColumn = 'off';
+        }
       });
 
       userService

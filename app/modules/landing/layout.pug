@@ -5,7 +5,7 @@ section.landing-page
       section.my-performance(column="7")
         section.greeting
           h1 {{l.greeting}}
-        h2 #[a(href="#" ui-sref="scorecards") My Performance]
+        h2 My Performance
         .depletions(column="4")
           h3 Depletions FYTD
           table(cellspacing="0" cellpadding="0")
@@ -17,14 +17,14 @@ section.landing-page
                 h3 {{l.performanceData.performance[0].measures[0].value | number:0}}
               td
                 h3(ng-class="l.isPositive(l.performanceData.performance[0].measures[0].percentChange)").bold <span ng-if="l.isPositive(l.performanceData.performance[0].measures[0].percentChange | number:2) === 'positive'">+</span>{{l.performanceData.performance[0].measures[0].percentChange | number:1}}<span>%</span>
-            tr
+            tr(ng-if="l.performanceData.distribution === 'allPremise'")
               td
                 h3 &nbsp;
               td
                 h3 &nbsp;
         .distribution(column="8")
           div.clearfix
-            h3 Distribution L90
+            h3 {{l.performanceData.timespan}} Distribution L90
             h4.accent VS  YA%
           table(cellspacing="0" cellpadding="0")
             tr
@@ -33,26 +33,27 @@ section.landing-page
               th &nbsp;
               th.accent Effective
               th &nbsp;
-            tr(ng-if="l.performanceData.performance[1] !== {} && l.performanceData.performance[2] !== {}")
+            tr(ng-if="l.performanceData.distribution === 'allPremise' || l.performanceData.distribution === 'onPremise'")
               td
                 h3 {{l.performanceData.performance[1].measures[0].value | number:0}}
               td
                 h3(ng-class="l.isPositive(l.performanceData.performance[1].measures[0].percentChange)").bold <span ng-if="l.isPositive(l.performanceData.performance[1].measures[0].percentChange | number:2) === 'positive'">+</span>{{l.performanceData.performance[1].measures[0].percentChange | number:1}}<span>%</span>
-              td.accent.table-spacer on
+              td.accent.table-spacer {{l.performanceData.onPremiseColumn}}
               td
                 h3 {{l.performanceData.performance[2].measures[0].value | number:0}}
               td
                 h3(ng-class="l.isPositive(l.performanceData.performance[2].measures[0].percentChange)").bold <span ng-if="l.isPositive(l.performanceData.performance[2].measures[0].percentChange | number:2) === 'positive'">+</span>{{l.performanceData.performance[2].measures[0].percentChange | number:1}}<span>%</span>
-            tr(ng-if="l.performanceData.performance[3] !== {} && l.performanceData.performance[4] !== {}")
+            tr(ng-if="l.performanceData.distribution === 'allPremise' || l.performanceData.distribution === 'offPremise'")
               td
                 h3 {{l.performanceData.performance[3].measures[0].value | number:0}}
               td
                 h3(ng-class="l.isPositive(l.performanceData.performance[3].measures[0].percentChange)").bold <span ng-if="l.isPositive(l.performanceData.performance[3].measures[0].percentChange | number:2) === 'positive'">+</span>{{l.performanceData.performance[3].measures[0].percentChange | number:1}}<span>%</span>
-              td.accent.table-spacer off
+              td.accent.table-spacer {{l.performanceData.offPremiseColumn}}
               td
                 h3 {{l.performanceData.performance[4].measures[0].value | number:0}}
               td
                 h3(ng-class="l.isPositive(l.performanceData.performance[4].measures[0].percentChange)").bold <span ng-if="l.isPositive(l.performanceData.performance[4].measures[0].percentChange) === 'positive'">+</span>{{l.performanceData.performance[4].measures[0].percentChange | number:1}}<span>%</span>
+
         div(column="8 +4")
           p.accent.action-item.go-arrow #[a(href="#" ui-sref="scorecards") Show Details]
       section(column="4 +1")
