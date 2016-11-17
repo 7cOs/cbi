@@ -846,11 +846,6 @@ describe('Unit: list controller', function() {
         }
       ];
 
-      deferred = q.defer();
-      spyOn(targetListService, 'addTargetListOpportunities').and.callFake(function() {
-        return deferred.promise;
-      });
-
       httpBackend.expectGET('/api/users/1/targetLists/').respond(200);
     });
 
@@ -860,17 +855,31 @@ describe('Unit: list controller', function() {
     });
 
     it('should add opprtunities to target list', function() {
+      var deferred = q.defer();
+      spyOn(targetListService, 'addTargetListOpportunities').and.callFake(function() {
+        return deferred.promise;
+      });
+
       ctrl.toggleSelectAllStores();
       ctrl.addToTargetList(listId);
       expect(targetListService.addTargetListOpportunities).toHaveBeenCalled();
     });
 
     it('should not call addToTargetService if opportunites are not selected', function() {
+      var deferred = q.defer();
+      spyOn(targetListService, 'addTargetListOpportunities').and.callFake(function() {
+        return deferred.promise;
+      });
+
       ctrl.addToTargetList(listId);
       expect(targetListService.addTargetListOpportunities).not.toHaveBeenCalled();
     });
 
     it('should not call addToTargetService if target list id is null', function() {
+      var deferred = q.defer();
+      spyOn(targetListService, 'addTargetListOpportunities').and.callFake(function() {
+        return deferred.promise;
+      });
       listId = null;
       ctrl.toggleSelectAllStores();
       ctrl.addToTargetList(listId);
@@ -880,6 +889,10 @@ describe('Unit: list controller', function() {
     it('should remove the selected opportunities from view when they are changed to targeted from open', function() {
       // scaffold
       ctrl.selected = [angular.copy(opportunitiesService.model.opportunities[1].groupedOpportunities[0])];
+      var deferred = q.defer();
+      spyOn(targetListService, 'addTargetListOpportunities').and.callFake(function() {
+        return deferred.promise;
+      });
       spyOn(toastService, 'showToast').and.callFake(function() {
         return true;
       });
