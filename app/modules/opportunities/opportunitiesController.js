@@ -44,8 +44,10 @@ module.exports = /*  @ngInject */
     function applySavedFilter(ev, filter) {
       var resetDefaultAuthorizationFlag = true;
       var currentChipModel = null, currentFilterModel = null;
-
       var filterDescription = IsJsonString(filter.description);
+
+      vm.editedFilterName = filter.name;
+
       if (filterDescription) {
         currentChipModel = filterDescription.chipsModel;
         currentFilterModel = filterDescription.filterModel;
@@ -130,6 +132,7 @@ module.exports = /*  @ngInject */
     }
 
     function editReportName() {
+      vm.currentFilter[0].name = vm.editedFilterName;
       opportunityFiltersService.updateOpportunityFilter(vm.currentFilter[0].id, 'name', vm.currentFilter[0].name).then(function(data) {
         closeModal();
       }, function(err) {
