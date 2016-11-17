@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports = /*  @ngInject */
-  function targetListDetailController($rootScope, $scope, $state, $timeout, $filter, $mdDialog, $mdSelect, $window, targetListService, chipsService, filtersService, opportunitiesService, userService) {
+  function targetListDetailController($rootScope, $scope, $state, $timeout, $filter, $mdDialog, $mdSelect, $window, targetListService, chipsService, filtersService, opportunitiesService, userService, ieHackService) {
 
     // ****************
     // CONTROLLER SETUP
@@ -11,6 +11,7 @@ module.exports = /*  @ngInject */
     var vm = this;
     vm.archiving = false;
     vm.changed = false;
+    vm.closeButton = false;
     vm.collaboratorName = '';
     vm.confirmToast = false;
     vm.deleting = false;
@@ -21,6 +22,7 @@ module.exports = /*  @ngInject */
     vm.pendingSharesPayload = [];
     vm.pendingRemovals = [];
     vm.permissionLevel = 'Collaborate';
+    vm.saveButton = false;
     vm.selectedCollaboratorId = '';
     vm.targetListAuthor = '';
 
@@ -36,6 +38,7 @@ module.exports = /*  @ngInject */
     vm.changePermissionClick = changePermissionClick;
     vm.closeModal = closeModal;
     vm.deleteList = deleteList;
+    vm.enableButton = enableButton;
     vm.findTargetListAuthor = findTargetListAuthor;
     vm.footerToast = footerToast;
     vm.initTargetLists = initTargetLists;
@@ -53,12 +56,9 @@ module.exports = /*  @ngInject */
     init();
 
     function addCollaboratorClick(result) {
-      console.log('result', result);
       vm.pendingShares.push({
         employee: result
       });
-
-      console.log(vm.pendingShares[0].employee);
 
       listChanged();
     }
@@ -71,6 +71,7 @@ module.exports = /*  @ngInject */
         }
       });
       listChanged();
+      ieHackService.forceRepaint();
     }
 
     function permissionLabel(permissionLevel) {
@@ -80,6 +81,10 @@ module.exports = /*  @ngInject */
         return 'collaborator';
       }
     }
+
+    function enableButton() {
+      targetListService.model.currentList.permissionLevel === 'collaborate' ? vm.closeButton = true : vm.saveButton = true;
+    };
 
     function changePermissionClick() {
       listChanged();
@@ -163,6 +168,7 @@ module.exports = /*  @ngInject */
       initTargetLists();
       isAuthor();
       removeFooterToast();
+      enableButton();
       vm.originalList = targetListService.model.currentList;
 
       $mdDialog.show({
@@ -191,11 +197,14 @@ module.exports = /*  @ngInject */
           angular.forEach(vm.pendingShares, function(item, key) {
             if (item.employee.employeeId === collaboratorId) vm.pendingShares.splice(key, 1);
           });
+          angular.forEach(vm.pendingRemovals, function(item, key) {
+            if (item === collaboratorId) vm.pendingRemovals.splice(key, 1);
+          });
         });
+        if (userService.model.currentUser.employeeID === collaboratorId) vm.closeButton = true;
       });
 
-      listChanged();
-      vm.leave = true;
+      vm.listChanged();
     }
 
     function removeFooterToast() {
@@ -215,10 +224,10 @@ module.exports = /*  @ngInject */
 
         if (vm.pendingShares.length > 0) addCollaborators();
 
-        if (vm.pendingRemovals.length > 0) removeCollaborator(vm.pendingRemovals);
+        if (vm.pendingRemovals.length > 0) vm.removeCollaborator(vm.pendingRemovals);
 
-        removeFooterToast();
-        closeModal();
+        vm.removeFooterToast();
+        vm.closeModal();
       });
     }
 
