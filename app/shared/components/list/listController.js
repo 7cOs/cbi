@@ -241,6 +241,7 @@ module.exports = /*  @ngInject */
 
       // Create target list
       userService.addTargetList(vm.newList).then(function(response) {
+        vm.addToTargetList(response.id);
         closeModal();
         vm.buttonDisabled = false;
 
