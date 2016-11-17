@@ -79,7 +79,6 @@ div.my-scorecards
             td.column-total.no-border {{s.totalRow.volumeBU | number:1}}%
             td.column-total {{s.totalRow.growthPercent | number:1}}%
             td.column-total.no-border {{s.totalRow.growthBU | number:1}}%
-          div {{s.filtersService.model.accountSelected.depletionsTimeFilter}}
           tr(ng-repeat="depletion in s.userService.model.depletion")
             td.left.data-brand(analytics-on="click" analytics-event="Brand Performance") {{depletion.name}}
             td.dark(ng-repeat-start="measure in depletion.measures | filter: {timeframe: s.depletionSelect}: true") {{measure.depletions | number:0}}
