@@ -1,5 +1,5 @@
 describe('Unit: list controller', function() {
-  var scope, ctrl, q, mdDialog, filtersService, loaderService, opportunitiesService, targetListService;
+  var scope, ctrl, q, httpBackend, mdDialog, filtersService, loaderService, opportunitiesService, targetListService, toastService, userService;
 
   beforeEach(function() {
     angular.mock.module('ui.router');
@@ -7,15 +7,20 @@ describe('Unit: list controller', function() {
     angular.mock.module('cf.common.services');
     angular.mock.module('cf.common.components.list');
 
-    inject(function($rootScope, _$q_, _$mdDialog_, $controller, _filtersService_, _loaderService_, _opportunitiesService_, _targetListService_, _userService_) {
+    inject(function($rootScope, _$q_, _$httpBackend_, _$mdDialog_, $controller, _filtersService_, _loaderService_, _opportunitiesService_, _targetListService_, _toastService_, _userService_) {
       scope = $rootScope.$new();
       q = _$q_;
       mdDialog = _$mdDialog_;
+      httpBackend = _$httpBackend_;
 
       filtersService = _filtersService_;
       loaderService = _loaderService_;
       opportunitiesService = _opportunitiesService_;
       targetListService = _targetListService_;
+      toastService = _toastService_;
+      userService = _userService_;
+
+      userService.model.currentUser.employeeID = 1;
 
       ctrl = $controller('listController', {$scope: scope});
     });
@@ -780,7 +785,7 @@ describe('Unit: list controller', function() {
               'featureTypeDesc': null,
               'priorityPackageFlag': 'Y',
               '$$hashKey': 'object:4161',
-              'selected': true
+              'selected': false
             }
           ]
         },
@@ -841,32 +846,73 @@ describe('Unit: list controller', function() {
         }
       ];
 
-      spyOn(targetListService, 'addTargetListOpportunities').and.callFake(function() {
-        var deferred = q.defer();
-        return deferred.promise;
-      });
+      httpBackend.expectGET('/api/users/1/targetLists/').respond(200);
     });
 
     afterEach(function() {
       ctrl.selected = [];
+      listId = 'fc1a0734-a16e-4953-97da-bba51c4690f6';
     });
 
     it('should add opprtunities to target list', function() {
+      var deferred = q.defer();
+      spyOn(targetListService, 'addTargetListOpportunities').and.callFake(function() {
+        return deferred.promise;
+      });
+
       ctrl.toggleSelectAllStores();
       ctrl.addToTargetList(listId);
       expect(targetListService.addTargetListOpportunities).toHaveBeenCalled();
     });
 
     it('should not call addToTargetService if opportunites are not selected', function() {
+      var deferred = q.defer();
+      spyOn(targetListService, 'addTargetListOpportunities').and.callFake(function() {
+        return deferred.promise;
+      });
+
       ctrl.addToTargetList(listId);
       expect(targetListService.addTargetListOpportunities).not.toHaveBeenCalled();
     });
 
     it('should not call addToTargetService if target list id is null', function() {
+      var deferred = q.defer();
+      spyOn(targetListService, 'addTargetListOpportunities').and.callFake(function() {
+        return deferred.promise;
+      });
       listId = null;
       ctrl.toggleSelectAllStores();
       ctrl.addToTargetList(listId);
       expect(targetListService.addTargetListOpportunities).not.toHaveBeenCalled();
+    });
+
+    it('should remove the selected opportunities from view when they are changed to targeted from open', function() {
+      // scaffold
+      ctrl.selected = [angular.copy(opportunitiesService.model.opportunities[1].groupedOpportunities[0])];
+      var deferred = q.defer();
+      spyOn(targetListService, 'addTargetListOpportunities').and.callFake(function() {
+        return deferred.promise;
+      });
+      spyOn(toastService, 'showToast').and.callFake(function() {
+        return true;
+      });
+
+      // assert init
+      expect(opportunitiesService.model.opportunities.length).toEqual(2);
+      expect(ctrl.selected.length).toEqual(1);
+      expect(targetListService.addTargetListOpportunities.calls.count()).toEqual(0);
+      expect(toastService.showToast.calls.count()).toEqual(0);
+
+      // run test
+      ctrl.addToTargetList(listId);
+      deferred.resolve();
+      scope.$digest();
+
+      // assert
+      expect(targetListService.addTargetListOpportunities).toHaveBeenCalledWith(listId, ['0080993___80013466___20160929']);
+      expect(ctrl.selected.length).toEqual(0);
+      expect(targetListService.addTargetListOpportunities.calls.count()).toEqual(1);
+      expect(toastService.showToast.calls.count()).toEqual(1);
     });
   });
 

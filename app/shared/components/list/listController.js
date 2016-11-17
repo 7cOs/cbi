@@ -174,12 +174,34 @@ module.exports = /*  @ngInject */
         for (var i = 0; i < vm.selected.length; i++) {
           opportunityIds.push(vm.selected[i].id);
         }
+
         targetListService.addTargetListOpportunities(listId, opportunityIds).then(function(data) {
           toastService.showToast('copied', opportunityIds);
-          return data;
+
+          if (vm.selected[0].status === 'OPEN') {
+            // for each selected item
+            for (i = 0; i < vm.selected.length; i++) {
+              var breaking = false;
+
+              // find opporuntities that were changed to targeted
+              for (var j = 0; j < opportunitiesService.model.opportunities.length; j++) {
+                for (var k = 0; k < opportunitiesService.model.opportunities[j].groupedOpportunities.length; k++) {
+                  if (opportunitiesService.model.opportunities[j].groupedOpportunities[k].id === vm.selected[i].id) {
+                    // remove from opportunities model (since a change to targeted is a new query, and TLs are loaded everytime - we dont need to remove or change statuses)
+                    opportunitiesService.model.opportunities[j].groupedOpportunities.splice(k, 1);
+                    // break loop after needle is found to save on performance
+                    breaking = true;
+                    break;
+                  }
+                }
+                if (breaking) break;
+              }
+            }
+            // reset selected
+            vm.selected = [];
+          }
         }, function(err) {
           console.log('Error adding these ids: ', opportunityIds, ' Responded with error: ', err);
-          return err;
         });
       }
     }
