@@ -1,5 +1,5 @@
 describe('Unit: page controller', function() {
-  var scope, ctrl, q, filtersService, loaderService, opportunitiesService;
+  var scope, ctrl, q, state, filtersService, loaderService, opportunitiesService;
 
   beforeEach(function() {
     angular.mock.module('ui.router');
@@ -7,9 +7,10 @@ describe('Unit: page controller', function() {
     angular.mock.module('cf.common.services');
     angular.mock.module('cf.common.components.page');
 
-    inject(function($rootScope, _$q_, $controller, _filtersService_, _loaderService_, _opportunitiesService_) {
+    inject(function($rootScope, _$q_, _$state_, $controller, _filtersService_, _loaderService_, _opportunitiesService_) {
       scope = $rootScope.$new();
       q = _$q_;
+      state = _$state_;
 
       filtersService = _filtersService_;
       loaderService = _loaderService_;
@@ -123,6 +124,11 @@ describe('Unit: page controller', function() {
 
     it('should return false if there are opportunities', function() {
       filtersService.model.appliedFilter.pagination.totalPages = 0;
+      expect(ctrl.displayPagination()).toEqual(false);
+    });
+
+    it('should return false if on the target list detail page', function() {
+      state.current.name = 'target-list-detail';
       expect(ctrl.displayPagination()).toEqual(false);
     });
   });

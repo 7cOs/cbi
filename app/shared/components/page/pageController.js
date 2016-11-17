@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports = /*  @ngInject */
-  function pageController($scope, filtersService, loaderService, opportunitiesService) {
+  function pageController($scope, $state, filtersService, loaderService, opportunitiesService) {
     // Initial variables
     var vm = this;
 
@@ -15,7 +15,7 @@ module.exports = /*  @ngInject */
 
     // Public Methods
     function displayPagination() {
-      if (filtersService.model.appliedFilter.pagination.totalPages > 0) return true;
+      if ($state.current.name !== 'target-list-detail' && filtersService.model.appliedFilter.pagination.totalPages > 0) return true;
 
       return false;
     }
