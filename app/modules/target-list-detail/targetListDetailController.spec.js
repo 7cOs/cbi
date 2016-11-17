@@ -1,5 +1,5 @@
 describe('Unit: targetListDetailController', function() {
-  var scope, ctrl, $mdDialog, $q, $httpBackend, targetListService, chipsService, filtersService, opportunitiesService, userService, collaborators, currentUser, pending, ownedTargetLists;
+  var scope, ctrl, $mdDialog, $q, $httpBackend, targetListService, chipsService, filtersService, opportunitiesService, userService, collaborators, currentUser, pending, ownedTargetLists, deferred;
 
   beforeEach(function() {
     angular.mock.module('ui.router');
@@ -20,6 +20,8 @@ describe('Unit: targetListDetailController', function() {
       opportunitiesService = _opportunitiesService_;
       userService = _userService_;
     });
+
+    deferred = $q.defer();
 
     collaborators = [
       {
@@ -83,6 +85,17 @@ describe('Unit: targetListDetailController', function() {
           'firstName': 'CHRISTOPHER',
           'lastName': 'WILLIAMS',
           'email': 'CHRIS.WILLIAMS@CBRANDS.COM'
+        },
+        'permissionLevel': 'collaborate',
+        'lastViewed': null
+      },
+      {
+        'employee': {
+          'id': '8585',
+          'employeeId': '200',
+          'firstName': 'FRANCIS SCOTT',
+          'lastName': 'KEY',
+          'email': 'FRANCIS.KEY@CBRANDS.COM'
         },
         'permissionLevel': 'collaborate',
         'lastViewed': null
@@ -211,6 +224,9 @@ describe('Unit: targetListDetailController', function() {
     expect(ctrl.deleteList).not.toBeUndefined();
     expect(typeof (ctrl.deleteList)).toEqual('function');
 
+    expect(ctrl.enableButton).not.toBeUndefined();
+    expect(typeof (ctrl.enableButton)).toEqual('function');
+
     expect(ctrl.findTargetListAuthor).not.toBeUndefined();
     expect(typeof (ctrl.findTargetListAuthor)).toEqual('function');
 
@@ -258,7 +274,11 @@ describe('Unit: targetListDetailController', function() {
 
       beforeEach(function() {
         result = {
-          employeeId: '321'
+          'id': '5649',
+          'employeeId': '1009529',
+          'firstName': 'CARRIE',
+          'lastName': 'REID',
+          'email': 'CARRIE.REID@CBRANDS.COM'
         };
 
         ctrl.changed = false;
@@ -269,13 +289,9 @@ describe('Unit: targetListDetailController', function() {
         ctrl.changed = false;
       });
 
-      it('should add a collaborator to the targetListShares array', function() {
-        expect(ctrl.targetListShares.length).toEqual(1);
-        expect(ctrl.targetListShares[0].employeeId).toEqual('321');
-      });
-
-      it('should add the collaborator share object to the pendingShares array', function() {
+      it('should add a collaborator to the pendingShares array', function() {
         expect(ctrl.pendingShares.length).toEqual(1);
+        expect(ctrl.pendingShares[0].employee.employeeId).toEqual('1009529');
       });
 
       it('should update the changed boolean to true', function() {
@@ -339,6 +355,28 @@ describe('Unit: targetListDetailController', function() {
         ctrl.closeModal();
         expect(targetListService.model.currentList.name).toEqual('Updated Name');
         expect(targetListService.model.currentList.description).toEqual('Updated Description');
+      });
+
+      it('should update the changed boolean to false', function() {
+        ctrl.changed = true;
+        ctrl.closeModal();
+        expect(ctrl.changed).toEqual(false);
+      });
+    });
+
+    describe('[tld.enableButton]', function() {
+      it('should update closeButton to true if permissionLevel is collaborate', function() {
+        targetListService.model.currentList.permissionLevel = 'collaborate';
+        ctrl.enableButton();
+        expect(ctrl.closeButton).toEqual(true);
+        expect(ctrl.saveButton).toEqual(false);
+      });
+
+      it('should update saveButton to true if permissionLevel is not collaborate', function() {
+        targetListService.model.currentList.permissionLevel = 'author';
+        ctrl.enableButton();
+        expect(ctrl.saveButton).toEqual(true);
+        expect(ctrl.closeButton).toEqual(false);
       });
     });
 
@@ -420,7 +458,6 @@ describe('Unit: targetListDetailController', function() {
 
       it('should call the service and run .then()', function() {
         // create promise and spy on service.method
-        var deferred = $q.defer();
         spyOn(targetListService, 'updateTargetList').and.callFake(function() {
           return deferred.promise;
         });
@@ -545,26 +582,23 @@ describe('Unit: targetListDetailController', function() {
       beforeEach(function() {
         targetListService.model.currentList.collaborators = collaborators;
         targetListService.model.currentList.id = 1;
-
         ctrl.pendingShares = pending;
-        ctrl.leave = false;
+        ctrl.pendingRemovals = ['111', '222', '333'];
 
         // init stuff that we dont care about - we dont need one for /api/targetLists/1 because real service is never actually called
         $httpBackend.expectGET('/api/targetLists/undefined').respond(200);
         $httpBackend.expectGET('/api/targetLists/undefined/opportunities').respond(200);
-      });
 
-      it('should call the service and run the script in .then()', function() {
         // create promise and spy on service.method
-        var deferred = $q.defer();
         spyOn(targetListService, 'deleteTargetListShares').and.callFake(function() {
           return deferred.promise;
         });
+      });
 
+      it('should call the service and run the script in .then()', function() {
         // make sure everything is how we want it on start
         expect(targetListService.deleteTargetListShares).not.toHaveBeenCalled();
         expect(targetListService.model.currentList.collaborators.length).toEqual(3);
-        expect(ctrl.pendingShares.length).toEqual(2);
 
         // run method
         ctrl.removeCollaborator(['1012135']);
@@ -577,14 +611,45 @@ describe('Unit: targetListDetailController', function() {
         // assert that everything we wanted to happen has happened, and things we didnt want to happen havent happened
         expect(targetListService.deleteTargetListShares).toHaveBeenCalledWith(1, '1012135');
         expect(targetListService.model.currentList.collaborators.length).toEqual(2);
-        expect(ctrl.pendingShares.length).toEqual(1);
-        expect(ctrl.leave).toBe(true);
+      });
+
+      it('should update the pendingShares array length', function() {
+        expect(ctrl.pendingShares.length).toEqual(3);
+        ctrl.removeCollaborator(['1012135']);
+        deferred.resolve();
+        scope.$digest();
+        expect(ctrl.pendingShares.length).toEqual(2);
+      });
+
+      it('should update the pendingRemovals array length', function() {
+        expect(ctrl.pendingRemovals.length).toEqual(3);
+        ctrl.removeCollaborator(['111']);
+        deferred.resolve();
+        scope.$digest();
+        expect(ctrl.pendingRemovals.length).toEqual(2);
+      });
+
+      it('should enable the close button if collaborator being removed is current user', function() {
+        expect(ctrl.closeButton).toEqual(false);
+        userService.model.currentUser.employeeID = '200';
+        ctrl.removeCollaborator(['200']);
+        deferred.resolve();
+        scope.$digest();
+        expect(ctrl.closeButton).toEqual(true);
+      });
+
+      it('should call the listChanged function', function() {
+        spyOn(ctrl, 'listChanged').and.callThrough();
+        ctrl.removeCollaborator(['200']);
+        expect(ctrl.listChanged).toHaveBeenCalled();
       });
 
       afterEach(function() {
         // reset stuff we changed
         targetListService.model.currentList.collaborators = collaborators;
         ctrl.pendingShares = pending;
+        ctrl.pendingRemovals = ['111', '222', '333'];
+        ctrl.closeButton = false;
       });
     });
 
@@ -621,59 +686,60 @@ describe('Unit: targetListDetailController', function() {
       });
     });
 
-    // describe('[tld.updateList]', function() {
-    //   beforeEach(function() {
-    //     // init stuff that we dont care about - we dont need one for /api/targetLists/1 because real service is never actually called
-    //     $httpBackend.expectGET('/api/targetLists/undefined').respond(200);
-    //     $httpBackend.expectGET('/api/targetLists/undefined/opportunities').respond(200);
+    describe('[tld.updateList]', function() {
+      beforeEach(function() {
+        $httpBackend.expectGET('/api/targetLists/undefined').respond(200);
+        $httpBackend.expectGET('/api/targetLists/undefined/opportunities').respond(200);
 
-    //     // create promise and spy on service.method
-    //     var deferred = $q.defer();
-    //     spyOn(targetListService, 'updateTargetList').and.callFake(function() {
-    //       return deferred.promise;
-    //     });
+        spyOn(targetListService, 'updateTargetList').and.callFake(function() {
+          return deferred.promise;
+        });
+      });
 
-    //     // make sure everything is how we want it on start
-    //     expect(targetListService.updateTargetList).not.toHaveBeenCalled();
+      it('should call the update function in the service', function() {
+        expect(targetListService.updateTargetList).not.toHaveBeenCalled();
+        ctrl.updateList();
+        deferred.resolve();
+        scope.$digest();
+        expect(targetListService.updateTargetList).toHaveBeenCalled();
+      });
 
-    //     // run method
-    //     ctrl.updateList();
+      it('should set the current list in the model to equal the api response data from the updateTargetList call', function() {
 
-    //     // resolve promise so we can trigger then
-    //     deferred.resolve();
-    //     // trigger promise resolution
-    //     scope.$digest();
-    //   });
+      });
 
-    //   it('should call the target list service updateTargetList method', function() {
+      it('should call the changePermissionClick function', function() {
 
-    //   });
+      });
 
-    //   it('should set the current list in the model to equal the api response data from the updateTargetList call', function() {
+      it('should call the addCollaborators function if there are pending collaborators', function() {
 
-    //   });
+      });
 
-    //   it('should call the changePermissionClick function', function() {
+      it('should call the removeCollaborator function if there are pending removals', function() {
 
-    //   });
+      });
 
-    //   it('should call the addCollaborators function if there are pending collaborators', function() {
+      it('should call the removeFooterToast function', function() {
+        spyOn(ctrl, 'removeFooterToast').and.callThrough();
+        ctrl.updateList();
+        deferred.resolve();
+        scope.$digest();
+        expect(ctrl.removeFooterToast).toHaveBeenCalled();
+        expect(ctrl.removeFooterToast.calls.count()).toEqual(1);
 
-    //   });
+      });
 
-    //   it('should call the removeCollaborator function if there are pending removals', function() {
-
-    //   });
-
-    //   it('should call the removeFooterToast function', function() {
-
-    //   });
-
-    //   it('should call the closeModal function', function() {
-    //     expect(ctrl.closeModal()).toHaveBeenCalled();
-    //     expect(ctrl.closeModal().calls.count()).toEqual(1);
-    //   });
-    // });
+      it('should call the closeModal function', function() {
+        spyOn(ctrl, 'closeModal').and.callThrough();
+        ctrl.updateList();
+        deferred.resolve();
+        scope.$digest();
+        expect(ctrl.closeModal).toHaveBeenCalled();
+        expect(ctrl.closeModal.calls.count()).toEqual(1);
+      });
+    });
 
   });
 });
+

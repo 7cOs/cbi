@@ -110,8 +110,15 @@
     color: transparent;
   }
 
-  // Update button background color for TL's manage modal
-  .target-list-modal .modal-footer button {
-    background-color: $gray-4;
+  // Update button background color && toast placement for TL's manage modal
+  .target-list-modal .modal-footer {
+    button {
+      background-color: $gray-4;
+    }
+
+    .toast {
+      margin-left: -466px;
+      margin-right: 0;
+    }
   }
 }
