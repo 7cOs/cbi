@@ -502,7 +502,7 @@ describe('Unit: filter controller (opportunities)', function() {
 
       expect(loaderService.openLoader).toHaveBeenCalledWith(true);
       expect(loaderService.openLoader.calls.count()).toEqual(1);
-      expect(opportunityFiltersService.updateOpportunityFilter).toHaveBeenCalledWith('test 1', chipsDescription);
+      expect(opportunityFiltersService.updateOpportunityFilter).toHaveBeenCalledWith('test 1', 'description', chipsDescription);
       expect(opportunityFiltersService.updateOpportunityFilter.calls.count()).toEqual(1);
     });
 
