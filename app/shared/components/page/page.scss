@@ -4,6 +4,16 @@
 
   .md-button {
     // because of the way the styles are loaded, the default colors are overwriting our added styles. - wjay
+    background-color: $blue !important;
+    color: $white !important;
+  }
+
+  .md-button.numbered {
+    background-color: $white !important;
+    color: $gray-1 !important;
+  }
+
+  .md-button.active {
     background-color: $dark-blue !important;
     color: $white !important;
   }
