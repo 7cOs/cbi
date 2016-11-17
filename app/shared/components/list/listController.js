@@ -42,7 +42,8 @@ module.exports = /*  @ngInject */
       description: '',
       opportunities: [],
       collaborators: [],
-      targetListShares: []
+      targetListShares: [],
+      collaborateAndInvite: false
     };
 
     // Expose public methods
@@ -230,22 +231,13 @@ module.exports = /*  @ngInject */
     function saveNewList(e) {
       vm.buttonDisabled = true;
 
-      // create collaborator payload
-      var newPayload = [];
-      for (var i = 0; i < vm.newList.collaborators.length; i++) {
-        newPayload.push({
-          employeeId: vm.newList.collaborators[i].employeeId,
-          permissionLevel: vm.newList.allowInvites ? 'CollaborateAndInvite' : 'Collaborate'
-        });
-      }
-
       // Create target list
       userService.addTargetList(vm.newList).then(function(response) {
         vm.addToTargetList(response.id);
         closeModal();
         vm.buttonDisabled = false;
 
-        return targetListService.addTargetListShares(response.id, newPayload);
+        return targetListService.addTargetListShares(response.id, vm.newList.targetListShares);
       })
       .then(function(addCollaboratorResponse) {
         userService.model.targetLists.owned[0].collaborators = addCollaboratorResponse.data;
@@ -255,7 +247,7 @@ module.exports = /*  @ngInject */
           description: '',
           opportunities: [],
           collaborators: [],
-          allowInvites: false
+          collaborateAndInvite: false
         };
       });
     }
@@ -263,8 +255,7 @@ module.exports = /*  @ngInject */
     function addCollaborator(e) {
       vm.newList.collaborators.push(e);
       var share = {
-        employeeId: e.employeeId,
-        permissionLevel: 'Collaborate'
+        employeeId: e.employeeId
       };
       vm.newList.targetListShares.push(share);
     }
