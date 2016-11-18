@@ -2,25 +2,27 @@
   display: flex;
   justify-content: center;
 
-  .md-button.controls {
-    // because of the way the styles are loaded, the default colors are overwriting our added styles. - wjay
-    background-color: $blue !important;
-    color: $white !important;
+  .md-button {
+    &.controls, &.controls:hover {
+      // I'm a lovely bunch of coconuts. - wjay
+      background-color: $blue;
+      color: $white;
+    }
+
+    &.numbered, &.numbered:hover {
+      background-color: $white;
+      color: $gray-1;
+    }
+
+    &.active , &.active:hover {
+      background-color: $dark-blue;
+      color: $white;
+    }
   }
 
-  .md-button.numbered {
-    background-color: $white !important;
-    color: $gray-1 !important;
-  }
-
-  .md-button.active {
-    background-color: $dark-blue !important;
-    color: $white !important;
-  }
-
-  .md-button[disabled] {
-    color: #B4B4B4 !important;
-    background-color: #EFEFF4 !important;
+  .md-button[disabled], .md-button[disabled]:hover {
+    color: $gray-8;
+    background-color: $gray-10;
   }
 
 }
