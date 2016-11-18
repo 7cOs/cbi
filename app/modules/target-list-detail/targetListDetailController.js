@@ -47,6 +47,7 @@ module.exports = /*  @ngInject */
     vm.makeOwner = makeOwner;
     vm.modalManageTargetList = modalManageTargetList;
     vm.navigateToTL = navigateToTL;
+    vm.pendingCheck = pendingCheck;
     vm.permissionLabel = permissionLabel;
     vm.removeCollaborator = removeCollaborator;
     vm.removeCollaboratorClick = removeCollaboratorClick;
@@ -104,10 +105,12 @@ module.exports = /*  @ngInject */
       vm.changed = false;
     }
 
-    function deleteList() {
-      if (vm.pendingRemovals) removeCollaborator(vm.pendingRemovals);
-      targetListService.deleteTargetList(targetListService.model.currentList.id).then(function(response) {
+    function pendingCheck() {
+      vm.pendingRemovals.length ? vm.removeCollaborator(vm.pendingRemovals) : vm.deleteList();
+    }
 
+    function deleteList() {
+      targetListService.deleteTargetList(targetListService.model.currentList.id).then(function(response) {
         vm.confirmToast = true;
         removeFooterToast();
 
@@ -190,6 +193,8 @@ module.exports = /*  @ngInject */
 
     function removeCollaborator(collaboratorIds) {
       angular.forEach(collaboratorIds, function(collaboratorId, key) {
+        var listLength = collaboratorIds.length;
+        var collabKey = key;
         targetListService.deleteTargetListShares(targetListService.model.currentList.id, collaboratorId).then(function(response) {
           angular.forEach(targetListService.model.currentList.collaborators, function(item, key) {
             if (item.user.employeeId === collaboratorId) targetListService.model.currentList.collaborators.splice(key, 1);
@@ -200,6 +205,9 @@ module.exports = /*  @ngInject */
           angular.forEach(vm.pendingRemovals, function(item, key) {
             if (item === collaboratorId) vm.pendingRemovals.splice(key, 1);
           });
+          if (listLength - 1 === collabKey) {
+            vm.deleteList();
+          }
         });
         if (userService.model.currentUser.employeeID === collaboratorId) vm.closeButton = true;
       });
