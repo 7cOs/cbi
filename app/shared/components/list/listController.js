@@ -191,6 +191,8 @@ module.exports = /*  @ngInject */
                     // remove from opportunities model if open is selected, otherwise just change status
                     filtersService.model.opportunityStatusOpen && filtersService.model.opportunityStatusOpen === true ? opportunitiesService.model.opportunities[j].groupedOpportunities.splice(k, 1) : opportunitiesService.model.opportunities[j].groupedOpportunities[k].status = 'TARGETED';
 
+                    if (opportunitiesService.model.opportunities[j].groupedOpportunities.length === 0) opportunitiesService.model.opportunities.splice(j, 1);
+
                     // break loop after needle is found to save on performance
                     breaking = true;
                     break;
