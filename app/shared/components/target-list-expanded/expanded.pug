@@ -2,9 +2,13 @@
   div(row)
     h1(column='12') Target Lists
 .clearfix
-  button.icon.select-all(ng-click="expanded.toggleAll()")
+  button(ng-if="expanded.buttonState === 'named'").icon.select-all(ng-click="expanded.toggleAll(expanded.buttonState)")
     span(ng-if='expanded.isChecked()') Un-
     | Select All
+  button(ng-if="expanded.buttonState === 'archived'").icon.select-all(ng-click="expanded.toggleAll(expanded.buttonState)")
+    span(ng-if='expanded.isCheckedArchived()') Un-
+    | Select All
+
 
   .target-action-buttons
     button(ng-if="expanded.buttonState === 'named'" ng-disabled="expanded.selected.length === 0" ng-click="expanded.archiveTargetList(expanded.selected)").btn-action Archive
@@ -45,11 +49,11 @@ div.expanded-target-lists
         div(row).target-list-detail-container
           .loader-wrap.inline(ng-if="expanded.loaderService.model.loadingFilters" ng-class="{'active': expanded.loaderService.model.loadingFilters}")
             loader
-          div(ng-show="!expanded.loaderService.model.loadingFilters && !expanded.userService.model.targetLists.owned.length || expanded.userService.model.targetLists.owned.length === 0 || !expanded.loaderService.model.loadingFilters  && !expanded.userService.model.targetLists.ownedNotArchived").no-opportunities
+          div(ng-show="!expanded.loaderService.model.loadingFilters && !expanded.userService.model.targetLists.ownedNotArchivedTargetLists.length || expanded.userService.model.targetLists.ownedNotArchivedTargetLists.length === 0 || !expanded.loaderService.model.loadingFilters  && !expanded.userService.model.targetLists.ownedNotArchived").no-opportunities
             h4 It seems that you haven't created any Target Lists yet
             p Click <a ng-click="expanded.createTargetList($event)">Create a New List</a> to get started.
           ul
-            li(ng-repeat="list in expanded.userService.model.targetLists.owned | filter:{archived:false} | filter:{deleted:false} | orderBy:expanded.sortProperty:expanded.reverse").clearfix
+            li(ng-repeat="list in expanded.userService.model.targetLists.ownedNotArchivedTargetLists | filter:{deleted:false} | orderBy:expanded.sortProperty:expanded.reverse").clearfix
               div.checkbox-wrapper.named-target-list(ng-click="expanded.toggle(list, expanded.selected)")
                 md-checkbox(aria-label="Select Item" ng-checked="expanded.exists(list, expanded.selected)")
               div.checkbox-sibling(column="12" ui-sref="target-list-detail({id: list.id})")
@@ -155,7 +159,7 @@ div.expanded-target-lists
             h4 No Opportunities to remove
             p Try Searching for <span>Opportunities</span> and add them to your list
           ul
-            li(ng-repeat="list in expanded.userService.model.targetLists.allTargetLists | filter:{archived:true} | filter:{deleted:false}| orderBy:expanded.sortProperty:expanded.reverse").clearfix
+            li(ng-repeat="list in expanded.userService.model.targetLists.archived | filter:{deleted:false}| orderBy:expanded.sortProperty:expanded.reverse").clearfix
               div.checkbox-wrapper(ng-click="expanded.toggle(list, expanded.selected)")
                 md-checkbox(aria-label="Select Item" ng-checked="expanded.exists(list, expanded.selected)")
               div.checkbox-sibling(column="12" ui-sref="target-list-detail({id: list.id})").archived

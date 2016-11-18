@@ -49,6 +49,7 @@ module.exports = /*  @ngInject */
     vm.exists = exists;
     vm.findTargetListAuthor = findTargetListAuthor;
     vm.isChecked = isChecked;
+    vm.isCheckedArchived = isCheckedArchived;
     vm.ratio = ratio;
     vm.saveNewList = saveNewList;
     vm.searchOpportunities = searchOpportunities;
@@ -86,7 +87,7 @@ module.exports = /*  @ngInject */
           // this may work or i may need to do the object. cant test due to api issues.
           item.archived = true;
 
-          userService.model.targetLists.allTargetLists.unshift(item);
+          userService.model.targetLists.archived.unshift(item);
 
           userService.model.targetLists.ownedArchived++;
           userService.model.targetLists.ownedNotArchived--;
@@ -156,7 +157,7 @@ module.exports = /*  @ngInject */
           angular.forEach(selectedItems, function(item, key) {
             if (item.archived) {
               userService.model.targetLists.ownedNotArchived--;
-              userService.model.targetLists.allTargetLists.splice(userService.model.targetLists.allTargetLists.indexOf(item), 1);
+              userService.model.targetLists.archived.splice(userService.model.targetLists.archived.indexOf(item), 1);
             }
             userService.model.targetLists.owned.splice(userService.model.targetLists.owned.indexOf(item), 1);
           });
@@ -217,6 +218,7 @@ module.exports = /*  @ngInject */
     }
 
     function selector(tab) {
+      vm.selected = [];
       vm.buttonState = tab;
     }
 
@@ -245,18 +247,37 @@ module.exports = /*  @ngInject */
     function isChecked() {
       // If the promise isn't resolved returns false
       if (vm.userService.model.targetLists) {
-        return vm.selected.length === vm.userService.model.targetLists.owned.length;
+        return vm.selected.length === vm.userService.model.targetLists.ownedNotArchivedTargetLists.length;
+      } else {
+        return false;
+      }
+    };
+
+    function isCheckedArchived() {
+      // If the promise isn't resolved returns false
+      if (vm.userService.model.targetLists) {
+        return vm.selected.length === vm.userService.model.targetLists.archived.length;
       } else {
         return false;
       }
     };
 
     // Select or deselect all list items
-    function toggleAll() {
-      if (vm.selected.length === vm.userService.model.targetLists.owned.length) {
-        vm.selected = [];
-      } else if (vm.selected.length === 0 || vm.selected.length > 0) {
-        vm.selected = vm.userService.model.targetLists.owned.slice(0);
+    function toggleAll(tab) {
+      if (tab === 'named') {
+        if (vm.selected.length === vm.userService.model.targetLists.ownedNotArchivedTargetLists.length) {
+          vm.selected = [];
+        } else if (vm.selected.length === 0 || vm.selected.length > 0) {
+          vm.selected = vm.userService.model.targetLists.ownedNotArchivedTargetLists.slice(0);
+        }
+      }
+
+      if (tab === 'archived') {
+        if (vm.selected.length === vm.userService.model.targetLists.archived.length) {
+          vm.selected = [];
+        } else if (vm.selected.length === 0 || vm.selected.length > 0) {
+          vm.selected = vm.userService.model.targetLists.archived.slice(0);
+        };
       }
     };
 
@@ -293,8 +314,9 @@ module.exports = /*  @ngInject */
         loaderService.closeLoader();
 
         var combinedTargetList = {
-          'allTargetLists': [],
+          'archived': [],
           'owned': [],
+          'ownedNotArchivedTargetLists': [],
           'sharedWithMe': [],
           'sharedArchivedCount': 0,
           'sharedNotArchivedCount': 0,
@@ -307,13 +329,13 @@ module.exports = /*  @ngInject */
 
             data[i].owned[j].targetListAuthor = 'current user';
 
-            combinedTargetList.owned.push(data[i].owned[j]);
-            combinedTargetList.allTargetLists.push(data[i].owned[j]);
-
             if (data[i].owned[j].archived) {
               combinedTargetList.ownedArchived++;
+              combinedTargetList.archived.push(data[i].owned[j]);
+
             } else {
               combinedTargetList.ownedNotArchived++;
+              combinedTargetList.ownedNotArchivedTargetLists.push(data[i].owned[j]);
             }
           }
 
@@ -323,10 +345,11 @@ module.exports = /*  @ngInject */
             data[i].sharedWithMe[j].targetListAuthor = vm.targetListAuthor;
 
             combinedTargetList.sharedWithMe.push(data[i].sharedWithMe[j]);
-            combinedTargetList.allTargetLists.push(data[i].sharedWithMe[j]);
 
             if (data[i].sharedWithMe[j].archived) {
               combinedTargetList.sharedArchivedCount++;
+              combinedTargetList.archived.push(data[i].sharedWithMe[j]);
+
             } else {
               combinedTargetList.sharedNotArchivedCount++;
             }
@@ -334,6 +357,7 @@ module.exports = /*  @ngInject */
         }
 
         userService.model.targetLists = combinedTargetList;
+        console.log(userService.model.targetLists);
       });
     }
 
