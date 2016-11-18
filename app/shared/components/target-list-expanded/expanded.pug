@@ -162,7 +162,7 @@ div.expanded-target-lists
                 div(row)
                   h4(column="4").left {{list.name}}
                   div(column="2")
-                    h5.accent.dropdown-menu-trigger.collaborators {{list.members.length}} collaborators
+                    h5.accent.dropdown-menu-trigger.collaborators {{list.collaborators.length}} collaborators
                       ul.dropdown-menu
                         li.member.creator(ng-repeat="user in list.collaborators | filter: {permissionLevel: 'Author'}") {{user.user.firstName}} {{user.user.lastName}}
                         li.member(ng-repeat="collaborator in list.collaborators| filter: {permissionLevel: 'Collaborate'} | orderBy:'user.firstName'") {{collaborator.user.firstName | uppercase}} {{collaborator.user.lastName | uppercase}}
