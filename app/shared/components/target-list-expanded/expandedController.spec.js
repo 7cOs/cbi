@@ -42,6 +42,9 @@ describe('Unit: expanded target list controller', function() {
   });
 
   it('should expose public methods', function() {
+    expect(ctrl.addCollaborator).not.toBeUndefined();
+    expect(typeof (ctrl.addCollaborator)).toEqual('function');
+
     expect(ctrl.archiveTargetList).not.toBeUndefined();
     expect(typeof (ctrl.archiveTargetList)).toEqual('function');
 
@@ -59,6 +62,12 @@ describe('Unit: expanded target list controller', function() {
 
     expect(ctrl.exists).not.toBeUndefined();
     expect(typeof (ctrl.exists)).toEqual('function');
+
+    expect(ctrl.findTargetListAuthor).not.toBeUndefined();
+    expect(typeof (ctrl.findTargetListAuthor)).toEqual('function');
+
+    expect(ctrl.isChecked).not.toBeUndefined();
+    expect(typeof (ctrl.isChecked)).toEqual('function');
 
     expect(ctrl.ratio).not.toBeUndefined();
     expect(typeof (ctrl.ratio)).toEqual('function');
@@ -78,20 +87,46 @@ describe('Unit: expanded target list controller', function() {
     expect(ctrl.toggle).not.toBeUndefined();
     expect(typeof (ctrl.toggle)).toEqual('function');
 
-    expect(ctrl.isChecked).not.toBeUndefined();
-    expect(typeof (ctrl.isChecked)).toEqual('function');
-
     expect(ctrl.toggleAll).not.toBeUndefined();
     expect(typeof (ctrl.toggleAll)).toEqual('function');
-
-    expect(ctrl.addCollaborator).not.toBeUndefined();
-    expect(typeof (ctrl.addCollaborator)).toEqual('function');
-
-    expect(ctrl.findTargetListAuthor).not.toBeUndefined();
-    expect(typeof (ctrl.findTargetListAuthor)).toEqual('function');
   });
 
   describe('Public Methods', function() {
+    describe('[expanded.addCollaborator]', function() {
+      var user = {
+        'id': '5648',
+        'employeeId': '1012132',
+        'firstName': 'FRED',
+        'lastName': 'BERRIOS',
+        'email': 'FRED.BERRIOS@CBRANDS.COM'
+      };
+
+      it('should add collaborators to the newList object', function() {
+        expect(ctrl.newList.collaborators.length).toEqual(0);
+        ctrl.addCollaborator(user);
+        expect(ctrl.newList.collaborators.length).toEqual(1);
+      });
+
+      it('should add a share object to the targetListShares array', function() {
+        expect(ctrl.newList.targetListShares.length).toEqual(0);
+        ctrl.addCollaborator(user);
+        expect(ctrl.newList.targetListShares.length).toEqual(1);
+      });
+    });
+
+    describe('[expanded.closeModal]', function() {
+      beforeEach(function() {
+        spyOn(mdDialog, 'hide').and.callThrough();
+      });
+
+      it('should close an open modal', function() {
+        ctrl.closeModal();
+
+        expect(mdDialog.hide).toHaveBeenCalled();
+        expect(mdDialog.hide.calls.count()).toEqual(1);
+      });
+    });
+
     describe('[expanded.createNewList]', function() {
       beforeEach(function() {
         spyOn(mdDialog, 'show').and.callThrough();
@@ -115,19 +150,6 @@ describe('Unit: expanded target list controller', function() {
 
         expect(mdDialog.show).toHaveBeenCalled();
         expect(mdDialog.show.calls.count()).toEqual(1);
-      });
-    });
-
-    describe('[expanded.closeModal]', function() {
-      beforeEach(function() {
-        spyOn(mdDialog, 'hide').and.callThrough();
-      });
-
-      it('should close an open modal', function() {
-        ctrl.closeModal();
-
-        expect(mdDialog.hide).toHaveBeenCalled();
-        expect(mdDialog.hide.calls.count()).toEqual(1);
       });
     });
 

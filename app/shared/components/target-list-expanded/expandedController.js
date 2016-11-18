@@ -16,11 +16,13 @@ module.exports = /*  @ngInject */
     vm.loaderService = loaderService;
 
     // Defaults
+    vm.allowDelete = true;
+    vm.buttonDisabled = false;
     vm.buttonState = 'named';
     vm.closedOpportunitiesChevron = false;
     vm.collaboratorsChevron = false;
+    vm.deleteError = false;
     vm.depletionsChevron = true;
-    vm.pageName = $state.current.name;
     vm.lastUpdatedChevron = false;
     vm.listChevron = true;
     vm.newList = {
@@ -31,13 +33,11 @@ module.exports = /*  @ngInject */
       targetListShares: [],
       collaborateAndInvite: false
     };
-    vm.totalOpportunitesChevron = true;
+    vm.pageName = $state.current.name;
     vm.selected = [];
-    vm.buttonDisabled = false;
     vm.selectedTab = 0;
-    vm.allowDelete = true;
-    vm.deleteError = false;
     vm.targetListAuthor = '';
+    vm.totalOpportunitesChevron = true;
 
     // Expose public methods
     vm.addCollaborator = addCollaborator;
