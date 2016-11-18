@@ -9,7 +9,7 @@ describe('Unit: landingController', function() {
     angular.mock.module('cf.common.services');
     angular.mock.module('cf.modules.landing');
 
-    inject(function($rootScope, $controller, _$mdSelect_, _$q_, _$httpBackend_, _chipsService_, _filtersService_, _userService_) {
+    inject(function($rootScope, $controller, _$mdSelect_, _chipsService_, _filtersService_, _userService_) {
       // Create scope
       scope = $rootScope.$new();
 
