@@ -216,7 +216,7 @@ module.exports = /*  @ngInject */
         archived: method === 'archive',
         description: targetListService.model.currentList.description,
         name: targetListService.model.currentList.name,
-        collaborateAndInvite: changePermissionClick()
+        collaborateAndInvite: vm.changePermissionClick()
       };
 
       targetListService.updateTargetList(targetListService.model.currentList.id, payload).then(function(response) {
