@@ -410,14 +410,23 @@ module.exports = /*  @ngInject */
       var distirbutionSimpleVal = Number(measure.distributionsSimple);
       var distirbutionEffectiveVal = Number(measure.distributionsSimple);
       if (planSimpleVal && distirbutionSimpleVal) {
-        temp = ((distirbutionSimpleVal - planSimpleVal) / planSimpleVal);
-        measure.planDistirbutionSimpleTrend = (temp * 100);
+        if (planSimpleVal === 0) {
+          measure.planDistirbutionSimpleTrend = 0;
+        } else {
+          temp = ((distirbutionSimpleVal - planSimpleVal) / planSimpleVal);
+          measure.planDistirbutionSimpleTrend = (temp * 100);
+        }
+
         isPlanValueCalculated = true;
       }
 
       if (planEffectiveVal && distirbutionEffectiveVal) {
-        temp = ((distirbutionEffectiveVal - planEffectiveVal) / planEffectiveVal);
-        measure.planDistirbutionEffectiveTrend = (temp * 100);
+        if (planEffectiveVal === 0) {
+          measure.planDistirbutionEffectiveTrend = 0;
+        } else {
+          temp = ((distirbutionEffectiveVal - planEffectiveVal) / planEffectiveVal);
+          measure.planDistirbutionEffectiveTrend = (temp * 100);
+        }
         isPlanValueCalculated = isPlanValueCalculated && true;
       }
       return isPlanValueCalculated;
@@ -428,8 +437,12 @@ module.exports = /*  @ngInject */
       var planVal = Number(measure.plan);
       var depletionsVal = Number(measure.depletions);
       if (planVal && depletionsVal) {
-        var temp = ((depletionsVal - planVal) / planVal);
-        measure.planDepletionTrend = (temp * 100);
+        if (planVal === 0) {
+          measure.planDepletionTrend = '-';
+        } else {
+          var temp = ((depletionsVal - planVal) / planVal);
+          measure.planDepletionTrend = (temp * 100);
+        }
         isPlanValueCalculated = true;
       }
       return isPlanValueCalculated;
@@ -464,8 +477,8 @@ module.exports = /*  @ngInject */
         .catch(getPerformanceBrandFail);
 
       function getPerformanceBrandSuccess(response) {
-        console.log('[getPerformanceBrandSuccess.data.performance.length]', response.data.performance.length);
         calculateTrendValuesForPlan(response.data.performance);
+        console.log('[getPerformanceBrandSuccess.data.performance.length]', response.data.performance);
         performancePromise.resolve(response.data);
       }
 
