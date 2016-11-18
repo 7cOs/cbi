@@ -288,7 +288,7 @@ module.exports = /*  @ngInject */
      */
     function getClassBasedOnValue(currentValue) {
       var classToBeAdded = '';
-      if (isValidValues(currentValue)) {
+      if (userService.isValidValues(currentValue)) {
         if (currentValue >= 0) {
           classToBeAdded = 'positive';
         } else {
@@ -509,26 +509,16 @@ module.exports = /*  @ngInject */
         // For Select Stores
           break;
       }
-      if (!isValidValues(currentTrendVal.value)) {
+      if (!userService.isValidValues(currentTrendVal.value)) {
         currentTrendVal.displayValue = '-';
       } else {
-        if (!currentTrendVal.value) {
-          console.log('HELLO', currentTrendVal.value);
-        }
         if (currentTrendVal.value === 0) {
-          currentTrendVal.displayValue =   '0%';
+          currentTrendVal.displayValue =   currentTrendVal.value + '%';
         } else {
           currentTrendVal.displayValue = currentTrendVal.value.toFixed(1) + '%';
         }
       }
       return currentTrendVal;
-    }
-
-    function isValidValues(value) {
-      var isValid = false;
-      // Check for undefiend , null, isNan
-      isValid = typeof value === 'number' && !isNaN(value) && typeof value !== 'undefined' && value !== null;
-      return isValid;
     }
 
     /**
