@@ -126,7 +126,7 @@ module.exports = /*  @ngInject */
 
       // reset opportunities counts
       filtersService.model.appliedFilter.pagination.totalOpportunities = 0;
-      filtersService.model.appliedFilter.pagination.roundedStores = 0;
+      filtersService.model.appliedFilter.pagination.totalStores = 0;
 
       $http.get(url)
         .then(getTargetListOpportunitiesSuccess)
@@ -166,7 +166,7 @@ module.exports = /*  @ngInject */
             // push previous store in newOpportunityArr
             if (i !== 0) {
               newOpportunityArr.push(store);
-              filtersService.model.appliedFilter.pagination.roundedStores += 1;
+              filtersService.model.appliedFilter.pagination.totalStores += 1;
             }
 
             // create grouped store object
@@ -208,7 +208,7 @@ module.exports = /*  @ngInject */
           // push last store into newOpportunityArr
           if (i + 1 === response.data.opportunities.length) {
             newOpportunityArr.push(store);
-            filtersService.model.appliedFilter.pagination.roundedStores += 1;
+            filtersService.model.appliedFilter.pagination.totalStores += 1;
           }
 
           // opportunitiesService.model.opportunitiesSum += 1;
