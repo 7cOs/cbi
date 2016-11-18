@@ -167,7 +167,7 @@ v-accordion.styled-list(multiple="" id="opportunities" control="list.accordion" 
           div(column='1')
             label.bold.text-center
         v-accordion(multiple class="nested-accordion" row)
-          v-pane.styled-list(ng-repeat="product in opportunity.groupedOpportunities | orderBy: [list.impactSort, 'product.name'] : false | filter : {'dismissed': false}" ng-class="{'not-authorized': product.itemAuthorizationCode === null}")
+          v-pane.styled-list(ng-repeat="product in opportunity.groupedOpportunities | orderBy: [list.impactSort, 'product.name'] : false | filter : {'dismissed': false}")
             v-pane-header
               .action-overlay(ng-class="{'active': (list.opportunityShared || list.opportunityDismissTrigger) && product.id === list.currentOpportunityId, 'fail': list.shareOpportunityFail && product.id === list.currentOpportunityId}" ng-click="$event.stopPropagation()")
                 div.checkbox-wrapper
@@ -187,7 +187,7 @@ v-accordion.styled-list(multiple="" id="opportunities" control="list.accordion" 
                   span.product-title {{::product.product.brand}} <br>
                   | {{::product.product.name}}
                 div.type(column='2') {{::product.type | formatOpportunitiesType}}
-                div(column='4') <label class="not-authorized-label" ng-if="product.itemAuthorizationCode === null">Item Not Authorized<br></label>{{::product.rationale}}
+                div(column='4') {{::product.rationale}}
                 div(column='1') {{product.status | titlecase}}
                 div(column='1' class="impact {{product.impactDescription | lowercase}}")
                 div(column='1').bottom.dismiss-product

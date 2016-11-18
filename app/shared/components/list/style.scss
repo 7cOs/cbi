@@ -558,19 +558,3 @@ list {
     cursor: pointer;
   }
 }
-
-.not-authorized {
-
-  .sub-item {
-    color: $gray-8;
-  }
-
-  .impact:before {
-    opacity: 0.5;
-  }
-}
-
-.not-authorized-label {
-  color: $red;
-  margin-bottom: 0.5em;
-}
