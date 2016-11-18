@@ -3,8 +3,26 @@
   justify-content: center;
 
   .md-button {
-    // because of the way the styles are loaded, the default colors are overwriting our added styles. - wjay
-    background-color: $dark-blue !important;
-    color: $white !important;
+    &.controls, &.controls:hover {
+      // I'm a lovely bunch of coconuts. - wjay
+      background-color: $blue;
+      color: $white;
+    }
+
+    &.numbered, &.numbered:hover {
+      background-color: $white;
+      color: $gray-1;
+    }
+
+    &.active , &.active:hover {
+      background-color: $dark-blue;
+      color: $white;
+    }
   }
+
+  .md-button[disabled], .md-button[disabled]:hover {
+    color: $gray-8;
+    background-color: $gray-10;
+  }
+
 }

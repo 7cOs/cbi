@@ -177,7 +177,6 @@ module.exports = /*  @ngInject */
       if (chip.search || chip.type === 'opportunityType' || chip.type === 'state') {
         var arr = filtersService.model.selected[chip.type];
         var i = arr.length;
-
         while (i--) {
           if (chip.type === 'segmentation' && arr[i] === chip.name.split('Segment ')[1]) {
             arr.splice(i, 1);
@@ -195,7 +194,7 @@ module.exports = /*  @ngInject */
             arr.splice(i, 1);
             filtersService.model['cbbdChain' + $filter('titlecase')(chip.name.split(' ')[0])] = false;
             break;
-          } else if ($filter('titlecase')(arr[i]) === chip.name.split(' ')[0]) {
+          } else if ($filter('titlecase')(arr[i]) === chip.name.split(' ')[0] && chip.type !== 'opportunityType') {
             arr.splice(i, 1);
             // update model
             if (chip.type === 'productType') filtersService.model['productType' + chip.name.split(' ')[0]] = false;

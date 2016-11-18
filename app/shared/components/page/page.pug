@@ -1,6 +1,6 @@
 div(ng-if="page.displayPagination()" column="12" class="pagination")
-  md-button(class="md-fab md-primary" aria-label="Back to first page" ng-click="page.pageChanged(0)" ng-if="page.filtersService.model.appliedFilter.pagination.totalPages > 10") 
+  md-button(class="md-fab controls" aria-label="Back to first page" ng-click="page.pageChanged(0)" ng-if="page.filtersService.model.appliedFilter.pagination.totalPages > 10" ng-disabled="page.filtersService.model.appliedFilter.pagination.currentPage === 0")
     | <<
-  md-button(class="md-fab md-primary" aria-label="Page Control" ng-click="page.pageChanged(p)" ng-repeat="p in page.getNumber() track by $index") {{p + 1}}
-  md-button(class="md-fab md-primary" aria-label="Forward to last page" ng-click="page.pageChanged(page.filtersService.model.appliedFilter.pagination.totalPages)" ng-if="page.filtersService.model.appliedFilter.pagination.totalPages > 10")
+  md-button(class="md-fab numbered" ng-class="{active: p === page.filtersService.model.appliedFilter.pagination.currentPage}" aria-label="Page Control" ng-click="page.pageChanged(p)" ng-repeat="p in page.getNumber() track by $index") {{p + 1}}
+  md-button(class="md-fab controls" aria-label="Forward to last page" ng-click="page.pageChanged(page.filtersService.model.appliedFilter.pagination.totalPages)" ng-if="page.filtersService.model.appliedFilter.pagination.totalPages > 10" ng-disabled="page.filtersService.model.appliedFilter.pagination.currentPage === page.filtersService.model.appliedFilter.pagination.totalPages")
     | >>

@@ -12,7 +12,8 @@ module.exports = /*  @ngInject */
           totalPages: 0,
           default: true,
           totalOpportunities: 0,
-          totalStores: 0
+          totalStores: 0,
+          roundedStores: 0
         },
         sort: {
           sortArr: []
