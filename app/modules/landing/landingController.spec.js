@@ -47,6 +47,7 @@ describe('Unit: landingController', function() {
     expect(ctrl.closeDoneButton).not.toBeUndefined();
     expect(ctrl.closeSelect).not.toBeUndefined();
     expect(ctrl.isPositive).not.toBeUndefined();
+    expect(ctrl.selectPremiseType).not.toBeUndefined();
   });
 
   describe('Public Methods', function() {
@@ -125,6 +126,140 @@ describe('Unit: landingController', function() {
       it('should return negative if data is NaN', function() {
         var test = ctrl.isPositive('string');
         expect(test).toEqual('negative');
+      });
+    });
+
+    describe('[landing.selectPremiseType]', function() {
+      it('should exist', function() {
+        expect(typeof ctrl.selectPremiseType).toEqual('function');
+      });
+      it('should process data', function() {
+        var testPerformanceData,
+            testPerformanceDataOnPremise,
+            testPerformanceDataOffPremise;
+
+        testPerformanceData = {
+          'performance': [{
+            'type': 'Depletions CE',
+            'id': null,
+            'name': null,
+            'measures': [{
+              'timeframe': 'FYTD',
+              'value': 36449586.2076,
+              'percentChange': 2.6023321863903712
+            }]
+          }, {
+            'type': 'Distribution Points - On Premise, Simple',
+            'id': null,
+            'name': null,
+            'measures': [{
+              'timeframe': 'L90',
+              'value': 16709,
+              'percentChange': 1.6300711635545282
+            }]
+          }, {
+            'type': 'Distribution Points - On Premise, Effective',
+            'id': null,
+            'name': null,
+            'measures': [{
+              'timeframe': 'L90',
+              'value': 23348,
+              'percentChange': -2.635529608006672
+            }]
+          }, {
+            'type': 'Distribution Points - Off Premise, Simple',
+            'id': null,
+            'name': null,
+            'measures': [{
+              'timeframe': 'L90',
+              'value': 43105,
+              'percentChange': -1.4562662886927895
+            }]
+          }, {
+            'type': 'Distribution Points - Off Premise, Effective',
+            'id': null,
+            'name': null,
+            'measures': [{
+              'timeframe': 'L90',
+              'value': 113935,
+              'percentChange': 3.683784251094306
+            }]
+          }]
+        };
+
+        testPerformanceDataOnPremise = {
+          'performance': [{
+            'type': 'Depletions CE',
+            'id': null,
+            'name': null,
+            'measures': [{
+              'timeframe': 'FYTD',
+              'value': 36449586.2076,
+              'percentChange': 2.6023321863903712
+            }]
+          }, {
+            'type': 'Distribution Points - On Premise, Simple',
+            'id': null,
+            'name': null,
+            'measures': [{
+              'timeframe': 'L90',
+              'value': 16709,
+              'percentChange': 1.6300711635545282
+            }]
+          }, {
+            'type': 'Distribution Points - On Premise, Effective',
+            'id': null,
+            'name': null,
+            'measures': [{
+              'timeframe': 'L90',
+              'value': 23348,
+              'percentChange': -2.635529608006672
+            }]
+          }, {
+          }, {
+          }]
+        };
+
+        testPerformanceDataOffPremise = {
+          'performance': [{
+            'type': 'Depletions CE',
+            'id': null,
+            'name': null,
+            'measures': [{
+              'timeframe': 'FYTD',
+              'value': 36449586.2076,
+              'percentChange': 2.6023321863903712
+            }]
+          }, {
+          }, {
+          }, {
+            'type': 'Distribution Points - Off Premise, Simple',
+            'id': null,
+            'name': null,
+            'measures': [{
+              'timeframe': 'L90',
+              'value': 43105,
+              'percentChange': -1.4562662886927895
+            }]
+          }, {
+            'type': 'Distribution Points - Off Premise, Effective',
+            'id': null,
+            'name': null,
+            'measures': [{
+              'timeframe': 'L90',
+              'value': 113935,
+              'percentChange': 3.683784251094306
+            }]
+          }]
+        };
+
+        var result = ctrl.selectPremiseType(testPerformanceData);
+        var resultOnPremise = ctrl.selectPremiseType(testPerformanceDataOnPremise);
+        var resultOffPremise = ctrl.selectPremiseType(testPerformanceDataOffPremise);
+
+        expect(result.distribution).toEqual('allPremise');
+        expect(resultOnPremise.distribution).toEqual('onPremise');
+        expect(resultOffPremise.distribution).toEqual('offPremise');
       });
     });
   });
