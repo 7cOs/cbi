@@ -429,8 +429,7 @@ module.exports = /*  @ngInject */
     }
 
     function isValidValues(value) {
-      var isValid = false;
-      isValid = typeof value === 'number' && !isNaN(value);
+      var isValid = typeof value === 'number' && !isNaN(value);
       return isValid;
     }
 
