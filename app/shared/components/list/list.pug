@@ -188,7 +188,7 @@ v-accordion.styled-list(multiple="" id="opportunities" control="list.accordion" 
                   | {{::product.product.name}}
                 div.type(column='2') {{::product.type | formatOpportunitiesType}}
                 div(column='4') <label class="not-authorized-label" ng-if="product.itemAuthorizationCode === null">Item Not Authorized<br></label>{{::product.rationale}}
-                div(column='1') {{::product.status | titlecase}}
+                div(column='1') {{product.status | titlecase}}
                 div(column='1' class="impact {{product.impactDescription | lowercase}}")
                 div(column='1').bottom.dismiss-product
                   div.more-wrapper

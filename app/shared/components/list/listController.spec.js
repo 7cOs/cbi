@@ -886,7 +886,7 @@ describe('Unit: list controller', function() {
       expect(targetListService.addTargetListOpportunities).not.toHaveBeenCalled();
     });
 
-    it('should remove the selected opportunities from view when they are changed to targeted from open', function() {
+    it('should change the selected opportunities from open to targeted when they are changed from open to targeted and opportunityStatus is targeted', function() {
       // scaffold
       ctrl.selected = [angular.copy(opportunitiesService.model.opportunities[1].groupedOpportunities[0])];
       var deferred = q.defer();
@@ -896,12 +896,15 @@ describe('Unit: list controller', function() {
       spyOn(toastService, 'showToast').and.callFake(function() {
         return true;
       });
+      filtersService.model.opportunityStatusTargeted = true;
+      filtersService.model.selected.opportunityStatus = ['TARGETED'];
 
       // assert init
       expect(opportunitiesService.model.opportunities.length).toEqual(2);
       expect(ctrl.selected.length).toEqual(1);
       expect(targetListService.addTargetListOpportunities.calls.count()).toEqual(0);
       expect(toastService.showToast.calls.count()).toEqual(0);
+      expect(opportunitiesService.model.opportunities[1].groupedOpportunities.length).toEqual(1);
 
       // run test
       ctrl.addToTargetList(listId);
@@ -913,6 +916,88 @@ describe('Unit: list controller', function() {
       expect(ctrl.selected.length).toEqual(0);
       expect(targetListService.addTargetListOpportunities.calls.count()).toEqual(1);
       expect(toastService.showToast.calls.count()).toEqual(1);
+      expect(opportunitiesService.model.opportunities[1].groupedOpportunities.length).toEqual(1);
+      expect(opportunitiesService.model.opportunities[1].groupedOpportunities[0].status).toEqual('TARGETED');
+
+      // reset
+      filtersService.model.opportunityStatusTargeted = false;
+      filtersService.model.selected.opportunityStatus = [];
+      opportunitiesService.model.opportunities[0].groupedOpportunities[0].status = 'OPEN';
+    });
+
+    it('should change the selected opportunities from open to targeted when they are changed from open to targeted and open opportunityStatus is not specified', function() {
+      // scaffold
+      ctrl.selected = [angular.copy(opportunitiesService.model.opportunities[1].groupedOpportunities[0])];
+      var deferred = q.defer();
+      spyOn(targetListService, 'addTargetListOpportunities').and.callFake(function() {
+        return deferred.promise;
+      });
+      spyOn(toastService, 'showToast').and.callFake(function() {
+        return true;
+      });
+      filtersService.model.selected.opportunityStatus = [];
+
+      // assert init
+      expect(opportunitiesService.model.opportunities.length).toEqual(2);
+      expect(ctrl.selected.length).toEqual(1);
+      expect(targetListService.addTargetListOpportunities.calls.count()).toEqual(0);
+      expect(toastService.showToast.calls.count()).toEqual(0);
+      expect(opportunitiesService.model.opportunities[1].groupedOpportunities.length).toEqual(1);
+      expect(opportunitiesService.model.opportunities[1].groupedOpportunities[0].status).toEqual('OPEN');
+
+      // run test
+      ctrl.addToTargetList(listId);
+      deferred.resolve();
+      scope.$digest();
+
+      // assert
+      expect(targetListService.addTargetListOpportunities).toHaveBeenCalledWith(listId, ['0080993___80013466___20160929']);
+      expect(ctrl.selected.length).toEqual(0);
+      expect(targetListService.addTargetListOpportunities.calls.count()).toEqual(1);
+      expect(toastService.showToast.calls.count()).toEqual(1);
+      expect(opportunitiesService.model.opportunities[1].groupedOpportunities.length).toEqual(1);
+      expect(opportunitiesService.model.opportunities[1].groupedOpportunities[0].status).toEqual('TARGETED');
+
+      // reset
+      opportunitiesService.model.opportunities[0].groupedOpportunities[0].status = 'OPEN';
+    });
+
+    it('should remove the selected opportunities from view when they are changed from open to targeted and open opportunityStatus is open', function() {
+      // scaffold
+      ctrl.selected = [angular.copy(opportunitiesService.model.opportunities[1].groupedOpportunities[0])];
+      var deferred = q.defer();
+      spyOn(targetListService, 'addTargetListOpportunities').and.callFake(function() {
+        return deferred.promise;
+      });
+      spyOn(toastService, 'showToast').and.callFake(function() {
+        return true;
+      });
+      filtersService.model.opportunityStatusOpen = true;
+      filtersService.model.selected.opportunityStatus = ['OPEN'];
+
+      // assert init
+      expect(opportunitiesService.model.opportunities.length).toEqual(2);
+      expect(ctrl.selected.length).toEqual(1);
+      expect(targetListService.addTargetListOpportunities.calls.count()).toEqual(0);
+      expect(toastService.showToast.calls.count()).toEqual(0);
+      expect(opportunitiesService.model.opportunities[1].groupedOpportunities.length).toEqual(1);
+
+      // run test
+      ctrl.addToTargetList(listId);
+      deferred.resolve();
+      scope.$digest();
+
+      // assert
+      expect(targetListService.addTargetListOpportunities).toHaveBeenCalledWith(listId, ['0080993___80013466___20160929']);
+      expect(ctrl.selected.length).toEqual(0);
+      expect(targetListService.addTargetListOpportunities.calls.count()).toEqual(1);
+      expect(toastService.showToast.calls.count()).toEqual(1);
+      expect(opportunitiesService.model.opportunities[1].groupedOpportunities.length).toEqual(0);
+
+      // reset
+      filtersService.model.opportunityStatusOpen = false;
+      filtersService.model.selected.opportunityStatus = [];
+      // opportunitiesService.model.opportunities[1].groupedOpportunities[0] = ;
     });
   });
 

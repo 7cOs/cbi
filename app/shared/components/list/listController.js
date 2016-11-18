@@ -179,17 +179,18 @@ module.exports = /*  @ngInject */
         targetListService.addTargetListOpportunities(listId, opportunityIds).then(function(data) {
           toastService.showToast('copied', opportunityIds);
 
-          if (vm.selected[0].status === 'OPEN') {
-            // for each selected item
-            for (i = 0; i < vm.selected.length; i++) {
-              var breaking = false;
+          // for each selected item
+          for (i = 0; i < vm.selected.length; i++) {
+            var breaking = false;
 
-              // find opporuntities that were changed to targeted
+            if (vm.selected[i].status !== 'TARGETED') {
+              // find opporuntities that were changed
               for (var j = 0; j < opportunitiesService.model.opportunities.length; j++) {
                 for (var k = 0; k < opportunitiesService.model.opportunities[j].groupedOpportunities.length; k++) {
                   if (opportunitiesService.model.opportunities[j].groupedOpportunities[k].id === vm.selected[i].id) {
-                    // remove from opportunities model (since a change to targeted is a new query, and TLs are loaded everytime - we dont need to remove or change statuses)
-                    opportunitiesService.model.opportunities[j].groupedOpportunities.splice(k, 1);
+                    // remove from opportunities model if open is selected, otherwise just change status
+                    filtersService.model.opportunityStatusOpen && filtersService.model.opportunityStatusOpen === true ? opportunitiesService.model.opportunities[j].groupedOpportunities.splice(k, 1) : opportunitiesService.model.opportunities[j].groupedOpportunities[k].status = 'TARGETED';
+
                     // break loop after needle is found to save on performance
                     breaking = true;
                     break;
@@ -198,9 +199,9 @@ module.exports = /*  @ngInject */
                 if (breaking) break;
               }
             }
-            // reset selected
-            vm.selected = [];
           }
+          // reset selected
+          vm.selected = [];
         }, function(err) {
           console.log('Error adding these ids: ', opportunityIds, ' Responded with error: ', err);
         });
