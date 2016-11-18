@@ -962,7 +962,7 @@ describe('Unit: list controller', function() {
       opportunitiesService.model.opportunities[0].groupedOpportunities[0].status = 'OPEN';
     });
 
-    it('should remove the selected opportunities from view when they are changed from open to targeted and open opportunityStatus is open', function() {
+    it('should remove the selected opportunities from view when they are changed from open to targeted and open opportunityStatus is open - remove store from view if last opp', function() {
       // scaffold
       ctrl.selected = [angular.copy(opportunitiesService.model.opportunities[1].groupedOpportunities[0])];
       var deferred = q.defer();
@@ -992,12 +992,153 @@ describe('Unit: list controller', function() {
       expect(ctrl.selected.length).toEqual(0);
       expect(targetListService.addTargetListOpportunities.calls.count()).toEqual(1);
       expect(toastService.showToast.calls.count()).toEqual(1);
-      expect(opportunitiesService.model.opportunities[1].groupedOpportunities.length).toEqual(0);
+      expect(opportunitiesService.model.opportunities.length).toEqual(1);
 
       // reset
       filtersService.model.opportunityStatusOpen = false;
       filtersService.model.selected.opportunityStatus = [];
-      // opportunitiesService.model.opportunities[1].groupedOpportunities[0] = ;
+      opportunitiesService.model.opportunities.push = {
+        'id': '0080993___80013466___20160929',
+        'product': {
+          'id': '80013466',
+          'name': 'CORONA LT 12PK CAN',
+          'type': 'sku',
+          'brand': 'CORONA LIGHT',
+          'brandCode': '229'
+        },
+        'brands': [
+          'corona light'
+        ],
+        'trend': null,
+        'selectedOpportunities': 0,
+        'groupedOpportunities': [
+          {
+            'id': '0080993___80013466___20160929',
+            'product': {
+              'id': '80013466',
+              'name': 'CORONA LT 12PK CAN',
+              'type': 'sku',
+              'brand': 'CORONA LIGHT',
+              'brandCode': '229'
+            },
+            'type': 'NON_BUY',
+            'subType': null,
+            'impact': 'L',
+            'impactDescription': 'LOW',
+            'status': 'OPEN',
+            'rationale': 'Recommended SKU performing at -40.0% at similar stores (L90 vs. YA trend)',
+            'store': {
+              'id': '0080993',
+              'name': '3 GS CONVENIENCE CENTER',
+              'address': '357 S 24TH ST W, BILLINGS, MT 591025601',
+              'opportunityCount': 1,
+              'distributors': [
+                'BRIGGS DIST CO INC - MT'
+              ],
+              'onPremise': false,
+              'cbbdChain': false
+            },
+            'itemAuthorizationCode': null,
+            'depletionsCurrentYearToDate': 0,
+            'depletionsCurrentYearToDateYA': 12,
+            'lastDepletionDate': '2015-07-10T00:00:00Z',
+            'dismissed': false,
+            'itemAuthorizationDesc': null,
+            'featureTypeCode': null,
+            'featureTypeDesc': null,
+            'priorityPackageFlag': 'Y',
+            '$$hashKey': 'object:2038',
+            'selected': true
+          }
+        ]
+      };
+    });
+
+    it('should remove the selected opportunity, and if grouped opportunities is empty, it should remove the store from the view - keep store if grouped opp length > 0', function() {
+      // scaffold
+      ctrl.selected = [angular.copy(opportunitiesService.model.opportunities[1].groupedOpportunities[0])];
+      var deferred = q.defer();
+      spyOn(targetListService, 'addTargetListOpportunities').and.callFake(function() {
+        return deferred.promise;
+      });
+      spyOn(toastService, 'showToast').and.callFake(function() {
+        return true;
+      });
+      filtersService.model.opportunityStatusOpen = true;
+      filtersService.model.selected.opportunityStatus = ['OPEN'];
+      opportunitiesService.model.opportunities[1].groupedOpportunities.push({
+        'id': '5231788___228-102___1474493257763',
+        'product': {
+          'id': '228-102',
+          'name': 'CORONA EXTRA-KEG',
+          'type': 'package',
+          'brand': 'CORONA EXTRA',
+          'brandCode': '228'
+        },
+        'type': 'CUSTOM',
+        'subType': null,
+        'impact': 'H',
+        'impactDescription': 'HIGH',
+        'status': 'OPEN',
+        'rationale': 'Want to make big sales!!',
+        'store': {
+          'id': '5231788',
+          'name': 'OUTBACK STEAKHOUSE',
+          'address': '20630 VALLEY GREEN DR, CUPERTINO, CA 950141702',
+          'city': 'CUPERTINO',
+          'state': 'CA',
+          'segmentation': 'C',
+          'latitude': 37.332,
+          'longitude': -122.0336,
+          'storeNumber': 514,
+          'distributionL90Simple': 2,
+          'distributionL90SimpleYA': 1,
+          'distributionL90Effective': 2,
+          'distributionL90EffectiveYA': 1,
+          'velocity': 1,
+          'velocityYA': 0,
+          'depletionsCurrentYearToDate': 39,
+          'depletionsCurrentYearToDateYA': 54,
+          'opportunityCount': 29,
+          'highImpactOpportunityCount': 16,
+          'distributors': [
+            'DBI BEV INC - CA (SAN JOSE 2)'
+          ],
+          'streetAddress': '20630 VALLEY GREEN DR',
+          'zip': '95014',
+          'cbbdChain': true,
+          'onPremise': true
+        },
+        'itemAuthorizationCode': null,
+        'depletionsCurrentYearToDate': 0,
+        'depletionsCurrentYearToDateYA': 0,
+        'lastDepletionDate': null,
+        'dismissed': false,
+        'itemAuthorizationDesc': null,
+        'featureTypeCode': null,
+        'featureTypeDesc': null,
+        'priorityPackageFlag': null
+      });
+
+      // assert init
+      expect(opportunitiesService.model.opportunities.length).toEqual(2);
+      expect(ctrl.selected.length).toEqual(1);
+      expect(targetListService.addTargetListOpportunities.calls.count()).toEqual(0);
+      expect(toastService.showToast.calls.count()).toEqual(0);
+      expect(opportunitiesService.model.opportunities[1].groupedOpportunities.length).toEqual(2);
+
+      // run test
+      ctrl.addToTargetList(listId);
+      deferred.resolve();
+      scope.$digest();
+
+      // assert
+      expect(targetListService.addTargetListOpportunities).toHaveBeenCalledWith(listId, ['0080993___80013466___20160929']);
+      expect(ctrl.selected.length).toEqual(0);
+      expect(targetListService.addTargetListOpportunities.calls.count()).toEqual(1);
+      expect(toastService.showToast.calls.count()).toEqual(1);
+      expect(opportunitiesService.model.opportunities.length).toEqual(2);
+      expect(opportunitiesService.model.opportunities[1].groupedOpportunities.length).toEqual(1);
     });
   });
 
