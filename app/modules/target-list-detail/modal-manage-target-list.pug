@@ -64,7 +64,7 @@ div.modal.target-list-modal
     .toast(ng-hide="!tld.showToast")
       p Are you sure you want to <span ng-if="tld.deleting">delete</span><span ng-if="tld.archiving">archive</span> this target list?
       p.bold.link(ng-if="tld.deleting && !tld.confirmToast")
-        a(ng-click="tld.deleteList()") Yes, Delete
+        a(ng-click="tld.pendingCheck()") Yes, Delete
       p.bold.link(ng-if="tld.archiving && !tld.confirmToast")
         a(ng-click="tld.updateList('archive')") Yes, Archive
       a.hide-row(ng-click="tld.removeFooterToast()")

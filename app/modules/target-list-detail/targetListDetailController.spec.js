@@ -1,5 +1,5 @@
 describe('Unit: targetListDetailController', function() {
-  var scope, ctrl, $mdDialog, $q, $httpBackend, targetListService, chipsService, filtersService, opportunitiesService, userService, collaborators, currentUser, pending, ownedTargetLists, deferred;
+  var scope, ctrl, $mdDialog, $q, $httpBackend, targetListService, chipsService, filtersService, opportunitiesService, userService, collaborators, currentUser, pending, ownedTargetLists, deferred, deleteTLDeferred;
 
   beforeEach(function() {
     angular.mock.module('ui.router');
@@ -22,6 +22,7 @@ describe('Unit: targetListDetailController', function() {
     });
 
     deferred = $q.defer();
+    deleteTLDeferred = $q.defer();
 
     collaborators = [
       {
@@ -250,6 +251,9 @@ describe('Unit: targetListDetailController', function() {
 
     expect(ctrl.navigateToTL).not.toBeUndefined();
     expect(typeof (ctrl.navigateToTL)).toEqual('function');
+
+    expect(ctrl.pendingCheck).not.toBeUndefined();
+    expect(typeof (ctrl.pendingCheck)).toEqual('function');
 
     expect(ctrl.permissionLabel).not.toBeUndefined();
     expect(typeof (ctrl.permissionLabel)).toEqual('function');
@@ -560,6 +564,39 @@ describe('Unit: targetListDetailController', function() {
       });
     });
 
+    describe('[tld.pendingCheck]', function() {
+
+      beforeEach(function() {
+        $httpBackend.expectGET('/api/targetLists/undefined').respond(200);
+        $httpBackend.expectGET('/api/targetLists/undefined/opportunities').respond(200);
+        $httpBackend.expectDELETE('/api/targetLists/undefined').respond(200);
+      });
+
+      it('should run removeCollaborator if there are pendingRemovals', function() {
+        var deferredRemoveCollab = $q.defer();
+        spyOn(ctrl, 'removeCollaborator').and.callFake(function() {
+          return deferredRemoveCollab.promise;
+        });
+        ctrl.pendingRemovals = pending;
+        ctrl.pendingCheck();
+        deferredRemoveCollab.resolve();
+        scope.$digest();
+        expect(ctrl.removeCollaborator).toHaveBeenCalled();
+      });
+
+      it('should run deleteList if there are no pendingRemovals', function() {
+        var deferredDeleteList = $q.defer();
+        spyOn(ctrl, 'deleteList').and.callFake(function() {
+          return deferredDeleteList.promise;
+        });
+        ctrl.pendingRemovals = [];
+        ctrl.pendingCheck();
+        deferredDeleteList.resolve();
+        scope.$digest();
+        expect(ctrl.deleteList).toHaveBeenCalled();
+      });
+    });
+
     describe('[tld.permissionLabel]', function() {
       it('should return "owner" if the permissionLevel is "author"', function() {
         expect(ctrl.permissionLabel('author')).toEqual('owner');
@@ -579,19 +616,24 @@ describe('Unit: targetListDetailController', function() {
     });
 
     describe('[tld.removeCollaborator]', function() {
+
       beforeEach(function() {
         targetListService.model.currentList.collaborators = collaborators;
         targetListService.model.currentList.id = 1;
         ctrl.pendingShares = pending;
-        ctrl.pendingRemovals = ['111', '222', '333'];
+        ctrl.pendingRemovals = ['1012135', '112233'];
 
         // init stuff that we dont care about - we dont need one for /api/targetLists/1 because real service is never actually called
         $httpBackend.expectGET('/api/targetLists/undefined').respond(200);
         $httpBackend.expectGET('/api/targetLists/undefined/opportunities').respond(200);
+        $httpBackend.expectDELETE('/api/targetLists/undefined').respond(200);
 
         // create promise and spy on service.method
         spyOn(targetListService, 'deleteTargetListShares').and.callFake(function() {
           return deferred.promise;
+        });
+        spyOn(targetListService, 'deleteTargetList').and.callFake(function() {
+          return deleteTLDeferred.promise;
         });
       });
 
@@ -599,34 +641,39 @@ describe('Unit: targetListDetailController', function() {
         // make sure everything is how we want it on start
         expect(targetListService.deleteTargetListShares).not.toHaveBeenCalled();
         expect(targetListService.model.currentList.collaborators.length).toEqual(3);
+        expect(ctrl.pendingRemovals.length).toEqual(2);
+        expect(targetListService.deleteTargetList).not.toHaveBeenCalled();
 
         // run method
-        ctrl.removeCollaborator(['1012135']);
+        ctrl.removeCollaborator(ctrl.pendingRemovals);
 
         // resolve promise so we can trigger then
         deferred.resolve();
+        deleteTLDeferred.resolve();
         // trigger promise resolution
         scope.$digest();
 
         // assert that everything we wanted to happen has happened, and things we didnt want to happen havent happened
         expect(targetListService.deleteTargetListShares).toHaveBeenCalledWith(1, '1012135');
-        expect(targetListService.model.currentList.collaborators.length).toEqual(2);
+        expect(targetListService.deleteTargetListShares).toHaveBeenCalledWith(1, '112233');
+        expect(targetListService.model.currentList.collaborators.length).toEqual(1);
+        expect(targetListService.deleteTargetList).toHaveBeenCalled();
       });
 
       it('should update the pendingShares array length', function() {
         expect(ctrl.pendingShares.length).toEqual(3);
-        ctrl.removeCollaborator(['1012135']);
+        ctrl.removeCollaborator(ctrl.pendingRemovals);
         deferred.resolve();
         scope.$digest();
         expect(ctrl.pendingShares.length).toEqual(2);
       });
 
       it('should update the pendingRemovals array length', function() {
-        expect(ctrl.pendingRemovals.length).toEqual(3);
-        ctrl.removeCollaborator(['111']);
+        expect(ctrl.pendingRemovals.length).toEqual(2);
+        ctrl.removeCollaborator(ctrl.pendingRemovals);
         deferred.resolve();
         scope.$digest();
-        expect(ctrl.pendingRemovals.length).toEqual(2);
+        expect(ctrl.pendingRemovals.length).toEqual(0);
       });
 
       it('should enable the close button if collaborator being removed is current user', function() {
@@ -648,7 +695,7 @@ describe('Unit: targetListDetailController', function() {
         // reset stuff we changed
         targetListService.model.currentList.collaborators = collaborators;
         ctrl.pendingShares = pending;
-        ctrl.pendingRemovals = ['111', '222', '333'];
+        ctrl.pendingRemovals = ['1012135', '112233'];
         ctrl.closeButton = false;
       });
     });
