@@ -17,4 +17,10 @@
     background-color: $dark-blue !important;
     color: $white !important;
   }
+
+  .md-button[disabled] {
+    color: #B4B4B4 !important;
+    background-color: #EFEFF4 !important;
+  }
+
 }
