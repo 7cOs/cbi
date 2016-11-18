@@ -397,6 +397,7 @@ module.exports = /*  @ngInject */
 
       userService.getPerformanceBrand(params).then(function(data) {
         vm.brandTabs.brands = data.performance;
+        prevTab();
         vm.loadingBrandSnapshot = false;
       });
 
@@ -461,6 +462,7 @@ module.exports = /*  @ngInject */
       vm.filtersService.model.accountSelected.accountBrands = vm.filters.accountBrands[0];
       chipsService.resetChipsFilters(chipsService.model);
       setDefaultEndingPeriodOptions();
+      vm.filtersService.model.selected.premiseType = 'all';
       var params = filtersService.getAppliedFilters('brandSnapshot');
 
       var promiseArr = [
