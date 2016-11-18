@@ -86,6 +86,8 @@ module.exports = /*  @ngInject */
           // this may work or i may need to do the object. cant test due to api issues.
           item.archived = true;
 
+          userService.model.targetLists.allTargetLists.unshift(item);
+
           userService.model.targetLists.ownedArchived++;
           userService.model.targetLists.ownedNotArchived--;
         });
@@ -154,6 +156,7 @@ module.exports = /*  @ngInject */
           angular.forEach(selectedItems, function(item, key) {
             if (item.archived) {
               userService.model.targetLists.ownedNotArchived--;
+              userService.model.targetLists.allTargetLists.splice(userService.model.targetLists.allTargetLists.indexOf(item), 1);
             }
             userService.model.targetLists.owned.splice(userService.model.targetLists.owned.indexOf(item), 1);
           });
