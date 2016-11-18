@@ -1,5 +1,5 @@
 describe('Unit: landingController', function() {
-  var scope, ctrl, $mdSelect, chipsService, filtersService, userService, testPerformanceData, testPerformanceDataOnPremise, testPerformanceDataOffPremise;
+  var scope, ctrl, $mdSelect, chipsService, filtersService, userService;
 
   beforeEach(function() {
     // Get Mock Modules
@@ -134,6 +134,10 @@ describe('Unit: landingController', function() {
         expect(typeof ctrl.selectPremiseType).toEqual('function');
       });
       it('should process data', function() {
+        var testPerformanceData,
+            testPerformanceDataOnPremise,
+            testPerformanceDataOffPremise;
+
         testPerformanceData = {
           'performance': [{
             'type': 'Depletions CE',
