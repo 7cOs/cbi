@@ -26,6 +26,7 @@ module.exports = /*  @ngInject */
     vm.isPositive = isPositive;
     vm.findOpportunities = findOpportunities;
     vm.goToSavedFilter = goToSavedFilter;
+    vm.selectPremiseType = selectPremiseType;
 
     // Set values
     vm.greeting = getGreeting();
@@ -80,6 +81,26 @@ module.exports = /*  @ngInject */
       });
     }
 
+    function selectPremiseType(data) {
+      if ((!data.performance[1].measures || !data.performance[2].measures) && (data.performance[3].measures || data.performance[4].measures)) {
+        data.timespan = 'Off Premise';
+        data.distribution = 'offPremise';
+        data.offPremiseColumn = ' ';
+
+      } else if ((data.performance[1].measures || data.performance[2].measures) && (!data.performance[3].measures || !data.performance[4].measures)) {
+        data.timespan = 'On Premise ';
+        data.distribution = 'onPremise';
+        data.onPremiseColumn = ' ';
+
+      } else {
+        data.timespan = '';
+        data.distribution = 'allPremise';
+        data.onPremiseColumn = 'on';
+        data.offPremiseColumn = 'off';
+      }
+      return data;
+    }
+
     // ***************
     // PRIVATE METHODS
     // ***************
@@ -114,24 +135,8 @@ module.exports = /*  @ngInject */
           if (item.type === 'Distribution Points - Off Premise, Simple') sortedData.performance[3] = item;
           if (item.type === 'Distribution Points - Off Premise, Effective') sortedData.performance[4] = item;
         });
-        vm.performanceData = sortedData;
 
-        if ((!vm.performanceData.performance[1].measures || !vm.performanceData.performance[2].measures) && (vm.performanceData.performance[3].measures || vm.performanceData.performance[4].measures)) {
-          vm.performanceData.timespan = 'Off Premise';
-          vm.performanceData.distribution = 'offPremise';
-          vm.performanceData.offPremiseColumn = ' ';
-
-        } else if ((vm.performanceData.performance[1].measures || vm.performanceData.performance[2].measures) && (!vm.performanceData.performance[3].measures || !vm.performanceData.performance[4].measures)) {
-          vm.performanceData.timespan = 'On Premise ';
-          vm.performanceData.distribution = 'onPremise';
-          vm.performanceData.onPremiseColumn = ' ';
-
-        } else {
-          vm.performanceData.timespan = '';
-          vm.performanceData.distribution = 'allPremise';
-          vm.performanceData.onPremiseColumn = 'on';
-          vm.performanceData.offPremiseColumn = 'off';
-        }
+        vm.performanceData = selectPremiseType(sortedData);
       });
 
       userService

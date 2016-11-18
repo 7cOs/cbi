@@ -1,5 +1,5 @@
 describe('Unit: landingController', function() {
-  var scope, ctrl, $mdSelect, chipsService, filtersService, userService;
+  var scope, ctrl, $mdSelect, chipsService, filtersService, userService, testPerformanceData, testPerformanceDataOnPremise, testPerformanceDataOffPremise;
 
   beforeEach(function() {
     // Get Mock Modules
@@ -9,7 +9,7 @@ describe('Unit: landingController', function() {
     angular.mock.module('cf.common.services');
     angular.mock.module('cf.modules.landing');
 
-    inject(function($rootScope, $controller, _$mdSelect_, _chipsService_, _filtersService_, _userService_) {
+    inject(function($rootScope, $controller, _$mdSelect_, _$q_, _$httpBackend_, _chipsService_, _filtersService_, _userService_) {
       // Create scope
       scope = $rootScope.$new();
 
@@ -47,6 +47,7 @@ describe('Unit: landingController', function() {
     expect(ctrl.closeDoneButton).not.toBeUndefined();
     expect(ctrl.closeSelect).not.toBeUndefined();
     expect(ctrl.isPositive).not.toBeUndefined();
+    expect(ctrl.selectPremiseType).not.toBeUndefined();
   });
 
   describe('Public Methods', function() {
@@ -125,6 +126,136 @@ describe('Unit: landingController', function() {
       it('should return negative if data is NaN', function() {
         var test = ctrl.isPositive('string');
         expect(test).toEqual('negative');
+      });
+    });
+
+    describe('[landing.selectPremiseType]', function() {
+      it('should exist', function() {
+        expect(typeof ctrl.selectPremiseType).toEqual('function');
+      });
+      it('should process data', function() {
+        testPerformanceData = {
+          'performance': [{
+            'type': 'Depletions CE',
+            'id': null,
+            'name': null,
+            'measures': [{
+              'timeframe': 'FYTD',
+              'value': 36449586.2076,
+              'percentChange': 2.6023321863903712
+            }]
+          }, {
+            'type': 'Distribution Points - On Premise, Simple',
+            'id': null,
+            'name': null,
+            'measures': [{
+              'timeframe': 'L90',
+              'value': 16709,
+              'percentChange': 1.6300711635545282
+            }]
+          }, {
+            'type': 'Distribution Points - On Premise, Effective',
+            'id': null,
+            'name': null,
+            'measures': [{
+              'timeframe': 'L90',
+              'value': 23348,
+              'percentChange': -2.635529608006672
+            }]
+          }, {
+            'type': 'Distribution Points - Off Premise, Simple',
+            'id': null,
+            'name': null,
+            'measures': [{
+              'timeframe': 'L90',
+              'value': 43105,
+              'percentChange': -1.4562662886927895
+            }]
+          }, {
+            'type': 'Distribution Points - Off Premise, Effective',
+            'id': null,
+            'name': null,
+            'measures': [{
+              'timeframe': 'L90',
+              'value': 113935,
+              'percentChange': 3.683784251094306
+            }]
+          }]
+        };
+
+        testPerformanceDataOnPremise = {
+          'performance': [{
+            'type': 'Depletions CE',
+            'id': null,
+            'name': null,
+            'measures': [{
+              'timeframe': 'FYTD',
+              'value': 36449586.2076,
+              'percentChange': 2.6023321863903712
+            }]
+          }, {
+            'type': 'Distribution Points - On Premise, Simple',
+            'id': null,
+            'name': null,
+            'measures': [{
+              'timeframe': 'L90',
+              'value': 16709,
+              'percentChange': 1.6300711635545282
+            }]
+          }, {
+            'type': 'Distribution Points - On Premise, Effective',
+            'id': null,
+            'name': null,
+            'measures': [{
+              'timeframe': 'L90',
+              'value': 23348,
+              'percentChange': -2.635529608006672
+            }]
+          }, {
+          }, {
+          }]
+        };
+
+        testPerformanceDataOffPremise = {
+          'performance': [{
+            'type': 'Depletions CE',
+            'id': null,
+            'name': null,
+            'measures': [{
+              'timeframe': 'FYTD',
+              'value': 36449586.2076,
+              'percentChange': 2.6023321863903712
+            }]
+          }, {
+          }, {
+          }, {
+            'type': 'Distribution Points - Off Premise, Simple',
+            'id': null,
+            'name': null,
+            'measures': [{
+              'timeframe': 'L90',
+              'value': 43105,
+              'percentChange': -1.4562662886927895
+            }]
+          }, {
+            'type': 'Distribution Points - Off Premise, Effective',
+            'id': null,
+            'name': null,
+            'measures': [{
+              'timeframe': 'L90',
+              'value': 113935,
+              'percentChange': 3.683784251094306
+            }]
+          }]
+        };
+
+        var result = ctrl.selectPremiseType(testPerformanceData);
+        var resultOnPremise = ctrl.selectPremiseType(testPerformanceDataOnPremise);
+        var resultOffPremise = ctrl.selectPremiseType(testPerformanceDataOffPremise);
+
+        expect(result.distribution).toEqual('allPremise');
+        expect(resultOnPremise.distribution).toEqual('onPremise');
+        expect(resultOffPremise.distribution).toEqual('offPremise');
       });
     });
   });
