@@ -27,7 +27,8 @@ module.exports = /*  @ngInject */
       getTopBottom: getTopBottom,
       getTargetLists: getTargetLists,
       addTargetList: addTargetList,
-      sendOpportunity: sendOpportunity
+      sendOpportunity: sendOpportunity,
+      isValidValues: isValidValues
     };
 
     return service;
@@ -402,45 +403,56 @@ module.exports = /*  @ngInject */
      * @returns {Object} - Returns true if the properties were calculated . Returns false if isNan
      */
     function calculatePlanDistirbutionTrend(measure) {
-      var isPlanValueCalculated = false;
       var planSimpleVal = Number(measure.planSimple);
       var planEffectiveVal = Number(measure.planEffective);
       var temp = null;
 
       var distirbutionSimpleVal = Number(measure.distributionsSimple);
       var distirbutionEffectiveVal = Number(measure.distributionsSimple);
-      if (planSimpleVal && distirbutionSimpleVal) {
-        temp = ((distirbutionSimpleVal - planSimpleVal) / planSimpleVal);
-        measure.planDistirbutionSimpleTrend = (temp * 100);
-        isPlanValueCalculated = true;
+      if (isValidValues(planSimpleVal) && isValidValues(distirbutionSimpleVal)) {
+        if (planSimpleVal === 0) {
+          measure.planDistirbutionSimpleTrend = 0;
+        } else {
+          temp = ((distirbutionSimpleVal - planSimpleVal) / planSimpleVal);
+          measure.planDistirbutionSimpleTrend = (temp * 100);
+        }
       }
 
-      if (planEffectiveVal && distirbutionEffectiveVal) {
-        temp = ((distirbutionEffectiveVal - planEffectiveVal) / planEffectiveVal);
-        measure.planDistirbutionEffectiveTrend = (temp * 100);
-        isPlanValueCalculated = isPlanValueCalculated && true;
+      if (isValidValues(planEffectiveVal) && isValidValues(distirbutionEffectiveVal)) {
+        if (planEffectiveVal === 0) {
+          measure.planDistirbutionEffectiveTrend = 0;
+        } else {
+          temp = ((distirbutionEffectiveVal - planEffectiveVal) / planEffectiveVal);
+          measure.planDistirbutionEffectiveTrend = (temp * 100);
+        }
       }
-      return isPlanValueCalculated;
+    }
+
+    function isValidValues(value) {
+      var isValid = typeof value === 'number' && !isNaN(value);
+      return isValid;
     }
 
     function calculatePlanDepletionTrend(measure) {
-      var isPlanValueCalculated = false;
       var planVal = Number(measure.plan);
       var depletionsVal = Number(measure.depletions);
-      if (planVal && depletionsVal) {
-        var temp = ((depletionsVal - planVal) / planVal);
-        measure.planDepletionTrend = (temp * 100);
-        isPlanValueCalculated = true;
+      if (isValidValues(planVal) && isValidValues(depletionsVal)) {
+        if (planVal === 0) {
+          measure.planDepletionTrend = '-';
+        } else {
+          var temp = ((depletionsVal - planVal) / planVal);
+          measure.planDepletionTrend = (temp * 100);
+        }
       }
-      return isPlanValueCalculated;
     }
 
     function calculateTrendValuesForPlan(brands) {
       for (var i = 0, len = brands.length; i < len; i++) {
         var currentBrand = brands[i];
         angular.forEach(currentBrand.measures, function(measure, index) {
-          var isPlanDepletionTrend = calculatePlanDepletionTrend(measure);
-          if (!isPlanDepletionTrend) {
+          if (isValidValues(measure.depletions)) {
+            calculatePlanDepletionTrend(measure);
+          } else {
             calculatePlanDistirbutionTrend(measure);
           }
         });
@@ -464,8 +476,8 @@ module.exports = /*  @ngInject */
         .catch(getPerformanceBrandFail);
 
       function getPerformanceBrandSuccess(response) {
-        console.log('[getPerformanceBrandSuccess.data.performance.length]', response.data.performance.length);
         calculateTrendValuesForPlan(response.data.performance);
+        console.log('[getPerformanceBrandSuccess.data.performance.length]', response.data.performance.length);
         performancePromise.resolve(response.data);
       }
 
