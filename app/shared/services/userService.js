@@ -460,6 +460,17 @@ module.exports = /*  @ngInject */
       return brands;
     }
 
+    function getTopBottomSnapshot(snapshotType, params) {
+      switch (snapshotType.level) {
+        case 1:
+
+          break;
+        case 2:
+
+          break;
+      }
+    }
+
     /**
      * @name getPerformanceBrand
      * @desc get brand performance for a user
