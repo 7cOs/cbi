@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports = /*  @ngInject */
-  function listController($scope, $state, $q, $location, $anchorScroll, $mdDialog, $timeout, filtersService, loaderService, opportunitiesService, targetListService, storesService, userService, closedOpportunitiesService, ieHackService, toastService) {
+  function listController($scope, $state, $q, $location, $anchorScroll, $mdDialog, $timeout, $filter, filtersService, loaderService, opportunitiesService, targetListService, storesService, userService, closedOpportunitiesService, ieHackService, toastService) {
 
     // ****************
     // CONTROLLER SETUP
@@ -45,6 +45,8 @@ module.exports = /*  @ngInject */
       targetListShares: [],
       collaborateAndInvite: false
     };
+    vm.ascending = true;
+    vm.orderName = ['store.segmentation', 'store.depletionsCurrentYearToDate'];
 
     // Expose public methods
     vm.addToSharedCollaborators = addToSharedCollaborators;
@@ -468,12 +470,25 @@ module.exports = /*  @ngInject */
 
     // Sort by selected property
     function sortBy(name) {
-      filtersService.addSortFilter(name);
-
+      vm.ascending = !vm.ascending;
       loaderService.openLoader(true);
-      opportunitiesService.getOpportunities().then(function(data) {
-        loaderService.closeLoader();
-      });
+
+      if ($state.current.name === 'opportunities') {
+        filtersService.addSortFilter(name);
+        opportunitiesService.getOpportunities();
+      } else if ($state.current.name === 'target-list-detail') {
+        vm.orderName = [];
+        if (vm.ascending) {
+          if (name === 'store') vm.orderName = ['store.name'];
+          if (name === 'depletions') vm.orderName = ['store.depletionsCurrentYearToDate'];
+          if (name === 'segmentation') vm.orderName = ['store.segmentation'];
+        } else {
+          if (name === 'store') vm.orderName = ['-store.name'];
+          if (name === 'depletions') vm.orderName = ['-store.depletionsCurrentYearToDate'];
+          if (name === 'segmentation') vm.orderName = ['-store.segmentation'];
+        }
+      }
+      loaderService.closeLoader();
     }
 
     // Select or deselect individual list item
