@@ -106,6 +106,7 @@ module.exports = /*  @ngInject */
     }
 
     function pendingCheck() {
+      vm.pendingCheckInProgress = true;
       vm.pendingRemovals.length ? vm.removeCollaborator(vm.pendingRemovals) : vm.deleteList();
     }
 
@@ -205,8 +206,9 @@ module.exports = /*  @ngInject */
           angular.forEach(vm.pendingRemovals, function(item, key) {
             if (item === collaboratorId) vm.pendingRemovals.splice(key, 1);
           });
-          if (listLength - 1 === collabKey) {
+          if (listLength - 1 === collabKey && vm.pendingCheckInProgress) {
             vm.deleteList();
+            vm.pendingCheckInProgress = false;
           }
         });
         if (userService.model.currentUser.employeeID === collaboratorId) vm.closeButton = true;

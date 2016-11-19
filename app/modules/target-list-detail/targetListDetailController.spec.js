@@ -657,7 +657,6 @@ describe('Unit: targetListDetailController', function() {
         expect(targetListService.deleteTargetListShares).toHaveBeenCalledWith(1, '1012135');
         expect(targetListService.deleteTargetListShares).toHaveBeenCalledWith(1, '112233');
         expect(targetListService.model.currentList.collaborators.length).toEqual(1);
-        expect(targetListService.deleteTargetList).toHaveBeenCalled();
       });
 
       it('should update the pendingShares array length', function() {
