@@ -2,10 +2,10 @@
   div(row)
     h1(column='12') Target Lists
 .clearfix
-  button(ng-if="expanded.buttonState === 'named'").icon.select-all(ng-click="expanded.toggleAll(expanded.buttonState)")
+  button(ng-if="expanded.buttonState === 'named'" ng-click="expanded.toggleAll(expanded.buttonState)").icon.select-all
     span(ng-if='expanded.isChecked()') Un-
     | Select All
-  button(ng-if="expanded.buttonState === 'archived'").icon.select-all(ng-click="expanded.toggleAll(expanded.buttonState)")
+  button(ng-if="expanded.buttonState === 'archived'" ng-click="expanded.toggleAll(expanded.buttonState)").icon.select-all
     span(ng-if='expanded.isCheckedArchived()') Un-
     | Select All
 
