@@ -641,7 +641,7 @@ module.exports = /*  @ngInject */
         response.data.opportunitiesSummary.opportunitiesCount = 0;
         response.data.opportunitiesSummary.totalClosedDepletions = 0;
 
-        service.model.targetLists.owned.unshift(response.data);
+        service.model.targetLists.ownedNotArchivedTargetLists.unshift(response.data);
         service.model.targetLists.ownedArchived++;
         service.model.targetLists.ownedNotArchived--;
 
