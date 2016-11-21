@@ -1,5 +1,5 @@
 div.modal.target-list-modal
-  loader(ng-show="tld.targetListService.model.currentList.loading")
+  loader(ng-if="tld.targetListService.model.currentList.loading")
   div.title
     h4 Manage Target List
     a.hide-row(ng-click="tld.closeModal()")

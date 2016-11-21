@@ -43,7 +43,7 @@ div.expanded-target-lists
                   | Depletions <br />Since Closed (CE)
                   span(ng-class="{ 'chevron-down-small' : expanded.depletionsChevron, 'chevron-up-small' : !expanded.depletionsChevron}").chevron-down-small
         div(row).target-list-detail-container
-          .loader-wrap.inline(ng-class="{'active': expanded.loaderService.model.loadingFilters}")
+          .loader-wrap.inline(ng-if="expanded.loaderService.model.loadingFilters" ng-class="{'active': expanded.loaderService.model.loadingFilters}")
             loader
           div(ng-show="!expanded.loaderService.model.loadingFilters && !expanded.userService.model.targetLists.owned.length || expanded.userService.model.targetLists.owned.length === 0 || !expanded.loaderService.model.loadingFilters  && !expanded.userService.model.targetLists.ownedNotArchived").no-opportunities
             h4 It seems that you haven't created any Target Lists yet
