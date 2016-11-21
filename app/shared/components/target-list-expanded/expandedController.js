@@ -159,7 +159,7 @@ module.exports = /*  @ngInject */
               userService.model.targetLists.ownedNotArchived--;
               userService.model.targetLists.archived.splice(userService.model.targetLists.archived.indexOf(item), 1);
             }
-            userService.model.targetLists.owned.splice(userService.model.targetLists.owned.indexOf(item), 1);
+            userService.model.targetLists.ownedNotArchivedTargetLists.splice(userService.model.targetLists.ownedNotArchivedTargetLists.indexOf(item), 1);
           });
         }).then(vm.selected = []);
 
