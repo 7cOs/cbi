@@ -91,6 +91,8 @@ module.exports = /*  @ngInject */
 
           userService.model.targetLists.ownedArchived++;
           userService.model.targetLists.ownedNotArchived--;
+
+          userService.model.targetLists.ownedNotArchivedTargetLists.splice(userService.model.targetLists.ownedNotArchivedTargetLists.indexOf(item), 1);
         });
 
         toastService.showToast('archived', selectedTargetLists);
