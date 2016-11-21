@@ -328,10 +328,15 @@ describe('Unit: targetListDetailController', function() {
     describe('[tld.closeModal]', function() {
       beforeEach(function() {
         spyOn($mdDialog, 'hide').and.callThrough();
+        spyOn(ctrl, 'navigateToTL').and.callFake(function() {
+          return true;
+        });
         targetListService.model.currentList.name = 'Updated Name';
         targetListService.model.currentList.description = 'Updated Description';
         ctrl.originalList.name = 'Original Name';
         ctrl.originalList.description = 'Original Description';
+        userService.model.currentUser = currentUser;
+        targetListService.model.currentList.collaborators = collaborators;
       });
 
       afterEach(function() {
@@ -341,11 +346,23 @@ describe('Unit: targetListDetailController', function() {
         ctrl.originalList.description = 'Original Description';
       });
 
-      it('should close an open modal', function() {
+      it('should close an open modal & stay on current page if user is still a collaborator', function() {
+        expect(ctrl.stayOnPage).toEqual(true);
         ctrl.closeModal();
 
+        expect(ctrl.stayOnPage).toEqual(true);
         expect($mdDialog.hide).toHaveBeenCalled();
         expect($mdDialog.hide.calls.count()).toEqual(1);
+      });
+
+      it('should close an open modal and navigateToTL if user is no longer a collaborator', function() {
+        expect(ctrl.stayOnPage).toEqual(true);
+        userService.model.currentUser.employeeID = '12345';
+        ctrl.closeModal();
+
+        expect(ctrl.stayOnPage).toEqual(false);
+        expect(ctrl.navigateToTL).toHaveBeenCalled();
+        expect(ctrl.navigateToTL.calls.count()).toEqual(1);
       });
 
       it('should revert the list name and description if passed true parameter', function() {
@@ -742,6 +759,10 @@ describe('Unit: targetListDetailController', function() {
         spyOn(targetListService, 'updateTargetList').and.callFake(function() {
           return deferred.promise;
         });
+
+        spyOn(ctrl, 'closeModal').and.callFake(function() {
+          return true;
+        });
       });
 
       it('should call the update function in the service', function() {
@@ -790,7 +811,6 @@ describe('Unit: targetListDetailController', function() {
       });
 
       it('should call the closeModal function', function() {
-        spyOn(ctrl, 'closeModal').and.callThrough();
         ctrl.updateList();
         deferred.resolve();
         scope.$digest();

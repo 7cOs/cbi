@@ -43,12 +43,12 @@ div.modal.target-list-modal
               md-menu-item(ng-click="tld.removeCollaborator([pending.employee.employeeId])") Remove
     div(ng-hide="tld.targetListService.model.currentList.permissionLevel !== 'author'").modal-input.clearfix
       md-checkbox(ng-model="tld.targetListService.model.currentList.collaboratorPermissionLevel" ng-true-value="'collaborateandinvite'" ng-false-value="'collaborate'" ng-click="tld.changePermissionClick()") Allow Collaborators to invite others
-    div(ng-hide="tld.targetListService.model.currentList.permissionLevel === 'collaborate'").modal-input
+    div(ng-hide="tld.targetListService.model.currentList.permissionLevel === 'collaborate' || tld.closeButton").modal-input
       label(ng-if="tld.targetListService.model.currentList.permissionLevel === 'author'") Add Collaborators
       label(ng-if="tld.targetListService.model.currentList.permissionLevel !== 'author'") Add Recipient
       inline-search(type="user" placeholder="Enter names or CBI Email addresses" chosen-result="tld.collaboratorName" callback="tld.addCollaboratorClick(result)")
     div(ng-if="tld.saveButton")
-      button( ng-disabled="!tld.changed" ng-click="tld.updateList()" analytics-on="click" analytics-event="Share Target List").btn-action Save
+      button(ng-disabled="!tld.changed" ng-click="tld.updateList()" analytics-on="click" analytics-event="Share Target List").btn-action Save
       p.cancel.accent(ng-click="tld.closeModal(true)") X Cancel
     button(ng-if="tld.closeButton" ng-click="tld.changed ? tld.navigateToTL() : tld.closeModal(true)").btn-action Close
   div.modal-footer.clearfix(ng-if="tld.targetListService.model.currentList.permissionLevel !== 'author'" ng-class="{'toasted': tld.showToast}")
