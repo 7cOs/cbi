@@ -24,6 +24,7 @@ module.exports = /*  @ngInject */
     vm.permissionLevel = 'Collaborate';
     vm.saveButton = false;
     vm.selectedCollaboratorId = '';
+    vm.stayOnPage = true;
     vm.targetListAuthor = '';
 
     // Services
@@ -101,7 +102,21 @@ module.exports = /*  @ngInject */
         targetListService.model.currentList.name = vm.originalList.name;
         targetListService.model.currentList.description = vm.originalList.description;
       }
-      $mdDialog.hide();
+
+      vm.keepGoing = true;
+      targetListService.model.currentList.collaborators.forEach(function(value, key) {
+        if (vm.keepGoing) {
+          if (userService.model.currentUser.employeeID === value.user.employeeId) {
+            vm.stayOnPage = true;
+            vm.keepGoing = false;
+          } else {
+            vm.stayOnPage = false;
+          }
+        }
+      });
+
+      vm.stayOnPage ? $mdDialog.hide() : vm.navigateToTL();
+
       vm.changed = false;
     }
 
@@ -176,7 +191,7 @@ module.exports = /*  @ngInject */
       vm.originalList = targetListService.model.currentList;
 
       $mdDialog.show({
-        clickOutsideToClose: true,
+        clickOutsideToClose: false,
         parent: parentEl,
         scope: $scope.$new(),
         targetEvent: ev,
@@ -211,7 +226,10 @@ module.exports = /*  @ngInject */
             vm.pendingCheckInProgress = false;
           }
         });
-        if (userService.model.currentUser.employeeID === collaboratorId) vm.closeButton = true;
+        if (userService.model.currentUser.employeeID === collaboratorId) {
+          vm.closeButton = true;
+          vm.saveButton = false;
+        }
       });
 
       vm.listChanged();
