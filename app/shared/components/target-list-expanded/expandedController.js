@@ -199,7 +199,7 @@ module.exports = /*  @ngInject */
         return targetListService.addTargetListShares(response.id, newPayload);
       })
       .then(function(addCollaboratorResponse) {
-        userService.model.targetLists.owned[0].collaborators = addCollaboratorResponse.data;
+        userService.model.targetLists.ownedNotArchivedTargetLists[0].collaborators = addCollaboratorResponse.data;
 
         // reset model
         vm.newList = {
