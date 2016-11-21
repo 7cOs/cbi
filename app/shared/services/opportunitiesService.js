@@ -184,7 +184,7 @@ module.exports = /*  @ngInject */
         filtersService.model.appliedFilter.pagination.totalOpportunities = response.headers()['opportunity-count'];
         filtersService.model.appliedFilter.pagination.totalStores = response.headers()['store-count'];
         filtersService.model.appliedFilter.pagination.roundedStores = Math.round(response.headers()['store-count'] / 10) * 10;
-        filtersService.model.appliedFilter.pagination.totalPages = (Math.ceil(filtersService.model.appliedFilter.pagination.roundedStores / 5));
+        filtersService.model.appliedFilter.pagination.totalPages = (Math.ceil(filtersService.model.appliedFilter.pagination.roundedStores / 10));
 
         if (!ieHackService.isIE) {
           console.log('[opportunitiesService.getOpportunitiesHeaders] response: ', response.headers());
