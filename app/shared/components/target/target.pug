@@ -8,7 +8,7 @@ div.target-lists
             h5(column="6").accent.completed Closed
             h5(column="6").accent Total
         div(row).target-list-container
-          .loader-wrap.inline(ng-class="{'active': target.loaderService.model.loadingFilters}")
+          .loader-wrap.inline(ng-if="target.loaderService.model.loadingFilters" ng-class="{'active': target.loaderService.model.loadingFilters}")
             loader
           div(ng-show="!target.loaderService.model.loadingFilters && !type.records.length && type.name !== 'Shared with Me'").no-opportunities
             p It seems that you haven't created any Target Lists yet. To create and save a new list, go to the <a ui-sref="target-lists">Target Lists page</a>.

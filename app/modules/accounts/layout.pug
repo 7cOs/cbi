@@ -86,7 +86,7 @@ notes
 
 div(row)
   div.scorecard-table.scorecard-table-accounts(column='6')
-    .loader-wrap.inline(ng-class="{'active': a.loadingBrandSnapshot}")
+    .loader-wrap.inline(ng-if="a.loadingBrandSnapshot" ng-class="{'active': a.loadingBrandSnapshot}")
       loader
     .widget-header
       .dropdown-filter
