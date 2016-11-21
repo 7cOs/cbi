@@ -333,10 +333,12 @@ module.exports = /*  @ngInject */
 
             if (data[i].owned[j].archived) {
               combinedTargetList.ownedArchived++;
+              combinedTargetList.owned.push(data[i].owned[j]);
               combinedTargetList.archived.push(data[i].owned[j]);
 
             } else {
               combinedTargetList.ownedNotArchived++;
+              combinedTargetList.owned.push(data[i].owned[j]);
               combinedTargetList.ownedNotArchivedTargetLists.push(data[i].owned[j]);
             }
           }
