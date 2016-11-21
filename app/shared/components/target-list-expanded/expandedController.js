@@ -361,7 +361,6 @@ module.exports = /*  @ngInject */
         }
 
         userService.model.targetLists = combinedTargetList;
-        console.log(userService.model.targetLists);
       });
     }
 
