@@ -2,9 +2,9 @@ div.modal.notes(ng-if="notesOpen")
   div.title
     a.hide-row(ng-click="n.notesClose()")
     h4 Notes For Walmed & Feller
-  div.no-notes(ng-if="n.notes.length <= 0")
+  div.no-notes(ng-if="n.notes.length <= 0" ng-hide="n.creatingNote")
     h5 There are no notes for this <br />account yet.
-    button.btn-action + Add A New Note
+    button(ng-click="n.openCreateNote()").btn-action + Add A New Note
     br
     img(src="../assets/img/icons/no-notes.svg").no-notes-image
   div(ng-if="n.loading").progress-container
@@ -14,7 +14,7 @@ div.modal.notes(ng-if="notesOpen")
   div(ng-if="n.fileUploading").progress-container.uploader
     md-progress-circular(ng-if="n.fileUploading" md-mode="indeterminate" md-diameter="100").md-accent
     h5 Uploading...
-  div.note-container(ng-if="n.notes.length > 0 && !n.fileUploading")
+  div.note-container(ng-if="n.notes.length > 0 && !n.fileUploading || n.creatingNote")
     div.new-note
       p(ng-click="n.openCreateNote()").bold.add-note <span>+</span> New Note
       div(ng-if="n.creatingNote").create-new-note
