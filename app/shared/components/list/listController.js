@@ -17,24 +17,11 @@ module.exports = /*  @ngInject */
     vm.targetListService = targetListService;
 
     // Defaults
+    vm.ascending = true;
     vm.currentOpportunityId = '';
     vm.depletionsChevron = false;
-    vm.expandedOpportunities = 0;
-    vm.opportunitiesChevron = false;
-    vm.reverse = false;
-    vm.segmentationChevron = false;
-    vm.selected = [];
-    vm.sharedCollaborators = [];
-    vm.stores = [];
-    // sortProperty is set to default sort on page load
-    // vm.sortProperty = 'store.name';
-    vm.storeChevron = true;
-    vm.showSubMenu = false;
     vm.disabledMessage = '';
-    vm.opportunityShared = false;
-    vm.shareOpportunityFail = false;
-    vm.opportunityDismissTrigger = false;
-    vm.undoClicked = false;
+    vm.expandedOpportunities = 0;
     vm.isSelectAllActivated = false;
     vm.memoData = {};
     vm.newList = {
@@ -45,45 +32,58 @@ module.exports = /*  @ngInject */
       targetListShares: [],
       collaborateAndInvite: false
     };
-    vm.ascending = true;
+    vm.opportunitiesChevron = false;
+    vm.opportunityDismissTrigger = false;
+    vm.opportunityShared = false;
     vm.orderName = ['store.segmentation', 'store.depletionsCurrentYearToDate'];
+    vm.reverse = false;
+    vm.segmentationChevron = false;
+    vm.selected = [];
+    vm.sharedCollaborators = [];
+    vm.shareOpportunityFail = false;
+    vm.showSubMenu = false;
+    // sortProperty is set to default sort on page load
+    // vm.sortProperty = 'store.name';
+    vm.storeChevron = true;
+    vm.stores = [];
+    vm.undoClicked = false;
 
     // Expose public methods
+    vm.addCollaborator = addCollaborator;
     vm.addToSharedCollaborators = addToSharedCollaborators;
     vm.addToTargetList = addToTargetList;
-    vm.createNewList = createNewList;
+    vm.allOpportunitiesExpanded = allOpportunitiesExpanded;
+    vm.cancelFeedback = cancelFeedback;
     vm.closeCreateTargetListModal = closeCreateTargetListModal;
-    vm.saveNewList = saveNewList;
-    vm.addCollaborator = addCollaborator;
     vm.closeModal = closeModal;
+    vm.collapseCallback = collapseCallback;
+    vm.createNewList = createNewList;
+    vm.depletionsVsYaPercent = depletionsVsYaPercent;
     vm.displayBrandIcon = displayBrandIcon;
     vm.exists = exists;
-    vm.openShareModal = openShareModal;
-    vm.openDismissModal = openDismissModal;
-    vm.pageName = pageName;
-    vm.removeOpportunity = removeOpportunity;
-    vm.updateOpportunityModel = updateOpportunityModel;
-    vm.shareOpportunity = shareOpportunity;
-    vm.sortBy = sortBy;
-    vm.selectOpportunity = selectOpportunity;
-    vm.showOpportunityMemoModal = showOpportunityMemoModal;
-    vm.submitFeedback = submitFeedback;
-    vm.cancelFeedback = cancelFeedback;
-    vm.allOpportunitiesExpanded = allOpportunitiesExpanded;
-    vm.noOpportunitiesExpanded = noOpportunitiesExpanded;
-    vm.showDisabled = showDisabled;
-    vm.flattenOpportunity = flattenOpportunity;
-    vm.getTargetLists = getTargetLists;
     vm.expandCallback = expandCallback;
-    vm.collapseCallback = collapseCallback;
+    vm.flattenOpportunity = flattenOpportunity;
     vm.getDate = getDate;
+    vm.getMemos = getMemos;
+    vm.getTargetLists = getTargetLists;
+    vm.impactSort = impactSort;
+    vm.noOpportunitiesExpanded = noOpportunitiesExpanded;
+    vm.openDismissModal = openDismissModal;
+    vm.openShareModal = openShareModal;
+    vm.pageName = pageName;
+    vm.pickMemo = pickMemo;
+    vm.removeOpportunity = removeOpportunity;
+    vm.removeSharedCollaborator = removeSharedCollaborator;
+    vm.saveNewList = saveNewList;
+    vm.selectOpportunity = selectOpportunity;
+    vm.shareOpportunity = shareOpportunity;
+    vm.showDisabled = showDisabled;
+    vm.showOpportunityMemoModal = showOpportunityMemoModal;
+    vm.sortBy = sortBy;
+    vm.submitFeedback = submitFeedback;
     vm.toggleOpportunitiesInStores = toggleOpportunitiesInStores;
     vm.toggleSelectAllStores = toggleSelectAllStores;
-    vm.removeSharedCollaborator = removeSharedCollaborator;
-    vm.impactSort = impactSort;
-    vm.getMemos = getMemos;
-    vm.pickMemo = pickMemo;
-    vm.depletionsVsYaPercent = depletionsVsYaPercent;
+    vm.updateOpportunityModel = updateOpportunityModel;
 
     // Custom Headers for CSV export
     vm.csvHeader = [
