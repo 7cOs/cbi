@@ -188,10 +188,22 @@ module.exports = /*  @ngInject */
               for (var j = 0; j < opportunitiesService.model.opportunities.length; j++) {
                 for (var k = 0; k < opportunitiesService.model.opportunities[j].groupedOpportunities.length; k++) {
                   if (opportunitiesService.model.opportunities[j].groupedOpportunities[k].id === vm.selected[i].id) {
-                    // remove from opportunities model if open is selected, otherwise just change status
-                    filtersService.model.opportunityStatusOpen && filtersService.model.opportunityStatusOpen === true ? opportunitiesService.model.opportunities[j].groupedOpportunities.splice(k, 1) : opportunitiesService.model.opportunities[j].groupedOpportunities[k].status = 'TARGETED';
+                    if (opportunitiesService.model.opportunities[j].groupedOpportunities[k].impact === 'H') {
+                      opportunitiesService.model.opportunities[j].store.highImpactOpportunityCount--;
+                    }
 
-                    if (opportunitiesService.model.opportunities[j].groupedOpportunities.length === 0) opportunitiesService.model.opportunities.splice(j, 1);
+                    // remove from opportunities model if open is selected, otherwise just change status
+                    if (filtersService.model.opportunityStatusOpen && filtersService.model.opportunityStatusOpen === true) {
+                      opportunitiesService.model.opportunities[j].groupedOpportunities.splice(k, 1);
+                      filtersService.model.appliedFilter.pagination.totalOpportunities--;
+                    } else {
+                      opportunitiesService.model.opportunities[j].groupedOpportunities[k].status = 'TARGETED';
+                    }
+
+                    if (opportunitiesService.model.opportunities[j].groupedOpportunities.length === 0) {
+                      opportunitiesService.model.opportunities.splice(j, 1);
+                      filtersService.model.appliedFilter.pagination.totalStores--;
+                    }
 
                     // break loop after needle is found to save on performance
                     breaking = true;

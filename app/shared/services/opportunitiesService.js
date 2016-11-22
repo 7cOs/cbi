@@ -86,7 +86,6 @@ module.exports = /*  @ngInject */
 
             // create grouped store object
             store = angular.copy(item);
-            store.highImpactSum = 0;
             store.depletionSum = 0;
             store.brands = [];
             store.store = setVsYAPercent(store.store);
@@ -113,9 +112,6 @@ module.exports = /*  @ngInject */
 
           // add brand to array
           store.brands.push(item.product.brand.toLowerCase());
-
-          // sum high opportunities
-          // if (item.impact === 'high') store.highImpactSum += 1;
 
           // sum depletions - not in api yet - WJAY 8/8
           // store.depletionSum += item.depletions
