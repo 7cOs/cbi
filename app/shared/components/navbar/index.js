@@ -185,10 +185,14 @@ function NavbarController($rootScope, $scope, $state, $window, $mdPanel, $mdDial
     var isMixedType = !isDistribution && opportunity.properties.product.type === 'mixed';
     var targetList = opportunity.properties.targetList;
 
+    if (opportunity.properties.rationale.other) {
+      opportunity.properties.rationale.description = opportunity.properties.rationale.other;
+    }
+
     var payload = {
       'store': opportunity.properties.store.id,
-      'itemId': !isMixedType && opportunity.properties.product.brandCode,
-      'itemType': 'BRAND',
+      'itemId': !isMixedType && opportunity.properties.product.id,
+      'itemType': 'SKU_PACKAGE',
       'mixedBrand': isMixedType,
       'rationale': opportunity.properties.rationale.description,
       'impact': opportunity.properties.impact.enum,
