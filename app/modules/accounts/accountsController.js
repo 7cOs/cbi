@@ -18,92 +18,6 @@ module.exports = /*  @ngInject */
     vm.filtersService = filtersService;
     vm.userService = userService;
 
-    vm.accountBrandEnum = {
-      'distirbutionSimple': 1,
-      'distirbutionEffective': 2,
-      'velocity': 3
-    };
-
-    vm.filters = {
-      placementType: [{
-        name: 'Simple'
-      }, {
-        name: 'Effective'
-      }],
-      trend: [{
-        name: 'vs YA'
-      }, {
-        name: 'vs ABP'
-      }],
-      premises: [{
-        name: 'All'
-      }, {
-        name: 'Off-Premise'
-      }, {
-        name: 'On-Premise'
-      }],
-      accountBrands: [{
-        name: 'Distribution (simple)',
-        depletionTableHeaderText: 'Distribution(s)',
-        value: 1
-      }, {
-        name: 'Distribution (effective)',
-        depletionTableHeaderText: 'Distribution(e)',
-        value: 2
-      }, {
-        name: 'Velocity',
-        depletionTableHeaderText: 'Velocity',
-        value: 3
-      }],
-      accountMarkets: [{
-        name: 'Depletions'
-      }, {
-        name: 'Distribution (simple)'
-      }, {
-        name: 'Distribution (effective)'
-      }, {
-        name: 'Velocity'
-      }],
-      valuesVsTrend: [{
-        name: 'Top 10 (Values)'
-      }, {
-        name: 'Top 10 (Trend)'
-      }, {
-        name: 'Bottom 10 (Values)'
-      }, {
-        name: 'Bottom 10 (Trend)'
-      }],
-      accountTypes: [{
-        name: 'Distributors'
-      }, {
-        name: 'Accounts'
-      }, {
-        name: 'Sub-Accounts'
-      }, {
-        name: 'Stores'
-      }],
-      storeTypes: [{
-        name: 'Chain'
-      }, {
-        name: 'Independent'
-      }]
-    };
-
-    var trendPropertyNames = {
-      'distributionsSimple': [
-        'distributionsSimpleTrend',
-        'planDistirbutionSimpleTrend'
-      ],
-      'distributionsEffective': [
-        'distributionsEffectiveTrend',
-        'planDistirbutionEffectiveTrend'
-      ],
-      'depletions': [
-        'depletionsTrend',
-        'planDepletionTrend'
-      ]
-
-    };
     /* Need to remove this */
     vm.marketData = myperformanceService.marketData();
 
@@ -319,7 +233,7 @@ module.exports = /*  @ngInject */
         vm.brandWidgetTitle = vm.brandWidgetTitleDefault;
         vm.brandIdSelected = null;
         vm.filterModel.brand = '';
-        vm.filtersService.model.accountSelected.accountBrands = vm.filters.accountBrands[0];
+        vm.filtersService.model.accountSelected.accountBrands = vm.filtersService.accountFilters.accountBrands[0];
       }
     }
 
@@ -451,7 +365,7 @@ module.exports = /*  @ngInject */
       if (widget === 'brands') {
         vm.brandSelectedIndex = vm.brandSelectedIndex + 1;
         setCurrentTotalsObject();
-        vm.filtersService.model.accountSelected.accountBrands = vm.filters.accountBrands[1];
+        vm.filtersService.model.accountSelected.accountBrands = vm.filtersService.accountFilters.accountBrands[1];
       }
       if (widget === 'markets') { vm.marketSelectedIndex = vm.marketSelectedIndex + 1; }
     }
@@ -459,7 +373,7 @@ module.exports = /*  @ngInject */
     function init() {
       // reset all chips and filters on page init
       vm.filterModel.trend = vm.filtersService.model.trend[0];
-      vm.filtersService.model.accountSelected.accountBrands = vm.filters.accountBrands[0];
+      vm.filtersService.model.accountSelected.accountBrands = vm.filtersService.accountFilters.accountBrands[0];
       chipsService.resetChipsFilters(chipsService.model);
       setDefaultEndingPeriodOptions();
       vm.filtersService.model.selected.premiseType = 'all';
@@ -498,12 +412,12 @@ module.exports = /*  @ngInject */
       switch (vm.filterModel.trend.value) {
         case 1:
         // For YA
-          measurePropertyName = trendPropertyNames[measureType][0];
+          measurePropertyName = vm.filtersService.trendPropertyNames[measureType][0];
           currentTrendVal.value = displayBrandValue(measures, measurePropertyName, timePeriod);
           break;
         case 2:
           // For ABP
-          measurePropertyName = trendPropertyNames[measureType][1];
+          measurePropertyName = vm.filtersService.trendPropertyNames[measureType][1];
           currentTrendVal.value = displayBrandValue(measures, measurePropertyName, timePeriod);
           break;
         case 3:

@@ -235,7 +235,7 @@ describe('Unit: accountsController', function() {
       expect(ctrl.accountTypesDefault).toEqual('Distributors');
       expect(ctrl.brandWidgetTitleDefault).toEqual('All Brands');
       expect(ctrl.brandWidgetTitle).toEqual(ctrl.brandWidgetTitleDefault);
-      expect(ctrl.filtersService.model.accountSelected.accountBrands).toEqual(ctrl.filters.accountBrands[0]);
+      expect(ctrl.filtersService.model.accountSelected.accountBrands).toEqual(ctrl.filtersService.accountFilters.accountBrands[0]);
       expect(ctrl.filtersService.model.accountSelected.accountMarkets).toEqual('Depletions');
       expect(ctrl.selectOpen).toEqual(false);
       expect(ctrl.disableAnimation).toEqual(false);
@@ -549,7 +549,7 @@ describe('Unit: accountsController', function() {
       ctrl.prevTab();
       expect(ctrl.brandSelectedIndex).toEqual(0);
       // Should reset back to Distirbution simple option
-      expect(ctrl.filtersService.model.accountSelected.accountBrands).toEqual(ctrl.filters.accountBrands[0]);
+      expect(ctrl.filtersService.model.accountSelected.accountBrands).toEqual(ctrl.filtersService.accountFilters.accountBrands[0]);
     });
 
     it('Should set the correct totals object on brands view', function () {
@@ -560,39 +560,39 @@ describe('Unit: accountsController', function() {
 
   describe('Showing correct distirbution and velocity options', function () {
     function getDistirbutionBasedOnValue(accountEnum) {
-      var matchedObj = ctrl.filters.accountBrands.filter(function (account) {
+      var matchedObj = ctrl.filtersService.accountFilters.accountBrands.filter(function (account) {
         return account.value === accountEnum;
       });
       return matchedObj[0];
     }
     it('Should not hide distirbution Simple in brand view ', function () {
-      var distSimple = getDistirbutionBasedOnValue(ctrl.accountBrandEnum.distirbutionSimple);
+      var distSimple = getDistirbutionBasedOnValue(ctrl.filtersService.accountFilters.accountBrandEnum.distirbutionSimple);
       var val = ctrl.removeDistOptionsBasedOnView(distSimple);
       expect(val).toBeFalsy();
     });
 
     it('Should hide distirbution Effective in brand view ', function () {
-      var distSimple = getDistirbutionBasedOnValue(ctrl.accountBrandEnum.distirbutionEffective);
+      var distSimple = getDistirbutionBasedOnValue(ctrl.filtersService.accountFilters.accountBrandEnum.distirbutionEffective);
       var val = ctrl.removeDistOptionsBasedOnView(distSimple);
       expect(val).toBeTruthy();
     });
 
     it('Should hide distirbution Simple in package view ', function () {
       ctrl.brandSelectedIndex++;
-      var distSimple = getDistirbutionBasedOnValue(ctrl.accountBrandEnum.distirbutionSimple);
+      var distSimple = getDistirbutionBasedOnValue(ctrl.filtersService.accountFilters.accountBrandEnum.distirbutionSimple);
       var val = ctrl.removeDistOptionsBasedOnView(distSimple);
       expect(val).toBeTruthy();
     });
 
     it('Should show distirbution Effective in package view ', function () {
       ctrl.brandSelectedIndex++;
-      var distSimple = getDistirbutionBasedOnValue(ctrl.accountBrandEnum.distirbutionEffective);
+      var distSimple = getDistirbutionBasedOnValue(ctrl.filtersService.accountFilters.accountBrandEnum.distirbutionEffective);
       var val = ctrl.removeDistOptionsBasedOnView(distSimple);
       expect(val).toBeFalsy();
     });
 
     it('Should show Velocity in brand and package view ', function () {
-      var velocity = getDistirbutionBasedOnValue(ctrl.accountBrandEnum.velocity);
+      var velocity = getDistirbutionBasedOnValue(ctrl.filtersService.accountFilters.accountBrandEnum.velocity);
       var val = ctrl.removeDistOptionsBasedOnView(velocity);
       expect(val).toBeFalsy();
 
