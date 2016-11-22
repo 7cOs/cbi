@@ -91,7 +91,7 @@ div(row)
     .widget-header
       .dropdown-filter
         md-select(ng-model="a.filtersService.model.accountSelected.accountBrands" md-on-open="a.openSelect(true)" md-on-close="a.openSelect(false);" aria-label="Account Brands Filter" placeholder="Distribution (simple)")
-          md-option(ng-repeat="filter in a.filters.accountBrands" ng-if="!a.removeDistOptionsBasedOnView(filter)" aria-label="{{filter.name}}" ng-value="filter") {{filter.name}}
+          md-option(ng-repeat="filter in a.filtersService.accountFilters.accountBrands" ng-if="!a.removeDistOptionsBasedOnView(filter)" aria-label="{{filter.name}}" ng-value="filter") {{filter.name}}
       span.back-chevron(ng-if="a.brandSelectedIndex === 1" ng-click="a.prevTab()")
       p.brands {{a.brandWidgetTitle || 'All Brands'}}
     .widget-content
@@ -130,26 +130,26 @@ div(row)
             //- Velocity value
             //- Need to be checked if this class needs to be added
             //- ng-class="a.getClassBasedOnValue(a.displayBrandValue(a.currentTotalsObject.measures, 'velocity', 'distributionTimePeriod'))"
-            td(ng-if="a.filtersService.model.accountSelected.accountBrands.value === a.accountBrandEnum.velocity") {{a.displayBrandValue(a.currentTotalsObject.measures, 'velocity', 'distributionTimePeriod') | number:0 }}
+            td(ng-if="a.filtersService.model.accountSelected.accountBrands.value === a.filtersService.accountFilters.accountBrandEnum.velocity") {{a.displayBrandValue(a.currentTotalsObject.measures, 'velocity', 'distributionTimePeriod') | number:0 }}
 
             //- Velocity Trend
             //- For YA
-            td(ng-if="a.filtersService.model.accountSelected.accountBrands.value === a.accountBrandEnum.velocity") <span class="percentage" ng-if="a.checkIfVelocityPresent(item)">{{a.displayBrandValue(a.currentTotalsObject.measures, 'velocityTrend', 'distributionTimePeriod') | number:1}} %</span><span ng-if="!a.displayBrandValue(a.currentTotalsObject.measures, 'velocityTrend', 'distributionTimePeriod')">-</span>
+            td(ng-if="a.filtersService.model.accountSelected.accountBrands.value === a.filtersService.accountFilters.accountBrandEnum.velocity") <span class="percentage" ng-if="a.checkIfVelocityPresent(item)">{{a.displayBrandValue(a.currentTotalsObject.measures, 'velocityTrend', 'distributionTimePeriod') | number:1}} %</span><span ng-if="!a.displayBrandValue(a.currentTotalsObject.measures, 'velocityTrend', 'distributionTimePeriod')">-</span>
 
             //- Distributions TDs
             //- Distirbution value Simple
             //- ng-class="a.getClassBasedOnValue(a.displayBrandValue(a.currentTotalsObject.measures, 'distributionsSimple', 'distributionTimePeriod'))"
-            td(ng-if="a.filtersService.model.accountSelected.accountBrands.value === a.accountBrandEnum.distirbutionSimple") {{a.displayBrandValue(a.currentTotalsObject.measures, 'distributionsSimple', 'distributionTimePeriod') | number:0 }}
+            td(ng-if="a.filtersService.model.accountSelected.accountBrands.value === a.filtersService.accountFilters.accountBrandEnum.distirbutionSimple") {{a.displayBrandValue(a.currentTotalsObject.measures, 'distributionsSimple', 'distributionTimePeriod') | number:0 }}
 
             //- Distirbution value Effective
             //- ng-class="a.getClassBasedOnValue(a.displayBrandValue(a.currentTotalsObject.measures, 'distributionsEffective', 'distributionTimePeriod'))"
-            td(ng-if="a.filtersService.model.accountSelected.accountBrands.value === a.accountBrandEnum.distirbutionEffective") {{a.displayBrandValue(a.currentTotalsObject.measures, 'distributionsEffective', 'distributionTimePeriod') | number:0 }}
+            td(ng-if="a.filtersService.model.accountSelected.accountBrands.value === a.filtersService.accountFilters.accountBrandEnum.distirbutionEffective") {{a.displayBrandValue(a.currentTotalsObject.measures, 'distributionsEffective', 'distributionTimePeriod') | number:0 }}
 
             //- Distirbution Trend Simple
-            td(ng-class="a.getClassBasedOnValue(a.getTrendValues(a.currentTotalsObject.measures, 'distributionsSimple', 'distributionTimePeriod').value)" ng-if="a.filtersService.model.accountSelected.accountBrands.value === a.accountBrandEnum.distirbutionSimple") <span ng-bind="a.getTrendValues(a.currentTotalsObject.measures, 'distributionsSimple', 'distributionTimePeriod').displayValue"></span>
+            td(ng-class="a.getClassBasedOnValue(a.getTrendValues(a.currentTotalsObject.measures, 'distributionsSimple', 'distributionTimePeriod').value)" ng-if="a.filtersService.model.accountSelected.accountBrands.value === a.filtersService.accountFilters.accountBrandEnum.distirbutionSimple") <span ng-bind="a.getTrendValues(a.currentTotalsObject.measures, 'distributionsSimple', 'distributionTimePeriod').displayValue"></span>
 
             //- Distirbution Trend Effective
-            td(ng-class="a.getClassBasedOnValue(a.getTrendValues(a.currentTotalsObject.measures, 'distributionsEffective', 'distributionTimePeriod').value)" ng-if="a.filtersService.model.accountSelected.accountBrands.value === a.accountBrandEnum.distirbutionEffective") <span ng-bind="a.getTrendValues(a.currentTotalsObject.measures, 'distributionsEffective', 'distributionTimePeriod').displayValue"></span>
+            td(ng-class="a.getClassBasedOnValue(a.getTrendValues(a.currentTotalsObject.measures, 'distributionsEffective', 'distributionTimePeriod').value)" ng-if="a.filtersService.model.accountSelected.accountBrands.value === a.filtersService.accountFilters.accountBrandEnum.distirbutionEffective") <span ng-bind="a.getTrendValues(a.currentTotalsObject.measures, 'distributionsEffective', 'distributionTimePeriod').displayValue"></span>
 
       md-tabs(md-selected="a.brandSelectedIndex" ng-class="{'animate-disabled': a.disableAnimation}" md-dynamic-height)
         //-md-tab(ng-repeat="brand in a.userService.model.brandPerformance track by $index" label="{{brand.name}}")
@@ -170,37 +170,37 @@ div(row)
                 //- Velocity value
                 //- Need to be checked if this class needs to be added
                 //- ng-class="a.getClassBasedOnValue(a.displayBrandValue(item.measures, 'velocity', 'distributionTimePeriod'))"
-                td(ng-if="a.filtersService.model.accountSelected.accountBrands.value === a.accountBrandEnum.velocity") {{a.displayBrandValue(item.measures, 'velocity', 'distributionTimePeriod') | number:0 }}
+                td(ng-if="a.filtersService.model.accountSelected.accountBrands.value === a.filtersService.accountFilters.accountBrandEnum.velocity") {{a.displayBrandValue(item.measures, 'velocity', 'distributionTimePeriod') | number:0 }}
 
                 //- Velocity Trend
                 //- For YA
-                td(ng-if="a.filtersService.model.accountSelected.accountBrands.value === a.accountBrandEnum.velocity") <span class="percentage" ng-if="a.checkIfVelocityPresent(item)">{{a.displayBrandValue(item.measures, 'velocityTrend', 'distributionTimePeriod') | number:1}} %</span><span ng-if="!a.displayBrandValue(item.measures, 'velocityTrend', 'distributionTimePeriod')">-</span>
+                td(ng-if="a.filtersService.model.accountSelected.accountBrands.value === a.filtersService.accountFilters.accountBrandEnum.velocity") <span class="percentage" ng-if="a.checkIfVelocityPresent(item)">{{a.displayBrandValue(item.measures, 'velocityTrend', 'distributionTimePeriod') | number:1}} %</span><span ng-if="!a.displayBrandValue(item.measures, 'velocityTrend', 'distributionTimePeriod')">-</span>
 
                 //- Distributions TDs
                 //- Distirbution value Simple
                 //- ng-class="a.getClassBasedOnValue(a.displayBrandValue(item.measures, 'distributionsSimple', 'distributionTimePeriod'))"
-                td(ng-if="a.filtersService.model.accountSelected.accountBrands.value === a.accountBrandEnum.distirbutionSimple") {{a.displayBrandValue(item.measures, 'distributionsSimple', 'distributionTimePeriod') | number:0 }}
+                td(ng-if="a.filtersService.model.accountSelected.accountBrands.value === a.filtersService.accountFilters.accountBrandEnum.distirbutionSimple") {{a.displayBrandValue(item.measures, 'distributionsSimple', 'distributionTimePeriod') | number:0 }}
 
                 //- Distirbution value Effective
                 //- ng-class="a.getClassBasedOnValue(a.displayBrandValue(item.measures, 'distributionsEffective', 'distributionTimePeriod'))"
-                td(ng-if="a.filtersService.model.accountSelected.accountBrands.value === a.accountBrandEnum.distirbutionEffective") {{a.displayBrandValue(item.measures, 'distributionsEffective', 'distributionTimePeriod') | number:0 }}
+                td(ng-if="a.filtersService.model.accountSelected.accountBrands.value === a.filtersService.accountFilters.accountBrandEnum.distirbutionEffective") {{a.displayBrandValue(item.measures, 'distributionsEffective', 'distributionTimePeriod') | number:0 }}
 
                 //- Distirbution Trend Simple
-                td(ng-class="a.getClassBasedOnValue(a.getTrendValues(item.measures, 'distributionsSimple', 'distributionTimePeriod').value)" ng-if="a.filtersService.model.accountSelected.accountBrands.value === a.accountBrandEnum.distirbutionSimple") <span ng-bind="a.getTrendValues(item.measures, 'distributionsSimple', 'distributionTimePeriod').displayValue"></span>
+                td(ng-class="a.getClassBasedOnValue(a.getTrendValues(item.measures, 'distributionsSimple', 'distributionTimePeriod').value)" ng-if="a.filtersService.model.accountSelected.accountBrands.value === a.filtersService.accountFilters.accountBrandEnum.distirbutionSimple") <span ng-bind="a.getTrendValues(item.measures, 'distributionsSimple', 'distributionTimePeriod').displayValue"></span>
 
                 //- Distirbution Trend Effective
-                td(ng-class="a.getClassBasedOnValue(a.getTrendValues(item.measures, 'distributionsEffective', 'distributionTimePeriod').value)" ng-if="a.filtersService.model.accountSelected.accountBrands.value === a.accountBrandEnum.distirbutionEffective") <span ng-bind="a.getTrendValues(item.measures, 'distributionsEffective', 'distributionTimePeriod').displayValue"></span>
+                td(ng-class="a.getClassBasedOnValue(a.getTrendValues(item.measures, 'distributionsEffective', 'distributionTimePeriod').value)" ng-if="a.filtersService.model.accountSelected.accountBrands.value === a.filtersService.accountFilters.accountBrandEnum.distirbutionEffective") <span ng-bind="a.getTrendValues(item.measures, 'distributionsEffective', 'distributionTimePeriod').displayValue"></span>
 
   div.scorecard-chart(column='6')
     .widget-header
       .dropdown-filter.narrow
         md-select(ng-model="a.filtersService.model.accountSelected.accountMarkets" md-on-open="a.openSelect(true)" md-on-close="a.openSelect(false)" aria-label="Account Markets Filter")
-          md-option(ng-repeat="filter in a.filters.accountMarkets" aria-label="{{filter.name}}" value="{{filter.name}}") {{filter.name}}
+          md-option(ng-repeat="filter in a.filtersService.accountFilters.accountMarkets" aria-label="{{filter.name}}" value="{{filter.name}}") {{filter.name}}
       .header-selector
         md-select.market(ng-model="a.filtersService.model.selected.valuesVsTrend" md-on-open="a.openSelect(true)" md-on-close="a.openSelect(false)" placeholder="Top 10 (Values)" aria-label="Values versus Trends Filter")
-          md-option(ng-repeat="filter in a.filters.valuesVsTrend" aria-label="{{filter.name}}" value="{{filter.name}}") {{filter.name}}
+          md-option(ng-repeat="filter in a.filtersService.accountFilters.valuesVsTrend" aria-label="{{filter.name}}" value="{{filter.name}}") {{filter.name}}
         md-select(ng-model="a.filtersService.model.selected.accountTypes" md-on-open="a.openSelect(true)" md-on-close="a.openSelect(false); a.updateTopBottom();" ng-change="a.setMarketTab(a.filtersService.model.selected.accountTypes)" placeholder="{{a.filtersService.model.selected.accountTypes || a.accountTypesDefault}}" aria-label="Account Type Filter")
-          md-option(ng-repeat="filter in a.filters.accountTypes" aria-label="{{filter.name}}" value="{{filter.name}}") {{filter.name}}
+          md-option(ng-repeat="filter in a.filtersService.accountFilters.accountTypes" aria-label="{{filter.name}}" value="{{filter.name}}") {{filter.name}}
     .widget-content.clearfix
       .chart-data
         table.fixed-layout(cellspacing="0" cellpadding="0")

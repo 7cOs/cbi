@@ -28,7 +28,8 @@ module.exports = /*  @ngInject */
       getTargetLists: getTargetLists,
       addTargetList: addTargetList,
       sendOpportunity: sendOpportunity,
-      isValidValues: isValidValues
+      isValidValues: isValidValues,
+      getTopBottomSnapshot: getTopBottomSnapshot
     };
 
     return service;
@@ -461,14 +462,41 @@ module.exports = /*  @ngInject */
     }
 
     function getTopBottomSnapshot(snapshotType, params) {
+      var snapshotPromise = $q.defer(),
+          url, baseUrl = '/api/users/' + service.model.currentUser.employeeID;
+
       switch (snapshotType.level) {
         case 1:
-
+          baseUrl += '/performance/topBottomSnapshot/distributors';
           break;
         case 2:
+          baseUrl += '/performance/topBottomSnapshot/accounts';
+          break;
 
+        case 3:
+          baseUrl += '/performance/topBottomSnapshot/subaccounts';
+          break;
+
+        case 4:
+          baseUrl += '/performance/topBottomSnapshot/stores';
           break;
       }
+
+      url = apiHelperService.request(baseUrl, params);
+      $http.get(url)
+        .then(getTopBottomSnapshotSuccess)
+        .catch(getTopBottomSnapshotFail);
+
+      function getTopBottomSnapshotSuccess(response) {
+        console.log('[getTopBottomSnapshot.data.performance.length]', response.data.performance.length);
+        snapshotPromise.resolve(response.data);
+      }
+
+      function getTopBottomSnapshotFail(error) {
+        snapshotPromise.reject(error);
+      }
+
+      return snapshotPromise.promise;
     }
 
     /**

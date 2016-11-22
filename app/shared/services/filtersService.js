@@ -2,7 +2,7 @@
 
 module.exports = /*  @ngInject */
   function filtersService($filter) {
-    var paramsNotIncludedInSaveFilter = ['opportunityType', 'opportunitiesType', 'placementType', 'premises', 'retailer', 'depletionsTimePeriod', 'distributionTimePeriod', 'accountSelected', 'selectedTemplate', 'timePeriod', 'tradeChannels', 'trend', 'defaultSort', 'appliedFilter'];
+    var paramsNotIncludedInSaveFilter = ['opportunityType', 'opportunitiesType', 'placementType', 'premises', 'retailer', 'depletionsTimePeriod', 'distributionTimePeriod', 'accountSelected', 'selectedTemplate', 'timePeriod', 'tradeChannels', 'trend', 'defaultSort', 'appliedFilter', 'topBottomSnapshotTypes'];
     var model = {
       account: [],
       appliedFilter: {
@@ -195,11 +195,102 @@ module.exports = /*  @ngInject */
         }
       ]
     };
+
+    var trendPropertyNames = {
+      'distributionsSimple': [
+        'distributionsSimpleTrend',
+        'planDistirbutionSimpleTrend'
+      ],
+      'distributionsEffective': [
+        'distributionsEffectiveTrend',
+        'planDistirbutionEffectiveTrend'
+      ],
+      'depletions': [
+        'depletionsTrend',
+        'planDepletionTrend'
+      ]
+    };
+
+    var accountFilters = {
+      placementType: [{
+        name: 'Simple'
+      }, {
+        name: 'Effective'
+      }],
+      trend: [{
+        name: 'vs YA'
+      }, {
+        name: 'vs ABP'
+      }],
+      premises: [{
+        name: 'All'
+      }, {
+        name: 'Off-Premise'
+      }, {
+        name: 'On-Premise'
+      }],
+      accountBrands: [{
+        name: 'Distribution (simple)',
+        depletionTableHeaderText: 'Distribution(s)',
+        value: 1
+      }, {
+        name: 'Distribution (effective)',
+        depletionTableHeaderText: 'Distribution(e)',
+        value: 2
+      }, {
+        name: 'Velocity',
+        depletionTableHeaderText: 'Velocity',
+        value: 3
+      }],
+      accountMarkets: [{
+        name: 'Depletions'
+      }, {
+        name: 'Distribution (simple)'
+      }, {
+        name: 'Distribution (effective)'
+      }, {
+        name: 'Velocity'
+      }],
+      valuesVsTrend: [{
+        name: 'Top 10 (Values)'
+      }, {
+        name: 'Top 10 (Trend)'
+      }, {
+        name: 'Bottom 10 (Values)'
+      }, {
+        name: 'Bottom 10 (Trend)'
+      }],
+      accountTypes: [{
+        name: 'Distributors',
+        values: '1'
+      }, {
+        name: 'Accounts',
+        values: '2'
+      }, {
+        name: 'Sub-Accounts',
+        values: '3'
+      }, {
+        name: 'Stores',
+        values: '4'
+      }],
+      storeTypes: [{
+        name: 'Chain'
+      }, {
+        name: 'Independent'
+      }],
+      accountBrandEnum: {
+        'distirbutionSimple': 1,
+        'distirbutionEffective': 2,
+        'velocity': 3
+      }
+    };
+
     var lastEndingTimePeriod = {
       endingPeriodType: 'year',
       depletionValue: model.depletionsTimePeriod.year[2],
       timePeriodValue: model.distributionTimePeriod.year[1]
     };
+
     var service = {
       model: model,
       addSortFilter: addSortFilter,
@@ -210,7 +301,9 @@ module.exports = /*  @ngInject */
       checkForAuthorizationFlag: checkForAuthorizationFlag,
       resetSort: resetSort,
       cleanUpSaveFilterObj: cleanUpSaveFilterObj,
-      lastEndingTimePeriod: lastEndingTimePeriod
+      lastEndingTimePeriod: lastEndingTimePeriod,
+      accountFilters: accountFilters,
+      trendPropertyNames: trendPropertyNames
     };
 
     return service;
