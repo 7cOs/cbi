@@ -1,5 +1,5 @@
 describe('Unit: list controller', function() {
-  var scope, ctrl, q, httpBackend, mdDialog, filtersService, loaderService, opportunitiesService, targetListService, toastService, userService;
+  var scope, ctrl, q, httpBackend, mdDialog, state, filtersService, loaderService, opportunitiesService, targetListService, toastService, userService;
 
   beforeEach(function() {
     angular.mock.module('ui.router');
@@ -7,10 +7,11 @@ describe('Unit: list controller', function() {
     angular.mock.module('cf.common.services');
     angular.mock.module('cf.common.components.list');
 
-    inject(function($rootScope, _$q_, _$httpBackend_, _$mdDialog_, $controller, _filtersService_, _loaderService_, _opportunitiesService_, _targetListService_, _toastService_, _userService_) {
+    inject(function($rootScope, _$q_, _$httpBackend_, _$mdDialog_, _$state_, $controller, _filtersService_, _loaderService_, _opportunitiesService_, _targetListService_, _toastService_, _userService_) {
       scope = $rootScope.$new();
       q = _$q_;
       mdDialog = _$mdDialog_;
+      state = _$state_;
       httpBackend = _$httpBackend_;
 
       filtersService = _filtersService_;
@@ -126,7 +127,7 @@ describe('Unit: list controller', function() {
     expect(typeof (ctrl.depletionsVsYaPercent)).toEqual('function');
   });
 
-  describe('sortBy method', function() {
+  describe('[list.sortBy] method', function() {
     it('should have default sort settings applied (store ascending)', function() {
       expect(filtersService.model.appliedFilter.sort.sortArr[0].str).toEqual('store');
       expect(filtersService.model.appliedFilter.sort.sortArr[0].asc).toEqual(true);
@@ -146,12 +147,14 @@ describe('Unit: list controller', function() {
     });
 
     it('should toggle asc when the same sort is applied', function() {
+      state.current.name = 'opportunities';
       ctrl.sortBy('store');
 
       expect(filtersService.model.appliedFilter.sort.sortArr[0]).toEqual({str: 'store', asc: false});
     });
 
     it('should switch the sort string and set asc to true when a new sort is applied', function() {
+      state.current.name = 'opportunities';
       ctrl.sortBy('segmentation');
 
       expect(filtersService.model.appliedFilter.sort.sortArr[0]).toEqual({str: 'segmentation', asc: true});
@@ -164,10 +167,58 @@ describe('Unit: list controller', function() {
     });
 
     it('should send request to get opportunities when sort is applied', function() {
+      state.current.name = 'opportunities';
       ctrl.sortBy('store');
       expect(opportunitiesService.getOpportunities).toHaveBeenCalled();
     });
+
+    it('should toggle the boolean ascending on function call', function() {
+      state.current.name = 'target-list-detail';
+      expect(ctrl.ascending).toEqual(true);
+      ctrl.sortBy();
+      expect(ctrl.ascending).toEqual(false);
+    });
+
+    it('should reset the default orderName when on the target-list-detail page', function() {
+      state.current.name = 'target-list-detail';
+      expect(ctrl.orderName).toEqual(['store.segmentation', 'store.depletionsCurrentYearToDate']);
+      ctrl.sortBy();
+      expect(ctrl.orderName).toEqual([]);
+    });
+
+    it('should assign ascending orderBy for store, depletions and segmentation when each is provided as param and ascending is true', function() {
+      state.current.name = 'target-list-detail';
+
+      ctrl.ascending = false;
+      ctrl.sortBy('store');
+      expect(ctrl.orderName).toEqual(['store.name']);
+
+      ctrl.ascending = false;
+      ctrl.sortBy('depletions');
+      expect(ctrl.orderName).toEqual(['store.depletionsCurrentYearToDate']);
+
+      ctrl.ascending = false;
+      ctrl.sortBy('segmentation');
+      expect(ctrl.orderName).toEqual(['store.segmentation']);
+    });
+
+    it('should assign descending orderBy for store, depletions and segmentation when each is provided as param and ascending is false', function() {
+      state.current.name = 'target-list-detail';
+
+      ctrl.ascending = true;
+      ctrl.sortBy('store');
+      expect(ctrl.orderName).toEqual(['-store.name']);
+
+      ctrl.ascending = true;
+      ctrl.sortBy('depletions');
+      expect(ctrl.orderName).toEqual(['-store.depletionsCurrentYearToDate']);
+
+      ctrl.ascending = true;
+      ctrl.sortBy('segmentation');
+      expect(ctrl.orderName).toEqual(['-store.segmentation']);
+    });
   });
+
   describe('selectAll functionality', function() {
     beforeEach(function() {
       opportunitiesService.model.opportunities = [
@@ -1257,4 +1308,5 @@ describe('Unit: list controller', function() {
       expect(mdDialog.show.calls.count()).toEqual(1);
     });
   });
+
 });

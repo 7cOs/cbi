@@ -38,7 +38,6 @@
 button.icon.select-all(ng-click="list.toggleSelectAllStores()") {{!list.isSelectAllActivated ? 'Select All' : 'Un-Select All'}}
 button.icon.narrow-icon.expand-all(ng-click="list.accordion.expandAll()" ng-disabled="list.allOpportunitiesExpanded()") Expand All
 button.icon.narrow-icon.collapse-all(ng-click="list.accordion.collapseAll()" ng-disabled="list.noOpportunitiesExpanded()") Collapse All
-
 p.list-disabled-message {{::list.disabledMessage}}
 
 v-accordion.styled-list(multiple="" id="opportunities" control="list.accordion" onexpand="list.expandCallback(item)" oncollapse="list.collapseCallback(item)" column='12' )
@@ -51,7 +50,7 @@ v-accordion.styled-list(multiple="" id="opportunities" control="list.accordion" 
       div(column='3')
         label(ng-click="list.sortBy('store')" ng-class="{ 'header-bold' : list.filtersService.model.appliedFilter.sort.sortArr[0].str === 'store'}")
           | Store / Number
-          span(ng-class="{'chevron-up-small' : (!list.filtersService.model.appliedFilter.sort.sortArr[0].asc && list.filtersService.model.appliedFilter.sort.sortArr[0].str === 'store')}").chevron-down-small
+          span(ng-class="{'chevron-up-small' : (!list.filtersService.model.appliedFilter.sort.sortArr[0].asc && list.filtersService.model.appliedFilter.sort.sortArr[0].str === 'store') || list.ascending && list.orderName[0] === 'store.name'}").chevron-down-small
       div(column='4')
         label Address
       div.text-center(column='2')
@@ -59,13 +58,13 @@ v-accordion.styled-list(multiple="" id="opportunities" control="list.accordion" 
       div(column='1')
         label(ng-click="list.sortBy('depletions')" ng-class="{ 'header-bold' : list.filtersService.model.appliedFilter.sort.sortArr[0].str === 'depletions'}")
           | Depletions CYTD
-          span(ng-class="{'chevron-up-small' : (!list.filtersService.model.appliedFilter.sort.sortArr[0].asc && list.filtersService.model.appliedFilter.sort.sortArr[0].str === 'depletions')}").chevron-down-small
+          span(ng-class="{'chevron-up-small' : (!list.filtersService.model.appliedFilter.sort.sortArr[0].asc && list.filtersService.model.appliedFilter.sort.sortArr[0].str === 'depletions') || list.ascending && list.orderName[0] === 'store.depletionsCurrentYearToDate'}").chevron-down-small
       div(column='1')
         label vs Ya%
       div(column='1')
         label(ng-click="list.sortBy('segmentation')" ng-class="{ 'header-bold' : list.filtersService.model.appliedFilter.sort.sortArr[0].str === 'segmentation'}")
           | Segmentation
-          span(ng-class="{'chevron-up-small' : (!list.filtersService.model.appliedFilter.sort.sortArr[0].asc && list.filtersService.model.appliedFilter.sort.sortArr[0].str === 'segmentation')}").chevron-down-small
+          span(ng-class="{'chevron-up-small' : (!list.filtersService.model.appliedFilter.sort.sortArr[0].asc && list.filtersService.model.appliedFilter.sort.sortArr[0].str === 'segmentation') || list.ascending && list.orderName[0] === 'store.segmentation'}").chevron-down-small
   div(ng-if="!list.opportunitiesService.model.filterApplied").no-opportunities
     h4 To get started, select some filters!
     p Narrow your opportunities by selecting a <strong>Retailer</strong> and/or a <strong>Distributor</strong>.
@@ -77,7 +76,7 @@ v-accordion.styled-list(multiple="" id="opportunities" control="list.accordion" 
         span Maximum of 5 <strong>Distributors</strong> and/or
       li
         span Maximum of 10 <strong> Retailers</strong>
-  v-pane.list-item(row ng-repeat="opportunity in list.opportunitiesService.model.opportunities |  filter : {'dismissed': false}" expanded='opportunity.isExpanded')
+  v-pane.list-item(row ng-repeat="opportunity in list.opportunitiesService.model.opportunities | filter : {'dismissed': false} | orderBy : list.orderName" expanded='opportunity.isExpanded')
     .shadow-wrap.bottom
       .header-wrapper(ng-click="list.toggleOpportunitiesInStores(opportunity, list.selected)")
         div.checkbox-wrapper(ng-click="list.toggleOpportunitiesInStores(opportunity, list.selected)")
@@ -107,7 +106,6 @@ v-accordion.styled-list(multiple="" id="opportunities" control="list.accordion" 
                 img(ng-if='list.displayBrandIcon(opportunity.brands, "victoria")' src='assets/img/brands/brand-lg-victoria.svg')
                 img(ng-if='list.displayBrandIcon(opportunity.brands, "ballast point")' src='assets/img/brands/brand-lg-ballastpoint.svg')
                 img(ng-if='list.displayBrandIcon(opportunity.brands, "unknown")' src='assets/img/brands/brand-lg-unknown.svg')
-
               div.small-icons
                 img(ng-if='!list.displayBrandIcon(opportunity.brands, "corona extra")' src='assets/img/brands/brand-sm-coronaextra.svg')
                 img(ng-if='!list.displayBrandIcon(opportunity.brands, "corona light")' src='assets/img/brands/brand-sm-coronalite.svg')
