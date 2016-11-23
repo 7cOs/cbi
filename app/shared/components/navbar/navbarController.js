@@ -82,6 +82,7 @@ module.exports = /*  @ngInject */
     vm.closeMenus = closeMenus;
     vm.closeModal = closeModal;
     vm.getTargetLists = getTargetLists;
+    vm.getOpportunity = getOpportunity;
     vm.markRead = markRead;
     vm.markSeen = markSeen;
     vm.modalAddOpportunityForm = modalAddOpportunityForm;
@@ -233,6 +234,13 @@ module.exports = /*  @ngInject */
           vm.targetLists = result.owned;
         });
       }
+    }
+
+    // on notification click > get the opp details > navigate to opportunities page > add filters to filtersService.service.model.selected
+    function getOpportunity(opportunityId) {
+      opportunitiesService.getOpportunities(opportunityId).then(function() {
+
+      });
     }
 
     // ***************
