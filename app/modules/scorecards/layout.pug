@@ -87,7 +87,7 @@ div.my-scorecards
             td(ng-class="{'negative': !s.isPositive(measure.vsPlan)}") {{measure.vsPlan | number:0 }}
             td.no-border(ng-class="{'negative': !s.isPositive(measure.vsPlanPercent)}") {{measure.vsPlanPercent | number:1}}%
             td(ng-class="{'negative': !s.isPositive(measure.depletionsBUTrend)}") {{measure.depletionsBUTrend | number:1}}%
-            td.no-border.rotate(ng-class="s.isPositive(measure.depletionsBUTrend) ? 'positive' : 'negative'") <span>&#9660;</span>
+            td.no-border.rotate(ng-class="s.isPositive(measure.depletionsBUTrend) ? 'positive' : 'negative'") <span class="triangle-icon">&#9660;</span>
             td(ng-class="{'negative': !s.isPositive(measure.depletions / s.totalRow.depletions)}") {{(measure.depletions / s.totalRow.depletions) * 100 | number:1}}%
             td.no-border(ng-class="{'negative': !s.isPositive(measure.depletionsBU / s.totalRow.depletionsBU)}") {{(measure.depletionsBU / s.totalRow.depletionsBU) * 100 | number:1}}%
             td(ng-class="{'negative': !s.isPositive(measure.depletionsGap / s.totalRow.gap)}") {{(measure.depletionsGap / s.totalRow.gap) * 100 | number:1}}%
@@ -176,8 +176,8 @@ div.my-scorecards
               span(ng-if="s.distributionRadioOptions.selected.placementType === 'Effective'" ng-class="{'negative': !s.isPositive(s.totalDistributions[0].distributionsEffectiveBUTrend)}") {{s.totalDistributions[0].distributionsEffectiveBUTrend | number:1 }}%
               span(ng-if="s.distributionRadioOptions.selected.placementType === 'Simple'" ng-class="{'negative': !s.isPositive(s.totalDistributions[0].distributionsSimpleBUTrend)}") {{s.totalDistributions[0].distributionsSimpleBUTrend | number:1 }}%
             td.column-total.no-border
-              span.rotate(ng-if="s.distributionRadioOptions.selected.placementType === 'Effective'" ng-class="s.isPositive(s.totalDistributions[0].distributionsEffectiveBUTrend) ? 'positive' : 'negative'") <span>&#9660;</span>
-              span.rotate(ng-if="s.distributionRadioOptions.selected.placementType === 'Simple'" ng-class="s.isPositive(s.totalDistributions[0].distributionsSimpleBUTrend) ? 'positive' : 'negative'") <span>&#9660;</span>
+              span.rotate(ng-if="s.distributionRadioOptions.selected.placementType === 'Effective'" ng-class="s.isPositive(s.totalDistributions[0].distributionsEffectiveBUTrend) ? 'positive' : 'negative'") <span class="triangle-icon">&#9660;</span>
+              span.rotate(ng-if="s.distributionRadioOptions.selected.placementType === 'Simple'" ng-class="s.isPositive(s.totalDistributions[0].distributionsSimpleBUTrend) ? 'positive' : 'negative'") <span class="triangle-icon">&#9660;</span>
             td.column-total 100%
             td.column-total.no-border 12%
             td.column-total 100%
@@ -203,8 +203,8 @@ div.my-scorecards
               span(ng-if="s.distributionRadioOptions.selected.placementType === 'Simple'" ng-class="{'negative': !s.isPositive(measure.distributionsSimpleBUTrend)}") {{measure.distributionsSimpleBUTrend | number:1}}%
               span(ng-if="s.distributionRadioOptions.selected.placementType === 'Effective'" ng-class="{'negative': !s.isPositive(measure.distributionsEffectiveBUTrend)}") {{measure.distributionsEffectiveBUTrend | number:1}}%
             td.no-border
-              span(ng-if="s.distributionRadioOptions.selected.placementType === 'Simple'" ng-class="s.isPositive(measure.distributionsSimpleBUTrend) ? 'positive' : 'negative'") <span>&#9660;</span>
-              span(ng-if="s.distributionRadioOptions.selected.placementType === 'Effective'" ng-class="s.isPositive(measure.distributionsEffectiveBUTrend) ? 'positive' : 'negative'") <span>&#9660;</span>
+              span(ng-if="s.distributionRadioOptions.selected.placementType === 'Simple'" ng-class="s.isPositive(measure.distributionsSimpleBUTrend) ? 'positive' : 'negative'") <span class="triangle-icon">&#9660;</span>
+              span(ng-if="s.distributionRadioOptions.selected.placementType === 'Effective'" ng-class="s.isPositive(measure.distributionsEffectiveBUTrend) ? 'positive' : 'negative'") <span class="triangle-icon">&#9660;</span>
             td
               span(ng-if="s.distributionRadioOptions.selected.placementType === 'Simple'" ng-class="{'negative': !s.isPositive(measure.distributionsSimple / s.totalDistributions[0].distributionsSimple)}") {{(measure.distributionsSimple / s.totalDistributions[0].distributionsSimple) * 100 | number:1 }}%
               span(ng-if="s.distributionRadioOptions.selected.placementType === 'Effective'" ng-class="{'negative': !s.isPositive(measure.distributionsEffective / s.totalDistributions[0].distributionsEffective)}") {{(measure.distributionsEffective / s.totalDistributions[0].distributionsEffective) * 100 | number:1 }}%

@@ -438,17 +438,17 @@ list {
 
 .positive {
 
-  span {
+  .triangle-icon {
     color: $green;
     display: block;
   }
 
-  &.rotate span {
+  &.rotate .triangle-icon {
     transform: rotate(180deg);
   }
 }
 
-.negative span {
+.negative .triangle-icon {
   color: $red;
   display: block;
 }
