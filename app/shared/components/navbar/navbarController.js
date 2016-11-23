@@ -154,6 +154,18 @@ module.exports = /*  @ngInject */
 
     // Add Opportunity
     function addOpportunity(opportunity) {
+      var targetListToFind = opportunity.properties.targetList,
+          model = userService.model.targetLists.ownedNotArchivedTargetLists;
+
+      angular.forEach(model, function(key, value) {
+        if (key.id === targetListToFind) {
+          model[value].dateOpportunitiesUpdated = new Date();
+          var tempModel = model[value];
+          console.log(tempModel);
+          model.splice(value, 1).push(tempModel);
+        }
+      });
+
       opportunity.properties.store = vm.chosenStoreObject;
       opportunity.properties.product = vm.chosenProductObject;
       if (saveOpportunity(opportunity)) {
