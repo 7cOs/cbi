@@ -57,7 +57,7 @@ module.exports = /*  @ngInject */
     function addAutocompleteChip(chip, filter, tradeChannel, id) {
       if (chip) {
         // Add to Chip Model
-        if (id && id.length < 5) filter === 'brand';
+        if (id && id.length < 5) filter = 'brand';
         var tempChip = {
           name: chip,
           id: id,

@@ -10,8 +10,7 @@ module.exports =
       title: 'Opportunities',
       params: {
         resetFiltersOnLoad: true,
-        applyFiltersOnLoad: false,
-        getDataOnLoad: false
+        applyFiltersOnLoad: false
       },
       templateUrl: './app/modules/opportunities/layout.html',
       controller: 'opportunitiesController',

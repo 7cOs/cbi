@@ -190,7 +190,8 @@ module.exports = /*  @ngInject */
     function goToOpportunities() {
       $state.go('opportunities', {
         resetFiltersOnLoad: false,
-        getDataOnLoad: true
+        applyFiltersOnLoad: true,
+        referrer: 'accounts'
       });
     }
 
@@ -239,7 +240,7 @@ module.exports = /*  @ngInject */
 
     function resetFilters() {
       vm.filterModel = angular.copy(filterModelTemplate);
-      filtersService.resetFilters();
+      chipsService.resetFilters(chipsService.model);
       apply(false);
     }
 
@@ -291,6 +292,12 @@ module.exports = /*  @ngInject */
         filtersService.model.selected.store = [];
         filtersService.model.store = '';
       }
+
+      for (var i = 0; i < chipsService.model.length; i++) {
+        if (chipsService.model[i].type === filterModelProperty) chipsService.model.splice(i, 1);
+      }
+
+      chipsService.addAutocompleteChip(result.name, filterModelProperty, false);
 
       apply(false);
     }

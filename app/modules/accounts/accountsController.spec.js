@@ -325,7 +325,8 @@ describe('Unit: accountsController', function() {
 
       expect($state.go).toHaveBeenCalledWith('opportunities', {
         resetFiltersOnLoad: false,
-        getDataOnLoad: true
+        applyFiltersOnLoad: true,
+        referrer: 'accounts'
       });
       expect($state.go.calls.count()).toEqual(1);
     });
