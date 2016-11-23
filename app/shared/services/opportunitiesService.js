@@ -39,6 +39,7 @@ module.exports = /*  @ngInject */
       var opportunitiesPromise = $q.defer(),
           url = opportunityID ? apiHelperService.request('/api/opportunities/' + opportunityID) : apiHelperService.request('/api/opportunities/', filterPayload);
 
+      service.model.opportunities = [];
       $http.get(url)
         .then(getOpportunitiesSuccess)
         .catch(getOpportunitiesFail);
@@ -48,7 +49,6 @@ module.exports = /*  @ngInject */
         var newOpportunityArr = [],
             store,
             storePlaceholder;
-        service.model.opportunities = [];
 
         // trigger no opps modal
         if (response.data.opportunities.length < 1) { service.model.noOpportunitiesFound = true; };
