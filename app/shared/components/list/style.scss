@@ -437,15 +437,20 @@ list {
 }
 
 .positive {
-  color: $green;
 
-  &.rotate {
+  span {
+    color: $green;
+    display: block;
+  }
+
+  &.rotate span {
     transform: rotate(180deg);
   }
 }
 
-.negative {
+.negative span {
   color: $red;
+  display: block;
 }
 
 .vs-ya {

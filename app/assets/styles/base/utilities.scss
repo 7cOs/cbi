@@ -135,3 +135,8 @@ ul {
 [ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
   display: none !important;
 }
+
+.disable-ng-animate.ng-animate,
+.disable-ng-animate .ng-animate {
+  transition: none !important;
+}
