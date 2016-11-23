@@ -437,6 +437,7 @@ list {
 }
 
 .positive {
+  color: $green;
 
   .triangle-icon {
     color: $green;
@@ -448,9 +449,13 @@ list {
   }
 }
 
-.negative .triangle-icon {
+.negative {
   color: $red;
-  display: block;
+
+  .triangle-icon {
+    color: $red;
+    display: block;
+  }
 }
 
 .vs-ya {
