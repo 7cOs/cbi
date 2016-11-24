@@ -264,6 +264,7 @@ module.exports = /*  @ngInject */
           description: '',
           opportunities: [],
           collaborators: [],
+          targetListShares: [],
           collaborateAndInvite: false
         };
       });
