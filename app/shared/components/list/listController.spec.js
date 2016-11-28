@@ -179,13 +179,6 @@ describe('Unit: list controller', function() {
       expect(ctrl.ascending).toEqual(false);
     });
 
-    it('should reset the default orderName when on the target-list-detail page', function() {
-      state.current.name = 'target-list-detail';
-      expect(ctrl.orderName).toEqual(['store.segmentation', 'store.depletionsCurrentYearToDate']);
-      ctrl.sortBy();
-      expect(ctrl.orderName).toEqual([]);
-    });
-
     it('should assign ascending orderBy for store, depletions and segmentation when each is provided as param and ascending is true', function() {
       state.current.name = 'target-list-detail';
 

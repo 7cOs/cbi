@@ -76,6 +76,10 @@ list {
       font-weight: $bold;
       color: $black-2;
     }
+
+    .sort {
+      cursor: pointer;
+    }
   }
 
   .cell-parent > div {
