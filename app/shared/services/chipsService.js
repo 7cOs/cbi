@@ -57,7 +57,7 @@ module.exports = /*  @ngInject */
     function addAutocompleteChip(chip, filter, tradeChannel, id) {
       if (chip) {
         // Add to Chip Model
-        if (id && id.length < 5) filter === 'brand';
+        if (id && id.length < 5) filter = 'brand';
         var tempChip = {
           name: chip,
           id: id,
@@ -225,7 +225,7 @@ module.exports = /*  @ngInject */
       } else if (typeof chip.type === 'string') {
         filtersService.model.selected[chip.type] = '';
       } /* else if (typeof chip.type === 'boolean') { // dont think this is used. leaving it in just in case i breaked something
-        console.log('hiya');
+        console.log('pls no');
         filtersService.model.selected[chip.type] = false;
       } */
 

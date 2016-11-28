@@ -153,24 +153,27 @@ module.exports = /*  @ngInject */
       // reset all chips and filters on page init
       if (vm.resetFiltersOnLoad) {
         chipsService.resetChipsFilters(chipsService.model);
-      } else {
-        if (filtersService.model.selected.currentFilter) {
-          applySavedFilter(filtersService.model.currentFilter.ev, filtersService.model.currentFilter);
-        }
+      } else if (!vm.resetFiltersOnLoad && filtersService.model.selected.currentFilter) {
+        applySavedFilter(filtersService.model.currentFilter.ev, filtersService.model.currentFilter);
       }
-      $state.params.resetFiltersOnLoad = true;
 
       // apply filters on init if requested
       if (vm.applyFiltersOnLoad) {
+        if ($state.params.referrer === 'accounts') {
+          delete $state.params.referrer;
+        }
+
+        console.log(chipsService.model);
+
         chipsService.applyFilters();
       }
+
+      // reset state params
       $state.params.applyFiltersOnLoad = false;
+      $state.params.resetFiltersOnLoad = true;
 
       // closes filter box
       filtersService.model.expanded = false;
-
-      // Set this to have a list load with the page
-      // chipsService.applyFilters();
 
       // go to a specific opportunity on load and then set to null if specified
       if (opportunitiesService.model.opportunityId !== null) {
@@ -178,12 +181,6 @@ module.exports = /*  @ngInject */
           opportunitiesService.model.opportunities = data;
           opportunitiesService.model.opportunityId = null;
         });
-      }
-
-      if ($state.params.getDataOnLoad) {
-        chipsService.applyFilters();
-        // To Do: apply chips ui, apply selected filters ui
-        $state.params.getDataOnLoad = false;
       }
     } // end init
 
