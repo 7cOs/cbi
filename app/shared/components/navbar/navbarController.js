@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports = /*  @ngInject */
-  function navbarController($rootScope, $scope, $state, $window, $mdPanel, $mdDialog, $mdMenu, $mdSelect, $anchorScroll, notificationsService, opportunitiesService, targetListService, userService, versionService, loaderService, ieHackService, toastService) {
+  function navbarController($rootScope, $scope, $state, $window, $mdPanel, $mdDialog, $mdMenu, $mdSelect, $anchorScroll, notificationsService, opportunitiesService, targetListService, userService, versionService, loaderService, ieHackService, toastService, moment) {
 
     // ****************
     // CONTROLLER SETUP
@@ -155,14 +155,13 @@ module.exports = /*  @ngInject */
     // Add Opportunity
     function addOpportunity(opportunity) {
       var targetListToFind = opportunity.properties.targetList,
-          model = userService.model.targetLists.ownedNotArchivedTargetLists;
+          model = userService.model.targetLists.owned;
 
       angular.forEach(model, function(key, value) {
         if (key.id === targetListToFind) {
-          model[value].dateOpportunitiesUpdated = new Date();
+          model[value].dateOpportunitiesUpdated = moment().format();
           var tempModel = model[value];
-          console.log(tempModel);
-          model.splice(value, 1).push(tempModel);
+          model.splice(value, 1).unshift(tempModel);
         }
       });
 
