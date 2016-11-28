@@ -29,7 +29,8 @@ module.exports = /*  @ngInject */
       addTargetList: addTargetList,
       sendOpportunity: sendOpportunity,
       isValidValues: isValidValues,
-      getTopBottomSnapshot: getTopBottomSnapshot
+      getTopBottomSnapshot: getTopBottomSnapshot,
+      getCurrentTopBottomView: getCurrentTopBottomView
     };
 
     return service;
@@ -461,11 +462,15 @@ module.exports = /*  @ngInject */
       return brands;
     }
 
+    function getCurrentTopBottomView(snapshotData) {
+      // TODO
+    }
+
     function getTopBottomSnapshot(snapshotType, params) {
       var snapshotPromise = $q.defer(),
           url, baseUrl = '/api/users/' + service.model.currentUser.employeeID;
 
-      switch (snapshotType.level) {
+      switch (snapshotType.value) {
         case 1:
           baseUrl += '/performance/topBottomSnapshot/distributors';
           break;
@@ -474,7 +479,7 @@ module.exports = /*  @ngInject */
           break;
 
         case 3:
-          baseUrl += '/performance/topBottomSnapshot/subaccounts';
+          baseUrl +=  '/performance/topBottomSnapshot/subaccounts';
           break;
 
         case 4:
@@ -488,7 +493,8 @@ module.exports = /*  @ngInject */
         .catch(getTopBottomSnapshotFail);
 
       function getTopBottomSnapshotSuccess(response) {
-        console.log('[getTopBottomSnapshot.data.performance.length]', response.data.performance.length);
+        calculateTrendValuesForPlan(response.data.performance);
+        // console.log('[getTopBottomSnapshot.data]', response.data);
         snapshotPromise.resolve(response.data);
       }
 
@@ -516,7 +522,7 @@ module.exports = /*  @ngInject */
 
       function getPerformanceBrandSuccess(response) {
         calculateTrendValuesForPlan(response.data.performance);
-        console.log('[getPerformanceBrandSuccess.data.performance.length]', response.data.performance.length);
+        // console.log('[getPerformanceBrandSuccess.data.performance.length]', response.data.performance);
         performancePromise.resolve(response.data);
       }
 

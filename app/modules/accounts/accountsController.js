@@ -65,6 +65,8 @@ module.exports = /*  @ngInject */
     vm.idSelected = null;
     vm.brandIdSelected = null;
     vm.loadingBrandSnapshot = true;
+    vm.currentTopBottomAcctType = null;
+    vm.currentTopBottomDataForFilter = null;
 
     // Chart Setup
     vm.chartData = [{'values': vm.marketData.distributors}];
@@ -131,6 +133,8 @@ module.exports = /*  @ngInject */
     vm.currentTotalsObject = null;
     vm.checkForDepletionCount = checkForDepletionCount;
     vm.updateChip = updateChip;
+    vm.setTopBottomAcctTypeSelection = setTopBottomAcctTypeSelection;
+    vm.currentTopBottomView = null;
 
     init();
 
@@ -366,6 +370,15 @@ module.exports = /*  @ngInject */
       });
     }
 
+    function setTopBottomAcctTypeSelection(currentAcctType) {
+      var params = filtersService.getAppliedFilters();
+      if (vm.currentTopBottomAcctType !== currentAcctType) {
+        userService.getTopBottomSnapshot(currentAcctType, params).then(function(data) {
+          vm.currentTopBottomView = userService.getCurrentTopBottomView(data);
+        });
+      }
+    }
+
     // ***************
     // PRIVATE METHODS
     // ***************
@@ -416,8 +429,10 @@ module.exports = /*  @ngInject */
       // reset all chips and filters on page init
       vm.filterModel.trend = vm.filtersService.model.trend[0];
       vm.filtersService.model.accountSelected.accountBrands = vm.filtersService.accountFilters.accountBrands[0];
+      vm.filtersService.model.accountSelected.accountMarkets = vm.filtersService.accountFilters.accountMarkets[0];
       chipsService.resetChipsFilters(chipsService.model);
       setDefaultEndingPeriodOptions();
+      vm.currentTopBottomAcctType = vm.filtersService.accountFilters.accountTypes[0];
       vm.filtersService.model.selected.premiseType = 'all';
       var params = filtersService.getAppliedFilters('brandSnapshot');
 
@@ -425,7 +440,8 @@ module.exports = /*  @ngInject */
         userService.getPerformanceSummary(),
         userService.getPerformanceDepletion(),
         userService.getPerformanceDistribution({'type': 'noencode', 'premiseType': 'off'}),
-        userService.getPerformanceBrand(params)
+        userService.getPerformanceBrand(params),
+        userService.getTopBottomSnapshot(vm.currentTopBottomAcctType, params)
       ];
 
       $q.all(promiseArr).then(function(data) {
@@ -434,6 +450,7 @@ module.exports = /*  @ngInject */
         userService.model.distribution = data[2];
         vm.brandTabs.brands = data[3].performance;
         setCurrentTotalsObject();
+        // vm.currentTopBottomDataForFilter = userService.getFilteredTopBottomData(data[4].performance);
         vm.loadingBrandSnapshot = false;
       });
     }

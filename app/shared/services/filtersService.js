@@ -121,18 +121,17 @@ module.exports = /*  @ngInject */
         }]
       },
       accountSelected: {
-        accountBrands: 'Distribution (simple)',
-        accountMarkets: 'Depletions',
-        depletionsTimeFilter: 'FYTD',
-        distributionTimeFilter: 'L90 Days',
-        timePeriod: 'Current Month to Date'
+        accountBrands: '',
+        accountMarkets: '',
+        depletionsTimeFilter: '',
+        distributionTimeFilter: '',
+        timePeriod: ''
       },
       selected: {},
       selectedTemplate: {
         myAccountsOnly: true,
         account: [],
         subaccount: [],
-        accountTypes: '',
         brand: [],
         masterSKU: [],
         cbbdChain: [],
@@ -242,36 +241,50 @@ module.exports = /*  @ngInject */
         depletionTableHeaderText: 'Velocity',
         value: 3
       }],
+      accountMarketsEnums: {
+        depletions: 1,
+        distSimple: 2,
+        distEffective: 3,
+        velocity: 4
+      },
       accountMarkets: [{
-        name: 'Depletions'
+        name: 'Depletions',
+        value: 1
       }, {
-        name: 'Distribution (simple)'
+        name: 'Distribution (simple)',
+        value: 2
       }, {
-        name: 'Distribution (effective)'
+        name: 'Distribution (effective)',
+        value: 3
       }, {
-        name: 'Velocity'
+        name: 'Velocity',
+        value: 4
       }],
       valuesVsTrend: [{
-        name: 'Top 10 (Values)'
+        name: 'Top 10 (Values)',
+        value: 1
       }, {
-        name: 'Top 10 (Trend)'
+        name: 'Top 10 (Trend)',
+        value: 2
       }, {
-        name: 'Bottom 10 (Values)'
+        name: 'Bottom 10 (Values)',
+        value: 3
       }, {
-        name: 'Bottom 10 (Trend)'
+        name: 'Bottom 10 (Trend)',
+        value: 4
       }],
       accountTypes: [{
         name: 'Distributors',
-        values: '1'
+        value: 1
       }, {
         name: 'Accounts',
-        values: '2'
+        value: 2
       }, {
         name: 'Sub-Accounts',
-        values: '3'
+        value: 3
       }, {
         name: 'Stores',
-        values: '4'
+        value: 4
       }],
       storeTypes: [{
         name: 'Chain'
@@ -303,7 +316,8 @@ module.exports = /*  @ngInject */
       cleanUpSaveFilterObj: cleanUpSaveFilterObj,
       lastEndingTimePeriod: lastEndingTimePeriod,
       accountFilters: accountFilters,
-      trendPropertyNames: trendPropertyNames
+      trendPropertyNames: trendPropertyNames,
+      getFilteredTopBottomData: getFilteredTopBottomData
     };
 
     return service;
@@ -347,13 +361,18 @@ module.exports = /*  @ngInject */
       // get applied filters
       var filterPayload = {type: type};
       for (var key in service.model.selected) {
-        if (service.model.selected[key].constructor === Array && service.model.selected[key].length > 0) {
-          filterPayload[key] = service.model.selected[key];
-        } else if (service.model.selected[key] !== '') {
-          filterPayload[key] = service.model.selected[key];
+        var propVal = service.model.selected[key];
+        if (service.model.selected.hasOwnProperty(key) && propVal !== '') {
+          if (Array.isArray(propVal)) {
+            if (propVal.length !== 0) {
+              filterPayload[key] = service.model.selected[key];
+            }
+          } else {
+            filterPayload[key] = service.model.selected[key];
+          }
         }
       }
-
+      console.log('filter payload', filterPayload);
       return filterPayload;
     }
 
@@ -407,6 +426,24 @@ module.exports = /*  @ngInject */
         if (service.model[prop] && service.model[prop].constructor !== Array && service.model[prop] === true && prop !== 'expanded') {
           service.model[prop] = false;
         }
+      }
+    }
+
+    function getFilteredTopBottomData(topBottomData, categoryType) {
+      switch (categoryType.value) {
+        case accountFilters.accountMarketsEnums.depletions:
+
+          break;
+        case accountFilters.accountMarketsEnums.distSimple:
+
+          break;
+        case accountFilters.accountMarketsEnums.distEffective:
+
+          break;
+        case accountFilters.accountMarketsEnums.velocity:
+
+          break;
+
       }
     }
   };
