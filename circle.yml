@@ -4,12 +4,14 @@ machine:
 dependencies:
   pre:
     - npm install -g gulp
+    - cd automation-test && mvn install -DskipTests=true	  
 
 test:
   override:
     - gulp vet:js
     - gulp vet:sass
     - gulp test
+    - cd automation-test && mvn test -P function-test
 
 deployment:
   develop:
