@@ -11,14 +11,14 @@ notes
         .brands
           p {{a.brandWidgetTitle}}<span ng-if="a.brandIdSelected"> - {{a.brandIdSelected}}</span>
         .market
-          p {{a.selectedStore || a.filtersService.model.selected.accountTypes || a.accountTypesDefault}}
+          p {{a.selectedStore || a.currentTopBottomAcctType.name || a.accountTypesDefault}}
         .notes-icon
           p <a href="#" ng-click="a.openNotes(true)" analytics-on="click" analytics-event="Notes Tab"></a>
       .market-overview.clearfix
         .brands
           p {{a.brandWidgetTitle}}<span ng-if="a.brandIdSelected"> - {{a.brandIdSelected}}</span>
         .market
-          p {{a.selectedStore || a.filtersService.model.selected.accountTypes || a.accountTypesDefault}}
+          p {{a.selectedStore || a.currentTopBottomAcctType.name || a.accountTypesDefault}}
         .notes-icon
           p <a href="#" ng-click="a.openNotes(true)" analytics-on="click" analytics-event="Notes Tab">Notes</a>
 
@@ -195,12 +195,12 @@ div(row)
     .widget-header
       .dropdown-filter.narrow
         md-select(ng-model="a.filtersService.model.accountSelected.accountMarkets" md-on-open="a.openSelect(true)" md-on-close="a.openSelect(false)" aria-label="Account Markets Filter")
-          md-option(ng-repeat="filter in a.filtersService.accountFilters.accountMarkets" aria-label="{{filter.name}}" value="{{filter.name}}") {{filter.name}}
+          md-option(ng-repeat="filter in a.filtersService.accountFilters.accountMarkets" aria-label="{{filter.name}}" ng-value="filter") {{filter.name}}
       .header-selector
         md-select.market(ng-model="a.filtersService.model.selected.valuesVsTrend" md-on-open="a.openSelect(true)" md-on-close="a.openSelect(false)" placeholder="Top 10 (Values)" aria-label="Values versus Trends Filter")
           md-option(ng-repeat="filter in a.filtersService.accountFilters.valuesVsTrend" aria-label="{{filter.name}}" value="{{filter.name}}") {{filter.name}}
-        md-select(ng-model="a.filtersService.model.selected.accountTypes" md-on-open="a.openSelect(true)" md-on-close="a.openSelect(false); a.updateTopBottom();" ng-change="a.setMarketTab(a.filtersService.model.selected.accountTypes)" placeholder="{{a.filtersService.model.selected.accountTypes || a.accountTypesDefault}}" aria-label="Account Type Filter")
-          md-option(ng-repeat="filter in a.filtersService.accountFilters.accountTypes" aria-label="{{filter.name}}" value="{{filter.name}}") {{filter.name}}
+        md-select(ng-model="a.currentTopBottomAcctType" md-on-open="a.openSelect(true)" md-on-close="a.openSelect(false);"  placeholder="{{a.currentTopBottomAcctType.name}}" aria-label="Account Type Filter")
+          md-option(ng-repeat="filter in a.filtersService.accountFilters.accountTypes track by filter.value" aria-label="{{filter.name}}" ng-value="filter" ng-click="a.setTopBottomAcctTypeSelection(filter)") {{filter.name}}
     .widget-content.clearfix
       .chart-data
         table.fixed-layout(cellspacing="0" cellpadding="0")
@@ -210,7 +210,7 @@ div(row)
                 p.accent.bold.left Distributors
                 p &nbsp;
               th.top.dark.market-label
-                p.accent.bold {{a.filtersService.model.accountSelected.accountMarkets}}
+                p.accent.bold {{a.filtersService.model.accountSelected.accountMarkets.name}}
                 p.accent.bold {{a.filtersService.model.depletionsTimeFilter.depletionsTimeFilter}}
         md-tabs(md-selected="a.marketSelectedIndex" ng-class="{'animate-disabled': a.disableAnimation}" md-autoselect)
           md-tab(ng-repeat="(key, data) in a.marketTabs" label="{{key}}")
@@ -219,10 +219,10 @@ div(row)
                 tr.clickable.market-value(ng-repeat="item in data" ng-class="{'store': item.address, 'selected': item.label === a.idSelected}" ng-click="a.selectItem('markets', item, a.marketTabs, $parent.$index)")
                   td.dist-label(colspan=2) {{item.title}} <span ng-if="item.storeNum" class="store-number">\#{{item.storeNum}}</span><span ng-if="item.address" class="address">{{item.address}}</span>
                   td.dark.market-label
-                    span(ng-if="a.filtersService.model.accountSelected.accountMarkets === 'Depletions'") {{item.depletions | number}}
-                    span(ng-if="a.filtersService.model.accountSelected.accountMarkets === 'Distribution (simple)'") {{item.distSimple}}
-                    span(ng-if="a.filtersService.model.accountSelected.accountMarkets === 'Distribution (effective)'") {{item.distEffective}}
-                    span(ng-if="a.filtersService.model.accountSelected.accountMarkets === 'Velocity'") {{item.velocity}}
+                    span(ng-if="a.filtersService.model.accountSelected.accountMarkets.value === a.filtersService.accountFilters.accountMarketsEnums.depletions") {{item.depletions | number}}
+                    span(ng-if="a.filtersService.model.accountSelected.accountMarkets.value === a.filtersService.accountFilters.accountMarketsEnums.distSimple") {{item.distSimple}}
+                    span(ng-if="a.filtersService.model.accountSelected.accountMarkets.value === a.filtersService.accountFilters.accountMarketsEnums.distEffective").value {{item.distEffective}}
+                    span(ng-if="a.filtersService.model.accountSelected.accountMarkets.value === a.filtersService.accountFilters.accountMarketsEnums.velocity") {{item.velocity}}
       .chart
         table.no-top-border(cellspacing="0" cellpadding="0")
           thead

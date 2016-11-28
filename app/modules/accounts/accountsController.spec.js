@@ -197,6 +197,7 @@ describe('Unit: accountsController', function() {
       spyOn(userService, 'getPerformanceDepletion').and.returnValue(fakePromise);
       spyOn(userService, 'getPerformanceDistribution').and.returnValue(fakePromise);
       spyOn(userService, 'getPerformanceSummary').and.returnValue(fakePromise);
+      spyOn(userService, 'getTopBottomSnapshot').and.returnValue(fakePromise);
       brandSpy = spyOn(userService, 'getPerformanceBrand');
       brandSpy.and.returnValue($q.when(brandPerformanceData));
       // Create Controller
