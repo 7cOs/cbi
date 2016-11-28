@@ -188,6 +188,8 @@ module.exports = /*  @ngInject */
     }
 
     function goToOpportunities() {
+      // premise type, my accounts only -- still need halp
+      // chain query -> store isnt deleting the previous
       $state.go('opportunities', {
         resetFiltersOnLoad: false,
         applyFiltersOnLoad: true,
