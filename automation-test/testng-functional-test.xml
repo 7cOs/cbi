@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite name="Suite">
+	<listeners>
+		<listener class-name="com.cbrands.TestNGCustomReportListener" />
+	</listeners>
+	<test name="Functional Test"> 
+		<classes>
+            <!-- Run 1 -->
+            <class name="com.cbrands.test.functional.home.HomePageTest" />
+            <!-- Run 2 , 3, 4 -->
+            <class name="com.cbrands.test.functional.opportunity.OpportunityTest" />
+            <!-- Run 13 , 18 -->
+            <class name="com.cbrands.test.functional.opportunity.OpportunityResultTest" />
+            <!-- Run 5 --> 
+            <class name="com.cbrands.test.functional.opportunity.Run5_SavedReports" />
+            <!-- Run 6 --> 
+            <class name="com.cbrands.test.functional.opportunity.Run6_OpportunitiesFilterTest" />
+            <!-- Run 7 --> 
+            <class name="com.cbrands.test.functional.opportunity.Run7_OpportunitiesFilterValues" />
+            <!-- Run 8 --> 
+            <class name="com.cbrands.test.functional.opportunity.Run8_SearchBasedFilterFieldsTest" />
+            <!-- Run 10 --> 
+            <class name="com.cbrands.test.functional.opportunity.Run10_OpportunityResultsTable" />
+            
+            <class name="com.cbrands.test.functional.opportunity.US12985_OpportunitySorting" />
+             
+            <class name="com.cbrands.test.functional.targetlist.Add_Collaborators_to_Target_List" />
+             
+            <class name="com.cbrands.test.functional.targetlist.CreateTargetList" />  
+       </classes>
+	</test> <!-- Test -->
+</suite> <!-- Suite -->
