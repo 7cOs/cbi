@@ -56,7 +56,9 @@ div.outer-nav-wrapper
                           span  {{notification.shortenedObject.type | formatOpportunitiesType}}
                       div(ng-if="notification.objectType === 'ACCOUNT'")
                         p A new note was added to your account
-                        a() {{notification.shortenedObject.name}}
+                        a(ui-sref="accounts" ui-sref-opts="{reload: true}") {{notification.shortenedObject.name}}
+                          span  #
+                          span {{notification.shortenedObject.id}}
                     .info
                       label {{notification.dateUpdated | timeAgo: 'relative'}}
                       label.bold {{notification.creator.firstName}} {{notification.creator.lastName}}
