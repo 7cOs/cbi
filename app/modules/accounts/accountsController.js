@@ -66,6 +66,7 @@ module.exports = /*  @ngInject */
     vm.brandIdSelected = null;
     vm.loadingBrandSnapshot = true;
     vm.currentTopBottomAcctType = null;
+    vm.currentTopBottomDataForFilter = null;
 
     // Chart Setup
     vm.chartData = [{'values': vm.marketData.distributors}];
@@ -449,6 +450,7 @@ module.exports = /*  @ngInject */
         userService.model.distribution = data[2];
         vm.brandTabs.brands = data[3].performance;
         setCurrentTotalsObject();
+        vm.currentTopBottomDataForFilter = userService.getFilteredTopBottomData(data[4].performance);
         vm.loadingBrandSnapshot = false;
       });
     }

@@ -330,7 +330,7 @@ module.exports = /*  @ngInject */
       'distributors': [
         {
           'label': 'Walmed & Feller',
-          'value': 15,
+          'value': 18,
           'title': 'Walmed & Feller',
           'depletions': 47560,
           'distSimple': 28344,

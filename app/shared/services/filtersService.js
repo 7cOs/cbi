@@ -316,7 +316,8 @@ module.exports = /*  @ngInject */
       cleanUpSaveFilterObj: cleanUpSaveFilterObj,
       lastEndingTimePeriod: lastEndingTimePeriod,
       accountFilters: accountFilters,
-      trendPropertyNames: trendPropertyNames
+      trendPropertyNames: trendPropertyNames,
+      getFilteredTopBottomData: getFilteredTopBottomData
     };
 
     return service;
@@ -425,6 +426,24 @@ module.exports = /*  @ngInject */
         if (service.model[prop] && service.model[prop].constructor !== Array && service.model[prop] === true && prop !== 'expanded') {
           service.model[prop] = false;
         }
+      }
+    }
+
+    function getFilteredTopBottomData(topBottomData, categoryType) {
+      switch (categoryType.value) {
+        case accountFilters.accountMarketsEnums.depletions:
+          console.log('Name:', categoryType.name);
+          break;
+        case accountFilters.accountMarketsEnums.distSimple:
+          console.log('Name:', categoryType.name);
+          break;
+        case accountFilters.accountMarketsEnums.distEffective:
+          console.log('Name:', categoryType.name);
+          break;
+        case accountFilters.accountMarketsEnums.velocity:
+          console.log('Name:', categoryType.name);
+          break;
+
       }
     }
   };
