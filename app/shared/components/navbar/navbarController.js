@@ -39,7 +39,6 @@ module.exports = /*  @ngInject */
     vm.myAccountsOnly = true;
     vm.noNotifications = 'No unread notifications.';
     vm.notifications = [];
-    vm.newOpportunity = vm.newOpportunityTemplate;
     vm.newOpportunityArray = [];
     vm.newOpportunityTemplate = {
       properties: {
@@ -51,6 +50,7 @@ module.exports = /*  @ngInject */
         }
       }
     };
+    vm.newOpportunity = vm.newOpportunityTemplate;
     vm.unreadNotifications = 0;
 
     // Mock data
@@ -186,10 +186,14 @@ module.exports = /*  @ngInject */
       var isMixedType = !isDistribution && opportunity.properties.product.type === 'mixed';
       var targetList = opportunity.properties.targetList;
 
+      if (opportunity.properties.rationale.other) {
+        opportunity.properties.rationale.description = opportunity.properties.rationale.other;
+      }
+
       var payload = {
         'store': opportunity.properties.store.id,
-        'itemId': !isMixedType && opportunity.properties.product.brandCode,
-        'itemType': 'BRAND',
+        'itemId': !isMixedType && opportunity.properties.product.id,
+        'itemType': 'SKU_PACKAGE',
         'mixedBrand': isMixedType,
         'rationale': opportunity.properties.rationale.description,
         'impact': opportunity.properties.impact.enum,
