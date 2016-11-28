@@ -19,6 +19,7 @@ function TargetListController($scope, $state, targetListService, userService, lo
   vm.ratio = ratio;
   vm.tabFilter = tabFilter;
   vm.goToTab = goToTab;
+  vm.recordsShownLength = recordsShownLength;
 
   // tab names
   vm.types = {
@@ -70,6 +71,14 @@ function TargetListController($scope, $state, targetListService, userService, lo
     return result;
   };
 
+  function recordsShownLength (length) {
+    if (length > 5) {
+      return 5;
+    } else {
+      return length;
+    }
+  }
+
   // **************
   // PRIVATE METHODS
   // **************
@@ -110,16 +119,19 @@ function TargetListController($scope, $state, targetListService, userService, lo
       // );
 
       // Send to model
-      vm.types.mine.records = filterTargetLists(mine).slice(0, 5);
+      vm.types.mine.records = filterTargetLists(mine);
       vm.types.mine.total = mine.length;
-      vm.types.shared.records = filterTargetLists(shared).slice(0, 5);
+      vm.types.shared.records = filterTargetLists(shared);
       vm.types.shared.total = shared.length;
-      vm.types.archived.records = filterTargetLists(archived).slice(0, 5);
+      vm.types.archived.records = filterTargetLists(archived);
       vm.types.archived.total = archived.length;
+      console.log(vm.types.mine.records);
+      console.log(vm.types.shared.records);
     }, function(reason) {
       console.log('Error: ' + reason);
       loaderService.closeLoader();
     });
+
   }
 }
 
