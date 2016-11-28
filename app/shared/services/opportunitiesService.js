@@ -50,11 +50,11 @@ module.exports = /*  @ngInject */
             store,
             storePlaceholder;
 
-        // trigger no opps modal
-        if (response.data.opportunities.length < 1) { service.model.noOpportunitiesFound = true; };
-
         // make opp array instead of obj if oppId provided
         if (opportunityID) { response.data.opportunities = [response.data]; };
+
+        // trigger no opps modal
+        if (response.data.opportunities.length < 1) { service.model.noOpportunitiesFound = true; };
 
         for (var i = 0; i < response.data.opportunities.length; i++) {
           var item = response.data.opportunities[i];

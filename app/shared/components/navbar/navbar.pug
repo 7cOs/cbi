@@ -49,8 +49,11 @@ div.outer-nav-wrapper
                         a(ui-sref="target-list-detail({id: notification.shortenedObject.id})") {{notification.shortenedObject.name}}
                       div(ng-if="notification.objectType === 'OPPORTUNITY'")
                         p An opportunity has been shared with you
-                        a(ui-sref="opportunities").source {{notification.shortenedObject.store.name}}
-                        p.sku {{notification.shortenedObject.product.name}} <span>{{notification.shortenedObject.type}}</span>
+                        a(ui-sref="opportunities({'opportunitiesService.model.opportunityId' : 'notification.shortenedObject.id'})" ui-sref-opts="{reload: true}").source {{notification.shortenedObject.store.name | titlecase}}
+                          span  #
+                          span {{notification.shortenedObject.store.id}}
+                        p.sku {{notification.shortenedObject.product.name | titlecase}}
+                          span  {{notification.shortenedObject.type | formatOpportunitiesType}}
                       div(ng-if="notification.objectType === 'ACCOUNT'")
                         p A new note was added to your account
                         a() {{notification.shortenedObject.name}}
