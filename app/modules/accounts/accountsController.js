@@ -135,7 +135,6 @@ module.exports = /*  @ngInject */
     vm.updateChip = updateChip;
     vm.setTopBottomAcctTypeSelection = setTopBottomAcctTypeSelection;
     vm.currentTopBottomView = null;
-    vm.updateChip = updateChip;
 
     init();
 
