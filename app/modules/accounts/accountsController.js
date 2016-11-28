@@ -450,7 +450,7 @@ module.exports = /*  @ngInject */
         userService.model.distribution = data[2];
         vm.brandTabs.brands = data[3].performance;
         setCurrentTotalsObject();
-        vm.currentTopBottomDataForFilter = userService.getFilteredTopBottomData(data[4].performance);
+        // vm.currentTopBottomDataForFilter = userService.getFilteredTopBottomData(data[4].performance);
         vm.loadingBrandSnapshot = false;
       });
     }
