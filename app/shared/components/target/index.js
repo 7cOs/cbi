@@ -125,8 +125,6 @@ function TargetListController($scope, $state, targetListService, userService, lo
       vm.types.shared.total = shared.length;
       vm.types.archived.records = filterTargetLists(archived);
       vm.types.archived.total = archived.length;
-      console.log(vm.types.mine.records);
-      console.log(vm.types.shared.records);
     }, function(reason) {
       console.log('Error: ' + reason);
       loaderService.closeLoader();
