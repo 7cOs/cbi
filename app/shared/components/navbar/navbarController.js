@@ -224,7 +224,25 @@ module.exports = /*  @ngInject */
     }
 
     function addToTargetList(targetList, opportunity) {
+      var storeExists = false;
+
       targetListService.addTargetListOpportunities(targetList, [opportunity.id]);
+      opportunity.brands = [];
+      opportunity.brands.push(opportunity.product.brand.toLowerCase());
+
+      angular.forEach(opportunitiesService.model.opportunities, function(key, value) {
+
+        if (opportunity.store.id === key.store.id) {
+          key.groupedOpportunities.push(opportunity);
+          storeExists = true;
+        }
+      });
+
+      if (!storeExists) {
+        opportunity.groupedOpportunities = [];
+        opportunity.groupedOpportunities.push(opportunity);
+        opportunitiesService.model.opportunities.push(opportunity);
+      }
     }
 
     // Close "Add Opportunity" modal
