@@ -13,7 +13,6 @@ test:
     - gulp vet:js
     - gulp vet:sass
     - gulp test
-    - cd automation-test && mvn test -P function-test
     
   post:
     - mkdir -p $CIRCLE_TEST_REPORTS/testng/
