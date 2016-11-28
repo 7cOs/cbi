@@ -1,5 +1,5 @@
 describe('Unit: accountsController', function() {
-  var scope, ctrl, $state, $q, filtersService, userService, packageSkuData, brandSpy, brandPerformanceData;
+  var scope, ctrl, $state, $q, filtersService, chipsService, userService, packageSkuData, brandSpy, brandPerformanceData;
   var measuresArr = [
     {
       'timeframe': 'MTD',
@@ -131,14 +131,14 @@ describe('Unit: accountsController', function() {
     angular.mock.module('cf.common.services');
     angular.mock.module('cf.modules.accounts');
 
-    inject(function($rootScope, $controller, _$state_, _$q_, _filtersService_, _userService_) {
+    inject(function($rootScope, $controller, _$state_, _$q_, _chipsService_, _filtersService_, _userService_) {
       // Create scope
       scope = $rootScope.$new();
 
       // Get Required Services
       $state = _$state_;
       $q = _$q_;
-      // chipsService = _chipsService_;
+      chipsService = _chipsService_;
       filtersService = _filtersService_;
       userService = _userService_;
       brandPerformanceData = {
@@ -317,7 +317,10 @@ describe('Unit: accountsController', function() {
       });
     });
 
-    it('Should go to opportunities page with params', function() {
+    it('Should go to opportunities page with params if conditions are met', function() {
+      filtersService.model.selected.premiseType = 'on';
+      filtersService.model.selected.chain = ['01110000 01101100 01110011'];
+
       expect($state.go).not.toHaveBeenCalled();
       expect($state.go.calls.count()).toEqual(0);
 
@@ -329,6 +332,32 @@ describe('Unit: accountsController', function() {
         referrer: 'accounts'
       });
       expect($state.go.calls.count()).toEqual(1);
+    });
+
+    it('Should do nothing if there is no premise type [or all] or chain', function() {
+      filtersService.model.selected.premiseType = 'all';
+      filtersService.model.selected.chain = ['01110000 01101100 01110011'];
+
+      expect($state.go).not.toHaveBeenCalled();
+      expect($state.go.calls.count()).toEqual(0);
+
+      ctrl.goToOpportunities();
+
+      expect($state.go).not.toHaveBeenCalled();
+      expect($state.go.calls.count()).toEqual(0);
+    });
+
+    it('Should do nothing if there is a premise type but no chain', function() {
+      filtersService.model.selected.premiseType = 'on';
+      filtersService.model.selected.chain = [];
+
+      expect($state.go).not.toHaveBeenCalled();
+      expect($state.go.calls.count()).toEqual(0);
+
+      ctrl.goToOpportunities();
+
+      expect($state.go).not.toHaveBeenCalled();
+      expect($state.go.calls.count()).toEqual(0);
     });
   });
 
@@ -616,6 +645,76 @@ describe('Unit: accountsController', function() {
       ctrl.filterModel.distributionTimePeriod = ctrl.filtersService.model.distributionTimePeriod.year[2];
       val = ctrl.checkIfVelocityPresent(item);
       expect(val).toBeTruthy();
+    });
+
+  });
+
+  describe('[Method] goToOpportunities', function() {
+    beforeEach(function() {
+      spyOn(chipsService, 'updateChip').and.callThrough();
+      spyOn(chipsService, 'addChip').and.callThrough();
+      spyOn(ctrl, 'apply').and.callThrough();
+    });
+
+    it('Should update my accounts only chip', function() {
+      // init
+      expect(chipsService.updateChip.calls.count()).toEqual(0);
+      expect(chipsService.updateChip).not.toHaveBeenCalled();
+      expect(chipsService.addChip.calls.count()).toEqual(0);
+      expect(chipsService.addChip).not.toHaveBeenCalled();
+      expect(ctrl.apply.calls.count()).toEqual(0);
+      expect(ctrl.apply).not.toHaveBeenCalled();
+      // run
+      ctrl.updateChip('My Accounts Only', 'myAccountsOnly');
+      // assert
+      expect(chipsService.updateChip.calls.count()).toEqual(1);
+      expect(chipsService.updateChip).toHaveBeenCalled();
+      expect(chipsService.addChip.calls.count()).toEqual(0);
+      expect(chipsService.addChip).not.toHaveBeenCalled();
+      expect(ctrl.apply.calls.count()).toEqual(1);
+      expect(ctrl.apply).toHaveBeenCalled();
+    });
+
+    it('Should update premise type chip', function() {
+      // init
+      expect(chipsService.updateChip.calls.count()).toEqual(0);
+      expect(chipsService.updateChip).not.toHaveBeenCalled();
+      expect(chipsService.addChip.calls.count()).toEqual(0);
+      expect(chipsService.addChip).not.toHaveBeenCalled();
+      expect(ctrl.apply.calls.count()).toEqual(0);
+      expect(ctrl.apply).not.toHaveBeenCalled();
+      // run
+      ctrl.updateChip('On-Premise', 'premiseType');
+      // assert
+      expect(chipsService.updateChip.calls.count()).toEqual(0);
+      expect(chipsService.updateChip).not.toHaveBeenCalled();
+      expect(chipsService.addChip.calls.count()).toEqual(1);
+      expect(chipsService.addChip).toHaveBeenCalled();
+      expect(ctrl.apply.calls.count()).toEqual(1);
+      expect(ctrl.apply).toHaveBeenCalled();
+    });
+
+    it('Should update premise type chip and remove the existing one if it already exists (off -> on)', function() {
+      // init
+      expect(chipsService.updateChip.calls.count()).toEqual(0);
+      expect(chipsService.updateChip).not.toHaveBeenCalled();
+      expect(chipsService.addChip.calls.count()).toEqual(0);
+      expect(chipsService.addChip).not.toHaveBeenCalled();
+      expect(ctrl.apply.calls.count()).toEqual(0);
+      expect(ctrl.apply).not.toHaveBeenCalled();
+      expect(chipsService.model.length).toEqual(3);
+      expect(chipsService.model[1].name).toEqual('Off-Premise');
+      // run
+      ctrl.updateChip('On-Premise', 'premiseType');
+      // assert
+      expect(chipsService.updateChip.calls.count()).toEqual(0);
+      expect(chipsService.updateChip).not.toHaveBeenCalled();
+      expect(chipsService.addChip.calls.count()).toEqual(1);
+      expect(chipsService.addChip).toHaveBeenCalled();
+      expect(ctrl.apply.calls.count()).toEqual(1);
+      expect(ctrl.apply).toHaveBeenCalled();
+      expect(chipsService.model.length).toEqual(3);
+      expect(chipsService.model[2].name).toEqual('On-Premise');
     });
 
   });

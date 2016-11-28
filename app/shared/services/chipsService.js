@@ -225,7 +225,7 @@ module.exports = /*  @ngInject */
       } else if (typeof chip.type === 'string') {
         filtersService.model.selected[chip.type] = '';
       } /* else if (typeof chip.type === 'boolean') { // dont think this is used. leaving it in just in case i breaked something
-        console.log('hiya');
+        console.log('pls no');
         filtersService.model.selected[chip.type] = false;
       } */
 

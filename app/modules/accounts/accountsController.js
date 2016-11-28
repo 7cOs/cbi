@@ -130,6 +130,7 @@ module.exports = /*  @ngInject */
     vm.checkIfVelocityPresent = checkIfVelocityPresent;
     vm.currentTotalsObject = null;
     vm.checkForDepletionCount = checkForDepletionCount;
+    vm.updateChip = updateChip;
 
     init();
 
@@ -188,13 +189,16 @@ module.exports = /*  @ngInject */
     }
 
     function goToOpportunities() {
-      // premise type, my accounts only -- still need halp
-      // chain query -> store isnt deleting the previous
-      $state.go('opportunities', {
-        resetFiltersOnLoad: false,
-        applyFiltersOnLoad: true,
-        referrer: 'accounts'
-      });
+      if (!allOpportunitiesDisabled()) {
+        $state.go('opportunities', {
+          resetFiltersOnLoad: false,
+          applyFiltersOnLoad: true,
+          referrer: 'accounts'
+        });
+      } else {
+        alert('Ratul, pls add moar filters pls');
+      }
+      // premise type - still need halp
     }
 
     /**
@@ -242,7 +246,7 @@ module.exports = /*  @ngInject */
 
     function resetFilters() {
       vm.filterModel = angular.copy(filterModelTemplate);
-      chipsService.resetFilters(chipsService.model);
+      chipsService.resetChipsFilters(chipsService.model);
       apply(false);
     }
 
@@ -290,13 +294,18 @@ module.exports = /*  @ngInject */
       if (filterModelProperty === 'store') {
         filtersService.model.selected.chain = [];
         filtersService.model.chain = '';
+        chipsService.removeChip('chain');
       } else if (filterModelProperty === 'chain') {
         filtersService.model.selected.store = [];
         filtersService.model.store = '';
+        chipsService.removeChip('store');
       }
 
       for (var i = 0; i < chipsService.model.length; i++) {
-        if (chipsService.model[i].type === filterModelProperty) chipsService.model.splice(i, 1);
+        if (chipsService.model[i].type === filterModelProperty) {
+          chipsService.model.splice(i, 1);
+          break;
+        }
       }
 
       chipsService.addAutocompleteChip(result.name, filterModelProperty, false);
@@ -327,6 +336,24 @@ module.exports = /*  @ngInject */
       apply(true);
     }
 
+    function updateChip(name, chip) {
+      if (chip === 'myAccountsOnly') {
+        chipsService.updateChip(chip, name);
+      } else if (chip === 'premiseType') {
+        for (var i = 0; i < chipsService.model.length; i++) {
+          if (chipsService.model[i].type === chip) {
+            chipsService.model.splice(i, 1);
+            break;
+          }
+        }
+
+        chipsService.addChip(name, chip, true, false);
+        // filter.resetTradeChannels() -- do we need to do this so the trade channels are correct based on filter
+      }
+
+      vm.apply(false);
+    }
+
     function updateDistributionTimePeriod(value) {
       vm.filterModel.depletionsTimePeriod = filtersService.model.depletionsTimePeriod[value][0];
       vm.filterModel.distributionTimePeriod = filtersService.model.distributionTimePeriod[value][0];
@@ -342,6 +369,12 @@ module.exports = /*  @ngInject */
     // ***************
     // PRIVATE METHODS
     // ***************
+
+    function allOpportunitiesDisabled() {
+      if ((filtersService.model.selected.premiseType && filtersService.model.selected.premiseType !== 'all') && ((filtersService.model.selected.distributor && filtersService.model.selected.distributor.length > 0) || (filtersService.model.selected.store && filtersService.model.selected.store.length > 0) || (filtersService.model.selected.chain && filtersService.model.selected.chain.length > 0))) return false;
+
+      return true;
+    }
 
     function deselectMarketId() {
       if (vm.marketIdSelected === true) {
