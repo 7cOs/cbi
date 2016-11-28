@@ -14,6 +14,10 @@ test:
     - gulp vet:sass
     - gulp test
     - cd automation-test && mvn test -P function-test
+    
+  post:
+    - mkdir -p $CIRCLE_TEST_REPORTS/testng/
+    - find . -type f -regex ".*/target/surefire-reports/.*html" -exec cp {} $CIRCLE_TEST_REPORTS/testng/ \;
 
 deployment:
   develop:
