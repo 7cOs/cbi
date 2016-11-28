@@ -42,7 +42,7 @@ div.outer-nav-wrapper
             md-menu-content
               .nav-flyout
                 .content.nopad
-                  div.notification-card.clearfix(md-prevent-menu-close ng-repeat="notification in nb.notifications" ng-class="{'read': notification.status === notificationsService.status.READ}" ng-click="nb.markRead(notification)" class="{{notification.action}}")
+                  div.notification-card.clearfix(md-prevent-menu-close ng-repeat="notification in nb.notifications | orderBy: '-dateCreated'" ng-class="{'read': notification.status === 'READ'}" ng-click="nb.markRead(notification)" class="{{notification.action}}")
                     .details
                       div(ng-if="notification.objectType === 'TARGET_LIST'")
                         p You've been added as a collaborator
@@ -60,7 +60,7 @@ div.outer-nav-wrapper
                           span  #
                           span {{notification.shortenedObject.id}}
                     .info
-                      label {{notification.dateUpdated | timeAgo: 'relative'}}
+                      label {{notification.dateCreated | timeAgo: 'relative'}}
                       label.bold {{notification.creator.firstName}} {{notification.creator.lastName}}
                   div.notification-card.clearfix(ng-if="nb.notificationHelper.unreadNotifications < 1")
                     .details
