@@ -463,7 +463,7 @@ module.exports = /*  @ngInject */
     }
 
     function getCurrentTopBottomView(snapshotData) {
-      return snapshotData.slice(0, 9);
+      // TODO
     }
 
     function getTopBottomSnapshot(snapshotType, params) {
@@ -494,7 +494,7 @@ module.exports = /*  @ngInject */
 
       function getTopBottomSnapshotSuccess(response) {
         calculateTrendValuesForPlan(response.data.performance);
-        console.log('[getTopBottomSnapshot.data]', response.data);
+        // console.log('[getTopBottomSnapshot.data]', response.data);
         snapshotPromise.resolve(response.data);
       }
 
@@ -522,7 +522,7 @@ module.exports = /*  @ngInject */
 
       function getPerformanceBrandSuccess(response) {
         calculateTrendValuesForPlan(response.data.performance);
-        console.log('[getPerformanceBrandSuccess.data.performance.length]', response.data.performance);
+        // console.log('[getPerformanceBrandSuccess.data.performance.length]', response.data.performance);
         performancePromise.resolve(response.data);
       }
 
