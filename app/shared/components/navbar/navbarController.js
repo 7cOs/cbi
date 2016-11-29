@@ -157,6 +157,10 @@ module.exports = /*  @ngInject */
       var targetListToFind = opportunity.properties.targetList,
           model = userService.model.targetLists.owned;
 
+      if (!userService.model.targetLists.owned) {
+        model = userService.model.targetLists;
+      }
+
       angular.forEach(model, function(key, value) {
         if (key.id === targetListToFind) {
           model[value].dateOpportunitiesUpdated = moment().format();
