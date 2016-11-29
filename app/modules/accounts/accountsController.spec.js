@@ -311,6 +311,12 @@ describe('Unit: accountsController', function() {
   });
 
   describe('[Method] goToOpportunities', function() {
+    var e = {
+      preventDefault: function() {
+        return true;
+      }
+    };
+
     beforeEach(function() {
       spyOn(filtersService, 'resetFilters').and.callThrough();
       spyOn($state, 'go').and.callFake(function() {
@@ -325,7 +331,7 @@ describe('Unit: accountsController', function() {
       expect($state.go).not.toHaveBeenCalled();
       expect($state.go.calls.count()).toEqual(0);
 
-      ctrl.goToOpportunities();
+      ctrl.goToOpportunities(e);
 
       expect($state.go).toHaveBeenCalledWith('opportunities', {
         resetFiltersOnLoad: false,
@@ -342,7 +348,7 @@ describe('Unit: accountsController', function() {
       expect($state.go).not.toHaveBeenCalled();
       expect($state.go.calls.count()).toEqual(0);
 
-      ctrl.goToOpportunities();
+      ctrl.goToOpportunities(e);
 
       expect($state.go).not.toHaveBeenCalled();
       expect($state.go.calls.count()).toEqual(0);
@@ -355,7 +361,7 @@ describe('Unit: accountsController', function() {
       expect($state.go).not.toHaveBeenCalled();
       expect($state.go.calls.count()).toEqual(0);
 
-      ctrl.goToOpportunities();
+      ctrl.goToOpportunities(e);
 
       expect($state.go).not.toHaveBeenCalled();
       expect($state.go.calls.count()).toEqual(0);
