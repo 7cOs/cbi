@@ -372,7 +372,6 @@ module.exports = /*  @ngInject */
           }
         }
       }
-      console.log('filter payload', filterPayload);
       return filterPayload;
     }
 

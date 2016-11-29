@@ -111,6 +111,7 @@ module.exports = /*  @ngInject */
     };
 
     // Expose public methods
+    vm.allOpportunitiesDisabled = allOpportunitiesDisabled;
     vm.apply = apply;
     vm.removeDistOptionsBasedOnView = removeDistOptionsBasedOnView;
     vm.displayBrandValue = displayBrandValue;
@@ -141,6 +142,12 @@ module.exports = /*  @ngInject */
     // **************
     // PUBLIC METHODS
     // **************
+
+    function allOpportunitiesDisabled() {
+      if ((filtersService.model.selected.premiseType && filtersService.model.selected.premiseType !== 'all') && ((filtersService.model.selected.distributor && filtersService.model.selected.distributor.length > 0) || (filtersService.model.selected.store && filtersService.model.selected.store.length > 0) || (filtersService.model.selected.chain && filtersService.model.selected.chain.length > 0))) return false;
+
+      return true;
+    }
 
     function apply(bool) {
       vm.disableApply = bool;
@@ -192,7 +199,7 @@ module.exports = /*  @ngInject */
       }
     }
 
-    function goToOpportunities() {
+    function goToOpportunities(e) {
       if (!allOpportunitiesDisabled()) {
         $state.go('opportunities', {
           resetFiltersOnLoad: false,
@@ -200,9 +207,8 @@ module.exports = /*  @ngInject */
           referrer: 'accounts'
         });
       } else {
-        alert('Ratul, pls add moar filters pls');
+        e.preventDefault();
       }
-      // premise type - still need halp
     }
 
     /**
@@ -382,12 +388,6 @@ module.exports = /*  @ngInject */
     // ***************
     // PRIVATE METHODS
     // ***************
-
-    function allOpportunitiesDisabled() {
-      if ((filtersService.model.selected.premiseType && filtersService.model.selected.premiseType !== 'all') && ((filtersService.model.selected.distributor && filtersService.model.selected.distributor.length > 0) || (filtersService.model.selected.store && filtersService.model.selected.store.length > 0) || (filtersService.model.selected.chain && filtersService.model.selected.chain.length > 0))) return false;
-
-      return true;
-    }
 
     function deselectMarketId() {
       if (vm.marketIdSelected === true) {

@@ -400,5 +400,9 @@ md-autocomplete.ng-isolate-scope {
   .accent {
     font-size: 0.5em;
     padding-left: 2em;
+
+    &[disabled] {
+      color: $gray-2;
+    }
   }
 }
