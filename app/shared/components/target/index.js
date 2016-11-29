@@ -103,9 +103,14 @@ function TargetListController($scope, $state, targetListService, userService, lo
   }
 
   function init() {
+    if (userService.model.targetLists) {
+      userService.model.targetLists = null;
+    }
+
     loaderService.openLoader();
     userService.getTargetLists(userService.model.currentUser.employeeID).then(function(data) {
       loaderService.closeLoader();
+      userService.model.targetLists = data;
       // split things into categories, but ignore archived
       var mine = data.owned.filter(curriedFilterByArchived(false));
       if (data.sharedWithMe) var shared = data.sharedWithMe.filter(curriedFilterByArchived(false));
@@ -121,6 +126,8 @@ function TargetListController($scope, $state, targetListService, userService, lo
       // Send to model
       vm.types.mine.records = filterTargetLists(mine);
       vm.types.mine.total = mine.length;
+      userService.model.targetLists.owned = mine;
+
       vm.types.shared.records = filterTargetLists(shared);
       vm.types.shared.total = shared.length;
       vm.types.archived.records = filterTargetLists(archived);
