@@ -249,15 +249,19 @@ module.exports = /*  @ngInject */
       },
       accountMarkets: [{
         name: 'Depletions',
+        propertyName: 'depletions',
         value: 1
       }, {
         name: 'Distribution (simple)',
+        propertyName: 'distributionsSimple',
         value: 2
       }, {
         name: 'Distribution (effective)',
+        propertyName: 'distributionsEffective',
         value: 3
       }, {
         name: 'Velocity',
+        propertyName: 'velocity',
         value: 4
       }],
       valuesVsTrend: [{
@@ -295,6 +299,12 @@ module.exports = /*  @ngInject */
         'distirbutionSimple': 1,
         'distirbutionEffective': 2,
         'velocity': 3
+      },
+      topBottomSortTypeEnum: {
+        'topValues': 1,
+        'topTrends': 2,
+        'bottomValues': 3,
+        'bottomTrends': 4
       }
     };
 
@@ -317,7 +327,8 @@ module.exports = /*  @ngInject */
       lastEndingTimePeriod: lastEndingTimePeriod,
       accountFilters: accountFilters,
       trendPropertyNames: trendPropertyNames,
-      getFilteredTopBottomData: getFilteredTopBottomData
+      getFilteredTopBottomData: getFilteredTopBottomData,
+      getTopBottomDataSorted: getTopBottomDataSorted
     };
 
     return service;
@@ -428,21 +439,79 @@ module.exports = /*  @ngInject */
       }
     }
 
-    function getFilteredTopBottomData(topBottomData, categoryType) {
+    function getTopBottomDataSorted(topBottomData, planType, categoryType) {
+      var sortedList = {
+            topValues: [],
+            bottomValues: [],
+            topTrends: [],
+            bottomTrends: []
+          }, queryLimit = 10, valuesArr, trendsArr;
+      valuesArr = $filter('orderBy')(topBottomData, categoryType.propertyName);
+      var len = valuesArr.length;
+      if (len > queryLimit) {
+        sortedList.topValues = valuesArr.splice(0, queryLimit - 1);
+        sortedList.bottomValues = valuesArr.splice(len - queryLimit, len - 1);
+      } else {
+        sortedList.topValues = valuesArr;
+        sortedList.bottomValues = valuesArr;
+      }
+      trendsArr = $filter('orderBy')(topBottomData, trendPropertyNames[categoryType.propertyName][planType.value - 1]);
+      if (len > queryLimit) {
+        sortedList.topTrends = valuesArr.splice(0, queryLimit - 1);
+        sortedList.topTrends = valuesArr.splice(len - queryLimit, len - 1);
+      } else {
+        sortedList.topTrends = trendsArr;
+        sortedList.topTrends = trendsArr;
+      }
+    }
+
+    /**
+      * Gets an array of data matching the distirubution or depletion time period
+      * @param {Object} topBottomData Package or Brand
+      * @param {String} categoryType depletions or Distribution
+      * @param {String} depletionOption L90, L120 etc
+      * @returns {Object} currentTrendVal Returns the trend display value as string and the actual float value
+      */
+    function getFilteredTopBottomData(topBottomData, categoryType, depletionOption, distirbutionOption) {
+      console.log('FilteredData', topBottomData, categoryType, distirbutionOption, depletionOption);
+      var data, filteredData = [], matchedMeasure = null;
       switch (categoryType.value) {
         case accountFilters.accountMarketsEnums.depletions:
-
+          for (var i = 0, len = topBottomData.length; i < len; i++) {
+            data = topBottomData[i];
+            matchedMeasure = data.measures.filter(function (measure) {
+              return measure.timeframe === depletionOption.name;
+            });
+            if (matchedMeasure[0]) {
+              var depletionObj = {
+                name: data.name,
+                type: data.type,
+                measure: matchedMeasure[0]
+              };
+              filteredData.push(depletionObj);
+            }
+          }
           break;
-        case accountFilters.accountMarketsEnums.distSimple:
-
+        default:
+          for (var j = 0, length = topBottomData.length; j < length; j++) {
+            data = topBottomData[i];
+            matchedMeasure = data.measures.filter(function (measure) {
+              return measure.timeframe === distirbutionOption.name;
+            });
+            if (matchedMeasure[0]) {
+              var distirbutionObj = {
+                name: data.name,
+                type: data.type,
+                measure: matchedMeasure[0]
+              };
+              filteredData.push(distirbutionObj);
+            }
+          }
           break;
-        case accountFilters.accountMarketsEnums.distEffective:
-
-          break;
-        case accountFilters.accountMarketsEnums.velocity:
-
-          break;
-
       }
+      var copyTest = angular.copy(filteredData);
+      filteredData = filteredData.concat(copyTest);
+      filteredData = filteredData.concat(copyTest);
+      return filteredData;
     }
   };

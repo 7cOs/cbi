@@ -419,6 +419,58 @@ module.exports = /*  @ngInject */
       if (vm.marketSelectedIndex === 3) { vm.filtersService.model.selected.accountTypes = 'Stores'; setChartData(vm.marketData.stores); }
     }
 
+<<<<<<< 6606e2289235f174218890caff6c1ae9e3508aee
+=======
+    // Move to next indexed tab
+    function nextTab(widget) {
+      vm.disableAnimation = false;
+      if (widget === 'brands') {
+        vm.brandSelectedIndex = vm.brandSelectedIndex + 1;
+        setCurrentTotalsObject();
+        vm.filtersService.model.accountSelected.accountBrands = vm.filtersService.accountFilters.accountBrands[1];
+      }
+      if (widget === 'markets') { vm.marketSelectedIndex = vm.marketSelectedIndex + 1; }
+    }
+
+    function setTopBottomInitData(performanceData) {
+      vm.filtersService.model.accountSelected.accountMarkets = vm.filtersService.accountFilters.accountMarkets[0];
+      vm.currentTopBottomDataForFilter = performanceData;
+      var filteredData = filtersService.getFilteredTopBottomData(performanceData, vm.filtersService.model.accountSelected.accountMarkets, vm.filterModel.depletionsTimePeriod, vm.filterModel.distributionTimePeriod);
+      var sortedData = filtersService.getTopBottomDataSorted(filteredData, vm.filterModel.trend, vm.filtersService.model.accountSelected.accountMarkets);
+      console.log('sortedData', sortedData);
+    }
+
+    function init() {
+      // reset all chips and filters on page init
+      vm.filterModel.trend = vm.filtersService.model.trend[0];
+      vm.filtersService.model.accountSelected.accountBrands = vm.filtersService.accountFilters.accountBrands[0];
+
+      chipsService.resetChipsFilters(chipsService.model);
+      setDefaultEndingPeriodOptions();
+      vm.currentTopBottomAcctType = vm.filtersService.accountFilters.accountTypes[0];
+      vm.filtersService.model.selected.premiseType = 'all';
+      var params = filtersService.getAppliedFilters('brandSnapshot');
+
+      var promiseArr = [
+        userService.getPerformanceSummary(),
+        userService.getPerformanceDepletion(),
+        userService.getPerformanceDistribution({'type': 'noencode', 'premiseType': 'off'}),
+        userService.getPerformanceBrand(params),
+        userService.getTopBottomSnapshot(vm.currentTopBottomAcctType, params)
+      ];
+
+      $q.all(promiseArr).then(function(data) {
+        userService.model.summary = data[0];
+        userService.model.depletion = data[1];
+        userService.model.distribution = data[2];
+        vm.brandTabs.brands = data[3].performance;
+        setCurrentTotalsObject();
+        // setTopBottomInitData(data[4].performance);
+        vm.loadingBrandSnapshot = false;
+      });
+    }
+
+>>>>>>> Primary commits for top bottom
     /**
      * Gets the trend values based on whether ABP or YA is selected
      * @param {Array} measures Package or Brand
