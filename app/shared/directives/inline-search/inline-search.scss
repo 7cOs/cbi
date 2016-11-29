@@ -21,6 +21,8 @@
     width: 100%;
 
     &.open {
+      width: 100%;
+      min-width: min-content;
       min-height: 9em;
       max-height: 9em;
       opacity: 1;
