@@ -6,6 +6,7 @@ describe('Unit: list controller', function() {
     angular.mock.module('ngMaterial');
     angular.mock.module('cf.common.services');
     angular.mock.module('cf.common.components.navbar');
+    angular.mock.module('angularMoment');
 
     inject(function(_$rootScope_, $controller, _$window_, _notificationsService_, _userService_, _versionService_) {
       $rootScope = _$rootScope_;

@@ -3,7 +3,7 @@ div.target-lists
     md-tab(ng-repeat="type in target.types" ng-if="target.tabFilter(type)" label="{{type.name}}")
       md-content.md-padding
         div(row).target-list-count-container.clearfix
-          h5.accent Displaying Most Recent ({{type.records.length}} of {{type.total}})
+          h5.accent Displaying Most Recent ({{target.recordsShownLength(type.records.length)}} of {{type.total}})
           div(column="3").target-list-count
             h5(column="6").accent.completed Closed
             h5(column="6").accent Total
@@ -16,7 +16,7 @@ div.target-lists
             p It seems that you haven't been invited to any shared Target Lists yet. In the meantime, you can invite others to collaborate on your target lists.
             a(ui-sref="target-lists") Ok, show me my lists
           ul
-            li(ng-repeat="list in type.records" ng-class="{'new-share' : list.newShare}").target-list
+            li(ng-repeat="list in type.records | orderBy:'-dateOpportunitiesUpdated' | limitTo:5" ng-class="{'new-share' : list.newShare}").target-list
               a(ui-sref="target-list-detail({id: list.id})")
                 div.target-list-row-one.clearfix
                   h3.target-list-name {{list.name}}

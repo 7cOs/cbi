@@ -36,6 +36,8 @@ module.exports = /*  @ngInject */
     vm.pageName = $state.current.name;
     vm.selected = [];
     vm.selectedTab = 0;
+    vm.sortProperty = 'dateOpportunitiesUpdated';
+    vm.reverse = true;
     vm.targetListAuthor = '';
     vm.totalOpportunitesChevron = true;
 
@@ -229,11 +231,11 @@ module.exports = /*  @ngInject */
       vm.sortProperty = property;
 
       vm.listChevron = (property === 'name') ? !vm.listChevron : vm.listChevron;
-      vm.collaboratorsChevron = (property === 'members.length') ? !vm.collaboratorsChevron : vm.collaboratorsChevron;
-      vm.lastUpdatedChevron = (property === 'created') ? !vm.lastUpdatedChevron : vm.lastUpdatedChevron;
-      vm.closedOpportunitiesChevron = (property === 'closedOpportunities') ? !vm.closedOpportunitiesChevron : vm.closedOpportunitiesChevron;
-      vm.totalOpportunitesChevron = (property === 'Opportunites') ? !vm.totalOpportunitesChevron : vm.totalOpportunitesChevron;
-      vm.depletionsChevron = (property === 'depletions') ? !vm.depletionsChevron : vm.depletionsChevron;
+      vm.collaboratorsChevron = (property === 'collaborators.length') ? !vm.collaboratorsChevron : vm.collaboratorsChevron;
+      vm.lastUpdatedChevron = (property === 'dateOpportunitiesUpdated') ? !vm.lastUpdatedChevron : vm.lastUpdatedChevron;
+      vm.closedOpportunitiesChevron = (property === 'opportunitiesSummary.closedOpportunitiesCount') ? !vm.closedOpportunitiesChevron : vm.closedOpportunitiesChevron;
+      vm.totalOpportunitesChevron = (property === 'opportunitiesSummary.opportunitiesCount') ? !vm.totalOpportunitesChevron : vm.totalOpportunitesChevron;
+      vm.depletionsChevron = (property === 'opportunitiesSummary.totalClosedDepletions') ? !vm.depletionsChevron : vm.depletionsChevron;
     }
 
     function toggle(item, list) {
@@ -328,6 +330,9 @@ module.exports = /*  @ngInject */
 
         for (var i = 0; i < data.length; i++) {
           for (var j = 0; j < data[i].owned.length; j++) {
+            if (data[i].owned[j].dateOpportunitiesUpdated === null) {
+              data[i].owned[j].dateOpportunitiesUpdated = data[i].owned[j].createdAt;
+            }
 
             data[i].owned[j].targetListAuthor = 'current user';
 
@@ -344,6 +349,11 @@ module.exports = /*  @ngInject */
           }
 
           for (j = 0; j < data[i].sharedWithMe.length; j++) {
+
+            if (data[i].sharedWithMe[j].dateOpportunitiesUpdated === null) {
+              data[i].sharedWithMe[j].dateOpportunitiesUpdated = data[i].sharedWithMe[j].createdAt;
+            }
+
             vm.targetListAuthor = findTargetListAuthor(data[i].sharedWithMe[j].collaborators);
 
             data[i].sharedWithMe[j].targetListAuthor = vm.targetListAuthor;

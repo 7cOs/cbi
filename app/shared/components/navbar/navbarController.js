@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports = /*  @ngInject */
-  function navbarController($rootScope, $scope, $state, $window, $mdPanel, $mdDialog, $mdMenu, $mdSelect, $anchorScroll, notificationsService, opportunitiesService, targetListService, userService, versionService, loaderService, ieHackService, toastService) {
+  function navbarController($rootScope, $scope, $state, $window, $mdPanel, $mdDialog, $mdMenu, $mdSelect, $anchorScroll, notificationsService, opportunitiesService, targetListService, userService, versionService, loaderService, ieHackService, toastService, filtersService, moment) {
 
     // ****************
     // CONTROLLER SETUP
@@ -154,12 +154,25 @@ module.exports = /*  @ngInject */
 
     // Add Opportunity
     function addOpportunity(opportunity) {
+      var targetListToFind = opportunity.properties.targetList,
+          model = userService.model.targetLists.owned;
+
+      angular.forEach(model, function(key, value) {
+        if (key.id === targetListToFind) {
+          model[value].dateOpportunitiesUpdated = moment().format();
+          var tempModel = model[value];
+          model.splice(value, 1).unshift(tempModel);
+        }
+      });
+
       opportunity.properties.store = vm.chosenStoreObject;
       opportunity.properties.product = vm.chosenProductObject;
       if (saveOpportunity(opportunity)) {
         vm.newOpportunity = {};
         $mdDialog.hide();
       }
+
+      filtersService.model.appliedFilter.pagination.totalOpportunities++;
     }
 
     // Adds opportunities to an array with the same account name
@@ -213,7 +226,26 @@ module.exports = /*  @ngInject */
     }
 
     function addToTargetList(targetList, opportunity) {
+      var storeExists = false;
+
       targetListService.addTargetListOpportunities(targetList, [opportunity.id]);
+      opportunity.brands = [];
+      opportunity.brands.push(opportunity.product.brand.toLowerCase());
+
+      angular.forEach(opportunitiesService.model.opportunities, function(key, value) {
+
+        if (opportunity.store.id === key.store.id) {
+          key.groupedOpportunities.push(opportunity);
+          storeExists = true;
+        }
+      });
+
+      if (!storeExists) {
+        filtersService.model.appliedFilter.pagination.totalStores++;
+        opportunity.groupedOpportunities = [];
+        opportunity.groupedOpportunities.push(opportunity);
+        opportunitiesService.model.opportunities.push(opportunity);
+      }
     }
 
     // Close "Add Opportunity" modal

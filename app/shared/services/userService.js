@@ -614,11 +614,18 @@ module.exports = /*  @ngInject */
             ownedArchived = 0;
 
         for (var i = 0; i < response.data.owned.length; i++) {
+          if (response.data.owned[i].dateOpportunitiesUpdated === null) {
+            response.data.owned[i].dateOpportunitiesUpdated = response.data.owned[i].createdAt;
+          }
           if (response.data.owned[i].archived) ownedArchived++;
           else ownedNotArchived++;
         }
 
         for (i = 0; i < response.data.sharedWithMe.length; i++) {
+          if (response.data.sharedWithMe[i].dateOpportunitiesUpdated === null) {
+            response.data.sharedWithMe[i].dateOpportunitiesUpdated = response.data.sharedWithMe[i].createdAt;
+          }
+
           if (response.data.sharedWithMe[i].archived) sharedArchivedCount++;
           else sharedNotArchivedCount++;
         }
@@ -691,6 +698,7 @@ module.exports = /*  @ngInject */
         } else  {
           service.model.targetLists.owned.unshift(response.data);
         }
+
         service.model.targetLists.ownedArchived++;
         service.model.targetLists.ownedNotArchived--;
 
