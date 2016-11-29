@@ -18,9 +18,11 @@
     position: absolute;
     top: 2.45em;
     transition: all 300ms ease;
-    width: 345px;
+    width: 100%;
 
     &.open {
+      width: 100%;
+      min-width: min-content;
       min-height: 9em;
       max-height: 9em;
       opacity: 1;
