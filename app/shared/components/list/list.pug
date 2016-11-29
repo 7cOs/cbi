@@ -145,7 +145,7 @@ v-accordion.styled-list(multiple="" id="opportunities" control="list.accordion" 
             div(column='2')
               label Distributor
               div(row)
-                div(column='12') {{::opportunity.store.distributors[0] | titlecase}}
+                div(column='12') {{::opportunity.store.distributors[0]}}
                   md-tooltip
                     div(class="align-left" ng-repeat="d in opportunity.store.distributors track by $index") {{::d}}
             div(column='2')
