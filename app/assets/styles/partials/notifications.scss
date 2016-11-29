@@ -67,7 +67,7 @@
 
   &:hover {
     background-color: $gray-4;
-    cursor: hand;
+    cursor: pointer;
   }
 
   &.ADDED_NOTE,
@@ -104,10 +104,6 @@
     p,
     label {
       color: $gray-8;
-    }
-
-    &:hover {
-      cursor: default;
     }
   }
 }
