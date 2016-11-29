@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports = /*  @ngInject */
-  function navbarController($rootScope, $scope, $state, $window, $mdPanel, $mdDialog, $mdMenu, $mdSelect, $anchorScroll, notificationsService, opportunitiesService, targetListService, userService, versionService, loaderService, ieHackService, toastService, moment) {
+  function navbarController($rootScope, $scope, $state, $window, $mdPanel, $mdDialog, $mdMenu, $mdSelect, $anchorScroll, notificationsService, opportunitiesService, targetListService, userService, versionService, loaderService, ieHackService, toastService, filtersService, moment) {
 
     // ****************
     // CONTROLLER SETUP
@@ -171,6 +171,8 @@ module.exports = /*  @ngInject */
         vm.newOpportunity = {};
         $mdDialog.hide();
       }
+
+      filtersService.model.appliedFilter.pagination.totalOpportunities++;
     }
 
     // Adds opportunities to an array with the same account name
@@ -239,6 +241,7 @@ module.exports = /*  @ngInject */
       });
 
       if (!storeExists) {
+        filtersService.model.appliedFilter.pagination.totalStores++;
         opportunity.groupedOpportunities = [];
         opportunity.groupedOpportunities.push(opportunity);
         opportunitiesService.model.opportunities.push(opportunity);
