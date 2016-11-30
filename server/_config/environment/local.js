@@ -23,8 +23,6 @@ module.exports = function (config) {
   config.env = 'development';
   config.address = 'http://' + config.domain + ':'  + config.port + '/'; // base url
 
-  config.iq = 'http://iqweb.cbrands.com';
-
   // if you change this server, you need to get a different JWT.
   config.api = {
     key: 'U1NCc2FXdGxJSFJ2SUVodlpHOXlMQ0JJYjJSdmNpd2dTRzlrYjNJc0lFaHZaRzl5Y3lCaGJtUWdTRzlrYjNKekxnPT0=',
