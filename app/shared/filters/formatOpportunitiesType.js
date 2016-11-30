@@ -11,7 +11,7 @@ module.exports = /*  @ngInject */
      */
     return function(str) {
       var map = {
-        'CUSTOM': 'Custom',
+        'ND001': 'New Distribution',
         'AT_RISK': 'At Risk',
         'NON_BUY': 'Non-Buy',
         'NEW_PLACEMENT_NO_REBUY': 'New Placement No Rebuy',
@@ -19,6 +19,10 @@ module.exports = /*  @ngInject */
         'LOW_VELOCITY': 'Low Velocity'
       };
 
-      return map[str];
+      if (!map[str]) {
+        return str;
+      } else {
+        return map[str];
+      }
     };
   };

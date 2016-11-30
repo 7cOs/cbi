@@ -184,7 +184,7 @@ v-accordion.styled-list(multiple="" id="opportunities" control="list.accordion" 
                 div(column='2').pad-cell
                   span.product-title {{::product.product.brand}} <br>
                   | {{::product.product.name}}
-                div.type(column='2') {{::product.type | formatOpportunitiesType}}
+                div.type(column='2') {{list.opportunityTypeOrSubtype(product) | formatOpportunitiesType}}
                 div(column='4') {{::product.rationale}}
                 div(column='1') {{product.status | titlecase}}
                 div(column='1' class="impact {{product.impactDescription | lowercase}}")
