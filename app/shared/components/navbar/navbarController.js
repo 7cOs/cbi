@@ -171,7 +171,6 @@ module.exports = /*  @ngInject */
       opportunity.properties.store = vm.chosenStoreObject;
       opportunity.properties.product = vm.chosenProductObject;
       opportunity.properties.product.type = tempType;
-      debugger;
       if (saveOpportunity(opportunity)) {
         vm.newOpportunity = {};
         $mdDialog.hide();
