@@ -166,12 +166,16 @@ module.exports = /*  @ngInject */
         }
       });
 
+      var tempType = opportunity.properties.product.type;
+
+      opportunity.properties.store = vm.chosenStoreObject;
+      opportunity.properties.product = vm.chosenProductObject;
+      opportunity.properties.product.type = tempType;
+      debugger;
       if (saveOpportunity(opportunity)) {
         vm.newOpportunity = {};
         $mdDialog.hide();
       }
-      opportunity.properties.store = vm.chosenStoreObject;
-      opportunity.properties.product = vm.chosenProductObject;
 
       filtersService.model.appliedFilter.pagination.totalOpportunities++;
     }
