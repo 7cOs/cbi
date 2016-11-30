@@ -6,7 +6,7 @@ div.modal.add-opportunity
       label Account
       inline-search(type="store" placeholder="Store Name or Location (City, Zip, or State)" chosen-result="nb.newOpportunity.properties.store.description" chosen-result-object="nb.chosenStoreObject" is-required="true" show-address="true")
       div(ng-cloak ng-show="nb.addOpportunityForm.$invalid && nb.addOpportunityForm.$submitted")
-        p.error-message.accent(ng-show="nb.addOpportunityForm.accountInput.$error.required") <img src="./assets/img/icons/error.svg">Please select an Account.
+        p.error-message.accent <img src="./assets/img/icons/error.svg">Please select an Account.
     div.modal-input.clearfix
       label Opportunity Type
       md-radio-group.horizontal-layout(ng-model="nb.newOpportunity.properties.distributionType.type" name="opportunityType" required)
@@ -14,7 +14,7 @@ div.modal.add-opportunity
         md-radio-button.md-primary(value="other" aria-label="Other") Other
         input(ng-model="nb.newOpportunity.properties.distributionType.description" aria-label="Opportunity Description" placeholder="Input type" name="otherOpportunityInput").short
     div(ng-cloak ng-show="nb.addOpportunityForm.$invalid && nb.addOpportunityForm.$submitted")
-      p.error-message.accent.select-opportunity-error(ng-show="nb.addOpportunityForm.opportunityType.$error.required") <img src="./assets/img/icons/error.svg">Please select an Opportunity Type.
+      p.error-message.accent.select-opportunity-error <img src="./assets/img/icons/error.svg">Please select an Opportunity Type.
 
     div.modal-input.clearfix
       label(ng-if="nb.newOpportunity.properties.distributionType.type === 'new'") Recommended Package/ SKU
@@ -30,7 +30,7 @@ div.modal.add-opportunity
         md-radio-group(ng-model="nb.newOpportunity.properties.product.type")
           md-radio-button.mixed-brands.md-primary(value="mixed" ng-if="nb.newOpportunity.properties.distributionType.type === 'other'" aria-label="Mixed Brands") Mixed Brands
         div(ng-cloak ng-show="nb.addOpportunityForm.$invalid && nb.addOpportunityForm.$submitted")
-          p.error-message.accent(ng-show="nb.addOpportunityForm.recommendedBrand.$error.required") <img src="./assets/img/icons/error.svg">Please enter a Recommended Brand or Select Mixed Brands.
+          p.error-message.accent <img src="./assets/img/icons/error.svg">Please enter a Recommended Brand or Select Mixed Brands.
 
     div.modal-input.rationale
       label Rationale
@@ -40,11 +40,11 @@ div.modal.add-opportunity
             md-option(ng-repeat="rationale in nb.rationales" aria-label="{{rationale.type}}" ng-click="nb.showNewRationaleInput(false)" value="{{rationale.type}}") {{rationale.type}}
             md-option(aria-label="Add New Rationale" ng-click="nb.showNewRationaleInput(true)" value="other") + Add Other Rationale
         div(ng-show="nb.addOpportunityForm.$invalid && nb.addOpportunityForm.$submitted")
-          p.error-message.accent(ng-show="nb.addOpportunityForm.rationaleDropdown.$error.required") <img src="./assets/img/icons/error.svg">Please select a Rationale, or add another one.
+          p.error-message.accent <img src="./assets/img/icons/error.svg">Please select a Rationale, or add another one.
       label(ng-if="nb.addNewRationale") Add Other Rationale
       input(ng-if="nb.addNewRationale" ng-model="nb.newOpportunity.properties.rationale.other" aria-label="Input New Rationale" placeholder="Add Other Rationale" name="addRationale")
       div(ng-cloak ng-show="nb.addOpportunityForm.$invalid && nb.addOpportunityForm.$submitted")
-        p.error-message.accent(ng-show="nb.addOpportunityForm.addRationale.$error.required") <img src="./assets/img/icons/error.svg">Please enter a Rationale.
+        p.error-message.accent <img src="./assets/img/icons/error.svg">Please enter a Rationale.
     div.modal-input
       label Impact
       .dropdown-filter.half-width
