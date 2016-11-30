@@ -166,12 +166,12 @@ module.exports = /*  @ngInject */
         }
       });
 
-      opportunity.properties.store = vm.chosenStoreObject;
-      opportunity.properties.product = vm.chosenProductObject;
       if (saveOpportunity(opportunity)) {
         vm.newOpportunity = {};
         $mdDialog.hide();
       }
+      opportunity.properties.store = vm.chosenStoreObject;
+      opportunity.properties.product = vm.chosenProductObject;
 
       filtersService.model.appliedFilter.pagination.totalOpportunities++;
     }
