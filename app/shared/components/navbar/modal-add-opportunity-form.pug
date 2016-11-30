@@ -13,7 +13,7 @@ div.modal.add-opportunity
         md-radio-button.md-primary(value="new" aria-label="New Distribution") New Distribution
         md-radio-button.md-primary(value="other" aria-label="Other") Other
         input(ng-model="nb.newOpportunity.properties.distributionType.description" aria-label="Opportunity Description" placeholder="Input type" name="otherOpportunityInput").short
-    div(ng-cloak ng-show="nb.addOpportunityForm.$invalid && nb.addOpportunityForm.$submitted")
+    div(ng-cloak ng-show="nb.addOpportunityForm.opportunityType.$invalid && nb.addOpportunityForm.$submitted")
       p.error-message.accent.select-opportunity-error <img src="./assets/img/icons/error.svg">Please select an Opportunity Type.
 
     div.modal-input.clearfix
@@ -36,23 +36,26 @@ div.modal.add-opportunity
       label Rationale
       .dropdown-filter
         .dropdown
-          md-select.left(ng-model="nb.newOpportunity.properties.rationale.description" aria-label="rationale dropdown" placeholder="Select Rationale" name="rationaleDropdown")
-            md-option(ng-repeat="rationale in nb.rationales" aria-label="{{rationale.type}}" ng-click="nb.showNewRationaleInput(false)" value="{{rationale.type}}") {{rationale.type}}
-            md-option(aria-label="Add New Rationale" ng-click="nb.showNewRationaleInput(true)" value="other") + Add Other Rationale
-        div(ng-show="nb.addOpportunityForm.$invalid && nb.addOpportunityForm.$submitted")
+          md-select.left(ng-model="nb.newOpportunity.properties.rationale.description" aria-label="rationale dropdown" placeholder="Select Rationale" name="rationaleDropdown" required)
+            md-option(aria-label="High Impact" value="H") <span class="impact-text">High</span> <img class="impact-icon" src="./assets/img/icons/impact-high.svg">
+            md-option(aria-label="Medium Impact form" value="M") <span class="impact-text">Medium</span> <img class="impact-icon" src="./assets/img/icons/impact-medium.svg">
+            md-option(aria-label="Low Impact" value="L") <span class="impact-text">Low</span> <img class="impact-icon" src="./assets/img/icons/impact-low.svg">
+        div(ng-show="nb.addOpportunityForm.rationaleDropdown.$invalid && nb.addOpportunityForm.$submitted")
           p.error-message.accent <img src="./assets/img/icons/error.svg">Please select a Rationale, or add another one.
       label(ng-if="nb.addNewRationale") Add Other Rationale
       input(ng-if="nb.addNewRationale" ng-model="nb.newOpportunity.properties.rationale.other" aria-label="Input New Rationale" placeholder="Add Other Rationale" name="addRationale")
-      div(ng-cloak ng-show="nb.addOpportunityForm.$invalid && nb.addOpportunityForm.$submitted")
+      div(ng-show="nb.addOpportunityForm.addRationale.$invalid && nb.addOpportunityForm.$submitted")
         p.error-message.accent <img src="./assets/img/icons/error.svg">Please enter a Rationale.
     div.modal-input
       label Impact
       .dropdown-filter.half-width
         .dropdown.short
-          md-select.left(ng-model="nb.newOpportunity.properties.impact.enum" aria-label="impact dropdown" placeholder="Select Impact" required)
+          md-select.left(ng-model="nb.newOpportunity.properties.impact.enum" aria-label="impact dropdown" placeholder="Select Impact" name="impactDropdown" required)
             md-option(aria-label="High Impact" value="H") <span class="impact-text">High</span> <img class="impact-icon" src="./assets/img/icons/impact-high.svg">
             md-option(aria-label="Medium Impact form" value="M") <span class="impact-text">Medium</span> <img class="impact-icon" src="./assets/img/icons/impact-medium.svg">
             md-option(aria-label="Low Impact" value="L") <span class="impact-text">Low</span> <img class="impact-icon" src="./assets/img/icons/impact-low.svg">
+        div(ng-show="nb.addOpportunityForm.impactDropdown.$invalid && nb.addOpportunityForm.$submitted")
+          p.error-message.accent <img src="./assets/img/icons/error.svg">Please select an impact level.
     div.modal-input
       button(type="submit" ng-click="nb.addAnotherOpportunity(nb.newOpportunity)").modal-input.icon-container.add-another-opportunity
         img(src="../assets/img/icons/overview-overall-market.svg")
@@ -63,7 +66,7 @@ div.modal.add-opportunity
         .dropdown-filter
           .dropdown
             md-checkbox Add to target list
-            md-select.left(ng-model="nb.newOpportunity.properties.targetList" aria-label="target list dropdown" placeholder="Select a target list" name="rationaleDropdown")
+            md-select.left(ng-model="nb.newOpportunity.properties.targetList" aria-label="target list dropdown" placeholder="Select a target list" name="targetListDropdown")
               md-option(ng-repeat="targetList in nb.targetLists | filter:{archived:false, deleted: false}:true" aria-label="{{targetList.name}}" value="{{targetList.id}}") {{targetList.name}}
     button(type="submit" ng-click="nb.addOpportunity(nb.newOpportunity)").btn-action Add
     p.cancel.accent(ng-click="nb.closeModal()") X Cancel
