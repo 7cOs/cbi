@@ -158,6 +158,10 @@ module.exports = /*  @ngInject */
       var targetListToFind = opportunity.properties.targetList,
           model = userService.model.targetLists.owned;
 
+      if (vm.addOpportunityForm.$invalid) {
+        return false;
+      }
+
       angular.forEach(model, function(key, value) {
         if (key.id === targetListToFind) {
           model[value].dateOpportunitiesUpdated = moment().format();
@@ -193,8 +197,8 @@ module.exports = /*  @ngInject */
     }
 
     function saveOpportunity(opportunity) {
-      console.log('saving', vm.addOpportunityForm);
-      if (vm.addOpportunityForm.$invalid === true) {
+
+      if (vm.addOpportunityForm.$invalid) {
         return false;
       }
 
