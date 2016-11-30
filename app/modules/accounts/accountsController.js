@@ -50,23 +50,23 @@ module.exports = /*  @ngInject */
 
     // Set default values
     vm.accountTypesDefault = 'Distributors';
+    vm.brandIdSelected = null;
     vm.brandWidgetTitleDefault = 'All Brands';
     vm.brandWidgetTitle = vm.brandWidgetTitleDefault;
-    vm.filtersService.model.accountSelected.accountBrands = 'Distribution (simple)';
-    vm.filtersService.model.accountSelected.accountMarkets = 'Depletions';
-    vm.selectOpen = false;
-    vm.disableAnimation = false;
-    vm.disableApply = false;
-    vm.marketStoresView = false;
-    vm.marketIdSelected = false;
-    vm.selectedStore = null;
-    vm.hintTextPlaceholder = 'Account or Subaccount Name';
-    vm.overviewOpen = false;
-    vm.idSelected = null;
-    vm.brandIdSelected = null;
-    vm.loadingBrandSnapshot = true;
     vm.currentTopBottomAcctType = null;
     vm.currentTopBottomDataForFilter = null;
+    vm.disableAnimation = false;
+    vm.disableApply = false;
+    vm.filtersService.model.accountSelected.accountBrands = 'Distribution (simple)';
+    vm.filtersService.model.accountSelected.accountMarkets = 'Depletions';
+    vm.hintTextPlaceholder = 'Account or Subaccount Name';
+    vm.idSelected = null;
+    vm.loadingBrandSnapshot = true;
+    vm.marketStoresView = false;
+    vm.marketIdSelected = false;
+    vm.overviewOpen = false;
+    vm.selectedStore = null;
+    vm.selectOpen = false;
 
     // Chart Setup
     vm.chartData = [{'values': vm.marketData.distributors}];
@@ -113,29 +113,29 @@ module.exports = /*  @ngInject */
     // Expose public methods
     vm.allOpportunitiesDisabled = allOpportunitiesDisabled;
     vm.apply = apply;
-    vm.removeDistOptionsBasedOnView = removeDistOptionsBasedOnView;
+    vm.checkForDepletionCount = checkForDepletionCount;
+    vm.checkIfVelocityPresent = checkIfVelocityPresent;
+    vm.currentTopBottomView = null;
+    vm.currentTotalsObject = null;
     vm.displayBrandValue = displayBrandValue;
     vm.goToOpportunities = goToOpportunities;
     vm.getClassBasedOnValue = getClassBasedOnValue;
+    vm.getTrendValues = getTrendValues;
+    vm.isPackageView = false;
     vm.openNotes = openNotes;
     vm.openSelect = openSelect;
     vm.placeholderSelect = placeholderSelect;
     vm.prevTab = prevTab;
+    vm.removeDistOptionsBasedOnView = removeDistOptionsBasedOnView;
     vm.resetFilters = resetFilters;
     vm.selectItem = selectItem;
     vm.setFilter = setFilter;
     vm.setMarketTab = setMarketTab;
+    vm.setTopBottomAcctTypeSelection = setTopBottomAcctTypeSelection;
     vm.updateBrandSnapshot = updateBrandSnapshot;
+    vm.updateChip = updateChip;
     vm.updateDistributionTimePeriod = updateDistributionTimePeriod;
     vm.updateTopBottom = updateTopBottom;
-    vm.getTrendValues = getTrendValues;
-    vm.isPackageView = false;
-    vm.checkIfVelocityPresent = checkIfVelocityPresent;
-    vm.currentTotalsObject = null;
-    vm.checkForDepletionCount = checkForDepletionCount;
-    vm.updateChip = updateChip;
-    vm.setTopBottomAcctTypeSelection = setTopBottomAcctTypeSelection;
-    vm.currentTopBottomView = null;
 
     init();
 
