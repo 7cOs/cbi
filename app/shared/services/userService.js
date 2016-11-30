@@ -486,7 +486,7 @@ module.exports = /*  @ngInject */
           baseUrl += '/performance/topBottomSnapshot/stores';
           break;
       }
-
+      params.type = 'topBottom';
       url = apiHelperService.request(baseUrl, params);
       $http.get(url)
         .then(getTopBottomSnapshotSuccess)
@@ -494,7 +494,6 @@ module.exports = /*  @ngInject */
 
       function getTopBottomSnapshotSuccess(response) {
         calculateTrendValuesForPlan(response.data.performance);
-        // console.log('[getTopBottomSnapshot.data]', response.data);
         snapshotPromise.resolve(response.data);
       }
 

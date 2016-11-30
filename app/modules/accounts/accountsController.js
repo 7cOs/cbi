@@ -62,6 +62,7 @@ module.exports = /*  @ngInject */
     vm.hintTextPlaceholder = 'Account or Subaccount Name';
     vm.idSelected = null;
     vm.loadingBrandSnapshot = true;
+    vm.loadingTopBottom = true;
     vm.marketStoresView = false;
     vm.marketIdSelected = false;
     vm.overviewOpen = false;
@@ -381,9 +382,11 @@ module.exports = /*  @ngInject */
     }
 
     function updateTopBottom() {
-      var route = filtersService.model.selected.accountTypes.replace(/\W/g, '').toLowerCase();
-      userService.getTopBottom(route).then(function(data) {
-        userService.model.topBottom[route] = data;
+      var params = filtersService.getAppliedFilters('brandSnapshot');
+      vm.loadingTopBottom = true;
+      userService.getTopBottomSnapshot(vm.currentTopBottomAcctType, params).then(function(data) {
+        // update model
+        vm.loadingTopBottom = false;
       });
     }
 
@@ -485,6 +488,7 @@ module.exports = /*  @ngInject */
         setCurrentTotalsObject();
         // vm.currentTopBottomDataForFilter = userService.getFilteredTopBottomData(data[4].performance);
         vm.loadingBrandSnapshot = false;
+        vm.loadingTopBottom = false;
       });
     }
 

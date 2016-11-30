@@ -725,4 +725,19 @@ describe('Unit: accountsController', function() {
     });
 
   });
+
+  describe('[Method] updateTopBottom', function() {
+    beforeEach(function() {
+    });
+
+    it('Should update top bottom', function() {
+      ctrl.loadingTopBottom = true;
+      expect(userService.getTopBottomSnapshot.calls.count()).toEqual(1);
+
+      ctrl.updateTopBottom();
+
+      expect(userService.getTopBottomSnapshot.calls.count()).toEqual(2);
+    });
+
+  });
 });
