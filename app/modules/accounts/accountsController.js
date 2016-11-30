@@ -653,6 +653,7 @@ module.exports = /*  @ngInject */
             isPerformanceDataChanged: false,
             isFilterCategoryChanged: false
           };
+          console.log('Top Bottom Dist', vm.topBottomData.distributors);
           break;
         case accountTypes.accounts:
           break;
