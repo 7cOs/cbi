@@ -56,6 +56,12 @@ module.exports = /*  @ngInject */
     vm.marketSelectedIndex = 0;
     vm.topBottomLevelIndex = 0;
 
+    // top bottom public methods
+    vm.currentTopBottomAcctType = null;
+    vm.currentTopBottomDataForFilter = null;
+    vm.getValueBoundForAcctType = getValueBoundForAcctType;
+    vm.filterByTopBottomSortCategory = filterByTopBottomSortCategory;
+
     // Set default values
     vm.accountTypesDefault = 'Distributors';
     vm.brandIdSelected = null;
@@ -70,6 +76,7 @@ module.exports = /*  @ngInject */
     vm.hintTextPlaceholder = 'Account or Subaccount Name';
     vm.idSelected = null;
     vm.loadingBrandSnapshot = true;
+<<<<<<< 94cada375e7fa30277288dc6fef3100438b96710
 <<<<<<< 9a6a8700b7307a49aae3a967d8b06f758f4f38fe
     vm.loadingTopBottom = true;
     vm.marketStoresView = false;
@@ -82,6 +89,8 @@ module.exports = /*  @ngInject */
     vm.currentTopBottomDataForFilter = null;
     vm.getValueBoundForAcctType = getValueBoundForAcctType;
 >>>>>>> depletions hooked up
+=======
+>>>>>>> Chart data hookup needs to be done
 
     // Chart Setup
     vm.chartData = [{'values': vm.marketData.distributors}];
@@ -466,18 +475,21 @@ module.exports = /*  @ngInject */
       if (widget === 'markets') { vm.marketSelectedIndex = vm.marketSelectedIndex + 1; }
     }
 
-    function init() {
-      // reset all chips and filters on page init
+    function setDefaultDropDownOptions() {
+      setDefaultEndingPeriodOptions();
       vm.filterModel.trend = vm.filtersService.model.trend[0];
       vm.filtersService.model.accountSelected.accountBrands = vm.filtersService.accountFilters.accountBrands[0];
       vm.filtersService.model.accountSelected.accountMarkets = vm.filtersService.accountFilters.accountMarkets[0];
-
-      chipsService.resetChipsFilters(chipsService.model);
-      setDefaultEndingPeriodOptions();
+      vm.filtersService.model.selected.valuesVsTrend =  vm.filtersService.accountFilters.valuesVsTrend[1];
       vm.currentTopBottomAcctType = vm.filtersService.accountFilters.accountTypes[0];
       vm.filtersService.model.selected.premiseType = 'all';
-      var params = filtersService.getAppliedFilters('brandSnapshot');
+    }
 
+    function init() {
+      // reset all chips and filters on page init
+      chipsService.resetChipsFilters(chipsService.model);
+      var params = filtersService.getAppliedFilters('brandSnapshot');
+      setDefaultDropDownOptions();
       var promiseArr = [
         userService.getPerformanceSummary(),
         userService.getPerformanceDepletion(),
@@ -643,29 +655,35 @@ module.exports = /*  @ngInject */
 
       if (filteredByTimePeriodData) {
         topBottomIndices = filtersService.getTopBottomDataSorted(filteredByTimePeriodData, vm.filterModel.trend, vm.filtersService.model.accountSelected.accountMarkets);
-
         setDataForCorrespondingTopDownLevel(performanceData, filteredByTimePeriodData, topBottomIndices);
       }
     }
 
     function setDataForCorrespondingTopDownLevel(performanceData, filteredByTimePeriodData, topBottomIndices) {
       var accountTypes = filtersService.accountFilters.accountTypesEnums;
+      var updatedObjectForLevel = {
+        performanceData: performanceData,
+        timePeriodFilteredData: filteredByTimePeriodData,
+        topBottomIndices: topBottomIndices,
+        isPerformanceDataChanged: false,
+        isFilterCategoryChanged: false
+      };
       switch (vm.currentTopBottomAcctType.value) {
         case accountTypes.distributors:
-          vm.topBottomData.distributors = {
-            performanceData: performanceData,
-            timePeriodFilteredData: filteredByTimePeriodData,
-            topBottomIndices: topBottomIndices,
-            isPerformanceDataChanged: false,
-            isFilterCategoryChanged: false
-          };
-          console.log('Top Bottom Dist', vm.topBottomData.distributors);
+          vm.topBottomData.distributors = updatedObjectForLevel;
+          console.log('Top Bottom Distirbutors', vm.topBottomData.distributors);
           break;
         case accountTypes.accounts:
+          vm.topBottomData.accounts = updatedObjectForLevel;
+          console.log('Top Bottom Accts', vm.topBottomData.accounts);
           break;
         case accountTypes.subAccounts:
+          vm.topBottomData.subAccounts = updatedObjectForLevel;
+          console.log('Top Bottom SubAccts', vm.topBottomData.subAccounts);
           break;
         case accountTypes.stores:
+          vm.topBottomData.stores = updatedObjectForLevel;
+          console.log('Top Bottom Stores', vm.topBottomData.stores);
           break;
       }
     }
@@ -682,4 +700,23 @@ module.exports = /*  @ngInject */
       }
     }
 
+    function filterByTopBottomSortCategory(currentIndex, topBottomIndices) {
+      var sortCategory = vm.filtersService.model.selected.valuesVsTrend.value;
+      var result = false;
+      switch (sortCategory) {
+        case filtersService.accountFilters.topBottomSortTypeEnum.topValues:
+          result = topBottomIndices.topValues.indexOf(currentIndex) !== -1;
+          break;
+        case filtersService.accountFilters.topBottomSortTypeEnum.topTrends:
+          result = topBottomIndices.topTrends.indexOf(currentIndex) !== -1;
+          break;
+        case filtersService.accountFilters.topBottomSortTypeEnum.bottomValues:
+          result = topBottomIndices.bottomValues.indexOf(currentIndex) !== -1;
+          break;
+        case filtersService.accountFilters.topBottomSortTypeEnum.bottomTrends:
+          result = topBottomIndices.bottomTrends.indexOf(currentIndex) !== -1;
+          break;
+      }
+      return result;
+    }
   };
