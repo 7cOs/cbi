@@ -664,7 +664,6 @@ module.exports = /*  @ngInject */
 
     function opportunityTypeOrSubtype(product) {
       if (product.type === 'CUSTOM') {
-        console.log(product);
         return product.subType;
       } else {
         return product.type;
