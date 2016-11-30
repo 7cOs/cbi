@@ -154,32 +154,16 @@ module.exports = /*  @ngInject */
     }
 
     /**
-     * Function gets the 'totals' property from brands web service call or package/sku call
-     * @returns Sets the totals object to vm.currentTotalsObject
+     * Checks if a value is positive or negative and returns empty string for null or undefined
+     * @param {Object} currentValue Opportunity object
+     * @param {String} classToBeAdded Array of all currently selected items
+     * @returns 'positive' or 'negative' or ''
      */
-    function setCurrentTotalsObject() {
-      var currentTab = vm.brandSelectedIndex === 0 ? vm.brandTabs.brands : vm.brandTabs.skus;
-      if (currentTab.filter) {
-        var matchedProperty = currentTab.filter(function (obj) {
-          return obj.type === 'Total';
-        });
-        vm.currentTotalsObject = matchedProperty[0];
+    function checkIfVelocityPresent(item) {
+      // Only return true if its YA%. For APB velocityTrend should be blank
+      if (item && item.measures) {
+        return vm.filterModel.trend.value === 1 && vm.displayBrandValue(item.measures, 'velocityTrend', 'distributionTimePeriod');
       }
-    }
-
-    /*
-    ** @param {Array} accountBrandObj - 'distirbutionSimple': 1,'distirbutionEffective': 2,'velocity': 3
-    ** @param {String} property - property to fetch from object depletions, depletionsTrend
-    ** @param {String} timePeriod - property to get from filterModel
-    */
-    function removeDistOptionsBasedOnView(accountBrandObj) {
-      var isOptionHidden = false;
-      if (accountBrandObj.value === 1 && vm.brandSelectedIndex === 1) {
-        isOptionHidden = true;
-      } else if (accountBrandObj.value === 2 && vm.brandSelectedIndex === 0) {
-        isOptionHidden = true;
-      }
-      return isOptionHidden;
     }
 
     /**
@@ -196,18 +180,6 @@ module.exports = /*  @ngInject */
         if (matchedMeasure[0]) {
           return matchedMeasure[0][property];
         }
-      }
-    }
-
-    function goToOpportunities(e) {
-      if (!allOpportunitiesDisabled()) {
-        $state.go('opportunities', {
-          resetFiltersOnLoad: false,
-          applyFiltersOnLoad: true,
-          referrer: 'accounts'
-        });
-      } else {
-        e.preventDefault();
       }
     }
 
@@ -228,6 +200,19 @@ module.exports = /*  @ngInject */
       }
       return classToBeAdded;
     }
+
+    function goToOpportunities(e) {
+      if (!allOpportunitiesDisabled()) {
+        $state.go('opportunities', {
+          resetFiltersOnLoad: false,
+          applyFiltersOnLoad: true,
+          referrer: 'accounts'
+        });
+      } else {
+        e.preventDefault();
+      }
+    }
+
     // Make notes available to the page
     function openNotes(val) {
       $rootScope.$broadcast('notes:opened', val);
@@ -253,23 +238,25 @@ module.exports = /*  @ngInject */
       }
     }
 
+    /*
+    ** @param {Array} accountBrandObj - 'distirbutionSimple': 1,'distirbutionEffective': 2,'velocity': 3
+    ** @param {String} property - property to fetch from object depletions, depletionsTrend
+    ** @param {String} timePeriod - property to get from filterModel
+    */
+    function removeDistOptionsBasedOnView(accountBrandObj) {
+      var isOptionHidden = false;
+      if (accountBrandObj.value === 1 && vm.brandSelectedIndex === 1) {
+        isOptionHidden = true;
+      } else if (accountBrandObj.value === 2 && vm.brandSelectedIndex === 0) {
+        isOptionHidden = true;
+      }
+      return isOptionHidden;
+    }
+
     function resetFilters() {
       vm.filterModel = angular.copy(filterModelTemplate);
       chipsService.resetChipsFilters(chipsService.model);
       apply(false);
-    }
-
-    /**
-     * Checks if a value is positive or negative and returns empty string for null or undefined
-     * @param {Object} currentValue Opportunity object
-     * @param {String} classToBeAdded Array of all currently selected items
-     * @returns 'positive' or 'negative' or ''
-     */
-    function checkIfVelocityPresent(item) {
-      // Only return true if its YA%. For APB velocityTrend should be blank
-      if (item && item.measures) {
-        return vm.filterModel.trend.value === 1 && vm.displayBrandValue(item.measures, 'velocityTrend', 'distributionTimePeriod');
-      }
     }
 
     // When a row item is clicked in brands / market widgets
@@ -298,6 +285,20 @@ module.exports = /*  @ngInject */
       if (widget === 'markets') { getActiveTab(); }
     }
 
+    /**
+     * Function gets the 'totals' property from brands web service call or package/sku call
+     * @returns Sets the totals object to vm.currentTotalsObject
+     */
+    function setCurrentTotalsObject() {
+      var currentTab = vm.brandSelectedIndex === 0 ? vm.brandTabs.brands : vm.brandTabs.skus;
+      if (currentTab.filter) {
+        var matchedProperty = currentTab.filter(function (obj) {
+          return obj.type === 'Total';
+        });
+        vm.currentTotalsObject = matchedProperty[0];
+      }
+    }
+
     function setFilter(result, filterModelProperty) {
       filtersService.model.selected[filterModelProperty] = [result.id];
 
@@ -323,6 +324,15 @@ module.exports = /*  @ngInject */
       apply(false);
     }
 
+    function setTopBottomAcctTypeSelection(currentAcctType) {
+      var params = filtersService.getAppliedFilters();
+      if (vm.currentTopBottomAcctType !== currentAcctType) {
+        userService.getTopBottomSnapshot(currentAcctType, params).then(function(data) {
+          vm.currentTopBottomView = userService.getCurrentTopBottomView(data);
+        });
+      }
+    }
+
     // Set proper tab and skip animation when chosen from market select box
     function setMarketTab(selectValue) {
       vm.disableAnimation = true;
@@ -336,10 +346,11 @@ module.exports = /*  @ngInject */
     function updateBrandSnapshot() {
       var params = filtersService.getAppliedFilters('brandSnapshot');
       vm.loadingBrandSnapshot = true;
+      prevTab();
 
       userService.getPerformanceBrand(params).then(function(data) {
         vm.brandTabs.brands = data.performance;
-        prevTab();
+        setCurrentTotalsObject();
         vm.loadingBrandSnapshot = false;
       });
 
@@ -376,25 +387,9 @@ module.exports = /*  @ngInject */
       });
     }
 
-    function setTopBottomAcctTypeSelection(currentAcctType) {
-      var params = filtersService.getAppliedFilters();
-      if (vm.currentTopBottomAcctType !== currentAcctType) {
-        userService.getTopBottomSnapshot(currentAcctType, params).then(function(data) {
-          vm.currentTopBottomView = userService.getCurrentTopBottomView(data);
-        });
-      }
-    }
-
     // ***************
     // PRIVATE METHODS
     // ***************
-
-    function deselectMarketId() {
-      if (vm.marketIdSelected === true) {
-        vm.idSelected = null;
-        vm.marketIdSelected = false;
-      }
-    }
 
     /**
      * Checks if value of Depletions for a Pacakge or Brand is greater than 0
@@ -406,6 +401,13 @@ module.exports = /*  @ngInject */
       return val && val > 0;
     }
 
+    function deselectMarketId() {
+      if (vm.marketIdSelected === true) {
+        vm.idSelected = null;
+        vm.marketIdSelected = false;
+      }
+    }
+
     // Checks active tab, updates model, passes data to chart (markets only)
     function getActiveTab() {
       if (vm.marketSelectedIndex === 0) { vm.filtersService.model.selected.accountTypes = 'Distributors'; setChartData(vm.marketData.distributors); deselectMarketId(); }
@@ -414,15 +416,46 @@ module.exports = /*  @ngInject */
       if (vm.marketSelectedIndex === 3) { vm.filtersService.model.selected.accountTypes = 'Stores'; setChartData(vm.marketData.stores); }
     }
 
-    // Move to next indexed tab
-    function nextTab(widget) {
-      vm.disableAnimation = false;
-      if (widget === 'brands') {
-        vm.brandSelectedIndex = vm.brandSelectedIndex + 1;
-        setCurrentTotalsObject();
-        vm.filtersService.model.accountSelected.accountBrands = vm.filtersService.accountFilters.accountBrands[1];
+    /**
+     * Gets the trend values based on whether ABP or YA is selected
+     * @param {Array} measures Package or Brand
+     * @param {String} measureType depletions or Distribution
+     * @param {String} timePeriod L90, L120 etc
+     * @returns {Object} currentTrendVal Returns the trend display value as string and the actual float value
+     */
+    function getTrendValues(measures, measureType, timePeriod) {
+      var currentTrendVal = {
+        value: null,
+        displayValue: ''
+      };
+
+      var measurePropertyName;
+      switch (vm.filterModel.trend.value) {
+        case 1:
+        // For YA
+          measurePropertyName = vm.filtersService.trendPropertyNames[measureType][0];
+          currentTrendVal.value = displayBrandValue(measures, measurePropertyName, timePeriod);
+          break;
+        case 2:
+          // For ABP
+          measurePropertyName = vm.filtersService.trendPropertyNames[measureType][1];
+          currentTrendVal.value = displayBrandValue(measures, measurePropertyName, timePeriod);
+          break;
+        case 3:
+        // TODO
+        // For Select Stores
+          break;
       }
-      if (widget === 'markets') { vm.marketSelectedIndex = vm.marketSelectedIndex + 1; }
+      if (!userService.isValidValues(currentTrendVal.value)) {
+        currentTrendVal.displayValue = '-';
+      } else {
+        if (currentTrendVal.value === 0) {
+          currentTrendVal.displayValue =   currentTrendVal.value + '%';
+        } else {
+          currentTrendVal.displayValue = currentTrendVal.value.toFixed(1) + '%';
+        }
+      }
+      return currentTrendVal;
     }
 
     function init() {
@@ -455,45 +488,20 @@ module.exports = /*  @ngInject */
       });
     }
 
-    /**
-     * Gets the trend values based on whether ABP or YA is selected
-     * @param {Array} measures Package or Brand
-     * @param {String} measureType depletions or Distribution
-     * @param {String} timePeriod L90, L120 etc
-     * @returns {Object} currentTrendVal Returns the trend display value as string and the actual float value
-     */
-    function getTrendValues(measures, measureType, timePeriod) {
-      var currentTrendVal = {
-        value: null,
-        displayValue: ''
-      };
-      var measurePropertyName;
-      switch (vm.filterModel.trend.value) {
-        case 1:
-        // For YA
-          measurePropertyName = vm.filtersService.trendPropertyNames[measureType][0];
-          currentTrendVal.value = displayBrandValue(measures, measurePropertyName, timePeriod);
-          break;
-        case 2:
-          // For ABP
-          measurePropertyName = vm.filtersService.trendPropertyNames[measureType][1];
-          currentTrendVal.value = displayBrandValue(measures, measurePropertyName, timePeriod);
-          break;
-        case 3:
-        // TODO
-        // For Select Stores
-          break;
+    // Move to next indexed tab
+    function nextTab(widget) {
+      vm.disableAnimation = false;
+      if (widget === 'brands') {
+        vm.brandSelectedIndex = vm.brandSelectedIndex + 1;
+        setCurrentTotalsObject();
+        vm.filtersService.model.accountSelected.accountBrands = vm.filtersService.accountFilters.accountBrands[1];
       }
-      if (!userService.isValidValues(currentTrendVal.value)) {
-        currentTrendVal.displayValue = '-';
-      } else {
-        if (currentTrendVal.value === 0) {
-          currentTrendVal.displayValue =   currentTrendVal.value + '%';
-        } else {
-          currentTrendVal.displayValue = currentTrendVal.value.toFixed(1) + '%';
-        }
-      }
-      return currentTrendVal;
+      if (widget === 'markets') { vm.marketSelectedIndex = vm.marketSelectedIndex + 1; }
+    }
+
+    // Handle required formatting for chart data
+    function setChartData(data) {
+      vm.chartData = [{'values': data}];
     }
 
     /**
@@ -504,11 +512,6 @@ module.exports = /*  @ngInject */
       vm.filterModel.endingTimePeriod = vm.filtersService.lastEndingTimePeriod.endingPeriodType;
       vm.filterModel.depletionsTimePeriod = vm.filtersService.lastEndingTimePeriod.depletionValue;
       vm.filterModel.distributionTimePeriod = vm.filtersService.lastEndingTimePeriod.timePeriodValue;
-    }
-
-    // Handle required formatting for chart data
-    function setChartData(data) {
-      vm.chartData = [{'values': data}];
     }
 
     // Set element class for market overview
