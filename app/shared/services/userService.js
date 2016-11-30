@@ -494,7 +494,6 @@ module.exports = /*  @ngInject */
 
       function getTopBottomSnapshotSuccess(response) {
         calculateTrendValuesForPlan(response.data.performance);
-        // console.log('[getTopBottomSnapshot.data]', response.data);
         snapshotPromise.resolve(response.data);
       }
 
