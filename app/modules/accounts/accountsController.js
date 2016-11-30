@@ -42,11 +42,19 @@ module.exports = /*  @ngInject */
       stores: vm.marketData.stores
     };
 
+    vm.topBottomData = {
+      distributors: null,
+      accounts: null,
+      subAccounts: null,
+      stores: null
+    };
+
     // Set selected tabs
     vm.selected = null;
     vm.previous = null;
     vm.brandSelectedIndex = 0;
     vm.marketSelectedIndex = 0;
+    vm.topBottomLevelIndex = 0;
 
     // Set default values
     vm.accountTypesDefault = 'Distributors';
@@ -136,7 +144,17 @@ module.exports = /*  @ngInject */
     vm.updateBrandSnapshot = updateBrandSnapshot;
     vm.updateChip = updateChip;
     vm.updateDistributionTimePeriod = updateDistributionTimePeriod;
+<<<<<<< d0b36292b6a345ca2ebbb4b436814c97deaf1ebf
     vm.updateTopBottom = updateTopBottom;
+=======
+    vm.getTrendValues = getTrendValues;
+    vm.isPackageView = false;
+    vm.checkIfVelocityPresent = checkIfVelocityPresent;
+    vm.currentTotalsObject = null;
+    vm.checkForDepletionCount = checkForDepletionCount;
+    vm.updateChip = updateChip;
+    vm.setTopBottomAcctTypeSelection = setTopBottomAcctTypeSelection;
+>>>>>>> Another stable commit
 
     init();
 
@@ -381,6 +399,7 @@ module.exports = /*  @ngInject */
       vm.filterModel.distributionTimePeriod = filtersService.model.distributionTimePeriod[value][0];
     }
 
+<<<<<<< d0b36292b6a345ca2ebbb4b436814c97deaf1ebf
     function updateTopBottom() {
       var params = filtersService.getAppliedFilters('brandSnapshot');
       vm.loadingTopBottom = true;
@@ -388,6 +407,15 @@ module.exports = /*  @ngInject */
         // update model
         vm.loadingTopBottom = false;
       });
+=======
+    function setTopBottomAcctTypeSelection(currentAcctType) {
+      var params = filtersService.getAppliedFilters();
+      if (vm.currentTopBottomAcctType !== currentAcctType) {
+        userService.getTopBottomSnapshot(currentAcctType, params).then(function(data) {
+          vm.currentTopBottomView = userService.getCurrentTopBottomView(data);
+        });
+      }
+>>>>>>> Another stable commit
     }
 
     // ***************
@@ -432,18 +460,11 @@ module.exports = /*  @ngInject */
       if (widget === 'markets') { vm.marketSelectedIndex = vm.marketSelectedIndex + 1; }
     }
 
-    function setTopBottomInitData(performanceData) {
-      vm.filtersService.model.accountSelected.accountMarkets = vm.filtersService.accountFilters.accountMarkets[0];
-      vm.currentTopBottomDataForFilter = performanceData;
-      var filteredData = filtersService.getFilteredTopBottomData(performanceData, vm.filtersService.model.accountSelected.accountMarkets, vm.filterModel.depletionsTimePeriod, vm.filterModel.distributionTimePeriod);
-      var sortedData = filtersService.getTopBottomDataSorted(filteredData, vm.filterModel.trend, vm.filtersService.model.accountSelected.accountMarkets);
-      console.log('sortedData', sortedData);
-    }
-
     function init() {
       // reset all chips and filters on page init
       vm.filterModel.trend = vm.filtersService.model.trend[0];
       vm.filtersService.model.accountSelected.accountBrands = vm.filtersService.accountFilters.accountBrands[0];
+      vm.filtersService.model.accountSelected.accountMarkets = vm.filtersService.accountFilters.accountMarkets[0];
 
       chipsService.resetChipsFilters(chipsService.model);
       setDefaultEndingPeriodOptions();
@@ -465,7 +486,9 @@ module.exports = /*  @ngInject */
         userService.model.distribution = data[2];
         vm.brandTabs.brands = data[3].performance;
         setCurrentTotalsObject();
-        // setTopBottomInitData(data[4].performance);
+        if (data[4]) {
+          setTopBottomInitData(data[4].performance);
+        }
         vm.loadingBrandSnapshot = false;
       });
     }
@@ -606,4 +629,38 @@ module.exports = /*  @ngInject */
         vm.scrolledBelowHeader = false;
       }
     });
+
+    // Top Bottom Specific Functions
+    function setTopBottomInitData(performanceData) {
+      var topBottomIndices, filteredByTimePeriodData;
+      filteredByTimePeriodData = filtersService.getFilteredTopBottomData(performanceData, vm.filtersService.model.accountSelected.accountMarkets, vm.filterModel.depletionsTimePeriod, vm.filterModel.distributionTimePeriod, vm.filterModel.trend);
+
+      if (filteredByTimePeriodData) {
+        topBottomIndices = filtersService.getTopBottomDataSorted(filteredByTimePeriodData, vm.filterModel.trend, vm.filtersService.model.accountSelected.accountMarkets);
+
+        setDataForCorrespondingTopDownLevel(performanceData, filteredByTimePeriodData, topBottomIndices);
+      }
+    }
+
+    function setDataForCorrespondingTopDownLevel(performanceData, filteredByTimePeriodData, topBottomIndices) {
+      var accountTypes = filtersService.accountFilters.accountTypesEnums;
+      switch (vm.currentTopBottomAcctType.value) {
+        case accountTypes.distributors:
+          vm.topBottomData.distributors = {
+            performanceData: performanceData,
+            timePeriodFilteredData: filteredByTimePeriodData,
+            topBottomIndices: topBottomIndices,
+            isPerformanceDataChanged: false,
+            isFilterCategoryChanged: false
+          };
+          break;
+        case accountTypes.accounts:
+          break;
+        case accountTypes.subAccounts:
+          break;
+        case accountTypes.stores:
+          break;
+      }
+    }
+
   };

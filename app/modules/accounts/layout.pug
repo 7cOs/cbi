@@ -222,13 +222,11 @@ div(row)
           md-tab(ng-repeat="(key, data) in a.marketTabs" label="{{key}}")
             table.fixed-layout(cellspacing="0" cellpadding="0")
               tbody
-                tr.clickable.market-value(ng-repeat="item in data" ng-class="{'store': item.address, 'selected': item.label === a.idSelected}" ng-click="a.selectItem('markets', item, a.marketTabs, $parent.$index)")
+                //- ng-click="a.selectItem('markets', item, a.marketTabs, $parent.$index)"
+                tr.clickable.market-value(ng-repeat="item in data.timePeriodFilteredData" ng-class="{'store': item.address, 'selected': item.label === a.idSelected}")
                   td.dist-label(colspan=2) {{item.title}} <span ng-if="item.storeNum" class="store-number">\#{{item.storeNum}}</span><span ng-if="item.address" class="address">{{item.address}}</span>
                   td.dark.market-label
-                    span(ng-if="a.filtersService.model.accountSelected.accountMarkets.value === a.filtersService.accountFilters.accountMarketsEnums.depletions") {{item.depletions | number}}
-                    span(ng-if="a.filtersService.model.accountSelected.accountMarkets.value === a.filtersService.accountFilters.accountMarketsEnums.distSimple") {{item.distSimple}}
-                    span(ng-if="a.filtersService.model.accountSelected.accountMarkets.value === a.filtersService.accountFilters.accountMarketsEnums.distEffective").value {{item.distEffective}}
-                    span(ng-if="a.filtersService.model.accountSelected.accountMarkets.value === a.filtersService.accountFilters.accountMarketsEnums.velocity") {{item.velocity}}
+                    span {{a.getValueBoundForAcctSelection() | number}}
       .chart
         table.no-top-border(cellspacing="0" cellpadding="0")
           thead

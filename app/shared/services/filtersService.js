@@ -305,6 +305,12 @@ module.exports = /*  @ngInject */
         'topTrends': 2,
         'bottomValues': 3,
         'bottomTrends': 4
+      },
+      accountTypesEnums: {
+        'distributors': 1,
+        'accounts': 2,
+        'subAccounts': 3,
+        'stores': 4
       }
     };
 
@@ -439,30 +445,59 @@ module.exports = /*  @ngInject */
       }
     }
 
+    function getIndexPositionsArr(originalArr, arrToGetIndex) {
+      var indexPos = -1;
+      var indexedArr = [];
+      if (arrToGetIndex === originalArr) {
+        angular.forEach(arrToGetIndex, function(obj) {
+          indexPos = originalArr.indexOf(obj);
+          if (indexPos !== -1) {
+            indexedArr.push(indexPos);
+          }
+        });
+      } else {
+        for (var i = 0; i < originalArr.length; i++) {
+          indexedArr.push(i);
+        }
+      }
+
+      return indexedArr;
+    }
+
     function getTopBottomDataSorted(topBottomData, planType, categoryType) {
       var sortedList = {
             topValues: [],
             bottomValues: [],
             topTrends: [],
             bottomTrends: []
-          }, queryLimit = 10, valuesArr, trendsArr;
+          }, queryLimit = 10,
+          valuesArr, trendsArr, tempArr = [];
+
       valuesArr = $filter('orderBy')(topBottomData, categoryType.propertyName);
       var len = valuesArr.length;
       if (len > queryLimit) {
-        sortedList.topValues = valuesArr.splice(0, queryLimit - 1);
-        sortedList.bottomValues = valuesArr.splice(len - queryLimit, len - 1);
+        tempArr = valuesArr.slice(0, queryLimit - 1);
+        sortedList.topValues = getIndexPositionsArr(valuesArr, tempArr);
+        tempArr = valuesArr.slice(len - queryLimit, len);
+        sortedList.bottomValues = getIndexPositionsArr(valuesArr, tempArr);
       } else {
-        sortedList.topValues = valuesArr;
-        sortedList.bottomValues = valuesArr;
+        tempArr =  getIndexPositionsArr(valuesArr, valuesArr);
+        sortedList.topValues = tempArr;
+        sortedList.bottomValues = tempArr;
       }
       trendsArr = $filter('orderBy')(topBottomData, trendPropertyNames[categoryType.propertyName][planType.value - 1]);
       if (len > queryLimit) {
-        sortedList.topTrends = valuesArr.splice(0, queryLimit - 1);
-        sortedList.topTrends = valuesArr.splice(len - queryLimit, len - 1);
+        tempArr = trendsArr.slice(0, queryLimit - 1);
+        sortedList.topTrends = getIndexPositionsArr(valuesArr, tempArr);
+        tempArr = trendsArr.slice(len - queryLimit, len);
+        sortedList.bottomTrends = tempArr;
       } else {
-        sortedList.topTrends = trendsArr;
-        sortedList.topTrends = trendsArr;
+        tempArr =  getIndexPositionsArr(trendsArr, trendsArr);
+        sortedList.topTrends = tempArr;
+        sortedList.bottomTrends = tempArr;
       }
+      console.log('sortedList', sortedList);
+      return sortedList;
     }
 
     /**
@@ -473,7 +508,6 @@ module.exports = /*  @ngInject */
       * @returns {Object} currentTrendVal Returns the trend display value as string and the actual float value
       */
     function getFilteredTopBottomData(topBottomData, categoryType, depletionOption, distirbutionOption) {
-      console.log('FilteredData', topBottomData, categoryType, distirbutionOption, depletionOption);
       var data, filteredData = [], matchedMeasure = null;
       switch (categoryType.value) {
         case accountFilters.accountMarketsEnums.depletions:
@@ -509,9 +543,6 @@ module.exports = /*  @ngInject */
           }
           break;
       }
-      var copyTest = angular.copy(filteredData);
-      filteredData = filteredData.concat(copyTest);
-      filteredData = filteredData.concat(copyTest);
       return filteredData;
     }
   };
