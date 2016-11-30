@@ -4,10 +4,6 @@ module.exports = function(app) {
   const git = require('git-rev-sync'),
         pjson = require('../../package');
 
-  app.get('/ext/iq', function (req, res) {
-    res.redirect(app.get('config').iq);
-  });
-
   app.get('/version', function (req, res) {
     var hash = process.env.HEROKU_SLUG_DESCRIPTION || git.short();
     var data = {

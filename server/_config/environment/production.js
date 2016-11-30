@@ -22,8 +22,6 @@ module.exports = function (config) {
     id: 'UA-77300343-7'
   };
 
-  config.iq = 'http://iqweb.cbrands.com/MicroStrategy/servlet/mstrWeb?server=CBIGDC-PMSTK801&project=Beer+Analytics&evt=2001&folderID=DC6B34544F13E47DFEA3AEB328B149A3';
-
   // change all of this to env variables for security.
   config.api = {
     url: 'http://cbi-api-test.herokuapp.com',

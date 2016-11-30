@@ -21,8 +21,6 @@ module.exports = function (config) {
     id: ''
   };
 
-  config.iq = 'http://dev-iqweb.cbrands.com/MicroStrategy/servlet/mstrWeb?server=CBIGDC-DMSTK801&project=Beer+Analytics&evt=2001&folderID=DC6B34544F13E47DFEA3AEB328B149A3';
-
   config.api = {
     url: 'https://deloitte-poc.herokuapp.com',
     key: 'U1NCc2FXdGxJSFJ2SUVodlpHOXlMQ0JJYjJSdmNpd2dTRzlrYjNJc0lFaHZaRzl5Y3lCaGJtUWdTRzlrYjNKekxnPT0=',
