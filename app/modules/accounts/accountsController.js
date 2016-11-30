@@ -249,7 +249,6 @@ module.exports = /*  @ngInject */
         setCurrentTotalsObject();
         vm.brandWidgetTitle = vm.brandWidgetTitleDefault;
         vm.brandIdSelected = null;
-        vm.filterModel.brand = '';
         vm.filtersService.model.accountSelected.accountBrands = vm.filtersService.accountFilters.accountBrands[0];
       }
     }
@@ -284,9 +283,9 @@ module.exports = /*  @ngInject */
       } else {
         if (widget === 'brands') { vm.brandWidgetTitle = item.name; }
         vm.loadingBrandSnapshot = true;
-        vm.filterModel.brand = item.id;
         var params = filtersService.getAppliedFilters('brandSnapshot');
         params.brand = item.id;
+        vm.brandIdSelected = item.id;
         userService.getPerformanceBrand(params).then(function(data) {
           vm.brandTabs.skus = data.performance;
           nextTab(widget);
@@ -295,6 +294,7 @@ module.exports = /*  @ngInject */
           }, 500);
         });
       }
+
       if (widget === 'markets') { getActiveTab(); }
     }
 
