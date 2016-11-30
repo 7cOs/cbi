@@ -77,9 +77,7 @@ module.exports = /*  @ngInject */
         }
 
         return '?' + queryParams;
-      } else if (obj.type && obj.type === 'brandSnapshot') {
-        // queryParams += 'filter=';
-
+      } else if (obj.type && (obj.type === 'brandSnapshot' || obj.type === 'topBottom')) {
         // remove type obj
         delete obj.type;
 

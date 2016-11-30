@@ -80,7 +80,7 @@ notes
 
   div(row)
     div(column='12' class='apply-filters')
-      button(value='Apply Filters' type="button" class="btn-action" ng-disabled="a.disableApply" ng-click="a.updateBrandSnapshot();") Apply Filters
+      button(value='Apply Filters' type="button" class="btn-action" ng-disabled="a.disableApply" ng-click="a.updateBrandSnapshot(); a.updateTopBottom();") Apply Filters
       .secondary-button-container.reset-only
         a(ng-click="a.resetFilters()").accent.reset-icon Reset
 
@@ -196,6 +196,8 @@ div(row)
                 td(ng-class="a.getClassBasedOnValue(a.getTrendValues(item.measures, 'distributionsEffective', 'distributionTimePeriod').value)" ng-if="a.filtersService.model.accountSelected.accountBrands.value === a.filtersService.accountFilters.accountBrandEnum.distirbutionEffective") <span ng-bind="a.getTrendValues(item.measures, 'distributionsEffective', 'distributionTimePeriod').displayValue"></span>
 
   div.scorecard-chart(column='6')
+    .loader-wrap.inline(ng-if="a.loadingTopBottom" ng-class="{'active': a.loadingTopBottom}")
+      loader
     .widget-header
       .dropdown-filter.narrow
         md-select(ng-model="a.filtersService.model.accountSelected.accountMarkets" md-on-open="a.openSelect(true)" md-on-close="a.openSelect(false)" aria-label="Account Markets Filter")

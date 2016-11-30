@@ -238,9 +238,13 @@
   }
 }
 
-.scorecard-table-accounts {
-  padding-right: 0.5em;
+.scorecard-chart,
+.scorecard-table {
   position: relative;
+
+  &.scorecard-table-accounts {
+    padding-right: 0.5em;
+  }
 }
 
 .scorecard-chart {
@@ -403,6 +407,7 @@ md-autocomplete.ng-isolate-scope {
 
     &[disabled] {
       color: $gray-2;
+      cursor: no-drop;
     }
   }
 }

@@ -486,7 +486,7 @@ module.exports = /*  @ngInject */
           baseUrl += '/performance/topBottomSnapshot/stores';
           break;
       }
-
+      params.type = 'topBottom';
       url = apiHelperService.request(baseUrl, params);
       $http.get(url)
         .then(getTopBottomSnapshotSuccess)
