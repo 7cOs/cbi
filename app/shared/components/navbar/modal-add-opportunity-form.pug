@@ -4,8 +4,8 @@ div.modal.add-opportunity
   form.modal-form(name="nb.addOpportunityForm" novalidate)
     div.modal-input
       label Account
-      inline-search(type="store" placeholder="Store Name or Location (City, Zip, or State)" chosen-result="nb.newOpportunity.properties.store.description" chosen-result-object="nb.chosenStoreObject" is-required="true" show-address="true")
-      div(ng-cloak ng-show="nb.addOpportunityForm.$invalid && nb.addOpportunityForm.$submitted")
+      inline-search(type="store" placeholder="Store Name or Location (City, Zip, or State)" chosen-result="nb.newOpportunity.properties.store.description" chosen-result-object="nb.chosenStoreObject" is-required="true" show-address="true" ng-model="nb.newOpportunity.properties.store.description" name="chosenStoreDescription" required)
+      div(ng-cloak ng-show="nb.addOpportunityForm.chosenStoreDescription.$invalid && nb.addOpportunityForm.$submitted")
         p.error-message.accent <img src="./assets/img/icons/error.svg">Please select an Account.
     div.modal-input.clearfix
       label Opportunity Type
@@ -36,11 +36,10 @@ div.modal.add-opportunity
       label Rationale
       .dropdown-filter
         .dropdown
-          md-select.left(ng-model="nb.newOpportunity.properties.rationale.description" aria-label="rationale dropdown" placeholder="Select Rationale" name="rationaleDropdown" required)
-            md-option(aria-label="High Impact" value="H") <span class="impact-text">High</span> <img class="impact-icon" src="./assets/img/icons/impact-high.svg">
-            md-option(aria-label="Medium Impact form" value="M") <span class="impact-text">Medium</span> <img class="impact-icon" src="./assets/img/icons/impact-medium.svg">
-            md-option(aria-label="Low Impact" value="L") <span class="impact-text">Low</span> <img class="impact-icon" src="./assets/img/icons/impact-low.svg">
-        div(ng-show="nb.addOpportunityForm.rationaleDropdown.$invalid && nb.addOpportunityForm.$submitted")
+          md-select.left(ng-model="nb.newOpportunity.properties.rationale.description" aria-label="rationale dropdown" placeholder="Select Rationale" name="rationaleDropdown")
+            md-option(ng-repeat="rationale in nb.rationales" aria-label="{{rationale.type}}" ng-click="nb.showNewRationaleInput(false)" value="{{rationale.type}}") {{rationale.type}}
+            md-option(aria-label="Add New Rationale" ng-click="nb.showNewRationaleInput(true)" value="other") + Add Other Rationale
+        div(ng-show="nb.addOpportunityForm.$invalid && nb.addOpportunityForm.$submitted")
           p.error-message.accent <img src="./assets/img/icons/error.svg">Please select a Rationale, or add another one.
       label(ng-if="nb.addNewRationale") Add Other Rationale
       input(ng-if="nb.addNewRationale" ng-model="nb.newOpportunity.properties.rationale.other" aria-label="Input New Rationale" placeholder="Add Other Rationale" name="addRationale")
