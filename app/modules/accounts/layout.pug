@@ -100,9 +100,10 @@ div(row)
           tr
             th.top.title-col.brand-name-column
               p.accent.bold.left.single-line
-                span(ng-show="a.filtersService.model.selected.premiseType === 'all'") Brand / SKU
-                span(ng-show="a.filtersService.model.selected.premiseType === 'off'") SKU
-                span(ng-show="a.filtersService.model.selected.premiseType === 'on'") Package
+                span(ng-show="!a.brandIdSelected") Brand
+                span(ng-show="a.filtersService.model.selected.premiseType === 'all' && a.brandIdSelected") SKU / Package
+                span(ng-show="a.filtersService.model.selected.premiseType === 'off' && a.brandIdSelected") SKU
+                span(ng-show="a.filtersService.model.selected.premiseType === 'on' && a.brandIdSelected") Package
             th(colspan=2).top.dark.other-columns
               p.accent.bold Depletions
             th(colspan=2).top.other-columns
