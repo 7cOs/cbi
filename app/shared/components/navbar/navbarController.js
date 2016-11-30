@@ -111,16 +111,17 @@ module.exports = /*  @ngInject */
         }])
         .then(function() {
           notification.status = vm.notificationsService.status.READ;
-          setUnreadCount(vm.unreadNotifications - 1);
+          setUnreadCount(vm.notifications);
         });
 
       if (notification.objectType.toUpperCase() === 'TARGET_LIST') {
-        targetListService.model.currentList.id = notification.objectId;
-        $state.go('target-list-detail');
+        $state.go('target-list-detail', ({id: notification.shortenedObject.id}));
       } else if (notification.objectType.toUpperCase() === 'OPPORTUNITY') {
-        opportunitiesService.model.opportunityId = notification.objectId;
-        $state.go('opportunities');
-      }
+        opportunitiesService.model.opportunityId = notification.shortenedObject.id;
+        $state.go('opportunities', (opportunitiesService.model.opportunityId), {reload: true});
+      } else if (notification.objectType.toUpperCase() === 'ACCOUNT') $state.go('accounts');
+
+      $mdMenu.hide();
     }
 
     // Mark notification as seen when opened
@@ -290,17 +291,20 @@ module.exports = /*  @ngInject */
 
     // Get unread notification count and set initial badge value
     function setUnreadCount(arr) {
-      var value = 0;
+      var unseen = 0;
+      var notRead = 0;
       for (var i = 0; i < arr.length; i++) {
-        if (arr[i].status.toUpperCase() === 'UNSEEN') value++;
+        if (arr[i].status.toUpperCase() === 'UNSEEN') unseen++;
+        if (arr[i].status.toUpperCase() !== 'READ') notRead++;
       }
 
       vm.notificationHelper = {
-        unreadNotifications: value,
+        unseenNotifications: unseen,
+        unreadNotifications: notRead,
         showBadge: true
       };
 
-      if (value < 1) vm.notificationHelper.showBadge = false;
+      if (unseen < 1) vm.notificationHelper.showBadge = false;
     }
 
     // Show inputs if a new item is needed
