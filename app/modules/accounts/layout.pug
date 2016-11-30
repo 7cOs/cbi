@@ -216,27 +216,32 @@ div(row)
                 p.accent.bold.left Distributors
                 p &nbsp;
               th.top.dark.market-label
-                p.accent.bold {{a.filtersService.model.accountSelected.accountMarkets.name}}
-                p.accent.bold {{a.filtersService.model.depletionsTimeFilter.depletionsTimeFilter}}
+                p(ng-if="a.filtersService.model.accountSelected.accountMarkets.propertyName === 'depletions'")
+                  p.accent.bold {{a.filtersService.model.accountSelected.accountMarkets.name}}
+                  p.accent.bold(ng-if="a.filtersService.model.accountSelected.accountMarkets.propertyName === 'depletions'") {{a.filterModel.depletionsTimePeriod.displayValue}}
+                  p.accent.bold(ng-if="a.filtersService.model.accountSelected.accountMarkets.propertyName !== 'depletions'") {{a.filterModel.distributionTimePeriod.displayValue}}
+
         md-tabs(md-selected="a.marketSelectedIndex" ng-class="{'animate-disabled': a.disableAnimation}" md-autoselect)
-          md-tab(ng-repeat="(key, data) in a.marketTabs" label="{{key}}")
+          md-tab(ng-repeat="(key, data) in a.topBottomData" label="{{key}}")
             table.fixed-layout(cellspacing="0" cellpadding="0")
               tbody
                 //- ng-click="a.selectItem('markets', item, a.marketTabs, $parent.$index)"
-                tr.clickable.market-value(ng-repeat="item in data" ng-class="{'store': item.address, 'selected': item.label === a.idSelected}")
-                  td.dist-label(colspan=2) {{item.title}} <span ng-if="item.storeNum" class="store-number">\#{{item.storeNum}}</span><span ng-if="item.address" class="address">{{item.address}}</span>
+                //- ng-class="{'store': item.address, 'selected': item.label === a.idSelected}"
+                //- <span ng-if="item.storeNum" class="store-number">\#{{item.storeNum}}</span><span ng-if="item.address" class="address">{{item.address}}</span>
+                tr.clickable.market-value(ng-repeat="item in data.timePeriodFilteredData")
+                  td.dist-label(colspan=2) {{item.title}}
                   td.dark.market-label
-                    span {{a.getValueBoundForAcctSelection() | number}}
-      .chart
-        table.no-top-border(cellspacing="0" cellpadding="0")
-          thead
-            tr
-              th.top.title-col.chart-title
-                p.accent.bold Trends
-            tr
-              th
-                p.accent FYTD - vs YA%
-        nvd3.nvd(options="a.chartOptions" data="a.chartData")
+                    span(ng-bind="a.getValueBoundForAcctType(item.measure)")
+      //- .chart
+      //-   table.no-top-border(cellspacing="0" cellpadding="0")
+      //-     thead
+      //-       tr
+      //-         th.top.title-col.chart-title
+      //-           p.accent.bold Trends
+      //-       tr
+      //-         th
+      //-           p.accent FYTD - vs YA%
+      //-   nvd3.nvd(options="a.chartOptions" data="a.chartData")
 
 h3.top-opportunities-header Top Opportunities
   a.accent(ng-click="a.goToOpportunities($event);" ng-disabled="a.allOpportunitiesDisabled()") See All Opportunities

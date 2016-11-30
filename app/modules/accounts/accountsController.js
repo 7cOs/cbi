@@ -70,12 +70,18 @@ module.exports = /*  @ngInject */
     vm.hintTextPlaceholder = 'Account or Subaccount Name';
     vm.idSelected = null;
     vm.loadingBrandSnapshot = true;
+<<<<<<< 9a6a8700b7307a49aae3a967d8b06f758f4f38fe
     vm.loadingTopBottom = true;
     vm.marketStoresView = false;
     vm.marketIdSelected = false;
     vm.overviewOpen = false;
     vm.selectedStore = null;
     vm.selectOpen = false;
+=======
+    vm.currentTopBottomAcctType = null;
+    vm.currentTopBottomDataForFilter = null;
+    vm.getValueBoundForAcctType = getValueBoundForAcctType;
+>>>>>>> depletions hooked up
 
     // Chart Setup
     vm.chartData = [{'values': vm.marketData.distributors}];
@@ -661,6 +667,18 @@ module.exports = /*  @ngInject */
           break;
         case accountTypes.stores:
           break;
+      }
+    }
+
+    function getValueBoundForAcctType(measures) {
+      if (measures) {
+        var propName = vm.filtersService.model.accountSelected.accountMarkets.propertyName;
+        var matchedMeasure = measures[propName];
+        if (userService.isValidValues(matchedMeasure)) {
+          return matchedMeasure.toFixed(0);
+        } else {
+          return '-';
+        }
       }
     }
 

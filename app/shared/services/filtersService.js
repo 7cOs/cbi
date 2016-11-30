@@ -518,7 +518,7 @@ module.exports = /*  @ngInject */
             });
             if (matchedMeasure[0]) {
               var depletionObj = {
-                name: data.name,
+                title: data.name,
                 type: data.type,
                 measure: matchedMeasure[0]
               };
@@ -534,7 +534,7 @@ module.exports = /*  @ngInject */
             });
             if (matchedMeasure[0]) {
               var distirbutionObj = {
-                name: data.name,
+                title: data.name,
                 type: data.type,
                 measure: matchedMeasure[0]
               };
