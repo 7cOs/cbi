@@ -115,11 +115,10 @@ module.exports = /*  @ngInject */
         });
 
       if (notification.objectType.toUpperCase() === 'TARGET_LIST') {
-        targetListService.model.currentList.id = notification.shortenedObject.id;
         $state.go('target-list-detail', ({id: notification.shortenedObject.id}));
       } else if (notification.objectType.toUpperCase() === 'OPPORTUNITY') {
         opportunitiesService.model.opportunityId = notification.shortenedObject.id;
-        $state.go('opportunities', ({'opportunitiesService.model.opportunityId': 'notification.shortenedObject.id'}), {reload: true});
+        $state.go('opportunities', (opportunitiesService.model.opportunityId), {reload: true});
       } else if (notification.objectType.toUpperCase() === 'ACCOUNT') $state.go('accounts');
 
       $mdMenu.hide();
