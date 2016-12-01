@@ -572,4 +572,17 @@ module.exports = /*  @ngInject */
       }
       return result;
     }
+
+    function changeFilteredTopBottomData() {
+      vm.loadingTopBottom = true;
+      for (var property in vm.topBottomData) {
+        if (vm.topBottomData.hasOwnProperty(property)) {
+              // do stuff
+          }
+        }
+    }
+
+    function changePerfromanceTopBottomData() {
+
+    }
   };

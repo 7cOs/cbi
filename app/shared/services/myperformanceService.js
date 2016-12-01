@@ -35,6 +35,7 @@ module.exports = /*  @ngInject */
       return indexedArr;
     }
 
+    // TODO Needs to be refactored
     function getTopBottomDataSorted(topBottomData, trendType, categoryType) {
       var sortedList = {
             topValues: [],
@@ -71,6 +72,7 @@ module.exports = /*  @ngInject */
       return sortedList;
     }
 
+    // TODO Needs to be refactored
     /**
       * Gets an array of data matching the distirubution or depletion time period
       * @param {Object} topBottomData Package or Brand
