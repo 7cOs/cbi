@@ -164,7 +164,6 @@ module.exports = /*  @ngInject */
       var chartData = [{'values': null}], propertyName, categoryChartData = [], obj;
       angular.forEach(filteredPerformaceData, function (data) {
         propertyName = filtersService.trendPropertyNames[categoryType.propertyName][trendType.value - 1];
-        var val = Number(data.measure[propertyName]).toFixed(0);
         obj = {
           'label': data.title,
           'value': isValidValues(Number(data.measure[propertyName])) ? Math.round(data.measure[propertyName]) : null

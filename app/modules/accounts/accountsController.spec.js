@@ -266,9 +266,6 @@ describe('Unit: accountsController', function() {
       expect(ctrl.openSelect).not.toBeUndefined();
       expect(typeof (ctrl.openSelect)).toEqual('function');
 
-      expect(ctrl.setMarketTab).not.toBeUndefined();
-      expect(typeof (ctrl.setMarketTab)).toEqual('function');
-
       expect(ctrl.selectItem).not.toBeUndefined();
       expect(typeof (ctrl.selectItem)).toEqual('function');
 
@@ -726,7 +723,6 @@ describe('Unit: accountsController', function() {
 
   });
 
-<<<<<<< 6606e2289235f174218890caff6c1ae9e3508aee
   describe('[Method] updateTopBottom', function() {
     beforeEach(function() {
     });
@@ -741,10 +737,5 @@ describe('Unit: accountsController', function() {
     });
 
   });
-=======
-  // describe('Top/Bottom graph data', function () {
-  //   it('Should pass correct options to filters service', function() {
-  //   });
-  // });
->>>>>>> Primary commits for top bottom
+
 });
