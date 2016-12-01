@@ -118,7 +118,7 @@ module.exports = /*  @ngInject */
         $state.go('target-list-detail', ({id: notification.shortenedObject.id}));
       } else if (notification.objectType.toUpperCase() === 'OPPORTUNITY') {
         opportunitiesService.model.opportunityId = notification.shortenedObject.id;
-        $state.go('opportunities', (opportunitiesService.model.opportunityId), {reload: true});
+        $state.go('opportunities', (opportunitiesService.model.opportunityId, opportunitiesService.model.filterApplied = false), {reload: true});
       } else if (notification.objectType.toUpperCase() === 'ACCOUNT') $state.go('accounts');
 
       $mdMenu.hide();
