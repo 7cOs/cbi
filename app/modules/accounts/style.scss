@@ -262,6 +262,7 @@
 
   .fixed-layout {
     table-layout: fixed;
+    min-height: 100%;
 
     &:last-child {
       border-top: none;

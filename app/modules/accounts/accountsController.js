@@ -18,9 +18,6 @@ module.exports = /*  @ngInject */
     vm.filtersService = filtersService;
     vm.userService = userService;
 
-    /* Need to remove this */
-    vm.marketData = myperformanceService.marketData();
-
     // Filter Model - Keeping this out of filtersService as its not needed anywhere else
     var filterModelTemplate = {
       trend: filtersService.model.trend[0].name,
@@ -34,12 +31,6 @@ module.exports = /*  @ngInject */
     vm.brandTabs = {
       brands: [],
       skus: []
-    };
-    vm.marketTabs = {
-      distributors: vm.marketData.distributors,
-      accounts: vm.marketData.accounts,
-      subAccounts: vm.marketData.subAccounts,
-      stores: vm.marketData.stores
     };
 
     vm.topBottomData = {
@@ -93,47 +84,7 @@ module.exports = /*  @ngInject */
 >>>>>>> Chart data hookup needs to be done
 
     // Chart Setup
-    vm.chartData = [{'values': vm.marketData.distributors}];
-    vm.chartOptions = {
-      chart: {
-        type: 'multiBarHorizontalChart',
-        groupSpacing: 0.65,
-        x: function(d) { return d.label; },
-        y: function(d) { return d.value; },
-        xAxis: {
-          showMaxMin: false
-        },
-        yAxis: {
-          showMaxMin: false
-        },
-        showControls: false,
-        showValues: true,
-        duration: 500,
-        valueFormat: function(d) {
-          return d + '%';
-        },
-        tooltip: {
-          valueFormatter: function(d) {
-            return d + '%';
-          }
-        },
-        margin: {
-          top: 0,
-          right: 0,
-          bottom: 30,
-          left: 0
-        },
-        legend: {
-          width: 0,
-          height: 0
-        },
-        controls: {
-          width: 0,
-          height: 0
-        }
-      }
-    };
-
+    vm.chartOptions = null;
     // Expose public methods
     vm.allOpportunitiesDisabled = allOpportunitiesDisabled;
     vm.apply = apply;
@@ -154,8 +105,11 @@ module.exports = /*  @ngInject */
     vm.resetFilters = resetFilters;
     vm.selectItem = selectItem;
     vm.setFilter = setFilter;
+<<<<<<< 4a5d4d4da89a24dfa9d94607844beea21498e972
     vm.setMarketTab = setMarketTab;
     vm.setTopBottomAcctTypeSelection = setTopBottomAcctTypeSelection;
+=======
+>>>>>>> Initial bindings to chart completed
     vm.updateBrandSnapshot = updateBrandSnapshot;
     vm.updateChip = updateChip;
     vm.updateDistributionTimePeriod = updateDistributionTimePeriod;
@@ -169,7 +123,11 @@ module.exports = /*  @ngInject */
     vm.checkForDepletionCount = checkForDepletionCount;
     vm.updateChip = updateChip;
     vm.setTopBottomAcctTypeSelection = setTopBottomAcctTypeSelection;
+<<<<<<< 4a5d4d4da89a24dfa9d94607844beea21498e972
 >>>>>>> Another stable commit
+=======
+    vm.getCurrentChartData = getCurrentChartData;
+>>>>>>> Initial bindings to chart completed
 
     init();
 
@@ -300,7 +258,6 @@ module.exports = /*  @ngInject */
       if (parentIndex + 1 === parentLength) {
         // We're on the deepest level of current tab list
         if (widget === 'brands') { setSelected(item.name, 'brands'); }
-        if (widget === 'markets') { setSelected(item.label, 'markets'); }
       } else {
         if (widget === 'brands') { vm.brandWidgetTitle = item.name; }
         vm.loadingBrandSnapshot = true;
@@ -315,8 +272,11 @@ module.exports = /*  @ngInject */
           }, 500);
         });
       }
+<<<<<<< 4a5d4d4da89a24dfa9d94607844beea21498e972
 
       if (widget === 'markets') { getActiveTab(); }
+=======
+>>>>>>> Initial bindings to chart completed
     }
 
     /**
@@ -358,6 +318,7 @@ module.exports = /*  @ngInject */
       apply(false);
     }
 
+<<<<<<< 4a5d4d4da89a24dfa9d94607844beea21498e972
     function setTopBottomAcctTypeSelection(currentAcctType) {
       var params = filtersService.getAppliedFilters();
       if (vm.currentTopBottomAcctType !== currentAcctType) {
@@ -377,6 +338,8 @@ module.exports = /*  @ngInject */
       getActiveTab();
     }
 
+=======
+>>>>>>> Initial bindings to chart completed
     function updateBrandSnapshot() {
       var params = filtersService.getAppliedFilters('brandSnapshot');
       vm.loadingBrandSnapshot = true;
@@ -447,6 +410,7 @@ module.exports = /*  @ngInject */
       return val && val > 0;
     }
 
+<<<<<<< 4a5d4d4da89a24dfa9d94607844beea21498e972
     function deselectMarketId() {
       if (vm.marketIdSelected === true) {
         vm.idSelected = null;
@@ -464,6 +428,8 @@ module.exports = /*  @ngInject */
 
 <<<<<<< 6606e2289235f174218890caff6c1ae9e3508aee
 =======
+=======
+>>>>>>> Initial bindings to chart completed
     // Move to next indexed tab
     function nextTab(widget) {
       vm.disableAnimation = false;
@@ -483,6 +449,7 @@ module.exports = /*  @ngInject */
       vm.filtersService.model.selected.valuesVsTrend =  vm.filtersService.accountFilters.valuesVsTrend[1];
       vm.currentTopBottomAcctType = vm.filtersService.accountFilters.accountTypes[0];
       vm.filtersService.model.selected.premiseType = 'all';
+      vm.chartOptions = myperformanceService.getChartOptions();
     }
 
     function init() {
@@ -650,21 +617,23 @@ module.exports = /*  @ngInject */
 
     // Top Bottom Specific Functions
     function setTopBottomInitData(performanceData) {
-      var topBottomIndices, filteredByTimePeriodData;
-      filteredByTimePeriodData = filtersService.getFilteredTopBottomData(performanceData, vm.filtersService.model.accountSelected.accountMarkets, vm.filterModel.depletionsTimePeriod, vm.filterModel.distributionTimePeriod, vm.filterModel.trend);
+      var topBottomIndices, filteredByTimePeriodData, chartData;
+      filteredByTimePeriodData = myperformanceService.getFilteredTopBottomData(performanceData, vm.filtersService.model.accountSelected.accountMarkets, vm.filterModel.depletionsTimePeriod, vm.filterModel.distributionTimePeriod, vm.filterModel.trend);
 
       if (filteredByTimePeriodData) {
-        topBottomIndices = filtersService.getTopBottomDataSorted(filteredByTimePeriodData, vm.filterModel.trend, vm.filtersService.model.accountSelected.accountMarkets);
-        setDataForCorrespondingTopDownLevel(performanceData, filteredByTimePeriodData, topBottomIndices);
+        topBottomIndices = myperformanceService.getTopBottomDataSorted(filteredByTimePeriodData, vm.filterModel.trend, vm.filtersService.model.accountSelected.accountMarkets);
+        chartData = myperformanceService.getChartData(filteredByTimePeriodData, vm.filterModel.trend, vm.filtersService.model.accountSelected.accountMarkets);
+        setDataForCorrespondingTopDownLevel(performanceData, filteredByTimePeriodData, topBottomIndices, chartData);
       }
     }
 
-    function setDataForCorrespondingTopDownLevel(performanceData, filteredByTimePeriodData, topBottomIndices) {
+    function setDataForCorrespondingTopDownLevel(performanceData, filteredByTimePeriodData, topBottomIndices, chartData) {
       var accountTypes = filtersService.accountFilters.accountTypesEnums;
       var updatedObjectForLevel = {
         performanceData: performanceData,
         timePeriodFilteredData: filteredByTimePeriodData,
         topBottomIndices: topBottomIndices,
+        chartData: chartData,
         isPerformanceDataChanged: false,
         isFilterCategoryChanged: false
       };
@@ -693,10 +662,17 @@ module.exports = /*  @ngInject */
         var propName = vm.filtersService.model.accountSelected.accountMarkets.propertyName;
         var matchedMeasure = measures[propName];
         if (userService.isValidValues(matchedMeasure)) {
-          return matchedMeasure.toFixed(0);
+          return Math.round(matchedMeasure);
         } else {
           return '-';
         }
+      }
+    }
+
+    function getCurrentChartData() {
+      var currentObj = vm.topBottomData[Object.keys(vm.topBottomData)[vm.marketSelectedIndex]];
+      if (currentObj && currentObj.chartData) {
+        return currentObj.chartData;
       }
     }
 

@@ -216,10 +216,9 @@ div(row)
                 p.accent.bold.left Distributors
                 p &nbsp;
               th.top.dark.market-label
-                p(ng-if="a.filtersService.model.accountSelected.accountMarkets.propertyName === 'depletions'")
-                  p.accent.bold {{a.filtersService.model.accountSelected.accountMarkets.name}}
-                  p.accent.bold(ng-if="a.filtersService.model.accountSelected.accountMarkets.propertyName === 'depletions'") {{a.filterModel.depletionsTimePeriod.displayValue}}
-                  p.accent.bold(ng-if="a.filtersService.model.accountSelected.accountMarkets.propertyName !== 'depletions'") {{a.filterModel.depletionsTimePeriod.displayValue}}
+                p.accent.bold {{a.filtersService.model.accountSelected.accountMarkets.name}}
+                p.accent.bold(ng-if="a.filtersService.model.accountSelected.accountMarkets.propertyName === 'depletions'") {{a.filterModel.depletionsTimePeriod.displayValue}}
+                p.accent.bold(ng-if="a.filtersService.model.accountSelected.accountMarkets.propertyName !== 'depletions'") {{a.filterModel.distributionTimePeriod.displayValue}}
 
         md-tabs(md-selected="a.marketSelectedIndex" ng-class="{'animate-disabled': a.disableAnimation}" md-autoselect)
           md-tab(ng-repeat="(key, data) in a.topBottomData" label="{{key}}")
@@ -232,16 +231,17 @@ div(row)
                   td.dist-label(colspan=2) {{item.title}}
                   td.dark.market-label
                     span(ng-bind="a.getValueBoundForAcctType(item.measure)")
-      //- .chart
-      //-   table.no-top-border(cellspacing="0" cellpadding="0")
-      //-     thead
-      //-       tr
-      //-         th.top.title-col.chart-title
-      //-           p.accent.bold Trends
-      //-       tr
-      //-         th
-      //-           p.accent FYTD - vs YA%
-      //-   nvd3.nvd(options="a.chartOptions" data="a.chartData")
+      .chart
+        table.no-top-border(cellspacing="0" cellpadding="0")
+          thead
+            tr
+              th.top.title-col.chart-title
+                p.accent.bold {{'Trend (' + a.filterModel.trend.name + '%)'}}
+            tr
+              th
+                p.accent(ng-if="a.filtersService.model.accountSelected.accountMarkets.propertyName === 'depletions'") {{a.filterModel.depletionsTimePeriod.displayValue}}
+                p.accent.bold(ng-if="a.filtersService.model.accountSelected.accountMarkets.propertyName !== 'depletions'") {{a.filterModel.distributionTimePeriod.displayValue}}
+        nvd3.nvd(options="a.chartOptions" data="a.getCurrentChartData()")
 
 h3.top-opportunities-header Top Opportunities
   a.accent(ng-click="a.goToOpportunities($event);" ng-disabled="a.allOpportunitiesDisabled()") See All Opportunities

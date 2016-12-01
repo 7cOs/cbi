@@ -332,9 +332,7 @@ module.exports = /*  @ngInject */
       cleanUpSaveFilterObj: cleanUpSaveFilterObj,
       lastEndingTimePeriod: lastEndingTimePeriod,
       accountFilters: accountFilters,
-      trendPropertyNames: trendPropertyNames,
-      getFilteredTopBottomData: getFilteredTopBottomData,
-      getTopBottomDataSorted: getTopBottomDataSorted
+      trendPropertyNames: trendPropertyNames
     };
 
     return service;
@@ -443,106 +441,5 @@ module.exports = /*  @ngInject */
           service.model[prop] = false;
         }
       }
-    }
-
-    function getIndexPositionsArr(originalArr, arrToGetIndex) {
-      var indexPos = -1;
-      var indexedArr = [];
-      if (arrToGetIndex === originalArr) {
-        angular.forEach(arrToGetIndex, function(obj) {
-          indexPos = originalArr.indexOf(obj);
-          if (indexPos !== -1) {
-            indexedArr.push(indexPos);
-          }
-        });
-      } else {
-        for (var i = 0; i < originalArr.length; i++) {
-          indexedArr.push(i);
-        }
-      }
-
-      return indexedArr;
-    }
-
-    function getTopBottomDataSorted(topBottomData, planType, categoryType) {
-      var sortedList = {
-            topValues: [],
-            bottomValues: [],
-            topTrends: [],
-            bottomTrends: []
-          }, queryLimit = 10,
-          valuesArr, trendsArr, tempArr = [];
-
-      valuesArr = $filter('orderBy')(topBottomData, categoryType.propertyName);
-      var len = valuesArr.length;
-      if (len > queryLimit) {
-        tempArr = valuesArr.slice(0, queryLimit - 1);
-        sortedList.topValues = getIndexPositionsArr(valuesArr, tempArr);
-        tempArr = valuesArr.slice(len - queryLimit, len);
-        sortedList.bottomValues = getIndexPositionsArr(valuesArr, tempArr);
-      } else {
-        tempArr =  getIndexPositionsArr(valuesArr, valuesArr);
-        sortedList.topValues = tempArr;
-        sortedList.bottomValues = tempArr;
-      }
-      trendsArr = $filter('orderBy')(topBottomData, trendPropertyNames[categoryType.propertyName][planType.value - 1]);
-      if (len > queryLimit) {
-        tempArr = trendsArr.slice(0, queryLimit - 1);
-        sortedList.topTrends = getIndexPositionsArr(valuesArr, tempArr);
-        tempArr = trendsArr.slice(len - queryLimit, len);
-        sortedList.bottomTrends = tempArr;
-      } else {
-        tempArr =  getIndexPositionsArr(trendsArr, trendsArr);
-        sortedList.topTrends = tempArr;
-        sortedList.bottomTrends = tempArr;
-      }
-      console.log('sortedList', sortedList);
-      return sortedList;
-    }
-
-    /**
-      * Gets an array of data matching the distirubution or depletion time period
-      * @param {Object} topBottomData Package or Brand
-      * @param {String} categoryType depletions or Distribution
-      * @param {String} depletionOption L90, L120 etc
-      * @returns {Object} currentTrendVal Returns the trend display value as string and the actual float value
-      */
-    function getFilteredTopBottomData(topBottomData, categoryType, depletionOption, distirbutionOption) {
-      var data, filteredData = [], matchedMeasure = null;
-      switch (categoryType.value) {
-        case accountFilters.accountMarketsEnums.depletions:
-          for (var i = 0, len = topBottomData.length; i < len; i++) {
-            data = topBottomData[i];
-            matchedMeasure = data.measures.filter(function (measure) {
-              return measure.timeframe === depletionOption.name;
-            });
-            if (matchedMeasure[0]) {
-              var depletionObj = {
-                title: data.name,
-                type: data.type,
-                measure: matchedMeasure[0]
-              };
-              filteredData.push(depletionObj);
-            }
-          }
-          break;
-        default:
-          for (var j = 0, length = topBottomData.length; j < length; j++) {
-            data = topBottomData[i];
-            matchedMeasure = data.measures.filter(function (measure) {
-              return measure.timeframe === distirbutionOption.name;
-            });
-            if (matchedMeasure[0]) {
-              var distirbutionObj = {
-                title: data.name,
-                type: data.type,
-                measure: matchedMeasure[0]
-              };
-              filteredData.push(distirbutionObj);
-            }
-          }
-          break;
-      }
-      return filteredData;
     }
   };
