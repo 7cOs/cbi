@@ -397,8 +397,9 @@ module.exports = /*  @ngInject */
     function init() {
       // reset all chips and filters on page init
       chipsService.resetChipsFilters(chipsService.model);
-      var params = filtersService.getAppliedFilters('brandSnapshot');
       setDefaultDropDownOptions();
+      var params = filtersService.getAppliedFilters('brandSnapshot');
+      vm.filtersService.model.selected.valuesVsTrend =  vm.filtersService.accountFilters.valuesVsTrend[1];
 
       var promiseArr = [
         userService.getPerformanceSummary(),
@@ -487,7 +488,6 @@ module.exports = /*  @ngInject */
       vm.filterModel.trend = vm.filtersService.model.trend[0];
       vm.filtersService.model.accountSelected.accountBrands = vm.filtersService.accountFilters.accountBrands[0];
       vm.filtersService.model.accountSelected.accountMarkets = vm.filtersService.accountFilters.accountMarkets[0];
-      vm.filtersService.model.selected.valuesVsTrend =  vm.filtersService.accountFilters.valuesVsTrend[1];
       vm.currentTopBottomAcctType = vm.filtersService.accountFilters.accountTypes[0];
       vm.filtersService.model.selected.premiseType = 'all';
       vm.chartOptions = myperformanceService.getChartOptions();
