@@ -96,6 +96,14 @@ module.exports = /*  @ngInject */
       vm.multipleTargetListsSelected = newVal.multipleTargetListsSelected;
     }, true);
 
+    // Check if opportunity type is valid in custom opportunity modal
+    $scope.$watchCollection('[nb.newOpportunity.properties.distributionType.type, nb.newOpportunity.properties.distributionType.description]', function() {
+      var type = vm.newOpportunity.properties.distributionType.type,
+          description = vm.newOpportunity.properties.distributionType.description;
+
+      if (type === 'other' && description) { vm.opportunityTypeValid = !isNaN(description.length) && description.length > 3; }
+    });
+
     init();
 
     // **************

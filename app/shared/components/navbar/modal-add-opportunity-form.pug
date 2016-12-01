@@ -15,6 +15,8 @@ div.modal.add-opportunity
         input(ng-model="nb.newOpportunity.properties.distributionType.description" aria-label="Opportunity Description" placeholder="Input type" name="otherOpportunityInput").short
     div(ng-cloak ng-show="nb.addOpportunityForm.opportunityType.$invalid && nb.addOpportunityForm.$submitted")
       p.error-message.accent.select-opportunity-error <img src="./assets/img/icons/error.svg">Please select an Opportunity Type.
+    div(ng-cloak ng-show="!nb.opportunityTypeValid && nb.addOpportunityForm.$submitted")
+      p.error-message.accent.select-opportunity-error <img src="./assets/img/icons/error.svg">Please specify at least 3 characters.
 
     div.modal-input.clearfix
       label(ng-if="nb.newOpportunity.properties.distributionType.type === 'new'") Recommended Package / SKU
