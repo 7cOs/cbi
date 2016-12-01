@@ -21,12 +21,13 @@ div.modal.add-opportunity
     div.modal-input.clearfix
       label(ng-if="nb.newOpportunity.properties.distributionType.type === 'new'") Recommended Package / SKU
       label(ng-if="nb.newOpportunity.properties.distributionType.type === 'other'") Recommended Brand or Package/ SKU
+
       .inline-search-radio(layout="row")
         md-radio-group(ng-model="nb.newOpportunity.properties.product.type")
           md-radio-button.md-primary(value="sku" aria-label="Search for brand or package/SKU") &nbsp;
 
-        inline-search(ng-if="nb.newOpportunity.properties.distributionType.type === 'new'" type="product" variety="non-brand" placeholder="Type package name, or master SKU" chosen-result="nb.newOpportunity.properties.product.text" chosen-result-object="nb.chosenProductObject" ng-model="nb.newOpportunity.properties.product.text" name="recommendedProduct" required)
-        inline-search.all-product-search(ng-if="nb.newOpportunity.properties.distributionType.type === 'other'" type="product" placeholder="Type brand, package name, or master SKU" chosen-result="nb.newOpportunity.properties.product.text" chosen-result-object="nb.chosenProductObject" ng-model="nb.newOpportunity.properties.product.text" name="recommendedProduct" required)
+        inline-search(ng-if="nb.newOpportunity.properties.distributionType.type === 'new'" type="product" variety="non-brand" placeholder="Type package name, or master SKU" chosen-result="nb.newOpportunity.properties.product.text" chosen-result-object="nb.chosenProductObject" ng-model="nb.newOpportunity.properties.product.text" name="recommendedProduct" ng-required="nb.newOpportunity.properties.product.type !== 'mixed'")
+        inline-search.all-product-search(ng-if="nb.newOpportunity.properties.distributionType.type === 'other'" type="product" placeholder="Type brand, package name, or master SKU" chosen-result="nb.newOpportunity.properties.product.text" chosen-result-object="nb.chosenProductObject" ng-model="nb.newOpportunity.properties.product.text" name="recommendedProduct" ng-required="nb.newOpportunity.properties.product.type !== 'mixed'")
 
         md-radio-group(ng-if="nb.newOpportunity.properties.distributionType.type === 'other'" ng-model="nb.newOpportunity.properties.product.type" required)
           md-radio-button.mixed-brands.md-primary(value="mixed" aria-label="Mixed Brands") Mixed Brands
