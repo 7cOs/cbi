@@ -12,10 +12,10 @@ div.modal.add-opportunity
       md-radio-group.horizontal-layout(ng-model="nb.newOpportunity.properties.distributionType.type" name="opportunityType" required)
         md-radio-button.md-primary(value="new" aria-label="New Distribution") New Distribution
         md-radio-button.md-primary(value="other" aria-label="Other") Other
-        input(ng-model="nb.newOpportunity.properties.distributionType.description" aria-label="Opportunity Description" placeholder="Input type" name="otherOpportunityInput").short
+        input(ng-model="nb.newOpportunity.properties.distributionType.description" aria-label="Opportunity Description" placeholder="Input type" name="otherOpportunityInput" ng-minlength="3" ng-required="true").short
     div(ng-cloak ng-show="nb.addOpportunityForm.opportunityType.$invalid && nb.addOpportunityForm.$submitted")
       p.error-message.accent.select-opportunity-error <img src="./assets/img/icons/error.svg">Please select an Opportunity Type.
-    div(ng-cloak ng-show="!nb.opportunityTypeValid && nb.addOpportunityForm.$submitted")
+    div(ng-cloak ng-show="nb.newOpportunity.properties.distributionType.type === 'other' && nb.addOpportunityForm.otherOpportunityInput.$invalid && nb.addOpportunityForm.$submitted")
       p.error-message.accent.select-opportunity-error <img src="./assets/img/icons/error.svg">Please specify at least 3 characters.
 
     div.modal-input.clearfix
