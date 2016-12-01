@@ -18,9 +18,6 @@ module.exports = /*  @ngInject */
     vm.filtersService = filtersService;
     vm.userService = userService;
 
-    /* Need to remove this */
-    vm.marketData = myperformanceService.marketData();
-
     // Filter Model - Keeping this out of filtersService as its not needed anywhere else
     var filterModelTemplate = {
       trend: filtersService.model.trend[0].name,
@@ -34,12 +31,6 @@ module.exports = /*  @ngInject */
     vm.brandTabs = {
       brands: [],
       skus: []
-    };
-    vm.marketTabs = {
-      distributors: vm.marketData.distributors,
-      accounts: vm.marketData.accounts,
-      subAccounts: vm.marketData.subAccounts,
-      stores: vm.marketData.stores
     };
 
     // Set selected tabs
@@ -69,47 +60,19 @@ module.exports = /*  @ngInject */
     vm.selectedStore = null;
     vm.selectOpen = false;
 
-    // Chart Setup
-    vm.chartData = [{'values': vm.marketData.distributors}];
-    vm.chartOptions = {
-      chart: {
-        type: 'multiBarHorizontalChart',
-        groupSpacing: 0.65,
-        x: function(d) { return d.label; },
-        y: function(d) { return d.value; },
-        xAxis: {
-          showMaxMin: false
-        },
-        yAxis: {
-          showMaxMin: false
-        },
-        showControls: false,
-        showValues: true,
-        duration: 500,
-        valueFormat: function(d) {
-          return d + '%';
-        },
-        tooltip: {
-          valueFormatter: function(d) {
-            return d + '%';
-          }
-        },
-        margin: {
-          top: 0,
-          right: 0,
-          bottom: 30,
-          left: 0
-        },
-        legend: {
-          width: 0,
-          height: 0
-        },
-        controls: {
-          width: 0,
-          height: 0
-        }
-      }
+    // top bottom public methods
+    vm.topBottomData = {
+      distributors: null,
+      accounts: null,
+      subAccounts: null,
+      stores: null
     };
+    vm.currentTopBottomAcctType = null;
+    vm.currentTopBottomDataForFilter = null;
+    vm.getValueBoundForAcctType = getValueBoundForAcctType;
+    vm.filterByTopBottomSortCategory = filterByTopBottomSortCategory;
+    vm.setTopBottomAcctTypeSelection = setTopBottomAcctTypeSelection;
+    vm.getCurrentChartData = getCurrentChartData;
 
     // Expose public methods
     vm.allOpportunitiesDisabled = allOpportunitiesDisabled;
@@ -131,8 +94,6 @@ module.exports = /*  @ngInject */
     vm.resetFilters = resetFilters;
     vm.selectItem = selectItem;
     vm.setFilter = setFilter;
-    vm.setMarketTab = setMarketTab;
-    vm.setTopBottomAcctTypeSelection = setTopBottomAcctTypeSelection;
     vm.updateBrandSnapshot = updateBrandSnapshot;
     vm.updateChip = updateChip;
     vm.updateDistributionTimePeriod = updateDistributionTimePeriod;
@@ -267,7 +228,6 @@ module.exports = /*  @ngInject */
       if (parentIndex + 1 === parentLength) {
         // We're on the deepest level of current tab list
         if (widget === 'brands') { setSelected(item.name, 'brands'); }
-        if (widget === 'markets') { setSelected(item.label, 'markets'); }
       } else {
         if (widget === 'brands') { vm.brandWidgetTitle = item.name; }
         vm.loadingBrandSnapshot = true;
@@ -282,8 +242,6 @@ module.exports = /*  @ngInject */
           }, 500);
         });
       }
-
-      if (widget === 'markets') { getActiveTab(); }
     }
 
     /**
@@ -332,16 +290,6 @@ module.exports = /*  @ngInject */
           vm.currentTopBottomView = userService.getCurrentTopBottomView(data);
         });
       }
-    }
-
-    // Set proper tab and skip animation when chosen from market select box
-    function setMarketTab(selectValue) {
-      vm.disableAnimation = true;
-      if (selectValue === 'Distributors') { vm.marketSelectedIndex = 0; }
-      if (selectValue === 'Accounts') { vm.marketSelectedIndex = 1; }
-      if (selectValue === 'Sub-Accounts') { vm.marketSelectedIndex = 2; }
-      if (selectValue === 'Stores') { vm.marketSelectedIndex = 3; }
-      getActiveTab();
     }
 
     function updateBrandSnapshot() {
@@ -404,21 +352,6 @@ module.exports = /*  @ngInject */
       return val && val > 0;
     }
 
-    function deselectMarketId() {
-      if (vm.marketIdSelected === true) {
-        vm.idSelected = null;
-        vm.marketIdSelected = false;
-      }
-    }
-
-    // Checks active tab, updates model, passes data to chart (markets only)
-    function getActiveTab() {
-      if (vm.marketSelectedIndex === 0) { vm.filtersService.model.selected.accountTypes = 'Distributors'; setChartData(vm.marketData.distributors); deselectMarketId(); }
-      if (vm.marketSelectedIndex === 1) { vm.filtersService.model.selected.accountTypes = 'Accounts'; setChartData(vm.marketData.accounts); deselectMarketId(); }
-      if (vm.marketSelectedIndex === 2) { vm.filtersService.model.selected.accountTypes = 'Sub-Accounts'; setChartData(vm.marketData.subAccounts); deselectMarketId(); }
-      if (vm.marketSelectedIndex === 3) { vm.filtersService.model.selected.accountTypes = 'Stores'; setChartData(vm.marketData.stores); }
-    }
-
     /**
      * Gets the trend values based on whether ABP or YA is selected
      * @param {Array} measures Package or Brand
@@ -463,14 +396,9 @@ module.exports = /*  @ngInject */
 
     function init() {
       // reset all chips and filters on page init
-      vm.filterModel.trend = vm.filtersService.model.trend[0];
-      vm.filtersService.model.accountSelected.accountBrands = vm.filtersService.accountFilters.accountBrands[0];
-      vm.filtersService.model.accountSelected.accountMarkets = vm.filtersService.accountFilters.accountMarkets[0];
       chipsService.resetChipsFilters(chipsService.model);
-      setDefaultEndingPeriodOptions();
-      vm.currentTopBottomAcctType = vm.filtersService.accountFilters.accountTypes[0];
-      vm.filtersService.model.selected.premiseType = 'all';
       var params = filtersService.getAppliedFilters('brandSnapshot');
+      setDefaultDropDownOptions();
 
       var promiseArr = [
         userService.getPerformanceSummary(),
@@ -486,7 +414,9 @@ module.exports = /*  @ngInject */
         userService.model.distribution = data[2];
         vm.brandTabs.brands = data[3].performance;
         setCurrentTotalsObject();
-        // vm.currentTopBottomDataForFilter = userService.getFilteredTopBottomData(data[4].performance);
+        if (data[4]) {
+          setTopBottomInitData(data[4].performance);
+        }
         vm.loadingBrandSnapshot = false;
         vm.loadingTopBottom = false;
       });
@@ -501,11 +431,6 @@ module.exports = /*  @ngInject */
         vm.filtersService.model.accountSelected.accountBrands = vm.filtersService.accountFilters.accountBrands[1];
       }
       if (widget === 'markets') { vm.marketSelectedIndex = vm.marketSelectedIndex + 1; }
-    }
-
-    // Handle required formatting for chart data
-    function setChartData(data) {
-      vm.chartData = [{'values': data}];
     }
 
     /**
@@ -554,4 +479,97 @@ module.exports = /*  @ngInject */
         vm.scrolledBelowHeader = false;
       }
     });
+
+    // Top Bottom Specific Functions
+
+    function setDefaultDropDownOptions() {
+      setDefaultEndingPeriodOptions();
+      vm.filterModel.trend = vm.filtersService.model.trend[0];
+      vm.filtersService.model.accountSelected.accountBrands = vm.filtersService.accountFilters.accountBrands[0];
+      vm.filtersService.model.accountSelected.accountMarkets = vm.filtersService.accountFilters.accountMarkets[0];
+      vm.filtersService.model.selected.valuesVsTrend =  vm.filtersService.accountFilters.valuesVsTrend[1];
+      vm.currentTopBottomAcctType = vm.filtersService.accountFilters.accountTypes[0];
+      vm.filtersService.model.selected.premiseType = 'all';
+      vm.chartOptions = myperformanceService.getChartOptions();
+    }
+
+    function setTopBottomInitData(performanceData) {
+      var topBottomIndices, filteredByTimePeriodData, chartData;
+      filteredByTimePeriodData = myperformanceService.getFilteredTopBottomData(performanceData, vm.filtersService.model.accountSelected.accountMarkets, vm.filterModel.depletionsTimePeriod, vm.filterModel.distributionTimePeriod, vm.filterModel.trend);
+
+      if (filteredByTimePeriodData) {
+        topBottomIndices = myperformanceService.getTopBottomDataSorted(filteredByTimePeriodData, vm.filterModel.trend, vm.filtersService.model.accountSelected.accountMarkets);
+        chartData = myperformanceService.getChartData(filteredByTimePeriodData, vm.filterModel.trend, vm.filtersService.model.accountSelected.accountMarkets);
+        setDataForCorrespondingTopDownLevel(performanceData, filteredByTimePeriodData, topBottomIndices, chartData);
+      }
+    }
+
+    function setDataForCorrespondingTopDownLevel(performanceData, filteredByTimePeriodData, topBottomIndices, chartData) {
+      var accountTypes = filtersService.accountFilters.accountTypesEnums;
+      var updatedObjectForLevel = {
+        performanceData: performanceData,
+        timePeriodFilteredData: filteredByTimePeriodData,
+        topBottomIndices: topBottomIndices,
+        chartData: chartData,
+        isPerformanceDataChanged: false,
+        isFilterCategoryChanged: false
+      };
+      switch (vm.currentTopBottomAcctType.value) {
+        case accountTypes.distributors:
+          vm.topBottomData.distributors = updatedObjectForLevel;
+          // console.log('Top Bottom Distirbutors', vm.topBottomData.distributors);
+          break;
+        case accountTypes.accounts:
+          vm.topBottomData.accounts = updatedObjectForLevel;
+          // console.log('Top Bottom Accts', vm.topBottomData.accounts);
+          break;
+        case accountTypes.subAccounts:
+          vm.topBottomData.subAccounts = updatedObjectForLevel;
+          // console.log('Top Bottom SubAccts', vm.topBottomData.subAccounts);
+          break;
+        case accountTypes.stores:
+          vm.topBottomData.stores = updatedObjectForLevel;
+          // console.log('Top Bottom Stores', vm.topBottomData.stores);
+          break;
+      }
+    }
+
+    function getValueBoundForAcctType(measures) {
+      if (measures) {
+        var propName = vm.filtersService.model.accountSelected.accountMarkets.propertyName;
+        var matchedMeasure = measures[propName];
+        if (userService.isValidValues(matchedMeasure)) {
+          return Math.round(matchedMeasure);
+        } else {
+          return '-';
+        }
+      }
+    }
+
+    function getCurrentChartData() {
+      var currentObj = vm.topBottomData[Object.keys(vm.topBottomData)[vm.marketSelectedIndex]];
+      if (currentObj && currentObj.chartData) {
+        return currentObj.chartData;
+      }
+    }
+
+    function filterByTopBottomSortCategory(currentIndex, topBottomIndices) {
+      var sortCategory = vm.filtersService.model.selected.valuesVsTrend.value;
+      var result = false;
+      switch (sortCategory) {
+        case filtersService.accountFilters.topBottomSortTypeEnum.topValues:
+          result = topBottomIndices.topValues.indexOf(currentIndex) !== -1;
+          break;
+        case filtersService.accountFilters.topBottomSortTypeEnum.topTrends:
+          result = topBottomIndices.topTrends.indexOf(currentIndex) !== -1;
+          break;
+        case filtersService.accountFilters.topBottomSortTypeEnum.bottomValues:
+          result = topBottomIndices.bottomValues.indexOf(currentIndex) !== -1;
+          break;
+        case filtersService.accountFilters.topBottomSortTypeEnum.bottomTrends:
+          result = topBottomIndices.bottomTrends.indexOf(currentIndex) !== -1;
+          break;
+      }
+      return result;
+    }
   };

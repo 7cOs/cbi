@@ -204,7 +204,7 @@ div(row)
           md-option(ng-repeat="filter in a.filtersService.accountFilters.accountMarkets" aria-label="{{filter.name}}" ng-value="filter") {{filter.name}}
       .header-selector
         md-select.market(ng-model="a.filtersService.model.selected.valuesVsTrend" md-on-open="a.openSelect(true)" md-on-close="a.openSelect(false)" placeholder="Top 10 (Values)" aria-label="Values versus Trends Filter")
-          md-option(ng-repeat="filter in a.filtersService.accountFilters.valuesVsTrend" aria-label="{{filter.name}}" value="{{filter.name}}") {{filter.name}}
+          md-option(ng-repeat="filter in a.filtersService.accountFilters.valuesVsTrend track by filter.value" aria-label="{{filter.name}}" ng-value="filter") {{filter.name}}
         md-select(ng-model="a.currentTopBottomAcctType" md-on-open="a.openSelect(true)" md-on-close="a.openSelect(false);"  placeholder="{{a.currentTopBottomAcctType.name}}" aria-label="Account Type Filter")
           md-option(ng-repeat="filter in a.filtersService.accountFilters.accountTypes track by filter.value" aria-label="{{filter.name}}" ng-value="filter" ng-click="a.setTopBottomAcctTypeSelection(filter)") {{filter.name}}
     .widget-content.clearfix
@@ -217,28 +217,31 @@ div(row)
                 p &nbsp;
               th.top.dark.market-label
                 p.accent.bold {{a.filtersService.model.accountSelected.accountMarkets.name}}
-                p.accent.bold {{a.filtersService.model.depletionsTimeFilter.depletionsTimeFilter}}
+                p.accent.bold(ng-if="a.filtersService.model.accountSelected.accountMarkets.propertyName === 'depletions'") {{a.filterModel.depletionsTimePeriod.displayValue}}
+                p.accent.bold(ng-if="a.filtersService.model.accountSelected.accountMarkets.propertyName !== 'depletions'") {{a.filterModel.distributionTimePeriod.displayValue}}
+
         md-tabs(md-selected="a.marketSelectedIndex" ng-class="{'animate-disabled': a.disableAnimation}" md-autoselect)
-          md-tab(ng-repeat="(key, data) in a.marketTabs" label="{{key}}")
+          md-tab(ng-repeat="(key, data) in a.topBottomData" label="{{key}}")
             table.fixed-layout(cellspacing="0" cellpadding="0")
               tbody
-                tr.clickable.market-value(ng-repeat="item in data" ng-class="{'store': item.address, 'selected': item.label === a.idSelected}" ng-click="a.selectItem('markets', item, a.marketTabs, $parent.$index)")
-                  td.dist-label(colspan=2) {{item.title}} <span ng-if="item.storeNum" class="store-number">\#{{item.storeNum}}</span><span ng-if="item.address" class="address">{{item.address}}</span>
+                //- ng-click="a.selectItem('markets', item, a.marketTabs, $parent.$index)"
+                //- ng-class="{'store': item.address, 'selected': item.label === a.idSelected}"
+                //- <span ng-if="item.storeNum" class="store-number">\#{{item.storeNum}}</span><span ng-if="item.address" class="address">{{item.address}}</span>
+                tr.clickable.market-value(ng-repeat="item in data.timePeriodFilteredData track by $index" ng-if="a.filterByTopBottomSortCategory($index, data.topBottomIndices)")
+                  td.dist-label(colspan=2) {{item.title}}
                   td.dark.market-label
-                    span(ng-if="a.filtersService.model.accountSelected.accountMarkets.value === a.filtersService.accountFilters.accountMarketsEnums.depletions") {{item.depletions | number}}
-                    span(ng-if="a.filtersService.model.accountSelected.accountMarkets.value === a.filtersService.accountFilters.accountMarketsEnums.distSimple") {{item.distSimple}}
-                    span(ng-if="a.filtersService.model.accountSelected.accountMarkets.value === a.filtersService.accountFilters.accountMarketsEnums.distEffective").value {{item.distEffective}}
-                    span(ng-if="a.filtersService.model.accountSelected.accountMarkets.value === a.filtersService.accountFilters.accountMarketsEnums.velocity") {{item.velocity}}
+                    span(ng-bind="a.getValueBoundForAcctType(item.measure)")
       .chart
         table.no-top-border(cellspacing="0" cellpadding="0")
           thead
             tr
               th.top.title-col.chart-title
-                p.accent.bold Trends
+                p.accent.bold {{'Trend (' + a.filterModel.trend.name + '%)'}}
             tr
               th
-                p.accent FYTD - vs YA%
-        nvd3.nvd(options="a.chartOptions" data="a.chartData")
+                p.accent(ng-if="a.filtersService.model.accountSelected.accountMarkets.propertyName === 'depletions'") {{a.filterModel.depletionsTimePeriod.displayValue}}
+                p.accent.bold(ng-if="a.filtersService.model.accountSelected.accountMarkets.propertyName !== 'depletions'") {{a.filterModel.distributionTimePeriod.displayValue}}
+        nvd3.nvd(options="a.chartOptions" data="a.getCurrentChartData()")
 
 h3.top-opportunities-header Top Opportunities
   a.accent(ng-click="a.goToOpportunities($event);" ng-disabled="a.allOpportunitiesDisabled()") See All Opportunities

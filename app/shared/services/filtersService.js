@@ -249,15 +249,19 @@ module.exports = /*  @ngInject */
       },
       accountMarkets: [{
         name: 'Depletions',
+        propertyName: 'depletions',
         value: 1
       }, {
         name: 'Distribution (simple)',
+        propertyName: 'distributionsSimple',
         value: 2
       }, {
         name: 'Distribution (effective)',
+        propertyName: 'distributionsEffective',
         value: 3
       }, {
         name: 'Velocity',
+        propertyName: 'velocity',
         value: 4
       }],
       valuesVsTrend: [{
@@ -295,6 +299,18 @@ module.exports = /*  @ngInject */
         'distirbutionSimple': 1,
         'distirbutionEffective': 2,
         'velocity': 3
+      },
+      topBottomSortTypeEnum: {
+        'topValues': 1,
+        'topTrends': 2,
+        'bottomValues': 3,
+        'bottomTrends': 4
+      },
+      accountTypesEnums: {
+        'distributors': 1,
+        'accounts': 2,
+        'subAccounts': 3,
+        'stores': 4
       }
     };
 
@@ -316,8 +332,7 @@ module.exports = /*  @ngInject */
       cleanUpSaveFilterObj: cleanUpSaveFilterObj,
       lastEndingTimePeriod: lastEndingTimePeriod,
       accountFilters: accountFilters,
-      trendPropertyNames: trendPropertyNames,
-      getFilteredTopBottomData: getFilteredTopBottomData
+      trendPropertyNames: trendPropertyNames
     };
 
     return service;
@@ -425,24 +440,6 @@ module.exports = /*  @ngInject */
         if (service.model[prop] && service.model[prop].constructor !== Array && service.model[prop] === true && prop !== 'expanded') {
           service.model[prop] = false;
         }
-      }
-    }
-
-    function getFilteredTopBottomData(topBottomData, categoryType) {
-      switch (categoryType.value) {
-        case accountFilters.accountMarketsEnums.depletions:
-
-          break;
-        case accountFilters.accountMarketsEnums.distSimple:
-
-          break;
-        case accountFilters.accountMarketsEnums.distEffective:
-
-          break;
-        case accountFilters.accountMarketsEnums.velocity:
-
-          break;
-
       }
     }
   };

@@ -266,9 +266,6 @@ describe('Unit: accountsController', function() {
       expect(ctrl.openSelect).not.toBeUndefined();
       expect(typeof (ctrl.openSelect)).toEqual('function');
 
-      expect(ctrl.setMarketTab).not.toBeUndefined();
-      expect(typeof (ctrl.setMarketTab)).toEqual('function');
-
       expect(ctrl.selectItem).not.toBeUndefined();
       expect(typeof (ctrl.selectItem)).toEqual('function');
 
@@ -740,4 +737,5 @@ describe('Unit: accountsController', function() {
     });
 
   });
+
 });
