@@ -17,29 +17,29 @@ div.modal.add-opportunity
       p.error-message.accent.select-opportunity-error <img src="./assets/img/icons/error.svg">Please select an Opportunity Type.
 
     div.modal-input.clearfix
-      label(ng-if="nb.newOpportunity.properties.distributionType.type === 'new'") Recommended Package/ SKU
+      label(ng-if="nb.newOpportunity.properties.distributionType.type === 'new'") Recommended Package / SKU
       label(ng-if="nb.newOpportunity.properties.distributionType.type === 'other'") Recommended Brand or Package/ SKU
       .inline-search-radio(layout="row")
         md-radio-group(ng-model="nb.newOpportunity.properties.product.type")
           md-radio-button.md-primary(value="sku" aria-label="Search for brand or package/SKU") &nbsp;
 
-        inline-search(ng-if="nb.newOpportunity.properties.distributionType.type === 'new'" type="product" variety="non-brand" placeholder="Type package name, or master SKU" chosen-result="nb.newOpportunity.properties.product.text" chosen-result-object="nb.chosenProductObject")
+        inline-search(ng-if="nb.newOpportunity.properties.distributionType.type === 'new'" type="product" variety="non-brand" placeholder="Type package name, or master SKU" chosen-result="nb.newOpportunity.properties.product.text" chosen-result-object="nb.chosenProductObject" ng-model="nb.newOpportunity.properties.product.text" name="recommendedProduct" required)
+        inline-search.all-product-search(ng-if="nb.newOpportunity.properties.distributionType.type === 'other'" type="product" placeholder="Type brand, package name, or master SKU" chosen-result="nb.newOpportunity.properties.product.text" chosen-result-object="nb.chosenProductObject" ng-model="nb.newOpportunity.properties.product.text" name="recommendedProduct" required)
 
-        inline-search.all-product-search(ng-if="nb.newOpportunity.properties.distributionType.type === 'other'" type="product" placeholder="Type brand, package name, or master SKU" chosen-result="nb.newOpportunity.properties.product.text" chosen-result-object="nb.chosenProductObject")
+        md-radio-group(ng-if="nb.newOpportunity.properties.distributionType.type === 'other'" ng-model="nb.newOpportunity.properties.product.type" required)
+          md-radio-button.mixed-brands.md-primary(value="mixed" aria-label="Mixed Brands") Mixed Brands
 
-        md-radio-group(ng-model="nb.newOpportunity.properties.product.type")
-          md-radio-button.mixed-brands.md-primary(value="mixed" ng-if="nb.newOpportunity.properties.distributionType.type === 'other'" aria-label="Mixed Brands") Mixed Brands
-        div(ng-cloak ng-show="nb.addOpportunityForm.$invalid && nb.addOpportunityForm.$submitted")
+        div(ng-cloak ng-show="(nb.newOpportunity.properties.product.type === 'sku' && nb.addOpportunityForm.recommendedProduct.$invalid) && nb.addOpportunityForm.$submitted")
           p.error-message.accent <img src="./assets/img/icons/error.svg">Please enter a Recommended Brand or Select Mixed Brands.
 
     div.modal-input.rationale
       label Rationale
       .dropdown-filter
         .dropdown
-          md-select.left(ng-model="nb.newOpportunity.properties.rationale.description" aria-label="rationale dropdown" placeholder="Select Rationale" name="rationaleDropdown")
+          md-select.left(ng-model="nb.newOpportunity.properties.rationale.description" aria-label="rationale dropdown" placeholder="Select Rationale" name="rationaleDropdown" required)
             md-option(ng-repeat="rationale in nb.rationales" aria-label="{{rationale.type}}" ng-click="nb.showNewRationaleInput(false)" value="{{rationale.type}}") {{rationale.type}}
             md-option(aria-label="Add New Rationale" ng-click="nb.showNewRationaleInput(true)" value="other") + Add Other Rationale
-        div(ng-show="nb.addOpportunityForm.$invalid && nb.addOpportunityForm.$submitted")
+        div(ng-show="nb.addOpportunityForm.rationaleDropdown.$invalid && nb.addOpportunityForm.$submitted")
           p.error-message.accent <img src="./assets/img/icons/error.svg">Please select a Rationale, or add another one.
       label(ng-if="nb.addNewRationale") Add Other Rationale
       input(ng-if="nb.addNewRationale" ng-model="nb.newOpportunity.properties.rationale.other" aria-label="Input New Rationale" placeholder="Add Other Rationale" name="addRationale")
