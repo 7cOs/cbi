@@ -62,7 +62,7 @@ module.exports = /*  @ngInject */
         sortedList.topTrends = tempArr;
         sortedList.bottomTrends = tempArr;
       }
-      console.log('sortedList', sortedList);
+      // console.log('sortedList', sortedList);
       return sortedList;
     }
 
@@ -171,7 +171,7 @@ module.exports = /*  @ngInject */
         categoryChartData.push(obj);
       });
       chartData[0].values = categoryChartData;
-      console.log('chartData', chartData);
+      // console.log('chartData', chartData);
       return chartData;
     }
   };
