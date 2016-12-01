@@ -23,6 +23,8 @@
     &.open {
       width: 100%;
       min-width: min-content;
+      min-width: -moz-min-content;
+      min-width: -webkit-min-content;
       min-height: 9em;
       max-height: 9em;
       opacity: 1;
