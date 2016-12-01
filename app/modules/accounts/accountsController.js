@@ -517,19 +517,19 @@ module.exports = /*  @ngInject */
       switch (vm.currentTopBottomAcctType.value) {
         case accountTypes.distributors:
           vm.topBottomData.distributors = updatedObjectForLevel;
-          console.log('Top Bottom Distirbutors', vm.topBottomData.distributors);
+          // console.log('Top Bottom Distirbutors', vm.topBottomData.distributors);
           break;
         case accountTypes.accounts:
           vm.topBottomData.accounts = updatedObjectForLevel;
-          console.log('Top Bottom Accts', vm.topBottomData.accounts);
+          // console.log('Top Bottom Accts', vm.topBottomData.accounts);
           break;
         case accountTypes.subAccounts:
           vm.topBottomData.subAccounts = updatedObjectForLevel;
-          console.log('Top Bottom SubAccts', vm.topBottomData.subAccounts);
+          // console.log('Top Bottom SubAccts', vm.topBottomData.subAccounts);
           break;
         case accountTypes.stores:
           vm.topBottomData.stores = updatedObjectForLevel;
-          console.log('Top Bottom Stores', vm.topBottomData.stores);
+          // console.log('Top Bottom Stores', vm.topBottomData.stores);
           break;
       }
     }
