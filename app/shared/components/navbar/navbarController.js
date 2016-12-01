@@ -204,7 +204,7 @@ module.exports = /*  @ngInject */
       }
 
       var isDistribution = opportunity.properties.distributionType.type === 'new';
-      var oppSubType = isDistribution ? 'ND001' : opportunity.properties.distributionType.description;
+      var oppSubType = isDistribution ? 'ND_001' : opportunity.properties.distributionType.description;
       var isMixedType = !isDistribution && opportunity.properties.product.type === 'mixed';
       var targetList = opportunity.properties.targetList;
       var itemType = opportunity.properties.product.id ? 'SKU_PACKAGE' : 'BRAND';
