@@ -277,7 +277,6 @@ module.exports = /*  @ngInject */
     // ***************
 
     function init() {
-      console.log('navbar init');
       userService
       .getNotifications(userService.model.currentUser.employeeID)
       .then(function(result) {
@@ -314,7 +313,7 @@ module.exports = /*  @ngInject */
       vm.addNewRationale = yes;
     }
 
-    // Remove notifications if 30+ days old &/or user removed from TargetList
+    // Remove notifications if 30+ days old
     function removeNotificationsByDate() {
       var deleteDate = moment().subtract(30, 'days').calendar(),
           created;
