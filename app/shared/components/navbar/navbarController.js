@@ -166,8 +166,11 @@ module.exports = /*  @ngInject */
         }
       });
 
+      var tempType = opportunity.properties.product.type;
+
       opportunity.properties.store = vm.chosenStoreObject;
       opportunity.properties.product = vm.chosenProductObject;
+      opportunity.properties.product.type = tempType;
       if (saveOpportunity(opportunity)) {
         vm.newOpportunity = {};
         $mdDialog.hide();
@@ -199,15 +202,26 @@ module.exports = /*  @ngInject */
       var oppSubType = isDistribution ? 'ND001' : opportunity.properties.distributionType.description;
       var isMixedType = !isDistribution && opportunity.properties.product.type === 'mixed';
       var targetList = opportunity.properties.targetList;
+      var itemType = opportunity.properties.product.id ? 'SKU_PACKAGE' : 'BRAND';
+      var itemId;
 
       if (opportunity.properties.rationale.other) {
         opportunity.properties.rationale.description = opportunity.properties.rationale.other;
       }
 
+      if (!opportunity.properties.product.id && opportunity.properties.product.brandCode) {
+        itemType = 'BRAND';
+        itemId = opportunity.properties.product.brandCode;
+      } else {
+        itemType = 'SKU_PACKAGE';
+        itemId = opportunity.properties.product.id;
+      }
+
       var payload = {
         'store': opportunity.properties.store.id,
-        'itemId': !isMixedType && opportunity.properties.product.id,
-        'itemType': 'SKU_PACKAGE',
+        // 'itemId': !isMixedType && opportunity.properties.product.id,
+        'itemId': itemId,
+        'itemType': itemType,
         'mixedBrand': isMixedType,
         'rationale': opportunity.properties.rationale.description,
         'impact': opportunity.properties.impact.enum,

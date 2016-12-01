@@ -25,7 +25,7 @@ div.modal.add-opportunity
 
         inline-search(ng-if="nb.newOpportunity.properties.distributionType.type === 'new'" type="product" variety="non-brand" placeholder="Type package name, or master SKU" chosen-result="nb.newOpportunity.properties.product.text" chosen-result-object="nb.chosenProductObject")
 
-        inline-search.all-product-search(ng-if="nb.newOpportunity.properties.distributionType.type === 'other'" type="product" placeholder="Type brand, package name, or master SKU" chosen-result="nb.newOpportunity.properties.product.text")
+        inline-search.all-product-search(ng-if="nb.newOpportunity.properties.distributionType.type === 'other'" type="product" placeholder="Type brand, package name, or master SKU" chosen-result="nb.newOpportunity.properties.product.text" chosen-result-object="nb.chosenProductObject")
 
         md-radio-group(ng-model="nb.newOpportunity.properties.product.type")
           md-radio-button.mixed-brands.md-primary(value="mixed" ng-if="nb.newOpportunity.properties.distributionType.type === 'other'" aria-label="Mixed Brands") Mixed Brands

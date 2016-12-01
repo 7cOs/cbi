@@ -84,6 +84,7 @@ module.exports = /*  @ngInject */
     vm.toggleOpportunitiesInStores = toggleOpportunitiesInStores;
     vm.toggleSelectAllStores = toggleSelectAllStores;
     vm.updateOpportunityModel = updateOpportunityModel;
+    vm.opportunityTypeOrSubtype = opportunityTypeOrSubtype;
 
     // Custom Headers for CSV export
     vm.csvHeader = [
@@ -659,6 +660,14 @@ module.exports = /*  @ngInject */
       }
 
       return yearAgoPercentValue;
+    }
+
+    function opportunityTypeOrSubtype(product) {
+      if (product.type === 'CUSTOM') {
+        return product.subType;
+      } else {
+        return product.type;
+      }
     }
 
     // ***************
