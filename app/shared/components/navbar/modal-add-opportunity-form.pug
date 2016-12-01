@@ -12,7 +12,7 @@ div.modal.add-opportunity
       md-radio-group.horizontal-layout(ng-model="nb.newOpportunity.properties.distributionType.type" name="opportunityType" required)
         md-radio-button.md-primary(value="new" aria-label="New Distribution") New Distribution
         md-radio-button.md-primary(value="other" aria-label="Other") Other
-        input(ng-model="nb.newOpportunity.properties.distributionType.description" aria-label="Opportunity Description" placeholder="Input type" name="otherOpportunityInput" ng-minlength="3" ng-required="true").short
+        input(ng-model="nb.newOpportunity.properties.distributionType.description" aria-label="Opportunity Description" placeholder="Input type" name="otherOpportunityInput" ng-minlength="3" ng-required="nb.newOpportunity.properties.distributionType.type === 'other'").short
     div(ng-cloak ng-show="nb.addOpportunityForm.opportunityType.$invalid && nb.addOpportunityForm.$submitted")
       p.error-message.accent.select-opportunity-error <img src="./assets/img/icons/error.svg">Please select an Opportunity Type.
     div(ng-cloak ng-show="nb.newOpportunity.properties.distributionType.type === 'other' && nb.addOpportunityForm.otherOpportunityInput.$invalid && nb.addOpportunityForm.$submitted")
@@ -26,7 +26,7 @@ div.modal.add-opportunity
         md-radio-group(ng-model="nb.newOpportunity.properties.product.type")
           md-radio-button.md-primary(value="sku" aria-label="Search for brand or package/SKU") &nbsp;
 
-        inline-search(ng-if="nb.newOpportunity.properties.distributionType.type === 'new'" type="product" variety="non-brand" placeholder="Type package name, or master SKU" chosen-result="nb.newOpportunity.properties.product.text" chosen-result-object="nb.chosenProductObject" ng-model="nb.newOpportunity.properties.product.text" name="recommendedProduct" ng-required="nb.newOpportunity.properties.product.type !== 'mixed'")
+        inline-search(ng-if="nb.newOpportunity.properties.distributionType.type === 'new'" type="product" variety="non-brand" placeholder="Type package name, or master SKU" chosen-result="nb.newOpportunity.properties.product.text" chosen-result-object="nb.chosenProductObject" ng-model="nb.newOpportunity.properties.product.text" name="recommendedProduct" required)
         inline-search.all-product-search(ng-if="nb.newOpportunity.properties.distributionType.type === 'other'" type="product" placeholder="Type brand, package name, or master SKU" chosen-result="nb.newOpportunity.properties.product.text" chosen-result-object="nb.chosenProductObject" ng-model="nb.newOpportunity.properties.product.text" name="recommendedProduct" ng-required="nb.newOpportunity.properties.product.type !== 'mixed'")
 
         md-radio-group(ng-if="nb.newOpportunity.properties.distributionType.type === 'other'" ng-model="nb.newOpportunity.properties.product.type" required)
