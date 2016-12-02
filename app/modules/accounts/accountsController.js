@@ -515,26 +515,24 @@ module.exports = /*  @ngInject */
         isPerformanceDataChanged: false,
         isFilterCategoryChanged: false
       };
-      var currentObj = vm.topBottomData[Object.keys(vm.topBottomData)[vm.marketSelectedIndex]];
-      currentObj = updatedObjectForLevel;
-      // switch (vm.currentTopBottomAcctType.value) {
-      //   case accountTypes.distributors:
-      //     vm.topBottomData.distributors = updatedObjectForLevel;
-      //     // console.log('Top Bottom Distirbutors', vm.topBottomData.distributors);
-      //     break;
-      //   case accountTypes.accounts:
-      //     vm.topBottomData.accounts = updatedObjectForLevel;
-      //     // console.log('Top Bottom Accts', vm.topBottomData.accounts);
-      //     break;
-      //   case accountTypes.subAccounts:
-      //     vm.topBottomData.subAccounts = updatedObjectForLevel;
-      //     // console.log('Top Bottom SubAccts', vm.topBottomData.subAccounts);
-      //     break;
-      //   case accountTypes.stores:
-      //     vm.topBottomData.stores = updatedObjectForLevel;
-      //     // console.log('Top Bottom Stores', vm.topBottomData.stores);
-      //     break;
-      // }
+      switch (vm.currentTopBottomAcctType.value) {
+        case accountTypes.distributors:
+          vm.topBottomData.distributors = updatedObjectForLevel;
+          // console.log('Top Bottom Distirbutors', vm.topBottomData.distributors);
+          break;
+        case accountTypes.accounts:
+          vm.topBottomData.accounts = updatedObjectForLevel;
+          // console.log('Top Bottom Accts', vm.topBottomData.accounts);
+          break;
+        case accountTypes.subAccounts:
+          vm.topBottomData.subAccounts = updatedObjectForLevel;
+          // console.log('Top Bottom SubAccts', vm.topBottomData.subAccounts);
+          break;
+        case accountTypes.stores:
+          vm.topBottomData.stores = updatedObjectForLevel;
+          // console.log('Top Bottom Stores', vm.topBottomData.stores);
+          break;
+      }
     }
 
     function getValueBoundForAcctType(measures) {
@@ -582,15 +580,29 @@ module.exports = /*  @ngInject */
     }
 
     function changeFilteredTopBottomData() {
-      vm.loadingTopBottom = true;
+      // vm.loadingTopBottom = true;
+      var accountTypes = filtersService.accountFilters.accountTypesEnums;
       for (var property in vm.topBottomData) {
         if (vm.topBottomData.hasOwnProperty(property) && vm.topBottomData[property]) {
           var currentLevel = vm.topBottomData[property];
           currentLevel.isFilterCategoryChanged = true;
         }
       }
-      var currentObj = vm.topBottomData[Object.keys(vm.topBottomData)[vm.marketSelectedIndex]];
-      setTopBottomInitData(currentObj.performanceData);
+
+      switch (vm.currentTopBottomAcctType.value) {
+        case accountTypes.distributors:
+          setTopBottomInitData(vm.topBottomData.distributors.performanceData);
+          break;
+        case accountTypes.accounts:
+          setTopBottomInitData(vm.topBottomData.distributors.accounts);
+          break;
+        case accountTypes.subAccounts:
+          setTopBottomInitData(vm.topBottomData.distributors.subAccounts);
+          break;
+        case accountTypes.stores:
+          setTopBottomInitData(vm.topBottomData.distributors.stores);
+          break;
+      }
     }
 
     function changePerformanceTopBottomData() {
