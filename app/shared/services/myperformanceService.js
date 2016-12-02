@@ -8,7 +8,9 @@ module.exports = /*  @ngInject */
       getChartData: getChartData,
       getChartOptions: getChartOptions,
       updateDataForCurrentTopDownLevel: updateDataForCurrentTopDownLevel,
-      initDataForAllTbLevels: initDataForAllTbLevels
+      initDataForAllTbLevels: initDataForAllTbLevels,
+      resetFilterFlags: resetFilterFlags,
+      resetPerformanceDataFlags: resetPerformanceDataFlags
     };
 
     return service;
@@ -185,6 +187,23 @@ module.exports = /*  @ngInject */
     function isValidValues(value) {
       var isValid = typeof value === 'number' && !isNaN(value);
       return isValid;
+    }
+
+    function resetFilterFlags(topBottomObj) {
+      for (var prop in topBottomObj) {
+        if (topBottomObj.hasOwnProperty(prop)) {
+          topBottomObj[prop].isFilterUpdateRequired = true;
+        }
+      }
+    }
+
+    function resetPerformanceDataFlags(topBottomObj) {
+      for (var prop in topBottomObj) {
+        if (topBottomObj.hasOwnProperty(prop)) {
+          topBottomObj[prop].isFilterUpdateRequired = true;
+          topBottomObj[prop].isPerformanceDataUpdateRequired = true;
+        }
+      }
     }
 
     function getChartData(filteredPerformaceData, trendType, categoryType) {

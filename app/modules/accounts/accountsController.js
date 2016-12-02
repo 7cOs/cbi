@@ -74,6 +74,7 @@ module.exports = /*  @ngInject */
     vm.filterByTopBottomSortCategory = filterByTopBottomSortCategory;
     vm.setTopBottomAcctTypeSelection = setTopBottomAcctTypeSelection;
     vm.getCurrentChartData = getCurrentChartData;
+    vm.topBottomInitData = true;
 
     // Expose public methods
     vm.allOpportunitiesDisabled = allOpportunitiesDisabled;
@@ -401,6 +402,11 @@ module.exports = /*  @ngInject */
           vm.currentTopBottomObj.performanceData = data[3].performance;
           vm.currentTopBottomObj.isPerformanceDataUpdateRequired = false;
           getDataForTopBottom(vm.currentTopBottomObj, categoryBound);
+          $scope.$watchGroup(['a.filtersService.model.accountSelected.accountMarkets', 'a.filterModel.depletionsTimePeriod',
+          'a.filterModel.distributionTimePeriod'], onFilterPropertiesChange);
+          if (vm.topBottomInitData === true) {
+            vm.topBottomInitData = false;
+          }
         }
         vm.loadingBrandSnapshot = false;
         vm.loadingTopBottom = false;
@@ -513,14 +519,14 @@ module.exports = /*  @ngInject */
 
     function getDataForTopBottom(topBottomObj, categoryBound) {
       // vm.loadingTopBottom = true;
-      if (!topBottomObj.performanceData || topBottomObj.isPerformanceDataUpdateRequired) {
+      if (!topBottomObj.performanceData || topBottomObj.isPerformanceDataUpdateRequired === true) {
         var params = filtersService.getAppliedFilters('brandSnapshot');
         userService.getTopBottomSnapshot(vm.currentTopBottomAcctType, params).then(function(data) {
           vm.currentTopBottomObj = myperformanceService.updateDataForCurrentTopDownLevel(vm.currentTopBottomObj, categoryBound, vm.filterModel.depletionsTimePeriod, vm.filterModel.distributionTimePeriod, vm.filterModel.trend);
           vm.loadingTopBottom = false;
         });
       } else {
-        if (!topBottomObj.timePeriodFilteredData || topBottomObj.isFilteredDataUpdateRequired) {
+        if (!topBottomObj.timePeriodFilteredData || topBottomObj.isFilterUpdateRequired === true) {
           vm.currentTopBottomObj = myperformanceService.updateDataForCurrentTopDownLevel(vm.currentTopBottomObj, categoryBound, vm.filterModel.depletionsTimePeriod, vm.filterModel.distributionTimePeriod, vm.filterModel.trend);
           vm.loadingTopBottom = false;
         }
@@ -564,5 +570,14 @@ module.exports = /*  @ngInject */
           break;
       }
       return result;
+    }
+
+    function onFilterPropertiesChange(newValues, oldValues) {
+      if (vm.topBottomInitData === false) {
+        myperformanceService.resetFilterFlags(vm.topBottomData);
+        var categoryBound = vm.filtersService.model.accountSelected.accountMarkets;
+        vm.currentTopBottomObj = getCurrentTopBottomObject(vm.currentTopBottomAcctType);
+        getDataForTopBottom(vm.currentTopBottomObj, categoryBound);
+      }
     }
   };
