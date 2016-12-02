@@ -183,9 +183,9 @@ module.exports = /*  @ngInject */
      * @returns {Array} - Array of all notifications for a user
      * @memberOf cf.common.services
      */
-    function getNotifications(id) {
+    function getNotifications(id, dateAfter) {
       var notificationsPromise = $q.defer(),
-          url = apiHelperService.request('/api/users/' + id + '/notifications/');
+          url = apiHelperService.request('/api/users/' + id + '/notifications/' + '?after=' + dateAfter);
 
       $http.get(url)
         .then(getNotificationsSuccess)
