@@ -69,13 +69,8 @@ v-accordion.styled-list(multiple="" id="opportunities" control="list.accordion" 
     h4 To get started, select some filters!
     p Narrow your opportunities by selecting a <strong>Retailer</strong> and/or a <strong>Distributor</strong>.
   div(ng-if="list.opportunitiesService.model.noOpportunitiesFound === true").no-opportunities.filter-error
-    h4 Dang! We found too many opportunities that met your search criteria.
-    p Try narrowing your search by using:
-    ul
-      li
-        span Maximum of 5 <strong>Distributors</strong> and/or
-      li
-        span Maximum of 10 <strong> Retailers</strong>
+    h4 Dang! We were unable to find any opportunities that met your criteria.
+    p Try adjusting your filters to broaden your search!
   v-pane.list-item(row ng-repeat="opportunity in list.opportunitiesService.model.opportunities | filter : {'dismissed': false} | orderBy : list.orderName" expanded='opportunity.isExpanded')
     .shadow-wrap.bottom
       .header-wrapper(ng-click="list.toggleOpportunitiesInStores(opportunity, list.selected)")
