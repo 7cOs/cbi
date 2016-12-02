@@ -23,7 +23,7 @@ div.my-scorecards
         h2 My Depletions Scorecard
         h3 {{s.depletionSelect}}
       div.scorecard-header-right
-        p.accent Total PODs / vs YA %
+        p.accent Total Depletions / vs YA %
         h3.bold {{s.totalRow.depletions | number:0 }}
           span &nbsp;CE
           div.value.positive(ng-class="{'negative': !s.isPositive(s.totalRow.percentTrend)}") <span ng-if="s.isPositive(s.totalRow.percentTrend)">+</span>{{s.totalRow.percentTrend | number:1}}<span>%</span>
@@ -84,7 +84,7 @@ div.my-scorecards
         h2 My Distribution Scorecard
         h3 {{s.distributionSelectOptions.selected}}
       div.scorecard-header-right
-        p.accent Total Depletions / vs YA %
+        p.accent Total PODs / vs YA %
         h3.bold(ng-if="s.distributionRadioOptions.selected.placementType === 'Effective'") {{s.totalDistributions[0].distributionsEffective | number:0 }}&nbsp;
           div(ng-class="s.isPositive(s.totalDistributions[0].distributionsEffectiveTrend) ? 'positive' : 'negative'")
             span(ng-if="s.isPositive(s.totalDistributions[0].distributionsEffectiveTrend)") +
