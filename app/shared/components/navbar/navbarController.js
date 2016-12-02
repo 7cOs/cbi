@@ -85,6 +85,7 @@ module.exports = /*  @ngInject */
     vm.markRead = markRead;
     vm.markSeen = markSeen;
     vm.modalAddOpportunityForm = modalAddOpportunityForm;
+    vm.modalDuplicateOpportunity = modalDuplicateOpportunity;
     vm.showNewRationaleInput = showNewRationaleInput;
 
     $scope.$watch(function() { return toastService.model; }, function(newVal) {
@@ -153,6 +154,14 @@ module.exports = /*  @ngInject */
       });
     }
 
+    function modalDuplicateOpportunity() {
+      $mdDialog.show({
+        clickOutsideToClose: true,
+        scope: $scope.$new(),
+        templateUrl: './app/shared/components/navbar/modal-duplicate-opportunity.html'
+      });
+    }
+
     // Add Opportunity
     function addOpportunity(opportunity) {
       var targetListToFind = opportunity.properties.targetList,
@@ -209,6 +218,7 @@ module.exports = /*  @ngInject */
       var targetList = opportunity.properties.targetList;
       var itemType = opportunity.properties.product.id ? 'SKU_PACKAGE' : 'BRAND';
       var itemId;
+      var saveSuccess = true;
 
       if (opportunity.properties.rationale.other) {
         opportunity.properties.rationale.description = opportunity.properties.rationale.other;
@@ -224,7 +234,6 @@ module.exports = /*  @ngInject */
 
       var payload = {
         'store': opportunity.properties.store.id,
-        // 'itemId': !isMixedType && opportunity.properties.product.id,
         'itemId': itemId,
         'itemType': itemType,
         'mixedBrand': isMixedType,
@@ -235,14 +244,21 @@ module.exports = /*  @ngInject */
 
       opportunitiesService
         .createOpportunity(payload)
-        .then(function(result) {
+        .then(function(success, error) {
           if (targetList) {
-            addToTargetList(targetList, result);
+            addToTargetList(targetList, success);
+            saveSuccess = true;
           }
           toastService.showToast('added');
+        }, function(error) {
+          console.log(error);
+          modalDuplicateOpportunity();
+          saveSuccess = false;
+          vm.duplicateOpportunity = opportunity;
         });
 
-      return true;
+      debugger;
+      return saveSuccess;
     }
 
     function addToTargetList(targetList, opportunity) {

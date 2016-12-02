@@ -246,6 +246,16 @@ md-dialog {
     }
   }
 
+  &.duplicate-opportuinty-modal {
+    p {
+      text-align: left;
+    }
+
+    button {
+      margin: 20px 0 10px;
+    }
+  }
+
   .icon-container {
     cursor: pointer;
   }
