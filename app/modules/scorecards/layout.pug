@@ -43,15 +43,6 @@ div.my-scorecards
                     label Scorecard
                     h3 Contribution to Volume
                     p Contribution to Volume (CTV) indicates the brand mix, or the % contribution of a brand to Total volume.
-            th(colspan=2)
-              .tooltip-wrap
-                p.accent.bold CTG
-                .tooltip
-                  img(src="../assets/img/icons/help-tooltip.svg")
-                  md-tooltip(md-direction="bottom")
-                    label Scorecard
-                    h3 Contribution to Growth
-                    p Contribution to Growth (CTG) indicates the % contribution of a brand to Total growth (for the selected time period TY vs. YA). To determine CTG, calculate incremental volume (TY – YA) for each brand and divide by the Total (net).  Only positive numbers (as those are the growth indicators) are taken into account.
           tr
             th.accent.border &nbsp;
             th.accent {{s.depletionSelect}}
@@ -63,11 +54,9 @@ div.my-scorecards
             th.accent.border MY % vs BU %
             th.accent To My Total %
             th.accent.border To BU Total %
-            th.accent To My Total %
-            th.accent To BU Total %
         tbody
           tr
-            td.column-total.left.no-border TOTAL
+            td.column-total.left TOTAL
             td.column-total.dark {{s.totalRow.depletions | number:0 }}
             td.column-total.medium-dark {{s.totalRow.gap | number:0 }}
             td.column-total.medium-dark.no-border {{s.totalRow.percentTrend | number:1 }}%
@@ -76,9 +65,7 @@ div.my-scorecards
             td.column-total {{s.totalRow.percentBUTrend | number:1 }}%
             td.column-total.no-border.positive(ng-class="{'negative': !s.isPositive(s.totalRow.percentBUTrend)}") &#9650;
             td.column-total {{s.totalRow.volumePercent | number:1}}%
-            td.column-total.no-border {{s.totalRow.volumeBU | number:1}}%
-            td.column-total {{s.totalRow.growthPercent | number:1}}%
-            td.column-total.no-border {{s.totalRow.growthBU | number:1}}%
+            td.column-total {{s.totalRow.volumeBU | number:1}}%
           tr(ng-repeat="depletion in s.userService.model.depletion" class="disable-ng-animate")
             td.left.data-brand(analytics-on="click" analytics-event="Brand Performance") {{depletion.name}}
             td.dark(ng-repeat-start="measure in depletion.measures | filter: {timeframe: s.depletionSelect}: true") {{measure.depletions | number:0}}
@@ -89,9 +76,7 @@ div.my-scorecards
             td(ng-class="{'negative': !s.isPositive(measure.depletionsBUTrend)}") {{measure.depletionsBUTrend | number:1}}%
             td.no-border.rotate(ng-class="s.isPositive(measure.depletionsBUTrend) ? 'positive' : 'negative'") <span class="triangle-icon">&#9660;</span>
             td(ng-class="{'negative': !s.isPositive(measure.depletions / s.totalRow.depletions)}") {{(measure.depletions / s.totalRow.depletions) * 100 | number:1}}%
-            td.no-border(ng-class="{'negative': !s.isPositive(measure.depletionsBU / s.totalRow.depletionsBU)}") {{(measure.depletionsBU / s.totalRow.depletionsBU) * 100 | number:1}}%
-            td(ng-class="{'negative': !s.isPositive(measure.depletionsGap / s.totalRow.gap)}") {{(measure.depletionsGap / s.totalRow.gap) * 100 | number:1}}%
-            td.no-border(ng-repeat-end ng-class="{'negative': !s.isPositive(measure.depletionsGap / s.totalRow.depletionsBU)}") {{(measure.depletionsGap / s.totalRow.depletionsBU) * 100 | number:1}}%
+            td(ng-repeat-end ng-class="{'negative': !s.isPositive(measure.depletionsBU / s.totalRow.depletionsBU)}") {{(measure.depletionsBU / s.totalRow.depletionsBU) * 100 | number:1}}%
 
   section.distributions-scorecard
     div.scorecard-header.clearfix
@@ -124,22 +109,13 @@ div.my-scorecards
             th(colspan=7).accent.border Points of Distribution
             th(colspan=2).accent.border
               .tooltip-wrap
-                 p.accent.border Contribution To Volume
+                 p.accent.border CTV
                    .tooltip
                      img(src="../assets/img/icons/help-tooltip.svg")
                      md-tooltip(md-direction="bottom")
                        label Scorecard
                        h3 Contribution to Volume
                        p Contribution to Volume (CTV) indicates the brand mix, or the % contribution of a brand to Total volume.
-            th(colspan=2)
-              .tooltip-wrap
-                p.accent.bold Contribution To Growth
-                  .tooltip
-                    img(src="../assets/img/icons/help-tooltip.svg")
-                    md-tooltip(md-direction="bottom")
-                      label Scorecard
-                      h3 Contribution to Growth
-                      p Contribution to Growth (CTG) indicates the % contribution of a brand to Total growth (for the selected time period TY vs. YA). To determine CTG, calculate incremental volume (TY – YA) for each brand and divide by the Total (net).  Only positive numbers (as those are the growth indicators) are taken into account.
 
           tr
             th.accent.border &nbsp;
@@ -152,15 +128,13 @@ div.my-scorecards
             th.accent.border MY % vs BU %
             th.accent To My Total %
             th.accent.border To BU Total %
-            th.accent To My Total %
-            th.accent To BU Total %
         tbody
           tr
             td.column-total.left TOTAL
-            td.column-total.dark.no-border
+            td.column-total.dark
               span(ng-if="s.distributionRadioOptions.selected.placementType === 'Effective'" ng-class="{'negative': !s.isPositive(s.totalDistributions[0].distributionsEffective)}") {{s.totalDistributions[0].distributionsEffective | number:0 }}
               span(ng-if="s.distributionRadioOptions.selected.placementType === 'Simple'" ng-class="{'negative': !s.isPositive(s.totalDistributions[0].distributionsSimple)}") {{s.totalDistributions[0].distributionsSimple | number:0 }}
-            td.column-total.medium-dark.no-border
+            td.column-total.medium-dark
               span(ng-if="s.distributionRadioOptions.selected.placementType === 'Effective'" ng-class="{'negative': !s.isPositive(s.totalDistributions[0].distributionsEffective * s.totalDistributions[0].distributionsEffectiveTrend)}") {{(s.totalDistributions[0].distributionsEffective * s.totalDistributions[0].distributionsEffectiveTrend) / 100 | number:0 }}
               span(ng-if="s.distributionRadioOptions.selected.placementType === 'Simple'" ng-class="{'negative': !s.isPositive(s.totalDistributions[0].distributionsSimple * s.totalDistributions[0].distributionsSimpleTrend)}") {{(s.totalDistributions[0].distributionsSimple * s.totalDistributions[0].distributionsSimpleTrend) / 100 | number:0 }}
             td.column-total.medium-dark.no-border
@@ -178,8 +152,6 @@ div.my-scorecards
             td.column-total.no-border
               span.rotate(ng-if="s.distributionRadioOptions.selected.placementType === 'Effective'" ng-class="s.isPositive(s.totalDistributions[0].distributionsEffectiveBUTrend) ? 'positive' : 'negative'") <span class="triangle-icon">&#9660;</span>
               span.rotate(ng-if="s.distributionRadioOptions.selected.placementType === 'Simple'" ng-class="s.isPositive(s.totalDistributions[0].distributionsSimpleBUTrend) ? 'positive' : 'negative'") <span class="triangle-icon">&#9660;</span>
-            td.column-total 100%
-            td.column-total.no-border 12%
             td.column-total 100%
             td.column-total.no-border 12%
           tr(ng-repeat="distribution in s.userService.model.distribution | filter: {type: '!Total'}: true" class="disable-ng-animate")
@@ -205,12 +177,6 @@ div.my-scorecards
             td.no-border
               span(ng-if="s.distributionRadioOptions.selected.placementType === 'Simple'" ng-class="s.isPositive(measure.distributionsSimpleBUTrend) ? 'positive' : 'negative'") <span class="triangle-icon">&#9660;</span>
               span(ng-if="s.distributionRadioOptions.selected.placementType === 'Effective'" ng-class="s.isPositive(measure.distributionsEffectiveBUTrend) ? 'positive' : 'negative'") <span class="triangle-icon">&#9660;</span>
-            td
-              span(ng-if="s.distributionRadioOptions.selected.placementType === 'Simple'" ng-class="{'negative': !s.isPositive(measure.distributionsSimple / s.totalDistributions[0].distributionsSimple)}") {{(measure.distributionsSimple / s.totalDistributions[0].distributionsSimple) * 100 | number:1 }}%
-              span(ng-if="s.distributionRadioOptions.selected.placementType === 'Effective'" ng-class="{'negative': !s.isPositive(measure.distributionsEffective / s.totalDistributions[0].distributionsEffective)}") {{(measure.distributionsEffective / s.totalDistributions[0].distributionsEffective) * 100 | number:1 }}%
-            td.no-border
-              span(ng-if="s.distributionRadioOptions.selected.placementType === 'Simple'" ng-class="{'negative': !s.isPositive(measure.distributionsSimple / s.totalDistributions[0].distributionsSimpleBU)}") {{(measure.distributionsSimple / s.totalDistributions[0].distributionsSimpleBU) * 100 | number:1 }}%
-              span(ng-if="s.distributionRadioOptions.selected.placementType === 'Effective'" ng-class="{'negative': !s.isPositive(measure.distributionsEffective / s.totalDistributions[0].distributionsEffectiveBU)}") {{(measure.distributionsEffective / s.totalDistributions[0].distributionsEffectiveBU) * 100 | number:1 }}%
             td
               span(ng-if="s.distributionRadioOptions.selected.placementType === 'Simple'" ng-class="{'negative': !s.isPositive(measure.distributionsSimple / s.totalDistributions[0].distributionsSimple)}") {{(measure.distributionsSimple / s.totalDistributions[0].distributionsSimple) * 100 | number:1 }}%
               span(ng-if="s.distributionRadioOptions.selected.placementType === 'Effective'" ng-class="{'negative': !s.isPositive(measure.distributionsEffective / s.totalDistributions[0].distributionsEffective)}") {{(measure.distributionsEffective / s.totalDistributions[0].distributionsEffective) * 100 | number:1 }}%
