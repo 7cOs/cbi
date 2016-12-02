@@ -4,13 +4,15 @@ module.exports = /*  @ngInject */
   function myperformanceService($filter, filtersService) {
 
     var service = {
-      getFilteredTopBottomData: getFilteredTopBottomData,
       getTopBottomDataSorted: getTopBottomDataSorted,
       getChartData: getChartData,
-      getChartOptions: getChartOptions
+      getChartOptions: getChartOptions,
+      updateDataForCurrentTopDownLevel: updateDataForCurrentTopDownLevel,
+      initDataForAllTbLevels: initDataForAllTbLevels
     };
 
     return service;
+
     function getIndexPositionsArr(originalArr, arrToGetIndex) {
       var indexPos = -1;
       var indexedArr = [];
@@ -30,17 +32,13 @@ module.exports = /*  @ngInject */
       return indexedArr;
     }
 
-    // TODO Needs to be refactored
-    function getTopBottomDataSorted(topBottomData, trendType, categoryType) {
+    function getSortedObjects(tbData, queryLimit, propertyName) {
       var sortedList = {
             topValues: [],
-            bottomValues: [],
-            topTrends: [],
-            bottomTrends: []
-          }, queryLimit = 10,
-          valuesArr, trendsArr, tempArr = [];
-
-      valuesArr = $filter('orderBy')(topBottomData, categoryType.propertyName);
+            bottomValues: []
+          },
+          valuesArr, tempArr = [];
+      valuesArr = $filter('orderBy')(tbData, propertyName);
       var len = valuesArr.length;
       if (len > queryLimit) {
         tempArr = valuesArr.slice(0, queryLimit - 1);
@@ -52,66 +50,89 @@ module.exports = /*  @ngInject */
         sortedList.topValues = tempArr;
         sortedList.bottomValues = tempArr;
       }
-      trendsArr = $filter('orderBy')(topBottomData, filtersService.trendPropertyNames[categoryType.propertyName][trendType.value - 1]);
-      if (len > queryLimit) {
-        tempArr = trendsArr.slice(0, queryLimit - 1);
-        sortedList.topTrends = getIndexPositionsArr(valuesArr, tempArr);
-        tempArr = trendsArr.slice(len - queryLimit, len);
-        sortedList.bottomTrends = tempArr;
-      } else {
-        tempArr =  getIndexPositionsArr(trendsArr, trendsArr);
-        sortedList.topTrends = tempArr;
-        sortedList.bottomTrends = tempArr;
-      }
-      // console.log('sortedList', sortedList);
       return sortedList;
     }
 
-    // TODO Needs to be refactored
-    /**
-      * Gets an array of data matching the distirubution or depletion time period
-      * @param {Object} topBottomData Package or Brand
-      * @param {String} categoryType depletions or Distribution
-      * @param {String} depletionOption L90, L120 etc
-      * @returns {Object} currentTrendVal Returns the trend display value as string and the actual float value
-      */
-    function getFilteredTopBottomData(topBottomData, categoryType, depletionOption, distirbutionOption) {
+    function getTopBottomDataSorted(topBottomData, trendType, categoryType) {
+      var sortedList = {
+            topValues: [],
+            bottomValues: [],
+            topTrends: [],
+            bottomTrends: []
+          }, queryLimit = 10;
+      var valuesSort = getSortedObjects(topBottomData, queryLimit, categoryType.propertyName);
+      var trendPropertyName = filtersService.trendPropertyNames[categoryType.propertyName][trendType.value - 1];
+      sortedList.topValues = valuesSort.topValues;
+      sortedList.bottomValues = valuesSort.bottomValues;
+
+      var trendSort = getSortedObjects(topBottomData, queryLimit, trendPropertyName);
+      sortedList.topTrends = trendSort.topTrends;
+      sortedList.bottomTrends = trendSort.bottomTrends;
+      return sortedList;
+    }
+
+    function getFilteredArr (tbData, filterOption) {
       var data, filteredData = [], matchedMeasure = null;
-      switch (categoryType.value) {
-        case filtersService.accountFilters.accountMarketsEnums.depletions:
-          for (var i = 0, len = topBottomData.length; i < len; i++) {
-            data = topBottomData[i];
-            matchedMeasure = data.measures.filter(function (measure) {
-              return measure.timeframe === depletionOption.name;
-            });
-            if (matchedMeasure[0]) {
-              var depletionObj = {
-                title: data.name,
-                type: data.type,
-                measure: matchedMeasure[0]
-              };
-              filteredData.push(depletionObj);
-            }
-          }
-          break;
-        default:
-          for (var j = 0, length = topBottomData.length; j < length; j++) {
-            data = topBottomData[j];
-            matchedMeasure = data.measures.filter(function (measure) {
-              return measure.timeframe === distirbutionOption.name;
-            });
-            if (matchedMeasure[0]) {
-              var distirbutionObj = {
-                title: data.name,
-                type: data.type,
-                measure: matchedMeasure[0]
-              };
-              filteredData.push(distirbutionObj);
-            }
-          }
-          break;
+      for (var i = 0, len = tbData.length; i < len; i++) {
+        data = tbData[i];
+        matchedMeasure = data.measures.filter(function (measure) {
+          return measure.timeframe === filterOption.name;
+        });
+        if (matchedMeasure[0]) {
+          var depletionObj = {
+            title: data.name,
+            type: data.type,
+            measure: matchedMeasure[0]
+          };
+          filteredData.push(depletionObj);
+        }
       }
       return filteredData;
+    }
+
+    function getFilteredTopBottomData(topBottomData, categoryType, depletionOption, distirbutionOption) {
+      var filteredArr = [];
+      switch (categoryType.value) {
+        case filtersService.accountFilters.accountMarketsEnums.depletions:
+          filteredArr = getFilteredArr(topBottomData.performanceData, depletionOption);
+          break;
+        default:
+          filteredArr = getFilteredArr(topBottomData.performanceData, distirbutionOption);
+          break;
+      }
+      return filteredArr;
+    }
+
+    function setUpdatedDataIndicator(currentTbData, filterIndicator, performanceDataIndicator) {
+      currentTbData.isFilterUpdateRequired = filterIndicator;
+      currentTbData.isPerformanceDataUpdateRequired = performanceDataIndicator;
+    }
+
+    function updateDataForCurrentTopDownLevel(currentTbData, categoryType, depletionOption, distirbutionOption, trendOption) {
+      var filteredData = getFilteredTopBottomData(currentTbData, categoryType, depletionOption, distirbutionOption);
+      currentTbData.timePeriodFilteredData = filteredData;
+      currentTbData.topBottomIndices = getTopBottomDataSorted(currentTbData.timePeriodFilteredData, trendOption, categoryType);
+      currentTbData.chartData = getChartData(currentTbData.timePeriodFilteredData, trendOption, categoryType);
+      setUpdatedDataIndicator(currentTbData, false, false);
+      return currentTbData;
+    }
+
+    function initDataForAllTbLevels(tbData) {
+      for (var property in tbData) {
+        var initObjectForEachLevel = {
+          performanceData: null,
+          timePeriodFilteredData: null,
+          topBottomIndices: null,
+          chartData: null,
+          isPerformanceDataUpdateRequired: true,
+          isFilterUpdateRequired: true
+        };
+
+        if (tbData.hasOwnProperty(property)) {
+          tbData[property] = initObjectForEachLevel;
+        }
+      }
+      return tbData;
     }
 
     function getChartOptions() {
