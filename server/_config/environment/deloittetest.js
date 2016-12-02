@@ -38,7 +38,7 @@ module.exports = function (config) {
 
   config.sfdcSec = {
     // assertionEndpoint: the endpoint you connect to in order to get the session token.
-    assertionEndpoint: 'https://cbrands--full.cs20.my.salesforce.com/services/oauth2/token?so=00Dm00000008hN8',
+    assertionEndpoint: 'https://cbrands--full.cs17.my.salesforce.com',
     // privateKey and certfile: keys generated from SFDC's Key and Certificate Management area
     privateKey: fs.readFileSync('./server/_config/environment/sfdcsecurity/' + config.env + '/signingKey.pem').toString(),
     certfile: fs.readFileSync('./server/_config/environment/sfdcsecurity/' + config.env + '/certificate.crt').toString(),
