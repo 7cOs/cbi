@@ -446,9 +446,6 @@ list {
   .triangle-icon {
     color: $green;
     display: block;
-  }
-
-  &.rotate .triangle-icon {
     transform: rotate(180deg);
   }
 }
