@@ -224,7 +224,6 @@ module.exports = /*  @ngInject */
       var targetList = opportunity.properties.targetList;
       var itemType = opportunity.properties.product.id ? 'SKU_PACKAGE' : 'BRAND';
       var itemId;
-      var saveSuccess = true;
 
       if (opportunity.properties.rationale.other) {
         opportunity.properties.rationale.description = opportunity.properties.rationale.other;
@@ -247,24 +246,20 @@ module.exports = /*  @ngInject */
         'impact': opportunity.properties.impact.enum,
         'subType': oppSubType
       };
-
       opportunitiesService
         .createOpportunity(payload)
         .then(function(success, error) {
           if (targetList) {
             addToTargetList(targetList, success);
-            saveSuccess = true;
           }
           toastService.showToast('added');
         }, function(error) {
           console.log(error);
           modalDuplicateOpportunity();
-          saveSuccess = false;
           vm.duplicateOpportunity = opportunity;
         });
 
-      debugger;
-      return saveSuccess;
+      return true;
     }
 
     function addToTargetList(targetList, opportunity) {
