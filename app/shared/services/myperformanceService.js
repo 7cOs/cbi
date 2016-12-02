@@ -38,7 +38,11 @@ module.exports = /*  @ngInject */
             bottomValues: []
           },
           valuesArr, tempArr = [];
-      valuesArr = $filter('orderBy')(tbData, propertyName);
+      console.log('tbDataPreSort', tbData);
+      valuesArr = $filter('orderBy')(tbData, function(data) {
+        return data.measure[propertyName];
+      });
+      console.log('tbDataAfterSort', valuesArr);
       var len = valuesArr.length;
       if (len > queryLimit) {
         tempArr = valuesArr.slice(0, queryLimit - 1);
@@ -66,8 +70,8 @@ module.exports = /*  @ngInject */
       sortedList.bottomValues = valuesSort.bottomValues;
 
       var trendSort = getSortedObjects(topBottomData, queryLimit, trendPropertyName);
-      sortedList.topTrends = trendSort.topTrends;
-      sortedList.bottomTrends = trendSort.bottomTrends;
+      sortedList.topTrends = trendSort.topValues;
+      sortedList.bottomTrends = trendSort.bottomValues;
       return sortedList;
     }
 

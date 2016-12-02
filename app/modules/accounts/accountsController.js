@@ -516,12 +516,12 @@ module.exports = /*  @ngInject */
       if (!topBottomObj.performanceData || topBottomObj.isPerformanceDataUpdateRequired) {
         var params = filtersService.getAppliedFilters('brandSnapshot');
         userService.getTopBottomSnapshot(vm.currentTopBottomAcctType, params).then(function(data) {
-          myperformanceService.updateDataForCurrentTopDownLevel(vm.currentTopBottomObj, categoryBound, vm.filterModel.depletionsTimePeriod, vm.filterModel.distributionTimePeriod, vm.filterModel.trend);
+          vm.currentTopBottomObj = myperformanceService.updateDataForCurrentTopDownLevel(vm.currentTopBottomObj, categoryBound, vm.filterModel.depletionsTimePeriod, vm.filterModel.distributionTimePeriod, vm.filterModel.trend);
           vm.loadingTopBottom = false;
         });
       } else {
         if (!topBottomObj.timePeriodFilteredData || topBottomObj.isFilteredDataUpdateRequired) {
-          myperformanceService.updateDataForCurrentTopDownLevel(vm.currentTopBottomObj, categoryBound, vm.filterModel.depletionsTimePeriod, vm.filterModel.distributionTimePeriod, vm.filterModel.trend);
+          vm.currentTopBottomObj = myperformanceService.updateDataForCurrentTopDownLevel(vm.currentTopBottomObj, categoryBound, vm.filterModel.depletionsTimePeriod, vm.filterModel.distributionTimePeriod, vm.filterModel.trend);
           vm.loadingTopBottom = false;
         }
       }
