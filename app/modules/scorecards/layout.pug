@@ -69,12 +69,12 @@ div.my-scorecards
           tr(ng-repeat="depletion in s.userService.model.depletion" class="disable-ng-animate")
             td.left.data-brand(analytics-on="click" analytics-event="Brand Performance") {{depletion.name}}
             td.dark(ng-repeat-start="measure in depletion.measures | filter: {timeframe: s.depletionSelect}: true") {{measure.depletions | number:0}}
-            td.medium-dark(ng-class="{'negative': !s.isPositive(measure.depletionsTrend)}") {{measure.depletionsGap | number:0}}
+            td.medium-dark(ng-class="{'negative': !s.isPositive(measure.depletions - (measure.depletions / (1 + measure.depletionsTrend / 100)))}") {{measure.depletions - (measure.depletions / (1 + measure.depletionsTrend / 100)) | number:0}}
             td.medium-dark.no-border(ng-class="{'negative': !s.isPositive(measure.depletionsTrend)}") {{measure.depletionsTrend | number:1}}%
-            td(ng-class="{'negative': !s.isPositive(measure.vsPlan)}") {{measure.vsPlan | number:0 }}
-            td.no-border(ng-class="{'negative': !s.isPositive(measure.vsPlanPercent)}") {{measure.vsPlanPercent | number:1}}%
+            td(ng-class="{'negative': !s.isPositive(measure.depletions - measure.plan)}") {{measure.depletions - measure.plan | number:0 }}
+            td.no-border(ng-class="{'negative': !s.isPositive(((measure.depletions - measure.plan) / measure.plan) * 100)}") {{((measure.depletions - measure.plan) / measure.plan) * 100 | number:1}}%
             td(ng-class="{'negative': !s.isPositive(measure.depletionsBUTrend)}") {{measure.depletionsBUTrend | number:1}}%
-            td.no-border.rotate(ng-class="s.isPositive(measure.depletionsBUTrend) ? 'positive' : 'negative'") <span class="triangle-icon">&#9660;</span>
+            td.no-border(ng-class="measure.depletionsTrend > measure.depletionsBUTrend ? 'positive' : 'negative'") <span class="triangle-icon">&#9660;</span>
             td(ng-class="{'negative': !s.isPositive(measure.depletions / s.totalRow.depletions)}") {{(measure.depletions / s.totalRow.depletions) * 100 | number:1}}%
             td(ng-repeat-end ng-class="{'negative': !s.isPositive(measure.depletionsBU / s.totalRow.depletionsBU)}") {{(measure.depletionsBU / s.totalRow.depletionsBU) * 100 | number:1}}%
 
@@ -150,8 +150,8 @@ div.my-scorecards
               span(ng-if="s.distributionRadioOptions.selected.placementType === 'Effective'" ng-class="{'negative': !s.isPositive(s.totalDistributions[0].distributionsEffectiveBUTrend)}") {{s.totalDistributions[0].distributionsEffectiveBUTrend | number:1 }}%
               span(ng-if="s.distributionRadioOptions.selected.placementType === 'Simple'" ng-class="{'negative': !s.isPositive(s.totalDistributions[0].distributionsSimpleBUTrend)}") {{s.totalDistributions[0].distributionsSimpleBUTrend | number:1 }}%
             td.column-total.no-border
-              span.rotate(ng-if="s.distributionRadioOptions.selected.placementType === 'Effective'" ng-class="s.isPositive(s.totalDistributions[0].distributionsEffectiveBUTrend) ? 'positive' : 'negative'") <span class="triangle-icon">&#9660;</span>
-              span.rotate(ng-if="s.distributionRadioOptions.selected.placementType === 'Simple'" ng-class="s.isPositive(s.totalDistributions[0].distributionsSimpleBUTrend) ? 'positive' : 'negative'") <span class="triangle-icon">&#9660;</span>
+              span(ng-if="s.distributionRadioOptions.selected.placementType === 'Effective'" ng-class="s.isPositive(s.totalDistributions[0].distributionsEffectiveBUTrend) ? 'positive' : 'negative'") <span class="triangle-icon">&#9660;</span>
+              span(ng-if="s.distributionRadioOptions.selected.placementType === 'Simple'" ng-class="s.isPositive(s.totalDistributions[0].distributionsSimpleBUTrend) ? 'positive' : 'negative'") <span class="triangle-icon">&#9660;</span>
             td.column-total 100%
             td.column-total.no-border 12%
           tr(ng-repeat="distribution in s.userService.model.distribution | filter: {type: '!Total'}: true" class="disable-ng-animate")
