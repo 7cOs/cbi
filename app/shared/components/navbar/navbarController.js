@@ -176,7 +176,8 @@ module.exports = /*  @ngInject */
       opportunity.properties.product = vm.chosenProductObject;
       opportunity.properties.product.type = tempType;
       if (saveOpportunity(opportunity)) {
-        vm.newOpportunity = {};
+        vm.newOpportunity = vm.newOpportunityTemplate;
+        resetFormModels();
         $mdDialog.hide();
       }
 
@@ -307,6 +308,13 @@ module.exports = /*  @ngInject */
         versionService.model.version = data;
       });
     };
+
+    function resetFormModels() {
+      vm.newOpportunity.properties.distributionType.description = '';
+      vm.newOpportunity.properties.rationale.description = '';
+      vm.newOpportunity.properties.impact.enum = '';
+      vm.newOpportunity.properties.targetList = '';
+    }
 
     // Get unread notification count and set initial badge value
     function setUnreadCount(arr) {
