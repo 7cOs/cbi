@@ -191,8 +191,6 @@ module.exports = /*  @ngInject */
       opportunity.properties.product = vm.chosenProductObject;
       opportunity.properties.product.type = tempType;
       if (saveOpportunity(opportunity)) {
-        vm.newOpportunity = vm.newOpportunityTemplate;
-        resetFormModels();
         $mdDialog.hide();
       }
 
@@ -252,6 +250,8 @@ module.exports = /*  @ngInject */
           if (targetList) {
             addToTargetList(targetList, success);
           }
+          vm.newOpportunity = vm.newOpportunityTemplate;
+          resetFormModels();
           toastService.showToast('added');
         }, function(error) {
           console.log(error);
