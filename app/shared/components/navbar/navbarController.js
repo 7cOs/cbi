@@ -86,6 +86,7 @@ module.exports = /*  @ngInject */
     vm.markSeen = markSeen;
     vm.modalAddOpportunityForm = modalAddOpportunityForm;
     vm.modalDuplicateOpportunity = modalDuplicateOpportunity;
+    vm.closeModalDuplicateOpportunity = closeModalDuplicateOpportunity;
     vm.showNewRationaleInput = showNewRationaleInput;
 
     $scope.$watch(function() { return toastService.model; }, function(newVal) {
@@ -160,6 +161,11 @@ module.exports = /*  @ngInject */
         scope: $scope.$new(),
         templateUrl: './app/shared/components/navbar/modal-duplicate-opportunity.html'
       });
+    }
+
+    function closeModalDuplicateOpportunity() {
+      vm.newOpportunity = {};
+      $mdDialog.hide();
     }
 
     // Add Opportunity
