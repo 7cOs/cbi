@@ -480,9 +480,12 @@ module.exports = /*  @ngInject */
 
     function setTopBottomAcctTypeSelection(currentAcctType) {
       if (vm.currentTopBottomAcctType !== currentAcctType) {
+        vm.currentTopBottomAcctType = currentAcctType;
         vm.currentTopBottomObj = getCurrentTopBottomObject(currentAcctType);
         var propertyBoundToTable = vm.filtersService.model.accountSelected.accountMarkets;
         getDataForTopBottom(vm.currentTopBottomObj, propertyBoundToTable);
+        vm.marketSelectedIndex = vm.currentTopBottomAcctType.value - 1;
+        // vm.marketSelectedIndex++;
       }
     }
 
@@ -519,15 +522,19 @@ module.exports = /*  @ngInject */
     }
 
     function getDataForTopBottom(topBottomObj, categoryBound) {
-      // vm.loadingTopBottom = true;
       if (!topBottomObj.performanceData || topBottomObj.isPerformanceDataUpdateRequired === true) {
+        vm.loadingTopBottom = true;
         var params = filtersService.getAppliedFilters('brandSnapshot');
         userService.getTopBottomSnapshot(vm.currentTopBottomAcctType, params).then(function(data) {
+          vm.currentTopBottomObj.performanceData = data.performance;
+          vm.currentTopBottomObj.isPerformanceDataUpdateRequired = false;
           vm.currentTopBottomObj = myperformanceService.updateDataForCurrentTopDownLevel(vm.currentTopBottomObj, categoryBound, vm.filterModel.depletionsTimePeriod, vm.filterModel.distributionTimePeriod, vm.filterModel.trend);
           vm.loadingTopBottom = false;
+          console.log('TopBottomData', vm.currentTopBottomObj);
         });
       } else {
         if (!topBottomObj.timePeriodFilteredData || topBottomObj.isFilterUpdateRequired === true) {
+          vm.loadingTopBottom = true;
           vm.currentTopBottomObj = myperformanceService.updateDataForCurrentTopDownLevel(vm.currentTopBottomObj, categoryBound, vm.filterModel.depletionsTimePeriod, vm.filterModel.distributionTimePeriod, vm.filterModel.trend);
           vm.loadingTopBottom = false;
         }
@@ -539,6 +546,9 @@ module.exports = /*  @ngInject */
         var propName = vm.filtersService.model.accountSelected.accountMarkets.propertyName;
         var matchedMeasure = measures[propName];
         if (userService.isValidValues(matchedMeasure)) {
+          if (matchedMeasure === 0) {
+            console.log('Wrong value');
+          }
           return Math.round(matchedMeasure);
         } else {
           return '-';

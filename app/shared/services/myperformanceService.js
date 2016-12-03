@@ -40,7 +40,7 @@ module.exports = /*  @ngInject */
       console.log('tbDataAfterSort', valuesArr);
       var len = valuesArr.length;
       if (len > queryLimit) {
-        tempArr = valuesArr.slice(0, queryLimit - 1);
+        tempArr = valuesArr.slice(0, queryLimit);
         sortedList.topValues = getIndexPositionsArr(tbData, tempArr);
         tempArr = valuesArr.slice(len - queryLimit, len);
         sortedList.bottomValues = getIndexPositionsArr(tbData, tempArr);
@@ -199,12 +199,8 @@ module.exports = /*  @ngInject */
     }
 
     function resetPerformanceDataFlags(topBottomObj) {
-      for (var prop in topBottomObj) {
-        if (topBottomObj.hasOwnProperty(prop)) {
-          topBottomObj[prop].isFilterUpdateRequired = true;
-          topBottomObj[prop].isPerformanceDataUpdateRequired = true;
-        }
-      }
+      topBottomObj.isFilterUpdateRequired = true;
+      topBottomObj.isPerformanceDataUpdateRequired = true;
     }
 
     function getChartData(filteredPerformaceData, trendType, categoryType) {
