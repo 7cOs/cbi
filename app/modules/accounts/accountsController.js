@@ -67,11 +67,12 @@ module.exports = /*  @ngInject */
       subAccounts: null,
       stores: null
     };
+    vm.getSortedArrIndex = getSortedArrIndex;
     vm.currentTopBottomObj = null;
     vm.currentTopBottomAcctType = null;
     vm.currentTopBottomDataForFilter = null;
     vm.getValueBoundForAcctType = getValueBoundForAcctType;
-    vm.filterByTopBottomSortCategory = filterByTopBottomSortCategory;
+    vm.getSortedArrIndex = getSortedArrIndex;
     vm.setTopBottomAcctTypeSelection = setTopBottomAcctTypeSelection;
     vm.getCurrentChartData = getCurrentChartData;
     vm.topBottomInitData = true;
@@ -403,7 +404,7 @@ module.exports = /*  @ngInject */
           vm.currentTopBottomObj.isPerformanceDataUpdateRequired = false;
           getDataForTopBottom(vm.currentTopBottomObj, categoryBound);
           $scope.$watchGroup(['a.filtersService.model.accountSelected.accountMarkets', 'a.filterModel.depletionsTimePeriod',
-          'a.filterModel.distributionTimePeriod'], onFilterPropertiesChange);
+          'a.filterModel.distributionTimePeriod', 'a.filterModel.trend'], onFilterPropertiesChange);
           if (vm.topBottomInitData === true) {
             vm.topBottomInitData = false;
           }
@@ -552,24 +553,26 @@ module.exports = /*  @ngInject */
       }
     }
 
-    function filterByTopBottomSortCategory(currentIndex, topBottomIndices) {
-      var sortCategory = vm.filtersService.model.selected.valuesVsTrend.value;
-      var result = false;
-      switch (sortCategory) {
-        case filtersService.accountFilters.topBottomSortTypeEnum.topValues:
-          result = topBottomIndices.topValues.indexOf(currentIndex) !== -1;
-          break;
-        case filtersService.accountFilters.topBottomSortTypeEnum.topTrends:
-          result = topBottomIndices.topTrends.indexOf(currentIndex) !== -1;
-          break;
-        case filtersService.accountFilters.topBottomSortTypeEnum.bottomValues:
-          result = topBottomIndices.bottomValues.indexOf(currentIndex) !== -1;
-          break;
-        case filtersService.accountFilters.topBottomSortTypeEnum.bottomTrends:
-          result = topBottomIndices.bottomTrends.indexOf(currentIndex) !== -1;
-          break;
+    function  getSortedArrIndex(data) {
+      if (data && data.topBottomIndices) {
+        var sortCategory = vm.filtersService.model.selected.valuesVsTrend.value;
+        var result;
+        switch (sortCategory) {
+          case filtersService.accountFilters.topBottomSortTypeEnum.topValues:
+            result = data.topBottomIndices.topValues;
+            break;
+          case filtersService.accountFilters.topBottomSortTypeEnum.topTrends:
+            result = data.topBottomIndices.topTrends;
+            break;
+          case filtersService.accountFilters.topBottomSortTypeEnum.bottomValues:
+            result = data.topBottomIndices.bottomValues;
+            break;
+          case filtersService.accountFilters.topBottomSortTypeEnum.bottomTrends:
+            result = data.topBottomIndices.bottomTrends;
+            break;
+        }
+        return result;
       }
-      return result;
     }
 
     function onFilterPropertiesChange(newValues, oldValues) {

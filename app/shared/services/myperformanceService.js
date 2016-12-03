@@ -151,11 +151,19 @@ module.exports = /*  @ngInject */
           showValues: true,
           duration: 500,
           valueFormat: function(d) {
-            return d + '%';
+            if (isValidValues(Number(d))) {
+              return d + '%';
+            } else {
+              return;
+            }
           },
           tooltip: {
             valueFormatter: function(d) {
-              return d + '%';
+              if (isValidValues(Number(d))) {
+                return d + '%';
+              } else {
+                return;
+              }
             }
           },
           margin: {
@@ -204,9 +212,11 @@ module.exports = /*  @ngInject */
       angular.forEach(filteredPerformaceData, function (data) {
         propertyName = filtersService.trendPropertyNames[categoryType.propertyName][trendType.value - 1];
         obj = {
-          'label': data.title,
-          'value': isValidValues(Number(data.measure[propertyName])) ? Math.round(data.measure[propertyName]) : null
+          'label': data.title
         };
+        if (isValidValues(Number(data.measure[propertyName]))) {
+          obj.value = Math.round(data.measure[propertyName]);
+        }
         categoryChartData.push(obj);
       });
       chartData[0].values = categoryChartData;
