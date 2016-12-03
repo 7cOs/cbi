@@ -5,7 +5,6 @@ module.exports = /*  @ngInject */
 
     var service = {
       getTopBottomDataSorted: getTopBottomDataSorted,
-      getChartData: getChartData,
       getChartOptions: getChartOptions,
       updateDataForCurrentTopDownLevel: updateDataForCurrentTopDownLevel,
       initDataForAllTbLevels: initDataForAllTbLevels,
@@ -33,15 +32,14 @@ module.exports = /*  @ngInject */
             bottomValues: []
           },
           valuesArr, tempArr = [];
-      console.log('tbDataPreSort', tbData);
       valuesArr = $filter('orderBy')(tbData, function(data) {
         return data.measure[propertyName];
       });
-      console.log('tbDataAfterSort', valuesArr);
       var len = valuesArr.length;
       if (len > queryLimit) {
         tempArr = valuesArr.slice(0, queryLimit);
         sortedList.topValues = getIndexPositionsArr(tbData, tempArr);
+
         tempArr = valuesArr.slice(len - queryLimit, len);
         sortedList.bottomValues = getIndexPositionsArr(tbData, tempArr);
       } else {
@@ -61,6 +59,7 @@ module.exports = /*  @ngInject */
           }, queryLimit = 10;
       var valuesSort = getSortedObjects(topBottomData, queryLimit, categoryType.propertyName);
       var trendPropertyName = filtersService.trendPropertyNames[categoryType.propertyName][trendType.value - 1];
+
       sortedList.topValues = valuesSort.topValues;
       sortedList.bottomValues = valuesSort.bottomValues;
 
@@ -111,7 +110,8 @@ module.exports = /*  @ngInject */
       var filteredData = getFilteredTopBottomData(currentTbData, categoryType, depletionOption, distirbutionOption);
       currentTbData.timePeriodFilteredData = filteredData;
       currentTbData.topBottomIndices = getTopBottomDataSorted(currentTbData.timePeriodFilteredData, trendOption, categoryType);
-      currentTbData.chartData = getChartData(currentTbData.timePeriodFilteredData, trendOption, categoryType);
+      getChartData(currentTbData, categoryType, trendOption);
+      console.log('currentTbData', currentTbData);
       setUpdatedDataIndicator(currentTbData, false, false);
       return currentTbData;
     }
@@ -203,20 +203,39 @@ module.exports = /*  @ngInject */
       topBottomObj.isPerformanceDataUpdateRequired = true;
     }
 
-    function getChartData(filteredPerformaceData, trendType, categoryType) {
-      var chartData = [{'values': null}], propertyName, categoryChartData = [], obj;
-      angular.forEach(filteredPerformaceData, function (data) {
-        propertyName = filtersService.trendPropertyNames[categoryType.propertyName][trendType.value - 1];
+    function getChartData(tbData, categoryType, trendType) {
+      tbData.chartData = {
+        topValues: null,
+        bottomValues: null,
+        topTrends: null,
+        bottomTrends: null
+      };
+      var trendPropertyName = filtersService.trendPropertyNames[categoryType.propertyName][trendType.value - 1];
+      tbData.chartData.topValues = getChartDataForSortCategory(tbData.timePeriodFilteredData, tbData.topBottomIndices.topValues, trendPropertyName);
+
+      tbData.chartData.bottomValues = getChartDataForSortCategory(tbData.timePeriodFilteredData, tbData.topBottomIndices.bottomValues, trendPropertyName);
+
+      tbData.chartData.topTrends = getChartDataForSortCategory(tbData.timePeriodFilteredData, tbData.topBottomIndices.topTrends, trendPropertyName);
+
+      tbData.chartData.bottomTrends = getChartDataForSortCategory(tbData.timePeriodFilteredData, tbData.topBottomIndices.bottomTrends, trendPropertyName);
+    }
+
+    function getChartDataForSortCategory(orginalArr, indexesArr, propName) {
+      var matchedArr = [], chartData = [{'values': null}], categoryChartData = [], obj;
+      angular.forEach(indexesArr, function (data) {
+        matchedArr.push(orginalArr[data]);
+      });
+
+      angular.forEach(matchedArr, function (data) {
         obj = {
           'label': data.title
         };
-        if (isValidValues(Number(data.measure[propertyName]))) {
-          obj.value = Math.round(data.measure[propertyName]);
+        if (isValidValues(Number(data.measure[propName]))) {
+          obj.value = Math.round(data.measure[propName]);
         }
         categoryChartData.push(obj);
       });
       chartData[0].values = categoryChartData;
-      // console.log('chartData', chartData);
       return chartData;
     }
   };

@@ -67,6 +67,7 @@ module.exports = /*  @ngInject */
       subAccounts: null,
       stores: null
     };
+    vm.currentChartData = null;
     vm.getSortedArrIndex = getSortedArrIndex;
     vm.currentTopBottomObj = null;
     vm.currentTopBottomAcctType = null;
@@ -570,15 +571,20 @@ module.exports = /*  @ngInject */
         switch (sortCategory) {
           case filtersService.accountFilters.topBottomSortTypeEnum.topValues:
             result = data.topBottomIndices.topValues;
+            vm.currentChartData = data.chartData.topValues;
+            console.log(vm.currentChartData);
             break;
           case filtersService.accountFilters.topBottomSortTypeEnum.topTrends:
             result = data.topBottomIndices.topTrends;
+            vm.currentChartData = data.chartData.topTrends;
             break;
           case filtersService.accountFilters.topBottomSortTypeEnum.bottomValues:
             result = data.topBottomIndices.bottomValues;
+            vm.currentChartData = data.chartData.bottomValues;
             break;
           case filtersService.accountFilters.topBottomSortTypeEnum.bottomTrends:
             result = data.topBottomIndices.bottomTrends;
+            vm.currentChartData = data.chartData.bottomTrends;
             break;
         }
         return result;
