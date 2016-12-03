@@ -18,19 +18,12 @@ module.exports = /*  @ngInject */
     function getIndexPositionsArr(originalArr, arrToGetIndex) {
       var indexPos = -1;
       var indexedArr = [];
-      if (arrToGetIndex === originalArr) {
-        angular.forEach(arrToGetIndex, function(obj) {
-          indexPos = originalArr.indexOf(obj);
-          if (indexPos !== -1) {
-            indexedArr.push(indexPos);
-          }
-        });
-      } else {
-        for (var i = 0; i < originalArr.length; i++) {
-          indexedArr.push(i);
+      angular.forEach(arrToGetIndex, function(obj) {
+        indexPos = originalArr.indexOf(obj);
+        if (indexPos !== -1) {
+          indexedArr.push(indexPos);
         }
-      }
-
+      });
       return indexedArr;
     }
 
@@ -48,11 +41,11 @@ module.exports = /*  @ngInject */
       var len = valuesArr.length;
       if (len > queryLimit) {
         tempArr = valuesArr.slice(0, queryLimit - 1);
-        sortedList.topValues = getIndexPositionsArr(valuesArr, tempArr);
+        sortedList.topValues = getIndexPositionsArr(tbData, tempArr);
         tempArr = valuesArr.slice(len - queryLimit, len);
-        sortedList.bottomValues = getIndexPositionsArr(valuesArr, tempArr);
+        sortedList.bottomValues = getIndexPositionsArr(tbData, tempArr);
       } else {
-        tempArr =  getIndexPositionsArr(valuesArr, valuesArr);
+        tempArr =  getIndexPositionsArr(tbData, valuesArr);
         sortedList.topValues = tempArr;
         sortedList.bottomValues = tempArr;
       }
