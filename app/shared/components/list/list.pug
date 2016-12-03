@@ -54,7 +54,7 @@ v-accordion.styled-list(multiple="" id="opportunities" control="list.accordion" 
       div(column='4')
         label Address
       div.text-center(column='2')
-        label Opportunities
+        label(ng-click="list.sortBy('opportunitiesCount')") Opportunities
       div(column='1')
         label(ng-click="list.sortBy('depletions')" ng-class="{ 'header-bold' : list.filtersService.model.appliedFilter.sort.sortArr[0].str === 'depletions' || list.orderName[0] === 'store.depletionsCurrentYearToDate' || list.orderName[0] === '-store.depletionsCurrentYearToDate'}").sort
           | Depletions CYTD

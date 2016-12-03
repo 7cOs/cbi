@@ -4,6 +4,7 @@ module.exports = /*  @ngInject */
     var model = {
       filterApplied: false,
       opportunities: [],
+      opportunityCountSort: false,
       opportunityId: null,
       noOpportunitiesFound: false
     };
@@ -37,10 +38,15 @@ module.exports = /*  @ngInject */
 
       // create promise, build url based on filters and if there is an opp id
       var opportunitiesPromise = $q.defer(),
-          url = opportunityID ? apiHelperService.request('/api/opportunities/' + opportunityID) : apiHelperService.request('/api/opportunities/', filterPayload);
+          url = opportunityID ? apiHelperService.request('/api/opportunities/' + opportunityID) : apiHelperService.request('/api/opportunities/', filterPayload),
+          payload = {
+            params: {
+              'opportunity': 'descending'
+            }
+          };
 
       service.model.opportunities = [];
-      $http.get(url)
+      model.opportunityCountSort ? $http.get(url, payload) : $http.get(url)
         .then(getOpportunitiesSuccess)
         .catch(getOpportunitiesFail);
 
@@ -122,6 +128,9 @@ module.exports = /*  @ngInject */
 
         // set data for pagination
         service.model.opportunities = newOpportunityArr;
+
+        // reset sort payload
+        model.opportunityCountSort = false;
 
         opportunitiesPromise.resolve(newOpportunityArr);
       }
