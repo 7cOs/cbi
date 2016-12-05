@@ -57,6 +57,7 @@ module.exports = /*  @ngInject */
     vm.marketStoresView = false;
     vm.marketIdSelected = false;
     vm.overviewOpen = false;
+    vm.premiseTypeDisabled = false;
     vm.selectedStore = null;
     vm.selectOpen = false;
 
@@ -86,6 +87,7 @@ module.exports = /*  @ngInject */
     vm.checkIfVelocityPresent = checkIfVelocityPresent;
     vm.currentTopBottomView = null;
     vm.currentTotalsObject = null;
+    vm.disablePremiseType = disablePremiseType;
     vm.displayBrandValue = displayBrandValue;
     vm.goToOpportunities = goToOpportunities;
     vm.getClassBasedOnValue = getClassBasedOnValue;
@@ -98,6 +100,7 @@ module.exports = /*  @ngInject */
     vm.removeDistOptionsBasedOnView = removeDistOptionsBasedOnView;
     vm.resetFilters = resetFilters;
     vm.selectItem = selectItem;
+    vm.setDefaultFilterOptions = setDefaultFilterOptions;
     vm.setFilter = setFilter;
     vm.updateBrandSnapshot = updateBrandSnapshot;
     vm.updateChip = updateChip;
@@ -131,6 +134,10 @@ module.exports = /*  @ngInject */
       if (item && item.measures) {
         return vm.filterModel.trend.value === 1 && vm.displayBrandValue(item.measures, 'velocityTrend', 'distributionTimePeriod');
       }
+    }
+
+    function disablePremiseType(bool) {
+      vm.premiseTypeDisabled = bool;
     }
 
     /**
@@ -263,6 +270,39 @@ module.exports = /*  @ngInject */
       }
     }
 
+    function setDefaultFilterOptions() {
+      if (!filtersService.model.selected.myAccountsOnly) {
+        defaultPremise();
+      } else if (userService.model.currentUser && userService.model.currentUser.srcTypeCd) {
+        switch (userService.model.currentUser.srcTypeCd[0]) {
+          case 'OFF_HIER':
+          case 'OFF_SPEC':
+            offPremise();
+            break;
+          case 'ON_HIER':
+            onPremise();
+            break;
+          default:
+            defaultPremise();
+            break;
+        }
+      }
+
+      function defaultPremise() {
+        disablePremiseType(false);
+      }
+      function onPremise() {
+        filtersService.model.selected.premiseType = 'on';
+        vm.updateChip('On-Premise', 'premiseType');
+        disablePremiseType(true);
+      }
+      function offPremise() {
+        filtersService.model.selected.premiseType = 'off';
+        vm.updateChip('Off-Premise', 'premiseType');
+        disablePremiseType(true);
+      }
+    }
+
     function setFilter(result, filterModelProperty) {
       filtersService.model.selected[filterModelProperty] = [result.id];
 
@@ -385,8 +425,9 @@ module.exports = /*  @ngInject */
       // reset all chips and filters on page init
       chipsService.resetChipsFilters(chipsService.model);
       setDefaultDropDownOptions();
+      setDefaultFilterOptions();
       var params = filtersService.getAppliedFilters('brandSnapshot');
-      vm.filtersService.model.selected.valuesVsTrend =  vm.filtersService.accountFilters.valuesVsTrend[1];
+      vm.filtersService.model.valuesVsTrend =  vm.filtersService.accountFilters.valuesVsTrend[1];
 
       var promiseArr = [
         userService.getPerformanceDepletion(),
@@ -562,6 +603,7 @@ module.exports = /*  @ngInject */
       }
     }
 
+// <<<<<<< caeaadd11b0ba65e0fcce6d098976407e95c2cef
     function  getSortedArrIndex(data) {
       if (data && data.topBottomIndices) {
         var sortCategory = vm.filtersService.model.selected.valuesVsTrend.value;
@@ -595,6 +637,24 @@ module.exports = /*  @ngInject */
         var categoryBound = vm.filtersService.model.accountSelected.accountMarkets;
         vm.currentTopBottomObj = getCurrentTopBottomObject(vm.currentTopBottomAcctType);
         getDataForTopBottom(vm.currentTopBottomObj, categoryBound);
+/* =======
+    function filterByTopBottomSortCategory(currentIndex, topBottomIndices) {
+      var sortCategory = vm.filtersService.model.valuesVsTrend.value;
+      var result = false;
+      switch (sortCategory) {
+        case filtersService.accountFilters.topBottomSortTypeEnum.topValues:
+          result = topBottomIndices.topValues.indexOf(currentIndex) !== -1;
+          break;
+        case filtersService.accountFilters.topBottomSortTypeEnum.topTrends:
+          result = topBottomIndices.topTrends.indexOf(currentIndex) !== -1;
+          break;
+        case filtersService.accountFilters.topBottomSortTypeEnum.bottomValues:
+          result = topBottomIndices.bottomValues.indexOf(currentIndex) !== -1;
+          break;
+        case filtersService.accountFilters.topBottomSortTypeEnum.bottomTrends:
+          result = topBottomIndices.bottomTrends.indexOf(currentIndex) !== -1;
+          break;
+>>>>>>> added default premise types based on user */
       }
     }
   };

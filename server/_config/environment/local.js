@@ -43,6 +43,48 @@ module.exports = function (config) {
   config.auth = {
     strategy: 'no-auth',
     user: {
+      // 'OFF_HEIR'
+      /* 'personId': 5699,
+      'employeeID': '1009707',
+      'firstName': 'ERIC',
+      'lastName': 'RAMEY',
+      'email': 'ERIC.RAMEY@CBRANDS.COM',
+      'srcTypeCd': [
+        'OFF_HIER'
+      ],
+      'groupingCode': null,
+      'corporateUser': true,
+      'userGroup': [
+        'cbi employees',
+        'cbi users',
+        'ug-cbigdc-biz-role-mktdevmgr',
+        'cbi-adenabledaccounts'
+      ],
+      'issuer': 'https://orion.cbrands.com',
+      'jwt': 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJsYXN0TmFtZSI6IlJBTUVZIiwiaXNzIjoiaHR0cHM6Ly9vcmlvbi5jYnJhbmRzLmNvbSIsImVtcGxveWVlSUQiOiIxMDA5NzA3IiwiZmlyc3ROYW1lIjoiRVJJQyIsImdyb3VwaW5nQ29kZSI6bnVsbCwiY29ycG9yYXRlVXNlciI6dHJ1ZSwicGVyc29uSUQiOjU2OTksImV4cCI6MTQ4NjE0NzYzMjY5MiwiaWF0IjoxNDgwOTYzNjMyNjkyLCJ1c2VyR3JvdXAiOlsiY2JpIGVtcGxveWVlcyIsImNiaSB1c2VycyIsInVnLWNiaWdkYy1iaXotcm9sZS1ta3RkZXZtZ3IiLCJjYmktYWRlbmFibGVkYWNjb3VudHMiXSwiZW1haWwiOiJFUklDLlJBTUVZQENCUkFORFMuQ09NIiwic3JjVHlwZUNkIjpbIk9GRl9ISUVSIl19.Gy-SZrPgg7oxCgYCc-8YWA2BIwlFO0E3Htu6vzufVh4',
+      'jwtmap': {
+        'firstName': 'ERIC',
+        'lastName': 'RAMEY',
+        'groupingCode': null,
+        'corporateUser': true,
+        'iss': 'https://orion.cbrands.com',
+        'personID': 5699,
+        'employeeID': '1009707',
+        'exp': 1486147632692,
+        'iat': 1480963632694,
+        'userGroup': [
+          'cbi employees',
+          'cbi users',
+          'ug-cbigdc-biz-role-mktdevmgr',
+          'cbi-adenabledaccounts'
+        ],
+        'email': 'ERIC.RAMEY@CBRANDS.COM',
+        'srcTypeCd': [
+          'OFF_HIER'
+        ]
+      },
+      'issuedAt': 1480963632694 */
+      // 'SALES-HIER'
       'personId': 5648,
       'employeeID': '1012132',
       'firstName': 'FRED',
@@ -84,22 +126,81 @@ module.exports = function (config) {
           'SALES_HIER'
         ]
       }
-      /* jwt: config.api.jwt,
-      jwtmap: {
-        firstName: 'SHAWN',
-        lastName: 'O\'NEIL',
-        groupingCode: '133',
-        iss: 'https://orion.cbrands.com',
-        personID: 5752,
-        employeeID: '1007665',
-        exp: 1477332952290,
-        iat: 1472148952296,
-        email: 'JIM.ONEIL@CBRANDS.COM',
-        srcTypeCd: [
-          'ON_HIER',
-          'OFF_HIER',
-          'SALES_HIER'
+      // 'ON_HEIR'
+      /* 'personId': 5527,
+      'employeeID': '1010009',
+      'firstName': 'ANDREW',
+      'lastName': 'KEEFNER',
+      'email': 'ANDY.KEEFNER@CBRANDS.COM',
+      'srcTypeCd': [
+        'ON_HIER'
+      ],
+      'groupingCode': '176',
+      'corporateUser': true,
+      'userGroup': [
+        'cbi employees',
+        'cbi users',
+        'ug-cbigdc-biz-role-mktdevmgr',
+        'cbi-adenabledaccounts'
+      ],
+      'issuer': 'https://orion.cbrands.com',
+      'jwt': 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJsYXN0TmFtZSI6IktFRUZORVIiLCJpc3MiOiJodHRwczovL29yaW9uLmNicmFuZHMuY29tIiwiZW1wbG95ZWVJRCI6IjEwMTAwMDkiLCJmaXJzdE5hbWUiOiJBTkRSRVciLCJncm91cGluZ0NvZGUiOiIxNzYiLCJjb3Jwb3JhdGVVc2VyIjp0cnVlLCJwZXJzb25JRCI6NTUyNywiZXhwIjoxNDg2MTUzMjc1NzQwLCJpYXQiOjE0ODA5NjkyNzU3NDAsInVzZXJHcm91cCI6WyJjYmkgZW1wbG95ZWVzIiwiY2JpIHVzZXJzIiwidWctY2JpZ2RjLWJpei1yb2xlLW1rdGRldm1nciIsImNiaS1hZGVuYWJsZWRhY2NvdW50cyJdLCJlbWFpbCI6IkFORFkuS0VFRk5FUkBDQlJBTkRTLkNPTSIsInNyY1R5cGVDZCI6WyJPTl9ISUVSIl19.5X1lLcNYunxZde9HcS8Buf4tiCpHs23yyjfdgKJXYSQ',
+      'jwtmap': {
+        'firstName': 'ANDREW',
+        'lastName': 'KEEFNER',
+        'groupingCode': '176',
+        'corporateUser': true,
+        'iss': 'https://orion.cbrands.com',
+        'personID': 5527,
+        'employeeID': '1010009',
+        'exp': 1486153275740,
+        'iat': 1480969275741,
+        'userGroup': [
+          'cbi employees',
+          'cbi users',
+          'ug-cbigdc-biz-role-mktdevmgr',
+          'cbi-adenabledaccounts'
+        ],
+        'email': 'ANDY.KEEFNER@CBRANDS.COM',
+        'srcTypeCd': [
+          'ON_HIER'
         ]
+      } */
+      // 'Corporate user'
+      /* 'personId': -1,
+      'employeeID': '7002806',
+      'firstName': null,
+      'lastName': null,
+      'email': null,
+      'srcTypeCd': [],
+      'groupingCode': null,
+      'corporateUser': true,
+      'userGroup': [
+        'cbi employees',
+        'cbi users',
+        'ug-cbigdc-biz-role-mktdevmgr',
+        'cbi-adenabledaccounts'
+      ],
+      'issuer': 'https://orion.cbrands.com',
+      'jwt': 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJsYXN0TmFtZSI6bnVsbCwiaXNzIjoiaHR0cHM6Ly9vcmlvbi5jYnJhbmRzLmNvbSIsImVtcGxveWVlSUQiOiI3MDAyODA2IiwiZmlyc3ROYW1lIjpudWxsLCJncm91cGluZ0NvZGUiOm51bGwsImNvcnBvcmF0ZVVzZXIiOnRydWUsInBlcnNvbklEIjotMSwiZXhwIjoxNDg2MTUzNTIyOTg4LCJpYXQiOjE0ODA5Njk1MjI5ODgsInVzZXJHcm91cCI6WyJjYmkgZW1wbG95ZWVzIiwiY2JpIHVzZXJzIiwidWctY2JpZ2RjLWJpei1yb2xlLW1rdGRldm1nciIsImNiaS1hZGVuYWJsZWRhY2NvdW50cyJdLCJlbWFpbCI6bnVsbCwic3JjVHlwZUNkIjpbXX0.9P5Exp4yRSy_rRm9C6MHlqqvbX41w8jgQSBmuE9NnO8',
+      'jwtmap': {
+        'firstName': null,
+        'lastName': null,
+        'groupingCode': null,
+        'corporateUser': true,
+        'iss': 'https://orion.cbrands.com',
+        'personID': -1,
+        'employeeID': '7002806',
+        'exp': 1486153522988,
+        'iat': 1480969522989,
+        'userGroup': [
+          'cbi employees',
+          'cbi users',
+          'ug-cbigdc-biz-role-mktdevmgr',
+          'cbi-adenabledaccounts'
+        ],
+        'email': null,
+        'srcTypeCd': []
       } */
     }
   };
