@@ -603,7 +603,6 @@ module.exports = /*  @ngInject */
       }
     }
 
-// <<<<<<< caeaadd11b0ba65e0fcce6d098976407e95c2cef
     function  getSortedArrIndex(data) {
       if (data && data.topBottomIndices) {
         var sortCategory = vm.filtersService.model.selected.valuesVsTrend.value;
@@ -637,24 +636,6 @@ module.exports = /*  @ngInject */
         var categoryBound = vm.filtersService.model.accountSelected.accountMarkets;
         vm.currentTopBottomObj = getCurrentTopBottomObject(vm.currentTopBottomAcctType);
         getDataForTopBottom(vm.currentTopBottomObj, categoryBound);
-/* =======
-    function filterByTopBottomSortCategory(currentIndex, topBottomIndices) {
-      var sortCategory = vm.filtersService.model.valuesVsTrend.value;
-      var result = false;
-      switch (sortCategory) {
-        case filtersService.accountFilters.topBottomSortTypeEnum.topValues:
-          result = topBottomIndices.topValues.indexOf(currentIndex) !== -1;
-          break;
-        case filtersService.accountFilters.topBottomSortTypeEnum.topTrends:
-          result = topBottomIndices.topTrends.indexOf(currentIndex) !== -1;
-          break;
-        case filtersService.accountFilters.topBottomSortTypeEnum.bottomValues:
-          result = topBottomIndices.bottomValues.indexOf(currentIndex) !== -1;
-          break;
-        case filtersService.accountFilters.topBottomSortTypeEnum.bottomTrends:
-          result = topBottomIndices.bottomTrends.indexOf(currentIndex) !== -1;
-          break;
->>>>>>> added default premise types based on user */
       }
     }
   };
