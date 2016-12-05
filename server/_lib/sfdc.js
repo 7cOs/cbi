@@ -88,7 +88,7 @@ function deleteAttach(app, req, res) {
       }
     } catch (err) {
       var generalError = {'isSuccess': false,
-                          'errorMessage': err};
+        'errorMessage': err};
       throw generalError;
     }
   });
@@ -131,7 +131,7 @@ function deleteNote(app, req, res) {
       }
     } catch (err) {
       var generalError = {'isSuccess': false,
-                          'errorMessage': err};
+        'errorMessage': err};
       throw generalError;
     }
   });
@@ -174,7 +174,7 @@ function searchAccounts(app, req, res) {
       }
     } catch (err) {
       var theError = {'isSuccess': false,
-                      'errorMessage': err};
+        'errorMessage': err};
     }
     throw theError;
   });
@@ -214,7 +214,7 @@ function queryAccountNotes(app, req, res) {
             .execute(function (err, records) {
               if (err) {
                 return {'isSuccess': false,
-                        'errorMessage': 'There was an SFDC API error retrieving the notes for this account: ' + err};
+                  'errorMessage': 'There was an SFDC API error retrieving the notes for this account: ' + err};
               }
               // set the URL on the image to include the url and session id
               for (var note in records) {
@@ -227,19 +227,19 @@ function queryAccountNotes(app, req, res) {
                 }
               }
               res.send({'isSuccess': true,
-                      'successReturnValue': records
-                     });
+                'successReturnValue': records
+              });
             })
-    );
+  );
     } catch (err) {
       var errMessage = 'There was an error in queryAccountNotes: ' + JSON.stringify(err, null, '');
       console.error(errMessage);
       return {'isSuccess': false,
-              'errorMessage': errMessage};
+        'errorMessage': errMessage};
     }
   }, function (err) {
     return {'isSuccess': false,
-            'errorMessage': 'A connection to Salesforce could not be established: ' + err};
+      'errorMessage': 'A connection to Salesforce could not be established: ' + err};
   });
 };
 
@@ -255,8 +255,8 @@ function createNote(app, req, res) {
 // Search for the correct Account Id
       if (!(req.query.accountId)) {
         var badAccountIdError = {'isSuccess': false,
-                                 'errorMessage': 'There was no valid account id submitted.  Please make sure you have an account id (i.e. TD Linx Id)'
-                                };
+          'errorMessage': 'There was no valid account id submitted.  Please make sure you have an account id (i.e. TD Linx Id)'
+        };
         throw badAccountIdError;
       } else {
         var acctId = req.query.accountId;
@@ -264,8 +264,8 @@ function createNote(app, req, res) {
           function (err, res) {
             if (err) {
               var badAccountIdInSFDCError = {'isSuccess': false,
-                                             'errorMessage': 'There was no account in SFDC found with TDLinx Id or JDE Address Book Number ' + acctId + ': ' +  err
-                                            };
+                'errorMessage': 'There was no account in SFDC found with TDLinx Id or JDE Address Book Number ' + acctId + ': ' +  err
+              };
               throw badAccountIdInSFDCError;
             } else {
               return res;
@@ -279,8 +279,8 @@ function createNote(app, req, res) {
           var accountId = result.searchRecords[0].Id;  // Only uses the first account it finds.
           if (accountId === null || accountId === undefined) {
             var badAccountIdInSFDCError = {'isSuccess': false,
-                                           'errorMessage': 'There was no account in SFDC found with TDLinx Id or JDE Address Book Number ' + acctId
-                                          };
+              'errorMessage': 'There was no account in SFDC found with TDLinx Id or JDE Address Book Number ' + acctId
+            };
             throw badAccountIdInSFDCError;
           } else {
             conn.sobject('Note__c').create([{
@@ -297,7 +297,7 @@ function createNote(app, req, res) {
             function (err, ret) {
               if (err) {
                 var badNoteCreationError = {'isSuccess': false,
-                                            'errorMessage': 'Error creating an note: ' + err};
+                  'errorMessage': 'Error creating an note: ' + err};
                 throw badNoteCreationError;
               } else {
                 try {
@@ -308,7 +308,7 @@ function createNote(app, req, res) {
                   return ret;
                 } catch (err) {
                   var badReturnError = {'isSuccess': false,
-                                       'errorMessage': 'There was an error returning the successful result: ' + err};
+                    'errorMessage': 'There was an error returning the successful result: ' + err};
                   throw badReturnError;
                 }
               }
@@ -316,7 +316,7 @@ function createNote(app, req, res) {
           };
         }, function (err) {
           var badSFDCAccountError = {'isSuccess': false,
-                                     'errorMessage': 'There was an error finding the correct account: ' + err};
+            'errorMessage': 'There was an error finding the correct account: ' + err};
           throw badSFDCAccountError;
         });
       };
@@ -354,7 +354,6 @@ function getAttachment(app, req, res) {
   } catch (err) {
     console.error(err);
     return {'isSuccess': false,
-            'errorMessage': 'No connection could be made to Salesforce.com: ' + err};
+      'errorMessage': 'No connection could be made to Salesforce.com: ' + err};
   }
 };
-
