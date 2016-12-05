@@ -227,10 +227,10 @@ div(row)
                 //- ng-click="a.selectItem('markets', item, a.marketTabs, $parent.$index)"
                 //- ng-class="{'store': item.address, 'selected': item.label === a.idSelected}"
                 //- <span ng-if="item.storeNum" class="store-number">\#{{item.storeNum}}</span><span ng-if="item.address" class="address">{{item.address}}</span>
-                tr.clickable.market-value(ng-repeat="item in data.timePeriodFilteredData track by $index" ng-if="a.filterByTopBottomSortCategory($index, data.topBottomIndices)")
-                  td.dist-label(colspan=2) {{item.title}}
+                tr.clickable.market-value(ng-repeat="index in a.getSortedArrIndex(data)")
+                  td.dist-label(colspan=2) {{data.timePeriodFilteredData[index].title}}
                   td.dark.market-label
-                    span(ng-bind="a.getValueBoundForAcctType(item.measure)")
+                    span(ng-bind="a.getValueBoundForAcctType(data.timePeriodFilteredData[index].measure)")
       .chart
         table.no-top-border(cellspacing="0" cellpadding="0")
           thead
@@ -241,7 +241,7 @@ div(row)
               th
                 p.accent(ng-if="a.filtersService.model.accountSelected.accountMarkets.propertyName === 'depletions'") {{a.filterModel.depletionsTimePeriod.displayValue}}
                 p.accent.bold(ng-if="a.filtersService.model.accountSelected.accountMarkets.propertyName !== 'depletions'") {{a.filterModel.distributionTimePeriod.displayValue}}
-        nvd3.nvd(options="a.chartOptions" data="a.getCurrentChartData()")
+        nvd3.nvd(options="a.chartOptions" data="a.currentChartData")
 
 h3.top-opportunities-header Top Opportunities
   a.accent(ng-click="a.goToOpportunities($event);" ng-disabled="a.allOpportunitiesDisabled()") See All Opportunities

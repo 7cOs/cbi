@@ -207,6 +207,10 @@ module.exports = /*  @ngInject */
       'depletions': [
         'depletionsTrend',
         'planDepletionTrend'
+      ],
+      'velocity': [
+        'velocityTrend',
+        'velocityPlanTrend'
       ]
     };
 

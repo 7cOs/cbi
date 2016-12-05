@@ -275,8 +275,8 @@
     td {
       // padding: 1.25em 1em 1.25em 0.75em;
       // Need to get to this during design fixes for top bottom
-      // white-space: nowrap;
-      // text-overflow: ellipsis;
+      white-space: nowrap;
+      text-overflow: ellipsis;
       overflow: hidden;
 
       &:first-child {
@@ -335,7 +335,7 @@
     height: 530px;
 
     md-tab-content {
-      overflow: hidden;
+      overflow: scroll;
     }
   }
 }

@@ -9,30 +9,92 @@ module.exports = /*  @ngInject */
       depletionModel: getDepletionData,
       brandSkus: getBrandData,
       distributionModel: getDistirbutionData,
-      getFilteredTopBottomData: getFilteredTopBottomData,
       getTopBottomDataSorted: getTopBottomDataSorted,
-      getChartData: getChartData,
-      getChartOptions: getChartOptions
+      getChartOptions: getChartOptions,
+      updateDataForCurrentTopDownLevel: updateDataForCurrentTopDownLevel,
+      initDataForAllTbLevels: initDataForAllTbLevels,
+      resetFilterFlags: resetFilterFlags,
+      resetPerformanceDataFlags: resetPerformanceDataFlags,
+      getFilterParametersForStore: getFilterParametersForStore
     };
 
     return service;
+
     function getIndexPositionsArr(originalArr, arrToGetIndex) {
       var indexPos = -1;
       var indexedArr = [];
-      if (arrToGetIndex === originalArr) {
-        angular.forEach(arrToGetIndex, function(obj) {
-          indexPos = originalArr.indexOf(obj);
-          if (indexPos !== -1) {
-            indexedArr.push(indexPos);
-          }
-        });
-      } else {
-        for (var i = 0; i < originalArr.length; i++) {
-          indexedArr.push(i);
+      angular.forEach(arrToGetIndex, function(obj) {
+        indexPos = originalArr.indexOf(obj);
+        if (indexPos !== -1) {
+          indexedArr.push(indexPos);
         }
+      });
+      return indexedArr;
+    }
+
+    function getSortedObjects(tbData, queryLimit, propertyName) {
+      var sortedList = {
+            topValues: [],
+            bottomValues: []
+          },
+          valuesArr, tempArr = [];
+      valuesArr = $filter('orderBy')(tbData, function(data) {
+        return data.measure[propertyName];
+      });
+      var len = valuesArr.length;
+      if (len > queryLimit) {
+        tempArr = valuesArr.slice(0, queryLimit);
+        sortedList.topValues = getIndexPositionsArr(tbData, tempArr);
+
+        tempArr = valuesArr.slice(len - queryLimit, len);
+        sortedList.bottomValues = getIndexPositionsArr(tbData, tempArr);
+      } else {
+        tempArr =  getIndexPositionsArr(tbData, valuesArr);
+        sortedList.topValues = tempArr;
+        sortedList.bottomValues = tempArr;
+      }
+      return sortedList;
+    }
+
+    function getFilterParametersForStore(queryParams, timePeriod, metric, topBottomSelection, trendSelection) {
+      var acctEnum = filtersService.accountFilters.accountMarketsEnums;
+      var timePeriodVal = '';
+      switch (metric.value) {
+        case acctEnum.depletions:
+          timePeriodVal = 'DEPL';
+          break;
+        case acctEnum.distEffective:
+          timePeriodVal = 'EPOD';
+          break;
+        case acctEnum.velocity:
+          timePeriodVal = 'VEL';
+          break;
+        case acctEnum.distSimple:
+          timePeriodVal = 'SPOD';
+          break;
       }
 
-      return indexedArr;
+      switch (topBottomSelection.value) {
+        case filtersService.accountFilters.topBottomSortTypeEnum.topValues:
+          queryParams.top = true;
+          queryParams.trend = false;
+          break;
+        case filtersService.accountFilters.topBottomSortTypeEnum.topTrends:
+          queryParams.top = true;
+          queryParams.trend = true;
+          break;
+        case filtersService.accountFilters.topBottomSortTypeEnum.bottomValues:
+          queryParams.top = false;
+          queryParams.trend = false;
+          break;
+        case filtersService.accountFilters.topBottomSortTypeEnum.bottomTrends:
+          queryParams.top = false;
+          queryParams.trend = true;
+          break;
+      }
+      queryParams.metric = timePeriodVal;
+      queryParams.timePeriod = timePeriod.name;
+      return queryParams;
     }
 
     function getTopBottomDataSorted(topBottomData, trendType, categoryType) {
@@ -41,80 +103,82 @@ module.exports = /*  @ngInject */
             bottomValues: [],
             topTrends: [],
             bottomTrends: []
-          }, queryLimit = 10,
-          valuesArr, trendsArr, tempArr = [];
+          }, queryLimit = 10;
+      var valuesSort = getSortedObjects(topBottomData, queryLimit, categoryType.propertyName);
+      var trendPropertyName = filtersService.trendPropertyNames[categoryType.propertyName][trendType.value - 1];
 
-      valuesArr = $filter('orderBy')(topBottomData, categoryType.propertyName);
-      var len = valuesArr.length;
-      if (len > queryLimit) {
-        tempArr = valuesArr.slice(0, queryLimit - 1);
-        sortedList.topValues = getIndexPositionsArr(valuesArr, tempArr);
-        tempArr = valuesArr.slice(len - queryLimit, len);
-        sortedList.bottomValues = getIndexPositionsArr(valuesArr, tempArr);
-      } else {
-        tempArr =  getIndexPositionsArr(valuesArr, valuesArr);
-        sortedList.topValues = tempArr;
-        sortedList.bottomValues = tempArr;
-      }
-      trendsArr = $filter('orderBy')(topBottomData, filtersService.trendPropertyNames[categoryType.propertyName][trendType.value - 1]);
-      if (len > queryLimit) {
-        tempArr = trendsArr.slice(0, queryLimit - 1);
-        sortedList.topTrends = getIndexPositionsArr(valuesArr, tempArr);
-        tempArr = trendsArr.slice(len - queryLimit, len);
-        sortedList.bottomTrends = tempArr;
-      } else {
-        tempArr =  getIndexPositionsArr(trendsArr, trendsArr);
-        sortedList.topTrends = tempArr;
-        sortedList.bottomTrends = tempArr;
-      }
-      // console.log('sortedList', sortedList);
+      sortedList.topValues = valuesSort.topValues;
+      sortedList.bottomValues = valuesSort.bottomValues;
+
+      var trendSort = getSortedObjects(topBottomData, queryLimit, trendPropertyName);
+      sortedList.topTrends = trendSort.topValues;
+      sortedList.bottomTrends = trendSort.bottomValues;
       return sortedList;
     }
 
-    /**
-      * Gets an array of data matching the distirubution or depletion time period
-      * @param {Object} topBottomData Package or Brand
-      * @param {String} categoryType depletions or Distribution
-      * @param {String} depletionOption L90, L120 etc
-      * @returns {Object} currentTrendVal Returns the trend display value as string and the actual float value
-      */
-    function getFilteredTopBottomData(topBottomData, categoryType, depletionOption, distirbutionOption) {
+    function getFilteredArr (tbData, filterOption) {
       var data, filteredData = [], matchedMeasure = null;
-      switch (categoryType.value) {
-        case filtersService.accountFilters.accountMarketsEnums.depletions:
-          for (var i = 0, len = topBottomData.length; i < len; i++) {
-            data = topBottomData[i];
-            matchedMeasure = data.measures.filter(function (measure) {
-              return measure.timeframe === depletionOption.name;
-            });
-            if (matchedMeasure[0]) {
-              var depletionObj = {
-                title: data.name,
-                type: data.type,
-                measure: matchedMeasure[0]
-              };
-              filteredData.push(depletionObj);
-            }
-          }
-          break;
-        default:
-          for (var j = 0, length = topBottomData.length; j < length; j++) {
-            data = topBottomData[i];
-            matchedMeasure = data.measures.filter(function (measure) {
-              return measure.timeframe === distirbutionOption.name;
-            });
-            if (matchedMeasure[0]) {
-              var distirbutionObj = {
-                title: data.name,
-                type: data.type,
-                measure: matchedMeasure[0]
-              };
-              filteredData.push(distirbutionObj);
-            }
-          }
-          break;
+      for (var i = 0, len = tbData.length; i < len; i++) {
+        data = tbData[i];
+        matchedMeasure = data.measures.filter(function (measure) {
+          return measure.timeframe === filterOption.name;
+        });
+        if (matchedMeasure[0]) {
+          var depletionObj = {
+            title: data.name,
+            type: data.type,
+            measure: matchedMeasure[0]
+          };
+          filteredData.push(depletionObj);
+        }
       }
       return filteredData;
+    }
+
+    function getFilteredTopBottomData(topBottomData, categoryType, depletionOption, distirbutionOption) {
+      var filteredArr = [];
+      switch (categoryType.value) {
+        case filtersService.accountFilters.accountMarketsEnums.depletions:
+          filteredArr = getFilteredArr(topBottomData.performanceData, depletionOption);
+          break;
+        default:
+          filteredArr = getFilteredArr(topBottomData.performanceData, distirbutionOption);
+          break;
+      }
+      return filteredArr;
+    }
+
+    function setUpdatedDataIndicator(currentTbData, filterIndicator, performanceDataIndicator) {
+      currentTbData.isFilterUpdateRequired = filterIndicator;
+      currentTbData.isPerformanceDataUpdateRequired = performanceDataIndicator;
+    }
+
+    function updateDataForCurrentTopDownLevel(currentTbData, categoryType, depletionOption, distirbutionOption, trendOption) {
+      var filteredData = getFilteredTopBottomData(currentTbData, categoryType, depletionOption, distirbutionOption);
+      currentTbData.timePeriodFilteredData = filteredData;
+      currentTbData.topBottomIndices = getTopBottomDataSorted(currentTbData.timePeriodFilteredData, trendOption, categoryType);
+      getChartData(currentTbData, categoryType, trendOption);
+      // console.log('currentTbData', currentTbData);
+      setUpdatedDataIndicator(currentTbData, false, false);
+      return currentTbData;
+    }
+
+    function initDataForAllTbLevels(tbData) {
+      for (var property in tbData) {
+        var initObjectForEachLevel = {
+          performanceData: null,
+          timePeriodFilteredData: null,
+          topBottomIndices: null,
+          chartData: null,
+          isPerformanceDataUpdateRequired: true,
+          isFilterUpdateRequired: true
+        };
+
+        if (tbData.hasOwnProperty(property)) {
+          tbData[property] = initObjectForEachLevel;
+        }
+      }
+      return tbData;
     }
 
     function getChartOptions() {
@@ -134,11 +198,19 @@ module.exports = /*  @ngInject */
           showValues: true,
           duration: 500,
           valueFormat: function(d) {
-            return d + '%';
+            if (isValidValues(Number(d))) {
+              return d + '%';
+            } else {
+              return;
+            }
           },
           tooltip: {
             valueFormatter: function(d) {
-              return d + '%';
+              if (isValidValues(Number(d))) {
+                return d + '%';
+              } else {
+                return;
+              }
             }
           },
           margin: {
@@ -165,18 +237,52 @@ module.exports = /*  @ngInject */
       return isValid;
     }
 
-    function getChartData(filteredPerformaceData, trendType, categoryType) {
-      var chartData = [{'values': null}], propertyName, categoryChartData = [], obj;
-      angular.forEach(filteredPerformaceData, function (data) {
-        propertyName = filtersService.trendPropertyNames[categoryType.propertyName][trendType.value - 1];
+    function resetFilterFlags(topBottomObj) {
+      for (var prop in topBottomObj) {
+        if (topBottomObj.hasOwnProperty(prop)) {
+          topBottomObj[prop].isFilterUpdateRequired = true;
+        }
+      }
+    }
+
+    function resetPerformanceDataFlags(topBottomObj) {
+      topBottomObj.isFilterUpdateRequired = true;
+      topBottomObj.isPerformanceDataUpdateRequired = true;
+    }
+
+    function getChartData(tbData, categoryType, trendType) {
+      tbData.chartData = {
+        topValues: null,
+        bottomValues: null,
+        topTrends: null,
+        bottomTrends: null
+      };
+      var trendPropertyName = filtersService.trendPropertyNames[categoryType.propertyName][trendType.value - 1];
+      tbData.chartData.topValues = getChartDataForSortCategory(tbData.timePeriodFilteredData, tbData.topBottomIndices.topValues, trendPropertyName);
+
+      tbData.chartData.bottomValues = getChartDataForSortCategory(tbData.timePeriodFilteredData, tbData.topBottomIndices.bottomValues, trendPropertyName);
+
+      tbData.chartData.topTrends = getChartDataForSortCategory(tbData.timePeriodFilteredData, tbData.topBottomIndices.topTrends, trendPropertyName);
+
+      tbData.chartData.bottomTrends = getChartDataForSortCategory(tbData.timePeriodFilteredData, tbData.topBottomIndices.bottomTrends, trendPropertyName);
+    }
+
+    function getChartDataForSortCategory(orginalArr, indexesArr, propName) {
+      var matchedArr = [], chartData = [{'values': null}], categoryChartData = [], obj;
+      angular.forEach(indexesArr, function (data) {
+        matchedArr.push(orginalArr[data]);
+      });
+
+      angular.forEach(matchedArr, function (data) {
         obj = {
-          'label': data.title,
-          'value': isValidValues(Number(data.measure[propertyName])) ? Math.round(data.measure[propertyName]) : null
+          'label': data.title
         };
+        if (isValidValues(Number(data.measure[propName]))) {
+          obj.value = Math.round(data.measure[propName]);
+        }
         categoryChartData.push(obj);
       });
       chartData[0].values = categoryChartData;
-      // console.log('chartData', chartData);
       return chartData;
     }
 
@@ -521,4 +627,5 @@ module.exports = /*  @ngInject */
       };
       return filters;
     }
+
   };
