@@ -230,6 +230,7 @@ module.exports = /*  @ngInject */
     function resetFilters() {
       vm.filterModel = angular.copy(filterModelTemplate);
       chipsService.resetChipsFilters(chipsService.model);
+      setDefaultFilterOptions();
       apply(false);
     }
 
