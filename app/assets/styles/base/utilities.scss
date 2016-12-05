@@ -44,6 +44,7 @@
 .chevron-down-small {
   @include chevron(5px, 1px, 135deg, 0%, 4px);
   display: inline;
+  color: $blue;
 }
 
 .chevron-left-small {
@@ -59,6 +60,7 @@
 .chevron-up-small {
   @include chevron(5px, 1px, -45deg, 35%, 4px);
   display: inline;
+  color: $blue;
 }
 
 .back-chevron {

@@ -476,11 +476,7 @@ module.exports = /*  @ngInject */
       loaderService.openLoader(true);
 
       if ($state.current.name === 'opportunities') {
-        if (name === 'opportunitiesCount') {
-          opportunitiesService.model.opportunityCountSort = true;
-        } else {
-          filtersService.addSortFilter(name);
-        }
+        filtersService.addSortFilter(name);
         opportunitiesService.getOpportunities();
       } else if ($state.current.name === 'target-list-detail') {
         vm.orderName = [];
