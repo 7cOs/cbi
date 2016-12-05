@@ -153,7 +153,7 @@ module.exports = /*  @ngInject */
       currentTbData.timePeriodFilteredData = filteredData;
       currentTbData.topBottomIndices = getTopBottomDataSorted(currentTbData.timePeriodFilteredData, trendOption, categoryType);
       getChartData(currentTbData, categoryType, trendOption);
-      console.log('currentTbData', currentTbData);
+      // console.log('currentTbData', currentTbData);
       setUpdatedDataIndicator(currentTbData, false, false);
       return currentTbData;
     }

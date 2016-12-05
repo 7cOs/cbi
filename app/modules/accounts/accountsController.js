@@ -532,7 +532,7 @@ module.exports = /*  @ngInject */
           vm.currentTopBottomObj.isPerformanceDataUpdateRequired = false;
           vm.currentTopBottomObj = myperformanceService.updateDataForCurrentTopDownLevel(vm.currentTopBottomObj, categoryBound, vm.filterModel.depletionsTimePeriod, vm.filterModel.distributionTimePeriod, vm.filterModel.trend);
           vm.loadingTopBottom = false;
-          console.log('TopBottomData', vm.currentTopBottomObj);
+          // console.log('TopBottomData', vm.currentTopBottomObj);
         });
       } else {
         if (!topBottomObj.timePeriodFilteredData || topBottomObj.isFilterUpdateRequired === true) {
@@ -548,9 +548,6 @@ module.exports = /*  @ngInject */
         var propName = vm.filtersService.model.accountSelected.accountMarkets.propertyName;
         var matchedMeasure = measures[propName];
         if (userService.isValidValues(matchedMeasure)) {
-          if (matchedMeasure === 0) {
-            console.log('Wrong value');
-          }
           return Math.round(matchedMeasure);
         } else {
           return '-';
@@ -573,7 +570,7 @@ module.exports = /*  @ngInject */
           case filtersService.accountFilters.topBottomSortTypeEnum.topValues:
             result = data.topBottomIndices.topValues;
             vm.currentChartData = data.chartData.topValues;
-            console.log(vm.currentChartData);
+            // console.log(vm.currentChartData);
             break;
           case filtersService.accountFilters.topBottomSortTypeEnum.topTrends:
             result = data.topBottomIndices.topTrends;
