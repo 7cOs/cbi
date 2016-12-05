@@ -58,7 +58,7 @@ module.exports = /*  @ngInject */
     vm.isPositive = isPositive;
 
     vm.updateEndingTimePeriod = updateEndingTimePeriod;
-    vm.changeDistirbutionTimePeriod = changeDistirbutionTimePeriod;
+    vm.changeDistributionTimePeriod = changeDistributionTimePeriod;
     vm.changeDepletionOption = changeDepletionOption;
 
     init();
@@ -97,8 +97,9 @@ module.exports = /*  @ngInject */
       }
     }
 
-    function changeDistirbutionTimePeriod(value) {
+    function changeDistributionTimePeriod(value) {
       updatedSelectionValuesInFilter(null, null, value);
+      updateTotalRowDistributions();
     }
 
     function changeDepletionOption(value) {
