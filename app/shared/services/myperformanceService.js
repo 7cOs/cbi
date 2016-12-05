@@ -56,21 +56,26 @@ module.exports = /*  @ngInject */
       return sortedList;
     }
 
-    function getFilterParametersForStore(queryParams, timePeriod, metric, topBottomSelection, trendSelection) {
+    function getFilterParametersForStore(queryParams, depletionsTimePeriod, distTimePeriod, metric, topBottomSelection, trendSelection) {
+      // TODO Trend selection sort has not been implemented by API yet and this function can be refactored
       var acctEnum = filtersService.accountFilters.accountMarketsEnums;
       var timePeriodVal = '';
       switch (metric.value) {
         case acctEnum.depletions:
           timePeriodVal = 'DEPL';
+          queryParams.timePeriod = depletionsTimePeriod.name;
           break;
         case acctEnum.distEffective:
           timePeriodVal = 'EPOD';
+          queryParams.timePeriod = distTimePeriod.name;
           break;
         case acctEnum.velocity:
           timePeriodVal = 'VEL';
+          queryParams.timePeriod = distTimePeriod.name;
           break;
         case acctEnum.distSimple:
           timePeriodVal = 'SPOD';
+          queryParams.timePeriod = distTimePeriod.name;
           break;
       }
 
@@ -93,7 +98,6 @@ module.exports = /*  @ngInject */
           break;
       }
       queryParams.metric = timePeriodVal;
-      queryParams.timePeriod = timePeriod.name;
       return queryParams;
     }
 

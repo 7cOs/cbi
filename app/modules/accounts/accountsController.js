@@ -68,6 +68,7 @@ module.exports = /*  @ngInject */
       subAccounts: null,
       stores: null
     };
+    vm.isStoreLevel = false;
     vm.getDataForTopBottom = getDataForTopBottom;
     vm.currentChartData = null;
     vm.getSortedArrIndex = getSortedArrIndex;
@@ -571,24 +572,40 @@ module.exports = /*  @ngInject */
       switch (acctType.value) {
         case accountTypes.distributors:
           currentObj = vm.topBottomData.distributors;
+          vm.isStoreLevel = false;
           break;
         case accountTypes.accounts:
           currentObj = vm.topBottomData.accounts;
+          vm.isStoreLevel = false;
           break;
         case accountTypes.subAccounts:
           currentObj = vm.topBottomData.subAccounts;
+          vm.isStoreLevel = false;
           break;
         case accountTypes.stores:
           currentObj = vm.topBottomData.stores;
+          vm.isStoreLevel = true;
           break;
       }
       return currentObj;
     }
 
+    function getCurrentStoreData() {
+      var params = filtersService.getAppliedFilters('brandSnapshot');
+      var queryParamsForAllSorts = [];
+      for (var sortType in filtersService.accountFilters.valuesVsTrend) {
+        var sortParam = angular.copy(params);
+        myperformanceService.getFilterParametersForStore(sortParam, vm.filterModel.depletionsTimePeriod,  vm.filterModel.distributionTimePeriod, vm.filtersService.model.accountSelected.accountMarkets, sortType, vm.filterModel.trend);
+        queryParamsForAllSorts.push(sortParam);
+      }
+    }
+
     function getDataForTopBottom(topBottomObj, categoryBound) {
-      if (!topBottomObj.performanceData || topBottomObj.isPerformanceDataUpdateRequired === true) {
-        vm.loadingTopBottom = true;
+      if (vm.isStoreLevel === true) {
+        getCurrentStoreData();
+      } else if (!topBottomObj.performanceData || topBottomObj.isPerformanceDataUpdateRequired === true) {
         var params = filtersService.getAppliedFilters('brandSnapshot');
+        vm.loadingTopBottom = true;
         userService.getTopBottomSnapshot(vm.currentTopBottomAcctType, params).then(function(data) {
           vm.currentTopBottomObj.performanceData = data.performance;
           vm.currentTopBottomObj.isPerformanceDataUpdateRequired = false;
