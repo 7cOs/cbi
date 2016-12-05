@@ -134,15 +134,13 @@ module.exports = /*  @ngInject */
     // **************
 
     function init() {
-      var performanceSummaryPromise = userService.getPerformanceSummary();
       var performanceDepletionPromise = userService.getPerformanceDepletion();
       var performanceDistributionPromise = userService.getPerformanceDistribution({'type': 'noencode', 'premiseType': 'off'});
 
       // serial http request -- we need all to complete before running init functions
-      $q.all([performanceSummaryPromise, performanceDepletionPromise, performanceDistributionPromise]).then(function(values) {
-        userService.model.summary = values[0];
-        userService.model.depletion = values[1];
-        userService.model.distribution = values[2];
+      $q.all([performanceDepletionPromise, performanceDistributionPromise]).then(function(values) {
+        userService.model.depletion = values[0];
+        userService.model.distribution = values[1];
 
         // init vars when all requests are finished
         // depletions
