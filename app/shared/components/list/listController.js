@@ -35,7 +35,7 @@ module.exports = /*  @ngInject */
     vm.opportunitiesChevron = false;
     vm.opportunityDismissTrigger = false;
     vm.opportunityShared = false;
-    vm.orderName = ['store.segmentation', 'store.depletionsCurrentYearToDate'];
+    vm.orderName = [];
     vm.reverse = false;
     vm.segmentationChevron = false;
     vm.selected = [];
@@ -762,6 +762,5 @@ module.exports = /*  @ngInject */
     function init() {
       // Initialize the target lists for the user Id
       getTargetLists();
-      ($state.current.name === 'target-list-detail') ? vm.orderName = ['store.segmentation', 'store.depletionsCurrentYearToDate'] : vm.orderName = [];
     }
   };

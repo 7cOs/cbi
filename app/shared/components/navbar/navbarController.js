@@ -296,11 +296,11 @@ module.exports = /*  @ngInject */
     // ***************
 
     function init() {
+      var dateAfter = moment().subtract(30, 'days').format('YYYY-MM-DD');
       userService
-      .getNotifications(userService.model.currentUser.employeeID)
+      .getNotifications(userService.model.currentUser.employeeID, dateAfter)
       .then(function(result) {
         vm.notifications = result;
-        removeNotificationsByDate(vm.notifications);
         setUnreadCount(vm.notifications);
       });
 
@@ -337,20 +337,5 @@ module.exports = /*  @ngInject */
     // Show inputs if a new item is needed
     function showNewRationaleInput(yes)  {
       vm.addNewRationale = yes;
-    }
-
-    // Remove notifications if 30+ days old
-    function removeNotificationsByDate() {
-      var deleteDate = moment().subtract(30, 'days').calendar(),
-          created;
-
-      for (var i = 0; i < vm.notifications.length; i++) {
-        angular.forEach(vm.notifications, function(item, key) {
-          created = moment(item.dateCreated).calendar();
-          if (created < deleteDate) {
-            vm.notifications.splice(key, 1);
-          }
-        });
-      }
     }
   };
