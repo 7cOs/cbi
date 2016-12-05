@@ -82,7 +82,7 @@ v-accordion.styled-list(multiple="" id="opportunities" control="list.accordion" 
             div.address(column='4') {{::opportunity.store.streetAddress | titlecase}} {{::opportunity.store.city | titlecase}}, {{::opportunity.store.state}} {{::opportunity.store.zip | zipcode}}
             .text-center.semi-bold(column='2') {{opportunity.groupedOpportunities.length}} <span class="supporting-text">({{opportunity.store.highImpactOpportunityCount}} High)</span>
             .text-center.semi-bold(column='1') {{::opportunity.store.depletionsCurrentYearToDate | number }}
-            .text-center.semi-bold(column='1' ng-class="list.depletionsVsYaPercent(opportunity) < 100 ? 'negative' : 'positive'") {{::list.depletionsVsYaPercent(opportunity)| number: 0}}%
+            .text-center.semi-bold(column='1' ng-class="list.depletionsVsYaPercent(opportunity) <= 0 ? 'negative' : 'positive'") {{::list.depletionsVsYaPercent(opportunity)| number: 0}}%
             .text-center.semi-bold(column='1') {{::opportunity.store.segmentation}}
       v-pane-content(column='12' class="products" ng-class="{'open' : open}")
         .shadow-wrap.top

@@ -733,7 +733,7 @@ describe('Unit: list controller', function() {
     });
 
     it('should return a positive value', function() {
-      expect(ctrl.depletionsVsYaPercent(opportunityArr[0])).toEqual(200);
+      expect(ctrl.depletionsVsYaPercent(opportunityArr[0])).toEqual(100);
     });
     it('should return a negative value', function() {
       expect(ctrl.depletionsVsYaPercent(opportunityArr[1])).toEqual(-50);

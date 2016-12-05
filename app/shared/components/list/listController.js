@@ -649,10 +649,8 @@ module.exports = /*  @ngInject */
         yearAgoPercentValue = 100;
       } else if (currentYearToDateYearAgo !== 0 && currentYearToDate === 0) {
         yearAgoPercentValue = -100;
-      } else if (currentYearToDateYearAgo > currentYearToDate) {
-        yearAgoPercentValue = (currentYearToDate / currentYearToDateYearAgo) * -100;
-      } else if (currentYearToDateYearAgo <= currentYearToDate) {
-        yearAgoPercentValue = (currentYearToDate / currentYearToDateYearAgo) * 100;
+      } else {
+        yearAgoPercentValue = (currentYearToDate - currentYearToDateYearAgo) / currentYearToDateYearAgo * 100;
       }
 
       if (yearAgoPercentValue > 999) {
