@@ -1,19 +1,21 @@
 describe('[Services.myperformanceService]', function() {
-  var myperformanceService, $filter, filtersService;
+  var myperformanceService, filtersService;
+  // , $filter
 
   beforeEach(function() {
     angular.mock.module('ui.router');
     angular.mock.module('cf.common.services');
     angular.mock.module('cf.common.filters');
 
-    inject(function(_myperformanceService_, _$filter_, _filtersService_) {
+    // _$filter_,
+    inject(function(_myperformanceService_, _filtersService_) {
       myperformanceService = _myperformanceService_;
-      $filter = _$filter_;
+      // $filter = _$filter_;
       filtersService = _filtersService_;
     });
   });
 
-  fit('should exist', function() {
+  it('should exist', function() {
     expect(myperformanceService).toBeDefined();
     expect(filtersService).toBeDefined();
   });

@@ -9,7 +9,8 @@ module.exports = /*  @ngInject */
       updateDataForCurrentTopDownLevel: updateDataForCurrentTopDownLevel,
       initDataForAllTbLevels: initDataForAllTbLevels,
       resetFilterFlags: resetFilterFlags,
-      resetPerformanceDataFlags: resetPerformanceDataFlags
+      resetPerformanceDataFlags: resetPerformanceDataFlags,
+      getFilterParametersForStore: getFilterParametersForStore
     };
 
     return service;
@@ -48,6 +49,47 @@ module.exports = /*  @ngInject */
         sortedList.bottomValues = tempArr;
       }
       return sortedList;
+    }
+
+    function getFilterParametersForStore(queryParams, timePeriod, metric, topBottomSelection, trendSelection) {
+      var acctEnum = filtersService.accountFilters.accountMarketsEnums;
+      var timePeriodVal = '';
+      switch (metric.value) {
+        case acctEnum.depletions:
+          timePeriodVal = 'DEPL';
+          break;
+        case acctEnum.distEffective:
+          timePeriodVal = 'EPOD';
+          break;
+        case acctEnum.velocity:
+          timePeriodVal = 'VEL';
+          break;
+        case acctEnum.distSimple:
+          timePeriodVal = 'SPOD';
+          break;
+      }
+
+      switch (topBottomSelection.value) {
+        case filtersService.accountFilters.topBottomSortTypeEnum.topValues:
+          queryParams.top = true;
+          queryParams.trend = false;
+          break;
+        case filtersService.accountFilters.topBottomSortTypeEnum.topTrends:
+          queryParams.top = true;
+          queryParams.trend = true;
+          break;
+        case filtersService.accountFilters.topBottomSortTypeEnum.bottomValues:
+          queryParams.top = false;
+          queryParams.trend = false;
+          break;
+        case filtersService.accountFilters.topBottomSortTypeEnum.bottomTrends:
+          queryParams.top = false;
+          queryParams.trend = true;
+          break;
+      }
+      queryParams.metric = timePeriodVal;
+      queryParams.timePeriod = timePeriod.name;
+      return queryParams;
     }
 
     function getTopBottomDataSorted(topBottomData, trendType, categoryType) {

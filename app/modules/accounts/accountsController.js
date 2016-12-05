@@ -67,6 +67,7 @@ module.exports = /*  @ngInject */
       subAccounts: null,
       stores: null
     };
+    vm.getDataForTopBottom = getDataForTopBottom;
     vm.currentChartData = null;
     vm.getSortedArrIndex = getSortedArrIndex;
     vm.currentTopBottomObj = null;
