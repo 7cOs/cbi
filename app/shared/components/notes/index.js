@@ -134,7 +134,7 @@ function NotesController($scope, $state, $mdDialog, $timeout, notesService, Uplo
   function openNotes(ev) {
     var parentEl = angular.element(document.body);
     $mdDialog.show({
-      clickOutsideToClose: true,
+      clickOutsideToClose: false,
       parent: parentEl,
       scope: $scope.$new(),
       targetEvent: ev
