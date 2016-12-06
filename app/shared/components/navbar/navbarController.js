@@ -166,12 +166,16 @@ module.exports = /*  @ngInject */
       }
     }
 
-    function modalDuplicateOpportunity() {
+    function modalDuplicateOpportunity(error) {
       $mdDialog.show({
         clickOutsideToClose: false,
         scope: $scope.$new(),
         templateUrl: './app/shared/components/navbar/modal-duplicate-opportunity.html'
       });
+
+      if (error.status === 500) {
+        vm.generalError = true;
+      }
     }
 
     function closeModalDuplicateOpportunity() {
@@ -268,7 +272,7 @@ module.exports = /*  @ngInject */
           toastService.showToast('added');
         }, function(error) {
           console.log(error);
-          modalDuplicateOpportunity();
+          modalDuplicateOpportunity(error);
           vm.duplicateOpportunity = opportunity;
         });
 
