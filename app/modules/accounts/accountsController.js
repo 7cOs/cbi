@@ -78,7 +78,6 @@ module.exports = /*  @ngInject */
     vm.currentChartData = null;
     vm.getSortedArrIndex = getSortedArrIndex;
     vm.currentTopBottomObj = null;
-    vm.currentTopBottomAcctType = null;
     vm.currentTopBottomDataForFilter = null;
     vm.getValueBoundForAcctType = getValueBoundForAcctType;
     vm.setTopBottomAcctTypeSelection = setTopBottomAcctTypeSelection;
@@ -242,7 +241,6 @@ module.exports = /*  @ngInject */
         if (accountObj.value === filtersService.accountFilters.accountMarketsEnums.distSimple && vm.brandSelectedIndex === 1) {
           isOptionHidden = true;
         } else if (accountObj.value === filtersService.accountFilters.accountMarketsEnums.distEffective && vm.brandSelectedIndex === 0) {
-          console.log('Option Hidden', accountObj.value);
           isOptionHidden = true;
         }
       }
@@ -563,9 +561,8 @@ module.exports = /*  @ngInject */
         vm.currentTopBottomAcctType = currentAcctType;
         vm.currentTopBottomObj = getCurrentTopBottomObject(currentAcctType);
         var propertyBoundToTable = vm.filtersService.model.accountSelected.accountMarkets;
-        getDataForTopBottom(vm.currentTopBottomObj, propertyBoundToTable);
         vm.marketSelectedIndex = vm.currentTopBottomAcctType.value - 1;
-        // vm.marketSelectedIndex++;
+        getDataForTopBottom(vm.currentTopBottomObj, propertyBoundToTable);
       }
     }
 
@@ -631,9 +628,11 @@ module.exports = /*  @ngInject */
       }
       $q.all(promiseArr).then(function(data) {
         if (data) {
-          vm.loadingTopBottom = false;
           vm.currentTopBottomObj = myperformanceService.setStoreTopBottomData(data, vm.currentTopBottomObj, depletionOption,  distirbutionOption, acctMarketSelection, vm.filterModel.trend);
           vm.marketSelectedIndex = vm.currentTopBottomAcctType.value - 1;
+          $timeout(function() {
+            vm.loadingTopBottom = false;
+          }, 300);
         }
       });
     }
@@ -648,15 +647,20 @@ module.exports = /*  @ngInject */
           vm.currentTopBottomObj.performanceData = data.performance;
           vm.currentTopBottomObj.isPerformanceDataUpdateRequired = false;
           vm.currentTopBottomObj = myperformanceService.updateDataForCurrentTopDownLevel(vm.currentTopBottomObj, categoryBound, vm.filterModel.depletionsTimePeriod, vm.filterModel.distributionTimePeriod, vm.filterModel.trend);
-          vm.loadingTopBottom = false;
+          $timeout(function() {
+            vm.loadingTopBottom = false;
+          }, 300);
         });
       } else {
         if (!topBottomObj.timePeriodFilteredData || topBottomObj.isFilterUpdateRequired === true) {
           vm.loadingTopBottom = true;
           vm.currentTopBottomObj = myperformanceService.updateDataForCurrentTopDownLevel(vm.currentTopBottomObj, categoryBound, vm.filterModel.depletionsTimePeriod, vm.filterModel.distributionTimePeriod, vm.filterModel.trend);
-          vm.loadingTopBottom = false;
+          $timeout(function() {
+            vm.loadingTopBottom = false;
+          }, 300);
         }
       }
+      console.log('TopBottomData', vm.currentTopBottomObj);
     }
 
     function getValueBoundForAcctType(measures) {
@@ -671,26 +675,20 @@ module.exports = /*  @ngInject */
       }
     }
 
-    function  getSortedArrIndex(data) {
+    function  getSortedArrIndex() {
+      var data = vm.currentTopBottomObj;
       if (data && data.topBottomIndices) {
         var sortCategory = vm.filtersService.model.valuesVsTrend.value;
         var result;
         switch (sortCategory) {
           case filtersService.accountFilters.topBottomSortTypeEnum.topValues:
-<<<<<<< 7227fda0068a1199107796c9514608816cde4852
-            result = data.topBottomIndices.topValues;
-            vm.currentChartData = data.chartData.topValues;
-=======
             if (data.topBottomIndices.topValues) {
               result = data.topBottomIndices.topValues;
               vm.currentChartData = data.chartData.topValues;
             }
-            // console.log(vm.currentChartData);
->>>>>>> MyPerformance service fixed for store
             break;
           case filtersService.accountFilters.topBottomSortTypeEnum.topTrends:
             if (data.topBottomIndices.topTrends) {
-              console.log(data.topBottomIndices.topTrends);
               result = data.topBottomIndices.topTrends;
               vm.currentChartData = data.chartData.topTrends;
             }
