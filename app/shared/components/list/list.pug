@@ -48,23 +48,24 @@ v-accordion.styled-list(multiple="" id="opportunities" control="list.accordion" 
     div.more-wrapper(ng-if="!list.pageName()")
     div.checkbox-sibling(column='12')
       div(column='3')
-        label(ng-click="list.sortBy('store')" ng-class="{ 'header-bold' : list.filtersService.model.appliedFilter.sort.sortArr[0].str === 'store' || list.orderName[0] === 'store.name' || list.orderName[0] === '-store.name'}").sort
+        label(ng-click="list.sortBy('store');" ng-class="{ 'header-bold' : list.filtersService.model.appliedFilter.sort.sortArr[0].str === 'store' || list.orderName[0] === 'store.name' || list.orderName[0] === '-store.name'}").sort
           | Store / Number
-          span(ng-class="{'chevron-up-small' : (!list.filtersService.model.appliedFilter.sort.sortArr[0].asc && list.filtersService.model.appliedFilter.sort.sortArr[0].str === 'store') || list.ascending && list.orderName[0] === 'store.name'}").chevron-down-small
+          span(ng-class="{'chevron-up-small' : (list.filtersService.model.appliedFilter.sort.sortArr[0].asc && list.filtersService.model.appliedFilter.sort.sortArr[0].str === 'store') || list.ascending && list.orderName[0] === 'store.name'}").chevron-down-small
       div(column='4')
         label Address
       div.text-center(column='2')
-        label Opportunities
+        label(ng-click="list.sortBy('opportunity');" ng-class="{'header-bold': list.filtersService.model.appliedFilter.sort.sortArr[0].str === 'opportunity' || list.orderName[0] === '-groupedOpportunities.length'}").sort Opportunities
+          span.chevron-down-small
       div(column='1')
-        label(ng-click="list.sortBy('depletions')" ng-class="{ 'header-bold' : list.filtersService.model.appliedFilter.sort.sortArr[0].str === 'depletions' || list.orderName[0] === 'store.depletionsCurrentYearToDate' || list.orderName[0] === '-store.depletionsCurrentYearToDate'}").sort
+        label(ng-click="list.sortBy('depletions');" ng-class="{ 'header-bold' : list.filtersService.model.appliedFilter.sort.sortArr[0].str === 'depletions' || list.orderName[0] === 'store.depletionsCurrentYearToDate' || list.orderName[0] === '-store.depletionsCurrentYearToDate'}").sort
           | Depletions CYTD
-          span(ng-class="{'chevron-up-small' : (!list.filtersService.model.appliedFilter.sort.sortArr[0].asc && list.filtersService.model.appliedFilter.sort.sortArr[0].str === 'depletions') || list.ascending && list.orderName[0] === 'store.depletionsCurrentYearToDate'}").chevron-down-small
+          span(ng-class="{'chevron-up-small' : (list.filtersService.model.appliedFilter.sort.sortArr[0].asc && list.filtersService.model.appliedFilter.sort.sortArr[0].str === 'depletions') || list.ascending && list.orderName[0] === 'store.depletionsCurrentYearToDate'}").chevron-down-small
       div(column='1')
         label vs Ya%
       div(column='1')
-        label(ng-click="list.sortBy('segmentation')" ng-class="{ 'header-bold' : list.filtersService.model.appliedFilter.sort.sortArr[0].str === 'segmentation' || list.orderName[0] === 'store.segmentation' || list.orderName[0] === '-store.segmentation'}").sort
+        label(ng-click="list.sortBy('segmentation');" ng-class="{ 'header-bold' : list.filtersService.model.appliedFilter.sort.sortArr[0].str === 'segmentation' || list.orderName[0] === 'store.segmentation' || list.orderName[0] === '-store.segmentation'}").sort
           | Segmentation
-          span(ng-class="{'chevron-up-small' : (!list.filtersService.model.appliedFilter.sort.sortArr[0].asc && list.filtersService.model.appliedFilter.sort.sortArr[0].str === 'segmentation') || list.ascending && list.orderName[0] === 'store.segmentation'}").chevron-down-small
+          span(ng-class="{'chevron-up-small' : (list.filtersService.model.appliedFilter.sort.sortArr[0].asc && list.filtersService.model.appliedFilter.sort.sortArr[0].str === 'segmentation') || list.ascending && list.orderName[0] === 'store.segmentation'}").chevron-down-small
   div(ng-if="!list.opportunitiesService.model.filterApplied && list.opportunitiesService.model.opportunities.length === 0").no-opportunities
     h4 To get started, select some filters!
     p Narrow your opportunities by selecting a <strong>Retailer</strong> and/or a <strong>Distributor</strong>.
@@ -82,7 +83,7 @@ v-accordion.styled-list(multiple="" id="opportunities" control="list.accordion" 
             div.address(column='4') {{::opportunity.store.streetAddress | titlecase}} {{::opportunity.store.city | titlecase}}, {{::opportunity.store.state}} {{::opportunity.store.zip | zipcode}}
             .text-center.semi-bold(column='2') {{opportunity.groupedOpportunities.length}} <span class="supporting-text">({{opportunity.store.highImpactOpportunityCount}} High)</span>
             .text-center.semi-bold(column='1') {{::opportunity.store.depletionsCurrentYearToDate | number }}
-            .text-center.semi-bold(column='1' ng-class="list.depletionsVsYaPercent(opportunity) < 100 ? 'negative' : 'positive'") {{::list.depletionsVsYaPercent(opportunity)| number: 0}}%
+            .text-center.semi-bold(column='1' ng-class="list.depletionsVsYaPercent(opportunity) <= 0 ? 'negative' : 'positive'") {{::list.depletionsVsYaPercent(opportunity)| number: 0}}%
             .text-center.semi-bold(column='1') {{::opportunity.store.segmentation}}
       v-pane-content(column='12' class="products" ng-class="{'open' : open}")
         .shadow-wrap.top
