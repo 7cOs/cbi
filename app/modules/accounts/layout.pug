@@ -27,7 +27,7 @@ notes
     div.trend(column='2')
       label Trend
       md-radio-group(ng-model="a.filterModel.trend")
-        md-radio-button(ng-repeat="filter in a.filtersService.model.trend" class="md-primary" ng-value="filter" aria-label="Trend") {{filter.name}}
+        md-radio-button(ng-repeat="filter in a.filtersService.model.trend" class="md-primary" ng-value="filter" aria-label="Trend" ng-if = "a.checkForStoreLevel(filter)") {{filter.name}}
     div(column='3')
       label Ending Time Period
       md-radio-group(ng-model="a.filterModel.endingTimePeriod")

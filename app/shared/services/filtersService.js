@@ -186,11 +186,21 @@ module.exports = /*  @ngInject */
       trend: [
         {
           name: 'vs YA',
-          value: 1
+          value: 1,
+          showInStoreLevel: true,
+          showInOtherLevels: true
         },
         {
           name: 'vs ABP',
-          value: 2
+          value: 2,
+          showInStoreLevel: false,
+          showInOtherLevels: true
+        },
+        {
+          name: 'vs Similar Stores',
+          value: 2,
+          showInStoreLevel: true,
+          showInOtherLevels: false
         }
       ]
     };

@@ -68,6 +68,7 @@ module.exports = /*  @ngInject */
       subAccounts: null,
       stores: null
     };
+    vm.checkForStoreLevel = checkForStoreLevel;
     vm.isStoreLevel = false;
     vm.getDataForTopBottom = getDataForTopBottom;
     vm.currentChartData = null;
@@ -691,9 +692,6 @@ module.exports = /*  @ngInject */
 >>>>>>> MyPerformance service fixed for store
             break;
           case filtersService.accountFilters.topBottomSortTypeEnum.topTrends:
-            if (!data.topBottomIndices) {
-              console.log('Null data');
-            }
             if (data.topBottomIndices.topTrends) {
               console.log(data.topBottomIndices.topTrends);
               result = data.topBottomIndices.topTrends;
@@ -715,6 +713,20 @@ module.exports = /*  @ngInject */
         }
         return result;
       }
+    }
+
+    function checkForStoreLevel(trendSelection) {
+      var isVisible = true;
+      if (vm.isStoreLevel === true) {
+        if (trendSelection.showInStoreLevel === false && trendSelection.showInOtherLevels === true) {
+          isVisible = false;
+        }
+      } else {
+        if (trendSelection.showInStoreLevel === true && trendSelection.showInOtherLevels === false) {
+          isVisible = false;
+        }
+      }
+      return isVisible;
     }
 
     function onFilterPropertiesChange(newValues, oldValues) {
