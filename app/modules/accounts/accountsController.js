@@ -75,7 +75,6 @@ module.exports = /*  @ngInject */
     vm.currentTopBottomAcctType = null;
     vm.currentTopBottomDataForFilter = null;
     vm.getValueBoundForAcctType = getValueBoundForAcctType;
-    vm.getSortedArrIndex = getSortedArrIndex;
     vm.setTopBottomAcctTypeSelection = setTopBottomAcctTypeSelection;
     vm.getCurrentChartData = getCurrentChartData;
     vm.topBottomInitData = true;
@@ -432,12 +431,20 @@ module.exports = /*  @ngInject */
     }
 
     function init() {
-      // reset all chips and filters on page init
-      chipsService.resetChipsFilters(chipsService.model);
+      // reset all chips and filters on page init if no brand is specified
+      if (!$state.params.applyFiltersOnLoad) {
+        chipsService.resetChipsFilters(chipsService.model);
+      } else {
+        vm.topBottomInitData = false;
+        vm.brandIdSelected = filtersService.model.selected.brand[0];
+        vm.brandWidgetTitle = $state.params.pageData.brandTitle;
+        chipsService.addAutocompleteChip(vm.brandWidgetTitle, 'brand', false);
+      }
+
       setDefaultDropDownOptions();
       setDefaultFilterOptions();
       var params = filtersService.getAppliedFilters('brandSnapshot');
-      vm.filtersService.model.valuesVsTrend =  vm.filtersService.accountFilters.valuesVsTrend[1];
+      vm.filtersService.model.valuesVsTrend = vm.filtersService.accountFilters.valuesVsTrend[1];
 
       var promiseArr = [
         userService.getPerformanceDepletion(),
@@ -464,6 +471,10 @@ module.exports = /*  @ngInject */
         }
         vm.loadingBrandSnapshot = false;
         vm.loadingTopBottom = false;
+
+        // reset state params
+        $state.params.applyFiltersOnLoad = false;
+        $state.params.resetFiltersOnLoad = true;
       });
     }
 
@@ -583,7 +594,6 @@ module.exports = /*  @ngInject */
           vm.currentTopBottomObj.isPerformanceDataUpdateRequired = false;
           vm.currentTopBottomObj = myperformanceService.updateDataForCurrentTopDownLevel(vm.currentTopBottomObj, categoryBound, vm.filterModel.depletionsTimePeriod, vm.filterModel.distributionTimePeriod, vm.filterModel.trend);
           vm.loadingTopBottom = false;
-          // console.log('TopBottomData', vm.currentTopBottomObj);
         });
       } else {
         if (!topBottomObj.timePeriodFilteredData || topBottomObj.isFilterUpdateRequired === true) {
@@ -615,13 +625,12 @@ module.exports = /*  @ngInject */
 
     function  getSortedArrIndex(data) {
       if (data && data.topBottomIndices) {
-        var sortCategory = vm.filtersService.model.selected.valuesVsTrend.value;
+        var sortCategory = vm.filtersService.model.valuesVsTrend.value;
         var result;
         switch (sortCategory) {
           case filtersService.accountFilters.topBottomSortTypeEnum.topValues:
             result = data.topBottomIndices.topValues;
             vm.currentChartData = data.chartData.topValues;
-            // console.log(vm.currentChartData);
             break;
           case filtersService.accountFilters.topBottomSortTypeEnum.topTrends:
             result = data.topBottomIndices.topTrends;
