@@ -226,13 +226,23 @@ module.exports = /*  @ngInject */
     ** @param {String} property - property to fetch from object depletions, depletionsTrend
     ** @param {String} timePeriod - property to get from filterModel
     */
-    function removeDistOptionsBasedOnView(accountBrandObj) {
+    function removeDistOptionsBasedOnView(accountObj, isBrand) {
       var isOptionHidden = false;
-      if (accountBrandObj.value === 1 && vm.brandSelectedIndex === 1) {
-        isOptionHidden = true;
-      } else if (accountBrandObj.value === 2 && vm.brandSelectedIndex === 0) {
-        isOptionHidden = true;
+      if (isBrand === true) {
+        if (accountObj.value === 1 && vm.brandSelectedIndex === 1) {
+          isOptionHidden = true;
+        } else if (accountObj.value === 2 && vm.brandSelectedIndex === 0) {
+          isOptionHidden = true;
+        }
+      } else {
+        if (accountObj.value === filtersService.accountFilters.accountMarketsEnums.distSimple && vm.brandSelectedIndex === 1) {
+          isOptionHidden = true;
+        } else if (accountObj.value === filtersService.accountFilters.accountMarketsEnums.distEffective && vm.brandSelectedIndex === 0) {
+          console.log('Option Hidden', accountObj.value);
+          isOptionHidden = true;
+        }
       }
+
       return isOptionHidden;
     }
 

@@ -91,7 +91,7 @@ div(row)
     .widget-header
       .dropdown-filter
         md-select(ng-model="a.filtersService.model.accountSelected.accountBrands" md-on-open="a.openSelect(true)" md-on-close="a.openSelect(false);" aria-label="Account Brands Filter" placeholder="Distribution (simple)")
-          md-option(ng-repeat="filter in a.filtersService.accountFilters.accountBrands" ng-if="!a.removeDistOptionsBasedOnView(filter)" aria-label="{{filter.name}}" ng-value="filter") {{filter.name}}
+          md-option(ng-repeat="filter in a.filtersService.accountFilters.accountBrands" ng-if="!a.removeDistOptionsBasedOnView(filter, true)" aria-label="{{filter.name}}" ng-value="filter") {{filter.name}}
       span.back-chevron(ng-if="a.brandSelectedIndex === 1" ng-click="a.prevTab()")
       p.brands {{a.brandWidgetTitle || 'All Brands'}}
     .widget-content
@@ -195,13 +195,14 @@ div(row)
                 //- Distirbution Trend Effective
                 td(ng-class="a.getClassBasedOnValue(a.getTrendValues(item.measures, 'distributionsEffective', 'distributionTimePeriod').value)" ng-if="a.filtersService.model.accountSelected.accountBrands.value === a.filtersService.accountFilters.accountBrandEnum.distirbutionEffective") <span ng-bind="a.getTrendValues(item.measures, 'distributionsEffective', 'distributionTimePeriod').displayValue"></span>
 
+  //- Top Bottom Section Starts
   div.scorecard-chart(column='6')
     .loader-wrap.inline(ng-if="a.loadingTopBottom" ng-class="{'active': a.loadingTopBottom}")
       loader
     .widget-header
       .dropdown-filter.narrow
         md-select(ng-model="a.filtersService.model.accountSelected.accountMarkets" md-on-open="a.openSelect(true)" md-on-close="a.openSelect(false)" aria-label="Account Markets Filter")
-          md-option(ng-repeat="filter in a.filtersService.accountFilters.accountMarkets" aria-label="{{filter.name}}" ng-value="filter") {{filter.name}}
+          md-option(ng-repeat="filter in a.filtersService.accountFilters.accountMarkets" aria-label="{{filter.name}}" ng-value="filter" ng-if="!a.removeDistOptionsBasedOnView(filter, false)") {{filter.name}}
       .header-selector
         md-select.market(ng-model="a.filtersService.model.valuesVsTrend" md-on-open="a.openSelect(true)" md-on-close="a.openSelect(false)" placeholder="Top 10 (Values)" aria-label="Values versus Trends Filter")
           md-option(ng-repeat="filter in a.filtersService.accountFilters.valuesVsTrend track by filter.value" aria-label="{{filter.name}}" ng-value="filter") {{filter.name}}

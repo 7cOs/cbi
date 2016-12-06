@@ -304,6 +304,12 @@ module.exports = /*  @ngInject */
         'distirbutionEffective': 2,
         'velocity': 3
       },
+      accountMarketsEnum: {
+        'depletions': 1,
+        'distirbutionSimple': 2,
+        'distirbutionEffective': 3,
+        'velocity': 4
+      },
       topBottomSortTypeEnum: {
         'topValues': 1,
         'topTrends': 2,
