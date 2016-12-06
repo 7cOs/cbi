@@ -466,9 +466,10 @@ module.exports = /*  @ngInject */
       // TODO
     }
 
-    function getTopBottomSnapshot(snapshotType, params) {
+    function getTopBottomSnapshot(snapshotType, params, additionalQueryParams) {
       var snapshotPromise = $q.defer(),
           url, baseUrl = '/api/users/' + service.model.currentUser.employeeID;
+      params.type = 'topBottom';
 
       switch (snapshotType.value) {
         case 1:
@@ -484,9 +485,9 @@ module.exports = /*  @ngInject */
 
         case 4:
           baseUrl += '/performance/topBottomSnapshot/stores';
+          params.type = 'store';
           break;
       }
-      params.type = 'topBottom';
       url = apiHelperService.request(baseUrl, params);
       $http.get(url)
         .then(getTopBottomSnapshotSuccess)

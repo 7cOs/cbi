@@ -2,6 +2,7 @@
 
 module.exports = /*  @ngInject */
   function myperformanceService($filter, filtersService) {
+    var queryLimit = 10;
 
     var service = {
       filter: getFilterData,
@@ -15,7 +16,8 @@ module.exports = /*  @ngInject */
       initDataForAllTbLevels: initDataForAllTbLevels,
       resetFilterFlags: resetFilterFlags,
       resetPerformanceDataFlags: resetPerformanceDataFlags,
-      getFilterParametersForStore: getFilterParametersForStore
+      getFilterParametersForStore: getFilterParametersForStore,
+      setStoreTopBottomData: setStoreTopBottomData
     };
 
     return service;
@@ -103,11 +105,11 @@ module.exports = /*  @ngInject */
 
     function getTopBottomDataSorted(topBottomData, trendType, categoryType) {
       var sortedList = {
-            topValues: [],
-            bottomValues: [],
-            topTrends: [],
-            bottomTrends: []
-          }, queryLimit = 10;
+        topValues: [],
+        bottomValues: [],
+        topTrends: [],
+        bottomTrends: []
+      };
       var valuesSort = getSortedObjects(topBottomData, queryLimit, categoryType.propertyName);
       var trendPropertyName = filtersService.trendPropertyNames[categoryType.propertyName][trendType.value - 1];
 
@@ -165,6 +167,35 @@ module.exports = /*  @ngInject */
       // console.log('currentTbData', currentTbData);
       setUpdatedDataIndicator(currentTbData, false, false);
       return currentTbData;
+    }
+
+    function insertNumbersInRange(lowerIndex, higherIndex) {
+      var arr = [];
+      for (var i = lowerIndex; i < higherIndex; i++) {
+        arr.push(i);
+      }
+      return arr;
+    }
+
+    function setStoreTopBottomData(data, storeTopBottomObj, depOption, distOption, accountMarketSelection, trendSelection) {
+      var mergedDataForAllTopDownSorts = [];
+      mergedDataForAllTopDownSorts = data[0].performance.concat(data[1].performance, data[2].performance, data[3].performance);
+      storeTopBottomObj.performanceData = mergedDataForAllTopDownSorts;
+      var timePeriodFilteredData = getFilteredTopBottomData(storeTopBottomObj, accountMarketSelection, depOption, distOption);
+      storeTopBottomObj.timePeriodFilteredData = timePeriodFilteredData;
+      storeTopBottomObj.performanceData = storeTopBottomObj;
+      storeTopBottomObj.topBottomIndices = {
+        topValues: [],
+        topTrends: [],
+        bottomValues: [],
+        bottomTrends: []
+      };
+      storeTopBottomObj.topBottomIndices.topValues = insertNumbersInRange(0, queryLimit);
+      storeTopBottomObj.topBottomIndices.topTrends = insertNumbersInRange(queryLimit, queryLimit * 2);
+      storeTopBottomObj.topBottomIndices.bottomValues = insertNumbersInRange(queryLimit * 2, queryLimit * 3);
+      storeTopBottomObj.topBottomIndices.bottomTrends = insertNumbersInRange(queryLimit * 3, queryLimit * 4);
+      getChartData(storeTopBottomObj, accountMarketSelection, trendSelection);
+      return storeTopBottomObj;
     }
 
     function initDataForAllTbLevels(tbData) {

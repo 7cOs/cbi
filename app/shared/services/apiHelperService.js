@@ -33,14 +33,24 @@ module.exports = /*  @ngInject */
       if (obj.type && obj.type === 'store') {
         // remove type obj
         delete obj.type;
-
-        for (var key1 in obj) {
-          queryParams += key1 + '=' + obj[key1];
+        var filterParams = obj.filterQueryParams;
+        var otherQueryParams = obj.otherQueryParams;
+        var filterQueryParams = '';
+        z = otherQueryParams.length;
+        queryParams += '?';
+        for (var key1 in otherQueryParams) {
+          queryParams += key1 + '=' + encodeURIComponent(otherQueryParams[key1]);
           if (i !== (z - 1)) queryParams += '&';
           i++;
         }
+        delete filterParams.type;
 
-        return '?' + encodeURIComponent(queryParams);
+        i = 0;
+        z = getKeyLength(filterParams) - 1;
+        filterQueryParams += parseAppliedFilters(filterParams, i, z);
+        queryParams += 'filter=' + encodeURIComponent(filterQueryParams);
+        console.log('queryParams', queryParams);
+        return queryParams;
       } else if (obj.type && obj.type === 'opportunities') {
         var p = applyPage(),
             s = applySort(),
@@ -56,7 +66,6 @@ module.exports = /*  @ngInject */
         filtersService.model.appliedFilter.appliedFilter = queryParams;
 
         queryStr = '?' + 'limit=10' + '&ignoreDismissed=true' + s + p + '&filter=' + encodeURIComponent(filtersService.model.appliedFilter.appliedFilter);
-
         return queryStr;
       } else if (obj.type && obj.type === 'targetLists') {
         delete obj.type;

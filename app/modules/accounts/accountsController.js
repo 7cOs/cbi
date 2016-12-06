@@ -591,13 +591,36 @@ module.exports = /*  @ngInject */
     }
 
     function getCurrentStoreData() {
+      vm.loadingTopBottom = true;
       var params = filtersService.getAppliedFilters('brandSnapshot');
-      var queryParamsForAllSorts = [];
-      for (var sortType in filtersService.accountFilters.valuesVsTrend) {
-        var sortParam = angular.copy(params);
-        myperformanceService.getFilterParametersForStore(sortParam, vm.filterModel.depletionsTimePeriod,  vm.filterModel.distributionTimePeriod, vm.filtersService.model.accountSelected.accountMarkets, sortType, vm.filterModel.trend);
-        queryParamsForAllSorts.push(sortParam);
+      var depletionOption = vm.filterModel.depletionsTimePeriod;
+      var distirbutionOption = vm.filterModel.distributionTimePeriod;
+      var acctMarketSelection = vm.filtersService.model.accountSelected.accountMarkets;
+
+      var promiseArr = [], queryParamsForAllSorts = [];
+      angular.forEach(filtersService.accountFilters.valuesVsTrend, function (sortType) {
+        var sortParams = {
+          filterQueryParams: params,
+          otherQueryParams: {
+            timePeriod: '',
+            top: false,
+            trend: false,
+            metric: ''
+          }
+        };
+        myperformanceService.getFilterParametersForStore(sortParams.otherQueryParams, depletionOption,  distirbutionOption, acctMarketSelection, sortType, vm.filterModel.trend);
+        queryParamsForAllSorts.push(sortParams);
+      });
+      for (var i = 0; i < queryParamsForAllSorts.length; i++) {
+        promiseArr.push(userService.getTopBottomSnapshot(vm.currentTopBottomAcctType, queryParamsForAllSorts[i]));
       }
+      $q.all(promiseArr).then(function(data) {
+        if (data) {
+          vm.loadingTopBottom = false;
+          vm.currentTopBottomObj = myperformanceService.setStoreTopBottomData(data, vm.currentTopBottomObj, depletionOption,  distirbutionOption, acctMarketSelection, vm.filterModel.trend);
+          vm.marketSelectedIndex = vm.currentTopBottomAcctType.value - 1;
+        }
+      });
     }
 
     function getDataForTopBottom(topBottomObj, categoryBound) {
@@ -646,20 +669,38 @@ module.exports = /*  @ngInject */
         var result;
         switch (sortCategory) {
           case filtersService.accountFilters.topBottomSortTypeEnum.topValues:
+<<<<<<< 7227fda0068a1199107796c9514608816cde4852
             result = data.topBottomIndices.topValues;
             vm.currentChartData = data.chartData.topValues;
+=======
+            if (data.topBottomIndices.topValues) {
+              result = data.topBottomIndices.topValues;
+              vm.currentChartData = data.chartData.topValues;
+            }
+            // console.log(vm.currentChartData);
+>>>>>>> MyPerformance service fixed for store
             break;
           case filtersService.accountFilters.topBottomSortTypeEnum.topTrends:
-            result = data.topBottomIndices.topTrends;
-            vm.currentChartData = data.chartData.topTrends;
+            if (!data.topBottomIndices) {
+              console.log('Null data');
+            }
+            if (data.topBottomIndices.topTrends) {
+              console.log(data.topBottomIndices.topTrends);
+              result = data.topBottomIndices.topTrends;
+              vm.currentChartData = data.chartData.topTrends;
+            }
             break;
           case filtersService.accountFilters.topBottomSortTypeEnum.bottomValues:
-            result = data.topBottomIndices.bottomValues;
-            vm.currentChartData = data.chartData.bottomValues;
+            if (data.topBottomIndices.bottomValues) {
+              result = data.topBottomIndices.bottomValues;
+              vm.currentChartData = data.chartData.bottomValues;
+            }
             break;
           case filtersService.accountFilters.topBottomSortTypeEnum.bottomTrends:
-            result = data.topBottomIndices.bottomTrends;
-            vm.currentChartData = data.chartData.bottomTrends;
+            if (data.topBottomIndices.bottomTrends) {
+              result = data.topBottomIndices.bottomTrends;
+              vm.currentChartData = data.chartData.bottomTrends;
+            }
             break;
         }
         return result;
