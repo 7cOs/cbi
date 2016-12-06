@@ -68,6 +68,10 @@ module.exports = /*  @ngInject */
       subAccounts: null,
       stores: null
     };
+    vm.distOptionChanged = distOptionChanged;
+    vm.acctMarketChanged = acctMarketChanged;
+    vm.depletionOptionChanged = depletionOptionChanged;
+    vm.trendOptionChanged = trendOptionChanged;
     vm.checkForStoreLevel = checkForStoreLevel;
     vm.isStoreLevel = false;
     vm.getDataForTopBottom = getDataForTopBottom;
@@ -475,8 +479,9 @@ module.exports = /*  @ngInject */
           vm.currentTopBottomObj.performanceData = data[3].performance;
           vm.currentTopBottomObj.isPerformanceDataUpdateRequired = false;
           getDataForTopBottom(vm.currentTopBottomObj, categoryBound);
-          $scope.$watchGroup(['a.filtersService.model.accountSelected.accountMarkets', 'a.filterModel.depletionsTimePeriod',
-          'a.filterModel.distributionTimePeriod', 'a.filterModel.trend'], onFilterPropertiesChange);
+          // $scope.$watchGroup(['a.filtersService.model.accountSelected.accountMarkets', 'a.filterModel.depletionsTimePeriod',
+          // 'a.filterModel.distributionTimePeriod', 'a.filterModel.trend'], onFilterPropertiesChange);
+          //
           if (vm.topBottomInitData === true) {
             vm.topBottomInitData = false;
           }
@@ -729,7 +734,28 @@ module.exports = /*  @ngInject */
       return isVisible;
     }
 
-    function onFilterPropertiesChange(newValues, oldValues) {
+    // All these functions require  change in the filter values bound to top bottom data
+    function distOptionChanged(selectedVal) {
+      vm.filterModel.distributionTimePeriod = selectedVal;
+      onFilterPropertiesChange();
+    }
+
+    function depletionOptionChanged(selectedVal) {
+      vm.filterModel.depletionsTimePeriod = selectedVal;
+      onFilterPropertiesChange();
+    }
+
+    function trendOptionChanged(selectedVal) {
+      vm.filterModel.trend = selectedVal;
+      onFilterPropertiesChange();
+    }
+
+    function acctMarketChanged(selectedVal) {
+      vm.filtersService.model.accountSelected.accountMarkets = selectedVal;
+      onFilterPropertiesChange();
+    }
+
+    function onFilterPropertiesChange() {
       if (vm.topBottomInitData === false) {
         myperformanceService.resetFilterFlags(vm.topBottomData);
         var categoryBound = vm.filtersService.model.accountSelected.accountMarkets;
