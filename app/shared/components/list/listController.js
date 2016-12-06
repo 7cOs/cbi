@@ -482,10 +482,12 @@ module.exports = /*  @ngInject */
         vm.orderName = [];
         if (vm.ascending) {
           if (name === 'store') vm.orderName = ['store.name'];
+          if (name === 'opportunity') vm.orderName = ['-groupedOpportunities.length'];
           if (name === 'depletions') vm.orderName = ['store.depletionsCurrentYearToDate'];
           if (name === 'segmentation') vm.orderName = ['store.segmentation'];
         } else {
           if (name === 'store') vm.orderName = ['-store.name'];
+          if (name === 'opportunity') vm.orderName = ['-groupedOpportunities.length'];
           if (name === 'depletions') vm.orderName = ['-store.depletionsCurrentYearToDate'];
           if (name === 'segmentation') vm.orderName = ['-store.segmentation'];
         }

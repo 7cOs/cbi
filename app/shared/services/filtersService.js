@@ -351,7 +351,7 @@ module.exports = /*  @ngInject */
         filterExists[0].asc = filterExists[0].asc ? filterExists[0].asc = false : filterExists[0].asc = true;
       } else {
         service.model.appliedFilter.sort.sortArr = []; // Comment out this line to sort mulitple fields
-        service.model.appliedFilter.sort.sortArr.push({str: name, asc: true});
+        (name === 'opportunity') ? service.model.appliedFilter.sort.sortArr.push({str: name, asc: false}) : service.model.appliedFilter.sort.sortArr.push({str: name, asc: true});
       }
     }
 
