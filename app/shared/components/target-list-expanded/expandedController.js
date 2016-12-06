@@ -105,7 +105,7 @@ module.exports = /*  @ngInject */
     function createNewList(e) {
       var parentEl = angular.element(document.body);
       $mdDialog.show({
-        clickOutsideToClose: true,
+        clickOutsideToClose: false,
         parent: parentEl,
         scope: $scope.$new(),
         targetEvent: e,
@@ -124,7 +124,7 @@ module.exports = /*  @ngInject */
       };
       var parentEl = angular.element(document.body);
       $mdDialog.show({
-        clickOutsideToClose: true,
+        clickOutsideToClose: false,
         parent: parentEl,
         scope: $scope.$new(),
         targetEvent: e,

@@ -68,13 +68,13 @@ function getSFDCSession(app, req, res) {
         bodyString = bodyString + '&assertion_type=' + urlencode('urn:oasis:names:tc:SAML:2.0:profiles:SSO:browser');
         bodyString = bodyString + '&assertion=' + theAssertion;
         var SessionIDOptions = {method: 'POST',
-                              url: sfdcConfig.assertionEndpoint,
-                              headers:
-                              {
-                                'Content-Type': 'application/x-www-form-urlencoded'
-                              },
-                              body: bodyString
-                             };
+          url: sfdcConfig.assertionEndpoint,
+          headers:
+          {
+            'Content-Type': 'application/x-www-form-urlencoded'
+          },
+          body: bodyString
+        };
         var sessionPromise = rp(SessionIDOptions);
         return sessionPromise;
       };

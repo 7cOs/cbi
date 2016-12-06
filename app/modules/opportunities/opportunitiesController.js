@@ -108,7 +108,7 @@ module.exports = /*  @ngInject */
       vm.currentFilter = $filter('filter')(userService.model.opportunityFilters, {id: filterId});
 
       $mdDialog.show({
-        clickOutsideToClose: true,
+        clickOutsideToClose: false,
         parent: parentEl,
         scope: $scope.$new(),
         targetEvent: ev,

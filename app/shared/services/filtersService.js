@@ -158,9 +158,9 @@ module.exports = /*  @ngInject */
       },
       timePeriod: [
         {name: 'Current Month to Date',
-         value: 'year'},
+          value: 'year'},
         {name: 'Last Closed Month',
-         value: 'month'}
+          value: 'month'}
       ],
       tradeChannels: {
         on: [

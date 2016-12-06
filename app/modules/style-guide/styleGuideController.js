@@ -44,7 +44,7 @@ module.exports = /*  @ngInject */
     function showModal(ev) {
       var parentEl = angular.element(document.body);
       $mdDialog.show({
-        clickOutsideToClose: true,
+        clickOutsideToClose: false,
         parent: parentEl,
         scope: $scope.$new(),
         targetEvent: ev,
