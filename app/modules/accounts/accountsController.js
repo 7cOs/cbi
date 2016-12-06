@@ -82,7 +82,6 @@ module.exports = /*  @ngInject */
     vm.currentTopBottomDataForFilter = null;
     vm.getValueBoundForAcctType = getValueBoundForAcctType;
     vm.setTopBottomAcctTypeSelection = setTopBottomAcctTypeSelection;
-    vm.getCurrentChartData = getCurrentChartData;
     vm.topBottomInitData = true;
 
     // Expose public methods
@@ -669,13 +668,6 @@ module.exports = /*  @ngInject */
         } else {
           return '-';
         }
-      }
-    }
-
-    function getCurrentChartData() {
-      var currentObj = vm.topBottomData[Object.keys(vm.topBottomData)[vm.marketSelectedIndex]];
-      if (currentObj && currentObj.chartData) {
-        return currentObj.chartData;
       }
     }
 
