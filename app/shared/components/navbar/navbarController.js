@@ -152,7 +152,7 @@ module.exports = /*  @ngInject */
     // "Add Opportunity" modal
     function modalAddOpportunityForm(restoreCache) {
       $mdDialog.show({
-        clickOutsideToClose: true,
+        clickOutsideToClose: false,
         scope: $scope.$new(),
         templateUrl: './app/shared/components/navbar/modal-add-opportunity-form.html'
       });
@@ -168,7 +168,7 @@ module.exports = /*  @ngInject */
 
     function modalDuplicateOpportunity() {
       $mdDialog.show({
-        clickOutsideToClose: true,
+        clickOutsideToClose: false,
         scope: $scope.$new(),
         templateUrl: './app/shared/components/navbar/modal-duplicate-opportunity.html'
       });
