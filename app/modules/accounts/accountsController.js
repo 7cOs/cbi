@@ -88,6 +88,7 @@ module.exports = /*  @ngInject */
     vm.currentTopBottomView = null;
     vm.currentTotalsObject = null;
     vm.disablePremiseType = disablePremiseType;
+    vm.disableStoreType = disableStoreType;
     vm.displayBrandValue = displayBrandValue;
     vm.goToOpportunities = goToOpportunities;
     vm.getClassBasedOnValue = getClassBasedOnValue;
@@ -138,6 +139,14 @@ module.exports = /*  @ngInject */
 
     function disablePremiseType(bool) {
       vm.premiseTypeDisabled = bool;
+    }
+
+    function disableStoreType() {
+      if ((filtersService.model.selected.distributor && filtersService.model.selected.distributor.length > 0) || (filtersService.model.selected.store && filtersService.model.selected.store.length > 0) || (filtersService.model.selected.chain && filtersService.model.selected.chain.length > 0)) {
+        return false;
+      } else {
+        return true;
+      }
     }
 
     /**
