@@ -12,7 +12,16 @@ module.exports =
       title: 'Account Dashboard',
       templateUrl: './app/modules/accounts/layout.html',
       controller: 'accountsController',
-      controllerAs: 'a'
+      controllerAs: 'a',
+      params: {
+        resetFiltersOnLoad: true,
+        applyFiltersOnLoad: false,
+        pageData: {
+          brandTitle: '',
+          depletionTimePeriod: '',
+          distributionTimePeriod: ''
+        }
+      }
     });
   })
   .controller('accountsController', require('./accountsController'));
