@@ -14,7 +14,8 @@ module.exports =
         variety: '@',
         isRequired: '@',
         showAddress: '@',
-        multipleRecipients: '=?'
+        multipleRecipients: '=?',
+        cacheInput: '=?'
       },
       controller: InlineSearchController,
       controllerAs: 'is',
@@ -39,8 +40,10 @@ module.exports =
       var vm = this;
 
       // Defaults
-      vm.input = '';
-      vm.chosenResultObject = {};
+      if (vm.cacheInput !== true) {
+        vm.input = '';
+        vm.chosenResultObject = {};
+      }
       vm.showResults = false;
       vm.loading = false;
       vm.type = '';
@@ -148,16 +151,16 @@ module.exports =
 
         switch (vm.type) {
           case 'user':
-            vm.input = $filter('titlecase')(result.firstName) + ' ' + $filter('titlecase')(result.lastName);
+            vm.input = result.firstName + ' ' + result.lastName;
             break;
           case 'chain':
           case 'distributor':
           case 'product':
-            result.name ? vm.input = $filter('titlecase')(result.name) : vm.input = $filter('titlecase')(result.brand);
+            result.name ? vm.input = result.name : vm.input = result.brand;
             break;
           case 'location':
           case 'store':
-            vm.input = $filter('titlecase')(result.name);
+            vm.input = result.name;
             break;
           default:
             vm.input = result;
