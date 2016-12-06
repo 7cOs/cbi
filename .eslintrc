@@ -16,10 +16,7 @@
     "inject": false
   },
   "rules": {
-    "indent": ["error", 2, {
-      "SwitchCase": 1,
-      "VariableDeclarator": { "var": 2, "let": 2, "const": 3 }
-    }],
+    "indent": 0,
     // "no-console": 1,
     "no-multi-spaces": 0,
     "no-debugger": 0,
