@@ -43,17 +43,17 @@ module.exports = /*  @ngInject */
       valuesArr = $filter('orderBy')(tbData, function(data) {
         return data.measure[propertyName];
       });
+      valuesArr = valuesArr.reverse();
       var len = valuesArr.length;
       if (len > queryLimit) {
         tempArr = valuesArr.slice(0, queryLimit);
         sortedList.topValues = getIndexPositionsArr(tbData, tempArr);
-
         tempArr = valuesArr.slice(len - queryLimit, len);
         sortedList.bottomValues = getIndexPositionsArr(tbData, tempArr);
       } else {
         tempArr =  getIndexPositionsArr(tbData, valuesArr);
         sortedList.topValues = tempArr;
-        sortedList.bottomValues = tempArr;
+        sortedList.bottomValues = angular.copy(tempArr).reverse();
       }
       return sortedList;
     }
