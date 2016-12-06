@@ -919,7 +919,30 @@ describe('Unit: accountsController', function() {
       expect(ctrl.updateChip.calls.count()).toEqual(0);
       expect(ctrl.updateChip).not.toHaveBeenCalled();
     });
+  });
 
+  describe('[Method] disableStoreType', function() {
+    afterEach(function() {
+      filtersService.model.selected.store = [];
+      filtersService.model.selected.chain = [];
+      filtersService.model.selected.distributor = [];
+    });
+
+    it('Should return true if there is no store, chain or distributor', function() {
+      expect(ctrl.disableStoreType()).toEqual(true);
+    });
+    it('Should return false if there is a store but no chain or distributor', function() {
+      filtersService.model.selected.store = ['222222'];
+      expect(ctrl.disableStoreType()).toEqual(false);
+    });
+    it('Should return false if there is a chain but no store or distributor', function() {
+      filtersService.model.selected.chain = ['222222'];
+      expect(ctrl.disableStoreType()).toEqual(false);
+    });
+    it('Should return false if there is a distributor but no chain or store', function() {
+      filtersService.model.selected.distributor = ['222222'];
+      expect(ctrl.disableStoreType()).toEqual(false);
+    });
   });
 
   describe('[Method] updateTopBottom', function() {
