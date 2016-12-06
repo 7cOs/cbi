@@ -53,19 +53,68 @@ module.exports = /*  @ngInject */
     vm.userService = userService;
 
     // Expose public methods
-    vm.changeDepletionScorecard = changeDepletionScorecard;
-    vm.changePremise = changePremise;
-    vm.isPositive = isPositive;
-
-    vm.updateEndingTimePeriod = updateEndingTimePeriod;
-    vm.changeDistributionTimePeriod = changeDistributionTimePeriod;
     vm.changeDepletionOption = changeDepletionOption;
+    vm.changeDepletionScorecard = changeDepletionScorecard;
+    vm.changeDistributionTimePeriod = changeDistributionTimePeriod;
+    vm.changePremise = changePremise;
+    vm.goToAccountDashboard = goToAccountDashboard;
+    vm.isPositive = isPositive;
+    vm.updateEndingTimePeriod = updateEndingTimePeriod;
 
     init();
 
     // **************
     // PUBLIC METHODS
     // **************
+
+    function changeDepletionOption(value) {
+      updatedSelectionValuesInFilter(null, value, null);
+    }
+
+    function changeDepletionScorecard(bool) {
+      if (bool) vm.depletionSelect = vm.depletionSelectOptions[vm.depletionRadio][0].name;
+      updateTotalRowDepletions();
+    }
+
+    function changeDistributionTimePeriod(value) {
+      updatedSelectionValuesInFilter(null, null, value);
+      updateTotalRowDistributions();
+    }
+
+    function changePremise() {
+      var payload = {'type': 'noencode'};
+      if (vm.distributionRadioOptions.selected.onOffPremise === 'On Premise') payload.premiseType = 'on';
+      else payload.premiseType = 'off';
+
+      userService.getPerformanceDistribution(payload).then(function(data) {
+        userService.model.distribution = data;
+
+        updateTotalRowDistributions();
+      });
+    }
+
+    function goToAccountDashboard(row) {
+      filtersService.model.selected.brand = [row.id];
+      filtersService.model.selected.myAccountsOnly = true;
+      filtersService.model.selected.opportunityType = ['All Types'];
+      filtersService.model.selected.premiseType = 'all';
+      filtersService.model.selected.retailer = 'Chain';
+
+      $state.go('accounts', {
+        resetFiltersOnLoad: false,
+        applyFiltersOnLoad: true,
+        pageData: {
+          brandTitle: row.name
+        }
+      });
+    }
+
+    function isPositive(salesData) {
+      if (salesData >= 0) {
+        return true;
+      }
+      return false;
+    }
 
     function updateEndingTimePeriod(value) {
       vm.distributionSelectOptions.selected = vm.filtersService.model.distributionTimePeriod[value][0].name;
@@ -95,39 +144,6 @@ module.exports = /*  @ngInject */
         });
         vm.filtersService.lastEndingTimePeriod.timePeriodValue = matchedDistObj[0];
       }
-    }
-
-    function changeDistributionTimePeriod(value) {
-      updatedSelectionValuesInFilter(null, null, value);
-      updateTotalRowDistributions();
-    }
-
-    function changeDepletionOption(value) {
-      updatedSelectionValuesInFilter(null, value, null);
-    }
-
-    function changeDepletionScorecard(bool) {
-      if (bool) vm.depletionSelect = vm.depletionSelectOptions[vm.depletionRadio][0].name;
-      updateTotalRowDepletions();
-    }
-
-    function changePremise() {
-      var payload = {'type': 'noencode'};
-      if (vm.distributionRadioOptions.selected.onOffPremise === 'On Premise') payload.premiseType = 'on';
-      else payload.premiseType = 'off';
-
-      userService.getPerformanceDistribution(payload).then(function(data) {
-        userService.model.distribution = data;
-
-        updateTotalRowDistributions();
-      });
-    }
-
-    function isPositive(salesData) {
-      if (salesData >= 0) {
-        return true;
-      }
-      return false;
     }
 
     // **************

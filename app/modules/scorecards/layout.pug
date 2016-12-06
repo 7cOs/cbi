@@ -67,7 +67,7 @@ div.my-scorecards
             td.column-total {{s.totalRow.volumePercent | number:1}}%
             td.column-total {{s.totalRow.volumeBU | number:1}}%
           tr(ng-repeat="depletion in s.userService.model.depletion" class="disable-ng-animate")
-            td.left.data-brand(analytics-on="click" analytics-event="Brand Performance") {{depletion.name}}
+            td.left.data-brand(analytics-on="click" analytics-event="Brand Performance" ng-click='s.goToAccountDashboard(depletion)') {{depletion.name}}
             td.dark(ng-repeat-start="measure in depletion.measures | filter: {timeframe: s.depletionSelect}: true") {{measure.depletions | number:0}}
             td.medium-dark(ng-class="{'negative': !s.isPositive(measure.depletions - (measure.depletions / (1 + measure.depletionsTrend / 100)))}") {{measure.depletions - (measure.depletions / (1 + measure.depletionsTrend / 100)) | number:0}}
             td.medium-dark.no-border(ng-class="{'negative': !s.isPositive(measure.depletionsTrend)}") {{measure.depletionsTrend | number:1}}%

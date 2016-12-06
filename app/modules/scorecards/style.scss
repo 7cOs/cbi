@@ -199,6 +199,10 @@
 
   .data-brand {
     color: $blue;
+
+    &:hover {
+      cursor: pointer;
+    }
   }
 
   tr {
