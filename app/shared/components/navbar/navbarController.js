@@ -50,8 +50,11 @@ module.exports = /*  @ngInject */
         }
       }
     };
+
     vm.newOpportunity = vm.newOpportunityTemplate;
     vm.unreadNotifications = 0;
+    vm.cachedOpportunity;
+    vm.cacheInputs = true;
 
     // Mock data
     vm.accountSelectorSelected = 'Distributor';
@@ -85,6 +88,8 @@ module.exports = /*  @ngInject */
     vm.markRead = markRead;
     vm.markSeen = markSeen;
     vm.modalAddOpportunityForm = modalAddOpportunityForm;
+    vm.modalDuplicateOpportunity = modalDuplicateOpportunity;
+    vm.closeModalDuplicateOpportunity = closeModalDuplicateOpportunity;
     vm.showNewRationaleInput = showNewRationaleInput;
 
     $scope.$watch(function() { return toastService.model; }, function(newVal) {
@@ -145,12 +150,33 @@ module.exports = /*  @ngInject */
     }
 
     // "Add Opportunity" modal
-    function modalAddOpportunityForm() {
+    function modalAddOpportunityForm(restoreCache) {
       $mdDialog.show({
         clickOutsideToClose: true,
         scope: $scope.$new(),
         templateUrl: './app/shared/components/navbar/modal-add-opportunity-form.html'
       });
+      if (restoreCache) {
+        vm.cacheInputs = true;
+        vm.newOpportunity = vm.cachedOpportunity;
+      } else {
+        vm.cacheInputs = false;
+        vm.newOpportunity = vm.newOpportunityTemplate;
+        resetFormModels();
+      }
+    }
+
+    function modalDuplicateOpportunity() {
+      $mdDialog.show({
+        clickOutsideToClose: true,
+        scope: $scope.$new(),
+        templateUrl: './app/shared/components/navbar/modal-duplicate-opportunity.html'
+      });
+    }
+
+    function closeModalDuplicateOpportunity() {
+      vm.newOpportunity = {};
+      $mdDialog.hide();
     }
 
     // Add Opportunity
@@ -176,10 +202,10 @@ module.exports = /*  @ngInject */
       opportunity.properties.product = vm.chosenProductObject;
       opportunity.properties.product.type = tempType;
       if (saveOpportunity(opportunity)) {
-        vm.newOpportunity = vm.newOpportunityTemplate;
-        resetFormModels();
         $mdDialog.hide();
       }
+
+      vm.cachedOpportunity = angular.copy(vm.newOpportunity);
 
       filtersService.model.appliedFilter.pagination.totalOpportunities++;
     }
@@ -190,7 +216,7 @@ module.exports = /*  @ngInject */
         vm.newOpportunity = {
           properties: {
             store: {
-              description: opportunity.properties.store.description
+              description: opportunity.properties.store.name
             }
           }
         };
@@ -204,7 +230,7 @@ module.exports = /*  @ngInject */
       }
 
       var isDistribution = opportunity.properties.distributionType.type === 'new';
-      var oppSubType = isDistribution ? 'ND001' : opportunity.properties.distributionType.description;
+      var oppSubType = isDistribution ? 'ND_001' : opportunity.properties.distributionType.description;
       var isMixedType = !isDistribution && opportunity.properties.product.type === 'mixed';
       var targetList = opportunity.properties.targetList;
       var itemType = opportunity.properties.product.id ? 'SKU_PACKAGE' : 'BRAND';
@@ -224,7 +250,6 @@ module.exports = /*  @ngInject */
 
       var payload = {
         'store': opportunity.properties.store.id,
-        // 'itemId': !isMixedType && opportunity.properties.product.id,
         'itemId': itemId,
         'itemType': itemType,
         'mixedBrand': isMixedType,
@@ -232,14 +257,19 @@ module.exports = /*  @ngInject */
         'impact': opportunity.properties.impact.enum,
         'subType': oppSubType
       };
-
       opportunitiesService
         .createOpportunity(payload)
-        .then(function(result) {
+        .then(function(success, error) {
           if (targetList) {
-            addToTargetList(targetList, result);
+            addToTargetList(targetList, success);
           }
+          vm.newOpportunity = vm.newOpportunityTemplate;
+          resetFormModels();
           toastService.showToast('added');
+        }, function(error) {
+          console.log(error);
+          modalDuplicateOpportunity();
+          vm.duplicateOpportunity = opportunity;
         });
 
       return true;
@@ -310,10 +340,10 @@ module.exports = /*  @ngInject */
     };
 
     function resetFormModels() {
-      vm.newOpportunity.properties.distributionType.description = '';
-      vm.newOpportunity.properties.rationale.description = '';
-      vm.newOpportunity.properties.impact.enum = '';
-      vm.newOpportunity.properties.targetList = '';
+      vm.newOpportunity.properties.distributionType ? vm.newOpportunity.properties.distributionType.description = '' : angular.noop;
+      vm.newOpportunity.properties.rationale ? vm.newOpportunity.properties.rationale.description = '' : angular.noop;
+      vm.newOpportunity.properties.impact ? vm.newOpportunity.properties.impact.enum = '' : angular.noop;
+      vm.newOpportunity.properties.targetList ? vm.newOpportunity.properties.targetList = '' : angular.noop;
     }
 
     // Get unread notification count and set initial badge value

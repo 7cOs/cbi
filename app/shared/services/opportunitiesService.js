@@ -207,10 +207,11 @@ module.exports = /*  @ngInject */
       var opportunitiesPromise = $q.defer(),
           url = apiHelperService.request('/api/opportunities');
 
-      $http.post(url, payload, {
-        headers: {}
-      })
-      .then(createOpportunitiesSuccess)
+      $http({ url: url,
+        method: 'POST',
+        data: payload,
+        headers: {'Content-Type': 'application/json;charset=utf-8'}
+      }).then(createOpportunitiesSuccess)
       .catch(createOpportunitiesFail);
 
       function createOpportunitiesSuccess(response) {
