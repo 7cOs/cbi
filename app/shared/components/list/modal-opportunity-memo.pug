@@ -4,7 +4,7 @@
     h4 {{list.memoData.typeDescription}}
   div.modal-form.clearfix
     div(column="12").regional-status.mandate-icon
-      div(ng-class="list.memoData.typeCode")
+      div(ng-class="{'featured': list.memoData.featureCode, 'mandatory': list.memoData.authorizationCode}")
     div(row).clearfix
       div(column="6")
         div(column="6")

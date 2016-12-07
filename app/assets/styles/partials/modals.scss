@@ -480,17 +480,11 @@ md-dialog {
     top: 0;
     width: 20px;
 
-    .featured,
-    .LP,
-    .LT,
-    .HH,
-    .BM {
+    .featured {
       background: url('../assets/img/icons/status-featured.svg') 0 0 no-repeat;
     }
 
-    .mandatory,
-    .OS,
-    .CM {
+    .mandatory {
       background: url('../assets/img/icons/status-mandatory.svg') 0 0 no-repeat;
     }
   }
