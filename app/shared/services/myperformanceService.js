@@ -40,10 +40,19 @@ module.exports = /*  @ngInject */
             bottomValues: []
           },
           valuesArr, tempArr = [];
+      // var validArr = tbData.filter(function (data) {
+      //   return isValidValues(data.measure[propertyName]);
+      // });
+      var j = 0;
       valuesArr = $filter('orderBy')(tbData, function(data) {
-        return data.measure[propertyName];
+        if (data.measure[propertyName]) {
+          return data.measure[propertyName];
+        } else {
+          j++;
+          return -1 * 99999;
+        }
       });
-      valuesArr = valuesArr.reverse();
+      valuesArr = valuesArr.reverse().slice(0, valuesArr.length - j);
       var len = valuesArr.length;
       if (len > queryLimit) {
         tempArr = valuesArr.slice(0, queryLimit);
