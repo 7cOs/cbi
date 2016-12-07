@@ -556,7 +556,8 @@ module.exports = /*  @ngInject */
     // Top Bottom Specific Functions
     // TODO Needs to be refactored
     function updateTopBottom() {
-      getDataForTopBottom();
+      var categoryBound = vm.filtersService.model.accountSelected.accountMarkets;
+      getDataForTopBottom(vm.currentTopBottomObj, categoryBound);
     }
 
     function setTopBottomAcctTypeSelection(currentAcctType) {
@@ -608,7 +609,7 @@ module.exports = /*  @ngInject */
     function stopTopBottomLoadingIcon() {
       $timeout(function() {
         vm.loadingTopBottom = false;
-      }, 400);
+      }, 350);
     }
 
     function getCurrentStoreData() {
@@ -721,6 +722,7 @@ module.exports = /*  @ngInject */
         }
         vm.currentBoundTopBottomIndexes =  result;
       }
+      console.log('Current Top Bittom Obj', vm.currentTopBottomObj);
     }
 
     function checkForStoreLevel(trendSelection) {
