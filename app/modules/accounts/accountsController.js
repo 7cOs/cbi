@@ -608,12 +608,13 @@ module.exports = /*  @ngInject */
     function stopTopBottomLoadingIcon() {
       $timeout(function() {
         vm.loadingTopBottom = false;
-      }, 300);
+      }, 400);
     }
 
     function getCurrentStoreData() {
       vm.loadingTopBottom = true;
       if (vm.currentTopBottomObj.isFilterUpdateRequired === false) {
+        setSortedArrIndex();
         vm.loadingTopBottom = false;
         return;
       }
@@ -663,15 +664,16 @@ module.exports = /*  @ngInject */
           setSortedArrIndex();
           stopTopBottomLoadingIcon();
         });
-      } else {
-        if (!topBottomObj.timePeriodFilteredData || topBottomObj.isFilterUpdateRequired === true) {
+      } else if (!topBottomObj.timePeriodFilteredData || topBottomObj.isFilterUpdateRequired === true) {
           vm.loadingTopBottom = true;
           vm.currentTopBottomObj = myperformanceService.updateDataForCurrentTopDownLevel(vm.currentTopBottomObj, categoryBound, vm.filterModel.depletionsTimePeriod, vm.filterModel.distributionTimePeriod, vm.filterModel.trend);
           setSortedArrIndex();
           stopTopBottomLoadingIcon();
-        }
+        } else {
+          vm.loadingTopBottom = true;
+          setSortedArrIndex();
+          stopTopBottomLoadingIcon();
       }
-      // console.log('TopBottomData', vm.currentTopBottomObj);
     }
 
     function getValueBoundForAcctType(measures) {
