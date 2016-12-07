@@ -173,7 +173,13 @@ module.exports = /*  @ngInject */
         templateUrl: './app/shared/components/navbar/modal-duplicate-opportunity.html'
       });
 
-      if (error.status === 500) {
+      if (error.status === 400) {
+        angular.forEach(error.data, function(key, value) {
+          if (key.description === 'OPP101') {
+            vm.generalError = false;
+          }
+        });
+      } else {
         vm.generalError = true;
       }
     }
