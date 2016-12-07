@@ -21,9 +21,11 @@ module.exports = /*  @ngInject */
         name: 'Effective'
       }],
       premises: [{
-        name: 'Off Premise'
+        name: 'Off Premise',
+        value: 'off'
       }, {
-        name: 'On Premise'
+        name: 'On Premise',
+        value: 'on'
       }],
       selected: {}
     };
@@ -83,7 +85,7 @@ module.exports = /*  @ngInject */
 
     function changePremise() {
       var payload = {'type': 'noencode'};
-      if (vm.distributionRadioOptions.selected.onOffPremise === 'On Premise') payload.premiseType = 'on';
+      if (vm.distributionRadioOptions.selected.onOffPremise === 'on') payload.premiseType = 'on';
       else payload.premiseType = 'off';
 
       userService.getPerformanceDistribution(payload).then(function(data) {
@@ -93,20 +95,35 @@ module.exports = /*  @ngInject */
       });
     }
 
-    function goToAccountDashboard(row) {
-      filtersService.model.selected.brand = [row.id];
-      filtersService.model.selected.myAccountsOnly = true;
-      filtersService.model.selected.opportunityType = ['All Types'];
-      filtersService.model.selected.premiseType = 'all';
-      filtersService.model.selected.retailer = 'Chain';
+    function goToAccountDashboard(row, disabled) {
+      if (disabled) return false;
 
-      $state.go('accounts', {
-        resetFiltersOnLoad: false,
-        applyFiltersOnLoad: true,
-        pageData: {
-          brandTitle: row.name
-        }
-      });
+      if (row) {
+        filtersService.model.selected.brand = [row.id];
+        filtersService.model.selected.myAccountsOnly = true;
+        filtersService.model.selected.opportunityType = ['All Types'];
+        filtersService.model.selected.retailer = 'Chain';
+
+        var premiseType = !row.depletionTotal ? vm.distributionRadioOptions.selected.onOffPremise : 'all';
+
+        $state.go('accounts', {
+          resetFiltersOnLoad: false,
+          applyFiltersOnLoad: true,
+          pageData: {
+            brandTitle: row.name,
+            premiseType: premiseType
+          }
+        });
+      } else {
+        filtersService.model.selected.myAccountsOnly = true;
+        $state.go('accounts', {
+          resetFiltersOnLoad: false,
+          applyFiltersOnLoad: true,
+          pageData: {
+            premiseType: vm.distributionRadioOptions.selected.onOffPremise
+          }
+        });
+      }
     }
 
     function isPositive(salesData) {
@@ -168,7 +185,7 @@ module.exports = /*  @ngInject */
 
         // distribution
         vm.distributionRadioOptions.selected.placementType = 'Simple';
-        vm.distributionRadioOptions.selected.onOffPremise = 'Off Premise';
+        vm.distributionRadioOptions.selected.onOffPremise = 'off';
         updatedSelectionValuesInFilter(vm.depletionRadio, vm.depletionSelect, vm.distributionSelectOptions.selected);
 
         updateTotalRowDistributions();

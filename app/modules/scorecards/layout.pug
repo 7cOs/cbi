@@ -96,7 +96,7 @@ div.my-scorecards
     div.scorecard-filter
       div.radio-button-group
         md-radio-group(ng-model="s.distributionRadioOptions.selected.onOffPremise" aria-label="Premise Filter" ng-change="s.changePremise();")
-          md-radio-button(ng-repeat="filter in s.distributionRadioOptions.premises | orderBy: 'name'" class="md-primary" ng-value="filter.name" aria-label="{{filter.name}}") {{filter.name}}
+          md-radio-button(ng-repeat="filter in s.distributionRadioOptions.premises | orderBy: 'name'" class="md-primary" ng-value="filter.value" aria-label="{{filter.name}}") {{filter.name}}
       div.radio-button-group
         md-radio-group(ng-model="s.distributionRadioOptions.selected.placementType" aria-label="Placement Type Filter")
           md-radio-button(ng-repeat="filter in s.distributionRadioOptions.placementType" class="md-primary" ng-value="filter.name" aria-label="{{filter.name}}") {{filter.name}}
@@ -130,7 +130,7 @@ div.my-scorecards
             th.accent.border To BU Total %
         tbody
           tr
-            td.column-total.left TOTAL
+            td.column-total.left(ng-click="s.goToAccountDashboard(null, s.distributionRadioOptions.selected.placementType === 'Effective')" ng-disabled="s.distributionRadioOptions.selected.placementType === 'Effective'") TOTAL
             td.column-total.dark
               span(ng-if="s.distributionRadioOptions.selected.placementType === 'Effective'" ng-class="{'negative': !s.isPositive(s.totalDistributions[0].distributionsEffective)}") {{s.totalDistributions[0].distributionsEffective | number:0 }}
               span(ng-if="s.distributionRadioOptions.selected.placementType === 'Simple'" ng-class="{'negative': !s.isPositive(s.totalDistributions[0].distributionsSimple)}") {{s.totalDistributions[0].distributionsSimple | number:0 }}
@@ -155,7 +155,7 @@ div.my-scorecards
             td.column-total 100%
             td.column-total.no-border 12%
           tr(ng-repeat="distribution in s.userService.model.distribution | filter: {type: '!Total'}: true" class="disable-ng-animate")
-            td.left.data-brand(analytics-on="click" analytics-event="Brand Performance") {{distribution.name}}
+            td.left.data-brand(analytics-on="click" analytics-event="Brand Performance" ng-click='s.goToAccountDashboard(distribution, s.distributionRadioOptions.selected.placementType === "Simple")' ng-disabled="s.distributionRadioOptions.selected.placementType === 'Simple'") {{distribution.name}}
             td.dark(ng-repeat-start="measure in distribution.measures | filter: {timeframe: s.distributionSelectOptions.selected}: true")
               span(ng-if="s.distributionRadioOptions.selected.placementType === 'Simple'" ng-class="{'negative': !s.isPositive(measure.distributionsSimple)}") {{measure.distributionsSimple | number:0}}
               span(ng-if="s.distributionRadioOptions.selected.placementType === 'Effective'" ng-class="{'negative': !s.isPositive(measure.distributionsEffective)}") {{measure.distributionsEffective | number:0}}

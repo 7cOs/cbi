@@ -436,13 +436,18 @@ module.exports = /*  @ngInject */
         chipsService.resetChipsFilters(chipsService.model);
       } else {
         vm.topBottomInitData = false;
-        vm.brandIdSelected = filtersService.model.selected.brand[0];
-        vm.brandWidgetTitle = $state.params.pageData.brandTitle;
-        chipsService.addAutocompleteChip(vm.brandWidgetTitle, 'brand', false);
+        if ($state.params.pageData.brandTitle) {
+          vm.brandIdSelected = filtersService.model.selected.brand[0];
+          vm.brandWidgetTitle = $state.params.pageData.brandTitle;
+          chipsService.addAutocompleteChip(vm.brandWidgetTitle, 'brand', false);
+        }
       }
 
       setDefaultDropDownOptions();
       setDefaultFilterOptions();
+
+      if ($state.params.pageData && $state.params.pageData.premiseType) vm.filtersService.model.selected.premiseType = $state.params.pageData.premiseType;
+
       var params = filtersService.getAppliedFilters('brandSnapshot');
       vm.filtersService.model.valuesVsTrend = vm.filtersService.accountFilters.valuesVsTrend[1];
 

@@ -189,6 +189,11 @@
     font-family: $work-sans;
     font-size: 1em;
     font-weight: $semibold;
+
+    &[disabled] {
+      cursor: no-drop;
+      color: $gray-2;
+    }
   }
 
   .data {
@@ -202,6 +207,11 @@
 
     &:hover {
       cursor: pointer;
+    }
+
+    &[disabled] {
+      cursor: no-drop;
+      color: $gray-2;
     }
   }
 
