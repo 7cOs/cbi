@@ -262,6 +262,7 @@ module.exports = /*  @ngInject */
 
       if (parentIndex + 1 === parentLength) {
         // We're on the deepest level of current tab list
+        vm.brandWidgetTitle = item.name;
         if (widget === 'brands') { setSelected(item.name, 'brands'); }
       } else {
         if (widget === 'brands') { vm.brandWidgetTitle = item.name; }
