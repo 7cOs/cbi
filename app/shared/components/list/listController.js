@@ -463,7 +463,6 @@ module.exports = /*  @ngInject */
         vm.memoData = products[0];
       }
 
-      // Convert strings to date objects for comparison
       function toDate(string) {
         var dateObj = new Date(string);
         return dateObj;
