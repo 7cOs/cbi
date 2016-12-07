@@ -186,11 +186,21 @@ module.exports = /*  @ngInject */
       trend: [
         {
           name: 'vs YA',
-          value: 1
+          value: 1,
+          showInStoreLevel: true,
+          showInOtherLevels: true
         },
         {
           name: 'vs ABP',
-          value: 2
+          value: 2,
+          showInStoreLevel: false,
+          showInOtherLevels: true
+        },
+        {
+          name: 'vs Similar Stores',
+          value: 2,
+          showInStoreLevel: true,
+          showInOtherLevels: false
         }
       ]
     };
@@ -303,6 +313,12 @@ module.exports = /*  @ngInject */
         'distirbutionSimple': 1,
         'distirbutionEffective': 2,
         'velocity': 3
+      },
+      accountMarketsEnum: {
+        'depletions': 1,
+        'distirbutionSimple': 2,
+        'distirbutionEffective': 3,
+        'velocity': 4
       },
       topBottomSortTypeEnum: {
         'topValues': 1,

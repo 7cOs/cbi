@@ -2,6 +2,7 @@
 
 module.exports = /*  @ngInject */
   function myperformanceService($filter, filtersService) {
+    var queryLimit = 10;
 
     var service = {
       filter: getFilterData,
@@ -15,7 +16,8 @@ module.exports = /*  @ngInject */
       initDataForAllTbLevels: initDataForAllTbLevels,
       resetFilterFlags: resetFilterFlags,
       resetPerformanceDataFlags: resetPerformanceDataFlags,
-      getFilterParametersForStore: getFilterParametersForStore
+      getFilterParametersForStore: getFilterParametersForStore,
+      setStoreTopBottomData: setStoreTopBottomData
     };
 
     return service;
@@ -38,39 +40,53 @@ module.exports = /*  @ngInject */
             bottomValues: []
           },
           valuesArr, tempArr = [];
+      // var validArr = tbData.filter(function (data) {
+      //   return isValidValues(data.measure[propertyName]);
+      // });
+      var j = 0;
       valuesArr = $filter('orderBy')(tbData, function(data) {
-        return data.measure[propertyName];
+        if (data.measure[propertyName]) {
+          return data.measure[propertyName];
+        } else {
+          j++;
+          return -1 * 99999;
+        }
       });
+      valuesArr = valuesArr.reverse().slice(0, valuesArr.length - j);
       var len = valuesArr.length;
       if (len > queryLimit) {
         tempArr = valuesArr.slice(0, queryLimit);
         sortedList.topValues = getIndexPositionsArr(tbData, tempArr);
-
         tempArr = valuesArr.slice(len - queryLimit, len);
         sortedList.bottomValues = getIndexPositionsArr(tbData, tempArr);
       } else {
         tempArr =  getIndexPositionsArr(tbData, valuesArr);
         sortedList.topValues = tempArr;
-        sortedList.bottomValues = tempArr;
+        sortedList.bottomValues = angular.copy(tempArr).reverse();
       }
       return sortedList;
     }
 
-    function getFilterParametersForStore(queryParams, timePeriod, metric, topBottomSelection, trendSelection) {
+    function getFilterParametersForStore(queryParams, depletionsTimePeriod, distTimePeriod, metric, topBottomSelection, trendSelection) {
+      // TODO Trend selection sort has not been implemented by API yet and this function can be refactored
       var acctEnum = filtersService.accountFilters.accountMarketsEnums;
       var timePeriodVal = '';
       switch (metric.value) {
         case acctEnum.depletions:
           timePeriodVal = 'DEPL';
+          queryParams.timePeriod = depletionsTimePeriod.name;
           break;
         case acctEnum.distEffective:
           timePeriodVal = 'EPOD';
+          queryParams.timePeriod = distTimePeriod.name;
           break;
         case acctEnum.velocity:
           timePeriodVal = 'VEL';
+          queryParams.timePeriod = distTimePeriod.name;
           break;
         case acctEnum.distSimple:
           timePeriodVal = 'SPOD';
+          queryParams.timePeriod = distTimePeriod.name;
           break;
       }
 
@@ -93,17 +109,16 @@ module.exports = /*  @ngInject */
           break;
       }
       queryParams.metric = timePeriodVal;
-      queryParams.timePeriod = timePeriod.name;
       return queryParams;
     }
 
     function getTopBottomDataSorted(topBottomData, trendType, categoryType) {
       var sortedList = {
-            topValues: [],
-            bottomValues: [],
-            topTrends: [],
-            bottomTrends: []
-          }, queryLimit = 10;
+        topValues: [],
+        bottomValues: [],
+        topTrends: [],
+        bottomTrends: []
+      };
       var valuesSort = getSortedObjects(topBottomData, queryLimit, categoryType.propertyName);
       var trendPropertyName = filtersService.trendPropertyNames[categoryType.propertyName][trendType.value - 1];
 
@@ -161,6 +176,35 @@ module.exports = /*  @ngInject */
       // console.log('currentTbData', currentTbData);
       setUpdatedDataIndicator(currentTbData, false, false);
       return currentTbData;
+    }
+
+    function insertNumbersInRange(lowerIndex, higherIndex) {
+      var arr = [];
+      for (var i = lowerIndex; i < higherIndex; i++) {
+        arr.push(i);
+      }
+      return arr;
+    }
+
+    function setStoreTopBottomData(data, storeTopBottomObj, depOption, distOption, accountMarketSelection, trendSelection) {
+      var mergedDataForAllTopDownSorts = [];
+      mergedDataForAllTopDownSorts = data[0].performance.concat(data[1].performance, data[2].performance, data[3].performance);
+      storeTopBottomObj.performanceData = mergedDataForAllTopDownSorts;
+      var timePeriodFilteredData = getFilteredTopBottomData(storeTopBottomObj, accountMarketSelection, depOption, distOption);
+      storeTopBottomObj.timePeriodFilteredData = timePeriodFilteredData;
+      storeTopBottomObj.performanceData = storeTopBottomObj;
+      storeTopBottomObj.topBottomIndices = {
+        topValues: [],
+        topTrends: [],
+        bottomValues: [],
+        bottomTrends: []
+      };
+      storeTopBottomObj.topBottomIndices.topValues = insertNumbersInRange(0, queryLimit);
+      storeTopBottomObj.topBottomIndices.topTrends = insertNumbersInRange(queryLimit, queryLimit * 2);
+      storeTopBottomObj.topBottomIndices.bottomValues = insertNumbersInRange(queryLimit * 2, queryLimit * 3);
+      storeTopBottomObj.topBottomIndices.bottomTrends = insertNumbersInRange(queryLimit * 3, queryLimit * 4);
+      getChartData(storeTopBottomObj, accountMarketSelection, trendSelection);
+      return storeTopBottomObj;
     }
 
     function initDataForAllTbLevels(tbData) {

@@ -68,15 +68,19 @@ module.exports = /*  @ngInject */
       subAccounts: null,
       stores: null
     };
+    vm.distOptionChanged = distOptionChanged;
+    vm.acctMarketChanged = acctMarketChanged;
+    vm.depletionOptionChanged = depletionOptionChanged;
+    vm.trendOptionChanged = trendOptionChanged;
+    vm.checkForStoreLevel = checkForStoreLevel;
+    vm.isStoreLevel = false;
     vm.getDataForTopBottom = getDataForTopBottom;
     vm.currentChartData = null;
     vm.getSortedArrIndex = getSortedArrIndex;
     vm.currentTopBottomObj = null;
-    vm.currentTopBottomAcctType = null;
     vm.currentTopBottomDataForFilter = null;
     vm.getValueBoundForAcctType = getValueBoundForAcctType;
     vm.setTopBottomAcctTypeSelection = setTopBottomAcctTypeSelection;
-    vm.getCurrentChartData = getCurrentChartData;
     vm.topBottomInitData = true;
 
     // Expose public methods
@@ -225,12 +229,20 @@ module.exports = /*  @ngInject */
     ** @param {String} property - property to fetch from object depletions, depletionsTrend
     ** @param {String} timePeriod - property to get from filterModel
     */
-    function removeDistOptionsBasedOnView(accountBrandObj) {
+    function removeDistOptionsBasedOnView(accountObj, isBrand) {
       var isOptionHidden = false;
-      if (accountBrandObj.value === 1 && vm.brandSelectedIndex === 1) {
-        isOptionHidden = true;
-      } else if (accountBrandObj.value === 2 && vm.brandSelectedIndex === 0) {
-        isOptionHidden = true;
+      if (isBrand === true) {
+        if (accountObj.value === 1 && vm.brandSelectedIndex === 1) {
+          isOptionHidden = true;
+        } else if (accountObj.value === 2 && vm.brandSelectedIndex === 0) {
+          isOptionHidden = true;
+        }
+      } else {
+        if (accountObj.value === filtersService.accountFilters.accountMarketsEnums.distSimple && vm.brandSelectedIndex === 1) {
+          isOptionHidden = true;
+        } else if (accountObj.value === filtersService.accountFilters.accountMarketsEnums.distEffective && vm.brandSelectedIndex === 0) {
+          isOptionHidden = true;
+        }
       }
       return isOptionHidden;
     }
@@ -463,8 +475,6 @@ module.exports = /*  @ngInject */
           vm.currentTopBottomObj.performanceData = data[3].performance;
           vm.currentTopBottomObj.isPerformanceDataUpdateRequired = false;
           getDataForTopBottom(vm.currentTopBottomObj, categoryBound);
-          $scope.$watchGroup(['a.filtersService.model.accountSelected.accountMarkets', 'a.filterModel.depletionsTimePeriod',
-          'a.filterModel.distributionTimePeriod', 'a.filterModel.trend'], onFilterPropertiesChange);
           if (vm.topBottomInitData === true) {
             vm.topBottomInitData = false;
           }
@@ -547,9 +557,8 @@ module.exports = /*  @ngInject */
         vm.currentTopBottomAcctType = currentAcctType;
         vm.currentTopBottomObj = getCurrentTopBottomObject(currentAcctType);
         var propertyBoundToTable = vm.filtersService.model.accountSelected.accountMarkets;
-        getDataForTopBottom(vm.currentTopBottomObj, propertyBoundToTable);
         vm.marketSelectedIndex = vm.currentTopBottomAcctType.value - 1;
-        // vm.marketSelectedIndex++;
+        getDataForTopBottom(vm.currentTopBottomObj, propertyBoundToTable);
       }
     }
 
@@ -571,37 +580,88 @@ module.exports = /*  @ngInject */
       switch (acctType.value) {
         case accountTypes.distributors:
           currentObj = vm.topBottomData.distributors;
+          vm.isStoreLevel = false;
           break;
         case accountTypes.accounts:
           currentObj = vm.topBottomData.accounts;
+          vm.isStoreLevel = false;
           break;
         case accountTypes.subAccounts:
           currentObj = vm.topBottomData.subAccounts;
+          vm.isStoreLevel = false;
           break;
         case accountTypes.stores:
           currentObj = vm.topBottomData.stores;
+          vm.isStoreLevel = true;
           break;
       }
       return currentObj;
     }
 
+    function stopTopBottomLoadingIcon() {
+      $timeout(function() {
+        vm.loadingTopBottom = false;
+      }, 300);
+    }
+
+    function getCurrentStoreData() {
+      vm.loadingTopBottom = true;
+      if (vm.currentTopBottomObj.isFilterUpdateRequired === false) {
+        vm.loadingTopBottom = false;
+        return;
+      }
+      var params = filtersService.getAppliedFilters('brandSnapshot');
+      var depletionOption = vm.filterModel.depletionsTimePeriod;
+      var distirbutionOption = vm.filterModel.distributionTimePeriod;
+      var acctMarketSelection = vm.filtersService.model.accountSelected.accountMarkets;
+
+      var promiseArr = [], queryParamsForAllSorts = [];
+      angular.forEach(filtersService.accountFilters.valuesVsTrend, function (sortType) {
+        var sortParams = {
+          filterQueryParams: params,
+          otherQueryParams: {
+            timePeriod: '',
+            top: false,
+            trend: false,
+            metric: ''
+          }
+        };
+        myperformanceService.getFilterParametersForStore(sortParams.otherQueryParams, depletionOption,  distirbutionOption, acctMarketSelection, sortType, vm.filterModel.trend);
+        queryParamsForAllSorts.push(sortParams);
+      });
+      for (var i = 0; i < queryParamsForAllSorts.length; i++) {
+        promiseArr.push(userService.getTopBottomSnapshot(vm.currentTopBottomAcctType, queryParamsForAllSorts[i]));
+      }
+      $q.all(promiseArr).then(function(data) {
+        if (data) {
+          vm.currentTopBottomObj = myperformanceService.setStoreTopBottomData(data, vm.currentTopBottomObj, depletionOption,  distirbutionOption, acctMarketSelection, vm.filterModel.trend);
+          vm.marketSelectedIndex = vm.currentTopBottomAcctType.value - 1;
+          vm.currentTopBottomObj.isFilterUpdateRequired = false;
+          stopTopBottomLoadingIcon();
+        }
+      });
+    }
+
     function getDataForTopBottom(topBottomObj, categoryBound) {
-      if (!topBottomObj.performanceData || topBottomObj.isPerformanceDataUpdateRequired === true) {
-        vm.loadingTopBottom = true;
+      if (vm.isStoreLevel === true) {
+        getCurrentStoreData();
+      } else if (!topBottomObj.performanceData || topBottomObj.isPerformanceDataUpdateRequired === true) {
         var params = filtersService.getAppliedFilters('brandSnapshot');
+        vm.loadingTopBottom = true;
         userService.getTopBottomSnapshot(vm.currentTopBottomAcctType, params).then(function(data) {
           vm.currentTopBottomObj.performanceData = data.performance;
           vm.currentTopBottomObj.isPerformanceDataUpdateRequired = false;
           vm.currentTopBottomObj = myperformanceService.updateDataForCurrentTopDownLevel(vm.currentTopBottomObj, categoryBound, vm.filterModel.depletionsTimePeriod, vm.filterModel.distributionTimePeriod, vm.filterModel.trend);
-          vm.loadingTopBottom = false;
+          stopTopBottomLoadingIcon();
         });
       } else {
         if (!topBottomObj.timePeriodFilteredData || topBottomObj.isFilterUpdateRequired === true) {
           vm.loadingTopBottom = true;
           vm.currentTopBottomObj = myperformanceService.updateDataForCurrentTopDownLevel(vm.currentTopBottomObj, categoryBound, vm.filterModel.depletionsTimePeriod, vm.filterModel.distributionTimePeriod, vm.filterModel.trend);
-          vm.loadingTopBottom = false;
+          stopTopBottomLoadingIcon();
         }
       }
+      // console.log('TopBottomData', vm.currentTopBottomObj);
     }
 
     function getValueBoundForAcctType(measures) {
@@ -616,40 +676,77 @@ module.exports = /*  @ngInject */
       }
     }
 
-    function getCurrentChartData() {
-      var currentObj = vm.topBottomData[Object.keys(vm.topBottomData)[vm.marketSelectedIndex]];
-      if (currentObj && currentObj.chartData) {
-        return currentObj.chartData;
-      }
-    }
-
-    function  getSortedArrIndex(data) {
+    function  getSortedArrIndex() {
+      var data = vm.currentTopBottomObj;
       if (data && data.topBottomIndices) {
         var sortCategory = vm.filtersService.model.valuesVsTrend.value;
         var result;
         switch (sortCategory) {
           case filtersService.accountFilters.topBottomSortTypeEnum.topValues:
-            result = data.topBottomIndices.topValues;
-            vm.currentChartData = data.chartData.topValues;
+            if (data.topBottomIndices.topValues) {
+              result = data.topBottomIndices.topValues;
+              vm.currentChartData = data.chartData.topValues;
+            }
             break;
           case filtersService.accountFilters.topBottomSortTypeEnum.topTrends:
-            result = data.topBottomIndices.topTrends;
-            vm.currentChartData = data.chartData.topTrends;
+            if (data.topBottomIndices.topTrends) {
+              result = data.topBottomIndices.topTrends;
+              vm.currentChartData = data.chartData.topTrends;
+            }
             break;
           case filtersService.accountFilters.topBottomSortTypeEnum.bottomValues:
-            result = data.topBottomIndices.bottomValues;
-            vm.currentChartData = data.chartData.bottomValues;
+            if (data.topBottomIndices.bottomValues) {
+              result = data.topBottomIndices.bottomValues;
+              vm.currentChartData = data.chartData.bottomValues;
+            }
             break;
           case filtersService.accountFilters.topBottomSortTypeEnum.bottomTrends:
-            result = data.topBottomIndices.bottomTrends;
-            vm.currentChartData = data.chartData.bottomTrends;
+            if (data.topBottomIndices.bottomTrends) {
+              result = data.topBottomIndices.bottomTrends;
+              vm.currentChartData = data.chartData.bottomTrends;
+            }
             break;
         }
         return result;
       }
     }
 
-    function onFilterPropertiesChange(newValues, oldValues) {
+    function checkForStoreLevel(trendSelection) {
+      var isVisible = true;
+      if (vm.isStoreLevel === true) {
+        if (trendSelection.showInStoreLevel === false && trendSelection.showInOtherLevels === true) {
+          isVisible = false;
+        }
+      } else {
+        if (trendSelection.showInStoreLevel === true && trendSelection.showInOtherLevels === false) {
+          isVisible = false;
+        }
+      }
+      return isVisible;
+    }
+
+    // All these functions require  change in the filter values bound to top bottom data
+    function distOptionChanged(selectedVal) {
+      vm.filterModel.distributionTimePeriod = selectedVal;
+      onFilterPropertiesChange();
+    }
+
+    function depletionOptionChanged(selectedVal) {
+      vm.filterModel.depletionsTimePeriod = selectedVal;
+      onFilterPropertiesChange();
+    }
+
+    function trendOptionChanged(selectedVal) {
+      vm.filterModel.trend = selectedVal;
+      onFilterPropertiesChange();
+    }
+
+    function acctMarketChanged(selectedVal) {
+      vm.filtersService.model.accountSelected.accountMarkets = selectedVal;
+      onFilterPropertiesChange();
+    }
+
+    function onFilterPropertiesChange() {
       if (vm.topBottomInitData === false) {
         myperformanceService.resetFilterFlags(vm.topBottomData);
         var categoryBound = vm.filtersService.model.accountSelected.accountMarkets;

@@ -121,7 +121,7 @@
   }
 
   .market {
-    background-position: 0.75em 0.75em;
+    background-position: 0.15em 0.75em;
   }
 
   .brands {
@@ -171,9 +171,11 @@
     font-size: 1.5em;
     font-weight: 300;
     color: $gray-3;
+    padding-top: 6px;
+    font-size: 1.4em;
 
     &.market {
-      padding: 0.4em 0 0 2em;
+      padding: 7px 11px 5px 29px;
     }
 
     span {
@@ -275,9 +277,9 @@
     td {
       // padding: 1.25em 1em 1.25em 0.75em;
       // Need to get to this during design fixes for top bottom
-      white-space: nowrap;
-      text-overflow: ellipsis;
-      overflow: hidden;
+      // white-space: nowrap;
+      // text-overflow: ellipsis;
+      // overflow: hidden;
 
       &:first-child {
         padding-left: 1em;
