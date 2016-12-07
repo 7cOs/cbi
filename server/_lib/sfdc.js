@@ -230,7 +230,7 @@ function queryAccountNotes(app, req, res) {
                 'successReturnValue': records
               });
             })
-      );
+  );
     } catch (err) {
       var errMessage = 'There was an error in queryAccountNotes: ' + JSON.stringify(err, null, '');
       console.error(errMessage);
