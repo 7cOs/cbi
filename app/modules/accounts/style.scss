@@ -271,10 +271,13 @@
     }
   }
 
+  .data-table {
+    height: 100%;
+    height: 530px;
+  }
 
   .fixed-layout {
     table-layout: fixed;
-    min-height: 100%;
 
     &:last-child {
       border-top: none;
@@ -348,7 +351,7 @@
     height: 530px;
 
     md-tab-content {
-      overflow: scroll;
+      // overflow: scroll;
     }
   }
 }

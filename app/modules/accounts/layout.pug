@@ -223,7 +223,7 @@ div(row)
 
         md-tabs(md-selected="a.marketSelectedIndex" ng-class="{'animate-disabled': a.disableAnimation}" md-autoselect)
           md-tab(ng-repeat="(key, data) in a.topBottomData" label="{{key}}")
-            table.fixed-layout(cellspacing="0" cellpadding="0")
+            table.fixed-layout.data-table(cellspacing="0" cellpadding="0")
               tbody
                 //- ng-click="a.selectItem('markets', item, a.marketTabs, $parent.$index)"
                 //- ng-class="{'store': item.address, 'selected': item.label === a.idSelected}"
