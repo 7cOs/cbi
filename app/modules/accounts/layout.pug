@@ -9,14 +9,16 @@ notes
           label My Accounts
           label On- &amp; Off-Premise
         .brands
-          p {{a.brandWidgetTitle}}<span ng-if="a.brandIdSelected"> - {{a.brandIdSelected}}</span>
+          p(ng-if="!a.brandWidgetSkuTitle") {{a.brandWidgetTitle}}<span ng-if="a.brandIdSelected"> - {{a.brandIdSelected}}</span>
+          p {{a.brandWidgetSkuTitle}}
         .market
           p {{a.selectedStore || a.currentTopBottomAcctType.name || a.accountTypesDefault}}
         .notes-icon
           p <a href="#" ng-click="a.openNotes(true)" analytics-on="click" analytics-event="Notes Tab"></a>
       .market-overview.clearfix
         .brands
-          p {{a.brandWidgetTitle}}<span ng-if="a.brandIdSelected"> - {{a.brandIdSelected}}</span>
+          p(ng-if="!a.brandWidgetSkuTitle") {{a.brandWidgetTitle}}<span ng-if="a.brandIdSelected"> - {{a.brandIdSelected}}</span>
+          p {{a.brandWidgetSkuTitle}}
         .market
           p {{a.selectedStore || a.currentTopBottomAcctType.name || a.accountTypesDefault}}
         .notes-icon
@@ -93,7 +95,7 @@ div(row)
         md-select(ng-model="a.filtersService.model.accountSelected.accountBrands" md-on-open="a.openSelect(true)" md-on-close="a.openSelect(false);" aria-label="Account Brands Filter" placeholder="Distribution (simple)")
           md-option(ng-repeat="filter in a.filtersService.accountFilters.accountBrands" ng-if="!a.removeDistOptionsBasedOnView(filter, true)" aria-label="{{filter.name}}" ng-value="filter") {{filter.name}}
       span.back-chevron(ng-if="a.brandSelectedIndex === 1" ng-click="a.prevTab()")
-      p.brands {{a.brandWidgetTitle || 'All Brands'}}
+      p.brands {{a.brandWidgetSkuTitle || a.brandWidgetTitle}}
     .widget-content
       table.depletions-table(cellspacing="0" cellpadding="0")
         thead
