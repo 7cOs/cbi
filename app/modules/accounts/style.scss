@@ -168,11 +168,11 @@
   md-select {
     display: inline-block;
     margin: 0;
-    font-size: 1.5em;
+    // font-size: 1.5em;
     font-weight: 300;
     color: $gray-3;
     padding-top: 6px;
-    font-size: 1.4em;
+    font-size: 1.3em;
 
     &.market {
       padding: 7px 11px 5px 29px;
@@ -262,9 +262,21 @@
     z-index: 1;
   }
 
+  .no-top-border {
+    z-index: 3;
+
+    th {
+      padding-top: 6px;
+      padding-bottom: 4px;
+    }
+  }
+
+  .data-table {
+    height: 530px;
+  }
+
   .fixed-layout {
     table-layout: fixed;
-    min-height: 100%;
 
     &:last-child {
       border-top: none;
@@ -280,6 +292,7 @@
       // white-space: nowrap;
       // text-overflow: ellipsis;
       // overflow: hidden;
+      padding: 6px 10px;
 
       &:first-child {
         padding-left: 1em;
@@ -337,15 +350,15 @@
     height: 530px;
 
     md-tab-content {
-      overflow: scroll;
+      // overflow: scroll;
     }
   }
 }
 
 .nvd {
-  height: 620px;
+  height: 630px;
   position: absolute;
-  top: 37px;
+  top: 0;
   width: 100%;
   z-index: 1;
 
@@ -384,7 +397,7 @@
 
 .dist-label,
 .market-label {
-  height: 65px;
+  // height: 65px;
 }
 
 .dist-label {

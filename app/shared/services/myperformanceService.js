@@ -192,7 +192,6 @@ module.exports = /*  @ngInject */
       storeTopBottomObj.performanceData = mergedDataForAllTopDownSorts;
       var timePeriodFilteredData = getFilteredTopBottomData(storeTopBottomObj, accountMarketSelection, depOption, distOption);
       storeTopBottomObj.timePeriodFilteredData = timePeriodFilteredData;
-      storeTopBottomObj.performanceData = storeTopBottomObj;
       storeTopBottomObj.topBottomIndices = {
         topValues: [],
         topTrends: [],
