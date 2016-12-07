@@ -386,6 +386,7 @@ module.exports = /*  @ngInject */
     function updateDistributionTimePeriod(value) {
       vm.filterModel.depletionsTimePeriod = filtersService.model.depletionsTimePeriod[value][0];
       vm.filterModel.distributionTimePeriod = filtersService.model.distributionTimePeriod[value][0];
+      onFilterPropertiesChange();
     }
 
     // ***************
@@ -722,7 +723,7 @@ module.exports = /*  @ngInject */
         }
         vm.currentBoundTopBottomIndexes =  result;
       }
-      console.log('Current Top Bittom Obj', vm.currentTopBottomObj);
+      // console.log('Current Top Bittom Obj', vm.currentTopBottomObj);
     }
 
     function checkForStoreLevel(trendSelection) {

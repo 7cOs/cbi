@@ -49,7 +49,7 @@ module.exports = /*  @ngInject */
         z = getKeyLength(filterParams) - 1;
         filterQueryParams += parseAppliedFilters(filterParams, i, z);
         queryParams += 'filter=' + encodeURIComponent(filterQueryParams);
-        console.log('queryParams', queryParams);
+        // console.log('queryParams', queryParams);
         return queryParams;
       } else if (obj.type && obj.type === 'opportunities') {
         var p = applyPage(),
