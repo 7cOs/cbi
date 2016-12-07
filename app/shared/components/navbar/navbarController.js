@@ -88,8 +88,7 @@ module.exports = /*  @ngInject */
     vm.markRead = markRead;
     vm.markSeen = markSeen;
     vm.modalAddOpportunityForm = modalAddOpportunityForm;
-    vm.modalDuplicateOpportunity = modalDuplicateOpportunity;
-    vm.closeModalDuplicateOpportunity = closeModalDuplicateOpportunity;
+    vm.modalCustomOpportunityError = modalCustomOpportunityError;
     vm.showNewRationaleInput = showNewRationaleInput;
 
     $scope.$watch(function() { return toastService.model; }, function(newVal) {
@@ -166,11 +165,11 @@ module.exports = /*  @ngInject */
       }
     }
 
-    function modalDuplicateOpportunity(error) {
+    function modalCustomOpportunityError(error) {
       $mdDialog.show({
         clickOutsideToClose: false,
         scope: $scope.$new(),
-        templateUrl: './app/shared/components/navbar/modal-duplicate-opportunity.html'
+        templateUrl: './app/shared/components/navbar/modal-custom-opportunity-error.html'
       });
 
       if (error.status === 400) {
@@ -182,11 +181,6 @@ module.exports = /*  @ngInject */
       } else {
         vm.generalError = true;
       }
-    }
-
-    function closeModalDuplicateOpportunity() {
-      vm.newOpportunity = {};
-      $mdDialog.hide();
     }
 
     // Add Opportunity
@@ -278,7 +272,7 @@ module.exports = /*  @ngInject */
           toastService.showToast('added');
         }, function(error) {
           console.log(error);
-          modalDuplicateOpportunity(error);
+          modalCustomOpportunityError(error);
           vm.duplicateOpportunity = opportunity;
         });
 

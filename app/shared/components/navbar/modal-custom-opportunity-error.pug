@@ -1,4 +1,4 @@
-div.modal.duplicate-opportuinty-modal
+div.modal.custom-opportunity-error
   div(ng-if="!nb.generalError")
     div.title
       h4 Add Opportunity
@@ -27,11 +27,12 @@ div.modal.duplicate-opportuinty-modal
           div(column="4")
             label Impact
             p {{nb.duplicateOpportunity.properties.impact.enum}}
-      button(type="submit" ng-click="nb.closeModalDuplicateOpportunity()").btn-action Use Original
+      button(type="submit" ng-click="nb.closeModal()").btn-action Use Original
       button(type="submit" ng-click="nb.modalAddOpportunityForm(true)").btn-action No, Edit Entry
   div(ng-if="nb.generalError")
     div.title
       h4 Error!
+      a.hide-row(ng-click="nb.closeModal()")
     form.modal-form
       .row
         p.error-message.accent.general-error <img src="./assets/img/icons/error.svg">Something went wrong...try again
