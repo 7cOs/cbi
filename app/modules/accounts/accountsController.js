@@ -604,6 +604,10 @@ module.exports = /*  @ngInject */
 
     function getCurrentStoreData() {
       vm.loadingTopBottom = true;
+      if (vm.currentTopBottomObj.isFilterUpdateRequired === false) {
+        vm.loadingTopBottom = false;
+        return;
+      }
       var params = filtersService.getAppliedFilters('brandSnapshot');
       var depletionOption = vm.filterModel.depletionsTimePeriod;
       var distirbutionOption = vm.filterModel.distributionTimePeriod;
@@ -630,6 +634,7 @@ module.exports = /*  @ngInject */
         if (data) {
           vm.currentTopBottomObj = myperformanceService.setStoreTopBottomData(data, vm.currentTopBottomObj, depletionOption,  distirbutionOption, acctMarketSelection, vm.filterModel.trend);
           vm.marketSelectedIndex = vm.currentTopBottomAcctType.value - 1;
+          vm.currentTopBottomObj.isFilterUpdateRequired = false;
           $timeout(function() {
             vm.loadingTopBottom = false;
           }, 300);
