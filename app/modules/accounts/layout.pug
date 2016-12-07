@@ -205,7 +205,7 @@ div(row)
           md-option(ng-repeat="filter in a.filtersService.accountFilters.accountMarkets" aria-label="{{filter.name}}" ng-value="filter" ng-click= "a.acctMarketChanged(filter)" ng-if="!a.removeDistOptionsBasedOnView(filter, false)") {{filter.name}}
       .header-selector
         md-select.market(ng-model="a.filtersService.model.valuesVsTrend" md-on-open="a.openSelect(true)" md-on-close="a.openSelect(false)" placeholder="Top 10 (Values)" aria-label="Values versus Trends Filter")
-          md-option(ng-repeat="filter in a.filtersService.accountFilters.valuesVsTrend track by filter.value" aria-label="{{filter.name}}" ng-value="filter") {{filter.name}}
+          md-option(ng-repeat="filter in a.filtersService.accountFilters.valuesVsTrend track by filter.value" aria-label="{{filter.name}}" ng-value="filter" ng-click="a.changeTopBottomSortOrder(filter)") {{filter.name}}
         md-select(ng-model="a.currentTopBottomAcctType" md-on-open="a.openSelect(true)" md-on-close="a.openSelect(false);"  placeholder="{{a.currentTopBottomAcctType.name}}" aria-label="Account Type Filter")
           md-option(ng-repeat="filter in a.filtersService.accountFilters.accountTypes track by filter.value" aria-label="{{filter.name}}" ng-value="filter" ng-click="a.setTopBottomAcctTypeSelection(filter)") {{filter.name}}
     .widget-content.clearfix
@@ -228,7 +228,7 @@ div(row)
                 //- ng-click="a.selectItem('markets', item, a.marketTabs, $parent.$index)"
                 //- ng-class="{'store': item.address, 'selected': item.label === a.idSelected}"
                 //- <span ng-if="item.storeNum" class="store-number">\#{{item.storeNum}}</span><span ng-if="item.address" class="address">{{item.address}}</span>
-                tr.clickable.market-value(ng-repeat="index in a.getSortedArrIndex(data)")
+                tr.clickable.market-value(ng-repeat="index in a.currentBoundTopBottomIndexes")
                   td.dist-label(colspan=2) {{data.timePeriodFilteredData[index].title}}
                   td.dark.market-label
                     span(ng-bind="a.getValueBoundForAcctType(data.timePeriodFilteredData[index].measure)")

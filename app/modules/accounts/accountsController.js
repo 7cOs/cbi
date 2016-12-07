@@ -68,6 +68,8 @@ module.exports = /*  @ngInject */
       subAccounts: null,
       stores: null
     };
+    vm.changeTopBottomSortOrder = changeTopBottomSortOrder;
+    vm.currentBoundTopBottomIndexes = [];
     vm.distOptionChanged = distOptionChanged;
     vm.acctMarketChanged = acctMarketChanged;
     vm.depletionOptionChanged = depletionOptionChanged;
@@ -76,7 +78,7 @@ module.exports = /*  @ngInject */
     vm.isStoreLevel = false;
     vm.getDataForTopBottom = getDataForTopBottom;
     vm.currentChartData = null;
-    vm.getSortedArrIndex = getSortedArrIndex;
+    vm.setSortedArrIndex = setSortedArrIndex;
     vm.currentTopBottomObj = null;
     vm.currentTopBottomDataForFilter = null;
     vm.getValueBoundForAcctType = getValueBoundForAcctType;
@@ -642,6 +644,7 @@ module.exports = /*  @ngInject */
           vm.currentTopBottomObj = myperformanceService.setStoreTopBottomData(data, vm.currentTopBottomObj, depletionOption,  distirbutionOption, acctMarketSelection, vm.filterModel.trend);
           vm.marketSelectedIndex = vm.currentTopBottomAcctType.value - 1;
           vm.currentTopBottomObj.isFilterUpdateRequired = false;
+          setSortedArrIndex();
           stopTopBottomLoadingIcon();
         }
       });
@@ -657,12 +660,14 @@ module.exports = /*  @ngInject */
           vm.currentTopBottomObj.performanceData = data.performance;
           vm.currentTopBottomObj.isPerformanceDataUpdateRequired = false;
           vm.currentTopBottomObj = myperformanceService.updateDataForCurrentTopDownLevel(vm.currentTopBottomObj, categoryBound, vm.filterModel.depletionsTimePeriod, vm.filterModel.distributionTimePeriod, vm.filterModel.trend);
+          setSortedArrIndex();
           stopTopBottomLoadingIcon();
         });
       } else {
         if (!topBottomObj.timePeriodFilteredData || topBottomObj.isFilterUpdateRequired === true) {
           vm.loadingTopBottom = true;
           vm.currentTopBottomObj = myperformanceService.updateDataForCurrentTopDownLevel(vm.currentTopBottomObj, categoryBound, vm.filterModel.depletionsTimePeriod, vm.filterModel.distributionTimePeriod, vm.filterModel.trend);
+          setSortedArrIndex();
           stopTopBottomLoadingIcon();
         }
       }
@@ -681,7 +686,7 @@ module.exports = /*  @ngInject */
       }
     }
 
-    function  getSortedArrIndex() {
+    function  setSortedArrIndex() {
       var data = vm.currentTopBottomObj;
       if (data && data.topBottomIndices) {
         var sortCategory = vm.filtersService.model.valuesVsTrend.value;
@@ -712,7 +717,7 @@ module.exports = /*  @ngInject */
             }
             break;
         }
-        return result;
+        vm.currentBoundTopBottomIndexes =  result;
       }
     }
 
@@ -749,6 +754,13 @@ module.exports = /*  @ngInject */
     function acctMarketChanged(selectedVal) {
       vm.filtersService.model.accountSelected.accountMarkets = selectedVal;
       onFilterPropertiesChange();
+    }
+
+    function changeTopBottomSortOrder(selectedVal) {
+      vm.loadingTopBottom = true;
+      vm.filtersService.model.valuesVsTrend = selectedVal;
+      setSortedArrIndex();
+      stopTopBottomLoadingIcon();
     }
 
     function onFilterPropertiesChange() {
