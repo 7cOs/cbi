@@ -601,37 +601,37 @@ describe('Unit: accountsController', function() {
     }
     it('Should not hide distirbution Simple in brand view ', function () {
       var distSimple = getDistirbutionBasedOnValue(ctrl.filtersService.accountFilters.accountBrandEnum.distirbutionSimple);
-      var val = ctrl.removeDistOptionsBasedOnView(distSimple);
+      var val = ctrl.removeDistOptionsBasedOnView(distSimple, true);
       expect(val).toBeFalsy();
     });
 
     it('Should hide distirbution Effective in brand view ', function () {
       var distSimple = getDistirbutionBasedOnValue(ctrl.filtersService.accountFilters.accountBrandEnum.distirbutionEffective);
-      var val = ctrl.removeDistOptionsBasedOnView(distSimple);
+      var val = ctrl.removeDistOptionsBasedOnView(distSimple, true);
       expect(val).toBeTruthy();
     });
 
     it('Should hide distirbution Simple in package view ', function () {
       ctrl.brandSelectedIndex++;
       var distSimple = getDistirbutionBasedOnValue(ctrl.filtersService.accountFilters.accountBrandEnum.distirbutionSimple);
-      var val = ctrl.removeDistOptionsBasedOnView(distSimple);
+      var val = ctrl.removeDistOptionsBasedOnView(distSimple, true);
       expect(val).toBeTruthy();
     });
 
     it('Should show distirbution Effective in package view ', function () {
       ctrl.brandSelectedIndex++;
       var distSimple = getDistirbutionBasedOnValue(ctrl.filtersService.accountFilters.accountBrandEnum.distirbutionEffective);
-      var val = ctrl.removeDistOptionsBasedOnView(distSimple);
+      var val = ctrl.removeDistOptionsBasedOnView(distSimple, true);
       expect(val).toBeFalsy();
     });
 
     it('Should show Velocity in brand and package view ', function () {
       var velocity = getDistirbutionBasedOnValue(ctrl.filtersService.accountFilters.accountBrandEnum.velocity);
-      var val = ctrl.removeDistOptionsBasedOnView(velocity);
+      var val = ctrl.removeDistOptionsBasedOnView(velocity, true);
       expect(val).toBeFalsy();
 
       ctrl.brandSelectedIndex++;
-      val = ctrl.removeDistOptionsBasedOnView(velocity);
+      val = ctrl.removeDistOptionsBasedOnView(velocity, true);
       expect(val).toBeFalsy();
     });
 

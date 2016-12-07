@@ -27,7 +27,7 @@ notes
     div.trend(column='2')
       label Trend
       md-radio-group(ng-model="a.filterModel.trend")
-        md-radio-button(ng-repeat="filter in a.filtersService.model.trend" class="md-primary" ng-value="filter" aria-label="Trend") {{filter.name}}
+        md-radio-button(ng-repeat="filter in a.filtersService.model.trend" class="md-primary" ng-value="filter" aria-label="Trend" ng-if = "a.checkForStoreLevel(filter)" ng-click="a.trendOptionChanged(filter)") {{filter.name}}
     div(column='3')
       label Ending Time Period
       md-radio-group(ng-model="a.filterModel.endingTimePeriod")
@@ -37,11 +37,11 @@ notes
         div(column='6').dropdown
           label Depletions Time Period
           md-select(ng-model="a.filterModel.depletionsTimePeriod" md-on-open="a.openSelect(true)" md-on-close="a.openSelect(false)" aria-label="Select a depletion time period" ng-model-options="{trackBy: '$value.id'}")
-            md-option(ng-repeat="filter in a.filtersService.model.depletionsTimePeriod[a.filterModel.endingTimePeriod]" aria-label="{{filter.name}}" ng-value="filter") {{filter.displayValue}}
+            md-option(ng-repeat="filter in a.filtersService.model.depletionsTimePeriod[a.filterModel.endingTimePeriod]" aria-label="{{filter.name}}" ng-value="filter" ng-click="a.depletionOptionChanged(filter);") {{filter.displayValue}}
         div(column='6').dropdown
           label Distribution Time Period
           md-select(ng-model="a.filterModel.distributionTimePeriod" md-on-open="a.openSelect(true)" md-on-close="a.openSelect(false)" aria-label="Select a distribution time period")
-            md-option(ng-repeat="filter in a.filtersService.model.distributionTimePeriod[a.filterModel.endingTimePeriod]" aria-label="{{filter.name}}" ng-value="filter")
+            md-option(ng-repeat="filter in a.filtersService.model.distributionTimePeriod[a.filterModel.endingTimePeriod]" aria-label="{{filter.name}}" ng-value="filter" ng-click="a.distOptionChanged(filter)")
               <span>{{a.filterModel.endingTimePeriod === 'month'? filter.displayValue + ' Month' : filter.displayValue + ' Days'}}</span>
 
 .filters(column='12')
@@ -91,7 +91,7 @@ div(row)
     .widget-header
       .dropdown-filter
         md-select(ng-model="a.filtersService.model.accountSelected.accountBrands" md-on-open="a.openSelect(true)" md-on-close="a.openSelect(false);" aria-label="Account Brands Filter" placeholder="Distribution (simple)")
-          md-option(ng-repeat="filter in a.filtersService.accountFilters.accountBrands" ng-if="!a.removeDistOptionsBasedOnView(filter)" aria-label="{{filter.name}}" ng-value="filter") {{filter.name}}
+          md-option(ng-repeat="filter in a.filtersService.accountFilters.accountBrands" ng-if="!a.removeDistOptionsBasedOnView(filter, true)" aria-label="{{filter.name}}" ng-value="filter") {{filter.name}}
       span.back-chevron(ng-if="a.brandSelectedIndex === 1" ng-click="a.prevTab()")
       p.brands {{a.brandWidgetTitle || 'All Brands'}}
     .widget-content
@@ -195,13 +195,14 @@ div(row)
                 //- Distirbution Trend Effective
                 td(ng-class="a.getClassBasedOnValue(a.getTrendValues(item.measures, 'distributionsEffective', 'distributionTimePeriod').value)" ng-if="a.filtersService.model.accountSelected.accountBrands.value === a.filtersService.accountFilters.accountBrandEnum.distirbutionEffective") <span ng-bind="a.getTrendValues(item.measures, 'distributionsEffective', 'distributionTimePeriod').displayValue"></span>
 
+  //- Top Bottom Section Starts
   div.scorecard-chart(column='6')
     .loader-wrap.inline(ng-if="a.loadingTopBottom" ng-class="{'active': a.loadingTopBottom}")
       loader
     .widget-header
       .dropdown-filter.narrow
         md-select(ng-model="a.filtersService.model.accountSelected.accountMarkets" md-on-open="a.openSelect(true)" md-on-close="a.openSelect(false)" aria-label="Account Markets Filter")
-          md-option(ng-repeat="filter in a.filtersService.accountFilters.accountMarkets" aria-label="{{filter.name}}" ng-value="filter") {{filter.name}}
+          md-option(ng-repeat="filter in a.filtersService.accountFilters.accountMarkets" aria-label="{{filter.name}}" ng-value="filter" ng-click= "a.acctMarketChanged(filter)" ng-if="!a.removeDistOptionsBasedOnView(filter, false)") {{filter.name}}
       .header-selector
         md-select.market(ng-model="a.filtersService.model.valuesVsTrend" md-on-open="a.openSelect(true)" md-on-close="a.openSelect(false)" placeholder="Top 10 (Values)" aria-label="Values versus Trends Filter")
           md-option(ng-repeat="filter in a.filtersService.accountFilters.valuesVsTrend track by filter.value" aria-label="{{filter.name}}" ng-value="filter") {{filter.name}}
