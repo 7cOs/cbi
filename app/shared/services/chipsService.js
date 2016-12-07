@@ -116,7 +116,7 @@ module.exports = /*  @ngInject */
       var isTargetList = false;
       filtersService.resetSort();
       if ($state.current.name === 'target-list-detail') isTargetList = true;
-
+      filtersService.model.appliedFilter.pagination.currentPage = 0;
       loaderService.openLoader(true);
 
       if (!isTargetList) {
