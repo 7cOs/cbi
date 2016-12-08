@@ -103,6 +103,8 @@ div.expanded-target-lists
                   | Depletions <br />Since Closed (CE)
                   span(ng-class="{ 'chevron-down-small' : expanded.depletionsChevron, 'chevron-up-small' : !expanded.depletionsChevron}").chevron-down-small
         div(row).target-list-detail-container
+          .loader-wrap.inline(ng-if="expanded.loaderService.model.loadingFilters" ng-class="{'active': expanded.loaderService.model.loadingFilters}")
+            loader
           div(ng-show="expanded.userService.model.targetLists.sharedNotArchivedCount === 0").no-opportunities
             p It seems that you haven't been invited to any shared Target Lists yet. In the meantime, you can invite others to collaborate on your target lists.
             a(ng-click="expanded.selectedTab = 0") Ok, show me my lists
@@ -155,6 +157,8 @@ div.expanded-target-lists
                   | Depletions <br />Since Closed (CE)
                   span(ng-class="{ 'chevron-down-small' : expanded.depletionsChevron, 'chevron-up-small' : !expanded.depletionsChevron}").chevron-down-small
         div(row).target-list-detail-container
+          .loader-wrap.inline(ng-if="expanded.loaderService.model.loadingFilters" ng-class="{'active': expanded.loaderService.model.loadingFilters}")
+            loader
           div(ng-show="expanded.userService.model.targetLists.sharedArchivedCount === 0 && expanded.userService.model.targetLists.ownedArchived === 0").no-opportunities
             h4 No Opportunities to remove
             p Try Searching for <span>Opportunities</span> and add them to your list

@@ -262,13 +262,15 @@ module.exports = /*  @ngInject */
     function initTargetLists() {
       targetListService.getTargetList(targetListService.model.currentList.id).then(function(response) {
         targetListService.model.currentList = response;
-        targetListService.model.currentList.loading = false;
 
         if (response.permissionLevel === 'author') {
           vm.targetListAuthor = 'current user';
+        } else if (response.permissionLevel === null) {
+          vm.navigateToTL();
         } else {
           vm.targetListAuthor = findTargetListAuthor(response.collaborators);
         }
+
         targetListService.model.currentList.archived = response.archived;
 
         // Binding to rootscope to use on the outer shell
