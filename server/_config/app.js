@@ -43,7 +43,7 @@ let config = {
     secret: '2l3kj4l2hcic991101CaTfAnCY2mfkj#L#JFeAsT$J4lk3rAtuLplSj2lk21j1jj',
     httpOnly: false,
     cookie: {
-      maxAge: 50000,
+      maxAge: 7200000,
       secure: false
     },
     resave: true,
