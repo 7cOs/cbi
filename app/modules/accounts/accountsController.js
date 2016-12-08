@@ -244,8 +244,22 @@ module.exports = /*  @ngInject */
       } else {
         if (accountObj.value === filtersService.accountFilters.accountMarketsEnums.distSimple && vm.brandSelectedIndex === 1) {
           isOptionHidden = true;
+          if (vm.filtersService.model.accountSelected.accountMarkets.value === filtersService.accountFilters.accountMarketsEnums.distSimple) {
+            var distEffectiveObj = filtersService.accountFilters.accountMarkets.filter(function (market) {
+              return market.value === filtersService.accountFilters.accountMarketsEnums.distEffective;
+            });
+            vm.filtersService.model.accountSelected.accountMarkets = distEffectiveObj[0];
+            updateTopBottom();
+          }
         } else if (accountObj.value === filtersService.accountFilters.accountMarketsEnums.distEffective && vm.brandSelectedIndex === 0) {
           isOptionHidden = true;
+          if (vm.filtersService.model.accountSelected.accountMarkets.value === filtersService.accountFilters.accountMarketsEnums.distEffective) {
+            var distSimpleObj = filtersService.accountFilters.accountMarkets.filter(function (market) {
+              return market.value === filtersService.accountFilters.accountMarketsEnums.distSimple;
+            });
+            vm.filtersService.model.accountSelected.accountMarkets = distSimpleObj[0];
+            updateTopBottom();
+          }
         }
       }
       return isOptionHidden;
