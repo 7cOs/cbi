@@ -49,10 +49,11 @@ module.exports = /*  @ngInject */
           return data.measure[propertyName];
         } else {
           j++;
-          return -1 * 99999;
+          return -1 * 9999999;
         }
       });
-      valuesArr = valuesArr.reverse().slice(0, valuesArr.length - j);
+      valuesArr = valuesArr.reverse();
+      valuesArr = valuesArr.slice(0, valuesArr.length - j);
       var len = valuesArr.length;
       if (len > queryLimit) {
         tempArr = valuesArr.slice(0, queryLimit);
