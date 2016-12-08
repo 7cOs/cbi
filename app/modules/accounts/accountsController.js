@@ -44,6 +44,7 @@ module.exports = /*  @ngInject */
     vm.brandIdSelected = null;
     vm.brandWidgetTitleDefault = 'All Brands';
     vm.brandWidgetTitle = vm.brandWidgetTitleDefault;
+    vm.brandWidgetSkuTitle = null;
     vm.currentTopBottomAcctType = null;
     vm.currentTopBottomDataForFilter = null;
     vm.disableAnimation = false;
@@ -218,6 +219,7 @@ module.exports = /*  @ngInject */
     // Move to previously indexed tab (only used for brands)
     function prevTab() {
       if (vm.brandSelectedIndex > 0) {
+        vm.brandWidgetSkuTitle = null;
         vm.brandSelectedIndex = vm.brandSelectedIndex - 1;
         setCurrentTotalsObject();
         vm.brandWidgetTitle = vm.brandWidgetTitleDefault;
@@ -262,8 +264,10 @@ module.exports = /*  @ngInject */
 
       if (parentIndex + 1 === parentLength) {
         // We're on the deepest level of current tab list
+        vm.brandWidgetSkuTitle = item.name;
         if (widget === 'brands') { setSelected(item.name, 'brands'); }
       } else {
+        vm.brandWidgetSkuTitle = null;
         if (widget === 'brands') { vm.brandWidgetTitle = item.name; }
         vm.loadingBrandSnapshot = true;
         var params = filtersService.getAppliedFilters('brandSnapshot');
