@@ -46,7 +46,8 @@ module.exports =  function(app) {
           RedisStore    = require('connect-redis')(session);
 
     sessionStore = new RedisStore({
-      client: redisClient
+      client: redisClient,
+      ttl: 7200000
     });
   }
 
