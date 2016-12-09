@@ -283,6 +283,13 @@ module.exports = /*  @ngInject */
 
       // reset top bottom
       // here
+      // When we reset Im setting the reset data flag on all objects (distirbutor, acct, subacct, store)
+      for (var topBottomObj in vm.topBottomData) {
+        myperformanceService.resetPerformanceDataFlags(vm.topBottomData[topBottomObj]);
+      }
+      // Get the current top bottom object for the level chosen
+      vm.currentTopBottomObj = getCurrentTopBottomObject(vm.currentTopBottomAcctType);
+      // This function gives me the updated datafor whatever level is currently set
       updateTopBottom();
     }
 
@@ -612,6 +619,7 @@ module.exports = /*  @ngInject */
       vm.filtersService.model.selected.premiseType = 'all';
       vm.chartOptions = myperformanceService.getChartOptions();
       vm.topBottomData = myperformanceService.initDataForAllTbLevels(vm.topBottomData);
+      vm.marketSelectedIndex = 0;
       vm.currentTopBottomObj = getCurrentTopBottomObject(vm.currentTopBottomAcctType);
     }
 
