@@ -266,10 +266,30 @@ module.exports = /*  @ngInject */
     }
 
     function resetFilters() {
+      // reset brand
+      vm.brandWidgetTitle = angular.copy(vm.brandWidgetTitleDefault);
+      vm.brandWidgetSkuTitle = null;
+      vm.selected = null;
+      vm.previous = null;
+      vm.brandSelectedIndex = 0;
+      vm.brandIdSelected = null;
+      vm.idSelected = null;
+
       vm.filterModel = angular.copy(filterModelTemplate);
       chipsService.resetChipsFilters(chipsService.model);
+      setDefaultDropDownOptions();
       setDefaultFilterOptions();
       apply(false);
+
+      // reset top bottom
+      // When we reset Im setting the reset data flag on all objects (distirbutor, acct, subacct, store)
+      for (var topBottomObj in vm.topBottomData) {
+        myperformanceService.resetPerformanceDataFlags(vm.topBottomData[topBottomObj]);
+      }
+      // Get the current top bottom object for the level chosen
+      vm.currentTopBottomObj = getCurrentTopBottomObject(vm.currentTopBottomAcctType);
+      // This function gives me the updated datafor whatever level is currently set
+      updateTopBottom();
     }
 
     // When a row item is clicked in brands / market widgets
@@ -598,6 +618,7 @@ module.exports = /*  @ngInject */
       vm.filtersService.model.selected.premiseType = 'all';
       vm.chartOptions = myperformanceService.getChartOptions();
       vm.topBottomData = myperformanceService.initDataForAllTbLevels(vm.topBottomData);
+      vm.marketSelectedIndex = 0;
       vm.currentTopBottomObj = getCurrentTopBottomObject(vm.currentTopBottomAcctType);
     }
 
