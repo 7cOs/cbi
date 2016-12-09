@@ -17,7 +17,9 @@ module.exports = /*  @ngInject */
       resetFilterFlags: resetFilterFlags,
       resetPerformanceDataFlags: resetPerformanceDataFlags,
       getFilterParametersForStore: getFilterParametersForStore,
-      setStoreTopBottomData: setStoreTopBottomData
+      setStoreTopBottomData: setStoreTopBottomData,
+      appendFilterParametersForTopBottom: appendFilterParametersForTopBottom,
+      resetFiltersForLevelsAboveCurrent: resetFiltersForLevelsAboveCurrent
     };
 
     return service;
@@ -289,6 +291,9 @@ module.exports = /*  @ngInject */
     function resetPerformanceDataFlags(topBottomObj) {
       topBottomObj.isFilterUpdateRequired = true;
       topBottomObj.isPerformanceDataUpdateRequired = true;
+      topBottomObj.performanceData = null;
+      topBottomObj.timePeriodFilteredData = null;
+      topBottomObj.chartData = null;
     }
 
     function getChartData(tbData, categoryType, trendType) {
@@ -325,6 +330,59 @@ module.exports = /*  @ngInject */
       });
       chartData[0].values = categoryChartData;
       return chartData;
+    }
+
+    function appendFilterParametersForTopBottom (params, currentTopBottomFilters) {
+      if (params.distributors !== '') {
+        params.distributors = currentTopBottomFilters.distributors;
+      }
+
+      if (params.accounts !== '') {
+        params.distributors = currentTopBottomFilters.accounts;
+      }
+
+      if (params.subAccounts !== '') {
+        params.distributors = currentTopBottomFilters.subAccounts;
+      }
+
+      if (params.store !== '') {
+        params.distributors = currentTopBottomFilters.store;
+      }
+      return params;
+    }
+
+    function resetFiltersForLevelsAboveCurrent(currentLevel, topBottomFiltersObj, topBottomObj) {
+      if (!currentLevel) {
+        topBottomFiltersObj.distributors = '';
+        topBottomFiltersObj.accounts = '';
+        topBottomFiltersObj.subAccounts = '';
+        topBottomFiltersObj.stores = '';
+        resetPerformanceDataFlags(topBottomObj.distributors);
+        resetPerformanceDataFlags(topBottomObj.accounts);
+        resetPerformanceDataFlags(topBottomObj.subAccounts);
+        resetPerformanceDataFlags(topBottomObj.stores);
+      } else {
+        switch (currentLevel) {
+          case 0:
+            topBottomFiltersObj.accounts = '';
+            topBottomFiltersObj.subAccounts = '';
+            topBottomFiltersObj.stores = '';
+            resetPerformanceDataFlags(topBottomObj.accounts);
+            resetPerformanceDataFlags(topBottomObj.subAccounts);
+            resetPerformanceDataFlags(topBottomObj.stores);
+            break;
+          case 1:
+            topBottomFiltersObj.subAccounts = '';
+            topBottomFiltersObj.stores = '';
+            resetPerformanceDataFlags(topBottomObj.stores);
+            resetPerformanceDataFlags(topBottomObj.subAccounts);
+            break;
+          case 2:
+            topBottomFiltersObj.stores = '';
+            resetPerformanceDataFlags(topBottomObj.stores);
+            break;
+        }
+      }
     }
 
     // Mock data needs to be removed when Scorecard is implemented with the API
