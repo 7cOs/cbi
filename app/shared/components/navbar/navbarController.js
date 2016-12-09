@@ -36,6 +36,10 @@ module.exports = /*  @ngInject */
 
     // Defaults
     vm.addNewRationale = false;
+    vm.cacheInputs = true;
+    vm.cachedOpportunity;
+    vm.dismissedError = false;
+    vm.duplicateError = false;
     vm.myAccountsOnly = true;
     vm.noNotifications = 'No unread notifications.';
     vm.notifications = [];
@@ -53,8 +57,6 @@ module.exports = /*  @ngInject */
 
     vm.newOpportunity = vm.newOpportunityTemplate;
     vm.unreadNotifications = 0;
-    vm.cachedOpportunity;
-    vm.cacheInputs = true;
 
     // Mock data
     vm.accountSelectorSelected = 'Distributor';
@@ -167,6 +169,8 @@ module.exports = /*  @ngInject */
     }
 
     function modalCustomOpportunityError(error) {
+      vm.dismissedError = vm.duplicateError = vm.generalError = false;
+
       $mdDialog.show({
         clickOutsideToClose: false,
         scope: $scope.$new(),
@@ -175,16 +179,20 @@ module.exports = /*  @ngInject */
 
       if (error.status === 400) {
         angular.forEach(error.data, function(key, value) {
-          if (!vm.doubleError) {
-            if (key.description === 'OPP101') {
-              vm.doubleError = true;
+          var keepGoing = true;
+          if (error.data.length === 1 && key.description === 'OPP101') {
+            vm.dismissedError = vm.generalError = false;
+            vm.duplicateError = true;
+          } else if (keepGoing) {
+            if (error.data.length > 1 && key.description === 'OPP107') {
+              vm.duplicateError = vm.generalError = false;
+              vm.dismissedError = true;
+              keepGoing = false;
             }
-          } else {
-            vm.doubleError = false;
           }
         });
       } else {
-        vm.doubleError = false;
+        vm.generalError = true;
       }
     }
 

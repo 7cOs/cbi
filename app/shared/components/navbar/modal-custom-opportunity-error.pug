@@ -27,7 +27,12 @@ div.modal.custom-opportunity-error
           div(column="4")
             label Impact
             p {{nb.duplicateOpportunity.properties.impact.enum}}
-      button(type="submit" ng-click="nb.closeModal()").btn-action Use Original
+      div(ng-if="nb.dismissedError").dismissed-error
+        h4.accent This Opportunity was Hidden
+        p If you unhide it, it will be visible again in your list
+        button(type="submit" ng-click="nb.closeModal()").btn-action Use Original (Unhide)
+      div(ng-if="nb.duplicateError")
+        button(type="submit" ng-click="nb.closeModal()").btn-action Use Original
       button(type="submit" ng-click="nb.modalAddOpportunityForm(true)").btn-action No, Edit Entry
   div(ng-if="!nb.doubleError")
     div.title

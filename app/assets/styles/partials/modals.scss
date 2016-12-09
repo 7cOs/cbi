@@ -265,6 +265,27 @@ md-dialog {
     button {
       margin: 20px 0 10px;
     }
+
+    label {
+      padding-top: 15px;
+    }
+
+    .cancel {
+      text-align: center;
+    }
+
+    .dismissed-error {
+      .accent:before {
+        background-image: url('../../assets/img/icons/hidden-opportunity.svg');
+        background-repeat: no-repeat;
+        content: '';
+        display: block;
+        position: absolute;
+        bottom: 200px;
+        height: 15px;
+        width: 15px;
+      }
+    }
   }
 
   .icon-container {
