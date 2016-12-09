@@ -694,6 +694,10 @@ module.exports = /*  @ngInject */
           setSortedArrIndex();
           stopTopBottomLoadingIcon();
         }
+      }, function(error) {
+        console.log('[getCurrentStoreData]', error);
+        vm.loadingTopBottom = 'error';
+        vm.currentChartData = myperformanceService.initChartData();
       });
     }
 
@@ -710,6 +714,10 @@ module.exports = /*  @ngInject */
           vm.currentTopBottomObj = myperformanceService.updateDataForCurrentTopDownLevel(vm.currentTopBottomObj, categoryBound, vm.filterModel.depletionsTimePeriod, vm.filterModel.distributionTimePeriod, vm.filterModel.trend);
           setSortedArrIndex();
           stopTopBottomLoadingIcon();
+        }, function(error) {
+          console.log('[getDataForTopBottom]', error);
+          vm.loadingTopBottom = 'error';
+          vm.currentChartData = myperformanceService.initChartData();
         });
       } else if (!topBottomObj.timePeriodFilteredData || topBottomObj.isFilterUpdateRequired === true) {
           vm.loadingTopBottom = true;

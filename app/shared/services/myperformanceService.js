@@ -19,7 +19,8 @@ module.exports = /*  @ngInject */
       getFilterParametersForStore: getFilterParametersForStore,
       setStoreTopBottomData: setStoreTopBottomData,
       appendFilterParametersForTopBottom: appendFilterParametersForTopBottom,
-      resetFiltersForLevelsAboveCurrent: resetFiltersForLevelsAboveCurrent
+      resetFiltersForLevelsAboveCurrent: resetFiltersForLevelsAboveCurrent,
+      initChartData: initChartData
     };
 
     return service;
@@ -386,6 +387,15 @@ module.exports = /*  @ngInject */
             break;
         }
       }
+    }
+
+    function initChartData() {
+      var data = [
+      {
+        'key': 'A key',
+        'values': [[]]
+      }];
+      return data;
     }
 
     // Mock data needs to be removed when Scorecard is implemented with the API

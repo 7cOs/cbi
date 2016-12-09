@@ -247,6 +247,16 @@
   &.scorecard-table-accounts {
     padding-right: 0.5em;
   }
+
+  .loader-wrap.error {
+    top: 50px;
+
+    .error-text {
+      top: 35%;
+      left: 30px;
+      position: relative;
+    }
+  }
 }
 
 .scorecard-chart {
