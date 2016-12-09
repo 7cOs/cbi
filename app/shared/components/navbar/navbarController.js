@@ -38,6 +38,7 @@ module.exports = /*  @ngInject */
     vm.addNewRationale = false;
     vm.cacheInputs = true;
     vm.cachedOpportunity;
+    vm.dateUpdated = '';
     vm.dismissedError = false;
     vm.duplicateError = false;
     vm.myAccountsOnly = true;
@@ -56,6 +57,7 @@ module.exports = /*  @ngInject */
     };
 
     vm.newOpportunity = vm.newOpportunityTemplate;
+    vm.oppID;
     vm.unreadNotifications = 0;
 
     // Mock data
@@ -85,11 +87,13 @@ module.exports = /*  @ngInject */
     vm.addToTargetList = addToTargetList;
     vm.closeMenus = closeMenus;
     vm.closeModal = closeModal;
+    vm.getDismissedOpportunity = getDismissedOpportunity;
     vm.getTargetLists = getTargetLists;
     vm.markRead = markRead;
     vm.markSeen = markSeen;
     vm.modalAddOpportunityForm = modalAddOpportunityForm;
     vm.modalCustomOpportunityError = modalCustomOpportunityError;
+    vm.showImpact = showImpact;
     vm.showNewRationaleInput = showNewRationaleInput;
 
     $scope.$watch(function() { return toastService.model; }, function(newVal) {
@@ -180,20 +184,42 @@ module.exports = /*  @ngInject */
       if (error.status === 400) {
         angular.forEach(error.data, function(key, value) {
           var keepGoing = true;
-          if (error.data.length === 1 && key.description === 'OPP101') {
-            vm.dismissedError = vm.generalError = false;
-            vm.duplicateError = true;
-          } else if (keepGoing) {
+          if (keepGoing) {
             if (error.data.length > 1 && key.description === 'OPP107') {
               vm.duplicateError = vm.generalError = false;
               vm.dismissedError = true;
               keepGoing = false;
+              vm.getDismissedOpportunity(key.objectIdentifier);
+              vm.oppID = key.objectIdentifier;
+            }
+          } else {
+            if (key.description === 'OPP101') {
+              vm.dismissedError = vm.generalError = false;
+              vm.duplicateError = true;
             }
           }
         });
       } else {
         vm.generalError = true;
       }
+    }
+
+    function showImpact(letter) {
+      if (letter === 'H') {
+        return 'High';
+      } else if (letter === 'M') {
+        return 'Medium';
+      } else {
+        return 'Low';
+      }
+    }
+
+    function getDismissedOpportunity(oppID) {
+      opportunitiesService.getOpportunities(oppID)
+      .then(function(response) {
+        // update with 'date updated' value from api when accessible
+        vm.dateUpdated = response[0].effectiveDate;
+      });
     }
 
     // Add Opportunity
@@ -304,7 +330,8 @@ module.exports = /*  @ngInject */
     }
 
     // Close "Add Opportunity" modal
-    function closeModal() {
+    function closeModal(deleteFeedback) {
+      if (deleteFeedback) opportunitiesService.deleteOpportunityFeedback(vm.oppID);
       vm.newOpportunity = vm.newOpportunityTemplate;
       $mdDialog.hide();
     }
