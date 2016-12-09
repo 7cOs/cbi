@@ -282,7 +282,6 @@ module.exports = /*  @ngInject */
       apply(false);
 
       // reset top bottom
-      // here
       // When we reset Im setting the reset data flag on all objects (distirbutor, acct, subacct, store)
       for (var topBottomObj in vm.topBottomData) {
         myperformanceService.resetPerformanceDataFlags(vm.topBottomData[topBottomObj]);
