@@ -266,8 +266,21 @@ module.exports = /*  @ngInject */
     }
 
     function resetFilters() {
+      // reset brand
+      vm.brandWidgetTitle = angular.copy(vm.brandWidgetTitleDefault);
+      vm.brandWidgetSkuTitle = null;
+      vm.selected = null;
+      vm.previous = null;
+      vm.brandSelectedIndex = 0;
+      vm.brandIdSelected = null;
+      vm.idSelected = null;
+
+      // reset top bottom
+      updateTopBottom();
+
       vm.filterModel = angular.copy(filterModelTemplate);
       chipsService.resetChipsFilters(chipsService.model);
+      setDefaultDropDownOptions();
       setDefaultFilterOptions();
       apply(false);
     }
