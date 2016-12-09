@@ -206,9 +206,9 @@ module.exports = /*  @ngInject */
       opportunity.properties.product.type = tempType;
 
       if (saveOpportunity(opportunity)) {
-        toastService.showToast('added');
         $mdDialog.hide();
       }
+      vm.cachedOpportunity = angular.copy(vm.newOpportunity);
     }
 
     function saveOpportunity(opportunity) {
@@ -251,15 +251,16 @@ module.exports = /*  @ngInject */
           if (targetList) {
             addToTargetList(targetList, success);
           }
-          vm.newOpportunity = vm.newOpportunityTemplate;
-          resetFormModels();
           if ($state.current.name === 'opportunities') {
             chipsService.applyFilters();
           }
+          toastService.showToast('added');
+          vm.newOpportunity = vm.newOpportunityTemplate;
+          resetFormModels();
         }, function(error) {
           console.log(error);
-          modalCustomOpportunityError(error);
           vm.duplicateOpportunity = opportunity;
+          modalCustomOpportunityError(error);
         });
 
       return true;
