@@ -40,12 +40,9 @@ module.exports = /*  @ngInject */
             bottomValues: []
           },
           valuesArr, tempArr = [];
-      // var validArr = tbData.filter(function (data) {
-      //   return isValidValues(data.measure[propertyName]);
-      // });
       var j = 0;
       valuesArr = $filter('orderBy')(tbData, function(data) {
-        if (data.measure[propertyName]) {
+        if (isValidValues(data.measure[propertyName])) {
           return data.measure[propertyName];
         } else {
           j++;
