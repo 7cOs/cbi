@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports = /*  @ngInject */
-  function navbarController($rootScope, $scope, $state, $window, $mdPanel, $mdDialog, $mdMenu, $mdSelect, $anchorScroll, notificationsService, opportunitiesService, targetListService, userService, versionService, loaderService, ieHackService, toastService, filtersService, moment) {
+  function navbarController($rootScope, $scope, $state, $window, $mdPanel, $mdDialog, $mdMenu, $mdSelect, $anchorScroll, notificationsService, opportunitiesService, targetListService, userService, versionService, loaderService, ieHackService, toastService, filtersService, chipsService, moment) {
 
     // ****************
     // CONTROLLER SETUP
@@ -79,7 +79,6 @@ module.exports = /*  @ngInject */
     vm.targetLists = [];
 
     // Expose public methods
-    vm.addAnotherOpportunity = addAnotherOpportunity;
     vm.addOpportunity = addOpportunity;
     vm.addToTargetList = addToTargetList;
     vm.closeMenus = closeMenus;
@@ -205,26 +204,11 @@ module.exports = /*  @ngInject */
       opportunity.properties.store = vm.chosenStoreObject;
       opportunity.properties.product = vm.chosenProductObject;
       opportunity.properties.product.type = tempType;
+
       if (saveOpportunity(opportunity)) {
         $mdDialog.hide();
       }
-
       vm.cachedOpportunity = angular.copy(vm.newOpportunity);
-
-      filtersService.model.appliedFilter.pagination.totalOpportunities++;
-    }
-
-    // Adds opportunities to an array with the same account name
-    function addAnotherOpportunity(opportunity) {
-      if (saveOpportunity(opportunity)) {
-        vm.newOpportunity = {
-          properties: {
-            store: {
-              description: opportunity.properties.store.name
-            }
-          }
-        };
-      }
     }
 
     function saveOpportunity(opportunity) {
@@ -267,13 +251,16 @@ module.exports = /*  @ngInject */
           if (targetList) {
             addToTargetList(targetList, success);
           }
+          if ($state.current.name === 'opportunities') {
+            chipsService.applyFilters();
+          }
+          toastService.showToast('added');
           vm.newOpportunity = vm.newOpportunityTemplate;
           resetFormModels();
-          toastService.showToast('added');
         }, function(error) {
           console.log(error);
-          modalCustomOpportunityError(error);
           vm.duplicateOpportunity = opportunity;
+          modalCustomOpportunityError(error);
         });
 
       return true;

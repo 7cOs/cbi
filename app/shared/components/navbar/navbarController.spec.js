@@ -38,9 +38,6 @@ describe('Unit: list controller', function() {
   });
 
   it('should expose public methods', function() {
-    expect(ctrl.addAnotherOpportunity).not.toBeUndefined();
-    expect(typeof (ctrl.addAnotherOpportunity)).toEqual('function');
-
     expect(ctrl.addOpportunity).not.toBeUndefined();
     expect(typeof (ctrl.addOpportunity)).toEqual('function');
 

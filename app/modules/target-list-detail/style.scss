@@ -20,5 +20,10 @@
 
   &.success {
     background-color: $green;
+
+    span {
+      color: $white;
+      text-decoration: underline;
+    }
   }
 }
