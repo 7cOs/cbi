@@ -333,26 +333,26 @@ module.exports = /*  @ngInject */
     }
 
     function appendFilterParametersForTopBottom (params, currentTopBottomFilters) {
-      if (params.distributors !== '') {
-        params.distributors = currentTopBottomFilters.distributors;
+      if (currentTopBottomFilters.distributors) {
+        params.distributor = currentTopBottomFilters.distributors.id;
       }
 
-      if (params.accounts !== '') {
-        params.distributors = currentTopBottomFilters.accounts;
+      if (currentTopBottomFilters.accounts) {
+        params.account = currentTopBottomFilters.accounts.id;
       }
 
-      if (params.subAccounts !== '') {
-        params.distributors = currentTopBottomFilters.subAccounts;
+      if (currentTopBottomFilters.subAccounts) {
+        params.subaccount = currentTopBottomFilters.subAccounts.id;
       }
 
-      if (params.store !== '') {
-        params.distributors = currentTopBottomFilters.store;
+      if (currentTopBottomFilters.store) {
+        params.store = currentTopBottomFilters.store.id;
       }
       return params;
     }
 
     function resetFiltersForLevelsAboveCurrent(currentLevel, topBottomFiltersObj, topBottomObj) {
-      if (!currentLevel) {
+      if (!isValidValues(currentLevel.value)) {
         topBottomFiltersObj.distributors = '';
         topBottomFiltersObj.accounts = '';
         topBottomFiltersObj.subAccounts = '';
@@ -362,23 +362,26 @@ module.exports = /*  @ngInject */
         resetPerformanceDataFlags(topBottomObj.subAccounts);
         resetPerformanceDataFlags(topBottomObj.stores);
       } else {
-        switch (currentLevel) {
-          case 0:
+        switch (currentLevel.value) {
+          case 1:
             topBottomFiltersObj.accounts = '';
+            topBottomFiltersObj.subAccounts = '';
+            topBottomFiltersObj.stores = '';
+            resetPerformanceDataFlags(topBottomObj.distributors);
+            resetPerformanceDataFlags(topBottomObj.accounts);
+            resetPerformanceDataFlags(topBottomObj.subAccounts);
+            resetPerformanceDataFlags(topBottomObj.stores);
+            break;
+          case 2:
             topBottomFiltersObj.subAccounts = '';
             topBottomFiltersObj.stores = '';
             resetPerformanceDataFlags(topBottomObj.accounts);
             resetPerformanceDataFlags(topBottomObj.subAccounts);
             resetPerformanceDataFlags(topBottomObj.stores);
             break;
-          case 1:
-            topBottomFiltersObj.subAccounts = '';
+          case 3:
             topBottomFiltersObj.stores = '';
-            resetPerformanceDataFlags(topBottomObj.stores);
             resetPerformanceDataFlags(topBottomObj.subAccounts);
-            break;
-          case 2:
-            topBottomFiltersObj.stores = '';
             resetPerformanceDataFlags(topBottomObj.stores);
             break;
         }

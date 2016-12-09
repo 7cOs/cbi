@@ -500,7 +500,7 @@ module.exports = /*  @ngInject */
       }
 
       function getTopBottomSnapshotFail(error) {
-        snapshotPromise.reject(error);
+        snapshotPromise.resolve(error);
       }
 
       return snapshotPromise.promise;

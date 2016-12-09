@@ -91,7 +91,8 @@ module.exports = /*  @ngInject */
         delete obj.type;
 
         queryParams += parseAppliedFilters(obj, i, z);
-
+        console.log('queryParams', queryParams);
+        console.log('encodedQueryParam', encodeURIComponent(queryParams));
         // console.log('[?filter=' + queryParams + ']', '?filter=' + encodeURIComponent(queryParams));
         return '?filter=' + encodeURIComponent(queryParams);
       } else {
