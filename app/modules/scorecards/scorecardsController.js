@@ -137,6 +137,8 @@ module.exports = /*  @ngInject */
       vm.distributionSelectOptions.selected = vm.filtersService.model.distributionTimePeriod[value][0].name;
       vm.depletionSelect = vm.filtersService.model.depletionsTimePeriod[value][0].name;
       updatedSelectionValuesInFilter(value, vm.depletionSelect, vm.distributionSelectOptions.selected);
+      updateTotalRowDepletions();
+      updateTotalRowDistributions();
     }
 
     // TODO The models that are hooked up for depletion and distirbution need to be changed to use an object instead of a string in the next sprint
