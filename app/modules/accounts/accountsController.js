@@ -275,14 +275,15 @@ module.exports = /*  @ngInject */
       vm.brandIdSelected = null;
       vm.idSelected = null;
 
-      // reset top bottom
-      updateTopBottom();
-
       vm.filterModel = angular.copy(filterModelTemplate);
       chipsService.resetChipsFilters(chipsService.model);
       setDefaultDropDownOptions();
       setDefaultFilterOptions();
       apply(false);
+
+      // reset top bottom
+      // here
+      updateTopBottom();
     }
 
     // When a row item is clicked in brands / market widgets
