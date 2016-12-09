@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports = /*  @ngInject */
-  function navbarController($rootScope, $scope, $state, $window, $mdPanel, $mdDialog, $mdMenu, $mdSelect, $anchorScroll, notificationsService, opportunitiesService, targetListService, userService, versionService, loaderService, ieHackService, toastService, filtersService, moment) {
+  function navbarController($rootScope, $scope, $state, $window, $mdPanel, $mdDialog, $mdMenu, $mdSelect, $anchorScroll, notificationsService, opportunitiesService, targetListService, userService, versionService, loaderService, ieHackService, toastService, filtersService, chipsService, moment) {
 
     // ****************
     // CONTROLLER SETUP
@@ -79,7 +79,6 @@ module.exports = /*  @ngInject */
     vm.targetLists = [];
 
     // Expose public methods
-    vm.addAnotherOpportunity = addAnotherOpportunity;
     vm.addOpportunity = addOpportunity;
     vm.addToTargetList = addToTargetList;
     vm.closeMenus = closeMenus;
@@ -205,25 +204,10 @@ module.exports = /*  @ngInject */
       opportunity.properties.store = vm.chosenStoreObject;
       opportunity.properties.product = vm.chosenProductObject;
       opportunity.properties.product.type = tempType;
+
       if (saveOpportunity(opportunity)) {
+        toastService.showToast('added');
         $mdDialog.hide();
-      }
-
-      vm.cachedOpportunity = angular.copy(vm.newOpportunity);
-
-      filtersService.model.appliedFilter.pagination.totalOpportunities++;
-    }
-
-    // Adds opportunities to an array with the same account name
-    function addAnotherOpportunity(opportunity) {
-      if (saveOpportunity(opportunity)) {
-        vm.newOpportunity = {
-          properties: {
-            store: {
-              description: opportunity.properties.store.name
-            }
-          }
-        };
       }
     }
 
@@ -269,7 +253,9 @@ module.exports = /*  @ngInject */
           }
           vm.newOpportunity = vm.newOpportunityTemplate;
           resetFormModels();
-          toastService.showToast('added');
+          if ($state.current.name === 'opportunities') {
+            chipsService.applyFilters();
+          }
         }, function(error) {
           console.log(error);
           modalCustomOpportunityError(error);

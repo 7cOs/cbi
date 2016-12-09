@@ -108,6 +108,12 @@ md-dialog {
     label {
       text-align: left;
       padding-bottom: 5px;
+
+      &.error {
+        position: relative;
+        top: -20px;
+        text-align: center;
+      }
     }
 
     input {

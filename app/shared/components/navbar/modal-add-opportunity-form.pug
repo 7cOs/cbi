@@ -21,7 +21,6 @@ div.modal.add-opportunity
     div.modal-input.clearfix
       label(ng-if="nb.newOpportunity.properties.distributionType.type === 'new'") Recommended Package / SKU
       label(ng-if="nb.newOpportunity.properties.distributionType.type === 'other'") Recommended Brand or Package/ SKU
-
       .inline-search-radio(layout="row")
         md-radio-group(ng-model="nb.newOpportunity.properties.product.type")
           md-radio-button.md-primary(value="sku" aria-label="Search for brand or package/SKU") &nbsp;
@@ -58,10 +57,6 @@ div.modal.add-opportunity
             md-option(aria-label="Low Impact" value="L") <span class="impact-text">Low</span> <img class="impact-icon" src="./assets/img/icons/impact-low.svg">
         div(ng-show="nb.addOpportunityForm.impactDropdown.$invalid && nb.addOpportunityForm.$submitted")
           p.error-message.accent <img src="./assets/img/icons/error.svg">Please select an impact level.
-    div.modal-input
-      button(type="submit" ng-click="nb.addAnotherOpportunity(nb.newOpportunity)").modal-input.icon-container.add-another-opportunity
-        img(src="../assets/img/icons/overview-overall-market.svg")
-        p.accent.left Add another opportunity
     div.modal-input.clearfix
       label Add to target list (optional)
       .horizontal-layout
