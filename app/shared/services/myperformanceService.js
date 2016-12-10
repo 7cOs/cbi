@@ -20,7 +20,10 @@ module.exports = /*  @ngInject */
       setStoreTopBottomData: setStoreTopBottomData,
       appendFilterParametersForTopBottom: appendFilterParametersForTopBottom,
       resetFiltersForLevelsAboveCurrent: resetFiltersForLevelsAboveCurrent,
-      initChartData: initChartData
+      initChartData: initChartData,
+      getAcctTypeObjectBasedOnTabIndex: getAcctTypeObjectBasedOnTabIndex,
+      isResetFiltersRequired: isResetFiltersRequired,
+      isValidValues: isValidValues
     };
 
     return service;
@@ -45,7 +48,7 @@ module.exports = /*  @ngInject */
           valuesArr, tempArr = [];
       var j = 0;
       valuesArr = $filter('orderBy')(tbData, function(data) {
-        if (isValidValues(data.measure[propertyName])) {
+        if (isValidValues(Number(data.measure[propertyName]))) {
           return data.measure[propertyName];
         } else {
           j++;
@@ -387,6 +390,36 @@ module.exports = /*  @ngInject */
             break;
         }
       }
+    }
+
+    function isResetFiltersRequired(topBottomFilters) {
+      var isReset = false;
+      for (var prop in topBottomFilters) {
+        if (topBottomFilters[prop] !== '') {
+          topBottomFilters[prop] = '';
+          if (!isReset) {
+            isReset = true;
+          }
+        }
+      }
+      return isReset;
+    }
+
+    function getAcctTypeObjectBasedOnTabIndex(tabIndex, isGetNextLevel) {
+      var currentAccountTypeLevel = null;
+      if (isGetNextLevel === true) {
+        var currentLevel = tabIndex + 1;
+        var levelToNavigate = currentLevel + 1;
+        currentAccountTypeLevel = filtersService.accountFilters.accountTypes.filter(function(market) {
+          return market.value === levelToNavigate;
+        });
+      } else {
+        var previousAcctIndex = tabIndex;
+        currentAccountTypeLevel = filtersService.accountFilters.accountTypes.filter(function(market) {
+          return market.value === previousAcctIndex;
+        });
+      }
+      return currentAccountTypeLevel[0];
     }
 
     function initChartData() {

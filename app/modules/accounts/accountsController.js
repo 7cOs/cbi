@@ -75,6 +75,7 @@ module.exports = /*  @ngInject */
       subAccounts: '',
       stores: ''
     };
+    vm.prevLevelInTopBottom = prevLevelInTopBottom;
     vm.navigateTopBottomLevels = navigateTopBottomLevels;
     vm.changeTopBottomSortOrder = changeTopBottomSortOrder;
     vm.currentBoundTopBottomIndexes = [];
@@ -287,7 +288,10 @@ module.exports = /*  @ngInject */
       setDefaultDropDownOptions();
       setDefaultFilterOptions();
       apply(false);
+      resetTopBottom();
+    }
 
+    function resetTopBottom() {
       // reset top bottom
       // When we reset Im setting the reset data flag on all objects (distirbutor, acct, subacct, store)
       for (var topBottomObj in vm.topBottomData) {
@@ -610,6 +614,9 @@ module.exports = /*  @ngInject */
         vm.currentTopBottomAcctType = currentAcctType;
         vm.currentTopBottomObj = getCurrentTopBottomObject(currentAcctType);
         var propertyBoundToTable = vm.filtersService.model.accountSelected.accountMarkets;
+        if (myperformanceService.isResetFiltersRequired(vm.currentTopBottomFilters)) {
+          resetTopBottom();
+        }
         getDataForTopBottom(vm.currentTopBottomObj, propertyBoundToTable);
       }
     }
@@ -822,15 +829,20 @@ module.exports = /*  @ngInject */
       stopTopBottomLoadingIcon();
     }
 
-    function navigateTopBottomLevels(levelName, performanceData) {
-      var currentLevel = vm.marketSelectedIndex + 1;
-      var levelToNavigate = currentLevel + 1;
-      var currentAccountTypeLevel = filtersService.accountFilters.accountTypes.filter(function(market) {
-        return market.value === levelToNavigate;
-      });
-      myperformanceService.resetFiltersForLevelsAboveCurrent(vm.currentTopBottomAcctType, vm.currentTopBottomFilters, vm.topBottomData);
+    function prevLevelInTopBottom() {
+      vm.currentTopBottomAcctType = myperformanceService.getAcctTypeObjectBasedOnTabIndex(vm.marketSelectedIndex);
+      vm.currentTopBottomObj = getCurrentTopBottomObject(vm.currentTopBottomAcctType);
+      updateTopBottom();
+    }
 
-      vm.currentTopBottomAcctType = currentAccountTypeLevel[0];
+    function navigateTopBottomLevels(levelName, performanceData) {
+      if (!myperformanceService.isValidValues(Number(performanceData.id))) {
+        return;
+      }
+      var isGetNextLevel = true;
+      myperformanceService.resetFiltersForLevelsAboveCurrent(vm.currentTopBottomAcctType, vm.currentTopBottomFilters, vm.topBottomData);
+      // Get the account type next to the current level
+      vm.currentTopBottomAcctType = myperformanceService.getAcctTypeObjectBasedOnTabIndex(vm.marketSelectedIndex, isGetNextLevel);
       vm.currentTopBottomFilters[levelName] = {
         id: performanceData.id,
         name: performanceData.name
