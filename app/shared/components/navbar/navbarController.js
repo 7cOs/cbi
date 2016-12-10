@@ -144,6 +144,7 @@ module.exports = /*  @ngInject */
         .markNotifications(toMarkSeen)
         .then(function() {
           vm.notificationHelper.showBadge = false;
+          vm.notificationHelper.unseenNotifications = 0;
         });
     }
 
