@@ -513,7 +513,6 @@ module.exports = /*  @ngInject */
       if ($state.params.pageData && $state.params.pageData.premiseType) vm.filtersService.model.selected.premiseType = $state.params.pageData.premiseType;
 
       var params = filtersService.getAppliedFilters('brandSnapshot');
-      vm.filtersService.model.valuesVsTrend = vm.filtersService.accountFilters.valuesVsTrend[1];
 
       var promiseArr = [
         userService.getPerformanceDepletion(),
@@ -627,6 +626,7 @@ module.exports = /*  @ngInject */
       vm.filtersService.model.accountSelected.accountBrands = vm.filtersService.accountFilters.accountBrands[0];
       vm.filtersService.model.accountSelected.accountMarkets = vm.filtersService.accountFilters.accountMarkets[0];
       vm.currentTopBottomAcctType = vm.filtersService.accountFilters.accountTypes[0];
+      vm.filtersService.model.valuesVsTrend = vm.filtersService.accountFilters.valuesVsTrend[0];
       vm.filtersService.model.selected.premiseType = 'all';
       vm.chartOptions = myperformanceService.getChartOptions();
       vm.topBottomData = myperformanceService.initDataForAllTbLevels(vm.topBottomData);
@@ -640,18 +640,22 @@ module.exports = /*  @ngInject */
       switch (acctType.value) {
         case accountTypes.distributors:
           currentObj = vm.topBottomData.distributors;
+          currentObj.currentLevelName = 'distributors';
           vm.isStoreLevel = false;
           break;
         case accountTypes.accounts:
           currentObj = vm.topBottomData.accounts;
           vm.isStoreLevel = false;
+          currentObj.currentLevelName = 'accounts';
           break;
         case accountTypes.subAccounts:
           currentObj = vm.topBottomData.subAccounts;
+          currentObj.currentLevelName = 'subaccounts';
           vm.isStoreLevel = false;
           break;
         case accountTypes.stores:
           currentObj = vm.topBottomData.stores;
+          currentObj.currentLevelName = 'stores';
           vm.isStoreLevel = true;
           break;
       }
@@ -836,9 +840,10 @@ module.exports = /*  @ngInject */
     }
 
     function navigateTopBottomLevels(levelName, performanceData) {
-      if (!myperformanceService.isValidValues(Number(performanceData.id))) {
+      if (performanceData && !myperformanceService.isValidValues(Number(performanceData.id))) {
         return;
       }
+
       var isGetNextLevel = true;
       myperformanceService.resetFiltersForLevelsAboveCurrent(vm.currentTopBottomAcctType, vm.currentTopBottomFilters, vm.topBottomData);
       // Get the account type next to the current level
