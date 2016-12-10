@@ -44,7 +44,7 @@ module.exports = function (config) {
     certfile: fs.readFileSync('./server/_config/environment/sfdcsecurity/' + config.env + '/certificate.crt').toString(),
     // issuer, recipient: can be anything, but must match between the SFDC Single Sign-On Configuration and this value.
     issuer: 'compass-portal',
-    recipient: 'https://cbrands--CBeerDev.cs20.my.salesforce.com?so=00Dm00000008hN8',
+    recipient: 'https://cbrands--full.cs17.my.salesforce.com?so=00Dg0000006Hhfi',
     // This value matches with the Entity Id value in the SFDC Single Sign-On Configuration
     audience: 'https://saml.salesforce.com',
     // These algorithms should not be touched.  They are used to encrypt the certificates.
