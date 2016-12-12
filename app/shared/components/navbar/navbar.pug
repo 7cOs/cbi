@@ -47,8 +47,7 @@ div.outer-nav-wrapper
                       div(ng-if="notification.objectType === 'OPPORTUNITY'")
                         p An opportunity has been shared with you
                         .source {{notification.shortenedObject.store.store_name | titlecase}}
-                          span  #
-                          span {{notification.shortenedObject.store.store_number}}
+                          span(ng-if="notification.shortenedObject.store.store_number.toUpperCase() !== 'UNKNOWN'")  \#{{notification.shortenedObject.store.store_number}}
                         p.sku {{notification.shortenedObject.product.name | titlecase}}
                           span  {{notification.shortenedObject.type | formatOpportunitiesType}}
                       div(ng-if="notification.objectType === 'ACCOUNT'")
