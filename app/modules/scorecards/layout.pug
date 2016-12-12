@@ -64,8 +64,8 @@ div.my-scorecards
             td.column-total.no-border {{s.totalRow.percentGapVsPlan | number:1}}%
             td.column-total {{s.totalRow.percentBUTrend | number:1 }}%
             td.column-total.no-border.positive(ng-class="{'negative': !s.isPositive(s.totalRow.percentBUTrend)}") &#9650;
-            td.column-total {{s.totalRow.volumePercent | number:1}}%
-            td.column-total {{s.totalRow.volumeBU | number:1}}%
+            td.column-total 100%
+            td.column-total 100%
           tr(ng-repeat="depletion in s.userService.model.depletion" class="disable-ng-animate" ng-click="s.toggleSelected($index, 'depletions')" ng-class="{'selected': s.selectedList === 'depletions' && $index === s.selectedIndex}")
             td.left.data-brand(analytics-on="click" analytics-event="Brand Performance" ng-click='s.goToAccountDashboard(depletion)') {{depletion.name}}
             td.dark(ng-repeat-start="measure in depletion.measures | filter: {timeframe: s.depletionSelect}: true") {{measure.depletions | number:0}}
@@ -149,11 +149,11 @@ div.my-scorecards
             td.column-total
               span(ng-if="s.distributionRadioOptions.selected.placementType === 'Effective'" ng-class="{'negative': !s.isPositive(s.totalDistributions[0].distributionsEffectiveBUTrend)}") {{s.totalDistributions[0].distributionsEffectiveBUTrend | number:1 }}%
               span(ng-if="s.distributionRadioOptions.selected.placementType === 'Simple'" ng-class="{'negative': !s.isPositive(s.totalDistributions[0].distributionsSimpleBUTrend)}") {{s.totalDistributions[0].distributionsSimpleBUTrend | number:1 }}%
-            td.column-total.no-border
+            td.column-total.no-border(ng-repeat-end)
               span(ng-if="s.distributionRadioOptions.selected.placementType === 'Effective'" ng-class="s.isPositive(s.totalDistributions[0].distributionsEffectiveBUTrend) ? 'positive' : 'negative'") <span class="triangle-icon">&#9660;</span>
               span(ng-if="s.distributionRadioOptions.selected.placementType === 'Simple'" ng-class="s.isPositive(s.totalDistributions[0].distributionsSimpleBUTrend) ? 'positive' : 'negative'") <span class="triangle-icon">&#9660;</span>
             td.column-total 100%
-            td.column-total.no-border 12%
+            td.column-total.no-border 100%
           tr(ng-repeat="distribution in s.userService.model.distribution | filter: {type: '!Total'}: true" class="disable-ng-animate" ng-click="s.toggleSelected($index, 'distributions')" ng-class="{'selected': s.selectedList === 'distributions' && $index === s.selectedIndex}")
             td.left.data-brand(analytics-on="click" analytics-event="Brand Performance" ng-click='s.goToAccountDashboard(distribution, s.distributionRadioOptions.selected.placementType === "Simple")' ng-disabled="s.distributionRadioOptions.selected.placementType === 'Simple'") {{distribution.name}}
             td.dark(ng-repeat-start="measure in distribution.measures | filter: {timeframe: s.distributionSelectOptions.selected}: true")
