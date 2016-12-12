@@ -122,11 +122,11 @@ v-accordion.styled-list(multiple="" id="opportunities" control="list.accordion" 
                 div(column='4')
                   label Simple
                   div(row)
-                    div(column='12') {{::opportunity.store.distributionL90Simple | number:0}}<span class="percentage">{{::opportunity.store.distributionL90SimpleYA | number:1}}</span>%
+                    div(column='12') {{::opportunity.store.distributionL90Simple | number:0}}<span class="percentage">{{::(opportunity.store.distributionL90Simple / opportunity.store.distributionL90SimpleYA - 1) * 100 | number:1}}</span>%
                 div(column='8')
                   label Effective
                   div(row)
-                    div(column='12') {{::opportunity.store.distributionL90Effective | number:0}}<span class="percentage">{{::opportunity.store.distributionL90EffectiveYA | number:1}}</span>%
+                    div(column='12') {{::opportunity.store.distributionL90Effective | number:0}}<span class="percentage">{{::(opportunity.store.distributionL90Effective / opportunity.store.distributionL90EffectiveYA - 1) * 100 | number:1}}</span>%
             div(column='2')
               .tooltip-wrap
                 label Velocity (VS YA%)
