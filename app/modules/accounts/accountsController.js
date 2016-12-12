@@ -113,6 +113,7 @@ module.exports = /*  @ngInject */
     vm.placeholderSelect = placeholderSelect;
     vm.prevTab = prevTab;
     vm.removeDistOptionsBasedOnView = removeDistOptionsBasedOnView;
+    vm.removeInlineSearch = removeInlineSearch;
     vm.resetFilters = resetFilters;
     vm.selectItem = selectItem;
     vm.setDefaultFilterOptions = setDefaultFilterOptions;
@@ -273,6 +274,10 @@ module.exports = /*  @ngInject */
       return isOptionHidden;
     }
 
+    function removeInlineSearch(type) {
+      vm[type] = '';
+    }
+
     function resetFilters() {
       // reset brand
       vm.brandWidgetTitle = angular.copy(vm.brandWidgetTitleDefault);
@@ -282,6 +287,8 @@ module.exports = /*  @ngInject */
       vm.brandSelectedIndex = 0;
       vm.brandIdSelected = null;
       vm.idSelected = null;
+      vm.selectedDistributor = null;
+      vm.selectedStore = null;
 
       vm.filterModel = angular.copy(filterModelTemplate);
       chipsService.resetChipsFilters(chipsService.model);
@@ -398,6 +405,13 @@ module.exports = /*  @ngInject */
       chipsService.addAutocompleteChip(result.name, filterModelProperty, false);
 
       apply(false);
+
+      filtersService.model[filterModelProperty] = result.name;
+      // to do:
+      // add x to inline-search
+
+      // Update display model
+      filterModelProperty === 'distributor' ? vm.selectedDistributor = result.name : vm.selectedStore = result.name;
     }
 
     function updateBrandSnapshot() {

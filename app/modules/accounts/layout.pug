@@ -12,7 +12,9 @@ notes
           p(ng-if="!a.brandWidgetSkuTitle") {{a.brandWidgetTitle}}<span ng-if="a.brandIdSelected"> - {{a.brandIdSelected}}</span>
           p {{a.brandWidgetSkuTitle}}
         .market
-          p {{a.selectedStore || a.currentTopBottomAcctType.name || a.accountTypesDefault}}
+          p(ng-if="a.selectedStore || a.selectedDistributor")
+            <span ng-if="a.selectedDistributor">{{a.selectedDistributor}}</span><span ng-if="a.selectedStore && a.selectedDistributor"> - </span><span ng-if="a.selectedStore">{{a.selectedStore}}</span>
+          p(ng-if="!a.selectedStore && !a.selectedDistributor") {{a.currentTopBottomAcctType.name || a.accountTypesDefault}}
         .notes-icon
           p <a href="#" ng-click="a.openNotes(true)" analytics-on="click" analytics-event="Notes Tab"></a>
       .market-overview.clearfix
@@ -20,7 +22,9 @@ notes
           p(ng-if="!a.brandWidgetSkuTitle") {{a.brandWidgetTitle}}<span ng-if="a.brandIdSelected"> - {{a.brandIdSelected}}</span>
           p {{a.brandWidgetSkuTitle}}
         .market
-          p {{a.selectedStore || a.currentTopBottomAcctType.name || a.accountTypesDefault}}
+          p(ng-if="a.selectedStore || a.selectedDistributor")
+            <span ng-if="a.selectedDistributor">{{a.selectedDistributor}}</span><span ng-if="a.selectedStore && a.selectedDistributor"> - </span><span ng-if="a.selectedStore">{{a.selectedStore}}</span>
+          p(ng-if="!a.selectedStore && !a.selectedDistributor") {{a.currentTopBottomAcctType.name || a.accountTypesDefault}}
         .notes-icon
           p <a href="#" ng-click="a.openNotes(true)" analytics-on="click" analytics-event="Notes Tab">Notes</a>
 
@@ -57,7 +61,7 @@ notes
         md-radio-button(ng-repeat="p in a.filtersService.model.premises track by $index" class="md-primary" ng-value="p.value" aria-label="{{p.name}}" ng-click="a.updateChip(p.name, 'premiseType')" ng-disabled="a.premiseTypeDisabled") {{p.name}}
     div(column='2')
       label Distributor
-      inline-search(type="distributor" placeholder="Name" chosen-result="a.filtersService.model.distributor" callback="a.setFilter(result, 'distributor')")
+      inline-search(type="distributor" placeholder="Name" chosen-result="a.filtersService.model.distributor" callback="a.setFilter(result, 'distributor')" removable='true' on-remove="a.removeInlineSearch('selectedDistributor')")
     div(column='2')
       .tooltip-wrap
         label Store Type
@@ -77,8 +81,8 @@ notes
           md-select(ng-model="a.filtersService.model.selected.retailer" placeholder="Chain" ng-init="a.filtersService.model.selected.retailer = 'Chain'")
             md-option(ng-repeat="type in a.filtersService.model.retailer" ng-click="a.placeholderSelect(type.hintText)" aria-label="{{type.name}}" value="{{type.name}}") {{::type.name}}
         div(column='8')
-          inline-search(ng-if="a.filtersService.model.selected.retailer === 'Store'" type="store" placeholder="{{a.hintTextPlaceholder}}" chosen-result="a.filtersService.model.store" show-address="true" callback="a.setFilter(result, 'store')")
-          inline-search(ng-if="a.filtersService.model.selected.retailer === 'Chain'" type="chain" placeholder="{{a.hintTextPlaceholder}}" chosen-result="a.filtersService.model.chain" callback="a.setFilter(result, 'chain')")
+          inline-search(ng-if="a.filtersService.model.selected.retailer === 'Store'" type="store" placeholder="{{a.hintTextPlaceholder}}" chosen-result="a.filtersService.model.store" show-address="true" callback="a.setFilter(result, 'store')" removable='true' on-remove="a.removeInlineSearch('selectedStore')")
+          inline-search(ng-if="a.filtersService.model.selected.retailer === 'Chain'" type="chain" placeholder="{{a.hintTextPlaceholder}}" chosen-result="a.filtersService.model.chain" callback="a.setFilter(result, 'chain')" removable='true' on-remove="a.removeInlineSearch('selectedStore')")
 
   div(row)
     div(column='12' class='apply-filters')

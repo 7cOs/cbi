@@ -15,7 +15,9 @@ module.exports =
         isRequired: '@',
         showAddress: '@',
         multipleRecipients: '=?',
-        cacheInput: '=?'
+        cacheInput: '=?',
+        removable: '@',
+        onRemove: '&'
       },
       controller: InlineSearchController,
       controllerAs: 'is',
@@ -53,6 +55,7 @@ module.exports =
       // Expose public methods
       vm.action = action;
       vm.resultChosen = resultChosen;
+      vm.clearModel = clearModel;
       vm.close = close;
       vm.onKeypress = onKeypress;
       vm.userDataFormat = userDataFormat;
@@ -144,6 +147,12 @@ module.exports =
           vm.loading = false;
           vm.errorMessage = reason;
         });
+      }
+
+      function clearModel() {
+        vm.chosenResult = null;
+        vm.input = '';
+        vm.onRemove();
       }
 
       function resultChosen(result, nav) {
