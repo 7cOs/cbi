@@ -250,10 +250,11 @@
 
   .loader-wrap.error {
     top: 50px;
+    z-index: 1000;
 
     .error-text {
-      top: 35%;
-      left: 30px;
+      top: 45%;
+      left: 35%;
       position: relative;
     }
   }
