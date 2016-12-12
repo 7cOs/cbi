@@ -20,6 +20,7 @@ div.target-lists
               a(ui-sref="target-list-detail({id: list.id})")
                 div.target-list-row-one.clearfix
                   h3.target-list-name {{list.name}}
+                    md-tooltip(ng-if="list.name.length > 42" md-direction="top") {{list.name}}
                   div(column="3").target-list-data
                     h3(column="6").closed {{list.opportunitiesSummary.closedOpportunitiesCount | number}}
                     h3(column="6") {{list.opportunitiesSummary.opportunitiesCount | number}}
