@@ -621,6 +621,7 @@ module.exports = /*  @ngInject */
         var propertyBoundToTable = vm.filtersService.model.accountSelected.accountMarkets;
         // We need to reset all filters if dropdown is directly selected
         if (myperformanceService.isResetFiltersRequired(vm.currentTopBottomFilters)) {
+          resetFilterTextFields();
           resetTopBottom();
         } else {
           getDataForTopBottom(vm.currentTopBottomObj, propertyBoundToTable);
@@ -849,20 +850,33 @@ module.exports = /*  @ngInject */
       updateTopBottom();
     }
 
+    function resetFilterTextFields() {
+      vm.filtersService.model.distributor = '';
+      vm.filtersService.model.chain = '';
+    }
+
+    function populateFieldsForFilterSelection(currentLevelName, data) {
+      vm.currentTopBottomFilters[currentLevelName] = {
+        id: data.id,
+        name: data.name
+      };
+      if (currentLevelName === 'distributors') {
+        vm.filtersService.model.distributor = data.name;
+      } else {
+        vm.filtersService.model.chain = data.name;
+      }
+    }
+
     function navigateTopBottomLevels(currentLevelName, performanceData) {
       // There are a lot of data inconsistensies. Some Id's are marked as Id missing
       if (performanceData.id && performanceData.id.toLowerCase() === 'id missing') {
         return;
       }
-
-      var isGetNextLevel = true;
+      var getNextLevel = true;
       myperformanceService.resetFiltersForLevelsAboveCurrent(vm.currentTopBottomAcctType, vm.currentTopBottomFilters, vm.topBottomData);
       // Get the account type next to the current level
-      vm.currentTopBottomAcctType = myperformanceService.getAcctTypeObjectBasedOnTabIndex(vm.marketSelectedIndex, isGetNextLevel);
-      vm.currentTopBottomFilters[currentLevelName] = {
-        id: performanceData.id,
-        name: performanceData.name
-      };
+      vm.currentTopBottomAcctType = myperformanceService.getAcctTypeObjectBasedOnTabIndex(vm.marketSelectedIndex, getNextLevel);
+      populateFieldsForFilterSelection(currentLevelName, performanceData);
       vm.currentTopBottomObj = getCurrentTopBottomObject(vm.currentTopBottomAcctType);
       updateTopBottom();
     }
