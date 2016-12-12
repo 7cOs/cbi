@@ -398,7 +398,7 @@ describe('Unit: accountsController', function() {
   describe('[Method] updateDistributionTimePeriod', function() {
     it('Should set ctrl.filterModel.distributionTimePeriod', function() {
       ctrl.updateDistributionTimePeriod('year');
-      expect(ctrl.filterModel.distributionTimePeriod).toEqual(filtersService.model.distributionTimePeriod['year'][0]);
+      expect(ctrl.filterModel.distributionTimePeriod).toEqual(filtersService.model.distributionTimePeriod['year'][1]);
 
       ctrl.updateDistributionTimePeriod('month');
       expect(ctrl.filterModel.distributionTimePeriod).toEqual(filtersService.model.distributionTimePeriod['month'][0]);
@@ -408,7 +408,7 @@ describe('Unit: accountsController', function() {
   describe('[Method] updateDistributionTimePeriod', function() {
     it('Should set ctrl.filterModel.distributionTimePeriod', function() {
       ctrl.updateDistributionTimePeriod('year');
-      expect(ctrl.filterModel.distributionTimePeriod).toEqual(filtersService.model.distributionTimePeriod['year'][0]);
+      expect(ctrl.filterModel.distributionTimePeriod).toEqual(filtersService.model.distributionTimePeriod['year'][1]);
 
       ctrl.updateDistributionTimePeriod('month');
       expect(ctrl.filterModel.distributionTimePeriod).toEqual(filtersService.model.distributionTimePeriod['month'][0]);

@@ -367,7 +367,7 @@ module.exports = /*  @ngInject */
         resetPerformanceDataFlags(topBottomObj.stores);
       } else {
         switch (currentLevel.value) {
-          case 1:
+          case filtersService.accountFilters.accountTypesEnums.distributors:
             topBottomFiltersObj.accounts = '';
             topBottomFiltersObj.subAccounts = '';
             topBottomFiltersObj.stores = '';
@@ -376,14 +376,14 @@ module.exports = /*  @ngInject */
             resetPerformanceDataFlags(topBottomObj.subAccounts);
             resetPerformanceDataFlags(topBottomObj.stores);
             break;
-          case 2:
+          case filtersService.accountFilters.accountTypesEnums.accounts:
             topBottomFiltersObj.subAccounts = '';
             topBottomFiltersObj.stores = '';
             resetPerformanceDataFlags(topBottomObj.accounts);
             resetPerformanceDataFlags(topBottomObj.subAccounts);
             resetPerformanceDataFlags(topBottomObj.stores);
             break;
-          case 3:
+          case filtersService.accountFilters.accountTypesEnums.subAccounts:
             topBottomFiltersObj.stores = '';
             resetPerformanceDataFlags(topBottomObj.subAccounts);
             resetPerformanceDataFlags(topBottomObj.stores);
@@ -408,8 +408,7 @@ module.exports = /*  @ngInject */
     function getAcctTypeObjectBasedOnTabIndex(tabIndex, isGetNextLevel) {
       var currentAccountTypeLevel = null;
       if (isGetNextLevel === true) {
-        var currentLevel = tabIndex + 1;
-        var levelToNavigate = currentLevel + 1;
+        var levelToNavigate = tabIndex + 1 + 1;
         currentAccountTypeLevel = filtersService.accountFilters.accountTypes.filter(function(market) {
           return market.value === levelToNavigate;
         });
@@ -425,7 +424,7 @@ module.exports = /*  @ngInject */
     function initChartData() {
       var data = [
       {
-        'key': 'A key',
+        'key': '',
         'values': [[]]
       }];
       return data;

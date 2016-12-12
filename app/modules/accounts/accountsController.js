@@ -433,8 +433,14 @@ module.exports = /*  @ngInject */
     }
 
     function updateDistributionTimePeriod(value) {
-      vm.filterModel.depletionsTimePeriod = filtersService.model.depletionsTimePeriod[value][0];
-      vm.filterModel.distributionTimePeriod = filtersService.model.distributionTimePeriod[value][0];
+      var deplIndex = 0;
+      var distIndex = 0;
+      if (value === 'year') {
+        deplIndex = 2;
+        distIndex = 1;
+      }
+      vm.filterModel.depletionsTimePeriod = filtersService.model.depletionsTimePeriod[value][deplIndex];
+      vm.filterModel.distributionTimePeriod = filtersService.model.distributionTimePeriod[value][distIndex];
       onFilterPropertiesChange();
     }
 
@@ -613,10 +619,12 @@ module.exports = /*  @ngInject */
         vm.currentTopBottomAcctType = currentAcctType;
         vm.currentTopBottomObj = getCurrentTopBottomObject(currentAcctType);
         var propertyBoundToTable = vm.filtersService.model.accountSelected.accountMarkets;
+        // We need to reset all filters if dropdown is directly selected
         if (myperformanceService.isResetFiltersRequired(vm.currentTopBottomFilters)) {
           resetTopBottom();
+        } else {
+          getDataForTopBottom(vm.currentTopBottomObj, propertyBoundToTable);
         }
-        getDataForTopBottom(vm.currentTopBottomObj, propertyBoundToTable);
       }
     }
 
@@ -834,13 +842,16 @@ module.exports = /*  @ngInject */
     }
 
     function prevLevelInTopBottom() {
-      vm.currentTopBottomAcctType = myperformanceService.getAcctTypeObjectBasedOnTabIndex(vm.marketSelectedIndex);
+      // vm.marketSelectedIndex is zero index based and acct type selections start from 1
+      var previousLevelInTopBottom = vm.marketSelectedIndex;
+      vm.currentTopBottomAcctType = myperformanceService.getAcctTypeObjectBasedOnTabIndex(previousLevelInTopBottom);
       vm.currentTopBottomObj = getCurrentTopBottomObject(vm.currentTopBottomAcctType);
       updateTopBottom();
     }
 
-    function navigateTopBottomLevels(levelName, performanceData) {
-      if (performanceData && !myperformanceService.isValidValues(Number(performanceData.id))) {
+    function navigateTopBottomLevels(currentLevelName, performanceData) {
+      // There are a lot of data inconsistensies. Some Id's are marked as Id missing
+      if (performanceData.id && performanceData.id.toLowerCase() === 'id missing') {
         return;
       }
 
@@ -848,7 +859,7 @@ module.exports = /*  @ngInject */
       myperformanceService.resetFiltersForLevelsAboveCurrent(vm.currentTopBottomAcctType, vm.currentTopBottomFilters, vm.topBottomData);
       // Get the account type next to the current level
       vm.currentTopBottomAcctType = myperformanceService.getAcctTypeObjectBasedOnTabIndex(vm.marketSelectedIndex, isGetNextLevel);
-      vm.currentTopBottomFilters[levelName] = {
+      vm.currentTopBottomFilters[currentLevelName] = {
         id: performanceData.id,
         name: performanceData.name
       };
