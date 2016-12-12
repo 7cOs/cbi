@@ -114,7 +114,8 @@ module.exports = /*  @ngInject */
         }])
         .then(function() {
           notification.status = vm.notificationsService.status.READ;
-          setUnreadCount(vm.notifications);
+          vm.notificationHelper.showBadge = false;
+          vm.notificationHelper.unseenNotifications = 0;
         });
 
       if (notification.objectType.toUpperCase() === 'TARGET_LIST') {
