@@ -407,8 +407,6 @@ module.exports = /*  @ngInject */
       apply(false);
 
       filtersService.model[filterModelProperty] = result.name;
-      // to do:
-      // add x to inline-search
 
       // Update display model
       filterModelProperty === 'distributor' ? vm.selectedDistributor = result.name : vm.selectedStore = result.name;
