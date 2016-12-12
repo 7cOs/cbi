@@ -121,7 +121,8 @@ module.exports = /*  @ngInject */
     vm.updateBrandSnapshot = updateBrandSnapshot;
     vm.updateChip = updateChip;
     vm.updateDistributionTimePeriod = updateDistributionTimePeriod;
-    vm.updateTopBottom = updateTopBottom;
+
+    vm.filterTopBottom = filterTopBottom;
 
     init();
 
@@ -179,6 +180,31 @@ module.exports = /*  @ngInject */
           return matchedMeasure[0][property];
         }
       }
+    }
+
+    function filterTopBottom() {
+      // reset flags
+      for (var topBottomObj in vm.topBottomData) {
+        myperformanceService.resetPerformanceDataFlags(vm.topBottomData[topBottomObj]);
+      }
+
+      var categoryBound = vm.filtersService.model.accountSelected.accountMarkets;
+      vm.currentTopBottomObj = getCurrentTopBottomObject(vm.currentTopBottomAcctType);
+
+      // change tab index
+      if (vm.currentTopBottomFilters.stores && vm.currentTopBottomFilters.stores.id) {
+        vm.currentTopBottomAcctType = vm.filtersService.accountFilters.accountTypes[3];
+        // to do: highlight store
+      } else if (vm.currentTopBottomFilters.subAccounts && vm.currentTopBottomFilters.subAccounts.id) {
+        vm.currentTopBottomAcctType = vm.filtersService.accountFilters.accountTypes[3];
+      } else if (vm.currentTopBottomFilters.accounts && vm.currentTopBottomFilters.accounts.id) {
+        vm.currentTopBottomAcctType = vm.filtersService.accountFilters.accountTypes[2];
+      } else if (vm.currentTopBottomFilters.distributors && vm.currentTopBottomFilters.distributors.id) {
+        vm.currentTopBottomAcctType = vm.filtersService.accountFilters.accountTypes[1];
+      }
+
+      // update data
+      getDataForTopBottom(vm.currentTopBottomObj, categoryBound);
     }
 
     /**
@@ -276,6 +302,7 @@ module.exports = /*  @ngInject */
 
     function removeInlineSearch(type) {
       vm[type] = '';
+      apply(false);
     }
 
     function resetFilters() {
@@ -393,6 +420,10 @@ module.exports = /*  @ngInject */
         filtersService.model.selected.store = [];
         filtersService.model.store = '';
         chipsService.removeChip('store');
+
+        result.type.toLowerCase() === 'account' ? vm.currentTopBottomFilters.accounts = result : vm.currentTopBottomFilters.subAccounts = result;
+      } else if (filterModelProperty === 'distributor') {
+        vm.currentTopBottomFilters.distributors = result;
       }
 
       for (var i = 0; i < chipsService.model.length; i++) {
@@ -884,6 +915,8 @@ module.exports = /*  @ngInject */
       if (performanceData.id && performanceData.id.toLowerCase() === 'id missing') {
         return;
       }
+      console.log('[performanceData]', performanceData);
+      console.log('[currentLevelName]', currentLevelName);
       var getNextLevel = true;
       myperformanceService.resetFiltersForLevelsAboveCurrent(vm.currentTopBottomAcctType, vm.currentTopBottomFilters, vm.topBottomData);
       // Get the account type next to the current level

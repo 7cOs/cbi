@@ -284,8 +284,8 @@ describe('Unit: accountsController', function() {
       expect(ctrl.updateBrandSnapshot).not.toBeUndefined();
       expect(typeof (ctrl.updateBrandSnapshot)).toEqual('function');
 
-      expect(ctrl.updateTopBottom).not.toBeUndefined();
-      expect(typeof (ctrl.updateTopBottom)).toEqual('function');
+      expect(ctrl.filterTopBottom).not.toBeUndefined();
+      expect(typeof (ctrl.filterTopBottom)).toEqual('function');
     });
 
     it('Should get default radio button options on init', function () {
