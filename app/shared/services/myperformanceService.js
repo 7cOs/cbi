@@ -17,7 +17,13 @@ module.exports = /*  @ngInject */
       resetFilterFlags: resetFilterFlags,
       resetPerformanceDataFlags: resetPerformanceDataFlags,
       getFilterParametersForStore: getFilterParametersForStore,
-      setStoreTopBottomData: setStoreTopBottomData
+      setStoreTopBottomData: setStoreTopBottomData,
+      appendFilterParametersForTopBottom: appendFilterParametersForTopBottom,
+      resetFiltersForLevelsAboveCurrent: resetFiltersForLevelsAboveCurrent,
+      initChartData: initChartData,
+      getAcctTypeObjectBasedOnTabIndex: getAcctTypeObjectBasedOnTabIndex,
+      isResetFiltersRequired: isResetFiltersRequired,
+      isValidValues: isValidValues
     };
 
     return service;
@@ -42,7 +48,7 @@ module.exports = /*  @ngInject */
           valuesArr, tempArr = [];
       var j = 0;
       valuesArr = $filter('orderBy')(tbData, function(data) {
-        if (isValidValues(data.measure[propertyName])) {
+        if (isValidValues(Number(data.measure[propertyName]))) {
           return data.measure[propertyName];
         } else {
           j++;
@@ -289,6 +295,9 @@ module.exports = /*  @ngInject */
     function resetPerformanceDataFlags(topBottomObj) {
       topBottomObj.isFilterUpdateRequired = true;
       topBottomObj.isPerformanceDataUpdateRequired = true;
+      topBottomObj.performanceData = null;
+      topBottomObj.timePeriodFilteredData = null;
+      topBottomObj.chartData = null;
     }
 
     function getChartData(tbData, categoryType, trendType) {
@@ -325,6 +334,101 @@ module.exports = /*  @ngInject */
       });
       chartData[0].values = categoryChartData;
       return chartData;
+    }
+
+    function appendFilterParametersForTopBottom (params, currentTopBottomFilters) {
+      if (currentTopBottomFilters.distributors) {
+        params.distributor = currentTopBottomFilters.distributors.id;
+      }
+
+      if (currentTopBottomFilters.accounts) {
+        params.account = currentTopBottomFilters.accounts.id;
+      }
+
+      if (currentTopBottomFilters.subAccounts) {
+        params.subaccount = currentTopBottomFilters.subAccounts.id;
+      }
+
+      if (currentTopBottomFilters.store) {
+        params.store = currentTopBottomFilters.store.id;
+      }
+      return params;
+    }
+
+    function resetFiltersForLevelsAboveCurrent(currentLevel, topBottomFiltersObj, topBottomObj) {
+      if (!isValidValues(currentLevel.value)) {
+        topBottomFiltersObj.distributors = '';
+        topBottomFiltersObj.accounts = '';
+        topBottomFiltersObj.subAccounts = '';
+        topBottomFiltersObj.stores = '';
+        resetPerformanceDataFlags(topBottomObj.distributors);
+        resetPerformanceDataFlags(topBottomObj.accounts);
+        resetPerformanceDataFlags(topBottomObj.subAccounts);
+        resetPerformanceDataFlags(topBottomObj.stores);
+      } else {
+        switch (currentLevel.value) {
+          case filtersService.accountFilters.accountTypesEnums.distributors:
+            topBottomFiltersObj.accounts = '';
+            topBottomFiltersObj.subAccounts = '';
+            topBottomFiltersObj.stores = '';
+            resetPerformanceDataFlags(topBottomObj.distributors);
+            resetPerformanceDataFlags(topBottomObj.accounts);
+            resetPerformanceDataFlags(topBottomObj.subAccounts);
+            resetPerformanceDataFlags(topBottomObj.stores);
+            break;
+          case filtersService.accountFilters.accountTypesEnums.accounts:
+            topBottomFiltersObj.subAccounts = '';
+            topBottomFiltersObj.stores = '';
+            resetPerformanceDataFlags(topBottomObj.accounts);
+            resetPerformanceDataFlags(topBottomObj.subAccounts);
+            resetPerformanceDataFlags(topBottomObj.stores);
+            break;
+          case filtersService.accountFilters.accountTypesEnums.subAccounts:
+            topBottomFiltersObj.stores = '';
+            resetPerformanceDataFlags(topBottomObj.subAccounts);
+            resetPerformanceDataFlags(topBottomObj.stores);
+            break;
+        }
+      }
+    }
+
+    function isResetFiltersRequired(topBottomFilters) {
+      var isReset = false;
+      for (var prop in topBottomFilters) {
+        if (topBottomFilters[prop] !== '') {
+          topBottomFilters[prop] = '';
+          if (!isReset) {
+            isReset = true;
+          }
+        }
+      }
+      return isReset;
+    }
+
+    function getAcctTypeObjectBasedOnTabIndex(tabIndex, isGetNextLevel) {
+      var currentAccountTypeLevel = null;
+      if (isGetNextLevel === true) {
+        // the tab index is 0  based whereas the values assigned to levels start from 1. So the current level value is tabIndex + 1. If I need the level after that I use tabIndex + 1 + 1.
+        var levelToNavigate = tabIndex + 1 + 1;
+        currentAccountTypeLevel = filtersService.accountFilters.accountTypes.filter(function(market) {
+          return market.value === levelToNavigate;
+        });
+      } else {
+        var previousAcctIndex = tabIndex;
+        currentAccountTypeLevel = filtersService.accountFilters.accountTypes.filter(function(market) {
+          return market.value === previousAcctIndex;
+        });
+      }
+      return currentAccountTypeLevel[0];
+    }
+
+    function initChartData() {
+      var data = [
+      {
+        'key': '',
+        'values': [[]]
+      }];
+      return data;
     }
 
     // Mock data needs to be removed when Scorecard is implemented with the API

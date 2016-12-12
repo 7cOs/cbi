@@ -134,7 +134,7 @@
     width: 200px;
 
     &.narrow {
-      width: 150px;
+      width: 139px;
 
       @media (max-width: $bp-large) {
         width: 135px;
@@ -246,6 +246,20 @@
 
   &.scorecard-table-accounts {
     padding-right: 0.5em;
+  }
+
+  .loader-wrap.error {
+    top: 50px;
+
+    .error-text {
+      top: 35%;
+      left: 30px;
+      position: relative;
+    }
+  }
+
+  .back-chevron {
+    left: 2px;
   }
 }
 
