@@ -175,8 +175,8 @@ div.my-scorecards
               span(ng-if="s.distributionRadioOptions.selected.placementType === 'Simple'" ng-class="{'negative': !s.isPositive(measure.distributionsSimpleBUTrend)}") {{measure.distributionsSimpleBUTrend | number:1}}%
               span(ng-if="s.distributionRadioOptions.selected.placementType === 'Effective'" ng-class="{'negative': !s.isPositive(measure.distributionsEffectiveBUTrend)}") {{measure.distributionsEffectiveBUTrend | number:1}}%
             td.no-border
-              span(ng-if="s.distributionRadioOptions.selected.placementType === 'Simple'" ng-class="s.isPositive(measure.distributionsSimpleTrend > measure.distributionsSimpleBU) ? 'positive' : 'negative'") <span class="triangle-icon">&#9660;</span>
-              span(ng-if="s.distributionRadioOptions.selected.placementType === 'Effective'" ng-class="s.isPositive(measure.distributionsEffectiveTrend > measure.distributionsEffectiveBU) ? 'positive' : 'negative'") <span class="triangle-icon">&#9660;</span>
+              span(ng-if="s.distributionRadioOptions.selected.placementType === 'Simple'" ng-class="measure.distributionsSimpleTrend > measure.distributionsSimpleBU ? 'positive' : 'negative'") <span class="triangle-icon">&#9660;</span>
+              span(ng-if="s.distributionRadioOptions.selected.placementType === 'Effective'" ng-class="measure.distributionsEffectiveTrend > measure.distributionsEffectiveBU ? 'positive' : 'negative'") <span class="triangle-icon">&#9660;</span>
             td
               span(ng-if="s.distributionRadioOptions.selected.placementType === 'Simple'" ng-class="{'negative': !s.isPositive(measure.distributionsSimple / s.totalDistributions[0].distributionsSimple)}") {{(measure.distributionsSimple / s.totalDistributions[0].distributionsSimple) * 100 | number:1 }}%
               span(ng-if="s.distributionRadioOptions.selected.placementType === 'Effective'" ng-class="{'negative': !s.isPositive(measure.distributionsEffective / s.totalDistributions[0].distributionsEffective)}") {{(measure.distributionsEffective / s.totalDistributions[0].distributionsEffective) * 100 | number:1 }}%
