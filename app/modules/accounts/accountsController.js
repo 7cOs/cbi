@@ -797,7 +797,7 @@ module.exports = /*  @ngInject */
         }
         vm.currentBoundTopBottomIndexes =  result;
       }
-      console.log('Current Top Bottom Obj', vm.currentTopBottomObj);
+      // console.log('Current Top Bottom Obj', vm.currentTopBottomObj);
     }
 
     function checkForStoreLevel(trendSelection) {
