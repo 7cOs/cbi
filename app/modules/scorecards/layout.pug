@@ -66,7 +66,7 @@ div.my-scorecards
             td.column-total.no-border.positive(ng-class="{'negative': !s.isPositive(s.totalRow.percentBUTrend)}") &#9650;
             td.column-total {{s.totalRow.volumePercent | number:1}}%
             td.column-total {{s.totalRow.volumeBU | number:1}}%
-          tr(ng-repeat="depletion in s.userService.model.depletion" class="disable-ng-animate")
+          tr(ng-repeat="depletion in s.userService.model.depletion" class="disable-ng-animate" ng-click="s.toggleSelected($index, 'depletions')" ng-class="{'selected': s.selectedList === 'depletions' && $index === s.selectedIndex}")
             td.left.data-brand(analytics-on="click" analytics-event="Brand Performance" ng-click='s.goToAccountDashboard(depletion)') {{depletion.name}}
             td.dark(ng-repeat-start="measure in depletion.measures | filter: {timeframe: s.depletionSelect}: true") {{measure.depletions | number:0}}
             td.medium-dark(ng-class="{'negative': !s.isPositive(measure.depletions - (measure.depletions / (1 + measure.depletionsTrend / 100)))}") {{measure.depletions - (measure.depletions / (1 + measure.depletionsTrend / 100)) | number:0}}
@@ -154,7 +154,7 @@ div.my-scorecards
               span(ng-if="s.distributionRadioOptions.selected.placementType === 'Simple'" ng-class="s.isPositive(s.totalDistributions[0].distributionsSimpleBUTrend) ? 'positive' : 'negative'") <span class="triangle-icon">&#9660;</span>
             td.column-total 100%
             td.column-total.no-border 12%
-          tr(ng-repeat="distribution in s.userService.model.distribution | filter: {type: '!Total'}: true" class="disable-ng-animate")
+          tr(ng-repeat="distribution in s.userService.model.distribution | filter: {type: '!Total'}: true" class="disable-ng-animate" ng-click="s.toggleSelected($index, 'distributions')" ng-class="{'selected': s.selectedList === 'distributions' && $index === s.selectedIndex}")
             td.left.data-brand(analytics-on="click" analytics-event="Brand Performance" ng-click='s.goToAccountDashboard(distribution, s.distributionRadioOptions.selected.placementType === "Simple")' ng-disabled="s.distributionRadioOptions.selected.placementType === 'Simple'") {{distribution.name}}
             td.dark(ng-repeat-start="measure in distribution.measures | filter: {timeframe: s.distributionSelectOptions.selected}: true")
               span(ng-if="s.distributionRadioOptions.selected.placementType === 'Simple'" ng-class="{'negative': !s.isPositive(measure.distributionsSimple)}") {{measure.distributionsSimple | number:0}}

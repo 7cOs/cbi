@@ -42,6 +42,8 @@ module.exports = /*  @ngInject */
       growthPercent: 100,
       growthBU: 0
     };
+    vm.selectedIndex = -1;
+    vm.selectedList = null;
 
     // Set page title for head and nav
     $rootScope.pageTitle = $state.current.title;
@@ -62,12 +64,18 @@ module.exports = /*  @ngInject */
     vm.goToAccountDashboard = goToAccountDashboard;
     vm.isPositive = isPositive;
     vm.updateEndingTimePeriod = updateEndingTimePeriod;
+    vm.toggleSelected = toggleSelected;
 
     init();
 
     // **************
     // PUBLIC METHODS
     // **************
+
+    function toggleSelected($index, list) {
+      vm.selectedList = list;
+      vm.selectedIndex = $index;
+    }
 
     function changeDepletionOption(value) {
       updatedSelectionValuesInFilter(null, value, null);
