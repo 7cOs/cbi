@@ -768,7 +768,7 @@ module.exports = /*  @ngInject */
           case filtersService.accountFilters.topBottomSortTypeEnum.topValues:
             if (data.topBottomIndices.topValues.length > 0) {
               result = data.topBottomIndices.topValues;
-              if (data.chartData.topValues.values) {
+              if (data.chartData.topValues[0].values) {
                 vm.currentChartData = data.chartData.topValues;
               } else {
                 vm.currentChartData = myperformanceService.initChartData();
@@ -778,7 +778,7 @@ module.exports = /*  @ngInject */
           case filtersService.accountFilters.topBottomSortTypeEnum.topTrends:
             if (data.topBottomIndices.topTrends.length > 0) {
               result = data.topBottomIndices.topTrends;
-              if (data.chartData.topTrends.values) {
+              if (data.chartData.topTrends[0].values) {
                 vm.currentChartData = data.chartData.topTrends;
               } else {
                 vm.currentChartData = myperformanceService.initChartData();
@@ -788,7 +788,7 @@ module.exports = /*  @ngInject */
           case filtersService.accountFilters.topBottomSortTypeEnum.bottomValues:
             if (data.topBottomIndices.bottomValues.length > 0) {
               result = data.topBottomIndices.bottomValues;
-              if (data.chartData.bottomValues.values) {
+              if (data.chartData.bottomValues[0].values) {
                 vm.currentChartData = data.chartData.bottomValues;
               } else {
                 vm.currentChartData = myperformanceService.initChartData();
@@ -798,7 +798,7 @@ module.exports = /*  @ngInject */
           case filtersService.accountFilters.topBottomSortTypeEnum.bottomTrends:
             if (data.topBottomIndices.bottomTrends.length > 0) {
               result = data.topBottomIndices.bottomTrends;
-              if (data.chartData.bottomTrends.values) {
+              if (data.chartData.bottomTrends[0].values) {
                 vm.currentChartData = data.chartData.bottomTrends;
               } else {
                 vm.currentChartData = myperformanceService.initChartData();
