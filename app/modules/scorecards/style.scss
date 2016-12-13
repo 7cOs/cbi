@@ -85,11 +85,9 @@
       border-right: 1px solid $gray-9;
       background: $white;
       outline: 0;
-      transition: background 0.3s;
 
       .dark {
         background: $gray-4;
-        transition: background 0.3s;
       }
 
       .medium-dark {
@@ -109,16 +107,13 @@
 
       &:hover {
         background: $light-blue-4;
-        transition: background 0.3s;
 
         .dark {
           background: $smoke;
-          transition: background 0.3s;
         }
 
         .medium-dark {
           background: $light-blue-4;
-          transition: background 0.3s;
         }
       }
 
@@ -132,11 +127,9 @@
       &.selected.store .address {
         background: $dark-blue-2;
         color: $white;
-        transition: none;
 
         &:hover {
           background: $dark-blue-2;
-          transition: none;
         }
       }
 
@@ -213,6 +206,7 @@
     &[disabled] {
       cursor: no-drop;
       color: $gray-2;
+      outline: 0;
     }
   }
 
