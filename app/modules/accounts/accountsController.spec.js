@@ -1187,7 +1187,7 @@ describe('Unit: accountsController', function() {
 
     });
 
-    fit('Should not get updated performance data if update performance flag is not set', function() {
+    it('Should not get updated performance data if update performance flag is not set', function() {
       ctrl.getDataForTopBottom(ctrl.topBottomData.distributors, categoryBound);
       scope.$digest();
       expect(userService.getTopBottomSnapshot.calls.count()).toEqual(1);
@@ -1198,12 +1198,12 @@ describe('Unit: accountsController', function() {
       expect(ctrl.topBottomData.distributors.isFilterUpdateRequired).not.toBeUndefined();
     });
 
-    fit('Should not get updated performance data and updated filtered data if update performance flag and update filter flags are not set', function() {
+    it('Should not get updated performance data and updated filtered data if update performance flag and update filter flags are not set', function() {
       var categoryBound = ctrl.filtersService.accountFilters.accountMarkets[0];
       ctrl.getDataForTopBottom(ctrl.topBottomData.distributors, categoryBound);
       scope.$digest();
       expect(ctrl.topBottomData.distributors.isFilterUpdateRequired).toBeFalsy();
-      expect(ctrl.topBottomData.distributors.isFilterUpdateRequired).not.toBeUndefined();
+      expect(ctrl.topBottomData.distributors.timePeriodFilteredData).not.toBeUndefined();
       expect(userService.getTopBottomSnapshot.calls.count()).toEqual(1);
     });
 
@@ -1222,4 +1222,53 @@ describe('Unit: accountsController', function() {
     });
   });
 
+  describe('Should fire on filter properties change on changing dropdown options', function() {
+    var resetFilterFlagsSpy;
+    beforeEach(function() {
+      resetFilterFlagsSpy = spyOn(myperformanceService, 'resetFilterFlags');
+      resetFilterFlagsSpy.calls.reset();
+    });
+
+    it('should reset filter flags when account market options are changed', function() {
+      var newVal = filtersService.accountFilters.accountMarkets[1];
+      ctrl.acctMarketChanged(newVal);
+      expect(resetFilterFlagsSpy.calls.count()).toEqual(1);
+    });
+
+    it('should reset filter flags when account market options are changed', function() {
+      var newVal = filtersService.accountFilters.accountMarkets[1];
+      ctrl.acctMarketChanged(newVal);
+      expect(resetFilterFlagsSpy.calls.count()).toEqual(1);
+    });
+
+    it('should reset filter flags when account market options are changed', function() {
+      var newVal = filtersService.accountFilters.accountMarkets[1];
+      ctrl.acctMarketChanged(newVal);
+      expect(resetFilterFlagsSpy.calls.count()).toEqual(1);
+    });
+
+    it('should reset filter flags when account market options are changed', function() {
+      var newVal = filtersService.accountFilters.accountMarkets[1];
+      ctrl.acctMarketChanged(newVal);
+      expect(resetFilterFlagsSpy.calls.count()).toEqual(1);
+    });
+
+    it('should reset filter flags when trendOptions options are changed', function() {
+      var newVal = filtersService.model.trend[0];
+      ctrl.trendOptionChanged(newVal);
+      expect(resetFilterFlagsSpy.calls.count()).toEqual(1);
+    });
+
+    it('should reset filter flags when depletion options are changed', function() {
+      var newVal = filtersService.model.depletionsTimePeriod.month[1];
+      ctrl.depletionOptionChanged(newVal);
+      expect(resetFilterFlagsSpy.calls.count()).toEqual(1);
+    });
+
+    fit('should reset filter flags when distirbution options are changed', function() {
+      var newVal = filtersService.model.distributionTimePeriod.month[0];
+      ctrl.depletionOptionChanged(newVal);
+      expect(resetFilterFlagsSpy.calls.count()).toEqual(1);
+    });
+  });
 });

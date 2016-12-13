@@ -233,8 +233,15 @@ module.exports = /*  @ngInject */
         chart: {
           type: 'multiBarHorizontalChart',
           groupSpacing: 0.65,
-          x: function(d) { return d.label; },
-          y: function(d) { return d.value; },
+          x: function(d) {
+            return  d.label;
+          },
+          y: function(d) {
+            if (isValidValues(Number(d.value))) {
+            return d.value;
+          } else {
+            return;
+          } },
           xAxis: {
             showMaxMin: false
           },
@@ -245,18 +252,16 @@ module.exports = /*  @ngInject */
           showValues: true,
           duration: 500,
           valueFormat: function(d) {
-            if (isValidValues(Number(d))) {
-              return d + '%';
+            if (d === null) {
+              return '';
             } else {
-              return;
+              return d + '%';
             }
           },
           tooltip: {
             valueFormatter: function(d) {
               if (isValidValues(Number(d))) {
                 return d + '%';
-              } else {
-                return;
               }
             }
           },
@@ -323,14 +328,21 @@ module.exports = /*  @ngInject */
         matchedArr.push(orginalArr[data]);
       });
 
-      angular.forEach(matchedArr, function (data) {
-        obj = {
-          'label': data.title
-        };
+      var i = 1;
+      angular.forEach(matchedArr, function (data, key) {
         if (isValidValues(Number(data.measure[propName]))) {
+          obj = {
+            'label': i + '. ' + data.title
+          };
           obj.value = Math.round(data.measure[propName]);
+        } else {
+          obj = {
+            label: '',
+            value: null
+          };
         }
         categoryChartData.push(obj);
+        i++;
       });
       chartData[0].values = categoryChartData;
       return chartData;
@@ -424,10 +436,16 @@ module.exports = /*  @ngInject */
 
     function initChartData() {
       var data = [
-      {
-        'key': '',
-        'values': [[]]
-      }];
+        {
+          'values': [
+            {
+              'label': '',
+              'value': null,
+              'series': 0
+            }
+          ]
+        }
+      ];
       return data;
     }
 

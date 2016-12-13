@@ -75,6 +75,7 @@ module.exports = /*  @ngInject */
       subAccounts: '',
       stores: ''
     };
+    vm.isChartVisible = true;
     vm.prevLevelInTopBottom = prevLevelInTopBottom;
     vm.navigateTopBottomLevels = navigateTopBottomLevels;
     vm.changeTopBottomSortOrder = changeTopBottomSortOrder;
@@ -825,6 +826,7 @@ module.exports = /*  @ngInject */
 
     function  setSortedArrIndex() {
       var data = vm.currentTopBottomObj;
+      vm.isChartVisible = true;
       if (data && data.topBottomIndices) {
         var sortCategory = vm.filtersService.model.valuesVsTrend.value;
         var result = null;
@@ -872,10 +874,16 @@ module.exports = /*  @ngInject */
       if (vm.isStoreLevel === true) {
         if (trendSelection.showInStoreLevel === false && trendSelection.showInOtherLevels === true) {
           isVisible = false;
+          if (vm.filterModel.trend === vm.filtersService.model.trend[1]) {
+            vm.filterModel.trend = vm.filtersService.model.trend[2];
+          }
         }
       } else {
         if (trendSelection.showInStoreLevel === true && trendSelection.showInOtherLevels === false) {
           isVisible = false;
+          if (vm.filterModel.trend === vm.filtersService.model.trend[2]) {
+            vm.filterModel.trend = vm.filtersService.model.trend[1];
+          }
         }
       }
       return isVisible;
@@ -935,7 +943,7 @@ module.exports = /*  @ngInject */
 
     function navigateTopBottomLevels(currentLevelName, performanceData) {
       // There are a lot of data inconsistensies. Some Id's are marked as Id missing
-      if (performanceData.id && performanceData.id.toLowerCase() === 'id missing') {
+      if (performanceData.id && performanceData.id.toLowerCase() === 'id missing' || currentLevelName === 'stores') {
         return;
       }
       var getNextLevel = true;
