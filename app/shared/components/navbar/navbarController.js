@@ -174,13 +174,18 @@ module.exports = /*  @ngInject */
       });
 
       if (error.status === 400) {
+        debugger;
         angular.forEach(error.data, function(key, value) {
-          if (key.description === 'OPP101') {
-            vm.generalError = false;
+          if (!vm.doubleError) {
+            if (key.description === 'OPP101') {
+              vm.doubleError = true;
+            }
+          } else {
+            vm.doubleError = false;
           }
         });
       } else {
-        vm.generalError = true;
+        vm.doubleError = false;
       }
     }
 
