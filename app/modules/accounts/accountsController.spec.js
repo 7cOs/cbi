@@ -1,5 +1,137 @@
 describe('Unit: accountsController', function() {
-  var scope, ctrl, $state, $q, filtersService, chipsService, userService, packageSkuData, brandSpy, brandPerformanceData;
+  var scope, ctrl, $state, $q, filtersService, chipsService, userService, packageSkuData, brandSpy, brandPerformanceData, myperformanceService;
+  var topBottomSnapshotData = {
+    performance: [{
+        'type': 'Distributor',
+        'id': '2225193',
+        'name': 'MANHATTAN BEER DIST LLC - NY (BRONX - S)',
+        'measures': [
+          {
+            'timeframe': 'MTD',
+            'depletions': 375314.3868,
+            'depletionsTrend': -61.88196023693025,
+            'depletionsBU': null,
+            'depletionsBUTrend': null,
+            'plan': 375314.3868,
+            'planDepletionTrend': 0
+          },
+          {
+            'timeframe': 'CYTD',
+            'depletions': 12491744.3937,
+            'depletionsTrend': -16.075459112592508,
+            'depletionsBU': null,
+            'depletionsBUTrend': null,
+            'plan': 12491744.3937,
+            'planDepletionTrend': 0
+          },
+          {
+            'timeframe': 'FYTD',
+            'depletions': 10773624.1935,
+            'depletionsTrend': -15.938390969559693,
+            'depletionsBU': null,
+            'depletionsBUTrend': null,
+            'plan': 12816343.0581,
+            'planDepletionTrend': -15.938390969559693
+          },
+          {
+            'timeframe': 'CMTH',
+            'depletions': 1090734.0057,
+            'depletionsTrend': 25.559366815655782,
+            'depletionsBU': null,
+            'depletionsBUTrend': null,
+            'plan': 1090734.0057,
+            'planDepletionTrend': 0
+          },
+          {
+            'timeframe': 'CYTM',
+            'depletions': 12116430.0069,
+            'depletionsTrend': -12.830714019277742,
+            'depletionsBU': null,
+            'depletionsBUTrend': null,
+            'plan': 13899884.4267,
+            'planDepletionTrend': -12.830714019277742
+          },
+          {
+            'timeframe': 'FYTM',
+            'depletions': 10398309.8067,
+            'depletionsTrend': -12.115067376404308,
+            'depletionsBU': null,
+            'depletionsBUTrend': null,
+            'plan': 10398309.8067,
+            'planDepletionTrend': 0
+          },
+          {
+            'timeframe': 'L60',
+            'distributionsSimple': 12413,
+            'distributionsSimpleTrend': -9.828563126543658,
+            'distributionsSimpleBU': null,
+            'distributionsSimpleBUTrend': null,
+            'distributionsEffective': 24323,
+            'distributionsEffectiveTrend': -9.47897283215482,
+            'distributionsEffectiveBU': null,
+            'distributionsEffectiveBUTrend': null,
+            'velocity': 3433.3869,
+            'velocityTrend': null,
+            'planSimple': 15783,
+            'planEffective': 32344,
+            'planDistirbutionSimpleTrend': -21.35208768928594,
+            'planDistirbutionEffectiveTrend': -61.621939154093496
+          },
+          {
+            'timeframe': 'L90',
+            'distributionsSimple': 14612,
+            'distributionsSimpleTrend': -12.055371652121577,
+            'distributionsSimpleBU': null,
+            'distributionsSimpleBUTrend': null,
+            'distributionsEffective': 30104,
+            'distributionsEffectiveTrend': -10.287280963166051,
+            'distributionsEffectiveBU': null,
+            'distributionsEffectiveBUTrend': null,
+            'velocity': 7189.6431,
+            'velocityTrend': -719136.2136213621,
+            'planSimple': 15783,
+            'planEffective': 32344,
+            'planDistirbutionSimpleTrend': -7.419375277196984,
+            'planDistirbutionEffectiveTrend': -54.82315112540193
+          },
+          {
+            'timeframe': 'L120',
+            'distributionsSimple': 15783,
+            'distributionsSimpleTrend': -14.617257235596428,
+            'distributionsSimpleBU': null,
+            'distributionsSimpleBUTrend': null,
+            'distributionsEffective': 33139,
+            'distributionsEffectiveTrend': -12.116792192638167,
+            'distributionsEffectiveBU': null,
+            'distributionsEffectiveBUTrend': null,
+            'velocity': 85686.7231,
+            'velocityTrend': -285722.41033333336,
+            'planSimple': 15783,
+            'planEffective': 32344,
+            'planDistirbutionSimpleTrend': 0,
+            'planDistirbutionEffectiveTrend': -51.202696017808556
+          },
+          {
+            'timeframe': 'L03',
+            'distributionsSimple': 15529,
+            'distributionsSimpleTrend': -11.525752051048313,
+            'distributionsSimpleBU': null,
+            'distributionsSimpleBUTrend': null,
+            'distributionsEffective': 32344,
+            'distributionsEffectiveTrend': -9.232755233765506,
+            'distributionsEffectiveBU': null,
+            'distributionsEffectiveBUTrend': null,
+            'velocity': 5924.5916,
+            'velocityTrend': -153142.76710064063,
+            'planSimple': 15783,
+            'planEffective': 32344,
+            'planDistirbutionSimpleTrend': -1.609326490527783,
+            'planDistirbutionEffectiveTrend': -51.98800395745733
+          }
+        ]
+      }]
+  };
+
   var measuresArr = [
     {
       'timeframe': 'MTD',
@@ -131,7 +263,7 @@ describe('Unit: accountsController', function() {
     angular.mock.module('cf.common.services');
     angular.mock.module('cf.modules.accounts');
 
-    inject(function($rootScope, $controller, _$state_, _$q_, _chipsService_, _filtersService_, _userService_) {
+    inject(function($rootScope, $controller, _$state_, _$q_, _chipsService_, _filtersService_, _userService_, _myperformanceService_) {
       // Create scope
       scope = $rootScope.$new();
 
@@ -141,6 +273,7 @@ describe('Unit: accountsController', function() {
       chipsService = _chipsService_;
       filtersService = _filtersService_;
       userService = _userService_;
+      myperformanceService = _myperformanceService_;
       brandPerformanceData = {
         performance: [
           {
@@ -197,7 +330,7 @@ describe('Unit: accountsController', function() {
       spyOn(userService, 'getPerformanceDepletion').and.returnValue(fakePromise);
       spyOn(userService, 'getPerformanceDistribution').and.returnValue(fakePromise);
       spyOn(userService, 'getPerformanceSummary').and.returnValue(fakePromise);
-      spyOn(userService, 'getTopBottomSnapshot').and.returnValue(fakePromise);
+      spyOn(userService, 'getTopBottomSnapshot').and.returnValue($q.when(topBottomSnapshotData));
       brandSpy = spyOn(userService, 'getPerformanceBrand');
       brandSpy.and.returnValue($q.when(brandPerformanceData));
       // Create Controller
@@ -230,6 +363,23 @@ describe('Unit: accountsController', function() {
       expect(ctrl.previous).toEqual(null);
       expect(ctrl.brandSelectedIndex).toEqual(0);
       expect(ctrl.marketSelectedIndex).toEqual(0);
+    });
+
+    it('Should set default dropdown options', function() {
+      // Default trend option should be YA
+      expect(ctrl.filterModel.trend).toEqual(ctrl.filtersService.model.trend[0]);
+      // Default account brands should be set Distirubution simple
+      ctrl.filtersService.model.accountSelected.accountBrands = ctrl.filtersService.accountFilters.accountBrands[0];
+      // Default account markets should be set Depeletions
+      ctrl.filtersService.model.accountSelected.accountMarkets = ctrl.filtersService.accountFilters.accountMarkets[0];
+      // Default account type should be set Distirubutors
+      ctrl.currentTopBottomAcctType = ctrl.filtersService.accountFilters.accountTypes[0];
+      // Default sort order should be Top 10 values
+      ctrl.filtersService.model.valuesVsTrend = ctrl.filtersService.accountFilters.valuesVsTrend[0];
+      // Default premise type to be all
+      ctrl.filtersService.model.selected.premiseType = 'all';
+      // Default top bottom object should be set to distirbutors
+      expect(ctrl.currentTopBottomObj).toEqual(ctrl.topBottomData.distributors);
     });
 
     it('Should set default controller variables', function() {
@@ -958,7 +1108,167 @@ describe('Unit: accountsController', function() {
 
       expect(userService.getTopBottomSnapshot.calls.count()).toEqual(2);
     });
-
   });
 
+  describe('Change top bottom dropwdown', function() {
+    beforeEach(function() {
+    });
+
+    it('Check if correct objects are set as the current top bottom object', function() {
+      var distirbutorObj = filtersService.accountFilters.accountTypes[0];
+      ctrl.setTopBottomAcctTypeSelection(distirbutorObj);
+      expect(ctrl.currentTopBottomObj).toEqual(ctrl.topBottomData.distributors);
+
+      var accountObj = filtersService.accountFilters.accountTypes[1];
+      ctrl.setTopBottomAcctTypeSelection(accountObj);
+      expect(ctrl.currentTopBottomObj).toEqual(ctrl.topBottomData.accounts);
+
+      var subAccountObj = filtersService.accountFilters.accountTypes[2];
+      ctrl.setTopBottomAcctTypeSelection(subAccountObj);
+      expect(ctrl.currentTopBottomObj).toEqual(ctrl.topBottomData.subAccounts);
+
+      var storesObj = filtersService.accountFilters.accountTypes[3];
+      ctrl.setTopBottomAcctTypeSelection(storesObj);
+      expect(ctrl.currentTopBottomObj).toEqual(ctrl.topBottomData.stores);
+
+      ctrl.setTopBottomAcctTypeSelection(storesObj);
+      expect(ctrl.currentTopBottomObj).not.toEqual(ctrl.topBottomData.distributors);
+    });
+
+    it('should call getDataForTopBottom only once', function() {
+      var distirbutorObj = filtersService.accountFilters.accountTypes[0];
+      ctrl.setTopBottomAcctTypeSelection(distirbutorObj);
+      expect(userService.getTopBottomSnapshot.calls.count()).toEqual(1);
+    });
+
+    it('should not call getDataForTopBottom if same selection is made consecutively', function() {
+      var distirbutorObj = filtersService.accountFilters.accountTypes[0];
+      ctrl.setTopBottomAcctTypeSelection(distirbutorObj);
+      expect(userService.getTopBottomSnapshot.calls.count()).toEqual(1);
+      userService.getTopBottomSnapshot.calls.reset();
+      ctrl.setTopBottomAcctTypeSelection(distirbutorObj);
+      expect(userService.getTopBottomSnapshot.calls.count()).toEqual(0);
+    });
+
+    it('should remove all top bottom filters once an option from dropwdown is selected', function() {
+      ctrl.currentTopBottomFilters.distributors = '234567';
+      ctrl.currentTopBottomFilters.accounts = '1345672';
+      var storesObj = filtersService.accountFilters.accountTypes[3];
+      ctrl.setTopBottomAcctTypeSelection(storesObj);
+      expect(ctrl.currentTopBottomFilters.distributors).toEqual('');
+      expect(ctrl.currentTopBottomFilters.accounts).toEqual('');
+      expect(ctrl.currentTopBottomFilters.subAccounts).toEqual('');
+      expect(ctrl.currentTopBottomFilters.stores).toEqual('');
+    });
+  });
+
+  describe('Get top bottom data', function() {
+    var categoryBound;
+    beforeEach(function() {
+      categoryBound = ctrl.filtersService.accountFilters.accountMarkets[0];
+      userService.getTopBottomSnapshot.calls.reset();
+      ctrl.topBottomData.distributors.performanceData = null;
+      ctrl.topBottomData.distributors.isPerformanceDataUpdateRequired = false;
+      ctrl.topBottomData.distributors.isFilterUpdateRequired = false;
+    });
+
+    it('Should get the updated top bottom data if performance flag is set to true', function() {
+      ctrl.getDataForTopBottom(ctrl.topBottomData.distributors, categoryBound);
+      expect(userService.getTopBottomSnapshot.calls.count()).toEqual(1);
+    });
+
+    it('Should get the updated filtered data if update filter flag is set to true', function() {
+      ctrl.getDataForTopBottom(ctrl.topBottomData.distributors, categoryBound);
+      scope.$digest();
+      expect(userService.getTopBottomSnapshot.calls.count()).toEqual(1);
+      userService.getTopBottomSnapshot.calls.reset();
+      ctrl.getDataForTopBottom(ctrl.topBottomData.distributors, categoryBound);
+      expect(userService.getTopBottomSnapshot.calls.count()).toEqual(0);
+
+    });
+
+    it('Should not get updated performance data if update performance flag is not set', function() {
+      ctrl.getDataForTopBottom(ctrl.topBottomData.distributors, categoryBound);
+      scope.$digest();
+      expect(userService.getTopBottomSnapshot.calls.count()).toEqual(1);
+      ctrl.topBottomData.distributors.isFilterUpdateRequired = true;
+      ctrl.topBottomData.distributors.timePeriodFilteredData = null;
+      ctrl.getDataForTopBottom(ctrl.topBottomData.distributors, categoryBound);
+      expect(ctrl.topBottomData.distributors.isFilterUpdateRequired).toBeFalsy();
+      expect(ctrl.topBottomData.distributors.isFilterUpdateRequired).not.toBeUndefined();
+    });
+
+    it('Should not get updated performance data and updated filtered data if update performance flag and update filter flags are not set', function() {
+      var categoryBound = ctrl.filtersService.accountFilters.accountMarkets[0];
+      ctrl.getDataForTopBottom(ctrl.topBottomData.distributors, categoryBound);
+      scope.$digest();
+      expect(ctrl.topBottomData.distributors.isFilterUpdateRequired).toBeFalsy();
+      expect(ctrl.topBottomData.distributors.timePeriodFilteredData).not.toBeUndefined();
+      expect(userService.getTopBottomSnapshot.calls.count()).toEqual(1);
+    });
+
+    it('Should update the correct tab value in the view', function() {
+      ctrl.getDataForTopBottom(ctrl.topBottomData.distributors, categoryBound);
+      ctrl.marketSelectedIndex = 0;
+
+      ctrl.getDataForTopBottom(ctrl.topBottomData.accounts, categoryBound);
+      ctrl.marketSelectedIndex = 1;
+
+      ctrl.getDataForTopBottom(ctrl.topBottomData.subAccounts, categoryBound);
+      ctrl.marketSelectedIndex = 2;
+
+      ctrl.getDataForTopBottom(ctrl.topBottomData.stores, categoryBound);
+      ctrl.marketSelectedIndex = 3;
+    });
+  });
+
+  describe('Should fire on filter properties change on changing dropdown options', function() {
+    var resetFilterFlagsSpy;
+    beforeEach(function() {
+      resetFilterFlagsSpy = spyOn(myperformanceService, 'resetFilterFlags');
+      resetFilterFlagsSpy.calls.reset();
+    });
+
+    it('should reset filter flags when account market options are changed', function() {
+      var newVal = filtersService.accountFilters.accountMarkets[1];
+      ctrl.acctMarketChanged(newVal);
+      expect(resetFilterFlagsSpy.calls.count()).toEqual(1);
+    });
+
+    it('should reset filter flags when account market options are changed', function() {
+      var newVal = filtersService.accountFilters.accountMarkets[1];
+      ctrl.acctMarketChanged(newVal);
+      expect(resetFilterFlagsSpy.calls.count()).toEqual(1);
+    });
+
+    it('should reset filter flags when account market options are changed', function() {
+      var newVal = filtersService.accountFilters.accountMarkets[1];
+      ctrl.acctMarketChanged(newVal);
+      expect(resetFilterFlagsSpy.calls.count()).toEqual(1);
+    });
+
+    it('should reset filter flags when account market options are changed', function() {
+      var newVal = filtersService.accountFilters.accountMarkets[1];
+      ctrl.acctMarketChanged(newVal);
+      expect(resetFilterFlagsSpy.calls.count()).toEqual(1);
+    });
+
+    it('should reset filter flags when trendOptions options are changed', function() {
+      var newVal = filtersService.model.trend[0];
+      ctrl.trendOptionChanged(newVal);
+      expect(resetFilterFlagsSpy.calls.count()).toEqual(1);
+    });
+
+    it('should reset filter flags when depletion options are changed', function() {
+      var newVal = filtersService.model.depletionsTimePeriod.month[1];
+      ctrl.depletionOptionChanged(newVal);
+      expect(resetFilterFlagsSpy.calls.count()).toEqual(1);
+    });
+
+    it('should reset filter flags when distirbution options are changed', function() {
+      var newVal = filtersService.model.distributionTimePeriod.month[0];
+      ctrl.depletionOptionChanged(newVal);
+      expect(resetFilterFlagsSpy.calls.count()).toEqual(1);
+    });
+  });
 });

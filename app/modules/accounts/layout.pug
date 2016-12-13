@@ -206,7 +206,7 @@ div(row)
     .loader-wrap.inline(ng-if="a.loadingTopBottom === true" ng-class="{'active': a.loadingTopBottom}")
       loader
     .loader-wrap.inline.error(ng-if="a.loadingTopBottom === 'error'" ng-class="{'active': a.loadingTopBottom}")
-      span.error-text No data found
+      //- span.error-text No data found
     .widget-header
       .dropdown-filter.narrow
         md-select(ng-model="a.filtersService.model.accountSelected.accountMarkets" md-on-open="a.openSelect(true)" md-on-close="a.openSelect(false)" aria-label="Account Markets Filter")
