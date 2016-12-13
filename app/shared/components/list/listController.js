@@ -349,6 +349,10 @@ module.exports = /*  @ngInject */
     }
 
     function submitFeedback(opportunity, data) {
+
+      if (data.type === 'other' && !data.feedback) {
+        data.feedback = 'other';
+      }
       dismissOpportunity(opportunity, data);
       vm.opportunityDismissTrigger = true;
       vm.opportunity.feedback = '';
