@@ -321,6 +321,9 @@ module.exports = /*  @ngInject */
 
       vm.filterModel = angular.copy(filterModelTemplate);
       chipsService.resetChipsFilters(chipsService.model);
+      filtersService.model.distributor = '';
+      filtersService.model.chain = '';
+      filtersService.model.store = '';
       setDefaultDropDownOptions();
       setDefaultFilterOptions();
       apply(false);
@@ -328,6 +331,10 @@ module.exports = /*  @ngInject */
         resetFilterTextFields();
       }
       resetTopBottom();
+      setTopBottomAcctTypeSelection({
+        name: 'Distributors',
+        value: 1
+      });
     }
 
     function resetTopBottom() {
@@ -337,7 +344,10 @@ module.exports = /*  @ngInject */
         myperformanceService.resetPerformanceDataFlags(vm.topBottomData[topBottomObj]);
       }
       // Get the current top bottom object for the level chosen
+      // var categoryBound = vm.filtersService.model.accountSelected.accountMarkets;
       vm.currentTopBottomObj = getCurrentTopBottomObject(vm.currentTopBottomAcctType);
+
+      vm.currentTopBottomAcctType = vm.filtersService.accountFilters.accountTypes[0];
       // This function gives me the updated datafor whatever level is currently set
       updateTopBottom();
     }
