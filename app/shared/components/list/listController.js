@@ -219,6 +219,9 @@ module.exports = /*  @ngInject */
           }
           // reset selected
           vm.selected = [];
+          vm.isSelectAllActivated = true;
+          vm.toggleSelectAllStores();
+          vm.selected = [];
         }, function(err) {
           console.log('Error adding these ids: ', opportunityIds, ' Responded with error: ', err);
         });
