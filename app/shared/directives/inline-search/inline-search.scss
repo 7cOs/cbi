@@ -25,8 +25,8 @@
       min-width: min-content;
       min-width: -moz-min-content;
       min-width: -webkit-min-content;
-      min-height: 9em;
-      max-height: 9em;
+      min-height: 13.75em;
+      max-height: 13.75em;
       opacity: 1;
       overflow: auto;
       z-index: 2;
@@ -157,4 +157,10 @@
     margin-right: 1em;
     width: 280px;
   }
+}
+
+.state-group {
+  background: linear-gradient(to right, $dark-blue, $dark-blue 3%, $blue 60%);
+  color: $white;
+  padding-left: 1.5em;
 }

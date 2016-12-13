@@ -140,6 +140,15 @@ module.exports =
               }
             });
             vm.results = products;
+          } else if (vm.type === 'store') {
+            var groupedByState = {};
+            angular.forEach(data, function(value, key) {
+              if (!groupedByState[value.state]) {
+                groupedByState[value.state] = [];
+              }
+              groupedByState[value.state].push(value);
+            });
+            vm.results = Object.keys(groupedByState).sort().map(function(key) { return groupedByState[key]; });
           } else {
             vm.results = data;
           }
