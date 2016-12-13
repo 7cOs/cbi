@@ -915,8 +915,6 @@ module.exports = /*  @ngInject */
       if (performanceData.id && performanceData.id.toLowerCase() === 'id missing') {
         return;
       }
-      console.log('[performanceData]', performanceData);
-      console.log('[currentLevelName]', currentLevelName);
       var getNextLevel = true;
       myperformanceService.resetFiltersForLevelsAboveCurrent(vm.currentTopBottomAcctType, vm.currentTopBottomFilters, vm.topBottomData);
       // Get the account type next to the current level
