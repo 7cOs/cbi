@@ -189,7 +189,6 @@ module.exports = /*  @ngInject */
       }
 
       var categoryBound = vm.filtersService.model.accountSelected.accountMarkets;
-      vm.currentTopBottomObj = getCurrentTopBottomObject(vm.currentTopBottomAcctType);
 
       // change tab index
       if (vm.currentTopBottomFilters.stores && vm.currentTopBottomFilters.stores.id) {
@@ -202,7 +201,7 @@ module.exports = /*  @ngInject */
       } else if (vm.currentTopBottomFilters.distributors && vm.currentTopBottomFilters.distributors.id) {
         vm.currentTopBottomAcctType = vm.filtersService.accountFilters.accountTypes[1];
       }
-
+      vm.currentTopBottomObj = getCurrentTopBottomObject(vm.currentTopBottomAcctType);
       // update data
       getDataForTopBottom(vm.currentTopBottomObj, categoryBound);
     }
