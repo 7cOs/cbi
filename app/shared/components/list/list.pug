@@ -201,7 +201,7 @@ v-accordion.styled-list(multiple="" id="opportunities" control="list.accordion" 
                   div(column="4").pad-cell.more
                     label Last Depletion
                     span(ng-if='product.lastDepletionDate === null') &ndash;
-                    span.last-depletion(ng-if='product.lastDepletionDate !== null') {{::product.lastDepletionDate | timeAgo: 'daysOnly' }} <span class="depletion-date">{{::product.lastDepletionDate | date:'MM/dd/yy'}}</span>
+                    span.last-depletion(ng-if='product.lastDepletionDate !== null') {{::product.lastDepletionDate | timeAgo: 'daysOnly' }} <span class="depletion-date">{{::product.lastDepletionDate | date:'MM/dd/yy':'UTC'}}</span>
                   div(column="2")
                     label Depletions CYTD
                     span.last-depletion {{::product.depletionsCurrentYearToDate | number:0 }}
