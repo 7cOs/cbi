@@ -41,18 +41,23 @@ div.outer-nav-wrapper
                 .content.nopad
                   div.notification-card.clearfix(md-prevent-menu-close ng-repeat="notification in nb.notifications | orderBy: '-dateCreated'" ng-class="{'read': notification.status === 'READ'}" ng-click="nb.markRead(notification)" class="{{notification.action}}")
                     .details
-                      div(ng-if="notification.objectType === 'TARGET_LIST'")
+                      div(ng-if="notification.objectType.toUpperCase() === 'TARGET_LIST'")
                         p You've been added as a collaborator
                         .source {{notification.shortenedObject.name}}
-                      div(ng-if="notification.objectType === 'OPPORTUNITY'")
+                      div(ng-if="notification.objectType.toUpperCase() === 'OPPORTUNITY'")
                         p An opportunity has been shared with you
                         .source {{notification.shortenedObject.store.store_name | titlecase}}
                           span(ng-if="notification.shortenedObject.store.store_number.toUpperCase() !== 'UNKNOWN'")  \#{{notification.shortenedObject.store.store_number}}
                         p.sku {{notification.shortenedObject.product.name | titlecase}}
                           span  {{notification.shortenedObject.type | formatOpportunitiesType}}
-                      div(ng-if="notification.objectType === 'ACCOUNT'")
+                      div(ng-if="notification.objectType.toUpperCase() === 'STORE' || notification.objectType.toUpperCase() === 'DISTRIBUTOR'")
                         p A new note was added to your account
-                        .source {{notification.shortenedObject.name}}
+                        div(ng-if="notification.objectType.toUpperCase() === 'STORE'")
+                          .source {{notification.shortenedObject.store_name | titlecase}}
+                            span(ng-if="notification.shortenedObject.store_number.toUpperCase() !== 'UNKNOWN'")  \#{{notification.shortenedObject.store_number}}
+                        div(ng-if="notification.objectType.toUpperCase() === 'DISTRIBUTOR'")
+                          .source {{notification.shortenedObject.name | titlecase}}
+                            span  \#{{notification.shortenedObject.id}}
                     .info
                       label {{notification.dateCreated | timeAgo: 'relative'}}
                       label.bold {{notification.creator.firstName}} {{notification.creator.lastName}}
