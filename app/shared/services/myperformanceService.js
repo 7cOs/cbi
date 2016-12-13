@@ -238,10 +238,11 @@ module.exports = /*  @ngInject */
           },
           y: function(d) {
             if (isValidValues(Number(d.value))) {
-            return d.value;
-          } else {
-            return;
-          } },
+              return d.value;
+            } else {
+              return;
+            }
+          },
           xAxis: {
             showMaxMin: false
           },
