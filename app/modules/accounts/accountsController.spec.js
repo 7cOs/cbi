@@ -1265,7 +1265,7 @@ describe('Unit: accountsController', function() {
       expect(resetFilterFlagsSpy.calls.count()).toEqual(1);
     });
 
-    fit('should reset filter flags when distirbution options are changed', function() {
+    it('should reset filter flags when distirbution options are changed', function() {
       var newVal = filtersService.model.distributionTimePeriod.month[0];
       ctrl.depletionOptionChanged(newVal);
       expect(resetFilterFlagsSpy.calls.count()).toEqual(1);

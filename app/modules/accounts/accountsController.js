@@ -75,7 +75,6 @@ module.exports = /*  @ngInject */
       subAccounts: '',
       stores: ''
     };
-    vm.isChartVisible = true;
     vm.prevLevelInTopBottom = prevLevelInTopBottom;
     vm.navigateTopBottomLevels = navigateTopBottomLevels;
     vm.changeTopBottomSortOrder = changeTopBottomSortOrder;
