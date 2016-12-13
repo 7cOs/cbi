@@ -454,9 +454,12 @@ md-dialog {
   }
 
   &.create-target-list {
-
     .error {
       margin-top: 1em;
+    }
+
+    label.error {
+      top: 0;
     }
   }
 

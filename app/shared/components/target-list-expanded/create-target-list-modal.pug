@@ -10,6 +10,7 @@ div.modal.create-target-list
     div.modal-input
       label Description (Optional)
       textarea(ng-model="expanded.newList.description" placeholder="Enter Description").larger-input
+      label.error(ng-show="expanded.newList.description.length > 255") List description cannot be greater than 255 characters. {{expanded.newList.description.length - 255}} over limit.
     div.modal-input.add-collaborators
       label Add Collaborators (Optional)
       inline-search(type="user" placeholder="Name or CBI email address" chosen-result="expanded.chosenResult" callback="expanded.addCollaborator(result)")
