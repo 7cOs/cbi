@@ -141,8 +141,7 @@ module.exports =
             });
             vm.results = products;
           } else if (vm.type === 'store') {
-            var groupedByState = {},
-                sortedObject;
+            var groupedByState = {};
             angular.forEach(data, function(value, key) {
               if (!groupedByState[value.state]) {
                 groupedByState[value.state] = [];
