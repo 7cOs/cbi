@@ -174,7 +174,6 @@ module.exports = /*  @ngInject */
       });
 
       if (error.status === 400) {
-        debugger;
         angular.forEach(error.data, function(key, value) {
           if (!vm.doubleError) {
             if (key.description === 'OPP101') {
