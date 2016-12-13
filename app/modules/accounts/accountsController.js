@@ -677,6 +677,11 @@ module.exports = /*  @ngInject */
       }
     }
 
+    /**
+     * It is called on init and sets the default dropdown options for the entire account dashboard
+     * @param {Object} currentAcctType The new account type to be set
+     * @returns Sets the data for the currently selected top bottom account type
+     */
     function setDefaultDropDownOptions() {
       setDefaultEndingPeriodOptions();
       vm.filterModel.trend = vm.filtersService.model.trend[0];
@@ -691,6 +696,11 @@ module.exports = /*  @ngInject */
       vm.currentTopBottomObj = getCurrentTopBottomObject(vm.currentTopBottomAcctType);
     }
 
+    /**
+     * Based on the acct type passed, this function gives the matching topbottom object
+     * @param {Object} acctType Can be either a distirbutor, acct, subacct, store object
+     * @returns returns either vm.topBottomData.distirbutor, vm.topBottomData.accounts etc
+     */
     function getCurrentTopBottomObject(acctType) {
       var currentObj;
       var accountTypes = filtersService.accountFilters.accountTypesEnums;
@@ -767,6 +777,12 @@ module.exports = /*  @ngInject */
       });
     }
 
+    /**
+     * Updates the topbottom object passed with the correct data based on whether performance data needs to be updated or the filtered data needs to be updated or if none needs to be updated sets the sort order (top 10 values etc)
+     * @param {Object} topBottomObj Can be either topBottomData.distirbutor, topBottomData.account etc
+     * @param {Object} categoryBound It is one of the objects from vm.filtersService.accountFilters.accountMarkets
+     * @returns Updates the object with the correct data
+     */
     function getDataForTopBottom(topBottomObj, categoryBound) {
       if (vm.isStoreLevel === true) {
         getCurrentStoreData();
