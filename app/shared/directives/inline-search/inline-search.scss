@@ -158,3 +158,9 @@
     width: 280px;
   }
 }
+
+.state-group {
+  background: linear-gradient(to right, $dark-blue, $dark-blue 3%, $blue 60%);
+  color: $white;
+  padding-left: 1.5em;
+}
