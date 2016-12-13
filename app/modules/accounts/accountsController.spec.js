@@ -958,7 +958,59 @@ describe('Unit: accountsController', function() {
 
       expect(userService.getTopBottomSnapshot.calls.count()).toEqual(2);
     });
+  });
 
+  describe('Change top bottom dropwdown', function() {
+    beforeEach(function() {
+    });
+
+    it('Check if correct objects are set as the current top bottom object', function() {
+      var distirbutorObj = filtersService.accountFilters.accountTypes[0];
+      ctrl.setTopBottomAcctTypeSelection(distirbutorObj);
+      expect(ctrl.currentTopBottomObj).toEqual(ctrl.topBottomData.distributors);
+
+      var accountObj = filtersService.accountFilters.accountTypes[1];
+      ctrl.setTopBottomAcctTypeSelection(accountObj);
+      expect(ctrl.currentTopBottomObj).toEqual(ctrl.topBottomData.accounts);
+
+      var subAccountObj = filtersService.accountFilters.accountTypes[2];
+      ctrl.setTopBottomAcctTypeSelection(subAccountObj);
+      expect(ctrl.currentTopBottomObj).toEqual(ctrl.topBottomData.subAccounts);
+
+      var storesObj = filtersService.accountFilters.accountTypes[3];
+      ctrl.setTopBottomAcctTypeSelection(storesObj);
+      expect(ctrl.currentTopBottomObj).toEqual(ctrl.topBottomData.stores);
+
+      ctrl.setTopBottomAcctTypeSelection(storesObj);
+      expect(ctrl.currentTopBottomObj).not.toEqual(ctrl.topBottomData.distributors);
+    });
+
+    it('should call getDataForTopBottom only once', function() {
+      var distirbutorObj = filtersService.accountFilters.accountTypes[0];
+      ctrl.setTopBottomAcctTypeSelection(distirbutorObj);
+      expect(userService.getTopBottomSnapshot.calls.count()).toEqual(1);
+    });
+
+    it('should not call getDataForTopBottom if same selection is made consecutively', function() {
+      var distirbutorObj = filtersService.accountFilters.accountTypes[0];
+      ctrl.setTopBottomAcctTypeSelection(distirbutorObj);
+      expect(userService.getTopBottomSnapshot.calls.count()).toEqual(1);
+      userService.getTopBottomSnapshot.calls.reset();
+      ctrl.setTopBottomAcctTypeSelection(distirbutorObj);
+      expect(userService.getTopBottomSnapshot.calls.count()).toEqual(0);
+    });
+
+    fit('should remove all top bottom filters once an option from dropwdown is selected', function() {
+      ctrl.currentTopBottomFilters.distributors = '234567';
+      ctrl.currentTopBottomFilters.accounts = '1345672';
+      var storesObj = filtersService.accountFilters.accountTypes[3];
+      ctrl.setTopBottomAcctTypeSelection(storesObj);
+      expect(ctrl.currentTopBottomFilters.distributors).toEqual('');
+      expect(ctrl.currentTopBottomFilters.accounts).toEqual('');
+      expect(ctrl.currentTopBottomFilters.subAccounts).toEqual('');
+      expect(ctrl.currentTopBottomFilters.stores).toEqual('');
+
+    });
   });
 
 });

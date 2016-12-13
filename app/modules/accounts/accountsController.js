@@ -657,6 +657,11 @@ module.exports = /*  @ngInject */
       getDataForTopBottom(vm.currentTopBottomObj, categoryBound);
     }
 
+    /**
+     * Sets the current top bottom acct type (1.Distirrbutor , 2.Accounts, 3.Sub Accounts, 4.Stores)
+     * @param {Object} currentAcctType The new account type to be set
+     * @returns Sets the data for the currently selected top bottom account type
+     */
     function setTopBottomAcctTypeSelection(currentAcctType) {
       if (vm.currentTopBottomAcctType !== currentAcctType) {
         vm.currentTopBottomAcctType = currentAcctType;
