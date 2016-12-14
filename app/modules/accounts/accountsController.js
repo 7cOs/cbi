@@ -961,7 +961,7 @@ module.exports = /*  @ngInject */
       populateFieldsForFilterSelection(currentLevelName, performanceData);
       vm.currentTopBottomObj = getCurrentTopBottomObject(vm.currentTopBottomAcctType);
       updateTopBottom();
-      updateBrandSnapshot();
+      // updateBrandSnapshot();
     }
 
     function onFilterPropertiesChange() {
