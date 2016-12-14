@@ -144,7 +144,7 @@ module.exports = /*  @ngInject */
 
     function updateEndingTimePeriod(value) {
       value === 'month' ? vm.distributionSelectOptions.selected = vm.filtersService.model.distributionTimePeriod[value][0].name : vm.distributionSelectOptions.selected = vm.filtersService.model.distributionTimePeriod[value][1].name;
-      value === 'month' ? vm.depletionSelect = vm.filtersService.model.depletionsTimePeriod[value][0].name : vm.depletionSelect = vm.filtersService.model.depletionsTimePeriod[value][2].name;
+      value === 'month' ? vm.depletionSelect = vm.filtersService.model.depletionsTimePeriod[value][2].name : vm.depletionSelect = vm.filtersService.model.depletionsTimePeriod[value][2].name;
       updatedSelectionValuesInFilter(value, vm.depletionSelect, vm.distributionSelectOptions.selected);
       updateTotalRowDepletions();
       updateTotalRowDistributions();
