@@ -184,9 +184,8 @@ module.exports = /*  @ngInject */
 
     function insertNumbersInRange(lowerIndex, numOfElements) {
       var arr = [];
-      for (var i = lowerIndex; numOfElements > 0; i++) {
+      for (var i = lowerIndex; numOfElements > 0; i++, numOfElements--) {
         arr.push(i);
-        numOfElements--;
       }
       return arr;
     }
