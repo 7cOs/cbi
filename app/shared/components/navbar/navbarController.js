@@ -36,6 +36,11 @@ module.exports = /*  @ngInject */
 
     // Defaults
     vm.addNewRationale = false;
+    vm.cacheInputs = true;
+    vm.cachedOpportunity;
+    vm.dateUpdated = '';
+    vm.dismissedError = false;
+    vm.duplicateError = false;
     vm.myAccountsOnly = true;
     vm.noNotifications = 'No unread notifications.';
     vm.notifications = [];
@@ -52,9 +57,8 @@ module.exports = /*  @ngInject */
     };
 
     vm.newOpportunity = vm.newOpportunityTemplate;
+    vm.oppID;
     vm.unreadNotifications = 0;
-    vm.cachedOpportunity;
-    vm.cacheInputs = true;
 
     // Mock data
     vm.accountSelectorSelected = 'Distributor';
@@ -83,11 +87,13 @@ module.exports = /*  @ngInject */
     vm.addToTargetList = addToTargetList;
     vm.closeMenus = closeMenus;
     vm.closeModal = closeModal;
+    vm.getDismissedOpportunity = getDismissedOpportunity;
     vm.getTargetLists = getTargetLists;
     vm.markRead = markRead;
     vm.markSeen = markSeen;
     vm.modalAddOpportunityForm = modalAddOpportunityForm;
     vm.modalCustomOpportunityError = modalCustomOpportunityError;
+    vm.showImpact = showImpact;
     vm.showNewRationaleInput = showNewRationaleInput;
 
     $scope.$watch(function() { return toastService.model; }, function(newVal) {
@@ -167,6 +173,8 @@ module.exports = /*  @ngInject */
     }
 
     function modalCustomOpportunityError(error) {
+      vm.dismissedError = vm.duplicateError = vm.generalError = false;
+
       $mdDialog.show({
         clickOutsideToClose: false,
         scope: $scope.$new(),
@@ -175,17 +183,41 @@ module.exports = /*  @ngInject */
 
       if (error.status === 400) {
         angular.forEach(error.data, function(key, value) {
-          if (!vm.doubleError) {
-            if (key.description === 'OPP101') {
-              vm.doubleError = true;
-            }
+          var keepGoing = true;
+          if (keepGoing && error.data.length > 1 && key.description === 'OPP107') {
+            vm.duplicateError = vm.generalError = false;
+            vm.dismissedError = true;
+            keepGoing = false;
+            vm.getDismissedOpportunity(key.objectIdentifier);
+            vm.oppID = key.objectIdentifier;
           } else {
-            vm.doubleError = false;
+            if (error.data.length < 2 && key.description === 'OPP101') {
+              vm.dismissedError = vm.generalError = false;
+              vm.duplicateError = true;
+            }
           }
         });
       } else {
-        vm.doubleError = false;
+        vm.generalError = true;
       }
+    }
+
+    function showImpact(letter) {
+      if (letter === 'H') {
+        return 'High';
+      } else if (letter === 'M') {
+        return 'Medium';
+      } else {
+        return 'Low';
+      }
+    }
+
+    function getDismissedOpportunity(oppID) {
+      opportunitiesService.getOpportunities(oppID)
+      .then(function(response) {
+        var isoDate = new Date(response[0].dateUpdated).toISOString();
+        vm.dateUpdated = moment(isoDate).format('M/D/YYYY');
+      });
     }
 
     // Add Opportunity
@@ -296,7 +328,8 @@ module.exports = /*  @ngInject */
     }
 
     // Close "Add Opportunity" modal
-    function closeModal() {
+    function closeModal(deleteFeedback) {
+      if (deleteFeedback) opportunitiesService.deleteOpportunityFeedback(vm.oppID);
       vm.newOpportunity = vm.newOpportunityTemplate;
       $mdDialog.hide();
     }

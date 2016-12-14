@@ -265,6 +265,49 @@ md-dialog {
     button {
       margin: 20px 0 10px;
     }
+
+    .btn-edit-entry {
+      margin-bottom: 30px;
+    }
+
+    label {
+      padding-top: 15px;
+    }
+
+    .opp-error-account {
+      p:nth-child(2) {
+        margin-bottom: 0;
+      }
+
+      p:nth-child(3) {
+        margin-top: 0;
+      }
+    }
+
+    .dismissed-error {
+      position: relative;
+
+      .accent {
+        text-align: left;
+        text-indent: 20px;
+        color: $blue;
+
+        &:before {
+          background-image: url('../../assets/img/icons/hidden-opportunity.svg');
+          background-repeat: no-repeat;
+          content: '';
+          display: block;
+          position: absolute;
+          height: 15px;
+          width: 15px;
+        }
+      }
+
+      p {
+        margin-top: -10px;
+        font-size: 0.7em;
+      }
+    }
   }
 
   .icon-container {

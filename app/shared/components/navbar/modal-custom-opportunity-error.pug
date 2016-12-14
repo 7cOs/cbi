@@ -1,19 +1,16 @@
 div.modal.custom-opportunity-error
-  div(ng-if="nb.doubleError")
+  div(ng-if="!nb.generalError")
     div.title
       h4 Add Opportunity
     form.modal-form(name="" novalidate)
       .row
-        p.error-message.accent <img src="./assets/img/icons/error.svg">This opportunity already exists
-      div.modal-input
-        .row
-          div(column="12")
-            .row
-              label Account
-              p {{nb.duplicateOpportunity.properties.store.name | titlecase}}
-            .row
-              p {{nb.duplicateOpportunity.properties.store.address | titlecase}}
-      div.modal-input
+        p(column="12").error-message.accent <img src="./assets/img/icons/error.svg">This opportunity already exists
+      div.modal-input.row
+        div(column="12").opp-error-account
+          label Account
+          p {{nb.duplicateOpportunity.properties.store.name | titlecase}}
+          p {{nb.duplicateOpportunity.properties.store.address | titlecase}}
+      div.modal-input.row
         div(column="8")
           label Package / SKU
           p {{nb.duplicateOpportunity.properties.product.name | titlecase}}
@@ -26,10 +23,20 @@ div.modal.custom-opportunity-error
             p {{nb.duplicateOpportunity.properties.rationale.description}}
           div(column="4")
             label Impact
-            p {{nb.duplicateOpportunity.properties.impact.enum}}
-      button(type="submit" ng-click="nb.closeModal()").btn-action Use Original
-      button(type="submit" ng-click="nb.modalAddOpportunityForm(true)").btn-action No, Edit Entry
-  div(ng-if="!nb.doubleError")
+            p {{nb.showImpact(nb.duplicateOpportunity.properties.impact.enum)}}
+      div(ng-if="nb.dismissedError").row.dismissed-error
+        div(column="12")
+          h4.accent This Opportunity was Hidden on
+            span  {{nb.dateUpdated}}
+          p If you unhide it, it will be visible again in your list
+          button(type="submit" ng-click="nb.closeModal(true)").btn-action Use Original (Unhide)
+      div(ng-if="nb.duplicateError").row
+        div(column="12")
+          button(type="submit" ng-click="nb.closeModal()").btn-action Use Original
+      .row
+        div(column="12")
+          button(type="submit" ng-click="nb.modalAddOpportunityForm(true)").btn-action.btn-edit-entry No, Edit Entry
+  div(ng-if="nb.generalError")
     div.title
       h4 Error!
       a.hide-row(ng-click="nb.closeModal()")
