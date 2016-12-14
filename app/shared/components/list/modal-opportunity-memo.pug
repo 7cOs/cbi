@@ -9,7 +9,7 @@
       div(column="6")
         div(column="6")
           label Start date
-          h3(ng-if="list.memoData.featurePeriodStartDate === null || list.memoData.setPeriodStartDate === null") None;
+          h3(ng-if="list.memoData.featurePeriodStartDate === null || list.memoData.setPeriodStartDate === null") None
           h3(ng-if="list.memoData.featurePeriodStartDate !== undefined") {{list.memoData.featurePeriodStartDate | date:'MM/dd/yy'}}
           h3(ng-if="list.memoData.setPeriodStartDate !== undefined") {{list.memoData.setPeriodStartDate | date:'MM/dd/yy'}}
         div(column="6")
@@ -17,6 +17,15 @@
           h3(ng-if="list.memoData.featurePeriodEndDate === null || list.memoData.setPeriodEndDate === null") None
           h3(ng-if="list.memoData.featurePeriodEndDate !== undefined") {{list.memoData.featurePeriodEndDate | date:'MM/dd/yy'}}
           h3(ng-if="list.memoData.setPeriodEndDate !== undefined") {{list.memoData.setPeriodEndDate | date:'MM/dd/yy'}}
+      div(column="6" ng-if="list.memoData.authorizationCode")
+        div(column="6")
+          label Reset Start
+          h3(ng-if="list.memoData.resetPeriodStartDate === null") None
+          h3(ng-if="list.memoData.resetPeriodStartDate !== null") {{list.memoData.resetPeriodStartDate | date: 'MM/dd/yy'}}
+        div(column="6")
+          label Reset End
+          h3(ng-if="list.memoData.resetPeriodEndDate === null") None
+          h3(ng-if="list.memoData.resetPeriodEndDate !== null") {{list.memoData.resetPeriodEndDate | date: 'MM/dd/yy'}}
     div(row ng-if="list.memoData.price !== undefined").clearfix.price-menu
       div(column="3").price
         label Price
