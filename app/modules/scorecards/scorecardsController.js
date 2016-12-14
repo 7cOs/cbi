@@ -87,6 +87,7 @@ module.exports = /*  @ngInject */
     }
 
     function changeDistributionTimePeriod(value) {
+      vm.distributionSelectOptions.selected = value;
       updatedSelectionValuesInFilter(null, null, value);
       updateTotalRowDistributions();
     }
