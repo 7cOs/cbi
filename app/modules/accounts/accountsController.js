@@ -870,6 +870,9 @@ module.exports = /*  @ngInject */
           vm.currentChartData = myperformanceService.initChartData();
         }
 
+      } else {
+        stopTopBottomLoadingIcon();
+        console.log('Unable to retrieve any ' + vm.currentTopBottomObj.currentLevelName);
       }
       // console.log('Current Top Bottom Obj', vm.currentTopBottomObj);
     }
