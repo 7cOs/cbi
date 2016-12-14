@@ -450,6 +450,7 @@ module.exports = /*  @ngInject */
 
     function updateBrandSnapshot() {
       var params = filtersService.getAppliedFilters('brandSnapshot');
+      myperformanceService.appendFilterParametersForTopBottom(params, vm.currentTopBottomFilters);
       vm.loadingBrandSnapshot = true;
       prevTab();
 
@@ -957,6 +958,7 @@ module.exports = /*  @ngInject */
       populateFieldsForFilterSelection(currentLevelName, performanceData);
       vm.currentTopBottomObj = getCurrentTopBottomObject(vm.currentTopBottomAcctType);
       updateTopBottom();
+      updateBrandSnapshot();
     }
 
     function onFilterPropertiesChange() {
