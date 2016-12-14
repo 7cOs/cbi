@@ -322,6 +322,9 @@ module.exports = /*  @ngInject */
       setDefaultDropDownOptions();
       setDefaultFilterOptions();
       apply(false);
+      if (myperformanceService.isResetFiltersRequired(vm.currentTopBottomFilters)) {
+        resetFilterTextFields();
+      }
       resetTopBottom();
     }
 

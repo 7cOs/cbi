@@ -182,10 +182,11 @@ module.exports = /*  @ngInject */
       return currentTbData;
     }
 
-    function insertNumbersInRange(lowerIndex, higherIndex) {
+    function insertNumbersInRange(lowerIndex, numOfElements) {
       var arr = [];
-      for (var i = lowerIndex; i < higherIndex; i++) {
+      for (var i = lowerIndex; numOfElements > 0; i++) {
         arr.push(i);
+        numOfElements--;
       }
       return arr;
     }
@@ -202,10 +203,10 @@ module.exports = /*  @ngInject */
         bottomValues: [],
         bottomTrends: []
       };
-      storeTopBottomObj.topBottomIndices.topValues = insertNumbersInRange(0, queryLimit);
-      storeTopBottomObj.topBottomIndices.topTrends = insertNumbersInRange(queryLimit, queryLimit * 2);
-      storeTopBottomObj.topBottomIndices.bottomValues = insertNumbersInRange(queryLimit * 2, queryLimit * 3);
-      storeTopBottomObj.topBottomIndices.bottomTrends = insertNumbersInRange(queryLimit * 3, queryLimit * 4);
+      storeTopBottomObj.topBottomIndices.topValues = insertNumbersInRange(0, data[0].performance.length);
+      storeTopBottomObj.topBottomIndices.topTrends = insertNumbersInRange(data[0].performance.length, data[1].performance.length);
+      storeTopBottomObj.topBottomIndices.bottomValues = insertNumbersInRange(data[1].performance.length, data[2].performance.length);
+      storeTopBottomObj.topBottomIndices.bottomTrends = insertNumbersInRange(data[2].performance.length, data[3].performance.length);
       getChartData(storeTopBottomObj, accountMarketSelection, trendSelection);
       return storeTopBottomObj;
     }
