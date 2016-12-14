@@ -284,6 +284,7 @@ module.exports = /*  @ngInject */
               return market.value === filtersService.accountFilters.accountMarketsEnums.distEffective;
             });
             vm.filtersService.model.accountSelected.accountMarkets = distEffectiveObj[0];
+            myperformanceService.resetFilterFlags(vm.topBottomData);
             updateTopBottom();
           }
         } else if (accountObj.value === filtersService.accountFilters.accountMarketsEnums.distEffective && vm.brandSelectedIndex === 0) {
@@ -293,6 +294,7 @@ module.exports = /*  @ngInject */
               return market.value === filtersService.accountFilters.accountMarketsEnums.distSimple;
             });
             vm.filtersService.model.accountSelected.accountMarkets = distSimpleObj[0];
+            myperformanceService.resetFilterFlags(vm.topBottomData);
             updateTopBottom();
           }
         }
