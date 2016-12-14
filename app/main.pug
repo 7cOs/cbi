@@ -1,4 +1,4 @@
-html(ng-app='cf')
+html(ng-app='cf' ng-class="{'ieWrap': $root.isIE, 'edgeWrap': $root.isEdge}")
   head
     include assets/templates/head
 

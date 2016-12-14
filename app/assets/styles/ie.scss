@@ -1,5 +1,13 @@
 /* This sucks, but so does IE. */
 
+.ieWrap,
+.edgeWrap {
+
+  &[style] {
+    overflow-y: hidden !important;
+  }
+}
+
 .ie,
 .edge {
 
@@ -12,14 +20,12 @@
     }
   }
 
-
   // Fix page jumping to top when select box is open
   &[style] {
     position: inherit !important;
     top: inherit !important;
     width: inherit !important;
   }
-
 
   // Placeholder font
   ::-ms-input-placeholder {
