@@ -97,19 +97,20 @@ module.exports = /*  @ngInject */
       switch (topBottomSelection.value) {
         case filtersService.accountFilters.topBottomSortTypeEnum.topValues:
           queryParams.top = true;
-          queryParams.trend = false;
+          queryParams.trend = 'NONE';
           break;
         case filtersService.accountFilters.topBottomSortTypeEnum.topTrends:
           queryParams.top = true;
-          queryParams.trend = true;
+          queryParams.trend = trendSelection.value === 1 ? 'YA' : 'PLAN';
+
           break;
         case filtersService.accountFilters.topBottomSortTypeEnum.bottomValues:
           queryParams.top = false;
-          queryParams.trend = false;
+          queryParams.trend = 'NONE';
           break;
         case filtersService.accountFilters.topBottomSortTypeEnum.bottomTrends:
           queryParams.top = false;
-          queryParams.trend = true;
+          queryParams.trend = trendSelection.value === 1 ? 'YA' : 'PLAN';
           break;
       }
       queryParams.metric = timePeriodVal;
