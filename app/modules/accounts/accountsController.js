@@ -61,6 +61,9 @@ module.exports = /*  @ngInject */
     vm.premiseTypeDisabled = false;
     vm.selectedStore = null;
     vm.selectOpen = false;
+    vm.showXChain = false;
+    vm.showXDistributor = false;
+    vm.showXStore = false;
 
     // top bottom public methods
     vm.topBottomData = {
@@ -321,8 +324,11 @@ module.exports = /*  @ngInject */
       vm.filterModel = angular.copy(filterModelTemplate);
       chipsService.resetChipsFilters(chipsService.model);
       filtersService.model.distributor = '';
+      vm.showXDistributor = false;
       filtersService.model.chain = '';
+      vm.showXChain = false;
       filtersService.model.store = '';
+      vm.showXStore = false;
       setDefaultDropDownOptions();
       setDefaultFilterOptions();
       apply(false);
@@ -430,14 +436,16 @@ module.exports = /*  @ngInject */
         filtersService.model.selected.chain = [];
         filtersService.model.chain = '';
         chipsService.removeChip('chain');
+        vm.showXStore = true;
       } else if (filterModelProperty === 'chain') {
         filtersService.model.selected.store = [];
         filtersService.model.store = '';
         chipsService.removeChip('store');
-
+        vm.showXChain = true;
         result.type.toLowerCase() === 'account' ? vm.currentTopBottomFilters.accounts = result : vm.currentTopBottomFilters.subAccounts = result;
       } else if (filterModelProperty === 'distributor') {
         vm.currentTopBottomFilters.distributors = result;
+        vm.showXDistributor = true;
       }
 
       for (var i = 0; i < chipsService.model.length; i++) {

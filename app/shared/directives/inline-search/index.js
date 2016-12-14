@@ -17,7 +17,8 @@ module.exports =
         multipleRecipients: '=?',
         cacheInput: '=?',
         removable: '@',
-        onRemove: '&'
+        onRemove: '&',
+        showX: '='
       },
       controller: InlineSearchController,
       controllerAs: 'is',
@@ -60,6 +61,7 @@ module.exports =
       vm.onKeypress = onKeypress;
       vm.userDataFormat = userDataFormat;
       vm.inputFocused = inputFocused;
+      vm.showX = false;
 
       $scope.$watch(function() { return searchService.model.searchActive; }, function(newVal) {
         if (!newVal) {
@@ -162,6 +164,7 @@ module.exports =
         vm.chosenResult = null;
         vm.input = '';
         vm.onRemove();
+        vm.showX = false;
       }
 
       function resultChosen(result, nav) {
@@ -191,6 +194,7 @@ module.exports =
         }
 
         vm.callback({result: result});
+        vm.showX = true;
         vm.chosenResult = result;
         vm.chosenResultObject = result;
         vm.variety === 'manage-collaborators' ? close(true) : close();
