@@ -117,4 +117,14 @@
       background-color: $gray-4;
     }
   }
+
+  // Disable Scroll on md-menu items
+  .md-active.md-open-menu-container  {
+    position: -ms-page;
+
+    .nav-flyout {
+      height: 300px;
+      width: 500px;
+    }
+  }
 }
