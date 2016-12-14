@@ -957,8 +957,10 @@ module.exports = /*  @ngInject */
       };
       if (currentLevelName === 'distributors') {
         vm.filtersService.model.distributor = data.name;
+        vm.showXDistributor = true;
       } else {
         vm.filtersService.model.chain = data.name;
+        vm.showXChain = true;
       }
     }
 

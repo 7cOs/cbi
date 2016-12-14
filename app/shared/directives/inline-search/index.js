@@ -18,7 +18,7 @@ module.exports =
         cacheInput: '=?',
         removable: '@',
         onRemove: '&',
-        showX: '='
+        showX: '=?showX'
       },
       controller: InlineSearchController,
       controllerAs: 'is',
