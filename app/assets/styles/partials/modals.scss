@@ -266,15 +266,27 @@ md-dialog {
       margin: 20px 0 10px;
     }
 
+    .btn-edit-entry {
+      margin-bottom: 30px;
+    }
+
     label {
       padding-top: 15px;
     }
 
-    .cancel {
-      text-align: center;
+    .opp-error-account {
+      p:nth-child(2) {
+        margin-bottom: 0;
+      }
+
+      p:nth-child(3) {
+        margin-top: 0;
+      }
     }
 
     .dismissed-error {
+      position: relative;
+
       .accent {
         text-align: left;
         text-indent: 20px;
@@ -286,7 +298,6 @@ md-dialog {
           content: '';
           display: block;
           position: absolute;
-          bottom: 240px;
           height: 15px;
           width: 15px;
         }
@@ -294,7 +305,7 @@ md-dialog {
 
       p {
         margin-top: -10px;
-        font-size: 0.8em;
+        font-size: 0.7em;
       }
     }
   }

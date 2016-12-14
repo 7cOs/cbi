@@ -184,16 +184,14 @@ module.exports = /*  @ngInject */
       if (error.status === 400) {
         angular.forEach(error.data, function(key, value) {
           var keepGoing = true;
-          if (keepGoing) {
-            if (error.data.length > 1 && key.description === 'OPP107') {
-              vm.duplicateError = vm.generalError = false;
-              vm.dismissedError = true;
-              keepGoing = false;
-              vm.getDismissedOpportunity(key.objectIdentifier);
-              vm.oppID = key.objectIdentifier;
-            }
+          if (keepGoing && error.data.length > 1 && key.description === 'OPP107') {
+            vm.duplicateError = vm.generalError = false;
+            vm.dismissedError = true;
+            keepGoing = false;
+            vm.getDismissedOpportunity(key.objectIdentifier);
+            vm.oppID = key.objectIdentifier;
           } else {
-            if (key.description === 'OPP101') {
+            if (error.data.length < 2 && key.description === 'OPP101') {
               vm.dismissedError = vm.generalError = false;
               vm.duplicateError = true;
             }
@@ -217,8 +215,8 @@ module.exports = /*  @ngInject */
     function getDismissedOpportunity(oppID) {
       opportunitiesService.getOpportunities(oppID)
       .then(function(response) {
-        // update with 'date updated' value from api when accessible
-        vm.dateUpdated = response[0].effectiveDate;
+        var isoDate = new Date(response[0].dateUpdated).toISOString();
+        vm.dateUpdated = moment(isoDate).format('M/D/YYYY');
       });
     }
 
