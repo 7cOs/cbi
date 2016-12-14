@@ -450,6 +450,7 @@ module.exports = /*  @ngInject */
 
     function updateBrandSnapshot() {
       var params = filtersService.getAppliedFilters('brandSnapshot');
+      myperformanceService.appendFilterParametersForTopBottom(params, vm.currentTopBottomFilters);
       vm.loadingBrandSnapshot = true;
       prevTab();
 
@@ -869,6 +870,9 @@ module.exports = /*  @ngInject */
           vm.currentChartData = myperformanceService.initChartData();
         }
 
+      } else {
+        stopTopBottomLoadingIcon();
+        console.log('Unable to retrieve any ' + vm.currentTopBottomObj.currentLevelName);
       }
       // console.log('Current Top Bottom Obj', vm.currentTopBottomObj);
     }
@@ -957,6 +961,7 @@ module.exports = /*  @ngInject */
       populateFieldsForFilterSelection(currentLevelName, performanceData);
       vm.currentTopBottomObj = getCurrentTopBottomObject(vm.currentTopBottomAcctType);
       updateTopBottom();
+      // updateBrandSnapshot();
     }
 
     function onFilterPropertiesChange() {
