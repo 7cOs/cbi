@@ -18,7 +18,9 @@ module.exports =
         cacheInput: '=?',
         removable: '@',
         onRemove: '&',
-        showX: '=?showX'
+        showX: '=?showX',
+        isDistributorSelectionComplete: '=?',
+        isChainSelectionComplete: '=?'
       },
       controller: InlineSearchController,
       controllerAs: 'is',
@@ -67,6 +69,22 @@ module.exports =
         if (!newVal) {
           close();
           searchService.setSearchActive(false);
+        }
+      }, true);
+
+      $scope.$watch(function() { return vm.isDistributorSelectionComplete; }, function(newVal) {
+        console.log('Hit distirbutor watch');
+        if (vm.isDistributorSelectionComplete) {
+            resultChosen(vm.isDistributorSelectionComplete);
+            vm.isDistributorSelectionComplete = null;
+        }
+      }, true);
+
+      $scope.$watch(function() { return vm.isChainSelectionComplete; }, function(newVal) {
+        console.log('Hit chain watch');
+        if (vm.isChainSelectionComplete) {
+            resultChosen(vm.isChainSelectionComplete);
+            vm.isChainSelectionComplete = null;
         }
       }, true);
 

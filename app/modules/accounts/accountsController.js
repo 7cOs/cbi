@@ -78,6 +78,8 @@ module.exports = /*  @ngInject */
       subAccounts: '',
       stores: ''
     };
+    vm.isChainSelectionComplete = null;
+    vm.isDistributorSelectionComplete = null;
     vm.getDataForTopBottom = getDataForTopBottom;
     vm.navigateTopBottomLevels = navigateTopBottomLevels;
     vm.changeTopBottomSortOrder = changeTopBottomSortOrder;
@@ -729,7 +731,7 @@ module.exports = /*  @ngInject */
       switch (acctType.value) {
         case accountTypes.distributors:
           currentObj = vm.topBottomData.distributors;
-          currentObj.currentLevelName = 'distributors';
+          currentObj.currentLevelName = '≈';
           isStoreLevel = false;
           break;
         case accountTypes.accounts:
@@ -1007,6 +1009,11 @@ module.exports = /*  @ngInject */
       // There are a lot of data inconsistensies. Some Id's are marked as Id missing
       if (performanceData.id && performanceData.id.toLowerCase() === 'id missing' || currentLevelName === 'stores') {
         return;
+      }
+      if (currentLevelName === 'distributors') {
+        vm.isDistributorSelectionComplete = performanceData;
+      } else {
+        vm.isChainSelectionComplete = performanceData;
       }
 
       var getNextLevel = true;
