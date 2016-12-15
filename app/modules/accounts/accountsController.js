@@ -848,7 +848,7 @@ module.exports = /*  @ngInject */
           case filtersService.accountFilters.topBottomSortTypeEnum.topValues:
             if (data.topBottomIndices.topValues.length > 0) {
               result = data.topBottomIndices.topValues;
-              vm.currentChartData = data.chartData.topValues;
+                vm.currentChartData = data.chartData.topValues;
             }
             break;
           case filtersService.accountFilters.topBottomSortTypeEnum.topTrends:
@@ -946,6 +946,11 @@ module.exports = /*  @ngInject */
       onFilterPropertiesChange();
     }
 
+    /**
+     * Fires when top bottom sort order changes
+     * @param {Object} selectedVal Current top bottom sort order (top10 values/trends etc)
+     * @returns Sets the current sort order indices
+     */
     function changeTopBottomSortOrder(selectedVal) {
       vm.loadingTopBottom = true;
       vm.filtersService.model.valuesVsTrend = selectedVal;
