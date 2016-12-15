@@ -85,7 +85,7 @@ module.exports = function (config) {
       },
       'issuedAt': 1480963632694 */
       // 'SALES-HIER'
-      /* 'personId': 5648,
+      'personId': 5648,
       'employeeID': '1012132',
       'firstName': 'FRED',
       'lastName': 'BERRIOS',
@@ -125,7 +125,7 @@ module.exports = function (config) {
         'srcTypeCd': [
           'SALES_HIER'
         ]
-      } */
+      }
       // 'ON_HEIR'
       /* 'personId': 5527,
       'employeeID': '1010009',
@@ -202,45 +202,6 @@ module.exports = function (config) {
         'email': null,
         'srcTypeCd': []
       } */
-      'personId': 5604,
-      'employeeID': '1009750',
-      'firstName': 'FRED',
-      'lastName': 'ASHENBRENNER',
-      'email': 'FRED.ASHENBRENNER@CBRANDS.COM',
-      'srcTypeCd': [
-        'ON_HIER'
-      ],
-      'groupingCode': '1683',
-      'corporateUser': true,
-      'userGroup': [
-        'cbi employees',
-        'ug-cbigdc-role-ecrownappusercorporateview',
-        'cbi users',
-        'cbi-adenabledaccounts'
-      ],
-      'issuer': 'https://orion.cbrands.com',
-      'jwt': 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJsYXN0TmFtZSI6IkFTSEVOQlJFTk5FUiIsImlzcyI6Imh0dHBzOi8vb3Jpb24uY2JyYW5kcy5jb20iLCJlbXBsb3llZUlEIjoiMTAwOTc1MCIsImZpcnN0TmFtZSI6IkZSRUQiLCJncm91cGluZ0NvZGUiOiIxNjgzIiwiY29ycG9yYXRlVXNlciI6dHJ1ZSwicGVyc29uSUQiOjU2MDQsImV4cCI6MTQ4NjgzNzM3MjQ4OCwiaWF0IjoxNDgxNjUzMzcyNDg4LCJ1c2VyR3JvdXAiOlsiY2JpIGVtcGxveWVlcyIsInVnLWNiaWdkYy1yb2xlLWVjcm93bmFwcHVzZXJjb3Jwb3JhdGV2aWV3IiwiY2JpIHVzZXJzIiwiY2JpLWFkZW5hYmxlZGFjY291bnRzIl0sImVtYWlsIjoiRlJFRC5BU0hFTkJSRU5ORVJAQ0JSQU5EUy5DT00iLCJzcmNUeXBlQ2QiOlsiT05fSElFUiJdfQ.f4iF5z80F1ygA-ZD2OQ-IvKoR7bufuvnSYiNdkuM5-I',
-      'jwtmap': {
-        'firstName': 'FRED',
-        'lastName': 'ASHENBRENNER',
-        'groupingCode': '1683',
-        'corporateUser': true,
-        'iss': 'https://orion.cbrands.com',
-        'personID': 5604,
-        'employeeID': '1009750',
-        'exp': 1486837372488,
-        'iat': 1481653372489,
-        'userGroup': [
-          'cbi employees',
-          'ug-cbigdc-role-ecrownappusercorporateview',
-          'cbi users',
-          'cbi-adenabledaccounts'
-        ],
-        'email': 'FRED.ASHENBRENNER@CBRANDS.COM',
-        'srcTypeCd': [
-          'ON_HIER'
-        ]
-      }
     }
   };
 
