@@ -1220,6 +1220,85 @@ describe('Unit: accountsController', function() {
       ctrl.getDataForTopBottom(ctrl.topBottomData.stores, categoryBound);
       ctrl.marketSelectedIndex = 3;
     });
+
+    it('Should get the correct property from the measure', function() {
+      var val;
+      // MTD
+      ctrl.filtersService.model.accountSelected.accountMarkets = ctrl.filtersService.accountFilters.accountMarkets[0];
+      val = ctrl.getValueBoundForAcctType(topBottomSnapshotData.performance[0].measures[0]);
+      expect(val).toEqual(375314);
+
+      ctrl.filtersService.model.accountSelected.accountMarkets = ctrl.filtersService.accountFilters.accountMarkets[1];
+      val = ctrl.getValueBoundForAcctType(topBottomSnapshotData.performance[0].measures[7]);
+      expect(val).toEqual(14612);
+
+      ctrl.filtersService.model.accountSelected.accountMarkets = ctrl.filtersService.accountFilters.accountMarkets[2];
+      val = ctrl.getValueBoundForAcctType(topBottomSnapshotData.performance[0].measures[7]);
+      expect(val).toEqual(30104);
+
+      ctrl.filtersService.model.accountSelected.accountMarkets = ctrl.filtersService.accountFilters.accountMarkets[3];
+      val = ctrl.getValueBoundForAcctType(topBottomSnapshotData.performance[0].measures[7]);
+      expect(val).toEqual(7190);
+
+      ctrl.filtersService.model.accountSelected.accountMarkets = ctrl.filtersService.accountFilters.accountMarkets[0];
+      val = ctrl.getValueBoundForAcctType(topBottomSnapshotData.performance[0].measures[0]);
+      expect(val).not.toEqual('-');
+
+      ctrl.filtersService.model.accountSelected.accountMarkets = null;
+      val = ctrl.getValueBoundForAcctType(topBottomSnapshotData.performance[0].measures[0]);
+      expect(val).toEqual('-');
+    });
+  });
+
+  describe('Top Bottom indices', function () {
+    beforeEach(function () {
+      ctrl.currentTopBottomObj = {
+        performanceData: null,
+        timePeriodFilteredData: null,
+        topBottomIndices: null,
+        chartData: null,
+        isPerformanceDataUpdateRequired: true,
+        isFilterUpdateRequired: true
+      };
+    });
+
+    it('Should get the correct Top Bottom indexes', function() {
+      ctrl.currentTopBottomObj.chartData = {
+        'topValues': [],
+        'bottomTrends': [],
+        'topTrends': [],
+        'bottomValues': []
+      };
+      ctrl.currentTopBottomObj.topBottomIndices = {
+        'topValues': [1, 4, 6, 7],
+        'bottomTrends': [12, 34, 1, 3, 4],
+        'topTrends': [112, 234, 612, 71],
+        'bottomValues': [103, 21, 623, 711]
+      };
+      ctrl.changeTopBottomSortOrder({
+        name: 'Top 10 (Values)',
+        value: 1
+      });
+      expect(ctrl.currentBoundTopBottomIndexes).toEqual(ctrl.currentTopBottomObj.topBottomIndices.topValues);
+
+      ctrl.changeTopBottomSortOrder({
+        name: 'Top 10 (Trend)',
+        value: 2
+      });
+      expect(ctrl.currentBoundTopBottomIndexes).toEqual(ctrl.currentTopBottomObj.topBottomIndices.topTrends);
+
+      ctrl.changeTopBottomSortOrder({
+        name: 'Bottom 10 (Values)',
+        value: 3
+      });
+      expect(ctrl.currentBoundTopBottomIndexes).toEqual(ctrl.currentTopBottomObj.topBottomIndices.bottomValues);
+
+      ctrl.changeTopBottomSortOrder({
+        name: 'Bottom 10 (Trend)',
+        value: 4
+      });
+      expect(ctrl.currentBoundTopBottomIndexes).toEqual(ctrl.currentTopBottomObj.topBottomIndices.bottomTrends);
+    });
   });
 
   describe('Should fire on filter properties change on changing dropdown options', function() {
