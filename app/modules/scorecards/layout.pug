@@ -15,7 +15,7 @@ div.my-scorecards
       div.dropdown
         label Distribution Time Period
         md-select(ng-model="s.distributionSelectOptions.selected" aria-label="Distirbution Select")
-          md-option(ng-repeat="filter in s.filtersService.model.distributionTimePeriod[s.depletionRadio]" aria-label="{{filter.name}}" ng-value="filter.name" ng-click="s.changeDistributionTimePeriod(filter.name)") {{filter.displayValue}}
+          md-option(ng-repeat="filter in s.filtersService.model.distributionTimePeriod[s.depletionRadio]" aria-label="{{filter.name}}" ng-value="filter.name" ng-click="s.changeDistributionTimePeriod(filter.name)") {{filter.displayValue}} {{filter.displayValue === 'L03' ? 'Mth' : 'Days'}}
 
   section.depeletions-scorecard
     div.scorecard-header.clearfix
