@@ -480,10 +480,11 @@ module.exports = /*  @ngInject */
     }
 
     function updateDistributionTimePeriod(value) {
-      var deplIndex = 0;
+      // deplIndex = 2 is FYTD and FYTM resp
+      // distIndex = 1 is L90
+      var deplIndex = 2;
       var distIndex = 0;
       if (value === 'year') {
-        deplIndex = 2;
         distIndex = 1;
       }
       vm.filterModel.depletionsTimePeriod = filtersService.model.depletionsTimePeriod[value][deplIndex];
