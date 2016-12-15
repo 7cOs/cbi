@@ -75,7 +75,7 @@ module.exports = /*  @ngInject */
       subAccounts: '',
       stores: ''
     };
-    vm.prevLevelInTopBottom = prevLevelInTopBottom;
+    vm.getDataForTopBottom = getDataForTopBottom;
     vm.navigateTopBottomLevels = navigateTopBottomLevels;
     vm.changeTopBottomSortOrder = changeTopBottomSortOrder;
     vm.currentBoundTopBottomIndexes = [];
@@ -84,15 +84,13 @@ module.exports = /*  @ngInject */
     vm.depletionOptionChanged = depletionOptionChanged;
     vm.trendOptionChanged = trendOptionChanged;
     vm.checkForStoreLevel = checkForStoreLevel;
-    vm.isStoreLevel = false;
-    vm.getDataForTopBottom = getDataForTopBottom;
     vm.currentChartData = null;
-    vm.setSortedArrIndex = setSortedArrIndex;
     vm.currentTopBottomObj = null;
     vm.currentTopBottomDataForFilter = null;
     vm.getValueBoundForAcctType = getValueBoundForAcctType;
     vm.setTopBottomAcctTypeSelection = setTopBottomAcctTypeSelection;
-    vm.topBottomInitData = true;
+    var topBottomInitData = true;
+    var isStoreLevel = false;
 
     // Expose public methods
     vm.allOpportunitiesDisabled = allOpportunitiesDisabled;
@@ -554,7 +552,7 @@ module.exports = /*  @ngInject */
       if (!$state.params.applyFiltersOnLoad) {
         chipsService.resetChipsFilters(chipsService.model);
       } else {
-        vm.topBottomInitData = false;
+        topBottomInitData = false;
         if ($state.params.pageData.brandTitle) {
           vm.brandIdSelected = filtersService.model.selected.brand[0];
           vm.brandWidgetTitle = $state.params.pageData.brandTitle;
@@ -586,8 +584,8 @@ module.exports = /*  @ngInject */
           vm.currentTopBottomObj.performanceData = data[3].performance;
           vm.currentTopBottomObj.isPerformanceDataUpdateRequired = false;
           getDataForTopBottom(vm.currentTopBottomObj, categoryBound);
-          if (vm.topBottomInitData === true) {
-            vm.topBottomInitData = false;
+          if (topBottomInitData === true) {
+            topBottomInitData = false;
           }
         }
         vm.loadingBrandSnapshot = false;
@@ -714,22 +712,22 @@ module.exports = /*  @ngInject */
         case accountTypes.distributors:
           currentObj = vm.topBottomData.distributors;
           currentObj.currentLevelName = 'distributors';
-          vm.isStoreLevel = false;
+          isStoreLevel = false;
           break;
         case accountTypes.accounts:
           currentObj = vm.topBottomData.accounts;
-          vm.isStoreLevel = false;
+          isStoreLevel = false;
           currentObj.currentLevelName = 'accounts';
           break;
         case accountTypes.subAccounts:
           currentObj = vm.topBottomData.subAccounts;
           currentObj.currentLevelName = 'subaccounts';
-          vm.isStoreLevel = false;
+          isStoreLevel = false;
           break;
         case accountTypes.stores:
           currentObj = vm.topBottomData.stores;
           currentObj.currentLevelName = 'stores';
-          vm.isStoreLevel = true;
+          isStoreLevel = true;
           break;
       }
       return currentObj;
@@ -790,7 +788,7 @@ module.exports = /*  @ngInject */
      * @returns Updates the object with the correct data
      */
     function getDataForTopBottom(topBottomObj, categoryBound) {
-      if (vm.isStoreLevel === true) {
+      if (isStoreLevel === true) {
         getCurrentStoreData();
       } else if (!topBottomObj.performanceData || topBottomObj.isPerformanceDataUpdateRequired === true) {
         var params = filtersService.getAppliedFilters('topBottom');
@@ -817,8 +815,13 @@ module.exports = /*  @ngInject */
       vm.marketSelectedIndex = vm.currentTopBottomAcctType.value - 1;
     }
 
+    /**
+     * Gets the value from the measure that is passed. It can be either Depletions,Dist(simple/effective), velocity
+     * @param {Object} measures Can be either topBottomData.distirbutor, topBottomData.account etc
+     * @returns Returns the rounded value or if null returns  '-'
+     */
     function getValueBoundForAcctType(measures) {
-      if (measures) {
+      if (measures && vm.filtersService.model.accountSelected.accountMarkets) {
         var propName = vm.filtersService.model.accountSelected.accountMarkets.propertyName;
         var matchedMeasure = measures[propName];
         if (userService.isValidValues(matchedMeasure)) {
@@ -826,9 +829,15 @@ module.exports = /*  @ngInject */
         } else {
           return '-';
         }
+      } else {
+        return '-';
       }
     }
 
+    /**
+     * This function is called if the sort order needs to be changed. The sort orders can be top 10 values/ trend, bottom 10 values/trend
+     * @returns Binds the correct sort order to the view
+     */
     function  setSortedArrIndex() {
       var data = vm.currentTopBottomObj;
       vm.isChartVisible = true;
@@ -879,7 +888,7 @@ module.exports = /*  @ngInject */
 
     function checkForStoreLevel(trendSelection) {
       var isVisible = true;
-      if (vm.isStoreLevel === true) {
+      if (isStoreLevel === true) {
         if (trendSelection.showInStoreLevel === false && trendSelection.showInOtherLevels === true) {
           isVisible = false;
           if (vm.filterModel.trend === vm.filtersService.model.trend[1]) {
@@ -897,22 +906,41 @@ module.exports = /*  @ngInject */
       return isVisible;
     }
 
-    // All these functions require  change in the filter values bound to top bottom data
+    /**
+     * Fires when distirbution time period options change
+     * @param {Object} selectedVal Updates the current distirbution time period
+     * @returns Set the filter flag on topBottom(topBottomData.distirbutor etc) objects to be updated and sets the updated data in the corresponding object
+     */
     function distOptionChanged(selectedVal) {
       vm.filterModel.distributionTimePeriod = selectedVal;
       onFilterPropertiesChange();
     }
 
+    /**
+     * Fires when depletion time period options change
+     * @param {Object} selectedVal Updates the current distirbution time period
+     * @returns Set the filter flag on topBottom(topBottomData.distirbutor etc) objects to be updated and sets the updated data in the corresponding object
+     */
     function depletionOptionChanged(selectedVal) {
       vm.filterModel.depletionsTimePeriod = selectedVal;
       onFilterPropertiesChange();
     }
 
+    /**
+     * Fires when trend options change
+     * @param {Object} selectedVal Updates the current distirbution time period
+     * @returns Set the filter flag on topBottom(topBottomData.distirbutor etc) objects to be updated and sets the updated data in the corresponding object
+     */
     function trendOptionChanged(selectedVal) {
       vm.filterModel.trend = selectedVal;
       onFilterPropertiesChange();
     }
 
+    /**
+     * Fires when vategory bound changes (Can be depletions, distirbution(simple), distirbution(effective), Velocity)
+     * @param {Object} selectedVal Updates the current distirbution time period
+     * @returns Set the filter flag on topBottom(topBottomData.distirbutor etc) objects to be updated and sets the updated data in the corresponding object
+     */
     function acctMarketChanged(selectedVal) {
       vm.filtersService.model.accountSelected.accountMarkets = selectedVal;
       onFilterPropertiesChange();
@@ -924,13 +952,14 @@ module.exports = /*  @ngInject */
       setSortedArrIndex();
     }
 
-    function prevLevelInTopBottom() {
-      // vm.marketSelectedIndex is zero index based and acct type selections start from 1
-      var previousLevelInTopBottom = vm.marketSelectedIndex;
-      vm.currentTopBottomAcctType = myperformanceService.getAcctTypeObjectBasedOnTabIndex(previousLevelInTopBottom);
-      vm.currentTopBottomObj = getCurrentTopBottomObject(vm.currentTopBottomAcctType);
-      updateTopBottom();
-    }
+    // Currently not used. If the functionality to go to previous level is present can be enabled
+    // function prevLevelInTopBottom() {
+    //   // vm.marketSelectedIndex is zero index based and acct type selections start from 1
+    //   var previousLevelInTopBottom = vm.marketSelectedIndex;
+    //   vm.currentTopBottomAcctType = myperformanceService.getAcctTypeObjectBasedOnTabIndex(previousLevelInTopBottom);
+    //   vm.currentTopBottomObj = getCurrentTopBottomObject(vm.currentTopBottomAcctType);
+    //   updateTopBottom();
+    // }
 
     function resetFilterTextFields() {
       vm.filtersService.model.distributor = '';
@@ -954,18 +983,19 @@ module.exports = /*  @ngInject */
       if (performanceData.id && performanceData.id.toLowerCase() === 'id missing' || currentLevelName === 'stores') {
         return;
       }
+
       var getNextLevel = true;
       myperformanceService.resetFiltersForLevelsAboveCurrent(vm.currentTopBottomAcctType, vm.currentTopBottomFilters, vm.topBottomData);
-      // Get the account type next to the current level
+      // Get the account type next to the current level. vm.marketSelectedIndex indicates the current level
       vm.currentTopBottomAcctType = myperformanceService.getAcctTypeObjectBasedOnTabIndex(vm.marketSelectedIndex, getNextLevel);
       populateFieldsForFilterSelection(currentLevelName, performanceData);
       vm.currentTopBottomObj = getCurrentTopBottomObject(vm.currentTopBottomAcctType);
       updateTopBottom();
-      // updateBrandSnapshot();
+      updateBrandSnapshot();
     }
 
     function onFilterPropertiesChange() {
-      if (vm.topBottomInitData === false) {
+      if (topBottomInitData === false) {
         myperformanceService.resetFilterFlags(vm.topBottomData);
         var categoryBound = vm.filtersService.model.accountSelected.accountMarkets;
         vm.currentTopBottomObj = getCurrentTopBottomObject(vm.currentTopBottomAcctType);
