@@ -61,6 +61,9 @@ module.exports = /*  @ngInject */
     vm.premiseTypeDisabled = false;
     vm.selectedStore = null;
     vm.selectOpen = false;
+    vm.showXChain = false;
+    vm.showXDistributor = false;
+    vm.showXStore = false;
 
     // top bottom public methods
     vm.topBottomData = {
@@ -187,7 +190,6 @@ module.exports = /*  @ngInject */
       }
 
       var categoryBound = vm.filtersService.model.accountSelected.accountMarkets;
-      vm.currentTopBottomObj = getCurrentTopBottomObject(vm.currentTopBottomAcctType);
 
       // change tab index
       if (vm.currentTopBottomFilters.stores && vm.currentTopBottomFilters.stores.id) {
@@ -200,7 +202,7 @@ module.exports = /*  @ngInject */
       } else if (vm.currentTopBottomFilters.distributors && vm.currentTopBottomFilters.distributors.id) {
         vm.currentTopBottomAcctType = vm.filtersService.accountFilters.accountTypes[1];
       }
-
+      vm.currentTopBottomObj = getCurrentTopBottomObject(vm.currentTopBottomAcctType);
       // update data
       getDataForTopBottom(vm.currentTopBottomObj, categoryBound);
     }
@@ -319,6 +321,12 @@ module.exports = /*  @ngInject */
 
       vm.filterModel = angular.copy(filterModelTemplate);
       chipsService.resetChipsFilters(chipsService.model);
+      filtersService.model.distributor = '';
+      vm.showXDistributor = false;
+      filtersService.model.chain = '';
+      vm.showXChain = false;
+      filtersService.model.store = '';
+      vm.showXStore = false;
       setDefaultDropDownOptions();
       setDefaultFilterOptions();
       apply(false);
@@ -326,6 +334,10 @@ module.exports = /*  @ngInject */
         resetFilterTextFields();
       }
       resetTopBottom();
+      setTopBottomAcctTypeSelection({
+        name: 'Distributors',
+        value: 1
+      });
     }
 
     function resetTopBottom() {
@@ -335,7 +347,10 @@ module.exports = /*  @ngInject */
         myperformanceService.resetPerformanceDataFlags(vm.topBottomData[topBottomObj]);
       }
       // Get the current top bottom object for the level chosen
+      // var categoryBound = vm.filtersService.model.accountSelected.accountMarkets;
       vm.currentTopBottomObj = getCurrentTopBottomObject(vm.currentTopBottomAcctType);
+
+      vm.currentTopBottomAcctType = vm.filtersService.accountFilters.accountTypes[0];
       // This function gives me the updated datafor whatever level is currently set
       updateTopBottom();
     }
@@ -419,14 +434,16 @@ module.exports = /*  @ngInject */
         filtersService.model.selected.chain = [];
         filtersService.model.chain = '';
         chipsService.removeChip('chain');
+        vm.showXStore = true;
       } else if (filterModelProperty === 'chain') {
         filtersService.model.selected.store = [];
         filtersService.model.store = '';
         chipsService.removeChip('store');
-
+        vm.showXChain = true;
         result.type.toLowerCase() === 'account' ? vm.currentTopBottomFilters.accounts = result : vm.currentTopBottomFilters.subAccounts = result;
       } else if (filterModelProperty === 'distributor') {
         vm.currentTopBottomFilters.distributors = result;
+        vm.showXDistributor = true;
       }
 
       for (var i = 0; i < chipsService.model.length; i++) {
@@ -979,8 +996,10 @@ module.exports = /*  @ngInject */
       };
       if (currentLevelName === 'distributors') {
         vm.filtersService.model.distributor = data.name;
+        vm.showXDistributor = true;
       } else {
         vm.filtersService.model.chain = data.name;
+        vm.showXChain = true;
       }
     }
 
