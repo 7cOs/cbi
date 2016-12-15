@@ -731,7 +731,7 @@ module.exports = /*  @ngInject */
       switch (acctType.value) {
         case accountTypes.distributors:
           currentObj = vm.topBottomData.distributors;
-          currentObj.currentLevelName = '≈';
+          currentObj.currentLevelName = 'distributors';
           isStoreLevel = false;
           break;
         case accountTypes.accounts:
