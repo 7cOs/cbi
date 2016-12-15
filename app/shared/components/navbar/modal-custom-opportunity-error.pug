@@ -11,17 +11,17 @@ div.modal.custom-opportunity-error
           p {{nb.duplicateOpportunity.properties.store.name | titlecase}}
           p {{nb.duplicateOpportunity.properties.store.address | titlecase}}
       div.modal-input.row
-        div(column="8")
+        div(column="7")
           label Package / SKU
           p {{nb.duplicateOpportunity.properties.product.name | titlecase}}
-        div(column="4")
+        div(column="5")
           label Type
           p {{nb.duplicateOpportunity.properties.distributionType.type | titlecase}}
         div.modal-input
-          div(column="8")
+          div(column="7")
             label Rationale
             p {{nb.duplicateOpportunity.properties.rationale.description}}
-          div(column="4")
+          div(column="5")
             label Impact
             p {{nb.showImpact(nb.duplicateOpportunity.properties.impact.enum)}}
       div(ng-if="nb.dismissedError").row.dismissed-error

@@ -192,6 +192,7 @@ module.exports = /*  @ngInject */
             vm.oppID = key.objectIdentifier;
           } else {
             if (error.data.length < 2 && key.description === 'OPP101') {
+              vm.duplicateOpportunity.properties.distributionType.type = 'New Distribution';
               vm.dismissedError = vm.generalError = false;
               vm.duplicateError = true;
             }
