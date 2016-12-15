@@ -318,7 +318,7 @@ module.exports = /*  @ngInject */
       vm.filterModel = angular.copy(filterModelTemplate);
       setDefaultDropDownOptions();
       setDefaultFilterOptions();
-      // Go back to distributor level. Get the new updated data for distributors
+      // Go back to distributor level. Get the updated data for distributors
       resetTopBottom();
     }
 
