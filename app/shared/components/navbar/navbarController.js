@@ -371,7 +371,7 @@ module.exports = /*  @ngInject */
 
     function resetFormModels() {
       vm.newOpportunity.properties.distributionType ? vm.newOpportunity.properties.distributionType.description = '' : angular.noop;
-      vm.newOpportunity.properties.rationale ? vm.newOpportunity.properties.rationale.description = '' : angular.noop;
+      vm.newOpportunity.properties.rationale ? vm.newOpportunity.properties.rationale = {'description': '', 'other': ''} : angular.noop;
       vm.newOpportunity.properties.impact ? vm.newOpportunity.properties.impact.enum = '' : angular.noop;
       vm.newOpportunity.properties.targetList ? vm.newOpportunity.properties.targetList = '' : angular.noop;
     }
