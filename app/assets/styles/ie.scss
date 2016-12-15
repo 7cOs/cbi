@@ -1,7 +1,7 @@
 /* This sucks, but so does IE. */
 
-.ieWrap,
-.edgeWrap {
+.ie-wrap,
+.edge-wrap {
 
   &[style] {
     overflow-y: hidden !important;
