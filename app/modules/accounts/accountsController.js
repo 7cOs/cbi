@@ -323,6 +323,7 @@ module.exports = /*  @ngInject */
     }
 
     function removeAllTopBottomAccountTypeFilters() {
+      // reset brand
       vm.brandWidgetTitle = angular.copy(vm.brandWidgetTitleDefault);
       vm.brandWidgetSkuTitle = null;
       vm.selected = null;
@@ -332,15 +333,15 @@ module.exports = /*  @ngInject */
       vm.idSelected = null;
       vm.selectedDistributor = null;
       vm.selectedStore = null;
+
+      chipsService.resetChipsFilters(chipsService.model);
       filtersService.model.distributor = '';
       vm.showXDistributor = false;
       filtersService.model.chain = '';
       vm.showXChain = false;
       filtersService.model.store = '';
       vm.showXStore = false;
-      apply(false);
-      resetFilterTextFields();
-      chipsService.resetChipsFilters(chipsService.model);
+      myperformanceService.resetFilters(vm.currentTopBottomFilters);
     }
 
     /**
@@ -691,7 +692,7 @@ module.exports = /*  @ngInject */
         vm.currentTopBottomObj = getCurrentTopBottomObject(currentAcctType);
         var propertyBoundToTable = vm.filtersService.model.accountSelected.accountMarkets;
         // We need to reset all filters if dropdown is directly selected
-        if (myperformanceService.isResetFiltersRequired(vm.currentTopBottomFilters)) {
+        if (myperformanceService.resetFilters(vm.currentTopBottomFilters)) {
           removeAllTopBottomAccountTypeFilters();
           // reset performance flags on all the tob bottom objects. As all the filters have been reset
           for (var topBottomObj in vm.topBottomData) {
@@ -986,11 +987,6 @@ module.exports = /*  @ngInject */
     //   vm.currentTopBottomObj = getCurrentTopBottomObject(vm.currentTopBottomAcctType);
     //   updateTopBottom();
     // }
-
-    function resetFilterTextFields() {
-      vm.filtersService.model.distributor = '';
-      vm.filtersService.model.chain = '';
-    }
 
     function populateFieldsForFilterSelection(currentLevelName, data) {
       vm.currentTopBottomFilters[currentLevelName] = {

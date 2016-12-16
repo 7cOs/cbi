@@ -22,7 +22,7 @@ module.exports = /*  @ngInject */
       resetFiltersForLevelsAboveCurrent: resetFiltersForLevelsAboveCurrent,
       initChartData: initChartData,
       getAcctTypeObjectBasedOnTabIndex: getAcctTypeObjectBasedOnTabIndex,
-      isResetFiltersRequired: isResetFiltersRequired,
+      resetFilters: resetFilters,
       isValidValues: isValidValues
     };
 
@@ -412,7 +412,7 @@ module.exports = /*  @ngInject */
       }
     }
 
-    function isResetFiltersRequired(topBottomFilters) {
+    function resetFilters(topBottomFilters) {
       var isReset = false;
       for (var prop in topBottomFilters) {
         if (topBottomFilters[prop] !== '') {
