@@ -23,7 +23,8 @@ module.exports = /*  @ngInject */
       initChartData: initChartData,
       getAcctTypeObjectBasedOnTabIndex: getAcctTypeObjectBasedOnTabIndex,
       resetFilters: resetFilters,
-      isValidValues: isValidValues
+      isValidValues: isValidValues,
+      checkForInconsistentIds: checkForInconsistentIds
     };
 
     return service;
@@ -357,6 +358,12 @@ module.exports = /*  @ngInject */
     }
 
     function appendFilterParametersForTopBottom (params, currentTopBottomFilters) {
+      // Need to remove filter parameters from filtersService.model that are in params. vm.currentTopBottomFilter should always reflect the most refreshed copy of those filters
+      delete params.distributor;
+      delete params.account;
+      delete params.subaccount;
+      delete params.store;
+
       if (currentTopBottomFilters.distributors) {
         params.distributor = currentTopBottomFilters.distributors.id;
       }
@@ -440,6 +447,14 @@ module.exports = /*  @ngInject */
         });
       }
       return currentAccountTypeLevel[0];
+    }
+
+    function checkForInconsistentIds(performanceData) {
+      if (performanceData.id && performanceData.id.toLowerCase() === 'id missing') {
+        return true;
+      } else {
+        return false;
+      }
     }
 
     function initChartData() {
