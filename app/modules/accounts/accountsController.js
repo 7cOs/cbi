@@ -317,7 +317,6 @@ module.exports = /*  @ngInject */
       removeAllTopBottomAccountTypeFilters();
       vm.filterModel = angular.copy(filterModelTemplate);
       setDefaultDropDownOptions();
-      setDefaultFilterOptions();
       apply(false);
       // Go back to distributor level. Get the updated data for distributors
       resetTopBottom();
@@ -343,6 +342,7 @@ module.exports = /*  @ngInject */
       filtersService.model.store = '';
       vm.showXStore = false;
       myperformanceService.resetFilters(vm.currentTopBottomFilters);
+      setDefaultFilterOptions();
     }
 
     /**
@@ -695,8 +695,6 @@ module.exports = /*  @ngInject */
         // We need to reset all filters if dropdown is directly selected
         if (myperformanceService.resetFilters(vm.currentTopBottomFilters)) {
           removeAllTopBottomAccountTypeFilters();
-          setDefaultFilterOptions();
-          // reset performance flags on all the tob bottom objects. As all the filters have been reset
           for (var topBottomObj in vm.topBottomData) {
             myperformanceService.resetPerformanceDataFlags(vm.topBottomData[topBottomObj]);
           }
