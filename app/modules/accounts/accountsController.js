@@ -94,8 +94,11 @@ module.exports = /*  @ngInject */
     vm.currentTopBottomDataForFilter = null;
     vm.getValueBoundForAcctType = getValueBoundForAcctType;
     vm.setTopBottomAcctTypeSelection = setTopBottomAcctTypeSelection;
+    vm.isStoreLevel = false;
+    vm.isHighlightStore = isHighlightStore;
     var topBottomInitData = true;
-    var isStoreLevel = false;
+    // Have to create this variable because vm.selecteStore just has the name..Changing th binding to include Id involves a ton of work
+    var currentStore = null;
 
     // Expose public methods
     vm.allOpportunitiesDisabled = allOpportunitiesDisabled;
@@ -734,22 +737,22 @@ module.exports = /*  @ngInject */
         case accountTypes.distributors:
           currentObj = vm.topBottomData.distributors;
           currentObj.currentLevelName = 'distributors';
-          isStoreLevel = false;
+          vm.isStoreLevel = false;
           break;
         case accountTypes.accounts:
           currentObj = vm.topBottomData.accounts;
-          isStoreLevel = false;
+          vm.isStoreLevel = false;
           currentObj.currentLevelName = 'accounts';
           break;
         case accountTypes.subAccounts:
           currentObj = vm.topBottomData.subAccounts;
           currentObj.currentLevelName = 'subaccounts';
-          isStoreLevel = false;
+          vm.isStoreLevel = false;
           break;
         case accountTypes.stores:
           currentObj = vm.topBottomData.stores;
           currentObj.currentLevelName = 'stores';
-          isStoreLevel = true;
+          vm.isStoreLevel = true;
           break;
       }
       return currentObj;
@@ -810,7 +813,7 @@ module.exports = /*  @ngInject */
      * @returns Updates the object with the correct data
      */
     function getDataForTopBottom(topBottomObj, categoryBound) {
-      if (isStoreLevel === true) {
+      if (vm.isStoreLevel === true) {
         getCurrentStoreData();
       } else if (!topBottomObj.performanceData || topBottomObj.isPerformanceDataUpdateRequired === true) {
         var params = filtersService.getAppliedFilters('topBottom');
@@ -910,7 +913,7 @@ module.exports = /*  @ngInject */
 
     function checkForStoreLevel(trendSelection) {
       var isVisible = true;
-      if (isStoreLevel === true) {
+      if (vm.isStoreLevel === true) {
         if (trendSelection.showInStoreLevel === false && trendSelection.showInOtherLevels === true) {
           isVisible = false;
           if (vm.filterModel.trend === vm.filtersService.model.trend[1]) {
@@ -1002,6 +1005,12 @@ module.exports = /*  @ngInject */
       }
     }
 
+    function isHighlightStore(storeDetails) {
+      if (storeDetails && storeDetails.id && vm.isStoreLevel && currentStore) {
+        return storeDetails.id === currentStore.id;
+      }
+    }
+
     function navigateTopBottomLevels(currentLevelName, performanceData) {
       // There are a lot of data inconsistensies. Some Id's are marked as Id missing
       var getNextLevel = true;
@@ -1014,8 +1023,13 @@ module.exports = /*  @ngInject */
         // Set it to Store
         vm.filtersService.model.selected.retailer = 'Store';
         placeholderSelect(filtersService.model.retailer[0].hintText);
+        currentStore = {
+          id: performanceData.id,
+          name: performanceData.name
+        };
         getNextLevel = false;
       } else {
+        currentStore = null;
         if (vm.filtersService.model.selected.retailer !== 'Chain') {
           vm.filtersService.model.selected.retailer = 'Chain';
           placeholderSelect(filtersService.model.retailer[1].hintText);

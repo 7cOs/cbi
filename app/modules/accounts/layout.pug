@@ -236,7 +236,7 @@ div(row)
                 //- ng-click="a.selectItem('markets', item, a.marketTabs, $parent.$index)"
                 //- ng-class="{'store': item.address, 'selected': item.label === a.idSelected}"
                 //- <span ng-if="item.storeNum" class="store-number">\#{{item.storeNum}}</span><span ng-if="item.address" class="address">{{item.address}}</span>
-                tr.clickable.market-value(ng-repeat="index in a.currentBoundTopBottomIndexes" ng-click="a.navigateTopBottomLevels(key, data.performanceData[index])")
+                tr.clickable.market-value(ng-repeat="index in a.currentBoundTopBottomIndexes" ng-click="a.navigateTopBottomLevels(key, data.performanceData[index])" ng-class="a.isHighlightStore(data.performanceData[index]) === true? 'selected':''")
                   td.dist-label(colspan=2) {{data.timePeriodFilteredData[index].title}}
                   td.dark.market-label
                     span(ng-bind="a.getValueBoundForAcctType(data.timePeriodFilteredData[index].measure)")
