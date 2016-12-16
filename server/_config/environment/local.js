@@ -85,43 +85,43 @@ module.exports = function (config) {
       },
       'issuedAt': 1480963632694 */
       // 'SALES-HIER'
-      'personId': 5648,
-      'employeeID': '1012132',
-      'firstName': 'FRED',
-      'lastName': 'BERRIOS',
-      'email': 'FRED.BERRIOS@CBRANDS.COM',
+      'personId': 5649,
+      'employeeID': '1009529',
+      'firstName': 'CARRIE',
+      'lastName': 'REID',
+      'email': 'CARRIE.REID@CBRANDS.COM',
       'srcTypeCd': [
         'SALES_HIER'
       ],
-      'groupingCode': '133',
+      'groupingCode': '132',
       'corporateUser': true,
       'userGroup': [
         'cbi-role-iq-app-users',
         'cbi employees',
+        'ug-cbigdc-role-ecrownappusercorporateview',
         'cbi users',
-        'cbi-adenabledaccounts',
-        'ug-cbigdc-biz-role-genmgr'
+        'cbi-adenabledaccounts'
       ],
       'issuer': 'https://orion.cbrands.com',
-      'jwt': 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJsYXN0TmFtZSI6IkJFUlJJT1MiLCJpc3MiOiJodHRwczovL29yaW9uLmNicmFuZHMuY29tIiwiZW1wbG95ZWVJRCI6IjEwMTIxMzIiLCJmaXJzdE5hbWUiOiJGUkVEIiwiZ3JvdXBpbmdDb2RlIjoiMTMzIiwiY29ycG9yYXRlVXNlciI6dHJ1ZSwicGVyc29uSUQiOjU2NDgsImV4cCI6MTQ4NTg5NzAyMzc0MSwiaWF0IjoxNDgwNzEzMDIzNzQxLCJ1c2VyR3JvdXAiOlsiY2JpIGVtcGxveWVlcyIsImNiaSB1c2VycyIsInVnLWNiaWdkYy1iaXotcm9sZS1ta3RkZXZtZ3IiLCJjYmktYWRlbmFibGVkYWNjb3VudHMiXSwiZW1haWwiOiJGUkVELkJFUlJJT1NAQ0JSQU5EUy5DT00iLCJzcmNUeXBlQ2QiOlsiU0FMRVNfSElFUiJdfQ.WwWIo6ssmepAf-1gOWYnhmSQ4CR2-HByA3PNFj6E8gs',
+      'jwt': 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJsYXN0TmFtZSI6IlJFSUQiLCJpc3MiOiJodHRwczovL29yaW9uLmNicmFuZHMuY29tIiwiZW1wbG95ZWVJRCI6IjEwMDk1MjkiLCJmaXJzdE5hbWUiOiJDQVJSSUUiLCJncm91cGluZ0NvZGUiOiIxMzIiLCJjb3Jwb3JhdGVVc2VyIjp0cnVlLCJwZXJzb25JRCI6NTY0OSwiZXhwIjoxNDg3MTEwMDM5OTc1LCJpYXQiOjE0ODE5MjYwMzk5NzUsInVzZXJHcm91cCI6WyJjYmktcm9sZS1pcS1hcHAtdXNlcnMiLCJjYmkgZW1wbG95ZWVzIiwidWctY2JpZ2RjLXJvbGUtZWNyb3duYXBwdXNlcmNvcnBvcmF0ZXZpZXciLCJjYmkgdXNlcnMiLCJjYmktYWRlbmFibGVkYWNjb3VudHMiXSwiZW1haWwiOiJDQVJSSUUuUkVJREBDQlJBTkRTLkNPTSIsInNyY1R5cGVDZCI6WyJTQUxFU19ISUVSIl19.PE8LXUhVUadA-jpF2mG8R_DQ28WGvVKr4VhmMplsUb8',
       'jwtmap': {
-        'firstName': 'FRED',
-        'lastName': 'BERRIOS',
-        'groupingCode': '133',
+        'firstName': 'CARRIE',
+        'lastName': 'REID',
+        'groupingCode': '132',
         'corporateUser': true,
         'iss': 'https://orion.cbrands.com',
-        'personID': 5648,
-        'employeeID': '1012132',
-        'exp': 1480707641150,
-        'iat': 1475523641152,
+        'personID': 5649,
+        'employeeID': '1009529',
+        'exp': 1487110039975,
+        'iat': 1481926039976,
         'userGroup': [
           'cbi-role-iq-app-users',
           'cbi employees',
+          'ug-cbigdc-role-ecrownappusercorporateview',
           'cbi users',
-          'cbi-adenabledaccounts',
-          'ug-cbigdc-biz-role-genmgr'
+          'cbi-adenabledaccounts'
         ],
-        'email': 'FRED.BERRIOS@CBRANDS.COM',
+        'email': 'CARRIE.REID@CBRANDS.COM',
         'srcTypeCd': [
           'SALES_HIER'
         ]
