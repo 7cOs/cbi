@@ -1004,24 +1004,40 @@ module.exports = /*  @ngInject */
 
     function navigateTopBottomLevels(currentLevelName, performanceData) {
       // There are a lot of data inconsistensies. Some Id's are marked as Id missing
-      if (performanceData.id && performanceData.id.toLowerCase() === 'id missing' || currentLevelName === 'stores') {
+      var getNextLevel = true;
+      if (performanceData.id && performanceData.id.toLowerCase() === 'id missing') {
         return;
       }
+
+      // Need  to update breacrumbs and add filters
+      if (currentLevelName === 'stores') {
+        // Set it to Store
+        vm.filtersService.model.selected.retailer = 'Store';
+        placeholderSelect(filtersService.model.retailer[0].hintText);
+        getNextLevel = false;
+      } else {
+        if (vm.filtersService.model.selected.retailer !== 'Chain') {
+          vm.filtersService.model.selected.retailer = 'Chain';
+          placeholderSelect(filtersService.model.retailer[1].hintText);
+        }
+      }
+
       if (currentLevelName === 'distributors') {
         vm.isDistributorSelectionComplete = performanceData;
       } else {
         vm.isChainSelectionComplete = performanceData;
       }
 
-      var getNextLevel = true;
-      myperformanceService.resetFiltersForLevelsAboveCurrent(vm.currentTopBottomAcctType, vm.currentTopBottomFilters, vm.topBottomData);
-      // Get the account type next to the current level. vm.marketSelectedIndex indicates the current level
-      vm.currentTopBottomAcctType = myperformanceService.getAcctTypeObjectBasedOnTabIndex(vm.marketSelectedIndex, getNextLevel);
-      populateFieldsForFilterSelection(currentLevelName, performanceData);
-      vm.currentTopBottomObj = getCurrentTopBottomObject(vm.currentTopBottomAcctType);
-      var categoryBound = vm.filtersService.model.accountSelected.accountMarkets;
-      getDataForTopBottom(vm.currentTopBottomObj, categoryBound);
-      // updateBrandSnapshot();
+      if (getNextLevel) {
+        myperformanceService.resetFiltersForLevelsAboveCurrent(vm.currentTopBottomAcctType, vm.currentTopBottomFilters, vm.topBottomData);
+        // Get the account type next to the current level. vm.marketSelectedIndex indicates the current level
+        vm.currentTopBottomAcctType = myperformanceService.getAcctTypeObjectBasedOnTabIndex(vm.marketSelectedIndex, getNextLevel);
+        populateFieldsForFilterSelection(currentLevelName, performanceData);
+        vm.currentTopBottomObj = getCurrentTopBottomObject(vm.currentTopBottomAcctType);
+        var categoryBound = vm.filtersService.model.accountSelected.accountMarkets;
+        getDataForTopBottom(vm.currentTopBottomObj, categoryBound);
+        // updateBrandSnapshot();
+      }
     }
 
     function onFilterPropertiesChange() {

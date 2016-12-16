@@ -81,7 +81,7 @@ notes
           md-select(ng-model="a.filtersService.model.selected.retailer" placeholder="Chain" ng-init="a.filtersService.model.selected.retailer = 'Chain'")
             md-option(ng-repeat="type in a.filtersService.model.retailer" ng-click="a.placeholderSelect(type.hintText)" aria-label="{{type.name}}" value="{{type.name}}") {{::type.name}}
         div(column='8')
-          inline-search(ng-if="a.filtersService.model.selected.retailer === 'Store'" type="store" placeholder="{{a.hintTextPlaceholder}}" chosen-result="a.filtersService.model.store" show-address="true" callback="a.setFilter(result, 'store')" removable='true' on-remove="a.removeInlineSearch('selectedStore')" show-x="a.showXStore")
+          inline-search(ng-if="a.filtersService.model.selected.retailer === 'Store'" type="store" placeholder="{{a.hintTextPlaceholder}}" chosen-result="a.filtersService.model.store" show-address="true" callback="a.setFilter(result, 'store')" removable='true' on-remove="a.removeInlineSearch('selectedStore')" show-x="a.showXStore" is-chain-selection-complete ="a.isChainSelectionComplete")
           inline-search(ng-if="a.filtersService.model.selected.retailer === 'Chain'" type="chain" placeholder="{{a.hintTextPlaceholder}}" chosen-result="a.filtersService.model.chain" callback="a.setFilter(result, 'chain')" removable='true' on-remove="a.removeInlineSearch('selectedStore')" show-x="a.showXChain" is-chain-selection-complete ="a.isChainSelectionComplete")
   div(row)
     div(column='12' class='apply-filters')
