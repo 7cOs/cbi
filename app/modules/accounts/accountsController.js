@@ -695,6 +695,7 @@ module.exports = /*  @ngInject */
         // We need to reset all filters if dropdown is directly selected
         if (myperformanceService.resetFilters(vm.currentTopBottomFilters)) {
           removeAllTopBottomAccountTypeFilters();
+          setDefaultFilterOptions();
           // reset performance flags on all the tob bottom objects. As all the filters have been reset
           for (var topBottomObj in vm.topBottomData) {
             myperformanceService.resetPerformanceDataFlags(vm.topBottomData[topBottomObj]);
