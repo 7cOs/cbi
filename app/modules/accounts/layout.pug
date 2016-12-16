@@ -61,7 +61,7 @@ notes
         md-radio-button(ng-repeat="p in a.filtersService.model.premises track by $index" class="md-primary" ng-value="p.value" aria-label="{{p.name}}" ng-click="a.updateChip(p.name, 'premiseType')" ng-disabled="a.premiseTypeDisabled") {{p.name}}
     div(column='2')
       label Distributor
-      inline-search(type="distributor" placeholder="Name" chosen-result="a.filtersService.model.distributor" callback="a.setFilter(result, 'distributor')" removable='true' on-remove="a.removeInlineSearch('selectedDistributor')" show-x='a.showXDistributor')
+      inline-search(type="distributor" placeholder="Name" chosen-result="a.filtersService.model.distributor" callback="a.setFilter(result, 'distributor')" removable='true' on-remove="a.removeInlineSearch('selectedDistributor')" show-x='a.showXDistributor' is-distributor-selection-complete="a.isDistributorSelectionComplete")
     div(column='2')
       .tooltip-wrap
         label Store Type
@@ -82,8 +82,7 @@ notes
             md-option(ng-repeat="type in a.filtersService.model.retailer" ng-click="a.placeholderSelect(type.hintText)" aria-label="{{type.name}}" value="{{type.name}}") {{::type.name}}
         div(column='8')
           inline-search(ng-if="a.filtersService.model.selected.retailer === 'Store'" type="store" placeholder="{{a.hintTextPlaceholder}}" chosen-result="a.filtersService.model.store" show-address="true" callback="a.setFilter(result, 'store')" removable='true' on-remove="a.removeInlineSearch('selectedStore')" show-x="a.showXStore")
-          inline-search(ng-if="a.filtersService.model.selected.retailer === 'Chain'" type="chain" placeholder="{{a.hintTextPlaceholder}}" chosen-result="a.filtersService.model.chain" callback="a.setFilter(result, 'chain')" removable='true' on-remove="a.removeInlineSearch('selectedStore')" show-x="a.showXChain")
-
+          inline-search(ng-if="a.filtersService.model.selected.retailer === 'Chain'" type="chain" placeholder="{{a.hintTextPlaceholder}}" chosen-result="a.filtersService.model.chain" callback="a.setFilter(result, 'chain')" removable='true' on-remove="a.removeInlineSearch('selectedStore')" show-x="a.showXChain" is-chain-selection-complete ="a.isChainSelectionComplete")
   div(row)
     div(column='12' class='apply-filters')
       button(value='Apply Filters' type="button" class="btn-action" ng-disabled="a.disableApply" ng-click="a.updateBrandSnapshot(); a.filterTopBottom()") Apply Filters
