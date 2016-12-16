@@ -73,7 +73,6 @@ module.exports =
       }, true);
 
       $scope.$watch(function() { return vm.isDistributorSelectionComplete; }, function(newVal) {
-        console.log('Hit distirbutor watch');
         if (vm.isDistributorSelectionComplete) {
             resultChosen(vm.isDistributorSelectionComplete);
             vm.isDistributorSelectionComplete = null;
@@ -81,7 +80,6 @@ module.exports =
       }, true);
 
       $scope.$watch(function() { return vm.isChainSelectionComplete; }, function(newVal) {
-        console.log('Hit chain watch');
         if (vm.isChainSelectionComplete) {
             resultChosen(vm.isChainSelectionComplete);
             vm.isChainSelectionComplete = null;
