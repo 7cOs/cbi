@@ -185,6 +185,7 @@ module.exports = /*  @ngInject */
         angular.forEach(error.data, function(key, value) {
           var keepGoing = true;
           if (keepGoing && error.data.length > 1 && key.description === 'OPP107') {
+            vm.duplicateOpportunity.properties.distributionType.type = 'New Distribution';
             vm.duplicateError = vm.generalError = false;
             vm.dismissedError = true;
             keepGoing = false;
