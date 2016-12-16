@@ -586,6 +586,7 @@ module.exports = /*  @ngInject */
         if ($state.params.pageData.brandTitle) {
           vm.brandIdSelected = filtersService.model.selected.brand[0];
           vm.brandWidgetTitle = $state.params.pageData.brandTitle;
+
           chipsService.addAutocompleteChip(vm.brandWidgetTitle, 'brand', false);
         }
       }
@@ -600,18 +601,31 @@ module.exports = /*  @ngInject */
       var promiseArr = [
         userService.getPerformanceDepletion(),
         userService.getPerformanceDistribution({'type': 'noencode', 'premiseType': 'off'}),
-        userService.getPerformanceBrand(params),
         userService.getTopBottomSnapshot(vm.currentTopBottomAcctType, params)
       ];
+
+      // brand snapshot returns sku data instead of just the brand if you add brand:xxx
+      if (params.brand && params.brand.length) delete params.brand;
+      promiseArr.push(userService.getPerformanceBrand(params));
 
       $q.all(promiseArr).then(function(data) {
         userService.model.depletion = data[0];
         userService.model.distribution = data[1];
-        vm.brandTabs.brands = data[2].performance;
+        vm.brandTabs.brands = data[3].performance;
+
+        if ($state.params.applyFiltersOnLoad) {
+          // select brand that was clicked in score card
+          for (var i = 0; i < vm.brandTabs.brands.length; i++) {
+            if (vm.brandTabs.brands[i].name === vm.brandWidgetTitle) {
+              selectItem('brands', vm.brandTabs.brands[i], vm.brandTabs, 0);
+            }
+          }
+        }
+
         setCurrentTotalsObject();
-        if (data[3]) {
+        if (data[2]) {
           var categoryBound = vm.filtersService.model.accountSelected.accountMarkets;
-          vm.currentTopBottomObj.performanceData = data[3].performance;
+          vm.currentTopBottomObj.performanceData = data[2].performance;
           vm.currentTopBottomObj.isPerformanceDataUpdateRequired = false;
           getDataForTopBottom(vm.currentTopBottomObj, categoryBound);
           if (topBottomInitData === true) {
