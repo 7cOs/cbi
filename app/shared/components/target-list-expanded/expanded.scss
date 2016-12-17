@@ -3,7 +3,6 @@
 }
 
 .expanded-target-lists {
-  overflow: hidden;
 
   label {
     outline: none;
@@ -136,9 +135,12 @@
     }
 
     li {
-
       background: $white;
       margin-bottom: 12px;
+
+      &.long-collaborators {
+        margin-bottom: 200px;
+      }
 
       h4, h5 {
         text-align: center;
