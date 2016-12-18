@@ -207,6 +207,7 @@ module.exports = /*  @ngInject */
       } else if (vm.currentTopBottomFilters.distributors && vm.currentTopBottomFilters.distributors.id) {
         vm.currentTopBottomAcctType = vm.filtersService.accountFilters.accountTypes[1];
       }
+      setUpdatedFilters();
       vm.currentTopBottomObj = getCurrentTopBottomObject(vm.currentTopBottomAcctType);
       // update data
       getDataForTopBottom(vm.currentTopBottomObj, categoryBound);
@@ -452,9 +453,7 @@ module.exports = /*  @ngInject */
         filtersService.model.store = '';
         chipsService.removeChip('store');
         vm.showXChain = true;
-        result.type.toLowerCase() === 'account' ? vm.currentTopBottomFilters.accounts = result : vm.currentTopBottomFilters.subAccounts = result;
       } else if (filterModelProperty === 'distributor') {
-        vm.currentTopBottomFilters.distributors = result;
         vm.showXDistributor = true;
       }
 
@@ -464,9 +463,7 @@ module.exports = /*  @ngInject */
           break;
         }
       }
-
       chipsService.addAutocompleteChip(result.name, filterModelProperty, false);
-
       apply(false);
 
       filtersService.model[filterModelProperty] = result.name;
@@ -1026,12 +1023,42 @@ module.exports = /*  @ngInject */
     }
 
     function navigateTopBottomLevels(currentLevelName, performanceData) {
-      // There are a lot of data inconsistensies. Some Id's are marked as Id missing
-      var getNextLevel = true;
-      if (performanceData.id && performanceData.id.toLowerCase() === 'id missing') {
+      var getNextLevel = currentLevelName !== 'stores';
+      if (myperformanceService.checkForInconsistentIds(performanceData)) {
         return;
       }
+      // Updates the top bottom filter object with the selection
+      populateFieldsForFilterSelection(currentLevelName, performanceData);
+      // Make sure all the filters are set correctly and reflect the object in top botom filter
+      setUpdatedFilters();
+      // Update the breadcrumb on the top with the current filters
+      handleBreadcrumbs(currentLevelName, performanceData);
+      if (getNextLevel) {
+        myperformanceService.resetFiltersForLevelsAboveCurrent(vm.currentTopBottomAcctType, vm.currentTopBottomFilters, vm.topBottomData);
+        // Get the top bottom level to the current level. vm.marketSelectedIndex indicates the current level and is 0 based index
+        vm.currentTopBottomAcctType = myperformanceService.getAcctTypeObjectBasedOnTabIndex(vm.marketSelectedIndex, getNextLevel);
+        vm.currentTopBottomObj = getCurrentTopBottomObject(vm.currentTopBottomAcctType);
+        var categoryBound = vm.filtersService.model.accountSelected.accountMarkets;
+        getDataForTopBottom(vm.currentTopBottomObj, categoryBound);
+        // updateBrandSnapshot();
+      }
+    }
 
+    function setUpdatedFilters() {
+      // The order to be processed is distributor, stores, subaccounts, accounts. So that the last value doesn't get overrided
+      if (vm.currentTopBottomFilters.distributors) {
+        setFilter(vm.currentTopBottomFilters.distributors, 'distributor');
+      }
+      if (vm.currentTopBottomFilters.stores) {
+        setFilter(vm.currentTopBottomFilters.stores, 'store');
+      } else if (vm.currentTopBottomFilters.subAccounts) {
+        setFilter(vm.currentTopBottomFilters.subAccounts, 'chain');
+      } else if (vm.currentTopBottomFilters.accounts) {
+        setFilter(vm.currentTopBottomFilters.accounts, 'chain');
+      }
+    }
+
+    function handleBreadcrumbs(currentLevelName, performanceData) {
       // Need  to update breacrumbs and add filters
       if (currentLevelName === 'stores') {
         // Set it to Store
@@ -1041,30 +1068,12 @@ module.exports = /*  @ngInject */
           id: performanceData.id,
           name: performanceData.name
         };
-        getNextLevel = false;
       } else {
         currentStore = null;
         if (vm.filtersService.model.selected.retailer !== 'Chain') {
           vm.filtersService.model.selected.retailer = 'Chain';
           placeholderSelect(filtersService.model.retailer[1].hintText);
         }
-      }
-
-      if (currentLevelName === 'distributors') {
-        vm.isDistributorSelectionComplete = performanceData;
-      } else {
-        vm.isChainSelectionComplete = performanceData;
-      }
-
-      if (getNextLevel) {
-        myperformanceService.resetFiltersForLevelsAboveCurrent(vm.currentTopBottomAcctType, vm.currentTopBottomFilters, vm.topBottomData);
-        // Get the account type next to the current level. vm.marketSelectedIndex indicates the current level
-        vm.currentTopBottomAcctType = myperformanceService.getAcctTypeObjectBasedOnTabIndex(vm.marketSelectedIndex, getNextLevel);
-        populateFieldsForFilterSelection(currentLevelName, performanceData);
-        vm.currentTopBottomObj = getCurrentTopBottomObject(vm.currentTopBottomAcctType);
-        var categoryBound = vm.filtersService.model.accountSelected.accountMarkets;
-        getDataForTopBottom(vm.currentTopBottomObj, categoryBound);
-        // updateBrandSnapshot();
       }
     }
 
