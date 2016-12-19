@@ -1035,8 +1035,8 @@ module.exports = /*  @ngInject */
       handleBreadcrumbs(currentLevelName, performanceData);
       if (getNextLevel) {
         myperformanceService.resetFiltersForLevelsAboveCurrent(vm.currentTopBottomAcctType, vm.currentTopBottomFilters, vm.topBottomData);
-        // Get the top bottom level to the current level. vm.marketSelectedIndex indicates the current level and is 0 based index
-        vm.currentTopBottomAcctType = myperformanceService.getAcctTypeObjectBasedOnTabIndex(vm.marketSelectedIndex, getNextLevel);
+        // Get the top bottom level next to the current level.
+        vm.currentTopBottomAcctType = myperformanceService.getAcctTypeObjectBasedOnTabIndex(vm.currentTopBottomAcctType.value, getNextLevel);
         vm.currentTopBottomObj = getCurrentTopBottomObject(vm.currentTopBottomAcctType);
         var categoryBound = vm.filtersService.model.accountSelected.accountMarkets;
         getDataForTopBottom(vm.currentTopBottomObj, categoryBound);
