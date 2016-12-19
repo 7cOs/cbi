@@ -30,6 +30,7 @@ div.modal.custom-opportunity-error
             span  {{nb.dateUpdated}}
           p If you unhide it, it will be visible again in your list
           button(type="submit" ng-click="nb.closeModal(true)").btn-action Recover
+          button(type="submit" ng-click="nb.closeModal()").btn-action Cancel and Discard
       div(ng-if="nb.duplicateError").row
         div(column="12")
           button(type="submit" ng-click="nb.closeModal()").btn-action Use Existing
