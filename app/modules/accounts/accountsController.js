@@ -137,7 +137,7 @@ module.exports = /*  @ngInject */
     // **************
 
     function allOpportunitiesDisabled() {
-      if ((filtersService.model.selected.premiseType && filtersService.model.selected.premiseType !== 'all') && ((filtersService.model.selected.distributor && filtersService.model.selected.distributor.length > 0) || (filtersService.model.selected.store && filtersService.model.selected.store.length > 0) || (filtersService.model.selected.chain && filtersService.model.selected.chain.length > 0))) return false;
+      if ((filtersService.model.selected.premiseType && filtersService.model.selected.premiseType !== 'all') && ((filtersService.model.selected.distributor && filtersService.model.selected.distributor.length > 0) || (filtersService.model.selected.store && filtersService.model.selected.store.length > 0) || (filtersService.model.selected.account && filtersService.model.selected.account.length > 0))) return false;
 
       return true;
     }
@@ -164,7 +164,7 @@ module.exports = /*  @ngInject */
     }
 
     function disableStoreType() {
-      if ((filtersService.model.selected.distributor && filtersService.model.selected.distributor.length > 0) || (filtersService.model.selected.store && filtersService.model.selected.store.length > 0) || (filtersService.model.selected.chain && filtersService.model.selected.chain.length > 0)) {
+      if ((filtersService.model.selected.distributor && filtersService.model.selected.distributor.length > 0) || (filtersService.model.selected.store && filtersService.model.selected.store.length > 0) || (filtersService.model.selected.account && filtersService.model.selected.account.length > 0)) {
         return false;
       } else {
         return true;
@@ -341,7 +341,7 @@ module.exports = /*  @ngInject */
       chipsService.resetChipsFilters(chipsService.model);
       filtersService.model.distributor = '';
       vm.showXDistributor = false;
-      filtersService.model.chain = '';
+      filtersService.model.account = '';
       vm.showXChain = false;
       filtersService.model.store = '';
       vm.showXStore = false;
@@ -444,8 +444,8 @@ module.exports = /*  @ngInject */
       filtersService.model.selected[filterModelProperty] = [result.id];
 
       if (filterModelProperty === 'store') {
-        filtersService.model.selected.chain = [];
-        filtersService.model.chain = '';
+        filtersService.model.selected.account = [];
+        filtersService.model.account = '';
         chipsService.removeChip('chain');
         vm.showXStore = true;
       } else if (filterModelProperty === 'chain') {
@@ -1011,7 +1011,7 @@ module.exports = /*  @ngInject */
         vm.filtersService.model.distributor = data.name;
         vm.showXDistributor = true;
       } else {
-        vm.filtersService.model.chain = data.name;
+        vm.filtersService.model.account = data.name;
         vm.showXChain = true;
       }
     }

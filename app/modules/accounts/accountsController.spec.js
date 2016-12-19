@@ -473,7 +473,7 @@ describe('Unit: accountsController', function() {
 
     it('Should go to opportunities page with params if conditions are met', function() {
       filtersService.model.selected.premiseType = 'on';
-      filtersService.model.selected.chain = ['01110000 01101100 01110011'];
+      filtersService.model.selected.account = ['01110000 01101100 01110011'];
 
       expect($state.go).not.toHaveBeenCalled();
       expect($state.go.calls.count()).toEqual(0);
@@ -1086,7 +1086,7 @@ describe('Unit: accountsController', function() {
       expect(ctrl.disableStoreType()).toEqual(false);
     });
     it('Should return false if there is a chain but no store or distributor', function() {
-      filtersService.model.selected.chain = ['222222'];
+      filtersService.model.selected.account = ['222222'];
       expect(ctrl.disableStoreType()).toEqual(false);
     });
     it('Should return false if there is a distributor but no chain or store', function() {
