@@ -49,7 +49,7 @@ module.exports = /*  @ngInject */
           valuesArr, tempArr = [];
       var j = 0;
       valuesArr = $filter('orderBy')(tbData, function(data) {
-        if (isValidValues(Number(data.measure[propertyName]))) {
+        if (isValidValues(data.measure[propertyName])) {
           return data.measure[propertyName];
         } else {
           j++;
@@ -339,7 +339,7 @@ module.exports = /*  @ngInject */
 
       var i = 1;
       angular.forEach(matchedArr, function (data, key) {
-        if (isValidValues(Number(data.measure[propName]))) {
+        if (isValidValues(data.measure[propName])) {
           obj = {
             'label': i + '. ' + data.title
           };
