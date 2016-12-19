@@ -15,8 +15,7 @@ module.exports = function(config) {
       'app/main.js',
       './node_modules/angular-mocks/angular-mocks.js',
       './node_modules/angular-material/angular-material-mocks.js',
-      'app/modules/**/*.spec.js',
-      'app/shared/**/**/*.spec.js'
+      'app/**/*.spec.js'
     ],
 
     // list of files to exclude
@@ -26,15 +25,12 @@ module.exports = function(config) {
     // preprocess matching files before serving them to the browser
     // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
     preprocessors: {
-      'app/main.js': ['browserify', 'coverage'],
-      'app/modules/index.js': ['browserify'],
-      'app/shared/index.js': ['browserify'],
-      'app/modules/**/*.spec.js': ['browserify'],
-      'app/shared/**/**/*.spec.js': ['browserify']
+      'app/main.js': ['browserify']
     },
 
     browserify: {
-      debug: true
+      debug: true,
+      transform: ['browserify-istanbul']
     },
 
     // test results reporter to use
@@ -52,8 +48,9 @@ module.exports = function(config) {
     },
 
     coverageReporter: {
-      type: 'html',
-      dir: 'coverage/'
+      reporters: [
+        {type: 'html', dir: 'coverage/'}
+      ]
     },
 
     // web server port
