@@ -1022,6 +1022,11 @@ module.exports = /*  @ngInject */
       }
     }
 
+    /**
+     * Navigates to the level after the current. If distributor ---> Acct, Acct--->SubAcct, SubAcct-->Store, Store click just highlight the store
+     * @param {String} currentLevelName Indicates the text indicator of the level. 'distributor', 'account', 'subaccount','store'
+     * @param {Object} performanceData get the data associated with the clicked object
+     */
     function navigateTopBottomLevels(currentLevelName, performanceData) {
       var getNextLevel = currentLevelName !== 'stores';
       if (myperformanceService.checkForInconsistentIds(performanceData)) {

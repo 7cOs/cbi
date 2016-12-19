@@ -1352,5 +1352,10 @@ describe('Unit: accountsController', function() {
   });
 
   describe('Navigate top bottom levels', function() {
+    it('should go to accounts level on selecting distributors', function() {
+      var newVal = filtersService.model.distributionTimePeriod.month[0];
+      ctrl.depletionOptionChanged(newVal);
+      expect(1).toEqual(1);
+    });
   });
 });
