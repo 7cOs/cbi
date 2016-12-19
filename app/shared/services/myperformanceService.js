@@ -358,6 +358,7 @@ module.exports = /*  @ngInject */
     }
 
     function appendFilterParametersForTopBottom (params, currentTopBottomFilters) {
+      params = angular.copy(params);
       // Need to remove filter parameters from filtersService.model that are in params. vm.currentTopBottomFilter should always reflect the most refreshed copy of those filters
       delete params.distributor;
       delete params.account;
