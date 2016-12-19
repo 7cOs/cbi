@@ -2,6 +2,10 @@
   margin: 0.67em 0 3em;
 }
 
+.long-collaborators {
+  margin-bottom: 200px;
+}
+
 .expanded-target-lists {
 
   label {
@@ -135,12 +139,9 @@
     }
 
     li {
+      overflow: hidden;
       background: $white;
       margin-bottom: 12px;
-
-      &.long-collaborators {
-        margin-bottom: 200px;
-      }
 
       h4, h5 {
         text-align: center;
