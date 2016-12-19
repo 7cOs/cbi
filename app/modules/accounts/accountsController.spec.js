@@ -330,7 +330,12 @@ describe('Unit: accountsController', function() {
       spyOn(userService, 'getPerformanceDepletion').and.returnValue(fakePromise);
       spyOn(userService, 'getPerformanceDistribution').and.returnValue(fakePromise);
       spyOn(userService, 'getPerformanceSummary').and.returnValue(fakePromise);
-      spyOn(userService, 'getTopBottomSnapshot').and.returnValue($q.when(topBottomSnapshotData));
+      spyOn(userService, 'getTopBottomSnapshot').and.callFake(function () {
+        var currentLevel = userService.getTopBottomSnapshot.arguments[0].name;
+        topBottomSnapshotData.performance[0].type = currentLevel;
+        return $q.when(topBottomSnapshotData);
+      });
+
       brandSpy = spyOn(userService, 'getPerformanceBrand');
       brandSpy.and.returnValue($q.when(brandPerformanceData));
       // Create Controller
@@ -1353,9 +1358,9 @@ describe('Unit: accountsController', function() {
 
   describe('Navigate top bottom levels', function() {
     it('should go to accounts level on selecting distributors', function() {
-      var newVal = filtersService.model.distributionTimePeriod.month[0];
-      ctrl.depletionOptionChanged(newVal);
-      expect(1).toEqual(1);
+      ctrl.currentTopBottomAcctType = ctrl.filtersService.accountFilters.accountTypes[0];
+      ctrl.navigateTopBottomLevels();
+      expect(ctrl.currentTopBottomAcctType).toEqual(ctrl.filtersService.accountFilters.accountTypes[1]);
     });
   });
 });

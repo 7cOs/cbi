@@ -1027,7 +1027,9 @@ module.exports = /*  @ngInject */
      * @param {String} currentLevelName Indicates the text indicator of the level. 'distributor', 'account', 'subaccount','store'
      * @param {Object} performanceData get the data associated with the clicked object
      */
-    function navigateTopBottomLevels(currentLevelName, performanceData) {
+    function navigateTopBottomLevels(performanceData) {
+      // console.log('Perf data', performanceData);
+      var currentLevelName = getCurrentTopBottomObject(vm.currentTopBottomAcctType).currentLevelName;
       var getNextLevel = currentLevelName !== 'stores';
       if (myperformanceService.checkForInconsistentIds(performanceData)) {
         return;
