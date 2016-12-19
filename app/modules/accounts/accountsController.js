@@ -341,7 +341,7 @@ module.exports = /*  @ngInject */
       chipsService.resetChipsFilters(chipsService.model);
       filtersService.model.distributor = '';
       vm.showXDistributor = false;
-      filtersService.model.chain = '';
+      filtersService.model.account = '';
       vm.showXChain = false;
       filtersService.model.store = '';
       vm.showXStore = false;
@@ -445,7 +445,7 @@ module.exports = /*  @ngInject */
 
       if (filterModelProperty === 'store') {
         filtersService.model.selected.account = [];
-        filtersService.model.chain = '';
+        filtersService.model.account = '';
         chipsService.removeChip('chain');
         vm.showXStore = true;
       } else if (filterModelProperty === 'chain') {
@@ -1011,7 +1011,7 @@ module.exports = /*  @ngInject */
         vm.filtersService.model.distributor = data.name;
         vm.showXDistributor = true;
       } else {
-        vm.filtersService.model.chain = data.name;
+        vm.filtersService.model.account = data.name;
         vm.showXChain = true;
       }
     }
