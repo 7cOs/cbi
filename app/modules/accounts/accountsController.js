@@ -1045,7 +1045,7 @@ module.exports = /*  @ngInject */
     }
 
     function setUpdatedFilters() {
-      // The order to be processed is distributor, stores, subaccounts, accounts. So that the last value doesn't get overrided
+      // The order to be processed is distributor, stores, subaccounts, accounts. So that the last value doesn't get overridden
       if (vm.currentTopBottomFilters.distributors) {
         setFilter(vm.currentTopBottomFilters.distributors, 'distributor');
       }
