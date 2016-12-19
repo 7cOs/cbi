@@ -19,4 +19,24 @@ describe('[Services.myperformanceService]', function() {
     expect(myperformanceService).toBeDefined();
     expect(filtersService).toBeDefined();
   });
+
+  it('should check if valid number', function() {
+    var isValid = myperformanceService.isValidValues('-');
+    expect(isValid).toEqual(false);
+
+    isValid = myperformanceService.isValidValues('12368');
+    expect(isValid).toEqual(false);
+
+    var num = 12368;
+    isValid = myperformanceService.isValidValues(num);
+    expect(isValid).toEqual(true);
+
+    num = null;
+    isValid = myperformanceService.isValidValues(num);
+    expect(isValid).toEqual(false);
+
+    var undefinedVal;
+    isValid = myperformanceService.isValidValues(undefinedVal);
+    expect(isValid).toEqual(false);
+  });
 });
