@@ -33,6 +33,18 @@
     }
   }
 
+  // Hide the fact that IE jumps around when modals are open
+  md-backdrop.md-default-theme,
+  md-backdrop {
+    transition: opacity 300ms ease;
+  }
+
+  md-backdrop.md-default-theme.md-opaque,
+  md-backdrop.md-opaque {
+    opacity: 0.95;
+    background: $body-bg;
+  }
+
   // Placeholder font
   ::-ms-input-placeholder {
     color: $gray-2;
