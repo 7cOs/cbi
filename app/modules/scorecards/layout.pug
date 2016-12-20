@@ -87,7 +87,7 @@ div.my-scorecards
     div.scorecard-header.clearfix
       div.scorecard-header-left
         h2 My Distribution Scorecard
-        h3 {{s.distributionSelectOptions.selected}}
+        h3 {{s.distributionSelectOptions.selected}} Days
       div.scorecard-header-right
         p.accent Total PODs / vs YA %
         h3.bold(ng-if="s.distributionRadioOptions.selected.placementType === 'Effective'") {{s.totalDistributions[0].distributionsEffective | number:0 }}&nbsp;
