@@ -195,7 +195,7 @@ module.exports = /*  @ngInject */
       }
 
       var categoryBound = vm.filtersService.model.accountSelected.accountMarkets;
-
+      console.log(vm.currentTopBottomFilters, categoryBound);
       // change tab index
       if (vm.currentTopBottomFilters.stores && vm.currentTopBottomFilters.stores.id) {
         vm.currentTopBottomAcctType = vm.filtersService.accountFilters.accountTypes[3];
@@ -207,6 +207,7 @@ module.exports = /*  @ngInject */
       } else if (vm.currentTopBottomFilters.distributors && vm.currentTopBottomFilters.distributors.id) {
         vm.currentTopBottomAcctType = vm.filtersService.accountFilters.accountTypes[1];
       }
+      console.log(vm.currentTopBottomAcctType);
       setUpdatedFilters();
       vm.currentTopBottomObj = getCurrentTopBottomObject(vm.currentTopBottomAcctType);
       // update data
@@ -450,6 +451,27 @@ module.exports = /*  @ngInject */
 
     function setFilter(result, filterModelProperty) {
       filtersService.model.selected[filterModelProperty] = [result.id];
+
+      // model uses .distributor but this uses .distributors
+      var topBottomProp = '';
+      switch (filterModelProperty) {
+        case 'account':
+          topBottomProp = 'accounts';
+          break;
+        case 'subAccount':
+          topBottomProp = 'subAccounts';
+          break;
+        case 'store':
+          topBottomProp = 'stores';
+          break;
+        default:
+          topBottomProp = 'distributors';
+          break;
+      };
+      vm.currentTopBottomFilters[topBottomProp] = {
+        id: result.id,
+        name: result.name
+      };
 
       if (filterModelProperty === 'store') {
         filtersService.model.selected.account = [];
