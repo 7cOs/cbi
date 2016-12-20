@@ -346,7 +346,6 @@ module.exports = /*  @ngInject */
               combinedTargetList.owned.push(data[i].owned[j]);
               combinedTargetList.ownedNotArchivedTargetLists.push(data[i].owned[j]);
             }
-
           }
 
           for (j = 0; j < data[i].sharedWithMe.length; j++) {
