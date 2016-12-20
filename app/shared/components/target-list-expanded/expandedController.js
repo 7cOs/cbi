@@ -40,7 +40,6 @@ module.exports = /*  @ngInject */
     vm.reverse = true;
     vm.targetListAuthor = '';
     vm.totalOpportunitesChevron = true;
-    vm.hasLongCollaborators = false;
 
     // Expose public methods
     vm.addCollaborator = addCollaborator;
@@ -342,18 +341,10 @@ module.exports = /*  @ngInject */
               combinedTargetList.owned.push(data[i].owned[j]);
               combinedTargetList.archived.push(data[i].owned[j]);
 
-              if (data[i].owned[j].collaborators.length > 7) {
-                vm.hasLongCollaborators = true;
-              }
-
             } else {
               combinedTargetList.ownedNotArchived++;
               combinedTargetList.owned.push(data[i].owned[j]);
               combinedTargetList.ownedNotArchivedTargetLists.push(data[i].owned[j]);
-
-              if (data[i].owned[j].collaborators.length > 7) {
-                vm.hasLongCollaborators = true;
-              }
             }
 
           }
@@ -373,15 +364,8 @@ module.exports = /*  @ngInject */
             if (data[i].sharedWithMe[j].archived) {
               combinedTargetList.sharedArchivedCount++;
               combinedTargetList.archived.push(data[i].sharedWithMe[j]);
-              if (data[i].sharedWithMe[j].collaborators.length > 7) {
-                vm.hasLongCollaborators = true;
-              }
-
             } else {
               combinedTargetList.sharedNotArchivedCount++;
-              if (data[i].sharedWithMe[j].collaborators.length > 7) {
-                vm.hasLongCollaborators = true;
-              }
             }
           };
         }
