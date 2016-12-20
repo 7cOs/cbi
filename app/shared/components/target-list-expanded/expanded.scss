@@ -64,6 +64,7 @@
 
     .checkbox-sibling {
       margin-left: 0;
+      padding-left: 0;
       padding-right: 0;
       width: calc(100% - 50px);
     }
@@ -88,12 +89,12 @@
         content: '';
         position: absolute;
         left: 57px;
-        top: -12px;
+        bottom: -12px;
         width: 0;
         height: 0;
         border-left: 16px solid transparent;
         border-right: 16px solid transparent;
-        border-bottom: 16px solid $lavender-2;
+        border-top: 16px solid $lavender-2;
       }
 
       &.creator {
@@ -114,6 +115,7 @@
       visibility: visible;
       opacity: 1;
       transition: opacity 300ms ease-in-out;
+      bottom: 30px;
     }
 
     ul.dropdown-menu {
@@ -139,13 +141,13 @@
     }
 
     li {
-      overflow: hidden;
       background: $white;
       margin-bottom: 12px;
 
       h4, h5 {
         text-align: center;
         margin-bottom: 0;
+        position: relative;
 
         &.left {
           text-align: left;
