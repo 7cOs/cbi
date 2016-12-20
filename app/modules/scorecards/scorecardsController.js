@@ -65,12 +65,22 @@ module.exports = /*  @ngInject */
     vm.isPositive = isPositive;
     vm.updateEndingTimePeriod = updateEndingTimePeriod;
     vm.toggleSelected = toggleSelected;
+    vm.checkValidity = checkValidity;
 
     init();
 
     // **************
     // PUBLIC METHODS
     // **************
+
+    function checkValidity(value, fractionSize) {
+      // Check if result is infinity or NaN
+      if (isFinite(value)) {
+        return $filter('number')(value, fractionSize || 0);
+      } else {
+        return '-';
+      }
+    }
 
     function toggleSelected($index, list) {
       vm.selectedList = list;
