@@ -313,6 +313,14 @@ module.exports = /*  @ngInject */
 
     function removeInlineSearch(type) {
       vm[type] = '';
+
+      if (type === 'selectedStore') {
+        filtersService.model.selected.account = [];
+        filtersService.model.selected.store = [];
+      } else if (type === 'selectedDistributor') {
+        filtersService.model.selected.distributor = [];
+      }
+
       apply(false);
     }
 

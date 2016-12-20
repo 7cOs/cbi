@@ -163,8 +163,6 @@ module.exports = /*  @ngInject */
           delete $state.params.referrer;
         }
 
-        console.log(chipsService.model);
-
         chipsService.applyFilters();
       }
 
