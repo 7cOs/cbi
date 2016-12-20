@@ -437,7 +437,7 @@ module.exports = /*  @ngInject */
       var currentAccountTypeLevel = null;
       if (isGetNextLevel === true) {
         // the tab index is 0  based whereas the values assigned to levels start from 1. So the current level value is tabIndex + 1. If I need the level after that I use tabIndex + 1 + 1.
-        var levelToNavigate = tabIndex + 1 + 1;
+        var levelToNavigate = tabIndex + 1;
         currentAccountTypeLevel = filtersService.accountFilters.accountTypes.filter(function(market) {
           return market.value === levelToNavigate;
         });
@@ -451,7 +451,7 @@ module.exports = /*  @ngInject */
     }
 
     function checkForInconsistentIds(performanceData) {
-      if (performanceData.id && performanceData.id.toLowerCase() === 'id missing') {
+      if (!performanceData.id || performanceData.id.toLowerCase() === 'id missing') {
         return true;
       } else {
         return false;

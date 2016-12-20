@@ -757,7 +757,7 @@ module.exports = /*  @ngInject */
           break;
         case accountTypes.subAccounts:
           currentObj = vm.topBottomData.subAccounts;
-          currentObj.currentLevelName = 'subaccounts';
+          currentObj.currentLevelName = 'subAccounts';
           vm.isStoreLevel = false;
           break;
         case accountTypes.stores:
@@ -1002,50 +1002,69 @@ module.exports = /*  @ngInject */
     //   updateTopBottom();
     // }
 
-    function populateFieldsForFilterSelection(currentLevelName, data) {
+    /**
+     * Updates vm.currentTopBottomFilters object
+     * @param {Object} currentLevelName The level to be updated.. Can be ditrstibutors, acct etc
+     * @param {Object} data The filter selected. It's of the format {id:xxx, name: 'sdfsdf'}
+     */
+    function setTopBottomFilterModel(currentLevelName, data) {
       vm.currentTopBottomFilters[currentLevelName] = {
         id: data.id,
         name: data.name
       };
+      // The term 'vm.filtersService.model.account' needs to be refactored. This variable for is used to hold the text for all types except distributor
       if (currentLevelName === 'distributors') {
         vm.filtersService.model.distributor = data.name;
-        vm.showXDistributor = true;
       } else {
         vm.filtersService.model.account = data.name;
-        vm.showXChain = true;
       }
     }
 
+    /**
+     * On clicking a store in top bottom, it highlights the store
+     */
     function isHighlightStore(storeDetails) {
       if (storeDetails && storeDetails.id && vm.isStoreLevel && currentStore) {
         return storeDetails.id === currentStore.id;
       }
     }
 
-    function navigateTopBottomLevels(currentLevelName, performanceData) {
-      var getNextLevel = currentLevelName !== 'stores';
-      if (myperformanceService.checkForInconsistentIds(performanceData)) {
-        return;
-      }
-      // Updates the top bottom filter object with the selection
-      populateFieldsForFilterSelection(currentLevelName, performanceData);
-      // Make sure all the filters are set correctly and reflect the object in top botom filter
-      setUpdatedFilters();
-      // Update the breadcrumb on the top with the current filters
-      handleBreadcrumbs(currentLevelName, performanceData);
-      if (getNextLevel) {
-        myperformanceService.resetFiltersForLevelsAboveCurrent(vm.currentTopBottomAcctType, vm.currentTopBottomFilters, vm.topBottomData);
-        // Get the top bottom level to the current level. vm.marketSelectedIndex indicates the current level and is 0 based index
-        vm.currentTopBottomAcctType = myperformanceService.getAcctTypeObjectBasedOnTabIndex(vm.marketSelectedIndex, getNextLevel);
-        vm.currentTopBottomObj = getCurrentTopBottomObject(vm.currentTopBottomAcctType);
-        var categoryBound = vm.filtersService.model.accountSelected.accountMarkets;
-        getDataForTopBottom(vm.currentTopBottomObj, categoryBound);
-        // updateBrandSnapshot();
+    /**
+     * Navigates to the level after the current. If distributor ---> Acct, Acct--->SubAcct, SubAcct-->Store, Store click just highlight the store
+     * @param {String} currentLevelName Indicates the text indicator of the level. 'distributor', 'account', 'subaccount','store'
+     * @param {Object} performanceData get the data associated with the clicked object
+     */
+    function navigateTopBottomLevels(performanceData) {
+      // console.log('Perf data', performanceData);
+      if (performanceData) {
+        var currentLevelName = getCurrentTopBottomObject(vm.currentTopBottomAcctType).currentLevelName;
+        var getNextLevel = currentLevelName !== 'stores';
+        if (myperformanceService.checkForInconsistentIds(performanceData)) {
+          return;
+        }
+        // Updates the top bottom filter object with the selection
+        setTopBottomFilterModel(currentLevelName, performanceData);
+        // Make sure all the models in filtersService are set correctly and reflect the object in top botom filter
+        setUpdatedFilters();
+        // Set the chain dropdown and appropriate placeholder text
+        setChainDropdownAndPlaceHolder(currentLevelName, performanceData);
+        if (getNextLevel) {
+          myperformanceService.resetFiltersForLevelsAboveCurrent(vm.currentTopBottomAcctType, vm.currentTopBottomFilters, vm.topBottomData);
+          // Get the top bottom level next to the current level.
+          vm.currentTopBottomAcctType = myperformanceService.getAcctTypeObjectBasedOnTabIndex(vm.currentTopBottomAcctType.value, getNextLevel);
+          vm.currentTopBottomObj = getCurrentTopBottomObject(vm.currentTopBottomAcctType);
+          var categoryBound = vm.filtersService.model.accountSelected.accountMarkets;
+          getDataForTopBottom(vm.currentTopBottomObj, categoryBound);
+          // updateBrandSnapshot();
+        } else {
+          // Just setting current top bottom object to store
+          vm.currentTopBottomObj = getCurrentTopBottomObject(vm.currentTopBottomAcctType);
+        }
       }
     }
 
     function setUpdatedFilters() {
-      // The order to be processed is distributor, stores, subaccounts, accounts. So that the last value doesn't get overrided
+      // The order to be processed is distributor, stores, subaccounts, accounts. So that the last value doesn't get overridden
       if (vm.currentTopBottomFilters.distributors) {
         setFilter(vm.currentTopBottomFilters.distributors, 'distributor');
       }
@@ -1058,8 +1077,7 @@ module.exports = /*  @ngInject */
       }
     }
 
-    function handleBreadcrumbs(currentLevelName, performanceData) {
-      // Need  to update breacrumbs and add filters
+    function setChainDropdownAndPlaceHolder(currentLevelName, performanceData) {
       if (currentLevelName === 'stores') {
         // Set it to Store
         vm.filtersService.model.selected.retailer = 'Store';

@@ -1,6 +1,6 @@
 describe('Unit: accountsController', function() {
   var scope, ctrl, $state, $q, filtersService, chipsService, userService, packageSkuData, brandSpy, brandPerformanceData, myperformanceService;
-  var topBottomSnapshotData = {
+  var topBottomSnapshotDistributorData = {
     performance: [{
         'type': 'Distributor',
         'id': '2225193',
@@ -129,9 +129,71 @@ describe('Unit: accountsController', function() {
             'planDistirbutionEffectiveTrend': -51.98800395745733
           }
         ]
-      }]
+      }, {
+          'type': 'Distributor',
+          'id': '2225538',
+          'name': 'MANHATTAN BEER DIST LLC - NY (RIDGEWOOD)',
+          'measures': [
+            {
+              'timeframe': 'MTD',
+              'depletions': 388810.5225,
+              'depletionsTrend': 4.4391700939200165,
+              'depletionsBU': null,
+              'depletionsBUTrend': null,
+              'plan': 388810.5225,
+              'planDepletionTrend': 0
+            }]
+        }
+    ]
+  };
+  var topBottomSnapshotAcctData = {
+    performance: [{
+        'type': 'Account',
+        'id': '004497',
+        'name': 'CONVENIENT FOOD MART INC/HQ',
+        'measures': []
+      }, {
+        'type': 'Account',
+        'id': '004498',
+        'name': 'CONVENIENT FOOD MART INC2/HQ',
+        'measures': []
+      }
+    ]
   };
 
+  var topBottomSnapshotSubAcctData = {
+    performance: [{
+        'type': 'SubAccount',
+        'id': '1254678',
+        'name': 'Rite Aid',
+        'measures': [
+        ]
+      }, {
+          'type': 'CVS',
+          'id': '1254679',
+          'name': 'CVS',
+          'measures': [
+            ]
+        }
+    ]
+  };
+
+  var topBottomSnapshotStoreData = {
+    performance: [{
+        'type': 'Store',
+        'id': '4225193',
+        'name': 'CVS WTC',
+        'measures': [
+        ]
+      }, {
+          'type': 'Account',
+          'id': '5225538',
+          'name': 'CVS Penn Station',
+          'measures': [
+            ]
+        }
+    ]
+  };
   var measuresArr = [
     {
       'timeframe': 'MTD',
@@ -330,7 +392,20 @@ describe('Unit: accountsController', function() {
       spyOn(userService, 'getPerformanceDepletion').and.returnValue(fakePromise);
       spyOn(userService, 'getPerformanceDistribution').and.returnValue(fakePromise);
       spyOn(userService, 'getPerformanceSummary').and.returnValue(fakePromise);
-      spyOn(userService, 'getTopBottomSnapshot').and.returnValue($q.when(topBottomSnapshotData));
+      spyOn(userService, 'getTopBottomSnapshot').and.callFake(function () {
+        var currentLevel = userService.getTopBottomSnapshot.arguments[0].value;
+        switch (currentLevel) {
+          case 1:
+            return $q.when(topBottomSnapshotDistributorData);
+          case 2:
+            return $q.when(topBottomSnapshotAcctData);
+          case 3:
+            return $q.when(topBottomSnapshotSubAcctData);
+          case 4:
+            return $q.when(topBottomSnapshotStoreData);
+        };
+      });
+
       brandSpy = spyOn(userService, 'getPerformanceBrand');
       brandSpy.and.returnValue($q.when(brandPerformanceData));
       // Create Controller
@@ -1225,27 +1300,27 @@ describe('Unit: accountsController', function() {
       var val;
       // MTD
       ctrl.filtersService.model.accountSelected.accountMarkets = ctrl.filtersService.accountFilters.accountMarkets[0];
-      val = ctrl.getValueBoundForAcctType(topBottomSnapshotData.performance[0].measures[0]);
+      val = ctrl.getValueBoundForAcctType(topBottomSnapshotDistributorData.performance[0].measures[0]);
       expect(val).toEqual(375314);
 
       ctrl.filtersService.model.accountSelected.accountMarkets = ctrl.filtersService.accountFilters.accountMarkets[1];
-      val = ctrl.getValueBoundForAcctType(topBottomSnapshotData.performance[0].measures[7]);
+      val = ctrl.getValueBoundForAcctType(topBottomSnapshotDistributorData.performance[0].measures[7]);
       expect(val).toEqual(14612);
 
       ctrl.filtersService.model.accountSelected.accountMarkets = ctrl.filtersService.accountFilters.accountMarkets[2];
-      val = ctrl.getValueBoundForAcctType(topBottomSnapshotData.performance[0].measures[7]);
+      val = ctrl.getValueBoundForAcctType(topBottomSnapshotDistributorData.performance[0].measures[7]);
       expect(val).toEqual(30104);
 
       ctrl.filtersService.model.accountSelected.accountMarkets = ctrl.filtersService.accountFilters.accountMarkets[3];
-      val = ctrl.getValueBoundForAcctType(topBottomSnapshotData.performance[0].measures[7]);
+      val = ctrl.getValueBoundForAcctType(topBottomSnapshotDistributorData.performance[0].measures[7]);
       expect(val).toEqual(7190);
 
       ctrl.filtersService.model.accountSelected.accountMarkets = ctrl.filtersService.accountFilters.accountMarkets[0];
-      val = ctrl.getValueBoundForAcctType(topBottomSnapshotData.performance[0].measures[0]);
+      val = ctrl.getValueBoundForAcctType(topBottomSnapshotDistributorData.performance[0].measures[0]);
       expect(val).not.toEqual('-');
 
       ctrl.filtersService.model.accountSelected.accountMarkets = null;
-      val = ctrl.getValueBoundForAcctType(topBottomSnapshotData.performance[0].measures[0]);
+      val = ctrl.getValueBoundForAcctType(topBottomSnapshotDistributorData.performance[0].measures[0]);
       expect(val).toEqual('-');
     });
   });
@@ -1306,6 +1381,8 @@ describe('Unit: accountsController', function() {
     beforeEach(function() {
       resetFilterFlagsSpy = spyOn(myperformanceService, 'resetFilterFlags');
       resetFilterFlagsSpy.calls.reset();
+      ctrl.currentTopBottomAcctType = ctrl.filtersService.accountFilters.accountTypes[0];
+      ctrl.resetFilters();
     });
 
     it('should reset filter flags when account market options are changed', function() {
@@ -1348,6 +1425,128 @@ describe('Unit: accountsController', function() {
       var newVal = filtersService.model.distributionTimePeriod.month[0];
       ctrl.depletionOptionChanged(newVal);
       expect(resetFilterFlagsSpy.calls.count()).toEqual(1);
+    });
+  });
+
+  describe('Navigate top bottom levels', function() {
+    var distributorData, acctData, subAcctData, storeData;
+    beforeEach(function() {
+      ctrl.currentTopBottomAcctType = ctrl.filtersService.accountFilters.accountTypes[0];
+      ctrl.resetFilters();
+      distributorData = angular.copy(topBottomSnapshotDistributorData.performance[0]);
+      acctData = angular.copy(topBottomSnapshotAcctData.performance[0]);
+      subAcctData = angular.copy(topBottomSnapshotSubAcctData.performance[0]);
+      storeData = angular.copy(topBottomSnapshotStoreData.performance[0]);
+    });
+
+    it('should go to accounts level on selecting distributors', function() {
+      ctrl.currentTopBottomAcctType = ctrl.filtersService.accountFilters.accountTypes[0];
+      ctrl.navigateTopBottomLevels(distributorData);
+      expect(ctrl.currentTopBottomAcctType).toEqual(ctrl.filtersService.accountFilters.accountTypes[1]);
+      expect(ctrl.currentTopBottomObj.currentLevelName).toEqual('accounts');
+    });
+
+    it('should go to sub accounts level on selecting accounts', function() {
+      ctrl.currentTopBottomAcctType = ctrl.filtersService.accountFilters.accountTypes[1];
+      ctrl.navigateTopBottomLevels(distributorData);
+      expect(ctrl.currentTopBottomAcctType).toEqual(ctrl.filtersService.accountFilters.accountTypes[2]);
+      expect(ctrl.currentTopBottomObj.currentLevelName).toEqual('subAccounts');
+    });
+
+    it('should go to stores level on selecting sub accounts', function() {
+      ctrl.currentTopBottomAcctType = ctrl.filtersService.accountFilters.accountTypes[2];
+      ctrl.navigateTopBottomLevels(distributorData);
+      expect(ctrl.currentTopBottomAcctType).toEqual(ctrl.filtersService.accountFilters.accountTypes[3]);
+      expect(ctrl.currentTopBottomObj.currentLevelName).toEqual('stores');
+    });
+
+    it('should stay at stores level on selecting stores', function() {
+      ctrl.currentTopBottomAcctType = ctrl.filtersService.accountFilters.accountTypes[3];
+      ctrl.navigateTopBottomLevels(distributorData);
+      expect(ctrl.currentTopBottomAcctType).toEqual(ctrl.filtersService.accountFilters.accountTypes[3]);
+      expect(ctrl.currentTopBottomObj.currentLevelName).toEqual('stores');
+    });
+
+    it('should stay at the same level if no performace data is passed', function() {
+      ctrl.currentTopBottomAcctType = ctrl.filtersService.accountFilters.accountTypes[0];
+      ctrl.navigateTopBottomLevels(null);
+      expect(ctrl.currentTopBottomAcctType).toEqual(ctrl.filtersService.accountFilters.accountTypes[0]);
+      expect(ctrl.currentTopBottomObj.currentLevelName).toEqual('distributors');
+    });
+
+    it('should stay at the same level if id of the selected item is missing or null', function() {
+      var tempVal = distributorData.id;
+      ctrl.currentTopBottomAcctType = ctrl.filtersService.accountFilters.accountTypes[0];
+      distributorData.id = 'id missing';
+      ctrl.navigateTopBottomLevels(distributorData);
+      expect(ctrl.currentTopBottomAcctType).toEqual(ctrl.filtersService.accountFilters.accountTypes[0]);
+      expect(ctrl.currentTopBottomObj.currentLevelName).toEqual('distributors');
+
+      distributorData.id = null;
+      ctrl.navigateTopBottomLevels(distributorData);
+      expect(ctrl.currentTopBottomAcctType).toEqual(ctrl.filtersService.accountFilters.accountTypes[0]);
+      distributorData.id = tempVal;
+    });
+
+    it('should update top bottom filter model object', function() {
+      // Update distributors filter
+      ctrl.currentTopBottomAcctType = ctrl.filtersService.accountFilters.accountTypes[0];
+      ctrl.navigateTopBottomLevels(distributorData);
+      expect(ctrl.currentTopBottomFilters.distributors.id).toEqual(distributorData.id);
+      expect(ctrl.currentTopBottomFilters.distributors.name).toEqual(distributorData.name);
+
+      // Update accounts filter
+      ctrl.currentTopBottomAcctType = ctrl.filtersService.accountFilters.accountTypes[1];
+      ctrl.navigateTopBottomLevels(acctData);
+      expect(ctrl.currentTopBottomFilters.distributors.id).toEqual(distributorData.id);
+      expect(ctrl.currentTopBottomFilters.distributors.name).toEqual(distributorData.name);
+      expect(ctrl.currentTopBottomFilters.accounts.id).toEqual(acctData.id);
+      expect(ctrl.currentTopBottomFilters.accounts.name).toEqual(acctData.name);
+
+      // Update sub accounts filter
+      ctrl.currentTopBottomAcctType = ctrl.filtersService.accountFilters.accountTypes[2];
+      ctrl.navigateTopBottomLevels(subAcctData);
+      expect(ctrl.currentTopBottomFilters.distributors.id).toEqual(distributorData.id);
+      expect(ctrl.currentTopBottomFilters.distributors.name).toEqual(distributorData.name);
+      expect(ctrl.currentTopBottomFilters.accounts.id).toEqual(acctData.id);
+      expect(ctrl.currentTopBottomFilters.accounts.name).toEqual(acctData.name);
+      expect(ctrl.currentTopBottomFilters.subAccounts.id).toEqual(subAcctData.id);
+      expect(ctrl.currentTopBottomFilters.subAccounts.name).toEqual(subAcctData.name);
+
+      // // Update stores filter
+      ctrl.currentTopBottomAcctType = ctrl.filtersService.accountFilters.accountTypes[3];
+      ctrl.navigateTopBottomLevels(storeData);
+      expect(ctrl.currentTopBottomFilters.distributors.id).toEqual(distributorData.id);
+      expect(ctrl.currentTopBottomFilters.distributors.name).toEqual(distributorData.name);
+      expect(ctrl.currentTopBottomFilters.accounts.id).toEqual(acctData.id);
+      expect(ctrl.currentTopBottomFilters.accounts.name).toEqual(acctData.name);
+      expect(ctrl.currentTopBottomFilters.subAccounts.id).toEqual(subAcctData.id);
+      expect(ctrl.currentTopBottomFilters.subAccounts.name).toEqual(subAcctData.name);
+      expect(ctrl.currentTopBottomFilters.stores.id).toEqual(storeData.id);
+      expect(ctrl.currentTopBottomFilters.stores.name).toEqual(storeData.name);
+    });
+
+    it('should not update account filter unless Apply Filter is selected', function() {
+      ctrl.currentTopBottomAcctType = ctrl.filtersService.accountFilters.accountTypes[0];
+      ctrl.navigateTopBottomLevels(distributorData);
+
+      ctrl.filtersService.model.account = topBottomSnapshotAcctData.performance[1].name;
+      ctrl.setFilter(topBottomSnapshotAcctData.performance[1], 'chain');
+
+      ctrl.navigateTopBottomLevels(acctData);
+      expect(ctrl.currentTopBottomFilters.accounts.id).toEqual(acctData.id);
+      expect(ctrl.currentTopBottomAcctType).toEqual(ctrl.filtersService.accountFilters.accountTypes[2]);
+    });
+
+    it('should not update distributor filter unless Apply Filter is selected', function() {
+      ctrl.currentTopBottomAcctType = ctrl.filtersService.accountFilters.accountTypes[0];
+      ctrl.navigateTopBottomLevels(distributorData);
+      ctrl.filtersService.model.distributor = topBottomSnapshotDistributorData.performance[1];
+      ctrl.setFilter(topBottomSnapshotDistributorData.performance[1], 'distributor');
+
+      ctrl.navigateTopBottomLevels(acctData);
+      expect(ctrl.currentTopBottomAcctType).toEqual(ctrl.filtersService.accountFilters.accountTypes[2]);
+      expect(ctrl.currentTopBottomAcctType).not.toEqual(ctrl.filtersService.accountFilters.accountTypes[1]);
     });
   });
 });
