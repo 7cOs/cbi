@@ -5,12 +5,16 @@ module.exports = function(app) {
         pjson = require('../../package');
 
   app.get('/version', function (req, res) {
-    var hash = process.env.HEROKU_SLUG_DESCRIPTION || git.short();
-    var data = {
-      hash: hash,
-      version: pjson.version
-    };
-    res.send(JSON.stringify(data));
+    if (req.isAuthenticated()) {
+      var hash = process.env.HEROKU_SLUG_DESCRIPTION || git.short();
+      var data = {
+        hash: hash,
+        version: pjson.version
+      };
+      res.send(JSON.stringify(data));
+    } else {
+      res.status(403).end();
+    }
 
   });
 
