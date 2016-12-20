@@ -263,9 +263,12 @@ module.exports = /*  @ngInject */
       var targetList = opportunity.properties.targetList;
       var itemType = opportunity.properties.product.id ? 'SKU_PACKAGE' : 'BRAND';
       var itemId;
+      var rationale;
 
       if (opportunity.properties.rationale.other) {
-        opportunity.properties.rationale.description = opportunity.properties.rationale.other;
+        rationale = opportunity.properties.rationale.other;
+      } else {
+        rationale = opportunity.properties.rationale.description;
       }
 
       if (!opportunity.properties.product.id && opportunity.properties.product.brandCode) {
@@ -281,7 +284,7 @@ module.exports = /*  @ngInject */
         'itemId': itemId,
         'itemType': itemType,
         'mixedBrand': isMixedType,
-        'rationale': opportunity.properties.rationale.description,
+        'rationale': rationale,
         'impact': opportunity.properties.impact.enum,
         'subType': oppSubType
       };
@@ -300,6 +303,7 @@ module.exports = /*  @ngInject */
         }, function(error) {
           console.log(error);
           vm.duplicateOpportunity = opportunity;
+          vm.duplicateOpportunity.properties.rationale.description = rationale;
           modalCustomOpportunityError(error);
         });
 
@@ -372,10 +376,11 @@ module.exports = /*  @ngInject */
     };
 
     function resetFormModels() {
-      vm.newOpportunity.properties.distributionType ? vm.newOpportunity.properties.distributionType.description = '' : angular.noop;
+      vm.newOpportunity.properties.distributionType ? vm.newOpportunity.properties.distributionType.type = 'new' : angular.noop;
       vm.newOpportunity.properties.rationale ? vm.newOpportunity.properties.rationale = {'description': '', 'other': ''} : angular.noop;
       vm.newOpportunity.properties.impact ? vm.newOpportunity.properties.impact.enum = '' : angular.noop;
       vm.newOpportunity.properties.targetList ? vm.newOpportunity.properties.targetList = '' : angular.noop;
+      vm.addNewRationale = false;
     }
 
     // Get unread notification count and set initial badge value
