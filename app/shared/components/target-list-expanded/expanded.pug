@@ -63,9 +63,9 @@ div.expanded-target-lists
                     h5(column="2").accent.dropdown-menu-trigger.collaborators {{list.collaborators.length}}
                       span(ng-if="list.collaborators.length > 1")  collaborators
                       span(ng-if="list.collaborators.length < 2")  collaborator
-                      ul.dropdown-menu
-                        li.member.creator {{expanded.userService.model.currentUser.firstName}} {{expanded.userService.model.currentUser.lastName}}
-                        li.member(ng-repeat="collaborator in list.collaborators| filter: {permissionLevel: 'Collaborate'} | orderBy:'user.firstName'") {{collaborator.user.firstName | uppercase}} {{collaborator.user.lastName | uppercase}}
+                      ul(ng-class="{'long-collaborators': list.collaborators.length > 4}").dropdown-menu
+                        li(ng-class="{'long-collaborators': list.collaborators.length > 4}").member.creator {{expanded.userService.model.currentUser.firstName}} {{expanded.userService.model.currentUser.lastName}}
+                        li(ng-class="{'long-collaborators': list.collaborators.length > 4}" ng-repeat="collaborator in list.collaborators| filter: {permissionLevel: 'Collaborate'} | orderBy:'user.firstName'").member {{collaborator.user.firstName | uppercase}} {{collaborator.user.lastName | uppercase}}
                     h5(column="2" am-time-ago="(list.dateOpportunitiesUpdated ? list.dateOpportunitiesUpdated : list.createdAt | amUtc | amLocal)").accent.date
                     h4(column="1").closed {{list.opportunitiesSummary.closedOpportunitiesCount | number}}
                     h4(column="1") {{list.opportunitiesSummary.opportunitiesCount | number}}
@@ -116,10 +116,12 @@ div.expanded-target-lists
                 div(row)
                   h4(column="4").left {{list.name}}
                   div(column="2")
-                    h5.accent.dropdown-menu-trigger.collaborators {{list.collaborators.length}} collaborators
-                      ul.dropdown-menu
-                        li.member.creator(ng-repeat="user in list.collaborators | filter: {permissionLevel: 'Author'}") {{user.user.firstName}} {{user.user.lastName}}
-                        li.member(ng-repeat="collaborator in list.collaborators| filter: {permissionLevel: 'Collaborate'} | orderBy:'user.firstName'") {{collaborator.user.firstName | uppercase}} {{collaborator.user.lastName | uppercase}}
+                    h5.accent.dropdown-menu-trigger.collaborators {{list.collaborators.length}}
+                      span(ng-if="list.collaborators.length > 1")  collaborators
+                      span(ng-if="list.collaborators.length < 2")  collaborator
+                      ul(ng-class="{'long-collaborators': list.collaborators.length > 4}").dropdown-menu
+                        li(ng-class="{'long-collaborators': list.collaborators.length > 4}").member.creator {{expanded.userService.model.currentUser.firstName}} {{expanded.userService.model.currentUser.lastName}}
+                        li(ng-class="{'long-collaborators': list.collaborators.length > 4}" ng-repeat="collaborator in list.collaborators| filter: {permissionLevel: 'Collaborate'} | orderBy:'user.firstName'").member {{collaborator.user.firstName | uppercase}} {{collaborator.user.lastName | uppercase}}
                   h5(column="2" am-time-ago="(list.dateOpportunitiesUpdated ? list.dateOpportunitiesUpdated : list.createdAt | amUtc | amLocal)").accent.date
                   h4(column="1").closed {{list.opportunitiesSummary.closedOpportunitiesCount | number}}
                   h4(column="1") {{list.opportunities | number}}
@@ -172,10 +174,12 @@ div.expanded-target-lists
                 div(row)
                   h4(column="4").left {{list.name}}
                   div(column="2")
-                    h5.accent.dropdown-menu-trigger.collaborators {{list.collaborators.length}} collaborators
-                      ul.dropdown-menu
-                        li.member.creator(ng-repeat="user in list.collaborators | filter: {permissionLevel: 'Author'}") {{user.user.firstName}} {{user.user.lastName}}
-                        li.member(ng-repeat="collaborator in list.collaborators| filter: {permissionLevel: 'Collaborate'} | orderBy:'user.firstName'") {{collaborator.user.firstName | uppercase}} {{collaborator.user.lastName | uppercase}}
+                    h5.accent.dropdown-menu-trigger.collaborators {{list.collaborators.length}}
+                      span(ng-if="list.collaborators.length > 1")  collaborators
+                      span(ng-if="list.collaborators.length < 2")  collaborator
+                      ul(ng-class="{'long-collaborators': list.collaborators.length > 4}").dropdown-menu
+                        li(ng-class="{'long-collaborators': list.collaborators.length > 4}").member.creator {{expanded.userService.model.currentUser.firstName}} {{expanded.userService.model.currentUser.lastName}}
+                        li(ng-class="{'long-collaborators': list.collaborators.length > 4}" ng-repeat="collaborator in list.collaborators| filter: {permissionLevel: 'Collaborate'} | orderBy:'user.firstName'").member {{collaborator.user.firstName | uppercase}} {{collaborator.user.lastName | uppercase}}
                   h5(column="2" am-time-ago="(list.dateOpportunitiesUpdated ? list.dateOpportunitiesUpdated : list.createdAt | amUtc | amLocal)").accent.date
                   h4(column="1").closed {{list.opportunitiesSummary.closedOpportunitiesCount | number}}
                   h4(column="1") {{list.opportunities | number}}
