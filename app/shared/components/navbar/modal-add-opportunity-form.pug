@@ -17,7 +17,6 @@ div.modal.add-opportunity
       p.error-message.accent.select-opportunity-error <img src="./assets/img/icons/error.svg">Please select an Opportunity Type.
     div(ng-cloak ng-show="nb.newOpportunity.properties.distributionType.type === 'other' && nb.addOpportunityForm.otherOpportunityInput.$invalid && nb.addOpportunityForm.$submitted")
       p.error-message.accent.select-opportunity-error <img src="./assets/img/icons/error.svg">Please specify at least 3 characters.
-
     div.modal-input.clearfix
       label(ng-if="nb.newOpportunity.properties.distributionType.type === 'new'") Recommended Package / SKU
       label(ng-if="nb.newOpportunity.properties.distributionType.type === 'other'") Recommended Brand or Package/ SKU
