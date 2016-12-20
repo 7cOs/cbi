@@ -137,7 +137,7 @@ v-accordion.styled-list(multiple="" id="opportunities" control="list.accordion" 
                       h3 vs YA %
                       p Monthly velocity for this account, calculated by taking the total volume over the selected time period (e.g. L90) and dividing by number of 30 day periods (3). “% vs YA” indicates the trend of velocity this year vs. same time period last year.
               div(row)
-                div(column='12') {{::opportunity.store.velocity | number:0}}<span class="percentage">{{::opportunity.store.velocityYA | number:1}}</span>%
+                div(column='12') {{::opportunity.store.velocity | number:0}}<span class="percentage">{{::(opportunity.store.velocity / opportunity.store.velocityYA - 1) * 100 | number:1}}</span>%
             div(column='2')
               label Distributor
               div(row)
