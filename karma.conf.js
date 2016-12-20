@@ -29,8 +29,8 @@ module.exports = function(config) {
     },
 
     browserify: {
-      debug: true,
-      transform: ['browserify-istanbul']
+      debug: true
+      // ,transform: ['browserify-istanbul']
     },
 
     // test results reporter to use

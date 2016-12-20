@@ -1,6 +1,6 @@
 describe('Unit: accountsController', function() {
   var scope, ctrl, $state, $q, filtersService, chipsService, userService, packageSkuData, brandSpy, brandPerformanceData, myperformanceService;
-  var topBottomSnapshotData = {
+  var topBottomSnapshotDistributorData = {
     performance: [{
         'type': 'Distributor',
         'id': '2225193',
@@ -129,9 +129,71 @@ describe('Unit: accountsController', function() {
             'planDistirbutionEffectiveTrend': -51.98800395745733
           }
         ]
-      }]
+      }, {
+          'type': 'Distributor',
+          'id': '2225538',
+          'name': 'MANHATTAN BEER DIST LLC - NY (RIDGEWOOD)',
+          'measures': [
+            {
+              'timeframe': 'MTD',
+              'depletions': 388810.5225,
+              'depletionsTrend': 4.4391700939200165,
+              'depletionsBU': null,
+              'depletionsBUTrend': null,
+              'plan': 388810.5225,
+              'planDepletionTrend': 0
+            }]
+        }
+    ]
+  };
+  var topBottomSnapshotAcctData = {
+    performance: [{
+        'type': 'Account',
+        'id': '004497',
+        'name': 'CONVENIENT FOOD MART INC/HQ',
+        'measures': []
+      }, {
+        'type': 'Account',
+        'id': '004498',
+        'name': 'CONVENIENT FOOD MART INC2/HQ',
+        'measures': []
+      }
+    ]
   };
 
+  var topBottomSnapshotSubAcctData = {
+    performance: [{
+        'type': 'SubAccount',
+        'id': '1254678',
+        'name': 'Rite Aid',
+        'measures': [
+        ]
+      }, {
+          'type': 'CVS',
+          'id': '1254679',
+          'name': 'CVS',
+          'measures': [
+            ]
+        }
+    ]
+  };
+
+  var topBottomSnapshotStoreData = {
+    performance: [{
+        'type': 'Store',
+        'id': '4225193',
+        'name': 'CVS WTC',
+        'measures': [
+        ]
+      }, {
+          'type': 'Account',
+          'id': '5225538',
+          'name': 'CVS Penn Station',
+          'measures': [
+            ]
+        }
+    ]
+  };
   var measuresArr = [
     {
       'timeframe': 'MTD',
@@ -331,9 +393,17 @@ describe('Unit: accountsController', function() {
       spyOn(userService, 'getPerformanceDistribution').and.returnValue(fakePromise);
       spyOn(userService, 'getPerformanceSummary').and.returnValue(fakePromise);
       spyOn(userService, 'getTopBottomSnapshot').and.callFake(function () {
-        var currentLevel = userService.getTopBottomSnapshot.arguments[0].name;
-        topBottomSnapshotData.performance[0].type = currentLevel;
-        return $q.when(topBottomSnapshotData);
+        var currentLevel = userService.getTopBottomSnapshot.arguments[0].value;
+        switch (currentLevel) {
+          case 1:
+            return $q.when(topBottomSnapshotDistributorData);
+          case 2:
+            return $q.when(topBottomSnapshotAcctData);
+          case 3:
+            return $q.when(topBottomSnapshotSubAcctData);
+          case 4:
+            return $q.when(topBottomSnapshotStoreData);
+        };
       });
 
       brandSpy = spyOn(userService, 'getPerformanceBrand');
@@ -1230,27 +1300,27 @@ describe('Unit: accountsController', function() {
       var val;
       // MTD
       ctrl.filtersService.model.accountSelected.accountMarkets = ctrl.filtersService.accountFilters.accountMarkets[0];
-      val = ctrl.getValueBoundForAcctType(topBottomSnapshotData.performance[0].measures[0]);
+      val = ctrl.getValueBoundForAcctType(topBottomSnapshotDistributorData.performance[0].measures[0]);
       expect(val).toEqual(375314);
 
       ctrl.filtersService.model.accountSelected.accountMarkets = ctrl.filtersService.accountFilters.accountMarkets[1];
-      val = ctrl.getValueBoundForAcctType(topBottomSnapshotData.performance[0].measures[7]);
+      val = ctrl.getValueBoundForAcctType(topBottomSnapshotDistributorData.performance[0].measures[7]);
       expect(val).toEqual(14612);
 
       ctrl.filtersService.model.accountSelected.accountMarkets = ctrl.filtersService.accountFilters.accountMarkets[2];
-      val = ctrl.getValueBoundForAcctType(topBottomSnapshotData.performance[0].measures[7]);
+      val = ctrl.getValueBoundForAcctType(topBottomSnapshotDistributorData.performance[0].measures[7]);
       expect(val).toEqual(30104);
 
       ctrl.filtersService.model.accountSelected.accountMarkets = ctrl.filtersService.accountFilters.accountMarkets[3];
-      val = ctrl.getValueBoundForAcctType(topBottomSnapshotData.performance[0].measures[7]);
+      val = ctrl.getValueBoundForAcctType(topBottomSnapshotDistributorData.performance[0].measures[7]);
       expect(val).toEqual(7190);
 
       ctrl.filtersService.model.accountSelected.accountMarkets = ctrl.filtersService.accountFilters.accountMarkets[0];
-      val = ctrl.getValueBoundForAcctType(topBottomSnapshotData.performance[0].measures[0]);
+      val = ctrl.getValueBoundForAcctType(topBottomSnapshotDistributorData.performance[0].measures[0]);
       expect(val).not.toEqual('-');
 
       ctrl.filtersService.model.accountSelected.accountMarkets = null;
-      val = ctrl.getValueBoundForAcctType(topBottomSnapshotData.performance[0].measures[0]);
+      val = ctrl.getValueBoundForAcctType(topBottomSnapshotDistributorData.performance[0].measures[0]);
       expect(val).toEqual('-');
     });
   });
@@ -1359,28 +1429,28 @@ describe('Unit: accountsController', function() {
   describe('Navigate top bottom levels', function() {
     it('should go to accounts level on selecting distributors', function() {
       ctrl.currentTopBottomAcctType = ctrl.filtersService.accountFilters.accountTypes[0];
-      ctrl.navigateTopBottomLevels(topBottomSnapshotData.performance[0]);
+      ctrl.navigateTopBottomLevels(topBottomSnapshotDistributorData.performance[0]);
       expect(ctrl.currentTopBottomAcctType).toEqual(ctrl.filtersService.accountFilters.accountTypes[1]);
       expect(ctrl.currentTopBottomObj.currentLevelName).toEqual('accounts');
     });
 
     it('should go to sub accounts level on selecting accounts', function() {
       ctrl.currentTopBottomAcctType = ctrl.filtersService.accountFilters.accountTypes[1];
-      ctrl.navigateTopBottomLevels(topBottomSnapshotData.performance[0]);
+      ctrl.navigateTopBottomLevels(topBottomSnapshotDistributorData.performance[0]);
       expect(ctrl.currentTopBottomAcctType).toEqual(ctrl.filtersService.accountFilters.accountTypes[2]);
       expect(ctrl.currentTopBottomObj.currentLevelName).toEqual('subaccounts');
     });
 
     it('should go to stores level on selecting sub accounts', function() {
       ctrl.currentTopBottomAcctType = ctrl.filtersService.accountFilters.accountTypes[2];
-      ctrl.navigateTopBottomLevels(topBottomSnapshotData.performance[0]);
+      ctrl.navigateTopBottomLevels(topBottomSnapshotDistributorData.performance[0]);
       expect(ctrl.currentTopBottomAcctType).toEqual(ctrl.filtersService.accountFilters.accountTypes[3]);
       expect(ctrl.currentTopBottomObj.currentLevelName).toEqual('stores');
     });
 
     it('should stay at stores level on selecting stores', function() {
       ctrl.currentTopBottomAcctType = ctrl.filtersService.accountFilters.accountTypes[3];
-      ctrl.navigateTopBottomLevels(topBottomSnapshotData.performance[0]);
+      ctrl.navigateTopBottomLevels(topBottomSnapshotDistributorData.performance[0]);
       expect(ctrl.currentTopBottomAcctType).toEqual(ctrl.filtersService.accountFilters.accountTypes[3]);
       expect(ctrl.currentTopBottomObj.currentLevelName).toEqual('stores');
     });
@@ -1393,17 +1463,31 @@ describe('Unit: accountsController', function() {
     });
 
     it('should stay at the same level if id of the selected item is missing or null', function() {
-      var tempVal = topBottomSnapshotData.performance[0].id;
+      var tempVal = topBottomSnapshotDistributorData.performance[0].id;
       ctrl.currentTopBottomAcctType = ctrl.filtersService.accountFilters.accountTypes[0];
-      topBottomSnapshotData.performance[0].id = 'id missing';
-      ctrl.navigateTopBottomLevels(topBottomSnapshotData.performance[0]);
+      topBottomSnapshotDistributorData.performance[0].id = 'id missing';
+      ctrl.navigateTopBottomLevels(topBottomSnapshotDistributorData.performance[0]);
       expect(ctrl.currentTopBottomAcctType).toEqual(ctrl.filtersService.accountFilters.accountTypes[0]);
       expect(ctrl.currentTopBottomObj.currentLevelName).toEqual('distributors');
 
-      topBottomSnapshotData.performance[0].id = null;
-      ctrl.navigateTopBottomLevels(topBottomSnapshotData.performance[0]);
+      topBottomSnapshotDistributorData.performance[0].id = null;
+      ctrl.navigateTopBottomLevels(topBottomSnapshotDistributorData.performance[0]);
       expect(ctrl.currentTopBottomAcctType).toEqual(ctrl.filtersService.accountFilters.accountTypes[0]);
-      topBottomSnapshotData.performance[0] = tempVal;
+      topBottomSnapshotDistributorData.performance[0] = tempVal;
+    });
+
+    fit('should update top bottom filter model object', function() {
+      ctrl.currentTopBottomAcctType = ctrl.filtersService.accountFilters.accountTypes[0];
+      ctrl.navigateTopBottomLevels(topBottomSnapshotDistributorData.performance[0]);
+      expect(ctrl.currentTopBottomFilters.distributors.id).toEqual(topBottomSnapshotDistributorData.performance[0].id);
+      expect(ctrl.currentTopBottomFilters.distributors.name).toEqual(topBottomSnapshotDistributorData.performance[0].name);
+
+      ctrl.currentTopBottomAcctType = ctrl.filtersService.accountFilters.accountTypes[1];
+      ctrl.navigateTopBottomLevels(topBottomSnapshotAcctData.performance[0]);
+      expect(ctrl.currentTopBottomFilters.distributors.id).toEqual(topBottomSnapshotDistributorData.performance[0].id);
+      expect(ctrl.currentTopBottomFilters.distributors.name).toEqual(topBottomSnapshotDistributorData.performance[0].name);
+      expect(ctrl.currentTopBottomFilters.accounts.id).toEqual(topBottomSnapshotAcctData.performance[0].id);
+      expect(ctrl.currentTopBottomFilters.accounts.name).toEqual(topBottomSnapshotAcctData.performance[0].name);
     });
   });
 });
