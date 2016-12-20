@@ -696,6 +696,7 @@ module.exports = /*  @ngInject */
 
         if (service.model.targetLists.ownedNotArchivedTargetLists) {
           service.model.targetLists.ownedNotArchivedTargetLists.unshift(response.data);
+          service.model.targetLists.owned.unshift(response.data);
         } else  {
           service.model.targetLists.owned.unshift(response.data);
         }
