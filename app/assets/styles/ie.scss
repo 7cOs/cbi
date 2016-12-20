@@ -25,6 +25,12 @@
     position: inherit !important;
     top: inherit !important;
     width: inherit !important;
+
+    &.md-dialog-is-showing {
+      position: fixed !important;
+      top: 0 !important;
+      width: 100% !important;
+    }
   }
 
   // Placeholder font
