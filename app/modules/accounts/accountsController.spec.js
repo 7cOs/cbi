@@ -1359,8 +1359,51 @@ describe('Unit: accountsController', function() {
   describe('Navigate top bottom levels', function() {
     it('should go to accounts level on selecting distributors', function() {
       ctrl.currentTopBottomAcctType = ctrl.filtersService.accountFilters.accountTypes[0];
-      ctrl.navigateTopBottomLevels();
+      ctrl.navigateTopBottomLevels(topBottomSnapshotData.performance[0]);
       expect(ctrl.currentTopBottomAcctType).toEqual(ctrl.filtersService.accountFilters.accountTypes[1]);
+      expect(ctrl.currentTopBottomObj.currentLevelName).toEqual('accounts');
+    });
+
+    it('should go to sub accounts level on selecting accounts', function() {
+      ctrl.currentTopBottomAcctType = ctrl.filtersService.accountFilters.accountTypes[1];
+      ctrl.navigateTopBottomLevels(topBottomSnapshotData.performance[0]);
+      expect(ctrl.currentTopBottomAcctType).toEqual(ctrl.filtersService.accountFilters.accountTypes[2]);
+      expect(ctrl.currentTopBottomObj.currentLevelName).toEqual('subaccounts');
+    });
+
+    it('should go to stores level on selecting sub accounts', function() {
+      ctrl.currentTopBottomAcctType = ctrl.filtersService.accountFilters.accountTypes[2];
+      ctrl.navigateTopBottomLevels(topBottomSnapshotData.performance[0]);
+      expect(ctrl.currentTopBottomAcctType).toEqual(ctrl.filtersService.accountFilters.accountTypes[3]);
+      expect(ctrl.currentTopBottomObj.currentLevelName).toEqual('stores');
+    });
+
+    it('should stay at stores level on selecting stores', function() {
+      ctrl.currentTopBottomAcctType = ctrl.filtersService.accountFilters.accountTypes[3];
+      ctrl.navigateTopBottomLevels(topBottomSnapshotData.performance[0]);
+      expect(ctrl.currentTopBottomAcctType).toEqual(ctrl.filtersService.accountFilters.accountTypes[3]);
+      expect(ctrl.currentTopBottomObj.currentLevelName).toEqual('stores');
+    });
+
+    it('should stay at the same level if no performace data is passed', function() {
+      ctrl.currentTopBottomAcctType = ctrl.filtersService.accountFilters.accountTypes[0];
+      ctrl.navigateTopBottomLevels(null);
+      expect(ctrl.currentTopBottomAcctType).toEqual(ctrl.filtersService.accountFilters.accountTypes[0]);
+      expect(ctrl.currentTopBottomObj.currentLevelName).toEqual('distributors');
+    });
+
+    it('should stay at the same level if id of the selected item is missing or null', function() {
+      var tempVal = topBottomSnapshotData.performance[0].id;
+      ctrl.currentTopBottomAcctType = ctrl.filtersService.accountFilters.accountTypes[0];
+      topBottomSnapshotData.performance[0].id = 'id missing';
+      ctrl.navigateTopBottomLevels(topBottomSnapshotData.performance[0]);
+      expect(ctrl.currentTopBottomAcctType).toEqual(ctrl.filtersService.accountFilters.accountTypes[0]);
+      expect(ctrl.currentTopBottomObj.currentLevelName).toEqual('distributors');
+
+      topBottomSnapshotData.performance[0].id = null;
+      ctrl.navigateTopBottomLevels(topBottomSnapshotData.performance[0]);
+      expect(ctrl.currentTopBottomAcctType).toEqual(ctrl.filtersService.accountFilters.accountTypes[0]);
+      topBottomSnapshotData.performance[0] = tempVal;
     });
   });
 });

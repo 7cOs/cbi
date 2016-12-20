@@ -451,7 +451,7 @@ module.exports = /*  @ngInject */
     }
 
     function checkForInconsistentIds(performanceData) {
-      if (performanceData.id && performanceData.id.toLowerCase() === 'id missing') {
+      if (!performanceData.id || performanceData.id.toLowerCase() === 'id missing') {
         return true;
       } else {
         return false;

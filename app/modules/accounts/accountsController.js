@@ -1002,17 +1002,16 @@ module.exports = /*  @ngInject */
     //   updateTopBottom();
     // }
 
-    function populateFieldsForFilterSelection(currentLevelName, data) {
+    function setTopBottomFilterModel(currentLevelName, data) {
       vm.currentTopBottomFilters[currentLevelName] = {
         id: data.id,
         name: data.name
       };
+      // The term 'vm.filtersService.model.account' needs to be refactored. This variable for is used to hold the text for all types except distributor
       if (currentLevelName === 'distributors') {
         vm.filtersService.model.distributor = data.name;
-        vm.showXDistributor = true;
       } else {
         vm.filtersService.model.account = data.name;
-        vm.showXChain = true;
       }
     }
 
@@ -1029,25 +1028,30 @@ module.exports = /*  @ngInject */
      */
     function navigateTopBottomLevels(performanceData) {
       // console.log('Perf data', performanceData);
-      var currentLevelName = getCurrentTopBottomObject(vm.currentTopBottomAcctType).currentLevelName;
-      var getNextLevel = currentLevelName !== 'stores';
-      if (myperformanceService.checkForInconsistentIds(performanceData)) {
-        return;
-      }
-      // Updates the top bottom filter object with the selection
-      populateFieldsForFilterSelection(currentLevelName, performanceData);
-      // Make sure all the filters are set correctly and reflect the object in top botom filter
-      setUpdatedFilters();
-      // Update the breadcrumb on the top with the current filters
-      handleBreadcrumbs(currentLevelName, performanceData);
-      if (getNextLevel) {
-        myperformanceService.resetFiltersForLevelsAboveCurrent(vm.currentTopBottomAcctType, vm.currentTopBottomFilters, vm.topBottomData);
-        // Get the top bottom level next to the current level.
-        vm.currentTopBottomAcctType = myperformanceService.getAcctTypeObjectBasedOnTabIndex(vm.currentTopBottomAcctType.value, getNextLevel);
-        vm.currentTopBottomObj = getCurrentTopBottomObject(vm.currentTopBottomAcctType);
-        var categoryBound = vm.filtersService.model.accountSelected.accountMarkets;
-        getDataForTopBottom(vm.currentTopBottomObj, categoryBound);
-        // updateBrandSnapshot();
+      if (performanceData) {
+        var currentLevelName = getCurrentTopBottomObject(vm.currentTopBottomAcctType).currentLevelName;
+        var getNextLevel = currentLevelName !== 'stores';
+        if (myperformanceService.checkForInconsistentIds(performanceData)) {
+          return;
+        }
+        // Updates the top bottom filter object with the selection
+        setTopBottomFilterModel(currentLevelName, performanceData);
+        // Make sure all the models in filtersService are set correctly and reflect the object in top botom filter
+        setUpdatedFilters();
+        // Set the chain dropdown and appropriate placeholder text
+        setChainDropdownAndPlaceHolder(currentLevelName, performanceData);
+        if (getNextLevel) {
+          myperformanceService.resetFiltersForLevelsAboveCurrent(vm.currentTopBottomAcctType, vm.currentTopBottomFilters, vm.topBottomData);
+          // Get the top bottom level next to the current level.
+          vm.currentTopBottomAcctType = myperformanceService.getAcctTypeObjectBasedOnTabIndex(vm.currentTopBottomAcctType.value, getNextLevel);
+          vm.currentTopBottomObj = getCurrentTopBottomObject(vm.currentTopBottomAcctType);
+          var categoryBound = vm.filtersService.model.accountSelected.accountMarkets;
+          getDataForTopBottom(vm.currentTopBottomObj, categoryBound);
+          // updateBrandSnapshot();
+        } else {
+          // Just setting current top bottom object to store
+          vm.currentTopBottomObj = getCurrentTopBottomObject(vm.currentTopBottomAcctType);
+        }
       }
     }
 
@@ -1065,8 +1069,7 @@ module.exports = /*  @ngInject */
       }
     }
 
-    function handleBreadcrumbs(currentLevelName, performanceData) {
-      // Need  to update breacrumbs and add filters
+    function setChainDropdownAndPlaceHolder(currentLevelName, performanceData) {
       if (currentLevelName === 'stores') {
         // Set it to Store
         vm.filtersService.model.selected.retailer = 'Store';
