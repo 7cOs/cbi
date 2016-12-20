@@ -363,7 +363,6 @@ module.exports = /*  @ngInject */
             if (data[i].sharedWithMe[j].archived) {
               combinedTargetList.sharedArchivedCount++;
               combinedTargetList.archived.push(data[i].sharedWithMe[j]);
-
             } else {
               combinedTargetList.sharedNotArchivedCount++;
             }
