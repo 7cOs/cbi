@@ -757,7 +757,7 @@ module.exports = /*  @ngInject */
           break;
         case accountTypes.subAccounts:
           currentObj = vm.topBottomData.subAccounts;
-          currentObj.currentLevelName = 'subaccounts';
+          currentObj.currentLevelName = 'subAccounts';
           vm.isStoreLevel = false;
           break;
         case accountTypes.stores:
@@ -1002,6 +1002,11 @@ module.exports = /*  @ngInject */
     //   updateTopBottom();
     // }
 
+    /**
+     * Updates vm.currentTopBottomFilters object
+     * @param {Object} currentLevelName The level to be updated.. Can be ditrstibutors, acct etc
+     * @param {Object} data The filter selected. It's of the format {id:xxx, name: 'sdfsdf'}
+     */
     function setTopBottomFilterModel(currentLevelName, data) {
       vm.currentTopBottomFilters[currentLevelName] = {
         id: data.id,
@@ -1015,6 +1020,9 @@ module.exports = /*  @ngInject */
       }
     }
 
+    /**
+     * On clicking a store in top bottom, it highlights the store
+     */
     function isHighlightStore(storeDetails) {
       if (storeDetails && storeDetails.id && vm.isStoreLevel && currentStore) {
         return storeDetails.id === currentStore.id;
