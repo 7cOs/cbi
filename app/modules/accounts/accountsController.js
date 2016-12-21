@@ -451,7 +451,6 @@ module.exports = /*  @ngInject */
 
     function setFilter(result, filterModelProperty) {
       filtersService.model.selected[filterModelProperty] = [result.id];
-      console.log(filterModelProperty);
 
       // model uses .distributor but this uses .distributors
       var topBottomProp = '';
