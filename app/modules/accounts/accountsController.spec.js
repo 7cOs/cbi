@@ -1423,13 +1423,13 @@ describe('Unit: accountsController', function() {
 
     it('should reset filter flags when distirbution options are changed', function() {
       var newVal = filtersService.model.distributionTimePeriod.month[0];
-      ctrl.depletionOptionChanged(newVal);
+      ctrl.distOptionChanged(newVal);
       expect(resetFilterFlagsSpy.calls.count()).toEqual(1);
     });
   });
 
   describe('Navigate top bottom levels', function() {
-    var distributorData, acctData, subAcctData, storeData;
+    var distributorData, acctData, subAcctData, storeData, anotherStoreData;
     beforeEach(function() {
       ctrl.currentTopBottomAcctType = ctrl.filtersService.accountFilters.accountTypes[0];
       ctrl.resetFilters();
@@ -1437,6 +1437,7 @@ describe('Unit: accountsController', function() {
       acctData = angular.copy(topBottomSnapshotAcctData.performance[0]);
       subAcctData = angular.copy(topBottomSnapshotSubAcctData.performance[0]);
       storeData = angular.copy(topBottomSnapshotStoreData.performance[0]);
+      anotherStoreData = angular.copy(topBottomSnapshotStoreData.performance[1]);
     });
 
     it('should go to accounts level on selecting distributors', function() {
@@ -1549,5 +1550,22 @@ describe('Unit: accountsController', function() {
       expect(ctrl.currentTopBottomAcctType).toEqual(ctrl.filtersService.accountFilters.accountTypes[2]);
       expect(ctrl.currentTopBottomAcctType).not.toEqual(ctrl.filtersService.accountFilters.accountTypes[1]);
     });
+
+    it('should highlight store on store click', function() {
+      ctrl.currentTopBottomAcctType = ctrl.filtersService.accountFilters.accountTypes[0];
+      ctrl.navigateTopBottomLevels(distributorData);
+      ctrl.currentTopBottomAcctType = ctrl.filtersService.accountFilters.accountTypes[1];
+      ctrl.navigateTopBottomLevels(acctData);
+      ctrl.currentTopBottomAcctType = ctrl.filtersService.accountFilters.accountTypes[2];
+      ctrl.navigateTopBottomLevels(subAcctData);
+      ctrl.currentTopBottomAcctType = ctrl.filtersService.accountFilters.accountTypes[3];
+      ctrl.navigateTopBottomLevels(storeData);
+      ctrl.navigateTopBottomLevels(anotherStoreData);
+      var isHighligted = ctrl.isHighlightStore(anotherStoreData);
+      expect(isHighligted).toBeTruthy();
+      isHighligted = ctrl.isHighlightStore(storeData);
+      expect(isHighligted).toBeFalsy();
+    });
+
   });
 });
