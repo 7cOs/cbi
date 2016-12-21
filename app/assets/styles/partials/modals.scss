@@ -455,6 +455,16 @@ md-dialog {
     }
   }
 
+  &.edit-report {
+    .error-message {
+      margin-top: -20px;
+    }
+
+    button {
+      margin-top: 20px;
+    }
+  }
+
   &.create-target-list,
   &.share-opportunity {
     .collaborator-list {
