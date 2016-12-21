@@ -28,7 +28,7 @@ module.exports = /*  @ngInject */
      * @returns {Object}
      * @memberOf cf.common.services
      */
-    function getOpportunities(opportunityID) {
+    function getOpportunities(opportunityID, dontResetList) {
       service.model.noOpportunitiesFound = false;
       if (!opportunityID) {
         // get applied filters
@@ -39,7 +39,10 @@ module.exports = /*  @ngInject */
       var opportunitiesPromise = $q.defer(),
           url = opportunityID ? apiHelperService.request('/api/opportunities/' + opportunityID) : apiHelperService.request('/api/opportunities/', filterPayload);
 
-      service.model.opportunities = [];
+      if (!dontResetList) {
+        service.model.opportunities = [];
+      }
+
       $http.get(url)
         .then(getOpportunitiesSuccess)
         .catch(getOpportunitiesFail);
