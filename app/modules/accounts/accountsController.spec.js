@@ -1,5 +1,5 @@
 describe('Unit: accountsController', function() {
-  var scope, ctrl, $state, $q, filtersService, chipsService, userService, packageSkuData, brandSpy, brandPerformanceData, myperformanceService;
+  var scope, ctrl, $state, $q, filtersService, chipsService, userService, packageSkuData, brandSpy, brandPerformanceData, myperformanceService, topBottomSpy;
   var topBottomSnapshotDistributorData = {
     performance: [{
         'type': 'Distributor',
@@ -392,7 +392,7 @@ describe('Unit: accountsController', function() {
       spyOn(userService, 'getPerformanceDepletion').and.returnValue(fakePromise);
       spyOn(userService, 'getPerformanceDistribution').and.returnValue(fakePromise);
       spyOn(userService, 'getPerformanceSummary').and.returnValue(fakePromise);
-      spyOn(userService, 'getTopBottomSnapshot').and.callFake(function () {
+      topBottomSpy = spyOn(userService, 'getTopBottomSnapshot').and.callFake(function () {
         var currentLevel = userService.getTopBottomSnapshot.arguments[0].value;
         switch (currentLevel) {
           case 1:
@@ -1373,6 +1373,19 @@ describe('Unit: accountsController', function() {
         value: 4
       });
       expect(ctrl.currentBoundTopBottomIndexes).toEqual(ctrl.currentTopBottomObj.topBottomIndices.bottomTrends);
+    });
+  });
+
+  describe('Should set correct params and get data from store api', function() {
+    beforeEach(function() {
+      ctrl.resetFilters();
+      topBottomSpy.calls.reset();
+      ctrl.setTopBottomAcctTypeSelection(ctrl.filtersService.accountFilters.accountTypes[3]);
+    });
+
+    it('should have called store endpoint 4 times', function() {
+      // One each for top 10(Values/Trends),bottom 10(Values/Trends)
+      expect(topBottomSpy.calls.count()).toEqual(4);
     });
   });
 
