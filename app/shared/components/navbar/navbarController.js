@@ -215,7 +215,7 @@ module.exports = /*  @ngInject */
     }
 
     function getDismissedOpportunity(oppID) {
-      opportunitiesService.getOpportunities(oppID)
+      opportunitiesService.getOpportunities(oppID, true)
       .then(function(response) {
         var isoDate = new Date(response[0].dateUpdated).toISOString();
         vm.dateUpdated = moment(isoDate).format('M/D/YYYY');
