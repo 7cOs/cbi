@@ -1383,9 +1383,38 @@ describe('Unit: accountsController', function() {
       ctrl.setTopBottomAcctTypeSelection(ctrl.filtersService.accountFilters.accountTypes[3]);
     });
 
-    it('should have called store endpoint 4 times', function() {
+    it('should have called store endpoint 4 times when acct type is changed', function() {
       // One each for top 10(Values/Trends),bottom 10(Values/Trends)
       expect(topBottomSpy.calls.count()).toEqual(4);
+    });
+
+    it('should have called store endpoint 4 times when account market option is changed', function() {
+      // One each for top 10(Values/Trends),bottom 10(Values/Trends)
+      topBottomSpy.calls.reset();
+      var newVal = filtersService.accountFilters.accountMarkets[1];
+      ctrl.acctMarketChanged(newVal);
+      expect(topBottomSpy.calls.count()).toEqual(4);
+
+      topBottomSpy.calls.reset();
+      newVal = filtersService.accountFilters.accountMarkets[2];
+      ctrl.acctMarketChanged(newVal);
+      expect(topBottomSpy.calls.count()).toEqual(4);
+
+      topBottomSpy.calls.reset();
+      newVal = filtersService.accountFilters.accountMarkets[3];
+      ctrl.acctMarketChanged(newVal);
+      expect(topBottomSpy.calls.count()).toEqual(4);
+
+      topBottomSpy.calls.reset();
+      newVal = filtersService.accountFilters.accountMarkets[0];
+      ctrl.acctMarketChanged(newVal);
+      expect(topBottomSpy.calls.count()).toEqual(4);
+
+      // No calls made when option is not changed
+      topBottomSpy.calls.reset();
+      newVal = filtersService.accountFilters.accountMarkets[0];
+      ctrl.acctMarketChanged(newVal);
+      expect(topBottomSpy.calls.count()).toEqual(0);
     });
   });
 
@@ -1398,32 +1427,40 @@ describe('Unit: accountsController', function() {
       ctrl.resetFilters();
     });
 
-    it('should reset filter flags when account market options are changed', function() {
+    it('should reset filter flags when account market options are changed to distirbution simple', function() {
       var newVal = filtersService.accountFilters.accountMarkets[1];
       ctrl.acctMarketChanged(newVal);
       expect(resetFilterFlagsSpy.calls.count()).toEqual(1);
     });
 
-    it('should reset filter flags when account market options are changed', function() {
-      var newVal = filtersService.accountFilters.accountMarkets[1];
+    it('should reset filter flags when account market options are changed to distirbution effective', function() {
+      var newVal = filtersService.accountFilters.accountMarkets[2];
       ctrl.acctMarketChanged(newVal);
       expect(resetFilterFlagsSpy.calls.count()).toEqual(1);
     });
 
-    it('should reset filter flags when account market options are changed', function() {
-      var newVal = filtersService.accountFilters.accountMarkets[1];
+    it('should not reset filter flags when account market options are not changed', function() {
+      var newVal = filtersService.accountFilters.accountMarkets[2];
       ctrl.acctMarketChanged(newVal);
       expect(resetFilterFlagsSpy.calls.count()).toEqual(1);
+      resetFilterFlagsSpy.calls.reset();
+      newVal = filtersService.accountFilters.accountMarkets[2];
+      ctrl.acctMarketChanged(newVal);
+      expect(resetFilterFlagsSpy.calls.count()).toEqual(0);
     });
 
-    it('should reset filter flags when account market options are changed', function() {
-      var newVal = filtersService.accountFilters.accountMarkets[1];
+    it('should reset filter flags when account market options are changed  to velocity', function() {
+      var newVal = filtersService.accountFilters.accountMarkets[3];
       ctrl.acctMarketChanged(newVal);
       expect(resetFilterFlagsSpy.calls.count()).toEqual(1);
     });
 
     it('should reset filter flags when trendOptions options are changed', function() {
       var newVal = filtersService.model.trend[0];
+      ctrl.trendOptionChanged(newVal);
+      expect(resetFilterFlagsSpy.calls.count()).toEqual(0);
+
+      newVal = filtersService.model.trend[1];
       ctrl.trendOptionChanged(newVal);
       expect(resetFilterFlagsSpy.calls.count()).toEqual(1);
     });
