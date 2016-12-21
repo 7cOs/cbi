@@ -195,7 +195,7 @@ module.exports = /*  @ngInject */
       }
 
       var categoryBound = vm.filtersService.model.accountSelected.accountMarkets;
-      console.log(vm.currentTopBottomFilters, categoryBound);
+
       // change tab index
       if (vm.currentTopBottomFilters.stores && vm.currentTopBottomFilters.stores.id) {
         vm.currentTopBottomAcctType = vm.filtersService.accountFilters.accountTypes[3];
@@ -207,7 +207,7 @@ module.exports = /*  @ngInject */
       } else if (vm.currentTopBottomFilters.distributors && vm.currentTopBottomFilters.distributors.id) {
         vm.currentTopBottomAcctType = vm.filtersService.accountFilters.accountTypes[1];
       }
-      console.log(vm.currentTopBottomAcctType);
+
       setUpdatedFilters();
       vm.currentTopBottomObj = getCurrentTopBottomObject(vm.currentTopBottomAcctType);
       // update data
