@@ -31,6 +31,7 @@ module.exports = /*  @ngInject */
     vm.closeEditModal = closeEditModal;
     vm.closeModal = closeModal;
     vm.deleteSavedFilter = deleteSavedFilter;
+    vm.duplicateNameCheck = duplicateNameCheck;
     vm.editFilterModal = editFilterModal;
     vm.placeholderSelect = placeholderSelect;
     vm.editReportName = editReportName;
@@ -106,6 +107,7 @@ module.exports = /*  @ngInject */
     function editFilterModal(filterId, ev) {
       var parentEl = angular.element(document.body);
       vm.currentFilter = $filter('filter')(userService.model.opportunityFilters, {id: filterId});
+      vm.duplicateName = false;
 
       $mdDialog.show({
         clickOutsideToClose: false,
@@ -129,6 +131,23 @@ module.exports = /*  @ngInject */
 
     function placeholderSelect(data) {
       vm.hintTextPlaceholder = data;
+    }
+
+    function duplicateNameCheck() {
+      vm.duplicateName = false;
+      var keepGoing = true;
+
+      angular.forEach(userService.model.opportunityFilters, function(value, key) {
+        if (keepGoing) {
+          if (vm.editedFilterName === value.name) {
+            keepGoing = false;
+            vm.duplicateName = true;
+            return;
+          }
+        }
+      });
+
+      if (!vm.duplicateName) vm.editReportName();
     }
 
     function editReportName() {

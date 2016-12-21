@@ -12,6 +12,7 @@ module.exports = /*  @ngInject */
 
     // Initial variables
     var vm = this;
+    vm.duplicateName = false;
     vm.opportunities = true;
     vm.hintTextPlaceholder = 'Account or Subaccount Name';
     vm.showSaveButton = true;
@@ -102,7 +103,9 @@ module.exports = /*  @ngInject */
     }
 
     function modalSaveOpportunityFilter(ev) {
+      console.log(userService.model.opportunityFilters);
       filtersService.model.newServiceName = '';
+      vm.duplicateName = false;
       var parentEl = angular.element(document.body);
       $mdDialog.show({
         clickOutsideToClose: false,
@@ -198,6 +201,7 @@ module.exports = /*  @ngInject */
     }
 
     function saveFilter() {
+      vm.duplicateName = false;
       loaderService.openLoader(true);
       var chipsDescription = getDescriptionForFilter(chipsService.model, filtersService.model);
       vm.tempId++;
@@ -219,6 +223,7 @@ module.exports = /*  @ngInject */
         // close modal
         closeModal();
       }, function(err) {
+        if (err.data[0].description === 'F101') vm.duplicateName = true;
         console.warn(err);
         loaderService.closeLoader();
       });
