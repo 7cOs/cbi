@@ -202,6 +202,46 @@ module.exports = function (config) {
         'email': null,
         'srcTypeCd': []
       } */
+      /* 'personId': 5699,
+      'employeeID': '1009707',
+      'firstName': 'ERIC',
+      'lastName': 'RAMEY',
+      'email': 'ERIC.RAMEY@CBRANDS.COM',
+      'srcTypeCd': [
+        'OFF_HIER'
+      ],
+      'groupingCode': null,
+      'corporateUser': true,
+      'userGroup': [
+        'cbi employees',
+        'cbi users',
+        'ug-cbigdc-biz-role-mktdevmgr',
+        'cbi-adenabledaccounts'
+      ],
+      'issuer': 'https://orion.cbrands.com',
+      'jwt': 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJsYXN0TmFtZSI6IlJBTUVZIiwiaXNzIjoiaHR0cHM6Ly9vcmlvbi5jYnJhbmRzLmNvbSIsImVtcGxveWVlSUQiOiIxMDA5NzA3IiwiZmlyc3ROYW1lIjoiRVJJQyIsImdyb3VwaW5nQ29kZSI6bnVsbCwiY29ycG9yYXRlVXNlciI6dHJ1ZSwicGVyc29uSUQiOjU2OTksImV4cCI6MTQ4NzQ2MDgzNjc0OSwiaWF0IjoxNDgyMjc2ODM2NzQ5LCJ1c2VyR3JvdXAiOlsiY2JpIGVtcGxveWVlcyIsImNiaSB1c2VycyIsInVnLWNiaWdkYy1iaXotcm9sZS1ta3RkZXZtZ3IiLCJjYmktYWRlbmFibGVkYWNjb3VudHMiXSwiZW1haWwiOiJFUklDLlJBTUVZQENCUkFORFMuQ09NIiwic3JjVHlwZUNkIjpbIk9GRl9ISUVSIl19.5ZJwRmbQ86jxWOc0WXwN4448tb2gv-Yl1bZurkE64-k',
+      'jwtmap': {
+        'firstName': 'ERIC',
+        'lastName': 'RAMEY',
+        'groupingCode': null,
+        'corporateUser': true,
+        'iss': 'https://orion.cbrands.com',
+        'personID': 5699,
+        'employeeID': '1009707',
+        'exp': 1487460836749,
+        'iat': 1482276836750,
+        'userGroup': [
+          'cbi employees',
+          'cbi users',
+          'ug-cbigdc-biz-role-mktdevmgr',
+          'cbi-adenabledaccounts'
+        ],
+        'email': 'ERIC.RAMEY@CBRANDS.COM',
+        'srcTypeCd': [
+          'OFF_HIER'
+        ]
+      },
+      'issuedAt': 1482276836750 */
     }
   };
 

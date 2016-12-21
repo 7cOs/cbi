@@ -451,6 +451,7 @@ module.exports = /*  @ngInject */
 
     function setFilter(result, filterModelProperty) {
       filtersService.model.selected[filterModelProperty] = [result.id];
+      console.log(filterModelProperty);
 
       // model uses .distributor but this uses .distributors
       var topBottomProp = '';
@@ -478,7 +479,7 @@ module.exports = /*  @ngInject */
         filtersService.model.account = '';
         chipsService.removeChip('chain');
         vm.showXStore = true;
-      } else if (filterModelProperty === 'chain') {
+      } else if (filterModelProperty === 'account') {
         filtersService.model.selected.store = [];
         filtersService.model.store = '';
         chipsService.removeChip('store');
@@ -1101,9 +1102,9 @@ module.exports = /*  @ngInject */
       if (vm.currentTopBottomFilters.stores) {
         setFilter(vm.currentTopBottomFilters.stores, 'store');
       } else if (vm.currentTopBottomFilters.subAccounts) {
-        setFilter(vm.currentTopBottomFilters.subAccounts, 'chain');
+        setFilter(vm.currentTopBottomFilters.subAccounts, 'subaccount');
       } else if (vm.currentTopBottomFilters.accounts) {
-        setFilter(vm.currentTopBottomFilters.accounts, 'chain');
+        setFilter(vm.currentTopBottomFilters.accounts, 'account');
       }
     }
 

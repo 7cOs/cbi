@@ -24,7 +24,6 @@ module.exports = /*  @ngInject */
       getPerformanceDepletion: getPerformanceDepletion,
       getPerformanceDistribution: getPerformanceDistribution,
       getPerformanceBrand: getPerformanceBrand,
-      getTopBottom: getTopBottom,
       getTargetLists: getTargetLists,
       addTargetList: addTargetList,
       sendOpportunity: sendOpportunity,
@@ -495,7 +494,7 @@ module.exports = /*  @ngInject */
 
       function getTopBottomSnapshotSuccess(response) {
         calculateTrendValuesForPlan(response.data.performance);
-        // console.log('top Bottom Data', response.data.performance);
+        console.log('top Bottom Data', response.data.performance);
         snapshotPromise.resolve(response.data);
       }
 
@@ -529,56 +528,6 @@ module.exports = /*  @ngInject */
 
       function getPerformanceBrandFail(error) {
         performancePromise.reject(error);
-      }
-
-      return performancePromise.promise;
-    }
-
-    /**
-     * @name getTopBottom
-     * @desc get performance top bottom snapshot for a user
-     * @params {String} id - id of a user
-     * @returns {Object} - user performance top bottom snapshot
-     * @memberOf cf.common.services
-     */
-    function getTopBottom(route) {
-      var performancePromise = $q.defer(),
-          url = apiHelperService.request('/api/users/' + service.model.currentUser.employeeID + '/performance/topBottomSnapshot/' + route);
-
-      $http.get(url)
-        .then(getTopBottomSuccess)
-        .catch(getTopBottomFail);
-
-      function getTopBottomSuccess(response) {
-        var responseData = addDisplayProperties(response.data);
-        performancePromise.resolve(responseData);
-      }
-
-      function getTopBottomFail(error) {
-        performancePromise.reject(error);
-      }
-
-      function addDisplayProperties(data) {
-        for (var i = 0; i < data.length; i++) {
-          var depletions = 0,
-              distributionsSimple = 0,
-              distributionsEffective = 0,
-              velocity = 0;
-
-          for (var j = 0; j < data[i].measures.length; j++) {
-            if (data[i].measures[j].depletions) depletions += data[i].measures[j].depletions;
-            if (data[i].measures[j].distributionsSimple) distributionsSimple += data[i].measures[j].distributionsSimple;
-            if (data[i].measures[j].distributionsEffective) distributionsEffective += data[i].measures[j].distributionsEffective;
-            if (data[i].measures[j].velocity) velocity += data[i].measures[j].velocity;
-          }
-
-          data[i].depletions = depletions;
-          data[i].distributionsSimple = distributionsSimple;
-          data[i].distributionsEffective = distributionsEffective;
-          data[i].velocity = velocity;
-        }
-
-        return data;
       }
 
       return performancePromise.promise;
