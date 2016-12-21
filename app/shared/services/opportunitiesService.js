@@ -124,7 +124,9 @@ module.exports = /*  @ngInject */
         }; // end for each
 
         // set data for pagination
-        service.model.opportunities = newOpportunityArr;
+        if (!dontResetList) {
+          service.model.opportunities = newOpportunityArr;
+        }
 
         opportunitiesPromise.resolve(newOpportunityArr);
       }
