@@ -103,7 +103,6 @@ module.exports = /*  @ngInject */
     }
 
     function modalSaveOpportunityFilter(ev) {
-      console.log(userService.model.opportunityFilters);
       filtersService.model.newServiceName = '';
       vm.duplicateName = false;
       var parentEl = angular.element(document.body);
