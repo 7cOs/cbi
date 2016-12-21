@@ -207,6 +207,7 @@ module.exports = /*  @ngInject */
       } else if (vm.currentTopBottomFilters.distributors && vm.currentTopBottomFilters.distributors.id) {
         vm.currentTopBottomAcctType = vm.filtersService.accountFilters.accountTypes[1];
       }
+
       setUpdatedFilters();
       vm.currentTopBottomObj = getCurrentTopBottomObject(vm.currentTopBottomAcctType);
       // update data
@@ -313,6 +314,14 @@ module.exports = /*  @ngInject */
 
     function removeInlineSearch(type) {
       vm[type] = '';
+
+      if (type === 'selectedStore') {
+        filtersService.model.selected.account = [];
+        filtersService.model.selected.store = [];
+      } else if (type === 'selectedDistributor') {
+        filtersService.model.selected.distributor = [];
+      }
+
       apply(false);
     }
 
@@ -443,12 +452,33 @@ module.exports = /*  @ngInject */
     function setFilter(result, filterModelProperty) {
       filtersService.model.selected[filterModelProperty] = [result.id];
 
+      // model uses .distributor but this uses .distributors
+      var topBottomProp = '';
+      switch (filterModelProperty) {
+        case 'account':
+          topBottomProp = 'accounts';
+          break;
+        case 'subAccount':
+          topBottomProp = 'subAccounts';
+          break;
+        case 'store':
+          topBottomProp = 'stores';
+          break;
+        default:
+          topBottomProp = 'distributors';
+          break;
+      };
+      vm.currentTopBottomFilters[topBottomProp] = {
+        id: result.id,
+        name: result.name
+      };
+
       if (filterModelProperty === 'store') {
         filtersService.model.selected.account = [];
         filtersService.model.account = '';
         chipsService.removeChip('chain');
         vm.showXStore = true;
-      } else if (filterModelProperty === 'chain') {
+      } else if (filterModelProperty === 'account') {
         filtersService.model.selected.store = [];
         filtersService.model.store = '';
         chipsService.removeChip('store');
@@ -1071,9 +1101,9 @@ module.exports = /*  @ngInject */
       if (vm.currentTopBottomFilters.stores) {
         setFilter(vm.currentTopBottomFilters.stores, 'store');
       } else if (vm.currentTopBottomFilters.subAccounts) {
-        setFilter(vm.currentTopBottomFilters.subAccounts, 'chain');
+        setFilter(vm.currentTopBottomFilters.subAccounts, 'subaccount');
       } else if (vm.currentTopBottomFilters.accounts) {
-        setFilter(vm.currentTopBottomFilters.accounts, 'chain');
+        setFilter(vm.currentTopBottomFilters.accounts, 'account');
       }
     }
 
