@@ -1,6 +1,6 @@
 {
   "name": "compass",
-  "version": "0.1.29",
+  "version": "0.1.30",
   "dependencies": {
     "angular": "1.5.8",
     "angular-animate": "1.5.8",
