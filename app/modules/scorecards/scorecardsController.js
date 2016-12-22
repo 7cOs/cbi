@@ -109,8 +109,10 @@ module.exports = /*  @ngInject */
 
       userService.getPerformanceDistribution(payload).then(function(data) {
         userService.model.distribution = data;
-
         updateTotalRowDistributions();
+      }, function(err) {
+        updateTotalRowDistributions();
+        console.warn(err);
       });
     }
 
@@ -238,7 +240,8 @@ module.exports = /*  @ngInject */
     }
 
     function updateTotalRowDistributions() {
-      var totalObj = $filter('filter')(userService.model.distribution, {type: 'Total'});
+      var totalObj = {};
+      totalObj = $filter('filter')(userService.model.distribution, {type: 'Total'});
       vm.totalDistributions = $filter('filter')(totalObj[0].measures, {timeframe: vm.distributionSelectOptions.selected});
     }
   };
