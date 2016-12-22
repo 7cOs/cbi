@@ -224,10 +224,11 @@ module.exports = /*  @ngInject */
         angular.forEach(userService.model.depletion[i].measures, function(item, key) {
           if (item.timeframe === vm.depletionSelect) {
             // sum
+            var gap = (item.depletions - (item.depletions / (1 + item.depletionsTrend / 100)));
+            isFinite(gap) ? vm.totalRow.gap += gap : vm.totalRow.gap += 0;
             vm.totalRow.depletions += item.depletions;
             vm.totalRow.depletionsBU += item.depletionsBU;
-            vm.totalRow.gap += item.depletionsGap;
-            vm.totalRow.gapVsPlan += item.vsPlan;
+            vm.totalRow.gapVsPlan += (item.depletions - item.plan);
             vm.volumneBU = 0;
             vm.growthBU = 0;
           }
