@@ -243,6 +243,10 @@ module.exports = /*  @ngInject */
     function updateTotalRowDistributions() {
       var totalObj = {};
       totalObj = $filter('filter')(userService.model.distribution, {type: 'Total'});
-      vm.totalDistributions = $filter('filter')(totalObj[0].measures, {timeframe: vm.distributionSelectOptions.selected});
+      if (totalObj[0]) {
+        vm.totalDistributions = $filter('filter')(totalObj[0].measures, {timeframe: vm.distributionSelectOptions.selected});
+      } else {
+        vm.totalDistributions = {};
+      }
     }
   };
