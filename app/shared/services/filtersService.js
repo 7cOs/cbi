@@ -125,6 +125,11 @@ module.exports = /*  @ngInject */
           name: 'L90',
           displayValue: 'L90',
           id: 2
+        }],
+        month: [{
+          name: 'L03',
+          displayValue: 'L03',
+          id: 4
         }]
       },
       accountSelected: {
