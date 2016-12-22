@@ -64,7 +64,7 @@ module.exports = /*  @ngInject */
         {
           name: 'Store',
           type: 'Store',
-          hintText: 'Name, Address, TDLinx, or Store#'
+          hintText: 'Name, Address, TDLinx'
         },
         {
           name: 'Chain',
