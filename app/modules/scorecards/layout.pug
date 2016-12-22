@@ -15,7 +15,7 @@ div.my-scorecards
       div.dropdown
         label Distribution Time Period
         md-select(ng-model="s.distributionSelectOptions.selected" aria-label="Distirbution Select")
-          md-option(ng-repeat="filter in s.filtersService.model.distributionTimePeriod[s.depletionRadio]" aria-label="{{filter.name}}" ng-value="filter.name" ng-click="s.changeDistributionTimePeriod(filter.name)") {{filter.displayValue}} {{filter.displayValue === 'L03' ? 'Mth' : 'Days'}}
+          md-option(ng-repeat="filter in s.filtersService.model.scorecardDistributionTimePeriod[s.depletionRadio]" aria-label="{{filter.name}}" ng-value="filter.name" ng-click="s.changeDistributionTimePeriod(filter.name)") {{filter.displayValue}} {{filter.displayValue === 'L03' ? 'Mth' : 'Days'}}
 
   section.depeletions-scorecard
     div.scorecard-header.clearfix
@@ -68,20 +68,20 @@ div.my-scorecards
             td.column-total 100%
           tr(ng-repeat="depletion in s.userService.model.depletion" class="disable-ng-animate" ng-click="s.toggleSelected($index, 'depletions')" ng-class="{'selected': s.selectedList === 'depletions' && $index === s.selectedIndex}")
             td.left.data-brand(analytics-on="click" analytics-event="Brand Performance" ng-click='s.goToAccountDashboard(depletion)') {{depletion.name}}
-            td.dark(ng-repeat-start="measure in depletion.measures | filter: {timeframe: s.depletionSelect}: true") {{measure.depletions | number:0}}
-            td.medium-dark(ng-if="measure.depletionsTrend !== null || measure.depletionsTrend !== 0" ng-class="{'negative': !s.isPositive(measure.depletions - (measure.depletions / (1 + measure.depletionsTrend / 100)))}") {{s.checkValidity(measure.depletions - (measure.depletions / (1 + measure.depletionsTrend / 100)), 0)}}
+            td.dark(ng-repeat-start="measure in depletion.measures | filter: {timeframe: s.depletionSelect}: true") {{s.checkValidity(measure.depletions, 0)}}
+            td.medium-dark(ng-if="measure.depletionsTrend !== null && measure.depletionsTrend !== 0" ng-class="{'negative': !s.isPositive(measure.depletions - (measure.depletions / (1 + measure.depletionsTrend / 100)))}") {{s.checkValidity(measure.depletions - (measure.depletions / (1 + measure.depletionsTrend / 100)), 0)}}
             td.medium-dark(ng-if="measure.depletionsTrend === null || measure.depletionsTrend === 0") 100
-            td.medium-dark.no-border(ng-if="measure.depletionsTrend !== null || measure.depletionsTrend !== 0" ng-class="{'negative': !s.isPositive(measure.depletionsTrend)}") {{s.checkValidity(measure.depletionsTrend, 1)}}%
+            td.medium-dark.no-border(ng-if="measure.depletionsTrend !== null && measure.depletionsTrend !== 0" ng-class="{'negative': !s.isPositive(measure.depletionsTrend)}") {{s.checkValidity(measure.depletionsTrend, 1)}}%
             td.medium-dark.no-border(ng-if="measure.depletionsTrend === null || measure.depletionsTrend === 0") 100%
-            td(ng-class="{'negative': !s.isPositive(measure.depletions - measure.plan)}") {{measure.depletions - measure.plan | number:0 }}
-            td.no-border(ng-if="measure.plan !== 0" ng-class="{'negative': !s.isPositive(((measure.depletions - measure.plan) / measure.plan) * 100)}") {{((measure.depletions - measure.plan) / measure.plan) * 100 | number:1}}%
+            td(ng-class="{'negative': !s.isPositive(measure.depletions - measure.plan)}") {{s.checkValidity(measure.depletions - measure.plan, 0) }}
+            td.no-border(ng-if="measure.plan !== 0" ng-class="{'negative': !s.isPositive(((measure.depletions - measure.plan) / measure.plan) * 100)}") {{s.checkValidity(((measure.depletions - measure.plan) / measure.plan) * 100, 1)}}%
             td.no-border(ng-if="measure.plan === 0") 100.0%
-            td(ng-if="measure.depletionsBUTrend !== null" ng-class="{'negative': !s.isPositive(measure.depletionsBUTrend)}") {{measure.depletionsBUTrend | number:1}}%
+            td(ng-if="measure.depletionsBUTrend !== null" ng-class="{'negative': !s.isPositive(measure.depletionsBUTrend)}") {{s.checkValidity(measure.depletionsBUTrend, 1)}}%
             td(ng-if="measure.depletionsBUTrend === null") 100%
             td.no-border(ng-if="measure.depletionsBUTrend !== null" ng-class="measure.depletionsTrend > measure.depletionsBUTrend ? 'positive' : 'negative'") <span class="triangle-icon">&#9660;</span>
             td.no-border(ng-if="measure.depletionsBUTrend === null" class="positive") <span class="triangle-icon">&#9660;</span>
-            td(ng-class="{'negative': !s.isPositive(measure.depletions / s.totalRow.depletions)}") {{(measure.depletions / s.totalRow.depletions) * 100 | number:1}}%
-            td(ng-repeat-end ng-class="{'negative': !s.isPositive(measure.depletionsBU / s.totalRow.depletionsBU)}") {{(measure.depletionsBU / s.totalRow.depletionsBU) * 100 | number:1}}%
+            td(ng-class="{'negative': !s.isPositive(measure.depletions / s.totalRow.depletions)}") {{s.checkValidity((measure.depletions / s.totalRow.depletions) * 100, 1)}}%
+            td(ng-repeat-end ng-class="{'negative': !s.isPositive(measure.depletionsBU / s.totalRow.depletionsBU)}") {{s.checkValidity((measure.depletionsBU / s.totalRow.depletionsBU) * 100, 1)}}%
 
   section.distributions-scorecard
     div.scorecard-header.clearfix
@@ -163,12 +163,12 @@ div.my-scorecards
           tr(ng-repeat="distribution in s.userService.model.distribution | filter: {type: '!Total'}: true" class="disable-ng-animate" ng-click="s.toggleSelected($index, 'distributions')" ng-class="{'selected': s.selectedList === 'distributions' && $index === s.selectedIndex}")
             td.left.data-brand(analytics-on="click" analytics-event="Brand Performance" ng-click='s.goToAccountDashboard(distribution, s.distributionRadioOptions.selected.placementType === "Simple")' ng-disabled="s.distributionRadioOptions.selected.placementType === 'Simple'") {{distribution.name}}
             td.dark(ng-repeat-start="measure in distribution.measures | filter: {timeframe: s.distributionSelectOptions.selected}: true")
-              span(ng-if="s.distributionRadioOptions.selected.placementType === 'Simple'" ng-class="{'negative': !s.isPositive(measure.distributionsSimple)}") {{measure.distributionsSimple | number:0}}
-              span(ng-if="s.distributionRadioOptions.selected.placementType === 'Effective'" ng-class="{'negative': !s.isPositive(measure.distributionsEffective)}") {{measure.distributionsEffective | number:0}}
+              span(ng-if="s.distributionRadioOptions.selected.placementType === 'Simple'" ng-class="{'negative': !s.isPositive(measure.distributionsSimple)}") {{s.checkValidity(measure.distributionsSimple, 0)}}
+              span(ng-if="s.distributionRadioOptions.selected.placementType === 'Effective'" ng-class="{'negative': !s.isPositive(measure.distributionsEffective)}") {{s.checkValidity(measure.distributionsEffective, 0)}}
             td.medium-dark
-              span(ng-if="s.distributionRadioOptions.selected.placementType === 'Simple' && (measure.distributionsSimpleTrend !== null || measure.distributionsSimpleTrend !== 0)" ng-class="{'negative': !s.isPositive(measure.distributionsSimple - (measure.distributionsSimple / (1 + measure.distributionsSimpleTrend / 100)))}") {{s.checkValidity(measure.distributionsSimple - (measure.distributionsSimple / (1 + measure.distributionsSimpleTrend / 100)), 0)}}
+              span(ng-if="s.distributionRadioOptions.selected.placementType === 'Simple' && (measure.distributionsSimpleTrend !== null && measure.distributionsSimpleTrend !== 0)" ng-class="{'negative': !s.isPositive(measure.distributionsSimple - (measure.distributionsSimple / (1 + measure.distributionsSimpleTrend / 100)))}") {{s.checkValidity(measure.distributionsSimple - (measure.distributionsSimple / (1 + measure.distributionsSimpleTrend / 100)), 0)}}
               span(ng-if="s.distributionRadioOptions.selected.placementType === 'Simple' && (measure.distributionsSimpleTrend === null || measure.distributionsSimpleTrend === 0)") 100
-              span(ng-if="s.distributionRadioOptions.selected.placementType === 'Effective' && (measure.distributionsEffectiveTrend !== null || measure.distributionsEffectiveTrend !== 0)" ng-class="{'negative': !s.isPositive(measure.distributionsEffective - (measure.distributionsEffective / (1 + measure.distributionsEffectiveTrend / 100)))}") {{s.checkValidity(measure.distributionsEffective - (measure.distributionsEffective / (1 + measure.distributionsEffectiveTrend / 100)), 0)}}
+              span(ng-if="s.distributionRadioOptions.selected.placementType === 'Effective' && (measure.distributionsEffectiveTrend !== null && measure.distributionsEffectiveTrend !== 0)" ng-class="{'negative': !s.isPositive(measure.distributionsEffective - (measure.distributionsEffective / (1 + measure.distributionsEffectiveTrend / 100)))}") {{s.checkValidity(measure.distributionsEffective - (measure.distributionsEffective / (1 + measure.distributionsEffectiveTrend / 100)), 0)}}
               span(ng-if="s.distributionRadioOptions.selected.placementType === 'Effective' && (measure.distributionsEffectiveTrend === null || measure.distributionsEffectiveTrend === 0)") 100
             td.medium-dark.no-border
               span(ng-if="s.distributionRadioOptions.selected.placementType === 'Simple' && measure.distributionsSimpleTrend !== null" ng-class="{'negative': !s.isPositive(measure.distributionsSimpleTrend)}") {{s.checkValidity(measure.distributionsSimpleTrend, 1)}}%
@@ -176,22 +176,22 @@ div.my-scorecards
               span(ng-if="s.distributionRadioOptions.selected.placementType === 'Effective' && measure.distributionsEffectiveTrend !== null" ng-class="{'negative': !s.isPositive(measure.distributionsEffectiveTrend)}") {{s.checkValidity(measure.distributionsEffectiveTrend, 1)}}%
               span(ng-if="s.distributionRadioOptions.selected.placementType === 'Effective' && measure.distributionsEffectiveTrend === null") 100.0%
             td.medium-dark
-              span(ng-if="s.distributionRadioOptions.selected.placementType === 'Simple'" ng-class="{'negative': !s.isPositive(measure.distributionsSimple - measure.planSimple)}") {{measure.distributionsSimple - measure.planSimple | number:0}}
-              span(ng-if="s.distributionRadioOptions.selected.placementType === 'Effective'" ng-class="{'negative': !s.isPositive(measure.distributionsEffective - measure.planEffective)}") {{measure.distributionsEffective - measure.planEffective | number:0}}
+              span(ng-if="s.distributionRadioOptions.selected.placementType === 'Simple'" ng-class="{'negative': !s.isPositive(measure.distributionsSimple - measure.planSimple)}") {{s.checkValidity(measure.distributionsSimple - measure.planSimple, 0)}}
+              span(ng-if="s.distributionRadioOptions.selected.placementType === 'Effective'" ng-class="{'negative': !s.isPositive(measure.distributionsEffective - measure.planEffective)}") {{s.checkValidity(measure.distributionsEffective - measure.planEffective, 0)}}
             td.medium-dark.no-border
-              span(ng-if="s.distributionRadioOptions.selected.placementType === 'Simple'" ng-class="{'negative': !s.isPositive(((measure.distributionsSimple - measure.planSimple) / measure.planSimple) * 100)}") {{((measure.distributionsSimple - measure.planSimple) / measure.planSimple) * 100 | number:1 }}%
-              span(ng-if="s.distributionRadioOptions.selected.placementType === 'Effective'" ng-class="{'negative': !s.isPositive(((measure.distributionsEffective - measure.planEffective) / measure.planEffective) * 100)}") {{((measure.distributionsEffective - measure.planEffective) / measure.planEffective) * 100 | number:1 }}%
+              span(ng-if="s.distributionRadioOptions.selected.placementType === 'Simple'" ng-class="{'negative': !s.isPositive(((measure.distributionsSimple - measure.planSimple) / measure.planSimple) * 100)}") {{s.checkValidity(((measure.distributionsSimple - measure.planSimple) / measure.planSimple) * 100, 1)}}%
+              span(ng-if="s.distributionRadioOptions.selected.placementType === 'Effective'" ng-class="{'negative': !s.isPositive(((measure.distributionsEffective - measure.planEffective) / measure.planEffective) * 100)}") {{s.checkValidity(((measure.distributionsEffective - measure.planEffective) / measure.planEffective) * 100, 1)}}%
             td
-              span(ng-if="s.distributionRadioOptions.selected.placementType === 'Simple' && measure.distributionsSimpleBUTrend !== null" ng-class="{'negative': !s.isPositive(measure.distributionsSimpleBUTrend)}") {{measure.distributionsSimpleBUTrend | number:1}}%
+              span(ng-if="s.distributionRadioOptions.selected.placementType === 'Simple' && measure.distributionsSimpleBUTrend !== null" ng-class="{'negative': !s.isPositive(measure.distributionsSimpleBUTrend)}") {{s.checkValidity(measure.distributionsSimpleBUTrend, 1)}}%
               span(ng-if="s.distributionRadioOptions.selected.placementType === 'Simple' && measure.distributionsSimpleBUTrend === null") 100.0%
-              span(ng-if="s.distributionRadioOptions.selected.placementType === 'Effective' && measure.distributionsEffectiveBUTrend !== null" ng-class="{'negative': !s.isPositive(measure.distributionsEffectiveBUTrend)}") {{measure.distributionsEffectiveBUTrend | number:1}}%
+              span(ng-if="s.distributionRadioOptions.selected.placementType === 'Effective' && measure.distributionsEffectiveBUTrend !== null" ng-class="{'negative': !s.isPositive(measure.distributionsEffectiveBUTrend)}") {{s.checkValidity(measure.distributionsEffectiveBUTrend, 1)}}%
               span(ng-if="s.distributionRadioOptions.selected.placementType === 'Effective' && measure.distributionsEffectiveBUTrend === null") 100.0%
             td.no-border
               span(ng-if="s.distributionRadioOptions.selected.placementType === 'Simple'" ng-class="measure.distributionsSimpleTrend > measure.distributionsSimpleBU ? 'positive' : 'negative'") <span class="triangle-icon">&#9660;</span>
               span(ng-if="s.distributionRadioOptions.selected.placementType === 'Effective'" ng-class="measure.distributionsEffectiveTrend > measure.distributionsEffectiveBU ? 'positive' : 'negative'") <span class="triangle-icon">&#9660;</span>
             td
-              span(ng-if="s.distributionRadioOptions.selected.placementType === 'Simple'" ng-class="{'negative': !s.isPositive(measure.distributionsSimple / s.totalDistributions[0].distributionsSimple)}") {{(measure.distributionsSimple / s.totalDistributions[0].distributionsSimple) * 100 | number:1 }}%
-              span(ng-if="s.distributionRadioOptions.selected.placementType === 'Effective'" ng-class="{'negative': !s.isPositive(measure.distributionsEffective / s.totalDistributions[0].distributionsEffective)}") {{(measure.distributionsEffective / s.totalDistributions[0].distributionsEffective) * 100 | number:1 }}%
+              span(ng-if="s.distributionRadioOptions.selected.placementType === 'Simple'" ng-class="{'negative': !s.isPositive(measure.distributionsSimple / s.totalDistributions[0].distributionsSimple)}") {{s.checkValidity((measure.distributionsSimple / s.totalDistributions[0].distributionsSimple) * 100, 1)}}%
+              span(ng-if="s.distributionRadioOptions.selected.placementType === 'Effective'" ng-class="{'negative': !s.isPositive(measure.distributionsEffective / s.totalDistributions[0].distributionsEffective)}") {{s.checkValidity((measure.distributionsEffective / s.totalDistributions[0].distributionsEffective) * 100, 1)}}%
             td.no-border(ng-repeat-end)
-              span(ng-if="s.distributionRadioOptions.selected.placementType === 'Simple'" ng-class="{'negative': !s.isPositive(measure.distributionsSimpleBU / s.totalDistributions[0].distributionsSimpleBU)}") {{(measure.distributionsSimpleBU / s.totalDistributions[0].distributionsSimpleBU) * 100 | number:1 }}%
-              span(ng-if="s.distributionRadioOptions.selected.placementType === 'Effective'" ng-class="{'negative': !s.isPositive(measure.distributionsEffectiveBU / s.totalDistributions[0].distributionsEffectiveBU)}") {{(measure.distributionsEffectiveBU / s.totalDistributions[0].distributionsEffectiveBU) * 100 | number:1 }}%
+              span(ng-if="s.distributionRadioOptions.selected.placementType === 'Simple'" ng-class="{'negative': !s.isPositive(measure.distributionsSimpleBU / s.totalDistributions[0].distributionsSimpleBU)}") {{s.checkValidity((measure.distributionsSimpleBU / s.totalDistributions[0].distributionsSimpleBU) * 100, 1)}}%
+              span(ng-if="s.distributionRadioOptions.selected.placementType === 'Effective'" ng-class="{'negative': !s.isPositive(measure.distributionsEffectiveBU / s.totalDistributions[0].distributionsEffectiveBU)}") {{s.checkValidity((measure.distributionsEffectiveBU / s.totalDistributions[0].distributionsEffectiveBU) * 100, 1)}}%

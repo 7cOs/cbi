@@ -75,7 +75,7 @@ module.exports = /*  @ngInject */
 
     function checkValidity(value, fractionSize) {
       // Check if result is infinity or NaN
-      if (isFinite(value)) {
+      if (isFinite(value) && value !== null && value !== '') {
         return $filter('number')(value, fractionSize || 0);
       } else {
         return '-';
