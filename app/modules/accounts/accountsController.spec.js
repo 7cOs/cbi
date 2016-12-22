@@ -1,5 +1,5 @@
 describe('Unit: accountsController', function() {
-  var scope, ctrl, $state, $q, filtersService, chipsService, userService, packageSkuData, brandSpy, brandPerformanceData, myperformanceService;
+  var scope, ctrl, $state, $q, filtersService, chipsService, userService, packageSkuData, brandSpy, brandPerformanceData, myperformanceService, topBottomSpy;
   var topBottomSnapshotDistributorData = {
     performance: [{
         'type': 'Distributor',
@@ -392,7 +392,7 @@ describe('Unit: accountsController', function() {
       spyOn(userService, 'getPerformanceDepletion').and.returnValue(fakePromise);
       spyOn(userService, 'getPerformanceDistribution').and.returnValue(fakePromise);
       spyOn(userService, 'getPerformanceSummary').and.returnValue(fakePromise);
-      spyOn(userService, 'getTopBottomSnapshot').and.callFake(function () {
+      topBottomSpy = spyOn(userService, 'getTopBottomSnapshot').and.callFake(function () {
         var currentLevel = userService.getTopBottomSnapshot.arguments[0].value;
         switch (currentLevel) {
           case 1:
@@ -1376,6 +1376,48 @@ describe('Unit: accountsController', function() {
     });
   });
 
+  describe('Should set correct params and get data from store api', function() {
+    beforeEach(function() {
+      ctrl.resetFilters();
+      topBottomSpy.calls.reset();
+      ctrl.setTopBottomAcctTypeSelection(ctrl.filtersService.accountFilters.accountTypes[3]);
+    });
+
+    it('should have called store endpoint 4 times when acct type is changed', function() {
+      // One each for top 10(Values/Trends),bottom 10(Values/Trends)
+      expect(topBottomSpy.calls.count()).toEqual(4);
+    });
+
+    it('should have called store endpoint 4 times when account market option is changed', function() {
+      // One each for top 10(Values/Trends),bottom 10(Values/Trends)
+      topBottomSpy.calls.reset();
+      var newVal = filtersService.accountFilters.accountMarkets[1];
+      ctrl.acctMarketChanged(newVal);
+      expect(topBottomSpy.calls.count()).toEqual(4);
+
+      topBottomSpy.calls.reset();
+      newVal = filtersService.accountFilters.accountMarkets[2];
+      ctrl.acctMarketChanged(newVal);
+      expect(topBottomSpy.calls.count()).toEqual(4);
+
+      topBottomSpy.calls.reset();
+      newVal = filtersService.accountFilters.accountMarkets[3];
+      ctrl.acctMarketChanged(newVal);
+      expect(topBottomSpy.calls.count()).toEqual(4);
+
+      topBottomSpy.calls.reset();
+      newVal = filtersService.accountFilters.accountMarkets[0];
+      ctrl.acctMarketChanged(newVal);
+      expect(topBottomSpy.calls.count()).toEqual(4);
+
+      // No calls made when option is not changed
+      topBottomSpy.calls.reset();
+      newVal = filtersService.accountFilters.accountMarkets[0];
+      ctrl.acctMarketChanged(newVal);
+      expect(topBottomSpy.calls.count()).toEqual(0);
+    });
+  });
+
   describe('Should fire on filter properties change on changing dropdown options', function() {
     var resetFilterFlagsSpy;
     beforeEach(function() {
@@ -1385,32 +1427,40 @@ describe('Unit: accountsController', function() {
       ctrl.resetFilters();
     });
 
-    it('should reset filter flags when account market options are changed', function() {
+    it('should reset filter flags when account market options are changed to distirbution simple', function() {
       var newVal = filtersService.accountFilters.accountMarkets[1];
       ctrl.acctMarketChanged(newVal);
       expect(resetFilterFlagsSpy.calls.count()).toEqual(1);
     });
 
-    it('should reset filter flags when account market options are changed', function() {
-      var newVal = filtersService.accountFilters.accountMarkets[1];
+    it('should reset filter flags when account market options are changed to distirbution effective', function() {
+      var newVal = filtersService.accountFilters.accountMarkets[2];
       ctrl.acctMarketChanged(newVal);
       expect(resetFilterFlagsSpy.calls.count()).toEqual(1);
     });
 
-    it('should reset filter flags when account market options are changed', function() {
-      var newVal = filtersService.accountFilters.accountMarkets[1];
+    it('should not reset filter flags when account market options are not changed', function() {
+      var newVal = filtersService.accountFilters.accountMarkets[2];
       ctrl.acctMarketChanged(newVal);
       expect(resetFilterFlagsSpy.calls.count()).toEqual(1);
+      resetFilterFlagsSpy.calls.reset();
+      newVal = filtersService.accountFilters.accountMarkets[2];
+      ctrl.acctMarketChanged(newVal);
+      expect(resetFilterFlagsSpy.calls.count()).toEqual(0);
     });
 
-    it('should reset filter flags when account market options are changed', function() {
-      var newVal = filtersService.accountFilters.accountMarkets[1];
+    it('should reset filter flags when account market options are changed  to velocity', function() {
+      var newVal = filtersService.accountFilters.accountMarkets[3];
       ctrl.acctMarketChanged(newVal);
       expect(resetFilterFlagsSpy.calls.count()).toEqual(1);
     });
 
     it('should reset filter flags when trendOptions options are changed', function() {
       var newVal = filtersService.model.trend[0];
+      ctrl.trendOptionChanged(newVal);
+      expect(resetFilterFlagsSpy.calls.count()).toEqual(0);
+
+      newVal = filtersService.model.trend[1];
       ctrl.trendOptionChanged(newVal);
       expect(resetFilterFlagsSpy.calls.count()).toEqual(1);
     });
@@ -1423,13 +1473,13 @@ describe('Unit: accountsController', function() {
 
     it('should reset filter flags when distirbution options are changed', function() {
       var newVal = filtersService.model.distributionTimePeriod.month[0];
-      ctrl.depletionOptionChanged(newVal);
+      ctrl.distOptionChanged(newVal);
       expect(resetFilterFlagsSpy.calls.count()).toEqual(1);
     });
   });
 
   describe('Navigate top bottom levels', function() {
-    var distributorData, acctData, subAcctData, storeData;
+    var distributorData, acctData, subAcctData, storeData, anotherStoreData;
     beforeEach(function() {
       ctrl.currentTopBottomAcctType = ctrl.filtersService.accountFilters.accountTypes[0];
       ctrl.resetFilters();
@@ -1437,6 +1487,7 @@ describe('Unit: accountsController', function() {
       acctData = angular.copy(topBottomSnapshotAcctData.performance[0]);
       subAcctData = angular.copy(topBottomSnapshotSubAcctData.performance[0]);
       storeData = angular.copy(topBottomSnapshotStoreData.performance[0]);
+      anotherStoreData = angular.copy(topBottomSnapshotStoreData.performance[1]);
     });
 
     it('should go to accounts level on selecting distributors', function() {
@@ -1549,5 +1600,22 @@ describe('Unit: accountsController', function() {
       expect(ctrl.currentTopBottomAcctType).toEqual(ctrl.filtersService.accountFilters.accountTypes[2]);
       expect(ctrl.currentTopBottomAcctType).not.toEqual(ctrl.filtersService.accountFilters.accountTypes[1]);
     });
+
+    it('should highlight store on store click', function() {
+      ctrl.currentTopBottomAcctType = ctrl.filtersService.accountFilters.accountTypes[0];
+      ctrl.navigateTopBottomLevels(distributorData);
+      ctrl.currentTopBottomAcctType = ctrl.filtersService.accountFilters.accountTypes[1];
+      ctrl.navigateTopBottomLevels(acctData);
+      ctrl.currentTopBottomAcctType = ctrl.filtersService.accountFilters.accountTypes[2];
+      ctrl.navigateTopBottomLevels(subAcctData);
+      ctrl.currentTopBottomAcctType = ctrl.filtersService.accountFilters.accountTypes[3];
+      ctrl.navigateTopBottomLevels(storeData);
+      ctrl.navigateTopBottomLevels(anotherStoreData);
+      var isHighligted = ctrl.isHighlightStore(anotherStoreData);
+      expect(isHighligted).toBeTruthy();
+      isHighligted = ctrl.isHighlightStore(storeData);
+      expect(isHighligted).toBeFalsy();
+    });
+
   });
 });

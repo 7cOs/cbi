@@ -978,8 +978,10 @@ module.exports = /*  @ngInject */
      * @returns Set the filter flag on topBottom(topBottomData.distirbutor etc) objects to be updated and sets the updated data in the corresponding object
      */
     function distOptionChanged(selectedVal) {
-      vm.filterModel.distributionTimePeriod = selectedVal;
-      onFilterPropertiesChange();
+      if (vm.filterModel.distributionTimePeriod !== selectedVal) {
+        vm.filterModel.distributionTimePeriod = selectedVal;
+        onFilterPropertiesChange();
+      }
     }
 
     /**
@@ -988,8 +990,10 @@ module.exports = /*  @ngInject */
      * @returns Set the filter flag on topBottom(topBottomData.distirbutor etc) objects to be updated and sets the updated data in the corresponding object
      */
     function depletionOptionChanged(selectedVal) {
-      vm.filterModel.depletionsTimePeriod = selectedVal;
-      onFilterPropertiesChange();
+      if (vm.filterModel.depletionsTimePeriod !== selectedVal) {
+        vm.filterModel.depletionsTimePeriod = selectedVal;
+        onFilterPropertiesChange();
+      }
     }
 
     /**
@@ -998,8 +1002,10 @@ module.exports = /*  @ngInject */
      * @returns Set the filter flag on topBottom(topBottomData.distirbutor etc) objects to be updated and sets the updated data in the corresponding object
      */
     function trendOptionChanged(selectedVal) {
-      vm.filterModel.trend = selectedVal;
-      onFilterPropertiesChange();
+      if (vm.filterModel.trend !== selectedVal) {
+        vm.filterModel.trend = selectedVal;
+        onFilterPropertiesChange();
+      }
     }
 
     /**
@@ -1008,8 +1014,10 @@ module.exports = /*  @ngInject */
      * @returns Set the filter flag on topBottom(topBottomData.distirbutor etc) objects to be updated and sets the updated data in the corresponding object
      */
     function acctMarketChanged(selectedVal) {
-      vm.filtersService.model.accountSelected.accountMarkets = selectedVal;
-      onFilterPropertiesChange();
+      if (vm.filtersService.model.accountSelected.accountMarkets !== selectedVal) {
+        vm.filtersService.model.accountSelected.accountMarkets = selectedVal;
+        onFilterPropertiesChange();
+      }
     }
 
     /**
@@ -1018,9 +1026,11 @@ module.exports = /*  @ngInject */
      * @returns Sets the current sort order indices
      */
     function changeTopBottomSortOrder(selectedVal) {
-      vm.loadingTopBottom = true;
-      vm.filtersService.model.valuesVsTrend = selectedVal;
-      setSortedArrIndex();
+      if (vm.filtersService.model.valuesVsTrend !== selectedVal) {
+        vm.loadingTopBottom = true;
+        vm.filtersService.model.valuesVsTrend = selectedVal;
+        setSortedArrIndex();
+      }
     }
 
     // Currently not used. If the functionality to go to previous level is present can be enabled
