@@ -120,6 +120,13 @@ module.exports = /*  @ngInject */
           id: 4
         }]
       },
+      scorecardDistributionTimePeriod: {
+        year: [{
+          name: 'L90',
+          displayValue: 'L90',
+          id: 2
+        }]
+      },
       accountSelected: {
         accountBrands: '',
         accountMarkets: '',
