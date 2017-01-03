@@ -211,7 +211,7 @@ module.exports = /*  @ngInject */
       setUpdatedFilters();
       vm.currentTopBottomObj = getCurrentTopBottomObject(vm.currentTopBottomAcctType);
       // update data
-      getDataForTopBottom(vm.currentTopBottomObj, categoryBound);
+      vm.getDataForTopBottom(vm.currentTopBottomObj, categoryBound);
     }
 
     /**

@@ -1618,4 +1618,38 @@ describe('Unit: accountsController', function() {
     });
 
   });
+
+  describe('filterTopBottom', function() {
+    beforeEach(function() {
+      var categoryBound = filtersService.model.accountSelected.accountMarkets;
+      ctrl.getDataForTopBottom(ctrl.topBottomData, categoryBound);
+    });
+
+    it('should reset flags for each object', function() {
+      spyOn(myperformanceService, 'resetPerformanceDataFlags').and.callFake(function() {
+        return true;
+      });
+
+      ctrl.filterTopBottom();
+
+      expect(myperformanceService.resetPerformanceDataFlags).toHaveBeenCalled();
+      expect(myperformanceService.resetPerformanceDataFlags.calls.count()).toEqual(4); // once for every level
+    });
+
+    it('should update top bottom data', function() {
+      spyOn(ctrl, 'getDataForTopBottom');
+
+      ctrl.filterTopBottom();
+
+      expect(ctrl.getDataForTopBottom).toHaveBeenCalled();
+      expect(ctrl.getDataForTopBottom.calls.count()).toEqual(1);
+    });
+
+    describe('changing tab index', function() {
+      it('should go to store level', function() {});
+      it('should go to sub account level', function() {});
+      it('should go to account level', function() {});
+      it('should go to distributor level', function() {});
+    });
+  });
 });
