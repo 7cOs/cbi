@@ -48,7 +48,7 @@ module.exports = /*  @ngInject */
     vm.currentTopBottomAcctType = null;
     vm.currentTopBottomDataForFilter = null;
     vm.disableAnimation = false;
-    vm.disableApply = false;
+    vm.disableApply = true;
     vm.filtersService.model.accountSelected.accountBrands = 'Distribution (simple)';
     vm.filtersService.model.accountSelected.accountMarkets = 'Depletions';
     vm.hintTextPlaceholder = 'Account or Subaccount Name';
@@ -1140,7 +1140,7 @@ module.exports = /*  @ngInject */
         myperformanceService.resetFilterFlags(vm.topBottomData);
         var categoryBound = vm.filtersService.model.accountSelected.accountMarkets;
         vm.currentTopBottomObj = getCurrentTopBottomObject(vm.currentTopBottomAcctType);
-        getDataForTopBottom(vm.currentTopBottomObj, categoryBound);
+        // getDataForTopBottom(vm.currentTopBottomObj, categoryBound);
       }
     }
   };
