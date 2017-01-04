@@ -66,6 +66,7 @@ module.exports = /*  @ngInject */
     vm.updateEndingTimePeriod = updateEndingTimePeriod;
     vm.toggleSelected = toggleSelected;
     vm.checkValidity = checkValidity;
+    vm.vsYAPercent = vsYAPercent;
 
     init();
 
@@ -79,6 +80,17 @@ module.exports = /*  @ngInject */
         return $filter('number')(value, fractionSize || 0);
       } else {
         return '-';
+      }
+    }
+
+    function vsYAPercent(ty, ya, trend) {
+      // Correctly display TY vs YA % values
+      if (trend === null && ty === 0 && ya === 0) {
+        return 0;
+      } else if (trend === null && ty > 0 && ya === 0) {
+        return $filter('number')(100, 1);
+      } else {
+        return $filter('number')(trend, 1);
       }
     }
 
