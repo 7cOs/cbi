@@ -23,27 +23,27 @@ div.expanded-target-lists
           div.checkbox-sibling-target(column="12")
             div(row).target-list-count-container
               div(column='4')
-                label.completed.left(ng-click="expanded.sortBy('name')" ng-class="{ 'header-bold' : expanded.sortProperty === 'listName'}")
+                label.left(ng-click="expanded.sortBy('name')" ng-class="{ 'completed' : expanded.sortProperty === 'name'}")
                   | <br />List Name
                   span(ng-class="{ 'chevron-down-small' : !expanded.listChevron, 'chevron-up-small' : expanded.listChevron}").chevron-down-small
               div(column='2')
-                label(ng-click="expanded.sortBy('collaborators.length')" ng-class="{ 'header-bold' : expanded.sortProperty === 'collaborators'}")
+                label(ng-click="expanded.sortBy('collaborators.length')" ng-class="{ 'completed' : expanded.sortProperty === 'collaborators.length'}")
                   | <br />Collaborators
                   span(ng-class="{ 'chevron-down-small' : !expanded.collaboratorsChevron, 'chevron-up-small' : expanded.collaboratorsChevron}").chevron-down-small
               div(column='2')
-                label(ng-click="expanded.sortBy('dateOpportunitiesUpdated')" ng-class="{ 'header-bold' : expanded.sortProperty === 'dateOpportunitiesUpdated'}")
+                label(ng-click="expanded.sortBy('dateOpportunitiesUpdated')" ng-class="{ 'completed' : expanded.sortProperty === 'dateOpportunitiesUpdated'}")
                   | <br />Last Updated
                   span(ng-class="{ 'chevron-down-small' : !expanded.lastUpdatedChevron, 'chevron-up-small' : expanded.lastUpdatedChevron}").chevron-down-small
               div(column='1')
-                label(ng-click="expanded.sortBy('opportunitiesSummary.closedOpportunitiesCount')" ng-class="{ 'header-bold' : expanded.sortProperty === 'opportunitiesSummary.closedOpportunitiesCount'}")
+                label(ng-click="expanded.sortBy('opportunitiesSummary.closedOpportunitiesCount')" ng-class="{ 'completed' : expanded.sortProperty === 'opportunitiesSummary.closedOpportunitiesCount'}")
                   | Closed Opps
                   span(ng-class="{ 'chevron-down-small' : !expanded.closedOpportunitiesChevron, 'chevron-up-small' : expanded.closedOpportunitiesChevron}").chevron-down-small
               div(column='1')
-                label(ng-click="expanded.sortBy('opportunitiesSummary.opportunitiesCount')" ng-class="{ 'header-bold' : expanded.sortProperty === 'opportunitiesSummary.opportunitiesCount'}")
+                label(ng-click="expanded.sortBy('opportunitiesSummary.opportunitiesCount')" ng-class="{ 'completed' : expanded.sortProperty === 'opportunitiesSummary.opportunitiesCount'}")
                   | Total Opps
                   span(ng-class="{ 'chevron-down-small' : expanded.totalOpportunitesChevron, 'chevron-up-small' : !expanded.totalOpportunitesChevron}").chevron-down-small
               div(column='2')
-                label(ng-click="expanded.sortBy('opportunitiesSummary.totalClosedDepletions')" ng-class="{ 'header-bold' : expanded.sortProperty === 'opportunitiesSummary.totalClosedDepletions'}")
+                label(ng-click="expanded.sortBy('opportunitiesSummary.totalClosedDepletions')" ng-class="{ 'completed' : expanded.sortProperty === 'opportunitiesSummary.totalClosedDepletions'}")
                   | Depletions <br />Since Closed (CE)
                   span(ng-class="{ 'chevron-down-small' : expanded.depletionsChevron, 'chevron-up-small' : !expanded.depletionsChevron}").chevron-down-small
         div(row).target-list-detail-container
@@ -81,27 +81,27 @@ div.expanded-target-lists
           div(column="12")
             div(row).target-list-count-container
               div(column='4')
-                label.completed.left(ng-click="expanded.sortBy('name')" ng-class="{ 'header-bold' : expanded.sortProperty === 'listName'}")
+                label.left(ng-click="expanded.sortBy('name')" ng-class="{ 'completed' : expanded.sortProperty === 'name'}")
                   | <br />List Name
                   span(ng-class="{ 'chevron-down-small' : !expanded.listChevron, 'chevron-up-small' : expanded.listChevron}").chevron-down-small
               div(column='2')
-                label(ng-click="expanded.sortBy('collaborators.length')" ng-class="{ 'header-bold' : expanded.sortProperty === 'collaborators'}")
+                label(ng-click="expanded.sortBy('collaborators.length')" ng-class="{ 'completed' : expanded.sortProperty === 'collaborators.length'}")
                   | <br />Collaborators
                   span(ng-class="{ 'chevron-down-small' : !expanded.collaboratorsChevron, 'chevron-up-small' : expanded.collaboratorsChevron}").chevron-down-small
               div(column='2')
-                label(ng-click="expanded.sortBy('dateOpportunitiesUpdated')" ng-class="{ 'header-bold' : expanded.sortProperty === 'dateOpportunitiesUpdated'}")
+                label(ng-click="expanded.sortBy('dateOpportunitiesUpdated')" ng-class="{ 'completed' : expanded.sortProperty === 'dateOpportunitiesUpdated'}")
                   | <br />Last Updated
                   span(ng-class="{ 'chevron-down-small' : !expanded.lastUpdatedChevron, 'chevron-up-small' : expanded.lastUpdatedChevron}").chevron-down-small
               div(column='1')
-                label(ng-click="expanded.sortBy('opportunitiesSummary.closedOpportunitiesCount')" ng-class="{ 'header-bold' : expanded.sortProperty === 'opportunitiesSummary.closedOpportunitiesCount'}")
+                label(ng-click="expanded.sortBy('opportunitiesSummary.closedOpportunitiesCount')" ng-class="{ 'completed' : expanded.sortProperty === 'opportunitiesSummary.closedOpportunitiesCount'}")
                   | Closed Opps
                   span(ng-class="{ 'chevron-down-small' : !expanded.closedOpportunitiesChevron, 'chevron-up-small' : expanded.closedOpportunitiesChevron}").chevron-down-small
               div(column='1')
-                label(ng-click="expanded.sortBy('opportunitiesSummary.opportunitiesCount')" ng-class="{ 'header-bold' : expanded.sortProperty === 'opportunitiesSummary.opportunitiesCount'}")
+                label(ng-click="expanded.sortBy('opportunitiesSummary.opportunitiesCount')" ng-class="{ 'completed' : expanded.sortProperty === 'opportunitiesSummary.opportunitiesCount'}")
                   | Total Opps
                   span(ng-class="{ 'chevron-down-small' : expanded.totalOpportunitesChevron, 'chevron-up-small' : !expanded.totalOpportunitesChevron}").chevron-down-small
               div(column='2')
-                label(ng-click="expanded.sortBy('opportunitiesSummary.totalClosedDepletions')" ng-class="{ 'header-bold' : expanded.sortProperty === 'opportunitiesSummary.totalClosedDepletions'}")
+                label(ng-click="expanded.sortBy('opportunitiesSummary.totalClosedDepletions')" ng-class="{ 'completed' : expanded.sortProperty === 'opportunitiesSummary.totalClosedDepletions'}")
                   | Depletions <br />Since Closed (CE)
                   span(ng-class="{ 'chevron-down-small' : expanded.depletionsChevron, 'chevron-up-small' : !expanded.depletionsChevron}").chevron-down-small
         div(row).target-list-detail-container
@@ -137,27 +137,27 @@ div.expanded-target-lists
           div.checkbox-sibling-target(column="12")
             div(row).target-list-count-container
               div(column='4')
-                label.completed.left(ng-click="expanded.sortBy('name')" ng-class="{ 'header-bold' : expanded.sortProperty === 'listName'}")
+                label.left(ng-click="expanded.sortBy('name')" ng-class="{ 'completed' : expanded.sortProperty === 'name'}")
                   | <br />List Name
                   span(ng-class="{ 'chevron-down-small' : !expanded.listChevron, 'chevron-up-small' : expanded.listChevron}").chevron-down-small
               div(column='2')
-                label(ng-click="expanded.sortBy('collaborators.length')" ng-class="{ 'header-bold' : expanded.sortProperty === 'collaborators'}")
+                label(ng-click="expanded.sortBy('collaborators.length')" ng-class="{ 'completed' : expanded.sortProperty === 'collaborators.length'}")
                   | <br />Collaborators
                   span(ng-class="{ 'chevron-down-small' : !expanded.collaboratorsChevron, 'chevron-up-small' : expanded.collaboratorsChevron}").chevron-down-small
               div(column='2')
-                label(ng-click="expanded.sortBy('dateOpportunitiesUpdated')" ng-class="{ 'header-bold' : expanded.sortProperty === 'dateOpportunitiesUpdated'}")
+                label(ng-click="expanded.sortBy('dateOpportunitiesUpdated')" ng-class="{ 'completed' : expanded.sortProperty === 'dateOpportunitiesUpdated'}")
                   | <br />Last Updated
                   span(ng-class="{ 'chevron-down-small' : !expanded.lastUpdatedChevron, 'chevron-up-small' : expanded.lastUpdatedChevron}").chevron-down-small
               div(column='1')
-                label(ng-click="expanded.sortBy('opportunitiesSummary.closedOpportunitiesCount')" ng-class="{ 'header-bold' : expanded.sortProperty === 'opportunitiesSummary.closedOpportunitiesCount'}")
+                label(ng-click="expanded.sortBy('opportunitiesSummary.closedOpportunitiesCount')" ng-class="{ 'completed' : expanded.sortProperty === 'opportunitiesSummary.closedOpportunitiesCount'}")
                   | Closed Opps
                   span(ng-class="{ 'chevron-down-small' : !expanded.closedOpportunitiesChevron, 'chevron-up-small' : expanded.closedOpportunitiesChevron}").chevron-down-small
               div(column='1')
-                label(ng-click="expanded.sortBy('opportunitiesSummary.opportunitiesCount')" ng-class="{ 'header-bold' : expanded.sortProperty === 'opportunitiesSummary.opportunitiesCount'}")
+                label(ng-click="expanded.sortBy('opportunitiesSummary.opportunitiesCount')" ng-class="{ 'completed' : expanded.sortProperty === 'opportunitiesSummary.opportunitiesCount'}")
                   | Total Opps
                   span(ng-class="{ 'chevron-down-small' : expanded.totalOpportunitesChevron, 'chevron-up-small' : !expanded.totalOpportunitesChevron}").chevron-down-small
               div(column='2')
-                label(ng-click="expanded.sortBy('opportunitiesSummary.totalClosedDepletions')" ng-class="{ 'header-bold' : expanded.sortProperty === 'opportunitiesSummary.totalClosedDepletions'}")
+                label(ng-click="expanded.sortBy('opportunitiesSummary.totalClosedDepletions')" ng-class="{ 'completed' : expanded.sortProperty === 'opportunitiesSummary.totalClosedDepletions'}")
                   | Depletions <br />Since Closed (CE)
                   span(ng-class="{ 'chevron-down-small' : expanded.depletionsChevron, 'chevron-up-small' : !expanded.depletionsChevron}").chevron-down-small
         div(row).target-list-detail-container
