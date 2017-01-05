@@ -604,6 +604,51 @@ module.exports = /*  @ngInject */
       return currentTrendVal;
     }
 
+    /**
+     * Gets applied filters for top bottom query params
+     * @returns {Object} obj Returns the object to be parsed by query builder before any filters
+     */
+    function getAppliedFiltersForTopBottom() {
+      var obj = {};
+
+      obj.timePeriod = filtersService.model.accountSelected.accountMarkets.propertyName === 'depletions' ? vm.filterModel.depletionsTimePeriod.displayValue : vm.filterModel.distributionTimePeriod.displayValue;
+
+      if (filtersService.model.valuesVsTrend.name.split(' ')[0].toLowerCase() === 'top') {
+        obj.top = true;
+      } else {
+        obj.top = false;
+      }
+
+      switch (filtersService.model.accountSelected.accountMarkets.propertyName) {
+        case 'distributionsSimple':
+          obj.metric = 'SPOD';
+          break;
+        case 'distributionsEffective':
+          obj.metric = 'EPOD';
+          break;
+        case 'velocity':
+          obj.metric = 'VEL';
+          break;
+        default:
+          obj.metric = 'DEPL';
+          break;
+      };
+
+      switch (vm.filterModel.trend.name.split('vs ')[1].toLowerCase()) {
+        case 'abp':
+          obj.trend = 'PLAN';
+          break;
+        case 'ya':
+          obj.trend = 'YA';
+          break;
+        default:
+          obj.trend = 'NONE';
+          break;
+      };
+
+      return obj;
+    }
+
     function init() {
       // reset all chips and filters on page init if no brand is specified
       if (!$state.params.applyFiltersOnLoad) {
@@ -624,6 +669,8 @@ module.exports = /*  @ngInject */
       if ($state.params.pageData && $state.params.pageData.premiseType) vm.filtersService.model.selected.premiseType = $state.params.pageData.premiseType;
 
       var params = filtersService.getAppliedFilters('brandSnapshot');
+
+      params.additionalParams = getAppliedFiltersForTopBottom();
 
       var promiseArr = [
         userService.getPerformanceDepletion(),
@@ -860,6 +907,9 @@ module.exports = /*  @ngInject */
         var params = filtersService.getAppliedFilters('topBottom');
         myperformanceService.appendFilterParametersForTopBottom(params, vm.currentTopBottomFilters);
         vm.loadingTopBottom = true;
+
+        params.additionalParams = getAppliedFiltersForTopBottom();
+
         userService.getTopBottomSnapshot(vm.currentTopBottomAcctType, params).then(function(data) {
           vm.currentTopBottomObj.performanceData = data.performance;
           vm.currentTopBottomObj.isPerformanceDataUpdateRequired = false;
@@ -1138,7 +1188,7 @@ module.exports = /*  @ngInject */
     function onFilterPropertiesChange() {
       if (topBottomInitData === false) {
         myperformanceService.resetFilterFlags(vm.topBottomData);
-        var categoryBound = vm.filtersService.model.accountSelected.accountMarkets;
+        // var categoryBound = vm.filtersService.model.accountSelected.accountMarkets;
         vm.currentTopBottomObj = getCurrentTopBottomObject(vm.currentTopBottomAcctType);
         // getDataForTopBottom(vm.currentTopBottomObj, categoryBound);
       }

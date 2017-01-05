@@ -465,7 +465,7 @@ module.exports = /*  @ngInject */
       // TODO
     }
 
-    function getTopBottomSnapshot(snapshotType, params, additionalQueryParams) {
+    function getTopBottomSnapshot(snapshotType, params) {
       var snapshotPromise = $q.defer(),
           url, baseUrl = '/api/users/' + service.model.currentUser.employeeID;
       params.type = 'topBottom';
