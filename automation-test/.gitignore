@@ -1,0 +1,6 @@
+/target/
+/.classpath
+/.gitignore
+/.project
+/test-output/
+/testng-functional-test.xml
