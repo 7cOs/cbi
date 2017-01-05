@@ -6,13 +6,13 @@ machine:
 dependencies:
   pre:
     - npm install -g gulp
-    - cd automation-test && mvn test 	  
 
 test:
   override:
     - gulp vet:js
     - gulp vet:sass
     - gulp test
+    - cd automation-test && mvn test
     
   post:
     - mkdir -p $CIRCLE_TEST_REPORTS/testng/
