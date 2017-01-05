@@ -1,6 +1,6 @@
 package com.cbrands.pages;
 
-import static com.cbrands.SeleniumUtils.waitForVisible;
+import static com.cbrands.helper.SeleniumUtils.waitForVisible;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -13,7 +13,7 @@ import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.LoadableComponent;
 import org.testng.Assert;
 
-import com.cbrands.PropertiesCache;
+import com.cbrands.helper.PropertiesCache;
 
 public class Login extends LoadableComponent<Login>{
     private Log log = LogFactory.getLog(Login.class);

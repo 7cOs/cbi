@@ -37,7 +37,7 @@ public class OpportunityResultTest extends BaseSeleniumTestCase{
 								   .getWebElementOfFirstItem();
 		
 		content.setSentByPersonName(ACTOR1_FIRST_NAME+" "+ ACTOR1_LAST_NAME );
-		content.setProductSku(content.getProductSku() + " " + "Non_Buy");
+		content.setProductSku(content.getProductSku() + " " + "Non-Buy");
 		content.setSentByDate("0 MINUTE AGO");
 		opportunitiesPage.sendOpportunityTo(ACTOR2_USER_NAME);
 		assertThat(opportunitiesPage.getOpportunitySent(),log(containsString(sent)));

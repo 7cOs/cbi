@@ -2,16 +2,26 @@
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
 <suite name="Suite">
 	<listeners>
-		<listener class-name="com.cbrands.TestNGCustomReportListener" />
+		<listener class-name="com.cbrands.listener.TestNGCustomReportListener" />
 	</listeners>
-	<test name="Functional Test"> 
+	<test name="Functional Test">
 		<classes>
+            
+            <class name="com.cbrands.test.functional.targetlist.TargetList_Create_AddCollaborators_Copy" />
+            
+            <class name="com.cbrands.test.functional.targetlist.feedback_for_opportunities" />
+            
+            <class name="com.cbrands.test.functional.targetlist.Target_List_Export" />
+            
+            <class name="com.cbrands.test.functional.targetlist.Archive_Target_List" />
             <!-- Run 1 -->
             <class name="com.cbrands.test.functional.home.HomePageTest" />
             <!-- Run 2 , 3, 4 -->
             <class name="com.cbrands.test.functional.opportunity.OpportunityTest" />
             <!-- Run 13 , 18 -->
             <class name="com.cbrands.test.functional.opportunity.OpportunityResultTest" />
+            
+            <class name="com.cbrands.test.functional.opportunity.AT_Opportunities_DismissOpportunity" />
             <!-- Run 5 --> 
             <class name="com.cbrands.test.functional.opportunity.Run5_SavedReports" />
             <!-- Run 6 --> 
@@ -24,10 +34,11 @@
             <class name="com.cbrands.test.functional.opportunity.Run10_OpportunityResultsTable" />
             
             <class name="com.cbrands.test.functional.opportunity.US12985_OpportunitySorting" />
-             
-            <class name="com.cbrands.test.functional.targetlist.Add_Collaborators_to_Target_List" />
-             
-            <class name="com.cbrands.test.functional.targetlist.CreateTargetList" />  
+        
+            <class name="com.cbrands.test.functional.targetlist.ShareOpportunity_TargetList" />
+            
+            <class name="com.cbrands.test.functional.myperformance.US13287_BrandSnapShot_PackageSKULevelDetail" />
+            
        </classes>
 	</test> <!-- Test -->
 </suite> <!-- Suite -->

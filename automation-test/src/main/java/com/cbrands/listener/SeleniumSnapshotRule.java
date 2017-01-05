@@ -5,7 +5,7 @@ import org.apache.commons.logging.LogFactory;
 import org.testng.ITestResult;
 import org.testng.TestListenerAdapter;
 
-import com.cbrands.SeleniumUtils;
+import com.cbrands.helper.SeleniumUtils;
 
 /**
  * 

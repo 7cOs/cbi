@@ -26,20 +26,20 @@ public class Run8_SearchBasedFilterFieldsTest extends BaseSeleniumTestCase {
 		// Test Step 8.1
 		opportunitiesPage.selectOpenOpportunityStatus();
 		opportunitiesPage.clearFirstRemovableFilterPill();
-		Assert.assertEquals(opportunitiesPage.opportunityStatusOpen.getAttribute("aria-checked"), "false", "'Open' filter option not removed");
+		Assert.assertEquals(opportunitiesPage.getOpportunityStatusOpen().getAttribute("aria-checked"), "false", "'Open' filter option not removed");
 
 		// Test Step 8.2
 		opportunitiesPage.clickShowMoreFilter();
-		Assert.assertEquals(opportunitiesPage.brandMasterSkuSearchBox.getAttribute("placeholder"), "Brand or SKU", "Helper text incorrect");
+		Assert.assertEquals(opportunitiesPage.getBrandMasterSkuSearchBox().getAttribute("placeholder"), "Brand or SKU", "Helper text incorrect");
 		opportunitiesPage.clickOnPremise();
-		Assert.assertEquals(opportunitiesPage.brandPackageSearchBox.getAttribute("placeholder"), "Brand or Package", "Helper text incorrect");
-		Assert.assertEquals(opportunitiesPage.retailerSearchBoxChain.getAttribute("placeholder"), "Account or Subaccount Name", "Helper text incorrect");
+		Assert.assertEquals(opportunitiesPage.getBrandPackageSearchBox().getAttribute("placeholder"), "Brand or Package", "Helper text incorrect");
+		Assert.assertEquals(opportunitiesPage.getRetailerSearchBoxChain().getAttribute("placeholder"), "Account or Subaccount Name", "Helper text incorrect");
 		opportunitiesPage.selectRetailerOptionStore();
-		Assert.assertEquals(opportunitiesPage.retailerSearchBoxStore.getAttribute("placeholder"), "Name, Address, TDLinx, or Store#", "Helper text incorrect");
-		Assert.assertEquals(opportunitiesPage.locationSearchBox.getAttribute("placeholder"), "City or Zip", "Helper text incorrect");
+		Assert.assertEquals(opportunitiesPage.getRetailerSearchBoxStore().getAttribute("placeholder"), "Name, Address, TDLinx", "Helper text incorrect");
+		Assert.assertEquals(opportunitiesPage.getLocationSearchBox().getAttribute("placeholder"), "City or Zip", "Helper text incorrect");
 		// The below step is to validate the helper text for CBBD Search box
 		// field
-		Assert.assertEquals(opportunitiesPage.searchBoxwithPlaceHolderValueName.get(1).getAttribute("placeholder"), "Name", "Helper text incorrect");
+		Assert.assertEquals(opportunitiesPage.getSearchBoxwithPlaceHolderValueName().get(1).getAttribute("placeholder"), "Name", "Helper text incorrect");
 
 		// Test Step 8.3
 		opportunitiesPage.clickOffPremise();
@@ -69,7 +69,7 @@ public class Run8_SearchBasedFilterFieldsTest extends BaseSeleniumTestCase {
 
 		// Test 8.7
 		opportunitiesPage.clickOpportunityTypeDropdown();
-		Assert.assertEquals(opportunitiesPage.opportunityTypeAllTypes.getAttribute("selected"), "true", "'All Types not selected by default'");
+		Assert.assertEquals(opportunitiesPage.getOpportunityTypeAllTypes().getAttribute("selected"), "true", "'All Types not selected by default'");
 		opportunitiesPage.clickOpporunityType("Non-Buy");
 		opportunitiesPage.clickOpporunityType("At Risk");
 		opportunitiesPage.clickOpporunityType("Low Velocity");
@@ -77,7 +77,7 @@ public class Run8_SearchBasedFilterFieldsTest extends BaseSeleniumTestCase {
 		opportunitiesPage.clickOpporunityType("New Placement (No Rebuy)");
 		opportunitiesPage.clickOpporunityType("Custom");
 		opportunitiesPage.clickOpporunityTypeDone();
-		Assert.assertNotNull(opportunitiesPage.filterPillNonBuy, "'At Risk' filter pill not displaying");
+		Assert.assertNotNull(opportunitiesPage.getFilterPillNonBuy(), "'At Risk' filter pill not displaying");
 		opportunitiesPage.clearFirstRemovableFilterPill();
 		WebElement HomeLink = driver.findElement(By.xpath("//a[contains(.,'Home')]"));
 		HomeLink.click();

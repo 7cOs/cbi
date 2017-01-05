@@ -10,7 +10,7 @@ import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 import com.cbrands.BaseSeleniumTestCase;
-import com.cbrands.RetryAnalyzer;
+import com.cbrands.helper.RetryAnalyzer;
 import com.cbrands.pages.Login;
 
 public class HomePageTest extends BaseSeleniumTestCase {

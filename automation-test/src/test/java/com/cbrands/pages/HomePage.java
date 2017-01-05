@@ -1,15 +1,17 @@
 package com.cbrands.pages;
 
-import static com.cbrands.SeleniumUtils.findElement;
-import static com.cbrands.SeleniumUtils.findElements;
-import static com.cbrands.SeleniumUtils.refresh;
-import static com.cbrands.SeleniumUtils.waitForElementToClickable;
-import static com.cbrands.SeleniumUtils.waitForVisible;
+import static com.cbrands.helper.SeleniumUtils.findElement;
+import static com.cbrands.helper.SeleniumUtils.findElements;
+import static com.cbrands.helper.SeleniumUtils.refresh;
+import static com.cbrands.helper.SeleniumUtils.waitForElementToClickable;
+import static com.cbrands.helper.SeleniumUtils.waitForVisible;
+import static com.cbrands.helper.SeleniumUtils.waitForVisibleFluentWait;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -20,7 +22,7 @@ import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.LoadableComponent;
 import org.testng.Assert;
 
-import com.cbrands.PropertiesCache;
+import com.cbrands.helper.PropertiesCache;
 
 public class HomePage extends LoadableComponent<HomePage>{
 	WebDriver driver;
@@ -62,6 +64,12 @@ public class HomePage extends LoadableComponent<HomePage>{
 	
 	@FindBy(how = How.XPATH, using = "//md-tab-item/span[text()='Shared with Me']")
 	private WebElement sharedWithMeLink;
+	
+	@FindBy(how = How.XPATH, using = "//a[contains(.,'My Performance')]")
+	private WebElement myPerformanceLink;
+	
+	@FindBy(how = How.XPATH, using = "//a[contains(.,'Account Dashboard')]")
+	private WebElement accountDashboardLink;
 	
 	public HomePage clickOffPremise() {
 		offPremise.click();
@@ -108,26 +116,48 @@ public class HomePage extends LoadableComponent<HomePage>{
 	
 	public HomePage typeBrandMasterSku(String value) {
 		brandMasterSku.sendKeys(value);
-		WebElement element = findElement(By.xpath("//div[4]/inline-search[1]/div[1]/input[2]"));
-		element.click();
-		WebElement element1 = findElement(By.xpath("//span[contains(.,'"+value+"')]"));
-		element1.click();
+		WebElement element = brandMasterSku.findElement(By.xpath("//input[contains(@class,'submit-btn visible')]"));
+		waitForVisibleFluentWait(element).click();
+		
+		List<WebElement> results = findElements(By.cssSelector("li[role='button']"));
+		for (WebElement webElement : results) {
+			if (webElement.getText().split("\n")[0].equalsIgnoreCase(value)) {
+				webElement.click();
+				return this;
+			}
+		}
+		
+		
+		//WebElement element1 = findElement(By.xpath("//span[contains(.,'"+value+"')]"));
+		//element1.click();
 		return this;
 	}
 
 	public HomePage typeRetailer(String retailerName) {
 		retailer.sendKeys(retailerName);
-		WebElement element = findElement(By.xpath("//div[2]/div[1]/inline-search[1]/div[1]/input[2]"));
-		element.click();
-		WebElement element1 = findElement(By.xpath("//div[1]/inline-search[1]/div[1]/div[1]/ul[1]/li[1]/span[1]"));
-		element1.click();
+		//		WebElement element = findElement(By.xpath("//div[2]/div[1]/inline-search[1]/div[1]/input[2]"));
+		WebElement element = retailer.findElement(By.xpath("//input[contains(@class,'submit-btn visible')]"));
+		waitForVisibleFluentWait(element).click();
+		List<WebElement> results = findElements(By.cssSelector("li[role='button']"));
+		for (WebElement webElement : results) {
+			if (webElement.getText().split("\n")[0].equalsIgnoreCase(retailerName)) {
+				JavascriptExecutor js = (JavascriptExecutor) driver;
+				js.executeScript("arguments[0].click();", webElement);
+				
+				//Actions action = new Actions(driver);
+				//action.moveToElement(webElement).perform();
+				//action.click().perform();
+				//webElement.click();
+				return this;
+			}
+		}
 		return this;
 	}
 	
 	public HomePage typeDistributor(String value)
 	{
 		distributor.sendKeys(value);
-		WebElement element = findElement(By.xpath("//div[2]/div[2]/inline-search/div/input[2]"));
+		WebElement element = findElement(By.xpath("//div[2]/div[2]/inline-search/div/input[3]"));
 		element.click();
 		WebElement element1 = findElement(By.xpath("//div[2]/div[2]/inline-search/div/div/ul/li/span[1]"));
 		element1.click();
@@ -154,6 +184,7 @@ public class HomePage extends LoadableComponent<HomePage>{
 	}
 
 	public TargetList navigateTargetList() {
+		waitForVisible(By.xpath("//span[contains(.,'Target Lists')]"));
 		waitForElementToClickable(TargetListLink, true).click();
 		TargetListLink.click();
 		return PageFactory.initElements(driver, TargetList.class);
@@ -230,4 +261,26 @@ public class HomePage extends LoadableComponent<HomePage>{
 		sharedWithMeLink.click();
 		return this;
 	}
+	
+	
+	public HomePage clickNotification() {
+		WebElement button = findElement(By.xpath("//a[@analytics-event='Notifications Click']"));
+		button.click();
+		return this;
+	}
+	
+    public TargetList  clickTargetList(String name){
+    	waitForVisible(By.xpath("//h4[text()='"+ name + "']"));
+    	WebElement MyTargetList = findElement(By.xpath("//h4[text()='"+ name + "']"));
+    	MyTargetList.click();
+    	return PageFactory.initElements(driver, TargetList.class);
+    }
+    
+    public AccountDashboard navigateToAccountDashboard(){
+    	waitForVisibleFluentWait(myPerformanceLink).click();	
+    	waitForVisibleFluentWait(accountDashboardLink).click();
+	return PageFactory.initElements(driver, AccountDashboard.class);
+    }
+    
+    
 }

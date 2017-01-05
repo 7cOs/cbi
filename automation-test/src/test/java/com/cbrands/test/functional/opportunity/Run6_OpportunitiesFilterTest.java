@@ -30,30 +30,30 @@ public class Run6_OpportunitiesFilterTest extends BaseSeleniumTestCase{
 
 		
 		//Test Step #6.3
-		Assert.assertNotNull(opportunitiesPage.filterPillMyAccountsOnly, "'My Accounts Only' filter pill is not present");
-		Assert.assertNotNull(opportunitiesPage.filterPillOffPremise, "'Off-Premise' filter pill is not present");
-		Assert.assertNotNull(opportunitiesPage.filterPillAllTypes, "'All Types' filter pill is not present");
+		Assert.assertNotNull(opportunitiesPage.getFilterPillMyAccountsOnly(), "'My Accounts Only' filter pill is not present");
+		Assert.assertNotNull(opportunitiesPage.getFilterPillOffPremise(), "'Off-Premise' filter pill is not present");
+		Assert.assertNotNull(opportunitiesPage.getFilterPillAllTypes(), "'All Types' filter pill is not present");
 		opportunitiesPage.selectOpenOpportunityStatus();
 		opportunitiesPage.resetFilters();
-		Assert.assertNotNull(opportunitiesPage.filterPillMyAccountsOnly, "'My Accounts Only' filter pill is not present");
-		Assert.assertNotNull(opportunitiesPage.filterPillOffPremise, "'Off-Premise' filter pill is not present");
-		Assert.assertNotNull(opportunitiesPage.filterPillAllTypes, "'All Types' filter pill is not present");
+		Assert.assertNotNull(opportunitiesPage.getFilterPillMyAccountsOnly(), "'My Accounts Only' filter pill is not present");
+		Assert.assertNotNull(opportunitiesPage.getFilterPillOffPremise(), "'Off-Premise' filter pill is not present");
+		Assert.assertNotNull(opportunitiesPage.getFilterPillAllTypes(), "'All Types' filter pill is not present");
 		
 		
 		//Test Step #6.4
-		Assert.assertNotNull(opportunitiesPage.filterInstruction, "Fillter selection instruction is not displaying");
+		Assert.assertNotNull(opportunitiesPage.getFilterInstruction(), "Fillter selection instruction is not displaying");
 		opportunitiesPage.clickOffPremise();
-		opportunitiesPage.searchRetailerChain("Walmart Supercenter");
-		Assert.assertNotNull(opportunitiesPage.applyFilters, "'Apply Filter' button is not enabled");
-		Assert.assertNotNull(opportunitiesPage.SaveReportLinkDisabled, "'Save Report' link is enabled");
+		opportunitiesPage.searchRetailerChainByName("Walmart");
+		Assert.assertNotNull(opportunitiesPage.getApplyFilters(), "'Apply Filter' button is not enabled");
+		Assert.assertNotNull(opportunitiesPage.getSaveReportLinkDisabled(), "'Save Report' link is enabled");
 		
 		//Test Step 6.5
-		Assert.assertNotNull(opportunitiesPage.distributor,"Distributor Search box not present");		
-		Assert.assertNotNull(opportunitiesPage.accountScope,"Account Scope radio button not present");	
-		Assert.assertNotNull(opportunitiesPage.opportunityStatusOpen,"Opportunity Status radio buttons not present");
-		Assert.assertNotNull(opportunitiesPage.opportunityTypeDropDown,"Opportunity Type drop down not present");
-		Assert.assertNotNull(opportunitiesPage.brandMasterSkuSearchBox,"Brand/SKU search box not present");
-		Assert.assertNotNull(opportunitiesPage.storeTypeIndependentRadioButton,"Store Type radio buttons not present");
+		Assert.assertNotNull(opportunitiesPage.getDistributor(),"Distributor Search box not present");		
+		Assert.assertNotNull(opportunitiesPage.getAccountScope(),"Account Scope radio button not present");	
+		Assert.assertNotNull(opportunitiesPage.getOpportunityStatusOpen(),"Opportunity Status radio buttons not present");
+		Assert.assertNotNull(opportunitiesPage.getOpportunityTypeDropDown(),"Opportunity Type drop down not present");
+		Assert.assertNotNull(opportunitiesPage.getBrandMasterSkuSearchBox(),"Brand/SKU search box not present");
+		Assert.assertNotNull(opportunitiesPage.getStoreTypeIndependentRadioButton(),"Store Type radio buttons not present");
 		
 		//Test Step #6.6
 		List<WebElement> allToolTips = driver.findElements(By.className("tooltip"));
@@ -63,13 +63,13 @@ public class Run6_OpportunitiesFilterTest extends BaseSeleniumTestCase{
 		
 		//Test Step 6.7
 		opportunitiesPage.clickShowMoreFilter();
-		Assert.assertNotNull(opportunitiesPage.predictedImpactHigh,"Pedicted Impact radio buttons not present");
-		Assert.assertNotNull(opportunitiesPage.productTypeAuthorized,"Product Type radio buttons not present");
-		Assert.assertNotNull(opportunitiesPage.tradeChannelGrocery,"Store Segmentation radio buttons not present");
-		Assert.assertNotNull(opportunitiesPage.storeSegmentationA,"Trade Channel radio buttons not present");
-		Assert.assertNotNull(opportunitiesPage.locationSearchBox,"Location search box not present");
-		Assert.assertNotNull(opportunitiesPage.stateDropDown,"'State' drop down not present");
-		Assert.assertNotNull(opportunitiesPage.searchBoxwithPlaceHolderValueName.get(1),"CBBD Contact search box not present");
+		Assert.assertNotNull(opportunitiesPage.getPredictedImpactHigh(),"Pedicted Impact radio buttons not present");
+		Assert.assertNotNull(opportunitiesPage.getProductTypeAuthorized(),"Product Type radio buttons not present");
+		Assert.assertNotNull(opportunitiesPage.getTradeChannelGrocery(),"Store Segmentation radio buttons not present");
+		Assert.assertNotNull(opportunitiesPage.getStoreSegmentationA(),"Trade Channel radio buttons not present");
+		Assert.assertNotNull(opportunitiesPage.getLocationSearchBox(),"Location search box not present");
+		Assert.assertNotNull(opportunitiesPage.getStateDropDown(),"'State' drop down not present");
+		Assert.assertNotNull(opportunitiesPage.getSearchBoxwithPlaceHolderValueName().get(1),"CBBD Contact search box not present");
 	
 	  }
 	

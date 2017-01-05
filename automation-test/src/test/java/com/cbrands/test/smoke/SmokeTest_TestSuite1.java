@@ -2,21 +2,20 @@ package com.cbrands.test.smoke;
 
 import static net.javacrumbs.hamcrest.logger.HamcrestLoggerMatcher.log;
 import static org.hamcrest.CoreMatchers.containsString;
-import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalToIgnoringCase;
 import static org.hamcrest.Matchers.hasItems;
 
-import org.openqa.selenium.By;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 import com.cbrands.BaseSeleniumTestCase;
+import com.cbrands.helper.RetryAnalyzer;
 import com.cbrands.pages.Login;
 
 public class SmokeTest_TestSuite1 extends BaseSeleniumTestCase {
+	
+	static String current_time_stamp = new java.text.SimpleDateFormat("MM.dd.yyyy HH:mm:ss").format(new java.util.Date());
 
 	@Test(dataProvider = "findOpportunity", description = "Search for the opportunity on Home Page", priority = 1)
 	public void findOpportunity(String Distributor) {
@@ -44,7 +43,7 @@ public class SmokeTest_TestSuite1 extends BaseSeleniumTestCase {
 		
 	}
 
-	@Test(dataProvider = "reportName", description = "Save Report as Smoke Test", priority = 3)
+	@Test(retryAnalyzer=RetryAnalyzer.class,dataProvider = "reportName", description = "Save Report as Smoke Test", priority = 3)
 	public void saveReport(String reportName) throws InterruptedException{
 		opportunitiesPage.clickSaveReport();
 		opportunitiesPage.typeSaveReportName(reportName);
@@ -54,21 +53,34 @@ public class SmokeTest_TestSuite1 extends BaseSeleniumTestCase {
 		
 	}
 
-	@Test(dataProvider = "sendOpportunityData", description = "Send Opportunity", priority = 4)
+	@Test(retryAnalyzer=RetryAnalyzer.class,dataProvider = "sendOpportunityData", description = "Send Opportunity", priority = 4)
 	public void sendOpportunity(String sendTo, String sent)throws InterruptedException {
 		opportunitiesPage.clickOpportunitySearchFirstResult();
 		opportunitiesPage.clickExpandAllButton();
 		Thread.sleep(300);
 		opportunitiesPage.sendOpportunityTo(sendTo);
-		Thread.sleep(300);
+		Thread.sleep(500);
 		assertThat(opportunitiesPage.getOpportunitySent(),log(containsString(sent)));
 		opportunitiesPage.reloadPage();
 	}
+	
+	@Test(retryAnalyzer=RetryAnalyzer.class,dataProvider="deleteReport", description="Delete Saved Report", priority=5)
+	public void deleteSaveReport(String reportName) throws InterruptedException{
+		//opportunitiesPage = targetListPage.navigateToOpportunities();
+		//Thread.sleep(2000);
+		opportunitiesPage.deleteSaveReportDropdownByName(reportName);
+		opportunitiesPage.clickDeleteReportBtn();
+		Thread.sleep(500);
+		assertThat("Report Deleted ", !opportunitiesPage.getListForSaveReport().contains(reportName));
+		signOut();
+	}
 
-	@Test(dataProvider = "targetData", description = "Create a new Target List", priority = 5)
+	@Test(retryAnalyzer=RetryAnalyzer.class,dataProvider = "targetData", description = "Create a new Target List", priority = 6)
 	public void createTargetList(String name, String description, String collaborator) throws InterruptedException {
-		
-		targetListPage = opportunitiesPage.navigateToTargetList();
+		login = new Login(driver);
+		homePage = login.loginWithValidCredentials(ACTOR1_USER_NAME, ACTOR1_PASSWORD);
+		targetListPage = homePage.navigateTargetList();
+		Thread.sleep(10000);
 		targetListPage.clickCreateNewList();
 		targetListPage.clickCreateNewListModal();
 		Thread.sleep(300);
@@ -76,33 +88,26 @@ public class SmokeTest_TestSuite1 extends BaseSeleniumTestCase {
 		targetListPage.typeDescription(description);
 		targetListPage.addCollaborator(collaborator);
 		targetListPage.clickTargetSave();
-		targetListPage.reloadPage();
+		Thread.sleep(3000);
 		targetListPage.clickNewTargetList(name);
-		
-		targetListPage.getTargetList(name);
+		Thread.sleep(3000);
 		
 		targetListPage.clickManage();
+		Thread.sleep(1000);
 		targetListPage.clickCollaborator();
 		targetListPage.removeCollaborator();
 		Thread.sleep(1000);
 		targetListPage.clickManage();
 		targetListPage.deleteTargetList();
 		
-		assertThat(targetListPage.getTargetListName(), log(containsString(name)));
+		
 		assertThat(targetListPage.getSuccessMessage(),log(containsString("Success")));
+		assertThat(targetListPage.getTargetListName(), log(containsString(name)));
 	
 		targetListPage.reloadPage();
 	}
 	
-	@Test(dataProvider="deleteReport", description="Delete Saved Report", priority=6)
-	public void deleteSaveReport(String reportName) throws InterruptedException{
-		opportunitiesPage = targetListPage.navigateToOpportunities();
-		opportunitiesPage.deleteSaveReportDropdownByName(reportName);
-		opportunitiesPage.clickDeleteReportBtn();
-		Thread.sleep(500);
-		assertThat("Report Deleted ", !opportunitiesPage.getListForSaveReport().contains(reportName));
-			
-	}
+	
 	
 
 	public void signOut() {
@@ -122,7 +127,7 @@ public class SmokeTest_TestSuite1 extends BaseSeleniumTestCase {
 
 	@DataProvider(name = "reportName")
 	public static Object[][] data2() {
-		return new Object[][] { { "Smoke Test"} };
+		return new Object[][] { { "Smoke Test "+current_time_stamp} };
 	}
 
 	@DataProvider(name = "sendOpportunityData")
@@ -132,14 +137,12 @@ public class SmokeTest_TestSuite1 extends BaseSeleniumTestCase {
 
 	@DataProvider(name = "targetData")
 	public static Object[][] data4() {
-		return new Object[][] { { "Smoke Test", "test", "Stanley Rowley" } };
+		return new Object[][] { { "Smoke Test "+current_time_stamp, "test", "Stanley Rowley" } };
 	}
 	
 	@DataProvider(name = "deleteReport")
 	public static Object[][] data5(){
-		return new Object[][]{{"Smoke Test"}};
+		return new Object[][]{{"Smoke Test "+current_time_stamp}};
 	}
-	
-	
 }
 

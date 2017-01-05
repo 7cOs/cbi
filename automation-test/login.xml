@@ -6,7 +6,7 @@
 	</listeners>
 	<test name="Smoke Test">
 		<classes>
-			<class name="com.cbrands.test.smoke.SmokeTest_TestSuite1" />
+			<class name="com.cbrands.test.smoke.UserLoginTest" />
 		</classes>
 	</test> <!-- Test -->
 </suite> <!-- Suite -->

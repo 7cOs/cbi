@@ -8,8 +8,6 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalToIgnoringCase;
 import static org.hamcrest.Matchers.hasItems;
 
-import org.hamcrest.core.IsEqual;
-import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
@@ -110,82 +108,81 @@ public class OpportunityTest extends BaseSeleniumTestCase {
 	
 	
 	@Test(dataProvider="opportunityPage2Test", description="US12829: I can add or remove opportunities to an existing Target List", priority=4)
-	public void addOpportunityToExistingTargetList(String chain, String targetListName1,String newTargetList,String targetListName2) throws InterruptedException{
+	public void addOpportunityToExistingTargetList(String chain, String targetListName1, String newTargetList, String targetListName2) throws InterruptedException {
 		login = new Login(driver);
 
 		homePage = login.loginWithValidCredentials(ACTOR1_USER_NAME, ACTOR1_PASSWORD);
-		
-		targetListPage = homePage.navigateTargetList();
-		
-		if(targetListPage.checkTargetNameExists(targetListName2)){
 
-		targetListPage.clickNewTargetList(targetListName2);
-		
-		if(targetListPage.expandAll.isEnabled()){
-			targetListPage.clickSelectAll();
-			targetListPage.deleteOpportunity();
-			assertThat("Existing Opportunities deleted", !targetListPage.expandAll.isEnabled());
-		}
+		targetListPage = homePage.navigateTargetList();
+		Thread.sleep(10000);
+
+		if (targetListPage.checkTargetNameExists(targetListName2)) {
+
+			targetListPage.clickNewTargetList(targetListName2);
+
+			if (targetListPage.getExpandAll().isEnabled()) {
+				targetListPage.clickSelectAll();
+				targetListPage.deleteOpportunity();
+				Thread.sleep(2000);
+				assertThat("Existing Opportunities deleted", !targetListPage.getExpandAll().isEnabled());
+			}
 		}
 		targetListPage.reloadPage();
-		opportunitiesPage =  targetListPage.navigateToOpportunities();
-		
-		opportunitiesPage.searchRetailerChain(chain);
+		opportunitiesPage = targetListPage.navigateToOpportunities();
+
+		opportunitiesPage.searchRetailerChainByName(chain);
 		opportunitiesPage.clickApplyFilters();
-		
+
 		assertThat(getFilterList(), log(hasItems(equalToIgnoringCase(chain))));
-		
+
 		opportunitiesPage.clickOpportunitySearchFirstResult();
 		opportunitiesPage.clickExpandAllButton();
-		
-		assertThat("Add to target list button is disabled ", !opportunitiesPage.addToTargetListButton.isEnabled());
-		
+
+		assertThat("Add to target list button is disabled ", !opportunitiesPage.getAddToTargetListButton().isEnabled());
+
 		opportunitiesPage.selectFirstStore();
 
 		opportunitiesPage.clickAddToTargetListButton();
-		
-		
-		if(opportunitiesPage.checkTargetListExists(targetListName1) && opportunitiesPage.checkTargetListExists(targetListName2)){
 
-		opportunitiesPage.selectDropdownFromTargetList(targetListName1);
-		Thread.sleep(500);
-		
-		assertThat(opportunitiesPage.getOpputunitiesAddedConfirmToast(), log(containsString("Opportunity")));
-		
-		opportunitiesPage.selectFirstStore();
-		opportunitiesPage.selectFirstStore();
-		opportunitiesPage.selectMultipleStore();
-		opportunitiesPage.clickAddToTargetListButton();
-		
-		opportunitiesPage.selectDropdownFromTargetList(targetListName2);
-		Thread.sleep(500);
-		assertThat(opportunitiesPage.getOpputunitiesAddedConfirmToast(), log(containsString("Opportunities")));
-		
-		opportunitiesPage.pageRefresh();
-		targetListPage = opportunitiesPage.navigateToTargetList();
-		Thread.sleep(2000);
-		targetListPage.clickNewTargetList(targetListName1);
-		targetListPage.selectFirstOpportunity();
-		targetListPage.deleteOpportunity();
-		Thread.sleep(1000);
-		assertThat("All Opportunities Deleted ", !targetListPage.removeOpportunity.isEnabled());
-		
-		targetListPage.reloadPage();
-		targetListPage.navigateToTargetList();
-		targetListPage.clickNewTargetList(targetListName2);
-		}
-		else if(!opportunitiesPage.checkTargetListExists(targetListName1)){
+		if (opportunitiesPage.checkTargetListExists(targetListName1) && opportunitiesPage.checkTargetListExists(targetListName2)) {
+
+			opportunitiesPage.selectDropdownFromTargetList(targetListName1);
+			Thread.sleep(500);
+
+			assertThat(opportunitiesPage.getOpputunitiesAddedConfirmToast(), log(containsString("Opportunity")));
+
+			opportunitiesPage.selectFirstStore();
+			// opportunitiesPage.selectFirstStore();
+			opportunitiesPage.selectMultipleStore();
+			opportunitiesPage.clickAddToTargetListButton();
+
+			opportunitiesPage.selectDropdownFromTargetList(targetListName2);
+			Thread.sleep(500);
+			assertThat(opportunitiesPage.getOpputunitiesAddedConfirmToast(), log(containsString("Opportunities")));
+
+			opportunitiesPage.pageRefresh();
+			Thread.sleep(10000);
+			targetListPage = opportunitiesPage.navigateToTargetList();
+			Thread.sleep(10000);
+			targetListPage.clickNewTargetList(targetListName1);
+			targetListPage.selectFirstOpportunity();
+			targetListPage.deleteOpportunity();
+			Thread.sleep(1000);
+			assertThat("All Opportunities Deleted ", !targetListPage.getRemoveOpportunity().isEnabled());
+
+			targetListPage.reloadPage();
+			targetListPage.navigateToTargetList();
+			targetListPage.clickNewTargetList(targetListName2);
+			targetListPage.clickExpandAll();
+			Thread.sleep(2000);
+		} else if (!opportunitiesPage.checkTargetListExists(targetListName1)) {
 			assertThat("Target List Does not exists. Create Target List " + targetListName1, !opportunitiesPage.checkTargetListExists(targetListName1));
-		}
-		else if(!opportunitiesPage.checkTargetListExists(targetListName2)){
+		} else if (!opportunitiesPage.checkTargetListExists(targetListName2)) {
 			assertThat("Target List Does not exists. Create Target List " + targetListName2, !opportunitiesPage.checkTargetListExists(targetListName2));
-		}
-		else{
+		} else {
 			assertThat("Target List Does not exists. Create Target List " + targetListName1 + " and " + targetListName2, !opportunitiesPage.checkTargetListExists(targetListName1));
 		}
-		
-		
-		
+
 	}
 	
 	@DataProvider(name = "opportunityPage1Test")

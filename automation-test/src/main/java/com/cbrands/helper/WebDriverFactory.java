@@ -1,4 +1,4 @@
-package com.cbrands;
+package com.cbrands.helper;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -16,24 +16,35 @@ import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.testng.annotations.Listeners;
 
-import com.cbrands.listener.SauceHelpers;
 import com.saucelabs.common.SauceOnDemandAuthentication;
 import com.saucelabs.common.SauceOnDemandSessionIdProvider;
 import com.saucelabs.testng.SauceOnDemandAuthenticationProvider;
 import com.saucelabs.testng.SauceOnDemandTestListener;
 
 /**
- * 
- * @author Kazi Hossain
+ * A factory for creating WebDriver objects.
  *
+ * @author Kazi Hossain
  */
 @Listeners({SauceOnDemandTestListener.class})
 public class WebDriverFactory implements SauceOnDemandSessionIdProvider, SauceOnDemandAuthenticationProvider{
+	
+	/** The log. */
 	private static Log log = LogFactory.getLog(WebDriverFactory.class);
 	
+	/** The web driver. */
 	private static ThreadLocal<WebDriver> webDriver = new ThreadLocal<WebDriver>();
+	
+	/** The session id. */
 	private static ThreadLocal<String> sessionId = new ThreadLocal<String>();
 	
+	/**
+	 * Creates a new WebDriver object.
+	 *
+	 * @param driverName the driver name
+	 * @return the web driver
+	 * @throws MalformedURLException the malformed URL exception
+	 */
 	public static WebDriver createDriver(String driverName) throws MalformedURLException {
 		
 
@@ -116,10 +127,23 @@ public class WebDriverFactory implements SauceOnDemandSessionIdProvider, SauceOn
 		return webDriver.get();
 	}
 
+	/**
+	 * The Enum BrowserType.
+	 */
 	public enum BrowserType {
-		firefox, ie, chrome, remote, sauce
+
+		firefox,
+		ie, 
+		chrome, 
+		remote, 
+		sauce
 	}
 	
+	/**
+	 * Gets the web driver.
+	 *
+	 * @return the web driver
+	 */
 	public static WebDriver getWebDriver() {
         return webDriver.get();
     }

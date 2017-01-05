@@ -23,7 +23,7 @@ public class NotificationContent {
 	}
 
 	public String getStoreName() {
-		return storeName;
+		return storeName.toUpperCase();
 	}
 
 	public void setStoreName(String storeName) {
@@ -31,7 +31,7 @@ public class NotificationContent {
 	}
 
 	public String getProductSku() {
-		return productSku;
+		return productSku.toUpperCase();
 	}
 
 	public void setProductSku(String productSku) {
@@ -39,7 +39,7 @@ public class NotificationContent {
 	}
 
 	public String getType() {
-		return type;
+		return type.toUpperCase();
 	}
 
 	public void setType(String type) {
@@ -47,7 +47,7 @@ public class NotificationContent {
 	}
 
 	public String getSentByPersonName() {
-		return sentByPersonName;
+		return sentByPersonName.toUpperCase();
 	}
 
 	public void setSentByPersonName(String sentByPersonName) {
@@ -55,7 +55,7 @@ public class NotificationContent {
 	}
 
 	public String getSentByDate() {
-		return sentByDate;
+		return sentByDate.toUpperCase();
 	}
 
 	public void setSentByDate(String sentByDate) {

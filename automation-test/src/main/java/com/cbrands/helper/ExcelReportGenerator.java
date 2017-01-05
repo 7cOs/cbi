@@ -1,4 +1,4 @@
-package com.cbrands;
+package com.cbrands.helper;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -22,11 +22,21 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 /**
- * 
- * @author Kazi Hossain
+ * The Class ExcelReportGenerator.
  *
+ * @author Kazi Hossain
  */
 public class ExcelReportGenerator {
+	
+	/**
+	 * Generate excel report.
+	 *
+	 * @param destFileNameWithExtention the dest file name with extention
+	 * @param DesiredPath the desired path
+	 * @throws ParserConfigurationException the parser configuration exception
+	 * @throws IOException Signals that an I/O exception has occurred.
+	 * @throws SAXException the SAX exception
+	 */
 	public static void generateExcelReport(String destFileNameWithExtention, String DesiredPath)
 			throws ParserConfigurationException, IOException, SAXException {
 		DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss_");
@@ -180,6 +190,14 @@ public class ExcelReportGenerator {
 		fout.close();
 	}
 
+	/**
+	 * The main method.
+	 *
+	 * @param args the arguments
+	 * @throws ParserConfigurationException the parser configuration exception
+	 * @throws IOException Signals that an I/O exception has occurred.
+	 * @throws SAXException the SAX exception
+	 */
 	public static void main(String[] args) throws ParserConfigurationException, IOException, SAXException {
 		ExcelReportGenerator.generateExcelReport("Automation.xlsx", ".");
 	}
