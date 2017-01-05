@@ -12,8 +12,7 @@ test:
     - gulp vet:js
     - gulp vet:sass
     - gulp test
-    - cd automation-test && mvn test
-    
+
   post:
     - mkdir -p $CIRCLE_TEST_REPORTS/testng/
     - find . -type f -regex ".*/target/surefire-reports/.*html" -exec cp {} $CIRCLE_TEST_REPORTS/testng/ \;
@@ -27,6 +26,7 @@ deployment:
   qa:
     branch: test
     commands:
+      - cd automation-test && mvn test
       # push the code to app-orion-dev
       - git push git@heroku.com:app-orion-qa.git $CIRCLE_SHA1:master -f
       - git push git@heroku.com:app-compass-loadtest.git $CIRCLE_SHA1:master -f
