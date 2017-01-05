@@ -90,9 +90,18 @@ module.exports = /*  @ngInject */
         // remove type obj
         delete obj.type;
 
+        queryParams += '?';
+
+        for (key1 in obj.additionalParams) {
+          queryParams += key1 + '=' + encodeURIComponent(obj.additionalParams[key1]) + '&';
+        }
+
+        delete obj.additionalParams;
+
+        queryParams += 'filter=';
         queryParams += parseAppliedFilters(obj, i, z);
-        // console.log('[?filter=' + queryParams + ']', '?filter=' + encodeURIComponent(queryParams));
-        return '?filter=' + encodeURIComponent(queryParams);
+
+        return queryParams;
       } else if (obj.type && obj.type === 'topBottom') {
         queryParams = '?';
 
@@ -105,7 +114,8 @@ module.exports = /*  @ngInject */
 
         filterQueryParams = parseAppliedFilters(obj, i, z);
         queryParams += 'filter=' + encodeURIComponent(filterQueryParams);
-        console.log('queryParams', queryParams);
+        // console.log('queryParams', queryParams);
+        return queryParams;
       } else {
         // remove type obj
         delete obj.type;

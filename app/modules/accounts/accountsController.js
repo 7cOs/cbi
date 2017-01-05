@@ -508,6 +508,10 @@ module.exports = /*  @ngInject */
       vm.loadingBrandSnapshot = true;
       prevTab();
 
+      params.additionalParams = {
+        timePeriod: filtersService.model.accountSelected.accountMarkets.propertyName === 'depletions' ? vm.filterModel.depletionsTimePeriod.displayValue : vm.filterModel.distributionTimePeriod.displayValue
+      };
+
       userService.getPerformanceBrand(params).then(function(data) {
         vm.brandTabs.brands = data.performance;
         setCurrentTotalsObject();
@@ -680,6 +684,10 @@ module.exports = /*  @ngInject */
 
       // brand snapshot returns sku data instead of just the brand if you add brand:xxx
       if (params.brand && params.brand.length) delete params.brand;
+      params.additionalParams = {
+        timePeriod: filtersService.model.accountSelected.accountMarkets.propertyName === 'depletions' ? vm.filterModel.depletionsTimePeriod.displayValue : vm.filterModel.distributionTimePeriod.displayValue
+      };
+      params.type = 'brandSnapshot';
       promiseArr.push(userService.getPerformanceBrand(params));
 
       $q.all(promiseArr).then(function(data) {

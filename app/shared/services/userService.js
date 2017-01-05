@@ -488,6 +488,7 @@ module.exports = /*  @ngInject */
           break;
       }
       url = apiHelperService.request(baseUrl, params);
+
       $http.get(url)
         .then(getTopBottomSnapshotSuccess)
         .catch(getTopBottomSnapshotFail);
