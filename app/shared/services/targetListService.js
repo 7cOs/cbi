@@ -224,17 +224,20 @@ module.exports = /*  @ngInject */
       }
 
       function setVsYAPercent(item) {
-        // defined in DE2970
+        // defined in DE2970, updated in US/13385
         var vsYAPercent = 0,
             negative = false;
-        if (item.depletionsCurrentYearToDateYA === 0) {
+        if (item.depletionsCurrentYearToDate > 0 && item.depletionsCurrentYearToDateYA === 0) {
           vsYAPercent = '100%';
-        } else if (item.depletionsCurrentYearToDate === 0) {
+        } else if (item.depletionsCurrentYearToDate === 0 && item.depletionsCurrentYearToDateYA > 0) {
           vsYAPercent = '-100%';
+          negative = true;
+        } else if (item.depletionsCurrentYearToDate === 0 && item.depletionsCurrentYearToDateYA === 0) {
+          vsYAPercent = 0;
           negative = true;
         } else {
           // vsYAPercent = -100 + ((item.depletionsCurrentYearToDate / item.depletionsCurrentYearToDateYA) * 100);
-          vsYAPercent = ((item.depletionsCurrentYearToDate - item.depletionsCurrentYearToDateYA) / item.depletionsCurrentYearToDateYA) * 100;
+          vsYAPercent = (item.depletionsCurrentYearToDate / item.depletionsCurrentYearToDateYA - 1) * 100;
           if (vsYAPercent > 999) {
             vsYAPercent = '999%';
           } else if (vsYAPercent < -999) {

@@ -84,6 +84,7 @@ module.exports = /*  @ngInject */
     vm.toggleOpportunitiesInStores = toggleOpportunitiesInStores;
     vm.toggleSelectAllStores = toggleSelectAllStores;
     vm.updateOpportunityModel = updateOpportunityModel;
+    vm.vsYAGrowthPercent = vsYAGrowthPercent;
     vm.opportunityTypeOrSubtype = opportunityTypeOrSubtype;
 
     // Custom Headers for CSV export
@@ -648,17 +649,31 @@ module.exports = /*  @ngInject */
       store.selectedOpportunities = 0;
     }
 
+    function vsYAGrowthPercent(ty, ya) {
+      if (ty > 0 && ya === 0) {
+        return 100;
+      } else if (ty === 0 && ya > 0) {
+        return -100;
+      } else if (ty === 0 && ya === 0) {
+        return 0;
+      } else {
+        return (ty / ya - 1) * 100;
+      }
+    }
+
     function depletionsVsYaPercent(opportunity) {
       var currentYearToDate = opportunity.store.depletionsCurrentYearToDate,
           currentYearToDateYearAgo = opportunity.store.depletionsCurrentYearToDateYA,
           yearAgoPercentValue = opportunity.store.depletionsCurrentYearToDateYAPercent;
 
-      if (currentYearToDateYearAgo === 0 && currentYearToDate !== 0) {
+      if (currentYearToDateYearAgo === 0 && currentYearToDate > 0) {
         yearAgoPercentValue = 100;
-      } else if (currentYearToDateYearAgo !== 0 && currentYearToDate === 0) {
+      } else if (currentYearToDateYearAgo > 0 && currentYearToDate === 0) {
         yearAgoPercentValue = -100;
+      } else if (currentYearToDateYearAgo === 0 && currentYearToDate === 0) {
+        yearAgoPercentValue = 0;
       } else {
-        yearAgoPercentValue = (currentYearToDate - currentYearToDateYearAgo) / currentYearToDateYearAgo * 100;
+        yearAgoPercentValue = (currentYearToDate / currentYearToDateYearAgo - 1) * 100;
       }
 
       if (yearAgoPercentValue > 999) {

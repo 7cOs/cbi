@@ -119,14 +119,16 @@ v-accordion.styled-list(multiple="" id="opportunities" control="list.accordion" 
             div(column='3').no-pad
               label.bold Distribution L90
               div(row)
-                div(column='4')
+                div(column='5')
                   label Simple
                   div(row)
-                    div(column='12') {{::opportunity.store.distributionL90Simple | number:0}}<span class="percentage">{{::(opportunity.store.distributionL90Simple / opportunity.store.distributionL90SimpleYA - 1) * 100 | number:1}}</span>%
-                div(column='8')
+                    div(column='12') {{::opportunity.store.distributionL90Simple | number:0}}
+                      span.percentage {{list.vsYAGrowthPercent(opportunity.store.distributionL90Simple, opportunity.store.distributionL90SimpleYA) | number:1}}%
+                div(column='7')
                   label Effective
                   div(row)
-                    div(column='12') {{::opportunity.store.distributionL90Effective | number:0}}<span class="percentage">{{::(opportunity.store.distributionL90Effective / opportunity.store.distributionL90EffectiveYA - 1) * 100 | number:1}}</span>%
+                    div(column='12') {{::opportunity.store.distributionL90Effective | number:0}}
+                      span.percentage {{list.vsYAGrowthPercent(opportunity.store.distributionL90Effective, opportunity.store.distributionL90EffectiveYA) | number:1}}%
             div(column='2')
               .tooltip-wrap
                 label Velocity (VS YA%)
@@ -137,7 +139,8 @@ v-accordion.styled-list(multiple="" id="opportunities" control="list.accordion" 
                       h3 vs YA %
                       p Monthly velocity for this account, calculated by taking the total volume over the selected time period (e.g. L90) and dividing by number of 30 day periods (3). “% vs YA” indicates the trend of velocity this year vs. same time period last year.
               div(row)
-                div(column='12') {{::opportunity.store.velocity | number:0}}<span class="percentage">{{::(opportunity.store.velocity / opportunity.store.velocityYA - 1) * 100 | number:1}}</span>%
+                div(column='12') {{::opportunity.store.velocity | number:0}}
+                  span.percentage {{list.vsYAGrowthPercent(opportunity.store.velocity, opportunity.store.velocityYA) | number:1}}%
             div(column='2')
               label Distributor
               div(row)
@@ -207,7 +210,8 @@ v-accordion.styled-list(multiple="" id="opportunities" control="list.accordion" 
                     span.last-depletion {{::product.depletionsCurrentYearToDate | number:0 }}
                   div(column="1").vs-ya
                     label vs YA %
-                    span(class='positive' ng-class="{'negative': product.depletionsCurrentYearToDateYAPercentNegative}") {{::product.depletionsCurrentYearToDateYAPercent}}
+                    span(ng-if="product.depletionsCurrentYearToDateYAPercent !== 0" class='positive' ng-class="{'negative': product.depletionsCurrentYearToDateYAPercentNegative}") {{::product.depletionsCurrentYearToDateYAPercent}}
+                    span(ng-if="product.depletionsCurrentYearToDateYAPercent === 0") 0%
                   div(column="2" ng-if="product.itemAuthorizationCode !== null")
                     label Authorization Type
                     span(ng-click="list.showOpportunityMemoModal(); list.getMemos(product.store.id, product.product.id, 'itemAuth')").open-memo {{::product.itemAuthorizationDesc}}
