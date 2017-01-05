@@ -9,7 +9,7 @@ notes
           label My Accounts
           label On- &amp; Off-Premise
         .brands
-          p(ng-if="!a.brandWidgetSkuTitle") {{a.brandWidgetTitle}}<span ng-if="a.brandIdSelected"> - {{a.brandIdSelected}}</span>
+          p(ng-if="!a.brandWidgetSkuTitle") {{a.brandWidgetTitle}}
           p {{a.brandWidgetSkuTitle}}
         .market
           p(ng-if="a.selectedStore || a.selectedDistributor")
@@ -19,7 +19,7 @@ notes
           p <a href="#" ng-click="a.openNotes(true)" analytics-on="click" analytics-event="Notes Tab"></a>
       .market-overview.clearfix
         .brands
-          p(ng-if="!a.brandWidgetSkuTitle") {{a.brandWidgetTitle}}<span ng-if="a.brandIdSelected"> - {{a.brandIdSelected}}</span>
+          p(ng-if="!a.brandWidgetSkuTitle") {{a.brandWidgetTitle}}
           p {{a.brandWidgetSkuTitle}}
         .market
           p(ng-if="a.selectedStore || a.selectedDistributor")
