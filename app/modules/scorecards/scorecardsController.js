@@ -31,7 +31,9 @@ module.exports = /*  @ngInject */
     };
     vm.totalRowTemplate = {
       depletions: 0,
+      depletionsLastYear: 0,
       depletionsBU: 0,
+      depletionsBULastYear: 0,
       gap: 0,
       percentTrend: 0,
       percentBUTrend: 0,
@@ -236,20 +238,29 @@ module.exports = /*  @ngInject */
         angular.forEach(userService.model.depletion[i].measures, function(item, key) {
           if (item.timeframe === vm.depletionSelect) {
             // sum
-            var gap = (item.depletions - (item.depletions / (1 + item.depletionsTrend / 100)));
-            isFinite(gap) ? vm.totalRow.gap += gap : vm.totalRow.gap += 0;
             vm.totalRow.depletions += item.depletions;
+            vm.totalRow.depletionsLastYear += item.depletionsLastYear;
             vm.totalRow.depletionsBU += item.depletionsBU;
+            vm.totalRow.depletionsBULastYear += item.depletionsBULastYear;
             vm.totalRow.gapVsPlan += (item.depletions - item.plan);
-            vm.volumneBU = 0;
+            vm.volumeBU = 0;
             vm.growthBU = 0;
+
           }
         });
       }
 
-      vm.totalRow.percentTrend = (vm.totalRow.gap / vm.totalRow.depletions) * 100;
-      vm.totalRow.percentBUTrend = (vm.totalRow.gap / vm.totalRow.depletions) * 100;
-      vm.totalRow.percentGapVsPlan = (vm.totalRow.gapVsPlan / vm.totalRow.depletions) * 100;
+      vm.totalRow.gap = vm.totalRow.depletions - vm.totalRow.depletionsLastYear;
+
+      vm.totalRow.percentTrend = vsYAPercent(vm.totalRow.depletions, vm.totalRow.depletionsLastYear, ((vm.totalRow.depletions / vm.totalRow.depletionsLastYear - 1) * 100));
+
+      vm.totalRow.percentBUTrend = vsYAPercent(vm.totalRow.depletionsBU, vm.totalRow.depletionsBULastYear, ((vm.totalRow.depletionsBU / vm.totalRow.depletionsBULastYear - 1) * 100));
+
+      if (vm.totalRow.depletions !== 0) {
+        vm.totalRow.percentGapVsPlan = $filter('number')((vm.totalRow.gapVsPlan / vm.totalRow.depletions) * 100, 1);
+      } else {
+        vm.totalRow.percentGapVsPlan = 0;
+      }
     }
 
     function updateTotalRowDistributions() {
