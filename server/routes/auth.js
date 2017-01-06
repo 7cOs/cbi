@@ -23,6 +23,11 @@ module.exports = function(app) {
     res.redirect(logoutUrl);
   });
 
+  app.get('/auth/expired', function (req, res) {
+    console.log(logoutUrl);
+    res.redirect(logoutUrl);
+  });
+
   app.post('/auth/callback',
     passport.authenticate(authType, {failureRedirect: logoutUrl}),
     function(req, res) {

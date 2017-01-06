@@ -5,7 +5,7 @@ module.exports = /*  @ngInject */
     var responseError = function (rejection) {
       if (rejection.status === 403) {
         console.log('redirecting');
-        window.location.href = '/auth/login';
+        window.location.href = '/auth/expired';
       }
       return $q.reject(rejection);
     };
