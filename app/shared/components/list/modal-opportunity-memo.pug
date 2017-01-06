@@ -1,8 +1,14 @@
 .modal.opportunity-memo
-  .title
+  .title(ng-if="list.memoError === true")
+    h4 Error!
+    a.hide-row(ng-click="list.closeModal()")
+  div.modal-form.clearfix(ng-if="list.memoError === true")
+    .row.clearfix
+      p.error-message.accent.general-error <img src="./assets/img/icons/error.svg"> Sorry, {{list.memoType}} details not found for this Opportunity.
+  .title(ng-if="list.memoError === false")
     a.hide-row(ng-click="list.closeModal()")
     h4 {{list.memoData.typeDescription}}
-  div.modal-form.clearfix
+  div.modal-form.clearfix(ng-if="list.memoError === false")
     div(column="12").regional-status.mandate-icon
       div(ng-class="{'featured': list.memoData.featureCode, 'mandatory': list.memoData.authorizationCode}")
     div(row).clearfix
