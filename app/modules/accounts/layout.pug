@@ -33,21 +33,21 @@ notes
     div.trend(column='2')
       label Trend
       md-radio-group(ng-model="a.filterModel.trend")
-        md-radio-button(ng-repeat="filter in a.filtersService.model.trend" class="md-primary" ng-value="filter" aria-label="Trend" ng-if = "a.checkForStoreLevel(filter)" ng-click="a.trendOptionChanged(filter)") {{filter.name}}
+        md-radio-button(ng-repeat="filter in a.filtersService.model.trend" class="md-primary" ng-value="filter" aria-label="Trend" ng-if = "a.checkForStoreLevel(filter)" ng-click="a.trendOptionChanged(filter); a.apply(false);") {{filter.name}}
     div(column='3')
       label Ending Time Period
       md-radio-group(ng-model="a.filterModel.endingTimePeriod")
-        md-radio-button(ng-repeat="filter in a.filtersService.model.timePeriod track by $index" class="md-primary" ng-value="filter.value" aria-label="Ending Time Period" ng-click="a.updateDistributionTimePeriod(filter.value)") {{filter.name}}
+        md-radio-button(ng-repeat="filter in a.filtersService.model.timePeriod track by $index" class="md-primary" ng-value="filter.value" aria-label="Ending Time Period" ng-click="a.updateDistributionTimePeriod(filter.value); a.apply(false);") {{filter.name}}
     div(column='7')
       div(row).dropdown-filter
         div(column='6').dropdown
           label Depletions Time Period
           md-select(ng-model="a.filterModel.depletionsTimePeriod" md-on-open="a.openSelect(true)" md-on-close="a.openSelect(false)" aria-label="Select a depletion time period" ng-model-options="{trackBy: '$value.id'}")
-            md-option(ng-repeat="filter in a.filtersService.model.depletionsTimePeriod[a.filterModel.endingTimePeriod]" aria-label="{{filter.name}}" ng-value="filter" ng-click="a.depletionOptionChanged(filter);") {{filter.displayValue}}
+            md-option(ng-repeat="filter in a.filtersService.model.depletionsTimePeriod[a.filterModel.endingTimePeriod]" aria-label="{{filter.name}}" ng-value="filter" ng-click="a.depletionOptionChanged(filter); a.apply(false);") {{filter.displayValue}}
         div(column='6').dropdown
           label Distribution Time Period
           md-select(ng-model="a.filterModel.distributionTimePeriod" md-on-open="a.openSelect(true)" md-on-close="a.openSelect(false)" aria-label="Select a distribution time period")
-            md-option(ng-repeat="filter in a.filtersService.model.distributionTimePeriod[a.filterModel.endingTimePeriod]" aria-label="{{filter.name}}" ng-value="filter" ng-click="a.distOptionChanged(filter)")
+            md-option(ng-repeat="filter in a.filtersService.model.distributionTimePeriod[a.filterModel.endingTimePeriod]" aria-label="{{filter.name}}" ng-value="filter" ng-click="a.distOptionChanged(filter); a.apply(false);")
               <span>{{a.filterModel.endingTimePeriod === 'month'? filter.displayValue + ' Mth' : filter.displayValue + ' Days'}}</span>
 
 .filters(column='12')

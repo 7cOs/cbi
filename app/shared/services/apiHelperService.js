@@ -86,13 +86,38 @@ module.exports = /*  @ngInject */
         }
 
         return '?' + queryParams;
-      } else if (obj.type && (obj.type === 'brandSnapshot' || obj.type === 'topBottom')) {
+      } else if (obj.type && obj.type === 'brandSnapshot') {
         // remove type obj
         delete obj.type;
 
+        queryParams += '?';
+
+        for (key1 in obj.additionalParams) {
+          queryParams += key1 + '=' + encodeURIComponent(obj.additionalParams[key1]) + '&';
+        }
+
+        delete obj.additionalParams;
+
+        queryParams += 'filter=';
         queryParams += parseAppliedFilters(obj, i, z);
-        // console.log('[?filter=' + queryParams + ']', '?filter=' + encodeURIComponent(queryParams));
-        return '?filter=' + encodeURIComponent(queryParams);
+
+        // console.log('queryParams', decodeURIComponent(queryParams));
+
+        return queryParams;
+      } else if (obj.type && obj.type === 'topBottom') {
+        queryParams = '?';
+
+        for (key1 in obj.additionalParams) {
+          queryParams += key1 + '=' + encodeURIComponent(obj.additionalParams[key1]) + '&';
+        }
+
+        delete obj.type;
+        delete obj.additionalParams;
+
+        filterQueryParams = parseAppliedFilters(obj, i, z);
+        queryParams += 'filter=' + encodeURIComponent(filterQueryParams);
+        console.log('queryParams', decodeURIComponent(queryParams));
+        return queryParams;
       } else {
         // remove type obj
         delete obj.type;

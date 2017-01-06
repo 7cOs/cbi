@@ -465,7 +465,7 @@ module.exports = /*  @ngInject */
       // TODO
     }
 
-    function getTopBottomSnapshot(snapshotType, params, additionalQueryParams) {
+    function getTopBottomSnapshot(snapshotType, params) {
       var snapshotPromise = $q.defer(),
           url, baseUrl = '/api/users/' + service.model.currentUser.employeeID;
       params.type = 'topBottom';
@@ -488,6 +488,7 @@ module.exports = /*  @ngInject */
           break;
       }
       url = apiHelperService.request(baseUrl, params);
+
       $http.get(url)
         .then(getTopBottomSnapshotSuccess)
         .catch(getTopBottomSnapshotFail);
@@ -522,7 +523,7 @@ module.exports = /*  @ngInject */
 
       function getPerformanceBrandSuccess(response) {
         calculateTrendValuesForPlan(response.data.performance);
-        // console.log('[getPerformanceBrandSuccess.data.performance.length]', response.data.performance);
+        // console.log('[getPerformanceBrandSuccess.data.performance]', response.data.performance);
         performancePromise.resolve(response.data);
       }
 
