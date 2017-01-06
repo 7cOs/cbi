@@ -245,6 +245,11 @@ module.exports =
 
         angular.forEach(vm.notes, function(note) {
           moment(note.date).format();
+          console.log(note.author);
+
+          if (isAuthor(note.author)) {
+            note.author = 'Me';
+          }
         });
       });
       $scope.notesOpen = data;
