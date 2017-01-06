@@ -6,8 +6,8 @@ module.exports = function(app) {
   const logoutUrl = 'https://ssodev.cbrands.com/oam/server/logout?end_url=' + app.get('config').address;
 
   function setCookies (req, res) {
-    res.cookie('user', JSON.stringify(req.user.jwtmap), { path: '/', maxAge: 5000 }); // 2 hours
-    res.cookie('ga', JSON.stringify(app.get('config').analytics), { path: '/', maxAge: 5000 }); // 2 hours
+    res.cookie('user', JSON.stringify(req.user.jwtmap), { path: '/', maxAge: 7200000 }); // 2 hours
+    res.cookie('ga', JSON.stringify(app.get('config').analytics), { path: '/', maxAge: 7200000 }); // 2 hours
   }
 
   // Auth stuff

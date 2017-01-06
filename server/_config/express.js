@@ -47,7 +47,7 @@ module.exports =  function(app) {
 
     sessionStore = new RedisStore({
       client: redisClient,
-      ttl: 5000
+      ttl: 7200000
     });
   }
 
