@@ -36,8 +36,7 @@ div.outer-nav-wrapper
             inline-search(ng-if="nb.accountSelectorSelected === 'Store'" type="store" placeholder="Search for a store" chosen-result="nb.searchResult" nav="true")
           md-menu(md-position-mode="target-right target" md-offset="1 38")
             a.nav-icon.notifications(href="#" md-menu-origin ng-click="$mdOpenMenu($event); nb.markSeen(nb.notifications)", aria-label="Notifications" analytics-on="click" analytics-event="Notifications Click")
-            md-menu-content
-              .nav-flyout
+            md-menu-content.nav-flyout
                 .content.nopad
                   div.notification-card.clearfix(md-prevent-menu-close ng-repeat="notification in nb.notifications | orderBy: '-dateCreated'" ng-class="{'read': notification.status === 'READ'}" ng-click="nb.markRead(notification)" class="{{notification.action}}")
                     .details
