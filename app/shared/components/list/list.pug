@@ -119,12 +119,12 @@ v-accordion.styled-list(multiple="" id="opportunities" control="list.accordion" 
             div(column='3').no-pad
               label.bold Distribution L90
               div(row)
-                div(column='5')
+                div(column='6')
                   label Simple
                   div(row)
                     div(column='12') {{::opportunity.store.distributionL90Simple | number:0}}
                       span.percentage {{list.vsYAGrowthPercent(opportunity.store.distributionL90Simple, opportunity.store.distributionL90SimpleYA) | number:1}}%
-                div(column='7')
+                div(column='6').effective
                   label Effective
                   div(row)
                     div(column='12') {{::opportunity.store.distributionL90Effective | number:0}}
@@ -214,8 +214,8 @@ v-accordion.styled-list(multiple="" id="opportunities" control="list.accordion" 
                     span(ng-if="product.depletionsCurrentYearToDateYAPercent === 0") 0%
                   div(column="2" ng-if="product.itemAuthorizationCode !== null")
                     label Authorization Type
-                    span(ng-click="list.showOpportunityMemoModal(); list.getMemos(product.store.id, product.product.id, 'itemAuth')").open-memo {{::product.itemAuthorizationDesc}}
+                    span(ng-click="list.showOpportunityMemoModal(); list.getMemos(product.store.id, product.product.id, 'Item Authorization')").open-memo {{::product.itemAuthorizationDesc}}
                   div(column="2" ng-if="product.featureTypeCode !== null")
                     label Feature Type
-                    span(ng-click="list.showOpportunityMemoModal(); list.getMemos(product.store.id, product.product.id, 'feature')").open-memo {{::product.featureTypeDesc}}
+                    span(ng-click="list.showOpportunityMemoModal(); list.getMemos(product.store.id, product.product.id, 'Feature')").open-memo {{::product.featureTypeDesc}}
 page

@@ -66,6 +66,11 @@ list {
       font-size: 0.7em;
       font-weight: $regular;
     }
+
+    .effective {
+      margin-left: -15px;
+      padding-left: 0;
+    }
   }
 
   .checkbox-sibling {

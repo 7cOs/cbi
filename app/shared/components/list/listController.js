@@ -24,6 +24,8 @@ module.exports = /*  @ngInject */
     vm.expandedOpportunities = 0;
     vm.isSelectAllActivated = false;
     vm.memoData = {};
+    vm.memoError = false;
+    vm.memoType = '';
     vm.newList = {
       name: '',
       description: '',
@@ -435,14 +437,22 @@ module.exports = /*  @ngInject */
     // Make call to applicable API endpoint for memo information per product
     // trigger population of memo with response data
     function getMemos(storeId, productId, type) {
-      if (type === 'itemAuth') {
+      vm.memoType = '';
+      if (type === 'Item Authorization') {
         storesService.getItemAuthorizations(storeId).then(populateMemo);
+        vm.memoType = type;
       } else {
         storesService.getFeatures(storeId).then(populateMemo);
+        vm.memoType = type;
       }
 
       function populateMemo(response) {
-        pickMemo(response, productId);
+        if (response.length === 0) {
+          vm.memoError = true;
+        } else {
+          pickMemo(response, productId);
+          vm.memoError = false;
+        }
       }
     }
 
