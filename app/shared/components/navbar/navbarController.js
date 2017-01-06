@@ -337,6 +337,7 @@ module.exports = /*  @ngInject */
     function closeModal(deleteFeedback) {
       if (deleteFeedback) opportunitiesService.deleteOpportunityFeedback(vm.oppID);
       vm.newOpportunity = vm.newOpportunityTemplate;
+      vm.newOpportunity.properties.distributionType.description = '';
       $mdDialog.hide();
     }
 
