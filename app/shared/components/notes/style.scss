@@ -90,8 +90,16 @@
       margin-top: 0;
     }
 
+    p {
+      margin: 0 auto;
+    }
+
     li {
       list-style: disc inside;
+
+      p {
+        display: inline-block;
+      }
     }
 
     .attachments {
@@ -156,6 +164,8 @@
   }
 
   .note-body-footer {
+    margin-top: 1em;
+
     p, div {
       display: inline;
     }
