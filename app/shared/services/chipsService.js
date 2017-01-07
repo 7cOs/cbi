@@ -320,6 +320,7 @@ module.exports = /*  @ngInject */
           case 'account':
           case 'distributor':
           case 'store':
+            if (result.ids) result.id = result.ids.join('|');
             addAutocompleteChip(displayName, filter, null, result.id);
             if (service.model.indexOf(result.id) === -1) model.push(result.id);
             filtersService.model.chain = '';
