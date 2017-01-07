@@ -295,7 +295,7 @@ module.exports = /*  @ngInject */
             addToTargetList(targetList, success);
           }
           if ($state.current.name === 'opportunities') {
-            chipsService.applyFilters();
+            $state.go('opportunities', (success.id, opportunitiesService.model.filterApplied = false, opportunitiesService.model.opportunities = []), {reload: true});
           }
           toastService.showToast('added');
           vm.newOpportunity = vm.newOpportunityTemplate;

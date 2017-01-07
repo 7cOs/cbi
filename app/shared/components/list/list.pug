@@ -171,7 +171,7 @@ v-accordion.styled-list(multiple="" id="opportunities" control="list.accordion" 
                   md-checkbox(aria-label="Action Item Select" ng-checked="true")
                 div.overlay-wrapper
                   p(ng-if="list.opportunityShared") Opportunity Sent!
-                  p(ng-if="list.opportunityDismissTrigger") Opportunity Dismissed! &nbsp;
+                  p(ng-if="list.opportunityDismissTrigger") Opportunity {{product.type.toUpperCase() !== 'CUSTOM' ? 'Dismissed' : 'Closed'}}! &nbsp;
                     a(ng-click="list.opportunityDismissTrigger = false; list.undoClicked = true") UNDO
                   p(ng-if="list.shareOpportunityFail") Whatever you just tried didn't work
                 div(ng-if="list.opportunityShared || list.shareOpportunityFail" ng-click="list.currentOpportunityId = ''").hide-wrapper.hide-icon-wrapper.hide-row
@@ -195,8 +195,10 @@ v-accordion.styled-list(multiple="" id="opportunities" control="list.accordion" 
                       md-menu-content(width="4")
                         md-menu-item
                           p(ng-click="list.openShareModal(product.id); $pane.collapse()") Send To
-                        md-menu-item(ng-show="product.status !== 'TARGETED'")
+                        md-menu-item(ng-show="product.status.toUpperCase() !== 'TARGETED' && product.type.toUpperCase() !== 'CUSTOM'")
                           p(ng-click="list.openDismissModal(product.id); $pane.collapse()") Dismiss
+                        md-menu-item(ng-show="product.type.toUpperCase() === 'CUSTOM' && product.status.toUpperCase() !== 'TARGETED'")
+                          p(ng-click="list.closeOrDismissOpportunity(product.id, {}, false); $pane.collapse()") Close
             .shadow-wrap.top
               v-pane-content.depletion-details
                 div(row)

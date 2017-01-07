@@ -58,6 +58,7 @@ module.exports = /*  @ngInject */
     vm.cancelFeedback = cancelFeedback;
     vm.closeCreateTargetListModal = closeCreateTargetListModal;
     vm.closeModal = closeModal;
+    vm.closeOrDismissOpportunity = closeOrDismissOpportunity;
     vm.collapseCallback = collapseCallback;
     vm.createNewList = createNewList;
     vm.depletionsVsYaPercent = depletionsVsYaPercent;
@@ -354,12 +355,42 @@ module.exports = /*  @ngInject */
       });
     }
 
+    function closeOrDismissOpportunity(oId, payload, dismiss) {
+      vm.opportunityDismissTrigger = true;
+      vm.currentOpportunityId = oId;
+
+      $timeout(function() {
+        if (!vm.undoClicked) {
+          (dismiss
+            ? opportunitiesService.createOpportunityFeedback(oId, payload)
+            : closedOpportunitiesService.closeOpportunity(oId))
+          .then(function() {
+            vm.opportunitiesService.model.opportunities.forEach(function(store, key) {
+              var storeGroup = store.groupedOpportunities;
+              storeGroup.forEach(function(opportunity, key) {
+                if (opportunity.id === oId) {
+                  storeGroup.splice(key, 1);
+                }
+              });
+              if (storeGroup.length < 1) {
+                vm.opportunitiesService.model.opportunities.splice(key, 1);
+                vm.filtersService.model.appliedFilter.pagination.roundedStores -= 1;
+              }
+            });
+          });
+        }
+        vm.opportunityDismissTrigger = false;
+        vm.currentOpportunityId = '';
+        vm.filtersService.model.appliedFilter.pagination.totalOpportunities -= 1;
+      }, 4000);
+    }
+
     function submitFeedback(opportunity, data) {
 
       if (data.type === 'other' && !data.feedback) {
         data.feedback = 'other';
       }
-      dismissOpportunity(opportunity, data);
+      vm.closeOrDismissOpportunity(opportunity, data, true);
       vm.opportunityDismissTrigger = true;
       vm.opportunity.feedback = '';
       $mdDialog.hide();
@@ -747,31 +778,6 @@ module.exports = /*  @ngInject */
         item.selected = true;
         list.push(item);
       }
-    }
-
-    function dismissOpportunity(oId, payload) {
-      vm.opportunityDismissTrigger = true;
-
-      $timeout(function() {
-        if (!vm.undoClicked) {
-          opportunitiesService.createOpportunityFeedback(oId, payload).then(function() {
-            vm.opportunitiesService.model.opportunities.forEach(function(store, key) {
-              var storeGroup = store.groupedOpportunities;
-              storeGroup.forEach(function(opportunity, key) {
-                if (opportunity.id === oId) {
-                  storeGroup.splice(key, 1);
-                }
-              });
-              if (storeGroup.length < 1) {
-                vm.opportunitiesService.model.opportunities.splice(key, 1);
-                vm.filtersService.model.appliedFilter.pagination.roundedStores -= 1;
-              }
-            });
-          });
-        }
-        vm.opportunityDismissTrigger = false;
-        vm.filtersService.model.appliedFilter.pagination.totalOpportunities -= 1;
-      }, 4000);
     }
 
     function impactSort (item) {
