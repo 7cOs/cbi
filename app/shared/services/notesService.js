@@ -3,13 +3,18 @@
 module.exports = /*  @ngInject */
   function notesService($http, $q) {
 
-    var urlBase = '/sfdc/',
-        accountId = '610291028';
-
     var tempData = {
     };
 
-    return {
+    var model = {
+      urlBase: '/sfdc/',
+      accountId: '',
+      currentStoreName: '',
+      currentStoreProperty: ''
+    };
+
+    var service = {
+      model: model,
       getNote: getNote,
       deleteNote: deleteNote,
       createNote: createNote,
@@ -18,9 +23,11 @@ module.exports = /*  @ngInject */
       accountNotes: accountNotes
     };
 
+    return service;
+
     function getNote(noteId) {
       var notesPromise = $q.defer(),
-          url = urlBase + 'createNote?accountId=' + accountId,
+          url = model.urlBase + 'createNote?accountId=' + model.accountId,
           data = {'read': true};
 
       $http.get(url, data)
@@ -40,9 +47,9 @@ module.exports = /*  @ngInject */
       return notesPromise.promise;
     }
 
-    function accountNotes(id) {
+    function accountNotes() {
       var notesPromise = $q.defer(),
-          url = urlBase + 'accountNotes' + '?accountId=' + accountId;
+          url = model.urlBase + 'accountNotes' + '?accountId=' + model.accountId;
 
       $http.get(url)
         .then(accountNotesSuccess)
@@ -67,6 +74,7 @@ module.exports = /*  @ngInject */
           }
 
           data.push({
+            id: arr.Id,
             title: arr.Title__c,
             body: arr.Comments_RTF__c,
             author: arr.CreatedBy.Name,
@@ -86,7 +94,7 @@ module.exports = /*  @ngInject */
 
     function searchAccounts(noteId) {
       var notesPromise = $q.defer(),
-          url = urlBase + 'note',
+          url = model.urlBase + 'note',
           data = {'read': true};
 
       $http.get(url, data)
@@ -106,7 +114,7 @@ module.exports = /*  @ngInject */
 
     function createNote(body) {
       var notePromise = $q.defer(),
-          url = urlBase + 'createNote?accountId=' + accountId,
+          url = model.urlBase + 'createNote?accountId=' + model.accountId,
           payload = body;
 
       $http.post(url, payload, {
@@ -129,7 +137,7 @@ module.exports = /*  @ngInject */
 
     function deleteAttach(noteId) {
       var notePromise = $q.defer(),
-          url = urlBase + 'create-note',
+          url = model.urlBase + 'create-note',
           payload = {};
 
       $http.delete(url, payload, {
@@ -152,7 +160,7 @@ module.exports = /*  @ngInject */
 
     function deleteNote(noteId) {
       var notePromise = $q.defer(),
-          url = urlBase + 'create-note',
+          url = model.urlBase + 'deleteNote?noteId=' + noteId,
           payload = {};
 
       $http.delete(url, payload, {

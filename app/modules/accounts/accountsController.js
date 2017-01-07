@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports = /*  @ngInject */
-  function accountsController($rootScope, $scope, $state, $log, $q, $window, $filter, myperformanceService, chipsService, filtersService, userService, $timeout) {
+  function accountsController($rootScope, $scope, $state, $log, $q, $window, $filter, myperformanceService, chipsService, filtersService, notesService, userService, $timeout) {
 
     // ****************
     // CONTROLLER SETUP
@@ -245,8 +245,8 @@ module.exports = /*  @ngInject */
     }
 
     // Make notes available to the page
-    function openNotes(val) {
-      $rootScope.$broadcast('notes:opened', val);
+    function openNotes(val, accountInfo) {
+      $rootScope.$broadcast('notes:opened', val, accountInfo);
     }
 
     // Set variable when select box is open (for bug in scroll binding)
@@ -472,7 +472,10 @@ module.exports = /*  @ngInject */
         id: result.id,
         name: result.name
       };
-
+      vm.selectedStoreInfo = vm.currentTopBottomFilters[topBottomProp];
+      vm.selectedStoreInfo.type = topBottomProp;
+      notesService.model.currentStoreName = result.name.toUpperCase();
+      notesService.model.currentStoreProperty = filterModelProperty;
       if (filterModelProperty === 'store') {
         filtersService.model.selected.account = [];
         filtersService.model.account = '';

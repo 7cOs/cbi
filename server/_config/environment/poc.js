@@ -38,13 +38,13 @@ module.exports = function (config) {
 
   config.sfdcSec = {
     // assertionEndpoint: the endpoint you connect to in order to get the session token.
-    assertionEndpoint: 'https://cbrands--CBeerDev.cs20.my.salesforce.com/services/oauth2/token?so=00Dm00000008fCJ',
+    assertionEndpoint: 'https://cbrands--Full.cs17.my.salesforce.com/services/oauth2/token?so=00Dg0000006Hhfi',
     // privateKey and certfile: keys generated from SFDC's Key and Certificate Management area
-    privateKey: fs.readFileSync('./server/_config/environment/sfdcsecurity/' + config.env + '/signingKey.pem').toString(),
-    certfile: fs.readFileSync('./server/_config/environment/sfdcsecurity/' + config.env + '/certificate.crt').toString(),
+    privateKey: fs.readFileSync('./server/_config/environment/sfdcsecurity/test/signingKey.pem').toString(),
+    certfile: fs.readFileSync('./server/_config/environment/sfdcsecurity/test/certificate.crt').toString(),
     // issuer, recipient: can be anything, but must match between the SFDC Single Sign-On Configuration and this value.
     issuer: 'compass-portal',
-    recipient: 'https://cbrands--CBeerDev.cs20.my.salesforce.com?so=00Dm00000008fCJ',
+    recipient: 'https://cbrands--Full.cs17.my.salesforce.com?so=00Dg0000006Hhfi',
     // This value matches with the Entity Id value in the SFDC Single Sign-On Configuration
     audience: 'https://saml.salesforce.com',
     // These algorithms should not be touched.  They are used to encrypt the certificates.

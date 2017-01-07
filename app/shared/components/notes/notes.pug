@@ -1,8 +1,8 @@
 div.modal.notes(ng-if="notesOpen")
   div.title
     a.hide-row(ng-click="n.notesClose()")
-    h4 Notes For Walmed & Feller
-  div.no-notes(ng-if="n.notes.length <= 0" ng-hide="n.creatingNote")
+    h4 {{::n.storeName}}
+  div.no-notes(ng-if="n.notes.length <= 0 && !n.loading" ng-hide="n.creatingNote")
     h5 There are no notes for this <br />account yet.
     button(ng-click="n.openCreateNote()").btn-action + Add A New Note
     br
@@ -41,9 +41,9 @@ div.modal.notes(ng-if="notesOpen")
         div.buttons
           button(ng-click="n.deleteNote(note)").btn-action Yes
           p(ng-click="n.toggleDelete(note)").cancel.accent X Cancel
-      div(ng-if="!note.deleteConfirmation")
+      div.note-body-field(ng-if="!note.deleteConfirmation")
         h4(ng-if="!note.editMode") {{note.title}} <span ng-if="note.attachments.length" class="attachments"></span>
-        p(ng-if="!note.editMode") <span ta-bind ng-model="note.body"></span> <span class="read-more" ng-if="note.numLimit <= 150 || !note.numLimit" ng-click="n.readMore(note)")>...Read More</span>
+        p(ng-if="!note.editMode" ng-class="{'long-note': note.noteDetails}") <div.note-body-field-text ta-bind ng-model="note.body"></div> <span class="read-more" ng-if="!note.noteDetails && note.body.length >= 150" ng-click="n.readMore(note)")>...Read More</span>
         .note-attachments(ng-if="note.noteDetails")
           div.attachement-header
             .attachments
@@ -66,8 +66,8 @@ div.modal.notes(ng-if="notesOpen")
           p by <span class="note-author"> {{note.author}}</span>  <span class="note-date">{{note.date | date:"dd MMMM, yyyy 'at' h:mm a"}}</span>
           .icons
             .delete-note(ng-if="note.author === 'Me'" ng-click="n.toggleDelete(note)")
-            div(ng-if="note.author === 'Me'" ng-click="n.isEditing(note)" ng-class="{'edit-note': !note.editMode, 'edit-note-active': note.editMode}")
-            .email-note
+            .edit-note(ng-if="note.author === 'Me'" ng-click="n.isEditing(note)" ng-class="{'edit-note': !note.editMode, 'edit-note-active': note.editMode}")
+            .email-note(ng-click="n.mailNote(note)")
         div.notes-editing(ng-if="note.editMode")
           div.main-note-section
             div

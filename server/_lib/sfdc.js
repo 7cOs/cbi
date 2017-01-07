@@ -210,7 +210,7 @@ function queryAccountNotes(app, req, res) {
             .select('Id, Name, CreatedDate, BodyLength, ContentType, Description, LastModifiedDate, OwnerId, ParentId')
             .orderby('CreatedDate', 'DESC')
             .end()
-            .where('Account__r.TDLinx_Id__c = \'' + strId + '\' or Account__r.JDE_Address_Book_Number__c = \'' + strId + '\'')
+            .where('Account__r.TDLinx_Id__c = \'' + strId + '\' or Account__r.JDE_Address_Book_Number__c = \'' + strId + '\' or Account__r.Store_Code__c = \'' + strId + '\'')
             .execute(function (err, records) {
               if (err) {
                 return {'isSuccess': false,

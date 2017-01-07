@@ -90,6 +90,25 @@
       margin-top: 0;
     }
 
+    p {
+      margin: 0 auto;
+      height: 2em;
+      overflow: hidden;;
+
+      &.long-note {
+        height: auto;
+        overflow: visible;;
+      }
+    }
+
+    li {
+      list-style: disc inside;
+
+      p {
+        display: inline-block;
+      }
+    }
+
     .attachments {
       background-position: 10px 4px;
     }
@@ -152,6 +171,8 @@
   }
 
   .note-body-footer {
+    margin-top: 1em;
+
     p, div {
       display: inline;
     }

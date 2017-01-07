@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports =
-  function notesController($scope, $state, $mdDialog, $timeout, notesService, Upload) {
+  function notesController($scope, $state, $mdDialog, $timeout, $filter, $window, notesService, userService, Upload, moment) {
 
     // ****************
     // CONTROLLER SETUP
@@ -26,74 +26,8 @@ module.exports =
     vm.noteTopics = [
       'Distribution',
       'Display',
-      'Space Management',
-      'Price',
-      'Account information',
-      'General visit'
-    ];
-    vm.attachments = [
-      {
-        name: 'IMG1009.PNG',
-        fileType: 'PNG',
-        fileSize: '3.4 MB',
-        thumbnail: 'https://scontent.xx.fbcdn.net/t31.0-8/13653130_733144425894_7777495390696756765_o.jpg',
-        url: 'https://scontent.xx.fbcdn.net/t31.0-8/13653130_733144425894_7777495390696756765_o.jpg'
-      },
-      {
-        name: 'IMG1008.PNG',
-        fileType: 'PNG',
-        fileSize: '2.3 MB',
-        thumbnail: 'http://r.ddmcdn.com/s_f/o_1/APL/uploads/2015/04/150896.001.01.197_20150429_121257.jpg',
-        url: 'http://r.ddmcdn.com/s_f/o_1/APL/uploads/2015/04/150896.001.01.197_20150429_121257.jpg'
-      },
-      {
-        name: 'DOC1976.DOC',
-        fileType: 'DOC',
-        fileSize: '1.4 KB',
-        url: ''
-      },
-      {
-        name: 'DOC5150.XLS',
-        fileType: 'XLS',
-        fileSize: '9.6 KB',
-        url: ''
-      },
-      {
-        name: 'DOC1980.MP4',
-        fileType: 'MP4',
-        fileSize: '12.4 KB',
-        url: ''
-      },
-      {
-        name: 'DOC5150.MP3',
-        fileType: 'MP3',
-        fileSize: '9.6 KB',
-        url: ''
-      },
-      {
-        name: 'DOC5150.TXT',
-        fileType: 'OTHER',
-        fileSize: '9.6 KB',
-        url: ''
-      },
-      {
-        name: 'DOC5150.PDF',
-        fileType: 'PDF',
-        fileSize: '9.6 KB',
-        url: ''
-      },
-      {
-        name: 'DOC5150.PPT',
-        fileType: 'PPT',
-        fileSize: '9.6 KB',
-        url: ''
-      },
-      {
-        name: 'DOC5150.ZIP',
-        fileType: 'ZIP',
-        fileSize: '9.6 KB',
-        url: ''
-      }
+      'Space',
+      'General / Account information'
     ];
 
     // Expose public methods
@@ -109,6 +43,9 @@ module.exports =
     vm.updateNote = updateNote;
     vm.showInput = showInput;
     vm.showImage = showImage;
+    vm.isAuthor = isAuthor;
+    vm.mailNote = mailNote;
+    vm.formatEmailString = formatEmailString;
 
     init();
 
@@ -118,6 +55,7 @@ module.exports =
 
     function notesClose() {
       $scope.notesOpen = false;
+      vm.notes = [];
     }
 
     function showInput() {
@@ -146,13 +84,13 @@ module.exports =
       attachment.visible = !attachment.visible;
     };
 
-    function createNote(data, accountId) {
-
+    function createNote(data) {
       data.author = 'Me';
-      data.date = Date.now();
 
-      notesService.createNote(data, accountId).then(function(success) {
-        vm.notes.unshift(data);
+      notesService.createNote(data, notesService.model.accountId).then(function(success) {
+        data.date = moment.utc().format();
+        vm.notes.push(data);
+
         vm.newNote = {};
         vm.creatingNote = false;
       });
@@ -163,13 +101,10 @@ module.exports =
     }
 
     function deleteNote(data, accountId) {
-      // TODO implement real functionality
-      // notesService.deleteNote().then(function(success) {
-      //  var index = vm.notes.indexOf(data);
-      //  vm.notes.splice(index, 1);
-      // });
-      var index = vm.notes.indexOf(data);
-      vm.notes.splice(index, 1);
+      notesService.deleteNote(data.id).then(function(success) {
+       var index = vm.notes.indexOf(data);
+       vm.notes.splice(index, 1);
+      });
     }
 
     function updateNote (note) {
@@ -220,18 +155,98 @@ module.exports =
 
     }
 
+    function isAuthor(author) {
+      var authorFirstName,
+          authorLastName,
+          noteAuthor;
+
+      authorFirstName = $filter('titlecase')(userService.model.currentUser.firstName);
+      authorLastName = $filter('titlecase')(userService.model.currentUser.lastName);
+
+      noteAuthor = authorFirstName + ' ' + authorLastName;
+
+      if (noteAuthor === author) {
+        return true;
+      } else {
+        return false;
+      }
+    }
+
+    function mailNote(note) {
+      var emailString,
+          currentAccount,
+          updatedNoteBody;
+
+      currentAccount = notesService.model;
+
+      updatedNoteBody = formatEmailString(note.body);
+
+      if (notesService.model.currentStoreProperty === 'subaccount' || notesService.model.currentStoreProperty === 'account') {
+        emailString = 'mailto:';
+        emailString += '?subject=Note: ' + note.title;
+        emailString += '&body=' + currentAccount.currentStoreName + '%0D%0A%0D%0A' + updatedNoteBody;
+        $window.location = emailString;
+      }
+
+      if (notesService.model.currentStoreProperty === 'store') {
+        emailString = 'mailto:';
+        emailString += '?subject=Note: ' + note.title;
+        emailString += '&body=' + currentAccount.currentStoreName + '%0D%0A%0D%0A';
+        emailString += 'here is where the STORE address would go%0D%0A';
+        emailString += 'here would be the tdlinx code';
+        emailString += '%0D%0A%0D%0A' + updatedNoteBody;
+        $window.location = emailString;
+      }
+
+      if (notesService.model.currentStoreProperty === 'distributor') {
+        emailString = 'mailto:';
+        emailString += '?subject=Note: ' + note.title;
+        emailString += '&body=' + currentAccount.currentStoreName + '%0D%0A%0D%0A';
+        emailString += 'here is where the DISTRIBUTOR address would go%0D%0A';
+        emailString += 'ID: ' + currentAccount.accountId + '%0D%0A%0D%0A';
+        emailString += '%0D%0A%0D%0A' + updatedNoteBody;
+        $window.location = emailString;
+      }
+    }
+
+    function formatEmailString(note) {
+      note = note.replace(/<\/?div[^>]*>/g, '');
+      note = note.replace(/<\/?p[^>]*>|<\/?ul[^>]*>/g, '%0D%0A');
+      note = note.replace(/<\/?br[^>]*>|<\/?li[^>]*>/g, ' ');
+      note = note.replace(/<\/?b[^>]*>/g, '');
+      note = note.replace(/<\/?[^>]+(>|$)/g, '');
+
+      return note;
+    }
+
     // ***************
     // PRIVATE METHODS
     // ***************
 
     function init() {
-      notesService.accountNotes().then(function(success) {
-        vm.notes = success;
-        vm.loading = false;
-      });
     }
 
-    $scope.$on('notes:opened', function(event, data) {
+    $scope.$on('notes:opened', function(event, data, account) {
+      vm.loading = true;
+
+      // this account id is hard coded as it is working
+      // notesService.model.accountId = '7198554';
+      notesService.model.accountId = account.id;
+
+      notesService.accountNotes().then(function(success) {
+
+        vm.notes = success;
+        vm.loading = false;
+
+        angular.forEach(vm.notes, function(note) {
+          moment(note.date).format();
+
+          if (isAuthor(note.author)) {
+            note.author = 'Me';
+          }
+        });
+      });
       $scope.notesOpen = data;
+      vm.storeName = notesService.model.currentStoreName;
     });
   };
