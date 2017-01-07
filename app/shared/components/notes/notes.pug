@@ -65,8 +65,8 @@ div.modal.notes(ng-if="notesOpen")
         .note-body-footer(ng-if="!note.editMode")
           p by <span class="note-author"> {{note.author}}</span>  <span class="note-date">{{note.date | date:"dd MMMM, yyyy 'at' h:mm a"}}</span>
           .icons
-            .delete-note(ng-if="n.isAuthor(note.author)" ng-click="n.toggleDelete(note)")
-            .edit-note(ng-if="n.isAuthor(note.author)" ng-click="n.isEditing(note)" ng-class="{'edit-note': !note.editMode, 'edit-note-active': note.editMode}")
+            .delete-note(ng-if="note.author === 'Me'" ng-click="n.toggleDelete(note)")
+            .edit-note(ng-if="note.author === 'Me'" ng-click="n.isEditing(note)" ng-class="{'edit-note': !note.editMode, 'edit-note-active': note.editMode}")
             .email-note(ng-click="n.mailNote(note)")
         div.notes-editing(ng-if="note.editMode")
           div.main-note-section
