@@ -180,7 +180,6 @@ module.exports =
       currentAccount = notesService.model;
 
       updatedNoteBody = formatEmailString(note.body);
-      console.log(updatedNoteBody);
 
       if (notesService.model.currentStoreProperty === 'subaccount' || notesService.model.currentStoreProperty === 'account') {
         emailString = 'mailto:';
@@ -211,16 +210,12 @@ module.exports =
     }
 
     function formatEmailString(note) {
-      console.log(note, ' dirty');
-      console.log('hit');
-      // this does all tags
       note = note.replace(/<\/?div[^>]*>/g, '');
       note = note.replace(/<\/?p[^>]*>|<\/?ul[^>]*>/g, '%0D%0A');
       note = note.replace(/<\/?br[^>]*>|<\/?li[^>]*>/g, ' ');
       note = note.replace(/<\/?b[^>]*>/g, '');
       note = note.replace(/<\/?[^>]+(>|$)/g, '');
 
-      console.log(note, ' clean');
       return note;
     }
 
