@@ -33,15 +33,15 @@ notes
 
 .filters.top(column='12')
   div(row)
-    div.trend(column='2')
+    // div.trend(column='2')
       label Trend
       md-radio-group(ng-model="a.filterModel.trend")
         md-radio-button(ng-repeat="filter in a.filtersService.model.trend" class="md-primary" ng-value="filter" aria-label="Trend" ng-if = "a.checkForStoreLevel(filter)" ng-click="a.trendOptionChanged(filter); a.apply(false);") {{filter.name}}
-    div(column='3')
+    div(column='4')
       label Ending Time Period
       md-radio-group(ng-model="a.filterModel.endingTimePeriod")
         md-radio-button(ng-repeat="filter in a.filtersService.model.timePeriod track by $index" class="md-primary" ng-value="filter.value" aria-label="Ending Time Period" ng-click="a.updateDistributionTimePeriod(filter.value); a.apply(false);") {{filter.name}}
-    div(column='7')
+    div(column='8')
       div(row).dropdown-filter
         div(column='6').dropdown
           label Depletions Time Period
