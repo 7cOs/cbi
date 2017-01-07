@@ -92,6 +92,13 @@
 
     p {
       margin: 0 auto;
+      height: 2em;
+      overflow: hidden;;
+
+      &.long-note {
+        height: auto;
+        overflow: visible;;
+      }
     }
 
     li {

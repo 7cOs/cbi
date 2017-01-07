@@ -41,9 +41,9 @@ div.modal.notes(ng-if="notesOpen")
         div.buttons
           button(ng-click="n.deleteNote(note)").btn-action Yes
           p(ng-click="n.toggleDelete(note)").cancel.accent X Cancel
-      div(ng-if="!note.deleteConfirmation")
+      div.note-body-field(ng-if="!note.deleteConfirmation")
         h4(ng-if="!note.editMode") {{note.title}} <span ng-if="note.attachments.length" class="attachments"></span>
-        p(ng-if="!note.editMode") <span ta-bind ng-model="note.body"></span> <span class="read-more" ng-if="note.numLimit <= 150 || !note.numLimit" ng-click="n.readMore(note)")>...Read More</span>
+        p(ng-if="!note.editMode" ng-class="{'long-note': note.noteDetails}") <div.note-body-field-text ta-bind ng-model="note.body"></div> <span class="read-more" ng-if="!note.noteDetails && note.body.length >= 150" ng-click="n.readMore(note)")>...Read More</span>
         .note-attachments(ng-if="note.noteDetails")
           div.attachement-header
             .attachments
