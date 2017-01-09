@@ -154,10 +154,20 @@ module.exports = /*  @ngInject */
       data.author = 'Me';
 
       notesService.createNote(data, notesService.model.accountId).then(function(success) {
+        var payload = {
+          'action': '',
+          'objectType': ''
+        };
+
         data.date = moment.utc().format();
         vm.notes.push(data);
         jumpToNotesTop();
         setNoteAuthor();
+
+        payload.action = 'ADDED_NOTE';
+        payload.objectType = notesService.model.currentStoreProperty;
+
+        userService.createNotification(userService.model.currentUser.employeeID, payload);
 
         vm.newNote = {};
         vm.creatingNote = false;

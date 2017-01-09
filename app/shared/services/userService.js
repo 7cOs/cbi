@@ -212,7 +212,7 @@ module.exports = /*  @ngInject */
      */
     function createNotification(id, p) {
       var notificationsPromise = $q.defer(),
-          url = apiHelperService.request('/api/users/' + id + '/notifications/'),
+          url = apiHelperService.request('/api/sfdcNotifications/'),
           payload = {
             creator: id,
             action: p.action,
