@@ -29,6 +29,70 @@ module.exports =
       'Space',
       'General / Account information'
     ];
+    vm.attachments = [
+      {
+        name: 'IMG1009.PNG',
+        fileType: 'PNG',
+        fileSize: '3.4 MB',
+        thumbnail: 'https://scontent.xx.fbcdn.net/t31.0-8/13653130_733144425894_7777495390696756765_o.jpg',
+        url: 'https://scontent.xx.fbcdn.net/t31.0-8/13653130_733144425894_7777495390696756765_o.jpg'
+      },
+      {
+        name: 'IMG1008.PNG',
+        fileType: 'PNG',
+        fileSize: '2.3 MB',
+        thumbnail: 'http://r.ddmcdn.com/s_f/o_1/APL/uploads/2015/04/150896.001.01.197_20150429_121257.jpg',
+        url: 'http://r.ddmcdn.com/s_f/o_1/APL/uploads/2015/04/150896.001.01.197_20150429_121257.jpg'
+      },
+      {
+        name: 'DOC1976.DOC',
+        fileType: 'DOC',
+        fileSize: '1.4 KB',
+        url: ''
+      },
+      {
+        name: 'DOC5150.XLS',
+        fileType: 'XLS',
+        fileSize: '9.6 KB',
+        url: ''
+      },
+      {
+        name: 'DOC1980.MP4',
+        fileType: 'MP4',
+        fileSize: '12.4 KB',
+        url: ''
+      },
+      {
+        name: 'DOC5150.MP3',
+        fileType: 'MP3',
+        fileSize: '9.6 KB',
+        url: ''
+      },
+      {
+        name: 'DOC5150.TXT',
+        fileType: 'OTHER',
+        fileSize: '9.6 KB',
+        url: ''
+      },
+      {
+        name: 'DOC5150.PDF',
+        fileType: 'PDF',
+        fileSize: '9.6 KB',
+        url: ''
+      },
+      {
+        name: 'DOC5150.PPT',
+        fileType: 'PPT',
+        fileSize: '9.6 KB',
+        url: ''
+      },
+      {
+        name: 'DOC5150.ZIP',
+        fileType: 'ZIP',
+        fileSize: '9.6 KB',
+        url: ''
+      }
+    ];
 
     // Expose public methods
     vm.isEditing = isEditing;
@@ -46,6 +110,7 @@ module.exports =
     vm.isAuthor = isAuthor;
     vm.mailNote = mailNote;
     vm.formatEmailString = formatEmailString;
+    vm.saveEditedNote = saveEditedNote;
 
     init();
 
@@ -93,6 +158,14 @@ module.exports =
 
         vm.newNote = {};
         vm.creatingNote = false;
+      });
+    }
+
+    function saveEditedNote(note) {
+      note.date = moment.utc().format();
+
+      notesService.updateNote(note).then(function(success) {
+        console.log('james');
       });
     }
 
@@ -229,12 +302,8 @@ module.exports =
     $scope.$on('notes:opened', function(data, account) {
       vm.loading = true;
 
-      // this account id is hard coded as it is working
-      // notesService.model.accountId = '7198554';
       notesService.model.accountId = account.id;
-
-      notesService.accountNotes().then(function(success) {
-
+      notesService.accountNotes(account.id).then(function(success) {
         vm.notes = success;
         vm.loading = false;
 
@@ -247,6 +316,8 @@ module.exports =
         });
       });
       $scope.notesOpen = data;
+
       vm.storeName = notesService.model.currentStoreName;
+      // vm.storeName = account.name;
     });
   };

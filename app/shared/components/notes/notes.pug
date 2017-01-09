@@ -1,7 +1,7 @@
 div.modal.notes(ng-if="notesOpen")
   div.title
     a.hide-row(ng-click="n.notesClose()")
-    h4 {{::n.storeName}}
+    h4 {{::n.storeName | titlecase}}
   div.no-notes(ng-if="n.notes.length <= 0 && !n.loading" ng-hide="n.creatingNote")
     h5 There are no notes for this <br />account yet.
     button(ng-click="n.openCreateNote()").btn-action + Add A New Note
@@ -123,5 +123,5 @@ div.modal.notes(ng-if="notesOpen")
               .add-attachments(ng-if="note.author === 'Me'" ngf-select="n.uploadFiles($files)" multiple accept="image/*")
                 p Add an attachment
                 p {{n.errorMsg}}
-            button(ng-click="n.isEditing(note)").btn-action Save
+            button(ng-click="n.saveEditedNote(note)").btn-action Save
             p(ng-click="n.isEditing(note)").cancel.accent X Cancel
