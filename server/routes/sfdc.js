@@ -20,6 +20,10 @@ module.exports = function(app) {
     sfdc['deleteAttach'](app, req, res);
   });
 
+  app.post('/sfdc/updateNote', function (req, res) {
+    sfdc['updateNote'](app, req, res);
+  });
+
   app.get('/sfdc/searchAccounts', function (req, res) {
     sfdc['searchAccounts'](app, req, res);
   });

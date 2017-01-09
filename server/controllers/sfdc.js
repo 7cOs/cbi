@@ -9,6 +9,7 @@ module.exports = {
   getAttachmentData: getAttachmentData,
   createNote: createNote,
   deleteNote: deleteNote,
+  updateNote: updateNote,
   deleteAttach: deleteAttach,
   searchAccounts: searchAccounts,
   accountNotes: accountNotes
@@ -47,6 +48,20 @@ function deleteNote(app, req, res) {
       res.send(err);
     };
   }, function (err) {
+    console.log(err);
+    res.send(err);
+  });
+};
+
+function updateNote(app, req, res) {
+  sfdc.updateNote(app, req, res).then(function(result) {
+    try {
+      res.send(result);
+    } catch (err) {
+      console.log(err);
+      res.send(err);
+    };
+  }, function(err) {
     console.log(err);
     res.send(err);
   });

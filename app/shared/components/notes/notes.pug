@@ -1,7 +1,7 @@
 div.modal.notes(ng-if="notesOpen")
   div.title
     a.hide-row(ng-click="n.notesClose()")
-    h4 {{::n.storeName}}
+    h4 {{::n.storeName | titlecase}}
   div.no-notes(ng-if="n.notes.length <= 0 && !n.loading" ng-hide="n.creatingNote")
     h5 There are no notes for this <br />account yet.
     button(ng-click="n.openCreateNote()").btn-action + Add A New Note
@@ -44,20 +44,20 @@ div.modal.notes(ng-if="notesOpen")
       div.note-body-field(ng-if="!note.deleteConfirmation")
         h4(ng-if="!note.editMode") {{note.title}} <span ng-if="note.attachments.length" class="attachments"></span>
         p(ng-if="!note.editMode" ng-class="{'long-note': note.noteDetails}") <div.note-body-field-text ta-bind ng-model="note.body"></div> <span class="read-more" ng-if="!note.noteDetails && note.body.length >= 150" ng-click="n.readMore(note)")>...Read More</span>
-        .note-attachments(ng-if="note.noteDetails")
-          div.attachement-header
-            .attachments
-              p.accent Attachments
-            .download-all
-              a(href="#") Download All
-          ul
-            li(ng-repeat="attachment in note.attachments")
-              div.attached-files
-                .photo
-                  img.thumbnail(src="{{attachment.url}}")
-                  p.file-name <a ng-href="{{attachment.url}}" target="_self">{{attachment.fileName}}</a>&nbsp;{{attachment.fileSize}}
-                  //- div(ng-click="n.showImage(attachment)" ng-class="{'chevron-down': !attachment.visible, 'chevron-up': attachment.visible}")
-                  //- img(src="{{attachment.url}}" ng-if="attachment.visible")
+        //- .note-attachments(ng-if="note.noteDetails")
+        //-   div.attachement-header
+        //-     .attachments
+        //-       p.accent Attachments
+        //-     .download-all
+        //-       a(href="#") Download All
+        //-   ul
+        //-     li(ng-repeat="attachment in note.attachments")
+        //-       div.attached-files
+        //-         .photo
+        //-           img.thumbnail(src="{{attachment.url}}")
+        //-           p.file-name <a ng-href="{{attachment.url}}" target="_self">{{attachment.fileName}}</a>&nbsp;{{attachment.fileSize}}
+        //-           div(ng-click="n.showImage(attachment)" ng-class="{'chevron-down': !attachment.visible, 'chevron-up': attachment.visible}")
+        //-           img(src="{{attachment.url}}" ng-if="attachment.visible")
           div
             .add-attachments(ng-if="note.author === 'Me'" ngf-select="n.uploadFiles($files)" multiple accept="image/*")
               p Add an attachment
@@ -82,11 +82,11 @@ div.modal.notes(ng-if="notesOpen")
             label Details
             div.text-editor
               text-angular(ta-toolbar="[['bold','italics', 'underline', 'ul']]" ng-model="note.body").text-editor
-            div.inline-container
-              .attachments
-                p.accent Attachments
-              .download-all
-                p Download All
+            //- div.inline-container
+            //-   .attachments
+            //-     p.accent Attachments
+            //-   .download-all
+            //-     p Download All
             //- ul
               li(ng-repeat="attachment in n.attachments")
                 div.attached-files
@@ -123,5 +123,5 @@ div.modal.notes(ng-if="notesOpen")
               .add-attachments(ng-if="note.author === 'Me'" ngf-select="n.uploadFiles($files)" multiple accept="image/*")
                 p Add an attachment
                 p {{n.errorMsg}}
-            button(ng-click="n.isEditing(note)").btn-action Save
+            button(ng-click="n.saveEditedNote(note)").btn-action Save
             p(ng-click="n.isEditing(note)").cancel.accent X Cancel

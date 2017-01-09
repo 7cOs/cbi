@@ -7,7 +7,8 @@ module.exports = {
   searchAccounts: searchAccounts,
   deleteAttach: deleteAttach,
   getAttachment: getAttachment,
-  deleteNote: deleteNote
+  deleteNote: deleteNote,
+  updateNote: updateNote
 };
 // var u = require('util');
 /**
@@ -22,7 +23,6 @@ function sfdcConn(app, req, res) {
   * sfdcConn: Create the Salesforce.com connection, or return the existing
   *           connection.
   */
-
   try {
     var saml = require('./ssoSAML.js');
     var jsforce = require('jsforce');
@@ -83,6 +83,55 @@ function deleteAttach(app, req, res) {
         var badNoteIdError = {
           'isSuccess': 'False',
           'ErrorString': 'No noteId Id was present for delete.'
+        };
+        throw badNoteIdError;
+      }
+    } catch (err) {
+      var generalError = {'isSuccess': false,
+        'errorMessage': err};
+      throw generalError;
+    }
+  });
+};
+
+function updateNote(app, req, res) {
+  /**
+  * updateNote test
+  *
+  */
+  return sfdcConn(app, req, res).then(function(result) {
+    try {
+      var conn = result;
+      if (req.query.noteId) {
+        var attachId = req.query.noteId;
+        return conn.sobject('Note__c').update({
+                                          Id: attachId,
+                                          Title__c: req.body.title,
+                                          Comments_RTF__c: req.body.body
+                                        },
+                                        function (err, res) {
+                                          if (err || !res.success) {
+                                            console.log('SFDC gave an error:');
+                                            console.dir(err);
+                                            return {
+                                              'isSuccess': false,
+                                              'errorMessage': err  // return the error from Salesforce
+                                            };
+                                          } else {
+                                            return {
+                                              'isSuccess': true,
+                                              'searchRecords': res.searchRecords
+                                            };
+                                          }
+                                        }).then(function(result) {
+                                          return result;
+                                        }, function(err) {
+                                          return err;
+                                        });
+      } else {
+        var badNoteIdError = {
+          'isSuccess': 'False',
+          'ErrorString': 'Not able to update this stupid note.'
         };
         throw badNoteIdError;
       }

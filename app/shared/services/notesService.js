@@ -20,7 +20,8 @@ module.exports = /*  @ngInject */
       createNote: createNote,
       deleteAttach: deleteAttach,
       searchAccounts: searchAccounts,
-      accountNotes: accountNotes
+      accountNotes: accountNotes,
+      updateNote: updateNote
     };
 
     return service;
@@ -49,7 +50,10 @@ module.exports = /*  @ngInject */
 
     function accountNotes() {
       var notesPromise = $q.defer(),
-          url = model.urlBase + 'accountNotes' + '?accountId=' + model.accountId;
+          id = service.model.accountId,
+          url = model.urlBase + 'accountNotes' + '?accountId=';
+
+      url += id;
 
       $http.get(url)
         .then(accountNotesSuccess)
@@ -59,6 +63,8 @@ module.exports = /*  @ngInject */
         var data = [];
         angular.forEach(response.data.successReturnValue, function(arr) {
           var noteAttachments = [];
+
+          // moment(arr.CreatedDate).format();
 
           if (arr.Attachments !== null) {
 
@@ -133,6 +139,30 @@ module.exports = /*  @ngInject */
       }
 
       return notePromise.promise;
+    }
+
+    function updateNote(note) {
+      console.log(note);
+      var notesPromise = $q.defer(),
+      url = model.urlBase + 'updateNote?noteId=' + note.id,
+      payload = note;
+
+      $http.post(url, payload, {
+        headers: {}
+      })
+      .then(updateNoteSuccess)
+      .catch(updateNoteFail);
+
+      function updateNoteSuccess(response) {
+        console.log('[noteServie.updateNote] response: ', response);
+        notesPromise.resolve(response.data);
+      }
+
+      function updateNoteFail(error) {
+        notesPromise.reject(error);
+      }
+
+      return notesPromise.promise;
     }
 
     function deleteAttach(noteId) {

@@ -1,4 +1,5 @@
 .notes {
+  min-height: 530px;
   position: fixed;
   width: 600px;
   right: 0;
@@ -19,6 +20,12 @@
   .progress-container {
     height: 400px;
     background: $light-blue-5;
+    position: absolute;
+    z-index: 1;
+    height: 100%;
+    width: 100%;
+    top: 0;
+    left: 0;
 
     h5 {
       display: block;
@@ -34,7 +41,7 @@
   md-progress-circular {
     z-index: 901;
     left: -50px;
-    top: 100;
+    top: calc(50% - 50px);
     display: inline;
 
     .uploader {
