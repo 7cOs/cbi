@@ -918,9 +918,10 @@ module.exports = /*  @ngInject */
      * @returns Updates the object with the correct data
      */
     function getDataForTopBottom(topBottomObj, categoryBound) {
-      if (vm.isStoreLevel === true) {
+      if (vm.isStoreLevel) {
         getCurrentStoreData();
-      } else if (!topBottomObj.performanceData || topBottomObj.isPerformanceDataUpdateRequired === true) {
+      // } else if (!topBottomObj.performanceData || topBottomObj.isPerformanceDataUpdateRequired === true) {
+      } else {
         var params = filtersService.getAppliedFilters('topBottom');
         myperformanceService.appendFilterParametersForTopBottom(params, vm.currentTopBottomFilters);
         vm.loadingTopBottom = true;
@@ -937,13 +938,13 @@ module.exports = /*  @ngInject */
           vm.loadingTopBottom = 'error';
           vm.currentChartData = myperformanceService.initChartData();
         });
-      } else if (!topBottomObj.timePeriodFilteredData || topBottomObj.isFilterUpdateRequired === true) {
+      /* } else if (!topBottomObj.timePeriodFilteredData || topBottomObj.isFilterUpdateRequired === true) {
           vm.loadingTopBottom = true;
           vm.currentTopBottomObj = myperformanceService.updateDataForCurrentTopDownLevel(vm.currentTopBottomObj, categoryBound, vm.filterModel.depletionsTimePeriod, vm.filterModel.distributionTimePeriod, vm.filterModel.trend);
           setSortedArrIndex();
         } else {
           vm.loadingTopBottom = true;
-          setSortedArrIndex();
+          setSortedArrIndex(); */
       }
       vm.marketSelectedIndex = vm.currentTopBottomAcctType.value - 1;
     }
@@ -1206,9 +1207,9 @@ module.exports = /*  @ngInject */
     function onFilterPropertiesChange() {
       if (topBottomInitData === false) {
         myperformanceService.resetFilterFlags(vm.topBottomData);
-        // var categoryBound = vm.filtersService.model.accountSelected.accountMarkets;
+        var categoryBound = vm.filtersService.model.accountSelected.accountMarkets;
         vm.currentTopBottomObj = getCurrentTopBottomObject(vm.currentTopBottomAcctType);
-        // getDataForTopBottom(vm.currentTopBottomObj, categoryBound);
+        getDataForTopBottom(vm.currentTopBottomObj, categoryBound);
       }
     }
   };
