@@ -156,7 +156,9 @@ module.exports = /*  @ngInject */
       notesService.createNote(data, notesService.model.accountId).then(function(success) {
         var payload = {
           'action': '',
-          'objectType': ''
+          'objectType': '',
+          'objectID': '',
+          'salesforceUserNoteID': ''
         };
 
         data.date = moment.utc().format();
@@ -165,7 +167,10 @@ module.exports = /*  @ngInject */
         setNoteAuthor();
 
         payload.action = 'ADDED_NOTE';
-        payload.objectType = notesService.model.currentStoreProperty;
+        // payload.objectType = notesService.model.currentStoreProperty.toUpperCase();
+        payload.objectType = 'STORE';
+        // payload.objectId = notesService.model.accountId;
+        payload.objectId = '0910751';
 
         userService.createNotification(userService.model.currentUser.employeeID, payload);
 
@@ -335,8 +340,8 @@ module.exports = /*  @ngInject */
 
     $scope.$on('notes:opened', function(event, data, account) {
       vm.loading = true;
-
       notesService.model.accountId = account.id;
+
       notesService.accountNotes().then(function(success) {
         vm.notes = success;
         vm.loading = false;

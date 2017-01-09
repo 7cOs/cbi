@@ -216,7 +216,9 @@ module.exports = /*  @ngInject */
           payload = {
             creator: id,
             action: p.action,
-            objectType: p.objectType
+            objectType: p.objectType,
+            objectID: p.objectId,
+            salesforceUserNoteID: p.salesforceUserNoteID
           };
 
       $http.post(url, payload)
