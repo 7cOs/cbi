@@ -82,35 +82,48 @@ module.exports = /*  @ngInject */
             item.isOnFeature = 'Y';
           }
 
-          // if its a new store
-          if (!storePlaceholder || (storePlaceholder.address !== item.store.address || storePlaceholder.id !== item.store.id)) {
-            // push previous store in newOpportunityArr
-            if (i !== 0) newOpportunityArr.push(store);
+          // Check that only specified authorizations show, applicable when 'authorized' filter applied
+          item.showAuthorization = '';
+          if (item.itemAuthorizationCode === 'CM' || item.itemAuthorizationCode === 'BM' || item.itemAuthorizationCode === 'OS' || item.itemAuthorizationCode === 'SP') {
+            item.showAuthorization = 'Y';
+          }
 
-            // create grouped store object
-            store = angular.copy(item);
-            store.depletionSum = 0;
-            store.brands = [];
-            store.store = setVsYAPercent(store.store);
+          if (filtersService.model.selected.productType[0] !== 'authorized' || (filtersService.model.selected.productType[0] === 'authorized' && item.showAuthorization === 'Y')) {
+            // if its a new store
+            if (!storePlaceholder || (storePlaceholder.address !== item.store.address || storePlaceholder.id !== item.store.id)) {
+              // push previous store in newOpportunityArr
+              if (i !== 0) newOpportunityArr.push(store);
 
-            // set store placeholder to new store
-            storePlaceholder = item.store;
+              // create grouped store object
+              store = angular.copy(item);
+              store.depletionSum = 0;
+              store.brands = [];
+              store.store = setVsYAPercent(store.store);
 
-            // Set positive or negative label for trend values for store
-            // I think this is no longer relevant to the app.
-            store.trend = store.currentYTDStoreVolume - store.lastYTDStoreVolume;
-            if (store.trend > 0) {
-              store.positiveValue = true;
-            } else if (store.trend < 0) {
-              store.negativeValue = true;
+              // set store placeholder to new store
+              storePlaceholder = item.store;
+
+              // Set positive or negative label for trend values for store
+              // I think this is no longer relevant to the app.
+              store.trend = store.currentYTDStoreVolume - store.lastYTDStoreVolume;
+              if (store.trend > 0) {
+                store.positiveValue = true;
+              } else if (store.trend < 0) {
+                store.negativeValue = true;
+              }
+
+              // create groupedOpportunities arr so all opportunities for one store will be in a row
+              store.groupedOpportunities = [];
+
+              store.groupedOpportunities.push(item);
+
+            } else {
+              store.groupedOpportunities.push(item);
             }
-
-            // create groupedOpportunities arr so all opportunities for one store will be in a row
-            store.groupedOpportunities = [];
-            store.groupedOpportunities.push(item);
-
           } else {
-            store.groupedOpportunities.push(item);
+            service.model.noOpportunitiesFound = true;
+            service.model.filterApplied = true;
+            return getOpportunitiesFail('No authorized Opportunities');
           }
 
           // add brand to array

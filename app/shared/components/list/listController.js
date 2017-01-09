@@ -81,6 +81,7 @@ module.exports = /*  @ngInject */
     vm.selectOpportunity = selectOpportunity;
     vm.shareOpportunity = shareOpportunity;
     vm.showDisabled = showDisabled;
+    vm.showItemAuthorizationFlag = showItemAuthorizationFlag;
     vm.showOpportunityMemoModal = showOpportunityMemoModal;
     vm.sortBy = sortBy;
     vm.submitFeedback = submitFeedback;
@@ -451,6 +452,16 @@ module.exports = /*  @ngInject */
       }
       vm.selected = [];
       selectedArr = [];
+    }
+
+    function showItemAuthorizationFlag(authCode, depletions) {
+      if (authCode === 'CM' || authCode === 'SP') {
+        return true;
+      } else if (authCode === 'BM' && depletions > 0) {
+        return true;
+      } else {
+        return false;
+      }
     }
 
     function showOpportunityMemoModal(ev) {
