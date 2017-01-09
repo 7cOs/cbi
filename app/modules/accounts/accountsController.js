@@ -667,8 +667,6 @@ module.exports = /*  @ngInject */
       // if navigating from opp page, load with a default query
       if ($state.params.storeId) $state.params.applyFiltersOnLoad = true;
 
-      console.log(filtersService.model);
-
       // reset all chips and filters on page init if no brand is specified
       if (!$state.params.applyFiltersOnLoad) {
         chipsService.resetChipsFilters(chipsService.model);

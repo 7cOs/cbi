@@ -86,7 +86,7 @@ module.exports = /*  @ngInject */
      */
     function getStores(searchTerm) {
       var searchPromise = $q.defer(),
-          url = apiHelperService.request('/api/search/stores?searchTerm=' + encodeURIComponent(searchTerm));
+          url = apiHelperService.request('/api/search/stores?allVersions=true&searchTerm=' + encodeURIComponent(searchTerm));
 
       $http.get(url, {
         headers: {}
