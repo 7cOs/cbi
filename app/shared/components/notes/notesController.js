@@ -150,14 +150,17 @@ module.exports =
     };
 
     function createNote(data) {
+      vm.loading = true;
       data.author = 'Me';
 
       notesService.createNote(data, notesService.model.accountId).then(function(success) {
         data.date = moment.utc().format();
         vm.notes.push(data);
+        jumpToNotesTop();
 
         vm.newNote = {};
         vm.creatingNote = false;
+        vm.loading = false;
       });
     }
 
@@ -168,6 +171,7 @@ module.exports =
       notesService.updateNote(note).then(function(success) {
         notesService.accountNotes().then(function(success) {
           vm.notes = success;
+          jumpToNotesTop();
           vm.loading = false;
         });
       });
@@ -301,6 +305,10 @@ module.exports =
     // ***************
 
     function init() {
+    }
+
+    function jumpToNotesTop() {
+      angular.element(document.querySelector('.note-container'))[0].scrollTop = 0;
     }
 
     $scope.$on('notes:opened', function(data, account) {
