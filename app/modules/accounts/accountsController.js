@@ -329,6 +329,7 @@ module.exports = /*  @ngInject */
       // Remove all filters asssociated with top bottom
       removeAllTopBottomAccountTypeFilters();
       vm.filterModel = angular.copy(filterModelTemplate);
+      filtersService.model.filtersValidCount = 0;
       setDefaultDropDownOptions();
       apply(false);
       // Go back to distributor level. Get the updated data for distributors
@@ -1165,6 +1166,7 @@ module.exports = /*  @ngInject */
     }
 
     function setUpdatedFilters() {
+      filtersService.model.filtersValidCount++;
       // The order to be processed is distributor, stores, subaccounts, accounts. So that the last value doesn't get overridden
       if (vm.currentTopBottomFilters.distributors) {
         setFilter(vm.currentTopBottomFilters.distributors, 'distributor');
