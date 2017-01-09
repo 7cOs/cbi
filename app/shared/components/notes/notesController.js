@@ -162,10 +162,14 @@ module.exports =
     }
 
     function saveEditedNote(note) {
+      vm.loading = true;
       note.date = moment.utc().format();
 
       notesService.updateNote(note).then(function(success) {
-        console.log('james');
+        notesService.accountNotes().then(function(success) {
+          vm.notes = success;
+          vm.loading = false;
+        });
       });
     }
 
@@ -303,7 +307,7 @@ module.exports =
       vm.loading = true;
 
       notesService.model.accountId = account.id;
-      notesService.accountNotes(account.id).then(function(success) {
+      notesService.accountNotes().then(function(success) {
         vm.notes = success;
         vm.loading = false;
 
