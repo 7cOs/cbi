@@ -199,6 +199,9 @@ module.exports =
         vm.chosenResultObject = result;
         vm.variety === 'manage-collaborators' ? close(true) : close();
         clearPreviousSelection();
+        $timeout(function() {
+          vm.results = [];
+        }, 1000);
       }
 
       /**
