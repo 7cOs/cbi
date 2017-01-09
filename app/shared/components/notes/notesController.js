@@ -226,7 +226,7 @@ module.exports =
     function init() {
     }
 
-    $scope.$on('notes:opened', function(event, data, account) {
+    $scope.$on('notes:opened', function(data, account) {
       vm.loading = true;
 
       // this account id is hard coded as it is working
