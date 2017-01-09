@@ -98,7 +98,7 @@ div(row)
       loader
     .widget-header
       .dropdown-filter
-        md-select(ng-model="a.filtersService.model.accountSelected.accountBrands" md-on-open="a.openSelect(true)" md-on-close="a.openSelect(false);" aria-label="Account Brands Filter" placeholder="Distribution (simple)")
+        md-select(ng-model="a.filtersService.model.accountSelected.accountBrands" ng-change="a.updateBrandSnapshot()" md-on-open="a.openSelect(true)" md-on-close="a.openSelect(false);" aria-label="Account Brands Filter" placeholder="Distribution (simple)")
           md-option(ng-repeat="filter in a.filtersService.accountFilters.accountBrands" ng-if="!a.removeDistOptionsBasedOnView(filter, true)" aria-label="{{filter.name}}" ng-value="filter") {{filter.name}}
       span.back-chevron(ng-if="a.brandSelectedIndex === 1" ng-click="a.prevTab()")
       p.brands {{a.brandWidgetSkuTitle || a.brandWidgetTitle}}
@@ -211,7 +211,7 @@ div(row)
       //- span.error-text No data found
     .widget-header
       .dropdown-filter.narrow
-        md-select(ng-model="a.filtersService.model.accountSelected.accountMarkets" md-on-open="a.openSelect(true)" md-on-close="a.openSelect(false)" aria-label="Account Markets Filter")
+        md-select(ng-model="a.filtersService.model.accountSelected.accountMarkets" ng-change="a.onFilterPropertiesChange()" md-on-open="a.openSelect(true)" md-on-close="a.openSelect(false)" aria-label="Account Markets Filter")
           md-option(ng-repeat="filter in a.filtersService.accountFilters.accountMarkets" aria-label="{{filter.name}}" ng-value="filter" ng-click= "a.acctMarketChanged(filter)" ng-if="!a.removeDistOptionsBasedOnView(filter, false)") {{filter.name}}
       .header-selector
         //- span.back-chevron(ng-if="a.marketSelectedIndex > 0" ng-click="a.prevLevelInTopBottom()")
