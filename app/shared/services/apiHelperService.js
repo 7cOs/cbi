@@ -101,7 +101,7 @@ module.exports = /*  @ngInject */
         queryParams += 'filter=';
         queryParams += parseAppliedFilters(obj, i, z);
 
-        // console.log('queryParams - brandSnapshot', decodeURIComponent(queryParams));
+        console.log('queryParams - brandSnapshot', decodeURIComponent(queryParams));
 
         return queryParams;
       } else if (obj.type && obj.type === 'topBottom') {

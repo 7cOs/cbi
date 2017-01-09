@@ -692,8 +692,6 @@ module.exports = /*  @ngInject */
       params.additionalParams = getAppliedFiltersForTopBottom();
 
       var promiseArr = [
-        userService.getPerformanceDepletion(),
-        userService.getPerformanceDistribution({'type': 'noencode', 'premiseType': 'off'}),
         userService.getTopBottomSnapshot(vm.currentTopBottomAcctType, params)
       ];
 
@@ -707,9 +705,7 @@ module.exports = /*  @ngInject */
       promiseArr.push(userService.getPerformanceBrand(params));
 
       $q.all(promiseArr).then(function(data) {
-        userService.model.depletion = data[0];
-        userService.model.distribution = data[1];
-        vm.brandTabs.brands = data[3].performance;
+        vm.brandTabs.brands = data[1].performance;
 
         if ($state.params.applyFiltersOnLoad) {
           // select brand that was clicked in score card
@@ -721,9 +717,9 @@ module.exports = /*  @ngInject */
         }
 
         setCurrentTotalsObject();
-        if (data[2]) {
+        if (data[0]) {
           var categoryBound = vm.filtersService.model.accountSelected.accountMarkets;
-          vm.currentTopBottomObj.performanceData = data[2].performance;
+          vm.currentTopBottomObj.performanceData = data[0].performance;
           vm.currentTopBottomObj.isPerformanceDataUpdateRequired = false;
           getDataForTopBottom(vm.currentTopBottomObj, categoryBound);
           if (topBottomInitData === true) {
