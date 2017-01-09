@@ -1376,7 +1376,7 @@ describe('Unit: accountsController', function() {
     });
   });
 
-  /* describe('Should set correct params and get data from store api', function() {
+  describe('Should set correct params and get data from store api', function() {
     beforeEach(function() {
       ctrl.resetFilters();
       topBottomSpy.calls.reset();
@@ -1388,7 +1388,7 @@ describe('Unit: accountsController', function() {
       expect(topBottomSpy.calls.count()).toEqual(4);
     });
 
-    it('should have called store endpoint 4 times when account market option is changed', function() {
+    /* it('should have called store endpoint 4 times when account market option is changed', function() {
       // One each for top 10(Values/Trends),bottom 10(Values/Trends)
       topBottomSpy.calls.reset();
       var newVal = filtersService.accountFilters.accountMarkets[1];
@@ -1415,8 +1415,8 @@ describe('Unit: accountsController', function() {
       newVal = filtersService.accountFilters.accountMarkets[0];
       ctrl.acctMarketChanged(newVal);
       expect(topBottomSpy.calls.count()).toEqual(0);
-    });
-  }); */
+    }); */
+  });
 
   describe('Should fire on filter properties change on changing dropdown options', function() {
     var resetFilterFlagsSpy;

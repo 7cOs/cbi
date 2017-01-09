@@ -101,7 +101,7 @@ module.exports = /*  @ngInject */
         queryParams += 'filter=';
         queryParams += parseAppliedFilters(obj, i, z);
 
-        // console.log('queryParams', decodeURIComponent(queryParams));
+        // console.log('queryParams - brandSnapshot', decodeURIComponent(queryParams));
 
         return queryParams;
       } else if (obj.type && obj.type === 'topBottom') {
@@ -116,7 +116,9 @@ module.exports = /*  @ngInject */
 
         filterQueryParams = parseAppliedFilters(obj, i, z);
         queryParams += 'filter=' + encodeURIComponent(filterQueryParams);
-        console.log('queryParams', decodeURIComponent(queryParams));
+
+        // console.log('queryParams - topBottom', decodeURIComponent(queryParams));
+
         return queryParams;
       } else {
         // remove type obj

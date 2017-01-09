@@ -391,6 +391,11 @@ module.exports = /*  @ngInject */
         if (widget === 'brands') { vm.brandWidgetTitle = item.name; }
         vm.loadingBrandSnapshot = true;
         var params = filtersService.getAppliedFilters('brandSnapshot');
+
+        params.additionalParams = {
+          timePeriod: filtersService.model.accountSelected.accountBrands.propertyName === 'depletions' ? vm.filterModel.depletionsTimePeriod.displayValue : vm.filterModel.distributionTimePeriod.displayValue
+        };
+
         params.brand = item.id;
         vm.brandIdSelected = item.id;
         userService.getPerformanceBrand(params).then(function(data) {
@@ -513,7 +518,7 @@ module.exports = /*  @ngInject */
       prevTab();
 
       params.additionalParams = {
-        timePeriod: filtersService.model.accountSelected.accountMarkets.propertyName === 'depletions' ? vm.filterModel.depletionsTimePeriod.displayValue : vm.filterModel.distributionTimePeriod.displayValue
+        timePeriod: filtersService.model.accountSelected.accountBrands.propertyName === 'depletions' ? vm.filterModel.depletionsTimePeriod.displayValue : vm.filterModel.distributionTimePeriod.displayValue
       };
 
       userService.getPerformanceBrand(params).then(function(data) {
@@ -689,7 +694,7 @@ module.exports = /*  @ngInject */
       // brand snapshot returns sku data instead of just the brand if you add brand:xxx
       if (params.brand && params.brand.length) delete params.brand;
       params.additionalParams = {
-        timePeriod: filtersService.model.accountSelected.accountMarkets.propertyName === 'depletions' ? vm.filterModel.depletionsTimePeriod.displayValue : vm.filterModel.distributionTimePeriod.displayValue
+        timePeriod: filtersService.model.accountSelected.accountBrands.propertyName === 'depletions' ? vm.filterModel.depletionsTimePeriod.displayValue : vm.filterModel.distributionTimePeriod.displayValue
       };
       params.type = 'brandSnapshot';
       promiseArr.push(userService.getPerformanceBrand(params));
