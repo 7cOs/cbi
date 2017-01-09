@@ -1177,11 +1177,11 @@ describe('Unit: accountsController', function() {
     it('Should update top bottom', function() {
       ctrl.loadingTopBottom = true;
       var categoryBound = filtersService.model.accountSelected.accountMarkets;
-      expect(userService.getTopBottomSnapshot.calls.count()).toEqual(1);
+      expect(userService.getTopBottomSnapshot.calls.count()).toEqual(2);
 
       ctrl.getDataForTopBottom(ctrl.topBottomData, categoryBound);
 
-      expect(userService.getTopBottomSnapshot.calls.count()).toEqual(2);
+      expect(userService.getTopBottomSnapshot.calls.count()).toEqual(3);
     });
   });
 
@@ -1213,13 +1213,13 @@ describe('Unit: accountsController', function() {
     it('should call getDataForTopBottom only once', function() {
       var distirbutorObj = filtersService.accountFilters.accountTypes[0];
       ctrl.setTopBottomAcctTypeSelection(distirbutorObj);
-      expect(userService.getTopBottomSnapshot.calls.count()).toEqual(1);
+      expect(userService.getTopBottomSnapshot.calls.count()).toEqual(2);
     });
 
     it('should not call getDataForTopBottom if same selection is made consecutively', function() {
       var distirbutorObj = filtersService.accountFilters.accountTypes[0];
       ctrl.setTopBottomAcctTypeSelection(distirbutorObj);
-      expect(userService.getTopBottomSnapshot.calls.count()).toEqual(1);
+      expect(userService.getTopBottomSnapshot.calls.count()).toEqual(2);
       userService.getTopBottomSnapshot.calls.reset();
       ctrl.setTopBottomAcctTypeSelection(distirbutorObj);
       expect(userService.getTopBottomSnapshot.calls.count()).toEqual(0);
@@ -1258,8 +1258,7 @@ describe('Unit: accountsController', function() {
       expect(userService.getTopBottomSnapshot.calls.count()).toEqual(1);
       userService.getTopBottomSnapshot.calls.reset();
       ctrl.getDataForTopBottom(ctrl.topBottomData.distributors, categoryBound);
-      expect(userService.getTopBottomSnapshot.calls.count()).toEqual(0);
-
+      expect(userService.getTopBottomSnapshot.calls.count()).toEqual(1);
     });
 
     it('Should not get updated performance data if update performance flag is not set', function() {
@@ -1269,7 +1268,7 @@ describe('Unit: accountsController', function() {
       ctrl.topBottomData.distributors.isFilterUpdateRequired = true;
       ctrl.topBottomData.distributors.timePeriodFilteredData = null;
       ctrl.getDataForTopBottom(ctrl.topBottomData.distributors, categoryBound);
-      expect(ctrl.topBottomData.distributors.isFilterUpdateRequired).toBeFalsy();
+      expect(ctrl.topBottomData.distributors.isFilterUpdateRequired).toBeTruthy();
       expect(ctrl.topBottomData.distributors.isFilterUpdateRequired).not.toBeUndefined();
     });
 
