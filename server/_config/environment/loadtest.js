@@ -56,7 +56,7 @@ module.exports = function (config) {
   config.saml = {
     entryPoint: 'https://ssodev.cbrands.com/oamfed/idp/samlv20',
     issuer: 'https://compass-loadtest.cbrands.com',
-    cert: '',
+    cert: fs.readFileSync('./server/_config/passport/certs/development.crt', 'utf-8'),
     privateCert: '',
     signatureAlgorithm: 'sha1'
   };

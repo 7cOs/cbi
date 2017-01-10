@@ -2,7 +2,6 @@
 
 module.exports = function(app) {
   const SamlStrategy = require('passport-saml').Strategy,
-        fs = require('graceful-fs'),
         util = require('../../_lib/util')(app),
         request = require('request');
 
@@ -14,7 +13,7 @@ module.exports = function(app) {
     passReqToCallback: true,
     entryPoint: app.get('config').saml.entryPoint,
     identifierFormat: 'urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified',
-    cert: fs.readFileSync('./server/_config/passport/certs/development.crt', 'utf-8'),
+    cert: app.get('config').saml.cert,
     signatureAlgorithm: app.get('config').saml.signatureAlgorithm
   }, function(req, profile, done) {
 
