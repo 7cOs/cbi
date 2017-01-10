@@ -234,8 +234,9 @@ module.exports = /*  @ngInject */
       angular.forEach(model, function(key, value) {
         if (key.id === targetListToFind) {
           model[value].dateOpportunitiesUpdated = moment().format();
-          // var tempModel = model[value];
-          // model.splice(value, 1).unshift(tempModel);
+          var tempModel = model[value];
+          model.splice(value, 1);
+          model.unshift(tempModel);
         }
       });
 
