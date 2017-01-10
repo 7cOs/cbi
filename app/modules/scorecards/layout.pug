@@ -66,14 +66,14 @@ div.my-scorecards
             td.column-total.no-border.positive(ng-class="s.totalRow.percentBUTrend ? 'positive' : 'negative'") &#9650;
             td.column-total 100%
             td.column-total 100%
-          tr(ng-repeat="depletion in s.userService.model.depletion" class="disable-ng-animate" ng-click="s.toggleSelected($index, 'depletions')" ng-class="{'selected': s.selectedList === 'depletions' && $index === s.selectedIndex}")
+          tr(ng-repeat="depletion in s.userService.model.depletion | orderBy:'name'" class="disable-ng-animate" ng-click="s.toggleSelected($index, 'depletions')" ng-class="{'selected': s.selectedList === 'depletions' && $index === s.selectedIndex}")
             td.left.data-brand(analytics-on="click" analytics-event="Brand Performance" ng-click='s.goToAccountDashboard(depletion)') {{depletion.name}}
             td.dark(ng-repeat-start="measure in depletion.measures | filter: {timeframe: s.depletionSelect}: true") {{s.checkValidity(measure.depletions, 0)}}
             td.medium-dark(ng-class="{'negative': !s.isPositive(measure.depletions - (measure.depletions / (1 + measure.depletionsTrend / 100)))}") {{s.checkValidity(measure.depletions - measure.depletionsLastYear, 0)}}
             td.medium-dark.no-border(ng-class="{'negative': !s.isPositive(measure.depletionsTrend)}") {{s.vsYAPercent(measure.depletions, measure.depletionsLastYear, measure.depletionsTrend)}}%
             // td(ng-class="{'negative': !s.isPositive(measure.depletions - measure.plan)}") {{s.checkValidity(measure.depletions - measure.plan, 0) }}
             // td.no-border(ng-if="measure.plan !== 0" ng-class="{'negative': !s.isPositive(((measure.depletions - measure.plan) / measure.plan) * 100)}") {{s.checkValidity(((measure.depletions - measure.plan) / measure.plan) * 100, 1)}}%
-            td.no-border(ng-if="measure.plan === 0") 0%
+            // td.no-border(ng-if="measure.plan === 0") 0%
             td(ng-class="{'negative': !s.isPositive(measure.depletionsBUTrend)}") {{s.vsYAPercent(measure.depletionsBU, measure.depletionsBULastYear, measure.depletionsBUTrend)}}%
             td.no-border(ng-if="measure.depletionsBUTrend !== null" ng-class="measure.depletionsTrend > measure.depletionsBUTrend ? 'positive' : 'negative'") <span class="triangle-icon">&#9660;</span>
             td.no-border(ng-if="measure.depletionsBUTrend === null" class="positive") <span class="triangle-icon">&#9660;</span>
@@ -158,7 +158,7 @@ div.my-scorecards
             td.column-total 100%
             td.column-total.no-border 100%
 
-          tr(ng-repeat="distribution in s.userService.model.distribution | filter: {type: '!Total'}: true" class="disable-ng-animate" ng-click="s.toggleSelected($index, 'distributions')" ng-class="{'selected': s.selectedList === 'distributions' && $index === s.selectedIndex}")
+          tr(ng-repeat="distribution in s.userService.model.distribution | filter: {type: '!Total'}: true | orderBy:'name'" class="disable-ng-animate" ng-click="s.toggleSelected($index, 'distributions')" ng-class="{'selected': s.selectedList === 'distributions' && $index === s.selectedIndex}")
             td.left.data-brand(analytics-on="click" analytics-event="Brand Performance" ng-click='s.goToAccountDashboard(distribution, s.distributionRadioOptions.selected.placementType === "Simple")' ng-disabled="s.distributionRadioOptions.selected.placementType === 'Simple'") {{distribution.name}}
             td.dark(ng-repeat-start="measure in distribution.measures | filter: {timeframe: s.distributionSelectOptions.selected}: true")
               span(ng-if="s.distributionRadioOptions.selected.placementType === 'Simple'" ng-class="{'negative': !s.isPositive(measure.distributionsSimple)}") {{s.checkValidity(measure.distributionsSimple, 0)}}
