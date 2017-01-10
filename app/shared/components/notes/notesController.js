@@ -172,6 +172,7 @@ module.exports = /*  @ngInject */
         notesService.accountNotes().then(function(success) {
           vm.notes = success;
           jumpToNotesTop();
+          setNoteAuthor();
           vm.loading = false;
         });
       });
@@ -311,6 +312,15 @@ module.exports = /*  @ngInject */
       angular.element(document.querySelector('.note-container'))[0].scrollTop = 0;
     }
 
+    function setNoteAuthor() {
+      angular.forEach(vm.notes, function(note) {
+        moment(note.date).format();
+        if (isAuthor(note.author)) {
+          note.author = 'Me';
+        }
+      });
+    }
+
     $scope.$on('notes:opened', function(event, data, account) {
       vm.loading = true;
 
@@ -318,14 +328,7 @@ module.exports = /*  @ngInject */
       notesService.accountNotes().then(function(success) {
         vm.notes = success;
         vm.loading = false;
-
-        angular.forEach(vm.notes, function(note) {
-          moment(note.date).format();
-
-          if (isAuthor(note.author)) {
-            note.author = 'Me';
-          }
-        });
+        setNoteAuthor();
       });
       $scope.notesOpen = data;
 

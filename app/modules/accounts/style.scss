@@ -50,6 +50,10 @@
     width: auto;
     z-index: 1;
     outline: none;
+
+    &:hover {
+      cursor: hand;
+    }
   }
 
   &.expanded {
