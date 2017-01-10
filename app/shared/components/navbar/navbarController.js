@@ -88,6 +88,7 @@ module.exports = /*  @ngInject */
     vm.closeMenus = closeMenus;
     vm.closeModal = closeModal;
     vm.getDismissedOpportunity = getDismissedOpportunity;
+    vm.unDismissOpportunity = unDismissOpportunity;
     vm.getTargetLists = getTargetLists;
     vm.markRead = markRead;
     vm.markSeen = markSeen;
@@ -236,6 +237,13 @@ module.exports = /*  @ngInject */
       });
     }
 
+    function unDismissOpportunity(id) {
+      opportunitiesService.deleteOpportunityFeedback(id).then(function(data) {
+        addDuplicateOpportunityId(vm.duplicateId);
+        closeModal();
+      });
+    }
+
     // Add Opportunity
     function addOpportunity(opportunity) {
       var targetListToFind = opportunity.properties.targetList,
@@ -318,6 +326,7 @@ module.exports = /*  @ngInject */
           vm.duplicateOpportunity = opportunity;
           vm.duplicateOpportunity.properties.rationale.description = rationale;
           vm.cachedTargetList = targetList;
+          vm.duplicateId = error.data[0].objectIdentifier;
           modalCustomOpportunityError(error);
         });
 
