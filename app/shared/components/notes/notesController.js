@@ -311,7 +311,7 @@ module.exports = /*  @ngInject */
       angular.element(document.querySelector('.note-container'))[0].scrollTop = 0;
     }
 
-    $scope.$on('notes:opened', function(data, account) {
+    $scope.$on('notes:opened', function(event, data, account) {
       vm.loading = true;
 
       notesService.model.accountId = account.id;
