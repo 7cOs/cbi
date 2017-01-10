@@ -1210,10 +1210,39 @@ module.exports = /*  @ngInject */
 
     function onFilterPropertiesChange() {
       if (topBottomInitData === false) {
-        myperformanceService.resetFilterFlags(vm.topBottomData);
+        // With the new api endpoints the performance flags need to be reset on filter change
+        for (var topBottomObj in vm.topBottomData) {
+          myperformanceService.resetPerformanceDataFlags(vm.topBottomData[topBottomObj]);
+        }
         var categoryBound = vm.filtersService.model.accountSelected.accountMarkets;
         vm.currentTopBottomObj = getCurrentTopBottomObject(vm.currentTopBottomAcctType);
         getDataForTopBottom(vm.currentTopBottomObj, categoryBound);
       }
     }
+
+    // Check if market overview is scrolled out of view
+      function setOverviewDisplay(value) {
+        vm.overviewOpen = value;
+        $scope.$apply();
+     }
+
+     angular.element($window).bind('scroll', function() {
+       if (vm.selectOpen) {
+         return;
+       }
+       vm.st = this.pageYOffset;
+       if (vm.st >= 230) {
+         // Only set element class if state has changed
+         if (!vm.scrolledBelowHeader) {
+           setOverviewDisplay(true);
+         }
+         vm.scrolledBelowHeader = true;
+       } else {
+         // Only set element class if state has changed
+         if (vm.scrolledBelowHeader) {
+           setOverviewDisplay(false);
+         }
+         vm.scrolledBelowHeader = false;
+       }
+     });
   };
