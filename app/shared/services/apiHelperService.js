@@ -101,7 +101,7 @@ module.exports = /*  @ngInject */
         delete obj.additionalParams;
 
         queryParams += 'filter=';
-        queryParams += parseAppliedFilters(obj, i, z);
+        queryParams += encodeURIComponent(parseAppliedFilters(obj, i, z));
 
         // console.log('queryParams - brandSnapshot', decodeURIComponent(queryParams));
 

@@ -199,7 +199,6 @@ module.exports = /*  @ngInject */
       // change tab index
       if (vm.currentTopBottomFilters.stores && vm.currentTopBottomFilters.stores.id) {
         vm.currentTopBottomAcctType = vm.filtersService.accountFilters.accountTypes[3];
-        // to do: highlight store
       } else if (vm.currentTopBottomFilters.subAccounts && vm.currentTopBottomFilters.subAccounts.id) {
         vm.currentTopBottomAcctType = vm.filtersService.accountFilters.accountTypes[3];
       } else if (vm.currentTopBottomFilters.accounts && vm.currentTopBottomFilters.accounts.id) {
@@ -391,15 +390,21 @@ module.exports = /*  @ngInject */
         vm.brandWidgetSkuTitle = null;
         if (widget === 'brands') { vm.brandWidgetTitle = item.name; }
         vm.loadingBrandSnapshot = true;
-        var params = filtersService.getAppliedFilters('brandSnapshot');
+        vm.loadingTopBottom = true;
 
+        var params = filtersService.getAppliedFilters('brandSnapshot');
         params.additionalParams = {
           deplTimePeriod: vm.filterModel.depletionsTimePeriod.name,
           podAndVelTimePeriod: vm.filterModel.distributionTimePeriod.name
         };
-
         params.brand = item.id;
         vm.brandIdSelected = item.id;
+
+        var categoryBound = vm.filtersService.model.accountSelected.accountMarkets;
+        setUpdatedFilters();
+        vm.currentTopBottomObj = getCurrentTopBottomObject(vm.currentTopBottomAcctType);
+        vm.getDataForTopBottom(vm.currentTopBottomObj, categoryBound);
+
         userService.getPerformanceBrand(params).then(function(data) {
           vm.brandTabs.skus = data.performance;
           nextTab(widget);
@@ -930,6 +935,8 @@ module.exports = /*  @ngInject */
         var params = filtersService.getAppliedFilters('topBottom');
         myperformanceService.appendFilterParametersForTopBottom(params, vm.currentTopBottomFilters);
         vm.loadingTopBottom = true;
+
+        if (vm.brandIdSelected) params.brand = vm.brandIdSelected;
 
         params.additionalParams = getAppliedFiltersForTopBottom();
 
