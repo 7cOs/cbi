@@ -288,6 +288,7 @@ module.exports = /*  @ngInject */
             bottom: 30,
             left: 0
           },
+          valuePadding: 80,
           legend: {
             width: 0,
             height: 0
