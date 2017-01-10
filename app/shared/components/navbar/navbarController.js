@@ -208,15 +208,27 @@ module.exports = /*  @ngInject */
     }
 
     function addDuplicateOpportunityId(id) {
-      var existingOpportunityArr = [];
-      existingOpportunityArr.push(id);
-
-      targetListService.addTargetListOpportunities(vm.cachedTargetList, existingOpportunityArr).then(function() {
+      if (!id) {
         vm.cachedTargetList = '';
         vm.currentOpportunityId = '';
-        toastService.showToast('copied', existingOpportunityArr);
         closeModal();
-      });
+      } else {
+        var existingOpportunityArr = [];
+        existingOpportunityArr.push(id);
+
+        targetListService.addTargetListOpportunities(vm.cachedTargetList, existingOpportunityArr).then(function(success) {
+          vm.cachedTargetList = '';
+          vm.currentOpportunityId = '';
+          toastService.showToast('copied', existingOpportunityArr);
+          closeModal();
+        }, function(error) {
+          if (!vm.cachedTargetList || error.data[0].description === 'TLOPP101') {
+            vm.cachedTargetList = '';
+            vm.currentOpportunityId = '';
+            closeModal();
+          }
+        });
+      }
     }
 
     function showImpact(letter) {
@@ -312,7 +324,7 @@ module.exports = /*  @ngInject */
       };
       opportunitiesService
         .createOpportunity(payload)
-        .then(function(success, error) {
+        .then(function(success) {
           if (targetList) {
             addToTargetList(targetList, success);
           }
