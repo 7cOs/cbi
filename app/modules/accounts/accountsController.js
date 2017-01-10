@@ -393,7 +393,8 @@ module.exports = /*  @ngInject */
         var params = filtersService.getAppliedFilters('brandSnapshot');
 
         params.additionalParams = {
-          timePeriod: filtersService.model.accountSelected.accountBrands.propertyName === 'depletions' ? vm.filterModel.depletionsTimePeriod.displayValue : vm.filterModel.distributionTimePeriod.displayValue
+          deplTimePeriod: vm.filterModel.depletionsTimePeriod.name,
+          podAndVelTimePeriod: vm.filterModel.distributionTimePeriod.name
         };
 
         params.brand = item.id;
