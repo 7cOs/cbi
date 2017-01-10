@@ -22,6 +22,7 @@ module.exports = function (config) {
   config.domain = addresses[0];
   config.env = 'development';
   config.address = 'http://' + config.domain + ':'  + config.port + '/'; // base url
+  config.session.cookie.secure = false;
 
   // if you change this server, you need to get a different JWT.
   config.api = {

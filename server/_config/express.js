@@ -33,7 +33,7 @@ module.exports =  function(app) {
   app.use(flash());
 
   //  Forces SSL for production
-  if (process.env.NODE_ENV !== 'local') app.use(enforce.HTTPS({ trustProtoHeader: true }));
+  if (config.session.cookie.secure) app.use(enforce.HTTPS({ trustProtoHeader: true }));
 
   // CONFIG BASED SETTINGS
   if (config.cors) app.use(require('cors')()); // ENABLE CORS
