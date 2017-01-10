@@ -264,13 +264,21 @@ module.exports = /*  @ngInject */
             if (d === null) {
               return '';
             } else {
-              return d + '%';
+              if (d % 1 !== 0) {
+                return $filter('number')(d, 1) + '%';
+              } else {
+                return $filter('number')(d, 0) + '%';
+              }
             }
           },
           tooltip: {
             valueFormatter: function(d) {
               if (isValidValues(Number(d))) {
-                return d + '%';
+                if (d % 1 !== 0) {
+                  return $filter('number')(d, 1) + '%';
+                } else {
+                  return $filter('number')(d, 0) + '%';
+                }
               }
             }
           },

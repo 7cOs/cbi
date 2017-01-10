@@ -518,7 +518,8 @@ module.exports = /*  @ngInject */
       prevTab();
 
       params.additionalParams = {
-        timePeriod: filtersService.model.accountSelected.accountBrands.propertyName === 'depletions' ? vm.filterModel.depletionsTimePeriod.displayValue : vm.filterModel.distributionTimePeriod.displayValue
+        deplTimePeriod: vm.filterModel.depletionsTimePeriod.name,
+        podAndVelTimePeriod: vm.filterModel.distributionTimePeriod.name
       };
 
       userService.getPerformanceBrand(params).then(function(data) {
@@ -694,7 +695,8 @@ module.exports = /*  @ngInject */
       // brand snapshot returns sku data instead of just the brand if you add brand:xxx
       if (params.brand && params.brand.length) delete params.brand;
       params.additionalParams = {
-        timePeriod: filtersService.model.accountSelected.accountBrands.propertyName === 'depletions' ? vm.filterModel.depletionsTimePeriod.displayValue : vm.filterModel.distributionTimePeriod.displayValue
+        deplTimePeriod: vm.filterModel.depletionsTimePeriod.name,
+        podAndVelTimePeriod: vm.filterModel.distributionTimePeriod.name
       };
       params.type = 'brandSnapshot';
       promiseArr.push(userService.getPerformanceBrand(params));
@@ -959,7 +961,7 @@ module.exports = /*  @ngInject */
         var propName = vm.filtersService.model.accountSelected.accountMarkets.propertyName;
         var matchedMeasure = measures[propName];
         if (userService.isValidValues(matchedMeasure)) {
-          return Math.round(matchedMeasure);
+          return $filter('number')(matchedMeasure, 0);
         } else {
           return '-';
         }
@@ -1163,7 +1165,7 @@ module.exports = /*  @ngInject */
           vm.currentTopBottomObj = getCurrentTopBottomObject(vm.currentTopBottomAcctType);
           var categoryBound = vm.filtersService.model.accountSelected.accountMarkets;
           getDataForTopBottom(vm.currentTopBottomObj, categoryBound);
-          // updateBrandSnapshot();
+          updateBrandSnapshot();
         } else {
           // Just setting current top bottom object to store
           vm.currentTopBottomObj = getCurrentTopBottomObject(vm.currentTopBottomAcctType);
