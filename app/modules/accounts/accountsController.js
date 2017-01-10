@@ -422,7 +422,7 @@ module.exports = /*  @ngInject */
       var currentTab = vm.brandSelectedIndex === 0 ? vm.brandTabs.brands : vm.brandTabs.skus;
       if (currentTab.filter) {
         var matchedProperty = currentTab.filter(function (obj) {
-          return obj.type === 'Total';
+          return obj.type === 'Total' || obj.type === 'Totals';
         });
         vm.currentTotalsObject = matchedProperty[0];
       }
