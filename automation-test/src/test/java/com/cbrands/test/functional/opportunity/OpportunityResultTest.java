@@ -20,7 +20,7 @@ public class OpportunityResultTest extends BaseSeleniumTestCase{
 	static NotificationContent content;
 	
 	@Test(dataProvider = "sendOpportunityData", description = "Run - 13:  I can Share an Opportunity to another Employee.", priority=1)
-	public void AT_Opportunities_Run13_ShareOpportunities(String sendTo, String sent) {
+	public void US12719_AT_Opportunities_Run13_ShareOpportunities(String sendTo, String sent) throws InterruptedException {
 		login = new Login(driver);
 		if(!login.isUserLoggedIn()) { 
 			login = new Login(driver);
@@ -43,8 +43,8 @@ public class OpportunityResultTest extends BaseSeleniumTestCase{
 		assertThat(opportunitiesPage.getOpportunitySent(),log(containsString(sent)));
 	}
 	
-	@Test(dependsOnMethods = "AT_Opportunities_Run13_ShareOpportunities", description = "Run - 18:  When I send an Opportunity to an employee, they receive a notification.", priority=2)
-	public void AT_Opportunities_Run18_ShareOpportunities(){
+	@Test(dependsOnMethods = "US12719_AT_Opportunities_Run13_ShareOpportunities", description = "Run - 18:  When I send an Opportunity to an employee, they receive a notification.", priority=2)
+	public void US12710_AT_Opportunities_Run18_SharedOpportunityNotification(){
 		login = new Login(driver);
 		if(!login.isUserLoggedIn()) { 
 			login = new Login(driver);

@@ -15,7 +15,7 @@ public class Run8_SearchBasedFilterFieldsTest extends BaseSeleniumTestCase {
 	private SoftAssert softAssert = new SoftAssert();
 
 	@Test
-	public void AT_Opportunities_Run8_OpportunitytypeSearchFilterBehavior() {
+	public void US12715_AT_Opportunities_Run8_OpportunityTypeSearchFilterBehavior() {
 
 		login = new Login(driver);
 		if (!login.isUserLoggedIn()) {
@@ -43,54 +43,24 @@ public class Run8_SearchBasedFilterFieldsTest extends BaseSeleniumTestCase {
 
 		// Test Step 8.3
 		opportunitiesPage.clickOffPremise();
-		// Commenting the below step, as we have no way to validate brands vs
-		// SKU in search results, through the front end
-		/*
-		 * List<WebElement> brandSearchResults =
-		 * opportunitiesPage.BrandSKUSearchResults("Corona"); for (int x =
-		 * brandSearchResults.size()-1; x>0; x = x-1 ){
-		 * softAssert.assertFalse(brandSearchResults.get(x).getText().contains(
-		 * "oz"), "Brand Search Results contain packages;");
-		 * 
-		 * }
-		 */
 
 		// Test Step 8.4
 		opportunitiesPage.clickOnPremise();
-		//// Commenting the below step, as we have no way to validate brands vs
-		//// SKU in search results, through the front end
-		/*
-		 * List<WebElement> packageSearchResults =
-		 * opportunitiesPage.BrandPackageSearchResults("Corona"); for (int x =
-		 * packageSearchResults.size()-1; x>0; x = x-1 ){
-		 * Assert.assertFalse(packageSearchResults.get(x).getText().contains(
-		 * "pk"), "Brand Search Results contain packages;"); }
-		 */
+
 
 		// Test 8.7
 		opportunitiesPage.clickOpportunityTypeDropdown();
 		Assert.assertEquals(opportunitiesPage.getOpportunityTypeAllTypes().getAttribute("selected"), "true", "'All Types not selected by default'");
-		opportunitiesPage.clickOpporunityType("Non-Buy");
-		opportunitiesPage.clickOpporunityType("At Risk");
-		opportunitiesPage.clickOpporunityType("Low Velocity");
-		opportunitiesPage.clickOpporunityType("New Placement (Quality)");
-		opportunitiesPage.clickOpporunityType("New Placement (No Rebuy)");
-		opportunitiesPage.clickOpporunityType("Custom");
+		opportunitiesPage.clickOpportunityType("Non-Buy");
+		opportunitiesPage.clickOpportunityType("At Risk");
+		opportunitiesPage.clickOpportunityType("Low Velocity");
+		opportunitiesPage.clickOpportunityType("New Placement (Quality)");
+		opportunitiesPage.clickOpportunityType("New Placement (No Rebuy)");
+		opportunitiesPage.clickOpportunityType("Custom");
 		opportunitiesPage.clickOpporunityTypeDone();
 		Assert.assertNotNull(opportunitiesPage.getFilterPillNonBuy(), "'At Risk' filter pill not displaying");
 		opportunitiesPage.clearFirstRemovableFilterPill();
-		WebElement HomeLink = driver.findElement(By.xpath("//a[contains(.,'Home')]"));
-		HomeLink.click();
-		homePage = opportunitiesPage.navigateToHome();
-		homePage.clickOpportunityTypeDropdown();
-		Assert.assertEquals(homePage.opportunityTypeAllTypes.getAttribute("selected"), "true", "'All Types not selected by default'");
-		homePage.clickOpporunityType("Non-Buy");
-		homePage.clickOpporunityType("At Risk");
-		homePage.clickOpporunityType("Low Velocity");
-		homePage.clickOpporunityType("New Placement (Quality)");
-		homePage.clickOpporunityType("New Placement (No Rebuy)");
-		homePage.clickOpporunityType("Custom");
-
+		
 		softAssert.assertAll();
 
 	}

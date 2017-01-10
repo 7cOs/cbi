@@ -12,7 +12,7 @@ public class Run5_SavedReports extends BaseSeleniumTestCase{
 	private SoftAssert softAssert = new SoftAssert();
 	
 	@Test(dataProvider="AT_Opportunities_Run5_ViewSavedReports")
-	public void AT_Opportunities_Run5_ViewSavedReports(String reportName){
+	public void US12708_AT_Opportunities_Run5_ViewSavedReports(String reportName){
 		login = new Login(driver);
 		if(!login.isUserLoggedIn()) { 
 			homePage = login.loginWithValidCredentials(ACTOR1_USER_NAME, ACTOR1_PASSWORD);

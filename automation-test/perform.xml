@@ -2,11 +2,11 @@
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
 <suite name="Suite">
 	<listeners>
-		<listener class-name="com.cbrands.listener.TestNGCustomReportListener" />
+		<listener class-name="com.cbrands.TestNGCustomReportListener" />
 	</listeners>
-	<test name="Smoke Test">
+	<test name="Functional Test">
 		<classes>
-			<class name="com.cbrands.test.smoke.SmokeTests" />
-		</classes>
+            <class name="com.cbrands.test.functional.opportunity.OpportunityTest" />
+       </classes>
 	</test> <!-- Test -->
 </suite> <!-- Suite -->

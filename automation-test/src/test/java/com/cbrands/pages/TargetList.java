@@ -52,7 +52,8 @@ public class TargetList extends LoadableComponent<TargetList> {
 	@FindBy(how = How.CSS, using = "a[href='/opportunities']")
 	private WebElement opportunities;
 
-	@FindBy(how = How.XPATH, using = "//div/div[2]/div[1]/input")
+	//@FindBy(how = How.XPATH, using = "//div/div[2]/div[1]/input")
+	@FindBy(how = How.CSS, using = "input[placeholder='Enter List Name']")
 	private WebElement NameTextBox;
 
 	@FindBy(how = How.XPATH, using = "//*[@placeholder='Enter Description']")
@@ -61,7 +62,8 @@ public class TargetList extends LoadableComponent<TargetList> {
 	@FindBy(how = How.XPATH, using = "//div/div[2]/button")
 	private WebElement SaveButton;
 
-	@FindBy(how = How.XPATH, using = "//div[2]/md-dialog/div/div[2]/div[3]/div/div[2]/md-menu/button")
+	//@FindBy(how = How.XPATH, using = "//div[2]/md-dialog/div/div[2]/div[3]/div/div[2]/md-menu/button")
+	@FindBy(how=How.CSS, using = "button[aria-label='Collaborator Options']")
 	private WebElement collaborator;
 
 	@FindBy(how = How.XPATH, using = "//div[2]/md-dialog/div/div[3]/button[2]")
@@ -229,6 +231,7 @@ public class TargetList extends LoadableComponent<TargetList> {
 	}
 
 	public TargetList EnterNameTextBox(String name) {
+		waitForVisibleFluentWait(NameTextBox);
 		NameTextBox.clear();
 		NameTextBox.sendKeys(name);
 		return this;
@@ -248,7 +251,8 @@ public class TargetList extends LoadableComponent<TargetList> {
 	public TargetList clickNewTargetList(String name) {
 		// waitForVisible(By.xpath("//h4[text()='"+ name + "']"));
 		WebElement MyTargetList = findElement(By.xpath("//h4[text()='" + name + "']"));
-		waitForElementToClickable(MyTargetList, true);
+		//waitForElementToClickable(MyTargetList, true);
+		waitForVisibleFluentWait(MyTargetList);
 		System.out.println(MyTargetList.getText());
 
 		JavascriptExecutor js = (JavascriptExecutor) driver;
@@ -341,9 +345,10 @@ public class TargetList extends LoadableComponent<TargetList> {
 	}
 
 	public TargetList clickCollaborator() {
-		System.out.println("Inside collaborator");
-		waitForElementVisible(collaborator, true);
-		waitForElementToClickable(collaborator, true).click();
+		//System.out.println("Inside collaborator");
+		//waitForElementVisible(collaborator, true);
+		//waitForElementToClickable(collaborator, true).click();
+		waitForVisibleFluentWait(collaborator).click();
 		return this;
 	}
 

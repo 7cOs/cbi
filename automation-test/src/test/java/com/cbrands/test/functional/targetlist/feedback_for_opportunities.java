@@ -13,7 +13,7 @@ public class feedback_for_opportunities extends BaseSeleniumTestCase{
 	
 
 	@Test(dataProvider = "targetData", description = "Create a new Target List", priority = 1)
-	public void Cannot_Dismiss_Targeted_Opportunities(String name, String description,  String listname, String desc,String distributorname, String listname2) throws InterruptedException {
+	public void US13001_AT_TargetList_CannotDismissTargetedOpportunities(String name, String description,  String listname, String desc,String distributorname, String listname2) throws InterruptedException {
 		
 		login = new Login(driver);
 		if(!login.isUserLoggedIn()) { 
