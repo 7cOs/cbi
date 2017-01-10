@@ -191,7 +191,7 @@ module.exports = /*  @ngInject */
           {label: 'Mass Merchandiser', name: 'Mass Merchandiser', value: '08'},
           {label: 'Liquor', name: 'Liquor', value: '02'},
           {label: 'Military', name: 'Military', value: 'MF'},
-          {label: 'Recreation', name: 'Recreation', value: '53'},
+          {label: 'Wholesale Club', name: 'Wholesale Club', value: '1'},
           {label: 'Other', name: 'Other Trade Channel', value: 'OTHER'}
         ]
       },
