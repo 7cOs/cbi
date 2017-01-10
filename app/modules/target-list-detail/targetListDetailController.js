@@ -9,6 +9,7 @@ module.exports = /*  @ngInject */
 
     // Initial variables
     var vm = this;
+    vm.accessError = false;
     vm.archiving = false;
     vm.changed = false;
     vm.closeButton = false;
@@ -47,6 +48,7 @@ module.exports = /*  @ngInject */
     vm.listChanged = listChanged;
     vm.makeOwner = makeOwner;
     vm.modalManageTargetList = modalManageTargetList;
+    vm.modalUnauthorizedAccess = modalUnauthorizedAccess;
     vm.navigateToTL = navigateToTL;
     vm.pendingCheck = pendingCheck;
     vm.permissionLabel = permissionLabel;
@@ -260,6 +262,7 @@ module.exports = /*  @ngInject */
     }
 
     function initTargetLists() {
+      vm.accessError = false;
       targetListService.getTargetList(targetListService.model.currentList.id).then(function(response) {
         targetListService.model.currentList = response;
 
@@ -279,6 +282,7 @@ module.exports = /*  @ngInject */
         targetListService.updateTargetListShares(targetListService.model.currentList.id, userService.model.currentUser.employeeID, true, false);
       }, function(err) {
         console.log('[targetListController.init], Error: ' + err.statusText + '. Code: ' + err.status);
+        vm.modalUnauthorizedAccess();
       });
     }
 
@@ -292,6 +296,19 @@ module.exports = /*  @ngInject */
       });
 
       return author;
+    }
+
+    function modalUnauthorizedAccess() {
+      $mdDialog.show({
+        clickOutsideToClose: false,
+        scope: $scope.$new(),
+        templateUrl: './app/modules/target-list-detail/modal-unauthorized-access.html'
+      });
+
+      $timeout(function() {
+        $mdDialog.hide();
+        vm.navigateToTL();
+      }, 3500);
     }
 
     // **************
