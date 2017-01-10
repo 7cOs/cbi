@@ -393,7 +393,8 @@ module.exports = /*  @ngInject */
         var params = filtersService.getAppliedFilters('brandSnapshot');
 
         params.additionalParams = {
-          timePeriod: filtersService.model.accountSelected.accountBrands.propertyName === 'depletions' ? vm.filterModel.depletionsTimePeriod.displayValue : vm.filterModel.distributionTimePeriod.displayValue
+          deplTimePeriod: vm.filterModel.depletionsTimePeriod.name,
+          podAndVelTimePeriod: vm.filterModel.distributionTimePeriod.name
         };
 
         params.brand = item.id;
@@ -653,7 +654,7 @@ module.exports = /*  @ngInject */
     function getAppliedFiltersForTopBottom() {
       var obj = {};
 
-      obj.timePeriod = filtersService.model.accountSelected.accountMarkets.propertyName === 'depletions' ? vm.filterModel.depletionsTimePeriod.displayValue : vm.filterModel.distributionTimePeriod.displayValue;
+      obj.timePeriod = filtersService.model.accountSelected.accountMarkets.propertyName === 'depletions' ? vm.filterModel.depletionsTimePeriod.name : vm.filterModel.distributionTimePeriod.name;
 
       if (filtersService.model.valuesVsTrend.name.split(' ')[0].toLowerCase() === 'top') {
         obj.top = true;
@@ -783,12 +784,6 @@ module.exports = /*  @ngInject */
       vm.filterModel.distributionTimePeriod = vm.filtersService.lastEndingTimePeriod.timePeriodValue;
     }
 
-    // Set element class for market overview
-    function setOverviewDisplay(value) {
-      vm.overviewOpen = value;
-      $scope.$apply();
-    }
-
     // Add 'selected' class to item furthest possible drill-down tab level
     function setSelected(idSelected, widget) {
       vm.idSelected = idSelected;
@@ -796,29 +791,6 @@ module.exports = /*  @ngInject */
       if (widget === 'brands') { vm.brandIdSelected = idSelected; }
       if (widget === 'markets') { vm.marketIdSelected = true; vm.selectedStore = idSelected; prevTab(); }
     }
-
-    // Check if market overview is scrolled out of view
-    angular.element($window).bind('scroll', function() {
-      if (vm.selectOpen) {
-        return;
-      }
-
-      vm.st = this.pageYOffset;
-
-      if (vm.st >= 230) {
-        // Only set element class if state has changed
-        if (!vm.scrolledBelowHeader) {
-          setOverviewDisplay(true);
-        }
-        vm.scrolledBelowHeader = true;
-      } else {
-        // Only set element class if state has changed
-        if (vm.scrolledBelowHeader) {
-          setOverviewDisplay(false);
-        }
-        vm.scrolledBelowHeader = false;
-      }
-    });
 
     // Top Bottom Specific Functions
     /**
@@ -839,6 +811,7 @@ module.exports = /*  @ngInject */
           }
         }
         getDataForTopBottom(vm.currentTopBottomObj, propertyBoundToTable);
+        updateBrandSnapshot();
       }
     }
 
