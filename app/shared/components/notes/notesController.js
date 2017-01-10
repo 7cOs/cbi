@@ -1,6 +1,6 @@
 'use strict';
 
-module.exports =
+module.exports = /*  @ngInject */
   function notesController($scope, $state, $mdDialog, $timeout, $filter, $window, notesService, userService, Upload, moment) {
 
     // ****************
