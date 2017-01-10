@@ -54,7 +54,8 @@ module.exports = /*  @ngInject */
     vm.hintTextPlaceholder = 'Account or Subaccount Name';
     vm.idSelected = null;
     vm.loadingBrandSnapshot = true;
-    vm.loadingTopBottom = true;
+    // vm.loadingTopBottom = true;
+    vm.loadingTopBottom = false;
     vm.marketStoresView = false;
     vm.marketIdSelected = false;
     vm.overviewOpen = false;
@@ -456,32 +457,60 @@ module.exports = /*  @ngInject */
     }
 
     function setFilter(result, filterModelProperty) {
-      filtersService.model.selected[filterModelProperty] = [result.id];
+      var i = 0;
+
+      // click through result.type is undefined, but on search you need result.type
+      var switchStr = filterModelProperty;
+      if (result.type) switchStr = result.type;
 
       // model uses .distributor but this uses .distributors
-      var topBottomProp = '';
-      switch (filterModelProperty) {
+      var topBottomProp = '',
+          filterModelProp = '';
+      switch (switchStr) {
         case 'account':
+        case 'accounts':
           topBottomProp = 'accounts';
+          filterModelProp = 'account';
           break;
-        case 'subAccount':
+        case 'subaccount':
+        case 'subAccounts':
           topBottomProp = 'subAccounts';
+          filterModelProp = 'subaccount';
           break;
         case 'store':
+        case 'stores':
           topBottomProp = 'stores';
+          filterModelProp = 'store';
           break;
         default:
           topBottomProp = 'distributors';
+          filterModelProp = 'distributor';
           break;
       };
+
+      // set filters service model selected
+      if (result.ids) {
+        for (i = 0; i < result.ids.length; i++) {
+          filtersService.model.selected[filterModelProp].push(result.ids[i]);
+        }
+      } else {
+        if (result.id.constructor === Array) {
+          filtersService.model.selected[filterModelProp] = result.id;
+        } else {
+          filtersService.model.selected[filterModelProp] = [result.id];
+        }
+      }
+
+      // set local model
       vm.currentTopBottomFilters[topBottomProp] = {
-        id: result.id,
+        id: angular.copy(filtersService.model.selected[filterModelProp]),
         name: result.name
       };
+
       vm.selectedStoreInfo = vm.currentTopBottomFilters[topBottomProp];
       vm.selectedStoreInfo.type = topBottomProp;
       notesService.model.currentStoreName = result.name.toUpperCase();
-      notesService.model.currentStoreProperty = filterModelProperty;
+      notesService.model.currentStoreProperty = filterModelProp;
       if (filterModelProperty === 'store') {
         filtersService.model.selected.account = [];
         filtersService.model.account = '';
@@ -496,13 +525,13 @@ module.exports = /*  @ngInject */
         vm.showXDistributor = true;
       }
 
-      for (var i = 0; i < chipsService.model.length; i++) {
-        if (chipsService.model[i].type === filterModelProperty) {
+      for (i = 0; i < chipsService.model.length; i++) {
+        if (chipsService.model[i].type === filterModelProp) {
           chipsService.model.splice(i, 1);
           break;
         }
       }
-      chipsService.addAutocompleteChip(result.name, filterModelProperty, false);
+      chipsService.addAutocompleteChip(result.name, filterModelProp, false);
       apply(false);
 
       filtersService.model[filterModelProperty] = result.name;
@@ -1020,7 +1049,6 @@ module.exports = /*  @ngInject */
         stopTopBottomLoadingIcon();
         console.log('Unable to retrieve any ' + vm.currentTopBottomObj.currentLevelName);
       }
-      // console.log('Current Top Bottom Obj', vm.currentTopBottomObj);
     }
 
     function checkForStoreLevel(trendSelection) {

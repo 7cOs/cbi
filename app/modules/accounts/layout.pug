@@ -88,7 +88,8 @@ notes
           inline-search(ng-if="a.filtersService.model.selected.retailer === 'Chain'" type="chain" placeholder="{{a.hintTextPlaceholder}}" chosen-result="a.filtersService.model.account" callback="a.setFilter(result, 'account')" removable='true' on-remove="a.removeInlineSearch('selectedStore')" show-x="a.showXChain")
   div(row)
     div(column='12' class='apply-filters')
-      button(value='Apply Filters' type="button" class="btn-action" ng-disabled="a.disableApply" ng-click="a.updateBrandSnapshot(); a.filterTopBottom()") Apply Filters
+      //- button(value='Apply Filters' type="button" class="btn-action" ng-disabled="a.disableApply" ng-click="a.updateBrandSnapshot(); a.filterTopBottom()") Apply Filters
+      button(value='Apply Filters' type="button" class="btn-action" ng-disabled="a.disableApply" ng-click="a.filterTopBottom();") Apply Filters
       .secondary-button-container.reset-only
         a(ng-click="a.resetFilters()").accent.reset-icon Reset
 
