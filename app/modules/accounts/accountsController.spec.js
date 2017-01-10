@@ -1,5 +1,5 @@
 describe('Unit: accountsController', function() {
-  var scope, ctrl, $state, $q, filtersService, chipsService, userService, packageSkuData, brandSpy, brandPerformanceData, myperformanceService, topBottomSpy;
+  var scope, ctrl, $state, $q, filtersService, chipsService, userService, packageSkuData, brandSpy, brandPerformanceData, myperformanceService, topBottomSpy, $filter;
   var topBottomSnapshotDistributorData = {
     performance: [{
         'type': 'Distributor',
@@ -325,13 +325,14 @@ describe('Unit: accountsController', function() {
     angular.mock.module('cf.common.services');
     angular.mock.module('cf.modules.accounts');
 
-    inject(function($rootScope, $controller, _$state_, _$q_, _chipsService_, _filtersService_, _userService_, _myperformanceService_) {
+    inject(function($rootScope, $controller, _$state_, _$q_, _chipsService_, _filtersService_, _userService_, _myperformanceService_, _$filter_) {
       // Create scope
       scope = $rootScope.$new();
 
       // Get Required Services
       $state = _$state_;
       $q = _$q_;
+      $filter = _$filter_;
       chipsService = _chipsService_;
       filtersService = _filtersService_;
       userService = _userService_;
@@ -1300,19 +1301,19 @@ describe('Unit: accountsController', function() {
       // MTD
       ctrl.filtersService.model.accountSelected.accountMarkets = ctrl.filtersService.accountFilters.accountMarkets[0];
       val = ctrl.getValueBoundForAcctType(topBottomSnapshotDistributorData.performance[0].measures[0]);
-      expect(val).toEqual(375314);
+      expect(val).toEqual($filter('number')(375314, 0));
 
       ctrl.filtersService.model.accountSelected.accountMarkets = ctrl.filtersService.accountFilters.accountMarkets[1];
       val = ctrl.getValueBoundForAcctType(topBottomSnapshotDistributorData.performance[0].measures[7]);
-      expect(val).toEqual(14612);
+      expect(val).toEqual($filter('number')(14612, 0));
 
       ctrl.filtersService.model.accountSelected.accountMarkets = ctrl.filtersService.accountFilters.accountMarkets[2];
       val = ctrl.getValueBoundForAcctType(topBottomSnapshotDistributorData.performance[0].measures[7]);
-      expect(val).toEqual(30104);
+      expect(val).toEqual($filter('number')(30104, 0));
 
       ctrl.filtersService.model.accountSelected.accountMarkets = ctrl.filtersService.accountFilters.accountMarkets[3];
       val = ctrl.getValueBoundForAcctType(topBottomSnapshotDistributorData.performance[0].measures[7]);
-      expect(val).toEqual(7190);
+      expect(val).toEqual($filter('number')(7190, 0));
 
       ctrl.filtersService.model.accountSelected.accountMarkets = ctrl.filtersService.accountFilters.accountMarkets[0];
       val = ctrl.getValueBoundForAcctType(topBottomSnapshotDistributorData.performance[0].measures[0]);

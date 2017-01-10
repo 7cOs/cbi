@@ -959,7 +959,7 @@ module.exports = /*  @ngInject */
         var propName = vm.filtersService.model.accountSelected.accountMarkets.propertyName;
         var matchedMeasure = measures[propName];
         if (userService.isValidValues(matchedMeasure)) {
-          return Math.round(matchedMeasure);
+          return $filter('number')(matchedMeasure, 0);
         } else {
           return '-';
         }
@@ -1163,7 +1163,7 @@ module.exports = /*  @ngInject */
           vm.currentTopBottomObj = getCurrentTopBottomObject(vm.currentTopBottomAcctType);
           var categoryBound = vm.filtersService.model.accountSelected.accountMarkets;
           getDataForTopBottom(vm.currentTopBottomObj, categoryBound);
-          // updateBrandSnapshot();
+          updateBrandSnapshot();
         } else {
           // Just setting current top bottom object to store
           vm.currentTopBottomObj = getCurrentTopBottomObject(vm.currentTopBottomAcctType);
