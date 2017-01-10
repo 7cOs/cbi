@@ -148,7 +148,7 @@ v-accordion.styled-list(multiple="" id="opportunities" control="list.accordion" 
                   md-tooltip
                     div(class="align-left" ng-repeat="d in opportunity.store.distributors track by $index") {{::d}}
             div(column='2')
-              a(ui-sref="accounts({id: opportunity.store.id})" ui-sref-active="active" target="_blank").details-link.accent Full Details
+              a(ui-sref="accounts({storeId: opportunity.store.id})" ui-sref-active="active" target="_blank").details-link.accent Full Details
         .title-row(row)
           div(column='1') &nbsp;
           div(column='2')

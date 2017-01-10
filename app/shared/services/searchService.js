@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports = /*  @ngInject */
-  function searchService($http, $q, apiHelperService) {
+  function searchService($http, $q, apiHelperService, userService) {
 
     var model = {
       searchActive: false
@@ -81,12 +81,20 @@ module.exports = /*  @ngInject */
     /**
      * @name getStores
      * @desc Get stores from API via Inline Search
+     * @params searchTerm - String - term to search
      * @returns [array]
      * @memberOf cf.common.services
      */
     function getStores(searchTerm) {
+      // user is not corporate and my accounts only true filtersService.model.selected.myAccountsOnly && userService.model.currentUser.corporateUser &&
       var searchPromise = $q.defer(),
-          url = apiHelperService.request('/api/search/stores?searchTerm=' + encodeURIComponent(searchTerm));
+          url = '';
+
+      if (userService.model.currentUser.corporateUser) {
+        url = apiHelperService.request('/api/search/stores?searchTerm=' + encodeURIComponent(searchTerm));
+      } else {
+        url = apiHelperService.request('/api/search/stores?allVersions=true&searchTerm=' + encodeURIComponent(searchTerm));
+      }
 
       $http.get(url, {
         headers: {}

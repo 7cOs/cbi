@@ -456,32 +456,60 @@ module.exports = /*  @ngInject */
     }
 
     function setFilter(result, filterModelProperty) {
-      filtersService.model.selected[filterModelProperty] = [result.id];
+      var i = 0;
+
+      // click through result.type is undefined, but on search you need result.type
+      var switchStr = filterModelProperty;
+      if (result.type) switchStr = result.type;
 
       // model uses .distributor but this uses .distributors
-      var topBottomProp = '';
-      switch (filterModelProperty) {
+      var topBottomProp = '',
+          filterModelProp = '';
+      switch (switchStr) {
         case 'account':
+        case 'accounts':
           topBottomProp = 'accounts';
+          filterModelProp = 'account';
           break;
-        case 'subAccount':
+        case 'subaccount':
+        case 'subAccounts':
           topBottomProp = 'subAccounts';
+          filterModelProp = 'subaccount';
           break;
         case 'store':
+        case 'stores':
           topBottomProp = 'stores';
+          filterModelProp = 'store';
           break;
         default:
           topBottomProp = 'distributors';
+          filterModelProp = 'distributor';
           break;
       };
+
+      // set filters service model selected
+      if (result.ids) {
+        for (i = 0; i < result.ids.length; i++) {
+          filtersService.model.selected[filterModelProp].push(result.ids[i]);
+        }
+      } else {
+        if (result.id.constructor === Array) {
+          filtersService.model.selected[filterModelProp] = result.id;
+        } else {
+          filtersService.model.selected[filterModelProp] = [result.id];
+        }
+      }
+
+      // set local model
       vm.currentTopBottomFilters[topBottomProp] = {
-        id: result.id,
+        id: angular.copy(filtersService.model.selected[filterModelProp]),
         name: result.name
       };
+
       vm.selectedStoreInfo = vm.currentTopBottomFilters[topBottomProp];
       vm.selectedStoreInfo.type = topBottomProp;
       notesService.model.currentStoreName = result.name.toUpperCase();
-      notesService.model.currentStoreProperty = filterModelProperty;
+      notesService.model.currentStoreProperty = filterModelProp;
       if (filterModelProperty === 'store') {
         filtersService.model.selected.account = [];
         filtersService.model.account = '';
@@ -496,13 +524,13 @@ module.exports = /*  @ngInject */
         vm.showXDistributor = true;
       }
 
-      for (var i = 0; i < chipsService.model.length; i++) {
-        if (chipsService.model[i].type === filterModelProperty) {
+      for (i = 0; i < chipsService.model.length; i++) {
+        if (chipsService.model[i].type === filterModelProp) {
           chipsService.model.splice(i, 1);
           break;
         }
       }
-      chipsService.addAutocompleteChip(result.name, filterModelProperty, false);
+      chipsService.addAutocompleteChip(result.name, filterModelProp, false);
       apply(false);
 
       filtersService.model[filterModelProperty] = result.name;
@@ -664,6 +692,9 @@ module.exports = /*  @ngInject */
     }
 
     function init() {
+      // if navigating from opp page, load with a default query
+      if ($state.params.storeId) $state.params.applyFiltersOnLoad = true;
+
       // reset all chips and filters on page init if no brand is specified
       if (!$state.params.applyFiltersOnLoad) {
         chipsService.resetChipsFilters(chipsService.model);
@@ -674,6 +705,8 @@ module.exports = /*  @ngInject */
           vm.brandWidgetTitle = $state.params.pageData.brandTitle;
 
           chipsService.addAutocompleteChip(vm.brandWidgetTitle, 'brand', false);
+        } else if ($state.params.storeId !== '') {
+          filtersService.model.selected.store = [$state.params.storeId];
         }
       }
 
@@ -687,8 +720,6 @@ module.exports = /*  @ngInject */
       params.additionalParams = getAppliedFiltersForTopBottom();
 
       var promiseArr = [
-        userService.getPerformanceDepletion(),
-        userService.getPerformanceDistribution({'type': 'noencode', 'premiseType': 'off'}),
         userService.getTopBottomSnapshot(vm.currentTopBottomAcctType, params)
       ];
 
@@ -702,9 +733,7 @@ module.exports = /*  @ngInject */
       promiseArr.push(userService.getPerformanceBrand(params));
 
       $q.all(promiseArr).then(function(data) {
-        userService.model.depletion = data[0];
-        userService.model.distribution = data[1];
-        vm.brandTabs.brands = data[3].performance;
+        vm.brandTabs.brands = data[1].performance;
 
         if ($state.params.applyFiltersOnLoad) {
           // select brand that was clicked in score card
@@ -716,9 +745,9 @@ module.exports = /*  @ngInject */
         }
 
         setCurrentTotalsObject();
-        if (data[2]) {
+        if (data[0]) {
           var categoryBound = vm.filtersService.model.accountSelected.accountMarkets;
-          vm.currentTopBottomObj.performanceData = data[2].performance;
+          vm.currentTopBottomObj.performanceData = data[0].performance;
           vm.currentTopBottomObj.isPerformanceDataUpdateRequired = false;
           getDataForTopBottom(vm.currentTopBottomObj, categoryBound);
           if (topBottomInitData === true) {
@@ -1019,7 +1048,6 @@ module.exports = /*  @ngInject */
         stopTopBottomLoadingIcon();
         console.log('Unable to retrieve any ' + vm.currentTopBottomObj.currentLevelName);
       }
-      // console.log('Current Top Bottom Obj', vm.currentTopBottomObj);
     }
 
     function checkForStoreLevel(trendSelection) {

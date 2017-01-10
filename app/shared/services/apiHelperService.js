@@ -49,7 +49,9 @@ module.exports = /*  @ngInject */
         z = getKeyLength(filterParams) - 1;
         filterQueryParams += parseAppliedFilters(filterParams, i, z);
         queryParams += 'filter=' + encodeURIComponent(filterQueryParams);
-        // console.log('queryParams', queryParams);
+
+        // console.log('queryParams - top bottom stores', decodeURIComponent(queryParams));
+
         return queryParams;
       } else if (obj.type && obj.type === 'opportunities') {
         var p = applyPage(),
@@ -200,7 +202,7 @@ module.exports = /*  @ngInject */
           } else {
             // iterate over arrays
             for (var k = 0; k < obj[key2].length; k++) {
-              if (obj[key2][k].toUpperCase() === 'ALL TYPES') break;
+              if (obj[key2][k] && obj[key2][k].toUpperCase() === 'ALL TYPES') break;
               if (k === 0) queryParams += key2 + ':';
 
               // transform opp types to db format
@@ -249,6 +251,7 @@ module.exports = /*  @ngInject */
         i++;
       }
 
+      // return queryParams.replace(/,$/g, '');
       return queryParams;
     }
   };

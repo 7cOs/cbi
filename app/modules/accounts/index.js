@@ -8,7 +8,7 @@ module.exports =
   .config(function ($stateProvider) {
     $stateProvider
     .state('accounts', {
-      url: '/accounts',
+      url: '/accounts/:storeId',
       title: 'Account Dashboard',
       templateUrl: './app/modules/accounts/layout.html',
       controller: 'accountsController',
@@ -20,7 +20,8 @@ module.exports =
           brandTitle: '',
           depletionTimePeriod: '',
           distributionTimePeriod: ''
-        }
+        },
+        id: ''
       }
     });
   })
