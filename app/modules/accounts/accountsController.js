@@ -212,6 +212,7 @@ module.exports = /*  @ngInject */
       vm.currentTopBottomObj = getCurrentTopBottomObject(vm.currentTopBottomAcctType);
       // update data
       vm.getDataForTopBottom(vm.currentTopBottomObj, categoryBound);
+      updateBrandSnapshot();
     }
 
     /**
