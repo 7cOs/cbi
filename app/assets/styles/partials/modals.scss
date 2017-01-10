@@ -197,6 +197,20 @@ md-dialog {
     }
   }
 
+  &.unauthorized {
+    img {
+      width: 10px;
+      height: 10px;
+      position: absolute;
+      left: 3em;
+      bottom: 8.5ex;
+    }
+
+    .error-message {
+      line-height: 3ex;
+    }
+  }
+
   &.add-opportunity {
     .horizontal-layout {
       inline-search {
