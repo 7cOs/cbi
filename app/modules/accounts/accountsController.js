@@ -193,7 +193,7 @@ module.exports = /*  @ngInject */
       for (var topBottomObj in vm.topBottomData) {
         myperformanceService.resetPerformanceDataFlags(vm.topBottomData[topBottomObj]);
       }
-
+      setUpdatedFilters();
       var categoryBound = vm.filtersService.model.accountSelected.accountMarkets;
 
       // change tab index
@@ -207,7 +207,6 @@ module.exports = /*  @ngInject */
         vm.currentTopBottomAcctType = vm.filtersService.accountFilters.accountTypes[1];
       }
 
-      setUpdatedFilters();
       vm.currentTopBottomObj = getCurrentTopBottomObject(vm.currentTopBottomAcctType);
       // update data
       vm.getDataForTopBottom(vm.currentTopBottomObj, categoryBound);
@@ -1224,6 +1223,7 @@ module.exports = /*  @ngInject */
         var categoryBound = vm.filtersService.model.accountSelected.accountMarkets;
         vm.currentTopBottomObj = getCurrentTopBottomObject(vm.currentTopBottomAcctType);
         getDataForTopBottom(vm.currentTopBottomObj, categoryBound);
+        updateBrandSnapshot();
       }
     }
 
