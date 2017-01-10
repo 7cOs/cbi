@@ -400,35 +400,6 @@ module.exports = /*  @ngInject */
         params.brand = item.id;
         vm.brandIdSelected = item.id;
 
-        /* var params1 = filtersService.getAppliedFilters('brandSnapshot');
-        params1.brand = item.id;
-        params1.additionalParams = getAppliedFiltersForTopBottom();
-        var promiseArr = [
-          userService.getPerformanceBrand(params),
-          userService.getTopBottomSnapshot(vm.currentTopBottomAcctType, params1)
-        ];
-
-        $q.all(promiseArr).then(function(data) {
-          vm.brandTabs.skus = data[0].performance;
-          nextTab(widget);
-
-          // top bottom
-          setCurrentTotalsObject();
-          if (data[1]) {
-            var categoryBound = vm.filtersService.model.accountSelected.accountMarkets;
-            vm.currentTopBottomObj.performanceData = data[1].performance;
-            vm.currentTopBottomObj.isPerformanceDataUpdateRequired = false;
-            getDataForTopBottom(vm.currentTopBottomObj, categoryBound);
-            if (topBottomInitData === true) {
-              topBottomInitData = false;
-            }
-          }
-
-          $timeout(function () {
-            vm.loadingBrandSnapshot = false;
-            vm.loadingTopBottom = false;
-          }, 500);
-        }); */
         var categoryBound = vm.filtersService.model.accountSelected.accountMarkets;
         setUpdatedFilters();
         vm.currentTopBottomObj = getCurrentTopBottomObject(vm.currentTopBottomAcctType);
@@ -439,7 +410,6 @@ module.exports = /*  @ngInject */
           nextTab(widget);
           $timeout(function () {
             vm.loadingBrandSnapshot = false;
-            vm.loadingTopBottom = false;
           }, 500);
         });
       }
