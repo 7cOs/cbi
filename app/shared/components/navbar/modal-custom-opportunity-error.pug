@@ -33,7 +33,7 @@ div.modal.custom-opportunity-error
           button(type="submit" ng-click="nb.closeModal()").btn-action Cancel and Discard
       div(ng-if="nb.duplicateError").row
         div(column="12")
-          button(type="submit" ng-click="nb.closeModal()").btn-action Use Existing
+          button(type="submit" ng-click="nb.addDuplicateOpportunityId(nb.duplicateOpportunityId)").btn-action Use Existing
       .row
         div(column="12")
           button(type="submit" ng-click="nb.modalAddOpportunityForm(true)").btn-action.btn-edit-entry No, Edit Entry
