@@ -10,7 +10,7 @@ import com.cbrands.pages.Login;
 public class TargetList_Create_AddCollaborators_Copy extends BaseSeleniumTestCase{
 
 	@Test(dataProvider = "createTargetListData", description = "Create a new Target List", priority = 1)
-	public void createTargetListNew(String name, String description,  String listname, String desc,String chainname, String listname2) throws InterruptedException {
+	public void US12828_AT_TargetList_Creation(String name, String description,  String listname, String desc,String chainname, String listname2) throws InterruptedException {
 		
 		login = new Login(driver);
 		if(!login.isUserLoggedIn()) { 
@@ -44,8 +44,8 @@ public class TargetList_Create_AddCollaborators_Copy extends BaseSeleniumTestCas
 		targetListPage.getTargetList(targetListName);
 	}
 	
-	@Test(dependsOnMethods = "createTargetListNew",dataProvider = "addCollaboratorData", description = "Add Colaborators to Target List", priority = 2)
-	public void AddCollaboratorstoTargetList(String name, String description,  String listname, String collaboratorname1, String collaboratorname2, String listname2) throws InterruptedException {
+	@Test(dependsOnMethods = "US12828_AT_TargetList_Creation",dataProvider = "addCollaboratorData", description = "Add Colaborators to Target List", priority = 2)
+	public void US12830_AT_TargetList_AddCollaboratorsToTargetList(String name, String description,  String listname, String collaboratorname1, String collaboratorname2, String listname2) throws InterruptedException {
 		
 		login = new Login(driver);
 		if(!login.isUserLoggedIn()) { 
@@ -91,8 +91,8 @@ public class TargetList_Create_AddCollaborators_Copy extends BaseSeleniumTestCas
 				
 			} 
 	
-	  @Test(dependsOnMethods = "AddCollaboratorstoTargetList",description = "Copy Opportunities to Target List", priority = 3)
-	  public void us13098_CopyTargetList() {
+	  @Test(dependsOnMethods = "US12830_AT_TargetList_AddCollaboratorsToTargetList",description = "Copy Opportunities to Target List", priority = 3)
+	  public void US13098_AT_TargetList_Copy() {
 		  login = new Login(driver);
 		  if(!login.isUserLoggedIn()) { 
 				homePage = login.loginWithValidCredentials(ACTOR1_USER_NAME, ACTOR1_PASSWORD);
@@ -103,8 +103,8 @@ public class TargetList_Create_AddCollaborators_Copy extends BaseSeleniumTestCas
 		  targetListPage.clickfirst_store_opportunity();
 		  targetListPage.clickfirstOpportunity();
 		  targetListPage.copyToTargetList("Automated Test Target List");
-		  //targetListPage.navigateBackToTargetLists();
-		  targetListPage.navigateToTargetLists();
+		  targetListPage.navigateBackToTargetLists();
+		  //targetListPage.navigateToTargetLists();
 		  targetListPage.clickTargetListDuplicate("Automated Test Target List");
 		  targetListPage.clickfirst_store_opportunity();
 		  

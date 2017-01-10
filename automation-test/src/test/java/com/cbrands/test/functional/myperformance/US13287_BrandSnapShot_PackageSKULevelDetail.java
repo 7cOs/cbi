@@ -10,7 +10,7 @@ import com.cbrands.pages.Login;
 
 public class US13287_BrandSnapShot_PackageSKULevelDetail extends BaseSeleniumTestCase{
   @Test(dataProvider="AT_US13287_BrandSnapShot_PackageSKULevelDetail")
-  public void AT_US13287_BrandSnapShot_PackageSKULevelDetail(String brandName) {
+  public void US13287_AT_BrandSnapshot_Package_SKULevelDetail(String brandName) {
 	  login = new Login(driver);
 		if(!login.isUserLoggedIn()) { 
 			homePage = login.loginWithValidCredentials(ACTOR1_USER_NAME, ACTOR1_PASSWORD);
@@ -24,9 +24,9 @@ public class US13287_BrandSnapShot_PackageSKULevelDetail extends BaseSeleniumTes
 		Assert.assertEquals(accountDashboardPage.allBrandsFirstColumnHeaderText(), "SKU / PACKAGE", "When product was selected, the first column header did not change as expected'");
 		accountDashboardPage.selectVelocity();
 		Assert.assertEquals(accountDashboardPage.allBrandsThirdColumnHeaderText(), "VELOCITY - L90 DAYS", "When 'Velocity' was selected, the third column header did not change as expected");
-		accountDashboardPage.offpremise();
+		accountDashboardPage.clickOffPremise();
 		Assert.assertEquals(accountDashboardPage.allBrandsFirstColumnHeaderText(), "SKU", "When 'Off-Premise' was selected, the first column header did not change as expected'");
-		accountDashboardPage.onpremise();
+		accountDashboardPage.clickOnPremise();
 		Assert.assertEquals(accountDashboardPage.allBrandsFirstColumnHeaderText(), "PACKAGE", "When 'On-Premise' was selected, the first column header did not change as expected'");
 		accountDashboardPage.selectDepletionTimePeriod("CYTD");
 		Assert.assertEquals(accountDashboardPage.depletionsColumnHeaderText(), "CYTD", "When 'CYTD' was selected as the Depletions Time Period, the first column header did not change as expected");

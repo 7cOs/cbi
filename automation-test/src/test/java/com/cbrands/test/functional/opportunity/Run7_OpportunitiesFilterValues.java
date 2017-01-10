@@ -12,7 +12,7 @@ public class Run7_OpportunitiesFilterValues extends BaseSeleniumTestCase {
 	private SoftAssert softAssert = new SoftAssert();
 
 	@Test
-	public void AT_Opportunities_Run7_FilterFields() {
+	public void US12714_AT_Opportunities_Run7_FilterFields() {
 
 		login = new Login(driver);
 		if (!login.isUserLoggedIn()) {

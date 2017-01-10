@@ -12,7 +12,7 @@ public class Archive_Target_List extends BaseSeleniumTestCase{
 	
 	
 	@Test(dataProvider = "targetData", description = "Create a new Target List", priority = 1)
-	public void archive_a_target_list(String name, String description,  String listname, String collaboratorname1, String collaboratorname2, String listname2) throws InterruptedException {
+	public void US13025_AT_TargetList_Archive(String name, String description,  String listname, String collaboratorname1, String collaboratorname2, String listname2) throws InterruptedException {
 		
 		login = new Login(driver);
 		if(!login.isUserLoggedIn()) { 

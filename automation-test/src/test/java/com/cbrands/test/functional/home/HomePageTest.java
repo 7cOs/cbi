@@ -10,13 +10,12 @@ import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 import com.cbrands.BaseSeleniumTestCase;
-import com.cbrands.helper.RetryAnalyzer;
 import com.cbrands.pages.Login;
 
 public class HomePageTest extends BaseSeleniumTestCase {
 	
-	@Test(retryAnalyzer = RetryAnalyzer.class, dataProvider = "findOpportunity1Test", testName="US12704", description = "AT_Opportunities_Run 1_Home Page Opportunity Search", priority = 2)
-	public void AT_Opportunities_Run1_1_HomePageOpportunitySearch(String premise, String OpportunityType, String item, String retailer) {
+	@Test(dataProvider = "findOpportunity1Test", testName="US12704", description = "AT_Opportunities_Run 1_Home Page Opportunity Search", priority = 2)
+	public void US12704_AT_Opportunities_Run_1_Home_Page_Opportunity_Search_1(String premise, String OpportunityType, String item, String retailer) {
 		login = new Login(driver);
 		homePage = login.loginWithValidCredentials(ACTOR1_USER_NAME, ACTOR1_PASSWORD);
 		homePage = (premise.equalsIgnoreCase("On-Premise")) ? homePage.clickOnPremise() : homePage.clickOffPremise();
@@ -31,8 +30,8 @@ public class HomePageTest extends BaseSeleniumTestCase {
 		assertThat(getFilterList(), log(hasItems(equalToIgnoringCase(premise))));
 	}
 
-	@Test(retryAnalyzer = RetryAnalyzer.class, dataProvider = "findOpportunity2Test", testName="US12704", description = "AT_Opportunities_Run 1_Home Page Opportunity Search", priority = 3)
-	public void AT_Opportunities_Run1_2_HomePageOpportunitySearch(String premise, String brandName, String retailer) {
+	@Test(dataProvider = "findOpportunity2Test", testName="US12704", description = "AT_Opportunities_Run 1_Home Page Opportunity Search", priority = 3)
+	public void US12704_AT_Opportunities_Run_1_Home_Page_Opportunity_Search_2(String premise, String brandName, String retailer) {
 		login = new Login(driver);
 		homePage = login.loginWithValidCredentials(ACTOR1_USER_NAME, ACTOR1_PASSWORD);
 		homePage = (premise.equalsIgnoreCase("On-Premise")) ? homePage.clickOnPremise() : homePage.clickOffPremise();

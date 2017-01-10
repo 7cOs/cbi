@@ -11,7 +11,7 @@ import com.cbrands.pages.Login;
 public class Run10_OpportunityResultsTable extends BaseSeleniumTestCase {
 
 	@Test(dataProvider="AT_Opportunities_Run10_OpportunityResultsTable")
-	public void AT_Opportunities_Run10_OpportunityResultsTable(String distributorName,String retailStoreName1,String retailStoreName2) {
+	public void US12716_AT_Opportunities_Run10_OpportunityResultsTable(String distributorName,String retailStoreName1,String retailStoreName2) {
 
 		// Test Step 10.1
 		login = new Login(driver);

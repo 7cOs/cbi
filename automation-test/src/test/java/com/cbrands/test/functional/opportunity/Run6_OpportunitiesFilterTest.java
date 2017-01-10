@@ -14,7 +14,7 @@ import com.cbrands.pages.Login;
 public class Run6_OpportunitiesFilterTest extends BaseSeleniumTestCase{
 	
 	@Test
-	public void AT_Opportunities_Run6_OpportunityFilters() {
+	public void US12710_AT_Opportunities_Run6_OpportunityFilters() {
 		
 		login = new Login(driver);
 		if(!login.isUserLoggedIn()) { 

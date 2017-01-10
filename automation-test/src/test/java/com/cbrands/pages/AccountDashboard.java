@@ -15,6 +15,7 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.CacheLookup;
 import org.openqa.selenium.support.FindAll;
 import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -37,7 +38,6 @@ public class AccountDashboard {
     private WebElement all;
 
     @FindBy(css = "md-content._md div div.ng-scope div:nth-of-type(3) div:nth-of-type(2) div.apply-filters button.btn-action")
-    @CacheLookup
     private WebElement applyFilters;
 
     @FindBy(id = "select_value_label_117")
@@ -197,7 +197,6 @@ public class AccountDashboard {
     private WebElement reset;
 
     @FindBy(css = "md-content._md div div.ng-scope h3.top-opportunities-header.ng-scope a.accent")
-    @CacheLookup
     private WebElement seeAllOpportunities;
 
     @FindBy(css = "button.icon.select-all.ng-binding")
@@ -230,6 +229,18 @@ public class AccountDashboard {
     
     @FindAll({@FindBy(css="p.accent.ng-binding")})
     private List<WebElement> headers;
+    
+    @FindBy(css="input[placeholder='Name']")
+    private WebElement distributorSearchBox;
+    
+    @FindBy(css="input.submit-btn.visible")
+    private WebElement searchButton; 
+    
+    @FindAll(@FindBy(css="span.result.ng-binding"))
+    private List <WebElement> searchResults; 
+    
+    @FindBy(xpath="//label[contains(.,'Select a premise type followed by a retailer and/or distributor to view opportunities')]")
+    private WebElement labelBelowOpportunitiesLink;
 
     public AccountDashboard() {
     }
@@ -302,8 +313,8 @@ public class AccountDashboard {
      * @return the AccountDashboard class instance.
      */
     public AccountDashboard clickApplyFiltersButton() {
-        applyFilters.click();
-        return this;
+    	waitForVisibleFluentWait(applyFilters).click();
+    return this;
     }
 
     /**
@@ -459,11 +470,11 @@ public class AccountDashboard {
     /**
      * Click on See All Opportunities Link.
      *
-     * @return the AccountDashboard class instance.
+     * @return the Opportunities class instance.
      */
-    public AccountDashboard clickSeeAllOpportunitiesLink() {
-        seeAllOpportunities.click();
-        return this;
+    public Opportunities clickSeeAllOpportunitiesLink() {
+    		waitForVisibleFluentWait(seeAllOpportunities).click();
+    		return PageFactory.initElements(driver, Opportunities.class);
     }
 
     /**
@@ -622,8 +633,8 @@ public class AccountDashboard {
      *
      * @return the AccountDashboard class instance.
      */
-    public AccountDashboard offpremise() {
-    	offpremise.click();
+    public AccountDashboard clickOffPremise() {
+    	waitForVisibleFluentWait(offpremise).click();
         return this;
     }
 
@@ -632,8 +643,8 @@ public class AccountDashboard {
      *
      * @return the AccountDashboard class instance.
      */
-    public AccountDashboard onpremise() {
-    	onpremise.click();
+    public AccountDashboard clickOnPremise() {
+    	waitForVisibleFluentWait(onpremise).click();
         return this;
     }
 
@@ -931,6 +942,31 @@ public class AccountDashboard {
     	waitForVisibleFluentWait(dropdown.get(1));
     	String deafultDistributionOption = dropdown.get(1).getText();
     	return deafultDistributionOption;
+    }
+    
+    /**
+     * 'See all' opportunities link state.
+     *
+     * @return the link attribute 'disabled'
+     */
+    public String seeAllOpportunitiesLinkState(){
+    	return seeAllOpportunities.getAttribute("disabled");
+    }
+    
+    
+    public AccountDashboard searchDistributor(String name){
+    	waitForVisibleFluentWait(distributorSearchBox).clear();
+    	distributorSearchBox.sendKeys(name);
+    	waitForVisibleFluentWait(searchButton).click();
+    	waitForVisibleFluentWait(searchResults.get(0)).click();
+    	return this;
+    }
+    
+    /**
+     * @return the text below the 'See All Opportunities' link
+     */
+    public String textBelowOpportunitiesLink(){
+    	return labelBelowOpportunitiesLink.getText();
     }
     
 }

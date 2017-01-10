@@ -12,7 +12,7 @@ public class Target_List_Export extends BaseSeleniumTestCase{
 	
 	
 	@Test(dataProvider = "targetData", description = "Create a new Target List", priority = 1)
-	public void Target_List_Export(String name, String description,  String listname, String collaboratorname1, String collaboratorname2, String listname2) throws InterruptedException {
+	public void US13024_AT_TargetList_Export(String name, String description,  String listname, String collaboratorname1, String collaboratorname2, String listname2) throws InterruptedException {
 		
 		login = new Login(driver);
 		if(!login.isUserLoggedIn()) { 

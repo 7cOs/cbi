@@ -19,7 +19,7 @@ import com.cbrands.pages.Login;
 public class OpportunityTest extends BaseSeleniumTestCase {
 	
 	@Test(dataProvider = "opportunityPage1Test", description = "Run - 2: I can select Save Report to save a set of filter criteria for reuse.", priority = 1)
-	public void AT_Opportunities_Run2_CreateSavedReport(String premise, String distributor, String opporunityType, String reportName) {
+	public void US12705_AT_Opportunities_Run2_CreateSavedReport(String premise, String distributor, String opporunityType, String reportName) {
 		login = new Login(driver);
 		if(!login.isUserLoggedIn()) { 
 			homePage = login.loginWithValidCredentials(ACTOR3_USER_NAME, ACTOR3_PASSWORD);
@@ -50,8 +50,8 @@ public class OpportunityTest extends BaseSeleniumTestCase {
 		
 	}
 	
-	@Test(dependsOnMethods = "AT_Opportunities_Run2_CreateSavedReport", dataProvider = "opportunityPage1Test", description = "Run - 4: I can get from the Home page to the Opportunities Page using a Saved Filter available on the Home Page and find the opportunity results that correspond to the Home Page Search." , priority = 3)
-	public void AT_Opportunities_Run4_HomePageSavedReport(String premise, String distributor, String opporunityType, String reportName){
+	@Test(dependsOnMethods = "US12705_AT_Opportunities_Run2_CreateSavedReport", dataProvider = "opportunityPage1Test", description = "Run - 4: I can get from the Home page to the Opportunities Page using a Saved Filter available on the Home Page and find the opportunity results that correspond to the Home Page Search." , priority = 3)
+	public void US12707_AT_Opportunities_Run4_HomePageSavedReport(String premise, String distributor, String opporunityType, String reportName){
 		login = new Login(driver);
 		if(!login.isUserLoggedIn()) { 
 			homePage = login.loginWithValidCredentials(ACTOR3_USER_NAME, ACTOR3_PASSWORD);
@@ -63,8 +63,8 @@ public class OpportunityTest extends BaseSeleniumTestCase {
 		assertThat("Opporunity Type filters is not selected", getFilterList(), log(hasItems(equalToIgnoringCase(opporunityType))));
 	}
 	
-	@Test(dependsOnMethods = "AT_Opportunities_Run4_HomePageSavedReport", dataProvider = "opportunityPage1Test", description = "Run - 3: I can edit or delete an existing Saved Report filter criteria and resave and I can ‘Reset’ my filter selection while working with filters." , priority = 2)
-	public void AT_Opportunities_Run3_EditDeleteSavedReport(String premise, String distributor, String opporunityType, String reportName) {
+	@Test(dependsOnMethods = "US12707_AT_Opportunities_Run4_HomePageSavedReport", dataProvider = "opportunityPage1Test", description = "Run - 3: I can edit or delete an existing Saved Report filter criteria and resave and I can ‘Reset’ my filter selection while working with filters." , priority = 2)
+	public void US12706_AT_Opportunities_Run3_Edit_DeleteSavedReport(String premise, String distributor, String opporunityType, String reportName) {
 
 		login = new Login(driver);
 		if(!login.isUserLoggedIn()) { 
@@ -108,7 +108,7 @@ public class OpportunityTest extends BaseSeleniumTestCase {
 	
 	
 	@Test(dataProvider="opportunityPage2Test", description="US12829: I can add or remove opportunities to an existing Target List", priority=4)
-	public void addOpportunityToExistingTargetList(String chain, String targetListName1, String newTargetList, String targetListName2) throws InterruptedException {
+	public void US12829_AT_TargetList_Add_RemoveOpportunities(String chain, String targetListName1, String newTargetList, String targetListName2) throws InterruptedException {
 		login = new Login(driver);
 
 		homePage = login.loginWithValidCredentials(ACTOR1_USER_NAME, ACTOR1_PASSWORD);

@@ -26,13 +26,13 @@ import com.cbrands.pages.NotificationContent;
 public class ShareOpportunity_TargetList extends BaseSeleniumTestCase {
 	static NotificationContent content;
 	
-	@Test(enabled =true,dataProvider="targetlistData1", description="US12999: AT_Target List_Share An Opportunity",priority=1)
-	public void AT_Target_List_Share_An_Opportunity(String listname,String sendTo1, String sendTo2) throws InterruptedException{
+	@Test(dataProvider="targetlistData1", description="US12999: AT_Target List_Share An Opportunity",priority=1)
+	public void US12999_AT_TargetList_ShareAnOpportunity(String listname,String sendTo1, String sendTo2) throws InterruptedException{
 		login = new Login(driver);
 		homePage = login.loginWithValidCredentials(ACTOR1_USER_NAME, ACTOR1_PASSWORD);
 		
 		targetListPage = homePage.navigateTargetList();
-		Thread.sleep(10000);
+		//Thread.sleep(10000);
 		if(targetListPage.checkTargetListExists(listname)){
 			targetListPage.clickNewTargetList(listname);
 			
@@ -105,12 +105,12 @@ public class ShareOpportunity_TargetList extends BaseSeleniumTestCase {
 	}
 	
 	@Test( enabled = true,retryAnalyzer=RetryAnalyzer.class,description="US13109: AT_Target List_Remove a Collaborator", dataProvider="targetlistData2", priority=2 )
-	public void AT_Target_List_Remove_a_Collaborator(String listname) throws InterruptedException{
+	public void US13109_AT_TargetList_RemoveACollaborator(String listname) throws InterruptedException{
 		login = new Login(driver);
 		homePage = login.loginWithValidCredentials(ACTOR1_USER_NAME, ACTOR1_PASSWORD);
 		
 		targetListPage = homePage.navigateTargetList();
-		Thread.sleep(6000);
+		//Thread.sleep(6000);
 		
 		targetListPage.checkNumberofCollaborator(listname);
 		
@@ -120,12 +120,12 @@ public class ShareOpportunity_TargetList extends BaseSeleniumTestCase {
 				targetListPage.clickManage();
 				targetListPage.clickCollaborator();
 				targetListPage.removeCollaborator();
-				Thread.sleep(1000);
+				//Thread.sleep(1000);
 				
 				targetListPage.clickManage();
 				targetListPage.clickCollaborator();
 				targetListPage.removeCollaborator();
-				Thread.sleep(1000);
+				//Thread.sleep(1000);
 				
 				targetListPage.navigateBackToTargetLists();
 				
@@ -137,7 +137,7 @@ public class ShareOpportunity_TargetList extends BaseSeleniumTestCase {
 				
 				targetListPage = homePage.navigateTargetList();
 				
-				Thread.sleep(3000);
+				//Thread.sleep(3000);
 				
 				targetListPage.clickSharedWithMe();
 				
@@ -154,12 +154,12 @@ public class ShareOpportunity_TargetList extends BaseSeleniumTestCase {
 	
 	
 	@Test(retryAnalyzer=RetryAnalyzer.class,description="US13107: AT_Target List_Show Depletions",dataProvider="targetlistData3",priority=3)
-	public void AT_Target_List_Show_Depletions(String listname) throws InterruptedException{
+	public void US13107_AT_TargetList_ShowDepletions(String listname) throws InterruptedException{
 		login = new Login(driver);
 		homePage = login.loginWithValidCredentials(ACTOR4_USER_NAME, ACTOR4_PASSWORD);
 		
 		targetListPage = homePage.navigateTargetList();
-		Thread.sleep(7000);
+		//Thread.sleep(7000);
 
 		if(targetListPage.checkTargetListExists(listname)){
 			
@@ -177,20 +177,20 @@ public class ShareOpportunity_TargetList extends BaseSeleniumTestCase {
 
 	
 	@Test(enabled = true,description="US13108:AT_Target List_Transfer Ownership",dataProvider="targetlistData4", priority=4)
-	public void AT_Target_List_Transfer_Ownership(String listname,String strName) throws InterruptedException{
+	public void US13108_AT_TargetList_TransferOwnership(String listname,String strName) throws InterruptedException{
 		login = new Login(driver);
 		homePage = login.loginWithValidCredentials(ACTOR1_USER_NAME, ACTOR1_PASSWORD);
 		
 		targetListPage = homePage.navigateTargetList();
-		Thread.sleep(10000);
+		//Thread.sleep(10000);
 		
 		System.out.println(targetListPage.checkTargetListExists(listname));
 
 		if(targetListPage.checkTargetListExists(listname)){
 			targetListPage.clickNewTargetList(listname);
-			Thread.sleep(1000);
+			//Thread.sleep(1000);
 			targetListPage.clickManage();
-			Thread.sleep(1000);
+			//Thread.sleep(1000);
 			targetListPage.clickCollaborator();
 			targetListPage.makeOwner();
 			
@@ -205,11 +205,11 @@ public class ShareOpportunity_TargetList extends BaseSeleniumTestCase {
 			
 			targetListPage.cancelManageTargetList();
 			targetListPage.navigateBackToTargetLists();
-			Thread.sleep(7000);
+			//Thread.sleep(7000);
 			assertThat(targetListPage.getTargetLists(), log(hasItems(not(equalToIgnoringCase(listname)))));
 			
 			targetListPage.clickSharedWithMeLink();
-			Thread.sleep(10000);
+			//Thread.sleep(10000);
 			assertThat(targetListPage.checkSharedTargetListExists(listname), log(containsString(listname)));
 			
 			signOut();
@@ -218,12 +218,12 @@ public class ShareOpportunity_TargetList extends BaseSeleniumTestCase {
 			homePage = login.loginWithValidCredentials(ACTOR2_USER_NAME, ACTOR2_PASSWORD);
 			
 			targetListPage = homePage.navigateTargetList();
-			Thread.sleep(10000);
+			//Thread.sleep(10000);
 			
 			assertThat(targetListPage.getTargetLists(), log(hasItems((equalToIgnoringCase(listname)))));
 			
 			targetListPage.clickSharedWithMe();
-			Thread.sleep(10000);
+			//Thread.sleep(10000);
 			assertThat(targetListPage.checkSharedTargetListExists(listname), log(not(containsString(listname))));
 		}
 		else{
@@ -231,26 +231,26 @@ public class ShareOpportunity_TargetList extends BaseSeleniumTestCase {
 		}
 	}
 	
-	@Test(description="US13113:AT_Target List_Delete List", dataProvider="targetlistData5",dependsOnMethods="AT_Target_List_Remove_a_Collaborator")
-	public void AT_Target_List_Delete_List(String listname, String listname1) throws InterruptedException{
+	@Test(description="US13113:AT_Target List_Delete List", dataProvider="targetlistData5",dependsOnMethods="US13109_AT_TargetList_RemoveACollaborator")
+	public void US13113_AT_TargetList_DeleteList(String listname, String listname1) throws InterruptedException{
 		login = new Login(driver);
 		homePage = login.loginWithValidCredentials(ACTOR1_USER_NAME, ACTOR1_PASSWORD);
 		
 		targetListPage = homePage.navigateTargetList();
-		Thread.sleep(10000);
+		//Thread.sleep(10000);
 		
 		
 		
 		targetListPage.clickSharedWithMe();
-		Thread.sleep(10000);
+		//Thread.sleep(10000);
 		
 		
 		
 		if(targetListPage.checkSharedTargetListExists(listname).trim().equalsIgnoreCase(listname)){
 			targetListPage.clickTargetList(listname);
-			Thread.sleep(1000);
+			//Thread.sleep(1000);
 			targetListPage.clickManage();
-			Thread.sleep(1000);
+			//Thread.sleep(1000);
 			assertThat(targetListPage.checkDeleteListExists(), log(equalToIgnoringCase("Delete List does not exists")));
 			targetListPage.cancelManageTargetList();
 			
@@ -264,7 +264,7 @@ public class ShareOpportunity_TargetList extends BaseSeleniumTestCase {
 				targetListPage.selectTargetList(listname1);
 				
 				targetListPage.clickDelete_TargetListPage();
-				Thread.sleep(300);
+				//Thread.sleep(300);
 				assertThat(targetListPage.getDeleteListText(), log(equalToIgnoringCase("Target List Deleted!")));
 				
 				signOut();
@@ -273,20 +273,20 @@ public class ShareOpportunity_TargetList extends BaseSeleniumTestCase {
 				
 				targetListPage = homePage.navigateTargetList();
 				
-				Thread.sleep(3000);
+				//Thread.sleep(3000);
 				
 				if(targetListPage.checkTargetListExists(listname)){
 					
 					targetListPage.selectTargetList(listname);
 					
 					targetListPage.clickDelete_TargetListPage();
-					Thread.sleep(300);
+					//Thread.sleep(300);
 					assertThat(targetListPage.getCannotDeleteListText(), log(equalToIgnoringCase("Sorry, you cannot delete a Target List that has Collaborators. Please remove all Collaborators from that list and try again.")));
 					
 					targetListPage.clickNewTargetList(listname);
-					Thread.sleep(1000);
+					//Thread.sleep(1000);
 					targetListPage.clickManage();
-					Thread.sleep(1000);
+					//Thread.sleep(1000);
 					
 					assertThat(targetListPage.checkDeleteListExists(), log(equalToIgnoringCase("Delete List does not exists")));
 					

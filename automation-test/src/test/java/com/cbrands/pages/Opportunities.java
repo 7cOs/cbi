@@ -347,6 +347,24 @@ public class Opportunities extends LoadableComponent<Opportunities> {
 	@FindBy(how=How.XPATH, using="//label[contains(.,'Store / Number')]")
 	private WebElement storeNumber;
 	
+	@FindAll(@FindBy(how=How.CSS, using = "span.chevron-down-small"))
+	private List <WebElement> chevronDownArrows;
+	
+	@FindBy(how=How.CSS, using = "span.chevron-down-small.chevron-up-small")
+	private WebElement chevronUpArrow;
+	
+	@FindBy(how=How.XPATH, using = "//label[contains(.,'Store / Number')]")
+	private WebElement storeHeaderSort;
+	
+	@FindBy(how=How.XPATH, using = "//label[contains(.,'Depletions CYTD')]")
+	private WebElement depletionsCYTDSort;
+	
+	@FindBy(how=How.XPATH, using = "//label[contains(.,'Opportunities')]")
+	private WebElement opportunitiesHeaderSort;
+	
+	@FindAll(@FindBy(how=How.CSS, using = "label[class='sort']"))
+	private List <WebElement> sortHeaders;
+	
 	public Opportunities(WebDriver driver) {
 		this.driver = driver;
 	}
@@ -377,8 +395,8 @@ public class Opportunities extends LoadableComponent<Opportunities> {
 	}
 	
 	public Opportunities clickSaveReport() {
-		saveReport.click();
-		waitForVisible(By.xpath("//input[@placeholder='Enter a name']"));
+		JavascriptExecutor js = (JavascriptExecutor) driver;
+		js.executeScript("arguments[0].click();", saveReport);
 		return this;
 	}
 	
@@ -406,7 +424,7 @@ public class Opportunities extends LoadableComponent<Opportunities> {
 	}
 	
 	//This method is used to verify whether the options in Opportunity Type drop down is clickable or not.
-	public Opportunities clickOpporunityType(String type){			
+	public Opportunities clickOpportunityType(String type){			
 		WebElement element = findElement(By.xpath("//md-option[@aria-label='"+type+"']"));
 		if (type=="Low Velocity"){
 			element.sendKeys(Keys.DOWN);
@@ -590,7 +608,7 @@ public class Opportunities extends LoadableComponent<Opportunities> {
 		List<String> list = new ArrayList<String>();
 		List<WebElement> elements = findElements(By.xpath("//*[@id='opportunities']/v-pane/div/v-pane-content/div/v-accordion/v-pane[1]/v-pane-header/div/div[2]/div[2]"));
 		
-		for (WebElement webElement : waitForElementsVisibleFluentWait(elements)) {
+		for (WebElement webElement : elements) {
 			list.add(webElement.getText());
 		}
 		
@@ -628,7 +646,7 @@ public class Opportunities extends LoadableComponent<Opportunities> {
 		return pane3.isDisplayed();
 	}
 	
-	public Opportunities sendOpportunityTo(String name) {
+	public Opportunities sendOpportunityTo(String name) throws InterruptedException {
 		
 		List<WebElement> elements = findElements(By.xpath("//*[@class='md-menu ng-scope _md']/button"));
 		
@@ -636,17 +654,23 @@ public class Opportunities extends LoadableComponent<Opportunities> {
 		js.executeScript("arguments[0].click();", elements.get(0));		
 		
 		WebElement pane3 = findElement(By.xpath("//*[@class='_md md-open-menu-container md-whiteframe-z2 md-active md-clickable']/md-menu-content/md-menu-item[1]/p"));
-		waitForVisibleFluentWait(pane3).click();
+		waitForElementToClickable(pane3, true).click();
+		
 		WebElement popWindow = findElement(By.cssSelector("input[placeholder='Name or CBI email address']"));
-		waitForElementVisible(popWindow, true);
+		waitForElementToClickable(popWindow, true).clear();
+		Thread.sleep(2000);
 		Actions actions = new Actions(driver);
+		actions.moveToElement(popWindow).click().build().perform();
 		actions.sendKeys(popWindow, name).build().perform();
 		popWindow.sendKeys(Keys.SPACE);
-		WebElement searchBtn = findElement(By.cssSelector("input.submit-btn.visible"));
+		
+		//js.executeScript(String.format("document.getElementById('cred-password-inputtext').value='{0}';", name));
+		
+		WebElement searchBtn = findElements(By.cssSelector("input.submit-btn.visible")).get(1);
 		waitForElementVisible(searchBtn, true).click();
 		WebElement result = findElement(By.cssSelector("ul.results>li.ng-binding.ng-scope>span.user-data.ng-binding"));
 		waitForElementToClickable(result, true).click();
-		WebElement sendBtn = findElement(By.xpath("//button[contains(.,'Send')]"));
+		WebElement sendBtn = findElement(By.cssSelector("button[class='btn-action'][ng-click='list.shareOpportunity()']"));
 		waitForElementToClickable(sendBtn, true).click();
 		return this;
 	}
@@ -767,9 +791,8 @@ public class Opportunities extends LoadableComponent<Opportunities> {
 	public Opportunities searchBrandSKU(String brandOrSKU){
 		brandMasterSkuSearchBox.click();
 		brandMasterSkuSearchBox.sendKeys(brandOrSKU);
-		waitForVisibleFluentWait(searchButton).click();
-		waitForVisible(By.cssSelector("span[class='result ng-binding']"), 30);
-		WebElement packageSearchResultFirst = findElements(By.cssSelector("span[class='result ng-binding']")).get(0);
+		brandMasterSkuSearchBox.sendKeys(Keys.ENTER);
+		WebElement packageSearchResultFirst = findElements(By.xpath("//span[contains(.,'"+brandOrSKU+"')]")).get(0);
 		packageSearchResultFirst.click();
 		return this;
 	}
@@ -920,8 +943,7 @@ public class Opportunities extends LoadableComponent<Opportunities> {
 	}
 	
 	public Opportunities clickOpportunitySearchFirstResult() {
-		waitForElementsVisibleFluentWait(opportunitySearchResults);
-		opportunitySearchResults.get(0).click();
+		waitForVisibleFluentWait(opportunitySearchResults.get(0)).click();;
 		return this;
 	}
 	
@@ -1037,7 +1059,7 @@ public class Opportunities extends LoadableComponent<Opportunities> {
 	}
 
 	public List<NotificationContent> getListOfNotifications() {
-		List<WebElement> elements = findElements(By.xpath("//*[@id='menu_container_0']/md-menu-content/div/div/div[@class='notification-card clearfix SHARE_OPPORTUNITY']"));
+		List<WebElement> elements = findElements(By.xpath("//*[@id='menu_container_0']/md-menu-content/div/div[@class='notification-card clearfix SHARE_OPPORTUNITY']"));
 		List<NotificationContent> notificationContents = new ArrayList<NotificationContent>();
 		for (WebElement webElement : elements) {
 			String storeName = webElement.getText().split("\n")[1].toUpperCase();
@@ -1070,7 +1092,12 @@ public class Opportunities extends LoadableComponent<Opportunities> {
 		return notificationContents;
 	}
 	
-	public boolean verifySegmentationSort(){
+	/**
+	 * Verifies the default sort order for Segmentation.
+	 *
+	 * @return true, if successful
+	 */
+	public boolean verifyDefaultSegmentationSort(){
 		String resultText = findElements(By.cssSelector("v-pane-header[class='checkbox-sibling ng-isolate-scope']")).get(0).getText();
 		char segmentationValue = resultText.charAt(resultText.length()-1);
 			if(segmentationValue =='A'){
@@ -1092,7 +1119,12 @@ public class Opportunities extends LoadableComponent<Opportunities> {
 		return this;
 	}
 	
-	public boolean verifySortPackageSKU(){
+	/**
+	 * Verifies the default sort order for package SKU.
+	 *
+	 * @return true, if successful
+	 */
+	public boolean verifyDefaultSortPackageSKU(){
 		String firstProduct = findElements(By.cssSelector("div[class='pad-cell ng-binding'][column='2']")).get(0).getText();
 		String secondProduct = findElements(By.cssSelector("div[class='pad-cell ng-binding'][column='2']")).get(1).getText();
 		if (firstProduct.compareToIgnoreCase(secondProduct) < 0){
@@ -1107,18 +1139,19 @@ public class Opportunities extends LoadableComponent<Opportunities> {
 	}
 	
 	public boolean verifySortStore(){
-		WebElement storeNumberDownArrow = findElements(By.cssSelector("span.chevron-down-small")).get(0);
-		storeNumberDownArrow.click();
+		JavascriptExecutor je = (JavascriptExecutor)driver;
+		je.executeScript("window.scrollBy(0,-500)", "");
+		waitForVisibleFluentWait(chevronDownArrows.get(0)).click();
 		//Hard wait introduced to wait for sorting to complete. Wait for element methods does not work in this situation, as the elements don't change
 		try {
-			Thread.sleep(2000);
+			Thread.sleep(3000);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
 		String firstStore = findElements(By.cssSelector("div[class='pad-cell semi-bold ng-binding'][column='3']")).get(0).getText();
-		storeNumberDownArrow.click();
+		waitForVisibleFluentWait(chevronUpArrow).click();
 		try {
-			Thread.sleep(2000);
+			Thread.sleep(3000);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
@@ -1130,8 +1163,7 @@ public class Opportunities extends LoadableComponent<Opportunities> {
 	}
 	
 	public boolean verifySortDepletionsCYTD(){
-		WebElement depletionsDownArrow = findElements(By.cssSelector("span.chevron-down-small")).get(1);
-		depletionsDownArrow.click();
+		waitForVisibleFluentWait(chevronDownArrows.get(2)).click();
 		//Hard wait introduced to wait for sorting to complete. Wait for element methods does not work in this situation, as the elements don't change
 		try {
 			Thread.sleep(2000);
@@ -1139,13 +1171,35 @@ public class Opportunities extends LoadableComponent<Opportunities> {
 			e.printStackTrace();
 		}
 		int firstResult = Integer.parseInt(findElements(By.cssSelector("div[class='text-center semi-bold ng-binding'][column='1']")).get(0).getText().replaceAll(",",""));
-		depletionsDownArrow.click();
+		waitForVisibleFluentWait(chevronUpArrow).click();
 		try {
 			Thread.sleep(2000);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
 		int secondResult = Integer.parseInt(findElements(By.cssSelector("div[class='text-center semi-bold ng-binding'][column='1']")).get(0).getText().replaceAll(",",""));
+		if (firstResult < secondResult){
+			return true;
+		}
+		return false;
+	}
+	
+	public boolean verifySortOpportunities(){
+		waitForVisibleFluentWait(chevronDownArrows.get(1)).click();
+		//Hard wait introduced to wait for sorting to complete. Wait for element methods does not work in this situation, as the elements don't change
+		try {
+			Thread.sleep(5000);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		int firstResult = Integer.parseInt(findElements(By.cssSelector("div[class='text-center semi-bold ng-binding'][column='2']")).get(0).getText().replaceAll(" \\(.*\\)", ""));
+		waitForVisibleFluentWait(chevronUpArrow).click();
+		try {
+			Thread.sleep(5000);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		int secondResult = Integer.parseInt(findElements(By.cssSelector("div[class='text-center semi-bold ng-binding'][column='2']")).get(0).getText().replaceAll(" \\(.*\\)", ""));
 		if (firstResult < secondResult){
 			return true;
 		}
@@ -1166,8 +1220,7 @@ public class Opportunities extends LoadableComponent<Opportunities> {
 	}
 	
 	public Opportunities clickLevelOneRow(){
-		waitForElementsVisibleFluentWait(levelOneRows);
-		levelOneRows.get(0).click();
+		waitForVisibleFluentWait(levelOneRows.get(0)).click();
 		return this;
 	}
 	
