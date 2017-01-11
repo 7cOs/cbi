@@ -27,6 +27,7 @@
             <!-- My Performance -->
             <class name="com.cbrands.test.functional.myperformance.US13287_BrandSnapShot_PackageSKULevelDetail" />
             <class name="com.cbrands.test.functional.myperformance.US13484_AccountDashboard_ApplyFilters_SeeAllOpportunities" />
+            <class name="com.cbrands.test.functional.myperformance.US13476_Scorecard_TimePeriodOptions" />
        </classes>
 	</test> <!-- Test -->
 </suite> <!-- Suite -->
