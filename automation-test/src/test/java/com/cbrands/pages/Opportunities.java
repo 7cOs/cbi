@@ -591,8 +591,7 @@ public class Opportunities extends LoadableComponent<Opportunities> {
 	}
 	
 	public Opportunities clickDeleteReportBtn() {
-		
-		WebElement button = findElement(By.xpath("//div/div[2]/p"));
+		WebElement button = findElement(By.xpath("//p[contains(.,'Delete Report')]"));
 		JavascriptExecutor js = (JavascriptExecutor) driver;
 		js.executeScript("arguments[0].click();", button);
 		return this;
