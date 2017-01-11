@@ -95,7 +95,7 @@ public class SmokeTests extends BaseSeleniumTestCase{
 		
 		opportunitiesPage.reloadPage().selectSaveReportDropdownByName(reportName);
 		
-		//assertThat("Open filters is not selected", getFilterList(), log(hasItems(equalToIgnoringCase("Open"))));
+		assertThat("Open filters is not selected", getFilterList(), log(hasItems(equalToIgnoringCase("Open"))));
 		assertThat("Premise filters is not selected", getFilterList(), log(hasItems(equalToIgnoringCase(premise))));
 		assertThat("Distributor filters is not selected", getFilterList(), log(hasItems(equalToIgnoringCase(distributor))));
 		assertThat("Opporunity Type filters is not selected", getFilterList(), log(hasItems(equalToIgnoringCase(opporunityType))));
