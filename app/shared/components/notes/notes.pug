@@ -124,4 +124,4 @@ div.modal.notes(ng-if="notesOpen")
                 p Add an attachment
                 p {{n.errorMsg}}
             button(ng-click="n.saveEditedNote(note)").btn-action Save
-            p(ng-click="n.isEditing(note)").cancel.accent X Cancel
+            p(ng-click="n.isEditing(note, true)").cancel.accent X Cancel

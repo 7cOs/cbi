@@ -122,8 +122,14 @@ module.exports = /*  @ngInject */
       vm.notes = [];
     }
 
-    function isEditing(note) {
+    function isEditing(note, cancel) {
       note.editMode = !note.editMode;
+      if (cancel) {
+        note.body = vm.cachedNote.body;
+        note.title = vm.cachedNote.title;
+      } else {
+        vm.cachedNote = angular.copy(note);
+      }
     }
 
     function openCreateNote() {
