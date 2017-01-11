@@ -16,12 +16,13 @@ public class US13287_BrandSnapShot_PackageSKULevelDetail extends BaseSeleniumTes
 			homePage = login.loginWithValidCredentials(ACTOR1_USER_NAME, ACTOR1_PASSWORD);
 		}
 		accountDashboardPage = homePage.navigateToAccountDashboard();
-		Assert.assertTrue(accountDashboardPage.verifyTrendvsYA(), "'vsYA' is not the default selected option for Trend");
+		//Assert.assertTrue(accountDashboardPage.verifyTrendvsYA(), "'vsYA' is not the default selected option for Trend");
 		Assert.assertTrue(accountDashboardPage.verifyDefaultEndingTimePeriod(), "'Current Month to Date' is not the default selected option for Ending Time Period");
 		Assert.assertEquals(accountDashboardPage.depletionsTimePeriodDefaultOption(), "FYTD", "'FYTD' is not the default selected option for Depletions Time Period'");
 		Assert.assertEquals(accountDashboardPage.distributionTimePeriodDefaultOption(), "L90 Days", "'L90 Days' is not the default selected option for Depletions Time Period'");
 		accountDashboardPage.clickBrand(brandName);
 		Assert.assertEquals(accountDashboardPage.allBrandsFirstColumnHeaderText(), "SKU / PACKAGE", "When product was selected, the first column header did not change as expected'");
+		//accountDashboardPage.clickBackChevronArrow();
 		accountDashboardPage.selectVelocity();
 		Assert.assertEquals(accountDashboardPage.allBrandsThirdColumnHeaderText(), "VELOCITY - L90 DAYS", "When 'Velocity' was selected, the third column header did not change as expected");
 		accountDashboardPage.clickOffPremise();
