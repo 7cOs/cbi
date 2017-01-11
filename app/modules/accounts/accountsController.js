@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports = /*  @ngInject */
-  function accountsController($rootScope, $scope, $state, $log, $q, $window, $filter, myperformanceService, chipsService, filtersService, notesService, userService, $timeout) {
+  function accountsController($rootScope, $scope, $state, $log, $q, $window, $filter, $timeout, myperformanceService, chipsService, filtersService, notesService, userService) {
 
     // ****************
     // CONTROLLER SETUP
@@ -811,6 +811,19 @@ module.exports = /*  @ngInject */
         $state.params.applyFiltersOnLoad = false;
         $state.params.resetFiltersOnLoad = true;
       });
+
+      if ($state.params.openNotesOnLoad) {
+        $timeout(function() {
+          console.log($state.params.pageData.account.id);
+          $rootScope.$broadcast('notes:opened', true, $state.params.pageData.account);
+
+          notesService.model.accountId = $state.params.pageData.account.id;
+          notesService.accountNotes().then(function(success) {
+            vm.notes = success;
+            vm.loading = false;
+          });
+        });
+      }
     }
 
     // Move to next indexed tab

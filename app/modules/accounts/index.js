@@ -16,10 +16,12 @@ module.exports =
       params: {
         resetFiltersOnLoad: true,
         applyFiltersOnLoad: false,
+        openNotesOnLoad: false,
         pageData: {
           brandTitle: '',
           depletionTimePeriod: '',
-          distributionTimePeriod: ''
+          distributionTimePeriod: '',
+          account: {}
         },
         id: ''
       }
