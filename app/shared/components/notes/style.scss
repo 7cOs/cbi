@@ -98,13 +98,17 @@
     }
 
     p {
+      margin-top: 0;
+    }
+
+    .note-body-field > p {
       margin: 0 auto;
-      height: 2em;
-      overflow: hidden;;
+      height: 2.25em;
+      overflow: hidden;
 
       &.long-note {
         height: auto;
-        overflow: visible;;
+        overflow: visible;
       }
     }
 

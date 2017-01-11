@@ -54,6 +54,22 @@
     &:hover {
       cursor: hand;
     }
+
+    &.disabled {
+      background-image: url('../assets/img/icons/overview-notes-disabled.svg');
+
+      a {
+        color: $gray-3;
+
+        &:hover {
+          cursor: not-allowed;
+        }
+      }
+
+      &:hover {
+        cursor: not-allowed;
+      }
+    }
   }
 
   &.expanded {
@@ -78,6 +94,7 @@
     .overview {
       min-height: 3em;
       padding-top: 0.5em;
+      margin-bottom: 0.5em;
     }
 
     .brands {
@@ -92,6 +109,7 @@
       background-position: 0 1.5em;
       border-left: none;
       float: right;
+      margin-right: 0.5em;
     }
 
     .overview {
