@@ -27,6 +27,7 @@ module.exports = /*  @ngInject */
       'Distribution',
       'Display',
       'Space',
+      'Price',
       'General / Account information'
     ];
     vm.attachments = [
