@@ -245,7 +245,9 @@ module.exports = /*  @ngInject */
 
     // Make notes available to the page
     function openNotes(val, accountInfo) {
-      $rootScope.$broadcast('notes:opened', val, accountInfo);
+      if (accountInfo) {
+        $rootScope.$broadcast('notes:opened', val, accountInfo);
+      }
     }
 
     // Set variable when select box is open (for bug in scroll binding)

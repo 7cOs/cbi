@@ -15,7 +15,7 @@ notes
           p(ng-if="a.selectedStore || a.selectedDistributor")
             <span ng-if="a.selectedDistributor">{{a.selectedDistributor}}</span><span ng-if="a.selectedStore && a.selectedDistributor"> - </span><span ng-if="a.selectedStore">{{a.selectedStore}}</span>
           p(ng-if="!a.selectedStore && !a.selectedDistributor") {{a.currentTopBottomAcctType.name || a.accountTypesDefault}}
-        .notes-icon(ng-click="a.openNotes(true, a.selectedStoreInfo)" analytics-on="click" analytics-event="Notes Tab")
+        .notes-icon(ng-class="{'disabled': !a.selectedStoreInfo}" ng-click="a.openNotes(true, a.selectedStoreInfo)" analytics-on="click" analytics-event="Notes Tab")
           p <a href="#"></a>
       .market-overview.clearfix
         .brands
@@ -25,7 +25,7 @@ notes
           p(ng-if="a.selectedStore || a.selectedDistributor")
             <span ng-if="a.selectedDistributor">{{a.selectedDistributor}}</span><span ng-if="a.selectedStore && a.selectedDistributor"> - </span><span ng-if="a.selectedStore">{{a.selectedStore}}</span>
           p(ng-if="!a.selectedStore && !a.selectedDistributor") {{a.currentTopBottomAcctType.name || a.accountTypesDefault}}
-        .notes-icon
+        .notes-icon(ng-class="{'disabled': !a.selectedStoreInfo}")
           //- p(ng-if="a.selectedStore && !a.selectedDistributor") <a href="#" ng-click="a.openNotes(true, a.selectedStoreInfo)" analytics-on="click" analytics-event="Notes Tab">Notes</a>
           p(ng-if="a.selectedStore || a.selectedDistributor") <a href="#" ng-click="a.openNotes(true, a.selectedStoreInfo)" analytics-on="click" analytics-event="Notes Tab">Notes</a>
           p(ng-if="!a.selectedStore && !a.selectedDistributor") <a href="#" ng-click="a.openNotes(true, a.selectedStoreInfo)" analytics-on="click" analytics-event="Notes Tab">Notes</a>
