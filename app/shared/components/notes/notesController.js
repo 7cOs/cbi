@@ -157,6 +157,7 @@ module.exports = /*  @ngInject */
         data.date = moment.utc().format();
         vm.notes.push(data);
         jumpToNotesTop();
+        setNoteAuthor();
 
         vm.newNote = {};
         vm.creatingNote = false;
@@ -186,6 +187,7 @@ module.exports = /*  @ngInject */
       notesService.deleteNote(data.id).then(function(success) {
        var index = vm.notes.indexOf(data);
        vm.notes.splice(index, 1);
+       setNoteAuthor();
       });
     }
 
