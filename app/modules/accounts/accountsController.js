@@ -337,6 +337,8 @@ module.exports = /*  @ngInject */
       apply(false);
       // Go back to distributor level. Get the updated data for distributors
       resetTopBottom();
+
+      updateBrandSnapshot();
     }
 
     function removeAllTopBottomAccountTypeFilters() {
@@ -549,6 +551,8 @@ module.exports = /*  @ngInject */
     }
 
     function updateBrandSnapshot() {
+      filtersService.model.selected.brand = []; // remove brand from query
+
       var params = filtersService.getAppliedFilters('brandSnapshot');
       myperformanceService.appendFilterParametersForTopBottom(params, vm.currentTopBottomFilters);
       vm.loadingBrandSnapshot = true;
