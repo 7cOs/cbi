@@ -521,7 +521,7 @@ module.exports = /*  @ngInject */
         filtersService.model.account = '';
         chipsService.removeChip('chain');
         vm.showXStore = true;
-      } else if (filterModelProperty === 'account') {
+      } else if (filterModelProperty === 'account' || filterModelProperty === 'subaccount') {
         filtersService.model.selected.store = [];
         filtersService.model.store = '';
         chipsService.removeChip('store');
