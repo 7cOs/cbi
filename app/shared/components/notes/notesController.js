@@ -16,7 +16,6 @@ module.exports = /*  @ngInject */
     vm.numLimit = 150;
     vm.creatingNote = false;
     vm.deleteConfirmation = false;
-    vm.inputToggle = false;
     vm.notesOpen = false;
     vm.notesClose = notesClose;
     vm.fileUploadActive = true;
@@ -106,7 +105,6 @@ module.exports = /*  @ngInject */
     vm.toggleDelete = toggleDelete;
     vm.cancelNewNote = cancelNewNote;
     vm.updateNote = updateNote;
-    vm.showInput = showInput;
     vm.showImage = showImage;
     vm.isAuthor = isAuthor;
     vm.mailNote = mailNote;
@@ -122,10 +120,6 @@ module.exports = /*  @ngInject */
     function notesClose() {
       $scope.notesOpen = false;
       vm.notes = [];
-    }
-
-    function showInput() {
-      vm.inputToggle = !vm.inputToggle;
     }
 
     function isEditing(note) {

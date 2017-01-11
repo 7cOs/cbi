@@ -23,8 +23,8 @@ div.modal.notes(ng-if="notesOpen")
           .dropdown
             md-select(ng-model="n.newNote.title" aria-label="rationale dropdown" placeholder="Select a topic").short
               md-option(ng-repeat="topic in n.noteTopics" aria-label="note title selector" value="{{topic}}") {{topic}}
-              md-option(aria-label="note title selector" ng-value="" ng-click="n.showInput()") + Add a new topic >
-        input(ng-if="n.inputToggle" ng-model="n.newNote.title")
+              md-option(aria-label="note title selector" value="") + Add a new topic >
+        input(ng-if="n.newNote && n.noteTopics.indexOf(n.newNote.title) === -1" ng-model="n.newNote.title")
         label details
         div.text-editor
           text-angular(ta-toolbar="[['bold','italics', 'underline', 'ul']]" ta-text-editor-class="form-content" ng-model="n.newNote.body").text-editor
@@ -77,7 +77,7 @@ div.modal.notes(ng-if="notesOpen")
                   md-select(ng-model="note.title" aria-label="rationale dropdown" placeholder="Select a topic").short
                     md-option(aria-label="note title selector" value="{{option}}" ng-model="note.title" ng-repeat="option in n.noteTopics") {{option}}
                     md-option(aria-label="note title selector" value="" ng-click="n.showInput()") + Add a new topic >
-              input(ng-if="n.inputToggle" ng-model="note.title")
+              input(ng-if="n.noteTopics.indexOf(note.title) === -1" ng-model="note.title")
 
             label Details
             div.text-editor

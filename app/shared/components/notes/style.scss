@@ -253,6 +253,10 @@
     textarea {
       width: 100%;
     }
+
+    .dropdown-filter + input {
+      margin-bottom: 1em;
+    }
   }
 
   .notes-icon,
