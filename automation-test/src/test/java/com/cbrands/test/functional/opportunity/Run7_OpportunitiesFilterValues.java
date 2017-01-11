@@ -53,8 +53,10 @@ public class Run7_OpportunitiesFilterValues extends BaseSeleniumTestCase {
 		softAssert.assertNotNull(opportunitiesPage.getFilterPillDrug(), "'Drug' filter pill is not present");
 		opportunitiesPage.selectTradeChannelLiquor();
 		softAssert.assertNotNull(opportunitiesPage.getFilterPillLiquor(), "'Liquor' filter pill is not present");
-		opportunitiesPage.selectTradeChannelRecreation();
-		softAssert.assertNotNull(opportunitiesPage.getFilterPillRecreation(), "'Liquor' filter pill is not present");
+		//opportunitiesPage.selectTradeChannelRecreation();
+		//softAssert.assertNotNull(opportunitiesPage.getFilterPillRecreation(), "'Liquor' filter pill is not present");
+		opportunitiesPage.selectTradeChannelWholeSaleClub();
+		softAssert.assertNotNull(opportunitiesPage.getFilterPillWholesaleClub(), "'Liquor' filter pill is not present");
 		opportunitiesPage.selectTradeChannelConvenience();
 		softAssert.assertNotNull(opportunitiesPage.getFilterPillConvenience(), "'Convenience' filter pill is not present");
 		opportunitiesPage.selectTradeChannelMassMerchandiser();

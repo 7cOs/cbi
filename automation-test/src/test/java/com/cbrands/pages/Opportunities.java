@@ -193,6 +193,9 @@ public class Opportunities extends LoadableComponent<Opportunities> {
 	@FindBy(how=How.XPATH, using = "//div[contains(.,'Recreation')]")
 	private WebElement filterPillRecreation;
 	
+	@FindBy(how=How.XPATH, using = "//div[contains(.,'Wholesale Club')]")
+	private WebElement filterPillWholesaleClub;
+	
 	@FindBy(how=How.XPATH, using = "//div[contains(.,'Convenience')]")
 	private WebElement filterPillConvenience;
 	
@@ -268,6 +271,9 @@ public class Opportunities extends LoadableComponent<Opportunities> {
 	
 	@FindBy(how=How.CSS, using = "md-checkbox[aria-label='Trade Channel Recreation']")
 	private WebElement tradeChannelRecreation;
+	
+	@FindBy(how=How.CSS, using = "md-checkbox[aria-label='Trade Channel Wholesale Club']")
+	private WebElement tradeChannelWholesaleClub;
 	
 	@FindBy(how=How.CSS, using = "md-checkbox[aria-label='Trade Channel Convenience']")
 	private WebElement tradeChannelConvenience;
@@ -838,6 +844,11 @@ public class Opportunities extends LoadableComponent<Opportunities> {
 	
 	public Opportunities selectTradeChannelRecreation(){
 		tradeChannelRecreation.click();
+		return this;
+	}
+	
+	public Opportunities selectTradeChannelWholeSaleClub(){
+		tradeChannelWholesaleClub.click();
 		return this;
 	}
 	
@@ -1476,6 +1487,10 @@ public class Opportunities extends LoadableComponent<Opportunities> {
 
 	public WebElement getFilterPillRecreation() {
 		return filterPillRecreation;
+	}
+	
+	public WebElement getFilterPillWholesaleClub() {
+		return filterPillWholesaleClub;
 	}
 
 	public WebElement getFilterPillConvenience() {
