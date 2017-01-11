@@ -319,9 +319,17 @@ module.exports = /*  @ngInject */
       if (type === 'selectedStore') {
         filtersService.model.selected.account = [];
         filtersService.model.selected.store = [];
+
+        filtersService.model.account = '';
+        filtersService.model.store = '';
+
+        vm.currentTopBottomFilters.accounts = '';
+        vm.currentTopBottomFilters.subAccounts = '';
+        vm.currentTopBottomFilters.stores = '';
       } else if (type === 'selectedDistributor') {
         filtersService.model.selected.distributor = [];
         filtersService.model.distributor = '';
+
         vm.currentTopBottomFilters.distributors = '';
       }
 
