@@ -549,6 +549,8 @@ module.exports = /*  @ngInject */
     }
 
     function updateBrandSnapshot() {
+      filtersService.model.selected.brand = []; // remove brand from query
+
       var params = filtersService.getAppliedFilters('brandSnapshot');
       myperformanceService.appendFilterParametersForTopBottom(params, vm.currentTopBottomFilters);
       vm.loadingBrandSnapshot = true;
