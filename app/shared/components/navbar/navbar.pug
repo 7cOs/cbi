@@ -39,7 +39,7 @@ div.outer-nav-wrapper
             md-menu-content.nav-flyout
                 .content.nopad
                   div.notification-card.clearfix(md-prevent-menu-close ng-repeat="notification in nb.notifications | orderBy: '-dateCreated'" ng-class="{'read': notification.status === 'READ'}" ng-click="nb.markRead(notification)" class="{{notification.action}}")
-                    .details
+                    .details(ng-click="nb.goToNote(notification)")
                       div(ng-if="notification.objectType.toUpperCase() === 'TARGET_LIST'")
                         p You've been added as a collaborator
                         .source {{notification.shortenedObject.name}}

@@ -334,8 +334,12 @@ module.exports = /*  @ngInject */
     }
 
     $scope.$on('notes:opened', function(event, data, account) {
+      console.log(account);
       vm.loading = true;
-      notesService.model.accountId = account.id[0];
+
+      if (typeof account.id !== 'string') {
+        notesService.model.accountId = account.id[0];
+      }
 
       notesService.accountNotes().then(function(success) {
         vm.notes = success;

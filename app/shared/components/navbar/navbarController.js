@@ -97,6 +97,7 @@ module.exports = /*  @ngInject */
     vm.addDuplicateOpportunityId = addDuplicateOpportunityId;
     vm.showImpact = showImpact;
     vm.showNewRationaleInput = showNewRationaleInput;
+    vm.goToNote = goToNote;
 
     $scope.$watch(function() { return toastService.model; }, function(newVal) {
       vm.archived = newVal.archived;
@@ -394,6 +395,30 @@ module.exports = /*  @ngInject */
       }
     }
 
+    function goToNote(notification) {
+      console.log(notification);
+      var accountNote = {
+        'id': '',
+        'name': ''
+      };
+
+      accountNote.id = notification.objectId;
+      accountNote.name = notification.shortenedObject.store_name;
+      accountNote.type = notification.objectType;
+
+      $state.go('accounts', {
+        resetFiltersOnLoad: false,
+        applyFiltersOnLoad: true,
+        pageData: {
+        }
+      }).then(function() {
+        console.log(accountNote, ' notes opened?');
+        $rootScope.$broadcast('notes:opened', true, accountNote);
+        // $rootScope.$broadcast('notes:opened', val, accountInfo);
+      });
+
+    }
+
     // ***************
     // PRIVATE METHODS
     // ***************
@@ -405,6 +430,7 @@ module.exports = /*  @ngInject */
       .then(function(result) {
         vm.notifications = result;
         setUnreadCount(vm.notifications);
+        console.log(vm.notifications);
       });
 
       versionService.getVersion().then(function(data) {
