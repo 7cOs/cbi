@@ -319,6 +319,8 @@ module.exports = /*  @ngInject */
         filtersService.model.selected.store = [];
       } else if (type === 'selectedDistributor') {
         filtersService.model.selected.distributor = [];
+        filtersService.model.distributor = '';
+        vm.currentTopBottomFilters.distributors = '';
       }
 
       apply(false);
