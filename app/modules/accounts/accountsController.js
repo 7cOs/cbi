@@ -511,7 +511,6 @@ module.exports = /*  @ngInject */
         id: angular.copy(filtersService.model.selected[filterModelProp]),
         name: result.name
       };
-
       vm.selectedStoreInfo = vm.currentTopBottomFilters[topBottomProp];
       vm.selectedStoreInfo.type = topBottomProp;
       notesService.model.currentStoreName = result.name.toUpperCase();
