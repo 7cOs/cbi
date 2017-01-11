@@ -42,6 +42,8 @@ module.exports = /*  @ngInject */
     // Set default values
     vm.accountTypesDefault = 'Distributors';
     vm.brandIdSelected = null;
+    var currentBrandSelected = null;
+    var currentBrandSkuSelected = null;
     vm.brandWidgetTitleDefault = 'All Brands';
     vm.brandWidgetTitle = vm.brandWidgetTitleDefault;
     vm.brandWidgetSkuTitle = null;
@@ -209,8 +211,8 @@ module.exports = /*  @ngInject */
 
       vm.currentTopBottomObj = getCurrentTopBottomObject(vm.currentTopBottomAcctType);
       // update data
-      vm.getDataForTopBottom(vm.currentTopBottomObj, categoryBound);
       updateBrandSnapshot();
+      vm.getDataForTopBottom(vm.currentTopBottomObj, categoryBound);
     }
 
     /**
@@ -263,6 +265,8 @@ module.exports = /*  @ngInject */
     function prevTab() {
       if (vm.brandSelectedIndex > 0) {
         vm.brandWidgetSkuTitle = null;
+        currentBrandSkuSelected = null;
+        currentBrandSelected = null;
         vm.brandSelectedIndex = vm.brandSelectedIndex - 1;
         setCurrentTotalsObject();
         vm.brandWidgetTitle = vm.brandWidgetTitleDefault;
@@ -398,6 +402,10 @@ module.exports = /*  @ngInject */
       if (parentIndex + 1 === parentLength) {
         // We're on the deepest level of current tab list
         vm.brandWidgetSkuTitle = item.name;
+        currentBrandSkuSelected = {
+          name: item.name,
+          id: item.id
+        };
         if (widget === 'brands') { setSelected(item.name, 'brands'); }
       } else {
         vm.brandWidgetSkuTitle = null;
@@ -410,13 +418,12 @@ module.exports = /*  @ngInject */
           deplTimePeriod: vm.filterModel.depletionsTimePeriod.name,
           podAndVelTimePeriod: vm.filterModel.distributionTimePeriod.name
         };
-        params.brand = item.id;
-        vm.brandIdSelected = item.id;
-
-        var categoryBound = vm.filtersService.model.accountSelected.accountMarkets;
-        setUpdatedFilters();
-        vm.currentTopBottomObj = getCurrentTopBottomObject(vm.currentTopBottomAcctType);
-        vm.getDataForTopBottom(vm.currentTopBottomObj, categoryBound);
+        currentBrandSelected = {
+          name: item.name,
+          id: item.id
+        };
+        params.brand = currentBrandSelected.id;
+        vm.brandIdSelected = currentBrandSelected.id;
 
         userService.getPerformanceBrand(params).then(function(data) {
           vm.brandTabs.skus = data.performance;
@@ -426,6 +433,14 @@ module.exports = /*  @ngInject */
           }, 500);
         });
       }
+
+      for (var topBottomObj in vm.topBottomData) {
+        myperformanceService.resetPerformanceDataFlags(vm.topBottomData[topBottomObj]);
+      }
+      var categoryBound = vm.filtersService.model.accountSelected.accountMarkets;
+      setUpdatedFilters();
+      vm.currentTopBottomObj = getCurrentTopBottomObject(vm.currentTopBottomAcctType);
+      getDataForTopBottom(vm.currentTopBottomObj, categoryBound);
     }
 
     /**
@@ -809,7 +824,6 @@ module.exports = /*  @ngInject */
       vm.idSelected = idSelected;
       if (vm.selectedStore) { vm.selectedStore = null; }
       if (widget === 'brands') { vm.brandIdSelected = idSelected; }
-      if (widget === 'markets') { vm.marketIdSelected = true; vm.selectedStore = idSelected; prevTab(); }
     }
 
     // Top Bottom Specific Functions
@@ -830,8 +844,8 @@ module.exports = /*  @ngInject */
             myperformanceService.resetPerformanceDataFlags(vm.topBottomData[topBottomObj]);
           }
         }
-        getDataForTopBottom(vm.currentTopBottomObj, propertyBoundToTable);
         updateBrandSnapshot();
+        getDataForTopBottom(vm.currentTopBottomObj, propertyBoundToTable);
       }
     }
 
@@ -901,6 +915,7 @@ module.exports = /*  @ngInject */
       }
       var params = filtersService.getAppliedFilters('topbottom');
       myperformanceService.appendFilterParametersForTopBottom(params, vm.currentTopBottomFilters);
+      appendBrandParametersForTopBottom(params);
       var depletionOption = vm.filterModel.depletionsTimePeriod;
       var distirbutionOption = vm.filterModel.distributionTimePeriod;
       var acctMarketSelection = vm.filtersService.model.accountSelected.accountMarkets;
@@ -935,6 +950,11 @@ module.exports = /*  @ngInject */
       });
     }
 
+    function appendBrandParametersForTopBottom(currentParams) {
+      if (currentBrandSelected) currentParams.brand = currentBrandSelected.id;
+      if (currentBrandSkuSelected) currentParams.masterSKU = currentBrandSkuSelected.id;
+    }
+
     /**
      * Updates the topbottom object passed with the correct data based on whether performance data needs to be updated or the filtered data needs to be updated or if none needs to be updated sets the sort order (top 10 values etc)
      * @param {Object} topBottomObj Can be either topBottomData.distirbutor, topBottomData.account etc
@@ -944,14 +964,11 @@ module.exports = /*  @ngInject */
     function getDataForTopBottom(topBottomObj, categoryBound) {
       if (vm.isStoreLevel) {
         getCurrentStoreData();
-      // } else if (!topBottomObj.performanceData || topBottomObj.isPerformanceDataUpdateRequired === true) {
       } else {
         var params = filtersService.getAppliedFilters('topBottom');
         myperformanceService.appendFilterParametersForTopBottom(params, vm.currentTopBottomFilters);
         vm.loadingTopBottom = true;
-
-        if (vm.brandIdSelected) params.brand = vm.brandIdSelected;
-
+        appendBrandParametersForTopBottom(params);
         params.additionalParams = getAppliedFiltersForTopBottom();
 
         userService.getTopBottomSnapshot(vm.currentTopBottomAcctType, params).then(function(data) {
@@ -1187,8 +1204,8 @@ module.exports = /*  @ngInject */
           vm.currentTopBottomAcctType = myperformanceService.getAcctTypeObjectBasedOnTabIndex(vm.currentTopBottomAcctType.value, getNextLevel);
           vm.currentTopBottomObj = getCurrentTopBottomObject(vm.currentTopBottomAcctType);
           var categoryBound = vm.filtersService.model.accountSelected.accountMarkets;
-          getDataForTopBottom(vm.currentTopBottomObj, categoryBound);
           updateBrandSnapshot();
+          getDataForTopBottom(vm.currentTopBottomObj, categoryBound);
         } else {
           // Just setting current top bottom object to store
           vm.currentTopBottomObj = getCurrentTopBottomObject(vm.currentTopBottomAcctType);
@@ -1237,8 +1254,8 @@ module.exports = /*  @ngInject */
         }
         var categoryBound = vm.filtersService.model.accountSelected.accountMarkets;
         vm.currentTopBottomObj = getCurrentTopBottomObject(vm.currentTopBottomAcctType);
-        getDataForTopBottom(vm.currentTopBottomObj, categoryBound);
         updateBrandSnapshot();
+        getDataForTopBottom(vm.currentTopBottomObj, categoryBound);
       }
     }
 
