@@ -53,7 +53,8 @@
     }
   }
 
-  .create-new-note {
+  .create-new-note,
+  .notes-editing {
     textarea {
       width: 100%;
       height: 90px;
@@ -74,6 +75,10 @@
       display: inline;
     }
 
+    button {
+      margin-bottom: 1em;
+    }
+
     a {
       color: $blue;
       padding-top: 4px;
@@ -81,6 +86,11 @@
 
     .cancel {
       margin-left: 24px;
+      color: $blue;
+
+      &:hover {
+        cursor: hand;
+      }
     }
   }
 
@@ -103,7 +113,7 @@
 
     .note-body-field > p {
       margin: 0 auto;
-      height: 2.25em;
+      height: 2.1em;
       overflow: hidden;
 
       &.long-note {
@@ -128,6 +138,10 @@
     .read-less {
       color: $blue;
       display: inline;
+
+      &:hover {
+        cursor: hand;
+      }
     }
 
     .delete-confirm {
