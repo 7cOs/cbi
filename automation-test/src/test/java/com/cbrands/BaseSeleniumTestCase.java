@@ -26,6 +26,7 @@ import com.cbrands.listener.SeleniumSnapshotRule;
 import com.cbrands.pages.AccountDashboard;
 import com.cbrands.pages.HomePage;
 import com.cbrands.pages.Login;
+import com.cbrands.pages.MyScorecards;
 import com.cbrands.pages.Opportunities;
 import com.cbrands.pages.TargetList;
 
@@ -40,6 +41,7 @@ public abstract class BaseSeleniumTestCase implements IConstant {
 	protected Opportunities opportunitiesPage;
 	protected TargetList targetListPage;
 	protected AccountDashboard accountDashboardPage;
+	protected MyScorecards myScorecards;
 
 	@BeforeSuite
 	public void setUp() throws Exception {

@@ -71,6 +71,9 @@ public class HomePage extends LoadableComponent<HomePage>{
 	@FindBy(how = How.XPATH, using = "//a[contains(.,'Account Dashboard')]")
 	private WebElement accountDashboardLink;
 	
+	@FindBy(how = How.XPATH, using = "//a[contains(.,'My Scorecards')]")
+	private WebElement myScoreCards;
+	
 	public HomePage clickOffPremise() {
 		offPremise.click();
 		return this;
@@ -279,7 +282,13 @@ public class HomePage extends LoadableComponent<HomePage>{
     public AccountDashboard navigateToAccountDashboard(){
     	waitForVisibleFluentWait(myPerformanceLink).click();	
     	waitForVisibleFluentWait(accountDashboardLink).click();
-	return PageFactory.initElements(driver, AccountDashboard.class);
+	    return PageFactory.initElements(driver, AccountDashboard.class);
+    }
+    
+    public MyScorecards navigateToMyScoreCards(){
+    	waitForVisibleFluentWait(myPerformanceLink).click();	
+    	waitForVisibleFluentWait(myScoreCards).click();
+    	return PageFactory.initElements(driver, MyScorecards.class);
     }
     
     

@@ -7,9 +7,12 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.CacheLookup;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedCondition;
+import org.openqa.selenium.support.ui.LoadableComponent;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-public class MyScorecards {
+import com.cbrands.helper.PropertiesCache;
+
+public class MyScorecards extends LoadableComponent<MyScorecards>{
     private Map<String, String> data;
     private WebDriver driver;
     private int timeout = 15;
@@ -356,4 +359,21 @@ public class MyScorecards {
         });
         return this;
     }
+
+	@Override
+	protected void load() {
+		driver.get(PropertiesCache.getInstance().getProperty("qa.host.address"));
+	}
+
+	@Override
+	protected void isLoaded() throws Error {
+		String url = driver.getCurrentUrl();
+	    assertTrue(url.contains("scorecards"));
+		
+	}
+
+	private void assertTrue(boolean contains) {
+		// TODO Auto-generated method stub
+		
+	}
 }
