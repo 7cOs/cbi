@@ -76,6 +76,7 @@ public class Run10_OpportunityResultsTable extends BaseSeleniumTestCase {
 		opportunitiesPage.clickShowMoreFilter();
 		opportunitiesPage.selectProductTypeFeatured();
 		opportunitiesPage.clickApplyFilters();
+		opportunitiesPage.clickApplyFilters();
 		
 		allText = getAllTextFromPage();
 		assertThat("Unable to find any opportunities that met your criteria.", allText, not(containsString("Dang! We were unable to find any opportunities that met your criteria.")));
