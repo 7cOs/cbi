@@ -306,8 +306,8 @@ module.exports = /*  @ngInject */
         emailString = 'mailto:';
         emailString += '?subject=Note: ' + note.title;
         emailString += '&body=' + currentAccount.currentStoreName + '%0D%0A%0D%0A';
-        emailString += 'here is where the STORE address would go%0D%0A';
-        emailString += 'here would be the tdlinx code';
+        emailString += currentAccount.address + '%0D%0A%0D%0A';
+        emailString += 'TDLinx: ' + currentAccount.tdlinx + '%0D%0A%0D%0A';
         emailString += '%0D%0A%0D%0A' + updatedNoteBody;
         $window.location = emailString;
       }
@@ -316,7 +316,7 @@ module.exports = /*  @ngInject */
         emailString = 'mailto:';
         emailString += '?subject=Note: ' + note.title;
         emailString += '&body=' + currentAccount.currentStoreName + '%0D%0A%0D%0A';
-        emailString += 'here is where the DISTRIBUTOR address would go%0D%0A';
+        emailString += currentAccount.address + '%0D%0A%0D%0A';
         emailString += 'ID: ' + currentAccount.accountId + '%0D%0A%0D%0A';
         emailString += '%0D%0A%0D%0A' + updatedNoteBody;
         $window.location = emailString;
