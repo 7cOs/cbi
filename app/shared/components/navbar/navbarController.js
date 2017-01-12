@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports = /*  @ngInject */
-  function navbarController($rootScope, $scope, $state, $window, $mdPanel, $mdDialog, $mdMenu, $mdSelect, $anchorScroll, notificationsService, opportunitiesService, targetListService, userService, versionService, loaderService, ieHackService, toastService, filtersService, chipsService, notesService, moment) {
+  function navbarController($rootScope, $scope, $state, $window, $mdPanel, $mdDialog, $mdMenu, $mdSelect, $anchorScroll, notificationsService, opportunitiesService, targetListService, userService, versionService, loaderService, ieHackService, toastService, filtersService, chipsService, moment) {
 
     // ****************
     // CONTROLLER SETUP
@@ -396,28 +396,27 @@ module.exports = /*  @ngInject */
     }
 
     function goToNote(notification) {
+      console.log(notification);
       var accountNote = {
         'id': '',
-        'name': '',
-        'noteId': ''
+        'name': ''
       };
 
       accountNote.id = notification.objectId;
       accountNote.name = notification.shortenedObject.store_name;
       accountNote.type = notification.objectType;
-      accountNote.noteId = notification.salesforceUserNoteID;
-
-      notesService.model.currentStoreName = accountNote.name;
 
       $state.go('accounts', {
         resetFiltersOnLoad: false,
         applyFiltersOnLoad: true,
-        openNotesOnLoad: true,
         pageData: {
-          account: accountNote
-        },
-        storeId: accountNote.id
+        }
+      }).then(function() {
+        console.log(accountNote, ' notes opened?');
+        $rootScope.$broadcast('notes:opened', true, accountNote);
+        // $rootScope.$broadcast('notes:opened', val, accountInfo);
       });
+
     }
 
     // ***************
@@ -431,7 +430,6 @@ module.exports = /*  @ngInject */
       .then(function(result) {
         vm.notifications = result;
         setUnreadCount(vm.notifications);
-        console.log(vm.notifications);
       });
 
       versionService.getVersion().then(function(data) {
