@@ -214,8 +214,8 @@ v-accordion.styled-list(multiple="" id="opportunities" control="list.accordion" 
                     span(ng-if="product.depletionsCurrentYearToDateYAPercent === 0") 0%
                   div(column="2" ng-if="product.itemAuthorizationCode !== null")
                     label Authorization Type
-                    span(ng-click="list.showOpportunityMemoModal(); list.getMemos(product.store.id, product.product.id, 'Item Authorization')").open-memo ({{::product.itemAuthorizationCode}}) {{::product.itemAuthorizationDesc}}
+                    span(ng-click="list.showOpportunityMemoModal(); list.getMemos(product.store.id, product.product.id, 'Item Authorization')").open-memo {{::product.itemAuthorizationDesc}}
                   div(column="2" ng-if="product.featureTypeCode !== null")
                     label Feature Type
-                    span(ng-click="list.showOpportunityMemoModal(); list.getMemos(product.store.id, product.product.id, 'Feature')").open-memo ({{::product.featureTypeCode}}) {{::product.featureTypeDesc}}
+                    span(ng-click="list.showOpportunityMemoModal(); list.getMemos(product.store.id, product.product.id, 'Feature')").open-memo {{::product.featureTypeDesc}}
 page
