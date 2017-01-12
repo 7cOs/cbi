@@ -123,6 +123,9 @@ public class SmokeTests extends BaseSeleniumTestCase{
 									.clickOnPremise()
 									.clickApplyFilters();
 		
+		String allText = getAllTextFromPage();
+		assertThat("Unable to find any opportunities that met your criteria.", allText, not(containsString("Dang! We were unable to find any opportunities that met your criteria.")));
+		
 		opportunitiesPage.sendOpportunityTo(ACTOR2_USER_NAME);
 		
 		SoftAssert softAssert = new SoftAssert();

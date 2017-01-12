@@ -74,6 +74,10 @@ public abstract class BaseSeleniumTestCase implements IConstant {
 		return filters;
 	}
 	
+	public String getAllTextFromPage() {
+		return driver.findElement(By.tagName("body")).getText();
+	}
+	
 	protected void logout(){
 		driver.get("https://orion-qa.cbrands.com/auth/logout");
 		driver.get("https://orion-qa.cbrands.com/auth/logout");

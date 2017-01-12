@@ -2,6 +2,7 @@ package com.cbrands.pages;
 
 import java.util.Map;
 
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.CacheLookup;
@@ -375,5 +376,9 @@ public class MyScorecards extends LoadableComponent<MyScorecards>{
 	private void assertTrue(boolean contains) {
 		// TODO Auto-generated method stub
 		
+	}
+
+	public String getAllTextFromPage() {
+		return driver.findElement(By.tagName("body")).getText();
 	}
 }

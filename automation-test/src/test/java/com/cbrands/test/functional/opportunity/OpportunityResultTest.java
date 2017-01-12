@@ -2,6 +2,7 @@ package com.cbrands.test.functional.opportunity;
 
 import static net.javacrumbs.hamcrest.logger.HamcrestLoggerMatcher.log;
 import static org.hamcrest.CoreMatchers.containsString;
+import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 import java.util.List;
@@ -32,6 +33,9 @@ public class OpportunityResultTest extends BaseSeleniumTestCase{
 									.selectOpporunityType("Non-Buy")
 									.clickOnPremise()
 									.clickApplyFilters();
+		
+		String allText = getAllTextFromPage();
+		assertThat("Unable to find any opportunities that met your criteria.", allText, not(containsString("Dang! We were unable to find any opportunities that met your criteria.")));
 		
 		content = opportunitiesPage.clickFirstResult()
 								   .getWebElementOfFirstItem();
