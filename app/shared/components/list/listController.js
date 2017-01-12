@@ -444,7 +444,7 @@ module.exports = /*  @ngInject */
     function showItemAuthorizationFlag(authCode, depletions) {
       if (authCode === 'CM' || authCode === 'SP') {
         return true;
-      } else if (authCode === 'BM' && depletions > 0) {
+      } else if (authCode === 'BM' && depletions <= 0) {
         return true;
       } else {
         return false;

@@ -78,9 +78,6 @@ describe('Unit: list controller', function() {
     expect(ctrl.flattenOpportunity).not.toBeUndefined();
     expect(typeof (ctrl.flattenOpportunity)).toEqual('function');
 
-    expect(ctrl.getDate).not.toBeUndefined();
-    expect(typeof (ctrl.getDate)).toEqual('function');
-
     expect(ctrl.getMemos).not.toBeUndefined();
     expect(typeof (ctrl.getMemos)).toEqual('function');
 
@@ -256,12 +253,6 @@ describe('Unit: list controller', function() {
     });
   });
 
-  describe('[list.getDate] method', function() {
-    it('should return a new date object', function() {
-      expect(ctrl.getDate()).toEqual(new Date());
-    });
-  });
-
   describe('[list.noOpportunitiesExpanded] method', function() {
     it('should return false if expandedOpportunities doesn\'t equal 0', function() {
       ctrl.expandedOpportunities = 1;
@@ -382,13 +373,13 @@ describe('Unit: list controller', function() {
       expect(ctrl.showItemAuthorizationFlag('SP')).toBeTruthy();
     });
 
-    it('should return true if authCode is BM and depletions are > 0', function() {
-      expect(ctrl.showItemAuthorizationFlag('BM', 500)).toBeTruthy();
+    it('should return false if authCode is BM and depletions are > 0', function() {
+      expect(ctrl.showItemAuthorizationFlag('BM', 500)).toBeFalsy();
     });
 
     it('should return false if authCode not acceptable', function() {
       expect(ctrl.showItemAuthorizationFlag('COW')).toBeFalsy();
-      expect(ctrl.showItemAuthorizationFlag('BM', 0)).toBeFalsy();
+      expect(ctrl.showItemAuthorizationFlag('BM', 1)).toBeFalsy();
     });
   });
 
