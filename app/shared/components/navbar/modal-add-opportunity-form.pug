@@ -22,9 +22,8 @@ div.modal.add-opportunity
       label(ng-if="nb.newOpportunity.properties.distributionType.type === 'other'") Recommended Brand or Package/ SKU
       inline-search(ng-if="nb.newOpportunity.properties.distributionType.type === 'new'" type="product" variety="non-brand" placeholder="Type package name, or master SKU" chosen-result="nb.newOpportunity.properties.product.name" chosen-result-object="nb.chosenProductObject" ng-model="nb.newOpportunity.properties.product.name" name="recommendedProduct" ng-attr-dont-set-defaults="{{nb.dontSetModalDefaults}}" cache-input="nb.cacheInputs" required)
       inline-search.all-product-search(ng-if="nb.newOpportunity.properties.distributionType.type === 'other'" type="product" placeholder="Type brand, package name, or master SKU" chosen-result="nb.newOpportunity.properties.product.name" chosen-result-object="nb.chosenProductObject" ng-model="nb.newOpportunity.properties.product.name" name="recommendedProduct" ng-attr-dont-set-defaults="{{nb.dontSetModalDefaults}}" cache-input="nb.cacheInputs")
-
-        div(ng-cloak ng-show="(nb.newOpportunity.properties.product.type === 'sku' && nb.addOpportunityForm.recommendedProduct.$invalid) && nb.addOpportunityForm.$submitted")
-          p.error-message.accent <img src="./assets/img/icons/error.svg">Please enter a Recommended Brand or Select Mixed Brands.
+      div(ng-cloak ng-show="(nb.newOpportunity.properties.product.type === 'sku' && nb.addOpportunityForm.recommendedProduct.$invalid) && nb.addOpportunityForm.$submitted")
+        p.error-message.accent <img src="./assets/img/icons/error.svg">Please enter a Recommended Brand or Select Mixed Brands.
 
     div.modal-input.rationale
       label Rationale
