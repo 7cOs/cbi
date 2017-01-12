@@ -109,8 +109,12 @@
       margin-top: 0;
     }
 
-    p {
+    p, ul {
       margin-top: 0;
+    }
+
+    p, li {
+      font-style: 0.9em;
     }
 
     .note-body-field > p {
@@ -263,7 +267,10 @@
       color: $blue;
     }
 
-    p {
+    p, li {
+      color: $gray-1;
+      line-height: 1.5;
+      font-family: $work-sans;
       font-size: 0.7em;
     }
 
