@@ -288,6 +288,7 @@ public class HomePage extends LoadableComponent<HomePage>{
     public MyScorecards navigateToMyScoreCards(){
     	waitForVisibleFluentWait(myPerformanceLink).click();	
     	waitForVisibleFluentWait(myScoreCards).click();
+    	waitForVisible(By.cssSelector("a[href='/scorecards']"));
     	return PageFactory.initElements(driver, MyScorecards.class);
     }
     

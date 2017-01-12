@@ -36,7 +36,7 @@ public class feedback_for_opportunities extends BaseSeleniumTestCase{
 				targetListPage.clickDistributorSearchButton();
 				
 				targetListPage.clickDistributorName(distributorname);
-				targetListPage.clickApplyFIlterButton();
+				targetListPage.clickApplyFilterButton();
 				targetListPage.clickfirst_store_opportunity();
 				targetListPage.clickfirstOpportunity();
 				targetListPage.clickActionButton();
