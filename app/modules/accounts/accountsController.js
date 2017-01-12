@@ -461,7 +461,7 @@ module.exports = /*  @ngInject */
 
     function setDefaultFilterOptions() {
       if (!filtersService.model.selected.myAccountsOnly) {
-        defaultPremise();
+        disablePremiseType(false);
       } else if (userService.model.currentUser && userService.model.currentUser.srcTypeCd) {
         switch (userService.model.currentUser.srcTypeCd[0]) {
           case 'OFF_HIER':
@@ -472,14 +472,13 @@ module.exports = /*  @ngInject */
             onPremise();
             break;
           default:
-            defaultPremise();
+            filtersService.model.selected.premiseType = 'all';
+            chipsService.removeChip('premiseType');
+            disablePremiseType(false);
             break;
         }
       }
 
-      function defaultPremise() {
-        disablePremiseType(false);
-      }
       function onPremise() {
         filtersService.model.selected.premiseType = 'on';
         vm.updateChip('On-Premise', 'premiseType');

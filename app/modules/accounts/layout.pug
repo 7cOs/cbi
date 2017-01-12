@@ -31,7 +31,7 @@ notes
 
 .filters.top(column='12')
   div(row)
-    // div.trend(column='2')
+    //- div.trend(column='2')
       label Trend
       md-radio-group(ng-model="a.filterModel.trend")
         md-radio-button(ng-repeat="filter in a.filtersService.model.trend" class="md-primary" ng-value="filter" aria-label="Trend" ng-if = "a.checkForStoreLevel(filter)" ng-click="a.trendOptionChanged(filter); a.apply(false);") {{filter.name}}
