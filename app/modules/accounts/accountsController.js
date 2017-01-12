@@ -322,9 +322,11 @@ module.exports = /*  @ngInject */
 
       if (type === 'selectedStore') {
         filtersService.model.selected.account = [];
+        filtersService.model.selected.subaccount = [];
         filtersService.model.selected.store = [];
 
         filtersService.model.account = '';
+        filtersService.model.subaccount = '';
         filtersService.model.store = '';
 
         vm.currentTopBottomFilters.accounts = '';
