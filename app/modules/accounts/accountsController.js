@@ -96,6 +96,7 @@ module.exports = /*  @ngInject */
     vm.currentTopBottomDataForFilter = null;
     vm.getValueBoundForAcctType = getValueBoundForAcctType;
     vm.setTopBottomAcctTypeSelection = setTopBottomAcctTypeSelection;
+    vm.switchToBrandView = switchToBrandView;
     vm.isStoreLevel = false;
     vm.isHighlightStore = isHighlightStore;
     var topBottomInitData = true;
@@ -262,6 +263,11 @@ module.exports = /*  @ngInject */
     }
 
     // Move to previously indexed tab (only used for brands)
+    function switchToBrandView() {
+      prevTab();
+      onFilterPropertiesChange();
+    }
+
     function prevTab() {
       if (vm.brandSelectedIndex > 0) {
         vm.brandWidgetSkuTitle = null;
@@ -575,13 +581,16 @@ module.exports = /*  @ngInject */
       filterModelProperty === 'distributor' ? vm.selectedDistributor = result.name : vm.selectedStore = result.name;
     }
 
-    function updateBrandSnapshot() {
+    function updateBrandSnapshot(isMoveToPreviousTab) {
       filtersService.model.selected.brand = []; // remove brand from query
 
       var params = filtersService.getAppliedFilters('brandSnapshot');
       myperformanceService.appendFilterParametersForTopBottom(params, vm.currentTopBottomFilters);
       vm.loadingBrandSnapshot = true;
-      prevTab();
+
+      if (isMoveToPreviousTab !== false) {
+        prevTab();
+      }
 
       params.additionalParams = {
         deplTimePeriod: vm.filterModel.depletionsTimePeriod.name,
