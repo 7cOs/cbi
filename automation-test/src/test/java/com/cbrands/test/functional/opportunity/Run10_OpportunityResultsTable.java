@@ -1,5 +1,9 @@
 package com.cbrands.test.functional.opportunity;
 
+import static org.hamcrest.CoreMatchers.containsString;
+import static org.hamcrest.CoreMatchers.not;
+import static org.hamcrest.MatcherAssert.assertThat;
+
 import org.testng.Assert;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.DataProvider;
@@ -23,6 +27,10 @@ public class Run10_OpportunityResultsTable extends BaseSeleniumTestCase {
 		opportunitiesPage.selectAccountScope();
 		opportunitiesPage.typeDistributor(distributorName);
 		opportunitiesPage.clickApplyFilters();
+		
+		String allText = getAllTextFromPage();
+		assertThat("Unable to find any opportunities that met your criteria.", allText, not(containsString("Dang! We were unable to find any opportunities that met your criteria.")));
+		
 		Assert.assertNotNull(opportunitiesPage.getColumnHeaderStoreNumber(), "Store/Number column header not present");
 		Assert.assertNotNull(opportunitiesPage.getColumnHeaderAddress(), "Address header not present");
 		Assert.assertNotNull(opportunitiesPage.getColumnHeaderOpportunitites(), "Opportunities column header not present");

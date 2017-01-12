@@ -1,11 +1,5 @@
 package com.cbrands.test.functional.targetlist;
 
-import org.apache.http.auth.UsernamePasswordCredentials;
-import org.openqa.selenium.Alert;
-import org.openqa.selenium.Keys;
-import org.openqa.selenium.NoAlertPresentException;
-import org.openqa.selenium.UnhandledAlertException;
-import org.openqa.selenium.security.Credentials;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
