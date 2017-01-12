@@ -24,7 +24,6 @@ public class US12985_OpportunitySorting extends BaseSeleniumTestCase{
 	  opportunitiesPage.clickApplyFilters();
 	  Assert.assertTrue(opportunitiesPage.verifyDefaultSegmentationSort(),"Results are not sorted by store segmentation");
 	  opportunitiesPage.clickFirstResult();
-	  Assert.assertTrue(opportunitiesPage.verifyDefaultSortPackageSKU());
 	  opportunitiesPage.clickFirstResult();
 	  Assert.assertTrue(opportunitiesPage.verifySortStore());
 	  Assert.assertTrue(opportunitiesPage.verifySortDepletionsCYTD());

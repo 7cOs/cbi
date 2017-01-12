@@ -98,7 +98,7 @@ public class TargetList extends LoadableComponent<TargetList> {
 	private WebElement AccountsSubnameTextBox;
 
 	@FindBy(how = How.XPATH, using = "//button[contains(.,'Apply Filters')]")
-	private WebElement ApplyFIlterButton;
+	private WebElement applyFilterButton;
 
 	// @FindBy(how =
 	// How.XPATH,using="//*[@id='opportunities']/v-pane/div/div/v-pane-header/div/div/div[1]")
@@ -179,6 +179,12 @@ public class TargetList extends LoadableComponent<TargetList> {
 	
 	@FindBy(how = How.CSS, using = "a[href='/target-lists']")
 	private WebElement targetListLink;
+	
+	@FindBy(how = How.CSS, using = "input[placeholder='Name']")
+	private WebElement distributor;
+	
+	@FindBy(how = How.CSS, using = "md-checkbox[aria-label='My Accounts']")
+	private WebElement accountScope;
 
 	public TargetList typeTargetName(String name) {
 
@@ -414,11 +420,9 @@ public class TargetList extends LoadableComponent<TargetList> {
 		return this;
 	}
 
-	public TargetList clickSearchOpportunityButton() {
+	public Opportunities clickSearchOpportunityButton() {
 		SearchOpportunityButton.click();
-		// waitForCondition(ExpectedConditions.invisibilityOfElementLocated(By.cssSelector("md-dialog[class='_md
-		// md-transition-in']")),10);
-		return this;
+		return PageFactory.initElements(driver, Opportunities.class);
 	}
 
 	public TargetList clickOnPremiseRadioButton() {
@@ -445,8 +449,8 @@ public class TargetList extends LoadableComponent<TargetList> {
 		return this;
 	}
 
-	public TargetList clickApplyFIlterButton() {
-		ApplyFIlterButton.click();
+	public TargetList clickApplyFilterButton() {
+		applyFilterButton.click();
 		return this;
 	}
 
@@ -1052,7 +1056,7 @@ public class TargetList extends LoadableComponent<TargetList> {
 	}
 
 	public WebElement getApplyFIlterButton() {
-		return ApplyFIlterButton;
+		return applyFilterButton;
 	}
 
 	public WebElement getFirst_store_opportunity() {
@@ -1153,5 +1157,19 @@ public class TargetList extends LoadableComponent<TargetList> {
 
 	public WebElement getSelectAllTargetListsButton() {
 		return selectAllTargetListsButton;
+	}
+	
+	public TargetList typeDistributor(String name) {
+		distributor.sendKeys(name);
+		WebElement element = distributor.findElement(By.xpath("//input[contains(@class,'submit-btn visible')]"));
+		waitForElementToClickable(element, true).click();
+		WebElement element1 = findElement(By.xpath("//div[3]/inline-search[1]/div[1]/div[1]/ul[1]/li[1]/span[1]"));
+		waitForElementToClickable(element1, true).click();
+		return this;		
+	}
+	
+	public TargetList selectAccountScope() {
+		accountScope.click();
+		return this;
 	}
 }

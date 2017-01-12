@@ -371,6 +371,15 @@ public class Opportunities extends LoadableComponent<Opportunities> {
 	@FindAll(@FindBy(how=How.CSS, using = "label[class='sort']"))
 	private List <WebElement> sortHeaders;
 	
+	@FindBy(how = How.XPATH, using = "//p[text()='Create New List']")
+	private WebElement CreatNewListButton;
+	
+	@FindBy(how = How.CSS, using = "input[placeholder='Enter List Name']")
+	private WebElement NameTextBox;
+	
+	@FindBy(how = How.XPATH, using = "//div/div[2]/button")
+	private WebElement SaveButton;
+	
 	public Opportunities(WebDriver driver) {
 		this.driver = driver;
 	}
@@ -1679,4 +1688,72 @@ public class Opportunities extends LoadableComponent<Opportunities> {
 	public WebElement getStoreNumber() {
 		return storeNumber;
 	}
+	
+	public Opportunities clickfirst_store_opportunity() {
+		// Introducing a hard wait, as sometimes clicking the opportunity
+		// immediately after page load does not return data.
+		try {
+			Thread.sleep(2000);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		WebElement firstResult = findElements(By.cssSelector("v-pane-header[class='checkbox-sibling ng-isolate-scope']")).get(0);
+		Actions actions = new Actions(driver);
+		firstResult.click();
+		if (firstResult.getAttribute("aria-expanded") == "false") {
+			actions.moveToElement(firstResult).click(firstResult).perform();
+		}
+		return this;
+	}
+	
+	public Opportunities clickfirstOpportunity() {
+		waitForVisible(By.cssSelector("md-checkbox[aria-label='Select Item'][ng-checked='product.selected']"));
+		WebElement firstStoreOpportunity = findElements(By.cssSelector("md-checkbox[aria-label='Select Item'][ng-checked='product.selected']")).get(0);
+		firstStoreOpportunity.click();
+		if (firstStoreOpportunity.getAttribute("aria-checked") == "false") {
+			firstStoreOpportunity.sendKeys(Keys.SPACE);
+		}
+		return this;
+	}
+	
+	public Opportunities clickSecondOpportunity() {
+		waitForVisible(By.cssSelector("md-checkbox[aria-label='Select Item'][ng-checked='product.selected']"));
+		WebElement secondStoreOpportunity = findElements(By.cssSelector("md-checkbox[aria-label='Select Item'][ng-checked='product.selected']")).get(1);
+		secondStoreOpportunity.click();
+		if (secondStoreOpportunity.getAttribute("aria-checked") == "false") {
+			secondStoreOpportunity.sendKeys(Keys.SPACE);
+		}
+		return this;
+	}
+	
+	public Opportunities clickCreatNewListButton() {
+		CreatNewListButton.click();
+		return this;
+	}
+	
+	public Opportunities EnterNameTextBox(String name) {
+		waitForVisibleFluentWait(NameTextBox);
+		NameTextBox.clear();
+		NameTextBox.sendKeys(name);
+		return this;
+	}
+	
+	public Opportunities clickSaveButton() {
+		SaveButton.click();
+		waitForVisibleFluentWait(targetList);
+		return this;
+	}
+	
+	public Opportunities sortOpportunities() {
+		JavascriptExecutor je = (JavascriptExecutor)driver;
+		je.executeScript("arguments[0].scrollIntoView(false);",opportunitiesHeaderSort);
+		waitForVisibleFluentWait(opportunitiesHeaderSort).click();
+		try {
+			Thread.sleep(4000);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		return this;
+	}
+	
 }
