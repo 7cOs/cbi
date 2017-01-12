@@ -39,7 +39,7 @@ div.outer-nav-wrapper
             md-menu-content.nav-flyout
                 .content.nopad
                   div.notification-card.clearfix(md-prevent-menu-close ng-repeat="notification in nb.notifications | orderBy: '-dateCreated'" ng-class="{'read': notification.status === 'READ'}" ng-click="nb.markRead(notification)" class="{{notification.action}}")
-                    .details(ng-click="nb.goToNote(notification)")
+                    .details
                       div(ng-if="notification.objectType.toUpperCase() === 'TARGET_LIST'")
                         p You've been added as a collaborator
                         .source {{notification.shortenedObject.name}}
@@ -49,7 +49,7 @@ div.outer-nav-wrapper
                           span(ng-if="notification.shortenedObject.store.store_number.toUpperCase() !== 'UNKNOWN'")  \#{{notification.shortenedObject.store.store_number}}
                         p.sku {{notification.shortenedObject.product.name | titlecase}}
                           span  {{notification.shortenedObject.type | formatOpportunitiesType}}
-                      div(ng-if="notification.objectType.toUpperCase() === 'STORE' || notification.objectType.toUpperCase() === 'DISTRIBUTOR'")
+                      div(ng-click="nb.goToNote(notification)" ng-if="notification.objectType.toUpperCase() === 'STORE' || notification.objectType.toUpperCase() === 'DISTRIBUTOR'")
                         p A new note was added to your account
                         div(ng-if="notification.objectType.toUpperCase() === 'STORE'")
                           .source {{notification.shortenedObject.store_name | titlecase}}

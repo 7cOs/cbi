@@ -415,7 +415,8 @@ module.exports = /*  @ngInject */
         openNotesOnLoad: true,
         pageData: {
           account: accountNote
-        }
+        },
+        storeId: accountNote.id
       });
     }
 
