@@ -380,6 +380,9 @@ public class Opportunities extends LoadableComponent<Opportunities> {
 	@FindBy(how = How.XPATH, using = "//div/div[2]/button")
 	private WebElement SaveButton;
 	
+	@FindAll(@FindBy(how=How.CSS, using = "button[aria-label='More']"))
+	private List <WebElement> actionButtons;
+	
 	public Opportunities(WebDriver driver) {
 		this.driver = driver;
 	}
@@ -1753,6 +1756,11 @@ public class Opportunities extends LoadableComponent<Opportunities> {
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
+		return this;
+	}
+	
+	public Opportunities clickActionButton() {
+		waitForVisibleFluentWait(actionButtons.get(0)).click();
 		return this;
 	}
 	

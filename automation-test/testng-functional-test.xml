@@ -18,10 +18,8 @@
 			<class name="com.cbrands.test.functional.opportunity.US12985_OpportunitySorting" />
             
 			<!-- Target List -->
-			<class name="com.cbrands.test.functional.targetlist.feedback_for_opportunities" />
 			<class name="com.cbrands.test.functional.targetlist.ShareOpportunity_TargetList" />
-			<class name="com.cbrands.test.functional.targetlist.Target_List_Export" />
-			<class name="com.cbrands.test.functional.targetlist.TargetList_Create_AddCollaborators_Copy_Archive" />
+			<class name="com.cbrands.test.functional.targetlist.TargetListTests" />
 
             <!-- My Performance -->
             <class name="com.cbrands.test.functional.myperformance.US13287_BrandSnapShot_PackageSKULevelDetail" />
