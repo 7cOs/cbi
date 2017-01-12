@@ -18,13 +18,13 @@ div.modal.add-opportunity
     div(ng-cloak ng-show="nb.newOpportunity.properties.distributionType.type === 'other' && nb.addOpportunityForm.otherOpportunityInput.$invalid && nb.addOpportunityForm.$submitted")
       p.error-message.accent.select-opportunity-error <img src="./assets/img/icons/error.svg">Please specify at least 3 characters.
     div.modal-input.clearfix
-      label(ng-if="nb.newOpportunity.properties.distributionType.type === 'new'") Recommended Package / SKU
-      label(ng-if="nb.newOpportunity.properties.distributionType.type === 'other'") Recommended Brand or Package / SKU
       div(ng-if="nb.newOpportunity.properties.distributionType.type === 'new'")
+        label Recommended Package / SKU
         inline-search( type="product" variety="non-brand" placeholder="Type package name, or master SKU" chosen-result="nb.newOpportunity.properties.product.name" chosen-result-object="nb.chosenProductObject" ng-model="nb.newOpportunity.properties.product.name" name="recommendedProduct" ng-attr-dont-set-defaults="{{nb.dontSetModalDefaults}}" cache-input="nb.cacheInputs" required)
         div(ng-cloak ng-show="(nb.addOpportunityForm.recommendedProduct.$invalid) && nb.addOpportunityForm.$submitted")
           p.error-message.accent <img src="./assets/img/icons/error.svg">Please enter a Recommended Package / SKU.
       div(ng-if="nb.newOpportunity.properties.distributionType.type === 'other'")
+        label Recommended Brand or Package / SKU
         inline-search.all-product-search( type="product" placeholder="Type brand, package name, or master SKU" chosen-result="nb.newOpportunity.properties.product.name" chosen-result-object="nb.chosenProductObject" ng-model="nb.newOpportunity.properties.product.name" name="recommendedProduct" ng-attr-dont-set-defaults="{{nb.dontSetModalDefaults}}" cache-input="nb.cacheInputs" required)
         div(ng-cloak ng-show="(nb.addOpportunityForm.recommendedProduct.$invalid) && nb.addOpportunityForm.$submitted")
           p.error-message.accent <img src="./assets/img/icons/error.svg">Please enter a Recommended Brand or Package / SKU.
