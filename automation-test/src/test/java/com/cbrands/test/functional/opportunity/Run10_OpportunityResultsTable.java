@@ -76,7 +76,10 @@ public class Run10_OpportunityResultsTable extends BaseSeleniumTestCase {
 		opportunitiesPage.clickShowMoreFilter();
 		opportunitiesPage.selectProductTypeFeatured();
 		opportunitiesPage.clickApplyFilters();
-		opportunitiesPage.clickApplyFilters();
+		
+		allText = getAllTextFromPage();
+		assertThat("Unable to find any opportunities that met your criteria.", allText, not(containsString("Dang! We were unable to find any opportunities that met your criteria.")));
+		
 		opportunitiesPage.clickFirstSearchResult();
 		Assert.assertNotNull(opportunitiesPage.getGreenFlagIcon(), "Green Flag icon not present");
 		opportunitiesPage.clickLevelOneRow();
@@ -88,6 +91,10 @@ public class Run10_OpportunityResultsTable extends BaseSeleniumTestCase {
 		opportunitiesPage.pageRefresh();
 		opportunitiesPage.searchRetailerChainByName(retailStoreName2);
 		opportunitiesPage.clickApplyFilters();
+		
+		allText = getAllTextFromPage();
+		assertThat("Unable to find any opportunities that met your criteria.", allText, not(containsString("Dang! We were unable to find any opportunities that met your criteria.")));
+		
 		opportunitiesPage.clickFirstSearchResult();
 		Assert.assertNotNull(opportunitiesPage.getYellowFlagIcon(), "Yellow Flag icon not present");
 		opportunitiesPage.clickLevelOneRow();
