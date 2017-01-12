@@ -1212,7 +1212,25 @@ module.exports = /*  @ngInject */
           // Just setting current top bottom object to store
           vm.currentTopBottomObj = getCurrentTopBottomObject(vm.currentTopBottomAcctType);
         }
+        notesService.model.tdlinx = performanceData.unversionedStoreCode;
+        notesService.model.address = formatAddress(performanceData);
       }
+    }
+
+    function formatAddress(performanceData) {
+      var address,
+          d = performanceData;
+
+      function ifIsKnown(field) {
+        return (field && field !== 'UNKNOWN' && field !== null) ? field + ' ' : '';
+      }
+
+      address = ifIsKnown(d.addressLine1) + ifIsKnown(d.addressLine2) + ifIsKnown(d.addressLine3) + ifIsKnown(d.addressLine4);
+      address += d.city + ' ';
+      address += d.state + ' ';
+      address += d.zipCode;
+
+      return address;
     }
 
     function setUpdatedFilters() {
