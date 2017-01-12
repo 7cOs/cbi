@@ -26,6 +26,35 @@ import com.cbrands.pages.NotificationContent;
 public class ShareOpportunity_TargetList extends BaseSeleniumTestCase {
 	static NotificationContent content;
 	
+	@Test(dataProvider = "createTargetListData", description = "Create a new Target List", priority = 0)
+	public void US12828_AT_TargetList_Creation(String name, String description,  String listname, String desc,String chainname, String listname2) throws InterruptedException {
+		
+		login = new Login(driver);
+		if(!login.isUserLoggedIn()) { 
+			homePage = login.loginWithValidCredentials(ACTOR1_USER_NAME, ACTOR1_PASSWORD);
+		}
+				targetListPage = homePage.navigateTargetList();
+				targetListPage.clickCreateNewList()
+								.clickCreateNewListModal()
+								.EnterNameTextBox(listname)
+								.EnterDescriptionTextBox(desc)
+								.clickSaveButton()
+								.clickNewTargetList(listname);		
+				targetListPage = homePage.navigateTargetList();
+				targetListPage.clickCreateNewList();
+				opportunitiesPage = targetListPage.clickSearchOpportunityButton();
+				opportunitiesPage.searchRetailerChainByName(chainname)
+								.clickApplyFilters()
+								.clickfirst_store_opportunity()
+								.clickfirstOpportunity()
+								.clickSecondOpportunity()
+								.clickAddToTargetListButton()
+								.clickCreatNewListButton()
+								.EnterNameTextBox(listname2)
+								.clickSaveButton();
+				targetListPage = opportunitiesPage.navigateToTargetList();
+			}
+	
 	@Test(dataProvider="targetlistData1", description="US12999: AT_Target List_Share An Opportunity",priority=1)
 	public void US12999_AT_TargetList_ShareAnOpportunity(String listname,String sendTo1, String sendTo2) throws InterruptedException{
 		login = new Login(driver);
@@ -306,6 +335,11 @@ public class ShareOpportunity_TargetList extends BaseSeleniumTestCase {
 			assertThat(targetListPage.checkSharedTargetListExists(listname), log(not(containsString("does not exist"))));
 		}
 		
+	}
+	
+	@DataProvider(name = "createTargetListData")
+	public static Object[][] data0() {
+		return new Object[][] { { "US12828", "Create New Target List test", "Automated Test Target List","test","Walmart ","Automated Test Target List 2" } };
 	}
 
 	

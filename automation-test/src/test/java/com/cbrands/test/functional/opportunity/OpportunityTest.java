@@ -107,7 +107,7 @@ public class OpportunityTest extends BaseSeleniumTestCase {
 	}
 	
 	
-	@Test(dataProvider="opportunityPage2Test", description="US12829: I can add or remove opportunities to an existing Target List", priority=4)
+	/*@Test(dataProvider="opportunityPage2Test", description="US12829: I can add or remove opportunities to an existing Target List", priority=4)
 	public void US12829_AT_TargetList_Add_RemoveOpportunities(String chain, String targetListName1, String newTargetList, String targetListName2) throws InterruptedException {
 		login = new Login(driver);
 
@@ -183,7 +183,7 @@ public class OpportunityTest extends BaseSeleniumTestCase {
 			assertThat("Target List Does not exists. Create Target List " + targetListName1 + " and " + targetListName2, !opportunitiesPage.checkTargetListExists(targetListName1));
 		}
 
-	}
+	}*/
 	
 	@DataProvider(name = "opportunityPage1Test")
 	public static Object[][] data1() {

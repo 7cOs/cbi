@@ -18,7 +18,6 @@
 			<class name="com.cbrands.test.functional.opportunity.US12985_OpportunitySorting" />
             
 			<!-- Target List -->
-			<class name="com.cbrands.test.functional.targetlist.ShareOpportunity_TargetList" />
 			<class name="com.cbrands.test.functional.targetlist.TargetListTests" />
 
             <!-- My Performance -->
