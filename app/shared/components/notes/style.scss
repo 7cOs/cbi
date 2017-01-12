@@ -53,7 +53,8 @@
     }
   }
 
-  .create-new-note {
+  .create-new-note,
+  .notes-editing {
     textarea {
       width: 100%;
       height: 90px;
@@ -74,6 +75,10 @@
       display: inline;
     }
 
+    button {
+      margin-bottom: 1em;
+    }
+
     a {
       color: $blue;
       padding-top: 4px;
@@ -81,6 +86,11 @@
 
     .cancel {
       margin-left: 24px;
+      color: $blue;
+
+      &:hover {
+        cursor: hand;
+      }
     }
   }
 
@@ -92,6 +102,8 @@
 
   .note-body {
     margin: 12px 0;
+    position: relative;
+    min-height: 6em;
 
     h4 {
       margin-top: 0;
@@ -103,7 +115,7 @@
 
     .note-body-field > p {
       margin: 0 auto;
-      height: 2.25em;
+      height: 2.1em;
       overflow: hidden;
 
       &.long-note {
@@ -127,15 +139,24 @@
     .read-more,
     .read-less {
       color: $blue;
-      display: inline;
+      display: block;
+      padding-top: 0.5em;
+
+      &:hover {
+        cursor: hand;
+      }
     }
 
     .delete-confirm {
-      padding: 12px 0;
-      margin: -24px;
-      width: calc=(100% + 24);
       background: $gray-9;
+      box-sizing: border-box;
+      height: 100%;
+      left: 0;
+      padding: 1.5em 0 1em;
+      position: absolute;
       text-align: center;
+      top: 0;
+      width: 100%;
 
       .buttons {
         margin: 0 auto;
@@ -252,6 +273,10 @@
 
     textarea {
       width: 100%;
+    }
+
+    .dropdown-filter + input {
+      margin-bottom: 1em;
     }
   }
 
