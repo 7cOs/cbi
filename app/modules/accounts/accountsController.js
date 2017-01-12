@@ -814,7 +814,6 @@ module.exports = /*  @ngInject */
 
       if ($state.params.openNotesOnLoad) {
         $timeout(function() {
-          console.log($state.params.pageData.account.id);
           $rootScope.$broadcast('notes:opened', true, $state.params.pageData.account);
 
           notesService.model.accountId = $state.params.pageData.account.id;

@@ -36,7 +36,7 @@ div.modal.notes(ng-if="notesOpen")
         //-     p {{n.errorMsg}}
         button(ng-click="n.createNote(n.newNote)").btn-action Save
         p(ng-click="n.cancelNewNote(n.newNote)").cancel.accent X Cancel
-    div.note-body(ng-repeat="note in n.notes | orderBy:'-date'")
+    div.note-body(id="{{note.id}}" ng-repeat="note in n.notes | orderBy:'-date'")
       div(ng-if="note.deleteConfirmation").delete-confirm
         h4 Are you sure you want to delete this note?
         div.buttons
@@ -64,7 +64,7 @@ div.modal.notes(ng-if="notesOpen")
               p Add an attachment
               p {{n.errorMsg}}
         .note-body-footer(ng-if="!note.editMode")
-          p by <span class="note-author"> {{note.author}}</span>  <span class="note-date">{{note.date | date:"dd MMMM, yyyy 'at' h:mm a"}}</span>
+          p by <span class="note-author"> {{note.author}}</span>  <span class="note-date">{{note.date | date:"dd MMMM, yyyy 'at' h:mm a"}} {{note.id}}</span>
           .icons
             .delete-note(ng-if="note.author === 'Me'" ng-click="n.toggleDelete(note)")
             .edit-note(ng-if="note.author === 'Me'" ng-click="n.isEditing(note)" ng-class="{'edit-note': !note.editMode, 'edit-note-active': note.editMode}")

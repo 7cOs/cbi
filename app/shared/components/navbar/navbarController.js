@@ -398,12 +398,14 @@ module.exports = /*  @ngInject */
     function goToNote(notification) {
       var accountNote = {
         'id': '',
-        'name': ''
+        'name': '',
+        'noteId': ''
       };
 
       accountNote.id = notification.objectId;
       accountNote.name = notification.shortenedObject.store_name;
       accountNote.type = notification.objectType;
+      accountNote.noteId = notification.salesforceUserNoteID;
 
       notesService.model.currentStoreName = accountNote.name;
 
