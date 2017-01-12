@@ -102,6 +102,8 @@
 
   .note-body {
     margin: 12px 0;
+    position: relative;
+    min-height: 6em;
 
     h4 {
       margin-top: 0;
@@ -137,7 +139,8 @@
     .read-more,
     .read-less {
       color: $blue;
-      display: inline;
+      display: block;
+      padding-top: 0.5em;
 
       &:hover {
         cursor: hand;
@@ -145,11 +148,15 @@
     }
 
     .delete-confirm {
-      padding: 12px 0;
-      margin: -24px;
-      width: calc=(100% + 24);
       background: $gray-9;
+      box-sizing: border-box;
+      height: 100%;
+      left: 0;
+      padding: 1.5em 0 1em;
+      position: absolute;
       text-align: center;
+      top: 0;
+      width: 100%;
 
       .buttons {
         margin: 0 auto;

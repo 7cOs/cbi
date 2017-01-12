@@ -151,6 +151,12 @@ module.exports = /*  @ngInject */
     };
 
     function createNote(data) {
+      if (!vm.newNote.title || vm.newNote.title === '' || vm.newNote.title === null) {
+        vm.invalidCreateNote = true;
+        return;
+      } else {
+        vm.invalidCreateNote = false;
+      }
       vm.loading = true;
       data.author = 'Me';
       var accountId = notesService.model.accountId;
@@ -175,13 +181,19 @@ module.exports = /*  @ngInject */
 
         userService.createNotification(userService.model.currentUser.employeeID, payload);
 
-        vm.newNote = {};
+        vm.newNote = null;
         vm.creatingNote = false;
         vm.loading = false;
       });
     }
 
     function saveEditedNote(note) {
+      if (note.title === '' || note.title === null) {
+        note.invalidNote = true;
+        return;
+      } else {
+        note.invalidNote = false;
+      }
       vm.loading = true;
       note.date = moment.utc().format();
 
@@ -200,10 +212,12 @@ module.exports = /*  @ngInject */
     }
 
     function deleteNote(data, accountId) {
+      vm.loading = true;
       notesService.deleteNote(data.id).then(function(success) {
        var index = vm.notes.indexOf(data);
        vm.notes.splice(index, 1);
        setNoteAuthor();
+       vm.loading = false;
       });
     }
 

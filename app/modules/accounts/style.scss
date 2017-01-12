@@ -81,7 +81,7 @@
     transform: translateY(-8em);
     transition: all 300ms ease;
     width: 100%;
-    z-index: 999;
+    z-index: 1000;
 
     &.visible {
       backface-visibility: hidden;
