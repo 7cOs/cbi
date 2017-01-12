@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports = /*  @ngInject */
-  function searchService($http, $q, apiHelperService, userService) {
+  function searchService($http, $q, $state, apiHelperService, userService) {
 
     var model = {
       searchActive: false
@@ -86,14 +86,14 @@ module.exports = /*  @ngInject */
      * @memberOf cf.common.services
      */
     function getStores(searchTerm) {
-      // user is not corporate and my accounts only true filtersService.model.selected.myAccountsOnly && userService.model.currentUser.corporateUser &&
       var searchPromise = $q.defer(),
           url = '';
 
-      if (userService.model.currentUser.corporateUser) {
-        url = apiHelperService.request('/api/search/stores?searchTerm=' + encodeURIComponent(searchTerm));
-      } else {
+      // Send down allVersions=true when using /search/stores from the my performance page when the user is non-corporate.
+      if (!userService.model.currentUser.corporateUser && $state.current.name === 'accounts') {
         url = apiHelperService.request('/api/search/stores?allVersions=true&searchTerm=' + encodeURIComponent(searchTerm));
+      } else {
+        url = apiHelperService.request('/api/search/stores?searchTerm=' + encodeURIComponent(searchTerm));
       }
 
       $http.get(url, {

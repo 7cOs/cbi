@@ -533,7 +533,8 @@ module.exports = /*  @ngInject */
         if (result.id.constructor === Array) {
           filtersService.model.selected[filterModelProp] = result.id;
         } else {
-          filtersService.model.selected[filterModelProp] = [result.id];
+          // Always send the 9 digit code to the my performance endpoints - versionedId for store, id for everything else
+          filtersService.model.selected[filterModelProp] = result.versionedId ? [result.versionedId] : [result.id];
         }
       }
 
