@@ -486,7 +486,7 @@ module.exports = /*  @ngInject */
 
         case 4:
           baseUrl += '/performance/topBottomSnapshot/stores';
-          params.type = 'store';
+          // params.type = 'store';
           break;
       }
       url = apiHelperService.request(baseUrl, params);

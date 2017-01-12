@@ -49,8 +49,8 @@ module.exports = /*  @ngInject */
           valuesArr, tempArr = [];
       var j = 0;
       valuesArr = $filter('orderBy')(tbData, function(data) {
-        if (isValidValues(data.measure[propertyName])) {
-          return data.measure[propertyName];
+        if (isValidValues(data.measures[propertyName])) {
+          return data.measures[propertyName];
         } else {
           j++;
           return -1 * 9999999;
@@ -141,9 +141,11 @@ module.exports = /*  @ngInject */
       var data, filteredData = [], matchedMeasure = null;
       for (var i = 0, len = tbData.length; i < len; i++) {
         data = tbData[i];
+
         matchedMeasure = data.measures.filter(function (measure) {
           return measure.timeframe === filterOption.name;
         });
+
         if (matchedMeasure[0]) {
           var depletionObj = {
             title: data.name,
@@ -348,16 +350,18 @@ module.exports = /*  @ngInject */
 
       var i = 1;
       angular.forEach(matchedArr, function (data, key) {
-        if (isValidValues(data.measure[propName])) {
-          obj = {
-            'label': i + '. ' + data.title
-          };
-          obj.value = Math.round(data.measure[propName]);
-        } else {
-          obj = {
-            label: '',
-            value: null
-          };
+        if (data) {
+          if (isValidValues(data.measure[propName])) {
+            obj = {
+              'label': i + '. ' + data.title
+            };
+            obj.value = Math.round(data.measure[propName]);
+          } else {
+            obj = {
+              label: '',
+              value: null
+            };
+          }
         }
         categoryChartData.push(obj);
         i++;
