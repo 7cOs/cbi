@@ -3,7 +3,6 @@ package com.cbrands.pages;
 import static com.cbrands.helper.SeleniumUtils.findElement;
 import static com.cbrands.helper.SeleniumUtils.findElements;
 import static com.cbrands.helper.SeleniumUtils.refresh;
-import static com.cbrands.helper.SeleniumUtils.waitForElementToClickable;
 import static com.cbrands.helper.SeleniumUtils.waitForVisible;
 import static com.cbrands.helper.SeleniumUtils.waitForVisibleFluentWait;
 
@@ -187,9 +186,7 @@ public class HomePage extends LoadableComponent<HomePage>{
 	}
 
 	public TargetList navigateTargetList() {
-		waitForVisible(By.xpath("//span[contains(.,'Target Lists')]"));
-		waitForElementToClickable(TargetListLink, true).click();
-		TargetListLink.click();
+		driver.get(PropertiesCache.getInstance().getProperty("qa.host.address") + "/target-lists");
 		return PageFactory.initElements(driver, TargetList.class);
 	}
 	
