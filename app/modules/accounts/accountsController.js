@@ -1206,6 +1206,10 @@ module.exports = /*  @ngInject */
         if (myperformanceService.checkForInconsistentIds(performanceData)) {
           return;
         }
+        if (performanceData.name.toLowerCase() === 'independent' && !vm.currentTopBottomFilters.distributors) {
+          return;
+        }
+
         // Updates the top bottom filter object with the selection
         setTopBottomFilterModel(currentLevelName, performanceData);
         // Make sure all the models in filtersService are set correctly and reflect the object in top botom filter
@@ -1223,6 +1227,7 @@ module.exports = /*  @ngInject */
         } else {
           // Just setting current top bottom object to store
           vm.currentTopBottomObj = getCurrentTopBottomObject(vm.currentTopBottomAcctType);
+          updateBrandSnapshot();
         }
         notesService.model.tdlinx = performanceData.unversionedStoreCode;
         notesService.model.address = formatAddress(performanceData);
