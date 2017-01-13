@@ -53,6 +53,10 @@
 
     a {
       color: $gray-3;
+
+      &:hover {
+        cursor: not-allowed;
+      }
     }
 
     &:hover {
@@ -68,6 +72,10 @@
         &:hover {
           cursor: hand;
         }
+      }
+
+      &:hover {
+        cursor: hand;
       }
     }
   }
