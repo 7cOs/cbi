@@ -63,7 +63,7 @@ public class TargetList extends LoadableComponent<TargetList> {
 	private WebElement SaveButton;
 
 	//@FindBy(how = How.XPATH, using = "//div[2]/md-dialog/div/div[2]/div[3]/div/div[2]/md-menu/button")
-	@FindBy(how=How.CSS, using = "button[aria-label='Collaborator Options']")
+	@FindBy(how=How.XPATH, using = "//*[@role='dialog']/div/div[@class='modal-form']/div[@class='modal-input']/div/div[2]/md-menu/button")
 	private WebElement collaborator;
 
 	@FindBy(how = How.XPATH, using = "//div[2]/md-dialog/div/div[3]/button[2]")
@@ -132,7 +132,7 @@ public class TargetList extends LoadableComponent<TargetList> {
 	@FindBy(how = How.LINK_TEXT, using = "Home")
 	private WebElement homePage;
 
-	@FindBy(how = How.XPATH, using = "//button[contains(.,'Copy to Target List')]")
+	@FindBy(how = How.XPATH, using = "//md-menu/button[contains(.,'Copy to Target List')]")
 	private WebElement copyToTargetListButton;
 
 	@FindBy(how = How.XPATH, using = "//span[contains(.,'Off-Premise')]")
@@ -153,7 +153,7 @@ public class TargetList extends LoadableComponent<TargetList> {
 	@FindBy(how = How.XPATH, using = "//v-pane[1]/v-pane-header/div/div[2]/div[7]/div/md-menu/button")
 	private WebElement ActionButton;
 
-	@FindBy(how = How.XPATH, using = "//button[contains(.,'Download')]")
+	@FindBy(how = How.XPATH, using = "//md-menu/button[contains(.,'Download')]")
 	private WebElement DownloadButton;
 
 	@FindBy(how = How.XPATH, using = "//p[contains(.,'With Rationale')]")
