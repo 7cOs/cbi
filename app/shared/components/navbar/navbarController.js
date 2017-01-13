@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports = /*  @ngInject */
-  function navbarController($rootScope, $scope, $state, $window, $mdPanel, $mdDialog, $mdMenu, $mdSelect, $anchorScroll, notificationsService, opportunitiesService, targetListService, userService, versionService, loaderService, ieHackService, toastService, filtersService, chipsService, moment) {
+  function navbarController($rootScope, $scope, $state, $window, $mdPanel, $mdDialog, $mdMenu, $mdSelect, $anchorScroll, notificationsService, opportunitiesService, targetListService, userService, versionService, loaderService, ieHackService, toastService, filtersService, chipsService, notesService, moment) {
 
     // ****************
     // CONTROLLER SETUP
@@ -396,27 +396,29 @@ module.exports = /*  @ngInject */
     }
 
     function goToNote(notification) {
-      console.log(notification);
       var accountNote = {
         'id': '',
-        'name': ''
+        'name': '',
+        'noteId': ''
       };
 
       accountNote.id = notification.objectId;
       accountNote.name = notification.shortenedObject.store_name;
       accountNote.type = notification.objectType;
+      accountNote.noteId = notification.salesforceUserNoteID;
+
+      notesService.model.currentStoreName = accountNote.name;
 
       $state.go('accounts', {
         resetFiltersOnLoad: false,
         applyFiltersOnLoad: true,
+        openNotesOnLoad: true,
         pageData: {
-        }
-      }).then(function() {
-        console.log(accountNote, ' notes opened?');
-        $rootScope.$broadcast('notes:opened', true, accountNote);
-        // $rootScope.$broadcast('notes:opened', val, accountInfo);
+          account: accountNote
+        },
+        storeId: notification.shortenedObject.tdlinx_number
+        // storeId: accountNote.id
       });
-
     }
 
     // ***************
