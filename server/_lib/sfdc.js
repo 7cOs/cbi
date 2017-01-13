@@ -5,7 +5,7 @@ module.exports = {
   createNote: createNote,
   queryAccountNotes: queryAccountNotes,
   searchAccounts: searchAccounts,
-  deleteAttach: deleteAttach,
+  deleteAttachment: deleteAttachment,
   getAttachment: getAttachment,
   createAttachment: createAttachment,
   deleteNote: deleteNote,
@@ -49,51 +49,6 @@ function sfdcConn(app, req, res) {
     return req.user.sfdcConn;
   }
 }
-
-function deleteAttach(app, req, res) {
-  /**
-  * deleteAttach: deletes an attachment identified by the query parameter "attachId"
-  *
-  */
-  return sfdcConn(app, req, res).then(function(result) {
-    try {
-      var conn = result;
-      if (req.query.attachId) {
-        var attachId = req.query.attachId;
-        return conn.sobject('Attachment').delete(attachId,
-                                        function (err, res) {
-                                          if (err || !res.success) {
-                                            console.log('SFDC gave an error:');
-                                            console.dir(err);
-                                            return {
-                                              'isSuccess': false,
-                                              'errorMessage': err  // return the error from Salesforce
-                                            };
-                                          } else {
-                                            return {
-                                              'isSuccess': true,
-                                              'searchRecords': res.searchRecords
-                                            };
-                                          }
-                                        }).then(function(result) {
-                                          return result;
-                                        }, function(err) {
-                                          return err;
-                                        });
-      } else {
-        var badNoteIdError = {
-          'isSuccess': 'False',
-          'ErrorString': 'No noteId Id was present for delete.'
-        };
-        throw badNoteIdError;
-      }
-    } catch (err) {
-      var generalError = {'isSuccess': false,
-        'errorMessage': err};
-      throw generalError;
-    }
-  });
-};
 
 function updateNote(app, req, res) {
   /**
@@ -427,6 +382,13 @@ function createAttachment(app, req, res) {
       var sfdc = args[1];
 
       return sfdc.sobject('Attachment').create(attachments);
+    });
+}
+
+function deleteAttachment(app, req, res) {
+  return sfdcConn(app, req, res)
+    .then(function(conn) {
+      return conn.sobject('Attachment').destroy(req.query.attachmentId);
     });
 }
 

@@ -16,8 +16,8 @@ module.exports = function(app) {
     sfdc['deleteNote'](app, req, res);
   });
 
-  app.delete('/sfdc/deleteAttach', function (req, res) {
-    sfdc['deleteAttach'](app, req, res);
+  app.delete('/sfdc/deleteAttachment', function (req, res) {
+    sfdc['deleteAttachment'](app, req, res);
   });
 
   app.post('/sfdc/updateNote', function (req, res) {
