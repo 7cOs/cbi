@@ -27,7 +27,7 @@ import com.cbrands.pages.NotificationContent;
 public class TargetListTests extends BaseSeleniumTestCase{
 	static NotificationContent content;
 	
-	@Test(dataProvider="depletions",description="US13107: AT_Target List_Show Depletions",priority=0)
+	@Test(retryAnalyzer = RetryAnalyzer.class, dataProvider="depletions",description="US13107: AT_Target List_Show Depletions",priority=0)
 	public void US13107_AT_TargetList_ShowDepletions(String listname) throws InterruptedException{
 		login = new Login(driver);
 		if(!login.isUserLoggedIn()) { 
