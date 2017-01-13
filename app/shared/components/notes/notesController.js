@@ -350,10 +350,12 @@ module.exports = /*  @ngInject */
         vm.loading = false;
         setNoteAuthor();
 
+      if (vm.notes.length) {
         setTimeout(function() {
           var num = angular.element(document.querySelector(accountElement))[0].offsetTop;
           angular.element(document.querySelector('.note-container'))[0].scrollTop = num;
         });
+      }
       });
 
       $scope.notesOpen = data;
