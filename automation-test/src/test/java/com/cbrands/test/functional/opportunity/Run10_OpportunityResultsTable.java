@@ -68,25 +68,7 @@ public class Run10_OpportunityResultsTable extends BaseSeleniumTestCase {
 		opportunitiesPage.clickLevelOneRow();
 		opportunitiesPage.clickLevelOneRow();
 
-		// Test Step 10.7
-		opportunitiesPage.pageRefresh();
-		opportunitiesPage.selectRetailerOptionStore();
-		opportunitiesPage.searchRetailerStore(retailStoreName1);
-		opportunitiesPage.selectAccountScope();
-		opportunitiesPage.clickShowMoreFilter();
-		opportunitiesPage.selectProductTypeFeatured();
-		opportunitiesPage.clickApplyFilters();
-		opportunitiesPage.clickApplyFilters();
-		
-		allText = getAllTextFromPage();
-		assertThat("Unable to find any opportunities that met your criteria.", allText, not(containsString("Dang! We were unable to find any opportunities that met your criteria.")));
-		
-		opportunitiesPage.clickFirstSearchResult();
-		Assert.assertNotNull(opportunitiesPage.getGreenFlagIcon(), "Green Flag icon not present");
-		opportunitiesPage.clickLevelOneRow();
-		opportunitiesPage.clickFeatureType();
-		Assert.assertNotNull(opportunitiesPage.getSecondaryModal(), "Secondary Modal not displaying");
-		opportunitiesPage.closeSecondaryModal();
+		// Test Step 10.7 - removed
 
 		// Test Step 10.8
 		opportunitiesPage.pageRefresh();
