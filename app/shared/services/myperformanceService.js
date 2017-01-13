@@ -49,11 +49,13 @@ module.exports = /*  @ngInject */
           valuesArr, tempArr = [];
       var j = 0;
       valuesArr = $filter('orderBy')(tbData, function(data) {
-        if (isValidValues(data.measures[propertyName])) {
-          return data.measures[propertyName];
-        } else {
-          j++;
-          return -1 * 9999999;
+        if (data && data.measure) {
+          if (isValidValues(data.measure[propertyName])) {
+            return data.measure[propertyName];
+          } else {
+            j++;
+            return -1 * 9999999;
+          }
         }
       });
       valuesArr = valuesArr.reverse();
