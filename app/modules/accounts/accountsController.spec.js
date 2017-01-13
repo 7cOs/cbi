@@ -1383,9 +1383,9 @@ describe('Unit: accountsController', function() {
       ctrl.setTopBottomAcctTypeSelection(ctrl.filtersService.accountFilters.accountTypes[3]);
     });
 
-    it('should have called store endpoint 4 times when acct type is changed', function() {
-      // One each for top 10(Values/Trends),bottom 10(Values/Trends)
-      expect(topBottomSpy.calls.count()).toEqual(4);
+    it('should have called store endpoint 1 times when acct type is changed', function() {
+      // One total now - old way was each for top 10(Values/Trends),bottom 10(Values/Trends)
+      expect(topBottomSpy.calls.count()).toEqual(1);
     });
 
     /* it('should have called store endpoint 4 times when account market option is changed', function() {
