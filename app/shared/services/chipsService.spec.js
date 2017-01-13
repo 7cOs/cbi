@@ -286,6 +286,31 @@ describe('[Services.chipsService]', function() {
     });
   });
 
+  describe('[addChip]', function() {
+
+    it('should add a chip', function() {
+      expect(chipsService.model.length).toEqual(0);
+      expect(chipsService.model).toEqual([]);
+
+      chipsService.addChip('On-Premise', 'premiseType', true, false);
+
+      expect(chipsService.model.length).toEqual(1);
+      expect(chipsService.model).toEqual([{name: 'On-Premise', type: 'premiseType', applied: false, removable: false}]);
+    });
+
+   it('should not add a one-allowed chip', function() {
+     chipsService.model = [{name: 'On-Premise', type: 'premiseType', applied: false, removable: false}];
+      expect(chipsService.model.length).toEqual(1);
+      expect(chipsService.model).toEqual([{name: 'On-Premise', type: 'premiseType', applied: false, removable: false}]);
+
+      chipsService.addChip('On-Premise', 'premiseType', true, false);
+
+      expect(chipsService.model.length).toEqual(1);
+      expect(chipsService.model).toEqual([{name: 'On-Premise', type: 'premiseType', applied: false, removable: false}]);
+    });
+
+  });
+
   describe('[addChipsArray]', function() {
     var sampleArray = [
       {name: 'Off-Premise', type: 'premiseType', applied: true, removable: false},
