@@ -36,7 +36,7 @@ div.modal.notes(ng-if="notesOpen")
         //-     p {{n.errorMsg}}
         button(ng-click="n.createNote(n.newNote)").btn-action Save
         p(ng-click="n.cancelNewNote(n.newNote)").cancel.accent X Cancel
-    div.note-body(ng-repeat="note in n.notes | orderBy:'-date'")
+    div.note-body(id="{{note.id}}" ng-repeat="note in n.notes | orderBy:'-date'")
       div(ng-if="note.deleteConfirmation").delete-confirm
         h4 Are you sure you want to delete this note?
         div.buttons

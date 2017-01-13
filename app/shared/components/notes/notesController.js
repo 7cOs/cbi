@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports = /*  @ngInject */
-  function notesController($scope, $state, $mdDialog, $timeout, $filter, $window, notesService, userService, Upload, moment) {
+  function notesController($scope, $state, $mdDialog, $timeout, $filter, $window, $location, notesService, userService, Upload, moment) {
 
     // ****************
     // CONTROLLER SETUP
@@ -336,17 +336,29 @@ module.exports = /*  @ngInject */
     }
 
     $scope.$on('notes:opened', function(event, data, account) {
+      var accountElement = '#' + account.noteId;
+
       vm.loading = true;
+
       notesService.model.accountId = account.id[0];
 
       notesService.accountNotes().then(function(success) {
+
         vm.notes = success;
         vm.loading = false;
         setNoteAuthor();
-      });
-      $scope.notesOpen = data;
 
+      if (vm.notes.length && account.noteId) {
+        setTimeout(function() {
+          var num = angular.element(document.querySelector(accountElement))[0].offsetTop;
+          angular.element(document.querySelector('.note-container'))[0].scrollTop = num;
+        });
+      }
+      });
+
+      $scope.notesOpen = data;
       vm.storeName = notesService.model.currentStoreName;
       // vm.storeName = account.name;
+      $location.hash(account.noteId);
     });
   };

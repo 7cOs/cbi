@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports = /*  @ngInject */
-  function navbarController($rootScope, $scope, $state, $window, $mdPanel, $mdDialog, $mdMenu, $mdSelect, $anchorScroll, notificationsService, opportunitiesService, targetListService, userService, versionService, loaderService, ieHackService, toastService, filtersService, chipsService, moment) {
+  function navbarController($rootScope, $scope, $state, $window, $mdPanel, $mdDialog, $mdMenu, $mdSelect, $anchorScroll, notificationsService, opportunitiesService, targetListService, userService, versionService, loaderService, ieHackService, toastService, filtersService, chipsService, notesService, moment) {
 
     // ****************
     // CONTROLLER SETUP
@@ -97,6 +97,7 @@ module.exports = /*  @ngInject */
     vm.addDuplicateOpportunityId = addDuplicateOpportunityId;
     vm.showImpact = showImpact;
     vm.showNewRationaleInput = showNewRationaleInput;
+    vm.goToNote = goToNote;
 
     $scope.$watch(function() { return toastService.model; }, function(newVal) {
       vm.archived = newVal.archived;
@@ -392,6 +393,31 @@ module.exports = /*  @ngInject */
           vm.targetLists = result.owned;
         });
       }
+    }
+
+    function goToNote(notification) {
+      var accountNote = {
+        'id': [],
+        'name': '',
+        'noteId': ''
+      };
+
+      accountNote.id.push(notification.objectId);
+      accountNote.name = notification.shortenedObject.store_name;
+      accountNote.type = notification.objectType;
+      accountNote.noteId = notification.salesforceUserNoteID;
+
+      notesService.model.currentStoreName = accountNote.name;
+
+      $state.go('accounts', {
+        resetFiltersOnLoad: false,
+        applyFiltersOnLoad: true,
+        openNotesOnLoad: true,
+        pageData: {
+          account: accountNote
+        },
+        storeId: notification.shortenedObject.tdlinx_number
+      });
     }
 
     // ***************

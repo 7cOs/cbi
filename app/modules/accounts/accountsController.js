@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports = /*  @ngInject */
-  function accountsController($rootScope, $scope, $state, $log, $q, $window, $filter, myperformanceService, chipsService, filtersService, notesService, userService, $timeout) {
+  function accountsController($rootScope, $scope, $state, $log, $q, $window, $filter, $timeout, myperformanceService, chipsService, filtersService, notesService, userService) {
 
     // ****************
     // CONTROLLER SETUP
@@ -803,7 +803,10 @@ module.exports = /*  @ngInject */
           vm.currentTopBottomObj.performanceData = data[0].performance;
           vm.currentTopBottomObj.isPerformanceDataUpdateRequired = false;
           getDataForTopBottom(vm.currentTopBottomObj, categoryBound);
-          if ($state.params.storeId) setUpdatedFilters();
+          if ($state.params.storeId) {
+            setUpdatedFilters();
+            vm.selectedStore = $state.params.pageData.account.name;
+          }
 
           if (topBottomInitData === true) topBottomInitData = false;
         }
@@ -814,6 +817,18 @@ module.exports = /*  @ngInject */
         $state.params.applyFiltersOnLoad = false;
         $state.params.resetFiltersOnLoad = true;
       });
+
+      if ($state.params.openNotesOnLoad) {
+        $timeout(function() {
+          $rootScope.$broadcast('notes:opened', true, $state.params.pageData.account);
+
+          notesService.model.accountId = $state.params.pageData.account.id;
+          notesService.accountNotes().then(function(success) {
+            vm.notes = success;
+            vm.loading = false;
+          });
+        });
+      }
     }
 
     // Move to next indexed tab
