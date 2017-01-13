@@ -185,6 +185,9 @@ public class TargetList extends LoadableComponent<TargetList> {
 	
 	@FindBy(how = How.CSS, using = "md-checkbox[aria-label='My Accounts']")
 	private WebElement accountScope;
+	
+	@FindAll(@FindBy(how=How.CSS, using = "div[column='12']>h4[column='4']"))
+	private List <WebElement> targetListRows;
 
 	public TargetList typeTargetName(String name) {
 
@@ -286,6 +289,7 @@ public class TargetList extends LoadableComponent<TargetList> {
 		// action.click(list).perform();
 		return this;
 	}
+	
 
 	public boolean checkTargetNameExists(String targetListName) {
 		WebElement element = findElement(By.xpath("//div[3]/md-tabs/md-tabs-content-wrapper/md-tab-content[1]/div/md-content"));
@@ -1171,5 +1175,21 @@ public class TargetList extends LoadableComponent<TargetList> {
 	public TargetList selectAccountScope() {
 		accountScope.click();
 		return this;
+	}
+	
+	public TargetList clickFirstTargetList() {
+		waitForVisibleFluentWait(targetListRows.get(0)).click();
+		waitForVisibleFluentWait(TargetListManageButton);
+		return this;
+	}
+	
+	public TargetList clickNewTargetListUsingXpath(String name) {
+		WebElement MyTargetList = findElement(By.xpath("//h4[contains(.'" + name + "']"));
+		waitForVisibleFluentWait(MyTargetList);
+		System.out.println(MyTargetList.getText());
+		JavascriptExecutor js = (JavascriptExecutor) driver;
+		js.executeScript("arguments[0].click();", MyTargetList);
+		return this;
+
 	}
 }

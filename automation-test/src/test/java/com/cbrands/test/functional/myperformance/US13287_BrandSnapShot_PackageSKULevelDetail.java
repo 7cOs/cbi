@@ -37,9 +37,9 @@ public class US13287_BrandSnapShot_PackageSKULevelDetail extends BaseSeleniumTes
 		Assert.assertEquals(accountDashboardPage.depletionsDaysHeaderText(), "L60", "When 'L60' was selected as the Distribution Time Period, the corresponding column header did not change as expected");
 		accountDashboardPage.selectDistributionTimePeriod("L120");
 		Assert.assertEquals(accountDashboardPage.depletionsDaysHeaderText(), "L120", "When 'L60' was selected as the Distribution Time Period, the corresponding column header did not change as expected");
-		accountDashboardPage.selectTrendABP();
+		/*accountDashboardPage.selectTrendABP();
 		Assert.assertEquals(accountDashboardPage.depletionsTrendHeaderText(), "VS ABP%", "When 'vs ABP' was selected as the Trend, the corresponding column header did not change as expected");
-		Assert.assertEquals(accountDashboardPage.distributionsTrendHeaderText(), "VS ABP%", "When 'vs ABP' was selected as the Trend, the corresponding column header did not change as expected");
+		Assert.assertEquals(accountDashboardPage.distributionsTrendHeaderText(), "VS ABP%", "When 'vs ABP' was selected as the Trend, the corresponding column header did not change as expected");*/
 		accountDashboardPage.selectLastClosedMonth();
 		Assert.assertEquals(accountDashboardPage.depletionsTimePeriodDropdownOptions(), "Clo Mth"+"CYTM"+"FYTM","'Depletions Time Period' drop down options do not change when 'Last Closed Month' is selected as the Ending Time Period");
 		Assert.assertEquals(accountDashboardPage.distributionsTimePeriodDropdownOptions(), "L03 Mth","'Distribution Time Period' drop down options do not change when 'Last Closed Month' is selected as the Ending Time Period");
