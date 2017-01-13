@@ -74,6 +74,17 @@ describe('[Services.chipsService]', function() {
 
   it('it\'s methods should exist', function() {
     expect(chipsService.isDefault).toBeDefined();
+    expect(chipsService.addAutocompleteChip).toBeDefined();
+    expect(chipsService.addChip).toBeDefined();
+    expect(chipsService.addChipsArray).toBeDefined();
+    expect(chipsService.applyFilters).toBeDefined();
+    expect(chipsService.removeChip).toBeDefined();
+    expect(chipsService.removeFromFilterService).toBeDefined();
+    expect(chipsService.isDefault).toBeDefined();
+    expect(chipsService.updateChip).toBeDefined();
+    expect(chipsService.applyFilterArr).toBeDefined();
+    expect(chipsService.applyFilterMulti).toBeDefined();
+    expect(chipsService.applyStatesFilter).toBeDefined();
   });
 
   it('should reject a model that does not have 4 chips', function() {
@@ -273,5 +284,94 @@ describe('[Services.chipsService]', function() {
       // remove independent
       chipsService.model.splice(3, 1);
     });
+  });
+
+  describe('[addChipsArray]', function() {
+    var sampleArray = [
+      {name: 'Off-Premise', type: 'premiseType', applied: true, removable: false},
+      {name: 'Targeted', type: 'opportunityStatus', search: true, applied: true, removable: true, tradeChannel: false}
+    ];
+
+    it('should add the chips to the service model', function() {
+      expect(chipsService.model.length).toEqual(0);
+
+      chipsService.addChipsArray(sampleArray);
+
+      expect(chipsService.model.length).toEqual(2);
+      var  correctResult = [{name: 'Off-Premise', type: 'premiseType', applied: true, removable: false}, {name: 'Targeted', type: 'opportunityStatus', search: true, applied: true, removable: true, tradeChannel: false}];
+      expect(chipsService.model).toEqual(correctResult);
+      expect(chipsService.model.length).toEqual(2);
+    });
+
+     it('should remove previous chips', function() {
+      var fakeArray = ['array', 'of', 'nothing'];
+      chipsService.model = fakeArray;
+      chipsService.addChipsArray(sampleArray);
+      expect(chipsService.model).not.toEqual(fakeArray);
+      expect(chipsService.model.length).toEqual(2);
+    });
+  });
+  describe('[applyFilterMulti]', function() {
+
+    it('should reset back to all types', function() {
+      expect(chipsService.model.length).toEqual(0);
+
+      chipsService.applyFilterMulti([[]], ['All Types'], 'opportunityType');
+
+      expect(chipsService.model).toEqual([{name: 'All Types', type: 'opportunityType', applied: false, removable: false}]);
+    });
+
+    it('should reset back to all types when there is no selection', function() {
+      chipsService.applyFilterMulti([[]], [], 'opportunityType');
+      expect(chipsService.model).toEqual([{name: 'All Types', type: 'opportunityType', applied: false, removable: false}]);
+    });
+
+    it('should add the correct chips', function() {
+      chipsService.applyFilterMulti([[]], ['Non-Buy', 'At Risk'], 'opportunityType');
+      expect(chipsService.model).toEqual([{name: 'Non-Buy', type: 'opportunityType', applied: false, removable: true}, {name: 'At Risk', type: 'opportunityType', applied: false, removable: true}]);
+      expect(filtersService.model.selected['opportunityType']).toEqual(['Non-Buy', 'At Risk']);
+    });
+
+    it('should should not allow all types with other options', function() {
+      chipsService.applyFilterMulti([[]], ['All Types', 'At Risk'], 'opportunityType');
+      expect(chipsService.model[0].name).not.toEqual('All Types');
+    });
+  });
+
+  describe('[applyStatesFilter]', function() {
+
+    it('should add states to the selected array', function() {
+      filtersService.model.selected.state = [];
+      expect(filtersService.model.selected.state.length).toEqual(0);
+      expect(filtersService.model.selected.state).toEqual([]);
+
+      chipsService.applyStatesFilter({}, ['AZ', 'CA'], 'state');
+
+      expect(filtersService.model.selected.state.length).toEqual(2);
+      expect(filtersService.model.selected.state).toEqual(['AZ', 'CA']);
+    });
+
+    it('should add states to the selected array with existing states', function() {
+      filtersService.model.selected.state = ['AZ', 'CA'];
+      expect(filtersService.model.selected.state.length).toEqual(2);
+      expect(filtersService.model.selected.state).toEqual(['AZ', 'CA']);
+
+      chipsService.applyStatesFilter({}, ['WA', 'OR'], 'state');
+
+      expect(filtersService.model.selected.state.length).toEqual(4);
+      expect(filtersService.model.selected.state).toEqual(['AZ', 'CA', 'WA', 'OR']);
+    });
+
+    it('should add states to the selected array and avoid duplicates', function() {
+      filtersService.model.selected.state = [];
+      expect(filtersService.model.selected.state.length).toEqual(0);
+      expect(filtersService.model.selected.state).toEqual([]);
+
+      chipsService.applyStatesFilter({}, ['CA', 'AZ', 'CA'], 'state');
+
+      expect(filtersService.model.selected.state.length).toEqual(2);
+      expect(filtersService.model.selected.state).toEqual(['CA', 'AZ']);
+    });
+
   });
 });
