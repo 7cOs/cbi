@@ -100,6 +100,7 @@ module.exports = /*  @ngInject */
     vm.isStoreLevel = false;
     vm.isHighlightStore = isHighlightStore;
     var topBottomInitData = true;
+    var independentAcct = 'independent';
     // Have to create this variable because vm.selecteStore just has the name..Changing th binding to include Id involves a ton of work
     var currentStore = null;
 
@@ -1203,6 +1204,10 @@ module.exports = /*  @ngInject */
         if (myperformanceService.checkForInconsistentIds(performanceData)) {
           return;
         }
+        if (performanceData.name.toLowerCase() === independentAcct && !vm.currentTopBottomFilters.distributors) {
+          return;
+        }
+
         // Updates the top bottom filter object with the selection
         setTopBottomFilterModel(currentLevelName, performanceData);
         // Make sure all the models in filtersService are set correctly and reflect the object in top botom filter
