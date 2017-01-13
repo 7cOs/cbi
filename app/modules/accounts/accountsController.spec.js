@@ -1336,44 +1336,6 @@ describe('Unit: accountsController', function() {
         isFilterUpdateRequired: true
       };
     });
-
-    it('Should get the correct Top Bottom indexes', function() {
-      ctrl.currentTopBottomObj.chartData = {
-        'topValues': [],
-        'bottomTrends': [],
-        'topTrends': [],
-        'bottomValues': []
-      };
-      ctrl.currentTopBottomObj.topBottomIndices = {
-        'topValues': [1, 4, 6, 7],
-        'bottomTrends': [12, 34, 1, 3, 4],
-        'topTrends': [112, 234, 612, 71],
-        'bottomValues': [103, 21, 623, 711]
-      };
-      ctrl.changeTopBottomSortOrder({
-        name: 'Top 10 (Values)',
-        value: 1
-      });
-      expect(ctrl.currentBoundTopBottomIndexes).toEqual(ctrl.currentTopBottomObj.topBottomIndices.topValues);
-
-      ctrl.changeTopBottomSortOrder({
-        name: 'Top 10 (Trend)',
-        value: 2
-      });
-      expect(ctrl.currentBoundTopBottomIndexes).toEqual(ctrl.currentTopBottomObj.topBottomIndices.topTrends);
-
-      ctrl.changeTopBottomSortOrder({
-        name: 'Bottom 10 (Values)',
-        value: 3
-      });
-      expect(ctrl.currentBoundTopBottomIndexes).toEqual(ctrl.currentTopBottomObj.topBottomIndices.bottomValues);
-
-      ctrl.changeTopBottomSortOrder({
-        name: 'Bottom 10 (Trend)',
-        value: 4
-      });
-      expect(ctrl.currentBoundTopBottomIndexes).toEqual(ctrl.currentTopBottomObj.topBottomIndices.bottomTrends);
-    });
   });
 
   describe('Should set correct params and get data from store api', function() {

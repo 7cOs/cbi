@@ -1128,7 +1128,7 @@ module.exports = /*  @ngInject */
     function trendOptionChanged(selectedVal) {
       if (vm.filterModel.trend !== selectedVal) {
         vm.filterModel.trend = selectedVal;
-        onFilterPropertiesChange();
+        onFilterPropertiesChange(false);
       }
     }
 
@@ -1153,18 +1153,9 @@ module.exports = /*  @ngInject */
       if (vm.filtersService.model.valuesVsTrend !== selectedVal) {
         vm.loadingTopBottom = true;
         vm.filtersService.model.valuesVsTrend = selectedVal;
-        setSortedArrIndex();
+        onFilterPropertiesChange(false);
       }
     }
-
-    // Currently not used. If the functionality to go to previous level is present can be enabled
-    // function prevLevelInTopBottom() {
-    //   // vm.marketSelectedIndex is zero index based and acct type selections start from 1
-    //   var previousLevelInTopBottom = vm.marketSelectedIndex;
-    //   vm.currentTopBottomAcctType = myperformanceService.getAcctTypeObjectBasedOnTabIndex(previousLevelInTopBottom);
-    //   vm.currentTopBottomObj = getCurrentTopBottomObject(vm.currentTopBottomAcctType);
-    //   updateTopBottom();
-    // }
 
     /**
      * Updates vm.currentTopBottomFilters object
@@ -1283,7 +1274,7 @@ module.exports = /*  @ngInject */
       }
     }
 
-    function onFilterPropertiesChange() {
+    function onFilterPropertiesChange(isBrandSnapshotUpdateRequired) {
       if (topBottomInitData === false) {
         // With the new api endpoints the performance flags need to be reset on filter change
         for (var topBottomObj in vm.topBottomData) {
@@ -1291,7 +1282,9 @@ module.exports = /*  @ngInject */
         }
         var categoryBound = vm.filtersService.model.accountSelected.accountMarkets;
         vm.currentTopBottomObj = getCurrentTopBottomObject(vm.currentTopBottomAcctType);
-        updateBrandSnapshot();
+        if (isBrandSnapshotUpdateRequired !== false) {
+          updateBrandSnapshot();
+        }
         getDataForTopBottom(vm.currentTopBottomObj, categoryBound);
       }
     }
