@@ -800,15 +800,9 @@ module.exports = /*  @ngInject */
           vm.currentTopBottomObj.performanceData = data[0].performance;
           vm.currentTopBottomObj.isPerformanceDataUpdateRequired = false;
           getDataForTopBottom(vm.currentTopBottomObj, categoryBound);
-          // HERE
-          // vm.filterTopBottom();
-          if ($state.params.storeId) {
-            setUpdatedFilters();
-          }
+          if ($state.params.storeId) setUpdatedFilters();
 
-          if (topBottomInitData === true) {
-            topBottomInitData = false;
-          }
+          if (topBottomInitData === true) topBottomInitData = false;
         }
         vm.loadingBrandSnapshot = false;
         vm.loadingTopBottom = false;
