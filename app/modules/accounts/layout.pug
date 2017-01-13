@@ -146,8 +146,7 @@ div(row)
 
             //- Velocity Trend
             //- For YA
-            td(ng-if="a.filtersService.model.accountSelected.accountBrands.value === a.filtersService.accountFilters.accountBrandEnum.velocity" ng-class="a.getClassBasedOnValue(a.displayBrandValue(a.currentTotalsObject.measures, 'velocityTrend', 'distributionTimePeriod'))") <span ng-if="a.checkIfVelocityPresent(item)">{{a.displayBrandValue(a.currentTotalsObject.measures, 'velocityTrend', 'distributionTimePeriod') | number:1}}%</span><span ng-if="!a.displayBrandValue(a.currentTotalsObject.measures, 'velocityTrend', 'distributionTimePeriod')">-</span>
-
+            td(ng-if="a.filtersService.model.accountSelected.accountBrands.value === a.filtersService.accountFilters.accountBrandEnum.velocity" ng-class="a.getClassBasedOnValue(a.displayBrandValue(a.currentTotalsObject.measures, 'velocityTrend', 'distributionTimePeriod'))") <span ng-if="a.checkIfVelocityPresent(a.currentTotalsObject)">{{a.displayBrandValue(a.currentTotalsObject.measures, 'velocityTrend', 'distributionTimePeriod') | number:1}}%</span><span ng-if="!a.displayBrandValue(a.currentTotalsObject.measures, 'velocityTrend', 'distributionTimePeriod')">-</span>
             //- Distributions TDs
             //- Distirbution value Simple
             //- ng-class="a.getClassBasedOnValue(a.displayBrandValue(a.currentTotalsObject.measures, 'distributionsSimple', 'distributionTimePeriod'))"
