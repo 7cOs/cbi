@@ -98,7 +98,6 @@ module.exports = /*  @ngInject */
     vm.isEditing = isEditing;
     vm.openNotes = openNotes;
     vm.readMore = readMore;
-    vm.readLess = readLess;
     vm.openCreateNote = openCreateNote;
     vm.createNote = createNote;
     vm.deleteNote = deleteNote;
@@ -233,13 +232,7 @@ module.exports = /*  @ngInject */
     }
 
     function readMore(note) {
-      note.numLimit = 9999;
-      note.noteDetails = true;
-    }
-
-    function readLess(note) {
-      note.numLimit = 150;
-      note.noteDetails = false;
+      note.readMore = true;
     }
 
     // Upload files to Salesforce
