@@ -262,21 +262,8 @@ module.exports = /*  @ngInject */
 
     }
 
-    function isAuthor(author) {
-      var authorFirstName,
-          authorLastName,
-          noteAuthor;
-
-      authorFirstName = $filter('titlecase')(userService.model.currentUser.firstName);
-      authorLastName = $filter('titlecase')(userService.model.currentUser.lastName);
-
-      noteAuthor = authorFirstName + ' ' + authorLastName;
-
-      if (noteAuthor === author) {
-        return true;
-      } else {
-        return false;
-      }
+    function isAuthor(authorId) {
+      return userService.model.currentUser.employeeID === authorId;
     }
 
     function mailNote(note) {
@@ -340,7 +327,7 @@ module.exports = /*  @ngInject */
     function setNoteAuthor() {
       angular.forEach(vm.notes, function(note) {
         moment(note.date).format();
-        if (isAuthor(note.author)) {
+        if (isAuthor(note.authorId)) {
           note.author = 'Me';
         }
       });
