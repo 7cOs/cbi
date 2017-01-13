@@ -397,12 +397,12 @@ module.exports = /*  @ngInject */
 
     function goToNote(notification) {
       var accountNote = {
-        'id': '',
+        'id': [],
         'name': '',
         'noteId': ''
       };
 
-      accountNote.id = notification.objectId;
+      accountNote.id.push(notification.objectId);
       accountNote.name = notification.shortenedObject.store_name;
       accountNote.type = notification.objectType;
       accountNote.noteId = notification.salesforceUserNoteID;
@@ -417,7 +417,6 @@ module.exports = /*  @ngInject */
           account: accountNote
         },
         storeId: notification.shortenedObject.tdlinx_number
-        // storeId: accountNote.id
       });
     }
 

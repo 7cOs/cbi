@@ -338,11 +338,7 @@ module.exports = /*  @ngInject */
 
       vm.loading = true;
 
-      if (typeof account.id !== 'string') {
-        notesService.model.accountId = account.id[0];
-      } else {
-        notesService.model.accountId = account.id;
-      }
+      notesService.model.accountId = account.id[0];
 
       notesService.accountNotes().then(function(success) {
 
@@ -350,7 +346,7 @@ module.exports = /*  @ngInject */
         vm.loading = false;
         setNoteAuthor();
 
-      if (vm.notes.length) {
+      if (vm.notes.length && account.noteId) {
         setTimeout(function() {
           var num = angular.element(document.querySelector(accountElement))[0].offsetTop;
           angular.element(document.querySelector('.note-container'))[0].scrollTop = num;
