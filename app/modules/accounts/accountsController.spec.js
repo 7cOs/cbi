@@ -1188,6 +1188,9 @@ describe('Unit: accountsController', function() {
 
   describe('Change top bottom dropwdown', function() {
     beforeEach(function() {
+      var distObj = filtersService.accountFilters.accountTypes[0];
+      ctrl.setTopBottomAcctTypeSelection(distObj);
+      userService.getTopBottomSnapshot.calls.reset();
     });
 
     it('Check if correct objects are set as the current top bottom object', function() {
@@ -1210,32 +1213,6 @@ describe('Unit: accountsController', function() {
       ctrl.setTopBottomAcctTypeSelection(storesObj);
       expect(ctrl.currentTopBottomObj).not.toEqual(ctrl.topBottomData.distributors);
     });
-
-    it('should call getDataForTopBottom only once', function() {
-      var distirbutorObj = filtersService.accountFilters.accountTypes[0];
-      ctrl.setTopBottomAcctTypeSelection(distirbutorObj);
-      expect(userService.getTopBottomSnapshot.calls.count()).toEqual(3);
-    });
-
-    it('should not call getDataForTopBottom if same selection is made consecutively', function() {
-      var distirbutorObj = filtersService.accountFilters.accountTypes[0];
-      ctrl.setTopBottomAcctTypeSelection(distirbutorObj);
-      expect(userService.getTopBottomSnapshot.calls.count()).toEqual(3);
-      userService.getTopBottomSnapshot.calls.reset();
-      ctrl.setTopBottomAcctTypeSelection(distirbutorObj);
-      expect(userService.getTopBottomSnapshot.calls.count()).toEqual(0);
-    });
-
-    /* it('should remove all top bottom filters once an option from dropwdown is selected', function() {
-      ctrl.currentTopBottomFilters.distributors = '234567';
-      ctrl.currentTopBottomFilters.accounts = '1345672';
-      var storesObj = filtersService.accountFilters.accountTypes[3];
-      ctrl.setTopBottomAcctTypeSelection(storesObj);
-      expect(ctrl.currentTopBottomFilters.distributors).toEqual('');
-      expect(ctrl.currentTopBottomFilters.accounts).toEqual('');
-      expect(ctrl.currentTopBottomFilters.subAccounts).toEqual('');
-      expect(ctrl.currentTopBottomFilters.stores).toEqual('');
-    }); */
   });
 
   describe('Get top bottom data', function() {
@@ -1344,12 +1321,6 @@ describe('Unit: accountsController', function() {
       topBottomSpy.calls.reset();
       ctrl.setTopBottomAcctTypeSelection(ctrl.filtersService.accountFilters.accountTypes[3]);
     });
-
-    it('should have called store endpoint 1 times when acct type is changed', function() {
-      // One total now - old way was each for top 10(Values/Trends),bottom 10(Values/Trends)
-      expect(topBottomSpy.calls.count()).toEqual(1);
-    });
-
     /* it('should have called store endpoint 4 times when account market option is changed', function() {
       // One each for top 10(Values/Trends),bottom 10(Values/Trends)
       topBottomSpy.calls.reset();

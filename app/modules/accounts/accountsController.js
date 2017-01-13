@@ -767,7 +767,7 @@ module.exports = /*  @ngInject */
       params.additionalParams = getAppliedFiltersForTopBottom();
 
       // this is being reset somewhere between end of else above and here but needs to be stores for :storeId
-      if ($state.params.storeId !== '') {
+      if ($state.params.storeId && $state.params.storeId.length > 0) {
         vm.currentTopBottomAcctType = vm.filtersService.accountFilters.accountTypes[3];
         vm.currentTopBottomObj = getCurrentTopBottomObject(vm.currentTopBottomAcctType);
       }
@@ -860,9 +860,9 @@ module.exports = /*  @ngInject */
           for (var topBottomObj in vm.topBottomData) {
             myperformanceService.resetPerformanceDataFlags(vm.topBottomData[topBottomObj]);
           }
+          updateBrandSnapshot();
+          getDataForTopBottom(vm.currentTopBottomObj, propertyBoundToTable);
         }
-        updateBrandSnapshot();
-        getDataForTopBottom(vm.currentTopBottomObj, propertyBoundToTable);
       }
     }
 
