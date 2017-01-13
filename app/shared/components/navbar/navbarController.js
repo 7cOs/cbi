@@ -88,6 +88,7 @@ module.exports = /*  @ngInject */
     vm.closeMenus = closeMenus;
     vm.closeModal = closeModal;
     vm.getDismissedOpportunity = getDismissedOpportunity;
+    vm.unDismissOpportunity = unDismissOpportunity;
     vm.getTargetLists = getTargetLists;
     vm.markRead = markRead;
     vm.markSeen = markSeen;
@@ -207,15 +208,27 @@ module.exports = /*  @ngInject */
     }
 
     function addDuplicateOpportunityId(id) {
-      var existingOpportunityArr = [];
-      existingOpportunityArr.push(id);
-
-      targetListService.addTargetListOpportunities(vm.cachedTargetList, existingOpportunityArr).then(function() {
+      if (!id) {
         vm.cachedTargetList = '';
         vm.currentOpportunityId = '';
-        toastService.showToast('copied', existingOpportunityArr);
         closeModal();
-      });
+      } else {
+        var existingOpportunityArr = [];
+        existingOpportunityArr.push(id);
+
+        targetListService.addTargetListOpportunities(vm.cachedTargetList, existingOpportunityArr).then(function(success) {
+          vm.cachedTargetList = '';
+          vm.currentOpportunityId = '';
+          toastService.showToast('copied', existingOpportunityArr);
+          closeModal();
+        }, function(error) {
+          if (!vm.cachedTargetList || error.data[0].description === 'TLOPP101') {
+            vm.cachedTargetList = '';
+            vm.currentOpportunityId = '';
+            closeModal();
+          }
+        });
+      }
     }
 
     function showImpact(letter) {
@@ -236,6 +249,13 @@ module.exports = /*  @ngInject */
       });
     }
 
+    function unDismissOpportunity(id) {
+      opportunitiesService.deleteOpportunityFeedback(id).then(function(data) {
+        addDuplicateOpportunityId(vm.duplicateId);
+        closeModal();
+      });
+    }
+
     // Add Opportunity
     function addOpportunity(opportunity) {
       var targetListToFind = opportunity.properties.targetList,
@@ -248,8 +268,9 @@ module.exports = /*  @ngInject */
       angular.forEach(model, function(key, value) {
         if (key.id === targetListToFind) {
           model[value].dateOpportunitiesUpdated = moment().format();
-          // var tempModel = model[value];
-          // model.splice(value, 1).unshift(tempModel);
+          var tempModel = model[value];
+          model.splice(value, 1);
+          model.unshift(tempModel);
         }
       });
 
@@ -303,7 +324,7 @@ module.exports = /*  @ngInject */
       };
       opportunitiesService
         .createOpportunity(payload)
-        .then(function(success, error) {
+        .then(function(success) {
           if (targetList) {
             addToTargetList(targetList, success);
           }
@@ -318,6 +339,7 @@ module.exports = /*  @ngInject */
           vm.duplicateOpportunity = opportunity;
           vm.duplicateOpportunity.properties.rationale.description = rationale;
           vm.cachedTargetList = targetList;
+          vm.duplicateId = error.data[0].objectIdentifier;
           modalCustomOpportunityError(error);
         });
 

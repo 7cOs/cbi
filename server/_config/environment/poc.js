@@ -22,7 +22,7 @@ module.exports = function (config) {
   };
 
   config.api = {
-    url: 'https://deloitte-poc.herokuapp.com',
+    url: 'http://cbi-api-internal-dd-qa.herokuapp.com',
     key: 'U1NCc2FXdGxJSFJ2SUVodlpHOXlMQ0JJYjJSdmNpd2dTRzlrYjNJc0lFaHZaRzl5Y3lCaGJtUWdTRzlrYjNKekxnPT0=',
     apiKey: 'test',
     version: 'v2'

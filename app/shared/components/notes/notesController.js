@@ -16,7 +16,6 @@ module.exports = /*  @ngInject */
     vm.numLimit = 150;
     vm.creatingNote = false;
     vm.deleteConfirmation = false;
-    vm.inputToggle = false;
     vm.notesOpen = false;
     vm.notesClose = notesClose;
     vm.fileUploadActive = true;
@@ -27,6 +26,7 @@ module.exports = /*  @ngInject */
       'Distribution',
       'Display',
       'Space',
+      'Price',
       'General / Account information'
     ];
     vm.attachments = [
@@ -98,14 +98,12 @@ module.exports = /*  @ngInject */
     vm.isEditing = isEditing;
     vm.openNotes = openNotes;
     vm.readMore = readMore;
-    vm.readLess = readLess;
     vm.openCreateNote = openCreateNote;
     vm.createNote = createNote;
     vm.deleteNote = deleteNote;
     vm.toggleDelete = toggleDelete;
     vm.cancelNewNote = cancelNewNote;
     vm.updateNote = updateNote;
-    vm.showInput = showInput;
     vm.showImage = showImage;
     vm.isAuthor = isAuthor;
     vm.mailNote = mailNote;
@@ -123,12 +121,14 @@ module.exports = /*  @ngInject */
       vm.notes = [];
     }
 
-    function showInput() {
-      vm.inputToggle = !vm.inputToggle;
-    }
-
-    function isEditing(note) {
+    function isEditing(note, cancel) {
       note.editMode = !note.editMode;
+      if (cancel) {
+        note.body = vm.cachedNote.body;
+        note.title = vm.cachedNote.title;
+      } else {
+        vm.cachedNote = angular.copy(note);
+      }
     }
 
     function openCreateNote() {
@@ -150,21 +150,49 @@ module.exports = /*  @ngInject */
     };
 
     function createNote(data) {
+      if (!vm.newNote.title || vm.newNote.title === '' || vm.newNote.title === null) {
+        vm.invalidCreateNote = true;
+        return;
+      } else {
+        vm.invalidCreateNote = false;
+      }
       vm.loading = true;
       data.author = 'Me';
+      var accountId = notesService.model.accountId;
 
       notesService.createNote(data, notesService.model.accountId).then(function(success) {
+        var payload = {
+          'action': '',
+          'objectType': '',
+          'objectID': '',
+          'salesforceUserNoteID': ''
+        };
+
         data.date = moment.utc().format();
         vm.notes.push(data);
         jumpToNotesTop();
+        setNoteAuthor();
 
-        vm.newNote = {};
+        payload.action = 'ADDED_NOTE';
+        payload.objectType = notesService.model.currentStoreProperty.toUpperCase();
+        payload.objectId = accountId;
+        payload.salesforceUserNoteID = success.successReturnValue[0].id;
+
+        userService.createNotification(userService.model.currentUser.employeeID, payload);
+
+        vm.newNote = null;
         vm.creatingNote = false;
         vm.loading = false;
       });
     }
 
     function saveEditedNote(note) {
+      if (note.title === '' || note.title === null) {
+        note.invalidNote = true;
+        return;
+      } else {
+        note.invalidNote = false;
+      }
       vm.loading = true;
       note.date = moment.utc().format();
 
@@ -172,6 +200,7 @@ module.exports = /*  @ngInject */
         notesService.accountNotes().then(function(success) {
           vm.notes = success;
           jumpToNotesTop();
+          setNoteAuthor();
           vm.loading = false;
         });
       });
@@ -182,9 +211,12 @@ module.exports = /*  @ngInject */
     }
 
     function deleteNote(data, accountId) {
+      vm.loading = true;
       notesService.deleteNote(data.id).then(function(success) {
        var index = vm.notes.indexOf(data);
        vm.notes.splice(index, 1);
+       setNoteAuthor();
+       vm.loading = false;
       });
     }
 
@@ -200,13 +232,7 @@ module.exports = /*  @ngInject */
     }
 
     function readMore(note) {
-      note.numLimit = 9999;
-      note.noteDetails = true;
-    }
-
-    function readLess(note) {
-      note.numLimit = 150;
-      note.noteDetails = false;
+      note.readMore = true;
     }
 
     // Upload files to Salesforce
@@ -264,26 +290,26 @@ module.exports = /*  @ngInject */
 
       if (notesService.model.currentStoreProperty === 'subaccount' || notesService.model.currentStoreProperty === 'account') {
         emailString = 'mailto:';
-        emailString += '?subject=Note: ' + note.title;
+        emailString += '?subject=' + currentAccount.currentStoreName + ': Note: ' + note.title;
         emailString += '&body=' + currentAccount.currentStoreName + '%0D%0A%0D%0A' + updatedNoteBody;
         $window.location = emailString;
       }
 
       if (notesService.model.currentStoreProperty === 'store') {
         emailString = 'mailto:';
-        emailString += '?subject=Note: ' + note.title;
+        emailString += '?subject=' + currentAccount.currentStoreName + ': Note: ' + note.title;
         emailString += '&body=' + currentAccount.currentStoreName + '%0D%0A%0D%0A';
-        emailString += 'here is where the STORE address would go%0D%0A';
-        emailString += 'here would be the tdlinx code';
+        emailString += currentAccount.address + '%0D%0A%0D%0A';
+        emailString += 'TDLinx: ' + currentAccount.tdlinx + '%0D%0A%0D%0A';
         emailString += '%0D%0A%0D%0A' + updatedNoteBody;
         $window.location = emailString;
       }
 
       if (notesService.model.currentStoreProperty === 'distributor') {
         emailString = 'mailto:';
-        emailString += '?subject=Note: ' + note.title;
+        emailString += '?subject=' + currentAccount.currentStoreName + ': Note: ' + note.title;
         emailString += '&body=' + currentAccount.currentStoreName + '%0D%0A%0D%0A';
-        emailString += 'here is where the DISTRIBUTOR address would go%0D%0A';
+        emailString += currentAccount.address + '%0D%0A%0D%0A';
         emailString += 'ID: ' + currentAccount.accountId + '%0D%0A%0D%0A';
         emailString += '%0D%0A%0D%0A' + updatedNoteBody;
         $window.location = emailString;
@@ -311,21 +337,23 @@ module.exports = /*  @ngInject */
       angular.element(document.querySelector('.note-container'))[0].scrollTop = 0;
     }
 
-    $scope.$on('notes:opened', function(data, account) {
-      vm.loading = true;
+    function setNoteAuthor() {
+      angular.forEach(vm.notes, function(note) {
+        moment(note.date).format();
+        if (isAuthor(note.author)) {
+          note.author = 'Me';
+        }
+      });
+    }
 
-      notesService.model.accountId = account.id;
+    $scope.$on('notes:opened', function(event, data, account) {
+      vm.loading = true;
+      notesService.model.accountId = account.id[0];
+
       notesService.accountNotes().then(function(success) {
         vm.notes = success;
         vm.loading = false;
-
-        angular.forEach(vm.notes, function(note) {
-          moment(note.date).format();
-
-          if (isAuthor(note.author)) {
-            note.author = 'Me';
-          }
-        });
+        setNoteAuthor();
       });
       $scope.notesOpen = data;
 

@@ -15,8 +15,8 @@ notes
           p(ng-if="a.selectedStore || a.selectedDistributor")
             <span ng-if="a.selectedDistributor">{{a.selectedDistributor}}</span><span ng-if="a.selectedStore && a.selectedDistributor"> - </span><span ng-if="a.selectedStore">{{a.selectedStore}}</span>
           p(ng-if="!a.selectedStore && !a.selectedDistributor") {{a.currentTopBottomAcctType.name || a.accountTypesDefault}}
-        .notes-icon
-          p <a href="#" ng-click="a.openNotes(true)" analytics-on="click" analytics-event="Notes Tab"></a>
+        .notes-icon(ng-class="{'disabled': !a.selectedStoreInfo}" ng-click="a.openNotes(true, a.selectedStoreInfo)" analytics-on="click" analytics-event="Notes Tab")
+          p <a href="#"></a>
       .market-overview.clearfix
         .brands
           p(ng-if="!a.brandWidgetSkuTitle") {{a.brandWidgetTitle}}
@@ -25,15 +25,13 @@ notes
           p(ng-if="a.selectedStore || a.selectedDistributor")
             <span ng-if="a.selectedDistributor">{{a.selectedDistributor}}</span><span ng-if="a.selectedStore && a.selectedDistributor"> - </span><span ng-if="a.selectedStore">{{a.selectedStore}}</span>
           p(ng-if="!a.selectedStore && !a.selectedDistributor") {{a.currentTopBottomAcctType.name || a.accountTypesDefault}}
-        .notes-icon
-          //- p(ng-if="a.selectedStore && !a.selectedDistributor") <a href="#" ng-click="a.openNotes(true, a.selectedStoreInfo)" analytics-on="click" analytics-event="Notes Tab">Notes</a>
-          p(ng-if="a.selectedStore || a.selectedDistributor") <a href="#" ng-click="a.openNotes(true, a.selectedStoreInfo)" analytics-on="click" analytics-event="Notes Tab">Notes</a>
-          p(ng-if="!a.selectedStore && !a.selectedDistributor") <a href="#" ng-click="a.openNotes(true, a.selectedStoreInfo)" analytics-on="click" analytics-event="Notes Tab">Notes</a>
+        .notes-icon(ng-class="{'disabled': !a.selectedStoreInfo}" ng-click="a.openNotes(true, a.selectedStoreInfo)")
+          p <a href="#" ng-click="a.openNotes(true, a.selectedStoreInfo)" analytics-on="click" analytics-event="Notes Tab">Notes</a>
 
 
 .filters.top(column='12')
   div(row)
-    // div.trend(column='2')
+    //- div.trend(column='2')
       label Trend
       md-radio-group(ng-model="a.filterModel.trend")
         md-radio-button(ng-repeat="filter in a.filtersService.model.trend" class="md-primary" ng-value="filter" aria-label="Trend" ng-if = "a.checkForStoreLevel(filter)" ng-click="a.trendOptionChanged(filter); a.apply(false);") {{filter.name}}
@@ -58,6 +56,7 @@ notes
     div(column='2')
       label Account Scope
       md-checkbox(ng-model="a.filtersService.model.selected.myAccountsOnly" aria-label="My Accounts" ng-click="a.updateChip('My Accounts Only', 'myAccountsOnly');" ng-change="a.setDefaultFilterOptions();") My Accounts Only
+
     div(column='2')
       label Premise Type
       md-radio-group(ng-model="a.filtersService.model.selected.premiseType")
@@ -84,8 +83,8 @@ notes
           md-select(ng-model="a.filtersService.model.selected.retailer" placeholder="Chain" ng-init="a.filtersService.model.selected.retailer = 'Chain'")
             md-option(ng-repeat="type in a.filtersService.model.retailer" ng-click="a.placeholderSelect(type.hintText)" aria-label="{{type.name}}" value="{{type.name}}") {{::type.name}}
         div(column='8')
-          inline-search(ng-if="a.filtersService.model.selected.retailer === 'Store'" type="store" placeholder="{{a.hintTextPlaceholder}}" chosen-result="a.filtersService.model.store" show-address="true" callback="a.setFilter(result, 'store')" removable='true' on-remove="a.removeInlineSearch('selectedStore')" show-x="a.showXStore")
-          inline-search(ng-if="a.filtersService.model.selected.retailer === 'Chain'" type="chain" placeholder="{{a.hintTextPlaceholder}}" chosen-result="a.filtersService.model.account" callback="a.setFilter(result, 'account')" removable='true' on-remove="a.removeInlineSearch('selectedStore')" show-x="a.showXChain")
+          inline-search(ng-show="a.filtersService.model.selected.retailer === 'Store'" type="store" placeholder="{{a.hintTextPlaceholder}}" chosen-result="a.filtersService.model.store" show-address="true" callback="a.setFilter(result, 'store')" removable='true' on-remove="a.removeInlineSearch('selectedStore')" show-x="a.showXStore")
+          inline-search(ng-show="a.filtersService.model.selected.retailer === 'Chain'" type="chain" placeholder="{{a.hintTextPlaceholder}}" chosen-result="a.filtersService.model.account" callback="a.setFilter(result, 'account')" removable='true' on-remove="a.removeInlineSearch('selectedStore')" show-x="a.showXChain")
   div(row)
     div(column='12' class='apply-filters')
       //- button(value='Apply Filters' type="button" class="btn-action" ng-disabled="a.disableApply" ng-click="a.updateBrandSnapshot(); a.filterTopBottom()") Apply Filters
@@ -99,9 +98,9 @@ div(row)
       loader
     .widget-header
       .dropdown-filter
-        md-select(ng-model="a.filtersService.model.accountSelected.accountBrands" ng-change="a.updateBrandSnapshot()" md-on-open="a.openSelect(true)" md-on-close="a.openSelect(false);" aria-label="Account Brands Filter" placeholder="Distribution (simple)")
+        md-select(ng-model="a.filtersService.model.accountSelected.accountBrands" ng-change="a.updateBrandSnapshot(false)" md-on-open="a.openSelect(true)" md-on-close="a.openSelect(false);" aria-label="Account Brands Filter" placeholder="Distribution (simple)")
           md-option(ng-repeat="filter in a.filtersService.accountFilters.accountBrands" ng-if="!a.removeDistOptionsBasedOnView(filter, true)" aria-label="{{filter.name}}" ng-value="filter") {{filter.name}}
-      span.back-chevron(ng-if="a.brandSelectedIndex === 1" ng-click="a.prevTab()")
+      span.back-chevron(ng-if="a.brandSelectedIndex === 1" ng-click="a.switchToBrandView()")
       p.brands {{a.brandWidgetSkuTitle || a.brandWidgetTitle}}
     .widget-content
       table.depletions-table(cellspacing="0" cellpadding="0")

@@ -50,6 +50,26 @@
     width: auto;
     z-index: 1;
     outline: none;
+
+    &:hover {
+      cursor: hand;
+    }
+
+    &.disabled {
+      background-image: url('../assets/img/icons/overview-notes-disabled.svg');
+
+      a {
+        color: $gray-3;
+
+        &:hover {
+          cursor: not-allowed;
+        }
+      }
+
+      &:hover {
+        cursor: not-allowed;
+      }
+    }
   }
 
   &.expanded {
@@ -61,7 +81,7 @@
     transform: translateY(-8em);
     transition: all 300ms ease;
     width: 100%;
-    z-index: 999;
+    z-index: 1000;
 
     &.visible {
       backface-visibility: hidden;
@@ -74,6 +94,7 @@
     .overview {
       min-height: 3em;
       padding-top: 0.5em;
+      margin-bottom: 0.5em;
     }
 
     .brands {
@@ -88,6 +109,7 @@
       background-position: 0 1.5em;
       border-left: none;
       float: right;
+      margin-right: 0.5em;
     }
 
     .overview {

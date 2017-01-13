@@ -39,77 +39,101 @@ describe('Unit: list controller', function() {
   });
 
   it('should expose public methods', function() {
+    expect(ctrl.addCollaborator).not.toBeUndefined();
+    expect(typeof (ctrl.addCollaborator)).toEqual('function');
+
     expect(ctrl.addToSharedCollaborators).not.toBeUndefined();
     expect(typeof (ctrl.addToSharedCollaborators)).toEqual('function');
 
     expect(ctrl.addToTargetList).not.toBeUndefined();
     expect(typeof (ctrl.addToTargetList)).toEqual('function');
 
-    expect(ctrl.closeModal).not.toBeUndefined();
-    expect(typeof (ctrl.closeModal)).toEqual('function');
-
-    expect(ctrl.displayBrandIcon).not.toBeUndefined();
-    expect(typeof (ctrl.displayBrandIcon)).toEqual('function');
-
-    expect(ctrl.exists).not.toBeUndefined();
-    expect(typeof (ctrl.exists)).toEqual('function');
-
-    expect(ctrl.openShareModal).not.toBeUndefined();
-    expect(typeof (ctrl.openShareModal)).toEqual('function');
-
-    expect(ctrl.openDismissModal).not.toBeUndefined();
-    expect(typeof (ctrl.openDismissModal)).toEqual('function');
-
-    expect(ctrl.pageName).not.toBeUndefined();
-    expect(typeof (ctrl.pageName)).toEqual('function');
-
-    expect(ctrl.removeOpportunity).not.toBeUndefined();
-    expect(typeof (ctrl.removeOpportunity)).toEqual('function');
-
-    expect(ctrl.updateOpportunityModel).not.toBeUndefined();
-    expect(typeof (ctrl.updateOpportunityModel)).toEqual('function');
-
-    expect(ctrl.shareOpportunity).not.toBeUndefined();
-    expect(typeof (ctrl.shareOpportunity)).toEqual('function');
-
-    expect(ctrl.sortBy).not.toBeUndefined();
-    expect(typeof (ctrl.sortBy)).toEqual('function');
-
-    expect(ctrl.selectOpportunity).not.toBeUndefined();
-    expect(typeof (ctrl.selectOpportunity)).toEqual('function');
-
-    expect(ctrl.showOpportunityMemoModal).not.toBeUndefined();
-    expect(typeof (ctrl.showOpportunityMemoModal)).toEqual('function');
-
-    expect(ctrl.submitFeedback).not.toBeUndefined();
-    expect(typeof (ctrl.submitFeedback)).toEqual('function');
-
-    expect(ctrl.cancelFeedback).not.toBeUndefined();
-    expect(typeof (ctrl.cancelFeedback)).toEqual('function');
-
     expect(ctrl.allOpportunitiesExpanded).not.toBeUndefined();
     expect(typeof (ctrl.allOpportunitiesExpanded)).toEqual('function');
 
-    expect(ctrl.noOpportunitiesExpanded).not.toBeUndefined();
-    expect(typeof (ctrl.noOpportunitiesExpanded)).toEqual('function');
+    expect(ctrl.closeCreateTargetListModal).not.toBeUndefined();
+    expect(typeof (ctrl.closeCreateTargetListModal)).toEqual('function');
 
-    expect(ctrl.showDisabled).not.toBeUndefined();
-    expect(typeof (ctrl.showDisabled)).toEqual('function');
+    expect(ctrl.closeModal).not.toBeUndefined();
+    expect(typeof (ctrl.closeModal)).toEqual('function');
 
-    expect(ctrl.flattenOpportunity).not.toBeUndefined();
-    expect(typeof (ctrl.flattenOpportunity)).toEqual('function');
-
-    expect(ctrl.getTargetLists).not.toBeUndefined();
-    expect(typeof (ctrl.getTargetLists)).toEqual('function');
-
-    expect(ctrl.expandCallback).not.toBeUndefined();
-    expect(typeof (ctrl.expandCallback)).toEqual('function');
+    expect(ctrl.closeOrDismissOpportunity).not.toBeUndefined();
+    expect(typeof (ctrl.closeOrDismissOpportunity)).toEqual('function');
 
     expect(ctrl.collapseCallback).not.toBeUndefined();
     expect(typeof (ctrl.collapseCallback)).toEqual('function');
 
-    expect(ctrl.getDate).not.toBeUndefined();
-    expect(typeof (ctrl.getDate)).toEqual('function');
+    expect(ctrl.createNewList).not.toBeUndefined();
+    expect(typeof (ctrl.createNewList)).toEqual('function');
+
+    expect(ctrl.depletionsVsYaPercent).not.toBeUndefined();
+    expect(typeof (ctrl.depletionsVsYaPercent)).toEqual('function');
+
+    expect(ctrl.displayBrandIcon).not.toBeUndefined();
+    expect(typeof (ctrl.displayBrandIcon)).toEqual('function');
+
+    expect(ctrl.expandCallback).not.toBeUndefined();
+    expect(typeof (ctrl.expandCallback)).toEqual('function');
+
+    expect(ctrl.flattenOpportunity).not.toBeUndefined();
+    expect(typeof (ctrl.flattenOpportunity)).toEqual('function');
+
+    expect(ctrl.getMemos).not.toBeUndefined();
+    expect(typeof (ctrl.getMemos)).toEqual('function');
+
+    expect(ctrl.getTargetLists).not.toBeUndefined();
+    expect(typeof (ctrl.getTargetLists)).toEqual('function');
+
+    expect(ctrl.impactSort).not.toBeUndefined();
+    expect(typeof (ctrl.impactSort)).toEqual('function');
+
+    expect(ctrl.noOpportunitiesExpanded).not.toBeUndefined();
+    expect(typeof (ctrl.noOpportunitiesExpanded)).toEqual('function');
+
+    expect(ctrl.openDismissModal).not.toBeUndefined();
+    expect(typeof (ctrl.openDismissModal)).toEqual('function');
+
+    expect(ctrl.openShareModal).not.toBeUndefined();
+    expect(typeof (ctrl.openShareModal)).toEqual('function');
+
+    expect(ctrl.opportunityTypeOrSubtype).not.toBeUndefined();
+    expect(typeof (ctrl.opportunityTypeOrSubtype)).toEqual('function');
+
+    expect(ctrl.pageName).not.toBeUndefined();
+    expect(typeof (ctrl.pageName)).toEqual('function');
+
+    expect(ctrl.pickMemo).not.toBeUndefined();
+    expect(typeof (ctrl.pickMemo)).toEqual('function');
+
+    expect(ctrl.removeOpportunity).not.toBeUndefined();
+    expect(typeof (ctrl.removeOpportunity)).toEqual('function');
+
+    expect(ctrl.removeSharedCollaborator).not.toBeUndefined();
+    expect(typeof (ctrl.removeSharedCollaborator)).toEqual('function');
+
+    expect(ctrl.saveNewList).not.toBeUndefined();
+    expect(typeof (ctrl.saveNewList)).toEqual('function');
+
+    expect(ctrl.selectOpportunity).not.toBeUndefined();
+    expect(typeof (ctrl.selectOpportunity)).toEqual('function');
+
+    expect(ctrl.shareOpportunity).not.toBeUndefined();
+    expect(typeof (ctrl.shareOpportunity)).toEqual('function');
+
+    expect(ctrl.showDisabled).not.toBeUndefined();
+    expect(typeof (ctrl.showDisabled)).toEqual('function');
+
+    expect(ctrl.showItemAuthorizationFlag).not.toBeUndefined();
+    expect(typeof (ctrl.showItemAuthorizationFlag)).toEqual('function');
+
+    expect(ctrl.showOpportunityMemoModal).not.toBeUndefined();
+    expect(typeof (ctrl.showOpportunityMemoModal)).toEqual('function');
+
+    expect(ctrl.sortBy).not.toBeUndefined();
+    expect(typeof (ctrl.sortBy)).toEqual('function');
+
+    expect(ctrl.submitFeedback).not.toBeUndefined();
+    expect(typeof (ctrl.submitFeedback)).toEqual('function');
 
     expect(ctrl.toggleOpportunitiesInStores).not.toBeUndefined();
     expect(typeof (ctrl.toggleOpportunitiesInStores)).toEqual('function');
@@ -117,14 +141,246 @@ describe('Unit: list controller', function() {
     expect(ctrl.toggleSelectAllStores).not.toBeUndefined();
     expect(typeof (ctrl.toggleSelectAllStores)).toEqual('function');
 
-    expect(ctrl.removeSharedCollaborator).not.toBeUndefined();
-    expect(typeof (ctrl.removeSharedCollaborator)).toEqual('function');
+    expect(ctrl.updateOpportunityModel).not.toBeUndefined();
+    expect(typeof (ctrl.updateOpportunityModel)).toEqual('function');
 
-    expect(ctrl.impactSort).not.toBeUndefined();
-    expect(typeof (ctrl.impactSort)).toEqual('function');
+    expect(ctrl.vsYAGrowthPercent).not.toBeUndefined();
+    expect(typeof (ctrl.vsYAGrowthPercent)).toEqual('function');
+  });
 
-    expect(ctrl.depletionsVsYaPercent).not.toBeUndefined();
-    expect(typeof (ctrl.depletionsVsYaPercent)).toEqual('function');
+  describe('[list.addCollaborator] method', function() {
+    var collaborator = {
+      'employeeId': '12345'
+    };
+
+    it('should add a new collaborator object to the collaborators array in a new list', function() {
+      expect(ctrl.newList.collaborators.length).toEqual(0);
+      ctrl.addCollaborator(collaborator);
+      expect(ctrl.newList.collaborators.length).toEqual(1);
+    });
+
+    it('should add a share object to the target list shares array in a new list', function() {
+      expect(ctrl.newList.targetListShares.length).toEqual(0);
+      ctrl.addCollaborator(collaborator);
+      expect(ctrl.newList.targetListShares.length).toEqual(1);
+      expect(ctrl.newList.targetListShares[0].employeeId).toEqual('12345');
+    });
+
+    afterEach(function() {
+      ctrl.newList.collaborators = [];
+      ctrl.newList.targetListShares = [];
+    });
+  });
+
+  describe('[list.allOpportunitiesExpanded] method', function() {
+    it('should return false if expandedOpportunities and opportunitiesService.model.opportunities are different lengths', function() {
+      ctrl.expandedOpportunities = 1;
+      ctrl.opportunitiesService.model.opportunities = [{'opportunity': 1}, {'otherOpportunity': 2}];
+      expect(ctrl.allOpportunitiesExpanded()).toBeFalsy();
+    });
+
+    it('should return true if expandedOpportunities and opportunitiesService.model.opportunities are the same lengths', function() {
+      ctrl.expandedOpportunities = 1;
+      ctrl.opportunitiesService.model.opportunities = [{'opportunity': 1}];
+      expect(ctrl.allOpportunitiesExpanded()).toBeTruthy();
+    });
+  });
+
+  describe('[list.closeCreateTargetListModal] method', function() {
+    beforeEach(function() {
+      spyOn(mdDialog, 'hide').and.callThrough();
+    });
+
+    it('should close create target list modal', function() {
+      ctrl.closeCreateTargetListModal();
+      expect(mdDialog.hide).toHaveBeenCalled();
+      expect(mdDialog.hide.calls.count()).toEqual(1);
+    });
+
+    it('should reset the new list object to blank', function() {
+      ctrl.newList = {'name': 'New List', 'description': 'A List.'};
+      ctrl.closeCreateTargetListModal();
+      expect(ctrl.newList.name).toEqual('');
+      expect(ctrl.newList.description).toEqual('');
+    });
+  });
+
+  describe('[list.closeModal] method', function() {
+    beforeEach(function() {
+      spyOn(mdDialog, 'hide').and.callThrough();
+    });
+
+    it('should close a material design modal', function() {
+      ctrl.closeModal();
+      expect(mdDialog.hide).toHaveBeenCalled();
+      expect(mdDialog.hide.calls.count()).toEqual(1);
+    });
+  });
+
+  describe('[list.collapseCallback] method', function() {
+    it('should decrease the expanded opportunities count', function() {
+      ctrl.expandedOpportunities = 2;
+      ctrl.collapseCallback();
+      expect(ctrl.expandedOpportunities).toEqual(1);
+    });
+  });
+
+  describe('[list.createNewList] method', function() {
+    beforeEach(function() {
+      spyOn(mdDialog, 'show').and.callThrough();
+    });
+
+    it('should open the create target list modal', function() {
+      ctrl.createNewList();
+      expect(mdDialog.show).toHaveBeenCalled();
+      expect(mdDialog.show.calls.count()).toEqual(1);
+    });
+  });
+
+  describe('[list.displayBrandIcon] method', function() {
+    it('should return true if brand name is in brands array', function() {
+      var brandsArray = ['corona', 'modelo'];
+      expect(ctrl.displayBrandIcon(brandsArray, 'corona')).toBeTruthy();
+      expect(ctrl.displayBrandIcon(brandsArray, 'victoria')).toBeFalsy();
+    });
+  });
+
+  describe('[list.expandCallback] method', function() {
+    it('should increase the expanded opportunities count', function() {
+      ctrl.expandedOpportunities = 0;
+      ctrl.expandCallback();
+      expect(ctrl.expandedOpportunities).toEqual(1);
+    });
+  });
+
+  describe('[list.noOpportunitiesExpanded] method', function() {
+    it('should return false if expandedOpportunities doesn\'t equal 0', function() {
+      ctrl.expandedOpportunities = 1;
+      expect(ctrl.noOpportunitiesExpanded()).toBeFalsy();
+    });
+
+    it('should return true if expandedOpportunities equals 0', function() {
+      ctrl.expandedOpportunities = 0;
+      expect(ctrl.noOpportunitiesExpanded()).toBeTruthy();
+    });
+  });
+
+  describe('[list.openDismissModal] method', function() {
+    beforeEach(function() {
+      spyOn(mdDialog, 'show').and.callThrough();
+    });
+
+    it('should open the dismiss opportunity modal', function() {
+      ctrl.openDismissModal();
+      expect(mdDialog.show).toHaveBeenCalled();
+      expect(mdDialog.show.calls.count()).toEqual(1);
+    });
+
+    it('should assign variables and booleans', function() {
+      ctrl.currentOpportunityId = '';
+      ctrl.opportunityShared = true;
+      ctrl.shareOpportunityFail = true;
+      ctrl.opportunityDismissTrigger = true;
+      ctrl.undoClicked = true;
+
+      ctrl.openDismissModal('123');
+
+      expect(ctrl.currentOpportunityId).toEqual('123');
+      expect(ctrl.opportunityShared).toBeFalsy();
+      expect(ctrl.shareOpportunityFail).toBeFalsy();
+      expect(ctrl.opportunityDismissTrigger).toBeFalsy();
+      expect(ctrl.undoClicked).toBeFalsy();
+    });
+  });
+
+  describe('[list.openShareModal] method', function() {
+    beforeEach(function() {
+      spyOn(mdDialog, 'show').and.callThrough();
+    });
+
+    it('should open the share opportunity modal', function() {
+      ctrl.openShareModal();
+      expect(mdDialog.show).toHaveBeenCalled();
+      expect(mdDialog.show.calls.count()).toEqual(1);
+    });
+
+    it('should assign variables and booleans', function() {
+      ctrl.currentOpportunityId = '';
+      ctrl.sharedCollaborators = [1, 2, 5];
+      ctrl.opportunityShared = true;
+      ctrl.shareOpportunityFail = true;
+
+      ctrl.openShareModal('123');
+
+      expect(ctrl.currentOpportunityId).toEqual('123');
+      expect(ctrl.sharedCollaborators).toEqual([]);
+      expect(ctrl.opportunityShared).toBeFalsy();
+      expect(ctrl.shareOpportunityFail).toBeFalsy();
+    });
+  });
+
+  describe('[list.opportunityTypeOrSubtype] method', function() {
+    it('should return the subtype value for custom opportunities', function() {
+      var opp = {
+        'type': 'CUSTOM',
+        'subType': 'New Distribution'
+      };
+
+      expect(ctrl.opportunityTypeOrSubtype(opp)).toEqual('New Distribution');
+    });
+
+    it('should return the type value for non-custom opportunities', function() {
+      var opp = {
+        'type': 'D001',
+        'subType': 'New Distribution'
+      };
+
+      expect(ctrl.opportunityTypeOrSubtype(opp)).toEqual('D001');
+    });
+  });
+
+  describe('[list.showDisabled] method', function() {
+    it('should assign the disabled message object to equal the passed in object from function', function() {
+      var newMessage = {'name': 'message'};
+      ctrl.disabledMessage = {};
+      ctrl.showDisabled(newMessage);
+      expect(ctrl.disabledMessage).toEqual(newMessage);
+
+    });
+  });
+
+  describe('[list.showOpportunityMemoModal] method', function() {
+    beforeEach(function() {
+      spyOn(mdDialog, 'show').and.callThrough();
+    });
+
+    it('should open the opportunity memos modal', function() {
+      ctrl.showOpportunityMemoModal();
+      expect(mdDialog.show).toHaveBeenCalled();
+      expect(mdDialog.show.calls.count()).toEqual(1);
+    });
+
+    it('should clear the memoData variable', function() {
+      ctrl.memoData = {'name': 'Corporate Mandate'};
+      ctrl.showOpportunityMemoModal();
+      expect(ctrl.memoData).toEqual({});
+    });
+  });
+
+  describe('[list.showItemAuthorizationFlag] method', function() {
+    it('should return true if item authCode is CM or SP', function() {
+      expect(ctrl.showItemAuthorizationFlag('CM')).toBeTruthy();
+      expect(ctrl.showItemAuthorizationFlag('SP')).toBeTruthy();
+    });
+
+    it('should return false if authCode is BM and depletions are > 0', function() {
+      expect(ctrl.showItemAuthorizationFlag('BM', 500)).toBeFalsy();
+    });
+
+    it('should return false if authCode not acceptable', function() {
+      expect(ctrl.showItemAuthorizationFlag('COW')).toBeFalsy();
+      expect(ctrl.showItemAuthorizationFlag('BM', 1)).toBeFalsy();
+    });
   });
 
   describe('[list.sortBy] method', function() {
@@ -209,6 +465,24 @@ describe('Unit: list controller', function() {
       ctrl.ascending = true;
       ctrl.sortBy('segmentation');
       expect(ctrl.orderName).toEqual(['-store.segmentation']);
+    });
+  });
+
+  describe('[list.vsYAGrowthPercent] method', function() {
+    it('should return 100 if this year is positive and last year is 0', function() {
+      expect(ctrl.vsYAGrowthPercent(356, 0)).toEqual(100);
+    });
+
+    it('should return -100 if this year is 0, and last year is positive', function() {
+      expect(ctrl.vsYAGrowthPercent(0, 420)).toEqual(-100);
+    });
+
+    it('should return 0 if both this and last year are 0', function() {
+      expect(ctrl.vsYAGrowthPercent(0, 0)).toEqual(0);
+    });
+
+    it('should return a percentage if no 0 values present', function() {
+      expect(ctrl.vsYAGrowthPercent(75, 150)).toEqual(-50);
     });
   });
 
@@ -1286,19 +1560,6 @@ describe('Unit: list controller', function() {
       expect(opportunitiesService.model.opportunities.length).toEqual(2);
       expect(opportunitiesService.model.opportunities[1].groupedOpportunities.length).toEqual(1);
       expect(opportunitiesService.model.opportunities[1].store.highImpactOpportunityCount).toEqual(0);
-    });
-  });
-
-  describe('[list.openDismissModal]', function() {
-    beforeEach(function() {
-      spyOn(mdDialog, 'show').and.callThrough();
-
-      ctrl.openDismissModal();
-    });
-
-    it('should open the dismiss opps modal', function() {
-      expect(mdDialog.show).toHaveBeenCalled();
-      expect(mdDialog.show.calls.count()).toEqual(1);
     });
   });
 

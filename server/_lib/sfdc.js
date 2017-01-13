@@ -352,7 +352,7 @@ function createNote(app, req, res) {
                 try {
                   res.send({
                     'isSuccess': true,
-                    'successReturnValue': result
+                    'successReturnValue': ret
                   });
                   return ret;
                 } catch (err) {

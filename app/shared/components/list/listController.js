@@ -44,8 +44,6 @@ module.exports = /*  @ngInject */
     vm.sharedCollaborators = [];
     vm.shareOpportunityFail = false;
     vm.showSubMenu = false;
-    // sortProperty is set to default sort on page load
-    // vm.sortProperty = 'store.name';
     vm.storeChevron = true;
     vm.stores = [];
     vm.undoClicked = false;
@@ -55,7 +53,6 @@ module.exports = /*  @ngInject */
     vm.addToSharedCollaborators = addToSharedCollaborators;
     vm.addToTargetList = addToTargetList;
     vm.allOpportunitiesExpanded = allOpportunitiesExpanded;
-    vm.cancelFeedback = cancelFeedback;
     vm.closeCreateTargetListModal = closeCreateTargetListModal;
     vm.closeModal = closeModal;
     vm.closeOrDismissOpportunity = closeOrDismissOpportunity;
@@ -63,7 +60,6 @@ module.exports = /*  @ngInject */
     vm.createNewList = createNewList;
     vm.depletionsVsYaPercent = depletionsVsYaPercent;
     vm.displayBrandIcon = displayBrandIcon;
-    vm.exists = exists;
     vm.expandCallback = expandCallback;
     vm.flattenOpportunity = flattenOpportunity;
     vm.getDate = getDate;
@@ -73,6 +69,7 @@ module.exports = /*  @ngInject */
     vm.noOpportunitiesExpanded = noOpportunitiesExpanded;
     vm.openDismissModal = openDismissModal;
     vm.openShareModal = openShareModal;
+    vm.opportunityTypeOrSubtype = opportunityTypeOrSubtype;
     vm.pageName = pageName;
     vm.pickMemo = pickMemo;
     vm.removeOpportunity = removeOpportunity;
@@ -89,7 +86,6 @@ module.exports = /*  @ngInject */
     vm.toggleSelectAllStores = toggleSelectAllStores;
     vm.updateOpportunityModel = updateOpportunityModel;
     vm.vsYAGrowthPercent = vsYAGrowthPercent;
-    vm.opportunityTypeOrSubtype = opportunityTypeOrSubtype;
 
     // Custom Headers for CSV export
     vm.csvHeader = [
@@ -295,11 +291,6 @@ module.exports = /*  @ngInject */
       return haystack.indexOf(needle) !== -1;
     }
 
-    // Check if list item exists and is selected
-    function exists(item, list) {
-      return list.indexOf(item) > -1;
-    }
-
     // Check if all items are selected
     /* not useful when you can uncheck alt j
     function isChecked() {
@@ -397,10 +388,6 @@ module.exports = /*  @ngInject */
       $mdDialog.hide();
     }
 
-    function cancelFeedback(opportunity) {
-      closeModal();
-    }
-
     // arr of pages to be hidden on
     function pageName(arr) {
       arr = arr || [];
@@ -457,7 +444,7 @@ module.exports = /*  @ngInject */
     function showItemAuthorizationFlag(authCode, depletions) {
       if (authCode === 'CM' || authCode === 'SP') {
         return true;
-      } else if (authCode === 'BM' && depletions > 0) {
+      } else if (authCode === 'BM' && depletions <= 0) {
         return true;
       } else {
         return false;

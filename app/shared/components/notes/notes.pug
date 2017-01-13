@@ -19,12 +19,13 @@ div.modal.notes(ng-if="notesOpen")
       p(ng-click="n.openCreateNote()").bold.add-note <span>+</span> New Note
       div(ng-if="n.creatingNote").create-new-note
         label Topic
+        label.error(ng-if="n.invalidCreateNote") Please Select a Topic
         .dropdown-filter
           .dropdown
-            md-select(ng-model="n.newNote.title" aria-label="rationale dropdown" placeholder="Select a topic").short
+            md-select(ng-model="n.newNote.title" ng-change="n.invalidCreateNote = false" aria-label="rationale dropdown" placeholder="Select a topic").short
               md-option(ng-repeat="topic in n.noteTopics" aria-label="note title selector" value="{{topic}}") {{topic}}
-              md-option(aria-label="note title selector" ng-value="" ng-click="n.showInput()") + Add a new topic >
-        input(ng-if="n.inputToggle" ng-model="n.newNote.title")
+              md-option(aria-label="note title selector" value="") + Add a new topic >
+        input(ng-if="n.newNote.title === '' || n.newNote && n.noteTopics.indexOf(n.newNote.title) === -1" ng-model="n.newNote.title")
         label details
         div.text-editor
           text-angular(ta-toolbar="[['bold','italics', 'underline', 'ul']]" ta-text-editor-class="form-content" ng-model="n.newNote.body").text-editor
@@ -43,7 +44,7 @@ div.modal.notes(ng-if="notesOpen")
           p(ng-click="n.toggleDelete(note)").cancel.accent X Cancel
       div.note-body-field(ng-if="!note.deleteConfirmation")
         h4(ng-if="!note.editMode") {{note.title}} <span ng-if="note.attachments.length" class="attachments"></span>
-        p(ng-if="!note.editMode" ng-class="{'long-note': note.noteDetails}") <div.note-body-field-text ta-bind ng-model="note.body"></div> <span class="read-more" ng-if="!note.noteDetails && note.body.length >= 150" ng-click="n.readMore(note)")>...Read More</span>
+        p(ng-if="!note.editMode" class="note-body-field-content" ng-class="{'expanded': note.readMore}" long-note) <div.note-body-field-text ta-bind ng-model="note.body"></div> <span class="read-more" ng-if="!note.editMode && !note.noteDetails" ng-class="{'expanded': note.readMore}" ng-click="n.readMore(note)")>...Read More</span>
         //- .note-attachments(ng-if="note.noteDetails")
         //-   div.attachement-header
         //-     .attachments
@@ -72,12 +73,13 @@ div.modal.notes(ng-if="notesOpen")
           div.main-note-section
             div
               label Topic
+              label.error(ng-if="note.invalidNote") Please Select a Topic
               .dropdown-filter
                 .dropdown
-                  md-select(ng-model="note.title" aria-label="rationale dropdown" placeholder="Select a topic").short
+                  md-select(ng-model="note.title" ng-change="note.invalidNote = false" aria-label="rationale dropdown" placeholder="Select a topic").short
                     md-option(aria-label="note title selector" value="{{option}}" ng-model="note.title" ng-repeat="option in n.noteTopics") {{option}}
                     md-option(aria-label="note title selector" value="" ng-click="n.showInput()") + Add a new topic >
-              input(ng-if="n.inputToggle" ng-model="note.title")
+              input(ng-if="n.noteTopics.indexOf(note.title) === -1" ng-model="note.title")
 
             label Details
             div.text-editor
@@ -124,4 +126,4 @@ div.modal.notes(ng-if="notesOpen")
                 p Add an attachment
                 p {{n.errorMsg}}
             button(ng-click="n.saveEditedNote(note)").btn-action Save
-            p(ng-click="n.isEditing(note)").cancel.accent X Cancel
+            p(ng-click="n.isEditing(note, true)").cancel.accent X Cancel
