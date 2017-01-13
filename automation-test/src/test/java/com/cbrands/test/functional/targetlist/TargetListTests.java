@@ -52,6 +52,9 @@ public class TargetListTests extends BaseSeleniumTestCase{
 		if(!login.isUserLoggedIn()) { 
 			homePage = login.loginWithValidCredentials(ACTOR1_USER_NAME, ACTOR1_PASSWORD);
 		}
+		targetListPage = homePage.navigateTargetList();
+		targetListPage.clickNewTargetList2(listname2);
+		
 				targetListPage = homePage.navigateTargetList();
 				targetListPage.clickCreateNewList()
 								.clickCreateNewListModal()

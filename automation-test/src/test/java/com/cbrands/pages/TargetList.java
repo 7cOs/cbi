@@ -257,7 +257,8 @@ public class TargetList extends LoadableComponent<TargetList> {
 		return this;
 	}
 
-	public TargetList clickNewTargetList(String name) {
+	@Deprecated
+	public TargetList clickNewTargetList2(String name) {
 		// waitForVisible(By.xpath("//h4[text()='"+ name + "']"));
 		WebElement MyTargetList = findElement(By.xpath("//h4[text()='" + name + "']"));
 		//waitForElementToClickable(MyTargetList, true);
@@ -270,6 +271,19 @@ public class TargetList extends LoadableComponent<TargetList> {
 		// MyTargetList.click();
 		// return this;
 
+	}
+	
+	public TargetList clickNewTargetList(String name) {
+		List<WebElement> MyTargetLists = findElements(By.xpath("//*[@id='tab-content-2']/div/md-content/div[@class='target-list-detail-container']/ul/li/div/div[@class='stats']/div/h4[1]"));
+		for (WebElement webElement : MyTargetLists) {
+			System.out.println(webElement.getText());
+			if(webElement.getText().equalsIgnoreCase(name)){
+				webElement.click();
+				break;
+			}
+			
+		}
+		return this;
 	}
 
 	public TargetList clickTargetList(String name) {
