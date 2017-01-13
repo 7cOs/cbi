@@ -20,7 +20,6 @@ import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 import com.cbrands.BaseSeleniumTestCase;
-import com.cbrands.helper.RetryAnalyzer;
 import com.cbrands.pages.Login;
 import com.cbrands.pages.NotificationContent;
 

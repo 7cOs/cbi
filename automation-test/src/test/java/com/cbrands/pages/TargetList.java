@@ -327,8 +327,9 @@ public class TargetList extends LoadableComponent<TargetList> {
 	}
 
 	public Opportunities navigateToOpportunities() {
-		waitForElementToClickable(opportunities, true).click();
-		opportunities.click();
+		//waitForElementToClickable(opportunities, true).click();
+		//opportunities.click();
+		driver.get(PropertiesCache.getInstance().getProperty("qa.host.address") + "/opportunities");
 		return PageFactory.initElements(driver, Opportunities.class);
 	}
 
