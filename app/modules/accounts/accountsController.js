@@ -947,7 +947,6 @@ module.exports = /*  @ngInject */
         vm.currentTopBottomObj.isPerformanceDataUpdateRequired = false;
         vm.currentTopBottomObj = myperformanceService.updateDataForCurrentTopDownLevel(vm.currentTopBottomObj, categoryBound, vm.filterModel.depletionsTimePeriod, vm.filterModel.distributionTimePeriod, vm.filterModel.trend);
         setSortedArrIndex();
-        console.log('TopBottom Obj', vm.currentTopBottomObj);
       }, function(error) {
         console.log('[getDataForTopBottom]', error);
         vm.loadingTopBottom = 'error';
