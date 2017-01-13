@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports = /*  @ngInject */
-  function scorecardsController($rootScope, $scope, $q, $filter, $state, filtersService, myperformanceService, opportunitiesService, userService) {
+  function scorecardsController($rootScope, $scope, $q, $filter, $state, filtersService, opportunitiesService, userService) {
 
     // ****************
     // CONTROLLER SETUP
@@ -49,12 +49,6 @@ module.exports = /*  @ngInject */
 
     // Set page title for head and nav
     $rootScope.pageTitle = $state.current.title;
-
-    // Services
-    vm.performanceData = myperformanceService.model();
-    vm.depletionsData = myperformanceService.depletionModel();
-    vm.distributionData = myperformanceService.distributionModel();
-    vm.filters = myperformanceService.filter();
     vm.filtersService = filtersService;
     vm.userService = userService;
 
