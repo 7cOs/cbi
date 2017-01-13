@@ -297,14 +297,14 @@ module.exports = /*  @ngInject */
 
       if (notesService.model.currentStoreProperty === 'subaccount' || notesService.model.currentStoreProperty === 'account') {
         emailString = 'mailto:';
-        emailString += '?subject=Note: ' + note.title;
+        emailString += '?subject=' + currentAccount.currentStoreName + ': Note: ' + note.title;
         emailString += '&body=' + currentAccount.currentStoreName + '%0D%0A%0D%0A' + updatedNoteBody;
         $window.location = emailString;
       }
 
       if (notesService.model.currentStoreProperty === 'store') {
         emailString = 'mailto:';
-        emailString += '?subject=Note: ' + note.title;
+        emailString += '?subject=' + currentAccount.currentStoreName + ': Note: ' + note.title;
         emailString += '&body=' + currentAccount.currentStoreName + '%0D%0A%0D%0A';
         emailString += currentAccount.address + '%0D%0A%0D%0A';
         emailString += 'TDLinx: ' + currentAccount.tdlinx + '%0D%0A%0D%0A';
@@ -314,7 +314,7 @@ module.exports = /*  @ngInject */
 
       if (notesService.model.currentStoreProperty === 'distributor') {
         emailString = 'mailto:';
-        emailString += '?subject=Note: ' + note.title;
+        emailString += '?subject=' + currentAccount.currentStoreName + ': Note: ' + note.title;
         emailString += '&body=' + currentAccount.currentStoreName + '%0D%0A%0D%0A';
         emailString += currentAccount.address + '%0D%0A%0D%0A';
         emailString += 'ID: ' + currentAccount.accountId + '%0D%0A%0D%0A';
