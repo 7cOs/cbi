@@ -169,6 +169,7 @@ module.exports = /*  @ngInject */
         };
 
         data.date = moment.utc().format();
+        data.id = success.successReturnValue[0].id;
         vm.notes.push(data);
         jumpToNotesTop();
         setNoteAuthor();
