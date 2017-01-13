@@ -4,6 +4,7 @@ module.exports = function(app) {
   const SamlStrategy = require('passport-saml').Strategy,
         fs = require('graceful-fs'),
         util = require('../../_lib/util')(app),
+        logfmt = require('logfmt'),
         request = require('request');
 
   return new SamlStrategy({
@@ -21,7 +22,11 @@ module.exports = function(app) {
     var signed = util.sign('/api/auth');
     request.post(signed, {body: req.body.SAMLResponse}, function(err, httpResponse, body) {
       if (err) {
-        console.log('error ' + err);
+        let logObj = Object.assign(
+          util.formatLogMessage(req.headers['x-request-id'], httpResponse.req.method, signed, httpResponse.statusCode, 'Error occurred in SAML auth process when making API request.', body),
+          err);
+        logfmt.log(logObj);
+
         return done(null, false);
       } else {
         var user = JSON.parse(body);
