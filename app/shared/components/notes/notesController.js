@@ -240,12 +240,13 @@ module.exports = /*  @ngInject */
     // This is a temporary function based on the plugin-demo
     // TODO make active with SF
     function uploadFiles(files) {
-      vm.fileUploading = true;
+      // vm.fileUploading = true;
       vm.files = files;
       if (files && files.length) {
         Upload.upload({
-          url: 'https://angular-file-upload-cors-srv.appspot.com/upload',
+          url: '/sfdc/createAttachment',
           data: {
+            noteId: 'a2Xg0000000IhBtEAK',
             files: files
           }
         }).then(function(response) {

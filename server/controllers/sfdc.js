@@ -6,14 +6,22 @@ J. Scott Cromie
 ***********************************************************/
 var sfdc = require('../_lib/sfdc.js');
 module.exports = {
+  createAttachment: createAttachment,
   getAttachmentData: getAttachmentData,
   createNote: createNote,
   deleteNote: deleteNote,
   updateNote: updateNote,
-  deleteAttach: deleteAttach,
+  deleteAttachment: deleteAttachment,
   searchAccounts: searchAccounts,
   accountNotes: accountNotes
 };
+
+function createAttachment(app, req, res) {
+  sfdc
+    .createAttachment(app, req, res)
+    .then(res.send)
+    .catch(res.send);
+}
 
 function getAttachmentData(app, req, res) {
   try {
@@ -23,19 +31,11 @@ function getAttachmentData(app, req, res) {
   }
 }
 
-function deleteAttach(app, req, res) {
-  sfdc.deleteAttach(app, req, res).then(function(result) {
-    try {
-      res.send(result);
-    } catch (err) {
-      // if there is a problem sending the response.
-      console.log(err);
-      res.send(err);
-    };
-  }, function (err) {
-    console.log(err);
-    res.send(err);
-  });
+function deleteAttachment(app, req, res) {
+  sfdc
+    .deleteAttachment(app, req, res)
+    .then(res.send)
+    .catch(res.send);
 };
 
 function deleteNote(app, req, res) {
