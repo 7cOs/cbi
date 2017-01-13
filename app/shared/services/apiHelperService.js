@@ -19,6 +19,7 @@ module.exports = /*  @ngInject */
       var queryParams = '',
           i = 0,
           z = getKeyLength(obj) - 1;
+      var key1, filterQueryParams;
 
       function getKeyLength(data) {
         var l = 0;
@@ -30,30 +31,7 @@ module.exports = /*  @ngInject */
         return l;
       }
 
-      if (obj.type && obj.type === 'store') {
-        // remove type obj
-        delete obj.type;
-        var filterParams = obj.filterQueryParams;
-        var otherQueryParams = obj.otherQueryParams;
-        var filterQueryParams = '';
-        z = otherQueryParams.length;
-        queryParams += '?';
-        for (var key1 in otherQueryParams) {
-          queryParams += key1 + '=' + encodeURIComponent(otherQueryParams[key1]);
-          if (i !== (z - 1)) queryParams += '&';
-          i++;
-        }
-        delete filterParams.type;
-
-        i = 0;
-        z = getKeyLength(filterParams) - 1;
-        filterQueryParams += parseAppliedFilters(filterParams, i, z);
-        queryParams += 'filter=' + encodeURIComponent(filterQueryParams);
-
-        // console.log('queryParams - top bottom stores', decodeURIComponent(queryParams));
-
-        return queryParams;
-      } else if (obj.type && obj.type === 'opportunities') {
+      if (obj.type && obj.type === 'opportunities') {
         var p = applyPage(),
             s = applySort(),
             queryStr = '';
