@@ -32,6 +32,10 @@ module.exports = function(app) {
     sfdc['getAttachmentData'](app, req, res);
   });
 
+  app.post('/sfdc/createAttachment', require('connect-multiparty')(), function(req, res) {
+    sfdc['createAttachment'](app, req, res);
+  });
+
   app.get('/sfdc/undeleteNote', function (req, res) {
     res.send('<h1>undeleteNote is not functional yet</h1>');
     //     sfdc['unDeleteNote'](app, req, res);

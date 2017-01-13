@@ -6,6 +6,7 @@ J. Scott Cromie
 ***********************************************************/
 var sfdc = require('../_lib/sfdc.js');
 module.exports = {
+  createAttachment: createAttachment,
   getAttachmentData: getAttachmentData,
   createNote: createNote,
   deleteNote: deleteNote,
@@ -14,6 +15,15 @@ module.exports = {
   searchAccounts: searchAccounts,
   accountNotes: accountNotes
 };
+
+function createAttachment(app, req, res) {
+  sfdc
+    .createAttachment(app, req, res)
+    .then(function(result) {
+      res.send(result);
+    })
+    .catch(res.send);
+}
 
 function getAttachmentData(app, req, res) {
   try {

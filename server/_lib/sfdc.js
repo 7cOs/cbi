@@ -7,6 +7,7 @@ module.exports = {
   searchAccounts: searchAccounts,
   deleteAttach: deleteAttach,
   getAttachment: getAttachment,
+  createAttachment: createAttachment,
   deleteNote: deleteNote,
   updateNote: updateNote
 };
@@ -406,3 +407,47 @@ function getAttachment(app, req, res) {
       'errorMessage': 'No connection could be made to Salesforce.com: ' + err};
   }
 };
+
+function createAttachment(app, req, res) {
+  var files = req.files.files || [];
+  var sfdc = sfdcConn(app, req, res);
+  var attachments = Promise
+    .all(cleanUploadedFiles(files))
+    .then(function(files) {
+      return files.map(function(file) {
+        file.ParentId = req.body.noteId;
+        return file;
+      });
+    });
+
+  return Promise
+    .all([attachments, sfdc])
+    .then(function(args) {
+      var attachments = args[0];
+      var sfdc = args[1];
+
+      return sfdc.sobject('Attachment').create(attachments);
+    });
+}
+
+function cleanUploadedFiles(files) {
+  return files.map(function(file) {
+    return getUploadedFileBase64(file.path)
+      .then(function(data) {
+        return {
+          Name: file.originalFilename,
+          Body: data,
+          ContentType: file.type
+        };
+      })
+      .catch(console.error);
+  });
+}
+function getUploadedFileBase64(path) {
+  return new Promise(function(resolve, reject) {
+    require('fs').readFile(path, function(err, data) {
+      err ? reject(err) : resolve(new Buffer(data).toString('base64'));
+    });
+  });
+}
+
