@@ -699,7 +699,7 @@ public class Opportunities extends LoadableComponent<Opportunities> {
 	}
 	
 	public HomePage navigateToHome() {
-		home.click();
+		driver.get(PropertiesCache.getInstance().getProperty("qa.host.address"));
 		return PageFactory.initElements(driver, HomePage.class);
 	}
 	
