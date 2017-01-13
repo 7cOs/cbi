@@ -276,14 +276,24 @@ public class TargetList extends LoadableComponent<TargetList> {
 	public TargetList clickNewTargetList(String name) {
 		List<WebElement> MyTargetLists = findElements(By.xpath("//*[@id='tab-content-2']/div/md-content/div[@class='target-list-detail-container']/ul/li/div/div[@class='stats']/div/h4[1]"));
 		for (WebElement webElement : MyTargetLists) {
-			System.out.println(webElement.getText());
 			if(webElement.getText().equalsIgnoreCase(name)){
-				webElement.click();
+				JavascriptExecutor js = (JavascriptExecutor) driver;
+				js.executeScript("arguments[0].click();", webElement);
 				break;
 			}
 			
 		}
 		return this;
+	}
+	
+	public boolean checkTargetLists(String name) {
+		List<WebElement> MyTargetLists = findElements(By.xpath("//*[@id='tab-content-2']/div/md-content/div[@class='target-list-detail-container']/ul/li/div/div[@class='stats']/div/h4[1]"));
+		for (WebElement webElement : MyTargetLists) {
+			if(webElement.getText().equalsIgnoreCase(name)){
+				return true;
+			}
+		}
+		return false;
 	}
 
 	public TargetList clickTargetList(String name) {
@@ -803,6 +813,7 @@ public class TargetList extends LoadableComponent<TargetList> {
 
 		return targetLists;
 	}
+
 
 	public String getDepletionSince_TargetListPage(String listname) throws InterruptedException {
 		WebElement element = findElement(By.cssSelector("div[class='target-list-detail-container']"));

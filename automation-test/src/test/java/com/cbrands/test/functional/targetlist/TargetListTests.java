@@ -34,10 +34,10 @@ public class TargetListTests extends BaseSeleniumTestCase{
 			homePage = login.loginWithValidCredentials(ACTOR4_USER_NAME, ACTOR4_PASSWORD);
 		}	
 		targetListPage = homePage.navigateTargetList();
-		if(targetListPage.checkTargetListExists(listname)){
+		if(targetListPage.checkTargetLists(listname)){
 			assertThat(targetListPage.getDepletionSince_TargetListPage(listname), log((not(equalToIgnoringCase("0")))));
 			targetListPage.clickNewTargetList(listname)
-						.getDepletionsSinceClosed();
+						  .getDepletionsSinceClosed();
 			assertThat(targetListPage.getDepletionsSinceClosed(),log(is(not(equalTo("0CE")))));
 		}
 		else{
