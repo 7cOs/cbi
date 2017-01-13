@@ -1098,7 +1098,7 @@ public class Opportunities extends LoadableComponent<Opportunities> {
 	}
 	
 	public List<NotificationContent> getFirtNotifications() {
-		List<WebElement> elements = findElements(By.xpath("//*[@id='menu_container_0']/md-menu-content/div/div/div[@class='notification-card clearfix SHARE_OPPORTUNITY']"));
+		List<WebElement> elements = findElements(By.xpath("//*[@id='menu_container_0']/md-menu-content/div/div[@class='notification-card clearfix SHARE_OPPORTUNITY']"));
 		List<NotificationContent> notificationContents = new ArrayList<NotificationContent>();
 		System.out.println(elements.get(0).getText());
 			String storeName = elements.get(0).getText().split("\n")[1].toUpperCase();
