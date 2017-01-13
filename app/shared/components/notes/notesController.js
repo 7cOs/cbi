@@ -288,9 +288,12 @@ module.exports = /*  @ngInject */
         emailString = 'mailto:';
         emailString += '?subject=' + currentAccount.currentStoreName + ': Note: ' + note.title;
         emailString += '&body=' + currentAccount.currentStoreName + '%0D%0A%0D%0A';
-        emailString += currentAccount.address + '%0D%0A%0D%0A';
+        emailString += currentAccount.address + '%0D%0A';
+        emailString += currentAccount.city + '%0D%0A';
+        emailString += currentAccount.state + '%0D%0A';
+        emailString += currentAccount.zipCode + '%0D%0A%0D%0A';
         emailString += 'TDLinx: ' + currentAccount.tdlinx + '%0D%0A%0D%0A';
-        emailString += '%0D%0A%0D%0A' + updatedNoteBody;
+        emailString += updatedNoteBody;
         $window.location = emailString;
       }
 
@@ -298,9 +301,12 @@ module.exports = /*  @ngInject */
         emailString = 'mailto:';
         emailString += '?subject=' + currentAccount.currentStoreName + ': Note: ' + note.title;
         emailString += '&body=' + currentAccount.currentStoreName + '%0D%0A%0D%0A';
-        emailString += currentAccount.address + '%0D%0A%0D%0A';
+        emailString += currentAccount.address + '%0D%0A';
+        emailString += currentAccount.city + '%0D%0A';
+        emailString += currentAccount.state + '%0D%0A';
+        emailString += currentAccount.zipCode + '%0D%0A%0D%0A';
         emailString += 'ID: ' + currentAccount.accountId + '%0D%0A%0D%0A';
-        emailString += '%0D%0A%0D%0A' + updatedNoteBody;
+        emailString += updatedNoteBody;
         $window.location = emailString;
       }
     }

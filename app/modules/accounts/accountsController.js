@@ -1186,6 +1186,9 @@ module.exports = /*  @ngInject */
         }
         notesService.model.tdlinx = performanceData.unversionedStoreCode;
         notesService.model.address = formatAddress(performanceData);
+        notesService.model.city = performanceData.city;
+        notesService.model.state = performanceData.state;
+        notesService.model.zipCode = performanceData.zipCode;
       }
     }
 
@@ -1198,9 +1201,6 @@ module.exports = /*  @ngInject */
       }
 
       address = ifIsKnown(d.addressLine1) + ifIsKnown(d.addressLine2) + ifIsKnown(d.addressLine3) + ifIsKnown(d.addressLine4);
-      address += d.city + ' ';
-      address += d.state + ' ';
-      address += d.zipCode;
 
       return address;
     }
