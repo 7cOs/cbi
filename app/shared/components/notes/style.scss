@@ -113,18 +113,38 @@
       margin-top: 0;
     }
 
-    p, li {
-      font-style: 0.9em;
+    p, li, span {
+      color: $gray-1;
+      font-family: $work-sans;
+      font-size: 0.9em !important;
     }
 
-    .note-body-field > p {
-      margin: 0 auto;
-      height: 2.1em;
-      overflow: hidden;
+    .note-body-field {
+
+      + .read-more {
+        display: none;
+      }
 
       &.long-note {
-        height: auto;
-        overflow: visible;
+
+        > p {
+          margin: 0 auto;
+          height: 2.1em;
+          overflow: hidden;
+
+          &.expanded {
+            height: auto;
+            overflow: auto;
+          }
+        }
+
+        + .read-more {
+          display: block;
+
+          &.expanded {
+            display: none;
+          }
+        }
       }
     }
 
@@ -267,11 +287,11 @@
       color: $blue;
     }
 
-    p, li {
+    p, li, span {
       color: $gray-1;
       line-height: 1.5;
       font-family: $work-sans;
-      font-size: 0.7em;
+      font-size: 0.7em !important;
     }
 
     label {
