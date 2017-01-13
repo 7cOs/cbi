@@ -146,7 +146,7 @@ div(row)
 
             //- Velocity Trend
             //- For YA
-            td(ng-if="a.filtersService.model.accountSelected.accountBrands.value === a.filtersService.accountFilters.accountBrandEnum.velocity") <span class="percentage" ng-if="a.checkIfVelocityPresent(item)">{{a.displayBrandValue(a.currentTotalsObject.measures, 'velocityTrend', 'distributionTimePeriod') | number:1}} %</span><span ng-if="!a.displayBrandValue(a.currentTotalsObject.measures, 'velocityTrend', 'distributionTimePeriod')">-</span>
+            td(ng-if="a.filtersService.model.accountSelected.accountBrands.value === a.filtersService.accountFilters.accountBrandEnum.velocity" ng-class="a.getClassBasedOnValue(a.displayBrandValue(a.currentTotalsObject.measures, 'velocityTrend', 'distributionTimePeriod'))") <span ng-if="a.checkIfVelocityPresent(item)">{{a.displayBrandValue(a.currentTotalsObject.measures, 'velocityTrend', 'distributionTimePeriod') | number:1}}%</span><span ng-if="!a.displayBrandValue(a.currentTotalsObject.measures, 'velocityTrend', 'distributionTimePeriod')">-</span>
 
             //- Distributions TDs
             //- Distirbution value Simple
@@ -186,7 +186,7 @@ div(row)
 
                 //- Velocity Trend
                 //- For YA
-                td(ng-if="a.filtersService.model.accountSelected.accountBrands.value === a.filtersService.accountFilters.accountBrandEnum.velocity") <span class="percentage" ng-if="a.checkIfVelocityPresent(item)">{{a.displayBrandValue(item.measures, 'velocityTrend', 'distributionTimePeriod') | number:1}} %</span><span ng-if="!a.displayBrandValue(item.measures, 'velocityTrend', 'distributionTimePeriod')">-</span>
+                td(ng-if="a.filtersService.model.accountSelected.accountBrands.value === a.filtersService.accountFilters.accountBrandEnum.velocity" ng-class="a.getClassBasedOnValue(a.displayBrandValue(item.measures, 'velocityTrend', 'distributionTimePeriod'))") <span ng-if="a.checkIfVelocityPresent(item)">{{a.displayBrandValue(item.measures, 'velocityTrend', 'distributionTimePeriod') | number:1}}%</span><span ng-if="!a.displayBrandValue(item.measures, 'velocityTrend', 'distributionTimePeriod')">-</span>
 
                 //- Distributions TDs
                 //- Distirbution value Simple
