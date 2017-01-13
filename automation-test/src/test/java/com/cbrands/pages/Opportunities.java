@@ -371,7 +371,7 @@ public class Opportunities extends LoadableComponent<Opportunities> {
 	@FindAll(@FindBy(how=How.CSS, using = "label[class='sort']"))
 	private List <WebElement> sortHeaders;
 	
-	@FindBy(how = How.XPATH, using = "//p[text()='Create New List']")
+	@FindBy(how = How.XPATH, using = "//*[@class='target-list-menu']/md-menu-item[@ng-click='list.createNewList($event)']")
 	private WebElement CreatNewListButton;
 	
 	@FindBy(how = How.CSS, using = "input[placeholder='Enter List Name']")

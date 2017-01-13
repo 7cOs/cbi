@@ -20,6 +20,7 @@ import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 import com.cbrands.BaseSeleniumTestCase;
+import com.cbrands.helper.RetryAnalyzer;
 import com.cbrands.pages.Login;
 import com.cbrands.pages.NotificationContent;
 
@@ -44,7 +45,7 @@ public class TargetListTests extends BaseSeleniumTestCase{
 		}
 	}
 
-	@Test(dataProvider = "createTargetListData", description = "Create a new Target List", priority = 1)
+	@Test(retryAnalyzer = RetryAnalyzer.class, dataProvider = "createTargetListData", description = "Create a new Target List", priority = 1)
 	public void US12828_AT_TargetList_Creation(String name, String description,  String listname, String desc,String chainname, String listname2) throws InterruptedException {
 		
 		login = new Login(driver);
@@ -56,8 +57,7 @@ public class TargetListTests extends BaseSeleniumTestCase{
 								.clickCreateNewListModal()
 								.EnterNameTextBox(listname)
 								.EnterDescriptionTextBox(desc)
-								.clickSaveButton()
-								.clickNewTargetList(listname);
+								.clickSaveButton();
 				targetListPage = homePage.navigateTargetList();
 				targetListPage.clickCreateNewList();
 				opportunitiesPage = targetListPage.clickSearchOpportunityButton();
@@ -70,7 +70,6 @@ public class TargetListTests extends BaseSeleniumTestCase{
 								.clickCreatNewListButton()
 								.EnterNameTextBox(listname2)
 								.clickSaveButton();
-				targetListPage = opportunitiesPage.navigateToTargetList();
 			}
 	
 	@Test(dependsOnMethods = "US12828_AT_TargetList_Creation", dataProvider = "cannotDismissTargetedOpportunities", description = "Cannot Dismiss TargetedOpportunities", priority = 2)
