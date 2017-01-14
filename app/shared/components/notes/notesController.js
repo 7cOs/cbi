@@ -312,6 +312,8 @@ module.exports = /*  @ngInject */
     }
 
     function formatEmailString(note) {
+      note = note.replace(/&#39;/g, '\'');
+      note = note.replace(/&quot;/g, '"');
       note = note.replace(/<\/?div[^>]*>/g, '');
       note = note.replace(/<\/?p[^>]*>|<\/?ul[^>]*>/g, '%0D%0A');
       note = note.replace(/<\/?br[^>]*>|<\/?li[^>]*>/g, ' ');
