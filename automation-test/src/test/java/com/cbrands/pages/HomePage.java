@@ -9,6 +9,8 @@ import static com.cbrands.helper.SeleniumUtils.waitForVisibleFluentWait;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.Keys;
@@ -24,6 +26,9 @@ import org.testng.Assert;
 import com.cbrands.helper.PropertiesCache;
 
 public class HomePage extends LoadableComponent<HomePage>{
+	
+	private Log log = LogFactory.getLog(HomePage.class);
+	
 	WebDriver driver;
 
 	@FindBy(how = How.CSS, using = "h1.ng-binding")
@@ -251,8 +256,8 @@ public class HomePage extends LoadableComponent<HomePage>{
 
 	@Override
 	protected void isLoaded() throws Error {
-		Assert.assertEquals(driver.getCurrentUrl(), PropertiesCache.getInstance().getProperty("qa.host.address"));
-		
+		Assert.assertTrue(userInfo.isDisplayed());
+		log.info("User: " + userInfo.getText() + " login submited");
 	}
 
 	public HomePage clickSharedWithMeLink() {

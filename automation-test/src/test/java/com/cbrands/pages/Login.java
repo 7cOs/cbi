@@ -22,13 +22,13 @@ public class Login extends LoadableComponent<Login>{
 	
 	private boolean isUserLoggedIn = false;
 	
-	@FindBy(how=How.XPATH, using="id(\"username\")")
+	@FindBy(how=How.XPATH, using="//*[@id='username']")
 	private WebElement userName;
 
-	@FindBy(how=How.XPATH, using="id(\"password\")")
+	@FindBy(how=How.XPATH, using="//*[@id='password']")
 	private WebElement password;
 
-	@FindBy(how=How.XPATH, using="//form[@name=\"login-form\"]/div[3]/div[1]/button[1]")
+	@FindBy(how=How.XPATH, using="//button[@type='submit']")
 	private WebElement submitButton;
 
 	public Login(WebDriver driver) {
@@ -53,7 +53,7 @@ public class Login extends LoadableComponent<Login>{
 	public HomePage loginWithValidCredentials(String userName, String password) {
         typeUserName(userName);
         typePassword(password);
-		log.info("User: " + userName + " Logged successfully.");
+		log.info("User: " + userName + " login submited");
         return clickSubmit();
     }
 	
@@ -63,13 +63,15 @@ public class Login extends LoadableComponent<Login>{
 
 	@Override
 	protected void load() {
-		driver.get(PropertiesCache.getInstance().getProperty("qa.host.address"));
+		driver.get("https://orion-qa.cbrands.com/auth/logout");
 	}
 
 	@Override
 	protected void isLoaded() throws Error {
-		Assert.assertEquals(driver.getCurrentUrl(), PropertiesCache.getInstance().getProperty("qa.host.address"));
-		
+		Assert.assertTrue(userName.isDisplayed());
+		Assert.assertTrue(password.isDisplayed());
+		Assert.assertTrue(submitButton.isDisplayed());
+		log.info("Logged out");
 	}
 
 	public void logOut() {

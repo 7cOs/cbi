@@ -79,16 +79,17 @@ public abstract class BaseSeleniumTestCase implements IConstant {
 	}
 	
 	protected void logout(){
-		driver.get("https://orion-qa.cbrands.com/auth/logout");
-		driver.get("https://orion-qa.cbrands.com/auth/logout");
+		//driver.get("https://orion-qa.cbrands.com/auth/logout");
 		try {
-			waitForVisible (By.id("username"));	
+			//waitForVisible (By.id("username"));	
+			login = new Login(driver);
+			login.logOut();
+			login.get();
 		} catch (NoSuchElementException | TimeoutException e ) {
 			log.info("**************Logout failed.");
 		} finally {
 			log.info("Re-Trying....");
 			driver.get("https://orion-qa.cbrands.com/auth/logout");
-			log.info("Logout successfully.");
 		}
 		
 	}

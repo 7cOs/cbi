@@ -229,8 +229,7 @@ public class TargetList extends LoadableComponent<TargetList> {
 
 	public TargetList clickCreateNewList() {
 		// waitForElementToClickable(createNewList, true).click();
-		waitForElementToClickable(createNewList, true);
-		createNewList.click();
+		waitForVisibleFluentWait(createNewList).click();;
 		return this;
 	}
 

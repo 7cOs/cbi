@@ -34,6 +34,7 @@ public class TargetListTests extends BaseSeleniumTestCase{
 		login = new Login(driver);
 		if(!login.isUserLoggedIn()) { 
 			homePage = login.loginWithValidCredentials(ACTOR1_USER_NAME, ACTOR1_PASSWORD);
+			homePage.get();
 		}
 				targetListPage = homePage.navigateTargetList();
 				targetListPage.clickCreateNewList()
@@ -63,6 +64,7 @@ public class TargetListTests extends BaseSeleniumTestCase{
 		login = new Login(driver);
 		if(!login.isUserLoggedIn()) { 
 			homePage = login.loginWithValidCredentials(ACTOR1_USER_NAME, ACTOR1_PASSWORD);
+			homePage.get();
 		}
 				targetListPage = homePage.navigateTargetList();
 				targetListPage.clickNewTargetList(listname)
@@ -87,6 +89,7 @@ public class TargetListTests extends BaseSeleniumTestCase{
 		login = new Login(driver);
 		if(!login.isUserLoggedIn()) { 
 			homePage = login.loginWithValidCredentials(ACTOR1_USER_NAME, ACTOR1_PASSWORD);
+			homePage.get();
 		}
 				targetListPage = homePage.navigateTargetList();				
 				targetListPage.clickNewTargetList(listname)
@@ -103,6 +106,7 @@ public class TargetListTests extends BaseSeleniumTestCase{
 	public void US12829_AT_TargetList_Add_RemoveOpportunities(String chain, String targetListName1, String newTargetList, String targetListName2) throws InterruptedException {
 		login = new Login(driver);
 		homePage = login.loginWithValidCredentials(ACTOR1_USER_NAME, ACTOR1_PASSWORD);
+		homePage.get();
 		targetListPage = homePage.navigateTargetList();
 		if (targetListPage.checkTargetNameExists(targetListName2)) {
 			targetListPage.clickNewTargetList(targetListName2);
@@ -176,7 +180,7 @@ public class TargetListTests extends BaseSeleniumTestCase{
 	public void US12999_AT_TargetList_ShareAnOpportunity(String listname,String sendTo1, String sendTo2) throws InterruptedException{
 		login = new Login(driver);
 		homePage = login.loginWithValidCredentials(ACTOR1_USER_NAME, ACTOR1_PASSWORD);
-		
+		homePage.get();
 		targetListPage = homePage.navigateTargetList();
 		if(targetListPage.checkTargetListExists(listname)){
 			targetListPage.clickNewTargetList(listname);
@@ -219,6 +223,7 @@ public class TargetListTests extends BaseSeleniumTestCase{
 			signOut();
 			login = new Login(driver);
 			homePage = login.loginWithValidCredentials(ACTOR3_USER_NAME, ACTOR3_PASSWORD);
+			homePage.get();
 			opportunitiesPage = homePage.navigateOpportunities();
 			opportunitiesPage.clickNotification();
 			
@@ -255,6 +260,7 @@ public class TargetListTests extends BaseSeleniumTestCase{
 		login = new Login(driver);
 		if(!login.isUserLoggedIn()) { 
 			homePage = login.loginWithValidCredentials(ACTOR1_USER_NAME, ACTOR1_PASSWORD);
+			homePage.get();
 		}
 				targetListPage = homePage.navigateTargetList();				
 				targetListPage.clickNewTargetList(listname)
@@ -283,6 +289,7 @@ public class TargetListTests extends BaseSeleniumTestCase{
 		  login = new Login(driver);
 		  if(!login.isUserLoggedIn()) { 
 				homePage = login.loginWithValidCredentials(ACTOR1_USER_NAME, ACTOR1_PASSWORD);
+				homePage.get();
 		  }
 		  targetListPage = homePage.navigateTargetList();
 		  targetListPage.clickTargetList("Automated Test Target List 2");
@@ -317,7 +324,8 @@ public class TargetListTests extends BaseSeleniumTestCase{
 	  @Test(dependsOnMethods = "US12830_AT_TargetList_AddCollaboratorsToTargetList",description="US13109: AT_Target List_Remove a Collaborator", dataProvider="removeCollaboratorData", priority=8 )
 		public void US13109_AT_TargetList_RemoveACollaborator(String listname){
 			login = new Login(driver);
-			homePage = login.loginWithValidCredentials(ACTOR1_USER_NAME, ACTOR1_PASSWORD);			
+			homePage = login.loginWithValidCredentials(ACTOR1_USER_NAME, ACTOR1_PASSWORD);
+			homePage.get();
 			targetListPage = homePage.navigateTargetList();			
 			targetListPage.checkNumberofCollaborator(listname);		
 			if(targetListPage.checkTargetListExists(listname)){
@@ -351,6 +359,7 @@ public class TargetListTests extends BaseSeleniumTestCase{
 		public void US13108_AT_TargetList_TransferOwnership(String listname,String strName) {
 			login = new Login(driver);
 			homePage = login.loginWithValidCredentials(ACTOR1_USER_NAME, ACTOR1_PASSWORD);
+			homePage.get();
 			
 			targetListPage = homePage.navigateTargetList();
 			//Thread.sleep(10000);
@@ -405,7 +414,8 @@ public class TargetListTests extends BaseSeleniumTestCase{
 	  @Test(retryAnalyzer = RetryAnalyzer.class, description="US13113:AT_Target List_Delete List", dataProvider="deleteListData", dependsOnMethods="US13109_AT_TargetList_RemoveACollaborator", priority = 10)
 		public void US13113_AT_TargetList_DeleteList(String listname, String listname1) throws InterruptedException{
 			login = new Login(driver);
-			homePage = login.loginWithValidCredentials(ACTOR1_USER_NAME, ACTOR1_PASSWORD);			
+			homePage = login.loginWithValidCredentials(ACTOR1_USER_NAME, ACTOR1_PASSWORD);	
+			homePage.get();
 			targetListPage = homePage.navigateTargetList();
 			targetListPage.clickSharedWithMe();		
 			if(targetListPage.checkSharedTargetListExists(listname).trim().equalsIgnoreCase(listname)){
@@ -454,6 +464,7 @@ public class TargetListTests extends BaseSeleniumTestCase{
 			login = new Login(driver);
 			if(!login.isUserLoggedIn()) { 
 				homePage = login.loginWithValidCredentials(ACTOR1_USER_NAME, ACTOR1_PASSWORD);
+				homePage.get();
 			}
 			
 			targetListPage = homePage.navigateTargetList();
@@ -485,6 +496,7 @@ public class TargetListTests extends BaseSeleniumTestCase{
 			login = new Login(driver);
 			if(!login.isUserLoggedIn()) { 
 				homePage = login.loginWithValidCredentials(ACTOR4_USER_NAME, ACTOR4_PASSWORD);
+				homePage.get();
 			}	
 			targetListPage = homePage.navigateTargetList();
 			if(targetListPage.checkTargetLists(listname)){

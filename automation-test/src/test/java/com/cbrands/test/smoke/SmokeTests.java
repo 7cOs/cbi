@@ -25,6 +25,7 @@ public class SmokeTests extends BaseSeleniumTestCase{
 		login = new Login(driver);
 		if(!login.isUserLoggedIn()) { 
 			homePage = login.loginWithValidCredentials(ACTOR3_USER_NAME, ACTOR3_PASSWORD);
+			homePage.get();
 		}
 		opportunitiesPage = homePage.navigateOpportunities();
 		opportunitiesPage = (premise.equalsIgnoreCase("On-Premise")) ? opportunitiesPage.clickOnPremise() : opportunitiesPage.clickOffPremise();
@@ -57,6 +58,7 @@ public class SmokeTests extends BaseSeleniumTestCase{
 		login = new Login(driver);
 		if(!login.isUserLoggedIn()) { 
 			homePage = login.loginWithValidCredentials(ACTOR3_USER_NAME, ACTOR3_PASSWORD);
+			homePage.get();
 		}
 		opportunitiesPage = homePage.selectSaveReportDropdown(reportName);
 		
@@ -71,6 +73,7 @@ public class SmokeTests extends BaseSeleniumTestCase{
 		login = new Login(driver);
 		if(!login.isUserLoggedIn()) { 
 			homePage = login.loginWithValidCredentials(ACTOR3_USER_NAME, ACTOR3_PASSWORD);
+			homePage.get();
 		}
 		opportunitiesPage = homePage.navigateOpportunities();
 		
@@ -115,6 +118,7 @@ public class SmokeTests extends BaseSeleniumTestCase{
 		if(!login.isUserLoggedIn()) { 
 			login = new Login(driver);
 			homePage = login.loginWithValidCredentials(ACTOR1_USER_NAME, ACTOR1_PASSWORD);
+			homePage.get();
 		}
 		
 		opportunitiesPage = homePage.navigateOpportunities()
@@ -138,6 +142,7 @@ public class SmokeTests extends BaseSeleniumTestCase{
 	public void createTargetList(String name, String description, String collaborator) throws InterruptedException {
 		login = new Login(driver);
 		homePage = login.loginWithValidCredentials(ACTOR1_USER_NAME, ACTOR1_PASSWORD);
+		homePage.get();
 		targetListPage = homePage.navigateTargetList();
 		Thread.sleep(10000);
 		targetListPage.clickCreateNewList();
