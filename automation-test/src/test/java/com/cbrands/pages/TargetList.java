@@ -297,9 +297,28 @@ public class TargetList extends LoadableComponent<TargetList> {
 	}
 
 	public TargetList clickTargetList(String name) {
-		waitForVisible(By.xpath("//h4[text()='" + name + "']"));
-		WebElement MyTargetList = findElement(By.xpath("//h4[text()='" + name + "']"));
-		MyTargetList.click();
+		List<WebElement> MyTargetLists = findElements(By.xpath("//*[@id='tab-content-2']/div/md-content/div[@class='target-list-detail-container']/ul/li/div/div[@class='stats']/div/h4[1]"));
+		for (WebElement webElement : MyTargetLists) {
+			if(webElement.getText().equalsIgnoreCase(name)){
+				JavascriptExecutor js = (JavascriptExecutor) driver;
+				js.executeScript("arguments[0].click();", webElement);
+				break;
+			}
+			
+		}
+		return this;
+	}
+	
+	public TargetList clickTargetListFromShared(String name) {
+		List<WebElement> MyTargetLists = findElements(By.xpath("//*[@id='tab-content-3']/div/md-content/div[@class='target-list-detail-container']/ul/li/div/div/h4[1]"));
+		for (WebElement webElement : MyTargetLists) {
+			if(webElement.getText().equalsIgnoreCase(name)){
+				JavascriptExecutor js = (JavascriptExecutor) driver;
+				js.executeScript("arguments[0].click();", webElement);
+				break;
+			}
+			
+		}
 		return this;
 	}
 
@@ -937,7 +956,7 @@ public class TargetList extends LoadableComponent<TargetList> {
 	public String checkDeleteListExists() {
 		WebElement element = findElement(By.xpath("//div[@class='modal-footer clearfix ng-scope']"));
 
-		if (element.getText().contains("Delete List")) {
+		if (element.getText().contains("Delete List") && element.isEnabled()) {
 			return "Delete list exists";
 		}
 

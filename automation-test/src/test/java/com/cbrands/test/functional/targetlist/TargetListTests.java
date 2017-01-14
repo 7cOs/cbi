@@ -417,14 +417,14 @@ public class TargetListTests extends BaseSeleniumTestCase{
 			}
 		}
 	  
-	  @Test(description="US13113:AT_Target List_Delete List", dataProvider="deleteListData",dependsOnMethods="US13109_AT_TargetList_RemoveACollaborator", priority = 10)
+	  @Test(description="US13113:AT_Target List_Delete List", dataProvider="deleteListData", dependsOnMethods="US13109_AT_TargetList_RemoveACollaborator", priority = 10)
 		public void US13113_AT_TargetList_DeleteList(String listname, String listname1) throws InterruptedException{
 			login = new Login(driver);
 			homePage = login.loginWithValidCredentials(ACTOR1_USER_NAME, ACTOR1_PASSWORD);			
 			targetListPage = homePage.navigateTargetList();
 			targetListPage.clickSharedWithMe();		
 			if(targetListPage.checkSharedTargetListExists(listname).trim().equalsIgnoreCase(listname)){
-				targetListPage.clickTargetList(listname);
+				targetListPage.clickTargetListFromShared(listname);
 				targetListPage.clickManage();
 				assertThat(targetListPage.checkDeleteListExists(), log(equalToIgnoringCase("Delete List does not exists")));
 				targetListPage.cancelManageTargetList();				
