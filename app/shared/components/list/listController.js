@@ -256,7 +256,7 @@ module.exports = /*  @ngInject */
       // Create target list
       userService.addTargetList(vm.newList).then(function(response) {
         vm.addToTargetList(response.id);
-        closeModal();
+        vm.closeModal();
         vm.buttonDisabled = false;
 
         return targetListService.addTargetListShares(response.id, vm.newList.targetListShares);
@@ -730,6 +730,22 @@ module.exports = /*  @ngInject */
       }
     }
 
+    function impactSort (item) {
+      var result;
+      switch (item.impact) {
+        case 'H':
+          result = 0;
+          break;
+        case 'M':
+          result = 1;
+          break;
+        case 'L':
+          result = 2;
+          break;
+      }
+      return result;
+    }
+
     // ***************
     // PRIVATE METHODS
     // ***************
@@ -776,22 +792,6 @@ module.exports = /*  @ngInject */
         item.selected = true;
         list.push(item);
       }
-    }
-
-    function impactSort (item) {
-      var result;
-      switch (item.impact) {
-        case 'H':
-          result = 0;
-          break;
-        case 'M':
-          result = 1;
-          break;
-        case 'L':
-          result = 2;
-          break;
-      }
-      return result;
     }
 
     function init() {

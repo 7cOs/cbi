@@ -1,5 +1,5 @@
 describe('Unit: list controller', function() {
-  var scope, ctrl, q, httpBackend, mdDialog, state, filtersService, loaderService, opportunitiesService, targetListService, toastService, userService;
+  var scope, ctrl, q, httpBackend, mdDialog, state, closedOpportunitiesService, filtersService, loaderService, opportunitiesService, storesService, targetListService, toastService, userService;
 
   beforeEach(function() {
     angular.mock.module('ui.router');
@@ -7,16 +7,18 @@ describe('Unit: list controller', function() {
     angular.mock.module('cf.common.services');
     angular.mock.module('cf.common.components.list');
 
-    inject(function($rootScope, _$q_, _$httpBackend_, _$mdDialog_, _$state_, $controller, _filtersService_, _loaderService_, _opportunitiesService_, _targetListService_, _toastService_, _userService_) {
+    inject(function($rootScope, _$q_, _$httpBackend_, _$mdDialog_, _$state_, $controller, _closedOpportunitiesService_, _filtersService_, _loaderService_, _opportunitiesService_, _storesService_, _targetListService_, _toastService_, _userService_) {
       scope = $rootScope.$new();
       q = _$q_;
       mdDialog = _$mdDialog_;
       state = _$state_;
       httpBackend = _$httpBackend_;
 
+      closedOpportunitiesService = _closedOpportunitiesService_;
       filtersService = _filtersService_;
       loaderService = _loaderService_;
       opportunitiesService = _opportunitiesService_;
+      storesService = _storesService_;
       targetListService = _targetListService_;
       toastService = _toastService_;
       userService = _userService_;
@@ -77,6 +79,9 @@ describe('Unit: list controller', function() {
 
     expect(ctrl.flattenOpportunity).not.toBeUndefined();
     expect(typeof (ctrl.flattenOpportunity)).toEqual('function');
+
+    expect(ctrl.getDate).not.toBeUndefined();
+    expect(typeof (ctrl.getDate)).toEqual('function');
 
     expect(ctrl.getMemos).not.toBeUndefined();
     expect(typeof (ctrl.getMemos)).toEqual('function');
@@ -217,6 +222,66 @@ describe('Unit: list controller', function() {
     });
   });
 
+  describe('[list.closeOrDismissOpportunity] method', function() {
+    var runTimeout = inject(function($timeout) {
+        $timeout.flush(4000);
+      });
+
+    beforeEach(function() {
+      httpBackend.expectGET('/api/users/1/targetLists/').respond(200);
+
+      spyOn(opportunitiesService, 'createOpportunityFeedback').and.callFake(function() {
+        var feedbackDeferred = q.defer();
+        return feedbackDeferred.promise;
+      });
+
+      spyOn(closedOpportunitiesService, 'closeOpportunity').and.callFake(function() {
+        var closeDeferred = q.defer();
+        return closeDeferred.promise;
+      });
+
+      ctrl.undoClicked = false;
+    });
+
+    it('should call the createOpportunityFeedback method if dismiss is true', function() {
+      ctrl.closeOrDismissOpportunity('123', {'feedback': 'send feedback'}, true);
+      runTimeout();
+      expect(opportunitiesService.createOpportunityFeedback).toHaveBeenCalled();
+    });
+
+    it('should call the closeOpportunity method if dismiss is false', function() {
+      ctrl.closeOrDismissOpportunity('123', {}, false);
+      runTimeout();
+      expect(closedOpportunitiesService.closeOpportunity).toHaveBeenCalled();
+    });
+
+    it('should not run either method if undo clicked', function() {
+      ctrl.undoClicked = true;
+
+      ctrl.closeOrDismissOpportunity('1', {}, false);
+      runTimeout();
+      expect(closedOpportunitiesService.closeOpportunity).not.toHaveBeenCalled();
+
+      ctrl.closeOrDismissOpportunity('1', {}, true);
+      runTimeout();
+      expect(opportunitiesService.createOpportunityFeedback).not.toHaveBeenCalled();
+    });
+
+    it('should update booleans and variables', function() {
+      ctrl.opportunityDismissTrigger = false;
+      ctrl.currentOpportunityId = '1';
+      ctrl.filtersService.model.appliedFilter.pagination.totalOpportunities = 3;
+      ctrl.closeOrDismissOpportunity('2', {}, false);
+      expect(ctrl.opportunityDismissTrigger).toBeTruthy();
+      expect(ctrl.currentOpportunityId).toEqual('2');
+
+      runTimeout();
+      expect(ctrl.opportunityDismissTrigger).toBeFalsy();
+      expect(ctrl.currentOpportunityId).toEqual('');
+      expect(ctrl.filtersService.model.appliedFilter.pagination.totalOpportunities).toEqual(2);
+    });
+  });
+
   describe('[list.collapseCallback] method', function() {
     it('should decrease the expanded opportunities count', function() {
       ctrl.expandedOpportunities = 2;
@@ -250,6 +315,152 @@ describe('Unit: list controller', function() {
       ctrl.expandedOpportunities = 0;
       ctrl.expandCallback();
       expect(ctrl.expandedOpportunities).toEqual(1);
+    });
+  });
+
+  describe('[list.flattenOpportunity] method', function() {
+    var object = [{
+      'id': '0129597___80013986___20160929',
+      'product': {
+        'id': '80013986',
+        'name': 'MODELO NEGRA 12PK BT',
+        'type': 'sku',
+        'brand': 'MODELO NEGRA',
+        'brandCode': '437'
+      },
+      'type': 'NON_BUY',
+      'subType': null,
+      'impact': 'L',
+      'impactDescription': 'LOW',
+      'status': 'TARGETED',
+      'rationale': 'Recommended SKU performing at 0.0% at similar stores (L90 vs. YA trend)',
+      'store': {
+        'id': '0129597',
+        'name': 'CARNICERIA LA BARATA ETHNIC',
+        'address': '214 N 4TH AVE, PASCO, WA 993015323',
+        'segmentation': 'A',
+        'latitude': 46.2318,
+        'longitude': -119.0929,
+        'storeNumber': null,
+        'distributionL90Simple': 6,
+        'distributionL90SimpleYA': 7,
+        'distributionL90Effective': 30,
+        'distributionL90EffectiveYA': 29,
+        'velocity': 0,
+        'velocityYA': 0,
+        'depletionsCurrentYearToDate': 7015,
+        'depletionsCurrentYearToDateYA': 7902,
+        'opportunityCount': 7,
+        'highImpactOpportunityCount': 0,
+        'distributors': ['COHO DIST LLC - WA (KENNEWICK)'],
+        'streetAddress': '214 N 4TH AVE',
+        'city': 'PASCO',
+        'state': 'WA',
+        'zip': '99301',
+        'onPremise': false,
+        'cbbdChain': false,
+        'rationale': 'because'
+      }
+    }];
+
+    it('should create a csvItem for each selected opportunity, and add it to the data array', function() {
+      expect(ctrl.flattenOpportunity(object)).toEqual([{
+        'storeDistributor': object[0].store.distributors[0],
+        'TDLinx': object[0].store.id,
+        'storeName': object[0].store.name,
+        'storeAddress': object[0].store.streetAddress,
+        'storeCity': object[0].store.city,
+        'storeZip': object[0].store.zip,
+        'storeDepletionsCTD': object[0].store.depletionsCurrentYearToDate,
+        'storeDepletionsCTDYA': object[0].store.depletionsCurrentYearToDateYA,
+        'storeDepletionsCTDYAPercent': object[0].store.depletionsCurrentYearToDateYAPercent,
+        'storeSegmentation': object[0].store.segmentation,
+        'opportunityType': object[0].type,
+        'productName': object[0].product.name,
+        'itemAuthorization': object[0].isItemAuthorization,
+        'chainMandate': object[0].isChainMandate,
+        'onFeature': object[0].isOnFeature,
+        'opportunityStatus': object[0].status,
+        'impactPredicted': object[0].impactDescription
+      }]);
+    });
+
+    it('should add a rationale when provided as input', function() {
+      expect(ctrl.flattenOpportunity(object, true)).toEqual([{
+        'storeDistributor': object[0].store.distributors[0],
+        'TDLinx': object[0].store.id,
+        'storeName': object[0].store.name,
+        'storeAddress': object[0].store.streetAddress,
+        'storeCity': object[0].store.city,
+        'storeZip': object[0].store.zip,
+        'storeDepletionsCTD': object[0].store.depletionsCurrentYearToDate,
+        'storeDepletionsCTDYA': object[0].store.depletionsCurrentYearToDateYA,
+        'storeDepletionsCTDYAPercent': object[0].store.depletionsCurrentYearToDateYAPercent,
+        'storeSegmentation': object[0].store.segmentation,
+        'opportunityType': object[0].type,
+        'productName': object[0].product.name,
+        'itemAuthorization': object[0].isItemAuthorization,
+        'chainMandate': object[0].isChainMandate,
+        'onFeature': object[0].isOnFeature,
+        'opportunityStatus': object[0].status,
+        'impactPredicted': object[0].impactDescription,
+        'rationale': object[0].rationale
+      }]);
+    });
+  });
+
+  describe('[list.getDate] method', function() {
+    it('should return a new date object', function() {
+      expect(ctrl.getDate()).toEqual(jasmine.any(Object));
+    });
+  });
+
+  describe('[list.getMemos] method', function() {
+    beforeEach(function() {
+      spyOn(storesService, 'getItemAuthorizations').and.callFake(function() {
+        var authDeferred = q.defer();
+        return authDeferred.promise;
+      });
+
+      spyOn(storesService, 'getFeatures').and.callFake(function() {
+        var featureDeferred = q.defer();
+        return featureDeferred.promise;
+      });
+    });
+
+    it('should call the item authorizations method if type is item auth', function() {
+      ctrl.getMemos('1', '12', 'Item Authorization');
+      expect(storesService.getItemAuthorizations).toHaveBeenCalled();
+      expect(storesService.getFeatures).not.toHaveBeenCalled();
+    });
+
+    it('should call the features method if type isn\'t item auth', function() {
+      ctrl.getMemos('1', '12', 'Feature');
+      expect(storesService.getFeatures).toHaveBeenCalled();
+      expect(storesService.getItemAuthorizations).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('[list.impactSort] method', function() {
+    it('should return 0 for input of H', function() {
+      var item = {
+        'impact': 'H'
+      };
+      expect(ctrl.impactSort(item)).toEqual(0);
+    });
+
+    it('should return 1 for input of M', function() {
+      var item = {
+        'impact': 'M'
+      };
+      expect(ctrl.impactSort(item)).toEqual(1);
+    });
+
+    it('should return 2 for input of L', function() {
+      var item = {
+        'impact': 'L'
+      };
+      expect(ctrl.impactSort(item)).toEqual(2);
     });
   });
 
@@ -339,6 +550,80 @@ describe('Unit: list controller', function() {
     });
   });
 
+  describe('[list.pageName] method', function() {
+    it('should return true if page name in argument doesn\'t match current page name', function() {
+      var input = ['target-lists'];
+      state.current.name = 'opportunities';
+      expect(ctrl.pageName(input)).toBeTruthy();
+    });
+
+    it('should return false if page name in argument list matches current page name', function() {
+      var input = ['target-lists'];
+      state.current.name = 'target-lists';
+      expect(ctrl.pageName(input)).toBeFalsy();
+    });
+  });
+
+  describe('[list.pickMemo] method', function() {
+    var itemAuthMemos = [
+      {
+        'packageID': '123',
+        'setPeriodStartDate': '2016-11-07T21:39:53.033Z'
+      },
+      {
+        'packageID': '123',
+        'setPeriodStartDate': '2016-10-01T21:39:53.033Z'
+      }
+    ];
+    var featureMemos = [
+      {
+        'packageID': '321',
+        'featurePeriodStartDate': '2016-09-01T21:39:53.033Z'
+      },
+      {
+        'packageID': '321',
+        'featurePeriodStartDate': '2016-10-01T21:39:53.033Z'
+      }
+    ];
+    it('should select the most recent memo and assign to memoData variable', function() {
+      ctrl.pickMemo(itemAuthMemos, '123');
+      expect(ctrl.memoData).toEqual({
+        'packageID': '123',
+        'setPeriodStartDate': '2016-11-07T21:39:53.033Z'
+      });
+
+      ctrl.pickMemo(featureMemos, '321');
+      expect(ctrl.memoData).toEqual({
+        'packageID': '321',
+        'featurePeriodStartDate': '2016-10-01T21:39:53.033Z'
+      });
+    });
+  });
+
+  describe('[list.saveNewList] method', function() {
+    beforeEach(function() {
+      spyOn(userService, 'addTargetList').and.callFake(function() {
+        var deferred = q.defer();
+        return deferred.promise;
+      });
+      spyOn(ctrl, 'closeModal').and.callThrough();
+
+      ctrl.newList = {
+        name: 'List',
+        description: 'List description',
+        opportunities: [],
+        collaborators: [],
+        targetListShares: [],
+        collaborateAndInvite: false
+      };
+    });
+
+    it('should call the userService create a target list', function() {
+      ctrl.saveNewList(ctrl.newList);
+      expect(userService.addTargetList).toHaveBeenCalled();
+    });
+  });
+
   describe('[list.showDisabled] method', function() {
     it('should assign the disabled message object to equal the passed in object from function', function() {
       var newMessage = {'name': 'message'};
@@ -375,6 +660,10 @@ describe('Unit: list controller', function() {
 
     it('should return false if authCode is BM and depletions are > 0', function() {
       expect(ctrl.showItemAuthorizationFlag('BM', 500)).toBeFalsy();
+    });
+
+    it('should return true if authCode is BM and depletions are <= 0', function() {
+      expect(ctrl.showItemAuthorizationFlag('BM', -40)).toBeTruthy();
     });
 
     it('should return false if authCode not acceptable', function() {
@@ -443,6 +732,10 @@ describe('Unit: list controller', function() {
       expect(ctrl.orderName).toEqual(['store.name']);
 
       ctrl.ascending = false;
+      ctrl.sortBy('opportunity');
+      expect(ctrl.orderName).toEqual(['-groupedOpportunities.length']);
+
+      ctrl.ascending = false;
       ctrl.sortBy('depletions');
       expect(ctrl.orderName).toEqual(['store.depletionsCurrentYearToDate']);
 
@@ -459,12 +752,98 @@ describe('Unit: list controller', function() {
       expect(ctrl.orderName).toEqual(['-store.name']);
 
       ctrl.ascending = true;
+      ctrl.sortBy('opportunity');
+      expect(ctrl.orderName).toEqual(['-groupedOpportunities.length']);
+
+      ctrl.ascending = true;
       ctrl.sortBy('depletions');
       expect(ctrl.orderName).toEqual(['-store.depletionsCurrentYearToDate']);
 
       ctrl.ascending = true;
       ctrl.sortBy('segmentation');
       expect(ctrl.orderName).toEqual(['-store.segmentation']);
+    });
+  });
+
+  describe('[list.submitFeedback] method', function() {
+    var data;
+
+    beforeEach(function() {
+      ctrl.opportunity = {
+        'feedback': 'feedback'
+      };
+    });
+
+    it('should send feedback as \'other\' if not provided', function() {
+      data = {
+        'type': 'other',
+        'feedback': ''
+      };
+      expect(data.type).toEqual('other');
+      expect(data.feedback).toEqual('');
+      ctrl.submitFeedback({'opp': 1}, data);
+      expect(data.feedback).toEqual('other');
+    });
+
+    it('should call the closeOrDismissOpportunity method', function() {
+      var deferred = q.defer();
+      spyOn(ctrl, 'closeOrDismissOpportunity').and.callFake(function() {
+        return deferred.promise;
+      });
+    });
+
+    it('should set trigger to true and opportunity feedback to empty string', function() {
+      expect(ctrl.opportunityDismissTrigger).toBeFalsy();
+      expect(ctrl.opportunity.feedback).toEqual('feedback');
+      ctrl.submitFeedback({'opp': 1}, data);
+      expect(ctrl.opportunityDismissTrigger).toBeTruthy();
+      expect(ctrl.opportunity.feedback).toEqual('');
+    });
+  });
+
+  describe('[list.updateOpportunityModel] method', function() {
+    var opportunities,
+        selected = [
+          {
+            'id': '0129597___80013469___20160929'
+          }
+        ];
+
+    beforeEach(function() {
+      opportunities = [{
+        'id': '0129597___80013986___20160929',
+        'brands': ['modelo negra', 'corona light', 'modelo especial', 'corona light', 'victoria', 'corona light', 'corona light'],
+        'groupedOpportunities': [{
+          'id': '0129597___80013986___20160929'
+        }, {
+          'id': '0129597___80013469___20160929'
+        }, {
+          'id': '0129597___80018933___20160929'
+        }]
+      }];
+
+    });
+
+    it('Should process properly formatted data', function() {
+      expect(opportunities[0].groupedOpportunities.length).toEqual(3);
+      expect(selected[0].id).toEqual('0129597___80013469___20160929');
+      expect(opportunities[0].groupedOpportunities[1].id).toEqual('0129597___80013469___20160929');
+      ctrl.updateOpportunityModel(opportunities, selected);
+      expect(opportunities[0].groupedOpportunities.length).toEqual(2);
+    });
+
+    it('should remove store if last opportunity dismissed', function() {
+      var singleOpp = [{
+        'id': '0129597___80013469___20160929',
+        'brands': ['modelo negra', 'corona light'],
+        'groupedOpportunities': [{
+          'id': '0129597___80013469___20160929'
+        }]
+      }];
+
+      expect(singleOpp[0].groupedOpportunities.length).toEqual(1);
+      ctrl.updateOpportunityModel(singleOpp, selected);
+      expect(singleOpp.length).toEqual(0);
     });
   });
 
@@ -675,236 +1054,6 @@ describe('Unit: list controller', function() {
     });
   });
 
-  describe('Remove opportunity from Target List', function() {
-    var selected = [
-      {
-        'id': '0129597___80013469___20160929'
-      }
-    ];
-
-    beforeEach(function() {
-      opportunitiesService.model.opportunities = [{
-        'id': '0129597___80013986___20160929',
-        'product': {
-          'id': '80013986',
-          'name': 'MODELO NEGRA 12PK BT',
-          'type': 'sku',
-          'brand': 'MODELO NEGRA',
-          'brandCode': '437'
-        },
-        'type': 'NON_BUY',
-        'subType': null,
-        'impact': 'L',
-        'impactDescription': 'LOW',
-        'status': 'TARGETED',
-        'rationale': 'Recommended SKU performing at 0.0% at similar stores (L90 vs. YA trend)',
-        'store': {
-          'id': '0129597',
-          'name': 'CARNICERIA LA BARATA ETHNIC',
-          'address': '214 N 4TH AVE, PASCO, WA 993015323',
-          'segmentation': 'A',
-          'latitude': 46.2318,
-          'longitude': -119.0929,
-          'storeNumber': null,
-          'distributionL90Simple': 6,
-          'distributionL90SimpleYA': 7,
-          'distributionL90Effective': 30,
-          'distributionL90EffectiveYA': 29,
-          'velocity': 0,
-          'velocityYA': 0,
-          'depletionsCurrentYearToDate': 7015,
-          'depletionsCurrentYearToDateYA': 7902,
-          'opportunityCount': 7,
-          'highImpactOpportunityCount': 0,
-          'distributors': ['COHO DIST LLC - WA (KENNEWICK)'],
-          'streetAddress': '214 N 4TH AVE',
-          'city': 'PASCO',
-          'state': 'WA',
-          'zip': '99301',
-          'onPremise': false,
-          'cbbdChain': false
-        },
-        'itemAuthorizationCode': null,
-        'depletionsCurrentYearToDate': 0,
-        'depletionsCurrentYearToDateYA': 0,
-        'lastDepletionDate': '2014-07-31T00:00:00Z',
-        'dismissed': false,
-        'itemAuthorizationDesc': null,
-        'featureTypeCode': null,
-        'featureTypeDesc': null,
-        'priorityPackageFlag': 'N',
-        'highImpactSum': 0,
-        'depletionSum': 0,
-        'brands': ['modelo negra', 'corona light', 'modelo especial', 'corona light', 'victoria', 'corona light', 'corona light'],
-        'trend': null,
-        'groupedOpportunities': [{
-          'id': '0129597___80013986___20160929',
-          'product': {
-            'id': '80013986',
-            'name': 'MODELO NEGRA 12PK BT',
-            'type': 'sku',
-            'brand': 'MODELO NEGRA',
-            'brandCode': '437'
-          },
-          'type': 'NON_BUY',
-          'subType': null,
-          'impact': 'L',
-          'impactDescription': 'LOW',
-          'status': 'TARGETED',
-          'rationale': 'Recommended SKU performing at 0.0% at similar stores (L90 vs. YA trend)',
-          'store': {
-            'id': '0129597',
-            'name': 'CARNICERIA LA BARATA ETHNIC',
-            'address': '214 N 4TH AVE, PASCO, WA 993015323',
-            'segmentation': 'A',
-            'latitude': 46.2318,
-            'longitude': -119.0929,
-            'storeNumber': null,
-            'distributionL90Simple': 6,
-            'distributionL90SimpleYA': 7,
-            'distributionL90Effective': 30,
-            'distributionL90EffectiveYA': 29,
-            'velocity': 0,
-            'velocityYA': 0,
-            'depletionsCurrentYearToDate': 7015,
-            'depletionsCurrentYearToDateYA': 7902,
-            'opportunityCount': 7,
-            'highImpactOpportunityCount': 0,
-            'distributors': ['COHO DIST LLC - WA (KENNEWICK)'],
-            'streetAddress': '214 N 4TH AVE',
-            'city': 'PASCO',
-            'state': 'WA',
-            'zip': '99301',
-            'onPremise': false,
-            'cbbdChain': false
-          },
-          'itemAuthorizationCode': null,
-          'depletionsCurrentYearToDate': 0,
-          'depletionsCurrentYearToDateYA': 0,
-          'lastDepletionDate': '2014-07-31T00:00:00Z',
-          'dismissed': false,
-          'itemAuthorizationDesc': null,
-          'featureTypeCode': null,
-          'featureTypeDesc': null,
-          'priorityPackageFlag': 'N',
-          '$$hashKey': 'object:532'
-        }, {
-          'id': '0129597___80013469___20160929',
-          'product': {
-            'id': '80013469',
-            'name': 'CORONA LT 18PK BT',
-            'type': 'sku',
-            'brand': 'CORONA LIGHT',
-            'brandCode': '229'
-          },
-          'type': 'NON_BUY',
-          'subType': null,
-          'impact': 'L',
-          'impactDescription': 'LOW',
-          'status': 'TARGETED',
-          'rationale': 'Recommended SKU performing at 0.0% at similar stores (L90 vs. YA trend)',
-          'store': {
-            'id': '0129597',
-            'name': 'CARNICERIA LA BARATA ETHNIC',
-            'address': '214 N 4TH AVE, PASCO, WA 993015323',
-            'segmentation': 'A',
-            'latitude': 46.2318,
-            'longitude': -119.0929,
-            'storeNumber': null,
-            'distributionL90Simple': 6,
-            'distributionL90SimpleYA': 7,
-            'distributionL90Effective': 30,
-            'distributionL90EffectiveYA': 29,
-            'velocity': 0,
-            'velocityYA': 0,
-            'depletionsCurrentYearToDate': 7015,
-            'depletionsCurrentYearToDateYA': 7902,
-            'opportunityCount': 7,
-            'highImpactOpportunityCount': 0,
-            'distributors': ['COHO DIST LLC - WA (KENNEWICK)'],
-            'streetAddress': '214 N 4TH AVE',
-            'city': 'PASCO',
-            'state': 'WA',
-            'zip': '99301',
-            'onPremise': false,
-            'cbbdChain': false
-          },
-          'itemAuthorizationCode': null,
-          'depletionsCurrentYearToDate': 0,
-          'depletionsCurrentYearToDateYA': 0,
-          'lastDepletionDate': null,
-          'dismissed': false,
-          'itemAuthorizationDesc': null,
-          'featureTypeCode': null,
-          'featureTypeDesc': null,
-          'priorityPackageFlag': null,
-          '$$hashKey': 'object:530'
-        }, {
-          'id': '0129597___80018933___20160929',
-          'product': {
-            'id': '80018933',
-            'name': 'MODELO ESP 16OZ 4PK CAN',
-            'type': 'sku',
-            'brand': 'MODELO ESPECIAL',
-            'brandCode': '416'
-          },
-          'type': 'NON_BUY',
-          'subType': null,
-          'impact': 'M',
-          'impactDescription': 'MEDIUM',
-          'status': 'TARGETED',
-          'rationale': 'Recommended SKU performing at 40.0% at similar stores (L90 vs. YA trend)',
-          'store': {
-            'id': '0129597',
-            'name': 'CARNICERIA LA BARATA ETHNIC',
-            'address': '214 N 4TH AVE, PASCO, WA 993015323',
-            'segmentation': 'A',
-            'latitude': 46.2318,
-            'longitude': -119.0929,
-            'storeNumber': null,
-            'distributionL90Simple': 6,
-            'distributionL90SimpleYA': 7,
-            'distributionL90Effective': 30,
-            'distributionL90EffectiveYA': 29,
-            'velocity': 0,
-            'velocityYA': 0,
-            'depletionsCurrentYearToDate': 7015,
-            'depletionsCurrentYearToDateYA': 7902,
-            'opportunityCount': 7,
-            'highImpactOpportunityCount': 0,
-            'distributors': ['COHO DIST LLC - WA (KENNEWICK)'],
-            'streetAddress': '214 N 4TH AVE',
-            'city': 'PASCO',
-            'state': 'WA',
-            'zip': '99301',
-            'onPremise': false,
-            'cbbdChain': false
-          },
-          'itemAuthorizationCode': null,
-          'depletionsCurrentYearToDate': 0,
-          'depletionsCurrentYearToDateYA': 0,
-          'lastDepletionDate': null,
-          'dismissed': false,
-          'itemAuthorizationDesc': null,
-          'featureTypeCode': null,
-          'featureTypeDesc': null,
-          'priorityPackageFlag': null,
-          '$$hashKey': 'object:527'
-        }],
-        '$$hashKey': 'object:468',
-        'isExpanded': false
-      }];
-
-    });
-    it('Should process properly formatted data', function() {
-      expect(ctrl.opportunitiesService.model.opportunities[0].groupedOpportunities.length).toEqual(3);
-      expect(selected[0].id).toEqual('0129597___80013469___20160929');
-      ctrl.updateOpportunityModel(ctrl.opportunitiesService.model.opportunities, selected[0]);
-      // TODO implement test to ensure that one opportunity is removed from model
-      // expect(ctrl.opportunitiesService.model.opportunities[0].groupedOpportunities.length).toEqual(2);
-    });
-  });
-
   describe('Collaborators functionality', function() {
     var collaboratorsArr = [];
 
@@ -993,8 +1142,8 @@ describe('Unit: list controller', function() {
         },
         {
           'store': {
-            'depletionsCurrentYearToDate': 5,
-            'depletionsCurrentYearToDateYA': 5150
+            'depletionsCurrentYearToDate': 0,
+            'depletionsCurrentYearToDateYA': 0
           }
         },
         {
@@ -1017,6 +1166,9 @@ describe('Unit: list controller', function() {
     });
     it('should return -100 percent', function() {
       expect(ctrl.depletionsVsYaPercent(opportunityArr[3])).toEqual(-100);
+    });
+    it('should return - percent', function() {
+      expect(ctrl.depletionsVsYaPercent(opportunityArr[4])).toEqual(0);
     });
     it('should return 999 percent', function() {
       expect(ctrl.depletionsVsYaPercent(opportunityArr[5])).toEqual(999);
