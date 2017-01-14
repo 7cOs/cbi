@@ -153,7 +153,7 @@ public class TargetList extends LoadableComponent<TargetList> {
 	@FindBy(how = How.XPATH, using = "//v-pane[1]/v-pane-header/div/div[2]/div[7]/div/md-menu/button")
 	private WebElement ActionButton;
 
-	@FindBy(how = How.XPATH, using = "//md-menu/button[contains(.,'Download')]")
+	@FindBy(how = How.XPATH, using = "//button[contains(.,'Download')]")
 	private WebElement DownloadButton;
 
 	@FindBy(how = How.XPATH, using = "//p[contains(.,'With Rationale')]")

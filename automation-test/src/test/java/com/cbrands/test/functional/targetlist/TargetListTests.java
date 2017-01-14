@@ -444,7 +444,7 @@ public class TargetListTests extends BaseSeleniumTestCase{
 						assertThat(targetListPage.getCannotDeleteListText(), log(equalToIgnoringCase("Sorry, you cannot delete a Target List that has Collaborators. Please remove all Collaborators from that list and try again.")));						
 						targetListPage.clickNewTargetList(listname);
 						targetListPage.clickManage();					
-						assertThat(targetListPage.checkDeleteListExists(), log(equalToIgnoringCase("Delete List does not exists")));						
+						assertThat(targetListPage.checkDeleteListExists(), log(equalToIgnoringCase("Delete list exists")));						
 						targetListPage.cancelManageTargetList();
 					}
 					}
