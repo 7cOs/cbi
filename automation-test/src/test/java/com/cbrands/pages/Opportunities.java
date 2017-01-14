@@ -1763,4 +1763,9 @@ public class Opportunities extends LoadableComponent<Opportunities> {
 		return this;
 	}
 	
+	public Opportunities waitForTargetListConfirmation() {
+		waitForVisible(By.xpath("//md-content/navbar/div[4]"));
+		return this;
+	}
+	
 }
