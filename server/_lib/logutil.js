@@ -9,8 +9,10 @@ module.exports = {
   logError: logError,
   buildError: buildError,
   buildAPIError: buildAPIError,
+  buildSFDCError: buildSFDCError,
   handleAPIResponse: handleAPIResponse,
-  handleAPIRequestError: handleAPIRequestError
+  handleAPIRequestError: handleAPIRequestError,
+  GENERIC_ERROR_MSG: GENERIC_ERROR_MSG
 };
 
 function logError(error) {
@@ -60,6 +62,20 @@ function buildAPIError(requestId, apiRequestMethod, apiRequestUrl, statusCode, a
   if (responseBody) {
     logMsg['response_body'] = responseBody;
   }
+
+  if (errorString) {
+    logMsg['error'] = errorString;
+  }
+
+  return logMsg;
+}
+
+function buildSFDCError(requestId, sfdcMethod, appServerMessage, errorString) {
+  let logMsg = {
+    'request_id': requestId,
+    'sfdc_method': sfdcMethod,
+    'app_server_message': appServerMessage
+  };
 
   if (errorString) {
     logMsg['error'] = errorString;
