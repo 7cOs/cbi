@@ -767,6 +767,8 @@ module.exports = /*  @ngInject */
       if ($state.params.storeId && $state.params.storeId.length > 0) {
         vm.currentTopBottomAcctType = vm.filtersService.accountFilters.accountTypes[3];
         vm.currentTopBottomObj = getCurrentTopBottomObject(vm.currentTopBottomAcctType);
+        setUpdatedFilters();
+        vm.selectedStore = $state.params.pageData.account.name;
       }
 
       var promiseArr = [];
@@ -780,6 +782,7 @@ module.exports = /*  @ngInject */
       promiseArr.push(userService.getPerformanceBrand(params));
 
       $q.all(promiseArr).then(function(data) {
+        vm.loadingBrandSnapshot = false;
         vm.brandTabs.brands = data[0].performance;
         var isTopBottomUpdateRequired = true;
 
@@ -797,11 +800,8 @@ module.exports = /*  @ngInject */
         if (isTopBottomUpdateRequired === true) {
           var categoryBound = vm.filtersService.model.accountSelected.accountMarkets;
           getDataForTopBottom(vm.currentTopBottomObj, categoryBound);
-          if ($state.params.storeId) {
-            setUpdatedFilters();
-            vm.selectedStore = $state.params.pageData.account.name;
-          }
         }
+
         // reset state params
         $state.params.applyFiltersOnLoad = false;
         $state.params.resetFiltersOnLoad = true;

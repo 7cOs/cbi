@@ -1178,11 +1178,11 @@ describe('Unit: accountsController', function() {
     it('Should update top bottom', function() {
       ctrl.loadingTopBottom = true;
       var categoryBound = filtersService.model.accountSelected.accountMarkets;
-      expect(userService.getTopBottomSnapshot.calls.count()).toEqual(2);
+      expect(userService.getTopBottomSnapshot.calls.count()).toEqual(1);
 
       ctrl.getDataForTopBottom(ctrl.topBottomData, categoryBound);
 
-      expect(userService.getTopBottomSnapshot.calls.count()).toEqual(3);
+      expect(userService.getTopBottomSnapshot.calls.count()).toEqual(2);
     });
   });
 
