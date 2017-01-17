@@ -548,8 +548,10 @@ module.exports = /*  @ngInject */
       };
       vm.selectedStoreInfo = vm.currentTopBottomFilters[topBottomProp];
       vm.selectedStoreInfo.type = topBottomProp;
-      notesService.model.currentStoreName = result.name.toUpperCase();
-      notesService.model.currentStoreProperty = filterModelProp;
+      if (result.name) {
+        notesService.model.currentStoreName = result.name.toUpperCase();
+        notesService.model.currentStoreProperty = filterModelProp;
+      }
       if (filterModelProperty === 'store') {
         filtersService.model.selected.account = [];
         filtersService.model.account = '';
@@ -749,8 +751,9 @@ module.exports = /*  @ngInject */
           vm.brandWidgetTitle = $state.params.pageData.brandTitle;
 
           chipsService.addAutocompleteChip(vm.brandWidgetTitle, 'brand', false);
-        } else if ($state.params.storeId !== '') {
+        } else if ($state.params.storeId && $state.params.storeId.length > 0) {
           filtersService.model.selected.store = [$state.params.storeId];
+          vm.currentTopBottomFilters.stores = {id: $state.params.storeId};
         }
       }
 
@@ -780,33 +783,35 @@ module.exports = /*  @ngInject */
       promiseArr.push(userService.getPerformanceBrand(params));
 
       $q.all(promiseArr).then(function(data) {
-        vm.loadingBrandSnapshot = false;
-        vm.brandTabs.brands = data[0].performance;
-        var isTopBottomUpdateRequired = true;
+        if (data[0]) {
+          vm.loadingBrandSnapshot = false;
+          vm.brandTabs.brands = data[0].performance;
+          var isTopBottomUpdateRequired = true;
 
-        if ($state.params.applyFiltersOnLoad) {
-          // select brand that was clicked in score card
-          for (var i = 0; i < vm.brandTabs.brands.length; i++) {
-            if (vm.brandTabs.brands[i].name === vm.brandWidgetTitle) {
-              // Select Item automatically gets the updated top bottom da
-              selectItem('brands', vm.brandTabs.brands[i], vm.brandTabs, 0);
-              isTopBottomUpdateRequired = false;
+          if ($state.params.applyFiltersOnLoad) {
+            // select brand that was clicked in score card
+            for (var i = 0; i < vm.brandTabs.brands.length; i++) {
+              if (vm.brandTabs.brands[i].name === vm.brandWidgetTitle) {
+                // Select Item automatically gets the updated top bottom data
+                selectItem('brands', vm.brandTabs.brands[i], vm.brandTabs, 0);
+                isTopBottomUpdateRequired = false;
+              }
             }
           }
-        }
-        setCurrentTotalsObject();
-        if (isTopBottomUpdateRequired === true) {
-          var categoryBound = vm.filtersService.model.accountSelected.accountMarkets;
-          getDataForTopBottom(vm.currentTopBottomObj, categoryBound);
+          setCurrentTotalsObject();
+          if (isTopBottomUpdateRequired === true) {
+            var categoryBound = vm.filtersService.model.accountSelected.accountMarkets;
+            getDataForTopBottom(vm.currentTopBottomObj, categoryBound);
+          }
+
           if ($state.params.storeId) {
             setUpdatedFilters();
             vm.selectedStore = $state.params.pageData.account.name;
           }
+          // reset state params
+          $state.params.applyFiltersOnLoad = false;
+          $state.params.resetFiltersOnLoad = true;
         }
-
-        // reset state params
-        $state.params.applyFiltersOnLoad = false;
-        $state.params.resetFiltersOnLoad = true;
       });
 
       if ($state.params.openNotesOnLoad) {
