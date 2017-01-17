@@ -99,7 +99,6 @@ module.exports = /*  @ngInject */
     vm.switchToBrandView = switchToBrandView;
     vm.isStoreLevel = false;
     vm.isHighlightStore = isHighlightStore;
-    var topBottomInitData = true;
     // Have to create this variable because vm.selecteStore just has the name..Changing th binding to include Id involves a ton of work
     var currentStore = null;
 
@@ -419,9 +418,8 @@ module.exports = /*  @ngInject */
         vm.brandWidgetSkuTitle = null;
         if (widget === 'brands') { vm.brandWidgetTitle = item.name; }
         vm.loadingBrandSnapshot = true;
-        vm.loadingTopBottom = true;
-
         var params = filtersService.getAppliedFilters('brandSnapshot');
+        params = myperformanceService.appendFilterParametersForTopBottom(params, vm.currentTopBottomFilters);
         params.additionalParams = {
           deplTimePeriod: vm.filterModel.depletionsTimePeriod.name,
           podAndVelTimePeriod: vm.filterModel.distributionTimePeriod.name
@@ -550,8 +548,10 @@ module.exports = /*  @ngInject */
       };
       vm.selectedStoreInfo = vm.currentTopBottomFilters[topBottomProp];
       vm.selectedStoreInfo.type = topBottomProp;
-      notesService.model.currentStoreName = result.name.toUpperCase();
-      notesService.model.currentStoreProperty = filterModelProp;
+      if (result.name) {
+        notesService.model.currentStoreName = result.name.toUpperCase();
+        notesService.model.currentStoreProperty = filterModelProp;
+      }
       if (filterModelProperty === 'store') {
         filtersService.model.selected.account = [];
         filtersService.model.account = '';
@@ -585,7 +585,7 @@ module.exports = /*  @ngInject */
       filtersService.model.selected.brand = []; // remove brand from query
 
       var params = filtersService.getAppliedFilters('brandSnapshot');
-      myperformanceService.appendFilterParametersForTopBottom(params, vm.currentTopBottomFilters);
+      params = myperformanceService.appendFilterParametersForTopBottom(params, vm.currentTopBottomFilters);
       vm.loadingBrandSnapshot = true;
 
       if (isMoveToPreviousTab !== false) {
@@ -746,14 +746,14 @@ module.exports = /*  @ngInject */
       if (!$state.params.applyFiltersOnLoad) {
         chipsService.resetChipsFilters(chipsService.model);
       } else {
-        topBottomInitData = false;
         if ($state.params.pageData.brandTitle) {
           vm.brandIdSelected = filtersService.model.selected.brand[0];
           vm.brandWidgetTitle = $state.params.pageData.brandTitle;
 
           chipsService.addAutocompleteChip(vm.brandWidgetTitle, 'brand', false);
-        } else if ($state.params.storeId !== '') {
+        } else if ($state.params.storeId && $state.params.storeId.length > 0) {
           filtersService.model.selected.store = [$state.params.storeId];
+          vm.currentTopBottomFilters.stores = {id: $state.params.storeId};
         }
       }
 
@@ -763,19 +763,19 @@ module.exports = /*  @ngInject */
       if ($state.params.pageData && $state.params.pageData.premiseType) vm.filtersService.model.selected.premiseType = $state.params.pageData.premiseType;
 
       var params = filtersService.getAppliedFilters('brandSnapshot');
-
+      params = myperformanceService.appendFilterParametersForTopBottom(params, vm.currentTopBottomFilters);
       params.additionalParams = getAppliedFiltersForTopBottom();
 
       // this is being reset somewhere between end of else above and here but needs to be stores for :storeId
       if ($state.params.storeId && $state.params.storeId.length > 0) {
         vm.currentTopBottomAcctType = vm.filtersService.accountFilters.accountTypes[3];
         vm.currentTopBottomObj = getCurrentTopBottomObject(vm.currentTopBottomAcctType);
+        setUpdatedFilters();
+        console.log('Params', $state.params.pageData);
+        vm.selectedStore = $state.params.pageData.account.name;
       }
 
-      var promiseArr = [
-        userService.getTopBottomSnapshot(vm.currentTopBottomAcctType, params)
-      ];
-
+      var promiseArr = [];
       // brand snapshot returns sku data instead of just the brand if you add brand:xxx
       if (params.brand && params.brand.length) delete params.brand;
       params.additionalParams = {
@@ -786,36 +786,30 @@ module.exports = /*  @ngInject */
       promiseArr.push(userService.getPerformanceBrand(params));
 
       $q.all(promiseArr).then(function(data) {
-        vm.brandTabs.brands = data[1].performance;
-
-        if ($state.params.applyFiltersOnLoad) {
-          // select brand that was clicked in score card
-          for (var i = 0; i < vm.brandTabs.brands.length; i++) {
-            if (vm.brandTabs.brands[i].name === vm.brandWidgetTitle) {
-              selectItem('brands', vm.brandTabs.brands[i], vm.brandTabs, 0);
-            }
-          }
-        }
-
-        setCurrentTotalsObject();
         if (data[0]) {
-          var categoryBound = vm.filtersService.model.accountSelected.accountMarkets;
-          vm.currentTopBottomObj.performanceData = data[0].performance;
-          vm.currentTopBottomObj.isPerformanceDataUpdateRequired = false;
-          getDataForTopBottom(vm.currentTopBottomObj, categoryBound);
-          if ($state.params.storeId) {
-            setUpdatedFilters();
-            vm.selectedStore = $state.params.pageData.account.name;
+          vm.loadingBrandSnapshot = false;
+          vm.brandTabs.brands = data[0].performance;
+          var isTopBottomUpdateRequired = true;
+
+          if ($state.params.applyFiltersOnLoad) {
+             var matchedVal = vm.brandTabs.brands.filter(function(val) {
+               return val.name === vm.brandWidgetTitle;
+             });
+             if (matchedVal[0]) {
+               selectItem('brands', matchedVal[0], vm.brandTabs, 0);
+               isTopBottomUpdateRequired = false;
+             }
+          }
+          setCurrentTotalsObject();
+          if (isTopBottomUpdateRequired === true) {
+            var categoryBound = vm.filtersService.model.accountSelected.accountMarkets;
+            getDataForTopBottom(vm.currentTopBottomObj, categoryBound);
           }
 
-          if (topBottomInitData === true) topBottomInitData = false;
+          // reset state params
+          $state.params.applyFiltersOnLoad = false;
+          $state.params.resetFiltersOnLoad = true;
         }
-        vm.loadingBrandSnapshot = false;
-        vm.loadingTopBottom = false;
-
-        // reset state params
-        $state.params.applyFiltersOnLoad = false;
-        $state.params.resetFiltersOnLoad = true;
       });
 
       if ($state.params.openNotesOnLoad) {
@@ -952,9 +946,9 @@ module.exports = /*  @ngInject */
      */
     function getDataForTopBottom(topBottomObj, categoryBound) {
       var params = filtersService.getAppliedFilters('topBottom');
-      myperformanceService.appendFilterParametersForTopBottom(params, vm.currentTopBottomFilters);
-      vm.loadingTopBottom = true;
       appendBrandParametersForTopBottom(params);
+      params = myperformanceService.appendFilterParametersForTopBottom(params, vm.currentTopBottomFilters);
+      vm.loadingTopBottom = true;
       params.additionalParams = getAppliedFiltersForTopBottom();
 
       userService.getTopBottomSnapshot(vm.currentTopBottomAcctType, params).then(function(data) {
@@ -1239,18 +1233,16 @@ module.exports = /*  @ngInject */
     }
 
     function onFilterPropertiesChange(isBrandSnapshotUpdateRequired) {
-      if (topBottomInitData === false) {
-        // With the new api endpoints the performance flags need to be reset on filter change
-        for (var topBottomObj in vm.topBottomData) {
-          myperformanceService.resetPerformanceDataFlags(vm.topBottomData[topBottomObj]);
-        }
-        var categoryBound = vm.filtersService.model.accountSelected.accountMarkets;
-        vm.currentTopBottomObj = getCurrentTopBottomObject(vm.currentTopBottomAcctType);
-        if (isBrandSnapshotUpdateRequired !== false) {
-          updateBrandSnapshot();
-        }
-        getDataForTopBottom(vm.currentTopBottomObj, categoryBound);
+      // With the new api endpoints the performance flags need to be reset on filter change
+      for (var topBottomObj in vm.topBottomData) {
+        myperformanceService.resetPerformanceDataFlags(vm.topBottomData[topBottomObj]);
       }
+      var categoryBound = vm.filtersService.model.accountSelected.accountMarkets;
+      vm.currentTopBottomObj = getCurrentTopBottomObject(vm.currentTopBottomAcctType);
+      if (isBrandSnapshotUpdateRequired !== false) {
+        updateBrandSnapshot();
+      }
+      getDataForTopBottom(vm.currentTopBottomObj, categoryBound);
     }
 
     // Check if market overview is scrolled out of view
