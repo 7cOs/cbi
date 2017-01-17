@@ -770,6 +770,9 @@ module.exports = /*  @ngInject */
       if ($state.params.storeId && $state.params.storeId.length > 0) {
         vm.currentTopBottomAcctType = vm.filtersService.accountFilters.accountTypes[3];
         vm.currentTopBottomObj = getCurrentTopBottomObject(vm.currentTopBottomAcctType);
+        setUpdatedFilters();
+        console.log('Params', $state.params.pageData);
+        vm.selectedStore = $state.params.pageData.account.name;
       }
 
       var promiseArr = [];
@@ -789,14 +792,13 @@ module.exports = /*  @ngInject */
           var isTopBottomUpdateRequired = true;
 
           if ($state.params.applyFiltersOnLoad) {
-            // select brand that was clicked in score card
-            for (var i = 0; i < vm.brandTabs.brands.length; i++) {
-              if (vm.brandTabs.brands[i].name === vm.brandWidgetTitle) {
-                // Select Item automatically gets the updated top bottom data
-                selectItem('brands', vm.brandTabs.brands[i], vm.brandTabs, 0);
-                isTopBottomUpdateRequired = false;
-              }
-            }
+             var matchedVal = vm.brandTabs.brands.filter(function(val) {
+               return val.name === vm.brandWidgetTitle;
+             });
+             if (matchedVal[0]) {
+               selectItem('brands', matchedVal[0], vm.brandTabs, 0);
+               isTopBottomUpdateRequired = false;
+             }
           }
           setCurrentTotalsObject();
           if (isTopBottomUpdateRequired === true) {
@@ -804,10 +806,6 @@ module.exports = /*  @ngInject */
             getDataForTopBottom(vm.currentTopBottomObj, categoryBound);
           }
 
-          if ($state.params.storeId) {
-            setUpdatedFilters();
-            vm.selectedStore = $state.params.pageData.account.name;
-          }
           // reset state params
           $state.params.applyFiltersOnLoad = false;
           $state.params.resetFiltersOnLoad = true;
