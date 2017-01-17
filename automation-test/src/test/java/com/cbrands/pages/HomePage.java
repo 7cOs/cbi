@@ -294,5 +294,11 @@ public class HomePage extends LoadableComponent<HomePage>{
     	return PageFactory.initElements(driver, MyScorecards.class);
     }
     
+    public TargetList  navigateToTargetListUsingURL(){
+    	String url = driver.getCurrentUrl();
+    	driver.get(url+"target-lists");
+    	return PageFactory.initElements(driver, TargetList.class);
+    }
+    
     
 }

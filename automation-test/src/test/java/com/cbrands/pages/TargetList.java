@@ -56,7 +56,8 @@ public class TargetList extends LoadableComponent<TargetList> {
 	@FindBy(how = How.CSS, using = "input[placeholder='Enter List Name']")
 	private WebElement NameTextBox;
 
-	@FindBy(how = How.XPATH, using = "//*[@placeholder='Enter Description']")
+	//@FindBy(how = How.XPATH, using = "//*[@placeholder='Enter Description']")
+	@FindBy(how = How.CSS, using = "textarea[placeholder='Enter Description']")
 	private WebElement DescriptionTextBox;
 
 	@FindBy(how = How.XPATH, using = "//div/div[2]/button")
@@ -188,6 +189,15 @@ public class TargetList extends LoadableComponent<TargetList> {
 	
 	@FindAll(@FindBy(how=How.CSS, using = "div[column='12']>h4[column='4']"))
 	private List <WebElement> targetListRows;
+	
+	@FindBy(how = How.CSS, using = "div.target-action-buttons>button[class='btn-action']")
+	private WebElement createNewListButton;
+	
+	@FindAll(@FindBy(how=How.CSS, using = "div[class='modal target-list-switch-modal']>div.modal-form>div.row>button[class='btn-action col-6']"))
+	private List <WebElement> createTargetListModalButtons;
+	
+	@FindBy(how = How.XPATH, using = "//div[contains(.,'Target List Archived!')]")
+	private WebElement archiveSuccessMessage;
 
 	public TargetList typeTargetName(String name) {
 
@@ -971,7 +981,8 @@ public class TargetList extends LoadableComponent<TargetList> {
 	}
 
 	public TargetList clickArchiveButton() {
-		ArchiveButton.click();
+		waitForVisibleFluentWait(ArchiveButton).click();
+		waitForVisible(By.xpath("//div[contains(.,'Target List Archived!')]"));
 		return this;
 	}
 
@@ -1015,7 +1026,7 @@ public class TargetList extends LoadableComponent<TargetList> {
 	}
 
 	public TargetList clickYesDelete() {
-		yesDelete.click();
+		waitForVisibleFluentWait(yesDelete).click();
 		return this;
 	}
 
@@ -1235,5 +1246,15 @@ public class TargetList extends LoadableComponent<TargetList> {
 		js.executeScript("arguments[0].click();", MyTargetList);
 		return this;
 
+	}
+	
+	public TargetList clickCreateNewListButton() {
+		waitForVisibleFluentWait(createNewListButton).click();
+		return this;
+	}
+	
+	public TargetList clickCreateNewListButtonInModal() {
+		waitForVisibleFluentWait(createTargetListModalButtons.get(0)).click();
+		return this;
 	}
 }
