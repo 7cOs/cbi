@@ -767,8 +767,6 @@ module.exports = /*  @ngInject */
       if ($state.params.storeId && $state.params.storeId.length > 0) {
         vm.currentTopBottomAcctType = vm.filtersService.accountFilters.accountTypes[3];
         vm.currentTopBottomObj = getCurrentTopBottomObject(vm.currentTopBottomAcctType);
-        setUpdatedFilters();
-        vm.selectedStore = $state.params.pageData.account.name;
       }
 
       var promiseArr = [];
@@ -800,6 +798,10 @@ module.exports = /*  @ngInject */
         if (isTopBottomUpdateRequired === true) {
           var categoryBound = vm.filtersService.model.accountSelected.accountMarkets;
           getDataForTopBottom(vm.currentTopBottomObj, categoryBound);
+          if ($state.params.storeId) {
+            setUpdatedFilters();
+            vm.selectedStore = $state.params.pageData.account.name;
+          }
         }
 
         // reset state params
