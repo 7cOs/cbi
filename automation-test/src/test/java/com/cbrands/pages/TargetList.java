@@ -1257,4 +1257,10 @@ public class TargetList extends LoadableComponent<TargetList> {
 		waitForVisibleFluentWait(createTargetListModalButtons.get(0)).click();
 		return this;
 	}
+	
+	public String sharedTargetList(String listName){
+		WebElement list = findElement(By.xpath("//h4[contains(.,'"+listName+"')]"));
+		return list.getText();
+	}
+	
 }

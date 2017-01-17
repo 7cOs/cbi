@@ -262,8 +262,8 @@ public class HomePage extends LoadableComponent<HomePage>{
 
 	public HomePage clickSharedWithMeLink() {
 		
-		waitForVisible(By.xpath("//md-tab-item/span[text()='Shared with Me']"));
-		sharedWithMeLink.click();
+		//waitForVisible(By.xpath("//md-tab-item/span[text()='Shared with Me']"));
+		waitForVisibleFluentWait(sharedWithMeLink).click();
 		return this;
 	}
 	
@@ -298,6 +298,17 @@ public class HomePage extends LoadableComponent<HomePage>{
     	String url = driver.getCurrentUrl();
     	driver.get(url+"target-lists");
     	return PageFactory.initElements(driver, TargetList.class);
+    }
+    
+	public String sharedTargetList(String listName) {
+		WebElement targetList = findElement(By.xpath("//h3[contains(.,'"+listName+"')]"));
+		return targetList.getText();
+	}
+	
+    public Opportunities  navigateToOpportunitiesPageUsingURL(){
+    	String url = driver.getCurrentUrl();
+    	driver.get(url+"opportunities");
+    	return PageFactory.initElements(driver, Opportunities.class);
     }
     
     

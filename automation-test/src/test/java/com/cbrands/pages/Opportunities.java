@@ -775,7 +775,7 @@ public class Opportunities extends LoadableComponent<Opportunities> {
 	
 	public Opportunities searchRetailerChainByName(String storeNameorID){
 		retailerSearchBoxChain.sendKeys(storeNameorID);
-		searchButton.click();
+		waitForVisibleFluentWait(searchButton).click();
 		List<WebElement> storeSearchResultFirst = findElements(By.cssSelector("ul.results>li.ng-binding.ng-scope"));
 		for (WebElement webElement : storeSearchResultFirst) {
 			if(webElement.getText().split("\n")[0].equalsIgnoreCase((storeNameorID.trim()))){
