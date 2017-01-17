@@ -24,16 +24,16 @@ module.exports = function (config) {
 
   // change all of this to env variables for security.
   config.api = {
-    url: 'http://cbi-api-test.herokuapp.com',
+    url: 'https://cbi-api-internal-qa.herokuapp.com',
     key: 'U1NCc2FXdGxJSFJ2SUVodlpHOXlMQ0JJYjJSdmNpd2dTRzlrYjNJc0lFaHZaRzl5Y3lCaGJtUWdTRzlrYjNKekxnPT0=',
     apiKey: 'test',
     version: 'v2'
   };
 
   config.saml = {
-    entryPoint: 'https://ssodev.cbrands.com/oamfed/idp/samlv20',
-    issuer: 'https://orion-dev.cbrands.com',
-    cert: '',
+    entryPoint: 'https://sso.cbrands.com/oamfed/idp/samlv20',
+    issuer: 'https://compass.cbrands.com',
+    cert: fs.readFileSync('./server/_config/passport/certs/cbi-prod-signing-2018.cer', 'utf-8'),
     privateCert: '',
     signatureAlgorithm: 'sha1'
   };
