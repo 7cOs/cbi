@@ -67,8 +67,6 @@ function updateNote(app, req, res) {
                                         },
                                         function (err, res) {
                                           if (err || !res.success) {
-                                            console.log('SFDC gave an error:');
-                                            console.dir(err);
                                             return {
                                               'isSuccess': false,
                                               'errorMessage': err  // return the error from Salesforce
@@ -238,7 +236,6 @@ function queryAccountNotes(app, req, res) {
   );
     } catch (err) {
       var errMessage = 'There was an error in queryAccountNotes: ' + JSON.stringify(err, null, '');
-      console.error(errMessage);
       return {'isSuccess': false,
         'errorMessage': errMessage};
     }
@@ -326,8 +323,10 @@ function createNote(app, req, res) {
         });
       };
     } catch (err) {
-      console.error('Error creating a note: ' + err);
-      res.send(err);
+      var errMessage = 'There was an error in createNote: ' + JSON.stringify(err, null, '');
+
+      return {'isSuccess': false,
+        'errorMessage': errMessage};
     };
   });
 };
@@ -357,7 +356,6 @@ function getAttachment(app, req, res) {
       throw (err);
     });
   } catch (err) {
-    console.error(err);
     return {'isSuccess': false,
       'errorMessage': 'No connection could be made to Salesforce.com: ' + err};
   }
