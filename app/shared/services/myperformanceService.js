@@ -387,8 +387,8 @@ module.exports = /*  @ngInject */
         params.subaccount = currentTopBottomFilters.subAccounts.id;
       }
 
-      if (currentTopBottomFilters.store) {
-        params.store = currentTopBottomFilters.store.id;
+      if (currentTopBottomFilters.stores) {
+        params.store = currentTopBottomFilters.stores.id;
       }
       return params;
     }
