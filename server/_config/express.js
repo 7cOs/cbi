@@ -33,7 +33,10 @@ module.exports =  function(app) {
   app.use(flash());
 
   //  Forces SSL for production
-  if (config.session.cookie.secure) app.use(enforce.HTTPS({ trustProtoHeader: true }));
+  if (config.session.cookie.secure) {
+    app.set('trust proxy', 1);  // trust "first" proxy
+    app.use(enforce.HTTPS({ trustProtoHeader: true }));
+  }
 
   // CONFIG BASED SETTINGS
   if (config.cors) app.use(require('cors')()); // ENABLE CORS
