@@ -416,12 +416,7 @@ module.exports = /*  @ngInject */
         vm.brandWidgetSkuTitle = null;
         if (widget === 'brands') { vm.brandWidgetTitle = item.name; }
         vm.loadingBrandSnapshot = true;
-        var params = filtersService.getAppliedFilters('brandSnapshot');
-        params = myperformanceService.appendFilterParametersForTopBottom(params, vm.currentTopBottomFilters);
-        params.additionalParams = {
-          deplTimePeriod: vm.filterModel.depletionsTimePeriod.name,
-          podAndVelTimePeriod: vm.filterModel.distributionTimePeriod.name
-        };
+        var params = getUpdatedFilterQueryParamsForBrand();
         currentBrandSelected = {
           name: item.name,
           id: item.id
@@ -578,9 +573,7 @@ module.exports = /*  @ngInject */
       filterModelProperty === 'distributor' ? vm.selectedDistributor = result.name : vm.selectedStore = result.name;
     }
 
-    function updateBrandSnapshot(isMoveToPreviousTab) {
-      filtersService.model.selected.brand = []; // remove brand from query
-
+    function getUpdatedFilterQueryParamsForBrand() {
       var params = filtersService.getAppliedFilters('brandSnapshot');
       params = myperformanceService.appendFilterParametersForTopBottom(params, vm.currentTopBottomFilters);
       vm.loadingBrandSnapshot = true;
@@ -588,7 +581,12 @@ module.exports = /*  @ngInject */
         deplTimePeriod: vm.filterModel.depletionsTimePeriod.name,
         podAndVelTimePeriod: vm.filterModel.distributionTimePeriod.name
       };
+      return params;
+    }
 
+    function updateBrandSnapshot(isMoveToPreviousTab) {
+      filtersService.model.selected.brand = []; // remove brand from query
+      var params = getUpdatedFilterQueryParamsForBrand();
       if (isMoveToPreviousTab !== false) {
         prevTab();
       }
@@ -768,16 +766,10 @@ module.exports = /*  @ngInject */
       if (isNavigatedFromScorecard === false && isNavigatedFromOpps === false) {
         chipsService.resetChipsFilters(chipsService.model);
       }
-      var params = filtersService.getAppliedFilters('brandSnapshot');
-      params = myperformanceService.appendFilterParametersForTopBottom(params, vm.currentTopBottomFilters);
-      params.additionalParams = getAppliedFiltersForTopBottom();
+      var params = getUpdatedFilterQueryParamsForBrand();
       var promiseArr = [];
       // brand snapshot returns sku data instead of just the brand if you add brand:xxx
       if (params.brand && params.brand.length) delete params.brand;
-      params.additionalParams = {
-        deplTimePeriod: vm.filterModel.depletionsTimePeriod.name,
-        podAndVelTimePeriod: vm.filterModel.distributionTimePeriod.name
-      };
       params.type = 'brandSnapshot';
       promiseArr.push(userService.getPerformanceBrand(params));
 
@@ -859,6 +851,7 @@ module.exports = /*  @ngInject */
       if (vm.currentTopBottomAcctType !== currentAcctType) {
         vm.currentTopBottomAcctType = currentAcctType;
         vm.currentTopBottomObj = getCurrentTopBottomObject(currentAcctType);
+        myperformanceService.resetFilters(vm.currentTopBottomFilters);
         onFilterPropertiesChange();
       }
     }
