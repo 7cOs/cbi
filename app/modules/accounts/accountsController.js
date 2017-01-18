@@ -105,7 +105,7 @@ module.exports = /*  @ngInject */
     // Expose public methods
     vm.allOpportunitiesDisabled = allOpportunitiesDisabled;
     vm.apply = apply;
-    vm.checkForDepletionCount = checkForDepletionCount;
+    vm.checkForDepOrDistValue = checkForDepOrDistValue;
     vm.checkIfVelocityPresent = checkIfVelocityPresent;
     vm.currentTopBottomView = null;
     vm.currentTotalsObject = null;
@@ -648,9 +648,10 @@ module.exports = /*  @ngInject */
      * @param {Number} item Package or Brand
      * @returns Returns true if value greater than 0
      */
-    function checkForDepletionCount(item) {
-      var val = vm.displayBrandValue(item.measures, 'depletions', 'depletionsTimePeriod');
-      return val && val > 0;
+    function checkForDepOrDistValue(item) {
+      var depletionVal = vm.displayBrandValue(item.measures, 'depletions', 'depletionsTimePeriod');
+      var distributionVal = vm.displayBrandValue(item.measures, 'depletions', vm.filtersService.model.accountSelected.accountBrands.propertyName, 'distributionTimePeriod');
+      return depletionVal || distributionVal;
     }
 
     /**
