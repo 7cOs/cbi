@@ -134,7 +134,9 @@ public class TargetList extends LoadableComponent<TargetList> {
 	@FindBy(how = How.LINK_TEXT, using = "Home")
 	private WebElement homePage;
 
-	@FindBy(how = How.XPATH, using = "//md-menu/button[contains(.,'Copy to Target List')]")
+	//@FindBy(how = How.XPATH, using = "//md-menu/button[contains(.,'Copy to Target List')]")
+	//@FindBy(how = How.CSS, using = "button[class='btn-action'][analytics-event='Add to Target List']")
+	@FindBy(how = How.XPATH, using = "//md-content/div/div/list/div[2]/span/span/md-menu[1]/button")
 	private WebElement copyToTargetListButton;
 
 	@FindBy(how = How.XPATH, using = "//span[contains(.,'Off-Premise')]")
@@ -199,6 +201,9 @@ public class TargetList extends LoadableComponent<TargetList> {
 	
 	@FindBy(how = How.XPATH, using = "//div[contains(.,'Target List Archived!')]")
 	private WebElement archiveSuccessMessage;
+	
+	@FindBy(how = How.XPATH, using = "//md-menu-item[contains(.,'Make Owner')]")
+	private WebElement makeOwnerOption;
 
 	public TargetList typeTargetName(String name) {
 
@@ -650,7 +655,7 @@ public class TargetList extends LoadableComponent<TargetList> {
 		return targetListExists;
 	}
 
-	public TargetList clickSendTo(String sendTo1, String sendTo2) throws InterruptedException {
+	public TargetList clickSendTo(String sendTo1) {
 		// List<WebElement> elements =
 		// findElements(By.xpath("//*[@class='md-menu ng-scope _md']/button"));
 		List<WebElement> elements = findElements(By.xpath("//button[@class='md-icon-button md-button']"));
@@ -664,7 +669,7 @@ public class TargetList extends LoadableComponent<TargetList> {
 
 		element = findElement(By.cssSelector("input[placeholder='Name or CBI email address']"));
 		waitForElementVisible(element, true);
-
+		element.clear();
 		element.sendKeys(sendTo1);
 
 		element = findElement(By.xpath("//div[3]/md-dialog/div/div[2]/div[1]/inline-search/div/input[3]"));
@@ -676,7 +681,7 @@ public class TargetList extends LoadableComponent<TargetList> {
 		WebElement result = findElement(By.cssSelector("ul.results>li.ng-binding.ng-scope>span.user-data.ng-binding"));
 		waitForElementToClickable(result, true).click();
 
-		element = findElement(By.cssSelector("input[placeholder='Name or CBI email address']"));
+		/*element = findElement(By.cssSelector("input[placeholder='Name or CBI email address']"));
 		waitForElementVisible(element, true);
 		element.sendKeys(sendTo2);
 
@@ -685,7 +690,7 @@ public class TargetList extends LoadableComponent<TargetList> {
 
 		element = findElement(By.xpath("//div[3]/md-dialog/div/div[2]/div[1]/inline-search/div/div/ul/li"));
 		waitForElementToClickable(element, true).click();
-
+*/
 		element = findElement(By.xpath("//button[contains(.,'Send')]"));
 		waitForElementToClickable(element, true).click();
 		return this;
@@ -698,14 +703,16 @@ public class TargetList extends LoadableComponent<TargetList> {
 	}
 
 	public TargetList copyToTargetList(String name) {
-		copyToTargetListButton.click();
-		if (copyToTargetListButton.getAttribute("aria-expanded") == "false") {
+		//JavascriptExecutor je = (JavascriptExecutor) driver;
+		//je.executeScript("arguments[0].scrollIntoView(false);",copyToTargetListButton);
+		waitForVisibleFluentWait(copyToTargetListButton).click();
+/*		if (copyToTargetListButton.getAttribute("aria-expanded") == "false") {
 			copyToTargetListButton.click(); // An additional click as fail-safe,
 											// to re-try the element click.
-		}
+		}*/
 		waitForVisible(By.xpath("//p[text()='" + name + "']"));
 		findElement(By.xpath("//p[text()='" + name + "']")).click();
-		waitForVisible(By.xpath("//div[contains(.,'Opportunity added to target list!')]"));
+		waitForVisible(By.xpath("//div[contains(.,'added to target list!')]"));
 		return this;
 	}
 
@@ -854,7 +861,7 @@ public class TargetList extends LoadableComponent<TargetList> {
 	}
 
 
-	public String getDepletionSince_TargetListPage(String listname) throws InterruptedException {
+	public String getDepletionSince_TargetListPage(String listname){
 		WebElement element = findElement(By.cssSelector("div[class='target-list-detail-container']"));
 		waitForElementVisible(element, true);
 
@@ -866,7 +873,7 @@ public class TargetList extends LoadableComponent<TargetList> {
 
 				element = driver.findElement(By.xpath("//h4[text()='" + listname + "']"));
 				((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", element);
-				Thread.sleep(500);
+				//Thread.sleep(500);
 
 				return array[i + 5].trim();
 			}
@@ -891,15 +898,14 @@ public class TargetList extends LoadableComponent<TargetList> {
 	}
 
 	public TargetList makeOwner() {
-		WebElement element = findElement(By.xpath("//div[3]/md-menu-content/md-menu-item[1]"));
-		element.click();
-
+		//WebElement element = findElement(By.xpath("//div[3]/md-menu-content/md-menu-item[1]"));
+		//WebElement element = findElement(By.xpath("//md-menu-item[contains(.,'Make Owner')]"));
+		//element.click();
+		waitForVisibleFluentWait(makeOwnerOption).click();
 		return this;
 	}
 
 	public String getmakeOwnerConfirmationToast() {
-		// WebElement element =
-		// findElement(By.xpath("//div[@class='overlay-wrapper']"));
 		WebElement element = findElement(By.xpath("//div[2]/md-dialog/div/div[2]/div[3]/div/div[2]/div[2]/div[1]/p"));
 		return element.getText();
 	}

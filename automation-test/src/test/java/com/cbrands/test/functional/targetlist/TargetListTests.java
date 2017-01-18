@@ -194,7 +194,7 @@ public class TargetListTests extends BaseSeleniumTestCase{
 			content.setSentByPersonName(ACTOR1_FIRST_NAME+" "+ ACTOR1_LAST_NAME );
 			content.setProductSku(content.getProductSku() + " " + "Non-Buy");
 			
-			targetListPage.clickSendTo(sendTo1, sendTo2);
+			targetListPage.clickSendTo(sendTo1);
 			Date date1  = new Date();
 			
 			assertThat(targetListPage.getOpportunitySent(),log(containsString("Opportunity Sent!")));
