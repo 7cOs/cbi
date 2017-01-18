@@ -859,7 +859,6 @@ module.exports = /*  @ngInject */
       if (vm.currentTopBottomAcctType !== currentAcctType) {
         vm.currentTopBottomAcctType = currentAcctType;
         vm.currentTopBottomObj = getCurrentTopBottomObject(currentAcctType);
-        myperformanceService.resetFilters(vm.currentTopBottomFilters);
         removeAllTopBottomAccountTypeFilters();
         onFilterPropertiesChange();
       }
