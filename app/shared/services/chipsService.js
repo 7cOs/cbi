@@ -40,7 +40,8 @@ module.exports = /*  @ngInject */
       applyFilterMulti: applyFilterMulti,
       applyStatesFilter: applyStatesFilter,
       addChipsArray: addChipsArray,
-      isDefault: isDefault
+      isDefault: isDefault,
+      removeTopBottomChips: removeTopBottomChips
     };
 
     return service;
@@ -414,5 +415,19 @@ module.exports = /*  @ngInject */
         }
       });
       filtersService.disableFilters(false, false, true, false);
+    }
+
+    /**
+     * @name removeTopBottomChips
+     * @desc Removes chips of type account, subaccount,store, distributor
+     * @params {Array} chips - List of chips
+     * @returns null
+     * @memberOf cf.common.services
+     */
+    function removeTopBottomChips(chips) {
+      removeChip('store');
+      removeChip('account');
+      removeChip('subaccount');
+      removeChip('distributor');
     }
   };
