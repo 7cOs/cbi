@@ -77,7 +77,8 @@ public class TargetList extends LoadableComponent<TargetList> {
 	@FindBy(how = How.XPATH, using = "//button[contains(.,'Manage')]")
 	private WebElement TargetListManageButton;
 
-	@FindBy(how = How.XPATH, using = "//div/div[2]/div[5]/inline-search/div/input[1]")
+	//@FindBy(how = How.XPATH, using = "//div/div[2]/div[5]/inline-search/div/input[1]")
+	@FindBy(how = How.CSS, using = "input[placeholder='Enter names or CBI Email addresses']")
 	private WebElement CollaboratorTextBox;
 
 	@FindBy(how = How.XPATH, using = "//inline-search/div/input[3]")
@@ -386,7 +387,8 @@ public class TargetList extends LoadableComponent<TargetList> {
 	}
 
 	public TargetList navigateToTargetList() {
-		targetList.click();
+		//targetList.click();
+		driver.get(PropertiesCache.getInstance().getProperty("qa.host.address") + "/target-lists");
 		return PageFactory.initElements(driver, TargetList.class);
 	}
 
@@ -418,10 +420,12 @@ public class TargetList extends LoadableComponent<TargetList> {
 	public TargetList removeCollaborator() {
 		// WebElement element
 		// =findElement(By.cssSelector("//md-menu-item[contains(.,'REMOVE')]"));
-		WebElement element = findElement(By.xpath("//div[3]/md-menu-content/md-menu-item[2]"));
-		waitForElementToClickable(element, true).click();
-		element = findElement(By.xpath("//div[2]/md-dialog/div/div[2]/div[6]/button"));
-		waitForElementToClickable(element, true).click();
+//		WebElement element = findElement(By.xpath("//div[3]/md-menu-content/md-menu-item[2]"));
+//		waitForElementToClickable(element, true).click();
+//		element = findElement(By.xpath("//div[2]/md-dialog/div/div[2]/div[6]/button"));
+//		waitForElementToClickable(element, true).click();
+		//findElement(By.cssSelector("md-menu-content.collaborator-options>md-menu-item[ng-click='tld.removeCollaboratorClick(collaborator.user.employeeId)']")).click();
+		findElement(By.xpath("//md-menu-item[contains(.,'Remove')]")).click();
 		return this;
 	}
 
@@ -468,7 +472,14 @@ public class TargetList extends LoadableComponent<TargetList> {
 	}
 
 	public TargetList clickSaveCollaboratorButton() {
-		SaveCollaboratorButton.click();
+		waitForVisibleFluentWait(SaveCollaboratorButton).click();
+		//Introducing a hard wait, as waiting for 2 seconds makes the behavior more consistent and reliable than waiting for element visibility.
+		try {
+			Thread.sleep(2000);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		waitForVisibleFluentWait(TargetListManageButton);
 		return this;
 	}
 

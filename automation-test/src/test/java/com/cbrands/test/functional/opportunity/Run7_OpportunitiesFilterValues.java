@@ -5,13 +5,14 @@ import org.testng.annotations.Test;
 import org.testng.asserts.SoftAssert;
 
 import com.cbrands.BaseSeleniumTestCase;
+import com.cbrands.helper.RetryAnalyzer;
 import com.cbrands.pages.Login;
 
 public class Run7_OpportunitiesFilterValues extends BaseSeleniumTestCase {
 
 	private SoftAssert softAssert = new SoftAssert();
 
-	@Test
+	@Test(retryAnalyzer = RetryAnalyzer.class)
 	public void US12714_AT_Opportunities_Run7_FilterFields() {
 
 		login = new Login(driver);
