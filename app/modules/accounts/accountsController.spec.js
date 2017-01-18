@@ -1005,7 +1005,7 @@ describe('Unit: accountsController', function() {
 
       ctrl.setDefaultFilterOptions();
 
-      expect(filtersService.model.selected.premiseType).toEqual('all');
+      expect(filtersService.model.selected.premiseType).toEqual('off');
       expect(ctrl.premiseTypeDisabled).toEqual(false);
       expect(ctrl.updateChip.calls.count()).toEqual(0);
     });
@@ -1092,7 +1092,7 @@ describe('Unit: accountsController', function() {
 
       ctrl.setDefaultFilterOptions();
 
-      expect(filtersService.model.selected.premiseType).toEqual('all');
+      expect(filtersService.model.selected.premiseType).toEqual('off');
       expect(ctrl.premiseTypeDisabled).toEqual(false);
       expect(ctrl.updateChip.calls.count()).toEqual(0);
       expect(ctrl.updateChip).not.toHaveBeenCalled();
