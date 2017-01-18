@@ -1182,7 +1182,7 @@ module.exports = /*  @ngInject */
           d = performanceData;
 
       function ifIsKnown(field) {
-        return (field && field !== 'UNKNOWN' && field !== null) ? field + ' ' : '';
+        return (field && field !== 'UNKNOWN' && field != null) ? field + ' ' : '';
       }
 
       address = ifIsKnown(d.addressLine1) + ifIsKnown(d.addressLine2) + ifIsKnown(d.addressLine3) + ifIsKnown(d.addressLine4);
