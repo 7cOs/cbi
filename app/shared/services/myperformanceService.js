@@ -19,7 +19,8 @@ module.exports = /*  @ngInject */
       getAcctTypeObjectBasedOnTabIndex: getAcctTypeObjectBasedOnTabIndex,
       resetFilters: resetFilters,
       isValidValues: isValidValues,
-      checkForInconsistentIds: checkForInconsistentIds
+      checkForInconsistentIds: checkForInconsistentIds,
+      parseStoreFilterFromOpps: parseStoreFilterFromOpps
     };
 
     return service;
@@ -466,6 +467,20 @@ module.exports = /*  @ngInject */
       } else {
         return false;
       }
+    }
+
+    function parseStoreFilterFromOpps(storeParams) {
+      var storeFilter = null;
+      if (storeParams) {
+        var result = storeParams.split('|');
+        if (result[0] && result[1]) {
+          storeFilter = {
+            storeId: result[0],
+            storeName: result[1]
+          };
+        }
+      }
+      return storeFilter;
     }
 
     function initChartData() {

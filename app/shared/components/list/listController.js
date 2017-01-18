@@ -86,6 +86,7 @@ module.exports = /*  @ngInject */
     vm.toggleSelectAllStores = toggleSelectAllStores;
     vm.updateOpportunityModel = updateOpportunityModel;
     vm.vsYAGrowthPercent = vsYAGrowthPercent;
+    vm.getStoreToBePassedToAcct = getStoreToBePassedToAcct;
 
     // Custom Headers for CSV export
     vm.csvHeader = [
@@ -792,6 +793,13 @@ module.exports = /*  @ngInject */
         item.selected = true;
         list.push(item);
       }
+    }
+
+    function getStoreToBePassedToAcct(storeDetails) {
+      var store = {
+        store: storeDetails.versionedId + '|' + storeDetails.name
+      };
+      return store;
     }
 
     function init() {

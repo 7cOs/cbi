@@ -738,43 +738,43 @@ module.exports = /*  @ngInject */
       return obj;
     }
 
-    function init() {
-      // if navigating from opp page, load with a default query
-      if ($state.params.storeId) $state.params.applyFiltersOnLoad = true;
-
-      // reset all chips and filters on page init if no brand is specified
-      if (!$state.params.applyFiltersOnLoad) {
-        chipsService.resetChipsFilters(chipsService.model);
-      } else {
-        if ($state.params.pageData.brandTitle) {
-          vm.brandIdSelected = filtersService.model.selected.brand[0];
-          vm.brandWidgetTitle = $state.params.pageData.brandTitle;
-
-          chipsService.addAutocompleteChip(vm.brandWidgetTitle, 'brand', false);
-        } else if ($state.params.storeId && $state.params.storeId.length > 0) {
-          filtersService.model.selected.store = [$state.params.storeId];
-          vm.currentTopBottomFilters.stores = {id: $state.params.storeId};
-        }
+    function checkForNavigationFromScorecard() {
+      var isNavigatedFromScorecard = false;
+      if ($state.params.applyFiltersOnLoad && $state.params.pageData.brandTitle) {
+        vm.brandIdSelected = filtersService.model.selected.brand[0];
+        vm.brandWidgetTitle = $state.params.pageData.brandTitle;
+        chipsService.addAutocompleteChip(vm.brandWidgetTitle, 'brand', false);
+        isNavigatedFromScorecard = true;
       }
+      if ($state.params.pageData && $state.params.pageData.premiseType) vm.filtersService.model.selected.premiseType = $state.params.pageData.premiseType;
+      return isNavigatedFromScorecard;
+    }
 
+    function checkForNavigationFromOpps() {
+      var isNavigatedFromOpps = false;
+      var storeFilter = myperformanceService.parseStoreFilterFromOpps($state.params.store);
+      if (storeFilter) {
+        vm.currentTopBottomAcctType = vm.filtersService.accountFilters.accountTypes[3];
+        vm.currentTopBottomObj = getCurrentTopBottomObject(vm.currentTopBottomAcctType);
+        var storeData = {id: storeFilter.storeId, name: storeFilter.storeName};
+        vm.currentTopBottomFilters.stores = storeData;
+        isNavigatedFromOpps = true;
+      }
+      return isNavigatedFromOpps;
+    }
+
+    function init() {
       setDefaultDropDownOptions();
       setDefaultFilterOptions();
+      var isNavigatedFromScorecard = checkForNavigationFromScorecard();
+      var isNavigatedFromOpps = checkForNavigationFromOpps();
 
-      if ($state.params.pageData && $state.params.pageData.premiseType) vm.filtersService.model.selected.premiseType = $state.params.pageData.premiseType;
-
+      if (isNavigatedFromScorecard === false && isNavigatedFromOpps === false) {
+        chipsService.resetChipsFilters(chipsService.model);
+      }
       var params = filtersService.getAppliedFilters('brandSnapshot');
       params = myperformanceService.appendFilterParametersForTopBottom(params, vm.currentTopBottomFilters);
       params.additionalParams = getAppliedFiltersForTopBottom();
-
-      // this is being reset somewhere between end of else above and here but needs to be stores for :storeId
-      if ($state.params.storeId && $state.params.storeId.length > 0) {
-        vm.currentTopBottomAcctType = vm.filtersService.accountFilters.accountTypes[3];
-        vm.currentTopBottomObj = getCurrentTopBottomObject(vm.currentTopBottomAcctType);
-        setUpdatedFilters();
-        console.log('Params', $state.params.pageData);
-        vm.selectedStore = $state.params.pageData.account.name;
-      }
-
       var promiseArr = [];
       // brand snapshot returns sku data instead of just the brand if you add brand:xxx
       if (params.brand && params.brand.length) delete params.brand;
@@ -787,23 +787,26 @@ module.exports = /*  @ngInject */
 
       $q.all(promiseArr).then(function(data) {
         if (data[0]) {
+          console.log('Store Pls1', vm.filtersService.model.selected.retailer);
           vm.loadingBrandSnapshot = false;
           vm.brandTabs.brands = data[0].performance;
-          var isTopBottomUpdateRequired = true;
-
-          if ($state.params.applyFiltersOnLoad) {
+          if (isNavigatedFromScorecard === true) {
              var matchedVal = vm.brandTabs.brands.filter(function(val) {
                return val.name === vm.brandWidgetTitle;
              });
              if (matchedVal[0]) {
                selectItem('brands', matchedVal[0], vm.brandTabs, 0);
-               isTopBottomUpdateRequired = false;
              }
           }
           setCurrentTotalsObject();
-          if (isTopBottomUpdateRequired === true) {
+          if (isNavigatedFromScorecard === false) {
             var categoryBound = vm.filtersService.model.accountSelected.accountMarkets;
             getDataForTopBottom(vm.currentTopBottomObj, categoryBound);
+          }
+
+          if (isNavigatedFromOpps === true) {
+            // Directly navigate to store level if navigated from opps
+            navigateTopBottomLevels(vm.currentTopBottomFilters.stores);
           }
 
           // reset state params
