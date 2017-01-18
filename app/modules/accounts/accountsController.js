@@ -169,6 +169,15 @@ module.exports = /*  @ngInject */
       if ((filtersService.model.selected.distributor && filtersService.model.selected.distributor.length > 0) || (filtersService.model.selected.store && filtersService.model.selected.store.length > 0) || (filtersService.model.selected.account && filtersService.model.selected.account.length > 0)) {
         return false;
       } else {
+        if (vm.filtersService.model.cbbdChainIndependent === true) {
+          vm.chipsService.applyFilterArr(vm.filtersService.model.selected.cbbdChain, 'Independent', 'cbbdChain');
+          vm.filtersService.model.cbbdChainIndependent = false;
+        }
+
+        if (vm.filtersService.model.cbbdChainCbbd === true) {
+          vm.chipsService.applyFilterArr(vm.filtersService.model.selected.cbbdChain, 'Cbbd', 'cbbdChain', 'CBBD Chain');
+          vm.filtersService.model.cbbdChainCbbd = false;
+        }
         return true;
       }
     }
