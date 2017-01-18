@@ -357,13 +357,14 @@ module.exports = /*  @ngInject */
     function resetFilters() {
       // Remove all filters asssociated with top bottom
       removeAllTopBottomAccountTypeFilters();
+      chipsService.resetChipsFilters(chipsService.model);
+      setDefaultFilterOptions();
       vm.filterModel = angular.copy(filterModelTemplate);
       filtersService.model.filtersValidCount = 0;
       setDefaultDropDownOptions();
       apply(false);
       // Go back to distributor level. Get the updated data for distributors
       resetTopBottom();
-
       updateBrandSnapshot();
     }
 
@@ -378,16 +379,14 @@ module.exports = /*  @ngInject */
       vm.idSelected = null;
       vm.selectedDistributor = null;
       vm.selectedStore = null;
-
-      chipsService.resetChipsFilters(chipsService.model);
       filtersService.model.distributor = '';
       vm.showXDistributor = false;
       filtersService.model.account = '';
       vm.showXChain = false;
       filtersService.model.store = '';
       vm.showXStore = false;
+      chipsService.removeTopBottomChips();
       myperformanceService.resetFilters(vm.currentTopBottomFilters);
-      setDefaultFilterOptions();
     }
 
     /**
@@ -861,6 +860,7 @@ module.exports = /*  @ngInject */
         vm.currentTopBottomAcctType = currentAcctType;
         vm.currentTopBottomObj = getCurrentTopBottomObject(currentAcctType);
         myperformanceService.resetFilters(vm.currentTopBottomFilters);
+        removeAllTopBottomAccountTypeFilters();
         onFilterPropertiesChange();
       }
     }
