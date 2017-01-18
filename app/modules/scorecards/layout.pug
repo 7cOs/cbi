@@ -99,7 +99,8 @@ div.my-scorecards
     div.scorecard-filter
       div.radio-button-group
         md-radio-group(ng-model="s.distributionRadioOptions.selected.onOffPremise" aria-label="Premise Filter" ng-change="s.changePremise();")
-          md-radio-button(ng-repeat="filter in s.distributionRadioOptions.premises | orderBy: 'name'" class="md-primary" ng-value="filter.value" aria-label="{{filter.name}}") {{filter.name}}
+          md-radio-button(ng-repeat="filter in s.distributionRadioOptions.premises | orderBy: 'name'" class="md-primary" ng-value="filter.value" aria-label="{{filter.name}}" ng-disabled="s.premiseTypeDisabled === filter.name") {{filter.name}}
+
       div.radio-button-group
         md-radio-group(ng-model="s.distributionRadioOptions.selected.placementType" aria-label="Placement Type Filter")
           md-radio-button(ng-repeat="filter in s.distributionRadioOptions.placementType" class="md-primary" ng-value="filter.name" aria-label="{{filter.name}}") {{filter.name}}
