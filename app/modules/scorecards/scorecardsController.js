@@ -63,6 +63,8 @@ module.exports = /*  @ngInject */
     vm.toggleSelected = toggleSelected;
     vm.checkValidity = checkValidity;
     vm.vsYAPercent = vsYAPercent;
+    vm.setDefaultFilterOptions = setDefaultFilterOptions;
+    vm.premiseTypeDisabled = '';
 
     init();
 
@@ -220,6 +222,7 @@ module.exports = /*  @ngInject */
         updatedSelectionValuesInFilter(vm.depletionRadio, vm.depletionSelect, vm.distributionSelectOptions.selected);
 
         updateTotalRowDistributions();
+        setDefaultFilterOptions();
 
         console.log('[scorecardsController.init - userService.model.distribution]', userService.model.distribution);
       });
@@ -264,6 +267,32 @@ module.exports = /*  @ngInject */
         vm.totalDistributions = $filter('filter')(totalObj[0].measures, {timeframe: vm.distributionSelectOptions.selected});
       } else {
         vm.totalDistributions = {};
+      }
+    }
+
+    function setDefaultFilterOptions() {
+      if (userService.model.currentUser.personID !== -1) {
+       switch (userService.model.currentUser.srcTypeCd[0]) {
+          case 'OFF_HIER':
+          case 'OFF_SPEC':
+            offPremise();
+            break;
+          case 'ON_HIER':
+            onPremise();
+            break;
+          default:
+            vm.distributionRadioOptions.selected.onOffPremise = 'off';
+            break;
+          }
+        }
+
+      function onPremise() {
+        vm.distributionRadioOptions.selected.onOffPremise = 'on';
+        vm.premiseTypeDisabled = 'Off Premise';
+      }
+      function offPremise() {
+        vm.distributionRadioOptions.selected.onOffPremise = 'off';
+        vm.premiseTypeDisabled = 'On Premise';
       }
     }
   };
