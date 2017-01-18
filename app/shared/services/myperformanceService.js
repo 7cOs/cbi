@@ -368,7 +368,7 @@ module.exports = /*  @ngInject */
       return chartData;
     }
 
-    function appendFilterParametersForTopBottom (params, currentTopBottomFilters) {
+    function appendFilterParametersForTopBottom (params, currentTopBottomFilters, myAccountsOnly) {
       params = angular.copy(params);
       // Need to remove filter parameters from filtersService.model that are in params. vm.currentTopBottomFilter should always reflect the most refreshed copy of those filters
       delete params.distributor;
@@ -389,7 +389,17 @@ module.exports = /*  @ngInject */
       }
 
       if (currentTopBottomFilters.stores) {
-        params.store = currentTopBottomFilters.stores.id;
+        var storeIdCollection = angular.copy(currentTopBottomFilters.stores.id);
+        if (storeIdCollection.length === 2) {
+          if (myAccountsOnly === true) {
+            storeIdCollection.splice(1, 1);
+          } else {
+            storeIdCollection.splice(0, 1);
+          }
+          params.store = storeIdCollection;
+        } else {
+          params.store = currentTopBottomFilters.stores.id;
+        }
       }
       return params;
     }

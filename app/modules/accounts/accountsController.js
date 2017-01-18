@@ -537,8 +537,8 @@ module.exports = /*  @ngInject */
         if (result.id.constructor === Array) {
           filtersService.model.selected[filterModelProp] = result.id;
         } else {
-          // Always send the 9 digit code to the my performance endpoints - versionedId for store, id for everything else
-          filtersService.model.selected[filterModelProp] = result.versionedId ? [result.versionedId] : [result.id];
+          // Always send the 9 digit code to the my performance endpoints - versionedId for store and a normal id, id for everything else
+          filtersService.model.selected[filterModelProp] = result.versionedId ? [result.versionedId, result.id] : [result.id];
         }
       }
 
@@ -584,7 +584,7 @@ module.exports = /*  @ngInject */
 
     function getUpdatedFilterQueryParamsForBrand() {
       var params = filtersService.getAppliedFilters('brandSnapshot');
-      params = myperformanceService.appendFilterParametersForTopBottom(params, vm.currentTopBottomFilters);
+      params = myperformanceService.appendFilterParametersForTopBottom(params, vm.currentTopBottomFilters, vm.filtersService.model.selected.myAccountsOnly);
       vm.loadingBrandSnapshot = true;
       params.additionalParams = {
         deplTimePeriod: vm.filterModel.depletionsTimePeriod.name,
@@ -938,7 +938,7 @@ module.exports = /*  @ngInject */
       var categoryBound = vm.filtersService.model.accountSelected.accountMarkets;
       var params = filtersService.getAppliedFilters('topBottom');
       appendBrandParametersForTopBottom(params);
-      params = myperformanceService.appendFilterParametersForTopBottom(params, vm.currentTopBottomFilters);
+      params = myperformanceService.appendFilterParametersForTopBottom(params, vm.currentTopBottomFilters, vm.filtersService.model.selected.myAccountsOnly);
       vm.loadingTopBottom = true;
       params.additionalParams = getAppliedFiltersForTopBottom();
 
