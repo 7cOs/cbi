@@ -367,6 +367,22 @@ module.exports = /*  @ngInject */
       $scope.notesOpen = data;
       vm.storeName = notesService.model.currentStoreName;
       // vm.storeName = account.name;
+
+      switch (notesService.model.currentStoreProperty) {
+        case 'account':
+          vm.analyticsCategory = 'Account Notes';
+          break;
+        case 'subaccount':
+          vm.analyticsCategory = 'Subaccount Notes';
+          break;
+        case 'store':
+          vm.analyticsCategory = 'Retailer Notes';
+          break;
+        case 'distributor':
+          vm.analyticsCategory = 'Distributor Notes';
+          break;
+      }
+
       $location.hash(account.noteId);
     });
   };
