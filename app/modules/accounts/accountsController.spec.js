@@ -1005,7 +1005,7 @@ describe('Unit: accountsController', function() {
 
       ctrl.setDefaultFilterOptions();
 
-      expect(filtersService.model.selected.premiseType).toEqual('all');
+      expect(filtersService.model.selected.premiseType).toEqual('off');
       expect(ctrl.premiseTypeDisabled).toEqual(false);
       expect(ctrl.updateChip.calls.count()).toEqual(0);
     });
@@ -1092,7 +1092,7 @@ describe('Unit: accountsController', function() {
 
       ctrl.setDefaultFilterOptions();
 
-      expect(filtersService.model.selected.premiseType).toEqual('all');
+      expect(filtersService.model.selected.premiseType).toEqual('off');
       expect(ctrl.premiseTypeDisabled).toEqual(false);
       expect(ctrl.updateChip.calls.count()).toEqual(0);
       expect(ctrl.updateChip).not.toHaveBeenCalled();
@@ -1177,10 +1177,9 @@ describe('Unit: accountsController', function() {
 
     it('Should update top bottom', function() {
       ctrl.loadingTopBottom = true;
-      var categoryBound = filtersService.model.accountSelected.accountMarkets;
+      ctrl.filtersService.model.accountSelected.accountMarkets = filtersService.model.accountSelected.accountMarkets;
       expect(userService.getTopBottomSnapshot.calls.count()).toEqual(1);
-
-      ctrl.getDataForTopBottom(ctrl.topBottomData, categoryBound);
+      ctrl.getDataForTopBottomLevel(ctrl.topBottomData);
 
       expect(userService.getTopBottomSnapshot.calls.count()).toEqual(2);
     });
@@ -1216,9 +1215,8 @@ describe('Unit: accountsController', function() {
   });
 
   describe('Get top bottom data', function() {
-    var categoryBound;
     beforeEach(function() {
-      categoryBound = ctrl.filtersService.accountFilters.accountMarkets[0];
+      ctrl.filtersService.model.accountSelected.accountMarkets = filtersService.model.accountSelected.accountMarkets;
       userService.getTopBottomSnapshot.calls.reset();
       ctrl.topBottomData.distributors.performanceData = null;
       ctrl.topBottomData.distributors.isPerformanceDataUpdateRequired = false;
@@ -1226,33 +1224,34 @@ describe('Unit: accountsController', function() {
     });
 
     it('Should get the updated top bottom data if performance flag is set to true', function() {
-      ctrl.getDataForTopBottom(ctrl.topBottomData.distributors, categoryBound);
+      ctrl.getDataForTopBottomLevel(ctrl.topBottomData.distributors);
       expect(userService.getTopBottomSnapshot.calls.count()).toEqual(1);
     });
 
     it('Should get the updated filtered data if update filter flag is set to true', function() {
-      ctrl.getDataForTopBottom(ctrl.topBottomData.distributors, categoryBound);
+      ctrl.getDataForTopBottomLevel(ctrl.topBottomData.distributors);
       scope.$digest();
       expect(userService.getTopBottomSnapshot.calls.count()).toEqual(1);
       userService.getTopBottomSnapshot.calls.reset();
-      ctrl.getDataForTopBottom(ctrl.topBottomData.distributors, categoryBound);
+      ctrl.getDataForTopBottomLevel(ctrl.topBottomData.distributors);
       expect(userService.getTopBottomSnapshot.calls.count()).toEqual(1);
     });
 
     it('Should not get updated performance data if update performance flag is not set', function() {
-      ctrl.getDataForTopBottom(ctrl.topBottomData.distributors, categoryBound);
+      ctrl.filtersService.model.accountSelected.accountMarkets = ctrl.filtersService.accountFilters.accountMarkets[0];
+      ctrl.getDataForTopBottomLevel(ctrl.topBottomData.distributors);
       scope.$digest();
       expect(userService.getTopBottomSnapshot.calls.count()).toEqual(1);
       ctrl.topBottomData.distributors.isFilterUpdateRequired = true;
       ctrl.topBottomData.distributors.timePeriodFilteredData = null;
-      ctrl.getDataForTopBottom(ctrl.topBottomData.distributors, categoryBound);
+      ctrl.getDataForTopBottomLevel(ctrl.topBottomData.distributors);
       expect(ctrl.topBottomData.distributors.isFilterUpdateRequired).toBeTruthy();
       expect(ctrl.topBottomData.distributors.isFilterUpdateRequired).not.toBeUndefined();
     });
 
     it('Should not get updated performance data and updated filtered data if update performance flag and update filter flags are not set', function() {
-      var categoryBound = ctrl.filtersService.accountFilters.accountMarkets[0];
-      ctrl.getDataForTopBottom(ctrl.topBottomData.distributors, categoryBound);
+      ctrl.filtersService.model.accountSelected.accountMarkets = ctrl.filtersService.accountFilters.accountMarkets[0];
+      ctrl.getDataForTopBottomLevel(ctrl.topBottomData.distributors);
       scope.$digest();
       expect(ctrl.topBottomData.distributors.isFilterUpdateRequired).toBeFalsy();
       expect(ctrl.topBottomData.distributors.timePeriodFilteredData).not.toBeUndefined();
@@ -1260,16 +1259,17 @@ describe('Unit: accountsController', function() {
     });
 
     it('Should update the correct tab value in the view', function() {
-      ctrl.getDataForTopBottom(ctrl.topBottomData.distributors, categoryBound);
+      ctrl.filtersService.model.accountSelected.accountMarkets = ctrl.filtersService.accountFilters.accountMarkets[0];
+      ctrl.getDataForTopBottomLevel(ctrl.topBottomData.distributors);
       ctrl.marketSelectedIndex = 0;
 
-      ctrl.getDataForTopBottom(ctrl.topBottomData.accounts, categoryBound);
+      ctrl.getDataForTopBottomLevel(ctrl.topBottomData.accounts);
       ctrl.marketSelectedIndex = 1;
 
-      ctrl.getDataForTopBottom(ctrl.topBottomData.subAccounts, categoryBound);
+      ctrl.getDataForTopBottomLevel(ctrl.topBottomData.subAccounts);
       ctrl.marketSelectedIndex = 2;
 
-      ctrl.getDataForTopBottom(ctrl.topBottomData.stores, categoryBound);
+      ctrl.getDataForTopBottomLevel(ctrl.topBottomData.stores);
       ctrl.marketSelectedIndex = 3;
     });
 
@@ -1554,8 +1554,8 @@ describe('Unit: accountsController', function() {
 
   describe('filterTopBottom', function() {
     beforeEach(function() {
-      var categoryBound = filtersService.model.accountSelected.accountMarkets;
-      ctrl.getDataForTopBottom(ctrl.topBottomData, categoryBound);
+      ctrl.filtersService.model.accountSelected.accountMarkets = ctrl.filtersService.accountFilters.accountMarkets[0];
+      ctrl.getDataForTopBottomLevel(ctrl.topBottomData);
     });
 
     it('should reset flags for each object', function() {
@@ -1570,19 +1570,12 @@ describe('Unit: accountsController', function() {
     });
 
     it('should update top bottom data', function() {
-      spyOn(ctrl, 'getDataForTopBottom');
+      spyOn(ctrl, 'getDataForTopBottomLevel');
 
       ctrl.filterTopBottom();
 
-      expect(ctrl.getDataForTopBottom).toHaveBeenCalled();
-      expect(ctrl.getDataForTopBottom.calls.count()).toEqual(1);
-    });
-
-    describe('changing tab index', function() {
-      it('should go to store level', function() {});
-      it('should go to sub account level', function() {});
-      it('should go to account level', function() {});
-      it('should go to distributor level', function() {});
+      expect(ctrl.getDataForTopBottomLevel).toHaveBeenCalled();
+      expect(ctrl.getDataForTopBottomLevel.calls.count()).toEqual(1);
     });
   });
 });
