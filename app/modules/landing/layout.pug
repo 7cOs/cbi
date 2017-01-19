@@ -61,7 +61,7 @@ section.landing-page
           img(src="../assets/img/icons/announcement-help.svg" width="80" height="80")
           h2 Welcome to Compass! Need Help?
           p Check out our tutorial videos! These will tell you more about the enhanced version of Compass and how to get started!
-          p.accent.action-item #[a(href="#" ui-sref="help" analytics-on="click" analytics-event="Help Feature Click" class="go-arrow") View all videos &amp; tutorials]
+          p.accent.action-item #[a(href="#" ui-sref="help" class="go-arrow" analytics-on="click" analytics-event="Help Feature Click" analytics-category="Help" analytics-label="View all videos & tutorials") View all videos &amp; tutorials]
     div(row)
       section.my-performance(column="7")
         target
@@ -98,4 +98,4 @@ section.landing-page
               label Brand / Master SKU
               inline-search(type="product" variety="sku" placeholder="By brand or SKU" chosen-result="l.filtersService.model.brandSearchText" callback="l.applyFilterArr(l.filtersService.model.selected.masterSKU, result, 'masterSKU', result.name)")
 
-            button.btn-action(ng-click="l.findOpportunities()" ng-disabled="l.filtersService.model.filtersApplied || l.filtersService.model.filtersValidCount === 0" analytics-on="click" analytics-event="Opportunity List Link Click") Find Opportunities
+            button.btn-action(ng-click="l.findOpportunities()" ng-disabled="l.filtersService.model.filtersApplied || l.filtersService.model.filtersValidCount === 0") Find Opportunities

@@ -7,35 +7,35 @@
 div.outer-nav-wrapper
   div.inner-nav-wrapper(container)
     div(row)
-      img(src="assets/img/logos/Compass_logo.svg", ui-sref="landing", alt="Home").nav-logo
+      img(src="assets/img/logos/Compass_logo.svg", ui-sref="landing", alt="Home" analytics-on="click" analytics-event="Image Click" analytics-category="Navigation" analytics-label="Compass Logo").nav-logo
       .nav-logo-background
       div.nav-link-wrapper
         ul(column='8').main-nav
           li.top-level-menu(ui-sref-active="active")
             div.inner
-              span #[a(ui-sref="landing" analytics-on="click" analytics-event="Home Page Link Click") Home]
+              span #[a(ui-sref="landing" analytics-on="click" analytics-event="Link Click" analytics-category="Navigation" analytics-label="Home") Home]
           li.top-level-menu.parent(ui-sref-active="active")
             div.inner
               span #[a My Performance]
             ul.dropdown
-              li.sub-menu(ui-sref="scorecards" analytics-on="click" analytics-event="My Scorecard Link Click") #[a My Scorecards]
-              li.sub-menu(ui-sref="accounts" analytics-on="click" analytics-event="My Accounts Link Click") #[a Account Dashboard]
+              li.sub-menu(ui-sref="scorecards" analytics-on="click" analytics-event="Link Click" analytics-category="Navigation" analytics-label="My Scorecards") #[a My Scorecards]
+              li.sub-menu(ui-sref="accounts" analytics-on="click" analytics-event="Link Click" analytics-category="Navigation" analytics-label="Account Dashboard") #[a Account Dashboard]
           li.top-level-menu(ui-sref-active="active")
             div.inner
-              span #[a(ui-sref="opportunities" analytics-on="click" analytics-event="Opportunity List Link Click") Opportunities]
+              span #[a(ui-sref="opportunities" analytics-on="click" analytics-event="Link Click" analytics-category="Navigation" analytics-label="Opportunities") Opportunities]
           li.top-level-menu(ui-sref-active="active")
             div.inner
-              span #[a(ui-sref="target-lists" analytics-on="click" analytics-event="Target List Link Click") Target Lists]
+              span #[a(ui-sref="target-lists" analytics-on="click" analytics-event="Link Click" analytics-category="Navigation" analytics-label="Target Lists") Target Lists]
           // li.top-level-menu(ui-sref-active="active")
             div.inner
               span #[a(ui-sref="help") Help]
         div.nav-icon-container
           .notification-count-badge(ng-if="nb.notificationHelper.showBadge")
             span {{nb.notificationHelper.unseenNotifications}}
-          a.nav-icon.add-opportunity(ng-click="nb.modalAddOpportunityForm(); nb.getTargetLists()")
+          a.nav-icon.add-opportunity(ng-click="nb.modalAddOpportunityForm(); nb.getTargetLists()" analytics-on="click" analytics-event="Add Opportunity" analytics-category="Opportunities" analytics-label="Navbar Icon Click")
             inline-search(ng-if="nb.accountSelectorSelected === 'Store'" type="store" placeholder="Search for a store" chosen-result="nb.searchResult" nav="true")
           md-menu(md-position-mode="target-right target" md-offset="1 38")
-            a.nav-icon.notifications(href="#" md-menu-origin ng-click="$mdOpenMenu($event); nb.markSeen(nb.notifications)", aria-label="Notifications" analytics-on="click" analytics-event="Notifications Click")
+            a.nav-icon.notifications(href="#" md-menu-origin ng-click="$mdOpenMenu($event); nb.markSeen(nb.notifications)", aria-label="Notifications" analytics-on="click" analytics-event="View Notification" analytics-category="Notifications" analytics-label="Navbar Icon Click")
             md-menu-content.nav-flyout
                 .content.nopad
                   div.notification-card.clearfix(md-prevent-menu-close ng-repeat="notification in nb.notifications | orderBy: '-dateCreated'" ng-class="{'read': notification.status === 'READ'}" ng-click="nb.markRead(notification)" class="{{notification.action}}")
@@ -64,13 +64,13 @@ div.outer-nav-wrapper
                     .details
                       p {{nb.noNotifications}}
           md-menu(md-position-mode="target-right target" md-offset="2 54")
-            a.nav-icon.settings(href="#" md-menu-origin ng-click="$mdOpenMenu($event)", aria-label="Settings")
+            a.nav-icon.settings(href="#" md-menu-origin ng-click="$mdOpenMenu($event)", aria-label="Settings" analytics-on="click" analytics-event="View Settings" analytics-category="Settings" analytics-label="Navbar Icon Click")
             md-menu-content
               .nav-flyout
                 .content
                   p You've logged in as
                   p <strong>{{nb.userService.model.currentUser.firstName | titlecase}} {{nb.userService.model.currentUser.lastName | titlecase}}</strong>
-                  a(href="/auth/logout" target="_self")
+                  a(href="/auth/logout" target="_self" analytics-on="click" analytics-event="Button Click" analytics-category="Navigation" analytics-label="Logout")
                     button.btn-action Logout
           div.version {{nb.versionService.model.version.hash}} | {{nb.versionService.model.version.version}}
       ul.nav-sub-menu(ng-if="$root.pageTitle === 'Account Dashboard' || $root.pageTitle === 'Scorecards'")

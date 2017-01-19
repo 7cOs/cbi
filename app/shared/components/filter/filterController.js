@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports = /*  @ngInject */
-  function filterController($state, $scope, $mdDialog, $mdSelect, loaderService, chipsService, filtersService, opportunityFiltersService, userService, usStatesService) {
+  function filterController($state, $scope, $mdDialog, $mdSelect, $analytics, loaderService, chipsService, filtersService, opportunityFiltersService, userService, usStatesService) {
 
     // ****************
     // CONTROLLER SETUP
@@ -45,6 +45,7 @@ module.exports = /*  @ngInject */
     vm.chooseOpportunityType = chooseOpportunityType;
     vm.changeOpportunitySelection = changeOpportunitySelection;
     vm.getDescriptionForFilter = getDescriptionForFilter;
+    vm.applyFilters = applyFilters;
 
     init();
 
@@ -253,9 +254,83 @@ module.exports = /*  @ngInject */
       });
     }
 
+    function applyFilters() {
+      sendFilterAnalytics();
+      chipsService.applyFilters();
+    }
+
     // **************
     // PRIVATE METHODS
     // **************
+
+    function sendFilterAnalytics() {
+      var chip, action, label;
+
+      for (var i = 0; i < chipsService.model.length; i++) {
+        chip = chipsService.model[i];
+
+        switch (chip.type) {
+          // camelCase to upper case action, id as label
+          case 'account':
+          case 'subaccount':
+          case 'store':
+          case 'distributor':
+          case 'brand':
+            action = chip.type.replace(/([A-Z])/g, ' $1').toUpperCase();
+            label = chip.id;
+            break;
+
+          // special cases
+          case 'myAccountsOnly':
+            action = 'ACCOUNT SCOPE';
+            label = 'MY ACCOUNTS ONLY';
+            break;
+
+          case 'contact':
+            action = 'CBBD CONTACT';
+            label = chip.id;
+            break;
+
+          case 'masterSKU':
+            action = 'MASTER SKU';
+            label = chip.id;
+            break;
+
+          case 'impact':
+            action = 'PREDICTED IMPACT';
+            label = chip.name.toUpperCase();
+            break;
+
+          case 'cbbdChain':
+            action = 'STORE TYPE';
+            label = chip.name.toUpperCase();
+            break;
+
+          case 'segmentation':
+            action = 'STORE SEGMENTATION';
+            label = chip.name.toUpperCase();
+            break;
+
+          // camelCase to upper case action, upper case label
+          case 'premiseType':
+          case 'opportunityStatus':
+          case 'opportunityType':
+          case 'zipCode':
+          case 'city':
+          case 'state':
+          case 'productType':
+          case 'tradeChannel':
+          default:
+            action = chip.type.replace(/([A-Z])/g, ' $1').toUpperCase();
+            label = chip.name.toUpperCase();
+            break;
+        }
+
+        $analytics.eventTrack(action, {
+          category: 'Filters', label: label
+        });
+      }
+    }
 
     function init() {
       if ($state.current.name === 'target-list-detail') {

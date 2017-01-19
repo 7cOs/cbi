@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports = /*  @ngInject */
-  function notesController($scope, $state, $mdDialog, $timeout, $filter, $window, $location, notesService, userService, Upload, moment) {
+  function notesController($scope, $state, $mdDialog, $timeout, $filter, $window, $location, $analytics, notesService, userService, Upload, moment) {
 
     // ****************
     // CONTROLLER SETUP
@@ -367,6 +367,24 @@ module.exports = /*  @ngInject */
       $scope.notesOpen = data;
       vm.storeName = notesService.model.currentStoreName;
       // vm.storeName = account.name;
+
+      switch (notesService.model.currentStoreProperty) {
+        case 'account':
+          vm.analyticsCategory = 'Account Notes';
+          break;
+        case 'subaccount':
+          vm.analyticsCategory = 'Subaccount Notes';
+          break;
+        case 'store':
+          vm.analyticsCategory = 'Retailer Notes';
+          break;
+        case 'distributor':
+          vm.analyticsCategory = 'Distributor Notes';
+          break;
+      }
+
+      $analytics.eventTrack('Notes Tab', {category: vm.analyticsCategory, label: 'Open Notes Tab'});
+
       $location.hash(account.noteId);
     });
   };

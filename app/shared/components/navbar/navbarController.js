@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports = /*  @ngInject */
-  function navbarController($rootScope, $scope, $state, $window, $mdPanel, $mdDialog, $mdMenu, $mdSelect, $anchorScroll, notificationsService, opportunitiesService, targetListService, userService, versionService, loaderService, ieHackService, toastService, filtersService, chipsService, notesService, moment) {
+  function navbarController($rootScope, $scope, $state, $window, $mdPanel, $mdDialog, $mdMenu, $mdSelect, $anchorScroll, $analytics, notificationsService, opportunitiesService, targetListService, userService, versionService, loaderService, ieHackService, toastService, filtersService, chipsService, notesService, moment) {
 
     // ****************
     // CONTROLLER SETUP
@@ -128,11 +128,19 @@ module.exports = /*  @ngInject */
         });
 
       if (notification.objectType.toUpperCase() === 'TARGET_LIST') {
+        $analytics.eventTrack('Read Notification', {category: 'Notifications', label: 'Shared Target List'});
+
         $state.go('target-list-detail', ({id: notification.shortenedObject.id}));
       } else if (notification.objectType.toUpperCase() === 'OPPORTUNITY') {
+        $analytics.eventTrack('Read Notification', {category: 'Notifications', label: 'Shared Opportunity'});
+
         opportunitiesService.model.opportunityId = notification.shortenedObject.id;
         $state.go('opportunities', (opportunitiesService.model.opportunityId, opportunitiesService.model.filterApplied = false), {reload: true});
-      } else if (notification.objectType.toUpperCase() === 'ACCOUNT') $state.go('accounts');
+      } else if (notification.objectType.toUpperCase() === 'ACCOUNT') {
+        $analytics.eventTrack('Read Notification', {category: 'Notifications', label: 'Account'});
+
+        $state.go('accounts');
+      }
 
       $mdMenu.hide();
     }
