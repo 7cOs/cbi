@@ -130,7 +130,7 @@ public class SmokeTests extends BaseSeleniumTestCase{
 		String allText = getAllTextFromPage();
 		assertThat("Unable to find any opportunities that met your criteria.", allText, not(containsString("Dang! We were unable to find any opportunities that met your criteria.")));
 		
-		opportunitiesPage.sendOpportunityTo(ACTOR2_USER_NAME);
+		opportunitiesPage.sendOpportunityTo(sendTo);
 		
 		SoftAssert softAssert = new SoftAssert();
 		
@@ -143,26 +143,24 @@ public class SmokeTests extends BaseSeleniumTestCase{
 		login = new Login(driver);
 		homePage = login.loginWithValidCredentials(ACTOR1_USER_NAME, ACTOR1_PASSWORD);
 		homePage.get();
-		targetListPage = homePage.navigateTargetList();
-		Thread.sleep(10000);
-		targetListPage.clickCreateNewList();
-		targetListPage.clickCreateNewListModal();
-		Thread.sleep(300);
-		targetListPage.typeTargetName(name);
-		targetListPage.typeDescription(description);
-		targetListPage.addCollaborator(collaborator);
-		targetListPage.clickTargetSave();
-		Thread.sleep(3000);
-		targetListPage.clickNewTargetList(name);
-		Thread.sleep(3000);
-		
-		targetListPage.clickManage();
-		Thread.sleep(1000);
-		targetListPage.clickCollaborator();
-		targetListPage.removeCollaborator();
-		Thread.sleep(1000);
-		targetListPage.clickManage();
-		targetListPage.deleteTargetList();
+		targetListPage = homePage.navigateTargetList();		
+		targetListPage.clickCreateNewListButton()
+					.clickCreateNewListButtonInModal()
+					.EnterNameTextBox(name)
+					.typeDescription(description)
+					.addCollaborator(collaborator)
+					.clickSaveButton()
+					.navigateToTargetList()
+					.clickTargetList(name)
+					.clickManage()
+					.clickCollaborator()
+					.removeCollaborator()
+					.clickSaveCollaboratorButton()
+					.navigateToTargetList()
+					.clickTargetList(name)
+					.clickManage()
+					.clickDelete_TargetListPage()
+					.clickYesDelete();
 		
 		
 		assertThat(targetListPage.getSuccessMessage(),log(containsString("Success")));
@@ -180,7 +178,7 @@ public class SmokeTests extends BaseSeleniumTestCase{
 
 	@DataProvider(name = "sendOpportunityData")
 	public static Object[][] data3() {
-		return new Object[][] { { "Carrie Reid", "Opportunity Sent!" } };
+		return new Object[][] { { "stash.rowley", "Opportunity Sent!" } };
 	}
 
 	@DataProvider(name = "targetData")
