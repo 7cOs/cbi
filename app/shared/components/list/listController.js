@@ -811,7 +811,7 @@ module.exports = /*  @ngInject */
         vm.analyticsCategory = 'Opportunities';
         vm.analyticsLabel = 'Opportunity Result List';
       } else {
-        vm.analyticsCategory = 'Target Lists';
+        vm.analyticsCategory = 'Target List';
         vm.analyticsLabel = 'Opportunities';
       }
     }
