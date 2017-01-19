@@ -484,7 +484,7 @@ public class TargetList extends LoadableComponent<TargetList> {
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
-		waitForVisibleFluentWait(TargetListManageButton);
+		//waitForVisibleFluentWait(TargetListManageButton);
 		return this;
 	}
 
@@ -1272,6 +1272,13 @@ public class TargetList extends LoadableComponent<TargetList> {
 	public String sharedTargetList(String listName){
 		WebElement list = findElement(By.xpath("//h4[contains(.,'"+listName+"')]"));
 		return list.getText();
+	}
+	
+	public TargetList EnterCollaboratorName(String name) {
+		WebElement textbox = findElement(By.cssSelector("input[placeholder='Name or CBI email address']"));
+		textbox.clear();
+		textbox.sendKeys(name);
+		return this;
 	}
 	
 }

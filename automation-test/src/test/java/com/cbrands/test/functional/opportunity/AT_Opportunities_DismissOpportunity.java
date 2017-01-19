@@ -18,7 +18,7 @@ public class AT_Opportunities_DismissOpportunity extends BaseSeleniumTestCase {
 		opportunitiesPage = homePage.navigateOpportunities();
 		opportunitiesPage.clickOffPremise()
 						.searchRetailerChainByName("walmart")
-						//.selectOpenOpportunityStatus()
+						.selectOpenOpportunityStatus()
 						.clickApplyFilters();
 		
 		opportunitiesPage.clickFirstResult()

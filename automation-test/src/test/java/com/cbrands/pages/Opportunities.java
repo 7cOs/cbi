@@ -465,7 +465,7 @@ public class Opportunities extends LoadableComponent<Opportunities> {
 	}
 	
 	public Opportunities selectOpenOpportunityStatus() {
-		opportunityStatusOpen.click();
+		waitForVisibleFluentWait(opportunityStatusOpen).click();
 		return this;
 	}
 	

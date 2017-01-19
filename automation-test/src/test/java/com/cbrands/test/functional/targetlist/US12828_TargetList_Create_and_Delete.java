@@ -23,7 +23,7 @@ public class US12828_TargetList_Create_and_Delete extends BaseSeleniumTestCase{
 								.EnterNameTextBox(listname)
 								.EnterDescriptionTextBox(desc)
 								.clickSaveButton()
-								.reloadPage()
+								.navigateToTargetList()
 								.clickTargetList(listname)
 								.clickManage()
 								.clickDelete_TargetListPage()
