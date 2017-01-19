@@ -769,7 +769,6 @@ module.exports = /*  @ngInject */
     }
 
     function init() {
-      chipsService.resetChipsFilters(chipsService.model);
       setDefaultDropDownOptions();
       var isNavigatedFromScorecard = checkForNavigationFromScorecard();
       var isNavigatedFromOpps = checkForNavigationFromOpps();
