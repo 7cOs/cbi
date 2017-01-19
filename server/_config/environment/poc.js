@@ -30,6 +30,7 @@ module.exports = function (config) {
 
   config.saml = {
     entryPoint: 'https://ssodev.cbrands.com/oamfed/idp/samlv20',
+    logoutBase: 'https://ssodev.cbrands.com/oam/server/logout',
     issuer: 'https://app-compass-poc.herokuapp.com',
     cert: fs.readFileSync('./server/_config/passport/certs/development.crt', 'utf-8'),
     privateCert: '',

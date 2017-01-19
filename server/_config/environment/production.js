@@ -5,7 +5,7 @@ module.exports = function (config) {
   const fs = require('fs');
 
   // global settings
-  config.domain = 'app-orion-prod.herokuapp.com';
+  config.domain = 'compass.cbrands.com';
   config.env = 'app-orion-prod';
   config.address = 'https://' + config.domain + '/'; // base url
 
@@ -32,6 +32,7 @@ module.exports = function (config) {
 
   config.saml = {
     entryPoint: 'https://sso.cbrands.com/oamfed/idp/samlv20',
+    logoutBase: 'https://sso.cbrands.com/oam/server/logout',
     issuer: 'https://compass.cbrands.com',
     cert: fs.readFileSync('./server/_config/passport/certs/cbi-prod-signing-2018.cer', 'utf-8'),
     privateCert: '',
