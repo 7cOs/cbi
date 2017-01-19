@@ -105,7 +105,7 @@ module.exports = /*  @ngInject */
     // Expose public methods
     vm.allOpportunitiesDisabled = allOpportunitiesDisabled;
     vm.apply = apply;
-    vm.checkForDepletionCount = checkForDepletionCount;
+    vm.checkForDepOrDistValue = checkForDepOrDistValue;
     vm.checkIfVelocityPresent = checkIfVelocityPresent;
     vm.currentTopBottomView = null;
     vm.currentTotalsObject = null;
@@ -311,7 +311,6 @@ module.exports = /*  @ngInject */
               return market.value === filtersService.accountFilters.accountMarketsEnums.distEffective;
             });
             vm.filtersService.model.accountSelected.accountMarkets = distEffectiveObj[0];
-            myperformanceService.resetFilterFlags(vm.topBottomData);
             getDataForTopBottomLevel(vm.currentTopBottomObj);
           }
         } else if (accountObj.value === filtersService.accountFilters.accountMarketsEnums.distEffective && vm.brandSelectedIndex === 0) {
@@ -321,7 +320,6 @@ module.exports = /*  @ngInject */
               return market.value === filtersService.accountFilters.accountMarketsEnums.distSimple;
             });
             vm.filtersService.model.accountSelected.accountMarkets = distSimpleObj[0];
-            myperformanceService.resetFilterFlags(vm.topBottomData);
             getDataForTopBottomLevel(vm.currentTopBottomObj);
           }
         }
@@ -648,9 +646,10 @@ module.exports = /*  @ngInject */
      * @param {Number} item Package or Brand
      * @returns Returns true if value greater than 0
      */
-    function checkForDepletionCount(item) {
-      var val = vm.displayBrandValue(item.measures, 'depletions', 'depletionsTimePeriod');
-      return val && val > 0;
+    function checkForDepOrDistValue(item) {
+      var depletionVal = vm.displayBrandValue(item.measures, 'depletions', 'depletionsTimePeriod');
+      var distributionVal = vm.displayBrandValue(item.measures, 'depletions', vm.filtersService.model.accountSelected.accountBrands.propertyName, 'distributionTimePeriod');
+      return depletionVal || distributionVal;
     }
 
     /**
@@ -704,7 +703,7 @@ module.exports = /*  @ngInject */
 
       obj.timePeriod = filtersService.model.accountSelected.accountMarkets.propertyName === 'depletions' ? vm.filterModel.depletionsTimePeriod.name : vm.filterModel.distributionTimePeriod.name;
 
-      if (filtersService.model.valuesVsTrend.name.split(' ')[0].toLowerCase() === 'top') {
+      if (filtersService.model.valuesVsTrend.value === 1 || filtersService.model.valuesVsTrend.value === 2) {
         obj.top = true;
       } else {
         obj.top = false;
@@ -723,20 +722,20 @@ module.exports = /*  @ngInject */
         default:
           obj.metric = 'DEPL';
           break;
-      };
+      }
 
-      switch (vm.filterModel.trend.name.split('vs ')[1].toLowerCase()) {
-        case 'abp':
-          obj.trend = 'PLAN';
-          break;
-        case 'ya':
-          obj.trend = 'YA';
-          break;
-        default:
-          obj.trend = 'NONE';
-          break;
-      };
-
+      if (filtersService.model.valuesVsTrend.value === 1 || filtersService.model.valuesVsTrend.value === 3) {
+        obj.trend = 'NONE';
+      } else {
+        switch (vm.filterModel.trend.value) {
+          case 1:
+            obj.trend = 'YA';
+            break;
+          case 2:
+            obj.trend = 'PLAN';
+            break;
+          }
+      }
       return obj;
     }
 
@@ -987,7 +986,7 @@ module.exports = /*  @ngInject */
           case filtersService.accountFilters.topBottomSortTypeEnum.topValues:
             if (data.topBottomIndices.topValues.length > 0) {
               result = data.topBottomIndices.topValues;
-                vm.currentChartData = data.chartData.topValues;
+              vm.currentChartData = data.chartData.topValues;
             }
             break;
           case filtersService.accountFilters.topBottomSortTypeEnum.topTrends:

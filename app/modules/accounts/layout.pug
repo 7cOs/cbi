@@ -170,7 +170,7 @@ div(row)
         md-tab(ng-repeat="(key, data) in a.brandTabs" label="{{key}}")
           table.depletions-table.fixed-layout(cellspacing="0" cellpadding="0")
             tbody
-              tr.clickable(ng-repeat="item in data | filter: {type: '!Total'} | orderBy:'name' track by $index" ng-show="a.checkForDepletionCount(item)" ng-click="a.selectItem('brands', item, a.brandTabs, $parent.$index)" ng-class="{selected: item.name === a.idSelected}")
+              tr.clickable(ng-repeat="item in data | filter: {type: '!Total'} | orderBy:'name' track by $index" ng-show="a.checkForDepOrDistValue(item)" ng-click="a.selectItem('brands', item, a.brandTabs, $parent.$index)" ng-class="{selected: item.name === a.idSelected}")
                 td.left.data-brand.title-col {{item.name}}
                 //- Depletion TDs -
                  Depletion value
