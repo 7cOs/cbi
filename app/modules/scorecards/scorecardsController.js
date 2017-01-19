@@ -271,8 +271,7 @@ module.exports = /*  @ngInject */
 
     function setDefaultFilterOptions() {
       if (userService.model.currentUser.personID !== -1) {
-       switch ('OFR') {
-       // switch (userService.model.currentUser.srcTypeCd[0]) {
+        switch (userService.model.currentUser.srcTypeCd[0]) {
           case 'OFF_HIER':
           case 'OFF_SPEC':
             offPremise();
