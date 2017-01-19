@@ -191,7 +191,7 @@ module.exports = /*  @ngInject */
     function displayBrandValue(brandMeasures, property, timePeriod) {
       if (brandMeasures) {
         var matchedMeasure = brandMeasures.filter(function(currentMeasure) {
-          return currentMeasure.timeframe === vm.filterModel[timePeriod].name;
+          return vm.filterModel[timePeriod] ? currentMeasure.timeframe === vm.filterModel[timePeriod].name : false;
         });
         if (matchedMeasure[0]) {
           return matchedMeasure[0][property];
@@ -647,9 +647,11 @@ module.exports = /*  @ngInject */
      * @returns Returns true if value greater than 0
      */
     function checkForDepOrDistValue(item) {
-      var depletionVal = vm.displayBrandValue(item.measures, 'depletions', 'depletionsTimePeriod');
-      var distributionVal = vm.displayBrandValue(item.measures, 'depletions', vm.filtersService.model.accountSelected.accountBrands.propertyName, 'distributionTimePeriod');
-      return depletionVal || distributionVal;
+      if (item) {
+        var depletionVal = vm.displayBrandValue(item.measures, 'depletions', 'depletionsTimePeriod');
+        var distributionVal = vm.displayBrandValue(item.measures, 'depletions', vm.filtersService.model.accountSelected.accountBrands.propertyName, 'distributionTimePeriod');
+        return depletionVal || distributionVal;
+      }
     }
 
     /**
