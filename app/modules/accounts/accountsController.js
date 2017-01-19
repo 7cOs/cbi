@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports = /*  @ngInject */
-  function accountsController($rootScope, $scope, $state, $log, $q, $window, $filter, myperformanceService, chipsService, filtersService, notesService, userService, $timeout) {
+  function accountsController($rootScope, $scope, $state, $log, $q, $window, $filter, $timeout, myperformanceService, chipsService, filtersService, notesService, userService) {
 
     // ****************
     // CONTROLLER SETUP
@@ -82,7 +82,7 @@ module.exports = /*  @ngInject */
     };
     vm.isChainSelectionComplete = null;
     vm.isDistributorSelectionComplete = null;
-    vm.getDataForTopBottom = getDataForTopBottom;
+    vm.getDataForTopBottomLevel = getDataForTopBottomLevel;
     vm.navigateTopBottomLevels = navigateTopBottomLevels;
     vm.changeTopBottomSortOrder = changeTopBottomSortOrder;
     vm.currentBoundTopBottomIndexes = [];
@@ -99,14 +99,13 @@ module.exports = /*  @ngInject */
     vm.switchToBrandView = switchToBrandView;
     vm.isStoreLevel = false;
     vm.isHighlightStore = isHighlightStore;
-    var topBottomInitData = true;
     // Have to create this variable because vm.selecteStore just has the name..Changing th binding to include Id involves a ton of work
     var currentStore = null;
 
     // Expose public methods
     vm.allOpportunitiesDisabled = allOpportunitiesDisabled;
     vm.apply = apply;
-    vm.checkForDepletionCount = checkForDepletionCount;
+    vm.checkForDepOrDistValue = checkForDepOrDistValue;
     vm.checkIfVelocityPresent = checkIfVelocityPresent;
     vm.currentTopBottomView = null;
     vm.currentTotalsObject = null;
@@ -170,6 +169,15 @@ module.exports = /*  @ngInject */
       if ((filtersService.model.selected.distributor && filtersService.model.selected.distributor.length > 0) || (filtersService.model.selected.store && filtersService.model.selected.store.length > 0) || (filtersService.model.selected.account && filtersService.model.selected.account.length > 0)) {
         return false;
       } else {
+        if (vm.filtersService.model.cbbdChainIndependent === true) {
+          vm.chipsService.applyFilterArr(vm.filtersService.model.selected.cbbdChain, 'Independent', 'cbbdChain');
+          vm.filtersService.model.cbbdChainIndependent = false;
+        }
+
+        if (vm.filtersService.model.cbbdChainCbbd === true) {
+          vm.chipsService.applyFilterArr(vm.filtersService.model.selected.cbbdChain, 'Cbbd', 'cbbdChain', 'CBBD Chain');
+          vm.filtersService.model.cbbdChainCbbd = false;
+        }
         return true;
       }
     }
@@ -183,7 +191,7 @@ module.exports = /*  @ngInject */
     function displayBrandValue(brandMeasures, property, timePeriod) {
       if (brandMeasures) {
         var matchedMeasure = brandMeasures.filter(function(currentMeasure) {
-          return currentMeasure.timeframe === vm.filterModel[timePeriod].name;
+          return vm.filterModel[timePeriod] ? currentMeasure.timeframe === vm.filterModel[timePeriod].name : false;
         });
         if (matchedMeasure[0]) {
           return matchedMeasure[0][property];
@@ -197,7 +205,6 @@ module.exports = /*  @ngInject */
         myperformanceService.resetPerformanceDataFlags(vm.topBottomData[topBottomObj]);
       }
       setUpdatedFilters();
-      var categoryBound = vm.filtersService.model.accountSelected.accountMarkets;
 
       // change tab index
       if (vm.currentTopBottomFilters.stores && vm.currentTopBottomFilters.stores.id) {
@@ -208,12 +215,14 @@ module.exports = /*  @ngInject */
         vm.currentTopBottomAcctType = vm.filtersService.accountFilters.accountTypes[2];
       } else if (vm.currentTopBottomFilters.distributors && vm.currentTopBottomFilters.distributors.id) {
         vm.currentTopBottomAcctType = vm.filtersService.accountFilters.accountTypes[1];
+      } else {
+        vm.currentTopBottomAcctType = vm.filtersService.accountFilters.accountTypes[0];
       }
 
       vm.currentTopBottomObj = getCurrentTopBottomObject(vm.currentTopBottomAcctType);
       // update data
       updateBrandSnapshot();
-      vm.getDataForTopBottom(vm.currentTopBottomObj, categoryBound);
+      vm.getDataForTopBottomLevel(vm.currentTopBottomObj);
     }
 
     /**
@@ -288,7 +297,6 @@ module.exports = /*  @ngInject */
     */
     function removeDistOptionsBasedOnView(accountObj, isBrand) {
       var isOptionHidden = false;
-      var categoryBound;
       if (isBrand === true) {
         if (accountObj.value === 1 && vm.brandSelectedIndex === 1) {
           isOptionHidden = true;
@@ -303,9 +311,7 @@ module.exports = /*  @ngInject */
               return market.value === filtersService.accountFilters.accountMarketsEnums.distEffective;
             });
             vm.filtersService.model.accountSelected.accountMarkets = distEffectiveObj[0];
-            myperformanceService.resetFilterFlags(vm.topBottomData);
-            categoryBound = vm.filtersService.model.accountSelected.accountMarkets;
-            getDataForTopBottom(vm.currentTopBottomObj, categoryBound);
+            getDataForTopBottomLevel(vm.currentTopBottomObj);
           }
         } else if (accountObj.value === filtersService.accountFilters.accountMarketsEnums.distEffective && vm.brandSelectedIndex === 0) {
           isOptionHidden = true;
@@ -314,9 +320,7 @@ module.exports = /*  @ngInject */
               return market.value === filtersService.accountFilters.accountMarketsEnums.distSimple;
             });
             vm.filtersService.model.accountSelected.accountMarkets = distSimpleObj[0];
-            myperformanceService.resetFilterFlags(vm.topBottomData);
-            categoryBound = vm.filtersService.model.accountSelected.accountMarkets;
-            getDataForTopBottom(vm.currentTopBottomObj, categoryBound);
+            getDataForTopBottomLevel(vm.currentTopBottomObj);
           }
         }
       }
@@ -351,13 +355,14 @@ module.exports = /*  @ngInject */
     function resetFilters() {
       // Remove all filters asssociated with top bottom
       removeAllTopBottomAccountTypeFilters();
+      chipsService.resetChipsFilters(chipsService.model);
+      setDefaultFilterOptions();
       vm.filterModel = angular.copy(filterModelTemplate);
       filtersService.model.filtersValidCount = 0;
       setDefaultDropDownOptions();
       apply(false);
       // Go back to distributor level. Get the updated data for distributors
       resetTopBottom();
-
       updateBrandSnapshot();
     }
 
@@ -372,16 +377,14 @@ module.exports = /*  @ngInject */
       vm.idSelected = null;
       vm.selectedDistributor = null;
       vm.selectedStore = null;
-
-      chipsService.resetChipsFilters(chipsService.model);
       filtersService.model.distributor = '';
       vm.showXDistributor = false;
       filtersService.model.account = '';
       vm.showXChain = false;
       filtersService.model.store = '';
       vm.showXStore = false;
+      chipsService.removeTopBottomChips();
       myperformanceService.resetFilters(vm.currentTopBottomFilters);
-      setDefaultFilterOptions();
     }
 
     /**
@@ -399,8 +402,8 @@ module.exports = /*  @ngInject */
       vm.currentTopBottomObj = getCurrentTopBottomObject(vm.currentTopBottomAcctType);
 
       // This function gives me the updated data for whatever level is currently set
-      var categoryBound = vm.filtersService.model.accountSelected.accountMarkets;
-      getDataForTopBottom(vm.currentTopBottomObj, categoryBound);
+
+      getDataForTopBottomLevel(vm.currentTopBottomObj);
     }
 
     // When a row item is clicked in brands / market widgets
@@ -419,13 +422,7 @@ module.exports = /*  @ngInject */
         vm.brandWidgetSkuTitle = null;
         if (widget === 'brands') { vm.brandWidgetTitle = item.name; }
         vm.loadingBrandSnapshot = true;
-        vm.loadingTopBottom = true;
-
-        var params = filtersService.getAppliedFilters('brandSnapshot');
-        params.additionalParams = {
-          deplTimePeriod: vm.filterModel.depletionsTimePeriod.name,
-          podAndVelTimePeriod: vm.filterModel.distributionTimePeriod.name
-        };
+        var params = getUpdatedFilterQueryParamsForBrand();
         currentBrandSelected = {
           name: item.name,
           id: item.id
@@ -445,10 +442,9 @@ module.exports = /*  @ngInject */
       for (var topBottomObj in vm.topBottomData) {
         myperformanceService.resetPerformanceDataFlags(vm.topBottomData[topBottomObj]);
       }
-      var categoryBound = vm.filtersService.model.accountSelected.accountMarkets;
       setUpdatedFilters();
       vm.currentTopBottomObj = getCurrentTopBottomObject(vm.currentTopBottomAcctType);
-      getDataForTopBottom(vm.currentTopBottomObj, categoryBound);
+      getDataForTopBottomLevel(vm.currentTopBottomObj);
     }
 
     /**
@@ -538,8 +534,8 @@ module.exports = /*  @ngInject */
         if (result.id.constructor === Array) {
           filtersService.model.selected[filterModelProp] = result.id;
         } else {
-          // Always send the 9 digit code to the my performance endpoints - versionedId for store, id for everything else
-          filtersService.model.selected[filterModelProp] = result.versionedId ? [result.versionedId] : [result.id];
+          // Always send the 9 digit code to the my performance endpoints - versionedId for store and a normal id, id for everything else
+          filtersService.model.selected[filterModelProp] = result.versionedId ? [result.versionedId, result.id] : [result.id];
         }
       }
 
@@ -550,8 +546,10 @@ module.exports = /*  @ngInject */
       };
       vm.selectedStoreInfo = vm.currentTopBottomFilters[topBottomProp];
       vm.selectedStoreInfo.type = topBottomProp;
-      notesService.model.currentStoreName = result.name.toUpperCase();
-      notesService.model.currentStoreProperty = filterModelProp;
+      if (result.name) {
+        notesService.model.currentStoreName = result.name.toUpperCase();
+        notesService.model.currentStoreProperty = filterModelProp;
+      }
       if (filterModelProperty === 'store') {
         filtersService.model.selected.account = [];
         filtersService.model.account = '';
@@ -581,21 +579,23 @@ module.exports = /*  @ngInject */
       filterModelProperty === 'distributor' ? vm.selectedDistributor = result.name : vm.selectedStore = result.name;
     }
 
-    function updateBrandSnapshot(isMoveToPreviousTab) {
-      filtersService.model.selected.brand = []; // remove brand from query
-
+    function getUpdatedFilterQueryParamsForBrand() {
       var params = filtersService.getAppliedFilters('brandSnapshot');
-      myperformanceService.appendFilterParametersForTopBottom(params, vm.currentTopBottomFilters);
+      params = myperformanceService.appendFilterParametersForTopBottom(params, vm.currentTopBottomFilters, vm.filtersService.model.selected.myAccountsOnly);
       vm.loadingBrandSnapshot = true;
-
-      if (isMoveToPreviousTab !== false) {
-        prevTab();
-      }
-
       params.additionalParams = {
         deplTimePeriod: vm.filterModel.depletionsTimePeriod.name,
         podAndVelTimePeriod: vm.filterModel.distributionTimePeriod.name
       };
+      return params;
+    }
+
+    function updateBrandSnapshot(isMoveToPreviousTab) {
+      filtersService.model.selected.brand = []; // remove brand from query
+      var params = getUpdatedFilterQueryParamsForBrand();
+      if (isMoveToPreviousTab !== false) {
+        prevTab();
+      }
 
       userService.getPerformanceBrand(params).then(function(data) {
         vm.brandTabs.brands = data.performance;
@@ -646,9 +646,12 @@ module.exports = /*  @ngInject */
      * @param {Number} item Package or Brand
      * @returns Returns true if value greater than 0
      */
-    function checkForDepletionCount(item) {
-      var val = vm.displayBrandValue(item.measures, 'depletions', 'depletionsTimePeriod');
-      return val && val > 0;
+    function checkForDepOrDistValue(item) {
+      if (item) {
+        var depletionVal = vm.displayBrandValue(item.measures, 'depletions', 'depletionsTimePeriod');
+        var distributionVal = vm.displayBrandValue(item.measures, 'depletions', vm.filtersService.model.accountSelected.accountBrands.propertyName, 'distributionTimePeriod');
+        return depletionVal || distributionVal;
+      }
     }
 
     /**
@@ -702,7 +705,7 @@ module.exports = /*  @ngInject */
 
       obj.timePeriod = filtersService.model.accountSelected.accountMarkets.propertyName === 'depletions' ? vm.filterModel.depletionsTimePeriod.name : vm.filterModel.distributionTimePeriod.name;
 
-      if (filtersService.model.valuesVsTrend.name.split(' ')[0].toLowerCase() === 'top') {
+      if (filtersService.model.valuesVsTrend.value === 1 || filtersService.model.valuesVsTrend.value === 2) {
         obj.top = true;
       } else {
         obj.top = false;
@@ -721,93 +724,101 @@ module.exports = /*  @ngInject */
         default:
           obj.metric = 'DEPL';
           break;
-      };
+      }
 
-      switch (vm.filterModel.trend.name.split('vs ')[1].toLowerCase()) {
-        case 'abp':
-          obj.trend = 'PLAN';
-          break;
-        case 'ya':
-          obj.trend = 'YA';
-          break;
-        default:
-          obj.trend = 'NONE';
-          break;
-      };
-
+      if (filtersService.model.valuesVsTrend.value === 1 || filtersService.model.valuesVsTrend.value === 3) {
+        obj.trend = 'NONE';
+      } else {
+        switch (vm.filterModel.trend.value) {
+          case 1:
+            obj.trend = 'YA';
+            break;
+          case 2:
+            obj.trend = 'PLAN';
+            break;
+          }
+      }
       return obj;
     }
 
-    function init() {
-      // if navigating from opp page, load with a default query
-      if ($state.params.storeId) $state.params.applyFiltersOnLoad = true;
-
-      // reset all chips and filters on page init if no brand is specified
-      if (!$state.params.applyFiltersOnLoad) {
-        chipsService.resetChipsFilters(chipsService.model);
-      } else {
-        topBottomInitData = false;
-        if ($state.params.pageData.brandTitle) {
-          vm.brandIdSelected = filtersService.model.selected.brand[0];
-          vm.brandWidgetTitle = $state.params.pageData.brandTitle;
-
-          chipsService.addAutocompleteChip(vm.brandWidgetTitle, 'brand', false);
-        } else if ($state.params.storeId !== '') {
-          filtersService.model.selected.store = [$state.params.storeId];
-        }
+    function checkForNavigationFromScorecard() {
+      var isNavigatedFromScorecard = false;
+      if ($state.params.applyFiltersOnLoad && $state.params.pageData.brandTitle) {
+        vm.brandIdSelected = filtersService.model.selected.brand[0];
+        vm.brandWidgetTitle = $state.params.pageData.brandTitle;
+        chipsService.addAutocompleteChip(vm.brandWidgetTitle, 'brand', false);
+        isNavigatedFromScorecard = true;
       }
+      if ($state.params.pageData && $state.params.pageData.premiseType) vm.filtersService.model.selected.premiseType = $state.params.pageData.premiseType;
+      return isNavigatedFromScorecard;
+    }
 
+    function checkForNavigationFromOpps() {
+      var isNavigatedFromOpps = false;
+      var storeFilter = myperformanceService.parseStoreFilterFromOpps($state.params.store);
+      if (storeFilter) {
+        vm.currentTopBottomAcctType = vm.filtersService.accountFilters.accountTypes[3];
+        vm.currentTopBottomObj = getCurrentTopBottomObject(vm.currentTopBottomAcctType);
+        var storeData = {id: storeFilter.storeId, name: storeFilter.storeName};
+        vm.currentTopBottomFilters.stores = storeData;
+        isNavigatedFromOpps = true;
+      }
+      return isNavigatedFromOpps;
+    }
+
+    function init() {
+      var isNavigatedFromScorecard = checkForNavigationFromScorecard();
+      var isNavigatedFromOpps = checkForNavigationFromOpps();
+      if (isNavigatedFromScorecard === false && isNavigatedFromOpps === false) {
+        chipsService.resetChipsFilters(chipsService.model);
+      }
       setDefaultDropDownOptions();
       setDefaultFilterOptions();
-
-      if ($state.params.pageData && $state.params.pageData.premiseType) vm.filtersService.model.selected.premiseType = $state.params.pageData.premiseType;
-
-      var params = filtersService.getAppliedFilters('brandSnapshot');
-
-      params.additionalParams = getAppliedFiltersForTopBottom();
-
-      var promiseArr = [
-        userService.getTopBottomSnapshot(vm.currentTopBottomAcctType, params)
-      ];
-
+      var params = getUpdatedFilterQueryParamsForBrand();
+      var promiseArr = [];
       // brand snapshot returns sku data instead of just the brand if you add brand:xxx
       if (params.brand && params.brand.length) delete params.brand;
-      params.additionalParams = {
-        deplTimePeriod: vm.filterModel.depletionsTimePeriod.name,
-        podAndVelTimePeriod: vm.filterModel.distributionTimePeriod.name
-      };
       params.type = 'brandSnapshot';
       promiseArr.push(userService.getPerformanceBrand(params));
-
       $q.all(promiseArr).then(function(data) {
-        vm.brandTabs.brands = data[1].performance;
-
-        if ($state.params.applyFiltersOnLoad) {
-          // select brand that was clicked in score card
-          for (var i = 0; i < vm.brandTabs.brands.length; i++) {
-            if (vm.brandTabs.brands[i].name === vm.brandWidgetTitle) {
-              selectItem('brands', vm.brandTabs.brands[i], vm.brandTabs, 0);
-            }
-          }
-        }
-
-        setCurrentTotalsObject();
         if (data[0]) {
-          var categoryBound = vm.filtersService.model.accountSelected.accountMarkets;
-          vm.currentTopBottomObj.performanceData = data[0].performance;
-          vm.currentTopBottomObj.isPerformanceDataUpdateRequired = false;
-          getDataForTopBottom(vm.currentTopBottomObj, categoryBound);
-          if (topBottomInitData === true) {
-            topBottomInitData = false;
+          vm.loadingBrandSnapshot = false;
+          vm.brandTabs.brands = data[0].performance;
+          if (isNavigatedFromScorecard === true) {
+             var matchedVal = vm.brandTabs.brands.filter(function(val) {
+               return val.name === vm.brandWidgetTitle;
+             });
+             if (matchedVal[0]) {
+               selectItem('brands', matchedVal[0], vm.brandTabs, 0);
+             }
           }
-        }
-        vm.loadingBrandSnapshot = false;
-        vm.loadingTopBottom = false;
+          setCurrentTotalsObject();
+          if (isNavigatedFromScorecard === false) {
+            getDataForTopBottomLevel(vm.currentTopBottomObj);
+          }
 
-        // reset state params
-        $state.params.applyFiltersOnLoad = false;
-        $state.params.resetFiltersOnLoad = true;
+          if (isNavigatedFromOpps === true) {
+            // Directly navigate to store level if navigated from opps
+            navigateTopBottomLevels(vm.currentTopBottomFilters.stores);
+          }
+
+          // reset state params
+          $state.params.applyFiltersOnLoad = false;
+          $state.params.resetFiltersOnLoad = true;
+        }
       });
+
+      if ($state.params.openNotesOnLoad) {
+        $timeout(function() {
+          $rootScope.$broadcast('notes:opened', true, $state.params.pageData.account);
+
+          notesService.model.accountId = $state.params.pageData.account.id;
+          notesService.accountNotes().then(function(success) {
+            vm.notes = success;
+            vm.loading = false;
+          });
+        });
+      }
     }
 
     // Move to next indexed tab
@@ -847,16 +858,8 @@ module.exports = /*  @ngInject */
       if (vm.currentTopBottomAcctType !== currentAcctType) {
         vm.currentTopBottomAcctType = currentAcctType;
         vm.currentTopBottomObj = getCurrentTopBottomObject(currentAcctType);
-        var propertyBoundToTable = vm.filtersService.model.accountSelected.accountMarkets;
-        // We need to reset all filters if dropdown is directly selected
-        if (myperformanceService.resetFilters(vm.currentTopBottomFilters)) {
-          removeAllTopBottomAccountTypeFilters();
-          for (var topBottomObj in vm.topBottomData) {
-            myperformanceService.resetPerformanceDataFlags(vm.topBottomData[topBottomObj]);
-          }
-        }
-        updateBrandSnapshot();
-        getDataForTopBottom(vm.currentTopBottomObj, propertyBoundToTable);
+        removeAllTopBottomAccountTypeFilters();
+        onFilterPropertiesChange();
       }
     }
 
@@ -872,7 +875,7 @@ module.exports = /*  @ngInject */
       vm.filtersService.model.accountSelected.accountMarkets = vm.filtersService.accountFilters.accountMarkets[0];
       vm.currentTopBottomAcctType = vm.filtersService.accountFilters.accountTypes[0];
       vm.filtersService.model.valuesVsTrend = vm.filtersService.accountFilters.valuesVsTrend[0];
-      vm.filtersService.model.selected.premiseType = 'all';
+      vm.filtersService.model.selected.premiseType = 'off';
       vm.chartOptions = myperformanceService.getChartOptions();
       vm.topBottomData = myperformanceService.initDataForAllTbLevels(vm.topBottomData);
       vm.marketSelectedIndex = 0;
@@ -918,49 +921,6 @@ module.exports = /*  @ngInject */
       }, 350);
     }
 
-    function getCurrentStoreData() {
-      vm.loadingTopBottom = true;
-      if (vm.currentTopBottomObj.isFilterUpdateRequired === false) {
-        setSortedArrIndex();
-        return;
-      }
-      var params = filtersService.getAppliedFilters('topbottom');
-      myperformanceService.appendFilterParametersForTopBottom(params, vm.currentTopBottomFilters);
-      appendBrandParametersForTopBottom(params);
-      var depletionOption = vm.filterModel.depletionsTimePeriod;
-      var distirbutionOption = vm.filterModel.distributionTimePeriod;
-      var acctMarketSelection = vm.filtersService.model.accountSelected.accountMarkets;
-
-      var promiseArr = [], queryParamsForAllSorts = [];
-      angular.forEach(filtersService.accountFilters.valuesVsTrend, function (sortType) {
-        var sortParams = {
-          filterQueryParams: params,
-          otherQueryParams: {
-            timePeriod: '',
-            top: false,
-            trend: false,
-            metric: ''
-          }
-        };
-        myperformanceService.getFilterParametersForStore(sortParams.otherQueryParams, depletionOption,  distirbutionOption, acctMarketSelection, sortType, vm.filterModel.trend);
-        queryParamsForAllSorts.push(sortParams);
-      });
-      for (var i = 0; i < queryParamsForAllSorts.length; i++) {
-        promiseArr.push(userService.getTopBottomSnapshot(vm.currentTopBottomAcctType, queryParamsForAllSorts[i]));
-      }
-      $q.all(promiseArr).then(function(data) {
-        if (data) {
-          vm.currentTopBottomObj = myperformanceService.setStoreTopBottomData(data, vm.currentTopBottomObj, depletionOption,  distirbutionOption, acctMarketSelection, vm.filterModel.trend);
-          vm.currentTopBottomObj.isFilterUpdateRequired = false;
-          setSortedArrIndex();
-        }
-      }, function(error) {
-        console.log('[getCurrentStoreData]', error);
-        vm.loadingTopBottom = 'error';
-        vm.currentChartData = myperformanceService.initChartData();
-      });
-    }
-
     function appendBrandParametersForTopBottom(currentParams) {
       if (currentBrandSelected) currentParams.brand = currentBrandSelected.id;
       if (currentBrandSkuSelected) currentParams.masterSKU = currentBrandSkuSelected.id;
@@ -972,34 +932,24 @@ module.exports = /*  @ngInject */
      * @param {Object} categoryBound It is one of the objects from vm.filtersService.accountFilters.accountMarkets
      * @returns Updates the object with the correct data
      */
-    function getDataForTopBottom(topBottomObj, categoryBound) {
-      if (vm.isStoreLevel) {
-        getCurrentStoreData();
-      } else {
-        var params = filtersService.getAppliedFilters('topBottom');
-        myperformanceService.appendFilterParametersForTopBottom(params, vm.currentTopBottomFilters);
-        vm.loadingTopBottom = true;
-        appendBrandParametersForTopBottom(params);
-        params.additionalParams = getAppliedFiltersForTopBottom();
+    function getDataForTopBottomLevel(topBottomObj) {
+      var categoryBound = vm.filtersService.model.accountSelected.accountMarkets;
+      var params = filtersService.getAppliedFilters('topBottom');
+      appendBrandParametersForTopBottom(params);
+      params = myperformanceService.appendFilterParametersForTopBottom(params, vm.currentTopBottomFilters, vm.filtersService.model.selected.myAccountsOnly);
+      vm.loadingTopBottom = true;
+      params.additionalParams = getAppliedFiltersForTopBottom();
 
-        userService.getTopBottomSnapshot(vm.currentTopBottomAcctType, params).then(function(data) {
-          vm.currentTopBottomObj.performanceData = data.performance;
-          vm.currentTopBottomObj.isPerformanceDataUpdateRequired = false;
-          vm.currentTopBottomObj = myperformanceService.updateDataForCurrentTopDownLevel(vm.currentTopBottomObj, categoryBound, vm.filterModel.depletionsTimePeriod, vm.filterModel.distributionTimePeriod, vm.filterModel.trend);
-          setSortedArrIndex();
-        }, function(error) {
-          console.log('[getDataForTopBottom]', error);
-          vm.loadingTopBottom = 'error';
-          vm.currentChartData = myperformanceService.initChartData();
-        });
-      /* } else if (!topBottomObj.timePeriodFilteredData || topBottomObj.isFilterUpdateRequired === true) {
-          vm.loadingTopBottom = true;
-          vm.currentTopBottomObj = myperformanceService.updateDataForCurrentTopDownLevel(vm.currentTopBottomObj, categoryBound, vm.filterModel.depletionsTimePeriod, vm.filterModel.distributionTimePeriod, vm.filterModel.trend);
-          setSortedArrIndex();
-        } else {
-          vm.loadingTopBottom = true;
-          setSortedArrIndex(); */
-      }
+      userService.getTopBottomSnapshot(vm.currentTopBottomAcctType, params).then(function(data) {
+        vm.currentTopBottomObj.performanceData = data.performance;
+        vm.currentTopBottomObj.isPerformanceDataUpdateRequired = false;
+        vm.currentTopBottomObj = myperformanceService.updateDataForCurrentTopDownLevel(vm.currentTopBottomObj, categoryBound, vm.filterModel.depletionsTimePeriod, vm.filterModel.distributionTimePeriod, vm.filterModel.trend);
+        setSortedArrIndex();
+      }, function(error) {
+        console.log('[getDataForTopBottomLevel]', error);
+        vm.loadingTopBottom = 'error';
+        vm.currentChartData = myperformanceService.initChartData();
+      });
       vm.marketSelectedIndex = vm.currentTopBottomAcctType.value - 1;
     }
 
@@ -1036,7 +986,7 @@ module.exports = /*  @ngInject */
           case filtersService.accountFilters.topBottomSortTypeEnum.topValues:
             if (data.topBottomIndices.topValues.length > 0) {
               result = data.topBottomIndices.topValues;
-                vm.currentChartData = data.chartData.topValues;
+              vm.currentChartData = data.chartData.topValues;
             }
             break;
           case filtersService.accountFilters.topBottomSortTypeEnum.topTrends:
@@ -1125,7 +1075,7 @@ module.exports = /*  @ngInject */
     function trendOptionChanged(selectedVal) {
       if (vm.filterModel.trend !== selectedVal) {
         vm.filterModel.trend = selectedVal;
-        onFilterPropertiesChange();
+        onFilterPropertiesChange(false);
       }
     }
 
@@ -1150,18 +1100,9 @@ module.exports = /*  @ngInject */
       if (vm.filtersService.model.valuesVsTrend !== selectedVal) {
         vm.loadingTopBottom = true;
         vm.filtersService.model.valuesVsTrend = selectedVal;
-        setSortedArrIndex();
+        onFilterPropertiesChange(false);
       }
     }
-
-    // Currently not used. If the functionality to go to previous level is present can be enabled
-    // function prevLevelInTopBottom() {
-    //   // vm.marketSelectedIndex is zero index based and acct type selections start from 1
-    //   var previousLevelInTopBottom = vm.marketSelectedIndex;
-    //   vm.currentTopBottomAcctType = myperformanceService.getAcctTypeObjectBasedOnTabIndex(previousLevelInTopBottom);
-    //   vm.currentTopBottomObj = getCurrentTopBottomObject(vm.currentTopBottomAcctType);
-    //   updateTopBottom();
-    // }
 
     /**
      * Updates vm.currentTopBottomFilters object
@@ -1203,6 +1144,10 @@ module.exports = /*  @ngInject */
         if (myperformanceService.checkForInconsistentIds(performanceData)) {
           return;
         }
+        if (performanceData.name.toLowerCase() === 'independent' && !vm.currentTopBottomFilters.distributors) {
+          return;
+        }
+
         // Updates the top bottom filter object with the selection
         setTopBottomFilterModel(currentLevelName, performanceData);
         // Make sure all the models in filtersService are set correctly and reflect the object in top botom filter
@@ -1214,15 +1159,19 @@ module.exports = /*  @ngInject */
           // Get the top bottom level next to the current level.
           vm.currentTopBottomAcctType = myperformanceService.getAcctTypeObjectBasedOnTabIndex(vm.currentTopBottomAcctType.value, getNextLevel);
           vm.currentTopBottomObj = getCurrentTopBottomObject(vm.currentTopBottomAcctType);
-          var categoryBound = vm.filtersService.model.accountSelected.accountMarkets;
+
           updateBrandSnapshot();
-          getDataForTopBottom(vm.currentTopBottomObj, categoryBound);
+          getDataForTopBottomLevel(vm.currentTopBottomObj);
         } else {
           // Just setting current top bottom object to store
           vm.currentTopBottomObj = getCurrentTopBottomObject(vm.currentTopBottomAcctType);
+          updateBrandSnapshot();
         }
         notesService.model.tdlinx = performanceData.unversionedStoreCode;
         notesService.model.address = formatAddress(performanceData);
+        notesService.model.city = performanceData.city;
+        notesService.model.state = performanceData.state;
+        notesService.model.zipCode = performanceData.zipCode;
       }
     }
 
@@ -1231,13 +1180,10 @@ module.exports = /*  @ngInject */
           d = performanceData;
 
       function ifIsKnown(field) {
-        return (field && field !== 'UNKNOWN' && field !== null) ? field + ' ' : '';
+        return (field && field !== 'UNKNOWN' && field != null) ? field + ' ' : '';
       }
 
       address = ifIsKnown(d.addressLine1) + ifIsKnown(d.addressLine2) + ifIsKnown(d.addressLine3) + ifIsKnown(d.addressLine4);
-      address += d.city + ' ';
-      address += d.state + ' ';
-      address += d.zipCode;
 
       return address;
     }
@@ -1275,17 +1221,17 @@ module.exports = /*  @ngInject */
       }
     }
 
-    function onFilterPropertiesChange() {
-      if (topBottomInitData === false) {
-        // With the new api endpoints the performance flags need to be reset on filter change
-        for (var topBottomObj in vm.topBottomData) {
-          myperformanceService.resetPerformanceDataFlags(vm.topBottomData[topBottomObj]);
-        }
-        var categoryBound = vm.filtersService.model.accountSelected.accountMarkets;
-        vm.currentTopBottomObj = getCurrentTopBottomObject(vm.currentTopBottomAcctType);
-        updateBrandSnapshot();
-        getDataForTopBottom(vm.currentTopBottomObj, categoryBound);
+    function onFilterPropertiesChange(isBrandSnapshotUpdateRequired) {
+      // With the new api endpoints the performance flags need to be reset on filter change
+      for (var topBottomObj in vm.topBottomData) {
+        myperformanceService.resetPerformanceDataFlags(vm.topBottomData[topBottomObj]);
       }
+
+      vm.currentTopBottomObj = getCurrentTopBottomObject(vm.currentTopBottomAcctType);
+      if (isBrandSnapshotUpdateRequired !== false) {
+        updateBrandSnapshot();
+      }
+      getDataForTopBottomLevel(vm.currentTopBottomObj);
     }
 
     // Check if market overview is scrolled out of view

@@ -15,7 +15,7 @@ notes
           p(ng-if="a.selectedStore || a.selectedDistributor")
             <span ng-if="a.selectedDistributor">{{a.selectedDistributor}}</span><span ng-if="a.selectedStore && a.selectedDistributor"> - </span><span ng-if="a.selectedStore">{{a.selectedStore}}</span>
           p(ng-if="!a.selectedStore && !a.selectedDistributor") {{a.currentTopBottomAcctType.name || a.accountTypesDefault}}
-        .notes-icon(ng-class="{'disabled': !a.selectedStoreInfo}" ng-click="a.openNotes(true, a.selectedStoreInfo)" analytics-on="click" analytics-event="Notes Tab")
+        .notes-icon(ng-class="{'enabled': a.selectedStoreInfo && a.currentTopBottomAcctType.name !== 'Distributors'}" ng-click="a.openNotes(true, a.selectedStoreInfo)" analytics-on="click" analytics-event="Notes Tab")
           p <a href="#"></a>
       .market-overview.clearfix
         .brands
@@ -25,7 +25,7 @@ notes
           p(ng-if="a.selectedStore || a.selectedDistributor")
             <span ng-if="a.selectedDistributor">{{a.selectedDistributor}}</span><span ng-if="a.selectedStore && a.selectedDistributor"> - </span><span ng-if="a.selectedStore">{{a.selectedStore}}</span>
           p(ng-if="!a.selectedStore && !a.selectedDistributor") {{a.currentTopBottomAcctType.name || a.accountTypesDefault}}
-        .notes-icon(ng-class="{'disabled': !a.selectedStoreInfo}" ng-click="a.openNotes(true, a.selectedStoreInfo)")
+        .notes-icon(ng-class="{'enabled': a.selectedStoreInfo && a.currentTopBottomAcctType.name !== 'Distributors'}" ng-click="a.openNotes(true, a.selectedStoreInfo)")
           p <a href="#" ng-click="a.openNotes(true, a.selectedStoreInfo)" analytics-on="click" analytics-event="Notes Tab">Notes</a>
 
 
@@ -115,7 +115,10 @@ div(row)
             th(colspan=2).top.dark.other-columns
               p.accent.bold Depletions
             th(colspan=2).top.other-columns
-              p.accent  {{a.filtersService.model.accountSelected.accountBrands.depletionTableHeaderText}} - {{a.filterModel.distributionTimePeriod.displayValue}} Days
+              p.accent
+                |{{a.filtersService.model.accountSelected.accountBrands.depletionTableHeaderText}} - {{a.filterModel.distributionTimePeriod.displayValue}}
+                span(ng-if="a.filterModel.distributionTimePeriod.displayValue === 'L90'") &nbsp;Days
+                span(ng-if="a.filterModel.distributionTimePeriod.displayValue === 'L03'") &nbsp;Months
           tr
             th
               p.accent &nbsp;
@@ -146,8 +149,7 @@ div(row)
 
             //- Velocity Trend
             //- For YA
-            td(ng-if="a.filtersService.model.accountSelected.accountBrands.value === a.filtersService.accountFilters.accountBrandEnum.velocity") <span class="percentage" ng-if="a.checkIfVelocityPresent(item)">{{a.displayBrandValue(a.currentTotalsObject.measures, 'velocityTrend', 'distributionTimePeriod') | number:1}} %</span><span ng-if="!a.displayBrandValue(a.currentTotalsObject.measures, 'velocityTrend', 'distributionTimePeriod')">-</span>
-
+            td(ng-if="a.filtersService.model.accountSelected.accountBrands.value === a.filtersService.accountFilters.accountBrandEnum.velocity" ng-class="a.getClassBasedOnValue(a.displayBrandValue(a.currentTotalsObject.measures, 'velocityTrend', 'distributionTimePeriod'))") <span ng-if="a.checkIfVelocityPresent(a.currentTotalsObject)">{{a.displayBrandValue(a.currentTotalsObject.measures, 'velocityTrend', 'distributionTimePeriod') | number:1}}%</span><span ng-if="!a.displayBrandValue(a.currentTotalsObject.measures, 'velocityTrend', 'distributionTimePeriod')">-</span>
             //- Distributions TDs
             //- Distirbution value Simple
             //- ng-class="a.getClassBasedOnValue(a.displayBrandValue(a.currentTotalsObject.measures, 'distributionsSimple', 'distributionTimePeriod'))"
@@ -168,7 +170,7 @@ div(row)
         md-tab(ng-repeat="(key, data) in a.brandTabs" label="{{key}}")
           table.depletions-table.fixed-layout(cellspacing="0" cellpadding="0")
             tbody
-              tr.clickable(ng-repeat="item in data | filter: {type: '!Total'} | orderBy:'name' track by $index" ng-show="a.checkForDepletionCount(item)" ng-click="a.selectItem('brands', item, a.brandTabs, $parent.$index)" ng-class="{selected: item.name === a.idSelected}")
+              tr.clickable(ng-repeat="item in data | filter: {type: '!Total'} | orderBy:'name' track by $index" ng-show="a.checkForDepOrDistValue(item)" ng-click="a.selectItem('brands', item, a.brandTabs, $parent.$index)" ng-class="{selected: item.name === a.idSelected}")
                 td.left.data-brand.title-col {{item.name}}
                 //- Depletion TDs -
                  Depletion value
@@ -186,7 +188,7 @@ div(row)
 
                 //- Velocity Trend
                 //- For YA
-                td(ng-if="a.filtersService.model.accountSelected.accountBrands.value === a.filtersService.accountFilters.accountBrandEnum.velocity") <span class="percentage" ng-if="a.checkIfVelocityPresent(item)">{{a.displayBrandValue(item.measures, 'velocityTrend', 'distributionTimePeriod') | number:1}} %</span><span ng-if="!a.displayBrandValue(item.measures, 'velocityTrend', 'distributionTimePeriod')">-</span>
+                td(ng-if="a.filtersService.model.accountSelected.accountBrands.value === a.filtersService.accountFilters.accountBrandEnum.velocity" ng-class="a.getClassBasedOnValue(a.displayBrandValue(item.measures, 'velocityTrend', 'distributionTimePeriod'))") <span ng-if="a.checkIfVelocityPresent(item)">{{a.displayBrandValue(item.measures, 'velocityTrend', 'distributionTimePeriod') | number:1}}%</span><span ng-if="!a.displayBrandValue(item.measures, 'velocityTrend', 'distributionTimePeriod')">-</span>
 
                 //- Distributions TDs
                 //- Distirbution value Simple

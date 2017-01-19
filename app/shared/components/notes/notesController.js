@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports = /*  @ngInject */
-  function notesController($scope, $state, $mdDialog, $timeout, $filter, $window, notesService, userService, Upload, moment) {
+  function notesController($scope, $state, $mdDialog, $timeout, $filter, $window, $location, notesService, userService, Upload, moment) {
 
     // ****************
     // CONTROLLER SETUP
@@ -169,6 +169,7 @@ module.exports = /*  @ngInject */
         };
 
         data.date = moment.utc().format();
+        data.id = success.successReturnValue[0].id;
         vm.notes.push(data);
         jumpToNotesTop();
         setNoteAuthor();
@@ -239,12 +240,13 @@ module.exports = /*  @ngInject */
     // This is a temporary function based on the plugin-demo
     // TODO make active with SF
     function uploadFiles(files) {
-      vm.fileUploading = true;
+      // vm.fileUploading = true;
       vm.files = files;
       if (files && files.length) {
         Upload.upload({
-          url: 'https://angular-file-upload-cors-srv.appspot.com/upload',
+          url: '/sfdc/createAttachment',
           data: {
+            noteId: 'a2Xg0000000IhBtEAK',
             files: files
           }
         }).then(function(response) {
@@ -262,21 +264,8 @@ module.exports = /*  @ngInject */
 
     }
 
-    function isAuthor(author) {
-      var authorFirstName,
-          authorLastName,
-          noteAuthor;
-
-      authorFirstName = $filter('titlecase')(userService.model.currentUser.firstName);
-      authorLastName = $filter('titlecase')(userService.model.currentUser.lastName);
-
-      noteAuthor = authorFirstName + ' ' + authorLastName;
-
-      if (noteAuthor === author) {
-        return true;
-      } else {
-        return false;
-      }
+    function isAuthor(authorId) {
+      return userService.model.currentUser.employeeID === authorId;
     }
 
     function mailNote(note) {
@@ -299,9 +288,12 @@ module.exports = /*  @ngInject */
         emailString = 'mailto:';
         emailString += '?subject=' + currentAccount.currentStoreName + ': Note: ' + note.title;
         emailString += '&body=' + currentAccount.currentStoreName + '%0D%0A%0D%0A';
-        emailString += currentAccount.address + '%0D%0A%0D%0A';
+        emailString += currentAccount.address + '%0D%0A';
+        emailString += currentAccount.city + '%0D%0A';
+        emailString += currentAccount.state + '%0D%0A';
+        emailString += currentAccount.zipCode + '%0D%0A%0D%0A';
         emailString += 'TDLinx: ' + currentAccount.tdlinx + '%0D%0A%0D%0A';
-        emailString += '%0D%0A%0D%0A' + updatedNoteBody;
+        emailString += updatedNoteBody;
         $window.location = emailString;
       }
 
@@ -309,14 +301,19 @@ module.exports = /*  @ngInject */
         emailString = 'mailto:';
         emailString += '?subject=' + currentAccount.currentStoreName + ': Note: ' + note.title;
         emailString += '&body=' + currentAccount.currentStoreName + '%0D%0A%0D%0A';
-        emailString += currentAccount.address + '%0D%0A%0D%0A';
+        emailString += currentAccount.address + '%0D%0A';
+        emailString += currentAccount.city + '%0D%0A';
+        emailString += currentAccount.state + '%0D%0A';
+        emailString += currentAccount.zipCode + '%0D%0A%0D%0A';
         emailString += 'ID: ' + currentAccount.accountId + '%0D%0A%0D%0A';
-        emailString += '%0D%0A%0D%0A' + updatedNoteBody;
+        emailString += updatedNoteBody;
         $window.location = emailString;
       }
     }
 
     function formatEmailString(note) {
+      note = note.replace(/&#39;/g, '\'');
+      note = note.replace(/&quot;/g, '"');
       note = note.replace(/<\/?div[^>]*>/g, '');
       note = note.replace(/<\/?p[^>]*>|<\/?ul[^>]*>/g, '%0D%0A');
       note = note.replace(/<\/?br[^>]*>|<\/?li[^>]*>/g, ' ');
@@ -340,24 +337,36 @@ module.exports = /*  @ngInject */
     function setNoteAuthor() {
       angular.forEach(vm.notes, function(note) {
         moment(note.date).format();
-        if (isAuthor(note.author)) {
+        if (isAuthor(note.authorId)) {
           note.author = 'Me';
         }
       });
     }
 
     $scope.$on('notes:opened', function(event, data, account) {
+      var accountElement = '#' + account.noteId;
+
       vm.loading = true;
+
       notesService.model.accountId = account.id[0];
 
       notesService.accountNotes().then(function(success) {
+
         vm.notes = success;
         vm.loading = false;
         setNoteAuthor();
-      });
-      $scope.notesOpen = data;
 
+      if (vm.notes.length && account.noteId) {
+        setTimeout(function() {
+          var num = angular.element(document.querySelector(accountElement))[0].offsetTop;
+          angular.element(document.querySelector('.note-container'))[0].scrollTop = num;
+        });
+      }
+      });
+
+      $scope.notesOpen = data;
       vm.storeName = notesService.model.currentStoreName;
       // vm.storeName = account.name;
+      $location.hash(account.noteId);
     });
   };

@@ -16,8 +16,8 @@ module.exports = function(app) {
     sfdc['deleteNote'](app, req, res);
   });
 
-  app.delete('/sfdc/deleteAttach', function (req, res) {
-    sfdc['deleteAttach'](app, req, res);
+  app.delete('/sfdc/deleteAttachment', function (req, res) {
+    sfdc['deleteAttachment'](app, req, res);
   });
 
   app.post('/sfdc/updateNote', function (req, res) {
@@ -30,6 +30,10 @@ module.exports = function(app) {
 
   app.get('/sfdc/getAttachment', function(req, res) {
     sfdc['getAttachmentData'](app, req, res);
+  });
+
+  app.post('/sfdc/createAttachment', require('connect-multiparty')(), function(req, res) {
+    sfdc['createAttachment'](app, req, res);
   });
 
   app.get('/sfdc/undeleteNote', function (req, res) {

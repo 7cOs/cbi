@@ -116,7 +116,7 @@
     p, li, span {
       color: $gray-1;
       font-family: $work-sans;
-      font-size: 0.9em !important;
+      font-size: 0.9em;
     }
 
     .note-body-field {
@@ -259,6 +259,7 @@
     overflow-y: scroll;
     min-height: 400px;
     height: 400px;
+    position: relative;
   }
 
   .new-note {
@@ -287,11 +288,17 @@
       color: $blue;
     }
 
-    p, li, span {
+    p, li {
       color: $gray-1;
       line-height: 1.5;
       font-family: $work-sans;
-      font-size: 0.7em !important;
+      font-size: 0.7em;
+    }
+
+    span {
+      color: $gray-1;
+      line-height: 1.5;
+      font-family: $work-sans;
     }
 
     label {

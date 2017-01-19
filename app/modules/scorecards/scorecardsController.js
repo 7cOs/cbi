@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports = /*  @ngInject */
-  function scorecardsController($rootScope, $scope, $q, $filter, $state, filtersService, myperformanceService, opportunitiesService, userService) {
+  function scorecardsController($rootScope, $scope, $q, $filter, $state, filtersService, opportunitiesService, userService) {
 
     // ****************
     // CONTROLLER SETUP
@@ -49,12 +49,6 @@ module.exports = /*  @ngInject */
 
     // Set page title for head and nav
     $rootScope.pageTitle = $state.current.title;
-
-    // Services
-    vm.performanceData = myperformanceService.model();
-    vm.depletionsData = myperformanceService.depletionModel();
-    vm.distributionData = myperformanceService.distributionModel();
-    vm.filters = myperformanceService.filter();
     vm.filtersService = filtersService;
     vm.userService = userService;
 
@@ -69,6 +63,8 @@ module.exports = /*  @ngInject */
     vm.toggleSelected = toggleSelected;
     vm.checkValidity = checkValidity;
     vm.vsYAPercent = vsYAPercent;
+    vm.setDefaultFilterOptions = setDefaultFilterOptions;
+    vm.premiseTypeDisabled = '';
 
     init();
 
@@ -205,8 +201,10 @@ module.exports = /*  @ngInject */
     // **************
 
     function init() {
+      userService.model.currentUser.srcTypeCd = [''];
+      setDefaultFilterOptions();
       var performanceDepletionPromise = userService.getPerformanceDepletion();
-      var performanceDistributionPromise = userService.getPerformanceDistribution({'type': 'noencode', 'premiseType': 'off'});
+      var performanceDistributionPromise = userService.getPerformanceDistribution({'type': 'noencode', 'premiseType': vm.distributionRadioOptions.selected.onOffPremise});
 
       // serial http request -- we need all to complete before running init functions
       $q.all([performanceDepletionPromise, performanceDistributionPromise]).then(function(values) {
@@ -222,7 +220,6 @@ module.exports = /*  @ngInject */
 
         // distribution
         vm.distributionRadioOptions.selected.placementType = 'Simple';
-        vm.distributionRadioOptions.selected.onOffPremise = 'off';
         updatedSelectionValuesInFilter(vm.depletionRadio, vm.depletionSelect, vm.distributionSelectOptions.selected);
 
         updateTotalRowDistributions();
@@ -270,6 +267,32 @@ module.exports = /*  @ngInject */
         vm.totalDistributions = $filter('filter')(totalObj[0].measures, {timeframe: vm.distributionSelectOptions.selected});
       } else {
         vm.totalDistributions = {};
+      }
+    }
+
+    function setDefaultFilterOptions() {
+      if (userService.model.currentUser.personID !== -1) {
+        switch (userService.model.currentUser.srcTypeCd[0]) {
+          case 'OFF_HIER':
+          case 'OFF_SPEC':
+            offPremise();
+            break;
+          case 'ON_HIER':
+            onPremise();
+            break;
+          default:
+            vm.distributionRadioOptions.selected.onOffPremise = 'off';
+            break;
+          }
+        }
+
+      function onPremise() {
+        vm.distributionRadioOptions.selected.onOffPremise = 'on';
+        vm.premiseTypeDisabled = 'Off Premise';
+      }
+      function offPremise() {
+        vm.distributionRadioOptions.selected.onOffPremise = 'off';
+        vm.premiseTypeDisabled = 'On Premise';
       }
     }
   };

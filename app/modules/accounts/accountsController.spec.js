@@ -438,7 +438,7 @@ describe('Unit: accountsController', function() {
       expect(ctrl.selected).toEqual(null);
       expect(ctrl.previous).toEqual(null);
       expect(ctrl.brandSelectedIndex).toEqual(0);
-      expect(ctrl.marketSelectedIndex).toEqual(0);
+      // expect(ctrl.marketSelectedIndex).toEqual(0);
     });
 
     it('Should set default dropdown options', function() {
@@ -794,15 +794,15 @@ describe('Unit: accountsController', function() {
       ctrl.selectItem(widget, item, parent, parentIndex);
       scope.$digest();
       expect(userService.getPerformanceBrand).toHaveBeenCalled();
-      // expect(ctrl.brandTabs.skus[0]).toEqual(packageSkuData.performance[0]);
+      expect(ctrl.brandTabs.skus[0]).toEqual(packageSkuData.performance[0]);
     });
 
-    it('Should move to Package/SKU view', function () {
+    /* it('Should move to Package/SKU view', function () {
       brandSpy.and.returnValue($q.when(packageSkuData));
       ctrl.selectItem(widget, item, parent, parentIndex);
       scope.$digest();
       expect(ctrl.brandSelectedIndex).toEqual(1);
-    });
+    }); */
 
     it('Should move back to Brand view', function () {
       ctrl.brandSelectedIndex = 1;
@@ -1005,7 +1005,7 @@ describe('Unit: accountsController', function() {
 
       ctrl.setDefaultFilterOptions();
 
-      expect(filtersService.model.selected.premiseType).toEqual('all');
+      expect(filtersService.model.selected.premiseType).toEqual('off');
       expect(ctrl.premiseTypeDisabled).toEqual(false);
       expect(ctrl.updateChip.calls.count()).toEqual(0);
     });
@@ -1092,7 +1092,7 @@ describe('Unit: accountsController', function() {
 
       ctrl.setDefaultFilterOptions();
 
-      expect(filtersService.model.selected.premiseType).toEqual('all');
+      expect(filtersService.model.selected.premiseType).toEqual('off');
       expect(ctrl.premiseTypeDisabled).toEqual(false);
       expect(ctrl.updateChip.calls.count()).toEqual(0);
       expect(ctrl.updateChip).not.toHaveBeenCalled();
@@ -1177,17 +1177,19 @@ describe('Unit: accountsController', function() {
 
     it('Should update top bottom', function() {
       ctrl.loadingTopBottom = true;
-      var categoryBound = filtersService.model.accountSelected.accountMarkets;
+      ctrl.filtersService.model.accountSelected.accountMarkets = filtersService.model.accountSelected.accountMarkets;
+      expect(userService.getTopBottomSnapshot.calls.count()).toEqual(1);
+      ctrl.getDataForTopBottomLevel(ctrl.topBottomData);
+
       expect(userService.getTopBottomSnapshot.calls.count()).toEqual(2);
-
-      ctrl.getDataForTopBottom(ctrl.topBottomData, categoryBound);
-
-      expect(userService.getTopBottomSnapshot.calls.count()).toEqual(3);
     });
   });
 
   describe('Change top bottom dropwdown', function() {
     beforeEach(function() {
+      var distObj = filtersService.accountFilters.accountTypes[0];
+      ctrl.setTopBottomAcctTypeSelection(distObj);
+      userService.getTopBottomSnapshot.calls.reset();
     });
 
     it('Check if correct objects are set as the current top bottom object', function() {
@@ -1210,38 +1212,11 @@ describe('Unit: accountsController', function() {
       ctrl.setTopBottomAcctTypeSelection(storesObj);
       expect(ctrl.currentTopBottomObj).not.toEqual(ctrl.topBottomData.distributors);
     });
-
-    it('should call getDataForTopBottom only once', function() {
-      var distirbutorObj = filtersService.accountFilters.accountTypes[0];
-      ctrl.setTopBottomAcctTypeSelection(distirbutorObj);
-      expect(userService.getTopBottomSnapshot.calls.count()).toEqual(2);
-    });
-
-    it('should not call getDataForTopBottom if same selection is made consecutively', function() {
-      var distirbutorObj = filtersService.accountFilters.accountTypes[0];
-      ctrl.setTopBottomAcctTypeSelection(distirbutorObj);
-      expect(userService.getTopBottomSnapshot.calls.count()).toEqual(2);
-      userService.getTopBottomSnapshot.calls.reset();
-      ctrl.setTopBottomAcctTypeSelection(distirbutorObj);
-      expect(userService.getTopBottomSnapshot.calls.count()).toEqual(0);
-    });
-
-    it('should remove all top bottom filters once an option from dropwdown is selected', function() {
-      ctrl.currentTopBottomFilters.distributors = '234567';
-      ctrl.currentTopBottomFilters.accounts = '1345672';
-      var storesObj = filtersService.accountFilters.accountTypes[3];
-      ctrl.setTopBottomAcctTypeSelection(storesObj);
-      expect(ctrl.currentTopBottomFilters.distributors).toEqual('');
-      expect(ctrl.currentTopBottomFilters.accounts).toEqual('');
-      expect(ctrl.currentTopBottomFilters.subAccounts).toEqual('');
-      expect(ctrl.currentTopBottomFilters.stores).toEqual('');
-    });
   });
 
   describe('Get top bottom data', function() {
-    var categoryBound;
     beforeEach(function() {
-      categoryBound = ctrl.filtersService.accountFilters.accountMarkets[0];
+      ctrl.filtersService.model.accountSelected.accountMarkets = filtersService.model.accountSelected.accountMarkets;
       userService.getTopBottomSnapshot.calls.reset();
       ctrl.topBottomData.distributors.performanceData = null;
       ctrl.topBottomData.distributors.isPerformanceDataUpdateRequired = false;
@@ -1249,33 +1224,34 @@ describe('Unit: accountsController', function() {
     });
 
     it('Should get the updated top bottom data if performance flag is set to true', function() {
-      ctrl.getDataForTopBottom(ctrl.topBottomData.distributors, categoryBound);
+      ctrl.getDataForTopBottomLevel(ctrl.topBottomData.distributors);
       expect(userService.getTopBottomSnapshot.calls.count()).toEqual(1);
     });
 
     it('Should get the updated filtered data if update filter flag is set to true', function() {
-      ctrl.getDataForTopBottom(ctrl.topBottomData.distributors, categoryBound);
+      ctrl.getDataForTopBottomLevel(ctrl.topBottomData.distributors);
       scope.$digest();
       expect(userService.getTopBottomSnapshot.calls.count()).toEqual(1);
       userService.getTopBottomSnapshot.calls.reset();
-      ctrl.getDataForTopBottom(ctrl.topBottomData.distributors, categoryBound);
+      ctrl.getDataForTopBottomLevel(ctrl.topBottomData.distributors);
       expect(userService.getTopBottomSnapshot.calls.count()).toEqual(1);
     });
 
     it('Should not get updated performance data if update performance flag is not set', function() {
-      ctrl.getDataForTopBottom(ctrl.topBottomData.distributors, categoryBound);
+      ctrl.filtersService.model.accountSelected.accountMarkets = ctrl.filtersService.accountFilters.accountMarkets[0];
+      ctrl.getDataForTopBottomLevel(ctrl.topBottomData.distributors);
       scope.$digest();
       expect(userService.getTopBottomSnapshot.calls.count()).toEqual(1);
       ctrl.topBottomData.distributors.isFilterUpdateRequired = true;
       ctrl.topBottomData.distributors.timePeriodFilteredData = null;
-      ctrl.getDataForTopBottom(ctrl.topBottomData.distributors, categoryBound);
+      ctrl.getDataForTopBottomLevel(ctrl.topBottomData.distributors);
       expect(ctrl.topBottomData.distributors.isFilterUpdateRequired).toBeTruthy();
       expect(ctrl.topBottomData.distributors.isFilterUpdateRequired).not.toBeUndefined();
     });
 
     it('Should not get updated performance data and updated filtered data if update performance flag and update filter flags are not set', function() {
-      var categoryBound = ctrl.filtersService.accountFilters.accountMarkets[0];
-      ctrl.getDataForTopBottom(ctrl.topBottomData.distributors, categoryBound);
+      ctrl.filtersService.model.accountSelected.accountMarkets = ctrl.filtersService.accountFilters.accountMarkets[0];
+      ctrl.getDataForTopBottomLevel(ctrl.topBottomData.distributors);
       scope.$digest();
       expect(ctrl.topBottomData.distributors.isFilterUpdateRequired).toBeFalsy();
       expect(ctrl.topBottomData.distributors.timePeriodFilteredData).not.toBeUndefined();
@@ -1283,16 +1259,17 @@ describe('Unit: accountsController', function() {
     });
 
     it('Should update the correct tab value in the view', function() {
-      ctrl.getDataForTopBottom(ctrl.topBottomData.distributors, categoryBound);
+      ctrl.filtersService.model.accountSelected.accountMarkets = ctrl.filtersService.accountFilters.accountMarkets[0];
+      ctrl.getDataForTopBottomLevel(ctrl.topBottomData.distributors);
       ctrl.marketSelectedIndex = 0;
 
-      ctrl.getDataForTopBottom(ctrl.topBottomData.accounts, categoryBound);
+      ctrl.getDataForTopBottomLevel(ctrl.topBottomData.accounts);
       ctrl.marketSelectedIndex = 1;
 
-      ctrl.getDataForTopBottom(ctrl.topBottomData.subAccounts, categoryBound);
+      ctrl.getDataForTopBottomLevel(ctrl.topBottomData.subAccounts);
       ctrl.marketSelectedIndex = 2;
 
-      ctrl.getDataForTopBottom(ctrl.topBottomData.stores, categoryBound);
+      ctrl.getDataForTopBottomLevel(ctrl.topBottomData.stores);
       ctrl.marketSelectedIndex = 3;
     });
 
@@ -1336,44 +1313,6 @@ describe('Unit: accountsController', function() {
         isFilterUpdateRequired: true
       };
     });
-
-    it('Should get the correct Top Bottom indexes', function() {
-      ctrl.currentTopBottomObj.chartData = {
-        'topValues': [],
-        'bottomTrends': [],
-        'topTrends': [],
-        'bottomValues': []
-      };
-      ctrl.currentTopBottomObj.topBottomIndices = {
-        'topValues': [1, 4, 6, 7],
-        'bottomTrends': [12, 34, 1, 3, 4],
-        'topTrends': [112, 234, 612, 71],
-        'bottomValues': [103, 21, 623, 711]
-      };
-      ctrl.changeTopBottomSortOrder({
-        name: 'Top 10 (Values)',
-        value: 1
-      });
-      expect(ctrl.currentBoundTopBottomIndexes).toEqual(ctrl.currentTopBottomObj.topBottomIndices.topValues);
-
-      ctrl.changeTopBottomSortOrder({
-        name: 'Top 10 (Trend)',
-        value: 2
-      });
-      expect(ctrl.currentBoundTopBottomIndexes).toEqual(ctrl.currentTopBottomObj.topBottomIndices.topTrends);
-
-      ctrl.changeTopBottomSortOrder({
-        name: 'Bottom 10 (Values)',
-        value: 3
-      });
-      expect(ctrl.currentBoundTopBottomIndexes).toEqual(ctrl.currentTopBottomObj.topBottomIndices.bottomValues);
-
-      ctrl.changeTopBottomSortOrder({
-        name: 'Bottom 10 (Trend)',
-        value: 4
-      });
-      expect(ctrl.currentBoundTopBottomIndexes).toEqual(ctrl.currentTopBottomObj.topBottomIndices.bottomTrends);
-    });
   });
 
   describe('Should set correct params and get data from store api', function() {
@@ -1382,12 +1321,6 @@ describe('Unit: accountsController', function() {
       topBottomSpy.calls.reset();
       ctrl.setTopBottomAcctTypeSelection(ctrl.filtersService.accountFilters.accountTypes[3]);
     });
-
-    it('should have called store endpoint 4 times when acct type is changed', function() {
-      // One each for top 10(Values/Trends),bottom 10(Values/Trends)
-      expect(topBottomSpy.calls.count()).toEqual(4);
-    });
-
     /* it('should have called store endpoint 4 times when account market option is changed', function() {
       // One each for top 10(Values/Trends),bottom 10(Values/Trends)
       topBottomSpy.calls.reset();
@@ -1621,8 +1554,8 @@ describe('Unit: accountsController', function() {
 
   describe('filterTopBottom', function() {
     beforeEach(function() {
-      var categoryBound = filtersService.model.accountSelected.accountMarkets;
-      ctrl.getDataForTopBottom(ctrl.topBottomData, categoryBound);
+      ctrl.filtersService.model.accountSelected.accountMarkets = ctrl.filtersService.accountFilters.accountMarkets[0];
+      ctrl.getDataForTopBottomLevel(ctrl.topBottomData);
     });
 
     it('should reset flags for each object', function() {
@@ -1637,19 +1570,12 @@ describe('Unit: accountsController', function() {
     });
 
     it('should update top bottom data', function() {
-      spyOn(ctrl, 'getDataForTopBottom');
+      spyOn(ctrl, 'getDataForTopBottomLevel');
 
       ctrl.filterTopBottom();
 
-      expect(ctrl.getDataForTopBottom).toHaveBeenCalled();
-      expect(ctrl.getDataForTopBottom.calls.count()).toEqual(1);
-    });
-
-    describe('changing tab index', function() {
-      it('should go to store level', function() {});
-      it('should go to sub account level', function() {});
-      it('should go to account level', function() {});
-      it('should go to distributor level', function() {});
+      expect(ctrl.getDataForTopBottomLevel).toHaveBeenCalled();
+      expect(ctrl.getDataForTopBottomLevel.calls.count()).toEqual(1);
     });
   });
 });

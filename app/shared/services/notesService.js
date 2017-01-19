@@ -84,6 +84,7 @@ module.exports = /*  @ngInject */
             title: arr.Title__c,
             body: arr.Comments_RTF__c,
             author: arr.CreatedBy.Name,
+            authorId: arr.CreatedBy.CBI_Employee_ID__c,
             date: arr.CreatedDate,
             attachments: noteAttachments
           });

@@ -42,7 +42,7 @@
   }
 
   .notes-icon {
-    background-image: url('../assets/img/icons/overview-notes.svg');
+    background-image: url('../assets/img/icons/overview-notes-disabled.svg');
     background-size: 20px 20px;
     background-position: 1em 1em;
     border-left: 1px solid $gray-4;
@@ -51,23 +51,31 @@
     z-index: 1;
     outline: none;
 
-    &:hover {
-      cursor: hand;
+    a {
+      color: $gray-3;
+
+      &:hover {
+        cursor: not-allowed;
+      }
     }
 
-    &.disabled {
-      background-image: url('../assets/img/icons/overview-notes-disabled.svg');
+    &:hover {
+      cursor: not-allowed;
+    }
+
+    &.enabled {
+      background-image: url('../assets/img/icons/overview-notes.svg');
 
       a {
-        color: $gray-3;
+        color: $blue;
 
         &:hover {
-          cursor: not-allowed;
+          cursor: hand;
         }
       }
 
       &:hover {
-        cursor: not-allowed;
+        cursor: hand;
       }
     }
   }

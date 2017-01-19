@@ -86,6 +86,7 @@ module.exports = /*  @ngInject */
     vm.toggleSelectAllStores = toggleSelectAllStores;
     vm.updateOpportunityModel = updateOpportunityModel;
     vm.vsYAGrowthPercent = vsYAGrowthPercent;
+    vm.getStoreToBePassedToAcct = getStoreToBePassedToAcct;
 
     // Custom Headers for CSV export
     vm.csvHeader = [
@@ -256,7 +257,7 @@ module.exports = /*  @ngInject */
       // Create target list
       userService.addTargetList(vm.newList).then(function(response) {
         vm.addToTargetList(response.id);
-        closeModal();
+        vm.closeModal();
         vm.buttonDisabled = false;
 
         return targetListService.addTargetListShares(response.id, vm.newList.targetListShares);
@@ -730,6 +731,22 @@ module.exports = /*  @ngInject */
       }
     }
 
+    function impactSort (item) {
+      var result;
+      switch (item.impact) {
+        case 'H':
+          result = 0;
+          break;
+        case 'M':
+          result = 1;
+          break;
+        case 'L':
+          result = 2;
+          break;
+      }
+      return result;
+    }
+
     // ***************
     // PRIVATE METHODS
     // ***************
@@ -778,20 +795,11 @@ module.exports = /*  @ngInject */
       }
     }
 
-    function impactSort (item) {
-      var result;
-      switch (item.impact) {
-        case 'H':
-          result = 0;
-          break;
-        case 'M':
-          result = 1;
-          break;
-        case 'L':
-          result = 2;
-          break;
-      }
-      return result;
+    function getStoreToBePassedToAcct(storeDetails) {
+      var store = {
+        store: storeDetails.versionedId + '|' + storeDetails.name
+      };
+      return store;
     }
 
     function init() {

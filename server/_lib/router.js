@@ -3,6 +3,7 @@
 module.exports = function(app) {
 
   const fs = require('graceful-fs'),
+        logutil = require('./logutil'),
         routes = fs.readdirSync('./server/routes/');
 
   // REQUIRE ALL ROUTES IN /ROUTES DIR
@@ -18,8 +19,10 @@ module.exports = function(app) {
 
   // DEFAULT ERROR HANDLER IF NOTHING ELSE INTERCEPTS
   app.use(function(err, req, res, next) {
-    console.error('An application error has occurred:', err);
-    res.render('errors/500', {
+    let logObj = logutil.buildError(req.headers['x-request-id'], 'An unhandled application error has occurred.', err.toString());
+    logutil.logError(logObj);
+
+    res.status(500).render('errors/500', {
       config: app.get('config'),
       error: {
         code: 500,
