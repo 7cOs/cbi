@@ -767,21 +767,19 @@ module.exports = /*  @ngInject */
     }
 
     function init() {
-      setDefaultDropDownOptions();
-      setDefaultFilterOptions();
       var isNavigatedFromScorecard = checkForNavigationFromScorecard();
       var isNavigatedFromOpps = checkForNavigationFromOpps();
-
       if (isNavigatedFromScorecard === false && isNavigatedFromOpps === false) {
         chipsService.resetChipsFilters(chipsService.model);
       }
+      setDefaultDropDownOptions();
+      setDefaultFilterOptions();
       var params = getUpdatedFilterQueryParamsForBrand();
       var promiseArr = [];
       // brand snapshot returns sku data instead of just the brand if you add brand:xxx
       if (params.brand && params.brand.length) delete params.brand;
       params.type = 'brandSnapshot';
       promiseArr.push(userService.getPerformanceBrand(params));
-
       $q.all(promiseArr).then(function(data) {
         if (data[0]) {
           vm.loadingBrandSnapshot = false;
