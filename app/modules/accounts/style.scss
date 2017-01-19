@@ -135,6 +135,31 @@
   }
 }
 
+.brand-header {
+  display: flex;
+  background: $gray-4;
+  height: 3em;
+  float: none;
+  align-items: center;
+  padding: 0.25em 0.25em 0.25em 0;
+
+  .brand-name-section {
+    height: 100%;
+    width: 80%;
+  }
+
+  .brands {
+    background-position: 0.75em 0.4em;
+    padding: 0.5em 0 0.5em 1.75em;
+  }
+
+  .dropdown-section {
+    background: #00FF00;
+    height: 100%;
+    width: 20%;
+  }
+}
+
 .widget-header {
   float: none;
   display: block;
