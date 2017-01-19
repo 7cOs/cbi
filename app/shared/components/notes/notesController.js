@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports = /*  @ngInject */
-  function notesController($scope, $state, $mdDialog, $timeout, $filter, $window, $location, notesService, userService, Upload, moment) {
+  function notesController($scope, $state, $mdDialog, $timeout, $filter, $window, $location, $analytics, notesService, userService, Upload, moment) {
 
     // ****************
     // CONTROLLER SETUP
@@ -382,6 +382,8 @@ module.exports = /*  @ngInject */
           vm.analyticsCategory = 'Distributor Notes';
           break;
       }
+
+      $analytics.eventTrack('Notes Tab', {category: vm.analyticsCategory, label: 'Open Notes Tab'});
 
       $location.hash(account.noteId);
     });
