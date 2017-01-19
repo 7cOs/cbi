@@ -1,5 +1,5 @@
 describe('Unit: scorecardsController', function() {
-  var scope, ctrl, $state, filtersService;
+  var scope, ctrl, $state, filtersService, userService;
 
   beforeEach(function() {
     // Get Mock Modules
@@ -8,13 +8,14 @@ describe('Unit: scorecardsController', function() {
     angular.mock.module('cf.common.services');
     angular.mock.module('cf.modules.scorecards');
 
-    inject(function($rootScope, $controller, _$state_, _filtersService_) {
+    inject(function($rootScope, $controller, _$state_, _filtersService_, _userService_) {
       // Create scope
       scope = $rootScope.$new();
 
       // Get Required Services
       $state = _$state_;
       filtersService = _filtersService_;
+      userService = _userService_;
 
       // Create Controller
       ctrl = $controller('scorecardsController', {$scope: scope});
@@ -22,6 +23,9 @@ describe('Unit: scorecardsController', function() {
   });
 
   describe('Init', function() {
+    beforeEach(function () {
+    });
+
     it('should expose public methods', function() {
       expect(ctrl.goToAccountDashboard).not.toBeUndefined();
     });
@@ -36,6 +40,7 @@ describe('Unit: scorecardsController', function() {
         performance: []
       };
       ctrl.distributionRadioOptions.selected.onOffPremise = 'off';
+      userService.model.currentUser.srcTypeCd = ['ON_HIER'];
 
       spyOn($state, 'go').and.callFake(function() {
         return true;
