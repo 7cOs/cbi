@@ -5,13 +5,14 @@ import org.testng.annotations.Test;
 import org.testng.asserts.SoftAssert;
 
 import com.cbrands.BaseSeleniumTestCase;
+import com.cbrands.helper.RetryAnalyzer;
 import com.cbrands.pages.Login;
 
 public class Run5_SavedReports extends BaseSeleniumTestCase{
 
 	private SoftAssert softAssert = new SoftAssert();
 	
-	@Test(dataProvider="AT_Opportunities_Run5_ViewSavedReports")
+	@Test(retryAnalyzer = RetryAnalyzer.class, dataProvider="AT_Opportunities_Run5_ViewSavedReports")
 	public void US12708_AT_Opportunities_Run5_ViewSavedReports(String reportName){
 		login = new Login(driver);
 		if(!login.isUserLoggedIn()) { 

@@ -1,15 +1,26 @@
 package com.cbrands.pages;
 
+import java.util.List;
 import java.util.Map;
 
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.CacheLookup;
+import org.openqa.selenium.support.FindAll;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedCondition;
+import org.openqa.selenium.support.ui.LoadableComponent;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-public class MyScorecards {
+import static com.cbrands.helper.SeleniumUtils.waitForElementsVisibleFluentWait;
+import static com.cbrands.helper.SeleniumUtils.waitForVisibleFluentWait;
+import static com.cbrands.helper.SeleniumUtils.findElement;
+import static com.cbrands.helper.SeleniumUtils.refresh;
+
+import com.cbrands.helper.PropertiesCache;
+
+public class MyScorecards extends LoadableComponent<MyScorecards>{
     private Map<String, String> data;
     private WebDriver driver;
     private int timeout = 15;
@@ -18,8 +29,7 @@ public class MyScorecards {
     @CacheLookup
     private WebElement accountDashboard;
 
-    @FindBy(id = "radio_27")
-    @CacheLookup
+    @FindBy(css = "md-radio-button[aria-label='Current Month to Date']")
     private WebElement currentMonthToDate;
 
     @FindBy(id = "radio_32")
@@ -50,8 +60,7 @@ public class MyScorecards {
     @CacheLookup
     private WebElement l60L60l90l120;
 
-    @FindBy(id = "radio_28")
-    @CacheLookup
+    @FindBy(css = "md-radio-button[aria-label='Last Closed Month']")
     private WebElement lastClosedMonth;
 
     @FindBy(css = "a[href='/auth/logout']")
@@ -101,6 +110,15 @@ public class MyScorecards {
     @FindBy(css = "a[href='/target-lists']")
     @CacheLookup
     private WebElement targetLists;
+    
+    @FindAll(@FindBy(css = "md-select-value.md-select-value"))
+    private List <WebElement> dropDowns;
+    
+    @FindAll(@FindBy(css = "div.scorecard-header-left>h3.ng-binding"))
+    private List <WebElement> tableLabels;
+    
+    @FindBy(css = "div.scorecard-header-left>h3.ng-scope")
+    private WebElement distributionScorecardTableLabelL03;
 
     public MyScorecards() {
     }
@@ -355,5 +373,59 @@ public class MyScorecards {
             }
         });
         return this;
+    }
+
+	@Override
+	protected void load() {
+		driver.get(PropertiesCache.getInstance().getProperty("qa.host.address"));
+	}
+
+	@Override
+	protected void isLoaded() throws Error {
+		String url = driver.getCurrentUrl();
+	    assertTrue(url.contains("scorecards"));
+		
+	}
+
+	private void assertTrue(boolean contains) {
+		// TODO Auto-generated method stub
+		
+	}
+	
+    public MyScorecards selectDepletionsTimePeriod(String value) {
+    waitForVisibleFluentWait(dropDowns.get(0)).click();
+    	findElement(By.cssSelector("md-option[aria-label='"+value+"']")).click();
+    return this;
+    }
+    
+    public String depletionsTimePeriodValue(){
+    	return waitForVisibleFluentWait(dropDowns.get(0)).getText();     	
+    }
+    
+    public MyScorecards selectDistributionTimePeriod(String value) {
+    waitForVisibleFluentWait(dropDowns.get(1)).click();
+    	findElement(By.cssSelector("md-option[aria-label='"+value+"']")).click();
+    return this;
+    }
+    
+    public String distributionTimePeriodValue(){
+    	return waitForVisibleFluentWait(dropDowns.get(1)).getText();     	
+    }
+    
+    public MyScorecards selectLastClosedMonth(){
+    	waitForVisibleFluentWait(lastClosedMonth).click();
+    	return this;
+    }
+    
+    public String depletionsScorecardTableLabel(){
+    	return tableLabels.get(0).getText();
+    }
+    
+    public String distributionScorecardTableLabel(){
+    	return tableLabels.get(1).getText();
+    }
+    
+    public String distributionScorecardTableLabelTextL03(){
+    	return distributionScorecardTableLabelL03.getText();
     }
 }

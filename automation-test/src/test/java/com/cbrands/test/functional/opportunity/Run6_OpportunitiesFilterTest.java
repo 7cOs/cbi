@@ -9,11 +9,12 @@ import org.testng.annotations.AfterMethod;
 import org.testng.annotations.Test;
 
 import com.cbrands.BaseSeleniumTestCase;
+import com.cbrands.helper.RetryAnalyzer;
 import com.cbrands.pages.Login;
 
 public class Run6_OpportunitiesFilterTest extends BaseSeleniumTestCase{
 	
-	@Test
+	@Test(retryAnalyzer = RetryAnalyzer.class)
 	public void US12710_AT_Opportunities_Run6_OpportunityFilters() {
 		
 		login = new Login(driver);

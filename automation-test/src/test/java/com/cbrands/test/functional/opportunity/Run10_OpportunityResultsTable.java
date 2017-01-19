@@ -1,16 +1,21 @@
 package com.cbrands.test.functional.opportunity;
 
+import static org.hamcrest.CoreMatchers.containsString;
+import static org.hamcrest.CoreMatchers.not;
+import static org.hamcrest.MatcherAssert.assertThat;
+
 import org.testng.Assert;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 import com.cbrands.BaseSeleniumTestCase;
+import com.cbrands.helper.RetryAnalyzer;
 import com.cbrands.pages.Login;
 
 public class Run10_OpportunityResultsTable extends BaseSeleniumTestCase {
 
-	@Test(dataProvider="AT_Opportunities_Run10_OpportunityResultsTable")
+	@Test(retryAnalyzer = RetryAnalyzer.class, dataProvider="AT_Opportunities_Run10_OpportunityResultsTable")
 	public void US12716_AT_Opportunities_Run10_OpportunityResultsTable(String distributorName,String retailStoreName1,String retailStoreName2) {
 
 		// Test Step 10.1
@@ -23,6 +28,10 @@ public class Run10_OpportunityResultsTable extends BaseSeleniumTestCase {
 		opportunitiesPage.selectAccountScope();
 		opportunitiesPage.typeDistributor(distributorName);
 		opportunitiesPage.clickApplyFilters();
+		
+		String allText = getAllTextFromPage();
+		assertThat("Unable to find any opportunities that met your criteria.", allText, not(containsString("Dang! We were unable to find any opportunities that met your criteria.")));
+		
 		Assert.assertNotNull(opportunitiesPage.getColumnHeaderStoreNumber(), "Store/Number column header not present");
 		Assert.assertNotNull(opportunitiesPage.getColumnHeaderAddress(), "Address header not present");
 		Assert.assertNotNull(opportunitiesPage.getColumnHeaderOpportunitites(), "Opportunities column header not present");
@@ -60,29 +69,20 @@ public class Run10_OpportunityResultsTable extends BaseSeleniumTestCase {
 		opportunitiesPage.clickLevelOneRow();
 		opportunitiesPage.clickLevelOneRow();
 
-		// Test Step 10.7
-		opportunitiesPage.pageRefresh();
-		opportunitiesPage.selectRetailerOptionStore();
-		opportunitiesPage.searchRetailerStore(retailStoreName1);
-		opportunitiesPage.selectAccountScope();
-		opportunitiesPage.clickShowMoreFilter();
-		opportunitiesPage.selectProductTypeFeatured();
-		opportunitiesPage.clickApplyFilters();
-		opportunitiesPage.clickApplyFilters();
-		opportunitiesPage.clickFirstSearchResult();
-		Assert.assertNotNull(opportunitiesPage.getGreenFlagIcon(), "Green Flag icon not present");
-		opportunitiesPage.clickLevelOneRow();
-		opportunitiesPage.clickFeatureType();
-		Assert.assertNotNull(opportunitiesPage.getSecondaryModal(), "Secondary Modal not displaying");
-		opportunitiesPage.closeSecondaryModal();
+		// Test Step 10.7 - removed
 
 		// Test Step 10.8
-		opportunitiesPage.pageRefresh();
-		opportunitiesPage.searchRetailerChainByName(retailStoreName2);
+/*		opportunitiesPage.pageRefresh();
+		//opportunitiesPage.searchRetailerChainByName(retailStoreName2);
+		opportunitiesPage.searchRetailerChain(retailStoreName2);
 		opportunitiesPage.clickApplyFilters();
+		
+		allText = getAllTextFromPage();
+		assertThat("Unable to find any opportunities that met your criteria.", allText, not(containsString("Dang! We were unable to find any opportunities that met your criteria.")));
+		
 		opportunitiesPage.clickFirstSearchResult();
 		Assert.assertNotNull(opportunitiesPage.getYellowFlagIcon(), "Yellow Flag icon not present");
-		opportunitiesPage.clickLevelOneRow();
+		opportunitiesPage.clickLevelOneRow();*/
 
 	}
 	

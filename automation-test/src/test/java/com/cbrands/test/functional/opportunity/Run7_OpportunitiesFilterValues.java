@@ -5,13 +5,14 @@ import org.testng.annotations.Test;
 import org.testng.asserts.SoftAssert;
 
 import com.cbrands.BaseSeleniumTestCase;
+import com.cbrands.helper.RetryAnalyzer;
 import com.cbrands.pages.Login;
 
 public class Run7_OpportunitiesFilterValues extends BaseSeleniumTestCase {
 
 	private SoftAssert softAssert = new SoftAssert();
 
-	@Test
+	@Test(retryAnalyzer = RetryAnalyzer.class)
 	public void US12714_AT_Opportunities_Run7_FilterFields() {
 
 		login = new Login(driver);
@@ -43,18 +44,16 @@ public class Run7_OpportunitiesFilterValues extends BaseSeleniumTestCase {
 		opportunitiesPage.selectProductTypePriorityPackages();
 		softAssert.assertNotNull(opportunitiesPage.getFilterPillPriorityPackages(), "'Priority Packages' filter pill is not present");
 		opportunitiesPage.selectProductTypeAuthorized();
-		// opportunitiesPage.clickOffPremise();
 		opportunitiesPage = opportunitiesPage.pageRefresh();
 		opportunitiesPage.clickShowMoreFilter();
-		// opportunitiesPage.clickOffPremise_run7();
-		opportunitiesPage.selectTradeChannelGrocery();
-		softAssert.assertNotNull(opportunitiesPage.getFilterPillGrocery(), "'Grcoery' filter pill is not present");
+		//opportunitiesPage.selectTradeChannelGrocery();
+		//softAssert.assertNotNull(opportunitiesPage.getFilterPillGrocery(), "'Grcoery' filter pill is not present");
 		opportunitiesPage.selectTradeChannelDrug();
 		softAssert.assertNotNull(opportunitiesPage.getFilterPillDrug(), "'Drug' filter pill is not present");
 		opportunitiesPage.selectTradeChannelLiquor();
 		softAssert.assertNotNull(opportunitiesPage.getFilterPillLiquor(), "'Liquor' filter pill is not present");
-		opportunitiesPage.selectTradeChannelRecreation();
-		softAssert.assertNotNull(opportunitiesPage.getFilterPillRecreation(), "'Liquor' filter pill is not present");
+		opportunitiesPage.selectTradeChannelWholeSaleClub();
+		softAssert.assertNotNull(opportunitiesPage.getFilterPillWholesaleClub(), "'Liquor' filter pill is not present");
 		opportunitiesPage.selectTradeChannelConvenience();
 		softAssert.assertNotNull(opportunitiesPage.getFilterPillConvenience(), "'Convenience' filter pill is not present");
 		opportunitiesPage.selectTradeChannelMassMerchandiser();
@@ -76,8 +75,7 @@ public class Run7_OpportunitiesFilterValues extends BaseSeleniumTestCase {
 		opportunitiesPage.selectStoreSegmentationC();
 		softAssert.assertNotNull(opportunitiesPage.getFilterPillSegmentC(), "'Segment C' filter pill is not present");
 
-		// Test Step #7.3 - This step may be hard to maintain, may need to pull
-		// out from the automated test
+		// Test Step #7.3
 		opportunitiesPage.clearFirstRemovableFilterPill();
 		softAssert.assertEquals(opportunitiesPage.getOpportunityStatusOpen().getAttribute("aria-checked"), "false", "'Open' filter option not removed");
 

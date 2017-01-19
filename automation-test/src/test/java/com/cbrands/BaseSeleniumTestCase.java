@@ -26,6 +26,7 @@ import com.cbrands.listener.SeleniumSnapshotRule;
 import com.cbrands.pages.AccountDashboard;
 import com.cbrands.pages.HomePage;
 import com.cbrands.pages.Login;
+import com.cbrands.pages.MyScorecards;
 import com.cbrands.pages.Opportunities;
 import com.cbrands.pages.TargetList;
 
@@ -40,6 +41,7 @@ public abstract class BaseSeleniumTestCase implements IConstant {
 	protected Opportunities opportunitiesPage;
 	protected TargetList targetListPage;
 	protected AccountDashboard accountDashboardPage;
+	protected MyScorecards myScorecards;
 
 	@BeforeSuite
 	public void setUp() throws Exception {
@@ -72,17 +74,22 @@ public abstract class BaseSeleniumTestCase implements IConstant {
 		return filters;
 	}
 	
+	public String getAllTextFromPage() {
+		return driver.findElement(By.tagName("body")).getText();
+	}
+	
 	protected void logout(){
-		driver.get("https://orion-qa.cbrands.com/auth/logout");
-		driver.get("https://orion-qa.cbrands.com/auth/logout");
+		//driver.get("https://orion-qa.cbrands.com/auth/logout");
 		try {
-			waitForVisible (By.id("username"));	
+			//waitForVisible (By.id("username"));	
+			login = new Login(driver);
+			login.logOut();
+			login.get();
 		} catch (NoSuchElementException | TimeoutException e ) {
 			log.info("**************Logout failed.");
 		} finally {
 			log.info("Re-Trying....");
 			driver.get("https://orion-qa.cbrands.com/auth/logout");
-			log.info("Logout successfully.");
 		}
 		
 	}

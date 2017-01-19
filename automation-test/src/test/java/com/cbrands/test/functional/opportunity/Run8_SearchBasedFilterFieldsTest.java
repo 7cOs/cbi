@@ -8,13 +8,14 @@ import org.testng.annotations.Test;
 import org.testng.asserts.SoftAssert;
 
 import com.cbrands.BaseSeleniumTestCase;
+import com.cbrands.helper.RetryAnalyzer;
 import com.cbrands.pages.Login;
 
 public class Run8_SearchBasedFilterFieldsTest extends BaseSeleniumTestCase {
 
 	private SoftAssert softAssert = new SoftAssert();
 
-	@Test
+	@Test(retryAnalyzer = RetryAnalyzer.class)
 	public void US12715_AT_Opportunities_Run8_OpportunityTypeSearchFilterBehavior() {
 
 		login = new Login(driver);

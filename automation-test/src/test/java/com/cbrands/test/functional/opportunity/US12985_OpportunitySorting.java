@@ -5,11 +5,12 @@ import org.testng.annotations.AfterMethod;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 import com.cbrands.BaseSeleniumTestCase;
+import com.cbrands.helper.RetryAnalyzer;
 import com.cbrands.pages.Login;
 
 public class US12985_OpportunitySorting extends BaseSeleniumTestCase{
 	
-	@Test(dataProvider="us12985_OpportunitySorting")
+	@Test(retryAnalyzer = RetryAnalyzer.class, dataProvider="us12985_OpportunitySorting")
   public void US12985_AT_OpportunitySorting(String distributorName, String brand) {
 	  login = new Login(driver);
 	  if(!login.isUserLoggedIn()) { 
@@ -24,7 +25,6 @@ public class US12985_OpportunitySorting extends BaseSeleniumTestCase{
 	  opportunitiesPage.clickApplyFilters();
 	  Assert.assertTrue(opportunitiesPage.verifyDefaultSegmentationSort(),"Results are not sorted by store segmentation");
 	  opportunitiesPage.clickFirstResult();
-	  Assert.assertTrue(opportunitiesPage.verifyDefaultSortPackageSKU());
 	  opportunitiesPage.clickFirstResult();
 	  Assert.assertTrue(opportunitiesPage.verifySortStore());
 	  Assert.assertTrue(opportunitiesPage.verifySortDepletionsCYTD());

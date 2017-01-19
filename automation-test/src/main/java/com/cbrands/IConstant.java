@@ -18,7 +18,7 @@ public interface IConstant {
 	String ACTOR1_LAST_NAME = "Baez";
 	
 	/** The actor2 user name. */
-	String ACTOR2_USER_NAME = "stash.rowley@cbrands.com";
+	String ACTOR2_USER_NAME = "stash.rowley@devcbrands.com";
 	
 	/** The actor2 password. */
 	String ACTOR2_PASSWORD = "Corona.2016";

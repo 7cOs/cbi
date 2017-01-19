@@ -56,14 +56,15 @@ public class TargetList extends LoadableComponent<TargetList> {
 	@FindBy(how = How.CSS, using = "input[placeholder='Enter List Name']")
 	private WebElement NameTextBox;
 
-	@FindBy(how = How.XPATH, using = "//*[@placeholder='Enter Description']")
+	//@FindBy(how = How.XPATH, using = "//*[@placeholder='Enter Description']")
+	@FindBy(how = How.CSS, using = "textarea[placeholder='Enter Description']")
 	private WebElement DescriptionTextBox;
 
 	@FindBy(how = How.XPATH, using = "//div/div[2]/button")
 	private WebElement SaveButton;
 
 	//@FindBy(how = How.XPATH, using = "//div[2]/md-dialog/div/div[2]/div[3]/div/div[2]/md-menu/button")
-	@FindBy(how=How.CSS, using = "button[aria-label='Collaborator Options']")
+	@FindBy(how=How.XPATH, using = "//*[@role='dialog']/div/div[@class='modal-form']/div[@class='modal-input']/div/div[2]/md-menu/button")
 	private WebElement collaborator;
 
 	@FindBy(how = How.XPATH, using = "//div[2]/md-dialog/div/div[3]/button[2]")
@@ -76,7 +77,8 @@ public class TargetList extends LoadableComponent<TargetList> {
 	@FindBy(how = How.XPATH, using = "//button[contains(.,'Manage')]")
 	private WebElement TargetListManageButton;
 
-	@FindBy(how = How.XPATH, using = "//div/div[2]/div[5]/inline-search/div/input[1]")
+	//@FindBy(how = How.XPATH, using = "//div/div[2]/div[5]/inline-search/div/input[1]")
+	@FindBy(how = How.CSS, using = "input[placeholder='Enter names or CBI Email addresses']")
 	private WebElement CollaboratorTextBox;
 
 	@FindBy(how = How.XPATH, using = "//inline-search/div/input[3]")
@@ -98,7 +100,7 @@ public class TargetList extends LoadableComponent<TargetList> {
 	private WebElement AccountsSubnameTextBox;
 
 	@FindBy(how = How.XPATH, using = "//button[contains(.,'Apply Filters')]")
-	private WebElement ApplyFIlterButton;
+	private WebElement applyFilterButton;
 
 	// @FindBy(how =
 	// How.XPATH,using="//*[@id='opportunities']/v-pane/div/div/v-pane-header/div/div/div[1]")
@@ -132,7 +134,9 @@ public class TargetList extends LoadableComponent<TargetList> {
 	@FindBy(how = How.LINK_TEXT, using = "Home")
 	private WebElement homePage;
 
-	@FindBy(how = How.XPATH, using = "//button[contains(.,'Copy to Target List')]")
+	//@FindBy(how = How.XPATH, using = "//md-menu/button[contains(.,'Copy to Target List')]")
+	//@FindBy(how = How.CSS, using = "button[class='btn-action'][analytics-event='Add to Target List']")
+	@FindBy(how = How.XPATH, using = "//md-content/div/div/list/div[2]/span/span/md-menu[1]/button")
 	private WebElement copyToTargetListButton;
 
 	@FindBy(how = How.XPATH, using = "//span[contains(.,'Off-Premise')]")
@@ -179,6 +183,27 @@ public class TargetList extends LoadableComponent<TargetList> {
 	
 	@FindBy(how = How.CSS, using = "a[href='/target-lists']")
 	private WebElement targetListLink;
+	
+	@FindBy(how = How.CSS, using = "input[placeholder='Name']")
+	private WebElement distributor;
+	
+	@FindBy(how = How.CSS, using = "md-checkbox[aria-label='My Accounts']")
+	private WebElement accountScope;
+	
+	@FindAll(@FindBy(how=How.CSS, using = "div[column='12']>h4[column='4']"))
+	private List <WebElement> targetListRows;
+	
+	@FindBy(how = How.CSS, using = "div.target-action-buttons>button[class='btn-action']")
+	private WebElement createNewListButton;
+	
+	@FindAll(@FindBy(how=How.CSS, using = "div[class='modal target-list-switch-modal']>div.modal-form>div.row>button[class='btn-action col-6']"))
+	private List <WebElement> createTargetListModalButtons;
+	
+	@FindBy(how = How.XPATH, using = "//div[contains(.,'Target List Archived!')]")
+	private WebElement archiveSuccessMessage;
+	
+	@FindBy(how = How.XPATH, using = "//md-menu-item[contains(.,'Make Owner')]")
+	private WebElement makeOwnerOption;
 
 	public TargetList typeTargetName(String name) {
 
@@ -220,8 +245,7 @@ public class TargetList extends LoadableComponent<TargetList> {
 
 	public TargetList clickCreateNewList() {
 		// waitForElementToClickable(createNewList, true).click();
-		waitForElementToClickable(createNewList, true);
-		createNewList.click();
+		waitForVisibleFluentWait(createNewList).click();;
 		return this;
 	}
 
@@ -248,7 +272,8 @@ public class TargetList extends LoadableComponent<TargetList> {
 		return this;
 	}
 
-	public TargetList clickNewTargetList(String name) {
+	@Deprecated
+	public TargetList clickNewTargetList2(String name) {
 		// waitForVisible(By.xpath("//h4[text()='"+ name + "']"));
 		WebElement MyTargetList = findElement(By.xpath("//h4[text()='" + name + "']"));
 		//waitForElementToClickable(MyTargetList, true);
@@ -262,11 +287,53 @@ public class TargetList extends LoadableComponent<TargetList> {
 		// return this;
 
 	}
+	
+	public TargetList clickNewTargetList(String name) {
+		List<WebElement> MyTargetLists = findElements(By.xpath("//*[@id='tab-content-2']/div/md-content/div[@class='target-list-detail-container']/ul/li/div/div[@class='stats']/div/h4[1]"));
+		for (WebElement webElement : MyTargetLists) {
+			if(webElement.getText().equalsIgnoreCase(name)){
+				JavascriptExecutor js = (JavascriptExecutor) driver;
+				js.executeScript("arguments[0].click();", webElement);
+				break;
+			}
+			
+		}
+		return this;
+	}
+	
+	public boolean checkTargetLists(String name) {
+		List<WebElement> MyTargetLists = findElements(By.xpath("//*[@id='tab-content-2']/div/md-content/div[@class='target-list-detail-container']/ul/li/div/div[@class='stats']/div/h4[1]"));
+		for (WebElement webElement : MyTargetLists) {
+			if(webElement.getText().equalsIgnoreCase(name)){
+				return true;
+			}
+		}
+		return false;
+	}
 
 	public TargetList clickTargetList(String name) {
-		waitForVisible(By.xpath("//h4[text()='" + name + "']"));
-		WebElement MyTargetList = findElement(By.xpath("//h4[text()='" + name + "']"));
-		MyTargetList.click();
+		List<WebElement> MyTargetLists = findElements(By.xpath("//*[@id='tab-content-2']/div/md-content/div[@class='target-list-detail-container']/ul/li/div/div[@class='stats']/div/h4[1]"));
+		for (WebElement webElement : MyTargetLists) {
+			if(webElement.getText().equalsIgnoreCase(name)){
+				JavascriptExecutor js = (JavascriptExecutor) driver;
+				js.executeScript("arguments[0].click();", webElement);
+				break;
+			}
+			
+		}
+		return this;
+	}
+	
+	public TargetList clickTargetListFromShared(String name) {
+		List<WebElement> MyTargetLists = findElements(By.xpath("//*[@id='tab-content-3']/div/md-content/div[@class='target-list-detail-container']/ul/li/div/div/h4[1]"));
+		for (WebElement webElement : MyTargetLists) {
+			if(webElement.getText().equalsIgnoreCase(name)){
+				JavascriptExecutor js = (JavascriptExecutor) driver;
+				js.executeScript("arguments[0].click();", webElement);
+				break;
+			}
+			
+		}
 		return this;
 	}
 
@@ -280,6 +347,7 @@ public class TargetList extends LoadableComponent<TargetList> {
 		// action.click(list).perform();
 		return this;
 	}
+	
 
 	public boolean checkTargetNameExists(String targetListName) {
 		WebElement element = findElement(By.xpath("//div[3]/md-tabs/md-tabs-content-wrapper/md-tab-content[1]/div/md-content"));
@@ -317,13 +385,15 @@ public class TargetList extends LoadableComponent<TargetList> {
 	}
 
 	public Opportunities navigateToOpportunities() {
-		waitForElementToClickable(opportunities, true).click();
-		opportunities.click();
+		//waitForElementToClickable(opportunities, true).click();
+		//opportunities.click();
+		driver.get(PropertiesCache.getInstance().getProperty("qa.host.address") + "/opportunities");
 		return PageFactory.initElements(driver, Opportunities.class);
 	}
 
 	public TargetList navigateToTargetList() {
-		targetList.click();
+		//targetList.click();
+		driver.get(PropertiesCache.getInstance().getProperty("qa.host.address") + "/target-lists");
 		return PageFactory.initElements(driver, TargetList.class);
 	}
 
@@ -355,10 +425,12 @@ public class TargetList extends LoadableComponent<TargetList> {
 	public TargetList removeCollaborator() {
 		// WebElement element
 		// =findElement(By.cssSelector("//md-menu-item[contains(.,'REMOVE')]"));
-		WebElement element = findElement(By.xpath("//div[3]/md-menu-content/md-menu-item[2]"));
-		waitForElementToClickable(element, true).click();
-		element = findElement(By.xpath("//div[2]/md-dialog/div/div[2]/div[6]/button"));
-		waitForElementToClickable(element, true).click();
+//		WebElement element = findElement(By.xpath("//div[3]/md-menu-content/md-menu-item[2]"));
+//		waitForElementToClickable(element, true).click();
+//		element = findElement(By.xpath("//div[2]/md-dialog/div/div[2]/div[6]/button"));
+//		waitForElementToClickable(element, true).click();
+		//findElement(By.cssSelector("md-menu-content.collaborator-options>md-menu-item[ng-click='tld.removeCollaboratorClick(collaborator.user.employeeId)']")).click();
+		findElement(By.xpath("//md-menu-item[contains(.,'Remove')]")).click();
 		return this;
 	}
 
@@ -405,7 +477,14 @@ public class TargetList extends LoadableComponent<TargetList> {
 	}
 
 	public TargetList clickSaveCollaboratorButton() {
-		SaveCollaboratorButton.click();
+		waitForVisibleFluentWait(SaveCollaboratorButton).click();
+		//Introducing a hard wait, as waiting for 2 seconds makes the behavior more consistent and reliable than waiting for element visibility.
+		try {
+			Thread.sleep(2000);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		//waitForVisibleFluentWait(TargetListManageButton);
 		return this;
 	}
 
@@ -414,11 +493,9 @@ public class TargetList extends LoadableComponent<TargetList> {
 		return this;
 	}
 
-	public TargetList clickSearchOpportunityButton() {
+	public Opportunities clickSearchOpportunityButton() {
 		SearchOpportunityButton.click();
-		// waitForCondition(ExpectedConditions.invisibilityOfElementLocated(By.cssSelector("md-dialog[class='_md
-		// md-transition-in']")),10);
-		return this;
+		return PageFactory.initElements(driver, Opportunities.class);
 	}
 
 	public TargetList clickOnPremiseRadioButton() {
@@ -445,8 +522,8 @@ public class TargetList extends LoadableComponent<TargetList> {
 		return this;
 	}
 
-	public TargetList clickApplyFIlterButton() {
-		ApplyFIlterButton.click();
+	public TargetList clickApplyFilterButton() {
+		applyFilterButton.click();
 		return this;
 	}
 
@@ -578,7 +655,7 @@ public class TargetList extends LoadableComponent<TargetList> {
 		return targetListExists;
 	}
 
-	public TargetList clickSendTo(String sendTo1, String sendTo2) throws InterruptedException {
+	public TargetList clickSendTo(String sendTo1) {
 		// List<WebElement> elements =
 		// findElements(By.xpath("//*[@class='md-menu ng-scope _md']/button"));
 		List<WebElement> elements = findElements(By.xpath("//button[@class='md-icon-button md-button']"));
@@ -592,7 +669,7 @@ public class TargetList extends LoadableComponent<TargetList> {
 
 		element = findElement(By.cssSelector("input[placeholder='Name or CBI email address']"));
 		waitForElementVisible(element, true);
-
+		element.clear();
 		element.sendKeys(sendTo1);
 
 		element = findElement(By.xpath("//div[3]/md-dialog/div/div[2]/div[1]/inline-search/div/input[3]"));
@@ -604,7 +681,7 @@ public class TargetList extends LoadableComponent<TargetList> {
 		WebElement result = findElement(By.cssSelector("ul.results>li.ng-binding.ng-scope>span.user-data.ng-binding"));
 		waitForElementToClickable(result, true).click();
 
-		element = findElement(By.cssSelector("input[placeholder='Name or CBI email address']"));
+		/*element = findElement(By.cssSelector("input[placeholder='Name or CBI email address']"));
 		waitForElementVisible(element, true);
 		element.sendKeys(sendTo2);
 
@@ -613,7 +690,7 @@ public class TargetList extends LoadableComponent<TargetList> {
 
 		element = findElement(By.xpath("//div[3]/md-dialog/div/div[2]/div[1]/inline-search/div/div/ul/li"));
 		waitForElementToClickable(element, true).click();
-
+*/
 		element = findElement(By.xpath("//button[contains(.,'Send')]"));
 		waitForElementToClickable(element, true).click();
 		return this;
@@ -626,14 +703,10 @@ public class TargetList extends LoadableComponent<TargetList> {
 	}
 
 	public TargetList copyToTargetList(String name) {
-		copyToTargetListButton.click();
-		if (copyToTargetListButton.getAttribute("aria-expanded") == "false") {
-			copyToTargetListButton.click(); // An additional click as fail-safe,
-											// to re-try the element click.
-		}
+		waitForVisibleFluentWait(copyToTargetListButton).click();
 		waitForVisible(By.xpath("//p[text()='" + name + "']"));
 		findElement(By.xpath("//p[text()='" + name + "']")).click();
-		waitForVisible(By.xpath("//div[contains(.,'Opportunity added to target list!')]"));
+		waitForVisible(By.xpath("//div[contains(.,'added to target list!')]"));
 		return this;
 	}
 
@@ -781,7 +854,8 @@ public class TargetList extends LoadableComponent<TargetList> {
 		return targetLists;
 	}
 
-	public String getDepletionSince_TargetListPage(String listname) throws InterruptedException {
+
+	public String getDepletionSince_TargetListPage(String listname){
 		WebElement element = findElement(By.cssSelector("div[class='target-list-detail-container']"));
 		waitForElementVisible(element, true);
 
@@ -793,7 +867,7 @@ public class TargetList extends LoadableComponent<TargetList> {
 
 				element = driver.findElement(By.xpath("//h4[text()='" + listname + "']"));
 				((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", element);
-				Thread.sleep(500);
+				//Thread.sleep(500);
 
 				return array[i + 5].trim();
 			}
@@ -818,15 +892,14 @@ public class TargetList extends LoadableComponent<TargetList> {
 	}
 
 	public TargetList makeOwner() {
-		WebElement element = findElement(By.xpath("//div[3]/md-menu-content/md-menu-item[1]"));
-		element.click();
-
+		//WebElement element = findElement(By.xpath("//div[3]/md-menu-content/md-menu-item[1]"));
+		//WebElement element = findElement(By.xpath("//md-menu-item[contains(.,'Make Owner')]"));
+		//element.click();
+		waitForVisibleFluentWait(makeOwnerOption).click();
 		return this;
 	}
 
 	public String getmakeOwnerConfirmationToast() {
-		// WebElement element =
-		// findElement(By.xpath("//div[@class='overlay-wrapper']"));
 		WebElement element = findElement(By.xpath("//div[2]/md-dialog/div/div[2]/div[3]/div/div[2]/div[2]/div[1]/p"));
 		return element.getText();
 	}
@@ -903,7 +976,7 @@ public class TargetList extends LoadableComponent<TargetList> {
 	public String checkDeleteListExists() {
 		WebElement element = findElement(By.xpath("//div[@class='modal-footer clearfix ng-scope']"));
 
-		if (element.getText().contains("Delete List")) {
+		if (element.getText().contains("Delete List") && element.isEnabled()) {
 			return "Delete list exists";
 		}
 
@@ -919,7 +992,8 @@ public class TargetList extends LoadableComponent<TargetList> {
 	}
 
 	public TargetList clickArchiveButton() {
-		ArchiveButton.click();
+		waitForVisibleFluentWait(ArchiveButton).click();
+		waitForVisible(By.xpath("//div[contains(.,'Target List Archived!')]"));
 		return this;
 	}
 
@@ -963,7 +1037,7 @@ public class TargetList extends LoadableComponent<TargetList> {
 	}
 
 	public TargetList clickYesDelete() {
-		yesDelete.click();
+		waitForVisibleFluentWait(yesDelete).click();
 		return this;
 	}
 
@@ -1052,7 +1126,7 @@ public class TargetList extends LoadableComponent<TargetList> {
 	}
 
 	public WebElement getApplyFIlterButton() {
-		return ApplyFIlterButton;
+		return applyFilterButton;
 	}
 
 	public WebElement getFirst_store_opportunity() {
@@ -1154,4 +1228,57 @@ public class TargetList extends LoadableComponent<TargetList> {
 	public WebElement getSelectAllTargetListsButton() {
 		return selectAllTargetListsButton;
 	}
+	
+	public TargetList typeDistributor(String name) {
+		distributor.sendKeys(name);
+		WebElement element = distributor.findElement(By.xpath("//input[contains(@class,'submit-btn visible')]"));
+		waitForElementToClickable(element, true).click();
+		WebElement element1 = findElement(By.xpath("//div[3]/inline-search[1]/div[1]/div[1]/ul[1]/li[1]/span[1]"));
+		waitForElementToClickable(element1, true).click();
+		return this;		
+	}
+	
+	public TargetList selectAccountScope() {
+		accountScope.click();
+		return this;
+	}
+	
+	public TargetList clickFirstTargetList() {
+		waitForVisibleFluentWait(targetListRows.get(0)).click();
+		waitForVisibleFluentWait(TargetListManageButton);
+		return this;
+	}
+	
+	public TargetList clickNewTargetListUsingXpath(String name) {
+		WebElement MyTargetList = findElement(By.xpath("//h4[contains(.'" + name + "']"));
+		waitForVisibleFluentWait(MyTargetList);
+		System.out.println(MyTargetList.getText());
+		JavascriptExecutor js = (JavascriptExecutor) driver;
+		js.executeScript("arguments[0].click();", MyTargetList);
+		return this;
+
+	}
+	
+	public TargetList clickCreateNewListButton() {
+		waitForVisibleFluentWait(createNewListButton).click();
+		return this;
+	}
+	
+	public TargetList clickCreateNewListButtonInModal() {
+		waitForVisibleFluentWait(createTargetListModalButtons.get(0)).click();
+		return this;
+	}
+	
+	public String sharedTargetList(String listName){
+		WebElement list = findElement(By.xpath("//h4[contains(.,'"+listName+"')]"));
+		return list.getText();
+	}
+	
+	public TargetList EnterCollaboratorName(String name) {
+		WebElement textbox = findElement(By.cssSelector("input[placeholder='Name or CBI email address']"));
+		textbox.clear();
+		textbox.sendKeys(name);
+		return this;
+	}
+	
 }

@@ -193,6 +193,9 @@ public class Opportunities extends LoadableComponent<Opportunities> {
 	@FindBy(how=How.XPATH, using = "//div[contains(.,'Recreation')]")
 	private WebElement filterPillRecreation;
 	
+	@FindBy(how=How.XPATH, using = "//div[contains(.,'Wholesale Club')]")
+	private WebElement filterPillWholesaleClub;
+	
 	@FindBy(how=How.XPATH, using = "//div[contains(.,'Convenience')]")
 	private WebElement filterPillConvenience;
 	
@@ -268,6 +271,9 @@ public class Opportunities extends LoadableComponent<Opportunities> {
 	
 	@FindBy(how=How.CSS, using = "md-checkbox[aria-label='Trade Channel Recreation']")
 	private WebElement tradeChannelRecreation;
+	
+	@FindBy(how=How.CSS, using = "md-checkbox[aria-label='Trade Channel Wholesale Club']")
+	private WebElement tradeChannelWholesaleClub;
 	
 	@FindBy(how=How.CSS, using = "md-checkbox[aria-label='Trade Channel Convenience']")
 	private WebElement tradeChannelConvenience;
@@ -365,6 +371,18 @@ public class Opportunities extends LoadableComponent<Opportunities> {
 	@FindAll(@FindBy(how=How.CSS, using = "label[class='sort']"))
 	private List <WebElement> sortHeaders;
 	
+	@FindBy(how = How.XPATH, using = "//*[@class='target-list-menu']/md-menu-item[@ng-click='list.createNewList($event)']")
+	private WebElement CreatNewListButton;
+	
+	@FindBy(how = How.CSS, using = "input[placeholder='Enter List Name']")
+	private WebElement NameTextBox;
+	
+	@FindBy(how = How.XPATH, using = "//div/div[2]/button")
+	private WebElement SaveButton;
+	
+	@FindAll(@FindBy(how=How.CSS, using = "button[aria-label='More']"))
+	private List <WebElement> actionButtons;
+	
 	public Opportunities(WebDriver driver) {
 		this.driver = driver;
 	}
@@ -447,12 +465,12 @@ public class Opportunities extends LoadableComponent<Opportunities> {
 	}
 	
 	public Opportunities selectOpenOpportunityStatus() {
-		opportunityStatusOpen.click();
+		waitForVisibleFluentWait(opportunityStatusOpen).click();
 		return this;
 	}
 	
 	public Opportunities selectTargetedOpportunityStatus() {
-		opportunityStatusTargeted.click();
+		waitForVisibleFluentWait(opportunityStatusTargeted).click();
 		return this;
 	}
 	
@@ -585,8 +603,7 @@ public class Opportunities extends LoadableComponent<Opportunities> {
 	}
 	
 	public Opportunities clickDeleteReportBtn() {
-		
-		WebElement button = findElement(By.xpath("//div/div[2]/p"));
+		WebElement button = findElement(By.xpath("//p[contains(.,'Delete Report')]"));
 		JavascriptExecutor js = (JavascriptExecutor) driver;
 		js.executeScript("arguments[0].click();", button);
 		return this;
@@ -682,13 +699,12 @@ public class Opportunities extends LoadableComponent<Opportunities> {
 	}
 	
 	public HomePage navigateToHome() {
-		home.click();
+		driver.get(PropertiesCache.getInstance().getProperty("qa.host.address"));
 		return PageFactory.initElements(driver, HomePage.class);
 	}
 	
 	public TargetList navigateToTargetList() {
-		waitForElementToClickable(targetList, true).click();
-		targetList.click();
+		driver.get(PropertiesCache.getInstance().getProperty("qa.host.address") + "/target-lists");
 		return PageFactory.initElements(driver, TargetList.class);
 	}
 	
@@ -759,7 +775,7 @@ public class Opportunities extends LoadableComponent<Opportunities> {
 	
 	public Opportunities searchRetailerChainByName(String storeNameorID){
 		retailerSearchBoxChain.sendKeys(storeNameorID);
-		searchButton.click();
+		waitForVisibleFluentWait(searchButton).click();
 		List<WebElement> storeSearchResultFirst = findElements(By.cssSelector("ul.results>li.ng-binding.ng-scope"));
 		for (WebElement webElement : storeSearchResultFirst) {
 			if(webElement.getText().split("\n")[0].equalsIgnoreCase((storeNameorID.trim()))){
@@ -822,7 +838,7 @@ public class Opportunities extends LoadableComponent<Opportunities> {
 	}
 	
 	public Opportunities selectTradeChannelGrocery(){
-		tradeChannelGrocery.sendKeys(Keys.SPACE); //Using SendKeys as the element click is not behaving consistently
+		waitForVisibleFluentWait(tradeChannelGrocery).sendKeys(Keys.SPACE); //Using SendKeys as the element click is not behaving consistently
 		return this;
 	}
 	
@@ -838,6 +854,11 @@ public class Opportunities extends LoadableComponent<Opportunities> {
 	
 	public Opportunities selectTradeChannelRecreation(){
 		tradeChannelRecreation.click();
+		return this;
+	}
+	
+	public Opportunities selectTradeChannelWholeSaleClub(){
+		tradeChannelWholesaleClub.click();
 		return this;
 	}
 	
@@ -1076,7 +1097,7 @@ public class Opportunities extends LoadableComponent<Opportunities> {
 	}
 	
 	public List<NotificationContent> getFirtNotifications() {
-		List<WebElement> elements = findElements(By.xpath("//*[@id='menu_container_0']/md-menu-content/div/div/div[@class='notification-card clearfix SHARE_OPPORTUNITY']"));
+		List<WebElement> elements = findElements(By.xpath("//*[@id='menu_container_0']/md-menu-content/div/div[@class='notification-card clearfix SHARE_OPPORTUNITY']"));
 		List<NotificationContent> notificationContents = new ArrayList<NotificationContent>();
 		System.out.println(elements.get(0).getText());
 			String storeName = elements.get(0).getText().split("\n")[1].toUpperCase();
@@ -1477,6 +1498,10 @@ public class Opportunities extends LoadableComponent<Opportunities> {
 	public WebElement getFilterPillRecreation() {
 		return filterPillRecreation;
 	}
+	
+	public WebElement getFilterPillWholesaleClub() {
+		return filterPillWholesaleClub;
+	}
 
 	public WebElement getFilterPillConvenience() {
 		return filterPillConvenience;
@@ -1665,4 +1690,89 @@ public class Opportunities extends LoadableComponent<Opportunities> {
 	public WebElement getStoreNumber() {
 		return storeNumber;
 	}
+	
+	public Opportunities clickfirst_store_opportunity() {
+		// Introducing a hard wait, as sometimes clicking the opportunity
+		// immediately after page load does not return data.
+		try {
+			Thread.sleep(2000);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		WebElement firstResult = findElements(By.cssSelector("v-pane-header[class='checkbox-sibling ng-isolate-scope']")).get(0);
+		Actions actions = new Actions(driver);
+		firstResult.click();
+		if (firstResult.getAttribute("aria-expanded") == "false") {
+			actions.moveToElement(firstResult).click(firstResult).perform();
+		}
+		return this;
+	}
+	
+	public Opportunities clickfirstOpportunity() {
+		waitForVisible(By.cssSelector("md-checkbox[aria-label='Select Item'][ng-checked='product.selected']"));
+		WebElement firstStoreOpportunity = findElements(By.cssSelector("md-checkbox[aria-label='Select Item'][ng-checked='product.selected']")).get(0);
+		firstStoreOpportunity.click();
+		if (firstStoreOpportunity.getAttribute("aria-checked") == "false") {
+			firstStoreOpportunity.sendKeys(Keys.SPACE);
+		}
+		return this;
+	}
+	
+	public Opportunities clickSecondOpportunity() {
+		waitForVisible(By.cssSelector("md-checkbox[aria-label='Select Item'][ng-checked='product.selected']"));
+		WebElement secondStoreOpportunity = findElements(By.cssSelector("md-checkbox[aria-label='Select Item'][ng-checked='product.selected']")).get(1);
+		secondStoreOpportunity.click();
+		if (secondStoreOpportunity.getAttribute("aria-checked") == "false") {
+			secondStoreOpportunity.sendKeys(Keys.SPACE);
+		}
+		return this;
+	}
+	
+	public Opportunities clickCreatNewListButton() {
+		CreatNewListButton.click();
+		return this;
+	}
+	
+	public Opportunities EnterNameTextBox(String name) {
+		waitForVisibleFluentWait(NameTextBox);
+		NameTextBox.clear();
+		NameTextBox.sendKeys(name);
+		return this;
+	}
+	
+	public Opportunities clickSaveButton() {
+		SaveButton.click();
+		waitForVisibleFluentWait(targetList);
+		return this;
+	}
+	
+	public Opportunities sortOpportunities() {
+		JavascriptExecutor je = (JavascriptExecutor)driver;
+		je.executeScript("arguments[0].scrollIntoView(false);",opportunitiesHeaderSort);
+		waitForVisibleFluentWait(opportunitiesHeaderSort).click();
+		try {
+			Thread.sleep(4000);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		return this;
+	}
+	
+	public Opportunities clickActionButton() {
+		waitForVisibleFluentWait(actionButtons.get(0)).click();
+		return this;
+	}
+	
+	public Opportunities waitForTargetListConfirmation() {
+		waitForVisible(By.xpath("//md-content/navbar/div[4]"));
+		return this;
+	}
+	
+	public Opportunities searchRetailerChain(String storeNameorID){
+		retailerSearchBoxChain.sendKeys(storeNameorID);
+		waitForVisibleFluentWait(searchButton).click();
+		findElements(By.cssSelector("ul.results>li.ng-binding.ng-scope")).get(0).click();;
+		return this;
+	}
+	
 }

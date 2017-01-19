@@ -13,6 +13,7 @@ public class UserLoginTest extends BaseSeleniumTestCase{
 	public void logIn(String user, String password) {
 		login = new Login(driver);
 		homePage = login.loginWithValidCredentials(user, password);
+		homePage.get();
 	}
 	
 	@AfterMethod

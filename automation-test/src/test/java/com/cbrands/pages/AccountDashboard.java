@@ -241,6 +241,9 @@ public class AccountDashboard {
     
     @FindBy(xpath="//label[contains(.,'Select a premise type followed by a retailer and/or distributor to view opportunities')]")
     private WebElement labelBelowOpportunitiesLink;
+    
+    @FindBy(css="span[class='back-chevron ng-scope']")
+    private WebElement backChevronArrow;
 
     public AccountDashboard() {
     }
@@ -807,6 +810,11 @@ public class AccountDashboard {
     	WebElement brandName = findElement(By.xpath("//td[contains(.,'"+brand+"')]"));
     	waitForVisibleFluentWait(brandName).click();
     	waitForVisibleFluentWait(distributionEffective);
+    	return this;
+    }
+    
+    public AccountDashboard clickBackChevronArrow(){
+    	waitForVisibleFluentWait(backChevronArrow).click();
     	return this;
     }
     

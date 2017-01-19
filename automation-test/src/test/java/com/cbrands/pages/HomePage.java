@@ -3,13 +3,14 @@ package com.cbrands.pages;
 import static com.cbrands.helper.SeleniumUtils.findElement;
 import static com.cbrands.helper.SeleniumUtils.findElements;
 import static com.cbrands.helper.SeleniumUtils.refresh;
-import static com.cbrands.helper.SeleniumUtils.waitForElementToClickable;
 import static com.cbrands.helper.SeleniumUtils.waitForVisible;
 import static com.cbrands.helper.SeleniumUtils.waitForVisibleFluentWait;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.Keys;
@@ -25,6 +26,9 @@ import org.testng.Assert;
 import com.cbrands.helper.PropertiesCache;
 
 public class HomePage extends LoadableComponent<HomePage>{
+	
+	private Log log = LogFactory.getLog(HomePage.class);
+	
 	WebDriver driver;
 
 	@FindBy(how = How.CSS, using = "h1.ng-binding")
@@ -70,6 +74,9 @@ public class HomePage extends LoadableComponent<HomePage>{
 	
 	@FindBy(how = How.XPATH, using = "//a[contains(.,'Account Dashboard')]")
 	private WebElement accountDashboardLink;
+	
+	@FindBy(how = How.XPATH, using = "//a[contains(.,'My Scorecards')]")
+	private WebElement myScoreCards;
 	
 	public HomePage clickOffPremise() {
 		offPremise.click();
@@ -184,9 +191,7 @@ public class HomePage extends LoadableComponent<HomePage>{
 	}
 
 	public TargetList navigateTargetList() {
-		waitForVisible(By.xpath("//span[contains(.,'Target Lists')]"));
-		waitForElementToClickable(TargetListLink, true).click();
-		TargetListLink.click();
+		driver.get(PropertiesCache.getInstance().getProperty("qa.host.address") + "/target-lists");
 		return PageFactory.initElements(driver, TargetList.class);
 	}
 	
@@ -251,14 +256,14 @@ public class HomePage extends LoadableComponent<HomePage>{
 
 	@Override
 	protected void isLoaded() throws Error {
-		Assert.assertEquals(driver.getCurrentUrl(), PropertiesCache.getInstance().getProperty("qa.host.address"));
-		
+		Assert.assertTrue(userInfo.isDisplayed());
+		log.info("User: " + userInfo.getText() + " login submited");
 	}
 
 	public HomePage clickSharedWithMeLink() {
 		
-		waitForVisible(By.xpath("//md-tab-item/span[text()='Shared with Me']"));
-		sharedWithMeLink.click();
+		//waitForVisible(By.xpath("//md-tab-item/span[text()='Shared with Me']"));
+		waitForVisibleFluentWait(sharedWithMeLink).click();
 		return this;
 	}
 	
@@ -279,7 +284,31 @@ public class HomePage extends LoadableComponent<HomePage>{
     public AccountDashboard navigateToAccountDashboard(){
     	waitForVisibleFluentWait(myPerformanceLink).click();	
     	waitForVisibleFluentWait(accountDashboardLink).click();
-	return PageFactory.initElements(driver, AccountDashboard.class);
+	    return PageFactory.initElements(driver, AccountDashboard.class);
+    }
+    
+    public MyScorecards navigateToMyScoreCards(){
+    	waitForVisibleFluentWait(myPerformanceLink).click();	
+    	waitForVisibleFluentWait(myScoreCards).click();
+    	waitForVisible(By.cssSelector("a[href='/scorecards']"));
+    	return PageFactory.initElements(driver, MyScorecards.class);
+    }
+    
+    public TargetList  navigateToTargetListUsingURL(){
+    	String url = driver.getCurrentUrl();
+    	driver.get(url+"target-lists");
+    	return PageFactory.initElements(driver, TargetList.class);
+    }
+    
+	public String sharedTargetList(String listName) {
+		WebElement targetList = findElement(By.xpath("//h3[contains(.,'"+listName+"')]"));
+		return targetList.getText();
+	}
+	
+    public Opportunities  navigateToOpportunitiesPageUsingURL(){
+    	String url = driver.getCurrentUrl();
+    	driver.get(url+"opportunities");
+    	return PageFactory.initElements(driver, Opportunities.class);
     }
     
     
