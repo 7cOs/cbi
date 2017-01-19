@@ -4,6 +4,7 @@ describe('Unit: filter controller (opportunities)', function() {
   beforeEach(function() {
     angular.mock.module('ui.router');
     angular.mock.module('ngMaterial');
+    angular.mock.module('angulartics');
     angular.mock.module('cf.common.services');
     angular.mock.module('cf.common.components.filter');
 
@@ -517,6 +518,7 @@ describe('Unit: filter controller (state = target-list-detail)', function() {
   beforeEach(function() {
     angular.mock.module('ui.router');
     angular.mock.module('ngMaterial');
+    angular.mock.module('angulartics');
     angular.mock.module('cf.common.services');
     angular.mock.module('cf.common.components.filter');
 
