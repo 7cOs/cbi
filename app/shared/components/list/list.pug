@@ -36,7 +36,7 @@
       button.btn-action(ng-disabled="list.selected < 1" ng-click="list.removeOpportunity()" ng-if="list.pageName(['opportunities']) && !list.targetListService.model.currentList.archived") Remove
 
 button.icon.select-all(ng-click="list.toggleSelectAllStores()") {{!list.isSelectAllActivated ? 'Select All' : 'Un-Select All'}}
-button.icon.narrow-icon.expand-all(ng-click="list.accordion.expandAll()" ng-disabled="list.allOpportunitiesExpanded()") Expand All
+button.icon.narrow-icon.expand-all(ng-click="list.accordion.expandAll()" ng-disabled="list.allOpportunitiesExpanded()" analytics-on="click" analytics-event="Expand Opportunity Store" analytics-category="Opportunities" analytics-label="All") Expand All
 button.icon.narrow-icon.collapse-all(ng-click="list.accordion.collapseAll()" ng-disabled="list.noOpportunitiesExpanded()") Collapse All
 p.list-disabled-message {{::list.disabledMessage}}
 
@@ -77,7 +77,7 @@ v-accordion.styled-list(multiple="" id="opportunities" control="list.accordion" 
       .header-wrapper(ng-click="list.toggleOpportunitiesInStores(opportunity, list.selected)")
         div.checkbox-wrapper(ng-click="list.toggleOpportunitiesInStores(opportunity, list.selected)")
           md-checkbox(aria-label="Select Item" ng-click="list.toggleOpportunitiesInStores(opportunity, list.selected)" ng-checked="opportunity.selectedOpportunities === opportunity.groupedOpportunities.length")
-        v-pane-header.checkbox-sibling(column='12' ng-click="$event.stopPropagation()")
+        v-pane-header.checkbox-sibling(column='12' ng-click="$event.stopPropagation()" analytics-if="opportunity.isExpanded" analytics-on="click" analytics-event="Expand Opportunity Store" analytics-category="Opportunities" analytics-label="{{opportunity.store.id}}")
           div(ng-class="{long: opportunity.store.name.length > 21}").cell-parent
             div.pad-cell.semi-bold(column='3') {{::opportunity.store.name | titlecase}} <span class="supporting-text" ng-if="opportunity.store.storeNumber">\#{{::opportunity.store.storeNumber | uppercase}}</span>
             div.address(column='4') {{::opportunity.store.streetAddress | titlecase}} {{::opportunity.store.city | titlecase}}, {{::opportunity.store.state}} {{::opportunity.store.zip | zipcode}}
