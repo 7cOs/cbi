@@ -201,8 +201,9 @@ module.exports = /*  @ngInject */
     // **************
 
     function init() {
+      setDefaultFilterOptions();
       var performanceDepletionPromise = userService.getPerformanceDepletion();
-      var performanceDistributionPromise = userService.getPerformanceDistribution({'type': 'noencode', 'premiseType': 'off'});
+      var performanceDistributionPromise = userService.getPerformanceDistribution({'type': 'noencode', 'premiseType': vm.distributionRadioOptions.selected.onOffPremise});
 
       // serial http request -- we need all to complete before running init functions
       $q.all([performanceDepletionPromise, performanceDistributionPromise]).then(function(values) {
@@ -218,11 +219,9 @@ module.exports = /*  @ngInject */
 
         // distribution
         vm.distributionRadioOptions.selected.placementType = 'Simple';
-        vm.distributionRadioOptions.selected.onOffPremise = 'off';
         updatedSelectionValuesInFilter(vm.depletionRadio, vm.depletionSelect, vm.distributionSelectOptions.selected);
 
         updateTotalRowDistributions();
-        setDefaultFilterOptions();
 
         console.log('[scorecardsController.init - userService.model.distribution]', userService.model.distribution);
       });
@@ -272,7 +271,8 @@ module.exports = /*  @ngInject */
 
     function setDefaultFilterOptions() {
       if (userService.model.currentUser.personID !== -1) {
-       switch (userService.model.currentUser.srcTypeCd[0]) {
+       switch ('OFR') {
+       // switch (userService.model.currentUser.srcTypeCd[0]) {
           case 'OFF_HIER':
           case 'OFF_SPEC':
             offPremise();
