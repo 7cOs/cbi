@@ -37,6 +37,10 @@ module.exports = function (config) {
     jwt: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJsYXN0TmFtZSI6IktFTExFUiIsImlzcyI6Imh0dHBzOi8vb3Jpb24uY2JyYW5kcy5jb20iLCJlbXBsb3llZUlEIjoiMTAwNzY2NSIsImZpcnN0TmFtZSI6IlNIQVdOIiwiZ3JvdXBpbmdDb2RlIjoiMjM0IiwiY29ycG9yYXRlVXNlciI6dHJ1ZSwicGVyc29uSUQiOjU3NTIsImV4cCI6MTQ3OTY5Njk1NDc2NywiaWF0IjoxNDc0NTEyOTU0NzY3LCJ1c2VyR3JvdXAiOlsiY2JpIGVtcGxveWVlcyIsImNiaSB1c2VycyIsInVnLWNiaWdkYy1iaXotcm9sZS1ta3RkZXZtZ3IiLCJjYmktYWRlbmFibGVkYWNjb3VudHMiXSwiZW1haWwiOiJTSEFXTi5LRUxMRVJAQ0JSQU5EUy5DT00iLCJzcmNUeXBlQ2QiOlsiT0ZGX0hJRVIiXX0.9ZbRIQ-CxP2YzFbfQ5u-uQfZcX1BDZ5rAPTJiHATJik'
   };
 
+  config.saml = {
+    logoutBase: 'https://ssodev.cbrands.com/oam/server/logout'  // used during logout process
+  };
+
   config.analytics = {
     id: ''
   };

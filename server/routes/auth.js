@@ -4,7 +4,7 @@ module.exports = function(app) {
   const passport = require('passport');
   const authType = app.get('config').auth.strategy;
   const crypto = require('crypto-js');
-  const logoutUrl = 'https://ssodev.cbrands.com/oam/server/logout?end_url=' + app.get('config').address;
+  const logoutUrl = app.get('config').saml.logoutBase + '?end_url=' + app.get('config').address;
   const secure = app.get('config').session.cookie.secure;
 
   function objectToBase64(obj) {
