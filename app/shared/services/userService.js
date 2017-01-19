@@ -311,7 +311,6 @@ module.exports = /*  @ngInject */
         .catch(getPerformanceSummaryFail);
 
       function getPerformanceSummarySuccess(response) {
-        console.log('[userService.getPerformanceSummary] response: ', response);
         performancePromise.resolve(response.data);
       }
 
