@@ -7,11 +7,12 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import org.testng.annotations.Test;
 
 import com.cbrands.BaseSeleniumTestCase;
+import com.cbrands.helper.RetryAnalyzer;
 import com.cbrands.pages.Login;
 
 public class US13475_AT_Scorecard_Depletions extends BaseSeleniumTestCase{
 
-	@Test
+	@Test(retryAnalyzer = RetryAnalyzer.class)
 	public void US13475_AT_Scorecard_Depletions() {
 		login = new Login(driver);
 		if(!login.isUserLoggedIn()) { 

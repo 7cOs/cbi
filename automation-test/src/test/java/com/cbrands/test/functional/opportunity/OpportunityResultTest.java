@@ -13,6 +13,7 @@ import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 import com.cbrands.BaseSeleniumTestCase;
+import com.cbrands.helper.RetryAnalyzer;
 import com.cbrands.pages.Login;
 import com.cbrands.pages.NotificationContent;
 
@@ -20,7 +21,7 @@ import com.cbrands.pages.NotificationContent;
 public class OpportunityResultTest extends BaseSeleniumTestCase{
 	static NotificationContent content;
 	
-	@Test(dataProvider = "sendOpportunityData", description = "Run - 13:  I can Share an Opportunity to another Employee.", priority=1)
+	@Test(retryAnalyzer = RetryAnalyzer.class, dataProvider = "sendOpportunityData", description = "Run - 13:  I can Share an Opportunity to another Employee.", priority=1)
 	public void US12719_AT_Opportunities_Run13_ShareOpportunities(String sendTo, String sent) throws InterruptedException {
 		login = new Login(driver);
 		if(!login.isUserLoggedIn()) { 
@@ -43,11 +44,11 @@ public class OpportunityResultTest extends BaseSeleniumTestCase{
 		content.setSentByPersonName(ACTOR1_FIRST_NAME+" "+ ACTOR1_LAST_NAME );
 		content.setProductSku(content.getProductSku() + " " + "Non-Buy");
 		content.setSentByDate("0 MINUTE AGO");
-		opportunitiesPage.sendOpportunityTo(ACTOR2_USER_NAME);
+		opportunitiesPage.sendOpportunityTo("Stash.Rowley");
 		assertThat(opportunitiesPage.getOpportunitySent(),log(containsString(sent)));
 	}
 	
-	@Test(dependsOnMethods = "US12719_AT_Opportunities_Run13_ShareOpportunities", description = "Run - 18:  When I send an Opportunity to an employee, they receive a notification.", priority=2)
+	@Test(retryAnalyzer = RetryAnalyzer.class, dependsOnMethods = "US12719_AT_Opportunities_Run13_ShareOpportunities", description = "Run - 18:  When I send an Opportunity to an employee, they receive a notification.", priority=2)
 	public void US12710_AT_Opportunities_Run18_SharedOpportunityNotification(){
 		login = new Login(driver);
 		if(!login.isUserLoggedIn()) { 

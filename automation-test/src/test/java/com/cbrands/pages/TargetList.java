@@ -703,13 +703,7 @@ public class TargetList extends LoadableComponent<TargetList> {
 	}
 
 	public TargetList copyToTargetList(String name) {
-		//JavascriptExecutor je = (JavascriptExecutor) driver;
-		//je.executeScript("arguments[0].scrollIntoView(false);",copyToTargetListButton);
 		waitForVisibleFluentWait(copyToTargetListButton).click();
-/*		if (copyToTargetListButton.getAttribute("aria-expanded") == "false") {
-			copyToTargetListButton.click(); // An additional click as fail-safe,
-											// to re-try the element click.
-		}*/
 		waitForVisible(By.xpath("//p[text()='" + name + "']"));
 		findElement(By.xpath("//p[text()='" + name + "']")).click();
 		waitForVisible(By.xpath("//div[contains(.,'added to target list!')]"));

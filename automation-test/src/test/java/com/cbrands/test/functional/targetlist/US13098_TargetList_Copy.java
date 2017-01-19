@@ -11,7 +11,7 @@ import org.testng.annotations.DataProvider;
 
 public class US13098_TargetList_Copy extends BaseSeleniumTestCase{
 	
-  @Test(retryAnalyzer = RetryAnalyzer.class,dataProvider="targetListCopyData", priority=1)
+  @Test(retryAnalyzer = RetryAnalyzer.class, dataProvider="targetListCopyData", priority=1)
   public void us13098_TargetList_Copy(String listName, String targetListURL) {
 	  login = new Login(driver);
 	  homePage = login.loginWithValidCredentials(ACTOR1_USER_NAME, ACTOR1_PASSWORD);
@@ -23,7 +23,7 @@ public class US13098_TargetList_Copy extends BaseSeleniumTestCase{
 					.clickSaveButton()
 					.openTargetListUsingURL(targetListURL)
 					.clickfirst_store_opportunity()
-					.selectFirstOpportunity()
+					.selectFirstRecord()
 					.copyToTargetList(listName)
 	  				.navigateToTargetList()
 	  				.clickTargetList(listName)

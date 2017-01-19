@@ -3,6 +3,7 @@ package com.cbrands.test.functional.myperformance;
 import org.testng.annotations.Test;
 
 import com.cbrands.BaseSeleniumTestCase;
+import com.cbrands.helper.RetryAnalyzer;
 import com.cbrands.pages.Login;
 
 import org.testng.Assert;
@@ -10,7 +11,7 @@ import org.testng.annotations.AfterMethod;
 
 public class US13484_AccountDashboard_ApplyFilters_SeeAllOpportunities extends BaseSeleniumTestCase{
   
-	@Test
+	@Test(retryAnalyzer = RetryAnalyzer.class)
   	public void us13484_AT_AccountDashboard_ApplyFilters_SeeAllOpportunities() {
 	  	login = new Login(driver);
 		if(!login.isUserLoggedIn()) { 

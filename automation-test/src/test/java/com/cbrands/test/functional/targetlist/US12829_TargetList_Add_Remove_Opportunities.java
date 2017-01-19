@@ -10,7 +10,7 @@ import org.testng.annotations.AfterMethod;
 import org.testng.annotations.DataProvider;
 
 public class US12829_TargetList_Add_Remove_Opportunities extends BaseSeleniumTestCase{
-  @Test(retryAnalyzer = RetryAnalyzer.class,dataProvider="addRemoveOpportunitiesData", priority=1)
+  @Test(retryAnalyzer = RetryAnalyzer.class, dataProvider="addRemoveOpportunitiesData", priority=1)
   public void us12829_AT_TargetList_Add_Remove_Opportunities(String chain, String targetListName, String targetListURL) {
 	  login = new Login(driver);
 	  homePage = login.loginWithValidCredentials(ACTOR1_USER_NAME, ACTOR1_PASSWORD);

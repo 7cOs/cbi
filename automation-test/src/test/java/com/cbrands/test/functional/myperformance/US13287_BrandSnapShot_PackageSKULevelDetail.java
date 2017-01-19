@@ -6,10 +6,11 @@ import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 import com.cbrands.BaseSeleniumTestCase;
+import com.cbrands.helper.RetryAnalyzer;
 import com.cbrands.pages.Login;
 
 public class US13287_BrandSnapShot_PackageSKULevelDetail extends BaseSeleniumTestCase{
-  @Test(dataProvider="AT_US13287_BrandSnapShot_PackageSKULevelDetail")
+  @Test(retryAnalyzer = RetryAnalyzer.class, dataProvider="AT_US13287_BrandSnapShot_PackageSKULevelDetail")
   public void US13287_AT_BrandSnapshot_Package_SKULevelDetail(String brandName) {
 	  login = new Login(driver);
 		if(!login.isUserLoggedIn()) { 
@@ -21,7 +22,7 @@ public class US13287_BrandSnapShot_PackageSKULevelDetail extends BaseSeleniumTes
 		Assert.assertEquals(accountDashboardPage.depletionsTimePeriodDefaultOption(), "FYTD", "'FYTD' is not the default selected option for Depletions Time Period'");
 		Assert.assertEquals(accountDashboardPage.distributionTimePeriodDefaultOption(), "L90 Days", "'L90 Days' is not the default selected option for Depletions Time Period'");
 		accountDashboardPage.clickBrand(brandName);
-		Assert.assertEquals(accountDashboardPage.allBrandsFirstColumnHeaderText(), "SKU / PACKAGE", "When product was selected, the first column header did not change as expected'");
+		Assert.assertEquals(accountDashboardPage.allBrandsFirstColumnHeaderText(), "SKU", "When product was selected, the first column header did not change as expected'");
 		//accountDashboardPage.clickBackChevronArrow();
 		accountDashboardPage.selectVelocity();
 		Assert.assertEquals(accountDashboardPage.allBrandsThirdColumnHeaderText(), "VELOCITY - L90 DAYS", "When 'Velocity' was selected, the third column header did not change as expected");

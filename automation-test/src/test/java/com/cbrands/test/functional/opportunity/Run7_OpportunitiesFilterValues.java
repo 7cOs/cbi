@@ -46,8 +46,8 @@ public class Run7_OpportunitiesFilterValues extends BaseSeleniumTestCase {
 		opportunitiesPage.selectProductTypeAuthorized();
 		opportunitiesPage = opportunitiesPage.pageRefresh();
 		opportunitiesPage.clickShowMoreFilter();
-		opportunitiesPage.selectTradeChannelGrocery();
-		softAssert.assertNotNull(opportunitiesPage.getFilterPillGrocery(), "'Grcoery' filter pill is not present");
+		//opportunitiesPage.selectTradeChannelGrocery();
+		//softAssert.assertNotNull(opportunitiesPage.getFilterPillGrocery(), "'Grcoery' filter pill is not present");
 		opportunitiesPage.selectTradeChannelDrug();
 		softAssert.assertNotNull(opportunitiesPage.getFilterPillDrug(), "'Drug' filter pill is not present");
 		opportunitiesPage.selectTradeChannelLiquor();

@@ -838,7 +838,7 @@ public class Opportunities extends LoadableComponent<Opportunities> {
 	}
 	
 	public Opportunities selectTradeChannelGrocery(){
-		tradeChannelGrocery.sendKeys(Keys.SPACE); //Using SendKeys as the element click is not behaving consistently
+		waitForVisibleFluentWait(tradeChannelGrocery).sendKeys(Keys.SPACE); //Using SendKeys as the element click is not behaving consistently
 		return this;
 	}
 	
@@ -1765,6 +1765,13 @@ public class Opportunities extends LoadableComponent<Opportunities> {
 	
 	public Opportunities waitForTargetListConfirmation() {
 		waitForVisible(By.xpath("//md-content/navbar/div[4]"));
+		return this;
+	}
+	
+	public Opportunities searchRetailerChain(String storeNameorID){
+		retailerSearchBoxChain.sendKeys(storeNameorID);
+		waitForVisibleFluentWait(searchButton).click();
+		findElements(By.cssSelector("ul.results>li.ng-binding.ng-scope")).get(0).click();;
 		return this;
 	}
 	

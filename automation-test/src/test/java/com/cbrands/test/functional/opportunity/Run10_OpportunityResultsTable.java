@@ -72,8 +72,9 @@ public class Run10_OpportunityResultsTable extends BaseSeleniumTestCase {
 		// Test Step 10.7 - removed
 
 		// Test Step 10.8
-		opportunitiesPage.pageRefresh();
-		opportunitiesPage.searchRetailerChainByName(retailStoreName2);
+/*		opportunitiesPage.pageRefresh();
+		//opportunitiesPage.searchRetailerChainByName(retailStoreName2);
+		opportunitiesPage.searchRetailerChain(retailStoreName2);
 		opportunitiesPage.clickApplyFilters();
 		
 		allText = getAllTextFromPage();
@@ -81,7 +82,7 @@ public class Run10_OpportunityResultsTable extends BaseSeleniumTestCase {
 		
 		opportunitiesPage.clickFirstSearchResult();
 		Assert.assertNotNull(opportunitiesPage.getYellowFlagIcon(), "Yellow Flag icon not present");
-		opportunitiesPage.clickLevelOneRow();
+		opportunitiesPage.clickLevelOneRow();*/
 
 	}
 	
