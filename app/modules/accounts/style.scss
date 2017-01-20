@@ -157,18 +157,17 @@
     padding-left: 2.75em;
     background-image: url(../assets/img/icons/overview-all-brands.svg);
     background-size: 20px 34px;
-    background-position: 12px 2px;
+    background-position: 12px 35%;
     font-size: 1.5em;
     font-weight: 300;
-    padding: 5px 0px 5px 40px;
+    padding: 5px 20px 5px 40px;
   }
 
   .dropdown-section {
     width: 40%;
 
     .dropdown-filter {
-      width: 200px;
-      padding: 0 8px 0 5px;
+      padding: 0 12px 0 15px;
 
       &.narrow {
         width: 139px;
