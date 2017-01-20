@@ -45,11 +45,11 @@ public class OpportunityResultTest extends BaseSeleniumTestCase{
 		content.setProductSku(content.getProductSku() + " " + "Non-Buy");
 		content.setSentByDate("0 MINUTE AGO");
 		opportunitiesPage.sendOpportunityTo(sendTo);
-		//assertThat(opportunitiesPage.getOpportunitySent(),log(containsString(sent)));
+		assertThat(opportunitiesPage.getOpportunitySent(),log(containsString(sent)));
 	}
 	
 	@Test(retryAnalyzer = RetryAnalyzer.class, dependsOnMethods = "US12719_AT_Opportunities_Run13_ShareOpportunities", description = "Run - 18:  When I send an Opportunity to an employee, they receive a notification.", priority=2)
-	public void US12710_AT_Opportunities_Run18_SharedOpportunityNotification(){
+	public void US12720_AT_Opportunities_Run18_SharedOpportunityNotification(){
 		login = new Login(driver);
 		if(!login.isUserLoggedIn()) { 
 			login = new Login(driver);
