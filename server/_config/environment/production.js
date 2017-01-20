@@ -24,7 +24,7 @@ module.exports = function (config) {
 
   // change all of this to env variables for security.
   config.api = {
-    url: 'https://cbi-api-internal-qa.herokuapp.com',
+    url: 'https://cbi-api-internal-dd-qa.herokuapp.com',
     key: 'U1NCc2FXdGxJSFJ2SUVodlpHOXlMQ0JJYjJSdmNpd2dTRzlrYjNJc0lFaHZaRzl5Y3lCaGJtUWdTRzlrYjNKekxnPT0=',
     apiKey: 'test',
     version: 'v2'
