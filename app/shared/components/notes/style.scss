@@ -26,6 +26,7 @@
     width: 100%;
     top: 0;
     left: 0;
+    z-index: 999;
 
     h5 {
       display: block;
@@ -160,6 +161,14 @@
       background-position: 10px 4px;
     }
 
+    .attachments,
+    .download-all {
+
+      p {
+        font-size: 0.7em;
+      }
+    }
+
     .read-more,
     .read-less {
       color: $blue;
@@ -181,6 +190,7 @@
       text-align: center;
       top: 0;
       width: 100%;
+      z-index: 1;
 
       .buttons {
         margin: 0 auto;
@@ -198,7 +208,7 @@
     }
 
     .note-attachments {
-      margin: 36px 0;
+      margin: 16px 0 26px;
 
       .attachment-header {
         margin-bottom: 36px;
@@ -217,12 +227,29 @@
 
       li {
         margin-bottom: 10px;
+        list-style-type: none;
+      }
+
+      .loader-wrap.inline {
+        min-height: 50px;
+        position: relative;
+
+        &.loaded {
+          height: auto;
+
+          .loader {
+            display: none;
+          }
+        }
       }
     }
 
     .file-name {
       color: $blue;
       font-size: 0.8em;
+      margin-bottom: 0;
+      vertical-align: top;
+      padding-left: 0.5em;
     }
   }
 
@@ -275,6 +302,32 @@
 
     p {
       color: $black;
+    }
+
+    .add-attachments {
+      margin-bottom: 1em;
+    }
+
+    .inline-container {
+      margin-top: 10px;
+      margin-left: 5px;
+
+      .attachments {
+        padding-top: 3px;
+      }
+
+      p {
+        color: $gray-1;
+        font-size: 0.7em;
+      }
+    }
+
+    .note-attachments {
+
+      p {
+        font-size: 0.7em;
+        color: $gray-2;
+      }
     }
   }
 
@@ -358,18 +411,23 @@
       position: absolute;
       padding-left: 10px;
       display: inline;
-      top: 9px;
+      top: 2px;
       color: $gray-8;
       outline: none;
+
+      &:before {
+        height: 6px;
+        width: 6px;
+      }
     }
 
     img {
-      width: 100%;
+      max-width: 100%;
     }
 
     .thumbnail {
-      width: 24px;
-      height: 24px;
+      width: 14px;
+      height: 14px;
     }
   }
 
@@ -377,14 +435,13 @@
     background-image: url('../assets/img/icons/attachment.svg');
     background-size: 9px;
     background-position: 4px 6px;
-    margin-left: -8px;
+    margin-left: -6px;
   }
 
   .add-attachments {
     background-image: url('../assets/img/icons/add-attachment.svg');
     background-size: 12px;
     cursor: pointer;
-    margin-bottom: 12px;
   }
 
   .download-all {
@@ -415,7 +472,7 @@
   }
 
   .inline-container {
-    margin-top: 12px;
+    margin-top: 22px;
 
     div,
     p {
@@ -429,7 +486,7 @@
 
   .notes-editing {
     .btn-action {
-      margin-top: 12px;
+      margin-top: 10px;
     }
   }
 

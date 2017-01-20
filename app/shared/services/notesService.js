@@ -73,7 +73,8 @@ module.exports = /*  @ngInject */
                 {
                   fileName: arr.Attachments.records[i].Name,
                   fileSize: filesizeFilter(arr.Attachments.records[i].BodyLength / 1000),
-                  url: arr.Attachments.records[i].attributes.url
+                  url: arr.Attachments.records[i].attributes.url,
+                  fileType: arr.Attachments.records[i].ContentType
                 }
               );
             };
