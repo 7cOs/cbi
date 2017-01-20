@@ -215,7 +215,7 @@ div(row)
       //- span.error-text No data found
     .widget-header
       .dropdown-filter.narrow
-        md-select(ng-model="a.filtersService.model.accountSelected.accountMarkets" ng-change="a.onFilterPropertiesChange()" md-on-open="a.openSelect(true)" md-on-close="a.openSelect(false)" aria-label="Account Markets Filter")
+        md-select(ng-model="a.filtersService.model.accountSelected.accountMarkets" md-on-open="a.openSelect(true)" md-on-close="a.openSelect(false)" aria-label="Account Markets Filter")
           md-option(ng-repeat="filter in a.filtersService.accountFilters.accountMarkets" aria-label="{{filter.name}}" ng-value="filter" ng-click= "a.acctMarketChanged(filter)" ng-if="!a.removeDistOptionsBasedOnView(filter, false)") {{filter.name}}
       .header-selector
         //- span.back-chevron(ng-if="a.marketSelectedIndex > 0" ng-click="a.prevLevelInTopBottom()")

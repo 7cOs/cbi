@@ -1089,7 +1089,7 @@ module.exports = /*  @ngInject */
     function acctMarketChanged(selectedVal) {
       if (vm.filtersService.model.accountSelected.accountMarkets !== selectedVal) {
         vm.filtersService.model.accountSelected.accountMarkets = selectedVal;
-        onFilterPropertiesChange();
+        onFilterPropertiesChange(false);
       }
     }
 
