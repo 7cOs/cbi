@@ -796,9 +796,21 @@ module.exports = /*  @ngInject */
     }
 
     function getStoreToBePassedToAcct(storeDetails) {
-      var store = {
-        store: storeDetails.versionedId + '|' + storeDetails.name
-      };
+      var store = null,
+          id = null;
+      // If myAccountsOnly is true pass the versionedId (9 digits). As a fallback if it's null send id
+      if (filtersService.model.selected.myAccountsOnly === true) {
+        id = storeDetails.versionedId ? storeDetails.versionedId : storeDetails.id;
+        store = {
+          store: id + '|' + storeDetails.name
+        };
+      } else {
+        // If myAccountsOnly is true pass the id (7 digits). As a fallback if it's null send versionedId
+        id = storeDetails.id ? storeDetails.id : storeDetails.versionedId;
+        store = {
+          store: id + '|' + storeDetails.name
+        };
+      }
       return store;
     }
 

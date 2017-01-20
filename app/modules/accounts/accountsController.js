@@ -761,18 +761,20 @@ module.exports = /*  @ngInject */
         vm.currentTopBottomObj = getCurrentTopBottomObject(vm.currentTopBottomAcctType);
         var storeData = {id: storeFilter.storeId, name: storeFilter.storeName};
         vm.currentTopBottomFilters.stores = storeData;
+        vm.filtersService.model.selected.myAccountsOnly = false;
+        vm.filtersService.model.selected.premiseType = 'all';
         isNavigatedFromOpps = true;
       }
       return isNavigatedFromOpps;
     }
 
     function init() {
+      setDefaultDropDownOptions();
       var isNavigatedFromScorecard = checkForNavigationFromScorecard();
       var isNavigatedFromOpps = checkForNavigationFromOpps();
       if (isNavigatedFromScorecard === false && isNavigatedFromOpps === false) {
         chipsService.resetChipsFilters(chipsService.model);
       }
-      setDefaultDropDownOptions();
       setDefaultFilterOptions();
       var params = getUpdatedFilterQueryParamsForBrand();
       var promiseArr = [];
