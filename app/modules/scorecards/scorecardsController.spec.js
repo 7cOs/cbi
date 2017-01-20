@@ -62,6 +62,7 @@ describe('Unit: scorecardsController', function() {
         resetFiltersOnLoad: false,
         applyFiltersOnLoad: true,
         pageData: {
+          brandId: row.id,
           brandTitle: row.name,
           premiseType: 'all'
         }
@@ -83,6 +84,7 @@ describe('Unit: scorecardsController', function() {
         resetFiltersOnLoad: false,
         applyFiltersOnLoad: true,
         pageData: {
+          brandId: row.id,
           brandTitle: row.name,
           premiseType: 'off'
         }
