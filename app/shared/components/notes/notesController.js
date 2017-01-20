@@ -19,7 +19,6 @@ module.exports = /*  @ngInject */
     vm.notesOpen = false;
     vm.notesClose = notesClose;
     vm.fileUploadActive = true;
-    vm.uploadFiles = uploadFiles;
 
     // Temp data
     vm.noteTopics = [
@@ -45,6 +44,8 @@ module.exports = /*  @ngInject */
     vm.mailNote = mailNote;
     vm.formatEmailString = formatEmailString;
     vm.saveEditedNote = saveEditedNote;
+    vm.uploadFiles = uploadFiles;
+    vm.deleteAttachment = deleteAttachment;
 
     init();
 
@@ -224,6 +225,17 @@ module.exports = /*  @ngInject */
         vm.fileUploading = false;
       }
 
+    }
+
+    function deleteAttachment(data) {
+      vm.loading = true;
+      notesService.deleteAttach(data.attachId).then(function(success) {
+        notesService.accountNotes().then(function(success) {
+          vm.notes = success;
+          vm.loading = false;
+          setNoteAuthor();
+        });
+      });
     }
 
     function isAuthor(authorId) {

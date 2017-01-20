@@ -386,7 +386,7 @@ function createAttachment(app, req, res) {
 function deleteAttachment(app, req, res) {
   return sfdcConn(app, req, res)
     .then(function(conn) {
-      return conn.sobject('Attachment').destroy(req.query.attachmentId);
+      return conn.sobject('Attachment').delete(req.query.attachmentId);
     });
 }
 

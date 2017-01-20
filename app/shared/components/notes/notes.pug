@@ -85,6 +85,7 @@ div.modal.notes(ng-if="notesOpen")
                 a(href="{{attachment.url}}" target="_blank")
                   p.file-name {{attachment.fileName}}&nbsp;({{attachment.fileSize}})
                 div(ng-click="n.showImage(attachment)" ng-class="{'chevron-down': !attachment.visible, 'chevron-up': attachment.visible}")
+                div.delete-attach(ng-if="note.author === 'Me'" ng-click="n.deleteAttachment(attachment)") x
                 .loader-wrap.inline(image-loader ng-if="attachment.visible" class="active")
                   loader
                   img(src="{{attachment.url}}")
@@ -93,6 +94,7 @@ div.modal.notes(ng-if="notesOpen")
                 a(href="{{attachment.url}}" target="_blank")
                   p.file-name {{attachment.fileName}}&nbsp;({{attachment.fileSize}})
                 div(ng-click="n.showImage(attachment)" ng-class="{'chevron-down': !attachment.visible, 'chevron-up': attachment.visible}")
+                div.delete-attach(ng-if="note.author === 'Me'" ng-click="n.deleteAttachment(attachment)") x
                 .loader-wrap.inline(image-loader ng-if="attachment.visible" class="active")
                   loader
                   img(src="{{attachment.url}}")
@@ -101,27 +103,34 @@ div.modal.notes(ng-if="notesOpen")
                 a(href="{{attachment.url}}" target="_blank")
                   p.file-name {{attachment.fileName}}&nbsp;({{attachment.fileSize}})
                 div(ng-click="n.showImage(attachment)" ng-class="{'chevron-down': !attachment.visible, 'chevron-up': attachment.visible}")
+                div.delete-attach(ng-if="note.author === 'Me'" ng-click="n.deleteAttachment(attachment)") x
                 .loader-wrap.inline(image-loader ng-if="attachment.visible" class="active")
                   loader
                   img(src="{{attachment.url}}")
               .spreadsheet(ng-switch-when="application/vnd.ms-excel")
                 img.thumbnail(src="../assets/img/icons/download-xls-c.svg")
                 p.file-name {{attachment.fileName}}&nbsp;({{attachment.fileSize}})
+                div.delete-attach(ng-if="note.author === 'Me'" ng-click="n.deleteAttachment(attachment)") x
               .pdf(ng-switch-when="application/pdf")
                 img.thumbnail(src="../assets/img/icons/download-pdf-c.svg")
                 p.file-name {{attachment.fileName}}&nbsp;({{attachment.fileSize}})
+                div.delete-attach(ng-if="note.author === 'Me'" ng-click="n.deleteAttachment(attachment)") x
               .powerpoint(ng-switch-when="application/vnd.ms-powerpoint")
                 img.thumbnail(src="../assets/img/icons/download-ppt-c.svg")
                 p.file-name {{attachment.fileName}}&nbsp;({{attachment.fileSize}})
+                div.delete-attach(ng-if="note.author === 'Me'" ng-click="n.deleteAttachment(attachment)") x
               .zip(ng-switch-when="application/zip")
                 img.thumbnail(src="../assets/img/icons/download-zip-c.svg")
                 p.file-name {{attachment.fileName}}&nbsp;({{attachment.fileSize}})
+                div.delete-attach(ng-if="note.author === 'Me'" ng-click="n.deleteAttachment(attachment)") x
               .document(ng-switch-when="application/msword")
                 img.thumbnail(src="../assets/img/icons/download-doc-c.svg")
                 p.file-name {{attachment.fileName}}&nbsp;({{attachment.fileSize}})
+                div.delete-attach(ng-if="note.author === 'Me'" ng-click="n.deleteAttachment(attachment)") x
               .other(ng-switch-default)
                 img.thumbnail(src="../assets/img/icons/download-other-c.svg")
                 p.file-name {{attachment.fileName}}&nbsp;({{attachment.fileSize}})
+                div.delete-attach(ng-if="note.author === 'Me'" ng-click="n.deleteAttachment(attachment)") x
         .note-body-footer(ng-if="!note.editMode")
           p by <span class="note-author"> {{note.author}}</span>  <span class="note-date">{{note.date | date:"dd MMMM, yyyy 'at' h:mm a"}}</span>
           .icons

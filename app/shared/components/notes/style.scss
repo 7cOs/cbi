@@ -26,7 +26,7 @@
     width: 100%;
     top: 0;
     left: 0;
-    z-index: 999;
+    z-index: 9999;
 
     h5 {
       display: block;
@@ -384,6 +384,15 @@
     background-position: 1px 1px;
   }
 
+  .chevron-down,
+  .chevron-up {
+    z-index: 2;
+
+    &:hover {
+      cursor: hand;
+    }
+  }
+
   .notes-icon {
     background-image: url('../assets/img/icons/photo-attachment.svg');
   }
@@ -428,6 +437,33 @@
     .thumbnail {
       width: 14px;
       height: 14px;
+    }
+
+    .delete-attach {
+      color: $gray-2;
+      display: none;
+      position: absolute;
+      padding-left: 10px;
+      top: -2px;
+      z-index: 1;
+
+      &:hover {
+        cursor: hand;
+      }
+    }
+
+    &:hover {
+
+      .delete-attach {
+        display: inline;
+      }
+    }
+  }
+
+  .photo {
+
+    .delete-attach {
+      padding-left: 30px;
     }
   }
 
