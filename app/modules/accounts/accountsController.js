@@ -356,10 +356,10 @@ module.exports = /*  @ngInject */
       // Remove all filters asssociated with top bottom
       removeAllTopBottomAccountTypeFilters();
       chipsService.resetChipsFilters(chipsService.model);
-      setDefaultFilterOptions();
       vm.filterModel = angular.copy(filterModelTemplate);
       filtersService.model.filtersValidCount = 0;
       setDefaultDropDownOptions();
+      setDefaultFilterOptions();
       apply(false);
       // Go back to distributor level. Get the updated data for distributors
       resetTopBottom();
