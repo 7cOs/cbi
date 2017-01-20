@@ -29,70 +29,6 @@ module.exports = /*  @ngInject */
       'Price',
       'General / Account information'
     ];
-    vm.attachments = [
-      {
-        name: 'IMG1009.PNG',
-        fileType: 'PNG',
-        fileSize: '3.4 MB',
-        thumbnail: 'https://scontent.xx.fbcdn.net/t31.0-8/13653130_733144425894_7777495390696756765_o.jpg',
-        url: 'https://scontent.xx.fbcdn.net/t31.0-8/13653130_733144425894_7777495390696756765_o.jpg'
-      },
-      {
-        name: 'IMG1008.PNG',
-        fileType: 'PNG',
-        fileSize: '2.3 MB',
-        thumbnail: 'http://r.ddmcdn.com/s_f/o_1/APL/uploads/2015/04/150896.001.01.197_20150429_121257.jpg',
-        url: 'http://r.ddmcdn.com/s_f/o_1/APL/uploads/2015/04/150896.001.01.197_20150429_121257.jpg'
-      },
-      {
-        name: 'DOC1976.DOC',
-        fileType: 'DOC',
-        fileSize: '1.4 KB',
-        url: ''
-      },
-      {
-        name: 'DOC5150.XLS',
-        fileType: 'XLS',
-        fileSize: '9.6 KB',
-        url: ''
-      },
-      {
-        name: 'DOC1980.MP4',
-        fileType: 'MP4',
-        fileSize: '12.4 KB',
-        url: ''
-      },
-      {
-        name: 'DOC5150.MP3',
-        fileType: 'MP3',
-        fileSize: '9.6 KB',
-        url: ''
-      },
-      {
-        name: 'DOC5150.TXT',
-        fileType: 'OTHER',
-        fileSize: '9.6 KB',
-        url: ''
-      },
-      {
-        name: 'DOC5150.PDF',
-        fileType: 'PDF',
-        fileSize: '9.6 KB',
-        url: ''
-      },
-      {
-        name: 'DOC5150.PPT',
-        fileType: 'PPT',
-        fileSize: '9.6 KB',
-        url: ''
-      },
-      {
-        name: 'DOC5150.ZIP',
-        fileType: 'ZIP',
-        fileSize: '9.6 KB',
-        url: ''
-      }
-    ];
 
     // Expose public methods
     vm.isEditing = isEditing;
@@ -133,6 +69,7 @@ module.exports = /*  @ngInject */
 
     function openCreateNote() {
       vm.creatingNote = !vm.creatingNote;
+      vm.newNote = {};
     }
 
     function openNotes(ev) {
@@ -156,7 +93,7 @@ module.exports = /*  @ngInject */
       } else {
         vm.invalidCreateNote = false;
       }
-      vm.loading = true;
+      vm.newNoteFiles ? vm.fileUploading = true : vm.loading = true;
       data.author = 'Me';
       var accountId = notesService.model.accountId;
 
@@ -184,6 +121,10 @@ module.exports = /*  @ngInject */
         vm.newNote = null;
         vm.creatingNote = false;
         vm.loading = false;
+
+        if (vm.newNoteFiles) {
+          uploadFiles(vm.newNoteFiles, data.id);
+        }
       });
     }
 
@@ -237,30 +178,51 @@ module.exports = /*  @ngInject */
     }
 
     // Upload files to Salesforce
-    // This is a temporary function based on the plugin-demo
-    // TODO make active with SF
-    function uploadFiles(files) {
-      // vm.fileUploading = true;
+    function uploadFiles(files, noteId) {
+      if (!noteId) {
+        vm.newNoteFiles = files;
+        if (vm.newNote.attachments) {
+          angular.forEach(files, function(file) {
+            vm.newNote.attachments.push(file);
+          });
+        } else {
+          vm.newNote.attachments = files;
+        }
+        return;
+      }
+
+      vm.errorMsg = '';
+      vm.fileUploading = true;
       vm.files = files;
       if (files && files.length) {
         Upload.upload({
           url: '/sfdc/createAttachment',
           data: {
-            noteId: 'a2Xg0000000IhBtEAK',
+            noteId: noteId,
             files: files
           }
         }).then(function(response) {
           $timeout(function() {
             vm.result = response.data;
+            vm.loading = true;
+            vm.fileUploading = false;
+
+            notesService.accountNotes().then(function(success) {
+              vm.notes = success;
+              vm.loading = false;
+              setNoteAuthor();
+            });
           });
         }, function(response) {
           if (response.status > 0) {
             vm.errorMsg = response.status + ': ' + response.data;
+            vm.fileUploading = false;
           }
         });
+      } else {
+        vm.errorMsg = 'Supported file types: .doc, .ppt, .xls, .gif, .jpg, .png, .pdf.';
+        vm.fileUploading = false;
       }
-      // Needs to flip after success or failure
-      // vm.fileUploading = false;
 
     }
 
@@ -356,12 +318,12 @@ module.exports = /*  @ngInject */
         vm.loading = false;
         setNoteAuthor();
 
-      if (vm.notes.length && account.noteId) {
-        setTimeout(function() {
-          var num = angular.element(document.querySelector(accountElement))[0].offsetTop;
-          angular.element(document.querySelector('.note-container'))[0].scrollTop = num;
-        });
-      }
+        if (vm.notes.length && account.noteId) {
+          setTimeout(function() {
+            var num = angular.element(document.querySelector(accountElement))[0].offsetTop;
+            angular.element(document.querySelector('.note-container'))[0].scrollTop = num;
+          });
+        }
       });
 
       $scope.notesOpen = data;

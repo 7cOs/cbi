@@ -13,7 +13,7 @@ div.modal.notes(ng-if="notesOpen")
 
   div(ng-if="n.fileUploading").progress-container.uploader
     md-progress-circular(ng-if="n.fileUploading" md-mode="indeterminate" md-diameter="100").md-accent
-    h5 Uploading...
+    h5 Uploading Files...
   div.note-container(ng-if="n.notes.length > 0 && !n.fileUploading || n.creatingNote")
     div.new-note
       p(ng-click="n.openCreateNote()").bold.add-note <span>+</span> New Note
@@ -29,13 +29,20 @@ div.modal.notes(ng-if="notesOpen")
         label details
         div.text-editor
           text-angular(ta-toolbar="[['bold','italics', 'underline', 'ul']]" ta-text-editor-class="form-content" ng-model="n.newNote.body").text-editor
-        //- TODO to uncomment when this feature is added
-        //- div
-        //-   .add-attachments(ngf-select="n.uploadFiles($files)" multiple accept="image/*")
-        //-     a(href="#").accent Add an attachment
-        //-     p {{n.errorMsg}}
+        div
+          .add-attachments(ngf-select="n.uploadFiles($files)" multiple ngf-pattern=".docx,.doc,.ppt,.pptx,.xls,.xlsx,.gif,.jpg,.png,.pdf")
+            a(href="#").accent Add an attachment
+            p {{n.errorMsg}}
         button(ng-click="n.createNote(n.newNote)").btn-action Save
         p(ng-click="n.cancelNewNote(n.newNote)").cancel.accent X Cancel
+      div.inline-container(ng-if="n.newNote.attachments.length > 0")
+        .attachments
+          p.accent Attachments (save to upload)
+      ul.note-attachments
+        li(ng-repeat="attachment in n.newNote.attachments")
+          div.attached-files
+            .other
+              p(ng-if="attachment.name").file-name {{attachment.name}}&nbsp;({{attachment.size}})
     div.note-body(id="{{note.id}}" ng-repeat="note in n.notes | orderBy:'-date'")
       div(ng-if="note.deleteConfirmation").delete-confirm
         h4 Are you sure you want to delete this note?
@@ -43,32 +50,8 @@ div.modal.notes(ng-if="notesOpen")
           button(ng-click="n.deleteNote(note)").btn-action Yes
           p(ng-click="n.toggleDelete(note)").cancel.accent X Cancel
       div.note-body-field(ng-if="!note.deleteConfirmation")
-        h4(ng-if="!note.editMode") {{note.title}} <span ng-if="note.attachments.length" class="attachments"></span>
+        h4(ng-if="!note.editMode") {{note.title}}
         p(ng-if="!note.editMode" class="note-body-field-content" ng-class="{'expanded': note.readMore}" long-note) <div.note-body-field-text ta-bind ng-model="note.body"></div> <span class="read-more" ng-if="!note.editMode && !note.noteDetails" ng-class="{'expanded': note.readMore}" ng-click="n.readMore(note)")>...Read More</span>
-        //- .note-attachments(ng-if="note.noteDetails")
-        //-   div.attachement-header
-        //-     .attachments
-        //-       p.accent Attachments
-        //-     .download-all
-        //-       a(href="#") Download All
-        //-   ul
-        //-     li(ng-repeat="attachment in note.attachments")
-        //-       div.attached-files
-        //-         .photo
-        //-           img.thumbnail(src="{{attachment.url}}")
-        //-           p.file-name <a ng-href="{{attachment.url}}" target="_self">{{attachment.fileName}}</a>&nbsp;{{attachment.fileSize}}
-        //-           div(ng-click="n.showImage(attachment)" ng-class="{'chevron-down': !attachment.visible, 'chevron-up': attachment.visible}")
-        //-           img(src="{{attachment.url}}" ng-if="attachment.visible")
-          div
-            .add-attachments(ng-if="note.author === 'Me'" ngf-select="n.uploadFiles($files)" multiple accept="image/*")
-              p Add an attachment
-              p {{n.errorMsg}}
-        .note-body-footer(ng-if="!note.editMode")
-          p by <span class="note-author"> {{note.author}}</span>  <span class="note-date">{{note.date | date:"dd MMMM, yyyy 'at' h:mm a"}}</span>
-          .icons
-            .delete-note(ng-if="note.author === 'Me'" ng-click="n.toggleDelete(note)")
-            .edit-note(ng-if="note.author === 'Me'" ng-click="n.isEditing(note)" ng-class="{'edit-note': !note.editMode, 'edit-note-active': note.editMode}")
-            .email-note(ng-click="n.mailNote(note)" analytics-on="click" analytics-event="Actions" analytics-category="{{n.analyticsCategory}}" analytics-label="Email")
         div.notes-editing(ng-if="note.editMode")
           div.main-note-section
             div
@@ -84,46 +67,64 @@ div.modal.notes(ng-if="notesOpen")
             label Details
             div.text-editor
               text-angular(ta-toolbar="[['bold','italics', 'underline', 'ul']]" ng-model="note.body").text-editor
-            //- div.inline-container
-            //-   .attachments
-            //-     p.accent Attachments
-            //-   .download-all
-            //-     p Download All
-            //- ul
-              li(ng-repeat="attachment in n.attachments")
-                div.attached-files
-                  .photo(ng-if="attachment.fileType === 'PNG'")
-                    img.thumbnail(src="{{attachment.thumbnail}}")
-                    p.file-name {{attachment.name}}&nbsp;({{attachment.fileSize}})
-                    div(ng-click="n.showImage(attachment)" ng-class="{'chevron-down': !attachment.visible, 'chevron-up': attachment.visible}")
-                    img(src="{{attachment.url}}" ng-if="attachment.visible")
-                  .spreadsheet(ng-if="attachment.fileType === 'XLS'")
-                    img.thumbnail(src="../assets/img/icons/download-xls-c.svg")
-                    p.file-name {{attachment.name}}&nbsp;({{attachment.fileSize}})
-                  .video(ng-if="attachment.fileType === 'MP4'")
-                    img.thumbnail(src="../assets/img/icons/download-mov-c.svg")
-                    p.file-name {{attachment.name}}&nbsp;({{attachment.fileSize}})
-                  .audio(ng-if="attachment.fileType === 'MP3'")
-                    img.thumbnail(src="../assets/img/icons/download-mp3-c.svg")
-                    p.file-name {{attachment.name}}&nbsp;({{attachment.fileSize}})
-                  .other(ng-if="attachment.fileType === 'OTHER'")
-                    img.thumbnail(src="../assets/img/icons/download-other-c.svg")
-                    p.file-name {{attachment.name}}&nbsp;({{attachment.fileSize}})
-                  .pdf(ng-if="attachment.fileType === 'PDF'")
-                    img.thumbnail(src="../assets/img/icons/download-pdf-c.svg")
-                    p.file-name {{attachment.name}}&nbsp;({{attachment.fileSize}})
-                  .powerpoint(ng-if="attachment.fileType === 'PPT'")
-                    img.thumbnail(src="../assets/img/icons/download-ppt-c.svg")
-                    p.file-name {{attachment.name}}&nbsp;({{attachment.fileSize}})
-                  .zip(ng-if="attachment.fileType === 'ZIP'")
-                    img.thumbnail(src="../assets/img/icons/download-zip-c.svg")
-                    p.file-name {{attachment.name}}&nbsp;({{attachment.fileSize}})
-                  .document(ng-if="attachment.fileType === 'DOC'")
-                    img.thumbnail(src="../assets/img/icons/download-doc-c.svg")
-                    p.file-name {{attachment.name}}&nbsp;({{attachment.fileSize}})
             div
-              .add-attachments(ng-if="note.author === 'Me'" ngf-select="n.uploadFiles($files)" multiple accept="image/*")
+              .add-attachments(ng-if="note.author === 'Me'" ngf-select="n.uploadFiles($files, note.id)" multiple ngf-pattern=".docx,.doc,.ppt,.pptx,.xls,.xlsx,.gif,.jpg,.png,.pdf")
                 p Add an attachment
-                p {{n.errorMsg}}
+                label.error {{n.errorMsg}}
             button(ng-click="n.saveEditedNote(note)").btn-action Save
             p(ng-click="n.isEditing(note, true)").cancel.accent X Cancel
+        div.inline-container(ng-if="note.attachments.length > 0")
+          .attachments
+            p.accent Attachments
+        ul.note-attachments
+          li(ng-repeat="attachment in note.attachments")
+            div.attached-files(ng-switch="attachment.fileType")
+              //- I have to repeat the same code because no multiple 'ng-switch-when' conditions before Angular 1.5.10 :(
+              .photo(ng-switch-when="image/gif")
+                img.thumbnail(src="../assets/img/icons/download-img.svg")
+                a(href="{{attachment.url}}" target="_blank")
+                  p.file-name {{attachment.fileName}}&nbsp;({{attachment.fileSize}})
+                div(ng-click="n.showImage(attachment)" ng-class="{'chevron-down': !attachment.visible, 'chevron-up': attachment.visible}")
+                .loader-wrap.inline(image-loader ng-if="attachment.visible" class="active")
+                  loader
+                  img(src="{{attachment.url}}")
+              .photo(ng-switch-when="image/jpeg")
+                img.thumbnail(src="../assets/img/icons/download-img.svg")
+                a(href="{{attachment.url}}" target="_blank")
+                  p.file-name {{attachment.fileName}}&nbsp;({{attachment.fileSize}})
+                div(ng-click="n.showImage(attachment)" ng-class="{'chevron-down': !attachment.visible, 'chevron-up': attachment.visible}")
+                .loader-wrap.inline(image-loader ng-if="attachment.visible" class="active")
+                  loader
+                  img(src="{{attachment.url}}")
+              .photo(ng-switch-when="image/png")
+                img.thumbnail(src="../assets/img/icons/download-img.svg")
+                a(href="{{attachment.url}}" target="_blank")
+                  p.file-name {{attachment.fileName}}&nbsp;({{attachment.fileSize}})
+                div(ng-click="n.showImage(attachment)" ng-class="{'chevron-down': !attachment.visible, 'chevron-up': attachment.visible}")
+                .loader-wrap.inline(image-loader ng-if="attachment.visible" class="active")
+                  loader
+                  img(src="{{attachment.url}}")
+              .spreadsheet(ng-switch-when="application/vnd.ms-excel")
+                img.thumbnail(src="../assets/img/icons/download-xls-c.svg")
+                p.file-name {{attachment.fileName}}&nbsp;({{attachment.fileSize}})
+              .pdf(ng-switch-when="application/pdf")
+                img.thumbnail(src="../assets/img/icons/download-pdf-c.svg")
+                p.file-name {{attachment.fileName}}&nbsp;({{attachment.fileSize}})
+              .powerpoint(ng-switch-when="application/vnd.ms-powerpoint")
+                img.thumbnail(src="../assets/img/icons/download-ppt-c.svg")
+                p.file-name {{attachment.fileName}}&nbsp;({{attachment.fileSize}})
+              .zip(ng-switch-when="application/zip")
+                img.thumbnail(src="../assets/img/icons/download-zip-c.svg")
+                p.file-name {{attachment.fileName}}&nbsp;({{attachment.fileSize}})
+              .document(ng-switch-when="application/msword")
+                img.thumbnail(src="../assets/img/icons/download-doc-c.svg")
+                p.file-name {{attachment.fileName}}&nbsp;({{attachment.fileSize}})
+              .other(ng-switch-default)
+                img.thumbnail(src="../assets/img/icons/download-other-c.svg")
+                p.file-name {{attachment.fileName}}&nbsp;({{attachment.fileSize}})
+        .note-body-footer(ng-if="!note.editMode")
+          p by <span class="note-author"> {{note.author}}</span>  <span class="note-date">{{note.date | date:"dd MMMM, yyyy 'at' h:mm a"}}</span>
+          .icons
+            .delete-note(ng-if="note.author === 'Me'" ng-click="n.toggleDelete(note)")
+            .edit-note(ng-if="note.author === 'Me'" ng-click="n.isEditing(note)" ng-class="{'edit-note': !note.editMode, 'edit-note-active': note.editMode}")
+            .email-note(ng-click="n.mailNote(note)" analytics-on="click" analytics-event="Actions" analytics-category="{{n.analyticsCategory}}" analytics-label="Email")
