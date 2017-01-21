@@ -322,6 +322,7 @@ describe('Unit: accountsController', function() {
     // Get Mock Modules
     angular.mock.module('ui.router');
     angular.mock.module('ngMaterial');
+    angular.mock.module('angulartics');
     angular.mock.module('cf.common.services');
     angular.mock.module('cf.modules.accounts');
 
