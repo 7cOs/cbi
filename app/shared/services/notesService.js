@@ -72,9 +72,11 @@ module.exports = /*  @ngInject */
               noteAttachments.push(
                 {
                   fileName: arr.Attachments.records[i].Name,
+                  bodyLength: arr.Attachments.records[i].BodyLength / 1000,
                   fileSize: filesizeFilter(arr.Attachments.records[i].BodyLength / 1000),
                   url: arr.Attachments.records[i].attributes.url,
-                  fileType: arr.Attachments.records[i].ContentType
+                  fileType: arr.Attachments.records[i].ContentType,
+                  attachId: arr.Attachments.records[i].Id
                 }
               );
             };
@@ -167,10 +169,10 @@ module.exports = /*  @ngInject */
       return notesPromise.promise;
     }
 
-    function deleteAttach(noteId) {
+    function deleteAttach(attachId) {
       var notePromise = $q.defer(),
-          url = model.urlBase + 'create-note',
-          payload = {};
+          url = model.urlBase + 'deleteAttachment?attachmentId=' + attachId,
+          payload = attachId;
 
       $http.delete(url, payload, {
         headers: {}

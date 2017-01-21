@@ -30,19 +30,19 @@ div.modal.notes(ng-if="notesOpen")
         div.text-editor
           text-angular(ta-toolbar="[['bold','italics', 'underline', 'ul']]" ta-text-editor-class="form-content" ng-model="n.newNote.body").text-editor
         div
-          .add-attachments(ngf-select="n.uploadFiles($files)" multiple ngf-pattern=".docx,.doc,.ppt,.pptx,.xls,.xlsx,.gif,.jpg,.png,.pdf")
-            a(href="#").accent Add an attachment
+          .add-attachments(ngf-select="n.uploadFiles($files)" multiple ngf-max-size="10MB" ngf-pattern=".docx,.doc,.ppt,.pptx,.xls,.xlsx,.gif,.jpg,.png,.pdf")
+            a(href="#").accent Add an attachment <span ng-if="!n.newNote.attachments || n.newNote.attachments.length === 0">(Max 10MB)</span>
             p {{n.errorMsg}}
         button(ng-click="n.createNote(n.newNote)").btn-action Save
         p(ng-click="n.cancelNewNote(n.newNote)").cancel.accent X Cancel
       div.inline-container(ng-if="n.newNote.attachments.length > 0")
         .attachments
-          p.accent Attachments (save to upload)
+          p.accent Attachments (Max 10MB total)
       ul.note-attachments
         li(ng-repeat="attachment in n.newNote.attachments")
           div.attached-files
             .other
-              p(ng-if="attachment.name").file-name {{attachment.name}}&nbsp;({{attachment.size}})
+              p(ng-if="attachment.name").file-name {{attachment.name}}&nbsp;({{attachment.parsedSize}})
     div.note-body(id="{{note.id}}" ng-repeat="note in n.notes | orderBy:'-date'")
       div(ng-if="note.deleteConfirmation").delete-confirm
         h4 Are you sure you want to delete this note?
@@ -68,7 +68,7 @@ div.modal.notes(ng-if="notesOpen")
             div.text-editor
               text-angular(ta-toolbar="[['bold','italics', 'underline', 'ul']]" ng-model="note.body").text-editor
             div
-              .add-attachments(ng-if="note.author === 'Me'" ngf-select="n.uploadFiles($files, note.id)" multiple ngf-pattern=".docx,.doc,.ppt,.pptx,.xls,.xlsx,.gif,.jpg,.png,.pdf")
+              .add-attachments(ng-if="note.author === 'Me'" ngf-select="n.uploadFiles($files, note.id)" ngf-max-size="{{n.getMaxFileSize(note)}}" multiple ngf-pattern=".docx,.doc,.ppt,.pptx,.xls,.xlsx,.gif,.jpg,.png,.pdf")
                 p Add an attachment
                 label.error {{n.errorMsg}}
             button(ng-click="n.saveEditedNote(note)").btn-action Save
@@ -85,6 +85,7 @@ div.modal.notes(ng-if="notesOpen")
                 a(href="{{attachment.url}}" target="_blank")
                   p.file-name {{attachment.fileName}}&nbsp;({{attachment.fileSize}})
                 div(ng-click="n.showImage(attachment)" ng-class="{'chevron-down': !attachment.visible, 'chevron-up': attachment.visible}")
+                div.delete-attach(ng-if="note.author === 'Me'" ng-click="attachment.showAreYouSure = true") x
                 .loader-wrap.inline(image-loader ng-if="attachment.visible" class="active")
                   loader
                   img(src="{{attachment.url}}")
@@ -93,6 +94,7 @@ div.modal.notes(ng-if="notesOpen")
                 a(href="{{attachment.url}}" target="_blank")
                   p.file-name {{attachment.fileName}}&nbsp;({{attachment.fileSize}})
                 div(ng-click="n.showImage(attachment)" ng-class="{'chevron-down': !attachment.visible, 'chevron-up': attachment.visible}")
+                div.delete-attach(ng-if="note.author === 'Me'" ng-click="attachment.showAreYouSure = true") x
                 .loader-wrap.inline(image-loader ng-if="attachment.visible" class="active")
                   loader
                   img(src="{{attachment.url}}")
@@ -101,27 +103,35 @@ div.modal.notes(ng-if="notesOpen")
                 a(href="{{attachment.url}}" target="_blank")
                   p.file-name {{attachment.fileName}}&nbsp;({{attachment.fileSize}})
                 div(ng-click="n.showImage(attachment)" ng-class="{'chevron-down': !attachment.visible, 'chevron-up': attachment.visible}")
+                div.delete-attach(ng-if="note.author === 'Me'" ng-click="attachment.showAreYouSure = true") x
                 .loader-wrap.inline(image-loader ng-if="attachment.visible" class="active")
                   loader
                   img(src="{{attachment.url}}")
               .spreadsheet(ng-switch-when="application/vnd.ms-excel")
                 img.thumbnail(src="../assets/img/icons/download-xls-c.svg")
                 p.file-name {{attachment.fileName}}&nbsp;({{attachment.fileSize}})
+                div.delete-attach(ng-if="note.author === 'Me'" ng-click="attachment.showAreYouSure = true") x
               .pdf(ng-switch-when="application/pdf")
                 img.thumbnail(src="../assets/img/icons/download-pdf-c.svg")
                 p.file-name {{attachment.fileName}}&nbsp;({{attachment.fileSize}})
+                div.delete-attach(ng-if="note.author === 'Me'" ng-click="attachment.showAreYouSure = true") x
               .powerpoint(ng-switch-when="application/vnd.ms-powerpoint")
                 img.thumbnail(src="../assets/img/icons/download-ppt-c.svg")
                 p.file-name {{attachment.fileName}}&nbsp;({{attachment.fileSize}})
+                div.delete-attach(ng-if="note.author === 'Me'" ng-click="attachment.showAreYouSure = true") x
               .zip(ng-switch-when="application/zip")
                 img.thumbnail(src="../assets/img/icons/download-zip-c.svg")
                 p.file-name {{attachment.fileName}}&nbsp;({{attachment.fileSize}})
+                div.delete-attach(ng-if="note.author === 'Me'" ng-click="attachment.showAreYouSure = true") x
               .document(ng-switch-when="application/msword")
                 img.thumbnail(src="../assets/img/icons/download-doc-c.svg")
                 p.file-name {{attachment.fileName}}&nbsp;({{attachment.fileSize}})
+                div.delete-attach(ng-if="note.author === 'Me'" ng-click="attachment.showAreYouSure = true") x
               .other(ng-switch-default)
                 img.thumbnail(src="../assets/img/icons/download-other-c.svg")
                 p.file-name {{attachment.fileName}}&nbsp;({{attachment.fileSize}})
+                div.delete-attach(ng-if="note.author === 'Me'" ng-click="attachment.showAreYouSure = true") x
+            label.error.are-you-sure(ng-if="attachment.showAreYouSure") Are you sure? <span class="delete" ng-click="n.deleteAttachment(attachment)">Delete</span> <span class="cancel" ng-click="attachment.showAreYouSure = false">Cancel</span>
         .note-body-footer(ng-if="!note.editMode")
           p by <span class="note-author"> {{note.author}}</span>  <span class="note-date">{{note.date | date:"dd MMMM, yyyy 'at' h:mm a"}}</span>
           .icons
