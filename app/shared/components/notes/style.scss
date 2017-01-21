@@ -467,6 +467,28 @@
     }
   }
 
+  .are-you-sure {
+    padding-top: 0.5em;
+
+    .delete,
+    .cancel {
+      font-weight: $bold;
+      padding-left: 0.5em;
+
+      &:hover {
+        cursor: hand;
+      }
+    }
+
+    .delete {
+      color: $red;
+    }
+
+    .cancel {
+      color: $gray-1;
+    }
+  }
+
   .attachments {
     background-image: url('../assets/img/icons/attachment.svg');
     background-size: 9px;
