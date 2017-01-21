@@ -46,6 +46,7 @@ module.exports = /*  @ngInject */
     vm.saveEditedNote = saveEditedNote;
     vm.uploadFiles = uploadFiles;
     vm.deleteAttachment = deleteAttachment;
+    vm.getMaxFileSize = getMaxFileSize;
 
     init();
 
@@ -184,9 +185,11 @@ module.exports = /*  @ngInject */
         vm.newNoteFiles = files;
         if (vm.newNote.attachments) {
           angular.forEach(files, function(file) {
+            file.parsedSize = parseFileSize(file.size);
             vm.newNote.attachments.push(file);
           });
         } else {
+          files[0].parsedSize = parseFileSize(files[0].size);
           vm.newNote.attachments = files;
         }
         return;
@@ -221,7 +224,7 @@ module.exports = /*  @ngInject */
           }
         });
       } else {
-        vm.errorMsg = 'Supported file types: .doc, .ppt, .xls, .gif, .jpg, .png, .pdf.';
+        vm.errorMsg = 'Please ensure you\'re using a supported file type (.doc, .ppt, .xls, .gif, .jpg, .png, .pdf) and your total attachments are under 10MB.';
         vm.fileUploading = false;
       }
 
@@ -297,11 +300,36 @@ module.exports = /*  @ngInject */
       return note;
     }
 
+    function getMaxFileSize(note) {
+      var maxSize = 10000, // Max upload total in KB
+          totalSize = 0;
+
+      if (!note.attachments) { return (maxSize).toString() + 'KB'; }
+
+      angular.forEach(note.attachments, function(attachment) {
+        var fileSize = attachment.bodyLength;
+        if (totalSize + fileSize <= maxSize) {
+          totalSize += fileSize;
+        } else {
+          totalSize = 10000;
+        }
+      });
+      return (Math.round(10000 - totalSize)).toString() + 'KB';
+    }
+
     // ***************
     // PRIVATE METHODS
     // ***************
 
     function init() {
+    }
+
+    function parseFileSize(s) {
+      if ((s / 1000) < 1000) {
+        return Math.round(s / 1000).toString() + 'KB';
+      } else {
+        return Math.round((s / 1000) / 1000).toString() + 'MB';
+      }
     }
 
     function jumpToNotesTop() {

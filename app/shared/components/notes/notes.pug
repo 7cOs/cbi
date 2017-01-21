@@ -30,19 +30,19 @@ div.modal.notes(ng-if="notesOpen")
         div.text-editor
           text-angular(ta-toolbar="[['bold','italics', 'underline', 'ul']]" ta-text-editor-class="form-content" ng-model="n.newNote.body").text-editor
         div
-          .add-attachments(ngf-select="n.uploadFiles($files)" multiple ngf-pattern=".docx,.doc,.ppt,.pptx,.xls,.xlsx,.gif,.jpg,.png,.pdf")
-            a(href="#").accent Add an attachment
+          .add-attachments(ngf-select="n.uploadFiles($files)" multiple ngf-max-size="10MB" ngf-pattern=".docx,.doc,.ppt,.pptx,.xls,.xlsx,.gif,.jpg,.png,.pdf")
+            a(href="#").accent Add an attachment <span ng-if="!n.newNote.attachments || n.newNote.attachments.length === 0">(Max 10MB)</span>
             p {{n.errorMsg}}
         button(ng-click="n.createNote(n.newNote)").btn-action Save
         p(ng-click="n.cancelNewNote(n.newNote)").cancel.accent X Cancel
       div.inline-container(ng-if="n.newNote.attachments.length > 0")
         .attachments
-          p.accent Attachments (save to upload)
+          p.accent Attachments (Max 10MB total)
       ul.note-attachments
         li(ng-repeat="attachment in n.newNote.attachments")
           div.attached-files
             .other
-              p(ng-if="attachment.name").file-name {{attachment.name}}&nbsp;({{attachment.size}})
+              p(ng-if="attachment.name").file-name {{attachment.name}}&nbsp;({{attachment.parsedSize}})
     div.note-body(id="{{note.id}}" ng-repeat="note in n.notes | orderBy:'-date'")
       div(ng-if="note.deleteConfirmation").delete-confirm
         h4 Are you sure you want to delete this note?
@@ -68,7 +68,7 @@ div.modal.notes(ng-if="notesOpen")
             div.text-editor
               text-angular(ta-toolbar="[['bold','italics', 'underline', 'ul']]" ng-model="note.body").text-editor
             div
-              .add-attachments(ng-if="note.author === 'Me'" ngf-select="n.uploadFiles($files, note.id)" multiple ngf-pattern=".docx,.doc,.ppt,.pptx,.xls,.xlsx,.gif,.jpg,.png,.pdf")
+              .add-attachments(ng-if="note.author === 'Me'" ngf-select="n.uploadFiles($files, note.id)" ngf-max-size="{{n.getMaxFileSize(note)}}" multiple ngf-pattern=".docx,.doc,.ppt,.pptx,.xls,.xlsx,.gif,.jpg,.png,.pdf")
                 p Add an attachment
                 label.error {{n.errorMsg}}
             button(ng-click="n.saveEditedNote(note)").btn-action Save
