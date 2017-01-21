@@ -223,8 +223,10 @@ function queryAccountNotes(app, req, res) {
               for (var note in records) {
                 if (records[note].Attachments) {
                   for (var theAtt in records[note].Attachments.records) {
-                    var thisAtt = records[note].Attachments.records[theAtt];
-                    var clickableLink = app.get('config').address + 'sfdc/getAttachment?attachId=' + thisAtt.Id;
+                    var thisAtt = records[note].Attachments.records[theAtt],
+                        urlPath = app.get('config').env === 'development' ? 'sfdc/getAttachment?attachId=' : '/sfdc/getAttachment?attachId=',
+                        clickableLink = app.get('config').address + urlPath + thisAtt.Id;
+
                     thisAtt.attributes.url = clickableLink;
                   }
                 }
