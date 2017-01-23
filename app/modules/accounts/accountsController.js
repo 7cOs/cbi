@@ -140,7 +140,6 @@ module.exports = /*  @ngInject */
 
     function allOpportunitiesDisabled() {
       if ((filtersService.model.selected.premiseType && filtersService.model.selected.premiseType !== 'all') && ((filtersService.model.selected.distributor && filtersService.model.selected.distributor.length > 0) || (filtersService.model.selected.store && filtersService.model.selected.store.length > 0) || (filtersService.model.selected.account && filtersService.model.selected.account.length > 0))) return false;
-
       return true;
     }
 
@@ -749,7 +748,6 @@ module.exports = /*  @ngInject */
         chipsService.addAutocompleteChip(vm.brandWidgetTitle, 'brand', false);
         isNavigatedFromScorecard = true;
       }
-      if ($state.params.pageData && $state.params.pageData.premiseType) vm.filtersService.model.selected.premiseType = $state.params.pageData.premiseType;
       return isNavigatedFromScorecard;
     }
 
@@ -813,6 +811,7 @@ module.exports = /*  @ngInject */
       }
       setDefaultFilterOptions();
       if (isNavigatedFromScorecard === true) {
+        if ($state.params.pageData && $state.params.pageData.premiseType) vm.filtersService.model.selected.premiseType = $state.params.pageData.premiseType;
         var brandObj = {
           id: vm.brandIdSelected,
           name: vm.brandWidgetTitle
