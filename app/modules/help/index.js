@@ -12,7 +12,10 @@ module.exports =
       title: 'Help',
       templateUrl: './app/modules/help/layout.html',
       controller: 'helpController',
-      controllerAs: 'help'
+      controllerAs: 'help',
+      analyticsData: {
+        pageTitle: 'Help'
+      }
     });
   })
   .controller('helpController', require('./helpController'));

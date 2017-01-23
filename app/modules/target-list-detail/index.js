@@ -22,6 +22,10 @@ module.exports =
           opportunityId: null,
           noOpportunitiesFound: false
         };
+      },
+      analyticsData: {
+        pageTitle: 'Target List',
+        pageUrl: '/target-lists/:id'
       }
     });
   })

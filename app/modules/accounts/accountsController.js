@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports = /*  @ngInject */
-  function accountsController($rootScope, $scope, $state, $log, $q, $window, $filter, $timeout, myperformanceService, chipsService, filtersService, notesService, userService) {
+  function accountsController($rootScope, $scope, $state, $log, $q, $window, $filter, $timeout, $analytics, myperformanceService, chipsService, filtersService, notesService, userService) {
 
     // ****************
     // CONTROLLER SETUP
@@ -200,6 +200,8 @@ module.exports = /*  @ngInject */
     }
 
     function filterTopBottom() {
+      var previousTopBottomAcctType = vm.currentTopBottomAcctType;
+
       // reset flags
       for (var topBottomObj in vm.topBottomData) {
         myperformanceService.resetPerformanceDataFlags(vm.topBottomData[topBottomObj]);
@@ -217,6 +219,10 @@ module.exports = /*  @ngInject */
         vm.currentTopBottomAcctType = vm.filtersService.accountFilters.accountTypes[1];
       } else {
         vm.currentTopBottomAcctType = vm.filtersService.accountFilters.accountTypes[0];
+      }
+
+      if (previousTopBottomAcctType.value !== vm.currentTopBottomAcctType.value) {
+        sendTopBottomAnalyticsEvent();
       }
 
       vm.currentTopBottomObj = getCurrentTopBottomObject(vm.currentTopBottomAcctType);
@@ -311,6 +317,7 @@ module.exports = /*  @ngInject */
               return market.value === filtersService.accountFilters.accountMarketsEnums.distEffective;
             });
             vm.filtersService.model.accountSelected.accountMarkets = distEffectiveObj[0];
+            sendTopBottomAnalyticsEvent();
             getDataForTopBottomLevel(vm.currentTopBottomObj);
           }
         } else if (accountObj.value === filtersService.accountFilters.accountMarketsEnums.distEffective && vm.brandSelectedIndex === 0) {
@@ -320,6 +327,7 @@ module.exports = /*  @ngInject */
               return market.value === filtersService.accountFilters.accountMarketsEnums.distSimple;
             });
             vm.filtersService.model.accountSelected.accountMarkets = distSimpleObj[0];
+            sendTopBottomAnalyticsEvent();
             getDataForTopBottomLevel(vm.currentTopBottomObj);
           }
         }
@@ -825,6 +833,8 @@ module.exports = /*  @ngInject */
       // reset state params
       $state.params.applyFiltersOnLoad = false;
       $state.params.resetFiltersOnLoad = true;
+
+      sendTopBottomAnalyticsEvent();
     }
 
     // Move to next indexed tab
@@ -864,6 +874,7 @@ module.exports = /*  @ngInject */
       if (vm.currentTopBottomAcctType !== currentAcctType) {
         vm.currentTopBottomAcctType = currentAcctType;
         vm.currentTopBottomObj = getCurrentTopBottomObject(currentAcctType);
+        sendTopBottomAnalyticsEvent();
         removeAllTopBottomAccountTypeFilters();
         onFilterPropertiesChange();
       }
@@ -1093,6 +1104,7 @@ module.exports = /*  @ngInject */
     function acctMarketChanged(selectedVal) {
       if (vm.filtersService.model.accountSelected.accountMarkets !== selectedVal) {
         vm.filtersService.model.accountSelected.accountMarkets = selectedVal;
+        sendTopBottomAnalyticsEvent();
         onFilterPropertiesChange(false);
       }
     }
@@ -1106,6 +1118,7 @@ module.exports = /*  @ngInject */
       if (vm.filtersService.model.valuesVsTrend !== selectedVal) {
         vm.loadingTopBottom = true;
         vm.filtersService.model.valuesVsTrend = selectedVal;
+        sendTopBottomAnalyticsEvent();
         onFilterPropertiesChange(false);
       }
     }
@@ -1168,6 +1181,7 @@ module.exports = /*  @ngInject */
 
           updateBrandSnapshot();
           getDataForTopBottomLevel(vm.currentTopBottomObj);
+          sendTopBottomAnalyticsEvent();
         } else {
           // Just setting current top bottom object to store
           vm.currentTopBottomObj = getCurrentTopBottomObject(vm.currentTopBottomAcctType);
@@ -1244,6 +1258,13 @@ module.exports = /*  @ngInject */
       function setOverviewDisplay(value) {
         vm.overviewOpen = value;
         $scope.$apply();
+     }
+
+     function sendTopBottomAnalyticsEvent() {
+       $analytics.eventTrack(vm.currentTopBottomAcctType.name, {
+         category: vm.filtersService.model.valuesVsTrend.name,
+         label: vm.filtersService.model.accountSelected.accountMarkets.name
+       });
      }
 
      angular.element($window).bind('scroll', function() {

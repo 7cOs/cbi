@@ -21,7 +21,7 @@ module.exports = /*  @ngInject */
     vm.tabFilter = tabFilter;
     vm.goToTab = goToTab;
     vm.recordsShownLength = recordsShownLength;
-    vm.analyticsLabelForType = analyticsLabelForType;
+    vm.analyticsActionForType = analyticsActionForType;
 
     // tab names
     vm.types = {
@@ -81,11 +81,11 @@ module.exports = /*  @ngInject */
       }
     }
 
-    function analyticsLabelForType(type) {
+    function analyticsActionForType(type) {
       if (type === 'Shared with Me') {
-        return 'Shared Lists';
+        return 'Shared List';
       } else {
-        return 'My Lists';
+        return 'My List';
       }
     }
 

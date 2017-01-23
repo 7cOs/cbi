@@ -24,6 +24,9 @@ module.exports =
           account: {}
         },
         id: ''
+      },
+      analyticsData: {
+        pageTitle: 'Performance : Account Dashboard'
       }
     });
   })
