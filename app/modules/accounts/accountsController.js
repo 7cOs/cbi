@@ -833,6 +833,8 @@ module.exports = /*  @ngInject */
       // reset state params
       $state.params.applyFiltersOnLoad = false;
       $state.params.resetFiltersOnLoad = true;
+
+      sendTopBottomAnalyticsEvent();
     }
 
     // Move to next indexed tab
