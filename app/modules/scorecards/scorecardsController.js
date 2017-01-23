@@ -202,7 +202,7 @@ module.exports = /*  @ngInject */
     // **************
 
     function init() {
-      userService.model.currentUser.srcTypeCd = [''];
+      if (userService.model.currentUser.srcTypeCd === undefined) userService.model.currentUser.srcTypeCd = [''];
       setDefaultFilterOptions();
       var performanceDepletionPromise = userService.getPerformanceDepletion();
       var performanceDistributionPromise = userService.getPerformanceDistribution({'type': 'noencode', 'premiseType': vm.distributionRadioOptions.selected.onOffPremise});
