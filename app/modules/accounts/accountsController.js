@@ -761,7 +761,7 @@ module.exports = /*  @ngInject */
         vm.currentTopBottomObj = getCurrentTopBottomObject(vm.currentTopBottomAcctType);
         var storeData = {id: storeFilter.storeId, name: storeFilter.storeName};
         vm.currentTopBottomFilters.stores = storeData;
-        vm.filtersService.model.selected.myAccountsOnly = false;
+        vm.filtersService.model.selected.myAccountsOnly = storeFilter.myAccountsOnly;
         vm.filtersService.model.selected.premiseType = 'all';
         isNavigatedFromOpps = true;
       }
