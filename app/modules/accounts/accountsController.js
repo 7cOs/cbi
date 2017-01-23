@@ -744,7 +744,7 @@ module.exports = /*  @ngInject */
     function checkForNavigationFromScorecard() {
       var isNavigatedFromScorecard = false;
       if ($state.params.applyFiltersOnLoad && $state.params.pageData.brandTitle) {
-        vm.brandIdSelected = filtersService.model.selected.brand[0];
+        vm.brandIdSelected = $state.params.pageData.brandId;
         vm.brandWidgetTitle = $state.params.pageData.brandTitle;
         chipsService.addAutocompleteChip(vm.brandWidgetTitle, 'brand', false);
         isNavigatedFromScorecard = true;
@@ -768,14 +768,7 @@ module.exports = /*  @ngInject */
       return isNavigatedFromOpps;
     }
 
-    function init() {
-      setDefaultDropDownOptions();
-      var isNavigatedFromScorecard = checkForNavigationFromScorecard();
-      var isNavigatedFromOpps = checkForNavigationFromOpps();
-      if (isNavigatedFromScorecard === false && isNavigatedFromOpps === false) {
-        chipsService.resetChipsFilters(chipsService.model);
-      }
-      setDefaultFilterOptions();
+    function getBrandsAndTopbottomDataOnInit(isNavigatedFromOpps) {
       var params = getUpdatedFilterQueryParamsForBrand();
       var promiseArr = [];
       // brand snapshot returns sku data instead of just the brand if you add brand:xxx
@@ -786,30 +779,18 @@ module.exports = /*  @ngInject */
         if (data[0]) {
           vm.loadingBrandSnapshot = false;
           vm.brandTabs.brands = data[0].performance;
-          if (isNavigatedFromScorecard === true) {
-             var matchedVal = vm.brandTabs.brands.filter(function(val) {
-               return val.name === vm.brandWidgetTitle;
-             });
-             if (matchedVal[0]) {
-               selectItem('brands', matchedVal[0], vm.brandTabs, 0);
-             }
-          }
           setCurrentTotalsObject();
-          if (isNavigatedFromScorecard === false) {
-            getDataForTopBottomLevel(vm.currentTopBottomObj);
-          }
+          getDataForTopBottomLevel(vm.currentTopBottomObj);
 
           if (isNavigatedFromOpps === true) {
             // Directly navigate to store level if navigated from opps
             navigateTopBottomLevels(vm.currentTopBottomFilters.stores);
           }
-
-          // reset state params
-          $state.params.applyFiltersOnLoad = false;
-          $state.params.resetFiltersOnLoad = true;
         }
       });
+    }
 
+    function setNotes() {
       if ($state.params.openNotesOnLoad) {
         $timeout(function() {
           $rootScope.$broadcast('notes:opened', true, $state.params.pageData.account);
@@ -821,6 +802,29 @@ module.exports = /*  @ngInject */
           });
         });
       }
+    }
+
+    function init() {
+      setDefaultDropDownOptions();
+      var isNavigatedFromScorecard = checkForNavigationFromScorecard();
+      var isNavigatedFromOpps = checkForNavigationFromOpps();
+      if (isNavigatedFromScorecard === false && isNavigatedFromOpps === false) {
+        chipsService.resetChipsFilters(chipsService.model);
+      }
+      setDefaultFilterOptions();
+      if (isNavigatedFromScorecard === true) {
+        var brandObj = {
+          id: vm.brandIdSelected,
+          name: vm.brandWidgetTitle
+        };
+        selectItem('brands', brandObj, vm.brandTabs, 0);
+      } else {
+        getBrandsAndTopbottomDataOnInit(isNavigatedFromOpps);
+      }
+      setNotes();
+      // reset state params
+      $state.params.applyFiltersOnLoad = false;
+      $state.params.resetFiltersOnLoad = true;
     }
 
     // Move to next indexed tab
@@ -1089,7 +1093,7 @@ module.exports = /*  @ngInject */
     function acctMarketChanged(selectedVal) {
       if (vm.filtersService.model.accountSelected.accountMarkets !== selectedVal) {
         vm.filtersService.model.accountSelected.accountMarkets = selectedVal;
-        onFilterPropertiesChange();
+        onFilterPropertiesChange(false);
       }
     }
 

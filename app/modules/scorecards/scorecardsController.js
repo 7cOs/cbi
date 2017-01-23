@@ -142,6 +142,7 @@ module.exports = /*  @ngInject */
           applyFiltersOnLoad: true,
           pageData: {
             brandTitle: row.name,
+            brandId: row.id,
             premiseType: premiseType
           }
         });
