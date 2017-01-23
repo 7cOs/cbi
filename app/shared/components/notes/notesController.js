@@ -19,6 +19,7 @@ module.exports = /*  @ngInject */
     vm.notesOpen = false;
     vm.notesClose = notesClose;
     vm.fileUploadActive = true;
+    vm.noteHasBeenDeleted = false;
 
     // Temp data
     vm.noteTopics = [
@@ -361,7 +362,12 @@ module.exports = /*  @ngInject */
         if (vm.notes.length && account.noteId) {
           setTimeout(function() {
             var num = angular.element(document.querySelector(accountElement))[0].offsetTop;
-            angular.element(document.querySelector('.note-container'))[0].scrollTop = num;
+            if (num) {
+              angular.element(document.querySelector('.note-container'))[0].scrollTop = num;
+            } else {
+              jumpToNotesTop();
+              vm.noteHasBeenDeleted = true;
+            }
           });
         }
       });

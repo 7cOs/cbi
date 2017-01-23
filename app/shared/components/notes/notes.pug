@@ -43,6 +43,10 @@ div.modal.notes(ng-if="notesOpen")
           div.attached-files
             .other
               p(ng-if="attachment.name").file-name {{attachment.name}}&nbsp;({{attachment.parsedSize}})
+    div.note-body(ng-if="n.noteHasBeenDeleted")
+      div.note-body-field
+        h4 Note Deleted
+        p The note you're trying to access has been deleted
     div.note-body(id="{{note.id}}" ng-repeat="note in n.notes | orderBy:'-date'")
       div(ng-if="note.deleteConfirmation").delete-confirm
         h4 Are you sure you want to delete this note?
