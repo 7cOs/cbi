@@ -266,8 +266,8 @@ module.exports = /*  @ngInject */
         emailString += '?subject=' + currentAccount.currentStoreName + ': Note: ' + note.title;
         emailString += '&body=' + currentAccount.currentStoreName + '%0D%0A%0D%0A';
         emailString += currentAccount.address + '%0D%0A';
-        emailString += currentAccount.city + '%0D%0A';
-        emailString += currentAccount.state + '%0D%0A';
+        emailString += currentAccount.city + ', ';
+        emailString += currentAccount.state + ' ';
         emailString += currentAccount.zipCode + '%0D%0A%0D%0A';
         emailString += 'TDLinx: ' + currentAccount.tdlinx + '%0D%0A%0D%0A';
         emailString += updatedNoteBody;
@@ -279,8 +279,8 @@ module.exports = /*  @ngInject */
         emailString += '?subject=' + currentAccount.currentStoreName + ': Note: ' + note.title;
         emailString += '&body=' + currentAccount.currentStoreName + '%0D%0A%0D%0A';
         emailString += currentAccount.address + '%0D%0A';
-        emailString += currentAccount.city + '%0D%0A';
-        emailString += currentAccount.state + '%0D%0A';
+        emailString += currentAccount.city + ', ';
+        emailString += currentAccount.state + ' ';
         emailString += currentAccount.zipCode + '%0D%0A%0D%0A';
         emailString += 'ID: ' + currentAccount.accountId + '%0D%0A%0D%0A';
         emailString += updatedNoteBody;
