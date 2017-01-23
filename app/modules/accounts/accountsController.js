@@ -284,7 +284,7 @@ module.exports = /*  @ngInject */
         currentBrandSelected = null;
         vm.brandSelectedIndex = vm.brandSelectedIndex - 1;
         setCurrentTotalsObject();
-        vm.brandWidgetTitle = vm.brandWidgetTitleDefault;
+        vm.brandWidgetTitle = angular.copy(vm.brandWidgetTitleDefault);
         vm.brandIdSelected = null;
         vm.filtersService.model.accountSelected.accountBrands = vm.filtersService.accountFilters.accountBrands[0];
       }
@@ -649,7 +649,7 @@ module.exports = /*  @ngInject */
     function checkForDepOrDistValue(item) {
       if (item) {
         var depletionVal = vm.displayBrandValue(item.measures, 'depletions', 'depletionsTimePeriod');
-        var distributionVal = vm.displayBrandValue(item.measures, 'depletions', vm.filtersService.model.accountSelected.accountBrands.propertyName, 'distributionTimePeriod');
+        var distributionVal = vm.displayBrandValue(item.measures, vm.filtersService.model.accountSelected.accountBrands.propertyName, 'distributionTimePeriod');
         return depletionVal || distributionVal;
       }
     }
