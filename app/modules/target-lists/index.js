@@ -15,7 +15,10 @@ module.exports = /*  @ngInject */
       },
       templateUrl: './app/modules/target-lists/layout.html',
       controller: 'targetListsController',
-      controllerAs: 't'
+      controllerAs: 't',
+      analyticsData: {
+        pageTitle: 'Target Lists'
+      }
     });
   })
   .controller('targetListsController', require('./targetListsController'));

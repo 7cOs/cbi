@@ -25,10 +25,6 @@ module.exports = /*  @ngInject */
       $mdSelect.hide();
     });
 
-    // Currently logged in user (for analytics)
-    $window.currentUserId = userService.model.currentUser.employeeID;
-    $window.analyticsId = $rootScope.analytics.id;
-
     // Services
     vm.notificationsService = notificationsService;
     vm.userService = userService;

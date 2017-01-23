@@ -12,7 +12,10 @@ module.exports =
       title: 'Welcome',
       templateUrl: './app/modules/landing/layout.html',
       controller: 'landingController',
-      controllerAs: 'l'
+      controllerAs: 'l',
+      analyticsData: {
+        pageTitle: 'Home'
+      }
     });
   })
   .controller('landingController', require('./landingController'));

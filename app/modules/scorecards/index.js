@@ -12,7 +12,10 @@ module.exports =
       title: 'Scorecards',
       templateUrl: './app/modules/scorecards/layout.html',
       controller: 'scorecardsController',
-      controllerAs: 's'
+      controllerAs: 's',
+      analyticsData: {
+        pageTitle: 'Performance : My Scorecards'
+      }
     });
   })
   .controller('scorecardsController', require('./scorecardsController'));

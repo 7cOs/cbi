@@ -14,7 +14,10 @@ module.exports =
       },
       templateUrl: './app/modules/opportunities/layout.html',
       controller: 'opportunitiesController',
-      controllerAs: 'o'
+      controllerAs: 'o',
+      analyticsData: {
+        pageTitle: 'Opportunities'
+      }
     });
   })
   .controller('opportunitiesController', require('./opportunitiesController'));
