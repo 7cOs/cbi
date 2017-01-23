@@ -325,7 +325,7 @@ module.exports = /*  @ngInject */
           storeFilter = {
             storeId: result[0],
             storeName: result[1],
-            myAccountsOnly: result[2]
+            myAccountsOnly: result[2] === 'true'
           };
         }
       }
