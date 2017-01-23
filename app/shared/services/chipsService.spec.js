@@ -311,6 +311,62 @@ describe('[Services.chipsService]', function() {
 
   });
 
+   describe('[applyFilterArr]', function() {
+
+    it('should apply arr filters with no display name', function() {
+      expect(chipsService.model).toEqual([]);
+
+      chipsService.applyFilterArr(['2225193'], {address: '989 E 149TH ST', id: '2225193', name: 'MANHATTAN BEER DIST LLC - NY (BRONX - S)'});
+
+      expect(chipsService.model).toEqual([{ name: 'Manhattan Beer Dist Llc - Ny (bronx - S)', id: undefined, type: undefined, search: true, applied: false, removable: true, tradeChannel: false }]);
+      expect(chipsService.model.length).toEqual(1);
+    });
+
+    it('should apply arr filters with a display name', function() {
+      expect(chipsService.model).toEqual([]);
+
+      chipsService.applyFilterArr(['2225193'], {address: '989 E 149TH ST', id: '2225193', name: 'MANHATTAN BEER DIST LLC - NY (BRONX - S)'}, 'distributor');
+
+      expect(chipsService.model).toEqual([{name: 'Manhattan Beer Dist Llc - Ny (bronx - S)', id: '2225193', type: 'distributor', search: true, applied: false, removable: true, tradeChannel: false}]);
+      expect(chipsService.model.length).toEqual(1);
+    });
+    it('should apply arr filters for a brand with no display name', function() {
+      expect(chipsService.model).toEqual([]);
+
+      chipsService.applyFilterArr([], {brand: 'CORONA EXTRA', brandCode: '228', id: null, name: null, type: 'brand'}, 'brand');
+
+      expect(chipsService.model).toEqual([{ name: 'Corona Extra', id: undefined, type: 'brand', search: true, applied: false, removable: true, tradeChannel: false }]);
+      expect(chipsService.model.length).toEqual(1);
+    });
+    it('should apply arr filters for a MASTER SKU with an ID', function() {
+      expect(chipsService.model).toEqual([]);
+
+      chipsService.applyFilterArr([], {brand: 'CORONA EXTRA', brandCode: '228', id: '80013438', name: 'CORONA EX 12PK CAN PROMO', type: 'sku'}, 'masterSKU');
+
+      expect(chipsService.model).toEqual([{name: 'Corona Ex 12pk Can Promo', id: '80013438', type: 'masterSKU', search: true, applied: false, removable: true, tradeChannel: false}]);
+      expect(chipsService.model.length).toEqual(1);
+    });
+
+    it('should apply arr filters for a MASTER SKU with no ID', function() {
+      expect(chipsService.model).toEqual([]);
+      filtersService.model.selected = {brand: []};
+
+      chipsService.applyFilterArr([], {brand: 'CORONA EXTRA', brandCode: '228', name: 'CORONA EX 12PK CAN PROMO', type: 'sku'}, 'masterSKU');
+
+      expect(chipsService.model).toEqual([{ name: 'Corona Extra', id: '228', type: 'brand', search: true, applied: false, removable: true, tradeChannel: false }]);
+      expect(chipsService.model.length).toEqual(1);
+    });
+
+    it('should apply arr filters for a contact', function() {
+      expect(chipsService.model).toEqual([]);
+
+      chipsService.applyFilterArr([], {id: '5516', employeeId: '1011729', firstName: 'VINCENT', lastName: 'DANDRAIA', email: 'VINCE.DANDRAIA@CBRANDS.COM'}, 'contact', 'VINCENT DANDRAIA');
+
+      expect(chipsService.model).toEqual([{ name: 'Vincent Dandraia', id: '1011729', type: 'contact', search: true, applied: false, removable: true, tradeChannel: false }]);
+      expect(chipsService.model.length).toEqual(1);
+    });
+  });
+
   describe('[addChipsArray]', function() {
     var sampleArray = [
       {name: 'Off-Premise', type: 'premiseType', applied: true, removable: false},

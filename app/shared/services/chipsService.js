@@ -296,6 +296,10 @@ module.exports = /*  @ngInject */
 
     function applyFilterArr(model, result, filter, displayName) {
       //  fall back to result if displayName is undefined
+      console.log(model);
+      console.log(result);
+      console.log(filter);
+      console.log(displayName);
       if (!displayName) {
         if (result.brand) {
           displayName = result.brand;
@@ -333,7 +337,7 @@ module.exports = /*  @ngInject */
             if (service.model.indexOf(result.id) === -1) model.push(result.id);
             break;
           case 'masterSKU':
-            if (result.id === null) {
+            if (result.id === null || result.id === undefined) {
               addAutocompleteChip($filter('titlecase')(result.brand), 'brand', null, result.brandCode);
               if (filtersService.model.selected.brand.indexOf(result.brandCode) === -1) filtersService.model.selected.brand.push(result.brandCode);
             } else if (result.id !== null) {

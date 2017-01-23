@@ -275,12 +275,17 @@ module.exports = /*  @ngInject */
         switch (userService.model.currentUser.srcTypeCd[0]) {
           case 'OFF_HIER':
           case 'OFF_SPEC':
+            console.log('off');
+            console.log(userService.model.currentUser.srcTypeCd[0]);
             offPremise();
             break;
           case 'ON_HIER':
+            console.log(userService.model.currentUser.srcTypeCd[0]);
             onPremise();
             break;
           default:
+            console.log('default');
+            console.log(userService.model.currentUser.srcTypeCd[0]);
             vm.distributionRadioOptions.selected.onOffPremise = 'off';
             break;
           }
