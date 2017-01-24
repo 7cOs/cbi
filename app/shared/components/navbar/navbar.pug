@@ -73,6 +73,7 @@ div.outer-nav-wrapper
                   a(href="/auth/logout" target="_self" analytics-on="click" analytics-event="Button Click" analytics-category="Navigation" analytics-label="Logout")
                     button.btn-action Logout
           div.version {{nb.versionService.model.version.hash}} | {{nb.versionService.model.version.version}}
+            a.feedback(href="#" ng-click="nb.sendFeedback()" analytics-on="click" analytics-event="Link Click" analytics-category="Navigation" analytics-label="Send Feedback") Send Feedback
       ul.nav-sub-menu(ng-if="$root.pageTitle === 'Account Dashboard' || $root.pageTitle === 'Scorecards'")
         li.accent #[a(ui-sref="scorecards" ui-sref-active="active" analytics-on="click" analytics-event="Link Click" analytics-category="Navigation" analytics-label="My Scorecards") My Scorecards]
         li.accent #[a(ui-sref="accounts" ui-sref-active="active" analytics-on="click" analytics-event="Link Click" analytics-category="Navigation" analytics-label="Account Dashboard") Account Dashboard]

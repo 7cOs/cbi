@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports = /*  @ngInject */
-  function navbarController($rootScope, $scope, $state, $window, $mdPanel, $mdDialog, $mdMenu, $mdSelect, $anchorScroll, $analytics, notificationsService, opportunitiesService, targetListService, userService, versionService, loaderService, ieHackService, toastService, filtersService, chipsService, notesService, moment) {
+  function navbarController($rootScope, $scope, $state, $window, $mdPanel, $mdDialog, $mdMenu, $mdSelect, $anchorScroll, $analytics, $location, notificationsService, opportunitiesService, targetListService, userService, versionService, loaderService, ieHackService, toastService, filtersService, chipsService, notesService, moment) {
 
     // ****************
     // CONTROLLER SETUP
@@ -94,6 +94,7 @@ module.exports = /*  @ngInject */
     vm.showImpact = showImpact;
     vm.showNewRationaleInput = showNewRationaleInput;
     vm.goToNote = goToNote;
+    vm.sendFeedback = sendFeedback;
 
     $scope.$watch(function() { return toastService.model; }, function(newVal) {
       vm.archived = newVal.archived;
@@ -422,6 +423,21 @@ module.exports = /*  @ngInject */
         },
         storeId: notification.shortenedObject.tdlinx_number
       });
+    }
+
+    function sendFeedback() {
+      var newline = '%0D%0A',
+        emailString = 'mailto:';
+
+      emailString += '?subject=Compass Beer Web - User Feedback';
+      emailString += '&to=compassbeerfeedback@cbrands.com';
+      emailString += '&body=';
+      emailString += 'Compass Web Version: ' + versionService.model.version.hash + ' - ' + versionService.model.version.version + newline;
+      emailString += 'URL: ' + $location.absUrl() + newline;
+      emailString += 'User Email: ' + userService.model.currentUser.email + newline + newline;
+      emailString += 'Feedback: ' + newline + newline;
+
+      $window.location = emailString;
     }
 
     // ***************
