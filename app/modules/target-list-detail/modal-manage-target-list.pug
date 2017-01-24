@@ -47,7 +47,7 @@ div.modal.target-list-modal
       label(ng-if="tld.targetListService.model.currentList.permissionLevel !== 'author'") Add Recipient
       inline-search(type="user" placeholder="Enter names or CBI Email addresses" chosen-result="tld.collaboratorName" callback="tld.addCollaboratorClick(result)")
     div(ng-if="tld.saveButton")
-      button(ng-disabled="!tld.changed" ng-click="tld.updateList()" analytics-on="click" analytics-event="Save Target List" analytics-category="Target List" analytics-label="Manage Target List").btn-action Save
+      button(ng-disabled="!tld.changed" ng-click="tld.updateList()" analytics-on="click" analytics-event="Save Target List" analytics-category="Target Lists" analytics-label="Manage Target List").btn-action Save
       p.cancel.accent(ng-click="tld.closeModal(true)") X Cancel
     button(ng-if="tld.closeButton" ng-click="tld.changed ? tld.navigateToTL() : tld.closeModal(true)").btn-action Close
   div.modal-footer.clearfix(ng-if="tld.targetListService.model.currentList.permissionLevel !== 'author'" ng-class="{'toasted': tld.showToast}")

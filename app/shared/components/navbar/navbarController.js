@@ -133,7 +133,7 @@ module.exports = /*  @ngInject */
         opportunitiesService.model.opportunityId = notification.shortenedObject.id;
         $state.go('opportunities', (opportunitiesService.model.opportunityId, opportunitiesService.model.filterApplied = false), {reload: true});
       } else if (notification.objectType.toUpperCase() === 'ACCOUNT') {
-        $analytics.eventTrack('Read Notification', {category: 'Notifications', label: 'Account'});
+        $analytics.eventTrack('Read Notification', {category: 'Notifications', label: 'Shared Note'});
 
         $state.go('accounts');
       }
