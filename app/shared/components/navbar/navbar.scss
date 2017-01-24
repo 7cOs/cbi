@@ -316,8 +316,13 @@ div.nav-link-wrapper {
   top: 48px;
   position: absolute;
   font-size: 10px;
-  width: 120px;
-  right: 7px;
+  width: 210px;
+  right: 3px;
   text-align: right;
   color: $gray-12;
+
+  .feedback {
+    font-weight: bold;
+    margin-left: 10px;
+  }
 }
