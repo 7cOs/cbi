@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports = /*  @ngInject */
-  function listController($scope, $state, $q, $location, $anchorScroll, $mdDialog, $timeout, filtersService, loaderService, opportunitiesService, targetListService, storesService, userService, closedOpportunitiesService, ieHackService, toastService) {
+  function listController($scope, $state, $q, $location, $anchorScroll, $mdDialog, $timeout, $analytics, filtersService, loaderService, opportunitiesService, targetListService, storesService, userService, closedOpportunitiesService, ieHackService, toastService) {
 
     // ****************
     // CONTROLLER SETUP
@@ -256,6 +256,7 @@ module.exports = /*  @ngInject */
 
       // Create target list
       userService.addTargetList(vm.newList).then(function(response) {
+        $analytics.eventTrack('Add to Target List', {category: vm.analyticsCategory, label: response.id});
         vm.addToTargetList(response.id);
         vm.closeModal();
         vm.buttonDisabled = false;
@@ -825,7 +826,7 @@ module.exports = /*  @ngInject */
         vm.analyticsCategory = 'Opportunities';
         vm.analyticsLabel = 'Opportunity Result List';
       } else {
-        vm.analyticsCategory = 'Target List';
+        vm.analyticsCategory = 'Target Lists';
         vm.analyticsLabel = 'Opportunities';
       }
     }
