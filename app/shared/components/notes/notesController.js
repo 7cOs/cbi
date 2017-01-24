@@ -264,26 +264,26 @@ module.exports = /*  @ngInject */
 
       if (notesService.model.currentStoreProperty === 'store') {
         emailString = 'mailto:';
-        emailString += '?subject=' + currentAccount.currentStoreName + ': Note: ' + note.title;
-        emailString += '&body=' + currentAccount.currentStoreName + '%0D%0A%0D%0A';
-        emailString += currentAccount.address + '%0D%0A';
-        emailString += currentAccount.city + ', ';
-        emailString += currentAccount.state + ' ';
-        emailString += currentAccount.zipCode + '%0D%0A%0D%0A';
-        emailString += 'TDLinx: ' + currentAccount.tdlinx + '%0D%0A%0D%0A';
+        if (currentAccount.currentStoreName) emailString += '?subject=' + currentAccount.currentStoreName + ': Note: ' + note.title;
+        if (currentAccount.currentStoreName) emailString += '&body=' + currentAccount.currentStoreName + '%0D%0A%0D%0A';
+        if (currentAccount.address) emailString += currentAccount.address + '%0D%0A';
+        if (currentAccount.city) emailString += currentAccount.city + ', ';
+        if (currentAccount.state) emailString += currentAccount.state + ' ';
+        if (currentAccount.zipCode) emailString += currentAccount.zipCode + '%0D%0A%0D%0A';
+        if (currentAccount.tdlinx) emailString += 'TDLinx: ' + currentAccount.tdlinx + '%0D%0A%0D%0A';
         emailString += updatedNoteBody;
         $window.location = emailString;
       }
 
       if (notesService.model.currentStoreProperty === 'distributor') {
         emailString = 'mailto:';
-        emailString += '?subject=' + currentAccount.currentStoreName + ': Note: ' + note.title;
-        emailString += '&body=' + currentAccount.currentStoreName + '%0D%0A%0D%0A';
-        emailString += currentAccount.address + '%0D%0A';
-        emailString += currentAccount.city + ', ';
-        emailString += currentAccount.state + ' ';
-        emailString += currentAccount.zipCode + '%0D%0A%0D%0A';
-        emailString += 'ID: ' + currentAccount.accountId + '%0D%0A%0D%0A';
+        if (currentAccount.currentStoreName) emailString += '?subject=' + currentAccount.currentStoreName + ': Note: ' + note.title;
+        if (currentAccount.currentStoreName) emailString += '&body=' + currentAccount.currentStoreName + '%0D%0A%0D%0A';
+        if (currentAccount.address) emailString += currentAccount.address + '%0D%0A';
+        if (currentAccount.city) emailString += currentAccount.city + ', ';
+        if (currentAccount.state) emailString += currentAccount.state + ' ';
+        if (currentAccount.zipCode) emailString += currentAccount.zipCode + '%0D%0A%0D%0A';
+        if (currentAccount.accountId) emailString += 'ID: ' + currentAccount.accountId + '%0D%0A%0D%0A';
         emailString += updatedNoteBody;
         $window.location = emailString;
       }
