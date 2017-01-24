@@ -89,6 +89,7 @@ module.exports = /*  @ngInject */
             author: arr.CreatedBy.Name,
             authorId: arr.CreatedBy.CBI_Employee_ID__c,
             date: arr.CreatedDate,
+            lastModifiedDate: arr.LastModifiedDate,
             attachments: noteAttachments
           });
         });
