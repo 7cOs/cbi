@@ -351,7 +351,7 @@ module.exports = /*  @ngInject */
 
       vm.loading = true;
 
-      notesService.model.accountId = account.id[0];
+      account.id.length > 1 ? notesService.model.accountId = account.id[1] : notesService.model.accountId = account.id[0];
 
       notesService.accountNotes().then(function(success) {
 
