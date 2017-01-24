@@ -284,6 +284,18 @@ describe('[Services.chipsService]', function() {
       // remove independent
       chipsService.model.splice(3, 1);
     });
+    it('should remove a productType chip', function() {
+      var productTypeChip = opportunityStatusChip;
+      productTypeChip.type = 'productType';
+      productTypeChip.search = true;
+
+      chipsService.model.push(productTypeChip);
+
+      chipsService.removeFromFilterService(productTypeChip);
+
+      expect(filtersService.disableFilters.calls.count()).toEqual(1);
+      expect(filtersService.disableFilters).toHaveBeenCalledWith(false, false, true, false);
+    });
   });
 
   describe('[addChip]', function() {
@@ -310,8 +322,18 @@ describe('[Services.chipsService]', function() {
     });
 
   });
+  describe('[applyFilters]', function() {
 
-   describe('[applyFilterArr]', function() {
+    it('should reset the page number', function() {
+      filtersService.model.appliedFilter.pagination.currentPage = 5;
+      expect(filtersService.model.appliedFilter.pagination.currentPage).toEqual(5);
+      chipsService.applyFilters();
+
+      expect(filtersService.model.appliedFilter.pagination.currentPage).toEqual(0);
+    });
+  });
+
+  describe('[applyFilterArr]', function() {
 
     it('should apply arr filters with no display name', function() {
       expect(chipsService.model).toEqual([]);
@@ -364,6 +386,26 @@ describe('[Services.chipsService]', function() {
 
       expect(chipsService.model).toEqual([{ name: 'Vincent Dandraia', id: '1011729', type: 'contact', search: true, applied: false, removable: true, tradeChannel: false }]);
       expect(chipsService.model.length).toEqual(1);
+    });
+
+    it('should apply arr filters for a tradeChannel', function() {
+      expect(chipsService.model).toEqual([]);
+
+      chipsService.applyFilterArr([], 'Grocery', 'tradeChannel');
+
+      expect(chipsService.model).toEqual([{ name: 'Grocery', id: undefined, type: 'tradeChannel', search: true, applied: false, removable: true, tradeChannel: true }]);
+      expect(chipsService.model.length).toEqual(1);
+    });
+
+    it('should  delete a chip', function() {
+      chipsService.model = ['Grocery'];
+      expect(chipsService.model).toEqual(['Grocery']);
+
+      chipsService.applyFilterArr(chipsService.model, 'Grocery', 'tradeChannel');
+
+      console.log(chipsService.model);
+      expect(chipsService.model).toEqual([]);
+      expect(chipsService.model.length).toEqual(0);
     });
   });
 

@@ -296,10 +296,6 @@ module.exports = /*  @ngInject */
 
     function applyFilterArr(model, result, filter, displayName) {
       //  fall back to result if displayName is undefined
-      console.log(model);
-      console.log(result);
-      console.log(filter);
-      console.log(displayName);
       if (!displayName) {
         if (result.brand) {
           displayName = result.brand;
