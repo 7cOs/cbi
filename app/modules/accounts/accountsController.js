@@ -98,6 +98,7 @@ module.exports = /*  @ngInject */
     vm.setTopBottomAcctTypeSelection = setTopBottomAcctTypeSelection;
     vm.switchToBrandView = switchToBrandView;
     vm.changeBrandSnapshotCategory = changeBrandSnapshotCategory;
+    vm.checkConditionsForBrandSnapshotRow = checkConditionsForBrandSnapshotRow;
     vm.isStoreLevel = false;
     vm.isHighlightStore = isHighlightStore;
     // Have to create this variable because vm.selecteStore just has the name..Changing th binding to include Id involves a ton of work
@@ -138,6 +139,18 @@ module.exports = /*  @ngInject */
     // **************
     // PUBLIC METHODS
     // **************
+
+    function checkConditionsForBrandSnapshotRow(distributionCategory, isAdditionalCheck) {
+      if (vm.filtersService.model.accountSelected.accountBrands.value === distributionCategory) {
+          return vm.filtersService.model.selected.premiseType !== 'all';
+      } else {
+        if (isAdditionalCheck) {
+          return true;
+        } else {
+          return false;
+        }
+      }
+    }
 
     function allOpportunitiesDisabled() {
       if ((filtersService.model.selected.premiseType && filtersService.model.selected.premiseType !== 'all') && ((filtersService.model.selected.distributor && filtersService.model.selected.distributor.length > 0) || (filtersService.model.selected.store && filtersService.model.selected.store.length > 0) || (filtersService.model.selected.account && filtersService.model.selected.account.length > 0))) return false;
