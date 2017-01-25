@@ -1,10 +1,9 @@
-doctype html
 html(ng-app='cf' ng-class="{'ie-wrap': $root.isIE, 'edge-wrap': $root.isEdge}")
   head
     include assets/templates/head
 
-  body(md-no-ink ng-class="{'ie': $root.isIE, 'edge': $root.isEdge, 'grayed-out': $root.isGrayedOut}")
-    md-content
+  md-content
+    body(md-no-ink ng-class="{'ie': $root.isIE, 'edge': $root.isEdge, 'grayed-out': $root.isGrayedOut}")
 
       navbar
       div(container)
