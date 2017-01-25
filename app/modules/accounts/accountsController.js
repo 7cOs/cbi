@@ -299,7 +299,7 @@ module.exports = /*  @ngInject */
 
     function changeBrandSnapshotCategory(currentCategory) {
       vm.filtersService.model.accountSelected.accountBrands = currentCategory;
-      vm.updateBrandSnapshot(false);
+      updateBrandSnapshot();
     }
 
     function prevTab() {
@@ -450,16 +450,16 @@ module.exports = /*  @ngInject */
         if (widget === 'brands') { vm.brandWidgetTitle = item.name; }
         vm.loadingBrandSnapshot = true;
         vm.filtersService.model.accountSelected.accountBrands = vm.filtersService.accountFilters.accountBrands[1];
-        var params = getUpdatedFilterQueryParamsForBrand();
         currentBrandSelected = {
           name: item.name,
           id: item.id
         };
-        params.brand = currentBrandSelected.id;
+        var params = getUpdatedFilterQueryParamsForBrand();
         vm.brandIdSelected = currentBrandSelected.id;
         userService.getPerformanceBrand(params).then(function(data) {
           vm.brandTabs.skus = data.performance;
-          nextTab(widget);
+          vm.brandSelectedIndex = vm.brandSelectedIndex + 1;
+          setCurrentTotalsObject();
           $timeout(function () {
             vm.loadingBrandSnapshot = false;
           }, 500);
@@ -625,6 +625,7 @@ module.exports = /*  @ngInject */
           currentMetric = 'SPOD';
           break;
       }
+      if (currentBrandSelected) params.brand = currentBrandSelected.id;
       params.additionalParams = {
         deplTimePeriod: vm.filterModel.depletionsTimePeriod.name,
         podAndVelTimePeriod: vm.filterModel.distributionTimePeriod.name,
@@ -633,19 +634,25 @@ module.exports = /*  @ngInject */
       return params;
     }
 
-    function updateBrandSnapshot(isMoveToPreviousTab) {
+    function updateBrandSnapshot() {
       filtersService.model.selected.brand = []; // remove brand from query
       var params = getUpdatedFilterQueryParamsForBrand();
-      if (isMoveToPreviousTab !== false) {
-        prevTab();
+
+      if (vm.brandSelectedIndex === 0) {
+        userService.getPerformanceBrand(params).then(function(data) {
+          vm.brandTabs.brands = data.performance;
+          setCurrentTotalsObject();
+          vm.loadingBrandSnapshot = false;
+        });
+      } else {
+        userService.getPerformanceBrand(params).then(function(data) {
+          vm.brandTabs.skus = data.performance;
+          setCurrentTotalsObject();
+          $timeout(function () {
+            vm.loadingBrandSnapshot = false;
+          }, 500);
+        });
       }
-
-      userService.getPerformanceBrand(params).then(function(data) {
-        vm.brandTabs.brands = data.performance;
-        setCurrentTotalsObject();
-        vm.loadingBrandSnapshot = false;
-      });
-
       apply(true);
     }
 
@@ -872,15 +879,6 @@ module.exports = /*  @ngInject */
       $state.params.resetFiltersOnLoad = true;
 
       sendTopBottomAnalyticsEvent();
-    }
-
-    // Move to next indexed tab
-    function nextTab(widget) {
-      vm.disableAnimation = false;
-      if (widget === 'brands') {
-        vm.brandSelectedIndex = vm.brandSelectedIndex + 1;
-        setCurrentTotalsObject();
-      }
     }
 
     /**
