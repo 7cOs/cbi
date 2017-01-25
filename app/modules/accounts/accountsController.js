@@ -241,7 +241,7 @@ module.exports = /*  @ngInject */
 
       vm.currentTopBottomObj = getCurrentTopBottomObject(vm.currentTopBottomAcctType);
       // update data
-      updateBrandSnapshot();
+      updateBrandSnapshot(true);
       vm.getDataForTopBottomLevel(vm.currentTopBottomObj);
     }
 
@@ -400,6 +400,8 @@ module.exports = /*  @ngInject */
       vm.selected = null;
       vm.previous = null;
       vm.brandSelectedIndex = 0;
+      currentBrandSelected = null;
+      currentBrandSkuSelected = null;
       vm.brandIdSelected = null;
       vm.idSelected = null;
       vm.selectedDistributor = null;
@@ -625,7 +627,7 @@ module.exports = /*  @ngInject */
           currentMetric = 'SPOD';
           break;
       }
-      if (currentBrandSelected) params.brand = currentBrandSelected.id;
+      if (vm.brandSelectedIndex === 1) params.brand = currentBrandSelected.id;
       params.additionalParams = {
         deplTimePeriod: vm.filterModel.depletionsTimePeriod.name,
         podAndVelTimePeriod: vm.filterModel.distributionTimePeriod.name,
@@ -634,10 +636,13 @@ module.exports = /*  @ngInject */
       return params;
     }
 
-    function updateBrandSnapshot() {
+    function updateBrandSnapshot(isMoveToPreviousTab) {
       filtersService.model.selected.brand = []; // remove brand from query
-      var params = getUpdatedFilterQueryParamsForBrand();
 
+      if (isMoveToPreviousTab && isMoveToPreviousTab === true && vm.brandSelectedIndex === 1) {
+        prevTab();
+      }
+      var params = getUpdatedFilterQueryParamsForBrand();
       if (vm.brandSelectedIndex === 0) {
         userService.getPerformanceBrand(params).then(function(data) {
           vm.brandTabs.brands = data.performance;
@@ -1213,13 +1218,13 @@ module.exports = /*  @ngInject */
           vm.currentTopBottomAcctType = myperformanceService.getAcctTypeObjectBasedOnTabIndex(vm.currentTopBottomAcctType.value, getNextLevel);
           vm.currentTopBottomObj = getCurrentTopBottomObject(vm.currentTopBottomAcctType);
 
-          updateBrandSnapshot();
+          updateBrandSnapshot(true);
           getDataForTopBottomLevel(vm.currentTopBottomObj);
           sendTopBottomAnalyticsEvent();
         } else {
           // Just setting current top bottom object to store
           vm.currentTopBottomObj = getCurrentTopBottomObject(vm.currentTopBottomAcctType);
-          updateBrandSnapshot();
+          updateBrandSnapshot(true);
         }
         notesService.model.tdlinx = performanceData.unversionedStoreCode;
         notesService.model.address = formatAddress(performanceData);
