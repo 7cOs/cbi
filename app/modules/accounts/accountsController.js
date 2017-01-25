@@ -853,8 +853,10 @@ module.exports = /*  @ngInject */
         chipsService.resetChipsFilters(chipsService.model);
       }
       setDefaultFilterOptions();
+      if ($state.params.pageData && $state.params.pageData.premiseType && $state.params.applyFiltersOnLoad) {
+        vm.filtersService.model.selected.premiseType = $state.params.pageData.premiseType;
+      }
       if (isNavigatedFromScorecard === true) {
-        if ($state.params.pageData && $state.params.pageData.premiseType) vm.filtersService.model.selected.premiseType = $state.params.pageData.premiseType;
         var brandObj = {
           id: vm.brandIdSelected,
           name: vm.brandWidgetTitle
