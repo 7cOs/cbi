@@ -102,8 +102,8 @@ div(row)
         p.brands {{a.brandWidgetSkuTitle || a.brandWidgetTitle}}
       div.dropdown-section
         .dropdown-filter
-          md-select.dropdown-options(ng-model="a.filtersService.model.accountSelected.accountBrands" ng-change="a.updateBrandSnapshot(false)" md-on-open="a.openSelect(true)" md-on-close="a.openSelect(false);" aria-label="Account Brands Filter" placeholder="Distribution (simple)")
-            md-option(ng-repeat="filter in a.filtersService.accountFilters.accountBrands" ng-if="!a.removeDistOptionsBasedOnView(filter, true)" aria-label="{{filter.name}}" ng-value="filter") {{filter.name}}
+          md-select.dropdown-options(ng-model="a.filtersService.model.accountSelected.accountBrands" md-on-open="a.openSelect(true)" md-on-close="a.openSelect(false);" aria-label="Account Brands Filter" placeholder="Distribution (simple)")
+            md-option(ng-repeat="filter in a.filtersService.accountFilters.accountBrands" ng-if="!a.removeDistOptionsBasedOnView(filter, true)" aria-label="{{filter.name}}" ng-value="filter"  ng-click="a.changeBrandSnapshotCategory(filter)") {{filter.name}}
     .widget-content
       table.depletions-table(cellspacing="0" cellpadding="0")
         thead
