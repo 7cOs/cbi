@@ -202,9 +202,14 @@ module.exports = /*  @ngInject */
             if (chip.type === 'tradeChannel') filtersService.model['tradeChannel' + chip.name] = false;
             if (chip.type === 'opportunityStatus') filtersService.model['opportunityStatus' + chip.name] = false;
             break;
-          } else if (chip.type === 'distributor' || chip.type === 'account' || chip.type === 'subaccount' || chip.type === 'store' || chip.type === 'contact') {
-            var index = arr.indexOf(chip.id);
-            arr.splice(index, 1);
+           } else if (chip.type === 'distributor' || chip.type === 'account' || chip.type === 'subaccount' || chip.type === 'store' || chip.type === 'contact') {
+            var unique = arr.filter(function(elem, index, self) {
+              return index === self.indexOf(elem);
+            });
+            var index = unique.indexOf(chip.id);
+            unique.splice(index, 1);
+            arr.length = 0;
+            arr = unique;
             if (chip.type !== 'contact') filtersService.model.filtersValidCount--;
             break;
           } else if (chip.type === 'opportunityType') {
