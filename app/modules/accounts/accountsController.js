@@ -98,6 +98,7 @@ module.exports = /*  @ngInject */
     vm.setTopBottomAcctTypeSelection = setTopBottomAcctTypeSelection;
     vm.switchToBrandView = switchToBrandView;
     vm.changeBrandSnapshotCategory = changeBrandSnapshotCategory;
+    vm.isDisplayBrandSnapshotRow = isDisplayBrandSnapshotRow;
     vm.isStoreLevel = false;
     vm.isHighlightStore = isHighlightStore;
     // Have to create this variable because vm.selecteStore just has the name..Changing th binding to include Id involves a ton of work
@@ -138,6 +139,19 @@ module.exports = /*  @ngInject */
     // **************
     // PUBLIC METHODS
     // **************
+
+    /**
+     * Returns if brand snapshot row needs to be displayed or not. If it's not the same distribution category as current the row should not be displayed
+     * @param {String} distributionCategory - DistSimple or distEffective
+     * @returns {Booelan}
+     */
+    function isDisplayBrandSnapshotRow(distributionCategory, isBlankColumn) {
+      if (vm.filtersService.model.accountSelected.accountBrands.value === distributionCategory) {
+          return vm.filtersService.model.selected.premiseType !== 'all';
+      } else {
+        return isBlankColumn && isBlankColumn === true;
+      }
+    }
 
     function allOpportunitiesDisabled() {
       if ((filtersService.model.selected.premiseType && filtersService.model.selected.premiseType !== 'all') && ((filtersService.model.selected.distributor && filtersService.model.selected.distributor.length > 0) || (filtersService.model.selected.store && filtersService.model.selected.store.length > 0) || (filtersService.model.selected.account && filtersService.model.selected.account.length > 0))) return false;
@@ -840,8 +854,10 @@ module.exports = /*  @ngInject */
         chipsService.resetChipsFilters(chipsService.model);
       }
       setDefaultFilterOptions();
+      if ($state.params.pageData && $state.params.pageData.premiseType && $state.params.applyFiltersOnLoad) {
+        vm.filtersService.model.selected.premiseType = $state.params.pageData.premiseType;
+      }
       if (isNavigatedFromScorecard === true) {
-        if ($state.params.pageData && $state.params.pageData.premiseType) vm.filtersService.model.selected.premiseType = $state.params.pageData.premiseType;
         var brandObj = {
           id: vm.brandIdSelected,
           name: vm.brandWidgetTitle
