@@ -97,6 +97,7 @@ module.exports = /*  @ngInject */
     vm.getValueBoundForAcctType = getValueBoundForAcctType;
     vm.setTopBottomAcctTypeSelection = setTopBottomAcctTypeSelection;
     vm.switchToBrandView = switchToBrandView;
+    vm.changeBrandSnapshotCategory = changeBrandSnapshotCategory;
     vm.isStoreLevel = false;
     vm.isHighlightStore = isHighlightStore;
     // Have to create this variable because vm.selecteStore just has the name..Changing th binding to include Id involves a ton of work
@@ -282,6 +283,11 @@ module.exports = /*  @ngInject */
       onFilterPropertiesChange();
     }
 
+    function changeBrandSnapshotCategory(currentCategory) {
+      vm.filtersService.model.accountSelected.accountBrands = currentCategory;
+      vm.updateBrandSnapshot(false);
+    }
+
     function prevTab() {
       if (vm.brandSelectedIndex > 0) {
         vm.brandWidgetSkuTitle = null;
@@ -429,6 +435,7 @@ module.exports = /*  @ngInject */
         vm.brandWidgetSkuTitle = null;
         if (widget === 'brands') { vm.brandWidgetTitle = item.name; }
         vm.loadingBrandSnapshot = true;
+        vm.filtersService.model.accountSelected.accountBrands = vm.filtersService.accountFilters.accountBrands[1];
         var params = getUpdatedFilterQueryParamsForBrand();
         currentBrandSelected = {
           name: item.name,
@@ -436,7 +443,6 @@ module.exports = /*  @ngInject */
         };
         params.brand = currentBrandSelected.id;
         vm.brandIdSelected = currentBrandSelected.id;
-
         userService.getPerformanceBrand(params).then(function(data) {
           vm.brandTabs.skus = data.performance;
           nextTab(widget);
@@ -590,9 +596,25 @@ module.exports = /*  @ngInject */
       var params = filtersService.getAppliedFilters('brandSnapshot');
       params = myperformanceService.appendFilterParametersForTopBottom(params, vm.currentTopBottomFilters, vm.filtersService.model.selected.myAccountsOnly);
       vm.loadingBrandSnapshot = true;
+      var currentMetric = null;
+      switch (vm.filtersService.model.accountSelected.accountBrands.value) {
+        case vm.filtersService.accountFilters.accountBrandEnum.distirbutionSimple:
+          currentMetric = 'SPOD';
+          break;
+        case vm.filtersService.accountFilters.accountBrandEnum.distirbutionEffective:
+          currentMetric = 'EPOD';
+          break;
+        case vm.filtersService.accountFilters.accountBrandEnum.velocity:
+          currentMetric = 'VEL';
+          break;
+        default:
+          currentMetric = 'SPOD';
+          break;
+      }
       params.additionalParams = {
         deplTimePeriod: vm.filterModel.depletionsTimePeriod.name,
-        podAndVelTimePeriod: vm.filterModel.distributionTimePeriod.name
+        podAndVelTimePeriod: vm.filterModel.distributionTimePeriod.name,
+        metric: currentMetric
       };
       return params;
     }
@@ -842,7 +864,6 @@ module.exports = /*  @ngInject */
       if (widget === 'brands') {
         vm.brandSelectedIndex = vm.brandSelectedIndex + 1;
         setCurrentTotalsObject();
-        vm.filtersService.model.accountSelected.accountBrands = vm.filtersService.accountFilters.accountBrands[1];
       }
     }
 
