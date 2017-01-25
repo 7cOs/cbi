@@ -142,28 +142,28 @@ div(row)
             td(ng-class="a.getClassBasedOnValue(a.getTrendValues(a.currentTotalsObject.measures, 'depletions', 'depletionsTimePeriod').value)") <span ng-bind="a.getTrendValues(a.currentTotalsObject.measures, 'depletions', 'depletionsTimePeriod').displayValue"></span>
 
             //- Velocity Value
-            td(ng-if="a.checkConditionsForBrandSnapshotRow(a.filtersService.accountFilters.accountBrandEnum.velocity)") {{a.displayBrandValue(a.currentTotalsObject.measures, 'velocity', 'distributionTimePeriod') | number:0 }}
-            td(ng-if="!a.checkConditionsForBrandSnapshotRow(a.filtersService.accountFilters.accountBrandEnum.velocity, true)") <span>-</span>
+            td(ng-if="a.isDisplayBrandSnapshotRow(a.filtersService.accountFilters.accountBrandEnum.velocity)") {{a.displayBrandValue(a.currentTotalsObject.measures, 'velocity', 'distributionTimePeriod') | number:0 }}
+            td(ng-if="!a.isDisplayBrandSnapshotRow(a.filtersService.accountFilters.accountBrandEnum.velocity, true)") <span>-</span>
 
             //- Velocity Trend
-            td(ng-if="a.checkConditionsForBrandSnapshotRow(a.filtersService.accountFilters.accountBrandEnum.velocity)" ng-class="a.getClassBasedOnValue(a.displayBrandValue(a.currentTotalsObject.measures, 'velocityTrend', 'distributionTimePeriod'))") <span ng-if="a.checkIfVelocityPresent(a.currentTotalsObject)">{{a.displayBrandValue(a.currentTotalsObject.measures, 'velocityTrend', 'distributionTimePeriod') | number:1}}%</span><span ng-if="!a.displayBrandValue(a.currentTotalsObject.measures, 'velocityTrend', 'distributionTimePeriod')">-</span>
-            td(ng-if="!a.checkConditionsForBrandSnapshotRow(a.filtersService.accountFilters.accountBrandEnum.velocity, true)") <span>-</span>
+            td(ng-if="a.isDisplayBrandSnapshotRow(a.filtersService.accountFilters.accountBrandEnum.velocity)" ng-class="a.getClassBasedOnValue(a.displayBrandValue(a.currentTotalsObject.measures, 'velocityTrend', 'distributionTimePeriod'))") <span ng-if="a.checkIfVelocityPresent(a.currentTotalsObject)">{{a.displayBrandValue(a.currentTotalsObject.measures, 'velocityTrend', 'distributionTimePeriod') | number:1}}%</span><span ng-if="!a.displayBrandValue(a.currentTotalsObject.measures, 'velocityTrend', 'distributionTimePeriod')">-</span>
+            td(ng-if="!a.isDisplayBrandSnapshotRow(a.filtersService.accountFilters.accountBrandEnum.velocity, true)") <span>-</span>
 
             //- Distirbution value Simple
-            td(ng-if="a.checkConditionsForBrandSnapshotRow(a.filtersService.accountFilters.accountBrandEnum.distirbutionSimple)") {{a.displayBrandValue(a.currentTotalsObject.measures, 'distributionsSimple', 'distributionTimePeriod') | number:0 }}
-            td(ng-if="!a.checkConditionsForBrandSnapshotRow(a.filtersService.accountFilters.accountBrandEnum.distirbutionSimple, true)") <span>-</span>
+            td(ng-if="a.isDisplayBrandSnapshotRow(a.filtersService.accountFilters.accountBrandEnum.distirbutionSimple)") {{a.displayBrandValue(a.currentTotalsObject.measures, 'distributionsSimple', 'distributionTimePeriod') | number:0 }}
+            td(ng-if="!a.isDisplayBrandSnapshotRow(a.filtersService.accountFilters.accountBrandEnum.distirbutionSimple, true)") <span>-</span>
 
             //- Distirbution value Effective
-            td(ng-if="a.checkConditionsForBrandSnapshotRow(a.filtersService.accountFilters.accountBrandEnum.distirbutionEffective)") {{a.displayBrandValue(a.currentTotalsObject.measures, 'distributionsEffective', 'distributionTimePeriod') | number:0 }}
-            td(ng-if="!a.checkConditionsForBrandSnapshotRow(a.filtersService.accountFilters.accountBrandEnum.distirbutionEffective, true)") <span>-</span>
+            td(ng-if="a.isDisplayBrandSnapshotRow(a.filtersService.accountFilters.accountBrandEnum.distirbutionEffective)") {{a.displayBrandValue(a.currentTotalsObject.measures, 'distributionsEffective', 'distributionTimePeriod') | number:0 }}
+            td(ng-if="!a.isDisplayBrandSnapshotRow(a.filtersService.accountFilters.accountBrandEnum.distirbutionEffective, true)") <span>-</span>
 
             //- Distirbution Trend Simple
-            td(ng-class="a.getClassBasedOnValue(a.getTrendValues(a.currentTotalsObject.measures, 'distributionsSimple', 'distributionTimePeriod').value)" ng-if="a.checkConditionsForBrandSnapshotRow(a.filtersService.accountFilters.accountBrandEnum.distirbutionSimple)") <span ng-bind="a.getTrendValues(a.currentTotalsObject.measures, 'distributionsSimple', 'distributionTimePeriod').displayValue"></span>
-            td(ng-if="!a.checkConditionsForBrandSnapshotRow(a.filtersService.accountFilters.accountBrandEnum.distirbutionSimple, true)") <span>-</span>
+            td(ng-class="a.getClassBasedOnValue(a.getTrendValues(a.currentTotalsObject.measures, 'distributionsSimple', 'distributionTimePeriod').value)" ng-if="a.isDisplayBrandSnapshotRow(a.filtersService.accountFilters.accountBrandEnum.distirbutionSimple)") <span ng-bind="a.getTrendValues(a.currentTotalsObject.measures, 'distributionsSimple', 'distributionTimePeriod').displayValue"></span>
+            td(ng-if="!a.isDisplayBrandSnapshotRow(a.filtersService.accountFilters.accountBrandEnum.distirbutionSimple, true)") <span>-</span>
 
             //- Distirbution Trend Effective
-            td(ng-class="a.getClassBasedOnValue(a.getTrendValues(a.currentTotalsObject.measures, 'distributionsEffective', 'distributionTimePeriod').value)" ng-if="a.checkConditionsForBrandSnapshotRow(a.filtersService.accountFilters.accountBrandEnum.distirbutionEffective)") <span ng-bind="a.getTrendValues(a.currentTotalsObject.measures, 'distributionsEffective', 'distributionTimePeriod').displayValue"></span>
-            td(ng-if="!a.checkConditionsForBrandSnapshotRow(a.filtersService.accountFilters.accountBrandEnum.distirbutionEffective, true)") <span>-</span>
+            td(ng-class="a.getClassBasedOnValue(a.getTrendValues(a.currentTotalsObject.measures, 'distributionsEffective', 'distributionTimePeriod').value)" ng-if="a.isDisplayBrandSnapshotRow(a.filtersService.accountFilters.accountBrandEnum.distirbutionEffective)") <span ng-bind="a.getTrendValues(a.currentTotalsObject.measures, 'distributionsEffective', 'distributionTimePeriod').displayValue"></span>
+            td(ng-if="!a.isDisplayBrandSnapshotRow(a.filtersService.accountFilters.accountBrandEnum.distirbutionEffective, true)") <span>-</span>
 
       md-tabs(md-selected="a.brandSelectedIndex" ng-class="{'animate-disabled': a.disableAnimation}" md-dynamic-height)
         //-md-tab(ng-repeat="brand in a.userService.model.brandPerformance track by $index" label="{{brand.name}}")
@@ -179,28 +179,28 @@ div(row)
                 td(ng-class="a.getClassBasedOnValue(a.getTrendValues(item.measures, 'depletions', 'depletionsTimePeriod').value)") <span ng-bind="a.getTrendValues(item.measures, 'depletions', 'depletionsTimePeriod').displayValue"></span>
 
                 //- Velocity value
-                td(ng-if="a.checkConditionsForBrandSnapshotRow(a.filtersService.accountFilters.accountBrandEnum.velocity)") {{a.displayBrandValue(item.measures, 'velocity', 'distributionTimePeriod') | number:0 }}
-                td(ng-if="!a.checkConditionsForBrandSnapshotRow(a.filtersService.accountFilters.accountBrandEnum.velocity, true)") <span>-</span>
+                td(ng-if="a.isDisplayBrandSnapshotRow(a.filtersService.accountFilters.accountBrandEnum.velocity)") {{a.displayBrandValue(item.measures, 'velocity', 'distributionTimePeriod') | number:0 }}
+                td(ng-if="!a.isDisplayBrandSnapshotRow(a.filtersService.accountFilters.accountBrandEnum.velocity, true)") <span>-</span>
 
                 //- Velocity Trend
-                td(ng-if="a.checkConditionsForBrandSnapshotRow(a.filtersService.accountFilters.accountBrandEnum.velocity)"  ng-class="a.getClassBasedOnValue(a.displayBrandValue(item.measures, 'velocityTrend', 'distributionTimePeriod'))") <span ng-if="a.checkIfVelocityPresent(item)">{{a.displayBrandValue(item.measures, 'velocityTrend', 'distributionTimePeriod') | number:1}}%</span><span ng-if="!a.displayBrandValue(item.measures, 'velocityTrend', 'distributionTimePeriod')">-</span>
-                td(ng-if="!a.checkConditionsForBrandSnapshotRow(a.filtersService.accountFilters.accountBrandEnum.velocity, true)") <span>-</span>
+                td(ng-if="a.isDisplayBrandSnapshotRow(a.filtersService.accountFilters.accountBrandEnum.velocity)"  ng-class="a.getClassBasedOnValue(a.displayBrandValue(item.measures, 'velocityTrend', 'distributionTimePeriod'))") <span ng-if="a.checkIfVelocityPresent(item)">{{a.displayBrandValue(item.measures, 'velocityTrend', 'distributionTimePeriod') | number:1}}%</span><span ng-if="!a.displayBrandValue(item.measures, 'velocityTrend', 'distributionTimePeriod')">-</span>
+                td(ng-if="!a.isDisplayBrandSnapshotRow(a.filtersService.accountFilters.accountBrandEnum.velocity, true)") <span>-</span>
 
                 //- Distirbution value Simple
-                td(ng-if="a.checkConditionsForBrandSnapshotRow(a.filtersService.accountFilters.accountBrandEnum.distirbutionSimple)") {{a.displayBrandValue(item.measures, 'distributionsSimple', 'distributionTimePeriod') | number:0 }}
-                td(ng-if="!a.checkConditionsForBrandSnapshotRow(a.filtersService.accountFilters.accountBrandEnum.distirbutionSimple, true)") <span>-</span>
+                td(ng-if="a.isDisplayBrandSnapshotRow(a.filtersService.accountFilters.accountBrandEnum.distirbutionSimple)") {{a.displayBrandValue(item.measures, 'distributionsSimple', 'distributionTimePeriod') | number:0 }}
+                td(ng-if="!a.isDisplayBrandSnapshotRow(a.filtersService.accountFilters.accountBrandEnum.distirbutionSimple, true)") <span>-</span>
 
                 //- Distirbution value Effective
-                td(ng-if="a.checkConditionsForBrandSnapshotRow(a.filtersService.accountFilters.accountBrandEnum.distirbutionEffective)") {{a.displayBrandValue(item.measures, 'distributionsEffective', 'distributionTimePeriod') | number:0 }}
-                td(ng-if="!a.checkConditionsForBrandSnapshotRow(a.filtersService.accountFilters.accountBrandEnum.distirbutionEffective, true)") <span>-</span>
+                td(ng-if="a.isDisplayBrandSnapshotRow(a.filtersService.accountFilters.accountBrandEnum.distirbutionEffective)") {{a.displayBrandValue(item.measures, 'distributionsEffective', 'distributionTimePeriod') | number:0 }}
+                td(ng-if="!a.isDisplayBrandSnapshotRow(a.filtersService.accountFilters.accountBrandEnum.distirbutionEffective, true)") <span>-</span>
 
                 //- Distirbution Trend Simple
-                td(ng-class="a.getClassBasedOnValue(a.getTrendValues(item.measures, 'distributionsSimple', 'distributionTimePeriod').value)" ng-if="a.checkConditionsForBrandSnapshotRow(a.filtersService.accountFilters.accountBrandEnum.distirbutionSimple)") <span ng-bind="a.getTrendValues(item.measures, 'distributionsSimple', 'distributionTimePeriod').displayValue"></span>
-                td(ng-if="!a.checkConditionsForBrandSnapshotRow(a.filtersService.accountFilters.accountBrandEnum.distirbutionSimple, true)") <span>-</span>
+                td(ng-class="a.getClassBasedOnValue(a.getTrendValues(item.measures, 'distributionsSimple', 'distributionTimePeriod').value)" ng-if="a.isDisplayBrandSnapshotRow(a.filtersService.accountFilters.accountBrandEnum.distirbutionSimple)") <span ng-bind="a.getTrendValues(item.measures, 'distributionsSimple', 'distributionTimePeriod').displayValue"></span>
+                td(ng-if="!a.isDisplayBrandSnapshotRow(a.filtersService.accountFilters.accountBrandEnum.distirbutionSimple, true)") <span>-</span>
 
                 //- Distirbution Trend Effective
-                td(ng-class="a.getClassBasedOnValue(a.getTrendValues(item.measures, 'distributionsEffective', 'distributionTimePeriod').value)" ng-if="a.checkConditionsForBrandSnapshotRow(a.filtersService.accountFilters.accountBrandEnum.distirbutionEffective)") <span ng-bind="a.getTrendValues(item.measures, 'distributionsEffective', 'distributionTimePeriod').displayValue"></span>
-                td(ng-if="!a.checkConditionsForBrandSnapshotRow(a.filtersService.accountFilters.accountBrandEnum.distirbutionEffective, true)") <span>-</span>
+                td(ng-class="a.getClassBasedOnValue(a.getTrendValues(item.measures, 'distributionsEffective', 'distributionTimePeriod').value)" ng-if="a.isDisplayBrandSnapshotRow(a.filtersService.accountFilters.accountBrandEnum.distirbutionEffective)") <span ng-bind="a.getTrendValues(item.measures, 'distributionsEffective', 'distributionTimePeriod').displayValue"></span>
+                td(ng-if="!a.isDisplayBrandSnapshotRow(a.filtersService.accountFilters.accountBrandEnum.distirbutionEffective, true)") <span>-</span>
 
   //- Top Bottom Section Starts
   div.scorecard-chart(column='6')

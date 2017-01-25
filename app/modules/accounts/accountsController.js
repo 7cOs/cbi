@@ -98,7 +98,7 @@ module.exports = /*  @ngInject */
     vm.setTopBottomAcctTypeSelection = setTopBottomAcctTypeSelection;
     vm.switchToBrandView = switchToBrandView;
     vm.changeBrandSnapshotCategory = changeBrandSnapshotCategory;
-    vm.checkConditionsForBrandSnapshotRow = checkConditionsForBrandSnapshotRow;
+    vm.isDisplayBrandSnapshotRow = isDisplayBrandSnapshotRow;
     vm.isStoreLevel = false;
     vm.isHighlightStore = isHighlightStore;
     // Have to create this variable because vm.selecteStore just has the name..Changing th binding to include Id involves a ton of work
@@ -140,15 +140,16 @@ module.exports = /*  @ngInject */
     // PUBLIC METHODS
     // **************
 
-    function checkConditionsForBrandSnapshotRow(distributionCategory, isAdditionalCheck) {
+    /**
+     * Returns if brand snapshot row needs to be displayed or not. If it's not the same distribution category as current the row should not be displayed
+     * @param {String} distributionCategory - DistSimple or distEffective
+     * @returns {Booelan}
+     */
+    function isDisplayBrandSnapshotRow(distributionCategory, isBlankColumn) {
       if (vm.filtersService.model.accountSelected.accountBrands.value === distributionCategory) {
           return vm.filtersService.model.selected.premiseType !== 'all';
       } else {
-        if (isAdditionalCheck) {
-          return true;
-        } else {
-          return false;
-        }
+        return isBlankColumn && isBlankColumn === true;
       }
     }
 
