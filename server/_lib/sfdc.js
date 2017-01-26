@@ -31,10 +31,6 @@ function sfdcConn(app, req, res) {
     console.log('There was an error requiring the libraries: ' + e);
   };
 
-  if (req.user === undefined) {
-    req.user = app.get('config').auth.user;
-  };
-
   if (!req.user.sfdcConn || req.user.sfdcConn === undefined) {
   // Get session promise from library
 
