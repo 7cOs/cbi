@@ -809,7 +809,6 @@ module.exports = /*  @ngInject */
       } else {
         return false;
       }
-
     }
 
     function getStoreToBePassedToAcct(storeDetails) {
