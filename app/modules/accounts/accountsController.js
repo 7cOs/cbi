@@ -43,7 +43,7 @@ module.exports = /*  @ngInject */
     vm.accountTypesDefault = 'Distributors';
     vm.brandIdSelected = null;
     var currentBrandSelected = null;
-    var currentBrandSkuSelected = null;
+    vm.currentBrandSkuSelected = null;
     vm.brandWidgetTitleDefault = 'All Brands';
     vm.brandWidgetTitle = vm.brandWidgetTitleDefault;
     vm.brandWidgetSkuTitle = null;
@@ -241,7 +241,7 @@ module.exports = /*  @ngInject */
 
       vm.currentTopBottomObj = getCurrentTopBottomObject(vm.currentTopBottomAcctType);
       // update data
-      updateBrandSnapshot();
+      updateBrandSnapshot(true);
       vm.getDataForTopBottomLevel(vm.currentTopBottomObj);
     }
 
@@ -299,13 +299,13 @@ module.exports = /*  @ngInject */
 
     function changeBrandSnapshotCategory(currentCategory) {
       vm.filtersService.model.accountSelected.accountBrands = currentCategory;
-      vm.updateBrandSnapshot(false);
+      updateBrandSnapshot();
     }
 
     function prevTab() {
       if (vm.brandSelectedIndex > 0) {
         vm.brandWidgetSkuTitle = null;
-        currentBrandSkuSelected = null;
+        vm.currentBrandSkuSelected = null;
         currentBrandSelected = null;
         vm.brandSelectedIndex = vm.brandSelectedIndex - 1;
         setCurrentTotalsObject();
@@ -400,6 +400,8 @@ module.exports = /*  @ngInject */
       vm.selected = null;
       vm.previous = null;
       vm.brandSelectedIndex = 0;
+      currentBrandSelected = null;
+      vm.currentBrandSkuSelected = null;
       vm.brandIdSelected = null;
       vm.idSelected = null;
       vm.selectedDistributor = null;
@@ -440,7 +442,7 @@ module.exports = /*  @ngInject */
       if (parentIndex + 1 === parentLength) {
         // We're on the deepest level of current tab list
         vm.brandWidgetSkuTitle = item.name;
-        currentBrandSkuSelected = {
+        vm.currentBrandSkuSelected = {
           name: item.name,
           id: item.id
         };
@@ -450,16 +452,16 @@ module.exports = /*  @ngInject */
         if (widget === 'brands') { vm.brandWidgetTitle = item.name; }
         vm.loadingBrandSnapshot = true;
         vm.filtersService.model.accountSelected.accountBrands = vm.filtersService.accountFilters.accountBrands[1];
-        var params = getUpdatedFilterQueryParamsForBrand();
         currentBrandSelected = {
           name: item.name,
           id: item.id
         };
-        params.brand = currentBrandSelected.id;
+        var params = getUpdatedFilterQueryParamsForBrand();
         vm.brandIdSelected = currentBrandSelected.id;
         userService.getPerformanceBrand(params).then(function(data) {
           vm.brandTabs.skus = data.performance;
-          nextTab(widget);
+          vm.brandSelectedIndex = vm.brandSelectedIndex + 1;
+          setCurrentTotalsObject();
           $timeout(function () {
             vm.loadingBrandSnapshot = false;
           }, 500);
@@ -625,6 +627,7 @@ module.exports = /*  @ngInject */
           currentMetric = 'SPOD';
           break;
       }
+      if (vm.brandSelectedIndex === 1) params.brand = currentBrandSelected.id;
       params.additionalParams = {
         deplTimePeriod: vm.filterModel.depletionsTimePeriod.name,
         podAndVelTimePeriod: vm.filterModel.distributionTimePeriod.name,
@@ -635,17 +638,26 @@ module.exports = /*  @ngInject */
 
     function updateBrandSnapshot(isMoveToPreviousTab) {
       filtersService.model.selected.brand = []; // remove brand from query
-      var params = getUpdatedFilterQueryParamsForBrand();
-      if (isMoveToPreviousTab !== false) {
+
+      if (isMoveToPreviousTab && isMoveToPreviousTab === true && vm.brandSelectedIndex === 1) {
         prevTab();
       }
-
-      userService.getPerformanceBrand(params).then(function(data) {
-        vm.brandTabs.brands = data.performance;
-        setCurrentTotalsObject();
-        vm.loadingBrandSnapshot = false;
-      });
-
+      var params = getUpdatedFilterQueryParamsForBrand();
+      if (vm.brandSelectedIndex === 0) {
+        userService.getPerformanceBrand(params).then(function(data) {
+          vm.brandTabs.brands = data.performance;
+          setCurrentTotalsObject();
+          vm.loadingBrandSnapshot = false;
+        });
+      } else {
+        userService.getPerformanceBrand(params).then(function(data) {
+          vm.brandTabs.skus = data.performance;
+          setCurrentTotalsObject();
+          $timeout(function () {
+            vm.loadingBrandSnapshot = false;
+          }, 500);
+        });
+      }
       apply(true);
     }
 
@@ -874,15 +886,6 @@ module.exports = /*  @ngInject */
       sendTopBottomAnalyticsEvent();
     }
 
-    // Move to next indexed tab
-    function nextTab(widget) {
-      vm.disableAnimation = false;
-      if (widget === 'brands') {
-        vm.brandSelectedIndex = vm.brandSelectedIndex + 1;
-        setCurrentTotalsObject();
-      }
-    }
-
     /**
      * Gets the default selections or the selections chosen in the Scorecard page
      * @returns {Object} Sets the ending, depletion and distirbution optios
@@ -894,10 +897,9 @@ module.exports = /*  @ngInject */
     }
 
     // Add 'selected' class to item furthest possible drill-down tab level
-    function setSelected(idSelected, widget) {
-      vm.idSelected = idSelected;
+    function setSelected(name, widget) {
       if (vm.selectedStore) { vm.selectedStore = null; }
-      if (widget === 'brands') { vm.brandIdSelected = idSelected; }
+      if (widget === 'brands') { vm.brandIdSelected = name; }
     }
 
     // Top Bottom Specific Functions
@@ -976,7 +978,7 @@ module.exports = /*  @ngInject */
 
     function appendBrandParametersForTopBottom(currentParams) {
       if (currentBrandSelected) currentParams.brand = currentBrandSelected.id;
-      if (currentBrandSkuSelected) currentParams.masterSKU = currentBrandSkuSelected.id;
+      if (vm.currentBrandSkuSelected) currentParams.masterSKU = vm.currentBrandSkuSelected.id;
     }
 
     /**
@@ -1215,13 +1217,13 @@ module.exports = /*  @ngInject */
           vm.currentTopBottomAcctType = myperformanceService.getAcctTypeObjectBasedOnTabIndex(vm.currentTopBottomAcctType.value, getNextLevel);
           vm.currentTopBottomObj = getCurrentTopBottomObject(vm.currentTopBottomAcctType);
 
-          updateBrandSnapshot();
+          updateBrandSnapshot(true);
           getDataForTopBottomLevel(vm.currentTopBottomObj);
           sendTopBottomAnalyticsEvent();
         } else {
           // Just setting current top bottom object to store
           vm.currentTopBottomObj = getCurrentTopBottomObject(vm.currentTopBottomAcctType);
-          updateBrandSnapshot();
+          updateBrandSnapshot(true);
         }
         notesService.model.tdlinx = performanceData.unversionedStoreCode;
         notesService.model.address = formatAddress(performanceData);
