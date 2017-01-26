@@ -148,7 +148,8 @@ v-accordion.styled-list(multiple="" id="opportunities" control="list.accordion" 
                   md-tooltip
                     div(class="align-left" ng-repeat="d in opportunity.store.distributors track by $index") {{::d}}
             div(column='2')
-              a(ui-sref="accounts(list.getStoreToBePassedToAcct(opportunity.store))" ui-sref-active="active" target="_blank").details-link.accent Show Full Details
+              a(ng-if="list.checkIfLinkDisabled(opportunity.store)" ui-sref="accounts(list.getStoreToBePassedToAcct(opportunity.store))" ui-sref-active="active" target="_blank").details-link.accent Show Full Details
+              a(ng-if="!list.checkIfLinkDisabled(opportunity.store)" disabled).accent.disabled Show Full Details
         .title-row(row)
           div(column='1') &nbsp;
           div(column='2')

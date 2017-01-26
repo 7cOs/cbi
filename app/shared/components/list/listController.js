@@ -87,6 +87,7 @@ module.exports = /*  @ngInject */
     vm.updateOpportunityModel = updateOpportunityModel;
     vm.vsYAGrowthPercent = vsYAGrowthPercent;
     vm.getStoreToBePassedToAcct = getStoreToBePassedToAcct;
+    vm.checkIfLinkDisabled = checkIfLinkDisabled;
 
     // Custom Headers for CSV export
     vm.csvHeader = [
@@ -798,20 +799,32 @@ module.exports = /*  @ngInject */
       }
     }
 
+    function checkIfLinkDisabled(storeDetails) {
+      var id = null;
+      if (storeDetails) {
+        if (filtersService.model.selected.myAccountsOnly === true) {
+          id = storeDetails.versionedId;
+        } else {
+          id = storeDetails.id;
+        }
+        return id !== null && typeof id !== 'undefined';
+      } else {
+        return false;
+      }
+    }
+
     function getStoreToBePassedToAcct(storeDetails) {
       var store = null,
           id = null;
       // If myAccountsOnly is true pass the versionedId (9 digits). As a fallback if it's null send id
       if (filtersService.model.selected.myAccountsOnly === true) {
         id = storeDetails.versionedId;
-        // ? storeDetails.versionedId : storeDetails.id;
         store = {
           store: id + '|' + storeDetails.name + '|' + filtersService.model.selected.myAccountsOnly
         };
       } else {
         // If myAccountsOnly is true pass the id (7 digits). As a fallback if it's null send versionedId
         id = storeDetails.id;
-        // ? storeDetails.id : storeDetails.versionedId;
         store = {
           store: id + '|' + storeDetails.name + '|' + filtersService.model.selected.myAccountsOnly
         };

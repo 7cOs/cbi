@@ -565,6 +565,15 @@ list {
   text-transform: uppercase;
 }
 
+.accent.disabled {
+  pointer-events: none;
+  float: right;
+
+  &:hover {
+    color: #4A4A4A;
+  }
+}
+
 .open-memo {
   color: $blue;
   font-size: 0.75em;
