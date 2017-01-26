@@ -43,7 +43,7 @@ module.exports = /*  @ngInject */
     vm.accountTypesDefault = 'Distributors';
     vm.brandIdSelected = null;
     var currentBrandSelected = null;
-    var currentBrandSkuSelected = null;
+    vm.currentBrandSkuSelected = null;
     vm.brandWidgetTitleDefault = 'All Brands';
     vm.brandWidgetTitle = vm.brandWidgetTitleDefault;
     vm.brandWidgetSkuTitle = null;
@@ -305,7 +305,7 @@ module.exports = /*  @ngInject */
     function prevTab() {
       if (vm.brandSelectedIndex > 0) {
         vm.brandWidgetSkuTitle = null;
-        currentBrandSkuSelected = null;
+        vm.currentBrandSkuSelected = null;
         currentBrandSelected = null;
         vm.brandSelectedIndex = vm.brandSelectedIndex - 1;
         setCurrentTotalsObject();
@@ -401,7 +401,7 @@ module.exports = /*  @ngInject */
       vm.previous = null;
       vm.brandSelectedIndex = 0;
       currentBrandSelected = null;
-      currentBrandSkuSelected = null;
+      vm.currentBrandSkuSelected = null;
       vm.brandIdSelected = null;
       vm.idSelected = null;
       vm.selectedDistributor = null;
@@ -442,7 +442,7 @@ module.exports = /*  @ngInject */
       if (parentIndex + 1 === parentLength) {
         // We're on the deepest level of current tab list
         vm.brandWidgetSkuTitle = item.name;
-        currentBrandSkuSelected = {
+        vm.currentBrandSkuSelected = {
           name: item.name,
           id: item.id
         };
@@ -897,10 +897,9 @@ module.exports = /*  @ngInject */
     }
 
     // Add 'selected' class to item furthest possible drill-down tab level
-    function setSelected(idSelected, widget) {
-      vm.idSelected = idSelected;
+    function setSelected(name, widget) {
       if (vm.selectedStore) { vm.selectedStore = null; }
-      if (widget === 'brands') { vm.brandIdSelected = idSelected; }
+      if (widget === 'brands') { vm.brandIdSelected = name; }
     }
 
     // Top Bottom Specific Functions
@@ -979,7 +978,7 @@ module.exports = /*  @ngInject */
 
     function appendBrandParametersForTopBottom(currentParams) {
       if (currentBrandSelected) currentParams.brand = currentBrandSelected.id;
-      if (currentBrandSkuSelected) currentParams.masterSKU = currentBrandSkuSelected.id;
+      if (vm.currentBrandSkuSelected) currentParams.masterSKU = vm.currentBrandSkuSelected.id;
     }
 
     /**
