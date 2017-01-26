@@ -4,6 +4,15 @@ module.exports = function(app) {
 
   var sfdc = require('../controllers/sfdc');
 
+  app.route('/sfdc/*')
+    .all(function(req, res, next) {
+      if (req.isAuthenticated()) {
+        next();
+      } else {
+        res.status(401).end();
+      }
+    });
+
   app.get('/sfdc/accountNotes', function (req, res) {
     sfdc['accountNotes'](app, req, res);
   });
