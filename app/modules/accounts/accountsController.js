@@ -456,11 +456,11 @@ module.exports = /*  @ngInject */
           name: item.name,
           id: item.id
         };
+        vm.brandSelectedIndex = vm.brandSelectedIndex + 1;
         var params = getUpdatedFilterQueryParamsForBrand();
         vm.brandIdSelected = currentBrandSelected.id;
         userService.getPerformanceBrand(params).then(function(data) {
           vm.brandTabs.skus = data.performance;
-          vm.brandSelectedIndex = vm.brandSelectedIndex + 1;
           setCurrentTotalsObject();
           $timeout(function () {
             vm.loadingBrandSnapshot = false;
