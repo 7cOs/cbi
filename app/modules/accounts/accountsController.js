@@ -571,8 +571,17 @@ module.exports = /*  @ngInject */
       // set local model
       vm.currentTopBottomFilters[topBottomProp] = {
         id: angular.copy(filtersService.model.selected[filterModelProp]),
-        name: result.name
+        name: result.name,
+        address: result.address,
+        city: result.city,
+        state: result.state,
+        zipCode: result.zipCode
       };
+      notesService.model.address = result.address;
+      notesService.model.city = result.city;
+      notesService.model.state = result.state;
+      notesService.model.zipCode = result.zipCode;
+
       vm.selectedStoreInfo = vm.currentTopBottomFilters[topBottomProp];
       vm.selectedStoreInfo.type = topBottomProp;
       if (result.name) {
@@ -1169,7 +1178,11 @@ module.exports = /*  @ngInject */
     function setTopBottomFilterModel(currentLevelName, data) {
       vm.currentTopBottomFilters[currentLevelName] = {
         id: data.id,
-        name: data.name
+        name: data.name,
+        address: formatAddress(data),
+        city: data.city,
+        state: data.state,
+        zipCode: data.zipCode
       };
       // The term 'vm.filtersService.model.account' needs to be refactored. This variable for is used to hold the text for all types except distributor
       if (currentLevelName === 'distributors') {
