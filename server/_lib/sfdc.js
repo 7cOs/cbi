@@ -2,6 +2,7 @@
 
 module.exports = {
   sfdcConn: sfdcConn,
+  userInfo: userInfo,
   createNote: createNote,
   queryAccountNotes: queryAccountNotes,
   searchAccounts: searchAccounts,
@@ -236,6 +237,50 @@ function queryAccountNotes(app, req, res) {
       var errMessage = 'There was an error in queryAccountNotes: ' + JSON.stringify(err, null, '');
       return {'isSuccess': false,
         'errorMessage': errMessage};
+    }
+  }, function (err) {
+    return {'isSuccess': false,
+      'errorMessage': 'A connection to Salesforce could not be established: ' + err};
+  });
+};
+
+function userInfo(app, req, res) {
+  return sfdcConn(app, req, res).then(function(result) {
+    try {
+      var conn = result,
+        empId = req.user.jwtmap.employeeID;
+
+      return (
+        conn.sobject('User')
+          .select('Id, FederationIdentifier, Name, CompanyName, Division')
+          .where('FederationIdentifier = \'' + empId + '\'')
+          .execute(function (err, records) {
+            if (err) {
+              return {
+                'isSuccess': false,
+                'errorMessage': 'There was an SFDC API error retrieving user info: ' + err
+              };
+            }
+
+            if (records.length === 1) {
+              return {
+                'isSuccess': true,
+                'successReturnValue': records[0]
+              };
+            } else {
+              return {
+                'isSuccess': false,
+                'errorMessage': 'Could not find a user with FederationIdentifier matching ' + empId + ' (' + records.length + ' records)'
+              };
+            }
+          })
+      );
+    } catch (err) {
+      var errMessage = 'There was an error in userInfo: ' + JSON.stringify(err, null, '');
+      return {
+        'isSuccess': false,
+        'errorMessage': errMessage
+      };
     }
   }, function (err) {
     return {'isSuccess': false,
