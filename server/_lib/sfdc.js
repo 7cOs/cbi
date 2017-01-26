@@ -59,7 +59,7 @@ function updateNote(app, req, res) {
         var attachId = req.query.noteId;
         return conn.sobject('Note__c').update({
                                           Id: attachId,
-                                          Title__c: req.body.title,
+                                          Type__c: req.body.title,
                                           Comments_RTF__c: req.body.body
                                         },
                                         function (err, res) {
@@ -336,8 +336,7 @@ function createNote(app, req, res) {
               Other_Type__c: req.body.othertype,
               Private__c: req.body.private,
               Soft_Delete__c: req.body.softdelete,
-              Title__c: req.body.title,
-              Type__c: req.body.type
+              Type__c: req.body.title
             }],
             function (err, ret) {
               if (err) {
