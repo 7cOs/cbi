@@ -13,6 +13,10 @@ module.exports = function(app) {
       }
     });
 
+  app.get('/sfdc/userInfo', function (req, res) {
+    sfdc['userInfo'](app, req, res);
+  });
+
   app.get('/sfdc/accountNotes', function (req, res) {
     sfdc['accountNotes'](app, req, res);
   });

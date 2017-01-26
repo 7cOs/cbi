@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports = /*  @ngInject */
-  function($rootScope, $cookies, userService, encodingService, $analytics, $window, analyticsHelperService) {
+  function($rootScope, $cookies, $analytics, userService, encodingService, analyticsHelperService) {
 
     var userEncoded = $cookies.get('user'),
       gaEncoded = $cookies.get('ga'),
@@ -19,13 +19,14 @@ module.exports = /*  @ngInject */
     userService.model.currentUser = JSON.parse(userObj);
     $rootScope.analytics = JSON.parse(gaObj);
 
-    // normally tracker is created right after analytics script loads, but
-    // analytics must load prior to angular app (angulartics GA plugin requirement),
-    // so we create tracker here after obtaining analytics ID & user ID
-    $window.ga('create', $rootScope.analytics.id, 'auto', {
-      userId: userService.model.currentUser.employeeID || 'undefined'
-    });
+    // GA tracker is normally created right after analytics script loads, but
+    // the angulartics GA plugin requires GA to load load prior to angular, so
+    // we create the tracker separately here after obtaining analytics ID & user ID
+    analyticsHelperService.createTracker($rootScope.analytics.id, userService.model.currentUser.employeeID);
 
     // custom page view tracking
     analyticsHelperService.trackPageViews();
+
+    // fetch additional user info from SFDC and set as custom GA dimensions
+    analyticsHelperService.setCustomDimensions();
   };

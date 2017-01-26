@@ -8,6 +8,7 @@ var sfdc = require('../_lib/sfdc.js'),
     logutil = require('../_lib/logutil');
 
 module.exports = {
+  userInfo: userInfo,
   createAttachment: createAttachment,
   getAttachmentData: getAttachmentData,
   createNote: createNote,
@@ -25,6 +26,21 @@ function isErrorResponse(response) {
 function logErrorAndReturnGeneric(req, res, sfdcMethod, errorString) {
   logutil.logError(logutil.buildSFDCError(req.headers['x-request-id'], sfdcMethod, 'SFDC error encountered.', errorString));
   res.status(500).send({isSuccess: false, code: 500, message: logutil.GENERIC_ERROR_MSG});
+}
+
+function userInfo(app, req, res) {
+  sfdc
+    .userInfo(app, req, res)
+    .then(function(result) {
+      if (isErrorResponse(result)) {
+        logErrorAndReturnGeneric(req, res, 'userInfo', JSON.stringify(result));
+      } else {
+        res.send(result);
+      }
+    })
+    .catch(function(err) {
+      logErrorAndReturnGeneric(req, res, 'userInfo', err.toString());
+    });
 }
 
 function createAttachment(app, req, res) {

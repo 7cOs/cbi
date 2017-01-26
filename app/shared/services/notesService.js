@@ -21,7 +21,8 @@ module.exports = /*  @ngInject */
       deleteAttach: deleteAttach,
       searchAccounts: searchAccounts,
       accountNotes: accountNotes,
-      updateNote: updateNote
+      updateNote: updateNote,
+      userInfo: userInfo
     };
 
     return service;
@@ -214,6 +215,25 @@ module.exports = /*  @ngInject */
       }
 
       return notePromise.promise;
+    }
+
+    function userInfo() {
+      var deferred = $q.defer(),
+        url = model.urlBase + 'userInfo';
+
+      $http.get(url)
+        .then(function(response) {
+          if (response.data && response.data.isSuccess && response.data.successReturnValue) {
+            deferred.resolve(response.data.successReturnValue);
+          } else {
+            deferred.reject(response);
+          }
+        })
+        .catch(function(err) {
+          deferred.reject(err);
+        });
+
+      return deferred.promise;
     }
 
     function filesizeFilter(number) {
