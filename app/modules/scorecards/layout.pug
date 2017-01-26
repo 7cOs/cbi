@@ -63,7 +63,7 @@ div.my-scorecards
             // td.column-total(ng-class="{'negative': !s.isPositive(s.totalRow.gapVsPlan)}") {{s.totalRow.gapVsPlan | number:0 }}
             // td.column-total.no-border(ng-class="{'negative': !s.isPositive(s.totalRow.percentGapVsPlan)}") {{s.totalRow.percentGapVsPlan}}%
             td.column-total(ng-class="{'negative': !s.isPositive(s.totalRow.percentBUTrend)}") {{s.totalRow.percentBUTrend | number:1 }}%
-            td.column-total.no-border.positive(ng-class="s.totalRow.percentBUTrend ? 'positive' : 'negative'") &#9650;
+            td.column-total.no-border(ng-class="s.totalRow.percentTrend > s.totalRow.percentBUTrend ? 'positive' : 'negative'") <span class="triangle-icon">&#9660;</span>
             td.column-total 100%
             td.column-total 100%
           tr(ng-repeat="depletion in s.userService.model.depletion | orderBy:'name'" class="disable-ng-animate" ng-click="s.toggleSelected($index, 'depletions')" ng-class="{'selected': s.selectedList === 'depletions' && $index === s.selectedIndex}")
