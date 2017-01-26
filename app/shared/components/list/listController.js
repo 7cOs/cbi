@@ -362,8 +362,10 @@ module.exports = /*  @ngInject */
             vm.opportunitiesService.model.opportunities.forEach(function(store, key) {
               var storeGroup = store.groupedOpportunities;
               storeGroup.forEach(function(opportunity, key) {
-                if (opportunity.id === oId) {
+                if (opportunity.id === oId && dismiss) {
                   storeGroup.splice(key, 1);
+                } else if (opportunity.id === oId && !dismiss) {
+                  opportunity.status = 'CLOSED';
                 }
               });
               if (storeGroup.length < 1) {
