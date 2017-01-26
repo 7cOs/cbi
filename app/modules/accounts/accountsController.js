@@ -145,9 +145,13 @@ module.exports = /*  @ngInject */
      * @param {String} distributionCategory - DistSimple or distEffective
      * @returns {Booelan}
      */
-    function isDisplayBrandSnapshotRow(distributionCategory, isBlankColumn) {
+    function isDisplayBrandSnapshotRow(distributionCategory, isBlankColumn, isPremiseCheckRequired) {
       if (vm.filtersService.model.accountSelected.accountBrands.value === distributionCategory) {
+        if (isPremiseCheckRequired === false) {
+          return true;
+        } else {
           return vm.filtersService.model.selected.premiseType !== 'all';
+        }
       } else {
         return isBlankColumn && isBlankColumn === true;
       }
