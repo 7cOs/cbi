@@ -351,8 +351,23 @@ function getAttachment(app, req, res) {
         buf.push(data);
       });
       attBlob.on('end', function() {
-        var contentStr = Buffer.concat(buf);
-        res.send(contentStr);
+        var attRecord = [];
+        conn.query('Select Id, ContentType, Description, Name FROM Attachment WHERE Id = \'' + req.query.attachId + '\'')
+        .on('record', function(record) {
+          attRecord.push(record);
+        })
+        .on('end', function() {
+          var contentStr = Buffer.concat(buf);
+          res.writeHead(200, {
+            'Content-Type': attRecord[0].ContentType,
+            'Content-disposition': 'attachment;filename="' + attRecord[0].Name + '"'
+          });
+          res.end(new Buffer(contentStr, 'binary'));
+          })
+          .on('error', function(err) {
+            console.error(err);
+          })
+          .run({ autoFetch: true, maxFetch: 1 });
       });
     }, function(err) {
       throw (err);
