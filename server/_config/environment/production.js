@@ -24,7 +24,7 @@ module.exports = function (config) {
 
   // change all of this to env variables for security.
   config.api = {
-    url: 'https://cbi-api-internal-dd-qa.herokuapp.com',
+    url: 'https://internal.api.cbrands.com',
     key: 'U1NCc2FXdGxJSFJ2SUVodlpHOXlMQ0JJYjJSdmNpd2dTRzlrYjNJc0lFaHZaRzl5Y3lCaGJtUWdTRzlrYjNKekxnPT0=',
     apiKey: 'test',
     version: 'v2'
@@ -39,25 +39,6 @@ module.exports = function (config) {
     signatureAlgorithm: 'sha1'
   };
 
-  // temp - using sandbox environment for UAT until production is ready
-  config.sfdcSec = {
-    // assertionEndpoint: the endpoint you connect to in order to get the session token.
-    assertionEndpoint: 'https://cbrands--Full.cs17.my.salesforce.com/services/oauth2/token?so=00Dg0000006Hhfi',
-    // privateKey and certfile: keys generated from SFDC's Key and Certificate Management area
-    privateKey: fs.readFileSync('./server/_config/environment/sfdcsecurity/test/signingKey.pem').toString(),
-    certfile: fs.readFileSync('./server/_config/environment/sfdcsecurity/test/certificate.crt').toString(),
-    // issuer, recipient: can be anything, but must match between the SFDC Single Sign-On Configuration and this value.
-    issuer: 'compass-portal',
-    recipient: 'https://cbrands--Full.cs17.my.salesforce.com?so=00Dg0000006Hhfi',
-    // This value matches with the Entity Id value in the SFDC Single Sign-On Configuration
-    audience: 'https://saml.salesforce.com',
-    // These algorithms should not be touched.  They are used to encrypt the certificates.
-    signatureAlgorithm: 'rsa-sha256',
-    digestAlgorithm: 'sha256',
-    // Used in samlBuilder as an attribute in the Assertion creation.
-    ssoStartPage: 'compass-portal'
-  };
-  /*
   config.sfdcSec = {
     // assertionEndpoint: the endpoint you connect to in order to get the session token.
     assertionEndpoint: 'https://cbrands.my.salesforce.com/services/oauth2/token?so=00DA0000000Iy9s',
@@ -75,7 +56,6 @@ module.exports = function (config) {
     // Used in samlBuilder as an attribute in the Assertion creation.
     ssoStartPage: 'compass-portal'
   };
-  */
 
   return config;
 
