@@ -15,7 +15,7 @@ notes
           p(ng-if="a.selectedStore || a.selectedDistributor")
             <span ng-if="a.selectedDistributor">{{a.selectedDistributor}}</span><span ng-if="a.selectedStore && a.selectedDistributor"> - </span><span ng-if="a.selectedStore">{{a.selectedStore}}</span> <span ng-if="a.currentTopBottomFilters.stores.id"> {{a.getStoreAddress();}}</span>
           p(ng-if="!a.selectedStore && !a.selectedDistributor") {{a.currentTopBottomAcctType.name || a.accountTypesDefault}}
-        .notes-icon(ng-class="{'enabled': a.currentTopBottomAcctType.name === 'Accounts' || a.storeSelected}" ng-click="a.currentTopBottomAcctType.name === 'Accounts' || a.storeSelected ? a.openNotes(true, a.selectedStoreInfo) : angular.noop()")
+        .notes-icon(ng-class="{'enabled': a.currentTopBottomAcctType.name === 'Accounts' || a.selectedStore}" ng-click="a.currentTopBottomAcctType.name === 'Accounts' || a.selectedStore ? a.openNotes(true, a.selectedStoreInfo) : angular.noop()")
           p <a href="#"></a>
       .market-overview.clearfix
         .brands
@@ -25,7 +25,7 @@ notes
           p(ng-if="a.selectedStore || a.selectedDistributor")
             <span ng-if="a.selectedDistributor">{{a.selectedDistributor}}</span><span ng-if="a.selectedStore && a.selectedDistributor"> - </span><span ng-if="a.selectedStore">{{a.selectedStore}}</span> <span ng-if="a.currentTopBottomFilters.stores.id"> {{a.getStoreAddress();}}</span>
           p(ng-if="!a.selectedStore && !a.selectedDistributor") {{a.currentTopBottomAcctType.name || a.accountTypesDefault}}
-        .notes-icon(ng-class="{'enabled': a.currentTopBottomAcctType.name === 'Accounts' || a.storeSelected}" ng-click="a.currentTopBottomAcctType.name === 'Accounts' || a.storeSelected ? a.openNotes(true, a.selectedStoreInfo) : angular.noop()")
+        .notes-icon(ng-class="{'enabled': a.currentTopBottomAcctType.name === 'Accounts' || a.selectedStore}" ng-click="a.currentTopBottomAcctType.name === 'Accounts' || a.selectedStore ? a.openNotes(true, a.selectedStoreInfo) : angular.noop()")
           p <a href="#">Notes</a>
 
 
