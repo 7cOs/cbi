@@ -484,8 +484,8 @@ module.exports = /*  @ngInject */
         if (response.length === 0) {
           vm.memoError = true;
         } else {
-          pickMemo(response, productId);
           vm.memoError = false;
+          pickMemo(response, productId);
         }
       }
     }
@@ -499,20 +499,22 @@ module.exports = /*  @ngInject */
         }
       });
 
-      if (products[0].setPeriodStartDate !== undefined) {
+      if (products[0] && products[0].setPeriodStartDate !== undefined) {
         products.sort(function(a, b) {
           var setDateA = toDate(a.setPeriodStartDate);
           var setDateB = toDate(b.setPeriodStartDate);
           return setDateB - setDateA;
         });
         vm.memoData = products[0];
-      } else if (products[0].featurePeriodStartDate !== undefined) {
+      } else if (products[0] && products[0].featurePeriodStartDate !== undefined) {
         products.sort(function(a, b) {
           var featDateA = toDate(a.featurePeriodStartDate);
           var featDateB = toDate(b.featurePeriodStartDate);
           return featDateB - featDateA;
         });
         vm.memoData = products[0];
+      } else {
+        vm.memoError = true;
       }
 
       function toDate(string) {
