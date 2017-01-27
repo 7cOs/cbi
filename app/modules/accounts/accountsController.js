@@ -858,7 +858,7 @@ module.exports = /*  @ngInject */
       return isNavigatedFromOpps;
     }
 
-    function getBrandsAndTopbottomDataOnInit(isNavigatedFromOpps) {
+    function getBrandsAndTopbottomDataOnInit(isNavigatedToNextLevel) {
       var params = getUpdatedFilterQueryParamsForBrand();
       var promiseArr = [];
       // brand snapshot returns sku data instead of just the brand if you add brand:xxx
@@ -872,15 +872,16 @@ module.exports = /*  @ngInject */
           setCurrentTotalsObject();
           getDataForTopBottomLevel(vm.currentTopBottomObj);
 
-          if (isNavigatedFromOpps === true) {
-            // Directly navigate to store level if navigated from opps
-            navigateTopBottomLevels(vm.currentTopBottomFilters.stores);
+          if (isNavigatedToNextLevel === true) {
+            var topBottomFilterForCurrentLevel = vm.currentTopBottomFilters[vm.currentTopBottomObj.currentLevelName];
+            navigateTopBottomLevels(topBottomFilterForCurrentLevel);
           }
         }
       });
     }
 
     function setNotes() {
+      var isNavigateToNextLevel = false;
       if ($state.params.openNotesOnLoad) {
         $timeout(function() {
           $rootScope.$broadcast('notes:opened', true, $state.params.pageData.account);
@@ -891,14 +892,20 @@ module.exports = /*  @ngInject */
             vm.loading = false;
           });
         });
+        var currentLevel = myperformanceService.setAcctDashboardFiltersOnInit($state.params.pageData.account, vm.currentTopBottomFilters);
+        vm.filtersService.model.selected.myAccountsOnly = false;
+        vm.currentTopBottomAcctType = currentLevel;
+        vm.currentTopBottomObj = getCurrentTopBottomObject(vm.currentTopBottomAcctType);
+        isNavigateToNextLevel = true;
       }
+      return isNavigateToNextLevel;
     }
 
     function init() {
       setDefaultDropDownOptions();
       var isNavigatedFromScorecard = checkForNavigationFromScorecard();
-      var isNavigatedFromOpps = checkForNavigationFromOpps();
-      if (isNavigatedFromScorecard === false && isNavigatedFromOpps === false) {
+      var isNavigatedToNextLevel = checkForNavigationFromOpps()  || setNotes();
+      if (isNavigatedFromScorecard === false && isNavigatedToNextLevel === false) {
         chipsService.resetChipsFilters(chipsService.model);
       }
       setDefaultFilterOptions();
@@ -912,9 +919,8 @@ module.exports = /*  @ngInject */
         };
         selectItem('brands', brandObj, vm.brandTabs, 0);
       } else {
-        getBrandsAndTopbottomDataOnInit(isNavigatedFromOpps);
+        getBrandsAndTopbottomDataOnInit(isNavigatedToNextLevel);
       }
-      setNotes();
       // reset state params
       $state.params.applyFiltersOnLoad = false;
       $state.params.resetFiltersOnLoad = true;
@@ -1244,7 +1250,7 @@ module.exports = /*  @ngInject */
         if (myperformanceService.checkForInconsistentIds(performanceData)) {
           return;
         }
-        if (performanceData.name.toLowerCase() === 'independent' && !vm.currentTopBottomFilters.distributors) {
+        if (performanceData.name && performanceData.name.toLowerCase() === 'independent' && !vm.currentTopBottomFilters.distributors) {
           return;
         }
 
