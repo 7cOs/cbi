@@ -85,7 +85,7 @@ module.exports = /*  @ngInject */
 
           data.push({
             id: arr.Id,
-            title: arr.Title__c,
+            title: arr.Type__c,
             body: arr.Comments_RTF__c,
             author: arr.CreatedBy.Name,
             authorId: arr.CreatedBy.CBI_Employee_ID__c,
