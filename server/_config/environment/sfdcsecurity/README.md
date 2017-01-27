@@ -11,6 +11,8 @@ Go back out to the main Certificate and Key Management page and click "Export to
 Dev: U@kR4v6'nj'+,t>"ZX\/2c3QAp_9
 Full: }{~#L488euK?s'sVq$3su[~p#.8L
 Prod: w&\ggNf/3}[^eN`#qP#txPn!-.4(gag5YBNvNS!q-Gx&&tn-zk
+Prod Alternate:  w&\ggNf/3}[^eN`#qP#txPn!-.4
+  Note: The tool seemed to dislike the longer production password, so the alternate was used.
 
 Download the java keystore file and place in the correct environment directory (i.e. sfdcsecurity/development and sfdcsecurity/local for dev, sfdcsecurity/loadtest and sfdcsecurity/test for full, and sfdcsecurity/production for prod)
 
