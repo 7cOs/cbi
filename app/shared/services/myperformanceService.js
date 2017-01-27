@@ -15,7 +15,8 @@ module.exports = /*  @ngInject */
       resetFilters: resetFilters,
       isValidValues: isValidValues,
       checkForInconsistentIds: checkForInconsistentIds,
-      parseStoreFilterFromOpps: parseStoreFilterFromOpps
+      parseStoreFilterFromOpps: parseStoreFilterFromOpps,
+      setAcctDashboardFiltersOnInit: setAcctDashboardFiltersOnInit
     };
 
     return service;
@@ -330,6 +331,35 @@ module.exports = /*  @ngInject */
         }
       }
       return storeFilter;
+    }
+
+    function setAcctDashboardFiltersOnInit(filterToApply, currentTopBottomFilters) {
+      var filter = {
+        id: filterToApply.id[0],
+        name: filterToApply.name
+      };
+      var levelToNavigate = null;
+      if (filterToApply.type.toLowerCase() === 'distributor') {
+        currentTopBottomFilters.distributors = filter;
+        // accts level
+        levelToNavigate = filtersService.accountFilters.accountTypes[0];
+      }
+
+      if (filterToApply.type.toLowerCase() === 'account') {
+        currentTopBottomFilters.accounts = filter;
+        levelToNavigate = filtersService.accountFilters.accountTypes[1];
+      }
+
+      if (filterToApply.type.toLowerCase() === 'subaccount') {
+        currentTopBottomFilters.subAccounts = filter;
+        levelToNavigate = filtersService.accountFilters.accountTypes[2];
+      }
+
+      if (filterToApply.type.toLowerCase() === 'store') {
+        currentTopBottomFilters.stores = filter;
+        levelToNavigate = filtersService.accountFilters.accountTypes[3];
+      }
+      return levelToNavigate;
     }
 
     function initChartData() {
