@@ -329,7 +329,7 @@ module.exports = /*  @ngInject */
      */
     function getPerformanceDepletion() {
       var performancePromise = $q.defer(),
-          url = apiHelperService.request('/api/users/' + service.model.currentUser.personID + '/performance/depletionScorecard/');
+          url = apiHelperService.request('/api/users/' + service.model.currentUser.employeeID + '/performance/depletionScorecard/');
 
       if (service.model.depletion.length < 1) {
         $http.get(url)
@@ -381,7 +381,7 @@ module.exports = /*  @ngInject */
      */
     function getPerformanceDistribution(params) {
       var performancePromise = $q.defer(),
-          url = apiHelperService.request('/api/users/' + service.model.currentUser.personID + '/performance/distributionScorecard/', params);
+          url = apiHelperService.request('/api/users/' + service.model.currentUser.employeeID + '/performance/distributionScorecard/', params);
 
       $http.get(url)
         .then(getPerformanceDistributionSuccess)
