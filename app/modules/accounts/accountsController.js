@@ -145,9 +145,13 @@ module.exports = /*  @ngInject */
      * @param {String} distributionCategory - DistSimple or distEffective
      * @returns {Booelan}
      */
-    function isDisplayBrandSnapshotRow(distributionCategory, isBlankColumn) {
+    function isDisplayBrandSnapshotRow(distributionCategory, isBlankColumn, isPremiseCheckRequired) {
       if (vm.filtersService.model.accountSelected.accountBrands.value === distributionCategory) {
+        if (isPremiseCheckRequired === false) {
+          return true;
+        } else {
           return vm.filtersService.model.selected.premiseType !== 'all';
+        }
       } else {
         return isBlankColumn && isBlankColumn === true;
       }
@@ -224,6 +228,12 @@ module.exports = /*  @ngInject */
 
       // change tab index
       if (vm.currentTopBottomFilters.stores && vm.currentTopBottomFilters.stores.id) {
+        // if (!currentStore || currentStore.idForOppsPage !== vm.currentTopBottomFilters.stores.id[0]) {
+        currentStore = {
+          id: vm.currentTopBottomFilters.stores.id,
+          name: vm.currentTopBottomFilters.stores.name,
+          idForOppsPage: vm.currentTopBottomFilters.stores.id[1]
+        };
         vm.currentTopBottomAcctType = vm.filtersService.accountFilters.accountTypes[3];
       } else if (vm.currentTopBottomFilters.subAccounts && vm.currentTopBottomFilters.subAccounts.id) {
         vm.currentTopBottomAcctType = vm.filtersService.accountFilters.accountTypes[3];
@@ -265,6 +275,18 @@ module.exports = /*  @ngInject */
 
     function goToOpportunities(e) {
       if (!allOpportunitiesDisabled()) {
+        if (vm.currentTopBottomFilters.stores) {
+          if (currentStore.idForOppsPage) {
+            vm.filtersService.model.selected.store = currentStore.idForOppsPage;
+          }
+          vm.filtersService.model.selected.account = '';
+          chipsService.removeChip('account');
+          vm.filtersService.model.selected.subaccount = '';
+          chipsService.removeChip('subaccount');
+        } else if (vm.currentTopBottomFilters.subAccounts) {
+          vm.filtersService.model.selected.account = '';
+          chipsService.removeChip('account');
+        }
         $state.go('opportunities', {
           resetFiltersOnLoad: false,
           applyFiltersOnLoad: true,
@@ -369,10 +391,13 @@ module.exports = /*  @ngInject */
         vm.currentTopBottomFilters.accounts = '';
         vm.currentTopBottomFilters.subAccounts = '';
         vm.currentTopBottomFilters.stores = '';
+        chipsService.removeChip('account');
+        chipsService.removeChip('subaccount');
+        chipsService.removeChip('store');
       } else if (type === 'selectedDistributor') {
         filtersService.model.selected.distributor = [];
         filtersService.model.distributor = '';
-
+        chipsService.removeChip('distributor');
         vm.currentTopBottomFilters.distributors = '';
       }
 
@@ -414,6 +439,7 @@ module.exports = /*  @ngInject */
       vm.showXStore = false;
       chipsService.removeTopBottomChips();
       myperformanceService.resetFilters(vm.currentTopBottomFilters);
+      currentStore = null;
     }
 
     /**
@@ -568,7 +594,6 @@ module.exports = /*  @ngInject */
         }
       }
 
-      // set local model
       vm.currentTopBottomFilters[topBottomProp] = {
         id: angular.copy(filtersService.model.selected[filterModelProp]),
         name: result.name,
@@ -1281,7 +1306,8 @@ module.exports = /*  @ngInject */
         placeholderSelect(filtersService.model.retailer[0].hintText);
         currentStore = {
           id: performanceData.id,
-          name: performanceData.name
+          name: performanceData.name,
+          idForOppsPage: performanceData.unversionedStoreCode
         };
       } else {
         currentStore = null;
