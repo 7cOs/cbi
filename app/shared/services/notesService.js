@@ -124,9 +124,9 @@ module.exports = /*  @ngInject */
       return notesPromise.promise;
     }
 
-    function createNote(body) {
+    function createNote(body, id) {
       var notePromise = $q.defer(),
-          url = model.urlBase + 'createNote?accountId=' + model.accountId,
+          url = model.urlBase + 'createNote?accountId=' + id,
           payload = body;
 
       $http.post(url, payload, {

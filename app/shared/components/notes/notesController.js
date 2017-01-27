@@ -98,9 +98,15 @@ module.exports = /*  @ngInject */
       }
       vm.newNoteFiles ? vm.fileUploading = true : vm.loading = true;
       data.author = 'Me';
-      var accountId = notesService.model.accountId;
 
-      notesService.createNote(data, notesService.model.accountId).then(function(success) {
+      var id;
+      if (notesService.model.tdlinx) {
+        id = notesService.model.tdlinx;
+      } else {
+        id = notesService.model.accountId;
+      }
+
+      notesService.createNote(data, id).then(function(success) {
         var payload = {
           'action': '',
           'objectType': '',
@@ -116,7 +122,7 @@ module.exports = /*  @ngInject */
 
         payload.action = 'ADDED_NOTE';
         payload.objectType = notesService.model.currentStoreProperty.toUpperCase();
-        payload.objectId = accountId;
+        payload.objectId = id;
         payload.salesforceUserNoteID = success.successReturnValue[0].id;
 
         userService.createNotification(userService.model.currentUser.employeeID, payload);
