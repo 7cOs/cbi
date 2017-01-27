@@ -91,7 +91,6 @@ module.exports = /*  @ngInject */
     vm.acctMarketChanged = acctMarketChanged;
     vm.depletionOptionChanged = depletionOptionChanged;
     vm.trendOptionChanged = trendOptionChanged;
-    vm.checkForStoreLevel = checkForStoreLevel;
     vm.currentChartData = null;
     vm.currentTopBottomObj = null;
     vm.currentTopBottomDataForFilter = null;
@@ -102,6 +101,7 @@ module.exports = /*  @ngInject */
     vm.isDisplayBrandSnapshotRow = isDisplayBrandSnapshotRow;
     vm.isStoreLevel = false;
     vm.isHighlightStore = isHighlightStore;
+    vm.getStoreAddress = getStoreAddress;
     // Have to create this variable because vm.selecteStore just has the name..Changing th binding to include Id involves a ton of work
     var currentStore = null;
 
@@ -476,7 +476,7 @@ module.exports = /*  @ngInject */
         if (widget === 'brands') { setSelected(item.name, 'brands'); }
       } else {
         vm.brandWidgetSkuTitle = null;
-        if (widget === 'brands') { vm.brandWidgetTitle = item.name; }
+        vm.brandWidgetTitle = item.name;
         vm.loadingBrandSnapshot = true;
         vm.filtersService.model.accountSelected.accountBrands = vm.filtersService.accountFilters.accountBrands[1];
         currentBrandSelected = {
@@ -615,6 +615,7 @@ module.exports = /*  @ngInject */
         notesService.model.currentStoreProperty = filterModelProp;
       }
       if (filterModelProperty === 'store') {
+        vm.currentTopBottomFilters.stores.storeNumber = result.storeNumber;
         filtersService.model.selected.account = [];
         filtersService.model.account = '';
         chipsService.removeChip('chain');
@@ -1114,26 +1115,6 @@ module.exports = /*  @ngInject */
       }
     }
 
-    function checkForStoreLevel(trendSelection) {
-      var isVisible = true;
-      if (vm.isStoreLevel === true) {
-        if (trendSelection.showInStoreLevel === false && trendSelection.showInOtherLevels === true) {
-          isVisible = false;
-          if (vm.filterModel.trend === vm.filtersService.model.trend[1]) {
-            vm.filterModel.trend = vm.filtersService.model.trend[2];
-          }
-        }
-      } else {
-        if (trendSelection.showInStoreLevel === true && trendSelection.showInOtherLevels === false) {
-          isVisible = false;
-          if (vm.filterModel.trend === vm.filtersService.model.trend[2]) {
-            vm.filterModel.trend = vm.filtersService.model.trend[1];
-          }
-        }
-      }
-      return isVisible;
-    }
-
     /**
      * Fires when distirbution time period options change
      * @param {Object} selectedVal Updates the current distirbution time period
@@ -1229,6 +1210,27 @@ module.exports = /*  @ngInject */
       }
     }
 
+    function getStoreAddress() {
+      var addressWithStoreNumber = '';
+      if (vm.currentTopBottomFilters.stores.storeNumber) {
+        addressWithStoreNumber += '#' + vm.currentTopBottomFilters.stores.storeNumber;
+      }
+      if (vm.currentTopBottomFilters.stores.address) {
+        addressWithStoreNumber += ' (' +  vm.currentTopBottomFilters.stores.address;
+      }
+      if (vm.currentTopBottomFilters.stores.city) {
+        addressWithStoreNumber += ', ' + vm.currentTopBottomFilters.stores.city;
+      }
+      if (vm.currentTopBottomFilters.stores.state) {
+        addressWithStoreNumber += ', ' + vm.currentTopBottomFilters.stores.state;
+      }
+      if (vm.currentTopBottomFilters.stores.zipCode) {
+        addressWithStoreNumber += ' ' + vm.currentTopBottomFilters.stores.zipCode;
+      }
+      addressWithStoreNumber += ')';
+      return addressWithStoreNumber;
+    }
+
     /**
      * Navigates to the level after the current. If distributor ---> Acct, Acct--->SubAcct, SubAcct-->Store, Store click just highlight the store
      * @param {String} currentLevelName Indicates the text indicator of the level. 'distributor', 'account', 'subaccount','store'
@@ -1264,6 +1266,7 @@ module.exports = /*  @ngInject */
         } else {
           // Just setting current top bottom object to store
           vm.currentTopBottomObj = getCurrentTopBottomObject(vm.currentTopBottomAcctType);
+          vm.currentTopBottomFilters.stores.storeNumber = performanceData.storeNumber;
           updateBrandSnapshot(true);
         }
         notesService.model.tdlinx = performanceData.unversionedStoreCode;
