@@ -141,4 +141,9 @@
       background-color: $gray-4;
     }
   }
+
+  // Fix contenteditable issue with rendering paragraphs inline
+  .text-editor [contenteditable='true'] p {
+    display: block;
+  }
 }
