@@ -66,6 +66,7 @@ module.exports = /*  @ngInject */
     vm.showXChain = false;
     vm.showXDistributor = false;
     vm.showXStore = false;
+    vm.storeSelected = false;
 
     // top bottom public methods
     vm.topBottomData = {
@@ -943,6 +944,7 @@ module.exports = /*  @ngInject */
      * @returns Sets the data for the currently selected top bottom account type
      */
     function setTopBottomAcctTypeSelection(currentAcctType) {
+      vm.storeSelected = false;
       if (vm.currentTopBottomAcctType !== currentAcctType) {
         vm.currentTopBottomAcctType = currentAcctType;
         vm.currentTopBottomObj = getCurrentTopBottomObject(currentAcctType);
@@ -1201,6 +1203,7 @@ module.exports = /*  @ngInject */
      * @param {Object} data The filter selected. It's of the format {id:xxx, name: 'sdfsdf'}
      */
     function setTopBottomFilterModel(currentLevelName, data) {
+      currentLevelName === 'stores' ? vm.storeSelected = true : vm.storeSelected = false;
       vm.currentTopBottomFilters[currentLevelName] = {
         id: data.id,
         name: data.name,
