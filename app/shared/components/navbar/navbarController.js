@@ -120,8 +120,10 @@ module.exports = /*  @ngInject */
         }])
         .then(function() {
           notification.status = vm.notificationsService.status.READ;
-          vm.notificationHelper.showBadge = false;
-          vm.notificationHelper.unseenNotifications = 0;
+          if (vm.notificationHelper) {
+            vm.notificationHelper.showBadge = false;
+            vm.notificationHelper.unseenNotifications = 0;
+          }
         });
 
       if (notification.objectType.toUpperCase() === 'TARGET_LIST') {
@@ -158,8 +160,10 @@ module.exports = /*  @ngInject */
       vm.notificationsService
         .markNotifications(toMarkSeen)
         .then(function() {
-          vm.notificationHelper.showBadge = false;
-          vm.notificationHelper.unseenNotifications = 0;
+          if (vm.notificationHelper) {
+            vm.notificationHelper.showBadge = false;
+            vm.notificationHelper.unseenNotifications = 0;
+          }
         });
     }
 
@@ -408,7 +412,7 @@ module.exports = /*  @ngInject */
       };
 
       accountNote.id.push(notification.objectId);
-      accountNote.name = notification.shortenedObject.store_name;
+      accountNote.name = notification.shortenedObject.name;
       accountNote.type = notification.objectType;
       accountNote.noteId = notification.salesforceUserNoteID;
 
