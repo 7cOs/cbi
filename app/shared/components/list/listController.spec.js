@@ -565,42 +565,6 @@ describe('Unit: list controller', function() {
     });
   });
 
-  describe('[list.pickMemo] method', function() {
-    var itemAuthMemos = [
-      {
-        'packageID': '123',
-        'setPeriodStartDate': '2016-11-07T21:39:53.033Z'
-      },
-      {
-        'packageID': '123',
-        'setPeriodStartDate': '2016-10-01T21:39:53.033Z'
-      }
-    ];
-    var featureMemos = [
-      {
-        'packageID': '321',
-        'featurePeriodStartDate': '2016-09-01T21:39:53.033Z'
-      },
-      {
-        'packageID': '321',
-        'featurePeriodStartDate': '2016-10-01T21:39:53.033Z'
-      }
-    ];
-    it('should select the most recent memo and assign to memoData variable', function() {
-      ctrl.pickMemo(itemAuthMemos, '123');
-      expect(ctrl.memoData).toEqual({
-        'packageID': '123',
-        'setPeriodStartDate': '2016-11-07T21:39:53.033Z'
-      });
-
-      ctrl.pickMemo(featureMemos, '321');
-      expect(ctrl.memoData).toEqual({
-        'packageID': '321',
-        'featurePeriodStartDate': '2016-10-01T21:39:53.033Z'
-      });
-    });
-  });
-
   describe('[list.saveNewList] method', function() {
     beforeEach(function() {
       spyOn(userService, 'addTargetList').and.callFake(function() {

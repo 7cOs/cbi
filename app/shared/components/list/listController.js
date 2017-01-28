@@ -470,7 +470,7 @@ module.exports = /*  @ngInject */
 
     // Make call to applicable API endpoint for memo information per product
     // trigger population of memo with response data
-    function getMemos(storeId, productId, type) {
+    function getMemos(storeId, productId, type, code) {
       vm.memoType = '';
       if (type === 'Item Authorization') {
         storesService.getItemAuthorizations(storeId).then(populateMemo);
@@ -485,43 +485,26 @@ module.exports = /*  @ngInject */
           vm.memoError = true;
         } else {
           vm.memoError = false;
-          pickMemo(response, productId);
+          pickMemo(response, productId, code);
         }
       }
     }
 
     // Choose single memo from response/memo array based on most recent startDate
-    function pickMemo(memos, productId) {
+    function pickMemo(memos, productId, code) {
       var products = [];
+      console.log(code);
       memos.forEach(function(value, key) {
-        if (value.packageID === productId) {
+        if (value.packageID === productId && value.typeCode === code) {
           products.push(value);
         }
       });
-
-      if (products[0] && products[0].setPeriodStartDate !== undefined) {
-        products.sort(function(a, b) {
-          var setDateA = toDate(a.setPeriodStartDate);
-          var setDateB = toDate(b.setPeriodStartDate);
-          return setDateB - setDateA;
-        });
-        vm.memoData = products[0];
-      } else if (products[0] && products[0].featurePeriodStartDate !== undefined) {
-        products.sort(function(a, b) {
-          var featDateA = toDate(a.featurePeriodStartDate);
-          var featDateB = toDate(b.featurePeriodStartDate);
-          return featDateB - featDateA;
-        });
+      if (products.length > 0) {
         vm.memoData = products[0];
       } else {
         vm.memoError = true;
-      }
-
-      function toDate(string) {
-        var dateObj = new Date(string);
-        return dateObj;
-      }
-    }
+      };
+    };
 
     // Sort by selected property
     function sortBy(name) {
