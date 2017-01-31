@@ -1,14 +1,15 @@
 describe('[Services.chipsService]', function() {
-  var chipsService, filtersService;
+  var chipsService, filtersService, $state;
 
   beforeEach(function() {
     angular.mock.module('ui.router');
     angular.mock.module('cf.common.services');
     angular.mock.module('cf.common.filters');
 
-    inject(function(_chipsService_, _filtersService_) {
+    inject(function(_chipsService_, _filtersService_, _$state_) {
       chipsService = _chipsService_;
       filtersService = _filtersService_;
+      $state = _$state_;
     });
   });
 
@@ -103,6 +104,12 @@ describe('[Services.chipsService]', function() {
   });
 
   describe('method.removeFromFilterService', function() {
+    var stateChip = {
+      applied: false,
+      name: 'WA',
+      removable: true,
+      type: 'state'
+    };
     var myAccountsOnlyChip = {
       applied: false,
       name: 'My Accounts Only',
@@ -173,6 +180,14 @@ describe('[Services.chipsService]', function() {
       expect(filtersService.model.selected['myAccountsOnly']).toEqual(true);
       chipsService.removeFromFilterService(myAccountsOnlyChip);
       expect(filtersService.model.selected['myAccountsOnly']).toEqual('');
+    });
+
+    it('should reset filtersService model if chip.type is state', function() {
+      chipsService.applyStatesFilter({}, ['WA'], 'state');
+      expect(filtersService.model.selected['state']).toEqual(['WA']);
+
+      chipsService.removeFromFilterService(stateChip);
+      expect(filtersService.model.selected['state']).toEqual([]);
     });
 
     it('should remove from filterService.model and chipsService.model if chip.type === "segmentation"', function() {
@@ -284,6 +299,18 @@ describe('[Services.chipsService]', function() {
       // remove independent
       chipsService.model.splice(3, 1);
     });
+    it('should remove a productType chip', function() {
+      var productTypeChip = opportunityStatusChip;
+      productTypeChip.type = 'productType';
+      productTypeChip.search = true;
+
+      chipsService.model.push(productTypeChip);
+
+      chipsService.removeFromFilterService(productTypeChip);
+
+      expect(filtersService.disableFilters.calls.count()).toEqual(1);
+      expect(filtersService.disableFilters).toHaveBeenCalledWith(false, false, true, false);
+    });
   });
 
   describe('[addChip]', function() {
@@ -309,6 +336,102 @@ describe('[Services.chipsService]', function() {
       expect(chipsService.model).toEqual([{name: 'On-Premise', type: 'premiseType', applied: false, removable: false}]);
     });
 
+  });
+  describe('[applyFilters]', function() {
+
+    it('should reset the page number', function() {
+      filtersService.model.appliedFilter.pagination.currentPage = 5;
+      expect(filtersService.model.appliedFilter.pagination.currentPage).toEqual(5);
+      chipsService.applyFilters();
+
+      expect(filtersService.model.appliedFilter.pagination.currentPage).toEqual(0);
+    });
+
+    it('should reset the page number for a target list', function() {
+      $state.current.name = 'target-list-detail';
+      expect($state.current.name).toEqual('target-list-detail');
+
+      filtersService.model.appliedFilter.pagination.currentPage = 5;
+      expect(filtersService.model.appliedFilter.pagination.currentPage).toEqual(5);
+      chipsService.applyFilters();
+
+      expect(filtersService.model.appliedFilter.pagination.currentPage).toEqual(0);
+    });
+  });
+
+  describe('[applyFilterArr]', function() {
+
+    it('should apply arr filters with no display name', function() {
+      expect(chipsService.model).toEqual([]);
+
+      chipsService.applyFilterArr(['2225193'], {address: '989 E 149TH ST', id: '2225193', name: 'MANHATTAN BEER DIST LLC - NY (BRONX - S)'});
+
+      expect(chipsService.model).toEqual([{ name: 'Manhattan Beer Dist Llc - Ny (bronx - S)', id: undefined, type: undefined, search: true, applied: false, removable: true, tradeChannel: false }]);
+      expect(chipsService.model.length).toEqual(1);
+    });
+
+    it('should apply arr filters with a display name', function() {
+      expect(chipsService.model).toEqual([]);
+
+      chipsService.applyFilterArr(['2225193'], {address: '989 E 149TH ST', id: '2225193', name: 'MANHATTAN BEER DIST LLC - NY (BRONX - S)'}, 'distributor');
+
+      expect(chipsService.model).toEqual([{name: 'Manhattan Beer Dist Llc - Ny (bronx - S)', id: '2225193', type: 'distributor', search: true, applied: false, removable: true, tradeChannel: false}]);
+      expect(chipsService.model.length).toEqual(1);
+    });
+    it('should apply arr filters for a brand with no display name', function() {
+      expect(chipsService.model).toEqual([]);
+
+      chipsService.applyFilterArr([], {brand: 'CORONA EXTRA', brandCode: '228', id: null, name: null, type: 'brand'}, 'brand');
+
+      expect(chipsService.model).toEqual([{ name: 'Corona Extra', id: undefined, type: 'brand', search: true, applied: false, removable: true, tradeChannel: false }]);
+      expect(chipsService.model.length).toEqual(1);
+    });
+    it('should apply arr filters for a MASTER SKU with an ID', function() {
+      expect(chipsService.model).toEqual([]);
+
+      chipsService.applyFilterArr([], {brand: 'CORONA EXTRA', brandCode: '228', id: '80013438', name: 'CORONA EX 12PK CAN PROMO', type: 'sku'}, 'masterSKU');
+
+      expect(chipsService.model).toEqual([{name: 'Corona Ex 12pk Can Promo', id: '80013438', type: 'masterSKU', search: true, applied: false, removable: true, tradeChannel: false}]);
+      expect(chipsService.model.length).toEqual(1);
+    });
+
+    it('should apply arr filters for a MASTER SKU with no ID', function() {
+      expect(chipsService.model).toEqual([]);
+      filtersService.model.selected = {brand: []};
+
+      chipsService.applyFilterArr([], {brand: 'CORONA EXTRA', brandCode: '228', name: 'CORONA EX 12PK CAN PROMO', type: 'sku'}, 'masterSKU');
+
+      expect(chipsService.model).toEqual([{ name: 'Corona Extra', id: '228', type: 'brand', search: true, applied: false, removable: true, tradeChannel: false }]);
+      expect(chipsService.model.length).toEqual(1);
+    });
+
+    it('should apply arr filters for a contact', function() {
+      expect(chipsService.model).toEqual([]);
+
+      chipsService.applyFilterArr([], {id: '5516', employeeId: '1011729', firstName: 'VINCENT', lastName: 'DANDRAIA', email: 'VINCE.DANDRAIA@CBRANDS.COM'}, 'contact', 'VINCENT DANDRAIA');
+
+      expect(chipsService.model).toEqual([{ name: 'Vincent Dandraia', id: '1011729', type: 'contact', search: true, applied: false, removable: true, tradeChannel: false }]);
+      expect(chipsService.model.length).toEqual(1);
+    });
+
+    it('should apply arr filters for a tradeChannel', function() {
+      expect(chipsService.model).toEqual([]);
+
+      chipsService.applyFilterArr([], 'Grocery', 'tradeChannel');
+
+      expect(chipsService.model).toEqual([{ name: 'Grocery', id: undefined, type: 'tradeChannel', search: true, applied: false, removable: true, tradeChannel: true }]);
+      expect(chipsService.model.length).toEqual(1);
+    });
+
+    it('should  delete a chip', function() {
+      chipsService.model = ['Grocery'];
+      expect(chipsService.model).toEqual(['Grocery']);
+
+      chipsService.applyFilterArr(chipsService.model, 'Grocery', 'tradeChannel');
+
+      expect(chipsService.model).toEqual([]);
+      expect(chipsService.model.length).toEqual(0);
+    });
   });
 
   describe('[addChipsArray]', function() {
