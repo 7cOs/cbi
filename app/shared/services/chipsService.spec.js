@@ -1,14 +1,15 @@
 describe('[Services.chipsService]', function() {
-  var chipsService, filtersService;
+  var chipsService, filtersService, $state;
 
   beforeEach(function() {
     angular.mock.module('ui.router');
     angular.mock.module('cf.common.services');
     angular.mock.module('cf.common.filters');
 
-    inject(function(_chipsService_, _filtersService_) {
+    inject(function(_chipsService_, _filtersService_, _$state_) {
       chipsService = _chipsService_;
       filtersService = _filtersService_;
+      $state = _$state_;
     });
   });
 
@@ -103,6 +104,12 @@ describe('[Services.chipsService]', function() {
   });
 
   describe('method.removeFromFilterService', function() {
+    var stateChip = {
+      applied: false,
+      name: 'WA',
+      removable: true,
+      type: 'state'
+    };
     var myAccountsOnlyChip = {
       applied: false,
       name: 'My Accounts Only',
@@ -173,6 +180,14 @@ describe('[Services.chipsService]', function() {
       expect(filtersService.model.selected['myAccountsOnly']).toEqual(true);
       chipsService.removeFromFilterService(myAccountsOnlyChip);
       expect(filtersService.model.selected['myAccountsOnly']).toEqual('');
+    });
+
+    it('should reset filtersService model if chip.type is state', function() {
+      chipsService.applyStatesFilter({}, ['WA'], 'state');
+      expect(filtersService.model.selected['state']).toEqual(['WA']);
+
+      chipsService.removeFromFilterService(stateChip);
+      expect(filtersService.model.selected['state']).toEqual([]);
     });
 
     it('should remove from filterService.model and chipsService.model if chip.type === "segmentation"', function() {
@@ -331,6 +346,17 @@ describe('[Services.chipsService]', function() {
 
       expect(filtersService.model.appliedFilter.pagination.currentPage).toEqual(0);
     });
+
+    it('should reset the page number for a target list', function() {
+      $state.current.name = 'target-list-detail';
+      expect($state.current.name).toEqual('target-list-detail');
+
+      filtersService.model.appliedFilter.pagination.currentPage = 5;
+      expect(filtersService.model.appliedFilter.pagination.currentPage).toEqual(5);
+      chipsService.applyFilters();
+
+      expect(filtersService.model.appliedFilter.pagination.currentPage).toEqual(0);
+    });
   });
 
   describe('[applyFilterArr]', function() {
@@ -403,7 +429,6 @@ describe('[Services.chipsService]', function() {
 
       chipsService.applyFilterArr(chipsService.model, 'Grocery', 'tradeChannel');
 
-      console.log(chipsService.model);
       expect(chipsService.model).toEqual([]);
       expect(chipsService.model.length).toEqual(0);
     });
