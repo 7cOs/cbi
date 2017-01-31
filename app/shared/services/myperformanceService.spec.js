@@ -39,4 +39,20 @@ describe('[Services.myperformanceService]', function() {
     isValid = myperformanceService.isValidValues(undefinedVal);
     expect(isValid).toEqual(false);
   });
+
+  it('dashboard init values distributor', function() {
+    var filterToApply = {id: ['2225231'], name: 'CHICAGO BEV SYSTEMS - IL', noteId: 'a2Xm0000000I7diEAC', type: 'DISTRIBUTOR'};
+    var currentTopBottomFilters = {distributors: {address: '', city: undefined}, id: ['2225231'], name: 'CHICAGO BEV SYSTEMS - IL', state: undefined, type: 'distributors', zipCode: undefined, accounts: '', subAccounts: '', stores: ''};
+    var levelToNavigate = myperformanceService.setAcctDashboardFiltersOnInit(filterToApply, currentTopBottomFilters);
+    expect(levelToNavigate.name).toEqual('Distributors');
+    expect(levelToNavigate.value).toEqual(1);
+  });
+
+    it('dashboard init values store', function() {
+    var filterToApply = {id: ['5024219'], name: 'BERNIES', noteId: 'a2Xm0000000I7N3EAK', type: 'STORE'};
+    var currentTopBottomFilters = {stores: {address: '', city: undefined}, id: ['5024219'], name: 'BERNIES', state: undefined, type: 'stores', zipCode: undefined, accounts: '', subAccounts: '', distributors: ''};
+    var levelToNavigate = myperformanceService.setAcctDashboardFiltersOnInit(filterToApply, currentTopBottomFilters);
+    expect(levelToNavigate.name).toEqual('Stores');
+    expect(levelToNavigate.value).toEqual(4);
+  });
 });
