@@ -431,15 +431,14 @@ module.exports = /*  @ngInject */
 
     function sendFeedback() {
       var newline = '%0D%0A',
-        emailString = 'mailto:';
+        emailString = 'mailto:compassbeersfeedback@cbrands.com';
 
-      emailString += '?subject=Compass Beer Web - User Feedback';
-      emailString += '&to=compassbeerfeedback@cbrands.com';
+      emailString += '?subject=Portal';
       emailString += '&body=';
-      emailString += 'Compass Web Version: ' + versionService.model.version.hash + ' - ' + versionService.model.version.version + newline;
-      emailString += 'URL: ' + $location.absUrl() + newline;
-      emailString += 'User Email: ' + userService.model.currentUser.email + newline + newline;
-      emailString += 'Feedback: ' + newline + newline;
+      emailString += 'Feedback%3A ' + newline + newline + newline;
+      emailString += 'Compass Web Version%3A ' + versionService.model.version.hash + ' %2D ' + versionService.model.version.version + newline;
+      emailString += 'URL%3A ' + window.encodeURIComponent($location.absUrl()) + newline;
+      emailString += 'User Email%3A ' + window.encodeURIComponent(userService.model.currentUser.email) + newline + newline;
 
       $window.location = emailString;
     }
