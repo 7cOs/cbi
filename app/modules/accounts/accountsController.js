@@ -1189,7 +1189,7 @@ module.exports = /*  @ngInject */
      */
     function setTopBottomFilterModel(currentLevelName, data) {
       vm.currentTopBottomFilters[currentLevelName] = {
-        id: data.id,
+        id: currentLevelName === 'stores' ? [data.id, data.unversionedStoreCode] : data.id,
         name: data.name,
         address: formatAddress(data),
         city: data.city,
