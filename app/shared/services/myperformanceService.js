@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports = /*  @ngInject */
-  function myperformanceService($filter, filtersService) {
+  function myperformanceService($filter, filtersService, userService) {
     var service = {
       getTopBottomDataSorted: getTopBottomDataSorted,
       getChartOptions: getChartOptions,
@@ -254,9 +254,11 @@ module.exports = /*  @ngInject */
       if (currentTopBottomFilters.stores) {
         var storeIdCollection = angular.copy(currentTopBottomFilters.stores.id);
         if (storeIdCollection.length === 2) {
-          if (myAccountsOnly === true) {
+          if (myAccountsOnly === true && userService.model.currentUser.corporateUser === false) {
+            // Setting 9 digit id
             storeIdCollection.splice(1, 1);
           } else {
+            // Setting 7 digit id
             storeIdCollection.splice(0, 1);
           }
           params.store = storeIdCollection;
