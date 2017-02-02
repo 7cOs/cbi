@@ -412,7 +412,7 @@ module.exports = /*  @ngInject */
       };
 
       accountNote.id.push(notification.objectId);
-      accountNote.name = notification.shortenedObject.name;
+      accountNote.name = notification.shortenedObject.name ? notification.shortenedObject.name : notification.shortenedObject.store_name;
       accountNote.type = notification.objectType;
       accountNote.noteId = notification.salesforceUserNoteID;
 
