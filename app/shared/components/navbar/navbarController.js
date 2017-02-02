@@ -433,7 +433,7 @@ module.exports = /*  @ngInject */
       var newline = '%0D%0A',
         emailString = 'mailto:compassbeersfeedback@cbrands.com';
 
-      emailString += '?subject=Portal';
+      emailString += '?subject=Compass Portal Feedback';
       emailString += '&body=';
       emailString += 'Feedback%3A ' + newline + newline + newline;
       emailString += 'Compass Web Version%3A ' + versionService.model.version.hash + ' %2D ' + versionService.model.version.version + newline;
