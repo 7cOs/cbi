@@ -231,7 +231,7 @@ div(row)
             table.fixed-layout.data-table(cellspacing="0" cellpadding="0")
               tbody
                 tr.clickable.market-value(ng-repeat="index in a.currentBoundTopBottomIndexes" ng-click="a.navigateTopBottomLevels(data.performanceData[index])" ng-class="a.isHighlightStore(data.performanceData[index]) === true? 'selected':''")
-                  td.dist-label(colspan=2) {{data.timePeriodFilteredData[index].title}}<span ng-if="a.isStoreLevel === true && data.performanceData[index].storeNumber"> &nbsp;{{'#' + data.performanceData[index].storeNumber}}</span>
+                  td.dist-label(colspan=2) {{data.timePeriodFilteredData[index].title}}<span ng-if="a.isStoreLevel === true && data.performanceData[index].storeNumber && data.performanceData[index].storeNumber !== 'UNKNOWN'"> &nbsp;{{'#' + data.performanceData[index].storeNumber}}</span>
                   td.dark.market-label
                     span(ng-bind="a.getValueBoundForAcctType(data.timePeriodFilteredData[index].measure)")
       .chart
