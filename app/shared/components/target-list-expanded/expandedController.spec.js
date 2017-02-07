@@ -153,6 +153,59 @@ describe('Unit: expanded target list controller', function() {
       });
     });
 
+    describe('[expanded.exists]', function() {
+      var sampleList = [0, 1, 2, 3];
+      it('should return true if the item exists', function() {
+        var existResult = ctrl.exists(0, sampleList);
+        expect(existResult).toEqual(true);
+      });
+
+      it('should return false if the item does not exist', function() {
+        var existResult = ctrl.exists(4, sampleList);
+        expect(existResult).toEqual(false);
+      });
+    });
+    describe('[expanded.ratio]', function() {
+      it('should return the calculated ratio', function() {
+        var ratioResult = ctrl.ratio(15, 15);
+        expect(ratioResult).toEqual(100);
+      });
+    });
+    describe('[expanded.searchOpportunities]', function() {
+      // fill in
+    });
+    describe('[expanded.selector]', function() {
+      // fill in
+    });
+    describe('[expanded.sortBy]', function() {
+      // fill in
+    });
+    describe('[expanded.toggle]', function() {
+      it('should add the item to the list', function() {
+        var list = [0, 1, 2];
+        var item = 3;
+        ctrl.toggle(item, list);
+        var listResult = [0, 1, 2, 3];
+        expect(list).toEqual(listResult);
+      });
+      it('should remove the item from the list', function() {
+        var list = [0, 1, 2];
+        var item = 2;
+        ctrl.toggle(item, list);
+        var listResult = [0, 1];
+        expect(list).toEqual(listResult);
+      });
+    });
+    describe('[expanded.isChecked]', function() {
+      // fill in
+    });
+    describe('[expanded.isCheckedArchived]', function() {
+      // fill in
+    });
+    describe('[expanded.toggleAll]', function() {
+      // fill in
+    });
+
     describe('[expanded.deleteTargetList]', function() {
       var multipleCollaborators,
           singleCollaborator;
@@ -367,5 +420,4 @@ describe('Unit: expanded target list controller', function() {
       });
     });
   });
-
 });
