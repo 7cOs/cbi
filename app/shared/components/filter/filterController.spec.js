@@ -1,5 +1,5 @@
 describe('Unit: filter controller (opportunities)', function() {
-  var scope, ctrl, mdDialog, mdSelect, q, state, chipsService, loaderService, filtersService, opportunityFiltersService, userService;
+  var scope, ctrl, mdDialog, mdSelect, q, state, chipsService, loaderService, filtersService, opportunityFiltersService, userService, $analytics;
 
   beforeEach(function() {
     angular.mock.module('ui.router');
@@ -8,7 +8,7 @@ describe('Unit: filter controller (opportunities)', function() {
     angular.mock.module('cf.common.services');
     angular.mock.module('cf.common.components.filter');
 
-    inject(function($controller, _$mdDialog_, _$mdSelect_, _$q_, $rootScope, _chipsService_, _filtersService_, _loaderService_, _opportunityFiltersService_, _userService_) {
+    inject(function($controller, _$mdDialog_, _$mdSelect_, _$q_, $rootScope, _chipsService_, _filtersService_, _loaderService_, _opportunityFiltersService_, _userService_, _$analytics_) {
       scope = $rootScope.$new();
       q = _$q_;
       state = {
@@ -25,6 +25,7 @@ describe('Unit: filter controller (opportunities)', function() {
       loaderService = _loaderService_;
       opportunityFiltersService = _opportunityFiltersService_;
       userService = _userService_;
+      $analytics = _$analytics_;
 
       ctrl = $controller('filterController', {$scope: scope, $state: state});
     });
@@ -447,6 +448,118 @@ describe('Unit: filter controller (opportunities)', function() {
 
       expect(chipsService.model).toEqual([]);
     });
+  });
+
+  it('change opportunity selection, assure All Types is removed or added', function() {
+
+    // user clicks on a type that is not All Types, All Types should be removed
+    filtersService.model.selected.opportunityType = ['All Types', 'Non-Buy'];
+    ctrl.chooseOpportunityType('Non-Buy');
+    ctrl.changeOpportunitySelection();
+    expect(filtersService.model.selected.opportunityType).toEqual(['Non-Buy']);
+
+    // user clicks on Non-Buy when it is the only selection, All Types should be added
+    filtersService.model.selected.opportunityType = [];
+    ctrl.chooseOpportunityType('Non-Buy');
+    ctrl.changeOpportunitySelection();
+    expect(filtersService.model.selected.opportunityType).toEqual(['All Types']);
+
+    // user clicks on All Types when other items are selected, all items except All Types should be removed
+    filtersService.model.selected.opportunityType = ['Non-Buy', 'At Risk', 'All Types'];
+    ctrl.chooseOpportunityType('All Types');
+    ctrl.changeOpportunitySelection();
+    expect(filtersService.model.selected.opportunityType).toEqual(['All Types']);
+  });
+
+  it('send filter analytics', function() {
+
+    var accountChip =
+      {
+        'name': 'Account',
+        'type': 'account',
+        'id': 'Walmart',
+        'applied': true,
+        'removable': false
+      };
+
+    var myAccountsChip =
+      {
+        'name': 'My Accounts Only',
+        'type': 'myAccountsOnly',
+        'applied': true,
+        'removable': false
+      };
+
+    var cbbdChip =
+      {
+        'name': 'CBBD Contact',
+        'type': 'contact',
+        'id': 'Mr. Simpson',
+        'applied': true,
+        'removable': false
+      };
+
+    var masterSkuChip =
+      {
+        'name': 'Master SKU',
+        'type': 'masterSKU',
+        'id': '228',
+        'applied': true,
+        'removable': false
+      };
+
+    var predictedImpactChip =
+      {
+        'name': 'High',
+        'type': 'impact',
+        'applied': true,
+        'removable': false
+      };
+
+    var cbbdChainChip =
+      {
+        'name': 'Store Type',
+        'type': 'cbbdChain',
+        'applied': true,
+        'removable': false
+      };
+
+    var segmentationChip =
+      {
+        'name': 'A',
+        'type': 'segmentation',
+        'applied': true,
+        'removable': false
+      };
+
+    var cityChip =
+      {
+        'name': 'Houston',
+        'type': 'city',
+        'applied': true,
+        'removable': false
+      };
+
+    chipsService.model.push(myAccountsChip);
+    chipsService.model.push(cbbdChip);
+    chipsService.model.push(masterSkuChip);
+    chipsService.model.push(predictedImpactChip);
+    chipsService.model.push(accountChip);
+    chipsService.model.push(cbbdChainChip);
+    chipsService.model.push(segmentationChip);
+    chipsService.model.push(cityChip);
+
+    spyOn($analytics, 'eventTrack');
+    ctrl.applyFilters();
+    expect($analytics.eventTrack).toHaveBeenCalledWith('ACCOUNT SCOPE', { category: 'Filters', label: 'MY ACCOUNTS ONLY' });
+    expect($analytics.eventTrack).toHaveBeenCalledWith('CBBD CONTACT', { category: 'Filters', label: 'Mr. Simpson' });
+    expect($analytics.eventTrack).toHaveBeenCalledWith('MASTER SKU', { category: 'Filters', label: '228' });
+    expect($analytics.eventTrack).toHaveBeenCalledWith('PREDICTED IMPACT', { category: 'Filters', label: 'HIGH' });
+    expect($analytics.eventTrack).toHaveBeenCalledWith('ACCOUNT', { category: 'Filters', label: 'Walmart' });
+    expect($analytics.eventTrack).toHaveBeenCalledWith('STORE TYPE', { category: 'Filters', label: 'STORE TYPE' });
+    expect($analytics.eventTrack).toHaveBeenCalledWith('STORE SEGMENTATION', { category: 'Filters', label: 'A' });
+    expect($analytics.eventTrack).toHaveBeenCalledWith('CITY', { category: 'Filters', label: 'HOUSTON' });
+
   });
 
   describe('[method.saveFilter]', function() {
