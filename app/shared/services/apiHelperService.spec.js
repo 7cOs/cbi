@@ -1,4 +1,4 @@
-/* describe('[Services.apiHelperService]', function() {
+describe('[Services.apiHelperService]', function() {
   var APIHelper;
 
   beforeEach(function() {
@@ -24,8 +24,7 @@
       'masterSKU': '112154',
       'premiseType': 'on'
     };
-    var resultExpectation = '?' + encodeURIComponent('filter=masterSKU:112154,premiseType:on');
-
+    var resultExpectation = '?' + 'filter=masterSKU%3A112154%2CpremiseType%3Aon';
     // execute
     var result = APIHelper.formatQueryString(mockObj);
 
@@ -48,7 +47,7 @@
       'premiseType': 'on'
     };
     var url = 'http://localhost:3000/';
-    var resultExpectation = url + '?' + encodeURIComponent('filter=masterSKU:112154,premiseType:on');
+    var resultExpectation = url + '?' + 'filter=masterSKU%3A112154%2CpremiseType%3Aon';
 
     var result = APIHelper.request(url, mockObj);
 
@@ -62,7 +61,7 @@
       'type': 'store'
     };
     var url = 'http://localhost:3000/';
-    var resultExpectation = url + '?' + 'masterSKU=112154&premiseType=on';
+    var resultExpectation = url + '?' + 'filter=masterSKU%3A112154%2CpremiseType%3Aon%2C';
 
     var result = APIHelper.request(url, mockObj);
 
@@ -76,7 +75,56 @@
       'type': 'opportunities'
     };
     var url = 'http://localhost:3000/';
-    var resultExpectation = url + '?limit=2000&sort=store&filter=' + encodeURIComponent('masterSKU:112154,premiseType:on');
+    var resultExpectation = url + '?limit=10&ignoreDismissed=true&sort=&offset=0&filter=masterSKU%3A112154%2CpremiseType%3Aon';
+
+    var result = APIHelper.request(url, mockObj);
+
+    expect(result).toEqual(resultExpectation);
+  });
+
+  it('[request] it should set archived=true for target lists', function() {
+    var mockObj = {
+      'type': 'targetLists'
+    };
+    var url = 'http://localhost:3000/';
+    var resultExpectation = url + '?' + 'archived=true';
+
+    var result = APIHelper.request(url, mockObj);
+
+    expect(result).toEqual(resultExpectation);
+  });
+  it('[request] it should set query params for brandsnapshot', function() {
+    var mockObj = {
+      'type': 'brandSnapshot',
+      'additionalParams': {type: 'brandSnapshot', myAccountsOnly: true, opportunityType: ['All Types'], premiseType: 'off', retailer: 'Chain', distributor: ['2225193']}
+    };
+    var url = 'http://localhost:3000/';
+    var resultExpectation = url + '?' + 'type=brandSnapshot&myAccountsOnly=true&opportunityType=All%20Types&premiseType=off&retailer=Chain&distributor=2225193&filter=';
+
+    var result = APIHelper.request(url, mockObj);
+
+    expect(result).toEqual(resultExpectation);
+  });
+  it('[request] it should set additional params for topbottom', function() {
+    var mockObj = {
+      'type': 'topBottom',
+      'additionalParams': {type: 'topBottom', myAccountsOnly: true, opportunityType: ['All Types'], premiseType: 'off', retailer: 'Chain', distributor: ['2225193']}
+    };
+    var url = 'http://localhost:3000/';
+    var resultExpectation = url + '?' + 'type=topBottom&myAccountsOnly=true&opportunityType=All%20Types&premiseType=off&retailer=Chain&distributor=2225193&filter=';
+
+    var result = APIHelper.request(url, mockObj);
+
+    expect(result).toEqual(resultExpectation);
+  });
+
+  it('[request] should set query params for cbbd chain on opportunities', function() {
+    var mockObj = {
+      'type': 'opportunities',
+      'additionalParams': ['cbbdChain']
+    };
+    var url = 'http://localhost:3000/';
+    var resultExpectation = url + '?' + 'limit=10&ignoreDismissed=true&sort=&offset=0&filter=additionalParams%3AcbbdChain';
 
     var result = APIHelper.request(url, mockObj);
 
@@ -84,4 +132,3 @@
   });
 
 });
-*/
