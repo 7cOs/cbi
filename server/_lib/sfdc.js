@@ -336,7 +336,8 @@ function createNote(app, req, res) {
               Other_Type__c: req.body.othertype,
               Private__c: req.body.private,
               Soft_Delete__c: req.body.softdelete,
-              Type__c: req.body.title
+              Type__c: req.body.title,
+              RecordTypeId: app.get('config').sfdcSettings.noteRecordTypeId
             }],
             function (err, ret) {
               if (err) {

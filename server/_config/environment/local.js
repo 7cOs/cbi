@@ -118,6 +118,10 @@ module.exports = function (config) {
     ssoStartPage: 'compass-portal'
   };
 
+  config.sfdcSettings = {
+    noteRecordTypeId: '012m00000004plsAAA'
+  };
+
   return config;
 
 };
