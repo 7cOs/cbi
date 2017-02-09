@@ -210,7 +210,7 @@ function queryAccountNotes(app, req, res) {
             .select('Id, Name, CreatedDate, BodyLength, ContentType, Description, LastModifiedDate, OwnerId, ParentId')
             .orderby('CreatedDate', 'DESC')
             .end()
-            .where('Account__r.TDLinx_Id__c = \'' + strId + '\' or Account__r.JDE_Address_Book_Number__c = \'' + strId + '\' or Account__r.Store_Code__c = \'' + strId + '\'')
+            .where('(Account__r.TDLinx_Id__c = \'' + strId + '\' or Account__r.JDE_Address_Book_Number__c = \'' + strId + '\' or Account__r.Store_Code__c = \'' + strId + '\') and RecordTypeId = \'' + app.get('config').sfdcSettings.noteRecordTypeId + '\'')
             .execute(function (err, records) {
               if (err) {
                 return {'isSuccess': false,
@@ -336,7 +336,8 @@ function createNote(app, req, res) {
               Other_Type__c: req.body.othertype,
               Private__c: req.body.private,
               Soft_Delete__c: req.body.softdelete,
-              Type__c: req.body.title
+              Type__c: req.body.title,
+              RecordTypeId: app.get('config').sfdcSettings.noteRecordTypeId
             }],
             function (err, ret) {
               if (err) {
