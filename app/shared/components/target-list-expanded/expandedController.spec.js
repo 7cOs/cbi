@@ -140,6 +140,100 @@ describe('Unit: expanded target list controller', function() {
       });
     });
 
+    describe('[expanded.selector]', function() {
+      it('should should reset selected and button state', function() {
+        ctrl.selected = ['testing'];
+        ctrl.buttonState = 'testing';
+        expect(ctrl.selected).toEqual(['testing']);
+
+        ctrl.selector('madeUp');
+        expect(ctrl.selected).toEqual([]);
+        expect(ctrl.buttonState).toEqual('madeUp');
+
+      });
+    });
+
+    describe('[expanded.sortBy]', function() {
+      it('should set the sort property to name', function() {
+        ctrl.sortProperty = '';
+        ctrl.listChevron = false;
+        ctrl.collaboratorsChevron = false;
+        ctrl.lastUpdatedChevron = false;
+        ctrl.closedOpportunitiesChevron = false;
+        ctrl.totalOpportunitesChevron = false;
+        ctrl.depletionsChevron = false;
+        expect(ctrl.sortProperty).toEqual('');
+        expect(ctrl.listChevron).toEqual(false);
+        expect(ctrl.collaboratorsChevron).toEqual(false);
+        expect(ctrl.lastUpdatedChevron).toEqual(false);
+        expect(ctrl.closedOpportunitiesChevron).toEqual(false);
+        expect(ctrl.totalOpportunitesChevron).toEqual(false);
+        expect(ctrl.depletionsChevron).toEqual(false);
+
+        ctrl.sortBy('name');
+        expect(ctrl.sortProperty).toEqual('name');
+        expect(ctrl.listChevron).toEqual(true);
+        expect(ctrl.collaboratorsChevron).toEqual(false);
+        expect(ctrl.lastUpdatedChevron).toEqual(false);
+        expect(ctrl.closedOpportunitiesChevron).toEqual(false);
+        expect(ctrl.totalOpportunitesChevron).toEqual(false);
+        expect(ctrl.depletionsChevron).toEqual(false);
+      });
+
+      it('should reverse the current property', function() {
+        ctrl.sortProperty = 'name';
+        ctrl.reverse = false;
+        expect(ctrl.sortProperty).toEqual('name');
+        expect(ctrl.reverse).toEqual(false);
+
+        ctrl.sortBy('name');
+        expect(ctrl.reverse).toEqual(true);
+        expect(ctrl.sortProperty).toEqual('name');
+      });
+    });
+
+    describe('[expanded.toggleAll]', function() {
+      it('should toggle all (remove) for named', function() {
+        ctrl.selected = [0, 1, 2, 3];
+        ctrl.userService.model.targetLists = {ownedNotArchivedTargetLists: [0, 1, 2, 3]};
+        expect(ctrl.selected.length).toEqual(4);
+
+        ctrl.toggleAll('named');
+
+        expect(ctrl.selected.length).toEqual(0);
+
+      });
+
+      it('should toggle all for named where selected length is zero', function() {
+        ctrl.selected = [];
+        ctrl.userService.model.targetLists = {ownedNotArchivedTargetLists: [0]};
+        expect(ctrl.selected.length).toEqual(0);
+
+        ctrl.toggleAll('named');
+
+        expect(ctrl.selected.length).toEqual(1);
+      });
+      it('should toggle all (remove) for archived', function() {
+        ctrl.selected = [0, 1, 2, 3];
+        ctrl.userService.model.targetLists = {archived: [0, 1, 2, 3]};
+        expect(ctrl.selected.length).toEqual(4);
+
+        ctrl.toggleAll('archived');
+
+        expect(ctrl.selected.length).toEqual(0);
+
+      });
+
+      it('should toggle all for archived where selected length is zero', function() {
+        ctrl.selected = [];
+        ctrl.userService.model.targetLists = {archived: [0]};
+        expect(ctrl.selected.length).toEqual(0);
+
+        ctrl.toggleAll('archived');
+
+        expect(ctrl.selected.length).toEqual(1);
+      });
+    });
     describe('[expanded.createTargetList]', function() {
       beforeEach(function() {
         spyOn(mdDialog, 'show').and.callThrough();
