@@ -1,5 +1,5 @@
 describe('Unit: filter service', function() {
-  var scope, ctrl, mdDialog, mdSelect, q, state, chipsService, loaderService, filtersService, opportunityFiltersService, userService;
+  var filtersService;
 
   beforeEach(function() {
     angular.mock.module('ui.router');
@@ -8,23 +8,8 @@ describe('Unit: filter service', function() {
     angular.mock.module('cf.common.services');
     angular.mock.module('cf.common.components.filter');
 
-    inject(function($controller, _$mdDialog_, _$mdSelect_, _$q_, $rootScope, _chipsService_, _filtersService_, _loaderService_, _opportunityFiltersService_, _userService_) {
-      scope = $rootScope.$new();
-      q = _$q_;
-      state = {
-        current: {
-          name: 'opportunities'
-        }
-      };
-
-      mdDialog = _$mdDialog_;
-      mdSelect = _$mdSelect_;
-
-      chipsService = _chipsService_;
+    inject(function(_filtersService_) {
       filtersService = _filtersService_;
-      loaderService = _loaderService_;
-      opportunityFiltersService = _opportunityFiltersService_;
-      userService = _userService_;
     });
   });
 
