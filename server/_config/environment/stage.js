@@ -1,12 +1,12 @@
 'use strict';
 
 module.exports = function (config) {
-  var fs = require('fs');
+  const fs = require('fs');
 
   // global settings
-  config.domain = 'app-compass-poc.herokuapp.com';
-  config.env = 'poc';
-  config.address = 'https://' + config.domain + ''; // base url
+  config.domain = 'compass-stage.cbrands.com';
+  config.env = 'stage';
+  config.address = 'https://' + config.domain + '/'; // base url
 
   // directories
   config.public = {
@@ -22,17 +22,17 @@ module.exports = function (config) {
   };
 
   config.api = {
-    url: 'http://cbi-api-internal-dd-qa.herokuapp.com',
+    url: 'https://internal.api.cbrands.com',
     key: 'U1NCc2FXdGxJSFJ2SUVodlpHOXlMQ0JJYjJSdmNpd2dTRzlrYjNJc0lFaHZaRzl5Y3lCaGJtUWdTRzlrYjNKekxnPT0=',
     apiKey: 'test',
     version: 'v2'
   };
 
   config.saml = {
-    entryPoint: 'https://ssodev.cbrands.com/oamfed/idp/samlv20',
-    logoutBase: 'https://ssodev.cbrands.com/oam/server/logout',
-    issuer: 'https://app-compass-poc.herokuapp.com',
-    cert: fs.readFileSync('./server/_config/passport/certs/development.crt', 'utf-8'),
+    entryPoint: 'https://sso.cbrands.com/oamfed/idp/samlv20',
+    logoutBase: 'https://sso.cbrands.com/oam/server/logout',
+    issuer: 'https://compass.cbrands.com',
+    cert: fs.readFileSync('./server/_config/passport/certs/cbi-prod-signing-2018.cer', 'utf-8'),
     privateCert: '',
     signatureAlgorithm: 'sha1'
   };

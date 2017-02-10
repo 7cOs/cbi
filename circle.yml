@@ -22,22 +22,19 @@ deployment:
   develop:
     branch: develop
     commands:
-      # push the code to app-orion-dev
-      - git push git@heroku.com:app-compass-deloitte-qa.git $CIRCLE_SHA1:master -f
+      - git push git@heroku.com:app-orion-dev.git $CIRCLE_SHA1:master -f
   qa:
     branch: test
     commands:
-      # push the code to app-orion-dev
       - git push git@heroku.com:app-orion-qa.git $CIRCLE_SHA1:master -f
-      - git push git@heroku.com:app-compass-loadtest.git $CIRCLE_SHA1:master -f
+      # - git push git@heroku.com:app-compass-loadtest.git $CIRCLE_SHA1:master -f
       - cd automation-test && mvn test
   poc:
-    branch: poc
+    branch: staging
     commands:
-      # push the code to poc
-      - git push git@heroku.com:app-orion-dev.git $CIRCLE_SHA1:master -f
+      - git push git@heroku.com:app-compass-stage.git $CIRCLE_SHA1:master -f
+
   production:
     branch: master
     commands:
-      # push the code to app-orion-prod
       - git push git@heroku.com:app-orion-prod.git $CIRCLE_SHA1:master -f

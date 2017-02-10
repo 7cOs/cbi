@@ -1,6 +1,17 @@
 // Karma configuration
 
 module.exports = function(config) {
+  var testReporters = ['mocha', 'nyan', 'coverage'],
+    coverageReporters = [
+      {type: 'html', dir: 'coverage/'}
+    ];
+
+  // check for CircleCI environment
+  if (process.env.CIRCLE_TEST_REPORTS) {
+    testReporters.push('junit');
+    coverageReporters.push({type: 'html', dir: process.env.CIRCLE_ARTIFACTS});
+  }
+
   config.set({
 
     // base path that will be used to resolve all patterns (eg. files, exclude)
@@ -36,7 +47,12 @@ module.exports = function(config) {
     // test results reporter to use
     // possible values: 'dots', 'progress'
     // available reporters: https://npmjs.org/browse/keyword/karma-reporter
-    reporters: ['mocha', 'nyan', 'coverage'],
+    reporters: testReporters,
+
+    // used for CircleCI output only
+    junitReporter: {
+      outputDir: process.env.CIRCLE_TEST_REPORTS + '/junit'
+    },
 
     nyanReporter: {
       numberOfRainbowLines: 4,
@@ -48,9 +64,7 @@ module.exports = function(config) {
     },
 
     coverageReporter: {
-      reporters: [
-        {type: 'html', dir: 'coverage/'}
-      ]
+      reporters: coverageReporters
     },
 
     // web server port

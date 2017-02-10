@@ -1,12 +1,11 @@
 'use strict';
 
 module.exports = function (config) {
-
   const fs = require('fs');
 
   // global settings
   config.domain = 'compass.cbrands.com';
-  config.env = 'app-orion-prod';
+  config.env = 'production';
   config.address = 'https://' + config.domain + '/'; // base url
 
   // directories
@@ -22,7 +21,6 @@ module.exports = function (config) {
     id: 'UA-77300343-7'
   };
 
-  // change all of this to env variables for security.
   config.api = {
     url: 'https://internal.api.cbrands.com',
     key: 'U1NCc2FXdGxJSFJ2SUVodlpHOXlMQ0JJYjJSdmNpd2dTRzlrYjNJc0lFaHZaRzl5Y3lCaGJtUWdTRzlrYjNKekxnPT0=',

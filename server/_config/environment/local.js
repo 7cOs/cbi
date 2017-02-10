@@ -26,15 +26,10 @@ module.exports = function (config) {
 
   // if you change this server, you need to get a different JWT.
   config.api = {
+    url: 'http://cbi-api-internal-qa.herokuapp.com',
     key: 'U1NCc2FXdGxJSFJ2SUVodlpHOXlMQ0JJYjJSdmNpd2dTRzlrYjNJc0lFaHZaRzl5Y3lCaGJtUWdTRzlrYjNKekxnPT0=',
     apiKey: 'test',
-    version: 'v2',
-    // url: 'http://cbi-api-test.herokuapp.com',
-    // jwt: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJsYXN0TmFtZSI6Ik8nTkVJTCIsImlzcyI6Imh0dHBzOi8vb3Jpb24uY2JyYW5kcy5jb20iLCJlbXBsb3llZUlEIjoiMTAwMjQxNyIsImZpcnN0TmFtZSI6IkpBTUVTIiwiZ3JvdXBpbmdDb2RlIjoiMTMzIiwiY29ycG9yYXRlVXNlciI6ZmFsc2UsInBlcnNvbklEIjoxNjAxLCJleHAiOjE0Nzc1MjgzMTQyMDcsImlhdCI6MTQ3MjM0NDMxNDIwNywidXNlckdyb3VwIjpbImNiaS1yb2xlLWlxLWFwcC11c2VycyIsImNiaSBlbXBsb3llZXMiLCJ1Zy1jYmlnZGMtYml6LXJvbGUtYnVzdW5pdHZwIiwiY2JpIHVzZXJzIiwiY2JpLWFkZW5hYmxlZGFjY291bnRzIl0sImVtYWlsIjoiamltLm9uZWlsQGNicmFuZHMuY29tIiwic3JjVHlwZUNkIjpbIk9GRl9ISUVSIiwiU0FMRVNfSElFUiJdfQ.YFHMTCRWTHyaarudBhBhMbRsmSo7Xlla8_m4ioXb66Q'
-    // url: 'http://cbrands-deloitte-dev.herokuapp.com',
-    // jwt: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJsYXN0TmFtZSI6Ik8nTkVJTCIsImlzcyI6Imh0dHBzOi8vb3Jpb24uY2JyYW5kcy5jb20iLCJlbXBsb3llZUlEIjoiMTAwMjQxNyIsImZpcnN0TmFtZSI6IkpBTUVTIiwiZ3JvdXBpbmdDb2RlIjoiMTMzIiwiY29ycG9yYXRlVXNlciI6ZmFsc2UsInBlcnNvbklEIjo1NDU5LCJleHAiOjE0ODA3OTE5OTUzMzYsImlhdCI6MTQ3NTYwNzk5NTMzNiwidXNlckdyb3VwIjpbImNiaS1yb2xlLWlxLWFwcC11c2VycyIsImNiaSBlbXBsb3llZXMiLCJ1Zy1jYmlnZGMtYml6LXJvbGUtYnVzdW5pdHZwIiwiY2JpIHVzZXJzIiwiY2JpLWFkZW5hYmxlZGFjY291bnRzIl0sImVtYWlsIjoiSklNLk9ORUlMQENCUkFORFMuQ09NIiwic3JjVHlwZUNkIjpbIlNBTEVTX0hJRVIiXX0.PJq-Y5A4OzAKPJV0UF7ns8PKhF3LHwzd6_STHN0mq9g'
-    url: 'http://cbi-api-internal-qa.herokuapp.com',
-    jwt: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJsYXN0TmFtZSI6IldJTFNPTiIsImlzcyI6Imh0dHBzOi8vb3Jpb24uY2JyYW5kcy5jb20iLCJlbXBsb3llZUlEIjoiMTAwOTMxMiIsImZpcnN0TmFtZSI6IkJSSVRUQU5ZIiwiY29ycG9yYXRlVXNlciI6ZmFsc2UsInBvc2l0aW9uSWQiOiI0NTAyIiwicGVyc29uSUQiOjU0MDQsImV4cCI6MTQ5MDU3NTA2Nzg1MCwiaWF0IjoxNDg1MzkxMDY3ODUwLCJ1c2VyR3JvdXAiOltdLCJlbWFpbCI6IkJSSVRUQU5ZLldJTFNPTkBDQlJBTkRTLkNPTSIsInNyY1R5cGVDZCI6WyJTQUxFU19ISUVSIl0sImJ1UG9zaXRpb25JZCI6IjAifQ.BJ5ffy5rZFmVWSOu1mMY-qHXKmgQfAgWuoVfnozgdJQ'
+    version: 'v2'
   };
 
   config.saml = {
@@ -48,8 +43,8 @@ module.exports = function (config) {
   config.auth = {
     strategy: 'no-auth',
     user: {
-      'personId': 5404,
-      'employeeID': '1009312',
+      'personId': 5648,
+      'employeeID': '1012132',
       'firstName': 'FRED',
       'lastName': 'BERRIOS',
       'email': 'FRED.BERRIOS@CBRANDS.COM',
@@ -57,7 +52,7 @@ module.exports = function (config) {
         'SALES_HIER'
       ],
       'groupingCode': '133',
-      'corporateUser': true,
+      'corporateUser': false,
       'userGroup': [
         'cbi-role-iq-app-users',
         'cbi employees',
@@ -66,17 +61,17 @@ module.exports = function (config) {
         'ug-cbigdc-biz-role-genmgr'
       ],
       'issuer': 'https://orion.cbrands.com',
-      'jwt': 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJsYXN0TmFtZSI6IldJTFNPTiIsImlzcyI6Imh0dHBzOi8vb3Jpb24uY2JyYW5kcy5jb20iLCJlbXBsb3llZUlEIjoiMTAwOTMxMiIsImZpcnN0TmFtZSI6IkJSSVRUQU5ZIiwiY29ycG9yYXRlVXNlciI6ZmFsc2UsInBvc2l0aW9uSWQiOiI0NTAyIiwicGVyc29uSUQiOjU0MDQsImV4cCI6MTQ5MDU3NTA2Nzg1MCwiaWF0IjoxNDg1MzkxMDY3ODUwLCJ1c2VyR3JvdXAiOltdLCJlbWFpbCI6IkJSSVRUQU5ZLldJTFNPTkBDQlJBTkRTLkNPTSIsInNyY1R5cGVDZCI6WyJTQUxFU19ISUVSIl0sImJ1UG9zaXRpb25JZCI6IjAifQ.BJ5ffy5rZFmVWSOu1mMY-qHXKmgQfAgWuoVfnozgdJQ',
+      'jwt': 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJsYXN0TmFtZSI6IkJFUlJJT1MiLCJpc3MiOiJodHRwczovL29yaW9uLmNicmFuZHMuY29tIiwiZW1wbG95ZWVJRCI6IjEwMTIxMzIiLCJmaXJzdE5hbWUiOiJGUkVEIiwiY29ycG9yYXRlVXNlciI6ZmFsc2UsInBvc2l0aW9uSWQiOiI0OTA3IiwicGVyc29uSUQiOjU2NDgsImV4cCI6MTQ5MTk0NjM5NDAwMCwiaWF0IjoxNDg2NzYyMzk0MDAwLCJ1c2VyR3JvdXAiOltdLCJlbWFpbCI6IkZSRUQuQkVSUklPU0BDQlJBTkRTLkNPTSIsInNyY1R5cGVDZCI6WyJTQUxFU19ISUVSIl0sImJ1UG9zaXRpb25JZCI6IjQwOTMifQ.k2IA9YV_07qx7yx2El6WoLuuZiCRsypJKz-Cuoe5AHU',
       'jwtmap': {
         'firstName': 'FRED',
         'lastName': 'BERRIOS',
         'groupingCode': '133',
-        'corporateUser': true,
+        'corporateUser': false,
         'iss': 'https://orion.cbrands.com',
-        'personId': 5404,
-        'employeeID': '1009312',
-        'exp': 1480707641150,
-        'iat': 1475523641152,
+        'personId': 5648,
+        'employeeID': '1012132',
+        'exp': 1491946394000,
+        'iat': 1486762394000,
         'userGroup': [
           'cbi-role-iq-app-users',
           'cbi employees',
@@ -100,6 +95,7 @@ module.exports = function (config) {
     lib: config.address + 'lib/',
     js: config.address + 'js/'
   };
+
   config.sfdcSec = {
     // assertionEndpoint: the endpoint you connect to in order to get the session token.
     assertionEndpoint: 'https://cbrands--CBeerDev.cs20.my.salesforce.com/services/oauth2/token?so=00Dm00000008fCJ',

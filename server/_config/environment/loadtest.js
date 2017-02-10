@@ -5,7 +5,7 @@ module.exports = function (config) {
 
   // global settings
   config.domain = 'compass-loadtest.cbrands.com';
-  config.env = 'test';
+  config.env = 'loadtest';
   config.address = 'https://' + config.domain + ''; // base url
 
   // directories
@@ -21,36 +21,11 @@ module.exports = function (config) {
     id: ''
   };
 
-  // change all of this to env variables for security.
   config.api = {
     url: 'http://cbi-api-internal-loadtest.herokuapp.com',
     key: 'U1NCc2FXdGxJSFJ2SUVodlpHOXlMQ0JJYjJSdmNpd2dTRzlrYjNJc0lFaHZaRzl5Y3lCaGJtUWdTRzlrYjNKekxnPT0=',
     apiKey: 'test',
-    version: 'v2',
-    jwt: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJsYXN0TmFtZSI6IldJTExJQU1TIiwiaXNzIjoiaHR0cHM6Ly9vcmlvbi5jYnJhbmRzLmNvbSIsImVtcGxveWVlSUQiOiIxMDEyMTM1IiwiZmlyc3ROYW1lIjoiQ0hSSVNUT1BIRVIiLCJncm91cGluZ0NvZGUiOiIyMzQiLCJjb3Jwb3JhdGVVc2VyIjp0cnVlLCJwZXJzb25JRCI6NTU0NSwiZXhwIjoxNDgzMzcxMzQwMDIyLCJpYXQiOjE0NzgxODczNDAxMDgsInVzZXJHcm91cCI6W10sImVtYWlsIjoiQ0hSSVMuV0lMTElBTVNAQ0JSQU5EUy5DT00iLCJzcmNUeXBlQ2QiOlsiU0FMRVNfSElFUiJdfQ.N6TonZWdpwHV4895JyD4S9BXXJq2miaKiJqcSvr5lN0'
-  };
-
-  config.auth = {
-    strategy: 'saml'
-    /*
-    user: {
-      jwt: config.api.jwt,
-      jwtmap: {
-        firstName: 'CARRIE',
-        lastName: 'REID',
-        groupingCode: '132',
-        iss: 'https://orion.cbrands.com',
-        personId: 5649,
-        employeeID: '1009529',
-        exp: 1483373944017,
-        iat: 1478189944022,
-        email: 'CARRIE.REID@CBRANDS.COM',
-        srcTypeCd: [
-          'SALES_HIER'
-        ]
-      }
-    }
-  */
+    version: 'v2'
   };
 
   config.saml = {
@@ -64,13 +39,13 @@ module.exports = function (config) {
 
   config.sfdcSec = {
     // assertionEndpoint: the endpoint you connect to in order to get the session token.
-    assertionEndpoint: 'https://cbrands--Full.cs17.my.salesforce.com/services/oauth2/token?so=00Dg0000006Hhfi',
+    assertionEndpoint: 'https://cbrands--CBeerDev.cs20.my.salesforce.com/services/oauth2/token?so=00Dm00000008fCJ',
     // privateKey and certfile: keys generated from SFDC's Key and Certificate Management area
-    privateKey: fs.readFileSync('./server/_config/environment/sfdcsecurity/test/signingKey.pem').toString(),
-    certfile: fs.readFileSync('./server/_config/environment/sfdcsecurity/test/certificate.crt').toString(),
+    privateKey: fs.readFileSync('./server/_config/environment/sfdcsecurity/dev/signingKey.pem').toString(),
+    certfile: fs.readFileSync('./server/_config/environment/sfdcsecurity/dev/certificate.crt').toString(),
     // issuer, recipient: can be anything, but must match between the SFDC Single Sign-On Configuration and this value.
     issuer: 'compass-portal',
-    recipient: 'https://cbrands--Full.cs17.my.salesforce.com?so=00Dg0000006Hhfi',
+    recipient: 'https://cbrands--CBeerDev.cs20.my.salesforce.com?so=00Dm00000008fCJ',
     // This value matches with the Entity Id value in the SFDC Single Sign-On Configuration
     audience: 'https://saml.salesforce.com',
     // These algorithms should not be touched.  They are used to encrypt the certificates.
@@ -81,7 +56,7 @@ module.exports = function (config) {
   };
 
   config.sfdcSettings = {
-    noteRecordTypeId: '012G0000001BSRRIA4'
+    noteRecordTypeId: '012m00000004plsAAA'
   };
 
   return config;

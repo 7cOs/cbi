@@ -2,6 +2,7 @@
 
 module.exports = function (config) {
   const fs = require('fs');
+
   // global settings
   config.domain = 'orion-qa.cbrands.com';
   config.env = 'test';
@@ -20,7 +21,6 @@ module.exports = function (config) {
     id: 'UA-77300343-6'
   };
 
-  // change all of this to env variables for security.
   config.api = {
     url: 'https://cbi-api-internal-qa.herokuapp.com',
     key: 'U1NCc2FXdGxJSFJ2SUVodlpHOXlMQ0JJYjJSdmNpd2dTRzlrYjNJc0lFaHZaRzl5Y3lCaGJtUWdTRzlrYjNKekxnPT0=',

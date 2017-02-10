@@ -10,7 +10,7 @@ module.exports = function(app) {
       if (req.isAuthenticated()) {
         app.locals.apiAuth = {
           signed: util.sign(req.url),
-          jwtToken: req.user ? req.user.jwt : app.get('config').api.jwt
+          jwtToken: req.user.jwt
         };
         next();
       } else {
