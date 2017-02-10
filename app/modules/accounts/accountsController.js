@@ -869,7 +869,15 @@ module.exports = /*  @ngInject */
           vm.loadingBrandSnapshot = false;
           vm.brandTabs.brands = data[0].performance;
           setCurrentTotalsObject();
-          getDataForTopBottomLevel(vm.currentTopBottomObj);
+          getDataForTopBottomLevel(vm.currentTopBottomObj, function() {
+            // if initializing to stores level, use data in response to set filter model, etc
+            if (vm.currentTopBottomAcctType.name === vm.filtersService.accountFilters.accountTypes[3].name) {
+              setTopBottomFilterModel('stores', vm.topBottomData.stores.performanceData[0]);
+              setChainDropdownAndPlaceHolder('stores', vm.topBottomData.stores.performanceData[0]);
+              notesService.model.tdlinx = vm.topBottomData.stores.performanceData[0].unversionedStoreCode;
+              setUpdatedFilters();
+            }
+          });
 
           if (isNavigatedToNextLevel === true) {
             var topBottomFilterForCurrentLevel = vm.currentTopBottomFilters[vm.currentTopBottomObj.currentLevelName];
@@ -1025,10 +1033,10 @@ module.exports = /*  @ngInject */
     /**
      * Updates the topbottom object passed with the correct data based on whether performance data needs to be updated or the filtered data needs to be updated or if none needs to be updated sets the sort order (top 10 values etc)
      * @param {Object} topBottomObj Can be either topBottomData.distirbutor, topBottomData.account etc
-     * @param {Object} categoryBound It is one of the objects from vm.filtersService.accountFilters.accountMarkets
+     * @param {Function} callback Function to invoke after successful retrieval of data
      * @returns Updates the object with the correct data
      */
-    function getDataForTopBottomLevel(topBottomObj) {
+    function getDataForTopBottomLevel(topBottomObj, callback) {
       var categoryBound = vm.filtersService.model.accountSelected.accountMarkets;
       var params = filtersService.getAppliedFilters('topBottom');
       appendBrandParametersForTopBottom(params);
@@ -1041,6 +1049,9 @@ module.exports = /*  @ngInject */
         vm.currentTopBottomObj.isPerformanceDataUpdateRequired = false;
         vm.currentTopBottomObj = myperformanceService.updateDataForCurrentTopDownLevel(vm.currentTopBottomObj, categoryBound, vm.filterModel.depletionsTimePeriod, vm.filterModel.distributionTimePeriod, vm.filterModel.trend);
         setSortedArrIndex();
+        if (callback) {
+          callback();
+        }
       }, function(error) {
         console.log('[getDataForTopBottomLevel]', error);
         vm.loadingTopBottom = 'error';
@@ -1189,13 +1200,18 @@ module.exports = /*  @ngInject */
      */
     function setTopBottomFilterModel(currentLevelName, data) {
       vm.currentTopBottomFilters[currentLevelName] = {
-        id: currentLevelName === 'stores' ? [data.id, data.unversionedStoreCode] : data.id,
+        id: currentLevelName === 'stores' && data.unversionedStoreCode ? [data.id, data.unversionedStoreCode] : data.id,
         name: data.name,
         address: formatAddress(data),
         city: data.city,
         state: data.state,
         zipCode: data.zipCode
       };
+
+      if (currentLevelName === 'stores' && data.storeNumber) {
+        vm.currentTopBottomFilters.stores.storeNumber = data.storeNumber;
+      }
+
       // The term 'vm.filtersService.model.account' needs to be refactored. This variable for is used to hold the text for all types except distributor
       if (currentLevelName === 'distributors') {
         vm.filtersService.model.distributor = data.name;
@@ -1214,23 +1230,28 @@ module.exports = /*  @ngInject */
     }
 
     function getStoreAddress() {
-      var addressWithStoreNumber = '';
-      if (vm.currentTopBottomFilters.stores.storeNumber) {
+      var addressWithStoreNumber = '',
+        fullAddress = '';
+      if (vm.currentTopBottomFilters.stores.storeNumber && vm.currentTopBottomFilters.stores.storeNumber !== 'UNKNOWN') {
         addressWithStoreNumber += '#' + vm.currentTopBottomFilters.stores.storeNumber;
       }
       if (vm.currentTopBottomFilters.stores.address) {
-        addressWithStoreNumber += ' (' +  vm.currentTopBottomFilters.stores.address;
+        fullAddress += vm.currentTopBottomFilters.stores.address;
       }
       if (vm.currentTopBottomFilters.stores.city) {
-        addressWithStoreNumber += ', ' + vm.currentTopBottomFilters.stores.city;
+        fullAddress += ', ' + vm.currentTopBottomFilters.stores.city;
       }
       if (vm.currentTopBottomFilters.stores.state) {
-        addressWithStoreNumber += ', ' + vm.currentTopBottomFilters.stores.state;
+        fullAddress += ', ' + vm.currentTopBottomFilters.stores.state;
       }
       if (vm.currentTopBottomFilters.stores.zipCode) {
-        addressWithStoreNumber += ' ' + vm.currentTopBottomFilters.stores.zipCode;
+        fullAddress += ' ' + vm.currentTopBottomFilters.stores.zipCode;
       }
-      addressWithStoreNumber += ')';
+
+      if (fullAddress !== '') {
+        addressWithStoreNumber += ' (' + fullAddress + ')';
+      }
+
       return addressWithStoreNumber;
     }
 

@@ -333,6 +333,8 @@ module.exports = /*  @ngInject */
       // reset all chips and filters on page init
       chipsService.resetChipsFilters(chipsService.model);
 
+      // disable my accounts only for pass-through to accounts dashboard
+      chipsService.removeFromFilterService({type: 'myAccountsOnly'});
     }
 
     function addCollaborators() {
