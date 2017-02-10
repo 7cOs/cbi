@@ -1,5 +1,5 @@
 describe('Unit: expanded target list controller', function() {
-  var ctrl, state, scope, mdDialog, httpBackend, provide;
+  var ctrl, state, scope, mdDialog, httpBackend, provide, $q, userService;
 
   beforeEach(angular.mock.module(function(_$provide_) {
     provide = _$provide_;
@@ -25,6 +25,8 @@ describe('Unit: expanded target list controller', function() {
       scope = $rootScope.$new();
       mdDialog = _$mdDialog_;
       httpBackend = _$httpBackend_;
+      $q = _$q_;
+      userService = _userService_;
 
       ctrl = $controller('expandedController', {$scope: scope, $state: state});
     });
@@ -268,12 +270,7 @@ describe('Unit: expanded target list controller', function() {
     describe('[expanded.searchOpportunities]', function() {
       // fill in
     });
-    describe('[expanded.selector]', function() {
-      // fill in
-    });
-    describe('[expanded.sortBy]', function() {
-      // fill in
-    });
+
     describe('[expanded.toggle]', function() {
       it('should add the item to the list', function() {
         var list = [0, 1, 2];
@@ -291,13 +288,66 @@ describe('Unit: expanded target list controller', function() {
       });
     });
     describe('[expanded.isChecked]', function() {
-      // fill in
+      it('should return false if targetLists is empty', function() {
+        expect(ctrl.userService.model.targetLists).toEqual(null);
+        var checked = ctrl.isChecked();
+        expect(checked).toEqual(false);
+      });
+
+      it('should return true if targetLists is populated', function() {
+        ctrl.userService.model.targetLists = {};
+        ctrl.userService.model.targetLists.ownedNotArchivedTargetLists = [0, 1, 2];
+        ctrl.selected = [0, 1, 2];
+
+        var checked = ctrl.isChecked();
+        expect(checked).toEqual(true);
+      });
     });
     describe('[expanded.isCheckedArchived]', function() {
-      // fill in
+      it('should return false if targetLists is not populated', function() {
+        expect(ctrl.userService.model.targetLists).toEqual(null);
+        var archived = ctrl.isCheckedArchived();
+        expect(archived).toEqual(false);
+      });
+
+      it('should return true if targetLists is populated', function() {
+        ctrl.userService.model.targetLists = {archived: [0, 1]};
+        ctrl.selected = [0, 1];
+        var archived = ctrl.isCheckedArchived();
+        expect(archived).toEqual(true);
+      });
     });
-    describe('[expanded.toggleAll]', function() {
-      // fill in
+
+    describe('[expanded.saveNewList]', function() {
+      it('should return null if character length is greater than fourty', function() {
+        ctrl.newList.name = 'This name is way way too long to be saved';
+        expect(ctrl.newList.name.length).toBeGreaterThan(39);
+        var newList = ctrl.saveNewList();
+        expect(newList).toBe(undefined);
+      });
+
+      it('should ', function() {
+        ctrl.newList = {
+        name: 'Standard Name',
+        collaborators: [
+          {
+            'user': {
+              'id': '5648',
+              'employeeId': '1012132',
+              'firstName': 'FRED',
+              'lastName': 'BERRIOS',
+              'email': 'FRED.BERRIOS@CBRANDS.COM'
+            },
+            'permissionLevel': 'author',
+            'lastViewed': null
+          }]
+        };
+        expect(ctrl.newList.name.length).toBeLessThan(40);
+
+        var newList = ctrl.saveNewList();
+        expect(ctrl.buttonDisabled).toEqual(true);
+        expect(newList).toBe(undefined);
+      });
     });
 
     describe('[expanded.deleteTargetList]', function() {
