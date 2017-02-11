@@ -1,5 +1,5 @@
 describe('Unit: expanded target list controller', function() {
-  var ctrl, state, scope, mdDialog, httpBackend, provide, $q, userService;
+  var ctrl, state, scope, mdDialog, httpBackend, provide, userService, q;
 
   beforeEach(angular.mock.module(function(_$provide_) {
     provide = _$provide_;
@@ -25,7 +25,7 @@ describe('Unit: expanded target list controller', function() {
       scope = $rootScope.$new();
       mdDialog = _$mdDialog_;
       httpBackend = _$httpBackend_;
-      $q = _$q_;
+      q = _$q_;
       userService = _userService_;
 
       ctrl = $controller('expandedController', {$scope: scope, $state: state});
@@ -326,7 +326,7 @@ describe('Unit: expanded target list controller', function() {
         expect(newList).toBe(undefined);
       });
 
-      it('should ', function() {
+      it('should ', function(done) {
         ctrl.newList = {
         name: 'Standard Name',
         collaborators: [
@@ -344,9 +344,18 @@ describe('Unit: expanded target list controller', function() {
         };
         expect(ctrl.newList.name.length).toBeLessThan(40);
 
+        spyOn(userService, 'addTargetList').and.callFake(function() {
+          return {
+            then: function(callback) { return callback({}); }
+          };
+        });
+
         var newList = ctrl.saveNewList();
-        expect(ctrl.buttonDisabled).toEqual(true);
+        expect(userService.addTargetList).toHaveBeenCalled();
+        expect(ctrl.buttonDisabled).toEqual(false);
         expect(newList).toBe(undefined);
+        done();
+
       });
     });
 

@@ -213,7 +213,7 @@ module.exports = /*  @ngInject */
           collaborators: [],
           collaborateAndInvite: false
         };
-      });
+      }).catch(function(response) { console.log(response); });
     }
 
     function searchOpportunities(e) {
