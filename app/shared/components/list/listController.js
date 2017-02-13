@@ -566,8 +566,12 @@ module.exports = /*  @ngInject */
     }
 
     function hasOpportunities() {
-      if (opportunitiesService.model.opportunities.length === 0) return false;
-      else return true;
+      if (opportunitiesService.model.opportunities.length === 0) {
+        return false;
+      }
+      else {
+        return true;
+      }
     }
 
     function noOpportunitiesExpanded() {
