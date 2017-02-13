@@ -59,7 +59,7 @@ div.outer-nav-wrapper
                             span  \#{{notification.shortenedObject.id}}
                     .info
                       label {{notification.dateCreated | timeAgo: 'relative'}}
-                      label.bold {{notification.creator.firstName}} {{notification.creator.lastName}}
+                      label.bold by {{notification.creator.firstName}} {{notification.creator.lastName}}
                   div.notification-card.clearfix(ng-if="nb.notificationHelper.unreadNotifications < 1")
                     .details
                       p {{nb.noNotifications}}
