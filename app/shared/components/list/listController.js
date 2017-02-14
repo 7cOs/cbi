@@ -67,6 +67,7 @@ module.exports = /*  @ngInject */
     vm.getTargetLists = getTargetLists;
     vm.impactSort = impactSort;
     vm.noOpportunitiesExpanded = noOpportunitiesExpanded;
+    vm.hasOpportunities = hasOpportunities;
     vm.openDismissModal = openDismissModal;
     vm.openShareModal = openShareModal;
     vm.opportunityTypeOrSubtype = opportunityTypeOrSubtype;
@@ -562,6 +563,14 @@ module.exports = /*  @ngInject */
 
     function allOpportunitiesExpanded() {
       return vm.expandedOpportunities === opportunitiesService.model.opportunities.length;
+    }
+
+    function hasOpportunities() {
+      if (opportunitiesService.model.opportunities.length === 0) {
+        return false;
+      } else {
+        return true;
+      }
     }
 
     function noOpportunitiesExpanded() {

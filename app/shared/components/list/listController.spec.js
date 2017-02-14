@@ -96,6 +96,9 @@ describe('Unit: list controller', function() {
     expect(ctrl.noOpportunitiesExpanded).not.toBeUndefined();
     expect(typeof (ctrl.noOpportunitiesExpanded)).toEqual('function');
 
+    expect(ctrl.hasOpportunities).not.toBeUndefined();
+    expect(typeof (ctrl.hasOpportunities)).toEqual('function');
+
     expect(ctrl.openDismissModal).not.toBeUndefined();
     expect(typeof (ctrl.openDismissModal)).toEqual('function');
 
@@ -474,6 +477,18 @@ describe('Unit: list controller', function() {
     it('should return true if expandedOpportunities equals 0', function() {
       ctrl.expandedOpportunities = 0;
       expect(ctrl.noOpportunitiesExpanded()).toBeTruthy();
+    });
+  });
+
+  describe('[list.hasOpportunities] method', function() {
+    it('should return false if opportunitiesService.model.opportunities length equal 0', function() {
+      ctrl.opportunitiesService.model.opportunities = [];
+      expect(ctrl.hasOpportunities()).toBeFalsy();
+    });
+
+    it('should return true if opportunitiesService.model.opportunities lengths is greater than 0', function() {
+      ctrl.opportunitiesService.model.opportunities = [{'opportunity': 1}, {'otherOpportunity': 2}];
+      expect(ctrl.hasOpportunities()).toBeTruthy();
     });
   });
 
@@ -1679,5 +1694,4 @@ describe('Unit: list controller', function() {
       expect(opportunitiesService.model.opportunities[1].store.highImpactOpportunityCount).toEqual(0);
     });
   });
-
 });
