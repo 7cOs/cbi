@@ -31,6 +31,43 @@ describe('Unit: scorecardsController', function() {
     });
   });
 
+  describe('[Method] checkValidity', function() {
+    it('should check for validity', function() {
+      var valid = ctrl.checkValidity(5, 2);
+      expect(valid).toEqual('5.00');
+    });
+
+    it('should reject NaN', function() {
+      var valid = ctrl.checkValidity('', 2);
+      expect(valid).toEqual('-');
+    });
+  });
+
+  describe('[Method] vsYAPercent', function() {
+    it('should format the value', function() {
+      var result = ctrl.vsYAPercent(34, 5, 7);
+      expect(result).toEqual('7.0');
+    });
+
+    it('should reject null', function() {
+      var result = ctrl.vsYAPercent(0, 0, null);
+      expect(result).toEqual(0);
+    });
+
+    it('should reject null and ty greater than zero', function() {
+      var result = ctrl.vsYAPercent(1, 0, null);
+      expect(result).toEqual('100.0');
+    });
+  });
+
+  describe('[Method] toggleSelected', function() {
+    it('should set the list and index', function() {
+      ctrl.toggleSelected(4, [0, 1]);
+      expect(ctrl.selectedList).toEqual([0, 1]);
+      expect(ctrl.selectedIndex).toEqual(4);
+    });
+  });
+
   describe('[Method] goToAccountDashboard', function() {
     var row = {};
     beforeEach(function() {

@@ -66,6 +66,7 @@ module.exports = /*  @ngInject */
     vm.setDefaultFilterOptions = setDefaultFilterOptions;
     vm.premiseTypeDisabled = '';
     vm.parseInt = parseInt;
+    vm.updatedSelectionValuesInFilter = updatedSelectionValuesInFilter;
 
     init();
 
