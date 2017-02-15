@@ -68,6 +68,55 @@ describe('Unit: scorecardsController', function() {
     });
   });
 
+  describe('[Method] changePremise', function() {
+    beforeEach(function() {
+      spyOn(userService, 'getPerformanceDistribution').and.callFake(function() {
+        return {
+          then: function(callback) { return callback([0, 1, 2]); }
+        };
+      });
+    });
+    it('should update the distribution', function() {
+      ctrl.changePremise();
+      expect(userService.model.distribution).toEqual([0, 1, 2]);
+    });
+
+    it('should update the distribution with onPremise selected', function() {
+      ctrl.distributionRadioOptions.selected.onOffPremise = 'on';
+      ctrl.changePremise();
+      // not sure if there is actually a way to test this difference. covers a few different lines of statement.
+      expect(ctrl.distributionRadioOptions.selected.onOffPremise).toEqual('on');
+      expect(userService.model.distribution).toEqual([0, 1, 2]);
+    });
+  });
+
+  describe('[Method] isPositive', function() {
+    it('should check for positivity', function() {
+      var positiveCheck = ctrl.isPositive(5);
+      expect(positiveCheck).toEqual(true);
+    });
+    it('should check for negativity', function() {
+      var positiveCheck = ctrl.isPositive(-5);
+      expect(positiveCheck).toEqual(false);
+    });
+  });
+
+ describe('[Method] changeDepletionOption', function() {
+   it('should update the distribution', function() {
+     expect(ctrl.filtersService.lastEndingTimePeriod.depletionValue).toEqual({ name: 'FYTD', displayValue: 'FYTD', id: 6 });
+     ctrl.changeDepletionOption('CYTD');
+     expect(ctrl.filtersService.lastEndingTimePeriod.depletionValue).toEqual({ name: 'CYTD', displayValue: 'CYTD', id: 5 });
+   });
+ });
+
+ describe('[Method] changeDepletionScorecard', function() {
+   it('should update the depletion', function() {
+     expect(ctrl.totalRow).toEqual(undefined);
+     ctrl.changeDepletionScorecard(false);
+     expect(ctrl.totalRow).toEqual({depletions: 0, depletionsLastYear: 0, depletionsBU: 0, depletionsBULastYear: 0, gap: 0, percentTrend: '', percentBUTrend: '', gapVsPlan: 0, percentGapVsPlan: 0, volumePercent: 100, volumeBU: 0, growthPercent: 100, growthBU: 0});
+    });
+  });
+
   describe('[Method] goToAccountDashboard', function() {
     var row = {};
     beforeEach(function() {

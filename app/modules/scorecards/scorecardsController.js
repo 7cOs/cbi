@@ -195,6 +195,8 @@ module.exports = /*  @ngInject */
         var matchedDistObj = distObj.filter(function(val) {
           return val.name === distirbutionPeriod;
         });
+        console.log(distirbutionPeriod);
+        console.log(vm.filtersService.lastEndingTimePeriod.timePeriodValue);
         vm.filtersService.lastEndingTimePeriod.timePeriodValue = matchedDistObj[0];
       }
     }
