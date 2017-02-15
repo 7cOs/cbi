@@ -1,5 +1,5 @@
 describe('Unit: landingController', function() {
-  var scope, ctrl, $mdSelect, chipsService, filtersService, userService;
+  var scope, ctrl, $mdSelect, chipsService, filtersService, userService, $state, $q;
 
   beforeEach(function() {
     // Get Mock Modules
@@ -9,7 +9,7 @@ describe('Unit: landingController', function() {
     angular.mock.module('cf.common.services');
     angular.mock.module('cf.modules.landing');
 
-    inject(function($rootScope, $controller, _$mdSelect_, _chipsService_, _filtersService_, _userService_) {
+    inject(function($rootScope, $controller, _$mdSelect_, _chipsService_, _filtersService_, _userService_, _$state_, _$q_) {
       // Create scope
       scope = $rootScope.$new();
 
@@ -18,6 +18,8 @@ describe('Unit: landingController', function() {
       chipsService = _chipsService_;
       filtersService = _filtersService_;
       userService = _userService_;
+      $state = _$state_;
+      $q = _$q_;
 
       // Create Controller
       ctrl = $controller('landingController', {$scope: scope});
@@ -260,6 +262,45 @@ describe('Unit: landingController', function() {
         expect(result.distribution).toEqual('allPremise');
         expect(resultOnPremise.distribution).toEqual('onPremise');
         expect(resultOffPremise.distribution).toEqual('offPremise');
+      });
+    });
+    describe('[landing.findOpportunities]', function() {
+      it('should exist', function() {
+        expect(typeof ctrl.findOpportunities).toEqual('function');
+      });
+
+      it('should call $state.go', function() {
+        var deferredState = $q.defer();
+        spyOn($state, 'go').and.callFake(function() {
+          return deferredState.promise;
+        });
+        ctrl.findOpportunities();
+        expect($state.go).toHaveBeenCalled();
+
+      });
+    });
+    describe('[landing.goToSavedFilter]', function() {
+      beforeEach(function() {
+        var deferredState = $q.defer();
+        spyOn($state, 'go').and.callFake(function() {
+          return deferredState.promise;
+        });
+      });
+      it('should exist', function() {
+        expect(typeof ctrl.goToSavedFilter).toEqual('function');
+      });
+
+      it('should call $state.go', function() {
+        ctrl.goToSavedFilter({}, {id: 23423});
+        expect($state.go).toHaveBeenCalled();
+
+      });
+      it('should set filter data', function() {
+        ctrl.goToSavedFilter({event: 'mouse'}, {id: 23423});
+
+        expect(filtersService.model.currentFilter).toEqual({id: 23423, ev: { event: 'mouse' }});
+        expect(filtersService.model.selected.currentFilter).toEqual(23423);
+
       });
     });
   });
