@@ -1,5 +1,5 @@
 describe('Unit: target list controller', function() {
-  var scope, ctrl, q, state, targetListService, userService;
+  var scope, ctrl, userService;
 
   beforeEach(function() {
     angular.mock.module('ui.router');
@@ -7,11 +7,9 @@ describe('Unit: target list controller', function() {
     angular.mock.module('cf.common.services');
     angular.mock.module('cf.common.components.target');
 
-    inject(function($controller, _$q_, $rootScope, _targetListService_, _userService_) {
+    inject(function($controller, $rootScope, _userService_) {
       scope = $rootScope.$new();
-      q = _$q_;
 
-      targetListService = _targetListService_;
       userService = _userService_;
 
       spyOn(userService, 'getTargetLists').and.callFake(function() {
