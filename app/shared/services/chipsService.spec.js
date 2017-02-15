@@ -103,27 +103,14 @@ describe('[Services.chipsService]', function() {
     expect(chipsService.isDefault(shuffledServiceModel)).toEqual(true);
   });
 
-  describe('method.removeFromFilterService', function() {
-    var stateChip = {
-      applied: false,
-      name: 'WA',
-      removable: true,
-      type: 'state'
-    };
+  describe('[removeFromFilterService]', function() {
     var myAccountsOnlyChip = {
       applied: false,
       name: 'My Accounts Only',
       removable: true,
       type: 'myAccountsOnly'
     };
-    var opportunityStatusChip = {
-      applied: false,
-      name: 'Open',
-      removable: true,
-      search: true,
-      tradeChannel: false,
-      type: 'opportunityStatus'
-    };
+
     var chipsTemplate = [
       {
         'name': 'My Accounts Only',
@@ -146,170 +133,247 @@ describe('[Services.chipsService]', function() {
     ];
 
     beforeEach(function() {
-      chipsService.model = angular.copy(chipsTemplate);
       filtersService.resetFilters();
-      spyOn(filtersService, 'disableFilters').and.callFake(function() {
-        return true;
+    });
+
+    describe('disableFilters behavior', function() {
+      beforeEach(function() {
+        chipsService.model = angular.copy(chipsTemplate);
+        spyOn(filtersService, 'disableFilters').and.callFake(function() {
+          return true;
+        });
+      });
+
+      it('should call disable filters if myAccountsOnly chip is removed from set of default chips', function() {
+        expect(filtersService.disableFilters.calls.count()).toEqual(0);
+        expect(filtersService.disableFilters).not.toHaveBeenCalled();
+
+        chipsService.removeFromFilterService(myAccountsOnlyChip);
+
+        expect(filtersService.disableFilters.calls.count()).toEqual(1);
+        expect(filtersService.disableFilters).toHaveBeenCalledWith(false, false, false, false);
+      });
+
+      it('should call disable filters when a chip is removed', function() {
+        var chip = {
+          applied: false,
+          name: 'Open',
+          removable: true,
+          search: true,
+          tradeChannel: false,
+          type: 'opportunityStatus'
+        };
+
+        chipsService.model.push(chip);
+
+        expect(filtersService.disableFilters.calls.count()).toEqual(0);
+        expect(filtersService.disableFilters).not.toHaveBeenCalled();
+
+        chipsService.removeFromFilterService(chip);
+
+        expect(filtersService.disableFilters.calls.count()).toEqual(1);
+        expect(filtersService.disableFilters).toHaveBeenCalledWith(false, false, true, false);
       });
     });
 
-    it('should call disable filters if myAccountsOnly chip is removed with default chips', function() {
-      expect(filtersService.disableFilters.calls.count()).toEqual(0);
-      expect(filtersService.disableFilters).not.toHaveBeenCalled();
+    describe('handling different chip types', function() {
+      it('should remove selected filter given "myAccountsOnly" chip', function() {
+        expect(filtersService.model.selected['myAccountsOnly']).toEqual(true);
 
-      chipsService.removeFromFilterService(myAccountsOnlyChip);
+        chipsService.removeFromFilterService(myAccountsOnlyChip);
 
-      expect(filtersService.disableFilters.calls.count()).toEqual(1);
-      expect(filtersService.disableFilters).toHaveBeenCalledWith(false, false, false, false);
-    });
+        expect(filtersService.model.selected['myAccountsOnly']).toEqual(false);
+      });
 
-    it('should call disable filters if a new chip is added and then removed', function() {
-      expect(filtersService.disableFilters.calls.count()).toEqual(0);
-      expect(filtersService.disableFilters).not.toHaveBeenCalled();
+      it('should remove selected filter and update filter model given "segmentation" chip', function() {
+        filtersService.model.selected.segmentation = ['A', 'B'];
+        filtersService.model.storeSegmentationA = true;
+        filtersService.model.storeSegmentationB = true;
 
-      chipsService.model.push(opportunityStatusChip);
+        chipsService.removeFromFilterService({type: 'segmentation', name: 'Segment A'});
 
-      chipsService.removeFromFilterService(opportunityStatusChip);
+        expect(filtersService.model.selected.segmentation).toEqual(['B']);
+        expect(filtersService.model.storeSegmentationA).toEqual(false);
+        expect(filtersService.model.storeSegmentationB).toEqual(true);
+      });
 
-      expect(filtersService.disableFilters.calls.count()).toEqual(1);
-      expect(filtersService.disableFilters).toHaveBeenCalledWith(false, false, true, false);
-    });
+      it('should remove selected filter and update filter model given "impact" chip', function() {
+        filtersService.model.selected.impact = ['High', 'Low'];
+        filtersService.model.predictedImpactHigh = true;
+        filtersService.model.predictedImpactLow = true;
 
-    it('should reset filtersService model if chip.type is string', function() {
-      // my accounts only is the only string
-      expect(filtersService.model.selected['myAccountsOnly']).toEqual(true);
-      chipsService.removeFromFilterService(myAccountsOnlyChip);
-      expect(filtersService.model.selected['myAccountsOnly']).toEqual('');
-    });
+        chipsService.removeFromFilterService({type: 'impact', name: 'High Impact'});
 
-    it('should reset filtersService model if chip.type is state', function() {
-      chipsService.applyStatesFilter({}, ['WA'], 'state');
-      expect(filtersService.model.selected['state']).toEqual(['WA']);
+        expect(filtersService.model.selected.impact).toEqual(['Low']);
+        expect(filtersService.model.predictedImpactHigh).toEqual(false);
+      });
 
-      chipsService.removeFromFilterService(stateChip);
-      expect(filtersService.model.selected['state']).toEqual([]);
-    });
+      it('should remove selected filter and update filter model given "cbbdChain" chip', function() {
+        filtersService.model.selected.cbbdChain = ['Cbbd', 'Independent'];
+        filtersService.model.cbbdChainCbbd = true;
+        filtersService.model.cbbdChainIndependent = true;
 
-    it('should remove from filterService.model and chipsService.model if chip.type === "segmentation"', function() {
-      // scaffold
-      var segmentationChip = {
-        applied: false,
-        name: 'Segment A',
-        removable: true,
-        search: true,
-        tradeChannel: false,
-        type: 'segmentation'
-      };
-      chipsService.model.push(segmentationChip);
-      filtersService.model.selected.segmentation = ['A'];
-      filtersService.model.storeSegmentationA = true;
+        chipsService.removeFromFilterService({type: 'cbbdChain', name: 'CBBD Chain'});
 
-      // assert initial conditions
-      expect(chipsService.model.length).toEqual(4);
-      expect(filtersService.model.selected.segmentation.length).toEqual(1);
-      expect(filtersService.model.storeSegmentationA).toEqual(true);
+        expect(filtersService.model.selected.cbbdChain).toEqual(['Independent']);
+        expect(filtersService.model.cbbdChainCbbd).toEqual(false);
+        expect(filtersService.model.cbbdChainIndependent).toEqual(true);
+      });
 
-      // run method
-      chipsService.removeFromFilterService(segmentationChip);
-      // manually remove as this is handled by md
-      chipsService.model.splice(3, 1);
+      it('should remove selected filter and update filter model given "opportunityStatus" chip', function() {
+        filtersService.model.selected.opportunityStatus = ['Open', 'Targeted'];
+        filtersService.model.opportunityStatusOpen = true;
+        filtersService.model.opportunityStatusTargeted = true;
 
-      // assert everything is correct
-      expect(chipsService.model.length).toEqual(3);
-      expect(chipsService.model).toEqual(chipsTemplate);
-      expect(filtersService.model.selected.segmentation.length).toEqual(0);
-      expect(filtersService.model.storeSegmentationA).toEqual(false);
-    });
+        chipsService.removeFromFilterService({type: 'opportunityStatus', name: 'Open'});
 
-    it('should remove from filterService.model and chipsService.model if chip.type === "impact"', function() {
-      // scaffold
-      var impactChip = {
-        applied: false,
-        name: 'High Impact',
-        removable: true,
-        search: true,
-        tradeChannel: false,
-        type: 'impact'
-      };
-      chipsService.model.push(impactChip);
-      filtersService.model.selected.impact = ['High'];
-      filtersService.model.predictedImpactHigh = true;
+        expect(filtersService.model.selected.opportunityStatus).toEqual(['Targeted']);
+        expect(filtersService.model.opportunityStatusOpen).toEqual(false);
+        expect(filtersService.model.opportunityStatusTargeted).toEqual(true);
+      });
 
-      // assert initial conditions
-      expect(chipsService.model.length).toEqual(4);
-      expect(filtersService.model.selected.impact.length).toEqual(1);
-      expect(filtersService.model.predictedImpactHigh).toEqual(true);
+      it('should remove selected filter and update filter model given "productType" chip', function() {
+        filtersService.model.selected.productType = ['featured', 'priority', 'authorized'];
+        filtersService.model.productTypeFeatured = true;
+        filtersService.model.productTypePriority = true;
+        filtersService.model.productTypeAuthorized = true;
 
-      // run method
-      chipsService.removeFromFilterService(impactChip);
-      // manually remove as this is handled by md
-      chipsService.model.splice(3, 1);
+        chipsService.removeFromFilterService({type: 'productType', name: 'Priority Packages'});
 
-      // assert everything is correct
-      expect(chipsService.model.length).toEqual(3);
-      expect(chipsService.model).toEqual(chipsTemplate);
-      expect(filtersService.model.selected.impact.length).toEqual(0);
-      expect(filtersService.model.predictedImpactHigh).toEqual(false);
-    });
+        expect(filtersService.model.selected.productType).toEqual(['featured', 'authorized']);
+        expect(filtersService.model.productTypeFeatured).toEqual(true);
+        expect(filtersService.model.productTypePriority).toEqual(false);
+        expect(filtersService.model.productTypeAuthorized).toEqual(true);
+      });
 
-    it('should remove from filterService.model and chipsService.model if chip.type === "cbbdChain"', function() {
-      // scaffold
-      var cbbdChip = {
-        applied: false,
-        name: 'CBBD Chain',
-        removable: true,
-        search: true,
-        tradeChannel: false,
-        type: 'cbbdChain'
-      };
-      var independentChip = {
-        applied: false,
-        name: 'Independent',
-        removable: true,
-        search: true,
-        tradeChannel: false,
-        type: 'cbbdChain'
-      };
+      it('should remove selected filter and update filter model given "tradeChannel" chip', function() {
+        filtersService.model.selected.tradeChannel = ['Drug', 'Mass Merchandiser', 'Grocery'];
+        filtersService.model['tradeChannelDrug'] = true;
+        filtersService.model['tradeChannelMass Merchandiser'] = true;
+        filtersService.model['tradeChannelGrocery'] = true;
 
-      chipsService.model.push(cbbdChip);
-      chipsService.model.push(independentChip);
-      filtersService.model.selected.cbbdChain = ['Cbbd', 'Independent'];
-      filtersService.model.cbbdChainCbbd = true;
-      filtersService.model.cbbdChainIndependent = true;
-      chipsTemplate.push(independentChip);
+        chipsService.removeFromFilterService({type: 'tradeChannel', name: 'Mass Merchandiser'});
+        chipsService.removeFromFilterService({type: 'tradeChannel', name: 'Drug'});
 
-      // assert initial conditions
-      expect(chipsService.model.length).toEqual(5);
-      expect(filtersService.model.selected.cbbdChain.length).toEqual(2);
-      expect(filtersService.model.cbbdChainCbbd).toEqual(true);
-      expect(filtersService.model.cbbdChainIndependent).toEqual(true);
+        expect(filtersService.model.selected.tradeChannel).toEqual(['Grocery']);
+        expect(filtersService.model['tradeChannelDrug']).toEqual(false);
+        expect(filtersService.model['tradeChannelMass Merchandiser']).toEqual(false);
+        expect(filtersService.model['tradeChannelGrocery']).toEqual(true);
+      });
 
-      // run method
-      chipsService.removeFromFilterService(cbbdChip);
-      // manually remove as this is handled by md
-      chipsService.model.splice(3, 1);
+      it('should remove selected filter given "city" chip', function() {
+        filtersService.model.selected.city = ['CHICAGO', 'SAN JOSE', 'CHICAGO HEIGHTS'];
 
-      // assert everything is correct
-      expect(chipsService.model.length).toEqual(4);
-      expect(chipsService.model).toEqual(chipsTemplate);
-      expect(filtersService.model.selected.cbbdChain.length).toEqual(1);
-      expect(filtersService.model.cbbdChainCbbd).toEqual(false);
-      expect(filtersService.model.cbbdChainIndependent).toEqual(true);
+        chipsService.removeFromFilterService({type: 'city', name: 'San Jose'});
 
-      // remove independent
-      chipsService.model.splice(3, 1);
-    });
-    it('should remove a productType chip', function() {
-      var productTypeChip = opportunityStatusChip;
-      productTypeChip.type = 'productType';
-      productTypeChip.search = true;
+        expect(filtersService.model.selected.city).toEqual(['CHICAGO', 'CHICAGO HEIGHTS']);
+      });
 
-      chipsService.model.push(productTypeChip);
+      it('should remove selected filter given "zipCode" chip', function() {
+        filtersService.model.selected.zipCode = ['60601', '60602', '60603'];
 
-      chipsService.removeFromFilterService(productTypeChip);
+        chipsService.removeFromFilterService({type: 'zipCode', name: '60602'});
 
-      expect(filtersService.disableFilters.calls.count()).toEqual(1);
-      expect(filtersService.disableFilters).toHaveBeenCalledWith(false, false, true, false);
+        expect(filtersService.model.selected.zipCode).toEqual(['60601', '60603']);
+      });
+
+      it('should remove selected filter and decrement filtersValidCount given "distributor" chip', function() {
+        // handle potential duplicate filters
+        filtersService.model.selected.distributor = ['555111', '555222', '555222', '555333'];
+        filtersService.model.filtersValidCount = 4;
+
+        chipsService.removeFromFilterService({type: 'distributor', name: 'some distributor', id: '555111'});
+
+        expect(filtersService.model.selected.distributor).toEqual(['555222', '555333']);
+        expect(filtersService.model.filtersValidCount).toEqual(3);
+      });
+
+      it('should remove selected filter and decrement filtersValidCount given "account" chip', function() {
+        // handle potential duplicate filters
+        filtersService.model.selected.account = ['555111', '555111', '555222'];
+        filtersService.model.filtersValidCount = 4;
+
+        chipsService.removeFromFilterService({type: 'account', name: 'some account', id: '555111'});
+
+        expect(filtersService.model.selected.account).toEqual(['555222']);
+        expect(filtersService.model.filtersValidCount).toEqual(3);
+      });
+
+      it('should remove selected filter and decrement filtersValidCount given "subaccount" chip', function() {
+        // handle potential duplicate filters
+        filtersService.model.selected.subaccount = ['555111', '555111', '555222'];
+        filtersService.model.filtersValidCount = 4;
+
+        chipsService.removeFromFilterService({type: 'subaccount', name: 'some subaccount', id: '555111'});
+
+        expect(filtersService.model.selected.subaccount).toEqual(['555222']);
+        expect(filtersService.model.filtersValidCount).toEqual(3);
+      });
+
+      it('should remove selected filter and decrement filtersValidCount given "store" chip', function() {
+        // handle potential duplicate filters
+        filtersService.model.selected.store = ['555111', '555111', '555222'];
+        filtersService.model.filtersValidCount = 4;
+
+        chipsService.removeFromFilterService({type: 'store', name: 'some store', id: '555111'});
+
+        expect(filtersService.model.selected.store).toEqual(['555222']);
+        expect(filtersService.model.filtersValidCount).toEqual(3);
+      });
+
+      it('should remove selected filter given "contact" chip', function() {
+        // handle potential duplicate filters
+        filtersService.model.selected.contact = ['555111', '555111', '555222'];
+
+        chipsService.removeFromFilterService({type: 'contact', name: 'some contact', id: '555111'});
+
+        expect(filtersService.model.selected.contact).toEqual(['555222']);
+      });
+
+      it('should remove selected filter given "masterSKU" chip', function() {
+        // handle potential duplicate filters
+        filtersService.model.selected.masterSKU = ['555111', '555111', '555111', '555222'];
+
+        chipsService.removeFromFilterService({type: 'masterSKU', name: 'some sku', id: '555111'});
+
+        expect(filtersService.model.selected.masterSKU).toEqual(['555222']);
+      });
+
+      it('should remove selected filter given "brand" chip', function() {
+        // handle potential duplicate filters
+        filtersService.model.selected.brand = ['111', '222', '222', '333'];
+
+        chipsService.removeFromFilterService({type: 'brand', name: 'some brand', id: '222'});
+
+        expect(filtersService.model.selected.brand).toEqual(['111', '333']);
+      });
+
+      it('should remove selected filter given "opportunityType" chip', function() {
+        filtersService.model.selected.opportunityType = ['Low Velocity', 'Non-Buy', 'At Risk'];
+
+        chipsService.removeFromFilterService({type: 'opportunityType', name: 'Low Velocity'});
+
+        expect(filtersService.model.selected.opportunityType).toEqual(['Non-Buy', 'At Risk']);
+      });
+
+      it('should remove selected filter and revert to "All Types" when no chips are left, given "opportunityType" chip', function() {
+        filtersService.model.selected.opportunityType = ['Low Velocity'];
+
+        chipsService.removeFromFilterService({type: 'opportunityType', name: 'Low Velocity'});
+
+        expect(filtersService.model.selected.opportunityType).toEqual(['All Types']);
+        expect(filtersService.model.opportunityType).toEqual(['All Types']);
+      });
+
+      it('should remove selected filter given "state" chip', function() {
+        chipsService.applyStatesFilter({}, ['WA', 'DC'], 'state');
+        expect(filtersService.model.selected['state']).toEqual(['WA', 'DC']);
+
+        chipsService.removeFromFilterService({type: 'state', name: 'WA'});
+
+        expect(filtersService.model.selected['state']).toEqual(['DC']);
+      });
+
     });
   });
 
