@@ -66,7 +66,6 @@ module.exports = /*  @ngInject */
     vm.setDefaultFilterOptions = setDefaultFilterOptions;
     vm.premiseTypeDisabled = '';
     vm.parseInt = parseInt;
-    vm.updatedSelectionValuesInFilter = updatedSelectionValuesInFilter;
 
     init();
 
@@ -195,8 +194,6 @@ module.exports = /*  @ngInject */
         var matchedDistObj = distObj.filter(function(val) {
           return val.name === distirbutionPeriod;
         });
-        console.log(distirbutionPeriod);
-        console.log(vm.filtersService.lastEndingTimePeriod.timePeriodValue);
         vm.filtersService.lastEndingTimePeriod.timePeriodValue = matchedDistObj[0];
       }
     }
@@ -235,7 +232,6 @@ module.exports = /*  @ngInject */
 
     function updateTotalRowDepletions() {
       vm.totalRow = angular.copy(vm.totalRowTemplate);
-
       for (var i = 0; i < userService.model.depletion.length; i++) {
         angular.forEach(userService.model.depletion[i].measures, function(item, key) {
           if (item.timeframe === vm.depletionSelect) {

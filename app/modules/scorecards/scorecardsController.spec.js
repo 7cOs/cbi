@@ -110,10 +110,64 @@ describe('Unit: scorecardsController', function() {
  });
 
  describe('[Method] changeDepletionScorecard', function() {
-   it('should update the depletion', function() {
+   it('should update the depletion with false', function() {
      expect(ctrl.totalRow).toEqual(undefined);
      ctrl.changeDepletionScorecard(false);
      expect(ctrl.totalRow).toEqual({depletions: 0, depletionsLastYear: 0, depletionsBU: 0, depletionsBULastYear: 0, gap: 0, percentTrend: '', percentBUTrend: '', gapVsPlan: 0, percentGapVsPlan: 0, volumePercent: 100, volumeBU: 0, growthPercent: 100, growthBU: 0});
+    });
+
+    it('should update the depletion with true', function() {
+     expect(ctrl.totalRow).toEqual(undefined);
+     ctrl.depletionSelect = true;
+     ctrl.depletionRadio = 0;
+     ctrl.depletionSelectOptions = [[{name: 'test'}]];
+     expect(ctrl.depletionSelect).toEqual(true);
+     ctrl.changeDepletionScorecard(true);
+     expect(ctrl.totalRow).toEqual({depletions: 0, depletionsLastYear: 0, depletionsBU: 0, depletionsBULastYear: 0, gap: 0, percentTrend: '', percentBUTrend: '', gapVsPlan: 0, percentGapVsPlan: 0, volumePercent: 100, volumeBU: 0, growthPercent: 100, growthBU: 0});
+    });
+  });
+
+  describe('[Method] updateEndingTimePeriod', function() {
+    beforeEach(function() {
+      ctrl.filtersService.model.scorecardDistributionTimePeriod = {'year': [{'name': 'L90', 'displayValue': 'L90', 'id': 2, '$$hashKey': 'object:37'}], 'month': [{'name': 'L03', 'displayValue': 'L03', 'id': 4}]};
+      ctrl.filtersService.model.depletionsTimePeriod = {month: [{'name': 'CMTH', 'displayValue': 'Clo Mth', 'id': 1}, { 'name': 'CYTM', 'displayValue': 'CYTM', 'id': 2 }, {'name': 'FYTM', 'displayValue': 'FYTM', 'id': 3}], year: [{'name': 'MTD', 'displayValue': 'MTD', 'id': 4, '$$hashKey': 'object:81 '}, {'name': 'CYTD', 'displayValue': 'CYTD', 'id': 5, '$$hashKey': 'object:82 '}, {'name': 'FYTD', 'displayValue': 'FYTD', 'id': 6}]};
+    });
+    it('should update the time period for year', function() {
+      ctrl.filtersService.lastEndingTimePeriod.endingPeriodType = 'year';
+      ctrl.updateEndingTimePeriod('year');
+
+      expect(ctrl.distributionSelectOptions.selected).toEqual('L90');
+      expect(ctrl.filtersService.model.depletionsTimePeriod['year'][2].name).toEqual('FYTD');
+      expect(ctrl.filtersService.lastEndingTimePeriod.depletionValue).toEqual({name: 'FYTD', displayValue: 'FYTD', id: 6});
+    });
+
+      it('should update the time period for month', function() {
+      ctrl.filtersService.lastEndingTimePeriod.endingPeriodType = 'month';
+      ctrl.updateEndingTimePeriod('month');
+
+      expect(ctrl.distributionSelectOptions.selected).toEqual('L03');
+      expect(ctrl.filtersService.model.depletionsTimePeriod['month'][2].name).toEqual('FYTM');
+      expect(ctrl.filtersService.lastEndingTimePeriod.timePeriodValue).toEqual({ name: 'L03', displayValue: 'L03', id: 4 });
+    });
+  });
+
+  describe('[Method] changeDistributionTimePeriod', function() {
+    it('should update the distribution time period', function() {
+      ctrl.changeDistributionTimePeriod('L90');
+      expect(ctrl.distributionSelectOptions.selected).toEqual('L90');
+      expect(ctrl.filtersService.lastEndingTimePeriod.timePeriodValue).toEqual({ name: 'L90', displayValue: 'L90', id: 2 });
+    });
+  });
+  describe('[Method] setDefaultFilterOptions', function() {
+    it('should setup for off hier', function() {
+      ctrl.userService.model.currentUser = {'personId': 5648, 'employeeID': '1012132', 'srcTypeCd': ['OFF_HIER']};
+      ctrl.setDefaultFilterOptions();
+      expect(ctrl.distributionRadioOptions.selected.onOffPremise).toEqual('off');
+    });
+    it('should setup for off hier', function() {
+      ctrl.userService.model.currentUser = {'personId': 5648, 'employeeID': '1012132', 'srcTypeCd': ['ON_HIER']};
+      ctrl.setDefaultFilterOptions();
+      expect(ctrl.distributionRadioOptions.selected.onOffPremise).toEqual('on');
     });
   });
 
