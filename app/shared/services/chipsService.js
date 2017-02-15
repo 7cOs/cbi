@@ -175,7 +175,9 @@ module.exports = /*  @ngInject */
      * @memberOf cf.common.services
      */
     function removeFromFilterService(chip) {
-      if (chip.search || chip.type === 'opportunityType' || chip.type === 'state') {
+      if (chip.type === 'myAccountsOnly') {
+        filtersService.model.selected['myAccountsOnly'] = false;
+      } else {
         var arr = filtersService.model.selected[chip.type];
         var i = arr.length;
         while (i--) {
@@ -185,32 +187,42 @@ module.exports = /*  @ngInject */
             break;
           } else if (chip.type === 'impact' && arr[i] === chip.name.split(' Impact')[0]) {
             arr.splice(i, 1);
-            // update model
             filtersService.model['predictedImpact' + chip.name.split(' Impact')[0]] = false;
             break;
-          } else if ((chip.type === 'masterSKU' || chip.type === 'brand') && chip.id === arr[i]) {
-            arr.splice(i, 1);
-            break;
-          } else if (chip.type === 'cbbdChain') {
+          } else if (chip.type === 'cbbdChain' && arr[i] === $filter('titlecase')(chip.name.split(' ')[0])) {
             arr.splice(i, 1);
             filtersService.model['cbbdChain' + $filter('titlecase')(chip.name.split(' ')[0])] = false;
             break;
-          } else if ($filter('titlecase')(arr[i]) === chip.name.split(' ')[0] && chip.type !== 'opportunityType') {
+          } else if (chip.type === 'opportunityStatus' && $filter('titlecase')(arr[i]) === chip.name) {
             arr.splice(i, 1);
-            // update model
-            if (chip.type === 'productType') filtersService.model['productType' + chip.name.split(' ')[0]] = false;
-            if (chip.type === 'tradeChannel') filtersService.model['tradeChannel' + chip.name] = false;
-            if (chip.type === 'opportunityStatus') filtersService.model['opportunityStatus' + chip.name] = false;
+            filtersService.model['opportunityStatus' + chip.name] = false;
             break;
-           } else if (chip.type === 'distributor' || chip.type === 'account' || chip.type === 'subaccount' || chip.type === 'store' || chip.type === 'contact') {
+          } else if (chip.type === 'productType' && $filter('titlecase')(arr[i]) === chip.name.split(' ')[0]) {
+            arr.splice(i, 1);
+            filtersService.model['productType' + chip.name.split(' ')[0]] = false;
+            break;
+          } else if (chip.type === 'tradeChannel' && $filter('titlecase')(arr[i]) === chip.name) {
+            arr.splice(i, 1);
+            filtersService.model['tradeChannel' + chip.name] = false;
+            break;
+          } else if (chip.type === 'city' && arr[i] === chip.name.toUpperCase()) {
+            arr.splice(i, 1);
+            break;
+           } else if (chip.type === 'zipCode' && arr[i] === chip.name) {
+            arr.splice(i, 1);
+            break;
+          } else if (chip.type === 'distributor' || chip.type === 'account' || chip.type === 'subaccount' || chip.type === 'store' ||
+              chip.type === 'contact' || chip.type === 'masterSKU' || chip.type === 'brand') {
+            // handle duplicate values for these fields, which may have been stored in a saved report
             var unique = arr.filter(function(elem, index, self) {
               return index === self.indexOf(elem);
             });
             var index = unique.indexOf(chip.id);
             unique.splice(index, 1);
-            arr.length = 0;
-            arr = unique;
-            if (chip.type !== 'contact') filtersService.model.filtersValidCount--;
+            filtersService.model.selected[chip.type] = unique;
+            if (chip.type !== 'contact' && chip.type !== 'brand' && chip.type !== 'masterSKU') {
+              filtersService.model.filtersValidCount--;
+            }
             break;
           } else if (chip.type === 'opportunityType') {
             index = arr.indexOf(chip.name);
@@ -228,12 +240,7 @@ module.exports = /*  @ngInject */
             break;
           };
         }
-      } else if (typeof chip.type === 'string') {
-        filtersService.model.selected[chip.type] = '';
-      } /* else if (typeof chip.type === 'boolean') { // dont think this is used. leaving it in just in case i breaked something
-        console.log('pls no');
-        filtersService.model.selected[chip.type] = false;
-      } */
+      }
 
       if (service.model.length === defaultFilterArrayLength && isDefault(service.model)) {
         filtersService.disableFilters(false, false, false, false);
