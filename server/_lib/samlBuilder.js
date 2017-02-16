@@ -9,21 +9,19 @@ installed for it to work.
 
 ************************************************/
 
-var builder = require('xmlbuilder'),  // xml parser
-    SignedXml = require('xml-crypto').SignedXml, // necessary for signing the cert
-    moment = require('moment'), // used to get the time boundaries for the assertion (issueInstant, notOnOrAfter, etc.)
-    utils = require('./samlUtils.js'); // useful parsing utilities.
-//    u = require('util');
+const builder = require('xmlbuilder'),              // xml parser
+      SignedXml = require('xml-crypto').SignedXml,  // necessary for signing the cert
+      moment = require('moment'),                   // used to get the time boundaries for the assertion (issueInstant, notOnOrAfter, etc.)
+      utils = require('./samlUtils.js');            // useful parsing utilities.
 
 module.exports = {
-  // export the function
   getSAMLAssertion: getSAMLAssertion
 };
 
-function getSAMLAssertion(app, req, res) {
-// generates the SAML Assertion, and then signs the assertion to prepare for presentation to SFDC.
+// Generates the SAML Assertion, and then signs the assertion to prepare for presentation to SFDC.
+// The user has already logged in to the IdP at this point.  We use the employee Id to build the assertion.
+function getSAMLAssertion(app, employeeID) {
   var sfdcConfig = app.get('config').sfdcSec;  // All admin-configurable parameters come from /server/_config/environment files.
-  var empId = req.user.jwtmap.employeeID;  // The user has already logged in to the IdP at this point.  We use the employee Id to build the assertion.
 
   var responseID = '_' + utils.uid(8) + '-' + utils.uid(8);
   var assertionID = '_' + utils.uid(8) + '-' + utils.uid(8);
@@ -74,7 +72,7 @@ function getSAMLAssertion(app, req, res) {
         'saml2:Subject': {
           'saml2:NameID': {
             '@Format': 'urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified',
-            '#text': empId
+            '#text': employeeID
           },
           'saml2:SubjectConfirmation': {
             '@Method': 'urn:oasis:names:tc:SAML:2.0:cm:bearer',
@@ -125,19 +123,21 @@ function getSAMLAssertion(app, req, res) {
       }
     }
   }).dec('1.0', 'UTF-8'); // Put the UTF-8 charset indicator on the XML file.
-// Now that we have the assertion in XML format, we need to sign it for transmission
-/*  var xmlString = assertion.end({
-  // for readability in the console, but not necessary for Prod
-    pretty: true,
-    indent: '  ',
-    newline: '\n',
-    allowEmpty: false
-  });
-*/
+
+  // Now that we have the assertion in XML format, we need to sign it for transmission
+  /*  var xmlString = assertion.end({
+    // for readability in the console, but not necessary for Prod
+      pretty: true,
+      indent: '  ',
+      newline: '\n',
+      allowEmpty: false
+    });
+  */
   var xmlString = assertion.end({
     allowEmpty: false
   });
-// Algorithms in use for encoding the assertion
+
+  // Algorithms in use for encoding the assertion
   var algorithms = {
     signature: {
       'rsa-sha256': 'http://www.w3.org/2001/04/xmldsig-more#rsa-sha256',
@@ -154,22 +154,26 @@ function getSAMLAssertion(app, req, res) {
   options.digestAlgorithm = sfdcConfig.digestAlgorithm || 'sha256';
 
   var sig = new SignedXml();
+
   // Find the Response node and sign it.
   sig.addReference('//*[local-name(.)=\'Response\']',
                   ['http://www.w3.org/2000/09/xmldsig#enveloped-signature', 'http://www.w3.org/2001/10/xml-exc-c14n#'],
                   algorithms.digest[options.digestAlgorithm]);
+
   // Use the server's private key to sign the assertion
   sig.signingKey = signingKey;
+
   // Add the KeyInfo to the assertion (required by SFDC)
   sig.keyInfoProvider = {
     getKeyInfo: function () {
       return '<X509Data><X509Certificate>' + certData + '</X509Certificate></X509Data>';
     }
   };
-// Generate the signature and return the XML
+
+  // Generate the signature and return the XML
   sig.computeSignature(xmlString, {
     location: { reference: '//*[local-name(.)=\'Issuer\']', action: 'after' }
   });
-  var retValue = utils.samlStrConvert(sig.getSignedXml());
-  return retValue;
+
+  return utils.samlStrConvert(sig.getSignedXml());
 };

@@ -1,5 +1,9 @@
 'use strict';
 
+const saml = require('./ssoSAML.js'),
+      jsforce = require('jsforce'),
+      fs = require('fs');
+
 module.exports = {
   sfdcConn: sfdcConn,
   userInfo: userInfo,
@@ -12,7 +16,7 @@ module.exports = {
   deleteNote: deleteNote,
   updateNote: updateNote
 };
-// var u = require('util');
+
 /**
 * sfdc.js: This controller contains the logic for the Salesforce.com endpoints
 * @author J. Scott Cromie
@@ -20,22 +24,13 @@ module.exports = {
 * @since 2016-09-11
 */
 
-function sfdcConn(app, req, res) {
+function sfdcConn(app, req) {
   /**
   * sfdcConn: Create the Salesforce.com connection, or return the existing
   *           connection.
   */
-  try {
-    var saml = require('./ssoSAML.js');
-    var jsforce = require('jsforce');
-  } catch (e) {
-    console.log('There was an error requiring the libraries: ' + e);
-  };
-
-  if (!req.user.sfdcConn || req.user.sfdcConn === undefined) {
-  // Get session promise from library
-
-    return saml.getSFDCSession(app, req, res).then(function(sfdcSession) {
+  if (!req.user.sfdcConn) {
+    return saml.getSFDCSession(app, req.user.jwtmap.employeeID).then(function(sfdcSession) {
       sfdcSession = JSON.parse(sfdcSession);
       return new jsforce.Connection({
         instanceUrl: sfdcSession.instance_url,
@@ -47,12 +42,12 @@ function sfdcConn(app, req, res) {
   }
 }
 
-function updateNote(app, req, res) {
+function updateNote(app, req) {
   /**
   * updateNote test
   *
   */
-  return sfdcConn(app, req, res).then(function(result) {
+  return sfdcConn(app, req).then(function(result) {
     try {
       var conn = result;
       if (req.query.noteId) {
@@ -94,12 +89,12 @@ function updateNote(app, req, res) {
   });
 };
 
-function deleteNote(app, req, res) {
+function deleteNote(app, req) {
   /**
   * deleteNote: deletes an attachment identified by the query parameter "noteId"
   *
   */
-  return sfdcConn(app, req, res).then(function(result) {
+  return sfdcConn(app, req).then(function(result) {
     try {
       var conn = result;
       if (req.query.noteId) {
@@ -137,13 +132,13 @@ function deleteNote(app, req, res) {
   });
 };
 
-function searchAccounts(app, req, res) {
+function searchAccounts(app, req) {
   /**
   * searchAccounts: searches for an account using the search term in the "searchTerm" query parameter.
   *                 This uses Salesforce's SOSL querying language
   *                 (https://developer.salesforce.com/docs/atlas.en-us.soql_sosl.meta/soql_sosl/sforce_api_calls_sosl_about.htm)
   */
-  return sfdcConn(app, req, res).then(function(result) {
+  return sfdcConn(app, req).then(function(result) {
     try {
       var conn = result;
       var searchTerm = req.query.searchTerm;
@@ -189,7 +184,7 @@ function queryAccountNotes(app, req, res) {
   *                      into the resultant page by using it in an <img src=""> tag.
   *
   */
-  return sfdcConn(app, req, res).then(function(result) {
+  return sfdcConn(app, req).then(function(result) {
     try {
       var conn = result;
       var strId = '';
@@ -244,8 +239,8 @@ function queryAccountNotes(app, req, res) {
   });
 };
 
-function userInfo(app, req, res) {
-  return sfdcConn(app, req, res).then(function(result) {
+function userInfo(app, req) {
+  return sfdcConn(app, req).then(function(result) {
     try {
       var conn = result,
         empId = req.user.jwtmap.employeeID;
@@ -288,89 +283,63 @@ function userInfo(app, req, res) {
   });
 };
 
-function createNote(app, req, res) {
+function createNote(app, req) {
   /**
   * createNote: Creates a new note for the account whose Id is passed in through the accountId query parameter.
   *
   */
+  return new Promise(function(resolve, reject) {
+    let acctId = req.query ? req.query.accountId : undefined;
 
-  return sfdcConn(app, req, res).then(function(result) {
-    try {
-      var conn = result;
-// Search for the correct Account Id
-      if (!(req.query.accountId)) {
-        var badAccountIdError = {'isSuccess': false,
-          'errorMessage': 'There was no valid account id submitted.  Please make sure you have an account id (i.e. TD Linx Id)'
-        };
-        throw badAccountIdError;
-      } else {
-        var acctId = req.query.accountId;
-        var theAccount = conn.search('FIND {' + acctId + '} IN ALL FIELDS RETURNING Account(Id, Name)',
-          function (err, res) {
-            if (err) {
-              var badAccountIdInSFDCError = {'isSuccess': false,
-                'errorMessage': 'There was no account in SFDC found with TDLinx Id or JDE Address Book Number ' + acctId + ': ' +  err
-              };
-              throw badAccountIdInSFDCError;
-            } else {
-              return res;
-            }
-          }
-        );
-// Once you have the correct account id, create a note and attach to that account Id.
+    if (!req.query.accountId) {
+      reject({
+        isSuccess: false,
+        errorMessage: 'There was no valid account id submitted.  Please make sure you have an account id (i.e. TD Linx Id)'
+      });
+    } else {
+      sfdcConn(app, req).then(function (conn) {
+        // search for the correct SFDC account Id
+        conn.search('FIND {' + acctId + '} IN ALL FIELDS RETURNING Account(Id, Name)').then(function (result) {
+          // only uses the first account it finds
+          let sfdcAccountId = (result && result.searchRecords && result.searchRecords[0]) ? result.searchRecords[0].Id : undefined;
 
-        theAccount.then(function (result) {
-
-          var accountId = result.searchRecords[0].Id;  // Only uses the first account it finds.
-          if (accountId === null || accountId === undefined) {
-            var badAccountIdInSFDCError = {'isSuccess': false,
-              'errorMessage': 'There was no account in SFDC found with TDLinx Id or JDE Address Book Number ' + acctId
-            };
-            throw badAccountIdInSFDCError;
+          if (!sfdcAccountId) {
+            reject({
+              isSuccess: false,
+              errorMessage: 'There was no account in SFDC found with TDLinx Id or JDE Address Book Number ' + acctId
+            });
           } else {
+            // once you have the correct account id, create a note and attach to that account Id.
             conn.sobject('Note__c').create([{
-              Account__c: accountId,
-              Comments_RTF__c: req.body.body,
-              Conversion_Flag__c: req.body.conversionflag,
-              // CreatedById, CreatedDate, Id, IsDeleted, LastModifiedById, LastModifiedDate are system generated.
-              Other_Type__c: req.body.othertype,
-              Private__c: req.body.private,
-              Soft_Delete__c: req.body.softdelete,
-              Type__c: req.body.title,
-              RecordTypeId: app.get('config').sfdcSettings.noteRecordTypeId
-            }],
-            function (err, ret) {
-              if (err) {
-                var badNoteCreationError = {'isSuccess': false,
-                  'errorMessage': 'Error creating an note: ' + err};
-                throw badNoteCreationError;
-              } else {
-                try {
-                  res.send({
-                    'isSuccess': true,
-                    'successReturnValue': ret
-                  });
-                  return ret;
-                } catch (err) {
-                  var badReturnError = {'isSuccess': false,
-                    'errorMessage': 'There was an error returning the successful result: ' + err};
-                  throw badReturnError;
-                }
-              }
+                Account__c: sfdcAccountId,
+                Comments_RTF__c: req.body.body,
+                Conversion_Flag__c: req.body.conversionflag,
+                // CreatedById, CreatedDate, Id, IsDeleted, LastModifiedById, LastModifiedDate are system generated
+                Other_Type__c: req.body.othertype,
+                Private__c: req.body.private,
+                Soft_Delete__c: req.body.softdelete,
+                Type__c: req.body.title,
+                RecordTypeId: app.get('config').sfdcSettings.noteRecordTypeId
+            }]).then(function(noteReturn) {
+              resolve({
+                'isSuccess': true,
+                'successReturnValue': noteReturn
+              });
+            }).catch(function(noteError) {
+              reject({
+                isSuccess: false,
+                errorMessage: 'Error creating an note: ' + noteError
+              });
             });
           };
-        }, function (err) {
-          var badSFDCAccountError = {'isSuccess': false,
-            'errorMessage': 'There was an error finding the correct account: ' + err};
-          throw badSFDCAccountError;
+        }).catch(function(err) {
+          reject({
+            isSuccess: false,
+            errorMessage: 'There was an error searching for a matching account: ' + err
+          });
         });
-      };
-    } catch (err) {
-      var errMessage = 'There was an error in createNote: ' + JSON.stringify(err, null, '');
-
-      return {'isSuccess': false,
-        'errorMessage': errMessage};
-    };
+      });
+    }
   });
 };
 
@@ -382,7 +351,7 @@ function getAttachment(app, req, res) {
   *
   */
   try {
-    return sfdcConn(app, req, res).then(function(result) {
+    return sfdcConn(app, req).then(function(result) {
     // In order to return a clickable link we need to issue a GET from our server
       var conn = result;
       var theAtt = conn.sobject('Attachment').record(req.query.attachId);
@@ -419,9 +388,9 @@ function getAttachment(app, req, res) {
   }
 };
 
-function createAttachment(app, req, res) {
+function createAttachment(app, req) {
   var files = req.files.files || [];
-  var sfdc = sfdcConn(app, req, res);
+  var sfdc = sfdcConn(app, req);
   var attachments = Promise
     .all(cleanUploadedFiles(files))
     .then(function(files) {
@@ -441,8 +410,8 @@ function createAttachment(app, req, res) {
     });
 }
 
-function deleteAttachment(app, req, res) {
-  return sfdcConn(app, req, res)
+function deleteAttachment(app, req) {
+  return sfdcConn(app, req)
     .then(function(conn) {
       return conn.sobject('Attachment').delete(req.query.attachmentId);
     });
@@ -463,7 +432,7 @@ function cleanUploadedFiles(files) {
 }
 function getUploadedFileBase64(path) {
   return new Promise(function(resolve, reject) {
-    require('fs').readFile(path, function(err, data) {
+    fs.readFile(path, function(err, data) {
       err ? reject(err) : resolve(new Buffer(data).toString('base64'));
     });
   });

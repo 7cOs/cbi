@@ -137,13 +137,14 @@ function searchAccounts(app, req, res) {
 };
 
 function createNote(app, req, res) {
-
-  sfdc.createNote(app, req, res).then(function(result) {
+  sfdc.createNote(app, req).then(function (result) {
     if (isErrorResponse(result)) {
       logErrorAndReturnGeneric(req, res, 'createNote', JSON.stringify(result));
+    } else {
+      res.send(result);
     }
-  }, function (err) {
-    logErrorAndReturnGeneric(req, res, 'createNote', err.toString());
+  }).catch(function (err) {
+    logErrorAndReturnGeneric(req, res, 'createNote', JSON.stringify(err));
   });
 };
 
