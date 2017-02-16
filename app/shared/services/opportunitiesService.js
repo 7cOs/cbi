@@ -203,10 +203,6 @@ module.exports = /*  @ngInject */
         filtersService.model.appliedFilter.pagination.roundedStores = Math.ceil(response.headers()['store-count'] / 10) * 10;
         filtersService.model.appliedFilter.pagination.totalPages = (Math.ceil(filtersService.model.appliedFilter.pagination.roundedStores / 10) - 1);
 
-        if (!ieHackService.isIE) {
-          console.log('[opportunitiesService.getOpportunitiesHeaders] response: ', response.headers());
-        }
-
         opportunitiesPromise.resolve(response.headers());
       }
 
@@ -266,7 +262,6 @@ module.exports = /*  @ngInject */
       .catch(getOpportunitiesFeedbackFail);
 
       function getOpportunitiesFeedbackSuccess(response) {
-        console.log('[opportunitiesService.getOpportunityFeedback] response: ', response);
         opportunitiesPromise.resolve(response.data);
       }
 
@@ -304,7 +299,6 @@ module.exports = /*  @ngInject */
       .catch(getOpportunitiesFeedbackFail);
 
       function getOpportunitiesFeedbackSuccess(response) {
-        console.log('[opportunitiesService.getOpportunityFeedback] response: ', response);
         opportunitiesPromise.resolve(response);
       }
 
@@ -337,7 +331,6 @@ module.exports = /*  @ngInject */
         .catch(deleteOpportunitiesFeedbackFail);
 
       function deleteOpportunitiesFeedbackSuccess(response) {
-        console.log('[opportunitiesService.getOpportunityFeedback] response: ', response);
         opportunitiesPromise.resolve(response.data);
       }
 
