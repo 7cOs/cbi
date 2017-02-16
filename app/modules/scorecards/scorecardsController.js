@@ -232,7 +232,6 @@ module.exports = /*  @ngInject */
 
     function updateTotalRowDepletions() {
       vm.totalRow = angular.copy(vm.totalRowTemplate);
-
       for (var i = 0; i < userService.model.depletion.length; i++) {
         angular.forEach(userService.model.depletion[i].measures, function(item, key) {
           if (item.timeframe === vm.depletionSelect) {
