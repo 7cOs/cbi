@@ -15,7 +15,6 @@ module.exports = {
   deleteNote: deleteNote,
   updateNote: updateNote,
   deleteAttachment: deleteAttachment,
-  searchAccounts: searchAccounts,
   accountNotes: accountNotes
 };
 
@@ -97,23 +96,6 @@ function updateNote(app, req, res) {
     }
   }).catch(function(err) {
     logErrorAndReturnGeneric(req, res, 'updateNote', JSON.stringify(err));
-  });
-};
-
-function searchAccounts(app, req, res) {
-  sfdc.searchAccounts(app, req, res).then(function(result) {
-    try {
-      if (isErrorResponse(result)) {
-        logErrorAndReturnGeneric(req, res, 'searchAccounts', JSON.stringify(result));
-      } else {
-        res.send(result);
-      }
-    } catch (err) {
-      // if there is a problem sending the response.
-      logErrorAndReturnGeneric(req, res, 'searchAccounts', err.toString());
-    };
-  }, function (err) {
-    logErrorAndReturnGeneric(req, res, 'searchAccounts', err.toString());
   });
 };
 

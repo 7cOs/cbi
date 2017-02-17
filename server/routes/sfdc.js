@@ -36,10 +36,6 @@ module.exports = function(app) {
     sfdc['updateNote'](app, req, res);
   });
 
-  app.get('/sfdc/searchAccounts', function (req, res) {
-    sfdc['searchAccounts'](app, req, res);
-  });
-
   app.get('/sfdc/getAttachment', function(req, res) {
     sfdc['getAttachmentData'](app, req, res);
   });

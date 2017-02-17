@@ -19,7 +19,6 @@ module.exports = /*  @ngInject */
       deleteNote: deleteNote,
       createNote: createNote,
       deleteAttach: deleteAttach,
-      searchAccounts: searchAccounts,
       accountNotes: accountNotes,
       updateNote: updateNote,
       userInfo: userInfo
@@ -93,26 +92,6 @@ module.exports = /*  @ngInject */
       }
 
       function accountNotesFail(error) {
-        notesPromise.reject(error);
-      }
-
-      return notesPromise.promise;
-    }
-
-    function searchAccounts(noteId) {
-      var notesPromise = $q.defer(),
-          url = model.urlBase + 'note',
-          data = {'read': true};
-
-      $http.get(url, data)
-        .then(searchAccountsSuccess)
-        .catch(searchAccountsFail);
-
-      function searchAccountsSuccess(response) {
-        notesPromise.resolve(response.data);
-      }
-
-      function searchAccountsFail(error) {
         notesPromise.reject(error);
       }
 

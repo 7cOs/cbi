@@ -10,7 +10,6 @@ module.exports = {
   userInfo: userInfo,
   createNote: createNote,
   accountNotes: accountNotes,
-  searchAccounts: searchAccounts,
   deleteAttachment: deleteAttachment,
   getAttachment: getAttachment,
   createAttachment: createAttachment,
@@ -130,49 +129,6 @@ function deleteNote(app, req) {
         });
       });
     }
-  });
-}
-
-function searchAccounts(app, req) {
-  /**
-  * searchAccounts: searches for an account using the search term in the "searchTerm" query parameter.
-  *                 This uses Salesforce's SOSL querying language
-  *                 (https://developer.salesforce.com/docs/atlas.en-us.soql_sosl.meta/soql_sosl/sforce_api_calls_sosl_about.htm)
-  */
-  return sfdcConn(app, req).then(function(result) {
-    try {
-      var conn = result;
-      var searchTerm = req.query.searchTerm;
-      if (searchTerm) {
-        return conn.search('FIND {' + searchTerm + '} IN ALL FIELDS RETURNING Account(Id, Name)',
-                                    function (err, res) {
-                                      if (err) {
-                                        return {
-                                          'isSuccess': false,
-                                          'errorMessage': err  // return the error from Salesforce
-                                        };
-                                      } else {
-                                        return {
-                                          'isSuccess': true,
-                                          'searchRecords': res.searchRecords
-                                        };
-                                      }
-                                    }).then(function(result) {
-                                      return result;
-                                    }, function(err) {
-                                      return err;
-                                    });
-      } else {
-        return {
-          'isSuccess': 'False',
-          'errorMessage': 'No search term was present in the URL'
-        };
-      }
-    } catch (err) {
-      var theError = {'isSuccess': false,
-        'errorMessage': err};
-    }
-    throw theError;
   });
 }
 
