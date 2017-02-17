@@ -2,7 +2,8 @@
 
 const saml = require('./ssoSAML.js'),
       jsforce = require('jsforce'),
-      fs = require('fs');
+      fs = require('fs'),
+      connErrorMessage = 'A connection to Salesforce could not be established: ';
 
 module.exports = {
   sfdcConn: sfdcConn,
@@ -78,6 +79,11 @@ function updateNote(app, req) {
             isSuccess: false,
             errorMessage: 'Error updating note: ' + err
           });
+        });
+      }).catch(function(err) {
+        reject({
+          isSuccess: false,
+          errorMessage: connErrorMessage + err
         });
       });
     }
@@ -339,6 +345,11 @@ function createNote(app, req) {
             isSuccess: false,
             errorMessage: 'There was an error searching for a matching account: ' + err
           });
+        });
+      }).catch(function(err) {
+        reject({
+          isSuccess: false,
+          errorMessage: connErrorMessage + err
         });
       });
     }
