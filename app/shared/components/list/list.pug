@@ -9,9 +9,8 @@
     span(ng-switch-when="true")
       button.btn-action(ng-if="!list.targetListService.model.currentList.archived && list.pageName(['target-lists', 'target-list-detail'])" ng-disabled="true") Add to Target List
       button.btn-action(ng-if="!list.targetListService.model.currentList.archived && list.pageName(['opportunities'])" ng-disabled="true") Copy to Target List
-      button.btn-action(ng-if="list.targetListService.model.currentList.archived" ng-disabled="true") Download
+      button.btn-action(ng-disabled="true") Download
       button.btn-action(ng-if="!list.targetListService.model.currentList.archived && list.pageName(['opportunities'])" ng-disabled="true" ) Remove
-
 
     span(ng-switch-when="false")
       md-menu(md-offset="0 45" ng-if="list.pageName(['target-lists', 'target-list-detail'])")
@@ -80,7 +79,7 @@ v-accordion.styled-list(multiple="" id="opportunities" control="list.accordion" 
         v-pane-header.checkbox-sibling(column='12' ng-click="$event.stopPropagation()" analytics-if="opportunity.isExpanded" analytics-on="click" analytics-event="Expand Store" analytics-category="Opportunities" analytics-label="{{opportunity.store.id}}")
           div(ng-class="{long: opportunity.store.name.length > 21}").cell-parent
             div.pad-cell.semi-bold(column='3') {{::opportunity.store.name | titlecase}} <span class="supporting-text" ng-if="opportunity.store.storeNumber">\#{{::opportunity.store.storeNumber | uppercase}}</span>
-            div.address(column='4') {{::opportunity.store.streetAddress | titlecase}} {{::opportunity.store.city | titlecase}}, {{::opportunity.store.state}} {{::opportunity.store.zip | zipcode}}
+            div.address(column='4') {{::opportunity.store.streetAddress | titlecase}}, {{::opportunity.store.city | titlecase}}, {{::opportunity.store.state}} {{::opportunity.store.zip | zipcode}}
             .text-center.semi-bold(column='2') {{opportunity.groupedOpportunities.length}} <span class="supporting-text">({{opportunity.store.highImpactOpportunityCount}} High)</span>
             .text-center.semi-bold(column='1') {{::opportunity.store.depletionsCurrentYearToDate | number: 0 }}
             .text-center.semi-bold(column='1' ng-class="list.depletionsVsYaPercent(opportunity) <= 0 ? 'negative' : 'positive'") {{::list.depletionsVsYaPercent(opportunity)| number: 1}}%
