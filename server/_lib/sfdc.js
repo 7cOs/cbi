@@ -44,47 +44,42 @@ function sfdcConn(app, req) {
 
 function updateNote(app, req) {
   /**
-  * updateNote test
+  * updateNote
   *
   */
-  return sfdcConn(app, req).then(function(result) {
-    try {
-      var conn = result;
-      if (req.query.noteId) {
-        var attachId = req.query.noteId;
-        return conn.sobject('Note__c').update({
-                                          Id: attachId,
-                                          Type__c: req.body.title,
-                                          Comments_RTF__c: req.body.body
-                                        },
-                                        function (err, res) {
-                                          if (err || !res.success) {
-                                            return {
-                                              'isSuccess': false,
-                                              'errorMessage': err  // return the error from Salesforce
-                                            };
-                                          } else {
-                                            return {
-                                              'isSuccess': true,
-                                              'searchRecords': res.searchRecords
-                                            };
-                                          }
-                                        }).then(function(result) {
-                                          return result;
-                                        }, function(err) {
-                                          return err;
-                                        });
-      } else {
-        var badNoteIdError = {
-          'isSuccess': 'False',
-          'ErrorString': 'Not able to update this stupid note.'
-        };
-        throw badNoteIdError;
-      }
-    } catch (err) {
-      var generalError = {'isSuccess': false,
-        'errorMessage': err};
-      throw generalError;
+  return new Promise(function(resolve, reject) {
+    let noteId = req.query ? req.query.noteId : undefined;
+
+    if (!noteId) {
+      reject({
+        isSuccess: false,
+        errorMessage: 'There was no valid noteId submitted.'
+      });
+    } else {
+      sfdcConn(app, req).then(function (conn) {
+        conn.sobject('Note__c').update({
+          Id: noteId,
+          Type__c: req.body.title,
+          Comments_RTF__c: req.body.body
+        }).then(function(result) {
+          if (result.success === true) {
+            resolve({
+              isSuccess: true,
+              successReturnValue: result
+            });
+          } else {
+            reject({
+              isSuccess: false,
+              errorMessage: 'Error updating note: ' + JSON.stringify(result)
+            });
+          }
+        }).catch(function(err) {
+          reject({
+            isSuccess: false,
+            errorMessage: 'Error updating note: ' + err
+          });
+        });
+      });
     }
   });
 };
@@ -291,10 +286,10 @@ function createNote(app, req) {
   return new Promise(function(resolve, reject) {
     let acctId = req.query ? req.query.accountId : undefined;
 
-    if (!req.query.accountId) {
+    if (!acctId) {
       reject({
         isSuccess: false,
-        errorMessage: 'There was no valid account id submitted.  Please make sure you have an account id (i.e. TD Linx Id)'
+        errorMessage: 'There was no valid accountId submitted. Please make sure you have an account id (i.e. TD Linx Id)'
       });
     } else {
       sfdcConn(app, req).then(function (conn) {
@@ -311,24 +306,31 @@ function createNote(app, req) {
           } else {
             // once you have the correct account id, create a note and attach to that account Id.
             conn.sobject('Note__c').create([{
-                Account__c: sfdcAccountId,
-                Comments_RTF__c: req.body.body,
-                Conversion_Flag__c: req.body.conversionflag,
-                // CreatedById, CreatedDate, Id, IsDeleted, LastModifiedById, LastModifiedDate are system generated
-                Other_Type__c: req.body.othertype,
-                Private__c: req.body.private,
-                Soft_Delete__c: req.body.softdelete,
-                Type__c: req.body.title,
-                RecordTypeId: app.get('config').sfdcSettings.noteRecordTypeId
+              Account__c: sfdcAccountId,
+              Comments_RTF__c: req.body.body,
+              Conversion_Flag__c: req.body.conversionflag,
+              // CreatedById, CreatedDate, Id, IsDeleted, LastModifiedById, LastModifiedDate are system generated
+              Other_Type__c: req.body.othertype,
+              Private__c: req.body.private,
+              Soft_Delete__c: req.body.softdelete,
+              Type__c: req.body.title,
+              RecordTypeId: app.get('config').sfdcSettings.noteRecordTypeId
             }]).then(function(noteReturn) {
-              resolve({
-                'isSuccess': true,
-                'successReturnValue': noteReturn
-              });
+              if (noteReturn.length > 0 && noteReturn[0].success === true) {
+                resolve({
+                  isSuccess: true,
+                  successReturnValue: noteReturn
+                });
+              } else {
+                reject({
+                  isSuccess: false,
+                  errorMessage: 'Error creating note: ' + JSON.stringify(noteReturn)
+                });
+              }
             }).catch(function(noteError) {
               reject({
                 isSuccess: false,
-                errorMessage: 'Error creating an note: ' + noteError
+                errorMessage: 'Error creating note: ' + noteError
               });
             });
           };

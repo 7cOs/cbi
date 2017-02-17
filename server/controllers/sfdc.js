@@ -4,8 +4,8 @@ Salesforce integration
 J. Scott Cromie
 8/9/16
 ***********************************************************/
-var sfdc = require('../_lib/sfdc.js'),
-    logutil = require('../_lib/logutil');
+const sfdc = require('../_lib/sfdc.js'),
+      logutil = require('../_lib/logutil');
 
 module.exports = {
   userInfo: userInfo,
@@ -104,18 +104,14 @@ function deleteNote(app, req, res) {
 };
 
 function updateNote(app, req, res) {
-  sfdc.updateNote(app, req, res).then(function(result) {
-    try {
-      if (isErrorResponse(result)) {
-        logErrorAndReturnGeneric(req, res, 'updateNote', JSON.stringify(result));
-      } else {
-        res.send(result);
-      }
-    } catch (err) {
-      logErrorAndReturnGeneric(req, res, 'updateNote', err.toString());
-    };
-  }, function(err) {
-    logErrorAndReturnGeneric(req, res, 'updateNote', err.toString());
+  sfdc.updateNote(app, req).then(function(result) {
+    if (isErrorResponse(result)) {
+      logErrorAndReturnGeneric(req, res, 'updateNote', JSON.stringify(result));
+    } else {
+      res.send(result);
+    }
+  }).catch(function(err) {
+    logErrorAndReturnGeneric(req, res, 'updateNote', JSON.stringify(err));
   });
 };
 
