@@ -88,7 +88,7 @@ function updateNote(app, req) {
       });
     }
   });
-};
+}
 
 function deleteNote(app, req) {
   /**
@@ -131,7 +131,7 @@ function deleteNote(app, req) {
       });
     }
   });
-};
+}
 
 function searchAccounts(app, req) {
   /**
@@ -174,7 +174,7 @@ function searchAccounts(app, req) {
     }
     throw theError;
   });
-};
+}
 
 function accountNotes(app, req) {
   /**
@@ -235,7 +235,7 @@ function accountNotes(app, req) {
       });
     }
   });
-};
+}
 
 function userInfo(app, req) {
   /**
@@ -275,7 +275,7 @@ function userInfo(app, req) {
       });
     });
   });
-};
+}
 
 function createNote(app, req) {
   /**
@@ -347,7 +347,7 @@ function createNote(app, req) {
       });
     }
   });
-};
+}
 
 function getAttachment(app, req, res) {
   /**
@@ -416,12 +416,12 @@ function getAttachment(app, req, res) {
       });
     }
   });
-};
+}
 
 function createAttachment(app, req) {
-  var files = req.files.files || [];
-  var sfdc = sfdcConn(app, req);
-  var attachments = Promise
+  let files = req.files.files || [];
+  let sfdc = sfdcConn(app, req);
+  let attachments = Promise
     .all(cleanUploadedFiles(files))
     .then(function(files) {
       return files.map(function(file) {
@@ -433,18 +433,59 @@ function createAttachment(app, req) {
   return Promise
     .all([attachments, sfdc])
     .then(function(args) {
-      var attachments = args[0];
-      var sfdc = args[1];
+      let attachments = args[0];
+      let sfdc = args[1];
 
       return sfdc.sobject('Attachment').create(attachments);
+    }).catch(function(err) {
+      return {
+        isSuccess: false,
+        errorMessage: 'Error creating attachment: ' + err
+      };
     });
 }
 
 function deleteAttachment(app, req) {
-  return sfdcConn(app, req)
-    .then(function(conn) {
-      return conn.sobject('Attachment').delete(req.query.attachmentId);
-    });
+  /**
+   * deleteAttachment: deletes an attachment on a note identified by the query parameter "attachmentId"
+   *
+   */
+  return new Promise(function(resolve, reject) {
+    let attachmentId = req.query ? req.query.attachmentId : undefined;
+
+    if (!attachmentId) {
+      reject({
+        isSuccess: false,
+        errorMessage: 'There was no valid attachmentId submitted.'
+      });
+    } else {
+      sfdcConn(app, req).then(function (conn) {
+        conn.sobject('Attachment').delete(attachmentId).then(function (result) {
+          if (result.success === true) {
+            resolve({
+              isSuccess: true,
+              successReturnValue: result
+            });
+          } else {
+            reject({
+              isSuccess: false,
+              errorMessage: 'Error deleting attachment: ' + JSON.stringify(result)
+            });
+          }
+        }).catch(function (err) {
+          reject({
+            isSuccess: false,
+            errorMessage: 'Error deleting attachment: ' + err
+          });
+        });
+      }).catch(function(err) {
+        reject({
+          isSuccess: false,
+          errorMessage: connErrorMessage + err
+        });
+      });
+    }
+  });
 }
 
 function cleanUploadedFiles(files) {
@@ -456,8 +497,7 @@ function cleanUploadedFiles(files) {
           Body: data,
           ContentType: file.type
         };
-      })
-      .catch(console.error);
+      });
   });
 }
 

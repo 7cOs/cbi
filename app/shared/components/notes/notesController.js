@@ -228,11 +228,9 @@ module.exports = /*  @ngInject */
               vm.notesError = true;
             });
           });
-        }, function(response) {
-          if (response.status > 0) {
-            vm.uploadErrorMsg = response.status + ': ' + response.data;
-            vm.fileUploading = false;
-          }
+        }).catch(function() {
+          vm.fileUploading = false;
+          vm.notesError = true;
         });
       } else {
         vm.uploadErrorMsg = 'Please ensure you\'re using a supported file type (.doc, .ppt, .xls, .gif, .jpg, .png, .pdf) and your total attachments are under 10MB.';

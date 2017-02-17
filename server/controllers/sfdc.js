@@ -41,18 +41,16 @@ function userInfo(app, req, res) {
 }
 
 function createAttachment(app, req, res) {
-  sfdc
-    .createAttachment(app, req, res)
-    .then(function(result) {
-      if (isErrorResponse(result)) {
-        logErrorAndReturnGeneric(req, res, 'createAttachment', JSON.stringify(result));
-      } else {
-        res.send(result);
-      }
-    })
-    .catch(function(err) {
-      logErrorAndReturnGeneric(req, res, 'createAttachment', err.toString());
-    });
+  sfdc.createAttachment(app, req).then(function(result) {
+    if (isErrorResponse(result)) {
+      logErrorAndReturnGeneric(req, res, 'createAttachment', JSON.stringify(result));
+    } else {
+      res.send(result);
+    }
+  })
+  .catch(function(err) {
+    logErrorAndReturnGeneric(req, res, 'createAttachment', JSON.stringify(err));
+  });
 }
 
 function getAttachmentData(app, req, res) {
@@ -67,17 +65,15 @@ function getAttachmentData(app, req, res) {
 }
 
 function deleteAttachment(app, req, res) {
-  sfdc
-    .deleteAttachment(app, req, res)
-    .then(function(result) {
-      if (isErrorResponse(result)) {
-        logErrorAndReturnGeneric(req, res, 'deleteAttachment', JSON.stringify(result));
-      } else {
-        res.send(result);
-      }
-    }).catch(function(err) {
-      logErrorAndReturnGeneric(req, res, 'deleteAttachment', err.toString());
-    });
+  sfdc.deleteAttachment(app, req).then(function(result) {
+    if (isErrorResponse(result)) {
+      logErrorAndReturnGeneric(req, res, 'deleteAttachment', JSON.stringify(result));
+    } else {
+      res.send(result);
+    }
+  }).catch(function(err) {
+    logErrorAndReturnGeneric(req, res, 'deleteAttachment', JSON.stringify(err));
+  });
 };
 
 function deleteNote(app, req, res) {
