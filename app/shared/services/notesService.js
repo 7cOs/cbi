@@ -65,21 +65,16 @@ module.exports = /*  @ngInject */
         angular.forEach(response.data.successReturnValue, function(arr) {
           var noteAttachments = [];
 
-          // moment(arr.CreatedDate).format();
-
           if (arr.Attachments !== null) {
-
             for (var i = 0; i < arr.Attachments.records.length; i++) {
-              noteAttachments.push(
-                {
-                  fileName: arr.Attachments.records[i].Name,
-                  bodyLength: arr.Attachments.records[i].BodyLength / 1000,
-                  fileSize: filesizeFilter(arr.Attachments.records[i].BodyLength / 1000),
-                  url: arr.Attachments.records[i].attributes.url,
-                  fileType: arr.Attachments.records[i].ContentType,
-                  attachId: arr.Attachments.records[i].Id
-                }
-              );
+              noteAttachments.push({
+                fileName: arr.Attachments.records[i].Name,
+                bodyLength: arr.Attachments.records[i].BodyLength / 1000,
+                fileSize: filesizeFilter(arr.Attachments.records[i].BodyLength / 1000),
+                url: arr.Attachments.records[i].attributes.compassUrl,
+                fileType: arr.Attachments.records[i].ContentType,
+                attachId: arr.Attachments.records[i].Id
+              });
             };
           }
 

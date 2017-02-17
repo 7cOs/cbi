@@ -9,7 +9,7 @@ module.exports = {
   sfdcConn: sfdcConn,
   userInfo: userInfo,
   createNote: createNote,
-  queryAccountNotes: queryAccountNotes,
+  accountNotes: accountNotes,
   searchAccounts: searchAccounts,
   deleteAttachment: deleteAttachment,
   getAttachment: getAttachment,
@@ -92,43 +92,43 @@ function updateNote(app, req) {
 
 function deleteNote(app, req) {
   /**
-  * deleteNote: deletes an attachment identified by the query parameter "noteId"
+  * deleteNote: deletes a note identified by the query parameter "noteId"
   *
   */
-  return sfdcConn(app, req).then(function(result) {
-    try {
-      var conn = result;
-      if (req.query.noteId) {
-        var noteId = req.query.noteId;
-        return conn.sobject('Note__c').delete(noteId,
-                                    function (err, res) {
-                                      if (err || !res.success) {
-                                        return {
-                                          'isSuccess': false,
-                                          'errorMessage': err  // return the error from Salesforce
-                                        };
-                                      } else {
-                                        return {
-                                          'isSuccess': true,
-                                          'searchRecords': res.searchRecords
-                                        };
-                                      }
-                                    }).then(function(result) {
-                                      return result;
-                                    }, function(err) {
-                                      return err;
-                                    });
-      } else {
-        var badNoteIdError = {
-          'isSuccess': 'False',
-          'ErrorString': 'No noteId Id was present for delete.'
-        };
-        throw badNoteIdError;
-      }
-    } catch (err) {
-      var generalError = {'isSuccess': false,
-        'errorMessage': err};
-      throw generalError;
+  return new Promise(function(resolve, reject) {
+    let noteId = req.query ? req.query.noteId : undefined;
+
+    if (!noteId) {
+      reject({
+        isSuccess: false,
+        errorMessage: 'There was no valid noteId submitted.'
+      });
+    } else {
+      sfdcConn(app, req).then(function (conn) {
+        conn.sobject('Note__c').delete(noteId).then(function(result) {
+          if (result.success === true) {
+            resolve({
+              isSuccess: true,
+              successReturnValue: result
+            });
+          } else {
+            reject({
+              isSuccess: false,
+              errorMessage: 'Error deleting note: ' + JSON.stringify(result)
+            });
+          }
+        }).catch(function(err) {
+          reject({
+            isSuccess: false,
+            errorMessage: 'Error deleting note: ' + err
+          });
+        });
+      }).catch(function(err) {
+        reject({
+          isSuccess: false,
+          errorMessage: connErrorMessage + err
+        });
+      });
     }
   });
 };
@@ -176,7 +176,7 @@ function searchAccounts(app, req) {
   });
 };
 
-function queryAccountNotes(app, req, res) {
+function accountNotes(app, req) {
   /**
   * queryAccountNotes: searches for the notes and associated attachments using the query parameter "accountId"
   *                    This accountId can either be the TDLinx_Id__c Id or
@@ -185,58 +185,55 @@ function queryAccountNotes(app, req, res) {
   *                      into the resultant page by using it in an <img src=""> tag.
   *
   */
-  return sfdcConn(app, req).then(function(result) {
-    try {
-      var conn = result;
-      var strId = '';
+  return new Promise(function(resolve, reject) {
+    let acctId = req.query ? req.query.accountId : undefined;
 
-      if (req.query.accountId) {
-        strId  = req.query.accountId;
-      } else {
-        var badAccountIdError = {
-          'isSuccess': 'False',
-          'ErrorMessage': 'There was no account Id'
-        };
-        throw badAccountIdError;
-      }
-      return (
+    if (!acctId) {
+      reject({
+        isSuccess: false,
+        errorMessage: 'There was no valid accountId submitted. Please make sure you have an account id (i.e. TD Linx Id)'
+      });
+    } else {
+
+      sfdcConn(app, req).then(function (conn) {
         conn.sobject('Note__c')
-            .select('Account__r.TDLinx_Id__c, Account__r.JDE_Address_Book_Number__c,  Type__c, Title__c, Soft_Delete__c, Private__c, OwnerId, Other_Type__c, Name, IsDeleted, Id, Comments_RTF__c, Account__c, CreatedDate, CreatedBy.Name, CreatedBy.CBI_Employee_ID__c, LastModifiedDate')
-            .include('Attachments')
-            .select('Id, Name, CreatedDate, BodyLength, ContentType, Description, LastModifiedDate, OwnerId, ParentId')
-            .orderby('CreatedDate', 'DESC')
-            .end()
-            .where('(Account__r.TDLinx_Id__c = \'' + strId + '\' or Account__r.JDE_Address_Book_Number__c = \'' + strId + '\' or Account__r.Store_Code__c = \'' + strId + '\') and RecordTypeId = \'' + app.get('config').sfdcSettings.noteRecordTypeId + '\'')
-            .execute(function (err, records) {
-              if (err) {
-                return {'isSuccess': false,
-                  'errorMessage': 'There was an SFDC API error retrieving the notes for this account: ' + err};
-              }
-              // set the URL on the image to include the url and session id
-              for (var note in records) {
-                if (records[note].Attachments) {
-                  for (var theAtt in records[note].Attachments.records) {
-                    var thisAtt = records[note].Attachments.records[theAtt],
-                        urlPath = app.get('config').env === 'development' ? 'sfdc/getAttachment?attachId=' : '/sfdc/getAttachment?attachId=',
-                        clickableLink = app.get('config').address + urlPath + thisAtt.Id;
+          .select('Account__r.TDLinx_Id__c, Account__r.JDE_Address_Book_Number__c,  Type__c, Title__c, Soft_Delete__c, Private__c, OwnerId, Other_Type__c, Name, IsDeleted, Id, Comments_RTF__c, Account__c, CreatedDate, CreatedBy.Name, CreatedBy.CBI_Employee_ID__c, LastModifiedDate')
+          .include('Attachments')
+          .select('Id, Name, CreatedDate, BodyLength, ContentType, Description, LastModifiedDate, OwnerId, ParentId')
+          .orderby('CreatedDate', 'DESC')
+          .end()
+          .where('(Account__r.TDLinx_Id__c = \'' + acctId + '\' or Account__r.JDE_Address_Book_Number__c = \'' + acctId + '\' or Account__r.Store_Code__c = \'' + acctId + '\') and RecordTypeId = \'' + app.get('config').sfdcSettings.noteRecordTypeId + '\'')
+          .execute().then(function(records) {
 
-                    thisAtt.attributes.url = clickableLink;
-                  }
-                }
+          // modify url attribute for attachments
+          for (let note in records) {
+            if (records[note].Attachments) {
+              for (let theAtt in records[note].Attachments.records) {
+                let thisAtt = records[note].Attachments.records[theAtt],
+                  urlPath = '/sfdc/getAttachment?attachId=' + thisAtt.Id;
+
+                thisAtt.attributes.compassUrl = urlPath;
               }
-              res.send({'isSuccess': true,
-                'successReturnValue': records
-              });
-            })
-  );
-    } catch (err) {
-      var errMessage = 'There was an error in queryAccountNotes: ' + JSON.stringify(err, null, '');
-      return {'isSuccess': false,
-        'errorMessage': errMessage};
+            }
+          }
+
+          resolve({
+            isSuccess: true,
+            successReturnValue: records
+          });
+        }).catch(function(err) {
+          reject({
+            isSuccess: false,
+            errorMessage: 'Error retrieving notes: ' + err
+          });
+        });
+      }).catch(function (err) {
+        reject({
+          isSuccess: false,
+          errorMessage: connErrorMessage + err
+        });
+      });
     }
-  }, function (err) {
-    return {'isSuccess': false,
-      'errorMessage': 'A connection to Salesforce could not be established: ' + err};
   });
 };
 

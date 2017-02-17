@@ -88,18 +88,13 @@ function deleteAttachment(app, req, res) {
 
 function deleteNote(app, req, res) {
   sfdc.deleteNote(app, req, res).then(function(result) {
-    try {
-      if (isErrorResponse(result)) {
-        logErrorAndReturnGeneric(req, res, 'deleteNote', JSON.stringify(result));
-      } else {
-        res.send(result);
-      }
-    } catch (err) {
-      // if there is a problem sending the response.
-      logErrorAndReturnGeneric(req, res, 'deleteNote', err.toString());
-    };
-  }, function (err) {
-    logErrorAndReturnGeneric(req, res, 'deleteNote', err.toString());
+    if (isErrorResponse(result)) {
+      logErrorAndReturnGeneric(req, res, 'deleteNote', JSON.stringify(result));
+    } else {
+      res.send(result);
+    }
+  }).catch(function (err) {
+    logErrorAndReturnGeneric(req, res, 'deleteNote', JSON.stringify(err));
   });
 };
 
@@ -145,19 +140,13 @@ function createNote(app, req, res) {
 };
 
 function accountNotes(app, req, res) {
-
-  sfdc.queryAccountNotes(app, req, res).then(function(result) {
-    try {
-      if (isErrorResponse(result)) {
-        logErrorAndReturnGeneric(req, res, 'queryAccountNotes', JSON.stringify(result || null));
-      } else {
-        res.send(result);
-      }
-    } catch (err) {
-      // if there is a problem sending the response.
-      logErrorAndReturnGeneric(req, res, 'queryAccountNotes', err.toString());
-    };
-  }, function (err) {
-    logErrorAndReturnGeneric(req, res, 'queryAccountNotes', err.toString());
+  sfdc.accountNotes(app, req).then(function(result) {
+    if (isErrorResponse(result)) {
+      logErrorAndReturnGeneric(req, res, 'queryAccountNotes', JSON.stringify(result));
+    } else {
+      res.send(result);
+    }
+  }).catch(function (err) {
+    logErrorAndReturnGeneric(req, res, 'queryAccountNotes', JSON.stringify(err));
   });
 };
