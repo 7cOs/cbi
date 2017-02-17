@@ -356,42 +356,66 @@ function getAttachment(app, req, res) {
   *                 be passed through a web service.
   *
   */
-  try {
-    return sfdcConn(app, req).then(function(result) {
-    // In order to return a clickable link we need to issue a GET from our server
-      var conn = result;
-      var theAtt = conn.sobject('Attachment').record(req.query.attachId);
-      var attBlob = theAtt.blob('Body');
-      var buf = [];
-      attBlob.on('data', function(data) {
-        buf.push(data);
+  return new Promise(function(resolve, reject) {
+    let attachId = req.query.attachId;
+
+    if (!attachId) {
+      reject({
+        isSuccess: false,
+        errorMessage: 'There was no valid attachId submitted.'
       });
-      attBlob.on('end', function() {
-        var attRecord = [];
-        conn.query('Select Id, ContentType, Description, Name FROM Attachment WHERE Id = \'' + req.query.attachId + '\'')
-        .on('record', function(record) {
-          attRecord.push(record);
-        })
-        .on('end', function() {
-          var contentStr = Buffer.concat(buf);
-          res.writeHead(200, {
-            'Content-Type': attRecord[0].ContentType,
-            'Content-disposition': 'attachment;filename="' + attRecord[0].Name + '"'
+    } else {
+      sfdcConn(app, req).then(function (conn) {
+
+        let theAtt = conn.sobject('Attachment').record(attachId);
+        let attBlob = theAtt.blob('Body');
+        let buf = [];
+
+        attBlob.on('error', function (err) {
+          reject({
+            isSuccess: false,
+            errorMessage: 'Error fetching attachment: ' + err
           });
-          res.end(new Buffer(contentStr, 'binary'));
-          })
-          .on('error', function(err) {
-            console.error(err);
-          })
-          .run({ autoFetch: true, maxFetch: 1 });
+        });
+
+        attBlob.on('data', function (data) {
+          buf.push(data);
+        });
+
+        attBlob.on('end', function () {
+          let attRecord = [];
+          conn.query('Select Id, ContentType, Description, Name FROM Attachment WHERE Id = \'' + req.query.attachId + '\'')
+            .on('record', function (record) {
+              attRecord.push(record);
+            })
+            .on('end', function () {
+              let contentStr = Buffer.concat(buf);
+              res.writeHead(200, {
+                'Content-Type': attRecord[0].ContentType,
+                'Content-disposition': 'attachment;filename="' + attRecord[0].Name + '"'
+              });
+              res.end(new Buffer(contentStr, 'binary'));
+
+              resolve({
+                isSuccess: true
+              });
+            })
+            .on('error', function (err) {
+              reject({
+                isSuccess: false,
+                errorMessage: 'Error fetching attachment: ' + err
+              });
+            })
+            .run({autoFetch: true, maxFetch: 1});
+        });
+      }).catch(function(err) {
+        reject({
+          isSuccess: false,
+          errorMessage: connErrorMessage + err
+        });
       });
-    }, function(err) {
-      throw (err);
-    });
-  } catch (err) {
-    return {'isSuccess': false,
-      'errorMessage': 'No connection could be made to Salesforce.com: ' + err};
-  }
+    }
+  });
 };
 
 function createAttachment(app, req) {
@@ -436,6 +460,7 @@ function cleanUploadedFiles(files) {
       .catch(console.error);
   });
 }
+
 function getUploadedFileBase64(path) {
   return new Promise(function(resolve, reject) {
     fs.readFile(path, function(err, data) {
@@ -443,4 +468,3 @@ function getUploadedFileBase64(path) {
     });
   });
 }
-

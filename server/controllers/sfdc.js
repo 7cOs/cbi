@@ -35,8 +35,7 @@ function userInfo(app, req, res) {
     } else {
       res.send(result);
     }
-  })
-  .catch(function(err) {
+  }).catch(function(err) {
     logErrorAndReturnGeneric(req, res, 'userInfo', JSON.stringify(err));
   });
 }
@@ -57,16 +56,14 @@ function createAttachment(app, req, res) {
 }
 
 function getAttachmentData(app, req, res) {
-  try {
-    sfdc.getAttachment(app, req, res).then(function(result) {
-      // handle potential error case only - success case is when data is streamed back to client
-      if (isErrorResponse(result)) {
-        logErrorAndReturnGeneric(req, res, 'getAttachment', JSON.stringify(result));
-      }
-    });
-  } catch (err) {
-    logErrorAndReturnGeneric(req, res, 'getAttachment', err.toString());
-  }
+  sfdc.getAttachment(app, req, res).then(function(result) {
+    // handle potential error case only - success case is when data is streamed back to client
+    if (isErrorResponse(result)) {
+      logErrorAndReturnGeneric(req, res, 'getAttachment', JSON.stringify(result));
+    }
+  }).catch(function(err) {
+    logErrorAndReturnGeneric(req, res, 'getAttachment', JSON.stringify(err));
+  });
 }
 
 function deleteAttachment(app, req, res) {
@@ -78,8 +75,7 @@ function deleteAttachment(app, req, res) {
       } else {
         res.send(result);
       }
-    })
-    .catch(function(err) {
+    }).catch(function(err) {
       logErrorAndReturnGeneric(req, res, 'deleteAttachment', err.toString());
     });
 };
