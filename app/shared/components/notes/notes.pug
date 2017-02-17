@@ -2,18 +2,26 @@ div.modal.notes(ng-if="notesOpen")
   div.title
     a.hide-row(ng-click="n.notesClose()")
     h4 {{::n.storeName | titlecase}}
+
   div.no-notes(ng-if="n.notes.length <= 0 && !n.loading" ng-hide="n.creatingNote")
     h5 There are no notes for this <br />account yet.
     button(ng-click="n.openCreateNote()").btn-action + Add A New Note
     br
     img(src="../assets/img/icons/no-notes.svg").no-notes-image
-  div(ng-if="n.loading").progress-container
+
+  div.progress-container(ng-if="n.loading")
     md-progress-circular(ng-if="n.loading" md-mode="indeterminate" md-diameter="100").md-accent
     h5 Loading...
 
-  div(ng-if="n.fileUploading").progress-container.uploader
+  div.progress-container.uploader(ng-if="n.fileUploading")
     md-progress-circular(ng-if="n.fileUploading" md-mode="indeterminate" md-diameter="100").md-accent
     h5 Uploading Files...
+
+  div.progress-container(ng-if="n.notesError")
+    a.hide-row(ng-click="n.notesClose()")
+    img.note-error(src="../assets/img/icons/notes-error-white.svg")
+    h5 Sorry, something went wrong...
+
   div.note-container(ng-if="n.notes.length > 0 && !n.fileUploading || n.creatingNote")
     div.new-note
       p(ng-click="n.openCreateNote()").bold.add-note <span>+</span> New Note
@@ -32,7 +40,7 @@ div.modal.notes(ng-if="notesOpen")
         div
           .add-attachments(ngf-select="n.uploadFiles($files)" multiple ngf-max-size="10MB" ngf-pattern=".docx,.doc,.ppt,.pptx,.xls,.xlsx,.gif,.jpg,.png,.pdf")
             a(href="#").accent Add an attachment <span ng-if="!n.newNote.attachments || n.newNote.attachments.length === 0">(Max 10MB)</span>
-            p {{n.errorMsg}}
+            p {{n.uploadErrorMsg}}
         button(ng-click="n.createNote(n.newNote)").btn-action Save
         p(ng-click="n.cancelNewNote(n.newNote)").cancel.accent X Cancel
       div.inline-container(ng-if="n.newNote.attachments.length > 0")
@@ -74,7 +82,7 @@ div.modal.notes(ng-if="notesOpen")
             div
               .add-attachments(ng-if="note.author === 'Me'" ngf-select="n.uploadFiles($files, note.id)" ngf-max-size="{{n.getMaxFileSize(note)}}" multiple ngf-pattern=".docx,.doc,.ppt,.pptx,.xls,.xlsx,.gif,.jpg,.png,.pdf")
                 p Add an attachment
-                label.error {{n.errorMsg}}
+                label.error {{n.uploadErrorMsg}}
             button(ng-click="n.saveEditedNote(note)").btn-action Save
             p(ng-click="n.isEditing(note, true)").cancel.accent X Cancel
         div.inline-container(ng-if="note.attachments.length > 0")

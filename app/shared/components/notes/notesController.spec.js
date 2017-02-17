@@ -56,9 +56,6 @@ describe('Unit: notes controller', function() {
     expect(ctrl.cancelNewNote).not.toBeUndefined();
     expect(typeof (ctrl.cancelNewNote)).toEqual('function');
 
-    expect(ctrl.updateNote).not.toBeUndefined();
-    expect(typeof (ctrl.updateNote)).toEqual('function');
-
     expect(ctrl.showImage).not.toBeUndefined();
     expect(typeof (ctrl.showImage)).toEqual('function');
 

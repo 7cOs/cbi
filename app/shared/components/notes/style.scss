@@ -30,12 +30,16 @@
 
     h5 {
       display: block;
-      width: 100px;
+      width: 100%;
       margin: 0 auto;
       color: $white;
       position: absolute;
-      top: 450;
-      left: calc(50% - 50px);
+      top: 450px;
+    }
+
+    img.note-error {
+      position: relative;
+      top: calc(50% - 50px);
     }
   }
 
