@@ -117,9 +117,7 @@ div(row)
               p.accent.bold Depletions
             th(colspan=2).top.other-columns
               p.accent
-                |{{a.filtersService.model.accountSelected.accountBrands.depletionTableHeaderText}} - {{a.filterModel.distributionTimePeriod.displayValue}}
-                span(ng-if="a.filterModel.distributionTimePeriod.displayValue === 'L90'") &nbsp;Days
-                span(ng-if="a.filterModel.distributionTimePeriod.displayValue === 'L03'") &nbsp;Months
+                |{{a.filtersService.model.accountSelected.accountBrands.depletionTableHeaderText}}
           tr
             th
               p.accent &nbsp;
