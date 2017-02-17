@@ -29,18 +29,16 @@ function logErrorAndReturnGeneric(req, res, sfdcMethod, errorString) {
 }
 
 function userInfo(app, req, res) {
-  sfdc
-    .userInfo(app, req, res)
-    .then(function(result) {
-      if (isErrorResponse(result)) {
-        logErrorAndReturnGeneric(req, res, 'userInfo', JSON.stringify(result));
-      } else {
-        res.send(result);
-      }
-    })
-    .catch(function(err) {
-      logErrorAndReturnGeneric(req, res, 'userInfo', err.toString());
-    });
+  sfdc.userInfo(app, req).then(function(result) {
+    if (isErrorResponse(result)) {
+      logErrorAndReturnGeneric(req, res, 'userInfo', JSON.stringify(result));
+    } else {
+      res.send(result);
+    }
+  })
+  .catch(function(err) {
+    logErrorAndReturnGeneric(req, res, 'userInfo', JSON.stringify(err));
+  });
 }
 
 function createAttachment(app, req, res) {

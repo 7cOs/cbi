@@ -238,46 +238,42 @@ function accountNotes(app, req) {
 };
 
 function userInfo(app, req) {
-  return sfdcConn(app, req).then(function(result) {
-    try {
-      var conn = result,
-        empId = req.user.jwtmap.employeeID;
+  /**
+   * userInfo: gets Salesforce user information for current user identified by empployeeID
+   *
+   */
+  return new Promise(function(resolve, reject) {
+    sfdcConn(app, req).then(function (conn) {
+      let employeeId = req.user.jwtmap.employeeID;
 
-      return (
-        conn.sobject('User')
-          .select('Id, FederationIdentifier, Name, CompanyName, Division, Department, Supervisory__c, Role__c')
-          .where('FederationIdentifier = \'' + empId + '\'')
-          .execute(function (err, records) {
-            if (err) {
-              return {
-                'isSuccess': false,
-                'errorMessage': 'There was an SFDC API error retrieving user info: ' + err
-              };
-            }
+      conn.sobject('User')
+        .select('Id, FederationIdentifier, Name, CompanyName, Division, Department, Supervisory__c, Role__c')
+        .where('FederationIdentifier = \'' + employeeId + '\'')
+        .execute().then(function(records) {
 
-            if (records.length === 1) {
-              return {
-                'isSuccess': true,
-                'successReturnValue': records[0]
-              };
-            } else {
-              return {
-                'isSuccess': false,
-                'errorMessage': 'Could not find a user with FederationIdentifier matching ' + empId + ' (' + records.length + ' records)'
-              };
-            }
-          })
-      );
-    } catch (err) {
-      var errMessage = 'There was an error in userInfo: ' + JSON.stringify(err, null, '');
-      return {
-        'isSuccess': false,
-        'errorMessage': errMessage
-      };
-    }
-  }, function (err) {
-    return {'isSuccess': false,
-      'errorMessage': 'A connection to Salesforce could not be established: ' + err};
+        if (records.length === 1) {
+          resolve({
+            isSuccess: true,
+            successReturnValue: records[0]
+          });
+        } else {
+          reject({
+            isSuccess: false,
+            errorMessage: 'Could not find a user with FederationIdentifier matching ' + employeeId + ' (' + records.length + ' records)'
+          });
+        }
+      }).catch(function(err) {
+        reject({
+          isSuccess: false,
+          errorMessage: 'Error retrieving user info: ' + err
+        });
+      });
+    }).catch(function(err) {
+      reject({
+        isSuccess: false,
+        errorMessage: connErrorMessage + err
+      });
+    });
   });
 };
 
