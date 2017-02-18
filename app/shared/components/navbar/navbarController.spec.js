@@ -138,4 +138,19 @@ describe('Unit: list controller', function() {
     });
   });
 
+  describe('[nb.markSeen]', function() {
+    it('should mark notifications as seen', function() {
+      spyOn(notificationsService, 'markNotifications').and.callFake(function() {
+        return {
+          then: function(callback) { return callback({}); }
+        };
+      });
+      var notifications = [{status: 'UNSEEN', id: '23093029'}];
+      ctrl.notificationHelper = {};
+      ctrl.markSeen(notifications);
+      expect(notificationsService.markNotifications).toHaveBeenCalled;
+      expect(ctrl.notificationHelper.showBadge).toEqual(false);
+      expect(ctrl.notificationHelper.unseenNotifications).toEqual(0);
+    });
+  });
 });
