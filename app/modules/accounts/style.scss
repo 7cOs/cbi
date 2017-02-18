@@ -132,6 +132,21 @@
         }
       }
     }
+
+    md-progress-circular {
+      margin-top: 20px;
+    }
+  }
+
+  md-progress-circular {
+    display: block;
+    float: left;
+    margin-left: 10px;
+    margin-top: 10px;
+
+    path {
+      stroke: $blue;
+    }
   }
 }
 
