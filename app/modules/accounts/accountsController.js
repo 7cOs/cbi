@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports = /*  @ngInject */
-  function accountsController($rootScope, $scope, $state, $log, $q, $window, $filter, $timeout, $analytics, myperformanceService, chipsService, filtersService, notesService, userService) {
+  function accountsController($rootScope, $scope, $state, $log, $q, $window, $filter, $timeout, $analytics, myperformanceService, chipsService, filtersService, notesService, userService, searchService) {
 
     // ****************
     // CONTROLLER SETUP
@@ -57,6 +57,7 @@ module.exports = /*  @ngInject */
     vm.idSelected = null;
     vm.loadingBrandSnapshot = true;
     vm.loadingTopBottom = true;
+    vm.loadingUnsoldStore = false;
     vm.marketStoresView = false;
     vm.marketIdSelected = false;
     vm.overviewOpen = false;
@@ -881,10 +882,23 @@ module.exports = /*  @ngInject */
           getDataForTopBottomLevel(vm.currentTopBottomObj, function() {
             // if initializing to stores level, use data in response to set filter model, etc
             if (vm.currentTopBottomAcctType.name === vm.filtersService.accountFilters.accountTypes[3].name) {
-              setTopBottomFilterModel('stores', vm.topBottomData.stores.performanceData[0]);
-              setChainDropdownAndPlaceHolder('stores', vm.topBottomData.stores.performanceData[0]);
-              notesService.model.tdlinx = vm.topBottomData.stores.performanceData[0].unversionedStoreCode;
-              setUpdatedFilters();
+
+              // if unsold store, there will be no performance data, so search for store and set filter directly
+              if (!vm.topBottomData.stores.performanceData || vm.topBottomData.stores.performanceData.length === 0) {
+                vm.loadingUnsoldStore = true;
+                searchService.getStores(vm.currentTopBottomFilters.stores.id).then(function(data) {
+                  if (data && data.length > 0) {
+                    setFilter(data[0], 'store');
+                  }
+                }).finally(function() {
+                  vm.loadingUnsoldStore = false;
+                });
+              } else {
+                setTopBottomFilterModel('stores', vm.topBottomData.stores.performanceData[0]);
+                setChainDropdownAndPlaceHolder('stores', vm.topBottomData.stores.performanceData[0]);
+                notesService.model.tdlinx = vm.topBottomData.stores.performanceData[0].unversionedStoreCode;
+                setUpdatedFilters();
+              }
             }
           });
 
@@ -1240,21 +1254,35 @@ module.exports = /*  @ngInject */
 
     function getStoreAddress() {
       var addressWithStoreNumber = '',
-        fullAddress = '';
+        fullAddress = '',
+        cityState =  '';
+
       if (vm.currentTopBottomFilters.stores.storeNumber && vm.currentTopBottomFilters.stores.storeNumber !== 'UNKNOWN') {
         addressWithStoreNumber += '#' + vm.currentTopBottomFilters.stores.storeNumber;
       }
       if (vm.currentTopBottomFilters.stores.address) {
-        fullAddress += vm.currentTopBottomFilters.stores.address;
+        fullAddress += vm.currentTopBottomFilters.stores.address.trim();
       }
+
       if (vm.currentTopBottomFilters.stores.city) {
-        fullAddress += ', ' + vm.currentTopBottomFilters.stores.city;
+        cityState += vm.currentTopBottomFilters.stores.city;
       }
       if (vm.currentTopBottomFilters.stores.state) {
-        fullAddress += ', ' + vm.currentTopBottomFilters.stores.state;
+        cityState += ', ' + vm.currentTopBottomFilters.stores.state;
       }
-      if (vm.currentTopBottomFilters.stores.zipCode) {
-        fullAddress += ' ' + vm.currentTopBottomFilters.stores.zipCode;
+
+      // if address already contains city and state, don't append city, state, zip
+      // (search result store address contains full address already)
+      if (cityState !== '' && vm.currentTopBottomFilters.stores.address && vm.currentTopBottomFilters.stores.address.indexOf(cityState) < 0) {
+        if (vm.currentTopBottomFilters.stores.city) {
+          fullAddress += ', ' + vm.currentTopBottomFilters.stores.city;
+        }
+        if (vm.currentTopBottomFilters.stores.state) {
+          fullAddress += ', ' + vm.currentTopBottomFilters.stores.state;
+        }
+        if (vm.currentTopBottomFilters.stores.zipCode) {
+          fullAddress += ' ' + vm.currentTopBottomFilters.stores.zipCode;
+        }
       }
 
       if (fullAddress !== '') {
