@@ -1,9 +1,8 @@
 'use strict';
 
+const sfdc = require('../controllers/sfdc');
+
 module.exports = function(app) {
-
-  var sfdc = require('../controllers/sfdc');
-
   app.route('/sfdc/*')
     .all(function(req, res, next) {
       if (req.isAuthenticated()) {
@@ -37,20 +36,11 @@ module.exports = function(app) {
     sfdc['updateNote'](app, req, res);
   });
 
-  app.get('/sfdc/searchAccounts', function (req, res) {
-    sfdc['searchAccounts'](app, req, res);
-  });
-
   app.get('/sfdc/getAttachment', function(req, res) {
     sfdc['getAttachmentData'](app, req, res);
   });
 
   app.post('/sfdc/createAttachment', require('connect-multiparty')(), function(req, res) {
     sfdc['createAttachment'](app, req, res);
-  });
-
-  app.get('/sfdc/undeleteNote', function (req, res) {
-    res.send('<h1>undeleteNote is not functional yet</h1>');
-    //     sfdc['unDeleteNote'](app, req, res);
   });
 };

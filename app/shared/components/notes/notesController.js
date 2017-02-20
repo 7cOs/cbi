@@ -12,6 +12,7 @@ module.exports = /*  @ngInject */
 
     // Defaults
     vm.loading = true;
+    vm.notesError = false;
     vm.editMode = false;
     vm.numLimit = 150;
     vm.creatingNote = false;
@@ -39,7 +40,6 @@ module.exports = /*  @ngInject */
     vm.deleteNote = deleteNote;
     vm.toggleDelete = toggleDelete;
     vm.cancelNewNote = cancelNewNote;
-    vm.updateNote = updateNote;
     vm.showImage = showImage;
     vm.isAuthor = isAuthor;
     vm.mailNote = mailNote;
@@ -134,6 +134,8 @@ module.exports = /*  @ngInject */
         if (vm.newNoteFiles) {
           uploadFiles(vm.newNoteFiles, data.id);
         }
+      }).catch(function() {
+        vm.notesError = true;
       });
     }
 
@@ -147,13 +149,17 @@ module.exports = /*  @ngInject */
       vm.loading = true;
       note.date = moment.utc().format();
 
-      notesService.updateNote(note).then(function(success) {
+      notesService.updateNote(note).then(function(updateSuccess) {
         notesService.accountNotes().then(function(success) {
           vm.notes = success;
           jumpToNotesTop();
           setNoteAuthor();
           vm.loading = false;
+        }).catch(function() {
+          vm.notesError = true;
         });
+      }).catch(function() {
+        vm.notesError = true;
       });
     }
 
@@ -168,13 +174,9 @@ module.exports = /*  @ngInject */
        vm.notes.splice(index, 1);
        setNoteAuthor();
        vm.loading = false;
+      }).catch(function() {
+        vm.notesError = true;
       });
-    }
-
-    function updateNote (note) {
-      // TODO real functionality, update to DB
-      // add a cancel build out a temp buffer
-      note.editMode = false;
     }
 
     function cancelNewNote(note) {
@@ -202,7 +204,7 @@ module.exports = /*  @ngInject */
         return;
       }
 
-      vm.errorMsg = '';
+      vm.uploadErrorMsg = '';
       vm.fileUploading = true;
       vm.files = files;
       if (files && files.length) {
@@ -222,16 +224,16 @@ module.exports = /*  @ngInject */
               vm.notes = success;
               vm.loading = false;
               setNoteAuthor();
+            }).catch(function() {
+              vm.notesError = true;
             });
           });
-        }, function(response) {
-          if (response.status > 0) {
-            vm.errorMsg = response.status + ': ' + response.data;
-            vm.fileUploading = false;
-          }
+        }).catch(function() {
+          vm.fileUploading = false;
+          vm.notesError = true;
         });
       } else {
-        vm.errorMsg = 'Please ensure you\'re using a supported file type (.doc, .ppt, .xls, .gif, .jpg, .png, .pdf) and your total attachments are under 10MB.';
+        vm.uploadErrorMsg = 'Please ensure you\'re using a supported file type (.doc, .ppt, .xls, .gif, .jpg, .png, .pdf) and your total attachments are under 10MB.';
         vm.fileUploading = false;
       }
 
@@ -239,12 +241,16 @@ module.exports = /*  @ngInject */
 
     function deleteAttachment(data) {
       vm.loading = true;
-      notesService.deleteAttach(data.attachId).then(function(success) {
+      notesService.deleteAttach(data.attachId).then(function(deleteSuccess) {
         notesService.accountNotes().then(function(success) {
           vm.notes = success;
           vm.loading = false;
           setNoteAuthor();
+        }).catch(function() {
+          vm.notesError = true;
         });
+      }).catch(function() {
+        vm.notesError = true;
       });
     }
 
@@ -355,6 +361,7 @@ module.exports = /*  @ngInject */
     $scope.$on('notes:opened', function(event, data, account) {
       var accountElement = '#' + account.noteId;
 
+      vm.notesError = false;
       vm.loading = true;
 
       account.id.length > 1 ? notesService.model.accountId = account.id[1] : notesService.model.accountId = account.id[0];
@@ -376,6 +383,8 @@ module.exports = /*  @ngInject */
             }
           });
         }
+      }).catch(function() {
+        vm.notesError = true;
       });
 
       $scope.notesOpen = data;

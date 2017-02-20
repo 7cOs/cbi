@@ -619,13 +619,22 @@ module.exports = /*  @ngInject */
         filtersService.model.account = '';
         chipsService.removeChip('chain');
         vm.showXStore = true;
+        if (result.id && result.id.constructor === Array) {
+          notesService.model.tdlinx = result.id.length > 1 ? result.id[1] : result.id[0];
+        } else {
+          notesService.model.tdlinx = result.id;
+        }
       } else if (filterModelProperty === 'account' || filterModelProperty === 'subaccount') {
         filtersService.model.selected.store = [];
         filtersService.model.store = '';
         chipsService.removeChip('store');
         vm.showXChain = true;
+        notesService.model.accountId = result.ids && result.ids.length > 0 ? result.ids[0] : result.id;
+        notesService.model.tdlinx = undefined;
       } else if (filterModelProperty === 'distributor') {
         vm.showXDistributor = true;
+        notesService.model.accountId = result.id;
+        notesService.model.tdlinx = undefined;
       }
 
       for (i = 0; i < chipsService.model.length; i++) {
