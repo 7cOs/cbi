@@ -1,5 +1,5 @@
 describe('Unit: list controller', function() {
-  var scope, $rootScope, ctrl, $q, $httpBackend, $state, $mdMenu, notificationsService, opportunitiesService;
+  var scope, $rootScope, ctrl, $q, $httpBackend, $state, $mdMenu, $mdDialog, notificationsService, opportunitiesService, targetListService;
 
   beforeEach(function() {
     angular.mock.module('ui.router');
@@ -9,7 +9,7 @@ describe('Unit: list controller', function() {
     angular.mock.module('cf.common.components.navbar');
     angular.mock.module('angularMoment');
 
-    inject(function(_$rootScope_, $controller, _$q_, _$httpBackend_, _$window_, _$state_, _$mdMenu_, _notificationsService_, _opportunitiesService_, _userService_, _versionService_) {
+    inject(function(_$rootScope_, $controller, _$q_, _$httpBackend_, _$window_, _$state_, _$mdMenu_, _$mdDialog_, _notificationsService_, _opportunitiesService_, _userService_, _versionService_, _targetListService_) {
       $rootScope = _$rootScope_;
       scope = $rootScope.$new();
       scope.analytics = {};
@@ -22,8 +22,10 @@ describe('Unit: list controller', function() {
       $httpBackend = _$httpBackend_;
       $state = _$state_;
       $mdMenu = _$mdMenu_;
+      $mdDialog = _$mdDialog_;
       notificationsService = _notificationsService_;
       opportunitiesService = _opportunitiesService_;
+      targetListService = _targetListService_;
     });
   });
 
@@ -151,6 +153,101 @@ describe('Unit: list controller', function() {
       expect(notificationsService.markNotifications).toHaveBeenCalled;
       expect(ctrl.notificationHelper.showBadge).toEqual(false);
       expect(ctrl.notificationHelper.unseenNotifications).toEqual(0);
+    });
+  });
+  describe('[nb.modalAddOpportunityForm]', function() {
+    it('should open the dialog', function() {
+      spyOn($mdDialog, 'show').and.callThrough();
+      ctrl.modalAddOpportunityForm();
+      expect($mdDialog.show).toHaveBeenCalled();
+    });
+    it('should copy the template', function() {
+      ctrl.modalAddOpportunityForm();
+      expect(ctrl.cacheInputs).toEqual(false);
+      expect(ctrl.newOpportunity).toEqual(JSON.parse('{"properties":{"product":{"type":"sku"},"distributionType":{"type":"new"}}}'));
+    });
+
+    it('should set cacheInputs to true', function() {
+      ctrl.modalAddOpportunityForm(true);
+      expect(ctrl.cacheInputs).toEqual(true);
+    });
+  });
+  describe('[nb.modalCustomOpportunityError]', function() {
+    it('should open the dialog', function() {
+      spyOn($mdDialog, 'show').and.callThrough();
+      ctrl.modalCustomOpportunityError({status: 400, data: [{description: 'OPP107'}]});
+      expect($mdDialog.show).toHaveBeenCalled();
+    });
+
+    it('should handle non-400 errors', function() {
+      ctrl.modalCustomOpportunityError({status: 500, data: [{description: 'OPP107'}]});
+      expect(ctrl.generalError).toEqual(true);
+    });
+    it('should handle the errors', function() {
+      ctrl.duplicateOpportunity = {properties: {distributionType: {}}};
+      ctrl.modalCustomOpportunityError({ status: 400, data: [{description: 'OPP107'}, {description: 'OPP108'}] });
+      expect(ctrl.duplicateOpportunity.properties.distributionType.type).toEqual('New Distribution');
+      expect(ctrl.duplicateError).toEqual(false);
+      expect(ctrl.dismissedError).toEqual(true);
+    });
+    it('should handle the errors for less than two', function() {
+      ctrl.duplicateOpportunity = {properties: {distributionType: {}}};
+      ctrl.modalCustomOpportunityError({ status: 400, data: [{objectIdentifier: 'cheese', description: 'OPP101'}] });
+      expect(ctrl.duplicateError).toEqual(true);
+      expect(ctrl.duplicateOpportunityId).toEqual('cheese');
+    });
+  });
+  describe('[nb.addDuplicateOpportunityId]', function() {
+    beforeEach(function() {
+      spyOn(targetListService, 'addTargetListOpportunities').and.callFake(function() {
+        return {
+          then: function(callback) { return callback([0, 1, 2]); }
+        };
+      });
+    });
+    it('should close the dialog', function() {
+      spyOn($mdDialog, 'hide').and.callThrough();
+      ctrl.addDuplicateOpportunityId();
+      expect(ctrl.cachedTargetList).toEqual('');
+      expect(ctrl.cachedTargetList).toEqual('');
+      expect($mdDialog.hide).toHaveBeenCalled();
+    });
+    it('should close the dialog with an ID', function() {
+      spyOn($mdDialog, 'hide').and.callThrough();
+      ctrl.addDuplicateOpportunityId('990');
+      expect(ctrl.cachedTargetList).toEqual('');
+      expect(ctrl.currentOpportunityId).toEqual('');
+      expect($mdDialog.hide).toHaveBeenCalled();
+      expect(targetListService.addTargetListOpportunities).toHaveBeenCalled();
+    });
+  });
+  describe('[nb.showImpact]', function() {
+    it('should return High for H', function() {
+      var response = ctrl.showImpact('H');
+      expect(response).toEqual('High');
+    });
+    it('should return Medium for M', function() {
+      var response = ctrl.showImpact('M');
+      expect(response).toEqual('Medium');
+    });
+    it('should return low for everything else', function() {
+      var response = ctrl.showImpact('R');
+      expect(response).toEqual('Low');
+    });
+  });
+  describe('[nb.getDismissedOpportunity]', function() {
+    beforeEach(function() {
+      spyOn(opportunitiesService, 'getOpportunities').and.callFake(function() {
+        return {
+          then: function(callback) { return callback([{dateUpdated: '05 October 2011 14:48 UTC'}]); }
+        };
+      });
+    });
+    it('should format the date', function() {
+      expect(ctrl.dateUpdated).toBeUndefined;
+      ctrl.getDismissedOpportunity();
+      expect(ctrl.dateUpdated).toEqual('10/5/2011');
+
     });
   });
 });
