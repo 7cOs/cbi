@@ -1,23 +1,27 @@
+# Mac
 .DS_Store
+
+# Various configs and logs
 .nodemonignore
 dump.rdb
 *.log
+
+# Sublime
 *.sublime-project
 *.sublime-workspace
-_build/
-node_modules/
-bower_components/
-server/_gulp/compile/cache/
 
+# Intellij IDEA
+*.iml
+*.ipr
+*.iws
+.idea
 
-typings/
-public/app/
-public/lib/
-public/assets/
-public/**/*.map
-public/css/**/*.css
-public/js/**/*.min.js
-
-coverage/
+# VS Code IDE
 .vscode
 /.project
+
+node_modules/
+coverage/
+typings/
+public/
+server/_gulp/compile/cache/

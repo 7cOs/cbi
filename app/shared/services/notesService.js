@@ -19,7 +19,6 @@ module.exports = /*  @ngInject */
       deleteNote: deleteNote,
       createNote: createNote,
       deleteAttach: deleteAttach,
-      searchAccounts: searchAccounts,
       accountNotes: accountNotes,
       updateNote: updateNote,
       userInfo: userInfo
@@ -65,21 +64,16 @@ module.exports = /*  @ngInject */
         angular.forEach(response.data.successReturnValue, function(arr) {
           var noteAttachments = [];
 
-          // moment(arr.CreatedDate).format();
-
           if (arr.Attachments !== null) {
-
             for (var i = 0; i < arr.Attachments.records.length; i++) {
-              noteAttachments.push(
-                {
-                  fileName: arr.Attachments.records[i].Name,
-                  bodyLength: arr.Attachments.records[i].BodyLength / 1000,
-                  fileSize: filesizeFilter(arr.Attachments.records[i].BodyLength / 1000),
-                  url: arr.Attachments.records[i].attributes.url,
-                  fileType: arr.Attachments.records[i].ContentType,
-                  attachId: arr.Attachments.records[i].Id
-                }
-              );
+              noteAttachments.push({
+                fileName: arr.Attachments.records[i].Name,
+                bodyLength: arr.Attachments.records[i].BodyLength / 1000,
+                fileSize: filesizeFilter(arr.Attachments.records[i].BodyLength / 1000),
+                url: arr.Attachments.records[i].attributes.compassUrl,
+                fileType: arr.Attachments.records[i].ContentType,
+                attachId: arr.Attachments.records[i].Id
+              });
             };
           }
 
@@ -98,26 +92,6 @@ module.exports = /*  @ngInject */
       }
 
       function accountNotesFail(error) {
-        notesPromise.reject(error);
-      }
-
-      return notesPromise.promise;
-    }
-
-    function searchAccounts(noteId) {
-      var notesPromise = $q.defer(),
-          url = model.urlBase + 'note',
-          data = {'read': true};
-
-      $http.get(url, data)
-        .then(searchAccountsSuccess)
-        .catch(searchAccountsFail);
-
-      function searchAccountsSuccess(response) {
-        notesPromise.resolve(response.data);
-      }
-
-      function searchAccountsFail(error) {
         notesPromise.reject(error);
       }
 

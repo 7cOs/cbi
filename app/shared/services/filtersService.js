@@ -257,12 +257,12 @@ module.exports = /*  @ngInject */
       accountBrands: [{
         name: 'Distribution (simple)',
         propertyName: 'distributionsSimple',
-        depletionTableHeaderText: 'Distribution(s)',
+        depletionTableHeaderText: 'Distribution (simple)',
         value: 1
       }, {
         name: 'Distribution (effective)',
         propertyName: 'distributionsEffective',
-        depletionTableHeaderText: 'Distribution(e)',
+        depletionTableHeaderText: 'Distribution (effective)',
         value: 2
       }, {
         name: 'Velocity',

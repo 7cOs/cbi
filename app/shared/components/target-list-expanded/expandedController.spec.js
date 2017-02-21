@@ -1,5 +1,5 @@
 describe('Unit: expanded target list controller', function() {
-  var ctrl, state, scope, mdDialog, httpBackend, provide;
+  var ctrl, state, scope, mdDialog, httpBackend, provide, userService, q;
 
   beforeEach(angular.mock.module(function(_$provide_) {
     provide = _$provide_;
@@ -25,6 +25,8 @@ describe('Unit: expanded target list controller', function() {
       scope = $rootScope.$new();
       mdDialog = _$mdDialog_;
       httpBackend = _$httpBackend_;
+      q = _$q_;
+      userService = _userService_;
 
       ctrl = $controller('expandedController', {$scope: scope, $state: state});
     });
@@ -140,6 +142,100 @@ describe('Unit: expanded target list controller', function() {
       });
     });
 
+    describe('[expanded.selector]', function() {
+      it('should should reset selected and button state', function() {
+        ctrl.selected = ['testing'];
+        ctrl.buttonState = 'testing';
+        expect(ctrl.selected).toEqual(['testing']);
+
+        ctrl.selector('madeUp');
+        expect(ctrl.selected).toEqual([]);
+        expect(ctrl.buttonState).toEqual('madeUp');
+
+      });
+    });
+
+    describe('[expanded.sortBy]', function() {
+      it('should set the sort property to name', function() {
+        ctrl.sortProperty = '';
+        ctrl.listChevron = false;
+        ctrl.collaboratorsChevron = false;
+        ctrl.lastUpdatedChevron = false;
+        ctrl.closedOpportunitiesChevron = false;
+        ctrl.totalOpportunitesChevron = false;
+        ctrl.depletionsChevron = false;
+        expect(ctrl.sortProperty).toEqual('');
+        expect(ctrl.listChevron).toEqual(false);
+        expect(ctrl.collaboratorsChevron).toEqual(false);
+        expect(ctrl.lastUpdatedChevron).toEqual(false);
+        expect(ctrl.closedOpportunitiesChevron).toEqual(false);
+        expect(ctrl.totalOpportunitesChevron).toEqual(false);
+        expect(ctrl.depletionsChevron).toEqual(false);
+
+        ctrl.sortBy('name');
+        expect(ctrl.sortProperty).toEqual('name');
+        expect(ctrl.listChevron).toEqual(true);
+        expect(ctrl.collaboratorsChevron).toEqual(false);
+        expect(ctrl.lastUpdatedChevron).toEqual(false);
+        expect(ctrl.closedOpportunitiesChevron).toEqual(false);
+        expect(ctrl.totalOpportunitesChevron).toEqual(false);
+        expect(ctrl.depletionsChevron).toEqual(false);
+      });
+
+      it('should reverse the current property', function() {
+        ctrl.sortProperty = 'name';
+        ctrl.reverse = false;
+        expect(ctrl.sortProperty).toEqual('name');
+        expect(ctrl.reverse).toEqual(false);
+
+        ctrl.sortBy('name');
+        expect(ctrl.reverse).toEqual(true);
+        expect(ctrl.sortProperty).toEqual('name');
+      });
+    });
+
+    describe('[expanded.toggleAll]', function() {
+      it('should toggle all (remove) for named', function() {
+        ctrl.selected = [0, 1, 2, 3];
+        ctrl.userService.model.targetLists = {ownedNotArchivedTargetLists: [0, 1, 2, 3]};
+        expect(ctrl.selected.length).toEqual(4);
+
+        ctrl.toggleAll('named');
+
+        expect(ctrl.selected.length).toEqual(0);
+
+      });
+
+      it('should toggle all for named where selected length is zero', function() {
+        ctrl.selected = [];
+        ctrl.userService.model.targetLists = {ownedNotArchivedTargetLists: [0]};
+        expect(ctrl.selected.length).toEqual(0);
+
+        ctrl.toggleAll('named');
+
+        expect(ctrl.selected.length).toEqual(1);
+      });
+      it('should toggle all (remove) for archived', function() {
+        ctrl.selected = [0, 1, 2, 3];
+        ctrl.userService.model.targetLists = {archived: [0, 1, 2, 3]};
+        expect(ctrl.selected.length).toEqual(4);
+
+        ctrl.toggleAll('archived');
+
+        expect(ctrl.selected.length).toEqual(0);
+
+      });
+
+      it('should toggle all for archived where selected length is zero', function() {
+        ctrl.selected = [];
+        ctrl.userService.model.targetLists = {archived: [0]};
+        expect(ctrl.selected.length).toEqual(0);
+
+        ctrl.toggleAll('archived');
+
+        expect(ctrl.selected.length).toEqual(1);
+      });
+    });
     describe('[expanded.createTargetList]', function() {
       beforeEach(function() {
         spyOn(mdDialog, 'show').and.callThrough();
@@ -150,6 +246,116 @@ describe('Unit: expanded target list controller', function() {
 
         expect(mdDialog.show).toHaveBeenCalled();
         expect(mdDialog.show.calls.count()).toEqual(1);
+      });
+    });
+
+    describe('[expanded.exists]', function() {
+      var sampleList = [0, 1, 2, 3];
+      it('should return true if the item exists', function() {
+        var existResult = ctrl.exists(0, sampleList);
+        expect(existResult).toEqual(true);
+      });
+
+      it('should return false if the item does not exist', function() {
+        var existResult = ctrl.exists(4, sampleList);
+        expect(existResult).toEqual(false);
+      });
+    });
+    describe('[expanded.ratio]', function() {
+      it('should return the calculated ratio', function() {
+        var ratioResult = ctrl.ratio(15, 15);
+        expect(ratioResult).toEqual(100);
+      });
+    });
+    describe('[expanded.searchOpportunities]', function() {
+      // fill in
+    });
+
+    describe('[expanded.toggle]', function() {
+      it('should add the item to the list', function() {
+        var list = [0, 1, 2];
+        var item = 3;
+        ctrl.toggle(item, list);
+        var listResult = [0, 1, 2, 3];
+        expect(list).toEqual(listResult);
+      });
+      it('should remove the item from the list', function() {
+        var list = [0, 1, 2];
+        var item = 2;
+        ctrl.toggle(item, list);
+        var listResult = [0, 1];
+        expect(list).toEqual(listResult);
+      });
+    });
+    describe('[expanded.isChecked]', function() {
+      it('should return false if targetLists is empty', function() {
+        expect(ctrl.userService.model.targetLists).toEqual(null);
+        var checked = ctrl.isChecked();
+        expect(checked).toEqual(false);
+      });
+
+      it('should return true if targetLists is populated', function() {
+        ctrl.userService.model.targetLists = {};
+        ctrl.userService.model.targetLists.ownedNotArchivedTargetLists = [0, 1, 2];
+        ctrl.selected = [0, 1, 2];
+
+        var checked = ctrl.isChecked();
+        expect(checked).toEqual(true);
+      });
+    });
+    describe('[expanded.isCheckedArchived]', function() {
+      it('should return false if targetLists is not populated', function() {
+        expect(ctrl.userService.model.targetLists).toEqual(null);
+        var archived = ctrl.isCheckedArchived();
+        expect(archived).toEqual(false);
+      });
+
+      it('should return true if targetLists is populated', function() {
+        ctrl.userService.model.targetLists = {archived: [0, 1]};
+        ctrl.selected = [0, 1];
+        var archived = ctrl.isCheckedArchived();
+        expect(archived).toEqual(true);
+      });
+    });
+
+    describe('[expanded.saveNewList]', function() {
+      it('should return null if character length is greater than fourty', function() {
+        ctrl.newList.name = 'This name is way way too long to be saved';
+        expect(ctrl.newList.name.length).toBeGreaterThan(39);
+        var newList = ctrl.saveNewList();
+        expect(newList).toBe(undefined);
+      });
+
+      it('should ', function(done) {
+        ctrl.newList = {
+        name: 'Standard Name',
+        collaborators: [
+          {
+            'user': {
+              'id': '5648',
+              'employeeId': '1012132',
+              'firstName': 'FRED',
+              'lastName': 'BERRIOS',
+              'email': 'FRED.BERRIOS@CBRANDS.COM'
+            },
+            'permissionLevel': 'author',
+            'lastViewed': null
+          }]
+        };
+        expect(ctrl.newList.name.length).toBeLessThan(40);
+
+        spyOn(userService, 'addTargetList').and.callFake(function() {
+          return {
+            then: function(callback) { return callback({}); }
+          };
+        });
+
+        var newList = ctrl.saveNewList();
+        expect(userService.addTargetList).toHaveBeenCalled();
+        expect(ctrl.buttonDisabled).toEqual(false);
+        expect(newList).toBe(undefined);
+        done();
+
       });
     });
 
@@ -367,5 +573,4 @@ describe('Unit: expanded target list controller', function() {
       });
     });
   });
-
 });
