@@ -598,6 +598,7 @@ module.exports = /*  @ngInject */
         csvItem.storeDepletionsCTDYA = item.store.depletionsCurrentYearToDateYA;
         csvItem.storeDepletionsCTDYAPercent = item.store.depletionsCurrentYearToDateYAPercent;
         csvItem.storeSegmentation = item.store.segmentation;
+        csvItem.opportunityType = opportunityTypeOrSubtype(item);
         csvItem.productName = item.product.name;
         csvItem.itemAuthorization = item.isItemAuthorization;
         csvItem.chainMandate = item.isChainMandate;
