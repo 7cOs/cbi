@@ -247,6 +247,48 @@ describe('Unit: list controller', function() {
       expect(ctrl.dateUpdated).toBeUndefined;
       ctrl.getDismissedOpportunity();
       expect(ctrl.dateUpdated).toEqual('10/5/2011');
+    });
+  });
+  describe('[nb.unDismissOpportunity]', function() {
+    beforeEach(function() {
+      spyOn($mdDialog, 'hide').and.callThrough();
+      spyOn(opportunitiesService, 'deleteOpportunityFeedback').and.callFake(function() {
+        return {
+          then: function(callback) { return callback({}); }
+        };
+      });
+    });
+    it('should close the modal', function() {
+      ctrl.unDismissOpportunity('23123');
+      expect($mdDialog.hide).toHaveBeenCalled();
+    });
+  });
+  describe('[nb.addOpportunity]', function() {
+    beforeEach(function() {
+      spyOn(opportunitiesService, 'deleteOpportunityFeedback').and.callFake(function() {
+        return {
+          then: function(callback) { return callback({}); }
+        };
+      });
+    });
+    it('should return false if the form is invalid', function() {
+      var targetLists = JSON.parse('[{"id":"4b41c525-7bc7-4e3e-9b93-6a717b3f3c5c","name":"Paul Test 1234","description":"","opportunities":0,"archived":false,"deleted":false,"opportunitiesSummary":{"storesCount":0,"opportunitiesCount":0,"closedOpportunitiesCount":0,"totalClosedDepletions":0},"createdAt":"2017-02-20 17:23:54.599","updatedAt":"2017-02-20 17:23:55.098","permissionLevel":"author","dateOpportunitiesUpdated":"2017-02-20 17:23:54.599","collaboratorPermissionLevel":"collaborate","lastViewed":null,"collaborators":[{"user":{"id":"5648","employeeId":"1012132","firstName":"FRED","lastName":"BERRIOS","email":"FRED.BERRIOS@CBRANDS.COM"},"permissionLevel":"author","lastViewed":"2017-02-21T17:21:20.079"}],"targetListAuthor":"current user","$$hashKey":"object:75"}]');
+      ctrl.userService.model.targetLists = {owned: targetLists};
+      ctrl.addOpportunityForm = {$invalid: true};
+      var opportunity = ctrl.addOpportunity({properties: {targetList: '4b41c525-7bc7-4e3e-9b93-6a717b3f3c5c'}});
+      expect(opportunity).toEqual(false);
+    });
+    it('should save the opportunity', function() {
+      spyOn($mdDialog, 'hide').and.callThrough();
+      var targetLists = JSON.parse('[{"id":"4b41c525-7bc7-4e3e-9b93-6a717b3f3c5c","name":"Paul Test 1234","description":"","opportunities":0,"archived":false,"deleted":false,"opportunitiesSummary":{"storesCount":0,"opportunitiesCount":0,"closedOpportunitiesCount":0,"totalClosedDepletions":0},"createdAt":"2017-02-20 17:23:54.599","updatedAt":"2017-02-20 17:23:55.098","permissionLevel":"author","dateOpportunitiesUpdated":"2017-02-20 17:23:54.599","collaboratorPermissionLevel":"collaborate","lastViewed":null,"collaborators":[{"user":{"id":"5648","employeeId":"1012132","firstName":"FRED","lastName":"BERRIOS","email":"FRED.BERRIOS@CBRANDS.COM"},"permissionLevel":"author","lastViewed":"2017-02-21T17:21:20.079"}],"targetListAuthor":"current user","$$hashKey":"object:75"}]');
+      ctrl.userService.model.targetLists = {owned: targetLists};
+      ctrl.addOpportunityForm = {$invalid: false};
+      ctrl.chosenStoreObject = {id: '23423'};
+      ctrl.chosenProductObject = {properties: {store: {id: '32434'}, product: {type: 'testing'}, distribution: {type: ''}}};
+      var opportunity = ctrl.addOpportunity({id: '4b41c525-7bc7-4e3e-9b93-6a717b3f3c5c', properties: {impact: {enum: ''}, rationale: {other: ''}, store: {id: '234234'}, distributionType: {type: ''}, product: {type: 'test'}, targetList: '4b41c525-7bc7-4e3e-9b93-6a717b3f3c5c'}});
+      expect($mdDialog.hide).toHaveBeenCalled();
+      expect(opportunity).toEqual(undefined);
+      expect(ctrl.cachedOpportunity).toEqual(JSON.parse('{"properties":{"product":{"type":"sku"},"distributionType":{"type":"new"}}}'));
 
     });
   });

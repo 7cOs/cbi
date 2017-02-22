@@ -297,6 +297,7 @@ module.exports = /*  @ngInject */
     }
 
     function saveOpportunity(opportunity) {
+      console.log(JSON.stringify(opportunity));
       if (vm.addOpportunityForm.$invalid) {
         return false;
       }
