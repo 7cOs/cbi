@@ -296,8 +296,8 @@ module.exports = /*  @ngInject */
       vm.cachedOpportunity = angular.copy(vm.newOpportunity);
     }
 
+    // this is a private function
     function saveOpportunity(opportunity) {
-      console.log(JSON.stringify(opportunity));
       if (vm.addOpportunityForm.$invalid) {
         return false;
       }

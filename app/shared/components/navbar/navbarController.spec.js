@@ -1,5 +1,5 @@
 describe('Unit: list controller', function() {
-  var scope, $rootScope, ctrl, $q, $httpBackend, $state, $mdMenu, $mdDialog, notificationsService, opportunitiesService, targetListService;
+  var scope, $rootScope, ctrl, $q, $httpBackend, $state, $mdMenu, $mdSelect, $mdDialog, notificationsService, opportunitiesService, targetListService;
 
   beforeEach(function() {
     angular.mock.module('ui.router');
@@ -9,7 +9,7 @@ describe('Unit: list controller', function() {
     angular.mock.module('cf.common.components.navbar');
     angular.mock.module('angularMoment');
 
-    inject(function(_$rootScope_, $controller, _$q_, _$httpBackend_, _$window_, _$state_, _$mdMenu_, _$mdDialog_, _notificationsService_, _opportunitiesService_, _userService_, _versionService_, _targetListService_) {
+    inject(function(_$rootScope_, $controller, _$q_, _$httpBackend_, _$window_, _$state_, _$mdMenu_, _$mdSelect_, _$mdDialog_, _notificationsService_, _opportunitiesService_, _userService_, _versionService_, _targetListService_) {
       $rootScope = _$rootScope_;
       scope = $rootScope.$new();
       scope.analytics = {};
@@ -22,6 +22,7 @@ describe('Unit: list controller', function() {
       $httpBackend = _$httpBackend_;
       $state = _$state_;
       $mdMenu = _$mdMenu_;
+      $mdSelect = _$mdSelect_;
       $mdDialog = _$mdDialog_;
       notificationsService = _notificationsService_;
       opportunitiesService = _opportunitiesService_;
@@ -290,6 +291,15 @@ describe('Unit: list controller', function() {
       expect(opportunity).toEqual(undefined);
       expect(ctrl.cachedOpportunity).toEqual(JSON.parse('{"properties":{"product":{"type":"sku"},"distributionType":{"type":"new"}}}'));
 
+    });
+  });
+  describe('[nb.closeMenus]', function() {
+    it('should save the opportunity', function() {
+      spyOn($mdMenu, 'hide').and.callThrough();
+      spyOn($mdSelect, 'hide').and.callThrough();
+      ctrl.closeMenus({relatedTarget: null});
+      expect($mdMenu.hide).toHaveBeenCalled();
+      expect($mdSelect.hide).toHaveBeenCalled();
     });
   });
 });
