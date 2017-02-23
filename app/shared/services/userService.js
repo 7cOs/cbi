@@ -35,6 +35,7 @@ module.exports = /*  @ngInject */
     return service;
 
     /**
+     * This appears to be an obsolete function
      * @name getUsers
      * @desc get data for all users or one user
      * @params {String} id - id of a user [Optional]
@@ -68,6 +69,7 @@ module.exports = /*  @ngInject */
     }
 
     /**
+     * This appears to be an obsolete function
      * @name getHiddenOpportunities
      * @desc get hidden opportunities for a user
      * @params {String} id - id of a user [required]
@@ -97,6 +99,7 @@ module.exports = /*  @ngInject */
     }
 
     /**
+     * This appears to be an obsolete function
      * @name hideOpportunity
      * @desc get hidden opportunities for a user
      * @params {String} id - id of a user [required]
@@ -136,6 +139,7 @@ module.exports = /*  @ngInject */
     }
 
     /**
+     * This appears to be an obsolete function
      * @name deleteHiddenOpportunity
      * @desc get hidden opportunities for a user
      * @params {String} id - id of a user [required]
@@ -191,7 +195,6 @@ module.exports = /*  @ngInject */
         .catch(getNotificationsFail);
 
       function getNotificationsSuccess(response) {
-        console.log('[userService.getNotifications] response: ', response);
         notificationsPromise.resolve(response.data);
       }
 
@@ -226,7 +229,6 @@ module.exports = /*  @ngInject */
         .catch(createNotificationFail);
 
       function createNotificationSuccess(response) {
-        console.log('[userService.createNotification] response: ', response);
         notificationsPromise.resolve(response.data);
       }
 
@@ -253,7 +255,6 @@ module.exports = /*  @ngInject */
         .catch(getOpportunityFiltersFail);
 
       function getOpportunityFiltersSuccess(response) {
-        console.log('[userService.getOpportunityFilters] response: ', response);
         opportunityFilterPromise.resolve(response.data);
       }
 
@@ -409,6 +410,8 @@ module.exports = /*  @ngInject */
       var planEffectiveVal = Number(measure.planEffective);
       var temp = null;
 
+      // this is suspicious that effective & simple are set to simple
+      // leaving as is since the code has gone through data validation
       var distirbutionSimpleVal = Number(measure.distributionsSimple);
       var distirbutionEffectiveVal = Number(measure.distributionsSimple);
       if (isValidValues(planSimpleVal) && isValidValues(distirbutionSimpleVal)) {
@@ -683,7 +686,6 @@ module.exports = /*  @ngInject */
         .catch(sendOppFail);
 
       function sendOppSuccess(response) {
-        console.log('[userService.sendOpportunity] response: ', response);
         oPromise.resolve(response.data);
       }
       function sendOppFail(error) {
