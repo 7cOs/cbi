@@ -253,11 +253,11 @@ module.exports = /*  @ngInject */
         targetListService.updateTargetList(targetListService.model.currentList.id, payload).then(function (response) {
           targetListService.model.currentList = response;
 
-          if (vm.pendingShares.length > 0) {
+          if (vm.pendingShares.length) {
             addCollaborators();
           }
 
-          if (vm.pendingRemovals.length > 0) {
+          if (vm.pendingRemovals.length) {
             vm.removeCollaborator(vm.pendingRemovals);
           }
 
@@ -266,7 +266,7 @@ module.exports = /*  @ngInject */
         });
       } else {
         // if not the owner, don't update list first (it will fail) - just add collaborators if necessary
-        if (vm.pendingShares.length > 0) {
+        if (vm.pendingShares.length) {
           addCollaborators();
         }
 
