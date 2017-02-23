@@ -430,6 +430,7 @@ module.exports = /*  @ngInject */
       });
     }
 
+    // cannot test this because it's causing phantom.js to reliably crash
     function sendFeedback() {
       var newline = '%0D%0A',
         emailString = 'mailto:compassbeersfeedback@cbrands.com';

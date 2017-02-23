@@ -105,16 +105,20 @@ describe('Unit: list controller', function() {
     });
 
     it('should trigger notificationsService', function() {
-      var deferredMark = $q.defer(),
-          deferredState = $q.defer();
+      var deferredState = $q.defer();
       spyOn(notificationsService, 'markNotifications').and.callFake(function() {
-        return deferredMark.promise;
+        return {
+          then: function(callback) { return callback({}); }
+        };
       });
       spyOn($state, 'go').and.callFake(function() {
         return deferredState.promise;
       });
+      ctrl.notificationHelper = {};
       ctrl.markRead(notifications[0]);
       expect(notificationsService.markNotifications).toHaveBeenCalled();
+      expect(ctrl.notificationHelper.showBadge).toEqual(false);
+      expect(ctrl.notificationHelper.unseenNotifications).toEqual(0);
     });
 
     it('should navigate to the appropriate page based on notification\'s objectType', function() {
@@ -284,12 +288,19 @@ describe('Unit: list controller', function() {
     });
     it('should save the opportunity', function() {
       spyOn($mdDialog, 'hide').and.callThrough();
+      spyOn(opportunitiesService, 'createOpportunity').and.callFake(function() {
+        return {
+          then: function(callback) { return callback({product: {brand: 'corona'}}); }
+        };
+      });
+
       var targetLists = JSON.parse('[{"id":"4b41c525-7bc7-4e3e-9b93-6a717b3f3c5c","name":"Paul Test 1234","description":"","opportunities":0,"archived":false,"deleted":false,"opportunitiesSummary":{"storesCount":0,"opportunitiesCount":0,"closedOpportunitiesCount":0,"totalClosedDepletions":0},"createdAt":"2017-02-20 17:23:54.599","updatedAt":"2017-02-20 17:23:55.098","permissionLevel":"author","dateOpportunitiesUpdated":"2017-02-20 17:23:54.599","collaboratorPermissionLevel":"collaborate","lastViewed":null,"collaborators":[{"user":{"id":"5648","employeeId":"1012132","firstName":"FRED","lastName":"BERRIOS","email":"FRED.BERRIOS@CBRANDS.COM"},"permissionLevel":"author","lastViewed":"2017-02-21T17:21:20.079"}],"targetListAuthor":"current user","$$hashKey":"object:75"}]');
       ctrl.userService.model.targetLists = {owned: targetLists};
       ctrl.addOpportunityForm = {$invalid: false};
       ctrl.chosenStoreObject = {id: '23423'};
       ctrl.chosenProductObject = {properties: {store: {id: '32434'}, product: {type: 'testing'}, distribution: {type: ''}}};
       var opportunity = ctrl.addOpportunity({id: '4b41c525-7bc7-4e3e-9b93-6a717b3f3c5c', properties: {impact: {enum: ''}, rationale: {other: ''}, store: {id: '234234'}, distributionType: {type: ''}, product: {type: 'test'}, targetList: '4b41c525-7bc7-4e3e-9b93-6a717b3f3c5c'}});
+
       expect($mdDialog.hide).toHaveBeenCalled();
       expect(opportunity).toEqual(undefined);
       expect(ctrl.cachedOpportunity).toEqual(JSON.parse('{"properties":{"product":{"type":"sku"},"distributionType":{"type":"new"}}}'));
