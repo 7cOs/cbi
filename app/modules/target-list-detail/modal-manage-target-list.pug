@@ -45,7 +45,7 @@ div.modal.target-list-modal
     div(ng-hide="tld.targetListService.model.currentList.permissionLevel === 'collaborate' || tld.closeButton").modal-input
       label(ng-if="tld.targetListService.model.currentList.permissionLevel === 'author'") Add Collaborators
       label(ng-if="tld.targetListService.model.currentList.permissionLevel !== 'author'") Add Recipient
-      inline-search(type="user" placeholder="Enter names or CBI Email addresses" chosen-result="tld.collaboratorName" callback="tld.addCollaboratorClick(result)")
+      inline-search(type="user" placeholder="Enter names or CBI Email addresses" variety="manage-collaborators" chosen-result="tld.collaboratorName" callback="tld.addCollaboratorClick(result)")
     div(ng-if="tld.saveButton")
       button(ng-disabled="!tld.changed" ng-click="tld.updateList()" analytics-on="click" analytics-event="Save Target List" analytics-category="Target Lists" analytics-label="Manage Target List").btn-action Save
       p.cancel.accent(ng-click="tld.closeModal(true)") X Cancel
