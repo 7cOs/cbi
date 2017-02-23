@@ -52,7 +52,7 @@ div.outer-nav-wrapper
                       div(ng-if="notification.objectType.toUpperCase() === 'STORE'" ng-click="nb.goToNote(notification)")
                         p A new note was added to your account
                         .source {{notification.shortenedObject.store_name | titlecase}}
-                        span(ng-if="notification.shortenedObject.store_number && notification.shortenedObject.store_number.toUpperCase() !== 'UNKNOWN'") \#{{notification.shortenedObject.store_number}}
+                          span(ng-if="notification.shortenedObject.store_number && notification.shortenedObject.store_number.toUpperCase() !== 'UNKNOWN'") &nbsp\#{{notification.shortenedObject.store_number}}
                       div(ng-if="notification.objectType.toUpperCase() === 'DISTRIBUTOR'" ng-click="nb.goToNote(notification)")
                         p A new note was added to your account
                         .source {{notification.shortenedObject.name | titlecase}}
