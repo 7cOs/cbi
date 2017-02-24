@@ -11,7 +11,7 @@ div.modal.create-target-list
       textarea(ng-model="list.newList.description" placeholder="Enter Description").larger-input
     div.modal-input.add-collaborators
       label Add Collaborators (Optional)
-      inline-search(type="user" placeholder="Name or CBI email address" chosen-result="list.chosenResult" callback="list.addCollaborator(result)")
+      inline-search(type="user" placeholder="Name or CBI email address" variety="manage-collaborators" chosen-result="list.chosenResult" callback="list.addCollaborator(result)")
       div.collaborator-list
         p You <span class="accent">Owner</span><span class="break">&nbsp;</span>
         .collaborator(ng-repeat="collaborator in list.newList.collaborators") {{collaborator.firstName | titlecase}} {{collaborator.lastName | titlecase}} <span class="accent">Collaborator</span><span class="break">&nbsp;</span>
