@@ -50,11 +50,11 @@ div.outer-nav-wrapper
                         p.sku {{notification.shortenedObject.product.name | titlecase}}
                           span  {{notification.shortenedObject.type | formatOpportunitiesType}}
                       div(ng-if="notification.objectType.toUpperCase() === 'STORE'" ng-click="nb.goToNote(notification)")
-                        p A new note was added to your account
+                        p A new note was added to your retailer
                         .source {{notification.shortenedObject.store_name | titlecase}}
                           span(ng-if="notification.shortenedObject.store_number && notification.shortenedObject.store_number.toUpperCase() !== 'UNKNOWN'") &nbsp\#{{notification.shortenedObject.store_number}}
                       div(ng-if="notification.objectType.toUpperCase() === 'DISTRIBUTOR'" ng-click="nb.goToNote(notification)")
-                        p A new note was added to your account
+                        p A new note was added to your distributor
                         .source {{notification.shortenedObject.name | titlecase}}
                     .info
                       label {{notification.dateCreated | timeAgo: 'relative'}}
