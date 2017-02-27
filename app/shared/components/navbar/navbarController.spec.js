@@ -1,5 +1,5 @@
 describe('Unit: list controller', function() {
-  var scope, $rootScope, ctrl, $q, $httpBackend, $state, $mdMenu, notificationsService, opportunitiesService;
+  var scope, $rootScope, ctrl, $q, $httpBackend, $state, $mdMenu, $mdSelect, $mdDialog, notificationsService, opportunitiesService, targetListService, notesService, filtersService, userService;
 
   beforeEach(function() {
     angular.mock.module('ui.router');
@@ -9,7 +9,7 @@ describe('Unit: list controller', function() {
     angular.mock.module('cf.common.components.navbar');
     angular.mock.module('angularMoment');
 
-    inject(function(_$rootScope_, $controller, _$q_, _$httpBackend_, _$window_, _$state_, _$mdMenu_, _notificationsService_, _opportunitiesService_, _userService_, _versionService_) {
+    inject(function(_$rootScope_, $controller, _$q_, _$httpBackend_, _$window_, _$state_, _$mdMenu_, _$mdSelect_, _$mdDialog_, _notificationsService_, _opportunitiesService_, _userService_, _versionService_, _targetListService_, _notesService_, _filtersService_) {
       $rootScope = _$rootScope_;
       scope = $rootScope.$new();
       scope.analytics = {};
@@ -22,8 +22,14 @@ describe('Unit: list controller', function() {
       $httpBackend = _$httpBackend_;
       $state = _$state_;
       $mdMenu = _$mdMenu_;
+      $mdSelect = _$mdSelect_;
+      $mdDialog = _$mdDialog_;
       notificationsService = _notificationsService_;
       opportunitiesService = _opportunitiesService_;
+      targetListService = _targetListService_;
+      notesService = _notesService_;
+      filtersService = _filtersService_;
+      userService = _userService_;
     });
   });
 
@@ -99,16 +105,20 @@ describe('Unit: list controller', function() {
     });
 
     it('should trigger notificationsService', function() {
-      var deferredMark = $q.defer(),
-          deferredState = $q.defer();
+      var deferredState = $q.defer();
       spyOn(notificationsService, 'markNotifications').and.callFake(function() {
-        return deferredMark.promise;
+        return {
+          then: function(callback) { return callback({}); }
+        };
       });
       spyOn($state, 'go').and.callFake(function() {
         return deferredState.promise;
       });
+      ctrl.notificationHelper = {};
       ctrl.markRead(notifications[0]);
       expect(notificationsService.markNotifications).toHaveBeenCalled();
+      expect(ctrl.notificationHelper.showBadge).toEqual(false);
+      expect(ctrl.notificationHelper.unseenNotifications).toEqual(0);
     });
 
     it('should navigate to the appropriate page based on notification\'s objectType', function() {
@@ -138,4 +148,212 @@ describe('Unit: list controller', function() {
     });
   });
 
+  describe('[nb.markSeen]', function() {
+    it('should mark notifications as seen', function() {
+      spyOn(notificationsService, 'markNotifications').and.callFake(function() {
+        return {
+          then: function(callback) { return callback({}); }
+        };
+      });
+      var notifications = [{status: 'UNSEEN', id: '23093029'}];
+      ctrl.notificationHelper = {};
+      ctrl.markSeen(notifications);
+      expect(notificationsService.markNotifications).toHaveBeenCalled;
+      expect(ctrl.notificationHelper.showBadge).toEqual(false);
+      expect(ctrl.notificationHelper.unseenNotifications).toEqual(0);
+    });
+  });
+  describe('[nb.modalAddOpportunityForm]', function() {
+    it('should open the dialog', function() {
+      spyOn($mdDialog, 'show').and.callThrough();
+      ctrl.modalAddOpportunityForm();
+      expect($mdDialog.show).toHaveBeenCalled();
+    });
+    it('should copy the template', function() {
+      ctrl.modalAddOpportunityForm();
+      expect(ctrl.cacheInputs).toEqual(false);
+      expect(ctrl.newOpportunity).toEqual(JSON.parse('{"properties":{"product":{"type":"sku"},"distributionType":{"type":"new"}}}'));
+    });
+
+    it('should set cacheInputs to true', function() {
+      ctrl.modalAddOpportunityForm(true);
+      expect(ctrl.cacheInputs).toEqual(true);
+    });
+  });
+  describe('[nb.modalCustomOpportunityError]', function() {
+    it('should open the dialog', function() {
+      spyOn($mdDialog, 'show').and.callThrough();
+      ctrl.modalCustomOpportunityError({status: 400, data: [{description: 'OPP107'}]});
+      expect($mdDialog.show).toHaveBeenCalled();
+    });
+
+    it('should handle non-400 errors', function() {
+      ctrl.modalCustomOpportunityError({status: 500, data: [{description: 'OPP107'}]});
+      expect(ctrl.generalError).toEqual(true);
+    });
+    it('should handle the errors', function() {
+      ctrl.duplicateOpportunity = {properties: {distributionType: {}}};
+      ctrl.modalCustomOpportunityError({ status: 400, data: [{description: 'OPP107'}, {description: 'OPP108'}] });
+      expect(ctrl.duplicateOpportunity.properties.distributionType.type).toEqual('New Distribution');
+      expect(ctrl.duplicateError).toEqual(false);
+      expect(ctrl.dismissedError).toEqual(true);
+    });
+    it('should handle the errors for less than two', function() {
+      ctrl.duplicateOpportunity = {properties: {distributionType: {}}};
+      ctrl.modalCustomOpportunityError({ status: 400, data: [{objectIdentifier: 'cheese', description: 'OPP101'}] });
+      expect(ctrl.duplicateError).toEqual(true);
+      expect(ctrl.duplicateOpportunityId).toEqual('cheese');
+    });
+  });
+  describe('[nb.addDuplicateOpportunityId]', function() {
+    beforeEach(function() {
+      spyOn(targetListService, 'addTargetListOpportunities').and.callFake(function() {
+        return {
+          then: function(callback) { return callback([0, 1, 2]); }
+        };
+      });
+    });
+    it('should close the dialog', function() {
+      spyOn($mdDialog, 'hide').and.callThrough();
+      ctrl.addDuplicateOpportunityId();
+      expect(ctrl.cachedTargetList).toEqual('');
+      expect(ctrl.cachedTargetList).toEqual('');
+      expect($mdDialog.hide).toHaveBeenCalled();
+    });
+    it('should close the dialog with an ID', function() {
+      spyOn($mdDialog, 'hide').and.callThrough();
+      ctrl.addDuplicateOpportunityId('990');
+      expect(ctrl.cachedTargetList).toEqual('');
+      expect(ctrl.currentOpportunityId).toEqual('');
+      expect($mdDialog.hide).toHaveBeenCalled();
+      expect(targetListService.addTargetListOpportunities).toHaveBeenCalled();
+    });
+  });
+  describe('[nb.showImpact]', function() {
+    it('should return High for H', function() {
+      var response = ctrl.showImpact('H');
+      expect(response).toEqual('High');
+    });
+    it('should return Medium for M', function() {
+      var response = ctrl.showImpact('M');
+      expect(response).toEqual('Medium');
+    });
+    it('should return low for everything else', function() {
+      var response = ctrl.showImpact('R');
+      expect(response).toEqual('Low');
+    });
+  });
+  describe('[nb.getDismissedOpportunity]', function() {
+    beforeEach(function() {
+      spyOn(opportunitiesService, 'getOpportunities').and.callFake(function() {
+        return {
+          then: function(callback) { return callback([{dateUpdated: '05 October 2011 14:48 UTC'}]); }
+        };
+      });
+    });
+    it('should format the date', function() {
+      expect(ctrl.dateUpdated).toBeUndefined;
+      ctrl.getDismissedOpportunity();
+      expect(ctrl.dateUpdated).toEqual('10/5/2011');
+    });
+  });
+  describe('[nb.unDismissOpportunity]', function() {
+    beforeEach(function() {
+      spyOn($mdDialog, 'hide').and.callThrough();
+      spyOn(opportunitiesService, 'deleteOpportunityFeedback').and.callFake(function() {
+        return {
+          then: function(callback) { return callback({}); }
+        };
+      });
+    });
+    it('should close the modal', function() {
+      ctrl.unDismissOpportunity('23123');
+      expect($mdDialog.hide).toHaveBeenCalled();
+    });
+  });
+  describe('[nb.addOpportunity]', function() {
+    beforeEach(function() {
+      spyOn(opportunitiesService, 'deleteOpportunityFeedback').and.callFake(function() {
+        return {
+          then: function(callback) { return callback({}); }
+        };
+      });
+    });
+    it('should return false if the form is invalid', function() {
+      var targetLists = JSON.parse('[{"id":"4b41c525-7bc7-4e3e-9b93-6a717b3f3c5c","name":"Paul Test 1234","description":"","opportunities":0,"archived":false,"deleted":false,"opportunitiesSummary":{"storesCount":0,"opportunitiesCount":0,"closedOpportunitiesCount":0,"totalClosedDepletions":0},"createdAt":"2017-02-20 17:23:54.599","updatedAt":"2017-02-20 17:23:55.098","permissionLevel":"author","dateOpportunitiesUpdated":"2017-02-20 17:23:54.599","collaboratorPermissionLevel":"collaborate","lastViewed":null,"collaborators":[{"user":{"id":"5648","employeeId":"1012132","firstName":"FRED","lastName":"BERRIOS","email":"FRED.BERRIOS@CBRANDS.COM"},"permissionLevel":"author","lastViewed":"2017-02-21T17:21:20.079"}],"targetListAuthor":"current user","$$hashKey":"object:75"}]');
+      ctrl.userService.model.targetLists = {owned: targetLists};
+      ctrl.addOpportunityForm = {$invalid: true};
+      var opportunity = ctrl.addOpportunity({properties: {targetList: '4b41c525-7bc7-4e3e-9b93-6a717b3f3c5c'}});
+      expect(opportunity).toEqual(false);
+    });
+    it('should save the opportunity', function() {
+      spyOn($mdDialog, 'hide').and.callThrough();
+      spyOn(opportunitiesService, 'createOpportunity').and.callFake(function() {
+        return {
+          then: function(callback) { return callback({product: {brand: 'corona'}}); }
+        };
+      });
+
+      var targetLists = JSON.parse('[{"id":"4b41c525-7bc7-4e3e-9b93-6a717b3f3c5c","name":"Paul Test 1234","description":"","opportunities":0,"archived":false,"deleted":false,"opportunitiesSummary":{"storesCount":0,"opportunitiesCount":0,"closedOpportunitiesCount":0,"totalClosedDepletions":0},"createdAt":"2017-02-20 17:23:54.599","updatedAt":"2017-02-20 17:23:55.098","permissionLevel":"author","dateOpportunitiesUpdated":"2017-02-20 17:23:54.599","collaboratorPermissionLevel":"collaborate","lastViewed":null,"collaborators":[{"user":{"id":"5648","employeeId":"1012132","firstName":"FRED","lastName":"BERRIOS","email":"FRED.BERRIOS@CBRANDS.COM"},"permissionLevel":"author","lastViewed":"2017-02-21T17:21:20.079"}],"targetListAuthor":"current user","$$hashKey":"object:75"}]');
+      ctrl.userService.model.targetLists = {owned: targetLists};
+      ctrl.addOpportunityForm = {$invalid: false};
+      ctrl.chosenStoreObject = {id: '23423'};
+      ctrl.chosenProductObject = {properties: {store: {id: '32434'}, product: {type: 'testing'}, distribution: {type: ''}}};
+      var opportunity = ctrl.addOpportunity({id: '4b41c525-7bc7-4e3e-9b93-6a717b3f3c5c', properties: {impact: {enum: ''}, rationale: {other: ''}, store: {id: '234234'}, distributionType: {type: ''}, product: {type: 'test'}, targetList: '4b41c525-7bc7-4e3e-9b93-6a717b3f3c5c'}});
+
+      expect($mdDialog.hide).toHaveBeenCalled();
+      expect(opportunity).toEqual(undefined);
+      expect(ctrl.cachedOpportunity).toEqual(JSON.parse('{"properties":{"product":{"type":"sku"},"distributionType":{"type":"new"}}}'));
+
+    });
+  });
+  describe('[nb.closeMenus]', function() {
+    it('should save the opportunity', function() {
+      spyOn($mdMenu, 'hide').and.callThrough();
+      spyOn($mdSelect, 'hide').and.callThrough();
+      ctrl.closeMenus({relatedTarget: null});
+      expect($mdMenu.hide).toHaveBeenCalled();
+      expect($mdSelect.hide).toHaveBeenCalled();
+    });
+  });
+  describe('[nb.addToTargetList]', function() {
+    it('should add to the target list', function() {
+      spyOn(targetListService, 'addTargetListOpportunities').and.callThrough();
+      opportunitiesService.model.opportunities = [{store: {id: '1699829'}, groupedOpportunities: []}, {store: {id: '1231'}, groupedOpportunities: []}];
+      ctrl.addToTargetList('73f2dc7f-2793-4044-9430-ac123afd0ee8', JSON.parse('{"id":"1699829___228-541-100___1487809625733","dateUpdated":"Thu Feb 23 00:27:05 UTC 2017","product":{"id":"228-541-100","name":"CORONA EXTRA 24OZ BT","type":"package","brand":"CORONA EXTRA","brandCode":"228"},"type":"CUSTOM","subType":"ND_001","impact":"H","impactDescription":"HIGH","status":"OPEN","rationale":"Based on account visit / discussion with decision-maker","effectiveDate":"20170223","expirationDate":null,"store":{"id":"1699829","versionedId":"201699829","name":"MANHATTAN PIZZA & WINE BAR","address":"22005 S ELLSWORTH RD, QUEEN CREEK, AZ 851428707","city":"QUEEN CREEK","state":"AZ","segmentation":"C","latitude":33.2485,"longitude":-111.6343,"storeNumber":null,"distributionL90Simple":0,"distributionL90SimpleYA":2,"distributionL90Effective":0,"distributionL90EffectiveYA":2,"velocity":0,"velocityYA":2,"depletionsCurrentYearToDate":0,"depletionsCurrentYearToDateYA":3,"opportunityCount":0,"highImpactOpportunityCount":0,"distributors":["CRESCENT CROWN DIST LLC - AZ (MESA)"],"streetAddress":"22005 S ELLSWORTH RD","zip":"85142","tradeChannel":"51","onPremise":true,"cbbdChain":false},"itemAuthorizationCode":null,"depletionsCurrentYearToDate":0,"depletionsCurrentYearToDateYA":0,"lastDepletionDate":null,"dismissed":false,"itemAuthorizationDesc":null,"featureTypeCode":null,"featureTypeDesc":null,"priorityPackageFlag":null}'));
+      expect(opportunitiesService.model.opportunities[0].groupedOpportunities).toEqual(JSON.parse('[{"id":"1699829___228-541-100___1487809625733","dateUpdated":"Thu Feb 23 00:27:05 UTC 2017","product":{"id":"228-541-100","name":"CORONA EXTRA 24OZ BT","type":"package","brand":"CORONA EXTRA","brandCode":"228"},"type":"CUSTOM","subType":"ND_001","impact":"H","impactDescription":"HIGH","status":"OPEN","rationale":"Based on account visit / discussion with decision-maker","effectiveDate":"20170223","expirationDate":null,"store":{"id":"1699829","versionedId":"201699829","name":"MANHATTAN PIZZA & WINE BAR","address":"22005 S ELLSWORTH RD, QUEEN CREEK, AZ 851428707","city":"QUEEN CREEK","state":"AZ","segmentation":"C","latitude":33.2485,"longitude":-111.6343,"storeNumber":null,"distributionL90Simple":0,"distributionL90SimpleYA":2,"distributionL90Effective":0,"distributionL90EffectiveYA":2,"velocity":0,"velocityYA":2,"depletionsCurrentYearToDate":0,"depletionsCurrentYearToDateYA":3,"opportunityCount":0,"highImpactOpportunityCount":0,"distributors":["CRESCENT CROWN DIST LLC - AZ (MESA)"],"streetAddress":"22005 S ELLSWORTH RD","zip":"85142","tradeChannel":"51","onPremise":true,"cbbdChain":false},"itemAuthorizationCode":null,"depletionsCurrentYearToDate":0,"depletionsCurrentYearToDateYA":0,"lastDepletionDate":null,"dismissed":false,"itemAuthorizationDesc":null,"featureTypeCode":null,"featureTypeDesc":null,"priorityPackageFlag":null,"brands":["corona extra"]}]'));
+      expect(filtersService.model.appliedFilter.pagination.totalStores).toEqual(0);
+      expect(targetListService.addTargetListOpportunities).toHaveBeenCalled();
+    });
+    it('should add to the target list when no store exists', function() {
+      spyOn(targetListService, 'addTargetListOpportunities').and.callThrough();
+      opportunitiesService.model.opportunities = [{store: {id: '324234234'}, groupedOpportunities: []}, {store: {id: '32423423'}, groupedOpportunities: []}];
+      ctrl.addToTargetList('73f2dc7f-2793-4044-9430-ac123afd0ee8', JSON.parse('{"id":"1699829___228-541-100___1487809625733","dateUpdated":"Thu Feb 23 00:27:05 UTC 2017","product":{"id":"228-541-100","name":"CORONA EXTRA 24OZ BT","type":"package","brand":"CORONA EXTRA","brandCode":"228"},"type":"CUSTOM","subType":"ND_001","impact":"H","impactDescription":"HIGH","status":"OPEN","rationale":"Based on account visit / discussion with decision-maker","effectiveDate":"20170223","expirationDate":null,"store":{"id":"1699829","versionedId":"201699829","name":"MANHATTAN PIZZA & WINE BAR","address":"22005 S ELLSWORTH RD, QUEEN CREEK, AZ 851428707","city":"QUEEN CREEK","state":"AZ","segmentation":"C","latitude":33.2485,"longitude":-111.6343,"storeNumber":null,"distributionL90Simple":0,"distributionL90SimpleYA":2,"distributionL90Effective":0,"distributionL90EffectiveYA":2,"velocity":0,"velocityYA":2,"depletionsCurrentYearToDate":0,"depletionsCurrentYearToDateYA":3,"opportunityCount":0,"highImpactOpportunityCount":0,"distributors":["CRESCENT CROWN DIST LLC - AZ (MESA)"],"streetAddress":"22005 S ELLSWORTH RD","zip":"85142","tradeChannel":"51","onPremise":true,"cbbdChain":false},"itemAuthorizationCode":null,"depletionsCurrentYearToDate":0,"depletionsCurrentYearToDateYA":0,"lastDepletionDate":null,"dismissed":false,"itemAuthorizationDesc":null,"featureTypeCode":null,"featureTypeDesc":null,"priorityPackageFlag":null}'));
+      expect(filtersService.model.appliedFilter.pagination.totalStores).toEqual(1);
+      expect(targetListService.addTargetListOpportunities).toHaveBeenCalled();
+    });
+  });
+  describe('[nb.goToNote]', function() {
+    it('should transition states', function() {
+      var deferredState = $q.defer();
+      spyOn($state, 'go').and.callFake(function() {
+        return deferredState.promise;
+      });
+      ctrl.goToNote({name: 'test', shortenedObject: {name: 'test'}});
+      expect($state.go).toHaveBeenCalled();
+      expect(notesService.model.currentStoreName).toEqual('test');
+    });
+  });
+  describe('[nb.getTargetLists]', function() {
+    it('should get target lists', function() {
+      expect(ctrl.targetLists.length).toEqual(0);
+      spyOn(userService, 'getTargetLists').and.callFake(function() {
+        return {
+          then: function(callback) { return callback([{test: 'test'}]); }
+        };
+      });
+      ctrl.getTargetLists();
+      expect(userService.getTargetLists).toHaveBeenCalled();
+    });
+  });
 });
