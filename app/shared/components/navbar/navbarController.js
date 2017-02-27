@@ -296,6 +296,7 @@ module.exports = /*  @ngInject */
       vm.cachedOpportunity = angular.copy(vm.newOpportunity);
     }
 
+    // this is a private function
     function saveOpportunity(opportunity) {
       if (vm.addOpportunityForm.$invalid) {
         return false;
@@ -429,6 +430,7 @@ module.exports = /*  @ngInject */
       });
     }
 
+    // cannot test this because it's causing phantom.js to reliably crash
     function sendFeedback() {
       var newline = '%0D%0A',
         emailString = 'mailto:compassbeersfeedback@cbrands.com';

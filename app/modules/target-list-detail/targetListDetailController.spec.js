@@ -750,73 +750,133 @@ describe('Unit: targetListDetailController', function() {
     });
 
     describe('[tld.updateList]', function() {
-      beforeEach(function() {
-        targetListService.model.currentList.id = 1;
 
-        $httpBackend.expectGET('/api/targetLists/undefined').respond(200);
-        $httpBackend.expectGET('/api/targetLists/undefined/opportunities').respond(200);
+      describe('when the list author is the current user', function() {
+        beforeEach(function() {
+          ctrl.targetListAuthor = 'current user';
+          targetListService.model.currentList.id = 1;
 
-        spyOn(targetListService, 'updateTargetList').and.callFake(function() {
-          return deferred.promise;
+          $httpBackend.expectGET('/api/targetLists/undefined').respond(200);
+          $httpBackend.expectGET('/api/targetLists/undefined/opportunities').respond(200);
+
+          spyOn(targetListService, 'updateTargetList').and.callFake(function() {
+            return deferred.promise;
+          });
+
+          spyOn(ctrl, 'closeModal').and.callFake(function() {
+            return true;
+          });
         });
 
-        spyOn(ctrl, 'closeModal').and.callFake(function() {
-          return true;
+        it('should call the update function in the service', function() {
+          expect(targetListService.updateTargetList).not.toHaveBeenCalled();
+          ctrl.updateList();
+          deferred.resolve();
+          scope.$digest();
+          expect(targetListService.updateTargetList).toHaveBeenCalled();
+        });
+
+        it('should set the current list in the model to equal the api response data from the updateTargetList call', function() {
+          targetListService.model.currentList = [];
+          ctrl.updateList();
+          deferred.resolve();
+          scope.$digest();
+          expect(targetListService.model.currentList).toEqual(deferred.resolve());
+        });
+
+        it('should call the changePermissionClick function', function() {
+          spyOn(ctrl, 'changePermissionClick').and.callThrough();
+          ctrl.updateList();
+          expect(ctrl.changePermissionClick).toHaveBeenCalled();
+        });
+
+        it('should call the removeCollaborator function if there are pending removals', function() {
+          var anotherDeferred = $q.defer();
+          spyOn(ctrl, 'removeCollaborator').and.callFake(function() {
+            return anotherDeferred.promise;
+          });
+          ctrl.pendingRemovals = pending;
+          ctrl.updateList();
+          deferred.resolve();
+          anotherDeferred.resolve();
+          scope.$digest();
+          expect(ctrl.removeCollaborator).toHaveBeenCalled();
+        });
+
+        it('should call the removeFooterToast function', function() {
+          spyOn(ctrl, 'removeFooterToast').and.callThrough();
+          ctrl.updateList();
+          deferred.resolve();
+          scope.$digest();
+          expect(ctrl.removeFooterToast).toHaveBeenCalled();
+          expect(ctrl.removeFooterToast.calls.count()).toEqual(1);
+        });
+
+        it('should call the closeModal function', function() {
+          ctrl.updateList();
+          deferred.resolve();
+          scope.$digest();
+          expect(ctrl.closeModal).toHaveBeenCalled();
+          expect(ctrl.closeModal.calls.count()).toEqual(1);
         });
       });
 
-      it('should call the update function in the service', function() {
-        expect(targetListService.updateTargetList).not.toHaveBeenCalled();
-        ctrl.updateList();
-        deferred.resolve();
-        scope.$digest();
-        expect(targetListService.updateTargetList).toHaveBeenCalled();
-      });
+      describe('when the list author is not the current user', function() {
+        beforeEach(function () {
+          ctrl.targetListAuthor = 'other user';
+          targetListService.model.currentList.id = 1;
 
-      it('should set the current list in the model to equal the api response data from the updateTargetList call', function() {
-        targetListService.model.currentList = [];
-        ctrl.updateList();
-        deferred.resolve();
-        scope.$digest();
-        expect(targetListService.model.currentList).toEqual(deferred.resolve());
-      });
+          $httpBackend.expectGET('/api/targetLists/undefined').respond(200);
+          $httpBackend.expectGET('/api/targetLists/undefined/opportunities').respond(200);
 
-      it('should call the changePermissionClick function', function() {
-        spyOn(ctrl, 'changePermissionClick').and.callThrough();
-        ctrl.updateList();
-        expect(ctrl.changePermissionClick).toHaveBeenCalled();
-      });
+          spyOn(targetListService, 'updateTargetList').and.callFake(function () {
+            return deferred.promise;
+          });
 
-      it('should call the removeCollaborator function if there are pending removals', function() {
-        var anotherDeferred = $q.defer();
-        spyOn(ctrl, 'removeCollaborator').and.callFake(function() {
-          return anotherDeferred.promise;
+          spyOn(ctrl, 'closeModal').and.callFake(function () {
+            return true;
+          });
         });
-        ctrl.pendingRemovals = pending;
-        ctrl.updateList();
-        deferred.resolve();
-        anotherDeferred.resolve();
-        scope.$digest();
-        expect(ctrl.removeCollaborator).toHaveBeenCalled();
+
+        it('should not call the update function', function () {
+          expect(targetListService.updateTargetList).not.toHaveBeenCalled();
+          ctrl.updateList();
+          deferred.resolve();
+          scope.$digest();
+          expect(targetListService.updateTargetList).not.toHaveBeenCalled();
+        });
+
+        it('should not call the removeCollaborator function even if there are pending removals', function() {
+          var anotherDeferred = $q.defer();
+          spyOn(ctrl, 'removeCollaborator').and.callFake(function() {
+            return anotherDeferred.promise;
+          });
+          ctrl.pendingRemovals = pending;
+          ctrl.updateList();
+          deferred.resolve();
+          anotherDeferred.resolve();
+          scope.$digest();
+          expect(ctrl.removeCollaborator).not.toHaveBeenCalled();
+        });
+
+        it('should call the removeFooterToast function', function() {
+          spyOn(ctrl, 'removeFooterToast').and.callThrough();
+          ctrl.updateList();
+          deferred.resolve();
+          scope.$digest();
+          expect(ctrl.removeFooterToast).toHaveBeenCalled();
+          expect(ctrl.removeFooterToast.calls.count()).toEqual(1);
+        });
+
+        it('should call the closeModal function', function() {
+          ctrl.updateList();
+          deferred.resolve();
+          scope.$digest();
+          expect(ctrl.closeModal).toHaveBeenCalled();
+          expect(ctrl.closeModal.calls.count()).toEqual(1);
+        });
       });
 
-      it('should call the removeFooterToast function', function() {
-        spyOn(ctrl, 'removeFooterToast').and.callThrough();
-        ctrl.updateList();
-        deferred.resolve();
-        scope.$digest();
-        expect(ctrl.removeFooterToast).toHaveBeenCalled();
-        expect(ctrl.removeFooterToast.calls.count()).toEqual(1);
-
-      });
-
-      it('should call the closeModal function', function() {
-        ctrl.updateList();
-        deferred.resolve();
-        scope.$digest();
-        expect(ctrl.closeModal).toHaveBeenCalled();
-        expect(ctrl.closeModal.calls.count()).toEqual(1);
-      });
     });
 
   });

@@ -249,16 +249,30 @@ module.exports = /*  @ngInject */
         collaborateAndInvite: vm.changePermissionClick()
       };
 
-      targetListService.updateTargetList(targetListService.model.currentList.id, payload).then(function(response) {
-        targetListService.model.currentList = response;
+      if (vm.targetListAuthor === 'current user') {
+        targetListService.updateTargetList(targetListService.model.currentList.id, payload).then(function (response) {
+          targetListService.model.currentList = response;
 
-        if (vm.pendingShares.length > 0) addCollaborators();
+          if (vm.pendingShares.length) {
+            addCollaborators();
+          }
 
-        if (vm.pendingRemovals.length > 0) vm.removeCollaborator(vm.pendingRemovals);
+          if (vm.pendingRemovals.length) {
+            vm.removeCollaborator(vm.pendingRemovals);
+          }
+
+          vm.removeFooterToast();
+          vm.closeModal();
+        });
+      } else {
+        // if not the owner, don't update list first (it will fail) - just add collaborators if necessary
+        if (vm.pendingShares.length) {
+          addCollaborators();
+        }
 
         vm.removeFooterToast();
         vm.closeModal();
-      });
+      }
     }
 
     function initTargetLists() {

@@ -138,6 +138,203 @@ describe('[Services.targetListService]', function() {
     });
   });
 
+  describe('[Services.targetListService - getTargetListOpportunities]', function() {
+  var $httpBackend, targetListService, params, returnedPromise, id, responseObject, expectedResponseObject;
+
+  beforeEach(function() {
+    inject(function(_$http_, _$httpBackend_, _targetListService_) {
+      $httpBackend = _$httpBackend_;
+      targetListService = _targetListService_;
+    });
+
+    params = undefined;
+    id = '1234560009999';
+    responseObject = {
+            opportunities: [ {
+                // test vsYAPercent +100
+                depletionsCurrentYearToDate: 5,
+                depletionsCurrentYearToDateYA: 0,
+                depletionsCurrentYearToDateYAPercent: 0,
+                depletionsCurrentYearToDateYAPercentNegative: true,
+                store: {
+                    // test vsYAPercent -100
+                    depletionsCurrentYearToDate: 0,
+                    depletionsCurrentYearToDateYA: 2886.8334,
+                    depletionsCurrentYearToDateYAPercent: 0,
+                    depletionsCurrentYearToDateYAPercentNegative: false,
+                    id: '1401904',
+                    address: '515 N WESTERN AVE, CHICAGO, IL 606121421'
+                },
+                featureTypeCode: null,
+                isChainMandate: 'N',
+                isItemAuthorization: 'N',
+                isOnFeature: 'N',
+                // test chain mandate
+                itemAuthorizationCode: 'CM',
+                product: {
+                    brand: 'CORONA EXTRA'
+                }
+            }, {
+                // test vsYAPercent 0
+                depletionsCurrentYearToDate: 0,
+                depletionsCurrentYearToDateYA: 0,
+                depletionsCurrentYearToDateYAPercent: 10,
+                depletionsCurrentYearToDateYAPercentNegative: false,
+                store: {
+                    // test vsYAPercent >999
+                    depletionsCurrentYearToDate: 100,
+                    depletionsCurrentYearToDateYA: 0.1,
+                    depletionsCurrentYearToDateYAPercent: 0,
+                    depletionsCurrentYearToDateYAPercentNegative: true,
+                    id: '1401904',
+                    address: '515 N WESTERN AVE, CHICAGO, IL 606121421'
+                },
+                featureTypeCode: 'OK',
+                isChainMandate: 'N',
+                isItemAuthorization: 'N',
+                isOnFeature: 'Y',
+                itemAuthorizationCode: null,
+                product: {
+                    brand: 'CORONA EXTRA'
+                }
+            }, {
+                // test vsYAPercent < -999
+                depletionsCurrentYearToDate: 100,
+                depletionsCurrentYearToDateYA: -0.1,
+                depletionsCurrentYearToDateYAPercent: 0,
+                depletionsCurrentYearToDateYAPercentNegative: false,
+                store: {
+                    // test vsYAPercent standard case
+                    depletionsCurrentYearToDate: 100,
+                    depletionsCurrentYearToDateYA: -25,
+                    depletionsCurrentYearToDateYAPercent: 0,
+                    depletionsCurrentYearToDateYAPercentNegative: true,
+                    id: '1401904',
+                    address: '515 N WESTERN AVE, CHICAGO, IL 606121421'
+                },
+                featureTypeCode: null,
+                isChainMandate: 'N',
+                isItemAuthorization: 'N',
+                isOnFeature: 'N',
+                itemAuthorizationCode: null,
+                product: {
+                    brand: 'CORONA EXTRA'
+                }
+            }
+        ]};
+    expectedResponseObject = {
+        filterApplied: true,
+        opportunityId: null,
+        noOpportunitiesFound: false,
+        opportunities: [
+            {
+                // test vsYAPercent +100%
+                depletionsCurrentYearToDate: 5,
+                depletionsCurrentYearToDateYA: 0,
+                depletionsCurrentYearToDateYAPercent: '+100%',
+                depletionsCurrentYearToDateYAPercentNegative: false,
+                store: {
+                    // test vsYAPercent -100%
+                    depletionsCurrentYearToDate: 0,
+                    depletionsCurrentYearToDateYA: 2886.8334,
+                    depletionsCurrentYearToDateYAPercent: '-100%',
+                    depletionsCurrentYearToDateYAPercentNegative: true,
+                    id: '1401904',
+                    address: '515 N WESTERN AVE, CHICAGO, IL 606121421'
+                },
+                featureTypeCode: null,
+                isChainMandate: 'Y',
+                isItemAuthorization: 'Y',
+                isOnFeature: 'N',
+                itemAuthorizationCode: 'CM',
+                product: {
+                    brand: 'CORONA EXTRA'
+                },
+                highImpactSum: 0,
+                depletionSum: 0,
+                brands: ['corona extra', 'corona extra', 'corona extra'],
+                trend: NaN,
+                groupedOpportunities: [{
+                    depletionsCurrentYearToDate: 5,
+                    depletionsCurrentYearToDateYA: 0,
+                    depletionsCurrentYearToDateYAPercent: '+100%',
+                    depletionsCurrentYearToDateYAPercentNegative: false,
+                    store: {
+                        depletionsCurrentYearToDate: 0,
+                        depletionsCurrentYearToDateYA: 2886.8334,
+                        depletionsCurrentYearToDateYAPercent: '-100%',
+                        depletionsCurrentYearToDateYAPercentNegative: true,
+                        id: '1401904',
+                        address: '515 N WESTERN AVE, CHICAGO, IL 606121421'
+                    },
+                    featureTypeCode: null,
+                    isChainMandate: 'Y',
+                    isItemAuthorization: 'Y',
+                    isOnFeature: 'N',
+                    itemAuthorizationCode: 'CM',
+                    product: {
+                        brand: 'CORONA EXTRA'
+                      }
+                    }, {
+                    // test vs YAPercent = 0
+                    depletionsCurrentYearToDate: 0,
+                    depletionsCurrentYearToDateYA: 0,
+                    depletionsCurrentYearToDateYAPercent: 0,
+                    depletionsCurrentYearToDateYAPercentNegative: true,
+                    store: {
+                        // test vsYAPercent >999
+                        depletionsCurrentYearToDate: 100,
+                        depletionsCurrentYearToDateYA: 0.1,
+                        depletionsCurrentYearToDateYAPercent: '+999%',
+                        depletionsCurrentYearToDateYAPercentNegative: false,
+                        id: '1401904',
+                        address: '515 N WESTERN AVE, CHICAGO, IL 606121421'
+                    },
+                    featureTypeCode: 'OK',
+                    isChainMandate: 'N',
+                    isItemAuthorization: 'N',
+                    isOnFeature: 'Y',
+                    itemAuthorizationCode: null,
+                    product: {
+                        brand: 'CORONA EXTRA'
+                    }
+                  }, {
+                    // test vs YAPercent < -999
+                    depletionsCurrentYearToDate: 100,
+                    depletionsCurrentYearToDateYA: -0.1,
+                    depletionsCurrentYearToDateYAPercent: '-999%',
+                    depletionsCurrentYearToDateYAPercentNegative: true,
+                    store: {
+                        // test vsYAPercent standard case
+                        depletionsCurrentYearToDate: 100,
+                        depletionsCurrentYearToDateYA: -25,
+                        depletionsCurrentYearToDateYAPercent: '-500.0%',
+                        depletionsCurrentYearToDateYAPercentNegative: true,
+                        id: '1401904',
+                        address: '515 N WESTERN AVE, CHICAGO, IL 606121421'
+                    },
+                    featureTypeCode: null,
+                    isChainMandate: 'N',
+                    isItemAuthorization: 'N',
+                    isOnFeature: 'N',
+                    itemAuthorizationCode: null,
+                    product: {
+                        brand: 'CORONA EXTRA'
+                  }}]}]};
+  });
+
+  it('should manipulate opportunitiy data', function() {
+      $httpBackend
+      .expect('GET', '/api/targetLists/' + id + '/opportunities')
+      .respond(200, responseObject);
+
+      returnedPromise = targetListService.getTargetListOpportunities(id, params);
+      $httpBackend.flush();
+      expect(returnedPromise.$$state.value).toEqual(expectedResponseObject.opportunities);
+
+    });
+  });
+
   describe('[addTargetListOpportunities]', function() {
     it('add target list opportunities should return a promise', function() {
       var result = targetListService.addTargetListOpportunities();
