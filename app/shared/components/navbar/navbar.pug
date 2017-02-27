@@ -49,14 +49,13 @@ div.outer-nav-wrapper
                           span(ng-if="notification.shortenedObject.store.store_number.toUpperCase() !== 'UNKNOWN'")  \#{{notification.shortenedObject.store.store_number}}
                         p.sku {{notification.shortenedObject.product.name | titlecase}}
                           span  {{notification.shortenedObject.type | formatOpportunitiesType}}
-                      div(ng-click="nb.goToNote(notification)" ng-if="notification.objectType.toUpperCase() === 'STORE' || notification.objectType.toUpperCase() === 'DISTRIBUTOR'")
-                        p A new note was added to your account
-                        div(ng-if="notification.objectType.toUpperCase() === 'STORE'")
-                          .source {{notification.shortenedObject.store_name | titlecase}}
-                            span(ng-if="notification.shortenedObject.store_number.toUpperCase() !== 'UNKNOWN'")  \#{{notification.shortenedObject.store_number}}
-                        div(ng-if="notification.objectType.toUpperCase() === 'DISTRIBUTOR'")
-                          .source {{notification.shortenedObject.name | titlecase}}
-                            span  \#{{notification.shortenedObject.id}}
+                      div(ng-if="notification.objectType.toUpperCase() === 'STORE'" ng-click="nb.goToNote(notification)")
+                        p A new note was added to your retailer
+                        .source {{notification.shortenedObject.store_name | titlecase}}
+                          span(ng-if="notification.shortenedObject.store_number && notification.shortenedObject.store_number.toUpperCase() !== 'UNKNOWN'") &nbsp\#{{notification.shortenedObject.store_number}}
+                      div(ng-if="notification.objectType.toUpperCase() === 'DISTRIBUTOR'" ng-click="nb.goToNote(notification)")
+                        p A new note was added to your distributor
+                        .source {{notification.shortenedObject.name | titlecase}}
                     .info
                       label {{notification.dateCreated | timeAgo: 'relative'}}
                       label.bold by {{notification.creator.firstName}} {{notification.creator.lastName}}
