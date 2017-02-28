@@ -1,5 +1,5 @@
 describe('Unit: targetListDetailController', function() {
-  var scope, ctrl, $mdDialog, $q, $httpBackend, targetListService, chipsService, filtersService, opportunitiesService, userService, collaborators, currentUser, pending, ownedTargetLists, deferred, deleteTLDeferred;
+  var scope, ctrl, $mdDialog, $q, $httpBackend, $timeout, targetListService, chipsService, filtersService, opportunitiesService, userService, collaborators, currentUser, pending, ownedTargetLists, deferred, deleteTLDeferred;
 
   beforeEach(function() {
     angular.mock.module('ui.router');
@@ -8,12 +8,13 @@ describe('Unit: targetListDetailController', function() {
     angular.mock.module('cf.common.filters');
     angular.mock.module('cf.modules.targetListDetail');
 
-    inject(function($rootScope, $controller, _$mdDialog_, _$window_, _$q_, _$httpBackend_, _targetListService_, _chipsService_, _filtersService_, _opportunitiesService_, _userService_) {
+    inject(function($rootScope, $controller, _$mdDialog_, _$window_, _$q_, _$httpBackend_, _$timeout_, _targetListService_, _chipsService_, _filtersService_, _opportunitiesService_, _userService_) {
       scope = $rootScope.$new();
       ctrl = $controller('targetListDetailController', {$scope: scope});
       $mdDialog = _$mdDialog_;
       $q = _$q_;
       $httpBackend = _$httpBackend_;
+      $timeout = _$timeout_;
       targetListService = _targetListService_;
       chipsService = _chipsService_;
       filtersService = _filtersService_;
@@ -748,9 +749,56 @@ describe('Unit: targetListDetailController', function() {
         expect(ctrl.changed).toEqual(true);
       });
     });
+    describe('[tld.deleteList]', function() {
+      beforeEach(function() {
+        spyOn(targetListService, 'deleteTargetList').and.callFake(function(callback) {
+          return {
+            then: function(callback) { return callback([0, 1, 2]); }
+          };
+        });
+      });
+      it('should open the toast', function() {
+        ctrl.deleteList();
+        expect(ctrl.confirmToast).toEqual(true);
+      });
+    });
+    describe('[tld.initTargetLists]', function() {
+      beforeEach(function() {
+      });
+      it('should init the list for author', function() {
+         spyOn(targetListService, 'getTargetList').and.callFake(function(callback) {
+          return {
+            then: function(callback) { return callback({permissionLevel: 'author'}); }
+          };
+        });
+        ctrl.initTargetLists();
+        expect(ctrl.targetListAuthor).toEqual('current user');
+      });
+      it('should init the list for non-author', function() {
+         spyOn(targetListService, 'updateTargetListShares').and.callThrough();
+         spyOn(targetListService, 'getTargetList').and.callFake(function(callback) {
+          return {
+            then: function(callback) { return callback({archived: 'cheese, it is the best'}); }
+          };
+        });
+        ctrl.initTargetLists();
+        expect(ctrl.targetListAuthor).toEqual(undefined);
+        expect(targetListService.model.currentList.archived).toEqual('cheese, it is the best');
+        expect(targetListService.updateTargetListShares).toHaveBeenCalled();
+      });
+    });
+
+    describe('[tld.modalUnauthorizedAccess]', function() {
+      beforeEach(function() {
+        spyOn($mdDialog, 'show').and.callThrough();
+      });
+      it('should show the dialog', function() {
+        ctrl.modalUnauthorizedAccess();
+        expect($mdDialog.show).toHaveBeenCalled();
+      });
+    });
 
     describe('[tld.updateList]', function() {
-
       describe('when the list author is the current user', function() {
         beforeEach(function() {
           ctrl.targetListAuthor = 'current user';
