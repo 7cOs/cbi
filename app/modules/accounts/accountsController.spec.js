@@ -541,6 +541,20 @@ describe('Unit: accountsController', function() {
       }
     };
 
+    var chipsArray = [
+      {
+        'name': 'one',
+        'type': 'account',
+        'applied': true,
+        'removable': false
+      },
+      {
+        'name': 'two',
+        'type': 'subaccount',
+        'applied': true,
+        'removable': false
+      }];
+
     beforeEach(function() {
       spyOn(filtersService, 'resetFilters').and.callThrough();
       spyOn($state, 'go').and.callFake(function() {
@@ -590,6 +604,44 @@ describe('Unit: accountsController', function() {
       expect($state.go).not.toHaveBeenCalled();
       expect($state.go.calls.count()).toEqual(0);
     });
+    it('should do set idForOppsPage and reset chips', function() {
+      chipsService.addChipsArray(chipsArray);
+      filtersService.model.selected.premiseType = 'on';
+      filtersService.model.selected.account = ['01110000 01101100 01110011'];
+      filtersService.model.selected.subaccount = ['01110000 01101100 01110011'];
+      ctrl.currentTopBottomAcctType = {value: 4};
+      var performanceData = {
+        type: 'Store',
+        id: '2225193',
+        name: 'MANHATTAN BEER DIST LLC - NY (BRONX - S)',
+        unversionedStoreCode: '999999999'
+      };
+      ctrl.navigateTopBottomLevels(performanceData);
+      filtersService.model.selected.store = '11111111';
+      ctrl.goToOpportunities(e);
+      expect(filtersService.model.selected.store).toEqual('999999999');
+      expect(filtersService.model.selected.account).toEqual('');
+      expect(filtersService.model.selected.subaccount).toEqual('');
+      expect(chipsService.model).toEqual([{
+        name: 'MANHATTAN BEER DIST LLC - NY (BRONX - S)',
+        id: undefined,
+        type: 'store',
+        search: true,
+        applied: false,
+        removable: true,
+        tradeChannel: false
+      }]);
+    });
+    it('should reset selected account and remove chip', function() {
+      filtersService.model.selected.premiseType = 'on';
+      filtersService.model.selected.account = ['01110000 01101100 01110011'];
+      chipsService.addChipsArray(chipsArray);
+      ctrl.currentTopBottomFilters.subAccounts = {id: '12343'};
+      ctrl.currentTopBottomFilters.stores = null;
+      ctrl.goToOpportunities(e);
+      expect(filtersService.model.selected.account).toEqual('');
+      expect(chipsService.model).toEqual([{ name: 'two', type: 'subaccount', applied: true, removable: false }]);
+    });
   });
 
   describe('[Method] updateBrandSnapshot', function() {
@@ -619,7 +671,6 @@ describe('Unit: accountsController', function() {
       expect(userService.getPerformanceBrand).toHaveBeenCalled();
       expect(userService.getPerformanceBrand.calls.count()).toEqual(1);
     });
-
   });
 
   describe('[Method] updateDistributionTimePeriod', function() {
@@ -876,6 +927,24 @@ describe('Unit: accountsController', function() {
       ctrl.filterModel.distributionTimePeriod = ctrl.filtersService.model.distributionTimePeriod.year[2];
       val = ctrl.checkIfVelocityPresent(item);
       expect(val).toBeTruthy();
+    });
+
+    it('should check for dist simple', function() {
+      var distSimple = {value: filtersService.accountFilters.accountMarketsEnums.distSimple};
+      ctrl.brandSelectedIndex = 1;
+      ctrl.filtersService.model.accountSelected.accountMarkets = {value: filtersService.accountFilters.accountMarketsEnums.distSimple};
+
+      expect(ctrl.removeDistOptionsBasedOnView(distSimple, false)).toBeTruthy();
+      expect(filtersService.model.accountSelected.accountMarkets).toEqual({ name: 'Distribution (effective)', propertyName: 'distributionsEffective', value: 3 });
+    });
+
+    it('should check for dist effective', function() {
+      var distSimple = {value: filtersService.accountFilters.accountMarketsEnums.distEffective};
+      ctrl.brandSelectedIndex = 0;
+      ctrl.filtersService.model.accountSelected.accountMarkets = {value: filtersService.accountFilters.accountMarketsEnums.distEffective};
+
+      expect(ctrl.removeDistOptionsBasedOnView(distSimple, false)).toBeTruthy();
+      expect(filtersService.model.accountSelected.accountMarkets).toEqual({ name: 'Distribution (simple)', propertyName: 'distributionsSimple', value: 2 });
     });
 
   });
@@ -1148,6 +1217,33 @@ describe('Unit: accountsController', function() {
     });
   });
 
+  describe('[Method] isDisplayBrandSnapshotRow', function() {
+    it('should return true isPremiseCheckRequired', function() {
+      filtersService.model.accountSelected.accountBrands = {value: 'testCategory'};
+      expect(ctrl.isDisplayBrandSnapshotRow('testCategory', false, false)).toEqual(true);
+    });
+
+    it('should return false premise type != all', function() {
+      filtersService.model.accountSelected.accountBrands = {value: 'testCategory'};
+      filtersService.model.selected.premiseType = 'all';
+      expect(ctrl.isDisplayBrandSnapshotRow('testCategory', false, true)).toEqual(false);
+    });
+
+    it('should return true premise type != all', function() {
+      filtersService.model.accountSelected.accountBrands = {value: 'testCategory'};
+      filtersService.model.selected.premiseType = 'notall';
+      expect(ctrl.isDisplayBrandSnapshotRow('testCategory', false, true)).toEqual(true);
+    });
+
+    it('should return true premise type != all', function() {
+      expect(ctrl.isDisplayBrandSnapshotRow('testCategory', true)).toEqual(true);
+    });
+
+    it('should return false premise type != all', function() {
+      expect(ctrl.isDisplayBrandSnapshotRow('testCategory', false)).toEqual(false);
+    });
+  });
+
   describe('[Method] disableStoreType', function() {
     afterEach(function() {
       filtersService.model.selected.store = [];
@@ -1169,6 +1265,26 @@ describe('Unit: accountsController', function() {
     it('Should return false if there is a distributor but no chain or store', function() {
       filtersService.model.selected.distributor = ['222222'];
       expect(ctrl.disableStoreType()).toEqual(false);
+    });
+    it('should return true & set cbbdChainIndependent', function() {
+      spyOn(chipsService, 'applyFilterArr').and.callFake(function() {
+        return {
+          then: function(callback) { return callback({}); }
+        };
+      });
+      filtersService.model.cbbdChainIndependent = true;
+      expect(ctrl.disableStoreType()).toEqual(true);
+      expect(filtersService.model.cbbdChainIndependent).toEqual(false);
+    });
+    it('should return true & set cbbdChainCbbd', function() {
+      spyOn(chipsService, 'applyFilterArr').and.callFake(function() {
+        return {
+          then: function(callback) { return callback({}); }
+        };
+      });
+      filtersService.model.cbbdChainCbbd = true;
+      expect(ctrl.disableStoreType()).toEqual(true);
+      expect(filtersService.model.cbbdChainCbbd).toEqual(false);
     });
   });
 
@@ -1557,6 +1673,7 @@ describe('Unit: accountsController', function() {
     beforeEach(function() {
       ctrl.filtersService.model.accountSelected.accountMarkets = ctrl.filtersService.accountFilters.accountMarkets[0];
       ctrl.getDataForTopBottomLevel(ctrl.topBottomData);
+      ctrl.currentTopBottomFilters = {distributors: '', accounts: '', subAccounts: '', stores: ''};
     });
 
     it('should reset flags for each object', function() {
@@ -1578,5 +1695,116 @@ describe('Unit: accountsController', function() {
       expect(ctrl.getDataForTopBottomLevel).toHaveBeenCalled();
       expect(ctrl.getDataForTopBottomLevel.calls.count()).toEqual(1);
     });
+    it('should set top bottom acct type to stores for stores', function() {
+      ctrl.currentTopBottomFilters.stores = {id: '555555'};
+      ctrl.filterTopBottom();
+      expect(ctrl.currentTopBottomAcctType).toEqual(filtersService.accountFilters.accountTypes[3]);
+    });
+    it('should set top bottom acct type to stores for subaccounts', function() {
+      ctrl.currentTopBottomFilters.subAccounts = {id: '555555'};
+      ctrl.filterTopBottom();
+      expect(ctrl.currentTopBottomAcctType).toEqual(filtersService.accountFilters.accountTypes[3]);
+    });
+    it('should set top bottom acct type to accounts', function() {
+      ctrl.currentTopBottomFilters.accounts = {id: '555555'};
+      ctrl.filterTopBottom();
+      expect(ctrl.currentTopBottomAcctType).toEqual(filtersService.accountFilters.accountTypes[2]);
+    });
+    it('should set top bottom acct type to distributor', function() {
+      ctrl.currentTopBottomFilters.distributors = {id: '555555'};
+      ctrl.filterTopBottom();
+      expect(ctrl.currentTopBottomAcctType).toEqual(filtersService.accountFilters.accountTypes[1]);
+    });
   });
+
+   describe('removeInlineSearch', function() {
+     it('should remove selectedStore', function() {
+       var chipsArray = [
+      {
+        'name': 'one',
+        'type': 'account',
+        'applied': true,
+        'removable': false
+      },
+      {
+        'name': 'two',
+        'type': 'subaccount',
+        'applied': true,
+        'removable': false
+      },
+      {
+        'name': 'three',
+        'type': 'store',
+        'applied': true,
+        'removable': false
+      },
+      {
+        'name': 'four',
+        'type': 'donotremove',
+        'applied': true,
+        'removable': false
+      }
+    ];
+       filtersService.model.selected.account = [1, 2, 3];
+       filtersService.model.selected.subaccount = [1, 2, 3];
+       filtersService.model.selected.store = [1, 2, 3];
+
+       filtersService.model.account = 'one';
+       filtersService.model.subaccount = 'two';
+       filtersService.model.store = 'three';
+
+       ctrl.currentTopBottomFilters.accounts = 'one';
+       ctrl.currentTopBottomFilters.subAccounts = 'two';
+       ctrl.currentTopBottomFilters.stores = 'three';
+       chipsService.addChipsArray(chipsArray);
+
+       ctrl.removeInlineSearch('selectedStore');
+
+       expect(filtersService.model.selected.account).toEqual([]);
+       expect(filtersService.model.selected.subaccount).toEqual([]);
+       expect(filtersService.model.selected.store).toEqual([]);
+
+       expect(filtersService.model.account).toEqual('');
+       expect(filtersService.model.subaccount).toEqual('');
+       expect(filtersService.model.store).toEqual('');
+
+       expect(ctrl.currentTopBottomFilters.accounts).toEqual('');
+       expect(ctrl.currentTopBottomFilters.subAccounts).toEqual('');
+       expect(ctrl.currentTopBottomFilters.stores).toEqual('');
+       expect(chipsService.model).toEqual([{
+         'name': 'four',
+         'type': 'donotremove',
+         'applied': true,
+         'removable': false
+       }]);
+     });
+     it('should remove selectedDistributor', function() {
+       var chipsArray = [{
+        'name': 'one',
+        'type': 'distributor',
+        'applied': true,
+        'removable': false
+      }, {
+        'name': 'two',
+        'type': 'subaccount',
+        'applied': true,
+        'removable': false
+       }];
+       filtersService.model.selected.distributor = [1, 2, 3];
+       filtersService.model.distributor = 'one';
+       ctrl.currentTopBottomFilters.distributors = 'two';
+       chipsService.addChipsArray(chipsArray);
+
+       ctrl.removeInlineSearch('selectedDistributor');
+       expect(filtersService.model.selected.distributor).toEqual([]);
+       expect(filtersService.model.distributor).toEqual('');
+       expect(chipsService.model).toEqual([{
+        'name': 'two',
+        'type': 'subaccount',
+        'applied': true,
+        'removable': false
+       }]);
+       expect(ctrl.currentTopBottomFilters.distributors).toEqual('');
+     });
+   });
 });
