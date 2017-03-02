@@ -5,8 +5,26 @@ module.exports = function(app) {
         logutil = require('../_lib/logutil'),
         request = require('request');
 
+  // for analytics
+  const git   = require('git-rev-sync'),
+        pjson = require('../../package');
+
   app.route('/api/*')
     .all(function apiAuth(req, res, next) {
+      let version    = pjson.version;
+      let hash       = process.env.HEROKU_SLUG_DESCRIPTION || git.short();
+      let employeeId = req.user.employeeID;
+
+      let agentObject = {app: {version: version, build: hash}};
+      let userObject  = {loggedInEmployeeId: employeeId};
+
+      req.headers['X-CBI-API-AGENT'] = agentObject;
+      req.headers['X-CBI-API-USER']  = userObject;
+
+      console.log('~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~');
+      console.log('route : url, headers');
+      console.log('API/* : ', req.url, req.headers);
+
       if (req.isAuthenticated()) {
         app.locals.apiAuth = {
           signed: util.sign(req.url),
@@ -33,6 +51,7 @@ module.exports = function(app) {
       const auth = app.locals.apiAuth;
 
       let apiRequestStream = request.del(auth.signed, {body: req.body, json: true}).auth(null, null, true, auth.jwtToken);
+      req.pipe(apiRequestStream); // pipe client request to API request so headers are passed through
 
       apiRequestStream
         .on('error', logutil.handleAPIRequestError(req, res, 'DELETE', auth.signed))
@@ -43,6 +62,7 @@ module.exports = function(app) {
       const auth = app.locals.apiAuth;
 
       let apiRequestStream = request.post(auth.signed, {body: req.body, json: true}).auth(null, null, true, auth.jwtToken);
+      req.pipe(apiRequestStream); // pipe client request to API request so headers are passed through
 
       apiRequestStream
         .on('error', logutil.handleAPIRequestError(req, res, 'POST', auth.signed))
@@ -53,6 +73,7 @@ module.exports = function(app) {
       const auth = app.locals.apiAuth;
 
       let apiRequestStream = request.put(auth.signed, {body: req.body, json: true}).auth(null, null, true, auth.jwtToken);
+      req.pipe(apiRequestStream); // pipe client request to API request so headers are passed through
 
       apiRequestStream
         .on('error', logutil.handleAPIRequestError(req, res, 'PUT', auth.signed))
@@ -63,6 +84,7 @@ module.exports = function(app) {
       const auth = app.locals.apiAuth;
 
       let apiRequestStream = request.patch(auth.signed, {body: req.body, json: true}).auth(null, null, true, auth.jwtToken);
+      req.pipe(apiRequestStream); // pipe client request to API request so headers are passed through
 
       apiRequestStream
         .on('error', logutil.handleAPIRequestError(req, res, 'PATCH', auth.signed))
@@ -73,6 +95,7 @@ module.exports = function(app) {
       const auth = app.locals.apiAuth;
 
       let apiRequestStream = request.head(auth.signed).auth(null, null, true, auth.jwtToken);
+      req.pipe(apiRequestStream); // pipe client request to API request so headers are passed through
 
       apiRequestStream
         .on('error', logutil.handleAPIRequestError(req, res, 'HEAD', auth.signed))
