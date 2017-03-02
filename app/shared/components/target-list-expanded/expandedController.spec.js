@@ -1,5 +1,5 @@
 describe('Unit: expanded target list controller', function() {
-  var ctrl, state, scope, mdDialog, httpBackend, provide, userService, q;
+  var ctrl, state, scope, mdDialog, httpBackend, provide, userService;
 
   beforeEach(angular.mock.module(function(_$provide_) {
     provide = _$provide_;
@@ -11,7 +11,7 @@ describe('Unit: expanded target list controller', function() {
     angular.mock.module('cf.common.services');
     angular.mock.module('cf.common.components.expanded');
 
-    inject(function($controller, $rootScope, _$mdDialog_, _$q_, _$http_, _$httpBackend_, _$timeout_, _userService_, _targetListService_, _loaderService_) {
+    inject(function($controller, $rootScope, _$mdDialog_, _$http_, _$httpBackend_, _$timeout_, _userService_, _targetListService_, _loaderService_) {
       state = {
         current: {
           name: 'opportunities'
@@ -25,7 +25,6 @@ describe('Unit: expanded target list controller', function() {
       scope = $rootScope.$new();
       mdDialog = _$mdDialog_;
       httpBackend = _$httpBackend_;
-      q = _$q_;
       userService = _userService_;
 
       ctrl = $controller('expandedController', {$scope: scope, $state: state});
