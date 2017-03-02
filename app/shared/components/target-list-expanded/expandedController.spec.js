@@ -28,6 +28,7 @@ describe('Unit: expanded target list controller', function() {
       userService = _userService_;
       targetListService = _targetListService_;
       toastService = _toastService_;
+      q = _$q_;
 
       ctrl = $controller('expandedController', {$scope: scope, $state: state});
     });
