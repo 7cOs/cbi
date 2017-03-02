@@ -5,7 +5,6 @@ module.exports =  function(app) {
   const bodyParser    = require('body-parser'), // ENABLE FORM DATA
         config        = require('../../server/_config/app.js'), // GLOBAL APP CONFIG
         express       = require('express'), // INCLUDE EXPRESS
-        flash         = require('connect-flash'),
         multer        = require('multer'), // ENABLE MULTI-PART FORM UPLOADS
         session       = require('express-session'), // ENABLE SESSIONS
         uuid          = require('uuid'), // CONTENFUL API CONFIG
@@ -30,16 +29,12 @@ module.exports =  function(app) {
   app.use(bodyParser.json()); // ENABLE application/json
   app.use(bodyParser.urlencoded({ extended: false })); // ENABLE application/x-www-form-urlencoded
   app.locals.pretty = config.prettify;
-  app.use(flash());
 
   //  Forces SSL for production
   if (config.session.cookie.secure) {
     app.set('trust proxy', 1);  // trust "first" proxy
     app.use(enforce.HTTPS({ trustProtoHeader: true }));
   }
-
-  // CONFIG BASED SETTINGS
-  if (config.cors) app.use(require('cors')()); // ENABLE CORS
 
   // ENABLE REDIS
   let sessionStore = null;

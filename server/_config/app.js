@@ -13,9 +13,6 @@ let config = {
   // CACHE
   cache: false,
 
-  // CORS
-  cors: false,
-
   namespace: 'cf',
 
   // PORT TO RUN ON
