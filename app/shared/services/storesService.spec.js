@@ -83,4 +83,45 @@ describe('[Services.storesService]', function() {
     });
   });
 
+  describe('[getItemAuthorizations]', function() {
+    it('get item authorizations should return a promise', function() {
+      var result = storesService.getItemAuthorizations('90234923');
+      var promiseResult = $q.defer().promise;
+
+      expect(result).toEqual(promiseResult);
+    });
+    it('should get the authorizations', function() {
+      $httpBackend.expect('GET', '/api/stores/90234923/itemAuthorizations').respond(200, {
+        status: 'success'
+      });
+      var result;
+      storesService.getItemAuthorizations('90234923').then(function() {
+        result = true;
+      });
+
+      $httpBackend.flush();
+      expect(result).toBeTruthy();
+    });
+  });
+
+  describe('[getFeatures]', function() {
+    it('get get features should return a promise', function() {
+      var result = storesService.getFeatures('90234923');
+      var promiseResult = $q.defer().promise;
+
+      expect(result).toEqual(promiseResult);
+    });
+    it('should get the features', function() {
+      $httpBackend.expect('GET', '/api/stores/90234923/features').respond(200, {
+        status: 'success'
+      });
+      var result;
+      storesService.getFeatures('90234923').then(function() {
+        result = true;
+      });
+
+      $httpBackend.flush();
+      expect(result).toBeTruthy();
+    });
+  });
 });
