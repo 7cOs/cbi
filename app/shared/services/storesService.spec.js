@@ -44,13 +44,9 @@ describe('[Services.storesService]', function() {
 
       expect(result).toBeTruthy();
     });
-  });
 
-    /*
     it('should get one stores data if a store id is passed', function() {
-      $httpBackend.expect('GET', '/stores/1').respond(200, {
-        status: 'success'
-      });
+      $httpBackend.expect('GET', '/api/stores/1').respond(200, [0, 1, 2, 3]);
 
       var result;
       storesService.getStores('1').then(function() {
@@ -85,6 +81,6 @@ describe('[Services.storesService]', function() {
 
       expect(result).toBeTruthy();
     });
-  });  */
+  });
 
 });

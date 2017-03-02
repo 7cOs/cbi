@@ -45,8 +45,6 @@ module.exports = /*  @ngInject */
             response.data[i].negativeValue = true;
           }
         } */
-        console.log(typeof response.data);
-        console.log(response.data);
         storesPromise.resolve(response.data.slice(0, 5));
       }
 
