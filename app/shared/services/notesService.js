@@ -26,6 +26,7 @@ module.exports = /*  @ngInject */
 
     return service;
 
+    // this function appears to be obsolete, accountNotes is used throughout
     function getNote(noteId) {
       var notesPromise = $q.defer(),
           url = model.urlBase + 'createNote?accountId=' + model.accountId,
@@ -110,7 +111,6 @@ module.exports = /*  @ngInject */
       .catch(createNoteFail);
 
       function createNoteSuccess(response) {
-        console.log('[noteService.createNote] response: ', response);
         notePromise.resolve(response.data);
       }
 
@@ -122,7 +122,6 @@ module.exports = /*  @ngInject */
     }
 
     function updateNote(note) {
-      console.log(note);
       var notesPromise = $q.defer(),
       url = model.urlBase + 'updateNote?noteId=' + note.id,
       payload = note;
@@ -134,7 +133,6 @@ module.exports = /*  @ngInject */
       .catch(updateNoteFail);
 
       function updateNoteSuccess(response) {
-        console.log('[noteServie.updateNote] response: ', response);
         notesPromise.resolve(response.data);
       }
 
@@ -157,7 +155,6 @@ module.exports = /*  @ngInject */
       .catch(deleteAttachFail);
 
       function deleteAttachSuccess(response) {
-        console.log('[noteService.deleteAttach] response: ', response);
         notePromise.resolve(response.data);
       }
 
@@ -180,7 +177,6 @@ module.exports = /*  @ngInject */
       .catch(deleteNoteFail);
 
       function deleteNoteSuccess(response) {
-        console.log('[noteService.deleteNote] response: ', response);
         notePromise.resolve(response.data);
       }
 
