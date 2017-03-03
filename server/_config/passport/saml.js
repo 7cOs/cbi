@@ -20,8 +20,7 @@ module.exports = function(app) {
 
     let headers = {};
     headers['X-CBI-API-AGENT'] = util.agentHeader();
-    // STILL NEED TO PARSE EMPLOYEE ID FROM req.body.SAMLResponse;
-    // How can we do this locally when we are hardcoding SAML user?
+    headers['X-CBI-API-USER']  = util.userHeaderFromSaml(req.body.SAMLResponse);
 
     var signed = util.sign('/api/auth');
     request.post(signed, {headers: headers, body: req.body.SAMLResponse}, function(err, httpResponse, body) {

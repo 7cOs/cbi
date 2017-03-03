@@ -3,7 +3,9 @@
 module.exports = function(app) {
   // for analytics
   const git   = require('git-rev-sync'),
-        pjson = require('../../package');
+        pjson = require('../../package'),
+        xmlParser = require('xml2json'),
+        logutil = require('./logutil');
 
   return {
     // APPLY TITLE CASING
@@ -32,13 +34,6 @@ module.exports = function(app) {
       return url;
     },
 
-    // REMOVE ME / Convenience method for WIP US14264
-    logRequest: function(req) {
-      console.log('~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~');
-      console.log('route : url, headers');
-      console.log('API/* : ', req.url, req.headers);
-    },
-
     // API Analytics headers
     agentHeader: function() {
       let version = pjson.version;
@@ -48,6 +43,20 @@ module.exports = function(app) {
 
     userHeader: function(employeeID) {
       return JSON.stringify({loggedInEmployeeId: employeeID});
+    },
+
+    userHeaderFromSaml: function(samlResponse) {
+      let samlJson;
+      let uniqueId;
+      try {
+        // convert base64 into JSON
+        samlJson = xmlParser.toJson(Buffer.from(samlResponse, 'base64').toString("ascii"), {object: true});
+        uniqueId = samlJson['thing']['samlp:Response']['saml:Assertion']['saml:Subject']['saml:NameID']['$t'];
+      } catch (e) {
+        logutil.logError(e);
+        uniqueId = '';
+      }
+      return JSON.stringify({loggedInEmployeeId: uniqueId});
     }
   };
 };

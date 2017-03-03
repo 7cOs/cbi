@@ -11,7 +11,6 @@ module.exports = function(app) {
 
       if (req.isAuthenticated()) {
         req.headers['X-CBI-API-USER'] = util.userHeader(req.user.employeeID);
-        util.logRequest(req);
 
         app.locals.apiAuth = {
           signed: util.sign(req.url),
