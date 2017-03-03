@@ -24,7 +24,7 @@ describe('[Services.storesService]', function() {
     expect(storesService.getStoreOpportunities).toBeDefined();
   });
 
-  /* describe('[getStores]', function() {
+  describe('[getStores]', function() {
     it('get stores should return a promise', function() {
       var result = storesService.getStores();
       var promiseResult = $q.defer().promise;
@@ -33,9 +33,7 @@ describe('[Services.storesService]', function() {
     });
 
     it('should get mulitple store data if no store id is passed', function() {
-      $httpBackend.expect('GET', '/stores/').respond(200, {
-        status: 'success'
-      });
+      $httpBackend.expect('GET', '/api/stores?filter=lowerRightBound%3A47%2C-122%2CupperLeftBound%3A46%2C-120%2C').respond(200, [0, 1, 2, 3]);
 
       var result;
       storesService.getStores().then(function() {
@@ -48,9 +46,7 @@ describe('[Services.storesService]', function() {
     });
 
     it('should get one stores data if a store id is passed', function() {
-      $httpBackend.expect('GET', '/stores/1').respond(200, {
-        status: 'success'
-      });
+      $httpBackend.expect('GET', '/api/stores/1').respond(200, [0, 1, 2, 3]);
 
       var result;
       storesService.getStores('1').then(function() {
@@ -85,6 +81,47 @@ describe('[Services.storesService]', function() {
 
       expect(result).toBeTruthy();
     });
-  });  */
+  });
 
+  describe('[getItemAuthorizations]', function() {
+    it('get item authorizations should return a promise', function() {
+      var result = storesService.getItemAuthorizations('90234923');
+      var promiseResult = $q.defer().promise;
+
+      expect(result).toEqual(promiseResult);
+    });
+    it('should get the authorizations', function() {
+      $httpBackend.expect('GET', '/api/stores/90234923/itemAuthorizations').respond(200, {
+        status: 'success'
+      });
+      var result;
+      storesService.getItemAuthorizations('90234923').then(function() {
+        result = true;
+      });
+
+      $httpBackend.flush();
+      expect(result).toBeTruthy();
+    });
+  });
+
+  describe('[getFeatures]', function() {
+    it('get get features should return a promise', function() {
+      var result = storesService.getFeatures('90234923');
+      var promiseResult = $q.defer().promise;
+
+      expect(result).toEqual(promiseResult);
+    });
+    it('should get the features', function() {
+      $httpBackend.expect('GET', '/api/stores/90234923/features').respond(200, {
+        status: 'success'
+      });
+      var result;
+      storesService.getFeatures('90234923').then(function() {
+        result = true;
+      });
+
+      $httpBackend.flush();
+      expect(result).toBeTruthy();
+    });
+  });
 });
