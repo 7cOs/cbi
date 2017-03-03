@@ -7,10 +7,6 @@ module.exports = function(app) {
   const logoutUrl = app.get('config').saml.logoutBase + '?end_url=' + app.get('config').address;
   const secure = app.get('config').session.cookie.secure;
 
-  // for analytics
-  const git   = require('git-rev-sync'),
-        pjson = require('../../package');
-
   function objectToBase64(obj) {
     return crypto.enc.Base64.stringify(crypto.enc.Utf8.parse(JSON.stringify(obj)));
   }
@@ -20,31 +16,9 @@ module.exports = function(app) {
     res.cookie('ga', objectToBase64(app.get('config').analytics), { path: '/', maxAge: 720000000, secure: secure });
   }
 
-  app.route('/auth/*')
-    .all(function (req, res, next) {
-      let version = pjson.version;
-      let hash    = process.env.HEROKU_SLUG_DESCRIPTION || git.short();
-      let agentObject = {app: {version: version, build: hash}};
-
-      req.headers['X-CBI-API-AGENT'] = agentObject;
-      console.log('~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~');
-      console.log('route : url, headers');
-      console.log('AUTH/* : ', req.url, req.headers);
-
-      next();
-    });
-
   // Auth stuff
   app.get('/auth/login',
     passport.authenticate(authType, {session: true}), function(req, res) {
-      let employeeId = req.user.employeeID;
-      let userObject = {loggedInEmployeeId: employeeId};
-
-      req.headers['X-CBI-API-USER'] = userObject;
-      console.log('~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~');
-      console.log('route : url, headers');
-      console.log('AUTH/LOGIN SUCCESS: ', req.url, req.headers);
-
       // Successful authentication, redirect home.
       setCookies(req, res);
       res.redirect('/');

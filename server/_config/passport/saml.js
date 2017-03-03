@@ -18,8 +18,13 @@ module.exports = function(app) {
     signatureAlgorithm: app.get('config').saml.signatureAlgorithm
   }, function(req, profile, done) {
 
+    let headers = {};
+    headers['X-CBI-API-AGENT'] = util.agentHeader();
+    // STILL NEED TO PARSE EMPLOYEE ID FROM req.body.SAMLResponse;
+    // How can we do this locally when we are hardcoding SAML user?
+
     var signed = util.sign('/api/auth');
-    request.post(signed, {body: req.body.SAMLResponse}, function(err, httpResponse, body) {
+    request.post(signed, {headers: headers, body: req.body.SAMLResponse}, function(err, httpResponse, body) {
       if (err) {  // request error
         let logObj = Object.assign(
           logutil.buildAPIError(req.headers['x-request-id'], httpResponse.req.method, signed, null, 'Error occurred in SAML auth process when making API request.'),

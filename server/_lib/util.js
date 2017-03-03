@@ -1,6 +1,10 @@
 'use strict';
 
 module.exports = function(app) {
+  // for analytics
+  const git   = require('git-rev-sync'),
+        pjson = require('../../package');
+
   return {
     // APPLY TITLE CASING
     titleCase: function(str) {
@@ -26,6 +30,24 @@ module.exports = function(app) {
       }
 
       return url;
+    },
+
+    // REMOVE ME / Convenience method for WIP US14264
+    logRequest: function(req) {
+      console.log('~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~');
+      console.log('route : url, headers');
+      console.log('API/* : ', req.url, req.headers);
+    },
+
+    // API Analytics headers
+    agentHeader: function() {
+      let version = pjson.version;
+      let hash    = process.env.HEROKU_SLUG_DESCRIPTION || git.short();
+      return JSON.stringify({app: {version: version, build: hash}});
+    },
+
+    userHeader: function(employeeID) {
+      return JSON.stringify({loggedInEmployeeId: employeeID});
     }
   };
 };

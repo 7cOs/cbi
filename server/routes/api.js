@@ -1,31 +1,18 @@
 'use strict';
 
 module.exports = function(app) {
-  const util = require('../_lib/util')(app),
+  const util    = require('../_lib/util')(app),
         logutil = require('../_lib/logutil'),
         request = require('request');
 
-  // for analytics
-  const git   = require('git-rev-sync'),
-        pjson = require('../../package');
-
   app.route('/api/*')
     .all(function apiAuth(req, res, next) {
-      let version    = pjson.version;
-      let hash       = process.env.HEROKU_SLUG_DESCRIPTION || git.short();
-      let employeeId = req.user.employeeID;
-
-      let agentObject = {app: {version: version, build: hash}};
-      let userObject  = {loggedInEmployeeId: employeeId};
-
-      req.headers['X-CBI-API-AGENT'] = agentObject;
-      req.headers['X-CBI-API-USER']  = userObject;
-
-      console.log('~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~');
-      console.log('route : url, headers');
-      console.log('API/* : ', req.url, req.headers);
+      req.headers['X-CBI-API-AGENT'] = util.agentHeader();
 
       if (req.isAuthenticated()) {
+        req.headers['X-CBI-API-USER'] = util.userHeader(req.user.employeeID);
+        util.logRequest(req);
+
         app.locals.apiAuth = {
           signed: util.sign(req.url),
           jwtToken: req.user.jwt
