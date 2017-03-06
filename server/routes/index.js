@@ -15,7 +15,6 @@ module.exports = function(app) {
     } else {
       res.status(403).end();
     }
-
   });
 
   //  Angular routes

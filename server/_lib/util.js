@@ -1,6 +1,12 @@
 'use strict';
 
 module.exports = function(app) {
+  // for analytics
+  const git   = require('git-rev-sync'),
+        pjson = require('../../package'),
+        xmlParser = require('xml2json'),
+        logutil = require('./logutil');
+
   return {
     // APPLY TITLE CASING
     titleCase: function(str) {
@@ -26,6 +32,31 @@ module.exports = function(app) {
       }
 
       return url;
+    },
+
+    // API Analytics headers
+    agentHeader: function() {
+      let version = pjson.version;
+      let hash    = process.env.HEROKU_SLUG_DESCRIPTION || git.short();
+      return JSON.stringify({app: {version: version, build: hash, platform: 'web'}});
+    },
+
+    userHeader: function(employeeID) {
+      return JSON.stringify({loggedInEmployeeId: employeeID});
+    },
+
+    userHeaderFromSaml: function(samlResponse) {
+      let samlJson;
+      let uniqueId;
+      try {
+        // convert base64 into JSON
+        samlJson = xmlParser.toJson(Buffer.from(samlResponse, 'base64').toString('utf-8'), {object: true});
+        uniqueId = samlJson['samlp:Response']['saml:Assertion']['saml:Subject']['saml:NameID']['$t'];
+      } catch (e) {
+        logutil.logError(e);
+        uniqueId = '';
+      }
+      return JSON.stringify({loggedInEmployeeId: uniqueId});
     }
   };
 };
