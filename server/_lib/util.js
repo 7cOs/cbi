@@ -38,7 +38,7 @@ module.exports = function(app) {
     agentHeader: function() {
       let version = pjson.version;
       let hash    = process.env.HEROKU_SLUG_DESCRIPTION || git.short();
-      return JSON.stringify({app: {version: version, build: hash}});
+      return JSON.stringify({app: {version: version, build: hash, platform: 'web'}});
     },
 
     userHeader: function(employeeID) {
@@ -50,8 +50,8 @@ module.exports = function(app) {
       let uniqueId;
       try {
         // convert base64 into JSON
-        samlJson = xmlParser.toJson(Buffer.from(samlResponse, 'base64').toString("ascii"), {object: true});
-        uniqueId = samlJson['thing']['samlp:Response']['saml:Assertion']['saml:Subject']['saml:NameID']['$t'];
+        samlJson = xmlParser.toJson(Buffer.from(samlResponse, 'base64').toString('utf-8'), {object: true});
+        uniqueId = samlJson['samlp:Response']['saml:Assertion']['saml:Subject']['saml:NameID']['$t'];
       } catch (e) {
         logutil.logError(e);
         uniqueId = '';
