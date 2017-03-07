@@ -212,7 +212,7 @@ div(row)
         md-select.market(ng-model="a.filtersService.model.valuesVsTrend" md-on-open="a.openSelect(true)" md-on-close="a.openSelect(false)" placeholder="Top 10 (Values)" aria-label="Values versus Trends Filter")
           md-option(ng-repeat="filter in a.filtersService.accountFilters.valuesVsTrend track by filter.value" aria-label="{{filter.name}}" ng-value="filter" ng-click="a.changeTopBottomSortOrder(filter)" ng-hide="a.isStoreLevel && filter.value > a._topPerformersThreshold") {{filter.name}}
         md-select(ng-model="a.currentTopBottomAcctType" md-on-open="a.openSelect(true)" md-on-close="a.openSelect(false);"  placeholder="{{a.currentTopBottomAcctType.name}}" aria-label="Account Type Filter")
-          md-option(ng-repeat="filter in a.filtersService.accountFilters.accountTypes track by filter.value" aria-label="{{filter.name}}" ng-value="filter" ng-click="a.setTopBottomAcctTypeSelection(filter)") {{filter.name}}
+          md-option(ng-repeat="filter in a.filtersService.accountFilters.accountTypes track by filter.value" aria-label="{{filter.name}}" ng-value="filter" ng-click="a.setTopBottomAcctTypeSelection(filter)" ng-hide="filter.value === a.filtersService.accountFilters.accountTypesEnums.stores && a.filtersService.model.valuesVsTrend.value > a._topPerformersThreshold") {{filter.name}}
     .widget-content.clearfix
       .chart-data
         table.fixed-layout(cellspacing="0" cellpadding="0")
