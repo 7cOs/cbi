@@ -6,4 +6,6 @@ module.exports =
     .directive('longNote', require('./longNote'))
     .directive('imageLoader', require('./imageLoader'))
     .directive('clPaging', require('./cl-paging/index'))
-    .directive('inlineSearch', require('./inline-search/index'));
+    .directive('inlineSearch', require('./inline-search/index'))
+    .controller('InlineSearchController', require('./inline-search/inlineSearchController'));
+
