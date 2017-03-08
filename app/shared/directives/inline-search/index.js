@@ -22,7 +22,7 @@ module.exports =
       },
       controller: InlineSearchController,
       controllerAs: 'is',
-      templateUrl: 'app/shared/directives/inline-search/inline-search.html',
+      template: require('./inline-search.pug'),
       scope: {
       },
       link: function(scope, elem, attrs) {

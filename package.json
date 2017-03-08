@@ -1,6 +1,31 @@
 {
   "name": "compass",
   "version": "1.1.1",
+  "engines": {
+    "node": ">=7.5.0",
+    "npm": ">=4.1.2"
+  },
+  "license": "UNLICENSED",
+  "private": true,
+  "repository": "git@github.com:ConstellationBrands/app-orion.git",
+  "scripts": {
+    "heroku-postbuild": "npm run build:prod",
+    "start": "node server",
+
+    "clean": "rimraf public",
+    "lintcode": "tslint **/*.ts --format stylish && eslint '**/*.js'",
+    "lintjs": "eslint '**/*.js'",
+    "lintsass": "sass-lint '**/*.scss' -v --no-exit -f stylish -i 'app/assets/styles/lib/**/*, node_modules/**/*'",
+    "lint": "npm run lintcode && npm run lintsass",
+    "fontgen": "fontmin app/assets/fontsrc app/assets/fonts && rm app/assets/fonts/*.css",
+    "build:prod": "rimraf public && webpack --config config/webpack.prod.js --progress --color --profile --display-modules --display-chunks --bail",
+    "build:dev": "rimraf public && webpack --config webpack.config.js --progress --color --profile --bail",
+    "build:dev:watch": "rimraf public && webpack --config webpack.config.js --progress --color --profile --watch",
+    "build": "npm run build:dev:watch",
+    "serve": "nodemon -V -w server/ server.js",
+    "test": "rimraf coverage && karma start",
+    "test:watch": "rimraf coverage && karma start --auto-watch --no-single-run"
+  },
   "dependencies": {
     "angular": "1.5.8",
     "angular-animate": "1.5.8",
@@ -14,7 +39,6 @@
     "angular-ui-router": "0.3.1",
     "angulartics": "^1.3.0",
     "angulartics-google-analytics": "~0.4.0",
-    "babel-preset-es2015": "^6.14.0",
     "babelify": "^7.3.0",
     "base64url": "^2.0.0",
     "body-parser": "~1.17.0",
@@ -65,7 +89,7 @@
     "karma-coverage": "~1.1.1",
     "karma-jasmine": "~1.1.0",
     "karma-junit-reporter": "~1.2.0",
-    "karma-mocha-reporter": "2.1.0",
+    "karma-mocha-reporter": "~2.2.2",
     "karma-nyan-reporter": "0.2.5",
     "karma-phantomjs-launcher": "1.0.2",
     "logfmt": "1.2.0",
@@ -95,17 +119,42 @@
     "v-accordion": "1.6.0",
     "watchify": "^3.7.0",
     "xml2json": "^0.11.0",
-    "yargs": "4.8.1"
-  },
-  "engines": {
-    "node": "7.7.1",
-    "npm": "4.1.2"
-  },
-  "license": "UNLICENSED",
-  "repository": "git@github.com:ConstellationBrands/app-orion.git",
-  "scripts": {
-    "heroku-postbuild": "gulp --release",
-    "lint": "eslint **/*.js && gulp vet:sass",
-    "start": "node server"
+    "yargs": "4.8.1",
+
+    "webpack": "2.2.1",
+
+    "autoprefixer": "~6.7.6",
+    "babel-core": "~6.23.1",
+    "babel-loader": "~6.4.0",
+    "babel-preset-es2015": "~6.22.0",
+    "css-loader": "~0.26.2",
+    "cssnano": "~3.10.0",
+    "eslint-loader": "~1.6.3",
+    "exports-loader": "~0.6.4",
+    "extract-text-webpack-plugin": "~2.0.0",
+    "file-loader": "~0.10.1",
+    "fontmin": "~0.9.6",
+    "html-loader": "~0.4.5",
+    "html-webpack-plugin": "~2.28.0",
+    "image-webpack-loader": "~3.2.0",
+    "import-glob-loader": "~1.1.0",
+    "istanbul-instrumenter-loader": "~1.2.0",
+    "karma-jasmine-diff-reporter": "~1.0.0",
+    "karma-remap-coverage": "~0.1.4",
+    "karma-sourcemap-loader": "~0.3.7",
+    "karma-super-dots-reporter": "^0.1.0",
+    "karma-webpack": "~2.0.2",
+    "ng-annotate-loader": "~0.2.0",
+    "node-sass": "~4.5.0",
+    "postcss-loader": "~1.3.3",
+    "pug-html-loader": "~1.1.1",
+    "rimraf": "~2.6.1",
+    "sass-lint": "~1.10.2",
+    "sasslint-webpack-plugin": "~1.0.4",
+    "sass-loader": "~6.0.2",
+    "source-map-loader": "~0.1.6",
+    "style-loader": "~0.13.2",
+    "url-loader": "~0.5.8",
+    "webpack-merge": "~3.0.0"
   }
 }

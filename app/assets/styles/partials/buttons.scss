@@ -49,42 +49,42 @@ button {
   &.expand-all {
 
     &:before {
-      background-image: url('../assets/img/icons/btn-expand.svg');
+      background-image: url('./assets/img/icons/btn-expand.svg');
     }
   }
 
   &.expand-all:hover {
 
     &:before {
-      background-image: url('../assets/img/icons/btn-expand-all_roll.svg');
+      background-image: url('./assets/img/icons/btn-expand-all_roll.svg');
     }
   }
 
   &.collapse-all {
 
     &:before {
-      background-image: url('../assets/img/icons/btn-collapse.svg');
+      background-image: url('./assets/img/icons/btn-collapse.svg');
     }
   }
 
   &.collapse-all:hover {
 
     &:before {
-      background-image: url('../assets/img/icons/btn-collapse-all_roll.svg');
+      background-image: url('./assets/img/icons/btn-collapse-all_roll.svg');
     }
   }
 
   &.select-all {
 
     &:before {
-      background-image: url('../assets/img/icons/btn-select-all.svg');
+      background-image: url('./assets/img/icons/btn-select-all.svg');
     }
   }
 
   &.select-all:hover {
 
     &:before {
-      background-image: url('../assets/img/icons/btn-select-all_roll.svg');
+      background-image: url('./assets/img/icons/btn-select-all_roll.svg');
     }
   }
 
@@ -95,21 +95,21 @@ button {
     &.expand-all {
 
       &:before {
-        background-image: url('../assets/img/icons/btn-expand-disabled.svg');
+        background-image: url('./assets/img/icons/btn-expand-disabled.svg');
       }
     }
 
     &.collapse-all {
 
       &:before {
-        background-image: url('../assets/img/icons/btn-collapse-disabled.svg');
+        background-image: url('./assets/img/icons/btn-collapse-disabled.svg');
       }
     }
 
     &.select-all {
 
       &:before {
-        background-image: url('../assets/img/icons/btn-select-all-disabled.svg');
+        background-image: url('./assets/img/icons/btn-select-all-disabled.svg');
       }
     }
 
@@ -156,7 +156,7 @@ button {
 .go-arrow:after {
   background-position: 0 center;
   background-repeat: no-repeat;
-  background-image: url('../../assets/img/icons/go-arrow.svg');
+  background-image: url('./assets/img/icons/go-arrow.svg');
   background-size: 12px 12px;
   content: '';
   display: block;

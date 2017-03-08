@@ -10,8 +10,8 @@ div.modal.save-report
           md-select.left(ng-model="filter.userService.model.newServiceSelect" aria-label="Select New or Saved Report Dropdown" ng-change="filter.filtersService.model.newServiceName = ''")
             md-option(ng-model="filter.filtersService.model.newServiceName" value="new" ng-selected="true") Save New Report
             md-option(ng-repeat="savedFilter in filter.userService.model.opportunityFilters | orderBy: 'name'" ng-value="savedFilter.id" aria-label="{{savedFilter.name}}") {{::savedFilter.name}}
-    p.error-message.accent(ng-hide="filter.userService.model.opportunityFilters.length < 10 || filter.userService.model.newServiceSelect !== 'new'") <img src="./assets/img/icons/error.svg"> You have reached the maximum number of saved reports (10). To save a new report, please delete any queries that you no longer need.
-    p.error-message.accent(ng-if="filter.duplicateName") <img src="./assets/img/icons/error.svg"> A report with this name already exists. Please update the existing report or create a new one.
+    p.error-message.accent(ng-hide="filter.userService.model.opportunityFilters.length < 10 || filter.userService.model.newServiceSelect !== 'new'") <img src="../../../assets/img/icons/error.svg"> You have reached the maximum number of saved reports (10). To save a new report, please delete any queries that you no longer need.
+    p.error-message.accent(ng-if="filter.duplicateName") <img src="../../../assets/img/icons/error.svg"> A report with this name already exists. Please update the existing report or create a new one.
     div.modal-input
       label(ng-class="{disabled: filter.userService.model.newServiceSelect === 'new' && filter.userService.model.opportunityFilters.length > 9 || filter.userService.model.newServiceSelect !== 'new'}") Name
       input(ng-class="{disabled: filter.userService.model.newServiceSelect !== 'new'}" ng-model="filter.filtersService.model.newServiceName" placeholder="Enter a name"

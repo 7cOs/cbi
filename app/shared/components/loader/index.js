@@ -7,6 +7,6 @@ function LoaderController($scope) {
 module.exports =
   angular.module('cf.common.components.loader', [])
   .component('loader', {
-    templateUrl: './app/shared/components/loader/loader.html',
+    template: require('./loader.pug'),
     controller: LoaderController
   });

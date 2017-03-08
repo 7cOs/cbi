@@ -63,6 +63,6 @@ function TypeaheadController($scope, $timeout, $q, $log) {
 module.exports =
   angular.module('cf.common.components.typeahead', [])
   .component('typeahead', {
-    templateUrl: './app/shared/components/typeahead/typeahead.html',
+    template: require('./typeahead.pug'),
     controller: TypeaheadController
   });

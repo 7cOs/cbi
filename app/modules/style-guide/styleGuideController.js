@@ -48,7 +48,7 @@ module.exports = /*  @ngInject */
         parent: parentEl,
         scope: $scope.$new(),
         targetEvent: ev,
-        templateUrl: './app/modules/style-guide/demo-modal.html'
+        template: require('./demo-modal.pug')
       });
     };
 

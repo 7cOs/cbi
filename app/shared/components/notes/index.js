@@ -3,7 +3,7 @@
 module.exports =
   angular.module('cf.common.components.notes', [])
   .component('notes', {
-    templateUrl: './app/shared/components/notes/notes.html',
+    template: require('./notes.pug'),
     controller: 'notesController',
     controllerAs: 'n'
   })

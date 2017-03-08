@@ -172,7 +172,7 @@ module.exports = /*  @ngInject */
       $mdDialog.show({
         clickOutsideToClose: false,
         scope: $scope.$new(),
-        templateUrl: './app/shared/components/navbar/modal-add-opportunity-form.html'
+        template: require('./modal-add-opportunity-form.pug')
       });
       if (restoreCache) {
         vm.cacheInputs = true;
@@ -190,7 +190,7 @@ module.exports = /*  @ngInject */
       $mdDialog.show({
         clickOutsideToClose: false,
         scope: $scope.$new(),
-        templateUrl: './app/shared/components/navbar/modal-custom-opportunity-error.html'
+        template: require('./modal-custom-opportunity-error.pug')
       });
 
       if (error.status === 400) {

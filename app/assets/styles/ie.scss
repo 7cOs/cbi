@@ -109,7 +109,7 @@
   // Replace dashed SVG with PNG on IE for target list progress
   .target-lists .md-container,
   .expanded-target-lists .target-list-detail-container md-progress-linear .md-container {
-    background-image: url('../../assets/img/icons/stripes.png');
+    background-image: url('./assets/img/icons/stripes.png');
     background-repeat: repeat-x;
     background-size: 8px;
   }

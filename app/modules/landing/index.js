@@ -10,7 +10,7 @@ module.exports =
     .state('landing', {
       url: '/',
       title: 'Welcome',
-      templateUrl: './app/modules/landing/layout.html',
+      template: require('./layout.pug'),
       controller: 'landingController',
       controllerAs: 'l',
       analyticsData: {

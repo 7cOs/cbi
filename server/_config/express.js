@@ -14,8 +14,10 @@ module.exports =  function(app) {
   // SAVE CONFIG AS GLOBAL APP VARIABLE
   app.set('config', config);
 
-  // SET PUBLIC DIR
+  // MIDDLEWARE
   app.use(compression());
+
+  // SET PUBLIC DIR (STATIC CONTENT)
   app.use('/', express.static(config.dir.public));
 
   // SAVE SOME SETTING TO APP CONFIG FOR EASY ACCESS LATER
@@ -25,6 +27,7 @@ module.exports =  function(app) {
   app.set('view engine', config.dir.server.views.engine);
   app.set('case sensitive routing', false);
   app.set('security', config.security);
+  app.set('index', config.dir.server.index);
   app.set('upload', multer()); // ENABLE MULTI-PART FORMS
   app.use(bodyParser.json()); // ENABLE application/json
   app.use(bodyParser.urlencoded({ extended: false })); // ENABLE application/x-www-form-urlencoded

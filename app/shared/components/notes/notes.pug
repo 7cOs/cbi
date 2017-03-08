@@ -7,7 +7,7 @@ div.modal.notes(ng-if="notesOpen")
     h5 There are no notes for this <br />account yet.
     button(ng-click="n.openCreateNote()").btn-action + Add A New Note
     br
-    img(src="../assets/img/icons/no-notes.svg").no-notes-image
+    img(src="../../../assets/img/icons/no-notes.svg").no-notes-image
 
   div.progress-container(ng-if="n.loading")
     md-progress-circular(ng-if="n.loading" md-mode="indeterminate" md-diameter="100").md-accent
@@ -19,7 +19,7 @@ div.modal.notes(ng-if="notesOpen")
 
   div.progress-container(ng-if="n.notesError")
     a.hide-row(ng-click="n.notesClose()")
-    img.note-error(src="../assets/img/icons/notes-error-white.svg")
+    img.note-error(src="../../../assets/img/icons/notes-error-white.svg")
     h5 Sorry, something went wrong...
 
   div.note-container(ng-if="n.notes.length > 0 && !n.fileUploading || n.creatingNote")
@@ -93,7 +93,7 @@ div.modal.notes(ng-if="notesOpen")
             div.attached-files(ng-switch="attachment.fileType")
               //- I have to repeat the same code because no multiple 'ng-switch-when' conditions before Angular 1.5.10 :(
               .photo(ng-switch-when="image/gif")
-                img.thumbnail(src="../assets/img/icons/download-img.svg")
+                img.thumbnail(src="../../../assets/img/icons/download-img.svg")
                 a(href="{{attachment.url}}" target="_blank")
                   p.file-name {{attachment.fileName}}&nbsp;({{attachment.fileSize}})
                 div(ng-click="n.showImage(attachment)" ng-class="{'chevron-down': !attachment.visible, 'chevron-up': attachment.visible}")
@@ -102,7 +102,7 @@ div.modal.notes(ng-if="notesOpen")
                   loader
                   img(src="{{attachment.url}}")
               .photo(ng-switch-when="image/jpeg")
-                img.thumbnail(src="../assets/img/icons/download-img.svg")
+                img.thumbnail(src="../../../assets/img/icons/download-img.svg")
                 a(href="{{attachment.url}}" target="_blank")
                   p.file-name {{attachment.fileName}}&nbsp;({{attachment.fileSize}})
                 div(ng-click="n.showImage(attachment)" ng-class="{'chevron-down': !attachment.visible, 'chevron-up': attachment.visible}")
@@ -111,7 +111,7 @@ div.modal.notes(ng-if="notesOpen")
                   loader
                   img(src="{{attachment.url}}")
               .photo(ng-switch-when="image/png")
-                img.thumbnail(src="../assets/img/icons/download-img.svg")
+                img.thumbnail(src="../../../assets/img/icons/download-img.svg")
                 a(href="{{attachment.url}}" target="_blank")
                   p.file-name {{attachment.fileName}}&nbsp;({{attachment.fileSize}})
                 div(ng-click="n.showImage(attachment)" ng-class="{'chevron-down': !attachment.visible, 'chevron-up': attachment.visible}")
@@ -121,32 +121,32 @@ div.modal.notes(ng-if="notesOpen")
                   img(src="{{attachment.url}}")
               .spreadsheet(ng-switch-when="application/vnd.ms-excel")
                 a(href="{{attachment.url}}" target="_blank")
-                  img.thumbnail(src="../assets/img/icons/download-xls-c.svg")
+                  img.thumbnail(src="../../../assets/img/icons/download-xls-c.svg")
                   p.file-name {{attachment.fileName}}&nbsp;({{attachment.fileSize}})
                 div.delete-attach(ng-if="note.author === 'Me'" ng-click="attachment.showAreYouSure = true") x
               .pdf(ng-switch-when="application/pdf")
                 a(href="{{attachment.url}}" target="_blank")
-                  img.thumbnail(src="../assets/img/icons/download-pdf-c.svg")
+                  img.thumbnail(src="../../../assets/img/icons/download-pdf-c.svg")
                   p.file-name {{attachment.fileName}}&nbsp;({{attachment.fileSize}})
                 div.delete-attach(ng-if="note.author === 'Me'" ng-click="attachment.showAreYouSure = true") x
               .powerpoint(ng-switch-when="application/vnd.ms-powerpoint")
                 a(href="{{attachment.url}}" target="_blank")
-                  img.thumbnail(src="../assets/img/icons/download-ppt-c.svg")
+                  img.thumbnail(src="../../../assets/img/icons/download-ppt-c.svg")
                   p.file-name {{attachment.fileName}}&nbsp;({{attachment.fileSize}})
                 div.delete-attach(ng-if="note.author === 'Me'" ng-click="attachment.showAreYouSure = true") x
               .zip(ng-switch-when="application/zip")
                 a(href="{{attachment.url}}" target="_blank")
-                  img.thumbnail(src="../assets/img/icons/download-zip-c.svg")
+                  img.thumbnail(src="../../../assets/img/icons/download-zip-c.svg")
                   p.file-name {{attachment.fileName}}&nbsp;({{attachment.fileSize}})
                 div.delete-attach(ng-if="note.author === 'Me'" ng-click="attachment.showAreYouSure = true") x
               .document(ng-switch-when="application/msword")
                 a(href="{{attachment.url}}" target="_blank")
-                  img.thumbnail(src="../assets/img/icons/download-doc-c.svg")
+                  img.thumbnail(src="../../../assets/img/icons/download-doc-c.svg")
                   p.file-name {{attachment.fileName}}&nbsp;({{attachment.fileSize}})
                 div.delete-attach(ng-if="note.author === 'Me'" ng-click="attachment.showAreYouSure = true") x
               .other(ng-switch-default)
                 a(href="{{attachment.url}}" target="_blank")
-                  img.thumbnail(src="../assets/img/icons/download-other-c.svg")
+                  img.thumbnail(src="../../../assets/img/icons/download-other-c.svg")
                   p.file-name {{attachment.fileName}}&nbsp;({{attachment.fileSize}})
                 div.delete-attach(ng-if="note.author === 'Me'" ng-click="attachment.showAreYouSure = true") x
             label.error.are-you-sure(ng-if="attachment.showAreYouSure") Are you sure? <span class="delete" ng-click="n.deleteAttachment(attachment)">Delete</span> <span class="cancel" ng-click="attachment.showAreYouSure = false">Cancel</span>

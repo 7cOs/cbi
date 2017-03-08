@@ -112,7 +112,7 @@ module.exports = /*  @ngInject */
         parent: parentEl,
         scope: $scope.$new(),
         targetEvent: ev,
-        templateUrl: './app/shared/components/filter/modal.html'
+        template: require('./modal.pug')
       });
     }
 

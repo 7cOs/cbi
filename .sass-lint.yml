@@ -4,8 +4,7 @@ options:
 
 # File Options
 files:
-  include: 'public/css/**/*.s+(a|c)ss'
-  ignore:
+  ignore: ['**/app/assets/styles/lib/**/*', '**/node_modules/**/*']
 
 # Rule Configuration
 rules:

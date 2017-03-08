@@ -196,7 +196,7 @@ list {
 
   .more-icon  {
     border: 1px solid $gray-4;
-    background: url('../assets/img/icons/action-menu.svg') $white;
+    background: url('./assets/img/icons/action-menu.svg') $white;
     background-position: center;
     background-size: 17px 17px;
     background-repeat: no-repeat;
@@ -205,7 +205,7 @@ list {
     padding: 5px;
 
     &:hover {
-      background-image: url('../assets/img/icons/action-menu_roll.svg');
+      background-image: url('./assets/img/icons/action-menu_roll.svg');
     }
   }
 }
@@ -332,14 +332,14 @@ list {
   &.L {
 
     &:before {
-      background-image: url('../assets/img/icons/impact-low.svg');
+      background-image: url('./assets/img/icons/impact-low.svg');
     }
   }
 
   &.low-small {
 
     &:before {
-      background-image: url('../assets/img/icons/impact-low-small.svg');
+      background-image: url('./assets/img/icons/impact-low-small.svg');
     }
   }
 
@@ -348,14 +348,14 @@ list {
   &.M {
 
     &:before {
-      background-image: url('../assets/img/icons/impact-medium.svg');
+      background-image: url('./assets/img/icons/impact-medium.svg');
     }
   }
 
   &.medium-small {
 
     &:before {
-      background-image: url('../assets/img/icons/impact-medium-small.svg');
+      background-image: url('./assets/img/icons/impact-medium-small.svg');
     }
   }
 
@@ -363,14 +363,14 @@ list {
   &.H {
 
     &:before {
-      background-image: url('../assets/img/icons/impact-high.svg');
+      background-image: url('./assets/img/icons/impact-high.svg');
     }
   }
 
   &.high-small {
 
     &:before {
-      background-image: url('../assets/img/icons/impact-high-small.svg');
+      background-image: url('./assets/img/icons/impact-high-small.svg');
     }
   }
 }
@@ -393,19 +393,19 @@ list {
 
 .flag-both {
   &:before {
-    background-image: url('../assets/img/icons/status-both.svg');
+    background-image: url('./assets/img/icons/status-both.svg');
   }
 }
 
 .flag-green {
   &:before {
-    background-image: url('../assets/img/icons/status-featured.svg');
+    background-image: url('./assets/img/icons/status-featured.svg');
   }
 }
 
 .flag-yellow {
   &:before {
-    background-image: url('../assets/img/icons/status-mandatory.svg');
+    background-image: url('./assets/img/icons/status-mandatory.svg');
   }
 }
 
@@ -551,7 +551,7 @@ list {
 }
 
 .list-disabled-message {
-  background: url('../assets/img/icons/error.svg') 0 0 no-repeat;
+  background: url('./assets/img/icons/error.svg') 0 0 no-repeat;
   background-size: 15px;
   color: $red;
   float: right;

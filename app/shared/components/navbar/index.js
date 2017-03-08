@@ -3,7 +3,7 @@
 module.exports =
   angular.module('cf.common.components.navbar', [])
   .component('navbar', {
-    templateUrl: './app/shared/components/navbar/navbar.html',
+    template: require('./navbar.pug'),
     controller: 'navbarController',
     controllerAs: 'nb'
   })

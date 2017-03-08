@@ -2,7 +2,8 @@ machine:
   java:
     version: oraclejdk8
   node:
-    version: v5.1.1
+    version: v7.7.1
+
 dependencies:
   pre:
     - npm install -g gulp
@@ -10,11 +11,12 @@ dependencies:
 
 test:
   override:
-    - gulp vet:js
-    - gulp vet:sass
-    - gulp test
+    - npm run lintjs
+    - npm run lintsass
+    - npm test
 
   post:
+    - cp -r coverage/* $CIRCLE_ARTIFACTS
     - mkdir -p $CIRCLE_TEST_REPORTS/testng/
     - find . -type f -regex ".*/target/surefire-reports/.*html" -exec cp {} $CIRCLE_TEST_REPORTS/testng/ \;
 

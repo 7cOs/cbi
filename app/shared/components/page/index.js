@@ -3,7 +3,7 @@
 module.exports =
   angular.module('cf.common.components.page', [])
   .component('page', {
-    templateUrl: './app/shared/components/page/page.html',
+    template: require('./page.pug'),
     controller: 'pageController',
     controllerAs: 'page'
   })

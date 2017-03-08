@@ -7,6 +7,6 @@ function TabsController($scope) {
 module.exports =
   angular.module('cf.common.components.tabs', [])
   .component('tabs', {
-    templateUrl: './app/shared/components/tabs/tabs.html',
+    template: require('./tabs.pug'),
     controller: TabsController
   });

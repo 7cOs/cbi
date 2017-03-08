@@ -19,6 +19,6 @@ function DatepickerController($scope) {
 module.exports =
   angular.module('cf.common.components.datepicker', [])
   .component('datepicker', {
-    templateUrl: './app/shared/components/datepicker/datepicker.html',
+    template: require('./datepicker.pug'),
     controller: DatepickerController
   });

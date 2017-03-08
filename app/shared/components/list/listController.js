@@ -239,7 +239,7 @@ module.exports = /*  @ngInject */
         parent: parentEl,
         scope: $scope.$new(),
         targetEvent: e,
-        templateUrl: './app/shared/components/list/create-target-list-modal.html'
+        template: require('./create-target-list-modal.pug')
       });
     }
 
@@ -314,7 +314,7 @@ module.exports = /*  @ngInject */
         parent: parentEl,
         scope: $scope.$new(),
         targetEvent: ev,
-        templateUrl: './app/shared/components/list/modal-share-opportunity.html'
+        template: require('./modal-share-opportunity.pug')
       });
     }
 
@@ -347,7 +347,7 @@ module.exports = /*  @ngInject */
         parent: parentEl,
         scope: $scope.$new(),
         targetEvent: ev,
-        templateUrl: './app/shared/components/list/modal-dismiss-opportunity.html'
+        template: require('./modal-dismiss-opportunity.pug')
       });
     }
 
@@ -465,7 +465,7 @@ module.exports = /*  @ngInject */
         parent: parentEl,
         scope: $scope.$new(),
         targetEvent: ev,
-        templateUrl: './app/shared/components/list/modal-opportunity-memo.html'
+        template: require('./modal-opportunity-memo.pug')
       });
     }
 

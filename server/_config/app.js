@@ -66,9 +66,10 @@ config.dir = {
     routes: rootPath + '/server/routes/',
     script: 'server.js',
     socket: rootPath + '/server/socket',
+    index: rootPath + '/public/app/index.html',
     views: {
       engine: 'pug',
-      dir: [rootPath + '/app/', rootPath + '/server/views/']
+      dir: [rootPath + '/server/views/']
     }
   },
   root: rootPath

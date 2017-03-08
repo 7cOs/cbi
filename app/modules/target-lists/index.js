@@ -13,7 +13,7 @@ module.exports = /*  @ngInject */
       params: {
         obj: 0
       },
-      templateUrl: './app/modules/target-lists/layout.html',
+      template: require('./layout.pug'),
       controller: 'targetListsController',
       controllerAs: 't',
       analyticsData: {
