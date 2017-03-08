@@ -67,6 +67,7 @@ module.exports = /*  @ngInject */
     vm.showXChain = false;
     vm.showXDistributor = false;
     vm.showXStore = false;
+    vm._topPerformersThreshold = 2;
 
     // top bottom public methods
     vm.topBottomData = {
@@ -1017,6 +1018,8 @@ module.exports = /*  @ngInject */
     function getCurrentTopBottomObject(acctType) {
       var currentObj;
       var accountTypes = filtersService.accountFilters.accountTypesEnums;
+      var selectedTopBottomValue = vm.filtersService.model.valuesVsTrend.value;
+      var indexOfNewSortOrder;
       switch (acctType.value) {
         case accountTypes.distributors:
           currentObj = vm.topBottomData.distributors;
@@ -1037,8 +1040,18 @@ module.exports = /*  @ngInject */
           currentObj = vm.topBottomData.stores;
           currentObj.currentLevelName = 'stores';
           vm.isStoreLevel = true;
+          /* Exclude bottom (trend) and bottom (value) options at the 'Store' level.
+             Manually change sort order from bottom to top when 'bottom' is already selected
+             and user subsequently selects 'Store' level metrics. indexOfNewSortOrder subtracts
+             2 from currently selected sort order value in order to find the corresponding
+             'trend' or 'value' option, and subtracts one more to offset from value to index. */
+          if (selectedTopBottomValue > vm._topPerformersThreshold) {
+            indexOfNewSortOrder = selectedTopBottomValue - vm._topPerformersThreshold - 1;
+            vm.changeTopBottomSortOrder(vm.filtersService.accountFilters.valuesVsTrend[indexOfNewSortOrder]);
+          }
           break;
       }
+
       return currentObj;
     }
 
