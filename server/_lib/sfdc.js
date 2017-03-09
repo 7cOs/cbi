@@ -26,19 +26,38 @@ module.exports = {
 
 function sfdcConn(app, req) {
   /**
-  * sfdcConn: Create the Salesforce.com connection, or return the existing
-  *           connection.
+  * sfdcConn: Retrieve access token and url form Salesforce, persist credentials to session,
+  * and create a new connection to salesforce, OR create a new connection from existing
+  * credentials if they already exist in session.
   */
-  if (!req.user.sfdcConn) {
+
+  let jsonSfdcSession;
+
+  if (!req.session.sfdc) {
     return saml.getSFDCSession(app, req.user.jwtmap.employeeID).then(function(sfdcSession) {
-      sfdcSession = JSON.parse(sfdcSession);
+      jsonSfdcSession = JSON.parse(sfdcSession);
+      req.session.sfdc = jsonSfdcSession;
+      req.session.save(); // manual save is required for non GET reqs
       return new jsforce.Connection({
-        instanceUrl: sfdcSession.instance_url,
-        accessToken: sfdcSession.access_token
+        instanceUrl: jsonSfdcSession.instance_url,
+        accessToken: jsonSfdcSession.access_token
       });
     });
   } else {
-    return req.user.sfdcConn;
+    jsonSfdcSession = req.session.sfdc;
+    return new Promise(function(resolve, reject) {
+      if (jsonSfdcSession.instance_url && jsonSfdcSession.access_token) {
+        resolve(new jsforce.Connection({
+          instanceUrl: jsonSfdcSession.instance_url,
+          accessToken: jsonSfdcSession.access_token
+        }));
+      } else {
+        reject({
+          'isSuccess': false,
+          'errorMessage': 'Unable to retrieve Salesforce credentials'
+        });
+      }
+    });
   }
 }
 
