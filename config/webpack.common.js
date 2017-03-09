@@ -76,7 +76,7 @@ module.exports = {
         include: [ helpers.root('app') ],
         exclude: [ helpers.root('app/assets/fonts') ],
         loaders: [
-          'file-loader?name=assets/img/[name].[hash].[ext]',
+          'url-loader?limit=8192&mimetype=image/svg+xml&name=assets/img/[name].[hash].[ext]',
           'image-webpack-loader'
         ]
       },

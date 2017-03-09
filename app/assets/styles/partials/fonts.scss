@@ -18,9 +18,9 @@
   }
 }
 
-@include font-face(WorkSans, './assets/fonts/worksans-300', 300, normal);
-@include font-face(WorkSans, './assets/fonts/worksans-400', 400, normal);
-@include font-face(WorkSans, './assets/fonts/worksans-600', 600, normal);
-@include font-face(Rajdhani, './assets/fonts/rajdhani-400', 400, normal);
-@include font-face(Rajdhani, './assets/fonts/rajdhani-600', 600, normal);
-@include font-face(Rajdhani, './assets/fonts/rajdhani-700', 700, normal);
+@include font-face(WorkSans, '../../fonts/worksans-300', 300, normal);
+@include font-face(WorkSans, '../../fonts/worksans-400', 400, normal);
+@include font-face(WorkSans, '../../fonts/worksans-600', 600, normal);
+@include font-face(Rajdhani, '../../fonts/rajdhani-400', 400, normal);
+@include font-face(Rajdhani, '../../fonts/rajdhani-600', 600, normal);
+@include font-face(Rajdhani, '../../fonts/rajdhani-700', 700, normal);

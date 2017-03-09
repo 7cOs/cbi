@@ -19,9 +19,10 @@ module.exports = webpackMerge(commonConfig, {
         test: /\.(css|scss)/,
         include: [path.resolve(helpers.root('app'), 'main.scss')],
         loader: ExtractTextPlugin.extract([
-          'css-loader?-minimize', // optimization is done in postcss-loader
+          'css-loader?-minimize',         // optimization is done in postcss-loader
           'postcss-loader',
-          'sass-loader',
+          'resolve-url-loader?keepQuery', // resolve url() paths relative to source files
+          'sass-loader?sourceMap',
           'import-glob-loader'
         ])
       },

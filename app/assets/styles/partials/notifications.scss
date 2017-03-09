@@ -79,20 +79,20 @@
   }
 
   &.ADDED_NOTE {
-    background-image: url('./assets/img/icons/notification-note.svg');
+    background-image: url('../../img/icons/notification-note.svg');
     background-position: 14px 1.5em;
     background-size: 20px 20px;
   }
 
   &.SHARE_OPPORTUNITY {
-    background-image: url('./assets/img/icons/notification-opportunity.svg');
+    background-image: url('../../img/icons/notification-opportunity.svg');
     background-position: 14px 1.25em;
     background-size: 20px 30px;
   }
 
   &.SHARE_TARGET_LIST,
   &.ARCHIVE_TARGET_LIST {
-    background-image: url('./assets/img/icons/notification-collaborator.svg');
+    background-image: url('../../img/icons/notification-collaborator.svg');
     background-position: 14px 1.25em;
     background-size: 20px 25px;
   }

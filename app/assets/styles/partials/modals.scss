@@ -308,7 +308,7 @@ md-dialog {
         color: $blue;
 
         &:before {
-          background-image: url('./assets/img/icons/hidden-opportunity.svg');
+          background-image: url('../../img/icons/hidden-opportunity.svg');
           background-repeat: no-repeat;
           content: '';
           display: block;
@@ -558,11 +558,11 @@ md-dialog {
     width: 20px;
 
     .featured {
-      background: url('./assets/img/icons/status-featured.svg') 0 0 no-repeat;
+      background: url('../../img/icons/status-featured.svg') 0 0 no-repeat;
     }
 
     .mandatory {
-      background: url('./assets/img/icons/status-mandatory.svg') 0 0 no-repeat;
+      background: url('../../img/icons/status-mandatory.svg') 0 0 no-repeat;
     }
   }
 

@@ -82,6 +82,7 @@ module.exports = {
         loaders: [
           'style-loader',
           'css-loader?-minimize&sourceMap',
+          'resolve-url-loader?sourceMap&keepQuery',
           'sass-loader?sourceMap',
           'import-glob-loader'
         ]

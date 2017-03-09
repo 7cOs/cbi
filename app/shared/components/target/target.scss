@@ -20,7 +20,7 @@
   }
 
   .md-container {
-    background-image: url('./assets/img/icons/stripes.svg');
+    background-image: url('../../../assets/img/icons/stripes.svg');
     border-bottom: 5px solid $body-bg;
   }
 
@@ -146,7 +146,7 @@
 .collaborators:before {
   background-position: 0 center;
   background-repeat: no-repeat;
-  background-image: url('./assets/img/icons/person.svg');
+  background-image: url('../../../assets/img/icons/person.svg');
   content: '';
   display: inline-block;
   height: 9px;

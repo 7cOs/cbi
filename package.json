@@ -112,6 +112,7 @@
     "redis-streams": "~1.1.0",
     "request": "~2.80.0",
     "request-promise": "~4.1.1",
+    "resolve-url-loader": "^2.0.2",
     "rimraf": "^2.6.1",
     "sass-lint": "^1.10.2",
     "sasslint-webpack-plugin": "^1.0.4",
