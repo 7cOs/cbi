@@ -125,7 +125,7 @@ module.exports = {
     new SassLintPlugin({
       ignorePlugins: ['extract-text-webpack-plugin'],
       failOnWarning: false,
-      failOnError: true
+      failOnError: false
     }),
 
     new webpack.optimize.CommonsChunkPlugin({

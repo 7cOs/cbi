@@ -46,9 +46,7 @@ let config = {
     resave: true,
     rolling: true,
     saveUninitialized: true
-  },
-
-  socket: true
+  }
 
 };
 
@@ -65,7 +63,6 @@ config.dir = {
     router: rootPath + '/server/_lib/router.js',
     routes: rootPath + '/server/routes/',
     script: 'server.js',
-    socket: rootPath + '/server/socket',
     index: rootPath + '/public/app/index.html',
     views: {
       engine: 'pug',

@@ -12,7 +12,6 @@ module.exports = function (config) {
   config.public = {
     css: config.address + 'css/',
     img: config.address + 'img/',
-    io: config.address + 'socket.io/socket.io.js',
     lib: config.address + 'lib/',
     js: config.address + 'js/'
   };
