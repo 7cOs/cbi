@@ -10,7 +10,7 @@ module.exports = {
   devtool: 'inline-source-map',
 
   resolve: {
-    extensions: [ '.ts', '.js' ],
+    extensions: [ '.js' ],
     modules: [
       helpers.root('app'),
       'node_modules'
@@ -22,12 +22,6 @@ module.exports = {
     rules: [
 
       // preloaders for linting and sourcemaps
-      // {
-      //   test: /\.ts$/,
-      //   loader: 'tslint-loader',
-      //   enforce: 'pre',
-      //   exclude: [ helpers.root('node_modules') ]
-      // },
       {
         test: /\.js$/,
         loaders: [
@@ -36,36 +30,17 @@ module.exports = {
         ],
         enforce: 'pre',
         exclude: [
-          helpers.root('node_modules'),
-
-          // these packages have problems with their sourcemaps
-          helpers.root('node_modules/rxjs'),
-          helpers.root('node_modules/@angular')
+          /node_modules/
         ]
       },
 
       // code
-      // {
-      //   test: /\.ts$/,
-      //   use: [
-      //     {
-      //       loader: 'awesome-typescript-loader',
-      //       query: {
-      //         configFileName: 'tsconfig.test.json',
-      //         compilerOptions: {
-      //           removeComments: true
-      //         }
-      //       }
-      //     },
-      //     { loader: 'angular2-template-loader' },
-      //     { loader: 'angular2-router-loader' }
-      //   ],
-      //   exclude: [ helpers.root('node_modules') ]
-      // },
       {
         test: /\.js$/,
         loader: 'babel-loader',
-        exclude: /node_modules/
+        exclude: [
+          /node_modules/
+        ]
       },
 
       // templates
@@ -78,7 +53,6 @@ module.exports = {
         include: helpers.root('app'),
         loaders: [
           'html-loader?attrs=img:src link:href',
-          // 'pug-html-loader?exports=false&doctype=html'
           'pug-html-loader?exports=false'
         ]
       },
@@ -89,7 +63,7 @@ module.exports = {
         loader: 'file-loader'
       },
 
-      // styles which will be referenced by JS (ng2 component styles)
+      // styles which will be required by JS (ng2 component styles)
       {
         test: /\.(css|scss)/,
         include: [ helpers.root('app') ],
@@ -101,7 +75,7 @@ module.exports = {
         ]
       },
 
-      // styles which are global or not referenced by JS framework (all ng1 styles)
+      // styles which are global (imported through main.scss e.g. all ng1 styles)
       {
         test: /\.(css|scss)/,
         include: [ path.resolve(helpers.root('app'), 'main.scss') ],
@@ -115,11 +89,11 @@ module.exports = {
 
       // code instrumentation, post load
       {
-        test: /\.(js|ts)$/,
+        test: /\.(js)$/,
         loader: 'istanbul-instrumenter-loader',
         include: helpers.root('app'),
         exclude: [
-          /\.(e2e|spec)\.(ts|js)$/,
+          /\.(e2e|spec)\.(js)$/,
           /node_modules/
         ],
         enforce: 'post'

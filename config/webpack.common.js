@@ -7,8 +7,6 @@ const helpers           = require('./helpers');
 
 module.exports = {
   entry: {
-    // 'polyfills': './app/polyfills.ts',
-    // 'app': './app/main.ts'
     'app': './app/main.js'
   },
 
@@ -20,7 +18,6 @@ module.exports = {
   },
 
   resolve: {
-    // extensions: [ '.ts', '.js' ],
     extensions: [ '.js' ],
     modules: [
       helpers.root('app'),
@@ -32,28 +29,22 @@ module.exports = {
 
     rules: [
       // pre-loaders, for linting
-      // {
-      //   test: /\.ts$/,
-      //   loader: 'tslint-loader',
-      //   enforce: 'pre',
-      //   exclude: [ helpers.root('node_modules') ]
-      // },
       {
         test: /\.js$/,
         loader: 'eslint-loader',
         enforce: 'pre',
-        exclude: [ helpers.root('node_modules') ]
+        exclude: [
+          /node_modules/
+        ]
       },
 
       // code
-      // {
-      //   test: /\.ts$/,
-      //   loader: 'awesome-typescript-loader'
-      // },
       {
         test: /\.js$/,
         loader: 'babel-loader',
-        exclude: /node_modules/
+        exclude: [
+          /node_modules/
+        ]
       },
 
       // templates
@@ -66,7 +57,6 @@ module.exports = {
         include: helpers.root('app'),
         loaders: [
           'html-loader?attrs=img:src link:href',
-          // 'pug-html-loader?exports=false&doctype=html'
           'pug-html-loader?exports=false'
         ]
       },
@@ -103,7 +93,7 @@ module.exports = {
         loaders: [ 'file-loader?name=assets/fonts/[name].[hash].[ext]' ]
       },
 
-      // styles which will be referenced by JS (ng2 component styles)
+      // styles which will be required by JS (ng2 component styles)
       {
         test: /\.(css|scss)/,
         include: [ helpers.root('app') ],

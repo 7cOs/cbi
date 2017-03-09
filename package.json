@@ -14,7 +14,6 @@
 
     "dev": "concurrently --kill-others --raw \"npm run build:dev:watch\" \"npm run serve\"",
     "clean": "rimraf public",
-    "lintcode": "tslint **/*.ts --format stylish && eslint '**/*.js'",
     "lintjs": "eslint '**/*.js'",
     "lintsass": "sass-lint '**/*.scss' -v --no-exit -f stylish -i 'app/assets/styles/lib/**/*, node_modules/**/*'",
     "lint": "npm run lintjs && npm run lintsass",
@@ -76,8 +75,8 @@
     "image-webpack-loader": "^3.2.0",
     "import-glob-loader": "^1.1.0",
     "istanbul-instrumenter-loader": "^1.2.0",
-    "jasmine": "~2.4.1",
-    "jasmine-core": "~2.4.1",
+    "jasmine": "~2.5.3",
+    "jasmine-core": "~2.5.2",
     "jsforce": "~1.7.1",
     "karma": "^1.5.0",
     "karma-chrome-launcher": "^2.0.0",

@@ -16,7 +16,7 @@ module.exports = webpackMerge(commonConfig, {
 
     rules: [
 
-      // styles which are global or not referenced by JS framework (all ng1 styles)
+      // styles which are global (imported through main.scss e.g. all ng1 styles)
       {
         test: /\.(css|scss)/,
         include: [ path.resolve(helpers.root('app'), 'main.scss') ],
@@ -64,12 +64,6 @@ module.exports = webpackMerge(commonConfig, {
 
         htmlLoader: {
           minimize: false // workaround for ng2
-        },
-
-        tslint: {
-          emitErrors: false,
-          failOnHint: true,
-          formatter: 'stylish'
         },
 
         eslint: {
