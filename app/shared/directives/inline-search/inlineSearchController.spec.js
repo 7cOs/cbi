@@ -1,5 +1,5 @@
 describe('Unit: inline search controller', function() {
-  var scope, ctrl, state, $filter, searchService;
+  var scope, ctrl, searchService;
 
   beforeEach(function() {
     angular.mock.module('ui.router');
@@ -7,11 +7,9 @@ describe('Unit: inline search controller', function() {
     angular.mock.module('cf.common.services');
     angular.mock.module('cf.common.directives');
 
-    inject(function($rootScope, _$state_, $controller, _$filter_, _searchService_) {
+    inject(function($rootScope, $controller, _searchService_) {
       scope = $rootScope.$new();
-      state = _$state_;
       searchService = _searchService_;
-      $filter = _$filter_;
 
       ctrl = $controller('InlineSearchController', {$scope: scope});
     });
