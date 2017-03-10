@@ -1,19 +1,21 @@
 describe('Unit: list controller', function() {
-  var scope, ctrl, q, httpBackend, mdDialog, state, closedOpportunitiesService, filtersService, loaderService, opportunitiesService, storesService, targetListService, toastService, userService;
+  var scope, ctrl, q, httpBackend, mdDialog, state, closedOpportunitiesService, filtersService, loaderService, opportunitiesService, storesService, targetListService, toastService, userService, filter;
 
   beforeEach(function() {
     angular.mock.module('ui.router');
     angular.mock.module('ngMaterial');
     angular.mock.module('angulartics');
+    angular.mock.module('cf.common.filters');
     angular.mock.module('cf.common.services');
     angular.mock.module('cf.common.components.list');
 
-    inject(function($rootScope, _$q_, _$httpBackend_, _$mdDialog_, _$state_, $controller, _closedOpportunitiesService_, _filtersService_, _loaderService_, _opportunitiesService_, _storesService_, _targetListService_, _toastService_, _userService_) {
+    inject(function($rootScope, _$q_, _$httpBackend_, _$mdDialog_, _$state_, $controller, _$filter_, _closedOpportunitiesService_, _filtersService_, _loaderService_, _opportunitiesService_, _storesService_, _targetListService_, _toastService_, _userService_) {
       scope = $rootScope.$new();
       q = _$q_;
       mdDialog = _$mdDialog_;
       state = _$state_;
       httpBackend = _$httpBackend_;
+      filter = _$filter_;
 
       closedOpportunitiesService = _closedOpportunitiesService_;
       filtersService = _filtersService_;
@@ -379,7 +381,7 @@ describe('Unit: list controller', function() {
         'storeDepletionsCTDYA': object[0].store.depletionsCurrentYearToDateYA,
         'storeDepletionsCTDYAPercent': object[0].store.depletionsCurrentYearToDateYAPercent,
         'storeSegmentation': object[0].store.segmentation,
-        'opportunityType': object[0].type,
+        'opportunityType': filter('formatOpportunitiesType')(ctrl.opportunityTypeOrSubtype(object[0])),
         'productName': object[0].product.name,
         'itemAuthorization': object[0].isItemAuthorization,
         'chainMandate': object[0].isChainMandate,
@@ -401,7 +403,7 @@ describe('Unit: list controller', function() {
         'storeDepletionsCTDYA': object[0].store.depletionsCurrentYearToDateYA,
         'storeDepletionsCTDYAPercent': object[0].store.depletionsCurrentYearToDateYAPercent,
         'storeSegmentation': object[0].store.segmentation,
-        'opportunityType': object[0].type,
+        'opportunityType': filter('formatOpportunitiesType')(ctrl.opportunityTypeOrSubtype(object[0])),
         'productName': object[0].product.name,
         'itemAuthorization': object[0].isItemAuthorization,
         'chainMandate': object[0].isChainMandate,

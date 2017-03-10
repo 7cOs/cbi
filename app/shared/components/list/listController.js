@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports = /*  @ngInject */
-  function listController($scope, $state, $q, $location, $anchorScroll, $mdDialog, $timeout, $analytics, filtersService, loaderService, opportunitiesService, targetListService, storesService, userService, closedOpportunitiesService, ieHackService, toastService) {
+  function listController($scope, $state, $q, $location, $anchorScroll, $mdDialog, $timeout, $analytics, $filter, filtersService, loaderService, opportunitiesService, targetListService, storesService, userService, closedOpportunitiesService, ieHackService, toastService) {
 
     // ****************
     // CONTROLLER SETUP
@@ -598,7 +598,7 @@ module.exports = /*  @ngInject */
         csvItem.storeDepletionsCTDYA = item.store.depletionsCurrentYearToDateYA;
         csvItem.storeDepletionsCTDYAPercent = item.store.depletionsCurrentYearToDateYAPercent;
         csvItem.storeSegmentation = item.store.segmentation;
-        csvItem.opportunityType = opportunityTypeOrSubtype(item);
+        csvItem.opportunityType = $filter('formatOpportunitiesType')(opportunityTypeOrSubtype(item));
         csvItem.productName = item.product.name;
         csvItem.itemAuthorization = item.isItemAuthorization;
         csvItem.chainMandate = item.isChainMandate;
