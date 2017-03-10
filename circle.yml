@@ -6,7 +6,6 @@ machine:
 
 dependencies:
   pre:
-    - npm install -g gulp
     - cd automation-test && mvn install -DskipTests=true
 
 test:
