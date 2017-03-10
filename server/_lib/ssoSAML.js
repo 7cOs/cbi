@@ -36,7 +36,7 @@ function getSFDCSession(app, employeeID) {
       } else {
         reject({
           'isSuccess': false,
-          'errorMessage': 'The assertion was not able to be constructed'
+          'errorMessage': 'The Salesforce SAML assertion was not able to be constructed'
         });
       }
     });

@@ -31,21 +31,32 @@ function sfdcConn(app, req) {
   * credentials if they already exist in session.
   */
 
-  let jsonSfdcSession;
+  return new Promise(function(resolve, reject) {
+    let jsonSfdcSession;
 
-  if (!req.session.sfdc) {
-    return saml.getSFDCSession(app, req.user.jwtmap.employeeID).then(function(sfdcSession) {
-      jsonSfdcSession = JSON.parse(sfdcSession);
-      req.session.sfdc = jsonSfdcSession;
-      req.session.save(); // manual save is required for non GET reqs
-      return new jsforce.Connection({
-        instanceUrl: jsonSfdcSession.instance_url,
-        accessToken: jsonSfdcSession.access_token
+    if (!req.session.sfdc) {
+      saml.getSFDCSession(app, req.user.jwtmap.employeeID).then(function(sfdcSession) {
+        jsonSfdcSession = JSON.parse(sfdcSession);
+        req.session.sfdc = jsonSfdcSession;
+
+        // manual save is required for non GET reqs
+        req.session.save(function() {
+          resolve(new jsforce.Connection({
+            instanceUrl: jsonSfdcSession.instance_url,
+            accessToken: jsonSfdcSession.access_token
+          }));
+        });
+      }).catch(function(err) {
+        let error = {
+          'isSuccess': false,
+          'errorMessage': (err && err.errorMessage) ? err.errorMessage : 'Unable to get Salesforce session'
+        };
+
+        reject(error);
       });
-    });
-  } else {
-    jsonSfdcSession = req.session.sfdc;
-    return new Promise(function(resolve, reject) {
+    } else {
+      jsonSfdcSession = req.session.sfdc;
+
       if (jsonSfdcSession.instance_url && jsonSfdcSession.access_token) {
         resolve(new jsforce.Connection({
           instanceUrl: jsonSfdcSession.instance_url,
@@ -54,11 +65,11 @@ function sfdcConn(app, req) {
       } else {
         reject({
           'isSuccess': false,
-          'errorMessage': 'Unable to retrieve Salesforce credentials'
+          'errorMessage': 'Unable to retrieve Salesforce credentials from session'
         });
       }
-    });
-  }
+    }
+  });
 }
 
 function updateNote(app, req) {
