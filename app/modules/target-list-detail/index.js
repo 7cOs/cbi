@@ -10,7 +10,7 @@ module.exports =
     .state('target-list-detail', {
       url: '/target-lists/:id',
       title: 'Target List',
-      templateUrl: './app/modules/target-list-detail/layout.html',
+      template: require('./layout.pug'),
       controller: 'targetListDetailController',
       controllerAs: 'tld',
       onExit: function($rootScope, opportunitiesService) {

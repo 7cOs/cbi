@@ -10,7 +10,7 @@ module.exports =
     .state('accounts', {
       url: '/accounts?store',
       title: 'Account Dashboard',
-      templateUrl: './app/modules/accounts/layout.html',
+      template: require('./layout.pug'),
       controller: 'accountsController',
       controllerAs: 'a',
       params: {

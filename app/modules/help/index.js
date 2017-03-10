@@ -10,7 +10,7 @@ module.exports =
     .state('help', {
       url: '/help',
       title: 'Help',
-      templateUrl: './app/modules/help/layout.html',
+      template: require('./layout.pug'),
       controller: 'helpController',
       controllerAs: 'help',
       analyticsData: {

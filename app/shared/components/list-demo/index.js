@@ -63,7 +63,7 @@ function ListDemoController($rootScope, $scope, $mdToast) {
       hideDelay: 0,
       position: 'top left',
       scope: $scope.$new(),
-      templateUrl: './app/shared/components/list-demo/toast.html'
+      template: require('./toast.pug')
     });
   };
 
@@ -123,7 +123,7 @@ function ListDemoController($rootScope, $scope, $mdToast) {
 module.exports =
   angular.module('cf.common.components.list-demo', [])
   .component('listdemo', {
-    templateUrl: './app/shared/components/list-demo/list-demo.html',
+    template: require('./list-demo.pug'),
     controller: ListDemoController,
     controllerAs: 'listdemo'
   });

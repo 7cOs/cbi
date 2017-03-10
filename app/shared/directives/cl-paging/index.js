@@ -40,7 +40,7 @@ module.exports =
       },
       controller: ClPagingController,
       controllerAs: 'paging',
-      templateUrl: 'app/shared/directives/cl-paging/cl-paging.html'
+      template: require('./cl-paging.pug')
     };
 
     /*  @ngInject */

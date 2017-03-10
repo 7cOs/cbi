@@ -197,7 +197,7 @@ module.exports = /*  @ngInject */
         parent: parentEl,
         scope: $scope.$new(),
         targetEvent: ev,
-        templateUrl: './app/modules/target-list-detail/modal-manage-target-list.html'
+        template: require('./modal-manage-target-list.pug')
       });
     }
 
@@ -316,7 +316,7 @@ module.exports = /*  @ngInject */
       $mdDialog.show({
         clickOutsideToClose: false,
         scope: $scope.$new(),
-        templateUrl: './app/modules/target-list-detail/modal-unauthorized-access.html'
+        template: require('./modal-unauthorized-access.pug')
       });
 
       $timeout(function() {

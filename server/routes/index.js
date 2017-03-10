@@ -20,9 +20,7 @@ module.exports = function(app) {
   //  Angular routes
   app.get('*', function (req, res) {
     if (req.isAuthenticated()) {
-      res.render('main', {
-        config: app.get('config')
-      });
+      res.sendFile(app.get('index'));
     } else {
       res.redirect('/auth/login');
     }

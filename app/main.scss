@@ -9,6 +9,7 @@
 @import './assets/styles/base/utilities';
 
 // Font Awesome for Text Editor
+$fa-font-path: './assets/fonts';
 @import './assets/styles/lib/font-awesome/font-awesome';
 @import './assets/styles/lib/text-angular/text-angular';
 
@@ -42,4 +43,5 @@
 @import './modules/**/*.scss';
 
 // Components
-@import './shared/**/*.scss';
+@import './shared/components/**/*.scss';
+@import './shared/directives/**/*.scss';

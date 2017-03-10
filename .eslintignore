@@ -1,3 +1,4 @@
-public/app/
-public/js/**/*.min.js
-public/lib/
+node_modules/
+coverage/
+public/
+automation-test/

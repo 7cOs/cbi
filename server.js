@@ -21,13 +21,8 @@ function start() {
 
   // START THE APP BY LISTENING ON <PORT>
   app.server = app.listen(process.env.PORT || 1980, function(err) {
-    if (err) { // IF THERE'S AN ERROR
+    if (err) {
       console.error('error', err);
-    } else {
-      let config = app.get('config');
-      if (config.socket) {
-        require(config.dir.server.socket)(app);
-      }
     }
 
     process.on('uncaughtException', function (er) {

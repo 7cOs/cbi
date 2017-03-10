@@ -6,7 +6,7 @@ module.exports = function(app, client) {
     error: {
       code: 500,
       title: 'Server Error!',
-      message: 'An an unkown error has occurred. Please try again'
+      message: 'An an unknown error has occurred. Please try again.'
     }
   });
 };

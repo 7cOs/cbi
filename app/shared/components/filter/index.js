@@ -3,7 +3,7 @@
 module.exports =
   angular.module('cf.common.components.filter', [])
   .component('filter', {
-    templateUrl: './app/shared/components/filter/filter.html',
+    template: require('./filter.pug'),
     controller: 'filterController',
     controllerAs: 'filter'
   })

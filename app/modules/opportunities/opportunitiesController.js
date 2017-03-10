@@ -114,7 +114,7 @@ module.exports = /*  @ngInject */
         parent: parentEl,
         scope: $scope.$new(),
         targetEvent: ev,
-        templateUrl: './app/modules/opportunities/modal-edit-filter.html'
+        template: require('./modal-edit-filter.pug')
       });
     }
 

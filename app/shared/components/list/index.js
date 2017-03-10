@@ -3,7 +3,7 @@
 module.exports =
   angular.module('cf.common.components.list', [])
   .component('list', {
-    templateUrl: './app/shared/components/list/list.html',
+    template: require('./list.pug'),
     controller: 'listController',
     controllerAs: 'list'
   })

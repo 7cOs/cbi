@@ -10,7 +10,7 @@ module.exports =
     .state('scorecards', {
       url: '/scorecards',
       title: 'Scorecards',
-      templateUrl: './app/modules/scorecards/layout.html',
+      template: require('./layout.pug'),
       controller: 'scorecardsController',
       controllerAs: 's',
       analyticsData: {

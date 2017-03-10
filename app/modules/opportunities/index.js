@@ -12,7 +12,7 @@ module.exports =
         resetFiltersOnLoad: true,
         applyFiltersOnLoad: false
       },
-      templateUrl: './app/modules/opportunities/layout.html',
+      template: require('./layout.pug'),
       controller: 'opportunitiesController',
       controllerAs: 'o',
       analyticsData: {

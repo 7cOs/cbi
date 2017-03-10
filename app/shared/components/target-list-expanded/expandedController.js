@@ -109,7 +109,7 @@ module.exports = /*  @ngInject */
         parent: parentEl,
         scope: $scope.$new(),
         targetEvent: e,
-        templateUrl: './app/shared/components/target-list-expanded/create-target-list-modal.html'
+        template: require('./create-target-list-modal.pug')
       });
     }
 
@@ -128,7 +128,7 @@ module.exports = /*  @ngInject */
         parent: parentEl,
         scope: $scope.$new(),
         targetEvent: e,
-        templateUrl: './app/shared/components/target-list-expanded/target-list-switch-modal.html'
+        template: require('./target-list-switch-modal.pug')
       });
     }
 

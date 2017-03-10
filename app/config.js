@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports = /*  @ngInject */
-  function($mdThemingProvider, $locationProvider, $httpProvider, $analyticsProvider) {
+  function($mdThemingProvider, $locationProvider, $httpProvider, $analyticsProvider, $urlRouterProvider) {
 
     if (!$httpProvider.defaults.headers.get) {
       $httpProvider.defaults.headers.get = {};
@@ -14,7 +14,11 @@ module.exports = /*  @ngInject */
     $mdThemingProvider.theme('default')
       .primaryPalette('grey')
       .accentPalette('light-blue');
+
     $locationProvider.html5Mode(true);
+
+    // route to / when unknown route is encountered
+    $urlRouterProvider.otherwise('/');
 
     // disable angulartics auto tracking
     $analyticsProvider.virtualPageviews(false);

@@ -2,14 +2,6 @@ describe('Unit: notes controller', function() {
   var $q, scope, $rootScope, ctrl, notesService, $window, note, callBackData, $httpBackend, files, $timeout;
 
   beforeEach(function() {
-      $window = { location: {replace: jasmine.createSpy()} };
-
-      module(function($provide) {
-        $provide.value('$window', $window);
-      });
-  });
-
-  beforeEach(function() {
     angular.mock.module('ui.router');
     angular.mock.module('ngMaterial');
     angular.mock.module('ngFileUpload');
@@ -18,13 +10,18 @@ describe('Unit: notes controller', function() {
     angular.mock.module('cf.common.components.notes');
     angular.mock.module('angularMoment');
 
-    inject(function(_$rootScope_, $controller, _notesService_, _$q_, $injector, _$window_, _$httpBackend_, _$timeout_) {
+    angular.mock.module(function($provide) {
+      $window = { location: {replace: jasmine.createSpy()} };
+
+      $provide.value('$window', $window);
+    });
+
+    inject(function(_$rootScope_, $controller, _notesService_, _$q_, $injector, _$httpBackend_, _$timeout_) {
       $rootScope = _$rootScope_;
       scope = $rootScope.$new();
       scope.analytics = {};
       notesService = _notesService_;
       $q = _$q_;
-      $window = _$window_;
       $httpBackend = _$httpBackend_;
       $timeout = _$timeout_;
       ctrl = $controller('notesController', {
