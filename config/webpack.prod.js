@@ -64,6 +64,7 @@ module.exports = webpackMerge(commonConfig, {
               remove: true
             },
             safe: true,
+            mergeLonghand: false, // workaround for angular-material issues
             discardComments: {
               removeAll: true
             }
