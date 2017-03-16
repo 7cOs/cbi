@@ -7,7 +7,8 @@ const helpers           = require('./helpers');
 
 module.exports = {
   entry: {
-    'app': './app/main.js'
+    'polyfills': './app/polyfills.ts',
+    'app': './app/main.ts'
   },
 
   output: {
@@ -18,7 +19,7 @@ module.exports = {
   },
 
   resolve: {
-    extensions: [ '.js' ],
+    extensions: [ '.ts', '.js' ],
     modules: [
       helpers.root('app'),
       'node_modules'
@@ -30,6 +31,14 @@ module.exports = {
     rules: [
       // pre-loaders, for linting
       {
+        test: /\.ts$/,
+        loader: 'tslint-loader',
+        enforce: 'pre',
+        exclude: [
+          /node_modules/
+        ]
+      },
+      {
         test: /\.js$/,
         loader: 'eslint-loader',
         enforce: 'pre',
@@ -40,8 +49,8 @@ module.exports = {
 
       // code
       {
-        test: /\.js$/,
-        loader: 'babel-loader',
+        test: /\.(ts|js)$/,
+        loader: 'awesome-typescript-loader',
         exclude: [
           /node_modules/
         ]
@@ -119,8 +128,7 @@ module.exports = {
     }),
 
     new webpack.optimize.CommonsChunkPlugin({
-      // name: [ 'app', 'polyfills' ]
-      name: [ 'app' ]
+      name: [ 'app', 'polyfills' ]
     }),
 
     new HtmlWebpackPlugin({

@@ -7,13 +7,13 @@ module.exports = function (config) {
     frameworks: [ 'jasmine' ],
 
     files: [
-      './app/main.js',
+      './config/karma-source-bundle.js',  // workaround for remap-coverage with ng1 sources in TS
       './config/karma-spec-bundle.js'
     ],
 
     preprocessors: {
-      './app/main.js': [ 'coverage', 'webpack', 'sourcemap' ],
-      './config/karma-spec-bundle.js': [ 'webpack', 'sourcemap' ]
+      './config/karma-source-bundle.js': [ 'coverage', 'webpack', 'sourcemap' ],
+      './config/karma-spec-bundle.js': [ 'coverage', 'webpack', 'sourcemap' ]
     },
 
     webpack: webpackConfig,
