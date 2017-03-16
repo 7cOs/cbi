@@ -1,5 +1,9 @@
-'use strict';
-var angular = require('angular');
+const angular = require('angular');
+
+interface Window {
+  nv: any;
+  CryptoJS: any;
+}
 window.nv = require('nvd3');
 window.CryptoJS = require('crypto-js');
 
@@ -10,7 +14,6 @@ require('textangular/dist/textAngular-sanitize.min');
 angular.module('cf', [
   require('angular-ui-router'),
   require('angular-cookies'),
-  'ngCookies',
   require('angular-material'),
   require('angular-animate'),
   require('v-accordion'),

@@ -67,6 +67,12 @@ module.exports = webpackMerge(commonConfig, {
           minimize: false // workaround for ng2
         },
 
+        tslint: {
+          emitErrors: false,
+          failOnHint: true,
+          formatter: 'stylish'
+        },
+
         eslint: {
           failOnWarning: false,
           failOnError: true

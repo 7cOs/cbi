@@ -10,7 +10,7 @@ module.exports = {
   devtool: 'inline-source-map',
 
   resolve: {
-    extensions: [ '.js' ],
+    extensions: [ '.ts', '.js' ],
     modules: [
       helpers.root('app'),
       'node_modules'
@@ -21,23 +21,24 @@ module.exports = {
 
     rules: [
 
-      // preloaders for linting and sourcemaps
+      // sourcemap preloader
       {
         test: /\.js$/,
         loaders: [
-          'source-map-loader',
-          'eslint-loader'
+          'source-map-loader'
         ],
         enforce: 'pre',
         exclude: [
-          /node_modules/
+          // these packages have problems with their sourcemaps
+          helpers.root('node_modules/rxjs'),
+          helpers.root('node_modules/@angular')
         ]
       },
 
       // code
       {
-        test: /\.js$/,
-        loader: 'babel-loader',
+        test: /\.(ts|js)$/,
+        loader: 'awesome-typescript-loader',
         exclude: [
           /node_modules/
         ]
@@ -63,38 +64,18 @@ module.exports = {
         loader: 'file-loader'
       },
 
-      // styles which will be required by JS (ng2 component styles)
       {
         test: /\.(css|scss)/,
-        include: [ helpers.root('app') ],
-        exclude: [ path.resolve(helpers.root('app'), 'main.scss') ],
-        loaders: [
-          'exports-loader?module.exports.toString()',
-          'css-loader?-minimize&sourceMap',
-          'sass-loader?sourceMap'
-        ]
-      },
-
-      // styles which are global (imported through main.scss e.g. all ng1 styles)
-      {
-        test: /\.(css|scss)/,
-        include: [ path.resolve(helpers.root('app'), 'main.scss') ],
-        loaders: [
-          'style-loader',
-          'css-loader?-minimize&sourceMap',
-          'resolve-url-loader?sourceMap&keepQuery',
-          'sass-loader?sourceMap',
-          'import-glob-loader'
-        ]
+        loader: 'null-loader'
       },
 
       // code instrumentation, post load
       {
-        test: /\.(js)$/,
+        test: /\.(ts|js)$/,
         loader: 'istanbul-instrumenter-loader',
         include: helpers.root('app'),
         exclude: [
-          /\.(e2e|spec)\.(js)$/,
+          /\.(e2e|spec)\.(ts|js)$/,
           /node_modules/
         ],
         enforce: 'post'
@@ -114,6 +95,19 @@ module.exports = {
     new webpack.ContextReplacementPlugin(
       /angular(\\|\/)core(\\|\/)(esm(\\|\/)src|src)(\\|\/)linker/,
       helpers.root('app')
-    )
+    ),
+
+    new webpack.LoaderOptionsPlugin({
+      minimize: false,
+      debug: true,
+
+      options: {
+        context: path.resolve(__dirname, './app'),
+
+        htmlLoader: {
+          minimize: false // workaround for ng2
+        }
+      }
+    })
   ]
 };

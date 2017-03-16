@@ -10,8 +10,9 @@ dependencies:
 
 test:
   override:
-    - npm run lintjs
-    - npm run lintsass
+    - npm run lint:ts
+    - npm run lint:js
+    - npm run lint:sass
     - npm test
 
   post:

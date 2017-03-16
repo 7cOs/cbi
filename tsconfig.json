@@ -1,0 +1,40 @@
+{
+  "compilerOptions": {
+    "target": "es5",
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "pretty": true,
+
+    "allowJs": true,
+    "alwaysStrict": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "importHelpers": true,
+    "noImplicitAny": false,
+    "removeComments": false,
+    "sourceMap": true,
+    "suppressImplicitAnyIndexErrors": true
+  },
+  "exclude": [
+    "automation-test",
+    "config",
+    "coverage",
+    "node_modules",
+    "public",
+    "server",
+    "typings/main",
+    "typings/main.d.ts"
+  ],
+  "lib": [
+    "dom",
+    "es6"
+  ],
+  "compileOnSave": false,
+  "buildOnSave": false,
+  "awesomeTypescriptLoaderOptions": {
+    "forkChecker": true
+  },
+  "atom": {
+    "rewriteTsconfig": false
+  }
+}
