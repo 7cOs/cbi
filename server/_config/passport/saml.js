@@ -22,7 +22,7 @@ module.exports = function(app) {
     headers['X-CBI-API-AGENT'] = util.agentHeader();
     headers['X-CBI-API-USER']  = util.userHeaderFromSaml(req.body.SAMLResponse);
 
-    var signed = util.sign('/api/auth');
+    let signed = util.signApiUrl('/api/auth');
     request.post(signed, {headers: headers, body: req.body.SAMLResponse}, function(err, httpResponse, body) {
       if (err) {  // request error
         let logObj = Object.assign(
