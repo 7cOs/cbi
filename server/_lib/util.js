@@ -1,37 +1,36 @@
 'use strict';
 
 module.exports = function(app) {
-  // for analytics
   const git   = require('git-rev-sync'),
         pjson = require('../../package'),
         xmlParser = require('xml2json'),
-        logutil = require('./logutil');
+        logutil = require('./logutil'),
+        crypto = require('crypto-js'),
+
+        apiBase = app.get('config').api.url,
+        apiVersion = app.get('config').api.version,
+        apiKey = encodeURIComponent(app.get('config').api.apiKey),
+        apiSecret = app.get('config').api.key;
 
   return {
-    // APPLY TITLE CASING
-    titleCase: function(str) {
-      var newstr = str.split(' ');
-      for (let i = 0; i < newstr.length; i++) {
-        let copy = newstr[i].substring(1).toLowerCase();
-        newstr[i] = newstr[i][0].toUpperCase() + copy;
-      }
-      return newstr.join(' ');
-    },
+    // Compass Beers API URL Signing:
+    //  - Replace /api/ in path with /<version>/
+    //  - Add 'apiKey' query param
+    //  - Add 'signature' query param based on path, apiKey, and secret key
+    signApiUrl: function(uri) {
+      let uriSplit =  uri.split('?'),
+          path = uriSplit[0],
+          params = uriSplit[1],
+          nonVersionedPath = path.split('api/')[1],
+          versionedPath = `/${apiVersion}/${nonVersionedPath}`,
+          signature = encodeURIComponent(crypto.enc.Base64.stringify(crypto.HmacSHA256(versionedPath + apiKey, apiSecret))),
+          signedUrl = `${apiBase}${versionedPath}?signature=${signature}&apiKey=${apiKey}`;
 
-    // URL Signing
-    sign: function(uri) {
-      const crypto = require('crypto-js');
-      var params = uri.split('?')[1];
-      uri = uri.split('?')[0];
-      var en = '/' + app.get('config').api.version + '/' + uri.split('api/')[1];
-      var signature = crypto.enc.Base64.stringify(crypto.HmacSHA256(en + app.get('config').api.apiKey, app.get('config').api.key));
-      // Adedd encodeURIComponent as signature is supposed to be encoded - WJAY 10/3
-      var url = app.get('config').api.url + en + '?signature=' + encodeURIComponent(signature) + '&apiKey=' + app.get('config').api.apiKey;
       if (params) {
-        url = url + '&' + params;
+        signedUrl = `${signedUrl}&${params}`;
       }
 
-      return url;
+      return signedUrl;
     },
 
     // API Analytics headers

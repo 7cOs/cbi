@@ -14,7 +14,7 @@ module.exports = function(app) {
         headers['X-CBI-API-USER'] = util.userHeader(req.user.employeeID);
 
         app.locals.apiAuth = {
-          signed: util.sign(req.url),
+          signed: util.signApiUrl(req.url),
           jwtToken: req.user.jwt,
           headers: headers
         };

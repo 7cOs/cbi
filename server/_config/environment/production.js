@@ -23,7 +23,7 @@ module.exports = function (config) {
   config.api = {
     url: 'https://internal.api.cbrands.com',
     key: 'U1NCc2FXdGxJSFJ2SUVodlpHOXlMQ0JJYjJSdmNpd2dTRzlrYjNJc0lFaHZaRzl5Y3lCaGJtUWdTRzlrYjNKekxnPT0=',
-    apiKey: 'test',
+    apiKey: 'compass-beer-portal',
     version: 'v2'
   };
 
