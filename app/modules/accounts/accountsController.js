@@ -68,6 +68,7 @@ module.exports = /*  @ngInject */
     vm.showXDistributor = false;
     vm.showXStore = false;
     vm._topPerformersThreshold = 2;
+    vm.prevTopBottomObj = {};
 
     // top bottom public methods
     vm.topBottomData = {
@@ -1017,6 +1018,7 @@ module.exports = /*  @ngInject */
      * @returns returns either vm.topBottomData.distirbutor, vm.topBottomData.accounts etc
      */
     function getCurrentTopBottomObject(acctType) {
+      vm.prevTopBottomObj = vm.currentTopBottomObj || {};
       var currentObj;
       var accountTypes = filtersService.accountFilters.accountTypesEnums;
       var selectedTopBottomValue = vm.filtersService.model.valuesVsTrend.value;
@@ -1080,7 +1082,7 @@ module.exports = /*  @ngInject */
       params = myperformanceService.appendFilterParametersForTopBottom(params, vm.currentTopBottomFilters, vm.filtersService.model.selected.myAccountsOnly);
       vm.loadingTopBottom = true;
       params.additionalParams = getAppliedFiltersForTopBottom();
-
+      debugger;
       userService.getTopBottomSnapshot(vm.currentTopBottomAcctType, params).then(function(data) {
         vm.currentTopBottomObj.performanceData = data.performance;
         vm.currentTopBottomObj.isPerformanceDataUpdateRequired = false;
@@ -1307,14 +1309,40 @@ module.exports = /*  @ngInject */
     }
 
     function navPrevLevelInTopBottom() {
-      console.log('foo');
-      var currentLevelName = getCurrentTopBottomObject(vm.currentTopBottomAcctType).currentLevelName;
+      var currentLevelName = vm.currentTopBottomAcctType.name;
       var getPrevLevel = currentLevelName !== 'distributors';
-      console.log('getPrevLevel', getPrevLevel);
-      if (currentLevelName === 'accounts') {
+      if (!getPrevLevel) return;
+      if (currentLevelName === 'Accounts') {
         var filter = {name: 'Distributors', value: 1};
         setTopBottomAcctTypeSelection(filter);
-      };
+      }
+      if (currentLevelName === 'Sub-Accounts') {
+        var newLevelName = 'accounts';
+        var performanceData = vm.topBottomData['accounts'].performanceData[1];
+        if (myperformanceService.checkForInconsistentIds(performanceData)) {
+          return;
+        }
+        if (performanceData.name && performanceData.name.toLowerCase() === 'independent' && !vm.currentTopBottomFilters.distributors) {
+          return;
+        }
+
+        // Updates the top bottom filter object with the selection
+        setTopBottomFilterModel(newLevelName, performanceData);
+        // Make sure all the models in filtersService are set correctly and reflect the object in top botom filter
+        setUpdatedFilters();
+        // Set the chain dropdown and appropriate placeholder text
+        setChainDropdownAndPlaceHolder(newLevelName, performanceData);
+        vm.currentTopBottomAcctType = {name: 'Accounts', value: 2};
+        myperformanceService.resetFiltersForLevelsAboveCurrent({name: 'Distributors', value: 1}, vm.currentTopBottomFilters, vm.topBottomData);
+        updateBrandSnapshot(true);
+        getDataForTopBottomLevel(vm.prevTopBottomObj);
+        sendTopBottomAnalyticsEvent();
+        notesService.model.tdlinx = performanceData.unversionedStoreCode;
+        notesService.model.address = formatAddress(performanceData);
+        notesService.model.city = performanceData.city;
+        notesService.model.state = performanceData.state;
+        notesService.model.zipCode = performanceData.zipCode;
+      }
     }
 
     /**
@@ -1323,7 +1351,6 @@ module.exports = /*  @ngInject */
      * @param {Object} performanceData get the data associated with the clicked object
      */
     function navigateTopBottomLevels(performanceData) {
-      debugger;
       // console.log('Perf data', performanceData);
       if (performanceData) {
         var currentLevelName = getCurrentTopBottomObject(vm.currentTopBottomAcctType).currentLevelName;
