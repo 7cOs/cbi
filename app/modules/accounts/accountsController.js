@@ -86,6 +86,7 @@ module.exports = /*  @ngInject */
     vm.isDistributorSelectionComplete = null;
     vm.getDataForTopBottomLevel = getDataForTopBottomLevel;
     vm.navigateTopBottomLevels = navigateTopBottomLevels;
+    vm.navPrevLevelInTopBottom = navPrevLevelInTopBottom;
     vm.changeTopBottomSortOrder = changeTopBottomSortOrder;
     vm.currentBoundTopBottomIndexes = [];
     vm.distOptionChanged = distOptionChanged;
@@ -1305,12 +1306,20 @@ module.exports = /*  @ngInject */
       return addressWithStoreNumber;
     }
 
+    function navPrevLevelInTopBottom() {
+      console.log('foo');
+      var currentLevelName = getCurrentTopBottomObject(vm.currentTopBottomAcctType).currentLevelName;
+      var getPrevLevel = currentLevelName !== 'distributors';
+      console.log('getPrevLevel', getPrevLevel);
+    }
+
     /**
      * Navigates to the level after the current. If distributor ---> Acct, Acct--->SubAcct, SubAcct-->Store, Store click just highlight the store
      * @param {String} currentLevelName Indicates the text indicator of the level. 'distributor', 'account', 'subaccount','store'
      * @param {Object} performanceData get the data associated with the clicked object
      */
     function navigateTopBottomLevels(performanceData) {
+      debugger;
       // console.log('Perf data', performanceData);
       if (performanceData) {
         var currentLevelName = getCurrentTopBottomObject(vm.currentTopBottomAcctType).currentLevelName;
