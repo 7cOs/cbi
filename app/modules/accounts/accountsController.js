@@ -1311,6 +1311,10 @@ module.exports = /*  @ngInject */
       var currentLevelName = getCurrentTopBottomObject(vm.currentTopBottomAcctType).currentLevelName;
       var getPrevLevel = currentLevelName !== 'distributors';
       console.log('getPrevLevel', getPrevLevel);
+      if (currentLevelName === 'accounts') {
+        var filter = {name: 'Distributors', value: 1};
+        setTopBottomAcctTypeSelection(filter);
+      };
     }
 
     /**
