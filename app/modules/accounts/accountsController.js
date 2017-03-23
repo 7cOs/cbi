@@ -413,6 +413,7 @@ module.exports = /*  @ngInject */
 
     function resetFilters() {
       // Remove all filters asssociated with top bottom
+      resetTopBottomHistory();
       removeAllTopBottomAccountTypeFilters();
       chipsService.resetChipsFilters(chipsService.model);
       vm.filterModel = angular.copy(filterModelTemplate);
