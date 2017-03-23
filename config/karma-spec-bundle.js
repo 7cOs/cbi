@@ -18,10 +18,10 @@ require('../node_modules/angular-material/angular-material-mocks.js');
 const appContext = require.context('../app', true, /\.spec\.(ts|js)/);
 appContext.keys().forEach(appContext);
 
-// const testing = require('@angular/core/testing');
-// const browser = require('@angular/platform-browser-dynamic/testing');
-//
-// testing.TestBed.initTestEnvironment(
-//   browser.BrowserDynamicTestingModule,
-//   browser.platformBrowserDynamicTesting()
-// );
+const testing = require('@angular/core/testing');
+const browser = require('@angular/platform-browser-dynamic/testing');
+
+testing.TestBed.initTestEnvironment(
+  browser.BrowserDynamicTestingModule,
+  browser.platformBrowserDynamicTesting()
+);

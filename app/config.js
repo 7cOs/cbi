@@ -15,7 +15,7 @@ module.exports = /*  @ngInject */
       .primaryPalette('grey')
       .accentPalette('light-blue');
 
-    $locationProvider.html5Mode(true);
+    $locationProvider.html5Mode({ enabled: true });
 
     // route to / when unknown route is encountered
     $urlRouterProvider.otherwise('/');
