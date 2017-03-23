@@ -1024,7 +1024,7 @@ module.exports = /*  @ngInject */
      */
     function getCurrentTopBottomObject(acctType, setPrev) {
       if (setPrev) {
-        vm.prevTopBottomObj = vm.currentTopBottomObj || {};
+        vm.prevTopBottomObj = vm.currentTopBottomObj;
         vm.canNavPrevLevel  = true;
       };
       var currentObj;
