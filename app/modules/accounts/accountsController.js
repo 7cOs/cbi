@@ -70,6 +70,7 @@ module.exports = /*  @ngInject */
     vm._topPerformersThreshold = 2;
     vm.prevTopBottomObj = {};
     vm.topBottomHistory = {};
+    vm.canNavPrevLevel = false;
 
     // top bottom public methods
     vm.topBottomData = {
@@ -223,6 +224,7 @@ module.exports = /*  @ngInject */
     }
 
     function filterTopBottom() {
+      resetTopBottomHistory();
       var previousTopBottomAcctType = vm.currentTopBottomAcctType;
 
       // reset flags
@@ -986,6 +988,7 @@ module.exports = /*  @ngInject */
      */
     function setTopBottomAcctTypeSelection(currentAcctType) {
       if (vm.currentTopBottomAcctType !== currentAcctType) {
+        resetTopBottomHistory();
         vm.currentTopBottomAcctType = currentAcctType;
         vm.currentTopBottomObj = getCurrentTopBottomObject(currentAcctType);
         sendTopBottomAnalyticsEvent();
@@ -1214,6 +1217,7 @@ module.exports = /*  @ngInject */
      */
     function acctMarketChanged(selectedVal) {
       if (vm.filtersService.model.accountSelected.accountMarkets !== selectedVal) {
+        resetTopBottomHistory();
         vm.filtersService.model.accountSelected.accountMarkets = selectedVal;
         sendTopBottomAnalyticsEvent();
         onFilterPropertiesChange(false);
@@ -1310,6 +1314,12 @@ module.exports = /*  @ngInject */
       return addressWithStoreNumber;
     }
 
+    function resetTopBottomHistory() {
+      vm.topBottomHistory = {};
+      vm.prevTopBottomObj = {};
+      vm.canNavPrevLevel  = false;
+    }
+
     function navPrevLevelInTopBottom() {
       var performanceData;
       var newLevelName;
@@ -1320,6 +1330,7 @@ module.exports = /*  @ngInject */
       if (currentLevelName === 'Accounts') {
         var filter = {name: 'Distributors', value: 1};
         setTopBottomAcctTypeSelection(filter);
+        resetTopBottomHistory();
       }
       if (currentLevelName === 'Sub-Accounts') {
         newLevelName = 'accounts';
