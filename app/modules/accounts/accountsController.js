@@ -68,6 +68,9 @@ module.exports = /*  @ngInject */
     vm.showXDistributor = false;
     vm.showXStore = false;
     vm._topPerformersThreshold = 2;
+    vm.prevTopBottomObj = {};
+    vm.topBottomHistory = {};
+    vm.canNavPrevLevel = false;
 
     // top bottom public methods
     vm.topBottomData = {
@@ -86,6 +89,7 @@ module.exports = /*  @ngInject */
     vm.isDistributorSelectionComplete = null;
     vm.getDataForTopBottomLevel = getDataForTopBottomLevel;
     vm.navigateTopBottomLevels = navigateTopBottomLevels;
+    vm.navPrevLevelInTopBottom = navPrevLevelInTopBottom;
     vm.changeTopBottomSortOrder = changeTopBottomSortOrder;
     vm.currentBoundTopBottomIndexes = [];
     vm.distOptionChanged = distOptionChanged;
@@ -220,6 +224,7 @@ module.exports = /*  @ngInject */
     }
 
     function filterTopBottom() {
+      resetTopBottomHistory();
       var previousTopBottomAcctType = vm.currentTopBottomAcctType;
 
       // reset flags
@@ -408,6 +413,7 @@ module.exports = /*  @ngInject */
 
     function resetFilters() {
       // Remove all filters asssociated with top bottom
+      resetTopBottomHistory();
       removeAllTopBottomAccountTypeFilters();
       chipsService.resetChipsFilters(chipsService.model);
       vm.filterModel = angular.copy(filterModelTemplate);
@@ -983,6 +989,7 @@ module.exports = /*  @ngInject */
      */
     function setTopBottomAcctTypeSelection(currentAcctType) {
       if (vm.currentTopBottomAcctType !== currentAcctType) {
+        resetTopBottomHistory();
         vm.currentTopBottomAcctType = currentAcctType;
         vm.currentTopBottomObj = getCurrentTopBottomObject(currentAcctType);
         sendTopBottomAnalyticsEvent();
@@ -1015,7 +1022,11 @@ module.exports = /*  @ngInject */
      * @param {Object} acctType Can be either a distirbutor, acct, subacct, store object
      * @returns returns either vm.topBottomData.distirbutor, vm.topBottomData.accounts etc
      */
-    function getCurrentTopBottomObject(acctType) {
+    function getCurrentTopBottomObject(acctType, setPrev) {
+      if (setPrev) {
+        vm.prevTopBottomObj = vm.currentTopBottomObj;
+        vm.canNavPrevLevel  = true;
+      };
       var currentObj;
       var accountTypes = filtersService.accountFilters.accountTypesEnums;
       var selectedTopBottomValue = vm.filtersService.model.valuesVsTrend.value;
@@ -1079,7 +1090,6 @@ module.exports = /*  @ngInject */
       params = myperformanceService.appendFilterParametersForTopBottom(params, vm.currentTopBottomFilters, vm.filtersService.model.selected.myAccountsOnly);
       vm.loadingTopBottom = true;
       params.additionalParams = getAppliedFiltersForTopBottom();
-
       userService.getTopBottomSnapshot(vm.currentTopBottomAcctType, params).then(function(data) {
         vm.currentTopBottomObj.performanceData = data.performance;
         vm.currentTopBottomObj.isPerformanceDataUpdateRequired = false;
@@ -1209,6 +1219,7 @@ module.exports = /*  @ngInject */
      */
     function acctMarketChanged(selectedVal) {
       if (vm.filtersService.model.accountSelected.accountMarkets !== selectedVal) {
+        resetTopBottomHistory();
         vm.filtersService.model.accountSelected.accountMarkets = selectedVal;
         sendTopBottomAnalyticsEvent();
         onFilterPropertiesChange(false);
@@ -1305,6 +1316,70 @@ module.exports = /*  @ngInject */
       return addressWithStoreNumber;
     }
 
+    function resetTopBottomHistory() {
+      vm.topBottomHistory = {};
+      vm.prevTopBottomObj = {};
+      vm.canNavPrevLevel  = false;
+    }
+
+    function updateNotesModel(performanceData) {
+      notesService.model.tdlinx  = performanceData.unversionedStoreCode;
+      notesService.model.address = formatAddress(performanceData);
+      notesService.model.city    = performanceData.city;
+      notesService.model.state   = performanceData.state;
+      notesService.model.zipCode = performanceData.zipCode;
+    }
+
+    function navPrevLevelInTopBottom() {
+      var performanceData;
+      var newLevelName;
+      var newAccountType;
+      var levelToResetBeyond;
+      var currentLevelName = vm.currentTopBottomAcctType.name;
+
+      if (currentLevelName === 'distributors') return;
+
+      switch (currentLevelName) {
+        case 'Accounts':
+          newAccountType     = {name: 'Distributors', value: 1};
+          break;
+        case 'Sub-Accounts':
+          newLevelName       = 'accounts';
+          performanceData    = vm.topBottomHistory.distributors;
+          newAccountType     = {name: 'Accounts', value: 2};
+          levelToResetBeyond = {name: 'Distributors', value: 1};
+          break;
+        case 'Stores':
+          newLevelName       = 'subAccounts';
+          performanceData    = vm.topBottomHistory.accounts;
+          newAccountType     = {name: 'Sub-Accounts', value: 3};
+          levelToResetBeyond = {name: 'Accounts', value: 2};
+          break;
+      }
+
+      // if performanceData does not exist (when navigating back to uppper-most level) treat it like a new request
+      if (!performanceData) {
+        vm.currentTopBottomObj = getCurrentTopBottomObject(newAccountType);
+        setTopBottomAcctTypeSelection(newAccountType);
+        resetTopBottomHistory();
+        return;
+      }
+
+      if (myperformanceService.hasInconsistentIds(performanceData)) return;
+      if (performanceData.name && performanceData.name.toLowerCase() === 'independent' && !vm.currentTopBottomFilters.distributors) return;
+
+      setTopBottomFilterModel(newLevelName, performanceData);
+      setUpdatedFilters();
+      setChainDropdownAndPlaceHolder(newLevelName, performanceData);
+      vm.currentTopBottomAcctType = newAccountType;
+      myperformanceService.resetFiltersForLevelsAboveCurrent(levelToResetBeyond, vm.currentTopBottomFilters, vm.topBottomData);
+      updateBrandSnapshot(true);
+      vm.currentTopBottomObj = getCurrentTopBottomObject(vm.currentTopBottomAcctType);
+      getDataForTopBottomLevel(vm.prevTopBottomObj);
+      sendTopBottomAnalyticsEvent();
+      updateNotesModel(performanceData);
+    }
+
     /**
      * Navigates to the level after the current. If distributor ---> Acct, Acct--->SubAcct, SubAcct-->Store, Store click just highlight the store
      * @param {String} currentLevelName Indicates the text indicator of the level. 'distributor', 'account', 'subaccount','store'
@@ -1312,43 +1387,35 @@ module.exports = /*  @ngInject */
      */
     function navigateTopBottomLevels(performanceData) {
       // console.log('Perf data', performanceData);
-      if (performanceData) {
-        var currentLevelName = getCurrentTopBottomObject(vm.currentTopBottomAcctType).currentLevelName;
-        var getNextLevel = currentLevelName !== 'stores';
-        if (myperformanceService.checkForInconsistentIds(performanceData)) {
-          return;
-        }
-        if (performanceData.name && performanceData.name.toLowerCase() === 'independent' && !vm.currentTopBottomFilters.distributors) {
-          return;
-        }
+      if (!performanceData) return;
+      var currentLevelName = getCurrentTopBottomObject(vm.currentTopBottomAcctType).currentLevelName;
+      vm.topBottomHistory[currentLevelName] = performanceData;
+      var getNextLevel = currentLevelName !== 'stores';
+      if (myperformanceService.hasInconsistentIds(performanceData)) return;
+      if (performanceData.name && performanceData.name.toLowerCase() === 'independent' && !vm.currentTopBottomFilters.distributors) return;
 
-        // Updates the top bottom filter object with the selection
-        setTopBottomFilterModel(currentLevelName, performanceData);
-        // Make sure all the models in filtersService are set correctly and reflect the object in top botom filter
-        setUpdatedFilters();
-        // Set the chain dropdown and appropriate placeholder text
-        setChainDropdownAndPlaceHolder(currentLevelName, performanceData);
-        if (getNextLevel) {
-          myperformanceService.resetFiltersForLevelsAboveCurrent(vm.currentTopBottomAcctType, vm.currentTopBottomFilters, vm.topBottomData);
-          // Get the top bottom level next to the current level.
-          vm.currentTopBottomAcctType = myperformanceService.getAcctTypeObjectBasedOnTabIndex(vm.currentTopBottomAcctType.value, getNextLevel);
-          vm.currentTopBottomObj = getCurrentTopBottomObject(vm.currentTopBottomAcctType);
+      // Updates the top bottom filter object with the selection
+      setTopBottomFilterModel(currentLevelName, performanceData);
+      // Make sure all the models in filtersService are set correctly and reflect the object in top botom filter
+      setUpdatedFilters();
+      // Set the chain dropdown and appropriate placeholder text
+      setChainDropdownAndPlaceHolder(currentLevelName, performanceData);
+      if (getNextLevel) {
+        myperformanceService.resetFiltersForLevelsAboveCurrent(vm.currentTopBottomAcctType, vm.currentTopBottomFilters, vm.topBottomData);
+        // Get the top bottom level next to the current level.
+        vm.currentTopBottomAcctType = myperformanceService.getAcctTypeObjectBasedOnTabIndex(vm.currentTopBottomAcctType.value, getNextLevel);
+        vm.currentTopBottomObj = getCurrentTopBottomObject(vm.currentTopBottomAcctType, true);
 
-          updateBrandSnapshot(true);
-          getDataForTopBottomLevel(vm.currentTopBottomObj);
-          sendTopBottomAnalyticsEvent();
-        } else {
-          // Just setting current top bottom object to store
-          vm.currentTopBottomObj = getCurrentTopBottomObject(vm.currentTopBottomAcctType);
-          vm.currentTopBottomFilters.stores.storeNumber = performanceData.storeNumber;
-          updateBrandSnapshot(true);
-        }
-        notesService.model.tdlinx = performanceData.unversionedStoreCode;
-        notesService.model.address = formatAddress(performanceData);
-        notesService.model.city = performanceData.city;
-        notesService.model.state = performanceData.state;
-        notesService.model.zipCode = performanceData.zipCode;
+        updateBrandSnapshot(true);
+        getDataForTopBottomLevel(vm.currentTopBottomObj);
+        sendTopBottomAnalyticsEvent();
+      } else {
+        // Just setting current top bottom object to store
+        vm.currentTopBottomObj = getCurrentTopBottomObject(vm.currentTopBottomAcctType);
+        vm.currentTopBottomFilters.stores.storeNumber = performanceData.storeNumber;
+        updateBrandSnapshot(true);
       }
+      updateNotesModel(performanceData);
     }
 
     function formatAddress(performanceData) {
