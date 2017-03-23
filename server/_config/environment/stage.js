@@ -30,7 +30,7 @@ module.exports = function (config) {
   config.saml = {
     entryPoint: 'https://sso.cbrands.com/oamfed/idp/samlv20',
     logoutBase: 'https://sso.cbrands.com/oam/server/logout',
-    issuer: 'https://compass.cbrands.com',
+    issuer: 'https://compass-stage.cbrands.com',
     cert: fs.readFileSync('./server/_config/passport/certs/cbi-prod-signing-2018.cer', 'utf-8'),
     privateCert: '',
     signatureAlgorithm: 'sha1'
