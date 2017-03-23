@@ -1021,8 +1021,11 @@ module.exports = /*  @ngInject */
      * @param {Object} acctType Can be either a distirbutor, acct, subacct, store object
      * @returns returns either vm.topBottomData.distirbutor, vm.topBottomData.accounts etc
      */
-    function getCurrentTopBottomObject(acctType) {
-      vm.prevTopBottomObj = vm.currentTopBottomObj || {};
+    function getCurrentTopBottomObject(acctType, setPrev) {
+      if (setPrev) {
+        vm.prevTopBottomObj = vm.currentTopBottomObj || {};
+        vm.canNavPrevLevel  = true;
+      };
       var currentObj;
       var accountTypes = filtersService.accountFilters.accountTypesEnums;
       var selectedTopBottomValue = vm.filtersService.model.valuesVsTrend.value;
@@ -1329,6 +1332,7 @@ module.exports = /*  @ngInject */
       if (!getPrevLevel) return;
       if (currentLevelName === 'Accounts') {
         var filter = {name: 'Distributors', value: 1};
+        vm.currentTopBottomObj = getCurrentTopBottomObject(filter);
         setTopBottomAcctTypeSelection(filter);
         resetTopBottomHistory();
       }
@@ -1351,6 +1355,7 @@ module.exports = /*  @ngInject */
         vm.currentTopBottomAcctType = {name: 'Accounts', value: 2};
         myperformanceService.resetFiltersForLevelsAboveCurrent({name: 'Distributors', value: 1}, vm.currentTopBottomFilters, vm.topBottomData);
         updateBrandSnapshot(true);
+        vm.currentTopBottomObj = getCurrentTopBottomObject(vm.currentTopBottomAcctType);
         getDataForTopBottomLevel(vm.prevTopBottomObj);
         sendTopBottomAnalyticsEvent();
         notesService.model.tdlinx = performanceData.unversionedStoreCode;
@@ -1379,6 +1384,7 @@ module.exports = /*  @ngInject */
         vm.currentTopBottomAcctType = {name: 'Sub-Accounts', value: 3};
         myperformanceService.resetFiltersForLevelsAboveCurrent({name: 'Accounts', value: 2}, vm.currentTopBottomFilters, vm.topBottomData);
         updateBrandSnapshot(true);
+        vm.currentTopBottomObj = getCurrentTopBottomObject(vm.currentTopBottomAcctType);
         getDataForTopBottomLevel(vm.prevTopBottomObj);
         sendTopBottomAnalyticsEvent();
         notesService.model.tdlinx = performanceData.unversionedStoreCode;
@@ -1418,7 +1424,7 @@ module.exports = /*  @ngInject */
           myperformanceService.resetFiltersForLevelsAboveCurrent(vm.currentTopBottomAcctType, vm.currentTopBottomFilters, vm.topBottomData);
           // Get the top bottom level next to the current level.
           vm.currentTopBottomAcctType = myperformanceService.getAcctTypeObjectBasedOnTabIndex(vm.currentTopBottomAcctType.value, getNextLevel);
-          vm.currentTopBottomObj = getCurrentTopBottomObject(vm.currentTopBottomAcctType);
+          vm.currentTopBottomObj = getCurrentTopBottomObject(vm.currentTopBottomAcctType, true);
 
           updateBrandSnapshot(true);
           getDataForTopBottomLevel(vm.currentTopBottomObj);
