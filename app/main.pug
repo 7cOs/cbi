@@ -1,6 +1,21 @@
-html(ng-app='cf' ng-class="{'ie-wrap': $root.isIE, 'edge-wrap': $root.isEdge}")
+html(ng-class="{'ie-wrap': $root.isIE, 'edge-wrap': $root.isEdge}")
   head
-    include assets/templates/head
+    base(href='/')
+
+    //- Forces IE out of compatibility mode (http://stackoverflow.com/a/3449338/4618864)
+    meta(http-equiv="X-UA-Compatible" content="IE=edge")
+    meta(charset="utf-8")
+    meta(name='viewport', content='width=device-width, initial-scale=1')
+
+    link(rel='icon', type='image/png', href='./assets/img/logos/CBI_favicon-02.png')
+    title(ng-bind="pageTitle")
+
+    //- GOOGLE ANALYTICS (Load before Angular app so that angulartics can detect it)
+    script.
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+          (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
 
   md-content
     body(md-no-ink ng-class="{'ie': $root.isIE, 'edge': $root.isEdge, 'grayed-out': $root.isGrayedOut}")
@@ -8,5 +23,3 @@ html(ng-app='cf' ng-class="{'ie-wrap': $root.isIE, 'edge-wrap': $root.isEdge}")
       navbar
       div(container)
         div(ui-view='' row)
-
-      include assets/templates/foot

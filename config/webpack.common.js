@@ -136,8 +136,9 @@ module.exports = {
       template: 'app/main.pug'
     }),
 
+    // https://github.com/angular/angular/issues/11580#issuecomment-282705332
     new webpack.ContextReplacementPlugin(
-      /angular(\\|\/)core(\\|\/)(esm(\\|\/)src|src)(\\|\/)linker/,
+      /angular(\\|\/)core(\\|\/)@angular/,
       helpers.root('app')
     )
   ]
