@@ -1089,9 +1089,7 @@ module.exports = /*  @ngInject */
       params = myperformanceService.appendFilterParametersForTopBottom(params, vm.currentTopBottomFilters, vm.filtersService.model.selected.myAccountsOnly);
       vm.loadingTopBottom = true;
       params.additionalParams = getAppliedFiltersForTopBottom();
-      // debugger;
       userService.getTopBottomSnapshot(vm.currentTopBottomAcctType, params).then(function(data) {
-        // debugger;
         vm.currentTopBottomObj.performanceData = data.performance;
         vm.currentTopBottomObj.isPerformanceDataUpdateRequired = false;
         vm.currentTopBottomObj = myperformanceService.updateDataForCurrentTopDownLevel(vm.currentTopBottomObj, categoryBound, vm.filterModel.depletionsTimePeriod, vm.filterModel.distributionTimePeriod, vm.filterModel.trend);
@@ -1361,7 +1359,7 @@ module.exports = /*  @ngInject */
           break;
       }
 
-      if (myperformanceService.checkForInconsistentIds(performanceData)) return;
+      if (myperformanceService.hasInconsistentIds(performanceData)) return;
       if (performanceData.name && performanceData.name.toLowerCase() === 'independent' && !vm.currentTopBottomFilters.distributors) return;
 
       setTopBottomFilterModel(newLevelName, performanceData);
@@ -1385,10 +1383,9 @@ module.exports = /*  @ngInject */
       // console.log('Perf data', performanceData);
       if (!performanceData) return;
       var currentLevelName = getCurrentTopBottomObject(vm.currentTopBottomAcctType).currentLevelName;
-      // debugger;
       vm.topBottomHistory[currentLevelName] = performanceData;
       var getNextLevel = currentLevelName !== 'stores';
-      if (myperformanceService.checkForInconsistentIds(performanceData)) return;
+      if (myperformanceService.hasInconsistentIds(performanceData)) return;
       if (performanceData.name && performanceData.name.toLowerCase() === 'independent' && !vm.currentTopBottomFilters.distributors) return;
 
       // Updates the top bottom filter object with the selection

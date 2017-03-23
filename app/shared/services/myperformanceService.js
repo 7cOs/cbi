@@ -14,7 +14,7 @@ module.exports = /*  @ngInject */
       getAcctTypeObjectBasedOnTabIndex: getAcctTypeObjectBasedOnTabIndex,
       resetFilters: resetFilters,
       isValidValues: isValidValues,
-      checkForInconsistentIds: checkForInconsistentIds,
+      hasInconsistentIds: hasInconsistentIds,
       parseStoreFilterFromOpps: parseStoreFilterFromOpps,
       setAcctDashboardFiltersOnInit: setAcctDashboardFiltersOnInit
     };
@@ -312,12 +312,8 @@ module.exports = /*  @ngInject */
       return currentAccountTypeLevel[0];
     }
 
-    function checkForInconsistentIds(performanceData) {
-      if (!performanceData.id || performanceData.id.toLowerCase() === 'id missing') {
-        return true;
-      } else {
-        return false;
-      }
+    function hasInconsistentIds(performanceData) {
+      return !performanceData.id || performanceData.id.toLowerCase() === 'id missing';
     }
 
     function parseStoreFilterFromOpps(storeParams) {
