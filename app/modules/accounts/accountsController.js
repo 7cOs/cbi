@@ -1341,11 +1341,8 @@ module.exports = /*  @ngInject */
 
       switch (currentLevelName) {
         case 'Accounts':
-          newAccountType         = {name: 'Distributors', value: 1};
-          vm.currentTopBottomObj = getCurrentTopBottomObject(newAccountType);
-          setTopBottomAcctTypeSelection(newAccountType);
-          resetTopBottomHistory();
-          return;
+          newAccountType     = {name: 'Distributors', value: 1};
+          break;
         case 'Sub-Accounts':
           newLevelName       = 'accounts';
           performanceData    = vm.topBottomHistory.distributors;
@@ -1358,6 +1355,14 @@ module.exports = /*  @ngInject */
           newAccountType     = {name: 'Sub-Accounts', value: 3};
           levelToResetBeyond = {name: 'Accounts', value: 2};
           break;
+      }
+
+      // if performanceData does not exist (when navigating back to uppper-most level) treat it like a new request
+      if (!performanceData) {
+        vm.currentTopBottomObj = getCurrentTopBottomObject(newAccountType);
+        setTopBottomAcctTypeSelection(newAccountType);
+        resetTopBottomHistory();
+        return;
       }
 
       if (myperformanceService.hasInconsistentIds(performanceData)) return;
