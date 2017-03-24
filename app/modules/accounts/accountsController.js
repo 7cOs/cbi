@@ -657,7 +657,13 @@ module.exports = /*  @ngInject */
       filtersService.model[filterModelProperty] = result.name;
 
       // Update display model
-      filterModelProperty === 'distributor' ? vm.selectedDistributor = result.name : vm.selectedStore = result.name;
+      if (filterModelProperty === 'distributor') {
+        vm.selectedDistributor = result.name;
+      } else if (vm.selectedDistributor === result.name) {
+        vm.selectedStore = null;
+      } else {
+        vm.selectedStore = result.name;
+      }
     }
 
     function getUpdatedFilterQueryParamsForBrand() {
