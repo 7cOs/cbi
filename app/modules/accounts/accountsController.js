@@ -436,7 +436,9 @@ module.exports = /*  @ngInject */
       updateBrandSnapshot();
     }
 
-    function removeAllTopBottomAccountTypeFilters() {
+    function removeAllTopBottomAccountTypeFilters(levelToResetBeyond) {
+      levelToResetBeyond = levelToResetBeyond || {value: -1}; // default to no level limit
+
       // reset brand
       vm.brandWidgetTitle = angular.copy(vm.brandWidgetTitleDefault);
       vm.brandWidgetSkuTitle = null;
@@ -447,16 +449,37 @@ module.exports = /*  @ngInject */
       vm.currentBrandSkuSelected = null;
       vm.brandIdSelected = null;
       vm.idSelected = null;
-      vm.selectedDistributor = null;
-      vm.selectedStore = null;
-      filtersService.model.distributor = '';
-      vm.showXDistributor = false;
-      filtersService.model.account = '';
-      vm.showXChain = false;
-      filtersService.model.store = '';
-      vm.showXStore = false;
-      chipsService.removeTopBottomChips();
-      myperformanceService.resetFilters(vm.currentTopBottomFilters);
+
+      switch (levelToResetBeyond.value) {
+        case filtersService.accountFilters.accountTypesEnums.distributors:
+          filtersService.model.account = '';
+          vm.showXChain = false;
+          filtersService.model.store = '';
+          vm.showXStore = false;
+          break;
+        case filtersService.accountFilters.accountTypesEnums.accounts:
+          vm.selectedStore = null;
+          filtersService.model.store = '';
+          vm.showXStore = false;
+          break;
+        default:
+          vm.selectedDistributor = null;
+          vm.selectedStore = null;
+          filtersService.model.distributor = '';
+          vm.showXDistributor = false;
+          filtersService.model.account = '';
+          vm.showXChain = false;
+          filtersService.model.store = '';
+          vm.showXStore = false;
+          break;
+      }
+
+      chipsService.removeTopBottomChips(levelToResetBeyond);
+      if (levelToResetBeyond && levelToResetBeyond.value >= 0) {
+        myperformanceService.resetFiltersForLevelsAboveCurrent(levelToResetBeyond, vm.currentTopBottomFilters, vm.topBottomData);
+      } else {
+        myperformanceService.resetFilters(vm.currentTopBottomFilters);
+      }
       currentStore = null;
     }
 
@@ -1009,13 +1032,13 @@ module.exports = /*  @ngInject */
      * @param {Object} currentAcctType The new account type to be set
      * @returns Sets the data for the currently selected top bottom account type
      */
-    function setTopBottomAcctTypeSelection(currentAcctType) {
+    function setTopBottomAcctTypeSelection(currentAcctType, levelToResetBeyond) {
       if (vm.currentTopBottomAcctType !== currentAcctType) {
         resetTopBottomHistory();
         vm.currentTopBottomAcctType = currentAcctType;
         vm.currentTopBottomObj = getCurrentTopBottomObject(currentAcctType);
         sendTopBottomAnalyticsEvent();
-        removeAllTopBottomAccountTypeFilters();
+        removeAllTopBottomAccountTypeFilters(levelToResetBeyond);
         onFilterPropertiesChange();
       }
     }
@@ -1266,15 +1289,21 @@ module.exports = /*  @ngInject */
      * @param {Object} currentLevelName The level to be updated.. Can be ditrstibutors, acct etc
      * @param {Object} data The filter selected. It's of the format {id:xxx, name: 'sdfsdf'}
      */
-    function setTopBottomFilterModel(currentLevelName, data) {
-      vm.currentTopBottomFilters[currentLevelName] = {
-        id: currentLevelName === 'stores' && data.unversionedStoreCode ? [data.id, data.unversionedStoreCode] : data.id,
-        name: data.name,
-        address: formatAddress(data),
-        city: data.city,
-        state: data.state,
-        zipCode: data.zipCode
-      };
+    function setTopBottomFilterModel(currentLevelName, data, goingBack) {
+      if (goingBack) {
+        // when traversing up, we clear the filter for the current level, since we would only have a filter applied for the level above.
+        // note that this also affects logic in setUpdatedFilters() -> setFilter(), which sets filtersService.model based on currentTopBottomFilters
+        vm.currentTopBottomFilters[currentLevelName] = '';
+      } else {
+        vm.currentTopBottomFilters[currentLevelName] = {
+          id: currentLevelName === 'stores' && data.unversionedStoreCode ? [data.id, data.unversionedStoreCode] : data.id,
+          name: data.name,
+          address: formatAddress(data),
+          city: data.city,
+          state: data.state,
+          zipCode: data.zipCode
+        };
+      }
 
       if (currentLevelName === 'stores' && data.storeNumber) {
         vm.currentTopBottomFilters.stores.storeNumber = data.storeNumber;
@@ -1283,6 +1312,8 @@ module.exports = /*  @ngInject */
       // The term 'vm.filtersService.model.account' needs to be refactored. This variable for is used to hold the text for all types except distributor
       if (currentLevelName === 'distributors') {
         vm.filtersService.model.distributor = data.name;
+      } else if (vm.selectedDistributor === data.name) {
+        vm.filtersService.model.account = '';
       } else {
         vm.filtersService.model.account = data.name;
       }
@@ -1378,10 +1409,18 @@ module.exports = /*  @ngInject */
           break;
       }
 
-      // if performanceData does not exist (when navigating back to uppper-most level) treat it like a new request
+      // in case we selected a specific store while at stores level, switch Retailer field back to account display
+      vm.filtersService.model.selected.retailer = 'Chain';
+
+      // if performanceData does not exist (when navigating back to upper-most level) treat it like a new request
       if (!performanceData) {
         vm.currentTopBottomObj = getCurrentTopBottomObject(newAccountType);
-        setTopBottomAcctTypeSelection(newAccountType);
+        if (newLevelName === 'subAccounts') {
+          // when switching back to subaccount level, set the account filter back to the account name
+          // (account filter is changed to subaccount name when on stores level)
+          vm.filtersService.model.account = vm.currentTopBottomFilters.accounts.name;
+        }
+        setTopBottomAcctTypeSelection(newAccountType, levelToResetBeyond);
         resetTopBottomHistory();
         return;
       }
@@ -1389,9 +1428,14 @@ module.exports = /*  @ngInject */
       if (myperformanceService.hasInconsistentIds(performanceData)) return;
       if (performanceData.name && performanceData.name.toLowerCase() === 'independent' && !vm.currentTopBottomFilters.distributors) return;
 
-      setTopBottomFilterModel(newLevelName, performanceData);
+      setTopBottomFilterModel(newLevelName, performanceData, true);
       setUpdatedFilters();
       setChainDropdownAndPlaceHolder(newLevelName, performanceData);
+      if (newLevelName === 'subAccounts' && vm.currentTopBottomFilters.stores) {
+        // when switching back to subaccount level, set the account filter back to the account name
+        // (account filter is changed to subaccount name when on stores level)
+        vm.filtersService.model.account = vm.currentTopBottomFilters.accounts.name;
+      }
       vm.currentTopBottomAcctType = newAccountType;
       myperformanceService.resetFiltersForLevelsAboveCurrent(levelToResetBeyond, vm.currentTopBottomFilters, vm.topBottomData);
       updateBrandSnapshot(true);
