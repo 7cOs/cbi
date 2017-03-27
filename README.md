@@ -10,7 +10,8 @@ This project contains code for the Compass Web Portal application. It includes t
 
 ## Prerequisites
 1. Install [Node.js](https://docs.npmjs.com/getting-started/installing-node)  
-( It is recommended that you use a version at least as new as specified in the `engines` section of [package.json](../blob/develop/package.json) for parity with the [CI environment](https://circleci.com/gh/ConstellationBrands/app-orion) and the [deployment environment](https://dashboard.heroku.com/pipelines/30ba816e-b652-4ca7-aed5-4a95a884d086) )  
+It is recommended that you use a version at least as new as specified in the `engines` section of [package.json](../blob/develop/package.json) for parity with the [CI environment](https://circleci.com/gh/ConstellationBrands/app-orion) and the [deployment environment](https://dashboard.heroku.com/pipelines/30ba816e-b652-4ca7-aed5-4a95a884d086)  
+( As of this writing, use Node version **7.7.1** or newer to at least match Heroku/CircleCI )  
 
 ## Installation
 1. Clone the app-orion repo: `git clone git@github.com:ConstellationBrands/app-orion.git`

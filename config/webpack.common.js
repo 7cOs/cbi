@@ -77,7 +77,7 @@ module.exports = {
         exclude: [ helpers.root('app/assets/fonts') ],
         loaders: [
           'url-loader?limit=1024&name=assets/img/[name].[hash].[ext]',
-          'image-webpack-loader'
+          'image-webpack-loader?bypassOnDebug=false'
         ]
       },
       {
@@ -86,7 +86,7 @@ module.exports = {
         exclude: [ helpers.root('app/assets/fonts') ],
         loaders: [
           'url-loader?limit=8192&mimetype=image/svg+xml&name=assets/img/[name].[hash].[ext]',
-          'image-webpack-loader'
+          'image-webpack-loader?bypassOnDebug=false'
         ]
       },
 
