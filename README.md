@@ -13,7 +13,7 @@ This project contains code for the Compass Web Portal application. It includes t
 ( It is recommended that you use a version at least as new as specified in the `engines` section of [package.json](../blob/develop/package.json) for parity with the [CI environment](https://circleci.com/gh/ConstellationBrands/app-orion) and the [deployment environment](https://dashboard.heroku.com/pipelines/30ba816e-b652-4ca7-aed5-4a95a884d086) )  
 
 ## Installation
-1. Clone the app-orion repo: `npm clone git@github.com:ConstellationBrands/app-orion.git`
+1. Clone the app-orion repo: `git clone git@github.com:ConstellationBrands/app-orion.git`
 2. Change into the app-orion directory that you just cloned (`cd app-orion`)
 3. Install build dependencies: `npm install`
 
