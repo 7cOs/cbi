@@ -4,7 +4,7 @@ module.exports = function (config) {
   const fs = require('fs');
 
   // global settings
-  config.domain = 'orion-dev.cbrands.com';
+  config.domain = 'compass-dev.cbrands.com';
   config.env = 'development';
   config.address = 'https://' + config.domain + ''; // base url
 
@@ -28,10 +28,10 @@ module.exports = function (config) {
   };
 
   config.saml = {
-    entryPoint: 'https://ssodev.cbrands.com/oamfed/idp/samlv20',
-    logoutBase: 'https://ssodev.cbrands.com/oam/server/logout',
-    issuer: 'https://orion-dev.cbrands.com',
-    cert: fs.readFileSync('./server/_config/passport/certs/development.crt', 'utf-8'),
+    entryPoint: 'https://stage-sso.cbrands.com/oamfed/idp/samlv20',
+    logoutBase: 'https://stage-sso.cbrands.com/oam/server/logout',
+    issuer: 'https://compass-dev.cbrands.com',
+    cert: fs.readFileSync('./server/_config/passport/certs/cbi-fed-idp-signing-1-stage.cer', 'utf-8'),
     privateCert: '',
     signatureAlgorithm: 'sha1'
   };
