@@ -38,7 +38,7 @@
   .market {
     background-image: url('../../assets/img/icons/overview-overall-market.svg');
     background-size: 20px 20px;
-    background-position: 1em 1em;
+    background-position: 0.5em 1em;
   }
 
   .notes-icon {
@@ -155,6 +155,7 @@
   background: $gray-4;
   float: none;
   align-items: center;
+  height: 85px;
 
   .brand-name-section {
     width: 60%;
@@ -169,7 +170,6 @@
 
   .brands {
     background-repeat: no-repeat;
-    padding-left: 2.75em;
     background-image: url('../../assets/img/icons/overview-all-brands.svg');
     background-size: 20px 34px;
     background-position: 12px 35%;
@@ -186,6 +186,7 @@
 
       &.narrow {
         width: 139px;
+        margin: 22px;
 
         @media (max-width: $bp-large) {
           width: 135px;
@@ -202,12 +203,27 @@
   }
 }
 
+.section-header {
+  height: 20px; 
+
+  .md-select {
+    height: 10px;
+    font-size: 10px;
+
+    .md-option {
+      height: 10px;
+      font-size:  10px; 
+    }
+  }
+}
+
 .widget-header {
   float: none;
   display: block;
-  padding: 0.25em 0.25em 0.25em 0;
+  padding: 0;
+  border: 0;
   background: $gray-4;
-  height: 3em;
+  height: 85px;
 
   .brands,
   .market,
@@ -232,9 +248,11 @@
 
     &.narrow {
       width: 139px;
+      margin: 25px 10px 0 0;
 
       @media (max-width: $bp-large) {
         width: 135px;
+        margin: 25px 10px 0 0;
         font-size: 0.9em;
       }
     }
@@ -255,8 +273,18 @@
     &.market,
     &.notes-icon,
     &.overview {
-      margin: 0;
+      margin-left: 0;
+      font-size: 1.5em;
+      font-weight: 300;
+      padding: 5px 20px 5px 45px;
     }
+  }
+}
+
+span {
+
+  &.light {
+    font-weight: 100;
   }
 }
 
@@ -265,11 +293,21 @@
   md-select {
     display: inline-block;
     margin: 0;
-    // font-size: 1.5em;
     font-weight: 300;
     color: $gray-3;
-    padding-top: 6px;
+    margin-top: -30px;
     font-size: 1.3em;
+    width: 120px;
+
+    .md-select-value {
+      border-bottom: 0;
+
+      .md-select-icon {
+        background-color: #FAFAFA;
+        margin-left: -5px;
+        margin-right: 10px;
+      }
+    }
 
     &.market {
       padding: 7px 11px 5px 29px;
@@ -357,7 +395,12 @@
   }
 
   .back-chevron {
+    position: absolute;
+    top: 55px;
     left: 2px;
+    padding: 0;
+    margin: 0;
+    width: 5px;
   }
 }
 
