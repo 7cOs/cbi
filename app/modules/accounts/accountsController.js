@@ -225,6 +225,11 @@ module.exports = /*  @ngInject */
 
     function filterTopBottom() {
       resetTopBottomHistory();
+      try {
+        vm.selectedEntityName = vm.selectedStoreInfo.name;
+      } catch(e) {
+        vm.selectedEntityName = null;
+      }
       var previousTopBottomAcctType = vm.currentTopBottomAcctType;
 
       // reset flags
