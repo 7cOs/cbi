@@ -35,9 +35,62 @@
 
   .md-tab.md-active {
     background-color: $body-bg;
-    border: 1px solid $gray-9;
+    border-top: 1px solid $gray-9;
+    border-left: 1px solid $gray-9;
+    border-right: 1px solid $gray-9;
+    border-bottom: 0;
     padding: 13px 21px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+  }
+
+  .tab-content-wrapper {
+    position: relative;
+    top: auto;
+    left: auto;
+    right: auto;
+    bottom: auto;
+    overflow: visible;
+  }
+
+  .tab-content {
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    overflow: visible;
+    transition: transform cubic-bezier(0.35, 0, 0.25, 1) 0.5s, visibility linear 0s 0.5s;
+
+    &.active {
+      position: relative;
+    }
+
+    @keyframes tab-content-hide {
+      0% { opacity: 1; }
+      50% { opacity: 1; }
+      100% { opacity: 0; }
+    }
+
+    @mixin rtl($prop, $ltr-value, $rtl-value) {
+      #{$prop}: $ltr-value;
+
+      [dir=rtl] & {
+        #{$prop}: $rtl-value;
+      }
+    }
+
+    &.left:not(.active) {
+      @include rtl(transform, translateX(-100%), translateX(+100%));
+      animation: 1s tab-content-hide;
+      opacity: 0;
+    }
+
+    &.right:not(.active) {
+      @include rtl(transform, translateX(100%), translateX(-100%));
+      animation: 1s tab-content-hide;
+      opacity: 0;
+    }
   }
 
   .target-list-detail-container {
