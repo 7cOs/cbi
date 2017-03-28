@@ -71,6 +71,9 @@ module.exports = /*  @ngInject */
     vm.prevTopBottomObj = {};
     vm.topBottomHistory = {};
     vm.canNavPrevLevel = false;
+    vm.currentUserName = null;
+    vm._defaultTopLevelForLabel = 'CBBD';
+    vm.topLevelForLabel = vm._defaultTopLevelForLabel;
 
     // top bottom public methods
     vm.topBottomData = {
@@ -224,10 +227,11 @@ module.exports = /*  @ngInject */
     }
 
     function filterTopBottom() {
+      setTopLevelForLabel();
       resetTopBottomHistory();
       try {
         vm.selectedEntityName = vm.selectedStoreInfo.name;
-      } catch(e) {
+      } catch (e) {
         vm.selectedEntityName = null;
       }
       var previousTopBottomAcctType = vm.currentTopBottomAcctType;
@@ -418,6 +422,7 @@ module.exports = /*  @ngInject */
 
     function resetFilters() {
       // Remove all filters asssociated with top bottom
+      setTopLevelForLabel();
       resetTopBottomHistory();
       removeAllTopBottomAccountTypeFilters();
       chipsService.resetChipsFilters(chipsService.model);
@@ -972,7 +977,13 @@ module.exports = /*  @ngInject */
       // reset state params
       $state.params.applyFiltersOnLoad = false;
       $state.params.resetFiltersOnLoad = true;
+      try {
+        vm.currentUserName = userService.model.currentUser.firstName;
+      } catch (e) {
+        vm.currentUserName = null;
+      }
 
+      setTopLevelForLabel();
       sendTopBottomAnalyticsEvent();
     }
 
@@ -1493,6 +1504,12 @@ module.exports = /*  @ngInject */
         vm.overviewOpen = value;
         $scope.$apply();
      }
+
+    function setTopLevelForLabel() {
+      vm.topLevelForLabel = filtersService.model.selected.myAccountsOnly && vm.currentUserName
+      ? vm.currentUserName
+      : vm._defaultTopLevelForLabel;
+    }
 
      function sendTopBottomAnalyticsEvent() {
        $analytics.eventTrack(vm.currentTopBottomAcctType.name, {
