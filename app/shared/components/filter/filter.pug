@@ -67,7 +67,17 @@ form.filters(column='12' ng-class="{'target-list': filter.opportunities}")
       .dropdown-filter
         .dropdown
           md-select(md-on-open="filter.appendDoneButton()" ng-change="filter.changeOpportunitySelection()" ng-model="filter.filtersService.model.selected.opportunityType"  multiple="true" md-on-close="filter.applyFilterMulti(filter.filtersService.model.selected.opportunityType, filter.filtersService.model.selected.opportunityType, 'opportunityType'); filter.closeDoneButton()" aria-label="Opportunity Type Dropdown")
-            md-option(ng-repeat="type in filter.filtersService.model.opportunitiesType" aria-label="{{type.name}}" value="{{type.name}}" ng-click="filter.chooseOpportunityType(type.name)") {{::type.name}}
+            md-option.tooltip-list-item-wrap(
+              ng-disabled="filter.filtersService.model.selected.simpleDistributionType && !filter.isSimpleDistributionOpportunityType(type.name)",
+              ng-repeat="type in filter.filtersService.model.opportunitiesType",
+              aria-label="{{type.name}}",
+              value="{{type.name}}",
+              ng-click="filter.chooseOpportunityType(type.name)"
+            )
+              md-tooltip(md-direction="bottom" ng-if="filter.filtersService.model.selected.simpleDistributionType && !filter.isSimpleDistributionOpportunityType(type.name)")
+                label {{type.name}}
+                p To enable this option, please unselect the Simple Distribution Type filter.
+              span {{::type.name}}
 
     div(column='4' ng-if="filter.filtersService.model.selected.premiseType === 'off'")
       label Brand / Master SKU
@@ -79,10 +89,10 @@ form.filters(column='12' ng-class="{'target-list': filter.opportunities}")
     div(column='2' ng-switch="filter.shouldEnableSimpleDistribution()")
       label Distribution Type
       div(ng-switch-when="true" ng-cloak)
-        md-checkbox(ng-model="filter.filtersService.model.simpleDistributionType" aria-label="Simple Distribution" ng-change="filter.applyFilterArr(filter.filtersService.model.selected.simpleDistributionType, 'Simple', 'simpleDistributionType')") Simple
+        md-checkbox(ng-model="filter.filtersService.model.selected.simpleDistributionType" aria-label="Simple Distribution" ng-click="filter.chipsService.updateChip('simpleDistributionType', 'Simple')") Simple
 
       .tooltip(ng-switch-when="false" ng-cloak)
-        md-checkbox(ng-disabled="true" ng-model="filter.filtersService.model.simpleDistributionType" aria-label="Simple Distribution" ng-change="filter.applyFilterArr(filter.filtersService.model.selected.simpleDistributionType, 'Simple', 'simpleDistributionType')") Simple
+        md-checkbox(ng-disabled="true" ng-model="filter.filtersService.model.selected.simpleDistributionType" aria-label="Simple Distribution" ng-click="filter.chipsService.updateChip('simpleDistributionType', 'Simple')") Simple
         md-tooltip(md-direction="bottom")
           label Simple Distribution Type
           p To enable this option, please select only <span class="bold">Non-Buy</span>, <span class="bold">At Risk</span>, and <span class="bold">New Placement (No Rebuy)</span> Opportunity Types.

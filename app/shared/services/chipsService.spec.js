@@ -185,6 +185,14 @@ describe('[Services.chipsService]', function() {
         expect(filtersService.model.selected['myAccountsOnly']).toEqual(false);
       });
 
+      it('should remove selected filter given "simpleDistributionType" chip', function() {
+        filtersService.model.selected.simpleDistributionType = true;
+
+        chipsService.removeFromFilterService({type: 'simpleDistributionType', name: 'Simple'});
+
+        expect(filtersService.model.selected.simpleDistributionType).toEqual(false);
+      });
+
       it('should remove selected filter and update filter model given "segmentation" chip', function() {
         filtersService.model.selected.segmentation = ['A', 'B'];
         filtersService.model.storeSegmentationA = true;
@@ -356,13 +364,23 @@ describe('[Services.chipsService]', function() {
         expect(filtersService.model.selected.opportunityType).toEqual(['Non-Buy', 'At Risk']);
       });
 
-      it('should remove selected filter and revert to "All Types" when no chips are left, given "opportunityType" chip', function() {
+      it('should remove selected filter and revert to "All Types" when no chips are left and simple distribution type is not selected, given "opportunityType" chip', function() {
         filtersService.model.selected.opportunityType = ['Low Velocity'];
 
         chipsService.removeFromFilterService({type: 'opportunityType', name: 'Low Velocity'});
 
         expect(filtersService.model.selected.opportunityType).toEqual(['All Types']);
         expect(filtersService.model.opportunityType).toEqual(['All Types']);
+      });
+
+      it('should remove selected filter and revert to "Non-Buy" when no chips are left and simple distribution type is selected, given "opportunityType" chip', function() {
+        filtersService.model.selected.opportunityType = ['At Risk'];
+        filtersService.model.selected.simpleDistributionType = true;
+
+        chipsService.removeFromFilterService({type: 'opportunityType', name: 'At Risk'});
+
+        expect(filtersService.model.selected.opportunityType).toEqual(['Non-Buy']);
+        expect(filtersService.model.opportunityType).toEqual(['Non-Buy']);
       });
 
       it('should remove selected filter given "state" chip', function() {

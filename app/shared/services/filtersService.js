@@ -142,6 +142,7 @@ module.exports = /*  @ngInject */
       selected: {},
       selectedTemplate: {
         myAccountsOnly: true,
+        simpleDistributionType: false,
         account: [],
         subaccount: [],
         brand: [],
@@ -168,6 +169,7 @@ module.exports = /*  @ngInject */
         valuesVsTrend: '',
         zipCode: []
       },
+      simpleDistributionType: false,
       timePeriod: [
         {name: 'Current Month to Date',
           value: 'year'},

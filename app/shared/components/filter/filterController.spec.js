@@ -258,6 +258,49 @@ describe('Unit: filter controller (opportunities)', function() {
     });
   });
 
+  describe('[method.isSimpleDistributionOpportunityType]', function() {
+    it('should correctly identify opportunity types allowed for the simple distribution filter', function() {
+      expect(ctrl.isSimpleDistributionOpportunityType('All Types')).toEqual(false);
+      expect(ctrl.isSimpleDistributionOpportunityType('Low Velocity')).toEqual(false);
+      expect(ctrl.isSimpleDistributionOpportunityType('New Placement (Quality)')).toEqual(false);
+      expect(ctrl.isSimpleDistributionOpportunityType('Custom')).toEqual(false);
+      expect(ctrl.isSimpleDistributionOpportunityType('Non-Buy')).toEqual(true);
+      expect(ctrl.isSimpleDistributionOpportunityType('At Risk')).toEqual(true);
+      expect(ctrl.isSimpleDistributionOpportunityType('New Placement (No Rebuy)')).toEqual(true);
+    });
+  });
+
+  describe('[method.shouldEnableSimpleDistribution]', function() {
+    beforeEach(function() {
+      filtersService.model = {
+        selected: {
+          opportunityType: []
+        }
+      };
+    });
+
+    it('should return true when one simple distribution opportunity type is present', function() {
+      filtersService.model.selected.opportunityType = ['At Risk'];
+      expect(ctrl.shouldEnableSimpleDistribution()).toEqual(true);
+    });
+
+    it('should return true when multiple simple distribution opportunity type is present', function() {
+      filtersService.model.selected.opportunityType = ['At Risk', 'Non-Buy', 'New Placement (No Rebuy)'];
+      expect(ctrl.shouldEnableSimpleDistribution()).toEqual(true);
+    });
+
+    it('should return false when no simple distribution opportunity type is present', function() {
+      filtersService.model.selected.opportunityType = ['Custom'];
+      expect(ctrl.shouldEnableSimpleDistribution()).toEqual(false);
+
+      filtersService.model.selected.opportunityType = ['All Types'];
+      expect(ctrl.shouldEnableSimpleDistribution()).toEqual(false);
+
+      filtersService.model.selected.opportunityType = [];
+      expect(ctrl.shouldEnableSimpleDistribution()).toEqual(false);
+    });
+  });
+
   describe('[method.resetFilters]', function() {
     beforeEach(function() {
       spyOn(chipsService, 'resetChipsFilters').and.callFake(function() {
@@ -459,7 +502,7 @@ describe('Unit: filter controller (opportunities)', function() {
     expect(filtersService.model.selected.opportunityType).toEqual(['Non-Buy']);
 
     // user clicks on Non-Buy when it is the only selection, All Types should be added
-    filtersService.model.selected.opportunityType = [];
+    filtersService.model.selected.opportunityType = []; // template bound to this, so already updated
     ctrl.chooseOpportunityType('Non-Buy');
     ctrl.changeOpportunitySelection();
     expect(filtersService.model.selected.opportunityType).toEqual(['All Types']);
@@ -469,6 +512,15 @@ describe('Unit: filter controller (opportunities)', function() {
     ctrl.chooseOpportunityType('All Types');
     ctrl.changeOpportunitySelection();
     expect(filtersService.model.selected.opportunityType).toEqual(['All Types']);
+  });
+
+  it('change opportunity selection, assure Non-Buy is added when others are removed and simpleDistributionType is selected', function() {
+    // user clicks on At-Risk when it is the only selection and simpleDistributionType is selected, Non-Buy should be added
+    filtersService.model.selected.opportunityType = [];  // template bound to this, so already updated
+    filtersService.model.selected.simpleDistributionType = true;
+    ctrl.chooseOpportunityType('At Risk');
+    ctrl.changeOpportunitySelection();
+    expect(filtersService.model.selected.opportunityType).toEqual(['Non-Buy']);
   });
 
   it('send filter analytics', function() {
