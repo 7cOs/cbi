@@ -60,15 +60,19 @@
     right: 0;
     bottom: 0;
     overflow: visible;
-    transition: transform cubic-bezier(0.35, 0, 0.25, 1) 0.5s, visibility linear 0s 0.5s;
+
+    &.no-transition {
+      transition: none;
+    }
 
     &.active {
+      transition: transform cubic-bezier(0.35, 0, 0.25, 1) 0.5s, visibility linear 0s;
       position: relative;
     }
 
     @keyframes tab-content-hide {
       0% { opacity: 1; }
-      50% { opacity: 1; }
+      40% { opacity: 1; }
       100% { opacity: 0; }
     }
 
@@ -82,14 +86,26 @@
 
     &.left:not(.active) {
       @include rtl(transform, translateX(-100%), translateX(+100%));
-      animation: 1s tab-content-hide;
+      animation: 0.7s tab-content-hide;
       opacity: 0;
+      transition: transform cubic-bezier(0.35, 0, 0.25, 1) 0.5s, visibility linear 0s 0.5s;
+      visibility: hidden;
+
+      &.no-transition {
+        transition: none;
+      }
     }
 
     &.right:not(.active) {
       @include rtl(transform, translateX(100%), translateX(-100%));
-      animation: 1s tab-content-hide;
+      animation: 0.7s tab-content-hide;
       opacity: 0;
+      transition: transform cubic-bezier(0.35, 0, 0.25, 1) 0.5s, visibility linear 0s 0.5s;
+      visibility: hidden;
+
+      &.no-transition {
+        transition: none;
+      }
     }
   }
 

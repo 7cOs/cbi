@@ -22,7 +22,7 @@ div.expanded-target-lists
     md-tab(label='Archived' md-on-select="expanded.selector('archived')")
 
   div.tab-content-wrapper
-    div.md-padding.tab-content(ng-class="{active: expanded.buttonState === 'named', left: expanded.selectedTab > 0}")
+    div.md-padding.tab-content(ng-cloak ng-class="{active: expanded.buttonState === 'named', left: expanded.selectedTab > 0, 'no-transition': !expanded.userSelectedTab}")
       div(row).clearfix
         div.checkbox-wrapper.placeholder
         div.checkbox-sibling-target(column="12")
@@ -81,7 +81,7 @@ div.expanded-target-lists
                 div(column="12")
                   md-progress-linear(md-mode="determinate" ng-value="expanded.ratio(list.opportunitiesSummary.closedOpportunitiesCount, list.opportunities)")
 
-    div.md-padding.tab-content(ng-class="{active: expanded.buttonState === 'shared', left: expanded.selectedTab > 1, right: expanded.selectedTab < 1}")
+    div.md-padding.tab-content(ng-cloak ng-class="{active: expanded.buttonState === 'shared', left: expanded.selectedTab > 1, right: expanded.selectedTab < 1, 'no-transition': !expanded.userSelectedTab}")
       div(row)
         div(column="12")
           div(row).target-list-count-container
@@ -136,7 +136,7 @@ div.expanded-target-lists
               div(row)
                 md-progress-linear(md-mode="determinate" ng-value="expanded.ratio(list.opportunitiesSummary.closedOpportunitiesCount, list.opportunities)")
 
-    div.md-padding.tab-content(ng-class="{active: expanded.buttonState === 'archived', right: expanded.selectedTab < 2}")
+    div.md-padding.tab-content(ng-cloak ng-class="{active: expanded.buttonState === 'archived', right: expanded.selectedTab < 2, 'no-transition': !expanded.userSelectedTab}")
       div(row).clearfix
         div.checkbox-wrapper.placeholder
         div.checkbox-sibling-target(column="12")
