@@ -26,18 +26,18 @@ module.exports = /*  @ngInject */
           currentPage = filtersService.model.appliedFilter.pagination.currentPage,
           totalPages = filtersService.model.appliedFilter.pagination.totalPages;
 
-      if (totalPages < 20) {
+      if (totalPages < 10) {
         start = 0;
         end = totalPages;
-      } else if (currentPage < 10) {
+      } else if (currentPage < 5) {
         start = 0;
-        end = totalPages < 9 ? totalPages : 19;
-      } else if (currentPage > totalPages - 10) {
-        start = totalPages - 19;
+        end = totalPages < 4 ? totalPages : 9;
+      } else if (currentPage > totalPages - 5) {
+        start = totalPages - 9;
         end = totalPages;
       } else {
-        start = currentPage - 9;
-        end = currentPage + 10;
+        start = currentPage - 4;
+        end = currentPage + 5;
       }
 
       var arr = [];
