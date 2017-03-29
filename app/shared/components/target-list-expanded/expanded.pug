@@ -179,5 +179,4 @@ div.expanded-target-lists
               div(row).creator
               h5(column="3" ng-if="list.targetListAuthor === 'current user'").accent.left &nbsp;
               h5(column="3" ng-if="list.targetListAuthor !== 'current user'").accent.left {{list.targetListAuthor}}
-              div(row)
-                md-progress-linear(md-mode="determinate" ng-value="expanded.ratio(list.closedOpportunities, list.opportunities)")
+              md-progress-linear(md-mode="determinate" ng-value="expanded.ratio(list.closedOpportunities, list.opportunities)")
