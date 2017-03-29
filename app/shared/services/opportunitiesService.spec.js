@@ -248,7 +248,7 @@ describe('Unit: opportunitiesService - get opportunities', function() {
         $httpBackend.flush();
         expect(filtersService.model.appliedFilter.pagination).toEqual({
             currentPage: 0,
-            totalPages: 3,
+            totalPages: 1,
             default: true,
             totalOpportunities: '28129',
             totalStores: '31',
