@@ -21,6 +21,7 @@ form.filters(column='12' ng-class="{'target-list': filter.opportunities}")
         span(ng-class="{ 'chevron-up': filter.filtersService.model.expanded, 'chevron-down': !filter.filtersService.model.expanded}")
         span.accent(ng-if="filter.filtersService.model.expanded") Show Less Filters
         span.accent(ng-if="!filter.filtersService.model.expanded") Show More Filters
+
   div(row)
     legend Select <strong>premise type</strong> followed by a <strong>retailer</strong> and/or <strong>distributor</strong> to begin your search
     div(column='2')
@@ -42,13 +43,13 @@ form.filters(column='12' ng-class="{'target-list': filter.opportunities}")
     div(column='2')
       label Account Scope
       md-checkbox(ng-model="filter.filtersService.model.selected.myAccountsOnly" aria-label="My Accounts" ng-click="filter.chipsService.updateChip('myAccountsOnly', 'My Accounts Only')") My Accounts Only
+
   div(row)
     div.checkbox-inline(column='2')
-      label Opportunity Status
-      md-checkbox(ng-model="filter.filtersService.model.opportunityStatusAll" aria-label="All" ng-change="filter.applyFilterArr(filter.filtersService.model.selected.opportunityStatus, 'All', 'opportunityStatus')" ng-if="filter.opportunityStatusSwitch()") All
-      md-checkbox(ng-model="filter.filtersService.model.opportunityStatusOpen" aria-label="Open" ng-change="filter.applyFilterArr(filter.filtersService.model.selected.opportunityStatus, 'Open', 'opportunityStatus')" ng-if="!filter.opportunityStatusSwitch()") Open
-      md-checkbox(ng-model="filter.filtersService.model.opportunityStatusTargeted" aria-label="Targeted" ng-change="filter.applyFilterArr(filter.filtersService.model.selected.opportunityStatus, 'Targeted', 'opportunityStatus')") Targeted
-      md-checkbox(ng-model="filter.filtersService.model.opportunityStatusClosed" aria-label="Closed" ng-change="filter.applyFilterArr(filter.filtersService.model.selected.opportunityStatus, 'Closed', 'opportunityStatus')" ng-if="filter.opportunityStatusSwitch()") Closed
+      label Store Type
+      md-checkbox(ng-model="filter.filtersService.model.cbbdChainIndependent" aria-label="Independent" ng-change="filter.applyFilterArr(filter.filtersService.model.selected.cbbdChain, 'Independent', 'cbbdChain')") Independent
+      md-checkbox(ng-model="filter.filtersService.model.cbbdChainCbbd" aria-label="CBBD Chain" ng-change="filter.applyFilterArr(filter.filtersService.model.selected.cbbdChain, 'Cbbd', 'cbbdChain', 'CBBD Chain')") CBBD Chain
+
     div(column='4')
       .tooltip-wrap
         label Opportunity Type
@@ -67,16 +68,26 @@ form.filters(column='12' ng-class="{'target-list': filter.opportunities}")
         .dropdown
           md-select(md-on-open="filter.appendDoneButton()" ng-change="filter.changeOpportunitySelection()" ng-model="filter.filtersService.model.selected.opportunityType"  multiple="true" md-on-close="filter.applyFilterMulti(filter.filtersService.model.selected.opportunityType, filter.filtersService.model.selected.opportunityType, 'opportunityType'); filter.closeDoneButton()" aria-label="Opportunity Type Dropdown")
             md-option(ng-repeat="type in filter.filtersService.model.opportunitiesType" aria-label="{{type.name}}" value="{{type.name}}" ng-click="filter.chooseOpportunityType(type.name)") {{::type.name}}
+
     div(column='4' ng-if="filter.filtersService.model.selected.premiseType === 'off'")
       label Brand / Master SKU
       inline-search(type="product" variety="sku" placeholder="Brand or SKU" chosen-result="filter.filtersService.model.masterSKU" callback="filter.applyFilterArr(filter.filtersService.model.selected.masterSKU, result, 'masterSKU', result.name)")
     div(column='4' ng-if="filter.filtersService.model.selected.premiseType === 'on'")
       label Brand / Package
       inline-search(type="product" variety="package" placeholder="Brand or Package" chosen-result="filter.filtersService.model.masterSKU" callback="filter.applyFilterArr(filter.filtersService.model.selected.masterSKU, result, 'masterSKU', result.name)")
-    div.checkbox-inline(column='2')
-      label Store Type
-      md-checkbox(ng-model="filter.filtersService.model.cbbdChainIndependent" aria-label="Independent" ng-change="filter.applyFilterArr(filter.filtersService.model.selected.cbbdChain, 'Independent', 'cbbdChain')") Independent
-      md-checkbox(ng-model="filter.filtersService.model.cbbdChainCbbd" aria-label="CBBD Chain" ng-change="filter.applyFilterArr(filter.filtersService.model.selected.cbbdChain, 'Cbbd', 'cbbdChain', 'CBBD Chain')") CBBD Chain
+
+    div(column='2' ng-switch="filter.shouldEnableSimpleDistribution()")
+      label Distribution Type
+      div(ng-switch-when="true" ng-cloak)
+        md-checkbox(ng-model="filter.filtersService.model.simpleDistributionType" aria-label="Simple Distribution" ng-change="filter.applyFilterArr(filter.filtersService.model.selected.simpleDistributionType, 'Simple', 'simpleDistributionType')") Simple
+
+      .tooltip(ng-switch-when="false" ng-cloak)
+        md-checkbox(ng-disabled="true" ng-model="filter.filtersService.model.simpleDistributionType" aria-label="Simple Distribution" ng-change="filter.applyFilterArr(filter.filtersService.model.selected.simpleDistributionType, 'Simple', 'simpleDistributionType')") Simple
+        md-tooltip(md-direction="bottom")
+          label Simple Distribution Type
+          p To enable this option, please select only <span class="bold">Non-Buy</span>, <span class="bold">At Risk</span>, and <span class="bold">New Placement (No Rebuy)</span> Opportunity Types.
+
+  //- MORE FILTERS
   div(row)
     div.predicted-impact(column='2' ng-show="filter.filtersService.model.expanded")
       label Predicted Impact
@@ -89,29 +100,51 @@ form.filters(column='12' ng-class="{'target-list': filter.opportunities}")
       md-checkbox(ng-model="filter.filtersService.model.predictedImpactLow" aria-label="Predicted Impact Low" ng-change="filter.applyFilterArr(filter.filtersService.model.selected.impact, 'Low', 'impact', 'Low Impact')")
         | Low
         span.impact.low-small
+
     div(column='4' ng-show="filter.filtersService.model.expanded")
-      label Product Type
-      md-checkbox(ng-model="filter.filtersService.model.productTypeFeatured" aria-label="Product Type Featured" ng-change="filter.applyFilterArr(filter.filtersService.model.selected.productType, 'featured', 'productType')") Featured
-      md-checkbox(ng-model="filter.filtersService.model.productTypePriority" aria-label="Product Type Priority Packages" ng-change="filter.applyFilterArr(filter.filtersService.model.selected.productType, 'priority', 'productType', 'priority packages')") Priority Packages
-      md-checkbox(ng-model="filter.filtersService.model.productTypeAuthorized" aria-label="Product Type Authorized" ng-change="filter.applyFilterArr(filter.filtersService.model.selected.productType, 'authorized', 'productType')") Authorized
-      div.checkbox-inline.trade-channel
-        label.vertical Trade Channel
-        md-checkbox(ng-repeat="channel in filter.filtersService.model.tradeChannels[filter.filtersService.model.selected.premiseType]" ng-model="filter.filtersService.model['tradeChannel' + channel.name]" aria-label="Trade Channel {{channel.name}}" ng-change="filter.applyFilterArr(filter.filtersService.model.selected.tradeChannel, channel.name, 'tradeChannel')") {{channel.label}}
+      div.nested-columns
+        label Opportunity Status
+        md-checkbox(ng-model="filter.filtersService.model.opportunityStatusAll" aria-label="All" ng-change="filter.applyFilterArr(filter.filtersService.model.selected.opportunityStatus, 'All', 'opportunityStatus')" ng-if="filter.opportunityStatusSwitch()") All
+        md-checkbox(ng-model="filter.filtersService.model.opportunityStatusOpen" aria-label="Open" ng-change="filter.applyFilterArr(filter.filtersService.model.selected.opportunityStatus, 'Open', 'opportunityStatus')" ng-if="!filter.opportunityStatusSwitch()") Open
+        md-checkbox(ng-model="filter.filtersService.model.opportunityStatusTargeted" aria-label="Targeted" ng-change="filter.applyFilterArr(filter.filtersService.model.selected.opportunityStatus, 'Targeted', 'opportunityStatus')") Targeted
+        md-checkbox(ng-model="filter.filtersService.model.opportunityStatusClosed" aria-label="Closed" ng-change="filter.applyFilterArr(filter.filtersService.model.selected.opportunityStatus, 'Closed', 'opportunityStatus')" ng-if="filter.opportunityStatusSwitch()") Closed
+
+      div.nested-columns
+        label Product Type
+        md-checkbox(ng-model="filter.filtersService.model.productTypeFeatured" aria-label="Product Type Featured" ng-change="filter.applyFilterArr(filter.filtersService.model.selected.productType, 'featured', 'productType')") Featured
+        md-checkbox(ng-model="filter.filtersService.model.productTypePriority" aria-label="Product Type Priority Packages" ng-change="filter.applyFilterArr(filter.filtersService.model.selected.productType, 'priority', 'productType', 'priority packages')") Priority Packages
+        md-checkbox(ng-model="filter.filtersService.model.productTypeAuthorized" aria-label="Product Type Authorized" ng-change="filter.applyFilterArr(filter.filtersService.model.selected.productType, 'authorized', 'productType')") Authorized
+
     div.checkbox-inline(column='2' ng-show="filter.filtersService.model.expanded")
       label Store Segmentation
       md-checkbox(ng-model="filter.filtersService.model.storeSegmentationA" aria-label="Store Segmentation A" ng-change="filter.applyFilterArr(filter.filtersService.model.selected.segmentation, 'A', 'segmentation', 'Segment A')") A
       md-checkbox(ng-model="filter.filtersService.model.storeSegmentationB" aria-label="Store Segmentation B" ng-change="filter.applyFilterArr(filter.filtersService.model.selected.segmentation, 'B', 'segmentation', 'Segment B')") B
       md-checkbox(ng-model="filter.filtersService.model.storeSegmentationC" aria-label="Store Segmentation C" ng-change="filter.applyFilterArr(filter.filtersService.model.selected.segmentation, 'C', 'segmentation', 'Segment C')") C
+
     div.location-contact-opps(column='4' ng-show="filter.filtersService.model.expanded")
       label Location
         inline-search(type="location" placeholder="City or Zip" chosen-result="filter.filtersService.model.location" callback="filter.applyLocations(result)")
+
       label.state State
         .dropdown-filter
           .dropdown.state-dropdown
             md-select.state-dropdown(md-on-open="filter.appendDoneButton()" ng-model="filter.filtersService.model.states" multiple="true" placeholder="State" md-on-close="filter.applyStates(filter.filtersService.model.states); filter.closeDoneButton()" aria-label="State Dropdown")
               md-option(ng-repeat="state in filter.states" aria-label="{{state.name}}" value="{{state.code}}" type="state") {{::state.name}}
-      label.cbbd-contact CBBD Contact
+
+  div(row)
+    div(column='2' ng-show="filter.filtersService.model.expanded") &nbsp;
+
+    div(column='4' ng-show="filter.filtersService.model.expanded")
+      div.checkbox-inline.trade-channel
+        label Trade Channel
+        md-checkbox(ng-repeat="channel in filter.filtersService.model.tradeChannels[filter.filtersService.model.selected.premiseType]" ng-model="filter.filtersService.model['tradeChannel' + channel.name]" aria-label="Trade Channel {{channel.name}}" ng-change="filter.applyFilterArr(filter.filtersService.model.selected.tradeChannel, channel.name, 'tradeChannel')") {{channel.label}}
+
+    div(column='2' ng-show="filter.filtersService.model.expanded") &nbsp;
+
+    div.location-contact-opps(column='4' ng-show="filter.filtersService.model.expanded")
+      label CBBD Contact
         inline-search(type="user" placeholder="Name" chosen-result="filter.filtersService.model.contact" callback="filter.applyFilterArr(filter.filtersService.model.selected.contact, result, 'contact', result.firstName + ' ' + result.lastName)")
+
   div(row)
     div(column='12' class='apply-filters')
       button(value='Apply Filters' type="submit" class="btn-action" ng-click="filter.applyFilters()" ng-disabled="filter.filtersService.model.filtersApplied || filter.filtersService.model.filtersValidCount === 0") Apply Filters

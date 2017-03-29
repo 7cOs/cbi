@@ -46,6 +46,7 @@ module.exports = /*  @ngInject */
     vm.changeOpportunitySelection = changeOpportunitySelection;
     vm.getDescriptionForFilter = getDescriptionForFilter;
     vm.applyFilters = applyFilters;
+    vm.shouldEnableSimpleDistribution = shouldEnableSimpleDistribution;
 
     init();
 
@@ -114,6 +115,15 @@ module.exports = /*  @ngInject */
         targetEvent: ev,
         template: require('./modal.pug')
       });
+    }
+
+    function shouldEnableSimpleDistribution() {
+      let nonSimpleOppTypes = vm.filtersService.model.selected.opportunityType.filter((item) => {
+        return item !== 'At Risk' && item !== 'Non-Buy' && item !== 'New Placement (No Rebuy)';
+      });
+
+      // enable simple distribution filter if there are no disallowed opp types selected
+      return nonSimpleOppTypes.length === 0;
     }
 
     function chooseOpportunityType(currentSelection) {

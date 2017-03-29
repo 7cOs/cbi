@@ -29,9 +29,12 @@ md-content {
     padding-left: 0.75em;
   }
 
-  .cbbd-contact,
   .state {
     margin-top: 3ex;
+
+    md-select {
+      margin-bottom: 8px;
+    }
   }
 
   label > div {
