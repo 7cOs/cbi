@@ -84,8 +84,48 @@
     }
   }
 
-  .nested-columns {
+  .location-contact-opps {
+    input {
+      height: 40px;
+      font-size: 1.3em;
+      padding-left: 0.75em;
+    }
+
+    label > div {
+      text-transform: capitalize;
+      font-size: 1.75em;
+    }
+
+    label {
+      &.location {
+        margin-bottom: 16px;
+      }
+
+      &.state {
+        margin-bottom: 20px;
+      }
+    }
+
+    .state {
+      md-select {
+        margin-bottom: 0;
+      }
+    }
+
+    .dropdown-filter md-select-value .md-select-icon {
+      margin: 7px 0 4px;
+    }
+  }
+
+  .filter-blocks-inline {
     float: left;
+    margin-bottom: 20px;
+    white-space: nowrap;
+  }
+
+  .nested-columns {
+    display: inline-block;
+    vertical-align: top;
   }
 
   .trade-channel, .nested-columns {
