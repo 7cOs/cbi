@@ -83,6 +83,22 @@ describe('[Services.apiHelperService]', function() {
     expect(result).toEqual(resultExpectation);
   });
 
+  it('[request] it should return opportunities specific formatting when type = opportunities and simple distribution is selected', function() {
+    var mockObj = {
+      'masterSKU': '112154',
+      'opportunityType': ['At Risk'],
+      'premiseType': 'on',
+      'simpleDistributionType': true,
+      'type': 'opportunities'
+    };
+    var url = 'http://localhost:3000/';
+    var resultExpectation = url + '?limit=10&ignoreDismissed=true&sort=&offset=0&brandOpportunityType=true&filter=masterSKU%3A112154%2CopportunityType%3AAT_RISK%2CpremiseType%3Aon%2C';
+
+    var result = APIHelper.request(url, mockObj);
+
+    expect(result).toEqual(resultExpectation);
+  });
+
   it('[request] it should set archived=true for target lists', function() {
     var mockObj = {
       'type': 'targetLists'
@@ -131,6 +147,7 @@ describe('[Services.apiHelperService]', function() {
 
     expect(result).toEqual(resultExpectation);
   });
+
   describe('[parseAppliedFilters]', function() {
     beforeEach(function() {
     });

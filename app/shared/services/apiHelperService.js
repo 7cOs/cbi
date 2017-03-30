@@ -34,7 +34,7 @@ module.exports = /*  @ngInject */
       if (obj.type && obj.type === 'opportunities') {
         var pageQuery = applyPage(),
             sortQuery = applySort(),
-            simpleQuery = applySimpleDist(),
+            simpleQuery = applySimpleDist(obj),
             queryStr = '';
 
         queryParams += '';
@@ -170,10 +170,10 @@ module.exports = /*  @ngInject */
      * @returns {String} - formatted query
      * @memberOf cf.common.services
      */
-    function applySimpleDist() {
+    function applySimpleDist(filters) {
       let query = '';
 
-      if (filtersService.model.selected.simpleDistributionType) {
+      if (filters && filters.simpleDistributionType === true) {
         query = '&brandOpportunityType=true';
       }
 
@@ -237,6 +237,8 @@ module.exports = /*  @ngInject */
             queryParams += key2 + ':' + obj[key2];
             somethingAdded = true;
           }
+        } else if (key2 === 'simpleDistributionType') {
+          somethingAdded = false;
         } else if (obj[key2].constructor !== Array && key2 !== 'retailer') {
           queryParams += key2 + ':' + obj[key2];
           somethingAdded = true;
