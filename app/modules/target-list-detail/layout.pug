@@ -21,9 +21,6 @@
 
     div(column="6 +1").hero-info
       div
-        span.bold {{tld.targetListService.model.currentList.opportunitiesSummary.totalClosedDepletions | number }}<span class="unit">CE</span>
-        label.accent.accent-blue Depletions<br />Since Closed
-      div
         span {{tld.targetListService.model.currentList.opportunitiesSummary.closedOpportunitiesCount | number }}
         label.accent.accent-blue Closed<br />Opportunities
       div

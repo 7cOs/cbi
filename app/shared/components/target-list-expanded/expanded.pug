@@ -22,12 +22,13 @@ div.expanded-target-lists
     md-tab(label='Archived' md-on-select="expanded.selector('archived')")
 
   div.tab-content-wrapper
+    //- My Target Lists
     div.md-padding.tab-content(ng-cloak ng-class="{active: expanded.buttonState === 'named', left: expanded.selectedTab > 0, 'no-transition': !expanded.userSelectedTab}")
       div(row).clearfix
         div.checkbox-wrapper.placeholder
         div.checkbox-sibling-target(column="12")
           div(row).target-list-count-container
-            div(column='4')
+            div(column='6')
               label.left(ng-click="expanded.sortBy('name')" ng-class="{ 'completed' : expanded.sortProperty === 'name'}")
                 | <br />List Name
                 span(ng-class="{ 'chevron-down-small' : !expanded.listChevron, 'chevron-up-small' : expanded.listChevron}").chevron-down-small
@@ -47,10 +48,6 @@ div.expanded-target-lists
               label(ng-click="expanded.sortBy('opportunitiesSummary.opportunitiesCount')" ng-class="{ 'completed' : expanded.sortProperty === 'opportunitiesSummary.opportunitiesCount'}")
                 | Total Opps
                 span(ng-class="{ 'chevron-down-small' : expanded.totalOpportunitesChevron, 'chevron-up-small' : !expanded.totalOpportunitesChevron}").chevron-down-small
-            div(column='2')
-              label(ng-click="expanded.sortBy('opportunitiesSummary.totalClosedDepletions')" ng-class="{ 'completed' : expanded.sortProperty === 'opportunitiesSummary.totalClosedDepletions'}")
-                | Depletions <br />Since Closed (CE)
-                span(ng-class="{ 'chevron-down-small' : expanded.depletionsChevron, 'chevron-up-small' : !expanded.depletionsChevron}").chevron-down-small
       div(row).target-list-detail-container
         .loader-wrap.inline(ng-if="expanded.loaderService.model.loadingFilters" ng-class="{'active': expanded.loaderService.model.loadingFilters}")
           loader
@@ -64,7 +61,7 @@ div.expanded-target-lists
             div.checkbox-sibling(column="12" ui-sref="target-list-detail({id: list.id})" analytics-on="click" analytics-event="My List" analytics-category="Target Lists" analytics-label="{{list.id}}")
               div(row).stats
                 div(column="12")
-                  h4(column="4").left {{list.name}}
+                  h4(column="6").left {{list.name}}
                   h5(column="2").accent.dropdown-menu-trigger.collaborators {{list.collaborators.length}}
                     span(ng-if="list.collaborators.length > 1")  collaborators
                     span(ng-if="list.collaborators.length < 2")  collaborator
@@ -74,18 +71,18 @@ div.expanded-target-lists
                   h5(column="2" am-time-ago="(list.dateOpportunitiesUpdated ? list.dateOpportunitiesUpdated : list.createdAt | amUtc | amLocal)").accent.date
                   h4(column="1").closed {{list.opportunitiesSummary.closedOpportunitiesCount | number}}
                   h4(column="1") {{list.opportunitiesSummary.opportunitiesCount | number}}
-                  h4(column="2") {{list.opportunitiesSummary.totalClosedDepletions | number}}
               div(row).creator
                 h5(column="3").accent.left &nbsp;
               div(row)
                 div(column="12")
                   md-progress-linear(md-mode="determinate" ng-value="expanded.ratio(list.opportunitiesSummary.closedOpportunitiesCount, list.opportunities)")
 
+    //- Shared With Me
     div.md-padding.tab-content(ng-cloak ng-class="{active: expanded.buttonState === 'shared', left: expanded.selectedTab > 1, right: expanded.selectedTab < 1, 'no-transition': !expanded.userSelectedTab}")
       div(row)
         div(column="12")
           div(row).target-list-count-container
-            div(column='4')
+            div(column='6')
               label.left(ng-click="expanded.sortBy('name')" ng-class="{ 'completed' : expanded.sortProperty === 'name'}")
                 | <br />List Name
                 span(ng-class="{ 'chevron-down-small' : !expanded.listChevron, 'chevron-up-small' : expanded.listChevron}").chevron-down-small
@@ -105,10 +102,6 @@ div.expanded-target-lists
               label(ng-click="expanded.sortBy('opportunitiesSummary.opportunitiesCount')" ng-class="{ 'completed' : expanded.sortProperty === 'opportunitiesSummary.opportunitiesCount'}")
                 | Total Opps
                 span(ng-class="{ 'chevron-down-small' : expanded.totalOpportunitesChevron, 'chevron-up-small' : !expanded.totalOpportunitesChevron}").chevron-down-small
-            div(column='2')
-              label(ng-click="expanded.sortBy('opportunitiesSummary.totalClosedDepletions')" ng-class="{ 'completed' : expanded.sortProperty === 'opportunitiesSummary.totalClosedDepletions'}")
-                | Depletions <br />Since Closed (CE)
-                span(ng-class="{ 'chevron-down-small' : expanded.depletionsChevron, 'chevron-up-small' : !expanded.depletionsChevron}").chevron-down-small
       div(row).target-list-detail-container
         .loader-wrap.inline(ng-if="expanded.loaderService.model.loadingFilters" ng-class="{'active': expanded.loaderService.model.loadingFilters}")
           loader
@@ -119,7 +112,7 @@ div.expanded-target-lists
           li(ng-repeat="list in expanded.userService.model.targetLists.sharedWithMe | filter:{archived:false} | orderBy:expanded.sortProperty:expanded.reverse").clearfix
             div(column="12" ui-sref="target-list-detail({id: list.id})" analytics-on="click" analytics-event="Shared List" analytics-category="Target Lists" analytics-label="{{list.id}}")
               div(row)
-                h4(column="4").left {{list.name}}
+                h4(column="6").left {{list.name}}
                 div(column="2")
                   h5.accent.dropdown-menu-trigger.collaborators {{list.collaborators.length}}
                     span(ng-if="list.collaborators.length > 1")  collaborators
@@ -130,18 +123,18 @@ div.expanded-target-lists
                 h5(column="2" am-time-ago="(list.dateOpportunitiesUpdated ? list.dateOpportunitiesUpdated : list.createdAt | amUtc | amLocal)").accent.date
                 h4(column="1").closed {{list.opportunitiesSummary.closedOpportunitiesCount | number}}
                 h4(column="1") {{list.opportunities | number}}
-                h4(column="2") {{list.opportunitiesSummary.totalClosedDepletions | number}}
               div(row).creator
                 h5(ng-if="list.targetListAuthor" column="3").accent.left {{list.targetListAuthor}}
               div(row)
                 md-progress-linear(md-mode="determinate" ng-value="expanded.ratio(list.opportunitiesSummary.closedOpportunitiesCount, list.opportunities)")
 
+    //- Archived
     div.md-padding.tab-content(ng-cloak ng-class="{active: expanded.buttonState === 'archived', right: expanded.selectedTab < 2, 'no-transition': !expanded.userSelectedTab}")
       div(row).clearfix
         div.checkbox-wrapper.placeholder
         div.checkbox-sibling-target(column="12")
           div(row).target-list-count-container
-            div(column='4')
+            div(column='6')
               label.left(ng-click="expanded.sortBy('name')" ng-class="{ 'completed' : expanded.sortProperty === 'name'}")
                 | <br />List Name
                 span(ng-class="{ 'chevron-down-small' : !expanded.listChevron, 'chevron-up-small' : expanded.listChevron}").chevron-down-small
@@ -161,10 +154,6 @@ div.expanded-target-lists
               label(ng-click="expanded.sortBy('opportunitiesSummary.opportunitiesCount')" ng-class="{ 'completed' : expanded.sortProperty === 'opportunitiesSummary.opportunitiesCount'}")
                 | Total Opps
                 span(ng-class="{ 'chevron-down-small' : expanded.totalOpportunitesChevron, 'chevron-up-small' : !expanded.totalOpportunitesChevron}").chevron-down-small
-            div(column='2')
-              label(ng-click="expanded.sortBy('opportunitiesSummary.totalClosedDepletions')" ng-class="{ 'completed' : expanded.sortProperty === 'opportunitiesSummary.totalClosedDepletions'}")
-                | Depletions <br />Since Closed (CE)
-                span(ng-class="{ 'chevron-down-small' : expanded.depletionsChevron, 'chevron-up-small' : !expanded.depletionsChevron}").chevron-down-small
       div(row).target-list-detail-container
         .loader-wrap.inline(ng-if="expanded.loaderService.model.loadingFilters" ng-class="{'active': expanded.loaderService.model.loadingFilters}")
           loader
@@ -176,7 +165,7 @@ div.expanded-target-lists
               md-checkbox(aria-label="Select Item" ng-checked="expanded.exists(list, expanded.selected)")
             div.checkbox-sibling(column="12" ui-sref="target-list-detail({id: list.id})" analytics-on="click" analytics-event="Archived List" analytics-category="Target Lists" analytics-label="{{list.id}}").archived
               div(row)
-                h4(column="4").left {{list.name}}
+                h4(column="6").left {{list.name}}
                 div(column="2")
                   h5.accent.dropdown-menu-trigger.collaborators {{list.collaborators.length}}
                     span(ng-if="list.collaborators.length > 1")  collaborators
@@ -187,9 +176,7 @@ div.expanded-target-lists
                 h5(column="2" am-time-ago="(list.dateOpportunitiesUpdated ? list.dateOpportunitiesUpdated : list.createdAt | amUtc | amLocal)").accent.date
                 h4(column="1").closed {{list.opportunitiesSummary.closedOpportunitiesCount | number}}
                 h4(column="1") {{list.opportunities | number}}
-                h4(column="2") {{list.opportunitiesSummary.totalClosedDepletions | number}}
               div(row).creator
               h5(column="3" ng-if="list.targetListAuthor === 'current user'").accent.left &nbsp;
               h5(column="3" ng-if="list.targetListAuthor !== 'current user'").accent.left {{list.targetListAuthor}}
-              div(row)
-                md-progress-linear(md-mode="determinate" ng-value="expanded.ratio(list.closedOpportunities, list.opportunities)")
+              md-progress-linear(md-mode="determinate" ng-value="expanded.ratio(list.closedOpportunities, list.opportunities)")
