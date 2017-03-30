@@ -248,11 +248,11 @@ describe('Unit: opportunitiesService - get opportunities', function() {
         $httpBackend.flush();
         expect(filtersService.model.appliedFilter.pagination).toEqual({
             currentPage: 0,
-            totalPages: 1,
+            totalPages: 2,
             default: true,
             totalOpportunities: '28129',
             totalStores: '31',
-            roundedStores: 40
+            roundedStores: 20
         });
     });
 
