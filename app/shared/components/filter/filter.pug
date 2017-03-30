@@ -66,7 +66,15 @@ form.filters(column='12' ng-class="{'target-list': filter.opportunities}")
               p #[strong Custom:] Field-generated opportunity
       .dropdown-filter
         .dropdown
-          md-select(md-on-open="filter.appendDoneButton()" ng-change="filter.changeOpportunitySelection()" ng-model="filter.filtersService.model.selected.opportunityType"  multiple="true" md-on-close="filter.applyFilterMulti(filter.filtersService.model.selected.opportunityType, filter.filtersService.model.selected.opportunityType, 'opportunityType'); filter.closeDoneButton()" aria-label="Opportunity Type Dropdown")
+          md-select(
+            md-on-open="filter.appendDoneButton()",
+            ng-change="filter.changeOpportunitySelection()",
+            ng-model="filter.filtersService.model.selected.opportunityType",
+            multiple="true",
+            md-on-close="filter.applyFilterMulti(filter.filtersService.model.selected.opportunityType, filter.filtersService.model.selected.opportunityType, 'opportunityType'); filter.closeDoneButton()",
+            aria-label="Opportunity Type Dropdown",
+            md-selected-text="filter.filtersService.model.selected.opportunityType.join(', ')"
+          )
             md-option.tooltip-list-item-wrap(
               ng-disabled="filter.filtersService.model.selected.simpleDistributionType && !filter.isSimpleDistributionOpportunityType(type.name)",
               ng-repeat="type in filter.filtersService.model.opportunitiesType",
