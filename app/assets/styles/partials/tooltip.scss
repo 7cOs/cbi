@@ -36,6 +36,7 @@ md-tooltip.md-tooltip,
 md-tooltip.md-panel.md-tooltip {
   overflow: visible;
   font-size: 0.8em;
+  z-index: 999;
 
   &.md-show, &.md-show-add-active {
     opacity: 1;
