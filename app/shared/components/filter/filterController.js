@@ -311,6 +311,11 @@ module.exports = /*  @ngInject */
             label = 'MY ACCOUNTS ONLY';
             break;
 
+          case 'simpleDistributionType':
+            action = 'DISTRIBUTION TYPE';
+            label = 'SIMPLE';
+            break;
+
           case 'contact':
             action = 'CBBD CONTACT';
             label = chip.id;

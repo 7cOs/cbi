@@ -542,6 +542,14 @@ describe('Unit: filter controller (opportunities)', function() {
         'removable': false
       };
 
+    var simpleDistChip =
+      {
+        'name': 'Simple',
+        'type': 'simpleDistributionType',
+        'applied': true,
+        'removable': false
+      };
+
     var cbbdChip =
       {
         'name': 'CBBD Contact',
@@ -593,6 +601,7 @@ describe('Unit: filter controller (opportunities)', function() {
       };
 
     chipsService.model.push(myAccountsChip);
+    chipsService.model.push(simpleDistChip);
     chipsService.model.push(cbbdChip);
     chipsService.model.push(masterSkuChip);
     chipsService.model.push(predictedImpactChip);
@@ -604,6 +613,7 @@ describe('Unit: filter controller (opportunities)', function() {
     spyOn($analytics, 'eventTrack');
     ctrl.applyFilters();
     expect($analytics.eventTrack).toHaveBeenCalledWith('ACCOUNT SCOPE', { category: 'Filters', label: 'MY ACCOUNTS ONLY' });
+    expect($analytics.eventTrack).toHaveBeenCalledWith('DISTRIBUTION TYPE', { category: 'Filters', label: 'SIMPLE' });
     expect($analytics.eventTrack).toHaveBeenCalledWith('CBBD CONTACT', { category: 'Filters', label: 'Mr. Simpson' });
     expect($analytics.eventTrack).toHaveBeenCalledWith('MASTER SKU', { category: 'Filters', label: '228' });
     expect($analytics.eventTrack).toHaveBeenCalledWith('PREDICTED IMPACT', { category: 'Filters', label: 'HIGH' });
