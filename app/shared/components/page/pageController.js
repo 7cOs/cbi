@@ -31,7 +31,7 @@ module.exports = /*  @ngInject */
         end = totalPages;
       } else if (currentPage < 5) {
         start = 0;
-        end = totalPages < 4 ? totalPages : 9;
+        end = totalPages < 9 ? totalPages : 9;
       } else if (currentPage > totalPages - 5) {
         start = totalPages - 9;
         end = totalPages;
