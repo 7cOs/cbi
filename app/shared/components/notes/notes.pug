@@ -38,9 +38,9 @@ div.modal.notes(ng-if="notesOpen")
         div.text-editor
           text-angular(ta-toolbar="[['bold','italics', 'underline', 'ul']]" ta-text-editor-class="form-content" ng-model="n.newNote.body").text-editor
         div
-          .add-attachments(ngf-select="n.uploadFiles($files)" multiple ngf-max-size="10MB" ngf-pattern=".docx,.doc,.ppt,.pptx,.xls,.xlsx,.gif,.jpg,.png,.pdf")
+          .add-attachments(ngf-select="n.addAttachment($file, $invalidFile)" multiple ngf-max-size="10MB" ngf-pattern="'.docx,.doc,.ppt,.pptx,.xls,.xlsx,.gif,.jpg,.png,.pdf'" accept=".docx,.doc,.ppt,.pptx,.xls,.xlsx,.gif,.jpg,.png,.pdf")
             a(href="#").accent Add an attachment <span ng-if="!n.newNote.attachments || n.newNote.attachments.length === 0">(Max 10MB)</span>
-            p {{n.uploadErrorMsg}}
+            p(ng-if="n.uploadSizeError") {{n.uploadSizeErrorMessage}}
         button(ng-click="n.createNote(n.newNote)").btn-action Save
         p(ng-click="n.cancelNewNote(n.newNote)").cancel.accent X Cancel
       div.inline-container(ng-if="n.newNote.attachments.length > 0")

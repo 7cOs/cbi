@@ -21,6 +21,8 @@ module.exports = /*  @ngInject */
     vm.notesClose = notesClose;
     vm.fileUploadActive = true;
     vm.noteHasBeenDeleted = false;
+    vm.uploadSizeError = false;
+    vm.uploadSizeErrorMessage = '';
 
     // Temp data
     vm.noteTopics = [
@@ -48,6 +50,7 @@ module.exports = /*  @ngInject */
     vm.uploadFiles = uploadFiles;
     vm.deleteAttachment = deleteAttachment;
     vm.getMaxFileSize = getMaxFileSize;
+    vm.addAttachment = addAttachment;
 
     init();
 
@@ -96,7 +99,7 @@ module.exports = /*  @ngInject */
       } else {
         vm.invalidCreateNote = false;
       }
-      vm.newNoteFiles ? vm.fileUploading = true : vm.loading = true;
+      data.attachments.length ? vm.fileUploading = true : vm.loading = true;
       data.author = 'Me';
 
       var id;
@@ -131,8 +134,8 @@ module.exports = /*  @ngInject */
         vm.creatingNote = false;
         vm.loading = false;
 
-        if (vm.newNoteFiles) {
-          uploadFiles(vm.newNoteFiles, data.id);
+        if (data.attachments.length) {
+          uploadFiles(data.id, data.attachments);
         }
       }).catch(function() {
         vm.notesError = true;
@@ -188,55 +191,48 @@ module.exports = /*  @ngInject */
       note.readMore = true;
     }
 
-    // Upload files to Salesforce
-    function uploadFiles(files, noteId) {
-      if (!noteId) {
-        vm.newNoteFiles = files;
-        if (vm.newNote.attachments) {
-          angular.forEach(files, function(file) {
-            file.parsedSize = parseFileSize(file.size);
-            vm.newNote.attachments.push(file);
-          });
-        } else {
-          files[0].parsedSize = parseFileSize(files[0].size);
-          vm.newNote.attachments = files;
+    function addAttachment(file, invalidFile) {
+      if (invalidFile) {
+        vm.uploadSizeErrorMessage = 'File exceeds the 10MB limit. Please try again.';
+        vm.uploadSizeError = true;
+        $timeout(function() {
+          vm.uploadSizeError = false;
+        }, 5000);
+      } else if (file) {
+        file.parsedSize = parseFileSize(file.size);
+
+        if (!vm.newNote.hasOwnProperty('attachments')) vm.newNote.attachments = [];
+
+        if (canAttachFile(file.size, vm.newNote.attachments)) {
+          vm.newNote.attachments.push(file);
         }
-        return;
       }
+    }
 
-      vm.uploadErrorMsg = '';
-      vm.fileUploading = true;
-      vm.files = files;
-      if (files && files.length) {
-        Upload.upload({
-          url: '/sfdc/createAttachment',
-          data: {
-            noteId: noteId,
-            files: files
-          }
-        }).then(function(response) {
-          $timeout(function() {
-            vm.result = response.data;
-            vm.loading = true;
-            vm.fileUploading = false;
+    // Upload files to Salesforce
+    function uploadFiles(noteId, attachments) {
+      Upload.upload({
+        url: '/sfdc/createAttachment',
+        data: {
+          noteId: noteId,
+          files: attachments
+        }
+      }).then(function(response) {
+        vm.result = response.data;
+        vm.loading = true;
+        vm.fileUploading = false;
 
-            notesService.accountNotes().then(function(success) {
-              vm.notes = success;
-              vm.loading = false;
-              setNoteAuthor();
-            }).catch(function() {
-              vm.notesError = true;
-            });
-          });
+        notesService.accountNotes().then(function(success) {
+          vm.notes = success;
+          vm.loading = false;
+          setNoteAuthor();
         }).catch(function() {
-          vm.fileUploading = false;
           vm.notesError = true;
         });
-      } else {
-        vm.uploadErrorMsg = 'Please ensure you\'re using a supported file type (.doc, .ppt, .xls, .gif, .jpg, .png, .pdf) and your total attachments are under 10MB.';
+      }).catch(function() {
         vm.fileUploading = false;
-      }
-
+        vm.notesError = true;
+      });
     }
 
     function deleteAttachment(data) {
@@ -356,6 +352,10 @@ module.exports = /*  @ngInject */
           note.author = 'Me';
         }
       });
+    }
+
+    function canAttachFile(newFileSize, currentAttachments) {
+      if (!currentAttachments.length) return true;
     }
 
     $scope.$on('notes:opened', function(event, data, account) {
