@@ -76,7 +76,7 @@ describe('[Services.apiHelperService]', function() {
       'type': 'opportunities'
     };
     var url = 'http://localhost:3000/';
-    var resultExpectation = url + '?limit=10&ignoreDismissed=true&sort=&offset=0&filter=masterSKU%3A112154%2CpremiseType%3Aon';
+    var resultExpectation = url + '?limit=20&ignoreDismissed=true&sort=&offset=0&filter=masterSKU%3A112154%2CpremiseType%3Aon';
 
     var result = APIHelper.request(url, mockObj);
 
@@ -92,7 +92,7 @@ describe('[Services.apiHelperService]', function() {
       'type': 'opportunities'
     };
     var url = 'http://localhost:3000/';
-    var resultExpectation = url + '?limit=10&ignoreDismissed=true&sort=&offset=0&brandOpportunityType=true&filter=masterSKU%3A112154%2CopportunityType%3AAT_RISK%2CpremiseType%3Aon%2C';
+    var resultExpectation = url + '?limit=20&ignoreDismissed=true&sort=&offset=0&brandOpportunityType=true&filter=masterSKU%3A112154%2CopportunityType%3AAT_RISK%2CpremiseType%3Aon%2C';
 
     var result = APIHelper.request(url, mockObj);
 
@@ -141,7 +141,7 @@ describe('[Services.apiHelperService]', function() {
       'additionalParams': ['cbbdChain']
     };
     var url = 'http://localhost:3000/';
-    var resultExpectation = url + '?' + 'limit=10&ignoreDismissed=true&sort=&offset=0&filter=additionalParams%3AcbbdChain';
+    var resultExpectation = url + '?' + 'limit=20&ignoreDismissed=true&sort=&offset=0&filter=additionalParams%3AcbbdChain';
 
     var result = APIHelper.request(url, mockObj);
 
@@ -155,34 +155,34 @@ describe('[Services.apiHelperService]', function() {
     it('should construct for cbbdChain', function() {
       var opportunityData = JSON.parse('{"type":"opportunities","myAccountsOnly":true,"cbbdChain":["Cbbd"],"distributor":["2225538"],"opportunityType":["All Types"],"premiseType":"off","retailer":"Chain"}');
       var result = APIHelper.formatQueryString(opportunityData);
-      expect(result).toEqual('?limit=10&ignoreDismissed=true&sort=&offset=0&filter=myAccountsOnly%3Atrue%2CcbbdChain%3Atrue%2Cdistributor%3A2225538%2CpremiseType%3Aoff%2C');
+      expect(result).toEqual('?limit=20&ignoreDismissed=true&sort=&offset=0&filter=myAccountsOnly%3Atrue%2CcbbdChain%3Atrue%2Cdistributor%3A2225538%2CpremiseType%3Aoff%2C');
     });
 
     it('should construct for Independent', function() {
       var opportunityData = JSON.parse('{"type":"opportunities","myAccountsOnly":true,"cbbdChain":["Independent"],"distributor":["2225538"],"opportunityType":["All Types"],"premiseType":"off","retailer":"Chain"}');
       var result = APIHelper.formatQueryString(opportunityData);
-      expect(result).toEqual('?limit=10&ignoreDismissed=true&sort=&offset=0&filter=myAccountsOnly%3Atrue%2CcbbdChain%3Afalse%2Cdistributor%3A2225538%2CpremiseType%3Aoff%2C');
+      expect(result).toEqual('?limit=20&ignoreDismissed=true&sort=&offset=0&filter=myAccountsOnly%3Atrue%2CcbbdChain%3Afalse%2Cdistributor%3A2225538%2CpremiseType%3Aoff%2C');
     });
     it('should construct for OT custom', function() {
       var opportunityData = JSON.parse('{"type":"opportunities","myAccountsOnly":true,"distributor":["2225538"],"opportunityType":["Custom"],"premiseType":"off","retailer":"Chain"}');
       var result = APIHelper.formatQueryString(opportunityData);
-      expect(result).toEqual('?limit=10&ignoreDismissed=true&sort=&offset=0&filter=myAccountsOnly%3Atrue%2Cdistributor%3A2225538%2CopportunityType%3AMANUAL%2CpremiseType%3Aoff%2C');
+      expect(result).toEqual('?limit=20&ignoreDismissed=true&sort=&offset=0&filter=myAccountsOnly%3Atrue%2Cdistributor%3A2225538%2CopportunityType%3AMANUAL%2CpremiseType%3Aoff%2C');
     });
     it('should construct for OT *other*', function() {
       var opportunityData = JSON.parse('{"type":"opportunities","myAccountsOnly":true,"distributor":["2225538"],"opportunityType":["Non-Buy"],"premiseType":"off","retailer":"Chain"}');
       var result = APIHelper.formatQueryString(opportunityData);
-      expect(result).toEqual('?limit=10&ignoreDismissed=true&sort=&offset=0&filter=myAccountsOnly%3Atrue%2Cdistributor%3A2225538%2CopportunityType%3ANON_BUY%2CpremiseType%3Aoff%2C');
+      expect(result).toEqual('?limit=20&ignoreDismissed=true&sort=&offset=0&filter=myAccountsOnly%3Atrue%2Cdistributor%3A2225538%2CopportunityType%3ANON_BUY%2CpremiseType%3Aoff%2C');
     });
     it('should construct for impact and opportunity status', function() {
       var opportunityData = JSON.parse('{"type":"opportunities","myAccountsOnly":true,"distributor":["2225538","2225538"],"impact":["High"],"opportunityStatus":["Open"],"opportunityType":["All Types"],"premiseType":"off","retailer":"Chain"}');
       var result = APIHelper.formatQueryString(opportunityData);
-      expect(result).toEqual('?limit=10&ignoreDismissed=true&sort=&offset=0&filter=myAccountsOnly%3Atrue%2Cdistributor%3A2225538%7C2225538%2Cimpact%3AH%2CopportunityStatus%3Aopen%2CpremiseType%3Aoff%2C');
+      expect(result).toEqual('?limit=20&ignoreDismissed=true&sort=&offset=0&filter=myAccountsOnly%3Atrue%2Cdistributor%3A2225538%7C2225538%2Cimpact%3AH%2CopportunityStatus%3Aopen%2CpremiseType%3Aoff%2C');
     });
     it('should construct for opportunity status closed and 2 trade channels', function() {
       var opportunityData = JSON.parse('{"type":"opportunities","myAccountsOnly":true,"distributor":["2225538"],"opportunityStatus":["closed"],"opportunityType":["All Types"],"premiseType":"off","retailer":"Chain","tradeChannel":["Grocery","Drug"]}');
       filtersService.model.selected = {premiseType: 'off'};
       var result = APIHelper.formatQueryString(opportunityData);
-      expect(result).toEqual('?limit=10&ignoreDismissed=true&sort=&offset=0&filter=myAccountsOnly%3Atrue%2Cdistributor%3A2225538%2CopportunityStatus%3Atargeted%2CpremiseType%3Aoff%2CtradeChannel%3A05%7C03');
+      expect(result).toEqual('?limit=20&ignoreDismissed=true&sort=&offset=0&filter=myAccountsOnly%3Atrue%2Cdistributor%3A2225538%2CopportunityStatus%3Atargeted%2CpremiseType%3Aoff%2CtradeChannel%3A05%7C03');
     });
   });
 });
