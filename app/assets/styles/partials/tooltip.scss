@@ -21,6 +21,16 @@
   }
 }
 
+// md-tooltip uses pointer-events to determine parent element
+.tooltip-list-item-wrap {
+  pointer-events: auto;
+
+  .md-text,
+  .md-text span {
+    pointer-events: none;
+  }
+}
+
 md-tooltip,
 md-tooltip.md-tooltip,
 md-tooltip.md-panel.md-tooltip {

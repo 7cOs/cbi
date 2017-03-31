@@ -237,7 +237,6 @@ module.exports = /*  @ngInject */
       vm.lastUpdatedChevron = (property === 'dateOpportunitiesUpdated') ? !vm.lastUpdatedChevron : vm.lastUpdatedChevron;
       vm.closedOpportunitiesChevron = (property === 'opportunitiesSummary.closedOpportunitiesCount') ? !vm.closedOpportunitiesChevron : vm.closedOpportunitiesChevron;
       vm.totalOpportunitesChevron = (property === 'opportunitiesSummary.opportunitiesCount') ? !vm.totalOpportunitesChevron : vm.totalOpportunitesChevron;
-      vm.depletionsChevron = (property === 'opportunitiesSummary.totalClosedDepletions') ? !vm.depletionsChevron : vm.depletionsChevron;
     }
 
     function toggle(item, list) {

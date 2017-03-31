@@ -177,6 +177,8 @@ module.exports = /*  @ngInject */
     function removeFromFilterService(chip) {
       if (chip.type === 'myAccountsOnly') {
         filtersService.model.selected['myAccountsOnly'] = false;
+      } else if (chip.type === 'simpleDistributionType') {
+        filtersService.model.selected['simpleDistributionType'] = false;
       } else {
         var arr = filtersService.model.selected[chip.type];
         var i = arr.length;
@@ -228,9 +230,15 @@ module.exports = /*  @ngInject */
             index = arr.indexOf(chip.name);
             arr.splice(index, 1);
             if (arr.length === 0) {
-              addChip('All Types', 'opportunityType', false, false);
-              filtersService.model.selected.opportunityType = ['All Types'];
-              filtersService.model.opportunityType = ['All Types'];
+              if (filtersService.model.selected.simpleDistributionType) {
+                addChip('Non-Buy', 'opportunityType', false, false);
+                filtersService.model.selected.opportunityType = ['Non-Buy'];
+                filtersService.model.opportunityType = ['Non-Buy'];
+              } else {
+                addChip('All Types', 'opportunityType', false, false);
+                filtersService.model.selected.opportunityType = ['All Types'];
+                filtersService.model.opportunityType = ['All Types'];
+              }
             }
             break;
           } else if (chip.type === 'state') {

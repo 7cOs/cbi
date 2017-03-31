@@ -152,6 +152,7 @@ describe('Unit: filter service', function() {
             selected: {},
             selectedTemplate: {
                 myAccountsOnly: true,
+                simpleDistributionType: false,
                 account: [],
                 subaccount: [],
                 brand: [],
@@ -178,6 +179,7 @@ describe('Unit: filter service', function() {
                 valuesVsTrend: '',
                 zipCode: []
             },
+            simpleDistributionType: false,
             timePeriod: [
                 {name: 'Current Month to Date',
                 value: 'year'},
@@ -365,6 +367,7 @@ describe('Unit: filter service', function() {
             },
             selected: {
                 myAccountsOnly: true,
+                simpleDistributionType: false,
                 account: [],
                 subaccount: [],
                 brand: [],
@@ -393,6 +396,7 @@ describe('Unit: filter service', function() {
             },
             selectedTemplate: {
                 myAccountsOnly: true,
+                simpleDistributionType: false,
                 account: [],
                 subaccount: [],
                 brand: [],
@@ -419,6 +423,7 @@ describe('Unit: filter service', function() {
                 valuesVsTrend: '',
                 zipCode: []
             },
+            simpleDistributionType: false,
             timePeriod: [
                 {name: 'Current Month to Date',
                 value: 'year'},
