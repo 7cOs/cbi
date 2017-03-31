@@ -192,8 +192,11 @@ module.exports = /*  @ngInject */
     }
 
     function addAttachment(file, invalidFile) {
+      vm.uploadSizeError = false;
+
       if (invalidFile) {
-        handleUploadError('File exceeds the 10MB limit. Please try again.');
+        vm.uploadSizeErrorMessage = 'File exceeds the 10MB limit. Please try again.';
+        vm.uploadSizeError = true;
       } else if (file) {
         file.parsedSize = parseFileSize(file.size);
 
@@ -202,7 +205,8 @@ module.exports = /*  @ngInject */
         if (canAttachFile(file.size, vm.newNote.attachments)) {
           vm.newNote.attachments.push(file);
         } else {
-          handleUploadError('Attaching this file puts you over the 10MB limit.');
+          vm.uploadSizeErrorMessage = 'Attaching this file puts you over the 10MB limit.';
+          vm.uploadSizeError = true;
         }
       }
     }
@@ -360,14 +364,6 @@ module.exports = /*  @ngInject */
         }, 0);
         return (currentAttachmentSize + newFileSize) < 10000000;
       }
-    }
-
-    function handleUploadError(errorMessage) {
-      vm.uploadSizeErrorMessage = errorMessage;
-      vm.uploadSizeError = true;
-      $timeout(() => {
-        vm.uploadSizeError = false;
-      }, 5000);
     }
 
     $scope.$on('notes:opened', function(event, data, account) {
