@@ -27,6 +27,13 @@ input {
     visibility: hidden;
     cursor: pointer;
   }
+
+  &::placeholder {
+    color: $gray-1;
+    font-family: $work-sans;
+    font-size: 0.9em;
+    font-weight: $regular;
+  }
 }
 
 /* Radio Buttons */

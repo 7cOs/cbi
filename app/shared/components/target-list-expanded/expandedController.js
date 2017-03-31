@@ -35,7 +35,8 @@ module.exports = /*  @ngInject */
     };
     vm.pageName = $state.current.name;
     vm.selected = [];
-    vm.selectedTab = 0;
+    vm.selectedTab = 0; // updated by md-tabs directive
+    vm.userSelectedTab = false;
     vm.sortProperty = 'dateOpportunitiesUpdated';
     vm.reverse = true;
     vm.targetListAuthor = '';
@@ -224,6 +225,7 @@ module.exports = /*  @ngInject */
     function selector(tab) {
       vm.selected = [];
       vm.buttonState = tab;
+      vm.userSelectedTab = true;
     }
 
     function sortBy(property) {
@@ -235,7 +237,6 @@ module.exports = /*  @ngInject */
       vm.lastUpdatedChevron = (property === 'dateOpportunitiesUpdated') ? !vm.lastUpdatedChevron : vm.lastUpdatedChevron;
       vm.closedOpportunitiesChevron = (property === 'opportunitiesSummary.closedOpportunitiesCount') ? !vm.closedOpportunitiesChevron : vm.closedOpportunitiesChevron;
       vm.totalOpportunitesChevron = (property === 'opportunitiesSummary.opportunitiesCount') ? !vm.totalOpportunitesChevron : vm.totalOpportunitesChevron;
-      vm.depletionsChevron = (property === 'opportunitiesSummary.totalClosedDepletions') ? !vm.depletionsChevron : vm.depletionsChevron;
     }
 
     function toggle(item, list) {
@@ -371,6 +372,11 @@ module.exports = /*  @ngInject */
 
         userService.model.targetLists = combinedTargetList;
       });
+
+      // reset after tabs are initialized
+      $timeout(function() {
+        vm.userSelectedTab = false;
+      }, 0);
     }
 
     function checkDelete() {
