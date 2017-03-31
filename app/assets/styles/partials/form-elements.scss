@@ -121,25 +121,27 @@ md-select-menu[multiple] md-option.md-checkbox-enabled {
     border-width: 1px;
   }
 
-  .md-container:hover {
-    .md-icon {
-      background-color: $dark-blue-5;
+  &:not([disabled]) {
+    .md-container:hover {
+      .md-icon {
+        background-color: $dark-blue-5;
 
-      &:after {
-        box-sizing: border-box;
-        transform: rotate(45deg);
-        position: absolute;
-        border-style: solid;
-        border-top: 0;
-        border-left: 0;
-        content: '';
-        display: block;
-        border-color: $gray-4;
-        border-width: 1px;
-        height: 9px;
-        left: 5px;
-        top: 2px;
-        width: 4px;
+        &:after {
+          box-sizing: border-box;
+          transform: rotate(45deg);
+          position: absolute;
+          border-style: solid;
+          border-top: 0;
+          border-left: 0;
+          content: '';
+          display: block;
+          border-color: $gray-4;
+          border-width: 1px;
+          height: 9px;
+          left: 5px;
+          top: 2px;
+          width: 4px;
+        }
       }
     }
   }

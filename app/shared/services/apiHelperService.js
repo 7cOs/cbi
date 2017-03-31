@@ -32,8 +32,9 @@ module.exports = /*  @ngInject */
       }
 
       if (obj.type && obj.type === 'opportunities') {
-        var p = applyPage(),
-            s = applySort(),
+        var pageQuery = applyPage(),
+            sortQuery = applySort(),
+            simpleQuery = applySimpleDist(obj),
             queryStr = '';
 
         queryParams += '';
@@ -45,7 +46,7 @@ module.exports = /*  @ngInject */
 
         filtersService.model.appliedFilter.appliedFilter = queryParams;
 
-        queryStr = '?' + 'limit=20' + '&ignoreDismissed=true' + s + p + '&filter=' + encodeURIComponent(filtersService.model.appliedFilter.appliedFilter);
+        queryStr = '?' + 'limit=20' + '&ignoreDismissed=true' + sortQuery + pageQuery + simpleQuery + '&filter=' + encodeURIComponent(filtersService.model.appliedFilter.appliedFilter);
         return queryStr;
       } else if (obj.type && obj.type === 'targetLists') {
         delete obj.type;
@@ -163,6 +164,22 @@ module.exports = /*  @ngInject */
       return '&sort=' + str;
     }
 
+    /**
+     * @name applySimpleDist
+     * @desc applies simple distribution filter to opportunities request
+     * @returns {String} - formatted query
+     * @memberOf cf.common.services
+     */
+    function applySimpleDist(filters) {
+      let query = '';
+
+      if (filters && filters.simpleDistributionType === true) {
+        query = '&brandOpportunityType=true';
+      }
+
+      return query;
+    }
+
     function parseAppliedFilters(obj, i, z) {
       var queryParams = '';
 
@@ -220,6 +237,8 @@ module.exports = /*  @ngInject */
             queryParams += key2 + ':' + obj[key2];
             somethingAdded = true;
           }
+        } else if (key2 === 'simpleDistributionType') {
+          somethingAdded = false;
         } else if (obj[key2].constructor !== Array && key2 !== 'retailer') {
           queryParams += key2 + ':' + obj[key2];
           somethingAdded = true;

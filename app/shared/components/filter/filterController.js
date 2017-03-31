@@ -7,8 +7,9 @@ module.exports = /*  @ngInject */
     // CONTROLLER SETUP
     // ****************
     // Private variables
-    var isAllOpportunityTypeClicked = null;
-    var allTypesOption = 'All Types';
+    const _allTypesOption = 'All Types';
+    const _nonBuyOption = 'Non-Buy';
+    let _isAllOpportunityTypeClicked = null;
 
     // Initial variables
     var vm = this;
@@ -46,6 +47,8 @@ module.exports = /*  @ngInject */
     vm.changeOpportunitySelection = changeOpportunitySelection;
     vm.getDescriptionForFilter = getDescriptionForFilter;
     vm.applyFilters = applyFilters;
+    vm.shouldEnableSimpleDistribution = shouldEnableSimpleDistribution;
+    vm.isSimpleDistributionOpportunityType = isSimpleDistributionOpportunityType;
 
     init();
 
@@ -116,30 +119,52 @@ module.exports = /*  @ngInject */
       });
     }
 
-    function chooseOpportunityType(currentSelection) {
-      isAllOpportunityTypeClicked = currentSelection === allTypesOption;
+    function isSimpleDistributionOpportunityType(oppType) {
+      return oppType === 'At Risk' || oppType === 'Non-Buy' || oppType === 'New Placement (No Rebuy)';
     }
 
-    function addAllTypesOpportunityType() {
+    function shouldEnableSimpleDistribution() {
+      if (vm.filtersService.model.selected.opportunityType.length === 0) {
+        return false;
+      }
+
+      let nonSimpleOppTypes = vm.filtersService.model.selected.opportunityType.filter((item) => !isSimpleDistributionOpportunityType(item));
+
+      // enable simple distribution filter if there are no disallowed opp types selected
+      return nonSimpleOppTypes.length === 0;
+    }
+
+    function chooseOpportunityType(currentSelection) {
+      _isAllOpportunityTypeClicked = currentSelection === _allTypesOption;
+    }
+
+    function resetToDefaultOpportunityType() {
       vm.filtersService.model.selected.opportunityType = [];
-      vm.filtersService.model.selected.opportunityType.push(allTypesOption);
+
+      if (vm.filtersService.model.selected.simpleDistributionType) {
+        vm.filtersService.model.selected.opportunityType.push(_nonBuyOption);
+      } else {
+        vm.filtersService.model.selected.opportunityType.push(_allTypesOption);
+      }
     }
 
     function changeOpportunitySelection() {
-      var oppType = vm.filtersService.model.selected.opportunityType;
-      if (isAllOpportunityTypeClicked !== null) {
+      let oppType = vm.filtersService.model.selected.opportunityType;
+
+      if (_isAllOpportunityTypeClicked !== null) {
         if (oppType.length === 0) {
           // We always need to have atleast one option selected
-          addAllTypesOpportunityType();
+          resetToDefaultOpportunityType();
         } else {
-          var allTypesOptionIndex = oppType.indexOf(allTypesOption);
-          if (allTypesOptionIndex !== -1) {
-            if (!isAllOpportunityTypeClicked) {
+          let allTypesOptionIndex = oppType.indexOf(_allTypesOption);
+
+          if (allTypesOptionIndex !== -1) { // all types is NOT already selected
+            if (!_isAllOpportunityTypeClicked) { // user did NOT just click all types
               // If alternate options are clicked we need to remove 'all types'
               oppType.splice(allTypesOptionIndex, 1);
-            } else {
+            } else { // user DID just click all types
               // We need to clear array and add only 'all types'
-              addAllTypesOpportunityType();
+              resetToDefaultOpportunityType();
             }
           }
         }
@@ -284,6 +309,11 @@ module.exports = /*  @ngInject */
           case 'myAccountsOnly':
             action = 'ACCOUNT SCOPE';
             label = 'MY ACCOUNTS ONLY';
+            break;
+
+          case 'simpleDistributionType':
+            action = 'DISTRIBUTION TYPE';
+            label = 'SIMPLE';
             break;
 
           case 'contact':
