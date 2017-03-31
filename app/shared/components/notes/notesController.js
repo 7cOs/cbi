@@ -99,7 +99,12 @@ module.exports = /*  @ngInject */
       } else {
         vm.invalidCreateNote = false;
       }
-      data.attachments.length ? vm.fileUploading = true : vm.loading = true;
+
+      if (data.attachments && data.attachments.length) {
+        vm.fileUploading = true;
+      } else {
+        vm.loading = true;
+      }
       data.author = 'Me';
 
       var id;
@@ -134,7 +139,7 @@ module.exports = /*  @ngInject */
         vm.creatingNote = false;
         vm.loading = false;
 
-        if (data.attachments.length) {
+        if (data.attachments && data.attachments.length) {
           uploadFiles(data.id, data.attachments);
         }
       }).catch(function() {
