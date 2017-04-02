@@ -366,11 +366,54 @@ describe('Unit: list controller', function() {
         'onPremise': false,
         'cbbdChain': false,
         'rationale': 'because'
-      }
+        }
+      },
+      {
+        'id': '0129597___80013986___20160929',
+        'product': {
+          'id': '80013986',
+          'name': null,
+          'type': 'sku',
+          'brand': 'MODELO NEGRA',
+          'brandCode': '437'
+        },
+        'type': 'NON_BUY',
+        'subType': null,
+        'impact': 'L',
+        'impactDescription': 'LOW',
+        'status': 'TARGETED',
+        'rationale': 'Recommended SKU performing at 0.0% at similar stores (L90 vs. YA trend)',
+        'store': {
+          'id': '0129597',
+          'name': 'CARNICERIA LA BARATA ETHNIC',
+          'address': '214 N 4TH AVE, PASCO, WA 993015323',
+          'segmentation': 'A',
+          'latitude': 46.2318,
+          'longitude': -119.0929,
+          'storeNumber': null,
+          'distributionL90Simple': 6,
+          'distributionL90SimpleYA': 7,
+          'distributionL90Effective': 30,
+          'distributionL90EffectiveYA': 29,
+          'velocity': 0,
+          'velocityYA': 0,
+          'depletionsCurrentYearToDate': 7015,
+          'depletionsCurrentYearToDateYA': 7902,
+          'opportunityCount': 7,
+          'highImpactOpportunityCount': 0,
+          'distributors': null,
+          'streetAddress': '214 N 4TH AVE',
+          'city': 'PASCO',
+          'state': 'WA',
+          'zip': '99301',
+          'onPremise': false,
+          'cbbdChain': false,
+          'rationale': 'because'
+        }
     }];
 
     it('should create a csvItem for each selected opportunity, and add it to the data array', function() {
-      expect(ctrl.flattenOpportunity(object)).toEqual([{
+      expect(ctrl.flattenOpportunity([object[0]])).toEqual([{
         'storeDistributor': object[0].store.distributors[0],
         'TDLinx': object[0].store.id,
         'storeName': object[0].store.name,
@@ -392,7 +435,7 @@ describe('Unit: list controller', function() {
     });
 
     it('should add a rationale when provided as input', function() {
-      expect(ctrl.flattenOpportunity(object, true)).toEqual([{
+      expect(ctrl.flattenOpportunity([object[0]], true)).toEqual([{
         'storeDistributor': object[0].store.distributors[0],
         'TDLinx': object[0].store.id,
         'storeName': object[0].store.name,
@@ -411,6 +454,28 @@ describe('Unit: list controller', function() {
         'opportunityStatus': object[0].status,
         'impactPredicted': object[0].impactDescription,
         'rationale': object[0].rationale
+      }]);
+    });
+
+    it('should be able to parse when the distributor list is null', function() {
+      expect(ctrl.flattenOpportunity([object[1]], false)).toEqual([{
+        'storeDistributor': '',
+        'TDLinx': object[1].store.id,
+        'storeName': object[1].store.name,
+        'storeAddress': object[1].store.streetAddress,
+        'storeCity': object[1].store.city,
+        'storeZip': object[1].store.zip,
+        'storeDepletionsCTD': object[1].store.depletionsCurrentYearToDate,
+        'storeDepletionsCTDYA': object[1].store.depletionsCurrentYearToDateYA,
+        'storeDepletionsCTDYAPercent': object[1].store.depletionsCurrentYearToDateYAPercent,
+        'storeSegmentation': object[1].store.segmentation,
+        'opportunityType': filter('formatOpportunitiesType')(ctrl.opportunityTypeOrSubtype(object[0])),
+        'productName': object[1].product.brand,
+        'itemAuthorization': object[1].isItemAuthorization,
+        'chainMandate': object[1].isChainMandate,
+        'onFeature': object[1].isOnFeature,
+        'opportunityStatus': object[1].status,
+        'impactPredicted': object[1].impactDescription
       }]);
     });
   });
