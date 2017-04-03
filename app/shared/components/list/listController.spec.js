@@ -268,6 +268,8 @@ describe('Unit: list controller', function() {
       runTimeout();
       expect(closedOpportunitiesService.closeOpportunity).not.toHaveBeenCalled();
 
+      ctrl.undoClicked = true;
+
       ctrl.closeOrDismissOpportunity('1', {}, true);
       runTimeout();
       expect(opportunitiesService.createOpportunityFeedback).not.toHaveBeenCalled();

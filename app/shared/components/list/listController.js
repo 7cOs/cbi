@@ -377,6 +377,7 @@ module.exports = /*  @ngInject */
             });
           });
         }
+        vm.undoClicked = false;
         vm.opportunityDismissTrigger = false;
         vm.currentOpportunityId = '';
         vm.filtersService.model.appliedFilter.pagination.totalOpportunities -= 1;

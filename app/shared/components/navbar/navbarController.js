@@ -77,6 +77,7 @@ module.exports = /*  @ngInject */
     ];
 
     vm.targetLists = [];
+    vm.linkToIQ = '';
 
     // Expose public methods
     vm.addOpportunity = addOpportunity;
@@ -460,6 +461,7 @@ module.exports = /*  @ngInject */
 
       versionService.getVersion().then(function(data) {
         versionService.model.version = data;
+        setLinkToIQ(data.env);
       });
     };
 
@@ -493,4 +495,12 @@ module.exports = /*  @ngInject */
     function showNewRationaleInput(yes)  {
       vm.addNewRationale = yes;
     }
+
+    // set IQ link for production or test
+    function setLinkToIQ(env) {
+      vm.linkToIQ = env === 'production'
+                  ? 'http://iqweb.cbrands.com/MicroStrategy/servlet/mstrWeb?server=CBIGDC-PMSTK801&project=Beer+Analytics&evt=2001&folderID=37162CF04A01CF139BF05F96B4098106'
+                  : 'http://test-iqweb.cbrands.com/MicroStrategy/servlet/mstrWeb?server=CBIGDC-IMSTK801&project=Beer+Analytics&evt=2001&folderID=37162CF04A01CF139BF05F96B4098106';
+    }
+
   };

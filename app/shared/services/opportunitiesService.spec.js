@@ -228,7 +228,7 @@ describe('Unit: opportunitiesService - get opportunities', function() {
     it('respond with opportunities properly formatted', function() {
 
         $httpBackend
-        .expect('GET', '/api/opportunities/?limit=10&ignoreDismissed=true&sort=&offset=0&filter=myAccountsOnly%3Atrue%2CpremiseType%3Aoff%2C')
+        .expect('GET', '/api/opportunities/?limit=20&ignoreDismissed=true&sort=&offset=0&filter=myAccountsOnly%3Atrue%2CpremiseType%3Aoff%2C')
         .respond(200, opportunitiesResponseObject);
 
         opportunitiesService.getOpportunities();
@@ -240,7 +240,7 @@ describe('Unit: opportunitiesService - get opportunities', function() {
    it('get opportunity headers', function() {
 
         $httpBackend
-        .expect('HEAD', '/api/opportunities/?limit=10&ignoreDismissed=true&sort=&offset=0&filter=myAccountsOnly%3Atrue%2CpremiseType%3Aoff%2C')
+        .expect('HEAD', '/api/opportunities/?limit=20&ignoreDismissed=true&sort=&offset=0&filter=myAccountsOnly%3Atrue%2CpremiseType%3Aoff%2C')
         .respond(200, { data: 'value' }, {'opportunity-count': '28129', 'store-count': '31'});
 
         opportunitiesService.getOpportunitiesHeaders();
@@ -248,7 +248,7 @@ describe('Unit: opportunitiesService - get opportunities', function() {
         $httpBackend.flush();
         expect(filtersService.model.appliedFilter.pagination).toEqual({
             currentPage: 0,
-            totalPages: 3,
+            totalPages: 1,
             default: true,
             totalOpportunities: '28129',
             totalStores: '31',

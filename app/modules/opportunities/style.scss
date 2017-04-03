@@ -21,25 +21,3 @@ md-content {
     margin-left: -3em;
   }
 }
-
-.location-contact-opps {
-  input {
-    height: 40px;
-    font-size: 1.3em;
-    padding-left: 0.75em;
-  }
-
-  .cbbd-contact,
-  .state {
-    margin-top: 3ex;
-  }
-
-  label > div {
-    text-transform: capitalize;
-    font-size: 1.75em;
-  }
-
-  .dropdown-filter md-select-value .md-select-icon {
-    margin: 7px 0 4px;
-  }
-}

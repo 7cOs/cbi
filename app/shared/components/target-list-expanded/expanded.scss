@@ -35,9 +35,81 @@
 
   .md-tab.md-active {
     background-color: $body-bg;
-    border: 1px solid $gray-9;
-    padding: 13px 21px;
+    border-top: 1px solid $gray-9;
+    border-left: 1px solid $gray-9;
+    border-right: 1px solid $gray-9;
+    border-bottom: 0;
+    padding: 13px 21px 25px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+  }
+
+  // Mimic angular-material md-tabs styling for tab-content displayed in external element rather than md-tab-content.
+  // May need to update to maintain parity with angular-material md-tabs on home page if material styles change.
+  .tab-content-wrapper {
+    position: relative;
+    top: auto;
+    left: auto;
+    right: auto;
+    bottom: auto;
+    overflow: visible;
+  }
+
+  // Mimic angular-material md-tabs styling
+  .tab-content {
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    overflow: visible;
+
+    &.no-transition {
+      transition: none;
+    }
+
+    &.active {
+      transition: transform cubic-bezier(0.35, 0, 0.25, 1) 0.5s, visibility linear 0s;
+      position: relative;
+    }
+
+    @keyframes tab-content-hide {
+      0% { opacity: 1; }
+      40% { opacity: 1; }
+      100% { opacity: 0; }
+    }
+
+    @mixin rtl($prop, $ltr-value, $rtl-value) {
+      #{$prop}: $ltr-value;
+
+      [dir=rtl] & {
+        #{$prop}: $rtl-value;
+      }
+    }
+
+    &.left:not(.active) {
+      @include rtl(transform, translateX(-100%), translateX(+100%));
+      animation: 0.7s tab-content-hide;
+      opacity: 0;
+      transition: transform cubic-bezier(0.35, 0, 0.25, 1) 0.5s, visibility linear 0s 0.5s;
+      visibility: hidden;
+
+      &.no-transition {
+        transition: none;
+      }
+    }
+
+    &.right:not(.active) {
+      @include rtl(transform, translateX(100%), translateX(-100%));
+      animation: 0.7s tab-content-hide;
+      opacity: 0;
+      transition: transform cubic-bezier(0.35, 0, 0.25, 1) 0.5s, visibility linear 0s 0.5s;
+      visibility: hidden;
+
+      &.no-transition {
+        transition: none;
+      }
+    }
   }
 
   .target-list-detail-container {
