@@ -478,6 +478,28 @@ describe('Unit: list controller', function() {
         'impactPredicted': object[1].impactDescription
       }]);
     });
+
+    it('should take the brand as product name if the product name is null', function() {
+      expect(ctrl.flattenOpportunity([object[1]], false)).toEqual([{
+        'storeDistributor': '',
+        'TDLinx': object[1].store.id,
+        'storeName': object[1].store.name,
+        'storeAddress': object[1].store.streetAddress,
+        'storeCity': object[1].store.city,
+        'storeZip': object[1].store.zip,
+        'storeDepletionsCTD': object[1].store.depletionsCurrentYearToDate,
+        'storeDepletionsCTDYA': object[1].store.depletionsCurrentYearToDateYA,
+        'storeDepletionsCTDYAPercent': object[1].store.depletionsCurrentYearToDateYAPercent,
+        'storeSegmentation': object[1].store.segmentation,
+        'opportunityType': filter('formatOpportunitiesType')(ctrl.opportunityTypeOrSubtype(object[0])),
+        'productName': object[1].product.brand,
+        'itemAuthorization': object[1].isItemAuthorization,
+        'chainMandate': object[1].isChainMandate,
+        'onFeature': object[1].isOnFeature,
+        'opportunityStatus': object[1].status,
+        'impactPredicted': object[1].impactDescription
+      }]);
+    });
   });
 
   describe('[list.getDate] method', function() {
