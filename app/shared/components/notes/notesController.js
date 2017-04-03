@@ -74,6 +74,7 @@ module.exports = /*  @ngInject */
     }
 
     function openCreateNote() {
+      vm.uploadSizeError = false;
       vm.creatingNote = !vm.creatingNote;
       vm.newNote = {};
     }
