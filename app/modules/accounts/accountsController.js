@@ -1225,7 +1225,6 @@ module.exports = /*  @ngInject */
      */
     function acctMarketChanged(selectedVal) {
       if (vm.filtersService.model.accountSelected.accountMarkets !== selectedVal) {
-        resetTopBottomHistory();
         vm.filtersService.model.accountSelected.accountMarkets = selectedVal;
         sendTopBottomAnalyticsEvent();
         onFilterPropertiesChange(false);
