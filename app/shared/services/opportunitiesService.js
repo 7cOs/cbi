@@ -1,5 +1,5 @@
 module.exports = /*  @ngInject */
-  function opportunitiesService($http, $q, distributorsService, apiHelperService, filtersService, ieHackService) {
+  function opportunitiesService($http, $q, apiHelperService, filtersService, ieHackService) {
 
     var model = {
       filterApplied: false,
