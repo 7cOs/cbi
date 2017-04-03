@@ -102,10 +102,10 @@ div(row)
       span
         label.accent Snapshot
     .brand-header
-     div.brand-name-section
+      div.brand-name-section
         span.back-chevron(ng-if="a.brandSelectedIndex === 1" ng-click="a.switchToBrandView()")
         p.brands {{a.brandWidgetSkuTitle || a.brandWidgetTitle}}
-     div.dropdown-section
+      div.dropdown-section
         .dropdown-filter
           md-select.dropdown-options(ng-model="a.filtersService.model.accountSelected.accountBrands" md-on-open="a.openSelect(true)" md-on-close="a.openSelect(false);" aria-label="Account Brands Filter" placeholder="Distribution (simple)")
             md-option(ng-repeat="filter in a.filtersService.accountFilters.accountBrands" ng-if="!a.removeDistOptionsBasedOnView(filter, true)" aria-label="{{filter.name}}" ng-value="filter"  ng-click="a.changeBrandSnapshotCategory(filter)") {{filter.name}}
