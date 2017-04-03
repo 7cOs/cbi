@@ -978,7 +978,7 @@ module.exports = /*  @ngInject */
       $state.params.applyFiltersOnLoad = false;
       $state.params.resetFiltersOnLoad = true;
       try {
-        vm.currentUserName = userService.model.currentUser.firstName;
+        vm.currentUserName = userService.model.currentUser.firstName + ' ' + userService.model.currentUser.lastName;
       } catch (e) {
         vm.currentUserName = null;
       }
