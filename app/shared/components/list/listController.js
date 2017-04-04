@@ -589,7 +589,7 @@ module.exports = /*  @ngInject */
         var item = {};
         var csvItem = {};
         angular.copy(value, item);
-        csvItem.storeDistributor = item.store.distributors[0];
+        csvItem.storeDistributor = item.store.distributors ? item.store.distributors[0] : '';
         csvItem.TDLinx = item.store.id;
         csvItem.storeName = item.store.name;
         csvItem.storeAddress = item.store.streetAddress;
@@ -600,7 +600,7 @@ module.exports = /*  @ngInject */
         csvItem.storeDepletionsCTDYAPercent = item.store.depletionsCurrentYearToDateYAPercent;
         csvItem.storeSegmentation = item.store.segmentation;
         csvItem.opportunityType = $filter('formatOpportunitiesType')(opportunityTypeOrSubtype(item));
-        csvItem.productName = item.product.name;
+        csvItem.productName = item.product.name || item.product.brand;
         csvItem.itemAuthorization = item.isItemAuthorization;
         csvItem.chainMandate = item.isChainMandate;
         csvItem.onFeature = item.isOnFeature;
