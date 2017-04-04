@@ -78,7 +78,7 @@ module.exports = /*  @ngInject */
             dimension3: sfdcUser.Division,        // 'Division'
             dimension4: sfdcUser.Role__c,         // 'Role'
             dimension5: sfdcUser.Supervisory__c,  // 'Supervisory'
-            dimension6: sfdcUser.Department       // 'Department'
+            dimension6: sfdcUser.CBI_Department__c       // 'Department'
           });
         });
     }
