@@ -440,14 +440,29 @@ module.exports = /*  @ngInject */
     /**
      * @name removeTopBottomChips
      * @desc Removes chips of type account, subaccount,store, distributor
-     * @params {Array} chips - List of chips
+     * @params {String} levelToResetBeyond - Optional, only remove chips 'below' specified level
      * @returns null
      * @memberOf cf.common.services
      */
-    function removeTopBottomChips(chips) {
-      removeChip('store');
-      removeChip('account');
-      removeChip('subaccount');
-      removeChip('distributor');
+    function removeTopBottomChips(levelToResetBeyond) {
+      levelToResetBeyond = levelToResetBeyond || {value: -1}; // default to no level limit
+
+      switch (levelToResetBeyond.value) {
+        case filtersService.accountFilters.accountTypesEnums.distributors:
+          removeChip('store');
+          removeChip('account');
+          removeChip('subaccount');
+          break;
+        case filtersService.accountFilters.accountTypesEnums.accounts:
+          removeChip('store');
+          removeChip('subaccount');
+          break;
+        default:
+          removeChip('store');
+          removeChip('account');
+          removeChip('subaccount');
+          removeChip('distributor');
+          break;
+      }
     }
   };
