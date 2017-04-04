@@ -459,7 +459,9 @@ module.exports = /*  @ngInject */
           vm.showXStore = false;
           break;
         case filtersService.accountFilters.accountTypesEnums.accounts:
-          vm.selectedStore = null;
+          // when resetting beyond accounts level, set the selected store to the account name
+          // so that the header & top-bottom table header labels are correctly aligned with the account filter
+          vm.selectedStore = vm.currentTopBottomFilters.accounts.name;
           filtersService.model.store = '';
           vm.showXStore = false;
           break;
@@ -1430,12 +1432,6 @@ module.exports = /*  @ngInject */
           vm.filtersService.model.account = vm.currentTopBottomFilters.accounts.name;
         }
         setTopBottomAcctTypeSelection(newAccountType, levelToResetBeyond);
-        if (newLevelName === 'subAccounts') {
-          // when switching back to subaccount level, set the selected store to the account name also
-          // so that the header & top-bottom table header labels are correctly displayed
-          // (must be set after setTopBottomAcctTypeSelection because of side-effects)
-          vm.selectedStore = vm.currentTopBottomFilters.accounts.name;
-        }
         resetTopBottomHistory();
         return;
       }
