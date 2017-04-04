@@ -61,6 +61,7 @@ module.exports = /*  @ngInject */
     function notesClose() {
       $scope.notesOpen = false;
       vm.notes = [];
+      cancelNewNote(vm.newNote);
     }
 
     function isEditing(note, cancel) {
