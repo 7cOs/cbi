@@ -15,7 +15,8 @@ module.exports = /*  @ngInject */
       createOpportunity: createOpportunity,
       getOpportunitiyFeedback: getOpportunityFeedback,
       createOpportunityFeedback: createOpportunityFeedback,
-      deleteOpportunityFeedback: deleteOpportunityFeedback
+      deleteOpportunityFeedback: deleteOpportunityFeedback,
+      clearOpportunitiesModel: clearOpportunitiesModel
     };
 
     return service;
@@ -340,4 +341,12 @@ module.exports = /*  @ngInject */
 
       return opportunitiesPromise.promise;
     }
+
+    function clearOpportunitiesModel() {
+      service.model.noOpportunitiesFound = false;
+      service.model.opportunities        = [];
+      service.model.filterApplied        = false;
+      service.model.opportuityId         = null;
+    }
+
   };
