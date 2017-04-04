@@ -326,3 +326,24 @@ div.nav-link-wrapper {
     margin-left: 10px;
   }
 }
+
+a.external-link {
+
+  .icon {
+    display: inline-block;
+    height: 14px;
+    width: 11px;
+    margin-left: 3px;
+    background-size: 10px 10px;
+    background-position: 0 4px;
+    background-repeat: no-repeat;
+
+    &.dropdown-icon {
+      background-image: url('../../assets/img/icons/external-link-ico.svg');
+    }
+
+    &.inline-icon {
+      background-image: url('../../assets/img/icons/external-link-k-ico.svg');
+    }
+  }
+}

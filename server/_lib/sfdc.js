@@ -233,7 +233,7 @@ function userInfo(app, req) {
       let employeeId = req.user.jwtmap.employeeID;
 
       conn.sobject('User')
-        .select('Id, FederationIdentifier, Name, CompanyName, Division, Department, Supervisory__c, Role__c')
+        .select('Id, FederationIdentifier, Name, CompanyName, Division, CBI_Department__c, Supervisory__c, Role__c')
         .where('FederationIdentifier = \'' + employeeId + '\'')
         .execute().then(function(records) {
 

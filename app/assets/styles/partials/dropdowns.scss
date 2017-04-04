@@ -65,7 +65,8 @@ md-select {
   display: inline;
 }
 
-md-select-menu .md-text {
+md-select-menu .md-text,
+md-select-value > span {
   font-size: 0.9em;
   color: $gray-1;
   font-weight: $light;
