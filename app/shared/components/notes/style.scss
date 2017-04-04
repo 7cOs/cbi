@@ -333,10 +333,6 @@
         color: $gray-2;
       }
     }
-
-    .error {
-      min-height: 14px;
-    }
   }
 
   .main-note-section {
@@ -581,5 +577,9 @@
 
   .concealed {
     visibility: hidden;
+  }
+
+  .upload-error {
+    min-height: 14px;
   }
 }

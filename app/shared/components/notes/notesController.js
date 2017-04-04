@@ -78,7 +78,9 @@ module.exports = /*  @ngInject */
     function openCreateNote() {
       vm.uploadSizeError = false;
       vm.creatingNote = !vm.creatingNote;
-      vm.newNote = {};
+      vm.newNote = {
+        uploadSizeError: false
+      };
     }
 
     function openNotes(ev) {
@@ -201,11 +203,11 @@ module.exports = /*  @ngInject */
     }
 
     function addAttachment(note, file, invalidFile) {
-      vm.uploadSizeError = false;
+      note.uploadSizeError = false;
 
       if (invalidFile) {
-        vm.uploadSizeErrorMessage = 'File exceeds the 10MB limit. Please try again.';
-        vm.uploadSizeError = true;
+        note.uploadSizeErrorMessage = 'File exceeds the 10MB limit. Please try again.';
+        note.uploadSizeError = true;
       } else if (file) {
         file.parsedSize = parseFileSize(file.size);
 
@@ -219,8 +221,8 @@ module.exports = /*  @ngInject */
             note.attachments.push(file);
           }
         } else {
-          vm.uploadSizeErrorMessage = 'Attaching this file puts you over the 10MB limit.';
-          vm.uploadSizeError = true;
+          note.uploadSizeErrorMessage = 'Attaching this file puts you over the 10MB limit.';
+          note.uploadSizeError = true;
         }
       }
     }

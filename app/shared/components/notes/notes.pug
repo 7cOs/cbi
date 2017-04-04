@@ -37,7 +37,7 @@ div.modal.notes(ng-if="notesOpen")
         label details
         div.text-editor
           text-angular(ta-toolbar="[['bold','italics', 'underline', 'ul']]" ta-text-editor-class="form-content" ng-model="n.newNote.body").text-editor
-        label.error(ng-class="{'concealed': !n.uploadSizeError}") {{n.uploadSizeErrorMessage}}
+        label.error.upload-error(ng-class="{'concealed': !n.newNote.uploadSizeError}") {{n.newNote.uploadSizeErrorMessage}}
         div
           .add-attachments(ngf-select="n.addAttachment(n.newNote, $file, $invalidFile)" multiple ngf-max-total-size="10000000" ngf-pattern="'.docx,.doc,.ppt,.pptx,.xls,.xlsx,.gif,.jpg,.png,.pdf,.jpeg'" accept=".docx,.doc,.ppt,.pptx,.xls,.xlsx,.gif,.jpg,.png,.pdf,.jpeg")
             a(href="#").accent Add an attachment <span ng-if="!n.newNote.attachments || n.newNote.attachments.length === 0">(Max 10MB)</span>
@@ -79,7 +79,7 @@ div.modal.notes(ng-if="notesOpen")
             label Details
             div.text-editor
               text-angular(ta-toolbar="[['bold','italics', 'underline', 'ul']]" ng-model="note.body").text-editor
-            label.error(ng-class="{'concealed': !n.uploadSizeError}") {{n.uploadSizeErrorMessage}}
+            label.error.upload-error(ng-class="{'concealed': !note.uploadSizeError}") {{note.uploadSizeErrorMessage}}
             div
               .add-attachments(ng-if="note.author === 'Me'" ngf-select="n.addAttachment(note, $file, $invalidFile)" multiple ngf-max-total-size="10000000" ngf-pattern="'.docx,.doc,.ppt,.pptx,.xls,.xlsx,.gif,.jpg,.png,.pdf,.jpeg'" accept=".docx,.doc,.ppt,.pptx,.xls,.xlsx,.gif,.jpg,.png,.pdf,.jpeg")
                 p Add an attachment
