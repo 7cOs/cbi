@@ -65,8 +65,9 @@ module.exports = /*  @ngInject */
     }
 
     function isEditing(note, cancel) {
-      vm.uploadSizeError = false;
+      note.uploadSizeError = false;
       note.editMode = !note.editMode;
+      cancelNewNote(vm.newNote);
       if (cancel) {
         note.body = vm.cachedNote.body;
         note.title = vm.cachedNote.title;
@@ -81,6 +82,9 @@ module.exports = /*  @ngInject */
       vm.newNote = {
         uploadSizeError: false
       };
+      vm.notes.forEach(note => {
+        if (note.editMode) note.editMode = false;
+      });
     }
 
     function openNotes(ev) {
