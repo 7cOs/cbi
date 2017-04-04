@@ -64,6 +64,7 @@ module.exports = /*  @ngInject */
     }
 
     function isEditing(note, cancel) {
+      vm.uploadSizeError = false;
       note.editMode = !note.editMode;
       if (cancel) {
         note.body = vm.cachedNote.body;
@@ -144,6 +145,7 @@ module.exports = /*  @ngInject */
           uploadFiles(data.id, data.attachments);
         }
       }).catch(function() {
+        vm.fileUploading = false;
         vm.notesError = true;
       });
     }
@@ -197,7 +199,7 @@ module.exports = /*  @ngInject */
       note.readMore = true;
     }
 
-    function addAttachment(file, invalidFile) {
+    function addAttachment(note, file, invalidFile) {
       vm.uploadSizeError = false;
 
       if (invalidFile) {
@@ -206,10 +208,15 @@ module.exports = /*  @ngInject */
       } else if (file) {
         file.parsedSize = parseFileSize(file.size);
 
-        if (!vm.newNote.hasOwnProperty('attachments')) vm.newNote.attachments = [];
+        if (!note.attachments) note.attachments = [];
 
-        if (canAttachFile(file.size, vm.newNote.attachments)) {
-          vm.newNote.attachments.push(file);
+        if (canAttachFile(file.size, note.attachments)) {
+          if (note.editMode) {
+            vm.fileUploading = true;
+            uploadFiles(note.id, [file]);
+          } else {
+            note.attachments.push(file);
+          }
         } else {
           vm.uploadSizeErrorMessage = 'Attaching this file puts you over the 10MB limit.';
           vm.uploadSizeError = true;
@@ -362,13 +369,27 @@ module.exports = /*  @ngInject */
       });
     }
 
+    function getExplicitSize(size) {
+      let splitSize = size.split(' ');
+
+      if (splitSize[1].toLowerCase() === 'kb') {
+        return splitSize[0] * 1000;
+      } else {
+        return splitSize[0] * 1000000;
+      }
+    }
+
     function canAttachFile(newFileSize, currentAttachments) {
       if (!currentAttachments.length) return true;
       else {
+        const tenMBSizeLimit = 10000000;
         const currentAttachmentSize = currentAttachments.reduce((fileSize, file) => {
+          if (!file.size) {
+            file.size = getExplicitSize(file.fileSize);
+          }
           return fileSize + file.size;
         }, 0);
-        return (currentAttachmentSize + newFileSize) < 10000000;
+        return (currentAttachmentSize + newFileSize) <= tenMBSizeLimit;
       }
     }
 

@@ -275,9 +275,8 @@ describe('Unit: notes controller', function() {
     expect(ctrl.creatingNote).toEqual(false);
   });
 
-  it('[addAttachment] should add files to the new file object & attachments obj', function() {
-    ctrl.newNote = note;
-
+  it('[addAttachment] should add files to the newNote attachments array if within size limits', function() {
+    const newNote = {};
     const attachmentFile1 = {
       lastModified: 1117789547000,
       name: 'file1',
@@ -297,46 +296,46 @@ describe('Unit: notes controller', function() {
       type: 'image/jpeg'
     };
 
-    expect(ctrl.newNote.attachments).toEqual([]);
-    ctrl.addAttachment(attachmentFile1);
+    expect(newNote.attachments).toEqual(undefined);
+    ctrl.addAttachment(newNote, attachmentFile1, undefined);
 
-    expect(ctrl.newNote.attachments).toEqual([{
+    expect(newNote.attachments).toEqual([{
       lastModified: 1117789547000,
       name: 'file1',
       size: 9999,
-      'parsedSize': '10KB',
+      parsedSize: '10KB',
       type: 'image/jpeg'
     }]);
 
-    ctrl.addAttachment(attachmentFile2);
+    ctrl.addAttachment(newNote, attachmentFile2, undefined);
 
-    expect(ctrl.newNote.attachments).toEqual([{
+    expect(newNote.attachments).toEqual([{
       lastModified: 1117789547000,
       name: 'file1',
       size: 9999,
-      'parsedSize': '10KB',
+      parsedSize: '10KB',
       type: 'image/jpeg'
     }, {
       lastModified: 1117789547000,
       name: 'file2',
       size: 90000,
-      'parsedSize': '90KB',
+      parsedSize: '90KB',
       type: 'image/jpeg'
     }]);
 
-    ctrl.addAttachment(attachmentFile3);
+    ctrl.addAttachment(newNote, attachmentFile3, undefined);
 
-    expect(ctrl.newNote.attachments).toEqual([{
+    expect(newNote.attachments).toEqual([{
       lastModified: 1117789547000,
       name: 'file1',
       size: 9999,
-      'parsedSize': '10KB',
+      parsedSize: '10KB',
       type: 'image/jpeg'
     }, {
       lastModified: 1117789547000,
       name: 'file2',
       size: 90000,
-      'parsedSize': '90KB',
+      parsedSize: '90KB',
       type: 'image/jpeg'
     }]);
   });
