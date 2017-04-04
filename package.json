@@ -153,7 +153,6 @@
     "url-loader": "^0.5.8",
     "urlencode": "~1.1.0",
     "uuid": "~3.0.1",
-    "v-accordion": "~1.6.0",
     "webpack": "~2.2.1",
     "webpack-merge": "~3.0.0",
     "xml2json": "~0.11.0",
