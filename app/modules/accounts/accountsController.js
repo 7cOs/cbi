@@ -454,6 +454,7 @@ module.exports = /*  @ngInject */
         case filtersService.accountFilters.accountTypesEnums.distributors:
           filtersService.model.account = '';
           vm.showXChain = false;
+          vm.selectedStore = null;
           filtersService.model.store = '';
           vm.showXStore = false;
           break;
@@ -692,10 +693,15 @@ module.exports = /*  @ngInject */
       // Update display model
       if (filterModelProperty === 'distributor') {
         vm.selectedDistributor = result.name;
+        vm.selectedStore = null;
       } else if (vm.selectedDistributor === result.name) {
         vm.selectedStore = null;
       } else {
         vm.selectedStore = result.name;
+
+        if (result.storeNumber) {
+          vm.selectedStore += ' #' + result.storeNumber;
+        }
       }
     }
 
@@ -1294,6 +1300,11 @@ module.exports = /*  @ngInject */
         // when traversing up, we clear the filter for the current level, since we would only have a filter applied for the level above.
         // note that this also affects logic in setUpdatedFilters() -> setFilter(), which sets filtersService.model based on currentTopBottomFilters
         vm.currentTopBottomFilters[currentLevelName] = '';
+
+        // if going to subaccounts, clear store from current filters also, in case a specific store was clicked while on stores level
+        if (currentLevelName === 'subAccounts') {
+          vm.currentTopBottomFilters['stores'] = '';
+        }
       } else {
         vm.currentTopBottomFilters[currentLevelName] = {
           id: currentLevelName === 'stores' && data.unversionedStoreCode ? [data.id, data.unversionedStoreCode] : data.id,
@@ -1333,9 +1344,6 @@ module.exports = /*  @ngInject */
         fullAddress = '',
         cityState =  '';
 
-      if (vm.currentTopBottomFilters.stores.storeNumber && vm.currentTopBottomFilters.stores.storeNumber !== 'UNKNOWN') {
-        addressWithStoreNumber += '#' + vm.currentTopBottomFilters.stores.storeNumber;
-      }
       if (vm.currentTopBottomFilters.stores.address) {
         fullAddress += vm.currentTopBottomFilters.stores.address.trim();
       }
@@ -1417,10 +1425,17 @@ module.exports = /*  @ngInject */
         vm.currentTopBottomObj = getCurrentTopBottomObject(newAccountType);
         if (newLevelName === 'subAccounts') {
           // when switching back to subaccount level, set the account filter back to the account name
-          // (account filter is changed to subaccount name when on stores level)
+          // because account filter is changed to subaccount name when on stores level
+          // (must be set before setTopBottomAcctTypeSelection because of side-effects)
           vm.filtersService.model.account = vm.currentTopBottomFilters.accounts.name;
         }
         setTopBottomAcctTypeSelection(newAccountType, levelToResetBeyond);
+        if (newLevelName === 'subAccounts') {
+          // when switching back to subaccount level, set the selected store to the account name also
+          // so that the header & top-bottom table header labels are correctly displayed
+          // (must be set after setTopBottomAcctTypeSelection because of side-effects)
+          vm.selectedStore = vm.currentTopBottomFilters.accounts.name;
+        }
         resetTopBottomHistory();
         return;
       }
