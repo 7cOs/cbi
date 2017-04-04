@@ -8,7 +8,7 @@ export default angular.module('cf', [
   require('angular-cookies'),
   require('angular-material'),
   require('angular-animate'),
-  require('v-accordion'),
+  require('./lib/v-accordion/index'),
   require('angular-nvd3'),
   require('ng-file-upload'),
   require('textangular'),
