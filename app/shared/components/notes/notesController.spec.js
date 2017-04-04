@@ -340,6 +340,42 @@ describe('Unit: notes controller', function() {
     }]);
   });
 
+  it('[addAttachment] should set the upload error for the note to true if it exceeds 10MB', function() {
+    const note = {
+      uploadSizeError: false
+    };
+    const attachmentFile1 = {
+      lastModified: 1117789547000,
+      name: 'file1',
+      size: 9999,
+      type: 'image/jpeg'
+    };
+    const attachmentFile2 = {
+      lastModified: 1117789547000,
+      name: 'file2',
+      size: 90000,
+      type: 'image/jpeg'
+    };
+    const attachmentFile3 = {
+      lastModified: 1117789547000,
+      name: 'file3',
+      size: 11000000,
+      type: 'image/jpeg'
+    };
+
+    ctrl.addAttachment(note, attachmentFile3, {});
+    expect(note.uploadSizeError).toEqual(true);
+
+    ctrl.addAttachment(note, attachmentFile1, undefined);
+    expect(note.uploadSizeError).toEqual(false);
+
+    ctrl.addAttachment(note, attachmentFile2, undefined);
+    expect(note.uploadSizeError).toEqual(false);
+
+    ctrl.addAttachment(note, attachmentFile3, undefined);
+    expect(note.uploadSizeError).toEqual(true);
+  });
+
   it('[uploadFiles] should upload files', function() {
     ctrl.newNote = note;
 
