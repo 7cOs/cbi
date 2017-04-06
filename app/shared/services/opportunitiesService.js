@@ -346,7 +346,7 @@ module.exports = /*  @ngInject */
       service.model.noOpportunitiesFound = false;
       service.model.opportunities        = [];
       service.model.filterApplied        = false;
-      service.model.opportuityId         = null;
+      service.model.opportunityId        = null;
     }
 
   };
