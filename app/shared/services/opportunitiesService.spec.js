@@ -287,4 +287,17 @@ describe('Unit: opportunitiesService - get opportunities', function() {
         $httpBackend.flush();
         expect(returnedPromise.$$state.status).toEqual(1);
     });
+
+  it('clearOpportunitiesModel', function() {
+    expect(opportunitiesService.clearOpportunitiesModel).toBeDefined();
+    opportunitiesService.model = expectedServiceModel;
+    expect(opportunitiesService.model.opportunities).toEqual(expectedServiceModel.opportunities);
+    opportunitiesService.clearOpportunitiesModel();
+    expect(opportunitiesService.model).toEqual({
+      noOpportunitiesFound: false,
+      opportunities: [],
+      filterApplied: false,
+      opportunityId: null
+    });
+  });
 });

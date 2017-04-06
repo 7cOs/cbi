@@ -474,6 +474,15 @@ describe('Unit: filter service', function() {
             states: []
     };
 
+    var paginationObject = {
+      currentPage: 1,
+      totalPages: 3,
+      default: true,
+      totalOpportunities: 300,
+      totalStores: 79,
+      roundedStores: 80
+    };
+
   it('should be defined', function() {
 
       expect(filtersService.addSortFilter).toBeDefined();
@@ -484,6 +493,7 @@ describe('Unit: filter service', function() {
       expect(filtersService.cleanUpSaveFilterObj).toBeDefined();
       expect(filtersService.resetFilters).toBeDefined();
       expect(filtersService.resetSort).toBeDefined();
+      expect(filtersService.resetPagination).toBeDefined();
   });
 
   it('should have valid default model state', function() {
@@ -668,6 +678,14 @@ describe('Unit: filter service', function() {
       filtersService.resetSort();
       expect(filtersService.model.appliedFilter.sort.sortArr).toEqual([filtersService.model.defaultSort]);
 
+  });
+
+  it('reset filters', function() {
+    filtersService.resetFilters();
+    expect(filtersService.model).toEqual(resetModelObject);
+    filtersService.model.appliedFilter.pagination = paginationObject;
+    filtersService.resetPagination();
+    expect(filtersService.model).toEqual(resetModelObject);
   });
 
   });

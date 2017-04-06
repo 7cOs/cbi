@@ -369,7 +369,8 @@ module.exports = /*  @ngInject */
       cleanUpSaveFilterObj: cleanUpSaveFilterObj,
       lastEndingTimePeriod: lastEndingTimePeriod,
       accountFilters: accountFilters,
-      trendPropertyNames: trendPropertyNames
+      trendPropertyNames: trendPropertyNames,
+      resetPagination: resetPagination
     };
 
     return service;
@@ -464,6 +465,17 @@ module.exports = /*  @ngInject */
       service.model.filtersApplied = false;
       service.model.filtersDefault = true;
       service.model.filtersValidCount = 0;
+    }
+
+    function resetPagination() {
+      service.model.appliedFilter.pagination = {
+        currentPage: 0,
+        totalPages: 0,
+        default: true,
+        totalOpportunities: 0,
+        totalStores: 0,
+        roundedStores: 0
+      };
     }
 
     function resetSort() {
