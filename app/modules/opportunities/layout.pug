@@ -2,7 +2,7 @@
   div(row)
     h1(column='9') Opportunities
     .saved-filter-select(column='3')
-      md-input-container
+      .filter-container
         .dropdown-filter
           .dropdown
             md-select(ng-init="o.filtersService.model.selected.currentFilter.id" ng-model="o.filtersService.model.selected.currentFilter" placeholder="Select Saved Report")

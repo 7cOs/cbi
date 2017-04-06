@@ -17,6 +17,11 @@ module.exports =
       controllerAs: 'o',
       analyticsData: {
         pageTitle: 'Opportunities'
+      },
+      onExit: function(opportunitiesService, filtersService) {
+        opportunitiesService.clearOpportunitiesModel();
+        filtersService.resetFilters();
+        filtersService.resetPagination();
       }
     });
   })

@@ -275,54 +275,105 @@ describe('Unit: notes controller', function() {
     expect(ctrl.creatingNote).toEqual(false);
   });
 
-  it('[uploadFiles] should add files to the new file object & attachments obj', function() {
-    ctrl.newNote = note;
-    ctrl.newNote.attachments = null;
-    var moreFiles = [{
+  it('[addAttachment] should add files to the newNote attachments array if within size limits', function() {
+    const newNote = {};
+    const attachmentFile1 = {
       lastModified: 1117789547000,
-      name: 'ORIGINAL file',
+      name: 'file1',
       size: 9999,
       type: 'image/jpeg'
-    }];
-
-    expect(ctrl.newNoteFiles).toEqual(undefined);
-    ctrl.uploadFiles(files);
-    expect(ctrl.newNoteFiles).toEqual([{
-      lastModified: 1487789547000,
-      name: 'file 1',
-      size: 6060,
-      type: 'image/jpeg',
-      parsedSize: '6KB'
-    }]);
-    expect(ctrl.newNote.attachments).toEqual([{
-      lastModified: 1487789547000,
-      name: 'file 1',
-      size: 6060,
-      type: 'image/jpeg',
-      parsedSize: '6KB'
-    }]);
-
-    ctrl.uploadFiles(moreFiles);
-    expect(ctrl.newNoteFiles).toEqual([{
+    };
+    const attachmentFile2 = {
       lastModified: 1117789547000,
-      name: 'ORIGINAL file',
+      name: 'file2',
+      size: 90000,
+      type: 'image/jpeg'
+    };
+    const attachmentFile3 = {
+      lastModified: 1117789547000,
+      name: 'file3',
+      size: 11000000,
+      type: 'image/jpeg'
+    };
+
+    expect(newNote.attachments).toEqual(undefined);
+    ctrl.addAttachment(newNote, attachmentFile1, undefined);
+
+    expect(newNote.attachments).toEqual([{
+      lastModified: 1117789547000,
+      name: 'file1',
       size: 9999,
-      type: 'image/jpeg',
-      parsedSize: '10KB'
+      parsedSize: '10KB',
+      type: 'image/jpeg'
     }]);
-    expect(ctrl.newNote.attachments).toEqual([{
-      lastModified: 1487789547000,
-      name: 'file 1',
-      size: 6060,
-      type: 'image/jpeg',
-      parsedSize: '6KB'
+
+    ctrl.addAttachment(newNote, attachmentFile2, undefined);
+
+    expect(newNote.attachments).toEqual([{
+      lastModified: 1117789547000,
+      name: 'file1',
+      size: 9999,
+      parsedSize: '10KB',
+      type: 'image/jpeg'
     }, {
       lastModified: 1117789547000,
-      name: 'ORIGINAL file',
-      size: 9999,
-      type: 'image/jpeg',
-      parsedSize: '10KB'
+      name: 'file2',
+      size: 90000,
+      parsedSize: '90KB',
+      type: 'image/jpeg'
     }]);
+
+    ctrl.addAttachment(newNote, attachmentFile3, undefined);
+
+    expect(newNote.attachments).toEqual([{
+      lastModified: 1117789547000,
+      name: 'file1',
+      size: 9999,
+      parsedSize: '10KB',
+      type: 'image/jpeg'
+    }, {
+      lastModified: 1117789547000,
+      name: 'file2',
+      size: 90000,
+      parsedSize: '90KB',
+      type: 'image/jpeg'
+    }]);
+  });
+
+  it('[addAttachment] should set the upload error for the note to true if it exceeds 10MB', function() {
+    const note = {
+      uploadSizeError: false
+    };
+    const attachmentFile1 = {
+      lastModified: 1117789547000,
+      name: 'file1',
+      size: 9999,
+      type: 'image/jpeg'
+    };
+    const attachmentFile2 = {
+      lastModified: 1117789547000,
+      name: 'file2',
+      size: 90000,
+      type: 'image/jpeg'
+    };
+    const attachmentFile3 = {
+      lastModified: 1117789547000,
+      name: 'file3',
+      size: 11000000,
+      type: 'image/jpeg'
+    };
+
+    ctrl.addAttachment(note, attachmentFile3, {});
+    expect(note.uploadSizeError).toEqual(true);
+
+    ctrl.addAttachment(note, attachmentFile1, undefined);
+    expect(note.uploadSizeError).toEqual(false);
+
+    ctrl.addAttachment(note, attachmentFile2, undefined);
+    expect(note.uploadSizeError).toEqual(false);
+
+    ctrl.addAttachment(note, attachmentFile3, undefined);
+    expect(note.uploadSizeError).toEqual(true);
   });
 
   it('[uploadFiles] should upload files', function() {
@@ -353,11 +404,6 @@ describe('Unit: notes controller', function() {
     }]);
     expect(ctrl.notesError).toEqual(false);
     expect(ctrl.fileUploading).toEqual(false);
-  });
-
-  it('[uploadFiles] should set error when upload size is exceeded', function() {
-    ctrl.uploadFiles([], '1234');
-    expect(ctrl.uploadErrorMsg).toEqual('Please ensure you\'re using a supported file type (.doc, .ppt, .xls, .gif, .jpg, .png, .pdf) and your total attachments are under 10MB.');
   });
 
   it('should return max size remaining', function() {
