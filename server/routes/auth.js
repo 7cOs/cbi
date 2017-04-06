@@ -25,8 +25,9 @@ module.exports = function(app) {
     });
 
   app.get('/auth/logout', function (req, res) {
-    req.logout();
-    res.redirect(logoutUrl);
+    req.session.destroy(function() {
+      res.redirect(logoutUrl);
+    });
   });
 
   app.get('/auth/expired', function (req, res) {

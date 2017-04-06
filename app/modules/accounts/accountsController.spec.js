@@ -604,6 +604,7 @@ describe('Unit: accountsController', function() {
       expect($state.go).not.toHaveBeenCalled();
       expect($state.go.calls.count()).toEqual(0);
     });
+
     it('should do set idForOppsPage and reset chips', function() {
       chipsService.addChipsArray(chipsArray);
       filtersService.model.selected.premiseType = 'on';
@@ -632,6 +633,7 @@ describe('Unit: accountsController', function() {
         tradeChannel: false
       }]);
     });
+
     it('should reset selected account and remove chip', function() {
       filtersService.model.selected.premiseType = 'on';
       filtersService.model.selected.account = ['01110000 01101100 01110011'];
@@ -1626,18 +1628,6 @@ describe('Unit: accountsController', function() {
       expect(ctrl.currentTopBottomFilters.subAccounts.name).toEqual(subAcctData.name);
       expect(ctrl.currentTopBottomFilters.stores.id).toEqual(storeData.id);
       expect(ctrl.currentTopBottomFilters.stores.name).toEqual(storeData.name);
-    });
-
-    it('should not update account filter unless Apply Filter is selected', function() {
-      ctrl.currentTopBottomAcctType = ctrl.filtersService.accountFilters.accountTypes[0];
-      ctrl.navigateTopBottomLevels(distributorData);
-
-      ctrl.filtersService.model.account = topBottomSnapshotAcctData.performance[1].name;
-      ctrl.setFilter(topBottomSnapshotAcctData.performance[1], 'chain');
-
-      ctrl.navigateTopBottomLevels(acctData);
-      expect(ctrl.currentTopBottomFilters.accounts.id).toEqual(acctData.id);
-      // expect(ctrl.currentTopBottomAcctType).toEqual(ctrl.filtersService.accountFilters.accountTypes[2]);
     }); */
 
     it('should not update distributor filter unless Apply Filter is selected', function() {
@@ -1665,6 +1655,30 @@ describe('Unit: accountsController', function() {
       expect(isHighligted).toBeTruthy();
       isHighligted = ctrl.isHighlightStore(storeData);
       expect(isHighligted).toBeFalsy();
+    });
+
+    it('should add a chip correctly formatted for click on store', function() {
+      ctrl.currentTopBottomAcctType = ctrl.filtersService.accountFilters.accountTypes[3];
+      storeData.name = 'Test Name';
+      storeData.addressLine1 = 'Test Address';
+      ctrl.navigateTopBottomLevels(storeData);
+      expect(chipsService.model[3].name).toEqual('Test Name - Test Address ');
+    });
+
+    it('should add a chip correctly formatted without the address for click on store', function() {
+      ctrl.currentTopBottomAcctType = ctrl.filtersService.accountFilters.accountTypes[3];
+      storeData.name = 'Test Name';
+      storeData.addressLine1 = '';
+      ctrl.navigateTopBottomLevels(storeData);
+      expect(chipsService.model[3].name).toEqual('Test Name');
+    });
+
+    it('should add a chip correctly formatted with a multiple parts address for click on store', function() {
+      ctrl.currentTopBottomAcctType = ctrl.filtersService.accountFilters.accountTypes[3];
+      storeData.name = 'Test Name';
+      storeData.addressLine1 = 'Test Address, Should be filtered out';
+      ctrl.navigateTopBottomLevels(storeData);
+      expect(chipsService.model[3].name).toEqual('Test Name - Test Address');
     });
 
   });
