@@ -574,4 +574,12 @@
     margin: 0;
     padding: 0.7em;
   }
+
+  .concealed {
+    visibility: hidden;
+  }
+
+  .upload-error {
+    min-height: 14px;
+  }
 }

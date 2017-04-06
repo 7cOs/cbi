@@ -327,7 +327,7 @@ describe('Unit: list controller', function() {
   });
 
   describe('[list.flattenOpportunity] method', function() {
-    var object = [{
+    var opportunities = [{
       'id': '0129597___80013986___20160929',
       'product': {
         'id': '80013986',
@@ -368,51 +368,138 @@ describe('Unit: list controller', function() {
         'onPremise': false,
         'cbbdChain': false,
         'rationale': 'because'
-      }
+        }
+      },
+      {
+        'id': '0129597___80013986___20160929',
+        'product': {
+          'id': '80013986',
+          'name': null,
+          'type': 'sku',
+          'brand': 'MODELO NEGRA',
+          'brandCode': '437'
+        },
+        'type': 'NON_BUY',
+        'subType': null,
+        'impact': 'L',
+        'impactDescription': 'LOW',
+        'status': 'TARGETED',
+        'rationale': 'Recommended SKU performing at 0.0% at similar stores (L90 vs. YA trend)',
+        'store': {
+          'id': '0129597',
+          'name': 'CARNICERIA LA BARATA ETHNIC',
+          'address': '214 N 4TH AVE, PASCO, WA 993015323',
+          'segmentation': 'A',
+          'latitude': 46.2318,
+          'longitude': -119.0929,
+          'storeNumber': null,
+          'distributionL90Simple': 6,
+          'distributionL90SimpleYA': 7,
+          'distributionL90Effective': 30,
+          'distributionL90EffectiveYA': 29,
+          'velocity': 0,
+          'velocityYA': 0,
+          'depletionsCurrentYearToDate': 7015,
+          'depletionsCurrentYearToDateYA': 7902,
+          'opportunityCount': 7,
+          'highImpactOpportunityCount': 0,
+          'distributors': null,
+          'streetAddress': '214 N 4TH AVE',
+          'city': 'PASCO',
+          'state': 'WA',
+          'zip': '99301',
+          'onPremise': false,
+          'cbbdChain': false,
+          'rationale': 'because'
+        }
     }];
 
     it('should create a csvItem for each selected opportunity, and add it to the data array', function() {
-      expect(ctrl.flattenOpportunity(object)).toEqual([{
-        'storeDistributor': object[0].store.distributors[0],
-        'TDLinx': object[0].store.id,
-        'storeName': object[0].store.name,
-        'storeAddress': object[0].store.streetAddress,
-        'storeCity': object[0].store.city,
-        'storeZip': object[0].store.zip,
-        'storeDepletionsCTD': object[0].store.depletionsCurrentYearToDate,
-        'storeDepletionsCTDYA': object[0].store.depletionsCurrentYearToDateYA,
-        'storeDepletionsCTDYAPercent': object[0].store.depletionsCurrentYearToDateYAPercent,
-        'storeSegmentation': object[0].store.segmentation,
-        'opportunityType': filter('formatOpportunitiesType')(ctrl.opportunityTypeOrSubtype(object[0])),
-        'productName': object[0].product.name,
-        'itemAuthorization': object[0].isItemAuthorization,
-        'chainMandate': object[0].isChainMandate,
-        'onFeature': object[0].isOnFeature,
-        'opportunityStatus': object[0].status,
-        'impactPredicted': object[0].impactDescription
+      expect(ctrl.flattenOpportunity([opportunities[0]])).toEqual([{
+        'storeDistributor': opportunities[0].store.distributors[0],
+        'TDLinx': opportunities[0].store.id,
+        'storeName': opportunities[0].store.name,
+        'storeAddress': opportunities[0].store.streetAddress,
+        'storeCity': opportunities[0].store.city,
+        'storeZip': opportunities[0].store.zip,
+        'storeDepletionsCTD': opportunities[0].store.depletionsCurrentYearToDate,
+        'storeDepletionsCTDYA': opportunities[0].store.depletionsCurrentYearToDateYA,
+        'storeDepletionsCTDYAPercent': opportunities[0].store.depletionsCurrentYearToDateYAPercent,
+        'storeSegmentation': opportunities[0].store.segmentation,
+        'opportunityType': filter('formatOpportunitiesType')(ctrl.opportunityTypeOrSubtype(opportunities[0])),
+        'productName': opportunities[0].product.name,
+        'itemAuthorization': opportunities[0].isItemAuthorization,
+        'chainMandate': opportunities[0].isChainMandate,
+        'onFeature': opportunities[0].isOnFeature,
+        'opportunityStatus': opportunities[0].status,
+        'impactPredicted': opportunities[0].impactDescription
       }]);
     });
 
     it('should add a rationale when provided as input', function() {
-      expect(ctrl.flattenOpportunity(object, true)).toEqual([{
-        'storeDistributor': object[0].store.distributors[0],
-        'TDLinx': object[0].store.id,
-        'storeName': object[0].store.name,
-        'storeAddress': object[0].store.streetAddress,
-        'storeCity': object[0].store.city,
-        'storeZip': object[0].store.zip,
-        'storeDepletionsCTD': object[0].store.depletionsCurrentYearToDate,
-        'storeDepletionsCTDYA': object[0].store.depletionsCurrentYearToDateYA,
-        'storeDepletionsCTDYAPercent': object[0].store.depletionsCurrentYearToDateYAPercent,
-        'storeSegmentation': object[0].store.segmentation,
-        'opportunityType': filter('formatOpportunitiesType')(ctrl.opportunityTypeOrSubtype(object[0])),
-        'productName': object[0].product.name,
-        'itemAuthorization': object[0].isItemAuthorization,
-        'chainMandate': object[0].isChainMandate,
-        'onFeature': object[0].isOnFeature,
-        'opportunityStatus': object[0].status,
-        'impactPredicted': object[0].impactDescription,
-        'rationale': object[0].rationale
+      expect(ctrl.flattenOpportunity([opportunities[0]], true)).toEqual([{
+        'storeDistributor': opportunities[0].store.distributors[0],
+        'TDLinx': opportunities[0].store.id,
+        'storeName': opportunities[0].store.name,
+        'storeAddress': opportunities[0].store.streetAddress,
+        'storeCity': opportunities[0].store.city,
+        'storeZip': opportunities[0].store.zip,
+        'storeDepletionsCTD': opportunities[0].store.depletionsCurrentYearToDate,
+        'storeDepletionsCTDYA': opportunities[0].store.depletionsCurrentYearToDateYA,
+        'storeDepletionsCTDYAPercent': opportunities[0].store.depletionsCurrentYearToDateYAPercent,
+        'storeSegmentation': opportunities[0].store.segmentation,
+        'opportunityType': filter('formatOpportunitiesType')(ctrl.opportunityTypeOrSubtype(opportunities[0])),
+        'productName': opportunities[0].product.name,
+        'itemAuthorization': opportunities[0].isItemAuthorization,
+        'chainMandate': opportunities[0].isChainMandate,
+        'onFeature': opportunities[0].isOnFeature,
+        'opportunityStatus': opportunities[0].status,
+        'impactPredicted': opportunities[0].impactDescription,
+        'rationale': opportunities[0].rationale
+      }]);
+    });
+
+    it('should be able to parse when the distributor list is null', function() {
+      expect(ctrl.flattenOpportunity([opportunities[1]], false)).toEqual([{
+        'storeDistributor': '',
+        'TDLinx': opportunities[1].store.id,
+        'storeName': opportunities[1].store.name,
+        'storeAddress': opportunities[1].store.streetAddress,
+        'storeCity': opportunities[1].store.city,
+        'storeZip': opportunities[1].store.zip,
+        'storeDepletionsCTD': opportunities[1].store.depletionsCurrentYearToDate,
+        'storeDepletionsCTDYA': opportunities[1].store.depletionsCurrentYearToDateYA,
+        'storeDepletionsCTDYAPercent': opportunities[1].store.depletionsCurrentYearToDateYAPercent,
+        'storeSegmentation': opportunities[1].store.segmentation,
+        'opportunityType': filter('formatOpportunitiesType')(ctrl.opportunityTypeOrSubtype(opportunities[1])),
+        'productName': opportunities[1].product.brand,
+        'itemAuthorization': opportunities[1].isItemAuthorization,
+        'chainMandate': opportunities[1].isChainMandate,
+        'onFeature': opportunities[1].isOnFeature,
+        'opportunityStatus': opportunities[1].status,
+        'impactPredicted': opportunities[1].impactDescription
+      }]);
+    });
+
+    it('should take the brand as product name if the product name is null', function() {
+      expect(ctrl.flattenOpportunity([opportunities[1]], false)).toEqual([{
+        'storeDistributor': '',
+        'TDLinx': opportunities[1].store.id,
+        'storeName': opportunities[1].store.name,
+        'storeAddress': opportunities[1].store.streetAddress,
+        'storeCity': opportunities[1].store.city,
+        'storeZip': opportunities[1].store.zip,
+        'storeDepletionsCTD': opportunities[1].store.depletionsCurrentYearToDate,
+        'storeDepletionsCTDYA': opportunities[1].store.depletionsCurrentYearToDateYA,
+        'storeDepletionsCTDYAPercent': opportunities[1].store.depletionsCurrentYearToDateYAPercent,
+        'storeSegmentation': opportunities[1].store.segmentation,
+        'opportunityType': filter('formatOpportunitiesType')(ctrl.opportunityTypeOrSubtype(opportunities[1])),
+        'productName': opportunities[1].product.brand,
+        'itemAuthorization': opportunities[1].isItemAuthorization,
+        'chainMandate': opportunities[1].isChainMandate,
+        'onFeature': opportunities[1].isOnFeature,
+        'opportunityStatus': opportunities[1].status,
+        'impactPredicted': opportunities[1].impactDescription
       }]);
     });
   });
