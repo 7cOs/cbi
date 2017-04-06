@@ -20,11 +20,15 @@
             p Create New List
           md-menu-item(ng-repeat="targetList in list.userService.model.targetLists.owned | filter:{archived:false, deleted: false}" ng-click="list.addToTargetList(targetList.id)" analytics-on="click" analytics-event="Add to Target List" analytics-category="{{list.analyticsCategory}}" analytics-label="{{targetList.id}}")
             p {{::targetList.name}}
+              br
+              span {{::list.remainingOpportunitySpots(targetList.opportunitiesSummary.opportunitiesCount)}} spots available
       md-menu(md-offset="0 45" ng-if="list.pageName(['opportunities']) && !list.targetListService.model.currentList.archived")
         button.btn-action(ng-click="$mdOpenMenu($event)") Copy to Target List
         md-menu-content.target-list-menu
           md-menu-item(ng-repeat="targetList in list.userService.model.targetLists.owned" ng-click="list.addToTargetList(targetList.id)" analytics-on="click" analytics-event="Add to Target List" analytics-category="{{list.analyticsCategory}}" analytics-label="{{targetList.id}}")
             p {{::targetList.name}}
+              br
+              span {{::list.remainingOpportunitySpots(targetList.opportunitiesSummary.opportunitiesCount)}} spots available
       md-menu(md-offset="0 45")
         button.btn-action(ng-click="$mdOpenMenu($event)" ng-disabled="list.selected < 1") Download
         md-menu-content.target-list-menu

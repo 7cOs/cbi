@@ -9,6 +9,7 @@ module.exports = /*  @ngInject */
 
     // Initial variables
     var vm = this;
+    const maxOpportunities = 1000;
 
     // Services
     vm.opportunitiesService = opportunitiesService;
@@ -89,6 +90,7 @@ module.exports = /*  @ngInject */
     vm.vsYAGrowthPercent = vsYAGrowthPercent;
     vm.getStoreToBePassedToAcct = getStoreToBePassedToAcct;
     vm.checkIfLinkDisabled = checkIfLinkDisabled;
+    vm.remainingOpportunitySpots = remainingOpportunitySpots;
 
     // Custom Headers for CSV export
     vm.csvHeader = [
@@ -824,5 +826,10 @@ module.exports = /*  @ngInject */
         vm.analyticsCategory = 'Target Lists';
         vm.analyticsLabel = 'Opportunities';
       }
+    }
+
+    function remainingOpportunitySpots(currentOpps) {
+      const  remainingOpps = maxOpportunities - currentOpps;
+      return remainingOpps > 0 ? remainingOpps : 0;
     }
   };
