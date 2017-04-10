@@ -216,7 +216,8 @@ module.exports = /*  @ngInject */
           showInStoreLevel: true,
           showInOtherLevels: false
         }
-      ]
+      ],
+      storeFormat: 'UNASSIGNED'
     };
 
     var trendPropertyNames = {
@@ -348,7 +349,21 @@ module.exports = /*  @ngInject */
         'accounts': 2,
         'subAccounts': 3,
         'stores': 4
-      }
+      },
+      storeFormats: [
+        {
+          name: 'All',
+          value: 'UNASSIGNED'
+        },
+        {
+          name: 'Hispanic',
+          value: 'HISPANIC'
+        },
+        {
+          name: 'General Market',
+          value: 'GM'
+        }
+      ]
     };
 
     var lastEndingTimePeriod = {
