@@ -1,5 +1,5 @@
 import { SettingsComponent } from './settings.component';
-import { inject, TestBed } from '@angular/core/testing';
+import { inject, TestBed, fakeAsync, flushMicrotasks } from '@angular/core/testing';
 import * as Chance from 'chance';
 let chance = new Chance();
 
@@ -44,9 +44,9 @@ describe('SettingsComponent', () => {
     expect(component.lastName).toBe(mockUserService.model.currentUser.lastName);
   }));
 
-  it('should get version hash and number from on init', inject([ SettingsComponent ], (component: SettingsComponent) => {
-    component.ngOnInit();
+  it('should get version hash and number from on init', fakeAsync(() => inject([ SettingsComponent ], (component: SettingsComponent) => {
+    flushMicrotasks();
     expect(component.versionNumber).toBe(mockVersionService.data.version);
     expect(component.versionHash).toBe(mockVersionService.data.hash);
-  }));
+  })));
 });
