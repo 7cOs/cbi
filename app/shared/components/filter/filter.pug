@@ -147,7 +147,7 @@ form.filters(column='12' ng-class="{'target-list': filter.opportunities}")
       div.nested-columns(style="margin-top:13px")
         label STORE FORMAT
         md-radio-group(ng-model="filter.filtersSerivce.model.storeFormat" ng-init="filter.filtersSerivce.model.storeFormat = 'UNASSIGNED'")
-          md-radio-button.md-primary(ng-repeat="format in filter.filtersService.accountFilters.storeFormats" aria-label="{{format.name}}" ng-value="format.value") {{format.name}}
+          md-radio-button.md-primary(ng-repeat="format in filter.filtersService.accountFilters.storeFormats track by format.value" aria-label="{{format.name}}" ng-value="format.value" ng-click="filter.chipsService.updateChip('storeFormat', format.chipValue)") {{::format.name}}
 
     div.location-contact-opps(column='4' ng-show="filter.filtersService.model.expanded")
       label.location Location

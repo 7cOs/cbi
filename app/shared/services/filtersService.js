@@ -353,15 +353,19 @@ module.exports = /*  @ngInject */
       storeFormats: [
         {
           name: 'All',
-          value: 'UNASSIGNED'
+          value: 'UNASSIGNED',
+          chipValue: 'All Formats'
+
         },
         {
           name: 'Hispanic',
-          value: 'HISPANIC'
+          value: 'HISPANIC',
+          chipValue: 'Hispanic'
         },
         {
           name: 'General Market',
-          value: 'GM'
+          value: 'GM',
+          chipValue: 'General Market'
         }
       ]
     };

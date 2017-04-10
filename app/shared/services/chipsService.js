@@ -21,6 +21,12 @@ module.exports = /*  @ngInject */
         'type': 'opportunityType',
         'applied': false,
         'removable': false
+      },
+      {
+        name: 'All Formats',
+        type: 'storeFormat',
+        applied: false,
+        removable: false
       }
     ];
     var model = [];
@@ -179,6 +185,10 @@ module.exports = /*  @ngInject */
         filtersService.model.selected['myAccountsOnly'] = false;
       } else if (chip.type === 'simpleDistributionType') {
         filtersService.model.selected['simpleDistributionType'] = false;
+      } else if (chip.type === 'storeFormat') {
+        addChip('All Formats', 'storeFormat', true, false);
+        filtersService.model.storeFormat = 'UNASSIGNED';
+        filtersService.model.selected.storeFormat = 'UNASSIGNED';
       } else {
         var arr = filtersService.model.selected[chip.type];
         var i = arr.length;
