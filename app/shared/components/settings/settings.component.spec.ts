@@ -13,12 +13,27 @@ describe('SettingsComponent', () => {
     }
   };
 
+  let mockVersionService = {
+    data: {
+      version: chance.string(),
+      hash: chance.string()
+    },
+
+    getVersion: function() {
+      return Promise.resolve(this.data);
+    }
+  };
+
   beforeEach(() => TestBed.configureTestingModule({
     providers: [
       SettingsComponent,
       {
         provide: 'userService',
         useValue: mockUserService
+      },
+      {
+        provide: 'versionService',
+        useValue: mockVersionService
       }
     ]
   }));
@@ -27,5 +42,11 @@ describe('SettingsComponent', () => {
     component.ngOnInit();
     expect(component.firstName).toBe(mockUserService.model.currentUser.firstName);
     expect(component.lastName).toBe(mockUserService.model.currentUser.lastName);
+  }));
+
+  it('should get version hash and number from on init', inject([ SettingsComponent ], (component: SettingsComponent) => {
+    component.ngOnInit();
+    expect(component.versionNumber).toBe(mockVersionService.data.version);
+    expect(component.versionHash).toBe(mockVersionService.data.hash);
   }));
 });
