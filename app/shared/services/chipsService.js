@@ -24,7 +24,7 @@ module.exports = /*  @ngInject */
       },
       {
         name: 'All Formats',
-        type: 'hispanicMarketType',
+        type: 'storeFormat',
         applied: false,
         removable: false
       }
@@ -185,9 +185,9 @@ module.exports = /*  @ngInject */
         filtersService.model.selected['myAccountsOnly'] = false;
       } else if (chip.type === 'simpleDistributionType') {
         filtersService.model.selected['simpleDistributionType'] = false;
-      } else if (chip.type === 'hispanicMarketType') {
-        addChip('All Formats', 'hispanicMarketType', true, false);
-        filtersService.model.appliedFilter.hispanicMarketType = '';
+      } else if (chip.type === 'storeFormat') {
+        addChip('All Formats', 'storeFormat', true, false);
+        filtersService.model.appliedFilter.storeFormat = '';
       } else {
         var arr = filtersService.model.selected[chip.type];
         var i = arr.length;

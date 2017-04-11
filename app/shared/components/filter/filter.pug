@@ -146,8 +146,8 @@ form.filters(column='12' ng-class="{'target-list': filter.opportunities}")
 
       div.nested-columns(style="margin-top:13px")
         label STORE FORMAT
-        md-radio-group(ng-model="filter.filtersService.model.appliedFilter.hispanicMarketType" ng-init="filter.filtersService.model.appliedFilter.hispanicMarketType = ''")
-          md-radio-button.md-primary(ng-repeat="marketType in filter.filtersService.accountFilters.hispanicMarketTypes track by marketType.value" aria-label="{{marketType.name}}" ng-value="marketType.value" ng-click="marketType.value !== '' ? filter.chipsService.updateChip('hispanicMarketType', marketType.chipValue) : filter.chipsService.addChip('All Formats', 'hispanicMarketType', true, false)") {{::marketType.name}}
+        md-radio-group(ng-model="filter.filtersService.model.appliedFilter.storeFormat" ng-init="filter.filtersService.model.appliedFilter.storeFormat = ''")
+          md-radio-button.md-primary(ng-repeat="marketType in filter.filtersService.accountFilters.storeFormats track by marketType.value" aria-label="{{marketType.name}}" ng-value="marketType.value" ng-click="marketType.value !== '' ? filter.chipsService.updateChip('storeFormat', marketType.chipValue) : filter.chipsService.addChip('All Formats', 'storeFormat', true, false)") {{::marketType.name}}
 
     div.location-contact-opps(column='4' ng-show="filter.filtersService.model.expanded")
       label.location Location

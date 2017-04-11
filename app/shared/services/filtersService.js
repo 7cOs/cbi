@@ -18,7 +18,7 @@ module.exports = /*  @ngInject */
         sort: {
           sortArr: []
         },
-        hispanicMarketType: ''
+        storeFormat: ''
       },
       defaultSort: {
         str: 'segmentation',
@@ -350,7 +350,7 @@ module.exports = /*  @ngInject */
         'subAccounts': 3,
         'stores': 4
       },
-      hispanicMarketTypes: [
+      storeFormats: [
         {
           name: 'All',
           value: '',
@@ -484,6 +484,7 @@ module.exports = /*  @ngInject */
       service.model.filtersApplied = false;
       service.model.filtersDefault = true;
       service.model.filtersValidCount = 0;
+      service.model.appliedFilter.storeFormat = '';
     }
 
     function resetPagination() {
