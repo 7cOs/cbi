@@ -35,7 +35,8 @@ module.exports = /*  @ngInject */
         var pageQuery = applyPage(),
             sortQuery = applySort(),
             simpleQuery = applySimpleDist(obj),
-            queryStr = '';
+            queryStr = '',
+            hispanicMarketQuery = applyHispanicMarketQuery(filtersService.model.appliedFilter.hispanicMarketType);
 
         queryParams += '';
 
@@ -46,7 +47,7 @@ module.exports = /*  @ngInject */
 
         filtersService.model.appliedFilter.appliedFilter = queryParams;
 
-        queryStr = '?' + 'limit=20' + '&ignoreDismissed=true' + sortQuery + pageQuery + simpleQuery + '&filter=' + encodeURIComponent(filtersService.model.appliedFilter.appliedFilter);
+        queryStr = '?' + 'limit=20' + '&ignoreDismissed=true' + sortQuery + pageQuery + simpleQuery + hispanicMarketQuery + '&filter=' + encodeURIComponent(filtersService.model.appliedFilter.appliedFilter);
         return queryStr;
       } else if (obj.type && obj.type === 'targetLists') {
         delete obj.type;
@@ -250,5 +251,10 @@ module.exports = /*  @ngInject */
 
       // return queryParams.replace(/,$/g, '');
       return queryParams;
+    }
+
+    function applyHispanicMarketQuery(hispanicMarketQuery) {
+      if (hispanicMarketQuery.length) return `&hispanicMarketType=${hispanicMarketQuery}`;
+      else return '';
     }
   };

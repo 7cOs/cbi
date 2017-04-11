@@ -17,7 +17,8 @@ module.exports = /*  @ngInject */
         },
         sort: {
           sortArr: []
-        }
+        },
+        hispanicMarketType: ''
       },
       defaultSort: {
         str: 'segmentation',
@@ -216,8 +217,7 @@ module.exports = /*  @ngInject */
           showInStoreLevel: true,
           showInOtherLevels: false
         }
-      ],
-      storeFormat: 'UNASSIGNED'
+      ]
     };
 
     var trendPropertyNames = {
@@ -350,10 +350,10 @@ module.exports = /*  @ngInject */
         'subAccounts': 3,
         'stores': 4
       },
-      storeFormats: [
+      hispanicMarketTypes: [
         {
           name: 'All',
-          value: 'UNASSIGNED',
+          value: '',
           chipValue: 'All Formats'
 
         },
