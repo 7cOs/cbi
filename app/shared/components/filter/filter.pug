@@ -144,7 +144,7 @@ form.filters(column='12' ng-class="{'target-list': filter.opportunities}")
       md-checkbox(ng-model="filter.filtersService.model.storeSegmentationB" aria-label="Store Segmentation B" ng-change="filter.applyFilterArr(filter.filtersService.model.selected.segmentation, 'B', 'segmentation', 'Segment B')") B
       md-checkbox(ng-model="filter.filtersService.model.storeSegmentationC" aria-label="Store Segmentation C" ng-change="filter.applyFilterArr(filter.filtersService.model.selected.segmentation, 'C', 'segmentation', 'Segment C')") C
 
-      div.nested-columns(style="margin-top:13px")
+      div.nested-columns.nested-row
         label STORE FORMAT
         md-radio-group(ng-model="filter.filtersService.model.selected.storeFormat" ng-init="filter.filtersService.model.selected.storeFormat = ''")
           md-radio-button.md-primary(ng-repeat="format in filter.filtersService.accountFilters.storeFormats track by format.value" aria-label="{{format.name}}" ng-value="format.value" ng-click="format.value !== '' ? filter.chipsService.updateChip('storeFormat', format.chipValue) : filter.chipsService.addChip('All Formats', 'storeFormat', true, false)") {{::format.name}}
