@@ -61,7 +61,7 @@ module.exports = function (config) {
         'ug-cbigdc-biz-role-genmgr'
       ],
       'issuer': 'https://orion.cbrands.com',
-      'jwt': 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJsYXN0TmFtZSI6IkJFUlJJT1MiLCJpc3MiOiJodHRwczovL29yaW9uLmNicmFuZHMuY29tIiwiZW1wbG95ZWVJRCI6IjEwMTIxMzIiLCJmaXJzdE5hbWUiOiJGUkVEIiwiY29ycG9yYXRlVXNlciI6ZmFsc2UsInBvc2l0aW9uSWQiOiI0OTA3IiwicGVyc29uSUQiOjU2NDgsImV4cCI6MTQ5MTk0NjM5NDAwMCwiaWF0IjoxNDg2NzYyMzk0MDAwLCJ1c2VyR3JvdXAiOltdLCJlbWFpbCI6IkZSRUQuQkVSUklPU0BDQlJBTkRTLkNPTSIsInNyY1R5cGVDZCI6WyJTQUxFU19ISUVSIl0sImJ1UG9zaXRpb25JZCI6IjQwOTMifQ.k2IA9YV_07qx7yx2El6WoLuuZiCRsypJKz-Cuoe5AHU',
+      'jwt': 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJsYXN0TmFtZSI6IkJFUlJJT1MiLCJpc3MiOiJodHRwczovL29yaW9uLmNicmFuZHMuY29tIiwiZW1wbG95ZWVJRCI6IjEwMTIxMzIiLCJmaXJzdE5hbWUiOiJGUkVEIiwiY29ycG9yYXRlVXNlciI6ZmFsc2UsInBvc2l0aW9uSWQiOiI0OTA3IiwicGVyc29uSUQiOjU2NDgsImV4cCI6MTQ5NzEzMDczODg5NywiaWF0IjoxNDkxOTQ2NzM4ODk3LCJ1c2VyR3JvdXAiOltdLCJlbWFpbCI6IkZSRUQuQkVSUklPU0BDQlJBTkRTLkNPTSIsInNyY1R5cGVDZCI6WyJTQUxFU19ISUVSIl0sImJ1UG9zaXRpb25JZCI6IjQwOTMifQ.8MBJYzJCmLJDxVA-5hiX2hZLZmEEMIHa5F7SQzjzIgM',
       'jwtmap': {
         'firstName': 'FRED',
         'lastName': 'BERRIOS',
@@ -70,8 +70,8 @@ module.exports = function (config) {
         'iss': 'https://orion.cbrands.com',
         'personId': 5648,
         'employeeID': '1012132',
-        'exp': 1491946394000,
-        'iat': 1486762394000,
+        'exp': 1497130738897,
+        'iat': 1491946738898,
         'userGroup': [
           'cbi-role-iq-app-users',
           'cbi employees',

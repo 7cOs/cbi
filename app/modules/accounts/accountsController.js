@@ -681,13 +681,13 @@ module.exports = /*  @ngInject */
         notesService.model.tdlinx = undefined;
       }
 
-      for (i = 0; i < chipsService.model.length; i++) {
-        if (chipsService.model[i].type === filterModelProp) {
-          chipsService.model.splice(i, 1);
-          break;
-        }
+      chipsService.removeChip(filterModelProp);
+
+      if (filterModelProperty === 'store') {
+        chipsService.addAutocompleteChip(result.name + (result.address ? ' - ' + result.address.split(',')[0] : ''), filterModelProp, false);
+      } else {
+        chipsService.addAutocompleteChip(result.name, filterModelProp, false);
       }
-      chipsService.addAutocompleteChip(result.name, filterModelProp, false);
       apply(false);
 
       filtersService.model[filterModelProperty] = result.name;
@@ -764,13 +764,7 @@ module.exports = /*  @ngInject */
       if (chip === 'myAccountsOnly') {
         chipsService.updateChip(chip, name);
       } else if (chip === 'premiseType') {
-        for (var i = 0; i < chipsService.model.length; i++) {
-          if (chipsService.model[i].type === chip) {
-            chipsService.model.splice(i, 1);
-            break;
-          }
-        }
-
+        chipsService.removeChip(chip);
         chipsService.addChip(name, chip, true, false);
         // filter.resetTradeChannels() -- do we need to do this so the trade channels are correct based on filter
       }

@@ -155,4 +155,7 @@ div.modal.notes(ng-if="notesOpen")
           .icons
             .delete-note(ng-if="note.author === 'Me'" ng-click="n.toggleDelete(note)")
             .edit-note(ng-if="note.author === 'Me'" ng-click="n.isEditing(note)" ng-class="{'edit-note': !note.editMode, 'edit-note-active': note.editMode}")
-            .email-note(ng-click="n.mailNote(note)" analytics-on="click" analytics-event="Actions" analytics-category="{{n.analyticsCategory}}" analytics-label="Email")
+            .tooltip-wrap.tooltip
+                .email-note(ng-click="n.mailNote(note)" analytics-on="click" analytics-event="Actions" analytics-category="{{n.analyticsCategory}}" analytics-label="Email")
+                md-tooltip(md-direction="bottom" md-z-index="1001" ng-if="note.attachments.length > 0")
+                  p Don't forget to download and add attachments

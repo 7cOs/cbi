@@ -1,0 +1,13 @@
+div.modal
+  .title
+    h4 Alert
+    a.hide-row(ng-click="list.closeModal()")
+  .modal-container(name="list.dismissOpportunityForm")
+    .modal-content
+      p(ng-if="oppsModalCtrl.remainingOpps") This Target List can only support {{oppsModalCtrl.remainingOpps}} more opportunities.
+      p(ng-if="oppsModalCtrl.remainingOpps") Please refine your selection or create a new Target List.
+      p(ng-if="!oppsModalCtrl.remainingOpps") This Target List cannot support any more opportunities.
+      p(ng-if="!oppsModalCtrl.remainingOpps") Please create a new Target List.
+    .modal-content.modal-select-container
+      p.modal-select.pull-left(ng-if="oppsModalCtrl.remainingOpps" ng-click="list.closeModal()") Refine My Selection
+      p.modal-select(ng-click="list.closeModal();list.createNewList($event);" ng-class="oppsModalCtrl.remainingOpps ? 'pull-right' : 'pull-center'") Create New List
