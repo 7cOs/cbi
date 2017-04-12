@@ -140,7 +140,6 @@ module.exports = /*  @ngInject */
     vm.updateBrandSnapshot = updateBrandSnapshot;
     vm.updateChip = updateChip;
     vm.updateDistributionTimePeriod = updateDistributionTimePeriod;
-
     vm.filterTopBottom = filterTopBottom;
 
     init();
@@ -315,7 +314,7 @@ module.exports = /*  @ngInject */
 
     // Make notes available to the page
     function openNotes(val, accountInfo) {
-      if (accountInfo) {
+      if (accountInfo && canOpenNote()) {
         $rootScope.$broadcast('notes:opened', val, accountInfo);
       }
     }
@@ -1586,4 +1585,9 @@ module.exports = /*  @ngInject */
          vm.scrolledBelowHeader = false;
        }
      });
+
+    function canOpenNote() {
+      if (vm.showXDistributor && !vm.showXChain || vm.showXStore) return true;
+      else return false;
+    }
   };
