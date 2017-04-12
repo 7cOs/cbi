@@ -16,6 +16,7 @@ export const AppUpgradeAdapter = new UpgradeAdapter(forwardRef(() => AppModule))
 // make ng1 services available to ng2 code (these are NOT passed as providers)
 // https://angular.io/docs/ts/latest/api/upgrade/index/UpgradeAdapter-class.html#!#upgradeNg1Provider-anchor
 AppUpgradeAdapter.upgradeNg1Provider('userService');
+AppUpgradeAdapter.upgradeNg1Provider('versionService');
 
 @NgModule({
   imports: [
