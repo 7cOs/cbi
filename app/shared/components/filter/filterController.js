@@ -212,6 +212,7 @@ module.exports = /*  @ngInject */
 
     function getFilterModel(currentFilterModel) {
       var copyFilter = angular.copy(currentFilterModel);
+      copyFilter.storeFormat = currentFilterModel.appliedFilter.storeFormat;
       var cleanedUpFilterObj = filtersService.cleanUpSaveFilterObj(copyFilter);
       return cleanedUpFilterObj;
     }

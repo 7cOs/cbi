@@ -424,7 +424,11 @@ module.exports = /*  @ngInject */
     function updateSelectedFilterModel(filterModel) {
       for (var property in filterModel) {
         if (filterModel.hasOwnProperty(property)) {
-          service.model[property] = filterModel[property];
+          if (property === 'storeFormat') {
+            service.model.appliedFilter.storeFormat = filterModel[property];
+          } else {
+            service.model[property] = filterModel[property];
+          }
         }
       }
     }
