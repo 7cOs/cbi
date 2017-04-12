@@ -187,7 +187,7 @@ module.exports = /*  @ngInject */
         filtersService.model.selected['simpleDistributionType'] = false;
       } else if (chip.type === 'storeFormat') {
         addChip('All Formats', 'storeFormat', true, false);
-        filtersService.model.appliedFilter.storeFormat = '';
+        filtersService.model.selected.storeFormat = '';
       } else {
         var arr = filtersService.model.selected[chip.type];
         var i = arr.length;

@@ -36,7 +36,7 @@ module.exports = /*  @ngInject */
             sortQuery = applySort(),
             simpleQuery = applySimpleDist(obj),
             queryStr = '',
-            storeFormatQuery = applyStoreFormatQuery(filtersService.model.appliedFilter.storeFormat);
+            storeFormatQuery = applyStoreFormatQuery(obj);
 
         queryParams += '';
 
@@ -238,7 +238,7 @@ module.exports = /*  @ngInject */
             queryParams += key2 + ':' + obj[key2];
             somethingAdded = true;
           }
-        } else if (key2 === 'simpleDistributionType') {
+        } else if (key2 === 'simpleDistributionType' || key2 === 'storeFormat') {
           somethingAdded = false;
         } else if (obj[key2].constructor !== Array && key2 !== 'retailer') {
           queryParams += key2 + ':' + obj[key2];
@@ -253,8 +253,8 @@ module.exports = /*  @ngInject */
       return queryParams;
     }
 
-    function applyStoreFormatQuery(storeFormatQuery) {
-      if (storeFormatQuery.length) return `&hispanicMarketType=${storeFormatQuery}`;
+    function applyStoreFormatQuery(queries) {
+      if (queries.storeFormat) return `&hispanicMarketType=${queries.storeFormat}`;
       else return '';
     }
   };

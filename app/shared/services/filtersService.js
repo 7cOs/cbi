@@ -17,8 +17,7 @@ module.exports = /*  @ngInject */
         },
         sort: {
           sortArr: []
-        },
-        storeFormat: ''
+        }
       },
       defaultSort: {
         str: 'segmentation',
@@ -168,9 +167,11 @@ module.exports = /*  @ngInject */
         tradeChannel: [],
         trend: '',
         valuesVsTrend: '',
-        zipCode: []
+        zipCode: [],
+        storeFormat: ''
       },
       simpleDistributionType: false,
+      storeFormat: '',
       timePeriod: [
         {name: 'Current Month to Date',
           value: 'year'},
@@ -424,11 +425,7 @@ module.exports = /*  @ngInject */
     function updateSelectedFilterModel(filterModel) {
       for (var property in filterModel) {
         if (filterModel.hasOwnProperty(property)) {
-          if (property === 'storeFormat') {
-            service.model.appliedFilter.storeFormat = filterModel[property];
-          } else {
-            service.model[property] = filterModel[property];
-          }
+          service.model[property] = filterModel[property];
         }
       }
     }
@@ -488,7 +485,6 @@ module.exports = /*  @ngInject */
       service.model.filtersApplied = false;
       service.model.filtersDefault = true;
       service.model.filtersValidCount = 0;
-      service.model.appliedFilter.storeFormat = '';
     }
 
     function resetPagination() {
