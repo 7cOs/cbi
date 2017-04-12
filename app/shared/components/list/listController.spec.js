@@ -157,6 +157,29 @@ describe('Unit: list controller', function() {
 
     expect(ctrl.vsYAGrowthPercent).not.toBeUndefined();
     expect(typeof (ctrl.vsYAGrowthPercent)).toEqual('function');
+
+    expect(ctrl.remainingOpportunitySpots).not.toBeUndefined();
+    expect(typeof (ctrl.remainingOpportunitySpots)).toEqual('function');
+
+    expect(ctrl.handleAddToTargetList).not.toBeUndefined();
+    expect(typeof (ctrl.handleAddToTargetList)).toEqual('function');
+  });
+
+  describe('[list.remainingOpportunitySpots]', function() {
+    it('returns the number of available opportunities when current opportunities is less than max', function() {
+      const currentOpps = 999;
+      expect(ctrl.remainingOpportunitySpots(currentOpps)).toEqual(1);
+    });
+
+    it('returns the number of available opportunities when current opportunities is equal to max', function() {
+      const currentOpps = 1000;
+      expect(ctrl.remainingOpportunitySpots(currentOpps)).toEqual(0);
+    });
+
+    it('returns the number of available opportunities when current opportunities exceeds max', function() {
+      const currentOpps = 1001;
+      expect(ctrl.remainingOpportunitySpots(currentOpps)).toEqual(0);
+    });
   });
 
   describe('[list.addCollaborator] method', function() {

@@ -541,6 +541,40 @@ list {
   }
 }
 
+.spots-available {
+  width: 132px;
+  height: 15px;
+  font-family: $rajdhani;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 1.2px;
+  color: $gray-2;
+  display: block;
+}
+
+.modal-select-container {
+  border-top: 1px solid $gray-2;
+  width: 100%;
+
+  .modal-select {
+    display: inline-block;
+    padding: 0 20px;
+    margin: 20px 0;
+    color: $blue;
+    cursor: pointer;
+
+    &.pull-center {
+      float: none;
+      margin: 20px auto 0;
+    }
+
+    &:hover {
+      color: $black-2;
+      font-weight: $semibold;
+    }
+  }
+}
+
 .action-buttons {
   float: right;
 }
