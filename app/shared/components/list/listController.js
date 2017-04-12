@@ -72,7 +72,6 @@ module.exports = /*  @ngInject */
     vm.openDismissModal = openDismissModal;
     vm.openShareModal = openShareModal;
     vm.opportunityTypeOrSubtype = opportunityTypeOrSubtype;
-    vm.pageName = pageName;
     vm.pickMemo = pickMemo;
     vm.removeOpportunity = removeOpportunity;
     vm.removeSharedCollaborator = removeSharedCollaborator;
@@ -396,16 +395,6 @@ module.exports = /*  @ngInject */
       vm.opportunityDismissTrigger = true;
       vm.opportunity.feedback = '';
       $mdDialog.hide();
-    }
-
-    // arr of pages to be hidden on
-    function pageName(arr) {
-      arr = arr || [];
-      for (var i = 0; i < arr.length; i++) {
-        if ($state.current.name === arr[i]) return false;
-      }
-
-      return true;
     }
 
     function removeOpportunity() {
@@ -851,7 +840,7 @@ module.exports = /*  @ngInject */
       getTargetLists();
 
       // page is NOT target-list-detail, so it is opportunities
-      if (pageName(['target-list-detail'])) {
+      if (vm.pageName === 'opportunities') {
         vm.analyticsCategory = 'Opportunities';
         vm.analyticsLabel = 'Opportunity Result List';
       } else {

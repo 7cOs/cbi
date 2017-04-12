@@ -5,6 +5,12 @@ module.exports =
   .component('list', {
     template: require('./list.pug'),
     controller: 'listController',
-    controllerAs: 'list'
+    controllerAs: 'list',
+    bindings: {
+      showAddToTargetList: '<',
+      showCopyToTargetList: '<',
+      showRemoveButton: '<',
+      pageName: '@'
+    }
   })
   .controller('listController', require('./listController'));

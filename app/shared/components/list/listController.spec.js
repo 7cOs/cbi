@@ -1,5 +1,6 @@
 describe('Unit: list controller', function() {
   var scope, ctrl, q, httpBackend, mdDialog, state, closedOpportunitiesService, filtersService, loaderService, opportunitiesService, storesService, targetListService, toastService, userService, filter;
+  var bindings = {showAddToTargetList: true, showRemoveButton: false, pageName: 'MyTestPage'};
 
   beforeEach(function() {
     angular.mock.module('ui.router');
@@ -28,7 +29,7 @@ describe('Unit: list controller', function() {
 
       userService.model.currentUser.employeeID = 1;
 
-      ctrl = $controller('listController', {$scope: scope});
+      ctrl = $controller('listController', {$scope: scope}, bindings);
     });
   });
 
@@ -110,9 +111,6 @@ describe('Unit: list controller', function() {
     expect(ctrl.opportunityTypeOrSubtype).not.toBeUndefined();
     expect(typeof (ctrl.opportunityTypeOrSubtype)).toEqual('function');
 
-    expect(ctrl.pageName).not.toBeUndefined();
-    expect(typeof (ctrl.pageName)).toEqual('function');
-
     expect(ctrl.pickMemo).not.toBeUndefined();
     expect(typeof (ctrl.pickMemo)).toEqual('function');
 
@@ -163,6 +161,15 @@ describe('Unit: list controller', function() {
 
     expect(ctrl.handleAddToTargetList).not.toBeUndefined();
     expect(typeof (ctrl.handleAddToTargetList)).toEqual('function');
+  });
+
+  describe('Bindings', function() {
+    it('should popoulate the bindings', function() {
+      expect(ctrl.showAddToTargetList.toBeTruthy());
+      expect(ctrl.showCopyToTargetList.toBeUndefined());
+      expect(ctrl.showRemoveButton.toBeFalsy());
+      expect(ctrl.pageName.toEqual(bindings.pageName));
+    });
   });
 
   describe('[list.remainingOpportunitySpots]', function() {
@@ -677,20 +684,6 @@ describe('Unit: list controller', function() {
       };
 
       expect(ctrl.opportunityTypeOrSubtype(opp)).toEqual('D001');
-    });
-  });
-
-  describe('[list.pageName] method', function() {
-    it('should return true if page name in argument doesn\'t match current page name', function() {
-      var input = ['target-lists'];
-      state.current.name = 'opportunities';
-      expect(ctrl.pageName(input)).toBeTruthy();
-    });
-
-    it('should return false if page name in argument list matches current page name', function() {
-      var input = ['target-lists'];
-      state.current.name = 'target-lists';
-      expect(ctrl.pageName(input)).toBeFalsy();
     });
   });
 

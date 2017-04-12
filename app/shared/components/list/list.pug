@@ -1,19 +1,19 @@
 .total-opportunities
   h4.opportunities-count(ng-if="!list.opportunitiesService.model.filterApplied" ng-hide="list.opportunitiesService.model.filterApplied || list.opportunitiesService.model.opportunities.length !== 0") 0 opportunities <span>across 0 stores</span>
-  h4.opportunities-count(ng-if="list.pageName(['accounts']) || list.pageName(['target-list-detail'])" ng-hide="list.opportunitiesService.model.noOpportunitiesFound || !list.opportunitiesService.model.filterApplied") {{list.filtersService.model.appliedFilter.pagination.totalOpportunities | number:0 }} opportunities <span>across {{list.filtersService.model.appliedFilter.pagination.totalStores | number:0}} stores</span>
+  h4.opportunities-count(ng-hide="list.opportunitiesService.model.noOpportunitiesFound || !list.opportunitiesService.model.filterApplied") {{list.filtersService.model.appliedFilter.pagination.totalOpportunities | number:0 }} opportunities <span>across {{list.filtersService.model.appliedFilter.pagination.totalStores | number:0}} stores</span>
   span.opportunities-selected-count(ng-hide="!list.selected || list.selected.length === 0")
     ng-pluralize(count="list.selected.length" when="{'1' : '1 opportunity selected', 'other': '{{list.selected.length}} opportunities selected'}")
 
 .action-buttons
   span(ng-switch="list.selected < 1")
     span(ng-switch-when="true")
-      button.btn-action(ng-if="!list.targetListService.model.currentList.archived && list.pageName(['target-lists', 'target-list-detail'])" ng-disabled="true") Add to Target List
-      button.btn-action(ng-if="!list.targetListService.model.currentList.archived && list.pageName(['opportunities'])" ng-disabled="true") Copy to Target List
+      button.btn-action(ng-if="!list.targetListService.model.currentList.archived && list.showAddToTargetList === true" ng-disabled="true") Add to Target List
+      button.btn-action(ng-if="!list.targetListService.model.currentList.archived && list.showCopyToTargetList === true" ng-disabled="true") Copy to Target List
       button.btn-action(ng-disabled="true") Download
-      button.btn-action(ng-if="!list.targetListService.model.currentList.archived && list.pageName(['opportunities'])" ng-disabled="true" ) Remove
+      button.btn-action(ng-if="!list.targetListService.model.currentList.archived && list.showRemoveButton === true" ng-disabled="true" ) Remove
 
     span(ng-switch-when="false")
-      md-menu(md-offset="0 45" ng-if="list.pageName(['target-lists', 'target-list-detail'])")
+      md-menu(md-offset="0 45" ng-if="list.showAddToTargetList === true")
         button.btn-action(aria-label="Add to Target List" ng-click="$mdOpenMenu($event)") Add to Target List
         md-menu-content.target-list-menu
           md-menu-item(ng-click="list.createNewList($event)")
@@ -21,7 +21,7 @@
           md-menu-item(ng-repeat="targetList in list.userService.model.targetLists.owned | filter:{archived:false, deleted: false}" ng-click="list.handleAddToTargetList($event, targetList)" analytics-on="click" analytics-event="Add to Target List" analytics-category="{{list.analyticsCategory}}" analytics-label="{{targetList.id}}")
             p {{::targetList.name | truncateText:18}}
               span.spots-available {{::list.remainingOpportunitySpots(targetList.opportunitiesSummary.opportunitiesCount)}} SPOTS AVAILABLE
-      md-menu(md-offset="0 45" ng-if="list.pageName(['opportunities']) && !list.targetListService.model.currentList.archived")
+      md-menu(md-offset="0 45" ng-if="list.showCopyToTargetList === false && !list.targetListService.model.currentList.archived")
         button.btn-action(ng-click="$mdOpenMenu($event)") Copy to Target List
         md-menu-content.target-list-menu
           md-menu-item(ng-repeat="targetList in list.userService.model.targetLists.owned" ng-click="list.handleAddToTargetList($event, targetList)" analytics-on="click" analytics-event="Add to Target List" analytics-category="{{list.analyticsCategory}}" analytics-label="{{targetList.id}}")
@@ -34,7 +34,7 @@
             p With Rationale
           md-menu-item(ng-csv="list.flattenOpportunity(list.selected)" filename="{{list.getDate() | date:'yyyy-MM-dd'}}.csv" csv-header="list.csvHeader" ng-click="$mdCloseMenu($event)" analytics-on="click" analytics-event="Download" analytics-category="{{list.analyticsCategory}}" analytics-label="{{list.analyticsLabel}}")
             p Without Rationale
-      button.btn-action(ng-disabled="list.selected < 1" ng-click="list.removeOpportunity()" ng-if="list.pageName(['opportunities']) && !list.targetListService.model.currentList.archived") Remove
+      button.btn-action(ng-disabled="list.selected < 1" ng-click="list.removeOpportunity()" ng-if="list.showRemoveButton === true && !list.targetListService.model.currentList.archived") Remove
 
 button.icon.select-all(ng-click="list.toggleSelectAllStores()" ng-disabled="!list.hasOpportunities()") {{!list.isSelectAllActivated ? 'Select All' : 'Un-Select All'}}
 button.icon.narrow-icon.expand-all(ng-click="list.accordion.expandAll()" ng-disabled="list.allOpportunitiesExpanded()" analytics-on="click" analytics-event="Expand Store" analytics-category="Opportunities" analytics-label="All") Expand All
@@ -44,9 +44,8 @@ p.list-disabled-message {{::list.disabledMessage}}
 v-accordion.styled-list(multiple="" id="opportunities" control="list.accordion" onexpand="list.expandCallback(item)" oncollapse="list.collapseCallback(item)" column='12' )
   div.header-row(row ng-class="{'header-disabled': list.filtersService.model.appliedFilter.pagination.totalOpportunities === 0}")
     div.checkbox-wrapper.placeholder
-    div.hide-wrapper(ng-if="list.pageName()")
+    div.hide-wrapper
       label
-    div.more-wrapper(ng-if="!list.pageName()")
     div.checkbox-sibling(column='12')
       div(column='3')
         label(ng-click="list.sortBy('store');" ng-class="{ 'header-bold' : list.filtersService.model.appliedFilter.sort.sortArr[0].str === 'store' || list.orderName[0] === 'store.name' || list.orderName[0] === '-store.name'}").sort
