@@ -165,10 +165,10 @@ describe('Unit: list controller', function() {
 
   describe('Bindings', function() {
     it('should popoulate the bindings', function() {
-      expect(ctrl.showAddToTargetList.toBeTruthy());
-      expect(ctrl.showCopyToTargetList.toBeUndefined());
-      expect(ctrl.showRemoveButton.toBeFalsy());
-      expect(ctrl.pageName.toEqual(bindings.pageName));
+      expect(ctrl.showAddToTargetList).toBeTruthy();
+      expect(ctrl.showCopyToTargetList).toBeUndefined();
+      expect(ctrl.showRemoveButton).toBeFalsy();
+      expect(ctrl.pageName).toEqual(bindings.pageName);
     });
   });
 
