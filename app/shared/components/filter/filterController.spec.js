@@ -600,7 +600,7 @@ describe('Unit: filter controller (opportunities)', function() {
         applied: true,
         removable: true
       }
-    }
+    };
 
     chipsService.model = [];
 
