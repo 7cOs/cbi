@@ -16,7 +16,7 @@ notes
             <span ng-if="a.selectedDistributor">{{a.selectedDistributor}}</span><span ng-if="a.selectedStore && a.selectedDistributor"> - </span><span ng-if="a.selectedStore">{{a.selectedStore}}</span> <span ng-if="a.currentTopBottomFilters.stores.id"> {{a.getStoreAddress();}}</span>
           p(ng-if="!a.selectedStore && !a.selectedDistributor") {{a.currentTopBottomAcctType.name || a.accountTypesDefault}}
         md-progress-circular(ng-if="a.selectedStore && a.loadingUnsoldStore" md-mode="indeterminate" md-diameter="20")
-        .notes-icon(ng-class="{'enabled': a.showXDistributor && !a.showXChain || a.showXStore}" ng-click="a.openNotes(true, a.selectedStoreInfo)")
+        .notes-icon(ng-class="{'enabled': a.canOpenNote()}" ng-click="a.openNotes(true, a.selectedStoreInfo)")
           p <a href="#"></a>
       .market-overview.clearfix
         .brands
@@ -27,7 +27,7 @@ notes
             <span ng-if="a.selectedDistributor">{{a.selectedDistributor}}</span><span ng-if="a.selectedStore && a.selectedDistributor"> - </span><span ng-if="a.selectedStore">{{a.selectedStore}}</span> <span ng-if="a.currentTopBottomFilters.stores.id"> {{a.getStoreAddress();}}</span>
           p(ng-if="!a.selectedStore && !a.selectedDistributor") {{a.currentTopBottomAcctType.name || a.accountTypesDefault}}
         md-progress-circular(ng-if="a.selectedStore && a.loadingUnsoldStore" md-mode="indeterminate" md-diameter="20")
-        .notes-icon(ng-class="{'enabled': a.showXDistributor && !a.showXChain || a.showXStore}" ng-click="a.openNotes(true, a.selectedStoreInfo)")
+        .notes-icon(ng-class="{'enabled': a.canOpenNote()}" ng-click="a.openNotes(true, a.selectedStoreInfo)")
           p <a href="#">Notes</a>
 
 
