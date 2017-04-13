@@ -254,7 +254,6 @@ module.exports = /*  @ngInject */
     }
 
     function applyStoreFormatQuery(queries) {
-      if (queries.storeFormat) return `&hispanicMarketType=${queries.storeFormat}`;
-      else return '';
+      return (queries.storeFormat) ? `&hispanicMarketType=${queries.storeFormat}` : '';
     }
   };
