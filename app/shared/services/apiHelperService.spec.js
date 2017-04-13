@@ -101,13 +101,11 @@ describe('[Services.apiHelperService]', function() {
 
   it('[request] it should return opportunities specific formatting when type = opportunities and unsoldstore is selected', function() {
     var mockObj = {
-      'masterSKU': '112154',
-      'premiseType': 'on',
-      'storeStatus': ['Unsold'],
-      'type': 'opportunities'
+      'unsold': 'true',
+      'additionalParams': {type: 'brandSnapshot', myAccountsOnly: true, opportunityType: ['All Types'], premiseType: 'off', retailer: 'Chain', distributor: ['2225193']}
     };
     var url = 'http://localhost:3000/';
-    var resultExpectation = url + '?limit=20&ignoreDismissed=true&sort=&offset=0&unsold=true&filter=masterSKU%3A112154%2CpremiseType%3Aon%2C';
+    var resultExpectation = url + '?' + 'unsold=true&myAccountsOnly=true&opportunityType=All%20Types&premiseType=off&retailer=Chain&distributor=2225193&filter=';
 
     var result = APIHelper.request(url, mockObj);
 
