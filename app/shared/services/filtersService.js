@@ -167,7 +167,8 @@ module.exports = /*  @ngInject */
         tradeChannel: [],
         trend: '',
         valuesVsTrend: '',
-        zipCode: []
+        zipCode: [],
+        salesStatus: []
       },
       simpleDistributionType: false,
       timePeriod: [

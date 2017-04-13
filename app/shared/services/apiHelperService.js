@@ -35,6 +35,7 @@ module.exports = /*  @ngInject */
         var pageQuery = applyPage(),
             sortQuery = applySort(),
             simpleQuery = applySimpleDist(obj),
+            salesStoreStatus = applySalesStoreStatus(obj),
             queryStr = '';
 
         queryParams += '';
@@ -46,7 +47,7 @@ module.exports = /*  @ngInject */
 
         filtersService.model.appliedFilter.appliedFilter = queryParams;
 
-        queryStr = '?' + 'limit=20' + '&ignoreDismissed=true' + sortQuery + pageQuery + simpleQuery + '&filter=' + encodeURIComponent(filtersService.model.appliedFilter.appliedFilter);
+        queryStr = '?' + 'limit=20' + '&ignoreDismissed=true' + sortQuery + pageQuery + simpleQuery + salesStoreStatus + '&filter=' + encodeURIComponent(filtersService.model.appliedFilter.appliedFilter);
         return queryStr;
       } else if (obj.type && obj.type === 'targetLists') {
         delete obj.type;
@@ -180,6 +181,28 @@ module.exports = /*  @ngInject */
       return query;
     }
 
+    /**
+     * @name applySalesStoreStatus
+     * @desc applies sold or unsold status filter to opportunities request
+     * @returns {String} - formatted query
+     * @memberOf cf.common.services
+     */
+    function applySalesStoreStatus(filters) {
+      let query = '';
+
+      if (filters && filters.salesStatus) {
+        if (filters.salesStatus.length === 2) {
+          query = '';
+        } else if (filters.salesStatus[0] === 'Unsold') {
+          query = '&unsoldStore=true';
+        } else if (filters.salesStatus[0] === 'Sold') {
+          query = '&unsoldStore=false';
+        }
+      }
+
+      return query;
+    }
+
     function parseAppliedFilters(obj, i, z) {
       var queryParams = '';
 
@@ -194,6 +217,8 @@ module.exports = /*  @ngInject */
               queryParams += 'cbbdChain:true';
               somethingAdded = true;
             }
+          } else if (key2 === 'salesStatus') {
+            somethingAdded = false;
           } else {
             // iterate over arrays
             for (var k = 0; k < obj[key2].length; k++) {
@@ -247,7 +272,6 @@ module.exports = /*  @ngInject */
         if (i !== (z - 1) && somethingAdded) queryParams += ',';
         i++;
       }
-
       // return queryParams.replace(/,$/g, '');
       return queryParams;
     }

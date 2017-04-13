@@ -118,18 +118,22 @@ v-accordion.styled-list(multiple="" id="opportunities" control="list.accordion" 
                 img(ng-if='!list.displayBrandIcon(opportunity.brands, "unknown")' src='assets/img/brands/brand-sm-unknown.svg')
 
             div(column='3').no-pad
-              label.bold Distribution L90
-              div(row)
-                div(column='6')
-                  label Simple
-                  div(row)
-                    div(column='12') {{::opportunity.store.distributionL90Simple | number:0}}
-                      span.percentage {{list.vsYAGrowthPercent(opportunity.store.distributionL90Simple, opportunity.store.distributionL90SimpleYA) | number:1}}%
-                div(column='6').effective
-                  label Effective
-                  div(row)
-                    div(column='12') {{::opportunity.store.distributionL90Effective | number:0}}
-                      span.percentage {{list.vsYAGrowthPercent(opportunity.store.distributionL90Effective, opportunity.store.distributionL90EffectiveYA) | number:1}}%
+              label.bold Distribution
+              div(ng-if="opportunity.store.unsold === 'Y'") Unsold Store
+              div(ng-if="opportunity.store.unsold !== 'Y'")
+                div(row)
+                  div(column='6')
+                    div(row)
+                      div(column='12') {{::opportunity.store.distributionL90Simple | number:0}}
+                        span.percentage {{list.vsYAGrowthPercent(opportunity.store.distributionL90Simple, opportunity.store.distributionL90SimpleYA) | number:1}}%
+                      div(column='12')
+                          label Simple L90
+                  div(column='6').effective
+                    div(row)
+                      div(column='12') {{::opportunity.store.distributionL90Effective | number:0}}
+                        span.percentage {{list.vsYAGrowthPercent(opportunity.store.distributionL90Effective, opportunity.store.distributionL90EffectiveYA) | number:1}}%
+                      div(column='12')
+                          label Effective L90
             div(column='2')
               .tooltip-wrap
                 label Velocity (VS YA%)

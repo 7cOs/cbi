@@ -177,7 +177,8 @@ describe('Unit: filter service', function() {
                 tradeChannel: [],
                 trend: '',
                 valuesVsTrend: '',
-                zipCode: []
+                zipCode: [],
+                salesStatus: []
             },
             simpleDistributionType: false,
             timePeriod: [
@@ -392,7 +393,8 @@ describe('Unit: filter service', function() {
                 tradeChannel: [],
                 trend: '',
                 valuesVsTrend: '',
-                zipCode: []
+                zipCode: [],
+                salesStore: []
             },
             selectedTemplate: {
                 myAccountsOnly: true,
@@ -421,7 +423,8 @@ describe('Unit: filter service', function() {
                 tradeChannel: [],
                 trend: '',
                 valuesVsTrend: '',
-                zipCode: []
+                zipCode: [],
+                salesStore: []
             },
             simpleDistributionType: false,
             timePeriod: [

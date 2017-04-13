@@ -191,6 +191,10 @@ module.exports = /*  @ngInject */
             arr.splice(i, 1);
             filtersService.model['predictedImpact' + chip.name.split(' Impact')[0]] = false;
             break;
+          } else if (chip.type === 'salesStatus' && arr[i] === chip.name.split(' ')[0]) {
+            arr.splice(i, 1);
+            filtersService.model['salesStatus' + chip.name.split(' ')[0]] = false;
+            break;
           } else if (chip.type === 'cbbdChain' && arr[i] === $filter('titlecase')(chip.name.split(' ')[0])) {
             arr.splice(i, 1);
             filtersService.model['cbbdChain' + $filter('titlecase')(chip.name.split(' ')[0])] = false;

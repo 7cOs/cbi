@@ -350,6 +350,7 @@ module.exports = /*  @ngInject */
           case 'state':
           case 'productType':
           case 'tradeChannel':
+          case 'salesStatus':
           default:
             action = chip.type.replace(/([A-Z])/g, ' $1').toUpperCase();
             label = chip.name.toUpperCase();

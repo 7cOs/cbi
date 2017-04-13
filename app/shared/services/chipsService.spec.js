@@ -193,6 +193,18 @@ describe('[Services.chipsService]', function() {
         expect(filtersService.model.selected.simpleDistributionType).toEqual(false);
       });
 
+      it('should remove selected filter and update filter model given "salesStatus" chip', function() {
+        filtersService.model.selected.salesStatus = ['Unsold', 'Sold'];
+        filtersService.model.salesStatusSold = true;
+        filtersService.model.salesStatusUnsold = true;
+
+        chipsService.removeFromFilterService({type: 'salesStatus', name: 'Sold'});
+
+        expect(filtersService.model.selected.salesStatus).toEqual(['Unsold']);
+        expect(filtersService.model.salesStatusSold).toEqual(false);
+        expect(filtersService.model.salesStatusUnsold).toEqual(true);
+      });
+
       it('should remove selected filter and update filter model given "segmentation" chip', function() {
         filtersService.model.selected.segmentation = ['A', 'B'];
         filtersService.model.storeSegmentationA = true;

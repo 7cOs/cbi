@@ -99,6 +99,21 @@ describe('[Services.apiHelperService]', function() {
     expect(result).toEqual(resultExpectation);
   });
 
+  it('[request] it should return opportunities specific formatting when type = opportunities and unsoldstore is selected', function() {
+    var mockObj = {
+      'masterSKU': '112154',
+      'storeStatus': ['UnSold'],
+      'premiseType': 'on',
+      'type': 'opportunities'
+    };
+    var url = 'http://localhost:3000/';
+    var resultExpectation = url + '?limit=20&ignoreDismissed=true&sort=&offset=0&unsold=true&filter=masterSKU%3A112154%2CopportunityType%3AAT_RISK%2CpremiseType%3Aon%2C';
+
+    var result = APIHelper.request(url, mockObj);
+
+    expect(result).toEqual(resultExpectation);
+  });
+
   it('[request] it should set archived=true for target lists', function() {
     var mockObj = {
       'type': 'targetLists'
@@ -110,6 +125,7 @@ describe('[Services.apiHelperService]', function() {
 
     expect(result).toEqual(resultExpectation);
   });
+
   it('[request] it should set query params for brandsnapshot', function() {
     var mockObj = {
       'type': 'brandSnapshot',
