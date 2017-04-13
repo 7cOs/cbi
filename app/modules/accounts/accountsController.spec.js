@@ -1821,4 +1821,41 @@ describe('Unit: accountsController', function() {
        expect(ctrl.currentTopBottomFilters.distributors).toEqual('');
      });
    });
+
+  describe('[Method] canOpenNote', function() {
+    it('should return false if we are not viewing a distributor', function() {
+      ctrl.showXDistributor = false;
+      ctrl.showXChain       = false;
+      ctrl.showXStore       = false;
+      expect(ctrl.canOpenNote()).toEqual(false);
+    });
+
+    it('should return true if we are viewing a distributor', function() {
+      ctrl.showXDistributor = true;
+      ctrl.showXChain       = false;
+      ctrl.showXStore       = false;
+      expect(ctrl.canOpenNote()).toEqual(true);
+    });
+
+    it('should return false if we are viewing a distributor that is a chain', function() {
+      ctrl.showXDistributor = true;
+      ctrl.showXChain       = true;
+      ctrl.showXStore       = false;
+      expect(ctrl.canOpenNote()).toEqual(false);
+    });
+
+    it('should return true if we are viewing a store of a distributor', function() {
+      ctrl.showXDistributor = true;
+      ctrl.showXChain       = false;
+      ctrl.showXStore       = true;
+      expect(ctrl.canOpenNote()).toEqual(true);
+    });
+
+    it('should return true if we are viewing a store of a chain of a distributor', function() {
+      ctrl.showXDistributor = true;
+      ctrl.showXChain       = true;
+      ctrl.showXStore       = true;
+      expect(ctrl.canOpenNote()).toEqual(true);
+    });
+  });
 });
