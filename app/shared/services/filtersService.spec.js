@@ -394,7 +394,7 @@ describe('Unit: filter service', function() {
                 trend: '',
                 valuesVsTrend: '',
                 zipCode: [],
-                salesStore: []
+                salesStatus: []
             },
             selectedTemplate: {
                 myAccountsOnly: true,
@@ -424,7 +424,7 @@ describe('Unit: filter service', function() {
                 trend: '',
                 valuesVsTrend: '',
                 zipCode: [],
-                salesStore: []
+                salesStatus: []
             },
             simpleDistributionType: false,
             timePeriod: [
