@@ -118,6 +118,12 @@
     position: relative;
     cursor: default;
 
+    .target-list-element {
+      &:hover {
+        cursor: pointer;
+      }
+    }
+
     .md-bar {
       background-color: $yellow;
     }
@@ -131,6 +137,14 @@
       padding-left: 0;
       padding-right: 0;
       width: calc(100% - 50px);
+
+      &:hover {
+        cursor: pointer;
+      }
+
+      div {
+        pointer-events: none;
+      }
     }
 
     .stats > .accent {
