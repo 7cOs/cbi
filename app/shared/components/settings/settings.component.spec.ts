@@ -1,5 +1,5 @@
 import { SettingsComponent } from './settings.component';
-import { inject, TestBed } from '@angular/core/testing';
+import { inject, TestBed, fakeAsync, flushMicrotasks } from '@angular/core/testing';
 import * as Chance from 'chance';
 let chance = new Chance();
 
@@ -13,12 +13,27 @@ describe('SettingsComponent', () => {
     }
   };
 
+  let mockVersionService = {
+    data: {
+      version: chance.string(),
+      hash: chance.string()
+    },
+
+    getVersion: function() {
+      return Promise.resolve(this.data);
+    }
+  };
+
   beforeEach(() => TestBed.configureTestingModule({
     providers: [
       SettingsComponent,
       {
         provide: 'userService',
         useValue: mockUserService
+      },
+      {
+        provide: 'versionService',
+        useValue: mockVersionService
       }
     ]
   }));
@@ -28,4 +43,10 @@ describe('SettingsComponent', () => {
     expect(component.firstName).toBe(mockUserService.model.currentUser.firstName);
     expect(component.lastName).toBe(mockUserService.model.currentUser.lastName);
   }));
+
+  it('should get version hash and number from on init', fakeAsync(() => inject([ SettingsComponent ], (component: SettingsComponent) => {
+    flushMicrotasks();
+    expect(component.versionNumber).toBe(mockVersionService.data.version);
+    expect(component.versionHash).toBe(mockVersionService.data.hash);
+  })));
 });

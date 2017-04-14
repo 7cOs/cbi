@@ -99,6 +99,40 @@ describe('[Services.apiHelperService]', function() {
     expect(result).toEqual(resultExpectation);
   });
 
+  it('[request] should return opportunities specific formatting when store format of hispanic is selected', function() {
+    const mockObject = {
+      masterSKU: '112154',
+      opportunityType: ['At Risk'],
+      premiseType: 'on',
+      simpleDistributionType: true,
+      type: 'opportunities',
+      storeFormat: 'HISPANIC'
+    };
+    const url = 'http://localhost:3000/';
+    const resultExpectation = url + '?limit=20&ignoreDismissed=true&sort=&offset=0&brandOpportunityType=true&hispanicMarketType=HISPANIC&filter=masterSKU%3A112154%2CopportunityType%3AAT_RISK%2CpremiseType%3Aon%2C';
+
+    const result = APIHelper.request(url, mockObject);
+
+    expect(result).toEqual(resultExpectation);
+  });
+
+  it('[request] should return opportunities specific formatting when store format of general market is selected', function() {
+    const mockObject = {
+      masterSKU: '112154',
+      opportunityType: ['At Risk'],
+      premiseType: 'on',
+      simpleDistributionType: true,
+      type: 'opportunities',
+      storeFormat: 'GM'
+    };
+    const url = 'http://localhost:3000/';
+    const resultExpectation = url + '?limit=20&ignoreDismissed=true&sort=&offset=0&brandOpportunityType=true&hispanicMarketType=GM&filter=masterSKU%3A112154%2CopportunityType%3AAT_RISK%2CpremiseType%3Aon%2C';
+
+    const result = APIHelper.request(url, mockObject);
+
+    expect(result).toEqual(resultExpectation);
+  });
+
   it('[request] it should set archived=true for target lists', function() {
     var mockObj = {
       'type': 'targetLists'

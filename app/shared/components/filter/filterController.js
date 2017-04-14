@@ -341,6 +341,11 @@ module.exports = /*  @ngInject */
             label = chip.name.toUpperCase();
             break;
 
+          case 'storeFormat':
+            action = 'STORE FORMAT';
+            label = chip.name.toUpperCase();
+            break;
+
           // camelCase to upper case action, upper case label
           case 'premiseType':
           case 'opportunityStatus':

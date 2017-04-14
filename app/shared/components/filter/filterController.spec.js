@@ -523,95 +523,94 @@ describe('Unit: filter controller (opportunities)', function() {
     expect(filtersService.model.selected.opportunityType).toEqual(['Non-Buy']);
   });
 
-  it('send filter analytics', function() {
+  it('[sendFilterAnalytics] should send filter analytics based on data in each chip', function() {
+    const filterChips = {
+      accountChip: {
+        name: 'Account',
+        type: 'account',
+        id: 'Walmart',
+        applied: true,
+        removable: false
+      },
+      myAccountsChip: {
+        name: 'My Accounts Only',
+        type: 'myAccountsOnly',
+        applied: true,
+        removable: false
+      },
+      simpleDistChip: {
+        name: 'Simple',
+        type: 'simpleDistributionType',
+        applied: true,
+        removable: false
+      },
+      cbbdChip: {
+        name: 'CBBD Contact',
+        type: 'contact',
+        id: 'Mr. Simpson',
+        applied: true,
+        removable: false
+      },
+      masterSkuChip: {
+        name: 'Master SKU',
+        type: 'masterSKU',
+        id: '228',
+        applied: true,
+        removable: false
+      },
+      predictedImpactChip: {
+        name: 'High',
+        type: 'impact',
+        applied: true,
+        removable: false
+      },
+      cbbdChainChip: {
+        name: 'Store Type',
+        type: 'cbbdChain',
+        applied: true,
+        removable: false
+      },
+      segmentationChip: {
+        name: 'A',
+        type: 'segmentation',
+        applied: true,
+        removable: false
+      },
+      cityChip: {
+        name: 'Houston',
+        type: 'city',
+        applied: true,
+        removable: false
+      },
+      storeFormatAll: {
+        name: 'All Formats',
+        type: 'storeFormat',
+        applied: true,
+        removable: false
+      },
+      storeFormatHispanic: {
+        name: 'Hispanic',
+        type: 'storeFormat',
+        applied: true,
+        removable: true
+      },
+      storeFormatGM: {
+        name: 'General Market',
+        type: 'storeFormat',
+        applied: true,
+        removable: true
+      }
+    };
 
-    var accountChip =
-      {
-        'name': 'Account',
-        'type': 'account',
-        'id': 'Walmart',
-        'applied': true,
-        'removable': false
-      };
+    chipsService.model = [];
 
-    var myAccountsChip =
-      {
-        'name': 'My Accounts Only',
-        'type': 'myAccountsOnly',
-        'applied': true,
-        'removable': false
-      };
-
-    var simpleDistChip =
-      {
-        'name': 'Simple',
-        'type': 'simpleDistributionType',
-        'applied': true,
-        'removable': false
-      };
-
-    var cbbdChip =
-      {
-        'name': 'CBBD Contact',
-        'type': 'contact',
-        'id': 'Mr. Simpson',
-        'applied': true,
-        'removable': false
-      };
-
-    var masterSkuChip =
-      {
-        'name': 'Master SKU',
-        'type': 'masterSKU',
-        'id': '228',
-        'applied': true,
-        'removable': false
-      };
-
-    var predictedImpactChip =
-      {
-        'name': 'High',
-        'type': 'impact',
-        'applied': true,
-        'removable': false
-      };
-
-    var cbbdChainChip =
-      {
-        'name': 'Store Type',
-        'type': 'cbbdChain',
-        'applied': true,
-        'removable': false
-      };
-
-    var segmentationChip =
-      {
-        'name': 'A',
-        'type': 'segmentation',
-        'applied': true,
-        'removable': false
-      };
-
-    var cityChip =
-      {
-        'name': 'Houston',
-        'type': 'city',
-        'applied': true,
-        'removable': false
-      };
-
-    chipsService.model.push(myAccountsChip);
-    chipsService.model.push(simpleDistChip);
-    chipsService.model.push(cbbdChip);
-    chipsService.model.push(masterSkuChip);
-    chipsService.model.push(predictedImpactChip);
-    chipsService.model.push(accountChip);
-    chipsService.model.push(cbbdChainChip);
-    chipsService.model.push(segmentationChip);
-    chipsService.model.push(cityChip);
+    for (let chip in filterChips) {
+      chipsService.model.push(filterChips[chip]);
+    }
 
     spyOn($analytics, 'eventTrack');
     ctrl.applyFilters();
+
     expect($analytics.eventTrack).toHaveBeenCalledWith('ACCOUNT SCOPE', { category: 'Filters', label: 'MY ACCOUNTS ONLY' });
     expect($analytics.eventTrack).toHaveBeenCalledWith('DISTRIBUTION TYPE', { category: 'Filters', label: 'SIMPLE' });
     expect($analytics.eventTrack).toHaveBeenCalledWith('CBBD CONTACT', { category: 'Filters', label: 'Mr. Simpson' });
@@ -621,7 +620,9 @@ describe('Unit: filter controller (opportunities)', function() {
     expect($analytics.eventTrack).toHaveBeenCalledWith('STORE TYPE', { category: 'Filters', label: 'STORE TYPE' });
     expect($analytics.eventTrack).toHaveBeenCalledWith('STORE SEGMENTATION', { category: 'Filters', label: 'A' });
     expect($analytics.eventTrack).toHaveBeenCalledWith('CITY', { category: 'Filters', label: 'HOUSTON' });
-
+    expect($analytics.eventTrack).toHaveBeenCalledWith('STORE FORMAT', { category: 'Filters', label: 'ALL FORMATS' });
+    expect($analytics.eventTrack).toHaveBeenCalledWith('STORE FORMAT', { category: 'Filters', label: 'HISPANIC' });
+    expect($analytics.eventTrack).toHaveBeenCalledWith('STORE FORMAT', { category: 'Filters', label: 'GENERAL MARKET' });
   });
 
   describe('[method.saveFilter]', function() {

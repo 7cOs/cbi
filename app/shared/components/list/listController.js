@@ -9,6 +9,7 @@ module.exports = /*  @ngInject */
 
     // Initial variables
     var vm = this;
+    const maxOpportunities = 1000;
 
     // Services
     vm.opportunitiesService = opportunitiesService;
@@ -89,6 +90,8 @@ module.exports = /*  @ngInject */
     vm.vsYAGrowthPercent = vsYAGrowthPercent;
     vm.getStoreToBePassedToAcct = getStoreToBePassedToAcct;
     vm.checkIfLinkDisabled = checkIfLinkDisabled;
+    vm.remainingOpportunitySpots = remainingOpportunitySpots;
+    vm.handleAddToTargetList = handleAddToTargetList;
 
     // Custom Headers for CSV export
     vm.csvHeader = [
@@ -744,6 +747,37 @@ module.exports = /*  @ngInject */
           break;
       }
       return result;
+    }
+
+    function remainingOpportunitySpots(currentOpps) {
+      const  remainingOpps = maxOpportunities - currentOpps;
+      return remainingOpps > 0 ? remainingOpps : 0;
+    }
+
+    function handleAddToTargetList(ev, targetList) {
+      const usedOpps = targetList.opportunitiesSummary.opportunitiesCount;
+      const remainingOpps = remainingOpportunitySpots(usedOpps);
+      const totalOpps = usedOpps + this.selected.length;
+      const hasRemainingOpps = totalOpps <= maxOpportunities;
+      if (hasRemainingOpps) {
+        vm.addToTargetList(targetList.id);
+      } else {
+        var parentEl = angular.element(document.body);
+        $mdDialog.show({
+          clickOutsideToClose: false,
+          parent: parentEl,
+          scope: $scope.$new(),
+          targetEvent: ev,
+          locals: {
+            remainingOpps: remainingOpps
+          },
+          template: require('./modal-target-list-opportunities-exceeded.pug'),
+          controller: ['remainingOpps', function(remainingOpps) {
+            this.remainingOpps = remainingOpps;
+          }],
+          controllerAs: 'oppsModalCtrl'
+        });
+      }
     }
 
     // ***************

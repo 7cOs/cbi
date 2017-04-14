@@ -177,9 +177,11 @@ describe('Unit: filter service', function() {
                 tradeChannel: [],
                 trend: '',
                 valuesVsTrend: '',
-                zipCode: []
+                zipCode: [],
+                storeFormat: ''
             },
             simpleDistributionType: false,
+            storeFormat: '',
             timePeriod: [
                 {name: 'Current Month to Date',
                 value: 'year'},
@@ -392,7 +394,8 @@ describe('Unit: filter service', function() {
                 tradeChannel: [],
                 trend: '',
                 valuesVsTrend: '',
-                zipCode: []
+                zipCode: [],
+                storeFormat: ''
             },
             selectedTemplate: {
                 myAccountsOnly: true,
@@ -421,9 +424,11 @@ describe('Unit: filter service', function() {
                 tradeChannel: [],
                 trend: '',
                 valuesVsTrend: '',
-                zipCode: []
+                zipCode: [],
+                storeFormat: ''
             },
             simpleDistributionType: false,
+            storeFormat: '',
             timePeriod: [
                 {name: 'Current Month to Date',
                 value: 'year'},
