@@ -110,9 +110,17 @@ list {
   padding: 2em 0 2em 15px;
   width: 35px;
 
+  .indeterminatable-checkbox .md-icon {
+    border-color: $blue;
+    color: $white;
+    background-color: $blue;
+    box-shadow: 0 2px 0 $gray-1;
+  }
+
   &.placeholder {
     background: transparent;
-    padding-bottom: 0.5em;
+    height: 28px;
+    padding: 0 0 0 15px;
   }
 
   + .checkbox-sibling {

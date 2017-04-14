@@ -23,7 +23,7 @@ module.exports = /*  @ngInject */
     vm.depletionsChevron = false;
     vm.disabledMessage = '';
     vm.expandedOpportunities = 0;
-    vm.isSelectAllActivated = false;
+    vm.isAllOpportunitiesSelected = false;
     vm.memoData = {};
     vm.memoError = false;
     vm.memoType = '';
@@ -225,7 +225,7 @@ module.exports = /*  @ngInject */
           }
           // reset selected
           vm.selected = [];
-          vm.isSelectAllActivated = true;
+          vm.isAllOpportunitiesSelected = false; // TODO: Check
           vm.toggleSelectAllStores();
           vm.selected = [];
         }, function(err) {
@@ -543,6 +543,11 @@ module.exports = /*  @ngInject */
         if (obj.selected === true) { groupedCount++; }
       }
       parent.selectedOpportunities = groupedCount;
+
+      if (parent.selectedOpportunities === parent.groupedOpportunities.length) {
+        updateSelectAllState();
+      }
+
       getTargetLists();
     }
 
@@ -622,34 +627,46 @@ module.exports = /*  @ngInject */
     }
 
     /**
-     * Toggles selection of all opportunites in the store and the store itself
+     * Toggles selection of all opportunites in all the stores
      */
     function toggleSelectAllStores () {
       angular.forEach(opportunitiesService.model.opportunities, function(store, key) {
-        if (vm.isSelectAllActivated) {
+        if (vm.isAllOpportunitiesSelected) {
           deselectAllOpportunitiesInStore(store, vm.selected);
         } else {
           selectAllOpportunitiesInStore(store, vm.selected);
         }
       });
 
-      if (vm.isSelectAllActivated) {
+      if (vm.isAllOpportunitiesSelected) {
         vm.selected = [];
       }
-      vm.isSelectAllActivated = !vm.isSelectAllActivated;
+      vm.isAllOpportunitiesSelected = !vm.isAllOpportunitiesSelected;
     }
 
     /**
-     * Toggles selection of all opportunites in the store and the store itself
+     * Toggles selection of all opportunites in all the stores
      * @param {object} store Store that needs to be toggled
      * @param {Array} currentSelectionList Array of all currently selected items
      */
     function toggleOpportunitiesInStores (store, currentSelectionList) {
-      vm.isSelectAllActivated = false;
       if (store.selectedOpportunities === store.groupedOpportunities.length) {
         deselectAllOpportunitiesInStore(store, currentSelectionList);
+        vm.isAllOpportunitiesSelected = false;
       } else {
         selectAllOpportunitiesInStore(store, currentSelectionList);
+        updateSelectAllState();
+      }
+    }
+
+    function updateSelectAllState() {
+      var selectedStores = 0;
+      angular.forEach(opportunitiesService.model.opportunities, function(store, key) {
+        if (store.selectedOpportunities === store.groupedOpportunities.length) { selectedStores++; }
+      });
+
+      if (selectedStores === opportunitiesService.model.opportunities.length) {
+        vm.isAllOpportunitiesSelected = true;
       }
     }
 

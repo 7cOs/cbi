@@ -36,14 +36,16 @@
             p Without Rationale
       button.btn-action(ng-disabled="list.selected < 1" ng-click="list.removeOpportunity()" ng-if="list.showRemoveButton === true && !list.targetListService.model.currentList.archived") Remove
 
-button.icon.select-all(ng-click="list.toggleSelectAllStores()" ng-disabled="!list.hasOpportunities()") {{!list.isSelectAllActivated ? 'Select All' : 'Un-Select All'}}
 button.icon.narrow-icon.expand-all(ng-click="list.accordion.expandAll()" ng-disabled="list.allOpportunitiesExpanded()" analytics-on="click" analytics-event="Expand Store" analytics-category="Opportunities" analytics-label="All") Expand All
 button.icon.narrow-icon.collapse-all(ng-click="list.accordion.collapseAll()" ng-disabled="list.noOpportunitiesExpanded()") Collapse All
 p.list-disabled-message {{::list.disabledMessage}}
 
 v-accordion.styled-list(multiple="" id="opportunities" control="list.accordion" onexpand="list.expandCallback(item)" oncollapse="list.collapseCallback(item)" column='12' )
   div.header-row(row ng-class="{'header-disabled': list.filtersService.model.appliedFilter.pagination.totalOpportunities === 0}")
-    div.checkbox-wrapper.placeholder
+    div.checkbox-wrapper.placeholder(ng-click="list.toggleSelectAllStores()" ng-disabled="!list.hasOpportunities()")
+      md-checkbox(ng-if="list.hasOpportunities() && list.selected.length === 0" aria-label="Select All" ng-checked="false")
+      div.indeterminatable-checkbox(ng-if="list.hasOpportunities() && list.selected.length > 0")
+        md-checkbox(aria-label="Select All" ng-checked="list.isAllOpportunitiesSelected" md-indeterminate="!list.isAllOpportunitiesSelected")
     div.hide-wrapper
       label
     div.checkbox-sibling(column='12')
@@ -75,8 +77,8 @@ v-accordion.styled-list(multiple="" id="opportunities" control="list.accordion" 
   v-pane.list-item(row ng-repeat="opportunity in list.opportunitiesService.model.opportunities | filter : {'dismissed': false} | orderBy : list.orderName" expanded='opportunity.isExpanded')
     .shadow-wrap.bottom
       .header-wrapper(ng-click="list.toggleOpportunitiesInStores(opportunity, list.selected)")
-        div.checkbox-wrapper(ng-click="list.toggleOpportunitiesInStores(opportunity, list.selected)")
-          md-checkbox(aria-label="Select Item" ng-click="list.toggleOpportunitiesInStores(opportunity, list.selected)" ng-checked="opportunity.selectedOpportunities === opportunity.groupedOpportunities.length")
+        div.checkbox-wrapper
+          md-checkbox(aria-label="Select Item" ng-checked="opportunity.selectedOpportunities === opportunity.groupedOpportunities.length")
         v-pane-header.checkbox-sibling(column='12' ng-click="$event.stopPropagation()" analytics-if="opportunity.isExpanded" analytics-on="click" analytics-event="Expand Store" analytics-category="Opportunities" analytics-label="{{opportunity.store.id}}")
           div(ng-class="{long: opportunity.store.name.length > 21}").cell-parent
             div.pad-cell.semi-bold(column='3') {{::opportunity.store.name | titlecase}} <span class="supporting-text" ng-if="opportunity.store.storeNumber">\#{{::opportunity.store.storeNumber | uppercase}}</span>
