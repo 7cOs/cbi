@@ -93,7 +93,7 @@ v-accordion.styled-list(multiple="" id="opportunities" control="list.accordion" 
             div(column='2')
               label.bold Store Format
               div(row)
-                div(column='12') {{::opportunity.store.hispanicMarketType}}
+                div(column='12') {{::opportunity.store.hispanicMarketType | hispanicMarketTypeFormat}}
             div(column='3').no-pad
               label.bold Distribution L90
               div(row)
