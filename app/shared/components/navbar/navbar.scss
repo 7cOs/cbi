@@ -169,6 +169,14 @@ navbar {
 
 .inner {
   padding: 8px 0;
+
+  &:hover {
+    cursor: pointer;
+
+    span a {
+      color: $dark-blue;
+    }
+  }
 }
 
 .main-nav {
@@ -250,7 +258,6 @@ navbar {
     }
   }
 
-  .top-level-menu:hover,
   .nav-sub-menu:hover {
     cursor: pointer;
   }
