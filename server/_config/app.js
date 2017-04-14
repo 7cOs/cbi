@@ -72,63 +72,6 @@ config.dir = {
   root: rootPath
 };
 
-// GULP SETTINGS
-config.gulp = {
-  browserSync: {
-    baseDir: 'public',
-    files: 'public/*',
-    // files: [ 'app/**/*.scss', 'server/**/*.*', 'app/**/*.js', 'app/**/*.pug' ],
-    // ignore: [ 'public' ],
-    open: false,
-    port: 3000,
-    reloadDelay: 500
-  },
-  src: {
-    assets: {
-      angular: {
-        css: ['./app/**/*.scss']
-      },
-      fonts: ['./app/assets/fonts/**/*.{ttf,woff,woff2,eof,svg}'],
-      img: ['./app/assets/img/**/*.jpg', './app/assets/img/**/*.jpg', './app/assets/img/**/*.png', './app/assets/img/**/*.svg'],
-      js: ['./app/**/*.js'],
-      jsMain: './app/main.js',
-      pug: {
-        templates: ['./app/**/*.pug', './app/modules/**/*.pug', '!./app/templates']
-      },
-      sass: ['./app/**/*.scss', '!./app/common/**/*.scss', './app/main.scss'],
-      sassLint: ['./app/**/*.scss', '!./app/assets/styles/lib/**/*.scss', './app/main.scss'],
-      sassMain: './app/main.scss',
-      ts: ['./app/**/*.ts']
-    },
-    app: rootPath + 'server/**/*',
-    lib: rootPath + 'lib/**/*'
-  },
-  dest: {
-    app: './public',
-    assets: {
-      angular: {
-        css: './public/app/'
-      },
-      css: './public/css/',
-      fonts: './public/assets/fonts/',
-      img: './public/assets/img/',
-      js: './public/app/',
-      jsMain: './public/app/main.min.js',
-      dir: './public/',
-      pug: {
-        templates: './public/app'
-      },
-      sass: './public/app/',
-      sassMain: './public/css/main.css',
-      ts: ['./public/app/']
-    },
-    build: './public/app',
-    dir: './public/',
-    lib: './public/lib/'
-  },
-  npm: './node_modules/'
-};
-
 // PULL IN ENVIRONMENT SETTING & APPEND TO MAIN CONFIG
 config = require(rootPath + '/server/_config/environment/' + process.env.NODE_ENV + '.js')(config);
 
