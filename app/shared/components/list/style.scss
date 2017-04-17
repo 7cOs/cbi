@@ -625,3 +625,35 @@ list {
     cursor: pointer;
   }
 }
+
+.select-all-toast-wrapper {
+  background-color: $yellow;
+  margin-left: -15px;
+  margin-right: -15px;
+  opacity: 0;
+  transition: opacity 200ms, height 200ms;
+  height: 0;
+
+  .toast-message {
+    padding-top: 7px;
+    padding-bottom: 7px;
+    height: 16px;
+    font-size: 0.87em;
+    font-weight: bold;
+    text-align: center;
+    color: $white;
+  }
+
+  &.visible {
+    opacity: 1;
+    height: 30px;
+  }
+
+  .inline-button {
+    text-decoration: underline;
+
+    &:hover {
+      cursor: pointer;
+    }
+  }
+}

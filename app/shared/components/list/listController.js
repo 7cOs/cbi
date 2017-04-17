@@ -48,6 +48,7 @@ module.exports = /*  @ngInject */
     vm.storeChevron = true;
     vm.stores = [];
     vm.undoClicked = false;
+    vm.selectAllToastVisible = false;
 
     // Expose public methods
     vm.addCollaborator = addCollaborator;
@@ -83,7 +84,8 @@ module.exports = /*  @ngInject */
     vm.showOpportunityMemoModal = showOpportunityMemoModal;
     vm.sortBy = sortBy;
     vm.submitFeedback = submitFeedback;
-    vm.toggleOpportunitiesInStores = toggleOpportunitiesInStores;
+    vm.toggleOpportunitiesInStore = toggleOpportunitiesInStore;
+    vm.selectAllOpportunities = selectAllOpportunities;
     vm.toggleSelectAllStores = toggleSelectAllStores;
     vm.updateOpportunityModel = updateOpportunityModel;
     vm.vsYAGrowthPercent = vsYAGrowthPercent;
@@ -531,6 +533,8 @@ module.exports = /*  @ngInject */
           groupedCount = 0;
 
       if (idx > -1) {
+        showSelectAllToasts(false);
+        vm.isAllOpportunitiesSelected = false;
         removeItem(item, list, idx);
       } else {
         addItem(item, list);
@@ -627,29 +631,52 @@ module.exports = /*  @ngInject */
     }
 
     /**
-     * Toggles selection of all opportunites in all the stores
+     * Check if a person already exists amongst a list of collaboraters
      */
-    function toggleSelectAllStores () {
-      angular.forEach(opportunitiesService.model.opportunities, function(store, key) {
-        if (vm.isAllOpportunitiesSelected) {
-          deselectAllOpportunitiesInStore(store, vm.selected);
-        } else {
-          selectAllOpportunitiesInStore(store, vm.selected);
-        }
-      });
-
-      if (vm.isAllOpportunitiesSelected) {
-        vm.selected = [];
-      }
-      vm.isAllOpportunitiesSelected = !vm.isAllOpportunitiesSelected;
+    function selectAllOpportunities() {
+      debugger;
     }
 
     /**
      * Toggles selection of all opportunites in all the stores
+     */
+    function toggleSelectAllStores () {
+      vm.isAllOpportunitiesSelected = !vm.isAllOpportunitiesSelected;
+
+      if (vm.isAllOpportunitiesSelected) {
+        angular.forEach(opportunitiesService.model.opportunities, function(store, key) {
+          selectAllOpportunitiesInStore(store, vm.selected);
+          showSelectAllToasts(true);
+        });
+      } else {
+        showSelectAllToasts(false);
+        vm.isAllOpportunitiesSelected = false;
+        vm.selected = [];
+
+        angular.forEach(opportunitiesService.model.opportunities, function(store, key) {
+          store.selectedOpportunities = 0;
+        });
+      }
+    }
+
+    function showSelectAllToasts(show) {
+      if (show) {
+        vm.selectAllToastVisible = true;
+
+        $timeout(function () {
+          vm.selectAllToastVisible = false;
+        }, 10000);
+      } else {
+        vm.selectAllToastVisible = false;
+      }
+    }
+
+    /**
+     * Toggles selection of all opportunites in the specified store
      * @param {object} store Store that needs to be toggled
      * @param {Array} currentSelectionList Array of all currently selected items
      */
-    function toggleOpportunitiesInStores (store, currentSelectionList) {
+    function toggleOpportunitiesInStore (store, currentSelectionList) {
       if (store.selectedOpportunities === store.groupedOpportunities.length) {
         deselectAllOpportunitiesInStore(store, currentSelectionList);
         vm.isAllOpportunitiesSelected = false;
