@@ -582,6 +582,12 @@ describe('Unit: filter controller (opportunities)', function() {
         applied: true,
         removable: false
       },
+      salesStatus: {
+        name: 'Unsold',
+        type: 'storeStatus',
+        applied: true,
+        removable: true
+      },
       storeFormatAll: {
         name: 'All Formats',
         type: 'storeFormat',
@@ -620,6 +626,7 @@ describe('Unit: filter controller (opportunities)', function() {
     expect($analytics.eventTrack).toHaveBeenCalledWith('STORE TYPE', { category: 'Filters', label: 'STORE TYPE' });
     expect($analytics.eventTrack).toHaveBeenCalledWith('STORE SEGMENTATION', { category: 'Filters', label: 'A' });
     expect($analytics.eventTrack).toHaveBeenCalledWith('CITY', { category: 'Filters', label: 'HOUSTON' });
+    expect($analytics.eventTrack).toHaveBeenCalledWith('STORE STATUS', { category: 'Filters', label: 'STORE STATUS' });
     expect($analytics.eventTrack).toHaveBeenCalledWith('STORE FORMAT', { category: 'Filters', label: 'ALL FORMATS' });
     expect($analytics.eventTrack).toHaveBeenCalledWith('STORE FORMAT', { category: 'Filters', label: 'HISPANIC' });
     expect($analytics.eventTrack).toHaveBeenCalledWith('STORE FORMAT', { category: 'Filters', label: 'GENERAL MARKET' });

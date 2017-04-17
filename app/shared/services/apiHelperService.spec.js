@@ -101,8 +101,8 @@ describe('[Services.apiHelperService]', function() {
 
   it('[request] it should return opportunities specific formatting when type = opportunities and unsoldstore is selected', function() {
     var mockObj = {
-      'type': 'opportunities',
-      'unsoldStore': 'true'
+      type: 'opportunities',
+      salesStatus: ['Unsold']
     };
     var url = 'http://localhost:3000/';
     var resultExpectation = url + '?limit=20&ignoreDismissed=true&sort=&offset=0&filter=unsoldStore%3Atrue';

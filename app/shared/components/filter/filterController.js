@@ -341,6 +341,11 @@ module.exports = /*  @ngInject */
             label = chip.name.toUpperCase();
             break;
 
+          case 'salesStatus':
+            action = 'STORE STATUS';
+            label = chip.name.toUpperCase();
+            break;
+
           case 'storeFormat':
             action = 'STORE FORMAT';
             label = chip.name.toUpperCase();
@@ -355,7 +360,6 @@ module.exports = /*  @ngInject */
           case 'state':
           case 'productType':
           case 'tradeChannel':
-          case 'salesStatus':
           default:
             action = chip.type.replace(/([A-Z])/g, ' $1').toUpperCase();
             label = chip.name.toUpperCase();
