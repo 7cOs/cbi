@@ -168,9 +168,11 @@ module.exports = /*  @ngInject */
         trend: '',
         valuesVsTrend: '',
         zipCode: [],
-        salesStatus: []
+        salesStatus: [],
+        storeFormat: ''
       },
       simpleDistributionType: false,
+      storeFormat: '',
       timePeriod: [
         {name: 'Current Month to Date',
           value: 'year'},
@@ -349,7 +351,25 @@ module.exports = /*  @ngInject */
         'accounts': 2,
         'subAccounts': 3,
         'stores': 4
-      }
+      },
+      storeFormats: [
+        {
+          name: 'All',
+          value: '',
+          chipValue: 'All Formats'
+
+        },
+        {
+          name: 'Hispanic',
+          value: 'HISPANIC',
+          chipValue: 'Hispanic'
+        },
+        {
+          name: 'General Market',
+          value: 'GM',
+          chipValue: 'General Market'
+        }
+      ]
     };
 
     var lastEndingTimePeriod = {

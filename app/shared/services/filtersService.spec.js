@@ -178,9 +178,11 @@ describe('Unit: filter service', function() {
                 trend: '',
                 valuesVsTrend: '',
                 zipCode: [],
-                salesStatus: []
+                salesStatus: [],
+                storeFormat: ''
             },
             simpleDistributionType: false,
+            storeFormat: '',
             timePeriod: [
                 {name: 'Current Month to Date',
                 value: 'year'},
@@ -394,7 +396,8 @@ describe('Unit: filter service', function() {
                 trend: '',
                 valuesVsTrend: '',
                 zipCode: [],
-                salesStatus: []
+                salesStatus: [],
+                storeFormat: ''
             },
             selectedTemplate: {
                 myAccountsOnly: true,
@@ -424,9 +427,11 @@ describe('Unit: filter service', function() {
                 trend: '',
                 valuesVsTrend: '',
                 zipCode: [],
-                salesStatus: []
+                salesStatus: [],
+                storeFormat: ''
             },
             simpleDistributionType: false,
+            storeFormat: '',
             timePeriod: [
                 {name: 'Current Month to Date',
                 value: 'year'},

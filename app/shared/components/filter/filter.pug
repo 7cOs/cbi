@@ -158,6 +158,11 @@ form.filters(column='12' ng-class="{'target-list': filter.opportunities}")
         br
         md-checkbox(ng-model="filter.filtersService.model.salesStatusUnsold" aria-label="Unsold" ng-change="filter.applyFilterArr(filter.filtersService.model.selected.salesStatus, 'Unsold', 'salesStatus', 'Unsold')") Unsold
 
+      div.nested-columns.nested-row
+        label STORE FORMAT
+        md-radio-group(ng-model="filter.filtersService.model.selected.storeFormat" ng-init="filter.filtersService.model.selected.storeFormat = ''")
+          md-radio-button.md-primary(ng-repeat="format in filter.filtersService.accountFilters.storeFormats track by format.value" aria-label="{{format.name}}" ng-value="format.value" ng-click="format.value !== '' ? filter.chipsService.updateChip('storeFormat', format.chipValue) : filter.chipsService.addChip('All Formats', 'storeFormat', true, false)") {{::format.name}}
+
     div.location-contact-opps(column='4' ng-show="filter.filtersService.model.expanded")
       label.location Location
         inline-search(type="location" placeholder="City or Zip" chosen-result="filter.filtersService.model.location" callback="filter.applyLocations(result)")

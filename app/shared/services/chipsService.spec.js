@@ -404,6 +404,30 @@ describe('[Services.chipsService]', function() {
         expect(filtersService.model.selected['state']).toEqual(['DC']);
       });
 
+      it('should reset the selected.storeFormat model and add an All Formats storeFormat chip when removing a storeFormat type chip', function() {
+        chipsService.model = [];
+        filtersService.model.selected.storeFormat = 'HISPANIC';
+        chipsService.removeFromFilterService({type: 'storeFormat', name: 'Hispanic'});
+        expect(filtersService.model.selected.storeFormat).toEqual('');
+        expect(chipsService.model).toEqual([{
+          name: 'All Formats',
+          type: 'storeFormat',
+          applied: false,
+          removable: false
+        }]);
+
+        chipsService.model = [];
+        filtersService.model.selected.storeFormat = 'GM';
+        chipsService.removeFromFilterService({type: 'storeFormat', name: 'General Market'});
+        expect(filtersService.model.selected.storeFormat).toEqual('');
+        expect(chipsService.model).toEqual([{
+          name: 'All Formats',
+          type: 'storeFormat',
+          applied: false,
+          removable: false
+        }]);
+      });
+
     });
   });
 

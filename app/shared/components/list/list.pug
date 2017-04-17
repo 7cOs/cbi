@@ -89,34 +89,11 @@ v-accordion.styled-list(multiple="" id="opportunities" control="list.accordion" 
       v-pane-content(column='12' class="products" ng-class="{'open' : open}")
         .shadow-wrap.top
           .hero-row(row)
-            div(column='3').pad-cell.brand-icons
-              // div
-                img(ng-if='list.displayBrandIcon(opportunity.brands, "corona extra")' src='assets/img/brands/brand-lg-coronaextra.svg')
-                img(ng-if='list.displayBrandIcon(opportunity.brands, "corona light")' src='assets/img/brands/brand-lg-coronalite.svg')
-                img(ng-if='list.displayBrandIcon(opportunity.brands, "modelo especial")' src='assets/img/brands/brand-lg-modelo.svg')
-                img(ng-if='list.displayBrandIcon(opportunity.brands, "modelo chelada")' src='assets/img/brands/brand-lg-modelochelada.svg')
-                img(ng-if='list.displayBrandIcon(opportunity.brands, "modelo light")' src='assets/img/brands/brand-lg-modelolite.svg')
-                img(ng-if='list.displayBrandIcon(opportunity.brands, "negra modelo")' src='assets/img/brands/brand-lg-negramodelo.svg')
-                img(ng-if='list.displayBrandIcon(opportunity.brands, "pacifico")' src='assets/img/brands/brand-lg-pacifico.svg')
-                img(ng-if='list.displayBrandIcon(opportunity.brands, "pacifico light")' src='assets/img/brands/brand-lg-pacificolite.svg')
-                img(ng-if='list.displayBrandIcon(opportunity.brands, "tecate")' src='assets/img/brands/brand-lg-tecate.svg')
-                img(ng-if='list.displayBrandIcon(opportunity.brands, "victoria")' src='assets/img/brands/brand-lg-victoria.svg')
-                img(ng-if='list.displayBrandIcon(opportunity.brands, "ballast point")' src='assets/img/brands/brand-lg-ballastpoint.svg')
-                img(ng-if='list.displayBrandIcon(opportunity.brands, "unknown")' src='assets/img/brands/brand-lg-unknown.svg')
-              // div.small-icons
-                img(ng-if='!list.displayBrandIcon(opportunity.brands, "corona extra")' src='assets/img/brands/brand-sm-coronaextra.svg')
-                img(ng-if='!list.displayBrandIcon(opportunity.brands, "corona light")' src='assets/img/brands/brand-sm-coronalite.svg')
-                img(ng-if='!list.displayBrandIcon(opportunity.brands, "modelo especial")' src='assets/img/brands/brand-sm-modelo.svg')
-                img(ng-if='!list.displayBrandIcon(opportunity.brands, "modelo chelada")' src='assets/img/brands/brand-sm-modelochelada.svg')
-                img(ng-if='!list.displayBrandIcon(opportunity.brands, "modelo light")' src='assets/img/brands/brand-sm-modelolite.svg')
-                img(ng-if='!list.displayBrandIcon(opportunity.brands, "negra modelo")' src='assets/img/brands/brand-sm-negramodelo.svg')
-                img(ng-if='!list.displayBrandIcon(opportunity.brands, "pacifico")' src='assets/img/brands/brand-sm-pacifico.svg')
-                img(ng-if='!list.displayBrandIcon(opportunity.brands, "pacifico light")' src='assets/img/brands/brand-sm-pacificolite.svg')
-                img(ng-if='!list.displayBrandIcon(opportunity.brands, "tecate")' src='assets/img/brands/brand-sm-tecate.svg')
-                img(ng-if='!list.displayBrandIcon(opportunity.brands, "victoria")' src='assets/img/brands/brand-sm-victoria.svg')
-                img(ng-if='!list.displayBrandIcon(opportunity.brands, "ballast point")' src='assets/img/brands/brand-sm-ballastpoint.svg')
-                img(ng-if='!list.displayBrandIcon(opportunity.brands, "unknown")' src='assets/img/brands/brand-sm-unknown.svg')
-
+            div(column='1').pad-cell.brand-icons
+            div(column='2')
+              label.bold Store Format
+              div(row)
+                div(column='12') {{::opportunity.store.hispanicMarketType | hispanicMarketTypeFormat}}
             div(column='3').no-pad
               label.bold Distribution
               div(ng-if="opportunity.store.unsold === 'Y'") Unsold Store
