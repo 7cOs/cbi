@@ -99,13 +99,39 @@ describe('[Services.apiHelperService]', function() {
     expect(result).toEqual(resultExpectation);
   });
 
-  it('[request] it should return opportunities specific formatting when type = opportunities and unsoldstore is selected', function() {
+  it('[request] it should return opportunities specific formatting when type = opportunities and unsold store is selected', function() {
     var mockObj = {
       type: 'opportunities',
       salesStatus: ['Unsold']
     };
     var url = 'http://localhost:3000/';
-    var resultExpectation = url + '?limit=20&ignoreDismissed=true&sort=&offset=0&filter=unsoldStore%3Atrue';
+    var resultExpectation = url + '?limit=20&ignoreDismissed=true&sort=&offset=0&unsoldStore=true&filter=';
+
+    var result = APIHelper.request(url, mockObj);
+
+    expect(result).toEqual(resultExpectation);
+  });
+
+  it('[request] it should return opportunities specific formatting when type = opportunities and sold store is selected', function() {
+    var mockObj = {
+      type: 'opportunities',
+      salesStatus: ['Sold']
+    };
+    var url = 'http://localhost:3000/';
+    var resultExpectation = url + '?limit=20&ignoreDismissed=true&sort=&offset=0&unsoldStore=false&filter=';
+
+    var result = APIHelper.request(url, mockObj);
+
+    expect(result).toEqual(resultExpectation);
+  });
+
+  it('[request] it should return opportunities specific formatting when type = opportunities and both sold & unsold store is selected', function() {
+    var mockObj = {
+      type: 'opportunities',
+      salesStatus: ['Unsold','Sold']
+    };
+    var url = 'http://localhost:3000/';
+    var resultExpectation = url + '?limit=20&ignoreDismissed=true&sort=&offset=0&unsoldStore=true&filter=';
 
     var result = APIHelper.request(url, mockObj);
 
