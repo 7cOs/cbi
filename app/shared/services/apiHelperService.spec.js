@@ -131,7 +131,7 @@ describe('[Services.apiHelperService]', function() {
       salesStatus: ['Unsold','Sold']
     };
     var url = 'http://localhost:3000/';
-    var resultExpectation = url + '?limit=20&ignoreDismissed=true&sort=&offset=0&unsoldStore=true&filter=';
+    var resultExpectation = url + '?limit=20&ignoreDismissed=true&sort=&offset=0&filter=';
 
     var result = APIHelper.request(url, mockObj);
 
