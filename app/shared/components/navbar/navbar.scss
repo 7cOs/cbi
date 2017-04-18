@@ -226,6 +226,10 @@ navbar {
 
         .sub-menu {
 
+          &:hover {
+            cursor: pointer;
+          }
+
           a {
             font-weight: $semibold;
             font-size: 1em;
