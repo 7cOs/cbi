@@ -96,8 +96,8 @@ v-accordion.styled-list(multiple="" id="opportunities" control="list.accordion" 
                 div(column='12') {{::opportunity.store.hispanicMarketType | hispanicMarketTypeFormat}}
             div(column='3').no-pad
               label.bold Distribution
-              div(ng-if="opportunity.store.unsold === 'Y'") Unsold Store
-              div(ng-if="opportunity.store.unsold !== 'Y'")
+              div(ng-if="opportunity.store.unsold") Unsold Store
+              div(ng-if="!opportunity.store.unsold")
                 div(row)
                   div(column='6')
                     div(row)
