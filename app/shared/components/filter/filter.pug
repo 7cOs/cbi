@@ -145,16 +145,16 @@ form.filters(column='12' ng-class="{'target-list': filter.opportunities}")
       md-checkbox(ng-model="filter.filtersService.model.storeSegmentationC" aria-label="Store Segmentation C" ng-change="filter.applyFilterArr(filter.filtersService.model.selected.segmentation, 'C', 'segmentation', 'Segment C')") C
 
       div.nested-columns.nested-row
-       .tooltip-wrap
-        label Store Status
-          .tooltip
-            img(src="../../../assets/img/icons/help-tooltip.svg")
-            md-tooltip(md-direction="bottom")
-              label Filter Set
-              h3 Store Status
-              p #[strong UnSold Store:] Store with no CBBD depletions within L365 and a Beer License
-        md-checkbox(ng-model="filter.filtersService.model.salesStatusSold" aria-label="Sold" ng-change="filter.applyFilterArr(filter.filtersService.model.selected.salesStatus, 'Sold', 'salesStatus', 'Sold')") Sold
-       md-checkbox(ng-model="filter.filtersService.model.salesStatusUnsold" aria-label="Unsold" ng-change="filter.applyFilterArr(filter.filtersService.model.selected.salesStatus, 'Unsold', 'salesStatus', 'Unsold')") Unsold
+        .tooltip-wrap
+          label Store Status
+            .tooltip
+              img(src="../../../assets/img/icons/help-tooltip.svg")
+              md-tooltip(md-direction="bottom")
+                label Filter Set
+                h3 Store Status
+                p #[strong UnSold Store:] Store with no CBBD depletions within L365 and a Beer License
+          md-checkbox(ng-model="filter.filtersService.model.salesStatusSold" aria-label="Sold" ng-change="filter.applyFilterArr(filter.filtersService.model.selected.salesStatus, 'Sold', 'salesStatus', 'Sold')") Sold
+        md-checkbox(ng-model="filter.filtersService.model.salesStatusUnsold" aria-label="Unsold" ng-change="filter.applyFilterArr(filter.filtersService.model.selected.salesStatus, 'Unsold', 'salesStatus', 'Unsold')") Unsold
 
       div.nested-columns.nested-row
         label STORE FORMAT
