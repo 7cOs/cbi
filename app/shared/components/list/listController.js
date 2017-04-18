@@ -24,6 +24,7 @@ module.exports = /*  @ngInject */
     vm.disabledMessage = '';
     vm.expandedOpportunities = 0;
     vm.isAllOpportunitiesSelected = false;
+    vm.isAllOpportunitiesInPageSelected = false;
     vm.memoData = {};
     vm.memoError = false;
     vm.memoType = '';
@@ -182,57 +183,79 @@ module.exports = /*  @ngInject */
      */
     function addToTargetList(listId) {
       if (listId && vm.selected.length > 0) {
+        loaderService.openLoader(true);
+
+        let opportunityIdsPromise = opportunityIdsToCopy();
+        opportunityIdsPromise.then((opportunityIds) => {
+          targetListService.addTargetListOpportunities(listId, opportunityIds).then(function(data) {
+            updateCopiedOpportunities();
+            vm.toggleSelectAllStores(false);
+
+            loaderService.closeLoader();
+
+            toastService.showToast('copied', opportunityIds);
+          }, function(err) {
+            loaderService.closeLoader();
+            console.log('Error adding these ids: ', opportunityIds, ' Responded with error: ', err);
+          });
+        });
+      }
+    }
+
+    function opportunityIdsToCopy() {
+      var opportunityIdsPromise = $q.defer();
+
+      if (vm.isAllOpportunitiesSelected) {
+        opportunitiesService.getAllOpportunitiesIDs().then((opportunityIds) => {
+          opportunityIdsPromise.resolve(opportunityIds);
+        });
+      } else {
         var opportunityIds = [];
+
         for (var i = 0; i < vm.selected.length; i++) {
           opportunityIds.push(vm.selected[i].id);
         }
 
-        targetListService.addTargetListOpportunities(listId, opportunityIds).then(function(data) {
-          toastService.showToast('copied', opportunityIds);
+        opportunityIdsPromise.resolve(opportunityIds);
+      }
 
-          // for each selected item
-          for (i = 0; i < vm.selected.length; i++) {
-            var breaking = false;
+      return opportunityIdsPromise.promise;
+    }
 
-            if (vm.selected[i].status !== 'TARGETED') {
-              // find opporuntities that were changed
-              for (var j = 0; j < opportunitiesService.model.opportunities.length; j++) {
-                for (var k = 0; k < opportunitiesService.model.opportunities[j].groupedOpportunities.length; k++) {
-                  if (opportunitiesService.model.opportunities[j].groupedOpportunities[k].id === vm.selected[i].id) {
-                    if (opportunitiesService.model.opportunities[j].groupedOpportunities[k].impact === 'H') {
-                      opportunitiesService.model.opportunities[j].store.highImpactOpportunityCount--;
-                    }
+    function updateCopiedOpportunities() {
+      for (var i = 0; i < vm.selected.length; i++) {
+        var breaking = false;
 
-                    // remove from opportunities model if open is selected, otherwise just change status
-                    if (filtersService.model.opportunityStatusOpen && filtersService.model.opportunityStatusOpen === true) {
-                      opportunitiesService.model.opportunities[j].groupedOpportunities.splice(k, 1);
-                      filtersService.model.appliedFilter.pagination.totalOpportunities--;
-                    } else {
-                      opportunitiesService.model.opportunities[j].groupedOpportunities[k].status = 'TARGETED';
-                    }
-
-                    if (opportunitiesService.model.opportunities[j].groupedOpportunities.length === 0) {
-                      opportunitiesService.model.opportunities.splice(j, 1);
-                      filtersService.model.appliedFilter.pagination.totalStores--;
-                    }
-
-                    // break loop after needle is found to save on performance
-                    breaking = true;
-                    break;
-                  }
+        if (vm.selected[i].status !== 'TARGETED') {
+          // find opporuntities that were changed
+          for (var j = 0; j < opportunitiesService.model.opportunities.length; j++) {
+            for (var k = 0; k < opportunitiesService.model.opportunities[j].groupedOpportunities.length; k++) {
+              if (opportunitiesService.model.opportunities[j].groupedOpportunities[k].id === vm.selected[i].id) {
+                if (opportunitiesService.model.opportunities[j].groupedOpportunities[k].impact === 'H') {
+                  opportunitiesService.model.opportunities[j].store.highImpactOpportunityCount--;
                 }
-                if (breaking) break;
+
+                // remove from opportunities model if open is selected, otherwise just change status
+                if (filtersService.model.opportunityStatusOpen && filtersService.model.opportunityStatusOpen === true) {
+                  opportunitiesService.model.opportunities[j].groupedOpportunities.splice(k, 1);
+                  filtersService.model.appliedFilter.pagination.totalOpportunities--;
+                } else {
+                  opportunitiesService.model.opportunities[j].groupedOpportunities[k].status = 'TARGETED';
+                }
+
+                if (opportunitiesService.model.opportunities[j].groupedOpportunities.length === 0) {
+                  opportunitiesService.model.opportunities.splice(j, 1);
+                  filtersService.model.appliedFilter.pagination.totalStores--;
+                }
+
+                // break loop after needle is found to save on performance
+                breaking = true;
+                break;
               }
             }
+            if (breaking) break;
           }
-          // reset selected
-          vm.selected = [];
-          vm.isAllOpportunitiesSelected = false; // TODO: Check
-          vm.toggleSelectAllStores();
-          vm.selected = [];
-        }, function(err) {
-          console.log('Error adding these ids: ', opportunityIds, ' Responded with error: ', err);
-        });
+        }
       }
     }
 
@@ -534,6 +557,7 @@ module.exports = /*  @ngInject */
 
       if (idx > -1) {
         showSelectAllToasts(false);
+        vm.isAllOpportunitiesInPageSelected = false;
         vm.isAllOpportunitiesSelected = false;
         removeItem(item, list, idx);
       } else {
@@ -634,22 +658,32 @@ module.exports = /*  @ngInject */
      * Check if a person already exists amongst a list of collaboraters
      */
     function selectAllOpportunities() {
-      debugger;
+      showSelectAllToasts(false);
+      vm.isAllOpportunitiesSelected = true;
     }
 
     /**
      * Toggles selection of all opportunites in all the stores
+     * @param {Boolean} select Optional: whether to select or not. If not provided, will reverse the current state.
      */
-    function toggleSelectAllStores () {
-      vm.isAllOpportunitiesSelected = !vm.isAllOpportunitiesSelected;
+    function toggleSelectAllStores (select) {
+      if (select !== undefined && select !== null) {
+        vm.isAllOpportunitiesInPageSelected = select;
+      } else {
+        vm.isAllOpportunitiesInPageSelected = !vm.isAllOpportunitiesInPageSelected;
+      }
 
-      if (vm.isAllOpportunitiesSelected) {
+      if (vm.isAllOpportunitiesInPageSelected) {
         angular.forEach(opportunitiesService.model.opportunities, function(store, key) {
           selectAllOpportunitiesInStore(store, vm.selected);
-          showSelectAllToasts(true);
         });
+
+        if (filtersService.model.appliedFilter.pagination.totalOpportunities < maxOpportunities) {
+          showSelectAllToasts(true);
+        }
       } else {
         showSelectAllToasts(false);
+        vm.isAllOpportunitiesInPageSelected = false;
         vm.isAllOpportunitiesSelected = false;
         vm.selected = [];
 
@@ -660,6 +694,7 @@ module.exports = /*  @ngInject */
     }
 
     function showSelectAllToasts(show) {
+      debugger;
       if (show) {
         vm.selectAllToastVisible = true;
 
@@ -679,7 +714,7 @@ module.exports = /*  @ngInject */
     function toggleOpportunitiesInStore (store, currentSelectionList) {
       if (store.selectedOpportunities === store.groupedOpportunities.length) {
         deselectAllOpportunitiesInStore(store, currentSelectionList);
-        vm.isAllOpportunitiesSelected = false;
+        vm.isAllOpportunitiesInPageSelected = false;
       } else {
         selectAllOpportunitiesInStore(store, currentSelectionList);
         updateSelectAllState();
@@ -693,7 +728,8 @@ module.exports = /*  @ngInject */
       });
 
       if (selectedStores === opportunitiesService.model.opportunities.length) {
-        vm.isAllOpportunitiesSelected = true;
+        vm.isAllOpportunitiesInPageSelected = true;
+        showSelectAllToasts(true);
       }
     }
 
@@ -782,15 +818,10 @@ module.exports = /*  @ngInject */
       return result;
     }
 
-    function remainingOpportunitySpots(currentOpps) {
-      const  remainingOpps = maxOpportunities - currentOpps;
-      return remainingOpps > 0 ? remainingOpps : 0;
-    }
-
     function handleAddToTargetList(ev, targetList) {
       const usedOpps = targetList.opportunitiesSummary.opportunitiesCount;
       const remainingOpps = remainingOpportunitySpots(usedOpps);
-      const totalOpps = usedOpps + this.selected.length;
+      const totalOpps = usedOpps + vm.isAllOpportunitiesSelected ? filtersService.model.appliedFilter.pagination.totalOpportunities : this.selected.length;
       const hasRemainingOpps = totalOpps <= maxOpportunities;
       if (hasRemainingOpps) {
         vm.addToTargetList(targetList.id);
@@ -811,6 +842,11 @@ module.exports = /*  @ngInject */
           controllerAs: 'oppsModalCtrl'
         });
       }
+    }
+
+    function remainingOpportunitySpots(currentOpps) {
+      const  remainingOpps = maxOpportunities - currentOpps;
+      return remainingOpps > 0 ? remainingOpps : 0;
     }
 
     // ***************

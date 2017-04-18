@@ -2,7 +2,7 @@
   h4.opportunities-count(ng-if="!list.opportunitiesService.model.filterApplied" ng-hide="list.opportunitiesService.model.filterApplied || list.opportunitiesService.model.opportunities.length !== 0") 0 opportunities <span>across 0 stores</span>
   h4.opportunities-count(ng-hide="list.opportunitiesService.model.noOpportunitiesFound || !list.opportunitiesService.model.filterApplied") {{list.filtersService.model.appliedFilter.pagination.totalOpportunities | number:0 }} opportunities <span>across {{list.filtersService.model.appliedFilter.pagination.totalStores | number:0}} stores</span>
   span.opportunities-selected-count(ng-hide="!list.selected || list.selected.length === 0")
-    ng-pluralize(count="list.selected.length" when="{'1' : '1 opportunity selected', 'other': '{{list.selected.length}} opportunities selected'}")
+    ng-pluralize(count="list.selected.length" when="{'1' : '1 opportunity selected', 'other': '{{list.isAllOpportunitiesSelected ? list.filtersService.model.appliedFilter.pagination.totalOpportunities : list.selected.length}} opportunities selected'}")
 
 .action-buttons
   span(ng-switch="list.selected < 1")
@@ -45,7 +45,7 @@ v-accordion.styled-list(multiple="" id="opportunities" control="list.accordion" 
     div.checkbox-wrapper.placeholder(ng-click="list.toggleSelectAllStores()" ng-disabled="!list.hasOpportunities()")
       md-checkbox(ng-if="list.hasOpportunities() && list.selected.length === 0" aria-label="Select All" ng-checked="false")
       div.indeterminatable-checkbox(ng-if="list.hasOpportunities() && list.selected.length > 0")
-        md-checkbox(aria-label="Select All" ng-checked="list.isAllOpportunitiesSelected" md-indeterminate="!list.isAllOpportunitiesSelected")
+        md-checkbox(aria-label="Select All" ng-checked="list.isAllOpportunitiesInPageSelected" md-indeterminate="!list.isAllOpportunitiesInPageSelected")
     div.hide-wrapper
       label
     div.checkbox-sibling(column='12')
@@ -75,7 +75,7 @@ v-accordion.styled-list(multiple="" id="opportunities" control="list.accordion" 
     h4 Dang! We were unable to find any opportunities that met your criteria.
     p Try adjusting your filters to broaden your search!
   div.select-all-toast-wrapper(ng-class="{'visible': list.selectAllToastVisible}")
-    div.toast-message There are currently {{list.selected.length}} opportunities selected. Do you want to <span class="inline-button" ng-click="list.selectAllOpportunities">select all {{list.filtersService.model.appliedFilter.pagination.totalOpportunities}}</span> of them?
+    div.toast-message There are currently {{list.selected.length}} opportunities selected. Do you want to <span class="inline-button" ng-click="list.selectAllOpportunities()">select all {{list.filtersService.model.appliedFilter.pagination.totalOpportunities}}</span> of them?
   v-pane.list-item(row ng-repeat="opportunity in list.opportunitiesService.model.opportunities | filter : {'dismissed': false} | orderBy : list.orderName" expanded='opportunity.isExpanded')
     .shadow-wrap.bottom
       .header-wrapper(ng-click="list.toggleOpportunitiesInStore(opportunity, list.selected)")
