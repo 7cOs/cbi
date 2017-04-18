@@ -162,6 +162,7 @@ describe('[Services.targetListService]', function() {
                     depletionsCurrentYearToDateYA: 2886.8334,
                     depletionsCurrentYearToDateYAPercent: 0,
                     depletionsCurrentYearToDateYAPercentNegative: false,
+                    unsold: false,
                     id: '1401904',
                     address: '515 N WESTERN AVE, CHICAGO, IL 606121421'
                 },
@@ -186,6 +187,7 @@ describe('[Services.targetListService]', function() {
                     depletionsCurrentYearToDateYA: 0.1,
                     depletionsCurrentYearToDateYAPercent: 0,
                     depletionsCurrentYearToDateYAPercentNegative: true,
+                    unsold: false,
                     id: '1401904',
                     address: '515 N WESTERN AVE, CHICAGO, IL 606121421'
                 },
@@ -209,6 +211,7 @@ describe('[Services.targetListService]', function() {
                     depletionsCurrentYearToDateYA: -25,
                     depletionsCurrentYearToDateYAPercent: 0,
                     depletionsCurrentYearToDateYAPercentNegative: true,
+                    unsold: false,
                     id: '1401904',
                     address: '515 N WESTERN AVE, CHICAGO, IL 606121421'
                 },
@@ -239,6 +242,7 @@ describe('[Services.targetListService]', function() {
                     depletionsCurrentYearToDateYA: 2886.8334,
                     depletionsCurrentYearToDateYAPercent: '-100%',
                     depletionsCurrentYearToDateYAPercentNegative: true,
+                    unsold: false,
                     id: '1401904',
                     address: '515 N WESTERN AVE, CHICAGO, IL 606121421'
                 },
@@ -264,6 +268,7 @@ describe('[Services.targetListService]', function() {
                         depletionsCurrentYearToDateYA: 2886.8334,
                         depletionsCurrentYearToDateYAPercent: '-100%',
                         depletionsCurrentYearToDateYAPercentNegative: true,
+                        unsold: false,
                         id: '1401904',
                         address: '515 N WESTERN AVE, CHICAGO, IL 606121421'
                     },
@@ -287,6 +292,7 @@ describe('[Services.targetListService]', function() {
                         depletionsCurrentYearToDateYA: 0.1,
                         depletionsCurrentYearToDateYAPercent: '+999%',
                         depletionsCurrentYearToDateYAPercentNegative: false,
+                        unsold: false,
                         id: '1401904',
                         address: '515 N WESTERN AVE, CHICAGO, IL 606121421'
                     },
@@ -310,6 +316,7 @@ describe('[Services.targetListService]', function() {
                         depletionsCurrentYearToDateYA: -25,
                         depletionsCurrentYearToDateYAPercent: '-500.0%',
                         depletionsCurrentYearToDateYAPercentNegative: true,
+                        unsold: false,
                         id: '1401904',
                         address: '515 N WESTERN AVE, CHICAGO, IL 606121421'
                     },
