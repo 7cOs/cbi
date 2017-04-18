@@ -11,8 +11,8 @@ div.outer-nav-wrapper
       .nav-logo-background
       div.nav-link-wrapper
         ul(column='8').main-nav
-          li.top-level-menu(ui-sref-active="active")
-            div.inner(ui-sref="landing" analytics-on="click" analytics-event="Link Click" analytics-category="Navigation" analytics-label="Home")
+          li.top-level-menu(ui-sref-active="active" ui-sref="landing" analytics-on="click" analytics-event="Link Click" analytics-category="Navigation" analytics-label="Home")
+            div.inner
               span #[a Home]
           li.top-level-menu.parent(ui-sref-active="active")
             div.inner
@@ -23,11 +23,11 @@ div.outer-nav-wrapper
               //- li.sub-menu
               //-   a.external-link(ng-href="{{nb.linkToIQ}}" target="_blank" analytics-on="click" analytics-event="Link Click" analytics-category="Navigation" analytics-label="More Reports") More Reports
               //-     .icon.dropdown-icon
-          li.top-level-menu(ui-sref-active="active")
-            div.inner(ui-sref="opportunities" analytics-on="click" analytics-event="Link Click" analytics-category="Navigation" analytics-label="Opportunities")
+          li.top-level-menu(ui-sref-active="active" ui-sref="opportunities" analytics-on="click" analytics-event="Link Click" analytics-category="Navigation" analytics-label="Opportunities")
+            div.inner
               span #[a Opportunities]
-          li.top-level-menu(ui-sref-active="active")
-            div.inner(ui-sref="target-lists" analytics-on="click" analytics-event="Link Click" analytics-category="Navigation" analytics-label="Target Lists")
+          li.top-level-menu(ui-sref-active="active" ui-sref="target-lists" analytics-on="click" analytics-event="Link Click" analytics-category="Navigation" analytics-label="Target Lists")
+            div.inner
               span #[a Target Lists]
           // li.top-level-menu(ui-sref-active="active")
             div.inner
