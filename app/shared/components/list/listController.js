@@ -10,7 +10,6 @@ module.exports = /*  @ngInject */
     // Initial variables
     var vm = this;
     const maxOpportunities = 1000;
-    let timer;
 
     // Services
     vm.opportunitiesService = opportunitiesService;
@@ -51,6 +50,7 @@ module.exports = /*  @ngInject */
     vm.stores = [];
     vm.undoClicked = false;
     vm.selectAllToastVisible = false;
+    vm.numberOfOpportunitiesSmallerThanMax = false;
 
     // Expose public methods
     vm.addCollaborator = addCollaborator;
@@ -657,7 +657,6 @@ module.exports = /*  @ngInject */
      * Selects all the opportunities across all the pages
      */
     function selectAllOpportunities() {
-      showSelectAllToast(false);
       vm.isAllOpportunitiesSelected = true;
     }
 
@@ -677,7 +676,7 @@ module.exports = /*  @ngInject */
           selectAllOpportunitiesInStore(store, vm.selected);
         });
 
-        showSelectAllToast(true);
+        vm.selectAllToastVisible = true;
       } else {
         updateStateAfterUnselectingOpportunity();
         vm.selected = [];
@@ -685,20 +684,6 @@ module.exports = /*  @ngInject */
         angular.forEach(opportunitiesService.model.opportunities, function(store, key) {
           store.selectedOpportunities = 0;
         });
-      }
-    }
-
-    function showSelectAllToast(show) {
-      if (show && filtersService.model.appliedFilter.pagination.totalOpportunities < maxOpportunities) {
-        vm.selectAllToastVisible = true;
-
-        $timeout.cancel(timer);
-        timer = $timeout(function () {
-          vm.selectAllToastVisible = false;
-        }, 10000);
-      } else {
-        $timeout.cancel(timer);
-        vm.selectAllToastVisible = false;
       }
     }
 
@@ -730,9 +715,9 @@ module.exports = /*  @ngInject */
 
       if (selectedStores === opportunitiesService.model.opportunities.length) {
         vm.isAllOpportunitiesInPageSelected = true;
-        showSelectAllToast(true);
+        vm.selectAllToastVisible = true;
       } else {
-        showSelectAllToast(false);
+        vm.selectAllToastVisible = false;
       }
     }
 
@@ -742,7 +727,7 @@ module.exports = /*  @ngInject */
     function updateStateAfterUnselectingOpportunity() {
       vm.isAllOpportunitiesInPageSelected = false;
       vm.isAllOpportunitiesSelected = false;
-      showSelectAllToast(false);
+      vm.selectAllToastVisible = false;
     }
 
     /**
@@ -876,6 +861,7 @@ module.exports = /*  @ngInject */
     $scope.$watch('list.opportunitiesService.model.opportunities', function() {
       vm.selected = [];
       vm.disabledMessage = '';
+      vm.numberOfOpportunitiesSmallerThanMax = filtersService.model.appliedFilter.pagination.totalOpportunities <= maxOpportunities;
       updateStateAfterUnselectingOpportunity();
     });
 
