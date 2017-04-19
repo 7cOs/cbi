@@ -146,6 +146,9 @@ module.exports = /*  @ngInject */
           item = setVsYAPercent(item);
           item.store = setVsYAPercent(item.store);
 
+          // Set store status to boolean
+          item.store.unsold = setStoreStatus(item.store.unsold);
+
           item.isItemAuthorization = 'N';
           if (item.itemAuthorizationCode !== null) {
             item.isItemAuthorization = 'Y';
@@ -255,6 +258,15 @@ module.exports = /*  @ngInject */
       }
 
       return targetListPromise.promise;
+    }
+
+    function setStoreStatus(storeValue) {
+
+      if (storeValue === 'Y') {
+        return true;
+      }
+
+      return false;
     }
 
     /**
