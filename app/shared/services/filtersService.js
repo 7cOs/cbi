@@ -168,6 +168,7 @@ module.exports = /*  @ngInject */
         trend: '',
         valuesVsTrend: '',
         zipCode: [],
+        salesStatus: [],
         storeFormat: ''
       },
       simpleDistributionType: false,
