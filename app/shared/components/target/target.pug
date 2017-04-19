@@ -6,7 +6,7 @@ div.target-lists
           h5.accent Displaying Most Recent ({{target.recordsShownLength(type.records.length)}} of {{type.total}})
           div(column="3").target-list-count
             h5(column="5").accent.completed Closed
-            h5(column="6").accent Total
+            h5(column="7").accent Total
         div(row).target-list-container
           .loader-wrap.inline(ng-if="target.loaderService.model.loadingFilters" ng-class="{'active': target.loaderService.model.loadingFilters}")
             loader
@@ -23,7 +23,7 @@ div.target-lists
                     md-tooltip(ng-if="list.name.length > 42" md-direction="top") {{list.name}}
                   div(column="3").target-list-data
                     h3(column="4").closed {{list.opportunitiesSummary.closedOpportunitiesCount | number}}
-                    h3(column="6") {{list.opportunitiesSummary.opportunitiesCount | number}}
+                    h3(column="8") {{list.opportunitiesSummary.opportunitiesCount | number}}
                 div.target-list-row-two
                   p(column="3" ng-if="list.creator").accent {{list.creator}}
                   p(column="3").accent.collaborators {{list.collaborators.length}} collaborators
