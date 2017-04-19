@@ -917,7 +917,6 @@ module.exports = /*  @ngInject */
       // Initialize the target lists for the user Id
       getTargetLists();
 
-      // page is NOT target-list-detail, so it is opportunities
       if (vm.pageName === 'opportunities') {
         vm.analyticsCategory = 'Opportunities';
         vm.analyticsLabel = 'Opportunity Result List';
