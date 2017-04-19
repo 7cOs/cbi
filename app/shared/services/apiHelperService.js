@@ -52,10 +52,8 @@ module.exports = /*  @ngInject */
         queryParams += parseAppliedFilters(obj, i, z);
 
         filtersService.model.appliedFilter.appliedFilter = queryParams;
-        queryStr = '?' + (model.bulkQuery ? 'limit=10000' : ('limit=20' + sortQuery + pageQuery)) + '&ignoreDismissed=true' + simpleQuery + '&filter=' + encodeURIComponent(filtersService.model.appliedFilter.appliedFilter);
+        queryStr = '?' + (model.bulkQuery ? 'limit=10000' : ('limit=20' + sortQuery + pageQuery)) + '&ignoreDismissed=true' + simpleQuery + salesStoreStatus + storeFormatQuery + '&filter=' + encodeURIComponent(filtersService.model.appliedFilter.appliedFilter);
         model.bulkQuery = false;
-
-        queryStr = '?' + 'limit=20' + '&ignoreDismissed=true' + sortQuery + pageQuery + simpleQuery + salesStoreStatus + storeFormatQuery + '&filter=' + encodeURIComponent(filtersService.model.appliedFilter.appliedFilter);
 
         return queryStr;
       } else if (obj.type && obj.type === 'targetLists') {
