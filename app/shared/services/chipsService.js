@@ -21,6 +21,12 @@ module.exports = /*  @ngInject */
         'type': 'opportunityType',
         'applied': false,
         'removable': false
+      },
+      {
+        name: 'All Formats',
+        type: 'storeFormat',
+        applied: false,
+        removable: false
       }
     ];
     var model = [];
@@ -179,6 +185,9 @@ module.exports = /*  @ngInject */
         filtersService.model.selected['myAccountsOnly'] = false;
       } else if (chip.type === 'simpleDistributionType') {
         filtersService.model.selected['simpleDistributionType'] = false;
+      } else if (chip.type === 'storeFormat') {
+        addChip('All Formats', 'storeFormat', true, false);
+        filtersService.model.selected.storeFormat = '';
       } else {
         var arr = filtersService.model.selected[chip.type];
         var i = arr.length;
@@ -190,6 +199,10 @@ module.exports = /*  @ngInject */
           } else if (chip.type === 'impact' && arr[i] === chip.name.split(' Impact')[0]) {
             arr.splice(i, 1);
             filtersService.model['predictedImpact' + chip.name.split(' Impact')[0]] = false;
+            break;
+          } else if (chip.type === 'salesStatus' && arr[i] === chip.name.split(' ')[0]) {
+            arr.splice(i, 1);
+            filtersService.model['salesStatus' + chip.name.split(' ')[0]] = false;
             break;
           } else if (chip.type === 'cbbdChain' && arr[i] === $filter('titlecase')(chip.name.split(' ')[0])) {
             arr.splice(i, 1);

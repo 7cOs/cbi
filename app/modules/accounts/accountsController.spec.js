@@ -1004,7 +1004,7 @@ describe('Unit: accountsController', function() {
       expect(chipsService.addChip).not.toHaveBeenCalled();
       expect(ctrl.apply.calls.count()).toEqual(0);
       expect(ctrl.apply).not.toHaveBeenCalled();
-      expect(chipsService.model.length).toEqual(3);
+      expect(chipsService.model.length).toEqual(4);
       expect(chipsService.model[1].name).toEqual('Off-Premise');
       // run
       ctrl.updateChip('On-Premise', 'premiseType');
@@ -1015,8 +1015,8 @@ describe('Unit: accountsController', function() {
       expect(chipsService.addChip).toHaveBeenCalled();
       expect(ctrl.apply.calls.count()).toEqual(1);
       expect(ctrl.apply).toHaveBeenCalled();
-      expect(chipsService.model.length).toEqual(3);
-      expect(chipsService.model[2].name).toEqual('On-Premise');
+      expect(chipsService.model.length).toEqual(4);
+      expect(chipsService.model[3].name).toEqual('On-Premise');
     });
 
   });
@@ -1662,7 +1662,7 @@ describe('Unit: accountsController', function() {
       storeData.name = 'Test Name';
       storeData.addressLine1 = 'Test Address';
       ctrl.navigateTopBottomLevels(storeData);
-      expect(chipsService.model[3].name).toEqual('Test Name - Test Address ');
+      expect(chipsService.model[4].name).toEqual('Test Name - Test Address ');
     });
 
     it('should add a chip correctly formatted without the address for click on store', function() {
@@ -1670,7 +1670,7 @@ describe('Unit: accountsController', function() {
       storeData.name = 'Test Name';
       storeData.addressLine1 = '';
       ctrl.navigateTopBottomLevels(storeData);
-      expect(chipsService.model[3].name).toEqual('Test Name');
+      expect(chipsService.model[4].name).toEqual('Test Name');
     });
 
     it('should add a chip correctly formatted with a multiple parts address for click on store', function() {
@@ -1678,7 +1678,7 @@ describe('Unit: accountsController', function() {
       storeData.name = 'Test Name';
       storeData.addressLine1 = 'Test Address, Should be filtered out';
       ctrl.navigateTopBottomLevels(storeData);
-      expect(chipsService.model[3].name).toEqual('Test Name - Test Address');
+      expect(chipsService.model[4].name).toEqual('Test Name - Test Address');
     });
 
   });
@@ -1821,4 +1821,41 @@ describe('Unit: accountsController', function() {
        expect(ctrl.currentTopBottomFilters.distributors).toEqual('');
      });
    });
+
+  describe('[Method] canOpenNote', function() {
+    it('should return false if we are not viewing a distributor', function() {
+      ctrl.showXDistributor = false;
+      ctrl.showXChain       = false;
+      ctrl.showXStore       = false;
+      expect(ctrl.canOpenNote()).toEqual(false);
+    });
+
+    it('should return true if we are viewing a distributor', function() {
+      ctrl.showXDistributor = true;
+      ctrl.showXChain       = false;
+      ctrl.showXStore       = false;
+      expect(ctrl.canOpenNote()).toEqual(true);
+    });
+
+    it('should return false if we are viewing a distributor that is a chain', function() {
+      ctrl.showXDistributor = true;
+      ctrl.showXChain       = true;
+      ctrl.showXStore       = false;
+      expect(ctrl.canOpenNote()).toEqual(false);
+    });
+
+    it('should return true if we are viewing a store of a distributor', function() {
+      ctrl.showXDistributor = true;
+      ctrl.showXChain       = false;
+      ctrl.showXStore       = true;
+      expect(ctrl.canOpenNote()).toEqual(true);
+    });
+
+    it('should return true if we are viewing a store of a chain of a distributor', function() {
+      ctrl.showXDistributor = true;
+      ctrl.showXChain       = true;
+      ctrl.showXStore       = true;
+      expect(ctrl.canOpenNote()).toEqual(true);
+    });
+  });
 });

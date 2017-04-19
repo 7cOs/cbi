@@ -40,6 +40,8 @@ module.exports = /*  @ngInject */
         var pageQuery = applyPage(),
             sortQuery = applySort(),
             simpleQuery = applySimpleDist(obj),
+            salesStoreStatus = applySalesStoreStatus(obj),
+            storeFormatQuery = applyStoreFormatQuery(obj),
             queryStr = '';
 
         queryParams += '';
@@ -52,6 +54,8 @@ module.exports = /*  @ngInject */
         filtersService.model.appliedFilter.appliedFilter = queryParams;
         queryStr = '?' + (model.bulkQuery ? 'limit=10000' : ('limit=20' + sortQuery + pageQuery)) + '&ignoreDismissed=true' + simpleQuery + '&filter=' + encodeURIComponent(filtersService.model.appliedFilter.appliedFilter);
         model.bulkQuery = false;
+
+        queryStr = '?' + 'limit=20' + '&ignoreDismissed=true' + sortQuery + pageQuery + simpleQuery + salesStoreStatus + storeFormatQuery + '&filter=' + encodeURIComponent(filtersService.model.appliedFilter.appliedFilter);
 
         return queryStr;
       } else if (obj.type && obj.type === 'targetLists') {
@@ -186,6 +190,28 @@ module.exports = /*  @ngInject */
       return query;
     }
 
+    /**
+     * @name applySalesStoreStatus
+     * @desc applies sold or unsold status filter to opportunities request
+     * @returns {String} - formatted query
+     * @memberOf cf.common.services
+     */
+    function applySalesStoreStatus(filters) {
+      let query = '';
+
+      if (filters && filters.salesStatus) {
+        if (filters.salesStatus.length === 2) {
+          query = '';
+        } else if (filters.salesStatus[0] === 'Unsold') {
+          query = '&unsoldStore=true';
+        } else if (filters.salesStatus[0] === 'Sold') {
+          query = '&unsoldStore=false';
+        }
+      }
+
+      return query;
+    }
+
     function parseAppliedFilters(obj, i, z) {
       var queryParams = '';
 
@@ -200,6 +226,8 @@ module.exports = /*  @ngInject */
               queryParams += 'cbbdChain:true';
               somethingAdded = true;
             }
+          } else if (key2 === 'salesStatus') {
+            somethingAdded = false;
           } else {
             // iterate over arrays
             for (var k = 0; k < obj[key2].length; k++) {
@@ -243,7 +271,7 @@ module.exports = /*  @ngInject */
             queryParams += key2 + ':' + obj[key2];
             somethingAdded = true;
           }
-        } else if (key2 === 'simpleDistributionType') {
+        } else if (key2 === 'simpleDistributionType' || key2 === 'storeFormat') {
           somethingAdded = false;
         } else if (obj[key2].constructor !== Array && key2 !== 'retailer') {
           queryParams += key2 + ':' + obj[key2];
@@ -253,8 +281,11 @@ module.exports = /*  @ngInject */
         if (i !== (z - 1) && somethingAdded) queryParams += ',';
         i++;
       }
-
       // return queryParams.replace(/,$/g, '');
       return queryParams;
+    }
+
+    function applyStoreFormatQuery(queries) {
+      return (queries.storeFormat) ? `&hispanicMarketType=${queries.storeFormat}` : '';
     }
   };

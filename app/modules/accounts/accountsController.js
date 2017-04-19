@@ -140,8 +140,8 @@ module.exports = /*  @ngInject */
     vm.updateBrandSnapshot = updateBrandSnapshot;
     vm.updateChip = updateChip;
     vm.updateDistributionTimePeriod = updateDistributionTimePeriod;
-
     vm.filterTopBottom = filterTopBottom;
+    vm.canOpenNote = canOpenNote;
 
     init();
 
@@ -315,7 +315,7 @@ module.exports = /*  @ngInject */
 
     // Make notes available to the page
     function openNotes(val, accountInfo) {
-      if (accountInfo) {
+      if (accountInfo && canOpenNote()) {
         $rootScope.$broadcast('notes:opened', val, accountInfo);
       }
     }
@@ -627,7 +627,9 @@ module.exports = /*  @ngInject */
       // set filters service model selected
       if (result.ids) {
         for (i = 0; i < result.ids.length; i++) {
-          filtersService.model.selected[filterModelProp].push(result.ids[i]);
+          filterModelProp === 'account'
+            ? filtersService.model.selected.account[0] = result.ids[i]
+            : filtersService.model.selected[filterModelProp].push(result.ids[i]);
         }
       } else {
         if (result.id.constructor === Array) {
@@ -783,6 +785,11 @@ module.exports = /*  @ngInject */
       vm.filterModel.depletionsTimePeriod = filtersService.model.depletionsTimePeriod[value][deplIndex];
       vm.filterModel.distributionTimePeriod = filtersService.model.distributionTimePeriod[value][distIndex];
       onFilterPropertiesChange();
+    }
+
+    function canOpenNote() {
+      if (vm.showXDistributor && !vm.showXChain || vm.showXStore) return true;
+      else return false;
     }
 
     // ***************

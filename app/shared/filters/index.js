@@ -6,4 +6,5 @@ module.exports =
   .filter('zipcode', require('./zipcode'))
   .filter('timeAgo', require('./timeAgo'))
   .filter('formatOpportunitiesType', require('./formatOpportunitiesType'))
-  .filter('truncateText', require('./truncateText'));
+  .filter('truncateText', require('./truncateText'))
+  .filter('hispanicMarketTypeFormat', require('./hispanicMarketTypeFormat'));

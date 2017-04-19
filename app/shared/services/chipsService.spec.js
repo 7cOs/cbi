@@ -193,6 +193,18 @@ describe('[Services.chipsService]', function() {
         expect(filtersService.model.selected.simpleDistributionType).toEqual(false);
       });
 
+      it('should remove selected filter and update filter model given "salesStatus" chip', function() {
+        filtersService.model.selected.salesStatus = ['Unsold', 'Sold'];
+        filtersService.model.salesStatusSold = true;
+        filtersService.model.salesStatusUnsold = true;
+
+        chipsService.removeFromFilterService({type: 'salesStatus', name: 'Sold'});
+
+        expect(filtersService.model.selected.salesStatus).toEqual(['Unsold']);
+        expect(filtersService.model.salesStatusSold).toEqual(false);
+        expect(filtersService.model.salesStatusUnsold).toEqual(true);
+      });
+
       it('should remove selected filter and update filter model given "segmentation" chip', function() {
         filtersService.model.selected.segmentation = ['A', 'B'];
         filtersService.model.storeSegmentationA = true;
@@ -390,6 +402,30 @@ describe('[Services.chipsService]', function() {
         chipsService.removeFromFilterService({type: 'state', name: 'WA'});
 
         expect(filtersService.model.selected['state']).toEqual(['DC']);
+      });
+
+      it('should reset the selected.storeFormat model and add an All Formats storeFormat chip when removing a storeFormat type chip', function() {
+        chipsService.model = [];
+        filtersService.model.selected.storeFormat = 'HISPANIC';
+        chipsService.removeFromFilterService({type: 'storeFormat', name: 'Hispanic'});
+        expect(filtersService.model.selected.storeFormat).toEqual('');
+        expect(chipsService.model).toEqual([{
+          name: 'All Formats',
+          type: 'storeFormat',
+          applied: false,
+          removable: false
+        }]);
+
+        chipsService.model = [];
+        filtersService.model.selected.storeFormat = 'GM';
+        chipsService.removeFromFilterService({type: 'storeFormat', name: 'General Market'});
+        expect(filtersService.model.selected.storeFormat).toEqual('');
+        expect(chipsService.model).toEqual([{
+          name: 'All Formats',
+          type: 'storeFormat',
+          applied: false,
+          removable: false
+        }]);
       });
 
     });
