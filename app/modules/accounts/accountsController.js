@@ -627,7 +627,9 @@ module.exports = /*  @ngInject */
       // set filters service model selected
       if (result.ids) {
         for (i = 0; i < result.ids.length; i++) {
-          filtersService.model.selected[filterModelProp].push(result.ids[i]);
+          filterModelProp === 'account'
+            ? filtersService.model.selected.account[0] = result.ids[i]
+            : filtersService.model.selected[filterModelProp].push(result.ids[i]);
         }
       } else {
         if (result.id.constructor === Array) {
