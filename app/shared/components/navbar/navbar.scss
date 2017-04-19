@@ -169,14 +169,6 @@ navbar {
 
 .inner {
   padding: 8px 0;
-
-  &:hover {
-    cursor: pointer;
-
-    span a {
-      color: $dark-blue;
-    }
-  }
 }
 
 .main-nav {
@@ -233,10 +225,6 @@ navbar {
         }
 
         .sub-menu {
-
-          &:hover {
-            cursor: pointer;
-          }
 
           a {
             font-weight: $semibold;
