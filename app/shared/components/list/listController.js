@@ -10,6 +10,7 @@ module.exports = /*  @ngInject */
     // Initial variables
     var vm = this;
     const maxOpportunities = 1000;
+    let timer;
 
     // Services
     vm.opportunitiesService = opportunitiesService;
@@ -556,9 +557,7 @@ module.exports = /*  @ngInject */
           groupedCount = 0;
 
       if (idx > -1) {
-        showSelectAllToasts(false);
-        vm.isAllOpportunitiesInPageSelected = false;
-        vm.isAllOpportunitiesSelected = false;
+        updateStateAfterUnselectingOpportunity();
         removeItem(item, list, idx);
       } else {
         addItem(item, list);
@@ -655,10 +654,10 @@ module.exports = /*  @ngInject */
     }
 
     /**
-     * Check if a person already exists amongst a list of collaboraters
+     * Selects all the opportunities across all the pages
      */
     function selectAllOpportunities() {
-      showSelectAllToasts(false);
+      showSelectAllToast(false);
       vm.isAllOpportunitiesSelected = true;
     }
 
@@ -678,13 +677,9 @@ module.exports = /*  @ngInject */
           selectAllOpportunitiesInStore(store, vm.selected);
         });
 
-        if (filtersService.model.appliedFilter.pagination.totalOpportunities < maxOpportunities) {
-          showSelectAllToasts(true);
-        }
+        showSelectAllToast(true);
       } else {
-        showSelectAllToasts(false);
-        vm.isAllOpportunitiesInPageSelected = false;
-        vm.isAllOpportunitiesSelected = false;
+        updateStateAfterUnselectingOpportunity();
         vm.selected = [];
 
         angular.forEach(opportunitiesService.model.opportunities, function(store, key) {
@@ -693,15 +688,16 @@ module.exports = /*  @ngInject */
       }
     }
 
-    function showSelectAllToasts(show) {
-      debugger;
-      if (show) {
+    function showSelectAllToast(show) {
+      if (show && filtersService.model.appliedFilter.pagination.totalOpportunities < maxOpportunities) {
         vm.selectAllToastVisible = true;
 
-        $timeout(function () {
+        $timeout.cancel(timer);
+        timer = $timeout(function () {
           vm.selectAllToastVisible = false;
         }, 10000);
       } else {
+        $timeout.cancel(timer);
         vm.selectAllToastVisible = false;
       }
     }
@@ -712,15 +708,20 @@ module.exports = /*  @ngInject */
      * @param {Array} currentSelectionList Array of all currently selected items
      */
     function toggleOpportunitiesInStore (store, currentSelectionList) {
-      if (store.selectedOpportunities === store.groupedOpportunities.length) {
-        deselectAllOpportunitiesInStore(store, currentSelectionList);
-        vm.isAllOpportunitiesInPageSelected = false;
-      } else {
+      const select = store.selectedOpportunities !== store.groupedOpportunities.length;
+
+      if (select) {
         selectAllOpportunitiesInStore(store, currentSelectionList);
         updateSelectAllState();
+      } else {
+        deselectAllOpportunitiesInStore(store, currentSelectionList);
+        updateStateAfterUnselectingOpportunity();
       }
     }
 
+    /**
+     * Checks if all the opportunities on the page are selected, then update the state accordingly
+     */
     function updateSelectAllState() {
       var selectedStores = 0;
       angular.forEach(opportunitiesService.model.opportunities, function(store, key) {
@@ -729,8 +730,19 @@ module.exports = /*  @ngInject */
 
       if (selectedStores === opportunitiesService.model.opportunities.length) {
         vm.isAllOpportunitiesInPageSelected = true;
-        showSelectAllToasts(true);
+        showSelectAllToast(true);
+      } else {
+        showSelectAllToast(false);
       }
+    }
+
+    /**
+     * Update the state after unselecting one or many opportunities
+     */
+    function updateStateAfterUnselectingOpportunity() {
+      vm.isAllOpportunitiesInPageSelected = false;
+      vm.isAllOpportunitiesSelected = false;
+      showSelectAllToast(false);
     }
 
     /**
