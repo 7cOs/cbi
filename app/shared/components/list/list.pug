@@ -74,7 +74,7 @@ v-accordion.styled-list(multiple="" id="opportunities" control="list.accordion" 
   div(ng-if="list.opportunitiesService.model.noOpportunitiesFound && list.opportunitiesService.model.filterApplied").no-opportunities.filter-error
     h4 Dang! We were unable to find any opportunities that met your criteria.
     p Try adjusting your filters to broaden your search!
-  div.select-all-toast-wrapper(ng-class="{'visible': list.selectAllToastVisible}")
+  div.select-all-toast-wrapper(ng-if="list.selectAllAvailable" ng-class="{'visible': list.selectAllToastVisible}")
     div.toast-message There are currently {{list.selected.length}} opportunities selected. Do you want to <span class="inline-button" ng-click="list.selectAllOpportunities()">select all {{list.filtersService.model.appliedFilter.pagination.totalOpportunities}}</span> of them?
   v-pane.list-item(row ng-repeat="opportunity in list.opportunitiesService.model.opportunities | filter : {'dismissed': false} | orderBy : list.orderName" expanded='opportunity.isExpanded')
     .shadow-wrap.bottom

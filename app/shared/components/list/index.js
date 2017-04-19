@@ -10,6 +10,7 @@ module.exports =
       showAddToTargetList: '<',
       showCopyToTargetList: '<',
       showRemoveButton: '<',
+      selectAllAvailable: '<',
       pageName: '@'
     }
   })
