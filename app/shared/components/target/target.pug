@@ -4,9 +4,9 @@ div.target-lists
       md-content.md-padding
         div(row).target-list-count-container.clearfix
           h5.accent Displaying Most Recent ({{target.recordsShownLength(type.records.length)}} of {{type.total}})
-          div(column="3").target-list-count
-            h5(column="5").accent.completed Closed
-            h5(column="7").accent Total
+          div(column="4").target-list-count
+            h5(column="6").accent.completed Closed
+            h5(column="6").accent Total
         div(row).target-list-container
           .loader-wrap.inline(ng-if="target.loaderService.model.loadingFilters" ng-class="{'active': target.loaderService.model.loadingFilters}")
             loader
@@ -20,8 +20,8 @@ div.target-lists
               a(ui-sref="target-list-detail({id: list.id})" analytics-on="click" analytics-event="{{target.analyticsActionForType(type.name)}}" analytics-category="Target Lists" analytics-label="{{list.id}}")
                 div.target-list-row-one.clearfix
                   h3.target-list-name {{list.name}}
-                    md-tooltip(ng-if="list.name.length > 42" md-direction="top") {{list.name}}
-                  div(column="3").target-list-data
+                    md-tooltip(ng-if="list.name.length > 34" md-direction="top") {{list.name}}
+                  div(column="4").target-list-data
                     h3(column="4").closed {{list.opportunitiesSummary.closedOpportunitiesCount | number}}
                     h3(column="8") {{list.opportunitiesSummary.opportunitiesCount | number}}
                 div.target-list-row-two
