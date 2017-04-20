@@ -211,12 +211,7 @@ module.exports = /*  @ngInject */
           opportunityIdsPromise.resolve(opportunityIds);
         });
       } else {
-        let opportunityIds = [];
-debugger;
-        for (let i = 0; i < vm.selected.length; i++) {
-          opportunityIds.push(vm.selected[i].id);
-        }
-
+        const opportunityIds = vm.selected.map((opportunity) => opportunity.id);
         opportunityIdsPromise.resolve(opportunityIds);
       }
 
