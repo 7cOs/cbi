@@ -60,7 +60,15 @@ notes
       md-checkbox(ng-model="a.filtersService.model.selected.myAccountsOnly" aria-label="My Accounts" ng-click="a.updateChip('My Accounts Only', 'myAccountsOnly');" ng-change="a.setDefaultFilterOptions();") My Accounts Only
 
     div(column='2')
-      label Premise Type
+      .tooltip-wrap
+        label Premise Type
+        .tooltip
+          img(src="../../assets/img/icons/help-tooltip.svg")
+          md-tooltip(md-direction="bottom")
+            label Filter Set
+            h3 Premise Type
+            p Premise type classification as provided by TDLinx.
+            p "All" contains Off-Premise, On-Premise, Non Retail, and Unknown (if applicable).
       md-radio-group(ng-model="a.filtersService.model.selected.premiseType")
         md-radio-button(ng-repeat="p in a.filtersService.model.premises track by $index" class="md-primary" ng-value="p.value" aria-label="{{p.name}}" ng-click="a.updateChip(p.name, 'premiseType')" ng-disabled="a.premiseTypeDisabled") {{p.name}}
     div(column='2')
