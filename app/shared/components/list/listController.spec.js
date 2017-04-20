@@ -149,6 +149,9 @@ describe('Unit: list controller', function() {
     expect(ctrl.toggleOpportunitiesInStore).not.toBeUndefined();
     expect(typeof (ctrl.toggleOpportunitiesInStore)).toEqual('function');
 
+    expect(ctrl.selectAllOpportunities).not.toBeUndefined();
+    expect(typeof (ctrl.selectAllOpportunities)).toEqual('function');
+
     expect(ctrl.toggleSelectAllStores).not.toBeUndefined();
     expect(typeof (ctrl.toggleSelectAllStores)).toEqual('function');
 
@@ -1116,6 +1119,44 @@ describe('Unit: list controller', function() {
       expect(ctrl.selected.length).toEqual(2);
     });
 
+    it('should display the toast to select all the opportunities when selecting all the stores', function() {
+      ctrl.selectAllToastVisible = false;
+      ctrl.toggleSelectAllStores();
+      expect(ctrl.selectAllToastVisible).toBeTruthy();
+    });
+
+    it('should not display the toast to select all the opportunities when unselecting all the stores', function() {
+      ctrl.selectAllToastVisible = true;
+      ctrl.toggleSelectAllStores(false);
+      expect(ctrl.selectAllToastVisible).toBeFalsy();
+    });
+
+    it('should display the toast to select all the opportunities when selecting the last store', function() {
+      ctrl.selectAllToastVisible = false;
+      ctrl.toggleSelectAllStores();
+      const storeToToggle = opportunitiesService.model.opportunities[0];
+      ctrl.toggleOpportunitiesInStore(storeToToggle, ctrl.selected);
+      expect(ctrl.selectAllToastVisible).toBeFalsy();
+      ctrl.toggleOpportunitiesInStore(storeToToggle, ctrl.selected);
+      expect(ctrl.selectAllToastVisible).toBeTruthy();
+    });
+
+    it('should display the toast to select all the opportunities when selecting the last opportunity', function() {
+      ctrl.selectAllToastVisible = false;
+
+      const fakeEvent = {
+        stopPropagation: () => {}
+      };
+
+      ctrl.toggleSelectAllStores();
+      const storeToToggle = opportunitiesService.model.opportunities[0];
+      const opportunityToToggle = storeToToggle.groupedOpportunities[0];
+      ctrl.selectOpportunity(fakeEvent, storeToToggle, opportunityToToggle, ctrl.selected);
+      expect(ctrl.selectAllToastVisible).toBeFalsy();
+      ctrl.selectOpportunity(fakeEvent, storeToToggle, opportunityToToggle, ctrl.selected);
+      expect(ctrl.selectAllToastVisible).toBeTruthy();
+    });
+
     it('should remove all the stores in the page that are selected', function() {
       ctrl.toggleSelectAllStores();
       ctrl.toggleSelectAllStores();
@@ -1436,8 +1477,29 @@ describe('Unit: list controller', function() {
       ctrl.toggleSelectAllStores();
       ctrl.addToTargetList(listId);
 
+      expect(targetListService.addTargetListOpportunities).toHaveBeenCalled();
+    }));
+
+    it('should request the IDs of all the opportunities without limit when selectAllOpportunities is true', fakeAsync(() => () => {
+      ctrl.isAllOpportunitiesSelected = true;
+      const deferred = q.defer();
+
+      spyOn(targetListService, 'addTargetListOpportunities').and.callFake(() => {
+        return deferred.promise;
+      });
+
+      spyOn(opportunitiesService, 'getAllOpportunitiesIDs').and.callFake(() => {
+        var opportunitiesIDsDeferred = q.defer();
+        return opportunitiesIDsDeferred.promise;
+      });
+
+      ctrl.toggleSelectAllStores();
+      ctrl.addToTargetList(listId);
+
       flushMicrotasks();
       expect(targetListService.addTargetListOpportunities).toHaveBeenCalled();
+      expect(opportunitiesService.getAllOpportunitiesIDs).toHaveBeenCalled();
+      expect(true).toBeFalsy();
     }));
 
     it('should not call addToTargetService if opportunites are not selected', function() {
@@ -1803,6 +1865,14 @@ describe('Unit: list controller', function() {
       expect(opportunitiesService.model.opportunities.length).toEqual(2);
       expect(opportunitiesService.model.opportunities[1].groupedOpportunities.length).toEqual(1);
       expect(opportunitiesService.model.opportunities[1].store.highImpactOpportunityCount).toEqual(0);
+    });
+  });
+
+  describe('selectAllOpportunities', () => {
+    it('should toggle the flag to true', () => {
+      ctrl.isAllOpportunitiesSelected = false;
+      ctrl.selectAllOpportunities();
+      expect(ctrl.isAllOpportunitiesSelected).toBeTruthy();
     });
   });
 });
