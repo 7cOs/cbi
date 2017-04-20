@@ -199,7 +199,7 @@ describe('[Services.apiHelperService]', function() {
 
     it('should set query params for cbbd chain on opportunities', function() {
       const mockObject = {
-        'type': 'oppotrtunities',
+        'type': 'opportunities',
         'additionalParams': ['cbbdChain']
       };
       const url = 'http://localhost:3000/';
