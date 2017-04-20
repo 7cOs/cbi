@@ -9,6 +9,7 @@ module.exports = function(app) {
     .all(function apiAuth(req, res, next) {
       let headers = {};
       headers['X-CBI-API-AGENT'] = util.agentHeader();
+      headers['User-Agent'] = req.headers['user-agent'];
 
       if (req.isAuthenticated()) {
         headers['X-CBI-API-USER'] = util.userHeader(req.user.employeeID);

@@ -178,6 +178,7 @@ describe('Unit: filter service', function() {
                 trend: '',
                 valuesVsTrend: '',
                 zipCode: [],
+                salesStatus: [],
                 storeFormat: ''
             },
             simpleDistributionType: false,
@@ -395,6 +396,7 @@ describe('Unit: filter service', function() {
                 trend: '',
                 valuesVsTrend: '',
                 zipCode: [],
+                salesStatus: [],
                 storeFormat: ''
             },
             selectedTemplate: {
@@ -425,6 +427,7 @@ describe('Unit: filter service', function() {
                 trend: '',
                 valuesVsTrend: '',
                 zipCode: [],
+                salesStatus: [],
                 storeFormat: ''
             },
             simpleDistributionType: false,
