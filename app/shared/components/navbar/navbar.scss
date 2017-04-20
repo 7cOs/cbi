@@ -169,14 +169,6 @@ navbar {
 
 .inner {
   padding: 8px 0;
-
-  &:hover {
-    cursor: pointer;
-
-    span a {
-      color: $dark-blue;
-    }
-  }
 }
 
 .main-nav {
@@ -200,6 +192,14 @@ navbar {
     display: inline-block;
     padding: 5px 18px 0;
     position: relative;
+
+    &:hover {
+      cursor: pointer;
+
+      span a {
+        color: $dark-blue;
+      }
+    }
 
     a {
       color: $gray-1;
@@ -237,7 +237,7 @@ navbar {
         }
 
         .dropdown {
-          padding: 4px 6px 0;
+          padding-top: 4px;
           height: auto;
           box-shadow: 0 1px 1px #000000;
 
@@ -245,12 +245,15 @@ navbar {
             font-size: 0.7em;
             font-family: $rajdhani;
             font-weight: $bold;
-            padding-left: 1em;
 
             &:hover {
               a {
                 color: $light-blue-2;
               }
+            }
+
+            a {
+              margin-left: 12px;
             }
           }
         }
@@ -275,9 +278,10 @@ navbar {
     background: $dark-blue-2;
   }
 
-  .sub-menu {
-    padding: 10px 0;
+  .sub-menu-item {
     border-top: 1px solid #135B97;
+    margin: 0 6px;
+    padding: 10px 0;
   }
 }
 

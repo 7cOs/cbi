@@ -67,6 +67,9 @@ module.exports = /*  @ngInject */
           item = setVsYAPercent(item);
           item.store = setVsYAPercent(item.store);
 
+          // Set store status to boolean
+          item.store.unsold = setStoreStatus(item.store.unsold);
+
           // Check Authorization/Feature for CSV
           item.isItemAuthorization = 'N';
           if (item.itemAuthorizationCode !== null) {
@@ -182,6 +185,15 @@ module.exports = /*  @ngInject */
       }
 
       return opportunitiesPromise.promise;
+    }
+
+    function setStoreStatus(storeValue) {
+
+      if (storeValue === 'Y') {
+        return true;
+      }
+
+      return false;
     }
 
     /**
