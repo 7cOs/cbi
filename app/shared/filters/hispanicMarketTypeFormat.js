@@ -16,6 +16,8 @@ module.exports = /*  @ngInject */
         case 'HISPANIC':
           return 'Hispanic';
         case 'UNASSIGNED':
+        case null:
+        case undefined:
           return 'Unassigned';
         default:
           return str;
