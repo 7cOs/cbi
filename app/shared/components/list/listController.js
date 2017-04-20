@@ -231,6 +231,7 @@ module.exports = /*  @ngInject */
           vm.selected = [];
         }, function(err) {
           console.log('Error adding these ids: ', opportunityIds, ' Responded with error: ', err);
+          getTargetLists();
         });
       }
     }
@@ -754,13 +755,14 @@ module.exports = /*  @ngInject */
       return remainingOpps > 0 ? remainingOpps : 0;
     }
 
-    function handleAddToTargetList(ev, targetList) {
+    function handleAddToTargetList(ev, targetList, idx) {
       const usedOpps = targetList.opportunitiesSummary.opportunitiesCount;
       const remainingOpps = remainingOpportunitySpots(usedOpps);
       const totalOpps = usedOpps + this.selected.length;
       const hasRemainingOpps = totalOpps <= maxOpportunities;
       if (hasRemainingOpps) {
         vm.addToTargetList(targetList.id);
+        updateTargetListOpportunitySummary(idx, this.selected.length);
       } else {
         var parentEl = angular.element(document.body);
         $mdDialog.show({
@@ -844,6 +846,10 @@ module.exports = /*  @ngInject */
 
     function getStoreToBePassedToAcct(storeDetails) {
       return {store: storeDetails.id + '|' + storeDetails.name + '|' + false};
+    }
+
+    function updateTargetListOpportunitySummary(idxOfTargetList, numberToAdd) {
+      vm.userService.model.targetLists.owned[idxOfTargetList].opportunitiesSummary.opportunitiesCount += numberToAdd;
     }
 
     function init() {

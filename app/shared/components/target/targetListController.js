@@ -15,6 +15,7 @@ module.exports = /*  @ngInject */
 
     // Defaults
     vm.pageName = $state.current.name;
+    vm.nameLengthForTooltip = 34;
 
     // Expose public methods
     vm.ratio = ratio;
