@@ -8,7 +8,7 @@ module.exports = /*  @ngInject */
     // ****************
 
     // Initial variables
-    var vm = this;
+    const vm = this;
     const maxOpportunities = 1000;
 
     // Services
@@ -136,7 +136,7 @@ module.exports = /*  @ngInject */
       if (!vm.sharedCollaborators.length) {
         vm.sharedCollaborators.push(person);
       } else {
-        var matchedPerson = checkIfPersonIsAddedToCollaborators(person);
+        const matchedPerson = checkIfPersonIsAddedToCollaborators(person);
         if (!matchedPerson) {
           vm.sharedCollaborators.push(person);
         }
@@ -150,7 +150,7 @@ module.exports = /*  @ngInject */
      * @returns {object} matchedPerson Returns the matchedPerson if the object exists or returns null
      */
     function checkIfPersonIsAddedToCollaborators(person) {
-      var matchedPerson = null;
+      let matchedPerson = null;
       vm.sharedCollaborators.forEach(function(collab, key) {
         if (!matchedPerson && person.employeeId === collab.employeeId) {
           matchedPerson = {
@@ -167,7 +167,7 @@ module.exports = /*  @ngInject */
      * @param {object} person The person who needs to be added to the list of collaborators
      */
     function removeSharedCollaborator(person) {
-      var matchedPerson = checkIfPersonIsAddedToCollaborators(person);
+      const matchedPerson = checkIfPersonIsAddedToCollaborators(person);
       if (matchedPerson) {
         vm.sharedCollaborators.splice(matchedPerson.key, 1);
       }
@@ -204,16 +204,16 @@ module.exports = /*  @ngInject */
     }
 
     function opportunityIdsToCopy() {
-      var opportunityIdsPromise = $q.defer();
+      const opportunityIdsPromise = $q.defer();
 
       if (vm.isAllOpportunitiesSelected) {
         opportunitiesService.getAllOpportunitiesIDs().then((opportunityIds) => {
           opportunityIdsPromise.resolve(opportunityIds);
         });
       } else {
-        var opportunityIds = [];
-
-        for (var i = 0; i < vm.selected.length; i++) {
+        let opportunityIds = [];
+debugger;
+        for (let i = 0; i < vm.selected.length; i++) {
           opportunityIds.push(vm.selected[i].id);
         }
 
@@ -224,13 +224,13 @@ module.exports = /*  @ngInject */
     }
 
     function updateCopiedOpportunities() {
-      for (var i = 0; i < vm.selected.length; i++) {
-        var breaking = false;
+      for (let i = 0; i < vm.selected.length; i++) {
+        let breaking = false;
 
         if (vm.selected[i].status !== 'TARGETED') {
           // find opporuntities that were changed
-          for (var j = 0; j < opportunitiesService.model.opportunities.length; j++) {
-            for (var k = 0; k < opportunitiesService.model.opportunities[j].groupedOpportunities.length; k++) {
+          for (let j = 0; j < opportunitiesService.model.opportunities.length; j++) {
+            for (let k = 0; k < opportunitiesService.model.opportunities[j].groupedOpportunities.length; k++) {
               if (opportunitiesService.model.opportunities[j].groupedOpportunities[k].id === vm.selected[i].id) {
                 if (opportunitiesService.model.opportunities[j].groupedOpportunities[k].impact === 'H') {
                   opportunitiesService.model.opportunities[j].store.highImpactOpportunityCount--;
@@ -261,7 +261,7 @@ module.exports = /*  @ngInject */
     }
 
     function createNewList(e) {
-      var parentEl = angular.element(document.body);
+      const parentEl = angular.element(document.body);
       $mdDialog.show({
         clickOutsideToClose: false,
         parent: parentEl,
@@ -309,7 +309,7 @@ module.exports = /*  @ngInject */
 
     function addCollaborator(e) {
       vm.newList.collaborators.push(e);
-      var share = {
+      const share = {
         employeeId: e.employeeId
       };
       vm.newList.targetListShares.push(share);
@@ -336,7 +336,7 @@ module.exports = /*  @ngInject */
       vm.opportunityShared = false;
       vm.shareOpportunityFail = false;
 
-      var parentEl = angular.element(document.body);
+      const parentEl = angular.element(document.body);
       $mdDialog.show({
         clickOutsideToClose: false,
         parent: parentEl,
@@ -348,7 +348,7 @@ module.exports = /*  @ngInject */
 
     function shareOpportunity() {
       if (vm.sharedCollaborators.length > 0) {
-        for (var i = 0; i < vm.sharedCollaborators.length; i++) {
+        for (let i = 0; i < vm.sharedCollaborators.length; i++) {
           userService.sendOpportunity(vm.sharedCollaborators[i].employeeId, vm.currentOpportunityId).then(function(data) {
             vm.opportunityShared = true;
             console.log('shared');
@@ -369,7 +369,7 @@ module.exports = /*  @ngInject */
       vm.undoClicked = false;
 
       // actionOverlay(opportunity, action);
-      var parentEl = angular.element(document.body);
+      const parentEl = angular.element(document.body);
       $mdDialog.show({
         clickOutsideToClose: false,
         parent: parentEl,
@@ -390,7 +390,7 @@ module.exports = /*  @ngInject */
             : closedOpportunitiesService.closeOpportunity(oId))
           .then(function() {
             vm.opportunitiesService.model.opportunities.forEach(function(store, key) {
-              var storeGroup = store.groupedOpportunities;
+              const storeGroup = store.groupedOpportunities;
               storeGroup.forEach(function(opportunity, key) {
                 if (opportunity.id === oId && dismiss) {
                   storeGroup.splice(key, 1);
@@ -424,10 +424,10 @@ module.exports = /*  @ngInject */
     }
 
     function removeOpportunity() {
-      var opportunityIds = [];
+      const opportunityIds = [];
 
       // add opportunity ids into array to be posted
-      for (var i = 0; i < vm.selected.length; i++) {
+      for (let i = 0; i < vm.selected.length; i++) {
         opportunityIds.push(vm.selected[i].id);
       }
 
@@ -440,13 +440,13 @@ module.exports = /*  @ngInject */
     }
 
     function updateOpportunityModel(opportunities, selected) {
-      var opps  = opportunities,
-          selectedArr = selected;
+      const opps  = opportunities;
+      let selectedArr = selected;
 
-      for (var i = 0; i < selectedArr.length; i++) {
-        for (var j = 0; j < opps.length; j++) {
-          for (var k = 0; k < opps[j].groupedOpportunities.length; k++) {
-            var oppId = opps[j].groupedOpportunities[k].id;
+      for (let i = 0; i < selectedArr.length; i++) {
+        for (let j = 0; j < opps.length; j++) {
+          for (let k = 0; k < opps[j].groupedOpportunities.length; k++) {
+            const oppId = opps[j].groupedOpportunities[k].id;
 
             if (selectedArr[i].id === oppId) {
               opps[j].groupedOpportunities.splice(k, 1);
@@ -478,7 +478,7 @@ module.exports = /*  @ngInject */
 
     function showOpportunityMemoModal(ev) {
       vm.memoData = {};
-      var parentEl = angular.element(document.body);
+      const parentEl = angular.element(document.body);
       $mdDialog.show({
         clickOutsideToClose: false,
         parent: parentEl,
@@ -512,7 +512,7 @@ module.exports = /*  @ngInject */
 
     // Choose single memo from response/memo array based on most recent startDate
     function pickMemo(memos, productId, code) {
-      var products = [];
+      const products = [];
       console.log(code);
       memos.forEach(function(value, key) {
         if (value.packageID === productId && value.typeCode === code) {
@@ -553,8 +553,8 @@ module.exports = /*  @ngInject */
 
     // Select or deselect individual list item
     function selectOpportunity(event, parent, item, list) {
-      var idx = list.indexOf(item),
-          groupedCount = 0;
+      const idx = list.indexOf(item);
+      let groupedCount = 0;
 
       if (idx > -1) {
         updateStateAfterUnselectingOpportunity();
@@ -565,8 +565,8 @@ module.exports = /*  @ngInject */
       event.stopPropagation();
 
       // Get selected opportunity count
-      for (var key in parent.groupedOpportunities) {
-        var obj = parent.groupedOpportunities[key];
+      for (const key in parent.groupedOpportunities) {
+        const obj = parent.groupedOpportunities[key];
         if (obj.selected === true) { groupedCount++; }
       }
       parent.selectedOpportunities = groupedCount;
@@ -607,11 +607,11 @@ module.exports = /*  @ngInject */
     }
 
     function flattenOpportunity(obj, rationale) {
-      var data = [];
+      const data = [];
 
       angular.forEach(obj, function(value, key) {
-        var item = {};
-        var csvItem = {};
+        const item = {};
+        const csvItem = {};
         angular.copy(value, item);
         csvItem.storeDistributor = item.store.distributors ? item.store.distributors[0] : '';
         csvItem.TDLinx = item.store.id;
@@ -708,7 +708,7 @@ module.exports = /*  @ngInject */
      * Checks if all the opportunities on the page are selected, then update the state accordingly
      */
     function updateSelectAllState() {
-      var selectedStores = 0;
+      let selectedStores = 0;
       angular.forEach(opportunitiesService.model.opportunities, function(store, key) {
         if (store.selectedOpportunities === store.groupedOpportunities.length) { selectedStores++; }
       });
@@ -736,8 +736,8 @@ module.exports = /*  @ngInject */
      * @param {Array} currentSelectionList Array of all currently selected items
      */
     function selectAllOpportunitiesInStore(store, currentSelectionList) {
-      for (var key in store.groupedOpportunities) {
-        var opportunity = store.groupedOpportunities[key];
+      for (const key in store.groupedOpportunities) {
+        const opportunity = store.groupedOpportunities[key];
         addItem(opportunity, currentSelectionList);
       }
       store.selectedOpportunities = store.groupedOpportunities.length;
@@ -749,8 +749,8 @@ module.exports = /*  @ngInject */
      * @param {Array} currentSelectionList Array of all currently selected items
      */
     function deselectAllOpportunitiesInStore(store, currentSelectionList) {
-      for (var key in store.groupedOpportunities) {
-        var opportunity = store.groupedOpportunities[key],
+      for (const key in store.groupedOpportunities) {
+        const opportunity = store.groupedOpportunities[key],
             idx = currentSelectionList.indexOf(opportunity);
         removeItem(opportunity, currentSelectionList, idx);
       }
@@ -770,9 +770,9 @@ module.exports = /*  @ngInject */
     }
 
     function depletionsVsYaPercent(opportunity) {
-      var currentYearToDate = opportunity.store.depletionsCurrentYearToDate,
-          currentYearToDateYearAgo = opportunity.store.depletionsCurrentYearToDateYA,
-          yearAgoPercentValue = opportunity.store.depletionsCurrentYearToDateYAPercent;
+      let currentYearToDate = opportunity.store.depletionsCurrentYearToDate;
+      let currentYearToDateYearAgo = opportunity.store.depletionsCurrentYearToDateYA;
+      let yearAgoPercentValue = opportunity.store.depletionsCurrentYearToDateYAPercent;
 
       if (currentYearToDateYearAgo === 0 && currentYearToDate > 0) {
         yearAgoPercentValue = 100;
@@ -800,7 +800,7 @@ module.exports = /*  @ngInject */
     }
 
     function impactSort (item) {
-      var result;
+      let result;
       switch (item.impact) {
         case 'H':
           result = 0;
@@ -823,7 +823,7 @@ module.exports = /*  @ngInject */
       if (hasRemainingOpps) {
         vm.addToTargetList(targetList.id);
       } else {
-        var parentEl = angular.element(document.body);
+        const parentEl = angular.element(document.body);
         $mdDialog.show({
           clickOutsideToClose: false,
           parent: parentEl,
@@ -876,7 +876,7 @@ module.exports = /*  @ngInject */
     }
 
     function csvHeaderRationale() {
-      var rationale = angular.copy(vm.csvHeader);
+      const rationale = angular.copy(vm.csvHeader);
       rationale.push('Rationale');
       return rationale;
     }
@@ -896,7 +896,7 @@ module.exports = /*  @ngInject */
     }
 
     function checkIfLinkDisabled(storeDetails) {
-      var id = null;
+      let id = null;
       if (storeDetails) {
         if (filtersService.model.selected.myAccountsOnly === true) {
           id = storeDetails.versionedId;

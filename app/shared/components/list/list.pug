@@ -43,8 +43,8 @@ p.list-disabled-message {{::list.disabledMessage}}
 v-accordion.styled-list(multiple="" id="opportunities" control="list.accordion" onexpand="list.expandCallback(item)" oncollapse="list.collapseCallback(item)" column='12' )
   div.header-row(row ng-class="{'header-disabled': list.filtersService.model.appliedFilter.pagination.totalOpportunities === 0}")
     div.checkbox-wrapper.placeholder(ng-click="list.toggleSelectAllStores()" ng-disabled="!list.hasOpportunities()")
-      md-checkbox(ng-if="list.hasOpportunities() && list.selected.length === 0" aria-label="Select All" ng-checked="false")
-      div.indeterminatable-checkbox(ng-if="list.hasOpportunities() && list.selected.length > 0")
+      md-checkbox(ng-if="list.hasOpportunities() && !list.selected.length" aria-label="Select All" ng-checked="false")
+      div.indeterminatable-checkbox(ng-if="list.hasOpportunities() && list.selected.length")
         md-checkbox(aria-label="Select All" ng-checked="list.isAllOpportunitiesInPageSelected" md-indeterminate="!list.isAllOpportunitiesInPageSelected")
     div.hide-wrapper
       label
