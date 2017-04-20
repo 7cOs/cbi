@@ -566,9 +566,7 @@ module.exports = /*  @ngInject */
       }
       parent.selectedOpportunities = groupedCount;
 
-      if (parent.selectedOpportunities === parent.groupedOpportunities.length) {
-        updateSelectAllState();
-      }
+      if (parent.selectedOpportunities === parent.groupedOpportunities.length) updateSelectAllState();
 
       getTargetLists();
     }
@@ -705,7 +703,7 @@ module.exports = /*  @ngInject */
     function updateSelectAllState() {
       let selectedStores = 0;
       angular.forEach(opportunitiesService.model.opportunities, function(store, key) {
-        if (store.selectedOpportunities === store.groupedOpportunities.length) { selectedStores++; }
+        if (store.selectedOpportunities === store.groupedOpportunities.length) selectedStores++;
       });
 
       if (selectedStores === opportunitiesService.model.opportunities.length) {

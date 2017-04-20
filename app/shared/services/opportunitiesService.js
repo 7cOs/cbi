@@ -211,13 +211,13 @@ module.exports = /*  @ngInject */
     function getAllOpportunitiesIDs() {
       apiHelperService.model.bulkQuery = true;
 
-      var filterPayload = filtersService.getAppliedFilters('opportunities');
+      const filterPayload = filtersService.getAppliedFilters('opportunities');
 
-      var opportunitiesPromise = $q.defer(),
-        url = apiHelperService.request('/api/opportunities/', filterPayload);
+      const opportunitiesPromise = $q.defer();
+      const url = apiHelperService.request('/api/opportunities/', filterPayload);
       $http.get(url)
         .then((response) => {
-          let opportunitiesIDs = response.data.opportunities.map((opp) => opp.id);
+          const opportunitiesIDs = response.data.opportunities.map((opp) => opp.id);
           opportunitiesPromise.resolve(opportunitiesIDs);
         })
         .catch((error) => handleGetOpportunitiesFail(opportunitiesPromise, error));
