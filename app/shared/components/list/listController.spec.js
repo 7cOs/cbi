@@ -1,6 +1,8 @@
+import { fakeAsync, flushMicrotasks } from '@angular/core/testing';
+
 describe('Unit: list controller', function() {
   var scope, ctrl, q, httpBackend, mdDialog, state, closedOpportunitiesService, filtersService, loaderService, opportunitiesService, storesService, targetListService, toastService, userService, filter;
-  var bindings = {showAddToTargetList: true, showRemoveButton: false, pageName: 'MyTestPage'};
+  var bindings = {showAddToTargetList: true, showRemoveButton: false, selectAllAvailable: true, pageName: 'MyTestPage'};
 
   beforeEach(function() {
     angular.mock.module('ui.router');
@@ -144,8 +146,8 @@ describe('Unit: list controller', function() {
     expect(ctrl.submitFeedback).not.toBeUndefined();
     expect(typeof (ctrl.submitFeedback)).toEqual('function');
 
-    expect(ctrl.toggleOpportunitiesInStores).not.toBeUndefined();
-    expect(typeof (ctrl.toggleOpportunitiesInStores)).toEqual('function');
+    expect(ctrl.toggleOpportunitiesInStore).not.toBeUndefined();
+    expect(typeof (ctrl.toggleOpportunitiesInStore)).toEqual('function');
 
     expect(ctrl.toggleSelectAllStores).not.toBeUndefined();
     expect(typeof (ctrl.toggleSelectAllStores)).toEqual('function');
@@ -1098,14 +1100,14 @@ describe('Unit: list controller', function() {
 
     it('should return the store that has been selected', function() {
       var storeToBeAdded = opportunitiesService.model.opportunities[0];
-      ctrl.toggleOpportunitiesInStores(storeToBeAdded, ctrl.selected);
+      ctrl.toggleOpportunitiesInStore(storeToBeAdded, ctrl.selected);
       expect(ctrl.selected[0].id).toEqual(storeToBeAdded.id);
     });
 
     it('should remove the store from the selection', function() {
       var storeToBeAdded = opportunitiesService.model.opportunities[0];
-      ctrl.toggleOpportunitiesInStores(storeToBeAdded, ctrl.selected);
-      ctrl.toggleOpportunitiesInStores(storeToBeAdded, ctrl.selected);
+      ctrl.toggleOpportunitiesInStore(storeToBeAdded, ctrl.selected);
+      ctrl.toggleOpportunitiesInStore(storeToBeAdded, ctrl.selected);
       expect(ctrl.selected[0]).toBeUndefined();
     });
 
@@ -1129,14 +1131,14 @@ describe('Unit: list controller', function() {
 
     it('should select all opportunities inside a store', function() {
       var storeToBeAdded = opportunitiesService.model.opportunities[0];
-      ctrl.toggleOpportunitiesInStores(storeToBeAdded, ctrl.selected);
+      ctrl.toggleOpportunitiesInStore(storeToBeAdded, ctrl.selected);
       expect(storeToBeAdded.selectedOpportunities).toEqual(storeToBeAdded.groupedOpportunities.length);
     });
 
     it('should deselect all opportunities inside a store', function() {
       var storeToBeAdded = opportunitiesService.model.opportunities[0];
-      ctrl.toggleOpportunitiesInStores(storeToBeAdded, ctrl.selected);
-      ctrl.toggleOpportunitiesInStores(storeToBeAdded, ctrl.selected);
+      ctrl.toggleOpportunitiesInStore(storeToBeAdded, ctrl.selected);
+      ctrl.toggleOpportunitiesInStore(storeToBeAdded, ctrl.selected);
       expect(storeToBeAdded.selectedOpportunities).toEqual(0);
     });
   });
@@ -1425,7 +1427,7 @@ describe('Unit: list controller', function() {
       listId = 'fc1a0734-a16e-4953-97da-bba51c4690f6';
     });
 
-    it('should add opprtunities to target list', function() {
+    it('should add opprtunities to target list', fakeAsync(() => () => {
       var deferred = q.defer();
       spyOn(targetListService, 'addTargetListOpportunities').and.callFake(function() {
         return deferred.promise;
@@ -1433,8 +1435,10 @@ describe('Unit: list controller', function() {
 
       ctrl.toggleSelectAllStores();
       ctrl.addToTargetList(listId);
+
+      flushMicrotasks();
       expect(targetListService.addTargetListOpportunities).toHaveBeenCalled();
-    });
+    }));
 
     it('should not call addToTargetService if opportunites are not selected', function() {
       var deferred = q.defer();
