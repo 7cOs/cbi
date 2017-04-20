@@ -21,4 +21,9 @@ describe('Unit: hispanicMarketTypeFormat Filter', function() {
     expect(filter('OTHER')).toEqual('OTHER');
   });
 
+  it('handles null coming from the API', function() {
+    expect(filter(null)).toEqual('Unassigned');
+    expect(filter(undefined)).toEqual('Unassigned');
+  });
+
 });
