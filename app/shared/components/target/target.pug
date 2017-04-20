@@ -20,7 +20,7 @@ div.target-lists
               a(ui-sref="target-list-detail({id: list.id})" analytics-on="click" analytics-event="{{target.analyticsActionForType(type.name)}}" analytics-category="Target Lists" analytics-label="{{list.id}}")
                 div.target-list-row-one.clearfix
                   h3.target-list-name {{list.name}}
-                    md-tooltip(ng-if="list.name.length > 34" md-direction="top") {{list.name}}
+                    md-tooltip(ng-if="list.name.length > target.nameLengthForTooltip" md-direction="top") {{list.name}}
                   div(column="4").target-list-data
                     h3(column="4").closed {{list.opportunitiesSummary.closedOpportunitiesCount | number}}
                     h3(column="8") {{list.opportunitiesSummary.opportunitiesCount | number}}
