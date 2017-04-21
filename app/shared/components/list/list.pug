@@ -1,19 +1,19 @@
 .total-opportunities
   h4.opportunities-count(ng-if="!list.opportunitiesService.model.filterApplied" ng-hide="list.opportunitiesService.model.filterApplied || list.opportunitiesService.model.opportunities.length !== 0") 0 opportunities <span>across 0 stores</span>
-  h4.opportunities-count(ng-if="list.pageName(['accounts']) || list.pageName(['target-list-detail'])" ng-hide="list.opportunitiesService.model.noOpportunitiesFound || !list.opportunitiesService.model.filterApplied") {{list.filtersService.model.appliedFilter.pagination.totalOpportunities | number:0 }} opportunities <span>across {{list.filtersService.model.appliedFilter.pagination.totalStores | number:0}} stores</span>
+  h4.opportunities-count(ng-hide="list.opportunitiesService.model.noOpportunitiesFound || !list.opportunitiesService.model.filterApplied") {{list.filtersService.model.appliedFilter.pagination.totalOpportunities | number:0 }} opportunities <span>across {{list.filtersService.model.appliedFilter.pagination.totalStores | number:0}} stores</span>
   span.opportunities-selected-count(ng-hide="!list.selected || list.selected.length === 0")
-    ng-pluralize(count="list.selected.length" when="{'1' : '1 opportunity selected', 'other': '{{list.selected.length}} opportunities selected'}")
+    ng-pluralize(count="list.selected.length" when="{'1' : '1 opportunity selected', 'other': '{{list.isAllOpportunitiesSelected ? list.filtersService.model.appliedFilter.pagination.totalOpportunities : list.selected.length}} opportunities selected'}")
 
 .action-buttons
   span(ng-switch="list.selected < 1")
     span(ng-switch-when="true")
-      button.btn-action(ng-if="!list.targetListService.model.currentList.archived && list.pageName(['target-lists', 'target-list-detail'])" ng-disabled="true") Add to Target List
-      button.btn-action(ng-if="!list.targetListService.model.currentList.archived && list.pageName(['opportunities'])" ng-disabled="true") Copy to Target List
+      button.btn-action(ng-if="!list.targetListService.model.currentList.archived && list.showAddToTargetList" ng-disabled="true") Add to Target List
+      button.btn-action(ng-if="!list.targetListService.model.currentList.archived && list.showCopyToTargetList" ng-disabled="true") Copy to Target List
       button.btn-action(ng-disabled="true") Download
-      button.btn-action(ng-if="!list.targetListService.model.currentList.archived && list.pageName(['opportunities'])" ng-disabled="true" ) Remove
+      button.btn-action(ng-if="!list.targetListService.model.currentList.archived && list.showRemoveButton" ng-disabled="true" ) Remove
 
     span(ng-switch-when="false")
-      md-menu(md-offset="0 45" ng-if="list.pageName(['target-lists', 'target-list-detail'])")
+      md-menu(md-offset="0 45" ng-if="list.showAddToTargetList")
         button.btn-action(aria-label="Add to Target List" ng-click="$mdOpenMenu($event)") Add to Target List
         md-menu-content.target-list-menu
           md-menu-item(ng-click="list.createNewList($event)")
@@ -21,7 +21,7 @@
           md-menu-item(ng-repeat="targetList in list.userService.model.targetLists.owned | filter:{archived:false, deleted: false}" ng-click="list.handleAddToTargetList($event, targetList, $index)" analytics-on="click" analytics-event="Add to Target List" analytics-category="{{list.analyticsCategory}}" analytics-label="{{targetList.id}}")
             p {{::targetList.name | truncateText:18}}
               span.spots-available {{list.remainingOpportunitySpots(targetList.opportunitiesSummary.opportunitiesCount)}} SPOTS AVAILABLE
-      md-menu(md-offset="0 45" ng-if="list.pageName(['opportunities']) && !list.targetListService.model.currentList.archived")
+      md-menu(md-offset="0 45" ng-if="list.showCopyToTargetList && !list.targetListService.model.currentList.archived")
         button.btn-action(ng-click="$mdOpenMenu($event)") Copy to Target List
         md-menu-content.target-list-menu
           md-menu-item(ng-repeat="targetList in list.userService.model.targetLists.owned" ng-click="list.handleAddToTargetList($event, targetList, $index)" analytics-on="click" analytics-event="Add to Target List" analytics-category="{{list.analyticsCategory}}" analytics-label="{{targetList.id}}")
@@ -34,19 +34,20 @@
             p With Rationale
           md-menu-item(ng-csv="list.flattenOpportunity(list.selected)" filename="{{list.getDate() | date:'yyyy-MM-dd'}}.csv" csv-header="list.csvHeader" ng-click="$mdCloseMenu($event)" analytics-on="click" analytics-event="Download" analytics-category="{{list.analyticsCategory}}" analytics-label="{{list.analyticsLabel}}")
             p Without Rationale
-      button.btn-action(ng-disabled="list.selected < 1" ng-click="list.removeOpportunity()" ng-if="list.pageName(['opportunities']) && !list.targetListService.model.currentList.archived") Remove
+      button.btn-action(ng-disabled="list.selected < 1" ng-click="list.removeOpportunity()" ng-if="list.showRemoveButton && !list.targetListService.model.currentList.archived") Remove
 
-button.icon.select-all(ng-click="list.toggleSelectAllStores()" ng-disabled="!list.hasOpportunities()") {{!list.isSelectAllActivated ? 'Select All' : 'Un-Select All'}}
 button.icon.narrow-icon.expand-all(ng-click="list.accordion.expandAll()" ng-disabled="list.allOpportunitiesExpanded()" analytics-on="click" analytics-event="Expand Store" analytics-category="Opportunities" analytics-label="All") Expand All
 button.icon.narrow-icon.collapse-all(ng-click="list.accordion.collapseAll()" ng-disabled="list.noOpportunitiesExpanded()") Collapse All
 p.list-disabled-message {{::list.disabledMessage}}
 
 v-accordion.styled-list(multiple="" id="opportunities" control="list.accordion" onexpand="list.expandCallback(item)" oncollapse="list.collapseCallback(item)" column='12' )
   div.header-row(row ng-class="{'header-disabled': list.filtersService.model.appliedFilter.pagination.totalOpportunities === 0}")
-    div.checkbox-wrapper.placeholder
-    div.hide-wrapper(ng-if="list.pageName()")
+    div.checkbox-wrapper.placeholder(ng-click="list.toggleSelectAllStores()" ng-disabled="!list.hasOpportunities()")
+      md-checkbox(ng-if="list.hasOpportunities() && !list.selected.length" aria-label="Select All" ng-checked="false")
+      div.indeterminatable-checkbox(ng-if="list.hasOpportunities() && list.selected.length")
+        md-checkbox(aria-label="Select All" ng-checked="list.isAllOpportunitiesInPageSelected" md-indeterminate="!list.isAllOpportunitiesInPageSelected")
+    div.hide-wrapper
       label
-    div.more-wrapper(ng-if="!list.pageName()")
     div.checkbox-sibling(column='12')
       div(column='3')
         label(ng-click="list.sortBy('store');" ng-class="{ 'header-bold' : list.filtersService.model.appliedFilter.sort.sortArr[0].str === 'store' || list.orderName[0] === 'store.name' || list.orderName[0] === '-store.name'}").sort
@@ -70,14 +71,18 @@ v-accordion.styled-list(multiple="" id="opportunities" control="list.accordion" 
   div(ng-if="!list.opportunitiesService.model.filterApplied && list.opportunitiesService.model.opportunities.length === 0").no-opportunities
     h4 To get started, select some filters!
     p Narrow your opportunities by selecting a <strong>Retailer</strong> and/or a <strong>Distributor</strong>.
-  div(ng-if="list.opportunitiesService.model.noOpportunitiesFound === true && list.opportunitiesService.model.filterApplied").no-opportunities.filter-error
+  div(ng-if="list.opportunitiesService.model.noOpportunitiesFound && list.opportunitiesService.model.filterApplied").no-opportunities.filter-error
     h4 Dang! We were unable to find any opportunities that met your criteria.
     p Try adjusting your filters to broaden your search!
+  div.select-all-toast-wrapper(ng-if="list.selectAllAvailable" ng-class="{'visible': list.selectAllToastVisible}")
+    div.toast-message(ng-if="!list.isAllOpportunitiesSelected && list.numberOfOpportunitiesSmallerThanMax") There are currently {{list.selected.length}} opportunities selected. Do you want to <span class="inline-button" ng-click="list.selectAllOpportunities()">select all {{list.filtersService.model.appliedFilter.pagination.totalOpportunities}}</span> of them?
+    div.toast-message(ng-if="!(list.isAllOpportunitiesSelected || list.numberOfOpportunitiesSmallerThanMax)") There are currently {{list.selected.length}} opportunities selected. To select all results, please narrow your search criteria.
+    div.toast-message(ng-if="list.isAllOpportunitiesSelected") All {{list.filtersService.model.appliedFilter.pagination.totalOpportunities}} opportunities are selected. <span class="inline-button" ng-click="list.toggleSelectAllStores()">Clear selection</span>
   v-pane.list-item(row ng-repeat="opportunity in list.opportunitiesService.model.opportunities | filter : {'dismissed': false} | orderBy : list.orderName" expanded='opportunity.isExpanded')
     .shadow-wrap.bottom
-      .header-wrapper(ng-click="list.toggleOpportunitiesInStores(opportunity, list.selected)")
-        div.checkbox-wrapper(ng-click="list.toggleOpportunitiesInStores(opportunity, list.selected)")
-          md-checkbox(aria-label="Select Item" ng-click="list.toggleOpportunitiesInStores(opportunity, list.selected)" ng-checked="opportunity.selectedOpportunities === opportunity.groupedOpportunities.length")
+      .header-wrapper(ng-click="list.toggleOpportunitiesInStore(opportunity, list.selected)")
+        div.checkbox-wrapper
+          md-checkbox(aria-label="Select Item" ng-checked="opportunity.selectedOpportunities === opportunity.groupedOpportunities.length")
         v-pane-header.checkbox-sibling(column='12' ng-click="$event.stopPropagation()" analytics-if="opportunity.isExpanded" analytics-on="click" analytics-event="Expand Store" analytics-category="Opportunities" analytics-label="{{opportunity.store.id}}")
           div(ng-class="{long: opportunity.store.name.length > 21}").cell-parent
             div.pad-cell.semi-bold(column='3') {{::opportunity.store.name | titlecase}} <span class="supporting-text" ng-if="opportunity.store.storeNumber">\#{{::opportunity.store.storeNumber | uppercase}}</span>

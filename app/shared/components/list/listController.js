@@ -8,7 +8,7 @@ module.exports = /*  @ngInject */
     // ****************
 
     // Initial variables
-    var vm = this;
+    const vm = this;
     const maxOpportunities = 1000;
 
     // Services
@@ -23,7 +23,8 @@ module.exports = /*  @ngInject */
     vm.depletionsChevron = false;
     vm.disabledMessage = '';
     vm.expandedOpportunities = 0;
-    vm.isSelectAllActivated = false;
+    vm.isAllOpportunitiesSelected = false;
+    vm.isAllOpportunitiesInPageSelected = false;
     vm.memoData = {};
     vm.memoError = false;
     vm.memoType = '';
@@ -48,6 +49,8 @@ module.exports = /*  @ngInject */
     vm.storeChevron = true;
     vm.stores = [];
     vm.undoClicked = false;
+    vm.selectAllToastVisible = false;
+    vm.numberOfOpportunitiesSmallerThanMax = false;
 
     // Expose public methods
     vm.addCollaborator = addCollaborator;
@@ -72,7 +75,6 @@ module.exports = /*  @ngInject */
     vm.openDismissModal = openDismissModal;
     vm.openShareModal = openShareModal;
     vm.opportunityTypeOrSubtype = opportunityTypeOrSubtype;
-    vm.pageName = pageName;
     vm.pickMemo = pickMemo;
     vm.removeOpportunity = removeOpportunity;
     vm.removeSharedCollaborator = removeSharedCollaborator;
@@ -84,7 +86,8 @@ module.exports = /*  @ngInject */
     vm.showOpportunityMemoModal = showOpportunityMemoModal;
     vm.sortBy = sortBy;
     vm.submitFeedback = submitFeedback;
-    vm.toggleOpportunitiesInStores = toggleOpportunitiesInStores;
+    vm.toggleOpportunitiesInStore = toggleOpportunitiesInStore;
+    vm.selectAllOpportunities = selectAllOpportunities;
     vm.toggleSelectAllStores = toggleSelectAllStores;
     vm.updateOpportunityModel = updateOpportunityModel;
     vm.vsYAGrowthPercent = vsYAGrowthPercent;
@@ -133,7 +136,7 @@ module.exports = /*  @ngInject */
       if (!vm.sharedCollaborators.length) {
         vm.sharedCollaborators.push(person);
       } else {
-        var matchedPerson = checkIfPersonIsAddedToCollaborators(person);
+        const matchedPerson = checkIfPersonIsAddedToCollaborators(person);
         if (!matchedPerson) {
           vm.sharedCollaborators.push(person);
         }
@@ -147,7 +150,7 @@ module.exports = /*  @ngInject */
      * @returns {object} matchedPerson Returns the matchedPerson if the object exists or returns null
      */
     function checkIfPersonIsAddedToCollaborators(person) {
-      var matchedPerson = null;
+      let matchedPerson = null;
       vm.sharedCollaborators.forEach(function(collab, key) {
         if (!matchedPerson && person.employeeId === collab.employeeId) {
           matchedPerson = {
@@ -164,7 +167,7 @@ module.exports = /*  @ngInject */
      * @param {object} person The person who needs to be added to the list of collaborators
      */
     function removeSharedCollaborator(person) {
-      var matchedPerson = checkIfPersonIsAddedToCollaborators(person);
+      const matchedPerson = checkIfPersonIsAddedToCollaborators(person);
       if (matchedPerson) {
         vm.sharedCollaborators.splice(matchedPerson.key, 1);
       }
@@ -181,63 +184,80 @@ module.exports = /*  @ngInject */
      */
     function addToTargetList(listId) {
       if (listId && vm.selected.length > 0) {
-        var opportunityIds = [];
-        for (var i = 0; i < vm.selected.length; i++) {
-          opportunityIds.push(vm.selected[i].id);
-        }
+        loaderService.openLoader(true);
 
-        targetListService.addTargetListOpportunities(listId, opportunityIds).then(function(data) {
-          toastService.showToast('copied', opportunityIds);
+        let opportunityIdsPromise = opportunityIdsToCopy();
+        opportunityIdsPromise.then((opportunityIds) => {
+          targetListService.addTargetListOpportunities(listId, opportunityIds).then(function(data) {
+            updateCopiedOpportunities();
+            vm.toggleSelectAllStores(false);
 
-          // for each selected item
-          for (i = 0; i < vm.selected.length; i++) {
-            var breaking = false;
+            loaderService.closeLoader();
 
-            if (vm.selected[i].status !== 'TARGETED') {
-              // find opporuntities that were changed
-              for (var j = 0; j < opportunitiesService.model.opportunities.length; j++) {
-                for (var k = 0; k < opportunitiesService.model.opportunities[j].groupedOpportunities.length; k++) {
-                  if (opportunitiesService.model.opportunities[j].groupedOpportunities[k].id === vm.selected[i].id) {
-                    if (opportunitiesService.model.opportunities[j].groupedOpportunities[k].impact === 'H') {
-                      opportunitiesService.model.opportunities[j].store.highImpactOpportunityCount--;
-                    }
-
-                    // remove from opportunities model if open is selected, otherwise just change status
-                    if (filtersService.model.opportunityStatusOpen && filtersService.model.opportunityStatusOpen === true) {
-                      opportunitiesService.model.opportunities[j].groupedOpportunities.splice(k, 1);
-                      filtersService.model.appliedFilter.pagination.totalOpportunities--;
-                    } else {
-                      opportunitiesService.model.opportunities[j].groupedOpportunities[k].status = 'TARGETED';
-                    }
-
-                    if (opportunitiesService.model.opportunities[j].groupedOpportunities.length === 0) {
-                      opportunitiesService.model.opportunities.splice(j, 1);
-                      filtersService.model.appliedFilter.pagination.totalStores--;
-                    }
-
-                    // break loop after needle is found to save on performance
-                    breaking = true;
-                    break;
-                  }
-                }
-                if (breaking) break;
-              }
-            }
-          }
-          // reset selected
-          vm.selected = [];
-          vm.isSelectAllActivated = true;
-          vm.toggleSelectAllStores();
-          vm.selected = [];
-        }, function(err) {
-          console.log('Error adding these ids: ', opportunityIds, ' Responded with error: ', err);
-          getTargetLists();
+            toastService.showToast('copied', opportunityIds);
+          }, function(err) {
+            loaderService.closeLoader();
+            console.log('Error adding these ids: ', opportunityIds, ' Responded with error: ', err);
+            getTargetLists();
+          });
         });
       }
     }
 
+    function opportunityIdsToCopy() {
+      const opportunityIdsPromise = $q.defer();
+
+      if (vm.isAllOpportunitiesSelected) {
+        opportunitiesService.getAllOpportunitiesIDs().then((opportunityIds) => {
+          opportunityIdsPromise.resolve(opportunityIds);
+        });
+      } else {
+        const opportunityIds = vm.selected.map((opportunity) => opportunity.id);
+        opportunityIdsPromise.resolve(opportunityIds);
+      }
+
+      return opportunityIdsPromise.promise;
+    }
+
+    function updateCopiedOpportunities() {
+      for (let i = 0; i < vm.selected.length; i++) {
+        let breaking = false;
+
+        if (vm.selected[i].status !== 'TARGETED') {
+          // find opporuntities that were changed
+          for (let j = 0; j < opportunitiesService.model.opportunities.length; j++) {
+            for (let k = 0; k < opportunitiesService.model.opportunities[j].groupedOpportunities.length; k++) {
+              if (opportunitiesService.model.opportunities[j].groupedOpportunities[k].id === vm.selected[i].id) {
+                if (opportunitiesService.model.opportunities[j].groupedOpportunities[k].impact === 'H') {
+                  opportunitiesService.model.opportunities[j].store.highImpactOpportunityCount--;
+                }
+
+                // remove from opportunities model if open is selected, otherwise just change status
+                if (filtersService.model.opportunityStatusOpen && filtersService.model.opportunityStatusOpen === true) {
+                  opportunitiesService.model.opportunities[j].groupedOpportunities.splice(k, 1);
+                  filtersService.model.appliedFilter.pagination.totalOpportunities--;
+                } else {
+                  opportunitiesService.model.opportunities[j].groupedOpportunities[k].status = 'TARGETED';
+                }
+
+                if (opportunitiesService.model.opportunities[j].groupedOpportunities.length === 0) {
+                  opportunitiesService.model.opportunities.splice(j, 1);
+                  filtersService.model.appliedFilter.pagination.totalStores--;
+                }
+
+                // break loop after needle is found to save on performance
+                breaking = true;
+                break;
+              }
+            }
+            if (breaking) break;
+          }
+        }
+      }
+    }
+
     function createNewList(e) {
-      var parentEl = angular.element(document.body);
+      const parentEl = angular.element(document.body);
       $mdDialog.show({
         clickOutsideToClose: false,
         parent: parentEl,
@@ -285,7 +305,7 @@ module.exports = /*  @ngInject */
 
     function addCollaborator(e) {
       vm.newList.collaborators.push(e);
-      var share = {
+      const share = {
         employeeId: e.employeeId
       };
       vm.newList.targetListShares.push(share);
@@ -312,7 +332,7 @@ module.exports = /*  @ngInject */
       vm.opportunityShared = false;
       vm.shareOpportunityFail = false;
 
-      var parentEl = angular.element(document.body);
+      const parentEl = angular.element(document.body);
       $mdDialog.show({
         clickOutsideToClose: false,
         parent: parentEl,
@@ -324,7 +344,7 @@ module.exports = /*  @ngInject */
 
     function shareOpportunity() {
       if (vm.sharedCollaborators.length > 0) {
-        for (var i = 0; i < vm.sharedCollaborators.length; i++) {
+        for (let i = 0; i < vm.sharedCollaborators.length; i++) {
           userService.sendOpportunity(vm.sharedCollaborators[i].employeeId, vm.currentOpportunityId).then(function(data) {
             vm.opportunityShared = true;
             console.log('shared');
@@ -345,7 +365,7 @@ module.exports = /*  @ngInject */
       vm.undoClicked = false;
 
       // actionOverlay(opportunity, action);
-      var parentEl = angular.element(document.body);
+      const parentEl = angular.element(document.body);
       $mdDialog.show({
         clickOutsideToClose: false,
         parent: parentEl,
@@ -366,7 +386,7 @@ module.exports = /*  @ngInject */
             : closedOpportunitiesService.closeOpportunity(oId))
           .then(function() {
             vm.opportunitiesService.model.opportunities.forEach(function(store, key) {
-              var storeGroup = store.groupedOpportunities;
+              const storeGroup = store.groupedOpportunities;
               storeGroup.forEach(function(opportunity, key) {
                 if (opportunity.id === oId && dismiss) {
                   storeGroup.splice(key, 1);
@@ -399,21 +419,11 @@ module.exports = /*  @ngInject */
       $mdDialog.hide();
     }
 
-    // arr of pages to be hidden on
-    function pageName(arr) {
-      arr = arr || [];
-      for (var i = 0; i < arr.length; i++) {
-        if ($state.current.name === arr[i]) return false;
-      }
-
-      return true;
-    }
-
     function removeOpportunity() {
-      var opportunityIds = [];
+      const opportunityIds = [];
 
       // add opportunity ids into array to be posted
-      for (var i = 0; i < vm.selected.length; i++) {
+      for (let i = 0; i < vm.selected.length; i++) {
         opportunityIds.push(vm.selected[i].id);
       }
 
@@ -426,13 +436,13 @@ module.exports = /*  @ngInject */
     }
 
     function updateOpportunityModel(opportunities, selected) {
-      var opps  = opportunities,
-          selectedArr = selected;
+      const opps  = opportunities;
+      let selectedArr = selected;
 
-      for (var i = 0; i < selectedArr.length; i++) {
-        for (var j = 0; j < opps.length; j++) {
-          for (var k = 0; k < opps[j].groupedOpportunities.length; k++) {
-            var oppId = opps[j].groupedOpportunities[k].id;
+      for (let i = 0; i < selectedArr.length; i++) {
+        for (let j = 0; j < opps.length; j++) {
+          for (let k = 0; k < opps[j].groupedOpportunities.length; k++) {
+            const oppId = opps[j].groupedOpportunities[k].id;
 
             if (selectedArr[i].id === oppId) {
               opps[j].groupedOpportunities.splice(k, 1);
@@ -464,7 +474,7 @@ module.exports = /*  @ngInject */
 
     function showOpportunityMemoModal(ev) {
       vm.memoData = {};
-      var parentEl = angular.element(document.body);
+      const parentEl = angular.element(document.body);
       $mdDialog.show({
         clickOutsideToClose: false,
         parent: parentEl,
@@ -498,7 +508,7 @@ module.exports = /*  @ngInject */
 
     // Choose single memo from response/memo array based on most recent startDate
     function pickMemo(memos, productId, code) {
-      var products = [];
+      const products = [];
       console.log(code);
       memos.forEach(function(value, key) {
         if (value.packageID === productId && value.typeCode === code) {
@@ -539,10 +549,11 @@ module.exports = /*  @ngInject */
 
     // Select or deselect individual list item
     function selectOpportunity(event, parent, item, list) {
-      var idx = list.indexOf(item),
-          groupedCount = 0;
+      const idx = list.indexOf(item);
+      let groupedCount = 0;
 
       if (idx > -1) {
+        updateStateAfterUnselectingOpportunity();
         removeItem(item, list, idx);
       } else {
         addItem(item, list);
@@ -550,11 +561,14 @@ module.exports = /*  @ngInject */
       event.stopPropagation();
 
       // Get selected opportunity count
-      for (var key in parent.groupedOpportunities) {
-        var obj = parent.groupedOpportunities[key];
+      for (const key in parent.groupedOpportunities) {
+        const obj = parent.groupedOpportunities[key];
         if (obj.selected === true) { groupedCount++; }
       }
       parent.selectedOpportunities = groupedCount;
+
+      if (parent.selectedOpportunities === parent.groupedOpportunities.length) updateSelectAllState();
+
       getTargetLists();
     }
 
@@ -587,11 +601,11 @@ module.exports = /*  @ngInject */
     }
 
     function flattenOpportunity(obj, rationale) {
-      var data = [];
+      const data = [];
 
       angular.forEach(obj, function(value, key) {
-        var item = {};
-        var csvItem = {};
+        const item = {};
+        const csvItem = {};
         angular.copy(value, item);
         csvItem.storeDistributor = item.store.distributors ? item.store.distributors[0] : '';
         csvItem.TDLinx = item.store.id;
@@ -634,35 +648,80 @@ module.exports = /*  @ngInject */
     }
 
     /**
-     * Toggles selection of all opportunites in the store and the store itself
+     * Selects all the opportunities across all the pages
      */
-    function toggleSelectAllStores () {
-      angular.forEach(opportunitiesService.model.opportunities, function(store, key) {
-        if (vm.isSelectAllActivated) {
-          deselectAllOpportunitiesInStore(store, vm.selected);
-        } else {
-          selectAllOpportunitiesInStore(store, vm.selected);
-        }
-      });
-
-      if (vm.isSelectAllActivated) {
-        vm.selected = [];
-      }
-      vm.isSelectAllActivated = !vm.isSelectAllActivated;
+    function selectAllOpportunities() {
+      vm.isAllOpportunitiesSelected = true;
     }
 
     /**
-     * Toggles selection of all opportunites in the store and the store itself
+     * Toggles selection of all opportunites in all the stores
+     * @param {Boolean} select Optional: whether to select or not. If not provided, will reverse the current state.
+     */
+    function toggleSelectAllStores (select) {
+      if (select !== undefined && select !== null) {
+        vm.isAllOpportunitiesInPageSelected = select;
+      } else {
+        vm.isAllOpportunitiesInPageSelected = !vm.isAllOpportunitiesInPageSelected;
+      }
+
+      if (vm.isAllOpportunitiesInPageSelected) {
+        angular.forEach(opportunitiesService.model.opportunities, function(store, key) {
+          selectAllOpportunitiesInStore(store, vm.selected);
+        });
+
+        vm.selectAllToastVisible = true;
+      } else {
+        updateStateAfterUnselectingOpportunity();
+        vm.selected = [];
+
+        angular.forEach(opportunitiesService.model.opportunities, function(store, key) {
+          store.selectedOpportunities = 0;
+        });
+      }
+    }
+
+    /**
+     * Toggles selection of all opportunites in the specified store
      * @param {object} store Store that needs to be toggled
      * @param {Array} currentSelectionList Array of all currently selected items
      */
-    function toggleOpportunitiesInStores (store, currentSelectionList) {
-      vm.isSelectAllActivated = false;
-      if (store.selectedOpportunities === store.groupedOpportunities.length) {
-        deselectAllOpportunitiesInStore(store, currentSelectionList);
-      } else {
+    function toggleOpportunitiesInStore (store, currentSelectionList) {
+      const select = store.selectedOpportunities !== store.groupedOpportunities.length;
+
+      if (select) {
         selectAllOpportunitiesInStore(store, currentSelectionList);
+        updateSelectAllState();
+      } else {
+        deselectAllOpportunitiesInStore(store, currentSelectionList);
+        updateStateAfterUnselectingOpportunity();
       }
+    }
+
+    /**
+     * Checks if all the opportunities on the page are selected, then update the state accordingly
+     */
+    function updateSelectAllState() {
+      let selectedStores = 0;
+      angular.forEach(opportunitiesService.model.opportunities, function(store, key) {
+        if (store.selectedOpportunities === store.groupedOpportunities.length) selectedStores++;
+      });
+
+      if (selectedStores === opportunitiesService.model.opportunities.length) {
+        vm.isAllOpportunitiesInPageSelected = true;
+        vm.selectAllToastVisible = true;
+      } else {
+        vm.selectAllToastVisible = false;
+      }
+    }
+
+    /**
+     * Update the state after unselecting one or many opportunities
+     */
+    function updateStateAfterUnselectingOpportunity() {
+      vm.isAllOpportunitiesInPageSelected = false;
+      vm.isAllOpportunitiesSelected = false;
+      vm.selectAllToastVisible = false;
     }
 
     /**
@@ -671,8 +730,8 @@ module.exports = /*  @ngInject */
      * @param {Array} currentSelectionList Array of all currently selected items
      */
     function selectAllOpportunitiesInStore(store, currentSelectionList) {
-      for (var key in store.groupedOpportunities) {
-        var opportunity = store.groupedOpportunities[key];
+      for (const key in store.groupedOpportunities) {
+        const opportunity = store.groupedOpportunities[key];
         addItem(opportunity, currentSelectionList);
       }
       store.selectedOpportunities = store.groupedOpportunities.length;
@@ -684,8 +743,8 @@ module.exports = /*  @ngInject */
      * @param {Array} currentSelectionList Array of all currently selected items
      */
     function deselectAllOpportunitiesInStore(store, currentSelectionList) {
-      for (var key in store.groupedOpportunities) {
-        var opportunity = store.groupedOpportunities[key],
+      for (const key in store.groupedOpportunities) {
+        const opportunity = store.groupedOpportunities[key],
             idx = currentSelectionList.indexOf(opportunity);
         removeItem(opportunity, currentSelectionList, idx);
       }
@@ -705,9 +764,9 @@ module.exports = /*  @ngInject */
     }
 
     function depletionsVsYaPercent(opportunity) {
-      var currentYearToDate = opportunity.store.depletionsCurrentYearToDate,
-          currentYearToDateYearAgo = opportunity.store.depletionsCurrentYearToDateYA,
-          yearAgoPercentValue = opportunity.store.depletionsCurrentYearToDateYAPercent;
+      let currentYearToDate = opportunity.store.depletionsCurrentYearToDate;
+      let currentYearToDateYearAgo = opportunity.store.depletionsCurrentYearToDateYA;
+      let yearAgoPercentValue = opportunity.store.depletionsCurrentYearToDateYAPercent;
 
       if (currentYearToDateYearAgo === 0 && currentYearToDate > 0) {
         yearAgoPercentValue = 100;
@@ -735,7 +794,7 @@ module.exports = /*  @ngInject */
     }
 
     function impactSort (item) {
-      var result;
+      let result;
       switch (item.impact) {
         case 'H':
           result = 0;
@@ -750,21 +809,16 @@ module.exports = /*  @ngInject */
       return result;
     }
 
-    function remainingOpportunitySpots(currentOpps) {
-      const  remainingOpps = maxOpportunities - currentOpps;
-      return remainingOpps > 0 ? remainingOpps : 0;
-    }
-
     function handleAddToTargetList(ev, targetList, idx) {
       const usedOpps = targetList.opportunitiesSummary.opportunitiesCount;
       const remainingOpps = remainingOpportunitySpots(usedOpps);
-      const totalOpps = usedOpps + this.selected.length;
+      const totalOpps = usedOpps + vm.isAllOpportunitiesSelected ? filtersService.model.appliedFilter.pagination.totalOpportunities : this.selected.length;
       const hasRemainingOpps = totalOpps <= maxOpportunities;
       if (hasRemainingOpps) {
         vm.addToTargetList(targetList.id);
         updateTargetListOpportunitySummary(idx, this.selected.length);
       } else {
-        var parentEl = angular.element(document.body);
+        const parentEl = angular.element(document.body);
         $mdDialog.show({
           clickOutsideToClose: false,
           parent: parentEl,
@@ -782,6 +836,11 @@ module.exports = /*  @ngInject */
       }
     }
 
+    function remainingOpportunitySpots(currentOpps) {
+      const  remainingOpps = maxOpportunities - currentOpps;
+      return remainingOpps > 0 ? remainingOpps : 0;
+    }
+
     // ***************
     // PRIVATE METHODS
     // ***************
@@ -796,8 +855,9 @@ module.exports = /*  @ngInject */
 
     $scope.$watch('list.opportunitiesService.model.opportunities', function() {
       vm.selected = [];
-      vm.isSelectAllActivated = false;
       vm.disabledMessage = '';
+      vm.numberOfOpportunitiesSmallerThanMax = filtersService.model.appliedFilter.pagination.totalOpportunities <= maxOpportunities;
+      updateStateAfterUnselectingOpportunity();
     });
 
     /**
@@ -811,7 +871,7 @@ module.exports = /*  @ngInject */
     }
 
     function csvHeaderRationale() {
-      var rationale = angular.copy(vm.csvHeader);
+      const rationale = angular.copy(vm.csvHeader);
       rationale.push('Rationale');
       return rationale;
     }
@@ -831,7 +891,7 @@ module.exports = /*  @ngInject */
     }
 
     function checkIfLinkDisabled(storeDetails) {
-      var id = null;
+      let id = null;
       if (storeDetails) {
         if (filtersService.model.selected.myAccountsOnly === true) {
           id = storeDetails.versionedId;
@@ -856,8 +916,7 @@ module.exports = /*  @ngInject */
       // Initialize the target lists for the user Id
       getTargetLists();
 
-      // page is NOT target-list-detail, so it is opportunities
-      if (pageName(['target-list-detail'])) {
+      if (vm.pageName === 'opportunities') {
         vm.analyticsCategory = 'Opportunities';
         vm.analyticsLabel = 'Opportunity Result List';
       } else {

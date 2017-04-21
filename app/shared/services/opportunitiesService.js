@@ -11,6 +11,7 @@ module.exports = /*  @ngInject */
     var service = {
       model: model,
       getOpportunities: getOpportunities,
+      getAllOpportunitiesIDs: getAllOpportunitiesIDs,
       getOpportunitiesHeaders: getOpportunitiesHeaders,
       createOpportunity: createOpportunity,
       getOpportunitiyFeedback: getOpportunityFeedback,
@@ -46,7 +47,7 @@ module.exports = /*  @ngInject */
 
       $http.get(url)
         .then(getOpportunitiesSuccess)
-        .catch(getOpportunitiesFail);
+        .catch((error) => handleGetOpportunitiesFail(opportunitiesPromise, error));
 
       function getOpportunitiesSuccess(response) {
         // Group opportunities by store
@@ -127,7 +128,7 @@ module.exports = /*  @ngInject */
           } else {
             service.model.noOpportunitiesFound = true;
             service.model.filterApplied = true;
-            return getOpportunitiesFail('No authorized Opportunities');
+            return handleGetOpportunitiesFail('No authorized Opportunities');
           }
 
           // add brand to array
@@ -146,11 +147,6 @@ module.exports = /*  @ngInject */
         }
 
         opportunitiesPromise.resolve(newOpportunityArr);
-      }
-
-      function getOpportunitiesFail(error) {
-        console.warn('[opportunitiesService.getOpportunities]... Error getting opportunities... Err: ', error);
-        opportunitiesPromise.reject(error);
       }
 
       function setVsYAPercent(item) {
@@ -194,6 +190,39 @@ module.exports = /*  @ngInject */
       }
 
       return false;
+    }
+
+    /**
+     * @name handleGetOpportunitiesFail
+     * @desc Handles a failing request on get opportunities.
+     * @params {String} url - url to hit the api with [this could end up being static]
+     */
+    function handleGetOpportunitiesFail(opportunitiesPromise, error) {
+      console.warn('[opportunitiesService.getOpportunities]... Error getting opportunities... Err: ', error);
+      opportunitiesPromise.reject(error);
+    }
+
+    /**
+     * @name getAllOpportunitiesIDs
+     * @desc Get opportunities IDs from API
+     * @returns {Object}
+     * @memberOf cf.common.services
+     */
+    function getAllOpportunitiesIDs() {
+      apiHelperService.model.bulkQuery = true;
+
+      const filterPayload = filtersService.getAppliedFilters('opportunities');
+
+      const opportunitiesPromise = $q.defer();
+      const url = apiHelperService.request('/api/opportunities/', filterPayload);
+      $http.get(url)
+        .then((response) => {
+          const opportunitiesIDs = response.data.opportunities.map((opp) => opp.id);
+          opportunitiesPromise.resolve(opportunitiesIDs);
+        })
+        .catch((error) => handleGetOpportunitiesFail(opportunitiesPromise, error));
+
+      return opportunitiesPromise.promise;
     }
 
     /**

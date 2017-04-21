@@ -3,7 +3,12 @@
 module.exports = /*  @ngInject */
   function apiHelperService(filtersService) {
 
+    var model = {
+      bulkQuery: false
+    };
+
     return {
+      model: model,
       formatQueryString: formatQueryString,
       request: request
     };
@@ -32,12 +37,12 @@ module.exports = /*  @ngInject */
       }
 
       if (obj.type && obj.type === 'opportunities') {
-        var pageQuery = applyPage(),
-            sortQuery = applySort(),
-            simpleQuery = applySimpleDist(obj),
-            salesStoreStatus = applySalesStoreStatus(obj),
-            storeFormatQuery = applyStoreFormatQuery(obj),
-            queryStr = '';
+        const pageQuery = applyPage();
+        const sortQuery = applySort();
+        const simpleQuery = applySimpleDist(obj);
+        const salesStoreStatus = applySalesStoreStatus(obj);
+        const storeFormatQuery = applyStoreFormatQuery(obj);
+        let queryStr = '';
 
         queryParams += '';
 
@@ -48,7 +53,10 @@ module.exports = /*  @ngInject */
 
         filtersService.model.appliedFilter.appliedFilter = queryParams;
 
-        queryStr = '?' + 'limit=20' + '&ignoreDismissed=true' + sortQuery + pageQuery + simpleQuery + salesStoreStatus + storeFormatQuery + '&filter=' + encodeURIComponent(filtersService.model.appliedFilter.appliedFilter);
+        const bulkifiedLimitSortPage = `${model.bulkQuery ? 'limit=1000' : 'limit=20' + sortQuery + pageQuery}`;
+        model.bulkQuery = false;
+
+        queryStr = `?${bulkifiedLimitSortPage}&ignoreDismissed=true${simpleQuery}${salesStoreStatus}${storeFormatQuery}&filter=${encodeURIComponent(filtersService.model.appliedFilter.appliedFilter)}`;
 
         return queryStr;
       } else if (obj.type && obj.type === 'targetLists') {

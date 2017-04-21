@@ -19,244 +19,264 @@ describe('[Services.apiHelperService]', function() {
     expect(APIHelper.request).toBeDefined();
   });
 
-  it('[formatQueryString] it should take an object and format it into a query string for consumption', function() {
-    // set up
-    var mockObj = {
-      'masterSKU': '112154',
-      'premiseType': 'on'
-    };
-    var resultExpectation = '?' + 'filter=masterSKU%3A112154%2CpremiseType%3Aon';
-    // execute
-    var result = APIHelper.formatQueryString(mockObj);
+  describe('[request]', function() {
+    it('it should return base url if there is no query param', function() {
+      const url = 'http://localhost:3000/';
+      const resultExpectation = 'http://localhost:3000/';
 
-    // assert
-    expect(result).toEqual(resultExpectation);
-  });
+      const result = APIHelper.request(url);
 
-  it('[request] it should return base url if there is no query param', function() {
-    var url = 'http://localhost:3000/';
-    var resultExpectation = 'http://localhost:3000/';
-
-    var result = APIHelper.request(url);
-
-    expect(result).toEqual(resultExpectation);
-  });
-
-  it('[request] it should return base url plus query params when a query param obj is passed in', function() {
-    var mockObj = {
-      'masterSKU': '112154',
-      'premiseType': 'on'
-    };
-    var url = 'http://localhost:3000/';
-    var resultExpectation = url + '?' + 'filter=masterSKU%3A112154%2CpremiseType%3Aon';
-
-    var result = APIHelper.request(url, mockObj);
-
-    expect(result).toEqual(resultExpectation);
-  });
-
-  it('[request] it should return store specific formatting when type = store', function() {
-    var mockObj = {
-      'masterSKU': '112154',
-      'premiseType': 'on',
-      'type': 'store'
-    };
-    var url = 'http://localhost:3000/';
-    var resultExpectation = url + '?' + 'filter=masterSKU%3A112154%2CpremiseType%3Aon%2C';
-
-    var result = APIHelper.request(url, mockObj);
-
-    expect(result).toEqual(resultExpectation);
-  });
-
-  it('[request] it should return opportunities specific formatting when type = opportunities', function() {
-    var mockObj = {
-      'masterSKU': '112154',
-      'premiseType': 'on',
-      'type': 'opportunities'
-    };
-    var url = 'http://localhost:3000/';
-    var resultExpectation = url + '?limit=20&ignoreDismissed=true&sort=&offset=0&filter=masterSKU%3A112154%2CpremiseType%3Aon';
-
-    var result = APIHelper.request(url, mockObj);
-
-    expect(result).toEqual(resultExpectation);
-  });
-
-  it('[request] it should return opportunities specific formatting when type = opportunities and simple distribution is selected', function() {
-    var mockObj = {
-      'masterSKU': '112154',
-      'opportunityType': ['At Risk'],
-      'premiseType': 'on',
-      'simpleDistributionType': true,
-      'type': 'opportunities'
-    };
-    var url = 'http://localhost:3000/';
-    var resultExpectation = url + '?limit=20&ignoreDismissed=true&sort=&offset=0&brandOpportunityType=true&filter=masterSKU%3A112154%2CopportunityType%3AAT_RISK%2CpremiseType%3Aon%2C';
-
-    var result = APIHelper.request(url, mockObj);
-
-    expect(result).toEqual(resultExpectation);
-  });
-
-  it('[request] it should return opportunities specific formatting when type = opportunities and unsold store is selected', function() {
-    var mockObj = {
-      type: 'opportunities',
-      salesStatus: ['Unsold']
-    };
-    var url = 'http://localhost:3000/';
-    var resultExpectation = url + '?limit=20&ignoreDismissed=true&sort=&offset=0&unsoldStore=true&filter=';
-
-    var result = APIHelper.request(url, mockObj);
-
-    expect(result).toEqual(resultExpectation);
-  });
-
-  it('[request] it should return opportunities specific formatting when type = opportunities and sold store is selected', function() {
-    var mockObj = {
-      type: 'opportunities',
-      salesStatus: ['Sold']
-    };
-    var url = 'http://localhost:3000/';
-    var resultExpectation = url + '?limit=20&ignoreDismissed=true&sort=&offset=0&unsoldStore=false&filter=';
-
-    var result = APIHelper.request(url, mockObj);
-
-    expect(result).toEqual(resultExpectation);
-  });
-
-  it('[request] it should return opportunities specific formatting when type = opportunities and both sold & unsold store is selected', function() {
-    var mockObj = {
-      type: 'opportunities',
-      salesStatus: ['Unsold', 'Sold']
-    };
-    var url = 'http://localhost:3000/';
-    var resultExpectation = url + '?limit=20&ignoreDismissed=true&sort=&offset=0&filter=';
-
-    var result = APIHelper.request(url, mockObj);
-
-    expect(result).toEqual(resultExpectation);
-  });
-
-  it('[request] should return opportunities specific formatting when store format of hispanic is selected', function() {
-    const mockObject = {
-      masterSKU: '112154',
-      opportunityType: ['At Risk'],
-      premiseType: 'on',
-      simpleDistributionType: true,
-      type: 'opportunities',
-      storeFormat: 'HISPANIC'
-    };
-    const url = 'http://localhost:3000/';
-    const resultExpectation = url + '?limit=20&ignoreDismissed=true&sort=&offset=0&brandOpportunityType=true&hispanicMarketType=HISPANIC&filter=masterSKU%3A112154%2CopportunityType%3AAT_RISK%2CpremiseType%3Aon%2C';
-
-    const result = APIHelper.request(url, mockObject);
-
-    expect(result).toEqual(resultExpectation);
-  });
-
-  it('[request] should return opportunities specific formatting when store format of general market is selected', function() {
-    const mockObject = {
-      masterSKU: '112154',
-      opportunityType: ['At Risk'],
-      premiseType: 'on',
-      simpleDistributionType: true,
-      type: 'opportunities',
-      storeFormat: 'GM'
-    };
-    const url = 'http://localhost:3000/';
-    const resultExpectation = url + '?limit=20&ignoreDismissed=true&sort=&offset=0&brandOpportunityType=true&hispanicMarketType=GM&filter=masterSKU%3A112154%2CopportunityType%3AAT_RISK%2CpremiseType%3Aon%2C';
-
-    const result = APIHelper.request(url, mockObject);
-
-    expect(result).toEqual(resultExpectation);
-  });
-
-  it('[request] it should set archived=true for target lists', function() {
-    var mockObj = {
-      'type': 'targetLists'
-    };
-    var url = 'http://localhost:3000/';
-    var resultExpectation = url + '?' + 'archived=true';
-
-    var result = APIHelper.request(url, mockObj);
-
-    expect(result).toEqual(resultExpectation);
-  });
-
-  it('[request] it should set query params for brandsnapshot', function() {
-    var mockObj = {
-      'type': 'brandSnapshot',
-      'additionalParams': {type: 'brandSnapshot', myAccountsOnly: true, opportunityType: ['All Types'], premiseType: 'off', retailer: 'Chain', distributor: ['2225193']}
-    };
-    var url = 'http://localhost:3000/';
-    var resultExpectation = url + '?' + 'type=brandSnapshot&myAccountsOnly=true&opportunityType=All%20Types&premiseType=off&retailer=Chain&distributor=2225193&filter=';
-
-    var result = APIHelper.request(url, mockObj);
-
-    expect(result).toEqual(resultExpectation);
-  });
-  it('[request] it should set additional params for topbottom', function() {
-    var mockObj = {
-      'type': 'topBottom',
-      'additionalParams': {type: 'topBottom', myAccountsOnly: true, opportunityType: ['All Types'], premiseType: 'off', retailer: 'Chain', distributor: ['2225193']}
-    };
-    var url = 'http://localhost:3000/';
-    var resultExpectation = url + '?' + 'type=topBottom&myAccountsOnly=true&opportunityType=All%20Types&premiseType=off&retailer=Chain&distributor=2225193&filter=';
-
-    var result = APIHelper.request(url, mockObj);
-
-    expect(result).toEqual(resultExpectation);
-  });
-
-  it('[request] should set query params for cbbd chain on opportunities', function() {
-    var mockObj = {
-      'type': 'opportunities',
-      'additionalParams': ['cbbdChain']
-    };
-    var url = 'http://localhost:3000/';
-    var resultExpectation = url + '?' + 'limit=20&ignoreDismissed=true&sort=&offset=0&filter=additionalParams%3AcbbdChain';
-
-    var result = APIHelper.request(url, mockObj);
-
-    expect(result).toEqual(resultExpectation);
-  });
-
-  describe('[parseAppliedFilters]', function() {
-    beforeEach(function() {
+      expect(result).toEqual(resultExpectation);
     });
 
+    it('it should return base url plus query params when a query param obj is passed in', function() {
+      const mockObject = {
+        'masterSKU': '112154',
+        'premiseType': 'on'
+      };
+      const url = 'http://localhost:3000/';
+      const resultExpectation = url + '?' + 'filter=masterSKU%3A112154%2CpremiseType%3Aon';
+
+      const result = APIHelper.request(url, mockObject);
+
+      expect(result).toEqual(resultExpectation);
+    });
+
+    it('it should return store specific formatting when type = store', function() {
+      const mockObject = {
+        'masterSKU': '112154',
+        'premiseType': 'on',
+        'type': 'store'
+      };
+      const url = 'http://localhost:3000/';
+      const resultExpectation = url + '?' + 'filter=masterSKU%3A112154%2CpremiseType%3Aon%2C';
+
+      const result = APIHelper.request(url, mockObject);
+
+      expect(result).toEqual(resultExpectation);
+    });
+
+    it('it should return opportunities specific formatting when type = opportunities', function() {
+      const mockObject = {
+        'masterSKU': '112154',
+        'premiseType': 'on',
+        'type': 'opportunities'
+      };
+      const url = 'http://localhost:3000/';
+      const resultExpectation = url + '?limit=20&sort=&offset=0&ignoreDismissed=true&filter=masterSKU%3A112154%2CpremiseType%3Aon';
+
+      const result = APIHelper.request(url, mockObject);
+
+      expect(result).toEqual(resultExpectation);
+    });
+
+    it('it should return opportunities specific formatting when type = opportunities and simple distribution is selected', function() {
+      const mockObject = {
+        'masterSKU': '112154',
+        'opportunityType': ['At Risk'],
+        'premiseType': 'on',
+        'simpleDistributionType': true,
+        'type': 'opportunities'
+      };
+      const url = 'http://localhost:3000/';
+      const resultExpectation = url + '?limit=20&sort=&offset=0&ignoreDismissed=true&brandOpportunityType=true&filter=masterSKU%3A112154%2CopportunityType%3AAT_RISK%2CpremiseType%3Aon%2C';
+
+      const result = APIHelper.request(url, mockObject);
+
+      expect(result).toEqual(resultExpectation);
+    });
+
+    it('it should return opportunities specific formatting when type = opportunities and unsold store is selected', function() {
+      const mockObject = {
+        type: 'opportunities',
+        salesStatus: ['Unsold']
+      };
+      const url = 'http://localhost:3000/';
+      const resultExpectation = url + '?limit=20&sort=&offset=0&ignoreDismissed=true&unsoldStore=true&filter=';
+
+      const result = APIHelper.request(url, mockObject);
+
+      expect(result).toEqual(resultExpectation);
+    });
+
+    it('it should return opportunities specific formatting when type = opportunities and sold store is selected', function() {
+      const mockObject = {
+        type: 'opportunities',
+        salesStatus: ['Sold']
+      };
+      const url = 'http://localhost:3000/';
+      const resultExpectation = url + '?limit=20&sort=&offset=0&ignoreDismissed=true&unsoldStore=false&filter=';
+
+      const result = APIHelper.request(url, mockObject);
+
+      expect(result).toEqual(resultExpectation);
+    });
+
+    it('it should return opportunities specific formatting when type = opportunities and both sold & unsold store is selected', function() {
+      const mockObject = {
+        type: 'opportunities',
+        salesStatus: ['Unsold', 'Sold']
+      };
+      const url = 'http://localhost:3000/';
+      const resultExpectation = url + '?limit=20&sort=&offset=0&ignoreDismissed=true&filter=';
+
+      const result = APIHelper.request(url, mockObject);
+
+      expect(result).toEqual(resultExpectation);
+    });
+
+    it('should return opportunities specific formatting when store format of hispanic is selected', function() {
+      const mockObject = {
+        masterSKU: '112154',
+        opportunityType: ['At Risk'],
+        premiseType: 'on',
+        simpleDistributionType: true,
+        type: 'opportunities',
+        storeFormat: 'HISPANIC'
+      };
+      const url = 'http://localhost:3000/';
+      const resultExpectation = url + '?limit=20&sort=&offset=0&ignoreDismissed=true&brandOpportunityType=true&hispanicMarketType=HISPANIC&filter=masterSKU%3A112154%2CopportunityType%3AAT_RISK%2CpremiseType%3Aon%2C';
+
+      const result = APIHelper.request(url, mockObject);
+
+      expect(result).toEqual(resultExpectation);
+    });
+
+    it('should return opportunities specific formatting when store format of general market is selected', function() {
+      const mockObject = {
+        masterSKU: '112154',
+        opportunityType: ['At Risk'],
+        premiseType: 'on',
+        simpleDistributionType: true,
+        type: 'opportunities',
+        storeFormat: 'GM'
+      };
+      const url = 'http://localhost:3000/';
+      const resultExpectation = url + '?limit=20&sort=&offset=0&ignoreDismissed=true&brandOpportunityType=true&hispanicMarketType=GM&filter=masterSKU%3A112154%2CopportunityType%3AAT_RISK%2CpremiseType%3Aon%2C';
+
+      const result = APIHelper.request(url, mockObject);
+
+      expect(result).toEqual(resultExpectation);
+    });
+
+    it('it should set archived=true for target lists', function() {
+      const mockObject = {
+        'type': 'targetLists'
+      };
+      const url = 'http://localhost:3000/';
+      const resultExpectation = url + '?' + 'archived=true';
+
+      const result = APIHelper.request(url, mockObject);
+
+      expect(result).toEqual(resultExpectation);
+    });
+
+    it('it should set query params for brandsnapshot', function() {
+      const mockObject = {
+        'type': 'brandSnapshot',
+        'additionalParams': {type: 'brandSnapshot', myAccountsOnly: true, opportunityType: ['All Types'], premiseType: 'off', retailer: 'Chain', distributor: ['2225193']}
+      };
+      const url = 'http://localhost:3000/';
+      const resultExpectation = url + '?' + 'type=brandSnapshot&myAccountsOnly=true&opportunityType=All%20Types&premiseType=off&retailer=Chain&distributor=2225193&filter=';
+
+      const result = APIHelper.request(url, mockObject);
+
+      expect(result).toEqual(resultExpectation);
+    });
+
+    it('it should set additional params for topbottom', function() {
+      const mockObject = {
+        'type': 'topBottom',
+        'additionalParams': {type: 'topBottom', myAccountsOnly: true, opportunityType: ['All Types'], premiseType: 'off', retailer: 'Chain', distributor: ['2225193']}
+      };
+      const url = 'http://localhost:3000/';
+      const resultExpectation = url + '?' + 'type=topBottom&myAccountsOnly=true&opportunityType=All%20Types&premiseType=off&retailer=Chain&distributor=2225193&filter=';
+
+      const result = APIHelper.request(url, mockObject);
+
+      expect(result).toEqual(resultExpectation);
+    });
+
+    it('should set query params for cbbd chain on opportunities', function() {
+      const mockObject = {
+        'type': 'opportunities',
+        'additionalParams': ['cbbdChain']
+      };
+      const url = 'http://localhost:3000/';
+      const resultExpectation = url + '?' + 'limit=20&sort=&offset=0&ignoreDismissed=true&filter=additionalParams%3AcbbdChain';
+
+      const result = APIHelper.request(url, mockObject);
+
+      expect(result).toEqual(resultExpectation);
+    });
+
+    it('should return a bulk query when requested', function() {
+      APIHelper.model.bulkQuery = true;
+
+      const mockObject = {
+        type: 'opportunities',
+        storeFormat: 'HISPANIC'
+      };
+      const url = 'http://localhost:3000/';
+
+      const resultExpectation = url + '?limit=1000&ignoreDismissed=true&hispanicMarketType=HISPANIC&filter=';
+
+      const result = APIHelper.request(url, mockObject);
+
+      expect(result).toEqual(resultExpectation);
+    });
+  });
+
+  describe('[formatQueryString]', function() {
     it('should construct for cbbdChain', function() {
       var opportunityData = JSON.parse('{"type":"opportunities","myAccountsOnly":true,"cbbdChain":["Cbbd"],"distributor":["2225538"],"opportunityType":["All Types"],"premiseType":"off","retailer":"Chain"}');
-      var result = APIHelper.formatQueryString(opportunityData);
-      expect(result).toEqual('?limit=20&ignoreDismissed=true&sort=&offset=0&filter=myAccountsOnly%3Atrue%2CcbbdChain%3Atrue%2Cdistributor%3A2225538%2CpremiseType%3Aoff%2C');
+      const result = APIHelper.formatQueryString(opportunityData);
+      expect(result).toEqual('?limit=20&sort=&offset=0&ignoreDismissed=true&filter=myAccountsOnly%3Atrue%2CcbbdChain%3Atrue%2Cdistributor%3A2225538%2CpremiseType%3Aoff%2C');
     });
 
     it('should construct for Independent', function() {
       var opportunityData = JSON.parse('{"type":"opportunities","myAccountsOnly":true,"cbbdChain":["Independent"],"distributor":["2225538"],"opportunityType":["All Types"],"premiseType":"off","retailer":"Chain"}');
-      var result = APIHelper.formatQueryString(opportunityData);
-      expect(result).toEqual('?limit=20&ignoreDismissed=true&sort=&offset=0&filter=myAccountsOnly%3Atrue%2CcbbdChain%3Afalse%2Cdistributor%3A2225538%2CpremiseType%3Aoff%2C');
+      const result = APIHelper.formatQueryString(opportunityData);
+      expect(result).toEqual('?limit=20&sort=&offset=0&ignoreDismissed=true&filter=myAccountsOnly%3Atrue%2CcbbdChain%3Afalse%2Cdistributor%3A2225538%2CpremiseType%3Aoff%2C');
     });
+
     it('should construct for OT custom', function() {
       var opportunityData = JSON.parse('{"type":"opportunities","myAccountsOnly":true,"distributor":["2225538"],"opportunityType":["Custom"],"premiseType":"off","retailer":"Chain"}');
-      var result = APIHelper.formatQueryString(opportunityData);
-      expect(result).toEqual('?limit=20&ignoreDismissed=true&sort=&offset=0&filter=myAccountsOnly%3Atrue%2Cdistributor%3A2225538%2CopportunityType%3AMANUAL%2CpremiseType%3Aoff%2C');
+      const result = APIHelper.formatQueryString(opportunityData);
+      expect(result).toEqual('?limit=20&sort=&offset=0&ignoreDismissed=true&filter=myAccountsOnly%3Atrue%2Cdistributor%3A2225538%2CopportunityType%3AMANUAL%2CpremiseType%3Aoff%2C');
     });
+
     it('should construct for OT *other*', function() {
       var opportunityData = JSON.parse('{"type":"opportunities","myAccountsOnly":true,"distributor":["2225538"],"opportunityType":["Non-Buy"],"premiseType":"off","retailer":"Chain"}');
-      var result = APIHelper.formatQueryString(opportunityData);
-      expect(result).toEqual('?limit=20&ignoreDismissed=true&sort=&offset=0&filter=myAccountsOnly%3Atrue%2Cdistributor%3A2225538%2CopportunityType%3ANON_BUY%2CpremiseType%3Aoff%2C');
+      const result = APIHelper.formatQueryString(opportunityData);
+      expect(result).toEqual('?limit=20&sort=&offset=0&ignoreDismissed=true&filter=myAccountsOnly%3Atrue%2Cdistributor%3A2225538%2CopportunityType%3ANON_BUY%2CpremiseType%3Aoff%2C');
     });
+
     it('should construct for impact and opportunity status', function() {
       var opportunityData = JSON.parse('{"type":"opportunities","myAccountsOnly":true,"distributor":["2225538","2225538"],"impact":["High"],"opportunityStatus":["Open"],"opportunityType":["All Types"],"premiseType":"off","retailer":"Chain"}');
-      var result = APIHelper.formatQueryString(opportunityData);
-      expect(result).toEqual('?limit=20&ignoreDismissed=true&sort=&offset=0&filter=myAccountsOnly%3Atrue%2Cdistributor%3A2225538%7C2225538%2Cimpact%3AH%2CopportunityStatus%3Aopen%2CpremiseType%3Aoff%2C');
+      const result = APIHelper.formatQueryString(opportunityData);
+      expect(result).toEqual('?limit=20&sort=&offset=0&ignoreDismissed=true&filter=myAccountsOnly%3Atrue%2Cdistributor%3A2225538%7C2225538%2Cimpact%3AH%2CopportunityStatus%3Aopen%2CpremiseType%3Aoff%2C');
     });
+
     it('should construct for opportunity status closed and 2 trade channels', function() {
       var opportunityData = JSON.parse('{"type":"opportunities","myAccountsOnly":true,"distributor":["2225538"],"opportunityStatus":["closed"],"opportunityType":["All Types"],"premiseType":"off","retailer":"Chain","tradeChannel":["Grocery","Drug"]}');
       filtersService.model.selected = {premiseType: 'off'};
-      var result = APIHelper.formatQueryString(opportunityData);
-      expect(result).toEqual('?limit=20&ignoreDismissed=true&sort=&offset=0&filter=myAccountsOnly%3Atrue%2Cdistributor%3A2225538%2CopportunityStatus%3Atargeted%2CpremiseType%3Aoff%2CtradeChannel%3A05%7C03');
+      const result = APIHelper.formatQueryString(opportunityData);
+      expect(result).toEqual('?limit=20&sort=&offset=0&ignoreDismissed=true&filter=myAccountsOnly%3Atrue%2Cdistributor%3A2225538%2CopportunityStatus%3Atargeted%2CpremiseType%3Aoff%2CtradeChannel%3A05%7C03');
+    });
+
+    it('it should take an object and format it into a query string for consumption', function() {
+      // set up
+      const mockObject = {
+        'masterSKU': '112154',
+        'premiseType': 'on'
+      };
+      const resultExpectation = '?' + 'filter=masterSKU%3A112154%2CpremiseType%3Aon';
+      // execute
+      const result = APIHelper.formatQueryString(mockObject);
+
+      // assert
+      expect(result).toEqual(resultExpectation);
     });
   });
 });

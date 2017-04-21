@@ -110,9 +110,17 @@ list {
   padding: 2em 0 2em 15px;
   width: 35px;
 
+  .indeterminatable-checkbox .md-icon {
+    border-color: $blue;
+    color: $white;
+    background-color: $blue;
+    box-shadow: 0 2px 0 $gray-1;
+  }
+
   &.placeholder {
     background: transparent;
-    padding-bottom: 0.5em;
+    height: 28px;
+    padding: 0 0 0 15px;
   }
 
   + .checkbox-sibling {
@@ -615,5 +623,37 @@ list {
 
   &:hover {
     cursor: pointer;
+  }
+}
+
+.select-all-toast-wrapper {
+  background-color: $yellow;
+  margin-left: -15px;
+  margin-right: -15px;
+  opacity: 0;
+  transition: opacity 200ms, height 200ms;
+  height: 0;
+
+  .toast-message {
+    padding-top: 7px;
+    padding-bottom: 7px;
+    height: 16px;
+    font-size: 0.87em;
+    font-weight: bold;
+    text-align: center;
+    color: $white;
+  }
+
+  &.visible {
+    opacity: 1;
+    height: 30px;
+  }
+
+  .inline-button {
+    text-decoration: underline;
+
+    &:hover {
+      cursor: pointer;
+    }
   }
 }
