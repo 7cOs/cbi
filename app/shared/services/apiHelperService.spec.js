@@ -219,7 +219,7 @@ describe('[Services.apiHelperService]', function() {
       };
       const url = 'http://localhost:3000/';
 
-      const resultExpectation = url + '?limit=10000&ignoreDismissed=true&hispanicMarketType=HISPANIC&filter=';
+      const resultExpectation = url + '?limit=1000&ignoreDismissed=true&hispanicMarketType=HISPANIC&filter=';
 
       const result = APIHelper.request(url, mockObject);
 

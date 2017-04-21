@@ -319,7 +319,7 @@ describe('Unit: opportunitiesService - get opportunities', function() {
     it('get opportunity ids', function() {
 
          $httpBackend
-         .expect('GET', '/api/opportunities/?limit=10000&ignoreDismissed=true&filter=myAccountsOnly%3Atrue%2CpremiseType%3Aoff%2C')
+         .expect('GET', '/api/opportunities/?limit=1000&ignoreDismissed=true&filter=myAccountsOnly%3Atrue%2CpremiseType%3Aoff%2C')
          .respond(200, opportunitiesResponseObject);
 
          let opportunityIDs;

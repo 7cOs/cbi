@@ -53,7 +53,7 @@ module.exports = /*  @ngInject */
 
         filtersService.model.appliedFilter.appliedFilter = queryParams;
 
-        const bulkifiedLimitSortPage = `${model.bulkQuery ? 'limit=10000' : 'limit=20' + sortQuery + pageQuery}`;
+        const bulkifiedLimitSortPage = `${model.bulkQuery ? 'limit=1000' : 'limit=20' + sortQuery + pageQuery}`;
         model.bulkQuery = false;
 
         queryStr = `?${bulkifiedLimitSortPage}&ignoreDismissed=true${simpleQuery}${salesStoreStatus}${storeFormatQuery}&filter=${encodeURIComponent(filtersService.model.appliedFilter.appliedFilter)}`;
