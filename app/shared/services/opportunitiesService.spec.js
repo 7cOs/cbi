@@ -14,6 +14,7 @@ describe('Unit: opportunitiesService - get opportunities', function() {
 
     opportunitiesResponseObject = {
             opportunities: [ {
+                id: '0516096_80013460_20170131',
                 // test vsYAPercent +100
                 depletionsCurrentYearToDate: 5,
                 depletionsCurrentYearToDateYA: 0,
@@ -39,6 +40,7 @@ describe('Unit: opportunitiesService - get opportunities', function() {
                     brand: 'CORONA EXTRA'
                 }
             }, {
+                id: '0516096_80013972_20170131',
                 // test vsYAPercent 0
                 depletionsCurrentYearToDate: 0,
                 depletionsCurrentYearToDateYA: 0,
@@ -63,6 +65,7 @@ describe('Unit: opportunitiesService - get opportunities', function() {
                     brand: 'CORONA EXTRA'
                 }
             }, {
+                id: '0516096_80013981_20170131',
                 // test vsYAPercent < -999
                 depletionsCurrentYearToDate: 100,
                 depletionsCurrentYearToDateYA: -0.1,
@@ -122,6 +125,7 @@ describe('Unit: opportunitiesService - get opportunities', function() {
         noOpportunitiesFound: false,
         opportunities: [
             {
+                id: '0516096_80013460_20170131',
                 // test vsYAPercent +100%
                 depletionsCurrentYearToDate: 5,
                 depletionsCurrentYearToDateYA: 0,
@@ -150,6 +154,7 @@ describe('Unit: opportunitiesService - get opportunities', function() {
                 brands: ['corona extra', 'corona extra', 'corona extra'],
                 trend: NaN,
                 groupedOpportunities: [{
+                    id: '0516096_80013460_20170131',
                     depletionsCurrentYearToDate: 5,
                     depletionsCurrentYearToDateYA: 0,
                     depletionsCurrentYearToDateYAPercent: '+100%',
@@ -173,6 +178,7 @@ describe('Unit: opportunitiesService - get opportunities', function() {
                     },
                     showAuthorization: 'Y'
                 }, {
+                    id: '0516096_80013972_20170131',
                     // test vs YAPercent = 0
                     depletionsCurrentYearToDate: 0,
                     depletionsCurrentYearToDateYA: 0,
@@ -198,6 +204,7 @@ describe('Unit: opportunitiesService - get opportunities', function() {
                     },
                     showAuthorization: ''
                 }, {
+                    id: '0516096_80013981_20170131',
                     // test vs YAPercent < -999
                     depletionsCurrentYearToDate: 100,
                     depletionsCurrentYearToDateYA: -0.1,
@@ -306,5 +313,26 @@ describe('Unit: opportunitiesService - get opportunities', function() {
       filterApplied: false,
       opportunityId: null
     });
+  });
+
+  describe('getAllOpportunitiesIDs', () => {
+    it('get opportunity ids', function() {
+
+         $httpBackend
+         .expect('GET', '/api/opportunities/?limit=10000&ignoreDismissed=true&filter=myAccountsOnly%3Atrue%2CpremiseType%3Aoff%2C')
+         .respond(200, opportunitiesResponseObject);
+
+         let opportunityIDs;
+         opportunitiesService.getAllOpportunitiesIDs().then((ids) => {
+           opportunityIDs = ids;
+         });
+
+         $httpBackend.flush();
+         expect(opportunityIDs).toEqual([
+           '0516096_80013460_20170131',
+           '0516096_80013972_20170131',
+           '0516096_80013981_20170131'
+         ]);
+      });
   });
 });
