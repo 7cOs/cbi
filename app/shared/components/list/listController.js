@@ -50,7 +50,6 @@ module.exports = /*  @ngInject */
     vm.stores = [];
     vm.undoClicked = false;
     vm.selectAllToastVisible = false;
-    vm.numberOfOpportunitiesSmallerThanMax = false;
 
     // Expose public methods
     vm.addCollaborator = addCollaborator;
@@ -95,6 +94,7 @@ module.exports = /*  @ngInject */
     vm.checkIfLinkDisabled = checkIfLinkDisabled;
     vm.remainingOpportunitySpots = remainingOpportunitySpots;
     vm.handleAddToTargetList = handleAddToTargetList;
+    vm.numberOfOpportunitiesSmallerThanMax = numberOfOpportunitiesSmallerThanMax;
 
     // Custom Headers for CSV export
     vm.csvHeader = [
@@ -841,6 +841,14 @@ module.exports = /*  @ngInject */
       return remainingOpps > 0 ? remainingOpps : 0;
     }
 
+    /**
+     * Whether or not the number of all the fetched opportunities is smaller than the max threshold
+     * @returns {Boolean}
+     */
+    function numberOfOpportunitiesSmallerThanMax() {
+      return filtersService.model.appliedFilter.pagination.totalOpportunities <= maxOpportunities;
+    }
+
     // ***************
     // PRIVATE METHODS
     // ***************
@@ -856,7 +864,6 @@ module.exports = /*  @ngInject */
     $scope.$watch('list.opportunitiesService.model.opportunities', function() {
       vm.selected = [];
       vm.disabledMessage = '';
-      vm.numberOfOpportunitiesSmallerThanMax = filtersService.model.appliedFilter.pagination.totalOpportunities <= maxOpportunities;
       updateStateAfterUnselectingOpportunity();
     });
 
