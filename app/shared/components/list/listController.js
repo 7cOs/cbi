@@ -50,6 +50,7 @@ module.exports = /*  @ngInject */
     vm.stores = [];
     vm.undoClicked = false;
     vm.selectAllToastVisible = false;
+    vm.maxOpportunities = maxOpportunities;
 
     // Expose public methods
     vm.addCollaborator = addCollaborator;
