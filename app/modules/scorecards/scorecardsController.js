@@ -142,7 +142,7 @@ module.exports = /*  @ngInject */
           pageData: {
             brandTitle: row.name,
             brandId: row.id,
-            premiseType: null
+            premiseType: disabled !== 'undefined' ? vm.distributionRadioOptions.selected.onOffPremise : null
           }
         });
       } else {

@@ -561,7 +561,6 @@ module.exports = /*  @ngInject */
     }
 
     function setDefaultFilterOptions() {
-      debugger;
       if (!filtersService.model.selected.myAccountsOnly) {
         disablePremiseType(false);
       } else if (userService.model.currentUser && userService.model.currentUser.srcTypeCd) {
@@ -582,7 +581,6 @@ module.exports = /*  @ngInject */
       }
 
       function onPremise() {
-        debugger;
         filtersService.model.selected.premiseType = 'on';
         vm.updateChip('On-Premise', 'premiseType');
         disablePremiseType(true);
