@@ -13,7 +13,8 @@ module.exports = /*  @ngInject */
           default: true,
           totalOpportunities: 0,
           totalStores: 0,
-          roundedStores: 0
+          roundedStores: 0,
+          shouldReloadData: false
         },
         sort: {
           sortArr: []
@@ -519,6 +520,11 @@ module.exports = /*  @ngInject */
 
       _paginationState.roundedStores = Math.ceil(_paginationState.totalStores / 10) * 10;
       _paginationState.totalPages = Math.ceil(_paginationState.roundedStores / 20) - 1;
+
+      if (_paginationState.currentPage > _paginationState.totalPages) {
+        _paginationState.currentPage = _paginationState.totalPages;
+        _paginationState.shouldReloadData = true;
+      }
 
       return _paginationState;
     }

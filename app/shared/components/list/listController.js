@@ -400,10 +400,14 @@ module.exports = /*  @ngInject */
               if (storeGroup.length < 1) {
                 vm.opportunitiesService.model.opportunities.splice(key, 1);
                 vm.filtersService.model.appliedFilter.pagination.totalStores -= 1;
+                filtersService.model.appliedFilter.pagination = filtersService.updatePaginationState(filtersService.model.appliedFilter.pagination);
               }
             });
 
-            filtersService.model.appliedFilter.pagination = filtersService.updatePaginationState(filtersService.model.appliedFilter.pagination);
+            if (filtersService.model.appliedFilter.pagination.shouldReloadData) {
+              opportunitiesService.getOpportunities();
+              filtersService.model.appliedFilter.pagination.shouldReloadData = false;
+            }
           });
         }
         vm.undoClicked = false;
