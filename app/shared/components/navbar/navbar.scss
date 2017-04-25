@@ -226,6 +226,10 @@ navbar {
 
         .sub-menu {
 
+          &:focus {
+            outline: none;
+          }
+
           a {
             font-weight: $semibold;
             font-size: 1em;
