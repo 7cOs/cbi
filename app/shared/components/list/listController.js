@@ -387,24 +387,28 @@ module.exports = /*  @ngInject */
           .then(function() {
             vm.opportunitiesService.model.opportunities.forEach(function(store, key) {
               const storeGroup = store.groupedOpportunities;
+
               storeGroup.forEach(function(opportunity, key) {
                 if (opportunity.id === oId && dismiss) {
                   storeGroup.splice(key, 1);
+                  vm.filtersService.model.appliedFilter.pagination.totalOpportunities -= 1;
                 } else if (opportunity.id === oId && !dismiss) {
                   opportunity.status = 'CLOSED';
                 }
               });
+
               if (storeGroup.length < 1) {
                 vm.opportunitiesService.model.opportunities.splice(key, 1);
-                vm.filtersService.model.appliedFilter.pagination.roundedStores -= 1;
+                vm.filtersService.model.appliedFilter.pagination.totalStores -= 1;
               }
             });
+
+            filtersService.model.appliedFilter.pagination = filtersService.updatePaginationState(filtersService.model.appliedFilter.pagination);
           });
         }
         vm.undoClicked = false;
         vm.opportunityDismissTrigger = false;
         vm.currentOpportunityId = '';
-        vm.filtersService.model.appliedFilter.pagination.totalOpportunities -= 1;
       }, 4000);
     }
 
