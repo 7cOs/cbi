@@ -22,9 +22,10 @@ div.outer-nav-wrapper
                 div.sub-menu-item #[a My Scorecards]
               li.sub-menu(ui-sref="accounts" analytics-on="click" analytics-event="Link Click" analytics-category="Navigation" analytics-label="Account Dashboard")
                 div.sub-menu-item #[a Account Dashboard]
-              //- li.sub-menu
-              //-   a.external-link(ng-href="{{nb.linkToIQ}}" target="_blank" analytics-on="click" analytics-event="Link Click" analytics-category="Navigation" analytics-label="More Reports") More Reports
-              //-     .icon.dropdown-icon
+              li.sub-menu
+                div.sub-menu-item
+                  a.external-link(ng-href="{{nb.linkToIQ}}" target="_blank" analytics-on="click" analytics-event="Link Click" analytics-category="Navigation" analytics-label="More Reports") More Reports
+                    .icon.dropdown-icon
           li.top-level-menu(ui-sref-active="active" ui-sref="opportunities" analytics-on="click" analytics-event="Link Click" analytics-category="Navigation" analytics-label="Opportunities")
             div.inner
               span #[a Opportunities]
@@ -77,6 +78,6 @@ div.outer-nav-wrapper
       ul.nav-sub-menu(ng-if="$root.pageTitle === 'Account Dashboard' || $root.pageTitle === 'Scorecards'")
         li.accent #[a(ui-sref="scorecards" ui-sref-active="active" analytics-on="click" analytics-event="Link Click" analytics-category="Navigation" analytics-label="My Scorecards") My Scorecards]
         li.accent #[a(ui-sref="accounts" ui-sref-active="active" analytics-on="click" analytics-event="Link Click" analytics-category="Navigation" analytics-label="Account Dashboard") Account Dashboard]
-        //- li.accent
-        //-   a.external-link(href="{{nb.linkToIQ}}" target="_blank" analytics-on="click" analytics-event="Link Click" analytics-category="Navigation" analytics-label="More Reports") More Reports
-        //-     .icon.inline-icon
+        li.accent
+          a.external-link(href="{{nb.linkToIQ}}" target="_blank" analytics-on="click" analytics-event="Link Click" analytics-category="Navigation" analytics-label="More Reports") More Reports
+            .icon.inline-icon
