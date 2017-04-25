@@ -613,6 +613,7 @@ module.exports = /*  @ngInject */
         case 'subAccounts':
           topBottomProp = 'subAccounts';
           filterModelProp = 'subaccount';
+          removeInlineSearch('selectedStore');
           break;
         case 'store':
         case 'stores':
