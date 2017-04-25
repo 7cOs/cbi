@@ -391,7 +391,8 @@ module.exports = /*  @ngInject */
       lastEndingTimePeriod: lastEndingTimePeriod,
       accountFilters: accountFilters,
       trendPropertyNames: trendPropertyNames,
-      resetPagination: resetPagination
+      resetPagination: resetPagination,
+      updatePaginationState: updatePaginationState
     };
 
     return service;
@@ -511,5 +512,14 @@ module.exports = /*  @ngInject */
           service.model[prop] = false;
         }
       }
+    }
+
+    function updatePaginationState(paginationState) {
+      const _paginationState = Object.assign({}, paginationState);
+
+      _paginationState.roundedStores = Math.ceil(_paginationState.totalStores / 10) * 10;
+      _paginationState.totalPages = Math.ceil(_paginationState.roundedStores / 20) - 1;
+
+      return _paginationState;
     }
   };
