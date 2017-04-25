@@ -700,4 +700,111 @@ describe('Unit: filter service', function() {
     filtersService.resetPagination();
     expect(filtersService.model).toEqual(resetModelObject);
   });
+
+  it('[updatePaginationState] should return a correct number of rounded stores and total pages', function() {
+
+    const paginationModelOne = filtersService.updatePaginationState({
+      currentPage: 0,
+      totalPages: 2,
+      default: true,
+      totalOpportunities: 41,
+      totalStores: 41,
+      roundedStores: 50,
+      shouldReloadData: false
+    });
+
+    expect(paginationModelOne).toEqual({
+      currentPage: 0,
+      totalPages: 2,
+      default: true,
+      totalOpportunities: 41,
+      totalStores: 41,
+      roundedStores: 50,
+      shouldReloadData: false
+    });
+
+    const paginationModelTwo = filtersService.updatePaginationState({
+      currentPage: 0,
+      totalPages: 2,
+      default: true,
+      totalOpportunities: 40,
+      totalStores: 40,
+      roundedStores: 50,
+      shouldReloadData: false
+    });
+
+    expect(paginationModelTwo).toEqual({
+      currentPage: 0,
+      totalPages: 1,
+      default: true,
+      totalOpportunities: 40,
+      totalStores: 40,
+      roundedStores: 40,
+      shouldReloadData: false
+    });
+
+    const paginationModelThree = filtersService.updatePaginationState({
+      currentPage: 0,
+      totalPages: 1,
+      default: true,
+      totalOpportunities: 20,
+      totalStores: 20,
+      roundedStores: 40,
+      shouldReloadData: false
+    });
+
+    expect(paginationModelThree).toEqual({
+      currentPage: 0,
+      totalPages: 0,
+      default: true,
+      totalOpportunities: 20,
+      totalStores: 20,
+      roundedStores: 20,
+      shouldReloadData: false
+    });
+
+  });
+
+  it('[updatePaginationState] should set the current page as the last page when total pages is decreased and tell you to reload data', function() {
+
+    const paginationModelOne = filtersService.updatePaginationState({
+      currentPage: 2,
+      totalPages: 2,
+      default: true,
+      totalOpportunities: 40,
+      totalStores: 40,
+      roundedStores: 50,
+      shouldReloadData: false
+    });
+
+    expect(paginationModelOne).toEqual({
+      currentPage: 1,
+      totalPages: 1,
+      default: true,
+      totalOpportunities: 40,
+      totalStores: 40,
+      roundedStores: 40,
+      shouldReloadData: true
+    });
+
+    const paginationModelTwo = filtersService.updatePaginationState({
+      currentPage: 1,
+      totalPages: 1,
+      default: true,
+      totalOpportunities: 20,
+      totalStores: 20,
+      roundedStores: 40,
+      shouldReloadData: false
+    });
+
+    expect(paginationModelTwo).toEqual({
+      currentPage: 0,
+      totalPages: 0,
+      default: true,
+      totalOpportunities: 20,
+      totalStores: 20,
+      roundedStores: 20,
+      shouldReloadData: true
+    });
+  });
 });
