@@ -18,12 +18,13 @@ describe('Unit: filter service', function() {
             appliedFilter: {
                 appliedFilter: '',
                 pagination: {
-                currentPage: 0,
-                totalPages: 0,
-                default: true,
-                totalOpportunities: 0,
-                totalStores: 0,
-                roundedStores: 0
+                  currentPage: 0,
+                  totalPages: 0,
+                  default: true,
+                  totalOpportunities: 0,
+                  totalStores: 0,
+                  roundedStores: 0,
+                  shouldReloadData: false
                 },
                 sort: {
                 sortArr: []
@@ -237,12 +238,13 @@ describe('Unit: filter service', function() {
             appliedFilter: {
                 appliedFilter: '',
                 pagination: {
-                currentPage: 0,
-                totalPages: 0,
-                default: true,
-                totalOpportunities: 0,
-                totalStores: 0,
-                roundedStores: 0
+                  currentPage: 0,
+                  totalPages: 0,
+                  default: true,
+                  totalOpportunities: 0,
+                  totalStores: 0,
+                  roundedStores: 0,
+                  shouldReloadData: false
                 },
                 sort: {
                 sortArr: []
@@ -482,15 +484,6 @@ describe('Unit: filter service', function() {
             states: []
     };
 
-    var paginationObject = {
-      currentPage: 1,
-      totalPages: 3,
-      default: true,
-      totalOpportunities: 300,
-      totalStores: 79,
-      roundedStores: 80
-    };
-
   it('should be defined', function() {
 
       expect(filtersService.addSortFilter).toBeDefined();
@@ -688,12 +681,23 @@ describe('Unit: filter service', function() {
 
   });
 
-  it('reset filters', function() {
+  it('reset pagination filters', function() {
+    const paginationObject = {
+      currentPage: 1,
+      totalPages: 3,
+      default: true,
+      totalOpportunities: 300,
+      totalStores: 79,
+      roundedStores: 80,
+      shouldReloadData: true
+    };
+
     filtersService.resetFilters();
     expect(filtersService.model).toEqual(resetModelObject);
+
     filtersService.model.appliedFilter.pagination = paginationObject;
+
     filtersService.resetPagination();
     expect(filtersService.model).toEqual(resetModelObject);
   });
-
-  });
+});
