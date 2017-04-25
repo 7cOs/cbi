@@ -497,7 +497,8 @@ module.exports = /*  @ngInject */
         default: true,
         totalOpportunities: 0,
         totalStores: 0,
-        roundedStores: 0
+        roundedStores: 0,
+        shouldReloadData: false
       };
     }
 
