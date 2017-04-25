@@ -676,10 +676,24 @@ module.exports = /*  @ngInject */
         updateStateAfterUnselectingOpportunity();
         vm.selected = [];
 
-        angular.forEach(opportunitiesService.model.opportunities, function(store, key) {
-          store.selectedOpportunities = 0;
-        });
+        unselectAllOpportunities();
       }
+    }
+
+    /**
+     * Unselects all the opportunities in all the stores
+     */
+    function unselectAllOpportunities() {
+      opportunitiesService.model.opportunities = opportunitiesService.model.opportunities.map((store) => {
+        store.selectedOpportunities = 0;
+
+        store.groupedOpportunities = store.groupedOpportunities.map((opportunity) => {
+          opportunity.selected = false;
+          return opportunity;
+        });
+
+        return store;
+      });
     }
 
     /**
