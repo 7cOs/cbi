@@ -391,7 +391,6 @@ module.exports = /*  @ngInject */
               storeGroup.forEach(function(opportunity, key) {
                 if (opportunity.id === oId && dismiss) {
                   storeGroup.splice(key, 1);
-                  vm.filtersService.model.appliedFilter.pagination.totalOpportunities -= 1;
                 } else if (opportunity.id === oId && !dismiss) {
                   opportunity.status = 'CLOSED';
                 }
@@ -413,6 +412,7 @@ module.exports = /*  @ngInject */
         vm.undoClicked = false;
         vm.opportunityDismissTrigger = false;
         vm.currentOpportunityId = '';
+        vm.filtersService.model.appliedFilter.pagination.totalOpportunities -= 1;
       }, 4000);
     }
 
