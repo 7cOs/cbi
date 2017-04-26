@@ -701,9 +701,9 @@ describe('Unit: filter service', function() {
     expect(filtersService.model).toEqual(resetModelObject);
   });
 
-  it('[updatePaginationState] should return a correct number of rounded stores and total pages', function() {
+  it('[getNewPaginationState] should not return a different number of total pages if current stores fit on existing pages', function() {
 
-    const paginationModelOne = filtersService.updatePaginationState({
+    const paginationModel = filtersService.getNewPaginationState({
       currentPage: 0,
       totalPages: 2,
       default: true,
@@ -713,7 +713,7 @@ describe('Unit: filter service', function() {
       shouldReloadData: false
     });
 
-    expect(paginationModelOne).toEqual({
+    expect(paginationModel).toEqual({
       currentPage: 0,
       totalPages: 2,
       default: true,
@@ -722,52 +722,33 @@ describe('Unit: filter service', function() {
       roundedStores: 50,
       shouldReloadData: false
     });
-
-    const paginationModelTwo = filtersService.updatePaginationState({
-      currentPage: 0,
-      totalPages: 2,
-      default: true,
-      totalOpportunities: 40,
-      totalStores: 40,
-      roundedStores: 50,
-      shouldReloadData: false
-    });
-
-    expect(paginationModelTwo).toEqual({
-      currentPage: 0,
-      totalPages: 1,
-      default: true,
-      totalOpportunities: 40,
-      totalStores: 40,
-      roundedStores: 40,
-      shouldReloadData: false
-    });
-
-    const paginationModelThree = filtersService.updatePaginationState({
-      currentPage: 0,
-      totalPages: 1,
-      default: true,
-      totalOpportunities: 20,
-      totalStores: 20,
-      roundedStores: 40,
-      shouldReloadData: false
-    });
-
-    expect(paginationModelThree).toEqual({
-      currentPage: 0,
-      totalPages: 0,
-      default: true,
-      totalOpportunities: 20,
-      totalStores: 20,
-      roundedStores: 20,
-      shouldReloadData: false
-    });
-
   });
 
-  it('[updatePaginationState] should set the current page as the last page when total pages is decreased and tell you to reload data', function() {
+  it('[getNewPaginationState] should return a new total page count when there are no stores left for the last page', function() {
 
-    const paginationModelOne = filtersService.updatePaginationState({
+    const paginationModel = filtersService.getNewPaginationState({
+      currentPage: 0,
+      totalPages: 2,
+      default: true,
+      totalOpportunities: 40,
+      totalStores: 40,
+      roundedStores: 50,
+      shouldReloadData: false
+    });
+
+    expect(paginationModel).toEqual({
+      currentPage: 0,
+      totalPages: 1,
+      default: true,
+      totalOpportunities: 40,
+      totalStores: 40,
+      roundedStores: 50,
+      shouldReloadData: false
+    });
+  });
+
+  it('[getNewPaginationState] if the currentPage is the last page and is removed, return true for shouldReloadData and set currentPage to the new last page', function() {
+    const paginationModel = filtersService.getNewPaginationState({
       currentPage: 2,
       totalPages: 2,
       default: true,
@@ -777,33 +758,13 @@ describe('Unit: filter service', function() {
       shouldReloadData: false
     });
 
-    expect(paginationModelOne).toEqual({
+    expect(paginationModel).toEqual({
       currentPage: 1,
       totalPages: 1,
       default: true,
       totalOpportunities: 40,
       totalStores: 40,
-      roundedStores: 40,
-      shouldReloadData: true
-    });
-
-    const paginationModelTwo = filtersService.updatePaginationState({
-      currentPage: 1,
-      totalPages: 1,
-      default: true,
-      totalOpportunities: 20,
-      totalStores: 20,
-      roundedStores: 40,
-      shouldReloadData: false
-    });
-
-    expect(paginationModelTwo).toEqual({
-      currentPage: 0,
-      totalPages: 0,
-      default: true,
-      totalOpportunities: 20,
-      totalStores: 20,
-      roundedStores: 20,
+      roundedStores: 50,
       shouldReloadData: true
     });
   });
