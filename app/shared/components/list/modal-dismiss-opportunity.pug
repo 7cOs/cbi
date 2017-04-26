@@ -11,7 +11,7 @@ div.modal
         md-radio-button.md-primary(value="other") Other
     .modal-content
       label Additional Feedback
-      textarea(ng-model="list.opportunity.feedback.feedback" name="feedback").feedback
+      textarea(ng-model="list.opportunity.feedback.feedback" name="feedback").modal-content-feedback
     .modal-content
       button.btn-action(ng-click="list.submitFeedback(list.currentOpportunityId, list.opportunity.feedback); list.closeModal()") Submit
       p.cancel.accent(ng-click="list.opportunityDismissTrigger = false; list.closeModal();") X Cancel
