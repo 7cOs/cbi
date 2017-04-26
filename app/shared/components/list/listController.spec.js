@@ -166,6 +166,9 @@ describe('Unit: list controller', function() {
 
     expect(ctrl.handleAddToTargetList).not.toBeUndefined();
     expect(typeof (ctrl.handleAddToTargetList)).toEqual('function');
+
+    expect(ctrl.isTotalOpportunitiesWithinMaxLimit).not.toBeUndefined();
+    expect(typeof (ctrl.isTotalOpportunitiesWithinMaxLimit)).toEqual('function');
   });
 
   describe('Bindings', function() {
@@ -1171,16 +1174,20 @@ describe('Unit: list controller', function() {
     });
 
     it('should select all opportunities inside a store', function() {
-      var storeToBeAdded = opportunitiesService.model.opportunities[0];
-      ctrl.toggleOpportunitiesInStore(storeToBeAdded, ctrl.selected);
-      expect(storeToBeAdded.selectedOpportunities).toEqual(storeToBeAdded.groupedOpportunities.length);
+      var store = opportunitiesService.model.opportunities[0];
+
+      ctrl.toggleOpportunitiesInStore(store, ctrl.selected);
+      expect(store.selectedOpportunities).toEqual(store.groupedOpportunities.length);
     });
 
     it('should deselect all opportunities inside a store', function() {
-      var storeToBeAdded = opportunitiesService.model.opportunities[0];
-      ctrl.toggleOpportunitiesInStore(storeToBeAdded, ctrl.selected);
-      ctrl.toggleOpportunitiesInStore(storeToBeAdded, ctrl.selected);
-      expect(storeToBeAdded.selectedOpportunities).toEqual(0);
+      var store = opportunitiesService.model.opportunities[0];
+      store.groupedOpportunities[0].selected = true;
+
+      ctrl.toggleOpportunitiesInStore(store, ctrl.selected);
+      ctrl.toggleOpportunitiesInStore(store, ctrl.selected);
+      expect(store.selectedOpportunities).toEqual(0);
+      expect(store.groupedOpportunities[0].selected).toBeFalsy();
     });
   });
 
@@ -1873,6 +1880,24 @@ describe('Unit: list controller', function() {
       ctrl.isAllOpportunitiesSelected = false;
       ctrl.selectAllOpportunities();
       expect(ctrl.isAllOpportunitiesSelected).toBeTruthy();
+    });
+  });
+
+  describe('isTotalOpportunitiesWithinMaxLimit', () => {
+    it('should return true when the given number is smaller or equal to then max', () => {
+      filtersService.model.appliedFilter.pagination.totalOpportunities = 0;
+      expect(ctrl.isTotalOpportunitiesWithinMaxLimit()).toBeTruthy();
+
+      filtersService.model.appliedFilter.pagination.totalOpportunities = 999;
+      expect(ctrl.isTotalOpportunitiesWithinMaxLimit()).toBeTruthy();
+
+      filtersService.model.appliedFilter.pagination.totalOpportunities = 1000;
+      expect(ctrl.isTotalOpportunitiesWithinMaxLimit()).toBeTruthy();
+    });
+
+    it('should return false when the given number is bigger than then max', () => {
+      filtersService.model.appliedFilter.pagination.totalOpportunities = 1001;
+      expect(ctrl.isTotalOpportunitiesWithinMaxLimit()).toBeFalsy();
     });
   });
 });

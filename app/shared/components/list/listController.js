@@ -50,7 +50,7 @@ module.exports = /*  @ngInject */
     vm.stores = [];
     vm.undoClicked = false;
     vm.selectAllToastVisible = false;
-    vm.numberOfOpportunitiesSmallerThanMax = false;
+    vm.maxOpportunities = maxOpportunities;
 
     // Expose public methods
     vm.addCollaborator = addCollaborator;
@@ -95,6 +95,7 @@ module.exports = /*  @ngInject */
     vm.checkIfLinkDisabled = checkIfLinkDisabled;
     vm.remainingOpportunitySpots = remainingOpportunitySpots;
     vm.handleAddToTargetList = handleAddToTargetList;
+    vm.isTotalOpportunitiesWithinMaxLimit = isTotalOpportunitiesWithinMaxLimit;
 
     // Custom Headers for CSV export
     vm.csvHeader = [
@@ -675,10 +676,24 @@ module.exports = /*  @ngInject */
         updateStateAfterUnselectingOpportunity();
         vm.selected = [];
 
-        angular.forEach(opportunitiesService.model.opportunities, function(store, key) {
-          store.selectedOpportunities = 0;
-        });
+        unselectAllOpportunities();
       }
+    }
+
+    /**
+     * Unselects all the opportunities in all the stores
+     */
+    function unselectAllOpportunities() {
+      opportunitiesService.model.opportunities = opportunitiesService.model.opportunities.map((store) => {
+        store.selectedOpportunities = 0;
+
+        store.groupedOpportunities = store.groupedOpportunities.map((opportunity) => {
+          opportunity.selected = false;
+          return opportunity;
+        });
+
+        return store;
+      });
     }
 
     /**
@@ -841,6 +856,14 @@ module.exports = /*  @ngInject */
       return remainingOpps > 0 ? remainingOpps : 0;
     }
 
+    /**
+     * Whether or not the number of all the fetched opportunities is smaller than the max threshold
+     * @returns {Boolean}
+     */
+    function isTotalOpportunitiesWithinMaxLimit() {
+      return filtersService.model.appliedFilter.pagination.totalOpportunities <= maxOpportunities;
+    }
+
     // ***************
     // PRIVATE METHODS
     // ***************
@@ -856,7 +879,6 @@ module.exports = /*  @ngInject */
     $scope.$watch('list.opportunitiesService.model.opportunities', function() {
       vm.selected = [];
       vm.disabledMessage = '';
-      vm.numberOfOpportunitiesSmallerThanMax = filtersService.model.appliedFilter.pagination.totalOpportunities <= maxOpportunities;
       updateStateAfterUnselectingOpportunity();
     });
 
