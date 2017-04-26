@@ -393,7 +393,7 @@ module.exports = /*  @ngInject */
       accountFilters: accountFilters,
       trendPropertyNames: trendPropertyNames,
       resetPagination: resetPagination,
-      updatePaginationState: updatePaginationState
+      getNewPaginationState: getNewPaginationState
     };
 
     return service;
@@ -516,11 +516,10 @@ module.exports = /*  @ngInject */
       }
     }
 
-    function updatePaginationState(paginationState) {
+    function getNewPaginationState(paginationState) {
       const _paginationState = Object.assign({}, paginationState);
 
-      _paginationState.roundedStores = Math.ceil(_paginationState.totalStores / 10) * 10;
-      _paginationState.totalPages = Math.ceil(_paginationState.roundedStores / 20) - 1;
+      _paginationState.totalPages = Math.ceil(_paginationState.totalStores / 20) - 1;
 
       if (_paginationState.currentPage > _paginationState.totalPages) {
         _paginationState.currentPage = _paginationState.totalPages;
