@@ -136,15 +136,13 @@ module.exports = /*  @ngInject */
         filtersService.model.selected.opportunityType = ['All Types'];
         filtersService.model.selected.retailer = 'Chain';
 
-        var premiseType = !row.depletionTotal ? vm.distributionRadioOptions.selected.onOffPremise : 'all';
-
         $state.go('accounts', {
           resetFiltersOnLoad: false,
           applyFiltersOnLoad: true,
           pageData: {
             brandTitle: row.name,
             brandId: row.id,
-            premiseType: premiseType
+            premiseType: disabled !== 'undefined' ? vm.distributionRadioOptions.selected.onOffPremise : null
           }
         });
       } else {

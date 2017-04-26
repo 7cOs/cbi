@@ -75,8 +75,8 @@ v-accordion.styled-list(multiple="" id="opportunities" control="list.accordion" 
     h4 Dang! We were unable to find any opportunities that met your criteria.
     p Try adjusting your filters to broaden your search!
   div.select-all-toast-wrapper(ng-if="list.selectAllAvailable" ng-class="{'visible': list.selectAllToastVisible}")
-    div.toast-message(ng-if="!list.isAllOpportunitiesSelected && list.numberOfOpportunitiesSmallerThanMax") There are currently {{list.selected.length}} opportunities selected. Do you want to <span class="inline-button" ng-click="list.selectAllOpportunities()">select all {{list.filtersService.model.appliedFilter.pagination.totalOpportunities}}</span> of them?
-    div.toast-message(ng-if="!(list.isAllOpportunitiesSelected || list.numberOfOpportunitiesSmallerThanMax)") There are currently {{list.selected.length}} opportunities selected. To select all results, please narrow your search criteria.
+    div.toast-message(ng-if="!list.isAllOpportunitiesSelected && list.isTotalOpportunitiesWithinMaxLimit()") There are currently {{list.selected.length}} opportunities selected. Do you want to <span class="inline-button" ng-click="list.selectAllOpportunities()">select all {{list.filtersService.model.appliedFilter.pagination.totalOpportunities}}</span> of them?
+    div.toast-message(ng-if="!(list.isAllOpportunitiesSelected || list.isTotalOpportunitiesWithinMaxLimit())") There are currently {{list.selected.length}} opportunities selected. To select all results, please narrow your search criteria to less than {{list.maxOpportunities}} opportunities.
     div.toast-message(ng-if="list.isAllOpportunitiesSelected") All {{list.filtersService.model.appliedFilter.pagination.totalOpportunities}} opportunities are selected. <span class="inline-button" ng-click="list.toggleSelectAllStores()">Clear selection</span>
   v-pane.list-item(row ng-repeat="opportunity in list.opportunitiesService.model.opportunities | filter : {'dismissed': false} | orderBy : list.orderName" expanded='opportunity.isExpanded')
     .shadow-wrap.bottom

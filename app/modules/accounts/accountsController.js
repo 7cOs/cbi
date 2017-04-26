@@ -768,7 +768,6 @@ module.exports = /*  @ngInject */
       if (chip === 'myAccountsOnly') {
         chipsService.updateChip(chip, name);
       } else if (chip === 'premiseType') {
-        chipsService.removeChip(chip);
         chipsService.addChip(name, chip, true, false);
         // filter.resetTradeChannels() -- do we need to do this so the trade channels are correct based on filter
       }

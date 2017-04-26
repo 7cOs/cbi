@@ -204,7 +204,7 @@ describe('Unit: scorecardsController', function() {
         pageData: {
           brandId: row.id,
           brandTitle: row.name,
-          premiseType: 'all'
+          premiseType: 'off'
         }
       });
       expect($state.go.calls.count()).toEqual(1);
