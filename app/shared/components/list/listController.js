@@ -400,7 +400,7 @@ module.exports = /*  @ngInject */
               if (storeGroup.length < 1) {
                 vm.opportunitiesService.model.opportunities.splice(key, 1);
                 vm.filtersService.model.appliedFilter.pagination.totalStores -= 1;
-                vm.filtersService.model.appliedFilter.pagination = vm.filtersService.getNewPaginationState(filtersService.model.appliedFilter.pagination);
+                vm.filtersService.model.appliedFilter.pagination = vm.filtersService.getNewPaginationState(vm.filtersService.model.appliedFilter.pagination);
               }
             });
 
