@@ -554,7 +554,8 @@ describe('[Services.userService - opportunities]', function() {
       var responseObject = [{
           id: 'A57K3',
           name: 'Corona in PNW',
-          filterString: 'productname%3Acorona%2Cregion%3Apacificnorthwest'
+          filterString: 'productname%3Acorona%2Cregion%3Apacificnorthwest',
+          description: 'Something'
         }];
 
       $httpBackend
@@ -567,7 +568,8 @@ describe('[Services.userService - opportunities]', function() {
       expect(returnedPromise.$$state.value).toEqual([{
           id: 'A57K3',
           name: 'Corona in PNW',
-          filterString: 'productname%3Acorona%2Cregion%3Apacificnorthwest'
+          filterString: 'productname%3Acorona%2Cregion%3Apacificnorthwest',
+          description: 'Something'
       }]);
 
        $httpBackend
@@ -577,6 +579,35 @@ describe('[Services.userService - opportunities]', function() {
       returnedPromise = userService.getOpportunityFilters('1234');
       $httpBackend.flush();
       expect(returnedPromise.$$state.status).toEqual(2);
+  });
+
+  it('should filter out opportunities with no description', function() {
+      var responseObject = [{
+        id: 'ABCD1',
+        name: 'Corona in CHI',
+        filterString: 'productname%3Acorona%2Cregion%3Apacificnorthwest',
+        description: null
+      },
+      {
+        id: 'ABCD2',
+        name: 'Corona in PNW',
+        filterString: 'productname%3Acorona%2Cregion%3Apacificnorthwest',
+        description: 'Something'
+      }];
+
+      $httpBackend
+      .expect('GET', '/api/users/1234/opportunityFilters/')
+      .respond(200, responseObject);
+
+      var returnedPromise = userService.getOpportunityFilters('1234');
+      $httpBackend.flush();
+      expect(returnedPromise.$$state.status).toEqual(1);
+      expect(returnedPromise.$$state.value).toEqual([{
+        id: 'ABCD2',
+        name: 'Corona in PNW',
+        filterString: 'productname%3Acorona%2Cregion%3Apacificnorthwest',
+        description: 'Something'
+      }]);
   });
 
   it('should save opportunity filter', function() {

@@ -3,6 +3,8 @@
 module.exports = /*  @ngInject */
   function userService($http, $q, apiHelperService, filtersService, targetListService) {
 
+    const maxNumberOfFilters = 100;
+
     var model = {
       currentUser: {},
       summary: [],
@@ -255,7 +257,12 @@ module.exports = /*  @ngInject */
         .catch(getOpportunityFiltersFail);
 
       function getOpportunityFiltersSuccess(response) {
-        opportunityFilterPromise.resolve(response.data);
+        let filters = response.data.filter((filter) => {
+          return filter.description;
+        })
+        .slice(0, maxNumberOfFilters);
+
+        opportunityFilterPromise.resolve(filters);
       }
 
       function getOpportunityFiltersFail(error) {
