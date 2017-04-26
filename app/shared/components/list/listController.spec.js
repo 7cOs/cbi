@@ -167,8 +167,8 @@ describe('Unit: list controller', function() {
     expect(ctrl.handleAddToTargetList).not.toBeUndefined();
     expect(typeof (ctrl.handleAddToTargetList)).toEqual('function');
 
-    expect(ctrl.numberOfOpportunitiesSmallerThanMax).not.toBeUndefined();
-    expect(typeof (ctrl.numberOfOpportunitiesSmallerThanMax)).toEqual('function');
+    expect(ctrl.isTotalOpportunitiesWithinMaxLimit).not.toBeUndefined();
+    expect(typeof (ctrl.isTotalOpportunitiesWithinMaxLimit)).toEqual('function');
   });
 
   describe('Bindings', function() {
@@ -1883,21 +1883,21 @@ describe('Unit: list controller', function() {
     });
   });
 
-  describe('numberOfOpportunitiesSmallerThanMax', () => {
+  describe('isTotalOpportunitiesWithinMaxLimit', () => {
     it('should return true when the given number is smaller or equal to then max', () => {
       filtersService.model.appliedFilter.pagination.totalOpportunities = 0;
-      expect(ctrl.numberOfOpportunitiesSmallerThanMax()).toBeTruthy();
+      expect(ctrl.isTotalOpportunitiesWithinMaxLimit()).toBeTruthy();
 
       filtersService.model.appliedFilter.pagination.totalOpportunities = 999;
-      expect(ctrl.numberOfOpportunitiesSmallerThanMax()).toBeTruthy();
+      expect(ctrl.isTotalOpportunitiesWithinMaxLimit()).toBeTruthy();
 
       filtersService.model.appliedFilter.pagination.totalOpportunities = 1000;
-      expect(ctrl.numberOfOpportunitiesSmallerThanMax()).toBeTruthy();
+      expect(ctrl.isTotalOpportunitiesWithinMaxLimit()).toBeTruthy();
     });
 
     it('should return false when the given number is bigger than then max', () => {
       filtersService.model.appliedFilter.pagination.totalOpportunities = 1001;
-      expect(ctrl.numberOfOpportunitiesSmallerThanMax()).toBeFalsy();
+      expect(ctrl.isTotalOpportunitiesWithinMaxLimit()).toBeFalsy();
     });
   });
 });

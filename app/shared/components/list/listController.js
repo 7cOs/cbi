@@ -95,7 +95,7 @@ module.exports = /*  @ngInject */
     vm.checkIfLinkDisabled = checkIfLinkDisabled;
     vm.remainingOpportunitySpots = remainingOpportunitySpots;
     vm.handleAddToTargetList = handleAddToTargetList;
-    vm.numberOfOpportunitiesSmallerThanMax = numberOfOpportunitiesSmallerThanMax;
+    vm.isTotalOpportunitiesWithinMaxLimit = isTotalOpportunitiesWithinMaxLimit;
 
     // Custom Headers for CSV export
     vm.csvHeader = [
@@ -860,7 +860,7 @@ module.exports = /*  @ngInject */
      * Whether or not the number of all the fetched opportunities is smaller than the max threshold
      * @returns {Boolean}
      */
-    function numberOfOpportunitiesSmallerThanMax() {
+    function isTotalOpportunitiesWithinMaxLimit() {
       return filtersService.model.appliedFilter.pagination.totalOpportunities <= maxOpportunities;
     }
 
