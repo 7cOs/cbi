@@ -10,7 +10,7 @@ module.exports = /*  @ngInject */
     // Initial variables
     var vm = this;
     vm.linkToIQ = process.env.IQ_LINK;
-    // console.log('ctrl', vm.linkToIQ);
+    console.log('ctrl', vm.linkToIQ);
 
     // User Agent Detection for IE fixes
     $rootScope.isIE = ieHackService.isIE;
@@ -498,6 +498,7 @@ module.exports = /*  @ngInject */
     }
 
     function openIQLink() {
+      console.log('open', vm.linkToIQ);
       $window.open(vm.linkToIQ, '_blank');
     }
 
