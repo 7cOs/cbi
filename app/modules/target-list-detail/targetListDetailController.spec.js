@@ -475,6 +475,7 @@ describe('Unit: targetListDetailController', function() {
         // init stuff that we dont care about - we dont need one for /api/targetLists/1 because real service is never actually called
         $httpBackend.expectGET('/api/targetLists/undefined').respond(200);
         $httpBackend.expectGET('/api/targetLists/undefined/opportunities').respond(200);
+        $httpBackend.expectPATCH('/api/targetLists/undefined/shares').respond(200);
       });
 
       it('should call the service and run .then()', function() {
@@ -534,6 +535,17 @@ describe('Unit: targetListDetailController', function() {
         expect($mdDialog.show.calls.count()).toEqual(1);
       });
 
+      it('should update target list shares', function() {
+        spyOn(targetListService, 'getTargetList').and.callFake(function(callback) {
+          return {
+            then: function(callback) { return callback({archived: 'cheese, it is the best'}); }
+          };
+        });
+        spyOn(targetListService, 'updateTargetListShares');
+        ctrl.modalManageTargetList();
+        expect(targetListService.updateTargetListShares).toHaveBeenCalled();
+      });
+
       it('should reset pending shares & pending removals arrays', function() {
         ctrl.modalManageTargetList();
         expect(ctrl.pendingShares.length).toEqual(0);
@@ -586,6 +598,7 @@ describe('Unit: targetListDetailController', function() {
       beforeEach(function() {
         $httpBackend.expectGET('/api/targetLists/undefined').respond(200);
         $httpBackend.expectGET('/api/targetLists/undefined/opportunities').respond(200);
+        $httpBackend.expectPATCH('/api/targetLists/undefined/shares').respond(200);
         $httpBackend.expectDELETE('/api/targetLists/undefined').respond(200);
       });
 
@@ -643,6 +656,7 @@ describe('Unit: targetListDetailController', function() {
         // init stuff that we dont care about - we dont need one for /api/targetLists/1 because real service is never actually called
         $httpBackend.expectGET('/api/targetLists/undefined').respond(200);
         $httpBackend.expectGET('/api/targetLists/undefined/opportunities').respond(200);
+        $httpBackend.expectPATCH('/api/targetLists/undefined/shares').respond(200);
         $httpBackend.expectDELETE('/api/targetLists/undefined').respond(200);
 
         // create promise and spy on service.method
@@ -774,7 +788,6 @@ describe('Unit: targetListDetailController', function() {
         expect(ctrl.targetListAuthor).toEqual('current user');
       });
       it('should init the list for non-author', function() {
-         spyOn(targetListService, 'updateTargetListShares').and.callThrough();
          spyOn(targetListService, 'getTargetList').and.callFake(function(callback) {
           return {
             then: function(callback) { return callback({archived: 'cheese, it is the best'}); }
@@ -783,7 +796,18 @@ describe('Unit: targetListDetailController', function() {
         ctrl.initTargetLists();
         expect(ctrl.targetListAuthor).toEqual(undefined);
         expect(targetListService.model.currentList.archived).toEqual('cheese, it is the best');
-        expect(targetListService.updateTargetListShares).toHaveBeenCalled();
+      });
+      it('should invoke callback if provided', function() {
+        let callbackSpy = jasmine.createSpy();
+        spyOn(targetListService, 'getTargetList').and.callFake(function(callback) {
+          return {
+            then: function(callback) { return callback({archived: 'cheese, it is the best'}); }
+          };
+        });
+        ctrl.initTargetLists(callbackSpy);
+        expect(ctrl.targetListAuthor).toEqual(undefined);
+        expect(targetListService.model.currentList.archived).toEqual('cheese, it is the best');
+        expect(callbackSpy).toHaveBeenCalled();
       });
     });
 
@@ -805,6 +829,7 @@ describe('Unit: targetListDetailController', function() {
 
           $httpBackend.expectGET('/api/targetLists/undefined').respond(200);
           $httpBackend.expectGET('/api/targetLists/undefined/opportunities').respond(200);
+          $httpBackend.expectPATCH('/api/targetLists/undefined/shares').respond(200);
 
           spyOn(targetListService, 'updateTargetList').and.callFake(function() {
             return deferred.promise;
@@ -875,6 +900,7 @@ describe('Unit: targetListDetailController', function() {
 
           $httpBackend.expectGET('/api/targetLists/undefined').respond(200);
           $httpBackend.expectGET('/api/targetLists/undefined/opportunities').respond(200);
+          $httpBackend.expectPATCH('/api/targetLists/undefined/shares').respond(200);
 
           spyOn(targetListService, 'updateTargetList').and.callFake(function () {
             return deferred.promise;
