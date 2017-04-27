@@ -266,7 +266,8 @@ describe('Unit: opportunitiesService - get opportunities', function() {
             default: true,
             totalOpportunities: '28129',
             totalStores: '31',
-            roundedStores: 40
+            roundedStores: 40,
+            shouldReloadData: false
         });
     });
 
