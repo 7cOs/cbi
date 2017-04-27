@@ -5,7 +5,7 @@ const path = require('path');
 const cssnano = require('cssnano');
 const commonConfig = require('./webpack.common.js');
 const helpers = require('./helpers');
-const Dotenv = require('dotenv')
+const Dotenv = require('dotenv');
 
 const ENV = process.env.NODE_ENV = process.env.ENV = 'development';
 
