@@ -5,6 +5,7 @@ const path = require('path');
 const cssnano = require('cssnano');
 const commonConfig = require('./webpack.common.js');
 const helpers = require('./helpers');
+const Dotenv = require('dotenv-webpack')
 
 const ENV = process.env.NODE_ENV = process.env.ENV = 'development';
 
@@ -32,6 +33,9 @@ module.exports = webpackMerge(commonConfig, {
   },
 
   plugins: [
+    new Dotenv({
+      path: './.env.local'
+    }),
 
     new webpack.DefinePlugin({
       'ENV': JSON.stringify(ENV),
