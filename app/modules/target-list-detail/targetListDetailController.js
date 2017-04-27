@@ -186,9 +186,7 @@ module.exports = /*  @ngInject */
       var parentEl = angular.element(document.body);
       vm.pendingShares = [];
       vm.pendingRemovals = [];
-      initTargetLists(() => {
-        targetListService.updateTargetListShares(targetListService.model.currentList.id, userService.model.currentUser.employeeID, true);
-      });
+      initTargetLists();
       isAuthor();
       removeFooterToast();
       enableButton();
@@ -292,13 +290,11 @@ module.exports = /*  @ngInject */
       $rootScope.isGrayedOut = targetList.archived;
     }
 
-    function initTargetLists(callback) {
+    function initTargetLists() {
       targetListService.getTargetList(targetListService.model.currentList.id).then(function(response) {
         handleListResponse(response);
 
-        if (callback) {
-          callback();
-        }
+        targetListService.updateTargetListShares(targetListService.model.currentList.id, userService.model.currentUser.employeeID, true);
       }, function() {
         vm.modalUnauthorizedAccess();
       });

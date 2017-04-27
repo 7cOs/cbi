@@ -797,17 +797,15 @@ describe('Unit: targetListDetailController', function() {
         expect(ctrl.targetListAuthor).toEqual(undefined);
         expect(targetListService.model.currentList.archived).toEqual('cheese, it is the best');
       });
-      it('should invoke callback if provided', function() {
-        let callbackSpy = jasmine.createSpy();
+      it('should update target list shares', function() {
         spyOn(targetListService, 'getTargetList').and.callFake(function(callback) {
           return {
             then: function(callback) { return callback({archived: 'cheese, it is the best'}); }
           };
         });
-        ctrl.initTargetLists(callbackSpy);
-        expect(ctrl.targetListAuthor).toEqual(undefined);
-        expect(targetListService.model.currentList.archived).toEqual('cheese, it is the best');
-        expect(callbackSpy).toHaveBeenCalled();
+        spyOn(targetListService, 'updateTargetListShares');
+        ctrl.initTargetLists();
+        expect(targetListService.updateTargetListShares).toHaveBeenCalled();
       });
     });
 
