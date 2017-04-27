@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports = /*  @ngInject */
-  function navbarController($rootScope, $scope, $state, $window, $mdPanel, $mdDialog, $mdMenu, $mdSelect, $anchorScroll, $analytics, $location, notificationsService, opportunitiesService, targetListService, userService, versionService, loaderService, ieHackService, toastService, filtersService, chipsService, notesService, moment) {
+  function navbarController($rootScope, $scope, $state, $window, $mdPanel, $mdDialog, $mdMenu, $mdSelect, $anchorScroll, $analytics, $location, notificationsService, opportunitiesService, targetListService, userService, versionService, loaderService, ieHackService, toastService, filtersService, chipsService, notesService, moment, ENV_VARS) {
 
     // ****************
     // CONTROLLER SETUP
@@ -9,7 +9,7 @@ module.exports = /*  @ngInject */
 
     // Initial variables
     var vm = this;
-    vm.linkToIQ = process.env.IQ_LINK;
+    vm.linkToIQ = ENV_VARS.iqUrl;
     console.log('ctrl', vm.linkToIQ);
 
     // User Agent Detection for IE fixes

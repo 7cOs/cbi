@@ -7,4 +7,7 @@ module.exports =
     controller: 'navbarController',
     controllerAs: 'nb'
   })
-  .controller('navbarController', require('./navbarController'));
+  .controller('navbarController', require('./navbarController'))
+  .constant('ENV_VARS', {
+    iqUrl: process.env.IQ_LINK
+  });
