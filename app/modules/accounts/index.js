@@ -8,7 +8,7 @@ module.exports =
   .config(function ($stateProvider) {
     $stateProvider
     .state('accounts', {
-      url: '/accounts?{store:json}',
+      url: '/accounts?storeid?storename?myaccountsonly',
       title: 'Account Dashboard',
       template: require('./layout.pug'),
       controller: 'accountsController',

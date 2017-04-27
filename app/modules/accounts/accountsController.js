@@ -908,12 +908,12 @@ module.exports = /*  @ngInject */
 
     function checkForNavigationFromOpps() {
       var isNavigatedFromOpps = false;
-      if ($state.params.store) {
+      if ($state.params.storeid && $state.params.storename) {
         vm.currentTopBottomAcctType = vm.filtersService.accountFilters.accountTypes[3];
         vm.currentTopBottomObj = getCurrentTopBottomObject(vm.currentTopBottomAcctType);
-        var storeData = {id: $state.params.store.id, name: $state.params.store.name};
+        var storeData = {id: $state.params.storeid, name: $state.params.storename};
         vm.currentTopBottomFilters.stores = storeData;
-        vm.filtersService.model.selected.myAccountsOnly = $state.params.store.myAccountsOnly === true;
+        vm.filtersService.model.selected.myAccountsOnly = $state.params.storemyAccountsOnly === true;
         vm.filtersService.model.selected.premiseType = 'all';
         isNavigatedFromOpps = true;
       }

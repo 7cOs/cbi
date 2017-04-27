@@ -928,10 +928,8 @@ module.exports = /*  @ngInject */
 
     function getStoreToBePassedToAcct(storeDetails) {
       return {
-        store: {
-          id: storeDetails.id,
-          name: storeDetails.name
-        }
+        storeid: storeDetails.id,
+        storename: storeDetails.name
       };
     }
 
