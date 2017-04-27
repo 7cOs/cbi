@@ -535,12 +535,11 @@ describe('Unit: targetListDetailController', function() {
         expect($mdDialog.show.calls.count()).toEqual(1);
       });
 
-      it('should update target list shares', function() {
-        spyOn(targetListService, 'getTargetList').and.callFake(function(callback) {
-          return {
-            then: function(callback) { return callback({archived: 'cheese, it is the best'}); }
-          };
-        });
+      it('should update target list shares', () => {
+        spyOn(targetListService, 'getTargetList').and.callFake(() => ({
+            then: (callback) => { callback({archived: 'cheese, it is the best'}); }
+          })
+        );
         spyOn(targetListService, 'updateTargetListShares');
         ctrl.modalManageTargetList();
         expect(targetListService.updateTargetListShares).toHaveBeenCalled();
@@ -797,12 +796,11 @@ describe('Unit: targetListDetailController', function() {
         expect(ctrl.targetListAuthor).toEqual(undefined);
         expect(targetListService.model.currentList.archived).toEqual('cheese, it is the best');
       });
-      it('should update target list shares', function() {
-        spyOn(targetListService, 'getTargetList').and.callFake(function(callback) {
-          return {
-            then: function(callback) { return callback({archived: 'cheese, it is the best'}); }
-          };
-        });
+      it('should update target list shares', () => {
+        spyOn(targetListService, 'getTargetList').and.callFake(() => ({
+            then: (callback) => { callback({archived: 'cheese, it is the best'}); }
+          })
+        );
         spyOn(targetListService, 'updateTargetListShares');
         ctrl.initTargetLists();
         expect(targetListService.updateTargetListShares).toHaveBeenCalled();
