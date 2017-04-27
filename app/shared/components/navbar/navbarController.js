@@ -79,7 +79,6 @@ module.exports = /*  @ngInject */
     ];
 
     vm.targetLists = [];
-    vm.linkToIQ = '';
 
     // Expose public methods
     vm.addOpportunity = addOpportunity;
