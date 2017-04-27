@@ -9,6 +9,8 @@ module.exports = /*  @ngInject */
 
     // Initial variables
     var vm = this;
+    vm.linkToIQ = process.env.IQ_LINK;
+    // console.log('ctrl', vm.linkToIQ);
 
     // User Agent Detection for IE fixes
     $rootScope.isIE = ieHackService.isIE;
@@ -462,7 +464,6 @@ module.exports = /*  @ngInject */
 
       versionService.getVersion().then(function(data) {
         versionService.model.version = data;
-        setLinkToIQ(data.env);
       });
     };
 
@@ -495,13 +496,6 @@ module.exports = /*  @ngInject */
     // Show inputs if a new item is needed
     function showNewRationaleInput(yes)  {
       vm.addNewRationale = yes;
-    }
-
-    // set IQ link for production or test
-    function setLinkToIQ(env) {
-      vm.linkToIQ = env === 'production' || env === 'stage'
-                  ? 'http://iqweb.cbrands.com/MicroStrategy/servlet/mstrWeb?server=CBIGDC-PMSTK801&project=Beer+Analytics&evt=2001&folderID=37162CF04A01CF139BF05F96B4098106'
-                  : 'http://test-iqweb.cbrands.com/MicroStrategy/servlet/mstrWeb?server=CBIGDC-IMSTK801&project=Beer+Analytics&evt=2001&folderID=37162CF04A01CF139BF05F96B4098106';
     }
 
     function openIQLink() {
