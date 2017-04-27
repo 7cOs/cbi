@@ -499,7 +499,7 @@ module.exports = /*  @ngInject */
 
     // set IQ link for production or test
     function setLinkToIQ(env) {
-      vm.linkToIQ = env === 'production'
+      vm.linkToIQ = env === 'production' || env === 'stage'
                   ? 'http://iqweb.cbrands.com/MicroStrategy/servlet/mstrWeb?server=CBIGDC-PMSTK801&project=Beer+Analytics&evt=2001&folderID=37162CF04A01CF139BF05F96B4098106'
                   : 'http://test-iqweb.cbrands.com/MicroStrategy/servlet/mstrWeb?server=CBIGDC-IMSTK801&project=Beer+Analytics&evt=2001&folderID=37162CF04A01CF139BF05F96B4098106';
     }
