@@ -279,12 +279,14 @@ module.exports = /*  @ngInject */
     }
 
     function saveNewList(e) {
+      const newTargetListIdx = 0; // newly created targetList will always be at 0 index
       vm.buttonDisabled = true;
 
       // Create target list
       userService.addTargetList(vm.newList).then(function(response) {
         $analytics.eventTrack('Add to Target List', {category: vm.analyticsCategory, label: response.id});
         vm.addToTargetList(response.id);
+        updateTargetListOpportunitySummary(newTargetListIdx, vm.selected.length);
         vm.closeModal();
         vm.buttonDisabled = false;
 
