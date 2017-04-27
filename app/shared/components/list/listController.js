@@ -927,7 +927,12 @@ module.exports = /*  @ngInject */
     }
 
     function getStoreToBePassedToAcct(storeDetails) {
-      return {store: storeDetails.id + '|' + storeDetails.name + '|' + false};
+      return {
+        store: {
+          id: storeDetails.id,
+          name: storeDetails.name
+        }
+      };
     }
 
     function updateTargetListOpportunitySummary(idxOfTargetList, numberToAdd) {

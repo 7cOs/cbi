@@ -908,13 +908,12 @@ module.exports = /*  @ngInject */
 
     function checkForNavigationFromOpps() {
       var isNavigatedFromOpps = false;
-      var storeFilter = myperformanceService.parseStoreFilterFromOpps($state.params.store);
-      if (storeFilter) {
+      if ($state.params.store) {
         vm.currentTopBottomAcctType = vm.filtersService.accountFilters.accountTypes[3];
         vm.currentTopBottomObj = getCurrentTopBottomObject(vm.currentTopBottomAcctType);
-        var storeData = {id: storeFilter.storeId, name: storeFilter.storeName};
+        var storeData = {id: $state.params.store.id, name: $state.params.store.name};
         vm.currentTopBottomFilters.stores = storeData;
-        vm.filtersService.model.selected.myAccountsOnly = storeFilter.myAccountsOnly;
+        vm.filtersService.model.selected.myAccountsOnly = $state.params.store.myAccountsOnly === true;
         vm.filtersService.model.selected.premiseType = 'all';
         isNavigatedFromOpps = true;
       }
@@ -989,14 +988,14 @@ module.exports = /*  @ngInject */
       setDefaultDropDownOptions();
       var isNavigatedFromScorecard = checkForNavigationFromScorecard();
       var isNavigatedToNextLevel = checkForNavigationFromOpps()  || setNotes();
-      if (isNavigatedFromScorecard === false && isNavigatedToNextLevel === false) {
+      if (!isNavigatedFromScorecard && !isNavigatedToNextLevel) {
         chipsService.resetChipsFilters(chipsService.model);
       }
       setDefaultFilterOptions();
       if ($state.params.pageData && $state.params.pageData.premiseType && $state.params.applyFiltersOnLoad) {
         vm.filtersService.model.selected.premiseType = $state.params.pageData.premiseType;
       }
-      if (isNavigatedFromScorecard === true) {
+      if (isNavigatedFromScorecard) {
         var brandObj = {
           id: vm.brandIdSelected,
           name: vm.brandWidgetTitle

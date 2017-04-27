@@ -15,7 +15,6 @@ module.exports = /*  @ngInject */
       resetFilters: resetFilters,
       isValidValues: isValidValues,
       hasInconsistentIds: hasInconsistentIds,
-      parseStoreFilterFromOpps: parseStoreFilterFromOpps,
       setAcctDashboardFiltersOnInit: setAcctDashboardFiltersOnInit
     };
 
@@ -314,21 +313,6 @@ module.exports = /*  @ngInject */
 
     function hasInconsistentIds(performanceData) {
       return !performanceData.id || performanceData.id.toLowerCase() === 'id missing';
-    }
-
-    function parseStoreFilterFromOpps(storeParams) {
-      var storeFilter = null;
-      if (storeParams) {
-        var result = storeParams.split('|');
-        if (result[0] && result[1]) {
-          storeFilter = {
-            storeId: result[0],
-            storeName: result[1],
-            myAccountsOnly: result[2] === 'true'
-          };
-        }
-      }
-      return storeFilter;
     }
 
     function setAcctDashboardFiltersOnInit(filterToApply, currentTopBottomFilters) {
