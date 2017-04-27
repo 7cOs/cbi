@@ -249,7 +249,7 @@ module.exports = /*  @ngInject */
      * @memberOf cf.common.services
      */
     function getOpportunityFilters(id) {
-      var opportunityFilterPromise = $q.defer(),
+      const opportunityFilterPromise = $q.defer(),
           url = apiHelperService.request('/api/users/' + id + '/opportunityFilters/');
 
       $http.get(url)
@@ -257,7 +257,7 @@ module.exports = /*  @ngInject */
         .catch(getOpportunityFiltersFail);
 
       function getOpportunityFiltersSuccess(response) {
-        let filters = response.data.filter((filter) => {
+        const filters = response.data.filter((filter) => {
           return filter.description;
         })
         .slice(0, maxNumberOfFilters);
