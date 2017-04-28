@@ -48,8 +48,14 @@ module.exports = /*  @ngInject */
     };
     vm.selectedIndex = -1;
     vm.selectedList = null;
-    vm.distributionSortQuery = 'name';
-    vm.distributionSortReverse = false;
+    vm.depletionSort = {
+      sortAscending: false,
+      query: 'name'
+    };
+    vm.distributionSort = {
+      sortAscending: false,
+      query: 'name'
+    };
 
     // Set page title for head and nav
     $rootScope.pageTitle = $state.current.title;
@@ -203,23 +209,26 @@ module.exports = /*  @ngInject */
       }
     }
 
-    function setSortQuery(table, query) {
-      if (table === 'distribution') {
-        vm.distributionSortQuery === query
-          ? vm.distributionSortReverse = !vm.distributionSortReverse
-          : vm.distributionSortQuery = query;
-      }
+    function setSortQuery(sort, query) {
+      vm[sort].query === query
+        ? vm[sort].sortAscending = !vm[sort].sortAscending
+        : vm[sort].query = query;
     }
 
-    function sortBy(distribution) {
-      if (vm.distributionSortQuery === 'name') return distribution.name;
-      else {
-        if (getFilteredValue(vm.distributionSortQuery, distribution, 'distribution') !== '-') {
-          return parseFloat(getFilteredValue(vm.distributionSortQuery, distribution, 'distribution').replace(/[,$]/g, ''));
-        } else {
-          return 0;
+    function sortBy(sortType) {
+      let filteredValueType = '';
+      sortType === 'distributionSort' ? filteredValueType = 'distribution' : filteredValueType = 'depletion';
+
+      return function(model) {
+        if (vm[sortType].query === 'name') return model.name;
+        else {
+          if (getFilteredValue(vm[sortType].query, model, filteredValueType) !== '-') {
+            return parseFloat(getFilteredValue(vm[sortType].query, model, filteredValueType).replace(/[,$]/g, ''));
+          } else {
+            return 0;
+          }
         }
-      }
+      };
     }
 
     function getFilteredValue(key, model, type) {
