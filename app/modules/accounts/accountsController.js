@@ -895,29 +895,92 @@ module.exports = /*  @ngInject */
       return obj;
     }
 
-    function checkForNavigationFromScorecard() {
-      var isNavigatedFromScorecard = false;
-      if ($state.params.applyFiltersOnLoad && $state.params.pageData.brandTitle) {
-        vm.brandIdSelected = $state.params.pageData.brandId;
-        vm.brandWidgetTitle = $state.params.pageData.brandTitle;
-        chipsService.addAutocompleteChip(vm.brandWidgetTitle, 'brand', false);
-        isNavigatedFromScorecard = true;
+    function init() {
+      setDefaultDropDownOptions();
+      const isNavigatedFromScorecard = $state.params.applyFiltersOnLoad && $state.params.pageData.brandTitle;
+      const isNavigatedFromOpps = $state.params.storeid && $state.params.storename;
+      const isSettingNotes = $state.params.openNotesOnLoad;
+
+      if (!isNavigatedFromScorecard && !(isNavigatedFromOpps || isSettingNotes)) {
+        chipsService.resetChipsFilters(chipsService.model);
       }
-      return isNavigatedFromScorecard;
+
+      if (isNavigatedFromOpps) {
+        setDataForNavigationFromOpps();
+      }
+
+      if (isSettingNotes) {
+        setNotes();
+      }
+
+      if (isNavigatedFromScorecard) {
+        setDataForNavigationFromScorecard();
+      } else {
+        getBrandsAndTopbottomDataOnInit(isNavigatedFromOpps || isSettingNotes);
+      }
+
+      setDefaultFilterOptions();
+      setPremiseType();
+      resetStateParameters();
+      setCurrentUserName();
+      setTopLevelForLabel();
+      sendTopBottomAnalyticsEvent();
     }
 
-    function checkForNavigationFromOpps() {
-      var isNavigatedFromOpps = false;
-      if ($state.params.storeid && $state.params.storename) {
-        vm.currentTopBottomAcctType = vm.filtersService.accountFilters.accountTypes[3];
-        vm.currentTopBottomObj = getCurrentTopBottomObject(vm.currentTopBottomAcctType);
-        var storeData = {id: $state.params.storeid, name: $state.params.storename};
-        vm.currentTopBottomFilters.stores = storeData;
-        vm.filtersService.model.selected.myAccountsOnly = $state.params.storemyAccountsOnly === true;
-        vm.filtersService.model.selected.premiseType = 'all';
-        isNavigatedFromOpps = true;
-      }
-      return isNavigatedFromOpps;
+    /**
+     * It is called on init and sets the default dropdown options for the entire account dashboard
+     * @param {Object} currentAcctType The new account type to be set
+     * @returns Sets the data for the currently selected top bottom account type
+     */
+    function setDefaultDropDownOptions() {
+      setDefaultEndingPeriodOptions();
+      vm.filterModel.trend = vm.filtersService.model.trend[0];
+      vm.filtersService.model.accountSelected.accountBrands = vm.filtersService.accountFilters.accountBrands[0];
+      vm.filtersService.model.accountSelected.accountMarkets = vm.filtersService.accountFilters.accountMarkets[0];
+      vm.currentTopBottomAcctType = vm.filtersService.accountFilters.accountTypes[0];
+      vm.filtersService.model.valuesVsTrend = vm.filtersService.accountFilters.valuesVsTrend[0];
+      vm.filtersService.model.selected.premiseType = 'off';
+      vm.chartOptions = myperformanceService.getChartOptions();
+      vm.topBottomData = myperformanceService.initDataForAllTbLevels(vm.topBottomData);
+      vm.marketSelectedIndex = 0;
+      vm.currentTopBottomObj = getCurrentTopBottomObject(vm.currentTopBottomAcctType);
+    }
+
+    function setDataForNavigationFromScorecard() {
+      vm.brandIdSelected = $state.params.pageData.brandId;
+      vm.brandWidgetTitle = $state.params.pageData.brandTitle;
+      chipsService.addAutocompleteChip(vm.brandWidgetTitle, 'brand', false);
+
+      var brandObj = {
+        id: vm.brandIdSelected,
+        name: vm.brandWidgetTitle
+      };
+      selectItem('brands', brandObj, vm.brandTabs, 0);
+    }
+
+    function setDataForNavigationFromOpps() {
+      vm.currentTopBottomAcctType = vm.filtersService.accountFilters.accountTypes[3];
+      vm.currentTopBottomObj = getCurrentTopBottomObject(vm.currentTopBottomAcctType);
+      var storeData = {id: $state.params.storeid, name: $state.params.storename};
+      vm.currentTopBottomFilters.stores = storeData;
+      vm.filtersService.model.selected.myAccountsOnly = $state.params.storemyAccountsOnly === true;
+      vm.filtersService.model.selected.premiseType = 'all';
+    }
+
+    function setNotes() {
+      $timeout(function() {
+        $rootScope.$broadcast('notes:opened', true, $state.params.pageData.account);
+
+        notesService.model.accountId = $state.params.pageData.account.id;
+        notesService.accountNotes().then(function(success) {
+          vm.notes = success;
+          vm.loading = false;
+        });
+      });
+      var currentLevel = myperformanceService.setAcctDashboardFiltersOnInit($state.params.pageData.account, vm.currentTopBottomFilters);
+      vm.filtersService.model.selected.myAccountsOnly = false;
+      vm.currentTopBottomAcctType = currentLevel;
+      vm.currentTopBottomObj = getCurrentTopBottomObject(vm.currentTopBottomAcctType);
     }
 
     function getBrandsAndTopbottomDataOnInit(isNavigatedToNextLevel) {
@@ -955,7 +1018,7 @@ module.exports = /*  @ngInject */
             }
           });
 
-          if (isNavigatedToNextLevel === true) {
+          if (isNavigatedToNextLevel) {
             var topBottomFilterForCurrentLevel = vm.currentTopBottomFilters[vm.currentTopBottomObj.currentLevelName];
             navigateTopBottomLevels(topBottomFilterForCurrentLevel);
           }
@@ -963,58 +1026,23 @@ module.exports = /*  @ngInject */
       });
     }
 
-    function setNotes() {
-      var isNavigateToNextLevel = false;
-      if ($state.params.openNotesOnLoad) {
-        $timeout(function() {
-          $rootScope.$broadcast('notes:opened', true, $state.params.pageData.account);
-
-          notesService.model.accountId = $state.params.pageData.account.id;
-          notesService.accountNotes().then(function(success) {
-            vm.notes = success;
-            vm.loading = false;
-          });
-        });
-        var currentLevel = myperformanceService.setAcctDashboardFiltersOnInit($state.params.pageData.account, vm.currentTopBottomFilters);
-        vm.filtersService.model.selected.myAccountsOnly = false;
-        vm.currentTopBottomAcctType = currentLevel;
-        vm.currentTopBottomObj = getCurrentTopBottomObject(vm.currentTopBottomAcctType);
-        isNavigateToNextLevel = true;
-      }
-      return isNavigateToNextLevel;
-    }
-
-    function init() {
-      setDefaultDropDownOptions();
-      var isNavigatedFromScorecard = checkForNavigationFromScorecard();
-      var isNavigatedToNextLevel = checkForNavigationFromOpps()  || setNotes();
-      if (!isNavigatedFromScorecard && !isNavigatedToNextLevel) {
-        chipsService.resetChipsFilters(chipsService.model);
-      }
-      setDefaultFilterOptions();
+    function setPremiseType() {
       if ($state.params.pageData && $state.params.pageData.premiseType && $state.params.applyFiltersOnLoad) {
         vm.filtersService.model.selected.premiseType = $state.params.pageData.premiseType;
       }
-      if (isNavigatedFromScorecard) {
-        var brandObj = {
-          id: vm.brandIdSelected,
-          name: vm.brandWidgetTitle
-        };
-        selectItem('brands', brandObj, vm.brandTabs, 0);
-      } else {
-        getBrandsAndTopbottomDataOnInit(isNavigatedToNextLevel);
-      }
-      // reset state params
+    }
+
+    function resetStateParameters() {
       $state.params.applyFiltersOnLoad = false;
       $state.params.resetFiltersOnLoad = true;
+    }
+
+    function setCurrentUserName() {
       try {
         vm.currentUserName = userService.model.currentUser.firstName + ' ' + userService.model.currentUser.lastName;
       } catch (e) {
         vm.currentUserName = null;
       }
-
-      setTopLevelForLabel();
-      sendTopBottomAnalyticsEvent();
     }
 
     /**
@@ -1048,25 +1076,6 @@ module.exports = /*  @ngInject */
         removeAllTopBottomAccountTypeFilters(levelToResetBeyond);
         onFilterPropertiesChange();
       }
-    }
-
-    /**
-     * It is called on init and sets the default dropdown options for the entire account dashboard
-     * @param {Object} currentAcctType The new account type to be set
-     * @returns Sets the data for the currently selected top bottom account type
-     */
-    function setDefaultDropDownOptions() {
-      setDefaultEndingPeriodOptions();
-      vm.filterModel.trend = vm.filtersService.model.trend[0];
-      vm.filtersService.model.accountSelected.accountBrands = vm.filtersService.accountFilters.accountBrands[0];
-      vm.filtersService.model.accountSelected.accountMarkets = vm.filtersService.accountFilters.accountMarkets[0];
-      vm.currentTopBottomAcctType = vm.filtersService.accountFilters.accountTypes[0];
-      vm.filtersService.model.valuesVsTrend = vm.filtersService.accountFilters.valuesVsTrend[0];
-      vm.filtersService.model.selected.premiseType = 'off';
-      vm.chartOptions = myperformanceService.getChartOptions();
-      vm.topBottomData = myperformanceService.initDataForAllTbLevels(vm.topBottomData);
-      vm.marketSelectedIndex = 0;
-      vm.currentTopBottomObj = getCurrentTopBottomObject(vm.currentTopBottomAcctType);
     }
 
     /**
