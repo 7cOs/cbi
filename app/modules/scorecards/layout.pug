@@ -48,8 +48,6 @@ div.my-scorecards
             th.accent {{s.depletionSelect === 'CMTH' ? 'Clo Mth' : s.depletionSelect}}
             th.accent VS YA
             th.accent VS YA %
-            // th.accent VS ABP
-            // th.accent VS ABP %
             th.accent BU vs YA %
             th.accent.border MY % vs BU %
             th.accent To My Total %
@@ -60,25 +58,20 @@ div.my-scorecards
             td.column-total.dark(ng-class="{'negative': !s.isPositive(s.totalRow.depletions)}") {{s.totalRow.depletions | number:0 }}
             td.column-total.medium-dark(ng-class="{'negative': !s.isPositive(s.totalRow.gap)}") {{s.checkValidity(s.totalRow.gap, 0)}}
             td.column-total.medium-dark.no-border(ng-class="{'negative': !s.isPositive(s.totalRow.percentTrend)}") {{s.totalRow.percentTrend | number:1}}%
-            // td.column-total(ng-class="{'negative': !s.isPositive(s.totalRow.gapVsPlan)}") {{s.totalRow.gapVsPlan | number:0 }}
-            // td.column-total.no-border(ng-class="{'negative': !s.isPositive(s.totalRow.percentGapVsPlan)}") {{s.totalRow.percentGapVsPlan}}%
             td.column-total(ng-class="{'negative': !s.isPositive(s.totalRow.percentBUTrend)}") {{s.totalRow.percentBUTrend | number:1 }}%
             td.column-total.no-border(ng-class="s.parseInt(s.totalRow.percentTrend) > s.parseInt(s.totalRow.percentBUTrend) ? 'positive' : 'negative'") <span class="triangle-icon">&#9660;</span>
             td.column-total 100%
             td.column-total 100%
           tr(ng-repeat="depletion in s.userService.model.depletion | orderBy:'name'" class="disable-ng-animate" ng-click="s.toggleSelected($index, 'depletions')" ng-class="{'selected': s.selectedList === 'depletions' && $index === s.selectedIndex}")
             td.left.data-brand(ng-click='s.goToAccountDashboard(depletion)' analytics-on="click" analytics-event="Brand Performance Selected" analytics-category="Scorecards" analytics-label="My Depletions Scorecard") {{depletion.name}}
-            td.dark(ng-repeat-start="measure in depletion.measures | filter: {timeframe: s.depletionSelect}: true") {{s.checkValidity(measure.depletions, 0)}}
-            td.medium-dark(ng-class="{'negative': !s.isPositive(measure.depletions - (measure.depletions / (1 + measure.depletionsTrend / 100)))}") {{s.checkValidity(measure.depletions - measure.depletionsLastYear, 0)}}
-            td.medium-dark.no-border(ng-class="{'negative': !s.isPositive(measure.depletionsTrend)}") {{s.vsYAPercent(measure.depletions, measure.depletionsLastYear, measure.depletionsTrend)}}%
-            // td(ng-class="{'negative': !s.isPositive(measure.depletions - measure.plan)}") {{s.checkValidity(measure.depletions - measure.plan, 0) }}
-            // td.no-border(ng-if="measure.plan !== 0" ng-class="{'negative': !s.isPositive(((measure.depletions - measure.plan) / measure.plan) * 100)}") {{s.checkValidity(((measure.depletions - measure.plan) / measure.plan) * 100, 1)}}%
-            // td.no-border(ng-if="measure.plan === 0") 0%
-            td(ng-class="{'negative': !s.isPositive(measure.depletionsBUTrend)}") {{s.vsYAPercent(measure.depletionsBU, measure.depletionsBULastYear, measure.depletionsBUTrend)}}%
-            td.no-border(ng-if="measure.depletionsBUTrend !== null" ng-class="measure.depletionsTrend > measure.depletionsBUTrend ? 'positive' : 'negative'") <span class="triangle-icon">&#9660;</span>
-            td.no-border(ng-if="measure.depletionsBUTrend === null" class="positive") <span class="triangle-icon">&#9660;</span>
-            td(ng-class="{'negative': !s.isPositive(measure.depletions / s.totalRow.depletions)}") {{s.checkValidity((measure.depletions / s.totalRow.depletions) * 100, 1)}}%
-            td(ng-repeat-end ng-class="{'negative': !s.isPositive(measure.depletionsBU / s.totalRow.depletionsBU)}") {{s.checkValidity((measure.depletionsBU / s.totalRow.depletionsBU) * 100, 1)}}%
+            td.dark {{s.getFilteredValue('timeFrameTotal', depletion, 'depletion')}}
+            td.medium-dark(ng-class="{'negative': !s.isPositive(s.getFilteredValue('vsYa', depletion, 'depletion'))}") {{s.getFilteredValue('vsYa', depletion, 'depletion')}}
+            td.medium-dark.no-border(ng-class="{'negative': s.getFilteredValue('vsYaPercent', depletion, 'depletion') < 0}") {{s.getFilteredValue('vsYaPercent', depletion, 'depletion')}}%
+            td(ng-class="{'negative': s.getFilteredValue('buVsYaPercent', depletion, 'depletion') < 0}") {{s.getFilteredValue('buVsYaPercent', depletion, 'depletion')}}%
+            td.no-border(ng-if="depletion[s.depletionSelect].depletionsBUTrend !== null" ng-class="depletion[s.depletionSelect].depletionsTrend > depletion[s.depletionSelect].depletionsBUTrend ? 'positive' : 'negative'") <span class="triangle-icon">&#9660;</span>
+            td.no-border(ng-if="depletion[s.depletionSelect].depletionsBUTrend === null" class="positive") <span class="triangle-icon">&#9660;</span>
+            td(ng-class="{'negative': s.getFilteredValue('percentTotal', depletion, 'depletion') < 0}") {{s.getFilteredValue('percentTotal', depletion, 'depletion')}}%
+            td(ng-class="{'negative': s.getFilteredValue('percentBuTotal', depletion, 'depletion')} < 0") {{s.getFilteredValue('percentBuTotal', depletion, 'depletion')}}%
 
   section.distributions-scorecard
     div.scorecard-header.clearfix
@@ -89,12 +82,12 @@ div.my-scorecards
       div.scorecard-header-right
         p.accent Total PODs / vs YA %
         h3.bold(ng-if="s.distributionRadioOptions.selected.placementType === 'effective'") {{s.totalDistributions[0].distributionsEffective | number:0 }}&nbsp;
-          div(ng-class="s.totalDistributions[0].distributionsEffectiveTrend > 0 ? 'positive' : 'negative'")
-            span(ng-if="s.totalDistributions[0].distributionsEffectiveTrend > 0") +
+          div(ng-class="s.totalDistributions[0].distributionsEffectiveTrend >= 0 ? 'positive' : 'negative'")
+            span(ng-if="s.totalDistributions[0].distributionsEffectiveTrend >= 0") +
             span {{s.totalDistributions[0].distributionsEffectiveTrend | number:1}}%
         h3.bold(ng-if="s.distributionRadioOptions.selected.placementType === 'simple'") {{s.totalDistributions[0].distributionsSimple | number:0 }}&nbsp;
-          div(ng-class="s.totalDistributions[0].distributionsSimpleTrend > 0 ? 'positive' : 'negative'")
-            span(ng-if="s.totalDistributions[0].distributionsSimpleTrend > 0") +
+          div(ng-class="s.totalDistributions[0].distributionsSimpleTrend >= 0 ? 'positive' : 'negative'")
+            span(ng-if="s.totalDistributions[0].distributionsSimpleTrend >= 0") +
             span {{s.totalDistributions[0].distributionsSimpleTrend | number:1}}%
     div.scorecard-filter
       div.radio-button-group
@@ -154,17 +147,17 @@ div.my-scorecards
           tr(ng-repeat="distribution in s.userService.model.distribution | filter: {type: '!Total'}: true | orderBy:s.sortBy:s.distributionSortReverse" class="disable-ng-animate" ng-click="s.toggleSelected($index, 'distributions')" ng-class="{'selected': s.selectedList === 'distributions' && $index === s.selectedIndex}")
             td.left.data-brand(ng-click='s.goToAccountDashboard(distribution, s.distributionRadioOptions.selected.placementType === "simple")' ng-disabled="s.distributionRadioOptions.selected.placementType === 'simple'" analytics-on="click" analytics-event="Brand Performance Selected" analytics-category="Scorecards" analytics-label="My Distribution Scorecard") {{distribution.name}}
             td.dark
-              span(ng-class="{'negative': s.getFilteredValue('timeFrameTotal', distribution) < 0}") {{s.getFilteredValue('timeFrameTotal', distribution)}}
+              span(ng-class="{'negative': s.getFilteredValue('timeFrameTotal', distribution, 'distribution') < 0}") {{s.getFilteredValue('timeFrameTotal', distribution, 'distribution')}}
             td.medium-dark
-              span(ng-class="{'negative': s.getFilteredValue('vsYa', distribution) < 0}") {{s.getFilteredValue('vsYa', distribution)}}
+              span(ng-class="{'negative': s.getFilteredValue('vsYa', distribution, 'distribution') < 0}") {{s.getFilteredValue('vsYa', distribution, 'distribution')}}
             td.medium-dark.no-border
-              span(ng-class="{'negative': s.getFilteredValue('vsYaPercent', distribution) < 0}") {{s.getFilteredValue('vsYaPercent', distribution)}}
+              span(ng-class="{'negative': s.getFilteredValue('vsYaPercent', distribution, 'distribution') < 0}") {{s.getFilteredValue('vsYaPercent', distribution, 'distribution')}}
             td
-              span(ng-class="{'negative': s.getFilteredValue('buVsYaPercent', distribution) < 0}") {{s.getFilteredValue('buVsYaPercent', distribution)}}
+              span(ng-class="{'negative': s.getFilteredValue('buVsYaPercent', distribution, 'distribution') < 0}") {{s.getFilteredValue('buVsYaPercent', distribution, 'distribution')}}
             td.no-border
               span(ng-if="s.distributionRadioOptions.selected.placementType === 'simple'" ng-class="distribution[s.distributionSelectOptions.selected].distributionsSimpleTrend > distribution[s.distributionSelectOptions.selected].distributionsSimpleBUTrend ? 'positive' : 'negative'") <span class="triangle-icon">&#9660;</span>
               span(ng-if="s.distributionRadioOptions.selected.placementType === 'effective'" ng-class="distribution[s.distributionSelectOptions.selected].distributionsEffectiveTrend > distribution[s.distributionSelectOptions.selected].distributionsEffectiveBUTrend ? 'positive' : 'negative'") <span class="triangle-icon">&#9660;</span>
             td
-              span(ng-class="{'negative': s.getFilteredValue('percentTotal', distribution) < 0}") {{s.getFilteredValue('percentTotal', distribution)}}
+              span(ng-class="{'negative': s.getFilteredValue('percentTotal', distribution, 'distribution') < 0}") {{s.getFilteredValue('percentTotal', distribution, 'distribution')}}
             td.no-border
-              span(ng-class="{'negative': s.getFilteredValue('percentBuTotal', distribution) < 0}") {{s.getFilteredValue('percentBuTotal', distribution)}}
+              span(ng-class="{'negative': s.getFilteredValue('percentBuTotal', distribution, 'distribution') < 0}") {{s.getFilteredValue('percentBuTotal', distribution, 'distribution')}}

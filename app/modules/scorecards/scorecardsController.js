@@ -214,16 +214,20 @@ module.exports = /*  @ngInject */
     function sortBy(distribution) {
       if (vm.distributionSortQuery === 'name') return distribution.name;
       else {
-        if (getFilteredValue(vm.distributionSortQuery, distribution) !== '-') {
-          return parseFloat(getFilteredValue(vm.distributionSortQuery, distribution).replace(/[,$]/g, ''));
+        if (getFilteredValue(vm.distributionSortQuery, distribution, 'distribution') !== '-') {
+          return parseFloat(getFilteredValue(vm.distributionSortQuery, distribution, 'distribution').replace(/[,$]/g, ''));
         } else {
           return 0;
         }
       }
     }
 
-    function getFilteredValue(key, distribution) {
-      return distribution[vm.distributionSelectOptions.selected][key][vm.distributionRadioOptions.selected.placementType];
+    function getFilteredValue(key, model, type) {
+      if (type === 'distribution') {
+        return model[vm.distributionSelectOptions.selected][key][vm.distributionRadioOptions.selected.placementType];
+      } else {
+        return model[vm.depletionSelect][key];
+      }
     }
 
     // **************
@@ -255,6 +259,7 @@ module.exports = /*  @ngInject */
         updateTotalRowDistributions();
 
         userService.model.distribution = getTransformedModel(getProcessedData('distribution', userService.model.distribution));
+        userService.model.depletion = getTransformedModel(getProcessedData('depletion', userService.model.depletion));
       });
     }
 
@@ -367,6 +372,19 @@ module.exports = /*  @ngInject */
               simple: checkValidity((measure.distributionsSimpleBU / vm.totalDistributions[0].distributionsSimpleBU) * 100, 1),
               effective: checkValidity((measure.distributionsEffectiveBU / vm.totalDistributions[0].distributionsEffectiveBU) * 100, 1)
             };
+          });
+
+          return model;
+        });
+      } else {
+        return modelCollection.map(model => {
+          model.measures.forEach(measure => {
+            measure['timeFrameTotal'] = checkValidity(measure.depletions, 0);
+            measure['vsYa'] = checkValidity(measure.depletions - measure.depletionsLastYear, 0);
+            measure['vsYaPercent'] = vsYAPercent(measure.depletions, measure.depletionsLastYear, measure.depletionsTrend);
+            measure['buVsYaPercent'] = vsYAPercent(measure.depletionsBU, measure.depletionsBULastYear, measure.depletionsBUTrend);
+            measure['percentTotal'] = checkValidity((measure.depletions / vm.totalRow.depletions) * 100, 1);
+            measure['percentBuTotal'] = checkValidity((measure.depletionsBU / vm.totalRow.depletionsBU) * 100, 1);
           });
 
           return model;
