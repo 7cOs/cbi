@@ -440,6 +440,7 @@ module.exports = /*  @ngInject */
 
       targetListService.deleteTargetListOpportunities(targetListService.model.currentList.id, opportunityIds).then(function(data) {
         console.log('Done deleting these ids: ', opportunityIds);
+        updateOpportunityCountAfterRemoval();
         updateOpportunityModel(opportunitiesService.model.opportunities, vm.selected);
       }, function(err) {
         console.log('Error deleting these ids: ', opportunityIds, ' Responded with error: ', err);
@@ -942,6 +943,14 @@ module.exports = /*  @ngInject */
 
     function updateTargetListOpportunitySummary(idxOfTargetList, numberToAdd) {
       vm.userService.model.targetLists.owned[idxOfTargetList].opportunitiesSummary.opportunitiesCount += numberToAdd;
+    }
+
+    function updateOpportunityCountAfterRemoval() {
+      vm.userService.model.targetLists.owned.map((targetList, idx) => {
+        if (targetList.id === vm.targetListService.model.currentList.id) {
+          return updateTargetListOpportunitySummary(idx, (0 - vm.selected.length));
+        }
+      });
     }
 
     function init() {
