@@ -49,11 +49,11 @@ module.exports = /*  @ngInject */
     vm.selectedIndex = -1;
     vm.selectedList = null;
     vm.depletionSort = {
-      sortAscending: false,
+      sortDescending: false,
       query: 'name'
     };
     vm.distributionSort = {
-      sortAscending: false,
+      sortDescending: false,
       query: 'name'
     };
 
@@ -211,7 +211,7 @@ module.exports = /*  @ngInject */
 
     function setSortQuery(sort, query) {
       vm[sort].query === query
-        ? vm[sort].sortAscending = !vm[sort].sortAscending
+        ? vm[sort].sortDescending = !vm[sort].sortDescending
         : vm[sort].query = query;
     }
 

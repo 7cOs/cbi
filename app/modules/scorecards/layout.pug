@@ -32,7 +32,9 @@ div.my-scorecards
       table(cellspacing="0" cellpadding="0")
         thead
           tr
-            th.accent.brand.border(ng-click="s.setSortQuery('depletionSort', 'name')") Brand
+            th.accent.brand.border
+              div.scorecard-header-content(ng-click="s.setSortQuery('depletionSort', 'name')") Brand
+                span.tooltip-wrap(ng-if="s.depletionSort.query === 'name'" ng-class="s.depletionSort.sortDescending ? 'sort-asc' : 'sort-desc'")
             th(colspan=5).accent.border Depletions
             th(colspan=2).border
               .tooltip-wrap
@@ -45,13 +47,25 @@ div.my-scorecards
                     p Contribution to Volume (CTV) indicates the brand mix, or the % contribution of a brand to Total volume.
           tr
             th.accent.border &nbsp;
-            th.accent(ng-click="s.setSortQuery('depletionSort', 'timeFrameTotal')") {{s.depletionSelect === 'CMTH' ? 'Clo Mth' : s.depletionSelect}}
-            th.accent(ng-click="s.setSortQuery('depletionSort', 'vsYa')") VS YA
-            th.accent(ng-click="s.setSortQuery('depletionSort', 'vsYaPercent')") VS YA %
-            th.accent(ng-click="s.setSortQuery('depletionSort', 'buVsYaPercent')") BU vs YA %
+            th.accent
+              div.scorecard-header-content(ng-click="s.setSortQuery('depletionSort', 'timeFrameTotal')") {{s.depletionSelect === 'CMTH' ? 'Clo Mth' : s.depletionSelect}}
+                span.tooltip-wrap(ng-if="s.depletionSort.query === 'timeFrameTotal'" ng-class="s.depletionSort.sortDescending ? 'sort-asc' : 'sort-desc'")
+            th.accent
+              div.scorecard-header-content(ng-click="s.setSortQuery('depletionSort', 'vsYa')") VS YA
+                span.tooltip-wrap(ng-if="s.depletionSort.query === 'vsYa'" ng-class="s.depletionSort.sortDescending ? 'sort-asc' : 'sort-desc'")
+            th.accent
+              div.scorecard-header-content(ng-click="s.setSortQuery('depletionSort', 'vsYaPercent')") VS YA %
+                span.tooltip-wrap(ng-if="s.depletionSort.query === 'vsYaPercent'" ng-class="s.depletionSort.sortDescending ? 'sort-asc' : 'sort-desc'")
+            th.accent
+              div.scorecard-header-content(ng-click="s.setSortQuery('depletionSort', 'buVsYaPercent')") BU vs YA %
+                span.tooltip-wrap(ng-if="s.depletionSort.query === 'buVsYaPercent'" ng-class="s.depletionSort.sortDescending ? 'sort-asc' : 'sort-desc'")
             th.accent.border MY % vs BU %
-            th.accent(ng-click="s.setSortQuery('depletionSort', 'percentTotal')") To My Total %
-            th.accent.border(ng-click="s.setSortQuery('depletionSort', 'percentBuTotal')") To BU Total %
+            th.accent
+              div.scorecard-header-content(ng-click="s.setSortQuery('depletionSort', 'percentTotal')") To My Total %
+                span.tooltip-wrap(ng-if="s.depletionSort.query === 'percentTotal'" ng-class="s.depletionSort.sortDescending ? 'sort-asc' : 'sort-desc'")
+            th.accent.border
+              div.scorecard-header-content(ng-click="s.setSortQuery('depletionSort', 'percentBuTotal')") To BU Total %
+                span.tooltip-wrap(ng-if="s.depletionSort.query === 'percentBuTotal'" ng-class="s.depletionSort.sortDescending ? 'sort-asc' : 'sort-desc'")
         tbody
           tr
             td.column-total.left TOTAL
@@ -62,7 +76,7 @@ div.my-scorecards
             td.column-total.no-border(ng-class="s.parseInt(s.totalRow.percentTrend) > s.parseInt(s.totalRow.percentBUTrend) ? 'positive' : 'negative'") <span class="triangle-icon">&#9660;</span>
             td.column-total 100%
             td.column-total 100%
-          tr(ng-repeat="depletion in s.userService.model.depletion | orderBy:s.sortBy('depletionSort'):s.depletionSort.sortAscending" class="disable-ng-animate" ng-click="s.toggleSelected($index, 'depletions')" ng-class="{'selected': s.selectedList === 'depletions' && $index === s.selectedIndex}")
+          tr(ng-repeat="depletion in s.userService.model.depletion | orderBy:s.sortBy('depletionSort'):s.depletionSort.sortDescending" class="disable-ng-animate" ng-click="s.toggleSelected($index, 'depletions')" ng-class="{'selected': s.selectedList === 'depletions' && $index === s.selectedIndex}")
             td.left.data-brand(ng-click='s.goToAccountDashboard(depletion)' analytics-on="click" analytics-event="Brand Performance Selected" analytics-category="Scorecards" analytics-label="My Depletions Scorecard") {{depletion.name}}
             td.dark {{s.getFilteredValue('timeFrameTotal', depletion, 'depletion')}}
             td.medium-dark(ng-class="{'negative': !s.isPositive(s.getFilteredValue('vsYa', depletion, 'depletion'))}") {{s.getFilteredValue('vsYa', depletion, 'depletion')}}
@@ -102,7 +116,9 @@ div.my-scorecards
       table(cellspacing="0" cellpadding="0")
         thead
           tr
-            th.accent.brand.border(ng-click="s.setSortQuery('distributionSort', 'name')") Brand
+            th.accent.brand.border
+              div.scorecard-header-content(ng-click="s.setSortQuery('distributionSort', 'name')") Brand
+                span.tooltip-wrap(ng-if="s.distributionSort.query === 'name'" ng-class="s.distributionSort.sortDescending ? 'sort-asc' : 'sort-desc'")
             th(colspan=5).accent.border Points of Distribution
             th(colspan=2).accent.border
               .tooltip-wrap
@@ -116,13 +132,25 @@ div.my-scorecards
 
           tr
             th.accent.border &nbsp;
-            th.accent(ng-click="s.setSortQuery('distributionSort', 'timeFrameTotal')") {{s.distributionSelectOptions.selected | uppercase}}
-            th.accent(ng-click="s.setSortQuery('distributionSort', 'vsYa')") VS YA
-            th.accent(ng-click="s.setSortQuery('distributionSort', 'vsYaPercent')") VS YA %
-            th.accent(ng-click="s.setSortQuery('distributionSort', 'buVsYaPercent')") BU vs YA %
+            th.accent
+              div.scorecard-header-content(ng-click="s.setSortQuery('distributionSort', 'timeFrameTotal')") {{s.distributionSelectOptions.selected | uppercase}}
+                span.tooltip-wrap(ng-if="s.distributionSort.query === 'timeFrameTotal'" ng-class="s.distributionSort.sortDescending ? 'sort-asc' : 'sort-desc'")
+            th.accent
+              div.scorecard-header-content(ng-click="s.setSortQuery('distributionSort', 'vsYa')") VS YA
+                span.tooltip-wrap(ng-if="s.distributionSort.query === 'vsYa'" ng-class="s.distributionSort.sortDescending ? 'sort-asc' : 'sort-desc'")
+            th.accent
+              div.scorecard-header-content(ng-click="s.setSortQuery('distributionSort', 'vsYaPercent')") VS YA %
+                span.tooltip-wrap(ng-if="s.distributionSort.query === 'vsYaPercent'" ng-class="s.distributionSort.sortDescending ? 'sort-asc' : 'sort-desc'")
+            th.accent
+              div.scorecard-header-content(ng-click="s.setSortQuery('distributionSort', 'buVsYaPercent')") BU vs YA %
+                span.tooltip-wrap(ng-if="s.distributionSort.query === 'buVsYaPercent'" ng-class="s.distributionSort.sortDescending ? 'sort-asc' : 'sort-desc'")
             th.accent.border MY % vs BU %
-            th.accent(ng-click="s.setSortQuery('distributionSort', 'percentTotal')") To My Total %
-            th.accent.border(ng-click="s.setSortQuery('distributionSort', 'percentBuTotal')") To BU Total %
+            th.accent
+              div.scorecard-header-content(ng-click="s.setSortQuery('distributionSort', 'percentTotal')") To My Total %
+                span.tooltip-wrap(ng-if="s.distributionSort.query === 'percentTotal'" ng-class="s.distributionSort.sortDescending ? 'sort-asc' : 'sort-desc'")
+            th.accent.border
+              div.scorecard-header-content(ng-click="s.setSortQuery('distributionSort', 'percentBuTotal')") To BU Total %
+                span.tooltip-wrap(ng-if="s.distributionSort.query === 'percentBuTotal'" ng-class="s.distributionSort.sortDescending ? 'sort-asc' : 'sort-desc'")
         tbody
           tr
             td.column-total.left(ng-click="s.goToAccountDashboard(null, s.distributionRadioOptions.selected.placementType === 'effective')" ng-disabled="s.distributionRadioOptions.selected.placementType === 'effective'") TOTAL
@@ -144,7 +172,7 @@ div.my-scorecards
             td.column-total 100%
             td.column-total.no-border 100%
 
-          tr(ng-repeat="distribution in s.userService.model.distribution | filter: {type: '!Total'}: true | orderBy:s.sortBy('distributionSort'):s.distributionSort.sortAscending" class="disable-ng-animate" ng-click="s.toggleSelected($index, 'distributions')" ng-class="{'selected': s.selectedList === 'distributions' && $index === s.selectedIndex}")
+          tr(ng-repeat="distribution in s.userService.model.distribution | filter: {type: '!Total'}: true | orderBy:s.sortBy('distributionSort'):s.distributionSort.sortDescending" class="disable-ng-animate" ng-click="s.toggleSelected($index, 'distributions')" ng-class="{'selected': s.selectedList === 'distributions' && $index === s.selectedIndex}")
             td.left.data-brand(ng-click='s.goToAccountDashboard(distribution, s.distributionRadioOptions.selected.placementType === "simple")' ng-disabled="s.distributionRadioOptions.selected.placementType === 'simple'" analytics-on="click" analytics-event="Brand Performance Selected" analytics-category="Scorecards" analytics-label="My Distribution Scorecard") {{distribution.name}}
             td.dark
               span(ng-class="{'negative': s.getFilteredValue('timeFrameTotal', distribution, 'distribution') < 0}") {{s.getFilteredValue('timeFrameTotal', distribution, 'distribution')}}
