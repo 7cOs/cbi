@@ -132,7 +132,7 @@ module.exports = /*  @ngInject */
       else payload.premiseType = 'off';
 
       userService.getPerformanceDistribution(payload).then(function(data) {
-        userService.model.distribution = getTransformedModel(getProcessedData('distribution', data));
+        userService.model.distribution = getRemodeledCollection(data, 'distribution');
         updateTotalRowDistributions();
       }, function(err) {
         updateTotalRowDistributions();
@@ -264,8 +264,8 @@ module.exports = /*  @ngInject */
 
         updateTotalRowDistributions();
 
-        userService.model.distribution = getTransformedModel(getProcessedData('distribution', userService.model.distribution));
-        userService.model.depletion = getTransformedModel(getProcessedData('depletion', userService.model.depletion));
+        userService.model.distribution = getRemodeledCollection(userService.model.distribution, 'distribution');
+        userService.model.depletion = getRemodeledCollection(userService.model.depletion, 'depletion');
       });
     }
 
@@ -336,6 +336,11 @@ module.exports = /*  @ngInject */
       }
     }
 
+    function getRemodeledCollection(collection, type) {
+      const processedCollection = getProcessedData(type, collection);
+      return getTransformedModel(processedCollection);
+    }
+
     function getTransformedModel(modelCollection) {
       return modelCollection.map(model => {
         model.measures.forEach(measure => {
@@ -343,7 +348,7 @@ module.exports = /*  @ngInject */
         });
         return model;
       });
-    };
+    }
 
     function getProcessedData(type, modelCollection) {
       if (type === 'distribution') {
