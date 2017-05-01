@@ -20,6 +20,16 @@ describe('Unit: scorecardsController', function() {
       // Create Controller
       ctrl = $controller('scorecardsController', {$scope: scope});
 
+      ctrl.depletionSort = {
+        sortDescending: false,
+        query: 'name'
+      };
+
+      ctrl.distributionSort = {
+        sortDescending: false,
+        query: 'name'
+      };
+
       ctrl.totalDistributions = [{
         "timeframe": "L90",
         "distributionsSimple": 46416,
@@ -637,5 +647,49 @@ describe('Unit: scorecardsController', function() {
 
       expect(filtersService.model.selected.myAccountsOnly).toEqual(true);
     });
+  });
+
+  describe('[setSortQuery] should update specified table sort query and update the sort order', function() {
+
+    it('should update the sort query for the specified table', function() {
+      ctrl.setSortQuery('distributionSort', 'vsYa');
+      expect(ctrl.distributionSort).toEqual({
+        sortDescending: false,
+        query: 'vsYa'
+      });
+    });
+
+    it('should set the inverse for sortDescending if the new query equals the current one', function() {
+      ctrl.setSortQuery('depletionSort', 'name');
+      expect(ctrl.depletionSort).toEqual({
+        sortDescending: true,
+        query: 'name'
+      });
+    });
+  });
+
+  describe('[getFilteredValue] should return the correct values from the current depletion/distribution object', function() {
+
+    it('should return the correct value from the distribution model', function() {
+      ctrl.initialized = true;
+      ctrl.distributionRadioOptions.selected.placementType = 'simple';
+      ctrl.distributionSelectOptions.selected = 'L60';
+      const filteredValue1 = ctrl.getFilteredValue('percentTotal', remodeledDistribution[0], 'distribution');
+      expect(filteredValue1).toEqual('21.7');
+    });
+
+    it('should return the correct value from the depletion model', function() {
+      ctrl.initialized = true;
+      ctrl.depletionSelect = 'MTD';
+      const filteredValue2 = ctrl.getFilteredValue('percentTotal', remodeledDepletion[0], 'depletion');
+      expect(filteredValue2).toEqual('22.5');
+    });
+
+    it('should return an emptu string when the controller is not done initializing', function() {
+      ctrl.initialized = false;
+      ctrl.depletionSelect = 'MTD';
+      const filteredValue2 = ctrl.getFilteredValue('percentTotal', remodeledDepletion[0], 'depletion');
+      expect(filteredValue2).toEqual('');
+    })
   });
 });
