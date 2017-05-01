@@ -77,38 +77,6 @@ describe('Unit: scorecardsController', function() {
     });
   });
 
-  const depletion = [{
-    "type": "Brand",
-    "name": "CORONA EXTRA",
-    "measures": [{
-      "timeframe": "MTD",
-      "depletions": 428034.5903,
-      "depletionsLastYear": 412412.1286,
-      "depletionsTrend": 3.788070383146337,
-      "depletionsBU": 1164684.7138,
-      "depletionsBULastYear": 1003931.0192,
-      "depletionsBUTrend": 16.01242431258867,
-      "plan": null,
-      "depletionsGap": 16214.251544776063,
-      "vsPlan": -428034.5903,
-      "vsPlanPercent": null
-    }, {
-      "timeframe": "CYTD",
-      "depletions": 2129747.4115,
-      "depletionsLastYear": 2211298.2289,
-      "depletionsTrend": -3.6879158285477907,
-      "depletionsBU": 5596694.0338,
-      "depletionsBULastYear": 5447913.0042,
-      "depletionsBUTrend": 2.730972933769301,
-      "plan": null,
-      "depletionsGap": -78543.29189679534,
-      "vsPlan": -2129747.4115,
-      "vsPlanPercent": null
-    }],
-    "depletionTotal": 6795723.7303,
-    "depletionBUTotal": 17703488.646,
-  }];
-
   const remodeledDepletion = [{
     "type": "Brand",
     "name": "CORONA EXTRA",
@@ -189,50 +157,6 @@ describe('Unit: scorecardsController', function() {
       "percentTotal": "111.8",
       "percentBuTotal": "120.3"
     }
-  }];
-
-  const distribution = [{
-    "type": "Brand",
-    "name": "CORONA EXTRA",
-    "measures": [{
-      "timeframe": "L60",
-      "distributionsSimple": 10077,
-      "distributionsSimpleLastYear": 10182,
-      "distributionsSimpleTrend": -1.0312315851502651,
-      "distributionsSimpleBU": 25867,
-      "distributionsSimpleBULastYear": 25754,
-      "distributionsSimpleBUTrend": 0.43876679350780456,
-      "distributionsEffective": 39963,
-      "distributionsEffectiveLastYear": 38021,
-      "distributionsEffectiveTrend": 5.107703637463508,
-      "distributionsEffectiveBU": 100879,
-      "distributionsEffectiveBULastYear": 93655,
-      "distributionsEffectiveBUTrend": 7.71341626181197,
-      "velocity": null,
-      "velocityLastYear": null,
-      "velocityTrend": null,
-      "planSimple": null,
-      "planEffective": null
-    }, {
-      "timeframe": "L90",
-      "distributionsSimple": 10265,
-      "distributionsSimpleLastYear": 10351,
-      "distributionsSimpleTrend": -0.8308376002318617,
-      "distributionsSimpleBU": 26394,
-      "distributionsSimpleBULastYear": 26219,
-      "distributionsSimpleBUTrend": 0.6674548991189595,
-      "distributionsEffective": 42572,
-      "distributionsEffectiveLastYear": 40583,
-      "distributionsEffectiveTrend": 4.901066949215189,
-      "distributionsEffectiveBU": 107545,
-      "distributionsEffectiveBULastYear": 99820,
-      "distributionsEffectiveBUTrend": 7.738930074133441,
-      "velocity": null,
-      "velocityLastYear": null,
-      "velocityTrend": null,
-      "planSimple": null,
-      "planEffective": null
-    }]
   }];
 
   const remodeledDistribution = [{
