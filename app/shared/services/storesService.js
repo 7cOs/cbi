@@ -36,16 +36,14 @@ module.exports = /*  @ngInject */
       .catch(getStoresFail);
 
       function getStoresSuccess(response) {
-        // response.data = data; // mock data
 
-        /* for (var i = 0; i < 6; i++) {
-          if (response.data[i].store_rank_wine.delta > 0) {
-            response.data[i].positiveValue = true;
-          } else if (response.data[i].store_rank_wine.delta < 0) {
-            response.data[i].negativeValue = true;
-          }
-        } */
-        storesPromise.resolve(response.data.slice(0, 5));
+        let store = response.data;
+        store.id = store.tdlinx_number;
+        store.name = store.store_name;
+        store.premiseTypeDesc = store.premise_type;
+        store.storeNumber = store.store_number;
+
+        storesPromise.resolve(store);
       }
 
       function getStoresFail(error) {

@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports = /*  @ngInject */
-  function accountsController($rootScope, $scope, $state, $log, $q, $window, $filter, $timeout, $analytics, myperformanceService, chipsService, filtersService, notesService, userService, searchService) {
+  function accountsController($rootScope, $scope, $state, $log, $q, $window, $filter, $timeout, $analytics, myperformanceService, chipsService, filtersService, notesService, userService, storesService) {
 
     // ****************
     // CONTROLLER SETUP
@@ -989,27 +989,31 @@ module.exports = /*  @ngInject */
       // brand snapshot returns sku data instead of just the brand if you add brand:xxx
       if (params.brand && params.brand.length) delete params.brand;
       params.type = 'brandSnapshot';
+
+      vm.loadingUnsoldStore = true;
       promiseArr.push(userService.getPerformanceBrand(params));
+      promiseArr.push(storesService.getStores(vm.currentTopBottomFilters.stores.id));
+
       $q.all(promiseArr).then(function(data) {
-        if (data[0]) {
+        const performanceData = data[0];
+        const storeData = data[1];
+
+        if (storeData) {
+          setFilter(storeData, 'store');
+
+          // Need to put CYTD and premiseType
+        }
+
+        if (performanceData) {
           vm.loadingBrandSnapshot = false;
-          vm.brandTabs.brands = data[0].performance;
+          vm.brandTabs.brands = performanceData.performance;
           setCurrentTotalsObject();
           getDataForTopBottomLevel(vm.currentTopBottomObj, function() {
             // if initializing to stores level, use data in response to set filter model, etc
             if (vm.currentTopBottomAcctType.name === vm.filtersService.accountFilters.accountTypes[3].name) {
 
               // if unsold store, there will be no performance data, so search for store and set filter directly
-              if (!vm.topBottomData.stores.performanceData || vm.topBottomData.stores.performanceData.length === 0) {
-                vm.loadingUnsoldStore = true;
-                searchService.getStores(vm.currentTopBottomFilters.stores.id).then(function(data) {
-                  if (data && data.length > 0) {
-                    setFilter(data[0], 'store');
-                  }
-                }).finally(function() {
-                  vm.loadingUnsoldStore = false;
-                });
-              } else {
+              if (vm.topBottomData.stores.performanceData && vm.topBottomData.stores.performanceData.length > 0) {
                 setTopBottomFilterModel('stores', vm.topBottomData.stores.performanceData[0]);
                 setChainDropdownAndPlaceHolder('stores', vm.topBottomData.stores.performanceData[0]);
                 notesService.model.tdlinx = vm.topBottomData.stores.performanceData[0].unversionedStoreCode;
@@ -1023,6 +1027,8 @@ module.exports = /*  @ngInject */
             navigateTopBottomLevels(topBottomFilterForCurrentLevel);
           }
         }
+      }).finally(function() {
+        vm.loadingUnsoldStore = false;
       });
     }
 
