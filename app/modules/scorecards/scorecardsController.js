@@ -56,6 +56,7 @@ module.exports = /*  @ngInject */
       sortDescending: false,
       query: 'name'
     };
+    vm.initialized = false;
 
     // Set page title for head and nav
     $rootScope.pageTitle = $state.current.title;
@@ -229,11 +230,11 @@ module.exports = /*  @ngInject */
     }
 
     function getFilteredValue(key, model, type) {
-      if (type === 'distribution') {
-        return model[vm.distributionSelectOptions.selected][key][vm.distributionRadioOptions.selected.placementType];
-      } else {
-        return model[vm.depletionSelect][key];
-      }
+      return !vm.initialized
+        ? ''
+        : (type === 'distribution')
+          ? model[vm.distributionSelectOptions.selected][key][vm.distributionRadioOptions.selected.placementType]
+          : model[vm.depletionSelect][key];
     }
 
     // **************
@@ -264,6 +265,7 @@ module.exports = /*  @ngInject */
 
         updateTotalRowDistributions();
 
+        vm.initialized = true;
         userService.model.distribution = getRemodeledCollection(userService.model.distribution, 'distribution');
         userService.model.depletion = getRemodeledCollection(userService.model.depletion, 'depletion');
       });
