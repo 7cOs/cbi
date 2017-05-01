@@ -220,14 +220,11 @@ module.exports = /*  @ngInject */
       sortType === 'distributionSort' ? filteredValueType = 'distribution' : filteredValueType = 'depletion';
 
       return function(model) {
-        if (vm[sortType].query === 'name') return model.name;
-        else {
-          if (getFilteredValue(vm[sortType].query, model, filteredValueType) !== '-') {
-            return parseFloat(getFilteredValue(vm[sortType].query, model, filteredValueType).replace(/[,$]/g, ''));
-          } else {
-            return 0;
-          }
-        }
+        return (vm[sortType].query === 'name')
+          ? model.name
+          : (getFilteredValue(vm[sortType].query, model, filteredValueType) !== '-')
+            ? parseFloat(getFilteredValue(vm[sortType].query, model, filteredValueType).replace(/[,$]/g, ''))
+            : 0;
       };
     }
 
