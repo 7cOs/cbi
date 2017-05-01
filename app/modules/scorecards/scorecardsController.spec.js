@@ -614,6 +614,6 @@ describe('Unit: scorecardsController', function() {
       ctrl.depletionSelect = 'MTD';
       const filteredValue2 = ctrl.getFilteredValue('percentTotal', remodeledDepletion[0], 'depletion');
       expect(filteredValue2).toEqual('');
-    })
+    });
   });
 });
