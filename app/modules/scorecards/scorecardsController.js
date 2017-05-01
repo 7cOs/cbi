@@ -71,7 +71,7 @@ module.exports = /*  @ngInject */
     vm.isPositive = isPositive;
     vm.updateEndingTimePeriod = updateEndingTimePeriod;
     vm.toggleSelected = toggleSelected;
-    vm.checkValidity = checkValidity;
+    vm.getValidValue = getValidValue;
     vm.vsYAPercent = vsYAPercent;
     vm.setDefaultFilterOptions = setDefaultFilterOptions;
     vm.premiseTypeDisabled = '';
@@ -86,7 +86,7 @@ module.exports = /*  @ngInject */
     // PUBLIC METHODS
     // **************
 
-    function checkValidity(value, fractionSize) {
+    function getValidValue(value, fractionSize) {
       // Check if result is infinity or NaN
       if (isFinite(value) && value !== null && value !== '') {
         return $filter('number')(value, fractionSize || 0);
@@ -353,13 +353,13 @@ module.exports = /*  @ngInject */
         return modelCollection.map(model => {
           model.measures.forEach(measure => {
             measure['timeFrameTotal'] = {
-              simple: checkValidity(measure.distributionsSimple, 0),
-              effective: checkValidity(measure.distributionsEffective, 0)
+              simple: getValidValue(measure.distributionsSimple, 0),
+              effective: getValidValue(measure.distributionsEffective, 0)
             };
 
             measure['vsYa'] = {
-              simple: checkValidity(measure.distributionsSimple - measure.distributionsSimpleLastYear),
-              effective: checkValidity(measure.distributionsEffective - measure.distributionsEffectiveLastYear)
+              simple: getValidValue(measure.distributionsSimple - measure.distributionsSimpleLastYear),
+              effective: getValidValue(measure.distributionsEffective - measure.distributionsEffectiveLastYear)
             };
 
             measure['vsYaPercent'] = {
@@ -373,13 +373,13 @@ module.exports = /*  @ngInject */
             };
 
             measure['percentTotal'] = {
-              simple: checkValidity((measure.distributionsSimple / vm.totalDistributions[0].distributionsSimple) * 100, 1),
-              effective: checkValidity((measure.distributionsEffective / vm.totalDistributions[0].distributionsEffective) * 100, 1)
+              simple: getValidValue((measure.distributionsSimple / vm.totalDistributions[0].distributionsSimple) * 100, 1),
+              effective: getValidValue((measure.distributionsEffective / vm.totalDistributions[0].distributionsEffective) * 100, 1)
             };
 
             measure['percentBuTotal'] = {
-              simple: checkValidity((measure.distributionsSimpleBU / vm.totalDistributions[0].distributionsSimpleBU) * 100, 1),
-              effective: checkValidity((measure.distributionsEffectiveBU / vm.totalDistributions[0].distributionsEffectiveBU) * 100, 1)
+              simple: getValidValue((measure.distributionsSimpleBU / vm.totalDistributions[0].distributionsSimpleBU) * 100, 1),
+              effective: getValidValue((measure.distributionsEffectiveBU / vm.totalDistributions[0].distributionsEffectiveBU) * 100, 1)
             };
           });
 
@@ -388,12 +388,12 @@ module.exports = /*  @ngInject */
       } else {
         return modelCollection.map(model => {
           model.measures.forEach(measure => {
-            measure['timeFrameTotal'] = checkValidity(measure.depletions, 0);
-            measure['vsYa'] = checkValidity(measure.depletions - measure.depletionsLastYear, 0);
+            measure['timeFrameTotal'] = getValidValue(measure.depletions, 0);
+            measure['vsYa'] = getValidValue(measure.depletions - measure.depletionsLastYear, 0);
             measure['vsYaPercent'] = vsYAPercent(measure.depletions, measure.depletionsLastYear, measure.depletionsTrend);
             measure['buVsYaPercent'] = vsYAPercent(measure.depletionsBU, measure.depletionsBULastYear, measure.depletionsBUTrend);
-            measure['percentTotal'] = checkValidity((measure.depletions / vm.totalRow.depletions) * 100, 1);
-            measure['percentBuTotal'] = checkValidity((measure.depletionsBU / vm.totalRow.depletionsBU) * 100, 1);
+            measure['percentTotal'] = getValidValue((measure.depletions / vm.totalRow.depletions) * 100, 1);
+            measure['percentBuTotal'] = getValidValue((measure.depletionsBU / vm.totalRow.depletionsBU) * 100, 1);
           });
 
           return model;
