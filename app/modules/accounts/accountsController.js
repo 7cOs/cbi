@@ -992,7 +992,7 @@ module.exports = /*  @ngInject */
 
       vm.loadingUnsoldStore = true;
       promiseArr.push(userService.getPerformanceBrand(params));
-      promiseArr.push(storesService.getStores(vm.currentTopBottomFilters.stores.id));
+      promiseArr.push(storesService.getStores(vm.currentTopBottomFilters.stores.id || vm.currentTopBottomFilters.distributors.id));
 
       $q.all(promiseArr).then(function(data) {
         const performanceData = data[0];

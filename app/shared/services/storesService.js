@@ -18,16 +18,9 @@ module.exports = /*  @ngInject */
      * @memberOf cf.common.services
      */
     function getStores(tdlinxNumber) {
-      var storesPromise = $q.defer(),
-          params = {
-            type: 'stores',
-            /* lowerRightBound: '38.820450,-77.050552',
-            upperLeftBound: '44.986656,-93.258133' */
-            lowerRightBound: '47,-122',
-            upperLeftBound: '46,-120'
-          },
-          // {{url}}/v2/stores?signature={{generatedSignature}}&apiKey={{apiKey}}&upperLeftBound=47,-122&lowerRightBound=46,-120`
-          url = tdlinxNumber ? apiHelperService.request('/api/stores/' + tdlinxNumber) : apiHelperService.request('/api/stores', params);
+      debugger;
+      const storesPromise = $q.defer();
+      const url = apiHelperService.request('/api/stores/' + tdlinxNumber);
 
       $http.get(url, {
         headers: {}
