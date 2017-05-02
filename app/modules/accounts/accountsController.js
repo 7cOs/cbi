@@ -964,6 +964,7 @@ module.exports = /*  @ngInject */
       var storeData = {id: $state.params.storeid, name: $state.params.storename};
       vm.currentTopBottomFilters.stores = storeData;
       vm.filtersService.model.selected.myAccountsOnly = $state.params.myaccountsonly && $state.params.myaccountsonly.toLowerCase() === 'true';
+      vm.filterModel.depletionsTimePeriod = filtersService.depletionsTimePeriodFromName($state.params.depletiontimeperiod);
     }
 
     function setNotes() {
@@ -1025,7 +1026,6 @@ module.exports = /*  @ngInject */
           setFilter(storeData, 'store');
 
           vm.filtersService.model.selected.premiseType = storeData.premiseTypeDesc;
-          vm.filterModel.depletionsTimePeriod = filtersService.depletionsTimePeriodFromName($state.params.depletiontimeperiod);
         }
       }).finally(function() {
         vm.loadingUnsoldStore = false;
