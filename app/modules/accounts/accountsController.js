@@ -963,8 +963,7 @@ module.exports = /*  @ngInject */
       vm.currentTopBottomObj = getCurrentTopBottomObject(vm.currentTopBottomAcctType);
       var storeData = {id: $state.params.storeid, name: $state.params.storename};
       vm.currentTopBottomFilters.stores = storeData;
-      vm.filtersService.model.selected.myAccountsOnly = $state.params.storemyAccountsOnly === true;
-      vm.filtersService.model.selected.premiseType = 'all';
+      vm.filtersService.model.selected.myAccountsOnly = $state.params.myaccountsonly && $state.params.myaccountsonly.toLowerCase() === 'true';
     }
 
     function setNotes() {
@@ -998,17 +997,11 @@ module.exports = /*  @ngInject */
         const performanceData = data[0];
         const storeData = data[1];
 
-        if (storeData) {
-          setFilter(storeData, 'store');
-
-          // Need to put CYTD and premiseType
-        }
-
         if (performanceData) {
           vm.loadingBrandSnapshot = false;
           vm.brandTabs.brands = performanceData.performance;
           setCurrentTotalsObject();
-          getDataForTopBottomLevel(vm.currentTopBottomObj, function() {
+          getDataForTopBottomLevel(vm.currentTopBottomObj, () => {
             // if initializing to stores level, use data in response to set filter model, etc
             if (vm.currentTopBottomAcctType.name === vm.filtersService.accountFilters.accountTypes[3].name) {
 
@@ -1026,6 +1019,13 @@ module.exports = /*  @ngInject */
             var topBottomFilterForCurrentLevel = vm.currentTopBottomFilters[vm.currentTopBottomObj.currentLevelName];
             navigateTopBottomLevels(topBottomFilterForCurrentLevel);
           }
+        }
+
+        if (storeData) {
+          setFilter(storeData, 'store');
+
+          vm.filtersService.model.selected.premiseType = storeData.premiseTypeDesc;
+          vm.filterModel.depletionsTimePeriod = filtersService.depletionsTimePeriodFromName($state.params.depletiontimeperiod);
         }
       }).finally(function() {
         vm.loadingUnsoldStore = false;

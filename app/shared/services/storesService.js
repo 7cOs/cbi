@@ -40,8 +40,23 @@ module.exports = /*  @ngInject */
         let store = response.data;
         store.id = store.tdlinx_number;
         store.name = store.store_name;
-        store.premiseTypeDesc = store.premise_type;
         store.storeNumber = store.store_number;
+
+        let premiseType;
+
+        switch (store.premise_type) {
+          case 'OFF PREMISE':
+            premiseType = 'off';
+            break;
+          case 'ON PREMISE':
+            premiseType = 'on';
+            break;
+          default:
+            premiseType = null;
+            break;
+        }
+
+        store.premiseTypeDesc = premiseType;
 
         storesPromise.resolve(store);
       }
