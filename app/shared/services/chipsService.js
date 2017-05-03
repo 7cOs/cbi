@@ -389,6 +389,14 @@ module.exports = /*  @ngInject */
       } else {
         filtersService.disableFilters(false, false, true, false);
       }
+
+      if (result.premiseType && result.premiseType === 'OFF PREMISE') {
+        addChip('Off-Premise', 'premiseType', true, false);
+        filtersService.model.selected.premiseType = 'off';
+      } else if (result.premiseType && result.premiseType === 'ON PREMISE') {
+        addChip('On-Premise', 'premiseType', true, false);
+        filtersService.model.selected.premiseType = 'on';
+      }
     }
 
     /**
