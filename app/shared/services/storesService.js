@@ -34,21 +34,12 @@ module.exports = /*  @ngInject */
         store.name = store.store_name;
         store.storeNumber = store.store_number;
 
-        let premiseType;
+        const premiseTypeMapping = {
+          'OFF PREMISE': 'off',
+          'ON PREMISE': 'on'
+        };
 
-        switch (store.premise_type) {
-          case 'OFF PREMISE':
-            premiseType = 'off';
-            break;
-          case 'ON PREMISE':
-            premiseType = 'on';
-            break;
-          default:
-            premiseType = null;
-            break;
-        }
-
-        store.premiseTypeDesc = premiseType;
+        store.premiseTypeDesc = premiseTypeMapping[store.premise_type] || null;
 
         storesPromise.resolve(store);
       }
