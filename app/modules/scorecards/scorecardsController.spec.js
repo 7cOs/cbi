@@ -19,8 +19,325 @@ describe('Unit: scorecardsController', function() {
 
       // Create Controller
       ctrl = $controller('scorecardsController', {$scope: scope});
+
+      ctrl.depletionSort = {
+        sortDescending: false,
+        query: 'name'
+      };
+
+      ctrl.distributionSort = {
+        sortDescending: false,
+        query: 'name'
+      };
+
+      ctrl.totalDistributions = [{
+        "timeframe": "L90",
+        "distributionsSimple": 46416,
+        "distributionsSimpleLastYear": 46675,
+        "distributionsSimpleTrend": -0.5549009105516872,
+        "distributionsSimpleBU": 102046,
+        "distributionsSimpleBULastYear": 96405,
+        "distributionsSimpleBUTrend": 5.851356257455526,
+        "distributionsEffective": 110453,
+        "distributionsEffectiveLastYear": 102932,
+        "distributionsEffectiveTrend": 7.306765631679167,
+        "distributionsEffectiveBU": 250428,
+        "distributionsEffectiveBULastYear": 225343,
+        "distributionsEffectiveBUTrend": 11.131918896970395,
+        "velocity": null,
+        "velocityLastYear": null,
+        "velocityTrend": null,
+        "planSimple": null,
+        "planEffective": null,
+        "timeFrameTotal": {
+          "simple": "46,416",
+          "effective": "110,453"
+        },
+        "vsYa": {
+          "simple": "-259",
+          "effective": "7,521"
+        },
+        "vsYaPercent": {
+          "simple": "-0.6",
+          "effective": "7.3"
+        },
+        "buVsYaPercent": {
+          "simple": "5.9",
+          "effective": "11.1"
+        },
+        "percentTotal": {
+          "simple": "100.0",
+          "effective": "100.0"
+        },
+        "percentBuTotal": {
+          "simple": "100.0",
+          "effective": "100.0"
+        }
+      }];
     });
   });
+
+  const remodeledDepletion = [{
+    "type": "Brand",
+    "name": "CORONA EXTRA",
+    "measures": [{
+      "timeframe": "MTD",
+      "depletions": 428034.5903,
+      "depletionsLastYear": 412412.1286,
+      "depletionsTrend": 3.788070383146337,
+      "depletionsBU": 1164684.7138,
+      "depletionsBULastYear": 1003931.0192,
+      "depletionsBUTrend": 16.01242431258867,
+      "plan": null,
+      "depletionsGap": 16214.251544776063,
+      "vsPlan": -428034.5903,
+      "vsPlanPercent": null,
+      "timeFrameTotal": "428,035",
+      "vsYa": "15,622",
+      "vsYaPercent": "3.8",
+      "buVsYaPercent": "16.0",
+      "percentTotal": "22.5",
+      "percentBuTotal": "25.0"
+    }, {
+      "timeframe": "CYTD",
+      "depletions": 2129747.4115,
+      "depletionsLastYear": 2211298.2289,
+      "depletionsTrend": -3.6879158285477907,
+      "depletionsBU": 5596694.0338,
+      "depletionsBULastYear": 5447913.0042,
+      "depletionsBUTrend": 2.730972933769301,
+      "plan": null,
+      "depletionsGap": -78543.29189679534,
+      "vsPlan": -2129747.4115,
+      "vsPlanPercent": null,
+      "timeFrameTotal": "2,129,747",
+      "vsYa": "-81,551",
+      "vsYaPercent": "-3.7",
+      "buVsYaPercent": "2.7",
+      "percentTotal": "111.8",
+      "percentBuTotal": "120.3"
+    }],
+    "depletionTotal": 6795723.7303,
+    "depletionBUTotal": 17703488.646,
+    "MTD": {
+      "timeframe": "MTD",
+      "depletions": 428034.5903,
+      "depletionsLastYear": 412412.1286,
+      "depletionsTrend": 3.788070383146337,
+      "depletionsBU": 1164684.7138,
+      "depletionsBULastYear": 1003931.0192,
+      "depletionsBUTrend": 16.01242431258867,
+      "plan": null,
+      "depletionsGap": 16214.251544776063,
+      "vsPlan": -428034.5903,
+      "vsPlanPercent": null,
+      "timeFrameTotal": "428,035",
+      "vsYa": "15,622",
+      "vsYaPercent": "3.8",
+      "buVsYaPercent": "16.0",
+      "percentTotal": "22.5",
+      "percentBuTotal": "25.0"
+    },
+    "CYTD": {
+      "timeframe": "CYTD",
+      "depletions": 2129747.4115,
+      "depletionsLastYear": 2211298.2289,
+      "depletionsTrend": -3.6879158285477907,
+      "depletionsBU": 5596694.0338,
+      "depletionsBULastYear": 5447913.0042,
+      "depletionsBUTrend": 2.730972933769301,
+      "plan": null,
+      "depletionsGap": -78543.29189679534,
+      "vsPlan": -2129747.4115,
+      "vsPlanPercent": null,
+      "timeFrameTotal": "2,129,747",
+      "vsYa": "-81,551",
+      "vsYaPercent": "-3.7",
+      "buVsYaPercent": "2.7",
+      "percentTotal": "111.8",
+      "percentBuTotal": "120.3"
+    }
+  }];
+
+  const remodeledDistribution = [{
+    "type": "Brand",
+    "name": "CORONA EXTRA",
+    "measures": [{
+      "timeframe": "L60",
+      "distributionsSimple": 10077,
+      "distributionsSimpleLastYear": 10182,
+      "distributionsSimpleTrend": -1.0312315851502651,
+      "distributionsSimpleBU": 25867,
+      "distributionsSimpleBULastYear": 25754,
+      "distributionsSimpleBUTrend": 0.43876679350780456,
+      "distributionsEffective": 39963,
+      "distributionsEffectiveLastYear": 38021,
+      "distributionsEffectiveTrend": 5.107703637463508,
+      "distributionsEffectiveBU": 100879,
+      "distributionsEffectiveBULastYear": 93655,
+      "distributionsEffectiveBUTrend": 7.71341626181197,
+      "velocity": null,
+      "velocityLastYear": null,
+      "velocityTrend": null,
+      "planSimple": null,
+      "planEffective": null,
+      "timeFrameTotal": {
+        "simple": "10,077",
+        "effective": "39,963"
+      },
+      "vsYa": {
+        "simple": "-105",
+        "effective": "1,942"
+      },
+      "vsYaPercent": {
+        "simple": "-1.0",
+        "effective": "5.1"
+      },
+      "buVsYaPercent": {
+        "simple": "0.4",
+        "effective": "7.7"
+      },
+      "percentTotal": {
+        "simple": "21.7",
+        "effective": "36.2"
+      },
+      "percentBuTotal": {
+        "simple": "25.3",
+        "effective": "40.3"
+      }
+    }, {
+      "timeframe": "L90",
+      "distributionsSimple": 10265,
+      "distributionsSimpleLastYear": 10351,
+      "distributionsSimpleTrend": -0.8308376002318617,
+      "distributionsSimpleBU": 26394,
+      "distributionsSimpleBULastYear": 26219,
+      "distributionsSimpleBUTrend": 0.6674548991189595,
+      "distributionsEffective": 42572,
+      "distributionsEffectiveLastYear": 40583,
+      "distributionsEffectiveTrend": 4.901066949215189,
+      "distributionsEffectiveBU": 107545,
+      "distributionsEffectiveBULastYear": 99820,
+      "distributionsEffectiveBUTrend": 7.738930074133441,
+      "velocity": null,
+      "velocityLastYear": null,
+      "velocityTrend": null,
+      "planSimple": null,
+      "planEffective": null,
+      "timeFrameTotal": {
+        "simple": "10,265",
+        "effective": "42,572"
+      },
+      "vsYa": {
+        "simple": "-86",
+        "effective": "1,989"
+      },
+      "vsYaPercent": {
+        "simple": "-0.8",
+        "effective": "4.9"
+      },
+      "buVsYaPercent": {
+        "simple": "0.7",
+        "effective": "7.7"
+      },
+      "percentTotal": {
+        "simple": "22.1",
+        "effective": "38.5"
+      },
+      "percentBuTotal": {
+        "simple": "25.9",
+        "effective": "42.9"
+      }
+    }],
+    "L60": {
+      "timeframe": "L60",
+      "distributionsSimple": 10077,
+      "distributionsSimpleLastYear": 10182,
+      "distributionsSimpleTrend": -1.0312315851502651,
+      "distributionsSimpleBU": 25867,
+      "distributionsSimpleBULastYear": 25754,
+      "distributionsSimpleBUTrend": 0.43876679350780456,
+      "distributionsEffective": 39963,
+      "distributionsEffectiveLastYear": 38021,
+      "distributionsEffectiveTrend": 5.107703637463508,
+      "distributionsEffectiveBU": 100879,
+      "distributionsEffectiveBULastYear": 93655,
+      "distributionsEffectiveBUTrend": 7.71341626181197,
+      "velocity": null,
+      "velocityLastYear": null,
+      "velocityTrend": null,
+      "planSimple": null,
+      "planEffective": null,
+      "timeFrameTotal": {
+        "simple": "10,077",
+        "effective": "39,963"
+      },
+      "vsYa": {
+        "simple": "-105",
+        "effective": "1,942"
+      },
+      "vsYaPercent": {
+        "simple": "-1.0",
+        "effective": "5.1"
+      },
+      "buVsYaPercent": {
+        "simple": "0.4",
+        "effective": "7.7"
+      },
+      "percentTotal": {
+        "simple": "21.7",
+        "effective": "36.2"
+      },
+      "percentBuTotal": {
+        "simple": "25.3",
+        "effective": "40.3"
+      }
+    },
+    "L90": {
+      "timeframe": "L90",
+      "distributionsSimple": 10265,
+      "distributionsSimpleLastYear": 10351,
+      "distributionsSimpleTrend": -0.8308376002318617,
+      "distributionsSimpleBU": 26394,
+      "distributionsSimpleBULastYear": 26219,
+      "distributionsSimpleBUTrend": 0.6674548991189595,
+      "distributionsEffective": 42572,
+      "distributionsEffectiveLastYear": 40583,
+      "distributionsEffectiveTrend": 4.901066949215189,
+      "distributionsEffectiveBU": 107545,
+      "distributionsEffectiveBULastYear": 99820,
+      "distributionsEffectiveBUTrend": 7.738930074133441,
+      "velocity": null,
+      "velocityLastYear": null,
+      "velocityTrend": null,
+      "planSimple": null,
+      "planEffective": null,
+      "timeFrameTotal": {
+        "simple": "10,265",
+        "effective": "42,572"
+      },
+      "vsYa": {
+        "simple": "-86",
+        "effective": "1,989"
+      },
+      "vsYaPercent": {
+        "simple": "-0.8",
+        "effective": "4.9"
+      },
+      "buVsYaPercent": {
+        "simple": "0.7",
+        "effective": "7.7"
+      },
+      "percentTotal": {
+        "simple": "22.1",
+        "effective": "38.5"
+      },
+      "percentBuTotal": {
+        "simple": "25.9",
+        "effective": "42.9"
+      }
+    }
+  }];
 
   describe('Init', function() {
     beforeEach(function () {
@@ -31,14 +348,14 @@ describe('Unit: scorecardsController', function() {
     });
   });
 
-  describe('[Method] checkValidity', function() {
+  describe('[Method] getValidValue', function() {
     it('should check for validity', function() {
-      var valid = ctrl.checkValidity(5, 2);
+      var valid = ctrl.getValidValue(5, 2);
       expect(valid).toEqual('5.00');
     });
 
     it('should reject NaN', function() {
-      var valid = ctrl.checkValidity('', 2);
+      var valid = ctrl.getValidValue('', 2);
       expect(valid).toEqual('-');
     });
   });
@@ -72,13 +389,14 @@ describe('Unit: scorecardsController', function() {
     beforeEach(function() {
       spyOn(userService, 'getPerformanceDistribution').and.callFake(function() {
         return {
-          then: function(callback) { return callback([0, 1, 2]); }
+          then: function(callback) { return callback(remodeledDistribution); }
         };
       });
     });
+
     it('should update the distribution', function() {
       ctrl.changePremise();
-      expect(userService.model.distribution).toEqual([0, 1, 2]);
+      expect(userService.model.distribution).toEqual(remodeledDistribution);
     });
 
     it('should update the distribution with onPremise selected', function() {
@@ -86,7 +404,7 @@ describe('Unit: scorecardsController', function() {
       ctrl.changePremise();
       // not sure if there is actually a way to test this difference. covers a few different lines of statement.
       expect(ctrl.distributionRadioOptions.selected.onOffPremise).toEqual('on');
-      expect(userService.model.distribution).toEqual([0, 1, 2]);
+      expect(userService.model.distribution).toEqual(remodeledDistribution);
     });
   });
 
@@ -252,6 +570,50 @@ describe('Unit: scorecardsController', function() {
       expect($state.go.calls.count()).toEqual(1);
 
       expect(filtersService.model.selected.myAccountsOnly).toEqual(true);
+    });
+  });
+
+  describe('[setSortQuery] should update specified table sort query and update the sort order', function() {
+
+    it('should update the sort query for the specified table', function() {
+      ctrl.setSortQuery('distributionSort', 'vsYa');
+      expect(ctrl.distributionSort).toEqual({
+        sortDescending: false,
+        query: 'vsYa'
+      });
+    });
+
+    it('should set the inverse for sortDescending if the new query equals the current one', function() {
+      ctrl.setSortQuery('depletionSort', 'name');
+      expect(ctrl.depletionSort).toEqual({
+        sortDescending: true,
+        query: 'name'
+      });
+    });
+  });
+
+  describe('[getFilteredValue] should return the correct values from the current depletion/distribution object', function() {
+
+    it('should return the correct value from the distribution model', function() {
+      ctrl.initialized = true;
+      ctrl.distributionRadioOptions.selected.placementType = 'simple';
+      ctrl.distributionSelectOptions.selected = 'L60';
+      const filteredValue1 = ctrl.getFilteredValue('percentTotal', remodeledDistribution[0], 'distribution');
+      expect(filteredValue1).toEqual('21.7');
+    });
+
+    it('should return the correct value from the depletion model', function() {
+      ctrl.initialized = true;
+      ctrl.depletionSelect = 'MTD';
+      const filteredValue2 = ctrl.getFilteredValue('percentTotal', remodeledDepletion[0], 'depletion');
+      expect(filteredValue2).toEqual('22.5');
+    });
+
+    it('should return an emptu string when the controller is not done initializing', function() {
+      ctrl.initialized = false;
+      ctrl.depletionSelect = 'MTD';
+      const filteredValue2 = ctrl.getFilteredValue('percentTotal', remodeledDepletion[0], 'depletion');
+      expect(filteredValue2).toEqual('');
     });
   });
 });
