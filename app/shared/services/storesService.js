@@ -18,7 +18,6 @@ module.exports = /*  @ngInject */
      * @memberOf cf.common.services
      */
     function getStores(tdlinxNumber) {
-      debugger;
       const storesPromise = $q.defer();
       const url = apiHelperService.request('/api/stores/' + tdlinxNumber);
 
