@@ -900,7 +900,7 @@ module.exports = /*  @ngInject */
     function init() {
       setDefaultDropDownOptions();
       const isNavigatedFromScorecard = $state.params.applyFiltersOnLoad && $state.params.pageData.brandTitle;
-      const isNavigatedFromOpps = $state.params.storeid && $state.params.storename;
+      const isNavigatedFromOpps = $state.params.storeid;
       const isSettingNotes = $state.params.openNotesOnLoad;
 
       if (!isNavigatedFromScorecard && !(isNavigatedFromOpps || isSettingNotes)) {
@@ -963,7 +963,7 @@ module.exports = /*  @ngInject */
     function setDataForNavigationFromOpps() {
       vm.currentTopBottomAcctType = vm.filtersService.accountFilters.accountTypes[3];
       vm.currentTopBottomObj = getCurrentTopBottomObject(vm.currentTopBottomAcctType);
-      var storeData = {id: $state.params.storeid, name: $state.params.storename};
+      var storeData = {id: $state.params.storeid};
       vm.currentTopBottomFilters.stores = storeData;
       vm.filtersService.model.selected.myAccountsOnly = $state.params.myaccountsonly && $state.params.myaccountsonly.toLowerCase() === 'true';
       vm.filterModel.depletionsTimePeriod = filtersService.depletionsTimePeriodFromName($state.params.depletiontimeperiod);
