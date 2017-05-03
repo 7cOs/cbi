@@ -279,12 +279,14 @@ module.exports = /*  @ngInject */
     }
 
     function saveNewList(e) {
+      const newTargetListIdx = 0; // newly created targetList will always be at 0 index
       vm.buttonDisabled = true;
 
       // Create target list
       userService.addTargetList(vm.newList).then(function(response) {
         $analytics.eventTrack('Add to Target List', {category: vm.analyticsCategory, label: response.id});
         vm.addToTargetList(response.id);
+        updateTargetListOpportunitySummary(newTargetListIdx, vm.selected.length);
         vm.closeModal();
         vm.buttonDisabled = false;
 
@@ -388,6 +390,7 @@ module.exports = /*  @ngInject */
           .then(function() {
             vm.opportunitiesService.model.opportunities.forEach(function(store, key) {
               const storeGroup = store.groupedOpportunities;
+
               storeGroup.forEach(function(opportunity, key) {
                 if (opportunity.id === oId && dismiss) {
                   storeGroup.splice(key, 1);
@@ -395,11 +398,18 @@ module.exports = /*  @ngInject */
                   opportunity.status = 'CLOSED';
                 }
               });
+
               if (storeGroup.length < 1) {
                 vm.opportunitiesService.model.opportunities.splice(key, 1);
-                vm.filtersService.model.appliedFilter.pagination.roundedStores -= 1;
+                vm.filtersService.model.appliedFilter.pagination.totalStores -= 1;
+                vm.filtersService.model.appliedFilter.pagination = vm.filtersService.getNewPaginationState(vm.filtersService.model.appliedFilter.pagination);
               }
             });
+
+            if (vm.filtersService.model.appliedFilter.pagination.shouldReloadData) {
+              vm.opportunitiesService.getOpportunities();
+              vm.filtersService.model.appliedFilter.pagination.shouldReloadData = false;
+            }
           });
         }
         vm.undoClicked = false;
@@ -430,6 +440,7 @@ module.exports = /*  @ngInject */
 
       targetListService.deleteTargetListOpportunities(targetListService.model.currentList.id, opportunityIds).then(function(data) {
         console.log('Done deleting these ids: ', opportunityIds);
+        updateOpportunityCountAfterRemoval();
         updateOpportunityModel(opportunitiesService.model.opportunities, vm.selected);
       }, function(err) {
         console.log('Error deleting these ids: ', opportunityIds, ' Responded with error: ', err);
@@ -937,6 +948,14 @@ module.exports = /*  @ngInject */
 
     function updateTargetListOpportunitySummary(idxOfTargetList, numberToAdd) {
       vm.userService.model.targetLists.owned[idxOfTargetList].opportunitiesSummary.opportunitiesCount += numberToAdd;
+    }
+
+    function updateOpportunityCountAfterRemoval() {
+      vm.userService.model.targetLists.owned.map((targetList, idx) => {
+        if (targetList.id === vm.targetListService.model.currentList.id) {
+          return updateTargetListOpportunitySummary(idx, (0 - vm.selected.length));
+        }
+      });
     }
 
     function init() {

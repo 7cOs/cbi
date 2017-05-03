@@ -13,7 +13,8 @@ module.exports = /*  @ngInject */
           default: true,
           totalOpportunities: 0,
           totalStores: 0,
-          roundedStores: 0
+          roundedStores: 0,
+          shouldReloadData: false
         },
         sort: {
           sortArr: []
@@ -392,7 +393,8 @@ module.exports = /*  @ngInject */
       accountFilters: accountFilters,
       trendPropertyNames: trendPropertyNames,
       resetPagination: resetPagination,
-      depletionsTimePeriodFromName: depletionsTimePeriodFromName
+      depletionsTimePeriodFromName: depletionsTimePeriodFromName,
+      getNewPaginationState: getNewPaginationState
     };
 
     return service;
@@ -496,7 +498,8 @@ module.exports = /*  @ngInject */
         default: true,
         totalOpportunities: 0,
         totalStores: 0,
-        roundedStores: 0
+        roundedStores: 0,
+        shouldReloadData: false
       };
     }
 
@@ -521,5 +524,18 @@ module.exports = /*  @ngInject */
       });
 
       return (period && period.length > 0) ? period[0] : null;
+    }
+
+    function getNewPaginationState(paginationState) {
+      const _paginationState = Object.assign({}, paginationState);
+
+      _paginationState.totalPages = Math.ceil(_paginationState.totalStores / 20) - 1;
+
+      if (_paginationState.currentPage > _paginationState.totalPages) {
+        _paginationState.currentPage = _paginationState.totalPages;
+        _paginationState.shouldReloadData = true;
+      }
+
+      return _paginationState;
     }
   };

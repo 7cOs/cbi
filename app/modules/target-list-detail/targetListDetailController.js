@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports = /*  @ngInject */
-  function targetListDetailController($rootScope, $scope, $state, $timeout, $filter, $mdDialog, $mdSelect, $window, targetListService, chipsService, filtersService, opportunitiesService, userService, ieHackService) {
+  function targetListDetailController($rootScope, $scope, $state, $timeout, $filter, $mdDialog, $mdSelect, $window, $q, targetListService, chipsService, filtersService, opportunitiesService, userService, ieHackService) {
 
     // ****************
     // CONTROLLER SETUP
@@ -9,7 +9,7 @@ module.exports = /*  @ngInject */
 
     // Initial variables
     var vm = this;
-    vm.accessError = false;
+    vm.loadingList = true;
     vm.archiving = false;
     vm.changed = false;
     vm.closeButton = false;
@@ -275,27 +275,27 @@ module.exports = /*  @ngInject */
       }
     }
 
+    function handleListResponse(targetList) {
+      targetListService.model.currentList = targetList;
+
+      if (targetList.permissionLevel === 'author') {
+        vm.targetListAuthor = 'current user';
+      } else if (targetList.permissionLevel === null) {
+        vm.modalUnauthorizedAccess();
+      } else {
+        vm.targetListAuthor = findTargetListAuthor(targetList.collaborators);
+      }
+
+      // Binding to rootscope to use on the outer shell
+      $rootScope.isGrayedOut = targetList.archived;
+    }
+
     function initTargetLists() {
-      vm.accessError = false;
       targetListService.getTargetList(targetListService.model.currentList.id).then(function(response) {
-        targetListService.model.currentList = response;
+        handleListResponse(response);
 
-        if (response.permissionLevel === 'author') {
-          vm.targetListAuthor = 'current user';
-        } else if (response.permissionLevel === null) {
-          vm.navigateToTL();
-        } else {
-          vm.targetListAuthor = findTargetListAuthor(response.collaborators);
-        }
-
-        targetListService.model.currentList.archived = response.archived;
-
-        // Binding to rootscope to use on the outer shell
-        $rootScope.isGrayedOut = response.archived;
-
-        targetListService.updateTargetListShares(targetListService.model.currentList.id, userService.model.currentUser.employeeID, true, false);
-      }, function(err) {
-        console.log('[targetListController.init], Error: ' + err.statusText + '. Code: ' + err.status);
+        targetListService.updateTargetListShares(targetListService.model.currentList.id, userService.model.currentUser.employeeID, true);
+      }, function() {
         vm.modalUnauthorizedAccess();
       });
     }
@@ -332,12 +332,19 @@ module.exports = /*  @ngInject */
     function init() {
       targetListService.model.currentList.id = $state.params.id;
 
-      initTargetLists();
-
-      // get opportunities
-      targetListService.getTargetListOpportunities(targetListService.model.currentList.id).then(function(data) {
-        // opportunitiesService.model.opportunities = data;
+      $q.all([
+        targetListService.getTargetList(targetListService.model.currentList.id),
+        targetListService.getTargetListOpportunities(targetListService.model.currentList.id)
+      ]).then((response) => {
+        handleListResponse(response[0]);
+      }).catch(() => {
+        vm.modalUnauthorizedAccess();
+      }).finally(() => {
+        vm.loadingList = false;
       });
+
+      // we don't care about when this finishes, no UI updates
+      targetListService.updateTargetListShares(targetListService.model.currentList.id, userService.model.currentUser.employeeID, true);
 
       opportunitiesService.model.filterApplied = true;
 
