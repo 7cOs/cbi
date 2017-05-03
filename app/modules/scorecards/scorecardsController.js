@@ -220,21 +220,21 @@ module.exports = /*  @ngInject */
       let filteredValueType = '';
       sortType === 'distributionSort' ? filteredValueType = 'distribution' : filteredValueType = 'depletion';
 
-      return function(model) {
-        return (vm[sortType].query === 'name')
-          ? model.name
-          : (getFilteredValue(vm[sortType].query, model, filteredValueType) !== '-')
-            ? parseFloat(getFilteredValue(vm[sortType].query, model, filteredValueType).replace(/[,$]/g, ''))
-            : 0;
+      return model => {
+        if (vm[sortType].query === 'name') return model.name;
+
+        return getFilteredValue(vm[sortType].query, model, filteredValueType) !== '-'
+          ? parseFloat(getFilteredValue(vm[sortType].query, model, filteredValueType).replace(/[,$]/g, ''))
+          : 0;
       };
     }
 
-    function getFilteredValue(key, model, type) {
-      return !vm.initialized
-        ? ''
-        : (type === 'distribution')
-          ? model[vm.distributionSelectOptions.selected][key][vm.distributionRadioOptions.selected.placementType]
-          : model[vm.depletionSelect][key];
+    function getFilteredValue(key, model, modelType) {
+      if (!vm.initialized) return '';
+
+      return modelType === 'distribution'
+        ? model[vm.distributionSelectOptions.selected][key][vm.distributionRadioOptions.selected.placementType]
+        : model[vm.depletionSelect][key];
     }
 
     // **************
