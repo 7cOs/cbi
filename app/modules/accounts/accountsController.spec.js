@@ -1,5 +1,5 @@
 describe('Unit: accountsController', function() {
-  var scope, ctrl, $state, $q, filtersService, chipsService, userService, packageSkuData, brandSpy, brandPerformanceData, myperformanceService, topBottomSpy, $filter;
+  var scope, ctrl, $state, $q, filtersService, chipsService, userService, packageSkuData, brandSpy, brandPerformanceData, myperformanceService, storesService, topBottomSpy, $filter;
   var topBottomSnapshotDistributorData = {
     performance: [{
         'type': 'Distributor',
@@ -326,7 +326,7 @@ describe('Unit: accountsController', function() {
     angular.mock.module('cf.common.services');
     angular.mock.module('cf.modules.accounts');
 
-    inject(function($rootScope, $controller, _$state_, _$q_, _chipsService_, _filtersService_, _userService_, _myperformanceService_, _$filter_) {
+    inject(function($rootScope, $controller, _$state_, _$q_, _chipsService_, _filtersService_, _userService_, _myperformanceService_, _storesService_, _$filter_) {
       // Create scope
       scope = $rootScope.$new();
 
@@ -338,6 +338,7 @@ describe('Unit: accountsController', function() {
       filtersService = _filtersService_;
       userService = _userService_;
       myperformanceService = _myperformanceService_;
+      storesService = _storesService_;
       brandPerformanceData = {
         performance: [
           {
@@ -394,6 +395,7 @@ describe('Unit: accountsController', function() {
       spyOn(userService, 'getPerformanceDepletion').and.returnValue(fakePromise);
       spyOn(userService, 'getPerformanceDistribution').and.returnValue(fakePromise);
       spyOn(userService, 'getPerformanceSummary').and.returnValue(fakePromise);
+      spyOn(storesService, 'getStores').and.returnValue(fakePromise);
       topBottomSpy = spyOn(userService, 'getTopBottomSnapshot').and.callFake(function () {
         var currentLevel = userService.getTopBottomSnapshot.arguments[0].value;
         switch (currentLevel) {
