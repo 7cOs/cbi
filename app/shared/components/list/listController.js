@@ -838,7 +838,7 @@ module.exports = /*  @ngInject */
     function handleAddToTargetList(ev, targetList, idx) {
       const usedOpps = targetList.opportunitiesSummary.opportunitiesCount;
       const remainingOpps = remainingOpportunitySpots(usedOpps);
-      const totalOpps = usedOpps + vm.isAllOpportunitiesSelected ? filtersService.model.appliedFilter.pagination.totalOpportunities : this.selected.length;
+      const totalOpps = usedOpps + (vm.isAllOpportunitiesSelected ? filtersService.model.appliedFilter.pagination.totalOpportunities : this.selected.length);
       const hasRemainingOpps = totalOpps <= maxOpportunities;
       if (hasRemainingOpps) {
         vm.addToTargetList(targetList.id);
