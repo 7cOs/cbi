@@ -1,5 +1,7 @@
 describe('Unit: accountsController', function() {
-  var scope, ctrl, $state, $q, filtersService, chipsService, userService, packageSkuData, brandSpy, brandPerformanceData, myperformanceService, topBottomSpy, $filter;
+  var scope, ctrl, $controller, $state, $q, filtersService, chipsService, userService, packageSkuData, brandSpy, brandPerformanceData, myperformanceService, storesService, topBottomSpy, $filter;
+  let promiseGetStores;
+
   var topBottomSnapshotDistributorData = {
     performance: [{
         'type': 'Distributor',
@@ -326,11 +328,12 @@ describe('Unit: accountsController', function() {
     angular.mock.module('cf.common.services');
     angular.mock.module('cf.modules.accounts');
 
-    inject(function($rootScope, $controller, _$state_, _$q_, _chipsService_, _filtersService_, _userService_, _myperformanceService_, _$filter_) {
+    inject(function($rootScope, _$controller_, _$state_, _$q_, _chipsService_, _filtersService_, _userService_, _myperformanceService_, _storesService_, _$filter_) {
       // Create scope
       scope = $rootScope.$new();
 
       // Get Required Services
+      $controller = _$controller_;
       $state = _$state_;
       $q = _$q_;
       $filter = _$filter_;
@@ -338,6 +341,7 @@ describe('Unit: accountsController', function() {
       filtersService = _filtersService_;
       userService = _userService_;
       myperformanceService = _myperformanceService_;
+      storesService = _storesService_;
       brandPerformanceData = {
         performance: [
           {
@@ -394,6 +398,7 @@ describe('Unit: accountsController', function() {
       spyOn(userService, 'getPerformanceDepletion').and.returnValue(fakePromise);
       spyOn(userService, 'getPerformanceDistribution').and.returnValue(fakePromise);
       spyOn(userService, 'getPerformanceSummary').and.returnValue(fakePromise);
+      promiseGetStores = spyOn(storesService, 'getStores').and.returnValue(fakePromise);
       topBottomSpy = spyOn(userService, 'getTopBottomSnapshot').and.callFake(function () {
         var currentLevel = userService.getTopBottomSnapshot.arguments[0].value;
         switch (currentLevel) {
@@ -520,6 +525,34 @@ describe('Unit: accountsController', function() {
       expect(ctrl.filterModel.depletionsTimePeriod.name).toEqual('FYTD');
       expect(ctrl.filterModel.distributionTimePeriod.name).toEqual('L90');
     });
+
+    it('Should get the store information when passed in params', function () {
+      $state.params.storeid = 'storeID';
+      $state.params.depletiontimeperiod = 'CYTD';
+
+      promiseGetStores.and.callFake((id) => {
+        expect(id).toEqual('storeID');
+
+        return {
+          account: 'An account',
+          tdlinx_number: '123',
+          store_name: 'testStore',
+          store_number: '456',
+          premise_type: 'ON PREMISE',
+          id: '123',
+          name: 'testStore',
+          storeNumber: '456',
+          premiseTypeDesc: 'on'
+        };
+      });
+
+      ctrl = $controller('accountsController', {$scope: scope});
+
+      scope.$digest();
+
+      expect(filtersService.model.selected.premiseType).toEqual('on');
+    });
+
   });
 
   describe('[Method] brandTotal', function() {
@@ -1432,102 +1465,6 @@ describe('Unit: accountsController', function() {
         isFilterUpdateRequired: true
       };
     });
-  });
-
-  describe('Should set correct params and get data from store api', function() {
-    beforeEach(function() {
-      ctrl.resetFilters();
-      topBottomSpy.calls.reset();
-      ctrl.setTopBottomAcctTypeSelection(ctrl.filtersService.accountFilters.accountTypes[3]);
-    });
-    /* it('should have called store endpoint 4 times when account market option is changed', function() {
-      // One each for top 10(Values/Trends),bottom 10(Values/Trends)
-      topBottomSpy.calls.reset();
-      var newVal = filtersService.accountFilters.accountMarkets[1];
-      ctrl.acctMarketChanged(newVal);
-      expect(topBottomSpy.calls.count()).toEqual(4);
-
-      topBottomSpy.calls.reset();
-      newVal = filtersService.accountFilters.accountMarkets[2];
-      ctrl.acctMarketChanged(newVal);
-      expect(topBottomSpy.calls.count()).toEqual(4);
-
-      topBottomSpy.calls.reset();
-      newVal = filtersService.accountFilters.accountMarkets[3];
-      ctrl.acctMarketChanged(newVal);
-      expect(topBottomSpy.calls.count()).toEqual(4);
-
-      topBottomSpy.calls.reset();
-      newVal = filtersService.accountFilters.accountMarkets[0];
-      ctrl.acctMarketChanged(newVal);
-      expect(topBottomSpy.calls.count()).toEqual(4);
-
-      // No calls made when option is not changed
-      topBottomSpy.calls.reset();
-      newVal = filtersService.accountFilters.accountMarkets[0];
-      ctrl.acctMarketChanged(newVal);
-      expect(topBottomSpy.calls.count()).toEqual(0);
-    }); */
-  });
-
-  describe('Should fire on filter properties change on changing dropdown options', function() {
-    var resetFilterFlagsSpy;
-    beforeEach(function() {
-      resetFilterFlagsSpy = spyOn(myperformanceService, 'resetFilterFlags');
-      resetFilterFlagsSpy.calls.reset();
-      ctrl.currentTopBottomAcctType = ctrl.filtersService.accountFilters.accountTypes[0];
-      ctrl.resetFilters();
-    });
-
-    /* it('should reset filter flags when account market options are changed to distirbution simple', function() {
-      var newVal = filtersService.accountFilters.accountMarkets[1];
-      ctrl.acctMarketChanged(newVal);
-      expect(resetFilterFlagsSpy.calls.count()).toEqual(1);
-    });
-
-    it('should reset filter flags when account market options are changed to distirbution effective', function() {
-      var newVal = filtersService.accountFilters.accountMarkets[2];
-      ctrl.acctMarketChanged(newVal);
-      expect(resetFilterFlagsSpy.calls.count()).toEqual(1);
-    });
-
-    it('should not reset filter flags when account market options are not changed', function() {
-      var newVal = filtersService.accountFilters.accountMarkets[2];
-      ctrl.acctMarketChanged(newVal);
-      expect(resetFilterFlagsSpy.calls.count()).toEqual(1);
-      resetFilterFlagsSpy.calls.reset();
-      newVal = filtersService.accountFilters.accountMarkets[2];
-      ctrl.acctMarketChanged(newVal);
-      expect(resetFilterFlagsSpy.calls.count()).toEqual(0);
-    });
-
-    it('should reset filter flags when account market options are changed  to velocity', function() {
-      var newVal = filtersService.accountFilters.accountMarkets[3];
-      ctrl.acctMarketChanged(newVal);
-      expect(resetFilterFlagsSpy.calls.count()).toEqual(1);
-    });
-
-    it('should reset filter flags when trendOptions options are changed', function() {
-      var newVal = filtersService.model.trend[0];
-      ctrl.trendOptionChanged(newVal);
-      expect(resetFilterFlagsSpy.calls.count()).toEqual(0);
-
-      newVal = filtersService.model.trend[1];
-      ctrl.trendOptionChanged(newVal);
-      expect(resetFilterFlagsSpy.calls.count()).toEqual(1);
-    });
-
-    it('should reset filter flags when depletion options are changed', function() {
-      var newVal = filtersService.model.depletionsTimePeriod.month[1];
-      ctrl.depletionOptionChanged(newVal);
-      expect(resetFilterFlagsSpy.calls.count()).toEqual(1);
-    });
-
-    it('should reset filter flags when distirbution options are changed', function() {
-      var newVal = filtersService.model.distributionTimePeriod.month[0];
-      ctrl.distOptionChanged(newVal);
-      expect(resetFilterFlagsSpy.calls.count()).toEqual(1);
-    }); */
   });
 
   describe('Navigate top bottom levels', function() {

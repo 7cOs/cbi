@@ -838,7 +838,7 @@ module.exports = /*  @ngInject */
     function handleAddToTargetList(ev, targetList, idx) {
       const usedOpps = targetList.opportunitiesSummary.opportunitiesCount;
       const remainingOpps = remainingOpportunitySpots(usedOpps);
-      const totalOpps = usedOpps + vm.isAllOpportunitiesSelected ? filtersService.model.appliedFilter.pagination.totalOpportunities : this.selected.length;
+      const totalOpps = usedOpps + (vm.isAllOpportunitiesSelected ? filtersService.model.appliedFilter.pagination.totalOpportunities : this.selected.length);
       const hasRemainingOpps = totalOpps <= maxOpportunities;
       if (hasRemainingOpps) {
         vm.addToTargetList(targetList.id);
@@ -938,7 +938,11 @@ module.exports = /*  @ngInject */
     }
 
     function getStoreToBePassedToAcct(storeDetails) {
-      return {store: storeDetails.id + '|' + storeDetails.name + '|' + false};
+      return {
+        storeid: storeDetails.id,
+        myaccountsonly: filtersService.model.selected.myAccountsOnly,
+        depletiontimeperiod: 'CYTD'
+      };
     }
 
     function updateTargetListOpportunitySummary(idxOfTargetList, numberToAdd) {
