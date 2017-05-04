@@ -40,9 +40,7 @@ module.exports = function (config) {
     // assertionEndpoint: the endpoint you connect to in order to get the session token.
     assertionEndpoint: 'https://cbrands--CBeerDev.cs20.my.salesforce.com/services/oauth2/token?so=00Dm00000008fCJ',
     // privateKey and certfile: keys generated from SFDC's Key and Certificate Management area
-    // privateKey: fs.readFileSync('./server/_config/environment/sfdcsecurity/dev/signingKey.pem').toString(),
     privateKey: process.env.SFDC_SIGNING_KEY,
-    // certfile: fs.readFileSync('./server/_config/environment/sfdcsecurity/dev/certificate.crt').toString(),
     certfile: process.env.SFDC_CERTIFICATE,
     // issuer, recipient: can be anything, but must match between the SFDC Single Sign-On Configuration and this value.
     issuer: 'compass-portal',

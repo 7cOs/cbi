@@ -5,11 +5,11 @@ const path = require('path');
 const cssnano = require('cssnano');
 const commonConfig = require('./webpack.common.js');
 const helpers = require('./helpers');
-const Dotenv = require('dotenv');
+const dotenv = require('dotenv');
 
 const ENV = process.env.NODE_ENV = process.env.ENV = 'development';
 
-Dotenv.config();
+dotenv.config();
 
 module.exports = webpackMerge(commonConfig, {
 

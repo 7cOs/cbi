@@ -9,5 +9,5 @@ module.exports =
   })
   .controller('navbarController', require('./navbarController'))
   .constant('ENV_VARS', {
-    iqUrl: process.env.IQ_LINK
+    iqURL: process.env.IQ_LINK
   });

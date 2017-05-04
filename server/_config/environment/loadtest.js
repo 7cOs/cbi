@@ -31,8 +31,7 @@ module.exports = function (config) {
     entryPoint: 'https://ssodev.cbrands.com/oamfed/idp/samlv20',
     logoutBase: 'https://ssodev.cbrands.com/oam/server/logout',
     issuer: 'https://compass-loadtest.cbrands.com',
-    // cert: fs.readFileSync('./server/_config/passport/certs/development.crt', 'utf-8'),
-    cert: process.env.SSO_CERT
+    cert: process.env.SSO_CERT,
     privateCert: '',
     signatureAlgorithm: 'sha1'
   };
