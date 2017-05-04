@@ -938,7 +938,11 @@ module.exports = /*  @ngInject */
     }
 
     function getStoreToBePassedToAcct(storeDetails) {
-      return {store: storeDetails.id + '|' + storeDetails.name + '|' + false};
+      return {
+        storeid: storeDetails.id,
+        myaccountsonly: filtersService.model.selected.myAccountsOnly,
+        depletiontimeperiod: 'CYTD'
+      };
     }
 
     function updateTargetListOpportunitySummary(idxOfTargetList, numberToAdd) {
