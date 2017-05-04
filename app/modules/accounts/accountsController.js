@@ -994,13 +994,15 @@ module.exports = /*  @ngInject */
 
       vm.loadingUnsoldStore = true;
       promiseArr.push(userService.getPerformanceBrand(params));
-      promiseArr.push(storesService.getStores(vm.currentTopBottomFilters.stores.id || vm.currentTopBottomFilters.distributors.id));
+
+      const id = vm.currentTopBottomFilters.stores.id || vm.currentTopBottomFilters.distributors.id;
+      if (id) promiseArr.push(storesService.getStores(id));
 
       $q.all(promiseArr).then(function(data) {
         const performanceData = data[0];
         const storeData = data[1];
 
-        if (performanceData) {
+        if (performanceData && performanceData.performance && performanceData.performance.length > 0) {
           vm.loadingBrandSnapshot = false;
           vm.brandTabs.brands = performanceData.performance;
           setCurrentTotalsObject();
@@ -1024,7 +1026,7 @@ module.exports = /*  @ngInject */
           }
         }
 
-        if (storeData) {
+        if (storeData && storeData.account) {
           setFilter(storeData, 'store');
 
           vm.filtersService.model.selected.premiseType = storeData.premiseTypeDesc;
