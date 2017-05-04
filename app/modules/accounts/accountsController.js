@@ -714,9 +714,9 @@ module.exports = /*  @ngInject */
         }
       }
 
-      if (result.premiseType && result.premiseType === 'OFF PREMISE') {
+      if (result.premiseType === 'OFF PREMISE') {
         vm.premiseTypeValue = 'off';
-      } else if (result.premiseType && result.premiseType === 'ON PREMISE') {
+      } else if (result.premiseType === 'ON PREMISE') {
         vm.premiseTypeValue = 'on';
       }
     }
