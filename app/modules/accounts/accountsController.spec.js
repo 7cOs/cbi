@@ -528,7 +528,6 @@ describe('Unit: accountsController', function() {
 
     it('Should get the store information when passed in params', function () {
       $state.params.storeid = 'storeID';
-      $state.params.storename = 'storeName';
       $state.params.depletiontimeperiod = 'CYTD';
 
       promiseGetStores.and.callFake((id) => {
@@ -548,7 +547,9 @@ describe('Unit: accountsController', function() {
 
       ctrl = $controller('accountsController', {$scope: scope});
 
-      // TODO: Add this line, asyc: expect(filtersService.model.selected.premiseType).toEqual('on');
+      scope.$digest();
+
+      expect(filtersService.model.selected.premiseType).toEqual('on');
     });
 
   });
