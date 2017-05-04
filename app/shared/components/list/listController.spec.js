@@ -1876,7 +1876,7 @@ describe('Unit: list controller', function() {
       expect(opportunitiesService.model.opportunities[1].store.highImpactOpportunityCount).toEqual(0);
     });
 
-    fit('Should have enough opportunities spots remaining to add to target list', () => {
+    it('Should have enough opportunities spots remaining to add to target list', () => {
       spyOn(ctrl, 'addToTargetList').and.callFake(() => {
         return;
       });
