@@ -278,6 +278,11 @@
     }
   }
 
+  .scorecard-header-content {
+    cursor: pointer;
+    display: inline-flex;
+  }
+
   h3 {
     font-size: 1.625em;
   }
@@ -350,5 +355,21 @@
         font-size: 10px;
       }
     }
+  }
+
+  .sort-desc {
+    background-image: url('../../../assets/img/icons/sort-desc.svg');
+    height: 10px;
+    width: 6px;
+    margin-top: 1px;
+    margin-left: 4px;
+  }
+
+  .sort-asc {
+    background-image: url('../../../assets/img/icons/sort-asc.svg');
+    height: 10px;
+    width: 6px;
+    margin-top: 1px;
+    margin-left: 4px;
   }
 }
