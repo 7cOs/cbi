@@ -357,19 +357,23 @@
     }
   }
 
-  .sort-desc {
-    background-image: url('../../../assets/img/icons/sort-desc.svg');
+  .sort-header {
     height: 10px;
     width: 6px;
     margin-top: 1px;
     margin-left: 4px;
-  }
+    opacity: 0;
 
-  .sort-asc {
-    background-image: url('../../../assets/img/icons/sort-asc.svg');
-    height: 10px;
-    width: 6px;
-    margin-top: 1px;
-    margin-left: 4px;
+    &.desc {
+      background-image: url('../../../assets/img/icons/sort-desc.svg');
+    }
+
+    &.asc {
+      background-image: url('../../../assets/img/icons/sort-asc.svg');
+    }
+
+    &.active {
+      opacity: 1;
+    }
   }
 }
