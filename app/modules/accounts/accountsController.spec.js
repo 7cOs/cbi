@@ -534,6 +534,7 @@ describe('Unit: accountsController', function() {
         expect(id).toEqual('storeID');
 
         return {
+          account: 'An account',
           tdlinx_number: '123',
           store_name: 'testStore',
           store_number: '456',
