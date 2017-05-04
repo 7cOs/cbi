@@ -1038,6 +1038,7 @@ module.exports = /*  @ngInject */
 
         if (storeData && storeData.account) {
           setFilter(storeData, 'store');
+          vm.premiseTypeValue = storeData.premiseTypeDesc;
           vm.filtersService.model.selected.premiseType = storeData.premiseTypeDesc;
         }
       }).finally(function() {
