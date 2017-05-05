@@ -1012,7 +1012,7 @@ module.exports = /*  @ngInject */
         const performanceData = data[0];
         const storeData = data[1];
 
-        if (performanceData && performanceData.performance && performanceData.performance.length > 0) {
+        if (performanceData) {
           vm.loadingBrandSnapshot = false;
           vm.brandTabs.brands = performanceData.performance;
           setCurrentTotalsObject();

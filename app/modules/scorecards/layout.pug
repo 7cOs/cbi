@@ -34,7 +34,7 @@ div.my-scorecards
           tr
             th.accent.brand.border
               div.scorecard-header-content(ng-click="s.setSortQuery('depletionSort', 'name')") Brand
-                span.tooltip-wrap(ng-if="s.depletionSort.query === 'name'" ng-class="s.depletionSort.sortDescending ? 'sort-asc' : 'sort-desc'")
+                span.sort-header(ng-class="{active: s.depletionSort.query === 'name', asc: !s.depletionSort.sortDescending, desc: s.depletionSort.sortDescending}")
             th(colspan=5).accent.border Depletions
             th(colspan=2).border
               .tooltip-wrap
@@ -49,23 +49,23 @@ div.my-scorecards
             th.accent.border &nbsp;
             th.accent
               div.scorecard-header-content(ng-click="s.setSortQuery('depletionSort', 'timeFrameTotal')") {{s.depletionSelect === 'CMTH' ? 'Clo Mth' : s.depletionSelect}}
-                span.tooltip-wrap(ng-if="s.depletionSort.query === 'timeFrameTotal'" ng-class="s.depletionSort.sortDescending ? 'sort-asc' : 'sort-desc'")
+                span.sort-header(ng-class="{active: s.depletionSort.query === 'timeFrameTotal', asc: !s.depletionSort.sortDescending, desc: s.depletionSort.sortDescending}")
             th.accent
               div.scorecard-header-content(ng-click="s.setSortQuery('depletionSort', 'vsYa')") VS YA
-                span.tooltip-wrap(ng-if="s.depletionSort.query === 'vsYa'" ng-class="s.depletionSort.sortDescending ? 'sort-asc' : 'sort-desc'")
+                span.sort-header(ng-class="{active: s.depletionSort.query === 'vsYa', asc: !s.depletionSort.sortDescending, desc: s.depletionSort.sortDescending}")
             th.accent
               div.scorecard-header-content(ng-click="s.setSortQuery('depletionSort', 'vsYaPercent')") VS YA %
-                span.tooltip-wrap(ng-if="s.depletionSort.query === 'vsYaPercent'" ng-class="s.depletionSort.sortDescending ? 'sort-asc' : 'sort-desc'")
+                span.sort-header(ng-class="{active: s.depletionSort.query === 'vsYaPercent', asc: !s.depletionSort.sortDescending, desc: s.depletionSort.sortDescending}")
             th.accent
               div.scorecard-header-content(ng-click="s.setSortQuery('depletionSort', 'buVsYaPercent')") BU vs YA %
-                span.tooltip-wrap(ng-if="s.depletionSort.query === 'buVsYaPercent'" ng-class="s.depletionSort.sortDescending ? 'sort-asc' : 'sort-desc'")
+                span.sort-header(ng-class="{active: s.depletionSort.query === 'buVsYaPercent', asc: !s.depletionSort.sortDescending, desc: s.depletionSort.sortDescending}")
             th.accent.border MY % vs BU %
             th.accent
               div.scorecard-header-content(ng-click="s.setSortQuery('depletionSort', 'percentTotal')") To My Total %
-                span.tooltip-wrap(ng-if="s.depletionSort.query === 'percentTotal'" ng-class="s.depletionSort.sortDescending ? 'sort-asc' : 'sort-desc'")
+                span.sort-header(ng-class="{active: s.depletionSort.query === 'percentTotal', asc: !s.depletionSort.sortDescending, desc: s.depletionSort.sortDescending}")
             th.accent.border
               div.scorecard-header-content(ng-click="s.setSortQuery('depletionSort', 'percentBuTotal')") To BU Total %
-                span.tooltip-wrap(ng-if="s.depletionSort.query === 'percentBuTotal'" ng-class="s.depletionSort.sortDescending ? 'sort-asc' : 'sort-desc'")
+                span.sort-header(ng-class="{active: s.depletionSort.query === 'percentBuTotal', asc: !s.depletionSort.sortDescending, desc: s.depletionSort.sortDescending}")
         tbody
           tr
             td.column-total.left TOTAL
@@ -118,7 +118,7 @@ div.my-scorecards
           tr
             th.accent.brand.border
               div.scorecard-header-content(ng-click="s.setSortQuery('distributionSort', 'name')") Brand
-                span.tooltip-wrap(ng-if="s.distributionSort.query === 'name'" ng-class="s.distributionSort.sortDescending ? 'sort-asc' : 'sort-desc'")
+                span.sort-header(ng-class="{active: s.distributionSort.query === 'name', asc: !s.distributionSort.sortDescending, desc: s.distributionSort.sortDescending}")
             th(colspan=5).accent.border Points of Distribution
             th(colspan=2).accent.border
               .tooltip-wrap
@@ -134,23 +134,23 @@ div.my-scorecards
             th.accent.border &nbsp;
             th.accent
               div.scorecard-header-content(ng-click="s.setSortQuery('distributionSort', 'timeFrameTotal')") {{s.distributionSelectOptions.selected | uppercase}}
-                span.tooltip-wrap(ng-if="s.distributionSort.query === 'timeFrameTotal'" ng-class="s.distributionSort.sortDescending ? 'sort-asc' : 'sort-desc'")
+                span.sort-header(ng-class="{active: s.distributionSort.query === 'timeFrameTotal', asc: !s.distributionSort.sortDescending, desc: s.distributionSort.sortDescending}")
             th.accent
               div.scorecard-header-content(ng-click="s.setSortQuery('distributionSort', 'vsYa')") VS YA
-                span.tooltip-wrap(ng-if="s.distributionSort.query === 'vsYa'" ng-class="s.distributionSort.sortDescending ? 'sort-asc' : 'sort-desc'")
+                span.sort-header(ng-class="{active: s.distributionSort.query === 'vsYa', asc: !s.distributionSort.sortDescending, desc: s.distributionSort.sortDescending}")
             th.accent
               div.scorecard-header-content(ng-click="s.setSortQuery('distributionSort', 'vsYaPercent')") VS YA %
-                span.tooltip-wrap(ng-if="s.distributionSort.query === 'vsYaPercent'" ng-class="s.distributionSort.sortDescending ? 'sort-asc' : 'sort-desc'")
+                span.sort-header(ng-class="{active: s.distributionSort.query === 'vsYaPercent', asc: !s.distributionSort.sortDescending, desc: s.distributionSort.sortDescending}")
             th.accent
               div.scorecard-header-content(ng-click="s.setSortQuery('distributionSort', 'buVsYaPercent')") BU vs YA %
-                span.tooltip-wrap(ng-if="s.distributionSort.query === 'buVsYaPercent'" ng-class="s.distributionSort.sortDescending ? 'sort-asc' : 'sort-desc'")
+                span.sort-header(ng-class="{active: s.distributionSort.query === 'buVsYaPercent', asc: !s.distributionSort.sortDescending, desc: s.distributionSort.sortDescending}")
             th.accent.border MY % vs BU %
             th.accent
               div.scorecard-header-content(ng-click="s.setSortQuery('distributionSort', 'percentTotal')") To My Total %
-                span.tooltip-wrap(ng-if="s.distributionSort.query === 'percentTotal'" ng-class="s.distributionSort.sortDescending ? 'sort-asc' : 'sort-desc'")
+                span.sort-header(ng-class="{active: s.distributionSort.query === 'percentTotal', asc: !s.distributionSort.sortDescending, desc: s.distributionSort.sortDescending}")
             th.accent.border
               div.scorecard-header-content(ng-click="s.setSortQuery('distributionSort', 'percentBuTotal')") To BU Total %
-                span.tooltip-wrap(ng-if="s.distributionSort.query === 'percentBuTotal'" ng-class="s.distributionSort.sortDescending ? 'sort-asc' : 'sort-desc'")
+                span.sort-header(ng-class="{active: s.distributionSort.query === 'percentBuTotal', asc: !s.distributionSort.sortDescending, desc: s.distributionSort.sortDescending}")
         tbody
           tr
             td.column-total.left(ng-click="s.goToAccountDashboard(null, s.distributionRadioOptions.selected.placementType === 'effective')" ng-disabled="s.distributionRadioOptions.selected.placementType === 'effective'") TOTAL

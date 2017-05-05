@@ -940,7 +940,7 @@ module.exports = /*  @ngInject */
     function getStoreToBePassedToAcct(storeDetails) {
       return {
         storeid: storeDetails.id,
-        myaccountsonly: filtersService.model.selected.myAccountsOnly,
+        myaccountsonly: false,
         depletiontimeperiod: 'CYTD'
       };
     }
