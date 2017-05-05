@@ -225,7 +225,7 @@ module.exports = /*  @ngInject */
 
         return getFilteredValue(vm[sortType].query, model, filteredValueType) !== '-'
           ? parseFloat(getFilteredValue(vm[sortType].query, model, filteredValueType).replace(/[,$]/g, ''))
-          : 0;
+          : -1;
       };
     }
 
