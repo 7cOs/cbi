@@ -74,6 +74,7 @@ module.exports = /*  @ngInject */
     vm.currentUserName = null;
     vm._defaultTopLevelForLabel = 'CBBD';
     vm.topLevelForLabel = vm._defaultTopLevelForLabel;
+    vm.premiseTypeValue = 'all';
 
     // top bottom public methods
     vm.topBottomData = {
@@ -573,6 +574,7 @@ module.exports = /*  @ngInject */
             onPremise();
             break;
           default:
+            vm.premiseTypeValue = 'all';
             filtersService.model.selected.premiseType = 'all';
             chipsService.removeChip('premiseType');
             disablePremiseType(false);
@@ -581,11 +583,13 @@ module.exports = /*  @ngInject */
       }
 
       function onPremise() {
+        vm.premiseTypeValue = 'off';
         filtersService.model.selected.premiseType = 'on';
         vm.updateChip('On-Premise', 'premiseType');
         disablePremiseType(true);
       }
       function offPremise() {
+        vm.premiseTypeValue = 'off';
         filtersService.model.selected.premiseType = 'off';
         vm.updateChip('Off-Premise', 'premiseType');
         disablePremiseType(true);
@@ -708,6 +712,12 @@ module.exports = /*  @ngInject */
         if (result.storeNumber && result.storeNumber.toUpperCase() !== 'UNKNOWN') {
           vm.selectedStore += ' #' + result.storeNumber;
         }
+      }
+
+      if (result.premiseType === 'OFF PREMISE') {
+        vm.premiseTypeValue = 'off';
+      } else if (result.premiseType === 'ON PREMISE') {
+        vm.premiseTypeValue = 'on';
       }
     }
 
@@ -941,7 +951,7 @@ module.exports = /*  @ngInject */
       vm.filtersService.model.accountSelected.accountMarkets = vm.filtersService.accountFilters.accountMarkets[0];
       vm.currentTopBottomAcctType = vm.filtersService.accountFilters.accountTypes[0];
       vm.filtersService.model.valuesVsTrend = vm.filtersService.accountFilters.valuesVsTrend[0];
-      vm.filtersService.model.selected.premiseType = 'off';
+      vm.premiseTypeValue = 'off';
       vm.chartOptions = myperformanceService.getChartOptions();
       vm.topBottomData = myperformanceService.initDataForAllTbLevels(vm.topBottomData);
       vm.marketSelectedIndex = 0;
@@ -1028,7 +1038,7 @@ module.exports = /*  @ngInject */
 
         if (storeData && storeData.account) {
           setFilter(storeData, 'store');
-
+          vm.premiseTypeValue = storeData.premiseTypeDesc;
           vm.filtersService.model.selected.premiseType = storeData.premiseTypeDesc;
         }
       }).finally(function() {
@@ -1038,6 +1048,7 @@ module.exports = /*  @ngInject */
 
     function setPremiseType() {
       if ($state.params.pageData && $state.params.pageData.premiseType && $state.params.applyFiltersOnLoad) {
+        vm.premiseTypeValue = $state.params.pageData.premiseType;
         vm.filtersService.model.selected.premiseType = $state.params.pageData.premiseType;
       }
     }
@@ -1527,6 +1538,8 @@ module.exports = /*  @ngInject */
 
     function setUpdatedFilters() {
       filtersService.model.filtersValidCount++;
+      filtersService.model.selected.premiseType = vm.premiseTypeValue;
+
       // The order to be processed is distributor, stores, subaccounts, accounts. So that the last value doesn't get overridden
       if (vm.currentTopBottomFilters.distributors) {
         setFilter(vm.currentTopBottomFilters.distributors, 'distributor');
