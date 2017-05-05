@@ -34,7 +34,7 @@ div.my-scorecards
           tr
             th.accent.brand.border
               div.scorecard-header-content(ng-click="s.setSortQuery('depletionSort', 'name')") Brand
-                span.tooltip-wrap(ng-if="s.depletionSort.query === 'name'" ng-class="s.depletionSort.sortDescending ? 'sort-asc' : 'sort-desc'")
+                span.sort-header(ng-class="{active: s.depletionSort.query === 'name', asc: !s.depletionSort.sortDescending, desc: s.depletionSort.sortDescending}")
             th(colspan=5).accent.border Depletions
             th(colspan=2).border
               .tooltip-wrap
@@ -118,7 +118,7 @@ div.my-scorecards
           tr
             th.accent.brand.border
               div.scorecard-header-content(ng-click="s.setSortQuery('distributionSort', 'name')") Brand
-                span.tooltip-wrap(ng-if="s.distributionSort.query === 'name'" ng-class="s.distributionSort.sortDescending ? 'sort-asc' : 'sort-desc'")
+                span.sort-header(ng-class="{active: s.distributionSort.query === 'name', asc: !s.distributionSort.sortDescending, desc: s.distributionSort.sortDescending}")
             th(colspan=5).accent.border Points of Distribution
             th(colspan=2).accent.border
               .tooltip-wrap
