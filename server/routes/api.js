@@ -5,7 +5,7 @@ module.exports = function(app) {
         logutil = require('../_lib/logutil'),
         request = require('request');
 
-  app.route('/api/*')
+  app.route('/v([2-3])/*')
     .all(function apiAuth(req, res, next) {
       let headers = {};
       headers['X-CBI-API-AGENT'] = util.agentHeader();
