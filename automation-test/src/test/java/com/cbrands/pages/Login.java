@@ -53,7 +53,7 @@ public class Login extends LoadableComponent<Login>{
 	public HomePage loginWithValidCredentials(String userName, String password) {
         typeUserName(userName);
         typePassword(password);
-		log.info("User: " + userName + " login submited");
+		log.info("User: " + userName + " login submitted");
         return clickSubmit();
     }
 
