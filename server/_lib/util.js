@@ -6,9 +6,7 @@ module.exports = function(app) {
         xmlParser = require('xml2json'),
         logutil = require('./logutil'),
         crypto = require('crypto-js'),
-
         apiBase = app.get('config').api.url,
-        apiVersion = app.get('config').api.version,
         apiKey = encodeURIComponent(app.get('config').api.apiKey),
         apiSecret = app.get('config').api.key;
 
