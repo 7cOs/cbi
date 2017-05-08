@@ -17,7 +17,7 @@
     var statuses = notificationsService.status;
 
     $httpBackend
-      .whenPATCH('/api/notifications')
+      .whenPATCH('/v2/notifications')
       .respond(function(method, url, data, headers, params) {
         try {
           return JSON

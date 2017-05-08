@@ -33,7 +33,7 @@ describe('[Services.storesService]', function() {
     });
 
     it('should get one stores data if a store id is passed', function() {
-      $httpBackend.expect('GET', '/api/stores/1').respond(200, [0, 1, 2, 3]);
+      $httpBackend.expect('GET', '/v2/stores/1').respond(200, [0, 1, 2, 3]);
 
       var result;
       storesService.getStores('1').then(function() {
@@ -53,7 +53,7 @@ describe('[Services.storesService]', function() {
         premise_type: 'OFF PREMISE'
       };
 
-      $httpBackend.expect('GET', '/api/stores/789').respond(200, responseObject);
+      $httpBackend.expect('GET', '/v2/stores/789').respond(200, responseObject);
 
       const returnedPromise = storesService.getStores('789');
       $httpBackend.flush();
@@ -104,7 +104,7 @@ describe('[Services.storesService]', function() {
       expect(result).toEqual(promiseResult);
     });
     it('should get the authorizations', function() {
-      $httpBackend.expect('GET', '/api/stores/90234923/itemAuthorizations').respond(200, {
+      $httpBackend.expect('GET', '/v2/stores/90234923/itemAuthorizations').respond(200, {
         status: 'success'
       });
       var result;
@@ -125,7 +125,7 @@ describe('[Services.storesService]', function() {
       expect(result).toEqual(promiseResult);
     });
     it('should get the features', function() {
-      $httpBackend.expect('GET', '/api/stores/90234923/features').respond(200, {
+      $httpBackend.expect('GET', '/v2/stores/90234923/features').respond(200, {
         status: 'success'
       });
       var result;
