@@ -264,7 +264,7 @@ describe('Unit: opportunitiesService - get opportunities', function() {
             currentPage: 0,
             totalPages: 1,
             default: true,
-            totalOpportunities: '28129',
+            totalOpportunities: 28129,
             totalStores: '31',
             roundedStores: 40,
             shouldReloadData: false
