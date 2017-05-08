@@ -88,7 +88,8 @@ module.exports = {
       'ENV': JSON.stringify(ENV),
       'process.env': {
         'ENV': JSON.stringify(ENV),
-        'NODE_ENV': JSON.stringify(ENV)
+        'NODE_ENV': JSON.stringify(ENV),
+        'IQ_LINK': JSON.stringify(process.env.IQ_LINK)
       }
     }),
 
