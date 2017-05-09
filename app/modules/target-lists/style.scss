@@ -79,18 +79,23 @@
 
 .predicted-impact {
 
-  .md-label {
+  .nested-columns {
+    .md-label {
 
-    span {
-      position: absolute;
-      top: 1px;
+      span {
+        position: absolute;
+        top: 1px;
+      }
+
+      .impact {
+        position: absolute;
+        right: -80px;
+        top: -5px;
+        width: 0;
+      }
     }
 
-    .impact {
-      position: absolute;
-      right: -80px;
-      top: -5px;
-    }
+    margin-bottom: 2em;
   }
 }
 

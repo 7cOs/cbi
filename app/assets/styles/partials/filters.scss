@@ -85,6 +85,16 @@
   }
 
   .location-contact-opps {
+    [column] {
+      &.left {
+        padding-left: 0;
+      }
+
+      &.right {
+        padding-right: 0;
+      }
+    }
+
     input {
       height: 40px;
       font-size: 1.3em;
@@ -104,6 +114,10 @@
       &.state {
         margin-bottom: 20px;
       }
+    }
+
+    > label {
+      margin-bottom: 2em;
     }
 
     .state {
