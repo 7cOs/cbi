@@ -1,5 +1,3 @@
-import { fakeAsync, flushMicrotasks } from '@angular/core/testing';
-
 describe('Unit: list controller', function() {
   var scope, ctrl, q, httpBackend, mdDialog, state, closedOpportunitiesService, filtersService, loaderService, opportunitiesService, storesService, targetListService, toastService, userService, filter;
   var bindings = {showAddToTargetList: true, showRemoveButton: false, selectAllAvailable: true, pageName: 'MyTestPage'};
@@ -1475,7 +1473,7 @@ describe('Unit: list controller', function() {
       listId = 'fc1a0734-a16e-4953-97da-bba51c4690f6';
     });
 
-    it('should add opprtunities to target list', fakeAsync(() => () => {
+    it('should add opprtunities to target list', () => {
       var deferred = q.defer();
       spyOn(targetListService, 'addTargetListOpportunities').and.callFake(function() {
         return deferred.promise;
@@ -1484,8 +1482,11 @@ describe('Unit: list controller', function() {
       ctrl.toggleSelectAllStores();
       ctrl.addToTargetList(listId);
 
+      deferred.resolve();
+      scope.$digest();
+
       expect(targetListService.addTargetListOpportunities).toHaveBeenCalled();
-    }));
+    });
 
     it('should request the IDs of all the opportunities without limit when selectAllOpportunities is true', () => {
       ctrl.isAllOpportunitiesSelected = true;
