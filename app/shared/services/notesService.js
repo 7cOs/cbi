@@ -100,23 +100,18 @@ module.exports = /*  @ngInject */
     }
 
     function createNote(body, id) {
-      var notePromise = $q.defer(),
-          url = model.urlBase + 'createNote?accountId=' + id,
-          payload = body;
+      const notePromise = $q.defer();
+      const url = model.urlBase + 'createNote?accountId=' + id;
 
-      $http.post(url, payload, {
+      $http.post(url, body, {
         headers: {}
       })
-      .then(createNoteSuccess)
-      .catch(createNoteFail);
-
-      function createNoteSuccess(response) {
+      .then(response => {
         notePromise.resolve(response.data);
-      }
-
-      function createNoteFail(error) {
+      })
+      .catch(error => {
         notePromise.reject(error);
-      }
+      });
 
       return notePromise.promise;
     }
