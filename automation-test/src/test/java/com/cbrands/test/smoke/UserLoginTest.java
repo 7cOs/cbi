@@ -7,6 +7,13 @@ import org.testng.annotations.Test;
 import com.cbrands.BaseSeleniumTestCase;
 import com.cbrands.pages.Login;
 
+/**
+ * Logs in and out repeatedly as the same set of users.
+ *
+ * @deprecated This test should not be included in the test suite.
+ * Please use the new Login testing file.
+ */
+@Deprecated
 public class UserLoginTest extends BaseSeleniumTestCase{
 
 	@Test(dataProvider = "data1")
@@ -15,35 +22,35 @@ public class UserLoginTest extends BaseSeleniumTestCase{
 		homePage = login.loginWithValidCredentials(user, password);
 		homePage.get();
 	}
-	
+
 	@AfterMethod
 	public void signOut() {
 		logout();
 	}
-	
+
 	@DataProvider(name = "data1")
 	public static Object[][] data1() {
-		return new Object[][] { 
+		return new Object[][] {
 								{ "juan.baez@cbrands.com", "Corona.2016" } ,
 								{ "stash.rowley@cbrands.com", "Corona.2016" } ,
 								{ "eric.ramey@cbrands.com", "Corona.2016" } ,
-								{ "chris.williams@cbrands.com", "Corona.2016" }, 
+								{ "chris.williams@cbrands.com", "Corona.2016" },
 								{ "juan.baez@cbrands.com", "Corona.2016" } ,
 								{ "stash.rowley@cbrands.com", "Corona.2016" } ,
 								{ "eric.ramey@cbrands.com", "Corona.2016" } ,
-								{ "chris.williams@cbrands.com", "Corona.2016" }, 
+								{ "chris.williams@cbrands.com", "Corona.2016" },
 								{ "juan.baez@cbrands.com", "Corona.2016" } ,
 								{ "stash.rowley@cbrands.com", "Corona.2016" } ,
 								{ "eric.ramey@cbrands.com", "Corona.2016" } ,
-								{ "chris.williams@cbrands.com", "Corona.2016" }, 
+								{ "chris.williams@cbrands.com", "Corona.2016" },
 								{ "juan.baez@cbrands.com", "Corona.2016" } ,
 								{ "stash.rowley@cbrands.com", "Corona.2016" } ,
 								{ "eric.ramey@cbrands.com", "Corona.2016" } ,
-								{ "chris.williams@cbrands.com", "Corona.2016" }, 
+								{ "chris.williams@cbrands.com", "Corona.2016" },
 								{ "juan.baez@cbrands.com", "Corona.2016" } ,
 								{ "stash.rowley@cbrands.com", "Corona.2016" } ,
 								{ "eric.ramey@cbrands.com", "Corona.2016" } ,
-								{ "chris.williams@cbrands.com", "Corona.2016" }, 
+								{ "chris.williams@cbrands.com", "Corona.2016" },
 								{ "juan.baez@cbrands.com", "Corona.2016" } ,
 								{ "stash.rowley@cbrands.com", "Corona.2016" } ,
 								{ "eric.ramey@cbrands.com", "Corona.2016" } ,
