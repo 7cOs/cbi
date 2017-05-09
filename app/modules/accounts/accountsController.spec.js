@@ -1,5 +1,5 @@
 describe('Unit: accountsController', function() {
-  var scope, ctrl, $controller, $state, $q, filtersService, chipsService, userService, packageSkuData, brandSpy, brandPerformanceData, myperformanceService, storesService, topBottomSpy, $filter;
+  var scope, ctrl, $controller, $state, $q, filtersService, chipsService, userService, packageSkuData, brandSpy, brandPerformanceData, myperformanceService, storesService, $filter;
   let promiseGetStores;
 
   var topBottomSnapshotDistributorData = {
@@ -399,7 +399,7 @@ describe('Unit: accountsController', function() {
       spyOn(userService, 'getPerformanceDistribution').and.returnValue(fakePromise);
       spyOn(userService, 'getPerformanceSummary').and.returnValue(fakePromise);
       promiseGetStores = spyOn(storesService, 'getStores').and.returnValue(fakePromise);
-      topBottomSpy = spyOn(userService, 'getTopBottomSnapshot').and.callFake(function () {
+      spyOn(userService, 'getTopBottomSnapshot').and.callFake(function () {
         var currentLevel = userService.getTopBottomSnapshot.arguments[0].value;
         switch (currentLevel) {
           case 1:

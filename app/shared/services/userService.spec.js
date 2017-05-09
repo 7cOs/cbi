@@ -80,7 +80,7 @@ describe('[Services.userService - performance]', function() {
 
   it('should get performance depletion', function() {
         $httpBackend
-        .expect('GET', '/api/users/undefined/performance/depletionScorecard/')
+        .expect('GET', '/v2/users/undefined/performance/depletionScorecard/')
         .respond(200, depletionPerformanceData);
 
       var returnedPromise = userService.getPerformanceDepletion();
@@ -116,7 +116,7 @@ describe('[Services.userService - performance]', function() {
       expect(returnedPromise.$$state.value[0].depletionBUTotal).toEqual(75);
 
       $httpBackend
-      .expect('GET', '/api/users/undefined/performance/depletionScorecard/')
+      .expect('GET', '/v2/users/undefined/performance/depletionScorecard/')
       .respond(400);
 
       returnedPromise = userService.getPerformanceDepletion();
@@ -154,7 +154,7 @@ describe('[Services.userService - performance]', function() {
       };
 
        $httpBackend
-        .expect('GET', '/api/users/undefined/performance/topBottomSnapshot/distributors?filter=myAccountsOnly%3Atrue%2C')
+        .expect('GET', '/v2/users/undefined/performance/topBottomSnapshot/distributors?filter=myAccountsOnly%3Atrue%2C')
         .respond(200, distributionPerformanceData);
       var returnPromise = userService.getTopBottomSnapshot(type, params);
       $httpBackend.flush();
@@ -178,28 +178,28 @@ describe('[Services.userService - performance]', function() {
 
       type.value = 2;
       $httpBackend
-      .expect('GET', '/api/users/undefined/performance/topBottomSnapshot/accounts?filter=myAccountsOnly%3Atrue%2C')
+      .expect('GET', '/v2/users/undefined/performance/topBottomSnapshot/accounts?filter=myAccountsOnly%3Atrue%2C')
       .respond(200, distributionPerformanceData);
       returnPromise = userService.getTopBottomSnapshot(type, params);
       $httpBackend.flush();
 
       type.value = 3;
       $httpBackend
-      .expect('GET', '/api/users/undefined/performance/topBottomSnapshot/subaccounts?filter=myAccountsOnly%3Atrue%2C')
+      .expect('GET', '/v2/users/undefined/performance/topBottomSnapshot/subaccounts?filter=myAccountsOnly%3Atrue%2C')
       .respond(200, distributionPerformanceData);
       returnPromise = userService.getTopBottomSnapshot(type, params);
       $httpBackend.flush();
 
       type.value = 4;
       $httpBackend
-      .expect('GET', '/api/users/undefined/performance/topBottomSnapshot/stores?filter=myAccountsOnly%3Atrue%2C')
+      .expect('GET', '/v2/users/undefined/performance/topBottomSnapshot/stores?filter=myAccountsOnly%3Atrue%2C')
       .respond(200, distributionPerformanceData);
       returnPromise = userService.getTopBottomSnapshot(type, params);
       $httpBackend.flush();
 
       type.value = 2;
       $httpBackend
-      .expect('GET', '/api/users/undefined/performance/topBottomSnapshot/accounts?filter=myAccountsOnly%3Atrue%2C')
+      .expect('GET', '/v2/users/undefined/performance/topBottomSnapshot/accounts?filter=myAccountsOnly%3Atrue%2C')
       .respond(400);
       returnPromise = userService.getTopBottomSnapshot(type, params);
       $httpBackend.flush();
@@ -216,7 +216,7 @@ describe('[Services.userService - performance]', function() {
       depletionPerformanceData.performance[0].measures[0].plan = 0;
 
        $httpBackend
-        .expect('GET', '/api/users/undefined/performance/topBottomSnapshot/distributors?filter=myAccountsOnly%3Atrue%2C')
+        .expect('GET', '/v2/users/undefined/performance/topBottomSnapshot/distributors?filter=myAccountsOnly%3Atrue%2C')
         .respond(200, depletionPerformanceData);
       var returnPromise = userService.getTopBottomSnapshot(type, params);
       $httpBackend.flush();
@@ -253,7 +253,7 @@ describe('[Services.userService - performance]', function() {
 
     it('get performance brand', function() {
         $httpBackend
-        .expect('GET', '/api/users/undefined/performance/brandSnapshot?filter=myAccountsOnly%3Atrue%2CpremiseType%3Aall%2Cretailer%3AChain')
+        .expect('GET', '/v2/users/undefined/performance/brandSnapshot?filter=myAccountsOnly%3Atrue%2CpremiseType%3Aall%2Cretailer%3AChain')
         .respond(200, depletionPerformanceData);
       var returnPromise = userService.getPerformanceBrand(params);
       $httpBackend.flush();
@@ -274,7 +274,7 @@ describe('[Services.userService - performance]', function() {
       });
 
       $httpBackend
-      .expect('GET', '/api/users/undefined/performance/brandSnapshot?filter=myAccountsOnly%3Atrue%2CpremiseType%3Aall%2Cretailer%3AChain')
+      .expect('GET', '/v2/users/undefined/performance/brandSnapshot?filter=myAccountsOnly%3Atrue%2CpremiseType%3Aall%2Cretailer%3AChain')
       .respond(400);
       returnPromise = userService.getPerformanceBrand(params);
       $httpBackend.flush();
@@ -290,7 +290,7 @@ describe('[Services.userService - performance]', function() {
         };
 
         $httpBackend
-        .expect('GET', '/api/users/1234/performance/summary')
+        .expect('GET', '/v2/users/1234/performance/summary')
         .respond(200, summaryData);
       var returnPromise = userService.getPerformanceSummary();
       $httpBackend.flush();
@@ -301,7 +301,7 @@ describe('[Services.userService - performance]', function() {
       });
 
       $httpBackend
-      .expect('GET', '/api/users/1234/performance/summary')
+      .expect('GET', '/v2/users/1234/performance/summary')
       .respond(400, depletionPerformanceData);
       returnPromise = userService.getPerformanceSummary();
       $httpBackend.flush();
@@ -322,14 +322,14 @@ describe('[Services.userService - performance]', function() {
         };
 
       $httpBackend
-      .expect('GET', '/api/users/1234/performance/distributionScorecard/?filter=premiseType%3Aoff')
+      .expect('GET', '/v2/users/1234/performance/distributionScorecard/?filter=premiseType%3Aoff')
       .respond(200, distributionData);
       var returnPromise = userService.getPerformanceDistribution(distributionParam);
       $httpBackend.flush();
       expect(returnPromise.$$state.value).toEqual(distributionData.performance);
 
       $httpBackend
-      .expect('GET', '/api/users/1234/performance/distributionScorecard/?filter=premiseType%3Aoff')
+      .expect('GET', '/v2/users/1234/performance/distributionScorecard/?filter=premiseType%3Aoff')
       .respond(400);
       returnPromise = userService.getPerformanceDistribution(distributionParam);
       $httpBackend.flush();
@@ -389,7 +389,7 @@ describe('[Services.userService - targetlists]', function() {
       };
 
       $httpBackend
-      .expect('GET', '/api/users/12345/targetLists/')
+      .expect('GET', '/v2/users/12345/targetLists/')
       .respond(200, responseObject);
 
       var returnObj = userService.getTargetLists('12345');
@@ -431,7 +431,7 @@ describe('[Services.userService - targetlists]', function() {
         expect(returnObj.$$state.value.sharedNotArchivedCount).toEqual(1);
 
       $httpBackend
-      .expect('GET', '/api/users/12345/targetLists/')
+      .expect('GET', '/v2/users/12345/targetLists/')
       .respond(400);
       returnObj = userService.getTargetLists('12345');
       $httpBackend.flush();
@@ -466,7 +466,7 @@ describe('[Services.userService - targetlists]', function() {
         };
 
       $httpBackend
-      .expect('POST', '/api/users/1234/targetLists/')
+      .expect('POST', '/v2/users/1234/targetLists/')
       .respond(200, responseObject);
 
       var returnedObject = userService.addTargetList(params);
@@ -485,7 +485,7 @@ describe('[Services.userService - targetlists]', function() {
       });
 
       $httpBackend
-      .expect('POST', '/api/users/1234/targetLists/')
+      .expect('POST', '/v2/users/1234/targetLists/')
       .respond(200, responseObject);
 
       userService.model.targetLists.ownedNotArchivedTargetLists = [{
@@ -511,7 +511,7 @@ describe('[Services.userService - targetlists]', function() {
       });
 
       $httpBackend
-      .expect('POST', '/api/users/1234/targetLists/')
+      .expect('POST', '/v2/users/1234/targetLists/')
       .respond(400);
       returnedObject = userService.addTargetList(params);
       $httpBackend.flush();
@@ -534,7 +534,7 @@ describe('[Services.userService - opportunities]', function() {
 
   it('should send opportunity', function() {
       $httpBackend
-      .expect('POST', '/api/users/1234/sharedOpportunities/', ['5678'])
+      .expect('POST', '/v2/users/1234/sharedOpportunities/', ['5678'])
       .respond(201);
 
       var returnedPromise = userService.sendOpportunity('1234', '5678');
@@ -542,7 +542,7 @@ describe('[Services.userService - opportunities]', function() {
       expect(returnedPromise.$$state.status).toEqual(1);
 
        $httpBackend
-      .expect('POST', '/api/users/1234/sharedOpportunities/', ['5678'])
+      .expect('POST', '/v2/users/1234/sharedOpportunities/', ['5678'])
       .respond(400);
 
       returnedPromise = userService.sendOpportunity('1234', '5678');
@@ -559,7 +559,7 @@ describe('[Services.userService - opportunities]', function() {
         }];
 
       $httpBackend
-      .expect('GET', '/api/users/1234/opportunityFilters/')
+      .expect('GET', '/v2/users/1234/opportunityFilters/')
       .respond(200, responseObject);
 
       var returnedPromise = userService.getOpportunityFilters('1234');
@@ -573,7 +573,7 @@ describe('[Services.userService - opportunities]', function() {
       }]);
 
        $httpBackend
-      .expect('GET', '/api/users/1234/opportunityFilters/')
+      .expect('GET', '/v2/users/1234/opportunityFilters/')
       .respond(400);
 
       returnedPromise = userService.getOpportunityFilters('1234');
@@ -596,7 +596,7 @@ describe('[Services.userService - opportunities]', function() {
       }];
 
       $httpBackend
-      .expect('GET', '/api/users/1234/opportunityFilters/')
+      .expect('GET', '/v2/users/1234/opportunityFilters/')
       .respond(200, responseObject);
 
       var returnedPromise = userService.getOpportunityFilters('1234');
@@ -622,7 +622,7 @@ describe('[Services.userService - opportunities]', function() {
        userService.model.currentUser.employeeID = '1234';
 
       $httpBackend
-      .expect('POST', '/api/users/1234/opportunityFilters/')
+      .expect('POST', '/v2/users/1234/opportunityFilters/')
       .respond(200, responseObject);
 
       var returnedPromise = userService.saveOpportunityFilter('filter description');
@@ -635,7 +635,7 @@ describe('[Services.userService - opportunities]', function() {
       }]);
 
        $httpBackend
-      .expect('POST', '/api/users/1234/opportunityFilters/')
+      .expect('POST', '/v2/users/1234/opportunityFilters/')
       .respond(400);
 
       returnedPromise = userService.saveOpportunityFilter('filter description');
@@ -665,7 +665,7 @@ describe('[Services.userService - notifications]', function() {
         }];
 
       $httpBackend
-      .expect('GET', '/api/users/1234/notifications/?after=2107-01-21')
+      .expect('GET', '/v2/users/1234/notifications/?after=2107-01-21')
       .respond(200, responseObject);
 
       var returnedPromise = userService.getNotifications('1234', '2107-01-21');
@@ -679,7 +679,7 @@ describe('[Services.userService - notifications]', function() {
       }]);
 
        $httpBackend
-      .expect('GET', '/api/users/1234/notifications/?after=2107-01-21')
+      .expect('GET', '/v2/users/1234/notifications/?after=2107-01-21')
       .respond(400);
 
       returnedPromise = userService.getNotifications('1234', '2107-01-21');
@@ -704,7 +704,7 @@ describe('[Services.userService - notifications]', function() {
         };
 
       $httpBackend
-      .expect('POST', '/api/sfdcNotifications/', payloadObject)
+      .expect('POST', '/v2/sfdcNotifications/', payloadObject)
       .respond(200);
 
       var returnedPromise = userService.createNotification('1234', params);
@@ -712,7 +712,7 @@ describe('[Services.userService - notifications]', function() {
       expect(returnedPromise.$$state.status).toEqual(1);
 
        $httpBackend
-      .expect('POST', '/api/sfdcNotifications/', payloadObject)
+      .expect('POST', '/v2/sfdcNotifications/', payloadObject)
       .respond(400);
 
       returnedPromise = userService.createNotification('1234', params);

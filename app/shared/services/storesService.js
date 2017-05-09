@@ -19,7 +19,7 @@ module.exports = /*  @ngInject */
      */
     function getStores(tdlinxNumber) {
       const storesPromise = $q.defer();
-      const url = apiHelperService.request('/api/stores/' + tdlinxNumber);
+      const url = apiHelperService.request('/v2/stores/' + tdlinxNumber);
 
       $http.get(url, {
         headers: {}
@@ -88,7 +88,7 @@ module.exports = /*  @ngInject */
      */
     function getItemAuthorizations(tdlinxNumber) {
       var itemAuthorizationsPromise = $q.defer(),
-          url = apiHelperService.request('/api/stores/' + tdlinxNumber + '/itemAuthorizations');
+          url = apiHelperService.request('/v2/stores/' + tdlinxNumber + '/itemAuthorizations');
 
       $http.get(url)
         .then(getItemAuthorizationsSuccess)
@@ -114,7 +114,7 @@ module.exports = /*  @ngInject */
      */
     function getFeatures(tdlinxNumber) {
       var getFeaturesPromise = $q.defer(),
-          url = apiHelperService.request('/api/stores/' + tdlinxNumber + '/features');
+          url = apiHelperService.request('/v2/stores/' + tdlinxNumber + '/features');
 
       $http.get(url, {
         headers: {}
