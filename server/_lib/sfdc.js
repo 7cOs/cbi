@@ -274,7 +274,7 @@ function createNote(app, req) {
       distributor: {
         sobject: 'Account',
         select: 'Id, JDE_Address_Book_Number__c, Account_Record_Type_Name__c',
-        where: `Account_Record_Type_Name__c='US_Distributor_Account' AND JDE_Address_Book_Number__c='${accountId}'`,
+        where: `Account_Record_Type_Name__c='US_Distributor_Account' AND JDE_Address_Book_Number__c='${accountId}'`
       },
       nonDistributor: {
         sobject: 'Account',
@@ -312,7 +312,7 @@ function createNote(app, req) {
           })
           .catch(error => reject(getResponseObject(false, `Error creating note: ${error}`)));
         })
-        .catch(error => reject(getResponseObject(false, `There was no account in SFDC found with TDLinx Id or JDE Address Book Number: ${sfdcAccountId}`)));
+        .catch((error) => reject(getResponseObject(false, `There was no account in SFDC found with TDLinx Id or JDE Address Book Number: ${error}`)));
     })
     .catch(error => reject(getResponseObject(false, `${connErrorMessage} ${error}`)));
   });
