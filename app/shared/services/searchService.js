@@ -32,7 +32,7 @@ module.exports = /*  @ngInject */
      */
     function getUsers(searchTerm) {
       var searchPromise = $q.defer(),
-          url = apiHelperService.request('/api/search/users?searchTerm=' + encodeURIComponent(searchTerm));
+          url = apiHelperService.request('/v2/search/users?searchTerm=' + encodeURIComponent(searchTerm));
 
       $http.get(url, {
         headers: {}
@@ -59,7 +59,7 @@ module.exports = /*  @ngInject */
      */
     function getProducts(searchTerm, variety) {
       var searchPromise = $q.defer(),
-          url = apiHelperService.request('/api/search/products?searchTerm=' + encodeURIComponent(searchTerm));
+          url = apiHelperService.request('/v2/search/products?searchTerm=' + encodeURIComponent(searchTerm));
 
       $http.get(url, {
         headers: {}
@@ -91,9 +91,9 @@ module.exports = /*  @ngInject */
 
       // Send down allVersions=true when using /search/stores from the my performance page when the user is non-corporate.
       if (!userService.model.currentUser.corporateUser && $state.current.name === 'accounts') {
-        url = apiHelperService.request('/api/search/stores?allVersions=true&searchTerm=' + encodeURIComponent(searchTerm));
+        url = apiHelperService.request('/v2/search/stores?allVersions=true&searchTerm=' + encodeURIComponent(searchTerm));
       } else {
-        url = apiHelperService.request('/api/search/stores?searchTerm=' + encodeURIComponent(searchTerm));
+        url = apiHelperService.request('/v2/search/stores?searchTerm=' + encodeURIComponent(searchTerm));
       }
 
       $http.get(url, {
@@ -122,7 +122,7 @@ module.exports = /*  @ngInject */
      */
     function getDistributors(searchTerm) {
       var searchPromise = $q.defer(),
-          url = apiHelperService.request('/api/search/distributors?searchTerm=' + encodeURIComponent(searchTerm));
+          url = apiHelperService.request('/v2/search/distributors?searchTerm=' + encodeURIComponent(searchTerm));
 
       $http.get(url, {
         headers: {}
@@ -149,7 +149,7 @@ module.exports = /*  @ngInject */
      */
     function getChains(searchTerm) {
       var searchPromise = $q.defer(),
-          url = apiHelperService.request('/api/search/chains?searchTerm=' + encodeURIComponent(searchTerm));
+          url = apiHelperService.request('/v2/search/chains?searchTerm=' + encodeURIComponent(searchTerm));
 
       $http.get(url, {
         headers: {}
@@ -176,7 +176,7 @@ module.exports = /*  @ngInject */
      */
     function getLocations(searchTerm) {
       var searchPromise = $q.defer(),
-          url = apiHelperService.request('/api/search/locations?searchTerm=' + encodeURIComponent(searchTerm));
+          url = apiHelperService.request('/v2/search/locations?searchTerm=' + encodeURIComponent(searchTerm));
 
       $http.get(url)
         .then(getLocationsSuccess)

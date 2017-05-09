@@ -6,31 +6,22 @@ module.exports = function(app) {
         xmlParser = require('xml2json'),
         logutil = require('./logutil'),
         crypto = require('crypto-js'),
-
         apiBase = app.get('config').api.url,
-        apiVersion = app.get('config').api.version,
         apiKey = encodeURIComponent(app.get('config').api.apiKey),
         apiSecret = app.get('config').api.key;
 
   return {
     // Compass Beers API URL Signing:
-    //  - Replace /api/ in path with /<version>/
     //  - Add 'apiKey' query param
     //  - Add 'signature' query param based on path, apiKey, and secret key
     signApiUrl: function(uri) {
-      let uriSplit =  uri.split('?'),
-          path = uriSplit[0],
-          params = uriSplit[1],
-          nonVersionedPath = path.split('api/')[1],
-          versionedPath = `/${apiVersion}/${nonVersionedPath}`,
-          signature = encodeURIComponent(crypto.enc.Base64.stringify(crypto.HmacSHA256(versionedPath + apiKey, apiSecret))),
-          signedUrl = `${apiBase}${versionedPath}?signature=${signature}&apiKey=${apiKey}`;
+      const uriSplit = uri.split('?');
+      const urlPath = uriSplit[0];
+      const params = uriSplit[1];
+      const signature = encodeURIComponent(crypto.enc.Base64.stringify(crypto.HmacSHA256(urlPath + apiKey, apiSecret)));
+      const signedUrl = `${apiBase}${urlPath}?signature=${signature}&apiKey=${apiKey}`;
 
-      if (params) {
-        signedUrl = `${signedUrl}&${params}`;
-      }
-
-      return signedUrl;
+      return params ? `${signedUrl}&${params}` : signedUrl;
     },
 
     // API Analytics headers
