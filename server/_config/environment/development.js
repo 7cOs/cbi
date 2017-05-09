@@ -23,8 +23,7 @@ module.exports = function (config) {
   config.api = {
     url: 'https://cbi-api-internal-qa.herokuapp.com',
     key: 'U1NCc2FXdGxJSFJ2SUVodlpHOXlMQ0JJYjJSdmNpd2dTRzlrYjNJc0lFaHZaRzl5Y3lCaGJtUWdTRzlrYjNKekxnPT0=',
-    apiKey: 'compass-beer-portal',
-    version: 'v2'
+    apiKey: 'compass-beer-portal'
   };
 
   config.saml = {

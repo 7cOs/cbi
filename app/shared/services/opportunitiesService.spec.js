@@ -242,7 +242,7 @@ describe('Unit: opportunitiesService - get opportunities', function() {
     it('respond with opportunities properly formatted', function() {
 
         $httpBackend
-        .expect('GET', '/api/opportunities/?limit=20&ignoreDismissed=true&sort=&offset=0&filter=myAccountsOnly%3Atrue%2CpremiseType%3Aoff%2C')
+        .expect('GET', '/v2/opportunities/?limit=20&ignoreDismissed=true&sort=&offset=0&filter=myAccountsOnly%3Atrue%2CpremiseType%3Aoff%2C')
         .respond(200, opportunitiesResponseObject);
 
         opportunitiesService.getOpportunities();
@@ -254,7 +254,7 @@ describe('Unit: opportunitiesService - get opportunities', function() {
    it('get opportunity headers', function() {
 
         $httpBackend
-        .expect('HEAD', '/api/opportunities/?limit=20&ignoreDismissed=true&sort=&offset=0&filter=myAccountsOnly%3Atrue%2CpremiseType%3Aoff%2C')
+        .expect('HEAD', '/v2/opportunities/?limit=20&ignoreDismissed=true&sort=&offset=0&filter=myAccountsOnly%3Atrue%2CpremiseType%3Aoff%2C')
         .respond(200, { data: 'value' }, {'opportunity-count': '28129', 'store-count': '31'});
 
         opportunitiesService.getOpportunitiesHeaders();
@@ -280,7 +280,7 @@ describe('Unit: opportunitiesService - get opportunities', function() {
         };
 
         $httpBackend
-        .expect('POST', '/api/opportunities/' + opportunityId + '/feedback/')
+        .expect('POST', '/v2/opportunities/' + opportunityId + '/feedback/')
         .respond(200, { feedback: 'test feedback' });
 
         var returnedPromise = opportunitiesService.createOpportunityFeedback(opportunityId, opportunityData);
@@ -295,7 +295,7 @@ describe('Unit: opportunitiesService - get opportunities', function() {
         var opportunityId = '1234';
 
         $httpBackend
-        .expect('DELETE', '/api/opportunities/' + opportunityId + '/feedback/')
+        .expect('DELETE', '/v2/opportunities/' + opportunityId + '/feedback/')
         .respond(200);
 
         var returnedPromise = opportunitiesService.deleteOpportunityFeedback(opportunityId);
@@ -320,7 +320,7 @@ describe('Unit: opportunitiesService - get opportunities', function() {
     it('get opportunity ids', function() {
 
          $httpBackend
-         .expect('GET', '/api/opportunities/?limit=1000&ignoreDismissed=true&filter=myAccountsOnly%3Atrue%2CpremiseType%3Aoff%2C')
+         .expect('GET', '/v2/opportunities/?limit=1000&ignoreDismissed=true&filter=myAccountsOnly%3Atrue%2CpremiseType%3Aoff%2C')
          .respond(200, opportunitiesResponseObject);
 
          let opportunityIDs;

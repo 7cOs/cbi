@@ -472,10 +472,10 @@ describe('Unit: targetListDetailController', function() {
         userService.model.currentUser.employeeID = currentUser.employeeID;
         userService.model.targetLists = ownedTargetLists;
 
-        // init stuff that we dont care about - we dont need one for /api/targetLists/1 because real service is never actually called
-        $httpBackend.expectGET('/api/targetLists/undefined').respond(200);
-        $httpBackend.expectGET('/api/targetLists/undefined/opportunities').respond(200);
-        $httpBackend.expectPATCH('/api/targetLists/undefined/shares').respond(200);
+        // init stuff that we dont care about - we dont need one for /v2/targetLists/1 because real service is never actually called
+        $httpBackend.expectGET('/v2/targetLists/undefined').respond(200);
+        $httpBackend.expectGET('/v2/targetLists/undefined/opportunities').respond(200);
+        $httpBackend.expectPATCH('/v2/targetLists/undefined/shares').respond(200);
       });
 
       it('should call the service and run .then()', function() {
@@ -595,10 +595,10 @@ describe('Unit: targetListDetailController', function() {
     describe('[tld.pendingCheck]', function() {
 
       beforeEach(function() {
-        $httpBackend.expectGET('/api/targetLists/undefined').respond(200);
-        $httpBackend.expectGET('/api/targetLists/undefined/opportunities').respond(200);
-        $httpBackend.expectPATCH('/api/targetLists/undefined/shares').respond(200);
-        $httpBackend.expectDELETE('/api/targetLists/undefined').respond(200);
+        $httpBackend.expectGET('/v2/targetLists/undefined').respond(200);
+        $httpBackend.expectGET('/v2/targetLists/undefined/opportunities').respond(200);
+        $httpBackend.expectPATCH('/v2/targetLists/undefined/shares').respond(200);
+        $httpBackend.expectDELETE('/v2/targetLists/undefined').respond(200);
       });
 
       it('should run removeCollaborator if there are pendingRemovals', function() {
@@ -652,11 +652,11 @@ describe('Unit: targetListDetailController', function() {
         ctrl.pendingShares = pending;
         ctrl.pendingRemovals = ['1012135', '112233'];
 
-        // init stuff that we dont care about - we dont need one for /api/targetLists/1 because real service is never actually called
-        $httpBackend.expectGET('/api/targetLists/undefined').respond(200);
-        $httpBackend.expectGET('/api/targetLists/undefined/opportunities').respond(200);
-        $httpBackend.expectPATCH('/api/targetLists/undefined/shares').respond(200);
-        $httpBackend.expectDELETE('/api/targetLists/undefined').respond(200);
+        // init stuff that we dont care about - we dont need one for /v2/targetLists/1 because real service is never actually called
+        $httpBackend.expectGET('/v2/targetLists/undefined').respond(200);
+        $httpBackend.expectGET('/v2/targetLists/undefined/opportunities').respond(200);
+        $httpBackend.expectPATCH('/v2/targetLists/undefined/shares').respond(200);
+        $httpBackend.expectDELETE('/v2/targetLists/undefined').respond(200);
 
         // create promise and spy on service.method
         spyOn(targetListService, 'deleteTargetListShares').and.callFake(function() {
@@ -823,9 +823,9 @@ describe('Unit: targetListDetailController', function() {
           ctrl.targetListAuthor = 'current user';
           targetListService.model.currentList.id = 1;
 
-          $httpBackend.expectGET('/api/targetLists/undefined').respond(200);
-          $httpBackend.expectGET('/api/targetLists/undefined/opportunities').respond(200);
-          $httpBackend.expectPATCH('/api/targetLists/undefined/shares').respond(200);
+          $httpBackend.expectGET('/v2/targetLists/undefined').respond(200);
+          $httpBackend.expectGET('/v2/targetLists/undefined/opportunities').respond(200);
+          $httpBackend.expectPATCH('/v2/targetLists/undefined/shares').respond(200);
 
           spyOn(targetListService, 'updateTargetList').and.callFake(function() {
             return deferred.promise;
@@ -894,9 +894,9 @@ describe('Unit: targetListDetailController', function() {
           ctrl.targetListAuthor = 'other user';
           targetListService.model.currentList.id = 1;
 
-          $httpBackend.expectGET('/api/targetLists/undefined').respond(200);
-          $httpBackend.expectGET('/api/targetLists/undefined/opportunities').respond(200);
-          $httpBackend.expectPATCH('/api/targetLists/undefined/shares').respond(200);
+          $httpBackend.expectGET('/v2/targetLists/undefined').respond(200);
+          $httpBackend.expectGET('/v2/targetLists/undefined/opportunities').respond(200);
+          $httpBackend.expectPATCH('/v2/targetLists/undefined/shares').respond(200);
 
           spyOn(targetListService, 'updateTargetList').and.callFake(function () {
             return deferred.promise;

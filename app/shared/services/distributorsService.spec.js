@@ -32,7 +32,7 @@
 
   it('should send a request and return status 200', function() {
     $httpBackend
-      .expectGET('/api/distributors/')
+      .expectGET('/v2/distributors/')
       .respond(200);
 
     var result;

@@ -18,26 +18,27 @@ module.exports = function(app) {
     signatureAlgorithm: app.get('config').saml.signatureAlgorithm
   }, function(req, profile, done) {
 
-    let headers = {};
-    headers['X-CBI-API-AGENT'] = util.agentHeader();
-    headers['X-CBI-API-USER']  = util.userHeaderFromSaml(req.body.SAMLResponse);
+    const headers = {
+      'X-CBI-API-AGENT': util.agentHeader(),
+      'X-CBI-API-USER': util.userHeaderFromSaml(req.body.SAMLResponse)
+    };
+    const signed = util.signApiUrl('/v2/auth');
 
-    let signed = util.signApiUrl('/api/auth');
     request.post(signed, {headers: headers, body: req.body.SAMLResponse}, function(err, httpResponse, body) {
       if (err) {  // request error
-        let logObj = Object.assign(
+        const logObj = Object.assign(
           logutil.buildAPIError(req.headers['x-request-id'], httpResponse.req.method, signed, null, 'Error occurred in SAML auth process when making API request.'),
           err);
         logutil.logError(logObj);
 
         return done(null, false);
       } else if (httpResponse.statusCode >= 400) {  // error response
-        let logObj = logutil.buildAPIError(req.headers['x-request-id'], httpResponse.req.method, signed, httpResponse.statusCode, 'Error occurred in SAML auth process - Error response received when making API request.', body);
+        const logObj = logutil.buildAPIError(req.headers['x-request-id'], httpResponse.req.method, signed, httpResponse.statusCode, 'Error occurred in SAML auth process - Error response received when making API request.', body);
         logutil.logError(logObj);
 
         return done(null, false);
       } else {
-        var user = JSON.parse(body);
+        const user = JSON.parse(body);
         return done(null, user);
       }
     });

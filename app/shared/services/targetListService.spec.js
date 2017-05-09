@@ -50,7 +50,7 @@ describe('[Services.targetListService]', function() {
     });
 
     it('should get target lists if id is passed', function() {
-      $httpBackend.expect('GET', '/api/targetLists/1').respond(200, {
+      $httpBackend.expect('GET', '/v2/targetLists/1').respond(200, {
         status: 'success'
       });
 
@@ -73,7 +73,7 @@ describe('[Services.targetListService]', function() {
     });
 
     it('should update target lists if id is passed', function() {
-      $httpBackend.expect('PATCH', '/api/targetLists/1').respond(200, {
+      $httpBackend.expect('PATCH', '/v2/targetLists/1').respond(200, {
         status: 'success'
       });
 
@@ -96,7 +96,7 @@ describe('[Services.targetListService]', function() {
     });
 
     it('should delete target list if id is passed', function() {
-      $httpBackend.expect('DELETE', '/api/targetLists/1').respond(200, {
+      $httpBackend.expect('DELETE', '/v2/targetLists/1').respond(200, {
         status: 'success'
       });
 
@@ -120,7 +120,7 @@ describe('[Services.targetListService]', function() {
 
     it('should get target list opportunities if id is passed', function() {
       var filterPayload = filtersService.getAppliedFilters('opportunities'),
-          url = apiHelperService.request('/api/targetLists/1/opportunities', filterPayload);
+          url = apiHelperService.request('/v2/targetLists/1/opportunities', filterPayload);
 
       $httpBackend.expect('GET', url).respond(200, {
         status: 'success',
@@ -332,7 +332,7 @@ describe('[Services.targetListService]', function() {
 
   it('should manipulate opportunitiy data', function() {
       $httpBackend
-      .expect('GET', '/api/targetLists/' + id + '/opportunities')
+      .expect('GET', '/v2/targetLists/' + id + '/opportunities')
       .respond(200, responseObject);
 
       returnedPromise = targetListService.getTargetListOpportunities(id, params);
@@ -350,7 +350,7 @@ describe('[Services.targetListService]', function() {
     });
 
     it('should add target list opportunities if id is passed', function() {
-      $httpBackend.expect('POST', '/api/targetLists/1/opportunities/').respond(200, {
+      $httpBackend.expect('POST', '/v2/targetLists/1/opportunities/').respond(200, {
         status: 'success'
       });
 
@@ -373,7 +373,7 @@ describe('[Services.targetListService]', function() {
     });
 
     it('should delete target list opportunities if id is passed', function() {
-      $httpBackend.expect('DELETE', '/api/targetLists/1/opportunities/').respond(200, {
+      $httpBackend.expect('DELETE', '/v2/targetLists/1/opportunities/').respond(200, {
         status: 'success'
       });
 
@@ -396,7 +396,7 @@ describe('[Services.targetListService]', function() {
     });
 
     it('should add target list shares if id is passed', function() {
-      $httpBackend.expect('POST', '/api/targetLists/1/shares').respond(200, {
+      $httpBackend.expect('POST', '/v2/targetLists/1/shares').respond(200, {
         status: 'success'
       });
 
@@ -419,7 +419,7 @@ describe('[Services.targetListService]', function() {
     });
 
     it('should update target list shares if id is passed', function() {
-      $httpBackend.expect('PATCH', '/api/targetLists/1/shares').respond(200, {
+      $httpBackend.expect('PATCH', '/v2/targetLists/1/shares').respond(200, {
         status: 'success'
       });
 
@@ -442,7 +442,7 @@ describe('[Services.targetListService]', function() {
     });
 
     it('should delete target list shares if id is passed', function() {
-      $httpBackend.expect('DELETE', '/api/targetLists/1/shares').respond(200, {
+      $httpBackend.expect('DELETE', '/v2/targetLists/1/shares').respond(200, {
         status: 'success'
       });
 

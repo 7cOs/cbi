@@ -270,7 +270,7 @@ describe('Unit: list controller', function() {
       });
 
     beforeEach(function() {
-      httpBackend.expectGET('/api/users/1/targetLists/').respond(200);
+      httpBackend.expectGET('/v2/users/1/targetLists/').respond(200);
 
       spyOn(opportunitiesService, 'createOpportunityFeedback').and.callFake(function() {
         var feedbackDeferred = q.defer();
@@ -1465,7 +1465,7 @@ describe('Unit: list controller', function() {
         }
       ];
 
-      httpBackend.expectGET('/api/users/1/targetLists/').respond(200);
+      httpBackend.expectGET('/v2/users/1/targetLists/').respond(200);
     });
 
     afterEach(function() {
