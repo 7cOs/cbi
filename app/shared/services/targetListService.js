@@ -33,7 +33,7 @@ module.exports = /*  @ngInject */
      */
     function getTargetList(targetListId, p) {
       var targetListPromise = $q.defer(),
-          url = apiHelperService.request('/api/targetLists/' + targetListId, p);
+          url = apiHelperService.request('/v2/targetLists/' + targetListId, p);
 
       $http.get(url)
         .then(getTargetListSuccess)
@@ -59,7 +59,7 @@ module.exports = /*  @ngInject */
      */
     function updateTargetList(targetListId, p) {
       var targetListPromise = $q.defer(),
-          url = apiHelperService.request('/api/targetLists/' + targetListId),
+          url = apiHelperService.request('/v2/targetLists/' + targetListId),
           payload = {};
 
       if (p.archived) payload.archived = p.archived;
@@ -93,7 +93,7 @@ module.exports = /*  @ngInject */
      */
     function deleteTargetList(targetListId) {
       var targetListPromise = $q.defer(),
-          url = apiHelperService.request('/api/targetLists/' + targetListId);
+          url = apiHelperService.request('/v2/targetLists/' + targetListId);
 
       $http.delete(url)
         .then(deleteTargetListSuccess)
@@ -122,7 +122,7 @@ module.exports = /*  @ngInject */
       if (params) filterPayload = filtersService.getAppliedFilters('opportunities');
 
       var targetListPromise = $q.defer(),
-          url = apiHelperService.request('/api/targetLists/' + targetListId + '/opportunities', filterPayload);
+          url = apiHelperService.request('/v2/targetLists/' + targetListId + '/opportunities', filterPayload);
 
       // reset opportunities counts
       filtersService.model.appliedFilter.pagination.totalOpportunities = 0;
@@ -279,7 +279,7 @@ module.exports = /*  @ngInject */
      */
     function addTargetListOpportunities(targetListId, opportunityIds) {
       var targetListPromise = $q.defer(),
-          url = apiHelperService.request('/api/targetLists/' + targetListId + '/opportunities/'),
+          url = apiHelperService.request('/v2/targetLists/' + targetListId + '/opportunities/'),
           payload = opportunityIds;
 
       $http.post(url, payload)
@@ -306,7 +306,7 @@ module.exports = /*  @ngInject */
      */
     function deleteTargetListOpportunities(targetListId, opportunityIds) {
       var targetListPromise = $q.defer(),
-          url = apiHelperService.request('/api/targetLists/' + targetListId + '/opportunities/'),
+          url = apiHelperService.request('/v2/targetLists/' + targetListId + '/opportunities/'),
           payload = opportunityIds;
 
       $http({ url: url,
@@ -337,7 +337,7 @@ module.exports = /*  @ngInject */
      */
     function getTargetListShares(targetListId) {
       var targetListPromise = $q.defer(),
-          url = apiHelperService.request('/api/targetLists/' + targetListId + '/shares/');
+          url = apiHelperService.request('/v2/targetLists/' + targetListId + '/shares/');
 
       $http.get(url)
         .then(getTargetListSharesSuccess)
@@ -364,7 +364,7 @@ module.exports = /*  @ngInject */
      */
     function addTargetListShares(targetListId, collaborators) {
       var targetListPromise = $q.defer(),
-          url = apiHelperService.request('/api/targetLists/' + targetListId + '/shares'),
+          url = apiHelperService.request('/v2/targetLists/' + targetListId + '/shares'),
           payload = collaborators;
 
       $http.post(url, payload)
@@ -393,7 +393,7 @@ module.exports = /*  @ngInject */
      */
     function updateTargetListShares(targetListId, employeeId, updateLastViewed) {
       var targetListPromise = $q.defer(),
-          url = apiHelperService.request('/api/targetLists/' + targetListId + '/shares'),
+          url = apiHelperService.request('/v2/targetLists/' + targetListId + '/shares'),
           payload = [{
             employeeId: employeeId,
             updateLastViewed: updateLastViewed
@@ -424,7 +424,7 @@ module.exports = /*  @ngInject */
      */
     function deleteTargetListShares(targetListId, id) {
       var targetListPromise = $q.defer(),
-          url = apiHelperService.request('/api/targetLists/' + targetListId + '/shares'),
+          url = apiHelperService.request('/v2/targetLists/' + targetListId + '/shares'),
           payload = [id];
 
       $http({ url: url,
