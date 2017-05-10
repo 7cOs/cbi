@@ -394,7 +394,7 @@ module.exports = /*  @ngInject */
     function removeDuplicate (key) {
       for (let i = 0; i < filtersService.model.selected[key].length; i++) {
         for (let j = 0; j < filtersService.model.selected[key].length; j++) {
-          if (i !== j && (filtersService.model.selected.account[i] === filtersService.model.selected[key][j])) {
+          if (i !== j && (filtersService.model.selected[key][i] === filtersService.model.selected[key][j])) {
               filtersService.model.selected[key].splice(j, 1);
               i--; j--;
           }
