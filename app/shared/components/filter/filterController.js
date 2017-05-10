@@ -382,6 +382,7 @@ module.exports = /*  @ngInject */
           case 'distributor':
           case 'brand':
           case 'masterSKU':
+          case 'contact':
             removeDuplicate(key);
             break;
         }
