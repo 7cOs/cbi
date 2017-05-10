@@ -24,6 +24,7 @@
     "serve": "nodemon -V -w server/ server.js",
     "test": "rimraf coverage && karma start",
     "test:watch": "rimraf coverage && karma start --auto-watch --no-single-run",
+    "test:debug": "rimraf coverage && karma start --auto-watch --no-single-run --browsers=Chrome",
     "fontgen": "fontmin app/assets/fontsrc app/assets/fonts && rm app/assets/fonts/*.css"
   },
   "dependencies": {

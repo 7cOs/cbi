@@ -46,7 +46,7 @@ module.exports = /*  @ngInject */
      */
     function getUsers(id) {
       var usersPromise = $q.defer(),
-          url = id ? apiHelperService.request('/api/users/' + id) : apiHelperService.request('/api/users/');
+          url = id ? apiHelperService.request('/v2/users/' + id) : apiHelperService.request('/v2/users/');
 
       // only fire request once. otherwise, use model
       if (!service.model) {
@@ -80,7 +80,7 @@ module.exports = /*  @ngInject */
      */
     function getHiddenOpportunities(id) {
       var hiddenOpportunitiesPromise = $q.defer(),
-          url = apiHelperService.request('/api/users/' + id + '/hiddenOpportunities/');
+          url = apiHelperService.request('/v2/users/' + id + '/hiddenOpportunities/');
 
       $http.get(url, {
         headers: {}
@@ -110,7 +110,7 @@ module.exports = /*  @ngInject */
      */
     function hideOpportunity(id) {
       var hideOpportunityPromise = $q.defer(),
-          url = apiHelperService.request('/api/users/' + id + '/hiddenOpportunities/'),
+          url = apiHelperService.request('/v2/users/' + id + '/hiddenOpportunities/'),
           payload = {
             'required': 'true',
             '$schema': 'http://json-schema.org/draft-03/schema',
@@ -151,7 +151,7 @@ module.exports = /*  @ngInject */
      */
     function deleteHiddenOpportunity(id) {
       var deleteHiddenOpportunityPromise = $q.defer(),
-          url = apiHelperService.request('/api/users/' + id + '/hiddenOpportunities/'),
+          url = apiHelperService.request('/v2/users/' + id + '/hiddenOpportunities/'),
           payload = {
             'required': 'true',
             '$schema': 'http://json-schema.org/draft-03/schema',
@@ -190,7 +190,7 @@ module.exports = /*  @ngInject */
      */
     function getNotifications(id, dateAfter) {
       var notificationsPromise = $q.defer(),
-          url = apiHelperService.request('/api/users/' + id + '/notifications/' + '?after=' + dateAfter);
+          url = apiHelperService.request('/v2/users/' + id + '/notifications/' + '?after=' + dateAfter);
 
       $http.get(url)
         .then(getNotificationsSuccess)
@@ -217,7 +217,7 @@ module.exports = /*  @ngInject */
      */
     function createNotification(id, p) {
       var notificationsPromise = $q.defer(),
-          url = apiHelperService.request('/api/sfdcNotifications/'),
+          url = apiHelperService.request('/v2/sfdcNotifications/'),
           payload = {
             creator: id,
             action: p.action,
@@ -250,7 +250,7 @@ module.exports = /*  @ngInject */
      */
     function getOpportunityFilters(id) {
       const opportunityFilterPromise = $q.defer(),
-          url = apiHelperService.request('/api/users/' + id + '/opportunityFilters/');
+          url = apiHelperService.request('/v2/users/' + id + '/opportunityFilters/');
 
       $http.get(url)
         .then(getOpportunityFiltersSuccess)
@@ -281,7 +281,7 @@ module.exports = /*  @ngInject */
      */
     function saveOpportunityFilter(filterDescription) {
       var opportunityFilterPromise = $q.defer(),
-          url = apiHelperService.request('/api/users/' + service.model.currentUser.employeeID + '/opportunityFilters/'),
+          url = apiHelperService.request('/v2/users/' + service.model.currentUser.employeeID + '/opportunityFilters/'),
           payload = {
             name: filtersService.model.newServiceName,
             filterString: encodeURIComponent(filtersService.model.appliedFilter.appliedFilter),
@@ -312,7 +312,7 @@ module.exports = /*  @ngInject */
      */
     function getPerformanceSummary() {
       var performancePromise = $q.defer(),
-          url = apiHelperService.request('/api/users/' + service.model.currentUser.employeeID + '/performance/summary');
+          url = apiHelperService.request('/v2/users/' + service.model.currentUser.employeeID + '/performance/summary');
 
       $http.get(url)
         .then(getPerformanceSummarySuccess)
@@ -337,7 +337,7 @@ module.exports = /*  @ngInject */
      */
     function getPerformanceDepletion() {
       var performancePromise = $q.defer(),
-          url = apiHelperService.request('/api/users/' + service.model.currentUser.employeeID + '/performance/depletionScorecard/');
+          url = apiHelperService.request('/v2/users/' + service.model.currentUser.employeeID + '/performance/depletionScorecard/');
 
       if (service.model.depletion.length < 1) {
         $http.get(url)
@@ -389,7 +389,7 @@ module.exports = /*  @ngInject */
      */
     function getPerformanceDistribution(params) {
       var performancePromise = $q.defer(),
-          url = apiHelperService.request('/api/users/' + service.model.currentUser.employeeID + '/performance/distributionScorecard/', params);
+          url = apiHelperService.request('/v2/users/' + service.model.currentUser.employeeID + '/performance/distributionScorecard/', params);
 
       $http.get(url)
         .then(getPerformanceDistributionSuccess)
@@ -478,7 +478,7 @@ module.exports = /*  @ngInject */
 
     function getTopBottomSnapshot(snapshotType, params) {
       var snapshotPromise = $q.defer(),
-          url, baseUrl = '/api/users/' + service.model.currentUser.employeeID;
+          url, baseUrl = '/v2/users/' + service.model.currentUser.employeeID;
       params.type = 'topBottom';
 
       switch (snapshotType.value) {
@@ -525,7 +525,7 @@ module.exports = /*  @ngInject */
      */
     function getPerformanceBrand(params) {
       var performancePromise = $q.defer(),
-          url = apiHelperService.request('/api/users/' + service.model.currentUser.employeeID + '/performance/brandSnapshot', params);
+          url = apiHelperService.request('/v2/users/' + service.model.currentUser.employeeID + '/performance/brandSnapshot', params);
 
       $http.get(url)
         .then(getPerformanceBrandSuccess)
@@ -554,10 +554,10 @@ module.exports = /*  @ngInject */
      */
     function getTargetLists(id, p) {
       var targetListPromise = $q.defer(),
-          url = apiHelperService.request('/api/users/' + id + '/targetLists/', p);
+          url = apiHelperService.request('/v2/users/' + id + '/targetLists/', p);
 
       if (p) {
-        url = apiHelperService.request('/api/users/' + id + '/targetLists' + p);
+        url = apiHelperService.request('/v2/users/' + id + '/targetLists' + p);
       }
 
       if (!service.model.targetLists) {
@@ -634,7 +634,7 @@ module.exports = /*  @ngInject */
      */
     function addTargetList(p) {
       var targetListPromise = $q.defer(),
-          url = apiHelperService.request('/api/users/' + model.currentUser.employeeID + '/targetLists/'),
+          url = apiHelperService.request('/v2/users/' + model.currentUser.employeeID + '/targetLists/'),
           payload = {
             name: p.name,
             description: p.description,
@@ -685,7 +685,7 @@ module.exports = /*  @ngInject */
      */
     function sendOpportunity(uId, oId) {
       var oPromise = $q.defer(),
-          url = apiHelperService.request('/api/users/' + uId + '/sharedOpportunities/'),
+          url = apiHelperService.request('/v2/users/' + uId + '/sharedOpportunities/'),
           payload = [oId];
 
       $http.post(url, payload)

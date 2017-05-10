@@ -19,7 +19,7 @@ module.exports = /*  @ngInject */
      */
     function deleteOpportunityFilter(filterId) {
       var opportunityFilterPromise = $q.defer(),
-          url = apiHelperService.request('api/opportunityFilters/' + filterId);
+          url = apiHelperService.request('/v2/opportunityFilters/' + filterId);
 
       $http.delete(url)
         .then(deleteOpportunityFilterSuccess)
@@ -46,7 +46,7 @@ module.exports = /*  @ngInject */
      */
     function updateOpportunityFilter(filterId, payloadKey, payloadValue) {
       var opportunityFilterPromise = $q.defer(),
-          url = apiHelperService.request('api/opportunityFilters/' + filterId),
+          url = apiHelperService.request('/v2/opportunityFilters/' + filterId),
           payload = {};
 
       payload['filterString'] = encodeURIComponent(filtersService.model.appliedFilter.appliedFilter);

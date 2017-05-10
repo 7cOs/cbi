@@ -15,7 +15,7 @@ module.exports = /*  @ngInject */
      */
     function getDistributors() {
       var distributorsPromise = $q.defer(),
-          url = apiHelperService.request('/api/distributors/');
+          url = apiHelperService.request('/v2/distributors/');
 
       $http.get(url, {
         headers: {}

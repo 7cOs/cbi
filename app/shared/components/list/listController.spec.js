@@ -1,5 +1,3 @@
-import { fakeAsync, flushMicrotasks } from '@angular/core/testing';
-
 describe('Unit: list controller', function() {
   var scope, ctrl, q, httpBackend, mdDialog, state, closedOpportunitiesService, filtersService, loaderService, opportunitiesService, storesService, targetListService, toastService, userService, filter;
   var bindings = {showAddToTargetList: true, showRemoveButton: false, selectAllAvailable: true, pageName: 'MyTestPage'};
@@ -272,7 +270,7 @@ describe('Unit: list controller', function() {
       });
 
     beforeEach(function() {
-      httpBackend.expectGET('/api/users/1/targetLists/').respond(200);
+      httpBackend.expectGET('/v2/users/1/targetLists/').respond(200);
 
       spyOn(opportunitiesService, 'createOpportunityFeedback').and.callFake(function() {
         var feedbackDeferred = q.defer();
@@ -1467,7 +1465,7 @@ describe('Unit: list controller', function() {
         }
       ];
 
-      httpBackend.expectGET('/api/users/1/targetLists/').respond(200);
+      httpBackend.expectGET('/v2/users/1/targetLists/').respond(200);
     });
 
     afterEach(function() {
@@ -1475,7 +1473,7 @@ describe('Unit: list controller', function() {
       listId = 'fc1a0734-a16e-4953-97da-bba51c4690f6';
     });
 
-    it('should add opprtunities to target list', fakeAsync(() => () => {
+    it('should add opprtunities to target list', () => {
       var deferred = q.defer();
       spyOn(targetListService, 'addTargetListOpportunities').and.callFake(function() {
         return deferred.promise;
@@ -1484,30 +1482,35 @@ describe('Unit: list controller', function() {
       ctrl.toggleSelectAllStores();
       ctrl.addToTargetList(listId);
 
-      expect(targetListService.addTargetListOpportunities).toHaveBeenCalled();
-    }));
+      deferred.resolve();
+      scope.$digest();
 
-    it('should request the IDs of all the opportunities without limit when selectAllOpportunities is true', fakeAsync(() => () => {
+      expect(targetListService.addTargetListOpportunities).toHaveBeenCalled();
+    });
+
+    it('should request the IDs of all the opportunities without limit when selectAllOpportunities is true', () => {
       ctrl.isAllOpportunitiesSelected = true;
-      const deferred = q.defer();
+      const addToTargetListdeferred = q.defer();
+      const opportunitiesIDsDeferred = q.defer();
 
       spyOn(targetListService, 'addTargetListOpportunities').and.callFake(() => {
-        return deferred.promise;
+        return addToTargetListdeferred.promise;
       });
 
       spyOn(opportunitiesService, 'getAllOpportunitiesIDs').and.callFake(() => {
-        var opportunitiesIDsDeferred = q.defer();
         return opportunitiesIDsDeferred.promise;
       });
 
       ctrl.toggleSelectAllStores();
       ctrl.addToTargetList(listId);
 
-      flushMicrotasks();
+      addToTargetListdeferred.resolve();
+      opportunitiesIDsDeferred.resolve();
+      scope.$digest();
+
       expect(targetListService.addTargetListOpportunities).toHaveBeenCalled();
       expect(opportunitiesService.getAllOpportunitiesIDs).toHaveBeenCalled();
-      expect(true).toBeFalsy();
-    }));
+    });
 
     it('should not call addToTargetService if opportunites are not selected', function() {
       var deferred = q.defer();
@@ -1872,6 +1875,40 @@ describe('Unit: list controller', function() {
       expect(opportunitiesService.model.opportunities.length).toEqual(2);
       expect(opportunitiesService.model.opportunities[1].groupedOpportunities.length).toEqual(1);
       expect(opportunitiesService.model.opportunities[1].store.highImpactOpportunityCount).toEqual(0);
+    });
+
+    it('Should have enough opportunities spots remaining to add to target list', () => {
+      spyOn(ctrl, 'addToTargetList').and.callFake(() => {
+        return;
+      });
+
+      ctrl.selected = {
+        length: 1
+      };
+
+      const targetList = {
+        opportunitiesSummary: {
+          opportunitiesCount: 300
+        },
+        id: 'fakeID'
+      };
+
+      userService.model.targetLists = {
+        owned: [targetList]
+      };
+
+      filtersService.model.appliedFilter.pagination.totalOpportunities = 5000;
+
+      const fakeEvent = {
+        stopPropagation: () => {}
+      };
+
+      ctrl.handleAddToTargetList(fakeEvent, targetList, 0);
+
+      scope.$digest();
+
+      expect(ctrl.addToTargetList).toHaveBeenCalled();
+      expect(userService.model.targetLists.owned[0].opportunitiesSummary.opportunitiesCount).toEqual(301);
     });
   });
 

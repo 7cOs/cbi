@@ -32,9 +32,9 @@ import com.cbrands.pages.TargetList;
 
 @Listeners(value = SeleniumSnapshotRule.class)
 public abstract class BaseSeleniumTestCase implements IConstant {
-	
+
 	protected Log log = LogFactory.getLog(BaseSeleniumTestCase.class);
-	
+
 	protected static WebDriver driver = null;
 	protected Login login;
 	protected HomePage homePage;
@@ -73,24 +73,23 @@ public abstract class BaseSeleniumTestCase implements IConstant {
 		}
 		return filters;
 	}
-	
+
 	public String getAllTextFromPage() {
 		return driver.findElement(By.tagName("body")).getText();
 	}
-	
+
 	protected void logout(){
-		driver.get("https://orion-qa.cbrands.com/auth/logout");
+		driver.get("https://compass-qa.cbrands.com/auth/logout");
 		try {
-			//waitForVisible (By.id("username"));	
 			login = new Login(driver);
 			login.logOut();
 			login.get();
 		} catch (NoSuchElementException | TimeoutException e ) {
-			log.info("**************Logout failed.");
+			log.info("**************Failed to logout and return to signin page.");
 		} finally {
-			log.info("Re-Trying....");
-			driver.get("https://orion-qa.cbrands.com/auth/logout");
+			log.info("Re-Trying navigation to signin page....");
+			driver.get("https://compass-qa.cbrands.com");
 		}
-		
+
 	}
 }

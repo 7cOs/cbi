@@ -393,6 +393,7 @@ module.exports = /*  @ngInject */
       accountFilters: accountFilters,
       trendPropertyNames: trendPropertyNames,
       resetPagination: resetPagination,
+      depletionsTimePeriodFromName: depletionsTimePeriodFromName,
       getNewPaginationState: getNewPaginationState
     };
 
@@ -514,6 +515,15 @@ module.exports = /*  @ngInject */
           service.model[prop] = false;
         }
       }
+    }
+
+    function depletionsTimePeriodFromName(name) {
+      let flattenPeriods = [...service.model.depletionsTimePeriod.month, ...service.model.depletionsTimePeriod.year];
+      let period = flattenPeriods.filter(timePeriod => {
+        return timePeriod.name === name;
+      });
+
+      return (period && period.length > 0) ? period[0] : null;
     }
 
     function getNewPaginationState(paginationState) {

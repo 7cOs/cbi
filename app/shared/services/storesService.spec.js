@@ -32,21 +32,8 @@ describe('[Services.storesService]', function() {
       expect(result).toEqual(promiseResult);
     });
 
-    it('should get mulitple store data if no store id is passed', function() {
-      $httpBackend.expect('GET', '/api/stores?filter=lowerRightBound%3A47%2C-122%2CupperLeftBound%3A46%2C-120%2C').respond(200, [0, 1, 2, 3]);
-
-      var result;
-      storesService.getStores().then(function() {
-        result = true;
-      });
-
-      $httpBackend.flush();
-
-      expect(result).toBeTruthy();
-    });
-
     it('should get one stores data if a store id is passed', function() {
-      $httpBackend.expect('GET', '/api/stores/1').respond(200, [0, 1, 2, 3]);
+      $httpBackend.expect('GET', '/v2/stores/1').respond(200, [0, 1, 2, 3]);
 
       var result;
       storesService.getStores('1').then(function() {
@@ -56,6 +43,32 @@ describe('[Services.storesService]', function() {
       $httpBackend.flush();
 
       expect(result).toBeTruthy();
+    });
+
+    it('should format the store accordingly', () => {
+      var responseObject = {
+        tdlinx_number: '123',
+        store_name: 'testStore',
+        store_number: '456',
+        premise_type: 'OFF PREMISE'
+      };
+
+      $httpBackend.expect('GET', '/v2/stores/789').respond(200, responseObject);
+
+      const returnedPromise = storesService.getStores('789');
+      $httpBackend.flush();
+
+      expect(returnedPromise.$$state.value).toEqual({
+        tdlinx_number: '123',
+        store_name: 'testStore',
+        store_number: '456',
+        premise_type: 'OFF PREMISE',
+        id: '123',
+        name: 'testStore',
+        storeNumber: '456',
+        premiseTypeDesc: 'off'
+      });
+
     });
   });
 
@@ -91,7 +104,7 @@ describe('[Services.storesService]', function() {
       expect(result).toEqual(promiseResult);
     });
     it('should get the authorizations', function() {
-      $httpBackend.expect('GET', '/api/stores/90234923/itemAuthorizations').respond(200, {
+      $httpBackend.expect('GET', '/v2/stores/90234923/itemAuthorizations').respond(200, {
         status: 'success'
       });
       var result;
@@ -112,7 +125,7 @@ describe('[Services.storesService]', function() {
       expect(result).toEqual(promiseResult);
     });
     it('should get the features', function() {
-      $httpBackend.expect('GET', '/api/stores/90234923/features').respond(200, {
+      $httpBackend.expect('GET', '/v2/stores/90234923/features').respond(200, {
         status: 'success'
       });
       var result;

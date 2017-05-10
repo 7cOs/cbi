@@ -279,12 +279,14 @@ module.exports = /*  @ngInject */
     }
 
     function saveNewList(e) {
+      const newTargetListIdx = 0; // newly created targetList will always be at 0 index
       vm.buttonDisabled = true;
 
       // Create target list
       userService.addTargetList(vm.newList).then(function(response) {
         $analytics.eventTrack('Add to Target List', {category: vm.analyticsCategory, label: response.id});
         vm.addToTargetList(response.id);
+        updateTargetListOpportunitySummary(newTargetListIdx, vm.selected.length);
         vm.closeModal();
         vm.buttonDisabled = false;
 
@@ -438,6 +440,7 @@ module.exports = /*  @ngInject */
 
       targetListService.deleteTargetListOpportunities(targetListService.model.currentList.id, opportunityIds).then(function(data) {
         console.log('Done deleting these ids: ', opportunityIds);
+        updateOpportunityCountAfterRemoval();
         updateOpportunityModel(opportunitiesService.model.opportunities, vm.selected);
       }, function(err) {
         console.log('Error deleting these ids: ', opportunityIds, ' Responded with error: ', err);
@@ -835,7 +838,7 @@ module.exports = /*  @ngInject */
     function handleAddToTargetList(ev, targetList, idx) {
       const usedOpps = targetList.opportunitiesSummary.opportunitiesCount;
       const remainingOpps = remainingOpportunitySpots(usedOpps);
-      const totalOpps = usedOpps + vm.isAllOpportunitiesSelected ? filtersService.model.appliedFilter.pagination.totalOpportunities : this.selected.length;
+      const totalOpps = usedOpps + (vm.isAllOpportunitiesSelected ? filtersService.model.appliedFilter.pagination.totalOpportunities : this.selected.length);
       const hasRemainingOpps = totalOpps <= maxOpportunities;
       if (hasRemainingOpps) {
         vm.addToTargetList(targetList.id);
@@ -935,11 +938,23 @@ module.exports = /*  @ngInject */
     }
 
     function getStoreToBePassedToAcct(storeDetails) {
-      return {store: storeDetails.id + '|' + storeDetails.name + '|' + false};
+      return {
+        storeid: storeDetails.id,
+        myaccountsonly: false,
+        depletiontimeperiod: 'CYTD'
+      };
     }
 
     function updateTargetListOpportunitySummary(idxOfTargetList, numberToAdd) {
       vm.userService.model.targetLists.owned[idxOfTargetList].opportunitiesSummary.opportunitiesCount += numberToAdd;
+    }
+
+    function updateOpportunityCountAfterRemoval() {
+      vm.userService.model.targetLists.owned.map((targetList, idx) => {
+        if (targetList.id === vm.targetListService.model.currentList.id) {
+          return updateTargetListOpportunitySummary(idx, (0 - vm.selected.length));
+        }
+      });
     }
 
     function init() {
