@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports = /*  @ngInject */
-  function navbarController($rootScope, $scope, $state, $window, $mdPanel, $mdDialog, $mdMenu, $mdSelect, $anchorScroll, $analytics, $location, notificationsService, opportunitiesService, targetListService, userService, versionService, loaderService, ieHackService, toastService, filtersService, chipsService, notesService, moment) {
+  function navbarController($rootScope, $scope, $state, $window, $mdPanel, $mdDialog, $mdMenu, $mdSelect, $anchorScroll, $analytics, $location, notificationsService, opportunitiesService, targetListService, userService, versionService, loaderService, ieHackService, toastService, filtersService, chipsService, notesService, moment, ENV_VARS) {
 
     // ****************
     // CONTROLLER SETUP
@@ -9,6 +9,7 @@ module.exports = /*  @ngInject */
 
     // Initial variables
     var vm = this;
+    vm.linkToIQ = ENV_VARS.iqURL;
 
     // User Agent Detection for IE fixes
     $rootScope.isIE = ieHackService.isIE;
@@ -77,7 +78,6 @@ module.exports = /*  @ngInject */
     ];
 
     vm.targetLists = [];
-    vm.linkToIQ = '';
 
     // Expose public methods
     vm.addOpportunity = addOpportunity;
@@ -462,7 +462,6 @@ module.exports = /*  @ngInject */
 
       versionService.getVersion().then(function(data) {
         versionService.model.version = data;
-        setLinkToIQ(data.env);
       });
     };
 
@@ -495,13 +494,6 @@ module.exports = /*  @ngInject */
     // Show inputs if a new item is needed
     function showNewRationaleInput(yes)  {
       vm.addNewRationale = yes;
-    }
-
-    // set IQ link for production or test
-    function setLinkToIQ(env) {
-      vm.linkToIQ = env === 'production' || env === 'stage'
-                  ? 'http://iqweb.cbrands.com/MicroStrategy/servlet/mstrWeb?server=CBIGDC-PMSTK801&project=Beer+Analytics&evt=2001&folderID=37162CF04A01CF139BF05F96B4098106'
-                  : 'http://test-iqweb.cbrands.com/MicroStrategy/servlet/mstrWeb?server=CBIGDC-IMSTK801&project=Beer+Analytics&evt=2001&folderID=37162CF04A01CF139BF05F96B4098106';
     }
 
     function openIQLink() {
