@@ -106,12 +106,8 @@ module.exports = /*  @ngInject */
       $http.post(url, body, {
         headers: {}
       })
-      .then(response => {
-        notePromise.resolve(response.data);
-      })
-      .catch(error => {
-        notePromise.reject(error);
-      });
+      .then(response => notePromise.resolve(response.data))
+      .catch(error => notePromise.reject(error));
 
       return notePromise.promise;
     }

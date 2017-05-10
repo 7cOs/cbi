@@ -97,6 +97,7 @@ module.exports = /*  @ngInject */
     vm.goToNote = goToNote;
     vm.sendFeedback = sendFeedback;
     vm.openIQLink = openIQLink;
+    vm.isNumber = angular.isNumber;
 
     $scope.$watch(function() { return toastService.model; }, function(newVal) {
       vm.archived = newVal.archived;
