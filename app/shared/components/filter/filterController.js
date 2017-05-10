@@ -8,14 +8,19 @@ module.exports = /*  @ngInject */
     // ****************
     // Private variables
     const _allTypesOption = 'All Types';
+    const _noTypesSelected = 'No Types Selected';
     const _nonBuyOption = 'Non-Buy';
     let _isAllOpportunityTypeClicked = null;
+    let _isAllFeatureProductTypesSelected = false;
+    let _isAllAuthorizedProductTypesSelected = false;
 
     // Initial variables
     var vm = this;
     vm.duplicateName = false;
     vm.opportunities = true;
     vm.hintTextPlaceholder = 'Account or Subaccount Name';
+    vm.featureProductTypesText = _noTypesSelected;
+    vm.autorizationProductTypesText = _noTypesSelected;
     vm.showSaveButton = true;
     vm.tempId = 0;
 
@@ -45,6 +50,8 @@ module.exports = /*  @ngInject */
     vm.states = usStatesService;
     vm.chooseOpportunityType = chooseOpportunityType;
     vm.changeOpportunitySelection = changeOpportunitySelection;
+    vm.changeFeatureProductTypesSelection = changeFeatureProductTypesSelection;
+    vm.changeAuthorizedProductTypesSelection = changeAuthorizedProductTypesSelection;
     vm.getDescriptionForFilter = getDescriptionForFilter;
     vm.applyFilters = applyFilters;
     vm.shouldEnableSimpleDistribution = shouldEnableSimpleDistribution;
@@ -169,6 +176,58 @@ module.exports = /*  @ngInject */
           }
         }
       }
+    }
+
+    function changeFeatureProductTypesSelection() {
+      const selected = vm.filtersService.model.selected;
+
+      const currentlySelectedFeatureProductTypes = selected.featureProductTypes;
+      const allFeatureTypes = vm.filtersService.model.featureProductTypes.map(type => type.name);
+
+      selected.featureProductTypes = adaptTypesSelection(currentlySelectedFeatureProductTypes, allFeatureTypes, _isAllFeatureProductTypesSelected);
+      _isAllFeatureProductTypesSelected = selected.featureProductTypes.length === allFeatureTypes.length;
+      vm.featureProductTypesText = _isAllFeatureProductTypesSelected
+        ? _allTypesOption
+        : selected.featureProductTypes.filter(type => type !== _allTypesOption).join(', ') || _noTypesSelected;
+    }
+
+    function adaptTypesSelection(currentlySelectedTypes, allTypes, isAllCurrentlySelected) {
+      const allTypesOptionIndex = currentlySelectedTypes.indexOf(_allTypesOption);
+      const allTypesIsSelected = allTypesOptionIndex !== -1;
+
+      let newSelectedTypes = currentlySelectedTypes;
+
+      if (isAllCurrentlySelected) {
+        if (allTypesIsSelected) {
+          newSelectedTypes.splice(allTypesOptionIndex, 1);
+        } else {
+          newSelectedTypes = [];
+        }
+      } else {
+        if (allTypesIsSelected) {
+          newSelectedTypes = allTypes;
+        } else {
+          if (currentlySelectedTypes.length >= allTypes.length - 1) {
+            newSelectedTypes = allTypes;
+          }
+        }
+      }
+
+      return newSelectedTypes;
+    }
+
+    function changeAuthorizedProductTypesSelection() {
+      const selected = vm.filtersService.model.selected;
+
+      const currentlySelectedAuthorizedProductTypes = selected.authorizedProductTypes;
+      const allFeatureTypes = vm.filtersService.model.authorizedProductTypes.map(type => type.name);
+
+      selected.authorizedProductTypes = adaptTypesSelection(currentlySelectedAuthorizedProductTypes, allFeatureTypes, _isAllAuthorizedProductTypesSelected);
+
+      _isAllAuthorizedProductTypesSelected = selected.authorizedProductTypes.length === allFeatureTypes.length;
+      vm.autorizationProductTypesText = _isAllAuthorizedProductTypesSelected
+        ? _allTypesOption
+        : selected.authorizedProductTypes.filter(type => type !== _allTypesOption).join(', ') || _noTypesSelected;
     }
 
     function opportunityStatusSwitch() {

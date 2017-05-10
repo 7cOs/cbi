@@ -2,7 +2,7 @@
 
 module.exports = /*  @ngInject */
   function filtersService($filter) {
-    var paramsNotIncludedInSaveFilter = ['opportunityType', 'opportunitiesType', 'placementType', 'premises', 'retailer', 'depletionsTimePeriod', 'distributionTimePeriod', 'accountSelected', 'selectedTemplate', 'timePeriod', 'tradeChannels', 'trend', 'defaultSort', 'appliedFilter', 'topBottomSnapshotTypes'];
+    var paramsNotIncludedInSaveFilter = ['opportunityType', 'opportunitiesType', 'featureProductTypes', 'authorizedProductTypes', 'placementType', 'premises', 'retailer', 'depletionsTimePeriod', 'distributionTimePeriod', 'accountSelected', 'selectedTemplate', 'timePeriod', 'tradeChannels', 'trend', 'defaultSort', 'appliedFilter', 'topBottomSnapshotTypes'];
     var model = {
       account: [],
       appliedFilter: {
@@ -44,6 +44,21 @@ module.exports = /*  @ngInject */
         {name: 'New Placement (Quality)'},
         {name: 'New Placement (No Rebuy)'},
         {name: 'Custom'}
+      ],
+      featureProductTypes: [
+        {name: 'All Types'},
+        {name: 'Happy Hour'},
+        {name: 'Everyday Low Price (EDLP)'},
+        {name: 'Limited Time Only (LTO)'},
+        {name: 'Beer of the Month'},
+        {name: 'Price Feature'}
+      ],
+      authorizedProductTypes: [
+        {name: 'All Types'},
+        {name: 'Brand Mandate'},
+        {name: 'Corporate Mandate'},
+        {name: 'Authorized-Select Planogram'},
+        {name: 'Authorized-Optional'}
       ],
       savedFilters: [],
       placementType: [
@@ -144,6 +159,7 @@ module.exports = /*  @ngInject */
       selectedTemplate: {
         myAccountsOnly: true,
         simpleDistributionType: false,
+        priorityPackage: false,
         account: [],
         subaccount: [],
         brand: [],

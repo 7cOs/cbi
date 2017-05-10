@@ -248,7 +248,7 @@ module.exports = /*  @ngInject */
                 filtersService.model.selected.opportunityType = ['Non-Buy'];
                 filtersService.model.opportunityType = ['Non-Buy'];
               } else {
-                addChip('All Types', 'opportunityType', false, false);
+                addChip('All Opportunity Types', 'opportunityType', false, false);
                 filtersService.model.selected.opportunityType = ['All Types'];
                 filtersService.model.opportunityType = ['All Types'];
               }
@@ -328,6 +328,7 @@ module.exports = /*  @ngInject */
      */
 
     function applyFilterArr(model, result, filter, displayName) {
+      debugger;
       //  fall back to result if displayName is undefined
       if (!displayName) {
         if (result.brand) {
@@ -383,6 +384,7 @@ module.exports = /*  @ngInject */
             if (service.model.indexOf(result) === -1) model.push(result);
         }
       }
+      debugger;
       filtersService.model[filter] = '';
       if (service.model.length === defaultFilterArrayLength && isDefault(service.model)) {
         filtersService.disableFilters(false, false, false, false);
@@ -410,22 +412,38 @@ module.exports = /*  @ngInject */
      */
 
     function applyFilterMulti(model, result, filter) {
-      removeChip('opportunityType');
-      if (result.length === 0 || (result.length <= 1 && result[0] === 'All Types')) {
-        addChip('All Types', 'opportunityType', false, false);
-        filtersService.model.selected[filter] = ['All Types'];
-        filtersService.model.opportunityType = ['All Types'];
-      } else {
-        var results = [];
-        angular.forEach(result, function(value, key) {
-          if (value === 'All Types') {
+      removeChip(filter);
+
+      switch (filter) {
+        case 'opportunityType':
+          if (result.length === 0 || (result.length <= 1 && result[0] === 'All Types')) {
+            addChip('All Types', 'opportunityType', false, false);
+            filtersService.model.selected[filter] = ['All Types'];
+            filtersService.model.opportunityType = ['All Types'];
           } else {
-            addChip(value, 'opportunityType', false);
-            results.push(value);
+            var results = [];
+            angular.forEach(result, function(value, key) {
+              if (value === 'All Types') {
+              } else {
+                addChip(value, 'opportunityType', false);
+                results.push(value);
+              }
+            });
+            filtersService.model.selected[filter] = results;
+            filtersService.disableFilters(false, false, true, false);
           }
-        });
-        filtersService.model.selected[filter] = results;
-        filtersService.disableFilters(false, false, true, false);
+          break;
+
+          case 'featureProductTypes':
+
+            break;
+
+          case 'authorizedProductTypes':
+
+            break;
+
+        default:
+          break;
       }
     }
 
