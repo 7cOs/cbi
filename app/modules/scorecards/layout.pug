@@ -32,7 +32,9 @@ div.my-scorecards
       table(cellspacing="0" cellpadding="0")
         thead
           tr
-            th.accent.brand.border Brand
+            th.accent.brand.border
+              div.scorecard-header-content(ng-click="s.setSortQuery('depletionSort', 'name')") Brand
+                span.sort-header(ng-class="{active: s.depletionSort.query === 'name', asc: !s.depletionSort.sortDescending, desc: s.depletionSort.sortDescending}")
             th(colspan=5).accent.border Depletions
             th(colspan=2).border
               .tooltip-wrap
@@ -45,40 +47,45 @@ div.my-scorecards
                     p Contribution to Volume (CTV) indicates the brand mix, or the % contribution of a brand to Total volume.
           tr
             th.accent.border &nbsp;
-            th.accent {{s.depletionSelect === 'CMTH' ? 'Clo Mth' : s.depletionSelect}}
-            th.accent VS YA
-            th.accent VS YA %
-            // th.accent VS ABP
-            // th.accent VS ABP %
-            th.accent BU vs YA %
+            th.accent
+              div.scorecard-header-content(ng-click="s.setSortQuery('depletionSort', 'timeFrameTotal')") {{s.depletionSelect === 'CMTH' ? 'Clo Mth' : s.depletionSelect}}
+                span.sort-header(ng-class="{active: s.depletionSort.query === 'timeFrameTotal', asc: !s.depletionSort.sortDescending, desc: s.depletionSort.sortDescending}")
+            th.accent
+              div.scorecard-header-content(ng-click="s.setSortQuery('depletionSort', 'vsYa')") VS YA
+                span.sort-header(ng-class="{active: s.depletionSort.query === 'vsYa', asc: !s.depletionSort.sortDescending, desc: s.depletionSort.sortDescending}")
+            th.accent
+              div.scorecard-header-content(ng-click="s.setSortQuery('depletionSort', 'vsYaPercent')") VS YA %
+                span.sort-header(ng-class="{active: s.depletionSort.query === 'vsYaPercent', asc: !s.depletionSort.sortDescending, desc: s.depletionSort.sortDescending}")
+            th.accent
+              div.scorecard-header-content(ng-click="s.setSortQuery('depletionSort', 'buVsYaPercent')") BU vs YA %
+                span.sort-header(ng-class="{active: s.depletionSort.query === 'buVsYaPercent', asc: !s.depletionSort.sortDescending, desc: s.depletionSort.sortDescending}")
             th.accent.border MY % vs BU %
-            th.accent To My Total %
-            th.accent.border To BU Total %
+            th.accent
+              div.scorecard-header-content(ng-click="s.setSortQuery('depletionSort', 'percentTotal')") To My Total %
+                span.sort-header(ng-class="{active: s.depletionSort.query === 'percentTotal', asc: !s.depletionSort.sortDescending, desc: s.depletionSort.sortDescending}")
+            th.accent.border
+              div.scorecard-header-content(ng-click="s.setSortQuery('depletionSort', 'percentBuTotal')") To BU Total %
+                span.sort-header(ng-class="{active: s.depletionSort.query === 'percentBuTotal', asc: !s.depletionSort.sortDescending, desc: s.depletionSort.sortDescending}")
         tbody
           tr
             td.column-total.left TOTAL
             td.column-total.dark(ng-class="{'negative': !s.isPositive(s.totalRow.depletions)}") {{s.totalRow.depletions | number:0 }}
-            td.column-total.medium-dark(ng-class="{'negative': !s.isPositive(s.totalRow.gap)}") {{s.checkValidity(s.totalRow.gap, 0)}}
+            td.column-total.medium-dark(ng-class="{'negative': !s.isPositive(s.totalRow.gap)}") {{s.getValidValue(s.totalRow.gap, 0)}}
             td.column-total.medium-dark.no-border(ng-class="{'negative': !s.isPositive(s.totalRow.percentTrend)}") {{s.totalRow.percentTrend | number:1}}%
-            // td.column-total(ng-class="{'negative': !s.isPositive(s.totalRow.gapVsPlan)}") {{s.totalRow.gapVsPlan | number:0 }}
-            // td.column-total.no-border(ng-class="{'negative': !s.isPositive(s.totalRow.percentGapVsPlan)}") {{s.totalRow.percentGapVsPlan}}%
             td.column-total(ng-class="{'negative': !s.isPositive(s.totalRow.percentBUTrend)}") {{s.totalRow.percentBUTrend | number:1 }}%
             td.column-total.no-border(ng-class="s.parseInt(s.totalRow.percentTrend) > s.parseInt(s.totalRow.percentBUTrend) ? 'positive' : 'negative'") <span class="triangle-icon">&#9660;</span>
             td.column-total 100%
             td.column-total 100%
-          tr(ng-repeat="depletion in s.userService.model.depletion | orderBy:'name'" class="disable-ng-animate" ng-click="s.toggleSelected($index, 'depletions')" ng-class="{'selected': s.selectedList === 'depletions' && $index === s.selectedIndex}")
+          tr(ng-repeat="depletion in s.userService.model.depletion | orderBy:s.sortBy('depletionSort'):s.depletionSort.sortDescending" class="disable-ng-animate" ng-click="s.toggleSelected($index, 'depletions')" ng-class="{'selected': s.selectedList === 'depletions' && $index === s.selectedIndex}")
             td.left.data-brand(ng-click='s.goToAccountDashboard(depletion)' analytics-on="click" analytics-event="Brand Performance Selected" analytics-category="Scorecards" analytics-label="My Depletions Scorecard") {{depletion.name}}
-            td.dark(ng-repeat-start="measure in depletion.measures | filter: {timeframe: s.depletionSelect}: true") {{s.checkValidity(measure.depletions, 0)}}
-            td.medium-dark(ng-class="{'negative': !s.isPositive(measure.depletions - (measure.depletions / (1 + measure.depletionsTrend / 100)))}") {{s.checkValidity(measure.depletions - measure.depletionsLastYear, 0)}}
-            td.medium-dark.no-border(ng-class="{'negative': !s.isPositive(measure.depletionsTrend)}") {{s.vsYAPercent(measure.depletions, measure.depletionsLastYear, measure.depletionsTrend)}}%
-            // td(ng-class="{'negative': !s.isPositive(measure.depletions - measure.plan)}") {{s.checkValidity(measure.depletions - measure.plan, 0) }}
-            // td.no-border(ng-if="measure.plan !== 0" ng-class="{'negative': !s.isPositive(((measure.depletions - measure.plan) / measure.plan) * 100)}") {{s.checkValidity(((measure.depletions - measure.plan) / measure.plan) * 100, 1)}}%
-            // td.no-border(ng-if="measure.plan === 0") 0%
-            td(ng-class="{'negative': !s.isPositive(measure.depletionsBUTrend)}") {{s.vsYAPercent(measure.depletionsBU, measure.depletionsBULastYear, measure.depletionsBUTrend)}}%
-            td.no-border(ng-if="measure.depletionsBUTrend !== null" ng-class="measure.depletionsTrend > measure.depletionsBUTrend ? 'positive' : 'negative'") <span class="triangle-icon">&#9660;</span>
-            td.no-border(ng-if="measure.depletionsBUTrend === null" class="positive") <span class="triangle-icon">&#9660;</span>
-            td(ng-class="{'negative': !s.isPositive(measure.depletions / s.totalRow.depletions)}") {{s.checkValidity((measure.depletions / s.totalRow.depletions) * 100, 1)}}%
-            td(ng-repeat-end ng-class="{'negative': !s.isPositive(measure.depletionsBU / s.totalRow.depletionsBU)}") {{s.checkValidity((measure.depletionsBU / s.totalRow.depletionsBU) * 100, 1)}}%
+            td.dark {{s.getFilteredValue('timeFrameTotal', depletion, 'depletion')}}
+            td.medium-dark(ng-class="{'negative': !s.isPositive(s.getFilteredValue('vsYa', depletion, 'depletion'))}") {{s.getFilteredValue('vsYa', depletion, 'depletion')}}
+            td.medium-dark.no-border(ng-class="{'negative': s.getFilteredValue('vsYaPercent', depletion, 'depletion') < 0}") {{s.getFilteredValue('vsYaPercent', depletion, 'depletion')}}%
+            td(ng-class="{'negative': s.getFilteredValue('buVsYaPercent', depletion, 'depletion') < 0}") {{s.getFilteredValue('buVsYaPercent', depletion, 'depletion')}}%
+            td.no-border(ng-if="depletion[s.depletionSelect].depletionsBUTrend !== null" ng-class="depletion[s.depletionSelect].depletionsTrend > depletion[s.depletionSelect].depletionsBUTrend ? 'positive' : 'negative'") <span class="triangle-icon">&#9660;</span>
+            td.no-border(ng-if="depletion[s.depletionSelect].depletionsBUTrend === null" class="positive") <span class="triangle-icon">&#9660;</span>
+            td(ng-class="{'negative': s.getFilteredValue('percentTotal', depletion, 'depletion') < 0}") {{s.getFilteredValue('percentTotal', depletion, 'depletion')}}%
+            td(ng-class="{'negative': s.getFilteredValue('percentBuTotal', depletion, 'depletion')} < 0") {{s.getFilteredValue('percentBuTotal', depletion, 'depletion')}}%
 
   section.distributions-scorecard
     div.scorecard-header.clearfix
@@ -88,13 +95,13 @@ div.my-scorecards
         h3(ng-if="s.distributionSelectOptions.selected !== 'L03'") {{s.distributionSelectOptions.selected}} Days
       div.scorecard-header-right
         p.accent Total PODs / vs YA %
-        h3.bold(ng-if="s.distributionRadioOptions.selected.placementType === 'Effective'") {{s.totalDistributions[0].distributionsEffective | number:0 }}&nbsp;
-          div(ng-class="s.isPositive(s.totalDistributions[0].distributionsEffectiveTrend) ? 'positive' : 'negative'")
-            span(ng-if="s.isPositive(s.totalDistributions[0].distributionsEffectiveTrend)") +
+        h3.bold(ng-if="s.distributionRadioOptions.selected.placementType === 'effective'") {{s.totalDistributions[0].distributionsEffective | number:0 }}&nbsp;
+          div(ng-class="s.totalDistributions[0].distributionsEffectiveTrend >= 0 ? 'positive' : 'negative'")
+            span(ng-if="s.totalDistributions[0].distributionsEffectiveTrend >= 0") +
             span {{s.totalDistributions[0].distributionsEffectiveTrend | number:1}}%
-        h3.bold(ng-if="s.distributionRadioOptions.selected.placementType === 'Simple'") {{s.totalDistributions[0].distributionsSimple | number:0 }}&nbsp;
-          div(ng-class="s.isPositive(s.totalDistributions[0].distributionsSimpleTrend) ? 'positive' : 'negative'")
-            span(ng-if="s.isPositive(s.totalDistributions[0].distributionsSimpleTrend)") +
+        h3.bold(ng-if="s.distributionRadioOptions.selected.placementType === 'simple'") {{s.totalDistributions[0].distributionsSimple | number:0 }}&nbsp;
+          div(ng-class="s.totalDistributions[0].distributionsSimpleTrend >= 0 ? 'positive' : 'negative'")
+            span(ng-if="s.totalDistributions[0].distributionsSimpleTrend >= 0") +
             span {{s.totalDistributions[0].distributionsSimpleTrend | number:1}}%
     div.scorecard-filter
       div.radio-button-group
@@ -103,13 +110,15 @@ div.my-scorecards
 
       div.radio-button-group
         md-radio-group(ng-model="s.distributionRadioOptions.selected.placementType" aria-label="Placement Type Filter")
-          md-radio-button(ng-repeat="filter in s.distributionRadioOptions.placementType" class="md-primary" ng-value="filter.name" aria-label="{{filter.name}}") {{filter.name}}
+          md-radio-button(ng-repeat="filter in s.distributionRadioOptions.placementType" class="md-primary" ng-value="filter.value" aria-label="{{filter.name}}") {{filter.name}}
 
     div.scorecard-table
       table(cellspacing="0" cellpadding="0")
         thead
           tr
-            th.accent.brand.border Brand
+            th.accent.brand.border
+              div.scorecard-header-content(ng-click="s.setSortQuery('distributionSort', 'name')") Brand
+                span.sort-header(ng-class="{active: s.distributionSort.query === 'name', asc: !s.distributionSort.sortDescending, desc: s.distributionSort.sortDescending}")
             th(colspan=5).accent.border Points of Distribution
             th(colspan=2).accent.border
               .tooltip-wrap
@@ -123,70 +132,60 @@ div.my-scorecards
 
           tr
             th.accent.border &nbsp;
-            th.accent {{s.distributionSelectOptions.selected | uppercase}}
-            th.accent VS YA
-            th.accent VS YA %
-            // th.accent VS ABP
-            // th.accent VS ABP %
-            th.accent BU vs YA %
+            th.accent
+              div.scorecard-header-content(ng-click="s.setSortQuery('distributionSort', 'timeFrameTotal')") {{s.distributionSelectOptions.selected | uppercase}}
+                span.sort-header(ng-class="{active: s.distributionSort.query === 'timeFrameTotal', asc: !s.distributionSort.sortDescending, desc: s.distributionSort.sortDescending}")
+            th.accent
+              div.scorecard-header-content(ng-click="s.setSortQuery('distributionSort', 'vsYa')") VS YA
+                span.sort-header(ng-class="{active: s.distributionSort.query === 'vsYa', asc: !s.distributionSort.sortDescending, desc: s.distributionSort.sortDescending}")
+            th.accent
+              div.scorecard-header-content(ng-click="s.setSortQuery('distributionSort', 'vsYaPercent')") VS YA %
+                span.sort-header(ng-class="{active: s.distributionSort.query === 'vsYaPercent', asc: !s.distributionSort.sortDescending, desc: s.distributionSort.sortDescending}")
+            th.accent
+              div.scorecard-header-content(ng-click="s.setSortQuery('distributionSort', 'buVsYaPercent')") BU vs YA %
+                span.sort-header(ng-class="{active: s.distributionSort.query === 'buVsYaPercent', asc: !s.distributionSort.sortDescending, desc: s.distributionSort.sortDescending}")
             th.accent.border MY % vs BU %
-            th.accent To My Total %
-            th.accent.border To BU Total %
+            th.accent
+              div.scorecard-header-content(ng-click="s.setSortQuery('distributionSort', 'percentTotal')") To My Total %
+                span.sort-header(ng-class="{active: s.distributionSort.query === 'percentTotal', asc: !s.distributionSort.sortDescending, desc: s.distributionSort.sortDescending}")
+            th.accent.border
+              div.scorecard-header-content(ng-click="s.setSortQuery('distributionSort', 'percentBuTotal')") To BU Total %
+                span.sort-header(ng-class="{active: s.distributionSort.query === 'percentBuTotal', asc: !s.distributionSort.sortDescending, desc: s.distributionSort.sortDescending}")
         tbody
           tr
-            td.column-total.left(ng-click="s.goToAccountDashboard(null, s.distributionRadioOptions.selected.placementType === 'Effective')" ng-disabled="s.distributionRadioOptions.selected.placementType === 'Effective'") TOTAL
+            td.column-total.left(ng-click="s.goToAccountDashboard(null, s.distributionRadioOptions.selected.placementType === 'effective')" ng-disabled="s.distributionRadioOptions.selected.placementType === 'effective'") TOTAL
             td.column-total.dark
-              span(ng-if="s.distributionRadioOptions.selected.placementType === 'Effective'" ng-class="{'negative': !s.isPositive(s.totalDistributions[0].distributionsEffective)}") {{s.checkValidity(s.totalDistributions[0].distributionsEffective, 0)}}
-              span(ng-if="s.distributionRadioOptions.selected.placementType === 'Simple'" ng-class="{'negative': !s.isPositive(s.totalDistributions[0].distributionsSimple)}") {{s.checkValidity(s.totalDistributions[0].distributionsSimple, 0)}}
+              span(ng-if="s.distributionRadioOptions.selected.placementType === 'effective'" ng-class="{'negative': !s.isPositive(s.totalDistributions[0].distributionsEffective)}") {{s.getValidValue(s.totalDistributions[0].distributionsEffective, 0)}}
+              span(ng-if="s.distributionRadioOptions.selected.placementType === 'simple'" ng-class="{'negative': !s.isPositive(s.totalDistributions[0].distributionsSimple)}") {{s.getValidValue(s.totalDistributions[0].distributionsSimple, 0)}}
             td.column-total.medium-dark
-              span(ng-if="s.distributionRadioOptions.selected.placementType === 'Effective'" ng-class="{'negative': !s.isPositive(s.totalDistributions[0].distributionsEffective - (s.totalDistributions[0].distributionsEffective / (1 + s.totalDistributions[0].distributionsEffectiveTrend / 100)))}") {{s.checkValidity(s.totalDistributions[0].distributionsEffective - (s.totalDistributions[0].distributionsEffective / (1 + s.totalDistributions[0].distributionsEffectiveTrend / 100)), 0)}}
-              span(ng-if="s.distributionRadioOptions.selected.placementType === 'Simple'" ng-class="{'negative': !s.isPositive(s.totalDistributions[0].distributionsSimple - (s.totalDistributions[0].distributionsSimple / (1 + s.totalDistributions[0].distributionsSimpleTrend / 100)))}") {{s.checkValidity(s.totalDistributions[0].distributionsSimple - (s.totalDistributions[0].distributionsSimple / (1 + s.totalDistributions[0].distributionsSimpleTrend / 100)), 0)}}
+              span(ng-if="s.distributionRadioOptions.selected.placementType === 'effective'" ng-class="{'negative': !s.isPositive(s.totalDistributions[0].distributionsEffective - (s.totalDistributions[0].distributionsEffective / (1 + s.totalDistributions[0].distributionsEffectiveTrend / 100)))}") {{s.getValidValue(s.totalDistributions[0].distributionsEffective - (s.totalDistributions[0].distributionsEffective / (1 + s.totalDistributions[0].distributionsEffectiveTrend / 100)), 0)}}
+              span(ng-if="s.distributionRadioOptions.selected.placementType === 'simple'" ng-class="{'negative': !s.isPositive(s.totalDistributions[0].distributionsSimple - (s.totalDistributions[0].distributionsSimple / (1 + s.totalDistributions[0].distributionsSimpleTrend / 100)))}") {{s.getValidValue(s.totalDistributions[0].distributionsSimple - (s.totalDistributions[0].distributionsSimple / (1 + s.totalDistributions[0].distributionsSimpleTrend / 100)), 0)}}
             td.column-total.medium-dark.no-border
-              span(ng-if="s.distributionRadioOptions.selected.placementType === 'Effective'" ng-class="{'negative': !s.isPositive(s.totalDistributions[0].distributionsEffectiveTrend)}") {{s.checkValidity(s.totalDistributions[0].distributionsEffectiveTrend, 1)}}%
-              span(ng-if="s.distributionRadioOptions.selected.placementType === 'Simple'" ng-class="{'negative': !s.isPositive(s.totalDistributions[0].distributionsSimpleTrend)}") {{s.checkValidity(s.totalDistributions[0].distributionsSimpleTrend, 1)}}%
-            // td.column-total
-              span(ng-if="s.distributionRadioOptions.selected.placementType === 'Effective'" ng-class="{'negative': !s.isPositive(s.totalDistributions[0].distributionsEffective - s.totalDistributions[0].planEffective)}") {{s.checkValidity(s.totalDistributions[0].distributionsEffective - s.totalDistributions[0].planEffective, 0)}}
-              span(ng-if="s.distributionRadioOptions.selected.placementType === 'Simple'" ng-class="{'negative': !s.isPositive(s.totalDistributions[0].distributionsSimple - s.totalDistributions[0].planSimple)}") {{s.checkValidity(s.totalDistributions[0].distributionsSimple - s.totalDistributions[0].planSimple, 0)}}
-            // td.column-total.no-border
-              span(ng-if="s.distributionRadioOptions.selected.placementType === 'Effective'" ng-class="{'negative': !s.isPositive(((s.totalDistributions[0].distributionsEffective - s.totalDistributions[0].planEffective) / s.totalDistributions[0].planEffective) * 100)}") {{s.checkValidity(((s.totalDistributions[0].distributionsEffective - s.totalDistributions[0].planEffective) / s.totalDistributions[0].planEffective), 1)}}%
-              span(ng-if="s.distributionRadioOptions.selected.placementType === 'Simple'" ng-class="{'negative': !s.isPositive(((s.totalDistributions[0].distributionsSimple - s.totalDistributions[0].planSimple) / s.totalDistributions[0].planSimple) * 100)}") {{s.checkValidity(((s.totalDistributions[0].distributionsSimple - s.totalDistributions[0].planSimple) / s.totalDistributions[0].planSimple), 1)}}%
+              span(ng-if="s.distributionRadioOptions.selected.placementType === 'effective'" ng-class="{'negative': !s.isPositive(s.totalDistributions[0].distributionsEffectiveTrend)}") {{s.getValidValue(s.totalDistributions[0].distributionsEffectiveTrend, 1)}}%
+              span(ng-if="s.distributionRadioOptions.selected.placementType === 'simple'" ng-class="{'negative': !s.isPositive(s.totalDistributions[0].distributionsSimpleTrend)}") {{s.getValidValue(s.totalDistributions[0].distributionsSimpleTrend, 1)}}%
             td.column-total
-              span(ng-if="s.distributionRadioOptions.selected.placementType === 'Effective'" ng-class="{'negative': !s.isPositive(s.totalDistributions[0].distributionsEffectiveBUTrend)}") {{s.checkValidity(s.totalDistributions[0].distributionsEffectiveBUTrend, 1)}}%
-              span(ng-if="s.distributionRadioOptions.selected.placementType === 'Simple'" ng-class="{'negative': !s.isPositive(s.totalDistributions[0].distributionsSimpleBUTrend)}") {{s.checkValidity(s.totalDistributions[0].distributionsSimpleBUTrend, 1)}}%
+              span(ng-if="s.distributionRadioOptions.selected.placementType === 'effective'" ng-class="{'negative': !s.isPositive(s.totalDistributions[0].distributionsEffectiveBUTrend)}") {{s.getValidValue(s.totalDistributions[0].distributionsEffectiveBUTrend, 1)}}%
+              span(ng-if="s.distributionRadioOptions.selected.placementType === 'simple'" ng-class="{'negative': !s.isPositive(s.totalDistributions[0].distributionsSimpleBUTrend)}") {{s.getValidValue(s.totalDistributions[0].distributionsSimpleBUTrend, 1)}}%
             td.column-total.no-border(ng-repeat-end)
-              span(ng-if="s.distributionRadioOptions.selected.placementType === 'Effective'" ng-class="s.totalDistributions[0].distributionsEffectiveTrend > s.totalDistributions[0].distributionsEffectiveBUTrend ? 'positive' : 'negative'") <span class="triangle-icon">&#9660;</span>
-              span(ng-if="s.distributionRadioOptions.selected.placementType === 'Simple'" ng-class="s.totalDistributions[0].distributionsSimpleTrend > s.totalDistributions[0].distributionsSimpleBUTrend ? 'positive' : 'negative'") <span class="triangle-icon">&#9660;</span>
+              span(ng-if="s.distributionRadioOptions.selected.placementType === 'effective'" ng-class="s.totalDistributions[0].distributionsEffectiveTrend > s.totalDistributions[0].distributionsEffectiveBUTrend ? 'positive' : 'negative'") <span class="triangle-icon">&#9660;</span>
+              span(ng-if="s.distributionRadioOptions.selected.placementType === 'simple'" ng-class="s.totalDistributions[0].distributionsSimpleTrend > s.totalDistributions[0].distributionsSimpleBUTrend ? 'positive' : 'negative'") <span class="triangle-icon">&#9660;</span>
             td.column-total 100%
             td.column-total.no-border 100%
 
-          tr(ng-repeat="distribution in s.userService.model.distribution | filter: {type: '!Total'}: true | orderBy:'name'" class="disable-ng-animate" ng-click="s.toggleSelected($index, 'distributions')" ng-class="{'selected': s.selectedList === 'distributions' && $index === s.selectedIndex}")
-            td.left.data-brand(ng-click='s.goToAccountDashboard(distribution, s.distributionRadioOptions.selected.placementType === "Simple")' ng-disabled="s.distributionRadioOptions.selected.placementType === 'Simple'" analytics-on="click" analytics-event="Brand Performance Selected" analytics-category="Scorecards" analytics-label="My Distribution Scorecard") {{distribution.name}}
-            td.dark(ng-repeat-start="measure in distribution.measures | filter: {timeframe: s.distributionSelectOptions.selected}: true")
-              span(ng-if="s.distributionRadioOptions.selected.placementType === 'Simple'" ng-class="{'negative': !s.isPositive(measure.distributionsSimple)}") {{s.checkValidity(measure.distributionsSimple, 0)}}
-              span(ng-if="s.distributionRadioOptions.selected.placementType === 'Effective'" ng-class="{'negative': !s.isPositive(measure.distributionsEffective)}") {{s.checkValidity(measure.distributionsEffective, 0)}}
+          tr(ng-repeat="distribution in s.userService.model.distribution | filter: {type: '!Total'}: true | orderBy:s.sortBy('distributionSort'):s.distributionSort.sortDescending" class="disable-ng-animate" ng-click="s.toggleSelected($index, 'distributions')" ng-class="{'selected': s.selectedList === 'distributions' && $index === s.selectedIndex}")
+            td.left.data-brand(ng-click='s.goToAccountDashboard(distribution, s.distributionRadioOptions.selected.placementType === "simple")' ng-disabled="s.distributionRadioOptions.selected.placementType === 'simple'" analytics-on="click" analytics-event="Brand Performance Selected" analytics-category="Scorecards" analytics-label="My Distribution Scorecard") {{distribution.name}}
+            td.dark
+              span(ng-class="{'negative': s.getFilteredValue('timeFrameTotal', distribution, 'distribution') < 0}") {{s.getFilteredValue('timeFrameTotal', distribution, 'distribution')}}
             td.medium-dark
-              span(ng-if="s.distributionRadioOptions.selected.placementType === 'Simple'" ng-class="{'negative': !s.isPositive(measure.distributionsSimple - measure.distributionsSimpleLastYear)}") {{s.checkValidity(measure.distributionsSimple - measure.distributionsSimpleLastYear)}}
-              span(ng-if="s.distributionRadioOptions.selected.placementType === 'Effective'" ng-class="{'negative': !s.isPositive(measure.distributionsEffective - measure.distributionsEffectiveLastYear)}") {{s.checkValidity(measure.distributionsEffective - measure.distributionsEffectiveLastYear)}}
+              span(ng-class="{'negative': s.getFilteredValue('vsYa', distribution, 'distribution') < 0}") {{s.getFilteredValue('vsYa', distribution, 'distribution')}}
             td.medium-dark.no-border
-              span(ng-if="s.distributionRadioOptions.selected.placementType === 'Simple'" ng-class="{'negative': !s.isPositive(measure.distributionsSimpleTrend)}") {{s.vsYAPercent(measure.distributionsSimple, measure.distributionsSimpleLastYear, measure.distributionsSimpleTrend)}}%
-              span(ng-if="s.distributionRadioOptions.selected.placementType === 'Effective'" ng-class="{'negative': !s.isPositive(measure.distributionsEffectiveTrend)}") {{s.vsYAPercent(measure.distributionsEffective, measure.distributionsEffectiveLastYear, measure.distributionsEffectiveTrend)}}%
-            // td.medium-dark
-              span(ng-if="s.distributionRadioOptions.selected.placementType === 'Simple'" ng-class="{'negative': !s.isPositive(measure.distributionsSimple - measure.planSimple)}") {{s.checkValidity(measure.distributionsSimple - measure.planSimple, 0)}}
-              span(ng-if="s.distributionRadioOptions.selected.placementType === 'Effective'" ng-class="{'negative': !s.isPositive(measure.distributionsEffective - measure.planEffective)}") {{s.checkValidity(measure.distributionsEffective - measure.planEffective, 0)}}
-            // td.medium-dark.no-border
-              span(ng-if="s.distributionRadioOptions.selected.placementType === 'Simple' && measure.planSimple !== 0" ng-class="{'negative': !s.isPositive(((measure.distributionsSimple - measure.planSimple) / measure.planSimple) * 100)}") {{s.checkValidity(((measure.distributionsSimple - measure.planSimple) / measure.planSimple) * 100, 1)}}%
-              span(ng-if="s.distributionRadioOptions.selected.placementType === 'Simple' && measure.planSimple === 0") 0%
-              span(ng-if="s.distributionRadioOptions.selected.placementType === 'Effective' && measure.planEffective !== 0" ng-class="{'negative': !s.isPositive(((measure.distributionsEffective - measure.planEffective) / measure.planEffective) * 100)}") {{s.checkValidity(((measure.distributionsEffective - measure.planEffective) / measure.planEffective) * 100, 1)}}%
-              span(ng-if="s.distributionRadioOptions.selected.placementType === 'Effective' && measure.planEffective === 0") 0%
+              span(ng-class="{'negative': s.getFilteredValue('vsYaPercent', distribution, 'distribution') < 0}") {{s.getFilteredValue('vsYaPercent', distribution, 'distribution')}}
             td
-              span(ng-if="s.distributionRadioOptions.selected.placementType === 'Simple'" ng-class="{'negative': !s.isPositive(measure.distributionsSimpleBUTrend)}") {{s.vsYAPercent(measure.distributionsSimpleBU, measure.distributionsSimpleBULastYear, measure.distributionsSimpleBUTrend)}}%
-              span(ng-if="s.distributionRadioOptions.selected.placementType === 'Effective'" ng-class="{'negative': !s.isPositive(measure.distributionsEffectiveBUTrend)}") {{s.vsYAPercent(measure.distributionsEffectiveBU, measure.distributionsEffectiveBULastYear, measure.distributionsEffectiveBUTrend)}}%
+              span(ng-class="{'negative': s.getFilteredValue('buVsYaPercent', distribution, 'distribution') < 0}") {{s.getFilteredValue('buVsYaPercent', distribution, 'distribution')}}
             td.no-border
-              span(ng-if="s.distributionRadioOptions.selected.placementType === 'Simple'" ng-class="measure.distributionsSimpleTrend > measure.distributionsSimpleBUTrend ? 'positive' : 'negative'") <span class="triangle-icon">&#9660;</span>
-              span(ng-if="s.distributionRadioOptions.selected.placementType === 'Effective'" ng-class="measure.distributionsEffectiveTrend > measure.distributionsEffectiveBUTrend ? 'positive' : 'negative'") <span class="triangle-icon">&#9660;</span>
+              span(ng-if="s.distributionRadioOptions.selected.placementType === 'simple'" ng-class="distribution[s.distributionSelectOptions.selected].distributionsSimpleTrend > distribution[s.distributionSelectOptions.selected].distributionsSimpleBUTrend ? 'positive' : 'negative'") <span class="triangle-icon">&#9660;</span>
+              span(ng-if="s.distributionRadioOptions.selected.placementType === 'effective'" ng-class="distribution[s.distributionSelectOptions.selected].distributionsEffectiveTrend > distribution[s.distributionSelectOptions.selected].distributionsEffectiveBUTrend ? 'positive' : 'negative'") <span class="triangle-icon">&#9660;</span>
             td
-              span(ng-if="s.distributionRadioOptions.selected.placementType === 'Simple'" ng-class="{'negative': !s.isPositive(measure.distributionsSimple / s.totalDistributions[0].distributionsSimple)}") {{s.checkValidity((measure.distributionsSimple / s.totalDistributions[0].distributionsSimple) * 100, 1)}}%
-              span(ng-if="s.distributionRadioOptions.selected.placementType === 'Effective'" ng-class="{'negative': !s.isPositive(measure.distributionsEffective / s.totalDistributions[0].distributionsEffective)}") {{s.checkValidity((measure.distributionsEffective / s.totalDistributions[0].distributionsEffective) * 100, 1)}}%
-            td.no-border(ng-repeat-end)
-              span(ng-if="s.distributionRadioOptions.selected.placementType === 'Simple'" ng-class="{'negative': !s.isPositive(measure.distributionsSimpleBU / s.totalDistributions[0].distributionsSimpleBU)}") {{s.checkValidity((measure.distributionsSimpleBU / s.totalDistributions[0].distributionsSimpleBU) * 100, 1)}}%
-              span(ng-if="s.distributionRadioOptions.selected.placementType === 'Effective'" ng-class="{'negative': !s.isPositive(measure.distributionsEffectiveBU / s.totalDistributions[0].distributionsEffectiveBU)}") {{s.checkValidity((measure.distributionsEffectiveBU / s.totalDistributions[0].distributionsEffectiveBU) * 100, 1)}}%
+              span(ng-class="{'negative': s.getFilteredValue('percentTotal', distribution, 'distribution') < 0}") {{s.getFilteredValue('percentTotal', distribution, 'distribution')}}
+            td.no-border
+              span(ng-class="{'negative': s.getFilteredValue('percentBuTotal', distribution, 'distribution') < 0}") {{s.getFilteredValue('percentBuTotal', distribution, 'distribution')}}

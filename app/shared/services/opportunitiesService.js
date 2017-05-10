@@ -39,7 +39,7 @@ module.exports = /*  @ngInject */
 
       // create promise, build url based on filters and if there is an opp id
       var opportunitiesPromise = $q.defer(),
-          url = opportunityID ? apiHelperService.request('/api/opportunities/' + opportunityID) : apiHelperService.request('/api/opportunities/', filterPayload);
+          url = opportunityID ? apiHelperService.request('/v2/opportunities/' + opportunityID) : apiHelperService.request('/v2/opportunities/', filterPayload);
 
       if (!dontResetList) {
         service.model.opportunities = [];
@@ -214,7 +214,7 @@ module.exports = /*  @ngInject */
       const filterPayload = filtersService.getAppliedFilters('opportunities');
 
       const opportunitiesPromise = $q.defer();
-      const url = apiHelperService.request('/api/opportunities/', filterPayload);
+      const url = apiHelperService.request('/v2/opportunities/', filterPayload);
       $http.get(url)
         .then((response) => {
           const opportunitiesIDs = response.data.opportunities.map((opp) => opp.id);
@@ -233,14 +233,14 @@ module.exports = /*  @ngInject */
     */
     function getOpportunitiesHeaders() {
       var opportunitiesPromise = $q.defer(),
-          url = apiHelperService.request('/api/opportunities/', filtersService.getAppliedFilters('opportunities'));
+          url = apiHelperService.request('/v2/opportunities/', filtersService.getAppliedFilters('opportunities'));
 
       $http.head(url)
         .then(getOpportunitiesHeadersSuccess)
         .catch(getOpportunitiesHeadersFail);
 
       function getOpportunitiesHeadersSuccess(response) {
-        filtersService.model.appliedFilter.pagination.totalOpportunities = response.headers()['opportunity-count'];
+        filtersService.model.appliedFilter.pagination.totalOpportunities = parseInt(response.headers()['opportunity-count']);
         filtersService.model.appliedFilter.pagination.totalStores = response.headers()['store-count'];
         filtersService.model.appliedFilter.pagination.roundedStores = Math.ceil(response.headers()['store-count'] / 10) * 10;
         filtersService.model.appliedFilter.pagination.totalPages = (Math.ceil(filtersService.model.appliedFilter.pagination.roundedStores / 20) - 1);
@@ -264,7 +264,7 @@ module.exports = /*  @ngInject */
      */
     function createOpportunity(payload) {
       var opportunitiesPromise = $q.defer(),
-          url = apiHelperService.request('/api/opportunities');
+          url = apiHelperService.request('/v2/opportunities');
 
       $http({ url: url,
         method: 'POST',
@@ -295,7 +295,7 @@ module.exports = /*  @ngInject */
      */
     function getOpportunityFeedback(opportunityID) {
       var opportunitiesPromise = $q.defer(),
-          url = apiHelperService.request('/api/opportunities/' + opportunityID + '/feedback/');
+          url = apiHelperService.request('/v2/opportunities/' + opportunityID + '/feedback/');
 
       $http.get(url, {
         headers: {}
@@ -329,7 +329,7 @@ module.exports = /*  @ngInject */
         feedback = data.feedback;
       } else { feedback = data.type; }
       var opportunitiesPromise = $q.defer(),
-          url = apiHelperService.request('/api/opportunities/' + opportunityID + '/feedback/'),
+          url = apiHelperService.request('/v2/opportunities/' + opportunityID + '/feedback/'),
           payload = {
             'feedback': feedback
           };
@@ -363,7 +363,7 @@ module.exports = /*  @ngInject */
      */
     function deleteOpportunityFeedback(opportunityID) {
       var opportunitiesPromise = $q.defer(),
-          url = apiHelperService.request('/api/opportunities/' + opportunityID + '/feedback/'),
+          url = apiHelperService.request('/v2/opportunities/' + opportunityID + '/feedback/'),
           payload = {
             'feedback': ''
           };

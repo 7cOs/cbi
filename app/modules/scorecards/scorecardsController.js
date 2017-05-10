@@ -16,9 +16,11 @@ module.exports = /*  @ngInject */
     };
     vm.distributionRadioOptions = {
       placementType: [{
-        name: 'Simple'
+        name: 'Simple',
+        value: 'simple'
       }, {
-        name: 'Effective'
+        name: 'Effective',
+        value: 'effective'
       }],
       premises: [{
         name: 'Off Premise',
@@ -46,6 +48,15 @@ module.exports = /*  @ngInject */
     };
     vm.selectedIndex = -1;
     vm.selectedList = null;
+    vm.depletionSort = {
+      sortDescending: false,
+      query: 'name'
+    };
+    vm.distributionSort = {
+      sortDescending: false,
+      query: 'name'
+    };
+    vm.initialized = false;
 
     // Set page title for head and nav
     $rootScope.pageTitle = $state.current.title;
@@ -61,11 +72,14 @@ module.exports = /*  @ngInject */
     vm.isPositive = isPositive;
     vm.updateEndingTimePeriod = updateEndingTimePeriod;
     vm.toggleSelected = toggleSelected;
-    vm.checkValidity = checkValidity;
+    vm.getValidValue = getValidValue;
     vm.vsYAPercent = vsYAPercent;
     vm.setDefaultFilterOptions = setDefaultFilterOptions;
     vm.premiseTypeDisabled = '';
     vm.parseInt = parseInt;
+    vm.sortBy = sortBy;
+    vm.setSortQuery = setSortQuery;
+    vm.getFilteredValue = getFilteredValue;
 
     init();
 
@@ -73,7 +87,7 @@ module.exports = /*  @ngInject */
     // PUBLIC METHODS
     // **************
 
-    function checkValidity(value, fractionSize) {
+    function getValidValue(value, fractionSize) {
       // Check if result is infinity or NaN
       if (isFinite(value) && value !== null && value !== '') {
         return $filter('number')(value, fractionSize || 0);
@@ -119,7 +133,7 @@ module.exports = /*  @ngInject */
       else payload.premiseType = 'off';
 
       userService.getPerformanceDistribution(payload).then(function(data) {
-        userService.model.distribution = data;
+        userService.model.distribution = getRemodeledCollection(data, 'distribution');
         updateTotalRowDistributions();
       }, function(err) {
         updateTotalRowDistributions();
@@ -158,7 +172,7 @@ module.exports = /*  @ngInject */
     }
 
     function isPositive(salesData) {
-      if (salesData >= 0) {
+      if (parseInt(salesData) >= 0) {
         return true;
       }
       return false;
@@ -196,6 +210,33 @@ module.exports = /*  @ngInject */
       }
     }
 
+    function setSortQuery(sort, query) {
+      vm[sort].query === query
+        ? vm[sort].sortDescending = !vm[sort].sortDescending
+        : vm[sort].query = query;
+    }
+
+    function sortBy(sortType) {
+      let filteredValueType = '';
+      sortType === 'distributionSort' ? filteredValueType = 'distribution' : filteredValueType = 'depletion';
+
+      return model => {
+        if (vm[sortType].query === 'name') return model.name;
+
+        return getFilteredValue(vm[sortType].query, model, filteredValueType) !== '-'
+          ? parseFloat(getFilteredValue(vm[sortType].query, model, filteredValueType).replace(/[,$]/g, ''))
+          : -1;
+      };
+    }
+
+    function getFilteredValue(key, model, modelType) {
+      if (!vm.initialized) return '';
+
+      return modelType === 'distribution'
+        ? model[vm.distributionSelectOptions.selected][key][vm.distributionRadioOptions.selected.placementType]
+        : model[vm.depletionSelect][key];
+    }
+
     // **************
     // PRIVATE METHODS
     // **************
@@ -219,12 +260,14 @@ module.exports = /*  @ngInject */
         updateTotalRowDepletions();
 
         // distribution
-        vm.distributionRadioOptions.selected.placementType = 'Simple';
+        vm.distributionRadioOptions.selected.placementType = 'simple';
         updatedSelectionValuesInFilter(vm.depletionRadio, vm.depletionSelect, vm.distributionSelectOptions.selected);
 
         updateTotalRowDistributions();
 
-        console.log('[scorecardsController.init - userService.model.distribution]', userService.model.distribution);
+        vm.initialized = true;
+        userService.model.distribution = getRemodeledCollection(userService.model.distribution, 'distribution');
+        userService.model.depletion = getRemodeledCollection(userService.model.depletion, 'depletion');
       });
     }
 
@@ -292,6 +335,73 @@ module.exports = /*  @ngInject */
       function offPremise() {
         vm.distributionRadioOptions.selected.onOffPremise = 'off';
         vm.premiseTypeDisabled = 'On Premise';
+      }
+    }
+
+    function getRemodeledCollection(collection, type) {
+      const processedCollection = getProcessedData(type, collection);
+      return getTransformedModel(processedCollection);
+    }
+
+    function getTransformedModel(modelCollection) {
+      return modelCollection.map(model => {
+        model.measures.forEach(measure => {
+          model[measure.timeframe] = measure;
+        });
+        return model;
+      });
+    }
+
+    function getProcessedData(type, modelCollection) {
+      if (type === 'distribution') {
+        return modelCollection.map(model => {
+          model.measures.forEach(measure => {
+            measure['timeFrameTotal'] = {
+              simple: getValidValue(measure.distributionsSimple, 0),
+              effective: getValidValue(measure.distributionsEffective, 0)
+            };
+
+            measure['vsYa'] = {
+              simple: getValidValue(measure.distributionsSimple - measure.distributionsSimpleLastYear),
+              effective: getValidValue(measure.distributionsEffective - measure.distributionsEffectiveLastYear)
+            };
+
+            measure['vsYaPercent'] = {
+              simple: vsYAPercent(measure.distributionSimple, measure.distributionsSimpleLastYear, measure.distributionsSimpleTrend),
+              effective: vsYAPercent(measure.distributionsEffective, measure.distributionsEffectiveLastYear, measure.distributionsEffectiveTrend)
+            };
+
+            measure['buVsYaPercent'] = {
+              simple: vsYAPercent(measure.distributionsSimpleBU, measure.distributionsSimpleBULastYear, measure.distributionsSimpleBUTrend),
+              effective: vsYAPercent(measure.distributionsEffectiveBU, measure.distributionsEffectiveBULastYear, measure.distributionsEffectiveBUTrend)
+            };
+
+            measure['percentTotal'] = {
+              simple: getValidValue((measure.distributionsSimple / vm.totalDistributions[0].distributionsSimple) * 100, 1),
+              effective: getValidValue((measure.distributionsEffective / vm.totalDistributions[0].distributionsEffective) * 100, 1)
+            };
+
+            measure['percentBuTotal'] = {
+              simple: getValidValue((measure.distributionsSimpleBU / vm.totalDistributions[0].distributionsSimpleBU) * 100, 1),
+              effective: getValidValue((measure.distributionsEffectiveBU / vm.totalDistributions[0].distributionsEffectiveBU) * 100, 1)
+            };
+          });
+
+          return model;
+        });
+      } else {
+        return modelCollection.map(model => {
+          model.measures.forEach(measure => {
+            measure['timeFrameTotal'] = getValidValue(measure.depletions, 0);
+            measure['vsYa'] = getValidValue(measure.depletions - measure.depletionsLastYear, 0);
+            measure['vsYaPercent'] = vsYAPercent(measure.depletions, measure.depletionsLastYear, measure.depletionsTrend);
+            measure['buVsYaPercent'] = vsYAPercent(measure.depletionsBU, measure.depletionsBULastYear, measure.depletionsBUTrend);
+            measure['percentTotal'] = getValidValue((measure.depletions / vm.totalRow.depletions) * 100, 1);
+            measure['percentBuTotal'] = getValidValue((measure.depletionsBU / vm.totalRow.depletionsBU) * 100, 1);
+          });
+
+          return model;
+        });
       }
     }
   };

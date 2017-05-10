@@ -35,6 +35,24 @@ module.exports = {
         ]
       },
 
+      // linting
+      {
+        test: /\.spec\.ts$/,
+        loader: 'tslint-loader',
+        enforce: 'pre',
+        exclude: [
+          /node_modules/
+        ]
+      },
+      {
+        test: /\.spec\.js$/,
+        loader: 'eslint-loader',
+        enforce: 'pre',
+        exclude: [
+          /node_modules/
+        ]
+      },
+
       // code
       {
         test: /\.(ts|js)$/,
@@ -107,6 +125,17 @@ module.exports = {
 
         htmlLoader: {
           minimize: false // workaround for ng2
+        },
+
+        tslint: {
+          emitErrors: false,
+          failOnHint: true,
+          formatter: 'stylish'
+        },
+
+        eslint: {
+          failOnWarning: false,
+          failOnError: true
         }
       }
     })

@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports = /*  @ngInject */
-  function accountsController($rootScope, $scope, $state, $log, $q, $window, $filter, $timeout, $analytics, myperformanceService, chipsService, filtersService, notesService, userService, searchService) {
+  function accountsController($rootScope, $scope, $state, $log, $q, $window, $filter, $timeout, $analytics, myperformanceService, chipsService, filtersService, notesService, userService, storesService) {
 
     // ****************
     // CONTROLLER SETUP
@@ -74,6 +74,7 @@ module.exports = /*  @ngInject */
     vm.currentUserName = null;
     vm._defaultTopLevelForLabel = 'CBBD';
     vm.topLevelForLabel = vm._defaultTopLevelForLabel;
+    vm.premiseTypeValue = 'all';
 
     // top bottom public methods
     vm.topBottomData = {
@@ -573,6 +574,7 @@ module.exports = /*  @ngInject */
             onPremise();
             break;
           default:
+            vm.premiseTypeValue = 'all';
             filtersService.model.selected.premiseType = 'all';
             chipsService.removeChip('premiseType');
             disablePremiseType(false);
@@ -581,11 +583,13 @@ module.exports = /*  @ngInject */
       }
 
       function onPremise() {
+        vm.premiseTypeValue = 'off';
         filtersService.model.selected.premiseType = 'on';
         vm.updateChip('On-Premise', 'premiseType');
         disablePremiseType(true);
       }
       function offPremise() {
+        vm.premiseTypeValue = 'off';
         filtersService.model.selected.premiseType = 'off';
         vm.updateChip('Off-Premise', 'premiseType');
         disablePremiseType(true);
@@ -705,9 +709,15 @@ module.exports = /*  @ngInject */
       } else {
         vm.selectedStore = result.name;
 
-        if (result.storeNumber) {
+        if (result.storeNumber && result.storeNumber.toUpperCase() !== 'UNKNOWN') {
           vm.selectedStore += ' #' + result.storeNumber;
         }
+      }
+
+      if (result.premiseType === 'OFF PREMISE') {
+        vm.premiseTypeValue = 'off';
+      } else if (result.premiseType === 'ON PREMISE') {
+        vm.premiseTypeValue = 'on';
       }
     }
 
@@ -897,30 +907,92 @@ module.exports = /*  @ngInject */
       return obj;
     }
 
-    function checkForNavigationFromScorecard() {
-      var isNavigatedFromScorecard = false;
-      if ($state.params.applyFiltersOnLoad && $state.params.pageData.brandTitle) {
-        vm.brandIdSelected = $state.params.pageData.brandId;
-        vm.brandWidgetTitle = $state.params.pageData.brandTitle;
-        chipsService.addAutocompleteChip(vm.brandWidgetTitle, 'brand', false);
-        isNavigatedFromScorecard = true;
+    function init() {
+      setDefaultDropDownOptions();
+      const isNavigatedFromScorecard = $state.params.applyFiltersOnLoad && $state.params.pageData.brandTitle;
+      const isNavigatedFromOpps = $state.params.storeid;
+      const isSettingNotes = $state.params.openNotesOnLoad;
+
+      if (!isNavigatedFromScorecard && !(isNavigatedFromOpps || isSettingNotes)) {
+        chipsService.resetChipsFilters(chipsService.model);
       }
-      return isNavigatedFromScorecard;
+
+      if (isNavigatedFromOpps) {
+        setDataForNavigationFromOpps();
+      }
+
+      if (isSettingNotes) {
+        setNotes();
+      }
+
+      if (isNavigatedFromScorecard) {
+        setDataForNavigationFromScorecard();
+      } else {
+        getBrandsAndTopbottomDataOnInit(isNavigatedFromOpps || isSettingNotes);
+      }
+
+      setDefaultFilterOptions();
+      setPremiseType();
+      resetStateParameters();
+      setCurrentUserName();
+      setTopLevelForLabel();
+      sendTopBottomAnalyticsEvent();
     }
 
-    function checkForNavigationFromOpps() {
-      var isNavigatedFromOpps = false;
-      var storeFilter = myperformanceService.parseStoreFilterFromOpps($state.params.store);
-      if (storeFilter) {
-        vm.currentTopBottomAcctType = vm.filtersService.accountFilters.accountTypes[3];
-        vm.currentTopBottomObj = getCurrentTopBottomObject(vm.currentTopBottomAcctType);
-        var storeData = {id: storeFilter.storeId, name: storeFilter.storeName};
-        vm.currentTopBottomFilters.stores = storeData;
-        vm.filtersService.model.selected.myAccountsOnly = storeFilter.myAccountsOnly;
-        vm.filtersService.model.selected.premiseType = 'all';
-        isNavigatedFromOpps = true;
-      }
-      return isNavigatedFromOpps;
+    /**
+     * It is called on init and sets the default dropdown options for the entire account dashboard
+     * @param {Object} currentAcctType The new account type to be set
+     * @returns Sets the data for the currently selected top bottom account type
+     */
+    function setDefaultDropDownOptions() {
+      setDefaultEndingPeriodOptions();
+      vm.filterModel.trend = vm.filtersService.model.trend[0];
+      vm.filtersService.model.accountSelected.accountBrands = vm.filtersService.accountFilters.accountBrands[0];
+      vm.filtersService.model.accountSelected.accountMarkets = vm.filtersService.accountFilters.accountMarkets[0];
+      vm.currentTopBottomAcctType = vm.filtersService.accountFilters.accountTypes[0];
+      vm.filtersService.model.valuesVsTrend = vm.filtersService.accountFilters.valuesVsTrend[0];
+      vm.premiseTypeValue = 'off';
+      vm.chartOptions = myperformanceService.getChartOptions();
+      vm.topBottomData = myperformanceService.initDataForAllTbLevels(vm.topBottomData);
+      vm.marketSelectedIndex = 0;
+      vm.currentTopBottomObj = getCurrentTopBottomObject(vm.currentTopBottomAcctType);
+    }
+
+    function setDataForNavigationFromScorecard() {
+      vm.brandIdSelected = $state.params.pageData.brandId;
+      vm.brandWidgetTitle = $state.params.pageData.brandTitle;
+      chipsService.addAutocompleteChip(vm.brandWidgetTitle, 'brand', false);
+
+      var brandObj = {
+        id: vm.brandIdSelected,
+        name: vm.brandWidgetTitle
+      };
+      selectItem('brands', brandObj, vm.brandTabs, 0);
+    }
+
+    function setDataForNavigationFromOpps() {
+      vm.currentTopBottomAcctType = vm.filtersService.accountFilters.accountTypes[3];
+      vm.currentTopBottomObj = getCurrentTopBottomObject(vm.currentTopBottomAcctType);
+      var storeData = {id: $state.params.storeid};
+      vm.currentTopBottomFilters.stores = storeData;
+      vm.filtersService.model.selected.myAccountsOnly = $state.params.myaccountsonly && $state.params.myaccountsonly.toLowerCase() === 'true';
+      vm.filterModel.depletionsTimePeriod = filtersService.depletionsTimePeriodFromName($state.params.depletiontimeperiod);
+    }
+
+    function setNotes() {
+      $timeout(function() {
+        $rootScope.$broadcast('notes:opened', true, $state.params.pageData.account);
+
+        notesService.model.accountId = $state.params.pageData.account.id;
+        notesService.accountNotes().then(function(success) {
+          vm.notes = success;
+          vm.loading = false;
+        });
+      });
+      var currentLevel = myperformanceService.setAcctDashboardFiltersOnInit($state.params.pageData.account, vm.currentTopBottomFilters);
+      vm.filtersService.model.selected.myAccountsOnly = false;
+      vm.currentTopBottomAcctType = currentLevel;
+      vm.currentTopBottomObj = getCurrentTopBottomObject(vm.currentTopBottomAcctType);
     }
 
     function getBrandsAndTopbottomDataOnInit(isNavigatedToNextLevel) {
@@ -929,27 +1001,27 @@ module.exports = /*  @ngInject */
       // brand snapshot returns sku data instead of just the brand if you add brand:xxx
       if (params.brand && params.brand.length) delete params.brand;
       params.type = 'brandSnapshot';
+
+      vm.loadingUnsoldStore = true;
       promiseArr.push(userService.getPerformanceBrand(params));
+
+      const id = vm.currentTopBottomFilters.stores.id || vm.currentTopBottomFilters.distributors.id;
+      if (id) promiseArr.push(storesService.getStores(id));
+
       $q.all(promiseArr).then(function(data) {
-        if (data[0]) {
+        const performanceData = data[0];
+        const storeData = data[1];
+
+        if (performanceData) {
           vm.loadingBrandSnapshot = false;
-          vm.brandTabs.brands = data[0].performance;
+          vm.brandTabs.brands = performanceData.performance;
           setCurrentTotalsObject();
-          getDataForTopBottomLevel(vm.currentTopBottomObj, function() {
+          getDataForTopBottomLevel(vm.currentTopBottomObj, () => {
             // if initializing to stores level, use data in response to set filter model, etc
             if (vm.currentTopBottomAcctType.name === vm.filtersService.accountFilters.accountTypes[3].name) {
 
               // if unsold store, there will be no performance data, so search for store and set filter directly
-              if (!vm.topBottomData.stores.performanceData || vm.topBottomData.stores.performanceData.length === 0) {
-                vm.loadingUnsoldStore = true;
-                searchService.getStores(vm.currentTopBottomFilters.stores.id).then(function(data) {
-                  if (data && data.length > 0) {
-                    setFilter(data[0], 'store');
-                  }
-                }).finally(function() {
-                  vm.loadingUnsoldStore = false;
-                });
-              } else {
+              if (vm.topBottomData.stores.performanceData && vm.topBottomData.stores.performanceData.length > 0) {
                 setTopBottomFilterModel('stores', vm.topBottomData.stores.performanceData[0]);
                 setChainDropdownAndPlaceHolder('stores', vm.topBottomData.stores.performanceData[0]);
                 notesService.model.tdlinx = vm.topBottomData.stores.performanceData[0].unversionedStoreCode;
@@ -958,66 +1030,40 @@ module.exports = /*  @ngInject */
             }
           });
 
-          if (isNavigatedToNextLevel === true) {
+          if (isNavigatedToNextLevel) {
             var topBottomFilterForCurrentLevel = vm.currentTopBottomFilters[vm.currentTopBottomObj.currentLevelName];
             navigateTopBottomLevels(topBottomFilterForCurrentLevel);
           }
         }
+
+        if (storeData && storeData.account) {
+          setFilter(storeData, 'store');
+          vm.premiseTypeValue = storeData.premiseTypeDesc;
+          vm.filtersService.model.selected.premiseType = storeData.premiseTypeDesc;
+        }
+      }).finally(function() {
+        vm.loadingUnsoldStore = false;
       });
     }
 
-    function setNotes() {
-      var isNavigateToNextLevel = false;
-      if ($state.params.openNotesOnLoad) {
-        $timeout(function() {
-          $rootScope.$broadcast('notes:opened', true, $state.params.pageData.account);
-
-          notesService.model.accountId = $state.params.pageData.account.id;
-          notesService.accountNotes().then(function(success) {
-            vm.notes = success;
-            vm.loading = false;
-          });
-        });
-        var currentLevel = myperformanceService.setAcctDashboardFiltersOnInit($state.params.pageData.account, vm.currentTopBottomFilters);
-        vm.filtersService.model.selected.myAccountsOnly = false;
-        vm.currentTopBottomAcctType = currentLevel;
-        vm.currentTopBottomObj = getCurrentTopBottomObject(vm.currentTopBottomAcctType);
-        isNavigateToNextLevel = true;
-      }
-      return isNavigateToNextLevel;
-    }
-
-    function init() {
-      setDefaultDropDownOptions();
-      var isNavigatedFromScorecard = checkForNavigationFromScorecard();
-      var isNavigatedToNextLevel = checkForNavigationFromOpps()  || setNotes();
-      if (isNavigatedFromScorecard === false && isNavigatedToNextLevel === false) {
-        chipsService.resetChipsFilters(chipsService.model);
-      }
-      setDefaultFilterOptions();
+    function setPremiseType() {
       if ($state.params.pageData && $state.params.pageData.premiseType && $state.params.applyFiltersOnLoad) {
+        vm.premiseTypeValue = $state.params.pageData.premiseType;
         vm.filtersService.model.selected.premiseType = $state.params.pageData.premiseType;
       }
-      if (isNavigatedFromScorecard === true) {
-        var brandObj = {
-          id: vm.brandIdSelected,
-          name: vm.brandWidgetTitle
-        };
-        selectItem('brands', brandObj, vm.brandTabs, 0);
-      } else {
-        getBrandsAndTopbottomDataOnInit(isNavigatedToNextLevel);
-      }
-      // reset state params
+    }
+
+    function resetStateParameters() {
       $state.params.applyFiltersOnLoad = false;
       $state.params.resetFiltersOnLoad = true;
+    }
+
+    function setCurrentUserName() {
       try {
         vm.currentUserName = userService.model.currentUser.firstName + ' ' + userService.model.currentUser.lastName;
       } catch (e) {
         vm.currentUserName = null;
       }
-
-      setTopLevelForLabel();
-      sendTopBottomAnalyticsEvent();
     }
 
     /**
@@ -1051,25 +1097,6 @@ module.exports = /*  @ngInject */
         removeAllTopBottomAccountTypeFilters(levelToResetBeyond);
         onFilterPropertiesChange();
       }
-    }
-
-    /**
-     * It is called on init and sets the default dropdown options for the entire account dashboard
-     * @param {Object} currentAcctType The new account type to be set
-     * @returns Sets the data for the currently selected top bottom account type
-     */
-    function setDefaultDropDownOptions() {
-      setDefaultEndingPeriodOptions();
-      vm.filterModel.trend = vm.filtersService.model.trend[0];
-      vm.filtersService.model.accountSelected.accountBrands = vm.filtersService.accountFilters.accountBrands[0];
-      vm.filtersService.model.accountSelected.accountMarkets = vm.filtersService.accountFilters.accountMarkets[0];
-      vm.currentTopBottomAcctType = vm.filtersService.accountFilters.accountTypes[0];
-      vm.filtersService.model.valuesVsTrend = vm.filtersService.accountFilters.valuesVsTrend[0];
-      vm.filtersService.model.selected.premiseType = 'off';
-      vm.chartOptions = myperformanceService.getChartOptions();
-      vm.topBottomData = myperformanceService.initDataForAllTbLevels(vm.topBottomData);
-      vm.marketSelectedIndex = 0;
-      vm.currentTopBottomObj = getCurrentTopBottomObject(vm.currentTopBottomAcctType);
     }
 
     /**
@@ -1511,6 +1538,8 @@ module.exports = /*  @ngInject */
 
     function setUpdatedFilters() {
       filtersService.model.filtersValidCount++;
+      filtersService.model.selected.premiseType = vm.premiseTypeValue;
+
       // The order to be processed is distributor, stores, subaccounts, accounts. So that the last value doesn't get overridden
       if (vm.currentTopBottomFilters.distributors) {
         setFilter(vm.currentTopBottomFilters.distributors, 'distributor');

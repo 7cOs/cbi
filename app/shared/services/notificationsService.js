@@ -21,7 +21,7 @@ module.exports = /*  @ngInject */
      */
     function markNotifications(notifications) {
       var notificationsPromise = $q.defer(),
-          url = apiHelperService.request('/api/notifications');
+          url = apiHelperService.request('/v2/notifications');
 
       $http.patch(url, notifications)
         .then(

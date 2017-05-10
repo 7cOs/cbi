@@ -520,7 +520,7 @@ describe('Unit: expanded target list controller', function() {
           }
         ];
 
-        httpBackend.expectGET('/api/targetLists').respond(200);
+        httpBackend.expectGET('/v2/targetLists').respond(200);
       });
 
       afterEach(function() {
@@ -589,8 +589,8 @@ describe('Unit: expanded target list controller', function() {
       });
       it('should update the model to reflect deleted target list', function() {
         var def = q.defer();
-        httpBackend.when('GET', '/api/users/undefined/targetLists?archived=true').respond(200, {test: 1});
-        httpBackend.when('GET', '/api/users/undefined/targetLists/').respond(200, {test: 2});
+        httpBackend.when('GET', '/v2/users/undefined/targetLists?archived=true').respond(200, {test: 1});
+        httpBackend.when('GET', '/v2/users/undefined/targetLists/').respond(200, {test: 2});
         spyOn(targetListService, 'deleteTargetList').and.callFake(function() {
          return {
            then: function(callback) { return q.when(callback(def)); }
@@ -635,9 +635,9 @@ describe('Unit: expanded target list controller', function() {
    describe('[archiveTargetList]', function() {
      it('should archive', function() {
        var def = q.defer();
-       httpBackend.when('GET', '/api/users/undefined/targetLists?archived=true').respond(200, {test: 1});
-       httpBackend.when('GET', '/api/users/undefined/targetLists/').respond(200, {test: 2});
-       httpBackend.when('PATCH', '/api/targetLists/1234').respond(200, {test: 3});
+       httpBackend.when('GET', '/v2/users/undefined/targetLists?archived=true').respond(200, {test: 1});
+       httpBackend.when('GET', '/v2/users/undefined/targetLists/').respond(200, {test: 2});
+       httpBackend.when('PATCH', '/v2/targetLists/1234').respond(200, {test: 3});
 
       spyOn(targetListService, 'updateTargetList').and.callFake(function() {
          return {
