@@ -1,8 +1,6 @@
 'use strict';
 
 module.exports = function (config) {
-  const fs = require('fs');
-
   // global settings
   config.domain = 'compass-qa.cbrands.com';
   config.env = 'test';

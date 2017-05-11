@@ -1,7 +1,6 @@
 'use strict';
 
-const os = require('os'),
-      fs = require('fs');
+const os = require('os');
 
 module.exports = function (config) {
 
