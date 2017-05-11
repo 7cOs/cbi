@@ -318,9 +318,7 @@ function createSalesForceNote(sfdcConnection, noteId, app, req) {
         ? resolve(getResponseObject(true, response))
         : reject(getResponseObject(false, `Error creating note: ${JSON.stringify(response)}`));
     })
-    .catch(error => {
-      reject(getResponseObject(false, `Error creating note: ${error}`))
-    });
+    .catch(error => reject(getResponseObject(false, `Error creating note: ${error}`)));
   });
 }
 
