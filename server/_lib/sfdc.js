@@ -267,55 +267,78 @@ function createNote(app, req) {
   return new Promise((resolve, reject) => {
     const accountId = req.query ? req.query.accountId : undefined;
 
-    if (!accountId) reject(getResponseObject(false, 'There was no valid accountId submitted. Please make sure you have an account id (i.e. TD Linx Id)'));
+    if (accountId) {
+      sfdcConn(app, req)
+      .then(connection => {
 
-    const accountType = req.body.accountType;
-    const queries = {
-      distributor: {
-        sobject: 'Account',
-        select: 'Id, JDE_Address_Book_Number__c, Account_Record_Type_Name__c',
-        where: `Account_Record_Type_Name__c='US_Distributor_Account' AND JDE_Address_Book_Number__c='${accountId}'`
-      },
-      nonDistributor: {
-        sobject: 'Account',
-        select: 'Id, TDLinx_ID__c',
-        where: `TDLinx_ID__c='${accountId}' AND Account_Record_Type_Name__c='US_Account'`
-      }
-    };
-    const queryStrings = accountType === 'DISTRIBUTOR' ? queries.distributor : queries.nonDistributor;
+        const queryStrings = req.body.accountType === 'DISTRIBUTOR'
+          ? getNoteQueries('distributor', accountId)
+          : getNoteQueries('nonDistributor', accountId);
 
-    sfdcConn(app, req)
-    .then(conn => {
-      conn.sobject(queryStrings.sobject)
-        .select(queryStrings.select)
-        .where(queryStrings.where)
-        .execute()
-        .then(response => {
-          if (!response.length) reject(getResponseObject(false, `There was no account in SFDC found with TDLinx Id or JDE Address Book Number: ${accountId}`));
-
-          const sfdcAccountId = response[0].Id;
-
-          conn.sobject('Note__c').create([{
-            Account__c: sfdcAccountId,
-            Comments_RTF__c: req.body.body,
-            Conversion_Flag__c: req.body.conversionflag,
-            Other_Type__c: req.body.othertype,
-            Private__c: req.body.private,
-            Soft_Delete__c: req.body.softdelete,
-            Type__c: req.body.title,
-            RecordTypeId: app.get('config').sfdcSettings.noteRecordTypeId
-          }])
-          .then(response => {
-            response.length && response[0].success
-              ? resolve(getResponseObject(true, response))
-              : reject(getResponseObject(false, `Error creating note: ${JSON.stringify(response)}`));
-          })
-          .catch(error => reject(getResponseObject(false, `Error creating note: ${error}`)));
-        })
-        .catch((error) => reject(getResponseObject(false, `There was no account in SFDC found with TDLinx Id or JDE Address Book Number: ${error}`)));
-    })
-    .catch(error => reject(getResponseObject(false, `${connErrorMessage} ${error}`)));
+        getNoteId(connection, queryStrings)
+        .then(response => createSalesForceNote(connection, response, app, req))
+        .then(response => resolve(response))
+        .catch(error => reject(error));
+      })
+      .catch(error => reject(error));
+    } else {
+      reject(getResponseObject(false, 'There was no valid accountId submitted. Please make sure you have an account id (i.e. TD Linx Id)'));
+    }
   });
+}
+
+function getNoteId(sfdcConnection, queryStrings) {
+  return new Promise((resolve, reject) => {
+    sfdcConnection.sobject(queryStrings.sobject)
+      .select(queryStrings.select)
+      .where(queryStrings.where)
+      .execute()
+      .then(response => {
+        if (response.length) resolve(response[0].Id);
+        else reject(getResponseObject(false, `There was no SFDC account found with request accountID: ${response}`));
+      })
+      .catch(error => reject(getResponseObject(false, `There was no SFDC account found with request accountID: ${error}`)));
+  });
+}
+
+function createSalesForceNote(sfdcConnection, noteId, app, req) {
+  return new Promise((resolve, reject) => {
+    sfdcConnection.sobject('Note__c').create([{
+      Account__c: noteId,
+      Comments_RTF__c: req.body.body,
+      Conversion_Flag__c: req.body.conversionflag,
+      Other_Type__c: req.body.othertype,
+      Private__c: req.body.private,
+      Soft_Delete__c: req.body.softdelete,
+      Type__c: req.body.title,
+      RecordTypeId: app.get('config').sfdcSettings.noteRecordTypeId
+    }])
+    .then(response => {
+      response.length && response[0].success
+        ? resolve(getResponseObject(true, response))
+        : reject(getResponseObject(false, `Error creating note: ${JSON.stringify(response)}`));
+    })
+    .catch(error => {
+      reject(getResponseObject(false, `Error creating note: ${error}`))
+    });
+  });
+}
+
+function getNoteQueries(queryType, accountId) {
+  const queries = {
+    distributor: {
+      sobject: 'Account',
+      select: 'Id, JDE_Address_Book_Number__c, Account_Record_Type_Name__c',
+      where: `Account_Record_Type_Name__c='US_Distributor_Account' AND JDE_Address_Book_Number__c='${accountId}'`
+    },
+    nonDistributor: {
+      sobject: 'Account',
+      select: 'Id, TDLinx_ID__c',
+      where: `TDLinx_ID__c='${accountId}' AND Account_Record_Type_Name__c='US_Account'`
+    }
+  };
+
+  return queries[queryType];
 }
 
 function getAttachment(app, req, res) {
@@ -478,12 +501,12 @@ function getUploadedFileBase64(path) {
   });
 }
 
-function getResponseObject(boolean, response) {
+function getResponseObject(isSuccess, response) {
   const responseObject = {
-    isSuccess: boolean
+    isSuccess: isSuccess
   };
 
-  boolean
+  isSuccess
     ? responseObject['successReturnValue'] = response
     : responseObject['errorMessage'] = response;
 
