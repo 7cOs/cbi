@@ -22,7 +22,7 @@ module.exports = function (config) {
 
   config.api = {
     url: 'https://internal.api.cbrands.com',
-    key: 'U1NCc2FXdGxJSFJ2SUVodlpHOXlMQ0JJYjJSdmNpd2dTRzlrYjNJc0lFaHZaRzl5Y3lCaGJtUWdTRzlrYjNKekxnPT0=',
+    key: process.env.API_SECRET,
     apiKey: 'compass-beer-portal'
   };
 
@@ -30,7 +30,7 @@ module.exports = function (config) {
     entryPoint: 'https://sso.cbrands.com/oamfed/idp/samlv20',
     logoutBase: 'https://sso.cbrands.com/oam/server/logout',
     issuer: 'https://compass-stage.cbrands.com',
-    cert: fs.readFileSync('./server/_config/passport/certs/cbi-prod-signing-2018.cer', 'utf-8'),
+    cert: process.env.SSO_CERT,
     privateCert: '',
     signatureAlgorithm: 'sha1'
   };
@@ -39,8 +39,8 @@ module.exports = function (config) {
     // assertionEndpoint: the endpoint you connect to in order to get the session token.
     assertionEndpoint: 'https://cbrands--Full.cs17.my.salesforce.com/services/oauth2/token?so=00Dg0000006Hhfi',
     // privateKey and certfile: keys generated from SFDC's Key and Certificate Management area
-    privateKey: fs.readFileSync('./server/_config/environment/sfdcsecurity/test/signingKey.pem').toString(),
-    certfile: fs.readFileSync('./server/_config/environment/sfdcsecurity/test/certificate.crt').toString(),
+    privateKey: process.env.SFDC_SIGNING_KEY,
+    certfile: process.env.SFDC_CERTIFICATE,
     // issuer, recipient: can be anything, but must match between the SFDC Single Sign-On Configuration and this value.
     issuer: 'compass-portal',
     recipient: 'https://cbrands--Full.cs17.my.salesforce.com?so=00Dg0000006Hhfi',
