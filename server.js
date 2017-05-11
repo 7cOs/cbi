@@ -12,6 +12,12 @@ throng({
 function start() {
   process.env.NODE_ENV = process.env.NODE_ENV || 'local'; // SET DEFAULT ENVIRONMENT
 
+  // pull in environment variables from .env file when running locally
+  if (process.env.NODE_ENV === 'local') {
+    const dotenv = require('dotenv');
+    dotenv.config();
+  }
+
   // Define our constants
   const express  = require('express'),
         app      = express();
