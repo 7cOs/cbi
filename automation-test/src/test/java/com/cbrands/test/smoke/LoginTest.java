@@ -69,7 +69,6 @@ public class LoginTest {
   @DataProvider(name = "userCredentials")
   public static Object[][] userCredentials() {
     return new Object[][] {
-      { "juan.baez@cbrands.com", "Corona.2016" },
       { "stash.rowley@cbrands.com", "Corona.2016" } ,
       { "eric.ramey@cbrands.com", "Corona.2016" } ,
       { "chris.williams@cbrands.com", "Corona.2016" }
