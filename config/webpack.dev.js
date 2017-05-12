@@ -5,8 +5,11 @@ const path = require('path');
 const cssnano = require('cssnano');
 const commonConfig = require('./webpack.common.js');
 const helpers = require('./helpers');
+const dotenv = require('dotenv');
 
 const ENV = process.env.NODE_ENV = process.env.ENV = 'development';
+
+dotenv.config();
 
 module.exports = webpackMerge(commonConfig, {
 
@@ -32,12 +35,12 @@ module.exports = webpackMerge(commonConfig, {
   },
 
   plugins: [
-
     new webpack.DefinePlugin({
       'ENV': JSON.stringify(ENV),
       'process.env': {
         'ENV': JSON.stringify(ENV),
-        'NODE_ENV': JSON.stringify(ENV)
+        'NODE_ENV': JSON.stringify(ENV),
+        'IQ_LINK': JSON.stringify(process.env.IQ_LINK)
       }
     }),
 
