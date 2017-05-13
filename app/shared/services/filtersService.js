@@ -527,6 +527,7 @@ module.exports = /*  @ngInject */
     }
 
     function getNewPaginationState(paginationState) {
+      debugger;
       const _paginationState = Object.assign({}, paginationState);
 
       _paginationState.totalPages = Math.ceil(_paginationState.totalStores / 20) - 1;

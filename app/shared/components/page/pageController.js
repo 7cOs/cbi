@@ -15,9 +15,9 @@ module.exports = /*  @ngInject */
 
     // Public Methods
     function displayPagination() {
-      if ($state.current.name !== 'target-list-detail' && filtersService.model.appliedFilter.pagination.totalPages > 0) return true;
+      // if ($state.current.name !== 'target-list-detail' && filtersService.model.appliedFilter.pagination.totalPages > 0) return true;
+      return true;
 
-      return false;
     }
 
     function getNumber() {

@@ -332,9 +332,13 @@ module.exports = /*  @ngInject */
     function init() {
       targetListService.model.currentList.id = $state.params.id;
 
+      // reset all chips and filters on page init
+      chipsService.resetChipsFilters(chipsService.model);
+
       $q.all([
         targetListService.getTargetList(targetListService.model.currentList.id),
-        targetListService.getTargetListOpportunities(targetListService.model.currentList.id)
+        // targetListService.getTargetListOpportunities(targetListService.model.currentList.id)
+        chipsService.applyFilters()
       ]).then((response) => {
         handleListResponse(response[0]);
       }).catch(() => {
@@ -350,9 +354,6 @@ module.exports = /*  @ngInject */
 
       // closes filter box
       filtersService.model.expanded = false;
-
-      // reset all chips and filters on page init
-      chipsService.resetChipsFilters(chipsService.model);
 
       // disable my accounts only for pass-through to accounts dashboard
       chipsService.removeFromFilterService({type: 'myAccountsOnly'});
