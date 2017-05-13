@@ -17,7 +17,8 @@ module.exports = /*  @ngInject */
       getOpportunitiyFeedback: getOpportunityFeedback,
       createOpportunityFeedback: createOpportunityFeedback,
       deleteOpportunityFeedback: deleteOpportunityFeedback,
-      clearOpportunitiesModel: clearOpportunitiesModel
+      clearOpportunitiesModel: clearOpportunitiesModel,
+      setPaginationModel: setPaginationModel
     };
 
     return service;

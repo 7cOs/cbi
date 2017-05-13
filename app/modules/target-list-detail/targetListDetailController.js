@@ -277,6 +277,10 @@ module.exports = /*  @ngInject */
 
     function handleListResponse(targetList) {
       targetListService.model.currentList = targetList;
+      const numberOfOpps = targetList.opportunitiesSummary.opportunitiesCount;
+      const numberOfStores = targetList.opportunitiesSummary.storesCount;
+
+      opportunitiesService.setPaginationModel(numberOfOpps, numberOfStores);
 
       if (targetList.permissionLevel === 'author') {
         vm.targetListAuthor = 'current user';
