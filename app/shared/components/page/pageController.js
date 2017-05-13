@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports = /*  @ngInject */
-  function pageController($scope, $state, filtersService, loaderService, opportunitiesService) {
+  function pageController($scope, $state, filtersService, loaderService, opportunitiesService, targetListService) {
     // Initial variables
     var vm = this;
 
@@ -50,11 +50,18 @@ module.exports = /*  @ngInject */
     }
 
     function pageChanged(pageNumber) {
+      const tl = true;
       filtersService.model.appliedFilter.pagination.currentPage = pageNumber;
 
       loaderService.openLoader(true);
-      opportunitiesService.getOpportunities().then(function(data) {
-        loaderService.closeLoader();
-      });
+      if (tl) {
+        targetListService.getTargetListOpportunities(targetListService.model.currentList.id, {type: 'opportunities'}).then(response => {
+          loaderService.closeLoader();
+        });
+      } else {
+        opportunitiesService.getOpportunities().then(function(data) {
+          loaderService.closeLoader();
+        });
+      }
     }
   };
