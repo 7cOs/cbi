@@ -15,9 +15,7 @@ module.exports = /*  @ngInject */
 
     // Public Methods
     function displayPagination() {
-      // if ($state.current.name !== 'target-list-detail' && filtersService.model.appliedFilter.pagination.totalPages > 0) return true;
-      return true;
-
+      return filtersService.model.appliedFilter.pagination.totalPages;
     }
 
     function getNumber() {
@@ -50,16 +48,17 @@ module.exports = /*  @ngInject */
     }
 
     function pageChanged(pageNumber) {
-      const tl = true;
+      const tl = $state.current.name === 'target-list-detail';
       filtersService.model.appliedFilter.pagination.currentPage = pageNumber;
 
       loaderService.openLoader(true);
       if (tl) {
+        console.log('tl');
         targetListService.getTargetListOpportunities(targetListService.model.currentList.id, {type: 'opportunities'}).then(response => {
           loaderService.closeLoader();
         });
       } else {
-        opportunitiesService.getOpportunities().then(function(data) {
+        opportunitiesService.getOpportunities().then(data => {
           loaderService.closeLoader();
         });
       }
