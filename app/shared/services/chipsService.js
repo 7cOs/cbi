@@ -120,7 +120,7 @@ module.exports = /*  @ngInject */
     }
 
     function applyFilters() {
-      let isTargetList = $state.current.name === 'target-list-detail';
+      const isTargetList = $state.current.name === 'target-list-detail';
       filtersService.resetSort();
       filtersService.model.appliedFilter.pagination.currentPage = 0;
       loaderService.openLoader(true);
@@ -129,7 +129,7 @@ module.exports = /*  @ngInject */
         targetListService.getTargetListOpportunities(targetListService.model.currentList.id, {type: 'opportunities'}).then(function(data) {
           loaderService.closeLoader();
           finishGet(data);
-        }, function(reason) {
+        }, reason => {
           console.log('Error: ' + reason);
           loaderService.closeLoader();
         });
@@ -137,7 +137,7 @@ module.exports = /*  @ngInject */
         $q.all([opportunitiesService.getOpportunities(), opportunitiesService.getOpportunitiesHeaders()]).then(function(data) {
           loaderService.closeLoader();
           finishGet(data[0]);
-        }, function(reason) {
+        }, reason => {
           console.log('Error: ' + reason);
           loaderService.closeLoader();
         });

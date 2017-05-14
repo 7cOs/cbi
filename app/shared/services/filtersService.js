@@ -400,16 +400,17 @@ module.exports = /*  @ngInject */
     return service;
 
     function addSortFilter(name) {
+      debugger;
       var filterExists = $filter('filter')(service.model.appliedFilter.sort.sortArr, {str: name});
 
       // Set page offset back to 0
       service.model.appliedFilter.pagination.currentPage = 0;
 
-      if (filterExists.length > 0) {
-        filterExists[0].asc = filterExists[0].asc ? filterExists[0].asc = false : filterExists[0].asc = true;
+      if (filterExists.length) {
+        filterExists[0].asc = !filterExists[0].asc;
       } else {
         service.model.appliedFilter.sort.sortArr = []; // Comment out this line to sort mulitple fields
-        (name === 'opportunity') ? service.model.appliedFilter.sort.sortArr.push({str: name, asc: false}) : service.model.appliedFilter.sort.sortArr.push({str: name, asc: true});
+        name === 'opportunity' ? service.model.appliedFilter.sort.sortArr.push({str: name, asc: false}) : service.model.appliedFilter.sort.sortArr.push({str: name, asc: true});
       }
     }
 
@@ -527,7 +528,6 @@ module.exports = /*  @ngInject */
     }
 
     function getNewPaginationState(paginationState) {
-      debugger;
       const _paginationState = Object.assign({}, paginationState);
 
       _paginationState.totalPages = Math.ceil(_paginationState.totalStores / 20) - 1;

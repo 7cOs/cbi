@@ -536,6 +536,7 @@ module.exports = /*  @ngInject */
 
     // Sort by selected property
     function sortBy(name) {
+      console.log(name);
       vm.ascending = !vm.ascending;
       loaderService.openLoader(true);
 
@@ -543,18 +544,20 @@ module.exports = /*  @ngInject */
         filtersService.addSortFilter(name);
         opportunitiesService.getOpportunities();
       } else if ($state.current.name === 'target-list-detail') {
-        vm.orderName = [];
-        if (vm.ascending) {
-          if (name === 'store') vm.orderName = ['store.name'];
-          if (name === 'opportunity') vm.orderName = ['-groupedOpportunities.length'];
-          if (name === 'depletions') vm.orderName = ['store.depletionsCurrentYearToDate'];
-          if (name === 'segmentation') vm.orderName = ['store.segmentation'];
-        } else {
-          if (name === 'store') vm.orderName = ['-store.name'];
-          if (name === 'opportunity') vm.orderName = ['-groupedOpportunities.length'];
-          if (name === 'depletions') vm.orderName = ['-store.depletionsCurrentYearToDate'];
-          if (name === 'segmentation') vm.orderName = ['-store.segmentation'];
-        }
+        filtersService.addSortFilter(name);
+        targetListService.getTargetListOpportunities(targetListService.model.currentList.id, {type: 'opportunities'});
+        // vm.orderName = [];
+        // if (vm.ascending) {
+        //   if (name === 'store') vm.orderName = ['store.name'];
+        //   if (name === 'opportunity') vm.orderName = ['-groupedOpportunities.length'];
+        //   if (name === 'depletions') vm.orderName = ['store.depletionsCurrentYearToDate'];
+        //   if (name === 'segmentation') vm.orderName = ['store.segmentation'];
+        // } else {
+        //   if (name === 'store') vm.orderName = ['-store.name'];
+        //   if (name === 'opportunity') vm.orderName = ['-groupedOpportunities.length'];
+        //   if (name === 'depletions') vm.orderName = ['-store.depletionsCurrentYearToDate'];
+        //   if (name === 'segmentation') vm.orderName = ['-store.segmentation'];
+        // }
       }
       loaderService.closeLoader();
     }
@@ -968,5 +971,7 @@ module.exports = /*  @ngInject */
         vm.analyticsCategory = 'Target Lists';
         vm.analyticsLabel = 'Opportunities';
       }
+      console.log(vm.pageName);
+      console.log($state.current);
     }
   };
