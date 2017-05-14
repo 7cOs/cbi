@@ -184,7 +184,7 @@ module.exports = /*  @ngInject */
      * @param {string} listId Guid of the target list
      */
     function addToTargetList(listId) {
-      if (listId && vm.selected.length > 0) {
+      if (listId && vm.selected.length) {
         loaderService.openLoader(true);
 
         let opportunityIdsPromise = opportunityIdsToCopy();
@@ -206,18 +206,24 @@ module.exports = /*  @ngInject */
     }
 
     function opportunityIdsToCopy() {
-      const opportunityIdsPromise = $q.defer();
+      const opportunityIDsPromise = $q.defer();
 
       if (vm.isAllOpportunitiesSelected) {
-        opportunitiesService.getAllOpportunitiesIDs().then((opportunityIds) => {
-          opportunityIdsPromise.resolve(opportunityIds);
-        });
+        if (vm.pageName === 'target-list-detail') {
+          targetListService.getTargetListOpportunityIDs(vm.targetListService.model.currentList.id).then(opportunityIDs => {
+            opportunityIDsPromise.resolve(opportunityIDs);
+          });
+        } else {
+          opportunitiesService.getAllOpportunitiesIDs().then((opportunityIDs) => {
+            opportunityIDsPromise.resolve(opportunityIDs);
+          });
+        }
       } else {
         const opportunityIds = vm.selected.map((opportunity) => opportunity.id);
-        opportunityIdsPromise.resolve(opportunityIds);
+        opportunityIDsPromise.resolve(opportunityIds);
       }
 
-      return opportunityIdsPromise.promise;
+      return opportunityIDsPromise.promise;
     }
 
     function updateCopiedOpportunities() {
@@ -953,7 +959,5 @@ module.exports = /*  @ngInject */
         vm.analyticsCategory = 'Target Lists';
         vm.analyticsLabel = 'Opportunities';
       }
-      console.log(vm.pageName);
-      console.log($state.current);
     }
   };

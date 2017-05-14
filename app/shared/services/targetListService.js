@@ -12,6 +12,7 @@ module.exports = /*  @ngInject */
       getTargetList: getTargetList,
       updateTargetList: updateTargetList,
       deleteTargetList: deleteTargetList,
+      getTargetListOpportunityIDs: getTargetListOpportunityIDs,
       getTargetListOpportunities: getTargetListOpportunities,
       addTargetListOpportunities: addTargetListOpportunities,
       deleteTargetListOpportunities: deleteTargetListOpportunities,
@@ -108,6 +109,33 @@ module.exports = /*  @ngInject */
       }
 
       return targetListPromise.promise;
+    }
+
+    /**
+     * @name getTargetListOpportunityIDs
+     * @desc get all opportunity IDs for given target list
+     * @params {String} targetListID - ID of target list
+     * @returns {Array} - target list opportunity IDs
+     * @memberOf cf.common.services
+     */
+    function getTargetListOpportunityIDs(targetListId) {
+      const opportunityIDsPromise = $q.defer();
+      const url = apiHelperService.request('/v2/targetLists/' + targetListId + '/opportunities');
+
+      $http.get(url)
+        .then(getTargetListOpportunityIDsSuccess)
+        .catch(getTargetListOpportunityIDsFail);
+
+      function getTargetListOpportunityIDsSuccess(response) {
+        console.log(response.data.opportunities.map(opp => opp.id));
+        opportunityIDsPromise.resolve(response.data.opportunities.map(opp => opp.id));
+      }
+
+      function getTargetListOpportunityIDsFail(error) {
+        opportunityIDsPromise.reject(error);
+      }
+
+      return opportunityIDsPromise.promise;
     }
 
     /**

@@ -38,7 +38,7 @@ module.exports = /*  @ngInject */
         end = currentPage + 5;
       }
 
-      var arr = [];
+    var arr = [];
 
       for (; start < end + 1; start++) {
         arr.push(start);
@@ -48,12 +48,11 @@ module.exports = /*  @ngInject */
     }
 
     function pageChanged(pageNumber) {
-      const tl = $state.current.name === 'target-list-detail';
+      const isTargetList = $state.current.name === 'target-list-detail';
       filtersService.model.appliedFilter.pagination.currentPage = pageNumber;
 
       loaderService.openLoader(true);
-      if (tl) {
-        console.log('tl');
+      if (isTargetList) {
         targetListService.getTargetListOpportunities(targetListService.model.currentList.id, {type: 'opportunities'}).then(response => {
           loaderService.closeLoader();
         });
