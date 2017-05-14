@@ -400,17 +400,16 @@ module.exports = /*  @ngInject */
     return service;
 
     function addSortFilter(name) {
-      debugger;
-      var filterExists = $filter('filter')(service.model.appliedFilter.sort.sortArr, {str: name});
+      const filterExists = $filter('filter')(service.model.appliedFilter.sort.sortArr, {str: name});
 
-      // Set page offset back to 0
-      service.model.appliedFilter.pagination.currentPage = 0;
+      service.model.appliedFilter.pagination.currentPage = 0; // reset pagination offset
 
       if (filterExists.length) {
         filterExists[0].asc = !filterExists[0].asc;
       } else {
+        const defaultAsc = name !== 'opportunity';
         service.model.appliedFilter.sort.sortArr = []; // Comment out this line to sort mulitple fields
-        name === 'opportunity' ? service.model.appliedFilter.sort.sortArr.push({str: name, asc: false}) : service.model.appliedFilter.sort.sortArr.push({str: name, asc: true});
+        service.model.appliedFilter.sort.sortArr.push({str: name, asc: defaultAsc});
       }
     }
 

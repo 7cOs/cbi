@@ -536,30 +536,16 @@ module.exports = /*  @ngInject */
 
     // Sort by selected property
     function sortBy(name) {
-      console.log(name);
       vm.ascending = !vm.ascending;
       loaderService.openLoader(true);
+      filtersService.addSortFilter(name);
 
       if ($state.current.name === 'opportunities') {
-        filtersService.addSortFilter(name);
-        opportunitiesService.getOpportunities();
+        opportunitiesService.getOpportunities().then(() => loaderService.closeLoader());
       } else if ($state.current.name === 'target-list-detail') {
-        filtersService.addSortFilter(name);
-        targetListService.getTargetListOpportunities(targetListService.model.currentList.id, {type: 'opportunities'});
-        // vm.orderName = [];
-        // if (vm.ascending) {
-        //   if (name === 'store') vm.orderName = ['store.name'];
-        //   if (name === 'opportunity') vm.orderName = ['-groupedOpportunities.length'];
-        //   if (name === 'depletions') vm.orderName = ['store.depletionsCurrentYearToDate'];
-        //   if (name === 'segmentation') vm.orderName = ['store.segmentation'];
-        // } else {
-        //   if (name === 'store') vm.orderName = ['-store.name'];
-        //   if (name === 'opportunity') vm.orderName = ['-groupedOpportunities.length'];
-        //   if (name === 'depletions') vm.orderName = ['-store.depletionsCurrentYearToDate'];
-        //   if (name === 'segmentation') vm.orderName = ['-store.segmentation'];
-        // }
+        targetListService.getTargetListOpportunities(targetListService.model.currentList.id,
+                                                    {type: 'opportunities'}).then(() => loaderService.closeLoader());
       }
-      loaderService.closeLoader();
     }
 
     // Select or deselect individual list item
@@ -600,11 +586,7 @@ module.exports = /*  @ngInject */
     }
 
     function hasOpportunities() {
-      if (opportunitiesService.model.opportunities.length === 0) {
-        return false;
-      } else {
-        return true;
-      }
+      return opportunitiesService.model.opportunities.length;
     }
 
     function noOpportunitiesExpanded() {
