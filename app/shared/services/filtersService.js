@@ -455,7 +455,7 @@ module.exports = /*  @ngInject */
       for (var key in service.model.selected) {
         var propVal = service.model.selected[key];
         if (service.model.selected.hasOwnProperty(key) && propVal !== '') {
-          if (!Array.isArray(propVal) || propVal.length !== 0) {
+          if (!Array.isArray(propVal) || propVal.length) {
             filterPayload[key] = service.model.selected[key];
           }
         }

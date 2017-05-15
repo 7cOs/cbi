@@ -279,9 +279,9 @@ module.exports = /*  @ngInject */
             queryParams += key2 + ':' + obj[key2];
             somethingAdded = true;
           }
-        } else if (key2 === 'simpleDistributionType' || key2 === 'storeFormat') {
+        } else if (key2 === 'simpleDistributionType' || key2 === 'storeFormat' || key2 === 'retailer' || key2 === 'priorityPackage') {
           somethingAdded = false;
-        } else if (obj[key2].constructor !== Array && key2 !== 'retailer' && key2 !== 'priorityPackage') {
+        } else if (obj[key2].constructor !== Array) {
           queryParams += key2 + ':' + obj[key2];
           somethingAdded = true;
         }
