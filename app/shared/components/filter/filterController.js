@@ -280,7 +280,6 @@ module.exports = /*  @ngInject */
     }
 
     function applyFilters() {
-      checkForDuplicates();
       sendFilterAnalytics();
       chipsService.applyFilters();
     }
@@ -370,35 +369,6 @@ module.exports = /*  @ngInject */
         $analytics.eventTrack(action, {
           category: 'Filters', label: label
         });
-      }
-    }
-
-    function checkForDuplicates() {
-      angular.forEach(filtersService.model.selected, function(value, key) {
-        switch (key) {
-          case 'account':
-          case 'subaccount':
-          case 'store':
-          case 'distributor':
-          case 'brand':
-          case 'masterSKU':
-          case 'contact':
-            removeDuplicate(key);
-            break;
-        }
-      });
-    }
-
-    // Generic function to remove duplicates
-    // from filtersService.model.selected
-    function removeDuplicate (key) {
-      for (let i = 0; i < filtersService.model.selected[key].length; i++) {
-        for (let j = 0; j < filtersService.model.selected[key].length; j++) {
-          if (i !== j && (filtersService.model.selected[key][i] === filtersService.model.selected[key][j])) {
-              filtersService.model.selected[key].splice(j, 1);
-              i--; j--;
-          }
-        }
       }
     }
 
