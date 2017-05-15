@@ -583,7 +583,7 @@ module.exports = /*  @ngInject */
       }
 
       function onPremise() {
-        vm.premiseTypeValue = 'off';
+        vm.premiseTypeValue = 'on';
         filtersService.model.selected.premiseType = 'on';
         vm.updateChip('On-Premise', 'premiseType');
         disablePremiseType(true);
@@ -908,7 +908,9 @@ module.exports = /*  @ngInject */
     }
 
     function init() {
+      // Set default account dashboard options
       setDefaultDropDownOptions();
+
       const isNavigatedFromScorecard = $state.params.applyFiltersOnLoad && $state.params.pageData.brandTitle;
       const isNavigatedFromOpps = $state.params.storeid;
       const isSettingNotes = $state.params.openNotesOnLoad;
@@ -916,6 +918,11 @@ module.exports = /*  @ngInject */
       if (!isNavigatedFromScorecard && !(isNavigatedFromOpps || isSettingNotes)) {
         chipsService.resetChipsFilters(chipsService.model);
       }
+
+      // Set filters based on the logged in user
+      setDefaultFilterOptions();
+      // Set premise type based on passed in state params if applicable
+      setPremiseType();
 
       if (isNavigatedFromOpps) {
         setDataForNavigationFromOpps();
@@ -931,8 +938,6 @@ module.exports = /*  @ngInject */
         getBrandsAndTopbottomDataOnInit(isNavigatedFromOpps || isSettingNotes);
       }
 
-      setDefaultFilterOptions();
-      setPremiseType();
       resetStateParameters();
       setCurrentUserName();
       setTopLevelForLabel();
