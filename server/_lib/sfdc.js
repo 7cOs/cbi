@@ -265,12 +265,11 @@ function userInfo(app, req) {
 
 function createNote(app, req) {
   return new Promise((resolve, reject) => {
-    const accountId = req.query ? req.query.accountId : undefined;
+    if (req.query.accountId) {
+      const accountId = req.query.accountId;
 
-    if (accountId) {
       sfdcConn(app, req)
       .then(connection => {
-
         const queryStrings = req.body.accountType === 'DISTRIBUTOR'
           ? getNoteQueries('distributor', accountId)
           : getNoteQueries('nonDistributor', accountId);
