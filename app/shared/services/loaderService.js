@@ -23,7 +23,6 @@ module.exports = /*  @ngInject */
      * @memberOf cf.common.services
      */
     function openLoader(disableScroll) {
-      console.log('open loader', disableScroll);
       model.loadingFilters = true;
       if (disableScroll) {
         scrollService.disableScroll();
@@ -37,7 +36,6 @@ module.exports = /*  @ngInject */
      * @memberOf cf.common.services
      */
     function closeLoader() {
-      console.log('close Loader', model.scrollDisabled);
       model.loadingFilters = false;
       if (model.scrollDisabled) {
         scrollService.enableScroll();
