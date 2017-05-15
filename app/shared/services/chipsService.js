@@ -356,14 +356,14 @@ module.exports = /*  @ngInject */
           case 'store':
             if (result.ids) result.id = result.ids.join('|');
             addAutocompleteChip(displayName, filter, null, result.id);
-            if (service.model.indexOf(result.id) === -1) checkForAndRemoveDuplicates((result.id), model);
+            if (service.model.indexOf(result.id) === -1) checkForAndRemoveDuplicates(result.id, model);
             filtersService.model.chain = '';
             filtersService.model.store = '';
             filtersService.model.filtersValidCount++;
             break;
           case 'contact':
             addAutocompleteChip(displayName, filter, null, result.employeeId);
-            if (service.model.indexOf(result.id) === -1) checkForAndRemoveDuplicates((result.id), model);
+            if (service.model.indexOf(result.id) === -1) checkForAndRemoveDuplicates(result.id, model);
             break;
           case 'masterSKU':
             if (result.id === null || result.id === undefined) {
@@ -371,7 +371,7 @@ module.exports = /*  @ngInject */
               if (filtersService.model.selected.brand.indexOf(result.brandCode) === -1) filtersService.model.selected.brand.push(result.brandCode);
             } else if (result.id !== null) {
               addAutocompleteChip($filter('titlecase')(result.name), filter, null, result.id);
-              if (service.model.indexOf(result.id) === -1) checkForAndRemoveDuplicates((result.id), model);
+              if (service.model.indexOf(result.id) === -1) checkForAndRemoveDuplicates(result.id, model);
             }
             break;
           case 'tradeChannel':
@@ -408,10 +408,10 @@ module.exports = /*  @ngInject */
     * @memberOf cf.common.services
     */
     function checkForAndRemoveDuplicates(id, ArrayMain) {
-      if (ArrayMain.length > 0) {
+      if (id && ArrayMain && ArrayMain.length > 0) {
         if (!ArrayMain.includes(id)) ArrayMain.push(id);
       } else {
-        ArrayMain.push(id);
+        if (id) ArrayMain.push(id);
       }
     }
 
