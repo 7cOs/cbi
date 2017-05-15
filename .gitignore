@@ -25,3 +25,4 @@ coverage/
 typings/
 public/
 server/_gulp/compile/cache/
+.env
