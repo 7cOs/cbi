@@ -277,10 +277,6 @@ module.exports = /*  @ngInject */
 
     function handleListResponse(targetList) {
       targetListService.model.currentList = targetList;
-      const numberOfOpps = targetList.opportunitiesSummary.opportunitiesCount;
-      const numberOfStores = targetList.opportunitiesSummary.storesCount;
-
-      opportunitiesService.setPaginationModel(numberOfOpps, numberOfStores);
 
       if (targetList.permissionLevel === 'author') {
         vm.targetListAuthor = 'current user';
@@ -297,7 +293,6 @@ module.exports = /*  @ngInject */
     function initTargetLists() {
       targetListService.getTargetList(targetListService.model.currentList.id).then(function(response) {
         handleListResponse(response);
-
         targetListService.updateTargetListShares(targetListService.model.currentList.id, userService.model.currentUser.employeeID, true);
       }, function() {
         vm.modalUnauthorizedAccess();
@@ -344,7 +339,11 @@ module.exports = /*  @ngInject */
         // targetListService.getTargetListOpportunities(targetListService.model.currentList.id)
         chipsService.applyFilters()
       ]).then((response) => {
-        handleListResponse(response[0]);
+        const targetList = response[0];
+        handleListResponse(targetList);
+        const numberOfOpps = targetList.opportunitiesSummary.opportunitiesCount;
+        const numberOfStores = targetList.opportunitiesSummary.storesCount;
+        opportunitiesService.setPaginationModel(numberOfOpps, numberOfStores);
       }).catch(() => {
         vm.modalUnauthorizedAccess();
       }).finally(() => {
