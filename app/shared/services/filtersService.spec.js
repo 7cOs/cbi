@@ -45,7 +45,6 @@ describe('Unit: filter service', function() {
             disableSaveFilter: false,
             filtersValidCount: 0,
             impact: '',
-            opportunityType: ['All Types'],
             opportunitiesType: [
                 {name: 'All Types'},
                 {name: 'Non-Buy'},
@@ -54,6 +53,21 @@ describe('Unit: filter service', function() {
                 {name: 'New Placement (Quality)'},
                 {name: 'New Placement (No Rebuy)'},
                 {name: 'Custom'}
+            ],
+            featureType: [
+              {name: 'All Types'},
+              {name: 'Happy Hour', key: 'HH'},
+              {name: 'Everyday Low Price', key: 'LP'},
+              {name: 'Limited Time Only', key: 'LT'},
+              {name: 'Beer of the Month', key: 'BE'},
+              {name: 'Price Feature', key: 'PF'}
+            ],
+            itemAuthorizationType: [
+              {name: 'All Types'},
+              {name: 'Brand Mandate', key: 'BM'},
+              {name: 'Corporate Mandate', key: 'CM'},
+              {name: 'Authorized-Select Planogram', key: 'SP'},
+              {name: 'Authorized-Optional', key: 'OS'}
             ],
             savedFilters: [],
             placementType: [
@@ -154,6 +168,7 @@ describe('Unit: filter service', function() {
             selectedTemplate: {
                 myAccountsOnly: true,
                 simpleDistributionType: false,
+                priorityPackage: false,
                 account: [],
                 subaccount: [],
                 brand: [],
@@ -265,7 +280,6 @@ describe('Unit: filter service', function() {
             disableSaveFilter: false,
             filtersValidCount: 0,
             impact: '',
-            opportunityType: ['All Types'],
             opportunitiesType: [
                 {name: 'All Types'},
                 {name: 'Non-Buy'},
@@ -274,6 +288,21 @@ describe('Unit: filter service', function() {
                 {name: 'New Placement (Quality)'},
                 {name: 'New Placement (No Rebuy)'},
                 {name: 'Custom'}
+            ],
+            featureType: [
+              {name: 'All Types'},
+              {name: 'Happy Hour', key: 'HH'},
+              {name: 'Everyday Low Price', key: 'LP'},
+              {name: 'Limited Time Only', key: 'LT'},
+              {name: 'Beer of the Month', key: 'BE'},
+              {name: 'Price Feature', key: 'PF'}
+            ],
+            itemAuthorizationType: [
+              {name: 'All Types'},
+              {name: 'Brand Mandate', key: 'BM'},
+              {name: 'Corporate Mandate', key: 'CM'},
+              {name: 'Authorized-Select Planogram', key: 'SP'},
+              {name: 'Authorized-Optional', key: 'OS'}
             ],
             savedFilters: [],
             placementType: [
@@ -373,6 +402,7 @@ describe('Unit: filter service', function() {
             selected: {
                 myAccountsOnly: true,
                 simpleDistributionType: false,
+                priorityPackage: false,
                 account: [],
                 subaccount: [],
                 brand: [],
@@ -404,6 +434,7 @@ describe('Unit: filter service', function() {
             selectedTemplate: {
                 myAccountsOnly: true,
                 simpleDistributionType: false,
+                priorityPackage: false,
                 account: [],
                 subaccount: [],
                 brand: [],
