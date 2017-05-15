@@ -16,7 +16,7 @@ export class SettingsComponent implements OnInit {
     this.firstName = this.userService.model.currentUser.firstName;
     this.lastName = this.userService.model.currentUser.lastName;
 
-    this.versionService.getVersion().then((data) => {
+    this.versionService.getVersion().then((data: any) => {
       this.versionNumber = data.version;
       this.versionHash = data.hash;
     });
