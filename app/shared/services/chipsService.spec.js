@@ -382,7 +382,6 @@ describe('[Services.chipsService]', function() {
         chipsService.removeFromFilterService({type: 'opportunityType', name: 'Low Velocity'});
 
         expect(filtersService.model.selected.opportunityType).toEqual(['All Types']);
-        expect(filtersService.model.opportunityType).toEqual(['All Types']);
       });
 
       it('should remove selected filter and revert to "Non-Buy" when no chips are left and simple distribution type is selected, given "opportunityType" chip', function() {
@@ -392,7 +391,6 @@ describe('[Services.chipsService]', function() {
         chipsService.removeFromFilterService({type: 'opportunityType', name: 'At Risk'});
 
         expect(filtersService.model.selected.opportunityType).toEqual(['Non-Buy']);
-        expect(filtersService.model.opportunityType).toEqual(['Non-Buy']);
       });
 
       it('should remove selected filter given "state" chip', function() {
@@ -584,12 +582,12 @@ describe('[Services.chipsService]', function() {
 
       chipsService.applyFilterMulti([[]], ['All Types'], 'opportunityType');
 
-      expect(chipsService.model).toEqual([{name: 'All Types', type: 'opportunityType', applied: false, removable: false}]);
+      expect(chipsService.model).toEqual([{name: 'All Opportunity Types', type: 'opportunityType', applied: false, removable: false}]);
     });
 
     it('should reset back to all types when there is no selection', function() {
       chipsService.applyFilterMulti([[]], [], 'opportunityType');
-      expect(chipsService.model).toEqual([{name: 'All Types', type: 'opportunityType', applied: false, removable: false}]);
+      expect(chipsService.model).toEqual([{name: 'All Opportunity Types', type: 'opportunityType', applied: false, removable: false}]);
     });
 
     it('should add the correct chips', function() {
