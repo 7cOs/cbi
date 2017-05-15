@@ -114,33 +114,28 @@ module.exports = /*  @ngInject */
       } else {
         vm.loading = true;
       }
+
       data.author = 'Me';
+      data.accountType = notesService.model.currentStoreProperty.toUpperCase();
 
-      var id;
-      if (notesService.model.tdlinx) {
-        id = notesService.model.tdlinx;
-      } else {
-        id = notesService.model.accountId;
-      }
+      const id = notesService.model.tdlinx
+        ? notesService.model.tdlinx
+        : notesService.model.accountId;
 
-      notesService.createNote(data, id).then(function(success) {
-        var payload = {
-          'action': '',
-          'objectType': '',
-          'objectID': '',
-          'salesforceUserNoteID': ''
-        };
-
+      notesService.createNote(data, id).then(response => {
         data.date = moment.utc().format();
-        data.id = success.successReturnValue[0].id;
+        data.id = response.successReturnValue[0].id;
         vm.notes.push(data);
+
         jumpToNotesTop();
         setNoteAuthor();
 
-        payload.action = 'ADDED_NOTE';
-        payload.objectType = notesService.model.currentStoreProperty.toUpperCase();
-        payload.objectId = id;
-        payload.salesforceUserNoteID = success.successReturnValue[0].id;
+        const payload = {
+          objectID: id,
+          salesforceUserNoteID: response.successReturnValue[0].id,
+          objectType: notesService.model.currentStoreProperty.toUpperCase(),
+          action: 'ADDED_NOTE'
+        };
 
         userService.createNotification(userService.model.currentUser.employeeID, payload);
 

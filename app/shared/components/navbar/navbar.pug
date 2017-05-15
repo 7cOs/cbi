@@ -52,13 +52,13 @@ div.outer-nav-wrapper
                       div(ng-if="notification.objectType.toUpperCase() === 'OPPORTUNITY'")
                         p An opportunity has been shared with you
                         .source {{notification.shortenedObject.store.store_name | titlecase}}
-                          span(ng-if="notification.shortenedObject.store.store_number.toUpperCase() !== 'UNKNOWN'")  \#{{notification.shortenedObject.store.store_number}}
+                          span(ng-if="nb.isNumber(notification.shortenedObject.store.store_number)")  \#{{notification.shortenedObject.store.store_number}}
                         p.sku {{notification.shortenedObject.product.name | titlecase}}
                           span  {{notification.shortenedObject.type | formatOpportunitiesType}}
                       div(ng-if="notification.objectType.toUpperCase() === 'STORE'" ng-click="nb.goToNote(notification)")
                         p A new note was added to your retailer
                         .source {{notification.shortenedObject.store_name | titlecase}}
-                          span(ng-if="notification.shortenedObject.store_number && notification.shortenedObject.store_number.toUpperCase() !== 'UNKNOWN'") &nbsp\#{{notification.shortenedObject.store_number}}
+                          span(ng-if="notification.shortenedObject.store_number && nb.isNumber(notification.shortenedObject.store_number)") &nbsp\#{{notification.shortenedObject.store_number}}
                       div(ng-if="notification.objectType.toUpperCase() === 'DISTRIBUTOR'" ng-click="nb.goToNote(notification)")
                         p A new note was added to your distributor
                         .source {{notification.shortenedObject.name | titlecase}}
