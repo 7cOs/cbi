@@ -264,75 +264,78 @@ function userInfo(app, req) {
 }
 
 function createNote(app, req) {
-  /**
-  * createNote: Creates a new note for the account whose Id is passed in through the accountId query parameter.
-  *
-  */
-  return new Promise(function(resolve, reject) {
-    let acctId = req.query ? req.query.accountId : undefined;
+  return new Promise((resolve, reject) => {
+    if (req.query.accountId) {
+      const accountId = req.query.accountId;
 
-    if (!acctId) {
-      reject({
-        isSuccess: false,
-        errorMessage: 'There was no valid accountId submitted. Please make sure you have an account id (i.e. TD Linx Id)'
-      });
+      sfdcConn(app, req)
+      .then(connection => {
+        const queryStrings = req.body.accountType === 'DISTRIBUTOR'
+          ? getNoteQueries('distributor', accountId)
+          : getNoteQueries('nonDistributor', accountId);
+
+        getNoteId(connection, queryStrings)
+        .then(response => createSalesForceNote(connection, response, app, req))
+        .then(response => resolve(response))
+        .catch(error => reject(error));
+      })
+      .catch(error => reject(error));
     } else {
-      sfdcConn(app, req).then(function (conn) {
-        // search for the correct SFDC account Id
-        conn.search('FIND {' + acctId + '} IN ALL FIELDS RETURNING Account(Id, Name)').then(function (result) {
-          // only uses the first account it finds
-          let sfdcAccountId = (result && result.searchRecords && result.searchRecords[0]) ? result.searchRecords[0].Id : undefined;
-
-          if (!sfdcAccountId) {
-            reject({
-              isSuccess: false,
-              errorMessage: 'There was no account in SFDC found with TDLinx Id or JDE Address Book Number ' + acctId
-            });
-          } else {
-            // once you have the correct account id, create a note and attach to that account Id.
-            conn.sobject('Note__c').create([{
-              Account__c: sfdcAccountId,
-              Comments_RTF__c: req.body.body,
-              Conversion_Flag__c: req.body.conversionflag,
-              // CreatedById, CreatedDate, Id, IsDeleted, LastModifiedById, LastModifiedDate are system generated
-              Other_Type__c: req.body.othertype,
-              Private__c: req.body.private,
-              Soft_Delete__c: req.body.softdelete,
-              Type__c: req.body.title,
-              RecordTypeId: app.get('config').sfdcSettings.noteRecordTypeId
-            }]).then(function(noteReturn) {
-              if (noteReturn.length > 0 && noteReturn[0].success === true) {
-                resolve({
-                  isSuccess: true,
-                  successReturnValue: noteReturn
-                });
-              } else {
-                reject({
-                  isSuccess: false,
-                  errorMessage: 'Error creating note: ' + JSON.stringify(noteReturn)
-                });
-              }
-            }).catch(function(noteError) {
-              reject({
-                isSuccess: false,
-                errorMessage: 'Error creating note: ' + noteError
-              });
-            });
-          };
-        }).catch(function(err) {
-          reject({
-            isSuccess: false,
-            errorMessage: 'There was an error searching for a matching account: ' + err
-          });
-        });
-      }).catch(function(err) {
-        reject({
-          isSuccess: false,
-          errorMessage: connErrorMessage + err
-        });
-      });
+      reject(getResponseObject(false, 'There was no valid accountId submitted. Please make sure you have an account id (i.e. TD Linx Id)'));
     }
   });
+}
+
+function getNoteId(sfdcConnection, queryStrings) {
+  return new Promise((resolve, reject) => {
+    sfdcConnection.sobject(queryStrings.sobject)
+      .select(queryStrings.select)
+      .where(queryStrings.where)
+      .execute()
+      .then(response => {
+        if (response.length) resolve(response[0].Id);
+        else reject(getResponseObject(false, `There was no SFDC account found with request accountID: ${response}`));
+      })
+      .catch(error => reject(getResponseObject(false, `There was no SFDC account found with request accountID: ${error}`)));
+  });
+}
+
+function createSalesForceNote(sfdcConnection, noteId, app, req) {
+  return new Promise((resolve, reject) => {
+    sfdcConnection.sobject('Note__c').create([{
+      Account__c: noteId,
+      Comments_RTF__c: req.body.body,
+      Conversion_Flag__c: req.body.conversionflag,
+      Other_Type__c: req.body.othertype,
+      Private__c: req.body.private,
+      Soft_Delete__c: req.body.softdelete,
+      Type__c: req.body.title,
+      RecordTypeId: app.get('config').sfdcSettings.noteRecordTypeId
+    }])
+    .then(response => {
+      response.length && response[0].success
+        ? resolve(getResponseObject(true, response))
+        : reject(getResponseObject(false, `Error creating note: ${JSON.stringify(response)}`));
+    })
+    .catch(error => reject(getResponseObject(false, `Error creating note: ${error}`)));
+  });
+}
+
+function getNoteQueries(queryType, accountId) {
+  const queries = {
+    distributor: {
+      sobject: 'Account',
+      select: 'Id, JDE_Address_Book_Number__c, Account_Record_Type_Name__c',
+      where: `Account_Record_Type_Name__c='US_Distributor_Account' AND JDE_Address_Book_Number__c='${accountId}'`
+    },
+    nonDistributor: {
+      sobject: 'Account',
+      select: 'Id, TDLinx_ID__c',
+      where: `TDLinx_ID__c='${accountId}' AND Account_Record_Type_Name__c='US_Account'`
+    }
+  };
+
+  return queries[queryType];
 }
 
 function getAttachment(app, req, res) {
@@ -493,4 +496,16 @@ function getUploadedFileBase64(path) {
       err ? reject(err) : resolve(new Buffer(data).toString('base64'));
     });
   });
+}
+
+function getResponseObject(isSuccess, response) {
+  const responseObject = {
+    isSuccess: isSuccess
+  };
+
+  isSuccess
+    ? responseObject['successReturnValue'] = response
+    : responseObject['errorMessage'] = response;
+
+  return responseObject;
 }

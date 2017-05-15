@@ -23,15 +23,14 @@ module.exports = function (config) {
   config.api = {
     url: 'http://cbi-api-internal-loadtest.herokuapp.com',
     key: 'U1NCc2FXdGxJSFJ2SUVodlpHOXlMQ0JJYjJSdmNpd2dTRzlrYjNJc0lFaHZaRzl5Y3lCaGJtUWdTRzlrYjNKekxnPT0=',
-    apiKey: 'compass-beer-portal',
-    version: 'v2'
+    apiKey: 'compass-beer-portal'
   };
 
   config.saml = {
     entryPoint: 'https://ssodev.cbrands.com/oamfed/idp/samlv20',
     logoutBase: 'https://ssodev.cbrands.com/oam/server/logout',
     issuer: 'https://compass-loadtest.cbrands.com',
-    cert: fs.readFileSync('./server/_config/passport/certs/development.crt', 'utf-8'),
+    cert: process.env.SSO_CERT,
     privateCert: '',
     signatureAlgorithm: 'sha1'
   };

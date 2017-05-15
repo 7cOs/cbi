@@ -19,9 +19,9 @@ public class Login extends LoadableComponent<Login>{
     private Log log = LogFactory.getLog(Login.class);
 
 	private final WebDriver driver;
-	
+
 	private boolean isUserLoggedIn = false;
-	
+
 	@FindBy(how=How.XPATH, using="//*[@id='username']")
 	private WebElement userName;
 
@@ -35,7 +35,7 @@ public class Login extends LoadableComponent<Login>{
 		this.driver = driver;
         PageFactory.initElements(driver, this);
 	}
-	
+
 	public void typeUserName(String text) {
 		userName.sendKeys(text);
 	}
@@ -49,21 +49,21 @@ public class Login extends LoadableComponent<Login>{
 		isUserLoggedIn = true;
         return PageFactory.initElements(driver, HomePage.class);
     }
-	
+
 	public HomePage loginWithValidCredentials(String userName, String password) {
         typeUserName(userName);
         typePassword(password);
-		log.info("User: " + userName + " login submited");
+		log.info("User: " + userName + " login submitted");
         return clickSubmit();
     }
-	
+
 	public boolean isUserLoggedIn(){
 		return isUserLoggedIn;
 	}
 
 	@Override
 	protected void load() {
-		driver.get("https://orion-qa.cbrands.com/auth/logout");
+		driver.get("https://compass-qa.cbrands.com");
 	}
 
 	@Override
@@ -71,17 +71,16 @@ public class Login extends LoadableComponent<Login>{
 		Assert.assertTrue(userName.isDisplayed());
 		Assert.assertTrue(password.isDisplayed());
 		Assert.assertTrue(submitButton.isDisplayed());
-		log.info("Logged out");
 	}
 
 	public void logOut() {
 		isUserLoggedIn = false;
-		driver.get("https://orion-qa.cbrands.com/auth/logout");
+		driver.get("https://compass-qa.cbrands.com/auth/logout");
 	}
-	
+
 	public void logOutwithWait() {
 		isUserLoggedIn = false;
-		driver.get("https://orion-qa.cbrands.com/auth/logout");
+		driver.get("https://compass-qa.cbrands.com/auth/logout");
 		waitForVisible (By.id("username"));
 	}
 }
