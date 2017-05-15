@@ -232,7 +232,7 @@ module.exports = /*  @ngInject */
           } else {
             // iterate over arrays
             for (var k = 0; k < obj[key2].length; k++) {
-              if (obj[key2][k] && obj[key2][k].toUpperCase() === 'ALL TYPES') break;
+              if (obj[key2][k] && key2 === 'opportunityType' && obj[key2][k].toUpperCase() === 'ALL TYPES') break;
               if (k === 0) queryParams += key2 + ':';
 
               // transform opp types to db format
@@ -242,6 +242,12 @@ module.exports = /*  @ngInject */
                 } else {
                   queryParams += obj[key2][k].replace(/["'()]/g, '').replace(/[__-\s]/g, '_').toUpperCase();
                 }
+              } else if (key2 === 'featureType') {
+                const typeKey = filtersService.model.featureType.filter(type => type.name === obj[key2][k])[0].key;
+                if (typeKey) queryParams += typeKey;
+              } else if (key2 === 'itemAuthorizationType') {
+                const itemAuthKey = filtersService.model.itemAuthorizationType.filter(type => type.name === obj[key2][k])[0].key;
+                if (itemAuthKey) queryParams += itemAuthKey;
               } else if (key2 === 'impact') {
                 queryParams += obj[key2][k].slice(0, 1);
               } else if (key2 === 'opportunityStatus') {
@@ -262,7 +268,7 @@ module.exports = /*  @ngInject */
               }
 
               // add separator if it's not last item
-              if (obj[key2].length - 1 !== k) queryParams += '|';
+              if (obj[key2].length - 1 !== k && obj[key2][k].toUpperCase() !== 'ALL TYPES') queryParams += '|';
 
               somethingAdded = true;
             }

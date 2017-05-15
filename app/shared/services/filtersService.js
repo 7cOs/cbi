@@ -2,7 +2,7 @@
 
 module.exports = /*  @ngInject */
   function filtersService($filter) {
-    var paramsNotIncludedInSaveFilter = ['opportunityType', 'opportunitiesType', 'featureProductTypes', 'authorizedProductTypes', 'placementType', 'premises', 'retailer', 'depletionsTimePeriod', 'distributionTimePeriod', 'accountSelected', 'selectedTemplate', 'timePeriod', 'tradeChannels', 'trend', 'defaultSort', 'appliedFilter', 'topBottomSnapshotTypes'];
+    var paramsNotIncludedInSaveFilter = ['opportunitiesType', 'featureType', 'itemAuthorizationType', 'placementType', 'premises', 'retailer', 'depletionsTimePeriod', 'distributionTimePeriod', 'accountSelected', 'selectedTemplate', 'timePeriod', 'tradeChannels', 'trend', 'defaultSort', 'appliedFilter', 'topBottomSnapshotTypes'];
     var model = {
       account: [],
       appliedFilter: {
@@ -35,7 +35,6 @@ module.exports = /*  @ngInject */
       disableSaveFilter: false,
       filtersValidCount: 0,
       impact: '',
-      opportunityType: ['All Types'],
       opportunitiesType: [
         {name: 'All Types'},
         {name: 'Non-Buy'},
@@ -45,20 +44,20 @@ module.exports = /*  @ngInject */
         {name: 'New Placement (No Rebuy)'},
         {name: 'Custom'}
       ],
-      featureProductTypes: [
+      featureType: [
         {name: 'All Types'},
-        {name: 'Happy Hour'},
-        {name: 'Everyday Low Price (EDLP)'},
-        {name: 'Limited Time Only (LTO)'},
-        {name: 'Beer of the Month'},
-        {name: 'Price Feature'}
+        {name: 'Happy Hour', key: 'HH'},
+        {name: 'Everyday Low Price', key: 'LP'},
+        {name: 'Limited Time Only', key: 'LT'},
+        {name: 'Beer of the Month', key: 'BE'},
+        {name: 'Price Feature', key: 'PF'}
       ],
-      authorizedProductTypes: [
+      itemAuthorizationType: [
         {name: 'All Types'},
-        {name: 'Brand Mandate'},
-        {name: 'Corporate Mandate'},
-        {name: 'Authorized-Select Planogram'},
-        {name: 'Authorized-Optional'}
+        {name: 'Brand Mandate', key: 'BM'},
+        {name: 'Corporate Mandate', key: 'CM'},
+        {name: 'Authorized-Select Planogram', key: 'SP'},
+        {name: 'Authorized-Optional', key: 'OS'}
       ],
       savedFilters: [],
       placementType: [
@@ -456,11 +455,7 @@ module.exports = /*  @ngInject */
       for (var key in service.model.selected) {
         var propVal = service.model.selected[key];
         if (service.model.selected.hasOwnProperty(key) && propVal !== '') {
-          if (Array.isArray(propVal)) {
-            if (propVal.length !== 0) {
-              filterPayload[key] = service.model.selected[key];
-            }
-          } else {
+          if (!Array.isArray(propVal) || propVal.length !== 0) {
             filterPayload[key] = service.model.selected[key];
           }
         }

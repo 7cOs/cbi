@@ -134,15 +134,15 @@ form.filters(column='12' ng-class="{'target-list': filter.opportunities}")
             .dropdown
               md-select(
                 md-on-open="filter.appendDoneButton()"
-                ng-change="filter.changeFeatureProductTypesSelection()",
-                ng-model="filter.filtersService.model.selected.featureProductTypes"
+                ng-change="filter.changeFeatureTypeSelection()",
+                ng-model="filter.filtersService.model.selected.featureType"
                 multiple="true"
-                md-on-close="filter.applyFilterMulti(filter.filtersService.model.selected.featureProductTypes, filter.filtersService.model.selected.featureProductTypes, 'featureProductTypes'); filter.closeDoneButton()",
+                md-on-close="filter.applyFilterMulti(filter.filtersService.model.selected.featureType, filter.filtersService.model.selected.featureType, 'featureType'); filter.closeDoneButton()",
                 aria-label="Feature Product Types Dropdown"
-                md-selected-text="filter.featureProductTypesText"
+                md-selected-text="filter.featureTypeText()"
               )
                 md-option(
-                  ng-repeat="type in filter.filtersService.model.featureProductTypes",
+                  ng-repeat="type in filter.filtersService.model.featureType",
                   aria-label="{{type.name}}"
                   value="{{type.name}}"
                 ) {{::type.name}}
@@ -152,15 +152,15 @@ form.filters(column='12' ng-class="{'target-list': filter.opportunities}")
             .dropdown
               md-select(
                 md-on-open="filter.appendDoneButton()"
-                ng-change="filter.changeAuthorizedProductTypesSelection()",
-                ng-model="filter.filtersService.model.selected.authorizedProductTypes"
+                ng-change="filter.changeItemAuthorizationTypeSelection()",
+                ng-model="filter.filtersService.model.selected.itemAuthorizationType"
                 multiple="true"
-                md-on-close="filter.applyFilterMulti(filter.filtersService.model.selected.authorizedProductTypes, filter.filtersService.model.selected.authorizedProductTypes, 'authorizedProductTypes'); filter.closeDoneButton()",
+                md-on-close="filter.applyFilterMulti(filter.filtersService.model.selected.itemAuthorizationType, filter.filtersService.model.selected.itemAuthorizationType, 'itemAuthorizationType'); filter.closeDoneButton()",
                 aria-label="Authorized Product Types Dropdown"
-                md-selected-text="filter.autorizationProductTypesText"
+                md-selected-text="filter.autorizationProductTypesText()"
               )
                 md-option(
-                  ng-repeat="type in filter.filtersService.model.authorizedProductTypes",
+                  ng-repeat="type in filter.filtersService.model.itemAuthorizationType",
                   aria-label="{{type.name}}"
                   value="{{type.name}}"
                 ) {{::type.name}}
