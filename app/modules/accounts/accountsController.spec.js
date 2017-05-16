@@ -1054,7 +1054,7 @@ describe('Unit: accountsController', function() {
 
   });
 
-  describe('[Method] setDefaultFilterOptions', function() {
+  describe('[Method] setUserSpecificModels', function() {
     beforeEach(function() {
       spyOn(ctrl, 'updateChip').and.callThrough();
     });
@@ -1108,7 +1108,7 @@ describe('Unit: accountsController', function() {
     it('Should go to default if myAccountsOnly is false', function() {
       filtersService.model.selected.myAccountsOnly = false;
 
-      ctrl.setDefaultFilterOptions();
+      ctrl.setUserSpecificModels();
 
       expect(filtersService.model.selected.premiseType).toEqual('off');
       expect(ctrl.premiseTypeDisabled).toEqual(false);
@@ -1160,7 +1160,7 @@ describe('Unit: accountsController', function() {
         'issuedAt': 1480963632694
       };
 
-      ctrl.setDefaultFilterOptions();
+      ctrl.setUserSpecificModels();
 
       expect(filtersService.model.selected.premiseType).toEqual('off');
       expect(ctrl.premiseTypeDisabled).toEqual(true);
@@ -1172,7 +1172,7 @@ describe('Unit: accountsController', function() {
       filtersService.model.selected.myAccountsOnly = true;
       userService.model.currentUser.srcTypeCd = ['OFF_SPEC'];
 
-      ctrl.setDefaultFilterOptions();
+      ctrl.setUserSpecificModels();
 
       expect(filtersService.model.selected.premiseType).toEqual('off');
       expect(ctrl.premiseTypeDisabled).toEqual(true);
@@ -1184,7 +1184,7 @@ describe('Unit: accountsController', function() {
       filtersService.model.selected.myAccountsOnly = true;
       userService.model.currentUser.srcTypeCd = ['ON_HIER'];
 
-      ctrl.setDefaultFilterOptions();
+      ctrl.setUserSpecificModels();
 
       expect(filtersService.model.selected.premiseType).toEqual('on');
       expect(ctrl.premiseTypeDisabled).toEqual(true);
@@ -1195,7 +1195,7 @@ describe('Unit: accountsController', function() {
     it('Should go to default if SALES_HIER', function() {
       filtersService.model.selected.myAccountsOnly = true;
 
-      ctrl.setDefaultFilterOptions();
+      ctrl.setUserSpecificModels();
 
       expect(filtersService.model.selected.premiseType).toEqual('off');
       expect(ctrl.premiseTypeDisabled).toEqual(false);
@@ -1243,7 +1243,7 @@ describe('Unit: accountsController', function() {
         }
       };
 
-      ctrl.setDefaultFilterOptions();
+      ctrl.setUserSpecificModels();
 
       expect(filtersService.model.selected.premiseType).toEqual('all');
       expect(ctrl.premiseTypeDisabled).toEqual(false);
