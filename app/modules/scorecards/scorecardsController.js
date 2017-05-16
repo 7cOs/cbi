@@ -80,6 +80,7 @@ module.exports = /*  @ngInject */
     vm.sortBy = sortBy;
     vm.setSortQuery = setSortQuery;
     vm.getFilteredValue = getFilteredValue;
+    vm.scorecardsFilter = scorecardsFilter;
 
     init();
 
@@ -235,6 +236,19 @@ module.exports = /*  @ngInject */
       return modelType === 'distribution'
         ? model[vm.distributionSelectOptions.selected][key][vm.distributionRadioOptions.selected.placementType]
         : model[vm.depletionSelect][key];
+    }
+
+    function scorecardsFilter(rowType) {
+      return function(row) {
+        return row.type !== 'Total' && hasRelevantValues(row);
+      };
+
+      function hasRelevantValues(row) {
+        const filteredTimeValue = getFilteredValue('timeFrameTotal', row, rowType);
+        const filteredYAValue = getFilteredValue('vsYa', row, rowType);
+
+        return filteredTimeValue !== '-' && filteredTimeValue !== 0 && filteredYAValue !== 0;
+      }
     }
 
     // **************
