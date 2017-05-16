@@ -259,10 +259,10 @@ module.exports = /*  @ngInject */
             arr.splice(index, 1);
             filtersService.model.states.splice(index, 1);
             break;
-          } else if (chip.type === 'featureTypes') {
+          } else if (chip.type === 'featureType') {
             index = arr.indexOf(chip.name);
             arr.splice(index, 1);
-            filtersService.model.selected.featureTypes = arr;
+            filtersService.model.selected.featureType = arr;
             break;
           } else if (chip.type === 'itemAuthorizationType') {
             index = arr.indexOf(chip.name);

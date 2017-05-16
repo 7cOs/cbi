@@ -440,19 +440,19 @@ describe('[Services.chipsService]', function() {
 
       it('should remove the given feature type', () => {
         filtersService.model.selected = {
-          featureTypes: [
+          featureType: [
             'Happy Hour',
             'Everyday Low Price'
           ]
         };
 
         chipsService.removeFromFilterService({
-          type: 'featureTypes',
+          type: 'featureType',
           name: 'Happy Hour'
         });
 
         expect(filtersService.model.selected).toEqual({
-          featureTypes: [
+          featureType: [
             'Everyday Low Price'
           ]
         });
