@@ -9,5 +9,5 @@ module.exports =
   })
   .controller('navbarController', require('./navbarController'))
   .constant('ENV_VARS', {
-    iqURL: process.env.IQ_LINK
+    iqURL: process.env.IQ_LINK  // resolved during webpack build
   });
