@@ -22,7 +22,7 @@ module.exports = /*  @ngInject */
       filtersService.model.appliedFilter.pagination.currentPage = pageNumber;
       vm.loadingList = true;
       if (isTargetList) {
-        targetListService.getTargetListOpportunities(targetListService.model.currentList.id, {type: 'opportunities'}).then(response => {
+        targetListService.getTargetListOpportunities(targetListService.model.currentList.id, {type: 'targetListOpportunities'}).then(response => {
           vm.loadingList = false;
         });
       } else {

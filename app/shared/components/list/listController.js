@@ -553,8 +553,8 @@ module.exports = /*  @ngInject */
         });
       } else if (vm.pageName === 'target-list-detail') {
         targetListService.getTargetListOpportunities(targetListService.model.currentList.id,
-                                                    {type: 'opportunities'})
-                                                    .then(() => {
+                          {type: 'targetListOpportunities'})
+                          .then(() => {
           vm.loadingList = false;
         });
       }

@@ -336,7 +336,10 @@ module.exports = /*  @ngInject */
 
       $q.all([
         targetListService.getTargetList(targetListService.model.currentList.id),
-        // targetListService.getTargetListOpportunities(targetListService.model.currentList.id)
+        // Allow chipsService handle applying pagination and sort parameters, parsing
+        // of response data, and updating the opportunities & filters models (the
+        // same way opportunities searches are handled)
+        // TODO: abstract this logic away from the chipsService
         chipsService.applyFilters()
       ]).then((response) => {
         const targetList = response[0];

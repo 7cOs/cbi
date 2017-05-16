@@ -146,7 +146,7 @@ module.exports = /*  @ngInject */
      */
     function getTargetListOpportunities(targetListId, params) {
       var filterPayload;
-      if (params) filterPayload = filtersService.getAppliedFilters('opportunities');
+      if (params) filterPayload = filtersService.getAppliedFilters('targetListOpportunities');
 
       var targetListPromise = $q.defer(),
           url = apiHelperService.request('/v2/targetLists/' + targetListId + '/opportunities', filterPayload);
