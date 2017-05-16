@@ -127,7 +127,6 @@ module.exports = /*  @ngInject */
         .catch(getTargetListOpportunityIDsFail);
 
       function getTargetListOpportunityIDsSuccess(response) {
-        console.log(response.data.opportunities.map(opp => opp.id));
         opportunityIDsPromise.resolve(response.data.opportunities.map(opp => opp.id));
       }
 
