@@ -136,7 +136,7 @@ module.exports = /*  @ngInject */
     vm.removeInlineSearch = removeInlineSearch;
     vm.resetFilters = resetFilters;
     vm.selectItem = selectItem;
-    vm.setDefaultFilterOptions = setDefaultFilterOptions;
+    vm.setUserSpecificModels = setUserSpecificModels;
     vm.setFilter = setFilter;
     vm.updateBrandSnapshot = updateBrandSnapshot;
     vm.updateChip = updateChip;
@@ -429,8 +429,8 @@ module.exports = /*  @ngInject */
       chipsService.resetChipsFilters(chipsService.model);
       vm.filterModel = angular.copy(filterModelTemplate);
       filtersService.model.filtersValidCount = 0;
-      setDefaultDropDownOptions();
-      setDefaultFilterOptions();
+      initDefaultModelValues();
+      setUserSpecificModels();
       apply(false);
       // Go back to distributor level. Get the updated data for distributors
       resetTopBottom();
@@ -561,7 +561,7 @@ module.exports = /*  @ngInject */
       }
     }
 
-    function setDefaultFilterOptions() {
+    function setUserSpecificModels() {
       if (!filtersService.model.selected.myAccountsOnly) {
         disablePremiseType(false);
       } else if (userService.model.currentUser && userService.model.currentUser.srcTypeCd) {
@@ -583,7 +583,7 @@ module.exports = /*  @ngInject */
       }
 
       function onPremise() {
-        vm.premiseTypeValue = 'off';
+        vm.premiseTypeValue = 'on';
         filtersService.model.selected.premiseType = 'on';
         vm.updateChip('On-Premise', 'premiseType');
         disablePremiseType(true);
@@ -908,7 +908,8 @@ module.exports = /*  @ngInject */
     }
 
     function init() {
-      setDefaultDropDownOptions();
+      initDefaultModelValues();
+
       const isNavigatedFromScorecard = $state.params.applyFiltersOnLoad && $state.params.pageData.brandTitle;
       const isNavigatedFromOpps = $state.params.storeid;
       const isSettingNotes = $state.params.openNotesOnLoad;
@@ -916,6 +917,9 @@ module.exports = /*  @ngInject */
       if (!isNavigatedFromScorecard && !(isNavigatedFromOpps || isSettingNotes)) {
         chipsService.resetChipsFilters(chipsService.model);
       }
+
+      setUserSpecificModels();
+      setStateParamModels();
 
       if (isNavigatedFromOpps) {
         setDataForNavigationFromOpps();
@@ -931,8 +935,6 @@ module.exports = /*  @ngInject */
         getBrandsAndTopbottomDataOnInit(isNavigatedFromOpps || isSettingNotes);
       }
 
-      setDefaultFilterOptions();
-      setPremiseType();
       resetStateParameters();
       setCurrentUserName();
       setTopLevelForLabel();
@@ -944,7 +946,7 @@ module.exports = /*  @ngInject */
      * @param {Object} currentAcctType The new account type to be set
      * @returns Sets the data for the currently selected top bottom account type
      */
-    function setDefaultDropDownOptions() {
+    function initDefaultModelValues() {
       setDefaultEndingPeriodOptions();
       vm.filterModel.trend = vm.filtersService.model.trend[0];
       vm.filtersService.model.accountSelected.accountBrands = vm.filtersService.accountFilters.accountBrands[0];
@@ -1046,7 +1048,7 @@ module.exports = /*  @ngInject */
       });
     }
 
-    function setPremiseType() {
+    function setStateParamModels() {
       if ($state.params.pageData && $state.params.pageData.premiseType && $state.params.applyFiltersOnLoad) {
         vm.premiseTypeValue = $state.params.pageData.premiseType;
         vm.filtersService.model.selected.premiseType = $state.params.pageData.premiseType;

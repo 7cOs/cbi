@@ -57,7 +57,7 @@ notes
   div(row)
     div(column='2')
       label Account Scope
-      md-checkbox(ng-model="a.filtersService.model.selected.myAccountsOnly" aria-label="My Accounts" ng-click="a.updateChip('My Accounts Only', 'myAccountsOnly');" ng-change="a.setDefaultFilterOptions();") My Accounts Only
+      md-checkbox(ng-model="a.filtersService.model.selected.myAccountsOnly" aria-label="My Accounts" ng-click="a.updateChip('My Accounts Only', 'myAccountsOnly');" ng-change="a.setUserSpecificModels();") My Accounts Only
 
     div(column='2')
       .tooltip-wrap
