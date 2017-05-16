@@ -497,6 +497,17 @@ describe('[Services.chipsService]', function() {
       expect(chipsService.model.length).toEqual(1);
     });
 
+    it('should apply arr filters with a display name and verify no duplicate is added', function() {
+      expect(chipsService.model).toEqual([]);
+
+      // call method again with same info to create duplicates
+      chipsService.applyFilterArr([], {address: '441 N KILBOURN AVE', city: 'CHICAGO', id: '2225231', name: 'CHICAGO BEV SYSTEMS - IL', state: 'IL', zipCode: '60624'}, 'distributor');
+      chipsService.applyFilterArr([], {address: '441 N KILBOURN AVE', city: 'CHICAGO', id: '2225231', name: 'CHICAGO BEV SYSTEMS - IL', state: 'IL', zipCode: '60624'}, 'distributor');
+
+      expect(chipsService.model).toEqual([{name: 'Chicago Bev Systems - Il', id: '2225231', type: 'distributor', search: true, applied: false, removable: true, tradeChannel: false}]);
+      expect(chipsService.model.length).toEqual(1);
+    });
+
     it('should apply arr filters for a brand with no display name', function() {
       expect(chipsService.model).toEqual([]);
 
