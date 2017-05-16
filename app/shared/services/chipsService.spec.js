@@ -426,6 +426,58 @@ describe('[Services.chipsService]', function() {
         }]);
       });
 
+      it('should remove my account only', () => {
+        filtersService.model.selected = {
+          'myAccountsOnly': true
+        };
+
+        chipsService.removeFromFilterService({type: 'myAccountsOnly'});
+
+        expect(filtersService.model.selected).toEqual({
+          'myAccountsOnly': false
+        });
+      });
+
+      it('should remove the given feature type', () => {
+        filtersService.model.selected = {
+          featureTypes: [
+            'Happy Hour',
+            'Everyday Low Price'
+          ]
+        };
+
+        chipsService.removeFromFilterService({
+          type: 'featureTypes',
+          name: 'Happy Hour'
+        });
+
+        expect(filtersService.model.selected).toEqual({
+          featureTypes: [
+            'Everyday Low Price'
+          ]
+        });
+      });
+
+      it('should remove the given item authorization type', () => {
+        filtersService.model.selected = {
+          itemAuthorizationType: [
+            'Brand Mandate',
+            'Authorized-Optional (Sell-In)'
+          ]
+        };
+
+        chipsService.removeFromFilterService({
+          type: 'itemAuthorizationType',
+          name: 'Authorized-Optional (Sell-In)'
+        });
+
+        expect(filtersService.model.selected).toEqual({
+          itemAuthorizationType: [
+            'Brand Mandate'
+          ]
+        });
+      });
+
     });
   });
 
@@ -575,30 +627,138 @@ describe('[Services.chipsService]', function() {
       expect(chipsService.model.length).toEqual(2);
     });
   });
-  describe('[applyFilterMulti]', function() {
+  describe('[applyFilterMulti]', () => {
+    describe('opportunityType cases', () => {
+      it('should reset back to all types', function() {
+        expect(chipsService.model.length).toEqual(0);
 
-    it('should reset back to all types', function() {
-      expect(chipsService.model.length).toEqual(0);
+        chipsService.applyFilterMulti([[]], ['All Types'], 'opportunityType');
 
-      chipsService.applyFilterMulti([[]], ['All Types'], 'opportunityType');
+        expect(chipsService.model).toEqual([{name: 'All Opportunity Types', type: 'opportunityType', applied: false, removable: false}]);
+      });
 
-      expect(chipsService.model).toEqual([{name: 'All Opportunity Types', type: 'opportunityType', applied: false, removable: false}]);
+      it('should reset back to all types when there is no selection', function() {
+        chipsService.applyFilterMulti([[]], [], 'opportunityType');
+        expect(chipsService.model).toEqual([{name: 'All Opportunity Types', type: 'opportunityType', applied: false, removable: false}]);
+      });
+
+      it('should add the correct chips', function() {
+        chipsService.applyFilterMulti([[]], ['Non-Buy', 'At Risk'], 'opportunityType');
+        expect(chipsService.model).toEqual([{name: 'Non-Buy', type: 'opportunityType', applied: false, removable: true}, {name: 'At Risk', type: 'opportunityType', applied: false, removable: true}]);
+        expect(filtersService.model.selected['opportunityType']).toEqual(['Non-Buy', 'At Risk']);
+      });
+
+      it('should not allow all types with other options', function() {
+        chipsService.applyFilterMulti([[]], ['All Types', 'At Risk'], 'opportunityType');
+        expect(chipsService.model[0].name).not.toEqual('All Types');
+        expect(chipsService.model[0].name).toEqual('At Risk');
+      });
     });
 
-    it('should reset back to all types when there is no selection', function() {
-      chipsService.applyFilterMulti([[]], [], 'opportunityType');
-      expect(chipsService.model).toEqual([{name: 'All Opportunity Types', type: 'opportunityType', applied: false, removable: false}]);
+    describe('featureType cases', () => {
+      it('should reset back to all types', () => {
+        chipsService.model = [];
+        chipsService.applyFilterMulti([[]], ['All Types'], 'featureType');
+
+        expect(chipsService.model).toEqual([
+          {
+            name: 'All Feature Product Types',
+            type: 'featureType',
+            applied: false,
+            removable: true
+          }
+        ]);
+      });
+
+      it('should stay to nothing when there is no selection', () => {
+        chipsService.model = [];
+        chipsService.applyFilterMulti([[]], [], 'featureType');
+
+        expect(chipsService.model).toEqual([]);
+      });
+
+      it('should add the correct chips', () => {
+        chipsService.applyFilterMulti([[]], ['Happy Hour', 'Limited Time Only'], 'featureType');
+        expect(chipsService.model).toEqual([
+          {
+            name: 'Happy Hour',
+            type: 'featureType',
+            applied: false,
+            removable: true
+          },
+          {
+            name: 'Limited Time Only',
+            type: 'featureType',
+            applied: false,
+            removable: true
+          }
+        ]);
+      });
+
+      it('should not allow all types with other options', () => {
+        chipsService.applyFilterMulti([[]], ['All Types', 'Beer of the Month'], 'featureType');
+        expect(chipsService.model).toEqual([
+          {
+            name: 'All Feature Product Types',
+            type: 'featureType',
+            applied: false,
+            removable: true
+          }
+        ]);
+      });
     });
 
-    it('should add the correct chips', function() {
-      chipsService.applyFilterMulti([[]], ['Non-Buy', 'At Risk'], 'opportunityType');
-      expect(chipsService.model).toEqual([{name: 'Non-Buy', type: 'opportunityType', applied: false, removable: true}, {name: 'At Risk', type: 'opportunityType', applied: false, removable: true}]);
-      expect(filtersService.model.selected['opportunityType']).toEqual(['Non-Buy', 'At Risk']);
-    });
+    describe('itemAuthorizationType cases', () => {
+      it('should reset back to all types', () => {
+        chipsService.model = [];
+        chipsService.applyFilterMulti([[]], ['All Types'], 'itemAuthorizationType');
 
-    it('should should not allow all types with other options', function() {
-      chipsService.applyFilterMulti([[]], ['All Types', 'At Risk'], 'opportunityType');
-      expect(chipsService.model[0].name).not.toEqual('All Types');
+        expect(chipsService.model).toEqual([
+          {
+            name: 'All Authorized Product Types',
+            type: 'itemAuthorizationType',
+            applied: false,
+            removable: true
+          }
+        ]);
+      });
+
+      it('should stay to nothing when there is no selection', () => {
+        chipsService.model = [];
+        chipsService.applyFilterMulti([[]], [], 'itemAuthorizationType');
+
+        expect(chipsService.model).toEqual([]);
+      });
+
+      it('should add the correct chips', () => {
+        chipsService.applyFilterMulti([[]], ['Brand Mandate', 'Corporate Mandate'], 'itemAuthorizationType');
+        expect(chipsService.model).toEqual([
+          {
+            name: 'Brand Mandate',
+            type: 'itemAuthorizationType',
+            applied: false,
+            removable: true
+          },
+          {
+            name: 'Corporate Mandate',
+            type: 'itemAuthorizationType',
+            applied: false,
+            removable: true
+          }
+        ]);
+      });
+
+      it('should not allow all types with other options', () => {
+        chipsService.applyFilterMulti([[]], ['All Types', 'Authorized-Select Planogram'], 'itemAuthorizationType');
+        expect(chipsService.model).toEqual([
+          {
+            name: 'All Authorized Product Types',
+            type: 'itemAuthorizationType',
+            applied: false,
+            removable: true
+          }
+        ]);
+      });
     });
   });
 

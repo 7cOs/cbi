@@ -196,7 +196,7 @@ describe('[Services.apiHelperService]', function() {
     it('should return opportunities specific formatting when ALL item authorization types is selected', function() {
       const mockObject = {
         masterSKU: '112154',
-        itemAuthorizationType: ['All Types', 'Authorized-Select Planogram', 'Authorized-Optional'],
+        itemAuthorizationType: ['All Types', 'Authorized-Select Planogram', 'Authorized-Optional (Sell-In)'],
         premiseType: 'on',
         simpleDistributionType: true,
         type: 'opportunities',
@@ -213,7 +213,7 @@ describe('[Services.apiHelperService]', function() {
     it('should return opportunities specific formatting when item authorization types is selected', function() {
       const mockObject = {
         masterSKU: '112154',
-        itemAuthorizationType: ['Authorized-Select Planogram', 'Authorized-Optional'],
+        itemAuthorizationType: ['Authorized-Select Planogram', 'Authorized-Optional (Sell-In)'],
         premiseType: 'on',
         simpleDistributionType: true,
         type: 'opportunities',

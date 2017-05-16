@@ -577,7 +577,7 @@ describe('Unit: filter controller (opportunities)', function() {
         'Brand Mandate',
         'Corporate Mandate',
         'Authorized-Select Planogram',
-        'Authorized-Optional'
+        'Authorized-Optional (Sell-In)'
       ]);
     });
   });

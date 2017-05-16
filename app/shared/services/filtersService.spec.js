@@ -67,7 +67,7 @@ describe('Unit: filter service', function() {
               {name: 'Brand Mandate', key: 'BM'},
               {name: 'Corporate Mandate', key: 'CM'},
               {name: 'Authorized-Select Planogram', key: 'SP'},
-              {name: 'Authorized-Optional', key: 'OS'}
+              {name: 'Authorized-Optional (Sell-In)', key: 'OS'}
             ],
             savedFilters: [],
             placementType: [
@@ -302,7 +302,7 @@ describe('Unit: filter service', function() {
               {name: 'Brand Mandate', key: 'BM'},
               {name: 'Corporate Mandate', key: 'CM'},
               {name: 'Authorized-Select Planogram', key: 'SP'},
-              {name: 'Authorized-Optional', key: 'OS'}
+              {name: 'Authorized-Optional (Sell-In)', key: 'OS'}
             ],
             savedFilters: [],
             placementType: [
