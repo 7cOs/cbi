@@ -1,8 +1,6 @@
 'use strict';
 
 module.exports = function (config) {
-  const fs = require('fs');
-
   // global settings
   config.domain = 'compass-dev.cbrands.com';
   config.env = 'development';
@@ -22,7 +20,7 @@ module.exports = function (config) {
 
   config.api = {
     url: 'https://cbi-api-internal-qa.herokuapp.com',
-    key: 'U1NCc2FXdGxJSFJ2SUVodlpHOXlMQ0JJYjJSdmNpd2dTRzlrYjNJc0lFaHZaRzl5Y3lCaGJtUWdTRzlrYjNKekxnPT0=',
+    key: process.env.API_SECRET,
     apiKey: 'compass-beer-portal'
   };
 
@@ -30,7 +28,7 @@ module.exports = function (config) {
     entryPoint: 'https://stage-sso.cbrands.com/oamfed/idp/samlv20',
     logoutBase: 'https://stage-sso.cbrands.com/oam/server/logout',
     issuer: 'https://compass-dev.cbrands.com',
-    cert: fs.readFileSync('./server/_config/passport/certs/cbi-fed-idp-signing-1-stage.cer', 'utf-8'),
+    cert: process.env.SSO_CERT,
     privateCert: '',
     signatureAlgorithm: 'sha1'
   };
