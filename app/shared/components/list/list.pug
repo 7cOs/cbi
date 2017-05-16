@@ -1,3 +1,6 @@
+.loader-wrap(ng-class="{'active': list.loadingList}")
+  loader
+
 .total-opportunities
   h4.opportunities-count(ng-if="!list.opportunitiesService.model.filterApplied || !list.opportunitiesService.model.opportunities.length") 0 opportunities <span>across 0 stores</span>
   h4.opportunities-count(ng-if="list.opportunitiesService.model.filterApplied && list.opportunitiesService.model.opportunities.length") {{list.filtersService.model.appliedFilter.pagination.totalOpportunities | number:0 }} opportunities <span>across {{list.filtersService.model.appliedFilter.pagination.totalStores | number:0}} stores</span>

@@ -19,7 +19,6 @@ module.exports = /*  @ngInject */
 
     function pageChanged(pageNumber) {
       const isTargetList = vm.pageName === 'target-list-detail';
-      console.log(vm.pageName);
       filtersService.model.appliedFilter.pagination.currentPage = pageNumber;
       vm.loadingList = true;
       if (isTargetList) {

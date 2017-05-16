@@ -25,6 +25,7 @@ module.exports = /*  @ngInject */
     vm.expandedOpportunities = 0;
     vm.isAllOpportunitiesSelected = false;
     vm.isAllOpportunitiesInPageSelected = false;
+    vm.loadingList = false;
     vm.memoData = {};
     vm.memoError = false;
     vm.memoType = '';
@@ -543,14 +544,19 @@ module.exports = /*  @ngInject */
     // Sort by selected property
     function sortBy(name) {
       vm.ascending = !vm.ascending;
-      loaderService.openLoader(true);
+      vm.loadingList = true;
       filtersService.addSortFilter(name);
 
-      if ($state.current.name === 'opportunities') {
-        opportunitiesService.getOpportunities().then(() => loaderService.closeLoader());
-      } else if ($state.current.name === 'target-list-detail') {
+      if (vm.pageName === 'opportunities') {
+        opportunitiesService.getOpportunities().then(() => {
+          vm.loadingList = false;
+        });
+      } else if (vm.pageName === 'target-list-detail') {
         targetListService.getTargetListOpportunities(targetListService.model.currentList.id,
-                                                    {type: 'opportunities'}).then(() => loaderService.closeLoader());
+                                                    {type: 'opportunities'})
+                                                    .then(() => {
+          vm.loadingList = false;
+        });
       }
     }
 
