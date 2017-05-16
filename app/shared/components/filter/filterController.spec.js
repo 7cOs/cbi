@@ -556,6 +556,14 @@ describe('Unit: filter controller (opportunities)', function() {
 
       expect(ctrl.featureTypeText()).toEqual('Happy Hour, Everyday Low Price, Limited Time Only');
     });
+
+    it('gives the default text when nothing is selected', () => {
+      filtersService.model.selected.featureType = [];
+
+      ctrl.changeFeatureTypeSelection();
+
+      expect(ctrl.featureTypeText()).toEqual('No Types Selected');
+    });
   });
 
   describe('[method.changeItemAuthorizationTypeSelection]', () => {
@@ -589,6 +597,14 @@ describe('Unit: filter controller (opportunities)', function() {
       ctrl.changeItemAuthorizationTypeSelection();
 
       expect(ctrl.autorizationProductTypesText()).toEqual('Brand Mandate, Corporate Mandate');
+    });
+
+    it('gives the default text when nothing is selected', () => {
+      filtersService.model.selected.itemAuthorizationType = [];
+
+      ctrl.changeItemAuthorizationTypeSelection();
+
+      expect(ctrl.autorizationProductTypesText()).toEqual('No Types Selected');
     });
   });
 
