@@ -39,7 +39,6 @@ module.exports = /*  @ngInject */
     vm.expandDropdown = expandDropdown;
     vm.hoverState = hoverState;
     vm.modalSaveOpportunityFilter = modalSaveOpportunityFilter;
-    vm.opportunityStatusSwitch = opportunityStatusSwitch;
     vm.placeholderSelect = placeholderSelect;
     vm.resetFilters = resetFilters;
     vm.resetTradeChannels = resetTradeChannels;
@@ -188,6 +187,14 @@ module.exports = /*  @ngInject */
       _isAllFeatureTypeSelected = selected.featureType.length === allFeatureTypes.length;
     }
 
+    /**
+     * Updates an array of types by select all of them if "All Types" is selected,
+     * or by unselecting "All Types" if one other element as been unselected
+     * @param {Array} currentlySelectedTypes The array containing the user-selected types
+     * @param {Array} allTypes The array containing all the possible types.
+     * @param {Array} isAllCurrentlySelected Whether or not "All Types" was selected before the user action.
+     * @returns {Array} The array with the types updated.
+     */
     function adaptTypesSelection(currentlySelectedTypes, allTypes, isAllCurrentlySelected) {
       const allTypesOptionIndex = currentlySelectedTypes.indexOf(_allTypesOption);
       const allTypesIsSelected = allTypesOptionIndex !== -1;
@@ -228,24 +235,20 @@ module.exports = /*  @ngInject */
       return _isAllFeatureTypeSelected
         ? _allTypesOption
         : vm.filtersService.model.selected.featureType
-          ? vm.filtersService.model.selected.featureType.filter(type => type !== _allTypesOption).join(', ') || _noTypesSelected
+          ? filterOutAllTypes(vm.filtersService.model.selected.featureType).join(', ') || _noTypesSelected
           : _noTypesSelected;
+    }
+
+    function filterOutAllTypes(types) {
+      return types.filter(type => type !== _allTypesOption);
     }
 
     function autorizationProductTypesText() {
       return _isAllItemAuthorizationTypeSelected
         ? _allTypesOption
         : vm.filtersService.model.selected.itemAuthorizationType
-          ? vm.filtersService.model.selected.itemAuthorizationType.filter(type => type !== _allTypesOption).join(', ') || _noTypesSelected
+          ? filterOutAllTypes(vm.filtersService.model.selected.itemAuthorizationType).join(', ') || _noTypesSelected
           : _noTypesSelected;
-    }
-
-    function opportunityStatusSwitch() {
-      if ($state.current.name === 'target-list-detail') {
-        return true;
-      } else {
-        return false;
-      }
     }
 
     function placeholderSelect(data) {

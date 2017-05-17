@@ -122,10 +122,8 @@ form.filters(column='12' ng-class="{'target-list': filter.opportunities}")
 
       div.nested-columns
         label Opportunity Status
-        md-checkbox(ng-model="filter.filtersService.model.opportunityStatusAll" aria-label="All" ng-change="filter.applyFilterArr(filter.filtersService.model.selected.opportunityStatus, 'All', 'opportunityStatus')" ng-if="filter.opportunityStatusSwitch()") All
-        md-checkbox(ng-model="filter.filtersService.model.opportunityStatusOpen" aria-label="Open" ng-change="filter.applyFilterArr(filter.filtersService.model.selected.opportunityStatus, 'Open', 'opportunityStatus')" ng-if="!filter.opportunityStatusSwitch()") Open
+        md-checkbox(ng-model="filter.filtersService.model.opportunityStatusOpen" aria-label="Open" ng-change="filter.applyFilterArr(filter.filtersService.model.selected.opportunityStatus, 'Open', 'opportunityStatus')") Open
         md-checkbox(ng-model="filter.filtersService.model.opportunityStatusTargeted" aria-label="Targeted" ng-change="filter.applyFilterArr(filter.filtersService.model.selected.opportunityStatus, 'Targeted', 'opportunityStatus')") Targeted
-        md-checkbox(ng-model="filter.filtersService.model.opportunityStatusClosed" aria-label="Closed" ng-change="filter.applyFilterArr(filter.filtersService.model.selected.opportunityStatus, 'Closed', 'opportunityStatus')" ng-if="filter.opportunityStatusSwitch()") Closed
 
     div(column='4' ng-show="filter.filtersService.model.expanded")
       div(class='product-types-wrapper')

@@ -241,13 +241,6 @@ describe('Unit: filter controller (opportunities)', function() {
     });
   });
 
-  describe('[method.opportunityStatusSwitch]', function() {
-    it('should return false if not "target-list-detail"', function() {
-      var test = ctrl.opportunityStatusSwitch();
-      expect(test).toEqual(false);
-    });
-  });
-
   describe('[method.placeholderSelect]', function() {
     it('should set hintTextPlaceholder', function() {
       expect(ctrl.hintTextPlaceholder).toEqual('Account or Subaccount Name');
@@ -818,10 +811,4 @@ describe('Unit: filter controller (state = target-list-detail)', function() {
     });
   });
 
-  describe('[method.opportunityStatusSwitch]', function() {
-    it('should return true if "target-list-detail"', function() {
-      var test = ctrl.opportunityStatusSwitch();
-      expect(test).toEqual(true);
-    });
-  });
 });
