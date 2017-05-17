@@ -119,8 +119,8 @@ module.exports = /*  @ngInject */
       });
     }
 
-    function applyFilters() {
-      const isTargetList = $state.current.name === 'target-list-detail';
+    function applyFilters(isTargetList) {
+      isTargetList = isTargetList || $state.current.name === 'target-list-detail';
       filtersService.resetSort();
       filtersService.model.appliedFilter.pagination.currentPage = 0;
       loaderService.openLoader(true);

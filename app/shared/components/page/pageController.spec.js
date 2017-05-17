@@ -20,9 +20,10 @@ describe('Unit: page controller', function() {
     });
   });
 
-  it('should have services defined', function() {
-    expect(ctrl.filtersService).not.toBeUndefined();
-    expect(typeof (ctrl.filtersService)).toEqual('object');
+  it('should have variables defined', () => {
+    expect(ctrl.loadingList).not.toBeUndefined();
+    expect(ctrl.firstPage).not.toBeUndefined();
+    expect(ctrl.currentPage).not.toBeUndefined();
   });
 
   describe('displayPagination', function() {
@@ -112,104 +113,75 @@ describe('Unit: page controller', function() {
         'priorityPackageFlag': 'N'
       }];
     });
-
-    it('should be defined', function() {
-      expect(ctrl.displayPagination).not.toBeUndefined();
-      expect(typeof (ctrl.displayPagination)).toEqual('function');
-    });
-
-    it('should return true if there are opportunities', function() {
-      expect(ctrl.displayPagination()).toEqual(true);
-    });
-
-    it('should return false if there are opportunities', function() {
-      filtersService.model.appliedFilter.pagination.totalPages = 0;
-      expect(ctrl.displayPagination()).toEqual(false);
-    });
-
-    it('should return false if on the target list detail page', function() {
-      state.current.name = 'target-list-detail';
-      expect(ctrl.displayPagination()).toEqual(false);
-    });
   });
 
-  describe('getNumber', function() {
-    it('should be defined', function() {
-      expect(ctrl.getNumber).not.toBeUndefined();
-      expect(typeof (ctrl.getNumber)).toEqual('function');
-    });
-
+  describe('totalPages watcher', function() {
     beforeEach(function() {
       filtersService.model.appliedFilter.pagination.currentPage = 0;
+      filtersService.model.appliedFilter.pagination.totalPages = 0;
+    });
+
+    it('results in pageNumbers being set to an array of 8 items', function() {
+      filtersService.model.appliedFilter.pagination.currentPage = 0;
       filtersService.model.appliedFilter.pagination.totalPages = 7;
+      scope.$digest();
+      expect(ctrl.pageNumbers).toEqual([0, 1, 2, 3, 4, 5, 6, 7]);
     });
 
-    it('should return an arr of 8 items', function() {
-      var array = ctrl.getNumber();
-      expect(array.length).toEqual(8);
-      expect(array).toEqual([0, 1, 2, 3, 4, 5, 6, 7]);
-    });
-
-    it('should return an arr of 8 items even if current page is 5', function() {
+    it('results in pageNumbers being set to an array of 8 items even if current page is 5', function() {
       filtersService.model.appliedFilter.pagination.currentPage = 5;
-      var array = ctrl.getNumber();
-      expect(array.length).toEqual(8);
-      expect(array).toEqual([0, 1, 2, 3, 4, 5, 6, 7]);
+      filtersService.model.appliedFilter.pagination.totalPages = 7;
+      scope.$digest();
+      expect(ctrl.pageNumbers).toEqual([0, 1, 2, 3, 4, 5, 6, 7]);
     });
 
-    it('should return an arr of 8 items even if current page is 7', function() {
+    it('results in pageNumbers being set to an array of 8 items even if current page is 7', function() {
       filtersService.model.appliedFilter.pagination.currentPage = 7;
-      var array = ctrl.getNumber();
-      expect(array.length).toEqual(8);
-      expect(array).toEqual([0, 1, 2, 3, 4, 5, 6, 7]);
+      filtersService.model.appliedFilter.pagination.totalPages = 7;
+      scope.$digest();
+      expect(ctrl.pageNumbers).toEqual([0, 1, 2, 3, 4, 5, 6, 7]);
     });
 
-    it('should return an arr of 10 items', function() {
+    it('results in pageNumbers being set to an array of 10 items', function() {
       filtersService.model.appliedFilter.pagination.currentPage = 0;
       filtersService.model.appliedFilter.pagination.totalPages = 15;
-      var array = ctrl.getNumber();
-      expect(array.length).toEqual(10);
-      expect(array).toEqual([0, 1, 2, 3, 4, 5, 6, 7, 8, 9]);
+      scope.$digest();
+      expect(ctrl.pageNumbers).toEqual([0, 1, 2, 3, 4, 5, 6, 7, 8, 9]);
     });
 
-    it('should return an arr of 10 items, but start at 2 when current page is 6', function() {
+    it('results in pageNumbers being set to an array of 10 items, but start at 2 when current page is 6', function() {
       filtersService.model.appliedFilter.pagination.currentPage = 6;
       filtersService.model.appliedFilter.pagination.totalPages = 15;
-      var array = ctrl.getNumber();
-      expect(array.length).toEqual(10);
-      expect(array).toEqual([2, 3, 4, 5, 6, 7, 8, 9, 10, 11]);
+      scope.$digest();
+      expect(ctrl.pageNumbers).toEqual([2, 3, 4, 5, 6, 7, 8, 9, 10, 11]);
     });
 
-    it('should return an arr of 10 items, but start at 4 when current page is 8', function() {
+    it('results in pageNumbers being set to an array of 10 items, but start at 4 when current page is 8', function() {
       filtersService.model.appliedFilter.pagination.currentPage = 8;
       filtersService.model.appliedFilter.pagination.totalPages = 15;
-      var array = ctrl.getNumber();
-      expect(array.length).toEqual(10);
-      expect(array).toEqual([4, 5, 6, 7, 8, 9, 10, 11, 12, 13]);
+      scope.$digest();
+      expect(ctrl.pageNumbers).toEqual([4, 5, 6, 7, 8, 9, 10, 11, 12, 13]);
     });
 
-    it('should return an arr of 10 items, but start at 6 when current page is 10', function() {
+    it('results in pageNumbers being set to an array of 10 items, but start at 6 when current page is 10', function() {
       filtersService.model.appliedFilter.pagination.currentPage = 10;
       filtersService.model.appliedFilter.pagination.totalPages = 15;
-      var array = ctrl.getNumber();
-      expect(array.length).toEqual(10);
-      expect(array).toEqual([6, 7, 8, 9, 10, 11, 12, 13, 14, 15]);
+      scope.$digest();
+      expect(ctrl.pageNumbers).toEqual([6, 7, 8, 9, 10, 11, 12, 13, 14, 15]);
     });
 
-    it('should return an arr of 10 items, but start at 6 when current page is 12', function() {
+    it('results in pageNumbers being set to an array of 10 items, but start at 6 when current page is 12', function() {
       filtersService.model.appliedFilter.pagination.currentPage = 12;
       filtersService.model.appliedFilter.pagination.totalPages = 15;
-      var array = ctrl.getNumber();
-      expect(array.length).toEqual(10);
-      expect(array).toEqual([6, 7, 8, 9, 10, 11, 12, 13, 14, 15]);
+      scope.$digest();
+      expect(ctrl.pageNumbers).toEqual([6, 7, 8, 9, 10, 11, 12, 13, 14, 15]);
     });
 
-    it('should return an arr of 10 items, but start at 6 when current page is 15', function() {
+    it('results in pageNumbers being set to an array of 10 items, but start at 6 when current page is 15', function() {
       filtersService.model.appliedFilter.pagination.currentPage = 15;
       filtersService.model.appliedFilter.pagination.totalPages = 15;
-      var array = ctrl.getNumber();
-      expect(array.length).toEqual(10);
-      expect(array).toEqual([6, 7, 8, 9, 10, 11, 12, 13, 14, 15]);
+      scope.$digest();
+      expect(ctrl.pageNumbers).toEqual([6, 7, 8, 9, 10, 11, 12, 13, 14, 15]);
     });
   });
 
@@ -219,13 +191,9 @@ describe('Unit: page controller', function() {
       expect(typeof (ctrl.pageChanged)).toEqual('function');
     });
 
-    beforeEach(function() {
+    beforeEach(() => {
       filtersService.model.appliedFilter.pagination.currentPage = 0;
 
-      // Spies
-      spyOn(loaderService, 'openLoader').and.callFake(function() {
-        return true;
-      });
       spyOn(opportunitiesService, 'getOpportunities').and.callFake(function() {
         var deferred = q.defer();
         return deferred.promise;
@@ -234,17 +202,16 @@ describe('Unit: page controller', function() {
 
     it('should update the current page', function() {
       expect(filtersService.model.appliedFilter.pagination.currentPage).toEqual(0);
-
       ctrl.pageChanged(2);
-
       expect(filtersService.model.appliedFilter.pagination.currentPage).toEqual(2);
     });
 
-    it('should call loaderService.openLoader', function() {
-      expect(loaderService.openLoader).not.toHaveBeenCalled();
+    it('should set loadingList', function() {
+      expect(ctrl.loadingList).toBeFalsy();
       ctrl.pageChanged(2);
-      expect(loaderService.openLoader).toHaveBeenCalledWith(true);
+      expect(ctrl.loadingList).toBeTruthy();
     });
+
 
     it('should call opportunitiesService.getOpportunities', function() {
       expect(opportunitiesService.getOpportunities).not.toHaveBeenCalled();

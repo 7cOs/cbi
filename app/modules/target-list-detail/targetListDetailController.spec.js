@@ -1,5 +1,5 @@
 describe('Unit: targetListDetailController', function() {
-  var scope, ctrl, $mdDialog, $q, $httpBackend, targetListService, chipsService, filtersService, opportunitiesService, userService, collaborators, currentUser, pending, ownedTargetLists, deferred, deleteTLDeferred;
+  var scope, ctrl, $mdDialog, $q, $httpBackend, targetListService, chipsService, filtersService, opportunitiesService, userService, collaborators, currentUser, pending, ownedTargetLists, deferred, deleteTLDeferred, $state;
 
   beforeEach(function() {
     angular.mock.module('ui.router');
@@ -8,7 +8,7 @@ describe('Unit: targetListDetailController', function() {
     angular.mock.module('cf.common.filters');
     angular.mock.module('cf.modules.targetListDetail');
 
-    inject(function($rootScope, $controller, _$mdDialog_, _$window_, _$q_, _$httpBackend_, _targetListService_, _chipsService_, _filtersService_, _opportunitiesService_, _userService_) {
+    inject(function($rootScope, $controller, _$mdDialog_, _$window_, _$q_, _$httpBackend_, _targetListService_, _chipsService_, _filtersService_, _opportunitiesService_, _userService_, _$state_) {
       scope = $rootScope.$new();
       ctrl = $controller('targetListDetailController', {$scope: scope});
       $mdDialog = _$mdDialog_;
@@ -19,6 +19,7 @@ describe('Unit: targetListDetailController', function() {
       filtersService = _filtersService_;
       opportunitiesService = _opportunitiesService_;
       userService = _userService_;
+      $state = _$state_;
     });
 
     deferred = $q.defer();
@@ -474,11 +475,13 @@ describe('Unit: targetListDetailController', function() {
 
         // init stuff that we dont care about - we dont need one for /v2/targetLists/1 because real service is never actually called
         $httpBackend.expectGET('/v2/targetLists/undefined').respond(200);
-        $httpBackend.expectGET('/v2/targetLists/undefined/opportunities').respond(200);
+        $httpBackend.expectGET('/v2/targetLists/undefined/opportunities?limit=20&sort=segmentation:ascending&offset=0').respond(200);
         $httpBackend.expectPATCH('/v2/targetLists/undefined/shares').respond(200);
       });
 
       it('should call the service and run .then()', function() {
+        $state.current.name = 'target-list-detail';
+        expect($state.current.name).toEqual('target-list-detail');
         // create promise and spy on service.method
         spyOn(targetListService, 'updateTargetList').and.callFake(function() {
           return deferred.promise;
@@ -596,7 +599,7 @@ describe('Unit: targetListDetailController', function() {
 
       beforeEach(function() {
         $httpBackend.expectGET('/v2/targetLists/undefined').respond(200);
-        $httpBackend.expectGET('/v2/targetLists/undefined/opportunities').respond(200);
+        $httpBackend.expectGET('/v2/targetLists/undefined/opportunities?limit=20&sort=segmentation:ascending&offset=0').respond(200);
         $httpBackend.expectPATCH('/v2/targetLists/undefined/shares').respond(200);
         $httpBackend.expectDELETE('/v2/targetLists/undefined').respond(200);
       });
@@ -654,7 +657,7 @@ describe('Unit: targetListDetailController', function() {
 
         // init stuff that we dont care about - we dont need one for /v2/targetLists/1 because real service is never actually called
         $httpBackend.expectGET('/v2/targetLists/undefined').respond(200);
-        $httpBackend.expectGET('/v2/targetLists/undefined/opportunities').respond(200);
+        $httpBackend.expectGET('/v2/targetLists/undefined/opportunities?limit=20&sort=segmentation:ascending&offset=0').respond(200);
         $httpBackend.expectPATCH('/v2/targetLists/undefined/shares').respond(200);
         $httpBackend.expectDELETE('/v2/targetLists/undefined').respond(200);
 
@@ -824,7 +827,7 @@ describe('Unit: targetListDetailController', function() {
           targetListService.model.currentList.id = 1;
 
           $httpBackend.expectGET('/v2/targetLists/undefined').respond(200);
-          $httpBackend.expectGET('/v2/targetLists/undefined/opportunities').respond(200);
+          $httpBackend.expectGET('/v2/targetLists/undefined/opportunities?limit=20&sort=segmentation:ascending&offset=0').respond(200);
           $httpBackend.expectPATCH('/v2/targetLists/undefined/shares').respond(200);
 
           spyOn(targetListService, 'updateTargetList').and.callFake(function() {
@@ -895,7 +898,7 @@ describe('Unit: targetListDetailController', function() {
           targetListService.model.currentList.id = 1;
 
           $httpBackend.expectGET('/v2/targetLists/undefined').respond(200);
-          $httpBackend.expectGET('/v2/targetLists/undefined/opportunities').respond(200);
+          $httpBackend.expectGET('/v2/targetLists/undefined/opportunities?limit=20&sort=segmentation:ascending&offset=0').respond(200);
           $httpBackend.expectPATCH('/v2/targetLists/undefined/shares').respond(200);
 
           spyOn(targetListService, 'updateTargetList').and.callFake(function () {

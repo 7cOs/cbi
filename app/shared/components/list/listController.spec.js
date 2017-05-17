@@ -782,17 +782,21 @@ describe('Unit: list controller', function() {
         var deferred = q.defer();
         return deferred.promise;
       });
+      spyOn(targetListService, 'getTargetListOpportunities').and.callFake(() => {
+        let deferred = q.defer();
+        return deferred.promise;
+      });
     });
 
     it('should toggle asc when the same sort is applied', function() {
-      state.current.name = 'opportunities';
+      ctrl.pageName = 'opportunities';
       ctrl.sortBy('store');
 
       expect(filtersService.model.appliedFilter.sort.sortArr[0]).toEqual({str: 'store', asc: false});
     });
 
     it('should switch the sort string and set asc to true when a new sort is applied', function() {
-      state.current.name = 'opportunities';
+      ctrl.pageName = 'opportunities';
       ctrl.sortBy('segmentation');
 
       expect(filtersService.model.appliedFilter.sort.sortArr[0]).toEqual({str: 'segmentation', asc: true});
@@ -800,61 +804,60 @@ describe('Unit: list controller', function() {
 
     it('should open loader when the sort is applied', function() {
       ctrl.sortBy('store');
-
-      expect(loaderService.openLoader).toHaveBeenCalled();
+      expect(ctrl.loadingList).toBeTruthy();
     });
 
     it('should send request to get opportunities when sort is applied', function() {
-      state.current.name = 'opportunities';
+      ctrl.pageName = 'opportunities';
       ctrl.sortBy('store');
       expect(opportunitiesService.getOpportunities).toHaveBeenCalled();
     });
 
     it('should toggle the boolean ascending on function call', function() {
-      state.current.name = 'target-list-detail';
+      ctrl.pageName = 'target-list-detail';
       expect(ctrl.ascending).toEqual(true);
       ctrl.sortBy();
       expect(ctrl.ascending).toEqual(false);
     });
 
     it('should assign ascending orderBy for store, depletions and segmentation when each is provided as param and ascending is true', function() {
-      state.current.name = 'target-list-detail';
+      ctrl.pageName = 'target-list-detail';
 
       ctrl.ascending = false;
       ctrl.sortBy('store');
-      expect(ctrl.orderName).toEqual(['store.name']);
+      expect(targetListService.getTargetListOpportunities).toHaveBeenCalled();
 
       ctrl.ascending = false;
       ctrl.sortBy('opportunity');
-      expect(ctrl.orderName).toEqual(['-groupedOpportunities.length']);
+      expect(targetListService.getTargetListOpportunities).toHaveBeenCalled();
 
       ctrl.ascending = false;
       ctrl.sortBy('depletions');
-      expect(ctrl.orderName).toEqual(['store.depletionsCurrentYearToDate']);
+      expect(targetListService.getTargetListOpportunities).toHaveBeenCalled();
 
       ctrl.ascending = false;
       ctrl.sortBy('segmentation');
-      expect(ctrl.orderName).toEqual(['store.segmentation']);
+      expect(targetListService.getTargetListOpportunities).toHaveBeenCalled();
     });
 
     it('should assign descending orderBy for store, depletions and segmentation when each is provided as param and ascending is false', function() {
-      state.current.name = 'target-list-detail';
+      ctrl.pageName = 'target-list-detail';
 
       ctrl.ascending = true;
       ctrl.sortBy('store');
-      expect(ctrl.orderName).toEqual(['-store.name']);
+      expect(targetListService.getTargetListOpportunities).toHaveBeenCalled();
 
       ctrl.ascending = true;
       ctrl.sortBy('opportunity');
-      expect(ctrl.orderName).toEqual(['-groupedOpportunities.length']);
+      expect(targetListService.getTargetListOpportunities).toHaveBeenCalled();
 
       ctrl.ascending = true;
       ctrl.sortBy('depletions');
-      expect(ctrl.orderName).toEqual(['-store.depletionsCurrentYearToDate']);
+      expect(targetListService.getTargetListOpportunities).toHaveBeenCalled();
 
       ctrl.ascending = true;
       ctrl.sortBy('segmentation');
-      expect(ctrl.orderName).toEqual(['-store.segmentation']);
+      expect(targetListService.getTargetListOpportunities).toHaveBeenCalled();
     });
   });
 

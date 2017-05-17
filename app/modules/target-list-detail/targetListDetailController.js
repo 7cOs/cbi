@@ -340,7 +340,7 @@ module.exports = /*  @ngInject */
         // of response data, and updating the opportunities & filters models (the
         // same way opportunities searches are handled)
         // TODO: abstract this logic away from the chipsService
-        chipsService.applyFilters()
+        chipsService.applyFilters(true)
       ]).then((response) => {
         const targetList = response[0];
         handleListResponse(targetList);
