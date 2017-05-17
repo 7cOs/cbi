@@ -5,6 +5,9 @@ module.exports =
   .component('page', {
     template: require('./page.pug'),
     controller: 'pageController',
-    controllerAs: 'page'
+    controllerAs: 'page',
+    bindings: {
+      pageName: '@'
+    }
   })
   .controller('pageController', require('./pageController'));

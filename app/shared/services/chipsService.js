@@ -119,26 +119,25 @@ module.exports = /*  @ngInject */
       });
     }
 
-    function applyFilters() {
-      var isTargetList = false;
+    function applyFilters(isTargetList) {
+      isTargetList = isTargetList || $state.current.name === 'target-list-detail';
       filtersService.resetSort();
-      if ($state.current.name === 'target-list-detail') isTargetList = true;
       filtersService.model.appliedFilter.pagination.currentPage = 0;
       loaderService.openLoader(true);
 
-      if (!isTargetList) {
-        $q.all([opportunitiesService.getOpportunities(), opportunitiesService.getOpportunitiesHeaders()]).then(function(data) {
+      if (isTargetList) {
+        targetListService.getTargetListOpportunities(targetListService.model.currentList.id, {type: 'targetListOpportunities'}).then(function(data) {
           loaderService.closeLoader();
-          finishGet(data[0]);
-        }, function(reason) {
+          finishGet(data);
+        }, reason => {
           console.log('Error: ' + reason);
           loaderService.closeLoader();
         });
-      } else if (isTargetList) {
-        targetListService.getTargetListOpportunities(targetListService.model.currentList.id, {type: 'opportunities'}).then(function(data) {
+      } else {
+        $q.all([opportunitiesService.getOpportunities(), opportunitiesService.getOpportunitiesHeaders()]).then(function(data) {
           loaderService.closeLoader();
-          finishGet(data);
-        }, function(reason) {
+          finishGet(data[0]);
+        }, reason => {
           console.log('Error: ' + reason);
           loaderService.closeLoader();
         });
@@ -366,14 +365,14 @@ module.exports = /*  @ngInject */
           case 'store':
             if (result.ids) result.id = result.ids.join('|');
             addAutocompleteChip(displayName, filter, null, result.id);
-            if (service.model.indexOf(result.id) === -1) model.push(result.id);
+            if (service.model.indexOf(result.id) === -1) pushUniqueValue(result.id, model);
             filtersService.model.chain = '';
             filtersService.model.store = '';
             filtersService.model.filtersValidCount++;
             break;
           case 'contact':
             addAutocompleteChip(displayName, filter, null, result.employeeId);
-            if (service.model.indexOf(result.id) === -1) model.push(result.id);
+            if (service.model.indexOf(result.id) === -1) pushUniqueValue(result.id, model);
             break;
           case 'masterSKU':
             if (result.id === null || result.id === undefined) {
@@ -381,7 +380,7 @@ module.exports = /*  @ngInject */
               if (filtersService.model.selected.brand.indexOf(result.brandCode) === -1) filtersService.model.selected.brand.push(result.brandCode);
             } else if (result.id !== null) {
               addAutocompleteChip($filter('titlecase')(result.name), filter, null, result.id);
-              if (service.model.indexOf(result.id) === -1) model.push(result.id);
+              if (service.model.indexOf(result.id) === -1) pushUniqueValue(result.id, model);
             }
             break;
           case 'tradeChannel':
@@ -406,6 +405,22 @@ module.exports = /*  @ngInject */
       } else if (result.premiseType && result.premiseType === 'ON PREMISE') {
         addChip('On-Premise', 'premiseType', true, false);
         filtersService.model.selected.premiseType = 'on';
+      }
+    }
+
+   /**
+    * @name pushUniqueValue
+    * @desc check for duplicates and make sure not to add to model object
+    * @params {Variable} id - id to be included
+    * @params {Object} objectArray - array object list
+    * @returns null
+    * @memberOf cf.common.services
+    */
+    function pushUniqueValue(id, objectArray) {
+      if (id && objectArray && objectArray.length) {
+        if (!objectArray.includes(id)) objectArray.push(id);
+      } else {
+        if (id) objectArray.push(id);
       }
     }
 

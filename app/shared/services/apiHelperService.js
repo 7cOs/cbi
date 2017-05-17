@@ -60,6 +60,12 @@ module.exports = /*  @ngInject */
         queryStr = `?${bulkifiedLimitSortPage}&ignoreDismissed=true${simpleQuery}${salesStoreStatus}${storeFormatQuery}${priorityPackage}&filter=${encodeURIComponent(filtersService.model.appliedFilter.appliedFilter)}`;
 
         return queryStr;
+      } else if (obj.type && obj.type === 'targetListOpportunities') {
+        const pageQuery = applyPage();
+        const sortQuery = applySort();
+        delete obj.type;
+
+        return `?limit=20${sortQuery}${pageQuery}`;
       } else if (obj.type && obj.type === 'targetLists') {
         delete obj.type;
 
