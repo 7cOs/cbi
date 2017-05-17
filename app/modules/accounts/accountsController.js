@@ -75,6 +75,7 @@ module.exports = /*  @ngInject */
     vm._defaultTopLevelForLabel = 'CBBD';
     vm.topLevelForLabel = vm._defaultTopLevelForLabel;
     vm.premiseTypeValue = 'all';
+    vm.topLevelPremiseType = 'all';
 
     // top bottom public methods
     vm.topBottomData = {
@@ -1435,18 +1436,21 @@ module.exports = /*  @ngInject */
       switch (currentLevelName) {
         case 'Accounts':
           newAccountType     = {name: 'Distributors', value: 1};
+          vm.premiseTypeValue = vm.topLevelPremiseType;
           break;
         case 'Sub-Accounts':
           newLevelName       = 'accounts';
           performanceData    = vm.topBottomHistory.distributors;
           newAccountType     = {name: 'Accounts', value: 2};
           levelToResetBeyond = {name: 'Distributors', value: 1};
+          vm.premiseTypeValue = filtersService.accountFilters.premiseTypeValue[vm.topBottomHistory.accounts.premiseType];
           break;
         case 'Stores':
           newLevelName       = 'subAccounts';
           performanceData    = vm.topBottomHistory.accounts;
           newAccountType     = {name: 'Sub-Accounts', value: 3};
           levelToResetBeyond = {name: 'Accounts', value: 2};
+          vm.premiseTypeValue = filtersService.accountFilters.premiseTypeValue[vm.topBottomHistory.subAccounts.premiseType];
           break;
       }
 
@@ -1493,20 +1497,30 @@ module.exports = /*  @ngInject */
      * @param {Object} performanceData get the data associated with the clicked object
      */
     function navigateTopBottomLevels(performanceData) {
-      // console.log('Perf data', performanceData);
       if (!performanceData) return;
-      var currentLevelName = getCurrentTopBottomObject(vm.currentTopBottomAcctType).currentLevelName;
+
+      const currentLevelName = getCurrentTopBottomObject(vm.currentTopBottomAcctType).currentLevelName;
+
+      if (currentLevelName === 'distributors') vm.topLevelPremiseType = vm.premiseTypeValue;
+
       vm.topBottomHistory[currentLevelName] = performanceData;
-      var getNextLevel = currentLevelName !== 'stores';
+      const getNextLevel = currentLevelName !== 'stores';
+
       if (myperformanceService.hasInconsistentIds(performanceData)) return;
+
       if (performanceData.name && performanceData.name.toLowerCase() === 'independent' && !vm.currentTopBottomFilters.distributors) return;
+
+      if (performanceData.premiseType) vm.premiseTypeValue = filtersService.accountFilters.premiseTypeValue[performanceData.premiseType];
 
       // Updates the top bottom filter object with the selection
       setTopBottomFilterModel(currentLevelName, performanceData);
+
       // Make sure all the models in filtersService are set correctly and reflect the object in top botom filter
       setUpdatedFilters();
+
       // Set the chain dropdown and appropriate placeholder text
       setChainDropdownAndPlaceHolder(currentLevelName, performanceData);
+
       if (getNextLevel) {
         myperformanceService.resetFiltersForLevelsAboveCurrent(vm.currentTopBottomAcctType, vm.currentTopBottomFilters, vm.topBottomData);
         // Get the top bottom level next to the current level.
