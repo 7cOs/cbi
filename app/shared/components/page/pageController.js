@@ -21,15 +21,12 @@ module.exports = /*  @ngInject */
       const isTargetList = vm.pageName === 'target-list-detail';
       filtersService.model.appliedFilter.pagination.currentPage = pageNumber;
       vm.loadingList = true;
-      if (isTargetList) {
-        targetListService.getTargetListOpportunities(targetListService.model.currentList.id, {type: 'targetListOpportunities'}).then(response => {
-          vm.loadingList = false;
-        });
-      } else {
-        opportunitiesService.getOpportunities().then(data => {
-          vm.loadingList = false;
-        });
-      }
+
+      const opportunitiesPromise = isTargetList
+        ? targetListService.getTargetListOpportunities(targetListService.model.currentList.id, {type: 'targetListOpportunities'})
+        : opportunitiesService.getOpportunities();
+
+      opportunitiesPromise.then(function() { vm.loadingList = false; });
     }
 
     // Private Methods

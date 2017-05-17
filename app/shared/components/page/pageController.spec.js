@@ -212,7 +212,6 @@ describe('Unit: page controller', function() {
       expect(ctrl.loadingList).toBeTruthy();
     });
 
-
     it('should call opportunitiesService.getOpportunities', function() {
       expect(opportunitiesService.getOpportunities).not.toHaveBeenCalled();
       ctrl.pageChanged(2);

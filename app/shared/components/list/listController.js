@@ -207,24 +207,21 @@ module.exports = /*  @ngInject */
     }
 
     function opportunityIdsToCopy() {
-      const opportunityIDsPromise = $q.defer();
+      const opportunityIdsPromise = $q.defer();
 
       if (vm.isAllOpportunitiesSelected) {
-        if (vm.pageName === 'target-list-detail') {
-          targetListService.getTargetListOpportunityIDs(vm.targetListService.model.currentList.id).then(opportunityIDs => {
-            opportunityIDsPromise.resolve(opportunityIDs);
-          });
-        } else {
-          opportunitiesService.getAllOpportunitiesIDs().then((opportunityIDs) => {
-            opportunityIDsPromise.resolve(opportunityIDs);
-          });
-        }
+        const getIdsPromise = vm.pageName === 'target-list-detail'
+          ? targetListService.getTargetListOpportunityIDs(vm.targetListService.model.currentList.id)
+          : opportunitiesService.getAllOpportunitiesIDs();
+
+          getIdsPromise.then(opportunityIds => opportunityIdsPromise.resolve(opportunityIds));
+
       } else {
-        const opportunityIds = vm.selected.map((opportunity) => opportunity.id);
-        opportunityIDsPromise.resolve(opportunityIds);
+        const opportunityIds = vm.selected.map(opportunity => opportunity.id);
+        opportunityIdsPromise.resolve(opportunityIds);
       }
 
-      return opportunityIDsPromise.promise;
+      return opportunityIdsPromise.promise;
     }
 
     function updateCopiedOpportunities() {
