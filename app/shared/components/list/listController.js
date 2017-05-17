@@ -25,6 +25,7 @@ module.exports = /*  @ngInject */
     vm.expandedOpportunities = 0;
     vm.isAllOpportunitiesSelected = false;
     vm.isAllOpportunitiesInPageSelected = false;
+    vm.loadingList = false;
     vm.memoData = {};
     vm.memoError = false;
     vm.memoType = '';
@@ -184,7 +185,7 @@ module.exports = /*  @ngInject */
      * @param {string} listId Guid of the target list
      */
     function addToTargetList(listId) {
-      if (listId && vm.selected.length > 0) {
+      if (listId && vm.selected.length) {
         loaderService.openLoader(true);
 
         let opportunityIdsPromise = opportunityIdsToCopy();
@@ -209,11 +210,14 @@ module.exports = /*  @ngInject */
       const opportunityIdsPromise = $q.defer();
 
       if (vm.isAllOpportunitiesSelected) {
-        opportunitiesService.getAllOpportunitiesIDs().then((opportunityIds) => {
-          opportunityIdsPromise.resolve(opportunityIds);
-        });
+        const getIdsPromise = vm.pageName === 'target-list-detail'
+          ? targetListService.getTargetListOpportunityIDs(vm.targetListService.model.currentList.id)
+          : opportunitiesService.getAllOpportunitiesIDs();
+
+          getIdsPromise.then(opportunityIds => opportunityIdsPromise.resolve(opportunityIds));
+
       } else {
-        const opportunityIds = vm.selected.map((opportunity) => opportunity.id);
+        const opportunityIds = vm.selected.map(opportunity => opportunity.id);
         opportunityIdsPromise.resolve(opportunityIds);
       }
 
@@ -537,26 +541,20 @@ module.exports = /*  @ngInject */
     // Sort by selected property
     function sortBy(name) {
       vm.ascending = !vm.ascending;
-      loaderService.openLoader(true);
+      vm.loadingList = true;
+      filtersService.addSortFilter(name);
 
-      if ($state.current.name === 'opportunities') {
-        filtersService.addSortFilter(name);
-        opportunitiesService.getOpportunities();
-      } else if ($state.current.name === 'target-list-detail') {
-        vm.orderName = [];
-        if (vm.ascending) {
-          if (name === 'store') vm.orderName = ['store.name'];
-          if (name === 'opportunity') vm.orderName = ['-groupedOpportunities.length'];
-          if (name === 'depletions') vm.orderName = ['store.depletionsCurrentYearToDate'];
-          if (name === 'segmentation') vm.orderName = ['store.segmentation'];
-        } else {
-          if (name === 'store') vm.orderName = ['-store.name'];
-          if (name === 'opportunity') vm.orderName = ['-groupedOpportunities.length'];
-          if (name === 'depletions') vm.orderName = ['-store.depletionsCurrentYearToDate'];
-          if (name === 'segmentation') vm.orderName = ['-store.segmentation'];
-        }
+      if (vm.pageName === 'opportunities') {
+        opportunitiesService.getOpportunities().then(() => {
+          vm.loadingList = false;
+        });
+      } else if (vm.pageName === 'target-list-detail') {
+        targetListService.getTargetListOpportunities(targetListService.model.currentList.id,
+                          {type: 'targetListOpportunities'})
+                          .then(() => {
+          vm.loadingList = false;
+        });
       }
-      loaderService.closeLoader();
     }
 
     // Select or deselect individual list item
@@ -597,11 +595,7 @@ module.exports = /*  @ngInject */
     }
 
     function hasOpportunities() {
-      if (opportunitiesService.model.opportunities.length === 0) {
-        return false;
-      } else {
-        return true;
-      }
+      return opportunitiesService.model.opportunities.length;
     }
 
     function noOpportunitiesExpanded() {

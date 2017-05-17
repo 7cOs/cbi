@@ -293,7 +293,6 @@ module.exports = /*  @ngInject */
     function initTargetLists() {
       targetListService.getTargetList(targetListService.model.currentList.id).then(function(response) {
         handleListResponse(response);
-
         targetListService.updateTargetListShares(targetListService.model.currentList.id, userService.model.currentUser.employeeID, true);
       }, function() {
         vm.modalUnauthorizedAccess();
@@ -332,11 +331,22 @@ module.exports = /*  @ngInject */
     function init() {
       targetListService.model.currentList.id = $state.params.id;
 
+      // reset all chips and filters on page init
+      chipsService.resetChipsFilters(chipsService.model);
+
       $q.all([
         targetListService.getTargetList(targetListService.model.currentList.id),
-        targetListService.getTargetListOpportunities(targetListService.model.currentList.id)
+        // Allow chipsService handle applying pagination and sort parameters, parsing
+        // of response data, and updating the opportunities & filters models (the
+        // same way opportunities searches are handled)
+        // TODO: abstract this logic away from the chipsService
+        chipsService.applyFilters(true)
       ]).then((response) => {
-        handleListResponse(response[0]);
+        const targetList = response[0];
+        handleListResponse(targetList);
+        const numberOfOpps = targetList.opportunitiesSummary.opportunitiesCount;
+        const numberOfStores = targetList.opportunitiesSummary.storesCount;
+        opportunitiesService.setPaginationModel(numberOfOpps, numberOfStores);
       }).catch(() => {
         vm.modalUnauthorizedAccess();
       }).finally(() => {
@@ -350,9 +360,6 @@ module.exports = /*  @ngInject */
 
       // closes filter box
       filtersService.model.expanded = false;
-
-      // reset all chips and filters on page init
-      chipsService.resetChipsFilters(chipsService.model);
 
       // disable my accounts only for pass-through to accounts dashboard
       chipsService.removeFromFilterService({type: 'myAccountsOnly'});

@@ -1,60 +1,65 @@
 'use strict';
 
 module.exports = /*  @ngInject */
-  function pageController($scope, $state, filtersService, loaderService, opportunitiesService) {
+  function pageController($scope, filtersService, opportunitiesService, targetListService) {
     // Initial variables
-    var vm = this;
+    let vm = this;
 
-    // Services
-    vm.filtersService = filtersService;
+    vm.loadingList = false;
+    vm.firstPage   = 0;
+    vm.currentPage = 0;
+
+    vm.pageNumbers;
+    vm.lastPage;
 
     // Methods
-    vm.displayPagination = displayPagination;
-    vm.getNumber = getNumber;
     vm.pageChanged = pageChanged;
 
     // Public Methods
-    function displayPagination() {
-      if ($state.current.name !== 'target-list-detail' && filtersService.model.appliedFilter.pagination.totalPages > 0) return true;
-
-      return false;
-    }
-
-    function getNumber() {
-      var start = 0,
-          end = 0,
-          currentPage = filtersService.model.appliedFilter.pagination.currentPage,
-          totalPages = filtersService.model.appliedFilter.pagination.totalPages;
-
-      if (totalPages < 10) {
-        start = 0;
-        end = totalPages;
-      } else if (currentPage < 5) {
-        start = 0;
-        end = totalPages < 9 ? totalPages : 9;
-      } else if (currentPage > totalPages - 5) {
-        start = totalPages - 9;
-        end = totalPages;
-      } else {
-        start = currentPage - 4;
-        end = currentPage + 5;
-      }
-
-      var arr = [];
-
-      for (; start < end + 1; start++) {
-        arr.push(start);
-      }
-
-      return arr;
-    }
 
     function pageChanged(pageNumber) {
+      const isTargetList = vm.pageName === 'target-list-detail';
       filtersService.model.appliedFilter.pagination.currentPage = pageNumber;
+      vm.loadingList = true;
 
-      loaderService.openLoader(true);
-      opportunitiesService.getOpportunities().then(function(data) {
-        loaderService.closeLoader();
-      });
+      const opportunitiesPromise = isTargetList
+        ? targetListService.getTargetListOpportunities(targetListService.model.currentList.id, {type: 'targetListOpportunities'})
+        : opportunitiesService.getOpportunities();
+
+      opportunitiesPromise.then(function() { vm.loadingList = false; });
+    }
+
+    // Private Methods
+
+    $scope.$watch(() => { return filtersService.model.appliedFilter.pagination.totalPages; }, newVal => {
+      vm.lastPage    = newVal;
+      vm.pageNumbers = getPageNumbers();
+    });
+
+    $scope.$watch(() => { return filtersService.model.appliedFilter.pagination.currentPage; }, newVal => {
+      vm.currentPage = newVal;
+      vm.pageNumbers = getPageNumbers();
+    });
+
+    function getPageNumbers() {
+      let _start, _end;
+
+      if (vm.lastPage < 10) {
+        _start = 0;
+        _end = vm.lastPage;
+      } else if (vm.currentPage < 5) {
+        _start = 0;
+        _end = vm.lastPage < 9 ? vm.lastPage : 9;
+      } else if (vm.currentPage > vm.lastPage - 5) {
+        _start = vm.lastPage - 9;
+        _end = vm.lastPage;
+      } else {
+        _start = vm.currentPage - 4;
+        _end = vm.currentPage + 5;
+      }
+
+      return Array(_end - _start + 1)
+             .fill()
+             .map((val, idx) => idx + _start);
     }
   };

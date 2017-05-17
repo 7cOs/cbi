@@ -12,6 +12,7 @@ module.exports = /*  @ngInject */
       getTargetList: getTargetList,
       updateTargetList: updateTargetList,
       deleteTargetList: deleteTargetList,
+      getTargetListOpportunityIDs: getTargetListOpportunityIDs,
       getTargetListOpportunities: getTargetListOpportunities,
       addTargetListOpportunities: addTargetListOpportunities,
       deleteTargetListOpportunities: deleteTargetListOpportunities,
@@ -111,6 +112,32 @@ module.exports = /*  @ngInject */
     }
 
     /**
+     * @name getTargetListOpportunityIDs
+     * @desc get all opportunity IDs for given target list
+     * @params {String} targetListID - ID of target list
+     * @returns {Array} - target list opportunity IDs
+     * @memberOf cf.common.services
+     */
+    function getTargetListOpportunityIDs(targetListId) {
+      const opportunityIDsPromise = $q.defer();
+      const url = apiHelperService.request('/v2/targetLists/' + targetListId + '/opportunities');
+
+      $http.get(url)
+        .then(getTargetListOpportunityIDsSuccess)
+        .catch(getTargetListOpportunityIDsFail);
+
+      function getTargetListOpportunityIDsSuccess(response) {
+        opportunityIDsPromise.resolve(response.data.opportunities.map(opp => opp.id));
+      }
+
+      function getTargetListOpportunityIDsFail(error) {
+        opportunityIDsPromise.reject(error);
+      }
+
+      return opportunityIDsPromise.promise;
+    }
+
+    /**
      * @name getTargetListOpportunities
      * @desc get target list opportunities
      * @params {String} targetListId - id of target list
@@ -119,14 +146,10 @@ module.exports = /*  @ngInject */
      */
     function getTargetListOpportunities(targetListId, params) {
       var filterPayload;
-      if (params) filterPayload = filtersService.getAppliedFilters('opportunities');
+      if (params) filterPayload = filtersService.getAppliedFilters('targetListOpportunities');
 
       var targetListPromise = $q.defer(),
           url = apiHelperService.request('/v2/targetLists/' + targetListId + '/opportunities', filterPayload);
-
-      // reset opportunities counts
-      filtersService.model.appliedFilter.pagination.totalOpportunities = 0;
-      filtersService.model.appliedFilter.pagination.totalStores = 0;
 
       $http.get(url)
         .then(getTargetListOpportunitiesSuccess)
@@ -169,7 +192,6 @@ module.exports = /*  @ngInject */
             // push previous store in newOpportunityArr
             if (i !== 0) {
               newOpportunityArr.push(store);
-              filtersService.model.appliedFilter.pagination.totalStores += 1;
             }
 
             // create grouped store object
@@ -199,23 +221,10 @@ module.exports = /*  @ngInject */
           // add brand to array
           store.brands.push(item.product.brand.toLowerCase());
 
-          // sum high opportunities
-          /*
-          item.impact = item.impact.toLowerCase();
-          if (item.impact === 'high') store.highImpactSum += 1;
-          */
-
-          // sum depletions - not in api yet - WJAY 8/8
-          // store.depletionSum += item.depletions
-
           // push last store into newOpportunityArr
           if (i + 1 === response.data.opportunities.length) {
             newOpportunityArr.push(store);
-            filtersService.model.appliedFilter.pagination.totalStores += 1;
           }
-
-          // opportunitiesService.model.opportunitiesSum += 1;
-          filtersService.model.appliedFilter.pagination.totalOpportunities += 1;
         }; // end for each
 
         opportunitiesService.model.opportunities = newOpportunityArr;

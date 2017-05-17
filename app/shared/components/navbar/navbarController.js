@@ -97,7 +97,7 @@ module.exports = /*  @ngInject */
     vm.goToNote = goToNote;
     vm.sendFeedback = sendFeedback;
     vm.openIQLink = openIQLink;
-    vm.isNumber = angular.isNumber;
+    vm.notUnknown = notUnknown;
 
     $scope.$watch(function() { return toastService.model; }, function(newVal) {
       vm.archived = newVal.archived;
@@ -113,6 +113,10 @@ module.exports = /*  @ngInject */
     // **************
     // PUBLIC METHODS
     // **************
+
+    function notUnknown(value) {
+      return value && value.toString().toUpperCase() !== 'UNKNOWN';
+    }
 
     // Mark notification as read on click
     function markRead(notification) {
