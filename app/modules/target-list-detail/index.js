@@ -13,15 +13,11 @@ module.exports =
       template: require('./layout.pug'),
       controller: 'targetListDetailController',
       controllerAs: 'tld',
-      onExit: function($rootScope, opportunitiesService) {
+      onExit: function($rootScope, opportunitiesService, filtersService) {
         $rootScope.isGrayedOut = false;
-
-        opportunitiesService.model = {
-          filterApplied: false,
-          opportunities: [],
-          opportunityId: null,
-          noOpportunitiesFound: false
-        };
+        opportunitiesService.clearOpportunitiesModel();
+        filtersService.resetFilters();
+        filtersService.resetPagination();
       },
       analyticsData: {
         pageTitle: 'Target List',

@@ -119,26 +119,25 @@ module.exports = /*  @ngInject */
       });
     }
 
-    function applyFilters() {
-      var isTargetList = false;
+    function applyFilters(isTargetList) {
+      isTargetList = isTargetList || $state.current.name === 'target-list-detail';
       filtersService.resetSort();
-      if ($state.current.name === 'target-list-detail') isTargetList = true;
       filtersService.model.appliedFilter.pagination.currentPage = 0;
       loaderService.openLoader(true);
 
-      if (!isTargetList) {
-        $q.all([opportunitiesService.getOpportunities(), opportunitiesService.getOpportunitiesHeaders()]).then(function(data) {
+      if (isTargetList) {
+        targetListService.getTargetListOpportunities(targetListService.model.currentList.id, {type: 'targetListOpportunities'}).then(function(data) {
           loaderService.closeLoader();
-          finishGet(data[0]);
-        }, function(reason) {
+          finishGet(data);
+        }, reason => {
           console.log('Error: ' + reason);
           loaderService.closeLoader();
         });
-      } else if (isTargetList) {
-        targetListService.getTargetListOpportunities(targetListService.model.currentList.id, {type: 'opportunities'}).then(function(data) {
+      } else {
+        $q.all([opportunitiesService.getOpportunities(), opportunitiesService.getOpportunitiesHeaders()]).then(function(data) {
           loaderService.closeLoader();
-          finishGet(data);
-        }, function(reason) {
+          finishGet(data[0]);
+        }, reason => {
           console.log('Error: ' + reason);
           loaderService.closeLoader();
         });

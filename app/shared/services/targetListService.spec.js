@@ -119,7 +119,7 @@ describe('[Services.targetListService]', function() {
     });
 
     it('should get target list opportunities if id is passed', function() {
-      var filterPayload = filtersService.getAppliedFilters('opportunities'),
+      var filterPayload = filtersService.getAppliedFilters('targetListOpportunities'),
           url = apiHelperService.request('/v2/targetLists/1/opportunities', filterPayload);
 
       $httpBackend.expect('GET', url).respond(200, {

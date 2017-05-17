@@ -17,7 +17,8 @@ module.exports = /*  @ngInject */
       getOpportunitiyFeedback: getOpportunityFeedback,
       createOpportunityFeedback: createOpportunityFeedback,
       deleteOpportunityFeedback: deleteOpportunityFeedback,
-      clearOpportunitiesModel: clearOpportunitiesModel
+      clearOpportunitiesModel: clearOpportunitiesModel,
+      setPaginationModel: setPaginationModel
     };
 
     return service;
@@ -240,11 +241,10 @@ module.exports = /*  @ngInject */
         .catch(getOpportunitiesHeadersFail);
 
       function getOpportunitiesHeadersSuccess(response) {
-        filtersService.model.appliedFilter.pagination.totalOpportunities = parseInt(response.headers()['opportunity-count']);
-        filtersService.model.appliedFilter.pagination.totalStores = response.headers()['store-count'];
-        filtersService.model.appliedFilter.pagination.roundedStores = Math.ceil(response.headers()['store-count'] / 10) * 10;
-        filtersService.model.appliedFilter.pagination.totalPages = (Math.ceil(filtersService.model.appliedFilter.pagination.roundedStores / 20) - 1);
+        const numberOfOpps = parseInt(response.headers()['opportunity-count']);
+        const numberOfStores = response.headers()['store-count'];
 
+        setPaginationModel(numberOfOpps, numberOfStores);
         opportunitiesPromise.resolve(response.headers());
       }
 
@@ -254,6 +254,13 @@ module.exports = /*  @ngInject */
       }
 
       return opportunitiesPromise.promise;
+    }
+
+    function setPaginationModel(numberOfOpps, numberOfStores) {
+      filtersService.model.appliedFilter.pagination.totalOpportunities = numberOfOpps;
+      filtersService.model.appliedFilter.pagination.totalStores = numberOfStores;
+      filtersService.model.appliedFilter.pagination.roundedStores = Math.ceil(numberOfStores / 10) * 10;
+      filtersService.model.appliedFilter.pagination.totalPages = Math.ceil(filtersService.model.appliedFilter.pagination.roundedStores / 20) - 1;
     }
 
     /**
