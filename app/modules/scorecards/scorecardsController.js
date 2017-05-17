@@ -247,7 +247,7 @@ module.exports = /*  @ngInject */
         const filteredTimeValue = getFilteredValue('timeFrameTotal', row, rowType);
         const filteredYAValue = getFilteredValue('vsYa', row, rowType);
 
-        return filteredTimeValue !== '-' && filteredTimeValue !== 0 && filteredYAValue !== 0;
+        return filteredTimeValue !== '-' && filteredTimeValue !== '0' && filteredYAValue !== '0';
       }
     }
 
