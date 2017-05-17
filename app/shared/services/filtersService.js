@@ -171,6 +171,8 @@ module.exports = /*  @ngInject */
         impact: [],
         opportunityStatus: [],
         opportunityType: ['All Types'],
+        featureType: [],
+        itemAuthorizationType: [],
         premiseType: 'off',
         productType: [],
         store: [],
