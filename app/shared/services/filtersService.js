@@ -253,13 +253,10 @@ module.exports = /*  @ngInject */
       }, {
         name: 'vs ABP'
       }],
-      premises: [{
-        name: 'All'
-      }, {
-        name: 'Off-Premise'
-      }, {
-        name: 'On-Premise'
-      }],
+      premiseTypeValue: {
+        'ON PREMISE': 'on',
+        'OFF PREMISE': 'off'
+      },
       accountBrands: [{
         name: 'Distribution (simple)',
         propertyName: 'distributionsSimple',

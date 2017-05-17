@@ -75,6 +75,7 @@ module.exports = /*  @ngInject */
     vm._defaultTopLevelForLabel = 'CBBD';
     vm.topLevelForLabel = vm._defaultTopLevelForLabel;
     vm.premiseTypeValue = 'all';
+    vm.topLevelPremiseType = 'all';
 
     // top bottom public methods
     vm.topBottomData = {
@@ -136,7 +137,7 @@ module.exports = /*  @ngInject */
     vm.removeInlineSearch = removeInlineSearch;
     vm.resetFilters = resetFilters;
     vm.selectItem = selectItem;
-    vm.setDefaultFilterOptions = setDefaultFilterOptions;
+    vm.setUserSpecificModels = setUserSpecificModels;
     vm.setFilter = setFilter;
     vm.updateBrandSnapshot = updateBrandSnapshot;
     vm.updateChip = updateChip;
@@ -429,8 +430,8 @@ module.exports = /*  @ngInject */
       chipsService.resetChipsFilters(chipsService.model);
       vm.filterModel = angular.copy(filterModelTemplate);
       filtersService.model.filtersValidCount = 0;
-      setDefaultDropDownOptions();
-      setDefaultFilterOptions();
+      initDefaultModelValues();
+      setUserSpecificModels();
       apply(false);
       // Go back to distributor level. Get the updated data for distributors
       resetTopBottom();
@@ -561,7 +562,7 @@ module.exports = /*  @ngInject */
       }
     }
 
-    function setDefaultFilterOptions() {
+    function setUserSpecificModels() {
       if (!filtersService.model.selected.myAccountsOnly) {
         disablePremiseType(false);
       } else if (userService.model.currentUser && userService.model.currentUser.srcTypeCd) {
@@ -583,7 +584,7 @@ module.exports = /*  @ngInject */
       }
 
       function onPremise() {
-        vm.premiseTypeValue = 'off';
+        vm.premiseTypeValue = 'on';
         filtersService.model.selected.premiseType = 'on';
         vm.updateChip('On-Premise', 'premiseType');
         disablePremiseType(true);
@@ -709,7 +710,7 @@ module.exports = /*  @ngInject */
       } else {
         vm.selectedStore = result.name;
 
-        if (result.storeNumber && angular.isNumber(result.storeNumber)) {
+        if (result.storeNumber && result.storeNumber.toString().toUpperCase() !== 'UNKNOWN') {
           vm.selectedStore += ' #' + result.storeNumber;
         }
       }
@@ -908,7 +909,8 @@ module.exports = /*  @ngInject */
     }
 
     function init() {
-      setDefaultDropDownOptions();
+      initDefaultModelValues();
+
       const isNavigatedFromScorecard = $state.params.applyFiltersOnLoad && $state.params.pageData.brandTitle;
       const isNavigatedFromOpps = $state.params.storeid;
       const isSettingNotes = $state.params.openNotesOnLoad;
@@ -916,6 +918,9 @@ module.exports = /*  @ngInject */
       if (!isNavigatedFromScorecard && !(isNavigatedFromOpps || isSettingNotes)) {
         chipsService.resetChipsFilters(chipsService.model);
       }
+
+      setUserSpecificModels();
+      setStateParamModels();
 
       if (isNavigatedFromOpps) {
         setDataForNavigationFromOpps();
@@ -931,8 +936,6 @@ module.exports = /*  @ngInject */
         getBrandsAndTopbottomDataOnInit(isNavigatedFromOpps || isSettingNotes);
       }
 
-      setDefaultFilterOptions();
-      setPremiseType();
       resetStateParameters();
       setCurrentUserName();
       setTopLevelForLabel();
@@ -944,7 +947,7 @@ module.exports = /*  @ngInject */
      * @param {Object} currentAcctType The new account type to be set
      * @returns Sets the data for the currently selected top bottom account type
      */
-    function setDefaultDropDownOptions() {
+    function initDefaultModelValues() {
       setDefaultEndingPeriodOptions();
       vm.filterModel.trend = vm.filtersService.model.trend[0];
       vm.filtersService.model.accountSelected.accountBrands = vm.filtersService.accountFilters.accountBrands[0];
@@ -1046,7 +1049,7 @@ module.exports = /*  @ngInject */
       });
     }
 
-    function setPremiseType() {
+    function setStateParamModels() {
       if ($state.params.pageData && $state.params.pageData.premiseType && $state.params.applyFiltersOnLoad) {
         vm.premiseTypeValue = $state.params.pageData.premiseType;
         vm.filtersService.model.selected.premiseType = $state.params.pageData.premiseType;
@@ -1433,18 +1436,21 @@ module.exports = /*  @ngInject */
       switch (currentLevelName) {
         case 'Accounts':
           newAccountType     = {name: 'Distributors', value: 1};
+          vm.premiseTypeValue = vm.topLevelPremiseType;
           break;
         case 'Sub-Accounts':
           newLevelName       = 'accounts';
           performanceData    = vm.topBottomHistory.distributors;
           newAccountType     = {name: 'Accounts', value: 2};
           levelToResetBeyond = {name: 'Distributors', value: 1};
+          vm.premiseTypeValue = filtersService.accountFilters.premiseTypeValue[vm.topBottomHistory.accounts.premiseType];
           break;
         case 'Stores':
           newLevelName       = 'subAccounts';
           performanceData    = vm.topBottomHistory.accounts;
           newAccountType     = {name: 'Sub-Accounts', value: 3};
           levelToResetBeyond = {name: 'Accounts', value: 2};
+          vm.premiseTypeValue = filtersService.accountFilters.premiseTypeValue[vm.topBottomHistory.subAccounts.premiseType];
           break;
       }
 
@@ -1491,20 +1497,30 @@ module.exports = /*  @ngInject */
      * @param {Object} performanceData get the data associated with the clicked object
      */
     function navigateTopBottomLevels(performanceData) {
-      // console.log('Perf data', performanceData);
       if (!performanceData) return;
-      var currentLevelName = getCurrentTopBottomObject(vm.currentTopBottomAcctType).currentLevelName;
+
+      const currentLevelName = getCurrentTopBottomObject(vm.currentTopBottomAcctType).currentLevelName;
+
+      if (currentLevelName === 'distributors') vm.topLevelPremiseType = vm.premiseTypeValue;
+
       vm.topBottomHistory[currentLevelName] = performanceData;
-      var getNextLevel = currentLevelName !== 'stores';
+      const getNextLevel = currentLevelName !== 'stores';
+
       if (myperformanceService.hasInconsistentIds(performanceData)) return;
+
       if (performanceData.name && performanceData.name.toLowerCase() === 'independent' && !vm.currentTopBottomFilters.distributors) return;
+
+      if (performanceData.premiseType) vm.premiseTypeValue = filtersService.accountFilters.premiseTypeValue[performanceData.premiseType];
 
       // Updates the top bottom filter object with the selection
       setTopBottomFilterModel(currentLevelName, performanceData);
+
       // Make sure all the models in filtersService are set correctly and reflect the object in top botom filter
       setUpdatedFilters();
+
       // Set the chain dropdown and appropriate placeholder text
       setChainDropdownAndPlaceHolder(currentLevelName, performanceData);
+
       if (getNextLevel) {
         myperformanceService.resetFiltersForLevelsAboveCurrent(vm.currentTopBottomAcctType, vm.currentTopBottomFilters, vm.topBottomData);
         // Get the top bottom level next to the current level.
