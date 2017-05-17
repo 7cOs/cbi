@@ -710,7 +710,7 @@ module.exports = /*  @ngInject */
       } else {
         vm.selectedStore = result.name;
 
-        if (result.storeNumber && angular.isNumber(result.storeNumber)) {
+        if (result.storeNumber && result.storeNumber.toString().toUpperCase() !== 'UNKNOWN') {
           vm.selectedStore += ' #' + result.storeNumber;
         }
       }
