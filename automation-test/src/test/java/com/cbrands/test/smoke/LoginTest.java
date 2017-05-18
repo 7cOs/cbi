@@ -23,7 +23,7 @@ public class LoginTest {
   private String webAppBaseUrl;
 
   @BeforeSuite
-  public void setUp() throws MalformedURLException {
+  public void setUpSuite() throws MalformedURLException {
     final PropertiesCache propertiesCache = PropertiesCache.getInstance();
     webAppBaseUrl = propertiesCache.getProperty("qa.host.address");
 
@@ -38,19 +38,19 @@ public class LoginTest {
   }
 
   @AfterSuite
-  public void tearDown() {
+  public void tearDownSuite() {
     driver.quit();
     log.info("Browser closed.\n");
   }
 
   @BeforeMethod
-  public void loadPage() {
+  public void setUp() {
     log.info("\nLoading webpage.");
     driver.get(webAppBaseUrl);
   }
 
   @AfterMethod
-  public void logOut() {
+  public void tearDown() {
     driver.get(webAppBaseUrl + "/auth/logout/");
     log.info("Logged out.");
   }
