@@ -52,7 +52,7 @@ public class HomePage extends LoadableComponent<HomePage>{
 	private WebElement onPremise;
 	@FindBy(how = How.XPATH, using = "//input[@placeholder='By brand or SKU']")
 	private WebElement brandMasterSku;
-	@FindBy(how = How.XPATH, using = "//input[@placeholder='Store, account, or subaccount name']")
+  @FindBy(how = How.XPATH, using = "//input[@placeholder='Store, account, or subaccount name']")
 	private WebElement retailer;
 	@FindBy(how = How.XPATH, using = "//input[@placeholder='Name']")
 	private WebElement distributor;
@@ -77,6 +77,23 @@ public class HomePage extends LoadableComponent<HomePage>{
 
 	@FindBy(how = How.XPATH, using = "//a[contains(.,'My Scorecards')]")
 	private WebElement myScoreCards;
+
+  public HomePage(WebDriver driver) {
+    this.driver = driver;
+  }
+
+  @Override
+  protected void load() {
+    driver.get(PropertiesCache.getInstance().getProperty("qa.host.address"));
+
+  }
+
+  @Override
+  protected void isLoaded() throws Error {
+    waitForVisibleFluentWait(userInfo);
+    Assert.assertTrue(userInfo.isDisplayed());
+    log.info("Login successful for User: " + userInfo.getText());
+  }
 
 	public HomePage clickOffPremise() {
 		offPremise.click();
@@ -103,6 +120,7 @@ public class HomePage extends LoadableComponent<HomePage>{
 		return this;
 	}
 
+
 	public HomePage clickOpportunityTypeDropdown() {
 		opportunityTypeDropDown.click();
 		return this;
@@ -119,7 +137,6 @@ public class HomePage extends LoadableComponent<HomePage>{
 		}
 		return this;
 	}
-
 
 	public HomePage typeBrandMasterSku(String value) {
 		brandMasterSku.sendKeys(value);
@@ -176,10 +193,6 @@ public class HomePage extends LoadableComponent<HomePage>{
 		return PageFactory.initElements(driver, Opportunities.class);
 	}
 
-	public HomePage(WebDriver driver) {
-		this.driver = driver;
-	}
-
 	public String showUserInfo() {
 		String userData = userInfo.getText();
 		return userData;
@@ -195,6 +208,7 @@ public class HomePage extends LoadableComponent<HomePage>{
 		return PageFactory.initElements(driver, TargetList.class);
 	}
 
+
 	public Opportunities selectSaveReportDropdown(String itemName) {
 		WebElement button1 = findElement(By.xpath("//md-select[@placeholder='Select Saved Report']"));
 		button1.click();
@@ -203,7 +217,6 @@ public class HomePage extends LoadableComponent<HomePage>{
 		actions.moveToElement(button2).click().build().perform();
 		return PageFactory.initElements(driver, Opportunities.class);
 	}
-
 
 	public Login logOut(){
 		driver.get("https://orion-qa.cbrands.com/auth/logout");
@@ -246,19 +259,6 @@ public class HomePage extends LoadableComponent<HomePage>{
 				return true;
 		}
 		return false;
-	}
-
-	@Override
-	protected void load() {
-		driver.get(PropertiesCache.getInstance().getProperty("qa.host.address"));
-
-	}
-
-	@Override
-	protected void isLoaded() throws Error {
-        waitForVisibleFluentWait(userInfo);
-		Assert.assertTrue(userInfo.isDisplayed());
-		log.info("Login successful for User: " + userInfo.getText());
 	}
 
 	public HomePage clickSharedWithMeLink() {
