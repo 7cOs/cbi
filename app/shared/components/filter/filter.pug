@@ -143,6 +143,7 @@ form.filters(column='12' ng-class="{'target-list': filter.opportunities}")
                 ng-repeat="type in filter.filtersService.model.featureType",
                 aria-label="{{type.name}}"
                 value="{{type.name}}"
+                ng-click="filter.chooseFeatureType(type.name)"
               ) {{::type.name}}
 
         label Authorized Product Types
@@ -161,6 +162,7 @@ form.filters(column='12' ng-class="{'target-list': filter.opportunities}")
                 ng-repeat="type in filter.filtersService.model.itemAuthorizationType",
                 aria-label="{{type.name}}"
                 value="{{type.name}}"
+                ng-click="filter.chooseItemAuthorizationType(type.name)"
               ) {{::type.name}}
 
       div.filter-blocks-inline
