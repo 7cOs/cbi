@@ -1,5 +1,6 @@
 package com.cbrands.test.smoke;
 
+import com.cbrands.TestUser;
 import com.cbrands.helper.PropertiesCache;
 import com.cbrands.helper.SeleniumUtils;
 import com.cbrands.helper.WebDriverFactory;
@@ -55,13 +56,13 @@ public class LoginTest {
   }
 
   @Test(dataProvider = "userCredentials", description = "Testing basic login and logout")
-  public void testLogin(String user, String password) {
-    final HomePage homePage = new Login(driver).loginWithValidCredentials(user, password);
+  public void testLogin(TestUser testUser) {
+    final HomePage homePage = new Login(driver).loginWithValidCredentials(testUser.userName(), testUser.password());
 
     try {
       homePage.get();
     } catch (final NoSuchElementException e) {
-      log.info("Login failed for user: " + user);
+      log.info("Login failed for userName: " + testUser.userName());
       throw e;
     }
   }
@@ -69,9 +70,9 @@ public class LoginTest {
   @DataProvider(name = "userCredentials")
   public static Object[][] userCredentials() {
     return new Object[][] {
-      { "stash.rowley@cbrands.com", "Corona.2016" } ,
-      { "eric.ramey@cbrands.com", "Corona.2016" } ,
-      { "chris.williams@cbrands.com", "Corona.2016" }
+      { TestUser.ACTOR2 } ,
+      { TestUser.ACTOR3 } ,
+      { TestUser.ACTOR4 }
     };
   }
 
