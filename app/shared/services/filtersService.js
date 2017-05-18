@@ -2,7 +2,7 @@
 
 module.exports = /*  @ngInject */
   function filtersService($filter) {
-    var paramsNotIncludedInSaveFilter = ['opportunityType', 'opportunitiesType', 'placementType', 'premises', 'retailer', 'depletionsTimePeriod', 'distributionTimePeriod', 'accountSelected', 'selectedTemplate', 'timePeriod', 'tradeChannels', 'trend', 'defaultSort', 'appliedFilter', 'topBottomSnapshotTypes'];
+    var paramsNotIncludedInSaveFilter = ['opportunitiesType', 'featureType', 'itemAuthorizationType', 'placementType', 'premises', 'retailer', 'depletionsTimePeriod', 'distributionTimePeriod', 'accountSelected', 'selectedTemplate', 'timePeriod', 'tradeChannels', 'trend', 'defaultSort', 'appliedFilter', 'topBottomSnapshotTypes'];
     var model = {
       account: [],
       appliedFilter: {
@@ -35,7 +35,6 @@ module.exports = /*  @ngInject */
       disableSaveFilter: false,
       filtersValidCount: 0,
       impact: '',
-      opportunityType: ['All Types'],
       opportunitiesType: [
         {name: 'All Types'},
         {name: 'Non-Buy'},
@@ -44,6 +43,21 @@ module.exports = /*  @ngInject */
         {name: 'New Placement (Quality)'},
         {name: 'New Placement (No Rebuy)'},
         {name: 'Custom'}
+      ],
+      featureType: [
+        {name: 'All Types'},
+        {name: 'Happy Hour', key: 'HH'},
+        {name: 'Everyday Low Price', key: 'LP'},
+        {name: 'Limited Time Only', key: 'LT'},
+        {name: 'Beer of the Month', key: 'BE'},
+        {name: 'Price Feature', key: 'PF'}
+      ],
+      itemAuthorizationType: [
+        {name: 'All Types'},
+        {name: 'Brand Mandate', key: 'BM'},
+        {name: 'Corporate Mandate', key: 'CM'},
+        {name: 'Authorized-Select Planogram', key: 'SP'},
+        {name: 'Authorized-Optional (Sell-In)', key: 'OS'}
       ],
       savedFilters: [],
       placementType: [
@@ -144,6 +158,7 @@ module.exports = /*  @ngInject */
       selectedTemplate: {
         myAccountsOnly: true,
         simpleDistributionType: false,
+        priorityPackage: false,
         account: [],
         subaccount: [],
         brand: [],
@@ -156,6 +171,8 @@ module.exports = /*  @ngInject */
         impact: [],
         opportunityStatus: [],
         opportunityType: ['All Types'],
+        featureType: [],
+        itemAuthorizationType: [],
         premiseType: 'off',
         productType: [],
         store: [],
@@ -437,11 +454,7 @@ module.exports = /*  @ngInject */
       for (var key in service.model.selected) {
         var propVal = service.model.selected[key];
         if (service.model.selected.hasOwnProperty(key) && propVal !== '') {
-          if (Array.isArray(propVal)) {
-            if (propVal.length !== 0) {
-              filterPayload[key] = service.model.selected[key];
-            }
-          } else {
+          if (!Array.isArray(propVal) || propVal.length) {
             filterPayload[key] = service.model.selected[key];
           }
         }

@@ -8,8 +8,11 @@ module.exports = /*  @ngInject */
     // ****************
     // Private variables
     const _allTypesOption = 'All Types';
+    const _noTypesSelected = 'No Types Selected';
     const _nonBuyOption = 'Non-Buy';
     let _isAllOpportunityTypeClicked = null;
+    let _isAllFeatureTypeSelected = false;
+    let _isAllItemAuthorizationTypeSelected = false;
 
     // Initial variables
     var vm = this;
@@ -36,7 +39,6 @@ module.exports = /*  @ngInject */
     vm.expandDropdown = expandDropdown;
     vm.hoverState = hoverState;
     vm.modalSaveOpportunityFilter = modalSaveOpportunityFilter;
-    vm.opportunityStatusSwitch = opportunityStatusSwitch;
     vm.placeholderSelect = placeholderSelect;
     vm.resetFilters = resetFilters;
     vm.resetTradeChannels = resetTradeChannels;
@@ -45,6 +47,10 @@ module.exports = /*  @ngInject */
     vm.states = usStatesService;
     vm.chooseOpportunityType = chooseOpportunityType;
     vm.changeOpportunitySelection = changeOpportunitySelection;
+    vm.changeFeatureTypeSelection = changeFeatureTypeSelection;
+    vm.changeItemAuthorizationTypeSelection = changeItemAuthorizationTypeSelection;
+    vm.featureTypeText = featureTypeText;
+    vm.autorizationProductTypesText = autorizationProductTypesText;
     vm.getDescriptionForFilter = getDescriptionForFilter;
     vm.applyFilters = applyFilters;
     vm.shouldEnableSimpleDistribution = shouldEnableSimpleDistribution;
@@ -171,12 +177,78 @@ module.exports = /*  @ngInject */
       }
     }
 
-    function opportunityStatusSwitch() {
-      if ($state.current.name === 'target-list-detail') {
-        return true;
+    function changeFeatureTypeSelection() {
+      const selected = vm.filtersService.model.selected;
+
+      const currentlySelectedFeatureType = selected.featureType;
+      const allFeatureTypes = vm.filtersService.model.featureType.map(type => type.name);
+
+      selected.featureType = adaptTypesSelection(currentlySelectedFeatureType, allFeatureTypes, _isAllFeatureTypeSelected);
+      _isAllFeatureTypeSelected = selected.featureType.length === allFeatureTypes.length;
+    }
+
+    /**
+     * Updates an array of types by select all of them if "All Types" is selected,
+     * or by unselecting "All Types" if one other element as been unselected
+     * @param {Array} currentlySelectedTypes The array containing the user-selected types
+     * @param {Array} allTypes The array containing all the possible types.
+     * @param {Array} isAllCurrentlySelected Whether or not "All Types" was selected before the user action.
+     * @returns {Array} The array with the types updated.
+     */
+    function adaptTypesSelection(currentlySelectedTypes, allTypes, isAllCurrentlySelected) {
+      const allTypesOptionIndex = currentlySelectedTypes.indexOf(_allTypesOption);
+      const allTypesIsSelected = allTypesOptionIndex !== -1;
+
+      let newSelectedTypes = currentlySelectedTypes;
+
+      if (isAllCurrentlySelected) {
+        if (allTypesIsSelected) {
+          newSelectedTypes.splice(allTypesOptionIndex, 1);
+        } else {
+          newSelectedTypes = [];
+        }
       } else {
-        return false;
+        if (allTypesIsSelected) {
+          newSelectedTypes = allTypes;
+        } else {
+          if (currentlySelectedTypes.length >= allTypes.length - 1) {
+            newSelectedTypes = allTypes;
+          }
+        }
       }
+
+      return newSelectedTypes;
+    }
+
+    function changeItemAuthorizationTypeSelection() {
+      const selected = vm.filtersService.model.selected;
+
+      const currentlySelectedItemAuthorizationType = selected.itemAuthorizationType;
+      const allFeatureTypes = vm.filtersService.model.itemAuthorizationType.map(type => type.name);
+
+      selected.itemAuthorizationType = adaptTypesSelection(currentlySelectedItemAuthorizationType, allFeatureTypes, _isAllItemAuthorizationTypeSelected);
+
+      _isAllItemAuthorizationTypeSelected = selected.itemAuthorizationType.length === allFeatureTypes.length;
+    }
+
+    function featureTypeText() {
+      return _isAllFeatureTypeSelected
+        ? _allTypesOption
+        : vm.filtersService.model.selected.featureType
+          ? filterOutAllTypes(vm.filtersService.model.selected.featureType).join(', ') || _noTypesSelected
+          : _noTypesSelected;
+    }
+
+    function filterOutAllTypes(types) {
+      return types.filter(type => type !== _allTypesOption);
+    }
+
+    function autorizationProductTypesText() {
+      return _isAllItemAuthorizationTypeSelected
+        ? _allTypesOption
+        : vm.filtersService.model.selected.itemAuthorizationType
+          ? filterOutAllTypes(vm.filtersService.model.selected.itemAuthorizationType).join(', ') || _noTypesSelected
+          : _noTypesSelected;
     }
 
     function placeholderSelect(data) {

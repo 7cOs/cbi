@@ -159,6 +159,91 @@ describe('[Services.apiHelperService]', function() {
       expect(result).toEqual(resultExpectation);
     });
 
+    it('should return opportunities specific formatting when ALL feature types is selected', function() {
+      const mockObject = {
+        masterSKU: '112154',
+        featureType: ['All Types', 'Happy Hour'],
+        premiseType: 'on',
+        simpleDistributionType: true,
+        type: 'opportunities',
+        storeFormat: 'GM'
+      };
+      const url = 'http://localhost:3000/';
+      const resultExpectation = url + '?limit=20&sort=&offset=0&ignoreDismissed=true&brandOpportunityType=true&hispanicMarketType=GM&filter=masterSKU%3A112154%2CfeatureType%3AHH%2CpremiseType%3Aon%2C';
+
+      const result = APIHelper.request(url, mockObject);
+
+      expect(result).toEqual(resultExpectation);
+    });
+
+    it('should return opportunities specific formatting when some feature types is selected', function() {
+      const mockObject = {
+        masterSKU: '112154',
+        featureType: ['Happy Hour', 'Beer of the Month'],
+        premiseType: 'on',
+        simpleDistributionType: true,
+        type: 'opportunities',
+        storeFormat: 'GM'
+      };
+      const url = 'http://localhost:3000/';
+      const resultExpectation = url + '?limit=20&sort=&offset=0&ignoreDismissed=true&brandOpportunityType=true&hispanicMarketType=GM&filter=masterSKU%3A112154%2CfeatureType%3AHH%7CBE%2CpremiseType%3Aon%2C';
+
+      const result = APIHelper.request(url, mockObject);
+
+      expect(result).toEqual(resultExpectation);
+    });
+
+    it('should return opportunities specific formatting when ALL item authorization types is selected', function() {
+      const mockObject = {
+        masterSKU: '112154',
+        itemAuthorizationType: ['All Types', 'Authorized-Select Planogram', 'Authorized-Optional (Sell-In)'],
+        premiseType: 'on',
+        simpleDistributionType: true,
+        type: 'opportunities',
+        storeFormat: 'GM'
+      };
+      const url = 'http://localhost:3000/';
+      const resultExpectation = url + '?limit=20&sort=&offset=0&ignoreDismissed=true&brandOpportunityType=true&hispanicMarketType=GM&filter=masterSKU%3A112154%2CitemAuthorizationType%3ASP%7COS%2CpremiseType%3Aon%2C';
+
+      const result = APIHelper.request(url, mockObject);
+
+      expect(result).toEqual(resultExpectation);
+    });
+
+    it('should return opportunities specific formatting when item authorization types is selected', function() {
+      const mockObject = {
+        masterSKU: '112154',
+        itemAuthorizationType: ['Authorized-Select Planogram', 'Authorized-Optional (Sell-In)'],
+        premiseType: 'on',
+        simpleDistributionType: true,
+        type: 'opportunities',
+        storeFormat: 'GM'
+      };
+      const url = 'http://localhost:3000/';
+      const resultExpectation = url + '?limit=20&sort=&offset=0&ignoreDismissed=true&brandOpportunityType=true&hispanicMarketType=GM&filter=masterSKU%3A112154%2CitemAuthorizationType%3ASP%7COS%2CpremiseType%3Aon%2C';
+
+      const result = APIHelper.request(url, mockObject);
+
+      expect(result).toEqual(resultExpectation);
+    });
+
+    it('should return opportunities specific formatting when priority package is selected', function() {
+      const mockObject = {
+        masterSKU: '112154',
+        priorityPackage: true,
+        premiseType: 'on',
+        simpleDistributionType: true,
+        type: 'opportunities',
+        storeFormat: 'GM'
+      };
+      const url = 'http://localhost:3000/';
+      const resultExpectation = url + '?limit=20&sort=&offset=0&ignoreDismissed=true&brandOpportunityType=true&hispanicMarketType=GM&priorityPackage:true&filter=masterSKU%3A112154%2CpremiseType%3Aon%2C';
+
+      const result = APIHelper.request(url, mockObject);
+
+      expect(result).toEqual(resultExpectation);
+    });
+
     it('it should set archived=true for target lists', function() {
       const mockObject = {
         'type': 'targetLists'
