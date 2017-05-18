@@ -90,9 +90,17 @@ public class HomePage extends LoadableComponent<HomePage>{
 
   @Override
   protected void isLoaded() throws Error {
-    waitForVisibleFluentWait(userInfo);
-    Assert.assertTrue(userInfo.isDisplayed());
+    Assert.assertTrue(isUserInfoDisplayed());
     log.info("Login successful for User: " + userInfo.getText());
+  }
+
+  public boolean isOnHomePage() {
+    return isUserInfoDisplayed();
+  }
+
+  private boolean isUserInfoDisplayed() {
+    waitForVisibleFluentWait(userInfo);
+    return userInfo.isDisplayed();
   }
 
 	public HomePage clickOffPremise() {
