@@ -8,8 +8,8 @@ import com.cbrands.pages.HomePage;
 import com.cbrands.pages.Login;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
+import org.testng.Assert;
 import org.testng.annotations.*;
 
 import java.net.MalformedURLException;
@@ -18,6 +18,8 @@ import java.net.MalformedURLException;
  * Automated test for logging in and out of the web app.
  */
 public class LoginTest {
+  private Login login;
+
   private Log log = LogFactory.getLog(LoginTest.class);
   private WebDriver driver;
   private String webAppBaseUrl;
@@ -45,6 +47,8 @@ public class LoginTest {
 
   @BeforeMethod
   public void setUp() {
+    login = new Login(driver);
+
     log.info("\nLoading webpage.");
     driver.get(webAppBaseUrl);
   }
@@ -57,14 +61,10 @@ public class LoginTest {
 
   @Test(dataProvider = "userCredentials", description = "Testing basic login and logout")
   public void testLogin(TestUser testUser) {
-    final HomePage homePage = new Login(driver).loginWithValidCredentials(testUser.userName(), testUser.password());
+    final HomePage homePage = login.loginWithValidCredentials(testUser.userName(), testUser.password());
+    Assert.assertTrue(homePage.isOnHomePage(), "Login failed for userName: " + testUser.userName());
 
-    try {
-      homePage.get();
-    } catch (final NoSuchElementException e) {
-      log.info("Login failed for userName: " + testUser.userName());
-      throw e;
-    }
+    log.info("Logged in successfully as: " + testUser.userName());
   }
 
   @DataProvider(name = "userCredentials")
