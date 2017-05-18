@@ -1,47 +1,18 @@
 package com.cbrands.test.smoke;
 
 import com.cbrands.TestUser;
-import com.cbrands.helper.PropertiesCache;
-import com.cbrands.helper.SeleniumUtils;
-import com.cbrands.helper.WebDriverFactory;
 import com.cbrands.pages.HomePage;
 import com.cbrands.pages.Login;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.openqa.selenium.NoSuchElementException;
-import org.openqa.selenium.WebDriver;
-import org.testng.annotations.*;
-
-import java.net.MalformedURLException;
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.DataProvider;
+import org.testng.annotations.Test;
 
 /**
  * Automated test for logging in and out of the web app.
  */
-public class LoginTest {
-  private Log log = LogFactory.getLog(LoginTest.class);
-  private WebDriver driver;
-  private String webAppBaseUrl;
-
-  @BeforeSuite
-  public void setUp() throws MalformedURLException {
-    final PropertiesCache propertiesCache = PropertiesCache.getInstance();
-    webAppBaseUrl = propertiesCache.getProperty("qa.host.address");
-
-    log.info("Browser opening...");
-
-    driver = WebDriverFactory.createDriver(propertiesCache.getProperty("selenium.host.address"));
-    driver.get(webAppBaseUrl);
-    SeleniumUtils.setDriver(driver);
-    SeleniumUtils.setStopAtShutdown();
-
-    log.info("Browser opened.");
-  }
-
-  @AfterSuite
-  public void tearDown() {
-    driver.quit();
-    log.info("Browser closed.");
-  }
+public class LoginTest extends BaseTestCase {
 
   @BeforeMethod
   public void loadPage() {
