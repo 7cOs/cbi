@@ -27,7 +27,7 @@ public class LoginTest {
     final PropertiesCache propertiesCache = PropertiesCache.getInstance();
     webAppBaseUrl = propertiesCache.getProperty("qa.host.address");
 
-    log.info("Browser opening...");
+    log.info("\nBrowser opening...");
 
     driver = WebDriverFactory.createDriver(propertiesCache.getProperty("selenium.host.address"));
     driver.get(webAppBaseUrl);
@@ -40,12 +40,12 @@ public class LoginTest {
   @AfterSuite
   public void tearDown() {
     driver.quit();
-    log.info("Browser closed.");
+    log.info("Browser closed.\n");
   }
 
   @BeforeMethod
   public void loadPage() {
-    log.info("Loading webpage.");
+    log.info("\nLoading webpage.");
     driver.get(webAppBaseUrl);
   }
 
