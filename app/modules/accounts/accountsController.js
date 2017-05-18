@@ -611,7 +611,6 @@ module.exports = /*  @ngInject */
         case 'accounts':
           topBottomProp = 'accounts';
           filterModelProp = 'account';
-          removeInlineSearch('selectedStore');
           break;
         case 'subaccount':
         case 'subAccounts':
@@ -632,9 +631,7 @@ module.exports = /*  @ngInject */
       // set filters service model selected
       if (result.ids) {
         for (i = 0; i < result.ids.length; i++) {
-          filterModelProp === 'account'
-            ? filtersService.model.selected.account[0] = result.ids[i]
-            : filtersService.model.selected[filterModelProp].push(result.ids[i]);
+          filtersService.model.selected[filterModelProp][0] = result.ids[i];
         }
       } else {
         if (result.id.constructor === Array) {
