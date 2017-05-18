@@ -10,7 +10,8 @@ module.exports = /*  @ngInject */
 
     var service = {
       model: model,
-      getOpportunities: getOpportunities,
+      getAndUpdateStoresWithOpportunities: getAndUpdateStoresWithOpportunities,
+      getStoresWithOpportunities: getStoresWithOpportunities,
       getAllOpportunitiesIDs: getAllOpportunitiesIDs,
       getOpportunitiesHeaders: getOpportunitiesHeaders,
       createOpportunity: createOpportunity,
@@ -25,172 +26,77 @@ module.exports = /*  @ngInject */
 
     // Opportunities Methods
     /**
-     * @name getOpportunities
-     * @desc Get opportunities from API
+     * @name getAndUpdateStoresWithOpportunities
+     * @desc Get opportunities from API and update the model
      * @params {String} opportunityID - ID of opportunity [optional]
      * @returns {Object}
      * @memberOf cf.common.services
      */
-    function getOpportunities(opportunityID, dontResetList) {
+    function getAndUpdateStoresWithOpportunities(opportunityID) {
+      const opportunitiesPromise = $q.defer();
+      service.model.opportunities = [];
+
+      service.getStoresWithOpportunities(opportunityID)
+        .then((storesWithOpportunities) => {
+          service.model.opportunities = storesWithOpportunities;
+
+          opportunitiesPromise.resolve(storesWithOpportunities);
+        })
+        .catch(error => opportunitiesPromise.reject(error));
+
+      return opportunitiesPromise.promise;
+    }
+
+    /**
+     * @name getStoresWithOpportunities
+     * @desc Get opportunities from API and update the model
+     * @params {String} opportunityID - ID of opportunity [optional]
+     * @returns {Object}
+     * @memberOf cf.common.services
+     */
+    function getStoresWithOpportunities(opportunityID) {
+      const opportunitiesPromise = $q.defer();
       service.model.noOpportunitiesFound = false;
-      if (!opportunityID) {
-        // get applied filters
-        var filterPayload = filtersService.getAppliedFilters('opportunities');
-      }
 
-      // create promise, build url based on filters and if there is an opp id
-      var opportunitiesPromise = $q.defer(),
-          url = opportunityID ? apiHelperService.request('/v2/opportunities/' + opportunityID) : apiHelperService.request('/v2/opportunities/', filterPayload);
+      const fetchDataPromise = opportunityID
+        ? getSingleOpportunity(opportunityID)
+        : getOpportunities();
 
-      if (!dontResetList) {
-        service.model.opportunities = [];
-      }
+      fetchDataPromise.then(getOpportunitiesSuccess);
 
-      $http.get(url)
-        .then(getOpportunitiesSuccess)
-        .catch((error) => handleGetOpportunitiesFail(opportunitiesPromise, error));
+      function getOpportunitiesSuccess(opportunities) {
+        if (!opportunities.length) {
+          service.model.noOpportunitiesFound = true;
+        } else {
+          const hasUnauthorizedOpportunities = opportunities.filter(opportunity => opportunity.showAuthorization === 'Y').length;
 
-      function getOpportunitiesSuccess(response) {
-        // Group opportunities by store
-        var newOpportunityArr = [],
-            store,
-            storePlaceholder;
-
-        // make opp array instead of obj if oppId provided
-        if (opportunityID) { response.data.opportunities = [response.data]; };
-
-        // trigger no opps modal
-        if (response.data.opportunities.length < 1) { service.model.noOpportunitiesFound = true; };
-
-        for (var i = 0; i < response.data.opportunities.length; i++) {
-          var item = response.data.opportunities[i];
-
-          // Set depletionsCurrentYearToDateYAPercent
-          item = setVsYAPercent(item);
-          item.store = setVsYAPercent(item.store);
-
-          // Set store status to boolean
-          item.store.unsold = setStoreStatus(item.store.unsold);
-
-          // Check Authorization/Feature for CSV
-          item.isItemAuthorization = 'N';
-          if (item.itemAuthorizationCode !== null) {
-            item.isItemAuthorization = 'Y';
-          }
-
-          item.isChainMandate = 'N';
-          if (item.itemAuthorizationCode === 'CM') {
-            item.isChainMandate = 'Y';
-          }
-
-          item.isOnFeature = 'N';
-          if (item.featureTypeCode !== null) {
-            item.isOnFeature = 'Y';
-          }
-
-          // Check that only specified authorizations show, applicable when 'authorized' filter applied
-          item.showAuthorization = '';
-          if (item.itemAuthorizationCode === 'CM' || item.itemAuthorizationCode === 'BM' || item.itemAuthorizationCode === 'OS' || item.itemAuthorizationCode === 'SP') {
-            item.showAuthorization = 'Y';
-          }
-
-          if (filtersService.model.selected.productType[0] !== 'authorized' || (filtersService.model.selected.productType[0] === 'authorized' && item.showAuthorization === 'Y')) {
-            // if its a new store
-            if (!storePlaceholder || (storePlaceholder.address !== item.store.address || storePlaceholder.id !== item.store.id)) {
-              // push previous store in newOpportunityArr
-              if (i !== 0) newOpportunityArr.push(store);
-
-              // create grouped store object
-              store = angular.copy(item);
-              store.depletionSum = 0;
-              store.brands = [];
-              store.store = setVsYAPercent(store.store);
-
-              // set store placeholder to new store
-              storePlaceholder = item.store;
-
-              // Set positive or negative label for trend values for store
-              // I think this is no longer relevant to the app.
-              store.trend = store.currentYTDStoreVolume - store.lastYTDStoreVolume;
-              if (store.trend > 0) {
-                store.positiveValue = true;
-              } else if (store.trend < 0) {
-                store.negativeValue = true;
-              }
-
-              // create groupedOpportunities arr so all opportunities for one store will be in a row
-              store.groupedOpportunities = [];
-
-              store.groupedOpportunities.push(item);
-
-            } else {
-              store.groupedOpportunities.push(item);
-            }
-          } else {
+          if (filtersService.model.selected.productType[0] === 'authorized' && hasUnauthorizedOpportunities) {
             service.model.noOpportunitiesFound = true;
             service.model.filterApplied = true;
-            return handleGetOpportunitiesFail('No authorized Opportunities');
-          }
-
-          // add brand to array
-          store.brands.push(item.product.brand.toLowerCase());
-
-          // sum depletions - not in api yet - WJAY 8/8
-          // store.depletionSum += item.depletions
-
-          // push last store into newOpportunityArr
-          if (i + 1 === response.data.opportunities.length) newOpportunityArr.push(store);
-        }; // end for each
-
-        // set data for pagination
-        if (!dontResetList) {
-          service.model.opportunities = newOpportunityArr;
-        }
-
-        opportunitiesPromise.resolve(newOpportunityArr);
-      }
-
-      function setVsYAPercent(item) {
-        // defined in DE2970, updated in US/13385
-        var vsYAPercent = 0,
-            negative = false;
-        if (item.depletionsCurrentYearToDate > 0 && item.depletionsCurrentYearToDateYA === 0) {
-          vsYAPercent = '100%';
-        } else if (item.depletionsCurrentYearToDate === 0 && item.depletionsCurrentYearToDateYA > 0) {
-          vsYAPercent = '-100%';
-          negative = true;
-        } else if (item.depletionsCurrentYearToDate === 0 && item.depletionsCurrentYearToDateYA === 0) {
-          vsYAPercent = 0;
-          negative = true;
-        } else {
-          // vsYAPercent = -100 + ((item.depletionsCurrentYearToDate / item.depletionsCurrentYearToDateYA) * 100);
-          vsYAPercent = (item.depletionsCurrentYearToDate / item.depletionsCurrentYearToDateYA - 1) * 100;
-          if (vsYAPercent > 999) {
-            vsYAPercent = '999%';
-          } else if (vsYAPercent < -999) {
-            vsYAPercent = '-999%';
-            negative = true;
+            handleGetOpportunitiesFail('No authorized Opportunities');
           } else {
-            if (vsYAPercent.toFixed(0) < 0) negative = true;
-            vsYAPercent = vsYAPercent.toFixed(1) + '%';
+            const storesWithOpportunities = groupOpportunitiesByStore(opportunities);
+
+            opportunitiesPromise.resolve(storesWithOpportunities);
           }
         }
-        item.depletionsCurrentYearToDateYAPercent = negative ? vsYAPercent : '+' + vsYAPercent;
-        item.depletionsCurrentYearToDateYAPercentNegative = negative;
-
-        return item;
       }
 
       return opportunitiesPromise.promise;
     }
 
-    function setStoreStatus(storeValue) {
+    function getSingleOpportunity(opportunityID) {
+      const opportunitiesPromise = $q.defer();
+      const url = apiHelperService.request('/v2/opportunities/' + opportunityID);
 
-      if (storeValue === 'Y') {
-        return true;
-      }
+      $http.get(url)
+        .then((response) => {
+          const opportunities = [response.data.opportunities].map(populateOpportunityData);
+          opportunitiesPromise.resolve(opportunities);
+        })
+        .catch(error => handleGetOpportunitiesFail(opportunitiesPromise, error));
 
-      return false;
+      return opportunitiesPromise.promise;
     }
 
     /**
@@ -201,6 +107,103 @@ module.exports = /*  @ngInject */
     function handleGetOpportunitiesFail(opportunitiesPromise, error) {
       console.warn('[opportunitiesService.getOpportunities]... Error getting opportunities... Err: ', error);
       opportunitiesPromise.reject(error);
+    }
+
+    function populateOpportunityData(opportunity) {
+      opportunity = setVsYAPercent(opportunity);
+      opportunity.store = setVsYAPercent(opportunity.store);
+      opportunity.store.unsold = opportunity.store.unsold === 'Y';
+      opportunity.isItemAuthorization = opportunity.itemAuthorizationCode === null ? 'N' : 'Y';
+      opportunity.isChainMandate = opportunity.itemAuthorizationCode === 'CM' ? 'Y' : 'N';
+      opportunity.isOnFeature = opportunity.featureTypeCode === null ? 'N' : 'Y';
+      // Check that only specified authorizations show, applicable when 'authorized' filter applied
+      opportunity.showAuthorization = opportunity.itemAuthorizationCode === 'CM' || opportunity.itemAuthorizationCode === 'BM' || opportunity.itemAuthorizationCode === 'OS' || opportunity.itemAuthorizationCode === 'SP'
+        ? 'Y'
+        : '';
+
+      return opportunity;
+    }
+
+    function setVsYAPercent(item) {
+      // defined in DE2970, updated in US/13385
+      var vsYAPercent = 0,
+          negative = false;
+      if (item.depletionsCurrentYearToDate > 0 && item.depletionsCurrentYearToDateYA === 0) {
+        vsYAPercent = '100%';
+      } else if (item.depletionsCurrentYearToDate === 0 && item.depletionsCurrentYearToDateYA > 0) {
+        vsYAPercent = '-100%';
+        negative = true;
+      } else if (item.depletionsCurrentYearToDate === 0 && item.depletionsCurrentYearToDateYA === 0) {
+        vsYAPercent = 0;
+        negative = true;
+      } else {
+        // vsYAPercent = -100 + ((item.depletionsCurrentYearToDate / item.depletionsCurrentYearToDateYA) * 100);
+        vsYAPercent = (item.depletionsCurrentYearToDate / item.depletionsCurrentYearToDateYA - 1) * 100;
+        if (vsYAPercent > 999) {
+          vsYAPercent = '999%';
+        } else if (vsYAPercent < -999) {
+          vsYAPercent = '-999%';
+          negative = true;
+        } else {
+          if (vsYAPercent.toFixed(0) < 0) negative = true;
+          vsYAPercent = vsYAPercent.toFixed(1) + '%';
+        }
+      }
+      item.depletionsCurrentYearToDateYAPercent = negative ? vsYAPercent : '+' + vsYAPercent;
+      item.depletionsCurrentYearToDateYAPercentNegative = negative;
+
+      return item;
+    }
+
+    function getOpportunities(areAllRequested) {
+debugger;
+      apiHelperService.model.bulkQuery = areAllRequested;
+
+      const opportunitiesPromise = $q.defer();
+      const filterPayload = filtersService.getAppliedFilters('opportunities');
+      const url = apiHelperService.request('/v2/opportunities/', filterPayload);
+
+      $http.get(url)
+        .then((response) => {
+          const opportunities = response.data.opportunities.map(populateOpportunityData);
+          opportunitiesPromise.resolve(opportunities);
+        })
+        .catch(error => handleGetOpportunitiesFail(opportunitiesPromise, error));
+
+      return opportunitiesPromise.promise;
+    }
+
+    function groupOpportunitiesByStore(opportunities) {
+      return opportunities.reduce((stores, opportunity) => {
+        const storeExists = stores.length && stores[stores.length - 1].store.id === opportunity.store.id;
+
+        if (!storeExists) {
+          const store = angular.copy(opportunity);
+          store.depletionSum = 0;
+          store.brands = [];
+          store.store = setVsYAPercent(store.store);
+
+          // Set positive or negative label for trend values for store
+          // I think this is no longer relevant to the app.
+          store.trend = store.currentYTDStoreVolume - store.lastYTDStoreVolume;
+          if (store.trend > 0) {
+            store.positiveValue = true;
+          } else if (store.trend < 0) {
+            store.negativeValue = true;
+          }
+
+          // create groupedOpportunities arr so all opportunities for one store will be in a row
+          store.groupedOpportunities = [];
+
+          stores.push(store);
+        }
+
+        const currentStore = stores[stores.length - 1];
+        currentStore.groupedOpportunities.push(opportunity);
+        currentStore.brands.push(opportunity.product.brand.toLowerCase());
+
+        return stores;
+      }, []);
     }
 
     /**

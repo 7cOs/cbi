@@ -134,7 +134,7 @@ module.exports = /*  @ngInject */
           loaderService.closeLoader();
         });
       } else {
-        $q.all([opportunitiesService.getOpportunities(), opportunitiesService.getOpportunitiesHeaders()]).then(function(data) {
+        $q.all([opportunitiesService.getAndUpdateStoresWithOpportunities(), opportunitiesService.getOpportunitiesHeaders()]).then(function(data) {
           loaderService.closeLoader();
           finishGet(data[0]);
         }, reason => {

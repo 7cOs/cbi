@@ -450,8 +450,9 @@ describe('Unit: list controller', function() {
         }
     }];
 
-    it('should create a csvItem for each selected opportunity, and add it to the data array', function() {
-      expect(ctrl.flattenOpportunity([opportunities[0]])).toEqual([{
+    it('should create a csvItem for each selected opportunity, and add it to the data array', () => {
+      ctrl.selected = [opportunities[0]];
+      expect(ctrl.flattenOpportunity()).toEqual([{
         'storeDistributor': opportunities[0].store.distributors[0],
         'TDLinx': opportunities[0].store.id,
         'storeName': opportunities[0].store.name,
@@ -472,8 +473,9 @@ describe('Unit: list controller', function() {
       }]);
     });
 
-    it('should add a rationale when provided as input', function() {
-      expect(ctrl.flattenOpportunity([opportunities[0]], true)).toEqual([{
+    it('should add a rationale when provided as input', () => {
+      ctrl.selected = [opportunities[0]];
+      expect(ctrl.flattenOpportunity(true)).toEqual([{
         'storeDistributor': opportunities[0].store.distributors[0],
         'TDLinx': opportunities[0].store.id,
         'storeName': opportunities[0].store.name,
@@ -495,8 +497,9 @@ describe('Unit: list controller', function() {
       }]);
     });
 
-    it('should be able to parse when the distributor list is null', function() {
-      expect(ctrl.flattenOpportunity([opportunities[1]], false)).toEqual([{
+    it('should be able to parse when the distributor list is null', () => {
+      ctrl.selected = [opportunities[1]];
+      expect(ctrl.flattenOpportunity(false)).toEqual([{
         'storeDistributor': '',
         'TDLinx': opportunities[1].store.id,
         'storeName': opportunities[1].store.name,
@@ -517,8 +520,9 @@ describe('Unit: list controller', function() {
       }]);
     });
 
-    it('should take the brand as product name if the product name is null', function() {
-      expect(ctrl.flattenOpportunity([opportunities[1]], false)).toEqual([{
+    it('should take the brand as product name if the product name is null', () => {
+      ctrl.selected = [opportunities[1]];
+      expect(ctrl.flattenOpportunity(false)).toEqual([{
         'storeDistributor': '',
         'TDLinx': opportunities[1].store.id,
         'storeName': opportunities[1].store.name,
@@ -778,7 +782,7 @@ describe('Unit: list controller', function() {
       spyOn(loaderService, 'openLoader').and.callFake(function() {
         return true;
       });
-      spyOn(opportunitiesService, 'getOpportunities').and.callFake(function() {
+      spyOn(opportunitiesService, 'getAndUpdateStoresWithOpportunities').and.callFake(function() {
         var deferred = q.defer();
         return deferred.promise;
       });
@@ -810,7 +814,7 @@ describe('Unit: list controller', function() {
     it('should send request to get opportunities when sort is applied', function() {
       ctrl.pageName = 'opportunities';
       ctrl.sortBy('store');
-      expect(opportunitiesService.getOpportunities).toHaveBeenCalled();
+      expect(opportunitiesService.getAndUpdateStoresWithOpportunities).toHaveBeenCalled();
     });
 
     it('should toggle the boolean ascending on function call', function() {

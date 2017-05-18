@@ -194,7 +194,7 @@ describe('Unit: page controller', function() {
     beforeEach(() => {
       filtersService.model.appliedFilter.pagination.currentPage = 0;
 
-      spyOn(opportunitiesService, 'getOpportunities').and.callFake(function() {
+      spyOn(opportunitiesService, 'getAndUpdateStoresWithOpportunities').and.callFake(function() {
         var deferred = q.defer();
         return deferred.promise;
       });
@@ -212,10 +212,10 @@ describe('Unit: page controller', function() {
       expect(ctrl.loadingList).toBeTruthy();
     });
 
-    it('should call opportunitiesService.getOpportunities', function() {
-      expect(opportunitiesService.getOpportunities).not.toHaveBeenCalled();
+    it('should call opportunitiesService.getAndUpdateStoresWithOpportunities', function() {
+      expect(opportunitiesService.getAndUpdateStoresWithOpportunities).not.toHaveBeenCalled();
       ctrl.pageChanged(2);
-      expect(opportunitiesService.getOpportunities).toHaveBeenCalled();
+      expect(opportunitiesService.getAndUpdateStoresWithOpportunities).toHaveBeenCalled();
     });
 
     // To Do: Find better way to test .then() of promise

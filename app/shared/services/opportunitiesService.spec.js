@@ -245,7 +245,7 @@ describe('Unit: opportunitiesService - get opportunities', function() {
         .expect('GET', '/v2/opportunities/?limit=20&ignoreDismissed=true&sort=&offset=0&filter=myAccountsOnly%3Atrue%2CpremiseType%3Aoff%2C')
         .respond(200, opportunitiesResponseObject);
 
-        opportunitiesService.getOpportunities();
+        opportunitiesService.getAndUpdateStoresWithOpportunities();
 
         $httpBackend.flush();
         expect(opportunitiesService.model.opportunities).toEqual(expectedServiceModel.opportunities);

@@ -411,7 +411,7 @@ module.exports = /*  @ngInject */
             });
 
             if (vm.filtersService.model.appliedFilter.pagination.shouldReloadData) {
-              vm.opportunitiesService.getOpportunities();
+              vm.opportunitiesService.getAndUpdateStoresWithOpportunities();
               vm.filtersService.model.appliedFilter.pagination.shouldReloadData = false;
             }
           });
@@ -545,7 +545,7 @@ module.exports = /*  @ngInject */
       filtersService.addSortFilter(name);
 
       if (vm.pageName === 'opportunities') {
-        opportunitiesService.getOpportunities().then(() => {
+        opportunitiesService.getAndUpdateStoresWithOpportunities().then(() => {
           vm.loadingList = false;
         });
       } else if (vm.pageName === 'target-list-detail') {
@@ -606,10 +606,10 @@ module.exports = /*  @ngInject */
       vm.disabledMessage = message;
     }
 
-    function flattenOpportunity(obj, rationale) {
+    function flattenOpportunity(rationale) {
       const data = [];
 
-      angular.forEach(obj, function(value, key) {
+      angular.forEach(vm.selected, function(value, key) {
         const item = {};
         const csvItem = {};
         angular.copy(value, item);
