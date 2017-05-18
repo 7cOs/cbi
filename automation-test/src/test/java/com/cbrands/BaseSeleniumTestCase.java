@@ -30,6 +30,14 @@ import com.cbrands.pages.MyScorecards;
 import com.cbrands.pages.Opportunities;
 import com.cbrands.pages.TargetList;
 
+/**
+ * @deprecated Moving away from using this class to reduce low cohesion that interferes with modularity.
+ * Methods in this class will be extracted to their appropriate page object or utility classes.
+ * The new base test class should contain only code relevant to setup and teardown of test suites.
+ *
+ * @see com.cbrands.test.smoke.BaseTestCase
+ */
+@Deprecated
 @Listeners(value = SeleniumSnapshotRule.class)
 public abstract class BaseSeleniumTestCase implements IConstant {
 
