@@ -6,6 +6,7 @@ import com.cbrands.helper.SeleniumUtils;
 import com.cbrands.helper.WebDriverFactory;
 import com.cbrands.pages.HomePage;
 import com.cbrands.pages.Login;
+import com.cbrands.pages.Logout;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openqa.selenium.WebDriver;
@@ -19,6 +20,7 @@ import java.net.MalformedURLException;
  */
 public class LoginTest {
   private Login login;
+  private Logout logout;
 
   private Log log = LogFactory.getLog(LoginTest.class);
   private WebDriver driver;
@@ -48,6 +50,7 @@ public class LoginTest {
   @BeforeMethod
   public void setUp() {
     login = new Login(driver);
+    logout = new Logout(driver);
 
     log.info("\nLoading webpage.");
     driver.get(webAppBaseUrl);
@@ -55,8 +58,8 @@ public class LoginTest {
 
   @AfterMethod
   public void tearDown() {
-    driver.get(webAppBaseUrl + "/auth/logout/");
-    log.info("Logged out.");
+    logout.logoutViaUrl();
+    Assert.assertTrue(logout.isOnLogoutPage());
   }
 
   @Test(dataProvider = "userCredentials", description = "Testing basic login and logout")
