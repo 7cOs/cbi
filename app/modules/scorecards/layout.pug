@@ -179,13 +179,13 @@ div.my-scorecards
             td.medium-dark
               span(ng-class="{'negative': s.getFilteredValue('vsYa', distribution, 'distribution') < 0}") {{s.getFilteredValue('vsYa', distribution, 'distribution')}}
             td.medium-dark.no-border
-              span(ng-class="{'negative': s.getFilteredValue('vsYaPercent', distribution, 'distribution') < 0}") {{s.getFilteredValue('vsYaPercent', distribution, 'distribution')}}
+              span(ng-class="{'negative': s.getFilteredValue('vsYaPercent', distribution, 'distribution') < 0}") {{s.getFilteredValue('vsYaPercent', distribution, 'distribution')}}%
             td
-              span(ng-class="{'negative': s.getFilteredValue('buVsYaPercent', distribution, 'distribution') < 0}") {{s.getFilteredValue('buVsYaPercent', distribution, 'distribution')}}
+              span(ng-class="{'negative': s.getFilteredValue('buVsYaPercent', distribution, 'distribution') < 0}") {{s.getFilteredValue('buVsYaPercent', distribution, 'distribution')}}%
             td.no-border
               span(ng-if="s.distributionRadioOptions.selected.placementType === 'simple'" ng-class="distribution[s.distributionSelectOptions.selected].distributionsSimpleTrend > distribution[s.distributionSelectOptions.selected].distributionsSimpleBUTrend ? 'positive' : 'negative'") <span class="triangle-icon">&#9660;</span>
               span(ng-if="s.distributionRadioOptions.selected.placementType === 'effective'" ng-class="distribution[s.distributionSelectOptions.selected].distributionsEffectiveTrend > distribution[s.distributionSelectOptions.selected].distributionsEffectiveBUTrend ? 'positive' : 'negative'") <span class="triangle-icon">&#9660;</span>
             td
-              span(ng-class="{'negative': s.getFilteredValue('percentTotal', distribution, 'distribution') < 0}") {{s.getFilteredValue('percentTotal', distribution, 'distribution')}}
+              span(ng-class="{'negative': s.getFilteredValue('percentTotal', distribution, 'distribution') < 0}") {{s.getFilteredValue('percentTotal', distribution, 'distribution')}}%
             td.no-border
-              span(ng-class="{'negative': s.getFilteredValue('percentBuTotal', distribution, 'distribution') < 0}") {{s.getFilteredValue('percentBuTotal', distribution, 'distribution')}}
+              span(ng-class="{'negative': s.getFilteredValue('percentBuTotal', distribution, 'distribution') < 0}") {{s.getFilteredValue('percentBuTotal', distribution, 'distribution')}}%
