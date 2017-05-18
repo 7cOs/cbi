@@ -616,4 +616,55 @@ describe('Unit: scorecardsController', function() {
       expect(filteredValue2).toEqual('');
     });
   });
+
+  describe('[scorecardsFilter] should filter out unnecessary scorecard rows', function() {
+    beforeEach(function() {
+      ctrl.initialized = true;
+      ctrl.depletionSelect = 'FYTD';
+    });
+
+    it('should return a callback function', function() {
+      expect(ctrl.scorecardsFilter).toEqual(jasmine.any(Function));
+    });
+
+    it('should return false given a row of type `Total`', function() {
+      const invalidRow = {
+        type: 'Total',
+        FYTD: { timeFrameTotal: '1,000', vsYa: '1,000' }
+      };
+      const callback = ctrl.scorecardsFilter('depletion');
+
+      expect(callback(invalidRow)).toEqual(false);
+    });
+
+    it('should return false when `timeFrameTotal` and `vsYa` are both equal to `0`', function() {
+      const invalidRow = {
+        type: 'Brand',
+        FYTD: { timeFrameTotal: '0', vsYa: '0' }
+      };
+      const callback = ctrl.scorecardsFilter('depletion');
+
+      expect(callback(invalidRow)).toEqual(false);
+    });
+
+    it('should return false when the `timeFrameTotal` equals `-` and `vsYa` equals `0`', function() {
+      const invalidRow = {
+        type: 'Brand',
+        FYTD: { timeFrameTotal: '-', vsYa: '0' }
+      };
+      const callback = ctrl.scorecardsFilter('depletion');
+
+      expect(callback(invalidRow)).toEqual(false);
+    });
+
+    it('should return true when given a valid row', function() {
+      const validRow = {
+        type: 'Brand',
+        FYTD: { timeFrameTotal: '1,000', vsYa: '1,000' }
+      };
+      const callback = ctrl.scorecardsFilter('depletion');
+
+      expect(callback(validRow)).toEqual(true);
+    });
+  });
 });
