@@ -241,13 +241,6 @@ describe('Unit: filter controller (opportunities)', function() {
     });
   });
 
-  describe('[method.opportunityStatusSwitch]', function() {
-    it('should return false if not "target-list-detail"', function() {
-      var test = ctrl.opportunityStatusSwitch();
-      expect(test).toEqual(false);
-    });
-  });
-
   describe('[method.placeholderSelect]', function() {
     it('should set hintTextPlaceholder', function() {
       expect(ctrl.hintTextPlaceholder).toEqual('Account or Subaccount Name');
@@ -523,6 +516,91 @@ describe('Unit: filter controller (opportunities)', function() {
     expect(filtersService.model.selected.opportunityType).toEqual(['Non-Buy']);
   });
 
+  describe('[method.changeFeatureTypeSelection]', () => {
+    it('adds all feature types when All Types is selected', () => {
+      filtersService.model.selected.featureType = ['All Types'];
+
+      ctrl.changeFeatureTypeSelection();
+
+      expect(filtersService.model.selected.featureType).toEqual([
+        'All Types',
+        'Happy Hour',
+        'Everyday Low Price',
+        'Limited Time Only',
+        'Beer of the Month',
+        'Price Feature'
+      ]);
+    });
+  });
+
+  describe('[method.featureTypeText]', () => {
+    it('updates the feature type text accordingly when All Types is selected', () => {
+      filtersService.model.selected.featureType = ['All Types', 'Whatever'];
+
+      ctrl.changeFeatureTypeSelection();
+
+      expect(ctrl.featureTypeText()).toEqual('All Types');
+    });
+
+    it('updates the feature type text accordingly when All Types is NOT selected', () => {
+      filtersService.model.selected.featureType = ['Happy Hour', 'Everyday Low Price', 'Limited Time Only'];
+
+      ctrl.changeFeatureTypeSelection();
+
+      expect(ctrl.featureTypeText()).toEqual('Happy Hour, Everyday Low Price, Limited Time Only');
+    });
+
+    it('gives the default text when nothing is selected', () => {
+      filtersService.model.selected.featureType = [];
+
+      ctrl.changeFeatureTypeSelection();
+
+      expect(ctrl.featureTypeText()).toEqual('No Types Selected');
+    });
+  });
+
+  describe('[method.changeItemAuthorizationTypeSelection]', () => {
+    it('adds all item authorization types when All Types is selected', () => {
+      filtersService.model.selected.itemAuthorizationType = ['All Types'];
+
+      ctrl.changeItemAuthorizationTypeSelection();
+
+      expect(filtersService.model.selected.itemAuthorizationType).toEqual([
+        'All Types',
+        'Brand Mandate',
+        'Corporate Mandate',
+        'Authorized-Select Planogram',
+        'Authorized-Optional (Sell-In)'
+      ]);
+    });
+  });
+
+  describe('[method.autorizationProductTypesText]', () => {
+    it('updates the feature type text accordingly when All Types is selected', () => {
+      filtersService.model.selected.itemAuthorizationType = ['All Types', 'Whatever'];
+
+      ctrl.changeItemAuthorizationTypeSelection();
+
+      expect(ctrl.autorizationProductTypesText()).toEqual('All Types');
+    });
+
+    it('updates the feature type text accordingly when All Types is NOT selected', () => {
+      filtersService.model.selected.itemAuthorizationType = ['Brand Mandate', 'Corporate Mandate'];
+
+      ctrl.changeItemAuthorizationTypeSelection();
+
+      expect(ctrl.autorizationProductTypesText()).toEqual('Brand Mandate, Corporate Mandate');
+    });
+
+    it('gives the default text when nothing is selected', () => {
+      filtersService.model.selected.itemAuthorizationType = [];
+
+      ctrl.changeItemAuthorizationTypeSelection();
+
+      expect(ctrl.autorizationProductTypesText()).toEqual('No Types Selected');
+    });
+  });
+
   it('[sendFilterAnalytics] should send filter analytics based on data in each chip', function() {
     const filterChips = {
       accountChip: {
@@ -733,10 +811,4 @@ describe('Unit: filter controller (state = target-list-detail)', function() {
     });
   });
 
-  describe('[method.opportunityStatusSwitch]', function() {
-    it('should return true if "target-list-detail"', function() {
-      var test = ctrl.opportunityStatusSwitch();
-      expect(test).toEqual(true);
-    });
-  });
 });

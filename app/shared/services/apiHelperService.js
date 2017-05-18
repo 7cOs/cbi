@@ -42,6 +42,7 @@ module.exports = /*  @ngInject */
         const simpleQuery = applySimpleDist(obj);
         const salesStoreStatus = applySalesStoreStatus(obj);
         const storeFormatQuery = applyStoreFormatQuery(obj);
+        const priorityPackage = applyPriorityPackage(obj);
         let queryStr = '';
 
         queryParams += '';
@@ -56,7 +57,7 @@ module.exports = /*  @ngInject */
         const bulkifiedLimitSortPage = `${model.bulkQuery ? 'limit=1000' : 'limit=20' + sortQuery + pageQuery}`;
         model.bulkQuery = false;
 
-        queryStr = `?${bulkifiedLimitSortPage}&ignoreDismissed=true${simpleQuery}${salesStoreStatus}${storeFormatQuery}&filter=${encodeURIComponent(filtersService.model.appliedFilter.appliedFilter)}`;
+        queryStr = `?${bulkifiedLimitSortPage}&ignoreDismissed=true${simpleQuery}${salesStoreStatus}${storeFormatQuery}${priorityPackage}&filter=${encodeURIComponent(filtersService.model.appliedFilter.appliedFilter)}`;
 
         return queryStr;
       } else if (obj.type && obj.type === 'targetListOpportunities') {
@@ -238,7 +239,7 @@ module.exports = /*  @ngInject */
           } else {
             // iterate over arrays
             for (var k = 0; k < obj[key2].length; k++) {
-              if (obj[key2][k] && obj[key2][k].toUpperCase() === 'ALL TYPES') break;
+              if (obj[key2][k] && key2 === 'opportunityType' && obj[key2][k].toUpperCase() === 'ALL TYPES') break;
               if (k === 0) queryParams += key2 + ':';
 
               // transform opp types to db format
@@ -248,6 +249,12 @@ module.exports = /*  @ngInject */
                 } else {
                   queryParams += obj[key2][k].replace(/["'()]/g, '').replace(/[__-\s]/g, '_').toUpperCase();
                 }
+              } else if (key2 === 'featureType') {
+                const typeKey = filtersService.model.featureType.filter(type => type.name === obj[key2][k])[0].key;
+                if (typeKey) queryParams += typeKey;
+              } else if (key2 === 'itemAuthorizationType') {
+                const itemAuthKey = filtersService.model.itemAuthorizationType.filter(type => type.name === obj[key2][k])[0].key;
+                if (itemAuthKey) queryParams += itemAuthKey;
               } else if (key2 === 'impact') {
                 queryParams += obj[key2][k].slice(0, 1);
               } else if (key2 === 'opportunityStatus') {
@@ -268,7 +275,7 @@ module.exports = /*  @ngInject */
               }
 
               // add separator if it's not last item
-              if (obj[key2].length - 1 !== k) queryParams += '|';
+              if (obj[key2].length - 1 !== k && obj[key2][k].toUpperCase() !== 'ALL TYPES') queryParams += '|';
 
               somethingAdded = true;
             }
@@ -278,9 +285,9 @@ module.exports = /*  @ngInject */
             queryParams += key2 + ':' + obj[key2];
             somethingAdded = true;
           }
-        } else if (key2 === 'simpleDistributionType' || key2 === 'storeFormat') {
+        } else if (key2 === 'simpleDistributionType' || key2 === 'storeFormat' || key2 === 'retailer' || key2 === 'priorityPackage') {
           somethingAdded = false;
-        } else if (obj[key2].constructor !== Array && key2 !== 'retailer') {
+        } else if (obj[key2].constructor !== Array) {
           queryParams += key2 + ':' + obj[key2];
           somethingAdded = true;
         }
@@ -294,5 +301,9 @@ module.exports = /*  @ngInject */
 
     function applyStoreFormatQuery(queries) {
       return (queries.storeFormat) ? `&hispanicMarketType=${queries.storeFormat}` : '';
+    }
+
+    function applyPriorityPackage(filters) {
+      return `${filters.priorityPackage ? '&priorityPackage:true' : ''}`;
     }
   };
