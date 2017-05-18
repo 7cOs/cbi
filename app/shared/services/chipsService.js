@@ -17,7 +17,7 @@ module.exports = /*  @ngInject */
         'removable': false
       },
       {
-        'name': 'All Types',
+        'name': 'All Opportunity Types',
         'type': 'opportunityType',
         'applied': false,
         'removable': false
@@ -182,6 +182,8 @@ module.exports = /*  @ngInject */
     function removeFromFilterService(chip) {
       if (chip.type === 'myAccountsOnly') {
         filtersService.model.selected['myAccountsOnly'] = false;
+      } else if (chip.type === 'priorityPackage') {
+        filtersService.model.selected['priorityPackage'] = false;
       } else if (chip.type === 'simpleDistributionType') {
         filtersService.model.selected['simpleDistributionType'] = false;
       } else if (chip.type === 'storeFormat') {
@@ -245,11 +247,9 @@ module.exports = /*  @ngInject */
               if (filtersService.model.selected.simpleDistributionType) {
                 addChip('Non-Buy', 'opportunityType', false, false);
                 filtersService.model.selected.opportunityType = ['Non-Buy'];
-                filtersService.model.opportunityType = ['Non-Buy'];
               } else {
-                addChip('All Types', 'opportunityType', false, false);
+                addChip('All Opportunity Types', 'opportunityType', false, false);
                 filtersService.model.selected.opportunityType = ['All Types'];
-                filtersService.model.opportunityType = ['All Types'];
               }
             }
             break;
@@ -258,7 +258,17 @@ module.exports = /*  @ngInject */
             arr.splice(index, 1);
             filtersService.model.states.splice(index, 1);
             break;
-          };
+          } else if (chip.type === 'featureType') {
+            index = arr.indexOf(chip.name);
+            arr.splice(index, 1);
+            filtersService.model.selected.featureType = arr;
+            break;
+          } else if (chip.type === 'itemAuthorizationType') {
+            index = arr.indexOf(chip.name);
+            arr.splice(index, 1);
+            filtersService.model.selected.itemAuthorizationType = arr;
+            break;
+          }
         }
       }
 
@@ -425,22 +435,48 @@ module.exports = /*  @ngInject */
      */
 
     function applyFilterMulti(model, result, filter) {
-      removeChip('opportunityType');
-      if (result.length === 0 || (result.length <= 1 && result[0] === 'All Types')) {
-        addChip('All Types', 'opportunityType', false, false);
-        filtersService.model.selected[filter] = ['All Types'];
-        filtersService.model.opportunityType = ['All Types'];
-      } else {
-        var results = [];
-        angular.forEach(result, function(value, key) {
-          if (value === 'All Types') {
+      removeChip(filter);
+
+      switch (filter) {
+        case 'opportunityType':
+          if (result.length === 0 || (result.length <= 1 && result[0] === 'All Types')) {
+            addChip('All Opportunity Types', filter, false, false);
+            filtersService.model.selected[filter] = ['All Types'];
           } else {
-            addChip(value, 'opportunityType', false);
-            results.push(value);
+            var results = [];
+            angular.forEach(result, function(value, key) {
+              if (value !== 'All Types') {
+                addChip(value, filter, false);
+                results.push(value);
+              }
+            });
+            filtersService.model.selected[filter] = results;
+            filtersService.disableFilters(false, false, true, false);
           }
-        });
-        filtersService.model.selected[filter] = results;
-        filtersService.disableFilters(false, false, true, false);
+          break;
+
+          case 'featureType':
+            if (result.length > 0 && result[0] === 'All Types') {
+              addChip('All Feature Product Types', filter, false, true);
+            } else {
+              for (let type of result) {
+                addChip(type, filter, false);
+              }
+            }
+            break;
+
+          case 'itemAuthorizationType':
+            if (result.length > 0 && result[0] === 'All Types') {
+              addChip('All Authorized Product Types', filter, false, true);
+            } else {
+              for (let type of result) {
+                addChip(type, filter, false);
+              }
+            }
+            break;
+
+        default:
+          break;
       }
     }
 

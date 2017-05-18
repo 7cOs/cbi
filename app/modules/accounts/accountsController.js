@@ -75,7 +75,6 @@ module.exports = /*  @ngInject */
     vm._defaultTopLevelForLabel = 'CBBD';
     vm.topLevelForLabel = vm._defaultTopLevelForLabel;
     vm.premiseTypeValue = 'all';
-    vm.topLevelPremiseType = 'all';
 
     // top bottom public methods
     vm.topBottomData = {
@@ -612,13 +611,11 @@ module.exports = /*  @ngInject */
         case 'accounts':
           topBottomProp = 'accounts';
           filterModelProp = 'account';
-          removeInlineSearch('selectedStore');
           break;
         case 'subaccount':
         case 'subAccounts':
           topBottomProp = 'subAccounts';
           filterModelProp = 'subaccount';
-          removeInlineSearch('selectedStore');
           break;
         case 'store':
         case 'stores':
@@ -634,9 +631,7 @@ module.exports = /*  @ngInject */
       // set filters service model selected
       if (result.ids) {
         for (i = 0; i < result.ids.length; i++) {
-          filterModelProp === 'account'
-            ? filtersService.model.selected.account[0] = result.ids[i]
-            : filtersService.model.selected[filterModelProp].push(result.ids[i]);
+          filtersService.model.selected[filterModelProp][0] = result.ids[i];
         }
       } else {
         if (result.id.constructor === Array) {
@@ -1436,21 +1431,21 @@ module.exports = /*  @ngInject */
       switch (currentLevelName) {
         case 'Accounts':
           newAccountType     = {name: 'Distributors', value: 1};
-          vm.premiseTypeValue = vm.topLevelPremiseType;
+          vm.premiseTypeValue = vm.topBottomHistory.distributors.prevPremiseType;
           break;
         case 'Sub-Accounts':
           newLevelName       = 'accounts';
           performanceData    = vm.topBottomHistory.distributors;
           newAccountType     = {name: 'Accounts', value: 2};
           levelToResetBeyond = {name: 'Distributors', value: 1};
-          vm.premiseTypeValue = filtersService.accountFilters.premiseTypeValue[vm.topBottomHistory.accounts.premiseType];
+          vm.premiseTypeValue = vm.topBottomHistory[newLevelName].prevPremiseType;
           break;
         case 'Stores':
           newLevelName       = 'subAccounts';
           performanceData    = vm.topBottomHistory.accounts;
           newAccountType     = {name: 'Sub-Accounts', value: 3};
           levelToResetBeyond = {name: 'Accounts', value: 2};
-          vm.premiseTypeValue = filtersService.accountFilters.premiseTypeValue[vm.topBottomHistory.subAccounts.premiseType];
+          vm.premiseTypeValue = vm.topBottomHistory[newLevelName].prevPremiseType;
           break;
       }
 
@@ -1501,9 +1496,9 @@ module.exports = /*  @ngInject */
 
       const currentLevelName = getCurrentTopBottomObject(vm.currentTopBottomAcctType).currentLevelName;
 
-      if (currentLevelName === 'distributors') vm.topLevelPremiseType = vm.premiseTypeValue;
-
       vm.topBottomHistory[currentLevelName] = performanceData;
+      vm.topBottomHistory[currentLevelName].prevPremiseType = vm.premiseTypeValue;
+
       const getNextLevel = currentLevelName !== 'stores';
 
       if (myperformanceService.hasInconsistentIds(performanceData)) return;

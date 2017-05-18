@@ -1,6 +1,7 @@
 package com.cbrands.pages;
 
 import static com.cbrands.helper.SeleniumUtils.waitForVisible;
+import static com.cbrands.helper.SeleniumUtils.waitForVisibleFluentWait;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -37,11 +38,13 @@ public class Login extends LoadableComponent<Login>{
 	}
 
 	public void typeUserName(String text) {
-		userName.sendKeys(text);
+		waitForVisibleFluentWait(userName);
+        userName.sendKeys(text);
 	}
 
 	public void typePassword(String text) {
-		password.sendKeys(text);
+        waitForVisibleFluentWait(password);
+        password.sendKeys(text);
 	}
 
 	public HomePage clickSubmit() {
@@ -68,9 +71,14 @@ public class Login extends LoadableComponent<Login>{
 
 	@Override
 	protected void isLoaded() throws Error {
+        waitForVisibleFluentWait(userName);
 		Assert.assertTrue(userName.isDisplayed());
-		Assert.assertTrue(password.isDisplayed());
-		Assert.assertTrue(submitButton.isDisplayed());
+
+        waitForVisibleFluentWait(password);
+        Assert.assertTrue(password.isDisplayed());
+
+        waitForVisibleFluentWait(submitButton);
+        Assert.assertTrue(submitButton.isDisplayed());
 	}
 
 	public void logOut() {
