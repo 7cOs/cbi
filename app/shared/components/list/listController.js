@@ -435,33 +435,37 @@ module.exports = /*  @ngInject */
       $mdDialog.hide();
     }
 
-    function removeOpportunity() {
-      const opportunityIds = [];
-
-      // add opportunity ids into array to be posted
-      for (let i = 0; i < vm.selected.length; i++) {
-        opportunityIds.push(vm.selected[i].id);
-      }
-
-      targetListService.deleteTargetListOpportunities(targetListService.model.currentList.id, opportunityIds).then(function(data) {
-        console.log('Done deleting these ids: ', opportunityIds);
-        updateOpportunityCountAfterRemoval();
-        updateOpportunityModel(opportunitiesService.model.opportunities, vm.selected);
-      }, function(err) {
-        console.log('Error deleting these ids: ', opportunityIds, ' Responded with error: ', err);
+    function removeAllOpportunities() {
+      targetListService.getTargetListOpportunityIDs(targetListService.model.currentList.id).then(opportunityIds => {
+        targetListService.deleteTargetListOpportunities(targetListService.model.currentList.id, opportunityIds).then(response => {
+          updateOpportunityModel(opportunitiesService.model.opportunities, opportunityIds);
+        });
       });
     }
 
-    function updateOpportunityModel(opportunities, selected) {
-      const opps  = opportunities;
-      let selectedArr = selected;
+    function removeOpportunity() {
+      vm.selectAllToastVisible = false;
+      const opportunityIds = vm.selected.map(opp => opp.id);
 
-      for (let i = 0; i < selectedArr.length; i++) {
+      if (vm.isAllOpportunitiesSelected) {
+        removeAllOpportunities();
+      } else {
+        targetListService.deleteTargetListOpportunities(targetListService.model.currentList.id, opportunityIds).then(function(data) {
+          updateOpportunityCountAfterRemoval();
+          updateOpportunityModel(opportunitiesService.model.opportunities, opportunityIds);
+        }, function(err) {
+          console.log('Error deleting these ids: ', opportunityIds, ' Responded with error: ', err);
+        });
+      }
+    }
+
+    function updateOpportunityModel(opps, selectedIds) {
+      for (let i = 0; i < selectedIds.length; i++) {
         for (let j = 0; j < opps.length; j++) {
           for (let k = 0; k < opps[j].groupedOpportunities.length; k++) {
             const oppId = opps[j].groupedOpportunities[k].id;
 
-            if (selectedArr[i].id === oppId) {
+            if (selectedIds[i] === oppId) {
               opps[j].groupedOpportunities.splice(k, 1);
               opps[j].brands.splice(k, 1);
               filtersService.model.appliedFilter.pagination.totalOpportunities--;
@@ -471,12 +475,26 @@ module.exports = /*  @ngInject */
 
           if (!opps[j].groupedOpportunities.length) {
             opps.splice(j, 1);
-            filtersService.model.appliedFilter.pagination.roundedStores--;
+            filtersService.model.appliedFilter.pagination.totalStores--;
           }
         }
       }
+
       vm.selected = [];
-      selectedArr = [];
+
+      if (vm.isAllOpportunitiesSelected) {
+        filtersService.model.appliedFilter.pagination.totalPages = 0;
+        filtersService.model.appliedFilter.pagination.currentPage = 0;
+      } else if (vm.isAllOpportunitiesInPageSelected) {
+        filtersService.model.appliedFilter.pagination.totalPages--;
+        filtersService.model.appliedFilter.pagination.currentPage--;
+        vm.loadingList = true;
+        targetListService.getTargetListOpportunities(targetListService.model.currentList.id,
+                                                    {type: 'targetListOpportunities'})
+                                                    .then(() => {
+          vm.loadingList = false;
+        });
+      }
     }
 
     function showItemAuthorizationFlag(authCode, depletions) {
