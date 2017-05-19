@@ -33,7 +33,9 @@ public class LoginTest extends BaseTestCase{
   @Test(dataProvider = "userCredentials", description = "Testing basic login and logout")
   public void testLogin(TestUser testUser) {
     final HomePage homePage = login.loginWithValidCredentials(testUser.userName(), testUser.password());
-    Assert.assertTrue(homePage.isOnHomePage(), "Failure logging in the following user: " + testUser.userName());
+    Assert.assertTrue(homePage.isOnHomePage(), "Login failed for userName: " + testUser.userName());
+
+    log.info("Logged in successfully as: " + testUser.userName());
   }
 
   @DataProvider(name = "userCredentials")
