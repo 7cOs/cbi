@@ -44,6 +44,10 @@ public class Logout  extends LoadableComponent<Logout> {
     load();
 
     log.info("Logging out...\n\n");
+
+    Assert.assertTrue(isLogoutMessageDisplayed(), "Failure logging out.\n");
+
+    log.info("Logout successful.");
   }
 
   public boolean isOnLogoutPage() {
