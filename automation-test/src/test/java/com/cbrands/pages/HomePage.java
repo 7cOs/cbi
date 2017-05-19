@@ -85,7 +85,6 @@ public class HomePage extends LoadableComponent<HomePage>{
   @Override
   protected void load() {
     driver.get(PropertiesCache.getInstance().getProperty("qa.host.address"));
-
   }
 
   @Override
