@@ -103,6 +103,7 @@ module.exports = /*  @ngInject */
       'Distributor',
       'TDLinx',
       'Store Name',
+      'Store Number',
       'Address',
       'City',
       'ZIP',
@@ -637,6 +638,7 @@ module.exports = /*  @ngInject */
         csvItem.storeDistributor = item.store.distributors ? item.store.distributors[0] : '';
         csvItem.TDLinx = item.store.id;
         csvItem.storeName = item.store.name;
+        csvItem.storeNumber = item.store.storeNumber;
         csvItem.storeAddress = item.store.streetAddress;
         csvItem.storeCity = item.store.city;
         csvItem.storeZip = item.store.zip;

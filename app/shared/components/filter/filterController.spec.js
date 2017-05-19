@@ -516,10 +516,11 @@ describe('Unit: filter controller (opportunities)', function() {
     expect(filtersService.model.selected.opportunityType).toEqual(['Non-Buy']);
   });
 
-  describe('[method.changeFeatureTypeSelection]', () => {
-    it('adds all feature types when All Types is selected', () => {
+  describe('[method.changeFeatureTypeSelection, method.chooseFeatureType]', () => {
+    it('adds all feature types when All Types is clicked and selected', () => {
       filtersService.model.selected.featureType = ['All Types'];
 
+      ctrl.chooseFeatureType('All Types');
       ctrl.changeFeatureTypeSelection();
 
       expect(filtersService.model.selected.featureType).toEqual([
@@ -531,21 +532,44 @@ describe('Unit: filter controller (opportunities)', function() {
         'Price Feature'
       ]);
     });
+
+    it('remove all feature types when All Types is clicked and unselected', () => {
+      filtersService.model.selected.featureType = [
+        'Happy Hour',
+        'Everyday Low Price',
+        'Limited Time Only',
+        'Beer of the Month',
+        'Price Feature'
+      ];
+
+      ctrl.chooseFeatureType('All Types');
+      ctrl.changeFeatureTypeSelection();
+
+      expect(filtersService.model.selected.featureType).toEqual([]);
+    });
   });
 
   describe('[method.featureTypeText]', () => {
-    it('updates the feature type text accordingly when All Types is selected', () => {
-      filtersService.model.selected.featureType = ['All Types', 'Whatever'];
+    it('displays "All Types" when all the types are selected', () => {
 
-      ctrl.changeFeatureTypeSelection();
+      filtersService.model.selected.featureType = [
+        'All Types',
+        'Happy Hour',
+        'Everyday Low Price',
+        'Limited Time Only',
+        'Beer of the Month',
+        'Price Feature'
+      ];
 
       expect(ctrl.featureTypeText()).toEqual('All Types');
     });
 
-    it('updates the feature type text accordingly when All Types is NOT selected', () => {
-      filtersService.model.selected.featureType = ['Happy Hour', 'Everyday Low Price', 'Limited Time Only'];
-
-      ctrl.changeFeatureTypeSelection();
+    it('displays whatever is selected when not all types are selected', () => {
+      filtersService.model.selected.featureType = [
+        'Happy Hour',
+        'Everyday Low Price',
+        'Limited Time Only'
+      ];
 
       expect(ctrl.featureTypeText()).toEqual('Happy Hour, Everyday Low Price, Limited Time Only');
     });
@@ -553,16 +577,15 @@ describe('Unit: filter controller (opportunities)', function() {
     it('gives the default text when nothing is selected', () => {
       filtersService.model.selected.featureType = [];
 
-      ctrl.changeFeatureTypeSelection();
-
       expect(ctrl.featureTypeText()).toEqual('No Types Selected');
     });
   });
 
-  describe('[method.changeItemAuthorizationTypeSelection]', () => {
-    it('adds all item authorization types when All Types is selected', () => {
+  describe('[method.changeItemAuthorizationTypeSelection, method.chooseItemAuthorizationType]', () => {
+    it('adds all authorization types when All Types is clicked and selected', () => {
       filtersService.model.selected.itemAuthorizationType = ['All Types'];
 
+      ctrl.chooseItemAuthorizationType('All Types');
       ctrl.changeItemAuthorizationTypeSelection();
 
       expect(filtersService.model.selected.itemAuthorizationType).toEqual([
@@ -573,29 +596,43 @@ describe('Unit: filter controller (opportunities)', function() {
         'Authorized-Optional (Sell-In)'
       ]);
     });
+
+    it('adds all authorization types when All Types is clicked and unselected', () => {
+      filtersService.model.selected.itemAuthorizationType = [
+        'Brand Mandate',
+        'Corporate Mandate',
+        'Authorized-Select Planogram',
+        'Authorized-Optional (Sell-In)'
+      ];
+
+      ctrl.chooseItemAuthorizationType('All Types');
+      ctrl.changeItemAuthorizationTypeSelection();
+
+      expect(filtersService.model.selected.itemAuthorizationType).toEqual([]);
+    });
   });
 
   describe('[method.autorizationProductTypesText]', () => {
-    it('updates the feature type text accordingly when All Types is selected', () => {
-      filtersService.model.selected.itemAuthorizationType = ['All Types', 'Whatever'];
-
-      ctrl.changeItemAuthorizationTypeSelection();
+    it('displays "All Types" when all the types are selected', () => {
+      filtersService.model.selected.itemAuthorizationType = [
+        'All Types',
+        'Brand Mandate',
+        'Corporate Mandate',
+        'Authorized-Select Planogram',
+        'Authorized-Optional (Sell-In)'
+      ];
 
       expect(ctrl.autorizationProductTypesText()).toEqual('All Types');
     });
 
-    it('updates the feature type text accordingly when All Types is NOT selected', () => {
+    it('displays whatever is selected when not all types are selected', () => {
       filtersService.model.selected.itemAuthorizationType = ['Brand Mandate', 'Corporate Mandate'];
-
-      ctrl.changeItemAuthorizationTypeSelection();
 
       expect(ctrl.autorizationProductTypesText()).toEqual('Brand Mandate, Corporate Mandate');
     });
 
     it('gives the default text when nothing is selected', () => {
       filtersService.model.selected.itemAuthorizationType = [];
-
-      ctrl.changeItemAuthorizationTypeSelection();
 
       expect(ctrl.autorizationProductTypesText()).toEqual('No Types Selected');
     });

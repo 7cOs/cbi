@@ -304,6 +304,6 @@ module.exports = /*  @ngInject */
     }
 
     function applyPriorityPackage(filters) {
-      return `${filters.priorityPackage ? '&priorityPackage:true' : ''}`;
+      return `${filters.priorityPackage ? '&priorityPackage=true' : ''}`;
     }
   };
