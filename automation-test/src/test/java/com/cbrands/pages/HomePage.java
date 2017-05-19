@@ -52,13 +52,13 @@ public class HomePage extends LoadableComponent<HomePage>{
 	private WebElement onPremise;
 	@FindBy(how = How.XPATH, using = "//input[@placeholder='By brand or SKU']")
 	private WebElement brandMasterSku;
-  @FindBy(how = How.XPATH, using = "//input[@placeholder='Store, account, or subaccount name']")
+  @FindBy(how = How.XPATH, using = "//input[@placeholder='Store, account, or " +
+    "subaccount name']")
 	private WebElement retailer;
 	@FindBy(how = How.XPATH, using = "//input[@placeholder='Name']")
 	private WebElement distributor;
 	@FindBy(how = How.XPATH, using = "//button[contains(.,'Find Opportunities')]")
 	private WebElement submitFindOpportunities;
-
 
 	@FindBy(how = How.CSS, using = "a.nav-icon.settings")
 	private WebElement settingsIcon;
@@ -127,7 +127,6 @@ public class HomePage extends LoadableComponent<HomePage>{
 		action.perform();
 		return this;
 	}
-
 
 	public HomePage clickOpportunityTypeDropdown() {
 		opportunityTypeDropDown.click();
@@ -215,7 +214,6 @@ public class HomePage extends LoadableComponent<HomePage>{
 		driver.get(PropertiesCache.getInstance().getProperty("qa.host.address") + "/target-lists");
 		return PageFactory.initElements(driver, TargetList.class);
 	}
-
 
 	public Opportunities selectSaveReportDropdown(String itemName) {
 		WebElement button1 = findElement(By.xpath("//md-select[@placeholder='Select Saved Report']"));
