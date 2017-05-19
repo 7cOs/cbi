@@ -438,11 +438,16 @@ module.exports = /*  @ngInject */
       targetListService.getTargetListOpportunityIDs(targetListService.model.currentList.id).then(opportunityIds => {
         targetListService.deleteTargetListOpportunities(targetListService.model.currentList.id, opportunityIds).then(response => {
           updateOpportunityModel(opportunitiesService.model.opportunities, opportunityIds);
+        }).catch((err) => {
+            console.log('Error deleting these ids: ', opportunityIds, ' Responded with error: ', err);
+        }).finally(() => {
+            vm.loadingList = false;
         });
       });
     }
 
     function removeOpportunity() {
+      vm.loadingList = true;
       vm.selectAllToastVisible = false;
       const opportunityIds = vm.selected.map(opp => opp.id);
 
@@ -454,7 +459,7 @@ module.exports = /*  @ngInject */
           updateOpportunityModel(opportunitiesService.model.opportunities, opportunityIds);
         }, function(err) {
           console.log('Error deleting these ids: ', opportunityIds, ' Responded with error: ', err);
-        });
+        }).finally(() => { vm.loadingList = false; });
       }
     }
 
@@ -487,11 +492,9 @@ module.exports = /*  @ngInject */
       } else if (vm.isAllOpportunitiesInPageSelected) {
         filtersService.model.appliedFilter.pagination.totalPages--;
         filtersService.model.appliedFilter.pagination.currentPage--;
-        vm.loadingList = true;
         targetListService.getTargetListOpportunities(targetListService.model.currentList.id,
                                                     {type: 'targetListOpportunities'})
                                                     .then(() => {
-          vm.loadingList = false;
         });
       }
     }
