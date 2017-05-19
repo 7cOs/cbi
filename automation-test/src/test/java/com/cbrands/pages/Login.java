@@ -37,6 +37,23 @@ public class Login extends LoadableComponent<Login>{
         PageFactory.initElements(driver, this);
 	}
 
+  @Override
+  protected void load() {
+    driver.get("https://compass-qa.cbrands.com");
+  }
+
+  @Override
+  protected void isLoaded() throws Error {
+    waitForVisibleFluentWait(userName);
+    Assert.assertTrue(userName.isDisplayed());
+
+    waitForVisibleFluentWait(password);
+    Assert.assertTrue(password.isDisplayed());
+
+    waitForVisibleFluentWait(submitButton);
+    Assert.assertTrue(submitButton.isDisplayed());
+  }
+
 	public void typeUserName(String text) {
 		waitForVisibleFluentWait(userName);
         userName.sendKeys(text);
@@ -64,28 +81,22 @@ public class Login extends LoadableComponent<Login>{
 		return isUserLoggedIn;
 	}
 
-	@Override
-	protected void load() {
-		driver.get("https://compass-qa.cbrands.com");
-	}
 
-	@Override
-	protected void isLoaded() throws Error {
-        waitForVisibleFluentWait(userName);
-		Assert.assertTrue(userName.isDisplayed());
-
-        waitForVisibleFluentWait(password);
-        Assert.assertTrue(password.isDisplayed());
-
-        waitForVisibleFluentWait(submitButton);
-        Assert.assertTrue(submitButton.isDisplayed());
-	}
-
+  /**
+   * @deprecated Please use the methods available in the Logout page object.
+   * @see Logout
+   */
+  @Deprecated
 	public void logOut() {
 		isUserLoggedIn = false;
 		driver.get("https://compass-qa.cbrands.com/auth/logout");
 	}
 
+  /**
+   * @deprecated Please use the methods available in the Logout page object.
+   * @see Logout
+   */
+  @Deprecated
 	public void logOutwithWait() {
 		isUserLoggedIn = false;
 		driver.get("https://compass-qa.cbrands.com/auth/logout");
