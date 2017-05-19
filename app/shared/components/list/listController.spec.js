@@ -928,7 +928,7 @@ describe('Unit: list controller', function() {
       expect(opportunities[0].groupedOpportunities.length).toEqual(3);
       expect(selected[0].id).toEqual('0129597___80013469___20160929');
       expect(opportunities[0].groupedOpportunities[1].id).toEqual('0129597___80013469___20160929');
-      ctrl.updateOpportunityModel(opportunities, selected);
+      ctrl.updateOpportunityModel(opportunities, selected.map(selected => selected.id));
       expect(opportunities[0].groupedOpportunities.length).toEqual(2);
     });
 
@@ -942,7 +942,7 @@ describe('Unit: list controller', function() {
       }];
 
       expect(singleOpp[0].groupedOpportunities.length).toEqual(1);
-      ctrl.updateOpportunityModel(singleOpp, selected);
+      ctrl.updateOpportunityModel(singleOpp, selected.map(selected => selected.id));
       expect(singleOpp.length).toEqual(0);
     });
   });
