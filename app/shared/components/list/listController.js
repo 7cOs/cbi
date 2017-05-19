@@ -491,8 +491,11 @@ module.exports = /*  @ngInject */
         filtersService.model.appliedFilter.pagination.totalPages = 0;
         filtersService.model.appliedFilter.pagination.currentPage = 0;
       } else if (vm.isAllOpportunitiesInPageSelected) {
+        filtersService.model.appliedFilter.pagination.currentPage
+          ? filtersService.model.appliedFilter.pagination.currentPage--
+          : filtersService.model.appliedFilter.pagination.currentPage = 0;
+
         filtersService.model.appliedFilter.pagination.totalPages--;
-        filtersService.model.appliedFilter.pagination.currentPage--;
         targetListService.getTargetListOpportunities(targetListService.model.currentList.id,
                                                     {type: 'targetListOpportunities'})
                                                     .then(() => {
