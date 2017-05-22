@@ -66,7 +66,7 @@ module.exports = /*  @ngInject */
     vm.depletionsVsYaPercent = depletionsVsYaPercent;
     vm.displayBrandIcon = displayBrandIcon;
     vm.expandCallback = expandCallback;
-    vm.flattenOpportunity = flattenOpportunity;
+    vm.getCSVData = getCSVData;
     vm.getDate = getDate;
     vm.getMemos = getMemos;
     vm.getTargetLists = getTargetLists;
@@ -211,10 +211,10 @@ module.exports = /*  @ngInject */
 
       if (vm.isAllOpportunitiesSelected) {
         const getIdsPromise = vm.pageName === 'target-list-detail'
-          ? targetListService.getTargetListOpportunityIDs(vm.targetListService.model.currentList.id)
-          : opportunitiesService.getAllOpportunitiesIDs();
+          ? targetListService.getTargetListOpportunities(vm.targetListService.model.currentList.id)
+          : opportunitiesService.getOpportunities();
 
-          getIdsPromise.then(opportunityIds => opportunityIdsPromise.resolve(opportunityIds));
+          getIdsPromise.then(opportunities => opportunityIdsPromise.resolve(opportunities.map(opportunity => opportunity.id)));
 
       } else {
         const opportunityIds = vm.selected.map(opportunity => opportunity.id);
@@ -549,7 +549,7 @@ module.exports = /*  @ngInject */
           vm.loadingList = false;
         });
       } else if (vm.pageName === 'target-list-detail') {
-        targetListService.getTargetListOpportunities(targetListService.model.currentList.id,
+        targetListService.getTargetListStoresWithOpportunities(targetListService.model.currentList.id,
                           {type: 'targetListOpportunities'})
                           .then(() => {
           vm.loadingList = false;
@@ -606,24 +606,29 @@ module.exports = /*  @ngInject */
       vm.disabledMessage = message;
     }
 
-    function flattenOpportunity(includeRationale) {
-      const opportunitiesPromise = $q.defer();
+    function getCSVData(includeRationale) {
+      debugger;
+      const csvDataPromise = $q.defer();
       if (vm.isAllOpportunitiesSelected) {
         loaderService.openLoader(true);
 
-        vm.opportunitiesService.getOpportunities(true)
+        const getOpportunitiesPromise = vm.pageName === 'target-list-detail'
+          ? targetListService.getTargetListOpportunities(targetListService.model.currentList.id)
+          : vm.opportunitiesService.getFormattedOpportunities(true);
+
+        getOpportunitiesPromise
           .then(opportunities => {
-            opportunitiesPromise.resolve(createCSVData(opportunities, includeRationale));
+            csvDataPromise.resolve(createCSVData(opportunities, includeRationale));
             loaderService.closeLoader();
           })
           .catch(() => {
             loaderService.closeLoader();
           });
       } else {
-        opportunitiesPromise.resolve(createCSVData(vm.selected, includeRationale));
+        csvDataPromise.resolve(createCSVData(vm.selected, includeRationale));
       }
 
-      return opportunitiesPromise.promise;
+      return csvDataPromise.promise;
     }
 
     function createCSVData(opportunities, includeRationale) {

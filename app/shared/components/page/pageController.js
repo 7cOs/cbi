@@ -23,7 +23,7 @@ module.exports = /*  @ngInject */
       vm.loadingList = true;
 
       const opportunitiesPromise = isTargetList
-        ? targetListService.getTargetListOpportunities(targetListService.model.currentList.id, {type: 'targetListOpportunities'})
+        ? targetListService.getTargetListStoresWithOpportunities(targetListService.model.currentList.id, {type: 'targetListOpportunities'})
         : opportunitiesService.getAndUpdateStoresWithOpportunities();
 
       opportunitiesPromise.then(function() { vm.loadingList = false; });

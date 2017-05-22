@@ -81,8 +81,8 @@ describe('Unit: list controller', function() {
     expect(ctrl.expandCallback).not.toBeUndefined();
     expect(typeof (ctrl.expandCallback)).toEqual('function');
 
-    expect(ctrl.flattenOpportunity).not.toBeUndefined();
-    expect(typeof (ctrl.flattenOpportunity)).toEqual('function');
+    expect(ctrl.getCSVData).not.toBeUndefined();
+    expect(typeof (ctrl.getCSVData)).toEqual('function');
 
     expect(ctrl.getDate).not.toBeUndefined();
     expect(typeof (ctrl.getDate)).toEqual('function');
@@ -362,7 +362,7 @@ describe('Unit: list controller', function() {
     });
   });
 
-  describe('[list.flattenOpportunity] method', function() {
+  describe('[list.getCSVData] method', function() {
     var opportunities = [{
       'id': '0129597___80013986___20160929',
       'product': {
@@ -452,7 +452,7 @@ describe('Unit: list controller', function() {
 
     it('should create a csvItem for each selected opportunity, and add it to the data array', () => {
       ctrl.selected = [opportunities[0]];
-      expect(ctrl.flattenOpportunity()).toEqual([{
+      expect(ctrl.getCSVData()).toEqual([{
         'storeDistributor': opportunities[0].store.distributors[0],
         'TDLinx': opportunities[0].store.id,
         'storeName': opportunities[0].store.name,
@@ -475,7 +475,7 @@ describe('Unit: list controller', function() {
 
     it('should add a rationale when provided as input', () => {
       ctrl.selected = [opportunities[0]];
-      expect(ctrl.flattenOpportunity(true)).toEqual([{
+      expect(ctrl.getCSVData(true)).toEqual([{
         'storeDistributor': opportunities[0].store.distributors[0],
         'TDLinx': opportunities[0].store.id,
         'storeName': opportunities[0].store.name,
@@ -499,7 +499,7 @@ describe('Unit: list controller', function() {
 
     it('should be able to parse when the distributor list is null', () => {
       ctrl.selected = [opportunities[1]];
-      expect(ctrl.flattenOpportunity(false)).toEqual([{
+      expect(ctrl.getCSVData(false)).toEqual([{
         'storeDistributor': '',
         'TDLinx': opportunities[1].store.id,
         'storeName': opportunities[1].store.name,
@@ -522,7 +522,7 @@ describe('Unit: list controller', function() {
 
     it('should take the brand as product name if the product name is null', () => {
       ctrl.selected = [opportunities[1]];
-      expect(ctrl.flattenOpportunity(false)).toEqual([{
+      expect(ctrl.getCSVData(false)).toEqual([{
         'storeDistributor': '',
         'TDLinx': opportunities[1].store.id,
         'storeName': opportunities[1].store.name,
@@ -786,7 +786,7 @@ describe('Unit: list controller', function() {
         var deferred = q.defer();
         return deferred.promise;
       });
-      spyOn(targetListService, 'getTargetListOpportunities').and.callFake(() => {
+      spyOn(targetListService, 'getTargetListStoresWithOpportunities').and.callFake(() => {
         let deferred = q.defer();
         return deferred.promise;
       });
@@ -829,19 +829,19 @@ describe('Unit: list controller', function() {
 
       ctrl.ascending = false;
       ctrl.sortBy('store');
-      expect(targetListService.getTargetListOpportunities).toHaveBeenCalled();
+      expect(targetListService.getTargetListStoresWithOpportunities).toHaveBeenCalled();
 
       ctrl.ascending = false;
       ctrl.sortBy('opportunity');
-      expect(targetListService.getTargetListOpportunities).toHaveBeenCalled();
+      expect(targetListService.getTargetListStoresWithOpportunities).toHaveBeenCalled();
 
       ctrl.ascending = false;
       ctrl.sortBy('depletions');
-      expect(targetListService.getTargetListOpportunities).toHaveBeenCalled();
+      expect(targetListService.getTargetListStoresWithOpportunities).toHaveBeenCalled();
 
       ctrl.ascending = false;
       ctrl.sortBy('segmentation');
-      expect(targetListService.getTargetListOpportunities).toHaveBeenCalled();
+      expect(targetListService.getTargetListStoresWithOpportunities).toHaveBeenCalled();
     });
 
     it('should assign descending orderBy for store, depletions and segmentation when each is provided as param and ascending is false', function() {
@@ -849,19 +849,19 @@ describe('Unit: list controller', function() {
 
       ctrl.ascending = true;
       ctrl.sortBy('store');
-      expect(targetListService.getTargetListOpportunities).toHaveBeenCalled();
+      expect(targetListService.getTargetListStoresWithOpportunities).toHaveBeenCalled();
 
       ctrl.ascending = true;
       ctrl.sortBy('opportunity');
-      expect(targetListService.getTargetListOpportunities).toHaveBeenCalled();
+      expect(targetListService.getTargetListStoresWithOpportunities).toHaveBeenCalled();
 
       ctrl.ascending = true;
       ctrl.sortBy('depletions');
-      expect(targetListService.getTargetListOpportunities).toHaveBeenCalled();
+      expect(targetListService.getTargetListStoresWithOpportunities).toHaveBeenCalled();
 
       ctrl.ascending = true;
       ctrl.sortBy('segmentation');
-      expect(targetListService.getTargetListOpportunities).toHaveBeenCalled();
+      expect(targetListService.getTargetListStoresWithOpportunities).toHaveBeenCalled();
     });
   });
 

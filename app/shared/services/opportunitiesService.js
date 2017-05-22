@@ -12,8 +12,8 @@ module.exports = /*  @ngInject */
       model: model,
       getAndUpdateStoresWithOpportunities: getAndUpdateStoresWithOpportunities,
       getStoresWithOpportunities: getStoresWithOpportunities,
+      getFormattedOpportunities: getFormattedOpportunities,
       getOpportunities: getOpportunities,
-      getAllOpportunitiesIDs: getAllOpportunitiesIDs,
       getOpportunitiesHeaders: getOpportunitiesHeaders,
       createOpportunity: createOpportunity,
       getOpportunitiyFeedback: getOpportunityFeedback,
@@ -60,12 +60,13 @@ module.exports = /*  @ngInject */
       service.model.noOpportunitiesFound = false;
 
       const fetchDataPromise = opportunityID
-        ? getSingleOpportunity(opportunityID)
-        : getOpportunities();
+        ? getFormattedSingleOpportunity(opportunityID)
+        : getFormattedOpportunities();
 
       fetchDataPromise.then(getOpportunitiesSuccess);
 
       function getOpportunitiesSuccess(opportunities) {
+        opportunities = opportunities.map(populateOpportunityData);
         if (!opportunities.length) {
           service.model.noOpportunitiesFound = true;
         } else {
@@ -86,7 +87,57 @@ module.exports = /*  @ngInject */
       return opportunitiesPromise.promise;
     }
 
-    function getSingleOpportunity(opportunityID) {
+    /**
+     * @name getFormattedOpportunities
+     * @desc Get opportunities from API, massages the data with populateOpportunityData
+     * @param {Boolean} areAllRequested Send true to disable pagination and request all of them (up to the max limit defined in apiHelperService)
+     * @returns {Array}
+     * @memberOf cf.common.services
+     */
+    function getFormattedOpportunities(areAllRequested) {
+      const opportunitiesPromise = $q.defer();
+
+      service.getOpportunities(areAllRequested)
+        .then((response) => {
+          const opportunities = response.data.opportunities.map(populateOpportunityData);
+          opportunitiesPromise.resolve(opportunities);
+        })
+        .catch(error => handleGetOpportunitiesFail(opportunitiesPromise, error));
+
+      return opportunitiesPromise.promise;
+    }
+
+    /**
+     * @name getOpportunities
+     * @desc Get opportunities from API
+     * @param {Boolean} areAllRequested Send true to disable pagination and request all of them (up to the max limit defined in apiHelperService)
+     * @returns {Array}
+     * @memberOf cf.common.services
+     */
+    function getOpportunities(areAllRequested) {
+      apiHelperService.model.bulkQuery = areAllRequested;
+
+      const opportunitiesPromise = $q.defer();
+      const filterPayload = filtersService.getAppliedFilters('opportunities');
+      const url = apiHelperService.request('/v2/opportunities/', filterPayload);
+
+      $http.get(url)
+        .then((response) => {
+          opportunitiesPromise.resolve(response.data.opportunities);
+        })
+        .catch(error => handleGetOpportunitiesFail(opportunitiesPromise, error));
+
+      return opportunitiesPromise.promise;
+    }
+
+    /**
+     * @name getFormattedSingleOpportunity
+     * @desc Get one opportunity from API, massages the data with populateOpportunityData
+     * @param {String} opportunityID The ID of the opportunity to fetch
+     * @returns {Array} the opportunity wrapped in a single element array
+     * @memberOf cf.common.services
+     */
+    function getFormattedSingleOpportunity(opportunityID) {
       const opportunitiesPromise = $q.defer();
       const url = apiHelperService.request('/v2/opportunities/' + opportunityID);
 
@@ -156,30 +207,6 @@ module.exports = /*  @ngInject */
       return item;
     }
 
-    /**
-     * @name getOpportunities
-     * @desc Get opportunities from API
-     * @param {Boolean} areAllRequested Send true to disable pagination and request all of them (up to the max limit defined in apiHelperService)
-     * @returns {Array}
-     * @memberOf cf.common.services
-     */
-    function getOpportunities(areAllRequested) {
-      apiHelperService.model.bulkQuery = areAllRequested;
-
-      const opportunitiesPromise = $q.defer();
-      const filterPayload = filtersService.getAppliedFilters('opportunities');
-      const url = apiHelperService.request('/v2/opportunities/', filterPayload);
-
-      $http.get(url)
-        .then((response) => {
-          const opportunities = response.data.opportunities.map(populateOpportunityData);
-          opportunitiesPromise.resolve(opportunities);
-        })
-        .catch(error => handleGetOpportunitiesFail(opportunitiesPromise, error));
-
-      return opportunitiesPromise.promise;
-    }
-
     function groupOpportunitiesByStore(opportunities) {
       return opportunities.reduce((stores, opportunity) => {
         const storeExists = stores.length && stores[stores.length - 1].store.id === opportunity.store.id;
@@ -211,29 +238,6 @@ module.exports = /*  @ngInject */
 
         return stores;
       }, []);
-    }
-
-    /**
-     * @name getAllOpportunitiesIDs
-     * @desc Get opportunities IDs from API
-     * @returns {Object}
-     * @memberOf cf.common.services
-     */
-    function getAllOpportunitiesIDs() {
-      apiHelperService.model.bulkQuery = true;
-
-      const filterPayload = filtersService.getAppliedFilters('opportunities');
-
-      const opportunitiesPromise = $q.defer();
-      const url = apiHelperService.request('/v2/opportunities/', filterPayload);
-      $http.get(url)
-        .then((response) => {
-          const opportunitiesIDs = response.data.opportunities.map((opp) => opp.id);
-          opportunitiesPromise.resolve(opportunitiesIDs);
-        })
-        .catch((error) => handleGetOpportunitiesFail(opportunitiesPromise, error));
-
-      return opportunitiesPromise.promise;
     }
 
     /**

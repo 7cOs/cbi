@@ -12,8 +12,8 @@ module.exports = /*  @ngInject */
       getTargetList: getTargetList,
       updateTargetList: updateTargetList,
       deleteTargetList: deleteTargetList,
-      getTargetListOpportunityIDs: getTargetListOpportunityIDs,
       getTargetListOpportunities: getTargetListOpportunities,
+      getTargetListStoresWithOpportunities: getTargetListStoresWithOpportunities,
       addTargetListOpportunities: addTargetListOpportunities,
       deleteTargetListOpportunities: deleteTargetListOpportunities,
       getTargetListShares: getTargetListShares,
@@ -112,25 +112,25 @@ module.exports = /*  @ngInject */
     }
 
     /**
-     * @name getTargetListOpportunityIDs
-     * @desc get all opportunity IDs for given target list
+     * @name getTargetListOpportunities
+     * @desc get all opportunity for given target list
      * @params {String} targetListID - ID of target list
-     * @returns {Array} - target list opportunity IDs
+     * @returns {Array} - target list opportunities
      * @memberOf cf.common.services
      */
-    function getTargetListOpportunityIDs(targetListId) {
+    function getTargetListOpportunities(targetListId) {
       const opportunityIDsPromise = $q.defer();
       const url = apiHelperService.request('/v2/targetLists/' + targetListId + '/opportunities');
 
       $http.get(url)
-        .then(getTargetListOpportunityIDsSuccess)
-        .catch(getTargetListOpportunityIDsFail);
+        .then(getTargetListOpportunitiesSuccess)
+        .catch(getTargetListOpportunitiesFail);
 
-      function getTargetListOpportunityIDsSuccess(response) {
-        opportunityIDsPromise.resolve(response.data.opportunities.map(opp => opp.id));
+      function getTargetListOpportunitiesSuccess(response) {
+        opportunityIDsPromise.resolve(response.data.opportunities);
       }
 
-      function getTargetListOpportunityIDsFail(error) {
+      function getTargetListOpportunitiesFail(error) {
         opportunityIDsPromise.reject(error);
       }
 
@@ -138,13 +138,13 @@ module.exports = /*  @ngInject */
     }
 
     /**
-     * @name getTargetListOpportunities
+     * @name getTargetListStoresWithOpportunities
      * @desc get target list opportunities
      * @params {String} targetListId - id of target list
      * @returns {Object} - target list opportunities
      * @memberOf cf.common.services
      */
-    function getTargetListOpportunities(targetListId, params) {
+    function getTargetListStoresWithOpportunities(targetListId, params) {
       var filterPayload;
       if (params) filterPayload = filtersService.getAppliedFilters('targetListOpportunities');
 
@@ -152,10 +152,10 @@ module.exports = /*  @ngInject */
           url = apiHelperService.request('/v2/targetLists/' + targetListId + '/opportunities', filterPayload);
 
       $http.get(url)
-        .then(getTargetListOpportunitiesSuccess)
-        .catch(getTargetListOpportunitiesFail);
+        .then(getTargetListStoresWithOpportunitiesSuccess)
+        .catch(getTargetListStoresWithOpportunitiesFail);
 
-      function getTargetListOpportunitiesSuccess(response) {
+      function getTargetListStoresWithOpportunitiesSuccess(response) {
         // Group opportunities by store
         var newOpportunityArr = [],
             store,
@@ -231,7 +231,7 @@ module.exports = /*  @ngInject */
         targetListPromise.resolve(newOpportunityArr);
       }
 
-      function getTargetListOpportunitiesFail(error) {
+      function getTargetListStoresWithOpportunitiesFail(error) {
         targetListPromise.reject(error);
       }
 
