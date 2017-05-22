@@ -30,7 +30,6 @@ deployment:
     branch: test
     commands:
       - git push git@heroku.com:app-orion-qa.git $CIRCLE_SHA1:master -f
-      # - git push git@heroku.com:app-compass-loadtest.git $CIRCLE_SHA1:master -f
       - cd automation-test && mvn test
   poc:
     branch: staging
