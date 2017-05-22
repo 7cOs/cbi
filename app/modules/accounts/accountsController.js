@@ -597,8 +597,6 @@ module.exports = /*  @ngInject */
     }
 
     function setFilter(result, filterModelProperty) {
-      var i = 0;
-
       // click through result.type is undefined, but on search you need result.type
       var switchStr = filterModelProperty;
       if (result.type) switchStr = result.type;
@@ -630,9 +628,7 @@ module.exports = /*  @ngInject */
 
       // set filters service model selected
       if (result.ids) {
-        for (i = 0; i < result.ids.length; i++) {
-          filtersService.model.selected[filterModelProp][0] = result.ids[i];
-        }
+        filtersService.model.selected[filterModelProp] = result.ids;
       } else {
         if (result.id.constructor === Array) {
           filtersService.model.selected[filterModelProp] = result.id;
