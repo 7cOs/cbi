@@ -12,6 +12,7 @@ module.exports = /*  @ngInject */
       model: model,
       getAndUpdateStoresWithOpportunities: getAndUpdateStoresWithOpportunities,
       getStoresWithOpportunities: getStoresWithOpportunities,
+      getOpportunities: getOpportunities,
       getAllOpportunitiesIDs: getAllOpportunitiesIDs,
       getOpportunitiesHeaders: getOpportunitiesHeaders,
       createOpportunity: createOpportunity,
@@ -155,8 +156,14 @@ module.exports = /*  @ngInject */
       return item;
     }
 
+    /**
+     * @name getOpportunities
+     * @desc Get opportunities from API
+     * @param {Boolean} areAllRequested Send true to disable pagination and request all of them (up to the max limit defined in apiHelperService)
+     * @returns {Array}
+     * @memberOf cf.common.services
+     */
     function getOpportunities(areAllRequested) {
-debugger;
       apiHelperService.model.bulkQuery = areAllRequested;
 
       const opportunitiesPromise = $q.defer();
