@@ -1164,6 +1164,13 @@ module.exports = /*  @ngInject */
       var params = filtersService.getAppliedFilters('topBottom');
       appendBrandParametersForTopBottom(params);
       params = myperformanceService.appendFilterParametersForTopBottom(params, vm.currentTopBottomFilters, vm.filtersService.model.selected.myAccountsOnly);
+
+      // Fixes when drilling down into and clicking on a store and then retailer searching for a store causing subaccount ids
+      // being wrongly sent with the request
+      if (filtersService.model.selected.retailer === 'Store') {
+        delete params['subaccount'];
+      }
+
       vm.loadingTopBottom = true;
       params.additionalParams = getAppliedFiltersForTopBottom();
       userService.getTopBottomSnapshot(vm.currentTopBottomAcctType, params).then(function(data) {
