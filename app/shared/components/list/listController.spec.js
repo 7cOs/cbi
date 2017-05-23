@@ -1906,7 +1906,6 @@ describe('Unit: list controller', function() {
 
       ctrl.selected = ['fake1'];
 
-      debugger;
       const targetList = {
         opportunitiesSummary: {
           opportunitiesCount: 300
