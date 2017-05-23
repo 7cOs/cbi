@@ -1,65 +1,33 @@
 package com.cbrands.test.smoke;
 
 import com.cbrands.TestUser;
-import com.cbrands.helper.PropertiesCache;
-import com.cbrands.helper.SeleniumUtils;
-import com.cbrands.helper.WebDriverFactory;
 import com.cbrands.pages.HomePage;
 import com.cbrands.pages.Login;
 import com.cbrands.pages.Logout;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.openqa.selenium.WebDriver;
 import org.testng.Assert;
 import org.testng.annotations.*;
-
-import java.net.MalformedURLException;
 
 /**
  * Automated test for logging in and out of the web app.
  */
-public class LoginTest {
+public class LoginTest extends BaseTestCase {
+
   private Login login;
   private Logout logout;
-
-  private Log log = LogFactory.getLog(LoginTest.class);
-  private WebDriver driver;
-  private String webAppBaseUrl;
-
-  @BeforeSuite
-  public void setUpSuite() throws MalformedURLException {
-    final PropertiesCache propertiesCache = PropertiesCache.getInstance();
-    webAppBaseUrl = propertiesCache.getProperty("qa.host.address");
-
-    log.info("\nBrowser opening...");
-
-    driver = WebDriverFactory.createDriver(propertiesCache.getProperty("selenium.host.address"));
-    driver.get(webAppBaseUrl);
-    SeleniumUtils.setDriver(driver);
-    SeleniumUtils.setStopAtShutdown();
-
-    log.info("Browser opened.");
-  }
-
-  @AfterSuite
-  public void tearDownSuite() {
-    driver.quit();
-    log.info("Browser closed.\n");
-  }
 
   @BeforeMethod
   public void setUp() {
     login = new Login(driver);
     logout = new Logout(driver);
 
-    log.info("\nLoading webpage.");
+    log.info("\nLoading webpage...");
     driver.get(webAppBaseUrl);
   }
 
   @AfterMethod
   public void tearDown() {
     logout.logoutViaUrl();
-    Assert.assertTrue(logout.isOnLogoutPage());
+    Assert.assertTrue(logout.isOnLogoutPage(), "Failure logging out.\n");
   }
 
   @Test(dataProvider = "userCredentials", description = "Testing basic login and logout")
