@@ -1,5 +1,5 @@
 describe('Unit: list controller', function() {
-  var scope, ctrl, q, httpBackend, mdDialog, state, closedOpportunitiesService, filtersService, loaderService, opportunitiesService, storesService, targetListService, toastService, userService, filter;
+  var scope, ctrl, q, httpBackend, mdDialog, closedOpportunitiesService, filtersService, loaderService, opportunitiesService, storesService, targetListService, toastService, userService, filter;
   var bindings = {showAddToTargetList: true, showRemoveButton: false, selectAllAvailable: true, pageName: 'MyTestPage'};
 
   beforeEach(function() {
@@ -14,7 +14,6 @@ describe('Unit: list controller', function() {
       scope = $rootScope.$new();
       q = _$q_;
       mdDialog = _$mdDialog_;
-      state = _$state_;
       httpBackend = _$httpBackend_;
       filter = _$filter_;
 

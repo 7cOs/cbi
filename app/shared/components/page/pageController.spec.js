@@ -1,5 +1,5 @@
 describe('Unit: page controller', function() {
-  var scope, ctrl, q, state, filtersService, loaderService, opportunitiesService;
+  var scope, ctrl, q, filtersService, opportunitiesService;
 
   beforeEach(function() {
     angular.mock.module('ui.router');
@@ -10,10 +10,8 @@ describe('Unit: page controller', function() {
     inject(function($rootScope, _$q_, _$state_, $controller, _filtersService_, _loaderService_, _opportunitiesService_) {
       scope = $rootScope.$new();
       q = _$q_;
-      state = _$state_;
 
       filtersService = _filtersService_;
-      loaderService = _loaderService_;
       opportunitiesService = _opportunitiesService_;
 
       ctrl = $controller('pageController', {$scope: scope});
