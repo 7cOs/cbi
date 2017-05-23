@@ -397,41 +397,45 @@ module.exports = /*  @ngInject */
       vm[type] = '';
 
       if (type === 'selectedStore') {
-        filtersService.model.selected.account = [];
-        filtersService.model.selected.subaccount = [];
-        filtersService.model.selected.store = [];
-
-        filtersService.model.account = '';
-        filtersService.model.subaccount = '';
-        filtersService.model.store = '';
-
-        vm.currentTopBottomFilters.accounts = '';
-        vm.currentTopBottomFilters.subAccounts = '';
-        vm.currentTopBottomFilters.stores = '';
-
-        chipsService.removeChip('account');
-        chipsService.removeChip('subaccount');
-        chipsService.removeChip('store');
+        clearAccountModels();
+        clearSubAccountModels();
+        clearStoreModels();
       } else if (type === 'selectedSubAccount') {
-        filtersService.model.selected.subaccount = [];
-        filtersService.model.selected.store = [];
-
-        filtersService.model.subaccount = '';
-        filtersService.model.store = '';
-
-        vm.currentTopBottomFilters.subAccounts = '';
-        vm.currentTopBottomFilters.stores = '';
-
-        chipsService.removeChip('subaccount');
-        chipsService.removeChip('store');
+        clearSubAccountModels();
+        clearStoreModels();
       } else if (type === 'selectedDistributor') {
+        clearDistributorModels();
+      }
+
+      apply(false);
+
+      function clearStoreModels() {
+        filtersService.model.selected.store = [];
+        filtersService.model.store = '';
+        vm.currentTopBottomFilters.stores = '';
+        chipsService.removeChip('store');
+      }
+
+      function clearSubAccountModels() {
+        filtersService.model.selected.subaccount = [];
+        filtersService.model.subaccount = '';
+        vm.currentTopBottomFilters.subAccounts = '';
+        chipsService.removeChip('subaccount');
+      }
+
+      function clearAccountModels() {
+        filtersService.model.selected.account = [];
+        filtersService.model.account = '';
+        vm.currentTopBottomFilters.accounts = '';
+        chipsService.removeChip('account');
+      }
+
+      function clearDistributorModels() {
         filtersService.model.selected.distributor = [];
         filtersService.model.distributor = '';
         chipsService.removeChip('distributor');
         vm.currentTopBottomFilters.distributors = '';
       }
-
-      apply(false);
     }
 
     function resetFilters() {
