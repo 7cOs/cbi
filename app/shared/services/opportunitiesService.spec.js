@@ -228,75 +228,63 @@ describe('Unit: opportunitiesService - get opportunities', function() {
     ]}]};
   });
 
-    it('to be defined', function() {
-        expect(opportunitiesService).toBeDefined();
-        expect($httpBackend).toBeDefined();
-        expect(filtersService).toBeDefined();
-    });
+  it('to be defined', function() {
+      expect(opportunitiesService).toBeDefined();
+      expect($httpBackend).toBeDefined();
+      expect(filtersService).toBeDefined();
+  });
 
-    it('respond with opportunities properly formatted', function() {
+ it('get opportunity headers', function() {
 
-        $httpBackend
-        .expect('GET', '/v2/opportunities/?limit=20&ignoreDismissed=true&sort=&offset=0&filter=myAccountsOnly%3Atrue%2CpremiseType%3Aoff%2C')
-        .respond(200, opportunitiesResponseObject);
+      $httpBackend
+      .expect('HEAD', '/v2/opportunities/?limit=20&ignoreDismissed=true&sort=&offset=0&filter=myAccountsOnly%3Atrue%2CpremiseType%3Aoff%2C')
+      .respond(200, { data: 'value' }, {'opportunity-count': '28129', 'store-count': '31'});
 
-        opportunitiesService.getAndUpdateStoresWithOpportunities();
+      opportunitiesService.getOpportunitiesHeaders();
 
-        $httpBackend.flush();
-        expect(opportunitiesService.model.opportunities).toEqual(expectedServiceModel.opportunities);
-    });
+      $httpBackend.flush();
+      expect(filtersService.model.appliedFilter.pagination).toEqual({
+          currentPage: 0,
+          totalPages: 1,
+          default: true,
+          totalOpportunities: 28129,
+          totalStores: '31',
+          roundedStores: 40,
+          shouldReloadData: false
+      });
+  });
 
-   it('get opportunity headers', function() {
+  it('create opportunity feedback', function() {
 
-        $httpBackend
-        .expect('HEAD', '/v2/opportunities/?limit=20&ignoreDismissed=true&sort=&offset=0&filter=myAccountsOnly%3Atrue%2CpremiseType%3Aoff%2C')
-        .respond(200, { data: 'value' }, {'opportunity-count': '28129', 'store-count': '31'});
+      var opportunityId = '1234';
+      var opportunityData = {
+          type: 'other',
+          feedback: 'test feedback 1'
+      };
 
-        opportunitiesService.getOpportunitiesHeaders();
+      $httpBackend
+      .expect('POST', '/v2/opportunities/' + opportunityId + '/feedback/')
+      .respond(200, { feedback: 'test feedback' });
 
-        $httpBackend.flush();
-        expect(filtersService.model.appliedFilter.pagination).toEqual({
-            currentPage: 0,
-            totalPages: 1,
-            default: true,
-            totalOpportunities: 28129,
-            totalStores: '31',
-            roundedStores: 40,
-            shouldReloadData: false
-        });
-    });
+      var returnedPromise = opportunitiesService.createOpportunityFeedback(opportunityId, opportunityData);
+      $httpBackend.flush();
+      expect(returnedPromise.$$state.value.data).toEqual({feedback: 'test feedback'});
+      expect(returnedPromise.$$state.status).toEqual(1);
 
-    it('create opportunity feedback', function() {
+  });
 
-        var opportunityId = '1234';
-        var opportunityData = {
-            type: 'other',
-            feedback: 'test feedback 1'
-        };
+  it('delete opportunity feedback', function() {
 
-        $httpBackend
-        .expect('POST', '/v2/opportunities/' + opportunityId + '/feedback/')
-        .respond(200, { feedback: 'test feedback' });
+      var opportunityId = '1234';
 
-        var returnedPromise = opportunitiesService.createOpportunityFeedback(opportunityId, opportunityData);
-        $httpBackend.flush();
-        expect(returnedPromise.$$state.value.data).toEqual({feedback: 'test feedback'});
-        expect(returnedPromise.$$state.status).toEqual(1);
+      $httpBackend
+      .expect('DELETE', '/v2/opportunities/' + opportunityId + '/feedback/')
+      .respond(200);
 
-    });
-
-    it('delete opportunity feedback', function() {
-
-        var opportunityId = '1234';
-
-        $httpBackend
-        .expect('DELETE', '/v2/opportunities/' + opportunityId + '/feedback/')
-        .respond(200);
-
-        var returnedPromise = opportunitiesService.deleteOpportunityFeedback(opportunityId);
-        $httpBackend.flush();
-        expect(returnedPromise.$$state.status).toEqual(1);
-    });
+      var returnedPromise = opportunitiesService.deleteOpportunityFeedback(opportunityId);
+      $httpBackend.flush();
+      expect(returnedPromise.$$state.status).toEqual(1);
+  });
 
   it('clearOpportunitiesModel', function() {
     expect(opportunitiesService.clearOpportunitiesModel).toBeDefined();
@@ -312,19 +300,84 @@ describe('Unit: opportunitiesService - get opportunities', function() {
   });
 
   describe('getOpportunities', () => {
-    it('get opportunities', function() {
-
-         $httpBackend
+    it('get opportunities', () => {
+       $httpBackend
          .expect('GET', '/v2/opportunities/?limit=20&sort=&offset=0&ignoreDismissed=true&filter=myAccountsOnly%3Atrue%2CpremiseType%3Aoff%2C')
          .respond(200, opportunitiesResponseObject);
 
-         let opportunities;
-         opportunitiesService.getOpportunities().then((opps) => {
-           opportunities = opps;
-         });
+       let opportunities;
+       opportunitiesService.getOpportunities().then((opps) => {
+         opportunities = opps;
+       });
 
-         $httpBackend.flush();
-         expect(opportunities).toEqual(opportunitiesResponseObject.opportunities);
-      });
+       $httpBackend.flush();
+       expect(opportunities).toEqual(opportunitiesResponseObject.opportunities);
+    });
+  });
+
+  describe('getAndUpdateStoresWithOpportunities', () => {
+    it('updates with opportunities properly formatted', () => {
+        $httpBackend
+          .expect('GET', '/v2/opportunities/?limit=20&ignoreDismissed=true&sort=&offset=0&filter=myAccountsOnly%3Atrue%2CpremiseType%3Aoff%2C')
+          .respond(200, opportunitiesResponseObject);
+
+        opportunitiesService.getAndUpdateStoresWithOpportunities();
+
+        $httpBackend.flush();
+        expect(opportunitiesService.model.opportunities).toEqual(expectedServiceModel.opportunities);
+    });
+  });
+
+  describe('getFormattedStoresWithOpportunities', () => {
+    it('responds with opportunities properly formatted', () => {
+        $httpBackend
+          .expect('GET', '/v2/opportunities/?limit=20&ignoreDismissed=true&sort=&offset=0&filter=myAccountsOnly%3Atrue%2CpremiseType%3Aoff%2C')
+          .respond(200, opportunitiesResponseObject);
+
+        const opportunitiesPromises = opportunitiesService.getFormattedStoresWithOpportunities();
+
+        $httpBackend.flush();
+        expect(opportunitiesPromises.$$state.value).toEqual(expectedServiceModel.opportunities);
+        expect(opportunitiesService.model.opportunities).toEqual([]);
+    });
+  });
+
+  describe('getFormattedOpportunities', () => {
+    it('responds with opportunities properly formatted', () => {
+       $httpBackend
+         .expect('GET', '/v2/opportunities/?limit=20&sort=&offset=0&ignoreDismissed=true&filter=myAccountsOnly%3Atrue%2CpremiseType%3Aoff%2C')
+         .respond(200, opportunitiesResponseObject);
+
+       let opportunities;
+       opportunitiesService.getFormattedOpportunities().then((opps) => {
+         opportunities = opps;
+       });
+
+       $httpBackend.flush();
+       expect(opportunities[0]).toEqual(
+         {
+           depletionsCurrentYearToDate: 5,
+           depletionsCurrentYearToDateYA: 0,
+           depletionsCurrentYearToDateYAPercent: '+100%',
+           depletionsCurrentYearToDateYAPercentNegative: false,
+           featureTypeCode: null,
+           id: '0516096_80013460_20170131',
+           isChainMandate: 'Y',
+           isItemAuthorization: 'Y',
+           isOnFeature: 'N',
+           itemAuthorizationCode: 'CM',
+           product: { brand: 'CORONA EXTRA' },
+           store: {
+              address: '515 N WESTERN AVE, CHICAGO, IL 606121421',
+              depletionsCurrentYearToDate: 0,
+              depletionsCurrentYearToDateYA: 2886.8334,
+              depletionsCurrentYearToDateYAPercent: '-100%',
+              depletionsCurrentYearToDateYAPercentNegative: true,
+              id: '1401904',
+              unsold: false
+            }
+          }
+        );
+    });
   });
 });

@@ -143,14 +143,14 @@ module.exports = /*  @ngInject */
     /**
      * @name getFormattedTargetListOpportunities
      * @desc get all opportunity for given target list, massages the data with populateOpportunityData
-     * @param {Boolean} areAllRequested Send true to disable pagination and request all of them (up to the max limit defined in apiHelperService)
+     * @param {String} targetListID - ID of target list
      * @returns {Array}
      * @memberOf cf.common.services
      */
-    function getFormattedTargetListOpportunities(areAllRequested, params) {
+    function getFormattedTargetListOpportunities(targetListId, params) {
       const opportunitiesPromise = $q.defer();
 
-      service.getTargetListOpportunities(areAllRequested, params)
+      service.getTargetListOpportunities(targetListId, params)
         .then((opportunities) => {
           opportunitiesPromise.resolve(opportunities.map(opportunitiesService.populateOpportunityData));
         })

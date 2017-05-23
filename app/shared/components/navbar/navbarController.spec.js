@@ -245,7 +245,7 @@ describe('Unit: list controller', function() {
   });
   describe('[nb.getDismissedOpportunity]', function() {
     beforeEach(function() {
-      spyOn(opportunitiesService, 'getStoresWithOpportunities').and.callFake(function() {
+      spyOn(opportunitiesService, 'getFormattedStoresWithOpportunities').and.callFake(function() {
         return {
           then: function(callback) { return callback([{dateUpdated: '05 October 2011 14:48 UTC'}]); }
         };

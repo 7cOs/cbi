@@ -11,7 +11,7 @@ module.exports = /*  @ngInject */
     var service = {
       model: model,
       getAndUpdateStoresWithOpportunities: getAndUpdateStoresWithOpportunities,
-      getStoresWithOpportunities: getStoresWithOpportunities,
+      getFormattedStoresWithOpportunities: getFormattedStoresWithOpportunities,
       getFormattedOpportunities: getFormattedOpportunities,
       getOpportunities: getOpportunities,
       getOpportunitiesHeaders: getOpportunitiesHeaders,
@@ -39,7 +39,7 @@ module.exports = /*  @ngInject */
       const opportunitiesPromise = $q.defer();
       service.model.opportunities = [];
 
-      service.getStoresWithOpportunities(opportunityID)
+      service.getFormattedStoresWithOpportunities(opportunityID)
         .then((storesWithOpportunities) => {
           service.model.opportunities = storesWithOpportunities;
 
@@ -51,13 +51,13 @@ module.exports = /*  @ngInject */
     }
 
     /**
-     * @name getStoresWithOpportunities
-     * @desc Get opportunities from API and update the model
+     * @name getFormattedStoresWithOpportunities
+     * @desc Get opportunities from API and update the model, massages the data with populateOpportunityData
      * @params {String} opportunityID - ID of opportunity [optional]
      * @returns {Object}
      * @memberOf cf.common.services
      */
-    function getStoresWithOpportunities(opportunityID) {
+    function getFormattedStoresWithOpportunities(opportunityID) {
       const opportunitiesPromise = $q.defer();
       service.model.noOpportunitiesFound = false;
 
