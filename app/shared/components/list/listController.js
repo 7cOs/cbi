@@ -549,7 +549,7 @@ module.exports = /*  @ngInject */
           vm.loadingList = false;
         });
       } else if (vm.pageName === 'target-list-detail') {
-        targetListService.getTargetListStoresWithOpportunities(targetListService.model.currentList.id,
+        targetListService.getAndUpdateTargetListStoresWithOpportunities(targetListService.model.currentList.id,
                           {type: 'targetListOpportunities'})
                           .then(() => {
           vm.loadingList = false;
@@ -607,13 +607,12 @@ module.exports = /*  @ngInject */
     }
 
     function getCSVData(includeRationale) {
-      debugger;
       const csvDataPromise = $q.defer();
       if (vm.isAllOpportunitiesSelected) {
         loaderService.openLoader(true);
 
         const getOpportunitiesPromise = vm.pageName === 'target-list-detail'
-          ? targetListService.getTargetListOpportunities(targetListService.model.currentList.id)
+          ? targetListService.getFormattedTargetListOpportunities(targetListService.model.currentList.id)
           : vm.opportunitiesService.getFormattedOpportunities(true);
 
         getOpportunitiesPromise

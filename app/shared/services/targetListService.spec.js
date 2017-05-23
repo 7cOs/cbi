@@ -29,7 +29,7 @@ describe('[Services.targetListService]', function() {
     expect(targetListService.getTargetList).toBeDefined();
     expect(targetListService.updateTargetList).toBeDefined();
     expect(targetListService.deleteTargetList).toBeDefined();
-    expect(targetListService.getTargetListStoresWithOpportunities).toBeDefined();
+    expect(targetListService.getAndUpdateTargetListStoresWithOpportunities).toBeDefined();
     expect(targetListService.addTargetListOpportunities).toBeDefined();
     expect(targetListService.deleteTargetListOpportunities).toBeDefined();
     expect(targetListService.getTargetListShares).toBeDefined();
@@ -111,9 +111,9 @@ describe('[Services.targetListService]', function() {
     });
   });
 
-  describe('[getTargetListStoresWithOpportunities]', function() {
+  describe('[getAndUpdateTargetListStoresWithOpportunities]', function() {
     it('get target list opportunities should return a promise', function() {
-      var result = targetListService.getTargetListStoresWithOpportunities(1, {});
+      var result = targetListService.getAndUpdateTargetListStoresWithOpportunities(1, {});
       var promiseResult = $q.defer().promise;
       expect(result).toEqual(promiseResult);
     });
@@ -128,7 +128,7 @@ describe('[Services.targetListService]', function() {
       });
 
       var result;
-      targetListService.getTargetListStoresWithOpportunities('1', filterPayload).then(function() {
+      targetListService.getAndUpdateTargetListStoresWithOpportunities('1', filterPayload).then(function() {
         result = true;
       });
 
@@ -138,7 +138,7 @@ describe('[Services.targetListService]', function() {
     });
   });
 
-  describe('[Services.targetListService - getTargetListStoresWithOpportunities]', function() {
+  describe('[Services.targetListService - getAndUpdateTargetListStoresWithOpportunities]', function() {
   var $httpBackend, targetListService, params, returnedPromise, id, responseObject, expectedResponseObject;
 
   beforeEach(function() {
@@ -335,7 +335,7 @@ describe('[Services.targetListService]', function() {
       .expect('GET', '/v2/targetLists/' + id + '/opportunities')
       .respond(200, responseObject);
 
-      returnedPromise = targetListService.getTargetListStoresWithOpportunities(id, params);
+      returnedPromise = targetListService.getAndUpdateTargetListStoresWithOpportunities(id, params);
       $httpBackend.flush();
       expect(returnedPromise.$$state.value).toEqual(expectedResponseObject.opportunities);
 

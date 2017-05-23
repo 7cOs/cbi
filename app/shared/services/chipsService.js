@@ -126,7 +126,7 @@ module.exports = /*  @ngInject */
       loaderService.openLoader(true);
 
       if (isTargetList) {
-        targetListService.getTargetListStoresWithOpportunities(targetListService.model.currentList.id, {type: 'targetListOpportunities'}).then(function(data) {
+        targetListService.getAndUpdateTargetListStoresWithOpportunities(targetListService.model.currentList.id, {type: 'targetListOpportunities'}).then(function(data) {
           loaderService.closeLoader();
           finishGet(data);
         }, reason => {

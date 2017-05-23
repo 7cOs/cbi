@@ -786,7 +786,7 @@ describe('Unit: list controller', function() {
         var deferred = q.defer();
         return deferred.promise;
       });
-      spyOn(targetListService, 'getTargetListStoresWithOpportunities').and.callFake(() => {
+      spyOn(targetListService, 'getAndUpdateTargetListStoresWithOpportunities').and.callFake(() => {
         let deferred = q.defer();
         return deferred.promise;
       });
@@ -829,19 +829,19 @@ describe('Unit: list controller', function() {
 
       ctrl.ascending = false;
       ctrl.sortBy('store');
-      expect(targetListService.getTargetListStoresWithOpportunities).toHaveBeenCalled();
+      expect(targetListService.getAndUpdateTargetListStoresWithOpportunities).toHaveBeenCalled();
 
       ctrl.ascending = false;
       ctrl.sortBy('opportunity');
-      expect(targetListService.getTargetListStoresWithOpportunities).toHaveBeenCalled();
+      expect(targetListService.getAndUpdateTargetListStoresWithOpportunities).toHaveBeenCalled();
 
       ctrl.ascending = false;
       ctrl.sortBy('depletions');
-      expect(targetListService.getTargetListStoresWithOpportunities).toHaveBeenCalled();
+      expect(targetListService.getAndUpdateTargetListStoresWithOpportunities).toHaveBeenCalled();
 
       ctrl.ascending = false;
       ctrl.sortBy('segmentation');
-      expect(targetListService.getTargetListStoresWithOpportunities).toHaveBeenCalled();
+      expect(targetListService.getAndUpdateTargetListStoresWithOpportunities).toHaveBeenCalled();
     });
 
     it('should assign descending orderBy for store, depletions and segmentation when each is provided as param and ascending is false', function() {
@@ -849,19 +849,19 @@ describe('Unit: list controller', function() {
 
       ctrl.ascending = true;
       ctrl.sortBy('store');
-      expect(targetListService.getTargetListStoresWithOpportunities).toHaveBeenCalled();
+      expect(targetListService.getAndUpdateTargetListStoresWithOpportunities).toHaveBeenCalled();
 
       ctrl.ascending = true;
       ctrl.sortBy('opportunity');
-      expect(targetListService.getTargetListStoresWithOpportunities).toHaveBeenCalled();
+      expect(targetListService.getAndUpdateTargetListStoresWithOpportunities).toHaveBeenCalled();
 
       ctrl.ascending = true;
       ctrl.sortBy('depletions');
-      expect(targetListService.getTargetListStoresWithOpportunities).toHaveBeenCalled();
+      expect(targetListService.getAndUpdateTargetListStoresWithOpportunities).toHaveBeenCalled();
 
       ctrl.ascending = true;
       ctrl.sortBy('segmentation');
-      expect(targetListService.getTargetListStoresWithOpportunities).toHaveBeenCalled();
+      expect(targetListService.getAndUpdateTargetListStoresWithOpportunities).toHaveBeenCalled();
     });
   });
 

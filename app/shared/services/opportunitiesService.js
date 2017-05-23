@@ -15,6 +15,8 @@ module.exports = /*  @ngInject */
       getFormattedOpportunities: getFormattedOpportunities,
       getOpportunities: getOpportunities,
       getOpportunitiesHeaders: getOpportunitiesHeaders,
+      groupOpportunitiesByStore: groupOpportunitiesByStore,
+      populateOpportunityData: populateOpportunityData,
       createOpportunity: createOpportunity,
       getOpportunitiyFeedback: getOpportunityFeedback,
       createOpportunityFeedback: createOpportunityFeedback,
@@ -61,7 +63,7 @@ module.exports = /*  @ngInject */
 
       const fetchDataPromise = opportunityID
         ? getFormattedSingleOpportunity(opportunityID)
-        : getFormattedOpportunities();
+        : getFormattedOpportunities(false);
 
       fetchDataPromise.then(getOpportunitiesSuccess);
 
@@ -70,17 +72,8 @@ module.exports = /*  @ngInject */
         if (!opportunities.length) {
           service.model.noOpportunitiesFound = true;
         } else {
-          const hasUnauthorizedOpportunities = opportunities.filter(opportunity => opportunity.showAuthorization === 'Y').length;
-
-          if (filtersService.model.selected.productType[0] === 'authorized' && hasUnauthorizedOpportunities) {
-            service.model.noOpportunitiesFound = true;
-            service.model.filterApplied = true;
-            handleGetOpportunitiesFail('No authorized Opportunities');
-          } else {
-            const storesWithOpportunities = groupOpportunitiesByStore(opportunities);
-
-            opportunitiesPromise.resolve(storesWithOpportunities);
-          }
+          const storesWithOpportunities = groupOpportunitiesByStore(opportunities);
+          opportunitiesPromise.resolve(storesWithOpportunities);
         }
       }
 
@@ -99,7 +92,7 @@ module.exports = /*  @ngInject */
 
       service.getOpportunities(areAllRequested)
         .then((response) => {
-          const opportunities = response.data.opportunities.map(populateOpportunityData);
+          const opportunities = response.data.opportunities.map(populateOpportunityData); // this will NOT work I'm sure
           opportunitiesPromise.resolve(opportunities);
         })
         .catch(error => handleGetOpportunitiesFail(opportunitiesPromise, error));
@@ -168,10 +161,6 @@ module.exports = /*  @ngInject */
       opportunity.isItemAuthorization = opportunity.itemAuthorizationCode === null ? 'N' : 'Y';
       opportunity.isChainMandate = opportunity.itemAuthorizationCode === 'CM' ? 'Y' : 'N';
       opportunity.isOnFeature = opportunity.featureTypeCode === null ? 'N' : 'Y';
-      // Check that only specified authorizations show, applicable when 'authorized' filter applied
-      opportunity.showAuthorization = opportunity.itemAuthorizationCode === 'CM' || opportunity.itemAuthorizationCode === 'BM' || opportunity.itemAuthorizationCode === 'OS' || opportunity.itemAuthorizationCode === 'SP'
-        ? 'Y'
-        : '';
 
       return opportunity;
     }

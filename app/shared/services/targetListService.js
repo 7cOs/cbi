@@ -13,7 +13,8 @@ module.exports = /*  @ngInject */
       updateTargetList: updateTargetList,
       deleteTargetList: deleteTargetList,
       getTargetListOpportunities: getTargetListOpportunities,
-      getTargetListStoresWithOpportunities: getTargetListStoresWithOpportunities,
+      getFormattedTargetListOpportunities: getFormattedTargetListOpportunities,
+      getAndUpdateTargetListStoresWithOpportunities: getAndUpdateTargetListStoresWithOpportunities,
       addTargetListOpportunities: addTargetListOpportunities,
       deleteTargetListOpportunities: deleteTargetListOpportunities,
       getTargetListShares: getTargetListShares,
@@ -112,170 +113,79 @@ module.exports = /*  @ngInject */
     }
 
     /**
+     * @name getAndUpdateTargetListStoresWithOpportunities
+     * @desc get target list opportunities
+     * @params {String} targetListId - id of target list
+     * @returns {Object} - target list opportunities
+     * @memberOf cf.common.services
+     */
+    function getAndUpdateTargetListStoresWithOpportunities(targetListId, params) {
+      var targetListPromise = $q.defer();
+
+      getFormattedTargetListOpportunities(targetListId, params)
+        .then(getAndUpdateTargetListStoresWithOpportunitiesSuccess)
+        .catch(getAndUpdateTargetListStoresWithOpportunitiesFail);
+
+      function getAndUpdateTargetListStoresWithOpportunitiesSuccess(opportunities) {
+        const storesWithOpportunties = opportunitiesService.groupOpportunitiesByStore(opportunities);
+
+        opportunitiesService.model.opportunities = storesWithOpportunties;
+        targetListPromise.resolve(storesWithOpportunties);
+      }
+
+      function getAndUpdateTargetListStoresWithOpportunitiesFail(error) {
+        targetListPromise.reject(error);
+      }
+
+      return targetListPromise.promise;
+    }
+
+    /**
+     * @name getFormattedTargetListOpportunities
+     * @desc get all opportunity for given target list, massages the data with populateOpportunityData
+     * @param {Boolean} areAllRequested Send true to disable pagination and request all of them (up to the max limit defined in apiHelperService)
+     * @returns {Array}
+     * @memberOf cf.common.services
+     */
+    function getFormattedTargetListOpportunities(areAllRequested, params) {
+      const opportunitiesPromise = $q.defer();
+
+      service.getTargetListOpportunities(areAllRequested, params)
+        .then((opportunities) => {
+          opportunitiesPromise.resolve(opportunities.map(opportunitiesService.populateOpportunityData));
+        })
+        .catch(error => opportunitiesPromise.reject(error));
+
+      return opportunitiesPromise.promise;
+    }
+
+    /**
      * @name getTargetListOpportunities
      * @desc get all opportunity for given target list
      * @params {String} targetListID - ID of target list
      * @returns {Array} - target list opportunities
      * @memberOf cf.common.services
      */
-    function getTargetListOpportunities(targetListId) {
-      const opportunityIDsPromise = $q.defer();
-      const url = apiHelperService.request('/v2/targetLists/' + targetListId + '/opportunities');
+    function getTargetListOpportunities(targetListId, params) {
+      let filterPayload;
+      if (params) filterPayload = filtersService.getAppliedFilters('targetListOpportunities');
+
+      const opportunitiesPromise = $q.defer();
+      const url = apiHelperService.request('/v2/targetLists/' + targetListId + '/opportunities', filterPayload);
 
       $http.get(url)
         .then(getTargetListOpportunitiesSuccess)
         .catch(getTargetListOpportunitiesFail);
 
       function getTargetListOpportunitiesSuccess(response) {
-        opportunityIDsPromise.resolve(response.data.opportunities);
+        opportunitiesPromise.resolve(response.data.opportunities);
       }
 
       function getTargetListOpportunitiesFail(error) {
-        opportunityIDsPromise.reject(error);
+        opportunitiesPromise.reject(error);
       }
 
-      return opportunityIDsPromise.promise;
-    }
-
-    /**
-     * @name getTargetListStoresWithOpportunities
-     * @desc get target list opportunities
-     * @params {String} targetListId - id of target list
-     * @returns {Object} - target list opportunities
-     * @memberOf cf.common.services
-     */
-    function getTargetListStoresWithOpportunities(targetListId, params) {
-      var filterPayload;
-      if (params) filterPayload = filtersService.getAppliedFilters('targetListOpportunities');
-
-      var targetListPromise = $q.defer(),
-          url = apiHelperService.request('/v2/targetLists/' + targetListId + '/opportunities', filterPayload);
-
-      $http.get(url)
-        .then(getTargetListStoresWithOpportunitiesSuccess)
-        .catch(getTargetListStoresWithOpportunitiesFail);
-
-      function getTargetListStoresWithOpportunitiesSuccess(response) {
-        // Group opportunities by store
-        var newOpportunityArr = [],
-            store,
-            storePlaceholder;
-        opportunitiesService.model.opportunities = [];
-
-        for (var i = 0; i < response.data.opportunities.length; i++) {
-          var item = response.data.opportunities[i];
-
-          // Set depletionsCurrentYearToDateYAPercent
-          item = setVsYAPercent(item);
-          item.store = setVsYAPercent(item.store);
-
-          // Set store status to boolean
-          item.store.unsold = setStoreStatus(item.store.unsold);
-
-          item.isItemAuthorization = 'N';
-          if (item.itemAuthorizationCode !== null) {
-            item.isItemAuthorization = 'Y';
-          }
-
-          item.isChainMandate = 'N';
-          if (item.itemAuthorizationCode === 'CM') {
-            item.isChainMandate = 'Y';
-          }
-
-          item.isOnFeature = 'N';
-          if (item.featureTypeCode !== null) {
-            item.isOnFeature = 'Y';
-          }
-
-          // if its a new store
-          if (!storePlaceholder || (storePlaceholder.address !== item.store.address || storePlaceholder.id !== item.store.id)) {
-            // push previous store in newOpportunityArr
-            if (i !== 0) {
-              newOpportunityArr.push(store);
-            }
-
-            // create grouped store object
-            store = angular.copy(item);
-            store.highImpactSum = 0;
-            store.depletionSum = 0;
-            store.brands = [];
-
-            // set store placeholder to new store
-            storePlaceholder = item.store;
-
-            // Set positive or negative label for trend values for store
-            store.trend = store.currentYTDStoreVolume - store.lastYTDStoreVolume;
-            if (store.trend > 0) {
-              store.positiveValue = true;
-            } else if (store.trend < 0) {
-              store.negativeValue = true;
-            }
-
-            // create groupedOpportunities arr so all opportunities for one store will be in a row
-            store.groupedOpportunities = [];
-            store.groupedOpportunities.push(item);
-          } else {
-            store.groupedOpportunities.push(item);
-          }
-
-          // add brand to array
-          store.brands.push(item.product.brand.toLowerCase());
-
-          // push last store into newOpportunityArr
-          if (i + 1 === response.data.opportunities.length) {
-            newOpportunityArr.push(store);
-          }
-        }; // end for each
-
-        opportunitiesService.model.opportunities = newOpportunityArr;
-        targetListPromise.resolve(newOpportunityArr);
-      }
-
-      function getTargetListStoresWithOpportunitiesFail(error) {
-        targetListPromise.reject(error);
-      }
-
-      function setVsYAPercent(item) {
-        // defined in DE2970, updated in US/13385
-        var vsYAPercent = 0,
-            negative = false;
-        if (item.depletionsCurrentYearToDate > 0 && item.depletionsCurrentYearToDateYA === 0) {
-          vsYAPercent = '100%';
-        } else if (item.depletionsCurrentYearToDate === 0 && item.depletionsCurrentYearToDateYA > 0) {
-          vsYAPercent = '-100%';
-          negative = true;
-        } else if (item.depletionsCurrentYearToDate === 0 && item.depletionsCurrentYearToDateYA === 0) {
-          vsYAPercent = 0;
-          negative = true;
-        } else {
-          // vsYAPercent = -100 + ((item.depletionsCurrentYearToDate / item.depletionsCurrentYearToDateYA) * 100);
-          vsYAPercent = (item.depletionsCurrentYearToDate / item.depletionsCurrentYearToDateYA - 1) * 100;
-          if (vsYAPercent > 999) {
-            vsYAPercent = '999%';
-          } else if (vsYAPercent < -999) {
-            vsYAPercent = '-999%';
-            negative = true;
-          } else {
-            if (vsYAPercent.toFixed(0) < 0) negative = true;
-            vsYAPercent = vsYAPercent.toFixed(1) + '%';
-          }
-        }
-        item.depletionsCurrentYearToDateYAPercent = negative ? vsYAPercent : '+' + vsYAPercent;
-        item.depletionsCurrentYearToDateYAPercentNegative = negative;
-
-        return item;
-      }
-
-      return targetListPromise.promise;
-    }
-
-    function setStoreStatus(storeValue) {
-
-      if (storeValue === 'Y') {
-        return true;
-      }
-
-      return false;
+      return opportunitiesPromise.promise;
     }
 
     /**
