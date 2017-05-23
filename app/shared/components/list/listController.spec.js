@@ -1,5 +1,5 @@
 describe('Unit: list controller', function() {
-  var scope, ctrl, q, httpBackend, mdDialog, state, closedOpportunitiesService, filtersService, loaderService, opportunitiesService, storesService, targetListService, toastService, userService, filter;
+  var scope, ctrl, q, httpBackend, mdDialog, closedOpportunitiesService, filtersService, loaderService, opportunitiesService, storesService, targetListService, toastService, userService, filter;
   var bindings = {showAddToTargetList: true, showRemoveButton: false, selectAllAvailable: true, pageName: 'MyTestPage'};
 
   beforeEach(function() {
@@ -10,11 +10,10 @@ describe('Unit: list controller', function() {
     angular.mock.module('cf.common.services');
     angular.mock.module('cf.common.components.list');
 
-    inject(function($rootScope, _$q_, _$httpBackend_, _$mdDialog_, _$state_, $controller, _$filter_, _closedOpportunitiesService_, _filtersService_, _loaderService_, _opportunitiesService_, _storesService_, _targetListService_, _toastService_, _userService_) {
+    inject(function($rootScope, _$q_, _$httpBackend_, _$mdDialog_, $controller, _$filter_, _closedOpportunitiesService_, _filtersService_, _loaderService_, _opportunitiesService_, _storesService_, _targetListService_, _toastService_, _userService_) {
       scope = $rootScope.$new();
       q = _$q_;
       mdDialog = _$mdDialog_;
-      state = _$state_;
       httpBackend = _$httpBackend_;
       filter = _$filter_;
 
@@ -452,7 +451,8 @@ describe('Unit: list controller', function() {
 
     it('should create a csvItem for each selected opportunity, and add it to the data array', () => {
       ctrl.selected = [opportunities[0]];
-      expect(ctrl.getCSVData()).toEqual([{
+      const dataPromise = ctrl.getCSVData();
+      expect(dataPromise.$$state.value).toEqual([{
         'storeDistributor': opportunities[0].store.distributors[0],
         'TDLinx': opportunities[0].store.id,
         'storeName': opportunities[0].store.name,
@@ -476,7 +476,8 @@ describe('Unit: list controller', function() {
 
     it('should add a rationale when provided as input', () => {
       ctrl.selected = [opportunities[0]];
-      expect(ctrl.getCSVData(true)).toEqual([{
+      const dataPromise = ctrl.getCSVData(true);
+      expect(dataPromise.$$state.value).toEqual([{
         'storeDistributor': opportunities[0].store.distributors[0],
         'TDLinx': opportunities[0].store.id,
         'storeName': opportunities[0].store.name,
@@ -501,7 +502,8 @@ describe('Unit: list controller', function() {
 
     it('should be able to parse when the distributor list is null', () => {
       ctrl.selected = [opportunities[1]];
-      expect(ctrl.getCSVData(false)).toEqual([{
+      const dataPromise = ctrl.getCSVData(false);
+      expect(dataPromise.$$state.value).toEqual([{
         'storeDistributor': '',
         'TDLinx': opportunities[1].store.id,
         'storeName': opportunities[1].store.name,
@@ -525,7 +527,8 @@ describe('Unit: list controller', function() {
 
     it('should take the brand as product name if the product name is null', () => {
       ctrl.selected = [opportunities[1]];
-      expect(ctrl.getCSVData(false)).toEqual([{
+      const dataPromise = ctrl.getCSVData(false);
+      expect(dataPromise.$$state.value).toEqual([{
         'storeDistributor': '',
         'TDLinx': opportunities[1].store.id,
         'storeName': opportunities[1].store.name,
@@ -1502,25 +1505,25 @@ describe('Unit: list controller', function() {
     it('should request the IDs of all the opportunities without limit when selectAllOpportunities is true', () => {
       ctrl.isAllOpportunitiesSelected = true;
       const addToTargetListdeferred = q.defer();
-      const opportunitiesIDsDeferred = q.defer();
+      const opportunitiesDeferred = q.defer();
 
       spyOn(targetListService, 'addTargetListOpportunities').and.callFake(() => {
         return addToTargetListdeferred.promise;
       });
 
-      spyOn(opportunitiesService, 'getAllOpportunitiesIDs').and.callFake(() => {
-        return opportunitiesIDsDeferred.promise;
+      spyOn(opportunitiesService, 'getOpportunities').and.callFake(() => {
+        return opportunitiesDeferred.promise;
       });
 
       ctrl.toggleSelectAllStores();
       ctrl.addToTargetList(listId);
 
       addToTargetListdeferred.resolve();
-      opportunitiesIDsDeferred.resolve();
+      opportunitiesDeferred.resolve([]);
       scope.$digest();
 
       expect(targetListService.addTargetListOpportunities).toHaveBeenCalled();
-      expect(opportunitiesService.getAllOpportunitiesIDs).toHaveBeenCalled();
+      expect(opportunitiesService.getOpportunities).toHaveBeenCalled();
     });
 
     it('should not call addToTargetService if opportunites are not selected', function() {

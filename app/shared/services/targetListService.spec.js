@@ -254,8 +254,6 @@ describe('[Services.targetListService]', function() {
                 product: {
                     brand: 'CORONA EXTRA'
                 },
-                highImpactSum: 0,
-                depletionSum: 0,
                 brands: ['corona extra', 'corona extra', 'corona extra'],
                 trend: NaN,
                 groupedOpportunities: [{
@@ -330,10 +328,10 @@ describe('[Services.targetListService]', function() {
                   }}]}]};
   });
 
-  it('should manipulate opportunitiy data', function() {
+  it('should manipulate opportunitiy data', () => {
       $httpBackend
-      .expect('GET', '/v2/targetLists/' + id + '/opportunities')
-      .respond(200, responseObject);
+        .expect('GET', '/v2/targetLists/' + id + '/opportunities')
+        .respond(200, responseObject);
 
       returnedPromise = targetListService.getAndUpdateTargetListStoresWithOpportunities(id, params);
       $httpBackend.flush();

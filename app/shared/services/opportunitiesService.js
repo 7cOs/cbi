@@ -91,9 +91,9 @@ module.exports = /*  @ngInject */
       const opportunitiesPromise = $q.defer();
 
       service.getOpportunities(areAllRequested)
-        .then((response) => {
-          const opportunities = response.data.opportunities.map(populateOpportunityData); // this will NOT work I'm sure
-          opportunitiesPromise.resolve(opportunities);
+        .then((opportunities) => {
+          const formattedOpportunities = opportunities.map(populateOpportunityData);
+          opportunitiesPromise.resolve(formattedOpportunities);
         })
         .catch(error => handleGetOpportunitiesFail(opportunitiesPromise, error));
 
@@ -202,7 +202,6 @@ module.exports = /*  @ngInject */
 
         if (!storeExists) {
           const store = angular.copy(opportunity);
-          store.depletionSum = 0;
           store.brands = [];
           store.store = setVsYAPercent(store.store);
 
