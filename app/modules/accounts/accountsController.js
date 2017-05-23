@@ -408,7 +408,20 @@ module.exports = /*  @ngInject */
         vm.currentTopBottomFilters.accounts = '';
         vm.currentTopBottomFilters.subAccounts = '';
         vm.currentTopBottomFilters.stores = '';
+
         chipsService.removeChip('account');
+        chipsService.removeChip('subaccount');
+        chipsService.removeChip('store');
+      } else if (type === 'selectedSubAccount') {
+        filtersService.model.selected.subaccount = [];
+        filtersService.model.selected.store = [];
+
+        filtersService.model.subaccount = '';
+        filtersService.model.store = '';
+
+        vm.currentTopBottomFilters.subAccounts = '';
+        vm.currentTopBottomFilters.stores = '';
+
         chipsService.removeChip('subaccount');
         chipsService.removeChip('store');
       } else if (type === 'selectedDistributor') {
@@ -615,6 +628,7 @@ module.exports = /*  @ngInject */
         case 'subAccounts':
           topBottomProp = 'subAccounts';
           filterModelProp = 'subaccount';
+          removeInlineSearch('selectedSubAccount');
           break;
         case 'store':
         case 'stores':
@@ -749,6 +763,9 @@ module.exports = /*  @ngInject */
         prevTab();
       }
       var params = getUpdatedFilterQueryParamsForBrand();
+
+      if (params.subaccount && params.account) delete params.account;
+
       if (vm.brandSelectedIndex === 0) {
         userService.getPerformanceBrand(params).then(function(data) {
           vm.brandTabs.brands = data.performance;
@@ -1165,6 +1182,14 @@ module.exports = /*  @ngInject */
       var params = filtersService.getAppliedFilters('topBottom');
       appendBrandParametersForTopBottom(params);
       params = myperformanceService.appendFilterParametersForTopBottom(params, vm.currentTopBottomFilters, vm.filtersService.model.selected.myAccountsOnly);
+
+      if (filtersService.model.selected.retailer === 'Store') {
+        delete params['account'];
+        delete params['subaccount'];
+        delete params['distributor'];
+        vm.filtersService.model.distributor = null;
+        vm.showXDistributor = false;
+      }
 
       vm.loadingTopBottom = true;
       params.additionalParams = getAppliedFiltersForTopBottom();
