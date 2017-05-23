@@ -5,12 +5,15 @@ import com.cbrands.pages.HomePage;
 import com.cbrands.pages.Login;
 import com.cbrands.pages.Logout;
 import org.testng.Assert;
-import org.testng.annotations.*;
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.DataProvider;
+import org.testng.annotations.Test;
 
 /**
  * Automated test for logging in and out of the web app.
  */
-public class LoginTest extends BaseTestCase{
+public class LoginTest extends BaseTestCase {
 
   private Login login;
   private Logout logout;
