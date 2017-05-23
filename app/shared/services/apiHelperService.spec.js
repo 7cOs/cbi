@@ -237,7 +237,7 @@ describe('[Services.apiHelperService]', function() {
         storeFormat: 'GM'
       };
       const url = 'http://localhost:3000/';
-      const resultExpectation = url + '?limit=20&sort=&offset=0&ignoreDismissed=true&brandOpportunityType=true&hispanicMarketType=GM&priorityPackage:true&filter=masterSKU%3A112154%2CpremiseType%3Aon%2C';
+      const resultExpectation = url + '?limit=20&sort=&offset=0&ignoreDismissed=true&brandOpportunityType=true&hispanicMarketType=GM&priorityPackage=true&filter=masterSKU%3A112154%2CpremiseType%3Aon%2C';
 
       const result = APIHelper.request(url, mockObject);
 

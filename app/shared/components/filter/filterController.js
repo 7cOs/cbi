@@ -11,8 +11,8 @@ module.exports = /*  @ngInject */
     const _noTypesSelected = 'No Types Selected';
     const _nonBuyOption = 'Non-Buy';
     let _isAllOpportunityTypeClicked = null;
-    let _isAllFeatureTypeSelected = false;
-    let _isAllItemAuthorizationTypeSelected = false;
+    let _isAllFeatureTypeBeingClicked = false;
+    let _isAllItemAuthorizationTypeBeingClicked = false;
 
     // Initial variables
     var vm = this;
@@ -47,7 +47,9 @@ module.exports = /*  @ngInject */
     vm.states = usStatesService;
     vm.chooseOpportunityType = chooseOpportunityType;
     vm.changeOpportunitySelection = changeOpportunitySelection;
+    vm.chooseFeatureType = chooseFeatureType;
     vm.changeFeatureTypeSelection = changeFeatureTypeSelection;
+    vm.chooseItemAuthorizationType = chooseItemAuthorizationType;
     vm.changeItemAuthorizationTypeSelection = changeItemAuthorizationTypeSelection;
     vm.featureTypeText = featureTypeText;
     vm.autorizationProductTypesText = autorizationProductTypesText;
@@ -177,14 +179,17 @@ module.exports = /*  @ngInject */
       }
     }
 
+    function chooseFeatureType(currentSelection) {
+      _isAllFeatureTypeBeingClicked = currentSelection === _allTypesOption;
+    }
+
     function changeFeatureTypeSelection() {
       const selected = vm.filtersService.model.selected;
 
       const currentlySelectedFeatureType = selected.featureType;
       const allFeatureTypes = vm.filtersService.model.featureType.map(type => type.name);
 
-      selected.featureType = adaptTypesSelection(currentlySelectedFeatureType, allFeatureTypes, _isAllFeatureTypeSelected);
-      _isAllFeatureTypeSelected = selected.featureType.length === allFeatureTypes.length;
+      selected.featureType = adaptTypesSelection(currentlySelectedFeatureType, allFeatureTypes, _isAllFeatureTypeBeingClicked);
     }
 
     /**
@@ -195,29 +200,31 @@ module.exports = /*  @ngInject */
      * @param {Array} isAllCurrentlySelected Whether or not "All Types" was selected before the user action.
      * @returns {Array} The array with the types updated.
      */
-    function adaptTypesSelection(currentlySelectedTypes, allTypes, isAllCurrentlySelected) {
+    function adaptTypesSelection(currentlySelectedTypes, allTypes, isAllBeingClicked) {
       const allTypesOptionIndex = currentlySelectedTypes.indexOf(_allTypesOption);
       const allTypesIsSelected = allTypesOptionIndex !== -1;
 
       let newSelectedTypes = currentlySelectedTypes;
 
-      if (isAllCurrentlySelected) {
+      if (isAllBeingClicked) {
         if (allTypesIsSelected) {
-          newSelectedTypes.splice(allTypesOptionIndex, 1);
+          newSelectedTypes = allTypes;
         } else {
           newSelectedTypes = [];
         }
       } else {
         if (allTypesIsSelected) {
+          newSelectedTypes.splice(allTypesOptionIndex, 1);
+        } else if (currentlySelectedTypes.length >= allTypes.length - 1) {
           newSelectedTypes = allTypes;
-        } else {
-          if (currentlySelectedTypes.length >= allTypes.length - 1) {
-            newSelectedTypes = allTypes;
-          }
         }
       }
 
       return newSelectedTypes;
+    }
+
+    function chooseItemAuthorizationType(currentSelection) {
+      _isAllItemAuthorizationTypeBeingClicked = currentSelection === _allTypesOption;
     }
 
     function changeItemAuthorizationTypeSelection() {
@@ -226,28 +233,22 @@ module.exports = /*  @ngInject */
       const currentlySelectedItemAuthorizationType = selected.itemAuthorizationType;
       const allFeatureTypes = vm.filtersService.model.itemAuthorizationType.map(type => type.name);
 
-      selected.itemAuthorizationType = adaptTypesSelection(currentlySelectedItemAuthorizationType, allFeatureTypes, _isAllItemAuthorizationTypeSelected);
-
-      _isAllItemAuthorizationTypeSelected = selected.itemAuthorizationType.length === allFeatureTypes.length;
+      selected.itemAuthorizationType = adaptTypesSelection(currentlySelectedItemAuthorizationType, allFeatureTypes, _isAllItemAuthorizationTypeBeingClicked);
     }
 
     function featureTypeText() {
-      return _isAllFeatureTypeSelected
+      return vm.filtersService.model.selected.featureType.length === vm.filtersService.model.featureType.length
         ? _allTypesOption
         : vm.filtersService.model.selected.featureType
-          ? filterOutAllTypes(vm.filtersService.model.selected.featureType).join(', ') || _noTypesSelected
+          ? vm.filtersService.model.selected.featureType.join(', ') || _noTypesSelected
           : _noTypesSelected;
     }
 
-    function filterOutAllTypes(types) {
-      return types.filter(type => type !== _allTypesOption);
-    }
-
     function autorizationProductTypesText() {
-      return _isAllItemAuthorizationTypeSelected
+      return vm.filtersService.model.selected.itemAuthorizationType.length === vm.filtersService.model.itemAuthorizationType.length
         ? _allTypesOption
         : vm.filtersService.model.selected.itemAuthorizationType
-          ? filterOutAllTypes(vm.filtersService.model.selected.itemAuthorizationType).join(', ') || _noTypesSelected
+          ? vm.filtersService.model.selected.itemAuthorizationType.join(', ') || _noTypesSelected
           : _noTypesSelected;
     }
 

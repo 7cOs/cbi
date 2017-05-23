@@ -259,14 +259,22 @@ module.exports = /*  @ngInject */
             filtersService.model.states.splice(index, 1);
             break;
           } else if (chip.type === 'featureType') {
-            index = arr.indexOf(chip.name);
-            arr.splice(index, 1);
-            filtersService.model.selected.featureType = arr;
+            if (chip.name === 'All Feature Product Types') {
+              filtersService.model.selected.featureType = [];
+            } else {
+              index = arr.indexOf(chip.name);
+              arr.splice(index, 1);
+              filtersService.model.selected.featureType = arr;
+            }
             break;
           } else if (chip.type === 'itemAuthorizationType') {
-            index = arr.indexOf(chip.name);
-            arr.splice(index, 1);
-            filtersService.model.selected.itemAuthorizationType = arr;
+            if (chip.name === 'All Authorized Product Types') {
+              filtersService.model.selected.itemAuthorizationType = [];
+            } else {
+              index = arr.indexOf(chip.name);
+              arr.splice(index, 1);
+              filtersService.model.selected.itemAuthorizationType = arr;
+            }
             break;
           }
         }

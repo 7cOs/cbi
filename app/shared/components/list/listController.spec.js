@@ -456,6 +456,7 @@ describe('Unit: list controller', function() {
         'storeDistributor': opportunities[0].store.distributors[0],
         'TDLinx': opportunities[0].store.id,
         'storeName': opportunities[0].store.name,
+        'storeNumber': opportunities[0].store.storeNumber,
         'storeAddress': opportunities[0].store.streetAddress,
         'storeCity': opportunities[0].store.city,
         'storeZip': opportunities[0].store.zip,
@@ -479,6 +480,7 @@ describe('Unit: list controller', function() {
         'storeDistributor': opportunities[0].store.distributors[0],
         'TDLinx': opportunities[0].store.id,
         'storeName': opportunities[0].store.name,
+        'storeNumber': opportunities[0].store.storeNumber,
         'storeAddress': opportunities[0].store.streetAddress,
         'storeCity': opportunities[0].store.city,
         'storeZip': opportunities[0].store.zip,
@@ -503,6 +505,7 @@ describe('Unit: list controller', function() {
         'storeDistributor': '',
         'TDLinx': opportunities[1].store.id,
         'storeName': opportunities[1].store.name,
+        'storeNumber': opportunities[1].store.storeNumber,
         'storeAddress': opportunities[1].store.streetAddress,
         'storeCity': opportunities[1].store.city,
         'storeZip': opportunities[1].store.zip,
@@ -526,6 +529,7 @@ describe('Unit: list controller', function() {
         'storeDistributor': '',
         'TDLinx': opportunities[1].store.id,
         'storeName': opportunities[1].store.name,
+        'storeNumber': opportunities[1].store.storeNumber,
         'storeAddress': opportunities[1].store.streetAddress,
         'storeCity': opportunities[1].store.city,
         'storeZip': opportunities[1].store.zip,
@@ -928,7 +932,7 @@ describe('Unit: list controller', function() {
       expect(opportunities[0].groupedOpportunities.length).toEqual(3);
       expect(selected[0].id).toEqual('0129597___80013469___20160929');
       expect(opportunities[0].groupedOpportunities[1].id).toEqual('0129597___80013469___20160929');
-      ctrl.updateOpportunityModel(opportunities, selected);
+      ctrl.updateOpportunityModel(opportunities, selected.map(selected => selected.id));
       expect(opportunities[0].groupedOpportunities.length).toEqual(2);
     });
 
@@ -942,7 +946,7 @@ describe('Unit: list controller', function() {
       }];
 
       expect(singleOpp[0].groupedOpportunities.length).toEqual(1);
-      ctrl.updateOpportunityModel(singleOpp, selected);
+      ctrl.updateOpportunityModel(singleOpp, selected.map(selected => selected.id));
       expect(singleOpp.length).toEqual(0);
     });
   });
