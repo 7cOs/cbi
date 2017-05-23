@@ -10,7 +10,7 @@ import org.testng.annotations.*;
 /**
  * Automated test for logging in and out of the web app.
  */
-public class LoginTest extends BaseTestCase{
+public class LoginTest extends BaseTestCase {
 
   private Login login;
   private Logout logout;
