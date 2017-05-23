@@ -1320,7 +1320,20 @@ describe('Unit: list controller', function() {
   describe('Add to target list functionality', function() {
     var listId = 'fc1a0734-a16e-4953-97da-bba51c4690f6';
 
-    beforeEach(function() {
+    beforeEach(() => {
+      ctrl.userService = {
+        model: {
+          targetLists: {
+            owned: [{
+              opportunitiesSummary: {
+                opportunitiesCount: 300
+              },
+              id: 'fakeID'
+            }]
+          }
+        }
+      };
+
       opportunitiesService.model.opportunities = [
         {
           'id': '1430039___80014014___20160929',
@@ -1480,11 +1493,9 @@ describe('Unit: list controller', function() {
       listId = 'fc1a0734-a16e-4953-97da-bba51c4690f6';
     });
 
-    it('should add opprtunities to target list', () => {
+    it('should add opportunities to target list', () => {
       var deferred = q.defer();
-      spyOn(targetListService, 'addTargetListOpportunities').and.callFake(function() {
-        return deferred.promise;
-      });
+      spyOn(targetListService, 'addTargetListOpportunities').and.callFake(() => deferred.promise);
 
       ctrl.toggleSelectAllStores();
       ctrl.addToTargetList(listId);
@@ -1512,7 +1523,7 @@ describe('Unit: list controller', function() {
       ctrl.addToTargetList(listId);
 
       addToTargetListdeferred.resolve();
-      opportunitiesIDsDeferred.resolve();
+      opportunitiesIDsDeferred.resolve('fake1', 'fake2');
       scope.$digest();
 
       expect(targetListService.addTargetListOpportunities).toHaveBeenCalled();
@@ -1885,23 +1896,23 @@ describe('Unit: list controller', function() {
     });
 
     it('Should have enough opportunities spots remaining to add to target list', () => {
-      spyOn(ctrl, 'addToTargetList').and.callFake(() => {
-        return;
+      const addToTargetListPromise = q.defer();
+      const opportunityIDsPromise = q.defer();
+
+      spyOn(ctrl, 'addToTargetList').and.callThrough();
+
+      spyOn(targetListService, 'addTargetListOpportunities').and.callFake(() => {
+        return addToTargetListPromise.promise;
       });
 
-      ctrl.selected = {
-        length: 1
-      };
+      ctrl.selected = ['fake1'];
 
+      debugger;
       const targetList = {
         opportunitiesSummary: {
           opportunitiesCount: 300
         },
         id: 'fakeID'
-      };
-
-      userService.model.targetLists = {
-        owned: [targetList]
       };
 
       filtersService.model.appliedFilter.pagination.totalOpportunities = 5000;
@@ -1911,11 +1922,12 @@ describe('Unit: list controller', function() {
       };
 
       ctrl.handleAddToTargetList(fakeEvent, targetList, 0);
+      opportunityIDsPromise.resolve(['fake1']);
+      addToTargetListPromise.resolve(true);
 
       scope.$digest();
 
-      expect(ctrl.addToTargetList).toHaveBeenCalled();
-      expect(userService.model.targetLists.owned[0].opportunitiesSummary.opportunitiesCount).toEqual(301);
+      expect(ctrl.userService.model.targetLists.owned[0].opportunitiesSummary.opportunitiesCount).toEqual(301);
     });
   });
 
