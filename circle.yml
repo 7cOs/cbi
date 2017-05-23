@@ -17,6 +17,7 @@ test:
 
   post:
     - cp -r coverage/* $CIRCLE_ARTIFACTS
+    - bash <(curl -s https://codecov.io/bash) -f coverage/lcov.info
     - mkdir -p $CIRCLE_TEST_REPORTS/testng/
     - find . -type f -regex ".*/target/surefire-reports/.*html" -exec cp {} $CIRCLE_TEST_REPORTS/testng/ \;
 
@@ -29,7 +30,6 @@ deployment:
     branch: test
     commands:
       - git push git@heroku.com:app-orion-qa.git $CIRCLE_SHA1:master -f
-      # - git push git@heroku.com:app-compass-loadtest.git $CIRCLE_SHA1:master -f
       - cd automation-test && mvn test
   poc:
     branch: staging
