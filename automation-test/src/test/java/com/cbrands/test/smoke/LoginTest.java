@@ -5,10 +5,7 @@ import com.cbrands.pages.HomePage;
 import com.cbrands.pages.Login;
 import com.cbrands.pages.Logout;
 import org.testng.Assert;
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.DataProvider;
-import org.testng.annotations.Test;
+import org.testng.annotations.*;
 
 /**
  * Automated test for logging in and out of the web app.
@@ -30,6 +27,7 @@ public class LoginTest extends BaseTestCase {
   @AfterMethod
   public void tearDown() {
     logout.logoutViaUrl();
+    Assert.assertTrue(logout.isOnLogoutPage(), "Failure logging out.\n");
   }
 
   @Test(dataProvider = "userCredentials", description = "Testing basic login and logout")

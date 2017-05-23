@@ -7,18 +7,16 @@ import com.cbrands.listener.SeleniumSnapshotRule;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openqa.selenium.WebDriver;
-import org.testng.annotations.AfterSuite;
-import org.testng.annotations.BeforeSuite;
-import org.testng.annotations.Listeners;
+import org.testng.annotations.*;
 
 import java.net.MalformedURLException;
 
 @Listeners(value = SeleniumSnapshotRule.class)
 public abstract class BaseTestCase {
+  protected static WebDriver driver;
+  protected static String webAppBaseUrl;
 
   protected Log log = LogFactory.getLog(BaseTestCase.class);
-  protected WebDriver driver;
-  protected String webAppBaseUrl;
 
   @BeforeSuite
   public void setUpSuite() throws MalformedURLException {
