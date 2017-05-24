@@ -29,7 +29,7 @@ module.exports = /*  @ngInject */
     vm.selectPremiseType = selectPremiseType;
 
     // Set values
-    vm.greeting = getGreeting();
+    vm.greetingName = getGreetingName();
 
     init();
 
@@ -105,22 +105,8 @@ module.exports = /*  @ngInject */
     // PRIVATE METHODS
     // ***************
 
-    function getGreeting() {
-      var myDate = new Date(),
-          hrs = myDate.getHours(),
-          greet;
-
-      if (hrs < 12) {
-        greet = 'Good morning';
-      } else if (hrs >= 12 && hrs <= 17) {
-        greet = 'Good afternoon';
-      } else if (hrs >= 17 && hrs <= 24) {
-        greet = 'Good evening';
-      }
-
-      var person = $filter('titlecase')(userService.model.currentUser.firstName);
-
-      return greet + ', ' + person + '!';
+    function getGreetingName() {
+      return $filter('titlecase')(userService.model.currentUser.firstName);
     }
 
     function init() {
