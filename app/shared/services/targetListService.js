@@ -38,8 +38,8 @@ module.exports = /*  @ngInject */
           url = apiHelperService.request('/v2/targetLists/' + targetListId, p);
 
       $http.get(url)
-        .then(getTargetListSuccess)
-        .catch(getTargetListFail);
+      .then(getTargetListSuccess)
+      .catch(getTargetListFail);
 
       function getTargetListSuccess(response) {
         targetListPromise.resolve(response.data);
@@ -72,8 +72,8 @@ module.exports = /*  @ngInject */
       payload.collaborateAndInvite = p.collaborateAndInvite;
 
       $http.patch(url, payload)
-        .then(updateTargetListSuccess)
-        .catch(updateTargetListFail);
+      .then(updateTargetListSuccess)
+      .catch(updateTargetListFail);
 
       function updateTargetListSuccess(response) {
         targetListPromise.resolve(response.data);
@@ -98,8 +98,8 @@ module.exports = /*  @ngInject */
           url = apiHelperService.request('/v2/targetLists/' + targetListId);
 
       $http.delete(url)
-        .then(deleteTargetListSuccess)
-        .catch(deleteTargetListFail);
+      .then(deleteTargetListSuccess)
+      .catch(deleteTargetListFail);
 
       function deleteTargetListSuccess(response) {
         targetListPromise.resolve(response.data);
@@ -123,8 +123,8 @@ module.exports = /*  @ngInject */
       var targetListPromise = $q.defer();
 
       getFormattedTargetListOpportunities(targetListId, params)
-        .then(getAndUpdateTargetListStoresWithOpportunitiesSuccess)
-        .catch(getAndUpdateTargetListStoresWithOpportunitiesFail);
+      .then(getAndUpdateTargetListStoresWithOpportunitiesSuccess)
+      .catch(getAndUpdateTargetListStoresWithOpportunitiesFail);
 
       function getAndUpdateTargetListStoresWithOpportunitiesSuccess(opportunities) {
         const storesWithOpportunties = opportunitiesService.groupOpportunitiesByStore(opportunities);
@@ -151,10 +151,10 @@ module.exports = /*  @ngInject */
       const opportunitiesPromise = $q.defer();
 
       service.getTargetListOpportunities(targetListId, params)
-        .then((opportunities) => {
-          opportunitiesPromise.resolve(opportunities.map(opportunitiesService.populateOpportunityData));
-        })
-        .catch(error => opportunitiesPromise.reject(error));
+      .then(opportunities => {
+        opportunitiesPromise.resolve(opportunities.map(opportunitiesService.populateOpportunityData));
+      })
+      .catch(error => opportunitiesPromise.reject(error));
 
       return opportunitiesPromise.promise;
     }
@@ -174,8 +174,8 @@ module.exports = /*  @ngInject */
       const url = apiHelperService.request('/v2/targetLists/' + targetListId + '/opportunities', filterPayload);
 
       $http.get(url)
-        .then(getTargetListOpportunitiesSuccess)
-        .catch(getTargetListOpportunitiesFail);
+      .then(getTargetListOpportunitiesSuccess)
+      .catch(getTargetListOpportunitiesFail);
 
       function getTargetListOpportunitiesSuccess(response) {
         opportunitiesPromise.resolve(response.data.opportunities);
@@ -202,8 +202,8 @@ module.exports = /*  @ngInject */
           payload = opportunityIds;
 
       $http.post(url, payload)
-        .then(addTargetListOpportunitiesSuccess)
-        .catch(addTargetListOpportunitiesFail);
+      .then(addTargetListOpportunitiesSuccess)
+      .catch(addTargetListOpportunitiesFail);
 
       function addTargetListOpportunitiesSuccess(response) {
         targetListPromise.resolve(response.data);
@@ -232,8 +232,9 @@ module.exports = /*  @ngInject */
         method: 'DELETE',
         data: payload,
         headers: {'Content-Type': 'application/json;charset=utf-8'}
-      }).then(deleteTargetListOpportunitiesSuccess)
-        .catch(deleteTargetListOpportunitiesFail);
+      })
+      .then(deleteTargetListOpportunitiesSuccess)
+      .catch(deleteTargetListOpportunitiesFail);
 
       function deleteTargetListOpportunitiesSuccess(response) {
         targetListPromise.resolve(response.data);
@@ -259,8 +260,8 @@ module.exports = /*  @ngInject */
           url = apiHelperService.request('/v2/targetLists/' + targetListId + '/shares/');
 
       $http.get(url)
-        .then(getTargetListSharesSuccess)
-        .catch(getTargetListSharesFail);
+      .then(getTargetListSharesSuccess)
+      .catch(getTargetListSharesFail);
 
       function getTargetListSharesSuccess(response) {
         targetListPromise.resolve(response.data);
@@ -287,8 +288,8 @@ module.exports = /*  @ngInject */
           payload = collaborators;
 
       $http.post(url, payload)
-        .then(addTargetListSharesSuccess)
-        .catch(addTargetListSharesFail);
+      .then(addTargetListSharesSuccess)
+      .catch(addTargetListSharesFail);
 
       function addTargetListSharesSuccess(response) {
         targetListPromise.resolve(response);
@@ -319,8 +320,8 @@ module.exports = /*  @ngInject */
           }];
 
       $http.patch(url, payload)
-        .then(updateTargetListSharesSuccess)
-        .catch(updateTargetListSharesFail);
+      .then(updateTargetListSharesSuccess)
+      .catch(updateTargetListSharesFail);
 
       function updateTargetListSharesSuccess(response) {
         targetListPromise.resolve(response.data);
@@ -351,8 +352,8 @@ module.exports = /*  @ngInject */
         data: payload,
         headers: {'Content-Type': 'application/json;charset=utf-8'}
       })
-        .then(deleteTargetListSharesSuccess)
-        .catch(deleteTargetListSharesFail);
+      .then(deleteTargetListSharesSuccess)
+      .catch(deleteTargetListSharesFail);
 
       function deleteTargetListSharesSuccess(response) {
         targetListPromise.resolve(response.data);

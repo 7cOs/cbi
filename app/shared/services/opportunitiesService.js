@@ -37,15 +37,14 @@ module.exports = /*  @ngInject */
      */
     function getAndUpdateStoresWithOpportunities(opportunityID) {
       const opportunitiesPromise = $q.defer();
-      service.model.opportunities = [];
 
       service.getFormattedStoresWithOpportunities(opportunityID)
-        .then((storesWithOpportunities) => {
-          service.model.opportunities = storesWithOpportunities;
+      .then(storesWithOpportunities => {
+        service.model.opportunities = storesWithOpportunities;
 
-          opportunitiesPromise.resolve(storesWithOpportunities);
-        })
-        .catch(error => opportunitiesPromise.reject(error));
+        opportunitiesPromise.resolve(storesWithOpportunities);
+      })
+      .catch(error => opportunitiesPromise.reject(error));
 
       return opportunitiesPromise.promise;
     }
@@ -91,11 +90,11 @@ module.exports = /*  @ngInject */
       const opportunitiesPromise = $q.defer();
 
       service.getOpportunities(areAllRequested)
-        .then((opportunities) => {
-          const formattedOpportunities = opportunities.map(populateOpportunityData);
-          opportunitiesPromise.resolve(formattedOpportunities);
-        })
-        .catch(error => handleGetOpportunitiesFail(opportunitiesPromise, error));
+      .then(opportunities => {
+        const formattedOpportunities = opportunities.map(populateOpportunityData);
+        opportunitiesPromise.resolve(formattedOpportunities);
+      })
+      .catch(error => handleGetOpportunitiesFail(opportunitiesPromise, error));
 
       return opportunitiesPromise.promise;
     }
@@ -115,10 +114,10 @@ module.exports = /*  @ngInject */
       const url = apiHelperService.request('/v2/opportunities/', filterPayload);
 
       $http.get(url)
-        .then((response) => {
-          opportunitiesPromise.resolve(response.data.opportunities);
-        })
-        .catch(error => handleGetOpportunitiesFail(opportunitiesPromise, error));
+      .then(response => {
+        opportunitiesPromise.resolve(response.data.opportunities);
+      })
+      .catch(error => handleGetOpportunitiesFail(opportunitiesPromise, error));
 
       return opportunitiesPromise.promise;
     }
@@ -135,11 +134,11 @@ module.exports = /*  @ngInject */
       const url = apiHelperService.request('/v2/opportunities/' + opportunityID);
 
       $http.get(url)
-        .then((response) => {
-          const opportunities = [response.data.opportunities].map(populateOpportunityData);
-          opportunitiesPromise.resolve(opportunities);
-        })
-        .catch(error => handleGetOpportunitiesFail(opportunitiesPromise, error));
+      .then(response => {
+        const opportunities = [response.data.opportunities].map(populateOpportunityData);
+        opportunitiesPromise.resolve(opportunities);
+      })
+      .catch(error => handleGetOpportunitiesFail(opportunitiesPromise, error));
 
       return opportunitiesPromise.promise;
     }
@@ -239,8 +238,8 @@ module.exports = /*  @ngInject */
           url = apiHelperService.request('/v2/opportunities/', filtersService.getAppliedFilters('opportunities'));
 
       $http.head(url)
-        .then(getOpportunitiesHeadersSuccess)
-        .catch(getOpportunitiesHeadersFail);
+      .then(getOpportunitiesHeadersSuccess)
+      .catch(getOpportunitiesHeadersFail);
 
       function getOpportunitiesHeadersSuccess(response) {
         const numberOfOpps = parseInt(response.headers()['opportunity-count']);
@@ -279,7 +278,8 @@ module.exports = /*  @ngInject */
         method: 'POST',
         data: payload,
         headers: {'Content-Type': 'application/json;charset=utf-8'}
-      }).then(createOpportunitiesSuccess)
+      })
+      .then(createOpportunitiesSuccess)
       .catch(createOpportunitiesFail);
 
       function createOpportunitiesSuccess(response) {
