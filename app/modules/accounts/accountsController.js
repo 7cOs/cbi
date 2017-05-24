@@ -116,7 +116,7 @@ module.exports = /*  @ngInject */
 
     // Expose public methods
     vm.allOpportunitiesDisabled = allOpportunitiesDisabled;
-    vm.apply = apply;
+    vm.disableApplyFilter = disableApplyFilter;
     vm.checkForDepOrDistValue = checkForDepOrDistValue;
     vm.checkIfVelocityPresent = checkIfVelocityPresent;
     vm.currentTopBottomView = null;
@@ -172,7 +172,7 @@ module.exports = /*  @ngInject */
       return true;
     }
 
-    function apply(bool) {
+    function disableApplyFilter(bool) {
       vm.disableApply = bool;
     }
 
@@ -397,28 +397,45 @@ module.exports = /*  @ngInject */
       vm[type] = '';
 
       if (type === 'selectedStore') {
-        filtersService.model.selected.account = [];
-        filtersService.model.selected.subaccount = [];
-        filtersService.model.selected.store = [];
-
-        filtersService.model.account = '';
-        filtersService.model.subaccount = '';
-        filtersService.model.store = '';
-
-        vm.currentTopBottomFilters.accounts = '';
-        vm.currentTopBottomFilters.subAccounts = '';
-        vm.currentTopBottomFilters.stores = '';
-        chipsService.removeChip('account');
-        chipsService.removeChip('subaccount');
-        chipsService.removeChip('store');
+        clearAccountModels();
+        clearSubAccountModels();
+        clearStoreModels();
+      } else if (type === 'selectedSubAccount') {
+        clearSubAccountModels();
+        clearStoreModels();
       } else if (type === 'selectedDistributor') {
+        clearDistributorModels();
+      }
+
+      disableApplyFilter(false);
+
+      function clearStoreModels() {
+        filtersService.model.selected.store = [];
+        filtersService.model.store = '';
+        vm.currentTopBottomFilters.stores = '';
+        chipsService.removeChip('store');
+      }
+
+      function clearSubAccountModels() {
+        filtersService.model.selected.subaccount = [];
+        filtersService.model.subaccount = '';
+        vm.currentTopBottomFilters.subAccounts = '';
+        chipsService.removeChip('subaccount');
+      }
+
+      function clearAccountModels() {
+        filtersService.model.selected.account = [];
+        filtersService.model.account = '';
+        vm.currentTopBottomFilters.accounts = '';
+        chipsService.removeChip('account');
+      }
+
+      function clearDistributorModels() {
         filtersService.model.selected.distributor = [];
         filtersService.model.distributor = '';
         chipsService.removeChip('distributor');
         vm.currentTopBottomFilters.distributors = '';
       }
-
-      apply(false);
     }
 
     function resetFilters() {
@@ -431,7 +448,7 @@ module.exports = /*  @ngInject */
       filtersService.model.filtersValidCount = 0;
       initDefaultModelValues();
       setUserSpecificModels();
-      apply(false);
+      disableApplyFilter(false);
       // Go back to distributor level. Get the updated data for distributors
       resetTopBottom();
       updateBrandSnapshot();
@@ -597,8 +614,6 @@ module.exports = /*  @ngInject */
     }
 
     function setFilter(result, filterModelProperty) {
-      var i = 0;
-
       // click through result.type is undefined, but on search you need result.type
       var switchStr = filterModelProperty;
       if (result.type) switchStr = result.type;
@@ -611,11 +626,13 @@ module.exports = /*  @ngInject */
         case 'accounts':
           topBottomProp = 'accounts';
           filterModelProp = 'account';
+          removeInlineSearch('selectedStore');
           break;
         case 'subaccount':
         case 'subAccounts':
           topBottomProp = 'subAccounts';
           filterModelProp = 'subaccount';
+          removeInlineSearch('selectedSubAccount');
           break;
         case 'store':
         case 'stores':
@@ -630,9 +647,7 @@ module.exports = /*  @ngInject */
 
       // set filters service model selected
       if (result.ids) {
-        for (i = 0; i < result.ids.length; i++) {
-          filtersService.model.selected[filterModelProp][0] = result.ids[i];
-        }
+        filtersService.model.selected[filterModelProp] = result.ids;
       } else {
         if (result.id.constructor === Array) {
           filtersService.model.selected[filterModelProp] = result.id;
@@ -692,7 +707,7 @@ module.exports = /*  @ngInject */
       } else {
         chipsService.addAutocompleteChip(result.name, filterModelProp, false);
       }
-      apply(false);
+      disableApplyFilter(false);
 
       filtersService.model[filterModelProperty] = result.name;
 
@@ -752,6 +767,9 @@ module.exports = /*  @ngInject */
         prevTab();
       }
       var params = getUpdatedFilterQueryParamsForBrand();
+
+      if (params.subaccount && params.account) delete params.account;
+
       if (vm.brandSelectedIndex === 0) {
         userService.getPerformanceBrand(params).then(function(data) {
           vm.brandTabs.brands = data.performance;
@@ -767,7 +785,7 @@ module.exports = /*  @ngInject */
           }, 500);
         });
       }
-      apply(true);
+      disableApplyFilter(true);
     }
 
     function updateChip(name, chip) {
@@ -778,7 +796,7 @@ module.exports = /*  @ngInject */
         // filter.resetTradeChannels() -- do we need to do this so the trade channels are correct based on filter
       }
 
-      vm.apply(false);
+      vm.disableApplyFilter(false);
     }
 
     function updateDistributionTimePeriod(value) {
@@ -1168,6 +1186,15 @@ module.exports = /*  @ngInject */
       var params = filtersService.getAppliedFilters('topBottom');
       appendBrandParametersForTopBottom(params);
       params = myperformanceService.appendFilterParametersForTopBottom(params, vm.currentTopBottomFilters, vm.filtersService.model.selected.myAccountsOnly);
+
+      if (filtersService.model.selected.retailer === 'Store') {
+        delete params['account'];
+        delete params['subaccount'];
+        delete params['distributor'];
+        vm.filtersService.model.distributor = null;
+        vm.showXDistributor = false;
+      }
+
       vm.loadingTopBottom = true;
       params.additionalParams = getAppliedFiltersForTopBottom();
       userService.getTopBottomSnapshot(vm.currentTopBottomAcctType, params).then(function(data) {
