@@ -315,6 +315,45 @@ describe('Unit: opportunitiesService - get opportunities', function() {
     });
   });
 
+  describe('getFormattedSingleOpportunity', () => {
+    it('get opportunities', () => {
+       $httpBackend
+         .expect('GET', '/v2/opportunities/123')
+         .respond(200, {opportunities: opportunitiesResponseObject.opportunities[0]});
+
+       let opportunity;
+       opportunitiesService.getFormattedSingleOpportunity('123').then((opp) => {
+         opportunity = opp;
+       });
+
+       $httpBackend.flush();
+       expect(opportunity).toEqual({
+         depletionsCurrentYearToDate: 5,
+         depletionsCurrentYearToDateYA: 0,
+         depletionsCurrentYearToDateYAPercent: '+100%',
+         depletionsCurrentYearToDateYAPercentNegative: false,
+         featureTypeCode: null,
+         id: '0516096_80013460_20170131',
+         isChainMandate: 'Y',
+         isItemAuthorization: 'Y',
+         isOnFeature: 'N',
+         itemAuthorizationCode: 'CM',
+         product: {
+           brand: 'CORONA EXTRA'
+         },
+         store: {
+           address: '515 N WESTERN AVE, CHICAGO, IL 606121421',
+           depletionsCurrentYearToDate: 0,
+           depletionsCurrentYearToDateYA: 2886.8334,
+           depletionsCurrentYearToDateYAPercent: '-100%',
+           depletionsCurrentYearToDateYAPercentNegative: true,
+           id: '1401904',
+           unsold: false
+         }
+       });
+    });
+  });
+
   describe('getAndUpdateStoresWithOpportunities', () => {
     it('updates with opportunities properly formatted', () => {
         $httpBackend

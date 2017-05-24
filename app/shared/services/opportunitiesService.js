@@ -14,6 +14,7 @@ module.exports = /*  @ngInject */
       getFormattedStoresWithOpportunities: getFormattedStoresWithOpportunities,
       getFormattedOpportunities: getFormattedOpportunities,
       getOpportunities: getOpportunities,
+      getFormattedSingleOpportunity: getFormattedSingleOpportunity,
       getOpportunitiesHeaders: getOpportunitiesHeaders,
       groupOpportunitiesByStore: groupOpportunitiesByStore,
       populateOpportunityData: populateOpportunityData,
@@ -31,14 +32,13 @@ module.exports = /*  @ngInject */
     /**
      * @name getAndUpdateStoresWithOpportunities
      * @desc Get opportunities from API and update the model
-     * @params {String} opportunityID - ID of opportunity [optional]
      * @returns {Object}
      * @memberOf cf.common.services
      */
-    function getAndUpdateStoresWithOpportunities(opportunityID) {
+    function getAndUpdateStoresWithOpportunities() {
       const opportunitiesPromise = $q.defer();
 
-      service.getFormattedStoresWithOpportunities(opportunityID)
+      service.getFormattedStoresWithOpportunities()
       .then(storesWithOpportunities => {
         service.model.opportunities = storesWithOpportunities;
 
@@ -52,19 +52,15 @@ module.exports = /*  @ngInject */
     /**
      * @name getFormattedStoresWithOpportunities
      * @desc Get opportunities from API and update the model, massages the data with populateOpportunityData
-     * @params {String} opportunityID - ID of opportunity [optional]
      * @returns {Object}
      * @memberOf cf.common.services
      */
-    function getFormattedStoresWithOpportunities(opportunityID) {
+    function getFormattedStoresWithOpportunities() {
+      debugger;
       const opportunitiesPromise = $q.defer();
       service.model.noOpportunitiesFound = false;
 
-      const fetchDataPromise = opportunityID
-        ? getFormattedSingleOpportunity(opportunityID)
-        : getFormattedOpportunities(false);
-
-      fetchDataPromise.then(getOpportunitiesSuccess);
+      getFormattedOpportunities(false).then(getOpportunitiesSuccess);
 
       function getOpportunitiesSuccess(opportunities) {
         opportunities = opportunities.map(populateOpportunityData);
@@ -87,6 +83,7 @@ module.exports = /*  @ngInject */
      * @memberOf cf.common.services
      */
     function getFormattedOpportunities(areAllRequested) {
+      debugger;
       const opportunitiesPromise = $q.defer();
 
       service.getOpportunities(areAllRequested)
@@ -107,6 +104,7 @@ module.exports = /*  @ngInject */
      * @memberOf cf.common.services
      */
     function getOpportunities(areAllRequested) {
+      debugger;
       apiHelperService.model.bulkQuery = areAllRequested;
 
       const opportunitiesPromise = $q.defer();
@@ -135,7 +133,7 @@ module.exports = /*  @ngInject */
 
       $http.get(url)
       .then(response => {
-        const opportunities = [response.data.opportunities].map(populateOpportunityData);
+        const opportunities = populateOpportunityData(response.data.opportunities);
         opportunitiesPromise.resolve(opportunities);
       })
       .catch(error => handleGetOpportunitiesFail(opportunitiesPromise, error));

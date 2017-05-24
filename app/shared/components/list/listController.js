@@ -214,7 +214,7 @@ module.exports = /*  @ngInject */
       if (vm.isAllOpportunitiesSelected) {
         const getIdsPromise = vm.pageName === 'target-list-detail'
           ? targetListService.getTargetListOpportunities(vm.targetListService.model.currentList.id)
-          : opportunitiesService.getOpportunities();
+          : opportunitiesService.getOpportunities(true);
 
           getIdsPromise.then(opportunities => opportunityIdsPromise.resolve(opportunities.map(opportunity => opportunity.id)));
 
