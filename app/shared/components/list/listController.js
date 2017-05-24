@@ -190,8 +190,9 @@ module.exports = /*  @ngInject */
         loaderService.openLoader(true);
 
         let opportunityIdsPromise = opportunityIdsToCopy();
-        opportunityIdsPromise.then((opportunityIds) => {
-          targetListService.addTargetListOpportunities(listId, opportunityIds).then(function(data) {
+        opportunityIdsPromise.then(opportunityIds => {
+          targetListService.addTargetListOpportunities(listId, opportunityIds).then(() => {
+            updateTargetListOpportunityCountByListID(listId, opportunityIds.length);
             updateCopiedOpportunities();
             vm.toggleSelectAllStores(false);
 
@@ -284,14 +285,12 @@ module.exports = /*  @ngInject */
     }
 
     function saveNewList(e) {
-      const newTargetListIdx = 0; // newly created targetList will always be at 0 index
       vm.buttonDisabled = true;
 
       // Create target list
       userService.addTargetList(vm.newList).then(function(response) {
         $analytics.eventTrack('Add to Target List', {category: vm.analyticsCategory, label: response.id});
         vm.addToTargetList(response.id);
-        updateTargetListOpportunitySummary(newTargetListIdx, vm.selected.length);
         vm.closeModal();
         vm.buttonDisabled = false;
 
@@ -439,6 +438,7 @@ module.exports = /*  @ngInject */
       targetListService.getTargetListOpportunityIDs(targetListService.model.currentList.id).then(opportunityIds => {
         targetListService.deleteTargetListOpportunities(targetListService.model.currentList.id, opportunityIds).then(response => {
           updateOpportunityModel(opportunitiesService.model.opportunities, opportunityIds);
+          updateTargetListOpportunityCountByListID(targetListService.model.currentList.id, 0 - opportunityIds.length);
         }).catch((err) => {
             console.log('Error deleting these ids: ', opportunityIds, ' Responded with error: ', err);
         }).finally(() => {
@@ -456,8 +456,8 @@ module.exports = /*  @ngInject */
         removeAllOpportunities();
       } else {
         targetListService.deleteTargetListOpportunities(targetListService.model.currentList.id, opportunityIds).then(function(data) {
-          updateOpportunityCountAfterRemoval();
           updateOpportunityModel(opportunitiesService.model.opportunities, opportunityIds);
+          updateTargetListOpportunityCountByListID(targetListService.model.currentList.id, 0 - opportunityIds.length);
         }, function(err) {
           console.log('Error deleting these ids: ', opportunityIds, ' Responded with error: ', err);
         }).finally(() => { vm.loadingList = false; });
@@ -883,7 +883,6 @@ module.exports = /*  @ngInject */
       const hasRemainingOpps = totalOpps <= maxOpportunities;
       if (hasRemainingOpps) {
         vm.addToTargetList(targetList.id);
-        updateTargetListOpportunitySummary(idx, this.selected.length);
       } else {
         const parentEl = angular.element(document.body);
         $mdDialog.show({
@@ -986,16 +985,13 @@ module.exports = /*  @ngInject */
       };
     }
 
-    function updateTargetListOpportunitySummary(idxOfTargetList, numberToAdd) {
+    function updateTargetListOpportunityCount(idxOfTargetList, numberToAdd) {
       vm.userService.model.targetLists.owned[idxOfTargetList].opportunitiesSummary.opportunitiesCount += numberToAdd;
     }
 
-    function updateOpportunityCountAfterRemoval() {
-      vm.userService.model.targetLists.owned.map((targetList, idx) => {
-        if (targetList.id === vm.targetListService.model.currentList.id) {
-          return updateTargetListOpportunitySummary(idx, (0 - vm.selected.length));
-        }
-      });
+    function updateTargetListOpportunityCountByListID(listID, opportunityCount) {
+      const foundListIdx = vm.userService.model.targetLists.owned.findIndex(targetList => targetList.id === listID);
+      if (foundListIdx > -1) updateTargetListOpportunityCount(foundListIdx, opportunityCount);
     }
 
     function init() {
