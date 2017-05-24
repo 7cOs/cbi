@@ -732,11 +732,11 @@ describe('Unit: accountsController', function() {
     it('Should set ctrl.disableApply to whatever is passed in', function() {
       expect(ctrl.disableApply).toEqual(true);
 
-      ctrl.apply(true);
+      ctrl.disableApplyFilter(true);
 
       expect(ctrl.disableApply).toEqual(true);
 
-      ctrl.apply(false);
+      ctrl.disableApplyFilter(false);
 
       expect(ctrl.disableApply).toEqual(false);
     });
@@ -988,7 +988,7 @@ describe('Unit: accountsController', function() {
     beforeEach(function() {
       spyOn(chipsService, 'updateChip').and.callThrough();
       spyOn(chipsService, 'addChip').and.callThrough();
-      spyOn(ctrl, 'apply').and.callThrough();
+      spyOn(ctrl, 'disableApplyFilter').and.callThrough();
     });
 
     it('Should update my accounts only chip', function() {
@@ -997,8 +997,8 @@ describe('Unit: accountsController', function() {
       expect(chipsService.updateChip).not.toHaveBeenCalled();
       expect(chipsService.addChip.calls.count()).toEqual(0);
       expect(chipsService.addChip).not.toHaveBeenCalled();
-      expect(ctrl.apply.calls.count()).toEqual(0);
-      expect(ctrl.apply).not.toHaveBeenCalled();
+      expect(ctrl.disableApplyFilter.calls.count()).toEqual(0);
+      expect(ctrl.disableApplyFilter).not.toHaveBeenCalled();
       // run
       ctrl.updateChip('My Accounts Only', 'myAccountsOnly');
       // assert
@@ -1006,8 +1006,8 @@ describe('Unit: accountsController', function() {
       expect(chipsService.updateChip).toHaveBeenCalled();
       expect(chipsService.addChip.calls.count()).toEqual(0);
       expect(chipsService.addChip).not.toHaveBeenCalled();
-      expect(ctrl.apply.calls.count()).toEqual(1);
-      expect(ctrl.apply).toHaveBeenCalled();
+      expect(ctrl.disableApplyFilter.calls.count()).toEqual(1);
+      expect(ctrl.disableApplyFilter).toHaveBeenCalled();
     });
 
     it('Should update premise type chip', function() {
@@ -1016,8 +1016,8 @@ describe('Unit: accountsController', function() {
       expect(chipsService.updateChip).not.toHaveBeenCalled();
       expect(chipsService.addChip.calls.count()).toEqual(0);
       expect(chipsService.addChip).not.toHaveBeenCalled();
-      expect(ctrl.apply.calls.count()).toEqual(0);
-      expect(ctrl.apply).not.toHaveBeenCalled();
+      expect(ctrl.disableApplyFilter.calls.count()).toEqual(0);
+      expect(ctrl.disableApplyFilter).not.toHaveBeenCalled();
       // run
       ctrl.updateChip('On-Premise', 'premiseType');
       // assert
@@ -1025,8 +1025,8 @@ describe('Unit: accountsController', function() {
       expect(chipsService.updateChip).not.toHaveBeenCalled();
       expect(chipsService.addChip.calls.count()).toEqual(1);
       expect(chipsService.addChip).toHaveBeenCalled();
-      expect(ctrl.apply.calls.count()).toEqual(1);
-      expect(ctrl.apply).toHaveBeenCalled();
+      expect(ctrl.disableApplyFilter.calls.count()).toEqual(1);
+      expect(ctrl.disableApplyFilter).toHaveBeenCalled();
     });
 
     it('Should update premise type chip and remove the existing one if it already exists (off -> on)', function() {
@@ -1035,8 +1035,8 @@ describe('Unit: accountsController', function() {
       expect(chipsService.updateChip).not.toHaveBeenCalled();
       expect(chipsService.addChip.calls.count()).toEqual(0);
       expect(chipsService.addChip).not.toHaveBeenCalled();
-      expect(ctrl.apply.calls.count()).toEqual(0);
-      expect(ctrl.apply).not.toHaveBeenCalled();
+      expect(ctrl.disableApplyFilter.calls.count()).toEqual(0);
+      expect(ctrl.disableApplyFilter).not.toHaveBeenCalled();
       expect(chipsService.model.length).toEqual(4);
       expect(chipsService.model[1].name).toEqual('Off-Premise');
       // run
@@ -1046,8 +1046,8 @@ describe('Unit: accountsController', function() {
       expect(chipsService.updateChip).not.toHaveBeenCalled();
       expect(chipsService.addChip.calls.count()).toEqual(1);
       expect(chipsService.addChip).toHaveBeenCalled();
-      expect(ctrl.apply.calls.count()).toEqual(1);
-      expect(ctrl.apply).toHaveBeenCalled();
+      expect(ctrl.disableApplyFilter.calls.count()).toEqual(1);
+      expect(ctrl.disableApplyFilter).toHaveBeenCalled();
       expect(chipsService.model.length).toEqual(4);
       expect(chipsService.model[3].name).toEqual('On-Premise');
     });

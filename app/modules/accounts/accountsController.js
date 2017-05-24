@@ -116,7 +116,7 @@ module.exports = /*  @ngInject */
 
     // Expose public methods
     vm.allOpportunitiesDisabled = allOpportunitiesDisabled;
-    vm.apply = apply;
+    vm.disableApplyFilter = disableApplyFilter;
     vm.checkForDepOrDistValue = checkForDepOrDistValue;
     vm.checkIfVelocityPresent = checkIfVelocityPresent;
     vm.currentTopBottomView = null;
@@ -172,7 +172,7 @@ module.exports = /*  @ngInject */
       return true;
     }
 
-    function apply(bool) {
+    function disableApplyFilter(bool) {
       vm.disableApply = bool;
     }
 
@@ -407,7 +407,7 @@ module.exports = /*  @ngInject */
         clearDistributorModels();
       }
 
-      apply(false);
+      disableApplyFilter(false);
 
       function clearStoreModels() {
         filtersService.model.selected.store = [];
@@ -448,7 +448,7 @@ module.exports = /*  @ngInject */
       filtersService.model.filtersValidCount = 0;
       initDefaultModelValues();
       setUserSpecificModels();
-      apply(false);
+      disableApplyFilter(false);
       // Go back to distributor level. Get the updated data for distributors
       resetTopBottom();
       updateBrandSnapshot();
@@ -707,7 +707,7 @@ module.exports = /*  @ngInject */
       } else {
         chipsService.addAutocompleteChip(result.name, filterModelProp, false);
       }
-      apply(false);
+      disableApplyFilter(false);
 
       filtersService.model[filterModelProperty] = result.name;
 
@@ -785,7 +785,7 @@ module.exports = /*  @ngInject */
           }, 500);
         });
       }
-      apply(true);
+      disableApplyFilter(true);
     }
 
     function updateChip(name, chip) {
@@ -796,7 +796,7 @@ module.exports = /*  @ngInject */
         // filter.resetTradeChannels() -- do we need to do this so the trade channels are correct based on filter
       }
 
-      vm.apply(false);
+      vm.disableApplyFilter(false);
     }
 
     function updateDistributionTimePeriod(value) {
