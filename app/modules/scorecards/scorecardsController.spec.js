@@ -666,5 +666,25 @@ describe('Unit: scorecardsController', function() {
 
       expect(callback(validRow)).toEqual(true);
     });
+
+    it('should return true when given a valid row with vsYa=0', () => {
+      const validRow = {
+        type: 'Brand',
+        FYTD: { timeFrameTotal: '1,000', vsYa: '0' }
+      };
+      const callback = ctrl.scorecardsFilter('depletion');
+
+      expect(callback(validRow)).toEqual(true);
+    });
+
+    it('should return true when given a valid row with timeFrameTotal=0', () => {
+      const validRow = {
+        type: 'Brand',
+        FYTD: { timeFrameTotal: '0', vsYa: '1,000' }
+      };
+      const callback = ctrl.scorecardsFilter('depletion');
+
+      expect(callback(validRow)).toEqual(true);
+    });
   });
 });
