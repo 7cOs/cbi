@@ -10,9 +10,14 @@ module.exports = /*  @ngInject */
 
     var service = {
       model: model,
+      getAndUpdateStoresWithOpportunities: getAndUpdateStoresWithOpportunities,
+      getFormattedStoresWithOpportunities: getFormattedStoresWithOpportunities,
+      getFormattedOpportunities: getFormattedOpportunities,
       getOpportunities: getOpportunities,
-      getAllOpportunitiesIDs: getAllOpportunitiesIDs,
+      getFormattedSingleOpportunity: getFormattedSingleOpportunity,
       getOpportunitiesHeaders: getOpportunitiesHeaders,
+      groupOpportunitiesByStore: groupOpportunitiesByStore,
+      populateOpportunityData: populateOpportunityData,
       createOpportunity: createOpportunity,
       getOpportunitiyFeedback: getOpportunityFeedback,
       createOpportunityFeedback: createOpportunityFeedback,
@@ -25,172 +30,115 @@ module.exports = /*  @ngInject */
 
     // Opportunities Methods
     /**
-     * @name getOpportunities
-     * @desc Get opportunities from API
-     * @params {String} opportunityID - ID of opportunity [optional]
+     * @name getAndUpdateStoresWithOpportunities
+     * @desc Get opportunities from API and update the model
      * @returns {Object}
      * @memberOf cf.common.services
      */
-    function getOpportunities(opportunityID, dontResetList) {
+    function getAndUpdateStoresWithOpportunities() {
+      const opportunitiesPromise = $q.defer();
+
+      service.getFormattedStoresWithOpportunities()
+      .then(storesWithOpportunities => {
+        service.model.opportunities = storesWithOpportunities;
+
+        opportunitiesPromise.resolve(storesWithOpportunities);
+      })
+      .catch(error => opportunitiesPromise.reject(error));
+
+      return opportunitiesPromise.promise;
+    }
+
+    /**
+     * @name getFormattedStoresWithOpportunities
+     * @desc Get opportunities from API and update the model, massages the data with populateOpportunityData
+     * @returns {Object}
+     * @memberOf cf.common.services
+     */
+    function getFormattedStoresWithOpportunities() {
+      debugger;
+      const opportunitiesPromise = $q.defer();
       service.model.noOpportunitiesFound = false;
-      if (!opportunityID) {
-        // get applied filters
-        var filterPayload = filtersService.getAppliedFilters('opportunities');
-      }
 
-      // create promise, build url based on filters and if there is an opp id
-      var opportunitiesPromise = $q.defer(),
-          url = opportunityID ? apiHelperService.request('/v2/opportunities/' + opportunityID) : apiHelperService.request('/v2/opportunities/', filterPayload);
+      getFormattedOpportunities(false).then(getOpportunitiesSuccess);
 
-      if (!dontResetList) {
-        service.model.opportunities = [];
-      }
-
-      $http.get(url)
-        .then(getOpportunitiesSuccess)
-        .catch((error) => handleGetOpportunitiesFail(opportunitiesPromise, error));
-
-      function getOpportunitiesSuccess(response) {
-        // Group opportunities by store
-        var newOpportunityArr = [],
-            store,
-            storePlaceholder;
-
-        // make opp array instead of obj if oppId provided
-        if (opportunityID) { response.data.opportunities = [response.data]; };
-
-        // trigger no opps modal
-        if (response.data.opportunities.length < 1) { service.model.noOpportunitiesFound = true; };
-
-        for (var i = 0; i < response.data.opportunities.length; i++) {
-          var item = response.data.opportunities[i];
-
-          // Set depletionsCurrentYearToDateYAPercent
-          item = setVsYAPercent(item);
-          item.store = setVsYAPercent(item.store);
-
-          // Set store status to boolean
-          item.store.unsold = setStoreStatus(item.store.unsold);
-
-          // Check Authorization/Feature for CSV
-          item.isItemAuthorization = 'N';
-          if (item.itemAuthorizationCode !== null) {
-            item.isItemAuthorization = 'Y';
-          }
-
-          item.isChainMandate = 'N';
-          if (item.itemAuthorizationCode === 'CM') {
-            item.isChainMandate = 'Y';
-          }
-
-          item.isOnFeature = 'N';
-          if (item.featureTypeCode !== null) {
-            item.isOnFeature = 'Y';
-          }
-
-          // Check that only specified authorizations show, applicable when 'authorized' filter applied
-          item.showAuthorization = '';
-          if (item.itemAuthorizationCode === 'CM' || item.itemAuthorizationCode === 'BM' || item.itemAuthorizationCode === 'OS' || item.itemAuthorizationCode === 'SP') {
-            item.showAuthorization = 'Y';
-          }
-
-          if (filtersService.model.selected.productType[0] !== 'authorized' || (filtersService.model.selected.productType[0] === 'authorized' && item.showAuthorization === 'Y')) {
-            // if its a new store
-            if (!storePlaceholder || (storePlaceholder.address !== item.store.address || storePlaceholder.id !== item.store.id)) {
-              // push previous store in newOpportunityArr
-              if (i !== 0) newOpportunityArr.push(store);
-
-              // create grouped store object
-              store = angular.copy(item);
-              store.depletionSum = 0;
-              store.brands = [];
-              store.store = setVsYAPercent(store.store);
-
-              // set store placeholder to new store
-              storePlaceholder = item.store;
-
-              // Set positive or negative label for trend values for store
-              // I think this is no longer relevant to the app.
-              store.trend = store.currentYTDStoreVolume - store.lastYTDStoreVolume;
-              if (store.trend > 0) {
-                store.positiveValue = true;
-              } else if (store.trend < 0) {
-                store.negativeValue = true;
-              }
-
-              // create groupedOpportunities arr so all opportunities for one store will be in a row
-              store.groupedOpportunities = [];
-
-              store.groupedOpportunities.push(item);
-
-            } else {
-              store.groupedOpportunities.push(item);
-            }
-          } else {
-            service.model.noOpportunitiesFound = true;
-            service.model.filterApplied = true;
-            return handleGetOpportunitiesFail('No authorized Opportunities');
-          }
-
-          // add brand to array
-          store.brands.push(item.product.brand.toLowerCase());
-
-          // sum depletions - not in api yet - WJAY 8/8
-          // store.depletionSum += item.depletions
-
-          // push last store into newOpportunityArr
-          if (i + 1 === response.data.opportunities.length) newOpportunityArr.push(store);
-        }; // end for each
-
-        // set data for pagination
-        if (!dontResetList) {
-          service.model.opportunities = newOpportunityArr;
-        }
-
-        opportunitiesPromise.resolve(newOpportunityArr);
-      }
-
-      function setVsYAPercent(item) {
-        // defined in DE2970, updated in US/13385
-        var vsYAPercent = 0,
-            negative = false;
-        if (item.depletionsCurrentYearToDate > 0 && item.depletionsCurrentYearToDateYA === 0) {
-          vsYAPercent = '100%';
-        } else if (item.depletionsCurrentYearToDate === 0 && item.depletionsCurrentYearToDateYA > 0) {
-          vsYAPercent = '-100%';
-          negative = true;
-        } else if (item.depletionsCurrentYearToDate === 0 && item.depletionsCurrentYearToDateYA === 0) {
-          vsYAPercent = 0;
-          negative = true;
+      function getOpportunitiesSuccess(opportunities) {
+        opportunities = opportunities.map(populateOpportunityData);
+        if (!opportunities.length) {
+          service.model.noOpportunitiesFound = true;
         } else {
-          // vsYAPercent = -100 + ((item.depletionsCurrentYearToDate / item.depletionsCurrentYearToDateYA) * 100);
-          vsYAPercent = (item.depletionsCurrentYearToDate / item.depletionsCurrentYearToDateYA - 1) * 100;
-          if (vsYAPercent > 999) {
-            vsYAPercent = '999%';
-          } else if (vsYAPercent < -999) {
-            vsYAPercent = '-999%';
-            negative = true;
-          } else {
-            if (vsYAPercent.toFixed(0) < 0) negative = true;
-            vsYAPercent = vsYAPercent.toFixed(1) + '%';
-          }
+          const storesWithOpportunities = groupOpportunitiesByStore(opportunities);
+          opportunitiesPromise.resolve(storesWithOpportunities);
         }
-        item.depletionsCurrentYearToDateYAPercent = negative ? vsYAPercent : '+' + vsYAPercent;
-        item.depletionsCurrentYearToDateYAPercentNegative = negative;
-
-        return item;
       }
 
       return opportunitiesPromise.promise;
     }
 
-    function setStoreStatus(storeValue) {
+    /**
+     * @name getFormattedOpportunities
+     * @desc Get opportunities from API, massages the data with populateOpportunityData
+     * @param {Boolean} areAllRequested Send true to disable pagination and request all of them (up to the max limit defined in apiHelperService)
+     * @returns {Array}
+     * @memberOf cf.common.services
+     */
+    function getFormattedOpportunities(areAllRequested) {
+      debugger;
+      const opportunitiesPromise = $q.defer();
 
-      if (storeValue === 'Y') {
-        return true;
-      }
+      service.getOpportunities(areAllRequested)
+      .then(opportunities => {
+        const formattedOpportunities = opportunities.map(populateOpportunityData);
+        opportunitiesPromise.resolve(formattedOpportunities);
+      })
+      .catch(error => handleGetOpportunitiesFail(opportunitiesPromise, error));
 
-      return false;
+      return opportunitiesPromise.promise;
+    }
+
+    /**
+     * @name getOpportunities
+     * @desc Get opportunities from API
+     * @param {Boolean} areAllRequested Send true to disable pagination and request all of them (up to the max limit defined in apiHelperService)
+     * @returns {Array}
+     * @memberOf cf.common.services
+     */
+    function getOpportunities(areAllRequested) {
+      debugger;
+      apiHelperService.model.bulkQuery = areAllRequested;
+
+      const opportunitiesPromise = $q.defer();
+      const filterPayload = filtersService.getAppliedFilters('opportunities');
+      const url = apiHelperService.request('/v2/opportunities/', filterPayload);
+
+      $http.get(url)
+      .then(response => {
+        opportunitiesPromise.resolve(response.data.opportunities);
+      })
+      .catch(error => handleGetOpportunitiesFail(opportunitiesPromise, error));
+
+      return opportunitiesPromise.promise;
+    }
+
+    /**
+     * @name getFormattedSingleOpportunity
+     * @desc Get one opportunity from API, massages the data with populateOpportunityData
+     * @param {String} opportunityID The ID of the opportunity to fetch
+     * @returns {Array} the opportunity wrapped in a single element array
+     * @memberOf cf.common.services
+     */
+    function getFormattedSingleOpportunity(opportunityID) {
+      const opportunitiesPromise = $q.defer();
+      const url = apiHelperService.request('/v2/opportunities/' + opportunityID);
+
+      $http.get(url)
+      .then(response => {
+        const opportunities = populateOpportunityData(response.data.opportunities);
+        opportunitiesPromise.resolve(opportunities);
+      })
+      .catch(error => handleGetOpportunitiesFail(opportunitiesPromise, error));
+
+      return opportunitiesPromise.promise;
     }
 
     /**
@@ -203,27 +151,78 @@ module.exports = /*  @ngInject */
       opportunitiesPromise.reject(error);
     }
 
-    /**
-     * @name getAllOpportunitiesIDs
-     * @desc Get opportunities IDs from API
-     * @returns {Object}
-     * @memberOf cf.common.services
-     */
-    function getAllOpportunitiesIDs() {
-      apiHelperService.model.bulkQuery = true;
+    function populateOpportunityData(opportunity) {
+      opportunity = setVsYAPercent(opportunity);
+      opportunity.store = setVsYAPercent(opportunity.store);
+      opportunity.store.unsold = opportunity.store.unsold === 'Y';
+      opportunity.isItemAuthorization = opportunity.itemAuthorizationCode === null ? 'N' : 'Y';
+      opportunity.isChainMandate = opportunity.itemAuthorizationCode === 'CM' ? 'Y' : 'N';
+      opportunity.isOnFeature = opportunity.featureTypeCode === null ? 'N' : 'Y';
 
-      const filterPayload = filtersService.getAppliedFilters('opportunities');
+      return opportunity;
+    }
 
-      const opportunitiesPromise = $q.defer();
-      const url = apiHelperService.request('/v2/opportunities/', filterPayload);
-      $http.get(url)
-        .then((response) => {
-          const opportunitiesIDs = response.data.opportunities.map((opp) => opp.id);
-          opportunitiesPromise.resolve(opportunitiesIDs);
-        })
-        .catch((error) => handleGetOpportunitiesFail(opportunitiesPromise, error));
+    function setVsYAPercent(item) {
+      // defined in DE2970, updated in US/13385
+      var vsYAPercent = 0,
+          negative = false;
+      if (item.depletionsCurrentYearToDate > 0 && item.depletionsCurrentYearToDateYA === 0) {
+        vsYAPercent = '100%';
+      } else if (item.depletionsCurrentYearToDate === 0 && item.depletionsCurrentYearToDateYA > 0) {
+        vsYAPercent = '-100%';
+        negative = true;
+      } else if (item.depletionsCurrentYearToDate === 0 && item.depletionsCurrentYearToDateYA === 0) {
+        vsYAPercent = 0;
+        negative = true;
+      } else {
+        // vsYAPercent = -100 + ((item.depletionsCurrentYearToDate / item.depletionsCurrentYearToDateYA) * 100);
+        vsYAPercent = (item.depletionsCurrentYearToDate / item.depletionsCurrentYearToDateYA - 1) * 100;
+        if (vsYAPercent > 999) {
+          vsYAPercent = '999%';
+        } else if (vsYAPercent < -999) {
+          vsYAPercent = '-999%';
+          negative = true;
+        } else {
+          if (vsYAPercent.toFixed(0) < 0) negative = true;
+          vsYAPercent = vsYAPercent.toFixed(1) + '%';
+        }
+      }
+      item.depletionsCurrentYearToDateYAPercent = negative ? vsYAPercent : '+' + vsYAPercent;
+      item.depletionsCurrentYearToDateYAPercentNegative = negative;
 
-      return opportunitiesPromise.promise;
+      return item;
+    }
+
+    function groupOpportunitiesByStore(opportunities) {
+      return opportunities.reduce((stores, opportunity) => {
+        const storeExists = stores.length && stores[stores.length - 1].store.id === opportunity.store.id;
+
+        if (!storeExists) {
+          const store = angular.copy(opportunity);
+          store.brands = [];
+          store.store = setVsYAPercent(store.store);
+
+          // Set positive or negative label for trend values for store
+          // I think this is no longer relevant to the app.
+          store.trend = store.currentYTDStoreVolume - store.lastYTDStoreVolume;
+          if (store.trend > 0) {
+            store.positiveValue = true;
+          } else if (store.trend < 0) {
+            store.negativeValue = true;
+          }
+
+          // create groupedOpportunities arr so all opportunities for one store will be in a row
+          store.groupedOpportunities = [];
+
+          stores.push(store);
+        }
+
+        const currentStore = stores[stores.length - 1];
+        currentStore.groupedOpportunities.push(opportunity);
+        currentStore.brands.push(opportunity.product.brand.toLowerCase());
+
+        return stores;
+      }, []);
     }
 
     /**
@@ -237,8 +236,8 @@ module.exports = /*  @ngInject */
           url = apiHelperService.request('/v2/opportunities/', filtersService.getAppliedFilters('opportunities'));
 
       $http.head(url)
-        .then(getOpportunitiesHeadersSuccess)
-        .catch(getOpportunitiesHeadersFail);
+      .then(getOpportunitiesHeadersSuccess)
+      .catch(getOpportunitiesHeadersFail);
 
       function getOpportunitiesHeadersSuccess(response) {
         const numberOfOpps = parseInt(response.headers()['opportunity-count']);
@@ -277,7 +276,8 @@ module.exports = /*  @ngInject */
         method: 'POST',
         data: payload,
         headers: {'Content-Type': 'application/json;charset=utf-8'}
-      }).then(createOpportunitiesSuccess)
+      })
+      .then(createOpportunitiesSuccess)
       .catch(createOpportunitiesFail);
 
       function createOpportunitiesSuccess(response) {

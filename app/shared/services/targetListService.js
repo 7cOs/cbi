@@ -12,8 +12,9 @@ module.exports = /*  @ngInject */
       getTargetList: getTargetList,
       updateTargetList: updateTargetList,
       deleteTargetList: deleteTargetList,
-      getTargetListOpportunityIDs: getTargetListOpportunityIDs,
       getTargetListOpportunities: getTargetListOpportunities,
+      getFormattedTargetListOpportunities: getFormattedTargetListOpportunities,
+      getAndUpdateTargetListStoresWithOpportunities: getAndUpdateTargetListStoresWithOpportunities,
       addTargetListOpportunities: addTargetListOpportunities,
       deleteTargetListOpportunities: deleteTargetListOpportunities,
       getTargetListShares: getTargetListShares,
@@ -37,8 +38,8 @@ module.exports = /*  @ngInject */
           url = apiHelperService.request('/v2/targetLists/' + targetListId, p);
 
       $http.get(url)
-        .then(getTargetListSuccess)
-        .catch(getTargetListFail);
+      .then(getTargetListSuccess)
+      .catch(getTargetListFail);
 
       function getTargetListSuccess(response) {
         targetListPromise.resolve(response.data);
@@ -71,8 +72,8 @@ module.exports = /*  @ngInject */
       payload.collaborateAndInvite = p.collaborateAndInvite;
 
       $http.patch(url, payload)
-        .then(updateTargetListSuccess)
-        .catch(updateTargetListFail);
+      .then(updateTargetListSuccess)
+      .catch(updateTargetListFail);
 
       function updateTargetListSuccess(response) {
         targetListPromise.resolve(response.data);
@@ -97,8 +98,8 @@ module.exports = /*  @ngInject */
           url = apiHelperService.request('/v2/targetLists/' + targetListId);
 
       $http.delete(url)
-        .then(deleteTargetListSuccess)
-        .catch(deleteTargetListFail);
+      .then(deleteTargetListSuccess)
+      .catch(deleteTargetListFail);
 
       function deleteTargetListSuccess(response) {
         targetListPromise.resolve(response.data);
@@ -112,170 +113,79 @@ module.exports = /*  @ngInject */
     }
 
     /**
-     * @name getTargetListOpportunityIDs
-     * @desc get all opportunity IDs for given target list
-     * @params {String} targetListID - ID of target list
-     * @returns {Array} - target list opportunity IDs
-     * @memberOf cf.common.services
-     */
-    function getTargetListOpportunityIDs(targetListId) {
-      const opportunityIDsPromise = $q.defer();
-      const url = apiHelperService.request('/v2/targetLists/' + targetListId + '/opportunities');
-
-      $http.get(url)
-        .then(getTargetListOpportunityIDsSuccess)
-        .catch(getTargetListOpportunityIDsFail);
-
-      function getTargetListOpportunityIDsSuccess(response) {
-        opportunityIDsPromise.resolve(response.data.opportunities.map(opp => opp.id));
-      }
-
-      function getTargetListOpportunityIDsFail(error) {
-        opportunityIDsPromise.reject(error);
-      }
-
-      return opportunityIDsPromise.promise;
-    }
-
-    /**
-     * @name getTargetListOpportunities
+     * @name getAndUpdateTargetListStoresWithOpportunities
      * @desc get target list opportunities
      * @params {String} targetListId - id of target list
      * @returns {Object} - target list opportunities
      * @memberOf cf.common.services
      */
-    function getTargetListOpportunities(targetListId, params) {
-      var filterPayload;
-      if (params) filterPayload = filtersService.getAppliedFilters('targetListOpportunities');
+    function getAndUpdateTargetListStoresWithOpportunities(targetListId, params) {
+      var targetListPromise = $q.defer();
 
-      var targetListPromise = $q.defer(),
-          url = apiHelperService.request('/v2/targetLists/' + targetListId + '/opportunities', filterPayload);
+      getFormattedTargetListOpportunities(targetListId, params)
+      .then(getAndUpdateTargetListStoresWithOpportunitiesSuccess)
+      .catch(getAndUpdateTargetListStoresWithOpportunitiesFail);
 
-      $http.get(url)
-        .then(getTargetListOpportunitiesSuccess)
-        .catch(getTargetListOpportunitiesFail);
+      function getAndUpdateTargetListStoresWithOpportunitiesSuccess(opportunities) {
+        const storesWithOpportunties = opportunitiesService.groupOpportunitiesByStore(opportunities);
 
-      function getTargetListOpportunitiesSuccess(response) {
-        // Group opportunities by store
-        var newOpportunityArr = [],
-            store,
-            storePlaceholder;
-        opportunitiesService.model.opportunities = [];
-
-        for (var i = 0; i < response.data.opportunities.length; i++) {
-          var item = response.data.opportunities[i];
-
-          // Set depletionsCurrentYearToDateYAPercent
-          item = setVsYAPercent(item);
-          item.store = setVsYAPercent(item.store);
-
-          // Set store status to boolean
-          item.store.unsold = setStoreStatus(item.store.unsold);
-
-          item.isItemAuthorization = 'N';
-          if (item.itemAuthorizationCode !== null) {
-            item.isItemAuthorization = 'Y';
-          }
-
-          item.isChainMandate = 'N';
-          if (item.itemAuthorizationCode === 'CM') {
-            item.isChainMandate = 'Y';
-          }
-
-          item.isOnFeature = 'N';
-          if (item.featureTypeCode !== null) {
-            item.isOnFeature = 'Y';
-          }
-
-          // if its a new store
-          if (!storePlaceholder || (storePlaceholder.address !== item.store.address || storePlaceholder.id !== item.store.id)) {
-            // push previous store in newOpportunityArr
-            if (i !== 0) {
-              newOpportunityArr.push(store);
-            }
-
-            // create grouped store object
-            store = angular.copy(item);
-            store.highImpactSum = 0;
-            store.depletionSum = 0;
-            store.brands = [];
-
-            // set store placeholder to new store
-            storePlaceholder = item.store;
-
-            // Set positive or negative label for trend values for store
-            store.trend = store.currentYTDStoreVolume - store.lastYTDStoreVolume;
-            if (store.trend > 0) {
-              store.positiveValue = true;
-            } else if (store.trend < 0) {
-              store.negativeValue = true;
-            }
-
-            // create groupedOpportunities arr so all opportunities for one store will be in a row
-            store.groupedOpportunities = [];
-            store.groupedOpportunities.push(item);
-          } else {
-            store.groupedOpportunities.push(item);
-          }
-
-          // add brand to array
-          store.brands.push(item.product.brand.toLowerCase());
-
-          // push last store into newOpportunityArr
-          if (i + 1 === response.data.opportunities.length) {
-            newOpportunityArr.push(store);
-          }
-        }; // end for each
-
-        opportunitiesService.model.opportunities = newOpportunityArr;
-        targetListPromise.resolve(newOpportunityArr);
+        opportunitiesService.model.opportunities = storesWithOpportunties;
+        targetListPromise.resolve(storesWithOpportunties);
       }
 
-      function getTargetListOpportunitiesFail(error) {
+      function getAndUpdateTargetListStoresWithOpportunitiesFail(error) {
         targetListPromise.reject(error);
-      }
-
-      function setVsYAPercent(item) {
-        // defined in DE2970, updated in US/13385
-        var vsYAPercent = 0,
-            negative = false;
-        if (item.depletionsCurrentYearToDate > 0 && item.depletionsCurrentYearToDateYA === 0) {
-          vsYAPercent = '100%';
-        } else if (item.depletionsCurrentYearToDate === 0 && item.depletionsCurrentYearToDateYA > 0) {
-          vsYAPercent = '-100%';
-          negative = true;
-        } else if (item.depletionsCurrentYearToDate === 0 && item.depletionsCurrentYearToDateYA === 0) {
-          vsYAPercent = 0;
-          negative = true;
-        } else {
-          // vsYAPercent = -100 + ((item.depletionsCurrentYearToDate / item.depletionsCurrentYearToDateYA) * 100);
-          vsYAPercent = (item.depletionsCurrentYearToDate / item.depletionsCurrentYearToDateYA - 1) * 100;
-          if (vsYAPercent > 999) {
-            vsYAPercent = '999%';
-          } else if (vsYAPercent < -999) {
-            vsYAPercent = '-999%';
-            negative = true;
-          } else {
-            if (vsYAPercent.toFixed(0) < 0) negative = true;
-            vsYAPercent = vsYAPercent.toFixed(1) + '%';
-          }
-        }
-        item.depletionsCurrentYearToDateYAPercent = negative ? vsYAPercent : '+' + vsYAPercent;
-        item.depletionsCurrentYearToDateYAPercentNegative = negative;
-
-        return item;
       }
 
       return targetListPromise.promise;
     }
 
-    function setStoreStatus(storeValue) {
+    /**
+     * @name getFormattedTargetListOpportunities
+     * @desc get all opportunity for given target list, massages the data with populateOpportunityData
+     * @param {String} targetListID - ID of target list
+     * @returns {Array}
+     * @memberOf cf.common.services
+     */
+    function getFormattedTargetListOpportunities(targetListId, params) {
+      const opportunitiesPromise = $q.defer();
 
-      if (storeValue === 'Y') {
-        return true;
+      service.getTargetListOpportunities(targetListId, params)
+      .then(opportunities => {
+        opportunitiesPromise.resolve(opportunities.map(opportunitiesService.populateOpportunityData));
+      })
+      .catch(error => opportunitiesPromise.reject(error));
+
+      return opportunitiesPromise.promise;
+    }
+
+    /**
+     * @name getTargetListOpportunities
+     * @desc get all opportunity for given target list
+     * @params {String} targetListID - ID of target list
+     * @returns {Array} - target list opportunities
+     * @memberOf cf.common.services
+     */
+    function getTargetListOpportunities(targetListId, params) {
+      let filterPayload;
+      if (params) filterPayload = filtersService.getAppliedFilters('targetListOpportunities');
+
+      const opportunitiesPromise = $q.defer();
+      const url = apiHelperService.request('/v2/targetLists/' + targetListId + '/opportunities', filterPayload);
+
+      $http.get(url)
+      .then(getTargetListOpportunitiesSuccess)
+      .catch(getTargetListOpportunitiesFail);
+
+      function getTargetListOpportunitiesSuccess(response) {
+        opportunitiesPromise.resolve(response.data.opportunities);
       }
 
-      return false;
+      function getTargetListOpportunitiesFail(error) {
+        opportunitiesPromise.reject(error);
+      }
+
+      return opportunitiesPromise.promise;
     }
 
     /**
@@ -292,8 +202,8 @@ module.exports = /*  @ngInject */
           payload = opportunityIds;
 
       $http.post(url, payload)
-        .then(addTargetListOpportunitiesSuccess)
-        .catch(addTargetListOpportunitiesFail);
+      .then(addTargetListOpportunitiesSuccess)
+      .catch(addTargetListOpportunitiesFail);
 
       function addTargetListOpportunitiesSuccess(response) {
         targetListPromise.resolve(response.data);
@@ -322,8 +232,9 @@ module.exports = /*  @ngInject */
         method: 'DELETE',
         data: payload,
         headers: {'Content-Type': 'application/json;charset=utf-8'}
-      }).then(deleteTargetListOpportunitiesSuccess)
-        .catch(deleteTargetListOpportunitiesFail);
+      })
+      .then(deleteTargetListOpportunitiesSuccess)
+      .catch(deleteTargetListOpportunitiesFail);
 
       function deleteTargetListOpportunitiesSuccess(response) {
         targetListPromise.resolve(response.data);
@@ -349,8 +260,8 @@ module.exports = /*  @ngInject */
           url = apiHelperService.request('/v2/targetLists/' + targetListId + '/shares/');
 
       $http.get(url)
-        .then(getTargetListSharesSuccess)
-        .catch(getTargetListSharesFail);
+      .then(getTargetListSharesSuccess)
+      .catch(getTargetListSharesFail);
 
       function getTargetListSharesSuccess(response) {
         targetListPromise.resolve(response.data);
@@ -377,8 +288,8 @@ module.exports = /*  @ngInject */
           payload = collaborators;
 
       $http.post(url, payload)
-        .then(addTargetListSharesSuccess)
-        .catch(addTargetListSharesFail);
+      .then(addTargetListSharesSuccess)
+      .catch(addTargetListSharesFail);
 
       function addTargetListSharesSuccess(response) {
         targetListPromise.resolve(response);
@@ -409,8 +320,8 @@ module.exports = /*  @ngInject */
           }];
 
       $http.patch(url, payload)
-        .then(updateTargetListSharesSuccess)
-        .catch(updateTargetListSharesFail);
+      .then(updateTargetListSharesSuccess)
+      .catch(updateTargetListSharesFail);
 
       function updateTargetListSharesSuccess(response) {
         targetListPromise.resolve(response.data);
@@ -441,8 +352,8 @@ module.exports = /*  @ngInject */
         data: payload,
         headers: {'Content-Type': 'application/json;charset=utf-8'}
       })
-        .then(deleteTargetListSharesSuccess)
-        .catch(deleteTargetListSharesFail);
+      .then(deleteTargetListSharesSuccess)
+      .catch(deleteTargetListSharesFail);
 
       function deleteTargetListSharesSuccess(response) {
         targetListPromise.resolve(response.data);

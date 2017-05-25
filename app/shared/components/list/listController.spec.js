@@ -10,7 +10,7 @@ describe('Unit: list controller', function() {
     angular.mock.module('cf.common.services');
     angular.mock.module('cf.common.components.list');
 
-    inject(function($rootScope, _$q_, _$httpBackend_, _$mdDialog_, _$state_, $controller, _$filter_, _closedOpportunitiesService_, _filtersService_, _loaderService_, _opportunitiesService_, _storesService_, _targetListService_, _toastService_, _userService_) {
+    inject(function($rootScope, _$q_, _$httpBackend_, _$mdDialog_, $controller, _$filter_, _closedOpportunitiesService_, _filtersService_, _loaderService_, _opportunitiesService_, _storesService_, _targetListService_, _toastService_, _userService_) {
       scope = $rootScope.$new();
       q = _$q_;
       mdDialog = _$mdDialog_;
@@ -80,8 +80,8 @@ describe('Unit: list controller', function() {
     expect(ctrl.expandCallback).not.toBeUndefined();
     expect(typeof (ctrl.expandCallback)).toEqual('function');
 
-    expect(ctrl.flattenOpportunity).not.toBeUndefined();
-    expect(typeof (ctrl.flattenOpportunity)).toEqual('function');
+    expect(ctrl.getCSVData).not.toBeUndefined();
+    expect(typeof (ctrl.getCSVData)).toEqual('function');
 
     expect(ctrl.getDate).not.toBeUndefined();
     expect(typeof (ctrl.getDate)).toEqual('function');
@@ -361,7 +361,7 @@ describe('Unit: list controller', function() {
     });
   });
 
-  describe('[list.flattenOpportunity] method', function() {
+  describe('[list.getCSVData] method', function() {
     var opportunities = [{
       'id': '0129597___80013986___20160929',
       'product': {
@@ -449,8 +449,10 @@ describe('Unit: list controller', function() {
         }
     }];
 
-    it('should create a csvItem for each selected opportunity, and add it to the data array', function() {
-      expect(ctrl.flattenOpportunity([opportunities[0]])).toEqual([{
+    it('should create a csvItem for each selected opportunity, and add it to the data array', () => {
+      ctrl.selected = [opportunities[0]];
+      const dataPromise = ctrl.getCSVData();
+      expect(dataPromise.$$state.value).toEqual([{
         'storeDistributor': opportunities[0].store.distributors[0],
         'TDLinx': opportunities[0].store.id,
         'storeName': opportunities[0].store.name,
@@ -472,8 +474,10 @@ describe('Unit: list controller', function() {
       }]);
     });
 
-    it('should add a rationale when provided as input', function() {
-      expect(ctrl.flattenOpportunity([opportunities[0]], true)).toEqual([{
+    it('should add a rationale when provided as input', () => {
+      ctrl.selected = [opportunities[0]];
+      const dataPromise = ctrl.getCSVData(true);
+      expect(dataPromise.$$state.value).toEqual([{
         'storeDistributor': opportunities[0].store.distributors[0],
         'TDLinx': opportunities[0].store.id,
         'storeName': opportunities[0].store.name,
@@ -496,8 +500,10 @@ describe('Unit: list controller', function() {
       }]);
     });
 
-    it('should be able to parse when the distributor list is null', function() {
-      expect(ctrl.flattenOpportunity([opportunities[1]], false)).toEqual([{
+    it('should be able to parse when the distributor list is null', () => {
+      ctrl.selected = [opportunities[1]];
+      const dataPromise = ctrl.getCSVData(false);
+      expect(dataPromise.$$state.value).toEqual([{
         'storeDistributor': '',
         'TDLinx': opportunities[1].store.id,
         'storeName': opportunities[1].store.name,
@@ -519,8 +525,10 @@ describe('Unit: list controller', function() {
       }]);
     });
 
-    it('should take the brand as product name if the product name is null', function() {
-      expect(ctrl.flattenOpportunity([opportunities[1]], false)).toEqual([{
+    it('should take the brand as product name if the product name is null', () => {
+      ctrl.selected = [opportunities[1]];
+      const dataPromise = ctrl.getCSVData(false);
+      expect(dataPromise.$$state.value).toEqual([{
         'storeDistributor': '',
         'TDLinx': opportunities[1].store.id,
         'storeName': opportunities[1].store.name,
@@ -781,11 +789,11 @@ describe('Unit: list controller', function() {
       spyOn(loaderService, 'openLoader').and.callFake(function() {
         return true;
       });
-      spyOn(opportunitiesService, 'getOpportunities').and.callFake(function() {
+      spyOn(opportunitiesService, 'getAndUpdateStoresWithOpportunities').and.callFake(function() {
         var deferred = q.defer();
         return deferred.promise;
       });
-      spyOn(targetListService, 'getTargetListOpportunities').and.callFake(() => {
+      spyOn(targetListService, 'getAndUpdateTargetListStoresWithOpportunities').and.callFake(() => {
         let deferred = q.defer();
         return deferred.promise;
       });
@@ -813,7 +821,7 @@ describe('Unit: list controller', function() {
     it('should send request to get opportunities when sort is applied', function() {
       ctrl.pageName = 'opportunities';
       ctrl.sortBy('store');
-      expect(opportunitiesService.getOpportunities).toHaveBeenCalled();
+      expect(opportunitiesService.getAndUpdateStoresWithOpportunities).toHaveBeenCalled();
     });
 
     it('should toggle the boolean ascending on function call', function() {
@@ -828,19 +836,19 @@ describe('Unit: list controller', function() {
 
       ctrl.ascending = false;
       ctrl.sortBy('store');
-      expect(targetListService.getTargetListOpportunities).toHaveBeenCalled();
+      expect(targetListService.getAndUpdateTargetListStoresWithOpportunities).toHaveBeenCalled();
 
       ctrl.ascending = false;
       ctrl.sortBy('opportunity');
-      expect(targetListService.getTargetListOpportunities).toHaveBeenCalled();
+      expect(targetListService.getAndUpdateTargetListStoresWithOpportunities).toHaveBeenCalled();
 
       ctrl.ascending = false;
       ctrl.sortBy('depletions');
-      expect(targetListService.getTargetListOpportunities).toHaveBeenCalled();
+      expect(targetListService.getAndUpdateTargetListStoresWithOpportunities).toHaveBeenCalled();
 
       ctrl.ascending = false;
       ctrl.sortBy('segmentation');
-      expect(targetListService.getTargetListOpportunities).toHaveBeenCalled();
+      expect(targetListService.getAndUpdateTargetListStoresWithOpportunities).toHaveBeenCalled();
     });
 
     it('should assign descending orderBy for store, depletions and segmentation when each is provided as param and ascending is false', function() {
@@ -848,19 +856,19 @@ describe('Unit: list controller', function() {
 
       ctrl.ascending = true;
       ctrl.sortBy('store');
-      expect(targetListService.getTargetListOpportunities).toHaveBeenCalled();
+      expect(targetListService.getAndUpdateTargetListStoresWithOpportunities).toHaveBeenCalled();
 
       ctrl.ascending = true;
       ctrl.sortBy('opportunity');
-      expect(targetListService.getTargetListOpportunities).toHaveBeenCalled();
+      expect(targetListService.getAndUpdateTargetListStoresWithOpportunities).toHaveBeenCalled();
 
       ctrl.ascending = true;
       ctrl.sortBy('depletions');
-      expect(targetListService.getTargetListOpportunities).toHaveBeenCalled();
+      expect(targetListService.getAndUpdateTargetListStoresWithOpportunities).toHaveBeenCalled();
 
       ctrl.ascending = true;
       ctrl.sortBy('segmentation');
-      expect(targetListService.getTargetListOpportunities).toHaveBeenCalled();
+      expect(targetListService.getAndUpdateTargetListStoresWithOpportunities).toHaveBeenCalled();
     });
   });
 
@@ -1508,25 +1516,25 @@ describe('Unit: list controller', function() {
     it('should request the IDs of all the opportunities without limit when selectAllOpportunities is true', () => {
       ctrl.isAllOpportunitiesSelected = true;
       const addToTargetListdeferred = q.defer();
-      const opportunitiesIDsDeferred = q.defer();
+      const opportunitiesDeferred = q.defer();
 
       spyOn(targetListService, 'addTargetListOpportunities').and.callFake(() => {
         return addToTargetListdeferred.promise;
       });
 
-      spyOn(opportunitiesService, 'getAllOpportunitiesIDs').and.callFake(() => {
-        return opportunitiesIDsDeferred.promise;
+      spyOn(opportunitiesService, 'getOpportunities').and.callFake(() => {
+        return opportunitiesDeferred.promise;
       });
 
       ctrl.toggleSelectAllStores();
       ctrl.addToTargetList(listId);
 
       addToTargetListdeferred.resolve();
-      opportunitiesIDsDeferred.resolve('fake1', 'fake2');
+      opportunitiesDeferred.resolve(['fake1', 'fake2']);
       scope.$digest();
 
       expect(targetListService.addTargetListOpportunities).toHaveBeenCalled();
-      expect(opportunitiesService.getAllOpportunitiesIDs).toHaveBeenCalled();
+      expect(opportunitiesService.getOpportunities).toHaveBeenCalled();
     });
 
     it('should not call addToTargetService if opportunites are not selected', function() {

@@ -1,5 +1,5 @@
 describe('[Services.targetListService]', function() {
-  var $http, $q, $httpBackend, targetListService, apiHelperService, opportunitiesService, filtersService;
+  var $http, $q, $httpBackend, targetListService, apiHelperService, opportunitiesService, filtersService, mockedOpportunities;
 
   beforeEach(function() {
     angular.mock.module('cf.common.services');
@@ -13,6 +13,118 @@ describe('[Services.targetListService]', function() {
       opportunitiesService = _opportunitiesService_;
       filtersService = _filtersService_;
     });
+
+    mockedOpportunities = {
+      raw: [
+        {
+          id: '0516096_80013460_20170131',
+          // test vsYAPercent +100
+          depletionsCurrentYearToDate: 5,
+          depletionsCurrentYearToDateYA: 0,
+          depletionsCurrentYearToDateYAPercent: 0,
+          depletionsCurrentYearToDateYAPercentNegative: true,
+          store: {
+            // test vsYAPercent -100
+            depletionsCurrentYearToDate: 0,
+            depletionsCurrentYearToDateYA: 2886.8334,
+            depletionsCurrentYearToDateYAPercent: 0,
+            depletionsCurrentYearToDateYAPercentNegative: false,
+            unsold: false,
+            id: '1401904',
+            address: '515 N WESTERN AVE, CHICAGO, IL 606121421'
+          },
+          featureTypeCode: null,
+          isChainMandate: 'N',
+          isItemAuthorization: 'N',
+          isOnFeature: 'N',
+          // test chain mandate
+          itemAuthorizationCode: 'CM',
+          product: {
+            brand: 'CORONA EXTRA'
+          }
+          }, {
+          id: '0516096_80013972_20170131',
+          // test vsYAPercent 0
+          depletionsCurrentYearToDate: 0,
+          depletionsCurrentYearToDateYA: 0,
+          depletionsCurrentYearToDateYAPercent: 10,
+          depletionsCurrentYearToDateYAPercentNegative: false,
+          store: {
+            // test vsYAPercent >999
+            depletionsCurrentYearToDate: 100,
+            depletionsCurrentYearToDateYA: 0.1,
+            depletionsCurrentYearToDateYAPercent: 0,
+            depletionsCurrentYearToDateYAPercentNegative: true,
+            unsold: false,
+            id: '1401904',
+            address: '515 N WESTERN AVE, CHICAGO, IL 606121421'
+          },
+          featureTypeCode: 'OK',
+          isChainMandate: 'N',
+          isItemAuthorization: 'N',
+          isOnFeature: 'Y',
+          itemAuthorizationCode: null,
+          product: {
+            brand: 'CORONA EXTRA'
+          }
+        }
+      ],
+      formatted: [
+        {
+          id: '0516096_80013460_20170131',
+          // test vsYAPercent +100
+          depletionsCurrentYearToDate: 5,
+          depletionsCurrentYearToDateYA: 0,
+          depletionsCurrentYearToDateYAPercent: '+100%',
+          depletionsCurrentYearToDateYAPercentNegative: false,
+          store: {
+            // test vsYAPercent -100
+            depletionsCurrentYearToDate: 0,
+            depletionsCurrentYearToDateYA: 2886.8334,
+            depletionsCurrentYearToDateYAPercent: '-100%',
+            depletionsCurrentYearToDateYAPercentNegative: true,
+            unsold: false,
+            id: '1401904',
+            address: '515 N WESTERN AVE, CHICAGO, IL 606121421'
+          },
+          featureTypeCode: null,
+          isChainMandate: 'Y',
+          isItemAuthorization: 'Y',
+          isOnFeature: 'N',
+          // test chain mandate
+          itemAuthorizationCode: 'CM',
+          product: {
+            brand: 'CORONA EXTRA'
+          }
+        },
+        {
+          id: '0516096_80013972_20170131',
+          // test vsYAPercent 0
+          depletionsCurrentYearToDate: 0,
+          depletionsCurrentYearToDateYA: 0,
+          depletionsCurrentYearToDateYAPercent: 0,
+          depletionsCurrentYearToDateYAPercentNegative: true,
+          store: {
+            // test vsYAPercent >999
+            depletionsCurrentYearToDate: 100,
+            depletionsCurrentYearToDateYA: 0.1,
+            depletionsCurrentYearToDateYAPercent: '+999%',
+            depletionsCurrentYearToDateYAPercentNegative: false,
+            unsold: false,
+            id: '1401904',
+            address: '515 N WESTERN AVE, CHICAGO, IL 606121421'
+          },
+          featureTypeCode: 'OK',
+          isChainMandate: 'N',
+          isItemAuthorization: 'N',
+          isOnFeature: 'Y',
+          itemAuthorizationCode: null,
+          product: {
+            brand: 'CORONA EXTRA'
+          }
+        }
+      ]
+    };
   });
 
   it('should exist', function() {
@@ -29,7 +141,8 @@ describe('[Services.targetListService]', function() {
     expect(targetListService.getTargetList).toBeDefined();
     expect(targetListService.updateTargetList).toBeDefined();
     expect(targetListService.deleteTargetList).toBeDefined();
-    expect(targetListService.getTargetListOpportunities).toBeDefined();
+    expect(targetListService.getFormattedTargetListOpportunities).toBeDefined();
+    expect(targetListService.getAndUpdateTargetListStoresWithOpportunities).toBeDefined();
     expect(targetListService.addTargetListOpportunities).toBeDefined();
     expect(targetListService.deleteTargetListOpportunities).toBeDefined();
     expect(targetListService.getTargetListShares).toBeDefined();
@@ -111,9 +224,27 @@ describe('[Services.targetListService]', function() {
     });
   });
 
-  describe('[getTargetListOpportunities]', function() {
+  describe('[getFormattedTargetListOpportunities]', () => {
+    it('should get formatted target list opportunities', () => {
+      var filterPayload = filtersService.getAppliedFilters('targetListOpportunities'),
+          url = apiHelperService.request('/v2/targetLists/1/opportunities', filterPayload);
+
+      $httpBackend.expect('GET', url).respond(200, {
+        status: 'success',
+        opportunities: mockedOpportunities.raw
+      });
+
+      const opportunitiesPromises = targetListService.getFormattedTargetListOpportunities('1', filterPayload);
+
+      $httpBackend.flush();
+      expect(opportunitiesPromises.$$state.value).toEqual(mockedOpportunities.formatted);
+      expect(opportunitiesService.model.opportunities).toEqual([]);
+    });
+  });
+
+  describe('[getAndUpdateTargetListStoresWithOpportunities]', function() {
     it('get target list opportunities should return a promise', function() {
-      var result = targetListService.getTargetListOpportunities(1, {});
+      var result = targetListService.getAndUpdateTargetListStoresWithOpportunities(1, {});
       var promiseResult = $q.defer().promise;
       expect(result).toEqual(promiseResult);
     });
@@ -128,7 +259,7 @@ describe('[Services.targetListService]', function() {
       });
 
       var result;
-      targetListService.getTargetListOpportunities('1', filterPayload).then(function() {
+      targetListService.getAndUpdateTargetListStoresWithOpportunities('1', filterPayload).then(function() {
         result = true;
       });
 
@@ -138,7 +269,7 @@ describe('[Services.targetListService]', function() {
     });
   });
 
-  describe('[Services.targetListService - getTargetListOpportunities]', function() {
+  describe('[Services.targetListService - getAndUpdateTargetListStoresWithOpportunities]', function() {
   var $httpBackend, targetListService, params, returnedPromise, id, responseObject, expectedResponseObject;
 
   beforeEach(function() {
@@ -254,8 +385,6 @@ describe('[Services.targetListService]', function() {
                 product: {
                     brand: 'CORONA EXTRA'
                 },
-                highImpactSum: 0,
-                depletionSum: 0,
                 brands: ['corona extra', 'corona extra', 'corona extra'],
                 trend: NaN,
                 groupedOpportunities: [{
@@ -330,12 +459,12 @@ describe('[Services.targetListService]', function() {
                   }}]}]};
   });
 
-  it('should manipulate opportunitiy data', function() {
+  it('should manipulate opportunitiy data', () => {
       $httpBackend
-      .expect('GET', '/v2/targetLists/' + id + '/opportunities')
-      .respond(200, responseObject);
+        .expect('GET', '/v2/targetLists/' + id + '/opportunities')
+        .respond(200, responseObject);
 
-      returnedPromise = targetListService.getTargetListOpportunities(id, params);
+      returnedPromise = targetListService.getAndUpdateTargetListStoresWithOpportunities(id, params);
       $httpBackend.flush();
       expect(returnedPromise.$$state.value).toEqual(expectedResponseObject.opportunities);
 

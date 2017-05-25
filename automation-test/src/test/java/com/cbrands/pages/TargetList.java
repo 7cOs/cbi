@@ -180,28 +180,28 @@ public class TargetList extends LoadableComponent<TargetList> {
 
 	@FindBy(how = How.CSS, using = "button.icon.select-all.ng-scope")
 	private WebElement selectAllTargetListsButton;
-	
+
 	@FindBy(how = How.CSS, using = "a[href='/target-lists']")
 	private WebElement targetListLink;
-	
+
 	@FindBy(how = How.CSS, using = "input[placeholder='Name']")
 	private WebElement distributor;
-	
+
 	@FindBy(how = How.CSS, using = "md-checkbox[aria-label='My Accounts']")
 	private WebElement accountScope;
-	
+
 	@FindAll(@FindBy(how=How.CSS, using = "div[column='12']>h4[column='4']"))
 	private List <WebElement> targetListRows;
-	
+
 	@FindBy(how = How.CSS, using = "div.target-action-buttons>button[class='btn-action']")
 	private WebElement createNewListButton;
-	
+
 	@FindAll(@FindBy(how=How.CSS, using = "div[class='modal target-list-switch-modal']>div.modal-form>div.row>button[class='btn-action col-6']"))
 	private List <WebElement> createTargetListModalButtons;
-	
+
 	@FindBy(how = How.XPATH, using = "//div[contains(.,'Target List Archived!')]")
 	private WebElement archiveSuccessMessage;
-	
+
 	@FindBy(how = How.XPATH, using = "//md-menu-item[contains(.,'Make Owner')]")
 	private WebElement makeOwnerOption;
 
@@ -287,7 +287,7 @@ public class TargetList extends LoadableComponent<TargetList> {
 		// return this;
 
 	}
-	
+
 	public TargetList clickNewTargetList(String name) {
 		List<WebElement> MyTargetLists = findElements(By.xpath("//*[@id='tab-content-2']/div/md-content/div[@class='target-list-detail-container']/ul/li/div/div[@class='stats']/div/h4[1]"));
 		for (WebElement webElement : MyTargetLists) {
@@ -296,11 +296,11 @@ public class TargetList extends LoadableComponent<TargetList> {
 				js.executeScript("arguments[0].click();", webElement);
 				break;
 			}
-			
+
 		}
 		return this;
 	}
-	
+
 	public boolean checkTargetLists(String name) {
 		List<WebElement> MyTargetLists = findElements(By.xpath("//*[@id='tab-content-2']/div/md-content/div[@class='target-list-detail-container']/ul/li/div/div[@class='stats']/div/h4[1]"));
 		for (WebElement webElement : MyTargetLists) {
@@ -319,11 +319,11 @@ public class TargetList extends LoadableComponent<TargetList> {
 				js.executeScript("arguments[0].click();", webElement);
 				break;
 			}
-			
+
 		}
 		return this;
 	}
-	
+
 	public TargetList clickTargetListFromShared(String name) {
 		List<WebElement> MyTargetLists = findElements(By.xpath("//*[@id='tab-content-3']/div/md-content/div[@class='target-list-detail-container']/ul/li/div/div/h4[1]"));
 		for (WebElement webElement : MyTargetLists) {
@@ -332,7 +332,7 @@ public class TargetList extends LoadableComponent<TargetList> {
 				js.executeScript("arguments[0].click();", webElement);
 				break;
 			}
-			
+
 		}
 		return this;
 	}
@@ -347,7 +347,7 @@ public class TargetList extends LoadableComponent<TargetList> {
 		// action.click(list).perform();
 		return this;
 	}
-	
+
 
 	public boolean checkTargetNameExists(String targetListName) {
 		WebElement element = findElement(By.xpath("//div[3]/md-tabs/md-tabs-content-wrapper/md-tab-content[1]/div/md-content"));
@@ -723,7 +723,7 @@ public class TargetList extends LoadableComponent<TargetList> {
 		}
 		return this;
 	}
-	
+
 	public TargetList navigateToTargetLists() {
 		waitForVisibleFluentWait(targetListLink).click();
 		waitForVisibleFluentWait(createNewList);
@@ -1065,7 +1065,7 @@ public class TargetList extends LoadableComponent<TargetList> {
 		return targetList;
 	}
 
-	public WebElement getOpportunities() {
+	public WebElement getAndUpdateStoresWithOpportunities() {
 		return opportunities;
 	}
 
@@ -1228,27 +1228,27 @@ public class TargetList extends LoadableComponent<TargetList> {
 	public WebElement getSelectAllTargetListsButton() {
 		return selectAllTargetListsButton;
 	}
-	
+
 	public TargetList typeDistributor(String name) {
 		distributor.sendKeys(name);
 		WebElement element = distributor.findElement(By.xpath("//input[contains(@class,'submit-btn visible')]"));
 		waitForElementToClickable(element, true).click();
 		WebElement element1 = findElement(By.xpath("//div[3]/inline-search[1]/div[1]/div[1]/ul[1]/li[1]/span[1]"));
 		waitForElementToClickable(element1, true).click();
-		return this;		
+		return this;
 	}
-	
+
 	public TargetList selectAccountScope() {
 		accountScope.click();
 		return this;
 	}
-	
+
 	public TargetList clickFirstTargetList() {
 		waitForVisibleFluentWait(targetListRows.get(0)).click();
 		waitForVisibleFluentWait(TargetListManageButton);
 		return this;
 	}
-	
+
 	public TargetList clickNewTargetListUsingXpath(String name) {
 		WebElement MyTargetList = findElement(By.xpath("//h4[contains(.'" + name + "']"));
 		waitForVisibleFluentWait(MyTargetList);
@@ -1258,27 +1258,27 @@ public class TargetList extends LoadableComponent<TargetList> {
 		return this;
 
 	}
-	
+
 	public TargetList clickCreateNewListButton() {
 		waitForVisibleFluentWait(createNewListButton).click();
 		return this;
 	}
-	
+
 	public TargetList clickCreateNewListButtonInModal() {
 		waitForVisibleFluentWait(createTargetListModalButtons.get(0)).click();
 		return this;
 	}
-	
+
 	public String sharedTargetList(String listName){
 		WebElement list = findElement(By.xpath("//h4[contains(.,'"+listName+"')]"));
 		return list.getText();
 	}
-	
+
 	public TargetList EnterCollaboratorName(String name) {
 		WebElement textbox = findElement(By.cssSelector("input[placeholder='Name or CBI email address']"));
 		textbox.clear();
 		textbox.sendKeys(name);
 		return this;
 	}
-	
+
 }
