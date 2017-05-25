@@ -15,9 +15,10 @@ import { SettingsComponent } from './shared/components/settings/settings.compone
 export const AppUpgradeAdapter = new UpgradeAdapter(forwardRef(() => AppModule)); // tslint:disable-line:variable-name
 
 // make ng1 components available to ng2 code & templates (these are passed as declarations)
-// const myComponent = AppUpgradeAdapter.upgradeNg1Component('myComponent');
-const NavbarComponent = AppUpgradeAdapter.upgradeNg1Component('navbar'); // tslint:disable-line:variable-name
-const AppViewComponent = AppUpgradeAdapter.upgradeNg1Component('appView'); // tslint:disable-line:variable-name
+const UpgradedComponents = [  // tslint:disable-line:variable-name
+  AppUpgradeAdapter.upgradeNg1Component('navbar'),
+  AppUpgradeAdapter.upgradeNg1Component('appView')
+];
 
 // make ng1 services available to ng2 code (these are NOT passed as providers)
 // https://angular.io/docs/ts/latest/api/upgrade/index/UpgradeAdapter-class.html#!#upgradeNg1Provider-anchor
@@ -36,8 +37,7 @@ AppUpgradeAdapter.upgradeNg1Provider('versionService');
   declarations: [
     AppComponent,
     SettingsComponent,
-    NavbarComponent,
-    AppViewComponent
+    ...UpgradedComponents
   ],
   providers: [ ]
 })
