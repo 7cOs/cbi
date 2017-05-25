@@ -66,7 +66,7 @@ module.exports = /*  @ngInject */
     vm.depletionsVsYaPercent = depletionsVsYaPercent;
     vm.displayBrandIcon = displayBrandIcon;
     vm.expandCallback = expandCallback;
-    vm.flattenOpportunity = flattenOpportunity;
+    vm.getCSVData = getCSVData;
     vm.getDate = getDate;
     vm.getMemos = getMemos;
     vm.getTargetLists = getTargetLists;
@@ -190,8 +190,9 @@ module.exports = /*  @ngInject */
         loaderService.openLoader(true);
 
         let opportunityIdsPromise = opportunityIdsToCopy();
-        opportunityIdsPromise.then((opportunityIds) => {
-          targetListService.addTargetListOpportunities(listId, opportunityIds).then(function(data) {
+        opportunityIdsPromise.then(opportunityIds => {
+          targetListService.addTargetListOpportunities(listId, opportunityIds).then(() => {
+            updateTargetListOpportunityCountByListID(listId, opportunityIds.length);
             updateCopiedOpportunities();
             vm.toggleSelectAllStores(false);
 
@@ -212,10 +213,10 @@ module.exports = /*  @ngInject */
 
       if (vm.isAllOpportunitiesSelected) {
         const getIdsPromise = vm.pageName === 'target-list-detail'
-          ? targetListService.getTargetListOpportunityIDs(vm.targetListService.model.currentList.id)
-          : opportunitiesService.getAllOpportunitiesIDs();
+          ? targetListService.getTargetListOpportunities(vm.targetListService.model.currentList.id)
+          : opportunitiesService.getOpportunities(true);
 
-          getIdsPromise.then(opportunityIds => opportunityIdsPromise.resolve(opportunityIds));
+          getIdsPromise.then(opportunities => opportunityIdsPromise.resolve(opportunities.map(opportunity => opportunity.id)));
 
       } else {
         const opportunityIds = vm.selected.map(opportunity => opportunity.id);
@@ -284,14 +285,12 @@ module.exports = /*  @ngInject */
     }
 
     function saveNewList(e) {
-      const newTargetListIdx = 0; // newly created targetList will always be at 0 index
       vm.buttonDisabled = true;
 
       // Create target list
       userService.addTargetList(vm.newList).then(function(response) {
         $analytics.eventTrack('Add to Target List', {category: vm.analyticsCategory, label: response.id});
         vm.addToTargetList(response.id);
-        updateTargetListOpportunitySummary(newTargetListIdx, vm.selected.length);
         vm.closeModal();
         vm.buttonDisabled = false;
 
@@ -412,7 +411,7 @@ module.exports = /*  @ngInject */
             });
 
             if (vm.filtersService.model.appliedFilter.pagination.shouldReloadData) {
-              vm.opportunitiesService.getOpportunities();
+              vm.opportunitiesService.getAndUpdateStoresWithOpportunities();
               vm.filtersService.model.appliedFilter.pagination.shouldReloadData = false;
             }
           });
@@ -439,6 +438,7 @@ module.exports = /*  @ngInject */
       targetListService.getTargetListOpportunityIDs(targetListService.model.currentList.id).then(opportunityIds => {
         targetListService.deleteTargetListOpportunities(targetListService.model.currentList.id, opportunityIds).then(response => {
           updateOpportunityModel(opportunitiesService.model.opportunities, opportunityIds);
+          updateTargetListOpportunityCountByListID(targetListService.model.currentList.id, 0 - opportunityIds.length);
         }).catch((err) => {
             console.log('Error deleting these ids: ', opportunityIds, ' Responded with error: ', err);
         }).finally(() => {
@@ -456,8 +456,8 @@ module.exports = /*  @ngInject */
         removeAllOpportunities();
       } else {
         targetListService.deleteTargetListOpportunities(targetListService.model.currentList.id, opportunityIds).then(function(data) {
-          updateOpportunityCountAfterRemoval();
           updateOpportunityModel(opportunitiesService.model.opportunities, opportunityIds);
+          updateTargetListOpportunityCountByListID(targetListService.model.currentList.id, 0 - opportunityIds.length);
         }, function(err) {
           console.log('Error deleting these ids: ', opportunityIds, ' Responded with error: ', err);
         }).finally(() => { vm.loadingList = false; });
@@ -570,11 +570,11 @@ module.exports = /*  @ngInject */
       filtersService.addSortFilter(name);
 
       if (vm.pageName === 'opportunities') {
-        opportunitiesService.getOpportunities().then(() => {
+        opportunitiesService.getAndUpdateStoresWithOpportunities().then(() => {
           vm.loadingList = false;
         });
       } else if (vm.pageName === 'target-list-detail') {
-        targetListService.getTargetListOpportunities(targetListService.model.currentList.id,
+        targetListService.getAndUpdateTargetListStoresWithOpportunities(targetListService.model.currentList.id,
                           {type: 'targetListOpportunities'})
                           .then(() => {
           vm.loadingList = false;
@@ -631,13 +631,35 @@ module.exports = /*  @ngInject */
       vm.disabledMessage = message;
     }
 
-    function flattenOpportunity(obj, rationale) {
-      const data = [];
+    function getCSVData(includeRationale) {
+      const csvDataPromise = $q.defer();
+      if (vm.isAllOpportunitiesSelected) {
+        loaderService.openLoader(true);
 
-      angular.forEach(obj, function(value, key) {
+        const getOpportunitiesPromise = vm.pageName === 'target-list-detail'
+          ? targetListService.getFormattedTargetListOpportunities(targetListService.model.currentList.id)
+          : vm.opportunitiesService.getFormattedOpportunities(true);
+
+        getOpportunitiesPromise
+          .then(opportunities => {
+            csvDataPromise.resolve(createCSVData(opportunities, includeRationale));
+            loaderService.closeLoader();
+          })
+          .catch(() => {
+            loaderService.closeLoader();
+          });
+      } else {
+        csvDataPromise.resolve(createCSVData(vm.selected, includeRationale));
+      }
+
+      return csvDataPromise.promise;
+    }
+
+    function createCSVData(opportunities, includeRationale) {
+      return opportunities.reduce((data, opportunity) => {
         const item = {};
         const csvItem = {};
-        angular.copy(value, item);
+        angular.copy(opportunity, item);
         csvItem.storeDistributor = item.store.distributors ? item.store.distributors[0] : '';
         csvItem.TDLinx = item.store.id;
         csvItem.storeName = item.store.name;
@@ -657,15 +679,14 @@ module.exports = /*  @ngInject */
         csvItem.opportunityStatus = item.status;
         csvItem.impactPredicted = item.impactDescription;
 
-        if (rationale) {
+        if (includeRationale) {
           csvItem.rationale = item.rationale;
         }
 
         data.push(csvItem);
 
-      });
-
-      return data;
+        return data;
+      }, []);
     }
 
     /**
@@ -862,7 +883,6 @@ module.exports = /*  @ngInject */
       const hasRemainingOpps = totalOpps <= maxOpportunities;
       if (hasRemainingOpps) {
         vm.addToTargetList(targetList.id);
-        updateTargetListOpportunitySummary(idx, this.selected.length);
       } else {
         const parentEl = angular.element(document.body);
         $mdDialog.show({
@@ -965,16 +985,13 @@ module.exports = /*  @ngInject */
       };
     }
 
-    function updateTargetListOpportunitySummary(idxOfTargetList, numberToAdd) {
+    function updateTargetListOpportunityCount(idxOfTargetList, numberToAdd) {
       vm.userService.model.targetLists.owned[idxOfTargetList].opportunitiesSummary.opportunitiesCount += numberToAdd;
     }
 
-    function updateOpportunityCountAfterRemoval() {
-      vm.userService.model.targetLists.owned.map((targetList, idx) => {
-        if (targetList.id === vm.targetListService.model.currentList.id) {
-          return updateTargetListOpportunitySummary(idx, (0 - vm.selected.length));
-        }
-      });
+    function updateTargetListOpportunityCountByListID(listID, opportunityCount) {
+      const foundListIdx = vm.userService.model.targetLists.owned.findIndex(targetList => targetList.id === listID);
+      if (foundListIdx > -1) updateTargetListOpportunityCount(foundListIdx, opportunityCount);
     }
 
     function init() {

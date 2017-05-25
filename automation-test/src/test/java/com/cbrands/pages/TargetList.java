@@ -1057,7 +1057,7 @@ public class TargetList extends LoadableComponent<TargetList> {
 		return targetList;
 	}
 
-	public WebElement getOpportunities() {
+	public WebElement getAndUpdateStoresWithOpportunities() {
 		return opportunities;
 	}
 
