@@ -3,7 +3,10 @@ import { BrowserModule } from '@angular/platform-browser';
 import { RouterModule } from '@angular/router';
 import { UpgradeAdapter } from '@angular/upgrade';
 import { Angulartics2, Angulartics2Module, Angulartics2GoogleAnalytics } from 'angulartics2';
-
+import { HttpModule } from '@angular/http';
+import { StoreModule } from '@ngrx/store';
+import { EffectsModule } from './state/effects/effects.module';
+import { rootReducer } from './state/reducers/root.reducer';
 import { SettingsComponent } from './shared/components/settings/settings.component';
 
 // Using forwardRef() to reference AppModule passed to UpgradeAdapter, because AppModule
@@ -22,7 +25,10 @@ AppUpgradeAdapter.upgradeNg1Provider('versionService');
   imports: [
     BrowserModule,
     RouterModule.forRoot([ {path: 'placeholder', redirectTo: '/'} ]), // need ng2 router for angulartics2 to work
-    Angulartics2Module.forRoot([ Angulartics2GoogleAnalytics ])
+    Angulartics2Module.forRoot([ Angulartics2GoogleAnalytics ]),
+    HttpModule,
+    StoreModule.provideStore(rootReducer),
+    EffectsModule
   ],
   declarations: [ SettingsComponent ],
   providers: [ ]
