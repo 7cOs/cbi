@@ -9,7 +9,6 @@ import { CompassVersionState } from '../../../state/reducers/compass-version.red
 import { AppState } from '../../../state/reducers/root.reducer';
 import { ActionStatus } from '../../../enums/action-status.enum';
 import { AppVersion } from '../../../models/app-version.model';
-import { FetchVersionAction } from '../../../state/actions/compass-version.action';
 
 @Component({
   selector: 'settings',
@@ -61,13 +60,8 @@ export class SettingsComponent implements OnInit, OnDestroy {
       // .share();
 
       // https://stackoverflow.com/a/42199718/4618864
-      .publishReplay(1) // solves null value problem by caching the last item for additional subscribers to get
+      .publishReplay(1) // provides last item in Observable to each additional subscriber (rather than null after 1st)
       .refCount(); // keeps subject open until all have disconnected (multicast hot observable)
-
-    setTimeout(() => {
-      console.log('dispatching action to fetch version stuff');
-      this.store.dispatch(new FetchVersionAction());
-    }, 5000);
   }
 
   ngOnDestroy() {
