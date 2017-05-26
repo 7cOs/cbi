@@ -1,0 +1,25 @@
+div.content.nopad
+  div.notification-card.clearfix(md-prevent-menu-close *ngFor="let notification of notifications" ng-class="{'read': notification.status === 'READ'}" ng-click="markRead(notification)" class="{{notification.action}}")
+    div.details
+      div(*ngIf="notification.objectType.toUpperCase() === 'TARGET_LIST'")
+        p You've been added as a collaborator
+        div.source {{notification.shortenedObject.name}}
+      div(*ngIf="notification.objectType.toUpperCase() === 'OPPORTUNITY'")
+        p An opportunity has been shared with you
+        div.source {{notification.shortenedObject.store.store_name | titlecase}}
+          span(*ngIf="nb.notUnknown(notification.shortenedObject.store.store_number)")  \#{{notification.shortenedObject.store.store_number}}
+        p.sku {{notification.shortenedObject.product.name | titlecase}}
+          span  {{notification.shortenedObject.type | formatOpportunitiesType}}
+      div(*ngIf="notification.objectType.toUpperCase() === 'STORE'" ng-click="nb.goToNote(notification)")
+        p A new note was added to your retailer
+        div.source {{notification.shortenedObject.store_name | titlecase}}
+          span(*ngIf="notification.shortenedObject.store_number && nb.notUnknown(notification.shortenedObject.store_number)") &nbsp\#{{notification.shortenedObject.store_number}}
+      div(*ngIf="notification.objectType.toUpperCase() === 'DISTRIBUTOR'" ng-click="nb.goToNote(notification)")
+        p A new note was added to your distributor
+        div.source {{notification.shortenedObject.name | titlecase}}
+    div.info
+      label {{notification.dateCreated | timeAgo: 'relative'}}
+      label.bold by {{notification.creator.firstName}} {{notification.creator.lastName}}
+  div.notification-card.clearfix(*ngIf="notifications.length < 1")
+    div.details
+      p {{noNotifications}}

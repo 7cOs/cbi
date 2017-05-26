@@ -39,7 +39,6 @@ module.exports = /*  @ngInject */
     vm.dismissedError = false;
     vm.duplicateError = false;
     vm.myAccountsOnly = true;
-    vm.noNotifications = 'No unread notifications.';
     vm.notifications = [];
     vm.newOpportunityArray = [];
     vm.newOpportunityTemplate = {
@@ -461,6 +460,7 @@ module.exports = /*  @ngInject */
       userService
       .getNotifications(userService.model.currentUser.employeeID, dateAfter)
       .then(function(result) {
+        debugger;
         vm.notifications = result;
         setUnreadCount(vm.notifications);
       });

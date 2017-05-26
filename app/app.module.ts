@@ -5,6 +5,12 @@ import { UpgradeAdapter } from '@angular/upgrade';
 import { Angulartics2, Angulartics2Module, Angulartics2GoogleAnalytics } from 'angulartics2';
 
 import { SettingsComponent } from './shared/components/settings/settings.component';
+import { NotificationsComponent } from './shared/components/Notifications/notifications.component';
+
+import { FormatOpportunitiesTypePipe } from './pipes/formatOpportunitiesType.pipe';
+import { TimeAgoPipe } from './pipes/timeAgo.pipe';
+
+import { DatePipe } from '@angular/common';
 
 // Using forwardRef() to reference AppModule passed to UpgradeAdapter, because AppModule
 // takes upgraded components created by UpgradeAdapter in its definition
@@ -24,8 +30,13 @@ AppUpgradeAdapter.upgradeNg1Provider('versionService');
     RouterModule.forRoot([ {path: 'placeholder', redirectTo: '/'} ]), // need ng2 router for angulartics2 to work
     Angulartics2Module.forRoot([ Angulartics2GoogleAnalytics ])
   ],
-  declarations: [ SettingsComponent ],
-  providers: [ ]
+  declarations: [
+    SettingsComponent,
+    NotificationsComponent,
+    FormatOpportunitiesTypePipe,
+    TimeAgoPipe
+  ],
+  providers: [ DatePipe ]
 })
 export class AppModule {
   constructor(angulartics2: Angulartics2, angulartics2GoogleAnalytics: Angulartics2GoogleAnalytics) {
