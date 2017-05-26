@@ -1,7 +1,4 @@
-p.version SOLUTION 1: {{versionHash}} | {{versionNumber}}
-p.version SOLUTION 2: {{(compassVersionState$ | async).version.hash}} | {{(compassVersionState$ | async).version.version}}
-p.version SOLUTION 3: {{(version$ | async).hash}} | {{(version$ | async).version}}
-p.version status: {{versionStatus}}
+p.version {{(version$ | async).hash}} | {{(version$ | async).version}}
 p You've logged in as
 p <strong>{{firstName | titlecase}} {{lastName | titlecase}}</strong>
 a(href="/auth/logout", target="_self", angulartics2On="click", angularticsEvent="Button Click", angularticsCategory="Navigation", [angularticsProperties]="{label: 'Logout'}")

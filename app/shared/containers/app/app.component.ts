@@ -12,9 +12,6 @@ export class AppComponent implements OnInit {
   constructor(private store: Store<AppState>) { }
 
   ngOnInit() {
-    setTimeout(() => {
-      console.log('dispatching action to fetch version stuff');
-      this.store.dispatch(new FetchVersionAction());
-    }, 5000);
+    this.store.dispatch(new FetchVersionAction());
   }
 }

@@ -464,10 +464,6 @@ module.exports = /*  @ngInject */
         vm.notifications = result;
         setUnreadCount(vm.notifications);
       });
-
-      // versionService.getVersion().then(function(data) {
-      //   versionService.model.version = data;
-      // });
     };
 
     function resetFormModels() {

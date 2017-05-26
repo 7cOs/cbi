@@ -44,11 +44,11 @@ describe('SettingsComponent', () => {
     expect(component.lastName).toBe(mockUserService.model.currentUser.lastName);
   }));
 
-  it('should get version hash and number from on init', inject([ SettingsComponent ], fakeAsync((component: SettingsComponent) => {
-    component.ngOnInit();
-    flushMicrotasks();
-    expect(component.versionNumber).toBe(mockVersionService.data.version);
-    expect(component.versionHash).toBe(mockVersionService.data.hash);
-  })));
+  // it('should get version hash and number from on init', inject([ SettingsComponent ], fakeAsync((component: SettingsComponent) => {
+  //   component.ngOnInit();
+  //   flushMicrotasks();
+  //   expect(component.versionNumber).toBe(mockVersionService.data.version);
+  //   expect(component.versionHash).toBe(mockVersionService.data.hash);
+  // })));
 
 });
