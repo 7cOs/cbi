@@ -460,7 +460,6 @@ module.exports = /*  @ngInject */
       userService
       .getNotifications(userService.model.currentUser.employeeID, dateAfter)
       .then(function(result) {
-        debugger;
         vm.notifications = result;
         setUnreadCount(vm.notifications);
       });

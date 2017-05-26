@@ -66,4 +66,4 @@ type NotificationAction = 'SHARE_TARGET_LIST' | 'SHARE_OPPORTUNITY' | 'ADDED_NOT
 
 type NotificationStatus = 'SEEN' | 'READ';
 
-type OpportunityType = 'NON_BUY'  | 'AT_RISK' | 'LOW_VELOCITY' | 'MANUAL' | 'NEW_PLACEMENT_NO_REBUY' | 'NEW_PLACEMENT_QUALITY';
+type OpportunityType = 'NON_BUY' | 'AT_RISK' | 'LOW_VELOCITY' | 'MANUAL' | 'NEW_PLACEMENT_NO_REBUY' | 'NEW_PLACEMENT_QUALITY';

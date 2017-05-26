@@ -6,14 +6,21 @@ import { Component, OnChanges, Input, SimpleChanges } from '@angular/core';
 })
 
 export class NotificationsComponent implements OnChanges {
-  @Input() notifications: [Notification];
+  @Input()
+  set notifications(notifications: [Notification]) {
+    this._notifications = notifications;
+
+    this.allNotificationRead = notifications.filter(notification => notification.status !== 'READ').length < 1;
+  };
 
   noNotifications: string = 'No unread notifications.';
+  allNotificationRead: boolean = false;
+
+  private _notifications = [];
 
   constructor() {}
 
   ngOnChanges(changes: SimpleChanges) {
-    debugger;
   }
 
   markRead(notification: Notification) {

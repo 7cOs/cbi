@@ -1,5 +1,5 @@
 div.content.nopad
-  div.notification-card.clearfix(md-prevent-menu-close *ngFor="let notification of notifications" ng-class="{'read': notification.status === 'READ'}" ng-click="markRead(notification)" class="{{notification.action}}")
+  div.notification-card.clearfix(md-prevent-menu-close *ngFor="let notification of _notifications" ng-class="{'read': notification.status === 'READ'}" ng-click="markRead(notification)" class="{{notification.action}}")
     div.details
       div(*ngIf="notification.objectType.toUpperCase() === 'TARGET_LIST'")
         p You've been added as a collaborator
@@ -20,6 +20,6 @@ div.content.nopad
     div.info
       label {{notification.dateCreated | timeAgo: 'relative'}}
       label.bold by {{notification.creator.firstName}} {{notification.creator.lastName}}
-  div.notification-card.clearfix(*ngIf="notifications.length < 1")
+  div.notification-card.clearfix(*ngIf="allNotificationRead")
     div.details
       p {{noNotifications}}
