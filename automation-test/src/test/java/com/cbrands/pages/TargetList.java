@@ -30,6 +30,12 @@ import org.testng.Assert;
 
 import com.cbrands.helper.PropertiesCache;
 
+/**
+ * @deprecated This class represents at least three different pages. The elements and methods contained in this class are to be
+ * split into their proper page objects. Please use the new page object classes, and extract/deprecate the needed
+ * code accordingly.
+ */
+@Deprecated
 public class TargetList extends LoadableComponent<TargetList> {
 
 	private final WebDriver driver;
