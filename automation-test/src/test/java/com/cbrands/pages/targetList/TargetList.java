@@ -1,4 +1,4 @@
-package com.cbrands.pages;
+package com.cbrands.pages.targetList;
 
 import static com.cbrands.helper.SeleniumUtils.findElement;
 import static com.cbrands.helper.SeleniumUtils.findElements;
@@ -14,6 +14,9 @@ import static com.cbrands.helper.SeleniumUtils.waitForVisibleFluentWait;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.cbrands.pages.HomePage;
+import com.cbrands.pages.NotificationContent;
+import com.cbrands.pages.Opportunities;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.Keys;
