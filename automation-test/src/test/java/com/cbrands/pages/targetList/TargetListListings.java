@@ -53,17 +53,15 @@ public class TargetListListings extends LoadableComponent<TargetListListings> {
     WebElement element = findElement(By.cssSelector("div[class='target-list-detail-container']"));
     waitForElementVisible(element, true);
 
-    boolean targetListExists = false;
     String[] array = element.getText().split("\\n");
 
     for (String txt : array) {
       if (txt.trim().equalsIgnoreCase(listname)) {
-        targetListExists = true;
-        return targetListExists;
+        return true;
       }
     }
 
-    return targetListExists;
+    return false;
   }
 
   public TargetListListings clickCreateNewListButton() {
