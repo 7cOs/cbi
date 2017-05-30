@@ -4,10 +4,14 @@ import com.cbrands.helper.PropertiesCache;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.FindAll;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.How;
+import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.LoadableComponent;
 import org.testng.Assert;
+
+import java.util.List;
 
 import static com.cbrands.helper.SeleniumUtils.findElement;
 import static com.cbrands.helper.SeleniumUtils.waitForElementVisible;
@@ -19,6 +23,12 @@ public class TargetListListings extends LoadableComponent<TargetListListings> {
 
   @FindBy(how = How.XPATH, using = "//h1[text()='Target Lists']")
   private WebElement listingsHeader;
+
+  @FindBy(how = How.CSS, using = "div.target-action-buttons>button[class='btn-action']")
+  private WebElement createNewListButton;
+
+  @FindAll(@FindBy(how=How.CSS, using = "div[class='modal target-list-switch-modal']>div.modal-form>div.row>button[class='btn-action col-6']"))
+  private List<WebElement> listCreationChoiceModalButtons;
 
   public TargetListListings(WebDriver driver) {
     this.driver = driver;
@@ -54,6 +64,17 @@ public class TargetListListings extends LoadableComponent<TargetListListings> {
     }
 
     return targetListExists;
+  }
+
+  public TargetListListings clickCreateNewListButton() {
+    waitForVisibleFluentWait(createNewListButton).click();
+    return this;
+  }
+
+  public TargetList clickCreateNewListButtonInListCreationChoiceModal() {
+    //TODO should return Target List details page object once it has been extracted from the old TargetList page object
+    waitForVisibleFluentWait(listCreationChoiceModalButtons.get(0)).click();
+    return PageFactory.initElements(driver, TargetList.class);
   }
 
 }
