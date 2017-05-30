@@ -41,8 +41,12 @@ public class TargetListTest extends BaseTestCase {
 
   @Test(dataProvider = "targetListData", description = "Create a new Target List")
   public void createTargetList(String targetListName, String targetListDescription, String collaborator) throws InterruptedException {
-    targetListPage.clickCreateNewListButton()
-      .clickCreateNewListButtonInModal()
+    final TargetList editTargetListModal =
+      targetListPage
+        .clickCreateNewListButton()
+        .clickCreateNewListButtonInModal();
+
+    editTargetListModal
       .EnterNameTextBox(targetListName)
       .typeDescription(targetListDescription)
       .addCollaborator(collaborator)
