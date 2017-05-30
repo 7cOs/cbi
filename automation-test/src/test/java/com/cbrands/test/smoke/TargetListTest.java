@@ -17,7 +17,6 @@ public class TargetListTest extends BaseTestCase {
 
   private Login login;
   private Logout logout;
-  private TargetList targetListPage;
   private TargetListListings targetListListingPage;
 
   @BeforeMethod
@@ -30,7 +29,6 @@ public class TargetListTest extends BaseTestCase {
     HomePage homePage = login.loginWithValidCredentials(TestUser.ACTOR2.userName(), TestUser.ACTOR2.password());
     Assert.assertTrue(homePage.isOnHomePage(), "Failed to log in user: " + TestUser.ACTOR2.userName());
 
-    targetListPage = homePage.navigateTargetList();
     targetListListingPage = homePage.navigateToTargetListListings();
   }
 
@@ -42,9 +40,9 @@ public class TargetListTest extends BaseTestCase {
   @Test(dataProvider = "targetListData", description = "Create a new Target List")
   public void createTargetList(String targetListName, String targetListDescription, String collaborator) throws InterruptedException {
     final TargetList editTargetListModal =
-      targetListPage
+      targetListListingPage
         .clickCreateNewListButton()
-        .clickCreateNewListButtonInModal();
+        .clickCreateNewListButtonInListCreationChoiceModal();
 
     editTargetListModal
       .EnterNameTextBox(targetListName)
