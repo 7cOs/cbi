@@ -42,7 +42,7 @@ public class TargetListTest extends BaseTestCase {
     final TargetList editTargetListModal =
       targetListListingPage
         .clickCreateNewListButton()
-        .clickCreateNewListButtonInListCreationChoiceModal();
+        .chooseCreateNewListInListCreationChoiceModal();
 
     editTargetListModal
       .EnterNameTextBox(targetListName)

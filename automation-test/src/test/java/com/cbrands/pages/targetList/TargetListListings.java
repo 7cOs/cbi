@@ -69,7 +69,7 @@ public class TargetListListings extends LoadableComponent<TargetListListings> {
     return this;
   }
 
-  public TargetList clickCreateNewListButtonInListCreationChoiceModal() {
+  public TargetList chooseCreateNewListInListCreationChoiceModal() {
     //TODO should return Target List details page object once it has been extracted from the old TargetList page object
     waitForVisibleFluentWait(listCreationChoiceModalButtons.get(0)).click();
     return PageFactory.initElements(driver, TargetList.class);
