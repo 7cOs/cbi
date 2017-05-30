@@ -109,7 +109,7 @@ module.exports = /*  @ngInject */
     }
 
     function getChartOptions() {
-      var chartOptions = {
+      return {
         chart: {
           type: 'multiBarHorizontalChart',
           groupSpacing: 0.65,
@@ -171,7 +171,6 @@ module.exports = /*  @ngInject */
           }
         }
       };
-      return chartOptions;
     }
 
     function isValidValues(value) {
