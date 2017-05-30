@@ -5,6 +5,7 @@ import com.cbrands.helper.SeleniumUtils;
 import com.cbrands.helper.WebDriverFactory;
 import com.cbrands.listener.SeleniumSnapshotRule;
 import com.cbrands.pages.*;
+import com.cbrands.pages.targetList.TargetList;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openqa.selenium.*;

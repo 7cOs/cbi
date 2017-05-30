@@ -4,7 +4,7 @@ import com.cbrands.TestUser;
 import com.cbrands.pages.HomePage;
 import com.cbrands.pages.Login;
 import com.cbrands.pages.Logout;
-import com.cbrands.pages.TargetList;
+import com.cbrands.pages.targetList.TargetList;
 import org.testng.Assert;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
