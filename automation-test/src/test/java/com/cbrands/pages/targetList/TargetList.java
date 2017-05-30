@@ -228,24 +228,7 @@ public class TargetList extends LoadableComponent<TargetList> {
     driver.get(PropertiesCache.getInstance().getProperty("qa.host.address") + "/target-lists");
   }
 
-  public boolean doesTargetListExist(String listname) {
-    WebElement element = findElement(By.cssSelector("div[class='target-list-detail-container']"));
-    waitForElementVisible(element, true);
-
-    boolean targetListExists = false;
-    String[] array = element.getText().split("\\n");
-
-    for (String txt : array) {
-      if (txt.trim().equalsIgnoreCase(listname)) {
-        targetListExists = true;
-        return targetListExists;
-      }
-    }
-
-    return targetListExists;
-  }
-
-	public TargetList typeTargetName(String name) {
+  public TargetList typeTargetName(String name) {
 
 		WebElement element = findElement(By.xpath("//input[@placeholder='Enter List Name']"));
 		waitForElementToClickable(element, true).click();
