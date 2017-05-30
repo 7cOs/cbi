@@ -56,7 +56,6 @@ module.exports = /*  @ngInject */
      * @memberOf cf.common.services
      */
     function getFormattedStoresWithOpportunities() {
-      debugger;
       const opportunitiesPromise = $q.defer();
       service.model.noOpportunitiesFound = false;
 
@@ -83,7 +82,6 @@ module.exports = /*  @ngInject */
      * @memberOf cf.common.services
      */
     function getFormattedOpportunities(areAllRequested) {
-      debugger;
       const opportunitiesPromise = $q.defer();
 
       service.getOpportunities(areAllRequested)
@@ -104,7 +102,6 @@ module.exports = /*  @ngInject */
      * @memberOf cf.common.services
      */
     function getOpportunities(areAllRequested) {
-      debugger;
       apiHelperService.model.bulkQuery = areAllRequested;
 
       const opportunitiesPromise = $q.defer();
