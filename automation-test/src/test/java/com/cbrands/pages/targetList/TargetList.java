@@ -228,6 +228,26 @@ public class TargetList extends LoadableComponent<TargetList> {
     driver.get(PropertiesCache.getInstance().getProperty("qa.host.address") + "/target-lists");
   }
 
+  /**
+   * @deprecated Please use the method extracted to the TargetListListings page object
+   * @see TargetListListings
+   */
+  @Deprecated
+  public TargetList clickCreateNewListButton() {
+    waitForVisibleFluentWait(createNewListButton).click();
+    return this;
+  }
+
+  /**
+   * @deprecated Please use the method extracted to the TargetListListings page object
+   * @see TargetListListings
+   */
+  @Deprecated
+  public TargetList clickCreateNewListButtonInModal() {
+    waitForVisibleFluentWait(createTargetListModalButtons.get(0)).click();
+    return this;
+  }
+
   public TargetList typeTargetName(String name) {
 
 		WebElement element = findElement(By.xpath("//input[@placeholder='Enter List Name']"));
@@ -1241,16 +1261,6 @@ public class TargetList extends LoadableComponent<TargetList> {
 		js.executeScript("arguments[0].click();", MyTargetList);
 		return this;
 
-	}
-
-	public TargetList clickCreateNewListButton() {
-		waitForVisibleFluentWait(createNewListButton).click();
-		return this;
-	}
-
-	public TargetList clickCreateNewListButtonInModal() {
-		waitForVisibleFluentWait(createTargetListModalButtons.get(0)).click();
-		return this;
 	}
 
 	public String sharedTargetList(String listName){
