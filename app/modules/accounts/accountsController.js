@@ -755,7 +755,8 @@ module.exports = /*  @ngInject */
       params.additionalParams = {
         deplTimePeriod: vm.filterModel.depletionsTimePeriod.name,
         podAndVelTimePeriod: vm.filterModel.distributionTimePeriod.name,
-        metric: currentMetric
+        metric: currentMetric,
+        numberOfRecords: 30
       };
       return params;
     }
@@ -918,6 +919,7 @@ module.exports = /*  @ngInject */
             break;
           }
       }
+      obj.numberOfRecords = 30;
       return obj;
     }
 
