@@ -360,8 +360,8 @@ span {
 .widget-content {
   background: $white;
   border-bottom: 1px solid $black;
-  overflow: hidden;
   min-width: 100%;
+  overflow-y: scroll;
 
   table {
     border-top: 0;
@@ -378,6 +378,10 @@ span {
 
     .clickable:hover {
       cursor: hand;
+    }
+
+    md-tab-content {
+      overflow: hidden;
     }
   }
 
@@ -526,6 +530,13 @@ span {
 
   svg {
     height: 100%;
+
+    .tick {
+
+      text {
+        display: none;
+      }
+    }
   }
 }
 
