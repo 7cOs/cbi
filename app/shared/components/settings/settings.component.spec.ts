@@ -1,7 +1,7 @@
 import { SettingsComponent } from './settings.component';
 import { inject, TestBed } from '@angular/core/testing';
-import * as Chance from 'chance';
 import { Store } from '@ngrx/store';
+import * as Chance from 'chance';
 let chance = new Chance();
 
 describe('SettingsComponent', () => {

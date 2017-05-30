@@ -7,6 +7,6 @@ module.exports =
   .component('appView', {
     template: require('./app-view.pug'),
     controller: 'appViewController',
-    controllerAs: 'av'
+    controllerAs: 'appView'
   })
   .controller('appViewController', require('./appViewController'));

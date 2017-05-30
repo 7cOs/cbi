@@ -1,7 +1,7 @@
 import { Action } from '@ngrx/store';
 import { AppVersion } from '../../models/app-version.model';
 
-export const FETCH_VERSION_ACTION   = '[App Version] FETCH_VERSION_ACTION';
+export const FETCH_VERSION_ACTION = '[App Version] FETCH_VERSION_ACTION';
 export class FetchVersionAction implements Action {
   readonly type = FETCH_VERSION_ACTION;
 }

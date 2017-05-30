@@ -5,7 +5,6 @@ import { AppUpgradeAdapter } from './app.module';
 import { IDirectiveFactory } from 'angular';
 import { SettingsComponent } from './shared/components/settings/settings.component';
 import { AppComponent } from './shared/containers/app/app.component';
-// import { AngularTwoDemoService } from './shared/services/angular-two-demo.service';
 
 (<any>window).CryptoJS = require('crypto-js');
 
@@ -28,7 +27,6 @@ export default angular.module('cf', [
   // make ng2 components/services available to ng1 code & templates
   .directive('settings', AppUpgradeAdapter.downgradeNg2Component(SettingsComponent) as IDirectiveFactory)
   .directive('appRoot', AppUpgradeAdapter.downgradeNg2Component(AppComponent) as IDirectiveFactory)
-  // .factory('angularTwoService', AppUpgradeAdapter.downgradeNg2Provider(AngularTwoDemoService));
 
   .config(require('./config'))
   .run(require('./run'));
