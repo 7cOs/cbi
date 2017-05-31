@@ -62,7 +62,7 @@ interface StoreNotification extends Notification {
 
 type NotificationObjectType = 'TARGET_LIST' | 'OPPORTUNITY' | 'STORE';
 
-type NotificationAction = 'SHARE_TARGET_LIST' | 'SHARE_OPPORTUNITY' | 'ADDED_NOTE';
+type NotificationAction = 'SHARE_TARGET_LIST' | 'SHARE_OPPORTUNITY' | 'ADDED_NOTE' | 'ARCHIVE_TARGET_LIST';
 
 type NotificationStatus = 'SEEN' | 'READ';
 

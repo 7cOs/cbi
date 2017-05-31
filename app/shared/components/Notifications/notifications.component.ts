@@ -1,30 +1,35 @@
-import { Component, OnChanges, Input, SimpleChanges } from '@angular/core';
+import { Component, Input } from '@angular/core';
 
 @Component({
   selector: 'notifications',
   template: require('./notifications.component.pug')
 })
 
-export class NotificationsComponent implements OnChanges {
+export class NotificationsComponent {
   @Input()
   set notifications(notifications: [Notification]) {
     this._notifications = notifications;
-
     this.allNotificationRead = notifications.filter(notification => notification.status !== 'READ').length < 1;
   };
 
   noNotifications: string = 'No unread notifications.';
-  allNotificationRead: boolean = false;
+  allNotificationRead: boolean = true;
 
   private _notifications = [];
 
-  constructor() {}
+  markRead(notification: Notification) {
 
-  ngOnChanges(changes: SimpleChanges) {
   }
 
-  markRead(notification: Notification) {
-    console.warn(notification);
+  notificationClasses(notification: Notification) {
+    return {
+      ['read']: notification.status === 'READ',
+      [notification.action]: true
+    };
+  }
+
+  notUnknown(value: string) {
+    return value && value.toString().toUpperCase() !== 'UNKNOWN';
   }
 
   // override setter and orderBy: '-dateCreated'
