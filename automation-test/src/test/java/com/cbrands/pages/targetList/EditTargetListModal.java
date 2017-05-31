@@ -26,6 +26,9 @@ public class EditTargetListModal extends LoadableComponent<EditTargetListModal> 
   @FindBy(how = How.XPATH, using = "//textarea[@placeholder='Enter Description']")
   private WebElement descriptionTextBox;
 
+  @FindBy(how = How.XPATH, using = "//input[@placeholder='Name or CBI email address']")
+  private WebElement collaboratorSearchBox;
+
   @FindBy(how = How.XPATH, using = "//div/div[2]/button")
   private WebElement saveButton;
 
@@ -62,15 +65,14 @@ public class EditTargetListModal extends LoadableComponent<EditTargetListModal> 
   }
 
   public EditTargetListModal addCollaborator(String collaborator) {
-    WebElement element = findElement(By.xpath("//input[@placeholder='Name or CBI email address']"));
-    waitForElementToClickable(element, true).click();
-    element.sendKeys(collaborator);
+    waitForElementToClickable(collaboratorSearchBox, true).click();
+    collaboratorSearchBox.sendKeys(collaborator);
 
-    WebElement element1 = findElement(By.xpath("//div[2]/div[3]/inline-search/div/input[3]"));
-    element1.click();
+    WebElement searchButton = findElement(By.xpath("//div[2]/div[3]/inline-search/div/input[3]"));
+    searchButton.click();
 
-    WebElement element2 = findElement(By.xpath("//div[2]/div[3]/inline-search/div/div/ul/li"));
-    element2.click();
+    WebElement firstCollaboratorResult = findElement(By.xpath("//div[2]/div[3]/inline-search/div/div/ul/li"));
+    firstCollaboratorResult.click();
     return this;
   }
 
