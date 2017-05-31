@@ -22,6 +22,9 @@ public class EditTargetListModal extends LoadableComponent<EditTargetListModal> 
   @FindBy(how = How.CSS, using = "input[placeholder='Enter List Name']")
   private WebElement listNameTextBox;
 
+  @FindBy(how = How.XPATH, using = "//textarea[@placeholder='Enter Description']")
+  private WebElement descriptionTextBox;
+
   public EditTargetListModal(WebDriver driver) {
     this.driver = driver;
   }
@@ -49,9 +52,8 @@ public class EditTargetListModal extends LoadableComponent<EditTargetListModal> 
   }
 
   public EditTargetListModal enterDescription(String description) {
-    WebElement element = findElement(By.xpath("//textarea[@placeholder='Enter Description']"));
-    waitForElementToClickable(element, true).click();
-    element.sendKeys(description);
+    waitForElementToClickable(descriptionTextBox, true).click();
+    descriptionTextBox.sendKeys(description);
     return this;
   }
 
