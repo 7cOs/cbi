@@ -248,6 +248,7 @@ public class TargetList extends LoadableComponent<TargetList> {
     return this;
   }
 
+  @Deprecated
   public TargetList EnterNameTextBox(String name) {
     waitForVisibleFluentWait(NameTextBox);
     NameTextBox.clear();
@@ -255,6 +256,7 @@ public class TargetList extends LoadableComponent<TargetList> {
     return this;
   }
 
+  @Deprecated
   public TargetList typeDescription(String description) {
     WebElement element = findElement(By.xpath("//textarea[@placeholder='Enter Description']"));
     waitForElementToClickable(element, true).click();
@@ -262,6 +264,7 @@ public class TargetList extends LoadableComponent<TargetList> {
     return this;
   }
 
+  @Deprecated
   public TargetList addCollaborator(String collaborator) {
     WebElement element = findElement(By.xpath("//input[@placeholder='Name or CBI email address']"));
     waitForElementToClickable(element, true).click();
@@ -273,6 +276,7 @@ public class TargetList extends LoadableComponent<TargetList> {
     return this;
   }
 
+  @Deprecated
   public TargetList clickSaveButton() {
     SaveButton.click();
     waitForVisibleFluentWait(targetList);
