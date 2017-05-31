@@ -22,7 +22,7 @@ public class EditTargetListModal extends LoadableComponent<EditTargetListModal> 
 
   @Override
   protected void isLoaded() throws Error {
-    Assert.assertTrue(isManageModalLoaded());
+    Assert.assertTrue(isModalLoaded());
   }
 
   @Override
@@ -30,7 +30,7 @@ public class EditTargetListModal extends LoadableComponent<EditTargetListModal> 
     Assert.fail("The Manage modal for Target Lists cannot be loaded directly.");
   }
 
-  public boolean isManageModalLoaded() {
+  public boolean isModalLoaded() {
     waitForVisibleFluentWait(modal);
     return modal.isDisplayed();
   }
