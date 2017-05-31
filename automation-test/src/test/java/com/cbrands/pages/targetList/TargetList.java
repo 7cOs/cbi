@@ -270,15 +270,14 @@ public class TargetList extends LoadableComponent<TargetList> {
     return this;
   }
 
+  /**
+   * @deprecated Please use the method extracted to the EditTargetListModal page object
+   * @see EditTargetListModal
+   */
   @Deprecated
   public TargetList addCollaborator(String collaborator) {
-    WebElement element = findElement(By.xpath("//input[@placeholder='Name or CBI email address']"));
-    waitForElementToClickable(element, true).click();
-    element.sendKeys(collaborator);
-    WebElement element1 = findElement(By.xpath("//div[2]/div[3]/inline-search/div/input[3]"));
-    element1.click();
-    WebElement element2 = findElement(By.xpath("//div[2]/div[3]/inline-search/div/div/ul/li"));
-    element2.click();
+    final EditTargetListModal editTargetListModal = PageFactory.initElements(driver, EditTargetListModal.class);
+    editTargetListModal.addCollaborator(collaborator);
     return this;
   }
 
