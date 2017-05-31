@@ -248,29 +248,42 @@ public class TargetList extends LoadableComponent<TargetList> {
     return this;
   }
 
+  public TargetList EnterNameTextBox(String name) {
+    waitForVisibleFluentWait(NameTextBox);
+    NameTextBox.clear();
+    NameTextBox.sendKeys(name);
+    return this;
+  }
+
+  public TargetList typeDescription(String description) {
+    WebElement element = findElement(By.xpath("//textarea[@placeholder='Enter Description']"));
+    waitForElementToClickable(element, true).click();
+    element.sendKeys(description);
+    return this;
+  }
+
+  public TargetList addCollaborator(String collaborator) {
+    WebElement element = findElement(By.xpath("//input[@placeholder='Name or CBI email address']"));
+    waitForElementToClickable(element, true).click();
+    element.sendKeys(collaborator);
+    WebElement element1 = findElement(By.xpath("//div[2]/div[3]/inline-search/div/input[3]"));
+    element1.click();
+    WebElement element2 = findElement(By.xpath("//div[2]/div[3]/inline-search/div/div/ul/li"));
+    element2.click();
+    return this;
+  }
+
+  public TargetList clickSaveButton() {
+    SaveButton.click();
+    waitForVisibleFluentWait(targetList);
+    return this;
+  }
+
   public TargetList typeTargetName(String name) {
 
 		WebElement element = findElement(By.xpath("//input[@placeholder='Enter List Name']"));
 		waitForElementToClickable(element, true).click();
 		element.sendKeys(name);
-		return this;
-	}
-
-	public TargetList typeDescription(String description) {
-		WebElement element = findElement(By.xpath("//textarea[@placeholder='Enter Description']"));
-		waitForElementToClickable(element, true).click();
-		element.sendKeys(description);
-		return this;
-	}
-
-	public TargetList addCollaborator(String collaborator) {
-		WebElement element = findElement(By.xpath("//input[@placeholder='Name or CBI email address']"));
-		waitForElementToClickable(element, true).click();
-		element.sendKeys(collaborator);
-		WebElement element1 = findElement(By.xpath("//div[2]/div[3]/inline-search/div/input[3]"));
-		element1.click();
-		WebElement element2 = findElement(By.xpath("//div[2]/div[3]/inline-search/div/div/ul/li"));
-		element2.click();
 		return this;
 	}
 
@@ -297,21 +310,8 @@ public class TargetList extends LoadableComponent<TargetList> {
 		return this;
 	}
 
-	public TargetList EnterNameTextBox(String name) {
-		waitForVisibleFluentWait(NameTextBox);
-		NameTextBox.clear();
-		NameTextBox.sendKeys(name);
-		return this;
-	}
-
 	public TargetList EnterDescriptionTextBox(String description) {
 		DescriptionTextBox.sendKeys(description);
-		return this;
-	}
-
-	public TargetList clickSaveButton() {
-		SaveButton.click();
-		waitForVisibleFluentWait(targetList);
 		return this;
 	}
 
