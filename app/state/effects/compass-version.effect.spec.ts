@@ -11,39 +11,48 @@ describe('Compass Version Effects', () => {
   let runner: EffectsRunner;
   let compassVersionEffects: CompassVersionEffects;
   const mockVersion = appVersionMock();
-
-  const testBedInit = (providers: Array<any> = []) => {
-    beforeEach(() => TestBed.configureTestingModule({
-      imports: [
-        EffectsTestingModule
-      ],
-      providers: [ CompassVersionEffects ].concat(providers)
-    }));
-
-    beforeEach(inject([ EffectsRunner, CompassVersionEffects ],
-      (_runner: EffectsRunner, _compassWebEffects: CompassVersionEffects) => {
-        runner = _runner;
-        compassVersionEffects = _compassWebEffects;
-      }
-    ));
+  let mockVersionService = {
+    getVersion: () => Promise.resolve(mockVersion),
+    model: { } as any
   };
+
+  beforeEach(() => TestBed.configureTestingModule({
+    imports: [
+      EffectsTestingModule
+    ],
+    providers: [
+      CompassVersionEffects,
+      {
+        provide: 'versionService',
+        useValue: mockVersionService
+      }
+    ]
+  }));
+
+  beforeEach(inject([ EffectsRunner, CompassVersionEffects ],
+    (_runner: EffectsRunner, _compassWebEffects: CompassVersionEffects) => {
+      runner = _runner;
+      compassVersionEffects = _compassWebEffects;
+    }
+  ));
 
   describe('when a FetchVersionAction is received', () => {
 
     describe('when versionService returns successfully', () => {
 
-      testBedInit([{
-        provide: 'versionService',
-        useValue: {
-          getVersion: () => Promise.resolve(mockVersion),
-          model: { }
+      let versionService: any;
+
+      beforeEach(inject([ 'versionService' ],
+        (_versionService: any) => {
+          versionService = _versionService;
+
+          runner.queue(new FetchVersionAction());
         }
-      }]);
+      ));
 
-      it('should return a FetchVersionSuccessAction after receiving version', (done) => {
-        runner.queue(new FetchVersionAction());
-
+      it('should return a FetchVersionSuccessAction and set version results on model', (done) => {
         compassVersionEffects.fetchVersion$().subscribe(result => {
+          expect(versionService.model.version).toEqual(mockVersion);
           expect(result).toEqual(new FetchVersionSuccessAction(mockVersion));
           done();
         });
@@ -54,17 +63,15 @@ describe('Compass Version Effects', () => {
 
       const error = new Error(chance.string());
 
-      testBedInit([{
-        provide: 'versionService',
-        useValue: {
-          getVersion: () => Promise.reject(error),
-          model: { }
+      beforeEach(inject([ 'versionService' ],
+        (versionService: any) => {
+          versionService.getVersion = () => Promise.reject(error);
+
+          runner.queue(new FetchVersionAction());
         }
-      }]);
+      ));
 
       it('should return a FetchVersionFailureAction after catching an error', (done) => {
-        runner.queue(new FetchVersionAction());
-
         compassVersionEffects.fetchVersion$().subscribe(result => {
           expect(result).toEqual(new FetchVersionFailureAction(error));
           done();
