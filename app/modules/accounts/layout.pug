@@ -242,16 +242,17 @@ div(row)
         p.accent.bold(ng-if="a.filtersService.model.accountSelected.accountMarkets.propertyName !== 'depletions'") {{a.filterModel.distributionTimePeriod.displayValue}}
     .widget-content.clearfix
       .widget-data
-        div(
+        div.no-outline(
           ng-repeat="(index, data) in a.topBottomData[a.accountTypeValues[a.currentTopBottomAcctType.name]].timePeriodFilteredData"
           label="{{key}}"
           ng-click="a.navigateTopBottomLevels(a.topBottomData[a.accountTypeValues[a.currentTopBottomAcctType.name]].performanceData[index])"
           ng-class="a.isHighlightStore(a.topBottomData[a.accountTypeValues[a.currentTopBottomAcctType.name]].performanceData[index]) === true ? 'selected' : ''"
         )
-          .widget-data-left
-            p.dist-label {{data.title}}<span ng-if="a.isStoreLevel && a.topBottomData[a.accountTypeValues[a.currentTopBottomAcctType.name]].performanceData[index].storeNumber && a.topBottomData[a.accountTypeValues[a.currentTopBottomAcctType.name]].performanceData[index].storeNumber !== 'UNKNOWN'">&nbsp;{{'#' + a.topBottomData[a.accountTypeValues[a.currentTopBottomAcctType.name]].performanceData[index].storeNumber}}</span>
-          .widget-data-right
-            p.dark.text-center {{a.getValueBoundForAcctType(data.measure)}}
+          .widget-data-row
+            .widget-data-left
+              p.dist-label.data-brand {{data.title}}<span ng-if="a.isStoreLevel && a.topBottomData[a.accountTypeValues[a.currentTopBottomAcctType.name]].performanceData[index].storeNumber && a.topBottomData[a.accountTypeValues[a.currentTopBottomAcctType.name]].performanceData[index].storeNumber !== 'UNKNOWN'">&nbsp;{{'#' + a.topBottomData[a.accountTypeValues[a.currentTopBottomAcctType.name]].performanceData[index].storeNumber}}</span>
+            .widget-data-right
+              p.dark.text-center {{a.getValueBoundForAcctType(data.measure)}}
       nvd3.widget-graph(options="a.chartOptions" data="a.currentChartData")
 
 h3.top-opportunities-header Top Opportunities

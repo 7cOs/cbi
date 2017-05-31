@@ -299,9 +299,36 @@
 }
 
 .widget-data {
+  border-right: 1px solid #E1E1E3;
   float: left;
   max-height: 678px;
   width: 58.5%;
+
+  div:not(.selected) {
+
+    &:hover {
+
+      .widget-data-left {
+        background: #F3F8FB;
+      }
+
+      .widget-data-right {
+        background: #F1F5F9;
+      }
+    }
+  }
+
+  p {
+    color: #000000;
+  }
+
+  .widget-data-row {
+    height: 60px;
+
+    &:hover {
+      cursor: hand;
+    }
+  }
 
   .widget-data-left {
     height: 60px;
@@ -309,7 +336,6 @@
     width: 70.5%;
 
     p {
-      padding-top: 5px;
       padding-left: 10px;
     }
   }
@@ -324,12 +350,19 @@
       padding-top: 5px;
     }
   }
+
+  .no-outline {
+
+    &:focus {
+      outline: none!important;
+    }
+  }
 }
 
 .widget-graph {
   float: right;
   max-height: 678px;
-  width: 41.5%;
+  width: 41.3%;
 
   svg {
     height: 100%;
@@ -422,7 +455,6 @@ span {
 .widget-content {
   background: $white;
   border-bottom: 1px solid $black;
-  min-width: 100%;
   overflow-y: scroll;
 
   table {
@@ -662,14 +694,14 @@ md-autocomplete.ng-isolate-scope {
 .selected {
 
   .widget-data-left {
-    background-color: #032E60;
+    background-color: #032E60!important;
   }
 
   .widget-data-right {
-    background-color: #1F4572;;
+    background-color: #1F4572!important;
 
     p {
-      color: $white;
+      color: $white!important;
     }
   }
 }
