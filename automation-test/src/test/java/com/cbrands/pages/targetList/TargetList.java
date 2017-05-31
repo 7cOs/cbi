@@ -248,11 +248,14 @@ public class TargetList extends LoadableComponent<TargetList> {
     return this;
   }
 
+  /**
+   * @deprecated Please use the method extracted to the EditTargetListModal page object
+   * @see EditTargetListModal
+   */
   @Deprecated
   public TargetList EnterNameTextBox(String name) {
-    waitForVisibleFluentWait(NameTextBox);
-    NameTextBox.clear();
-    NameTextBox.sendKeys(name);
+    final EditTargetListModal editTargetListModal = PageFactory.initElements(driver, EditTargetListModal.class);
+    editTargetListModal.enterListName(name);
     return this;
   }
 

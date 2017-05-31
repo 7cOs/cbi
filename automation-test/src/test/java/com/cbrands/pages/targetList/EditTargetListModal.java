@@ -16,6 +16,9 @@ public class EditTargetListModal extends LoadableComponent<EditTargetListModal> 
   @FindBy(how = How.XPATH, using = "//div[contains(@class, 'target-list-modal')")
   private WebElement modal;
 
+  @FindBy(how = How.CSS, using = "input[placeholder='Enter List Name']")
+  private WebElement listNameTextBox;
+
   public EditTargetListModal(WebDriver driver) {
     this.driver = driver;
   }
@@ -35,4 +38,10 @@ public class EditTargetListModal extends LoadableComponent<EditTargetListModal> 
     return modal.isDisplayed();
   }
 
+  public EditTargetListModal enterListName(String name) {
+    waitForVisibleFluentWait(listNameTextBox);
+    listNameTextBox.clear();
+    listNameTextBox.sendKeys(name);
+    return this;
+  }
 }
