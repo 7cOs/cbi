@@ -4,7 +4,6 @@ import com.cbrands.TestUser;
 import com.cbrands.pages.HomePage;
 import com.cbrands.pages.Login;
 import com.cbrands.pages.Logout;
-import com.cbrands.pages.targetList.TargetList;
 import com.cbrands.pages.targetList.TargetListListings;
 import org.testng.Assert;
 import org.testng.annotations.AfterMethod;
@@ -39,14 +38,11 @@ public class TargetListTest extends BaseTestCase {
 
   @Test(dataProvider = "targetListData", description = "Create a new Target List")
   public void createTargetList(String targetListName, String targetListDescription, String collaborator) throws InterruptedException {
-    final TargetList editTargetListModal =
-      targetListListingPage
-        .clickCreateNewListButton()
-        .chooseCreateNewListInListCreationChoiceModal();
-
-    editTargetListModal
-      .EnterNameTextBox(targetListName)
-      .typeDescription(targetListDescription)
+    targetListListingPage
+      .clickCreateNewListButton()
+      .chooseCreateNewListInListCreationChoiceModal()
+      .enterListName(targetListName)
+      .enterDescription(targetListDescription)
       .addCollaborator(collaborator)
       .clickSaveButton();
 
