@@ -4,7 +4,7 @@ import com.cbrands.TestUser;
 import com.cbrands.pages.HomePage;
 import com.cbrands.pages.Login;
 import com.cbrands.pages.Logout;
-import com.cbrands.pages.targetList.TargetListListings;
+import com.cbrands.pages.targetList.TargetListListingsPage;
 import org.testng.Assert;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
@@ -16,7 +16,7 @@ public class TargetListTest extends BaseTestCase {
 
   private Login login;
   private Logout logout;
-  private TargetListListings targetListListingPage;
+  private TargetListListingsPage targetListListingPage;
 
   @BeforeMethod
   public void setUp() {

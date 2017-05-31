@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.cbrands.pages.targetList.TargetList;
-import com.cbrands.pages.targetList.TargetListListings;
+import com.cbrands.pages.targetList.TargetListListingsPage;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openqa.selenium.By;
@@ -104,10 +104,10 @@ public class HomePage extends LoadableComponent<HomePage>{
     return userInfo.isDisplayed();
   }
 
-  public TargetListListings navigateToTargetListListingsPage() {
+  public TargetListListingsPage navigateToTargetListListingsPage() {
     driver.get(PropertiesCache.getInstance().getProperty("qa.host.address") + "/target-lists");
 
-    return PageFactory.initElements(driver, TargetListListings.class);
+    return PageFactory.initElements(driver, TargetListListingsPage.class);
   }
 
   /**
@@ -115,7 +115,7 @@ public class HomePage extends LoadableComponent<HomePage>{
    * to navigate to the
    * TargetList page.
    *
-   * @see com.cbrands.pages.targetList.TargetListListings
+   * @see TargetListListingsPage
    */
   @Deprecated
   public TargetList navigateTargetList() {

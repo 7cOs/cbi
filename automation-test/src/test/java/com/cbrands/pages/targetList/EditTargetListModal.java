@@ -76,8 +76,8 @@ public class EditTargetListModal extends LoadableComponent<EditTargetListModal> 
     return this;
   }
 
-  public TargetListListings clickSaveButton() {
-    final TargetListListings targetListListingsPage = PageFactory.initElements(driver, TargetListListings.class);
+  public TargetListListingsPage clickSaveButton() {
+    final TargetListListingsPage targetListListingsPage = PageFactory.initElements(driver, TargetListListingsPage.class);
 
     saveButton.click();
     targetListListingsPage.isLoaded();

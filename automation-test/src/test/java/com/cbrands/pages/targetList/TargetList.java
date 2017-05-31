@@ -230,7 +230,7 @@ public class TargetList extends LoadableComponent<TargetList> {
 
   /**
    * @deprecated Please use the method extracted to the TargetListListings page object
-   * @see TargetListListings
+   * @see TargetListListingsPage
    */
   @Deprecated
   public TargetList clickCreateNewListButton() {
@@ -240,7 +240,7 @@ public class TargetList extends LoadableComponent<TargetList> {
 
   /**
    * @deprecated Please use the method extracted to the TargetListListings page object
-   * @see TargetListListings
+   * @see TargetListListingsPage
    */
   @Deprecated
   public TargetList clickCreateNewListButtonInModal() {

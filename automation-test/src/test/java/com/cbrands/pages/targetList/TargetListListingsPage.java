@@ -17,7 +17,7 @@ import static com.cbrands.helper.SeleniumUtils.findElement;
 import static com.cbrands.helper.SeleniumUtils.waitForElementVisible;
 import static com.cbrands.helper.SeleniumUtils.waitForVisibleFluentWait;
 
-public class TargetListListings extends LoadableComponent<TargetListListings> {
+public class TargetListListingsPage extends LoadableComponent<TargetListListingsPage> {
 
   private final WebDriver driver;
 
@@ -30,7 +30,7 @@ public class TargetListListings extends LoadableComponent<TargetListListings> {
   @FindAll(@FindBy(how=How.CSS, using = "div[class='modal target-list-switch-modal']>div.modal-form>div.row>button[class='btn-action col-6']"))
   private List<WebElement> listCreationChoiceModalButtons;
 
-  public TargetListListings(WebDriver driver) {
+  public TargetListListingsPage(WebDriver driver) {
     this.driver = driver;
   }
 
@@ -64,7 +64,7 @@ public class TargetListListings extends LoadableComponent<TargetListListings> {
     return false;
   }
 
-  public TargetListListings clickCreateNewListButton() {
+  public TargetListListingsPage clickCreateNewListButton() {
     waitForVisibleFluentWait(createNewListButton).click();
     return this;
   }
