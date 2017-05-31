@@ -5,6 +5,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.How;
+import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.LoadableComponent;
 import org.testng.Assert;
 
@@ -24,6 +25,9 @@ public class EditTargetListModal extends LoadableComponent<EditTargetListModal> 
 
   @FindBy(how = How.XPATH, using = "//textarea[@placeholder='Enter Description']")
   private WebElement descriptionTextBox;
+
+  @FindBy(how = How.XPATH, using = "//div/div[2]/button")
+  private WebElement saveButton;
 
   public EditTargetListModal(WebDriver driver) {
     this.driver = driver;
@@ -55,6 +59,15 @@ public class EditTargetListModal extends LoadableComponent<EditTargetListModal> 
     waitForElementToClickable(descriptionTextBox, true).click();
     descriptionTextBox.sendKeys(description);
     return this;
+  }
+
+  public TargetListListings clickSaveButton() {
+    final TargetListListings targetListListingsPage = PageFactory.initElements(driver, TargetListListings.class);
+
+    saveButton.click();
+    targetListListingsPage.isLoaded();
+
+    return targetListListingsPage;
   }
 
 }
