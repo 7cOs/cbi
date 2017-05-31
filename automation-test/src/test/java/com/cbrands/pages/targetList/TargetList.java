@@ -259,11 +259,14 @@ public class TargetList extends LoadableComponent<TargetList> {
     return this;
   }
 
+  /**
+   * @deprecated Please use the method extracted to the EditTargetListModal page object
+   * @see EditTargetListModal
+   */
   @Deprecated
   public TargetList typeDescription(String description) {
-    WebElement element = findElement(By.xpath("//textarea[@placeholder='Enter Description']"));
-    waitForElementToClickable(element, true).click();
-    element.sendKeys(description);
+    final EditTargetListModal editTargetListModal = PageFactory.initElements(driver, EditTargetListModal.class);
+    editTargetListModal.enterDescription(description);
     return this;
   }
 

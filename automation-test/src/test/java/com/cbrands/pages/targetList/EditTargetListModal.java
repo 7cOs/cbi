@@ -1,5 +1,6 @@
 package com.cbrands.pages.targetList;
 
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -7,6 +8,8 @@ import org.openqa.selenium.support.How;
 import org.openqa.selenium.support.ui.LoadableComponent;
 import org.testng.Assert;
 
+import static com.cbrands.helper.SeleniumUtils.findElement;
+import static com.cbrands.helper.SeleniumUtils.waitForElementToClickable;
 import static com.cbrands.helper.SeleniumUtils.waitForVisibleFluentWait;
 
 public class EditTargetListModal extends LoadableComponent<EditTargetListModal> {
@@ -44,4 +47,12 @@ public class EditTargetListModal extends LoadableComponent<EditTargetListModal> 
     listNameTextBox.sendKeys(name);
     return this;
   }
+
+  public EditTargetListModal enterDescription(String description) {
+    WebElement element = findElement(By.xpath("//textarea[@placeholder='Enter Description']"));
+    waitForElementToClickable(element, true).click();
+    element.sendKeys(description);
+    return this;
+  }
+
 }
