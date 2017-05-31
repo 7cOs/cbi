@@ -9,14 +9,14 @@ import org.testng.Assert;
 
 import static com.cbrands.helper.SeleniumUtils.waitForVisibleFluentWait;
 
-public class TargetListManageModal extends LoadableComponent<TargetListManageModal> {
+public class EditTargetListModal extends LoadableComponent<EditTargetListModal> {
 
   private final WebDriver driver;
 
   @FindBy(how = How.XPATH, using = "//div[contains(@class, 'target-list-modal')")
   private WebElement modal;
 
-  public TargetListManageModal(WebDriver driver) {
+  public EditTargetListModal(WebDriver driver) {
     this.driver = driver;
   }
 
