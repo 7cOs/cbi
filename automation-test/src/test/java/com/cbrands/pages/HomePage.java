@@ -104,14 +104,14 @@ public class HomePage extends LoadableComponent<HomePage>{
     return userInfo.isDisplayed();
   }
 
-  public TargetListListings navigateToTargetListListings() {
+  public TargetListListings navigateToTargetListListingsPage() {
     driver.get(PropertiesCache.getInstance().getProperty("qa.host.address") + "/target-lists");
 
     return PageFactory.initElements(driver, TargetListListings.class);
   }
 
   /**
-   * @deprecated This method returns a deprecated page object. Please use the new navigateToTargetListListings() method
+   * @deprecated This method returns a deprecated page object. Please use the new navigateToTargetListListingsPage() method
    * to navigate to the
    * TargetList page.
    *
@@ -119,7 +119,7 @@ public class HomePage extends LoadableComponent<HomePage>{
    */
   @Deprecated
   public TargetList navigateTargetList() {
-    navigateToTargetListListings();
+    navigateToTargetListListingsPage();
     return PageFactory.initElements(driver, TargetList.class);
   }
 

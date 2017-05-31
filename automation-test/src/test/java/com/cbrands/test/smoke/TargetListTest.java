@@ -28,7 +28,7 @@ public class TargetListTest extends BaseTestCase {
     HomePage homePage = login.loginWithValidCredentials(TestUser.ACTOR2.userName(), TestUser.ACTOR2.password());
     Assert.assertTrue(homePage.isOnHomePage(), "Failed to log in user: " + TestUser.ACTOR2.userName());
 
-    targetListListingPage = homePage.navigateToTargetListListings();
+    targetListListingPage = homePage.navigateToTargetListListingsPage();
   }
 
   @AfterMethod
