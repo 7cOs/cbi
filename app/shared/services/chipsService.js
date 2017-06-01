@@ -126,7 +126,7 @@ module.exports = /*  @ngInject */
       loaderService.openLoader(true);
 
       if (isTargetList) {
-        targetListService.getTargetListOpportunities(targetListService.model.currentList.id, {type: 'targetListOpportunities'}).then(function(data) {
+        targetListService.getAndUpdateTargetListStoresWithOpportunities(targetListService.model.currentList.id, {type: 'targetListOpportunities'}).then(function(data) {
           loaderService.closeLoader();
           finishGet(data);
         }, reason => {
@@ -134,7 +134,7 @@ module.exports = /*  @ngInject */
           loaderService.closeLoader();
         });
       } else {
-        $q.all([opportunitiesService.getOpportunities(), opportunitiesService.getOpportunitiesHeaders()]).then(function(data) {
+        $q.all([opportunitiesService.getAndUpdateStoresWithOpportunities(), opportunitiesService.getOpportunitiesHeaders()]).then(function(data) {
           loaderService.closeLoader();
           finishGet(data[0]);
         }, reason => {

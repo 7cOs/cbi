@@ -9,6 +9,8 @@ import static com.cbrands.helper.SeleniumUtils.waitForVisibleFluentWait;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.cbrands.pages.targetList.TargetList;
+import com.cbrands.pages.targetList.TargetListListingsPage;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openqa.selenium.By;
@@ -100,6 +102,25 @@ public class HomePage extends LoadableComponent<HomePage>{
   private boolean isUserInfoDisplayed() {
     waitForVisibleFluentWait(userInfo);
     return userInfo.isDisplayed();
+  }
+
+  public TargetListListingsPage navigateToTargetListListingsPage() {
+    driver.get(PropertiesCache.getInstance().getProperty("qa.host.address") + "/target-lists");
+
+    return PageFactory.initElements(driver, TargetListListingsPage.class);
+  }
+
+  /**
+   * @deprecated This method returns a deprecated page object. Please use the new navigateToTargetListListingsPage() method
+   * to navigate to the
+   * TargetList page.
+   *
+   * @see TargetListListingsPage
+   */
+  @Deprecated
+  public TargetList navigateTargetList() {
+    navigateToTargetListListingsPage();
+    return PageFactory.initElements(driver, TargetList.class);
   }
 
 	public HomePage clickOffPremise() {
@@ -209,12 +230,7 @@ public class HomePage extends LoadableComponent<HomePage>{
 		return PageFactory.initElements(driver, Opportunities.class);
 	}
 
-	public TargetList navigateTargetList() {
-		driver.get(PropertiesCache.getInstance().getProperty("qa.host.address") + "/target-lists");
-		return PageFactory.initElements(driver, TargetList.class);
-	}
-
-	public Opportunities selectSaveReportDropdown(String itemName) {
+  public Opportunities selectSaveReportDropdown(String itemName) {
 		WebElement button1 = findElement(By.xpath("//md-select[@placeholder='Select Saved Report']"));
 		button1.click();
 		Actions actions = new Actions(driver);

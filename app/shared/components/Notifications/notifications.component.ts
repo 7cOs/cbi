@@ -17,7 +17,7 @@ export class NotificationsComponent {
   noNotifications: string = 'No unread notifications.';
   allNotificationRead: boolean = true;
 
-  private _notifications = [];
+  private _notifications: Notification[] = [];
 
   clickOn(notification: Notification) {
     this.notificationClicked.emit(notification);

@@ -194,7 +194,7 @@ module.exports = /*  @ngInject */
 
       // go to a specific opportunity on load and then set to null if specified
       if (opportunitiesService.model.opportunityId !== null) {
-        opportunitiesService.getOpportunities(opportunitiesService.model.opportunityId).then(function(data) {
+        opportunitiesService.getAndUpdateStoresWithOpportunities(opportunitiesService.model.opportunityId).then(function(data) {
           opportunitiesService.model.opportunities = data;
           opportunitiesService.model.opportunityId = null;
         });

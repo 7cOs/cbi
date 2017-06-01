@@ -3,7 +3,11 @@ import { BrowserModule } from '@angular/platform-browser';
 import { RouterModule } from '@angular/router';
 import { UpgradeAdapter } from '@angular/upgrade';
 import { Angulartics2, Angulartics2Module, Angulartics2GoogleAnalytics } from 'angulartics2';
-
+import { HttpModule } from '@angular/http';
+import { StoreModule } from '@ngrx/store';
+import { EffectsModule } from './state/effects/effects.module';
+import { rootReducer } from './state/reducers/root.reducer';
+import { AppComponent } from './shared/containers/app/app.component';
 import { SettingsComponent } from './shared/components/settings/settings.component';
 import { NotificationsComponent } from './shared/components/Notifications/notifications.component';
 
@@ -17,7 +21,10 @@ import { DatePipe } from '@angular/common';
 export const AppUpgradeAdapter = new UpgradeAdapter(forwardRef(() => AppModule)); // tslint:disable-line:variable-name
 
 // make ng1 components available to ng2 code & templates (these are passed as declarations)
-// const myComponent = AppUpgradeAdapter.upgradeNg1Component('myComponent');
+const UpgradedComponents = [  // tslint:disable-line:variable-name
+  AppUpgradeAdapter.upgradeNg1Component('navbar'),
+  AppUpgradeAdapter.upgradeNg1Component('appView')
+];
 
 // make ng1 services available to ng2 code (these are NOT passed as providers)
 // https://angular.io/docs/ts/latest/api/upgrade/index/UpgradeAdapter-class.html#!#upgradeNg1Provider-anchor
@@ -28,11 +35,16 @@ AppUpgradeAdapter.upgradeNg1Provider('versionService');
   imports: [
     BrowserModule,
     RouterModule.forRoot([ {path: 'placeholder', redirectTo: '/'} ]), // need ng2 router for angulartics2 to work
-    Angulartics2Module.forRoot([ Angulartics2GoogleAnalytics ])
+    Angulartics2Module.forRoot([ Angulartics2GoogleAnalytics ]),
+    HttpModule,
+    StoreModule.provideStore(rootReducer),
+    EffectsModule
   ],
   declarations: [
+    AppComponent,
     SettingsComponent,
     NotificationsComponent,
+    ...UpgradedComponents,
     FormatOpportunitiesTypePipe,
     TimeAgoPipe
   ],
