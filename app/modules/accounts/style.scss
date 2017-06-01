@@ -299,10 +299,13 @@
 }
 
 .widget-data {
-  border-right: 1px solid #E1E1E3;
   float: left;
   max-height: 678px;
   width: 58.5%;
+
+  .widget-row-container {
+    border-right: 1px solid #E1E1E3;
+  }
 
   div:not(.selected) {
 
@@ -337,6 +340,7 @@
 
     p {
       padding-left: 10px;
+      width: 92%;
     }
   }
 
@@ -364,15 +368,12 @@
   max-height: 678px;
   width: 41.3%;
 
-  svg {
-    height: 100%;
+  div:first-child {
+    margin-top: -45px;
+  }
 
-    .tick {
-
-      text {
-        display: none;
-      }
-    }
+  .nv-y {
+    display: none;
   }
 }
 

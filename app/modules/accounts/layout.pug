@@ -241,8 +241,8 @@ div(row)
         p.accent(ng-if="a.filtersService.model.accountSelected.accountMarkets.propertyName === 'depletions'") {{a.filterModel.depletionsTimePeriod.displayValue}}
         p.accent.bold(ng-if="a.filtersService.model.accountSelected.accountMarkets.propertyName !== 'depletions'") {{a.filterModel.distributionTimePeriod.displayValue}}
     .widget-content.clearfix
-      .widget-data
-        div.no-outline(
+      .widget-data(ng-if="a.topBottomData[a.accountTypeValues[a.currentTopBottomAcctType.name]].timePeriodFilteredData.length")
+        .widget-row-container.no-outline(
           ng-repeat="(index, data) in a.topBottomData[a.accountTypeValues[a.currentTopBottomAcctType.name]].timePeriodFilteredData"
           label="{{key}}"
           ng-click="a.navigateTopBottomLevels(a.topBottomData[a.accountTypeValues[a.currentTopBottomAcctType.name]].performanceData[index])"
@@ -253,7 +253,9 @@ div(row)
               p.dist-label.data-brand {{data.title}}<span ng-if="a.isStoreLevel && a.topBottomData[a.accountTypeValues[a.currentTopBottomAcctType.name]].performanceData[index].storeNumber && a.topBottomData[a.accountTypeValues[a.currentTopBottomAcctType.name]].performanceData[index].storeNumber !== 'UNKNOWN'">&nbsp;{{'#' + a.topBottomData[a.accountTypeValues[a.currentTopBottomAcctType.name]].performanceData[index].storeNumber}}</span>
             .widget-data-right
               p.dark.text-center {{a.getValueBoundForAcctType(data.measure)}}
-      nvd3.widget-graph(options="a.chartOptions" data="a.currentChartData")
+      .widget-graph
+        div(style="height: 60px;" ng-repeat="data in a.testChartData")
+          nvd3(options="a.chartOptions" data="data")
 
 h3.top-opportunities-header Top Opportunities
   a.accent(ng-click="a.goToOpportunities($event);" ng-disabled="a.allOpportunitiesDisabled()" analytics-on="click" analytics-event="{{a.currentTopBottomAcctType.name}}" analytics-category="{{a.filtersService.model.valuesVsTrend.name}}" analytics-label="View Opportunities") See All Opportunities

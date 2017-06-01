@@ -112,7 +112,7 @@ module.exports = /*  @ngInject */
       return {
         chart: {
           type: 'multiBarHorizontalChart',
-          groupSpacing: 0.65,
+          groupSpacing: 0.55,
           x: function(d) {
             return  d.label;
           },
@@ -129,6 +129,7 @@ module.exports = /*  @ngInject */
           yAxis: {
             showMaxMin: false
           },
+          yDomain: [-60, 60],
           showControls: false,
           showValues: true,
           duration: 500,
@@ -144,6 +145,7 @@ module.exports = /*  @ngInject */
             }
           },
           tooltip: {
+            enabled: false,
             valueFormatter: function(d) {
               if (isValidValues(Number(d))) {
                 if (d % 1 !== 0) {

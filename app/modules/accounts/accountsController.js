@@ -1217,6 +1217,15 @@ module.exports = /*  @ngInject */
         console.log('[getDataForTopBottomLevel]', error);
         vm.loadingTopBottom = 'error';
         vm.currentChartData = myperformanceService.initChartData();
+        console.log('vm.currentChartData1', vm.currentChartData);
+
+        vm.testChartData = [];
+
+        vm.currentChartData[0].values.forEach(value => {
+          vm.testChartData.push([value]);
+        });
+
+        console.log('vm.testChartData', vm.testChartData);
       });
       vm.marketSelectedIndex = vm.currentTopBottomAcctType.value - 1;
     }
@@ -1289,6 +1298,16 @@ module.exports = /*  @ngInject */
         stopTopBottomLoadingIcon();
         console.log('Unable to retrieve any ' + vm.currentTopBottomObj.currentLevelName);
       }
+      console.log('vm.currentChartData2', vm.currentChartData);
+      vm.testChartData = [];
+
+      vm.currentChartData[0].values.forEach(value => {
+        vm.testChartData.push([{
+          values: [value]
+        }]);
+      });
+
+      console.log('vm.testChartData2', vm.testChartData);
     }
 
     /**
