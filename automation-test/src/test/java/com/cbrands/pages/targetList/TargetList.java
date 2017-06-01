@@ -228,46 +228,75 @@ public class TargetList extends LoadableComponent<TargetList> {
     driver.get(PropertiesCache.getInstance().getProperty("qa.host.address") + "/target-lists");
   }
 
-  public boolean doesTargetListExist(String listname) {
-    WebElement element = findElement(By.cssSelector("div[class='target-list-detail-container']"));
-    waitForElementVisible(element, true);
-
-    boolean targetListExists = false;
-    String[] array = element.getText().split("\\n");
-
-    for (String txt : array) {
-      if (txt.trim().equalsIgnoreCase(listname)) {
-        targetListExists = true;
-        return targetListExists;
-      }
-    }
-
-    return targetListExists;
+  /**
+   * @deprecated Please use the method extracted to the TargetListListings page object
+   * @see TargetListListingsPage
+   */
+  @Deprecated
+  public TargetList clickCreateNewListButton() {
+    waitForVisibleFluentWait(createNewListButton).click();
+    return this;
   }
 
-	public TargetList typeTargetName(String name) {
+  /**
+   * @deprecated Please use the method extracted to the TargetListListings page object
+   * @see TargetListListingsPage
+   */
+  @Deprecated
+  public TargetList clickCreateNewListButtonInModal() {
+    waitForVisibleFluentWait(createTargetListModalButtons.get(0)).click();
+    return this;
+  }
+
+  /**
+   * @deprecated Please use the method extracted to the EditTargetListModal page object
+   * @see EditTargetListModal
+   */
+  @Deprecated
+  public TargetList EnterNameTextBox(String name) {
+    final EditTargetListModal editTargetListModal = PageFactory.initElements(driver, EditTargetListModal.class);
+    editTargetListModal.enterListName(name);
+    return this;
+  }
+
+  /**
+   * @deprecated Please use the method extracted to the EditTargetListModal page object
+   * @see EditTargetListModal
+   */
+  @Deprecated
+  public TargetList typeDescription(String description) {
+    final EditTargetListModal editTargetListModal = PageFactory.initElements(driver, EditTargetListModal.class);
+    editTargetListModal.enterDescription(description);
+    return this;
+  }
+
+  /**
+   * @deprecated Please use the method extracted to the EditTargetListModal page object
+   * @see EditTargetListModal
+   */
+  @Deprecated
+  public TargetList addCollaborator(String collaborator) {
+    final EditTargetListModal editTargetListModal = PageFactory.initElements(driver, EditTargetListModal.class);
+    editTargetListModal.addCollaborator(collaborator);
+    return this;
+  }
+
+  /**
+   * @deprecated Please use the method extracted to the EditTargetListModal page object
+   * @see EditTargetListModal
+   */
+  @Deprecated
+  public TargetList clickSaveButton() {
+    final EditTargetListModal editTargetListModal = PageFactory.initElements(driver, EditTargetListModal.class);
+    editTargetListModal.clickSaveButton();
+    return this;
+  }
+
+  public TargetList typeTargetName(String name) {
 
 		WebElement element = findElement(By.xpath("//input[@placeholder='Enter List Name']"));
 		waitForElementToClickable(element, true).click();
 		element.sendKeys(name);
-		return this;
-	}
-
-	public TargetList typeDescription(String description) {
-		WebElement element = findElement(By.xpath("//textarea[@placeholder='Enter Description']"));
-		waitForElementToClickable(element, true).click();
-		element.sendKeys(description);
-		return this;
-	}
-
-	public TargetList addCollaborator(String collaborator) {
-		WebElement element = findElement(By.xpath("//input[@placeholder='Name or CBI email address']"));
-		waitForElementToClickable(element, true).click();
-		element.sendKeys(collaborator);
-		WebElement element1 = findElement(By.xpath("//div[2]/div[3]/inline-search/div/input[3]"));
-		element1.click();
-		WebElement element2 = findElement(By.xpath("//div[2]/div[3]/inline-search/div/div/ul/li"));
-		element2.click();
 		return this;
 	}
 
@@ -294,21 +323,8 @@ public class TargetList extends LoadableComponent<TargetList> {
 		return this;
 	}
 
-	public TargetList EnterNameTextBox(String name) {
-		waitForVisibleFluentWait(NameTextBox);
-		NameTextBox.clear();
-		NameTextBox.sendKeys(name);
-		return this;
-	}
-
 	public TargetList EnterDescriptionTextBox(String description) {
 		DescriptionTextBox.sendKeys(description);
-		return this;
-	}
-
-	public TargetList clickSaveButton() {
-		SaveButton.click();
-		waitForVisibleFluentWait(targetList);
 		return this;
 	}
 
@@ -1258,16 +1274,6 @@ public class TargetList extends LoadableComponent<TargetList> {
 		js.executeScript("arguments[0].click();", MyTargetList);
 		return this;
 
-	}
-
-	public TargetList clickCreateNewListButton() {
-		waitForVisibleFluentWait(createNewListButton).click();
-		return this;
-	}
-
-	public TargetList clickCreateNewListButtonInModal() {
-		waitForVisibleFluentWait(createTargetListModalButtons.get(0)).click();
-		return this;
 	}
 
 	public String sharedTargetList(String listName){

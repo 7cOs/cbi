@@ -1,4 +1,4 @@
-p.version {{versionHash}} | {{versionNumber}}
+p.version {{(version$ | async).hash}} | {{(version$ | async).version}}
 p You've logged in as
 p <strong>{{firstName | titlecase}} {{lastName | titlecase}}</strong>
 a(href="/auth/logout", target="_self", angulartics2On="click", angularticsEvent="Button Click", angularticsCategory="Navigation", [angularticsProperties]="{label: 'Logout'}")

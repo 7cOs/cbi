@@ -4,7 +4,7 @@ import com.cbrands.TestUser;
 import com.cbrands.pages.HomePage;
 import com.cbrands.pages.Login;
 import com.cbrands.pages.Logout;
-import com.cbrands.pages.targetList.TargetList;
+import com.cbrands.pages.targetList.TargetListListingsPage;
 import org.testng.Assert;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
@@ -16,7 +16,7 @@ public class TargetListTest extends BaseTestCase {
 
   private Login login;
   private Logout logout;
-  private TargetList targetListPage;
+  private TargetListListingsPage targetListListingPage;
 
   @BeforeMethod
   public void setUp() {
@@ -28,7 +28,7 @@ public class TargetListTest extends BaseTestCase {
     HomePage homePage = login.loginWithValidCredentials(TestUser.ACTOR2.userName(), TestUser.ACTOR2.password());
     Assert.assertTrue(homePage.isOnHomePage(), "Failed to log in user: " + TestUser.ACTOR2.userName());
 
-    targetListPage = homePage.navigateTargetList();
+    targetListListingPage = homePage.navigateToTargetListListingsPage();
   }
 
   @AfterMethod
@@ -38,14 +38,16 @@ public class TargetListTest extends BaseTestCase {
 
   @Test(dataProvider = "targetListData", description = "Create a new Target List")
   public void createTargetList(String targetListName, String targetListDescription, String collaborator) throws InterruptedException {
-    targetListPage.clickCreateNewListButton()
-      .clickCreateNewListButtonInModal()
-      .EnterNameTextBox(targetListName)
-      .typeDescription(targetListDescription)
+    targetListListingPage
+      .clickCreateNewListButton()
+      .chooseCreateNewListInListCreationChoiceModal()
+      .enterListName(targetListName)
+      .enterDescription(targetListDescription)
       .addCollaborator(collaborator)
       .clickSaveButton();
 
-    Assert.assertTrue(targetListPage.doesTargetListExist(targetListName), "Failure creating target list: " + targetListName);
+    Assert.assertTrue(targetListListingPage.doesTargetListExist(targetListName), "Failure creating target list: " +
+      targetListName);
   }
 
   @DataProvider(name = "targetListData")
