@@ -79,4 +79,22 @@ describe('Compass Version Effects', () => {
       });
     });
   });
+
+  describe('when a FetchVersionFailureAction is received', () => {
+
+    const err = new Error(chance.string());
+
+    beforeEach(() => {
+      runner.queue(new FetchVersionFailureAction(err));
+      spyOn(console, 'error');
+    });
+
+    // console logging isn't important, but it will be important to test real error handling if added later
+    it('should log the error payload', (done) => {
+      compassVersionEffects.fetchVersionFailure$().subscribe(() => {
+        expect(console.error).toHaveBeenCalled();
+        done();
+      });
+    });
+  });
 });

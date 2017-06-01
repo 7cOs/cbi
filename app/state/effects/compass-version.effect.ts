@@ -25,7 +25,7 @@ export class CompassVersionEffects {
             this.versionService.model.version = response; // set on model so ng1 can still use data
             return new CompassVersionActions.FetchVersionSuccessAction(response);
           })
-          .catch((err: Error) => (new CompassVersionActions.FetchVersionFailureAction(err)));
+          .catch((err: any) => (new CompassVersionActions.FetchVersionFailureAction(err)));
       });
   }
 
