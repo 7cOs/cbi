@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
 
 @Component({
   selector: 'notifications',
@@ -12,13 +12,15 @@ export class NotificationsComponent {
     this.allNotificationRead = notifications.filter(notification => notification.status !== 'READ').length < 1;
   };
 
+  @Output() notificationClicked = new EventEmitter<Notification>();
+
   noNotifications: string = 'No unread notifications.';
   allNotificationRead: boolean = true;
 
   private _notifications = [];
 
-  markRead(notification: Notification) {
-
+  clickOn(notification: Notification) {
+    this.notificationClicked.emit(notification);
   }
 
   notificationClasses(notification: Notification) {

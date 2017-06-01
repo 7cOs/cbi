@@ -86,7 +86,7 @@ module.exports = /*  @ngInject */
     vm.getDismissedOpportunity = getDismissedOpportunity;
     vm.unDismissOpportunity = unDismissOpportunity;
     vm.getTargetLists = getTargetLists;
-    vm.markRead = markRead;
+    vm.notificationClicked = notificationClicked;
     vm.markSeen = markSeen;
     vm.modalAddOpportunityForm = modalAddOpportunityForm;
     vm.modalCustomOpportunityError = modalCustomOpportunityError;
@@ -113,7 +113,7 @@ module.exports = /*  @ngInject */
     // **************
 
     // Mark notification as read on click
-    function markRead(notification) {
+    function notificationClicked(notification) {
       vm.notificationsService
         .markNotifications([{
           id: notification.id,

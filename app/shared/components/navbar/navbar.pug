@@ -43,7 +43,7 @@ div.outer-nav-wrapper
           md-menu(md-position-mode="target-right target" md-offset="1 38")
             a.nav-icon.notifications(href="#" md-menu-origin ng-click="$mdOpenMenu($event); nb.markSeen(nb.notifications)", aria-label="Notifications" analytics-on="click" analytics-event="View Notification" analytics-category="Notifications" analytics-label="Navbar Icon Click")
             md-menu-content.nav-flyout
-              notifications([notifications]="nb.notifications")
+              notifications([notifications]="nb.notifications", (notification-clicked)="nb.notificationClicked($event)")
           md-menu(md-position-mode="target-right target" md-offset="2 54")
             a.nav-icon.settings(href="#" md-menu-origin ng-click="$mdOpenMenu($event)", aria-label="Settings" analytics-on="click" analytics-event="View Settings" analytics-category="Settings" analytics-label="Navbar Icon Click")
             md-menu-content
