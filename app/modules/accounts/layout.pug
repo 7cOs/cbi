@@ -254,7 +254,7 @@ div(row)
             .widget-data-right
               p.dark.text-center {{a.getValueBoundForAcctType(data.measure)}}
       .widget-graph
-        div(style="height: 60px;" ng-repeat="data in a.testChartData")
+        div(style="height: 60px;" ng-repeat="data in a.currentChartData")
           nvd3(options="a.chartOptions" data="data")
 
 h3.top-opportunities-header Top Opportunities
