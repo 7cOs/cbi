@@ -336,7 +336,7 @@
   .widget-data-left {
     height: 60px;
     float: left;
-    width: 70.5%;
+    width: 71%;
 
     p {
       padding-left: 10px;
@@ -348,7 +348,7 @@
     background: #F3F3F3;
     float: right;
     height: 60px;
-    width: 29.5%;
+    width: 29%;
 
     p {
       padding-top: 5px;
@@ -368,8 +368,12 @@
   max-height: 678px;
   width: 41.3%;
 
+  svg {
+    height: 100px;
+  }
+
   div:first-child {
-    margin-top: -45px;
+    margin-top: -20px;
   }
 
   .nv-y {
@@ -456,6 +460,7 @@ span {
 .widget-content {
   background: $white;
   border-bottom: 1px solid $black;
+  min-height: 80px;
   overflow-y: scroll;
 
   table {
