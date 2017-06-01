@@ -144,6 +144,7 @@ module.exports = /*  @ngInject */
     vm.updateDistributionTimePeriod = updateDistributionTimePeriod;
     vm.filterTopBottom = filterTopBottom;
     vm.canOpenNote = canOpenNote;
+    vm.getAccountTypePerformanceData = getAccountTypePerformanceData;
 
     init();
 
@@ -817,6 +818,10 @@ module.exports = /*  @ngInject */
     function canOpenNote() {
       if (vm.showXDistributor && !vm.showXChain || vm.showXStore) return true;
       else return false;
+    }
+
+    function getAccountTypePerformanceData(index) {
+      return vm.topBottomData[vm.accountTypeValues[vm.currentTopBottomAcctType.name]].performanceData[index];
     }
 
     // ***************
@@ -1666,10 +1671,12 @@ module.exports = /*  @ngInject */
      });
 
     function formatChartData(chartData) {
-      return chartData[0].values.map(data => {
-        return [{
-          values: [data]
-        }];
-      });
+      if (chartData.length && angular.isArray(chartData)) {
+        return chartData[0].values.map(data => {
+          return [{
+            values: [data]
+          }];
+        });
+      } else return [];
     }
   };

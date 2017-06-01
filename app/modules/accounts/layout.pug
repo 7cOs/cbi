@@ -222,6 +222,7 @@ div(row)
       span.light For &nbsp;
       span {{ (a.selectedStore || a.selectedDistributor || a.topLevelForLabel) | truncateText:30 }}
 
+    //- Top Bottom Header
     .widget-header
       .dropdown-filter.narrow
         md-select(ng-model="a.filtersService.model.accountSelected.accountMarkets" md-on-open="a.openSelect(true)" md-on-close="a.openSelect(false)" aria-label="Account Markets Filter")
@@ -229,28 +230,30 @@ div(row)
       .header-selector
         span.back-chevron(ng-if="a.canNavPrevLevel" ng-click="a.navPrevLevelInTopBottom()")
         p.brands.market {{ (a.selectedStore || a.selectedDistributor || a.currentTopBottomObj.currentLevelName.toUpperCase()) | truncateText:20 }}
+
+    //- Top Bottom Subheader
     .widget-subheader
       .widget-subheader-item
         p.accent.bold.left {{a.currentTopBottomObj.currentLevelName}}
       .widget-subheader-item.text-center
         p.accent.bold {{a.filtersService.model.accountSelected.accountMarkets.name}}
-        p.accent.bold(ng-if="a.filtersService.model.accountSelected.accountMarkets.propertyName === 'depletions'") {{a.filterModel.depletionsTimePeriod.displayValue}}
-        p.accent.bold(ng-if="a.filtersService.model.accountSelected.accountMarkets.propertyName !== 'depletions'") {{a.filterModel.distributionTimePeriod.displayValue}}
+        p.accent.bold {{ a.filtersService.model.accountSelected.accountMarkets.propertyName === 'depletions' ? a.filterModel.depletionsTimePeriod.displayValue : a.filterModel.distributionTimePeriod.displayValue }}
       .widget-subheader-item.text-center
-        p.accent.bold {{'Trend (' + a.filterModel.trend.name + '%)'}}
-        p.accent(ng-if="a.filtersService.model.accountSelected.accountMarkets.propertyName === 'depletions'") {{a.filterModel.depletionsTimePeriod.displayValue}}
-        p.accent.bold(ng-if="a.filtersService.model.accountSelected.accountMarkets.propertyName !== 'depletions'") {{a.filterModel.distributionTimePeriod.displayValue}}
+        p.accent.bold Trend ({{a.filterModel.trend.name}}%)
+        p.accent.bold {{ a.filtersService.model.accountSelected.accountMarkets.propertyName === 'depletions' ? a.filterModel.depletionsTimePeriod.displayValue : a.filterModel.distributionTimePeriod.displayValue }}
+
+    //- Top Bottom Content
     .widget-content.clearfix
-      .widget-data(ng-if="a.topBottomData[a.accountTypeValues[a.currentTopBottomAcctType.name]].timePeriodFilteredData.length")
+      .widget-data
         .widget-row-container.no-outline(
           ng-repeat="(index, data) in a.topBottomData[a.accountTypeValues[a.currentTopBottomAcctType.name]].timePeriodFilteredData"
           label="{{key}}"
-          ng-click="a.navigateTopBottomLevels(a.topBottomData[a.accountTypeValues[a.currentTopBottomAcctType.name]].performanceData[index])"
-          ng-class="a.isHighlightStore(a.topBottomData[a.accountTypeValues[a.currentTopBottomAcctType.name]].performanceData[index]) === true ? 'selected' : ''"
+          ng-click="a.navigateTopBottomLevels(a.getAccountTypePerformanceData(index))"
+          ng-class="a.isHighlightStore(a.getAccountTypePerformanceData(index)) === true ? 'selected' : ''"
         )
           .widget-data-row
             .widget-data-left
-              p.dist-label.data-brand {{data.title}}<span ng-if="a.isStoreLevel && a.topBottomData[a.accountTypeValues[a.currentTopBottomAcctType.name]].performanceData[index].storeNumber && a.topBottomData[a.accountTypeValues[a.currentTopBottomAcctType.name]].performanceData[index].storeNumber !== 'UNKNOWN'">&nbsp;{{'#' + a.topBottomData[a.accountTypeValues[a.currentTopBottomAcctType.name]].performanceData[index].storeNumber}}</span>
+              p.dist-label.data-brand {{data.title}}<span ng-if="a.isStoreLevel && a.getAccountTypePerformanceData(index).storeNumber && a.getAccountTypePerformanceData(index).storeNumber !== 'UNKNOWN'">&nbsp;{{'#' + a.getAccountTypePerformanceData(index).storeNumber}}</span>
             .widget-data-right
               p.dark.text-center {{a.getValueBoundForAcctType(data.measure)}}
       .widget-graph
