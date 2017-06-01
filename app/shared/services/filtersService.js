@@ -384,7 +384,13 @@ module.exports = /*  @ngInject */
           value: 'GM',
           chipValue: 'General Market'
         }
-      ]
+      ],
+      accountTypeValues: {
+        Distributors: 'distributors',
+        Accounts: 'accounts',
+        'Sub-Accounts': 'subAccounts',
+        Stores: 'stores'
+      }
     };
 
     var lastEndingTimePeriod = {

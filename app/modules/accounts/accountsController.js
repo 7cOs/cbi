@@ -89,12 +89,7 @@ module.exports = /*  @ngInject */
       subAccounts: '',
       stores: ''
     };
-    vm.accountTypeValues = {
-      Distributors: 'distributors',
-      Accounts: 'accounts',
-      'Sub-Accounts': 'subAccounts',
-      Stores: 'stores'
-    };
+    vm.accountTypeValues = filtersService.accountFilters.accountTypeValues;
     vm.isChainSelectionComplete = null;
     vm.isDistributorSelectionComplete = null;
     vm.getDataForTopBottomLevel = getDataForTopBottomLevel;
