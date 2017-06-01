@@ -307,6 +307,13 @@
     border-right: 1px solid #E1E1E3;
   }
 
+  .no-outline {
+
+    &:focus {
+      outline: none;
+    }
+  }
+
   div:not(.selected) {
 
     &:hover {
@@ -354,30 +361,27 @@
       padding-top: 5px;
     }
   }
-
-  .no-outline {
-
-    &:focus {
-      outline: none!important;
-    }
-  }
 }
 
 .widget-graph {
   float: right;
   max-height: 678px;
-  width: 41.3%;
-
-  svg {
-    height: 100px;
-  }
+  width: 41.5%;
 
   div:first-child {
     margin-top: -20px;
   }
 
-  .nv-y {
-    display: none;
+  .graph-container {
+    height: 60px;
+
+    svg {
+      height: 100px;
+    }
+
+    .nv-y {
+      display: none;
+    }
   }
 }
 
@@ -461,6 +465,7 @@ span {
   background: $white;
   border-bottom: 1px solid $black;
   min-height: 80px;
+  overflow-x: hidden;
   overflow-y: scroll;
 
   table {

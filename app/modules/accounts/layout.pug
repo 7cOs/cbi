@@ -215,7 +215,7 @@ div(row)
       loader
     .loader-wrap.inline.error(ng-if="a.loadingTopBottom === 'error'" ng-class="{'active': a.loadingTopBottom}")
     .section-header.header-selector.label.accent
-      md-select.top-bottom(ng-model="a.filtersService.model.valuesVsTrend" md-on-open="a.openSelect(true)" md-on-close="a.openSelect(false)" placeholder="Top 10 (Values)" aria-label="Values versus Trends Filter")
+      md-select.top-bottom(ng-model="a.filtersService.model.valuesVsTrend" md-on-open="a.openSelect(true)" md-on-close="a.openSelect(false)" placeholder="Top 30 (Values)" aria-label="Values versus Trends Filter")
         md-option(ng-repeat="filter in a.filtersService.accountFilters.valuesVsTrend track by filter.value" ng-if="!a.isStoreLevel || filter.value <= a._topPerformersThreshold" aria-label="{{filter.name}}" ng-value="filter" ng-click="a.changeTopBottomSortOrder(filter)") {{filter.name}}
       md-select.account-entity(ng-model="a.currentTopBottomAcctType" md-on-open="a.openSelect(true)" md-on-close="a.openSelect(false);"  placeholder="{{a.currentTopBottomAcctType.name}}" aria-label="Account Type Filter")
         md-option(ng-repeat="filter in a.filtersService.accountFilters.accountTypes track by filter.value" ng-if="filter.value !== a.filtersService.accountFilters.accountTypesEnums.stores || a.filtersService.model.valuesVsTrend.value <= a._topPerformersThreshold" aria-label="{{filter.name}}" ng-value="filter" ng-click="a.setTopBottomAcctTypeSelection(filter)") {{filter.name}}
@@ -257,7 +257,7 @@ div(row)
             .widget-data-right
               p.dark.text-center {{a.getValueBoundForAcctType(data.measure)}}
       .widget-graph
-        div(style="height: 60px;" ng-repeat="data in a.currentChartData")
+        .graph-container(ng-repeat="data in a.currentChartData")
           nvd3(options="a.chartOptions" data="data")
 
 h3.top-opportunities-header Top Opportunities
