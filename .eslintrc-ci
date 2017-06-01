@@ -1,8 +1,12 @@
 {
   "env": { },
-  "plugins": [ ],
+  "plugins": [
+    "jasmine"
+  ],
   "globals": { },
   "rules": {
-    "no-debugger": 2
+    "no-debugger": 2,
+    "jasmine/no-focused-tests": 2,
+    "jasmine/no-disabled-tests": 2
   }
 }

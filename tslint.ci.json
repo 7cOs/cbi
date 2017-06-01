@@ -1,6 +1,10 @@
 {
-  "rulesDirectory": [ ],
+  "rulesDirectory": [
+    "config/tslint-rules"
+  ],
   "rules": {
-    "no-debugger": true
+    "no-debugger": true,
+    "no-disabled-tests": true,
+    "no-focused-tests": true
   }
 }
