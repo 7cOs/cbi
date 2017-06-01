@@ -1,0 +1,8 @@
+{
+  "env": { },
+  "plugins": [ ],
+  "globals": { },
+  "rules": {
+    "no-debugger": 2
+  }
+}

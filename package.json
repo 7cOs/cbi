@@ -15,6 +15,8 @@
     "clean": "rimraf public",
     "lint:ts": "tslint **/*.ts **/*.spec.ts --format stylish",
     "lint:js": "eslint '**/*.js'",
+    "lint:ts:ci": "tslint **/*.ts **/*.spec.ts --format stylish -c tslint.ci.json",
+    "lint:js:ci": "eslint '**/*.js' -c .eslintrc-ci",
     "lint:sass": "sass-lint '**/*.scss' -v --no-exit -f stylish -i 'app/assets/styles/lib/**/*, node_modules/**/*'",
     "lint": "npm run lint:ts && npm run lint:js && npm run lint:sass",
     "build:prod": "rimraf public && webpack --config config/webpack.prod.js --progress --color --profile --display-modules --display-chunks --bail",
