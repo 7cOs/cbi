@@ -1,6 +1,6 @@
 {
   "rulesDirectory": [
-    "config/tslint-rules"
+    "node_modules/tslint-jasmine-rules/dist"
   ],
   "rules": {
     "no-debugger": true,
