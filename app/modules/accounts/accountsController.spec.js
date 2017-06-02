@@ -1795,4 +1795,65 @@ describe('Unit: accountsController', function() {
       expect(ctrl.canOpenNote()).toEqual(true);
     });
   });
+
+  describe('[Method] getAccountTypePerformanceData', function() {
+    beforeEach(function() {
+      ctrl.topBottomData = {
+        accounts: {
+          performanceData: [
+            { name: 'Account 1' },
+            { name: 'Account 2' }
+          ]
+        },
+        distributors: {
+          performanceData: [
+            { name: 'Distributor 1' },
+            { name: 'Distributor 2' }
+          ]
+        },
+        subAccounts: {
+          performanceData: [
+            { name: 'SubAccount 1' },
+            { name: 'SubAccount 2' }
+          ]
+        },
+        stores: {
+          performanceData: [
+            { name: 'Store 1' },
+            { name: 'Store 2' }
+          ]
+        }
+      };
+      ctrl.accountTypeValues = {
+        Distributors: 'distributors',
+        Accounts: 'accounts',
+        'Sub-Accounts': 'subAccounts',
+        Stores: 'stores'
+      };
+    });
+
+    it('should return performanceData from the current top bottom account type', function() {
+      ctrl.currentTopBottomAcctType.name = 'Accounts';
+      expect(ctrl.getAccountTypePerformanceData(0)).toEqual({name: 'Account 1'});
+
+      ctrl.currentTopBottomAcctType.name = 'Distributors';
+      expect(ctrl.getAccountTypePerformanceData(0)).toEqual({name: 'Distributor 1'});
+
+      ctrl.currentTopBottomAcctType.name = 'Sub-Accounts';
+      expect(ctrl.getAccountTypePerformanceData(0)).toEqual({name: 'SubAccount 1'});
+
+      ctrl.currentTopBottomAcctType.name = 'Stores';
+      expect(ctrl.getAccountTypePerformanceData(0)).toEqual({name: 'Store 1'});
+    });
+
+    it('should return performanceData of the given index', function() {
+      ctrl.currentTopBottomAcctType.name = 'Accounts';
+      expect(ctrl.getAccountTypePerformanceData(0)).toEqual({name: 'Account 1'});
+      expect(ctrl.getAccountTypePerformanceData(1)).toEqual({name: 'Account 2'});
+
+      ctrl.currentTopBottomAcctType.name = 'Distributors';
+      expect(ctrl.getAccountTypePerformanceData(0)).toEqual({name: 'Distributor 1'});
+      expect(ctrl.getAccountTypePerformanceData(1)).toEqual({name: 'Distributor 2'});
+    });
+  });
 });
