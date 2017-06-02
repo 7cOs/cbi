@@ -2,3 +2,4 @@ node_modules/
 coverage/
 public/
 automation-test/
+config/tslint-rules/
