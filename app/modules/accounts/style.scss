@@ -310,7 +310,7 @@
 .widget-data {
   float: left;
   max-height: 678px;
-  width: 58.5%;
+  width: 330px;
 
   .widget-row-container {
     border-right: 1px solid #E1E1E3;
@@ -343,6 +343,7 @@
 
   .widget-data-row {
     height: 60px;
+    width: 329px;
 
     &:hover {
       cursor: hand;
@@ -352,7 +353,7 @@
   .widget-data-left {
     height: 60px;
     float: left;
-    width: 71%;
+    width: 234px;
 
     p {
       padding-left: 10px;
@@ -364,7 +365,7 @@
     background: #F3F3F3;
     float: right;
     height: 60px;
-    width: 29%;
+    width: 94px;
 
     p {
       padding-top: 5px;
@@ -375,7 +376,8 @@
 .widget-graph {
   float: right;
   max-height: 678px;
-  width: 41.5%;
+  max-width: 230px;
+  min-width: 200px;
 
   div:first-child {
     margin-top: -20px;
@@ -474,7 +476,8 @@ span {
   background: $white;
   border-bottom: 1px solid $black;
   min-height: 80px;
-  min-width: 100%;
+  // min-width: 100%;
+  width: 560px;
   overflow-x: hidden;
   overflow-y: auto;
 
