@@ -1,6 +1,8 @@
-interface Notification {
-  dateCreated: string;
-  dateUpdated: string;
+import { Moment } from 'moment';
+
+export interface Notification {
+  dateCreated: Moment;
+  dateUpdated: Moment;
   id: string;
   objectType: NotificationObjectType;
   objectId: string;
@@ -15,7 +17,7 @@ interface Notification {
   status: NotificationStatus;
 }
 
-interface TargetListNotification extends Notification {
+export interface TargetListNotification extends Notification {
   shortenedObject: {
     id: string;
     name: string;
@@ -23,7 +25,7 @@ interface TargetListNotification extends Notification {
   };
 }
 
-interface OpportunityNotification extends Notification {
+export interface OpportunityNotification extends Notification {
   shortenedObject: {
     id: string;
     store: {
@@ -60,10 +62,10 @@ interface StoreNotification extends Notification {
   };
 }
 
-type NotificationObjectType = 'TARGET_LIST' | 'OPPORTUNITY' | 'STORE';
+export type NotificationObjectType = 'TARGET_LIST' | 'OPPORTUNITY' | 'STORE';
 
-type NotificationAction = 'SHARE_TARGET_LIST' | 'SHARE_OPPORTUNITY' | 'ADDED_NOTE' | 'ARCHIVE_TARGET_LIST';
+export type NotificationAction = 'SHARE_TARGET_LIST' | 'SHARE_OPPORTUNITY' | 'ADDED_NOTE' | 'ARCHIVE_TARGET_LIST';
 
-type NotificationStatus = 'SEEN' | 'READ';
+export type NotificationStatus = 'SEEN' | 'READ';
 
-type OpportunityType = 'NON_BUY' | 'AT_RISK' | 'LOW_VELOCITY' | 'MANUAL' | 'NEW_PLACEMENT_NO_REBUY' | 'NEW_PLACEMENT_QUALITY';
+export type OpportunityType = 'NON_BUY' | 'AT_RISK' | 'LOW_VELOCITY' | 'MANUAL' | 'NEW_PLACEMENT_NO_REBUY' | 'NEW_PLACEMENT_QUALITY';

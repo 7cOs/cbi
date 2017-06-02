@@ -1,4 +1,7 @@
+import * as moment from 'moment';
+
 import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Notification } from '../../../models/notification.model';
 
 @Component({
   selector: 'notifications',
@@ -6,13 +9,21 @@ import { Component, Input, Output, EventEmitter } from '@angular/core';
 })
 
 export class NotificationsComponent {
+  @Output() notificationClicked = new EventEmitter<Notification>();
+
   @Input()
   set notifications(notifications: [Notification]) {
-    this._notifications = notifications;
-    this.allNotificationRead = notifications.filter(notification => notification.status !== 'READ').length < 1;
-  };
+    // Temporary: creating moments from strings
+    this._notifications = notifications.map(notification => {
+      notification.dateCreated = moment(notification.dateCreated);
+      notification.dateUpdated = moment(notification.dateUpdated);
 
-  @Output() notificationClicked = new EventEmitter<Notification>();
+      return notification;
+    });
+
+    this._notifications = this._notifications.sort((n1, n2) => n2.dateCreated.diff(n1.dateCreated));
+    this.allNotificationRead = this._notifications.filter(notification => notification.status !== 'READ').length < 1;
+  };
 
   noNotifications: string = 'No unread notifications.';
   allNotificationRead: boolean = true;
