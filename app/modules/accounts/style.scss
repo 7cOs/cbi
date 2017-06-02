@@ -376,7 +376,7 @@
 .widget-graph {
   float: right;
   max-height: 678px;
-  max-width: 230px;
+  max-width: calc(100% - 330px);
   min-width: 200px;
 
   div:first-child {
@@ -476,7 +476,6 @@ span {
   background: $white;
   border-bottom: 1px solid $black;
   min-height: 80px;
-  // min-width: 100%;
   width: 560px;
   overflow-x: hidden;
   overflow-y: auto;
