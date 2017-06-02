@@ -284,17 +284,26 @@
 .widget-subheader {
   border-top: 2px solid #B4B4B4;
   border-bottom: 2px solid #B4B4B4;
-  display: flex;
+  display: inline-block;
   width: 100%;
+
+  div:first-child {
+    float: left;
+  }
+
+  div:last-child {
+    float: right;
+  }
 
   .widget-subheader-item {
     background: #FFFFFF;
-    flex: 3 0 0;
+    width: 41.5%;
   }
 
   .widget-subheader-item:nth-child(2n) {
     background: #F3F3F3;
-    flex: 1.25 0 0;
+    float: left;
+    width: 17%;
   }
 }
 
