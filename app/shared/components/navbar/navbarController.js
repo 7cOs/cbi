@@ -259,9 +259,9 @@ module.exports = /*  @ngInject */
     }
 
     function getDismissedOpportunity(oppID) {
-      opportunitiesService.getOpportunities(oppID, true)
+      opportunitiesService.getFormattedSingleOpportunity(oppID)
       .then(function(response) {
-        var isoDate = new Date(response[0].dateUpdated).toISOString();
+        var isoDate = new Date(response.dateUpdated).toISOString();
         vm.dateUpdated = moment(isoDate).format('M/D/YYYY');
       });
     }
@@ -463,10 +463,6 @@ module.exports = /*  @ngInject */
       .then(function(result) {
         vm.notifications = result;
         setUnreadCount(vm.notifications);
-      });
-
-      versionService.getVersion().then(function(data) {
-        versionService.model.version = data;
       });
     };
 

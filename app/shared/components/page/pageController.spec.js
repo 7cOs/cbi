@@ -1,5 +1,5 @@
 describe('Unit: page controller', function() {
-  var scope, ctrl, q, state, filtersService, loaderService, opportunitiesService;
+  var scope, ctrl, q, filtersService, opportunitiesService;
 
   beforeEach(function() {
     angular.mock.module('ui.router');
@@ -10,10 +10,8 @@ describe('Unit: page controller', function() {
     inject(function($rootScope, _$q_, _$state_, $controller, _filtersService_, _loaderService_, _opportunitiesService_) {
       scope = $rootScope.$new();
       q = _$q_;
-      state = _$state_;
 
       filtersService = _filtersService_;
-      loaderService = _loaderService_;
       opportunitiesService = _opportunitiesService_;
 
       ctrl = $controller('pageController', {$scope: scope});
@@ -194,7 +192,7 @@ describe('Unit: page controller', function() {
     beforeEach(() => {
       filtersService.model.appliedFilter.pagination.currentPage = 0;
 
-      spyOn(opportunitiesService, 'getOpportunities').and.callFake(function() {
+      spyOn(opportunitiesService, 'getAndUpdateStoresWithOpportunities').and.callFake(function() {
         var deferred = q.defer();
         return deferred.promise;
       });
@@ -212,10 +210,10 @@ describe('Unit: page controller', function() {
       expect(ctrl.loadingList).toBeTruthy();
     });
 
-    it('should call opportunitiesService.getOpportunities', function() {
-      expect(opportunitiesService.getOpportunities).not.toHaveBeenCalled();
+    it('should call opportunitiesService.getAndUpdateStoresWithOpportunities', function() {
+      expect(opportunitiesService.getAndUpdateStoresWithOpportunities).not.toHaveBeenCalled();
       ctrl.pageChanged(2);
-      expect(opportunitiesService.getOpportunities).toHaveBeenCalled();
+      expect(opportunitiesService.getAndUpdateStoresWithOpportunities).toHaveBeenCalled();
     });
 
     // To Do: Find better way to test .then() of promise

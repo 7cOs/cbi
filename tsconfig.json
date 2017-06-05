@@ -10,7 +10,7 @@
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "importHelpers": true,
-    "noImplicitAny": false,
+    "noImplicitAny": true,
     "removeComments": false,
     "sourceMap": true,
     "suppressImplicitAnyIndexErrors": true

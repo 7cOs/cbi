@@ -314,16 +314,16 @@ module.exports = /*  @ngInject */
         value: 4
       }],
       valuesVsTrend: [{
-        name: 'Top 10 (Values)',
+        name: 'Top 30 (Values)',
         value: 1
       }, {
-        name: 'Top 10 (Trend)',
+        name: 'Top 30 (Trend)',
         value: 2
       }, {
-        name: 'Bottom 10 (Values)',
+        name: 'Bottom 30 (Values)',
         value: 3
       }, {
-        name: 'Bottom 10 (Trend)',
+        name: 'Bottom 30 (Trend)',
         value: 4
       }],
       accountTypes: [{
@@ -384,7 +384,13 @@ module.exports = /*  @ngInject */
           value: 'GM',
           chipValue: 'General Market'
         }
-      ]
+      ],
+      accountTypeValues: {
+        Distributors: 'distributors',
+        Accounts: 'accounts',
+        'Sub-Accounts': 'subAccounts',
+        Stores: 'stores'
+      }
     };
 
     var lastEndingTimePeriod = {
