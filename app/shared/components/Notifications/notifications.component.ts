@@ -9,7 +9,7 @@ import { Notification } from '../../../models/notification.model';
 })
 
 export class NotificationsComponent {
-  @Output() notificationClicked = new EventEmitter<Notification>();
+  @Output() onNotificationClicked = new EventEmitter<Notification>();
 
   @Input()
   set notifications(notifications: [Notification]) {
@@ -31,7 +31,7 @@ export class NotificationsComponent {
   private _notifications: Notification[] = [];
 
   clickOn(notification: Notification) {
-    this.notificationClicked.emit(notification);
+    this.onNotificationClicked.emit(notification);
   }
 
   notificationClasses(notification: Notification) {
