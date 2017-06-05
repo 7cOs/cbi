@@ -2,7 +2,7 @@ import { compassVersionReducer, CompassVersionState } from './compass-version.re
 
 export interface AppState {
   compassVersion: CompassVersionState;
-};
+}
 
 export const rootReducer = {
   compassVersion: compassVersionReducer

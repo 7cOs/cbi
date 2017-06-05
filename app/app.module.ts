@@ -15,9 +15,7 @@ import { rootReducer } from './state/reducers/root.reducer';
 import { SettingsComponent } from './shared/components/settings/settings.component';
 import { TimeAgoPipe } from './pipes/timeAgo.pipe';
 
-// Using forwardRef() to reference AppModule passed to UpgradeAdapter, because AppModule
-// takes upgraded components created by UpgradeAdapter in its definition
-export const AppUpgradeAdapter = new UpgradeAdapter(forwardRef(() => AppModule)); // tslint:disable-line:variable-name
+export const AppUpgradeAdapter = new UpgradeAdapter(forwardRef(() => AppModule)); // tslint:disable-line:variable-name no-use-before-declare
 
 // make ng1 components available to ng2 code & templates (these are passed as declarations)
 const UpgradedComponents = [  // tslint:disable-line:variable-name
@@ -26,7 +24,6 @@ const UpgradedComponents = [  // tslint:disable-line:variable-name
 ];
 
 // make ng1 services available to ng2 code (these are NOT passed as providers)
-// https://angular.io/docs/ts/latest/api/upgrade/index/UpgradeAdapter-class.html#!#upgradeNg1Provider-anchor
 AppUpgradeAdapter.upgradeNg1Provider('userService');
 AppUpgradeAdapter.upgradeNg1Provider('versionService');
 

@@ -89,6 +89,7 @@ module.exports = /*  @ngInject */
       subAccounts: '',
       stores: ''
     };
+    vm.accountTypeValues = filtersService.accountFilters.accountTypeValues;
     vm.isChainSelectionComplete = null;
     vm.isDistributorSelectionComplete = null;
     vm.getDataForTopBottomLevel = getDataForTopBottomLevel;
@@ -143,6 +144,7 @@ module.exports = /*  @ngInject */
     vm.updateDistributionTimePeriod = updateDistributionTimePeriod;
     vm.filterTopBottom = filterTopBottom;
     vm.canOpenNote = canOpenNote;
+    vm.getAccountTypePerformanceData = getAccountTypePerformanceData;
 
     init();
 
@@ -755,7 +757,8 @@ module.exports = /*  @ngInject */
       params.additionalParams = {
         deplTimePeriod: vm.filterModel.depletionsTimePeriod.name,
         podAndVelTimePeriod: vm.filterModel.distributionTimePeriod.name,
-        metric: currentMetric
+        metric: currentMetric,
+        numberOfRecords: 30
       };
       return params;
     }
@@ -815,6 +818,10 @@ module.exports = /*  @ngInject */
     function canOpenNote() {
       if (vm.showXDistributor && !vm.showXChain || vm.showXStore) return true;
       else return false;
+    }
+
+    function getAccountTypePerformanceData(index) {
+      return vm.topBottomData[vm.accountTypeValues[vm.currentTopBottomAcctType.name]].performanceData[index];
     }
 
     // ***************
@@ -918,6 +925,7 @@ module.exports = /*  @ngInject */
             break;
           }
       }
+      obj.numberOfRecords = 30;
       return obj;
     }
 
@@ -1208,7 +1216,7 @@ module.exports = /*  @ngInject */
       }, function(error) {
         console.log('[getDataForTopBottomLevel]', error);
         vm.loadingTopBottom = 'error';
-        vm.currentChartData = myperformanceService.initChartData();
+        vm.currentChartData = formatChartData(myperformanceService.initChartData());
       });
       vm.marketSelectedIndex = vm.currentTopBottomAcctType.value - 1;
     }
@@ -1246,25 +1254,25 @@ module.exports = /*  @ngInject */
           case filtersService.accountFilters.topBottomSortTypeEnum.topValues:
             if (data.topBottomIndices.topValues.length > 0) {
               result = data.topBottomIndices.topValues;
-              vm.currentChartData = data.chartData.topValues;
+              vm.currentChartData = formatChartData(data.chartData.topValues);
             }
             break;
           case filtersService.accountFilters.topBottomSortTypeEnum.topTrends:
             if (data.topBottomIndices.topTrends.length > 0) {
               result = data.topBottomIndices.topTrends;
-              vm.currentChartData = data.chartData.topTrends;
+              vm.currentChartData = formatChartData(data.chartData.topTrends);
             }
             break;
           case filtersService.accountFilters.topBottomSortTypeEnum.bottomValues:
             if (data.topBottomIndices.bottomValues.length > 0) {
               result = data.topBottomIndices.bottomValues;
-              vm.currentChartData = data.chartData.bottomValues;
+              vm.currentChartData = formatChartData(data.chartData.bottomValues);
             }
             break;
           case filtersService.accountFilters.topBottomSortTypeEnum.bottomTrends:
             if (data.topBottomIndices.bottomTrends.length > 0) {
               result = data.topBottomIndices.bottomTrends;
-              vm.currentChartData = data.chartData.bottomTrends;
+              vm.currentChartData = formatChartData(data.chartData.bottomTrends);
             }
             break;
         }
@@ -1274,7 +1282,7 @@ module.exports = /*  @ngInject */
         } else {
           vm.loadingTopBottom = 'error';
           vm.currentBoundTopBottomIndexes = [];
-          vm.currentChartData = myperformanceService.initChartData();
+          vm.currentChartData = formatChartData(myperformanceService.initChartData());
         }
 
       } else {
@@ -1661,4 +1669,14 @@ module.exports = /*  @ngInject */
          vm.scrolledBelowHeader = false;
        }
      });
+
+    function formatChartData(chartData) {
+      if (chartData.length && angular.isArray(chartData)) {
+        return chartData[0].values.map(data => {
+          return [{
+            values: [data]
+          }];
+        });
+      } else return [];
+    }
   };

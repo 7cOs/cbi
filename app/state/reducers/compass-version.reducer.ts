@@ -4,7 +4,7 @@ import { AppVersion } from '../../models/app-version.model';
 
 export interface CompassVersionState extends State {
   version: AppVersion;
-};
+}
 
 export const initialState: CompassVersionState = {
   status: ActionStatus.NotFetched,

@@ -8,4 +8,4 @@ export function appVersionMock(): AppVersion {
     hash: chance.string(),
     version: chance.string()
   };
-};
+}

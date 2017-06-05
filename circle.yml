@@ -11,7 +11,9 @@ dependencies:
 test:
   override:
     - npm run lint:ts
+    - npm run lint:ts:ci
     - npm run lint:js
+    - npm run lint:js:ci
     - npm run lint:sass
     - npm test
 
