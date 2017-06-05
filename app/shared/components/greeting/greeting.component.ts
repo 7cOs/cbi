@@ -1,4 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
+import * as moment from 'moment';
 
 @Component({
   selector: 'greeting',
@@ -14,14 +15,10 @@ export class GreetingComponent implements OnInit {
   constructor() {}
 
   ngOnInit() {
-    const hours: number = (new Date()).getHours();
+    const hour: number = moment().hour();
 
-    if (hours < 12) {
-      this.salutation = 'Good morning';
-    } else if (hours >= 12 && hours <= 17) {
-      this.salutation = 'Good afternoon';
-    } else if (hours >= 17 && hours <= 24) {
-      this.salutation = 'Good evening';
-    }
+    if (hour < 12) this.salutation = 'Good morning';
+    else if (hour >= 12 && hour <= 17) this.salutation = 'Good afternoon';
+    else if (hour >= 17 && hour <= 24) this.salutation = 'Good evening';
   }
 }
