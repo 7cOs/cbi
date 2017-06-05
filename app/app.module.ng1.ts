@@ -1,11 +1,11 @@
 import * as angular from 'angular';
+import { IDirectiveFactory } from 'angular';
 import 'textangular/dist/textAngular-sanitize.min';
 
-import { AppUpgradeAdapter } from './app.module';
-import { IDirectiveFactory } from 'angular';
-import { SettingsComponent } from './shared/components/settings/settings.component';
 import { AppComponent } from './shared/containers/app/app.component';
+import { AppUpgradeAdapter } from './app.module';
 import { NotificationsComponent } from './shared/components/Notifications/notifications.component';
+import { SettingsComponent } from './shared/components/settings/settings.component';
 
 (<any>window).CryptoJS = require('crypto-js');
 

@@ -1,20 +1,19 @@
-import { NgModule, forwardRef } from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
-import { RouterModule } from '@angular/router';
-import { UpgradeAdapter } from '@angular/upgrade';
 import { Angulartics2, Angulartics2Module, Angulartics2GoogleAnalytics } from 'angulartics2';
-import { HttpModule } from '@angular/http';
-import { StoreModule } from '@ngrx/store';
-import { EffectsModule } from './state/effects/effects.module';
-import { rootReducer } from './state/reducers/root.reducer';
-import { AppComponent } from './shared/containers/app/app.component';
-import { SettingsComponent } from './shared/components/settings/settings.component';
-import { NotificationsComponent } from './shared/components/Notifications/notifications.component';
-
-import { FormatOpportunitiesTypePipe } from './pipes/formatOpportunitiesType.pipe';
-import { TimeAgoPipe } from './pipes/timeAgo.pipe';
-
+import { BrowserModule } from '@angular/platform-browser';
 import { DatePipe } from '@angular/common';
+import { HttpModule } from '@angular/http';
+import { NgModule, forwardRef } from '@angular/core';
+import { RouterModule } from '@angular/router';
+import { StoreModule } from '@ngrx/store';
+import { UpgradeAdapter } from '@angular/upgrade';
+
+import { AppComponent } from './shared/containers/app/app.component';
+import { EffectsModule } from './state/effects/effects.module';
+import { FormatOpportunitiesTypePipe } from './pipes/formatOpportunitiesType.pipe';
+import { NotificationsComponent } from './shared/components/Notifications/notifications.component';
+import { rootReducer } from './state/reducers/root.reducer';
+import { SettingsComponent } from './shared/components/settings/settings.component';
+import { TimeAgoPipe } from './pipes/timeAgo.pipe';
 
 // Using forwardRef() to reference AppModule passed to UpgradeAdapter, because AppModule
 // takes upgraded components created by UpgradeAdapter in its definition

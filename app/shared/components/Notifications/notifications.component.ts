@@ -1,6 +1,6 @@
+import { Component, Input, Output, EventEmitter } from '@angular/core';
 import * as moment from 'moment';
 
-import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { Notification } from '../../../models/notification.model';
 
 @Component({
