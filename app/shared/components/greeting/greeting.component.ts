@@ -2,22 +2,16 @@ import { Component, Input, OnInit } from '@angular/core';
 
 @Component({
   selector: 'greeting',
-  template: require('./greeting.component.pug')
+  template: require('./greeting.component.pug'),
+  styles: [require('./greeting.component.scss')]
 })
+
 export class GreetingComponent implements OnInit {
-
-  // TODO: Figure out ordering of inputs, outputs, etc?
-  // TODO: should we explicitly label public, private, etc?
-  // TODO: Move styles into component scss if needed (look for greeting class being used in template currently)
-  // TODO: Add title-casing in here
-  // TODO: unit test
-  // TODO: cleanup
-
   @Input() name: string;
 
-  salutation: string;
+  public salutation: string;
 
-  constructor() { }
+  constructor() {}
 
   ngOnInit() {
     const hours: number = (new Date()).getHours();

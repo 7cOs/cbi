@@ -7,9 +7,12 @@ import { HttpModule } from '@angular/http';
 import { StoreModule } from '@ngrx/store';
 import { EffectsModule } from './state/effects/effects.module';
 import { rootReducer } from './state/reducers/root.reducer';
+
 import { AppComponent } from './shared/containers/app/app.component';
 import { SettingsComponent } from './shared/components/settings/settings.component';
 import { GreetingComponent } from './shared/components/greeting/greeting.component';
+
+import { TitleCasePipe } from './pipes/titleCase.pipe';
 
 export const AppUpgradeAdapter = new UpgradeAdapter(forwardRef(() => AppModule)); // tslint:disable-line:variable-name no-use-before-declare
 
@@ -36,6 +39,7 @@ AppUpgradeAdapter.upgradeNg1Provider('versionService');
     AppComponent,
     GreetingComponent,
     SettingsComponent,
+    TitleCasePipe,
     ...UpgradedComponents
   ],
   providers: [ ]

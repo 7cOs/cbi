@@ -29,7 +29,7 @@ module.exports = /*  @ngInject */
     vm.selectPremiseType = selectPremiseType;
 
     // Set values
-    vm.greetingName = getGreetingName();
+    vm.greetingName = userService.model.currentUser.firstName;
 
     init();
 
@@ -104,10 +104,6 @@ module.exports = /*  @ngInject */
     // ***************
     // PRIVATE METHODS
     // ***************
-
-    function getGreetingName() {
-      return $filter('titlecase')(userService.model.currentUser.firstName);
-    }
 
     function init() {
 
