@@ -1,3 +1,5 @@
+import * as moment from 'moment';
+
 import { Pipe, PipeTransform } from '@angular/core';
 import { DatePipe } from '@angular/common';
 
@@ -6,38 +8,39 @@ export class TimeAgoPipe implements PipeTransform {
 
   constructor(private datePipe: DatePipe) {}
 
-  transform(displayDate: string, type: DateType): string {
-    const currentDate = new Date();
-    const d = new Date(displayDate);
-    let returnStr = '';
+  transform(dateFrom: moment.Moment, type: DateType): string {
+    const now = moment();
+    let formattedDate = '';
 
-    // if (isNaN(Date.parse(d))) return '';
+    switch (type) {
+      case 'daysOnly':
+        const hoursAgo = Math.round((now.valueOf() - dateFrom.valueOf()) / (1000 * 60 * 60));
 
-    if (type === 'daysOnly') {
-      const hoursPast = Math.round((currentDate.getTime() - d.getTime()) / (1000 * 60 * 60));
+        if (hoursAgo < 2) formattedDate = hoursAgo + ' hour ago';
+        else if (hoursAgo < 25) formattedDate = hoursAgo + ' hours ago';
+        else if (hoursAgo > 24) formattedDate = Math.round(hoursAgo / 24) + ' days ago';
+        break;
+      case 'relative':
+      case 'relativeTime':
+      default:
+        const daysAgo = (now.valueOf() - dateFrom.valueOf()) / (1000 * 60 * 60 * 24);
 
-      if (hoursPast < 2) returnStr = hoursPast + ' hour ago';
-      else if (hoursPast < 25) returnStr = hoursPast + ' hours ago';
-      else if (hoursPast > 24) returnStr = Math.round(hoursPast / 24) + ' days ago';
-
-    } else if (type === 'relative' || type === 'relativeTime') {
-      const daysAgo = (currentDate.getTime() - d.getTime()) / (1000 * 60 * 60 * 24);
-
-      if (daysAgo > 7) { // 7+ days
-        returnStr = type === 'relativeTime' ? this.datePipe.transform(d, 'MMMM d, y')
-        + ' at ' + this.datePipe.transform(d, 'h:mm a') : this.datePipe.transform(d, 'longDate');
-      } else if (daysAgo > 1) { // 1 - 7 days
-        returnStr = Math.round(daysAgo) + ' days ago';
-      } else if (daysAgo < 1 && (daysAgo * 24) > 1) { // 61 minutes to 24 hours
-        const hours = Math.round(daysAgo * 24);
-        returnStr = hours < 2 ? hours + ' hour ago' : hours + ' hours ago';
-      } else { // 0-60 minutes
-        const minutes = Math.round(daysAgo * 24 * 60);
-        returnStr = minutes < 2 ? minutes + ' minute ago' : minutes + ' minutes ago';
-      }
+        if (daysAgo > 7) {
+          formattedDate = type === 'relativeTime' ? this.datePipe.transform(now, 'MMMM d, y')
+          + ' at ' + this.datePipe.transform(now, 'h:mm a') : this.datePipe.transform(now, 'longDate');
+        } else if (daysAgo > 1) {
+          formattedDate = Math.round(daysAgo) + ' days ago';
+        } else if (daysAgo < 1 && (daysAgo * 24) > 1) {
+          const hours = Math.round(daysAgo * 24);
+          formattedDate = hours < 2 ? hours + ' hour ago' : hours + ' hours ago';
+        } else { // 0-60 minutes
+          const minutes = Math.round(daysAgo * 24 * 60);
+          formattedDate = minutes < 2 ? minutes + ' minute ago' : minutes + ' minutes ago';
+        }
+        break;
     }
 
-    return returnStr;
+    return formattedDate;
   }
 }
 
