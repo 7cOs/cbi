@@ -289,21 +289,22 @@
 
   div:first-child {
     float: left;
+    width: 234px;
   }
 
   div:last-child {
     float: right;
+    width: calc(100% - 330px);
   }
 
   .widget-subheader-item {
     background: #FFFFFF;
-    width: 41.5%;
   }
 
   .widget-subheader-item:nth-child(2n) {
     background: #F3F3F3;
     float: left;
-    width: 17%;
+    width: 96px;
   }
 }
 
