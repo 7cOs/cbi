@@ -1,6 +1,7 @@
 import { inject, TestBed } from '@angular/core/testing';
 import { GreetingComponent } from './greeting.component';
 import * as Chance from 'chance';
+import * as moment from 'moment';
 
 const chance = new Chance();
 
@@ -12,8 +13,7 @@ describe('GreetingComponent', () => {
   describe('morning greeting', () => {
     beforeEach(inject([ GreetingComponent ], (component: GreetingComponent) => {
       const randomMorningHour = chance.integer({min: 0, max: 11});
-      const newDate = new Date(2020, 1, 1, randomMorningHour);
-      jasmine.clock().mockDate(newDate);
+      jasmine.clock().mockDate(moment().hour(randomMorningHour).toDate());
       component.ngOnInit();
     }));
 
@@ -25,8 +25,7 @@ describe('GreetingComponent', () => {
   describe('afternoon greeting', () => {
     beforeEach(inject([ GreetingComponent ], (component: GreetingComponent) => {
       const randomAfternoonHour = chance.integer({min: 12, max: 16});
-      const newDate = new Date(2020, 1, 1, randomAfternoonHour);
-      jasmine.clock().mockDate(newDate);
+      jasmine.clock().mockDate(moment().hour(randomAfternoonHour).toDate());
       component.ngOnInit();
     }));
 
@@ -38,8 +37,7 @@ describe('GreetingComponent', () => {
   describe('evening greeting', () => {
     beforeEach(inject([ GreetingComponent ], (component: GreetingComponent) => {
       const randomEveningHour = chance.integer({min: 17, max: 23});
-      const newDate = new Date(2020, 1, 1, randomEveningHour);
-      jasmine.clock().mockDate(newDate);
+      jasmine.clock().mockDate(moment().hour(randomEveningHour).toDate());
       component.ngOnInit();
     }));
 
