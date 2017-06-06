@@ -128,17 +128,11 @@ module.exports = /*  @ngInject */
         });
 
       if (notification.objectType.toUpperCase() === 'TARGET_LIST') {
-        $analytics.eventTrack('Read Notification', {category: 'Notifications', label: 'Shared Target List'});
-
         $state.go('target-list-detail', ({id: notification.shortenedObject.id}));
       } else if (notification.objectType.toUpperCase() === 'OPPORTUNITY') {
-        $analytics.eventTrack('Read Notification', {category: 'Notifications', label: 'Shared Opportunity'});
-
         opportunitiesService.model.opportunityId = notification.shortenedObject.id;
         $state.go('opportunities', (opportunitiesService.model.opportunityId, opportunitiesService.model.filterApplied = false), {reload: true});
       } else if (notification.objectType.toUpperCase() === 'ACCOUNT') {
-        $analytics.eventTrack('Read Notification', {category: 'Notifications', label: 'Shared Note'});
-
         $state.go('accounts');
       }
 
@@ -451,7 +445,7 @@ module.exports = /*  @ngInject */
     // ***************
 
     function init() {
-      var dateAfter = moment().subtract(30, 'days').format('YYYY-MM-DD');
+      var dateAfter = moment().subtract(90, 'days').format('YYYY-MM-DD');
       userService
       .getNotifications(userService.model.currentUser.employeeID, dateAfter)
       .then(function(result) {

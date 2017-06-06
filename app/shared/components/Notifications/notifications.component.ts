@@ -1,3 +1,4 @@
+import { Angulartics2 } from 'angulartics2';
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import * as moment from 'moment';
 
@@ -29,8 +30,21 @@ export class NotificationsComponent {
   allNotificationRead: boolean = true;
 
   private _notifications: Notification[] = [];
+  private notificationActionAnalyticsMapping = {
+    'TARGET_LIST': 'Shared Target List',
+    'OPPORTUNITY': 'Shared Opportunity',
+    'ACCOUNT': 'Shared Note',
+    'STORE': ''
+  };
+
+  constructor(
+    private angulartics2: Angulartics2
+  ) { }
 
   clickOn(notification: Notification) {
+    const analyticsLabel = this.notificationActionAnalyticsMapping[notification.objectType];
+    this.angulartics2.eventTrack.next({action: 'Read Notification', properties: {category: 'Notifications', label: analyticsLabel}});
+
     this.onNotificationClicked.emit(notification);
   }
 

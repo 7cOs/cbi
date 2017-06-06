@@ -62,7 +62,7 @@ interface StoreNotification extends Notification {
   };
 }
 
-export type NotificationObjectType = 'TARGET_LIST' | 'OPPORTUNITY' | 'STORE';
+export type NotificationObjectType = 'TARGET_LIST' | 'OPPORTUNITY' | 'STORE' | 'ACCOUNT';
 
 export type NotificationAction = 'SHARE_TARGET_LIST' | 'SHARE_OPPORTUNITY' | 'ADDED_NOTE' | 'ARCHIVE_TARGET_LIST';
 
