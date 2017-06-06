@@ -377,8 +377,7 @@
 .widget-graph {
   float: right;
   max-height: 678px;
-  max-width: calc(100% - 330px);
-  min-width: 200px;
+  width: calc(100% - 330px);
 
   div:first-child {
     margin-top: -20px;
