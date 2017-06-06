@@ -12,7 +12,7 @@ export class NotificationsComponent {
   @Output() onNotificationClicked = new EventEmitter<Notification>();
 
   @Input()
-  set notifications(notifications: [Notification]) {
+  set notifications(notifications: Notification[]) {
     // Temporary: creating moments from strings
     this._notifications = notifications.map(notification => {
       notification.dateCreated = moment(notification.dateCreated);
@@ -23,7 +23,7 @@ export class NotificationsComponent {
 
     this._notifications = this._notifications.sort((n1, n2) => n2.dateCreated.diff(n1.dateCreated));
     this.allNotificationRead = this._notifications.filter(notification => notification.status !== 'READ').length < 1;
-  };
+  }
 
   noNotifications: string = 'No unread notifications.';
   allNotificationRead: boolean = true;
