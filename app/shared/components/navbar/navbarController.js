@@ -445,7 +445,7 @@ module.exports = /*  @ngInject */
     // ***************
 
     function init() {
-      var dateAfter = moment().subtract(90, 'days').format('YYYY-MM-DD');
+      var dateAfter = moment().subtract(30, 'days').format('YYYY-MM-DD');
       userService
       .getNotifications(userService.model.currentUser.employeeID, dateAfter)
       .then(function(result) {
