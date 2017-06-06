@@ -2,7 +2,7 @@ import { Pipe, PipeTransform } from '@angular/core';
 
 @Pipe({name: 'formatOpportunitiesType'})
 export class FormatOpportunitiesTypePipe implements PipeTransform {
-  map = {
+  opportunityTypeDescriptions = {
     'Mixed': 'Custom',
     'ND001': 'New Distribution',
     'ND_001': 'New Distribution',
@@ -14,6 +14,6 @@ export class FormatOpportunitiesTypePipe implements PipeTransform {
   };
 
   transform(rawType: string): string {
-    return this.map[rawType] || rawType;
+    return this.opportunityTypeDescriptions[rawType] || rawType;
   }
 }
