@@ -1,19 +1,20 @@
 'use strict';
 
 module.exports = /*  @ngInject */
-  function notesService($http, $q) {
+  function notesService(userService, $http, $q) {
 
-    var tempData = {
+    const tempData = {
     };
 
-    var model = {
+    const model = {
       urlBase: '/sfdc/',
       accountId: '',
       currentStoreName: '',
-      currentStoreProperty: ''
+      currentStoreProperty: '',
+      sfdcID: ''
     };
 
-    var service = {
+    const service = {
       model: model,
       getNote: getNote,
       deleteNote: deleteNote,
@@ -185,6 +186,7 @@ module.exports = /*  @ngInject */
       $http.get(url)
         .then(function(response) {
           if (response.data && response.data.isSuccess && response.data.successReturnValue) {
+            userService.model.currentUser.sfdcID = response.data.successReturnValue.Id;
             deferred.resolve(response.data.successReturnValue);
           } else {
             deferred.reject(response);

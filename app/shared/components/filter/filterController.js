@@ -440,7 +440,9 @@ module.exports = /*  @ngInject */
         }
 
         $analytics.eventTrack(action, {
-          category: 'Filters', label: label
+          'User Id': userService.model.currentUser.sfdcID,
+          category: 'Filters',
+          label: label
         });
       }
     }

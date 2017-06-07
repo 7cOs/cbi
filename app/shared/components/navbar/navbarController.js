@@ -134,17 +134,28 @@ module.exports = /*  @ngInject */
         });
 
       if (notification.objectType.toUpperCase() === 'TARGET_LIST') {
-        $analytics.eventTrack('Read Notification', {category: 'Notifications', label: 'Shared Target List'});
-
+        $analytics.eventTrack('Read Notification', {
+          'User Id': userService.model.currentUser.sfdcID,
+          category: 'Notifications',
+          label: 'Shared Target List'
+        });
         $state.go('target-list-detail', ({id: notification.shortenedObject.id}));
-      } else if (notification.objectType.toUpperCase() === 'OPPORTUNITY') {
-        $analytics.eventTrack('Read Notification', {category: 'Notifications', label: 'Shared Opportunity'});
 
+      } else if (notification.objectType.toUpperCase() === 'OPPORTUNITY') {
+        $analytics.eventTrack('Read Notification', {
+          'User Id': userService.model.currentUser.sfdcID,
+          category: 'Notifications',
+          label: 'Shared Opportunity'
+        });
         opportunitiesService.model.opportunityId = notification.shortenedObject.id;
         $state.go('opportunities', (opportunitiesService.model.opportunityId, opportunitiesService.model.filterApplied = false), {reload: true});
-      } else if (notification.objectType.toUpperCase() === 'ACCOUNT') {
-        $analytics.eventTrack('Read Notification', {category: 'Notifications', label: 'Shared Note'});
 
+      } else if (notification.objectType.toUpperCase() === 'ACCOUNT') {
+        $analytics.eventTrack('Read Notification', {
+          'User Id': userService.model.currentUser.sfdcID,
+          category: 'Notifications',
+          label: 'Shared Note'
+        });
         $state.go('accounts');
       }
 
