@@ -3,6 +3,30 @@ import * as moment from 'moment';
 
 let chance = new Chance();
 
+export function targetListNotificationNotificationMock(): any {
+  return {
+    dateCreated: moment(),
+    dateUpdated: moment(),
+    id: chance.string(),
+    objectType: 'OPPORTUNITY',
+    objectId: chance.string(),
+    action: 'SHARE_OPPORTUNITY',
+    salesforceUserNoteID: null,
+    creator: {
+      id: chance.string(),
+      firstName: chance.string(),
+      lastName: chance.string(),
+      email: chance.string()
+    },
+    shortenedObject: {
+      id: chance.string(),
+      name: chance.string(),
+      valid: chance.bool()
+    },
+    status: 'SEEN'
+  };
+}
+
 export function opportunityNotificationMock(): any {
   return {
     dateCreated: moment(),
@@ -27,7 +51,7 @@ export function opportunityNotificationMock(): any {
         address: chance.string(),
         city: chance.string(),
         state: chance.string(),
-        valid: true
+        valid: chance.bool()
       },
       product: {
         id: chance.string(),
@@ -38,7 +62,59 @@ export function opportunityNotificationMock(): any {
       },
       type: 'MANUAL',
       subType: 'ND_001',
-      valid: true
+      valid: chance.bool()
+    },
+    status: 'SEEN'
+  };
+}
+
+export function storeNotificationMock(): any {
+  return {
+    dateCreated: moment(),
+    dateUpdated: moment(),
+    id: chance.string(),
+    objectType: 'OPPORTUNITY',
+    objectId: chance.string(),
+    action: 'SHARE_OPPORTUNITY',
+    salesforceUserNoteID: null,
+    creator: {
+      id: chance.string(),
+      firstName: chance.string(),
+      lastName: chance.string(),
+      email: chance.string()
+    },
+    shortenedObject: {
+      tdlinx_number: chance.integer(),
+      store_name: chance.string(),
+      store_number: chance.integer(),
+      address: chance.string(),
+      city: chance.string(),
+      state: chance.string(),
+      valid: chance.bool(),
+    },
+    status: 'SEEN'
+  };
+}
+
+export function accountNotificationMock(): any {
+  return {
+    dateCreated: moment(),
+    dateUpdated: moment(),
+    id: chance.string(),
+    objectType: 'OPPORTUNITY',
+    objectId: chance.string(),
+    action: 'SHARE_OPPORTUNITY',
+    salesforceUserNoteID: null,
+    creator: {
+      id: chance.string(),
+      firstName: chance.string(),
+      lastName: chance.string(),
+      email: chance.string()
+    },
+    shortenedObject: {
+      id: chance.string(),
+      name: chance.string(),
+      value: chance.bool()
     },
     status: 'SEEN'
   };

@@ -3,7 +3,12 @@ import { inject, TestBed } from '@angular/core/testing';
 
 import { NotificationsComponent } from './notifications.component';
 import { Notification } from './../../../models/notification.model';
-import { opportunityNotificationMock } from '../../../models/notification.model.mock';
+import {
+  targetListNotificationNotificationMock,
+  opportunityNotificationMock,
+  storeNotificationMock,
+  accountNotificationMock
+} from '../../../models/notification.model.mock';
 
 describe('NotificationsComponent', () => {
 
@@ -38,7 +43,7 @@ describe('NotificationsComponent', () => {
       inject([ NotificationsComponent ], (component: NotificationsComponent) => {
 
       const notificationsMock = [
-        opportunityNotificationMock(),
+        targetListNotificationNotificationMock(),
         opportunityNotificationMock()
       ];
 
@@ -51,8 +56,8 @@ describe('NotificationsComponent', () => {
       inject([ NotificationsComponent ], (component: NotificationsComponent) => {
 
       const notificationsMock = [
-        opportunityNotificationMock(),
-        opportunityNotificationMock()
+        storeNotificationMock(),
+        accountNotificationMock()
       ];
 
       notificationsMock[0].status = 'READ';

@@ -62,6 +62,14 @@ interface StoreNotification extends Notification {
   };
 }
 
+interface AccountNotification extends Notification {
+  shortenedObject: {
+    id: string;
+    name: string;
+    value: boolean;
+  };
+}
+
 export type NotificationObjectType = 'TARGET_LIST' | 'OPPORTUNITY' | 'STORE' | 'ACCOUNT';
 
 export type NotificationAction = 'SHARE_TARGET_LIST' | 'SHARE_OPPORTUNITY' | 'ADDED_NOTE' | 'ARCHIVE_TARGET_LIST';
