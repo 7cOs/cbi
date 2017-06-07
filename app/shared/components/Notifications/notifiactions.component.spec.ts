@@ -1,3 +1,4 @@
+import { Angulartics2 } from 'angulartics2';
 import { inject, TestBed } from '@angular/core/testing';
 
 import { NotificationsComponent } from './notifications.component';
@@ -6,11 +7,19 @@ import { opportunityNotificationMock } from '../../../models/notification.model.
 
 describe('NotificationsComponent', () => {
 
-  beforeEach(() => TestBed.configureTestingModule({
-    providers: [
-      NotificationsComponent
-    ]
-  }));
+  beforeEach(() => {
+    const mockAngulartics2 = jasmine.createSpyObj('angulartics2', ['eventTrack']);
+    mockAngulartics2.eventTrack = jasmine.createSpyObj('angulartics2', ['next']);
+    TestBed.configureTestingModule({
+      providers: [
+        NotificationsComponent,
+        {
+          provide: Angulartics2,
+          useValue: mockAngulartics2
+        }
+      ]
+    });
+  });
 
   describe('constructor', () => {
 
