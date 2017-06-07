@@ -31,8 +31,7 @@ describe('NotificationsComponent', () => {
     it('should be defaulted',
       inject([ NotificationsComponent ], (component: NotificationsComponent) => {
 
-      expect(component.noNotifications).toEqual('No unread notifications.');
-      expect(component.allNotificationRead).toEqual(true);
+      expect(component.allNotificationRead).toBe(true);
     }));
 
   });
@@ -49,7 +48,7 @@ describe('NotificationsComponent', () => {
 
       component.notifications = notificationsMock;
 
-      expect(component.allNotificationRead).toEqual(false);
+      expect(component.allNotificationRead).toBe(false);
     }));
 
     it('should determine that all notifications not',
@@ -65,7 +64,7 @@ describe('NotificationsComponent', () => {
 
       component.notifications = notificationsMock;
 
-      expect(component.allNotificationRead).toEqual(true);
+      expect(component.allNotificationRead).toBe(true);
     }));
 
   });

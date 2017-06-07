@@ -26,7 +26,6 @@ export class NotificationsComponent {
     this.allNotificationRead = this._notifications.filter(notification => notification.status !== 'READ').length < 1;
   }
 
-  noNotifications: string = 'No unread notifications.';
   allNotificationRead: boolean = true;
 
   private _notifications: Notification[] = [];
