@@ -50,7 +50,7 @@ export interface OpportunityNotification extends Notification {
   };
 }
 
-interface StoreNotification extends Notification {
+export interface StoreNotification extends Notification {
   shortenedObject: {
     tdlinx_number: number;
     store_name: string;
@@ -62,7 +62,7 @@ interface StoreNotification extends Notification {
   };
 }
 
-interface AccountNotification extends Notification {
+export interface AccountNotification extends Notification {
   shortenedObject: {
     id: string;
     name: string;
