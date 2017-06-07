@@ -1,6 +1,7 @@
 import * as Chance from 'chance';
-let chance = new Chance();
 import * as moment from 'moment';
+
+let chance = new Chance();
 
 export function opportunityNotificationMock(): any {
   return {
