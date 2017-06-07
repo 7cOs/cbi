@@ -11,12 +11,14 @@ describe('GreetingComponent', () => {
     providers: [ GreetingComponent ]
   }));
 
-  it('should salutate the user with "Good morning" during morning hours', inject([ GreetingComponent ], (component: GreetingComponent) => {
-    const randomMorningHour = chance.integer({min: 0, max: 11});
-    jasmine.clock().mockDate(moment().hour(randomMorningHour).toDate());
-    component.ngOnInit();
-    expect(component.salutation).toBe('Good morning');
-  }));
+  it('should salutate the user with "Good morning" during morning hours',
+    inject([ GreetingComponent ], (component: GreetingComponent) => {
+      const randomMorningHour = chance.integer({min: 0, max: 11});
+      jasmine.clock().mockDate(moment().hour(randomMorningHour).toDate());
+      component.ngOnInit();
+      expect(component.salutation).toBe('Good morning');
+    })
+  );
 
   it('should NOT salutate the user with "Good morning" during non-morning hours',
     inject([ GreetingComponent ], (component: GreetingComponent) => {
