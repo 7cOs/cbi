@@ -57,7 +57,7 @@ describe('GreetingComponent', () => {
     })
   );
 
-  it('should NOT salutate the user with "Good evening"',
+  it('should NOT salutate the user with "Good evening" during non-evening hours',
     inject([ GreetingComponent ], (component: GreetingComponent) => {
       const randomNonEveningHour = chance.integer({min: 0, max: 16});
       jasmine.clock().mockDate(moment().hour(randomNonEveningHour).toDate());
