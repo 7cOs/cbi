@@ -6,7 +6,8 @@ import { Notification } from '../../../models/notification.model';
 
 @Component({
   selector: 'notifications',
-  template: require('./notifications.component.pug')
+  template: require('./notifications.component.pug'),
+  styles: [require('./notifications.component.scss').toString()]
 })
 
 export class NotificationsComponent {
@@ -26,8 +27,7 @@ export class NotificationsComponent {
     this.allNotificationRead = this._notifications.filter(notification => notification.status !== 'READ').length < 1;
   }
 
-  allNotificationRead: boolean = true;
-
+  private allNotificationRead: boolean = true;
   private _notifications: Notification[] = [];
   private notificationActionAnalyticsMapping = {
     'TARGET_LIST': 'Shared Target List',

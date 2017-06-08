@@ -1,8 +1,11 @@
 import { Angulartics2 } from 'angulartics2';
-import { inject, TestBed } from '@angular/core/testing';
+import { By } from '@angular/platform-browser';
+import { inject, TestBed, ComponentFixture } from '@angular/core/testing';
 
+import { FormatOpportunitiesTypePipe } from '../../../pipes/formatOpportunitiesType.pipe';
+import { TimeAgoPipe } from '../../../pipes/timeAgo.pipe';
 import { NotificationsComponent } from './notifications.component';
-import { Notification } from './../../../models/notification.model';
+import { Notification } from '../../../models/notification.model';
 import {
   targetListNotificationNotificationMock,
   opportunityNotificationMock,
@@ -12,10 +15,18 @@ import {
 
 describe('NotificationsComponent', () => {
 
+  let fixture: ComponentFixture<NotificationsComponent>;
+
   beforeEach(() => {
     const mockAngulartics2 = jasmine.createSpyObj('angulartics2', ['eventTrack']);
     mockAngulartics2.eventTrack = jasmine.createSpyObj('angulartics2', ['next']);
+
     TestBed.configureTestingModule({
+      declarations: [
+        NotificationsComponent,
+        FormatOpportunitiesTypePipe,
+        TimeAgoPipe
+      ],
       providers: [
         NotificationsComponent,
         {
@@ -24,36 +35,38 @@ describe('NotificationsComponent', () => {
         }
       ]
     });
+
+    fixture = TestBed.createComponent(NotificationsComponent);
   });
 
   describe('constructor', () => {
 
-    it('should be defaulted',
-      inject([ NotificationsComponent ], (component: NotificationsComponent) => {
-
-      expect(component.allNotificationRead).toBe(true);
-    }));
+    it('should be defaulted', () => {
+      fixture.detectChanges();
+      const noUnreadNotificationElement = fixture.debugElement
+        .query(By.css('.notification-card.clearfix:last-child .details p')).nativeElement;
+      expect(noUnreadNotificationElement.textContent).toBe('No unread notifications.');
+    });
 
   });
 
   describe('setNotifications', () => {
 
-    it('should determine that all notifications are not read',
-      inject([ NotificationsComponent ], (component: NotificationsComponent) => {
-
+    it('should determine that all notifications are not read', () => {
       const notificationsMock = [
         targetListNotificationNotificationMock(),
         opportunityNotificationMock()
       ];
 
-      component.notifications = notificationsMock;
+      fixture.componentInstance.notifications = notificationsMock;
 
-      expect(component.allNotificationRead).toBe(false);
-    }));
+      fixture.detectChanges();
+      const noUnreadNotificationElement = fixture.debugElement
+        .query(By.css('.notification-card.clearfix:last-child .details p')).nativeElement;
+      expect(noUnreadNotificationElement.textContent).not.toContain('No unread notifications.');
+    });
 
-    it('should determine that all notifications not',
-      inject([ NotificationsComponent ], (component: NotificationsComponent) => {
-
+    it('should determine that all notifications are read', () => {
       const notificationsMock = [
         storeNotificationMock(),
         accountNotificationMock()
@@ -62,10 +75,13 @@ describe('NotificationsComponent', () => {
       notificationsMock[0].status = 'READ';
       notificationsMock[1].status = 'READ';
 
-      component.notifications = notificationsMock;
+      fixture.componentInstance.notifications = notificationsMock;
 
-      expect(component.allNotificationRead).toBe(true);
-    }));
+      fixture.detectChanges();
+      const noUnreadNotificationElement = fixture.debugElement
+        .query(By.css('.notification-card.clearfix:last-child .details p')).nativeElement;
+      expect(noUnreadNotificationElement.textContent).toBe('No unread notifications.');
+    });
 
   });
 
