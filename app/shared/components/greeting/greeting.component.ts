@@ -4,13 +4,13 @@ import * as moment from 'moment';
 @Component({
   selector: 'greeting',
   template: require('./greeting.component.pug'),
-  styles: [require('./greeting.component.scss')]
+  styles: [require('./greeting.component.scss').toString()]
 })
 
 export class GreetingComponent implements OnInit {
   @Input() name: string;
 
-  public salutation: string;
+  private salutation: string;
 
   constructor() {}
 
