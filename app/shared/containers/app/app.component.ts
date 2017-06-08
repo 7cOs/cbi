@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../../state/reducers/root.reducer';
 import { FetchVersionAction } from '../../../state/actions/compass-version.action';
+import { FetchDateRangesAction } from '../../../state/actions/date-ranges.action';
+import { DateRangeApiService } from '../../../services/date-range-api.service';
 
 @Component({
   selector: 'app-root',
@@ -13,5 +15,6 @@ export class AppComponent implements OnInit {
 
   ngOnInit() {
     this.store.dispatch(new FetchVersionAction());
+    this.store.dispatch(new FetchDateRangesAction());
   }
 }
