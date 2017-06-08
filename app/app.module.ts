@@ -9,6 +9,8 @@ import { EffectsModule } from './state/effects/effects.module';
 import { rootReducer } from './state/reducers/root.reducer';
 import { AppComponent } from './shared/containers/app/app.component';
 import { SettingsComponent } from './shared/components/settings/settings.component';
+import { DateRangeService } from './services/date-range.service';
+import { DateRangeApiService } from './services/date-range-api.service';
 
 export const AppUpgradeAdapter = new UpgradeAdapter(forwardRef(() => AppModule)); // tslint:disable-line:variable-name no-use-before-declare
 
@@ -36,7 +38,10 @@ AppUpgradeAdapter.upgradeNg1Provider('versionService');
     SettingsComponent,
     ...UpgradedComponents
   ],
-  providers: [ ]
+  providers: [
+    DateRangeService,
+    DateRangeApiService
+  ]
 })
 export class AppModule {
   constructor(angulartics2: Angulartics2, angulartics2GoogleAnalytics: Angulartics2GoogleAnalytics) {
