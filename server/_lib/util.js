@@ -8,19 +8,21 @@ module.exports = function(app) {
         crypto = require('crypto-js'),
         apiBase = app.get('config').api.url,
         apiKey = encodeURIComponent(app.get('config').api.apiKey),
+        v3BaseUrls = app.get('config').api.v3BaseUrls,
         apiSecret = app.get('config').api.key;
 
   return {
     // Compass Beers API URL Signing:
     //  - Add 'apiKey' query param
     //  - Add 'signature' query param based on path, apiKey, and secret key
-    signApiUrl: function(uri) {
+    signApiUrl: function(uri, v3URLKey) {
       const uriSplit = uri.split('?');
       const urlPath = uriSplit[0];
       const params = uriSplit[1];
       const signature = encodeURIComponent(crypto.enc.Base64.stringify(crypto.HmacSHA256(urlPath + apiKey, apiSecret)));
-      const signedUrl = `${apiBase}${urlPath}?signature=${signature}&apiKey=${apiKey}`;
 
+      // TODO: remove ternary expression & update base url when api gateway is in place
+      const signedUrl = `${v3URLKey ? v3BaseUrls[v3URLKey] : apiBase}${urlPath}?signature=${signature}&apiKey=${apiKey}`;
       return params ? `${signedUrl}&${params}` : signedUrl;
     },
 
