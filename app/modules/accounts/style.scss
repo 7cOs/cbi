@@ -289,21 +289,22 @@
 
   div:first-child {
     float: left;
+    width: 234px;
   }
 
   div:last-child {
     float: right;
+    width: calc(100% - 330px);
   }
 
   .widget-subheader-item {
     background: #FFFFFF;
-    width: 41.5%;
   }
 
   .widget-subheader-item:nth-child(2n) {
     background: #F3F3F3;
     float: left;
-    width: 17%;
+    width: 96px;
   }
 }
 
@@ -365,7 +366,7 @@
     background: #F3F3F3;
     float: right;
     height: 60px;
-    width: 94px;
+    width: 95px;
 
     p {
       padding-top: 5px;
@@ -376,8 +377,7 @@
 .widget-graph {
   float: right;
   max-height: 678px;
-  max-width: calc(100% - 330px);
-  min-width: 200px;
+  width: calc(100% - 330px);
 
   div:first-child {
     margin-top: -20px;
