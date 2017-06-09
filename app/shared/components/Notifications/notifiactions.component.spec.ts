@@ -1,6 +1,7 @@
 import { Angulartics2 } from 'angulartics2';
 import { By } from '@angular/platform-browser';
 import { inject, TestBed, ComponentFixture } from '@angular/core/testing';
+import * as moment from 'moment';
 
 import { FormatOpportunitiesTypePipe } from '../../../pipes/formatOpportunitiesType.pipe';
 import { TimeAgoPipe } from '../../../pipes/timeAgo.pipe';
@@ -81,6 +82,29 @@ describe('NotificationsComponent', () => {
       const noUnreadNotificationElement = fixture.debugElement
         .query(By.css('.notification-card.clearfix:last-child .details p')).nativeElement;
       expect(noUnreadNotificationElement.textContent).toBe('No unread notifications.');
+    });
+
+    it('should sort the notifications by dateCreated descending', () => {
+      const notificationsMock = [
+        storeNotificationMock(),
+        accountNotificationMock()
+      ];
+
+      notificationsMock[0].dateCreated = moment().subtract(2, 'days');
+      notificationsMock[1].dateCreated = moment().subtract(1, 'days');
+
+      fixture.componentInstance.notifications = notificationsMock;
+
+      fixture.detectChanges();
+      const firstCreatorLabel = fixture.debugElement
+        .query(By.css('.notification-card.clearfix:first-child .info label:last-child')).nativeElement;
+      const secondCreatorLabel = fixture.debugElement
+        .query(By.css('.notification-card.clearfix:nth-child(2) .info label:last-child')).nativeElement;
+
+      expect(firstCreatorLabel.textContent)
+        .toBe(`by ${notificationsMock[1].creator.firstName} ${notificationsMock[1].creator.lastName}`);
+      expect(secondCreatorLabel.textContent)
+        .toBe(`by ${notificationsMock[0].creator.firstName} ${notificationsMock[0].creator.lastName}`);
     });
 
   });
