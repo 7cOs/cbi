@@ -4,7 +4,6 @@ import 'textangular/dist/textAngular-sanitize.min';
 
 import { AppComponent } from './shared/containers/app/app.component';
 import { AppUpgradeAdapter } from './app.module';
-import { AppComponent } from './shared/containers/app/app.component';
 import { GreetingComponent } from './shared/components/greeting/greeting.component';
 import { NotificationsComponent } from './shared/components/Notifications/notifications.component';
 import { SettingsComponent } from './shared/components/settings/settings.component';
