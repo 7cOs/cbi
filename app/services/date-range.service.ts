@@ -21,6 +21,19 @@ export class DateRangeService {
   private L3CM: Observable<DateRange>;
   private defaultDateFormat: string;
 
+  private dateRangeDisplayCodes: any = {
+      'MTD': 'MTD',
+      'FYTM': 'FYTM',
+      'CYTM': 'CYTM',
+      'CYTDBDL': 'CYTD',
+      'FYTDBDL': 'FYTD',
+      'L60BDL': 'L60 Days',
+      'L90BDL': 'L90 Days',
+      'L120BDL': 'L120 Days',
+      'LCM': 'Clo Mth',
+      'L3CM': 'L03 Mth'
+    };
+
   constructor(private store: Store<AppState>) {
     this.MTD = store.select(state => state.dateRanges.MTD);
     this.FYTM = store.select(state => state.dateRanges.FYTM);
@@ -39,7 +52,8 @@ export class DateRangeService {
   }
 
   transformDateRanges(dateRangeDTOs: DateRangeDTO[]): DateRange[] {
-    return dateRangeDTOs.map(dto => this.formatDateRange(dto));
+    return dateRangeDTOs.filter(dto => !!this.dateRangeDisplayCodes[dto.code])
+                        .map(dto => this.formatDateRange(dto));
   }
 
   private formatDateRange(dateRangeDTO: DateRangeDTO): DateRange {
@@ -57,16 +71,6 @@ export class DateRangeService {
   }
 
   private mapDateRangeDisplayCode(rawType: string): string {
-    const dateRangeDisplayCodes: any = {
-      'CYTDBDL': 'CYTD',
-      'FYTDBDL': 'FYTD',
-      'L60BDL': 'L60 Days',
-      'L90BDL': 'L90 Days',
-      'L120BDL': 'L120 Days',
-      'LCM': 'Clo Mth',
-      'L3CM': 'L03 Mth'
-    };
-
-    return dateRangeDisplayCodes[rawType] || rawType;
+    return this.dateRangeDisplayCodes[rawType] || rawType;
   }
 }
