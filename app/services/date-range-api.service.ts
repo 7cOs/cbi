@@ -4,7 +4,6 @@ import { Observable } from 'rxjs';
 import 'rxjs/add/operator/map';
 
 import { DateRangeDTO } from '../models/date-range-dto.model';
-import { dateRangeDTOMock } from '../models/date-range-dto.model.mock';
 
 @Injectable()
 export class DateRangeApiService {
@@ -12,11 +11,11 @@ export class DateRangeApiService {
   constructor(private http: Http) {}
 
   getDateRanges(): Observable<DateRangeDTO[]> {
-      return this.http.get(`${this.GET_DATE_RANGES_URL}`)
-        .map(res => res.json());
+    return this.http.get(`${this.GET_DATE_RANGES_URL}`)
+      .map(res => res.json());
   }
 
-  getMockDateRange(): Observable<DateRangeDTO> {
-    return Observable.of(dateRangeDTOMock());
+  a(): Observable<DateRangeDTO> {
+    return Observable.of({});
   }
 }
