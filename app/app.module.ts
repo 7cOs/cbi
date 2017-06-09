@@ -9,6 +9,7 @@ import { StoreModule } from '@ngrx/store';
 import { UpgradeAdapter } from '@angular/upgrade';
 
 import { AppComponent } from './shared/containers/app/app.component';
+import { CbiSelectComponent } from './shared/components/cbi-select/cbi-select.component';
 import { EffectsModule } from './state/effects/effects.module';
 import { GreetingComponent } from './shared/components/greeting/greeting.component';
 import { FormatOpportunitiesTypePipe } from './pipes/formatOpportunitiesType.pipe';
@@ -32,6 +33,7 @@ AppUpgradeAdapter.upgradeNg1Provider('versionService');
 @NgModule({
   declarations: [
     AppComponent,
+    CbiSelectComponent,
     GreetingComponent,
     SettingsComponent,
     NotificationsComponent,
