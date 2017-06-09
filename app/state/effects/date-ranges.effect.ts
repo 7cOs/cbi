@@ -5,11 +5,11 @@ import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/do';
 import 'rxjs/add/operator/switchMap';
 
+import { DateRange } from '../../models/date-range.model';
 import { DateRangeApiService } from '../../services/date-range-api.service';
 import * as DateRangesActions from '../../state/actions/date-ranges.action';
 import { DateRangeDTO } from '../../models/date-range-dto.model';
-import { DateRangeService } from '../../services/date-range.service';
-import { DateRange } from '../../models/date-range.model';
+import { DateRangeTransformerService } from '../../services/date-range-transformer.service';
 
 @Injectable()
 export class DateRangesEffects {
@@ -17,7 +17,7 @@ export class DateRangesEffects {
   constructor(
     private actions$: Actions,
     private dateRangeApiService: DateRangeApiService,
-    private dateRangeService: DateRangeService
+    private dateRangeTransformerService: DateRangeTransformerService
   ) { }
 
   @Effect()
@@ -27,7 +27,7 @@ export class DateRangesEffects {
       .switchMap(() => {
         return this.dateRangeApiService.getDateRanges()
           .map((response: DateRangeDTO[]) => {
-            return new DateRangesActions.FetchDateRangesSuccessAction(this.dateRangeService.transformDateRanges(response));
+            return new DateRangesActions.FetchDateRangesSuccessAction(this.dateRangeTransformerService.transformDateRanges(response));
           })
           .catch((err: Error) => Observable.of(new DateRangesActions.FetchDateRangesFailureAction(err)));
       });
