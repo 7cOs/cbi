@@ -1,7 +1,8 @@
 import { Angulartics2, Angulartics2Module, Angulartics2GoogleAnalytics } from 'angulartics2';
 import { BrowserModule } from '@angular/platform-browser';
-
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpModule } from '@angular/http';
+import { MdSelectModule } from '@angular/material';
 import { NgModule, forwardRef } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { StoreModule } from '@ngrx/store';
@@ -29,14 +30,6 @@ AppUpgradeAdapter.upgradeNg1Provider('userService');
 AppUpgradeAdapter.upgradeNg1Provider('versionService');
 
 @NgModule({
-  imports: [
-    BrowserModule,
-    RouterModule.forRoot([ {path: 'placeholder', redirectTo: '/'} ]), // need ng2 router for angulartics2 to work
-    Angulartics2Module.forRoot([ Angulartics2GoogleAnalytics ]),
-    HttpModule,
-    StoreModule.provideStore(rootReducer),
-    EffectsModule
-  ],
   declarations: [
     AppComponent,
     GreetingComponent,
@@ -45,6 +38,19 @@ AppUpgradeAdapter.upgradeNg1Provider('versionService');
     FormatOpportunitiesTypePipe,
     TimeAgoPipe,
     ...UpgradedComponents
+  ],
+  imports: [
+    Angulartics2Module.forRoot([ Angulartics2GoogleAnalytics ]),
+    BrowserModule,
+    BrowserAnimationsModule,
+    EffectsModule,
+    HttpModule,
+    MdSelectModule,
+    RouterModule.forRoot([ {path: 'placeholder', redirectTo: '/'} ]), // need ng2 router for angulartics2 to work
+    StoreModule.provideStore(rootReducer)
+  ],
+  exports: [
+    MdSelectModule
   ],
   providers: [ ]
 })

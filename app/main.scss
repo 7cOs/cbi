@@ -39,6 +39,9 @@ $fa-font-path: './assets/fonts';
 // Browser fixes
 @import './assets/styles/ie';
 
+// Temporary Custom Theme
+@import '~@angular/material/prebuilt-themes/deeppurple-amber.css';
+
 // Modules
 @import './modules/**/*.scss';
 
