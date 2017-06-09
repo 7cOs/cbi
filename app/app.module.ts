@@ -1,6 +1,6 @@
 import { Angulartics2, Angulartics2Module, Angulartics2GoogleAnalytics } from 'angulartics2';
 import { BrowserModule } from '@angular/platform-browser';
-import { DatePipe } from '@angular/common';
+
 import { HttpModule } from '@angular/http';
 import { NgModule, forwardRef } from '@angular/core';
 import { RouterModule } from '@angular/router';
@@ -9,6 +9,7 @@ import { UpgradeAdapter } from '@angular/upgrade';
 
 import { AppComponent } from './shared/containers/app/app.component';
 import { EffectsModule } from './state/effects/effects.module';
+import { GreetingComponent } from './shared/components/greeting/greeting.component';
 import { FormatOpportunitiesTypePipe } from './pipes/formatOpportunitiesType.pipe';
 import { NotificationsComponent } from './shared/components/Notifications/notifications.component';
 import { rootReducer } from './state/reducers/root.reducer';
@@ -38,13 +39,14 @@ AppUpgradeAdapter.upgradeNg1Provider('versionService');
   ],
   declarations: [
     AppComponent,
+    GreetingComponent,
     SettingsComponent,
     NotificationsComponent,
-    ...UpgradedComponents,
     FormatOpportunitiesTypePipe,
-    TimeAgoPipe
+    TimeAgoPipe,
+    ...UpgradedComponents
   ],
-  providers: [ DatePipe ]
+  providers: [ ]
 })
 export class AppModule {
   constructor(angulartics2: Angulartics2, angulartics2GoogleAnalytics: Angulartics2GoogleAnalytics) {
