@@ -12,7 +12,8 @@ export class DateRangeApiService {
 
   getDateRanges(): Observable<DateRangeDTO[]> {
     return this.http.get(`${this.GET_DATE_RANGES_URL}`)
-      .map(res => res.json());
+      .map(res => res.json())
+      .catch(err => Observable.throw(new Error(err)));
   }
 
   a(): Observable<DateRangeDTO> {

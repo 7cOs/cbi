@@ -3,7 +3,7 @@ import { ActionStatus } from '../../enums/action-status.enum';
 import * as DateRangesActions from '../actions/date-ranges.action';
 import { dateRangeCollectionMock } from '../../models/date-range-collection.mock.model';
 
-fdescribe('Date Ranges Reducer', () => {
+describe('Date Ranges Reducer', () => {
 
   it('updates the status when a fetch is dispatched', () => {
     const expectedState = {
