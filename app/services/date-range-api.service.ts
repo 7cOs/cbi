@@ -13,10 +13,15 @@ export class DateRangeApiService {
   getDateRanges(): Observable<DateRangeDTO[]> {
     return this.http.get(`${this.GET_DATE_RANGES_URL}`)
       .map(res => res.json())
-      .catch(err => Observable.throw(new Error(err)));
+      .catch(err => this.handleError(new Error(err)));
   }
 
   a(): Observable<DateRangeDTO> {
     return Observable.of({});
+  }
+
+  private handleError(err: Error): Observable<any> {
+    console.log(err.message || 'Unkown Error');
+    return Observable.throw(err);
   }
 }
