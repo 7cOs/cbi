@@ -12,7 +12,7 @@ import { Observable } from 'rxjs';
 import * as Chance from 'chance';
 let chance = new Chance();
 
-fdescribe('Date Ranges Effects', () => {
+describe('Date Ranges Effects', () => {
   const dateRange1: DateRange = dateRangeMock();
   const dateRange2: DateRange = dateRangeMock();
   const mockDateRanges: DateRange[] = [dateRange1, dateRange2];
@@ -63,7 +63,7 @@ fdescribe('Date Ranges Effects', () => {
     describe('when DateRangeApiService returns successfully', () => {
 
       let dateRangeApiService: DateRangeApiService;
-      beforeEach(inject([ DateRangeApiService, DateRangeTransformerService ],
+      beforeEach(inject([ DateRangeApiService ],
         (_dateRangeApiService: DateRangeApiService) => {
           dateRangeApiService = _dateRangeApiService;
 
@@ -82,7 +82,7 @@ fdescribe('Date Ranges Effects', () => {
     describe('when dateRangeApiService returns an error', () => {
       let dateRangeApiService: DateRangeApiService;
 
-      beforeEach(inject([ DateRangeApiService, DateRangeTransformerService ],
+      beforeEach(inject([ DateRangeApiService ],
         (_dateRangeApiService: DateRangeApiService) => {
           dateRangeApiService = _dateRangeApiService;
           runner.queue(new FetchDateRangesAction());
