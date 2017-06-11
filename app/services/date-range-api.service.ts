@@ -16,10 +16,6 @@ export class DateRangeApiService {
       .catch(err => this.handleError(new Error(err)));
   }
 
-  a(): Observable<DateRangeDTO> {
-    return Observable.of({});
-  }
-
   private handleError(err: Error): Observable<any> {
     console.log(err.message || 'Unkown Error');
     return Observable.throw(err);

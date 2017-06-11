@@ -1,15 +1,17 @@
-import { TestBed, inject } from '@angular/core/testing';
+import * as Chance from 'chance';
 import { EffectsRunner, EffectsTestingModule } from '@ngrx/effects/testing';
-import { dateRangeMock } from '../../models/date-range.model.mock';
-import { DateRangesEffects } from './date-ranges.effect';
+import { Observable } from 'rxjs';
+import { TestBed, inject } from '@angular/core/testing';
+
 import { DateRange } from '../../models/date-range.model';
+import { DateRangeApiService } from '../../services/date-range-api.service';
 import { DateRangeDTO } from '../../models/date-range-dto.model';
 import { dateRangeDTOMock } from '../../models/date-range-dto.model.mock';
-import { DateRangeApiService } from '../../services/date-range-api.service';
+import { dateRangeMock } from '../../models/date-range.model.mock';
+import { DateRangesEffects } from './date-ranges.effect';
 import { DateRangeTransformerService } from '../../services/date-range-transformer.service';
 import { FetchDateRangesAction, FetchDateRangesFailureAction, FetchDateRangesSuccessAction } from '../actions/date-ranges.action';
-import { Observable } from 'rxjs';
-import * as Chance from 'chance';
+
 let chance = new Chance();
 
 describe('Date Ranges Effects', () => {
