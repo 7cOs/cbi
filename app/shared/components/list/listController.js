@@ -289,7 +289,10 @@ module.exports = /*  @ngInject */
 
       // Create target list
       userService.addTargetList(vm.newList).then(function(response) {
-        $analytics.eventTrack('Add to Target List', {category: vm.analyticsCategory, label: response.id});
+        $analytics.eventTrack('Add to Target List', {
+          category: vm.analyticsCategory,
+          label: response.id
+        });
         vm.addToTargetList(response.id);
         vm.closeModal();
         vm.buttonDisabled = false;

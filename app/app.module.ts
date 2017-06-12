@@ -11,8 +11,12 @@ import { DateRangeApiService } from './services/date-range-api.service';
 import { DateRangeService } from './services/date-range.service';
 import { DateRangeTransformerService } from './services/date-range-transformer.service';
 import { EffectsModule } from './state/effects/effects.module';
+import { GreetingComponent } from './shared/components/greeting/greeting.component';
+import { FormatOpportunitiesTypePipe } from './pipes/formatOpportunitiesType.pipe';
+import { NotificationsComponent } from './shared/components/Notifications/notifications.component';
 import { rootReducer } from './state/reducers/root.reducer';
 import { SettingsComponent } from './shared/components/settings/settings.component';
+import { TimeAgoPipe } from './pipes/timeAgo.pipe';
 
 export const AppUpgradeAdapter = new UpgradeAdapter(forwardRef(() => AppModule)); // tslint:disable-line:variable-name no-use-before-declare
 
@@ -37,7 +41,11 @@ AppUpgradeAdapter.upgradeNg1Provider('versionService');
   ],
   declarations: [
     AppComponent,
+    GreetingComponent,
     SettingsComponent,
+    NotificationsComponent,
+    FormatOpportunitiesTypePipe,
+    TimeAgoPipe,
     ...UpgradedComponents
   ],
   providers: [
