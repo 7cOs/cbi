@@ -443,7 +443,10 @@ module.exports = /*  @ngInject */
           break;
       }
 
-      $analytics.eventTrack('Notes Tab', {category: vm.analyticsCategory, label: 'Open Notes Tab'});
+      $analytics.eventTrack('Notes Tab', {
+        category: vm.analyticsCategory,
+        label: 'Open Notes Tab'
+      });
 
       $location.hash(account.noteId);
     });
