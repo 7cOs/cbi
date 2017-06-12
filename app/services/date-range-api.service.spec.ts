@@ -259,8 +259,8 @@ let mockResponse = [
 ];
 
 describe('Service: DateRangeApiService', () => {
-  let service: DateRangeApiService = null;
-  let backend: MockBackend = null;
+  let service: DateRangeApiService;
+  let backend: MockBackend;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
