@@ -60,8 +60,8 @@ describe('Unit: list controller', function() {
     expect(ctrl.getTargetLists).not.toBeUndefined();
     expect(typeof (ctrl.getTargetLists)).toEqual('function');
 
-    expect(ctrl.markRead).not.toBeUndefined();
-    expect(typeof (ctrl.markRead)).toEqual('function');
+    expect(ctrl.notificationClicked).not.toBeUndefined();
+    expect(typeof (ctrl.notificationClicked)).toEqual('function');
 
     expect(ctrl.markSeen).not.toBeUndefined();
     expect(typeof (ctrl.markSeen)).toEqual('function');
@@ -73,7 +73,7 @@ describe('Unit: list controller', function() {
     expect(typeof (ctrl.showNewRationaleInput)).toEqual('function');
   });
 
-  describe('[nb.markRead]', function() {
+  describe('[nb.notificationClicked]', function() {
     var notifications;
     beforeEach(function() {
       notifications = [
@@ -115,7 +115,7 @@ describe('Unit: list controller', function() {
         return deferredState.promise;
       });
       ctrl.notificationHelper = {};
-      ctrl.markRead(notifications[0]);
+      ctrl.notificationClicked(notifications[0]);
       expect(notificationsService.markNotifications).toHaveBeenCalled();
       expect(ctrl.notificationHelper.showBadge).toEqual(false);
       expect(ctrl.notificationHelper.unseenNotifications).toEqual(0);
@@ -127,13 +127,13 @@ describe('Unit: list controller', function() {
         return deferredState.promise;
       });
 
-      ctrl.markRead(notifications[0]);
+      ctrl.notificationClicked(notifications[0]);
       expect($state.go).toHaveBeenCalledWith('opportunities', (opportunitiesService.model.opportunityId, opportunitiesService.model.filterApplied = false), {reload: true});
 
-      ctrl.markRead(notifications[1]);
+      ctrl.notificationClicked(notifications[1]);
       expect($state.go).toHaveBeenCalledWith('target-list-detail', ({id: notifications[1].shortenedObject.id}));
 
-      ctrl.markRead(notifications[2]);
+      ctrl.notificationClicked(notifications[2]);
       expect($state.go).toHaveBeenCalledWith('accounts');
     });
 
@@ -143,7 +143,7 @@ describe('Unit: list controller', function() {
       spyOn($state, 'go').and.callFake(function() {
         return deferredState.promise;
       });
-      ctrl.markRead(notifications[0]);
+      ctrl.notificationClicked(notifications[0]);
       expect($mdMenu.hide).toHaveBeenCalled();
     });
   });

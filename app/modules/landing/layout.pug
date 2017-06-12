@@ -3,8 +3,8 @@ section.landing-page
   section.landing-page-data(column="12")
     div(row)
       section.my-performance(column="7")
-        section.greeting
-          h1 {{l.greeting}}
+        greeting([name]="l.greetingName")
+
         h2 My Performance
         .depletions(column="4")
           h3 Depletions FYTD
