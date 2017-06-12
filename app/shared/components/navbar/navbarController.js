@@ -135,7 +135,6 @@ module.exports = /*  @ngInject */
 
       if (notification.objectType.toUpperCase() === 'TARGET_LIST') {
         $analytics.eventTrack('Read Notification', {
-          'User Id': userService.model.currentUser.sfdcID,
           category: 'Notifications',
           label: 'Shared Target List'
         });
@@ -143,7 +142,6 @@ module.exports = /*  @ngInject */
 
       } else if (notification.objectType.toUpperCase() === 'OPPORTUNITY') {
         $analytics.eventTrack('Read Notification', {
-          'User Id': userService.model.currentUser.sfdcID,
           category: 'Notifications',
           label: 'Shared Opportunity'
         });
@@ -152,7 +150,6 @@ module.exports = /*  @ngInject */
 
       } else if (notification.objectType.toUpperCase() === 'ACCOUNT') {
         $analytics.eventTrack('Read Notification', {
-          'User Id': userService.model.currentUser.sfdcID,
           category: 'Notifications',
           label: 'Shared Note'
         });

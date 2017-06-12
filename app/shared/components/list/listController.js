@@ -290,7 +290,6 @@ module.exports = /*  @ngInject */
       // Create target list
       userService.addTargetList(vm.newList).then(function(response) {
         $analytics.eventTrack('Add to Target List', {
-          'User Id': userService.model.currentUser.sfdcID,
           category: vm.analyticsCategory,
           label: response.id
         });

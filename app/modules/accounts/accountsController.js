@@ -1645,7 +1645,6 @@ module.exports = /*  @ngInject */
 
      function sendTopBottomAnalyticsEvent() {
        $analytics.eventTrack(vm.currentTopBottomAcctType.name, {
-        'User Id': userService.model.currentUser.sfdcID,
          category: vm.filtersService.model.valuesVsTrend.name,
          label: vm.filtersService.model.accountSelected.accountMarkets.name
        });

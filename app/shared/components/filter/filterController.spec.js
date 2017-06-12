@@ -708,24 +708,23 @@ describe('Unit: filter controller (opportunities)', function() {
       applied: true,
       removable: true
     }];
-    userService.model.currentUser.sfdcID = 10110110;
 
     spyOn($analytics, 'eventTrack');
     ctrl.applyFilters();
 
-    expect($analytics.eventTrack).toHaveBeenCalledWith('ACCOUNT SCOPE', { 'User Id': 10110110, category: 'Filters', label: 'MY ACCOUNTS ONLY' });
-    expect($analytics.eventTrack).toHaveBeenCalledWith('DISTRIBUTION TYPE', { 'User Id': 10110110, category: 'Filters', label: 'SIMPLE' });
-    expect($analytics.eventTrack).toHaveBeenCalledWith('CBBD CONTACT', { 'User Id': 10110110, category: 'Filters', label: 'Mr. Simpson' });
-    expect($analytics.eventTrack).toHaveBeenCalledWith('MASTER SKU', { 'User Id': 10110110, category: 'Filters', label: '228' });
-    expect($analytics.eventTrack).toHaveBeenCalledWith('PREDICTED IMPACT', { 'User Id': 10110110, category: 'Filters', label: 'HIGH' });
-    expect($analytics.eventTrack).toHaveBeenCalledWith('ACCOUNT', { 'User Id': 10110110, category: 'Filters', label: 'Walmart' });
-    expect($analytics.eventTrack).toHaveBeenCalledWith('STORE TYPE', { 'User Id': 10110110, category: 'Filters', label: 'STORE TYPE' });
-    expect($analytics.eventTrack).toHaveBeenCalledWith('STORE SEGMENTATION', { 'User Id': 10110110, category: 'Filters', label: 'A' });
-    expect($analytics.eventTrack).toHaveBeenCalledWith('CITY', { 'User Id': 10110110, category: 'Filters', label: 'HOUSTON' });
-    expect($analytics.eventTrack).toHaveBeenCalledWith('STORE STATUS', { 'User Id': 10110110, category: 'Filters', label: 'UNSOLD' });
-    expect($analytics.eventTrack).toHaveBeenCalledWith('STORE FORMAT', { 'User Id': 10110110, category: 'Filters', label: 'ALL FORMATS' });
-    expect($analytics.eventTrack).toHaveBeenCalledWith('STORE FORMAT', { 'User Id': 10110110, category: 'Filters', label: 'HISPANIC' });
-    expect($analytics.eventTrack).toHaveBeenCalledWith('STORE FORMAT', { 'User Id': 10110110, category: 'Filters', label: 'GENERAL MARKET' });
+    expect($analytics.eventTrack).toHaveBeenCalledWith('ACCOUNT SCOPE', { category: 'Filters', label: 'MY ACCOUNTS ONLY' });
+    expect($analytics.eventTrack).toHaveBeenCalledWith('DISTRIBUTION TYPE', { category: 'Filters', label: 'SIMPLE' });
+    expect($analytics.eventTrack).toHaveBeenCalledWith('CBBD CONTACT', { category: 'Filters', label: 'Mr. Simpson' });
+    expect($analytics.eventTrack).toHaveBeenCalledWith('MASTER SKU', { category: 'Filters', label: '228' });
+    expect($analytics.eventTrack).toHaveBeenCalledWith('PREDICTED IMPACT', { category: 'Filters', label: 'HIGH' });
+    expect($analytics.eventTrack).toHaveBeenCalledWith('ACCOUNT', { category: 'Filters', label: 'Walmart' });
+    expect($analytics.eventTrack).toHaveBeenCalledWith('STORE TYPE', { category: 'Filters', label: 'STORE TYPE' });
+    expect($analytics.eventTrack).toHaveBeenCalledWith('STORE SEGMENTATION', { category: 'Filters', label: 'A' });
+    expect($analytics.eventTrack).toHaveBeenCalledWith('CITY', { category: 'Filters', label: 'HOUSTON' });
+    expect($analytics.eventTrack).toHaveBeenCalledWith('STORE STATUS', { category: 'Filters', label: 'UNSOLD' });
+    expect($analytics.eventTrack).toHaveBeenCalledWith('STORE FORMAT', { category: 'Filters', label: 'ALL FORMATS' });
+    expect($analytics.eventTrack).toHaveBeenCalledWith('STORE FORMAT', { category: 'Filters', label: 'HISPANIC' });
+    expect($analytics.eventTrack).toHaveBeenCalledWith('STORE FORMAT', { category: 'Filters', label: 'GENERAL MARKET' });
   });
 
   describe('[method.saveFilter]', function() {

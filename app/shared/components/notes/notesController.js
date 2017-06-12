@@ -444,7 +444,6 @@ module.exports = /*  @ngInject */
       }
 
       $analytics.eventTrack('Notes Tab', {
-        'User Id': userService.model.currentUser.sfdcID,
         category: vm.analyticsCategory,
         label: 'Open Notes Tab'
       });

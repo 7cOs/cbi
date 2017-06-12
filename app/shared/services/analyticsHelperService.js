@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports = /*  @ngInject */
-  function apiHelperService($rootScope, $analytics, $location, $window, notesService, userService) {
+  function apiHelperService($rootScope, $analytics, $location, $window, notesService) {
 
     return {
       createTracker: createTracker,
@@ -36,7 +36,6 @@ module.exports = /*  @ngInject */
       $rootScope.$on('$stateChangeSuccess', function (event, currentState) {
         var url = $location.url(),
           props = {
-            'User Id': userService.model.currentUser.sfdcID,
             location: $location.absUrl(),
             title: currentState.title
           };

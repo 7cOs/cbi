@@ -440,7 +440,6 @@ module.exports = /*  @ngInject */
         }
 
         $analytics.eventTrack(action, {
-          'User Id': userService.model.currentUser.sfdcID,
           category: 'Filters',
           label: label
         });
