@@ -1,11 +1,10 @@
 import { Action } from '@ngrx/store';
 import { Actions, Effect } from '@ngrx/effects';
-import { Injectable, Inject } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/do';
 import 'rxjs/add/operator/switchMap';
 
-import { DateRange } from '../../models/date-range.model';
 import { DateRangeApiService } from '../../services/date-range-api.service';
 import * as DateRangesActions from '../../state/actions/date-ranges.action';
 import { DateRangeDTO } from '../../models/date-range-dto.model';

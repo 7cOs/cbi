@@ -1,6 +1,5 @@
 import * as DateRangesActions from '../actions/date-ranges.action';
 import { ActionStatus, State } from '../../enums/action-status.enum';
-import { DateRangeDTO } from '../../models/date-range-dto.model';
 import { DateRange } from '../../models/date-range.model';
 
 export interface DateRangesState extends State {

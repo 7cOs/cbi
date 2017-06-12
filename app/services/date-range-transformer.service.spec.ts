@@ -1,14 +1,7 @@
-import { Chance } from 'chance';
 import { inject, TestBed } from '@angular/core/testing';
-import { Observable } from 'rxjs';
-import { Store } from '@ngrx/store';
 
-import { DateRange } from '../models/date-range.model';
-import { dateRangeMock } from '../models/date-range.model.mock';
 import { DateRangeTransformerService } from './date-range-transformer.service';
 import { dateRangeCollectionMock } from '../models/date-range-collection.mock.model';
-
-let chance = new Chance();
 
 describe('Service: DateRangeTransformerService', () => {
   const mockDateRangeDTOs = [

@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import * as moment from 'moment';
 import { Observable } from 'rxjs';
 import { Store } from '@ngrx/store';
 import 'rxjs/add/operator/map';
@@ -20,15 +19,15 @@ export class DateRangeService {
   private L3CM: Observable<DateRange>;
 
   constructor(private store: Store<AppState>) {
-    this.MTD = store.select(state => state.dateRanges.MTD);
-    this.FYTM = store.select(state => state.dateRanges.FYTM);
-    this.CYTM = store.select(state => state.dateRanges.CYTM);
-    this.CYTD = store.select(state => state.dateRanges.CYTD);
-    this.FYTD = store.select(state => state.dateRanges.FYTD);
-    this.L60 = store.select(state => state.dateRanges.L60);
-    this.L90 = store.select(state => state.dateRanges.L90);
-    this.L120 = store.select(state => state.dateRanges.L120);
-    this.L3CM = store.select(state => state.dateRanges.L3CM);
+    this.MTD = this.store.select(state => state.dateRanges.MTD);
+    this.FYTM = this.store.select(state => state.dateRanges.FYTM);
+    this.CYTM = this.store.select(state => state.dateRanges.CYTM);
+    this.CYTD = this.store.select(state => state.dateRanges.CYTD);
+    this.FYTD = this.store.select(state => state.dateRanges.FYTD);
+    this.L60 = this.store.select(state => state.dateRanges.L60);
+    this.L90 = this.store.select(state => state.dateRanges.L90);
+    this.L120 = this.store.select(state => state.dateRanges.L120);
+    this.L3CM = this.store.select(state => state.dateRanges.L3CM);
   }
 
   getDateRange(timePeriod: string): Observable<DateRange> {

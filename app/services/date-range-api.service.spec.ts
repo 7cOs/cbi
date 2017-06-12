@@ -1,15 +1,10 @@
-import { BaseRequestOptions, Http, RequestMethod, Response, ResponseOptions, XHRBackend } from '@angular/http';
-import * as Chance from 'chance';
+import { BaseRequestOptions, Http, RequestMethod, Response, ResponseOptions } from '@angular/http';
 import { inject, TestBed } from '@angular/core/testing';
 import { MockBackend, MockConnection } from '@angular/http/testing';
-import { Observable } from 'rxjs';
 
-import { DateRangeDTO } from '../models/date-range-dto.model';
 import { DateRangeApiService } from './date-range-api.service';
 
-let chance = new Chance();
-
-let mockResponse = [
+const mockResponse = [
   {
     'code': 'FYTCCM',
     'description': 'Fiscal Year to Current Closed Month',

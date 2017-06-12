@@ -1,6 +1,6 @@
 import { DateRange } from './date-range.model';
 
-export const dateRangeCollectionMock: DateRange[] = [ 
+export const dateRangeCollectionMock: DateRange[] = [
   { code: 'L60BDL',
     displayCode: 'L60 Days',
     description: 'Last 60 Days Of Current Year With Business Day Lag',

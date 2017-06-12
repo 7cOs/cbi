@@ -27,7 +27,6 @@ export class DateRangeTransformerService {
   }
 
   public transformDateRanges(dateRangeDTOs: DateRangeDTO[]): DateRange[] {
-    console.log('im up in it dawgg yeah');
     return dateRangeDTOs.filter(dto => !!this.dateRangeDisplayCodes[dto.code])
                         .map(dto => this.formatDateRange(dto));
   }

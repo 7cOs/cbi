@@ -1,4 +1,3 @@
-import { Chance } from 'chance';
 import { inject, TestBed } from '@angular/core/testing';
 import { Observable } from 'rxjs';
 import { Store } from '@ngrx/store';
@@ -6,8 +5,6 @@ import { Store } from '@ngrx/store';
 import { DateRange } from '../models/date-range.model';
 import { dateRangeMock } from '../models/date-range.model.mock';
 import { DateRangeService } from './date-range.service';
-
-let chance = new Chance();
 
 describe('Service: DateRangeService', () => {
   const mockDateRange: DateRange = dateRangeMock();
