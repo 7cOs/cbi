@@ -5,6 +5,7 @@ import { Store } from '@ngrx/store';
 import { DateRange } from '../models/date-range.model';
 import { dateRangeMock } from '../models/date-range.model.mock';
 import { DateRangeService } from './date-range.service';
+import { DateRangeTimePeriod } from '../enums/date-range-time-period.enum';
 
 describe('Service: DateRangeService', () => {
   const mockDateRange: DateRange = dateRangeMock();
@@ -33,7 +34,7 @@ describe('Service: DateRangeService', () => {
 
     it('should return a date range from the store', (done) => {
       spyOn(dateRangeService, 'getDateRange').and.callThrough();
-      dateRangeService.getDateRange('MTD');
+      dateRangeService.getDateRange(DateRangeTimePeriod.MTD);
       expect(store.select).toHaveBeenCalled();
       done();
     });
