@@ -1,17 +1,18 @@
-import { NgModule, forwardRef } from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
-import { RouterModule } from '@angular/router';
-import { UpgradeAdapter } from '@angular/upgrade';
 import { Angulartics2, Angulartics2Module, Angulartics2GoogleAnalytics } from 'angulartics2';
+import { BrowserModule } from '@angular/platform-browser';
 import { HttpModule } from '@angular/http';
+import { NgModule, forwardRef } from '@angular/core';
+import { RouterModule } from '@angular/router';
 import { StoreModule } from '@ngrx/store';
-import { EffectsModule } from './state/effects/effects.module';
-import { rootReducer } from './state/reducers/root.reducer';
+import { UpgradeAdapter } from '@angular/upgrade';
+
 import { AppComponent } from './shared/containers/app/app.component';
-import { SettingsComponent } from './shared/components/settings/settings.component';
 import { DateRangeApiService } from './services/date-range-api.service';
 import { DateRangeService } from './services/date-range.service';
 import { DateRangeTransformerService } from './services/date-range-transformer.service';
+import { EffectsModule } from './state/effects/effects.module';
+import { rootReducer } from './state/reducers/root.reducer';
+import { SettingsComponent } from './shared/components/settings/settings.component';
 
 export const AppUpgradeAdapter = new UpgradeAdapter(forwardRef(() => AppModule)); // tslint:disable-line:variable-name no-use-before-declare
 
