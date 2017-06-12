@@ -3,17 +3,17 @@
 module.exports = /*  @ngInject */
   function notesService($http, $q) {
 
-    var tempData = {
+    const tempData = {
     };
 
-    var model = {
+    const model = {
       urlBase: '/sfdc/',
       accountId: '',
       currentStoreName: '',
       currentStoreProperty: ''
     };
 
-    var service = {
+    const service = {
       model: model,
       getNote: getNote,
       deleteNote: deleteNote,

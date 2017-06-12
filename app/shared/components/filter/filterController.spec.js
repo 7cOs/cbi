@@ -639,95 +639,75 @@ describe('Unit: filter controller (opportunities)', function() {
   });
 
   it('[sendFilterAnalytics] should send filter analytics based on data in each chip', function() {
-    const filterChips = {
-      accountChip: {
-        name: 'Account',
-        type: 'account',
-        id: 'Walmart',
-        applied: true,
-        removable: false
-      },
-      myAccountsChip: {
-        name: 'My Accounts Only',
-        type: 'myAccountsOnly',
-        applied: true,
-        removable: false
-      },
-      simpleDistChip: {
-        name: 'Simple',
-        type: 'simpleDistributionType',
-        applied: true,
-        removable: false
-      },
-      cbbdChip: {
-        name: 'CBBD Contact',
-        type: 'contact',
-        id: 'Mr. Simpson',
-        applied: true,
-        removable: false
-      },
-      masterSkuChip: {
-        name: 'Master SKU',
-        type: 'masterSKU',
-        id: '228',
-        applied: true,
-        removable: false
-      },
-      predictedImpactChip: {
-        name: 'High',
-        type: 'impact',
-        applied: true,
-        removable: false
-      },
-      cbbdChainChip: {
-        name: 'Store Type',
-        type: 'cbbdChain',
-        applied: true,
-        removable: false
-      },
-      segmentationChip: {
-        name: 'A',
-        type: 'segmentation',
-        applied: true,
-        removable: false
-      },
-      cityChip: {
-        name: 'Houston',
-        type: 'city',
-        applied: true,
-        removable: false
-      },
-      salesStatus: {
-        name: 'Unsold',
-        type: 'storeStatus',
-        applied: true,
-        removable: true
-      },
-      storeFormatAll: {
-        name: 'All Formats',
-        type: 'storeFormat',
-        applied: true,
-        removable: false
-      },
-      storeFormatHispanic: {
-        name: 'Hispanic',
-        type: 'storeFormat',
-        applied: true,
-        removable: true
-      },
-      storeFormatGM: {
-        name: 'General Market',
-        type: 'storeFormat',
-        applied: true,
-        removable: true
-      }
-    };
-
-    chipsService.model = [];
-
-    for (let chip in filterChips) {
-      chipsService.model.push(filterChips[chip]);
-    }
+    chipsService.model = [{
+      name: 'Account',
+      type: 'account',
+      id: 'Walmart',
+      applied: true,
+      removable: false
+    }, {
+      name: 'My Accounts Only',
+      type: 'myAccountsOnly',
+      applied: true,
+      removable: false
+    }, {
+      name: 'Simple',
+      type: 'simpleDistributionType',
+      applied: true,
+      removable: false
+    }, {
+      name: 'CBBD Contact',
+      type: 'contact',
+      id: 'Mr. Simpson',
+      applied: true,
+      removable: false
+    }, {
+      name: 'Master SKU',
+      type: 'masterSKU',
+      id: '228',
+      applied: true,
+      removable: false
+    }, {
+      name: 'High',
+      type: 'impact',
+      applied: true,
+      removable: false
+    }, {
+      name: 'Store Type',
+      type: 'cbbdChain',
+      applied: true,
+      removable: false
+    }, {
+      name: 'A',
+      type: 'segmentation',
+      applied: true,
+      removable: false
+    }, {
+      name: 'Houston',
+      type: 'city',
+      applied: true,
+      removable: false
+    }, {
+      name: 'Unsold',
+      type: 'storeStatus',
+      applied: true,
+      removable: true
+    }, {
+      name: 'All Formats',
+      type: 'storeFormat',
+      applied: true,
+      removable: false
+    }, {
+      name: 'Hispanic',
+      type: 'storeFormat',
+      applied: true,
+      removable: true
+    }, {
+      name: 'General Market',
+      type: 'storeFormat',
+      applied: true,
+      removable: true
+    }];
 
     spyOn($analytics, 'eventTrack');
     ctrl.applyFilters();
