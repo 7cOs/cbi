@@ -193,10 +193,10 @@ module.exports = /*  @ngInject */
       filtersService.model.expanded = false;
 
       // go to a specific opportunity on load and then set to null if specified
-      if (opportunitiesService.model.opportunityId !== null) {
-        opportunitiesService.getAndUpdateStoresWithOpportunities(opportunitiesService.model.opportunityId).then(function(data) {
-          opportunitiesService.model.opportunities = data;
-          opportunitiesService.model.opportunityId = null;
+      if ($state.params.opportunityID && $state.params.opportunityID.length) {
+        loaderService.openLoader(true);
+        opportunitiesService.getAndUpdateStoreWithOpportunity($state.params.opportunityID).then(function(data) {
+          loaderService.closeLoader();
         });
       }
     } // end init
