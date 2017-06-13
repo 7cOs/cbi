@@ -1,6 +1,6 @@
 import * as DateRangesActions from './date-ranges.action';
 import { DateRange } from '../../models/date-range.model';
-import { dateRangeMock } from '../../models/date-range.model.mock';
+import { getDateRangeMock } from '../../models/date-range.model.mock';
 import * as Chance from 'chance';
 let chance = new Chance();
 
@@ -20,13 +20,13 @@ describe('Date Ranges Actions', () => {
   });
 
   describe('FetchVersionSuccessAction', () => {
-    const dateRange1: DateRange = dateRangeMock();
-    const dateRange2: DateRange = dateRangeMock();
-    const dateRanges: DateRange[] = [dateRange1, dateRange2];
+    const dateRange1: DateRange = getDateRangeMock();
+    const dateRange2: DateRange = getDateRangeMock();
+    const dateRangesMock: DateRange[] = [dateRange1, dateRange2];
     let action: DateRangesActions.FetchDateRangesSuccessAction;
 
     beforeEach(() => {
-      action = new DateRangesActions.FetchDateRangesSuccessAction(dateRanges);
+      action = new DateRangesActions.FetchDateRangesSuccessAction(dateRangesMock);
     });
 
     it('should have the correct type', () => {
@@ -35,7 +35,7 @@ describe('Date Ranges Actions', () => {
     });
 
     it('should contain the mock payload', () => {
-      expect(action.payload).toEqual(dateRanges);
+      expect(action.payload).toEqual(dateRangesMock);
     });
   });
 

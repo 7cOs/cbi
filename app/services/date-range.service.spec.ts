@@ -3,14 +3,14 @@ import { Observable } from 'rxjs';
 import { Store } from '@ngrx/store';
 
 import { DateRange } from '../models/date-range.model';
-import { dateRangeMock } from '../models/date-range.model.mock';
 import { DateRangeService } from './date-range.service';
 import { DateRangeTimePeriod } from '../enums/date-range-time-period.enum';
+import { getDateRangeMock } from '../models/date-range.model.mock';
 
 describe('Service: DateRangeService', () => {
-  const mockDateRange: DateRange = dateRangeMock();
+  const dateRangeMock: DateRange = getDateRangeMock();
   const mockStore = {
-    select: jasmine.createSpy('select').and.returnValue(Observable.of(mockDateRange))
+    select: jasmine.createSpy('select').and.returnValue(Observable.of(dateRangeMock))
   };
 
   beforeEach(() => TestBed.configureTestingModule({

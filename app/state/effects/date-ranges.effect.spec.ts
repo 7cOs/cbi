@@ -6,33 +6,29 @@ import { TestBed, inject } from '@angular/core/testing';
 import { DateRange } from '../../models/date-range.model';
 import { DateRangeApiService } from '../../services/date-range-api.service';
 import { DateRangeDTO } from '../../models/date-range-dto.model';
-import { dateRangeDTOMock } from '../../models/date-range-dto.model.mock';
-import { dateRangeMock } from '../../models/date-range.model.mock';
 import { DateRangesEffects } from './date-ranges.effect';
 import { DateRangeTransformerService } from '../../services/date-range-transformer.service';
 import { FetchDateRangesAction, FetchDateRangesFailureAction, FetchDateRangesSuccessAction } from '../actions/date-ranges.action';
+import { getDateRangeMock } from '../../models/date-range.model.mock';
 
 let chance = new Chance();
 
 describe('Date Ranges Effects', () => {
-  const dateRange1: DateRange = dateRangeMock();
-  const dateRange2: DateRange = dateRangeMock();
-  const mockDateRanges: DateRange[] = [dateRange1, dateRange2];
-  const dateRangeDTO1: DateRangeDTO = dateRangeDTOMock();
-  const dateRangeDTO2: DateRangeDTO = dateRangeDTOMock();
-  const mockDateRangeDTOs: DateRangeDTO[] = [dateRangeDTO1, dateRangeDTO2];
+  const dateRange1: DateRange = getDateRangeMock();
+  const dateRange2: DateRange = getDateRangeMock();
+  const dateRangesMock: DateRange[] = [dateRange1, dateRange2];
   const err = new Error(chance.string());
 
   let runner: EffectsRunner;
   let dateRangesEffects: DateRangesEffects;
-  let mockDateRangeApiService = {
+  let dateRangeApiServiceMock = {
     getDateRanges() {
-      return Observable.of(mockDateRangeDTOs);
+      return Observable.of(dateRangesMock);
     }
   };
-  let mockDateRangeTransformerService = {
+  let dateRangeTransformerServiceMock = {
     transformDateRanges(dateRangeDTOs: DateRangeDTO[]): DateRange[] {
-      return mockDateRanges;
+      return dateRangesMock;
     }
   };
 
@@ -44,11 +40,11 @@ describe('Date Ranges Effects', () => {
       DateRangesEffects,
       {
         provide: DateRangeApiService,
-        useValue: mockDateRangeApiService
+        useValue: dateRangeApiServiceMock
       },
       {
         provide: DateRangeTransformerService,
-        useValue: mockDateRangeTransformerService
+        useValue: dateRangeTransformerServiceMock
       }
     ]
   }));
@@ -75,7 +71,7 @@ describe('Date Ranges Effects', () => {
 
       it('should return a FetchDateRangesSuccessAction', (done) => {
         dateRangesEffects.fetchDateRanges$().subscribe(result => {
-          expect(result).toEqual(new FetchDateRangesSuccessAction(mockDateRanges));
+          expect(result).toEqual(new FetchDateRangesSuccessAction(dateRangesMock));
           done();
         });
       });
@@ -92,9 +88,9 @@ describe('Date Ranges Effects', () => {
       ));
 
       it('should return a FetchVersionFailureAction after catching an error', (done) => {
-        spyOn(dateRangeApiService, 'getDateRanges').and.callFake(() => Observable.of(err));
-        dateRangesEffects.fetchDateRanges$().subscribe(() => { done(); }, error => {
-          expect(error).toEqual(new FetchDateRangesFailureAction(err));
+        spyOn(dateRangeApiService, 'getDateRanges').and.returnValue(Observable.throw(err));
+        dateRangesEffects.fetchDateRanges$().subscribe((result) => {
+          expect(result).toEqual(new FetchDateRangesFailureAction(err));
           done();
         });
       });

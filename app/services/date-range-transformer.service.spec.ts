@@ -1,8 +1,8 @@
 import { inject, TestBed } from '@angular/core/testing';
 
 import { DateRangeTransformerService } from './date-range-transformer.service';
-import { dateRangeCollectionMock } from '../models/date-range-collection.mock.model';
-import { mockDateRangeDTOs } from '../models/date-range-dto-collection.mock.model';
+import { dateRangeCollectionMock } from '../models/date-range-collection.model.mock';
+import { dateRangeDTOsMock } from '../models/date-range-dto-collection.model.mock';
 
 describe('Service: DateRangeTransformerService', () => {
   beforeEach(() => TestBed.configureTestingModule({
@@ -13,18 +13,15 @@ describe('Service: DateRangeTransformerService', () => {
 
   describe('transformDateRanges', () => {
     let dateRangeTransformerService: DateRangeTransformerService;
-    let store: any;
     beforeEach(inject([ DateRangeTransformerService ],
-      (_dateRangeTransformerService: DateRangeTransformerService, _store: any) => {
+      (_dateRangeTransformerService: DateRangeTransformerService) => {
         dateRangeTransformerService = _dateRangeTransformerService;
-        store = _store;
     }));
 
-    it('should return a collection of formatted DateRanges from a collection of DateRangeDTOs', (done) => {
+    it('should return a collection of formatted DateRanges from a collection of DateRangeDTOs', () => {
       spyOn(dateRangeTransformerService, 'transformDateRanges').and.callThrough();
-      const transformedDateRanges = dateRangeTransformerService.transformDateRanges(mockDateRangeDTOs);
+      const transformedDateRanges = dateRangeTransformerService.transformDateRanges(dateRangeDTOsMock);
       expect(transformedDateRanges).toEqual(dateRangeCollectionMock);
-      done();
     });
   });
 });

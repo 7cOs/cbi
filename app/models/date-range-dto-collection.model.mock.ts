@@ -1,6 +1,6 @@
 import { DateRangeDTO } from './date-range-dto.model';
 
-export const mockDateRangeDTOs: DateRangeDTO[] = [
+export const dateRangeDTOsMock: DateRangeDTO[] = [
     {
       'code': 'FYTCCM',
       'description': 'Fiscal Year to Current Closed Month',

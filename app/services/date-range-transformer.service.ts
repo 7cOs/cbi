@@ -36,7 +36,7 @@ export class DateRangeTransformerService {
       code: dateRangeDTO.code,
       displayCode: this.mapDateRangeDisplayCode(dateRangeDTO.code),
       description: dateRangeDTO.description,
-      dateRange: `${this.formatDate(dateRangeDTO.startDate)} - ${this.formatDate(dateRangeDTO.endDate)}`
+      range: `${this.formatDate(dateRangeDTO.startDate)} - ${this.formatDate(dateRangeDTO.endDate)}`
     };
   }
 

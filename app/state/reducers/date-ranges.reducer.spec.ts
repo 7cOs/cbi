@@ -1,7 +1,7 @@
 import { dateRangesReducer, initialState } from './date-ranges.reducer';
 import { ActionStatus } from '../../enums/action-status.enum';
 import * as DateRangesActions from '../actions/date-ranges.action';
-import { dateRangeCollectionMock } from '../../models/date-range-collection.mock.model';
+import { dateRangeCollectionMock } from '../../models/date-range-collection.model.mock';
 
 describe('Date Ranges Reducer', () => {
 
