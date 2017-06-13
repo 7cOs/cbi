@@ -1,6 +1,7 @@
 import { Angulartics2, Angulartics2Module, Angulartics2GoogleAnalytics } from 'angulartics2';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 import { MdSelectModule } from '@angular/material';
 import { NgModule, forwardRef } from '@angular/core';
@@ -46,6 +47,7 @@ AppUpgradeAdapter.upgradeNg1Provider('versionService');
     BrowserModule,
     BrowserAnimationsModule,
     EffectsModule,
+    FormsModule,
     HttpModule,
     MdSelectModule,
     RouterModule.forRoot([ {path: 'placeholder', redirectTo: '/'} ]), // need ng2 router for angulartics2 to work

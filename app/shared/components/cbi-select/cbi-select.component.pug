@@ -1,4 +1,9 @@
-md-select(placeholder="Placeholder Option")
-  md-option None
-  md-option(value="Option 1") Option 1
-  md-option(value="Option 2") Option 2
+section
+  p {{title}}
+
+  md-select([ngModel]="model", (onClose)="handleOnClose($event)", (onOpen)="handleOnOpen($event)")
+    md-option(*ngFor="let option of _options", [value]="option.value", (click)="currentSubValue = option.subDisplayValue")
+      div {{option.displayValue}}
+        span(*ngIf="subKey && isSelectOpen") {{option.subDisplayValue}})
+
+  p(*ngIf="subDisplayKey") {{currentSubValue}}

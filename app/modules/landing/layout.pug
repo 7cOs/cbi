@@ -5,6 +5,16 @@ section.landing-page
       section.my-performance(column="7")
         greeting([name]="l.greetingName")
 
+        p {{l.selectModel}}
+        cbi-select(
+          [(model)]="l.selectModel",
+          [options]="l.selectData",
+          [display-key]="'name'",
+          [value-key]="'value'",
+          [sub-display-key]="'range'",
+          [title]="'CBI SELECT YALL!'",
+        )
+
         h2 My Performance
         .depletions(column="4")
           h3 Depletions FYTD

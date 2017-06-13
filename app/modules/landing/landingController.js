@@ -31,6 +31,13 @@ module.exports = /*  @ngInject */
     // Set values
     vm.greetingName = userService.model.currentUser.firstName;
 
+    vm.selectModel = 'PIOTR';
+    vm.selectData = [
+      {name: 'Piotr', value: 'PIOTR', range: '1/1/17 - 2/2/17'},
+      {name: 'Coco', value: 'COCO', range: '2/2/17 - 3/3/17'},
+      {name: 'Cody', value: 'C0D3S', range: '3/3/17 - 4/4/17'}
+    ];
+
     init();
 
     // **************
