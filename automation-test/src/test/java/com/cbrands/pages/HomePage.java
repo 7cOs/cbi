@@ -33,7 +33,7 @@ public class HomePage extends LoadableComponent<HomePage>{
 
 	WebDriver driver;
 
-	@FindBy(how = How.CSS, using = "h1.ng-binding")
+	@FindBy(how = How.XPATH, using = "//greeting//h1")
 	private WebElement userInfo;
 
 	//@FindBy(how = How.LINK_TEXT, using = "Opportunities")
