@@ -315,11 +315,31 @@ describe('Unit: opportunitiesService - get opportunities', function() {
     });
   });
 
+  describe('getAndUpdateStoreWithOpportunity', () => {
+    it('updates with opportunity properly formatted', () => {
+        $httpBackend
+          .expect('GET', '/v2/opportunities/' + opportunitiesResponseObject.opportunities[0].id)
+          .respond(200, opportunitiesResponseObject.opportunities[0]);
+
+        opportunitiesService.getAndUpdateStoreWithOpportunity(opportunitiesResponseObject.opportunities[0].id);
+
+        $httpBackend.flush();
+
+        expectedServiceModel.opportunities = expectedServiceModel.opportunities.filter(elem => elem.store.id === opportunitiesResponseObject.opportunities[0].store.id);
+        expectedServiceModel.opportunities[0].groupedOpportunities = expectedServiceModel.opportunities[0].groupedOpportunities.filter(opportunity => opportunity.id === opportunitiesResponseObject.opportunities[0].id);
+
+        // Removing the extra brands pushed, this "brands" array should have been a set.
+        expectedServiceModel.opportunities[0].brands = [expectedServiceModel.opportunities[0].brands[0]];
+
+        expect(opportunitiesService.model.opportunities).toEqual(expectedServiceModel.opportunities);
+    });
+  });
+
   describe('getFormattedSingleOpportunity', () => {
     it('get opportunities', () => {
        $httpBackend
          .expect('GET', '/v2/opportunities/123')
-         .respond(200, {opportunities: opportunitiesResponseObject.opportunities[0]});
+         .respond(200, opportunitiesResponseObject.opportunities[0]);
 
        let opportunity;
        opportunitiesService.getFormattedSingleOpportunity('123').then((opp) => {

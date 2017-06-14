@@ -128,7 +128,7 @@ describe('Unit: list controller', function() {
       });
 
       ctrl.notificationClicked(notifications[0]);
-      expect($state.go).toHaveBeenCalledWith('opportunities', (opportunitiesService.model.opportunityId, opportunitiesService.model.filterApplied = false), {reload: true});
+      expect($state.go).toHaveBeenCalledWith('opportunities', {'resetFiltersOnLoad': false, 'opportunityID': notifications[0].shortenedObject.id}, {reload: true});
 
       ctrl.notificationClicked(notifications[1]);
       expect($state.go).toHaveBeenCalledWith('target-list-detail', ({id: notifications[1].shortenedObject.id}));
