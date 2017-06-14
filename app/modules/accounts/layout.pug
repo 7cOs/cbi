@@ -45,13 +45,18 @@ notes
       div(row).dropdown-filter
         div(column='6').dropdown
           label Depletions Time Period
-          md-select(ng-model="a.filterModel.depletionsTimePeriod" md-on-open="a.openSelect(true)" md-on-close="a.openSelect(false)" aria-label="Select a depletion time period" ng-model-options="{trackBy: '$value.id'}")
-            md-option(ng-repeat="filter in a.filtersService.model.depletionsTimePeriod[a.filterModel.endingTimePeriod]" aria-label="{{filter.name}}" ng-value="filter" ng-click="a.depletionOptionChanged(filter); a.disableApplyFilter(false);") {{filter.displayValue}}
+          md-select(ng-model="a.filterModel.depletionsTimePeriod" md-on-open="a.openSelect(true); a.depletionSelectOpen = true" md-on-close="a.openSelect(false); a.depletionSelectOpen = false" aria-label="Select a depletion time period" ng-model-options="{trackBy: '$value.id'}")
+            md-option(ng-repeat="filter in a.filtersService.model.depletionsTimePeriod[a.filterModel.endingTimePeriod]" aria-label="{{filter.name}}" ng-value="filter" ng-click="a.depletionOptionChanged(filter); a.disableApplyFilter(false);")
+              div {{filter.displayValue}}
+              div.dropdown-subtext(ng-if="a.depletionSelectOpen") {{a.dateRanges[filter.name]}}
+          p.dropdown-subtext {{a.dateRanges[a.filterModel.depletionsTimePeriod.displayValue]}}
         div(column='6').dropdown
           label Distribution Time Period
-          md-select(ng-model="a.filterModel.distributionTimePeriod" md-on-open="a.openSelect(true)" md-on-close="a.openSelect(false)" aria-label="Select a distribution time period")
+          md-select(ng-model="a.filterModel.distributionTimePeriod" md-on-open="a.openSelect(true); a.distributionSelectOpen = true" md-on-close="a.openSelect(false); a.distributionSelectOpen = false" aria-label="Select a distribution time period")
             md-option(ng-repeat="filter in a.filtersService.model.distributionTimePeriod[a.filterModel.endingTimePeriod]" aria-label="{{filter.name}}" ng-value="filter" ng-click="a.distOptionChanged(filter); a.disableApplyFilter(false);")
-              <span>{{a.filterModel.endingTimePeriod === 'month'? filter.displayValue + ' Mth' : filter.displayValue + ' Days'}}</span>
+              div {{a.filterModel.endingTimePeriod === 'month'? filter.displayValue + ' Mth' : filter.displayValue + ' Days'}}
+              div.dropdown-subtext(ng-if="a.distributionSelectOpen") {{a.dateRanges[filter.name]}}
+          p.dropdown-subtext {{a.dateRanges[a.filterModel.distributionTimePeriod.displayValue]}}
 
 .filters(column='12')
   div(row)

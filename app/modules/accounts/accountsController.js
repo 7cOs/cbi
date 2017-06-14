@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports = /*  @ngInject */
-  function accountsController($rootScope, $scope, $state, $log, $q, $window, $filter, $timeout, $analytics, myperformanceService, chipsService, filtersService, notesService, userService, storesService) {
+  function accountsController($rootScope, $scope, $state, $log, $q, $window, $filter, $timeout, $analytics, myperformanceService, chipsService, filtersService, notesService, userService, storesService, dateRangeService) {
 
     // ****************
     // CONTROLLER SETUP
@@ -75,6 +75,9 @@ module.exports = /*  @ngInject */
     vm._defaultTopLevelForLabel = 'CBBD';
     vm.topLevelForLabel = vm._defaultTopLevelForLabel;
     vm.premiseTypeValue = 'all';
+    vm.depletionSelectOpen = false;
+    vm.distributionSelectOpen = false;
+    vm.dateRanges = dateRangeService.getDateRanges();
 
     // top bottom public methods
     vm.topBottomData = {
@@ -145,6 +148,7 @@ module.exports = /*  @ngInject */
     vm.filterTopBottom = filterTopBottom;
     vm.canOpenNote = canOpenNote;
     vm.getAccountTypePerformanceData = getAccountTypePerformanceData;
+    vm.dateRangeService = dateRangeService;
 
     init();
 

@@ -10,6 +10,17 @@ import { DateRangeTimePeriod } from '../enums/date-range-time-period.enum';
 @Injectable()
 export class DateRangeService {
   private dateRanges: Array<Observable<DateRange>>;
+  private rangeCollection: any = {
+    MTD:  '',
+    FYTM: '',
+    CYTM: '',
+    CYTD: '',
+    FYTD: '',
+    L60:  '',
+    L90:  '',
+    L120: '',
+    L3CM: ''
+  };
 
   constructor(private store: Store<AppState>) {
     this.dateRanges = [
@@ -23,9 +34,23 @@ export class DateRangeService {
       this.store.select(state => state.dateRanges.L120),
       this.store.select(state => state.dateRanges.L3CM)
     ];
+
+    Object.keys(this.rangeCollection).forEach(dateKey => {
+      this.store.select(state => state.dateRanges[dateKey]).subscribe(dateRange => {
+        this.rangeCollection[dateKey] = dateRange.range;
+      });
+    });
   }
 
   getDateRange(timePeriod: DateRangeTimePeriod): Observable<DateRange> {
     return this.dateRanges[timePeriod];
+  }
+
+  getDateRanges(): any {
+    return this.rangeCollection;
+  }
+
+  getDateRangeString(timePeriod: DateRangeTimePeriod): string {
+    return this.rangeCollection[timePeriod];
   }
 }
