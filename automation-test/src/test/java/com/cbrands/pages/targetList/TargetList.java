@@ -292,21 +292,19 @@ public class TargetList extends LoadableComponent<TargetList> {
     return this;
   }
 
+  /**
+   * @deprecated Please use the method extracted to the TargetListListingsPage page object
+   * @see TargetListListingsPage
+   */
+  @Deprecated
   public TargetList clickTargetList(String name) {
-    clickTargetListByName(name);
+    final TargetListListingsPage targetListListingsPage = PageFactory.initElements(
+      driver,
+      TargetListListingsPage.class
+    );
+    targetListListingsPage.clickTargetListByName(name);
+
     return this;
-  }
-
-  private void clickTargetListByName(String name) {
-    List<WebElement> MyTargetLists = findElements(By.xpath("//*[@id='tab-content-2']/div/md-content/div[@class='target-list-detail-container']/ul/li/div/div[@class='stats']/div/h4[1]"));
-    for (WebElement webElement : MyTargetLists) {
-      if(webElement.getText().equalsIgnoreCase(name)){
-        JavascriptExecutor js = (JavascriptExecutor) driver;
-        js.executeScript("arguments[0].click();", webElement);
-        break;
-      }
-
-    }
   }
 
   public TargetList typeTargetName(String name) {

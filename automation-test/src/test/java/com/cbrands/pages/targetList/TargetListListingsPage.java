@@ -2,6 +2,7 @@ package com.cbrands.pages.targetList;
 
 import com.cbrands.helper.PropertiesCache;
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindAll;
@@ -13,9 +14,7 @@ import org.testng.Assert;
 
 import java.util.List;
 
-import static com.cbrands.helper.SeleniumUtils.findElement;
-import static com.cbrands.helper.SeleniumUtils.waitForElementVisible;
-import static com.cbrands.helper.SeleniumUtils.waitForVisibleFluentWait;
+import static com.cbrands.helper.SeleniumUtils.*;
 
 public class TargetListListingsPage extends LoadableComponent<TargetListListingsPage> {
 
@@ -72,6 +71,18 @@ public class TargetListListingsPage extends LoadableComponent<TargetListListings
   public EditTargetListModal chooseCreateNewListInListCreationChoiceModal() {
     waitForVisibleFluentWait(listCreationChoiceModalButtons.get(0)).click();
     return PageFactory.initElements(driver, EditTargetListModal.class);
+  }
+
+  public void clickTargetListByName(String name) {
+    List<WebElement> MyTargetLists = findElements(By.xpath("//*[@id='tab-content-2']/div/md-content/div[@class='target-list-detail-container']/ul/li/div/div[@class='stats']/div/h4[1]"));
+    for (WebElement webElement : MyTargetLists) {
+      if(webElement.getText().equalsIgnoreCase(name)){
+        JavascriptExecutor js = (JavascriptExecutor) driver;
+        js.executeScript("arguments[0].click();", webElement);
+        break;
+      }
+
+    }
   }
 
 }
