@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports = /*  @ngInject */
-  function apiHelperService($rootScope, $analytics, $location, $window, notesService) {
+  function apiHelperService($rootScope, $analytics, $location, $window, notesService, userService) {
 
     return {
       createTracker: createTracker,
@@ -78,7 +78,7 @@ module.exports = /*  @ngInject */
           dimension4: sfdcUser.Role__c,           // 'Role'
           dimension5: sfdcUser.Supervisory__c,    // 'Supervisory'
           dimension6: sfdcUser.CBI_Department__c, // 'Department'
-          'User Id': sfdcUser.Id
+          'User Id': userService.model.currentUser.employeeID
         });
       });
     }
