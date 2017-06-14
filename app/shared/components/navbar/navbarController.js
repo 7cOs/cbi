@@ -130,8 +130,8 @@ module.exports = /*  @ngInject */
       if (notification.objectType.toUpperCase() === 'TARGET_LIST') {
         $state.go('target-list-detail', ({id: notification.shortenedObject.id}));
       } else if (notification.objectType.toUpperCase() === 'OPPORTUNITY') {
-        opportunitiesService.model.opportunityId = notification.shortenedObject.id;
-        $state.go('opportunities', (opportunitiesService.model.opportunityId, opportunitiesService.model.filterApplied = false), {reload: true});
+        opportunitiesService.model.filterApplied = false;
+        $state.go('opportunities', {'resetFiltersOnLoad': false, 'opportunityID': notification.shortenedObject.id}, {reload: true});
       } else if (notification.objectType.toUpperCase() === 'ACCOUNT') {
         $state.go('accounts');
       }
