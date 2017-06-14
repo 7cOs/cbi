@@ -2,7 +2,6 @@ package com.cbrands.pages.targetList;
 
 import com.cbrands.helper.PropertiesCache;
 import org.openqa.selenium.By;
-import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindAll;
@@ -73,7 +72,7 @@ public class TargetListListingsPage extends LoadableComponent<TargetListListings
     return PageFactory.initElements(driver, EditTargetListModal.class);
   }
 
-  public void clickTargetListByName(String name) {
+  public TargetListDetailPage clickTargetListByName(String name) {
     List<WebElement> targetLists = findElements(By.xpath("//*[@class='target-list-detail-container']/ul/li/div/div[@class='stats']/div/h4[1]"));
     for (WebElement targetListElement : targetLists) {
       if(targetListElement.getText().equalsIgnoreCase(name)){
@@ -82,6 +81,8 @@ public class TargetListListingsPage extends LoadableComponent<TargetListListings
       }
 
     }
+
+    return PageFactory.initElements(driver, TargetListDetailPage.class);
   }
 
 }
