@@ -52,6 +52,11 @@ public class TargetListTest extends BaseTestCase {
       targetListName);
   }
 
+  @Test(dependsOnMethods = "createTargetList", dataProvider = "targetListData", description = "Delete Target List")
+  public void deleteTargetList(String targetListName, String targetListDescription, String collaborator) {
+    Assert.fail("Delete Target List not yet implemented.");
+  }
+
   @DataProvider(name = "targetListData")
   public static Object[][] targetListData() {
     return new Object[][] { { "Smoke Test " + current_time_stamp, "test", "Stanley Rowley" } };
