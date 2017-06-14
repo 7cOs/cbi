@@ -74,11 +74,10 @@ public class TargetListListingsPage extends LoadableComponent<TargetListListings
   }
 
   public void clickTargetListByName(String name) {
-    List<WebElement> MyTargetLists = findElements(By.xpath("//*[@id='tab-content-2']/div/md-content/div[@class='target-list-detail-container']/ul/li/div/div[@class='stats']/div/h4[1]"));
-    for (WebElement webElement : MyTargetLists) {
-      if(webElement.getText().equalsIgnoreCase(name)){
-        JavascriptExecutor js = (JavascriptExecutor) driver;
-        js.executeScript("arguments[0].click();", webElement);
+    List<WebElement> targetLists = findElements(By.xpath("//*[@class='target-list-detail-container']/ul/li/div/div[@class='stats']/div/h4[1]"));
+    for (WebElement targetListElement : targetLists) {
+      if(targetListElement.getText().equalsIgnoreCase(name)){
+        targetListElement.click();
         break;
       }
 
