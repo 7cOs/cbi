@@ -30,6 +30,8 @@ module.exports = /*  @ngInject */
 
     // Set values
     vm.greetingName = userService.model.currentUser.firstName;
+    vm.fytdDateRange = 'FYTD';
+    vm.l90DateRange = 'L90';
 
     init();
 
