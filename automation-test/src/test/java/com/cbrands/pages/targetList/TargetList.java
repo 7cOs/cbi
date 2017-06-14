@@ -297,11 +297,6 @@ public class TargetList extends LoadableComponent<TargetList> {
     return this;
   }
 
-  public TargetList clickNewTargetList(String name) {
-    clickTargetListByName(name);
-    return this;
-  }
-
   private void clickTargetListByName(String name) {
     List<WebElement> MyTargetLists = findElements(By.xpath("//*[@id='tab-content-2']/div/md-content/div[@class='target-list-detail-container']/ul/li/div/div[@class='stats']/div/h4[1]"));
     for (WebElement webElement : MyTargetLists) {
