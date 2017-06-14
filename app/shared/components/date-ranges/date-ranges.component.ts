@@ -11,14 +11,14 @@ import { DateRangeTimePeriod } from '../../../enums/date-range-time-period.enum'
 export class DateRangeComponent implements OnInit {
 
   @Input() daterangeinput: string;
-  private outcome: string;
+  private daterangeoutput: string;
 
   constructor(private dateRangeService: DateRangeService) {
   }
 
   getDateRange() {
     this.dateRangeService.getDateRange(DateRangeTimePeriod[this.daterangeinput]).subscribe(dateRange => {
-      this.outcome = dateRange.range;
+      this.daterangeoutput = dateRange.range;
     });
   }
 
