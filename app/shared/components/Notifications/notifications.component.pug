@@ -9,7 +9,7 @@ div.nopad(md-prevent-menu-close)
         div.source {{notification.shortenedObject.store.store_name | titlecase}}
           span(*ngIf="notUnknown(notification.shortenedObject.store.store_number)")  \#{{notification.shortenedObject.store.store_number}}
         p.sku {{notification.shortenedObject.product.name | titlecase}}
-          span {{notification.shortenedObject.type | formatOpportunitiesType}}
+          span  {{notification.shortenedObject.type | formatOpportunitiesType}}
       div(*ngIf="notification.objectType.toUpperCase() === 'STORE'" ng-click="nb.goToNote(notification)")
         p A new note was added to your retailer
         div.source {{notification.shortenedObject.store_name | titlecase}}
@@ -23,4 +23,3 @@ div.nopad(md-prevent-menu-close)
   div.notification-card.clearfix(*ngIf="allNotificationRead")
     div.details
       p No unread notifications.
-      span
