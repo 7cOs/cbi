@@ -65,6 +65,7 @@ module.exports = /*  @ngInject */
         opportunities = opportunities.map(populateOpportunityData);
         if (!opportunities.length) {
           service.model.noOpportunitiesFound = true;
+          opportunitiesPromise.resolve(opportunities);
         } else {
           const storesWithOpportunities = groupOpportunitiesByStore(opportunities);
           opportunitiesPromise.resolve(storesWithOpportunities);
