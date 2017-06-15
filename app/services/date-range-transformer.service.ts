@@ -23,7 +23,7 @@ export class DateRangeTransformerService {
     };
 
   constructor() {
-    this.defaultDateFormat = 'MM/DD/YYYY';
+    this.defaultDateFormat = 'MM/DD/YY';
   }
 
   public transformDateRanges(dateRangeDTOs: DateRangeDTO[]): DateRange[] {
