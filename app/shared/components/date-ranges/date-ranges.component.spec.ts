@@ -37,19 +37,19 @@ describe('DateRangeComponent', () => {
     daterangeElement = fixture.debugElement.query(By.css('p')).nativeElement;
 
     it('L90 date-range check', () => {
-      componentInstance.daterangeinput = 'L90';
+      componentInstance.dateRangeInput = 'L90';
       fixture.detectChanges();
       expect(daterangeElement.textContent).toBe(`${mockDateRange.range}`);
     });
 
     it('FYTD date-range check', () => {
-      componentInstance.daterangeinput = 'FYTD';
+      componentInstance.dateRangeInput = 'FYTD';
       fixture.detectChanges();
       expect(daterangeElement.textContent).toBe(`${mockDateRange.range}`);
     });
 
     it('FAKE date-range check should be NULL', () => {
-      componentInstance.daterangeinput = 'FAKE';
+      componentInstance.dateRangeInput = 'FAKE';
       fixture.detectChanges();
       expect(daterangeElement.textContent).toBe(``);
     });

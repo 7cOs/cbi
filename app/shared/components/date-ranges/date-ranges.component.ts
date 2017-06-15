@@ -10,17 +10,17 @@ import { DateRangeTimePeriod } from '../../../enums/date-range-time-period.enum'
 
 export class DateRangeComponent implements OnInit {
 
-  @Input() daterangeinput: string;
-  private daterangeoutput: string;
-
-  constructor(private dateRangeService: DateRangeService) {
-  }
+  @Input() dateRangeInput: string;
+  private dateRangeDisplay: string;
+  // private dateRangeDispla: Observable <DateRange>;
 
   getDateRange() {
-    this.dateRangeService.getDateRange(DateRangeTimePeriod[this.daterangeinput]).subscribe(dateRange => {
-      this.daterangeoutput = dateRange.range;
+    this.dateRangeService.getDateRange(DateRangeTimePeriod[this.dateRangeInput]).subscribe(dateRange => {
+      this.dateRangeDisplay = dateRange.range;
     });
   }
+
+  constructor(private dateRangeService: DateRangeService) {}
 
   ngOnInit() {
     this.getDateRange();
