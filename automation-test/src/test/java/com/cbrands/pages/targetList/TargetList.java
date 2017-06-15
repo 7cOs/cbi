@@ -307,6 +307,24 @@ public class TargetList extends LoadableComponent<TargetList> {
     return this;
   }
 
+  public TargetList clickManage() {
+    // waitForElementVisible(TargetListManageButton, true);
+    // waitForElementToClickable(TargetListManageButton,true);
+    // TargetListManageButton.click();
+
+    List<WebElement> elements = findElements(By.xpath("//*[@class='hero-actions']/button"));
+
+    JavascriptExecutor js = (JavascriptExecutor) driver;
+    js.executeScript("arguments[0].click();", elements.get(0));
+    return this;
+  }
+
+  public TargetList clickManageButton() {
+    TargetListManageButton.sendKeys(Keys.ENTER);
+
+    return this;
+  }
+
   public TargetList typeTargetName(String name) {
 
 		WebElement element = findElement(By.xpath("//input[@placeholder='Enter List Name']"));
@@ -425,18 +443,6 @@ public class TargetList extends LoadableComponent<TargetList> {
 		return PageFactory.initElements(driver, HomePage.class);
 	}
 
-	public TargetList clickManage() {
-		// waitForElementVisible(TargetListManageButton, true);
-		// waitForElementToClickable(TargetListManageButton,true);
-		// TargetListManageButton.click();
-
-		List<WebElement> elements = findElements(By.xpath("//*[@class='hero-actions']/button"));
-
-		JavascriptExecutor js = (JavascriptExecutor) driver;
-		js.executeScript("arguments[0].click();", elements.get(0));
-		return this;
-	}
-
 	public TargetList clickCollaborator() {
 		//System.out.println("Inside collaborator");
 		//waitForElementVisible(collaborator, true);
@@ -472,12 +478,6 @@ public class TargetList extends LoadableComponent<TargetList> {
 		WebElement element = findElement(By.xpath("//h1[text()='" + targetListName + "']"));
 		waitForElementVisible(element, true);
 		element.click();
-		return this;
-	}
-
-	public TargetList clickManageButton() {
-		TargetListManageButton.sendKeys(Keys.ENTER);
-
 		return this;
 	}
 
