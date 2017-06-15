@@ -1,14 +1,16 @@
 package com.cbrands.pages.targetList;
 
+import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.How;
+import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.LoadableComponent;
 import org.testng.Assert;
 
-import static com.cbrands.helper.SeleniumUtils.waitForVisibleFluentWait;
+import static com.cbrands.helper.SeleniumUtils.*;
 
 public class TargetListDetailPage extends LoadableComponent<TargetListDetailPage> {
 
@@ -40,16 +42,7 @@ public class TargetListDetailPage extends LoadableComponent<TargetListDetailPage
   }
 
   public void clickManageButton() {
-    // waitForElementVisible(TargetListManageButton, true);
-    // waitForElementToClickable(TargetListManageButton,true);
-    // TargetListManageButton.click();
-//
-//    List<WebElement> elements = findElements(By.xpath("//*[@class='hero-actions']/button"));
-//
-//    JavascriptExecutor js = (JavascriptExecutor) driver;
-//    js.executeScript("arguments[0].click();", elements.get(0));
-
-    targetListManageButton.sendKeys(Keys.ENTER);
+    waitForElementVisible(findElement(By.xpath("//div[contains(@class, 'loader')]")), false);
+    waitForElementToClickable(targetListManageButton, true).click();
   }
-
 }
