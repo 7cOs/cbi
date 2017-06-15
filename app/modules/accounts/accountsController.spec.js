@@ -1,3 +1,5 @@
+const Observable = require('rxjs/observable/of');
+
 describe('Unit: accountsController', function() {
   var scope, ctrl, $controller, $state, $q, filtersService, chipsService, userService, packageSkuData, brandSpy, brandPerformanceData, myperformanceService, storesService, $filter;
   let promiseGetStores;
@@ -320,6 +322,18 @@ describe('Unit: accountsController', function() {
       'planDistirbutionEffectiveTrend': -70.37382451231834
     }
   ];
+
+  const mockDateRangeService = {
+    getDateRange: function() {
+      return {
+        code: 'MTD',
+        description: 'Current Month to Date',
+        displayCode: 'MTD',
+        range: '06/01/2017 - 06/14/2017'
+      };
+    }
+  };
+
   beforeEach(function() {
     // Get Mock Modules
     angular.mock.module('ui.router');
@@ -342,6 +356,7 @@ describe('Unit: accountsController', function() {
       userService = _userService_;
       myperformanceService = _myperformanceService_;
       storesService = _storesService_;
+
       brandPerformanceData = {
         performance: [
           {
@@ -412,11 +427,19 @@ describe('Unit: accountsController', function() {
             return $q.when(topBottomSnapshotStoreData);
         };
       });
+      spyOn(mockDateRangeService, 'getDateRange').and.callFake(function() {
+        return Observable.of({
+          code: 'MTD',
+          description: 'Current Month to Date',
+          displayCode: 'MTD',
+          range: '06/01/2017 - 06/14/2017'
+        });
+      });
 
       brandSpy = spyOn(userService, 'getPerformanceBrand');
       brandSpy.and.returnValue($q.when(brandPerformanceData));
       // Create Controller
-      ctrl = $controller('accountsController', {$scope: scope});
+      ctrl = $controller('accountsController', {$scope: scope, dateRangeService: mockDateRangeService});
       scope.$digest();
     });
   });
@@ -546,7 +569,7 @@ describe('Unit: accountsController', function() {
         };
       });
 
-      ctrl = $controller('accountsController', {$scope: scope});
+      ctrl = $controller('accountsController', {$scope: scope, dateRangeService: mockDateRangeService});
 
       scope.$digest();
 

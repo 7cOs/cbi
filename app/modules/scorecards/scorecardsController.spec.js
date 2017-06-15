@@ -447,7 +447,7 @@ describe('Unit: scorecardsController', function() {
 
   describe('[Method] updateEndingTimePeriod', function() {
     beforeEach(function() {
-      ctrl.filtersService.model.scorecardDistributionTimePeriod = {'year': [{'name': 'L90', 'displayValue': 'L90', 'id': 2, '$$hashKey': 'object:37'}], 'month': [{'name': 'L03', 'displayValue': 'L03', 'id': 4}]};
+      ctrl.filtersService.model.scorecardDistributionTimePeriod = {'year': [{'name': 'L90', 'displayValue': 'L90', displayCode: 'L90 Days', 'id': 2, '$$hashKey': 'object:37'}], 'month': [{'name': 'L03', 'displayValue': 'L03', displayCode: 'L03 Mth', 'id': 4}]};
       ctrl.filtersService.model.depletionsTimePeriod = {month: [{'name': 'CMTH', 'displayValue': 'Clo Mth', 'id': 1}, { 'name': 'CYTM', 'displayValue': 'CYTM', 'id': 2 }, {'name': 'FYTM', 'displayValue': 'FYTM', 'id': 3}], year: [{'name': 'MTD', 'displayValue': 'MTD', 'id': 4, '$$hashKey': 'object:81 '}, {'name': 'CYTD', 'displayValue': 'CYTD', 'id': 5, '$$hashKey': 'object:82 '}, {'name': 'FYTD', 'displayValue': 'FYTD', 'id': 6}]};
     });
     it('should update the time period for year', function() {
@@ -465,7 +465,7 @@ describe('Unit: scorecardsController', function() {
 
       expect(ctrl.distributionSelectOptions.selected).toEqual('L03');
       expect(ctrl.filtersService.model.depletionsTimePeriod['month'][2].name).toEqual('FYTM');
-      expect(ctrl.filtersService.lastEndingTimePeriod.timePeriodValue).toEqual({ name: 'L03', displayValue: 'L03', id: 4 });
+      expect(ctrl.filtersService.lastEndingTimePeriod.timePeriodValue).toEqual({ displayCode: 'L03 Mth', name: 'L03', displayValue: 'L03', id: 4 });
     });
   });
 
@@ -473,7 +473,7 @@ describe('Unit: scorecardsController', function() {
     it('should update the distribution time period', function() {
       ctrl.changeDistributionTimePeriod('L90');
       expect(ctrl.distributionSelectOptions.selected).toEqual('L90');
-      expect(ctrl.filtersService.lastEndingTimePeriod.timePeriodValue).toEqual({ name: 'L90', displayValue: 'L90', id: 2 });
+      expect(ctrl.filtersService.lastEndingTimePeriod.timePeriodValue).toEqual({ name: 'L90', displayValue: 'L90', displayCode: 'L90 Days', id: 2 });
     });
   });
   describe('[Method] setDefaultFilterOptions', function() {
