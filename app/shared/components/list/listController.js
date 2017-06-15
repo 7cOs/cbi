@@ -22,7 +22,6 @@ module.exports = /*  @ngInject */
     vm.currentOpportunityId = '';
     vm.depletionsChevron = false;
     vm.disabledMessage = '';
-    vm.expandedOpportunities = 0;
     vm.isAllOpportunitiesSelected = false;
     vm.isAllOpportunitiesInPageSelected = false;
     vm.loadingList = false;
@@ -611,15 +610,15 @@ module.exports = /*  @ngInject */
     }
 
     function expandCallback(item) {
-      vm.expandedOpportunities++;
+      filtersService.model.appliedFilter.expandedOpportunities++;
     }
 
     function collapseCallback(item) {
-      vm.expandedOpportunities--;
+      filtersService.model.appliedFilter.expandedOpportunities--;
     }
 
     function allOpportunitiesExpanded() {
-      return vm.expandedOpportunities === opportunitiesService.model.opportunities.length;
+      return filtersService.model.appliedFilter.expandedOpportunities === opportunitiesService.model.opportunities.length;
     }
 
     function hasOpportunities() {
@@ -627,7 +626,7 @@ module.exports = /*  @ngInject */
     }
 
     function noOpportunitiesExpanded() {
-      return vm.expandedOpportunities === 0;
+      return filtersService.model.appliedFilter.expandedOpportunities === 0;
     }
 
     function showDisabled(message) {

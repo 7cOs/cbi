@@ -7,6 +7,7 @@ module.exports = /*  @ngInject */
       account: [],
       appliedFilter: {
         appliedFilter: '',
+        expandedOpportunities: 0,
         pagination: {
           currentPage: 0,
           totalPages: 0,
