@@ -118,7 +118,8 @@ module.exports = /*  @ngInject */
     vm.isHighlightStore = isHighlightStore;
     vm.getStoreAddress = getStoreAddress;
     // Have to create this variable because vm.selecteStore just has the name..Changing th binding to include Id involves a ton of work
-    var currentStore = null;
+    let currentStore = null;
+    const dateRangeSubscriptions = {};
 
     // Expose public methods
     vm.allOpportunitiesDisabled = allOpportunitiesDisabled;
@@ -150,7 +151,6 @@ module.exports = /*  @ngInject */
     vm.filterTopBottom = filterTopBottom;
     vm.canOpenNote = canOpenNote;
     vm.getAccountTypePerformanceData = getAccountTypePerformanceData;
-    vm.dateRangeService = dateRangeService;
 
     init();
 
@@ -1690,10 +1690,16 @@ module.exports = /*  @ngInject */
     function initDateRanges() {
       for (let timePeriod in DateRangeTimePeriod) {
         if (isNaN(Number(timePeriod))) {
-          dateRangeService.getDateRange(DateRangeTimePeriod[timePeriod]).subscribe(dateRange => {
+          dateRangeSubscriptions[timePeriod] = dateRangeService.getDateRange(DateRangeTimePeriod[timePeriod]).subscribe(dateRange => {
             vm.dateRanges[dateRange.displayCode] = dateRange.range;
           });
         }
       }
     }
+
+    $scope.$on('$destroy', () => {
+      for (let dateRange in dateRangeSubscriptions) {
+        dateRangeSubscriptions[dateRange].unsubscribe();
+      }
+    });
   };
