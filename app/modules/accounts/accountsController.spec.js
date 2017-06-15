@@ -325,12 +325,12 @@ describe('Unit: accountsController', function() {
 
   const mockDateRangeService = {
     getDateRange: function() {
-      return {
+      return Observable.of({
         code: 'MTD',
         description: 'Current Month to Date',
         displayCode: 'MTD',
         range: '06/01/2017 - 06/14/2017'
-      };
+      });
     }
   };
 
@@ -427,14 +427,7 @@ describe('Unit: accountsController', function() {
             return $q.when(topBottomSnapshotStoreData);
         };
       });
-      spyOn(mockDateRangeService, 'getDateRange').and.callFake(function() {
-        return Observable.of({
-          code: 'MTD',
-          description: 'Current Month to Date',
-          displayCode: 'MTD',
-          range: '06/01/2017 - 06/14/2017'
-        });
-      });
+      spyOn(mockDateRangeService, 'getDateRange').and.callThrough();
 
       brandSpy = spyOn(userService, 'getPerformanceBrand');
       brandSpy.and.returnValue($q.when(brandPerformanceData));
