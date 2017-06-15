@@ -307,20 +307,26 @@ public class TargetList extends LoadableComponent<TargetList> {
     return this;
   }
 
+  /**
+   * @deprecated Please use the method extracted to the TargetListDetailPage page object
+   * @see TargetListDetailPage
+   */
+  @Deprecated
   public TargetList clickManage() {
-    // waitForElementVisible(TargetListManageButton, true);
-    // waitForElementToClickable(TargetListManageButton,true);
-    // TargetListManageButton.click();
+    final TargetListDetailPage targetListDetailPage = PageFactory.initElements(driver, TargetListDetailPage.class);
+    targetListDetailPage.clickManageButton();
 
-    List<WebElement> elements = findElements(By.xpath("//*[@class='hero-actions']/button"));
-
-    JavascriptExecutor js = (JavascriptExecutor) driver;
-    js.executeScript("arguments[0].click();", elements.get(0));
     return this;
   }
 
+  /**
+   * @deprecated Please use the method extracted to the TargetListDetailPage page object
+   * @see TargetListDetailPage
+   */
+  @Deprecated
   public TargetList clickManageButton() {
-    TargetListManageButton.sendKeys(Keys.ENTER);
+    final TargetListDetailPage targetListDetailPage = PageFactory.initElements(driver, TargetListDetailPage.class);
+    targetListDetailPage.clickManageButton();
 
     return this;
   }

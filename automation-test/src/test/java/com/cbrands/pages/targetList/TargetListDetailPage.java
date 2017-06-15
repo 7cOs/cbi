@@ -1,5 +1,6 @@
 package com.cbrands.pages.targetList;
 
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -15,6 +16,9 @@ public class TargetListDetailPage extends LoadableComponent<TargetListDetailPage
 
   @FindBy(how = How.XPATH, using = "//v-accordion[@id='opportunities']")
   private WebElement opportunities;
+
+  @FindBy(how = How.XPATH, using = "//button[contains(.,'Manage')]")
+  private WebElement targetListManageButton;
 
   public TargetListDetailPage(WebDriver driver) {
     this.driver = driver;
@@ -33,6 +37,19 @@ public class TargetListDetailPage extends LoadableComponent<TargetListDetailPage
   public boolean isOpportunityListLoaded() {
     waitForVisibleFluentWait(opportunities);
     return opportunities.isDisplayed();
+  }
+
+  public void clickManageButton() {
+    // waitForElementVisible(TargetListManageButton, true);
+    // waitForElementToClickable(TargetListManageButton,true);
+    // TargetListManageButton.click();
+//
+//    List<WebElement> elements = findElements(By.xpath("//*[@class='hero-actions']/button"));
+//
+//    JavascriptExecutor js = (JavascriptExecutor) driver;
+//    js.executeScript("arguments[0].click();", elements.get(0));
+
+    targetListManageButton.sendKeys(Keys.ENTER);
   }
 
 }
