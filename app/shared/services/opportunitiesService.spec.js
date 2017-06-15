@@ -399,6 +399,18 @@ describe('Unit: opportunitiesService - get opportunities', function() {
         expect(opportunitiesPromises.$$state.value).toEqual(expectedServiceModel.opportunities);
         expect(opportunitiesService.model.opportunities).toEqual([]);
     });
+    it('responds correctly when no opportunities are returned', () => {
+        $httpBackend
+          .expect('GET', '/v2/opportunities/?limit=20&ignoreDismissed=true&sort=&offset=0&filter=myAccountsOnly%3Atrue%2CpremiseType%3Aoff%2C')
+          .respond(200, { opportunities: [] });
+
+        const opportunitiesPromises = opportunitiesService.getFormattedStoresWithOpportunities();
+
+        $httpBackend.flush();
+        expect(opportunitiesPromises.$$state.value).toEqual([]);
+        expect(opportunitiesService.model.noOpportunitiesFound).toBe(true);
+        expect(opportunitiesService.model.opportunities).toEqual([]);
+    });
   });
 
   describe('getFormattedOpportunities', () => {
