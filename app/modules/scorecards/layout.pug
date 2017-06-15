@@ -10,18 +10,25 @@ div.my-scorecards
     div.dropdown-filter
       div.dropdown
         label Depletions Time Period
-        md-select(ng-model="s.depletionSelect" md-on-close="s.changeDepletionScorecard(false)" aria-label="Depletion Select")
-          md-option(ng-repeat="filter in s.filtersService.model.depletionsTimePeriod[s.depletionRadio]" aria-label="{{filter.name}}" ng-value="filter.name" ng-click="s.changeDepletionOption(filter.name)") {{filter.displayValue}}
+        md-select(ng-model="s.depletionSelect" md-on-open="s.depletionSelectOpen = true" md-on-close="s.changeDepletionScorecard(false); s.depletionSelectOpen = false" aria-label="Depletion Select")
+          md-option(ng-repeat="filter in s.filtersService.model.depletionsTimePeriod[s.depletionRadio]" aria-label="{{filter.name}}" ng-value="filter.name" ng-click="s.changeDepletionOption(filter.name)")
+            div {{filter.displayValue}}
+            div.dropdown-subtext(ng-if="s.depletionSelectOpen") {{filter.displayValue !== "Clo Mth" ? s.dateRanges[filter.name] : s.dateRanges['CMTH']}}
+        p.dropdown-subtext {{s.filterModel.depletionsTimePeriod.displayValue !== "Clo Mth" ? s.dateRanges[s.depletionSelect] : s.dateRanges['CMTH']}}
       div.dropdown
         label Distribution Time Period
-        md-select(ng-model="s.distributionSelectOptions.selected" aria-label="Distirbution Select")
-          md-option(ng-repeat="filter in s.filtersService.model.scorecardDistributionTimePeriod[s.depletionRadio]" aria-label="{{filter.name}}" ng-value="filter.name" ng-click="s.changeDistributionTimePeriod(filter.name)") {{filter.displayValue}} {{filter.displayValue === 'L03' ? 'Mth' : 'Days'}}
+        md-select(ng-model="s.distributionSelectOptions.selected" aria-label="Distirbution Select" md-on-open="s.distributionSelectOpen = true" md-on-close="s.distributionSelectOpen = false")
+          md-option(ng-repeat="filter in s.filtersService.model.scorecardDistributionTimePeriod[s.depletionRadio]" aria-label="{{filter.name}}" ng-value="filter.name" ng-click="s.changeDistributionTimePeriod(filter.name, filter.displayCode)")
+            div {{filter.displayCode}}
+            div.dropdown-subtext(ng-if="s.distributionSelectOpen") {{s.dateRanges[filter.displayCode]}}
+        p.dropdown-subtext {{s.dateRanges[s.distributionSelectOptions.displayCode]}}
 
   section.depeletions-scorecard
     div.scorecard-header.clearfix
       div.scorecard-header-left
         h2 My Depletions Scorecard
         h3 {{s.depletionSelect === 'CMTH' ? 'Clo Mth' : s.depletionSelect}}
+        p {{s.filterModel.depletionsTimePeriod.displayValue !== "Clo Mth" ? s.dateRanges[s.depletionSelect] : s.dateRanges['CMTH']}}
       div.scorecard-header-right
         p.accent Total Depletions / vs YA %
         h3.bold {{s.totalRow.depletions | number:0 }}
@@ -93,6 +100,7 @@ div.my-scorecards
         h2 My Distribution Scorecard
         h3(ng-if="s.distributionSelectOptions.selected === 'L03'") L03 Mth
         h3(ng-if="s.distributionSelectOptions.selected !== 'L03'") {{s.distributionSelectOptions.selected}} Days
+        p {{s.dateRanges[s.distributionSelectOptions.displayCode]}}
       div.scorecard-header-right
         p.accent Total PODs / vs YA %
         h3.bold(ng-if="s.distributionRadioOptions.selected.placementType === 'effective'") {{s.totalDistributions[0].distributionsEffective | number:0 }}&nbsp;

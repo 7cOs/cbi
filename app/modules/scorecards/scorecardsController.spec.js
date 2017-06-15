@@ -1,5 +1,18 @@
+import { Observable } from 'rxjs';
+
 describe('Unit: scorecardsController', function() {
   var scope, ctrl, $state, filtersService, userService;
+
+  const mockDateRangeService = {
+    getDateRange: () => {
+      return Observable.of({
+        code: 'MTD',
+        description: 'Current Month to Date',
+        displayCode: 'MTD',
+        range: '06/01/2017 - 06/14/2017'
+      });
+    }
+  };
 
   beforeEach(function() {
     // Get Mock Modules
@@ -18,7 +31,7 @@ describe('Unit: scorecardsController', function() {
       userService = _userService_;
 
       // Create Controller
-      ctrl = $controller('scorecardsController', {$scope: scope});
+      ctrl = $controller('scorecardsController', {$scope: scope, dateRangeService: mockDateRangeService});
 
       ctrl.depletionSort = {
         sortDescending: false,
@@ -75,6 +88,8 @@ describe('Unit: scorecardsController', function() {
         }
       }];
     });
+
+    spyOn(mockDateRangeService, 'getDateRange').and.callThrough();
   });
 
   const remodeledDepletion = [{

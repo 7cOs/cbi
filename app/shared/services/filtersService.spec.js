@@ -150,16 +150,18 @@ describe('Unit: filter service', function() {
                 }]
             },
             scorecardDistributionTimePeriod: {
-                year: [{
+              year: [{
                 name: 'L90',
                 displayValue: 'L90',
+                displayCode: 'L90 Days',
                 id: 2
-                }],
-                month: [{
+              }],
+              month: [{
                 name: 'L03',
                 displayValue: 'L03',
+                displayCode: 'L03 Mth',
                 id: 4
-                }]
+              }]
             },
             accountSelected: {
                 accountBrands: '',
@@ -391,16 +393,18 @@ describe('Unit: filter service', function() {
                 }]
             },
             scorecardDistributionTimePeriod: {
-                year: [{
+              year: [{
                 name: 'L90',
                 displayValue: 'L90',
+                displayCode: 'L90 Days',
                 id: 2
-                }],
-                month: [{
+              }],
+              month: [{
                 name: 'L03',
                 displayValue: 'L03',
+                displayCode: 'L03 Mth',
                 id: 4
-                }]
+              }]
             },
             accountSelected: {
                 accountBrands: '',
