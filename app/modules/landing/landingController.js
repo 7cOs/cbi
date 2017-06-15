@@ -1,4 +1,5 @@
 'use strict';
+import { DateRangeTimePeriod } from '../../enums/date-range-time-period.enum';
 
 module.exports = /*  @ngInject */
   function landingController($rootScope, $state, $filter, $mdSelect, filtersService, chipsService, myperformanceService, userService) {
@@ -30,8 +31,8 @@ module.exports = /*  @ngInject */
 
     // Set values
     vm.greetingName = userService.model.currentUser.firstName;
-    vm.fytdDateRange = 'FYTD';
-    vm.l90DateRange = 'L90';
+    vm.fytdDateRange = DateRangeTimePeriod.FYTD;
+    vm.l90DateRange = DateRangeTimePeriod.L90;
 
     init();
 
