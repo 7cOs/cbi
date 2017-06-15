@@ -1,6 +1,5 @@
 import { Angulartics2, Angulartics2Module, Angulartics2GoogleAnalytics } from 'angulartics2';
 import { BrowserModule } from '@angular/platform-browser';
-
 import { HttpModule } from '@angular/http';
 import { NgModule, forwardRef } from '@angular/core';
 import { RouterModule } from '@angular/router';
@@ -8,6 +7,9 @@ import { StoreModule } from '@ngrx/store';
 import { UpgradeAdapter } from '@angular/upgrade';
 
 import { AppComponent } from './shared/containers/app/app.component';
+import { DateRangeApiService } from './services/date-range-api.service';
+import { DateRangeService } from './services/date-range.service';
+import { DateRangeTransformerService } from './services/date-range-transformer.service';
 import { EffectsModule } from './state/effects/effects.module';
 import { GreetingComponent } from './shared/components/greeting/greeting.component';
 import { FormatOpportunitiesTypePipe } from './pipes/formatOpportunitiesType.pipe';
@@ -46,7 +48,11 @@ AppUpgradeAdapter.upgradeNg1Provider('versionService');
     TimeAgoPipe,
     ...UpgradedComponents
   ],
-  providers: [ ]
+  providers: [
+    DateRangeApiService,
+    DateRangeService,
+    DateRangeTransformerService
+  ]
 })
 export class AppModule {
   constructor(angulartics2: Angulartics2, angulartics2GoogleAnalytics: Angulartics2GoogleAnalytics) {

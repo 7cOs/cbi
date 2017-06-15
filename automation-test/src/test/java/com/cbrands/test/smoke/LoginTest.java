@@ -41,9 +41,8 @@ public class LoginTest extends BaseTestCase {
   @DataProvider(name = "userCredentials")
   public static Object[][] userCredentials() {
     return new Object[][] {
-      { TestUser.ACTOR2 } ,
-      { TestUser.ACTOR3 } ,
-      { TestUser.ACTOR4 }
+      { TestUser.ACTOR4 } ,
+      { TestUser.ACTOR5 }
     };
   }
 
