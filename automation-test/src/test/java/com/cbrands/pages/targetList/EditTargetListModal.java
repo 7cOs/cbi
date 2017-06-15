@@ -17,7 +17,7 @@ public class EditTargetListModal extends LoadableComponent<EditTargetListModal> 
 
   private final WebDriver driver;
 
-  @FindBy(how = How.XPATH, using = "//div[contains(@class, 'target-list-modal')")
+  @FindBy(how = How.XPATH, using = "//div[contains(@class, 'target-list-modal')]")
   private WebElement modal;
 
   @FindBy(how = How.CSS, using = "input[placeholder='Enter List Name']")

@@ -1,7 +1,6 @@
 package com.cbrands.pages.targetList;
 
 import org.openqa.selenium.By;
-import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -41,8 +40,10 @@ public class TargetListDetailPage extends LoadableComponent<TargetListDetailPage
     return opportunities.isDisplayed();
   }
 
-  public void clickManageButton() {
+  public EditTargetListModal clickManageButton() {
     waitForElementVisible(findElement(By.xpath("//div[contains(@class, 'loader')]")), false);
     waitForElementToClickable(targetListManageButton, true).click();
+
+    return PageFactory.initElements(driver, EditTargetListModal.class);
   }
 }
