@@ -1,5 +1,7 @@
 'use strict';
 
+const DateRangeTimePeriod = require('../../enums/date-range-time-period.enum').DateRangeTimePeriod;
+
 module.exports = /*  @ngInject */
   function accountsController($rootScope, $scope, $state, $log, $q, $window, $filter, $timeout, $analytics, myperformanceService, chipsService, filtersService, notesService, userService, storesService, dateRangeService) {
 
@@ -77,7 +79,7 @@ module.exports = /*  @ngInject */
     vm.premiseTypeValue = 'all';
     vm.depletionSelectOpen = false;
     vm.distributionSelectOpen = false;
-    vm.dateRanges = dateRangeService.getDateRanges();
+    vm.dateRanges = {};
 
     // top bottom public methods
     vm.topBottomData = {
@@ -935,6 +937,7 @@ module.exports = /*  @ngInject */
 
     function init() {
       initDefaultModelValues();
+      initDateRanges();
 
       const isNavigatedFromScorecard = $state.params.applyFiltersOnLoad && $state.params.pageData.brandTitle;
       const isNavigatedFromOpps = $state.params.storeid;
@@ -1682,5 +1685,15 @@ module.exports = /*  @ngInject */
           }];
         });
       } else return [];
+    }
+
+    function initDateRanges() {
+      for (let timePeriod in DateRangeTimePeriod) {
+        if (isNaN(Number(timePeriod))) {
+          dateRangeService.getDateRange(DateRangeTimePeriod[timePeriod]).subscribe(dateRange => {
+            vm.dateRanges[dateRange.displayCode] = dateRange.range;
+          });
+        }
+      }
     }
   };

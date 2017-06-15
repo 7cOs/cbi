@@ -119,19 +119,23 @@ module.exports = /*  @ngInject */
         year: [{
           name: 'L60',
           displayValue: 'L60',
+          displayCode: 'L60 Days',
           id: 1
         }, {
           name: 'L90',
           displayValue: 'L90',
+          displayCode: 'L90 Days',
           id: 2
         }, {
           name: 'L120',
           displayValue: 'L120',
+          displayCode: 'L120 Days',
           id: 3
         }],
         month: [{
           name: 'L03',
           displayValue: 'L03',
+          displayCode: 'L03 Mth',
           id: 4
         }]
       },

@@ -54,9 +54,9 @@ notes
           label Distribution Time Period
           md-select(ng-model="a.filterModel.distributionTimePeriod" md-on-open="a.openSelect(true); a.distributionSelectOpen = true" md-on-close="a.openSelect(false); a.distributionSelectOpen = false" aria-label="Select a distribution time period")
             md-option(ng-repeat="filter in a.filtersService.model.distributionTimePeriod[a.filterModel.endingTimePeriod]" aria-label="{{filter.name}}" ng-value="filter" ng-click="a.distOptionChanged(filter); a.disableApplyFilter(false);")
-              div {{a.filterModel.endingTimePeriod === 'month'? filter.displayValue + ' Mth' : filter.displayValue + ' Days'}}
-              div.dropdown-subtext(ng-if="a.distributionSelectOpen") {{a.dateRanges[filter.name]}}
-          p.dropdown-subtext {{a.dateRanges[a.filterModel.distributionTimePeriod.displayValue]}}
+              div {{filter.displayCode}}
+              div.dropdown-subtext(ng-if="a.distributionSelectOpen") {{a.dateRanges[filter.displayCode]}}
+          p.dropdown-subtext {{a.dateRanges[a.filterModel.distributionTimePeriod.displayCode]}}
 
 .filters(column='12')
   div(row)
