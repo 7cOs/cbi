@@ -1,6 +1,6 @@
 'use strict';
 
-const DateRangeTimePeriod = require('../../enums/date-range-time-period.enum').DateRangeTimePeriod;
+import { DateRangeTimePeriod } from '../../enums/date-range-time-period.enum';
 
 module.exports = /*  @ngInject */
   function accountsController($rootScope, $scope, $state, $log, $q, $window, $filter, $timeout, $analytics, myperformanceService, chipsService, filtersService, notesService, userService, storesService, dateRangeService) {
@@ -1691,7 +1691,8 @@ module.exports = /*  @ngInject */
       for (let timePeriod in DateRangeTimePeriod) {
         if (isNaN(Number(timePeriod))) {
           dateRangeSubscriptions[timePeriod] = dateRangeService.getDateRange(DateRangeTimePeriod[timePeriod]).subscribe(dateRange => {
-            vm.dateRanges[dateRange.displayCode] = dateRange.range;
+            if (dateRange.code !== 'LCM') vm.dateRanges[dateRange.displayCode] = dateRange.range;
+            else vm.dateRanges['CMTH'] = dateRange.range;
           });
         }
       }

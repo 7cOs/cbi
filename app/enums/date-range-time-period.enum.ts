@@ -7,5 +7,6 @@ export enum DateRangeTimePeriod {
   L60,
   L90,
   L120,
-  L3CM
+  L3CM,
+  LCM
 }

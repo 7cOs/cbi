@@ -1,4 +1,4 @@
-const Observable = require('rxjs/observable/of');
+import { Observable } from 'rxjs';
 
 describe('Unit: accountsController', function() {
   var scope, ctrl, $controller, $state, $q, filtersService, chipsService, userService, packageSkuData, brandSpy, brandPerformanceData, myperformanceService, storesService, $filter;
