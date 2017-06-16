@@ -331,6 +331,11 @@ public class TargetList extends LoadableComponent<TargetList> {
     return this;
   }
 
+  public TargetList clickDelete_TargetListPage() {
+    deleteTarget.click();
+    return this;
+  }
+
   public TargetList typeTargetName(String name) {
 
 		WebElement element = findElement(By.xpath("//input[@placeholder='Enter List Name']"));
@@ -961,11 +966,6 @@ public class TargetList extends LoadableComponent<TargetList> {
 			}
 		}
 
-		return this;
-	}
-
-	public TargetList clickDelete_TargetListPage() {
-		deleteTarget.click();
 		return this;
 	}
 
