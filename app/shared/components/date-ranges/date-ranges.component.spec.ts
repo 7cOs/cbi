@@ -3,6 +3,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { Observable } from 'rxjs';
 import { DateRangeComponent } from './date-ranges.component';
 import { DateRangeService } from '../../../services/date-range.service';
+import { DateRangeTimePeriod } from '../../../enums/date-range-time-period.enum';
 import { DateRange } from '../../../models/date-range.model';
 import { getDateRangeMock } from '../../../models/date-range.model.mock';
 
@@ -37,19 +38,19 @@ describe('DateRangeComponent', () => {
     daterangeElement = fixture.debugElement.query(By.css('p')).nativeElement;
 
     it('L90 date-range check', () => {
-      componentInstance.dateRangeInput = 'L90';
+      componentInstance.dateRangeInput = DateRangeTimePeriod.L90;
       fixture.detectChanges();
       expect(daterangeElement.textContent).toBe(`${mockDateRange.range}`);
     });
 
     it('FYTD date-range check', () => {
-      componentInstance.dateRangeInput = 'FYTD';
+      componentInstance.dateRangeInput = DateRangeTimePeriod.FYTD;
       fixture.detectChanges();
       expect(daterangeElement.textContent).toBe(`${mockDateRange.range}`);
     });
 
     it('FAKE date-range check should be NULL', () => {
-      componentInstance.dateRangeInput = 'FAKE';
+      componentInstance.dateRangeInput = DateRangeTimePeriod['FAKE'];
       fixture.detectChanges();
       expect(daterangeElement.textContent).toBe(``);
     });

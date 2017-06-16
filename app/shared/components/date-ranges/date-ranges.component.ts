@@ -1,8 +1,8 @@
 import { Component, Input, OnInit } from '@angular/core';
-// import { Observable } from 'rxjs';
-import { DateRangeService } from '../../../services/date-range.service';
+import { Observable } from 'rxjs';
+import { DateRange } from '../../../models/date-range.model';
 import { DateRangeTimePeriod } from '../../../enums/date-range-time-period.enum';
-// import { DateRange } from '../../../models/date-range.model';
+import { DateRangeService } from '../../../services/date-range.service';
 
 @Component({
   selector: 'dateranges',
@@ -12,19 +12,12 @@ import { DateRangeTimePeriod } from '../../../enums/date-range-time-period.enum'
 
 export class DateRangeComponent implements OnInit {
 
-  @Input() dateRangeInput: string;
-  private dateRangeDisplay: string;
-  // private dateRangeDispla: Observable <DateRange>;
-
-  getDateRange() {
-    this.dateRangeService.getDateRange(DateRangeTimePeriod[this.dateRangeInput]).subscribe(dateRange => {
-      this.dateRangeDisplay = dateRange.range;
-    });
-  }
+  @Input() dateRangeInput: number;
+  private dateRangeDisplay: Observable <DateRange>;
 
   constructor(private dateRangeService: DateRangeService) {}
 
   ngOnInit() {
-    this.getDateRange();
+    this.dateRangeDisplay = this.dateRangeService.getDateRange(<DateRangeTimePeriod>this.dateRangeInput);
   }
 }
