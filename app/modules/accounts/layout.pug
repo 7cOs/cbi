@@ -42,7 +42,7 @@ notes
       md-radio-group(ng-model="a.filterModel.endingTimePeriod")
         md-radio-button(ng-repeat="filter in a.filtersService.model.timePeriod track by $index" class="md-primary" ng-value="filter.value" aria-label="Ending Time Period" ng-click="a.updateDistributionTimePeriod(filter.value); a.disableApplyFilter(false);") {{filter.name}}
     div(column='8')
-      div(row).dropdown-filter
+      div(row).dropdown-filter.dashboard-filter
         div(column='6').dropdown
           label Depletions Time Period
           md-select(ng-model="a.filterModel.depletionsTimePeriod" md-on-open="a.openSelect(true); a.depletionSelectOpen = true" md-on-close="a.openSelect(false); a.depletionSelectOpen = false" aria-label="Select a depletion time period" ng-model-options="{trackBy: '$value.id'}")
