@@ -41,7 +41,6 @@ public class TargetListDetailPage extends LoadableComponent<TargetListDetailPage
   }
 
   public EditTargetListModal clickManageButton() {
-    waitForElementVisible(findElement(By.xpath("//div[contains(@class, 'loader')]")), false);
     waitForElementToClickable(targetListManageButton, true).click();
 
     return PageFactory.initElements(driver, EditTargetListModal.class);
