@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
-import { DateRange } from '../../../models/date-range.model';
+import { DateRange } from '../../../models/date-range.model'; // tslint:disable-line:no-unused-variable
 import { DateRangeTimePeriod } from '../../../enums/date-range-time-period.enum';
 import { DateRangeService } from '../../../services/date-range.service';
 
