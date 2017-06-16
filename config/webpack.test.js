@@ -131,7 +131,8 @@ module.exports = {
         tslint: {
           emitErrors: false,
           failOnHint: true,
-          formatter: 'stylish'
+          formatter: 'stylish',
+          typeCheck: true
         },
 
         eslint: {
