@@ -88,8 +88,10 @@ public class EditTargetListModal extends LoadableComponent<EditTargetListModal> 
     return targetListListingsPage;
   }
 
-  public void clickDeleteTargetListButton() {
+  public EditTargetListModal clickDeleteTargetListButton() {
     deleteListButton.click();
+
+    return this;
   }
 
 }
