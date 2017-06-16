@@ -342,6 +342,11 @@ public class TargetList extends LoadableComponent<TargetList> {
     return this;
   }
 
+  public TargetList clickYesDelete() {
+    waitForVisibleFluentWait(yesDelete).click();
+    return this;
+  }
+
   public TargetList typeTargetName(String name) {
 
 		WebElement element = findElement(By.xpath("//input[@placeholder='Enter List Name']"));
@@ -1051,11 +1056,6 @@ public class TargetList extends LoadableComponent<TargetList> {
 
 	public TargetList openTargetListUsingURL(String URL) {
 		driver.get(URL);
-		return this;
-	}
-
-	public TargetList clickYesDelete() {
-		waitForVisibleFluentWait(yesDelete).click();
 		return this;
 	}
 
