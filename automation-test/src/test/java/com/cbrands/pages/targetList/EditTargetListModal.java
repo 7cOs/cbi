@@ -32,6 +32,9 @@ public class EditTargetListModal extends LoadableComponent<EditTargetListModal> 
   @FindBy(how = How.XPATH, using = "//div/div[2]/button")
   private WebElement saveButton;
 
+  @FindBy(how = How.XPATH, using = "//button[contains(.,'Delete')]")
+  private WebElement deleteTarget;
+
   public EditTargetListModal(WebDriver driver) {
     this.driver = driver;
   }
@@ -83,6 +86,10 @@ public class EditTargetListModal extends LoadableComponent<EditTargetListModal> 
     targetListListingsPage.isLoaded();
 
     return targetListListingsPage;
+  }
+
+  public void clickDeleteTargetListButton() {
+    deleteTarget.click();
   }
 
 }

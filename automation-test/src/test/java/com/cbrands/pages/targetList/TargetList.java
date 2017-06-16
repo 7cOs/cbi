@@ -337,7 +337,8 @@ public class TargetList extends LoadableComponent<TargetList> {
    */
   @Deprecated
   public TargetList clickDelete_TargetListPage() {
-    deleteTarget.click();
+    final EditTargetListModal editTargetListModal = PageFactory.initElements(driver, EditTargetListModal.class);
+    editTargetListModal.clickDeleteTargetListButton();
     return this;
   }
 
