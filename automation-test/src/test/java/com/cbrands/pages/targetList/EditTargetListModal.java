@@ -36,7 +36,7 @@ public class EditTargetListModal extends LoadableComponent<EditTargetListModal> 
   private WebElement deleteListButton;
 
   @FindBy(how = How.XPATH, using = "//a[contains(.,'Yes, Delete')]")
-  private WebElement yesDelete;
+  private WebElement confirmDelete;
 
   public EditTargetListModal(WebDriver driver) {
     this.driver = driver;
@@ -98,7 +98,7 @@ public class EditTargetListModal extends LoadableComponent<EditTargetListModal> 
   }
 
   public void confirmListDelete() {
-    waitForVisibleFluentWait(yesDelete).click();
+    waitForVisibleFluentWait(confirmDelete).click();
   }
 
 }
