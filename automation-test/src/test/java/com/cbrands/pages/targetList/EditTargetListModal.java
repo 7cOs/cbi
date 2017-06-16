@@ -33,7 +33,7 @@ public class EditTargetListModal extends LoadableComponent<EditTargetListModal> 
   private WebElement saveButton;
 
   @FindBy(how = How.XPATH, using = "//button[contains(.,'Delete')]")
-  private WebElement deleteTarget;
+  private WebElement deleteListButton;
 
   public EditTargetListModal(WebDriver driver) {
     this.driver = driver;
@@ -89,7 +89,7 @@ public class EditTargetListModal extends LoadableComponent<EditTargetListModal> 
   }
 
   public void clickDeleteTargetListButton() {
-    deleteTarget.click();
+    deleteListButton.click();
   }
 
 }
