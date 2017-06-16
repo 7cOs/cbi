@@ -97,8 +97,10 @@ public class EditTargetListModal extends LoadableComponent<EditTargetListModal> 
     return this;
   }
 
-  public void confirmListDelete() {
+  public TargetListListingsPage confirmListDelete() {
     waitForVisibleFluentWait(confirmDelete).click();
+
+    return PageFactory.initElements(driver, TargetListListingsPage.class);
   }
 
 }
