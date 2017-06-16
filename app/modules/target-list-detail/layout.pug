@@ -27,7 +27,7 @@
         span {{tld.targetListService.model.currentList.opportunitiesSummary.opportunitiesCount | number }}
         label.accent.accent-blue Total<br />Opportunities
 
-.loader-wrap(ng-class="{'active': tld.loadingList}")
+.loader-wrap(ng-if="tld.loadingList" ng-class="{'active': tld.loadingList}")
   loader
 
 list(show-copy-to-target-list="true" show-remove-button="true" page-name="target-list-detail" select-all-available="true")
