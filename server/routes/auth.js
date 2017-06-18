@@ -11,21 +11,28 @@ module.exports = function(app) {
     return crypto.enc.Base64.stringify(crypto.enc.Utf8.parse(JSON.stringify(obj)));
   }
 
-  function setCookies (req, res) {
+  function setSessionCookies(req, res) {
     res.cookie('user', objectToBase64(req.user.jwtmap), { path: '/', maxAge: 720000000, secure: secure });
     res.cookie('ga', objectToBase64(app.get('config').analytics), { path: '/', maxAge: 720000000, secure: secure });
+  }
+
+  function removeSessionCookies(req, res) {
+    res.clearCookie('user', { path: '/', maxAge: 720000000, secure: secure });
+    res.clearCookie('ga', { path: '/', maxAge: 720000000, secure: secure });
   }
 
   // Auth stuff
   app.get('/auth/login',
     passport.authenticate(authType, {session: true}), function(req, res) {
       // Successful authentication, redirect home.
-      setCookies(req, res);
+      setSessionCookies(req, res);
       res.redirect('/');
     });
 
   app.get('/auth/logout', function (req, res) {
-    req.session.destroy(function() {
+    req.session.destroy(function() {   // express-session destroys req.session and cf-sid
+      req.logout();                    // passport auth destroys req.user
+      removeSessionCookies(req, res);  // clear client cookies
       res.redirect(logoutUrl);
     });
   });
@@ -38,7 +45,7 @@ module.exports = function(app) {
   app.post('/auth/callback',
     passport.authenticate(authType, {failureRedirect: logoutUrl}),
     function(req, res) {
-      setCookies(req, res);
+      setSessionCookies(req, res);
       res.redirect('/');
     });
 
