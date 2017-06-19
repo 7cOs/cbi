@@ -1,4 +1,4 @@
-.loader-wrap(ng-class="{'active': page.loadingList}")
+.loader-wrap(ng-if="page.loadingList" ng-class="{'active': page.loadingList}")
   loader
 
 div(ng-if="!!page.lastPage" column="12" class="pagination")

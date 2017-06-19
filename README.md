@@ -41,7 +41,7 @@ NPM's built in [task runner](https://docs.npmjs.com/cli/run-script) is used for 
 - `npm start`: Start the Node Express server only. Useful for running the server (very very quickly) *after* performing a `build` (or similar) step.
 - `npm run serve`: Start the Node Express server only (using nodemon to watch for changes and reload Node if server code is updated). Useful for running the server (very very quickly) *after* performing a `build` (or similar) step.
 - `npm run heroku-postbuild`: Alias for `npm run build:prod`. Heroku looks for, recognizes, and runs this command as its final step after a new code deployment.
-- `npm run fontgen`
+- `npm run fontgen`: Use `fontmin` utility to generate web-compatible font set from app/assets/fontsrc into app/assets/fonts - Generally only needed when updating/adding new source font files.
 
 ## IDEs
 
@@ -50,7 +50,10 @@ If you're using Atom, you can add these packages:
 - [Editorconfig](https://atom.io/packages/editorconfig): `apm install editorconfig`
 - [Linter](https://atom.io/packages/linter): `apm install linter`
   - [Sass Linter](https://atom.io/packages/linter-sass-lint): `apm install linter-sass-lint`
-  - [ES Lint](https://atom.io/packages/linter-eslint): `apm install linter-eslint`
+  - [ESLint](https://atom.io/packages/linter-eslint): `apm install linter-eslint`
+  - [TSLint](https://atom.io/packages/linter-tslint): `apm install linter-tslint`  
+
+There are likely additional packages to help with TypeScript, Pug, Angular, Node, Jasmine, etc.
 
 ### IntelliJ IDEA
  - Make sure you have the `EditorConfig` plugin installed to support the predefined style conventions, in Preferences > Plugins > EditorConfig
