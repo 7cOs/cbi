@@ -5,7 +5,7 @@ import { DateRangeTimePeriod } from '../../../enums/date-range-time-period.enum'
 import { DateRangeService } from '../../../services/date-range.service';
 
 @Component({
-  selector: 'dateranges',
+  selector: 'date-ranges',
   template: require('./date-ranges.component.pug'),
   styles: [require('./date-ranges.component.scss').toString()]
 })
