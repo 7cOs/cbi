@@ -209,4 +209,4 @@ v-accordion.styled-list(multiple="" id="opportunities" control="list.accordion" 
                   div(column="2" ng-if="product.featureTypeCode !== null")
                     label Feature Type
                     span(ng-click="list.showOpportunityMemoModal(); list.getMemos(product.store.id, product.product.id, 'Feature', product.featureTypeCode)").open-memo {{::product.featureTypeDesc}}
-page(page-name="{{list.pageName}}")
+page(page-name="{{list.pageName}}" page-change-callback="list.resetOpportunitiesExpanded()")

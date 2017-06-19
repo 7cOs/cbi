@@ -22,6 +22,7 @@ module.exports = /*  @ngInject */
     vm.currentOpportunityId = '';
     vm.depletionsChevron = false;
     vm.disabledMessage = '';
+    vm.expandedOpportunities = 0;
     vm.isAllOpportunitiesSelected = false;
     vm.isAllOpportunitiesInPageSelected = false;
     vm.loadingList = false;
@@ -96,6 +97,7 @@ module.exports = /*  @ngInject */
     vm.remainingOpportunitySpots = remainingOpportunitySpots;
     vm.handleAddToTargetList = handleAddToTargetList;
     vm.isTotalOpportunitiesWithinMaxLimit = isTotalOpportunitiesWithinMaxLimit;
+    vm.resetOpportunitiesExpanded = resetOpportunitiesExpanded;
 
     // Custom Headers for CSV export
     vm.csvHeader = [
@@ -610,15 +612,15 @@ module.exports = /*  @ngInject */
     }
 
     function expandCallback(item) {
-      filtersService.model.appliedFilter.expandedOpportunities++;
+      vm.expandedOpportunities++;
     }
 
     function collapseCallback(item) {
-      filtersService.model.appliedFilter.expandedOpportunities--;
+      vm.expandedOpportunities--;
     }
 
     function allOpportunitiesExpanded() {
-      return filtersService.model.appliedFilter.expandedOpportunities === opportunitiesService.model.opportunities.length;
+      return vm.expandedOpportunities === opportunitiesService.model.opportunities.length;
     }
 
     function hasOpportunities() {
@@ -626,7 +628,11 @@ module.exports = /*  @ngInject */
     }
 
     function noOpportunitiesExpanded() {
-      return filtersService.model.appliedFilter.expandedOpportunities === 0;
+      return vm.expandedOpportunities === 0;
+    }
+
+    function resetOpportunitiesExpanded() {
+      vm.expandedOpportunities = 0;
     }
 
     function showDisabled(message) {

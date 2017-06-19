@@ -20,8 +20,9 @@ module.exports = /*  @ngInject */
     function pageChanged(pageNumber) {
       const isTargetList = vm.pageName === 'target-list-detail';
       filtersService.model.appliedFilter.pagination.currentPage = pageNumber;
-      filtersService.model.appliedFilter.expandedOpportunities = 0;
+
       vm.loadingList = true;
+      vm.pageChangeCallback();
 
       const opportunitiesPromise = isTargetList
         ? targetListService.getAndUpdateTargetListStoresWithOpportunities(targetListService.model.currentList.id, {type: 'targetListOpportunities'})

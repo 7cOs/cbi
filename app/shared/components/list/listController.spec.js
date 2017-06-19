@@ -219,14 +219,14 @@ describe('Unit: list controller', function() {
   });
 
   describe('[list.allOpportunitiesExpanded] method', function() {
-    it('should return false if filtersService.model.appliedFilter.expandedOpportunities and opportunitiesService.model.opportunities are different lengths', function() {
-      ctrl.filtersService.model.appliedFilter.expandedOpportunities = 1;
+    it('should return false if expandedOpportunities and opportunitiesService.model.opportunities are different lengths', function() {
+      ctrl.expandedOpportunities = 1;
       ctrl.opportunitiesService.model.opportunities = [{'opportunity': 1}, {'otherOpportunity': 2}];
       expect(ctrl.allOpportunitiesExpanded()).toBeFalsy();
     });
 
-    it('should return true if filtersService.model.appliedFilter.expandedOpportunities and opportunitiesService.model.opportunities are the same lengths', function() {
-      ctrl.filtersService.model.appliedFilter.expandedOpportunities = 1;
+    it('should return true if expandedOpportunities and opportunitiesService.model.opportunities are the same lengths', function() {
+      ctrl.expandedOpportunities = 1;
       ctrl.opportunitiesService.model.opportunities = [{'opportunity': 1}];
       expect(ctrl.allOpportunitiesExpanded()).toBeTruthy();
     });
@@ -327,9 +327,9 @@ describe('Unit: list controller', function() {
 
   describe('[list.collapseCallback] method', function() {
     it('should decrease the expanded opportunities count', function() {
-      ctrl.filtersService.model.appliedFilter.expandedOpportunities = 2;
+      ctrl.expandedOpportunities = 2;
       ctrl.collapseCallback();
-      expect(ctrl.filtersService.model.appliedFilter.expandedOpportunities).toEqual(1);
+      expect(ctrl.expandedOpportunities).toEqual(1);
     });
   });
 
@@ -355,9 +355,9 @@ describe('Unit: list controller', function() {
 
   describe('[list.expandCallback] method', function() {
     it('should increase the expanded opportunities count', function() {
-      ctrl.filtersService.model.appliedFilter.expandedOpportunities = 0;
+      ctrl.expandedOpportunities = 0;
       ctrl.expandCallback();
-      expect(ctrl.filtersService.model.appliedFilter.expandedOpportunities).toEqual(1);
+      expect(ctrl.expandedOpportunities).toEqual(1);
     });
   });
 
@@ -607,13 +607,13 @@ describe('Unit: list controller', function() {
   });
 
   describe('[list.noOpportunitiesExpanded] method', function() {
-    it('should return false if filtersService.model.appliedFilter.expandedOpportunities doesn\'t equal 0', function() {
-      ctrl.filtersService.model.appliedFilter.expandedOpportunities = 1;
+    it('should return false if expandedOpportunities doesn\'t equal 0', function() {
+      ctrl.expandedOpportunities = 1;
       expect(ctrl.noOpportunitiesExpanded()).toBeFalsy();
     });
 
-    it('should return true if filtersService.model.appliedFilter.expandedOpportunities equals 0', function() {
-      ctrl.filtersService.model.appliedFilter.expandedOpportunities = 0;
+    it('should return true if expandedOpportunities equals 0', function() {
+      ctrl.expandedOpportunities = 0;
       expect(ctrl.noOpportunitiesExpanded()).toBeTruthy();
     });
   });

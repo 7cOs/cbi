@@ -17,7 +17,6 @@ describe('Unit: filter service', function() {
         account: [],
             appliedFilter: {
                 appliedFilter: '',
-                expandedOpportunities: 0,
                 pagination: {
                   currentPage: 0,
                   totalPages: 0,
@@ -255,7 +254,6 @@ describe('Unit: filter service', function() {
         account: [],
             appliedFilter: {
                 appliedFilter: '',
-                expandedOpportunities: 0,
                 pagination: {
                   currentPage: 0,
                   totalPages: 0,
