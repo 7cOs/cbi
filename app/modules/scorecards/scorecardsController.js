@@ -120,12 +120,14 @@ module.exports = /*  @ngInject */
     function changeDepletionScorecard(bool) {
       if (bool) vm.depletionSelect = vm.depletionSelectOptions[vm.depletionRadio][0].name;
       updateTotalRowDepletions();
+      userService.model.depletion = getRemodeledCollection(userService.model.depletion, 'depletion');
     }
 
     function changeDistributionTimePeriod(value) {
       vm.distributionSelectOptions.selected = value;
       updatedSelectionValuesInFilter(null, null, value);
       updateTotalRowDistributions();
+      userService.model.distribution = getRemodeledCollection(userService.model.distribution, 'distribution');
     }
 
     function changePremise() {
