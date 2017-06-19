@@ -22,13 +22,14 @@ module.exports = /*  @ngInject */
       filtersService.model.appliedFilter.pagination.currentPage = pageNumber;
 
       vm.loadingList = true;
-      vm.pageChangeCallback();
 
       const opportunitiesPromise = isTargetList
         ? targetListService.getAndUpdateTargetListStoresWithOpportunities(targetListService.model.currentList.id, {type: 'targetListOpportunities'})
         : opportunitiesService.getAndUpdateStoresWithOpportunities();
 
       opportunitiesPromise.then(function() { vm.loadingList = false; });
+
+      if (vm.pageChangeCallback() && typeof vm.pageChangeCallback() === 'function') vm.pageChangeCallback;
     }
 
     // Private Methods
