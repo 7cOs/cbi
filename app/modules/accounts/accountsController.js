@@ -1,7 +1,5 @@
 'use strict';
 
-import { DateRangeTimePeriod } from '../../enums/date-range-time-period.enum';
-
 module.exports = /*  @ngInject */
   function accountsController($rootScope, $scope, $state, $log, $q, $window, $filter, $timeout, $analytics, myperformanceService, chipsService, filtersService, notesService, userService, storesService, dateRangeService) {
 
@@ -119,7 +117,7 @@ module.exports = /*  @ngInject */
     vm.getStoreAddress = getStoreAddress;
     // Have to create this variable because vm.selecteStore just has the name..Changing th binding to include Id involves a ton of work
     let currentStore = null;
-    const dateRangeSubscriptions = {};
+    let dateRangeSubscription = null;
 
     // Expose public methods
     vm.allOpportunitiesDisabled = allOpportunitiesDisabled;
@@ -1688,19 +1686,16 @@ module.exports = /*  @ngInject */
     }
 
     function initDateRanges() {
-      for (let timePeriod in DateRangeTimePeriod) {
-        if (isNaN(Number(timePeriod))) {
-          dateRangeSubscriptions[timePeriod] = dateRangeService.getDateRange(DateRangeTimePeriod[timePeriod]).subscribe(dateRange => {
-            if (dateRange.code !== 'LCM') vm.dateRanges[dateRange.displayCode] = dateRange.range;
-            else vm.dateRanges['CMTH'] = dateRange.range;
-          });
-        }
-      }
+      dateRangeSubscription = dateRangeService.getDateRanges().subscribe(dateRanges => {
+        vm.dateRanges = dateRanges;
+        vm.dateRanges['CMTH'] = dateRanges['LCM'];
+        vm.dateRanges['L03'] = dateRanges['L3CM'];
+        delete vm.dateRanges['LCM'];
+        delete vm.dateRanges['L3CM'];
+      });
     }
 
     $scope.$on('$destroy', () => {
-      for (let dateRange in dateRangeSubscriptions) {
-        dateRangeSubscriptions[dateRange].unsubscribe();
-      }
+      dateRangeSubscription.unsubscribe();
     });
   };
