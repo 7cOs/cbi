@@ -1688,10 +1688,6 @@ module.exports = /*  @ngInject */
     function initDateRanges() {
       dateRangeSubscription = dateRangeService.getDateRanges().subscribe(dateRanges => {
         vm.dateRanges = dateRanges;
-        vm.dateRanges['CMTH'] = dateRanges['LCM'];
-        vm.dateRanges['L03'] = dateRanges['L3CM'];
-        delete vm.dateRanges['LCM'];
-        delete vm.dateRanges['L3CM'];
       });
     }
 

@@ -89,7 +89,7 @@ module.exports = /*  @ngInject */
       ],
       depletionsTimePeriod: {
         month: [{
-          name: 'CMTH',
+          name: 'LCM',
           displayValue: 'Clo Mth',
           id: 1
         }, {
@@ -133,8 +133,8 @@ module.exports = /*  @ngInject */
           id: 3
         }],
         month: [{
-          name: 'L03',
-          displayValue: 'L03',
+          name: 'L3CM',
+          displayValue: 'L3CM',
           displayCode: 'L03 Mth',
           id: 4
         }]
@@ -146,8 +146,8 @@ module.exports = /*  @ngInject */
           id: 2
         }],
         month: [{
-          name: 'L03',
-          displayValue: 'L03',
+          name: 'L3CM',
+          displayValue: 'L3CM',
           id: 4
         }]
       },
