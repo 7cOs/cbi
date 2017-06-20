@@ -9,7 +9,7 @@ module.exports = /*  @ngInject */
 
     // Initial variables
     const vm = this;
-    let dateRangeSubscription = '';
+    let dateRangeSubscription;
 
     vm.depletionSelect;
     vm.depletionSelectApiCode;
