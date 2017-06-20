@@ -8,6 +8,7 @@ section.landing-page
         h2 My Performance
         .depletions(column="4")
           h3 Depletions FYTD
+            date-ranges([date-range]="l.fytdDateRange")
           table(cellspacing="0" cellpadding="0")
             tr
               th.accent CE
@@ -25,6 +26,7 @@ section.landing-page
         .distribution(column="8")
           div.clearfix
             h3 {{l.performanceData.timespan}} Distribution L90
+              date-ranges([date-range]="l.l90DateRange")
             h4.accent VS  YA%
           table(cellspacing="0" cellpadding="0")
             tr

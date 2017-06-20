@@ -7,6 +7,7 @@ import { StoreModule } from '@ngrx/store';
 import { UpgradeAdapter } from '@angular/upgrade';
 
 import { AppComponent } from './shared/containers/app/app.component';
+import { DateRangeComponent } from './shared/components/date-ranges/date-ranges.component';
 import { DateRangeApiService } from './services/date-range-api.service';
 import { DateRangeService } from './services/date-range.service';
 import { DateRangeTransformerService } from './services/date-range-transformer.service';
@@ -41,6 +42,7 @@ AppUpgradeAdapter.upgradeNg1Provider('versionService');
   ],
   declarations: [
     AppComponent,
+    DateRangeComponent,
     GreetingComponent,
     SettingsComponent,
     NotificationsComponent,
