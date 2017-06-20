@@ -19,7 +19,6 @@ export interface DateRangesState extends State {
 const initialDateRangeState: DateRange = {
   code: '',
   displayCode: '',
-  v2ApiCode: '',
   range: '',
   description: ''
 };
