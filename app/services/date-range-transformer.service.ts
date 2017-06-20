@@ -10,20 +10,20 @@ export class DateRangeTransformerService {
   private defaultDateFormat: string;
 
   private dateRangeDisplayCodes: any = {
-      'MTD': 'MTD',
-      'FYTM': 'FYTM',
-      'CYTM': 'CYTM',
-      'CYTDBDL': 'CYTD',
-      'FYTDBDL': 'FYTD',
-      'L60BDL': 'L60 Days',
-      'L90BDL': 'L90 Days',
-      'L120BDL': 'L120 Days',
-      'LCM': 'Clo Mth',
-      'L3CM': 'L03 Mth'
-    };
+    'MTD': 'MTD',
+    'FYTM': 'FYTM',
+    'CYTM': 'CYTM',
+    'CYTDBDL': 'CYTD',
+    'FYTDBDL': 'FYTD',
+    'L60BDL': 'L60 Days',
+    'L90BDL': 'L90 Days',
+    'L120BDL': 'L120 Days',
+    'LCM': 'Clo Mth',
+    'L3CM': 'L03 Mth'
+  };
 
   constructor() {
-    this.defaultDateFormat = 'MM/DD/YYYY';
+    this.defaultDateFormat = 'MM/DD/YY';
   }
 
   public transformDateRanges(dateRangeDTOs: DateRangeDTO[]): DateRange[] {

@@ -1,3 +1,6 @@
+import { getDateRangeMock } from '../../models/date-range.model.mock';
+import { Observable } from 'rxjs';
+
 describe('Unit: accountsController', function() {
   var scope, ctrl, $controller, $state, $q, filtersService, chipsService, userService, packageSkuData, brandSpy, brandPerformanceData, myperformanceService, storesService, $filter;
   let promiseGetStores;
@@ -320,6 +323,11 @@ describe('Unit: accountsController', function() {
       'planDistirbutionEffectiveTrend': -70.37382451231834
     }
   ];
+
+  const mockDateRangeService = {
+    getDateRanges: () => Observable.of(getDateRangeMock())
+  };
+
   beforeEach(function() {
     // Get Mock Modules
     angular.mock.module('ui.router');
@@ -342,6 +350,7 @@ describe('Unit: accountsController', function() {
       userService = _userService_;
       myperformanceService = _myperformanceService_;
       storesService = _storesService_;
+
       brandPerformanceData = {
         performance: [
           {
@@ -412,11 +421,12 @@ describe('Unit: accountsController', function() {
             return $q.when(topBottomSnapshotStoreData);
         };
       });
+      spyOn(mockDateRangeService, 'getDateRanges').and.callThrough();
 
       brandSpy = spyOn(userService, 'getPerformanceBrand');
       brandSpy.and.returnValue($q.when(brandPerformanceData));
       // Create Controller
-      ctrl = $controller('accountsController', {$scope: scope});
+      ctrl = $controller('accountsController', {$scope: scope, dateRangeService: mockDateRangeService});
       scope.$digest();
     });
   });
@@ -546,7 +556,7 @@ describe('Unit: accountsController', function() {
         };
       });
 
-      ctrl = $controller('accountsController', {$scope: scope});
+      ctrl = $controller('accountsController', {$scope: scope, dateRangeService: mockDateRangeService});
 
       scope.$digest();
 
