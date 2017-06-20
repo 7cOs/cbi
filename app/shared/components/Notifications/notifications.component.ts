@@ -7,7 +7,7 @@ import { Notification } from '../../../models/notification.model';
 @Component({
   selector: 'notifications',
   template: require('./notifications.component.pug'),
-  styles: [require('./notifications.component.scss').toString()]
+  styles: [ require('./notifications.component.scss') ]
 })
 
 export class NotificationsComponent {
