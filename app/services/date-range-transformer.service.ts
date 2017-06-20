@@ -10,17 +10,30 @@ export class DateRangeTransformerService {
   private defaultDateFormat: string;
 
   private dateRangeDisplayCodes: any = {
-      'MTD': 'MTD',
-      'FYTM': 'FYTM',
-      'CYTM': 'CYTM',
-      'CYTDBDL': 'CYTD',
-      'FYTDBDL': 'FYTD',
-      'L60BDL': 'L60 Days',
-      'L90BDL': 'L90 Days',
-      'L120BDL': 'L120 Days',
-      'LCM': 'Clo Mth',
-      'L3CM': 'L03 Mth'
-    };
+    'MTD': 'MTD',
+    'FYTM': 'FYTM',
+    'CYTM': 'CYTM',
+    'CYTDBDL': 'CYTD',
+    'FYTDBDL': 'FYTD',
+    'L60BDL': 'L60 Days',
+    'L90BDL': 'L90 Days',
+    'L120BDL': 'L120 Days',
+    'LCM': 'Clo Mth',
+    'L3CM': 'L03 Mth'
+  };
+
+  private dateRangeV2Codes: any = {
+    'MTD': 'MTD',
+    'FYTM': 'FYTM',
+    'CYTM': 'CYTM',
+    'CYTDBDL': 'CYTD',
+    'FYTDBDL': 'FYTD',
+    'L60BDL': 'L60',
+    'L90BDL': 'L90',
+    'L120BDL': 'L120',
+    'LCM': 'CMTH',
+    'L3CM': 'L03'
+  };
 
   constructor() {
     this.defaultDateFormat = 'MM/DD/YY';
@@ -35,6 +48,7 @@ export class DateRangeTransformerService {
     return {
       code: dateRangeDTO.code,
       displayCode: this.mapDateRangeDisplayCode(dateRangeDTO.code),
+      v2ApiCode: this.mapDateRangeV2Code(dateRangeDTO.code),
       description: dateRangeDTO.description,
       range: `${this.formatDate(dateRangeDTO.startDate)} - ${this.formatDate(dateRangeDTO.endDate)}`
     };
@@ -47,5 +61,9 @@ export class DateRangeTransformerService {
 
   private mapDateRangeDisplayCode(rawType: string): string {
     return this.dateRangeDisplayCodes[rawType] || rawType;
+  }
+
+  private mapDateRangeV2Code(rawType: string): string {
+    return this.dateRangeV2Codes[rawType] || rawType;
   }
 }
