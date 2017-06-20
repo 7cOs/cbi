@@ -1,17 +1,11 @@
+import { getDateRangeMock } from '../../models/date-range.model.mock';
 import { Observable } from 'rxjs';
 
 describe('Unit: scorecardsController', function() {
   var scope, ctrl, $state, filtersService, userService;
 
   const mockDateRangeService = {
-    getDateRange: () => {
-      return Observable.of({
-        code: 'MTD',
-        description: 'Current Month to Date',
-        displayCode: 'MTD',
-        range: '06/01/2017 - 06/14/2017'
-      });
-    }
+    getDateRanges: () => Observable.of(getDateRangeMock())
   };
 
   beforeEach(function() {
@@ -89,7 +83,7 @@ describe('Unit: scorecardsController', function() {
       }];
     });
 
-    spyOn(mockDateRangeService, 'getDateRange').and.callThrough();
+    spyOn(mockDateRangeService, 'getDateRanges').and.callThrough();
   });
 
   const remodeledDepletion = [{

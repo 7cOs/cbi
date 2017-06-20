@@ -1,7 +1,5 @@
 'use strict';
 
-import { DateRangeTimePeriod } from '../../enums/date-range-time-period.enum';
-
 module.exports = /*  @ngInject */
   function scorecardsController(dateRangeService, filtersService, opportunitiesService, userService, $filter, $q, $rootScope, $scope, $state) {
 
@@ -11,12 +9,14 @@ module.exports = /*  @ngInject */
 
     // Initial variables
     const vm = this;
-    const dateRangeSubscriptions = {};
+    let dateRangeSubscription = '';
 
     vm.depletionSelect;
+    vm.depletionSelectApiCode;
     vm.depletionRadio;
     vm.distributionSelectOptions = {
-      selected: ''
+      selected: '',
+      v3ApiCode: ''
     };
     vm.distributionRadioOptions = {
       placementType: [{
@@ -120,7 +120,8 @@ module.exports = /*  @ngInject */
       vm.selectedIndex = $index;
     }
 
-    function changeDepletionOption(value) {
+    function changeDepletionOption(value, v3ApiCode) {
+      vm.depletionSelectApiCode = v3ApiCode;
       updatedSelectionValuesInFilter(null, value, null);
     }
 
@@ -129,9 +130,9 @@ module.exports = /*  @ngInject */
       updateTotalRowDepletions();
     }
 
-    function changeDistributionTimePeriod(value, displayCode) {
+    function changeDistributionTimePeriod(value, v3ApiCode) {
       vm.distributionSelectOptions.selected = value;
-      vm.distributionSelectOptions.displayCode = displayCode;
+      vm.distributionSelectOptions.v3ApiCode = v3ApiCode;
       updatedSelectionValuesInFilter(null, null, value);
       updateTotalRowDistributions();
     }
@@ -189,8 +190,9 @@ module.exports = /*  @ngInject */
 
     function updateEndingTimePeriod(value) {
       vm.distributionSelectOptions.selected = vm.filtersService.model.scorecardDistributionTimePeriod[value][0].name;
-      vm.distributionSelectOptions.displayCode = vm.filtersService.model.scorecardDistributionTimePeriod[value][0].displayCode;
+      vm.distributionSelectOptions.v3ApiCode = vm.filtersService.model.scorecardDistributionTimePeriod[value][0].v3ApiCode;
       vm.depletionSelect = vm.filtersService.model.depletionsTimePeriod[value][2].name;
+      vm.depletionSelectApiCode = vm.filtersService.model.depletionsTimePeriod[value][2].v3ApiCode;
       updatedSelectionValuesInFilter(value, vm.depletionSelect, vm.distributionSelectOptions.selected);
       updateTotalRowDepletions();
       updateTotalRowDistributions();
@@ -282,9 +284,10 @@ module.exports = /*  @ngInject */
         // depletions
         vm.depletionRadio = 'year';
         vm.depletionSelect = 'FYTD';
+        vm.depletionSelectApiCode = 'FYTD';
         vm.distributionSelectOptions = {
           selected: vm.filtersService.model.distributionTimePeriod[vm.depletionRadio][1].name,
-          displayCode: vm.filtersService.model.distributionTimePeriod[vm.depletionRadio][1].displayCode
+          v3ApiCode: vm.filtersService.model.distributionTimePeriod[vm.depletionRadio][1].v3ApiCode
         };
         updateTotalRowDepletions();
 
@@ -435,19 +438,12 @@ module.exports = /*  @ngInject */
     }
 
     function initDateRanges() {
-      for (let timePeriod in DateRangeTimePeriod) {
-        if (isNaN(Number(timePeriod))) {
-          dateRangeSubscriptions[timePeriod] = dateRangeService.getDateRange(DateRangeTimePeriod[timePeriod]).subscribe(dateRange => {
-            if (dateRange.code !== 'LCM') vm.dateRanges[dateRange.displayCode] = dateRange.range;
-            else vm.dateRanges['CMTH'] = dateRange.range;
-          });
-        }
-      }
+      dateRangeSubscription = dateRangeService.getDateRanges().subscribe(dateRanges => {
+        vm.dateRanges = dateRanges;
+      });
     }
 
     $scope.$on('$destroy', () => {
-      for (let dateRange in dateRangeSubscriptions) {
-        dateRangeSubscriptions[dateRange].unsubscribe();
-      }
+      dateRangeSubscription.unsubscribe();
     });
   };
