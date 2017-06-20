@@ -4,7 +4,7 @@ import * as moment from 'moment';
 @Component({
   selector: 'greeting',
   template: require('./greeting.component.pug'),
-  styles: [require('./greeting.component.scss').toString()]
+  styles: [ require('./greeting.component.scss') ]
 })
 
 export class GreetingComponent implements OnInit {

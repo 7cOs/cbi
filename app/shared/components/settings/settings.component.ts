@@ -7,7 +7,8 @@ import { AppVersion } from '../../../models/app-version.model';
 
 @Component({
   selector: 'settings',
-  template: require('./settings.component.pug')
+  template: require('./settings.component.pug'),
+  styles: [ require('./settings.component.scss') ]
 })
 export class SettingsComponent implements OnInit {
   firstName: string;
