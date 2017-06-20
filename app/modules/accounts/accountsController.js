@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports = /*  @ngInject */
-  function accountsController($rootScope, $scope, $state, $log, $q, $window, $filter, $timeout, $analytics, myperformanceService, chipsService, filtersService, notesService, userService, storesService) {
+  function accountsController($rootScope, $scope, $state, $log, $q, $window, $filter, $timeout, $analytics, myperformanceService, chipsService, filtersService, notesService, userService, storesService, dateRangeService) {
 
     // ****************
     // CONTROLLER SETUP
@@ -75,6 +75,9 @@ module.exports = /*  @ngInject */
     vm._defaultTopLevelForLabel = 'CBBD';
     vm.topLevelForLabel = vm._defaultTopLevelForLabel;
     vm.premiseTypeValue = 'all';
+    vm.depletionSelectOpen = false;
+    vm.distributionSelectOpen = false;
+    vm.dateRanges = {};
 
     // top bottom public methods
     vm.topBottomData = {
@@ -113,7 +116,8 @@ module.exports = /*  @ngInject */
     vm.isHighlightStore = isHighlightStore;
     vm.getStoreAddress = getStoreAddress;
     // Have to create this variable because vm.selecteStore just has the name..Changing th binding to include Id involves a ton of work
-    var currentStore = null;
+    let currentStore = null;
+    let dateRangeSubscription = null;
 
     // Expose public methods
     vm.allOpportunitiesDisabled = allOpportunitiesDisabled;
@@ -931,6 +935,7 @@ module.exports = /*  @ngInject */
 
     function init() {
       initDefaultModelValues();
+      initDateRanges();
 
       const isNavigatedFromScorecard = $state.params.applyFiltersOnLoad && $state.params.pageData.brandTitle;
       const isNavigatedFromOpps = $state.params.storeid;
@@ -1679,4 +1684,14 @@ module.exports = /*  @ngInject */
         });
       } else return [];
     }
+
+    function initDateRanges() {
+      dateRangeSubscription = dateRangeService.getDateRanges().subscribe(dateRanges => {
+        vm.dateRanges = dateRanges;
+      });
+    }
+
+    $scope.$on('$destroy', () => {
+      dateRangeSubscription.unsubscribe();
+    });
   };
