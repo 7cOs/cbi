@@ -155,6 +155,7 @@
     "style-loader": "^0.13.2",
     "textangular": "~1.5.16",
     "throng": "~4.0.0",
+    "to-string-loader": "^1.1.5",
     "tslib": "~1.6.0",
     "tslint": "^5.4.2",
     "tslint-jasmine-rules": "~1.3.0",
