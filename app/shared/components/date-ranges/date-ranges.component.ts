@@ -12,12 +12,12 @@ import { DateRangeService } from '../../../services/date-range.service';
 
 export class DateRangeComponent implements OnInit {
 
-  @Input() dateRangeInput: number;
+  @Input() dateRange: number;
   private dateRangeDisplay: Observable <DateRange>;
 
   constructor(private dateRangeService: DateRangeService) {}
 
   ngOnInit() {
-    this.dateRangeDisplay = this.dateRangeService.getDateRange(<DateRangeTimePeriod>this.dateRangeInput);
+    this.dateRangeDisplay = this.dateRangeService.getDateRange(<DateRangeTimePeriod>this.dateRange);
   }
 }
