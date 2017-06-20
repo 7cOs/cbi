@@ -1,3 +1,4 @@
+import { getDateRangeMock } from '../../models/date-range.model.mock';
 import { Observable } from 'rxjs';
 
 describe('Unit: accountsController', function() {
@@ -324,14 +325,7 @@ describe('Unit: accountsController', function() {
   ];
 
   const mockDateRangeService = {
-    getDateRange: function() {
-      return Observable.of({
-        code: 'MTD',
-        description: 'Current Month to Date',
-        displayCode: 'MTD',
-        range: '06/01/2017 - 06/14/2017'
-      });
-    }
+    getDateRanges: () => Observable.of(getDateRangeMock())
   };
 
   beforeEach(function() {
@@ -427,7 +421,7 @@ describe('Unit: accountsController', function() {
             return $q.when(topBottomSnapshotStoreData);
         };
       });
-      spyOn(mockDateRangeService, 'getDateRange').and.callThrough();
+      spyOn(mockDateRangeService, 'getDateRanges').and.callThrough();
 
       brandSpy = spyOn(userService, 'getPerformanceBrand');
       brandSpy.and.returnValue($q.when(brandPerformanceData));

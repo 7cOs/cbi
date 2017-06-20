@@ -1,4 +1,4 @@
-.loader-wrap(ng-class="{'active': list.loadingList}")
+.loader-wrap(ng-if="list.loadingList" ng-class="{'active': list.loadingList}")
   loader
 
 .total-opportunities

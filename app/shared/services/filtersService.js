@@ -91,27 +91,33 @@ module.exports = /*  @ngInject */
         month: [{
           name: 'CMTH',
           displayValue: 'Clo Mth',
+          v3ApiCode: 'LCM',
           id: 1
         }, {
           name: 'CYTM',
           displayValue: 'CYTM',
+          v3ApiCode: 'CYTM',
           id: 2
         }, {
           name: 'FYTM',
           displayValue: 'FYTM',
+          v3ApiCode: 'FYTM',
           id: 3
         }],
         year: [{
           name: 'MTD',
           displayValue: 'MTD',
+          v3ApiCode: 'MTD',
           id: 4
         }, {
           name: 'CYTD',
           displayValue: 'CYTD',
+          v3ApiCode: 'CYTD',
           id: 5
         }, {
           name: 'FYTD',
           displayValue: 'FYTD',
+          v3ApiCode: 'FYTD',
           id: 6
         }]
       },
@@ -120,22 +126,26 @@ module.exports = /*  @ngInject */
           name: 'L60',
           displayValue: 'L60',
           displayCode: 'L60 Days',
+          v3ApiCode: 'L60',
           id: 1
         }, {
           name: 'L90',
           displayValue: 'L90',
           displayCode: 'L90 Days',
+          v3ApiCode: 'L90',
           id: 2
         }, {
           name: 'L120',
           displayValue: 'L120',
           displayCode: 'L120 Days',
+          v3ApiCode: 'L120',
           id: 3
         }],
         month: [{
           name: 'L03',
           displayValue: 'L03',
           displayCode: 'L03 Mth',
+          v3ApiCode: 'L3CM',
           id: 4
         }]
       },
