@@ -209,11 +209,6 @@
     display: inline-block;
     font-size: 1.1em;
     width: 265px;
-
-    @media screen and (-ms-high-contrast: active), screen and (-ms-high-contrast: none) {
-      padding-top: calc(5% - 26px);
-      vertical-align: top;
-    }
   }
 
   .md-select {
@@ -743,4 +738,9 @@ md-autocomplete.ng-isolate-scope {
   md-select {
     margin: 0;
   }
+}
+
+.ie .section-header-user {
+  padding-top: calc(5% - 26px);
+  vertical-align: top;
 }
