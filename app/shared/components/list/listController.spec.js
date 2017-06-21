@@ -325,6 +325,15 @@ describe('Unit: list controller', function() {
     });
   });
 
+  describe('[list.pageChangeCallback] method', function() {
+    it('should reset expandedOpportunities for current current page', function () {
+      ctrl.expandedOpportunities = 2;
+      expect(ctrl.expandedOpportunities).toEqual(2);
+      ctrl.resetOpportunitiesExpanded();
+      expect(ctrl.expandedOpportunities).toEqual(0);
+    });
+  });
+
   describe('[list.collapseCallback] method', function() {
     it('should decrease the expanded opportunities count', function() {
       ctrl.expandedOpportunities = 2;
