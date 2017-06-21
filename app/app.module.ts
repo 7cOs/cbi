@@ -30,6 +30,7 @@ const UpgradedComponents = [  // tslint:disable-line:variable-name
 // make ng1 services available to ng2 code (these are NOT passed as providers)
 AppUpgradeAdapter.upgradeNg1Provider('userService');
 AppUpgradeAdapter.upgradeNg1Provider('versionService');
+AppUpgradeAdapter.upgradeNg1Provider('routerService');
 
 @NgModule({
   imports: [

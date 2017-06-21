@@ -24,4 +24,5 @@ module.exports =
     .factory('toastService', require('./toastService'))
     .factory('httpInterceptorService', require('./httpInterceptorService'))
     .factory('encodingService', require('./encodingService'))
+    .factory('routerService', require('./routerService'))
     .factory('analyticsHelperService', require('./analyticsHelperService'));
