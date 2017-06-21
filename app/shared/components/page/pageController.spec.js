@@ -191,6 +191,7 @@ describe('Unit: page controller', function() {
 
     beforeEach(() => {
       filtersService.model.appliedFilter.pagination.currentPage = 0;
+      ctrl.pageChangeCallback = () => { return; };
 
       spyOn(opportunitiesService, 'getAndUpdateStoresWithOpportunities').and.callFake(function() {
         var deferred = q.defer();
@@ -199,21 +200,18 @@ describe('Unit: page controller', function() {
     });
 
     it('should update the current page', function() {
-      ctrl.pageChangeCallback = () => { return; };
       expect(filtersService.model.appliedFilter.pagination.currentPage).toEqual(0);
       ctrl.pageChanged(2);
       expect(filtersService.model.appliedFilter.pagination.currentPage).toEqual(2);
     });
 
     it('should set loadingList', function() {
-      ctrl.pageChangeCallback = () =>  { return; };
       expect(ctrl.loadingList).toBeFalsy();
       ctrl.pageChanged(2);
       expect(ctrl.loadingList).toBeTruthy();
     });
 
     it('should call opportunitiesService.getAndUpdateStoresWithOpportunities', function() {
-      ctrl.pageChangeCallback = () =>  { return; };
       expect(opportunitiesService.getAndUpdateStoresWithOpportunities).not.toHaveBeenCalled();
       ctrl.pageChanged(2);
       expect(opportunitiesService.getAndUpdateStoresWithOpportunities).toHaveBeenCalled();
