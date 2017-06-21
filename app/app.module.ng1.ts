@@ -2,6 +2,7 @@ import * as angular from 'angular';
 import { downgradeInjectable } from '@angular/upgrade/static';
 import { IDirectiveFactory } from 'angular';
 import 'textangular/dist/textAngular-sanitize.min';
+import '@uirouter/angularjs';
 
 import { AppComponent } from './shared/containers/app/app.component';
 import { AppUpgradeAdapter } from './app.module';
@@ -13,11 +14,8 @@ import { SettingsComponent } from './shared/components/settings/settings.compone
 
 (<any>window).CryptoJS = require('crypto-js');
 
-export const DowngradedGreetingComponent = AppUpgradeAdapter // tslint:disable-line:variable-name
-.downgradeNg2Component(GreetingComponent) as any;
-
 export default angular.module('cf', [
-  require('angular-ui-router'),
+  'ui.router',
   require('angular-cookies'),
   require('angular-material'),
   require('angular-animate'),
@@ -35,7 +33,7 @@ export default angular.module('cf', [
   // make ng2 components/services available to ng1 code & templates
   .directive('appRoot', AppUpgradeAdapter.downgradeNg2Component(AppComponent) as IDirectiveFactory)
   .directive('dateRanges', AppUpgradeAdapter.downgradeNg2Component(DateRangeComponent) as IDirectiveFactory)
-  .component('greeting', DowngradedGreetingComponent)
+  .directive('greeting', AppUpgradeAdapter.downgradeNg2Component(GreetingComponent) as IDirectiveFactory)
   .directive('settings', AppUpgradeAdapter.downgradeNg2Component(SettingsComponent) as IDirectiveFactory)
   .directive('notifications', AppUpgradeAdapter.downgradeNg2Component(NotificationsComponent) as IDirectiveFactory)
   .factory('dateRangeService', downgradeInjectable(DateRangeService))
