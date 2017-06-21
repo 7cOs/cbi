@@ -72,11 +72,11 @@ public class TargetListListingsPage extends LoadableComponent<TargetListListings
     return PageFactory.initElements(driver, EditTargetListModal.class);
   }
 
-  public TargetListDetailPage clickTargetListByName(String name) {
-    List<WebElement> targetLists = findElements(By.xpath("//*[@class='target-list-detail-container']/ul/li/div/div[@class='stats']/div/h4[1]"));
-    for (WebElement targetListElement : targetLists) {
-      if(targetListElement.getText().equalsIgnoreCase(name)){
-        targetListElement.click();
+  public TargetListDetailPage clickTargetListByName(String listName) {
+    List<WebElement> targetListTitles = findElements(By.xpath("//*[@class='target-list-detail-container']/ul/li/div/div[@class='stats']/div/h4[1]"));
+    for (WebElement titleElement : targetListTitles) {
+      if(titleElement.getText().equalsIgnoreCase(listName)){
+        titleElement.click();
         break;
       }
 
