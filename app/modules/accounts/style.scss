@@ -204,7 +204,6 @@
 }
 
 .section-header {
-  height: 20px;
 
   .md-select {
     height: 10px;
@@ -218,12 +217,13 @@
 }
 
 .widget-header {
-  float: none;
   display: block;
   padding: 0;
   border: 0;
   background: $gray-4;
   height: 85px;
+  width: 566px;
+  margin-top: 5px;
 
   .brands,
   .market,
@@ -410,7 +410,7 @@ span {
     margin: 0;
     font-weight: 300;
     color: $gray-1;
-    margin-top: -30px;
+    // margin-top: -30px;
     font-size: 1.3em;
     width: 120px;
 
