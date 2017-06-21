@@ -1,7 +1,13 @@
 'use strict';
 
 module.exports = /*  @ngInject */
-  function($mdThemingProvider, $locationProvider, $httpProvider, $analyticsProvider, $urlRouterProvider) {
+  function($mdThemingProvider, $locationProvider, $httpProvider, $analyticsProvider, $urlRouterProvider, $stateProvider) {
+
+    $stateProvider
+    .state('greeting', {
+      url: '/greeting',
+      component: 'greeting'
+    });
 
     if (!$httpProvider.defaults.headers.get) {
       $httpProvider.defaults.headers.get = {};
