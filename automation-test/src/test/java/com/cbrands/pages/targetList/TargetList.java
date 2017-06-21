@@ -353,23 +353,18 @@ public class TargetList extends LoadableComponent<TargetList> {
     return this;
   }
 
+  /**
+   * @deprecated Please use the method extracted to the TargetListListingsPage page object
+   * @see TargetListListingsPage
+   */
+  @Deprecated
   public TargetList selectTargetList(String listname) {
-    List<WebElement> elements = findElements(By.xpath("//div[@class='target-list-detail-container']/ul/li"));
+    final TargetListListingsPage targetListListingsPage = PageFactory.initElements(
+      driver,
+      TargetListListingsPage.class
+    );
 
-    System.out.println("listname: " + listname);
-
-    for (int i = 0; i < elements.size(); i++) {
-
-      String arr[] = elements.get(i).getText().split("\n");
-
-      if (arr[0].trim().equalsIgnoreCase(listname)) {
-        String str = "//div[3]/md-tabs/md-tabs-content-wrapper/md-tab-content[1]/div/md-content/div[2]/ul/li[" + (i + 1) + "]/div[1]/md-checkbox/div[1]";
-        WebElement element = findElement(By.xpath(str));
-        element.click();
-
-        return this;
-      }
-    }
+    targetListListingsPage.selectTargetListByName(listname);
 
     return this;
   }

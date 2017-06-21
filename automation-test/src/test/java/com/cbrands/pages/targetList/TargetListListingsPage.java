@@ -85,4 +85,36 @@ public class TargetListListingsPage extends LoadableComponent<TargetListListings
     return PageFactory.initElements(driver, TargetListDetailPage.class);
   }
 
+  public void selectTargetListByName(String listname) {
+    int index = getTargetListIndexByName(listname);
+    if(index >= 0) {
+      selectTargetListByIndex(index);
+    }
+  }
+
+  private int getTargetListIndexByName(String listname) {
+    int index = -1;
+
+    List<WebElement> elements = findElements(By.xpath("//div[@class='target-list-detail-container']/ul/li"));
+    for (int i = 0; i < elements.size(); i++) {
+
+      String arr[] = elements.get(i).getText().split("\n");
+
+      if (arr[0].trim().equalsIgnoreCase(listname)) {
+        index = i;
+        return index;
+      }
+
+    }
+
+    return index;
+  }
+
+  private void selectTargetListByIndex(int index) {
+    String str = "//div[3]/md-tabs/md-tabs-content-wrapper/md-tab-content[1]/div/md-content/div[2]/ul/li[" + (index + 1) + "]/div[1]/md-checkbox/div[1]";
+    WebElement element = findElement(By.xpath(str));
+    element.click();
+  }
+
+
 }
