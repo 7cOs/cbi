@@ -205,6 +205,18 @@
 
 .section-header {
 
+  .section-header-user {
+    display: inline-block;
+    font-size: 1.1em;
+    width: 265px;
+    vertical-align: top;
+    padding-top: calc(5% - 23px);
+
+    @media screen and (-ms-high-contrast: active), screen and (-ms-high-contrast: none) {
+      padding-top: calc(5% - 26px);
+    }
+  }
+
   .md-select {
     height: 10px;
     font-size: 10px;
@@ -223,7 +235,6 @@
   background: $gray-4;
   height: 85px;
   width: 566px;
-  margin-top: 5px;
 
   .brands,
   .market,
@@ -410,7 +421,6 @@ span {
     margin: 0;
     font-weight: 300;
     color: $gray-1;
-    // margin-top: -30px;
     font-size: 1.3em;
     width: 120px;
 
@@ -508,6 +518,11 @@ span {
 
   &.scorecard-table-accounts {
     padding-right: 0.5em;
+
+    .snapshot-label {
+      padding-top: 10px;
+      padding-bottom: 5px;
+    }
   }
 
   .loader-wrap.error {
