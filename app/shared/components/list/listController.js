@@ -97,6 +97,7 @@ module.exports = /*  @ngInject */
     vm.remainingOpportunitySpots = remainingOpportunitySpots;
     vm.handleAddToTargetList = handleAddToTargetList;
     vm.isTotalOpportunitiesWithinMaxLimit = isTotalOpportunitiesWithinMaxLimit;
+    vm.resetOpportunitiesExpanded = resetOpportunitiesExpanded;
 
     // Custom Headers for CSV export
     vm.csvHeader = [
@@ -628,6 +629,10 @@ module.exports = /*  @ngInject */
 
     function noOpportunitiesExpanded() {
       return vm.expandedOpportunities === 0;
+    }
+
+    function resetOpportunitiesExpanded() {
+      vm.expandedOpportunities = 0;
     }
 
     function showDisabled(message) {

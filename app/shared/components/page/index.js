@@ -7,7 +7,8 @@ module.exports =
     controller: 'pageController',
     controllerAs: 'page',
     bindings: {
-      pageName: '@'
+      pageName: '@',
+      pageChangeCallback: '&'
     }
   })
   .controller('pageController', require('./pageController'));
