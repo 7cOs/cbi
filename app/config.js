@@ -1,13 +1,11 @@
 'use strict';
 
+import * as myPerformance from './modules/my-performance/my-performance.state.ts';
+
 module.exports = /*  @ngInject */
   function($mdThemingProvider, $locationProvider, $httpProvider, $analyticsProvider, $urlRouterProvider, $stateProvider) {
 
-    $stateProvider
-    .state('greeting', {
-      url: '/greeting',
-      component: 'greeting'
-    });
+    myPerformance.configState($stateProvider);
 
     if (!$httpProvider.defaults.headers.get) {
       $httpProvider.defaults.headers.get = {};

@@ -12,8 +12,9 @@ import { DateRangeApiService } from './services/date-range-api.service';
 import { DateRangeService } from './services/date-range.service';
 import { DateRangeTransformerService } from './services/date-range-transformer.service';
 import { EffectsModule } from './state/effects/effects.module';
-import { GreetingComponent } from './shared/components/greeting/greeting.component';
 import { FormatOpportunitiesTypePipe } from './pipes/formatOpportunitiesType.pipe';
+import { GreetingComponent } from './shared/components/greeting/greeting.component';
+import { MyPerformanceComponent } from './modules/my-performance/my-performance.component';
 import { NotificationsComponent } from './shared/components/Notifications/notifications.component';
 import { rootReducer } from './state/reducers/root.reducer';
 import { SettingsComponent } from './shared/components/settings/settings.component';
@@ -31,6 +32,7 @@ const UpgradedComponents = [  // tslint:disable-line:variable-name
 AppUpgradeAdapter.upgradeNg1Provider('userService');
 AppUpgradeAdapter.upgradeNg1Provider('versionService');
 AppUpgradeAdapter.upgradeNg1Provider('routerService');
+AppUpgradeAdapter.upgradeNg1Provider('$state');
 
 @NgModule({
   imports: [
@@ -44,10 +46,11 @@ AppUpgradeAdapter.upgradeNg1Provider('routerService');
   declarations: [
     AppComponent,
     DateRangeComponent,
-    GreetingComponent,
-    SettingsComponent,
-    NotificationsComponent,
     FormatOpportunitiesTypePipe,
+    GreetingComponent,
+    MyPerformanceComponent,
+    NotificationsComponent,
+    SettingsComponent,
     TimeAgoPipe,
     ...UpgradedComponents
   ],
