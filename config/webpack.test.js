@@ -84,7 +84,10 @@ module.exports = {
 
       {
         test: /\.(css|scss)/,
-        loader: 'null-loader'
+        loaders: [
+          'to-string-loader',
+          'null-loader'
+        ]
       },
 
       // code instrumentation, post load
@@ -131,7 +134,8 @@ module.exports = {
         tslint: {
           emitErrors: false,
           failOnHint: true,
-          formatter: 'stylish'
+          formatter: 'stylish',
+          typeCheck: true
         },
 
         eslint: {

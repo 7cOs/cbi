@@ -10,6 +10,10 @@ import { UpgradeAdapter } from '@angular/upgrade';
 
 import { AppComponent } from './shared/containers/app/app.component';
 import { CbiSelectComponent } from './shared/components/cbi-select/cbi-select.component';
+import { DateRangeComponent } from './shared/components/date-ranges/date-ranges.component';
+import { DateRangeApiService } from './services/date-range-api.service';
+import { DateRangeService } from './services/date-range.service';
+import { DateRangeTransformerService } from './services/date-range-transformer.service';
 import { EffectsModule } from './state/effects/effects.module';
 import { GreetingComponent } from './shared/components/greeting/greeting.component';
 import { FormatOpportunitiesTypePipe } from './pipes/formatOpportunitiesType.pipe';
@@ -34,6 +38,7 @@ AppUpgradeAdapter.upgradeNg1Provider('versionService');
   declarations: [
     AppComponent,
     CbiSelectComponent,
+    DateRangeComponent,
     GreetingComponent,
     SettingsComponent,
     NotificationsComponent,
@@ -54,7 +59,11 @@ AppUpgradeAdapter.upgradeNg1Provider('versionService');
   exports: [
     MdSelectModule
   ],
-  providers: [ ]
+  providers: [
+    DateRangeApiService,
+    DateRangeService,
+    DateRangeTransformerService
+  ]
 })
 export class AppModule {
   constructor(angulartics2: Angulartics2, angulartics2GoogleAnalytics: Angulartics2GoogleAnalytics) {

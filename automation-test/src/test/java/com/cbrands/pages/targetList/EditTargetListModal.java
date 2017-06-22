@@ -17,7 +17,7 @@ public class EditTargetListModal extends LoadableComponent<EditTargetListModal> 
 
   private final WebDriver driver;
 
-  @FindBy(how = How.XPATH, using = "//div[contains(@class, 'target-list-modal')")
+  @FindBy(how = How.XPATH, using = "//div[contains(@class, 'target-list-modal')]")
   private WebElement modal;
 
   @FindBy(how = How.CSS, using = "input[placeholder='Enter List Name']")
@@ -31,6 +31,12 @@ public class EditTargetListModal extends LoadableComponent<EditTargetListModal> 
 
   @FindBy(how = How.XPATH, using = "//div/div[2]/button")
   private WebElement saveButton;
+
+  @FindBy(how = How.XPATH, using = "//button[contains(.,'Delete')]")
+  private WebElement deleteListButton;
+
+  @FindBy(how = How.XPATH, using = "//a[contains(.,'Yes, Delete')]")
+  private WebElement confirmDelete;
 
   public EditTargetListModal(WebDriver driver) {
     this.driver = driver;
@@ -83,6 +89,18 @@ public class EditTargetListModal extends LoadableComponent<EditTargetListModal> 
     targetListListingsPage.isLoaded();
 
     return targetListListingsPage;
+  }
+
+  public EditTargetListModal clickDeleteTargetListButton() {
+    deleteListButton.click();
+
+    return this;
+  }
+
+  public TargetListListingsPage confirmListDelete() {
+    waitForVisibleFluentWait(confirmDelete).click();
+
+    return PageFactory.initElements(driver, TargetListListingsPage.class);
   }
 
 }

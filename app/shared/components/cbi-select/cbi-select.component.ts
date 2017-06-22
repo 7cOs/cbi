@@ -43,10 +43,12 @@ export class CbiSelectComponent implements OnInit {
     });
   }
 
+  // tslint:disable-next-line:no-unused-variable
   private handleOnOpen(e: Event): void {
     this.isSelectOpen = true;
   }
 
+  // tslint:disable-next-line:no-unused-variable
   private handleOnClose(e: Event): void {
     this.isSelectOpen = false;
   }

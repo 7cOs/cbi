@@ -1,10 +1,10 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import * as moment from 'moment';
 
 @Component({
   selector: 'greeting',
   template: require('./greeting.component.pug'),
-  styles: [require('./greeting.component.scss').toString()]
+  styles: [ require('./greeting.component.scss') ]
 })
 
 export class GreetingComponent implements OnInit {

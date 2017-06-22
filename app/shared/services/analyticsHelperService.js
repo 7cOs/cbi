@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports = /*  @ngInject */
-  function apiHelperService($rootScope, $analytics, $location, $window, notesService) {
+  function apiHelperService($rootScope, $analytics, $location, $window, notesService, userService) {
 
     return {
       createTracker: createTracker,
@@ -70,16 +70,16 @@ module.exports = /*  @ngInject */
      * @memberOf cf.common.services
      */
     function setCustomDimensions() {
-      notesService.userInfo()
-        .then(function(sfdcUser) {
-          $analytics.setUserProperties({
-            dimension1: 'Constellation Brands',   // 'User Type', static
-            dimension2: sfdcUser.CompanyName,     // 'Company'
-            dimension3: sfdcUser.Division,        // 'Division'
-            dimension4: sfdcUser.Role__c,         // 'Role'
-            dimension5: sfdcUser.Supervisory__c,  // 'Supervisory'
-            dimension6: sfdcUser.CBI_Department__c       // 'Department'
-          });
+      notesService.userInfo().then(sfdcUser => {
+        $analytics.setUserProperties({
+          dimension1: 'Constellation Brands',     // 'User Type', static
+          dimension2: sfdcUser.CompanyName,       // 'Company'
+          dimension3: sfdcUser.Division,          // 'Division'
+          dimension4: sfdcUser.Role__c,           // 'Role'
+          dimension5: sfdcUser.Supervisory__c,    // 'Supervisory'
+          dimension6: sfdcUser.CBI_Department__c, // 'Department'
+          dimension7: userService.model.currentUser.employeeID // 'User Id'
         });
+      });
     }
   };

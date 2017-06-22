@@ -347,9 +347,9 @@ module.exports = /*  @ngInject */
         const numberOfOpps = targetList.opportunitiesSummary.opportunitiesCount;
         const numberOfStores = targetList.opportunitiesSummary.storesCount;
         opportunitiesService.setPaginationModel(numberOfOpps, numberOfStores);
+        vm.loadingList = false;
       }).catch(() => {
         vm.modalUnauthorizedAccess();
-      }).finally(() => {
         vm.loadingList = false;
       });
 

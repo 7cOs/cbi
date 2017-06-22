@@ -440,7 +440,8 @@ module.exports = /*  @ngInject */
         }
 
         $analytics.eventTrack(action, {
-          category: 'Filters', label: label
+          category: 'Filters',
+          label: label
         });
       }
     }

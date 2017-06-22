@@ -20,13 +20,15 @@ public class TargetListTest extends BaseTestCase {
 
   @BeforeMethod
   public void setUp() {
+    final TestUser testUser = TestUser.ACTOR4;
+
     login = new Login(driver);
     logout = new Logout(driver);
 
     log.info("\nLoading webpage...");
     driver.get(webAppBaseUrl);
-    HomePage homePage = login.loginWithValidCredentials(TestUser.ACTOR2.userName(), TestUser.ACTOR2.password());
-    Assert.assertTrue(homePage.isOnHomePage(), "Failed to log in user: " + TestUser.ACTOR2.userName());
+    HomePage homePage = login.loginWithValidCredentials(testUser.userName(), testUser.password());
+    Assert.assertTrue(homePage.isOnHomePage(), "Failed to log in user: " + testUser.userName());
 
     targetListListingPage = homePage.navigateToTargetListListingsPage();
   }
@@ -48,6 +50,11 @@ public class TargetListTest extends BaseTestCase {
 
     Assert.assertTrue(targetListListingPage.doesTargetListExist(targetListName), "Failure creating target list: " +
       targetListName);
+  }
+
+  @Test(dependsOnMethods = "createTargetList", dataProvider = "targetListData", description = "Delete Target List")
+  public void deleteTargetList(String targetListName, String targetListDescription, String collaborator) {
+    Assert.fail("Delete Target List not yet implemented.");
   }
 
   @DataProvider(name = "targetListData")
