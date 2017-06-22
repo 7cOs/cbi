@@ -1,6 +1,8 @@
 package com.cbrands.pages.targetList;
 
 import com.cbrands.helper.PropertiesCache;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -18,6 +20,7 @@ import static com.cbrands.helper.SeleniumUtils.*;
 public class TargetListListingsPage extends LoadableComponent<TargetListListingsPage> {
 
   private final WebDriver driver;
+  protected Log log = LogFactory.getLog(TargetListListingsPage.class);
 
   @FindBy(how = How.XPATH, using = "//h1[text()='Target Lists']")
   private WebElement listingsHeader;
@@ -94,6 +97,8 @@ public class TargetListListingsPage extends LoadableComponent<TargetListListings
       String str = "//div[3]/md-tabs/md-tabs-content-wrapper/md-tab-content[1]/div/md-content/div[2]/ul/li[" + (index + 1) + "]/div[1]/md-checkbox/div[1]";
       WebElement element = findElement(By.xpath(str));
       element.click();
+    } else {
+      log.info("No target list found by the following name: " + listname);
     }
   }
 
