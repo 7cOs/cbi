@@ -204,7 +204,12 @@
 }
 
 .section-header {
-  height: 20px;
+
+  .section-header-user {
+    display: inline-block;
+    font-size: 1.1em;
+    width: 265px;
+  }
 
   .md-select {
     height: 10px;
@@ -218,12 +223,12 @@
 }
 
 .widget-header {
-  float: none;
   display: block;
   padding: 0;
   border: 0;
   background: $gray-4;
   height: 85px;
+  width: 566px;
 
   .brands,
   .market,
@@ -410,7 +415,6 @@ span {
     margin: 0;
     font-weight: 300;
     color: $gray-1;
-    margin-top: -30px;
     font-size: 1.3em;
     width: 120px;
 
@@ -508,6 +512,11 @@ span {
 
   &.scorecard-table-accounts {
     padding-right: 0.5em;
+
+    .snapshot-label {
+      padding-top: 10px;
+      padding-bottom: 5px;
+    }
   }
 
   .loader-wrap.error {
@@ -729,4 +738,9 @@ md-autocomplete.ng-isolate-scope {
   md-select {
     margin: 0;
   }
+}
+
+.ie .section-header-user {
+  padding-top: calc(5% - 26px);
+  vertical-align: top;
 }
