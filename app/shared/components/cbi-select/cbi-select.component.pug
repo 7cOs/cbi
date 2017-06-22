@@ -1,9 +1,9 @@
-section
-  p {{title}}
+section.cbi-select
+  p.title {{title}}
 
   md-select([(ngModel)]="_model", (onClose)="handleOnClose($event)", (onOpen)="handleOnOpen($event)")
     md-option(*ngFor="let option of _options", [value]="option.value", (click)="_currentSubValue = option.subDisplayValue")
       div {{option.displayValue}}
         span(*ngIf="subKey && isSelectOpen") {{option.subDisplayValue}})
 
-  p(*ngIf="subDisplayKey") {{_currentSubValue}}
+  p.sub-title(*ngIf="subDisplayKey") {{_currentSubValue}}

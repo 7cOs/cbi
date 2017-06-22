@@ -5,13 +5,12 @@ section.landing-page
       section.my-performance(column="7")
         greeting([name]="l.greetingName")
 
-        p {{l.selectModel}}
         cbi-select(
           [options]="l.selectData",
           [display-key]="'name'",
           [value-key]="'value'",
           [sub-display-key]="'range'",
-          [title]="'CBI SELECT YALL!'",
+          [title]="'CBI SELECT TITLE'",
         )
 
         h2 My Performance
