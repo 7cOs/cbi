@@ -10,11 +10,11 @@ div.nopad(md-prevent-menu-close)
           span(*ngIf="notUnknown(notification.shortenedObject.store.store_number)")  \#{{notification.shortenedObject.store.store_number}}
         p.sku {{notification.shortenedObject.product.name | titlecase}}
           span  {{notification.shortenedObject.type | formatOpportunitiesType}}
-      div(*ngIf="notification.objectType.toUpperCase() === 'STORE'" ng-click="nb.goToNote(notification)")
+      div(*ngIf="notification.objectType.toUpperCase() === 'STORE'")
         p A new note was added to your retailer
         div.source {{notification.shortenedObject.store_name | titlecase}}
-          span(*ngIf="notification.shortenedObject.store_number && notUnknown(notification.shortenedObject.store_number)") &nbsp\#{{notification.shortenedObject.store_number}}
-      div(*ngIf="notification.objectType.toUpperCase() === 'DISTRIBUTOR'" ng-click="nb.goToNote(notification)")
+          span(*ngIf="notification.shortenedObject.store_number && notUnknown(notification.shortenedObject.store_number)")  \#{{notification.shortenedObject.store_number}}
+      div(*ngIf="notification.objectType.toUpperCase() === 'DISTRIBUTOR'")
         p A new note was added to your distributor
         div.source {{notification.shortenedObject.name | titlecase}}
     div.info
