@@ -84,7 +84,7 @@ public class TargetListListingsPage extends LoadableComponent<TargetListListings
     if(null != targetListElement) {
       targetListElement.click();
     } else {
-      log.info("No target list found by the following name: " + listName);
+      log.info("Cannot click Target List. No target list found by the following name: " + listName);
     }
 
     return PageFactory.initElements(driver, TargetListDetailPage.class);
@@ -97,7 +97,7 @@ public class TargetListListingsPage extends LoadableComponent<TargetListListings
       final WebElement targetListCheckBox = targetList.findElement(By.xpath("./div[1]/md-checkbox/div[1]"));
       targetListCheckBox.click();
     } else {
-      log.info("No target list found by the following name: " + listName);
+      log.info("Cannot select Target List checkbox. No target list found by the following name: " + listName);
     }
 
   }
