@@ -29,7 +29,7 @@ module.exports = /*  @ngInject */
 
       opportunitiesPromise.then(function() { vm.loadingList = false; });
 
-      if (angular.isFunction(vm.pageChangeCallback)) vm.pageChangeCallback();
+      if (angular.isFunction(vm.onPageChange)) vm.onPageChange();
     }
 
     // Private Methods
