@@ -91,7 +91,9 @@ public class TargetListListingsPage extends LoadableComponent<TargetListListings
   public void selectTargetListByName(String listname) {
     int index = getTargetListIndexByName(listname);
     if(index >= 0) {
-      selectTargetListByIndex(index);
+      String str = "//div[3]/md-tabs/md-tabs-content-wrapper/md-tab-content[1]/div/md-content/div[2]/ul/li[" + (index + 1) + "]/div[1]/md-checkbox/div[1]";
+      WebElement element = findElement(By.xpath(str));
+      element.click();
     }
   }
 
@@ -113,12 +115,5 @@ public class TargetListListingsPage extends LoadableComponent<TargetListListings
 
     return index;
   }
-
-  private void selectTargetListByIndex(int index) {
-    String str = "//div[3]/md-tabs/md-tabs-content-wrapper/md-tab-content[1]/div/md-content/div[2]/ul/li[" + (index + 1) + "]/div[1]/md-checkbox/div[1]";
-    WebElement element = findElement(By.xpath(str));
-    element.click();
-  }
-
 
 }
