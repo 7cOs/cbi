@@ -90,7 +90,7 @@ public class TargetListListingsPage extends LoadableComponent<TargetListListings
     return PageFactory.initElements(driver, TargetListDetailPage.class);
   }
 
-  public void selectTargetListByName(String listName) {
+  public TargetListListingsPage selectTargetListByName(String listName) {
     final WebElement targetList = getTargetListByName(listName);
 
     if(null != targetList) {
@@ -100,6 +100,7 @@ public class TargetListListingsPage extends LoadableComponent<TargetListListings
       log.info("Cannot select Target List checkbox. No target list found by the following name: " + listName);
     }
 
+    return this;
   }
 
   private WebElement getTargetListByName(String listName) {
