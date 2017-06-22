@@ -1070,7 +1070,7 @@ module.exports = /*  @ngInject */
           vm.premiseTypeValue = storeData.premiseTypeDesc;
           vm.filtersService.model.selected.premiseType = storeData.premiseTypeDesc;
         }
-      }).finally(function() {
+
         vm.loadingUnsoldStore = false;
       });
     }
