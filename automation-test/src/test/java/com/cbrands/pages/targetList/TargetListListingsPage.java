@@ -22,6 +22,9 @@ public class TargetListListingsPage extends LoadableComponent<TargetListListings
   @FindBy(how = How.XPATH, using = "//h1[text()='Target Lists']")
   private WebElement listingsHeader;
 
+  @FindBy(how = How.XPATH, using = "//*[@class='target-list-detail-container']/ul/li")
+  private List<WebElement> targetListElements;
+
   @FindBy(how = How.CSS, using = "div.target-action-buttons>button[class='btn-action']")
   private WebElement createNewListButton;
 
@@ -73,10 +76,10 @@ public class TargetListListingsPage extends LoadableComponent<TargetListListings
   }
 
   public TargetListDetailPage clickTargetListByName(String listName) {
-    List<WebElement> targetListTitles = findElements(By.xpath("//*[@class='target-list-detail-container']/ul/li/div/div[@class='stats']/div/h4[1]"));
-    for (WebElement titleElement : targetListTitles) {
-      if(titleElement.getText().equalsIgnoreCase(listName)){
-        titleElement.click();
+    for (WebElement element : targetListElements) {
+      final String elementTitle = element.findElement(By.xpath("./div/div[@class='stats']/div/h4[1]")).getText();
+      if (elementTitle.equalsIgnoreCase(listName)) {
+        element.click();
         break;
       }
 
@@ -95,9 +98,8 @@ public class TargetListListingsPage extends LoadableComponent<TargetListListings
   private int getTargetListIndexByName(String listname) {
     int index = -1;
 
-    List<WebElement> targetLists = findElements(By.xpath("//div[@class='target-list-detail-container']/ul/li"));
-    for (int i = 0; i < targetLists.size(); i++) {
-      final WebElement targetListElement = targetLists.get(i);
+    for (int i = 0; i < targetListElements.size(); i++) {
+      final WebElement targetListElement = targetListElements.get(i);
 
       String arr[] = targetListElement.getText().split("\n");
       final String elementTitle = arr[0].trim();
