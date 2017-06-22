@@ -41,7 +41,7 @@ public class TargetListTest extends BaseTestCase {
   }
 
   @Test(dataProvider = "targetListData", description = "Create a new Target List")
-  public void createTargetList(String targetListName, String targetListDescription, String collaborator) throws InterruptedException {
+  public void createTargetList(String targetListName, String targetListDescription) throws InterruptedException {
     targetListListingPage
       .clickCreateNewListButton()
       .chooseCreateNewListInListCreationChoiceModal()
@@ -54,7 +54,7 @@ public class TargetListTest extends BaseTestCase {
   }
 
   @Test(dependsOnMethods = "createTargetList", dataProvider = "targetListData", description = "Delete Target List")
-  public void deleteTargetList(String targetListName, String targetListDescription, String collaborator) {
+  public void deleteTargetList(String targetListName, String targetListDescription) {
     targetListListingPage
       .selectTargetListByName(targetListName)
       .clickDeleteButton();
@@ -65,7 +65,7 @@ public class TargetListTest extends BaseTestCase {
 
   @DataProvider(name = "targetListData")
   public static Object[][] targetListData() {
-    return new Object[][] { { "Smoke Test " + current_time_stamp, "test", "Stanley Rowley" } };
+    return new Object[][] { { "Smoke Test " + current_time_stamp, "test" } };
   }
 
 }
