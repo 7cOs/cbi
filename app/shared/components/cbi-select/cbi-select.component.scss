@@ -11,10 +11,10 @@
     text-transform: uppercase;
   }
 
-  // md-select {
+  md-select {
 
-  //   div.mat-select-trigger {
-  //     box-shadow: 0 1px 3px 0;
-  //   }
-  // }
+    /deep/ .mat-select-trigger {
+      box-shadow: 0 1px 3px 0;
+    }
+  }
 }
