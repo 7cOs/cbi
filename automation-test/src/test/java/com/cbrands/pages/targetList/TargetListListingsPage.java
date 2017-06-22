@@ -53,6 +53,16 @@ public class TargetListListingsPage extends LoadableComponent<TargetListListings
     return listingsHeader.isDisplayed();
   }
 
+  public TargetListListingsPage clickCreateNewListButton() {
+    waitForVisibleFluentWait(createNewListButton).click();
+    return this;
+  }
+
+  public EditTargetListModal chooseCreateNewListInListCreationChoiceModal() {
+    waitForVisibleFluentWait(listCreationChoiceModalButtons.get(0)).click();
+    return PageFactory.initElements(driver, EditTargetListModal.class);
+  }
+
   public boolean doesTargetListExist(String listname) {
     WebElement element = findElement(By.cssSelector("div[class='target-list-detail-container']"));
     waitForElementVisible(element, true);
@@ -66,16 +76,6 @@ public class TargetListListingsPage extends LoadableComponent<TargetListListings
     }
 
     return false;
-  }
-
-  public TargetListListingsPage clickCreateNewListButton() {
-    waitForVisibleFluentWait(createNewListButton).click();
-    return this;
-  }
-
-  public EditTargetListModal chooseCreateNewListInListCreationChoiceModal() {
-    waitForVisibleFluentWait(listCreationChoiceModalButtons.get(0)).click();
-    return PageFactory.initElements(driver, EditTargetListModal.class);
   }
 
   public TargetListDetailPage clickTargetListByName(String listName) {
