@@ -97,6 +97,26 @@ describe('Unit: list controller', function() {
           'shortenedObject': {
             'id': '909088'
           }
+        },
+        {
+          id: '112233',
+          objectId: 'abcd1234',
+          objectType: 'STORE',
+          shortenedObject: {
+            storeName: 'BUFFALO WILD WINGS',
+            'tdlinx_number': '001122'
+          },
+          salesforceUserNoteID: 'sfdc123'
+        },
+        {
+          id: '445566',
+          objectId: 'abcd5678',
+          objectType: 'DISTRIBUTOR',
+          shortenedObject: {
+            name: 'CHICAGO BEV SYSTEMS',
+            'tdlinx_number': '004455'
+          },
+          salesforceUserNoteID: 'sfdc456'
         }
       ];
       $httpBackend.expectGET('/opportunities').respond(200);
@@ -128,13 +148,54 @@ describe('Unit: list controller', function() {
       });
 
       ctrl.notificationClicked(notifications[0]);
-      expect($state.go).toHaveBeenCalledWith('opportunities', {'resetFiltersOnLoad': false, 'opportunityID': notifications[0].shortenedObject.id}, {reload: true});
+      expect($state.go.calls.argsFor(0)).toEqual(['opportunities', {
+        resetFiltersOnLoad: false,
+        opportunityID: notifications[0].shortenedObject.id
+      }, {
+        reload: true
+      }]);
 
       ctrl.notificationClicked(notifications[1]);
-      expect($state.go).toHaveBeenCalledWith('target-list-detail', ({id: notifications[1].shortenedObject.id}));
+      expect($state.go.calls.argsFor(1)).toEqual(['target-list-detail', {
+        id: notifications[1].shortenedObject.id
+      }]);
 
       ctrl.notificationClicked(notifications[2]);
-      expect($state.go).toHaveBeenCalledWith('accounts');
+      expect($state.go.calls.argsFor(2)).toEqual(['accounts']);
+
+      ctrl.notificationClicked(notifications[3]);
+      expect($state.go.calls.argsFor(3)).toEqual(['accounts', {
+        resetFiltersOnLoad: false,
+        applyFiltersOnLoad: true,
+        openNotesOnLoad: true,
+        pageData: {
+          account: {
+            id: [ notifications[3].objectId ],
+            name: notifications[3].shortenedObject.store_name,
+            type: notifications[3].objectType,
+            noteId: notifications[3].salesforceUserNoteID
+          }
+        },
+        storeId: notifications[3].shortenedObject.tdlinx_number
+      }]);
+      expect(notesService.model.currentStoreName).toEqual(notifications[3].shortenedObject.store_name);
+
+      ctrl.notificationClicked(notifications[4]);
+      expect($state.go.calls.argsFor(4)).toEqual(['accounts', {
+        resetFiltersOnLoad: false,
+        applyFiltersOnLoad: true,
+        openNotesOnLoad: true,
+        pageData: {
+          account: {
+            id: [ notifications[4].objectId ],
+            name: notifications[4].shortenedObject.name,
+            type: notifications[4].objectType,
+            noteId: notifications[4].salesforceUserNoteID
+          }
+        },
+        storeId: notifications[4].shortenedObject.tdlinx_number
+      }]);
+      expect(notesService.model.currentStoreName).toEqual(notifications[4].shortenedObject.name);
     });
 
     it('should hide the menu', function() {
@@ -331,17 +392,6 @@ describe('Unit: list controller', function() {
       ctrl.addToTargetList('73f2dc7f-2793-4044-9430-ac123afd0ee8', JSON.parse('{"id":"1699829___228-541-100___1487809625733","dateUpdated":"Thu Feb 23 00:27:05 UTC 2017","product":{"id":"228-541-100","name":"CORONA EXTRA 24OZ BT","type":"package","brand":"CORONA EXTRA","brandCode":"228"},"type":"CUSTOM","subType":"ND_001","impact":"H","impactDescription":"HIGH","status":"OPEN","rationale":"Based on account visit / discussion with decision-maker","effectiveDate":"20170223","expirationDate":null,"store":{"id":"1699829","versionedId":"201699829","name":"MANHATTAN PIZZA & WINE BAR","address":"22005 S ELLSWORTH RD, QUEEN CREEK, AZ 851428707","city":"QUEEN CREEK","state":"AZ","segmentation":"C","latitude":33.2485,"longitude":-111.6343,"storeNumber":null,"distributionL90Simple":0,"distributionL90SimpleYA":2,"distributionL90Effective":0,"distributionL90EffectiveYA":2,"velocity":0,"velocityYA":2,"depletionsCurrentYearToDate":0,"depletionsCurrentYearToDateYA":3,"opportunityCount":0,"highImpactOpportunityCount":0,"distributors":["CRESCENT CROWN DIST LLC - AZ (MESA)"],"streetAddress":"22005 S ELLSWORTH RD","zip":"85142","tradeChannel":"51","onPremise":true,"cbbdChain":false},"itemAuthorizationCode":null,"depletionsCurrentYearToDate":0,"depletionsCurrentYearToDateYA":0,"lastDepletionDate":null,"dismissed":false,"itemAuthorizationDesc":null,"featureTypeCode":null,"featureTypeDesc":null,"priorityPackageFlag":null}'));
       expect(filtersService.model.appliedFilter.pagination.totalStores).toEqual(1);
       expect(targetListService.addTargetListOpportunities).toHaveBeenCalled();
-    });
-  });
-  describe('[nb.goToNote]', function() {
-    it('should transition states', function() {
-      var deferredState = $q.defer();
-      spyOn($state, 'go').and.callFake(function() {
-        return deferredState.promise;
-      });
-      ctrl.goToNote({name: 'test', shortenedObject: {name: 'test'}});
-      expect($state.go).toHaveBeenCalled();
-      expect(notesService.model.currentStoreName).toEqual('test');
     });
   });
   describe('[nb.getTargetLists]', function() {

@@ -325,6 +325,15 @@ describe('Unit: list controller', function() {
     });
   });
 
+  describe('[list.onPageChange] method', function() {
+    it('should reset expandedOpportunities for current current page', function () {
+      ctrl.expandedOpportunities = 2;
+      ctrl.resetOpportunitiesExpanded();
+      expect(ctrl.expandedOpportunities).toEqual(0);
+      expect(ctrl.noOpportunitiesExpanded()).toBeTruthy();
+    });
+  });
+
   describe('[list.collapseCallback] method', function() {
     it('should decrease the expanded opportunities count', function() {
       ctrl.expandedOpportunities = 2;
@@ -614,6 +623,15 @@ describe('Unit: list controller', function() {
 
     it('should return true if expandedOpportunities equals 0', function() {
       ctrl.expandedOpportunities = 0;
+      expect(ctrl.noOpportunitiesExpanded()).toBeTruthy();
+    });
+  });
+
+  describe('[list.resetOpportunitiesExpanded] method', () => {
+    it('should reset the count of opportunities expanded', () => {
+      ctrl.expandedOpportunities = 1;
+      ctrl.resetOpportunitiesExpanded();
+      expect(ctrl.expandedOpportunities).toBe(0);
       expect(ctrl.noOpportunitiesExpanded()).toBeTruthy();
     });
   });
