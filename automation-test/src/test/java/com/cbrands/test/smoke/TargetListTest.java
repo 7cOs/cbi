@@ -55,9 +55,6 @@ public class TargetListTest extends BaseTestCase {
 
   @Test(dependsOnMethods = "createTargetList", dataProvider = "targetListData", description = "Delete Target List")
   public void deleteTargetList(String targetListName, String targetListDescription, String collaborator) {
-//    PageFactory.initElements(driver, TargetList.class)
-//      .selectTargetList(targetListName)
-//      .clickDelete_TargetListPage();
     targetListListingPage
       .selectTargetListByName(targetListName)
       .clickDeleteButton();
