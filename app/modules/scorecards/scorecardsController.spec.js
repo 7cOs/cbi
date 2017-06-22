@@ -1,5 +1,12 @@
+import { getDateRangeMock } from '../../models/date-range.model.mock';
+import { Observable } from 'rxjs';
+
 describe('Unit: scorecardsController', function() {
   var scope, ctrl, $state, filtersService, userService;
+
+  const mockDateRangeService = {
+    getDateRanges: () => Observable.of(getDateRangeMock())
+  };
 
   beforeEach(function() {
     // Get Mock Modules
@@ -18,7 +25,7 @@ describe('Unit: scorecardsController', function() {
       userService = _userService_;
 
       // Create Controller
-      ctrl = $controller('scorecardsController', {$scope: scope});
+      ctrl = $controller('scorecardsController', {$scope: scope, dateRangeService: mockDateRangeService});
 
       ctrl.depletionSort = {
         sortDescending: false,
@@ -75,6 +82,8 @@ describe('Unit: scorecardsController', function() {
         }
       }];
     });
+
+    spyOn(mockDateRangeService, 'getDateRanges').and.callThrough();
   });
 
   const remodeledDepletion = [{
