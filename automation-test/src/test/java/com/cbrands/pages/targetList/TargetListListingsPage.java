@@ -79,16 +79,30 @@ public class TargetListListingsPage extends LoadableComponent<TargetListListings
   }
 
   public TargetListDetailPage clickTargetListByName(String listName) {
+    WebElement targetListElement = getTargetListByName(listName);
+
+    if(null != targetListElement) {
+      targetListElement.click();
+    } else {
+      log.info("No target list found by the following name: " + listName);
+    }
+
+    return PageFactory.initElements(driver, TargetListDetailPage.class);
+  }
+
+  private WebElement getTargetListByName(String listName) {
+    WebElement targetListElement = null;
+
     for (WebElement element : targetListElements) {
       final String elementTitle = element.findElement(By.xpath("./div/div[@class='stats']/div/h4[1]")).getText();
       if (elementTitle.equalsIgnoreCase(listName)) {
-        element.click();
+        targetListElement = element;
         break;
       }
 
     }
 
-    return PageFactory.initElements(driver, TargetListDetailPage.class);
+    return targetListElement;
   }
 
   public void selectTargetListByName(String listname) {
