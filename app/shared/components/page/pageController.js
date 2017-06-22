@@ -20,6 +20,7 @@ module.exports = /*  @ngInject */
     function pageChanged(pageNumber) {
       const isTargetList = vm.pageName === 'target-list-detail';
       filtersService.model.appliedFilter.pagination.currentPage = pageNumber;
+
       vm.loadingList = true;
 
       const opportunitiesPromise = isTargetList
@@ -27,6 +28,8 @@ module.exports = /*  @ngInject */
         : opportunitiesService.getAndUpdateStoresWithOpportunities();
 
       opportunitiesPromise.then(function() { vm.loadingList = false; });
+
+      if (angular.isFunction(vm.pageChangeCallback)) vm.pageChangeCallback();
     }
 
     // Private Methods

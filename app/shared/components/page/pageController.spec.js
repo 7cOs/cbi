@@ -191,6 +191,7 @@ describe('Unit: page controller', function() {
 
     beforeEach(() => {
       filtersService.model.appliedFilter.pagination.currentPage = 0;
+      ctrl.pageChangeCallback = () => { return; };
 
       spyOn(opportunitiesService, 'getAndUpdateStoresWithOpportunities').and.callFake(function() {
         var deferred = q.defer();

@@ -13,9 +13,7 @@ import org.testng.Assert;
 
 import java.util.List;
 
-import static com.cbrands.helper.SeleniumUtils.findElement;
-import static com.cbrands.helper.SeleniumUtils.waitForElementVisible;
-import static com.cbrands.helper.SeleniumUtils.waitForVisibleFluentWait;
+import static com.cbrands.helper.SeleniumUtils.*;
 
 public class TargetListListingsPage extends LoadableComponent<TargetListListingsPage> {
 
@@ -72,6 +70,19 @@ public class TargetListListingsPage extends LoadableComponent<TargetListListings
   public EditTargetListModal chooseCreateNewListInListCreationChoiceModal() {
     waitForVisibleFluentWait(listCreationChoiceModalButtons.get(0)).click();
     return PageFactory.initElements(driver, EditTargetListModal.class);
+  }
+
+  public TargetListDetailPage clickTargetListByName(String name) {
+    List<WebElement> targetLists = findElements(By.xpath("//*[@class='target-list-detail-container']/ul/li/div/div[@class='stats']/div/h4[1]"));
+    for (WebElement targetListElement : targetLists) {
+      if(targetListElement.getText().equalsIgnoreCase(name)){
+        targetListElement.click();
+        break;
+      }
+
+    }
+
+    return PageFactory.initElements(driver, TargetListDetailPage.class);
   }
 
 }

@@ -292,6 +292,67 @@ public class TargetList extends LoadableComponent<TargetList> {
     return this;
   }
 
+  /**
+   * @deprecated Please use the method extracted to the TargetListListingsPage page object
+   * @see TargetListListingsPage
+   */
+  @Deprecated
+  public TargetList clickTargetList(String name) {
+    final TargetListListingsPage targetListListingsPage = PageFactory.initElements(
+      driver,
+      TargetListListingsPage.class
+    );
+    targetListListingsPage.clickTargetListByName(name);
+
+    return this;
+  }
+
+  /**
+   * @deprecated Please use the method extracted to the TargetListDetailPage page object
+   * @see TargetListDetailPage
+   */
+  @Deprecated
+  public TargetList clickManage() {
+    final TargetListDetailPage targetListDetailPage = PageFactory.initElements(driver, TargetListDetailPage.class);
+    targetListDetailPage.clickManageButton();
+
+    return this;
+  }
+
+  /**
+   * @deprecated Please use the method extracted to the TargetListDetailPage page object
+   * @see TargetListDetailPage
+   */
+  @Deprecated
+  public TargetList clickManageButton() {
+    final TargetListDetailPage targetListDetailPage = PageFactory.initElements(driver, TargetListDetailPage.class);
+    targetListDetailPage.clickManageButton();
+
+    return this;
+  }
+
+  /**
+   * @deprecated Please use the method extracted to the EditTargetListModal page object
+   * @see EditTargetListModal
+   */
+  @Deprecated
+  public TargetList clickDelete_TargetListPage() {
+    final EditTargetListModal editTargetListModal = PageFactory.initElements(driver, EditTargetListModal.class);
+    editTargetListModal.clickDeleteTargetListButton();
+    return this;
+  }
+
+  /**
+   * @deprecated Please use the method extracted to the EditTargetListModal page object
+   * @see EditTargetListModal
+   */
+  @Deprecated
+  public TargetList clickYesDelete() {
+    final EditTargetListModal editTargetListModal = PageFactory.initElements(driver, EditTargetListModal.class);
+    editTargetListModal.confirmListDelete();
+    return this;
+  }
+
   public TargetList typeTargetName(String name) {
 
 		WebElement element = findElement(By.xpath("//input[@placeholder='Enter List Name']"));
@@ -344,19 +405,6 @@ public class TargetList extends LoadableComponent<TargetList> {
 
 	}
 
-	public TargetList clickNewTargetList(String name) {
-		List<WebElement> MyTargetLists = findElements(By.xpath("//*[@id='tab-content-2']/div/md-content/div[@class='target-list-detail-container']/ul/li/div/div[@class='stats']/div/h4[1]"));
-		for (WebElement webElement : MyTargetLists) {
-			if(webElement.getText().equalsIgnoreCase(name)){
-				JavascriptExecutor js = (JavascriptExecutor) driver;
-				js.executeScript("arguments[0].click();", webElement);
-				break;
-			}
-
-		}
-		return this;
-	}
-
 	public boolean checkTargetLists(String name) {
 		List<WebElement> MyTargetLists = findElements(By.xpath("//*[@id='tab-content-2']/div/md-content/div[@class='target-list-detail-container']/ul/li/div/div[@class='stats']/div/h4[1]"));
 		for (WebElement webElement : MyTargetLists) {
@@ -365,19 +413,6 @@ public class TargetList extends LoadableComponent<TargetList> {
 			}
 		}
 		return false;
-	}
-
-	public TargetList clickTargetList(String name) {
-		List<WebElement> MyTargetLists = findElements(By.xpath("//*[@id='tab-content-2']/div/md-content/div[@class='target-list-detail-container']/ul/li/div/div[@class='stats']/div/h4[1]"));
-		for (WebElement webElement : MyTargetLists) {
-			if(webElement.getText().equalsIgnoreCase(name)){
-				JavascriptExecutor js = (JavascriptExecutor) driver;
-				js.executeScript("arguments[0].click();", webElement);
-				break;
-			}
-
-		}
-		return this;
 	}
 
 	public TargetList clickTargetListFromShared(String name) {
@@ -436,18 +471,6 @@ public class TargetList extends LoadableComponent<TargetList> {
 		return PageFactory.initElements(driver, HomePage.class);
 	}
 
-	public TargetList clickManage() {
-		// waitForElementVisible(TargetListManageButton, true);
-		// waitForElementToClickable(TargetListManageButton,true);
-		// TargetListManageButton.click();
-
-		List<WebElement> elements = findElements(By.xpath("//*[@class='hero-actions']/button"));
-
-		JavascriptExecutor js = (JavascriptExecutor) driver;
-		js.executeScript("arguments[0].click();", elements.get(0));
-		return this;
-	}
-
 	public TargetList clickCollaborator() {
 		//System.out.println("Inside collaborator");
 		//waitForElementVisible(collaborator, true);
@@ -483,12 +506,6 @@ public class TargetList extends LoadableComponent<TargetList> {
 		WebElement element = findElement(By.xpath("//h1[text()='" + targetListName + "']"));
 		waitForElementVisible(element, true);
 		element.click();
-		return this;
-	}
-
-	public TargetList clickManageButton() {
-		TargetListManageButton.sendKeys(Keys.ENTER);
-
 		return this;
 	}
 
@@ -969,11 +986,6 @@ public class TargetList extends LoadableComponent<TargetList> {
 		return this;
 	}
 
-	public TargetList clickDelete_TargetListPage() {
-		deleteTarget.click();
-		return this;
-	}
-
 	public String getDeleteListText() {
 		WebElement element = findElement(By.xpath("//md-content/navbar/div[2]"));
 		return element.getText().trim();
@@ -1050,11 +1062,6 @@ public class TargetList extends LoadableComponent<TargetList> {
 
 	public TargetList openTargetListUsingURL(String URL) {
 		driver.get(URL);
-		return this;
-	}
-
-	public TargetList clickYesDelete() {
-		waitForVisibleFluentWait(yesDelete).click();
 		return this;
 	}
 
