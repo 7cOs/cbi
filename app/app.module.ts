@@ -14,7 +14,7 @@ import { DateRangeTransformerService } from './services/date-range-transformer.s
 import { EffectsModule } from './state/effects/effects.module';
 import { GreetingComponent } from './shared/components/greeting/greeting.component';
 import { FormatOpportunitiesTypePipe } from './pipes/formatOpportunitiesType.pipe';
-import { NotificationsComponent } from './shared/components/Notifications/notifications.component';
+import { NotificationsComponent } from './shared/components/notifications/notifications.component';
 import { rootReducer } from './state/reducers/root.reducer';
 import { SettingsComponent } from './shared/components/settings/settings.component';
 import { TimeAgoPipe } from './pipes/timeAgo.pipe';
