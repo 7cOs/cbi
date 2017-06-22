@@ -90,6 +90,18 @@ public class TargetListListingsPage extends LoadableComponent<TargetListListings
     return PageFactory.initElements(driver, TargetListDetailPage.class);
   }
 
+  public void selectTargetListByName(String listName) {
+    final WebElement targetList = getTargetListByName(listName);
+
+    if(null != targetList) {
+      final WebElement targetListCheckBox = targetList.findElement(By.xpath("./div[1]/md-checkbox/div[1]"));
+      targetListCheckBox.click();
+    } else {
+      log.info("No target list found by the following name: " + listName);
+    }
+
+  }
+
   private WebElement getTargetListByName(String listName) {
     WebElement targetListElement = null;
 
@@ -103,36 +115,6 @@ public class TargetListListingsPage extends LoadableComponent<TargetListListings
     }
 
     return targetListElement;
-  }
-
-  public void selectTargetListByName(String listname) {
-    int index = getTargetListIndexByName(listname);
-    if(index >= 0) {
-      String str = "//div[3]/md-tabs/md-tabs-content-wrapper/md-tab-content[1]/div/md-content/div[2]/ul/li[" + (index + 1) + "]/div[1]/md-checkbox/div[1]";
-      WebElement element = findElement(By.xpath(str));
-      element.click();
-    } else {
-      log.info("No target list found by the following name: " + listname);
-    }
-  }
-
-  private int getTargetListIndexByName(String listname) {
-    int index = -1;
-
-    for (int i = 0; i < targetListElements.size(); i++) {
-      final WebElement targetListElement = targetListElements.get(i);
-
-      String arr[] = targetListElement.getText().split("\n");
-      final String elementTitle = arr[0].trim();
-
-      if (elementTitle.equalsIgnoreCase(listname)) {
-        index = i;
-        break;
-      }
-
-    }
-
-    return index;
   }
 
 }
