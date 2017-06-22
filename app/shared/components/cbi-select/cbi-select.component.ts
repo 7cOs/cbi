@@ -11,18 +11,19 @@ export class CbiSelectComponent implements OnInit {
   @Input() displayKey: string;
   @Input() valueKey: string;
   @Input() subDisplayKey?: string;
-  @Input() model: any;
   @Input() title?: string;
 
+  private _model: any;
   private _options: any[];
-  private isSelectOpen: boolean = false;
-  private currentSubValue: any;
+  private _currentSubValue: any;
+  private _isSelectOpen: boolean = false;
 
   constructor() {}
 
   ngOnInit() {
     this._options = this.initOptionData(this.options);
-    if (this.subDisplayKey) this.initCurrentSubValue();
+    this._model = this._options[0].value;
+    if (this.subDisplayKey) this._currentSubValue = this._options[0].subDisplayValue;
   }
 
   private initOptionData(options: any[]): any[] {
@@ -37,19 +38,13 @@ export class CbiSelectComponent implements OnInit {
     });
   }
 
-  private initCurrentSubValue(): void {
-    this._options.forEach(option => {
-      if (option.value === this.model) this.currentSubValue = option.subDisplayValue;
-    });
-  }
-
   // tslint:disable-next-line:no-unused-variable
   private handleOnOpen(e: Event): void {
-    this.isSelectOpen = true;
+    this._isSelectOpen = true;
   }
 
   // tslint:disable-next-line:no-unused-variable
   private handleOnClose(e: Event): void {
-    this.isSelectOpen = false;
+    this._isSelectOpen = false;
   }
 }

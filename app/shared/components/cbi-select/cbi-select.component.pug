@@ -1,9 +1,9 @@
 section
   p {{title}}
 
-  md-select((onClose)="handleOnClose($event)", (onOpen)="handleOnOpen($event)")
-    md-option(*ngFor="let option of _options", [value]="option.value", (click)="currentSubValue = option.subDisplayValue")
+  md-select([(ngModel)]="_model", (onClose)="handleOnClose($event)", (onOpen)="handleOnOpen($event)")
+    md-option(*ngFor="let option of _options", [value]="option.value", (click)="_currentSubValue = option.subDisplayValue")
       div {{option.displayValue}}
         span(*ngIf="subKey && isSelectOpen") {{option.subDisplayValue}})
 
-  p(*ngIf="subDisplayKey") {{currentSubValue}}
+  p(*ngIf="subDisplayKey") {{_currentSubValue}}
