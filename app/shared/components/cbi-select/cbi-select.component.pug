@@ -1,7 +1,7 @@
 section
   p {{title}}
 
-  md-select([ngModel]="model", (onClose)="handleOnClose($event)", (onOpen)="handleOnOpen($event)")
+  md-select((onClose)="handleOnClose($event)", (onOpen)="handleOnOpen($event)")
     md-option(*ngFor="let option of _options", [value]="option.value", (click)="currentSubValue = option.subDisplayValue")
       div {{option.displayValue}}
         span(*ngIf="subKey && isSelectOpen") {{option.subDisplayValue}})
