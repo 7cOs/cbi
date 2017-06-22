@@ -95,14 +95,16 @@ public class TargetListListingsPage extends LoadableComponent<TargetListListings
   private int getTargetListIndexByName(String listname) {
     int index = -1;
 
-    List<WebElement> elements = findElements(By.xpath("//div[@class='target-list-detail-container']/ul/li"));
-    for (int i = 0; i < elements.size(); i++) {
+    List<WebElement> targetLists = findElements(By.xpath("//div[@class='target-list-detail-container']/ul/li"));
+    for (int i = 0; i < targetLists.size(); i++) {
+      final WebElement targetListElement = targetLists.get(i);
 
-      String arr[] = elements.get(i).getText().split("\n");
+      String arr[] = targetListElement.getText().split("\n");
+      final String elementTitle = arr[0].trim();
 
-      if (arr[0].trim().equalsIgnoreCase(listname)) {
+      if (elementTitle.equalsIgnoreCase(listname)) {
         index = i;
-        return index;
+        break;
       }
 
     }
