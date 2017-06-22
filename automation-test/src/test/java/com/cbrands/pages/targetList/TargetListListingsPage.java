@@ -25,14 +25,17 @@ public class TargetListListingsPage extends LoadableComponent<TargetListListings
   @FindBy(how = How.XPATH, using = "//h1[text()='Target Lists']")
   private WebElement listingsHeader;
 
-  @FindBy(how = How.XPATH, using = "//*[@class='target-list-detail-container']/ul/li")
-  private List<WebElement> targetListElements;
+  @FindBy(how = How.XPATH, using = "//button[contains(., 'Delete')]")
+  private WebElement deleteButton;
 
   @FindBy(how = How.CSS, using = "div.target-action-buttons>button[class='btn-action']")
   private WebElement createNewListButton;
 
   @FindAll(@FindBy(how=How.CSS, using = "div[class='modal target-list-switch-modal']>div.modal-form>div.row>button[class='btn-action col-6']"))
   private List<WebElement> listCreationChoiceModalButtons;
+
+  @FindBy(how = How.XPATH, using = "//*[@class='target-list-detail-container']/ul/li")
+  private List<WebElement> targetListElements;
 
   public TargetListListingsPage(WebDriver driver) {
     this.driver = driver;
@@ -51,6 +54,11 @@ public class TargetListListingsPage extends LoadableComponent<TargetListListings
   public boolean isHeaderDisplayed() {
     waitForVisibleFluentWait(listingsHeader);
     return listingsHeader.isDisplayed();
+  }
+
+  public TargetListListingsPage clickDeleteButton() {
+    waitForElementToClickable(deleteButton, true).click();
+    return this;
   }
 
   public TargetListListingsPage clickCreateNewListButton() {
