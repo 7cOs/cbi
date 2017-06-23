@@ -303,13 +303,25 @@ public class HomePage extends LoadableComponent<HomePage>{
     	return PageFactory.initElements(driver, TargetList.class);
     }
 
+	/**
+   * @deprecated Please use navigateToAccountDashboardPage() instead,
+   * which returns the AccountDashboardPage page object.
+   * This one returns a deprecated page object.
+   */
+  @Deprecated
     public AccountDashboard navigateToAccountDashboard(){
-    	waitForVisibleFluentWait(myPerformanceLink).click();
-    	waitForVisibleFluentWait(accountDashboardLink).click();
+      navigateToAccountDashboardPage();
 	    return PageFactory.initElements(driver, AccountDashboard.class);
     }
 
-    public MyScorecards navigateToMyScoreCards(){
+  public AccountDashboardPage navigateToAccountDashboardPage() {
+    waitForVisibleFluentWait(myPerformanceLink).click();
+    waitForVisibleFluentWait(accountDashboardLink).click();
+
+    return PageFactory.initElements(driver, AccountDashboardPage.class);
+  }
+
+  public MyScorecards navigateToMyScoreCards(){
     	waitForVisibleFluentWait(myPerformanceLink).click();
     	waitForVisibleFluentWait(myScoreCards).click();
     	waitForVisible(By.cssSelector("a[href='/scorecards']"));
