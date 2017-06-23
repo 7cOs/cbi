@@ -138,8 +138,7 @@ module.exports = /*  @ngInject */
 
     function changePremise() {
       var payload = {'type': 'noencode'};
-      if (vm.distributionRadioOptions.selected.onOffPremise === 'on') payload.premiseType = 'on';
-      else payload.premiseType = 'off';
+      payload.premiseType = vm.distributionRadioOptions.selected.onOffPremise === 'on' ? 'on' : 'off';
 
       userService.getPerformanceDistribution(payload).then(function(data) {
         userService.model.distribution = getRemodeledCollection(data, 'distribution');
@@ -316,8 +315,7 @@ module.exports = /*  @ngInject */
   }
 
     function updateTotalRowDistributions() {
-      let totalObj = {};
-      totalObj = $filter('filter')(userService.model.distribution, {type: 'Total'});
+      let totalObj = $filter('filter')(userService.model.distribution, {type: 'Total'}) || {};
       vm.totalDistributions = totalObj[0]
         ? $filter('filter')(totalObj[0].measures, {timeframe: vm.distributionSelectOptions.selected})
         : {};
@@ -389,13 +387,13 @@ module.exports = /*  @ngInject */
             };
 
             measure['percentTotal'] = {
-              simple: getValidValue((measure.distributionsSimple / vm.totalDistributions[0].distributionsSimple) * 100, 1),
-              effective: getValidValue((measure.distributionsEffective / vm.totalDistributions[0].distributionsEffective) * 100, 1)
+              simple: getValidValue(vm.totalDistributions[0] ? (measure.distributionsSimple / vm.totalDistributions[0].distributionsSimple * 100) : null, 1),
+              effective: getValidValue(vm.totalDistributions[0] ? (measure.distributionsEffective / vm.totalDistributions[0].distributionsEffective * 100) : null, 1)
             };
 
             measure['percentBuTotal'] = {
-              simple: getValidValue((measure.distributionsSimpleBU / vm.totalDistributions[0].distributionsSimpleBU) * 100, 1),
-              effective: getValidValue((measure.distributionsEffectiveBU / vm.totalDistributions[0].distributionsEffectiveBU) * 100, 1)
+              simple: getValidValue(vm.totalDistributions[0] ? (measure.distributionsSimpleBU / vm.totalDistributions[0].distributionsSimpleBU * 100) : null, 1),
+              effective: getValidValue(vm.totalDistributions[0] ? (measure.distributionsEffectiveBU / vm.totalDistributions[0].distributionsEffectiveBU * 100) : null, 1)
             };
           });
 
