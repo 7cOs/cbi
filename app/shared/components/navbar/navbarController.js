@@ -134,6 +134,9 @@ module.exports = /*  @ngInject */
         $state.go('opportunities', {'resetFiltersOnLoad': false, 'opportunityID': notification.shortenedObject.id}, {reload: true});
       } else if (notification.objectType.toUpperCase() === 'ACCOUNT') {
         $state.go('accounts');
+      } else if (notification.objectType.toUpperCase() === 'STORE' ||
+                 notification.objectType.toUpperCase() === 'DISTRIBUTOR') {
+        goToNote(notification);
       }
 
       $mdMenu.hide();
