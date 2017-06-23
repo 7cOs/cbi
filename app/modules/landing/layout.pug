@@ -10,7 +10,13 @@ section.landing-page
           [display-key]="'name'",
           [value-key]="'value'",
           [sub-display-key]="'range'",
-          [title]="'CBI SELECT TITLE'",
+          [title]="'Time Period'"
+        )
+
+        cbi-select(
+          [options]="l.selectData2",
+          [display-key]="'person'",
+          [value-key]="'personValue'",
         )
 
         h2 My Performance
