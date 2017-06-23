@@ -12,8 +12,10 @@ public enum TestUser {
   ACTOR2 ("stash.rowley@cbrands.com", "Corona.2016", "Stash", ""),
   @Deprecated
   ACTOR3 ("eric.ramey@cbrands.com", "Corona.2016", "Eric", "Ramey"),
+
   ACTOR4 ("chris.williams@cbrands.com", "Corona.2016", "Chris", "Williams"),
-  ACTOR5 ("joe.delapaz@cbrands.com", "Corona.2016", "Joe", "Delapaz");
+  ACTOR5 ("joe.delapaz@cbrands.com", "Corona.2016", "Joe", "Delapaz"),
+  NOTES_ACTOR("chelsea.hoff@cbrands.com", "Corona.2016", "Chelsea", "Hoff");
 
   private final String userName;
   private final String password;
