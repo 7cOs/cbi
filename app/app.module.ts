@@ -16,8 +16,9 @@ import { DateRangeApiService } from './services/date-range-api.service';
 import { DateRangeService } from './services/date-range.service';
 import { DateRangeTransformerService } from './services/date-range-transformer.service';
 import { EffectsModule } from './state/effects/effects.module';
-import { GreetingComponent } from './shared/components/greeting/greeting.component';
 import { FormatOpportunitiesTypePipe } from './pipes/formatOpportunitiesType.pipe';
+import { GreetingComponent } from './shared/components/greeting/greeting.component';
+import { MyPerformanceModule } from './containers/my-performance/my-performance.module';
 import { NotificationsComponent } from './shared/components/Notifications/notifications.component';
 import { rootReducer } from './state/reducers/root.reducer';
 import { SettingsComponent } from './shared/components/settings/settings.component';
@@ -34,19 +35,9 @@ const UpgradedComponents = [  // tslint:disable-line:variable-name
 // make ng1 services available to ng2 code (these are NOT passed as providers)
 AppUpgradeAdapter.upgradeNg1Provider('userService');
 AppUpgradeAdapter.upgradeNg1Provider('versionService');
+AppUpgradeAdapter.upgradeNg1Provider('$state');
 
 @NgModule({
-  declarations: [
-    AppComponent,
-    CbiSelectComponent,
-    DateRangeComponent,
-    GreetingComponent,
-    SettingsComponent,
-    NotificationsComponent,
-    FormatOpportunitiesTypePipe,
-    TimeAgoPipe,
-    ...UpgradedComponents
-  ],
   imports: [
     Angulartics2Module.forRoot([ Angulartics2GoogleAnalytics ]),
     BrowserModule,
@@ -55,11 +46,23 @@ AppUpgradeAdapter.upgradeNg1Provider('versionService');
     FormsModule,
     HttpModule,
     MdSelectModule,
+    MyPerformanceModule,
     RouterModule.forRoot([ {path: 'placeholder', redirectTo: '/'} ]), // need ng2 router for angulartics2 to work
     StoreModule.provideStore(rootReducer)
   ],
   exports: [
     MdSelectModule
+  ],
+  declarations: [
+    AppComponent,
+    CbiSelectComponent,
+    DateRangeComponent,
+    FormatOpportunitiesTypePipe,
+    GreetingComponent,
+    NotificationsComponent,
+    SettingsComponent,
+    TimeAgoPipe,
+    ...UpgradedComponents
   ],
   providers: [
     DateRangeApiService,

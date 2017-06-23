@@ -1,5 +1,5 @@
 'use strict';
-import { DateRangeTimePeriod } from '../../enums/date-range-time-period.enum';
+const DateRangeTimePeriod = require('../../enums/date-range-time-period.enum').DateRangeTimePeriod;
 
 module.exports = /*  @ngInject */
   function landingController($rootScope, $state, $filter, $mdSelect, filtersService, chipsService, myperformanceService, userService) {
