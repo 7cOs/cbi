@@ -1,4 +1,5 @@
 .cbi-select {
+  width: 320px;
 
   .title {
     color: #4A4A4A;
@@ -7,14 +8,84 @@
     font-weight: 600;
     letter-spacing: 1px;
     margin-bottom: 6px;
+    margin-left: 5px;
     outline: 0;
     text-transform: uppercase;
   }
 
+  .sub-title {
+    color: #4a4a4a;
+    font-family: WorkSans;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 1.2px;
+    margin-left: 5px;
+    margin-top: 5px;
+    text-align: left;
+  }
+
   md-select {
+    margin: 0;
+    width: 100%;
 
     /deep/ .mat-select-trigger {
+      background: #FFFFFF;
       box-shadow: 0 1px 3px 0;
+      height: 40px;
+      width: 100%;
+
+      .mat-select-value {
+        color: #4A4A4A;
+        font-size: 16px;
+        font-weight: 300;
+        height: 40px;
+        letter-spacing: 1px;
+        padding: 0;
+        width: 85%;
+      }
+
+      .mat-select-arrow {
+        background-color: #F3F3F3;
+        background-image: url('../../../assets/img/icons/drop-chevron.svg');
+        background-position: center;
+        background-repeat: no-repeat;
+        background-size: 15px;
+        border: none;
+        height: 100%;
+        margin: 0;
+        padding: 0;
+        width: 15%;
+      }
+
+      .mat-select-underline {
+        display: none;
+      }
+    }
+  }
+}
+
+.cbi-select-option {
+  border-bottom: 1px dotted #F3F3F3;
+  padding: 5px;
+
+  .option-container {
+    color: #4A4A4A;
+    line-height: normal;
+    padding: 5px;
+
+    .option-top-text {
+      font-size: 16px;
+      font-weight: 300;
+      height: 10px;
+      margin: 0;
+      text-align: left;
+    }
+
+    .option-sub-text {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 1.2px;
+      margin-top: 15px;
     }
   }
 }
