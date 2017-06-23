@@ -1,6 +1,6 @@
 'use strict';
 
-import * as myPerformance from './modules/my-performance/my-performance.state.ts';
+import * as myPerformance from './containers/my-performance/my-performance.state.ts';
 
 module.exports = /*  @ngInject */
   function($mdThemingProvider, $locationProvider, $httpProvider, $analyticsProvider, $urlRouterProvider, $stateProvider) {
