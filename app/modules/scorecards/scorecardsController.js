@@ -387,13 +387,13 @@ module.exports = /*  @ngInject */
             };
 
             measure['percentTotal'] = {
-              simple: getValidValue(vm.totalDistributions[0] ? (measure.distributionsSimple / vm.totalDistributions[0].distributionsSimple * 100) : null, 1),
-              effective: getValidValue(vm.totalDistributions[0] ? (measure.distributionsEffective / vm.totalDistributions[0].distributionsEffective * 100) : null, 1)
+              simple: getValidValue(vm.totalDistributions[0] ? ((measure.distributionsSimple / vm.totalDistributions[0].distributionsSimple) * 100) : null, 1),
+              effective: getValidValue(vm.totalDistributions[0] ? ((measure.distributionsEffective / vm.totalDistributions[0].distributionsEffective) * 100) : null, 1)
             };
 
             measure['percentBuTotal'] = {
-              simple: getValidValue(vm.totalDistributions[0] ? (measure.distributionsSimpleBU / vm.totalDistributions[0].distributionsSimpleBU * 100) : null, 1),
-              effective: getValidValue(vm.totalDistributions[0] ? (measure.distributionsEffectiveBU / vm.totalDistributions[0].distributionsEffectiveBU * 100) : null, 1)
+              simple: getValidValue(vm.totalDistributions[0] ? ((measure.distributionsSimpleBU / vm.totalDistributions[0].distributionsSimpleBU) * 100) : null, 1),
+              effective: getValidValue(vm.totalDistributions[0] ? ((measure.distributionsEffectiveBU / vm.totalDistributions[0].distributionsEffectiveBU) * 100) : null, 1)
             };
           });
 
