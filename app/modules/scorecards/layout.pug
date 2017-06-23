@@ -18,6 +18,8 @@ div.my-scorecards
           md-option(ng-repeat="filter in s.filtersService.model.scorecardDistributionTimePeriod[s.depletionRadio]" aria-label="{{filter.name}}" ng-value="filter.name" ng-click="s.changeDistributionTimePeriod(filter.name)") {{filter.displayValue}} {{filter.displayValue === 'L03' ? 'Mth' : 'Days'}}
 
   section.depeletions-scorecard
+    .loader-wrap(ng-class="{'active': s.calculatingDepletionTotals || s.calculatingDistributionTotals}")
+      loader
     div.scorecard-header.clearfix
       div.scorecard-header-left
         h2 My Depletions Scorecard
