@@ -18,4 +18,9 @@ export class MyPerformanceComponent {
     { person: 'Michael', personValue: 'MICHAEL' },
     { person: 'Steven', personValue: 'SEAGAL' }
   ];
+
+  // tslint:disable-next-line:no-unused-variable
+  private optionSelected(e: any) {
+    console.log('Selected: ', e);
+  }
 }

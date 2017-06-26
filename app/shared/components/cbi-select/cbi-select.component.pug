@@ -2,7 +2,7 @@ section.cbi-select
   p.title {{ title }}
 
   md-select([(ngModel)]="model", (onClose)="isSelectOpen = false", (onOpen)="isSelectOpen = true")
-    md-option.cbi-select-option(*ngFor="let option of options", [value]="option[valueKey]", (click)="currentSubValue = option[subDisplayKey]; optionClicked(option.value)")
+    md-option.cbi-select-option(*ngFor="let option of options", [value]="option[valueKey]", (click)="currentSubValue = option[subDisplayKey]; optionClicked(option[valueKey])")
       div.option-container(*ngIf="!subDisplayKey")
         p.option-text {{ option[displayKey] }}
       div.option-container(*ngIf="subDisplayKey")

@@ -6,11 +6,13 @@ cbi-select(
   [displayKey]="'name'",
   [valueKey]="'value'",
   [subDisplayKey]="'range'",
-  [title]="'Time Period'"
+  [title]="'Time Period'",
+  (onOptionSelected)="optionSelected($event)"
 )
 
 cbi-select(
   [options]="selectData2",
   [displayKey]="'person'",
   [valueKey]="'personValue'",
+  (onOptionSelected)="optionSelected($event)"
 )
