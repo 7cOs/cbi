@@ -34,6 +34,8 @@ export class CbiSelectComponent implements OnInit {
 
   // tslint:disable-next-line:no-unused-variable
   private optionClicked(option: any) {
-    this.onOptionSelected.emit(option);
+    this.isSelectOpen = false;
+    this.currentSubValue = option[this.subDisplayKey];
+    this.onOptionSelected.emit(option[this.valueKey]);
   }
 }
