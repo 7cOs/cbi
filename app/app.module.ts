@@ -12,8 +12,9 @@ import { DateRangeApiService } from './services/date-range-api.service';
 import { DateRangeService } from './services/date-range.service';
 import { DateRangeTransformerService } from './services/date-range-transformer.service';
 import { EffectsModule } from './state/effects/effects.module';
-import { GreetingComponent } from './shared/components/greeting/greeting.component';
 import { FormatOpportunitiesTypePipe } from './pipes/formatOpportunitiesType.pipe';
+import { GreetingComponent } from './shared/components/greeting/greeting.component';
+import { MyPerformanceModule } from './containers/my-performance/my-performance.module';
 import { NotificationsComponent } from './shared/components/notifications/notifications.component';
 import { rootReducer } from './state/reducers/root.reducer';
 import { SettingsComponent } from './shared/components/settings/settings.component';
@@ -30,23 +31,25 @@ const UpgradedComponents = [  // tslint:disable-line:variable-name
 // make ng1 services available to ng2 code (these are NOT passed as providers)
 AppUpgradeAdapter.upgradeNg1Provider('userService');
 AppUpgradeAdapter.upgradeNg1Provider('versionService');
+AppUpgradeAdapter.upgradeNg1Provider('$state');
 
 @NgModule({
   imports: [
-    BrowserModule,
-    RouterModule.forRoot([ {path: 'placeholder', redirectTo: '/'} ]), // need ng2 router for angulartics2 to work
     Angulartics2Module.forRoot([ Angulartics2GoogleAnalytics ]),
+    BrowserModule,
+    EffectsModule,
     HttpModule,
+    MyPerformanceModule,
+    RouterModule.forRoot([ {path: 'placeholder', redirectTo: '/'} ]), // need ng2 router for angulartics2 to work
     StoreModule.provideStore(rootReducer),
-    EffectsModule
   ],
   declarations: [
     AppComponent,
     DateRangeComponent,
-    GreetingComponent,
-    SettingsComponent,
-    NotificationsComponent,
     FormatOpportunitiesTypePipe,
+    GreetingComponent,
+    NotificationsComponent,
+    SettingsComponent,
     TimeAgoPipe,
     ...UpgradedComponents
   ],
