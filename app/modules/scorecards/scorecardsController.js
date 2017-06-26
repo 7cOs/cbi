@@ -191,6 +191,8 @@ module.exports = /*  @ngInject */
       updatedSelectionValuesInFilter(value, vm.depletionSelect, vm.distributionSelectOptions.selected);
       updateTotalRowDepletions();
       updateTotalRowDistributions();
+      userService.model.distribution = getRemodeledCollection(userService.model.distribution, 'distribution');
+      userService.model.depletion = getRemodeledCollection(userService.model.depletion, 'depletion');
     }
 
     // TODO The models that are hooked up for depletion and distirbution need to be changed to use an object instead of a string in the next sprint
