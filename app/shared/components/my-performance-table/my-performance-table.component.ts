@@ -1,7 +1,12 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
-import * as moment from 'moment';
 
-import { Notification } from '../../../models/notification.model';
+export enum ColumnType {
+  description,
+  metricColumn1,
+  metricColumn2,
+  metricColumn3,
+  ctv
+}
 
 @Component({
   selector: 'my-performance-table',
@@ -9,7 +14,7 @@ import { Notification } from '../../../models/notification.model';
   styles: [ require('./my-performance-table.component.scss') ]
 })
 
-export class NotificationsComponent {
+export class MyPerformanceTableComponent {
   @Output() onElementClicked = new EventEmitter<MyPerformanceTableEvent>();
   @Output() onSortingCriteriasChanged = new EventEmitter<Array<SortingCriteria>>();
 
@@ -78,14 +83,6 @@ export interface MyPerformanceTableRow {
 export interface MyPerformanceTableEvent {
   row: MyPerformanceTableRow;
   index: number;
-}
-
-export enum ColumnType {
-  description,
-  metricColumn1,
-  metricColumn2,
-  metricColumn3,
-  ctv
 }
 
 export interface SortingCriteria {
