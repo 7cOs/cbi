@@ -21,6 +21,9 @@ public class AccountDashboardPage extends LoadableComponent<AccountDashboardPage
   @FindBy(how = How.XPATH, using = "//inline-search[@type='chain']//input[@placeholder='Account or Subaccount Name']")
   private WebElement retailerChainTextBox;
 
+  @FindBy(css = "md-content._md div div.ng-scope div:nth-of-type(3) div:nth-of-type(2) div.apply-filters button.btn-action")
+  private WebElement applyFilters;
+
   public AccountDashboardPage(WebDriver driver) {
     this.driver = driver;
   }
@@ -43,4 +46,10 @@ public class AccountDashboardPage extends LoadableComponent<AccountDashboardPage
     return this;
   }
 
+  public AccountDashboardPage applyFilters() {
+    waitForElementToClickable(applyFilters, true);
+    waitForVisibleFluentWait(applyFilters).click();
+
+    return this;
+  }
 }

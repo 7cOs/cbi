@@ -41,6 +41,10 @@ public class AccountDashboard {
     @CacheLookup
     private WebElement all;
 
+	/**
+   * @deprecated Please use the AccountDashboardPage page object instead
+    */
+  @Deprecated
     @FindBy(css = "md-content._md div div.ng-scope div:nth-of-type(3) div:nth-of-type(2) div.apply-filters button.btn-action")
     private WebElement applyFilters;
 
@@ -315,13 +319,17 @@ public class AccountDashboard {
     }
 
     /**
+     * @deprecated Please use the method found in the AccountDashBoardPage page object
+     *
      * Click on Apply Filters Button.
      *
      * @return the AccountDashboard class instance.
      */
+    @Deprecated
     public AccountDashboard clickApplyFiltersButton() {
-    	waitForVisibleFluentWait(applyFilters).click();
-    return this;
+      PageFactory.initElements(driver, AccountDashboardPage.class)
+        .applyFilters();
+      return this;
     }
 
     /**
