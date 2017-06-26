@@ -3,14 +3,12 @@ import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
-import { MdSelectModule } from '@angular/material';
 import { NgModule, forwardRef } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { StoreModule } from '@ngrx/store';
 import { UpgradeAdapter } from '@angular/upgrade';
 
 import { AppComponent } from './shared/containers/app/app.component';
-import { CbiSelectComponent } from './shared/components/cbi-select/cbi-select.component';
 import { DateRangeComponent } from './shared/components/date-ranges/date-ranges.component';
 import { DateRangeApiService } from './services/date-range-api.service';
 import { DateRangeService } from './services/date-range.service';
@@ -22,6 +20,7 @@ import { MyPerformanceModule } from './containers/my-performance/my-performance.
 import { NotificationsComponent } from './shared/components/Notifications/notifications.component';
 import { rootReducer } from './state/reducers/root.reducer';
 import { SettingsComponent } from './shared/components/settings/settings.component';
+import { SharedModule } from './shared/shared.module';
 import { TimeAgoPipe } from './pipes/timeAgo.pipe';
 
 export const AppUpgradeAdapter = new UpgradeAdapter(forwardRef(() => AppModule)); // tslint:disable-line:variable-name no-use-before-declare
@@ -45,17 +44,13 @@ AppUpgradeAdapter.upgradeNg1Provider('$state');
     EffectsModule,
     FormsModule,
     HttpModule,
-    MdSelectModule,
     MyPerformanceModule,
     RouterModule.forRoot([ {path: 'placeholder', redirectTo: '/'} ]), // need ng2 router for angulartics2 to work
+    SharedModule,
     StoreModule.provideStore(rootReducer)
-  ],
-  exports: [
-    MdSelectModule
   ],
   declarations: [
     AppComponent,
-    CbiSelectComponent,
     DateRangeComponent,
     FormatOpportunitiesTypePipe,
     GreetingComponent,

@@ -1,2 +1,16 @@
 h2 This page will come
   div soon...
+
+cbi-select(
+  [options]="selectData",
+  [displayKey]="'name'",
+  [valueKey]="'value'",
+  [subDisplayKey]="'range'",
+  [title]="'Time Period'"
+)
+
+cbi-select(
+  [options]="selectData2",
+  [displayKey]="'person'",
+  [valueKey]="'personValue'",
+)
