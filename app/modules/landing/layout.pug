@@ -5,20 +5,6 @@ section.landing-page
       section.my-performance(column="7")
         greeting([name]="l.greetingName")
 
-        cbi-select(
-          [options]="l.selectData",
-          [display-key]="'name'",
-          [value-key]="'value'",
-          [sub-display-key]="'range'",
-          [title]="'Time Period'"
-        )
-
-        cbi-select(
-          [options]="l.selectData2",
-          [display-key]="'person'",
-          [value-key]="'personValue'",
-        )
-
         h2 My Performance
         .depletions(column="4")
           h3 Depletions FYTD

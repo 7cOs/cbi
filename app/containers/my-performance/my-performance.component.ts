@@ -6,6 +6,9 @@ import { Component } from '@angular/core';
 })
 
 export class MyPerformanceComponent {
+
+  private modelValue = 'CYTD';
+  private modelValue2 = 'MICHAEL';
   // tslint:disable-next-line:no-unused-variable
   private selectData = [
     { name: 'FYTD', value: 'FYTD', range: '1/1/17 - 2/2/17' },
@@ -21,6 +24,11 @@ export class MyPerformanceComponent {
 
   // tslint:disable-next-line:no-unused-variable
   private optionSelected(e: any) {
-    console.log('Selected: ', e);
+    this.modelValue = e;
+  }
+
+  // tslint:disable-next-line:no-unused-variable
+  private optionSelected2(e: any) {
+    this.modelValue2 = e;
   }
 }

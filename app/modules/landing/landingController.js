@@ -34,18 +34,6 @@ module.exports = /*  @ngInject */
     vm.fytdDateRange = DateRangeTimePeriod.FYTD;
     vm.l90DateRange = DateRangeTimePeriod.L90;
 
-    // TEST DATA FOR CBI-SELECT COMPONENT
-    vm.selectData = [
-      { name: 'FYTD', value: 'FYTD', range: '1/1/17 - 2/2/17' },
-      { name: 'CYTD', value: 'CYTD', range: '2/2/17 - 3/3/17' },
-      { name: 'MTD', value: 'MTD', range: '3/3/17 - 4/4/17' }
-    ];
-    vm.selectData2 = [
-      { person: 'Peter', personValue: 'PETER' },
-      { person: 'Michael', personValue: 'MICHAEL' },
-      { person: 'Steven', personValue: 'SEAGAL' }
-    ];
-
     init();
 
     // **************
