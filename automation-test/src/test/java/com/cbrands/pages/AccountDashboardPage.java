@@ -93,7 +93,7 @@ public class AccountDashboardPage extends LoadableComponent<AccountDashboardPage
     return retailer;
   }
 
-  public AccountDashboardPage applyFilters() {
+  public AccountDashboardPage clickApplyFilters() {
     waitForElementToClickable(applyFilters, true);
     waitForVisibleFluentWait(applyFilters).click();
 

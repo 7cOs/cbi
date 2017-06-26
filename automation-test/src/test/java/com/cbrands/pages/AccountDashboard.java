@@ -328,7 +328,7 @@ public class AccountDashboard {
     @Deprecated
     public AccountDashboard clickApplyFiltersButton() {
       PageFactory.initElements(driver, AccountDashboardPage.class)
-        .applyFilters();
+        .clickApplyFilters();
       return this;
     }
 
