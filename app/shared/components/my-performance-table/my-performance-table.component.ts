@@ -45,7 +45,7 @@ export class NotificationsComponent {
           i++;
         } while (i < this._sortingCriterias.length && currentSortOrder === 0);
 
-        return this._sortingCriterias[i].order ? currentSortOrder : -currentSortOrder;
+        return this._sortingCriterias[--i].order ? currentSortOrder : -currentSortOrder;
       };
     }
   }
