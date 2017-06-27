@@ -11,14 +11,17 @@ export class CbiSelectComponent implements OnInit {
 
   @Input() displayKey: string;
   @Input() model: string;
-  @Input() options: any[];
   @Input() subDisplayKey?: string;
   @Input() title?: string;
   @Input() valueKey: string;
+  @Input() set options(optionCollection: any[]) {
+    this.optionData = optionCollection;
+    if (this.subDisplayKey) this.initSubValue();
+  }
 
   private currentSubValue: any;
-  // tslint:disable-next-line:no-unused-variable
-  private isSelectOpen: boolean = false;
+  private isSelectOpen: boolean = false; // tslint:no-unused-variable
+  private optionData: any[] = [];
 
   constructor() {}
 
@@ -27,7 +30,7 @@ export class CbiSelectComponent implements OnInit {
   }
 
   private initSubValue() {
-    this.options.forEach(option => {
+    this.optionData.forEach(option => {
       if (option[this.valueKey] === this.model) this.currentSubValue = option[this.subDisplayKey];
     });
   }
