@@ -12,7 +12,7 @@ section.landing-page
           table(cellspacing="0" cellpadding="0")
             tr
               th.accent CE
-              th &nbsp;
+              th.accent VS YA%
             tr
               td
                 h3 {{l.performanceData.performance[0].measures[0].value | number:0}}
@@ -27,14 +27,13 @@ section.landing-page
           div.clearfix
             h3 {{l.performanceData.timespan}} Distribution L90
               date-ranges([date-range]="l.l90DateRange")
-            h4.accent VS  YA%
           table(cellspacing="0" cellpadding="0")
             tr
               th.accent Simple
-              th &nbsp;
+              th.accent VS YA%
               th &nbsp;
               th.accent Effective
-              th &nbsp;
+              th.accent VS YA%
             tr(ng-if="l.performanceData.distribution === 'allPremise' || l.performanceData.distribution === 'onPremise'")
               td
                 h3 {{l.performanceData.performance[1].measures[0].value | number:0}}
