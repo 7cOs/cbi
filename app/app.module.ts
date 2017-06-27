@@ -1,6 +1,5 @@
 import { Angulartics2, Angulartics2Module, Angulartics2GoogleAnalytics } from 'angulartics2';
 import { BrowserModule } from '@angular/platform-browser';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 import { NgModule, forwardRef } from '@angular/core';
@@ -40,7 +39,6 @@ AppUpgradeAdapter.upgradeNg1Provider('$state');
   imports: [
     Angulartics2Module.forRoot([ Angulartics2GoogleAnalytics ]),
     BrowserModule,
-    BrowserAnimationsModule,
     EffectsModule,
     FormsModule,
     HttpModule,
