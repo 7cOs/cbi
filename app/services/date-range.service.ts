@@ -25,7 +25,8 @@ export class DateRangeService {
       this.store.select(state => state.dateRanges.L90),
       this.store.select(state => state.dateRanges.L120),
       this.store.select(state => state.dateRanges.L3CM),
-      this.store.select(state => state.dateRanges.LCM)
+      this.store.select(state => state.dateRanges.LCM),
+      this.store.select(state => state.dateRanges.CMIPBDL)
     ];
   }
 

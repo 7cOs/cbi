@@ -131,7 +131,7 @@ export const dateRangeDTOsMock: DateRangeDTO[] = [
       'code': 'CMIPBDL',
       'description': 'Current Month In Progress Of Current Year With Business Day Lag',
       'startDate': '20170601',
-      'endDate': '20170602'
+      'endDate': '20170617'
     },
     {
       'code': 'CMIP2',
