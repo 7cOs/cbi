@@ -10,7 +10,6 @@ export class DateRangeTransformerService {
   private defaultDateFormat: string;
 
   private dateRangeDisplayCodes: any = {
-    'MTD': 'MTD',
     'FYTM': 'FYTM',
     'CYTM': 'CYTM',
     'CYTDBDL': 'CYTD',
@@ -20,7 +19,7 @@ export class DateRangeTransformerService {
     'L120BDL': 'L120 Days',
     'LCM': 'Clo Mth',
     'L3CM': 'L03 Mth',
-    'CMIPBDL': 'CMIPBDL'
+    'CMIPBDL': 'MTD'
   };
 
   constructor() {

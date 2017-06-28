@@ -4,7 +4,6 @@ import { DateRange } from '../../models/date-range.model';
 
 export interface DateRangesState extends State {
   status: ActionStatus;
-  MTD: DateRange;
   FYTM: DateRange;
   CYTM: DateRange;
   CYTD: DateRange;
@@ -26,7 +25,6 @@ const initialDateRangeState: DateRange = {
 
 export const initialState: DateRangesState = {
   status: ActionStatus.NotFetched,
-  MTD: initialDateRangeState,
   FYTM: initialDateRangeState,
   CYTM: initialDateRangeState,
   CYTD: initialDateRangeState,
@@ -53,7 +51,6 @@ export function dateRangesReducer(
     case DateRangesActions.FETCH_DATE_RANGES_SUCCESS_ACTION:
       return {
         status: ActionStatus.Fetched,
-        MTD: action.payload.find(dateRange => dateRange.code === 'MTD'),
         FYTM: action.payload.find(dateRange => dateRange.code === 'FYTM'),
         CYTM: action.payload.find(dateRange => dateRange.code === 'CYTM'),
         CYTD: action.payload.find(dateRange => dateRange.code === 'CYTDBDL'),
