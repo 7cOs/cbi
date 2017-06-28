@@ -3,9 +3,9 @@ import { Component, Input, Output, EventEmitter } from '@angular/core';
 export enum ColumnType {
   descriptionLine0,
   descriptionLine1,
+  metricColumn0,
   metricColumn1,
   metricColumn2,
-  metricColumn3,
   ctv
 }
 
@@ -68,18 +68,18 @@ export class MyPerformanceTableComponent {
         : 0;
   }
 
-  private clickOn(row: MyPerformanceTableRow, index: number) {
-    this.onElementClicked.emit({row: row, index: index});
-  }
+  // private clickOn(row: MyPerformanceTableRow, index: number) {
+  //   this.onElementClicked.emit({row: row, index: index});
+  // }
 
 }
 
 export interface MyPerformanceTableRow {
   descriptionLine0: string;
   descriptionLine1: string;
+  metricColumn0: number;
   metricColumn1: number;
   metricColumn2: number;
-  metricColumn3: number;
   ctv: number;
 }
 
