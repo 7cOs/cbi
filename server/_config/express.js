@@ -57,7 +57,7 @@ module.exports =  function(app) {
     genid: function(req) {
       return uuid.v4(); // use UUIDs for session IDs
     },
-    name: 'cf.sid',
+    name: config.session.name,
     resave: config.session.resave,
     rolling: config.session.rolling,
     maxAge: config.session.maxAge,
