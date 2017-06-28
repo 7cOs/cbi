@@ -15,7 +15,6 @@ import { EffectsModule } from './state/effects/effects.module';
 import { FormatOpportunitiesTypePipe } from './pipes/formatOpportunitiesType.pipe';
 import { GreetingComponent } from './shared/components/greeting/greeting.component';
 import { MyPerformanceModule } from './containers/my-performance/my-performance.module';
-import { MyPerformanceTableComponent } from './shared/components/my-performance-table/my-performance-table.component';
 import { NotificationsComponent } from './shared/components/notifications/notifications.component';
 import { rootReducer } from './state/reducers/root.reducer';
 import { SettingsComponent } from './shared/components/settings/settings.component';
@@ -49,7 +48,6 @@ AppUpgradeAdapter.upgradeNg1Provider('$state');
     DateRangeComponent,
     FormatOpportunitiesTypePipe,
     GreetingComponent,
-    MyPerformanceTableComponent,
     NotificationsComponent,
     SettingsComponent,
     TimeAgoPipe,

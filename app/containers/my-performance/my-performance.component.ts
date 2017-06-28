@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'my-Performance',
+  selector: 'my-performance',
   template: require('./my-performance.component.pug')
 })
 
