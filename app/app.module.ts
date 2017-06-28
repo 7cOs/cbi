@@ -1,6 +1,5 @@
 import { Angulartics2, Angulartics2Module, Angulartics2GoogleAnalytics } from 'angulartics2';
 import { BrowserModule } from '@angular/platform-browser';
-import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 import { NgModule, forwardRef } from '@angular/core';
 import { RouterModule } from '@angular/router';
@@ -40,7 +39,6 @@ AppUpgradeAdapter.upgradeNg1Provider('$state');
     Angulartics2Module.forRoot([ Angulartics2GoogleAnalytics ]),
     BrowserModule,
     EffectsModule,
-    FormsModule,
     HttpModule,
     MyPerformanceModule,
     RouterModule.forRoot([ {path: 'placeholder', redirectTo: '/'} ]), // need ng2 router for angulartics2 to work

@@ -29,14 +29,14 @@ export class CbiSelectComponent implements OnInit {
     if (this.subDisplayKey) this.initSubValue();
   }
 
-  private initSubValue() {
+  private initSubValue(): void {
     this.optionData.forEach(option => {
       if (option[this.valueKey] === this.model) this.currentSubValue = option[this.subDisplayKey];
     });
   }
 
   // tslint:disable-next-line:no-unused-variable
-  private optionClicked(option: any) {
+  private optionClicked(option: any): void {
     this.isSelectOpen = false;
     this.currentSubValue = option[this.subDisplayKey];
     this.onOptionSelected.emit(option[this.valueKey]);

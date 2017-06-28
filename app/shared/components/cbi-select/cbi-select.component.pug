@@ -1,5 +1,5 @@
 section.cbi-select
-  p.title {{ title }}
+  p.title(*ngIf="title") {{ title }}
 
   md-select([(ngModel)]="model", (onOpen)="isSelectOpen = true", (onClose)="isSelectOpen = false")
     md-option.cbi-select-option(*ngFor="let option of optionData", [value]="option[valueKey]", (click)="optionClicked(option)")
