@@ -147,3 +147,7 @@ md-select-menu[multiple] {
     cursor: hand;
   }
 }
+
+md-select:focus {
+  height: 40px;
+}
