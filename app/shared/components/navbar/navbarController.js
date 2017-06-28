@@ -39,7 +39,6 @@ module.exports = /*  @ngInject */
     vm.dismissedError = false;
     vm.duplicateError = false;
     vm.myAccountsOnly = true;
-    vm.noNotifications = 'No unread notifications.';
     vm.notifications = [];
     vm.newOpportunityArray = [];
     vm.newOpportunityTemplate = {
@@ -87,7 +86,7 @@ module.exports = /*  @ngInject */
     vm.getDismissedOpportunity = getDismissedOpportunity;
     vm.unDismissOpportunity = unDismissOpportunity;
     vm.getTargetLists = getTargetLists;
-    vm.markRead = markRead;
+    vm.notificationClicked = notificationClicked;
     vm.markSeen = markSeen;
     vm.modalAddOpportunityForm = modalAddOpportunityForm;
     vm.modalCustomOpportunityError = modalCustomOpportunityError;
@@ -97,7 +96,6 @@ module.exports = /*  @ngInject */
     vm.goToNote = goToNote;
     vm.sendFeedback = sendFeedback;
     vm.openIQLink = openIQLink;
-    vm.notUnknown = notUnknown;
 
     $scope.$watch(function() { return toastService.model; }, function(newVal) {
       vm.archived = newVal.archived;
@@ -114,12 +112,8 @@ module.exports = /*  @ngInject */
     // PUBLIC METHODS
     // **************
 
-    function notUnknown(value) {
-      return value && value.toString().toUpperCase() !== 'UNKNOWN';
-    }
-
     // Mark notification as read on click
-    function markRead(notification) {
+    function notificationClicked(notification) {
       vm.notificationsService
         .markNotifications([{
           id: notification.id,
@@ -134,18 +128,15 @@ module.exports = /*  @ngInject */
         });
 
       if (notification.objectType.toUpperCase() === 'TARGET_LIST') {
-        $analytics.eventTrack('Read Notification', {category: 'Notifications', label: 'Shared Target List'});
-
         $state.go('target-list-detail', ({id: notification.shortenedObject.id}));
       } else if (notification.objectType.toUpperCase() === 'OPPORTUNITY') {
-        $analytics.eventTrack('Read Notification', {category: 'Notifications', label: 'Shared Opportunity'});
-
-        opportunitiesService.model.opportunityId = notification.shortenedObject.id;
-        $state.go('opportunities', (opportunitiesService.model.opportunityId, opportunitiesService.model.filterApplied = false), {reload: true});
+        opportunitiesService.model.filterApplied = false;
+        $state.go('opportunities', {'resetFiltersOnLoad': false, 'opportunityID': notification.shortenedObject.id}, {reload: true});
       } else if (notification.objectType.toUpperCase() === 'ACCOUNT') {
-        $analytics.eventTrack('Read Notification', {category: 'Notifications', label: 'Shared Note'});
-
         $state.go('accounts');
+      } else if (notification.objectType.toUpperCase() === 'STORE' ||
+                 notification.objectType.toUpperCase() === 'DISTRIBUTOR') {
+        goToNote(notification);
       }
 
       $mdMenu.hide();
@@ -463,10 +454,6 @@ module.exports = /*  @ngInject */
       .then(function(result) {
         vm.notifications = result;
         setUnreadCount(vm.notifications);
-      });
-
-      versionService.getVersion().then(function(data) {
-        versionService.model.version = data;
       });
     };
 

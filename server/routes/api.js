@@ -8,6 +8,12 @@ module.exports = function(app) {
   app.route('/v([2-3])/*')
     .all(function apiAuth(req, res, next) {
       let headers = {};
+      let v3BaseURLKey;
+
+      // grabbing hard-coded dateRangeCodes base url from config
+      // TODO: remove once api gateway is in place
+      if (req.url.match(/\/v3\/dateRangeCodes/)) v3BaseURLKey = 'dateRangeCodes';
+
       headers['X-CBI-API-AGENT'] = util.agentHeader();
       headers['User-Agent'] = req.headers['user-agent'];
 
@@ -15,7 +21,7 @@ module.exports = function(app) {
         headers['X-CBI-API-USER'] = util.userHeader(req.user.employeeID);
 
         app.locals.apiAuth = {
-          signed: util.signApiUrl(req.url),
+          signed: util.signApiUrl(req.url, v3BaseURLKey),
           jwtToken: req.user.jwt,
           headers: headers
         };

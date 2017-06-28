@@ -184,18 +184,20 @@ describe('Unit: page controller', function() {
   });
 
   describe('pageChanged', function() {
-    it('should be defined', function() {
-      expect(ctrl.pageChanged).not.toBeUndefined();
-      expect(typeof (ctrl.pageChanged)).toEqual('function');
-    });
-
     beforeEach(() => {
       filtersService.model.appliedFilter.pagination.currentPage = 0;
+      ctrl.onPageChange = () => {};
+      spyOn(ctrl, 'onPageChange').and.callThrough();
 
       spyOn(opportunitiesService, 'getAndUpdateStoresWithOpportunities').and.callFake(function() {
         var deferred = q.defer();
         return deferred.promise;
       });
+    });
+
+    it('should be defined', function() {
+      expect(ctrl.pageChanged).not.toBeUndefined();
+      expect(typeof (ctrl.pageChanged)).toEqual('function');
     });
 
     it('should update the current page', function() {
@@ -214,9 +216,8 @@ describe('Unit: page controller', function() {
       expect(opportunitiesService.getAndUpdateStoresWithOpportunities).not.toHaveBeenCalled();
       ctrl.pageChanged(2);
       expect(opportunitiesService.getAndUpdateStoresWithOpportunities).toHaveBeenCalled();
+      expect(ctrl.onPageChange).toHaveBeenCalled();
     });
-
-    // To Do: Find better way to test .then() of promise
 
     afterEach(function() {
       filtersService.model.appliedFilter.pagination.currentPage = 1;

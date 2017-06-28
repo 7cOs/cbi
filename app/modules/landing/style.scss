@@ -2,10 +2,6 @@
   background: $body-bg;
   padding: 0;
 
-  .greeting {
-    padding-top: 0;
-  }
-
   .announcement-widget {
     margin-top: 60px;
     text-align: center;
@@ -51,8 +47,9 @@
         background: $white;
 
         .accent {
-          text-align: left;
           color: $gray-1;
+          display: table-cell;
+          text-align: left;
         }
 
         h3 {
@@ -91,7 +88,7 @@
         h3 {
           float: left;
           margin-top: 8px;
-          margin-bottom: 8px;
+          margin-bottom: 0;
         }
 
         h4 {

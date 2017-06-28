@@ -204,7 +204,12 @@
 }
 
 .section-header {
-  height: 20px;
+
+  .section-header-user {
+    display: inline-block;
+    font-size: 1.1em;
+    width: 265px;
+  }
 
   .md-select {
     height: 10px;
@@ -218,12 +223,12 @@
 }
 
 .widget-header {
-  float: none;
   display: block;
   padding: 0;
   border: 0;
   background: $gray-4;
   height: 85px;
+  width: 566px;
 
   .brands,
   .market,
@@ -281,6 +286,121 @@
   }
 }
 
+.widget-subheader {
+  border-top: 2px solid #B4B4B4;
+  border-bottom: 2px solid #B4B4B4;
+  display: inline-block;
+  width: 100%;
+
+  div:first-child {
+    float: left;
+    width: 234px;
+  }
+
+  div:last-child {
+    float: right;
+    width: calc(100% - 330px);
+  }
+
+  .widget-subheader-item {
+    background: #FFFFFF;
+  }
+
+  .widget-subheader-item:nth-child(2n) {
+    background: #F3F3F3;
+    float: left;
+    width: 96px;
+  }
+}
+
+.widget-data {
+  float: left;
+  max-height: 678px;
+  width: 330px;
+
+  .widget-row-container {
+    border-right: 1px solid #E1E1E3;
+  }
+
+  .no-outline {
+
+    &:focus {
+      outline: none;
+    }
+  }
+
+  div:not(.selected) {
+
+    &:hover {
+
+      .widget-data-left {
+        background: #F3F8FB;
+      }
+
+      .widget-data-right {
+        background: #F1F5F9;
+      }
+    }
+  }
+
+  p {
+    color: #000000;
+  }
+
+  .widget-data-row {
+    height: 60px;
+    width: 329px;
+
+    &:hover {
+      cursor: hand;
+    }
+  }
+
+  .widget-data-left {
+    height: 60px;
+    float: left;
+    width: 234px;
+
+    p {
+      padding-left: 10px;
+      width: 92%;
+    }
+  }
+
+  .widget-data-right {
+    background: #F3F3F3;
+    float: right;
+    height: 60px;
+    width: 95px;
+
+    p {
+      padding-top: 5px;
+    }
+  }
+}
+
+.widget-graph {
+  float: right;
+  max-height: 678px;
+  width: calc(100% - 330px);
+
+  div:first-child {
+    margin-top: -20px;
+  }
+
+  .graph-container {
+    height: 60px;
+
+    svg {
+      height: 100px;
+    }
+
+    .nv-y {
+      display: none;
+    }
+  }
+}
+
 span {
 
   &.light {
@@ -295,7 +415,6 @@ span {
     margin: 0;
     font-weight: 300;
     color: $gray-1;
-    margin-top: -30px;
     font-size: 1.3em;
     width: 120px;
 
@@ -360,8 +479,9 @@ span {
 .widget-content {
   background: $white;
   border-bottom: 1px solid $black;
-  overflow: hidden;
-  min-width: 100%;
+  min-height: 80px;
+  overflow-x: hidden;
+  overflow-y: auto;
 
   table {
     border-top: 0;
@@ -392,6 +512,11 @@ span {
 
   &.scorecard-table-accounts {
     padding-right: 0.5em;
+
+    .snapshot-label {
+      padding-top: 10px;
+      padding-bottom: 5px;
+    }
   }
 
   .loader-wrap.error {
@@ -526,6 +651,13 @@ span {
 
   svg {
     height: 100%;
+
+    .tick {
+
+      text {
+        display: none;
+      }
+    }
   }
 }
 
@@ -584,4 +716,31 @@ md-autocomplete.ng-isolate-scope {
       cursor: no-drop;
     }
   }
+}
+
+.selected {
+
+  .widget-data-left {
+    background-color: #032E60!important;
+  }
+
+  .widget-data-right {
+    background-color: #1F4572!important;
+
+    p {
+      color: $white!important;
+    }
+  }
+}
+
+.dashboard-filter {
+
+  md-select {
+    margin: 0;
+  }
+}
+
+.ie .section-header-user {
+  padding-top: calc(5% - 26px);
+  vertical-align: top;
 }

@@ -1,4 +1,4 @@
-package com.cbrands.pages;
+package com.cbrands.pages.targetList;
 
 import static com.cbrands.helper.SeleniumUtils.findElement;
 import static com.cbrands.helper.SeleniumUtils.findElements;
@@ -14,6 +14,9 @@ import static com.cbrands.helper.SeleniumUtils.waitForVisibleFluentWait;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.cbrands.pages.HomePage;
+import com.cbrands.pages.NotificationContent;
+import com.cbrands.pages.Opportunities;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.Keys;
@@ -30,6 +33,12 @@ import org.testng.Assert;
 
 import com.cbrands.helper.PropertiesCache;
 
+/**
+ * @deprecated This class represents at least three different pages. The elements and methods contained in this class are to be
+ * split into their proper page objects. Please use the new page object classes, and extract/deprecate the needed
+ * code accordingly.
+ */
+@Deprecated
 public class TargetList extends LoadableComponent<TargetList> {
 
 	private final WebDriver driver;
@@ -205,29 +214,166 @@ public class TargetList extends LoadableComponent<TargetList> {
 	@FindBy(how = How.XPATH, using = "//md-menu-item[contains(.,'Make Owner')]")
 	private WebElement makeOwnerOption;
 
-	public TargetList typeTargetName(String name) {
+  public TargetList(WebDriver driver) {
+    this.driver = driver;
+  }
+
+  @Override
+  protected void isLoaded() throws Error {
+    Assert.assertTrue(driver.getCurrentUrl().contains("target-lists"));
+  }
+
+  @Override
+  protected void load() {
+    driver.get(PropertiesCache.getInstance().getProperty("qa.host.address") + "/target-lists");
+  }
+
+  /**
+   * @deprecated Please use the method extracted to the TargetListListings page object
+   * @see TargetListListingsPage
+   */
+  @Deprecated
+  public TargetList clickCreateNewListButton() {
+    waitForVisibleFluentWait(createNewListButton).click();
+    return this;
+  }
+
+  /**
+   * @deprecated Please use the method extracted to the TargetListListings page object
+   * @see TargetListListingsPage
+   */
+  @Deprecated
+  public TargetList clickCreateNewListButtonInModal() {
+    waitForVisibleFluentWait(createTargetListModalButtons.get(0)).click();
+    return this;
+  }
+
+  /**
+   * @deprecated Please use the method extracted to the EditTargetListModal page object
+   * @see EditTargetListModal
+   */
+  @Deprecated
+  public TargetList EnterNameTextBox(String name) {
+    final EditTargetListModal editTargetListModal = PageFactory.initElements(driver, EditTargetListModal.class);
+    editTargetListModal.enterListName(name);
+    return this;
+  }
+
+  /**
+   * @deprecated Please use the method extracted to the EditTargetListModal page object
+   * @see EditTargetListModal
+   */
+  @Deprecated
+  public TargetList typeDescription(String description) {
+    final EditTargetListModal editTargetListModal = PageFactory.initElements(driver, EditTargetListModal.class);
+    editTargetListModal.enterDescription(description);
+    return this;
+  }
+
+  /**
+   * @deprecated Please use the method extracted to the EditTargetListModal page object
+   * @see EditTargetListModal
+   */
+  @Deprecated
+  public TargetList addCollaborator(String collaborator) {
+    final EditTargetListModal editTargetListModal = PageFactory.initElements(driver, EditTargetListModal.class);
+    editTargetListModal.addCollaborator(collaborator);
+    return this;
+  }
+
+  /**
+   * @deprecated Please use the method extracted to the EditTargetListModal page object
+   * @see EditTargetListModal
+   */
+  @Deprecated
+  public TargetList clickSaveButton() {
+    final EditTargetListModal editTargetListModal = PageFactory.initElements(driver, EditTargetListModal.class);
+    editTargetListModal.clickSaveButton();
+    return this;
+  }
+
+  /**
+   * @deprecated Please use the method extracted to the TargetListListingsPage page object
+   * @see TargetListListingsPage
+   */
+  @Deprecated
+  public TargetList clickTargetList(String name) {
+    final TargetListListingsPage targetListListingsPage = PageFactory.initElements(
+      driver,
+      TargetListListingsPage.class
+    );
+    targetListListingsPage.clickTargetListByName(name);
+
+    return this;
+  }
+
+  /**
+   * @deprecated Please use the method extracted to the TargetListDetailPage page object
+   * @see TargetListDetailPage
+   */
+  @Deprecated
+  public TargetList clickManage() {
+    final TargetListDetailPage targetListDetailPage = PageFactory.initElements(driver, TargetListDetailPage.class);
+    targetListDetailPage.clickManageButton();
+
+    return this;
+  }
+
+  /**
+   * @deprecated Please use the method extracted to the TargetListDetailPage page object
+   * @see TargetListDetailPage
+   */
+  @Deprecated
+  public TargetList clickManageButton() {
+    final TargetListDetailPage targetListDetailPage = PageFactory.initElements(driver, TargetListDetailPage.class);
+    targetListDetailPage.clickManageButton();
+
+    return this;
+  }
+
+  /**
+   * @deprecated Please use the method extracted to the EditTargetListModal page object
+   * @see EditTargetListModal
+   */
+  @Deprecated
+  public TargetList clickDelete_TargetListPage() {
+    final EditTargetListModal editTargetListModal = PageFactory.initElements(driver, EditTargetListModal.class);
+    editTargetListModal.clickDeleteTargetListButton();
+    return this;
+  }
+
+  /**
+   * @deprecated Please use the method extracted to the EditTargetListModal page object
+   * @see EditTargetListModal
+   */
+  @Deprecated
+  public TargetList clickYesDelete() {
+    final EditTargetListModal editTargetListModal = PageFactory.initElements(driver, EditTargetListModal.class);
+    editTargetListModal.confirmListDelete();
+    return this;
+  }
+
+  /**
+   * @deprecated Please use the method extracted to the TargetListListingsPage page object
+   * @see TargetListListingsPage
+   */
+  @Deprecated
+  public TargetList selectTargetList(String listname) {
+    final TargetListListingsPage targetListListingsPage = PageFactory.initElements(
+      driver,
+      TargetListListingsPage.class
+    );
+
+    targetListListingsPage.selectTargetListByName(listname);
+
+    return this;
+  }
+
+  public TargetList typeTargetName(String name) {
 
 		WebElement element = findElement(By.xpath("//input[@placeholder='Enter List Name']"));
 		waitForElementToClickable(element, true).click();
 		element.sendKeys(name);
-		return this;
-	}
-
-	public TargetList typeDescription(String description) {
-		WebElement element = findElement(By.xpath("//textarea[@placeholder='Enter Description']"));
-		waitForElementToClickable(element, true).click();
-		element.sendKeys(description);
-		return this;
-	}
-
-	public TargetList addCollaborator(String collaborator) {
-		WebElement element = findElement(By.xpath("//input[@placeholder='Name or CBI email address']"));
-		waitForElementToClickable(element, true).click();
-		element.sendKeys(collaborator);
-		WebElement element1 = findElement(By.xpath("//div[2]/div[3]/inline-search/div/input[3]"));
-		element1.click();
-		WebElement element2 = findElement(By.xpath("//div[2]/div[3]/inline-search/div/div/ul/li"));
-		element2.click();
 		return this;
 	}
 
@@ -254,21 +400,8 @@ public class TargetList extends LoadableComponent<TargetList> {
 		return this;
 	}
 
-	public TargetList EnterNameTextBox(String name) {
-		waitForVisibleFluentWait(NameTextBox);
-		NameTextBox.clear();
-		NameTextBox.sendKeys(name);
-		return this;
-	}
-
 	public TargetList EnterDescriptionTextBox(String description) {
 		DescriptionTextBox.sendKeys(description);
-		return this;
-	}
-
-	public TargetList clickSaveButton() {
-		SaveButton.click();
-		waitForVisibleFluentWait(targetList);
 		return this;
 	}
 
@@ -288,19 +421,6 @@ public class TargetList extends LoadableComponent<TargetList> {
 
 	}
 
-	public TargetList clickNewTargetList(String name) {
-		List<WebElement> MyTargetLists = findElements(By.xpath("//*[@id='tab-content-2']/div/md-content/div[@class='target-list-detail-container']/ul/li/div/div[@class='stats']/div/h4[1]"));
-		for (WebElement webElement : MyTargetLists) {
-			if(webElement.getText().equalsIgnoreCase(name)){
-				JavascriptExecutor js = (JavascriptExecutor) driver;
-				js.executeScript("arguments[0].click();", webElement);
-				break;
-			}
-
-		}
-		return this;
-	}
-
 	public boolean checkTargetLists(String name) {
 		List<WebElement> MyTargetLists = findElements(By.xpath("//*[@id='tab-content-2']/div/md-content/div[@class='target-list-detail-container']/ul/li/div/div[@class='stats']/div/h4[1]"));
 		for (WebElement webElement : MyTargetLists) {
@@ -309,19 +429,6 @@ public class TargetList extends LoadableComponent<TargetList> {
 			}
 		}
 		return false;
-	}
-
-	public TargetList clickTargetList(String name) {
-		List<WebElement> MyTargetLists = findElements(By.xpath("//*[@id='tab-content-2']/div/md-content/div[@class='target-list-detail-container']/ul/li/div/div[@class='stats']/div/h4[1]"));
-		for (WebElement webElement : MyTargetLists) {
-			if(webElement.getText().equalsIgnoreCase(name)){
-				JavascriptExecutor js = (JavascriptExecutor) driver;
-				js.executeScript("arguments[0].click();", webElement);
-				break;
-			}
-
-		}
-		return this;
 	}
 
 	public TargetList clickTargetListFromShared(String name) {
@@ -348,7 +455,6 @@ public class TargetList extends LoadableComponent<TargetList> {
 		return this;
 	}
 
-
 	public boolean checkTargetNameExists(String targetListName) {
 		WebElement element = findElement(By.xpath("//div[3]/md-tabs/md-tabs-content-wrapper/md-tab-content[1]/div/md-content"));
 		boolean targetListExists = false;
@@ -361,27 +467,6 @@ public class TargetList extends LoadableComponent<TargetList> {
 			}
 		}
 		return targetListExists;
-	}
-
-	public Login logOut() {
-		driver.get("https://orion-qa.cbrands.com/auth/logout");
-		return PageFactory.initElements(driver, Login.class);
-	}
-
-	@Override
-	protected void isLoaded() throws Error {
-		Assert.assertTrue(driver.getCurrentUrl().contains("target-lists"));
-
-	}
-
-	@Override
-	protected void load() {
-		driver.get(PropertiesCache.getInstance().getProperty("qa.host.address") + "/target-lists");
-
-	}
-
-	public TargetList(WebDriver driver) {
-		this.driver = driver;
 	}
 
 	public Opportunities navigateToOpportunities() {
@@ -400,18 +485,6 @@ public class TargetList extends LoadableComponent<TargetList> {
 	public HomePage navigateToHomePage() {
 		homePage.click();
 		return PageFactory.initElements(driver, HomePage.class);
-	}
-
-	public TargetList clickManage() {
-		// waitForElementVisible(TargetListManageButton, true);
-		// waitForElementToClickable(TargetListManageButton,true);
-		// TargetListManageButton.click();
-
-		List<WebElement> elements = findElements(By.xpath("//*[@class='hero-actions']/button"));
-
-		JavascriptExecutor js = (JavascriptExecutor) driver;
-		js.executeScript("arguments[0].click();", elements.get(0));
-		return this;
 	}
 
 	public TargetList clickCollaborator() {
@@ -449,12 +522,6 @@ public class TargetList extends LoadableComponent<TargetList> {
 		WebElement element = findElement(By.xpath("//h1[text()='" + targetListName + "']"));
 		waitForElementVisible(element, true);
 		element.click();
-		return this;
-	}
-
-	public TargetList clickManageButton() {
-		TargetListManageButton.sendKeys(Keys.ENTER);
-
 		return this;
 	}
 
@@ -636,23 +703,6 @@ public class TargetList extends LoadableComponent<TargetList> {
 	public TargetList clickExpandAll() {
 		waitForElementToClickable(expandAll, true).click();
 		return this;
-	}
-
-	public boolean checkTargetListExists(String listname) {
-		WebElement element = findElement(By.cssSelector("div[class='target-list-detail-container']"));
-		waitForElementVisible(element, true);
-
-		boolean targetListExists = false;
-		String[] array = element.getText().split("\\n");
-
-		for (String txt : array) {
-			if (txt.trim().equalsIgnoreCase(listname)) {
-				targetListExists = true;
-				return targetListExists;
-			}
-		}
-
-		return targetListExists;
 	}
 
 	public TargetList clickSendTo(String sendTo1) {
@@ -931,32 +981,6 @@ public class TargetList extends LoadableComponent<TargetList> {
 		return this;
 	}
 
-	public TargetList selectTargetList(String listname) {
-		List<WebElement> elements = findElements(By.xpath("//div[@class='target-list-detail-container']/ul/li"));
-
-		System.out.println("listname: " + listname);
-
-		for (int i = 0; i < elements.size(); i++) {
-
-			String arr[] = elements.get(i).getText().split("\n");
-
-			if (arr[0].trim().equalsIgnoreCase(listname)) {
-				String str = "//div[3]/md-tabs/md-tabs-content-wrapper/md-tab-content[1]/div/md-content/div[2]/ul/li[" + (i + 1) + "]/div[1]/md-checkbox/div[1]";
-				WebElement element = findElement(By.xpath(str));
-				element.click();
-
-				return this;
-			}
-		}
-
-		return this;
-	}
-
-	public TargetList clickDelete_TargetListPage() {
-		deleteTarget.click();
-		return this;
-	}
-
 	public String getDeleteListText() {
 		WebElement element = findElement(By.xpath("//md-content/navbar/div[2]"));
 		return element.getText().trim();
@@ -1033,11 +1057,6 @@ public class TargetList extends LoadableComponent<TargetList> {
 
 	public TargetList openTargetListUsingURL(String URL) {
 		driver.get(URL);
-		return this;
-	}
-
-	public TargetList clickYesDelete() {
-		waitForVisibleFluentWait(yesDelete).click();
 		return this;
 	}
 
@@ -1257,16 +1276,6 @@ public class TargetList extends LoadableComponent<TargetList> {
 		js.executeScript("arguments[0].click();", MyTargetList);
 		return this;
 
-	}
-
-	public TargetList clickCreateNewListButton() {
-		waitForVisibleFluentWait(createNewListButton).click();
-		return this;
-	}
-
-	public TargetList clickCreateNewListButtonInModal() {
-		waitForVisibleFluentWait(createTargetListModalButtons.get(0)).click();
-		return this;
 	}
 
 	public String sharedTargetList(String listName){

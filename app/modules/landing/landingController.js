@@ -1,4 +1,5 @@
 'use strict';
+const DateRangeTimePeriod = require('../../enums/date-range-time-period.enum').DateRangeTimePeriod;
 
 module.exports = /*  @ngInject */
   function landingController($rootScope, $state, $filter, $mdSelect, filtersService, chipsService, myperformanceService, userService) {
@@ -29,7 +30,9 @@ module.exports = /*  @ngInject */
     vm.selectPremiseType = selectPremiseType;
 
     // Set values
-    vm.greeting = getGreeting();
+    vm.greetingName = userService.model.currentUser.firstName;
+    vm.fytdDateRange = DateRangeTimePeriod.FYTD;
+    vm.l90DateRange = DateRangeTimePeriod.L90;
 
     init();
 
@@ -104,24 +107,6 @@ module.exports = /*  @ngInject */
     // ***************
     // PRIVATE METHODS
     // ***************
-
-    function getGreeting() {
-      var myDate = new Date(),
-          hrs = myDate.getHours(),
-          greet;
-
-      if (hrs < 12) {
-        greet = 'Good morning';
-      } else if (hrs >= 12 && hrs <= 17) {
-        greet = 'Good afternoon';
-      } else if (hrs >= 17 && hrs <= 24) {
-        greet = 'Good evening';
-      }
-
-      var person = $filter('titlecase')(userService.model.currentUser.firstName);
-
-      return greet + ', ' + person + '!';
-    }
 
     function init() {
 

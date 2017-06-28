@@ -10,7 +10,8 @@ module.exports =
       title: 'Opportunities',
       params: {
         resetFiltersOnLoad: true,
-        applyFiltersOnLoad: false
+        applyFiltersOnLoad: false,
+        opportunityID: ''
       },
       template: require('./layout.pug'),
       controller: 'opportunitiesController',

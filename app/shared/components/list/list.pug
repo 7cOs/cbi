@@ -1,4 +1,4 @@
-.loader-wrap(ng-class="{'active': list.loadingList}")
+.loader-wrap(ng-if="list.loadingList" ng-class="{'active': list.loadingList}")
   loader
 
 .total-opportunities
@@ -209,4 +209,4 @@ v-accordion.styled-list(multiple="" id="opportunities" control="list.accordion" 
                   div(column="2" ng-if="product.featureTypeCode !== null")
                     label Feature Type
                     span(ng-click="list.showOpportunityMemoModal(); list.getMemos(product.store.id, product.product.id, 'Feature', product.featureTypeCode)").open-memo {{::product.featureTypeDesc}}
-page(page-name="{{list.pageName}}")
+page(page-name="{{list.pageName}}" on-page-change="list.resetOpportunitiesExpanded()")

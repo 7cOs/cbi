@@ -1,35 +1,33 @@
 package com.cbrands;
 
-import static com.cbrands.helper.SeleniumUtils.waitForVisible;
-import static net.javacrumbs.hamcrest.logger.HamcrestLoggerMatcher.log;
-import static org.hamcrest.CoreMatchers.containsString;
-import static org.hamcrest.MatcherAssert.assertThat;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.openqa.selenium.By;
-import org.openqa.selenium.NoSuchElementException;
-import org.openqa.selenium.TimeoutException;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
-import org.testng.annotations.AfterSuite;
-import org.testng.annotations.BeforeSuite;
-import org.testng.annotations.Listeners;
-
 import com.cbrands.helper.PropertiesCache;
 import com.cbrands.helper.SeleniumUtils;
 import com.cbrands.helper.WebDriverFactory;
 import com.cbrands.listener.SeleniumSnapshotRule;
-import com.cbrands.pages.AccountDashboard;
-import com.cbrands.pages.HomePage;
-import com.cbrands.pages.Login;
-import com.cbrands.pages.MyScorecards;
-import com.cbrands.pages.Opportunities;
-import com.cbrands.pages.TargetList;
+import com.cbrands.pages.*;
+import com.cbrands.pages.targetList.TargetList;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.openqa.selenium.*;
+import org.testng.annotations.AfterSuite;
+import org.testng.annotations.BeforeSuite;
+import org.testng.annotations.Listeners;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import static net.javacrumbs.hamcrest.logger.HamcrestLoggerMatcher.log;
+import static org.hamcrest.CoreMatchers.containsString;
+import static org.hamcrest.MatcherAssert.assertThat;
+
+/**
+ * @deprecated Moving away from using this class to reduce low cohesion that interferes with modularity.
+ * Methods in this class will be extracted to their appropriate page object or utility classes.
+ * The new base test class should contain only code relevant to setup and teardown of test suites.
+ *
+ * @see com.cbrands.test.smoke.BaseTestCase
+ */
+@Deprecated
 @Listeners(value = SeleniumSnapshotRule.class)
 public abstract class BaseSeleniumTestCase implements IConstant {
 
@@ -58,12 +56,14 @@ public abstract class BaseSeleniumTestCase implements IConstant {
 		log.info("Browser closed.");
 	}
 
+  @Deprecated
 	public void LoginTest() {
 		login = new Login(driver);
 		homePage = login.loginWithValidCredentials(ACTOR1_USER_NAME, ACTOR1_PASSWORD);
 		assertThat(homePage.showUserInfo(), log(containsString(ACTOR1_FIRST_NAME)));
 	}
 
+  @Deprecated
 	public List<String> getFilterList() {
 		List<WebElement> results = driver
 				.findElements(By.xpath("//div[@class='md-chip-content']/md-chip-template/div"));
@@ -74,10 +74,12 @@ public abstract class BaseSeleniumTestCase implements IConstant {
 		return filters;
 	}
 
+  @Deprecated
 	public String getAllTextFromPage() {
 		return driver.findElement(By.tagName("body")).getText();
 	}
 
+  @Deprecated
 	protected void logout(){
 		driver.get("https://compass-qa.cbrands.com/auth/logout");
 		try {

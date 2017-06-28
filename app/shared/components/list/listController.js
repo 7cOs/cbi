@@ -97,6 +97,7 @@ module.exports = /*  @ngInject */
     vm.remainingOpportunitySpots = remainingOpportunitySpots;
     vm.handleAddToTargetList = handleAddToTargetList;
     vm.isTotalOpportunitiesWithinMaxLimit = isTotalOpportunitiesWithinMaxLimit;
+    vm.resetOpportunitiesExpanded = resetOpportunitiesExpanded;
 
     // Custom Headers for CSV export
     vm.csvHeader = [
@@ -289,7 +290,10 @@ module.exports = /*  @ngInject */
 
       // Create target list
       userService.addTargetList(vm.newList).then(function(response) {
-        $analytics.eventTrack('Add to Target List', {category: vm.analyticsCategory, label: response.id});
+        $analytics.eventTrack('Add to Target List', {
+          category: vm.analyticsCategory,
+          label: response.id
+        });
         vm.addToTargetList(response.id);
         vm.closeModal();
         vm.buttonDisabled = false;
@@ -439,10 +443,10 @@ module.exports = /*  @ngInject */
         targetListService.deleteTargetListOpportunities(targetListService.model.currentList.id, opportunityIds).then(response => {
           updateOpportunityModel(opportunitiesService.model.opportunities, opportunityIds);
           updateTargetListOpportunityCountByListID(targetListService.model.currentList.id, 0 - opportunityIds.length);
+          vm.loadingList = false;
         }).catch((err) => {
-            console.log('Error deleting these ids: ', opportunityIds, ' Responded with error: ', err);
-        }).finally(() => {
-            vm.loadingList = false;
+          console.log('Error deleting these ids: ', opportunityIds, ' Responded with error: ', err);
+          vm.loadingList = false;
         });
       });
     }
@@ -458,9 +462,11 @@ module.exports = /*  @ngInject */
         targetListService.deleteTargetListOpportunities(targetListService.model.currentList.id, opportunityIds).then(function(data) {
           updateOpportunityModel(opportunitiesService.model.opportunities, opportunityIds);
           updateTargetListOpportunityCountByListID(targetListService.model.currentList.id, 0 - opportunityIds.length);
+          vm.loadingList = false;
         }, function(err) {
           console.log('Error deleting these ids: ', opportunityIds, ' Responded with error: ', err);
-        }).finally(() => { vm.loadingList = false; });
+          vm.loadingList = false;
+        });
       }
     }
 
@@ -625,6 +631,10 @@ module.exports = /*  @ngInject */
 
     function noOpportunitiesExpanded() {
       return vm.expandedOpportunities === 0;
+    }
+
+    function resetOpportunitiesExpanded() {
+      vm.expandedOpportunities = 0;
     }
 
     function showDisabled(message) {

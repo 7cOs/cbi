@@ -43,5 +43,6 @@ $fa-font-path: './assets/fonts';
 @import './modules/**/*.scss';
 
 // Components
-@import './shared/components/**/*.scss';
+@import './shared/components/**/!(*.component).scss';
+
 @import './shared/directives/**/*.scss';

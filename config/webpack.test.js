@@ -31,7 +31,9 @@ module.exports = {
         exclude: [
           // these packages have problems with their sourcemaps
           helpers.root('node_modules/rxjs'),
-          helpers.root('node_modules/@angular')
+          helpers.root('node_modules/@angular'),
+          helpers.root('node_modules/@uirouter/angularjs'),
+          helpers.root('node_modules/@uirouter/core')
         ]
       },
 
@@ -84,7 +86,10 @@ module.exports = {
 
       {
         test: /\.(css|scss)/,
-        loader: 'null-loader'
+        loaders: [
+          'to-string-loader',
+          'null-loader'
+        ]
       },
 
       // code instrumentation, post load
@@ -131,7 +136,8 @@ module.exports = {
         tslint: {
           emitErrors: false,
           failOnHint: true,
-          formatter: 'stylish'
+          formatter: 'stylish',
+          typeCheck: true
         },
 
         eslint: {

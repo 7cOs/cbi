@@ -14,5 +14,6 @@ module.exports =
     require('./list-demo').name,
     require('./notes').name,
     require('./filter').name,
-    require('./page').name
+    require('./page').name,
+    require('./app-view').name
   ]);

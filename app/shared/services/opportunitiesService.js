@@ -4,7 +4,6 @@ module.exports = /*  @ngInject */
     var model = {
       filterApplied: false,
       opportunities: [],
-      opportunityId: null,
       noOpportunitiesFound: false
     };
 
@@ -14,6 +13,7 @@ module.exports = /*  @ngInject */
       getFormattedStoresWithOpportunities: getFormattedStoresWithOpportunities,
       getFormattedOpportunities: getFormattedOpportunities,
       getOpportunities: getOpportunities,
+      getAndUpdateStoreWithOpportunity: getAndUpdateStoreWithOpportunity,
       getFormattedSingleOpportunity: getFormattedSingleOpportunity,
       getOpportunitiesHeaders: getOpportunitiesHeaders,
       groupOpportunitiesByStore: groupOpportunitiesByStore,
@@ -65,6 +65,7 @@ module.exports = /*  @ngInject */
         opportunities = opportunities.map(populateOpportunityData);
         if (!opportunities.length) {
           service.model.noOpportunitiesFound = true;
+          opportunitiesPromise.resolve(opportunities);
         } else {
           const storesWithOpportunities = groupOpportunitiesByStore(opportunities);
           opportunitiesPromise.resolve(storesWithOpportunities);
@@ -118,6 +119,27 @@ module.exports = /*  @ngInject */
     }
 
     /**
+     * @name getAndUpdateStoreWithOpportunity
+     * @desc Get opportunity from API and update the model
+     * @returns {Object}
+     * @memberOf cf.common.services
+     */
+    function getAndUpdateStoreWithOpportunity(opportunityID) {
+      const opportunitiesPromise = $q.defer();
+
+      service.getFormattedSingleOpportunity(opportunityID)
+      .then(opportunity => {
+        const storeWithOpportunity = groupOpportunitiesByStore([opportunity]);
+        service.model.opportunities = storeWithOpportunity;
+
+        opportunitiesPromise.resolve(storeWithOpportunity);
+      })
+      .catch(error => opportunitiesPromise.reject(error));
+
+      return opportunitiesPromise.promise;
+    }
+
+    /**
      * @name getFormattedSingleOpportunity
      * @desc Get one opportunity from API, massages the data with populateOpportunityData
      * @param {String} opportunityID The ID of the opportunity to fetch
@@ -130,8 +152,8 @@ module.exports = /*  @ngInject */
 
       $http.get(url)
       .then(response => {
-        const opportunities = populateOpportunityData(response.data.opportunities);
-        opportunitiesPromise.resolve(opportunities);
+        const opportunity = populateOpportunityData(response.data);
+        opportunitiesPromise.resolve(opportunity);
       })
       .catch(error => handleGetOpportunitiesFail(opportunitiesPromise, error));
 
@@ -391,7 +413,6 @@ module.exports = /*  @ngInject */
       service.model.noOpportunitiesFound = false;
       service.model.opportunities        = [];
       service.model.filterApplied        = false;
-      service.model.opportunityId        = null;
     }
 
   };

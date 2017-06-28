@@ -1,0 +1,25 @@
+div.nopad(md-prevent-menu-close)
+  div.notification-card.clearfix(*ngFor="let notification of _notifications", [ngClass]="notificationClasses(notification)", (click)="clickOn(notification)")
+    div.details
+      div(*ngIf="notification.objectType.toUpperCase() === 'TARGET_LIST'")
+        p You've been added as a collaborator
+        div.source {{notification.shortenedObject.name}}
+      div(*ngIf="notification.objectType.toUpperCase() === 'OPPORTUNITY'")
+        p An opportunity has been shared with you
+        div.source {{notification.shortenedObject.store.store_name | titlecase}}
+          span(*ngIf="notUnknown(notification.shortenedObject.store.store_number)")  \#{{notification.shortenedObject.store.store_number}}
+        p.sku {{notification.shortenedObject.product.name | titlecase}}
+          span  {{notification.shortenedObject.type | formatOpportunitiesType}}
+      div(*ngIf="notification.objectType.toUpperCase() === 'STORE'")
+        p A new note was added to your retailer
+        div.source {{notification.shortenedObject.store_name | titlecase}}
+          span(*ngIf="notification.shortenedObject.store_number && notUnknown(notification.shortenedObject.store_number)")  \#{{notification.shortenedObject.store_number}}
+      div(*ngIf="notification.objectType.toUpperCase() === 'DISTRIBUTOR'")
+        p A new note was added to your distributor
+        div.source {{notification.shortenedObject.name | titlecase}}
+    div.info
+      label {{notification.dateCreated | timeAgo: 'relative'}}
+      label.bold by {{notification.creator.firstName}} {{notification.creator.lastName}}
+  div.notification-card.clearfix(*ngIf="allNotificationRead")
+    div.details
+      p No unread notifications.

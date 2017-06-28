@@ -36,22 +36,27 @@ notes
     //- div.trend(column='2')
       label Trend
       md-radio-group(ng-model="a.filterModel.trend")
-        md-radio-button(ng-repeat="filter in a.filtersService.model.trend" class="md-primary" ng-value="filter" aria-label="Trend" ng-if = "a.checkForStoreLevel(filter)" ng-click="a.trendOptionChanged(filter); a.apply(false);") {{filter.name}}
+        md-radio-button(ng-repeat="filter in a.filtersService.model.trend" class="md-primary" ng-value="filter" aria-label="Trend" ng-if = "a.checkForStoreLevel(filter)" ng-click="a.trendOptionChanged(filter); a.disableApplyFilter(false);") {{filter.name}}
     div(column='4')
       label Ending Time Period
       md-radio-group(ng-model="a.filterModel.endingTimePeriod")
-        md-radio-button(ng-repeat="filter in a.filtersService.model.timePeriod track by $index" class="md-primary" ng-value="filter.value" aria-label="Ending Time Period" ng-click="a.updateDistributionTimePeriod(filter.value); a.apply(false);") {{filter.name}}
+        md-radio-button(ng-repeat="filter in a.filtersService.model.timePeriod track by $index" class="md-primary" ng-value="filter.value" aria-label="Ending Time Period" ng-click="a.updateDistributionTimePeriod(filter.value); a.disableApplyFilter(false);") {{filter.name}}
     div(column='8')
-      div(row).dropdown-filter
+      div(row).dropdown-filter.dashboard-filter
         div(column='6').dropdown
           label Depletions Time Period
-          md-select(ng-model="a.filterModel.depletionsTimePeriod" md-on-open="a.openSelect(true)" md-on-close="a.openSelect(false)" aria-label="Select a depletion time period" ng-model-options="{trackBy: '$value.id'}")
-            md-option(ng-repeat="filter in a.filtersService.model.depletionsTimePeriod[a.filterModel.endingTimePeriod]" aria-label="{{filter.name}}" ng-value="filter" ng-click="a.depletionOptionChanged(filter); a.apply(false);") {{filter.displayValue}}
+          md-select(ng-model="a.filterModel.depletionsTimePeriod" md-on-open="a.openSelect(true); a.depletionSelectOpen = true" md-on-close="a.openSelect(false); a.depletionSelectOpen = false" aria-label="Select a depletion time period" ng-model-options="{trackBy: '$value.id'}")
+            md-option(ng-repeat="filter in a.filtersService.model.depletionsTimePeriod[a.filterModel.endingTimePeriod]" aria-label="{{filter.name}}" ng-value="filter" ng-click="a.depletionOptionChanged(filter); a.disableApplyFilter(false);")
+              div {{filter.displayValue}}
+              div.dropdown-subtext(ng-if="a.depletionSelectOpen") {{a.dateRanges[filter.v3ApiCode].range}}
+          p.dropdown-subtext {{a.dateRanges[a.filterModel.depletionsTimePeriod.v3ApiCode].range}}
         div(column='6').dropdown
           label Distribution Time Period
-          md-select(ng-model="a.filterModel.distributionTimePeriod" md-on-open="a.openSelect(true)" md-on-close="a.openSelect(false)" aria-label="Select a distribution time period")
-            md-option(ng-repeat="filter in a.filtersService.model.distributionTimePeriod[a.filterModel.endingTimePeriod]" aria-label="{{filter.name}}" ng-value="filter" ng-click="a.distOptionChanged(filter); a.apply(false);")
-              <span>{{a.filterModel.endingTimePeriod === 'month'? filter.displayValue + ' Mth' : filter.displayValue + ' Days'}}</span>
+          md-select(ng-model="a.filterModel.distributionTimePeriod" md-on-open="a.openSelect(true); a.distributionSelectOpen = true" md-on-close="a.openSelect(false); a.distributionSelectOpen = false" aria-label="Select a distribution time period")
+            md-option(ng-repeat="filter in a.filtersService.model.distributionTimePeriod[a.filterModel.endingTimePeriod]" aria-label="{{filter.name}}" ng-value="filter" ng-click="a.distOptionChanged(filter); a.disableApplyFilter(false);")
+              div {{filter.displayCode}}
+              div.dropdown-subtext(ng-if="a.distributionSelectOpen") {{a.dateRanges[filter.v3ApiCode].range}}
+          p.dropdown-subtext {{a.dateRanges[a.filterModel.distributionTimePeriod.v3ApiCode].range}}
 
 .filters(column='12')
   div(row)
@@ -84,8 +89,8 @@ notes
               h3 Store Type
               p Chain = Chain retailers directly called on by CBBD National or Key Accounts teams (On and Off-Premise)
               p Independent = Retailers not directly called on by CBBD’s National or Key Accounts teams
-      md-checkbox(ng-model="a.filtersService.model.cbbdChainIndependent" aria-label="Independent" ng-change="a.chipsService.applyFilterArr(a.filtersService.model.selected.cbbdChain, 'Independent', 'cbbdChain'); a.apply(false)" ng-disabled="a.disableStoreType()") Independent
-      md-checkbox(ng-model="a.filtersService.model.cbbdChainCbbd" aria-label="CBBD Chain" ng-change="a.chipsService.applyFilterArr(a.filtersService.model.selected.cbbdChain, 'Cbbd', 'cbbdChain', 'CBBD Chain'); a.apply(false)" ng-disabled="a.disableStoreType()") CBBD Chain
+      md-checkbox(ng-model="a.filtersService.model.cbbdChainIndependent" aria-label="Independent" ng-change="a.chipsService.applyFilterArr(a.filtersService.model.selected.cbbdChain, 'Independent', 'cbbdChain'); a.disableApplyFilter(false)" ng-disabled="a.disableStoreType()") Independent
+      md-checkbox(ng-model="a.filtersService.model.cbbdChainCbbd" aria-label="CBBD Chain" ng-change="a.chipsService.applyFilterArr(a.filtersService.model.selected.cbbdChain, 'Cbbd', 'cbbdChain', 'CBBD Chain'); a.disableApplyFilter(false)" ng-disabled="a.disableStoreType()") CBBD Chain
     div(column='4')
       label Retailer
       div(row).retailer.dropdown-filter
@@ -106,7 +111,7 @@ div(row)
   div.scorecard-table.scorecard-table-accounts(column='6')
     .loader-wrap.inline(ng-if="a.loadingBrandSnapshot" ng-class="{'active': a.loadingBrandSnapshot}")
       loader
-    .section-header
+    .section-header.snapshot-label
       span
         label.accent Snapshot
     .brand-header
@@ -214,15 +219,16 @@ div(row)
     .loader-wrap.inline(ng-if="a.loadingTopBottom === true" ng-class="{'active': a.loadingTopBottom}")
       loader
     .loader-wrap.inline.error(ng-if="a.loadingTopBottom === 'error'" ng-class="{'active': a.loadingTopBottom}")
-      //- span.error-text No data found
     .section-header.header-selector.label.accent
-      md-select.top-bottom(ng-model="a.filtersService.model.valuesVsTrend" md-on-open="a.openSelect(true)" md-on-close="a.openSelect(false)" placeholder="Top 10 (Values)" aria-label="Values versus Trends Filter")
+      md-select.top-bottom(ng-model="a.filtersService.model.valuesVsTrend" md-on-open="a.openSelect(true)" md-on-close="a.openSelect(false)" placeholder="Top 30 (Values)" aria-label="Values versus Trends Filter")
         md-option(ng-repeat="filter in a.filtersService.accountFilters.valuesVsTrend track by filter.value" ng-if="!a.isStoreLevel || filter.value <= a._topPerformersThreshold" aria-label="{{filter.name}}" ng-value="filter" ng-click="a.changeTopBottomSortOrder(filter)") {{filter.name}}
       md-select.account-entity(ng-model="a.currentTopBottomAcctType" md-on-open="a.openSelect(true)" md-on-close="a.openSelect(false);"  placeholder="{{a.currentTopBottomAcctType.name}}" aria-label="Account Type Filter")
         md-option(ng-repeat="filter in a.filtersService.accountFilters.accountTypes track by filter.value" ng-if="filter.value !== a.filtersService.accountFilters.accountTypesEnums.stores || a.filtersService.model.valuesVsTrend.value <= a._topPerformersThreshold" aria-label="{{filter.name}}" ng-value="filter" ng-click="a.setTopBottomAcctTypeSelection(filter)") {{filter.name}}
-      span.light For &nbsp;
-      span {{ (a.selectedStore || a.selectedDistributor || a.topLevelForLabel) | truncateText:30 }}
+      .section-header-user
+        span.light For &nbsp;
+        span {{ (a.selectedStore || a.selectedDistributor || a.topLevelForLabel) | truncateText:30 }}
 
+    //- Top Bottom Header
     .widget-header
       .dropdown-filter.narrow
         md-select(ng-model="a.filtersService.model.accountSelected.accountMarkets" md-on-open="a.openSelect(true)" md-on-close="a.openSelect(false)" aria-label="Account Markets Filter")
@@ -230,38 +236,36 @@ div(row)
       .header-selector
         span.back-chevron(ng-if="a.canNavPrevLevel" ng-click="a.navPrevLevelInTopBottom()")
         p.brands.market {{ (a.selectedStore || a.selectedDistributor || a.currentTopBottomObj.currentLevelName.toUpperCase()) | truncateText:20 }}
-    .widget-content.clearfix
-      .chart-data
-        table.fixed-layout(cellspacing="0" cellpadding="0")
-          thead
-            tr
-              th.top.title-col.dist-label(colspan=2)
-                p.accent.bold.left {{a.currentTopBottomObj.currentLevelName}}
-                p &nbsp;
-              th.top.dark.market-label
-                p.accent.bold {{a.filtersService.model.accountSelected.accountMarkets.name}}
-                p.accent.bold(ng-if="a.filtersService.model.accountSelected.accountMarkets.propertyName === 'depletions'") {{a.filterModel.depletionsTimePeriod.displayValue}}
-                p.accent.bold(ng-if="a.filtersService.model.accountSelected.accountMarkets.propertyName !== 'depletions'") {{a.filterModel.distributionTimePeriod.displayValue}}
 
-        md-tabs(md-selected="a.marketSelectedIndex" ng-class="{'animate-disabled': a.disableAnimation}" md-autoselect)
-          md-tab(ng-repeat="(key, data) in a.topBottomData" label="{{key}}")
-            table.fixed-layout.data-table(cellspacing="0" cellpadding="0")
-              tbody
-                tr.clickable.market-value(ng-repeat="index in a.currentBoundTopBottomIndexes" ng-click="a.navigateTopBottomLevels(data.performanceData[index])" ng-class="a.isHighlightStore(data.performanceData[index]) === true? 'selected':''")
-                  td.dist-label(colspan=2) {{data.timePeriodFilteredData[index].title}}<span ng-if="a.isStoreLevel === true && data.performanceData[index].storeNumber && data.performanceData[index].storeNumber !== 'UNKNOWN'"> &nbsp;{{'#' + data.performanceData[index].storeNumber}}</span>
-                  td.dark.market-label
-                    span(ng-bind="a.getValueBoundForAcctType(data.timePeriodFilteredData[index].measure)")
-      .chart
-        table.no-top-border(cellspacing="0" cellpadding="0")
-          thead
-            tr
-              th.top.title-col.chart-title
-                p.accent.bold {{'Trend (' + a.filterModel.trend.name + '%)'}}
-            tr
-              th
-                p.accent(ng-if="a.filtersService.model.accountSelected.accountMarkets.propertyName === 'depletions'") {{a.filterModel.depletionsTimePeriod.displayValue}}
-                p.accent.bold(ng-if="a.filtersService.model.accountSelected.accountMarkets.propertyName !== 'depletions'") {{a.filterModel.distributionTimePeriod.displayValue}}
-        nvd3.nvd(options="a.chartOptions" data="a.currentChartData")
+    //- Top Bottom Subheader
+    .widget-subheader
+      .widget-subheader-item
+        p.accent.bold.left {{a.currentTopBottomObj.currentLevelName}}
+        p.accent.bold &nbsp;
+      .widget-subheader-item.text-center
+        p.accent.bold {{a.filtersService.model.accountSelected.accountMarkets.name}}
+        p.accent.bold {{ a.filtersService.model.accountSelected.accountMarkets.propertyName === 'depletions' ? a.filterModel.depletionsTimePeriod.displayValue : a.filterModel.distributionTimePeriod.displayValue }}
+      .widget-subheader-item.text-center
+        p.accent.bold Trend ({{a.filterModel.trend.name}}%)
+        p.accent.bold {{ a.filtersService.model.accountSelected.accountMarkets.propertyName === 'depletions' ? a.filterModel.depletionsTimePeriod.displayValue : a.filterModel.distributionTimePeriod.displayValue }}
+
+    //- Top Bottom Content
+    .widget-content.clearfix
+      .widget-data
+        .widget-row-container.no-outline(
+          ng-repeat="(index, data) in a.topBottomData[a.accountTypeValues[a.currentTopBottomAcctType.name]].timePeriodFilteredData"
+          label="{{key}}"
+          ng-click="a.navigateTopBottomLevels(a.getAccountTypePerformanceData(index))"
+          ng-class="a.isHighlightStore(a.getAccountTypePerformanceData(index)) === true ? 'selected' : ''"
+        )
+          .widget-data-row
+            .widget-data-left
+              p.dist-label.data-brand {{data.title}}<span ng-if="a.isStoreLevel && a.getAccountTypePerformanceData(index).storeNumber && a.getAccountTypePerformanceData(index).storeNumber !== 'UNKNOWN'">&nbsp;{{'#' + a.getAccountTypePerformanceData(index).storeNumber}}</span>
+            .widget-data-right
+              p.dark.text-center {{a.getValueBoundForAcctType(data.measure)}}
+      .widget-graph
+        .graph-container(ng-repeat="data in a.currentChartData")
+          nvd3(options="a.chartOptions" data="data")
 
 h3.top-opportunities-header Top Opportunities
   a.accent(ng-click="a.goToOpportunities($event);" ng-disabled="a.allOpportunitiesDisabled()" analytics-on="click" analytics-event="{{a.currentTopBottomAcctType.name}}" analytics-category="{{a.filtersService.model.valuesVsTrend.name}}" analytics-label="View Opportunities") See All Opportunities

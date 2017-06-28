@@ -3,15 +3,16 @@ section.landing-page
   section.landing-page-data(column="12")
     div(row)
       section.my-performance(column="7")
-        section.greeting
-          h1 {{l.greeting}}
+        greeting([name]="l.greetingName")
+
         h2 My Performance
         .depletions(column="4")
           h3 Depletions FYTD
+            date-ranges([date-range]="l.fytdDateRange")
           table(cellspacing="0" cellpadding="0")
             tr
               th.accent CE
-              th &nbsp;
+              th.accent VS YA%
             tr
               td
                 h3 {{l.performanceData.performance[0].measures[0].value | number:0}}
@@ -25,14 +26,14 @@ section.landing-page
         .distribution(column="8")
           div.clearfix
             h3 {{l.performanceData.timespan}} Distribution L90
-            h4.accent VS  YA%
+              date-ranges([date-range]="l.l90DateRange")
           table(cellspacing="0" cellpadding="0")
             tr
               th.accent Simple
-              th &nbsp;
+              th.accent VS YA%
               th &nbsp;
               th.accent Effective
-              th &nbsp;
+              th.accent VS YA%
             tr(ng-if="l.performanceData.distribution === 'allPremise' || l.performanceData.distribution === 'onPremise'")
               td
                 h3 {{l.performanceData.performance[1].measures[0].value | number:0}}

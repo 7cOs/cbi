@@ -1,3 +1,6 @@
+import { getDateRangeMock } from '../../models/date-range.model.mock';
+import { Observable } from 'rxjs';
+
 describe('Unit: accountsController', function() {
   var scope, ctrl, $controller, $state, $q, filtersService, chipsService, userService, packageSkuData, brandSpy, brandPerformanceData, myperformanceService, storesService, $filter;
   let promiseGetStores;
@@ -320,6 +323,11 @@ describe('Unit: accountsController', function() {
       'planDistirbutionEffectiveTrend': -70.37382451231834
     }
   ];
+
+  const mockDateRangeService = {
+    getDateRanges: () => Observable.of(getDateRangeMock())
+  };
+
   beforeEach(function() {
     // Get Mock Modules
     angular.mock.module('ui.router');
@@ -342,6 +350,7 @@ describe('Unit: accountsController', function() {
       userService = _userService_;
       myperformanceService = _myperformanceService_;
       storesService = _storesService_;
+
       brandPerformanceData = {
         performance: [
           {
@@ -412,11 +421,12 @@ describe('Unit: accountsController', function() {
             return $q.when(topBottomSnapshotStoreData);
         };
       });
+      spyOn(mockDateRangeService, 'getDateRanges').and.callThrough();
 
       brandSpy = spyOn(userService, 'getPerformanceBrand');
       brandSpy.and.returnValue($q.when(brandPerformanceData));
       // Create Controller
-      ctrl = $controller('accountsController', {$scope: scope});
+      ctrl = $controller('accountsController', {$scope: scope, dateRangeService: mockDateRangeService});
       scope.$digest();
     });
   });
@@ -546,7 +556,7 @@ describe('Unit: accountsController', function() {
         };
       });
 
-      ctrl = $controller('accountsController', {$scope: scope});
+      ctrl = $controller('accountsController', {$scope: scope, dateRangeService: mockDateRangeService});
 
       scope.$digest();
 
@@ -732,11 +742,11 @@ describe('Unit: accountsController', function() {
     it('Should set ctrl.disableApply to whatever is passed in', function() {
       expect(ctrl.disableApply).toEqual(true);
 
-      ctrl.apply(true);
+      ctrl.disableApplyFilter(true);
 
       expect(ctrl.disableApply).toEqual(true);
 
-      ctrl.apply(false);
+      ctrl.disableApplyFilter(false);
 
       expect(ctrl.disableApply).toEqual(false);
     });
@@ -988,7 +998,7 @@ describe('Unit: accountsController', function() {
     beforeEach(function() {
       spyOn(chipsService, 'updateChip').and.callThrough();
       spyOn(chipsService, 'addChip').and.callThrough();
-      spyOn(ctrl, 'apply').and.callThrough();
+      spyOn(ctrl, 'disableApplyFilter').and.callThrough();
     });
 
     it('Should update my accounts only chip', function() {
@@ -997,8 +1007,8 @@ describe('Unit: accountsController', function() {
       expect(chipsService.updateChip).not.toHaveBeenCalled();
       expect(chipsService.addChip.calls.count()).toEqual(0);
       expect(chipsService.addChip).not.toHaveBeenCalled();
-      expect(ctrl.apply.calls.count()).toEqual(0);
-      expect(ctrl.apply).not.toHaveBeenCalled();
+      expect(ctrl.disableApplyFilter.calls.count()).toEqual(0);
+      expect(ctrl.disableApplyFilter).not.toHaveBeenCalled();
       // run
       ctrl.updateChip('My Accounts Only', 'myAccountsOnly');
       // assert
@@ -1006,8 +1016,8 @@ describe('Unit: accountsController', function() {
       expect(chipsService.updateChip).toHaveBeenCalled();
       expect(chipsService.addChip.calls.count()).toEqual(0);
       expect(chipsService.addChip).not.toHaveBeenCalled();
-      expect(ctrl.apply.calls.count()).toEqual(1);
-      expect(ctrl.apply).toHaveBeenCalled();
+      expect(ctrl.disableApplyFilter.calls.count()).toEqual(1);
+      expect(ctrl.disableApplyFilter).toHaveBeenCalled();
     });
 
     it('Should update premise type chip', function() {
@@ -1016,8 +1026,8 @@ describe('Unit: accountsController', function() {
       expect(chipsService.updateChip).not.toHaveBeenCalled();
       expect(chipsService.addChip.calls.count()).toEqual(0);
       expect(chipsService.addChip).not.toHaveBeenCalled();
-      expect(ctrl.apply.calls.count()).toEqual(0);
-      expect(ctrl.apply).not.toHaveBeenCalled();
+      expect(ctrl.disableApplyFilter.calls.count()).toEqual(0);
+      expect(ctrl.disableApplyFilter).not.toHaveBeenCalled();
       // run
       ctrl.updateChip('On-Premise', 'premiseType');
       // assert
@@ -1025,8 +1035,8 @@ describe('Unit: accountsController', function() {
       expect(chipsService.updateChip).not.toHaveBeenCalled();
       expect(chipsService.addChip.calls.count()).toEqual(1);
       expect(chipsService.addChip).toHaveBeenCalled();
-      expect(ctrl.apply.calls.count()).toEqual(1);
-      expect(ctrl.apply).toHaveBeenCalled();
+      expect(ctrl.disableApplyFilter.calls.count()).toEqual(1);
+      expect(ctrl.disableApplyFilter).toHaveBeenCalled();
     });
 
     it('Should update premise type chip and remove the existing one if it already exists (off -> on)', function() {
@@ -1035,8 +1045,8 @@ describe('Unit: accountsController', function() {
       expect(chipsService.updateChip).not.toHaveBeenCalled();
       expect(chipsService.addChip.calls.count()).toEqual(0);
       expect(chipsService.addChip).not.toHaveBeenCalled();
-      expect(ctrl.apply.calls.count()).toEqual(0);
-      expect(ctrl.apply).not.toHaveBeenCalled();
+      expect(ctrl.disableApplyFilter.calls.count()).toEqual(0);
+      expect(ctrl.disableApplyFilter).not.toHaveBeenCalled();
       expect(chipsService.model.length).toEqual(4);
       expect(chipsService.model[1].name).toEqual('Off-Premise');
       // run
@@ -1046,8 +1056,8 @@ describe('Unit: accountsController', function() {
       expect(chipsService.updateChip).not.toHaveBeenCalled();
       expect(chipsService.addChip.calls.count()).toEqual(1);
       expect(chipsService.addChip).toHaveBeenCalled();
-      expect(ctrl.apply.calls.count()).toEqual(1);
-      expect(ctrl.apply).toHaveBeenCalled();
+      expect(ctrl.disableApplyFilter.calls.count()).toEqual(1);
+      expect(ctrl.disableApplyFilter).toHaveBeenCalled();
       expect(chipsService.model.length).toEqual(4);
       expect(chipsService.model[3].name).toEqual('On-Premise');
     });
@@ -1793,6 +1803,67 @@ describe('Unit: accountsController', function() {
       ctrl.showXChain       = true;
       ctrl.showXStore       = true;
       expect(ctrl.canOpenNote()).toEqual(true);
+    });
+  });
+
+  describe('[Method] getAccountTypePerformanceData', function() {
+    beforeEach(function() {
+      ctrl.topBottomData = {
+        accounts: {
+          performanceData: [
+            { name: 'Account 1' },
+            { name: 'Account 2' }
+          ]
+        },
+        distributors: {
+          performanceData: [
+            { name: 'Distributor 1' },
+            { name: 'Distributor 2' }
+          ]
+        },
+        subAccounts: {
+          performanceData: [
+            { name: 'SubAccount 1' },
+            { name: 'SubAccount 2' }
+          ]
+        },
+        stores: {
+          performanceData: [
+            { name: 'Store 1' },
+            { name: 'Store 2' }
+          ]
+        }
+      };
+      ctrl.accountTypeValues = {
+        Distributors: 'distributors',
+        Accounts: 'accounts',
+        'Sub-Accounts': 'subAccounts',
+        Stores: 'stores'
+      };
+    });
+
+    it('should return performanceData from the current top bottom account type', function() {
+      ctrl.currentTopBottomAcctType.name = 'Accounts';
+      expect(ctrl.getAccountTypePerformanceData(0)).toEqual({name: 'Account 1'});
+
+      ctrl.currentTopBottomAcctType.name = 'Distributors';
+      expect(ctrl.getAccountTypePerformanceData(0)).toEqual({name: 'Distributor 1'});
+
+      ctrl.currentTopBottomAcctType.name = 'Sub-Accounts';
+      expect(ctrl.getAccountTypePerformanceData(0)).toEqual({name: 'SubAccount 1'});
+
+      ctrl.currentTopBottomAcctType.name = 'Stores';
+      expect(ctrl.getAccountTypePerformanceData(0)).toEqual({name: 'Store 1'});
+    });
+
+    it('should return performanceData of the given index', function() {
+      ctrl.currentTopBottomAcctType.name = 'Accounts';
+      expect(ctrl.getAccountTypePerformanceData(0)).toEqual({name: 'Account 1'});
+      expect(ctrl.getAccountTypePerformanceData(1)).toEqual({name: 'Account 2'});
+
+      ctrl.currentTopBottomAcctType.name = 'Distributors';
+      expect(ctrl.getAccountTypePerformanceData(0)).toEqual({name: 'Distributor 1'});
+      expect(ctrl.getAccountTypePerformanceData(1)).toEqual({name: 'Distributor 2'});
     });
   });
 });

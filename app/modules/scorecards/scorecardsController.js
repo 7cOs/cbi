@@ -1,18 +1,22 @@
 'use strict';
 
 module.exports = /*  @ngInject */
-  function scorecardsController($rootScope, $scope, $q, $filter, $state, filtersService, opportunitiesService, userService) {
+  function scorecardsController(dateRangeService, filtersService, opportunitiesService, userService, $filter, $q, $rootScope, $scope, $state) {
 
     // ****************
     // CONTROLLER SETUP
     // ****************
 
     // Initial variables
-    var vm = this;
+    const vm = this;
+    let dateRangeSubscription;
+
     vm.depletionSelect;
+    vm.depletionSelectApiCode;
     vm.depletionRadio;
     vm.distributionSelectOptions = {
-      selected: ''
+      selected: '',
+      v3ApiCode: ''
     };
     vm.distributionRadioOptions = {
       placementType: [{
@@ -64,6 +68,9 @@ module.exports = /*  @ngInject */
     $rootScope.pageTitle = $state.current.title;
     vm.filtersService = filtersService;
     vm.userService = userService;
+    vm.depletionSelectOpen = false;
+    vm.distributionSelectOpen = false;
+    vm.dateRanges = {};
 
     // Expose public methods
     vm.changeDepletionOption = changeDepletionOption;
@@ -115,8 +122,9 @@ module.exports = /*  @ngInject */
       vm.selectedIndex = $index;
     }
 
-    function changeDepletionOption(value) {
+    function changeDepletionOption(value, v3ApiCode) {
       vm.calculatingDepletionTotals = true;
+      vm.depletionSelectApiCode = v3ApiCode;
       updatedSelectionValuesInFilter(null, value, null);
     }
 
@@ -127,9 +135,10 @@ module.exports = /*  @ngInject */
       vm.calculatingDepletionTotals = false;
     }
 
-    function changeDistributionTimePeriod(value) {
+    function changeDistributionTimePeriod(value, v3ApiCode) {
       vm.calculatingDistributionTotals = true;
       vm.distributionSelectOptions.selected = value;
+      vm.distributionSelectOptions.v3ApiCode = v3ApiCode;
       updatedSelectionValuesInFilter(null, null, value);
       updateTotalRowDistributions();
       userService.model.distribution = getRemodeledCollection(userService.model.distribution, 'distribution');
@@ -187,7 +196,9 @@ module.exports = /*  @ngInject */
 
     function updateEndingTimePeriod(value) {
       vm.distributionSelectOptions.selected = vm.filtersService.model.scorecardDistributionTimePeriod[value][0].name;
+      vm.distributionSelectOptions.v3ApiCode = vm.filtersService.model.scorecardDistributionTimePeriod[value][0].v3ApiCode;
       vm.depletionSelect = vm.filtersService.model.depletionsTimePeriod[value][2].name;
+      vm.depletionSelectApiCode = vm.filtersService.model.depletionsTimePeriod[value][2].v3ApiCode;
       updatedSelectionValuesInFilter(value, vm.depletionSelect, vm.distributionSelectOptions.selected);
       updateTotalRowDepletions();
       updateTotalRowDistributions();
@@ -255,7 +266,7 @@ module.exports = /*  @ngInject */
         const filteredTimeValue = getFilteredValue('timeFrameTotal', row, rowType);
         const filteredYAValue = getFilteredValue('vsYa', row, rowType);
 
-        return filteredTimeValue !== '-' && filteredTimeValue !== '0' && filteredYAValue !== '0';
+        return (filteredTimeValue !== '-' && filteredTimeValue !== '0') || filteredYAValue !== '0';
       }
     }
 
@@ -265,7 +276,10 @@ module.exports = /*  @ngInject */
 
     function init() {
       if (userService.model.currentUser.srcTypeCd === undefined) userService.model.currentUser.srcTypeCd = [''];
+
       setDefaultFilterOptions();
+      initDateRanges();
+
       var performanceDepletionPromise = userService.getPerformanceDepletion();
       var performanceDistributionPromise = userService.getPerformanceDistribution({'type': 'noencode', 'premiseType': vm.distributionRadioOptions.selected.onOffPremise});
 
@@ -278,7 +292,11 @@ module.exports = /*  @ngInject */
         // depletions
         vm.depletionRadio = 'year';
         vm.depletionSelect = 'FYTD';
-        vm.distributionSelectOptions.selected = vm.filtersService.model.distributionTimePeriod[vm.depletionRadio][1].name;
+        vm.depletionSelectApiCode = 'FYTD';
+        vm.distributionSelectOptions = {
+          selected: vm.filtersService.model.distributionTimePeriod[vm.depletionRadio][1].name,
+          v3ApiCode: vm.filtersService.model.distributionTimePeriod[vm.depletionRadio][1].v3ApiCode
+        };
         updateTotalRowDepletions();
 
         // distribution
@@ -416,4 +434,14 @@ module.exports = /*  @ngInject */
         });
       }
     }
+
+    function initDateRanges() {
+      dateRangeSubscription = dateRangeService.getDateRanges().subscribe(dateRanges => {
+        vm.dateRanges = dateRanges;
+      });
+    }
+
+    $scope.$on('$destroy', () => {
+      dateRangeSubscription.unsubscribe();
+    });
   };

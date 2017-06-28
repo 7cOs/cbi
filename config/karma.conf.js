@@ -51,7 +51,8 @@ module.exports = function (config) {
 
     remapCoverageReporter: {
       'text-summary': null,
-      html: 'coverage/'
+      html: 'coverage/',
+      lcovonly: 'coverage/lcov.info'
     },
 
     // used for CircleCI output only

@@ -43,31 +43,7 @@ div.outer-nav-wrapper
           md-menu(md-position-mode="target-right target" md-offset="1 38")
             a.nav-icon.notifications(href="#" md-menu-origin ng-click="$mdOpenMenu($event); nb.markSeen(nb.notifications)", aria-label="Notifications" analytics-on="click" analytics-event="View Notification" analytics-category="Notifications" analytics-label="Navbar Icon Click")
             md-menu-content.nav-flyout
-                .content.nopad
-                  div.notification-card.clearfix(md-prevent-menu-close ng-repeat="notification in nb.notifications | orderBy: '-dateCreated'" ng-class="{'read': notification.status === 'READ'}" ng-click="nb.markRead(notification)" class="{{notification.action}}")
-                    .details
-                      div(ng-if="notification.objectType.toUpperCase() === 'TARGET_LIST'")
-                        p You've been added as a collaborator
-                        .source {{notification.shortenedObject.name}}
-                      div(ng-if="notification.objectType.toUpperCase() === 'OPPORTUNITY'")
-                        p An opportunity has been shared with you
-                        .source {{notification.shortenedObject.store.store_name | titlecase}}
-                          span(ng-if="nb.notUnknown(notification.shortenedObject.store.store_number)")  \#{{notification.shortenedObject.store.store_number}}
-                        p.sku {{notification.shortenedObject.product.name | titlecase}}
-                          span  {{notification.shortenedObject.type | formatOpportunitiesType}}
-                      div(ng-if="notification.objectType.toUpperCase() === 'STORE'" ng-click="nb.goToNote(notification)")
-                        p A new note was added to your retailer
-                        .source {{notification.shortenedObject.store_name | titlecase}}
-                          span(ng-if="notification.shortenedObject.store_number && nb.notUnknown(notification.shortenedObject.store_number)") &nbsp\#{{notification.shortenedObject.store_number}}
-                      div(ng-if="notification.objectType.toUpperCase() === 'DISTRIBUTOR'" ng-click="nb.goToNote(notification)")
-                        p A new note was added to your distributor
-                        .source {{notification.shortenedObject.name | titlecase}}
-                    .info
-                      label {{notification.dateCreated | timeAgo: 'relative'}}
-                      label.bold by {{notification.creator.firstName}} {{notification.creator.lastName}}
-                  div.notification-card.clearfix(ng-if="nb.notificationHelper.unreadNotifications < 1")
-                    .details
-                      p {{nb.noNotifications}}
+              notifications([notifications]="nb.notifications", (on-notification-clicked)="nb.notificationClicked($event)")
           md-menu(md-position-mode="target-right target" md-offset="2 54")
             a.nav-icon.settings(href="#" md-menu-origin ng-click="$mdOpenMenu($event)", aria-label="Settings" analytics-on="click" analytics-event="View Settings" analytics-category="Settings" analytics-label="Navbar Icon Click")
             md-menu-content
