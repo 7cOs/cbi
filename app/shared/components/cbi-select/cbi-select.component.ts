@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 
 @Component({
   selector: 'cbi-select',
@@ -6,7 +6,7 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
   styles: [require('./cbi-select.component.scss')]
 })
 
-export class CbiSelectComponent implements OnInit {
+export class CbiSelectComponent {
   @Output() onOptionSelected = new EventEmitter<any>();
 
   @Input() displayKey: string;
@@ -24,10 +24,6 @@ export class CbiSelectComponent implements OnInit {
   private optionData: any[] = [];
 
   constructor() {}
-
-  ngOnInit() {
-    if (this.subDisplayKey) this.initSubValue();
-  }
 
   private initSubValue(): void {
     this.optionData.forEach(option => {

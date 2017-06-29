@@ -1,7 +1,7 @@
 section.cbi-select
   p.title(*ngIf="title") {{ title }}
 
-  md-select([(ngModel)]="model", (onOpen)="isSelectOpen = true", (onClose)="isSelectOpen = false")
+  md-select([ngModel]="model", (onOpen)="isSelectOpen = true", (onClose)="isSelectOpen = false")
     md-option.cbi-select-option(*ngFor="let option of optionData", [value]="option[valueKey]", (click)="optionClicked(option)")
       div.option-container(*ngIf="!subDisplayKey")
         p.option-text {{ option[displayKey] }}
@@ -9,4 +9,4 @@ section.cbi-select
         p.option-top-text {{ option[displayKey] }}
         p.option-sub-text(*ngIf="subDisplayKey && isSelectOpen") {{ option[subDisplayKey] }}
 
-  p.sub-title(*ngIf="subDisplayKey") {{ currentSubValue }}
+  p.subtitle(*ngIf="subDisplayKey") {{ currentSubValue }}
