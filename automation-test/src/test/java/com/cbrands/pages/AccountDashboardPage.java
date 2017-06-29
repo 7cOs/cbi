@@ -4,6 +4,7 @@ import com.cbrands.helper.PropertiesCache;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -17,6 +18,7 @@ import static com.cbrands.helper.SeleniumUtils.*;
 
 public class AccountDashboardPage extends LoadableComponent<AccountDashboardPage> {
 
+  private static final int MAX_HEADER_CHAR_LIMIT = 17;
   private Log log = LogFactory.getLog(AccountDashboardPage.class);
 
   private final WebDriver driver;
@@ -71,11 +73,8 @@ public class AccountDashboardPage extends LoadableComponent<AccountDashboardPage
     waitForElementsVisibleFluentWait(results);
 
     final WebElement retailer = getFirstMatchingDropdownSearchResultByName(accountName, results);
-    if(null != retailer) {
-      retailer.click();
-    } else {
-      log.info("No retailer found by the name of " + accountName);
-    }
+    Assert.assertNotNull(retailer, "No retailer found by the name of " + accountName);
+    waitForElementToClickable(retailer, true).click();
 
     return this;
   }
@@ -83,8 +82,9 @@ public class AccountDashboardPage extends LoadableComponent<AccountDashboardPage
   private WebElement getFirstMatchingDropdownSearchResultByName(String accountName, List<WebElement> results) {
     WebElement retailer = null;
 
-    for(WebElement result : results) {
-      if(accountName.equalsIgnoreCase(result.getText())) {
+    for (WebElement result : results) {
+      final String resultText = result.getText().trim();
+      if (resultText.toUpperCase().contains(accountName.toUpperCase())) {
         retailer = result;
         break;
       }
