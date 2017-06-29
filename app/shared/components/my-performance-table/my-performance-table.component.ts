@@ -101,9 +101,10 @@ export class MyPerformanceTableComponent {
         : 0;
   }
 
-  // private clickOn(row: MyPerformanceTableRow, index: number) {
-  //   this.onElementClicked.emit({row: row, index: index});
-  // }
+  private clickOn(row: MyPerformanceTableRow, index: number) {
+    console.log('clicked on ', row);
+    this.onElementClicked.emit({row: row, index: index});
+  }
 
 }
 

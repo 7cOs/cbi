@@ -13,4 +13,6 @@ div.performance-table-wrapper
             th.col-20-pct.center-col VS YA %
         th.col-20-pct.right-col {{ _tableHeaderRow[2] }}
     my-performance-table-row.total-row.col-100-pct([rowData]="totalRowData")
-    my-performance-table-row.col-100-pct(*ngFor="let rowData of _tableData", [rowData]="rowData")
+    my-performance-table-row.col-100-pct(*ngFor="let rowData of _tableData, let i = index", 
+                                         [rowData]="rowData",
+                                         (click)="clickOn(rowData, i)")
