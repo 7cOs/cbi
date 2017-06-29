@@ -1,16 +1,9 @@
 // tslint:disable:no-unused-variable
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 
+import { ColumnType } from '../../../enums/column-type.enum';
 import { DateRange } from '../../../models/date-range.model';
-
-export enum ColumnType {
-  descriptionLine0,
-  descriptionLine1,
-  metricColumn0,
-  metricColumn1,
-  metricColumn2,
-  ctv
-}
+import { MyPerformanceTableRow } from '../../../models/my-performance-table-row.model';
 
 @Component({
   selector: 'my-performance-table',
@@ -34,47 +27,18 @@ export class MyPerformanceTableComponent {
   }
 
   @Input()
-  set tableDataRow(tableData: Array<MyPerformanceTableRow>) {
+  set tableData(tableData: Array<MyPerformanceTableRow>) {
+    console.log('thing', tableData);
     this._tableData = tableData;
 
-    if (typeof this.sortingFunction === 'function') { // check if that works
+    if (typeof this.sortingFunction === 'function') {
       this._tableData = this._tableData.sort(this.sortingFunction);
     }
   }
 
-  // stubbing this here for now
-  private _tableHeaderRow: string[] = ['People', 'Depletions', 'CTV'];
-  private _performanceMetric: string = 'Depletions';
-  private _dateRange: DateRange = <DateRange>{displayCode: 'CYTD', code: 'CYTDBDL', range: '01/01/17 - 06/27/17'};
-  private row1Data: MyPerformanceTableRow = {
-    descriptionLine0: 'Specialists',
-    descriptionLine1: '',
-    metricColumn0: 123,
-    metricColumn1: 456,
-    metricColumn2: 789,
-    ctv: 44
-  };
-  private row2Data: MyPerformanceTableRow = {
-    descriptionLine0: 'MDMs',
-    descriptionLine1: '',
-    metricColumn0: 11,
-    metricColumn1: 46,
-    metricColumn2: 78,
-    ctv: 4
-  };
-
-  private totalRowData: MyPerformanceTableRow = {
-    descriptionLine0: 'Total',
-    descriptionLine1: '',
-    metricColumn0: 1323,
-    metricColumn1: 4356,
-    metricColumn2: 89,
-    ctv: 100
-  };
-
   private sortingFunction: (left: MyPerformanceTableRow, right: MyPerformanceTableRow) => number;
   private _sortingCriterias: Array<SortingCriteria> = null;
-  private _tableData: Array<MyPerformanceTableRow> = [ this.row1Data, this.row2Data ];
+  private _tableData: Array<MyPerformanceTableRow>;
 
   private updateSortingFunction() {
     if (this._sortingCriterias.length) {
@@ -87,7 +51,7 @@ export class MyPerformanceTableComponent {
           currentSortOrder = this.compareObjects(left[currentColumn], (right[currentColumn]));
           i++;
         } while (i < this._sortingCriterias.length && currentSortOrder === 0);
-
+        console.log(currentSortOrder);
         return this._sortingCriterias[--i].order ? currentSortOrder : -currentSortOrder;
       };
     }
@@ -106,15 +70,12 @@ export class MyPerformanceTableComponent {
     this.onElementClicked.emit({row: row, index: index});
   }
 
-}
+  private sortRows(colType: ColumnType, order: boolean) {
+    console.log('sort');
+    this._sortingCriterias = [<SortingCriteria>{columnType: colType, order: order}];
+    this.updateSortingFunction();
+  }
 
-export interface MyPerformanceTableRow {
-  descriptionLine0: string;
-  descriptionLine1: string;
-  metricColumn0: number;
-  metricColumn1: number;
-  metricColumn2: number;
-  ctv: number;
 }
 
 export interface MyPerformanceTableEvent {

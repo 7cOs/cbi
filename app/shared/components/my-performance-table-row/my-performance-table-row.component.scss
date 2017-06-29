@@ -8,6 +8,10 @@
   border: 1px solid #999; 
 }
 
+td {
+  border: 1px solid gray;
+}
+
 th {
   font-weight: normal;
   font-size: 10px;
@@ -33,6 +37,7 @@ tr {
 
 .col-20-pct {
   width: 20%;
+  margin: 0 auto;
 }
 
 .col-10-pct {

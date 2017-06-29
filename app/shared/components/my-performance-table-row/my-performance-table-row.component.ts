@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { MyPerformanceTableRow } from '../my-performance-table/my-performance-table.component';
+import { MyPerformanceTableRow } from '../../../models/my-performance-table-row.model';
 
 @Component({
   selector: '[my-performance-table-row]',
