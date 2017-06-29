@@ -4,6 +4,7 @@ import { FormsModule }    from '@angular/forms';
 
 import { MyPerformanceComponent }    from './my-performance.component';
 import { MyPerformanceTableComponent } from '../../shared/components/my-performance-table/my-performance-table.component';
+import { MyPerformanceTableRowComponent } from '../../shared/components/my-performance-table-row/my-performance-table-row.component';
 
 @NgModule({
   imports: [
@@ -12,7 +13,8 @@ import { MyPerformanceTableComponent } from '../../shared/components/my-performa
   ],
   declarations: [
     MyPerformanceComponent,
-    MyPerformanceTableComponent
+    MyPerformanceTableComponent,
+    MyPerformanceTableRowComponent
   ]
 })
 

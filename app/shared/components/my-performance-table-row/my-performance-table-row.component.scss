@@ -1,6 +1,7 @@
 .performance-table-wrapper {
   width: 50%;
   min-width: 400px;
+  display: inline-block;
 }
 
 .my-performance-table {
@@ -12,8 +13,10 @@ th {
   font-size: 10px;
 }
 
-td {
-  border: 1px solid #999;
+tr {
+  width: 100%;
+  min-width: 400px;
+  position: relative;
 }
 
 .col-100-pct {

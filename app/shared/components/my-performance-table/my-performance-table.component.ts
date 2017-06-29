@@ -1,4 +1,7 @@
+// tslint:disable:no-unused-variable
 import { Component, Input, Output, EventEmitter } from '@angular/core';
+
+import { DateRange } from '../../../models/date-range.model';
 
 export enum ColumnType {
   descriptionLine0,
@@ -14,10 +17,14 @@ export enum ColumnType {
   template: require('./my-performance-table.component.pug'),
   styles: [ require('./my-performance-table.component.scss') ]
 })
-
 export class MyPerformanceTableComponent {
   @Output() onElementClicked = new EventEmitter<MyPerformanceTableEvent>();
   @Output() onSortingCriteriasChanged = new EventEmitter<Array<SortingCriteria>>();
+
+  @Input() tableHeaderRow: Array<string>;
+  @Input() totalRow: MyPerformanceTableRow;
+  @Input() performanceMetric: string;
+  @Input() dateRange: DateRange;
 
   @Input()
   set sortingCriterias(criterias: Array<SortingCriteria>) {
@@ -25,10 +32,6 @@ export class MyPerformanceTableComponent {
     this.updateSortingFunction();
     this._tableData = this._tableData.sort(this.sortingFunction);
   }
-
-  @Input() tableHeaderRow: Array<string>;
-
-  @Input() totalRow: MyPerformanceTableRow;
 
   @Input()
   set tableDataRow(tableData: Array<MyPerformanceTableRow>) {
@@ -39,9 +42,39 @@ export class MyPerformanceTableComponent {
     }
   }
 
+  // stubbing this here for now
+  private _tableHeaderRow: string[] = ['People', 'Depletions', 'CTV'];
+  private _performanceMetric: string = 'Depletions';
+  private _dateRange: DateRange = <DateRange>{displayCode: 'CYTD', code: 'CYTDBDL', range: '01/01/17 - 06/27/17'};
+  private row1Data: MyPerformanceTableRow = {
+    descriptionLine0: 'Specialists',
+    descriptionLine1: '',
+    metricColumn0: 123,
+    metricColumn1: 456,
+    metricColumn2: 789,
+    ctv: 44
+  };
+  private row2Data: MyPerformanceTableRow = {
+    descriptionLine0: 'MDMs',
+    descriptionLine1: '',
+    metricColumn0: 11,
+    metricColumn1: 46,
+    metricColumn2: 78,
+    ctv: 4
+  };
+
+  private totalRowData: MyPerformanceTableRow = {
+    descriptionLine0: 'Total',
+    descriptionLine1: '',
+    metricColumn0: 1323,
+    metricColumn1: 4356,
+    metricColumn2: 89,
+    ctv: 100
+  };
+
   private sortingFunction: (left: MyPerformanceTableRow, right: MyPerformanceTableRow) => number;
   private _sortingCriterias: Array<SortingCriteria> = null;
-  private _tableData: Array<MyPerformanceTableRow> = [];
+  private _tableData: Array<MyPerformanceTableRow> = [ this.row1Data, this.row2Data ];
 
   private updateSortingFunction() {
     if (this._sortingCriterias.length) {

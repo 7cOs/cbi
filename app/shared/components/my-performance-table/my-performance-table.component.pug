@@ -1,5 +1,16 @@
-table
-  thead
-    tr
-      th Description
-      th Name
+div.performance-table-wrapper
+  div.performance-table-summary.col-100-pct
+    h1 {{ _performanceMetric }} {{ _dateRange.displayCode }}
+    h4 {{ _dateRange.range }}
+  table.my-performance-table.col-100-pct
+    thead.col-100-pct
+      tr.top-header.col-100-pct
+        th.col-20-pct.left-col {{ _tableHeaderRow[0] }}
+        th.col-60-pct.center-col {{ _tableHeaderRow[1] }} 
+          tr
+            th.col-20-pct.center-col CYTV
+            th.col-20-pct.center-col VS YA
+            th.col-20-pct.center-col VS YA %
+        th.col-20-pct.right-col {{ _tableHeaderRow[2] }}
+    my-performance-table-row.total-row.col-100-pct([rowData]="totalRowData")
+    my-performance-table-row.col-100-pct(*ngFor="let rowData of _tableData", [rowData]="rowData")
