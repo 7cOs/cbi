@@ -97,4 +97,18 @@ public class AccountDashboardPage extends LoadableComponent<AccountDashboardPage
 
     return this;
   }
+
+  public AccountDashboardPage drillIntoRightPanelWithName(String name) {
+    final List<WebElement> elements = findElements(By.xpath(
+      "//div[@class='scorecard-chart']//p[contains(@class, 'data-brand')]"));
+    waitForElementsVisibleFluentWait(elements);
+
+    final WebElement element = getFirstElementTextMatchByName(name, elements);
+    Assert.assertNotNull(element, "No item found by name: " + name);
+
+    scrollToAndClick(element);
+
+    return this;
+  }
+
 }
