@@ -70,14 +70,14 @@ public class AccountDashboardPage extends LoadableComponent<AccountDashboardPage
     final List<WebElement> results = resultsContainer.findElements(By.xpath(".//li"));
     waitForElementsVisibleFluentWait(results);
 
-    final WebElement retailer = getFirstMatchingDropdownSearchResultByName(accountName, results);
+    final WebElement retailer = getFirstElementTextMatchByName(accountName, results);
     Assert.assertNotNull(retailer, "No retailer found by the name of " + accountName);
     waitForElementToClickable(retailer, true).click();
 
     return this;
   }
 
-  private WebElement getFirstMatchingDropdownSearchResultByName(String accountName, List<WebElement> results) {
+  private WebElement getFirstElementTextMatchByName(String accountName, List<WebElement> results) {
     WebElement retailer = null;
 
     for (WebElement result : results) {
