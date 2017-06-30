@@ -4,7 +4,6 @@ import com.cbrands.helper.PropertiesCache;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openqa.selenium.By;
-import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -18,7 +17,6 @@ import static com.cbrands.helper.SeleniumUtils.*;
 
 public class AccountDashboardPage extends LoadableComponent<AccountDashboardPage> {
 
-  private static final int MAX_HEADER_CHAR_LIMIT = 17;
   private Log log = LogFactory.getLog(AccountDashboardPage.class);
 
   private final WebDriver driver;
