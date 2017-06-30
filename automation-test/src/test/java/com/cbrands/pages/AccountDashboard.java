@@ -48,14 +48,6 @@ public class AccountDashboard {
     @FindBy(css = "md-content._md div div.ng-scope div:nth-of-type(3) div:nth-of-type(2) div.apply-filters button.btn-action")
     private WebElement applyFilters;
 
-    /**
-     * @deprecated Please use the AccountDashboardPage page object instead
-     */
-    @FindBy(css = "md-content._md div div.ng-scope div:nth-of-type(1) div div:nth-of-type(2) div:nth-of-type(2) div:nth-of-type(3) p a")
-    @CacheLookup
-    @Deprecated
-    private WebElement notes;
-
     @FindBy(id = "select_value_label_117")
     @CacheLookup
     private WebElement chain;
@@ -333,19 +325,6 @@ public class AccountDashboard {
     public AccountDashboard clickApplyFiltersButton() {
       PageFactory.initElements(driver, AccountDashboardPage.class)
         .clickApplyFilters();
-      return this;
-    }
-
-    /**
-     * @deprecated Please use the method in AccountDashboardPage page object
-     *
-     * Click on Notes Link.
-     *
-     * @return the AccountDashboard class instance.
-     */
-    @Deprecated
-    public AccountDashboard clickNotesLink() {
-      notes.click();
       return this;
     }
 
