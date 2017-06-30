@@ -41,12 +41,20 @@ public class AccountDashboard {
     @CacheLookup
     private WebElement all;
 
-	/**
-   * @deprecated Please use the AccountDashboardPage page object instead
-    */
-  @Deprecated
+    /**
+     * @deprecated Please use the AccountDashboardPage page object instead
+     */
+    @Deprecated
     @FindBy(css = "md-content._md div div.ng-scope div:nth-of-type(3) div:nth-of-type(2) div.apply-filters button.btn-action")
     private WebElement applyFilters;
+
+    /**
+     * @deprecated Please use the AccountDashboardPage page object instead
+     */
+    @FindBy(css = "md-content._md div div.ng-scope div:nth-of-type(1) div div:nth-of-type(2) div:nth-of-type(2) div:nth-of-type(3) p a")
+    @CacheLookup
+    @Deprecated
+    private WebElement notes;
 
     @FindBy(id = "select_value_label_117")
     @CacheLookup
@@ -161,10 +169,6 @@ public class AccountDashboard {
     @FindBy(css = "a[href='/scorecards']")
     @CacheLookup
     private WebElement myScorecards2;
-
-    @FindBy(css = "md-content._md div div.ng-scope div:nth-of-type(1) div div:nth-of-type(2) div:nth-of-type(2) div:nth-of-type(3) p a")
-    @CacheLookup
-    private WebElement notes;
 
     @FindBy(css = "md-radio-button[aria-label='Off-Premise']")
     private WebElement offpremise;
@@ -333,6 +337,19 @@ public class AccountDashboard {
     }
 
     /**
+     * @deprecated Please use the method in AccountDashboardPage page object
+     *
+     * Click on Notes Link.
+     *
+     * @return the AccountDashboard class instance.
+     */
+    @Deprecated
+    public AccountDashboard clickNotesLink() {
+      notes.click();
+      return this;
+    }
+
+    /**
      * Click on Collapse All Button.
      *
      * @return the AccountDashboard class instance.
@@ -439,16 +456,6 @@ public class AccountDashboard {
      */
     public AccountDashboard clickMyScorecards2Link() {
         myScorecards2.click();
-        return this;
-    }
-
-    /**
-     * Click on Notes Link.
-     *
-     * @return the AccountDashboard class instance.
-     */
-    public AccountDashboard clickNotesLink() {
-        notes.click();
         return this;
     }
 
