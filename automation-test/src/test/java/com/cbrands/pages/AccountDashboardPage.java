@@ -111,4 +111,14 @@ public class AccountDashboardPage extends LoadableComponent<AccountDashboardPage
     return this;
   }
 
+  public AccountDashboardPage clickNotesButton() {
+    final WebElement notesButton = findElement(By.xpath(
+      "//*[contains(@class, 'notes-icon enabled')]//a[contains(., 'Notes')]/../.."));
+    waitForElementToClickable(notesButton, true).click();
+
+    Assert.assertTrue(findElement(By.xpath("//div[contains(@class, 'modal notes')]")).isDisplayed());
+
+    return this;
+  }
+
 }
