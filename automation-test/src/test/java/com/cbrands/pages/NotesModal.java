@@ -99,4 +99,20 @@ public class NotesModal extends LoadableComponent<NotesModal> {
 
     return this;
   }
+
+  public NotesModal clickSave() {
+    final WebElement saveButton = modalContainer.findElement(By.xpath(".//button[contains(., 'Save')]"));
+    waitForVisibleFluentWait(saveButton);
+    waitForElementToClickable(saveButton, true).click();
+
+    return this;
+  }
+
+  public String getTextFromFirstNote(NotesModal notesModal) {
+    final WebElement firstNote =
+      notesModal.modalContainer.findElement(By.xpath(".//div[contains(@class, 'note-body')]"));
+    waitForVisibleFluentWait(firstNote);
+    return firstNote.findElement(By.xpath(".//p[contains(@class, 'note-body-field-content')]//p")).getText().trim();
+  }
+
 }
