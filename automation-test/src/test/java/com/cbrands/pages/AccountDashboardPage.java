@@ -8,6 +8,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.How;
+import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.LoadableComponent;
 import org.testng.Assert;
 
@@ -111,14 +112,12 @@ public class AccountDashboardPage extends LoadableComponent<AccountDashboardPage
     return this;
   }
 
-  public AccountDashboardPage clickNotesButton() {
+  public NotesModal clickNotesButton() {
     final WebElement notesButton = findElement(By.xpath(
       "//*[contains(@class, 'notes-icon enabled')]//a[contains(., 'Notes')]/../.."));
     waitForElementToClickable(notesButton, true).click();
 
-    Assert.assertTrue(findElement(By.xpath("//div[contains(@class, 'modal notes')]")).isDisplayed());
-
-    return this;
+    return  PageFactory.initElements(driver, NotesModal.class);
   }
 
 }
