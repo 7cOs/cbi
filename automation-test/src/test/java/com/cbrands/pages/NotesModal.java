@@ -12,6 +12,8 @@ import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.LoadableComponent;
 import org.testng.Assert;
 
+import java.util.List;
+
 import static com.cbrands.helper.SeleniumUtils.*;
 
 public class NotesModal extends LoadableComponent<NotesModal> {
@@ -49,5 +51,42 @@ public class NotesModal extends LoadableComponent<NotesModal> {
     waitForVisibleFluentWait(addNoteButton);
     waitForElementToClickable(addNoteButton, true).click();
     return this;
+  }
+
+  public NotesModal clickNoteTopicSelector() {
+    final WebElement selector = modalContainer.findElement(By.xpath(".//md-select[@placeholder='Select a topic']"));
+    waitForVisibleFluentWait(selector);
+    waitForElementToClickable(selector, true).click();
+
+    return this;
+  }
+
+  public NotesModal selectNoteTopicByName(String name) {
+    final List<WebElement> topics = findElements(By.xpath("//md-option[@ng-repeat='topic in n.noteTopics']"));
+    waitForElementsVisibleFluentWait(topics);
+
+    final WebElement selectedTopic = getOptionByName(name, topics);
+    Assert.assertNotNull(selectedTopic, "No topic found by name of: " + name);
+
+    waitForElementToClickable(selectedTopic, true).click();
+
+    return this;
+  }
+
+  private WebElement getOptionByName(String name, List<WebElement> topics) {
+    WebElement selectedTopic = null;
+
+    for(WebElement topic: topics) {
+      if(name.equalsIgnoreCase(getOptionText(topic))) {
+        selectedTopic = topic;
+        break;
+      }
+    }
+
+    return selectedTopic;
+  }
+
+  private String getOptionText(WebElement topic) {
+    return topic.findElement(By.xpath(".//*[contains(@class, 'md-text')]")).getText().trim();
   }
 }
