@@ -53,7 +53,7 @@ public class NotesTest extends BaseTestCase {
       .enterNoteText(noteText)
       .clickSave();
 
-    Assert.assertEquals(notesModal.getTextFromFirstNote(notesModal), noteText);
+    Assert.assertEquals(notesModal.getTextFromFirstNote(), noteText);
   }
 
   @DataProvider(name = "NoteData")
