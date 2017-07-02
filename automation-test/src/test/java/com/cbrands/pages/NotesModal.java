@@ -89,4 +89,14 @@ public class NotesModal extends LoadableComponent<NotesModal> {
   private String getOptionText(WebElement topic) {
     return topic.findElement(By.xpath(".//*[contains(@class, 'md-text')]")).getText().trim();
   }
+
+  public NotesModal enterNoteText(String noteText) {
+    final WebElement textBox = modalContainer.findElement(By.xpath(".//text-angular//div[@contenteditable='true']"));
+    waitForVisibleFluentWait(textBox);
+    waitForElementToClickable(textBox, true).click();
+
+    textBox.sendKeys(noteText);
+
+    return this;
+  }
 }
