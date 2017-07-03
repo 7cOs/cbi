@@ -36,6 +36,8 @@ public class NotesTest extends BaseTestCase {
       .drillIntoRightPanelWithName(storeAccountName)
       .drillIntoRightPanelWithName(storeAccountName)
       .clickNotesButton();
+
+    Assert.assertTrue(notesModal.isModalLoaded(), "Failure to load Notes modal \n");
   }
 
   @AfterMethod

@@ -40,10 +40,15 @@ public class NotesModal extends LoadableComponent<NotesModal> {
 
   @Override
   protected void isLoaded() throws Error {
-    Assert.assertTrue(modalContainer.isDisplayed());
+    Assert.assertTrue(isModalLoaded());
   }
 
-	/**
+  public boolean isModalLoaded() {
+    waitForVisibleFluentWait(modalContainer);
+    return modalContainer.isDisplayed();
+  }
+
+  /**
    * Clicks the add Note button when other notes already exist.
    */
   public NotesModal clickAddNoteButton() {
