@@ -12,17 +12,15 @@ public class NotesTest extends BaseTestCase {
   private static String current_time_stamp = new java.text.SimpleDateFormat("MM.dd.yyyy HH:mm:ss").format(new java.util
     .Date());
 
-  private Login login;
   private Logout logout;
-  private AccountDashboardPage accountDashboardPage;
-  private String storeAccountName;
+  private NotesModal notesModal;
 
   @BeforeMethod
   public void setUp() {
     final TestUser testUser = TestUser.NOTES_ACTOR;
-    storeAccountName = "Taco Joint";
+    final String storeAccountName = "Taco Joint";
 
-    login = new Login(driver);
+    final Login login = new Login(driver);
     logout = new Logout(driver);
 
     log.info("\nLoading webpage...");
@@ -30,7 +28,14 @@ public class NotesTest extends BaseTestCase {
     HomePage homePage = login.loginWithValidCredentials(testUser.userName(), testUser.password());
     Assert.assertTrue(homePage.isOnHomePage(), "Failed to log in user: " + testUser.userName());
 
-    accountDashboardPage = homePage.navigateToAccountDashboardPage();
+    notesModal = homePage.navigateToAccountDashboardPage()
+      .enterRetailerChainSearchText(storeAccountName)
+      .clickSearchForRetailerChain()
+      .selectRetailerChainByName(storeAccountName)
+      .clickApplyFilters()
+      .drillIntoRightPanelWithName(storeAccountName)
+      .drillIntoRightPanelWithName(storeAccountName)
+      .clickNotesButton();
   }
 
   @AfterMethod
@@ -40,11 +45,6 @@ public class NotesTest extends BaseTestCase {
 
   @Test(description = "Create a new Note", dataProvider = "NoteData")
   public void createNote(String noteTopic, String noteText) {
-
-    final NotesModal notesModal =
-      drillDownToStore()
-      .clickNotesButton();
-
     notesModal.clickAddNoteButton()
       .clickNoteTopicSelector()
       .selectNoteTopicByName(noteTopic)
@@ -57,20 +57,6 @@ public class NotesTest extends BaseTestCase {
   @DataProvider(name = "NoteData")
   public static Object[][] noteData() {
     return new Object[][] { {"Distribution", "Testing create notes: " + current_time_stamp } };
-  }
-
-	/**
-   * The drilldown steps in this method are specific to the given store. These steps will need to be updated should
-   * we decide to use a different store account.
-   */
-  private AccountDashboardPage drillDownToStore() {
-    return accountDashboardPage
-      .enterRetailerChainSearchText(storeAccountName)
-      .clickSearchForRetailerChain()
-      .selectRetailerChainByName(storeAccountName)
-      .clickApplyFilters()
-      .drillIntoRightPanelWithName(storeAccountName)
-      .drillIntoRightPanelWithName(storeAccountName);
   }
 
 }
