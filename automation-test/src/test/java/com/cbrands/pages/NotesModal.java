@@ -54,6 +54,8 @@ public class NotesModal extends LoadableComponent<NotesModal> {
    * Clicks the add Note button when other notes already exist.
    */
   public NotesModal clickAddNoteButton() {
+    waitForLoaderToDisappear();
+
     final WebElement addNoteButton = modalContainer.findElement(By.xpath(".//p[contains(., 'New Note')]"));
     waitForVisibleFluentWait(addNoteButton);
     waitForElementToClickable(addNoteButton, true).click();
@@ -116,6 +118,8 @@ public class NotesModal extends LoadableComponent<NotesModal> {
   }
 
   public String getTextFromFirstNote() {
+    waitForLoaderToDisappear();
+
     final WebElement firstNote = modalContainer.findElement(By.xpath(".//div[contains(@class, 'note-body')]"));
     waitForVisibleFluentWait(firstNote);
     return firstNote.findElement(By.xpath(".//p[contains(@class, 'note-body-field-content')]//p")).getText().trim();
