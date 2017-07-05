@@ -20,6 +20,10 @@ import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+/**
+ * @deprecated Please use the AccountDashboardPage page object instead.
+ */
+@Deprecated
 public class AccountDashboard {
     private Map<String, String> data;
     private WebDriver driver;
@@ -37,6 +41,10 @@ public class AccountDashboard {
     @CacheLookup
     private WebElement all;
 
+    /**
+     * @deprecated Please use the AccountDashboardPage page object instead
+     */
+    @Deprecated
     @FindBy(css = "md-content._md div div.ng-scope div:nth-of-type(3) div:nth-of-type(2) div.apply-filters button.btn-action")
     private WebElement applyFilters;
 
@@ -70,16 +78,16 @@ public class AccountDashboard {
 
     @FindBy(id = "select_value_label_118")
     private WebElement distributionSimple;
-    
+
     @FindBy(xpath = "//div[contains(.,'Distribution (effective)')]")
     private WebElement distributionEffective;
-    
+
     @FindAll({@FindBy(css="span.md-select-icon")})
     private List<WebElement> dropdownIcon;
-    
+
     @FindAll({@FindBy(css="md-select-value.md-select-value")})
     private List<WebElement> dropdown;
-    
+
     @FindAll({@FindBy(xpath="//md-option[contains(.,'Velocity')]")})
     private List<WebElement> velocity;
 
@@ -126,7 +134,7 @@ public class AccountDashboard {
     @FindBy(id = "radio_139")
     @CacheLookup
     private WebElement deprectated_lastClosedMonth;
-    
+
     @FindAll({@FindBy(css="md-radio-button[aria-label='Ending Time Period']")})
     private List<WebElement> endingTimePeriodRadioButtons;
 
@@ -153,10 +161,6 @@ public class AccountDashboard {
     @FindBy(css = "a[href='/scorecards']")
     @CacheLookup
     private WebElement myScorecards2;
-
-    @FindBy(css = "md-content._md div div.ng-scope div:nth-of-type(1) div div:nth-of-type(2) div:nth-of-type(2) div:nth-of-type(3) p a")
-    @CacheLookup
-    private WebElement notes;
 
     @FindBy(css = "md-radio-button[aria-label='Off-Premise']")
     private WebElement offpremise;
@@ -217,31 +221,31 @@ public class AccountDashboard {
 
     @FindAll({@FindBy(css="md-radio-button[aria-label='Trend']")})
     private List<WebElement> trendRadioButtons;
-   
+
     @FindBy(css="th.top.title-col.brand-name-column>p.accent.bold.left.single-line")
     private WebElement allBrandsFirstColumnHeader;
-    
+
     @FindBy(css="th.top.other-columns>p.accent.ng-binding")
     private WebElement allBrandsThirdColumnHeader;
-    
+
     @FindBy(css="th.dark>p.accent.no-transform.ng-binding")
-    private WebElement depletionsColumnHeader; 
-    
+    private WebElement depletionsColumnHeader;
+
     @FindAll({@FindBy(css="p.accent.ng-binding")})
     private List<WebElement> headers;
-    
+
     @FindBy(css="input[placeholder='Name']")
     private WebElement distributorSearchBox;
-    
+
     @FindBy(css="input.submit-btn.visible")
-    private WebElement searchButton; 
-    
+    private WebElement searchButton;
+
     @FindAll(@FindBy(css="span.result.ng-binding"))
-    private List <WebElement> searchResults; 
-    
+    private List <WebElement> searchResults;
+
     @FindBy(xpath="//label[contains(.,'Select a premise type followed by a retailer and/or distributor to view opportunities')]")
     private WebElement labelBelowOpportunitiesLink;
-    
+
     @FindBy(css="span[class='back-chevron ng-scope']")
     private WebElement backChevronArrow;
 
@@ -311,13 +315,17 @@ public class AccountDashboard {
     }
 
     /**
+     * @deprecated Please use the method found in the AccountDashBoardPage page object
+     *
      * Click on Apply Filters Button.
      *
      * @return the AccountDashboard class instance.
      */
+    @Deprecated
     public AccountDashboard clickApplyFiltersButton() {
-    	waitForVisibleFluentWait(applyFilters).click();
-    return this;
+      PageFactory.initElements(driver, AccountDashboardPage.class)
+        .clickApplyFilters();
+      return this;
     }
 
     /**
@@ -427,16 +435,6 @@ public class AccountDashboard {
      */
     public AccountDashboard clickMyScorecards2Link() {
         myScorecards2.click();
-        return this;
-    }
-
-    /**
-     * Click on Notes Link.
-     *
-     * @return the AccountDashboard class instance.
-     */
-    public AccountDashboard clickNotesLink() {
-        notes.click();
         return this;
     }
 
@@ -799,7 +797,7 @@ public class AccountDashboard {
     public AccountDashboard vsYa() {
         return this;
     }
-    
+
     /**
      * Click on a brand name under 'All Brands' table.
      *
@@ -812,12 +810,12 @@ public class AccountDashboard {
     	waitForVisibleFluentWait(distributionEffective);
     	return this;
     }
-    
+
     public AccountDashboard clickBackChevronArrow(){
     	waitForVisibleFluentWait(backChevronArrow).click();
     	return this;
     }
-    
+
     public AccountDashboard selectVelocity(){
     	JavascriptExecutor je = (JavascriptExecutor) driver;
     	je.executeScript("arguments[0].scrollIntoView(true);",distributionEffective);
@@ -825,7 +823,7 @@ public class AccountDashboard {
     	waitForVisibleFluentWait(velocity.get(1)).click();
     	return this;
     }
-    
+
     /**
      * Page refresh.
      *
@@ -835,7 +833,7 @@ public class AccountDashboard {
     	refresh();
     	return this;
     }
-    
+
     public AccountDashboard selectDepletionTimePeriod(String value){
     	JavascriptExecutor je = (JavascriptExecutor) driver;
     	je.executeScript("arguments[0].scrollIntoView(false);",dropdown.get(0));
@@ -844,7 +842,7 @@ public class AccountDashboard {
     	findElement(By.cssSelector("md-option[aria-label='"+value+"']")).click();
     	return this;
     }
-    
+
     public AccountDashboard selectDistributionTimePeriod(String value){
     	JavascriptExecutor je = (JavascriptExecutor) driver;
     	je.executeScript("arguments[0].scrollIntoView(false);",dropdown.get(1));
@@ -853,7 +851,7 @@ public class AccountDashboard {
     	findElement(By.cssSelector("md-option[aria-label='"+value+"']")).click();
     	return this;
     }
-    
+
     /**
      *
      * @return the first column header text under 'All Brands' table as a string
@@ -861,22 +859,22 @@ public class AccountDashboard {
     public String allBrandsFirstColumnHeaderText(){
     	return allBrandsFirstColumnHeader.getText();
     }
-    
+
     /**
     *
     * @return the third column header text under 'All Brands' table as a string
-    */ 
+    */
     public String allBrandsThirdColumnHeaderText(){
     	return allBrandsThirdColumnHeader.getText();
     }
-    
+
     /**
      * @return the Depletions column header text as a string
      */
     public String depletionsColumnHeaderText(){
     	return depletionsColumnHeader.getText();
     }
-    
+
     /**
      * Click Trend ABP radio button
      *
@@ -887,7 +885,7 @@ public class AccountDashboard {
     	vsAbp.click();
     	return this;
     }
-    
+
     /**
      * Click last closed month radio button
      *
@@ -898,22 +896,22 @@ public class AccountDashboard {
         lastClosedMonth.click();
     	return this;
     }
-    
+
     public String depletionsDaysHeaderText(){
     	WebElement element = headers.get(3);
     	return element.getText();
     }
-    
+
     public String depletionsTrendHeaderText(){
     	WebElement element = headers.get(2);
     	return element.getText();
     }
-    
+
     public String distributionsTrendHeaderText(){
     	WebElement element = headers.get(4);
     	return element.getText();
     }
-    
+
     public String depletionsTimePeriodDropdownOptions(){
     	waitForVisibleFluentWait(dropdown.get(0)).click();
     	WebElement element = findElement(By.cssSelector("div.md-select-menu-container.md-active.md-clickable"));
@@ -922,36 +920,36 @@ public class AccountDashboard {
     	waitForVisibleFluentWait(dropdown.get(0)).click();//Closing the dropdown
     	return options;
     }
-    
+
     public String distributionsTimePeriodDropdownOptions(){
     	waitForVisibleFluentWait(dropdown.get(1)).click();
     	String distributionOptions = dropdown.get(1).getText();
     	waitForVisibleFluentWait(dropdown.get(1)).click();//Closing the dropdown
     	return distributionOptions;
     }
-    
+
     public Boolean verifyTrendvsYA(){
-        WebElement vsYA = trendRadioButtons.get(0);      
+        WebElement vsYA = trendRadioButtons.get(0);
     	return Boolean.valueOf(vsYA.getAttribute("aria-checked"));
     }
-    
+
     public Boolean verifyDefaultEndingTimePeriod(){
         WebElement currentMonthToDate = endingTimePeriodRadioButtons.get(0);
         return Boolean.valueOf(currentMonthToDate.getAttribute("aria-checked"));
     }
-    
+
     public String depletionsTimePeriodDefaultOption(){
     	waitForVisibleFluentWait(dropdown.get(0));
     	String deafultDepletionOption = dropdown.get(0).getText();
     	return deafultDepletionOption;
     }
-    
+
     public String distributionTimePeriodDefaultOption(){
     	waitForVisibleFluentWait(dropdown.get(1));
     	String deafultDistributionOption = dropdown.get(1).getText();
     	return deafultDistributionOption;
     }
-    
+
     /**
      * 'See all' opportunities link state.
      *
@@ -960,8 +958,8 @@ public class AccountDashboard {
     public String seeAllOpportunitiesLinkState(){
     	return seeAllOpportunities.getAttribute("disabled");
     }
-    
-    
+
+
     public AccountDashboard searchDistributor(String name){
     	waitForVisibleFluentWait(distributorSearchBox).clear();
     	distributorSearchBox.sendKeys(name);
@@ -969,12 +967,12 @@ public class AccountDashboard {
     	waitForVisibleFluentWait(searchResults.get(0)).click();
     	return this;
     }
-    
+
     /**
      * @return the text below the 'See All Opportunities' link
      */
     public String textBelowOpportunitiesLink(){
     	return labelBelowOpportunitiesLink.getText();
     }
-    
+
 }

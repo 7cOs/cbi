@@ -6,13 +6,7 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import org.apache.commons.io.FileUtils;
-import org.openqa.selenium.By;
-import org.openqa.selenium.ElementNotVisibleException;
-import org.openqa.selenium.NoSuchElementException;
-import org.openqa.selenium.OutputType;
-import org.openqa.selenium.TakesScreenshot;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.FluentWait;
@@ -29,10 +23,10 @@ public class SeleniumUtils {
 
 	/** The Constant DEFAULT_WAIT_TIME. */
 	public static final int DEFAULT_WAIT_TIME = 20;
-	
+
 	/** The driver. */
 	private static WebDriver driver;
-	
+
 	/** The base url. */
 	private static String baseUrl;
 
@@ -194,6 +188,23 @@ public class SeleniumUtils {
 	public static void click(By by) {
 		driver.findElement(by).click();
 	}
+
+	/**
+   * Scrolls to the given element and clicks it.
+   *
+   * Used to circumvent a defect in Selenium's element click() method
+   * where it will auto-scroll to the element in IE11 regardless of whether the the element is visible, and will
+   * sometimes scroll the element underneath another element, making it unclickable.
+   *
+   * @param element the desired element
+   */
+  public static WebElement scrollToAndClick(WebElement element) {
+    final JavascriptExecutor jse = (JavascriptExecutor) SeleniumUtils.driver;
+    jse.executeScript("arguments[0].scrollIntoView(false);", element);
+    jse.executeScript("arguments[0].click()", element);
+
+    return element;
+  }
 
 	/**
 	 * Check.
@@ -359,7 +370,7 @@ public class SeleniumUtils {
 	public static void waitForVisible(By by) {
 		waitForCondition(ExpectedConditions.visibilityOfElementLocated(by), DEFAULT_WAIT_TIME);
 	}
-	
+
 	/**
 	 * Wait for visible fluent wait.
 	 *
@@ -376,7 +387,7 @@ public class SeleniumUtils {
 	   wait.until(ExpectedConditions.visibilityOf(element));
 	   return element;
 	}
-	
+
 	/**
 	 * Wait for elements visible fluent wait.
 	 *
@@ -434,7 +445,7 @@ public class SeleniumUtils {
 	public static void waitForValuePresent(By by, String value) {
 		waitForCondition(ExpectedConditions.textToBePresentInElementValue(by, value), DEFAULT_WAIT_TIME);
 	}
-	
+
 	/**
 	 * Wait for element visible.
 	 *
@@ -449,7 +460,7 @@ public class SeleniumUtils {
 			waitForCondition(ExpectedConditions.not(ExpectedConditions.elementToBeClickable(element)), DEFAULT_WAIT_TIME);
 		return element;
 	}
-	
+
 	/**
 	 * Wait for element to clickable.
 	 *
@@ -520,7 +531,7 @@ public class SeleniumUtils {
 	public static String getTable(By by, int rowIndex, int columnIndex) {
 		return getTable(driver.findElement(by), rowIndex, columnIndex);
 	}
-	
+
 	/**
 	 * Maximize.
 	 */
