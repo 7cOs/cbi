@@ -18,6 +18,7 @@ import java.util.List;
 import static com.cbrands.helper.SeleniumUtils.*;
 
 public class NotesModal extends LoadableComponent<NotesModal> {
+  private static final String MODAL_CONTAINER_XPATH = "//div[contains(@class, 'modal notes')]";
 
   private Log log = LogFactory.getLog(NotesModal.class);
   final PropertiesCache propertiesCache;
@@ -126,8 +127,9 @@ public class NotesModal extends LoadableComponent<NotesModal> {
   }
 
   private void waitForLoaderToDisappear() {
+    final By by = By.xpath(MODAL_CONTAINER_XPATH + "//progress-container");
     try {
-      waitForElementStalenessFluentWait(modalContainer.findElement(By.xpath(".//progress-container")));
+      waitForElementStalenessFluentWait(findElement(by));
     } catch (NoSuchElementException e) {
       log.info("Loader element no longer present.");
     }
