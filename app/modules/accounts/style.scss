@@ -211,14 +211,8 @@
     width: 265px;
   }
 
-  .md-select {
-    height: 10px;
-    font-size: 10px;
-
-    .md-option {
-      height: 10px;
-      font-size:  10px;
-    }
+  md-select:focus {
+    height: 29px;
   }
 }
 
