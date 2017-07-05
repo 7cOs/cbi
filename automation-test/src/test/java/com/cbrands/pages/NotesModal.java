@@ -1,6 +1,9 @@
 package com.cbrands.pages;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.openqa.selenium.By;
+import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -14,9 +17,9 @@ import java.util.List;
 import static com.cbrands.helper.SeleniumUtils.*;
 
 public class NotesModal extends LoadableComponent<NotesModal> {
-
   private static final String MODAL_CONTAINER_XPATH = "//div[contains(@class, 'modal notes')]";
 
+  private Log log = LogFactory.getLog(NotesModal.class);
   private final WebDriver driver;
 
   @FindBy(how = How.XPATH, using = MODAL_CONTAINER_XPATH)
@@ -109,9 +112,23 @@ public class NotesModal extends LoadableComponent<NotesModal> {
   }
 
   public String getTextFromFirstNote() {
-    final WebElement firstNote = modalContainer.findElement(By.xpath(".//div[contains(@class, 'note-body')]"));
+    final WebElement firstNote = modalContainer.findElement(By.xpath(".//div[contains(@class, 'note-body ')]"));
     waitForVisibleFluentWait(firstNote);
-    return firstNote.findElement(By.xpath(".//p[contains(@class, 'note-body-field-content')]//p")).getText().trim();
+    return getNoteText(firstNote);
+  }
+
+  private String getNoteText(WebElement note) {
+    String text = "";
+
+    final WebElement textContainer =
+      note.findElement(By.xpath(".//p[contains(@class, 'note-body-field-content')]//div.note-body-field-text"));
+    try {
+      text = textContainer.findElement(By.xpath("./*")).getText().trim();
+    } catch (NoSuchElementException e) {
+      log.info("This Note has no text.");
+    }
+
+    return text;
   }
 
   public NotesModal waitForLoaderToDisappear() {
