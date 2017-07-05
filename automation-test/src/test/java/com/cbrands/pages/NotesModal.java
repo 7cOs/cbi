@@ -127,11 +127,6 @@ public class NotesModal extends LoadableComponent<NotesModal> {
   }
 
   private void waitForLoaderToDisappear() {
-    final By by = By.xpath(MODAL_CONTAINER_XPATH + "//progress-container");
-    try {
-      waitForElementStalenessFluentWait(findElement(by));
-    } catch (NoSuchElementException e) {
-      log.info("Loader element no longer present.");
-    }
+    waitForElementToDisappear(By.xpath(MODAL_CONTAINER_XPATH + "//progress-container"));
   }
 }

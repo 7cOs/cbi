@@ -430,6 +430,19 @@ public class SeleniumUtils {
 		waitForCondition(ExpectedConditions.stalenessOf(element), DEFAULT_WAIT_TIME);
 	}
 
+  /**
+   * Waits for element to disappear from the DOM. If element is not present, swallows the exception.
+   *
+   * @param by the element handle
+   */
+  public static void waitForElementToDisappear(By by) {
+    try {
+      waitForElementStalenessFluentWait(findElement(by));
+    } catch (NoSuchElementException e) {
+      // Success. Element not present.
+    }
+  }
+
 	/**
 	 * Wait for text present.
 	 *
