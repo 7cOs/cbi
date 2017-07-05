@@ -34,10 +34,10 @@ describe('Service: DateRangeService', () => {
 
     it('should return an observable of a date range from the store', (done) => {
       spyOn(dateRangeService, 'getDateRange').and.callThrough();
-      dateRangeService.getDateRange(DateRangeTimePeriod.CMIPBDL);
+      let result = dateRangeService.getDateRange(DateRangeTimePeriod.CMIPBDL);
       expect(dateRangeService.getDateRange).toHaveBeenCalledWith(9);
       expect(store.select).toHaveBeenCalled();
-      expect(dateRangeService.getDateRange(DateRangeTimePeriod.CMIPBDL)).toEqual(Observable.of(dateRangeMock));
+      expect(result).toEqual(Observable.of(dateRangeMock));
       done();
     });
   });
