@@ -20,8 +20,8 @@ export class MyPerformanceTableComponent {
   @Output() onSortingCriteriasChanged = new EventEmitter<Array<SortingCriteria>>();
 
   @Input()
-  set sortingCriterias(criterias: Array<SortingCriteria>) {
-    this._sortingCriterias = criterias;
+  set sortingCriteria(criterias: Array<SortingCriteria>) {
+    this._sortingCriteria = criterias;
     this.updateSortingFunction();
     this._tableData = this._tableData.sort(this.sortingFunction);
   }
@@ -40,22 +40,22 @@ export class MyPerformanceTableComponent {
   }
 
   private sortingFunction: (left: MyPerformanceTableRow, right: MyPerformanceTableRow) => number;
-  private _sortingCriterias: Array<SortingCriteria> = null;
+  private _sortingCriteria: Array<SortingCriteria> = null;
   private _tableData: Array<MyPerformanceTableRow> = [];
 
   private updateSortingFunction() {
-    if (this._sortingCriterias.length) {
+    if (this._sortingCriteria.length) {
       this.sortingFunction = (left: MyPerformanceTableRow, right: MyPerformanceTableRow) => {
         let i = 0;
         let currentColumn;
         let currentSortOrder;
         do {
-          currentColumn = ColumnType[this._sortingCriterias[i].columnType];
+          currentColumn = ColumnType[this._sortingCriteria[i].columnType];
           currentSortOrder = this.compareObjects(left[currentColumn], (right[currentColumn]));
           i++;
-        } while (i < this._sortingCriterias.length && currentSortOrder === 0);
+        } while (i < this._sortingCriteria.length && currentSortOrder === 0);
 
-        return this._sortingCriterias[--i].order ? currentSortOrder : -currentSortOrder;
+        return this._sortingCriteria[--i].order ? currentSortOrder : -currentSortOrder;
       };
     }
   }
