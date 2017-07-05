@@ -18,7 +18,6 @@ import { MyPerformanceModule } from './containers/my-performance/my-performance.
 import { NotificationsComponent } from './shared/components/Notifications/notifications.component';
 import { rootReducer } from './state/reducers/root.reducer';
 import { SettingsComponent } from './shared/components/settings/settings.component';
-import { SharedModule } from './shared/shared.module';
 import { TimeAgoPipe } from './pipes/timeAgo.pipe';
 
 export const AppUpgradeAdapter = new UpgradeAdapter(forwardRef(() => AppModule)); // tslint:disable-line:variable-name no-use-before-declare
@@ -42,7 +41,6 @@ AppUpgradeAdapter.upgradeNg1Provider('$state');
     HttpModule,
     MyPerformanceModule,
     RouterModule.forRoot([ {path: 'placeholder', redirectTo: '/'} ]), // need ng2 router for angulartics2 to work
-    SharedModule,
     StoreModule.provideStore(rootReducer)
   ],
   declarations: [

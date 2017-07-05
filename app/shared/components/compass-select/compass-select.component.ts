@@ -1,12 +1,12 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 
 @Component({
-  selector: 'cbi-select',
-  template: require('./cbi-select.component.pug'),
-  styles: [require('./cbi-select.component.scss')]
+  selector: 'compass-select',
+  template: require('./compass-select.component.pug'),
+  styles: [require('./compass-select.component.scss')]
 })
 
-export class CbiSelectComponent {
+export class CompassSelectComponent {
   @Output() onOptionSelected = new EventEmitter<any>();
 
   @Input() displayKey: string;
