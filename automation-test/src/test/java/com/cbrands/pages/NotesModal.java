@@ -1,6 +1,5 @@
 package com.cbrands.pages;
 
-import com.cbrands.helper.PropertiesCache;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -15,9 +14,8 @@ import java.util.List;
 import static com.cbrands.helper.SeleniumUtils.*;
 
 public class NotesModal extends LoadableComponent<NotesModal> {
-  private static final String MODAL_CONTAINER_XPATH = "//div[contains(@class, 'modal notes')]";
 
-  final PropertiesCache propertiesCache;
+  private static final String MODAL_CONTAINER_XPATH = "//div[contains(@class, 'modal notes')]";
 
   private final WebDriver driver;
 
@@ -25,8 +23,6 @@ public class NotesModal extends LoadableComponent<NotesModal> {
   private WebElement modalContainer;
 
   public NotesModal(WebDriver driver) {
-    propertiesCache = PropertiesCache.getInstance();
-
     this.driver = driver;
     PageFactory.initElements(driver, this);
   }
@@ -80,8 +76,8 @@ public class NotesModal extends LoadableComponent<NotesModal> {
   private WebElement getOptionByName(String name, List<WebElement> topics) {
     WebElement selectedTopic = null;
 
-    for(WebElement topic: topics) {
-      if(name.equalsIgnoreCase(getOptionText(topic))) {
+    for (WebElement topic : topics) {
+      if (name.equalsIgnoreCase(getOptionText(topic))) {
         selectedTopic = topic;
         break;
       }
