@@ -35,7 +35,8 @@ public class NotesTest extends BaseTestCase {
       .clickApplyFilters()
       .drillIntoRightPanelWithName(storeAccountName)
       .drillIntoRightPanelWithName(storeAccountName)
-      .clickNotesButton();
+      .clickNotesButton()
+      .waitForLoaderToDisappear();
 
     Assert.assertTrue(notesModal.isModalLoaded(), "Failure to load Notes modal \n");
   }
@@ -47,11 +48,13 @@ public class NotesTest extends BaseTestCase {
 
   @Test(description = "Create a new Note", dataProvider = "NoteData")
   public void createNote(String noteTopic, String noteText) {
-    notesModal.clickAddNoteButton()
+    notesModal
+      .clickAddNoteButton()
       .clickNoteTopicSelector()
       .selectNoteTopicByName(noteTopic)
       .enterNoteText(noteText)
-      .clickSave();
+      .clickSave()
+      .waitForLoaderToDisappear();
 
     Assert.assertEquals(notesModal.getTextFromFirstNote(), noteText);
   }

@@ -1,10 +1,7 @@
 package com.cbrands.pages;
 
 import com.cbrands.helper.PropertiesCache;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.openqa.selenium.By;
-import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -20,12 +17,11 @@ import static com.cbrands.helper.SeleniumUtils.*;
 public class NotesModal extends LoadableComponent<NotesModal> {
   private static final String MODAL_CONTAINER_XPATH = "//div[contains(@class, 'modal notes')]";
 
-  private Log log = LogFactory.getLog(NotesModal.class);
   final PropertiesCache propertiesCache;
 
   private final WebDriver driver;
 
-  @FindBy(how = How.XPATH, using = "//div[contains(@class, 'modal notes')]")
+  @FindBy(how = How.XPATH, using = MODAL_CONTAINER_XPATH)
   private WebElement modalContainer;
 
   public NotesModal(WebDriver driver) {
@@ -55,8 +51,6 @@ public class NotesModal extends LoadableComponent<NotesModal> {
    * Clicks the add Note button when other notes already exist.
    */
   public NotesModal clickAddNoteButton() {
-    waitForLoaderToDisappear();
-
     final WebElement addNoteButton = modalContainer.findElement(By.xpath(".//p[contains(., 'New Note')]"));
     waitForVisibleFluentWait(addNoteButton);
     waitForElementToClickable(addNoteButton, true).click();
@@ -119,14 +113,13 @@ public class NotesModal extends LoadableComponent<NotesModal> {
   }
 
   public String getTextFromFirstNote() {
-    waitForLoaderToDisappear();
-
     final WebElement firstNote = modalContainer.findElement(By.xpath(".//div[contains(@class, 'note-body')]"));
     waitForVisibleFluentWait(firstNote);
     return firstNote.findElement(By.xpath(".//p[contains(@class, 'note-body-field-content')]//p")).getText().trim();
   }
 
-  private void waitForLoaderToDisappear() {
+  public NotesModal waitForLoaderToDisappear() {
     waitForElementToDisappear(By.xpath(MODAL_CONTAINER_XPATH + "//progress-container"));
+    return this;
   }
 }
