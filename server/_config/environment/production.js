@@ -21,7 +21,12 @@ module.exports = function (config) {
   config.api = {
     url: 'https://internal.api.cbrands.com',
     key: process.env.API_SECRET,
-    apiKey: 'compass-beer-portal'
+    apiKey: 'compass-beer-portal',
+
+    // TODO: remove when api gateway is in place
+    v3BaseUrls: {
+      dateRangeCodes: 'https://cbi-product-metrics-api-prod.herokuapp.com/'
+    }
   };
 
   config.saml = {
