@@ -4,6 +4,7 @@ import com.cbrands.helper.PropertiesCache;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openqa.selenium.By;
+import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -45,6 +46,7 @@ public class NotesModal extends LoadableComponent<NotesModal> {
 
   public boolean isModalLoaded() {
     waitForVisibleFluentWait(modalContainer);
+    waitForLoaderToDisappear();
     return modalContainer.isDisplayed();
   }
 
@@ -119,4 +121,11 @@ public class NotesModal extends LoadableComponent<NotesModal> {
     return firstNote.findElement(By.xpath(".//p[contains(@class, 'note-body-field-content')]//p")).getText().trim();
   }
 
+  private void waitForLoaderToDisappear() {
+    try {
+      waitForElementStalenessFluentWait(modalContainer.findElement(By.xpath(".//progress-container")));
+    } catch (NoSuchElementException e) {
+      log.info("Loader element no longer present.");
+    }
+  }
 }

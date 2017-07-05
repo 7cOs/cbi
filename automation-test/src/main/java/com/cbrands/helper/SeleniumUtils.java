@@ -416,6 +416,21 @@ public class SeleniumUtils {
 	}
 
 	/**
+   * Waits for element to disappear from the DOM
+   *
+   * @param element the element
+   */
+  @SuppressWarnings("unchecked")
+  public static void waitForElementStalenessFluentWait(WebElement element) {
+    Wait<WebDriver> wait = new FluentWait(driver)
+      .withTimeout(DEFAULT_WAIT_TIME, TimeUnit.SECONDS)
+      .pollingEvery(5, TimeUnit.SECONDS)
+      .ignoring(NoSuchElementException.class)
+      .ignoring(ElementNotVisibleException.class);
+		waitForCondition(ExpectedConditions.stalenessOf(element), DEFAULT_WAIT_TIME);
+	}
+
+	/**
 	 * Wait for text present.
 	 *
 	 * @param by the by
