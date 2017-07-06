@@ -1,6 +1,6 @@
 import { By } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { CompassSelectComponent } from './compass-select.component';
 import { FormsModule } from '@angular/forms';
 import { MdSelectModule } from '@angular/material';
@@ -40,6 +40,17 @@ describe('CompassSelectComponent', () => {
     componentInstance.model = optionsMock[0][valueKeyMock];
   });
 
+  describe('component init', () => {
+    it('should initialize the current selected option based on the passed in [model] input', fakeAsync(() => {
+      fixture.detectChanges();
+      tick();
+      fixture.detectChanges();
+
+      const selectedOptionElement = fixture.debugElement.query(By.css('.mat-select-value-text')).nativeElement;
+      expect(selectedOptionElement.textContent).toBe(optionsMock[0][displayKeyMock]);
+    }));
+  });
+
   describe('component title', () => {
     it('should contain a title element when [title] input is passed in', () => {
       componentInstance.title = titleMock;
@@ -76,6 +87,21 @@ describe('CompassSelectComponent', () => {
       const subtitleElement = fixture.debugElement.query(By.css('.subtitle'));
 
       expect(subtitleElement).toBe(null);
+    });
+  });
+
+  describe('component output event', () => {
+    it('should output the value of a clicked option', () => {
+      fixture.detectChanges();
+
+      componentInstance.onOptionSelected.subscribe((value: any) => {
+        expect(value).toBe(optionsMock[0][valueKeyMock]);
+      });
+
+      fixture.debugElement.query(By.css('.mat-select-trigger')).nativeElement.click();
+      fixture.detectChanges();
+
+      fixture.debugElement.query(By.css('.compass-select-option:nth-child(1)')).triggerEventHandler('click', null);
     });
   });
 });

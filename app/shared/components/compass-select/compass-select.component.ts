@@ -20,7 +20,7 @@ export class CompassSelectComponent {
   }
 
   private currentSubValue: any;
-  private isSelectOpen: boolean = false; // tslint:no-unused-variable
+  private isSelectOpen: boolean = false;
   private optionData: any[] = [];
 
   constructor() {}
