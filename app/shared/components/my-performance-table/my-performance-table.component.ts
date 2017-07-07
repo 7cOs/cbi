@@ -31,7 +31,7 @@ export class MyPerformanceTableComponent {
   @Input() totalRow: MyPerformanceTableRow;
 
   @Input()
-  set tableDataRow(tableData: Array<MyPerformanceTableRow>) {
+  set tableDataRows(tableData: Array<MyPerformanceTableRow>) {
     this._tableData = tableData;
 
     if (typeof this.sortingFunction === 'function') { // check if that works
@@ -55,7 +55,7 @@ export class MyPerformanceTableComponent {
           i++;
         } while (i < this._sortingCriteria.length && currentSortOrder === 0);
 
-        return this._sortingCriteria[--i].order ? currentSortOrder : -currentSortOrder;
+        return this._sortingCriteria[--i].ascending ? currentSortOrder : -currentSortOrder;
       };
     }
   }
@@ -90,5 +90,5 @@ export interface MyPerformanceTableEvent {
 
 export interface SortingCriteria {
   columnType: ColumnType;
-  order: boolean;
+  ascending: boolean;
 }

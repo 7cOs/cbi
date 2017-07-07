@@ -17,6 +17,7 @@ import {
 describe('NotificationsComponent', () => {
 
   let fixture: ComponentFixture<NotificationsComponent>;
+  let componentInstance: NotificationsComponent;
 
   beforeEach(() => {
     const mockAngulartics2 = jasmine.createSpyObj('angulartics2', ['eventTrack']);
@@ -38,6 +39,7 @@ describe('NotificationsComponent', () => {
     });
 
     fixture = TestBed.createComponent(NotificationsComponent);
+    componentInstance = fixture.componentInstance;
   });
 
   describe('constructor', () => {
@@ -59,7 +61,7 @@ describe('NotificationsComponent', () => {
         opportunityNotificationMock()
       ];
 
-      fixture.componentInstance.notifications = notificationsMock;
+      componentInstance.notifications = notificationsMock;
 
       fixture.detectChanges();
       const noUnreadNotificationElement = fixture.debugElement
@@ -76,7 +78,7 @@ describe('NotificationsComponent', () => {
       notificationsMock[0].status = 'READ';
       notificationsMock[1].status = 'READ';
 
-      fixture.componentInstance.notifications = notificationsMock;
+      componentInstance.notifications = notificationsMock;
 
       fixture.detectChanges();
       const noUnreadNotificationElement = fixture.debugElement
@@ -93,7 +95,7 @@ describe('NotificationsComponent', () => {
       notificationsMock[0].dateCreated = moment().subtract(2, 'days');
       notificationsMock[1].dateCreated = moment().subtract(1, 'days');
 
-      fixture.componentInstance.notifications = notificationsMock;
+      componentInstance.notifications = notificationsMock;
 
       fixture.detectChanges();
       const firstCreatorLabel = fixture.debugElement
