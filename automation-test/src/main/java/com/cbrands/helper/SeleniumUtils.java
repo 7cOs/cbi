@@ -23,8 +23,9 @@ public class SeleniumUtils {
 
 	/** The Constant DEFAULT_WAIT_TIME. */
 	public static final int DEFAULT_WAIT_TIME = 20;
+  private static final int DEFAULT_POLL_TIME = 5;
 
-	/** The driver. */
+  /** The driver. */
 	private static WebDriver driver;
 
 	/** The base url. */
@@ -381,7 +382,7 @@ public class SeleniumUtils {
 	public static WebElement waitForVisibleFluentWait(WebElement element) {
 		Wait<WebDriver> wait = new FluentWait(driver)
 	              .withTimeout(DEFAULT_WAIT_TIME, TimeUnit.SECONDS)
-	              .pollingEvery(5, TimeUnit.MILLISECONDS)
+	              .pollingEvery(DEFAULT_POLL_TIME, TimeUnit.MILLISECONDS)
 	              .ignoring(NoSuchElementException.class)
 	              .ignoring(ElementNotVisibleException.class);
 	   wait.until(ExpectedConditions.visibilityOf(element));
@@ -398,7 +399,7 @@ public class SeleniumUtils {
 	public static List<WebElement> waitForElementsVisibleFluentWait(List<WebElement> elements) {
 		Wait<WebDriver> wait = new FluentWait(driver)
 				.withTimeout(DEFAULT_WAIT_TIME, TimeUnit.SECONDS)
-				.pollingEvery(5, TimeUnit.SECONDS)
+				.pollingEvery(DEFAULT_POLL_TIME, TimeUnit.SECONDS)
 				.ignoring(NoSuchElementException.class)
 				.ignoring(ElementNotVisibleException.class);
 		wait.until(ExpectedConditions.visibilityOfAllElements(elements));
@@ -424,7 +425,7 @@ public class SeleniumUtils {
   public static void waitForElementStalenessFluentWait(WebElement element) {
     Wait<WebDriver> wait = new FluentWait(driver)
       .withTimeout(DEFAULT_WAIT_TIME, TimeUnit.SECONDS)
-      .pollingEvery(5, TimeUnit.SECONDS)
+      .pollingEvery(DEFAULT_POLL_TIME, TimeUnit.SECONDS)
       .ignoring(NoSuchElementException.class)
       .ignoring(ElementNotVisibleException.class);
 		waitForCondition(ExpectedConditions.stalenessOf(element), DEFAULT_WAIT_TIME);
