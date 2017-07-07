@@ -49,7 +49,7 @@ function createRandomSortingCriteria(length: number) {
   return criteria;
 }
 
-fdescribe('MyPerformanceTableComponent', () => {
+describe('MyPerformanceTableComponent', () => {
 
   let fixture: ComponentFixture<MyPerformanceTableComponent>;
   let componentInstance: MyPerformanceTableComponent;
@@ -80,6 +80,89 @@ fdescribe('MyPerformanceTableComponent', () => {
       componentInstance.sortingCriteria = sortingCriteriaMock;
       const firstSortingCriterion = sortingCriteriaMock[0];
       const firstColumnType = ColumnType[sortingCriteriaMock[0].columnType];
+
+      fixture.detectChanges();
+
+      const mockElements = fixture.debugElement
+        .queryAll(By.directive(MockMyPerformanceTableRowComponent));
+      // The index 0 contains an empty component for whatever reason
+      const rowComponent0 = mockElements[1]
+        .injector
+        .get(MockMyPerformanceTableRowComponent) as MockMyPerformanceTableRowComponent;
+      const rowComponent1 = mockElements[2]
+        .injector
+        .get(MockMyPerformanceTableRowComponent) as MockMyPerformanceTableRowComponent;
+
+      expect(rowComponent0.rowData).toBeTruthy();
+      expect(rowComponent1.rowData).toBeTruthy();
+
+      const sortingRespected =
+        rowComponent0.rowData[firstColumnType] === rowComponent1.rowData[firstColumnType]
+        || firstSortingCriterion.ascending
+          && rowComponent0.rowData[firstColumnType] < rowComponent1.rowData[firstColumnType]
+        || !firstSortingCriterion.ascending
+          && rowComponent0.rowData[firstColumnType] > rowComponent1.rowData[firstColumnType];
+      expect(sortingRespected).toBeTruthy();
+    });
+
+    it('should sort the data with two criteria', () => {
+      let tableDataRows = createRandomDataRows(3);
+      tableDataRows[0].descriptionLine0 = 'b';
+      tableDataRows[0].metricColumn0 = 1;
+      tableDataRows[1].descriptionLine0 = 'a';
+      tableDataRows[1].metricColumn0 = 0;
+      tableDataRows[2].descriptionLine0 = 'b';
+      tableDataRows[2].metricColumn0 = 2;
+      componentInstance.tableDataRows = tableDataRows.slice();
+
+      const sortingCriteriaMock = [
+        {
+          columnType: ColumnType.descriptionLine0,
+          ascending: true
+        },
+        {
+          columnType: ColumnType.metricColumn0,
+          ascending: false
+        }
+      ];
+      componentInstance.sortingCriteria = sortingCriteriaMock;
+
+      fixture.detectChanges();
+
+      const mockElements = fixture.debugElement
+        .queryAll(By.directive(MockMyPerformanceTableRowComponent));
+      // The index 0 contains an empty component for whatever reason
+      const rowComponent0 = mockElements[1]
+        .injector
+        .get(MockMyPerformanceTableRowComponent) as MockMyPerformanceTableRowComponent;
+      const rowComponent1 = mockElements[2]
+        .injector
+        .get(MockMyPerformanceTableRowComponent) as MockMyPerformanceTableRowComponent;
+      const rowComponent2 = mockElements[3]
+        .injector
+        .get(MockMyPerformanceTableRowComponent) as MockMyPerformanceTableRowComponent;
+
+      expect(rowComponent0.rowData).toBeTruthy();
+      expect(rowComponent1.rowData).toBeTruthy();
+      expect(rowComponent2.rowData).toBeTruthy();
+
+      expect(rowComponent0.rowData).toBe(tableDataRows[1]);
+      expect(rowComponent1.rowData).toBe(tableDataRows[2]);
+      expect(rowComponent2.rowData).toBe(tableDataRows[0]);
+    });
+
+  });
+
+  describe('setTableDataRows', () => {
+
+    it('should sort the data if some sorting criteria were present', () => {
+      const sortingCriteriaMock = createRandomSortingCriteria(1);
+      componentInstance.sortingCriteria = sortingCriteriaMock;
+      const firstSortingCriterion = sortingCriteriaMock[0];
+      const firstColumnType = ColumnType[sortingCriteriaMock[0].columnType];
+
+      const tableDataRows = createRandomDataRows(2);
+      componentInstance.tableDataRows = tableDataRows;
 
       fixture.detectChanges();
 
