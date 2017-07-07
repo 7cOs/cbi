@@ -112,7 +112,8 @@ public class NotesModal extends LoadableComponent<NotesModal> {
   }
 
   public String getTextFromFirstNote() {
-    final WebElement firstNote = modalContainer.findElement(By.xpath(".//div[contains(@class, 'note-body ')]"));
+    final WebElement firstNote = modalContainer
+      .findElement(By.xpath(".//div[contains(concat(' ', normalize-space(@class), ' '), ' note-body ')]"));
     waitForVisibleFluentWait(firstNote);
     return getNoteText(firstNote);
   }
