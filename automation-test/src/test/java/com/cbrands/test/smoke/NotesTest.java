@@ -2,6 +2,7 @@ package com.cbrands.test.smoke;
 
 import com.cbrands.TestUser;
 import com.cbrands.pages.*;
+import org.openqa.selenium.WebElement;
 import org.testng.Assert;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
@@ -59,9 +60,24 @@ public class NotesTest extends BaseTestCase {
     Assert.assertEquals(notesModal.getTextFromFirstNote(), noteText);
   }
 
+  @Test(dependsOnMethods = "createNote", description = "Delete a Note", dataProvider = "NoteData")
+  public void deleteNote(String noteTopic, String noteText) {
+    final WebElement deleteMe = notesModal.findNoteWithText(noteText);
+
+    notesModal
+      .clickDeleteIcon(deleteMe)
+      .confirmDelete(deleteMe)
+      .waitForLoaderToDisappear();
+
+    Assert.assertFalse(
+      notesModal.doesNoteExistByNoteText(noteText),
+      "Failure to delete note with the following text: " + noteText + "\n"
+    );
+  }
+
   @DataProvider(name = "NoteData")
   public static Object[][] noteData() {
-    return new Object[][] { {"Distribution", "Testing create notes: " + current_time_stamp } };
+    return new Object[][]{{"Distribution", "Testing create notes: " + current_time_stamp}};
   }
 
 }
