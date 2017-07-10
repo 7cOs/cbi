@@ -1,0 +1,33 @@
+//- Metric Select
+compass-select(
+  [model]="metricModel",
+  [options]="metricOptions",
+  [displayKey]="'metricName'",
+  [valueKey]="'metricValue'",
+  [title]="'metric'",
+  (onOptionSelected)="filterSelected('metric', $event)"
+)
+
+//- Depletion Time Period Select
+compass-select(
+  *ngIf="metricModel === 'DEPLETIONS'",
+  [model]="timePeriodModel",
+  [options]="depletionTimePeriodOptions",
+  [displayKey]="'displayCode'",
+  [valueKey]="'code'",
+  [subDisplayKey]="'range'",
+  [title]="'time period'",
+  (onOptionSelected)="filterSelected('timeperiod', $event)"
+)
+
+//- Distribution Time Period Select
+compass-select(
+  *ngIf="metricModel !== 'DEPLETIONS'",
+  [model]="timePeriodModel",
+  [options]="distributionTimePeriodOptions",
+  [displayKey]="'displayCode'",
+  [valueKey]="'code'",
+  [subDisplayKey]="'range'",
+  [title]="'time period'",
+  (onOptionSelected)="filterSelected('timeperiod', $event)"
+)

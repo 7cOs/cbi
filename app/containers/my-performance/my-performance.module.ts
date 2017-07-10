@@ -2,6 +2,7 @@ import { NgModule }       from '@angular/core';
 import { CommonModule }   from '@angular/common';
 
 import { MyPerformanceComponent } from './my-performance.component';
+import { MyPerformanceFilterComponent } from '../../shared/components/my-performance-filter/my-performance-filter.component';
 import { SharedModule } from '../../shared/shared.module';
 
 @NgModule({
@@ -10,7 +11,8 @@ import { SharedModule } from '../../shared/shared.module';
     SharedModule
   ],
   declarations: [
-    MyPerformanceComponent
+    MyPerformanceComponent,
+    MyPerformanceFilterComponent
   ]
 })
 
