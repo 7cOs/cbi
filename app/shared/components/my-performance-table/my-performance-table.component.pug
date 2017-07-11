@@ -1,7 +1,9 @@
 div.performance-table-wrapper
   div.performance-table-summary.col-100-pct
-    h1 {{ performanceMetric }} {{ dateRange.displayCode }}
-    h4 {{ dateRange.range }}
+    div.summary-header 
+      span {{ performanceMetric }} - {{ dateRange.displayCode }}
+    div.summary-date-range
+      span {{ dateRange.range }}
   table.my-performance-table.col-100-pct
     thead.col-100-pct
       tr.top-header.col-100-pct

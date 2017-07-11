@@ -1,11 +1,23 @@
 .performance-table-wrapper {
-  width: 50%;
-  min-width: 400px;
+  width: 100%;
+}
+
+.performance-table-summary {
+  background-color: #f3f3f3;
+  border-bottom: 2px solid #b4b4b4;
+  font-family: Rajdhani;
+  height: 70px;
+  min-width: 565px;
 }
 
 table {
-  border: 0;
+  border: 1px solid #f3f3f3;
   border-collapse: collapse;
+}
+
+tbody {
+  height: 100px;
+  overflow-y: auto;
 }
 
 my-performance-table-row {
@@ -40,11 +52,8 @@ th {
 .left-col {
   text-align: left;
   min-width: 120px;
-}
-
-.center-col {
-  text-align: center;
-  background-color: #f3f3f3;
+  padding-left: 16px;
+  font-weight: 600;
 }
 
 .right-col {
@@ -67,46 +76,46 @@ th {
   color: #ffffff;
 }
 
-// .left-col {
-//   font-family: Rajdhani;
-//   font-size: 12px;
-//   font-weight: 600;
-//   letter-spacing: 0.5px;
-//   text-align: left;
-//   color: #4a4a4a;
-// }
-
 thead {
   height: 90px;
 }
 
-tr {
-  &.sub-header {
-    height: 30px;
-    border-bottom: 1px solid #e7e7e7;
+.sub-header {
+  height: 30px;
+  border-bottom: 1px solid #e7e7e7;
+}
+
+.total-row {
+  height: 60px;
+  border-bottom: 1px solid #e7e7e7;
+
+}
+
+.center-col {
+  text-align: center;
+  background-color: #f3f3f3;
+}
+
+.entity-row {
+  height: 60px;
+  border-bottom: 1px solid #e7e7e7;
+
+  /deep/.center-col {
+    text-align: center;
   }
 
-  &.total-row {
-    height: 60px;
-    border-bottom: 1px solid #e7e7e7;
-  }
-
-  &.entity-row {
-    height: 60px;
-    border-bottom: 1px solid #e7e7e7;
-
-    &:hover {
-      .center-col {
-        background-color: #e7e7e7;
-      }
+  &:hover {
+    /deep/td {
+      background-color: #F3F8FB;
     }
-
-    td {
-      font-family: WorkSans;
-      font-size: 12px;
-      font-weight: 600;
-    }
   }
+}
+
+td, th {
+  font-family: WorkSans;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
 }
 
 .top-header {
@@ -134,4 +143,32 @@ tr {
     color: #4a4a4a;
     vertical-align: center;
   }
+}
+
+tr.total-row { 
+  background-color: #032e60;
+  color: #e7e7e7;
+
+  /deep/.center-col {
+    background-color: #345070;
+  }
+}
+
+.summary-header {
+  font-family: WorkSans;
+  font-size: 24px;
+  font-weight: 300;
+  text-align: left;
+  color: #4a4a4a;
+  padding-left: 16px;
+}
+
+.summary-date-range {
+  font-family: Rajdhani;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 1px;
+  text-align: left;
+  color: #4a4a4a;
+  padding-left: 16px;
 }
