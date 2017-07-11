@@ -1,0 +1,8 @@
+div.col-100-pct
+  h1 {{ performanceMetric }}
+  my-performance-table.col-100-pct.my-performance-table-right([tableData]="tableData",
+                                    [sortingCriteria]="sortingCriteria",
+                                    [tableHeaderRow]="tableHeaderRow",
+                                    [totalRow]="totalRow",
+                                    (onElementClicked)="onElementClicked($event)",
+                                    (onSortingcriteriaChanged)="onSortingcriteriaChanged($event)")

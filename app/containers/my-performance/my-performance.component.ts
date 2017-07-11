@@ -8,6 +8,8 @@ import { myPerformanceTableData, myPerformanceTotalRowData } from '../../models/
 import { MyPerformanceTableRow } from '../../models/my-performance-table-row.model';
 import { SortingCriteria } from '../../models/sorting-criteria.model';
 
+import { dateRangeDTOsMock } from '../../models/date-range-dto-collection.model.mock';
+
 @Component({
   selector: 'my-performance',
   template: require('./my-performance.component.pug'),
@@ -15,15 +17,17 @@ import { SortingCriteria } from '../../models/sorting-criteria.model';
 })
 
 export class MyPerformanceComponent {
-  private _tableHeaderRow: string[] = ['People', 'Depletions', 'CTV'];
+  private _tableHeaderRowLeft: Array<string> = ['People','Depletions','CYTD'];
+  private _tableHeaderRowRight: Array<string> = ['Brand','Depletions','CYTD'];
   private _performanceMetric: string = 'Depletions';
   private _dateRange: DateRange = getDateRangeMock();
   private _tableData: MyPerformanceTableRow[] = myPerformanceTableData;
   private _totalRowData: MyPerformanceTableRow = myPerformanceTotalRowData;
-  private _sortingCriteria: SortingCriteria[] = [<SortingCriteria>{columnType: ColumnType.metricColumn0, ascending: false}];
-  
-  private handleSortRows(criterias: SortingCriteria[]): void {
-    console.log(criterias);
-    this._sortingCriteria = criterias;
+  private _sortingCriteria: Array<SortingCriteria> = [{columnType: ColumnType.metricColumn0, ascending: false}];
+  private _dateRanges = dateRangeDTOsMock;
+
+  private handleSortRows(criteria: SortingCriteria[]): void {
+    console.log(criteria);
+    this._sortingCriteria = criteria;
   }
 }

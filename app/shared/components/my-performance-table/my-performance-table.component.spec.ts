@@ -70,7 +70,7 @@ describe('MyPerformanceTableComponent', () => {
     componentInstance = fixture.componentInstance;
   });
 
-  describe('setSortingCriterias', () => {
+  describe('setSortingcriteria', () => {
 
     it('should sort the data with one criterion', () => {
       const tableDataRows = createRandomDataRows(2);

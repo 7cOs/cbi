@@ -1,0 +1,9 @@
+div.col-100-pct
+  h1 {{ performanceMetric }} {{ dateRange.displayCode }}
+  h4 {{ dateRange.range }}
+  my-performance-table.my-performance-table-left.col-100-pct([tableData]="tableData",
+                                    [sortingCriteria]="sortingCriteria",
+                                    [tableHeaderRow]="tableHeaderRow",
+                                    [totalRow]="totalRow",
+                                    (onElementClicked)="onElementClicked($event)",
+                                    (onSortingcriteriaChanged)="onSortingcriteriaChanged($event)")
