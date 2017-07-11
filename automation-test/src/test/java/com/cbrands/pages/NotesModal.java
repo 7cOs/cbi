@@ -118,6 +118,19 @@ public class NotesModal extends LoadableComponent<NotesModal> {
     return getNoteText(firstNote);
   }
 
+  public boolean doesNoteExistByNoteText(String noteText) {
+    boolean doesExist = false;
+
+    try {
+      findNoteWithText(noteText);
+      doesExist = true;
+    } catch(NoSuchElementException e) {
+      log.info("No Note found with the following text: " + noteText);
+    }
+
+    return doesExist;
+  }
+
   private String getNoteText(WebElement note) {
     String text = "";
 
@@ -134,6 +147,27 @@ public class NotesModal extends LoadableComponent<NotesModal> {
 
   public NotesModal waitForLoaderToDisappear() {
     waitForElementToDisappear(By.xpath(MODAL_CONTAINER_XPATH + "//progress-container"));
+    return this;
+  }
+
+  public WebElement findNoteWithText(String noteText) {
+    final String isNote = "contains(@class, 'note-body ')";
+    final String containsMatchingText = ".//div.note-body-field-text/*[contains(., '" + noteText + "')]";
+
+    return modalContainer.findElement(By.xpath(".//div["+ isNote +" and "+ containsMatchingText +"]"));
+  }
+
+  public NotesModal clickDeleteIcon(WebElement deleteMe) {
+    waitForElementToClickable(deleteMe.findElement(By.xpath(".//div[contains(@class, 'delete-note')]")), true).click();
+
+    return this;
+  }
+
+  public NotesModal confirmDelete(WebElement note) {
+    final WebElement confirmDeleteButton = note.findElement(By.xpath(".//button[contains(., 'Yes')]"));
+    waitForVisibleFluentWait(confirmDeleteButton);
+    waitForElementToClickable(confirmDeleteButton, true).click();
+
     return this;
   }
 }
