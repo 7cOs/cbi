@@ -1,13 +1,19 @@
-my-performance-table-left.col-50-pct([onSortingcriteriaChanged]="handleSortRows",
-                                      [sortingCriteria]="_sortingCriteria",
-                                      [tableHeaderRow]="_tableHeaderRowLeft",
-                                      [totalRow]="_totalRowData",
-                                      [tableData]="_tableData",
-                                      [dateRange]="_dateRanges",
-                                      [performanceMetric]="_performanceMetric")
-my-performance-table-right.col-50-pct([onSortingcriteriaChanged]="handleSortRows",
-                                      [sortingCriteria]="_sortingCriteria",
-                                      [tableHeaderRow]="_tableHeaderRowRight",
-                                      [totalRow]="_totalRowData",
-                                      [tableData]="_tableData",
-                                      [performanceMetric]="_performanceMetric")
+my-performance-table-left.my-performance-table.col-50-pct(
+  [onSortingcriteriaChanged]="handleSortRows",
+  [onElementClicked]="handleElementClicked",
+  [sortingCriteria]="_sortingCriteria",
+  [tableHeaderRow]="_tableHeaderRowLeft",
+  [totalRow]="_totalRowData",
+  [tableData]="_tableData",
+  [dateRange]="_dateRanges",
+  [performanceMetric]="_performanceMetric"
+)
+my-performance-table-right.my-performance-table.col-50-pct(
+  [onSortingcriteriaChanged]="handleSortRows",
+  [onElementClicked]="handleElementClicked",
+  [sortingCriteria]="_sortingCriteria",
+  [tableHeaderRow]="_tableHeaderRowRight",
+  [totalRow]="_totalRowData",
+  [tableData]="_tableData",
+  [performanceMetric]="_performanceMetric"
+)

@@ -30,4 +30,9 @@ export class MyPerformanceComponent {
     console.log(criteria);
     this._sortingCriteria = criteria;
   }
+
+  private handleElementClicked(row: MyPerformanceTableRow, index: number) {
+    console.log(row);
+    console.log(index);
+  }
 }

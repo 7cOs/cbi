@@ -12,7 +12,7 @@ import { SortingCriteria } from '../../../models/sorting-criteria.model';
   styles: [ require('./my-performance-table.component.scss') ]
 })
 export class MyPerformanceTableComponent {
-  @Output() onElementClicked = new EventEmitter<MyPerformanceTableEvent>();
+  @Output() onElementClicked = new EventEmitter<{row: MyPerformanceTableRow, index: number}>();
   @Output() onSortingcriteriaChanged = new EventEmitter<Array<SortingCriteria>>();
 
   @Input()
@@ -78,7 +78,7 @@ export class MyPerformanceTableComponent {
   }
 }
 
-export interface MyPerformanceTableEvent {
-  row: MyPerformanceTableRow;
-  index: number;
+export interface SortingCriteria {
+  columnType: ColumnType;
+  ascending: boolean;
 }
