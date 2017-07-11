@@ -1,0 +1,57 @@
+.performance-table-wrapper {
+  width: 50%;
+  min-width: 400px;
+  display: inline-block;
+}
+
+.my-performance-table {
+  border: 1px solid #999; 
+}
+
+td {
+  border: 1px solid #999;
+}
+
+th {
+  font-weight: normal;
+  font-size: 10px;
+}
+
+tr {
+  width: 100%;
+  min-width: 400px;
+  position: relative;
+}
+
+.col-100-pct {
+  width: 100%;
+}
+
+.col-60-pct {
+  width: 60%;
+}
+
+.col-30-pct {
+  width: 30%;
+}
+
+.col-20-pct {
+  width: 20%;
+  margin: 0 auto;
+}
+
+.col-10-pct {
+  width: 10%;
+}
+
+.left-col {
+  text-align: left;
+}
+
+.center-col {
+  text-align: center;
+}
+
+.right-col {
+  text-align: center;
+}

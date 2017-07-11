@@ -1,47 +1,44 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+// tslint:disable:no-unused-variable
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 
-export enum ColumnType {
-  descriptionLine0,
-  descriptionLine1,
-  metricColumn0,
-  metricColumn1,
-  metricColumn2,
-  ctv
-}
+import { ColumnType } from '../../../enums/column-type.enum';
+import { DateRange } from '../../../models/date-range.model';
+import { MyPerformanceTableRow } from '../../../models/my-performance-table-row.model';
+import { SortingCriteria } from '../../../models/sorting-criteria.model';
 
 @Component({
   selector: 'my-performance-table',
   template: require('./my-performance-table.component.pug'),
   styles: [ require('./my-performance-table.component.scss') ]
 })
-
 export class MyPerformanceTableComponent {
   @Output() onElementClicked = new EventEmitter<MyPerformanceTableEvent>();
   @Output() onSortingCriteriasChanged = new EventEmitter<Array<SortingCriteria>>();
 
-  @Input()
-  set sortingCriteria(criterias: Array<SortingCriteria>) {
-    this._sortingCriteria = criterias;
-    this.updateSortingFunction();
-    this._tableData = this._tableData.sort(this.sortingFunction);
-  }
-
   @Input() tableHeaderRow: Array<string>;
-
   @Input() totalRow: MyPerformanceTableRow;
+  @Input() performanceMetric: string;
+  @Input() dateRange: DateRange;
 
   @Input()
-  set tableDataRows(tableData: Array<MyPerformanceTableRow>) {
+  set tableData(tableData: Array<MyPerformanceTableRow>) {
     this._tableData = tableData;
-
-    if (typeof this.sortingFunction === 'function') { // check if that works
+    if (typeof this.sortingFunction === 'function') {
       this._tableData = this._tableData.sort(this.sortingFunction);
     }
   }
 
+  @Input()
+  set sortingCriterias(criterias: Array<SortingCriteria>) {
+    this._sortingCriterias = criterias;
+    this.updateSortingFunction();
+    this._tableData = this._tableData.sort(this.sortingFunction);
+  }
+
   private sortingFunction: (left: MyPerformanceTableRow, right: MyPerformanceTableRow) => number;
-  private _sortingCriteria: Array<SortingCriteria> = null;
-  private _tableData: Array<MyPerformanceTableRow> = [];
+  private _sortingCriterias: Array<SortingCriteria> = null;
+  private _tableData: Array<MyPerformanceTableRow>;
+  private columnType = ColumnType; // for use in template
 
   private updateSortingFunction() {
     if (this._sortingCriteria.length) {
@@ -53,9 +50,8 @@ export class MyPerformanceTableComponent {
           currentColumn = ColumnType[this._sortingCriteria[i].columnType];
           currentSortOrder = this.compareObjects(left[currentColumn], (right[currentColumn]));
           i++;
-        } while (i < this._sortingCriteria.length && currentSortOrder === 0);
-
-        return this._sortingCriteria[--i].ascending ? currentSortOrder : -currentSortOrder;
+        } while (i < this._sortingCriterias.length && currentSortOrder === 0);
+        return this._sortingCriterias[--i].ascending ? currentSortOrder : -currentSortOrder;
       };
     }
   }
@@ -68,27 +64,21 @@ export class MyPerformanceTableComponent {
         : 0;
   }
 
-  // private clickOn(row: MyPerformanceTableRow, index: number) {
-  //   this.onElementClicked.emit({row: row, index: index});
-  // }
+  private clickOn(row: MyPerformanceTableRow, index: number) {
+    console.log('clicked on ', row);
+    this.onElementClicked.emit({row: row, index: index});
+  }
 
-}
-
-export interface MyPerformanceTableRow {
-  descriptionLine0: string;
-  descriptionLine1: string;
-  metricColumn0: number;
-  metricColumn1: number;
-  metricColumn2: number;
-  ctv: number;
+  private sortRows(colType: ColumnType) {
+    // keeping this one-dimensional for now
+    const ascending = this._sortingCriterias[0].columnType === colType
+      ? !this._sortingCriterias[0].ascending
+      : false;
+    this.onSortingCriteriasChanged.emit([<SortingCriteria>{columnType: colType, ascending: ascending}]);
+  }
 }
 
 export interface MyPerformanceTableEvent {
   row: MyPerformanceTableRow;
   index: number;
-}
-
-export interface SortingCriteria {
-  columnType: ColumnType;
-  ascending: boolean;
 }
