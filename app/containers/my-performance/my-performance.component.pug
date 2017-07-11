@@ -1,22 +1,2 @@
 h2 This page will come
   div soon...
-
-p Current Model for this select: {{modelValue}}
-compass-select(
-  [options]="selectData",
-  [displayKey]="'name'",
-  [valueKey]="'value'",
-  [subDisplayKey]="'range'",
-  [title]="'Time Period'",
-  (onOptionSelected)="optionSelected($event)",
-  [model]="modelValue"
-)
-
-p Current Model for this select: {{modelValue2}}
-compass-select(
-  [options]="selectData2",
-  [displayKey]="'person'",
-  [valueKey]="'personValue'",
-  (onOptionSelected)="optionSelected2($event)",
-  [model]="modelValue2"
-)
