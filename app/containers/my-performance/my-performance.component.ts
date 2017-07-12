@@ -5,4 +5,6 @@ import { Component } from '@angular/core';
   template: require('./my-performance.component.pug')
 })
 
-export class MyPerformanceComponent { }
+export class MyPerformanceComponent {
+
+}
