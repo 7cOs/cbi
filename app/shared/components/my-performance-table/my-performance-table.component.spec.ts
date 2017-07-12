@@ -1,52 +1,20 @@
-import * as Chance from 'chance';
 import { Component, Input } from '@angular/core';
 import { By } from '@angular/platform-browser';
 import { TestBed, ComponentFixture } from '@angular/core/testing';
 
-import { MyPerformanceTableComponent, MyPerformanceTableRow, ColumnType, SortingCriteria } from './my-performance-table.component';
-
-let chance = new Chance();
+import { ColumnType } from '../../../enums/column-type.enum';
+import { MyPerformanceTableComponent } from './my-performance-table.component';
+import { MyPerformanceTableRow } from '../../../models/my-performance-table-row.model';
+import { myPerformanceTableRowMock } from '../../../models/my-performance-table-row.model.mock';
+import { sortingCriteriaMock } from '../../../models/my-performance-table-sorting-criteria.model.mock';
 
 @Component({
   selector: 'my-performance-table-row',
   template: ''
 })
+
 class MockMyPerformanceTableRowComponent {
   @Input() rowData: MyPerformanceTableRow;
-}
-
-function createRandomDataRows(length: number) {
-  let rows: Array<MyPerformanceTableRow> = Array<MyPerformanceTableRow>();
-
-  for (let i = 0 ; i < length ; i++) {
-    rows.push({
-      descriptionLine0: chance.string(),
-      descriptionLine1: chance.string(),
-      metricColumn0: chance.floating(),
-      metricColumn1: chance.floating(),
-      metricColumn2: chance.floating(),
-      ctv: chance.natural()
-    });
-  }
-
-  return rows;
-}
-
-const columnTypeValues = Object.keys(ColumnType)
-  .map(key => ColumnType[key])
-  .filter(value => typeof value === 'number');
-
-function createRandomSortingCriteria(length: number) {
-  let criteria: Array<SortingCriteria> = Array<SortingCriteria>();
-
-  for (let i = 0 ; i < length ; i++) {
-    criteria.push({
-      columnType: columnTypeValues[chance.integer({min: 0, max: columnTypeValues.length - 1})],
-      ascending: chance.bool()
-    });
-  }
-
-  return criteria;
 }
 
 describe('MyPerformanceTableComponent', () => {
@@ -73,11 +41,11 @@ describe('MyPerformanceTableComponent', () => {
   describe('setSortingcriteria', () => {
 
     it('should sort the data with one criterion', () => {
-      const tableDataRows = createRandomDataRows(2);
-      componentInstance.tableDataRows = tableDataRows;
+      const tableData = myPerformanceTableRowMock(2);
+      componentInstance.tableData = tableData;
 
-      const sortingCriteriaMock = createRandomSortingCriteria(1);
-      componentInstance.sortingCriteria = sortingCriteriaMock;
+      const sortingCriteria = sortingCriteriaMock(1);
+      componentInstance.sortingCriteria = sortingCriteria;
       const firstSortingCriterion = sortingCriteriaMock[0];
       const firstColumnType = ColumnType[sortingCriteriaMock[0].columnType];
 
@@ -156,13 +124,13 @@ describe('MyPerformanceTableComponent', () => {
   describe('setTableDataRows', () => {
 
     it('should sort the data if some sorting criteria were present', () => {
-      const sortingCriteriaMock = createRandomSortingCriteria(1);
-      componentInstance.sortingCriteria = sortingCriteriaMock;
+      const sortingCriteria = sortingCriteriaMock(1);
+      componentInstance.sortingCriteria = sortingCriteria;
       const firstSortingCriterion = sortingCriteriaMock[0];
       const firstColumnType = ColumnType[sortingCriteriaMock[0].columnType];
 
-      const tableDataRows = createRandomDataRows(2);
-      componentInstance.tableDataRows = tableDataRows;
+      const tableData = myPerformanceTableRowMock(2);
+      componentInstance.tableData = tableData;
 
       fixture.detectChanges();
 
