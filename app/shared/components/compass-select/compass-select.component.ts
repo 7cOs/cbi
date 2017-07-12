@@ -31,8 +31,9 @@ export class CompassSelectComponent {
     });
   }
 
-  // tslint:disable-next-line:no-unused-variable
-  private optionClicked(option: any): void {
+  private optionClicked(option: any): void { // tslint:disable-line:no-unused-variable
+    // Setting 'isSelectOpen' to false here updates styles earlier when select is closing, fixing a style issue.
+    // This is also set to false in the markup to handle select closing when off clicking.
     this.isSelectOpen = false;
     this.currentSubValue = option[this.subDisplayKey];
     this.onOptionSelected.emit(option[this.valueKey]);

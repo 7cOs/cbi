@@ -7,18 +7,25 @@ import { MdSelectModule } from '@angular/material';
 import * as Chance from 'chance';
 
 const chance = new Chance();
-const optionsMock = [{}, {}, {}];
+const keysMock: Array<string> = [];
+const optionsMock: Array<any> = [];
 
-optionsMock.forEach((mockOption: any) => {
-  mockOption[chance.string()] = chance.string();
-  mockOption[chance.string()] = chance.string();
-  mockOption[chance.string()] = chance.string();
-});
+for (let i = 0; i < 5; i++) {
+  keysMock.push(chance.string());
+}
 
-const optionsKeys = Object.keys(optionsMock[0]);
-const displayKeyMock = optionsKeys[Math.floor(Math.random() * optionsKeys.length)];
-const valueKeyMock = optionsKeys[Math.floor(Math.random() * optionsKeys.length)];
-const subDisplayKeyMock = optionsKeys[Math.floor(Math.random() * optionsKeys.length)];
+for (let i = 0; i < 5; i++) {
+  const mockOption = {};
+
+  keysMock.forEach(randomKey => {
+    mockOption[randomKey] = chance.string();
+    optionsMock.push(mockOption);
+  });
+}
+
+const displayKeyMock = keysMock[Math.floor(Math.random() * keysMock.length)];
+const valueKeyMock = keysMock[Math.floor(Math.random() * keysMock.length)];
+const subDisplayKeyMock = keysMock[Math.floor(Math.random() * keysMock.length)];
 const titleMock = chance.string();
 
 describe('CompassSelectComponent', () => {
@@ -42,9 +49,8 @@ describe('CompassSelectComponent', () => {
 
   describe('component init', () => {
     it('should initialize the current selected option based on the passed in [model] input', fakeAsync(() => {
-      fixture.detectChanges();
+      fixture.autoDetectChanges(true);
       tick();
-      fixture.detectChanges();
 
       const selectedOptionElement = fixture.debugElement.query(By.css('.mat-select-value-text')).nativeElement;
       expect(selectedOptionElement.textContent).toBe(optionsMock[0][displayKeyMock]);
