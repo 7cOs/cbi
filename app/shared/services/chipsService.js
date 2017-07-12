@@ -420,16 +420,12 @@ module.exports = /*  @ngInject */
     * @name pushUniqueValue
     * @desc check for duplicates and make sure not to add to model object
     * @params {Variable} id - id to be included
-    * @params {Object} objectArray - array object list
+    * @params {Object} arr - array from filters service model
     * @returns null
     * @memberOf cf.common.services
     */
-    function pushUniqueValue(id, objectArray) {
-      if (id && objectArray && objectArray.length) {
-        if (!objectArray.includes(id)) objectArray.push(id);
-      } else {
-        if (id) objectArray.push(id);
-      }
+    function pushUniqueValue(id, arr) {
+      if (arr && arr.indexOf(id) === -1) arr.push(id);
     }
 
     /**

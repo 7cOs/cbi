@@ -1,9 +1,9 @@
 package com.cbrands.pages;
 
-import com.cbrands.helper.PropertiesCache;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openqa.selenium.By;
+import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -17,18 +17,15 @@ import java.util.List;
 import static com.cbrands.helper.SeleniumUtils.*;
 
 public class NotesModal extends LoadableComponent<NotesModal> {
+  private static final String MODAL_CONTAINER_XPATH = "//div[contains(@class, 'modal notes')]";
 
   private Log log = LogFactory.getLog(NotesModal.class);
-  final PropertiesCache propertiesCache;
-
   private final WebDriver driver;
 
-  @FindBy(how = How.XPATH, using = "//div[contains(@class, 'modal notes')]")
+  @FindBy(how = How.XPATH, using = MODAL_CONTAINER_XPATH)
   private WebElement modalContainer;
 
   public NotesModal(WebDriver driver) {
-    propertiesCache = PropertiesCache.getInstance();
-
     this.driver = driver;
     PageFactory.initElements(driver, this);
   }
@@ -45,6 +42,7 @@ public class NotesModal extends LoadableComponent<NotesModal> {
 
   public boolean isModalLoaded() {
     waitForVisibleFluentWait(modalContainer);
+    waitForLoaderToDisappear();
     return modalContainer.isDisplayed();
   }
 
@@ -81,8 +79,8 @@ public class NotesModal extends LoadableComponent<NotesModal> {
   private WebElement getOptionByName(String name, List<WebElement> topics) {
     WebElement selectedTopic = null;
 
-    for(WebElement topic: topics) {
-      if(name.equalsIgnoreCase(getOptionText(topic))) {
+    for (WebElement topic : topics) {
+      if (name.equalsIgnoreCase(getOptionText(topic))) {
         selectedTopic = topic;
         break;
       }
@@ -114,9 +112,62 @@ public class NotesModal extends LoadableComponent<NotesModal> {
   }
 
   public String getTextFromFirstNote() {
-    final WebElement firstNote = modalContainer.findElement(By.xpath(".//div[contains(@class, 'note-body')]"));
+    final WebElement firstNote = modalContainer
+      .findElement(By.xpath(".//div[contains(concat(' ', normalize-space(@class), ' '), ' note-body ')]"));
     waitForVisibleFluentWait(firstNote);
-    return firstNote.findElement(By.xpath(".//p[contains(@class, 'note-body-field-content')]//p")).getText().trim();
+    return getNoteText(firstNote);
   }
 
+  public boolean doesNoteExistByNoteText(String noteText) {
+    boolean doesExist = false;
+
+    try {
+      findNoteWithText(noteText);
+      doesExist = true;
+    } catch(NoSuchElementException e) {
+      log.info("No Note found with the following text: " + noteText);
+    }
+
+    return doesExist;
+  }
+
+  private String getNoteText(WebElement note) {
+    String text = "";
+
+    final WebElement textContainer =
+      note.findElement(By.xpath(".//p[contains(@class, 'note-body-field-content')]//div.note-body-field-text"));
+    try {
+      text = textContainer.findElement(By.xpath("./*")).getText().trim();
+    } catch (NoSuchElementException e) {
+      log.info("This Note has no text.");
+    }
+
+    return text;
+  }
+
+  public NotesModal waitForLoaderToDisappear() {
+    waitForElementToDisappear(By.xpath(MODAL_CONTAINER_XPATH + "//progress-container"));
+    return this;
+  }
+
+  public WebElement findNoteWithText(String noteText) {
+    final String isNote = "contains(@class, 'note-body ')";
+    final String containsMatchingText = ".//div.note-body-field-text/*[contains(., '" + noteText + "')]";
+
+    return modalContainer.findElement(By.xpath(".//div["+ isNote +" and "+ containsMatchingText +"]"));
+  }
+
+  public NotesModal clickDeleteIcon(WebElement deleteMe) {
+    waitForElementToClickable(deleteMe.findElement(By.xpath(".//div[contains(@class, 'delete-note')]")), true).click();
+
+    return this;
+  }
+
+  public NotesModal confirmDelete(WebElement note) {
+    final WebElement confirmDeleteButton = note.findElement(By.xpath(".//button[contains(., 'Yes')]"));
+    waitForVisibleFluentWait(confirmDeleteButton);
+    waitForElementToClickable(confirmDeleteButton, true).click();
+
+    return this;
+  }
 }

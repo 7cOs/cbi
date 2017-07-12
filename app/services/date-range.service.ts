@@ -6,10 +6,11 @@ import 'rxjs/add/operator/map';
 import { AppState } from '../state/reducers/root.reducer';
 import { DateRange } from '../models/date-range.model';
 import { DateRangeTimePeriod } from '../enums/date-range-time-period.enum';
+import { DateRangesState } from '../state/reducers/date-ranges.reducer';
 
 @Injectable()
 export class DateRangeService {
-  private dateRanges: Object;
+  private dateRanges: Observable<DateRangesState>;
   private dateRangesArray: Array<Observable<DateRange>>;
 
   constructor(private store: Store<AppState>) {
@@ -33,7 +34,7 @@ export class DateRangeService {
     return this.dateRangesArray[timePeriod];
   }
 
-  getDateRanges(): Object {
+  getDateRanges(): Observable<DateRangesState> {
     return this.dateRanges;
   }
 }
