@@ -6,10 +6,11 @@ import { ColumnType } from '../../../enums/column-type.enum';
 import { MyPerformanceTableComponent } from './my-performance-table.component';
 import { MyPerformanceTableRow } from '../../../models/my-performance-table-row.model';
 import { myPerformanceTableRowMock } from '../../../models/my-performance-table-row.model.mock';
+import { SortableComponent } from '../sortable/sortable.component';
 import { sortingCriteriaMock } from '../../../models/my-performance-table-sorting-criteria.model.mock';
 
 @Component({
-  selector: 'my-performance-table-row',
+  selector: '[my-performance-table-row]',
   template: ''
 })
 
@@ -21,21 +22,21 @@ describe('MyPerformanceTableComponent', () => {
 
   let fixture: ComponentFixture<MyPerformanceTableComponent>;
   let componentInstance: MyPerformanceTableComponent;
+  let tableHeaderRow: Array<string> = ['column1', 'column2', 'column3'];
 
   beforeEach(() => {
     TestBed.configureTestingModule({
       declarations: [
         MyPerformanceTableComponent,
-        MockMyPerformanceTableRowComponent
-      ],
-      providers: [
-        MyPerformanceTableComponent
+        MockMyPerformanceTableRowComponent,
+        SortableComponent
       ]
     });
 
     fixture = TestBed.createComponent(MyPerformanceTableComponent);
     // fixture.autoDetectChanges();
     componentInstance = fixture.componentInstance;
+    componentInstance.tableHeaderRow = tableHeaderRow;
   });
 
   describe('setSortingcriteria', () => {
@@ -46,8 +47,8 @@ describe('MyPerformanceTableComponent', () => {
 
       const sortingCriteria = sortingCriteriaMock(1);
       componentInstance.sortingCriteria = sortingCriteria;
-      const firstSortingCriterion = sortingCriteriaMock[0];
-      const firstColumnType = ColumnType[sortingCriteriaMock[0].columnType];
+      const firstSortingCriterion = sortingCriteria[0];
+      const firstColumnType = ColumnType[sortingCriteria[0].columnType];
 
       fixture.detectChanges();
 
@@ -83,7 +84,7 @@ describe('MyPerformanceTableComponent', () => {
       tableData[2].metricColumn0 = 2;
       componentInstance.tableData = tableData.slice();
 
-      const sortingCriteriaMock = [
+      const sortingCriteria = [
         {
           columnType: ColumnType.descriptionLine0,
           ascending: true
@@ -93,7 +94,7 @@ describe('MyPerformanceTableComponent', () => {
           ascending: false
         }
       ];
-      componentInstance.sortingCriteria = sortingCriteriaMock;
+      componentInstance.sortingCriteria = sortingCriteria;
 
       fixture.detectChanges();
 
@@ -121,13 +122,13 @@ describe('MyPerformanceTableComponent', () => {
 
   });
 
-  describe('setTableDataRows', () => {
+  describe('setTableData', () => {
 
     it('should sort the data if some sorting criteria were present', () => {
       const sortingCriteria = sortingCriteriaMock(1);
       componentInstance.sortingCriteria = sortingCriteria;
-      const firstSortingCriterion = sortingCriteriaMock[0];
-      const firstColumnType = ColumnType[sortingCriteriaMock[0].columnType];
+      const firstSortingCriterion = sortingCriteria[0];
+      const firstColumnType = ColumnType[sortingCriteria[0].columnType];
 
       const tableData = myPerformanceTableRowMock(2);
       componentInstance.tableData = tableData;
