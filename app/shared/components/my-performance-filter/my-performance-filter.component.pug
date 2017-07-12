@@ -1,6 +1,7 @@
 section.filter-component-section
+
+  //- Metric Select
   div
-    //- Metric Select
     compass-select(
       [model]="metricModel",
       [options]="metricOptions",
@@ -9,8 +10,9 @@ section.filter-component-section
       [title]="'metric'",
       (onOptionSelected)="filterSelected('metric', $event)"
     )
+
+  //- Time Period Select (Depletions)
   div(*ngIf="metricModel === 'DEPLETIONS'")
-    //- Depletion Time Period Select
     compass-select(
       [model]="timePeriodModel",
       [options]="depletionTimePeriodOptions",
@@ -20,8 +22,9 @@ section.filter-component-section
       [title]="'time period'",
       (onOptionSelected)="filterSelected('timeperiod', $event)"
     )
+
+  //- Time Period Select (Distribution)
   div(*ngIf="metricModel !== 'DEPLETIONS'")
-    //- Distribution Time Period Select
     compass-select(
       [model]="timePeriodModel",
       [options]="distributionTimePeriodOptions",
@@ -31,8 +34,9 @@ section.filter-component-section
       [title]="'time period'",
       (onOptionSelected)="filterSelected('timeperiod', $event)"
     )
+
+  //- Premise Type Radio (Depletions)
   div(*ngIf="metricModel === 'DEPLETIONS'")
-    //- Premise Type Radio (Depletions)
     compass-radio(
       [model]="premiseTypeRadioModel",
       [options]="depletionsPremiseRadioOptions",
@@ -42,19 +46,21 @@ section.filter-component-section
       [direction]="'inline'",
       (onRadioClicked)="filterSelected('premiseType', $event)",
     )
+
+  //- Premise Type Radio (Distribution)
   div(*ngIf="metricModel !== 'DEPLETIONS'")
-    //- Premise Type Radio (Distribution)
     compass-radio(
       [model]="premiseTypeRadioModel",
       [options]="distributionPremiseRadioOptions",
       [displayKey]="'premiseType'",
       [valueKey]="'premiseTypeValue'",
       [title]="'premise type'",
-      [direction]="'stacked'",
+      [direction]="metricModel === 'DISTRIBUTION' ? 'stacked' : 'inline'",
       (onRadioClicked)="filterSelected('premiseType', $event)"
     )
-  div(*ngIf="metricModel !== 'DEPLETIONS'")
-    //- Distribution Type Radio
+
+  //- Distribution Type Radio
+  div(*ngIf="metricModel === 'DISTRIBUTION'")
     compass-radio(
       [model]="distributionRadioModel",
       [options]="distributionRadioOptions",

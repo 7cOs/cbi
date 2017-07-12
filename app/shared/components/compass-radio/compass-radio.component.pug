@@ -3,9 +3,9 @@ section.compass-radio
 
   md-radio-group.compass-radio-group([ngModel]="model")
     md-radio-button.compass-radio-button(
-      *ngFor="let radio of optionData",
+      *ngFor="let option of optionData",
       [ngClass]="direction === 'inline' ? 'inline' : 'stacked'",
-      [value]="radio[valueKey]",
-      (click)="radioClicked(radio)"
+      [value]="option[valueKey]",
+      (click)="radioClicked(option)"
     )
-      p.compass-radio-value {{ radio[displayKey] }}
+      p.compass-radio-value {{ option[displayKey] }}
