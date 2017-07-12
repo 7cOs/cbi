@@ -3,7 +3,7 @@ import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs/Subscription';
 
 import { AppState } from '../../state/reducers/root.reducer';
-import { SET_METRIC, SET_TIME_PERIOD } from '../../state/actions/my-performance-filter.action';
+import { SET_DISTRIBUTION_TYPE, SET_PREMISE_TYPE, SET_METRIC, SET_TIME_PERIOD } from '../../state/actions/my-performance-filter.action';
 
 @Component({
   selector: 'myPerformance',
@@ -39,6 +39,12 @@ export class MyPerformanceComponent implements OnDestroy {
         break;
       case 'timeperiod':
         this.store.dispatch({type: SET_TIME_PERIOD, payload: event.filterValue});
+        break;
+      case 'premiseType':
+        this.store.dispatch({type: SET_PREMISE_TYPE, payload: event.filterValue});
+        break;
+      case 'distributionType':
+        this.store.dispatch({type: SET_DISTRIBUTION_TYPE, payload: event.filterValue});
         break;
       default:
         throw new Error(`My Performance Component: Filtertype of ${event.filterType} does not exist!`);

@@ -2,7 +2,8 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 
 @Component({
   selector: 'my-performance-filter',
-  template: require('./my-performance-filter.component.pug')
+  template: require('./my-performance-filter.component.pug'),
+  styles: [require('./my-performance-filter.component.scss')]
 })
 
 export class MyPerformanceFilterComponent {
@@ -14,6 +15,8 @@ export class MyPerformanceFilterComponent {
   @Input() set filterState(state: any) {
     this.metricModel = state.metric;
     this.timePeriodModel = state.timePeriod;
+    this.premiseTypeRadioModel = state.premiseType;
+    this.distributionRadioModel = state.distributionType;
   }
 
   private depletionTimePeriodOptions: Array<any> = [];
@@ -23,6 +26,21 @@ export class MyPerformanceFilterComponent {
     { metricName: 'Depletions', metricValue: 'DEPLETIONS' },
     { metricName: 'Distribution', metricValue: 'DISTRIBUTION' },
     { metricName: 'Velocity', metricValue: 'VELOCITY' }
+  ];
+  private premiseTypeRadioModel: string;
+  private depletionsPremiseRadioOptions = [ // tslint:disable-line:no-unused-variable
+    { premiseType: 'All', premiseTypeValue: 'ALL'},
+    { premiseType: 'Off-Premise', premiseTypeValue: 'OFF-PREMISE'},
+    { premiseType: 'On-Premise', premiseTypeValue: 'ON-PREMISE'}
+  ];
+  private distributionPremiseRadioOptions = [ // tslint:disable-line:no-unused-variable
+    { premiseType: 'Off-Premise', premiseTypeValue: 'OFF-PREMISE'},
+    { premiseType: 'On-Premise', premiseTypeValue: 'ON-PREMISE'}
+  ];
+  private distributionRadioModel: string;
+  private distributionRadioOptions = [ // tslint:disable-line:no-unused-variable
+    { distributionType: 'Simple', distributionTypeValue: 'SIMPLE'},
+    { distributionType: 'Effective', distributionTypeValue: 'EFFECTIVE'}
   ];
   private timePeriodModel: any;
 

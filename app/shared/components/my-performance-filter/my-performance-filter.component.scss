@@ -1,0 +1,14 @@
+.filter-component-section {
+  background-color: #f3f3f3;
+  padding: 0 30px;
+
+  div {
+    display: inline-block;
+    margin-right: 30px;
+    vertical-align: top;
+  }
+
+  div:last-child {
+    margin-right: 0;
+  }
+}

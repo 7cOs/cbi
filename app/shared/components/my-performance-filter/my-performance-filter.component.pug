@@ -1,33 +1,66 @@
-//- Metric Select
-compass-select(
-  [model]="metricModel",
-  [options]="metricOptions",
-  [displayKey]="'metricName'",
-  [valueKey]="'metricValue'",
-  [title]="'metric'",
-  (onOptionSelected)="filterSelected('metric', $event)"
-)
-
-//- Depletion Time Period Select
-compass-select(
-  *ngIf="metricModel === 'DEPLETIONS'",
-  [model]="timePeriodModel",
-  [options]="depletionTimePeriodOptions",
-  [displayKey]="'displayCode'",
-  [valueKey]="'code'",
-  [subDisplayKey]="'range'",
-  [title]="'time period'",
-  (onOptionSelected)="filterSelected('timeperiod', $event)"
-)
-
-//- Distribution Time Period Select
-compass-select(
-  *ngIf="metricModel !== 'DEPLETIONS'",
-  [model]="timePeriodModel",
-  [options]="distributionTimePeriodOptions",
-  [displayKey]="'displayCode'",
-  [valueKey]="'code'",
-  [subDisplayKey]="'range'",
-  [title]="'time period'",
-  (onOptionSelected)="filterSelected('timeperiod', $event)"
-)
+section.filter-component-section
+  div
+    //- Metric Select
+    compass-select(
+      [model]="metricModel",
+      [options]="metricOptions",
+      [displayKey]="'metricName'",
+      [valueKey]="'metricValue'",
+      [title]="'metric'",
+      (onOptionSelected)="filterSelected('metric', $event)"
+    )
+  div(*ngIf="metricModel === 'DEPLETIONS'")
+    //- Depletion Time Period Select
+    compass-select(
+      [model]="timePeriodModel",
+      [options]="depletionTimePeriodOptions",
+      [displayKey]="'displayCode'",
+      [valueKey]="'code'",
+      [subDisplayKey]="'range'",
+      [title]="'time period'",
+      (onOptionSelected)="filterSelected('timeperiod', $event)"
+    )
+  div(*ngIf="metricModel !== 'DEPLETIONS'")
+    //- Distribution Time Period Select
+    compass-select(
+      [model]="timePeriodModel",
+      [options]="distributionTimePeriodOptions",
+      [displayKey]="'displayCode'",
+      [valueKey]="'code'",
+      [subDisplayKey]="'range'",
+      [title]="'time period'",
+      (onOptionSelected)="filterSelected('timeperiod', $event)"
+    )
+  div(*ngIf="metricModel === 'DEPLETIONS'")
+    //- Premise Type Radio (Depletions)
+    compass-radio(
+      [model]="premiseTypeRadioModel",
+      [options]="depletionsPremiseRadioOptions",
+      [displayKey]="'premiseType'",
+      [valueKey]="'premiseTypeValue'",
+      [title]="'premise type'",
+      [direction]="'inline'",
+      (onRadioClicked)="filterSelected('premiseType', $event)",
+    )
+  div(*ngIf="metricModel !== 'DEPLETIONS'")
+    //- Premise Type Radio (Distribution)
+    compass-radio(
+      [model]="premiseTypeRadioModel",
+      [options]="distributionPremiseRadioOptions",
+      [displayKey]="'premiseType'",
+      [valueKey]="'premiseTypeValue'",
+      [title]="'premise type'",
+      [direction]="'stacked'",
+      (onRadioClicked)="filterSelected('premiseType', $event)"
+    )
+  div(*ngIf="metricModel !== 'DEPLETIONS'")
+    //- Distribution Type Radio
+    compass-radio(
+      [model]="distributionRadioModel",
+      [options]="distributionRadioOptions",
+      [displayKey]="'distributionType'",
+      [valueKey]="'distributionTypeValue'",
+      [title]="'distribution type'",
+      [direction]="'stacked'",
+      (onRadioClicked)="filterSelected('distributionType', $event)"
+    )

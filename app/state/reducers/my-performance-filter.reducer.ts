@@ -20,7 +20,9 @@ export function myPerformanceFilterReducer(
     case MyPerformanceFilterActions.SET_METRIC:
       return Object.assign({}, state, {
         metric: action.payload,
-        timePeriod: action.payload === 'DEPLETIONS' ? 'CYTDBDL' : 'L90BDL'
+        timePeriod: action.payload === 'DEPLETIONS' ? 'CYTDBDL' : 'L90BDL',
+        premiseType: action.payload === 'DEPLETIONS' ? 'ALL' : 'OFF-PREMISE',
+        distributionType: 'SIMPLE'
       });
 
     case MyPerformanceFilterActions.SET_TIME_PERIOD:
