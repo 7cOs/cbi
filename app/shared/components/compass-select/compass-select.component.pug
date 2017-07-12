@@ -1,0 +1,12 @@
+section.compass-select
+  p.title(*ngIf="title") {{ title }}
+
+  md-select([ngModel]="model", (onOpen)="isSelectOpen = true", (onClose)="isSelectOpen = false")
+    md-option.compass-select-option(*ngFor="let option of optionData", [value]="option[valueKey]", (click)="optionClicked(option)")
+      div.option-container(*ngIf="!subDisplayKey")
+        p.option-text {{ option[displayKey] }}
+      div.option-container(*ngIf="subDisplayKey")
+        p.option-top-text {{ option[displayKey] }}
+        p.option-sub-text(*ngIf="subDisplayKey && isSelectOpen") {{ option[subDisplayKey] }}
+
+  p.subtitle(*ngIf="subDisplayKey") {{ currentSubValue }}
