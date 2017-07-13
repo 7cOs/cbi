@@ -20,11 +20,13 @@ public class PropertiesCache {
   }
 
   private String getPropertiesFilename() {
-    String filename = BASE_AUTOMATION_PROPERTIES_FILENAME;
+    final String filename;
 
     final String suffix = System.getProperty("env");
     if (null != suffix) {
-      filename += "." + suffix;
+      filename = BASE_AUTOMATION_PROPERTIES_FILENAME + "." + suffix;
+    } else {
+      filename = BASE_AUTOMATION_PROPERTIES_FILENAME + ".local";
     }
 
     return filename;
