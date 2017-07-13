@@ -13,7 +13,7 @@ import { SortingCriteria } from '../../../models/sorting-criteria.model';
 })
 export class MyPerformanceTableComponent {
   @Output() onElementClicked = new EventEmitter<{row: MyPerformanceTableRow, index: number}>();
-  @Output() onSortingcriteriaChanged = new EventEmitter<Array<SortingCriteria>>();
+  @Output() onSortingCriteriaChanged = new EventEmitter<Array<SortingCriteria>>();
 
   @Input()
   set sortingCriteria(criteria: Array<SortingCriteria>) {
@@ -74,7 +74,7 @@ export class MyPerformanceTableComponent {
     const ascending = this._sortingCriterias[0].columnType === colType
       ? !this._sortingCriterias[0].ascending
       : false;
-    this.onSortingcriteriaChanged.emit([<SortingCriteria>{columnType: colType, ascending: ascending}]);
+    this.onSortingCriteriaChanged.emit([<SortingCriteria>{columnType: colType, ascending: ascending}]);
   }
 }
 

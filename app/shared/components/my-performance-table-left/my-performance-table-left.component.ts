@@ -12,7 +12,7 @@ import { SortingCriteria } from '../my-performance-table/my-performance-table.co
 
 export class MyPerformanceTableLeftComponent {
   @Input() onElementClicked: Function;
-  @Input() onSortingcriteriaChanged: Function;
+  @Input() onSortingCriteriaChanged: Function;
   @Input() sortingCriteria: Array<SortingCriteria>;
   @Input() tableHeaderRow: Array<string>;
   @Input() totalRow: MyPerformanceTableRow;
