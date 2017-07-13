@@ -1,6 +1,6 @@
 {
   "name": "compass",
-  "version": "1.4.2",
+  "version": "1.5.1",
   "engines": {
     "node": "7.7.1",
     "npm": "4.1.2"
@@ -30,11 +30,14 @@
     "fontgen": "fontmin app/assets/fontsrc app/assets/fonts && rm app/assets/fonts/*.css"
   },
   "dependencies": {
+    "@angular/animations": "4.1.3",
+    "@angular/cdk": "2.0.0-beta.8",
     "@angular/common": "4.1.3",
     "@angular/compiler": "4.1.3",
     "@angular/core": "4.1.3",
     "@angular/forms": "4.1.3",
     "@angular/http": "4.1.3",
+    "@angular/material": "2.0.0-beta.8",
     "@angular/platform-browser": "4.1.3",
     "@angular/platform-browser-dynamic": "4.1.3",
     "@angular/router": "4.1.3",
@@ -124,7 +127,7 @@
     "logfmt": "~1.2.0",
     "moment": "~2.17.1",
     "multer": "~1.3.0",
-    "ng-annotate-loader": "^0.2.0",
+    "ng-annotate-loader": "~0.6.1",
     "ng-csv": "~0.3.6",
     "ng-file-upload": "~12.2.13",
     "node-sass": "^4.5.0",

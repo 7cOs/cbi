@@ -12,14 +12,20 @@ import { SortingCriteria } from '../../../models/sorting-criteria.model';
   styles: [ require('./my-performance-table.component.scss') ]
 })
 export class MyPerformanceTableComponent {
-  @Output() onElementClicked = new EventEmitter<MyPerformanceTableEvent>();
-  @Output() onSortingCriteriasChanged = new EventEmitter<Array<SortingCriteria>>();
+  @Output() onElementClicked = new EventEmitter<{row: MyPerformanceTableRow, index: number}>();
+  @Output() onSortingCriteriaChanged = new EventEmitter<Array<SortingCriteria>>();
+
+  @Input()
+  set sortingCriteria(criteria: Array<SortingCriteria>) {
+    this._sortingCriteria = criteria;
+    this.updateSortingFunction();
+    if (this._tableData && this._tableData.length) {
+      this._tableData = this._tableData.sort(this.sortingFunction);
+    }
+  }
 
   @Input() tableHeaderRow: Array<string>;
   @Input() totalRow: MyPerformanceTableRow;
-  @Input() performanceMetric: string;
-  @Input() dateRange: DateRange;
-  @Input() showOpportunities: boolean = true;
 
   @Input()
   set tableData(tableData: Array<MyPerformanceTableRow>) {
@@ -29,27 +35,20 @@ export class MyPerformanceTableComponent {
     }
   }
 
-  @Input()
-  set sortingCriterias(criterias: Array<SortingCriteria>) {
-    this._sortingCriterias = criterias;
-    this.updateSortingFunction();
-    this._tableData = this._tableData.sort(this.sortingFunction);
-  }
-
-  private sortingFunction: (left: MyPerformanceTableRow, right: MyPerformanceTableRow) => number;
-  private _sortingCriterias: Array<SortingCriteria> = null;
+  private sortingFunction: (elem0: MyPerformanceTableRow, elem1: MyPerformanceTableRow) => number;
+  private _sortingCriteria: Array<SortingCriteria> = null;
   private _tableData: Array<MyPerformanceTableRow>;
   private columnType = ColumnType; // for use in template
 
   private updateSortingFunction() {
-    if (this._sortingCriterias.length) {
-      this.sortingFunction = (left: MyPerformanceTableRow, right: MyPerformanceTableRow) => {
+    if (this._sortingCriteria.length) {
+      this.sortingFunction = (elem0: MyPerformanceTableRow, elem1: MyPerformanceTableRow) => {
         let i = 0;
         let currentColumn;
         let currentSortOrder;
         do {
-          currentColumn = ColumnType[this._sortingCriterias[i].columnType];
-          currentSortOrder = this.compareObjects(left[currentColumn], (right[currentColumn]));
+          currentColumn = ColumnType[this._sortingCriteria[i].columnType];
+          currentSortOrder = this.compareObjects(elem0[currentColumn], (elem1[currentColumn]));
           i++;
         } while (i < this._sortingCriterias.length && currentSortOrder === 0);
         return this._sortingCriterias[--i].ascending ? currentSortOrder : -currentSortOrder;
@@ -75,11 +74,11 @@ export class MyPerformanceTableComponent {
     const ascending = this._sortingCriterias[0].columnType === colType
       ? !this._sortingCriterias[0].ascending
       : false;
-    this.onSortingCriteriasChanged.emit([<SortingCriteria>{columnType: colType, ascending: ascending}]);
+    this.onSortingCriteriaChanged.emit([<SortingCriteria>{columnType: colType, ascending: ascending}]);
   }
 }
 
-export interface MyPerformanceTableEvent {
-  row: MyPerformanceTableRow;
-  index: number;
+export interface SortingCriteria {
+  columnType: ColumnType;
+  ascending: boolean;
 }

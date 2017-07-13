@@ -117,7 +117,7 @@ describe('Unit: filter service', function() {
                 year: [{
                 name: 'MTD',
                 displayValue: 'MTD',
-                v3ApiCode: 'MTD',
+                v3ApiCode: 'CMIPBDL',
                 id: 4
                 }, {
                 name: 'CYTD',
@@ -372,7 +372,7 @@ describe('Unit: filter service', function() {
                 year: [{
                 name: 'MTD',
                 displayValue: 'MTD',
-                v3ApiCode: 'MTD',
+                v3ApiCode: 'CMIPBDL',
                 id: 4
                 }, {
                 name: 'CYTD',

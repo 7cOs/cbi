@@ -8,7 +8,6 @@ describe('Date Ranges Reducer', () => {
   it('updates the status when a fetch is dispatched', () => {
     const expectedState = {
       status: ActionStatus.Fetching,
-      MTD: initialState.MTD,
       FYTM: initialState.FYTM,
       CYTM: initialState.CYTM,
       CYTD: initialState.CYTD,
@@ -17,7 +16,8 @@ describe('Date Ranges Reducer', () => {
       L90: initialState.L90,
       L120: initialState.L120,
       LCM: initialState.LCM,
-      L3CM: initialState.L3CM
+      L3CM: initialState.L3CM,
+      CMIPBDL: initialState.CMIPBDL
     };
 
     const actualState = dateRangesReducer(initialState, new DateRangesActions.FetchDateRangesAction());
@@ -37,7 +37,7 @@ describe('Date Ranges Reducer', () => {
       FYTD: dateRangeCollectionMock[4],
       L3CM: dateRangeCollectionMock[5],
       LCM: dateRangeCollectionMock[6],
-      MTD: dateRangeCollectionMock[7],
+      CMIPBDL: dateRangeCollectionMock[7],
       L120: dateRangeCollectionMock[8],
       CYTD: dateRangeCollectionMock[9]
     };
@@ -50,7 +50,6 @@ describe('Date Ranges Reducer', () => {
   it('should update the status when a fetch fails', () => {
     const expectedState = {
       status: ActionStatus.Error,
-      MTD: initialState.MTD,
       FYTM: initialState.FYTM,
       CYTM: initialState.CYTM,
       CYTD: initialState.CYTD,
@@ -59,7 +58,8 @@ describe('Date Ranges Reducer', () => {
       L90: initialState.L90,
       L120: initialState.L120,
       LCM: initialState.LCM,
-      L3CM: initialState.L3CM
+      L3CM: initialState.L3CM,
+      CMIPBDL: initialState.CMIPBDL
     };
 
     const actualState = dateRangesReducer(initialState, new DateRangesActions.FetchDateRangesFailureAction(new Error()));

@@ -24,6 +24,8 @@ div.my-scorecards
         p.dropdown-subtext {{s.dateRanges[s.distributionSelectOptions.v3ApiCode].range}}
 
   section.depeletions-scorecard
+    .loader-wrap.active(ng-if="s.calculatingDepletionTotals || s.calculatingDistributionTotals")
+      loader
     div.scorecard-header.clearfix
       div.scorecard-header-left
         h2 My Depletions Scorecard
