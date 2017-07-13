@@ -24,6 +24,8 @@ export class MyPerformanceComponent {
   private _tableData: MyPerformanceTableRow[] = myPerformanceTableData;
   private _rightTableData: MyPerformanceTableRow[] = myPerformanceRightTableData; 
   private _totalRowData: MyPerformanceTableRow = myPerformanceTotalRowData;
+  private _showOpportunities: boolean = true;
+  
   private _sortingCriteria: Array<SortingCriteria> = [{columnType: ColumnType.metricColumn0, ascending: false}];
   private _dateRanges = dateRangeDTOsMock;
 

@@ -4,6 +4,8 @@ my-performance-table {
   min-width: 565px;
 
   &.right {
-    box-shadow: -10px 0 20px #b4b4b4;
+    box-shadow: -10px 0 20px #e4e4e4;
+    -webkit-box-shadow: -10px 0 20px #e4e4e4;
+    -moz-box-shadow: -10px 0 20px #e4e4e4;
   }
 }
