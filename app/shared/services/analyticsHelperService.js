@@ -70,8 +70,6 @@ module.exports = /*  @ngInject */
      * @memberOf cf.common.services
      */
     function setCustomDimensions() {
-      var timestamp = new Date().getTime() / 1000;
-
       notesService.userInfo().then(sfdcUser => {
         $analytics.setUserProperties({
           dimension1: 'Constellation Brands',     // 'User Type', static
@@ -81,7 +79,7 @@ module.exports = /*  @ngInject */
           dimension5: sfdcUser.Supervisory__c,    // 'Supervisory'
           dimension6: sfdcUser.CBI_Department__c, // 'Department'
           dimension7: userService.model.currentUser.employeeID, // 'User Id'
-          dimension8: timestamp                   // 'Current Timestamp'
+          dimension8: new Date().getTime()        // 'Time Stamp'
         });
       });
     }
