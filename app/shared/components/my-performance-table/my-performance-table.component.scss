@@ -18,12 +18,12 @@ table {
 
 thead {
   display: block;
-  height: 120px;
+  // height: 120px;
 }
 
 tbody {
   display: block;
-  max-height: 600px;
+  max-height: 500px;
   overflow-y: auto;
 }
 
@@ -137,7 +137,7 @@ span.negative {
 }
 
 span.link-out {
-  color: #1589d1;
+  color: #1589d1 !important;
 }
 
 td, th {

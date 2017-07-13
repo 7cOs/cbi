@@ -39,6 +39,7 @@ div.performance-table-wrapper
         th.right-col(*ngIf="showOpportunities", colspan=1, [ngClass]="showOpportunities ? 'col-16-pct' : 'col-20-pct'")
         
       tr.total-row.col-100-pct(my-performance-table-row, 
+                              *ngIf="totalRow",
                               [rowData]="totalRow",
                               [showOpportunities]="showOpportunities")
 
@@ -47,4 +48,5 @@ div.performance-table-wrapper
                                 *ngFor="let rowData of _tableData, let i = index", 
                                 [rowData]="rowData",
                                 [showOpportunities]="showOpportunities",
+                                [rowType]="tableHeaderRow[0] === 'Brands' ? 1 : 0",
                                 (click)="clickOn(rowData, i)")

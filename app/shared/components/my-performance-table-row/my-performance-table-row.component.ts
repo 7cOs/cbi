@@ -10,6 +10,7 @@ import { MyPerformanceTableRow } from '../../../models/my-performance-table-row.
 export class MyPerformanceTableRowComponent {
   @Input() rowData: MyPerformanceTableRow;
   @Input() showOpportunities: boolean;
+  @Input() rowType: number;
 
   private isNegative(num: number): boolean {
     return num <= 0;

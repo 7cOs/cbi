@@ -1,5 +1,5 @@
 td.left-col(colspan=1, [ngClass]="showOpportunities ? 'col-16-pct' : 'col-20-pct'")
-  span {{rowData.descriptionLine0}}
+  span([ngClass]="rowType === 1 ? 'link-out' : ''") {{rowData.descriptionLine0}}
   span(*ngIf="rowData.descriptionLine1") {{rowData.descriptionLine1}}
 td.center-col(colspan=1, [ngClass]="showOpportunities ? 'col-16-pct' : 'col-20-pct'") {{rowData.metricColumn0}}
 td.center-col(colspan=1, [ngClass]="showOpportunities ? 'col-16-pct' : 'col-20-pct'") 

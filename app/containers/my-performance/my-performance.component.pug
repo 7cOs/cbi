@@ -7,11 +7,10 @@ my-performance-table([tableData]="_tableData",
                      [showOpportunities]="false",
                      (onSortingCriteriasChanged)="handleSortRows($event)")
 
-my-performance-table.left([tableData]="_tableData", 
+my-performance-table.right([tableData]="_rightTableData", 
                           [dateRange]="_dateRange", 
-                          [tableHeaderRow]="_tableHeaderRow",
+                          [tableHeaderRow]="_rightTableHeaderRow",
                           [performanceMetric]="_performanceMetric",
-                          [totalRow]="_totalRowData",
                           [sortingCriterias]="_sortingCriteria",
                           [showOpportunities]="_showOpportunities",
                           (onSortingCriteriasChanged)="handleSortRows($event)")
