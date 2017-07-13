@@ -24,33 +24,15 @@ import com.saucelabs.testng.SauceOnDemandTestListener;
 /**
  * A factory for creating WebDriver objects.
  *
- * @author Kazi Hossain
+ * @author Kazi Hossain, Edie Liao
  */
 @Listeners({SauceOnDemandTestListener.class})
 public class WebDriverFactory implements SauceOnDemandSessionIdProvider, SauceOnDemandAuthenticationProvider {
 
-  /**
-   * The log.
-   */
   private static Log log = LogFactory.getLog(WebDriverFactory.class);
-
-  /**
-   * The web driver.
-   */
   private static ThreadLocal<WebDriver> webDriver = new ThreadLocal<WebDriver>();
-
-  /**
-   * The session id.
-   */
   private static ThreadLocal<String> sessionId = new ThreadLocal<String>();
 
-  /**
-   * Creates a new WebDriver object.
-   *
-   * @param driverName the driver name
-   * @return the web driver
-   * @throws MalformedURLException the malformed URL exception
-   */
   public static WebDriver createDriver(String driverName) throws MalformedURLException {
 
     if (BrowserType.firefox.name().equals(driverName)) {
@@ -144,9 +126,6 @@ public class WebDriverFactory implements SauceOnDemandSessionIdProvider, SauceOn
     }
   }
 
-  /**
-   * The Enum BrowserType.
-   */
   public enum BrowserType {
 
     firefox,
@@ -156,11 +135,6 @@ public class WebDriverFactory implements SauceOnDemandSessionIdProvider, SauceOn
     sauce
   }
 
-  /**
-   * Gets the web driver.
-   *
-   * @return the web driver
-   */
   public static WebDriver getWebDriver() {
     return webDriver.get();
   }
