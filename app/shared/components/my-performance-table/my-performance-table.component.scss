@@ -15,7 +15,13 @@ table {
   border-collapse: collapse;
 }
 
+thead {
+  display: block;
+  height: 120px;
+}
+
 tbody {
+  display: block;
   height: 100px;
   overflow-y: auto;
 }
@@ -74,10 +80,6 @@ th {
   font-weight: 600;
   text-align: center;
   color: #ffffff;
-}
-
-thead {
-  height: 90px;
 }
 
 .sub-header {

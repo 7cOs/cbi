@@ -31,9 +31,10 @@ div.performance-table-wrapper
             sortable([active]='_sortingCriterias[0].columnType === columnType.metricColumn2',
                      [ascending]='_sortingCriterias[0].ascending')
         th.col-20-pct.right-col(colspan=1)
-    tr.total-row.col-100-pct(my-performance-table-row, 
-                             [rowData]="totalRow")
-    tr.entity-row.col-100-pct(my-performance-table-row, 
-                              *ngFor="let rowData of _tableData, let i = index", 
-                              [rowData]="rowData",
-                              (click)="clickOn(rowData, i)")
+      tr.total-row.col-100-pct(my-performance-table-row, 
+                              [rowData]="totalRow")
+    tbody
+      tr.entity-row.col-100-pct(my-performance-table-row, 
+                                *ngFor="let rowData of _tableData, let i = index", 
+                                [rowData]="rowData",
+                                (click)="clickOn(rowData, i)")
