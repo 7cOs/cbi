@@ -8,8 +8,11 @@ import { MyPerformanceTableRow } from '../../../models/my-performance-table-row.
 })
 export class MyPerformanceTableRowComponent {
   @Input() rowData: MyPerformanceTableRow;
+  @Input() showOpportunities: boolean;
 
   constructor() { }
 
-  ngOnInit() { }
+  ngOnInit() {
+    console.log(this.rowData, this.showOpportunities);
+  }
 }

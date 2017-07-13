@@ -19,6 +19,7 @@ export class MyPerformanceTableComponent {
   @Input() totalRow: MyPerformanceTableRow;
   @Input() performanceMetric: string;
   @Input() dateRange: DateRange;
+  @Input() showOpportunities: boolean = true;
 
   @Input()
   set tableData(tableData: Array<MyPerformanceTableRow>) {

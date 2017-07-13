@@ -21,6 +21,7 @@ export class MyPerformanceComponent {
   private _tableData: MyPerformanceTableRow[] = myPerformanceTableData;
   private _totalRowData: MyPerformanceTableRow = myPerformanceTotalRowData;
   private _sortingCriteria: SortingCriteria[] = [<SortingCriteria>{columnType: ColumnType.metricColumn0, ascending: false}];
+  private _showOpportunities: boolean = true;
   
   private handleSortRows(criterias: SortingCriteria[]): void {
     console.log(criterias);

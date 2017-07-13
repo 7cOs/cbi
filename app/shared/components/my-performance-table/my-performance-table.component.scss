@@ -8,10 +8,11 @@
   font-family: Rajdhani;
   height: 70px;
   min-width: 565px;
+  padding-top: 40px;
 }
 
 table {
-  border: 1px solid #f3f3f3;
+  border: 1px 1px 1px 0 solid #f3f3f3;
   border-collapse: collapse;
 }
 
@@ -43,12 +44,20 @@ th {
   width: 60%;
 }
 
+.col-50-pct {
+  width: 50%;
+}
+
 .col-30-pct {
   width: 30%;
 }
 
 .col-20-pct {
   width: 20%;
+}
+
+.col-16-pct {
+  width: 16.6666%;
 }
 
 .col-10-pct {

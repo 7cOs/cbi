@@ -6,4 +6,3 @@ export interface MyPerformanceTableRow {
   metricColumn2: number;
   ctv: number;
 }
-
