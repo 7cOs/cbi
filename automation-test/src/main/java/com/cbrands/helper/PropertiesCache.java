@@ -9,15 +9,16 @@ import java.util.Set;
  * The Class PropertiesCache.
  */
 public class PropertiesCache {
-	
-	/** The config prop. */
+  private static final String BASE_AUTOMATION_PROPERTIES_FILENAME = "automation.properties";
+
+  /** The config prop. */
 	private final Properties configProp = new Properties();
 
 	/**
 	 * Instantiates a new properties cache.
 	 */
 	private PropertiesCache() {
-		InputStream in = this.getClass().getClassLoader().getResourceAsStream("automation.properties");
+		InputStream in = this.getClass().getClassLoader().getResourceAsStream(getPropertiesFilename());
 		try {
 			configProp.load(in);
 		} catch (IOException e) {
@@ -25,11 +26,22 @@ public class PropertiesCache {
 		}
 	}
 
-	/**
+  private String getPropertiesFilename() {
+    String filename = BASE_AUTOMATION_PROPERTIES_FILENAME;
+
+    final String suffix = System.getProperty("env");
+    if(null != suffix) {
+      filename += "." + suffix;
+    }
+
+    return filename;
+  }
+
+  /**
 	 * The Class LazyHolder.
 	 */
 	private static class LazyHolder {
-		
+
 		/** The Constant INSTANCE. */
 		private static final PropertiesCache INSTANCE = new PropertiesCache();
 	}
