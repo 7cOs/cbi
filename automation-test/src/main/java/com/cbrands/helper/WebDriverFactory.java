@@ -60,80 +60,88 @@ public class WebDriverFactory implements SauceOnDemandSessionIdProvider, SauceOn
     } else if (BrowserType.chrome.name().equals(driverName)) {
       webDriver.set(new ChromeDriver());
     } else if (driverName.startsWith(BrowserType.remote.name())) {
-      String[] params = driverName.split(":");
-      Validate.isTrue(
-        params.length == 4,
-        "Remote driver is not right, accept format is \"remote:localhost:4444:firefox\", but the input is\""
-          + driverName + "\""
-      );
-
-      String remoteHost = params[1];
-      String remotePort = params[2];
-      String driverType = params[3];
-
-      String remoteUrl = "http://" + remoteHost + ":" + remotePort + "/wd/hub";
-
-      DesiredCapabilities cap = null;
-      if (BrowserType.firefox.name().equals(driverType)) {
-        cap = DesiredCapabilities.firefox();
-      } else if (BrowserType.ie.name().equals(driverType)) {
-        cap = DesiredCapabilities.internetExplorer();
-        cap.setCapability(InternetExplorerDriver.INTRODUCE_FLAKINESS_BY_IGNORING_SECURITY_DOMAINS, true);
-        cap.setCapability(InternetExplorerDriver.ENABLE_ELEMENT_CACHE_CLEANUP, true);
-        cap.setCapability(InternetExplorerDriver.IE_ENSURE_CLEAN_SESSION, true);
-        cap.setBrowserName("internet explorer");
-      } else if (BrowserType.chrome.name().equals(driverType)) {
-        cap = DesiredCapabilities.chrome();
-      }
-
-      try {
-        webDriver.set(new RemoteWebDriver(new URL(remoteUrl), cap));
-        String id = ((RemoteWebDriver) getWebDriver()).getSessionId().toString();
-        sessionId.set(id);
-        log.info("Targeted Host:" + BrowserType.remote.name());
-      } catch (MalformedURLException e) {
-        throw new RuntimeException(e);
-      }
+      setRemoteWebDriver(driverName);
     } else if (driverName.startsWith(BrowserType.sauce.name())) {
-      String[] params = driverName.split(":");
-      Validate.isTrue(
-        params.length == 4,
-        "Remote driver is not right, accept format is \"remote:localhost:4444:firefox\", but the input is\""
-          + driverName + "\""
-      );
-
-      String remoteHost = params[1];
-      String remotePort = params[2];
-      String driverType = params[3];
-
-      DesiredCapabilities capabilities = null;
-      if (BrowserType.ie.name().equals(driverType)) {
-        capabilities = DesiredCapabilities.internetExplorer();
-        capabilities.setCapability(CapabilityType.PLATFORM, Platform.WIN8_1);
-        capabilities.setCapability(InternetExplorerDriver.INTRODUCE_FLAKINESS_BY_IGNORING_SECURITY_DOMAINS, true);
-        capabilities.setCapability(InternetExplorerDriver.REQUIRE_WINDOW_FOCUS, true);
-        capabilities.setCapability(InternetExplorerDriver.ENABLE_ELEMENT_CACHE_CLEANUP, true);
-        capabilities.setCapability(InternetExplorerDriver.IE_ENSURE_CLEAN_SESSION, true);
-        capabilities.setCapability("name", "Automated Functional Test");
-      } else if (BrowserType.chrome.name().equals(driverType)) {
-        capabilities = DesiredCapabilities.chrome();
-      }
-      SauceHelpers.addSauceConnectTunnelId(capabilities);
-
-      // Launch remote browser and set it as the current thread
-      webDriver.set(new RemoteWebDriver(
-        new URL("https://" + authentication.getUsername() + ":" + authentication.getAccessKey() +
-          SauceHelpers.buildSauceUri() + "/wd/hub"), capabilities));
-
-      //((RemoteWebDriver) getWebDriver()).manage().window().setSize(new Dimension(1024, 768));
-      // set current sessionId
-      String id = ((RemoteWebDriver) getWebDriver()).getSessionId().toString();
-      sessionId.set(id);
-      log.info("Targeted Host:" + BrowserType.sauce.name());
+      setSauceWebDriver(driverName);
     }
     log.info("Connected to Selenium Server. Session ID: " + sessionId.get());
     Validate.notNull(webDriver.get(), "Driver could be found by name:" + driverName);
     return webDriver.get();
+  }
+
+  private static void setSauceWebDriver(String driverName) throws MalformedURLException {
+    String[] params = driverName.split(":");
+    Validate.isTrue(
+      params.length == 4,
+      "Remote driver is not right, accept format is \"remote:localhost:4444:firefox\", but the input is\""
+        + driverName + "\""
+    );
+
+    String remoteHost = params[1];
+    String remotePort = params[2];
+    String driverType = params[3];
+
+    DesiredCapabilities capabilities = null;
+    if (BrowserType.ie.name().equals(driverType)) {
+      capabilities = DesiredCapabilities.internetExplorer();
+      capabilities.setCapability(CapabilityType.PLATFORM, Platform.WIN8_1);
+      capabilities.setCapability(InternetExplorerDriver.INTRODUCE_FLAKINESS_BY_IGNORING_SECURITY_DOMAINS, true);
+      capabilities.setCapability(InternetExplorerDriver.REQUIRE_WINDOW_FOCUS, true);
+      capabilities.setCapability(InternetExplorerDriver.ENABLE_ELEMENT_CACHE_CLEANUP, true);
+      capabilities.setCapability(InternetExplorerDriver.IE_ENSURE_CLEAN_SESSION, true);
+      capabilities.setCapability("name", "Automated Functional Test");
+    } else if (BrowserType.chrome.name().equals(driverType)) {
+      capabilities = DesiredCapabilities.chrome();
+    }
+    SauceHelpers.addSauceConnectTunnelId(capabilities);
+
+    // Launch remote browser and set it as the current thread
+    webDriver.set(new RemoteWebDriver(
+      new URL("https://" + authentication.getUsername() + ":" + authentication.getAccessKey() +
+        SauceHelpers.buildSauceUri() + "/wd/hub"), capabilities));
+
+    //((RemoteWebDriver) getWebDriver()).manage().window().setSize(new Dimension(1024, 768));
+    // set current sessionId
+    String id = ((RemoteWebDriver) getWebDriver()).getSessionId().toString();
+    sessionId.set(id);
+    log.info("Targeted Host:" + BrowserType.sauce.name());
+  }
+
+  private static void setRemoteWebDriver(String driverName) {
+    String[] params = driverName.split(":");
+    Validate.isTrue(
+      params.length == 4,
+      "Remote driver is not right, accept format is \"remote:localhost:4444:firefox\", but the input is\""
+        + driverName + "\""
+    );
+
+    String remoteHost = params[1];
+    String remotePort = params[2];
+    String driverType = params[3];
+
+    String remoteUrl = "http://" + remoteHost + ":" + remotePort + "/wd/hub";
+
+    DesiredCapabilities cap = null;
+    if (BrowserType.firefox.name().equals(driverType)) {
+      cap = DesiredCapabilities.firefox();
+    } else if (BrowserType.ie.name().equals(driverType)) {
+      cap = DesiredCapabilities.internetExplorer();
+      cap.setCapability(InternetExplorerDriver.INTRODUCE_FLAKINESS_BY_IGNORING_SECURITY_DOMAINS, true);
+      cap.setCapability(InternetExplorerDriver.ENABLE_ELEMENT_CACHE_CLEANUP, true);
+      cap.setCapability(InternetExplorerDriver.IE_ENSURE_CLEAN_SESSION, true);
+      cap.setBrowserName("internet explorer");
+    } else if (BrowserType.chrome.name().equals(driverType)) {
+      cap = DesiredCapabilities.chrome();
+    }
+
+    try {
+      webDriver.set(new RemoteWebDriver(new URL(remoteUrl), cap));
+      String id = ((RemoteWebDriver) getWebDriver()).getSessionId().toString();
+      sessionId.set(id);
+      log.info("Targeted Host:" + BrowserType.remote.name());
+    } catch (MalformedURLException e) {
+      throw new RuntimeException(e);
+    }
   }
 
   /**
