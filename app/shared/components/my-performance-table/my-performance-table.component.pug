@@ -17,7 +17,7 @@ div.performance-table-wrapper
           span {{ tableHeaderRow[2] }}
             sortable([active]='_sortingCriterias[0].columnType === columnType.ctv',
                      [ascending]='_sortingCriterias[0].ascending')
-        th.right-col.sortable(colspan=1, [ngClass]="showOpportunities ? 'col-16-pct' : 'col-20-pct'") Opps
+        th.right-col.sortable(*ngIf="showOpportunities", colspan=1, [ngClass]="showOpportunities ? 'col-16-pct' : 'col-20-pct'") Opps
             sortable([active]='_sortingCriterias[0].columnType === columnType.ctv',
                      [ascending]='_sortingCriterias[0].ascending')
 
@@ -36,7 +36,7 @@ div.performance-table-wrapper
             sortable([active]='_sortingCriterias[0].columnType === columnType.metricColumn2',
                      [ascending]='_sortingCriterias[0].ascending')
         th.right-col(colspan=1, [ngClass]="showOpportunities ? 'col-16-pct' : 'col-20-pct'")
-        th.right-col(colspan=1, [ngClass]="showOpportunities ? 'col-16-pct' : 'col-20-pct'")
+        th.right-col(*ngIf="showOpportunities", colspan=1, [ngClass]="showOpportunities ? 'col-16-pct' : 'col-20-pct'")
         
       tr.total-row.col-100-pct(my-performance-table-row, 
                               [rowData]="totalRow",

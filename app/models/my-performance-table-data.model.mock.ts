@@ -13,8 +13,8 @@ export const myPerformanceTableData: MyPerformanceTableRow[] = [
     descriptionLine0: 'MDMs',
     descriptionLine1: '',
     metricColumn0: 11,
-    metricColumn1: 46,
-    metricColumn2: 78,
+    metricColumn1: -46,
+    metricColumn2: -78,
     ctv: 4
   },
   {

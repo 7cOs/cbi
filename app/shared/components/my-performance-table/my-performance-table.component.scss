@@ -23,7 +23,7 @@ thead {
 
 tbody {
   display: block;
-  max-height: 100px;
+  max-height: 600px;
   overflow-y: auto;
 }
 
@@ -99,7 +99,6 @@ th {
 .total-row {
   height: 60px;
   border-bottom: 1px solid #e7e7e7;
-
 }
 
 .center-col {
@@ -115,11 +114,30 @@ th {
     text-align: center;
   }
 
+  /deep/.right-col {
+    &.opportunities {
+      color: #1589d1;
+      font-weight: normal;
+    }
+  }
+
   &:hover {
     /deep/td {
       background-color: #F3F8FB;
     }
   }
+}
+
+span.positive {
+  color: #40b76f;
+}
+
+span.negative {
+  color: #e55053;
+}
+
+span.link-out {
+  color: #1589d1;
 }
 
 td, th {

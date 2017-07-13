@@ -2,7 +2,9 @@ td.left-col(colspan=1, [ngClass]="showOpportunities ? 'col-16-pct' : 'col-20-pct
   span {{rowData.descriptionLine0}}
   span(*ngIf="rowData.descriptionLine1") {{rowData.descriptionLine1}}
 td.center-col(colspan=1, [ngClass]="showOpportunities ? 'col-16-pct' : 'col-20-pct'") {{rowData.metricColumn0}}
-td.center-col(colspan=1, [ngClass]="showOpportunities ? 'col-16-pct' : 'col-20-pct'") {{rowData.metricColumn1}}
-td.center-col(colspan=1, [ngClass]="showOpportunities ? 'col-16-pct' : 'col-20-pct'") {{rowData.metricColumn2}}%
+td.center-col(colspan=1, [ngClass]="showOpportunities ? 'col-16-pct' : 'col-20-pct'") 
+  span([ngClass]="isNegative(rowData.metricColumn1) ? 'negative' : 'positive'") {{rowData.metricColumn1}}
+td.center-col(colspan=1, [ngClass]="showOpportunities ? 'col-16-pct' : 'col-20-pct'")
+  span([ngClass]="isNegative(rowData.metricColumn1) ? 'negative' : 'positive'") {{rowData.metricColumn2}}%
 td.right-col(colspan=1, [ngClass]="showOpportunities ? 'col-16-pct' : 'col-20-pct'") {{rowData.ctv}}%
-td.right-col(colspan=1, [ngClass]="showOpportunities ? 'col-16-pct' : 'col-20-pct'") 33
+td.right-col.opportunities(*ngIf="showOpportunities", colspan=1, [ngClass]="showOpportunities ? 'col-16-pct' : 'col-20-pct'") 33
