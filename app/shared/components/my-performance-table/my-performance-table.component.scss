@@ -22,7 +22,7 @@ thead {
 
 tbody {
   display: block;
-  height: 100px;
+  max-height: 100px;
   overflow-y: auto;
 }
 
@@ -132,6 +132,15 @@ td, th {
     text-align: center;
     vertical-align: center;
     color: #4a4a4a;
+
+    &.right-col, &.center-col {
+      vertical-align: center;
+    }
+
+    &.left-col {
+      text-align: left;
+      margin-left: 16px;
+    }
   }
 }
 
@@ -143,7 +152,6 @@ td, th {
     letter-spacing: 0.9px;
     text-align: center;
     color: #4a4a4a;
-    vertical-align: center;
   }
 }
 
