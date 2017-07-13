@@ -41,7 +41,7 @@ AppUpgradeAdapter.upgradeNg1Provider('$state');
     HttpModule,
     MyPerformanceModule,
     RouterModule.forRoot([ {path: 'placeholder', redirectTo: '/'} ]), // need ng2 router for angulartics2 to work
-    StoreModule.provideStore(rootReducer),
+    StoreModule.provideStore(rootReducer)
   ],
   declarations: [
     AppComponent,

@@ -61,6 +61,8 @@ module.exports = /*  @ngInject */
       query: 'name'
     };
     vm.initialized = false;
+    vm.calculatingDepletionTotals;
+    vm.calculatingDistributionTotals;
 
     // Set page title for head and nav
     $rootScope.pageTitle = $state.current.title;
@@ -121,6 +123,7 @@ module.exports = /*  @ngInject */
     }
 
     function changeDepletionOption(value, v3ApiCode) {
+      vm.calculatingDepletionTotals = true;
       vm.depletionSelectApiCode = v3ApiCode;
       updatedSelectionValuesInFilter(null, value, null);
     }
@@ -128,25 +131,31 @@ module.exports = /*  @ngInject */
     function changeDepletionScorecard(bool) {
       if (bool) vm.depletionSelect = vm.depletionSelectOptions[vm.depletionRadio][0].name;
       updateTotalRowDepletions();
+      userService.model.depletion = getRemodeledCollection(userService.model.depletion, 'depletion');
+      vm.calculatingDepletionTotals = false;
     }
 
     function changeDistributionTimePeriod(value, v3ApiCode) {
+      vm.calculatingDistributionTotals = true;
       vm.distributionSelectOptions.selected = value;
       vm.distributionSelectOptions.v3ApiCode = v3ApiCode;
       updatedSelectionValuesInFilter(null, null, value);
       updateTotalRowDistributions();
+      userService.model.distribution = getRemodeledCollection(userService.model.distribution, 'distribution');
+      vm.calculatingDistributionTotals = false;
     }
 
     function changePremise() {
       var payload = {'type': 'noencode'};
-      if (vm.distributionRadioOptions.selected.onOffPremise === 'on') payload.premiseType = 'on';
-      else payload.premiseType = 'off';
+      payload.premiseType = vm.distributionRadioOptions.selected.onOffPremise === 'on' ? 'on' : 'off';
 
       userService.getPerformanceDistribution(payload).then(function(data) {
         userService.model.distribution = getRemodeledCollection(data, 'distribution');
         updateTotalRowDistributions();
+        userService.model.distribution = getRemodeledCollection(userService.model.distribution, 'distribution');
       }, function(err) {
         updateTotalRowDistributions();
+        userService.model.distribution = getRemodeledCollection(userService.model.distribution, 'distribution');
         console.warn(err);
       });
     }
@@ -182,10 +191,7 @@ module.exports = /*  @ngInject */
     }
 
     function isPositive(salesData) {
-      if (parseInt(salesData) >= 0) {
-        return true;
-      }
-      return false;
+      return parseInt(salesData) >= 0;
     }
 
     function updateEndingTimePeriod(value) {
@@ -196,6 +202,8 @@ module.exports = /*  @ngInject */
       updatedSelectionValuesInFilter(value, vm.depletionSelect, vm.distributionSelectOptions.selected);
       updateTotalRowDepletions();
       updateTotalRowDistributions();
+      userService.model.distribution = getRemodeledCollection(userService.model.distribution, 'distribution');
+      userService.model.depletion = getRemodeledCollection(userService.model.depletion, 'depletion');
     }
 
     // TODO The models that are hooked up for depletion and distirbution need to be changed to use an object instead of a string in the next sprint
@@ -305,43 +313,32 @@ module.exports = /*  @ngInject */
 
     function updateTotalRowDepletions() {
       vm.totalRow = angular.copy(vm.totalRowTemplate);
-      for (var i = 0; i < userService.model.depletion.length; i++) {
-        angular.forEach(userService.model.depletion[i].measures, function(item, key) {
-          if (item.timeframe === vm.depletionSelect) {
-            // sum
-            vm.totalRow.depletions += item.depletions;
-            vm.totalRow.depletionsLastYear += item.depletionsLastYear;
-            vm.totalRow.depletionsBU += item.depletionsBU;
-            vm.totalRow.depletionsBULastYear += item.depletionsBULastYear;
-            vm.totalRow.gapVsPlan += (item.depletions - item.plan);
-            vm.volumeBU = 0;
-            vm.growthBU = 0;
-
-          }
-        });
-      }
+      userService.model.depletion.forEach(depletion => {
+        const measure = depletion.measures.find(measure => measure.timeframe === vm.depletionSelect);
+        if (measure) {
+          vm.totalRow.depletions += measure.depletions;
+          vm.totalRow.depletionsLastYear += measure.depletionsLastYear;
+          vm.totalRow.depletionsBU += measure.depletionsBU;
+          vm.totalRow.depletionsBULastYear += measure.depletionsBULastYear;
+          vm.totalRow.gapVsPlan += (measure.depletions - measure.plan);
+          vm.volumeBU = 0;
+          vm.growthBU = 0;
+        }
+      });
 
       vm.totalRow.gap = vm.totalRow.depletions - vm.totalRow.depletionsLastYear;
-
       vm.totalRow.percentTrend = vsYAPercent(vm.totalRow.depletions, vm.totalRow.depletionsLastYear, ((vm.totalRow.depletions / vm.totalRow.depletionsLastYear - 1) * 100));
-
       vm.totalRow.percentBUTrend = vsYAPercent(vm.totalRow.depletionsBU, vm.totalRow.depletionsBULastYear, ((vm.totalRow.depletionsBU / vm.totalRow.depletionsBULastYear - 1) * 100));
-
-      if (vm.totalRow.depletions !== 0) {
-        vm.totalRow.percentGapVsPlan = $filter('number')((vm.totalRow.gapVsPlan / vm.totalRow.depletions) * 100, 1);
-      } else {
-        vm.totalRow.percentGapVsPlan = 0;
-      }
-    }
+      vm.totalRow.percentGapVsPlan = vm.totalRow.depletions
+        ? $filter('number')((vm.totalRow.gapVsPlan / vm.totalRow.depletions) * 100, 1)
+        : vm.totalRow.percentGapVsPlan = 0;
+  }
 
     function updateTotalRowDistributions() {
-      var totalObj = {};
-      totalObj = $filter('filter')(userService.model.distribution, {type: 'Total'});
-      if (totalObj[0]) {
-        vm.totalDistributions = $filter('filter')(totalObj[0].measures, {timeframe: vm.distributionSelectOptions.selected});
-      } else {
-        vm.totalDistributions = {};
-      }
+      let totalObj = $filter('filter')(userService.model.distribution, {type: 'Total'}) || {};
+      vm.totalDistributions = totalObj[0]
+        ? $filter('filter')(totalObj[0].measures, {timeframe: vm.distributionSelectOptions.selected})
+        : {};
     }
 
     function setDefaultFilterOptions() {
@@ -372,7 +369,8 @@ module.exports = /*  @ngInject */
 
     function getRemodeledCollection(collection, type) {
       const processedCollection = getProcessedData(type, collection);
-      return getTransformedModel(processedCollection);
+      const transformedModel = getTransformedModel(processedCollection);
+      return transformedModel;
     }
 
     function getTransformedModel(modelCollection) {
@@ -409,13 +407,13 @@ module.exports = /*  @ngInject */
             };
 
             measure['percentTotal'] = {
-              simple: getValidValue((measure.distributionsSimple / vm.totalDistributions[0].distributionsSimple) * 100, 1),
-              effective: getValidValue((measure.distributionsEffective / vm.totalDistributions[0].distributionsEffective) * 100, 1)
+              simple: getValidValue(vm.totalDistributions[0] ? ((measure.distributionsSimple / vm.totalDistributions[0].distributionsSimple) * 100) : null, 1),
+              effective: getValidValue(vm.totalDistributions[0] ? ((measure.distributionsEffective / vm.totalDistributions[0].distributionsEffective) * 100) : null, 1)
             };
 
             measure['percentBuTotal'] = {
-              simple: getValidValue((measure.distributionsSimpleBU / vm.totalDistributions[0].distributionsSimpleBU) * 100, 1),
-              effective: getValidValue((measure.distributionsEffectiveBU / vm.totalDistributions[0].distributionsEffectiveBU) * 100, 1)
+              simple: getValidValue(vm.totalDistributions[0] ? ((measure.distributionsSimpleBU / vm.totalDistributions[0].distributionsSimpleBU) * 100) : null, 1),
+              effective: getValidValue(vm.totalDistributions[0] ? ((measure.distributionsEffectiveBU / vm.totalDistributions[0].distributionsEffectiveBU) * 100) : null, 1)
             };
           });
 

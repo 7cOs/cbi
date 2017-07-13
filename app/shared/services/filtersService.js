@@ -107,7 +107,7 @@ module.exports = /*  @ngInject */
         year: [{
           name: 'MTD',
           displayValue: 'MTD',
-          v3ApiCode: 'MTD',
+          v3ApiCode: 'CMIPBDL',
           id: 4
         }, {
           name: 'CYTD',
