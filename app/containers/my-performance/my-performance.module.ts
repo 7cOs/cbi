@@ -1,7 +1,9 @@
 import { NgModule }       from '@angular/core';
 import { CommonModule }   from '@angular/common';
 
-import { MyPerformanceComponent } from './my-performance.component';
+import { MyPerformanceComponent }    from './my-performance.component';
+import { MyPerformanceTableComponent } from '../../shared/components/my-performance-table/my-performance-table.component';
+import { MyPerformanceTableRowComponent } from '../../shared/components/my-performance-table-row/my-performance-table-row.component';
 import { SharedModule } from '../../shared/shared.module';
 
 @NgModule({
@@ -12,8 +14,6 @@ import { SharedModule } from '../../shared/shared.module';
   declarations: [
     MyPerformanceComponent,
     MyPerformanceTableComponent,
-    MyPerformanceTableLeftComponent,
-    MyPerformanceTableRightComponent,
     MyPerformanceTableRowComponent,
     SortableComponent
   ]

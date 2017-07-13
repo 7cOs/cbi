@@ -4,5 +4,13 @@ export enum ColumnType {
   metricColumn0,
   metricColumn1,
   metricColumn2,
-  ctv
+  ctv,
+  opps
+}
+
+export enum RowType {
+  brands,
+  skus,
+  people,
+  distributors
 }

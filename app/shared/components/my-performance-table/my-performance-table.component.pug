@@ -12,6 +12,11 @@ div.performance-table-wrapper
           span {{ tableHeaderRow[2] }}
             sortable([active]='_sortingCriteria[0].columnType === columnType.ctv',
                      [ascending]='_sortingCriteria[0].ascending')
+        th.right-col.sortable(*ngIf="showOpportunities", colspan=1, [ngClass]="showOpportunities ? 'col-16-pct' : 'col-20-pct'") 
+          span Opps
+            sortable([active]='_sortingCriteria[0].columnType === columnType.opps',
+                     [ascending]='_sortingCriteria[0].ascending')
+
       tr.sub-header.col-100-pct
         th.col-20-pct(colspan=1)
         th.col-20-pct.center-col.sortable(colspan=1, (click)="sortRows(columnType.metricColumn0, false)")
