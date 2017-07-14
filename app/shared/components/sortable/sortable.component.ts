@@ -1,4 +1,8 @@
+// tslint:disable:no-unused-variable
 import { Component, Input } from '@angular/core';
+
+import { SortStatus } from '../../../enums/sort-status.enum';
+
 @Component({
   selector: 'sortable',
   template: require('./sortable.component.pug'),
@@ -6,6 +10,7 @@ import { Component, Input } from '@angular/core';
 })
 
 export class SortableComponent {
-  @Input() active: boolean;
-  @Input() ascending: boolean;
+  @Input() status: SortStatus;
+
+  private sortStatus = SortStatus; // for use in template;
 }

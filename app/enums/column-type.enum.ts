@@ -7,10 +7,3 @@ export enum ColumnType {
   ctv,
   opps
 }
-
-export enum RowType {
-  brands,
-  skus,
-  people,
-  distributors
-}

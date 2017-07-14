@@ -4,8 +4,9 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { ColumnType } from '../../../enums/column-type.enum';
 import { DateRange } from '../../../models/date-range.model';
 import { MyPerformanceTableRow } from '../../../models/my-performance-table-row.model';
-import { RowType } from '../../../enums/column-type.enum';
 import { SortingCriteria } from '../../../models/sorting-criteria.model';
+import { SortStatus } from '../../../enums/sort-status.enum';
+import { ViewType } from '../../../enums/view-type.enum';
 
 @Component({
   selector: 'my-performance-table',
@@ -40,7 +41,7 @@ export class MyPerformanceTableComponent {
   private _sortingCriteria: Array<SortingCriteria> = null;
   private _tableData: Array<MyPerformanceTableRow>;
   private columnType = ColumnType; // for use in template
-  private rowType = RowType;
+  private viewType = ViewType; // for use in template
 
   private updateSortingFunction() {
     if (this._sortingCriteria.length) {
@@ -77,6 +78,22 @@ export class MyPerformanceTableComponent {
       ? !this._sortingCriterias[0].ascending
       : false;
     this.onSortingCriteriaChanged.emit([<SortingCriteria>{columnType: colType, ascending: ascending}]);
+  }
+
+  private getSortStatus(columnType: ColumnType): SortStatus {
+    return this._sortingCriteria[0].columnType === columnType
+      ? this._sortingCriteria[0].ascending
+        ? SortStatus.ascending
+        : SortStatus.descending
+      : SortStatus.inactive;
+  }
+
+  private columnWidth(): string {
+    return this.showOpportunities ? 'col-16-pct' : 'col-20-pct';
+  }
+
+  private centerColumnsWidth(): string {
+    return this.showOpportunities ? 'col-50-pct' : 'col-60-pct';
   }
 }
 

@@ -1,7 +1,9 @@
-//tslint:disable
+// tslint:disable:no-unused-variable
 import { Component, Input } from '@angular/core';
+
 import { MyPerformanceTableRow } from '../../../models/my-performance-table-row.model';
-import { RowType } from '../../../enums/column-type.enum';
+import { SortStatus } from '../../../enums/sort-status.enum';
+import { ViewType } from '../../../enums/view-type.enum';
 
 @Component({
   selector: '[my-performance-table-row]',
@@ -11,9 +13,15 @@ import { RowType } from '../../../enums/column-type.enum';
 export class MyPerformanceTableRowComponent {
   @Input() rowData: MyPerformanceTableRow;
   @Input() showOpportunities: boolean;
-  @Input() rowType: RowType;
+  @Input() viewType: ViewType;
+
+  private sortStatus = SortStatus;
 
   private isNegative(num: number): boolean {
     return num <= 0;
+  }
+
+  private columnWidth(): string {
+    return this.showOpportunities ? 'col-16-pct' : 'col-20-pct';
   }
 }
