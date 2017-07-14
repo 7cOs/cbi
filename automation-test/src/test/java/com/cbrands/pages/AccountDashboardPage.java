@@ -43,7 +43,7 @@ public class AccountDashboardPage extends LoadableComponent<AccountDashboardPage
 
   @Override
   protected void load() {
-    driver.get(PropertiesCache.getInstance().getProperty("qa.host.address") + "/");
+    driver.get(PropertiesCache.getInstance().getProperty("host.address") + "/");
   }
 
   public AccountDashboardPage enterRetailerChainSearchText(String text) {
