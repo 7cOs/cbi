@@ -26,8 +26,8 @@ import { myPerformanceTableData,
 })
 
 export class MyPerformanceComponent {
-  private _tableHeaderRowLeft: Array<string> = ['People','Depletions','CYTD'];
-  private _tableHeaderRowRight: Array<string> = ['Brand','Depletions','CYTD'];
+  private _tableHeaderRowLeft: Array<string> = ['People','Depletions','CTV'];
+  private _tableHeaderRowRight: Array<string> = ['Brand','Depletions','CTV'];
   private _performanceMetric: string = 'Depletions';
   private _dateRange: DateRange = getDateRangeMock();
   private _tableData: MyPerformanceTableRow[] = myPerformanceTableData;
