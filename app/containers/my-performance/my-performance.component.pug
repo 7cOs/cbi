@@ -9,7 +9,7 @@ div
     [showOpportunities]="false",
     (onSortingCriteriaChanged)="handleSortRows($event)")
 
-  my-performance-table.right(
+  my-performance-table.right.view-type.brands(
     [tableData]="_rightTableData", 
     [tableHeaderRow]="_tableHeaderRowRight",
     [performanceMetric]="'Product Snapshot'",
@@ -28,9 +28,48 @@ div(style="margin-top: 100px;")
     [showOpportunities]="false",
     (onSortingCriteriaChanged)="handleSortRows($event)")
 
-  my-performance-table.right(
+  my-performance-table.right.view-type.skus(
     [tableData]="_skusData", 
     [totalRow]="_skuTotalData",
+    [tableHeaderRow]="_tableHeaderRowRight",
+    [performanceMetric]="'Product Snapshot'",
+    [sortingCriteria]="_sortingCriteria",
+    [showOpportunities]="false",
+    (onSortingCriteriaChanged)="handleSortRows($event)")
+
+div(style="margin-top: 100px;")
+  my-performance-table.left.view-type.people(
+    [tableData]="_peopleData", 
+    [dateRange]="_dateRange", 
+    [tableHeaderRow]="_tableHeaderRowLeft",
+    [performanceMetric]="_performanceMetric",
+    [totalRow]="_peopleTotalData",
+    [sortingCriteria]="_sortingCriteria",
+    [showOpportunities]="false",
+    (onSortingCriteriaChanged)="handleSortRows($event)")
+
+  my-performance-table.right.view-type.skus(
+    [tableData]="_skusData", 
+    [totalRow]="_skuTotalData",
+    [tableHeaderRow]="_tableHeaderRowRight",
+    [performanceMetric]="'Product Snapshot'",
+    [sortingCriteria]="_sortingCriteria",
+    [showOpportunities]="true",
+    (onSortingCriteriaChanged)="handleSortRows($event)")
+
+div(style="margin-top: 100px;")
+  my-performance-table.left.view-type.accounts(
+    [tableData]="_accountData", 
+    [dateRange]="_dateRange", 
+    [tableHeaderRow]="_tableHeaderRowLeft",
+    [performanceMetric]="_performanceMetric",
+    [totalRow]="_accountTotalData",
+    [sortingCriteria]="_sortingCriteria",
+    [showOpportunities]="false",
+    (onSortingCriteriaChanged)="handleSortRows($event)")
+
+  my-performance-table.right.view-type.brands(
+    [tableData]="_rightTableData",
     [tableHeaderRow]="_tableHeaderRowRight",
     [performanceMetric]="'Product Snapshot'",
     [sortingCriteria]="_sortingCriteria",

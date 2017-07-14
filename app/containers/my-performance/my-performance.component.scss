@@ -21,4 +21,116 @@ my-performance-table {
       }
     }
   }
+
+  // brands
+  &.view-type.brands {
+
+    /deep/td.left-col {
+      color: #1589d1;
+      font-weight: normal;
+    }
+  }
+
+  // skus 
+  &.view-type.skus {
+
+    /deep/tr.total-row {
+
+      /deep/td.left-col {
+        font-weight: 600;
+        color: #1589d1; 
+      }      
+    }
+
+    /deep/tr.entity-row {
+
+      /deep/td.left-col {
+
+        /deep/span {
+          color: #1589d1;
+          font-weight: normal;
+          padding-left: 12px;
+        }
+      }
+    }
+  }
+
+  // people
+  &.view-type.people {
+
+    /deep/tr.total-row {
+  
+      /deep/td.left-col {
+
+        /deep/div.description-line-1 {
+          padding-top: 5px;
+        }
+
+        /deep/span.description-line-1 {
+          font-family: "Rajdhani", Arial, sans-serif;
+          font-weight: 600;
+          font-size: 0.7rem;
+          text-transform: uppercase;
+          letter-spacing: 1px;
+          outline: 0; 
+        }
+      }
+
+    }
+
+    /deep/tr.entity-row {
+
+      /deep/td.left-col {
+
+        /deep/span {
+          color: #1589d1;
+          font-weight: normal;
+          padding-left: 12px;
+        }
+      }
+    }
+  }
+
+  // accounts 
+  &.view-type.accounts {
+
+    /deep/tr.total-row {
+  
+      /deep/td.left-col {
+
+        /deep/div.description-line-1 {
+          padding-top: 5px;
+        }
+
+        /deep/span.description-line-1 {
+          font-family: "Rajdhani", Arial, sans-serif;
+          font-weight: 600;
+          font-size: 0.7rem;
+          text-transform: uppercase;
+          letter-spacing: 1px;
+          outline: 0; 
+        }
+      }
+    }
+
+    /deep/tr.entity-row {
+
+      /deep/td.left-col {
+
+        /deep/div.description-line-1 {
+          padding-top: 5px;
+        }
+
+        /deep/span.description-line-1 {
+          font-family: "Rajdhani", Arial, sans-serif;
+          font-weight: 600;
+          font-size: 0.7rem;
+          text-transform: uppercase;
+          letter-spacing: 1px;
+          outline: 0; 
+          color: #1589d1;
+        }
+      }
+    }
+  }
 }

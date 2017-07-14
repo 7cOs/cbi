@@ -1,6 +1,8 @@
 td.left-col(colspan=1, [ngClass]="columnWidth()")
-  span([ngClass]="viewType === 0 || viewType === 1 ? 'link-out' : ''") {{rowData.descriptionLine0}} {{viewType}}
-  span(*ngIf="rowData.descriptionLine1") {{rowData.descriptionLine1}}
+  div
+    span {{rowData.descriptionLine0}}
+  div.description-line-1(*ngIf="rowData.descriptionLine1")
+    span.description-line-1 {{rowData.descriptionLine1}}
 td.center-col(colspan=1, [ngClass]="columnWidth()") {{rowData.metricColumn0}}
 td.center-col(colspan=1, [ngClass]="columnWidth()") 
   span([ngClass]="isNegative(rowData.metricColumn1) ? 'negative' : 'positive'") {{rowData.metricColumn1}}

@@ -13,7 +13,11 @@ import { myPerformanceTableData,
          myPerformanceTotalRowData,
          myPerformanceRightTableData,
          myPerformanceSkusData,
-         myPerformanceSkuTotalData } from '../../models/my-performance-table-data.model.mock';
+         myPerformanceSkuTotalData,
+         myPerformanceTotalPeopleData,
+         myPerformancePeopleData,
+         myPerformanceAccountData,
+         myPerformanceTotalAccountData } from '../../models/my-performance-table-data.model.mock';
 
 @Component({
   selector: 'my-performance',
@@ -32,6 +36,10 @@ export class MyPerformanceComponent {
   private _showOpportunities: boolean = true;
   private _skusData = myPerformanceSkusData;
   private _skuTotalData = myPerformanceSkuTotalData;
+  private _peopleData = myPerformancePeopleData;
+  private _peopleTotalData = myPerformanceTotalPeopleData;
+  private _accountData = myPerformanceAccountData;
+  private _accountTotalData = myPerformanceTotalAccountData;
   
   private _sortingCriteria: Array<SortingCriteria> = [{columnType: ColumnType.metricColumn0, ascending: false}];
   private _dateRanges = dateRangeDTOsMock;

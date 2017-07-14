@@ -226,3 +226,122 @@ export const myPerformanceTotalRowData: MyPerformanceTableRow = {
   metricColumn2: 89,
   ctv: 100
 };
+
+export const myPerformanceTotalPeopleData: MyPerformanceTableRow = {
+  descriptionLine0: 'Total',
+  descriptionLine1: 'Role',
+  metricColumn0: 1323,
+  metricColumn1: 4356,
+  metricColumn2: 89,
+  ctv: 100
+};
+
+export const myPerformancePeopleData: MyPerformanceTableRow[] = [
+  {
+    descriptionLine0: 'Inspecta Deck',
+    descriptionLine1: '',
+    metricColumn0: 11,
+    metricColumn1: 456,
+    metricColumn2: 789,
+    ctv: 44
+  },
+  {
+    descriptionLine0: 'Ghosface Killah',
+    descriptionLine1: '',
+    metricColumn0: 11,
+    metricColumn1: -46,
+    metricColumn2: -78,
+    ctv: 4
+  },
+  {
+    descriptionLine0: 'Method Man',
+    descriptionLine1: '',
+    metricColumn0: 14,
+    metricColumn1: 46,
+    metricColumn2: 71,
+    ctv: 9
+  },
+  {
+    descriptionLine0: 'O.D.B, Esquire',
+    descriptionLine1: '',
+    metricColumn0: 11,
+    metricColumn1: 456,
+    metricColumn2: 789,
+    ctv: 44
+  },
+  {
+    descriptionLine0: 'The GZA',
+    descriptionLine1: '',
+    metricColumn0: 14,
+    metricColumn1: 46,
+    metricColumn2: 71,
+    ctv: 9
+  },
+  {
+    descriptionLine0: 'Raekwon',
+    descriptionLine1: '',
+    metricColumn0: 11,
+    metricColumn1: 456,
+    metricColumn2: 789,
+    ctv: 44
+  },
+  {
+    descriptionLine0: 'The RZA',
+    descriptionLine1: '',
+    metricColumn0: 11,
+    metricColumn1: -46,
+    metricColumn2: -78,
+    ctv: 4
+  }
+];
+export const myPerformanceTotalAccountData: MyPerformanceTableRow = {
+  descriptionLine0: 'Total',
+  descriptionLine1: 'Ghostface Killa',
+  metricColumn0: 1323,
+  metricColumn1: 4356,
+  metricColumn2: 89,
+  ctv: 100
+};
+
+export const myPerformanceAccountData: MyPerformanceTableRow[] = [
+  {
+    descriptionLine0: 'Walgreens',
+    descriptionLine1: 'Go To Dashboard',
+    metricColumn0: 11,
+    metricColumn1: 456,
+    metricColumn2: 789,
+    ctv: 44
+  },
+  {
+    descriptionLine0: 'Walmart',
+    descriptionLine1: 'Go To Dashboard',
+    metricColumn0: 11,
+    metricColumn1: -46,
+    metricColumn2: -78,
+    ctv: 4
+  },
+  {
+    descriptionLine0: '7 Eleven',
+    descriptionLine1: 'Go To Dashboard',
+    metricColumn0: 14,
+    metricColumn1: 46,
+    metricColumn2: 71,
+    ctv: 9
+  },
+  {
+    descriptionLine0: "Joe's Liquors",
+    descriptionLine1: 'Go To Dashboard',
+    metricColumn0: 11,
+    metricColumn1: 456,
+    metricColumn2: 789,
+    ctv: 44
+  },
+  {
+    descriptionLine0: 'The Place',
+    descriptionLine1: 'Go To Dashboard',
+    metricColumn0: 14,
+    metricColumn1: 46,
+    metricColumn2: 71,
+    ctv: 9
+  }
+];
