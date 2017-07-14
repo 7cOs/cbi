@@ -126,6 +126,98 @@ export const myPerformanceRightTableData: MyPerformanceTableRow[] = [
   }
 ];
 
+export const myPerformanceSkuTotalData: MyPerformanceTableRow = {
+  descriptionLine0: 'Modelo',
+  descriptionLine1: '',
+  metricColumn0: 100,
+  metricColumn1: 222,
+  metricColumn2: 77,
+  ctv: 123
+};
+
+export const myPerformanceSkusData: MyPerformanceTableRow[] = [
+  {
+    descriptionLine0: '1/2 BL',
+    descriptionLine1: '',
+    metricColumn0: 11,
+    metricColumn1: 456,
+    metricColumn2: 789,
+    ctv: 44
+  },
+  {
+    descriptionLine0: '12PK BT',
+    descriptionLine1: '',
+    metricColumn0: 11,
+    metricColumn1: -46,
+    metricColumn2: -78,
+    ctv: 4
+  },
+  {
+    descriptionLine0: '12PK CAN',
+    descriptionLine1: '',
+    metricColumn0: 14,
+    metricColumn1: 46,
+    metricColumn2: 71,
+    ctv: 9
+  },
+  {
+    descriptionLine0: '16OZ 4PK CAN',
+    descriptionLine1: '',
+    metricColumn0: 11,
+    metricColumn1: 456,
+    metricColumn2: 789,
+    ctv: 44
+  },
+  {
+    descriptionLine0: '12PK CAN',
+    descriptionLine1: '',
+    metricColumn0: 14,
+    metricColumn1: 46,
+    metricColumn2: 71,
+    ctv: 9
+  },
+  {
+    descriptionLine0: '1/2 BL',
+    descriptionLine1: '',
+    metricColumn0: 11,
+    metricColumn1: 456,
+    metricColumn2: 789,
+    ctv: 44
+  },
+  {
+    descriptionLine0: '12PK BT',
+    descriptionLine1: '',
+    metricColumn0: 11,
+    metricColumn1: -46,
+    metricColumn2: -78,
+    ctv: 4
+  },
+  {
+    descriptionLine0: '12PK CAN',
+    descriptionLine1: '',
+    metricColumn0: 14,
+    metricColumn1: 46,
+    metricColumn2: 71,
+    ctv: 9
+  },
+  {
+    descriptionLine0: '16OZ 4PK CAN',
+    descriptionLine1: '',
+    metricColumn0: 11,
+    metricColumn1: 456,
+    metricColumn2: 789,
+    ctv: 44
+  },
+  {
+    descriptionLine0: '12PK CAN',
+    descriptionLine1: '',
+    metricColumn0: 14,
+    metricColumn1: 46,
+    metricColumn2: 71,
+    ctv: 9
+  },
+];
+
 export const myPerformanceTotalRowData: MyPerformanceTableRow = {
   descriptionLine0: 'Total',
   descriptionLine1: '',

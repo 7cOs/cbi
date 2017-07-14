@@ -8,4 +8,16 @@ my-performance-table {
     -webkit-box-shadow: -10px 0 20px #e4e4e4;
     -moz-box-shadow: -10px 0 20px #e4e4e4;
   }
+
+  &.left {
+
+    /deep/tr.total-row { 
+      background-color: #032e60;
+      color: #e7e7e7;
+
+      /deep/.center-col {
+        background-color: #345070;
+      }
+    }
+  }
 }

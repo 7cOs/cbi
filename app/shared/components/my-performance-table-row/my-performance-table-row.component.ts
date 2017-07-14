@@ -1,6 +1,7 @@
 //tslint:disable
 import { Component, Input } from '@angular/core';
 import { MyPerformanceTableRow } from '../../../models/my-performance-table-row.model';
+import { RowType } from '../../../enums/column-type.enum';
 
 @Component({
   selector: '[my-performance-table-row]',
@@ -10,7 +11,7 @@ import { MyPerformanceTableRow } from '../../../models/my-performance-table-row.
 export class MyPerformanceTableRowComponent {
   @Input() rowData: MyPerformanceTableRow;
   @Input() showOpportunities: boolean;
-  @Input() rowType: number;
+  @Input() rowType: RowType;
 
   private isNegative(num: number): boolean {
     return num <= 0;

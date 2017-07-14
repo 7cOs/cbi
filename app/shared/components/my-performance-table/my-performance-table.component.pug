@@ -1,4 +1,10 @@
 div.performance-table-wrapper
+  div.performance-table-summary.col-100-pct
+    div.summary-header 
+      span {{ performanceMetric }}
+      span(*ngIf='dateRange') - {{ dateRange.displayCode }}
+    div.summary-date-range
+      span(*ngIf="dateRange") {{ dateRange.range }}
   table.my-performance-table.col-100-pct
     thead.col-100-pct
 
@@ -14,9 +20,6 @@ div.performance-table-wrapper
                      [ascending]='_sortingCriteria[0].ascending')
         th.right-col.sortable(*ngIf="showOpportunities", colspan=1, [ngClass]="showOpportunities ? 'col-16-pct' : 'col-20-pct'") 
           span Opps
-            sortable([active]='_sortingCriteria[0].columnType === columnType.opps',
-                     [ascending]='_sortingCriteria[0].ascending')
-
       tr.sub-header.col-100-pct
         th.col-20-pct(colspan=1)
         th.col-20-pct.center-col.sortable(colspan=1, (click)="sortRows(columnType.metricColumn0, false)")
@@ -44,33 +47,5 @@ div.performance-table-wrapper
                                 *ngFor="let rowData of _tableData, let i = index", 
                                 [rowData]="rowData",
                                 [showOpportunities]="showOpportunities",
-                                [rowType]="tableHeaderRow[0] === 'Brand' ? 1 : 0",
+                                [rowType]="rowType[tableHeaderRow[0].toLowerCase()]",
                                 (click)="clickOn(rowData, i)")
-    //-         sortable([active]='_sortingCriteria[0].columnType === columnType.descriptionLine0',
-    //-                  [ascending]='_sortingCriteria[0].ascending')
-    //-     th.col-60-pct.center-col.sortable(colspan=3) {{ tableHeaderRow[1] }}
-    //-     th.col-20-pct.right-col.sortable(colspan=1, (click)="sortRows(columnType.ctv, false)")
-    //-       span {{ tableHeaderRow[2] }}
-    //-         sortable([active]='_sortingCriteria[0].columnType === columnType.ctv',
-    //-                  [ascending]='_sortingCriteria[0].ascending')
-    //-   tr.sub-header.col-100-pct
-    //-     th.col-20-pct(colspan=1)
-    //-     th.col-20-pct.center-col.sortable(colspan=1, (click)="sortRows(columnType.metricColumn0, false)")
-    //-       span CYTV
-    //-         sortable([active]='_sortingCriteria[0].columnType === columnType.metricColumn0',
-    //-                  [ascending]='_sortingCriteria[0].ascending')
-    //-     th.col-20-pct.center-col.sortable(colspan=1, (click)="sortRows(columnType.metricColumn1, false)")
-    //-       span VS YA
-    //-         sortable([active]='_sortingCriteria[0].columnType === columnType.metricColumn1',
-    //-                  [ascending]='_sortingCriteria[0].ascending')
-    //-     th.col-20-pct.center-col.sortable(colspan=1, (click)="sortRows(columnType.metricColumn2, false)")
-    //-       span VS YA%
-    //-         sortable([active]='_sortingCriteria[0].columnType === columnType.metricColumn2',
-    //-                  [ascending]='_sortingCriteria[0].ascending')
-    //-     th.col-20-pct.right-col(colspan=1)
-    //- tr.total-row.col-100-pct(my-performance-table-row,
-    //-                          [rowData]="totalRow")
-    //- tr.entity-row.col-100-pct(my-performance-table-row,
-    //-                           *ngFor="let rowData of _tableData, let i = index",
-    //-                           [rowData]="rowData",
-    //-                           (click)="clickOn(rowData, i)")

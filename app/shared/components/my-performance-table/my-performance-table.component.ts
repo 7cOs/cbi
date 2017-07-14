@@ -4,6 +4,7 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { ColumnType } from '../../../enums/column-type.enum';
 import { DateRange } from '../../../models/date-range.model';
 import { MyPerformanceTableRow } from '../../../models/my-performance-table-row.model';
+import { RowType } from '../../../enums/column-type.enum';
 import { SortingCriteria } from '../../../models/sorting-criteria.model';
 
 @Component({
@@ -39,6 +40,7 @@ export class MyPerformanceTableComponent {
   private _sortingCriteria: Array<SortingCriteria> = null;
   private _tableData: Array<MyPerformanceTableRow>;
   private columnType = ColumnType; // for use in template
+  private rowType = RowType;
 
   private updateSortingFunction() {
     if (this._sortingCriteria.length) {
