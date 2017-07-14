@@ -1,3 +1,5 @@
+@import '../../../assets/styles/base/variables';
+
 .compass-select {
   padding: 0;
   width: 320px;
@@ -5,9 +7,9 @@
 
 .title {
   color: #4A4A4A;
-  font-family: sans-serif;
+  font-family: $rajdhani;
   font-size: 0.7rem;
-  font-weight: 600;
+  font-weight: $semibold;
   letter-spacing: 1px;
   margin-bottom: 6px;
   text-transform: uppercase;
@@ -15,9 +17,9 @@
 
 .subtitle {
   color: #4a4a4a;
-  font-family: WorkSans;
+  font-family: $work-sans;
   font-size: 11px;
-  font-weight: 600;
+  font-weight: $semibold;
   letter-spacing: 1.2px;
   margin-top: 5px;
   text-align: left;
@@ -36,7 +38,7 @@ md-select {
     .mat-select-value {
       color: #4A4A4A;
       font-size: 16px;
-      font-weight: 300;
+      font-weight: $light;
       height: 40px;
       letter-spacing: 1px;
       padding: 0;
@@ -73,7 +75,7 @@ md-select {
 
     .option-top-text {
       font-size: 16px;
-      font-weight: 300;
+      font-weight: $light;
       height: 10px;
       margin: 0;
       text-align: left;
@@ -81,7 +83,7 @@ md-select {
 
     .option-sub-text {
       font-size: 11px;
-      font-weight: 600;
+      font-weight: $semibold;
       letter-spacing: 1.2px;
       margin-top: 15px;
     }
