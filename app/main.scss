@@ -13,7 +13,6 @@ $fa-font-path: './assets/fonts';
 @import './assets/styles/lib/font-awesome/font-awesome';
 @import './assets/styles/lib/text-angular/text-angular';
 
-
 // Partials
 @import './assets/styles/partials/fonts';
 @import './assets/styles/partials/layout';
@@ -38,6 +37,9 @@ $fa-font-path: './assets/fonts';
 
 // Browser fixes
 @import './assets/styles/ie';
+
+// Material Design custom theme
+@import './theme.scss';
 
 // Modules
 @import './modules/**/*.scss';
