@@ -34,12 +34,12 @@ module.exports = /*  @ngInject */
      */
     function trackPageViews() {
       $transitions.onSuccess({}, (transition) => {
-        let toState = transition.to();
-        let url = $location.url();
-        let props = {
+        const toState = transition.to();
+        const props = {
           location: $location.absUrl(),
           title: toState.title
         };
+        let url = $location.url();
 
         if (toState.analyticsData) {
           if (toState.analyticsData.pageTitle) {
