@@ -1,15 +1,7 @@
+@import '../../../assets/styles/base/variables';
+
 .compass-radio {
   padding: 0;
-}
-
-.title {
-  color: #4A4A4A;
-  font-family: sans-serif;
-  font-size: 0.7rem;
-  font-weight: 600;
-  letter-spacing: 1px;
-  margin-bottom: 5px;
-  text-transform: uppercase;
 }
 
 /deep/ .compass-radio-button {
@@ -19,32 +11,40 @@
   .mat-radio-container {
 
     .mat-radio-outer-circle {
-      border: 1px solid #B4B4B5;
+      border: 1px solid $gray-8;
     }
 
     .mat-radio-inner-circle {
-      background-color: #B4B4B5;
+      background-color: $gray-8;
       transform: scale(0.5);
     }
   }
 }
 
-/deep/ .mat-radio-checked
-.mat-radio-label {
+.compass-radio-value {
+  color: $gray-1;
+  font-family: WorkSans;
+  font-size: 14px;
+  font-weight: $regular;
+  letter-spacing: 1px;
+  text-transform: initial;
+}
+
+/deep/ .mat-radio-checked .mat-radio-label {
 
   .compass-radio-value {
-    color: #218ACE;
+    color: $blue;
   }
 
   .mat-radio-container {
 
     .mat-radio-outer-circle {
-      border-color: #218ACE;
+      border-color: $blue;
       border-width: 4px;
     }
 
     .mat-radio-inner-circle {
-      background-color: #218ACE;
+      background-color: $blue;
       transform: scale(0.4);
     }
   }
@@ -63,11 +63,12 @@
   }
 }
 
-.compass-radio-value {
-  color: #4A4A4A;
-  font-family: WorkSans;
-  font-size: 14px;
-  font-weight: 400;
+.title {
+  color: $gray-1;
+  font-family: $rajdhani;
+  font-size: 0.7rem;
+  font-weight: $semibold;
   letter-spacing: 1px;
-  text-transform: initial;
+  margin-bottom: 5px;
+  text-transform: uppercase;
 }

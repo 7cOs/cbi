@@ -3,6 +3,8 @@ import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs/Subscription';
 
 import { AppState } from '../../state/reducers/root.reducer';
+import { DateRangesState } from '../../state/reducers/date-ranges.reducer';
+import { MyPerformanceFilter } from '../../models/my-performance-filter.model';
 import { SET_DISTRIBUTION_TYPE, SET_PREMISE_TYPE, SET_METRIC, SET_TIME_PERIOD } from '../../state/actions/my-performance-filter.action';
 
 @Component({
@@ -11,10 +13,9 @@ import { SET_DISTRIBUTION_TYPE, SET_PREMISE_TYPE, SET_METRIC, SET_TIME_PERIOD } 
 })
 
 export class MyPerformanceComponent implements OnDestroy {
-
-  private dateRanges: any;
+  private dateRanges: DateRangesState;
   private dateRangeSubscription: Subscription;
-  private filterState: any;
+  private filterState: MyPerformanceFilter;
   private filterStateSubscription: Subscription;
 
   constructor(private store: Store<AppState>) {

@@ -14,11 +14,11 @@ export class CompassRadioComponent {
   @Input() model: string;
   @Input() title?: string;
   @Input() valueKey: string;
-  @Input() set options(optionCollection: any[]) {
+  @Input() set options(optionCollection: Array<any>) {
     this.optionData = optionCollection;
   }
 
-  private optionData: any[] = [];
+  private optionData: Array<any> = [];
 
   constructor() {}
 

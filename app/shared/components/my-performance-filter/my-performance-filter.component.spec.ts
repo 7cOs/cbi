@@ -1,16 +1,17 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { By } from '@angular/platform-browser';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import * as Chance from 'chance';
 
+import { dateRangeStateMock } from '../../../models/date-range-state.model.mock';
 import { MyPerformanceFilterComponent } from './my-performance-filter.component';
+import { MyPerformanceFilterState } from '../../../state/reducers/my-performance-filter.reducer';
 
 @Component({
   selector: 'compass-radio',
   template: ''
 })
 class MockCompassRadioComponent {
-  @Output() onRadioClicked = new EventEmitter<any>();
+  @Output() onRadioClicked = new EventEmitter<string>();
 
   @Input() displayKey: string;
   @Input() direction: string;
@@ -24,7 +25,7 @@ class MockCompassRadioComponent {
   template: ''
 })
 class MockCompassSelectComponent {
-  @Output() onOptionSelected = new EventEmitter<any>();
+  @Output() onOptionSelected = new EventEmitter<string>();
 
   @Input() displayKey: string;
   @Input() model: string;
@@ -33,28 +34,13 @@ class MockCompassSelectComponent {
   @Input() valueKey: string;
 }
 
-const chance = new Chance();
-const dateRangesMock = {
-  CYTD: {
-    code: 'CYTDBDL',
-    displayCode: 'CYTD',
-    description: chance.sentence(),
-    range: chance.string()
-  },
-  L90: {
-    code: 'L90BDL',
-    displayCode: 'L90 Days',
-    description: chance.sentence(),
-    range: chance.string()
-  }
-};
-const initialStateMock = {
+const initialStateMock: MyPerformanceFilterState = {
   metric: 'DEPLETIONS',
   timePeriod: 'CYTDBDL',
   premiseType: 'ALL',
   distributionType: 'SIMPLE'
 };
-const updatedStateMock = {
+const updatedStateMock: MyPerformanceFilterState = {
   metric: 'DISTRIBUTION',
   timePeriod: 'L90BDL',
   premiseType: 'OFF-PREMISE',
@@ -77,7 +63,7 @@ describe('My Performance Filter Component', () => {
   describe('component input', () => {
     it('should pass input data to its child components', () => {
       componentInstance.filterState = initialStateMock;
-      componentInstance.dateRanges = dateRangesMock;
+      componentInstance.dateRanges = dateRangeStateMock;
       fixture.detectChanges();
 
       let mockSelectComponents = fixture.debugElement.queryAll(By.directive(MockCompassSelectComponent));
@@ -100,7 +86,7 @@ describe('My Performance Filter Component', () => {
 
       mockRadioComponents = fixture.debugElement.queryAll(By.directive(MockCompassRadioComponent));
       premiseTypeRadio = mockRadioComponents[0].injector.get(MockCompassRadioComponent) as MockCompassRadioComponent;
-      let distributionTypeRadio = mockRadioComponents[1].injector.get(MockCompassRadioComponent) as MockCompassRadioComponent;
+      const distributionTypeRadio = mockRadioComponents[1].injector.get(MockCompassRadioComponent) as MockCompassRadioComponent;
 
       expect(metricCompassSelect.model).toEqual('DISTRIBUTION');
       expect(timePeriodCompassSelect.model).toEqual('L90BDL');
@@ -112,37 +98,37 @@ describe('My Performance Filter Component', () => {
   describe('component output', () => {
     it('should emit value outputed by metric child component select dropdown', () => {
       componentInstance.filterState = initialStateMock;
-      componentInstance.dateRanges = dateRangesMock;
+      componentInstance.dateRanges = dateRangeStateMock;
       fixture.detectChanges();
 
       componentInstance.onFilterChange.subscribe((value: any) => {
         expect(value).toEqual({ filterType: 'metric', filterValue: 'DEPLETIONS' });
       });
 
-      let mockSelectComponents = fixture.debugElement.queryAll(By.directive(MockCompassSelectComponent));
-      let metricCompassSelect = mockSelectComponents[0].injector.get(MockCompassSelectComponent) as MockCompassSelectComponent;
+      const mockSelectComponents = fixture.debugElement.queryAll(By.directive(MockCompassSelectComponent));
+      const metricCompassSelect = mockSelectComponents[0].injector.get(MockCompassSelectComponent) as MockCompassSelectComponent;
 
       metricCompassSelect.onOptionSelected.emit('DEPLETIONS');
     });
 
     it('should emit value outputed by time period select dropdown child component', () => {
       componentInstance.filterState = initialStateMock;
-      componentInstance.dateRanges = dateRangesMock;
+      componentInstance.dateRanges = dateRangeStateMock;
       fixture.detectChanges();
 
       componentInstance.onFilterChange.subscribe((value: any) => {
         expect(value).toEqual({ filterType: 'timePeriod', filterValue: 'CYTDBDL' });
       });
 
-      let mockSelectComponents = fixture.debugElement.queryAll(By.directive(MockCompassSelectComponent));
-      let timePeriodSelect = mockSelectComponents[1].injector.get(MockCompassSelectComponent) as MockCompassSelectComponent;
+      const mockSelectComponents = fixture.debugElement.queryAll(By.directive(MockCompassSelectComponent));
+      const timePeriodSelect = mockSelectComponents[1].injector.get(MockCompassSelectComponent) as MockCompassSelectComponent;
 
       timePeriodSelect.onOptionSelected.emit('CYTDBDL');
     });
 
     it('should emit value outputed by premise type child component radio button', () => {
       componentInstance.filterState = initialStateMock;
-      componentInstance.dateRanges = dateRangesMock;
+      componentInstance.dateRanges = dateRangeStateMock;
       fixture.detectChanges();
 
       componentInstance.onFilterChange.subscribe((value: any) => {
@@ -157,7 +143,7 @@ describe('My Performance Filter Component', () => {
 
     it('should emit value outputed by distribution type child component radio button', () => {
       componentInstance.filterState = updatedStateMock;
-      componentInstance.dateRanges = dateRangesMock;
+      componentInstance.dateRanges = dateRangeStateMock;
       fixture.detectChanges();
 
       componentInstance.onFilterChange.subscribe((value: any) => {

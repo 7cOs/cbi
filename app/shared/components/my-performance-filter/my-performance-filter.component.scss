@@ -1,5 +1,7 @@
+@import '../../../assets/styles/base/variables';
+
 .filter-component-section {
-  background-color: #F3F3F3;
+  background-color: $gray-4;
   height: 100px;
   min-width: 1100px;
   padding-left: 30px;
