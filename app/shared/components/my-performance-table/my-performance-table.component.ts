@@ -1,4 +1,4 @@
-// tslint:disable:no-unused-variable
+// tslint:disable
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 
 import { ColumnType } from '../../../enums/column-type.enum';
@@ -26,9 +26,6 @@ export class MyPerformanceTableComponent {
     }
   }
 
-  @Input() tableHeaderRow: Array<string>;
-  @Input() totalRow: MyPerformanceTableRow;
-
   @Input()
   set tableData(tableData: Array<MyPerformanceTableRow>) {
     this._tableData = tableData;
@@ -36,6 +33,11 @@ export class MyPerformanceTableComponent {
       this._tableData = this._tableData.sort(this.sortingFunction);
     }
   }
+
+  @Input() tableHeaderRow: Array<string>;
+  @Input() totalRow: MyPerformanceTableRow;
+  @Input() showOpportunities: boolean;
+
 
   private sortingFunction: (elem0: MyPerformanceTableRow, elem1: MyPerformanceTableRow) => number;
   private _sortingCriteria: Array<SortingCriteria> = null;
@@ -53,8 +55,8 @@ export class MyPerformanceTableComponent {
           currentColumn = ColumnType[this._sortingCriteria[i].columnType];
           currentSortOrder = this.compareObjects(elem0[currentColumn], (elem1[currentColumn]));
           i++;
-        } while (i < this._sortingCriterias.length && currentSortOrder === 0);
-        return this._sortingCriterias[--i].ascending ? currentSortOrder : -currentSortOrder;
+        } while (i < this._sortingCriteria.length && currentSortOrder === 0);
+        return this._sortingCriteria[--i].ascending ? currentSortOrder : -currentSortOrder;
       };
     }
   }
@@ -74,9 +76,9 @@ export class MyPerformanceTableComponent {
 
   private sortRows(colType: ColumnType) {
     // keeping this one-dimensional for now
-    const ascending = this._sortingCriterias[0].columnType === colType
-      ? !this._sortingCriterias[0].ascending
-      : false;
+    const ascending = this._sortingCriteria[0].columnType === colType
+      ? !this._sortingCriteria[0].ascending
+      : colType === ColumnType.descriptionLine0;
     this.onSortingCriteriaChanged.emit([<SortingCriteria>{columnType: colType, ascending: ascending}]);
   }
 
@@ -95,9 +97,4 @@ export class MyPerformanceTableComponent {
   private centerColumnsWidth(): string {
     return this.showOpportunities ? 'col-50-pct' : 'col-60-pct';
   }
-}
-
-export interface SortingCriteria {
-  columnType: ColumnType;
-  ascending: boolean;
 }

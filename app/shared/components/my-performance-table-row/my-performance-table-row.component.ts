@@ -17,8 +17,8 @@ export class MyPerformanceTableRowComponent {
 
   private sortStatus = SortStatus;
 
-  private isNegative(num: number): boolean {
-    return num <= 0;
+  private getTrendClass(num: number): string {
+    return num >= 0 ? 'positive' : 'negative';
   }
 
   private columnWidth(): string {

@@ -1,4 +1,4 @@
-//tslint:disable
+// tslint:disable:no-unused-variable
 import { Component, EventEmitter } from '@angular/core';
 
 import { ColumnType } from '../../enums/column-type.enum';
@@ -24,14 +24,13 @@ import { myPerformanceTableData,
   template: require('./my-performance.component.pug'),
   styles: [require('./my-performance.component.scss')]
 })
-
 export class MyPerformanceComponent {
-  private _tableHeaderRowLeft: Array<string> = ['People','Depletions','CTV'];
-  private _tableHeaderRowRight: Array<string> = ['Brand','Depletions','CTV'];
+  private _tableHeaderRowLeft: Array<string> = ['PEOPLE', 'DEPLETIONS', 'CTV'];
+  private _tableHeaderRowRight: Array<string> = ['BRAND', 'DEPLETIONS', 'CTV'];
   private _performanceMetric: string = 'Depletions';
   private _dateRange: DateRange = getDateRangeMock();
   private _tableData: MyPerformanceTableRow[] = myPerformanceTableData;
-  private _rightTableData: MyPerformanceTableRow[] = myPerformanceRightTableData; 
+  private _rightTableData: MyPerformanceTableRow[] = myPerformanceRightTableData;
   private _totalRowData: MyPerformanceTableRow = myPerformanceTotalRowData;
   private _showOpportunities: boolean = true;
   private _skusData = myPerformanceSkusData;
@@ -40,7 +39,6 @@ export class MyPerformanceComponent {
   private _peopleTotalData = myPerformanceTotalPeopleData;
   private _accountData = myPerformanceAccountData;
   private _accountTotalData = myPerformanceTotalAccountData;
-  
   private _sortingCriteria: Array<SortingCriteria> = [{columnType: ColumnType.metricColumn0, ascending: false}];
   private _dateRanges = dateRangeDTOsMock;
 
@@ -49,7 +47,7 @@ export class MyPerformanceComponent {
     this._sortingCriteria = criteria;
   }
 
-  private handleElementClicked(row: MyPerformanceTableRow, index: number) {
+  private handleElementClicked(row: MyPerformanceTableRow, index: number): void {
     console.log(row);
     console.log(index);
   }

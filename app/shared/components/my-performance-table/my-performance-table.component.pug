@@ -9,7 +9,7 @@ div.performance-table-wrapper
     thead.col-100-pct
 
       tr.top-header.col-100-pct
-        th.left-col.sortable(colspan=1, [ngClass]="columnWidth()", (click)="sortRows(columnType.descriptionLine0)")
+        th.left-col.sortable(colspan=2, [ngClass]="columnWidth()", (click)="sortRows(columnType.descriptionLine0)")
           span {{ tableHeaderRow[0] }}
             sortable([status]="getSortStatus(columnType.descriptionLine0)")
         th.center-col.sortable(colspan=3, [ngClass]="centerColumnsWidth()") {{ tableHeaderRow[1] }} 
@@ -17,9 +17,9 @@ div.performance-table-wrapper
           span {{ tableHeaderRow[2] }}
             sortable([status]="getSortStatus(columnType.ctv)")
         th.right-col.sortable(*ngIf="showOpportunities", colspan=1, [ngClass]="columnWidth()") 
-          span Opps
+          span OPPS
       tr.sub-header.col-100-pct
-        th(colspan=1, [ngClass]="columnWidth()")
+        th(colspan=2, [ngClass]="columnWidth()")
         th.center-col.sortable(colspan=1, [ngClass]="columnWidth()", (click)="sortRows(columnType.metricColumn0)") 
           span CYTD
             sortable([status]='getSortStatus(columnType.metricColumn0)')
@@ -27,7 +27,7 @@ div.performance-table-wrapper
           span VS YA
             sortable([status]='getSortStatus(columnType.metricColumn1)')
         th.center-col.sortable(colspan=1, [ngClass]="columnWidth()", (click)="sortRows(columnType.metricColumn2)") 
-          span VS YA%
+          span VS YA %
             sortable([status]='getSortStatus(columnType.metricColumn2)')
         th.right-col(colspan=1, [ngClass]="columnWidth()")
         th.right-col(*ngIf="showOpportunities", colspan=1, [ngClass]="columnWidth()")
