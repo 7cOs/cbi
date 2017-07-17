@@ -3,7 +3,7 @@ sauce.accessKey = 4bbf4cd6-fbe7-4535-b458-05e2782cf5ce
 
 selenium.host.address = sauce:selenium3:4444:ie
 
-qa.host.address = https://compass-qa.cbrands.com
+host.address = https://compass-qa.cbrands.com
 
 # BEGIN email properties #
 send.email = false

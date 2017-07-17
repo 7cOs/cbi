@@ -24,7 +24,7 @@ public class Logout  extends LoadableComponent<Logout> {
 
   public Logout(WebDriver driver) {
     final PropertiesCache propertiesCache = PropertiesCache.getInstance();
-    webAppBaseUrl = propertiesCache.getProperty("qa.host.address");
+    webAppBaseUrl = propertiesCache.getProperty("host.address");
 
     this.driver = driver;
     PageFactory.initElements(driver, this);

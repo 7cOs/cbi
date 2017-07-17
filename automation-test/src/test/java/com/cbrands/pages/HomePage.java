@@ -86,7 +86,7 @@ public class HomePage extends LoadableComponent<HomePage>{
 
   @Override
   protected void load() {
-    driver.get(PropertiesCache.getInstance().getProperty("qa.host.address"));
+    driver.get(PropertiesCache.getInstance().getProperty("host.address"));
   }
 
   @Override
@@ -105,7 +105,7 @@ public class HomePage extends LoadableComponent<HomePage>{
   }
 
   public TargetListListingsPage navigateToTargetListListingsPage() {
-    driver.get(PropertiesCache.getInstance().getProperty("qa.host.address") + "/target-lists");
+    driver.get(PropertiesCache.getInstance().getProperty("host.address") + "/target-lists");
 
     return PageFactory.initElements(driver, TargetListListingsPage.class);
   }

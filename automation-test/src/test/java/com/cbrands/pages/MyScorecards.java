@@ -110,13 +110,13 @@ public class MyScorecards extends LoadableComponent<MyScorecards>{
     @FindBy(css = "a[href='/target-lists']")
     @CacheLookup
     private WebElement targetLists;
-    
+
     @FindAll(@FindBy(css = "md-select-value.md-select-value"))
     private List <WebElement> dropDowns;
-    
+
     @FindAll(@FindBy(css = "div.scorecard-header-left>h3.ng-binding"))
     private List <WebElement> tableLabels;
-    
+
     @FindBy(css = "div.scorecard-header-left>h3.ng-scope")
     private WebElement distributionScorecardTableLabelL03;
 
@@ -377,54 +377,54 @@ public class MyScorecards extends LoadableComponent<MyScorecards>{
 
 	@Override
 	protected void load() {
-		driver.get(PropertiesCache.getInstance().getProperty("qa.host.address"));
+		driver.get(PropertiesCache.getInstance().getProperty("host.address"));
 	}
 
 	@Override
 	protected void isLoaded() throws Error {
 		String url = driver.getCurrentUrl();
 	    assertTrue(url.contains("scorecards"));
-		
+
 	}
 
 	private void assertTrue(boolean contains) {
 		// TODO Auto-generated method stub
-		
+
 	}
-	
+
     public MyScorecards selectDepletionsTimePeriod(String value) {
     waitForVisibleFluentWait(dropDowns.get(0)).click();
     	findElement(By.cssSelector("md-option[aria-label='"+value+"']")).click();
     return this;
     }
-    
+
     public String depletionsTimePeriodValue(){
-    	return waitForVisibleFluentWait(dropDowns.get(0)).getText();     	
+    	return waitForVisibleFluentWait(dropDowns.get(0)).getText();
     }
-    
+
     public MyScorecards selectDistributionTimePeriod(String value) {
     waitForVisibleFluentWait(dropDowns.get(1)).click();
     	findElement(By.cssSelector("md-option[aria-label='"+value+"']")).click();
     return this;
     }
-    
+
     public String distributionTimePeriodValue(){
-    	return waitForVisibleFluentWait(dropDowns.get(1)).getText();     	
+    	return waitForVisibleFluentWait(dropDowns.get(1)).getText();
     }
-    
+
     public MyScorecards selectLastClosedMonth(){
     	waitForVisibleFluentWait(lastClosedMonth).click();
     	return this;
     }
-    
+
     public String depletionsScorecardTableLabel(){
     	return tableLabels.get(0).getText();
     }
-    
+
     public String distributionScorecardTableLabel(){
     	return tableLabels.get(1).getText();
     }
-    
+
     public String distributionScorecardTableLabelTextL03(){
     	return distributionScorecardTableLabelL03.getText();
     }
