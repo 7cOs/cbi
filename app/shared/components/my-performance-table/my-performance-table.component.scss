@@ -1,5 +1,7 @@
+@import '../../../assets/styles/base/variables';
+
 table {
-  border: 1px 1px 1px 0 solid #f3f3f3;
+  border: 1px 1px 1px 0 solid $gray-4;
   border-collapse: collapse;
 }
 
@@ -54,7 +56,7 @@ th {
   text-align: left;
   min-width: 120px;
   padding-left: 16px;
-  font-weight: 600;
+  font-weight: $semibold;
 }
 
 .right-col {
@@ -68,9 +70,9 @@ th {
 }
 
 .performance-table-summary {
-  background-color: #f3f3f3;
-  border-bottom: 2px solid #b4b4b4;
-  font-family: Rajdhani;
+  background-color: $gray-4;
+  border-bottom: 2px solid $gray-8;
+  font-family: $rajdhani;
   height: 70px;
   min-width: 565px;
   padding-top: 10px;
@@ -78,17 +80,17 @@ th {
 
 .total-row {
   height: 60px;
-  border-bottom: 1px solid #e7e7e7;
+  border-bottom: 1px solid $gray-10;
 }
 
 .center-col {
   text-align: center;
-  background-color: #f3f3f3;
+  background-color: $gray-4;
 }
 
 .entity-row {
   height: 60px;
-  border-bottom: 1px solid #e7e7e7;
+  border-bottom: 1px solid $gray-10;
 
   /deep/.center-col {
     text-align: center;
@@ -96,36 +98,36 @@ th {
 
   /deep/.right-col {
     &.opportunities {
-      color: #1589d1;
+      color: $blue;
       font-weight: normal;
     }
   }
 
   &:hover {
-    border-right: 1px solid #e4e4e4;
+    border-right: 1px solid $gray-14;
 
     /deep/td {
-      background-color: #F3F8FB;
+      background-color: $light-blue-4;
     }
   }
 }
 
 span.positive {
-  color: #40b76f;
+  color: $green;
 }
 
 span.negative {
-  color: #e55053;
+  color: $red;
 }
 
 span.link-out {
-  color: #1589d1 !important;
+  color: $blue;
 }
 
 td, th {
   font-family: WorkSans;
   font-size: 12px;
-  font-weight: 600;
+  font-weight: $semibold;
   cursor: pointer;
 }
 
@@ -134,13 +136,13 @@ td, th {
   height: 30px;
 
   th {
-    font-family: Rajdhani;
+    font-family: $rajdhani;
     font-size: 11px;
     font-weight: bold;
     letter-spacing: 1px;
     text-align: center;
     vertical-align: center;
-    color: #4a4a4a;
+    color: $gray-1;
 
     &.right-col, &.center-col {
       vertical-align: center;
@@ -155,15 +157,15 @@ td, th {
 
 .sub-header {
   height: 30px;
-  border-bottom: 1px solid #e7e7e7;
+  border-bottom: 1px solid $gray-10;
 
   th {
-    font-family: Rajdhani;
+    font-family: $rajdhani;
     font-size: 10px;
-    font-weight: 600;
+    font-weight: $semibold;
     letter-spacing: 0.9px;
     text-align: center;
-    color: #4a4a4a;
+    color: $gray-1;
   }
 }
 
@@ -172,17 +174,17 @@ td, th {
   font-size: 24px;
   font-weight: 300;
   text-align: left;
-  color: #4a4a4a;
+  color: $gray-1;
   padding-left: 16px;
 }
 
 .summary-date-range {
-  font-family: Rajdhani;
+  font-family: $rajdhani;
   font-size: 11px;
-  font-weight: 600;
+  font-weight: $semibold;
   letter-spacing: 1px;
   text-align: left;
-  color: #4a4a4a;
+  color: $gray-1;
   padding-left: 16px;
 }
 

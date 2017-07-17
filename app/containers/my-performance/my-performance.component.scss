@@ -1,3 +1,5 @@
+@import '../../assets/styles/base/variables';
+
 my-performance-table {
   display: inline-block;
   width: 50%;
@@ -5,19 +7,19 @@ my-performance-table {
   vertical-align: top;
 
   &.right {
-    box-shadow: -10px 0 20px #e4e4e4;
-    -webkit-box-shadow: -10px 0 20px #e4e4e4;
-    -moz-box-shadow: -10px 0 20px #e4e4e4;
+    box-shadow: -10px 0 20px $gray-14;
+    -webkit-box-shadow: -10px 0 20px $gray-14;
+    -moz-box-shadow: -10px 0 20px $gray-14;
   }
 
   &.left {
 
     /deep/tr.total-row { 
-      background-color: #032e60;
-      color: #e7e7e7;
+      background-color: $dark-blue-2;
+      color: $gray-10;
 
       /deep/.center-col {
-        background-color: #345070;
+        background-color: $dark-blue-7;
       }
     }
   }
@@ -26,7 +28,7 @@ my-performance-table {
   &.view-type.brands {
 
     /deep/td.left-col {
-      color: #1589d1;
+      color: $blue;
       font-weight: normal;
     }
   }
@@ -37,8 +39,8 @@ my-performance-table {
     /deep/tr.total-row {
 
       /deep/td.left-col {
-        font-weight: 600;
-        color: #1589d1; 
+        font-weight: $semibold;
+        color: $blue; 
       }      
     }
 
@@ -47,7 +49,7 @@ my-performance-table {
       /deep/td.left-col {
 
         /deep/span {
-          color: #1589d1;
+          color: $blue;
           font-weight: normal;
           padding-left: 12px;
         }
@@ -67,8 +69,8 @@ my-performance-table {
         }
 
         /deep/span.description-line-1 {
-          font-family: "Rajdhani", Arial, sans-serif;
-          font-weight: 600;
+          font-family: $rajdhani;
+          font-weight: $semibold;
           font-size: 0.7rem;
           text-transform: uppercase;
           letter-spacing: 1px;
@@ -83,7 +85,7 @@ my-performance-table {
       /deep/td.left-col {
 
         /deep/span {
-          color: #1589d1;
+          color: $blue;
           font-weight: normal;
           padding-left: 12px;
         }
@@ -103,8 +105,8 @@ my-performance-table {
         }
 
         /deep/span.description-line-1 {
-          font-family: "Rajdhani", Arial, sans-serif;
-          font-weight: 600;
+          font-family: $rajdhani;
+          font-weight: $semibold;
           font-size: 0.7rem;
           text-transform: uppercase;
           letter-spacing: 1px;
@@ -122,13 +124,13 @@ my-performance-table {
         }
 
         /deep/span.description-line-1 {
-          font-family: "Rajdhani", Arial, sans-serif;
-          font-weight: 600;
+          font-family: $rajdhani;
+          font-weight: $semibold;
           font-size: 0.7rem;
           text-transform: uppercase;
           letter-spacing: 1px;
           outline: 0; 
-          color: #1589d1;
+          color: $blue;
         }
       }
     }
