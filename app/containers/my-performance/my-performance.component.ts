@@ -37,7 +37,7 @@ export class MyPerformanceComponent implements OnDestroy {
       case 'metric':
         this.store.dispatch({type: SET_METRIC, payload: event.filterValue});
         break;
-      case 'timeperiod':
+      case 'timePeriod':
         this.store.dispatch({type: SET_TIME_PERIOD, payload: event.filterValue});
         break;
       case 'premiseType':
