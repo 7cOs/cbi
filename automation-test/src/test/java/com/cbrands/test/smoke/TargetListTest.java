@@ -4,9 +4,7 @@ import com.cbrands.TestUser;
 import com.cbrands.pages.HomePage;
 import com.cbrands.pages.Login;
 import com.cbrands.pages.Logout;
-import com.cbrands.pages.targetList.TargetList;
 import com.cbrands.pages.targetList.TargetListListingsPage;
-import org.openqa.selenium.support.PageFactory;
 import org.testng.Assert;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
@@ -37,7 +35,7 @@ public class TargetListTest extends BaseTestCase {
 
   @AfterMethod
   public void tearDown() {
-    logout.logoutViaUrl();
+    logout.goToPage();
   }
 
   @Test(dataProvider = "targetListData", description = "Create a new Target List")

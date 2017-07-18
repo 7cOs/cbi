@@ -44,7 +44,7 @@ public class NotesTest extends BaseTestCase {
 
   @AfterMethod
   public void tearDown() {
-    logout.logoutViaUrl();
+    logout.goToPage();
   }
 
   @Test(description = "Create a new Note", dataProvider = "NoteData")

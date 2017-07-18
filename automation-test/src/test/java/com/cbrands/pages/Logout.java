@@ -34,14 +34,4 @@ public class Logout  extends TestNGBasePage {
     return logoutMessage.isDisplayed();
   }
 
-  public void logoutViaUrl() {
-    load();
-
-    log.info("Logging out...");
-
-    Assert.assertTrue(isLoaded(), "Failure logging out.\n\n");
-
-    log.info("Logout successful.\n\n");
-  }
-
 }
