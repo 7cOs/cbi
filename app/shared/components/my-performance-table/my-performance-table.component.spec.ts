@@ -16,6 +16,7 @@ import { sortingCriteriaMock } from '../../../models/my-performance-table-sortin
 
 class MockMyPerformanceTableRowComponent {
   @Input() rowData: MyPerformanceTableRow;
+  @Input() showOpportunities: boolean;
 }
 
 describe('MyPerformanceTableComponent', () => {
@@ -54,11 +55,10 @@ describe('MyPerformanceTableComponent', () => {
 
       const mockElements = fixture.debugElement
         .queryAll(By.directive(MockMyPerformanceTableRowComponent));
-      // The index 0 contains an empty component for whatever reason
-      const rowComponent0 = mockElements[1]
+      const rowComponent0 = mockElements[0]
         .injector
         .get(MockMyPerformanceTableRowComponent) as MockMyPerformanceTableRowComponent;
-      const rowComponent1 = mockElements[2]
+      const rowComponent1 = mockElements[1]
         .injector
         .get(MockMyPerformanceTableRowComponent) as MockMyPerformanceTableRowComponent;
 
@@ -100,14 +100,13 @@ describe('MyPerformanceTableComponent', () => {
 
       const mockElements = fixture.debugElement
         .queryAll(By.directive(MockMyPerformanceTableRowComponent));
-      // The index 0 contains an empty component for whatever reason
-      const rowComponent0 = mockElements[1]
+      const rowComponent0 = mockElements[0]
         .injector
         .get(MockMyPerformanceTableRowComponent) as MockMyPerformanceTableRowComponent;
-      const rowComponent1 = mockElements[2]
+      const rowComponent1 = mockElements[1]
         .injector
         .get(MockMyPerformanceTableRowComponent) as MockMyPerformanceTableRowComponent;
-      const rowComponent2 = mockElements[3]
+      const rowComponent2 = mockElements[2]
         .injector
         .get(MockMyPerformanceTableRowComponent) as MockMyPerformanceTableRowComponent;
 
@@ -137,11 +136,10 @@ describe('MyPerformanceTableComponent', () => {
 
       const mockElements = fixture.debugElement
         .queryAll(By.directive(MockMyPerformanceTableRowComponent));
-      // The index 0 contains an empty component for whatever reason
-      const rowComponent0 = mockElements[1]
+      const rowComponent0 = mockElements[0]
         .injector
         .get(MockMyPerformanceTableRowComponent) as MockMyPerformanceTableRowComponent;
-      const rowComponent1 = mockElements[2]
+      const rowComponent1 = mockElements[1]
         .injector
         .get(MockMyPerformanceTableRowComponent) as MockMyPerformanceTableRowComponent;
 
@@ -156,7 +154,5 @@ describe('MyPerformanceTableComponent', () => {
           && rowComponent0.rowData[firstColumnType] > rowComponent1.rowData[firstColumnType];
       expect(sortingRespected).toBeTruthy();
     });
-
   });
-
 });
