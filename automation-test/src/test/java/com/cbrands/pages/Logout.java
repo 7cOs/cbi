@@ -8,12 +8,11 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.How;
 import org.openqa.selenium.support.PageFactory;
-import org.openqa.selenium.support.ui.LoadableComponent;
 import org.testng.Assert;
 
 import static com.cbrands.helper.SeleniumUtils.waitForVisibleFluentWait;
 
-public class Logout  extends LoadableComponent<Logout> {
+public class Logout  extends TestNGBasePage {
   private Log log = LogFactory.getLog(Logout.class);
 
   private final WebDriver driver;
@@ -36,8 +35,8 @@ public class Logout  extends LoadableComponent<Logout> {
   }
 
   @Override
-  protected void isLoaded() throws Error {
-    Assert.assertTrue(isLogoutMessageDisplayed());
+  public boolean isLoaded() throws Error {
+    return isLogoutMessageDisplayed();
   }
 
   public void logoutViaUrl() {
