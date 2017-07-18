@@ -27,7 +27,7 @@ public class LoginTest extends BaseTestCase {
   @AfterMethod
   public void tearDown() {
     logout.logoutViaUrl();
-    Assert.assertTrue(logout.isOnLogoutPage(), "Failure logging out.\n");
+    Assert.assertTrue(logout.isLoaded(), "Failure logging out.\n");
   }
 
   @Test(dataProvider = "userCredentials", description = "Testing basic login and logout")

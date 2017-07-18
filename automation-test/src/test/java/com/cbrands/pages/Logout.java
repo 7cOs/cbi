@@ -36,7 +36,8 @@ public class Logout  extends TestNGBasePage {
 
   @Override
   public boolean isLoaded() throws Error {
-    return isLogoutMessageDisplayed();
+    waitForVisibleFluentWait(logoutMessage);
+    return logoutMessage.isDisplayed();
   }
 
   public void logoutViaUrl() {
@@ -44,18 +45,9 @@ public class Logout  extends TestNGBasePage {
 
     log.info("Logging out...");
 
-    Assert.assertTrue(isLogoutMessageDisplayed(), "Failure logging out.\n\n");
+    Assert.assertTrue(isLoaded(), "Failure logging out.\n\n");
 
     log.info("Logout successful.\n\n");
-  }
-
-  public boolean isOnLogoutPage() {
-    return isLogoutMessageDisplayed();
-  }
-
-  private boolean isLogoutMessageDisplayed() {
-    waitForVisibleFluentWait(logoutMessage);
-    return logoutMessage.isDisplayed();
   }
 
 }
