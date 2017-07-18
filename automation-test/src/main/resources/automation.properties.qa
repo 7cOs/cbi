@@ -1,0 +1,17 @@
+sauce.userName = brandonbailey
+sauce.accessKey = 4bbf4cd6-fbe7-4535-b458-05e2782cf5ce
+
+selenium.host.address = sauce:selenium3:4444:ie
+
+host.address = https://compass-qa.cbrands.com
+
+# BEGIN email properties #
+send.email = false
+send.email.to = ediel@slalom.com
+
+# smtp properties
+smtp.address = smtp.gmail.com
+smtp.userid = cbrandqa@gmail.com
+smtp.password = Deloitte1!
+
+# END email properties #
