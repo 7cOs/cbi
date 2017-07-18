@@ -99,7 +99,6 @@ describe('My Performance Filter Component', () => {
     it('should emit value outputed by metric child component select dropdown', () => {
       componentInstance.filterState = initialStateMock;
       componentInstance.dateRanges = dateRangeStateMock;
-      fixture.detectChanges();
 
       componentInstance.onFilterChange.subscribe((value: any) => {
         expect(value).toEqual({ filterType: 'metric', filterValue: 'DEPLETIONS' });

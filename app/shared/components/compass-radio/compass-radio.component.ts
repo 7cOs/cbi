@@ -14,13 +14,7 @@ export class CompassRadioComponent {
   @Input() model: string;
   @Input() title?: string;
   @Input() valueKey: string;
-  @Input() set options(optionCollection: Array<any>) {
-    this.optionData = optionCollection;
-  }
-
-  private optionData: Array<any> = [];
-
-  constructor() {}
+  @Input() options: Array<any>;
 
   private radioClicked(option: any): void { // tslint:disable-line:no-unused-variable
     this.onRadioClicked.emit(option[this.valueKey]);

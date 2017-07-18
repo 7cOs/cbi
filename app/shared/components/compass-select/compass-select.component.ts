@@ -23,8 +23,6 @@ export class CompassSelectComponent {
   private isSelectOpen: boolean = false;
   private optionData: any[] = [];
 
-  constructor() {}
-
   private initSubValue(): void {
     this.optionData.forEach(option => {
       if (option[this.valueKey] === this.model) this.currentSubValue = option[this.subDisplayKey];
