@@ -13,7 +13,7 @@ public class NotesTest extends BaseTestCase {
   private static String current_time_stamp = new java.text.SimpleDateFormat("MM.dd.yyyy HH:mm:ss").format(new java.util
     .Date());
 
-  private Logout logout;
+  private LogoutPage logoutPage;
   private NotesModal notesModal;
 
   @BeforeMethod
@@ -22,7 +22,7 @@ public class NotesTest extends BaseTestCase {
     final String storeAccountName = "Taco Joint";
 
     final Login login = new Login(driver);
-    logout = new Logout(driver);
+    logoutPage = new LogoutPage(driver);
 
     log.info("\nLoading webpage...");
     driver.get(webAppBaseUrl);
@@ -44,7 +44,7 @@ public class NotesTest extends BaseTestCase {
 
   @AfterMethod
   public void tearDown() {
-    logout.goToPage();
+    logoutPage.goToPage();
   }
 
   @Test(description = "Create a new Note", dataProvider = "NoteData")

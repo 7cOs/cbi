@@ -7,18 +7,17 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.How;
 import org.openqa.selenium.support.PageFactory;
-import org.testng.Assert;
 
 import static com.cbrands.helper.SeleniumUtils.waitForVisibleFluentWait;
 
-public class Logout  extends TestNGBasePage {
-  private Log log = LogFactory.getLog(Logout.class);
+public class LogoutPage extends TestNGBasePage {
+  private Log log = LogFactory.getLog(LogoutPage.class);
   private final WebDriver driver;
 
   @FindBy(how = How.XPATH, using = "//*[contains(., 'Logged Out')]")
   private WebElement logoutMessage;
 
-  public Logout(WebDriver driver) {
+  public LogoutPage(WebDriver driver) {
     this.driver = driver;
     PageFactory.initElements(driver, this);
   }
