@@ -192,3 +192,118 @@ div.ctv {
   display: inline-block;
   vertical-align: middle;
 }
+
+.view-type {
+
+  // brands
+  &.view-type-0 {
+
+    /deep/td.left-col {
+      color: $blue;
+      font-weight: normal;
+    }
+  }
+
+  // skus 
+  &.view-type-1 {
+
+    /deep/tr.total-row {
+
+      /deep/td.left-col {
+        font-weight: $semibold;
+        color: $blue; 
+      }      
+    }
+
+    /deep/tr.entity-row {
+
+      /deep/td.left-col {
+
+        /deep/span {
+          color: $blue;
+          font-weight: normal;
+          padding-left: 12px;
+        }
+      }
+    }
+  }
+
+  // people
+  &.view-type-3 {
+
+    /deep/tr.total-row {
+  
+      /deep/td.left-col {
+
+        /deep/div.description-line-1 {
+          padding-top: 5px;
+        }
+
+        /deep/span.description-line-1 {
+          font-family: $rajdhani;
+          font-weight: $semibold;
+          font-size: 0.7rem;
+          text-transform: uppercase;
+          letter-spacing: 1px;
+          outline: 0; 
+        }
+      }
+
+    }
+
+    /deep/tr.entity-row {
+
+      /deep/td.left-col {
+
+        /deep/span {
+          color: $blue;
+          font-weight: normal;
+          padding-left: 12px;
+        }
+      }
+    }
+  }
+
+  // distributors/accounts 
+  &.view-type-4, &.view-type-5 {
+
+    /deep/tr.total-row {
+  
+      /deep/td.left-col {
+
+        /deep/div.description-line-1 {
+          padding-top: 5px;
+        }
+
+        /deep/span.description-line-1 {
+          font-family: $rajdhani;
+          font-weight: $semibold;
+          font-size: 0.7rem;
+          text-transform: uppercase;
+          letter-spacing: 1px;
+          outline: 0; 
+        }
+      }
+    }
+
+    /deep/tr.entity-row {
+
+      /deep/td.left-col {
+
+        /deep/div.description-line-1 {
+          padding-top: 5px;
+        }
+
+        /deep/span.description-line-1 {
+          font-family: $rajdhani;
+          font-weight: $semibold;
+          font-size: 0.7rem;
+          text-transform: uppercase;
+          letter-spacing: 1px;
+          outline: 0; 
+          color: $blue;
+        }
+      }
+    }
+  }
+}

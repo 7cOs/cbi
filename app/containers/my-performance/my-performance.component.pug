@@ -9,12 +9,13 @@ div
     [showOpportunities]="false",
     (onSortingCriteriaChanged)="handleSortRows($event)")
 
-  my-performance-table.right.view-type.brands(
+  my-performance-table.right(
     [tableData]="_rightTableData", 
     [tableHeaderRow]="_tableHeaderRowRight",
     [performanceMetric]="'Product Snapshot'",
     [sortingCriteria]="_sortingCriteria",
     [showOpportunities]="_showOpportunities",
+    [viewType]="viewType.brands",
     (onSortingCriteriaChanged)="handleSortRows($event)")
 
 div(style="margin-top: 100px;")
@@ -28,17 +29,18 @@ div(style="margin-top: 100px;")
     [showOpportunities]="false",
     (onSortingCriteriaChanged)="handleSortRows($event)")
 
-  my-performance-table.right.view-type.skus(
+  my-performance-table.right(
     [tableData]="_skusData", 
     [totalRow]="_skuTotalData",
     [tableHeaderRow]="_tableHeaderRowRight",
     [performanceMetric]="'Product Snapshot'",
     [sortingCriteria]="_sortingCriteria",
     [showOpportunities]="false",
+    [viewType]="viewType.skus",
     (onSortingCriteriaChanged)="handleSortRows($event)")
 
 div(style="margin-top: 100px;")
-  my-performance-table.left.view-type.people(
+  my-performance-table.left(
     [tableData]="_peopleData", 
     [dateRange]="_dateRange", 
     [tableHeaderRow]="_tableHeaderRowLeft",
@@ -46,19 +48,21 @@ div(style="margin-top: 100px;")
     [totalRow]="_peopleTotalData",
     [sortingCriteria]="_sortingCriteria",
     [showOpportunities]="false",
+    [viewType]="viewType.people",
     (onSortingCriteriaChanged)="handleSortRows($event)")
 
-  my-performance-table.right.view-type.skus(
+  my-performance-table.right(
     [tableData]="_skusData", 
     [totalRow]="_skuTotalData",
     [tableHeaderRow]="_tableHeaderRowRight",
     [performanceMetric]="'Product Snapshot'",
     [sortingCriteria]="_sortingCriteria",
     [showOpportunities]="true",
+    [viewType]="viewType.skus",
     (onSortingCriteriaChanged)="handleSortRows($event)")
 
 div(style="margin-top: 100px;")
-  my-performance-table.left.view-type.accounts(
+  my-performance-table.left(
     [tableData]="_accountData", 
     [dateRange]="_dateRange", 
     [tableHeaderRow]="_tableHeaderRowLeft",
@@ -66,12 +70,14 @@ div(style="margin-top: 100px;")
     [totalRow]="_accountTotalData",
     [sortingCriteria]="_sortingCriteria",
     [showOpportunities]="false",
+    [viewType]="viewType.accounts",
     (onSortingCriteriaChanged)="handleSortRows($event)")
 
-  my-performance-table.right.view-type.brands(
+  my-performance-table.right(
     [tableData]="_rightTableData",
     [tableHeaderRow]="_tableHeaderRowRight",
     [performanceMetric]="'Product Snapshot'",
     [sortingCriteria]="_sortingCriteria",
     [showOpportunities]="false",
+    [viewType]="viewType.brands",
     (onSortingCriteriaChanged)="handleSortRows($event)")

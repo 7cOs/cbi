@@ -1,5 +1,5 @@
-// tslint:disable
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+// tslint:disable:no-unused-variable
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 
 import { ColumnType } from '../../../enums/column-type.enum';
 import { DateRange } from '../../../models/date-range.model';
@@ -19,11 +19,7 @@ export class MyPerformanceTableComponent {
 
   @Input()
   set sortingCriteria(criteria: Array<SortingCriteria>) {
-    this._sortingCriteria = criteria;
-    this.updateSortingFunction();
-    if (this._tableData && this._tableData.length) {
-      this._tableData = this._tableData.sort(this.sortingFunction);
-    }
+    this.applySortingCriteria(criteria);
   }
 
   @Input()
@@ -34,16 +30,17 @@ export class MyPerformanceTableComponent {
     }
   }
 
+  @Input() dateRange: DateRange;
+  @Input() performanceMetric: string;
+  @Input() showOpportunities: boolean = true;
   @Input() tableHeaderRow: Array<string>;
   @Input() totalRow: MyPerformanceTableRow;
-  @Input() showOpportunities: boolean;
-
+  @Input() viewType: ViewType;
 
   private sortingFunction: (elem0: MyPerformanceTableRow, elem1: MyPerformanceTableRow) => number;
   private _sortingCriteria: Array<SortingCriteria> = null;
   private _tableData: Array<MyPerformanceTableRow>;
   private columnType = ColumnType; // for use in template
-  private viewType = ViewType; // for use in template
 
   private updateSortingFunction() {
     if (this._sortingCriteria.length) {
@@ -74,12 +71,21 @@ export class MyPerformanceTableComponent {
     this.onElementClicked.emit({row: row, index: index});
   }
 
+  private applySortingCriteria(criteria: SortingCriteria[]) {
+    this._sortingCriteria = criteria;
+    this.updateSortingFunction();
+    if (this._tableData && this._tableData.length) {
+      this._tableData = this._tableData.sort(this.sortingFunction);
+    }
+  }
+
   private sortRows(colType: ColumnType) {
     // keeping this one-dimensional for now
     const ascending = this._sortingCriteria[0].columnType === colType
       ? !this._sortingCriteria[0].ascending
       : colType === ColumnType.descriptionLine0;
-    this.onSortingCriteriaChanged.emit([<SortingCriteria>{columnType: colType, ascending: ascending}]);
+    const criteria = [<SortingCriteria>{columnType: colType, ascending: ascending}];
+    this.applySortingCriteria(criteria);
   }
 
   private getSortStatus(columnType: ColumnType): SortStatus {

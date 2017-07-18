@@ -6,6 +6,7 @@ import { DateRange } from '../../models/date-range.model';
 import { getDateRangeMock } from '../../models/date-range.model.mock';
 import { MyPerformanceTableRow } from '../../models/my-performance-table-row.model';
 import { SortingCriteria } from '../../models/sorting-criteria.model';
+import { ViewType } from '../../enums/view-type.enum';
 
 // mocks
 import { dateRangeDTOsMock } from '../../models/date-range-dto-collection.model.mock';
@@ -41,6 +42,7 @@ export class MyPerformanceComponent {
   private _accountTotalData = myPerformanceTotalAccountData;
   private _sortingCriteria: Array<SortingCriteria> = [{columnType: ColumnType.metricColumn0, ascending: false}];
   private _dateRanges = dateRangeDTOsMock;
+  private viewType = ViewType;
 
   private handleSortRows(criteria: SortingCriteria[]): void {
     console.log(criteria);
