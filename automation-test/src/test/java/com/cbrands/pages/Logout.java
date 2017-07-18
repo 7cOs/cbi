@@ -1,6 +1,5 @@
 package com.cbrands.pages;
 
-import com.cbrands.helper.PropertiesCache;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openqa.selenium.WebDriver;
@@ -14,17 +13,12 @@ import static com.cbrands.helper.SeleniumUtils.waitForVisibleFluentWait;
 
 public class Logout  extends TestNGBasePage {
   private Log log = LogFactory.getLog(Logout.class);
-
   private final WebDriver driver;
-  private final String webAppBaseUrl;
 
   @FindBy(how = How.XPATH, using = "//*[contains(., 'Logged Out')]")
   private WebElement logoutMessage;
 
   public Logout(WebDriver driver) {
-    final PropertiesCache propertiesCache = PropertiesCache.getInstance();
-    webAppBaseUrl = propertiesCache.getProperty("host.address");
-
     this.driver = driver;
     PageFactory.initElements(driver, this);
   }

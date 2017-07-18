@@ -1,5 +1,6 @@
 package com.cbrands.pages;
 
+import com.cbrands.helper.PropertiesCache;
 import org.testng.Assert;
 
 /**
@@ -7,7 +8,8 @@ import org.testng.Assert;
  *
  * Created by ediel on 7/18/17.
  */
-public abstract class TestNGBasePage<T> {
+public abstract class TestNGBasePage {
+  protected static final String webAppBaseUrl = PropertiesCache.getInstance().getProperty("host.address");
 
 	/**
    * This method safely loads the page that the page object class represents and asserts that the page is loaded. It
