@@ -45,7 +45,6 @@ export class MyPerformanceComponent {
   private viewType = ViewType;
 
   private handleSortRows(criteria: SortingCriteria[]): void {
-    console.log(criteria);
     this._sortingCriteria = criteria;
   }
 
