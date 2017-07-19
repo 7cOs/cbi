@@ -8,8 +8,6 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openqa.selenium.Platform;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.ie.InternetExplorerDriver;
 import org.openqa.selenium.remote.CapabilityType;
 import org.openqa.selenium.remote.DesiredCapabilities;
@@ -46,20 +44,7 @@ public class WebDriverFactory implements SauceOnDemandSessionIdProvider, SauceOn
   }
 
   private static void setSauceWebDriver() throws MalformedURLException {
-    final String driverType = System.getProperty("browser");
-
-    DesiredCapabilities capabilities = null;
-    if (BrowserType.ie.name().equals(driverType)) {
-      capabilities = DesiredCapabilities.internetExplorer();
-      capabilities.setCapability(CapabilityType.PLATFORM, Platform.WIN8_1);
-      capabilities.setCapability(InternetExplorerDriver.INTRODUCE_FLAKINESS_BY_IGNORING_SECURITY_DOMAINS, true);
-      capabilities.setCapability(InternetExplorerDriver.REQUIRE_WINDOW_FOCUS, true);
-      capabilities.setCapability(InternetExplorerDriver.ENABLE_ELEMENT_CACHE_CLEANUP, true);
-      capabilities.setCapability(InternetExplorerDriver.IE_ENSURE_CLEAN_SESSION, true);
-      capabilities.setCapability("name", "Automated Functional Test");
-    } else if (BrowserType.chrome.name().equals(driverType)) {
-      capabilities = DesiredCapabilities.chrome();
-    }
+    final DesiredCapabilities capabilities = getSauceCapabilitiesByBrowser(System.getProperty("browser"));
     SauceHelpers.addSauceConnectTunnelId(capabilities);
 
     // Launch remote browser and set it as the current thread
@@ -72,6 +57,31 @@ public class WebDriverFactory implements SauceOnDemandSessionIdProvider, SauceOn
     String id = ((RemoteWebDriver) getWebDriver()).getSessionId().toString();
     sessionId.set(id);
     log.info("Targeted Host:" + BrowserType.sauce.name());
+  }
+
+  private static DesiredCapabilities getSauceCapabilitiesByBrowser(String driverType) {
+    DesiredCapabilities capabilities = null;
+
+    if (BrowserType.ie.name().equals(driverType)) {
+      capabilities = getSauceCapabilitiesForIE();
+    } else if (BrowserType.chrome.name().equals(driverType)) {
+      capabilities = DesiredCapabilities.chrome();
+    }
+
+    return capabilities;
+  }
+
+  private static DesiredCapabilities getSauceCapabilitiesForIE() {
+    final DesiredCapabilities capabilities = DesiredCapabilities.internetExplorer();
+
+    capabilities.setCapability(CapabilityType.PLATFORM, Platform.WIN8_1);
+    capabilities.setCapability(InternetExplorerDriver.INTRODUCE_FLAKINESS_BY_IGNORING_SECURITY_DOMAINS, true);
+    capabilities.setCapability(InternetExplorerDriver.REQUIRE_WINDOW_FOCUS, true);
+    capabilities.setCapability(InternetExplorerDriver.ENABLE_ELEMENT_CACHE_CLEANUP, true);
+    capabilities.setCapability(InternetExplorerDriver.IE_ENSURE_CLEAN_SESSION, true);
+    capabilities.setCapability("name", "Automated Functional Test");
+
+    return capabilities;
   }
 
   private static void setRemoteWebDriver(String driverName) {
