@@ -58,11 +58,24 @@ section.landing-page
         div(column="8 +4")
           p.accent.action-item.go-arrow #[a(href="#" ui-sref="scorecards") Show Details]
       section(column="4 +1")
-        .announcement-widget
-          img(src="../../assets/img/icons/announcement-help.svg" width="80" height="80")
-          h2 Welcome to Compass! Need Help?
-          p Check out the Compass user guide and job aides! These will tell you more about the enhanced version of Compass and how to get started!
-          p.accent.action-item #[a(target="_blank" href="https://constel1.sharepoint.com/sites/goldnetwork/SitePages/Learning%20and%20Development.aspx" lass="go-arrow" analytics-on="click" analytics-event="Help Feature Click" analytics-category="Help" analytics-label="View all videos & tutorials") View All Tutorials]
+        compass-card(
+          [title]="'Compass Enhancements'",
+          [main-action]="'View job aides'",
+          [icon-visible]="true",
+          (on-main-action-clicked)="l.openViewJobAides()"
+        )
+          p Welcome to Compass! Need Help?
+          p Have you heard about the latest Compass enhancements? Here's what's new:
+            ul
+              li Additional filter options within the "Opportunities" search tool
+                ul
+                  li Simple Distribution
+                  li Authorization Type (mandated vs. authorized-optional sell-in)
+                  li Store Format (Hispanic vs. General Market)
+                  li Store Status (Sold vs. Unsold)
+                li Access to new sales reports (under "My Performance" > "More Reports")
+              li ...and more!
+          p Want to learn how to get the most out of Compass? Check out the Compass user guide and job aides.
     div(row)
       section.my-performance(column="7")
         target

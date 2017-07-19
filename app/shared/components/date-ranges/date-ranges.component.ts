@@ -7,7 +7,7 @@ import { DateRangeService } from '../../../services/date-range.service';
 @Component({
   selector: 'date-ranges',
   template: require('./date-ranges.component.pug'),
-  styles: [require('./date-ranges.component.scss').toString()]
+  styles: [require('./date-ranges.component.scss')]
 })
 
 export class DateRangeComponent implements OnInit {
