@@ -5,7 +5,7 @@ import { Subscription } from 'rxjs/Subscription';
 import { AppState } from '../../state/reducers/root.reducer';
 import { DateRangesState } from '../../state/reducers/date-ranges.reducer';
 import { MyPerformanceFilter } from '../../models/my-performance-filter.model';
-import { SET_DISTRIBUTION_TYPE, SET_PREMISE_TYPE, SET_METRIC, SET_TIME_PERIOD } from '../../state/actions/my-performance-filter.action';
+import * as MyPerformanceFilterActions from '../../state/actions/my-performance-filter.action';
 
 @Component({
   selector: 'myPerformance',
@@ -34,21 +34,25 @@ export class MyPerformanceComponent implements OnDestroy {
   }
 
   private filterOptionSelected(event: any) { // tslint:disable-line:no-unused-variable
+    let actionType;
+
     switch (event.filterType) {
       case 'metric':
-        this.store.dispatch({type: SET_METRIC, payload: event.filterValue});
+        actionType = MyPerformanceFilterActions.SET_METRIC;
         break;
       case 'timePeriod':
-        this.store.dispatch({type: SET_TIME_PERIOD, payload: event.filterValue});
+        actionType = MyPerformanceFilterActions.SET_TIME_PERIOD;
         break;
       case 'premiseType':
-        this.store.dispatch({type: SET_PREMISE_TYPE, payload: event.filterValue});
+        actionType = MyPerformanceFilterActions.SET_PREMISE_TYPE;
         break;
       case 'distributionType':
-        this.store.dispatch({type: SET_DISTRIBUTION_TYPE, payload: event.filterValue});
+        actionType = MyPerformanceFilterActions.SET_DISTRIBUTION_TYPE;
         break;
       default:
         throw new Error(`My Performance Component: Filtertype of ${event.filterType} does not exist!`);
     }
+
+    this.store.dispatch({type: actionType, payload: event.filterValue});
   }
 }
