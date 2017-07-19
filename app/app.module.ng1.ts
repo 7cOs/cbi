@@ -10,7 +10,7 @@ import { DateRangeComponent } from './shared/components/date-ranges/date-ranges.
 import { DateRangeService } from './services/date-range.service';
 import { GreetingComponent } from './shared/components/greeting/greeting.component';
 import { MyPerformanceComponent } from './containers/my-performance/my-performance.component';
-import { NotificationsComponent } from './shared/components/notifications/notifications.component';
+import { NotificationsComponent } from './shared/components/Notifications/notifications.component';
 import { SettingsComponent } from './shared/components/settings/settings.component';
 
 (<any>window).CryptoJS = require('crypto-js');
