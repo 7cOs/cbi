@@ -44,24 +44,15 @@ public class WebDriverFactory implements SauceOnDemandSessionIdProvider, SauceOn
     } else if (driverName.startsWith(BrowserType.remote.name())) {
       setRemoteWebDriver(driverName);
     } else if (driverName.startsWith(BrowserType.sauce.name())) {
-      setSauceWebDriver(driverName);
+      setSauceWebDriver();
     }
     log.info("Connected to Selenium Server. Session ID: " + sessionId.get());
     Validate.notNull(webDriver.get(), "Driver could be found by name:" + driverName);
     return webDriver.get();
   }
 
-  private static void setSauceWebDriver(String driverName) throws MalformedURLException {
-    String[] params = driverName.split(":");
-    Validate.isTrue(
-      params.length == 4,
-      "Remote driver is not right, accept format is \"remote:localhost:4444:firefox\", but the input is\""
-        + driverName + "\""
-    );
-
-    String remoteHost = params[1];
-    String remotePort = params[2];
-    String driverType = params[3];
+  private static void setSauceWebDriver() throws MalformedURLException {
+    final String driverType = System.getProperty("browser");
 
     DesiredCapabilities capabilities = null;
     if (BrowserType.ie.name().equals(driverType)) {
