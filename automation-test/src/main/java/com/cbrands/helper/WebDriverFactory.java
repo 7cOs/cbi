@@ -63,10 +63,19 @@ public class WebDriverFactory implements SauceOnDemandSessionIdProvider, SauceOn
     DesiredCapabilities capabilities;
 
     if (BrowserType.chrome.name().equals(driverType)) {
-      capabilities = DesiredCapabilities.chrome();
+      capabilities = getSauceCapabilitiesForChrome();
     } else {
       capabilities = getSauceCapabilitiesForIE();
     }
+
+    return capabilities;
+  }
+
+  private static DesiredCapabilities getSauceCapabilitiesForChrome() {
+    final DesiredCapabilities capabilities = DesiredCapabilities.chrome();
+
+    capabilities.setCapability(CapabilityType.PLATFORM, Platform.WIN8_1);
+    capabilities.setCapability("name", "Automated Functional Test - Chrome");
 
     return capabilities;
   }
@@ -79,7 +88,7 @@ public class WebDriverFactory implements SauceOnDemandSessionIdProvider, SauceOn
     capabilities.setCapability(InternetExplorerDriver.REQUIRE_WINDOW_FOCUS, true);
     capabilities.setCapability(InternetExplorerDriver.ENABLE_ELEMENT_CACHE_CLEANUP, true);
     capabilities.setCapability(InternetExplorerDriver.IE_ENSURE_CLEAN_SESSION, true);
-    capabilities.setCapability("name", "Automated Functional Test");
+    capabilities.setCapability("name", "Automated Functional Test - IE");
 
     return capabilities;
   }
