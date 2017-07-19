@@ -26,6 +26,9 @@ import { myPerformanceTableData,
   styles: [require('./my-performance.component.scss')]
 })
 export class MyPerformanceComponent {
+  private viewType = ViewType;
+
+  // mocks
   private _tableHeaderRowLeft: Array<string> = ['PEOPLE', 'DEPLETIONS', 'CTV'];
   private _tableHeaderRowRight: Array<string> = ['BRAND', 'DEPLETIONS', 'CTV'];
   private _performanceMetric: string = 'Depletions';
@@ -34,15 +37,7 @@ export class MyPerformanceComponent {
   private _rightTableData: MyPerformanceTableRow[] = myPerformanceRightTableData;
   private _totalRowData: MyPerformanceTableRow = myPerformanceTotalRowData;
   private _showOpportunities: boolean = true;
-  private _skusData = myPerformanceSkusData;
-  private _skuTotalData = myPerformanceSkuTotalData;
-  private _peopleData = myPerformancePeopleData;
-  private _peopleTotalData = myPerformanceTotalPeopleData;
-  private _accountData = myPerformanceAccountData;
-  private _accountTotalData = myPerformanceTotalAccountData;
   private _sortingCriteria: Array<SortingCriteria> = [{columnType: ColumnType.metricColumn0, ascending: false}];
-  private _dateRanges = dateRangeDTOsMock;
-  private viewType = ViewType;
 
   private handleSortRows(criteria: SortingCriteria[]): void {
     this._sortingCriteria = criteria;
