@@ -35,7 +35,6 @@ describe('MyPerformanceTableComponent', () => {
     });
 
     fixture = TestBed.createComponent(MyPerformanceTableComponent);
-    // fixture.autoDetectChanges();
     componentInstance = fixture.componentInstance;
     componentInstance.tableHeaderRow = tableHeaderRow;
   });
@@ -114,9 +113,9 @@ describe('MyPerformanceTableComponent', () => {
       expect(rowComponent1.rowData).toBeTruthy();
       expect(rowComponent2.rowData).toBeTruthy();
 
-      expect(rowComponent0.rowData).toBe(tableDataRows[1]);
-      expect(rowComponent1.rowData).toBe(tableDataRows[2]);
-      expect(rowComponent2.rowData).toBe(tableDataRows[0]);
+      expect(rowComponent0.rowData).toBe(tableData[1]);
+      expect(rowComponent1.rowData).toBe(tableData[2]);
+      expect(rowComponent2.rowData).toBe(tableData[0]);
     });
 
   });

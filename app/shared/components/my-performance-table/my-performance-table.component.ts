@@ -53,6 +53,7 @@ export class MyPerformanceTableComponent {
           currentSortOrder = this.compareObjects(elem0[currentColumn], (elem1[currentColumn]));
           i++;
         } while (i < this._sortingCriteria.length && currentSortOrder === 0);
+
         return this._sortingCriteria[--i].ascending ? currentSortOrder : -currentSortOrder;
       };
     }
@@ -103,4 +104,9 @@ export class MyPerformanceTableComponent {
   private centerColumnsWidth(): string {
     return this.showOpportunities ? 'col-50-pct' : 'col-60-pct';
   }
+}
+
+export interface SortingCriteria {
+  columnType: ColumnType;
+  ascending: boolean;
 }

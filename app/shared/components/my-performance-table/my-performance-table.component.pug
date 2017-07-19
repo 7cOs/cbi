@@ -41,5 +41,4 @@ div.performance-table-wrapper
                                 *ngFor="let rowData of _tableData, let i = index", 
                                 [rowData]="rowData",
                                 [showOpportunities]="showOpportunities",
-                                [viewType]="viewType[tableHeaderRow[0].toLowerCase()]",
                                 (click)="clickOn(rowData, i)")
