@@ -35,15 +35,9 @@ public class WebDriverFactory implements SauceOnDemandSessionIdProvider, SauceOn
 
   public static WebDriver createDriver(String driverName) throws MalformedURLException {
 
-    if (BrowserType.firefox.name().equals(driverName)) {
-      webDriver.set(new FirefoxDriver());
-    } else if (BrowserType.ie.name().equals(driverName)) {
-      webDriver.set(new InternetExplorerDriver());
-    } else if (BrowserType.chrome.name().equals(driverName)) {
-      webDriver.set(new ChromeDriver());
-    } else if (driverName.startsWith(BrowserType.remote.name())) {
+    if (driverName.startsWith(BrowserType.remote.name())) {
       setRemoteWebDriver(driverName);
-    } else if (driverName.startsWith(BrowserType.sauce.name())) {
+    } else {
       setSauceWebDriver();
     }
     log.info("Connected to Selenium Server. Session ID: " + sessionId.get());
