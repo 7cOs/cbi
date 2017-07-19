@@ -3,7 +3,7 @@ package com.cbrands.test.smoke;
 import com.cbrands.TestUser;
 import com.cbrands.pages.HomePage;
 import com.cbrands.pages.Login;
-import com.cbrands.pages.Logout;
+import com.cbrands.pages.LogoutPage;
 import org.testng.Assert;
 import org.testng.annotations.*;
 
@@ -13,12 +13,12 @@ import org.testng.annotations.*;
 public class LoginTest extends BaseTestCase {
 
   private Login login;
-  private Logout logout;
+  private LogoutPage logoutPage;
 
   @BeforeMethod
   public void setUp() {
     login = new Login(driver);
-    logout = new Logout(driver);
+    logoutPage = new LogoutPage(driver);
 
     log.info("\nLoading webpage...");
     driver.get(webAppBaseUrl);
@@ -26,8 +26,7 @@ public class LoginTest extends BaseTestCase {
 
   @AfterMethod
   public void tearDown() {
-    logout.logoutViaUrl();
-    Assert.assertTrue(logout.isOnLogoutPage(), "Failure logging out.\n");
+    logoutPage.goToPage();
   }
 
   @Test(dataProvider = "userCredentials", description = "Testing basic login and logout")
