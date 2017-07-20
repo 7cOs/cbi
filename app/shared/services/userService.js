@@ -477,8 +477,10 @@ module.exports = /*  @ngInject */
     }
 
     function getTopBottomSnapshot(snapshotType, params) {
-      var snapshotPromise = $q.defer(),
-          url, baseUrl = '/v2/users/' + service.model.currentUser.employeeID;
+      const snapshotPromise = $q.defer();
+      let baseUrl = '/v2/users/' + service.model.currentUser.employeeID;
+      let isGettingAccounts = false;
+
       params.type = 'topBottom';
 
       switch (snapshotType.value) {
@@ -487,17 +489,20 @@ module.exports = /*  @ngInject */
           break;
         case 2:
           baseUrl += '/performance/topBottomSnapshot/accounts';
+          isGettingAccounts = true;
           break;
-
         case 3:
           baseUrl +=  '/performance/topBottomSnapshot/subaccounts';
+          if (params.account[0] === '999999' || params.account[0] === 'ALL OTHER') {
+            isGettingAccounts = true;
+          }
           break;
-
         case 4:
           baseUrl += '/performance/topBottomSnapshot/stores';
           break;
       }
-      url = apiHelperService.request(baseUrl, params);
+
+      const url = apiHelperService.request(baseUrl, params);
 
       $http.get(url)
         .then(getTopBottomSnapshotSuccess)
@@ -505,12 +510,29 @@ module.exports = /*  @ngInject */
 
       function getTopBottomSnapshotSuccess(response) {
         calculateTrendValuesForPlan(response.data.performance);
-        // console.log('top Bottom Data', response.data.performance);
+        if (isGettingAccounts) {
+          response.data.performance = indicatePremiseTypes(response.data.performance);
+        }
         snapshotPromise.resolve(response.data);
       }
 
       function getTopBottomSnapshotFail(error) {
         snapshotPromise.reject(error);
+      }
+
+      function indicatePremiseTypes(accountArray) {
+        return accountArray.map(account => {
+          const _account = Object.assign({}, account);
+
+          if (_account.id === '999999') {
+            _account.name += ` (${filtersService.accountFilters.premiseTypeValue[_account.premiseType].toUpperCase()})`;
+          }
+          if (_account.id === 'ALL OTHER') {
+            _account.name = `UNMANAGED CHAIN (${filtersService.accountFilters.premiseTypeValue[_account.premiseType].toUpperCase()})`;
+          }
+
+          return _account;
+        });
       }
 
       return snapshotPromise.promise;
