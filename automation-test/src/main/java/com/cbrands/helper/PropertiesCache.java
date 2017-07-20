@@ -22,11 +22,11 @@ public class PropertiesCache {
   private String getPropertiesFilename() {
     final String filename;
 
-    final String suffix = System.getProperty("env");
-    if (null != suffix) {
-      filename = BASE_AUTOMATION_PROPERTIES_FILENAME + "." + suffix;
+    final String prefix = System.getProperty("env");
+    if (null != prefix) {
+      filename = prefix + "." + BASE_AUTOMATION_PROPERTIES_FILENAME;
     } else {
-      filename = BASE_AUTOMATION_PROPERTIES_FILENAME + ".local";
+      filename = "local." + BASE_AUTOMATION_PROPERTIES_FILENAME;
     }
 
     return filename;
