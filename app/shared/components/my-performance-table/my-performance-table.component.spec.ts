@@ -6,7 +6,7 @@ import { ColumnType } from '../../../enums/column-type.enum';
 import { MyPerformanceTableComponent } from './my-performance-table.component';
 import { MyPerformanceTableRow } from '../../../models/my-performance-table-row.model';
 import { myPerformanceTableRowMock } from '../../../models/my-performance-table-row.model.mock';
-import { SortableComponent } from '../sortable/sortable.component';
+import { SortIndicatorComponent } from '../sort-indicator/sort-indicator.component';
 import { sortingCriteriaMock } from '../../../models/my-performance-table-sorting-criteria.model.mock';
 
 @Component({
@@ -30,7 +30,7 @@ describe('MyPerformanceTableComponent', () => {
       declarations: [
         MyPerformanceTableComponent,
         MockMyPerformanceTableRowComponent,
-        SortableComponent
+        SortIndicatorComponent
       ]
     });
 

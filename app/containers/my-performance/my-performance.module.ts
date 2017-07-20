@@ -5,7 +5,7 @@ import { MyPerformanceComponent }    from './my-performance.component';
 import { MyPerformanceTableComponent } from '../../shared/components/my-performance-table/my-performance-table.component';
 import { MyPerformanceTableRowComponent } from '../../shared/components/my-performance-table-row/my-performance-table-row.component';
 import { SharedModule } from '../../shared/shared.module';
-import { SortableComponent } from '../../shared/components/sortable/sortable.component';
+import { SortIndicatorComponent } from '../../shared/components/sort-indicator/sort-indicator.component';
 
 @NgModule({
   imports: [
@@ -16,7 +16,7 @@ import { SortableComponent } from '../../shared/components/sortable/sortable.com
     MyPerformanceComponent,
     MyPerformanceTableComponent,
     MyPerformanceTableRowComponent,
-    SortableComponent
+    SortIndicatorComponent
   ]
 })
 

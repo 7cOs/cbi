@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { SortableComponent } from './sortable.component';
+import { SortIndicatorComponent } from './sort-indicator.component';
 import { SortStatus } from '../../../enums/sort-status.enum';
 
 describe('GreetingComponent', () => {
 
-  let fixture: ComponentFixture<SortableComponent>;
-  let componentInstance: SortableComponent;
+  let fixture: ComponentFixture<SortIndicatorComponent>;
+  let componentInstance: SortIndicatorComponent;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [ SortableComponent ]
+      declarations: [ SortIndicatorComponent ]
     });
 
-    fixture = TestBed.createComponent(SortableComponent);
+    fixture = TestBed.createComponent(SortIndicatorComponent);
     componentInstance = fixture.componentInstance;
   });
 

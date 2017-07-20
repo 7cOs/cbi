@@ -4,12 +4,12 @@ import { Component, Input } from '@angular/core';
 import { SortStatus } from '../../../enums/sort-status.enum';
 
 @Component({
-  selector: 'sortable',
-  template: require('./sortable.component.pug'),
-  styles: [ require('./sortable.component.scss') ]
+  selector: 'sort-indicator',
+  template: require('./sort-indicator.component.pug'),
+  styles: [ require('./sort-indicator.component.scss') ]
 })
 
-export class SortableComponent {
+export class SortIndicatorComponent {
   @Input() status: SortStatus;
 
   private sortStatus = SortStatus; // for use in template;
