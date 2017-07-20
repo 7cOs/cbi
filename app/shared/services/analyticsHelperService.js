@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports = /*  @ngInject */
-  function apiHelperService($rootScope, $analytics, $location, $window, notesService, userService) {
+  function apiHelperService($rootScope, $analytics, $location, $window, notesService, userService, $transitions) {
 
     return {
       createTracker: createTracker,
@@ -33,20 +33,21 @@ module.exports = /*  @ngInject */
      * @memberOf cf.common.services
      */
     function trackPageViews() {
-      $rootScope.$on('$stateChangeSuccess', function (event, currentState) {
-        var url = $location.url(),
-          props = {
-            location: $location.absUrl(),
-            title: currentState.title
-          };
+      $transitions.onSuccess({}, (transition) => {
+        const toState = transition.to();
+        const props = {
+          location: $location.absUrl(),
+          title: toState.title
+        };
+        let url = $location.url();
 
-        if (currentState.analyticsData) {
-          if (currentState.analyticsData.pageTitle) {
-            props.title = currentState.analyticsData.pageTitle;
+        if (toState.analyticsData) {
+          if (toState.analyticsData.pageTitle) {
+            props.title = toState.analyticsData.pageTitle;
           }
 
-          if (currentState.analyticsData.pageUrl) {
-            url = currentState.analyticsData.pageUrl;
+          if (toState.analyticsData.pageUrl) {
+            url = toState.analyticsData.pageUrl;
           }
         }
 
