@@ -1,3 +1,4 @@
+import { CompassSelectOption } from './compass-select-component.model';
 import { DateRangeTimePeriodValue } from '../enums/date-range-time-period.enum';
 import { DistributionTypeValue } from '../enums/distribution-type.enum';
 import { MetricValue } from '../enums/metric-type.enum';
@@ -10,16 +11,19 @@ export interface MyPerformanceFilter {
   distributionType: DistributionTypeValue;
 }
 
-export const metricOptionsModel: Array<{ metricName: string, metricValue: MetricValue }> = [
+export const metricOptionsModel: Array<CompassSelectOption> = [
   {
-    metricName: 'Depletions',
-    metricValue: MetricValue.DEPLETIONS
+    display: 'Depletions',
+    subDisplay: '',
+    value: MetricValue.DEPLETIONS
   }, {
-    metricName: 'Distribution',
-    metricValue: MetricValue.DISTRIBUTION
+    display: 'Distribution',
+    subDisplay: '',
+    value: MetricValue.DISTRIBUTION
   }, {
-    metricName: 'Velocity',
-    metricValue: MetricValue.VELOCITY
+    display: 'Velocity',
+    subDisplay: '',
+    value: MetricValue.VELOCITY
   }
 ];
 

@@ -1,3 +1,4 @@
+// tslint:disable:no-unused-variable
 import { By } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
@@ -6,28 +7,16 @@ import { MdSelectModule } from '@angular/material';
 import * as Chance from 'chance';
 
 import { CompassSelectComponent } from './compass-select.component';
+import {
+  selectOptionsMockNumbers,
+  selectOptionsMockStandard,
+  selectOptionsMockStrings
+} from '../../../models/compass-select-options.model.mock';
 
 const chance = new Chance();
-const keysMock: Array<string> = [];
-const optionsMock: Array<any> = [];
-
-for (let i = 0; i < 5; i++) {
-  keysMock.push(chance.string());
-}
-
-for (let i = 0; i < 5; i++) {
-  const mockOption = {};
-
-  keysMock.forEach(randomKey => {
-    mockOption[randomKey] = chance.string();
-  });
-
-  optionsMock.push(mockOption);
-}
-
-const displayKeyMock = keysMock[Math.floor(Math.random() * keysMock.length)];
-const valueKeyMock = keysMock[Math.floor(Math.random() * keysMock.length)];
-const subDisplayKeyMock = keysMock[Math.floor(Math.random() * keysMock.length)];
+const optionsMockNumbers = selectOptionsMockNumbers();
+const optionsMockStandard = selectOptionsMockStandard();
+const optionsMockStrings = selectOptionsMockStrings();
 const titleMock = chance.string();
 
 describe('CompassSelectComponent', () => {
@@ -43,19 +32,33 @@ describe('CompassSelectComponent', () => {
     fixture = TestBed.createComponent(CompassSelectComponent);
     componentInstance = fixture.componentInstance;
 
-    componentInstance.options = optionsMock;
-    componentInstance.displayKey = displayKeyMock;
-    componentInstance.valueKey = valueKeyMock;
-    componentInstance.model = optionsMock[0][valueKeyMock];
+    componentInstance.options = optionsMockStandard;
+    componentInstance.model = optionsMockStandard[0].value;
   });
 
   describe('component init', () => {
     it('should initialize the current selected option based on the passed in [model] input', fakeAsync(() => {
-      fixture.autoDetectChanges(true);
+      fixture.autoDetectChanges();
       tick();
+      let selectedOptionElement = fixture.debugElement.query(By.css('.mat-select-value-text')).nativeElement;
 
-      const selectedOptionElement = fixture.debugElement.query(By.css('.mat-select-value-text')).nativeElement;
-      expect(selectedOptionElement.textContent).toBe(optionsMock[0][displayKeyMock]);
+      expect(selectedOptionElement.textContent).toBe(optionsMockStandard[0].display);
+
+      componentInstance.options = optionsMockNumbers;
+      componentInstance.model = optionsMockNumbers[1].value;
+      fixture.autoDetectChanges();
+      tick();
+      selectedOptionElement = fixture.debugElement.query(By.css('.mat-select-value-text')).nativeElement;
+
+      expect(selectedOptionElement.textContent).toBe(optionsMockNumbers[1].display);
+
+      componentInstance.options = optionsMockStrings;
+      componentInstance.model = optionsMockStrings[2].value;
+      fixture.autoDetectChanges();
+      tick();
+      selectedOptionElement = fixture.debugElement.query(By.css('.mat-select-value-text')).nativeElement;
+
+      expect(selectedOptionElement.textContent).toBe(optionsMockStrings[2].display);
     }));
   });
 
@@ -78,18 +81,19 @@ describe('CompassSelectComponent', () => {
   });
 
   describe('component subtitle', () => {
-    it('should contain a subtitle element when [subDisplayKey] input is passed in', () => {
-      componentInstance.subDisplayKey = subDisplayKeyMock;
-      componentInstance.options = optionsMock; // Trigger change detection on options input
+    it('should contain a subtitle element when options are given a string value for subDisplay', () => {
+      componentInstance.options = optionsMockStrings;
+      componentInstance.model = optionsMockStrings[0].value;
       fixture.detectChanges();
       const subtitleElement = fixture.debugElement.query(By.css('.subtitle'));
 
       expect(subtitleElement).not.toBe(null);
-      expect(subtitleElement.nativeElement.textContent).toBe(optionsMock[0][subDisplayKeyMock]);
+      expect(subtitleElement.nativeElement.textContent).toBe(optionsMockStrings[0].subDisplay);
     });
 
-    it('should not contain a sub-title element when [subDisplayKey] input is not passed in', () => {
-      componentInstance.subDisplayKey = undefined;
+    it('should not contain a subtitle element when options are not given a string value for subDisplay', () => {
+      componentInstance.options = optionsMockStandard;
+      componentInstance.model = optionsMockStandard[0].value;
       fixture.detectChanges();
       const subtitleElement = fixture.debugElement.query(By.css('.subtitle'));
 
@@ -99,10 +103,12 @@ describe('CompassSelectComponent', () => {
 
   describe('component output event', () => {
     it('should output the value of a clicked option', () => {
+      componentInstance.options = optionsMockStandard;
+      componentInstance.model = optionsMockStandard[0].value;
       fixture.detectChanges();
 
-      componentInstance.onOptionSelected.subscribe((value: string) => {
-        expect(value).toBe(optionsMock[0][valueKeyMock]);
+      componentInstance.onOptionSelected.subscribe((value: any) => {
+        expect(value).toBe(optionsMockStandard[0].value);
       });
 
       fixture.debugElement.query(By.css('.mat-select-trigger')).nativeElement.click();

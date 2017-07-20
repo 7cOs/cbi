@@ -2,6 +2,7 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 
 import { ActionStatus } from '../../../enums/action-status.enum';
+import { CompassSelectOption } from '../../../models/compass-select-component.model';
 import { DateRange } from '../../../models/date-range.model';
 import { DateRangesState } from '../../../state/reducers/date-ranges.reducer';
 import { DateRangeTimePeriodValue } from '../../../enums/date-range-time-period.enum';
@@ -24,7 +25,7 @@ import { PremiseTypeValue } from '../../../enums/premise-type.enum';
 })
 
 export class MyPerformanceFilterComponent {
-  @Output() onFilterChange = new EventEmitter<any>();
+  @Output() onFilterChange = new EventEmitter<{ filterType: string, filterValue: any }>();
 
   @Input() filterState: MyPerformanceFilterState;
   @Input() set dateRanges(dateRanges: DateRangesState) {
@@ -34,23 +35,26 @@ export class MyPerformanceFilterComponent {
     }
   }
 
+  // private performanceFilterState: MyPerformanceFilterState;
   private depletionsPremiseOptions: Array<{ premiseType: string, premiseTypeValue: PremiseTypeValue }> = depletionsPremiseOptionsModel;
-  private depletionTimePeriodOptions: Array<DateRange> = [];
+  private depletionTimePeriodOptions: Array<CompassSelectOption> = [];
   private distributionOptions: Array<{ distributionType: string, distributionTypeValue: DistributionTypeValue }> = distributionOptionsModel;
   private distributionPremiseOptions: Array<{ premiseType: string, premiseTypeValue: PremiseTypeValue }> = distributionPremiseOptionsModel;
-  private distributionTimePeriodOptions: Array<DateRange> = [];
-  private metricOptions: Array<{ metricName: string, metricValue: MetricValue }> = metricOptionsModel;
+  private distributionTimePeriodOptions: Array<CompassSelectOption> = [];
+  private metricOptions: Array<CompassSelectOption> = metricOptionsModel;
   private metricValueEnum: any = MetricValue;
 
-  private initDateRanges(dateType: string, dateRanges: DateRangesState) {
+  private initDateRanges(dateType: string, dateRanges: DateRangesState): Array<CompassSelectOption> {
     const depletionDateRangeCodes: Array<string> = ['CYTD', 'FYTD', 'CMIPBDL', 'LCM', 'CYTM', 'FYTM'];
     const distributionDateRangeCodes: Array<string> = ['L60', 'L90', 'L120', 'L3CM'];
 
-    const initDateRangeData = (dateRangeCodes: Array<string>, dateRangeObject: DateRangesState) => {
+    const initDateRangeData = (dateRangeCodes: Array<string>, dateRangeObject: DateRangesState): Array<CompassSelectOption> => {
       return dateRangeCodes.map(dateCode => {
-        const _dateRange = Object.assign({}, dateRangeObject[dateCode]);
-        _dateRange['codeValue'] = DateRangeTimePeriodValue[dateRangeObject[dateCode].code];
-        return _dateRange;
+        return {
+          display: dateRangeObject[dateCode].displayCode,
+          subDisplay: dateRangeObject[dateCode].range,
+          value: DateRangeTimePeriodValue[dateRangeObject[dateCode].code]
+        };
       });
     };
 
