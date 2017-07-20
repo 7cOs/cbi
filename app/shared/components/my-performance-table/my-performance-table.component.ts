@@ -45,16 +45,16 @@ export class MyPerformanceTableComponent {
   private updateSortingFunction() {
     if (this._sortingCriteria.length) {
       this.sortingFunction = (elem0: MyPerformanceTableRow, elem1: MyPerformanceTableRow) => {
-        let i = 0;
-        let currentColumn;
-        let currentSortOrder;
-        do {
-          currentColumn = ColumnType[this._sortingCriteria[i].columnType];
+        let i: number = 0;
+        let currentColumn: string;
+        let currentSortOrder: number;
+        this._sortingCriteria.every((criterion, idx) => {
+          i = idx;
+          currentColumn = ColumnType[criterion.columnType];
           currentSortOrder = this.compareObjects(elem0[currentColumn], (elem1[currentColumn]));
-          i++;
-        } while (i < this._sortingCriteria.length && currentSortOrder === 0);
-
-        return this._sortingCriteria[--i].ascending ? currentSortOrder : -currentSortOrder;
+          return !currentSortOrder;
+        });
+        return this._sortingCriteria[i].ascending ? currentSortOrder : 0 - currentSortOrder;
       };
     }
   }
@@ -81,7 +81,7 @@ export class MyPerformanceTableComponent {
   }
 
   private sortRows(colType: ColumnType) {
-    // keeping this one-dimensional for now
+    // this will only sort on the FIRST criterion (for now)
     const ascending = this._sortingCriteria[0].columnType === colType
       ? !this._sortingCriteria[0].ascending
       : colType === ColumnType.descriptionLine0;
