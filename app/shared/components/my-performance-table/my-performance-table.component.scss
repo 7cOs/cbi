@@ -237,7 +237,7 @@ div.ctv {
       }      
     }
 
-    /deep/tr.entity-row {
+    tr.entity-row {
 
       /deep/td.left-col {
 
@@ -253,15 +253,15 @@ div.ctv {
   // people
   &.view-type-3 {
 
-    /deep/tr.total-row {
+    tr.total-row {
   
       /deep/td.left-col {
 
-        /deep/div.description-line-1 {
+        div.description-line-1 {
           padding-top: 5px;
         }
 
-        /deep/span.description-line-1 {
+        span.description-line-1 {
           font-family: $rajdhani;
           font-weight: $semibold;
           font-size: 0.7rem;
@@ -273,11 +273,11 @@ div.ctv {
 
     }
 
-    /deep/tr.entity-row {
+    tr.entity-row {
 
       /deep/td.left-col {
 
-        /deep/span {
+        span {
           color: $blue;
           font-weight: normal;
           padding-left: 12px;
@@ -289,15 +289,15 @@ div.ctv {
   // distributors/accounts 
   &.view-type-4, &.view-type-5 {
 
-    /deep/tr.total-row {
+    tr.total-row {
   
       /deep/td.left-col {
 
-        /deep/div.description-line-1 {
+        div.description-line-1 {
           padding-top: 5px;
         }
 
-        /deep/span.description-line-1 {
+        span.description-line-1 {
           font-family: $rajdhani;
           font-weight: $semibold;
           font-size: 0.7rem;
@@ -308,15 +308,15 @@ div.ctv {
       }
     }
 
-    /deep/tr.entity-row {
+    tr.entity-row {
 
       /deep/td.left-col {
 
-        /deep/div.description-line-1 {
+        div.description-line-1 {
           padding-top: 5px;
         }
 
-        /deep/span.description-line-1 {
+        span.description-line-1 {
           font-family: $rajdhani;
           font-weight: $semibold;
           font-size: 0.7rem;
