@@ -10,4 +10,4 @@ td.center-col(colspan=1, [ngClass]="columnWidth()")
   span([ngClass]="getTrendClass(rowData.metricColumn1)") {{rowData.metricColumn2}}%
 td.right-col(colspan=1, [ngClass]="columnWidth()") 
   span.ctv {{rowData.ctv}}%
-td.right-col.opportunities(*ngIf="showOpportunities", colspan=1, [ngClass]="columnWidth()") {{rowData.opportunities || 0}} 
+td.right-col.opportunities(*ngIf="showOpportunities", colspan=1, [ngClass]="columnWidth()") {{rowData.opportunities || 0}}

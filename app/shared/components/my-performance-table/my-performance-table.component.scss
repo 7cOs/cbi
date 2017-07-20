@@ -3,16 +3,34 @@
 table {
   border: 1px 1px 1px 0 solid $gray-4;
   border-collapse: collapse;
+  border-collapse: collapse;
+  width: 100%;
 }
 
 thead {
+  text-align: left;
   display: block;
+  float: left;
+  width: 100%;
+
+  tr {
+    display: table-row;
+    width: 100%;
+  }
 }
 
 tbody {
   display: block;
   max-height: 500px;
   overflow-y: auto;
+  -ms-overflow-style: -ms-autohiding-scrollbar;
+  float: left;
+  width: 100%;
+
+  tr {
+    display: table-row;
+    width: 100%;
+  }
 }
 
 my-performance-table-row {
@@ -50,6 +68,10 @@ th {
 
 .col-10-pct {
   width: 10%;
+}
+
+.col-0-width {
+  width: 0;
 }
 
 .left-col {
