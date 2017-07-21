@@ -14,6 +14,11 @@ md-content {
   overflow: hidden;
 }
 
+.grayout {
+  opacity: 0.6; /* Real browsers */
+  filter: alpha(opacity = 60); /* MSIE */
+}
+
 .store-segmentation {
   margin-top: 2ex;
 
