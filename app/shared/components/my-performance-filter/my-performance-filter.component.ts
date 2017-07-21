@@ -1,4 +1,3 @@
-// tslint:disable:no-unused-variable
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 
 import { ActionStatus } from '../../../enums/action-status.enum';
@@ -6,19 +5,16 @@ import { CompassRadioOption } from '../../../models/compass-radio-component.mode
 import { CompassSelectOption } from '../../../models/compass-select-component.model';
 import { DateRangesState } from '../../../state/reducers/date-ranges.reducer';
 import { DateRangeTimePeriodValue } from '../../../enums/date-range-time-period.enum';
-import { DistributionTypeValue } from '../../../enums/distribution-type.enum';
 import {
   depletionsPremiseOptionsModel,
   distributionOptionsModel,
   distributionPremiseOptionsModel,
   metricOptionsModel,
-  MyPerformanceFilter,
-  MyPerformanceFilterEvent
+  MyPerformanceFilterEvent // tslint:disable-line:no-unused-variable
 } from '../../../models/my-performance-filter.model';
 import { MetricValue } from '../../../enums/metric-type.enum';
 import { MyPerformanceFilterActionType } from '../../../enums/my-performance-filter.enum';
 import { MyPerformanceFilterState } from '../../../state/reducers/my-performance-filter.reducer';
-import { PremiseTypeValue } from '../../../enums/premise-type.enum';
 
 @Component({
   selector: 'my-performance-filter',
@@ -37,13 +33,19 @@ export class MyPerformanceFilterComponent {
     }
   }
 
+  // tslint:disable-next-line:no-unused-variable
   private depletionsPremiseOptions: Array<CompassRadioOption> = depletionsPremiseOptionsModel;
   private depletionTimePeriodOptions: Array<CompassSelectOption> = [];
+  // tslint:disable-next-line:no-unused-variable
   private distributionOptions: Array<CompassRadioOption> = distributionOptionsModel;
+  // tslint:disable-next-line:no-unused-variable
   private distributionPremiseOptions: Array<CompassRadioOption> = distributionPremiseOptionsModel;
   private distributionTimePeriodOptions: Array<CompassSelectOption> = [];
+  // tslint:disable-next-line:no-unused-variable
   private filterActionTypeEnum: any = MyPerformanceFilterActionType;
+  // tslint:disable-next-line:no-unused-variable
   private metricOptions: Array<CompassSelectOption> = metricOptionsModel;
+  // tslint:disable-next-line:no-unused-variable
   private metricValueEnum: any = MetricValue;
 
   private initDateRanges(dateType: string, dateRanges: DateRangesState): Array<CompassSelectOption> {
