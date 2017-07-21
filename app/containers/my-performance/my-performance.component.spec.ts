@@ -10,6 +10,7 @@ import { MetricValue } from '../../enums/metric-type.enum';
 import { MockStore } from '../../state/mock-store';
 import { MyPerformanceComponent } from './my-performance.component';
 import { MyPerformanceFilterActionType } from '../../enums/my-performance-filter.enum';
+import { MyPerformanceFilterEvent } from '../../models/my-performance-filter.model'; // tslint:disable-line:no-unused-variable
 import { MyPerformanceFilterState } from '../../state/reducers/my-performance-filter.reducer';
 import { PremiseTypeValue } from '../../enums/premise-type.enum';
 
@@ -18,7 +19,7 @@ import { PremiseTypeValue } from '../../enums/premise-type.enum';
   template: ''
 })
 class MockMyPerformanceFilterComponent {
-  @Output() onFilterChange = new EventEmitter<any>();
+  @Output() onFilterChange = new EventEmitter<MyPerformanceFilterEvent>();
 
   @Input() dateRanges: DateRangesState;
   @Input() filterState: MyPerformanceFilterState;

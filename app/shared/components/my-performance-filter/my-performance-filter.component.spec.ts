@@ -1,41 +1,17 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { By } from '@angular/platform-browser';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { CompassRadioOption } from '../../../models/compass-radio-component.model';
-import { CompassSelectOption } from '../../../models/compass-select-component.model';
 import { dateRangeStateMock } from '../../../models/date-range-state.model.mock';
 import { DateRangeTimePeriodValue } from '../../../enums/date-range-time-period.enum';
 import { DistributionTypeValue } from '../../../enums/distribution-type.enum';
 import { MetricValue } from '../../../enums/metric-type.enum';
+import { MockCompassRadioComponent } from '../compass-radio/compass-radio.component.mock';
+import { MockCompassSelectComponent } from '../compass-select/compass-select.component.mock';
 import { MyPerformanceFilterActionType } from '../../../enums/my-performance-filter.enum';
 import { MyPerformanceFilterComponent } from './my-performance-filter.component';
 import { MyPerformanceFilterEvent } from '../../../models/my-performance-filter.model';
 import { MyPerformanceFilterState } from '../../../state/reducers/my-performance-filter.reducer';
 import { PremiseTypeValue } from '../../../enums/premise-type.enum';
-
-@Component({
-  selector: 'compass-radio',
-  template: ''
-})
-class MockCompassRadioComponent {
-  @Output() onRadioClicked = new EventEmitter<any>();
-
-  @Input() model: any;
-  @Input() options: Array<CompassRadioOption>;
-  @Input() stacked: boolean;
-}
-
-@Component({
-  selector: 'compass-select',
-  template: ''
-})
-class MockCompassSelectComponent {
-  @Output() onOptionSelected = new EventEmitter<any>();
-
-  @Input() model: any;
-  @Input() options: Array<CompassSelectOption>;
-}
 
 const initialStateMock: MyPerformanceFilterState = {
   metric: MetricValue.DEPLETIONS,

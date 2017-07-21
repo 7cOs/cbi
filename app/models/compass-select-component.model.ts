@@ -1,5 +1,5 @@
 export interface CompassSelectOption {
   display: string;
-  subDisplay: string;
+  subDisplay?: string;
   value: any;
 }

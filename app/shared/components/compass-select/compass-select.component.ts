@@ -26,7 +26,7 @@ export class CompassSelectComponent {
   private optionData: Array<CompassSelectOption> = [];
 
   private initSubValue(): void {
-    if (this.optionData.length) {
+    if (this.optionData.length && this.optionData[0].subDisplay) {
       this.optionData.forEach(option => {
         if (option.value === this.componentModel) this.currentSubValue = option.subDisplay;
       });

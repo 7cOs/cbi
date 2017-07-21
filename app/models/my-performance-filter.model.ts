@@ -20,15 +20,12 @@ export interface MyPerformanceFilterEvent {
 
 export const metricOptionsModel: Array<CompassSelectOption> = [{
   display: 'Depletions',
-  subDisplay: '',
   value: MetricValue.DEPLETIONS
 }, {
   display: 'Distribution',
-  subDisplay: '',
   value: MetricValue.DISTRIBUTION
 }, {
   display: 'Velocity',
-  subDisplay: '',
   value: MetricValue.VELOCITY
 }];
 

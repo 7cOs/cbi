@@ -6,15 +6,12 @@ const chance = new Chance();
 export function selectOptionsMockStandard(): Array<CompassSelectOption> {
   return [{
     display: chance.string(),
-    subDisplay: '',
     value: chance.string()
   }, {
     display: chance.string(),
-    subDisplay: '',
     value: chance.string()
   }, {
     display: chance.string(),
-    subDisplay: '',
     value: chance.string()
   }];
 }
