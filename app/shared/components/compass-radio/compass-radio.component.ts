@@ -1,5 +1,7 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 
+import { CompassRadioOption } from '../../../models/compass-radio-component.model';
+
 @Component({
   selector: 'compass-radio',
   template: require('./compass-radio.component.pug'),
@@ -9,14 +11,12 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 export class CompassRadioComponent {
   @Output() onRadioClicked = new EventEmitter<any>();
 
-  @Input() displayKey: string;
-  @Input() direction: string;
-  @Input() model: string;
+  @Input() model: any;
+  @Input() options: Array<CompassRadioOption>;
+  @Input() stacked: boolean;
   @Input() title?: string;
-  @Input() valueKey: string;
-  @Input() options: Array<any>;
 
-  private radioClicked(option: any): void { // tslint:disable-line:no-unused-variable
-    this.onRadioClicked.emit(option[this.valueKey]);
+  private radioClicked(option: CompassRadioOption): void { // tslint:disable-line:no-unused-variable
+    this.onRadioClicked.emit(option.value);
   }
 }

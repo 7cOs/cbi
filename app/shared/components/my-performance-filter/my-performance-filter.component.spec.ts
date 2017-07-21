@@ -2,13 +2,16 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { By } from '@angular/platform-browser';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
+import { CompassRadioOption } from '../../../models/compass-radio-component.model';
+import { CompassSelectOption } from '../../../models/compass-select-component.model';
 import { dateRangeStateMock } from '../../../models/date-range-state.model.mock';
-import { MyPerformanceFilterComponent } from './my-performance-filter.component';
-import { MyPerformanceFilterState } from '../../../state/reducers/my-performance-filter.reducer';
-
 import { DateRangeTimePeriodValue } from '../../../enums/date-range-time-period.enum';
 import { DistributionTypeValue } from '../../../enums/distribution-type.enum';
 import { MetricValue } from '../../../enums/metric-type.enum';
+import { MyPerformanceFilterActionType } from '../../../enums/my-performance-filter.enum';
+import { MyPerformanceFilterComponent } from './my-performance-filter.component';
+import { MyPerformanceFilterEvent } from '../../../models/my-performance-filter.model';
+import { MyPerformanceFilterState } from '../../../state/reducers/my-performance-filter.reducer';
 import { PremiseTypeValue } from '../../../enums/premise-type.enum';
 
 @Component({
@@ -16,13 +19,11 @@ import { PremiseTypeValue } from '../../../enums/premise-type.enum';
   template: ''
 })
 class MockCompassRadioComponent {
-  @Output() onRadioClicked = new EventEmitter<number>();
+  @Output() onRadioClicked = new EventEmitter<any>();
 
-  @Input() displayKey: string;
-  @Input() direction: string;
   @Input() model: any;
-  @Input() options: Array<any>;
-  @Input() valueKey: string;
+  @Input() options: Array<CompassRadioOption>;
+  @Input() stacked: boolean;
 }
 
 @Component({
@@ -30,13 +31,10 @@ class MockCompassRadioComponent {
   template: ''
 })
 class MockCompassSelectComponent {
-  @Output() onOptionSelected = new EventEmitter<number>();
+  @Output() onOptionSelected = new EventEmitter<any>();
 
-  @Input() displayKey: string;
   @Input() model: any;
-  @Input() options: Array<any>;
-  @Input() subDisplayKey?: string;
-  @Input() valueKey: string;
+  @Input() options: Array<CompassSelectOption>;
 }
 
 const initialStateMock: MyPerformanceFilterState = {
@@ -105,8 +103,8 @@ describe('My Performance Filter Component', () => {
       componentInstance.filterState = initialStateMock;
       componentInstance.dateRanges = dateRangeStateMock;
 
-      componentInstance.onFilterChange.subscribe((value: { filterType: string, filterValue: MetricValue }) => {
-        expect(value).toEqual({ filterType: 'metric', filterValue: MetricValue.DEPLETIONS });
+      componentInstance.onFilterChange.subscribe((value: MyPerformanceFilterEvent) => {
+        expect(value).toEqual({ filterType: MyPerformanceFilterActionType.Metric, filterValue: MetricValue.DEPLETIONS });
       });
 
       const mockSelectComponents = fixture.debugElement.queryAll(By.directive(MockCompassSelectComponent));
@@ -120,8 +118,8 @@ describe('My Performance Filter Component', () => {
       componentInstance.dateRanges = dateRangeStateMock;
       fixture.detectChanges();
 
-      componentInstance.onFilterChange.subscribe((value: { filterType: string, filterValue: DateRangeTimePeriodValue }) => {
-        expect(value).toEqual({ filterType: 'timePeriod', filterValue: DateRangeTimePeriodValue.CYTDBDL });
+      componentInstance.onFilterChange.subscribe((value: MyPerformanceFilterEvent) => {
+        expect(value).toEqual({ filterType: MyPerformanceFilterActionType.TimePeriod, filterValue: DateRangeTimePeriodValue.CYTDBDL });
       });
 
       const mockSelectComponents = fixture.debugElement.queryAll(By.directive(MockCompassSelectComponent));
@@ -135,8 +133,8 @@ describe('My Performance Filter Component', () => {
       componentInstance.dateRanges = dateRangeStateMock;
       fixture.detectChanges();
 
-      componentInstance.onFilterChange.subscribe((value: { filterType: string, filterValue: PremiseTypeValue }) => {
-        expect(value).toEqual({ filterType: 'premiseType', filterValue: PremiseTypeValue.OFF });
+      componentInstance.onFilterChange.subscribe((value: MyPerformanceFilterEvent) => {
+        expect(value).toEqual({ filterType: MyPerformanceFilterActionType.PremiseType, filterValue: PremiseTypeValue.OFF });
       });
 
       const mockRadioComponents = fixture.debugElement.queryAll(By.directive(MockCompassRadioComponent));
@@ -150,8 +148,8 @@ describe('My Performance Filter Component', () => {
       componentInstance.dateRanges = dateRangeStateMock;
       fixture.detectChanges();
 
-      componentInstance.onFilterChange.subscribe((value: { filterType: string, filterValue: DistributionTypeValue }) => {
-        expect(value).toEqual({ filterType: 'distributionType', filterValue: DistributionTypeValue.SIMPLE });
+      componentInstance.onFilterChange.subscribe((value: MyPerformanceFilterEvent) => {
+        expect(value).toEqual({ filterType: MyPerformanceFilterActionType.DistributionType, filterValue: DistributionTypeValue.SIMPLE });
       });
 
       const mockRadioComponents = fixture.debugElement.queryAll(By.directive(MockCompassRadioComponent));

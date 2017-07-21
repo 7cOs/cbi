@@ -18,7 +18,7 @@ export class CompassSelectComponent {
     this.optionData = optionCollection;
     this.initSubValue();
   }
-  @Input() title: string;
+  @Input() title?: string;
 
   private componentModel: any;
   private currentSubValue: string;

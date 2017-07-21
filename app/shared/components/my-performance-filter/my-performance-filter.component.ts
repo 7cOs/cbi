@@ -2,8 +2,8 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 
 import { ActionStatus } from '../../../enums/action-status.enum';
+import { CompassRadioOption } from '../../../models/compass-radio-component.model';
 import { CompassSelectOption } from '../../../models/compass-select-component.model';
-import { DateRange } from '../../../models/date-range.model';
 import { DateRangesState } from '../../../state/reducers/date-ranges.reducer';
 import { DateRangeTimePeriodValue } from '../../../enums/date-range-time-period.enum';
 import { DistributionTypeValue } from '../../../enums/distribution-type.enum';
@@ -12,9 +12,11 @@ import {
   distributionOptionsModel,
   distributionPremiseOptionsModel,
   metricOptionsModel,
-  MyPerformanceFilter
+  MyPerformanceFilter,
+  MyPerformanceFilterEvent
 } from '../../../models/my-performance-filter.model';
 import { MetricValue } from '../../../enums/metric-type.enum';
+import { MyPerformanceFilterActionType } from '../../../enums/my-performance-filter.enum';
 import { MyPerformanceFilterState } from '../../../state/reducers/my-performance-filter.reducer';
 import { PremiseTypeValue } from '../../../enums/premise-type.enum';
 
@@ -25,7 +27,7 @@ import { PremiseTypeValue } from '../../../enums/premise-type.enum';
 })
 
 export class MyPerformanceFilterComponent {
-  @Output() onFilterChange = new EventEmitter<{ filterType: string, filterValue: any }>();
+  @Output() onFilterChange = new EventEmitter<MyPerformanceFilterEvent>();
 
   @Input() filterState: MyPerformanceFilterState;
   @Input() set dateRanges(dateRanges: DateRangesState) {
@@ -35,12 +37,12 @@ export class MyPerformanceFilterComponent {
     }
   }
 
-  // private performanceFilterState: MyPerformanceFilterState;
-  private depletionsPremiseOptions: Array<{ premiseType: string, premiseTypeValue: PremiseTypeValue }> = depletionsPremiseOptionsModel;
+  private depletionsPremiseOptions: Array<CompassRadioOption> = depletionsPremiseOptionsModel;
   private depletionTimePeriodOptions: Array<CompassSelectOption> = [];
-  private distributionOptions: Array<{ distributionType: string, distributionTypeValue: DistributionTypeValue }> = distributionOptionsModel;
-  private distributionPremiseOptions: Array<{ premiseType: string, premiseTypeValue: PremiseTypeValue }> = distributionPremiseOptionsModel;
+  private distributionOptions: Array<CompassRadioOption> = distributionOptionsModel;
+  private distributionPremiseOptions: Array<CompassRadioOption> = distributionPremiseOptionsModel;
   private distributionTimePeriodOptions: Array<CompassSelectOption> = [];
+  private filterActionTypeEnum: any = MyPerformanceFilterActionType;
   private metricOptions: Array<CompassSelectOption> = metricOptionsModel;
   private metricValueEnum: any = MetricValue;
 
@@ -63,7 +65,7 @@ export class MyPerformanceFilterComponent {
       : initDateRangeData(distributionDateRangeCodes, dateRanges);
   }
 
-  private filterSelected(filterType: string, filterValue: any): void { // tslint:disable-line:no-unused-variable
+  private filterSelected(filterType: MyPerformanceFilterActionType, filterValue: any): void { // tslint:disable-line:no-unused-variable
     this.onFilterChange.emit({ filterType, filterValue });
   }
 }

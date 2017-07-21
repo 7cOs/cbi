@@ -9,6 +9,9 @@ import { DistributionTypeValue } from '../../enums/distribution-type.enum';
 import { MetricValue } from '../../enums/metric-type.enum';
 import { MockStore } from '../../state/mock-store';
 import { MyPerformanceComponent } from './my-performance.component';
+import { MyPerformanceFilterActionType } from '../../enums/my-performance-filter.enum';
+
+// import { MyPerformanceFilterEvent } from '../../models/my-performance-filter.model';
 import { MyPerformanceFilterState } from '../../state/reducers/my-performance-filter.reducer';
 import { PremiseTypeValue } from '../../enums/premise-type.enum';
 
@@ -17,7 +20,7 @@ import { PremiseTypeValue } from '../../enums/premise-type.enum';
   template: ''
 })
 class MockMyPerformanceFilterComponent {
-  @Output() onFilterChange = new EventEmitter<{filterType: string, filterValue: any}>();
+  @Output() onFilterChange = new EventEmitter<any>();
 
   @Input() dateRanges: DateRangesState;
   @Input() filterState: MyPerformanceFilterState;
@@ -47,10 +50,22 @@ describe('MyPerformanceComponent', () => {
     const mockMyPerformanceFilter = fixture.debugElement.query(By.directive(MockMyPerformanceFilterComponent));
     const mockFilterElement = mockMyPerformanceFilter.injector.get(MockMyPerformanceFilterComponent) as MockMyPerformanceFilterComponent;
 
-    mockFilterElement.onFilterChange.emit({ filterType: 'metric', filterValue: MetricValue.DEPLETIONS });
-    mockFilterElement.onFilterChange.emit({ filterType: 'timePeriod', filterValue: DateRangeTimePeriodValue.L90BDL });
-    mockFilterElement.onFilterChange.emit({ filterType: 'premiseType', filterValue: PremiseTypeValue.OFF });
-    mockFilterElement.onFilterChange.emit({ filterType: 'distributionType', filterValue: DistributionTypeValue.SIMPLE });
+    mockFilterElement.onFilterChange.emit({
+      filterType: MyPerformanceFilterActionType.Metric,
+      filterValue: MetricValue.DEPLETIONS
+    });
+    mockFilterElement.onFilterChange.emit({
+      filterType: MyPerformanceFilterActionType.TimePeriod,
+      filterValue: DateRangeTimePeriodValue.L90BDL
+    });
+    mockFilterElement.onFilterChange.emit({
+      filterType: MyPerformanceFilterActionType.PremiseType,
+      filterValue: PremiseTypeValue.OFF
+    });
+    mockFilterElement.onFilterChange.emit({
+      filterType: MyPerformanceFilterActionType.DistributionType,
+      filterValue: DistributionTypeValue.SIMPLE
+    });
 
     expect(store.dispatch.calls.count()).toEqual(4);
     expect(store.dispatch.calls.argsFor(0)).toEqual([{

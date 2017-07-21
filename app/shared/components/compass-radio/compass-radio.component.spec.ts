@@ -5,28 +5,11 @@ import { FormsModule } from '@angular/forms';
 import { MdRadioModule } from '@angular/material';
 import * as Chance from 'chance';
 
+import { compassRadioOptionMock } from '../../../models/compass-radio-options.model.mock';
 import { CompassRadioComponent } from './compass-radio.component';
 
 const chance = new Chance();
-const keysMock: Array<string> = [];
-const optionsMock: Array<any> = [];
-
-for (let i = 0; i < 3; i++) {
-  keysMock.push(chance.string());
-}
-
-for (let i = 0; i < 3; i++) {
-  const mockOption = {};
-
-  keysMock.forEach(randomKey => {
-    mockOption[randomKey] = chance.string();
-  });
-
-  optionsMock.push(mockOption);
-}
-
-const displayKeyMock = keysMock[Math.floor(Math.random() * keysMock.length)];
-const valueKeyMock = keysMock[Math.floor(Math.random() * keysMock.length)];
+const optionsMock = compassRadioOptionMock();
 const titleMock = chance.string();
 
 describe('CompassRadioComponent', () => {
@@ -43,9 +26,8 @@ describe('CompassRadioComponent', () => {
     componentInstance = fixture.componentInstance;
 
     componentInstance.options = optionsMock;
-    componentInstance.displayKey = displayKeyMock;
-    componentInstance.valueKey = valueKeyMock;
-    componentInstance.model = optionsMock[0][valueKeyMock];
+    componentInstance.model = optionsMock[0].value;
+    componentInstance.stacked = true;
   });
 
   describe('component init', () => {
@@ -54,7 +36,7 @@ describe('CompassRadioComponent', () => {
       tick();
       const selectedRadioButtonElement = fixture.debugElement.query(By.css('.mat-radio-checked .compass-radio-value')).nativeElement;
 
-      expect(selectedRadioButtonElement.textContent).toBe(optionsMock[0][displayKeyMock]);
+      expect(selectedRadioButtonElement.textContent).toBe(optionsMock[0].display);
     }));
   });
 
@@ -80,8 +62,8 @@ describe('CompassRadioComponent', () => {
     it('should output the value of a clicked radio button', () => {
       fixture.detectChanges();
 
-      componentInstance.onRadioClicked.subscribe((value: string) => {
-        expect(value).toBe(optionsMock[0][valueKeyMock]);
+      componentInstance.onRadioClicked.subscribe((value: any) => {
+        expect(value).toBe(optionsMock[0].value);
       });
 
       fixture.debugElement.query(By.css('.compass-radio-button:nth-child(1)')).triggerEventHandler('click', null);
@@ -89,8 +71,8 @@ describe('CompassRadioComponent', () => {
   });
 
   describe('radio button direction styles', () => {
-    it('should have a "inline" class when [direction] input is "inline"', () => {
-      componentInstance.direction = 'inline';
+    it('should have a "inline" class when [stacked] input is false', () => {
+      componentInstance.stacked = false;
       fixture.detectChanges();
       const inlineRadioElement = fixture.debugElement.query(By.css('.compass-radio-group:nth-child(1) .inline'));
       const stackedRadioElement = fixture.debugElement.query(By.css('.compass-radio-group:nth-child(1) .stacked'));
@@ -99,8 +81,8 @@ describe('CompassRadioComponent', () => {
       expect(stackedRadioElement).toBe(null);
     });
 
-    it('should have a "stacked" class when [direction] input is "stacked"', () => {
-      componentInstance.direction = 'stacked';
+    it('should have a "stacked" class when [stacked] input is true', () => {
+      componentInstance.stacked = true;
       fixture.detectChanges();
       const inlineRadioElement = fixture.debugElement.query(By.css('.compass-radio-group:nth-child(1) .inline'));
       const stackedRadioElement = fixture.debugElement.query(By.css('.compass-radio-group:nth-child(1) .stacked'));

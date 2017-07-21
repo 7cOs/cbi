@@ -5,6 +5,8 @@ import { Subscription } from 'rxjs/Subscription';
 import { AppState } from '../../state/reducers/root.reducer';
 import { DateRangesState } from '../../state/reducers/date-ranges.reducer';
 import { MyPerformanceFilter } from '../../models/my-performance-filter.model';
+import { MyPerformanceFilterActionType } from '../../enums/my-performance-filter.enum';
+import { MyPerformanceFilterEvent } from '../../models/my-performance-filter.model';
 import * as MyPerformanceFilterActions from '../../state/actions/my-performance-filter.action';
 
 @Component({
@@ -33,20 +35,20 @@ export class MyPerformanceComponent implements OnDestroy {
     this.dateRangeSubscription.unsubscribe();
   }
 
-  private filterOptionSelected(event: any) { // tslint:disable-line:no-unused-variable
+  private filterOptionSelected(event: MyPerformanceFilterEvent): void { // tslint:disable-line:no-unused-variable
     let actionType;
 
     switch (event.filterType) {
-      case 'metric':
+      case MyPerformanceFilterActionType.Metric:
         actionType = MyPerformanceFilterActions.SET_METRIC;
         break;
-      case 'timePeriod':
+      case MyPerformanceFilterActionType.TimePeriod:
         actionType = MyPerformanceFilterActions.SET_TIME_PERIOD;
         break;
-      case 'premiseType':
+      case MyPerformanceFilterActionType.PremiseType:
         actionType = MyPerformanceFilterActions.SET_PREMISE_TYPE;
         break;
-      case 'distributionType':
+      case MyPerformanceFilterActionType.DistributionType:
         actionType = MyPerformanceFilterActions.SET_DISTRIBUTION_TYPE;
         break;
       default:

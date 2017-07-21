@@ -1,6 +1,8 @@
+import { CompassRadioOption } from './compass-radio-component.model';
 import { CompassSelectOption } from './compass-select-component.model';
 import { DateRangeTimePeriodValue } from '../enums/date-range-time-period.enum';
 import { DistributionTypeValue } from '../enums/distribution-type.enum';
+import { MyPerformanceFilterActionType } from '../enums/my-performance-filter.enum';
 import { MetricValue } from '../enums/metric-type.enum';
 import { PremiseTypeValue } from '../enums/premise-type.enum';
 
@@ -11,51 +13,48 @@ export interface MyPerformanceFilter {
   distributionType: DistributionTypeValue;
 }
 
-export const metricOptionsModel: Array<CompassSelectOption> = [
-  {
-    display: 'Depletions',
-    subDisplay: '',
-    value: MetricValue.DEPLETIONS
-  }, {
-    display: 'Distribution',
-    subDisplay: '',
-    value: MetricValue.DISTRIBUTION
-  }, {
-    display: 'Velocity',
-    subDisplay: '',
-    value: MetricValue.VELOCITY
-  }
-];
+export interface MyPerformanceFilterEvent {
+  filterType: MyPerformanceFilterActionType;
+  filterValue: any;
+}
 
-export const depletionsPremiseOptionsModel: Array<{ premiseType: string, premiseTypeValue: PremiseTypeValue }> = [
-  {
-    premiseType: 'All',
-    premiseTypeValue: PremiseTypeValue.ALL
-  }, {
-    premiseType: 'Off-Premise',
-    premiseTypeValue: PremiseTypeValue.OFF
-  }, {
-    premiseType: 'On-Premise',
-    premiseTypeValue: PremiseTypeValue.ON
-  }
-];
+export const metricOptionsModel: Array<CompassSelectOption> = [{
+  display: 'Depletions',
+  subDisplay: '',
+  value: MetricValue.DEPLETIONS
+}, {
+  display: 'Distribution',
+  subDisplay: '',
+  value: MetricValue.DISTRIBUTION
+}, {
+  display: 'Velocity',
+  subDisplay: '',
+  value: MetricValue.VELOCITY
+}];
 
-export const distributionPremiseOptionsModel: Array<{ premiseType: string, premiseTypeValue: PremiseTypeValue }> = [
-  {
-    premiseType: 'Off-Premise',
-    premiseTypeValue: PremiseTypeValue.OFF
-  }, {
-    premiseType: 'On-Premise',
-    premiseTypeValue: PremiseTypeValue.ON
-  }
-];
+export const depletionsPremiseOptionsModel: Array<CompassRadioOption> = [{
+  display: 'All',
+  value: PremiseTypeValue.ALL
+}, {
+  display: 'Off-Premise',
+  value: PremiseTypeValue.OFF
+}, {
+  display: 'On-Premise',
+  value: PremiseTypeValue.ON
+}];
 
-export const distributionOptionsModel: Array<{ distributionType: string, distributionTypeValue: DistributionTypeValue} > = [
-  {
-    distributionType: 'Simple',
-    distributionTypeValue: DistributionTypeValue.SIMPLE
-  }, {
-    distributionType: 'Effective',
-    distributionTypeValue: DistributionTypeValue.EFFECTIVE
-  }
-];
+export const distributionPremiseOptionsModel: Array<CompassRadioOption> = [{
+  display: 'Off-Premise',
+  value: PremiseTypeValue.OFF
+}, {
+  display: 'On-Premise',
+  value: PremiseTypeValue.ON
+}];
+
+export const distributionOptionsModel: Array<CompassRadioOption> = [{
+  display: 'Simple',
+  value: DistributionTypeValue.SIMPLE
+}, {
+  display: 'Effective',
+  value: DistributionTypeValue.EFFECTIVE
+}];

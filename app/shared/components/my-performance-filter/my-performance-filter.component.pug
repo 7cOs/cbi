@@ -6,7 +6,7 @@ section.filter-component-section
       [model]="filterState.metric",
       [options]="metricOptions",
       [title]="'metric'",
-      (onOptionSelected)="filterSelected('metric', $event)"
+      (onOptionSelected)="filterSelected(filterActionTypeEnum.Metric, $event)"
     )
 
   //- Time Period Select (Depletions)
@@ -15,7 +15,7 @@ section.filter-component-section
       [model]="filterState.timePeriod",
       [options]="depletionTimePeriodOptions",
       [title]="'time period'",
-      (onOptionSelected)="filterSelected('timePeriod', $event)"
+      (onOptionSelected)="filterSelected(filterActionTypeEnum.TimePeriod, $event)"
     )
 
   //- Time Period Select (Distribution)
@@ -24,7 +24,7 @@ section.filter-component-section
       [model]="filterState.timePeriod",
       [options]="distributionTimePeriodOptions",
       [title]="'time period'",
-      (onOptionSelected)="filterSelected('timePeriod', $event)"
+      (onOptionSelected)="filterSelected(filterActionTypeEnum.TimePeriod, $event)"
     )
 
   //- Premise Type Radio (Depletions)
@@ -32,11 +32,9 @@ section.filter-component-section
     compass-radio(
       [model]="filterState.premiseType",
       [options]="depletionsPremiseOptions",
-      [displayKey]="'premiseType'",
-      [valueKey]="'premiseTypeValue'",
       [title]="'premise type'",
-      [direction]="'inline'",
-      (onRadioClicked)="filterSelected('premiseType', $event)",
+      [stacked]="false",
+      (onRadioClicked)="filterSelected(filterActionTypeEnum.PremiseType, $event)",
     )
 
   //- Premise Type Radio (Distribution)
@@ -44,11 +42,9 @@ section.filter-component-section
     compass-radio(
       [model]="filterState.premiseType",
       [options]="distributionPremiseOptions",
-      [displayKey]="'premiseType'",
-      [valueKey]="'premiseTypeValue'",
       [title]="'premise type'",
-      [direction]="filterState.metric === metricValueEnum.DISTRIBUTION ? 'stacked' : 'inline'",
-      (onRadioClicked)="filterSelected('premiseType', $event)"
+      [stacked]="filterState.metric === metricValueEnum.DISTRIBUTION ? true : false",
+      (onRadioClicked)="filterSelected(filterActionTypeEnum.PremiseType, $event)"
     )
 
   //- Distribution Type Radio
@@ -56,9 +52,7 @@ section.filter-component-section
     compass-radio(
       [model]="filterState.distributionType",
       [options]="distributionOptions",
-      [displayKey]="'distributionType'",
-      [valueKey]="'distributionTypeValue'",
       [title]="'distribution type'",
-      [direction]="'stacked'",
-      (onRadioClicked)="filterSelected('distributionType', $event)"
+      [stacked]="true",
+      (onRadioClicked)="filterSelected(filterActionTypeEnum.DistributionType, $event)"
     )
