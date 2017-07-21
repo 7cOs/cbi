@@ -89,13 +89,6 @@ describe('[Services.userService - performance]', function() {
           performance: [{ measures: [distributionPerformanceData.performance[0].measures[0]] }]
         }
       }, {
-        id: '999999',
-        name: 'INDEPENDENT',
-        premiseType: 'UNKNOWN',
-        measures: {
-          performance: [{ measures: [distributionPerformanceData.performance[0].measures[0]] }]
-        }
-      }, {
         id: 'ALL OTHER',
         name: 'ALL OTHER',
         premiseType: 'OFF PREMISE',
@@ -113,13 +106,6 @@ describe('[Services.userService - performance]', function() {
         id: 'ALL OTHER',
         name: 'ALL OTHER',
         premiseType: 'NON RETAIL',
-        measures: {
-          performance: [{ measures: [distributionPerformanceData.performance[0].measures[0]] }]
-        }
-      }, {
-        id: 'ALL OTHER',
-        name: 'ALL OTHER',
-        premiseType: 'UNKNOWN',
         measures: {
           performance: [{ measures: [distributionPerformanceData.performance[0].measures[0]] }]
         }
@@ -238,11 +224,9 @@ describe('[Services.userService - performance]', function() {
     expect(returnedAccounts[1].name).toEqual('INDEPENDENT (OFF)');
     expect(returnedAccounts[2].name).toEqual('INDEPENDENT (ON)');
     expect(returnedAccounts[3].name).toEqual('INDEPENDENT (NON-RETAIL)');
-    expect(returnedAccounts[4].name).toEqual('INDEPENDENT (UNKNOWN)');
-    expect(returnedAccounts[5].name).toEqual('UNMANAGED CHAIN (OFF)');
-    expect(returnedAccounts[6].name).toEqual('UNMANAGED CHAIN (ON)');
-    expect(returnedAccounts[7].name).toEqual('UNMANAGED CHAIN (NON-RETAIL)');
-    expect(returnedAccounts[8].name).toEqual('UNMANAGED CHAIN (UNKNOWN)');
+    expect(returnedAccounts[4].name).toEqual('UNMANAGED CHAIN (OFF)');
+    expect(returnedAccounts[5].name).toEqual('UNMANAGED CHAIN (ON)');
+    expect(returnedAccounts[6].name).toEqual('UNMANAGED CHAIN (NON-RETAIL)');
   });
 
   it('get top bottom snapshot distribution', () => {

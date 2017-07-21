@@ -522,16 +522,15 @@ module.exports = /*  @ngInject */
 
       function indicatePremiseTypes(accountArray) {
         return accountArray.map(account => {
-          const _account = Object.assign({}, account);
+          if (account.id === '999999' || account.id === 'ALL OTHER') {
+            const premiseTypeDisplay = ` (${filtersService.accountFilters.premiseTypeDisplay[account.premiseType]})`;
 
-          if (_account.id === '999999') {
-            _account.name += ` (${filtersService.accountFilters.premiseTypeValue[_account.premiseType].toUpperCase()})`;
-          }
-          if (_account.id === 'ALL OTHER') {
-            _account.name = `UNMANAGED CHAIN (${filtersService.accountFilters.premiseTypeValue[_account.premiseType].toUpperCase()})`;
+            account.name = account.id ===  '999999'
+              ? account.name + premiseTypeDisplay
+              : 'UNMANAGED CHAIN' + premiseTypeDisplay;
           }
 
-          return _account;
+          return account;
         });
       }
 
