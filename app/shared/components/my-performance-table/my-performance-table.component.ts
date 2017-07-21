@@ -84,7 +84,7 @@ export class MyPerformanceTableComponent {
     // this will only sort on the FIRST criterion (for now)
     const ascending = this._sortingCriteria[0].columnType === colType
       ? !this._sortingCriteria[0].ascending
-      : colType === ColumnType.descriptionLine0;
+      : colType === ColumnType.descriptionRow0;
     const criteria = [<SortingCriteria>{columnType: colType, ascending: ascending}];
     this.applySortingCriteria(criteria);
   }

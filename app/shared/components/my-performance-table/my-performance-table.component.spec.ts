@@ -75,17 +75,17 @@ describe('MyPerformanceTableComponent', () => {
 
     it('should sort the data with two criteria', () => {
       let tableData = myPerformanceTableRowMock(3);
-      tableData[0].descriptionLine0 = 'b';
+      tableData[0].descriptionRow0 = 'b';
       tableData[0].metricColumn0 = 1;
-      tableData[1].descriptionLine0 = 'a';
+      tableData[1].descriptionRow0 = 'a';
       tableData[1].metricColumn0 = 0;
-      tableData[2].descriptionLine0 = 'b';
+      tableData[2].descriptionRow0 = 'b';
       tableData[2].metricColumn0 = 2;
       componentInstance.tableData = tableData.slice();
 
       const sortingCriteria = [
         {
-          columnType: ColumnType.descriptionLine0,
+          columnType: ColumnType.descriptionRow0,
           ascending: true
         },
         {
