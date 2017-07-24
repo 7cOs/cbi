@@ -8,15 +8,16 @@ import { MyPerformanceTableRow } from '../../../models/my-performance-table-row.
 import { myPerformanceTableRowMock } from '../../../models/my-performance-table-row.model.mock';
 import { SortIndicatorComponent } from '../sort-indicator/sort-indicator.component';
 import { sortingCriteriaMock } from '../../../models/my-performance-table-sorting-criteria.model.mock';
+import { ViewType } from '../../../enums/view-type.enum';
 
 @Component({
   selector: '[my-performance-table-row]',
   template: ''
 })
-
 class MockMyPerformanceTableRowComponent {
   @Input() rowData: MyPerformanceTableRow;
   @Input() showOpportunities: boolean;
+  @Input() viewType: ViewType;
 }
 
 describe('MyPerformanceTableComponent', () => {
@@ -51,7 +52,6 @@ describe('MyPerformanceTableComponent', () => {
       const firstColumnType = ColumnType[sortingCriteria[0].columnType];
 
       fixture.detectChanges();
-
       const mockElements = fixture.debugElement
         .queryAll(By.directive(MockMyPerformanceTableRowComponent));
       const rowComponent0 = mockElements[0]

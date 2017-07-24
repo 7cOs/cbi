@@ -1,4 +1,3 @@
-// tslint:disable:no-unused-variable
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 
 import { ColumnType } from '../../../enums/column-type.enum';
@@ -24,10 +23,9 @@ export class MyPerformanceTableComponent {
 
   @Input()
   set tableData(tableData: Array<MyPerformanceTableRow>) {
-    this._tableData = tableData;
-    if (typeof this.sortingFunction === 'function') {
-      this._tableData = this._tableData.sort(this.sortingFunction);
-    }
+    this.sortedTableData = typeof this.sortingFunction === 'function'
+      ? tableData.sort(this.sortingFunction)
+      : tableData;
   }
 
   @Input() dateRange: DateRange;
@@ -37,10 +35,41 @@ export class MyPerformanceTableComponent {
   @Input() totalRow: MyPerformanceTableRow;
   @Input() viewType: ViewType;
 
+  public sortedTableData: Array<MyPerformanceTableRow>;
+  public columnType = ColumnType;
+
   private sortingFunction: (elem0: MyPerformanceTableRow, elem1: MyPerformanceTableRow) => number;
   private _sortingCriteria: Array<SortingCriteria> = null;
-  private _tableData: Array<MyPerformanceTableRow>;
-  private columnType = ColumnType; // for use in template
+
+  public clickOn(row: MyPerformanceTableRow, index: number) {
+    console.log('clicked on ', row);
+    this.onElementClicked.emit({row: row, index: index});
+  }
+
+  public centerColumnsWidth(): string {
+    return this.showOpportunities ? 'col-50-pct' : 'col-60-pct';
+  }
+
+  public columnWidth(): string {
+    return this.showOpportunities ? 'col-16-pct' : 'col-20-pct';
+  }
+
+  public getSortStatus(columnType: ColumnType): SortStatus {
+    return this._sortingCriteria[0].columnType === columnType
+      ? this._sortingCriteria[0].ascending
+        ? SortStatus.ascending
+        : SortStatus.descending
+      : SortStatus.inactive;
+  }
+
+  public sortRows(colType: ColumnType) {
+    // this will only sort on the FIRST criterion (for now)
+    const ascending = this._sortingCriteria[0].columnType === colType
+      ? !this._sortingCriteria[0].ascending
+      : colType === ColumnType.descriptionLine0;
+    const criteria = [<SortingCriteria>{columnType: colType, ascending: ascending}];
+    this.applySortingCriteria(criteria);
+  }
 
   private updateSortingFunction() {
     if (this._sortingCriteria.length) {
@@ -67,46 +96,11 @@ export class MyPerformanceTableComponent {
         : 0;
   }
 
-  private clickOn(row: MyPerformanceTableRow, index: number) {
-    console.log('clicked on ', row);
-    this.onElementClicked.emit({row: row, index: index});
-  }
-
   private applySortingCriteria(criteria: SortingCriteria[]) {
     this._sortingCriteria = criteria;
     this.updateSortingFunction();
-    if (this._tableData && this._tableData.length) {
-      this._tableData = this._tableData.sort(this.sortingFunction);
+    if (this.sortedTableData && this.sortedTableData.length) {
+      this.sortedTableData = this.sortedTableData.sort(this.sortingFunction);
     }
   }
-
-  private sortRows(colType: ColumnType) {
-    // this will only sort on the FIRST criterion (for now)
-    const ascending = this._sortingCriteria[0].columnType === colType
-      ? !this._sortingCriteria[0].ascending
-      : colType === ColumnType.descriptionLine0;
-    const criteria = [<SortingCriteria>{columnType: colType, ascending: ascending}];
-    this.applySortingCriteria(criteria);
-  }
-
-  private getSortStatus(columnType: ColumnType): SortStatus {
-    return this._sortingCriteria[0].columnType === columnType
-      ? this._sortingCriteria[0].ascending
-        ? SortStatus.ascending
-        : SortStatus.descending
-      : SortStatus.inactive;
-  }
-
-  private columnWidth(): string {
-    return this.showOpportunities ? 'col-16-pct' : 'col-20-pct';
-  }
-
-  private centerColumnsWidth(): string {
-    return this.showOpportunities ? 'col-50-pct' : 'col-60-pct';
-  }
-}
-
-export interface SortingCriteria {
-  columnType: ColumnType;
-  ascending: boolean;
 }

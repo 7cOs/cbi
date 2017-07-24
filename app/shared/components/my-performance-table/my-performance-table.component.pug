@@ -38,7 +38,7 @@ div.performance-table-wrapper
 
     tbody
       tr.entity-row.col-100-pct(my-performance-table-row, 
-                                *ngFor="let rowData of _tableData, let i = index", 
+                                *ngFor="let rowData of sortedTableData, let i = index", 
                                 [rowData]="rowData",
                                 [showOpportunities]="showOpportunities",
                                 (click)="clickOn(rowData, i)")

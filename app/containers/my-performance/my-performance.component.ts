@@ -1,5 +1,4 @@
-// tslint:disable:no-unused-variable
-import { Component, EventEmitter } from '@angular/core';
+import { Component } from '@angular/core';
 
 import { ColumnType } from '../../enums/column-type.enum';
 import { DateRange } from '../../models/date-range.model';
@@ -9,16 +8,9 @@ import { SortingCriteria } from '../../models/sorting-criteria.model';
 import { ViewType } from '../../enums/view-type.enum';
 
 // mocks
-import { dateRangeDTOsMock } from '../../models/date-range-dto-collection.model.mock';
 import { myPerformanceTableData,
          myPerformanceTotalRowData,
-         myPerformanceRightTableData,
-         myPerformanceSkusData,
-         myPerformanceSkuTotalData,
-         myPerformanceTotalPeopleData,
-         myPerformancePeopleData,
-         myPerformanceAccountData,
-         myPerformanceTotalAccountData } from '../../models/my-performance-table-data.model.mock';
+         myPerformanceRightTableData } from '../../models/my-performance-table-data.model.mock';
 
 @Component({
   selector: 'my-performance',
@@ -26,24 +18,29 @@ import { myPerformanceTableData,
   styles: [require('./my-performance.component.scss')]
 })
 export class MyPerformanceComponent {
-  private viewType = ViewType;
+  public viewType = ViewType;
 
   // mocks
-  private _tableHeaderRowLeft: Array<string> = ['PEOPLE', 'DEPLETIONS', 'CTV'];
-  private _tableHeaderRowRight: Array<string> = ['BRAND', 'DEPLETIONS', 'CTV'];
-  private _performanceMetric: string = 'Depletions';
-  private _dateRange: DateRange = getDateRangeMock();
-  private _tableData: MyPerformanceTableRow[] = myPerformanceTableData;
-  private _rightTableData: MyPerformanceTableRow[] = myPerformanceRightTableData;
-  private _totalRowData: MyPerformanceTableRow = myPerformanceTotalRowData;
-  private _showOpportunities: boolean = true;
-  private _sortingCriteria: Array<SortingCriteria> = [{columnType: ColumnType.metricColumn0, ascending: false}];
+  public tableHeaderRowLeft: Array<string> = ['PEOPLE', 'DEPLETIONS', 'CTV'];
+  public tableHeaderRowRight: Array<string> = ['BRAND', 'DEPLETIONS', 'CTV'];
+  public performanceMetric: string = 'Depletions';
+  public dateRange: DateRange = getDateRangeMock();
+  public tableData: MyPerformanceTableRow[] = myPerformanceTableData;
+  public rightTableData: MyPerformanceTableRow[] = myPerformanceRightTableData;
+  public totalRowData: MyPerformanceTableRow = myPerformanceTotalRowData;
+  public showOpportunities: boolean = true;
+  public sortingCriteria: Array<SortingCriteria> = [
+    {
+      columnType: ColumnType.metricColumn0,
+      ascending: false
+    }
+  ];
 
-  private handleSortRows(criteria: SortingCriteria[]): void {
-    this._sortingCriteria = criteria;
+  public handleSortRows(criteria: SortingCriteria[]): void {
+    this.sortingCriteria = criteria;
   }
 
-  private handleElementClicked(row: MyPerformanceTableRow, index: number): void {
+  public handleElementClicked(row: MyPerformanceTableRow, index: number): void {
     console.log(row);
     console.log(index);
   }

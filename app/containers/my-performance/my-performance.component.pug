@@ -1,19 +1,19 @@
 div
   my-performance-table.left(
-    [tableData]="_tableData", 
-    [dateRange]="_dateRange", 
-    [tableHeaderRow]="_tableHeaderRowLeft",
-    [performanceMetric]="_performanceMetric",
-    [totalRow]="_totalRowData",
-    [sortingCriteria]="_sortingCriteria",
+    [tableData]="tableData", 
+    [dateRange]="dateRange", 
+    [tableHeaderRow]="tableHeaderRowLeft",
+    [performanceMetric]="performanceMetric",
+    [totalRow]="totalRowData",
+    [sortingCriteria]="sortingCriteria",
     [showOpportunities]="false",
     (onSortingCriteriaChanged)="handleSortRows($event)")
 
   my-performance-table.right(
-    [tableData]="_rightTableData", 
-    [tableHeaderRow]="_tableHeaderRowRight",
+    [tableData]="rightTableData", 
+    [tableHeaderRow]="tableHeaderRowRight",
     [performanceMetric]="'Product Snapshot'",
-    [sortingCriteria]="_sortingCriteria",
-    [showOpportunities]="_showOpportunities",
+    [sortingCriteria]="sortingCriteria",
+    [showOpportunities]="showOpportunities",
     [viewType]="viewType.brands",
     (onSortingCriteriaChanged)="handleSortRows($event)")

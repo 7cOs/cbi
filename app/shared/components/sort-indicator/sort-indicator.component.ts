@@ -1,4 +1,3 @@
-// tslint:disable:no-unused-variable
 import { Component, Input } from '@angular/core';
 
 import { SortStatus } from '../../../enums/sort-status.enum';
@@ -12,5 +11,5 @@ import { SortStatus } from '../../../enums/sort-status.enum';
 export class SortIndicatorComponent {
   @Input() status: SortStatus;
 
-  private sortStatus = SortStatus; // for use in template;
+  public sortStatus = SortStatus;
 }
