@@ -8,9 +8,9 @@ div.performance-table-wrapper
   table.my-performance-table.col-100-pct.view-type([ngClass]="'view-type-' + viewType")
     thead.col-100-pct
       tr.top-header.col-100-pct
-        th.left-col.sort-indicator(colspan=1, [ngClass]="columnWidth()", (click)="sortRows(columnType.descriptionLine0)")
+        th.left-col.sort-indicator(colspan=1, [ngClass]="columnWidth()", (click)="sortRows(columnType.descriptionRow0)")
           span {{ tableHeaderRow[0] }}
-            sort-indicator([status]="getSortStatus(columnType.descriptionLine0)")
+            sort-indicator([status]="getSortStatus(columnType.descriptionRow0)")
         th.center-col.sort-indicator(colspan=3, [ngClass]="centerColumnsWidth()") {{ tableHeaderRow[1] }} 
         th.right-col.sort-indicator(colspan=1, [ngClass]="columnWidth()", (click)="sortRows(columnType.ctv)") 
           span {{ tableHeaderRow[2] }}

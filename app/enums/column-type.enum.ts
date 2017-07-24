@@ -1,6 +1,6 @@
 export enum ColumnType {
-  descriptionLine0,
-  descriptionLine1,
+  descriptionRow0,
+  descriptionRow1,
   metricColumn0,
   metricColumn1,
   metricColumn2,

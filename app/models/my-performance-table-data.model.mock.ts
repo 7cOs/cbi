@@ -2,72 +2,72 @@ import { MyPerformanceTableRow } from './my-performance-table-row.model';
 
 export const myPerformanceTableData: MyPerformanceTableRow[] = [
   {
-    descriptionLine0: 'Specialists',
-    descriptionLine1: '',
+    descriptionRow0: 'Specialists',
+    descriptionRow1: '',
     metricColumn0: 123,
     metricColumn1: 456,
     metricColumn2: 789,
     ctv: 44
   },
   {
-    descriptionLine0: 'MDMs',
-    descriptionLine1: '',
+    descriptionRow0: 'MDMs',
+    descriptionRow1: '',
     metricColumn0: 11,
     metricColumn1: -46,
     metricColumn2: -78,
     ctv: 4
   },
   {
-    descriptionLine0: 'NAMs',
-    descriptionLine1: '',
+    descriptionRow0: 'NAMs',
+    descriptionRow1: '',
     metricColumn0: 14,
     metricColumn1: 46,
     metricColumn2: 71,
     ctv: 9
   },
   {
-    descriptionLine0: 'Specialists',
-    descriptionLine1: '',
+    descriptionRow0: 'Specialists',
+    descriptionRow1: '',
     metricColumn0: 123,
     metricColumn1: 456,
     metricColumn2: 789,
     ctv: 44
   },
   {
-    descriptionLine0: 'MDMs',
-    descriptionLine1: '',
+    descriptionRow0: 'MDMs',
+    descriptionRow1: '',
     metricColumn0: 11,
     metricColumn1: -46,
     metricColumn2: -78,
     ctv: 4
   },
   {
-    descriptionLine0: 'NAMs',
-    descriptionLine1: '',
+    descriptionRow0: 'NAMs',
+    descriptionRow1: '',
     metricColumn0: 14,
     metricColumn1: 46,
     metricColumn2: 71,
     ctv: 9
   },
   {
-    descriptionLine0: 'Specialists',
-    descriptionLine1: '',
+    descriptionRow0: 'Specialists',
+    descriptionRow1: '',
     metricColumn0: 123,
     metricColumn1: 456,
     metricColumn2: 789,
     ctv: 44
   },
   {
-    descriptionLine0: 'MDMs',
-    descriptionLine1: '',
+    descriptionRow0: 'MDMs',
+    descriptionRow1: '',
     metricColumn0: 11,
     metricColumn1: -46,
     metricColumn2: -78,
     ctv: 4
   },
   {
-    descriptionLine0: 'NAMs',
-    descriptionLine1: '',
+    descriptionRow0: 'NAMs',
+    descriptionRow1: '',
     metricColumn0: 14,
     metricColumn1: 46,
     metricColumn2: 71,
@@ -77,48 +77,48 @@ export const myPerformanceTableData: MyPerformanceTableRow[] = [
 
 export const myPerformanceRightTableData: MyPerformanceTableRow[] = [
   {
-    descriptionLine0: 'Modelo Especial',
-    descriptionLine1: '',
+    descriptionRow0: 'Modelo Especial',
+    descriptionRow1: '',
     metricColumn0: 11,
     metricColumn1: 456,
     metricColumn2: 789,
     ctv: 44
   },
   {
-    descriptionLine0: 'Corona Extra',
-    descriptionLine1: '',
+    descriptionRow0: 'Corona Extra',
+    descriptionRow1: '',
     metricColumn0: 11,
     metricColumn1: -46,
     metricColumn2: -78,
     ctv: 4
   },
   {
-    descriptionLine0: 'Tocayo',
-    descriptionLine1: '',
+    descriptionRow0: 'Tocayo',
+    descriptionRow1: '',
     metricColumn0: 14,
     metricColumn1: 46,
     metricColumn2: 71,
     ctv: 9
   },
   {
-    descriptionLine0: 'Modelo Negra',
-    descriptionLine1: '',
+    descriptionRow0: 'Modelo Negra',
+    descriptionRow1: '',
     metricColumn0: 11,
     metricColumn1: 456,
     metricColumn2: 789,
     ctv: 44
   },
   {
-    descriptionLine0: 'Victoria',
-    descriptionLine1: '',
+    descriptionRow0: 'Victoria',
+    descriptionRow1: '',
     metricColumn0: 11,
     metricColumn1: -46,
     metricColumn2: -78,
     ctv: 4
   },
   {
-    descriptionLine0: 'Pacifico',
-    descriptionLine1: '',
+    descriptionRow0: 'Pacifico',
+    descriptionRow1: '',
     metricColumn0: 14,
     metricColumn1: 46,
     metricColumn2: 71,
@@ -127,8 +127,8 @@ export const myPerformanceRightTableData: MyPerformanceTableRow[] = [
 ];
 
 export const myPerformanceSkuTotalData: MyPerformanceTableRow = {
-  descriptionLine0: 'Modelo',
-  descriptionLine1: '',
+  descriptionRow0: 'Modelo',
+  descriptionRow1: '',
   metricColumn0: 100,
   metricColumn1: 222,
   metricColumn2: 77,
@@ -137,80 +137,80 @@ export const myPerformanceSkuTotalData: MyPerformanceTableRow = {
 
 export const myPerformanceSkusData: MyPerformanceTableRow[] = [
   {
-    descriptionLine0: '1/2 BL',
-    descriptionLine1: '',
+    descriptionRow0: '1/2 BL',
+    descriptionRow1: '',
     metricColumn0: 11,
     metricColumn1: 456,
     metricColumn2: 789,
     ctv: 44
   },
   {
-    descriptionLine0: '12PK BT',
-    descriptionLine1: '',
+    descriptionRow0: '12PK BT',
+    descriptionRow1: '',
     metricColumn0: 11,
     metricColumn1: -46,
     metricColumn2: -78,
     ctv: 4
   },
   {
-    descriptionLine0: '12PK CAN',
-    descriptionLine1: '',
+    descriptionRow0: '12PK CAN',
+    descriptionRow1: '',
     metricColumn0: 14,
     metricColumn1: 46,
     metricColumn2: 71,
     ctv: 9
   },
   {
-    descriptionLine0: '16OZ 4PK CAN',
-    descriptionLine1: '',
+    descriptionRow0: '16OZ 4PK CAN',
+    descriptionRow1: '',
     metricColumn0: 11,
     metricColumn1: 456,
     metricColumn2: 789,
     ctv: 44
   },
   {
-    descriptionLine0: '12PK CAN',
-    descriptionLine1: '',
+    descriptionRow0: '12PK CAN',
+    descriptionRow1: '',
     metricColumn0: 14,
     metricColumn1: 46,
     metricColumn2: 71,
     ctv: 9
   },
   {
-    descriptionLine0: '1/2 BL',
-    descriptionLine1: '',
+    descriptionRow0: '1/2 BL',
+    descriptionRow1: '',
     metricColumn0: 11,
     metricColumn1: 456,
     metricColumn2: 789,
     ctv: 44
   },
   {
-    descriptionLine0: '12PK BT',
-    descriptionLine1: '',
+    descriptionRow0: '12PK BT',
+    descriptionRow1: '',
     metricColumn0: 11,
     metricColumn1: -46,
     metricColumn2: -78,
     ctv: 4
   },
   {
-    descriptionLine0: '12PK CAN',
-    descriptionLine1: '',
+    descriptionRow0: '12PK CAN',
+    descriptionRow1: '',
     metricColumn0: 14,
     metricColumn1: 46,
     metricColumn2: 71,
     ctv: 9
   },
   {
-    descriptionLine0: '16OZ 4PK CAN',
-    descriptionLine1: '',
+    descriptionRow0: '16OZ 4PK CAN',
+    descriptionRow1: '',
     metricColumn0: 11,
     metricColumn1: 456,
     metricColumn2: 789,
     ctv: 44
   },
   {
-    descriptionLine0: '12PK CAN',
-    descriptionLine1: '',
+    descriptionRow0: '12PK CAN',
+    descriptionRow1: '',
     metricColumn0: 14,
     metricColumn1: 46,
     metricColumn2: 71,
@@ -219,8 +219,8 @@ export const myPerformanceSkusData: MyPerformanceTableRow[] = [
 ];
 
 export const myPerformanceTotalRowData: MyPerformanceTableRow = {
-  descriptionLine0: 'Total',
-  descriptionLine1: '',
+  descriptionRow0: 'Total',
+  descriptionRow1: '',
   metricColumn0: 1323,
   metricColumn1: 4356,
   metricColumn2: 89,
@@ -228,8 +228,8 @@ export const myPerformanceTotalRowData: MyPerformanceTableRow = {
 };
 
 export const myPerformanceTotalPeopleData: MyPerformanceTableRow = {
-  descriptionLine0: 'Total',
-  descriptionLine1: 'Role',
+  descriptionRow0: 'Total',
+  descriptionRow1: 'Role',
   metricColumn0: 1323,
   metricColumn1: 4356,
   metricColumn2: 89,
@@ -238,56 +238,56 @@ export const myPerformanceTotalPeopleData: MyPerformanceTableRow = {
 
 export const myPerformancePeopleData: MyPerformanceTableRow[] = [
   {
-    descriptionLine0: 'Inspecta Deck',
-    descriptionLine1: '',
+    descriptionRow0: 'Inspecta Deck',
+    descriptionRow1: '',
     metricColumn0: 11,
     metricColumn1: 456,
     metricColumn2: 789,
     ctv: 44
   },
   {
-    descriptionLine0: 'Ghosface Killah',
-    descriptionLine1: '',
+    descriptionRow0: 'Ghosface Killah',
+    descriptionRow1: '',
     metricColumn0: 11,
     metricColumn1: -46,
     metricColumn2: -78,
     ctv: 4
   },
   {
-    descriptionLine0: 'Method Man',
-    descriptionLine1: '',
+    descriptionRow0: 'Method Man',
+    descriptionRow1: '',
     metricColumn0: 14,
     metricColumn1: 46,
     metricColumn2: 71,
     ctv: 9
   },
   {
-    descriptionLine0: 'O.D.B, Esquire',
-    descriptionLine1: '',
+    descriptionRow0: 'O.D.B, Esquire',
+    descriptionRow1: '',
     metricColumn0: 11,
     metricColumn1: 456,
     metricColumn2: 789,
     ctv: 44
   },
   {
-    descriptionLine0: 'The GZA',
-    descriptionLine1: '',
+    descriptionRow0: 'The GZA',
+    descriptionRow1: '',
     metricColumn0: 14,
     metricColumn1: 46,
     metricColumn2: 71,
     ctv: 9
   },
   {
-    descriptionLine0: 'Raekwon',
-    descriptionLine1: '',
+    descriptionRow0: 'Raekwon',
+    descriptionRow1: '',
     metricColumn0: 11,
     metricColumn1: 456,
     metricColumn2: 789,
     ctv: 44
   },
   {
-    descriptionLine0: 'The RZA',
-    descriptionLine1: '',
+    descriptionRow0: 'The RZA',
+    descriptionRow1: '',
     metricColumn0: 11,
     metricColumn1: -46,
     metricColumn2: -78,
@@ -295,8 +295,8 @@ export const myPerformancePeopleData: MyPerformanceTableRow[] = [
   }
 ];
 export const myPerformanceTotalAccountData: MyPerformanceTableRow = {
-  descriptionLine0: 'Total',
-  descriptionLine1: 'Ghostface Killa',
+  descriptionRow0: 'Total',
+  descriptionRow1: 'Ghostface Killa',
   metricColumn0: 1323,
   metricColumn1: 4356,
   metricColumn2: 89,
@@ -305,40 +305,40 @@ export const myPerformanceTotalAccountData: MyPerformanceTableRow = {
 
 export const myPerformanceAccountData: MyPerformanceTableRow[] = [
   {
-    descriptionLine0: 'Walgreens',
-    descriptionLine1: 'Go To Dashboard',
+    descriptionRow0: 'Walgreens',
+    descriptionRow1: 'Go To Dashboard',
     metricColumn0: 11,
     metricColumn1: 456,
     metricColumn2: 789,
     ctv: 44
   },
   {
-    descriptionLine0: 'Walmart',
-    descriptionLine1: 'Go To Dashboard',
+    descriptionRow0: 'Walmart',
+    descriptionRow1: 'Go To Dashboard',
     metricColumn0: 11,
     metricColumn1: -46,
     metricColumn2: -78,
     ctv: 4
   },
   {
-    descriptionLine0: '7 Eleven',
-    descriptionLine1: 'Go To Dashboard',
+    descriptionRow0: '7 Eleven',
+    descriptionRow1: 'Go To Dashboard',
     metricColumn0: 14,
     metricColumn1: 46,
     metricColumn2: 71,
     ctv: 9
   },
   {
-    descriptionLine0: "Joe's Liquors",
-    descriptionLine1: 'Go To Dashboard',
+    descriptionRow0: "Joe's Liquors",
+    descriptionRow1: 'Go To Dashboard',
     metricColumn0: 11,
     metricColumn1: 456,
     metricColumn2: 789,
     ctv: 44
   },
   {
-    descriptionLine0: 'The Place',
-    descriptionLine1: 'Go To Dashboard',
+    descriptionRow0: 'The Place',
+    descriptionRow1: 'Go To Dashboard',
     metricColumn0: 14,
     metricColumn1: 46,
     metricColumn2: 71,
