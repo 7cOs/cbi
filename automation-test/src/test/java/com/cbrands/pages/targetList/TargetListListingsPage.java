@@ -42,17 +42,13 @@ public class TargetListListingsPage extends TestNGBasePage {
 
   @Override
   public boolean isLoaded() throws Error {
-    return isHeaderDisplayed();
+    waitForVisibleFluentWait(listingsHeader);
+    return listingsHeader.isDisplayed();
   }
 
   @Override
   protected void load() {
     driver.get(PropertiesCache.getInstance().getProperty("host.address") + "/target-lists");
-  }
-
-  public boolean isHeaderDisplayed() {
-    waitForVisibleFluentWait(listingsHeader);
-    return listingsHeader.isDisplayed();
   }
 
   public TargetListListingsPage clickDeleteButton() {
