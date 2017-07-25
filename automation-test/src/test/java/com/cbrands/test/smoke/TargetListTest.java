@@ -5,6 +5,7 @@ import com.cbrands.pages.HomePage;
 import com.cbrands.pages.Login;
 import com.cbrands.pages.LogoutPage;
 import com.cbrands.pages.targetList.TargetListListingsPage;
+import org.openqa.selenium.support.PageFactory;
 import org.testng.Assert;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
@@ -30,7 +31,8 @@ public class TargetListTest extends BaseTestCase {
     HomePage homePage = login.loginWithValidCredentials(testUser.userName(), testUser.password());
     Assert.assertTrue(homePage.isOnHomePage(), "Failed to log in user: " + testUser.userName());
 
-    targetListListingPage = homePage.navigateToTargetListListingsPage();
+    targetListListingPage = PageFactory.initElements(driver, TargetListListingsPage.class);
+    targetListListingPage.goToPage();
   }
 
   @AfterMethod
