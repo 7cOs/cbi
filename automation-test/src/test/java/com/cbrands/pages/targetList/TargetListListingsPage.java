@@ -1,6 +1,7 @@
 package com.cbrands.pages.targetList;
 
 import com.cbrands.helper.PropertiesCache;
+import com.cbrands.pages.TestNGBasePage;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openqa.selenium.By;
@@ -10,14 +11,12 @@ import org.openqa.selenium.support.FindAll;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.How;
 import org.openqa.selenium.support.PageFactory;
-import org.openqa.selenium.support.ui.LoadableComponent;
-import org.testng.Assert;
 
 import java.util.List;
 
 import static com.cbrands.helper.SeleniumUtils.*;
 
-public class TargetListListingsPage extends LoadableComponent<TargetListListingsPage> {
+public class TargetListListingsPage extends TestNGBasePage {
 
   private final WebDriver driver;
   protected Log log = LogFactory.getLog(TargetListListingsPage.class);
@@ -42,8 +41,8 @@ public class TargetListListingsPage extends LoadableComponent<TargetListListings
   }
 
   @Override
-  protected void isLoaded() throws Error {
-    Assert.assertTrue(isHeaderDisplayed(), "Target List listings page not loaded.");
+  public boolean isLoaded() throws Error {
+    return isHeaderDisplayed();
   }
 
   @Override
