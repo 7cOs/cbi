@@ -310,7 +310,7 @@ public class HomePage extends LoadableComponent<HomePage>{
    */
   @Deprecated
     public AccountDashboard navigateToAccountDashboard(){
-      navigateToAccountDashboardPage();
+      PageFactory.initElements(driver, AccountDashboardPage.class).goToPage();
 	    return PageFactory.initElements(driver, AccountDashboard.class);
     }
 
