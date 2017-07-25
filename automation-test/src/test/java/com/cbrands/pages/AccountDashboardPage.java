@@ -43,7 +43,7 @@ public class AccountDashboardPage extends TestNGBasePage {
 
   @Override
   protected void load() {
-    driver.get(PropertiesCache.getInstance().getProperty("host.address") + "/accounts");
+    driver.get(webAppBaseUrl + "/accounts");
   }
 
   public AccountDashboardPage enterRetailerChainSearchText(String text) {
