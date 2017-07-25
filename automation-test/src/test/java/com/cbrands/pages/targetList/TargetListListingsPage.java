@@ -1,6 +1,5 @@
 package com.cbrands.pages.targetList;
 
-import com.cbrands.helper.PropertiesCache;
 import com.cbrands.pages.TestNGBasePage;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -48,7 +47,7 @@ public class TargetListListingsPage extends TestNGBasePage {
 
   @Override
   protected void load() {
-    driver.get(PropertiesCache.getInstance().getProperty("host.address") + "/target-lists");
+    driver.get(webAppBaseUrl + "/target-lists");
   }
 
   public TargetListListingsPage clickDeleteButton() {
