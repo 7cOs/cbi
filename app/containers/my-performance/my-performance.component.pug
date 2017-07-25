@@ -6,6 +6,7 @@ div
     [performanceMetric]="performanceMetric",
     [totalRow]="totalRowData",
     [sortingCriteria]="sortingCriteria",
+    [viewType]="viewType.roleGroups",
     [showOpportunities]="false",
     (onSortingCriteriaChanged)="handleSortRows($event)")
 
@@ -15,5 +16,70 @@ div
     [performanceMetric]="'Product Snapshot'",
     [sortingCriteria]="sortingCriteria",
     [showOpportunities]="showOpportunities",
+    [viewType]="viewType.brands",
+    (onSortingCriteriaChanged)="handleSortRows($event)")
+
+div(style="margin-top: 100px;")
+  my-performance-table.left(
+    [tableData]="tableData", 
+    [dateRange]="dateRange", 
+    [tableHeaderRow]="tableHeaderRowLeft",
+    [performanceMetric]="performanceMetric",
+    [totalRow]="totalRowData",
+    [sortingCriteria]="sortingCriteria",
+    [showOpportunities]="false",
+    [viewType]="viewType.roleGroups",
+    (onSortingCriteriaChanged)="handleSortRows($event)")
+
+  my-performance-table.right.view-type.skus(
+    [tableData]="skusData", 
+    [totalRow]="skuTotalData",
+    [tableHeaderRow]="tableHeaderRowRight",
+    [performanceMetric]="'Product Snapshot'",
+    [sortingCriteria]="sortingCriteria",
+    [showOpportunities]="false",
+    [viewType]="viewType.skus",
+    (onSortingCriteriaChanged)="handleSortRows($event)")
+
+div(style="margin-top: 100px;")
+  my-performance-table.left.view-type.people(
+    [tableData]="peopleData", 
+    [dateRange]="dateRange", 
+    [tableHeaderRow]="tableHeaderRowLeft",
+    [performanceMetric]="performanceMetric",
+    [totalRow]="peopleTotalData",
+    [sortingCriteria]="sortingCriteria",
+    [showOpportunities]="false",
+    [viewType]="viewType.people",
+    (onSortingCriteriaChanged)="handleSortRows($event)")
+
+  my-performance-table.right.view-type.skus(
+    [tableData]="skusData", 
+    [totalRow]="skuTotalData",
+    [tableHeaderRow]="tableHeaderRowRight",
+    [performanceMetric]="'Product Snapshot'",
+    [sortingCriteria]="sortingCriteria",
+    [showOpportunities]="true",
+    [viewType]="viewType.skus",
+    (onSortingCriteriaChanged)="handleSortRows($event)")
+
+div(style="margin-top: 100px;")
+  my-performance-table.left.view-type.accounts(
+    [tableData]="accountData", 
+    [dateRange]="dateRange", 
+    [tableHeaderRow]="tableHeaderRowLeft",
+    [performanceMetric]="performanceMetric",
+    [totalRow]="accountTotalData",
+    [sortingCriteria]="sortingCriteria",
+    [showOpportunities]="false",
+    [viewType]="viewType.accounts",
+    (onSortingCriteriaChanged)="handleSortRows($event)")
+
+  my-performance-table.right.view-type.brands(
+    [tableData]="rightTableData",
+    [tableHeaderRow]="tableHeaderRowRight",
+    [performanceMetric]="'Product Snapshot'",
+    [sortingCriteria]="sortingCriteria",
+    [showOpportunities]="false",
     [viewType]="viewType.brands",
     (onSortingCriteriaChanged)="handleSortRows($event)")

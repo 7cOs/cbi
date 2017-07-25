@@ -10,7 +10,13 @@ import { ViewType } from '../../enums/view-type.enum';
 // mocks
 import { myPerformanceTableData,
          myPerformanceTotalRowData,
-         myPerformanceRightTableData } from '../../models/my-performance-table-data.model.mock';
+         myPerformanceRightTableData,
+         myPerformanceSkusData,
+         myPerformanceSkuTotalData,
+         myPerformanceTotalPeopleData,
+         myPerformancePeopleData,
+         myPerformanceAccountData,
+         myPerformanceTotalAccountData } from '../../models/my-performance-table-data.model.mock';
 
 @Component({
   selector: 'my-performance',
@@ -29,6 +35,12 @@ export class MyPerformanceComponent {
   public rightTableData: MyPerformanceTableRow[] = myPerformanceRightTableData;
   public totalRowData: MyPerformanceTableRow = myPerformanceTotalRowData;
   public showOpportunities: boolean = true;
+  public skusData = myPerformanceSkusData;
+  public skuTotalData = myPerformanceSkuTotalData;
+  public peopleData = myPerformancePeopleData;
+  public peopleTotalData = myPerformanceTotalPeopleData;
+  public accountData = myPerformanceAccountData;
+  public accountTotalData = myPerformanceTotalAccountData;
   public sortingCriteria: Array<SortingCriteria> = [
     {
       columnType: ColumnType.metricColumn0,
