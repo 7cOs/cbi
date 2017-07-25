@@ -14,7 +14,7 @@ export class CompassCardComponent {
   @Input() mainAction: string;
   @Input() iconVisible: boolean;
 
-  private optionMainActionClicked(): void { // tslint:disable-line:no-unused-variable
+  public optionMainActionClicked(): void {
     this.onMainActionClicked.emit();
   }
 

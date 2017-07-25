@@ -1,10 +1,8 @@
 section.landing-page
-
   section.landing-page-data(column="12")
-    div(row)
-      section.my-performance(column="7")
-        greeting([name]="l.greetingName")
-
+    greeting([name]="l.greetingName")
+    section.my-performance(column="8")
+      div(row)
         h2 My Performance
         .depletions(column="4")
           h3 Depletions FYTD
@@ -54,32 +52,30 @@ section.landing-page
                 h3 {{l.performanceData.performance[4].measures[0].value | number:0}}
               td
                 h3(ng-class="l.isPositive(l.performanceData.performance[4].measures[0].percentChange)").bold <span ng-if="l.isPositive(l.performanceData.performance[4].measures[0].percentChange) === 'positive'">+</span>{{l.performanceData.performance[4].measures[0].percentChange | number:1}}<span>%</span>
-
         div(column="8 +4")
           p.accent.action-item.go-arrow #[a(href="#" ui-sref="scorecards") Show Details]
-      section(column="4 +1")
-        compass-card(
-          [title]="'Compass Enhancements'",
-          [main-action]="'View job aides'",
-          [icon-visible]="true",
-          (on-main-action-clicked)="l.openViewJobAides()"
-        )
-          p Welcome to Compass! Need Help?
-          p Have you heard about the latest Compass enhancements? Here's what's new:
-            ul
-              li Additional filter options within the "Opportunities" search tool
-                ul
-                  li Simple Distribution
-                  li Authorization Type (mandated vs. authorized-optional sell-in)
-                  li Store Format (Hispanic vs. General Market)
-                  li Store Status (Sold vs. Unsold)
-                li Access to new sales reports (under "My Performance" > "More Reports")
-              li ...and more!
-          p Want to learn how to get the most out of Compass? Check out the Compass user guide and job aides.
-    div(row)
-      section.my-performance(column="7")
+      div(row)
         target
-      section.opportunities(column="4 +1")
+    section(column="4")
+      compass-card(
+        [title]="'Compass Enhancements'",
+        [main-action]="'View job aides'",
+        [icon-visible]="true",
+        (on-main-action-clicked)="l.openViewJobAides()"
+      )
+        p Welcome to Compass! Need Help?
+        p Have you heard about the latest Compass enhancements? Here's what's new:
+          ul
+            li Additional filter options within the "Opportunities" search tool
+              ul
+                li Simple Distribution
+                li Authorization Type (mandated vs. authorized-optional sell-in)
+                li Store Format (Hispanic vs. General Market)
+                li Store Status (Sold vs. Unsold)
+              li Access to new sales reports (under "My Performance" > "More Reports")
+            li ...and more!
+        p Want to learn how to get the most out of Compass? Check out the Compass user guide and job aides.
+      section.opportunities(column="12")
         h2 #[a(href="#" ui-sref="opportunities") Opportunities]
         h3 Saved Reports
         .filter-container.first
@@ -89,27 +85,3 @@ section.landing-page
                 md-option(ng-if="!l.savedFilters.length" class="saved-filter-option" value="" ng-class="{'show-span': hover}" ng-mouseenter="hover = true" ng-mouseleave="hover = false") No saved reports
                 md-option(ng-click="l.goToSavedFilter($event, savedFilter)" class="saved-filter-option" ng-repeat="savedFilter in l.savedFilters | orderBy: 'name'" value="{{::savedFilter.id}}" ng-class="{'show-span': hover}" ng-mouseenter="hover = true" ng-mouseleave="hover = false" analytics-on="click" analytics-event="Select Saved Report" analytics-category="Home" analytics-label="{{savedFilter.id}}") {{::savedFilter.name}}
                   span.go-arrow(ng-if="hover" ng-click="")
-        //
-          h3 New Search
-          .filter-container
-            legend Select <strong>premise type</strong> followed by a <strong>retailer</strong> and/or <strong>distributor</strong> to begin your search
-            label Premise Type
-            md-radio-group(ng-model="l.filtersService.model.selected.premiseType")
-              md-radio-button(ng-repeat="p in l.filtersService.model.premises | filter: '!All'" class="md-primary" ng-click="l.chipsService.addChip(p.name, 'premiseType', true, false)" ng-value="p.value" aria-label="p.name") {{p.name}}
-            .filter-item
-              label Retailer
-              inline-search(type="store" placeholder="Store, account, or subaccount name" chosen-result="l.filtersService.model.storeSearchText" callback="l.applyFilterArr(l.filtersService.model.selected.store, result, 'store', result.name)" show-address="true")
-            .filter-item
-              label Distributor
-              inline-search(type="distributor" placeholder="Name" chosen-result="l.filtersService.model.distributorSearchText" callback="l.applyFilterArr(l.filtersService.model.selected.distributor, result, 'distributor', result.name)")
-            .filter-item
-              label Opportunity Type
-              .dropdown-filter
-                .dropdown
-                  md-select(md-on-open="l.appendDoneButton()" ng-model="l.filtersService.model.selected.opportunityType"  multiple="true" md-on-close="l.applyFilterMulti(l.filtersService.model.selected.opportunitiesType, l.filtersService.model.selected.opportunityType, 'opportunitiesType'); l.closeDoneButton()" aria-label="Opportunity Type Dropdown")
-                    md-option(ng-repeat="type in l.filtersService.model.opportunitiesType" aria-label="{{type.name}}" value="{{type.name}}") {{::type.name}}
-            .filter-item
-              label Brand / Master SKU
-              inline-search(type="product" variety="sku" placeholder="By brand or SKU" chosen-result="l.filtersService.model.brandSearchText" callback="l.applyFilterArr(l.filtersService.model.selected.masterSKU, result, 'masterSKU', result.name)")
-
-            button.btn-action(ng-click="l.findOpportunities()" ng-disabled="l.filtersService.model.filtersApplied || l.filtersService.model.filtersValidCount === 0") Find Opportunities
