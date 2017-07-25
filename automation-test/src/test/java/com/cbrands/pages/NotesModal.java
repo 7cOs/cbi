@@ -9,14 +9,13 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.How;
 import org.openqa.selenium.support.PageFactory;
-import org.openqa.selenium.support.ui.LoadableComponent;
 import org.testng.Assert;
 
 import java.util.List;
 
 import static com.cbrands.helper.SeleniumUtils.*;
 
-public class NotesModal extends LoadableComponent<NotesModal> {
+public class NotesModal extends TestNGBasePage {
   private static final String MODAL_CONTAINER_XPATH = "//div[contains(@class, 'modal notes')]";
 
   private Log log = LogFactory.getLog(NotesModal.class);
@@ -36,8 +35,8 @@ public class NotesModal extends LoadableComponent<NotesModal> {
   }
 
   @Override
-  protected void isLoaded() throws Error {
-    Assert.assertTrue(isModalLoaded());
+  public boolean isLoaded() throws Error {
+    return isModalLoaded();
   }
 
   public boolean isModalLoaded() {
