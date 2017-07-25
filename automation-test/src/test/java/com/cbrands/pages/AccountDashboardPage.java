@@ -16,7 +16,7 @@ import java.util.List;
 
 import static com.cbrands.helper.SeleniumUtils.*;
 
-public class AccountDashboardPage extends LoadableComponent<AccountDashboardPage> {
+public class AccountDashboardPage extends TestNGBasePage {
 
   private Log log = LogFactory.getLog(AccountDashboardPage.class);
 
@@ -36,9 +36,9 @@ public class AccountDashboardPage extends LoadableComponent<AccountDashboardPage
   }
 
   @Override
-  protected void isLoaded() throws Error {
+  public boolean isLoaded() {
     waitForVisibleFluentWait(header);
-    Assert.assertTrue(header.isDisplayed());
+    return header.isDisplayed();
   }
 
   @Override
