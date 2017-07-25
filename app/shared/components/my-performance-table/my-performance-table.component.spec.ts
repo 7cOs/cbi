@@ -8,6 +8,7 @@ import { MyPerformanceTableRow } from '../../../models/my-performance-table-row.
 import { myPerformanceTableRowMock } from '../../../models/my-performance-table-row.model.mock';
 import { SortIndicatorComponent } from '../sort-indicator/sort-indicator.component';
 import { sortingCriteriaMock } from '../../../models/my-performance-table-sorting-criteria.model.mock';
+import { UtilService } from '../../../services/util.service';
 import { ViewType } from '../../../enums/view-type.enum';
 
 @Component({
@@ -32,6 +33,9 @@ describe('MyPerformanceTableComponent', () => {
         MyPerformanceTableComponent,
         MockMyPerformanceTableRowComponent,
         SortIndicatorComponent
+      ],
+      providers: [
+        UtilService
       ]
     });
 

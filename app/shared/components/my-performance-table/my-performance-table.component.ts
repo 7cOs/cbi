@@ -5,6 +5,7 @@ import { DateRange } from '../../../models/date-range.model';
 import { MyPerformanceTableRow } from '../../../models/my-performance-table-row.model';
 import { SortingCriteria } from '../../../models/sorting-criteria.model';
 import { SortStatus } from '../../../enums/sort-status.enum';
+import { UtilService } from '../../../services/util.service';
 import { ViewType } from '../../../enums/view-type.enum';
 
 @Component({
@@ -40,6 +41,8 @@ export class MyPerformanceTableComponent {
 
   private sortingFunction: (elem0: MyPerformanceTableRow, elem1: MyPerformanceTableRow) => number;
   private _sortingCriteria: Array<SortingCriteria> = null;
+
+  constructor (private utilService: UtilService) { }
 
   public clickOn(row: MyPerformanceTableRow, index: number) {
     console.log('clicked on ', row);
@@ -80,20 +83,12 @@ export class MyPerformanceTableComponent {
         this._sortingCriteria.every((criterion, idx) => {
           i = idx;
           currentColumn = ColumnType[criterion.columnType];
-          currentSortOrder = this.compareObjects(elem0[currentColumn], (elem1[currentColumn]));
+          currentSortOrder = this.utilService.compareObjects(elem0[currentColumn], (elem1[currentColumn]));
           return !currentSortOrder;
         });
         return this._sortingCriteria[i].ascending ? currentSortOrder : 0 - currentSortOrder;
       };
     }
-  }
-
-  private compareObjects(a: any, b: any) {
-    return a < b
-      ? -1
-      : a > b
-        ? 1
-        : 0;
   }
 
   private applySortingCriteria(criteria: SortingCriteria[]) {
