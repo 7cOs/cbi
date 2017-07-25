@@ -36,10 +36,6 @@ public class NotesModal extends TestNGBasePage {
 
   @Override
   public boolean isLoaded() throws Error {
-    return isModalLoaded();
-  }
-
-  public boolean isModalLoaded() {
     waitForVisibleFluentWait(modalContainer);
     waitForLoaderToDisappear();
     return modalContainer.isDisplayed();
