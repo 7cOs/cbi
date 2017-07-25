@@ -40,7 +40,7 @@ public class TargetListListingsPage extends TestNGBasePage {
   }
 
   @Override
-  public boolean isLoaded() throws Error {
+  public boolean isLoaded() {
     waitForVisibleFluentWait(listingsHeader);
     return listingsHeader.isDisplayed();
   }
