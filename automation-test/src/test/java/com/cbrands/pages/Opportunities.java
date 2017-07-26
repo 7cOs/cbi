@@ -487,7 +487,7 @@ public class Opportunities extends LoadableComponent<Opportunities> {
 
 	@Override
 	protected void load() {
-		driver.get(PropertiesCache.getInstance().getProperty("qa.host.address") + "/opportunities");
+		driver.get(PropertiesCache.getInstance().getProperty("host.address") + "/opportunities");
 
 	}
 
@@ -700,12 +700,12 @@ public class Opportunities extends LoadableComponent<Opportunities> {
 	}
 
 	public HomePage navigateToHome() {
-		driver.get(PropertiesCache.getInstance().getProperty("qa.host.address"));
+		driver.get(PropertiesCache.getInstance().getProperty("host.address"));
 		return PageFactory.initElements(driver, HomePage.class);
 	}
 
 	public TargetList navigateToTargetList() {
-		driver.get(PropertiesCache.getInstance().getProperty("qa.host.address") + "/target-lists");
+		driver.get(PropertiesCache.getInstance().getProperty("host.address") + "/target-lists");
 		return PageFactory.initElements(driver, TargetList.class);
 	}
 

@@ -225,7 +225,7 @@ public class TargetList extends LoadableComponent<TargetList> {
 
   @Override
   protected void load() {
-    driver.get(PropertiesCache.getInstance().getProperty("qa.host.address") + "/target-lists");
+    driver.get(PropertiesCache.getInstance().getProperty("host.address") + "/target-lists");
   }
 
   /**
@@ -472,13 +472,13 @@ public class TargetList extends LoadableComponent<TargetList> {
 	public Opportunities navigateToOpportunities() {
 		//waitForElementToClickable(opportunities, true).click();
 		//opportunities.click();
-		driver.get(PropertiesCache.getInstance().getProperty("qa.host.address") + "/opportunities");
+		driver.get(PropertiesCache.getInstance().getProperty("host.address") + "/opportunities");
 		return PageFactory.initElements(driver, Opportunities.class);
 	}
 
 	public TargetList navigateToTargetList() {
 		//targetList.click();
-		driver.get(PropertiesCache.getInstance().getProperty("qa.host.address") + "/target-lists");
+		driver.get(PropertiesCache.getInstance().getProperty("host.address") + "/target-lists");
 		return PageFactory.initElements(driver, TargetList.class);
 	}
 

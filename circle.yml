@@ -32,7 +32,8 @@ deployment:
     branch: test
     commands:
       - git push git@heroku.com:app-orion-qa.git $CIRCLE_SHA1:master -f
-      - cd automation-test && mvn test
+      - cd automation-test && mvn test -DargLine="-Denv=qa -Dbrowser=ie"
+      - cd automation-test && mvn test -DargLine="-Denv=qa -Dbrowser=chrome"
   poc:
     branch: staging
     commands:

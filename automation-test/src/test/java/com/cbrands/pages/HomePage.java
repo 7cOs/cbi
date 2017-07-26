@@ -74,9 +74,6 @@ public class HomePage extends LoadableComponent<HomePage>{
 	@FindBy(how = How.XPATH, using = "//a[contains(.,'My Performance')]")
 	private WebElement myPerformanceLink;
 
-	@FindBy(how = How.XPATH, using = "//a[contains(.,'Account Dashboard')]")
-	private WebElement accountDashboardLink;
-
 	@FindBy(how = How.XPATH, using = "//a[contains(.,'My Scorecards')]")
 	private WebElement myScoreCards;
 
@@ -86,7 +83,7 @@ public class HomePage extends LoadableComponent<HomePage>{
 
   @Override
   protected void load() {
-    driver.get(PropertiesCache.getInstance().getProperty("qa.host.address"));
+    driver.get(PropertiesCache.getInstance().getProperty("host.address"));
   }
 
   @Override
@@ -105,7 +102,7 @@ public class HomePage extends LoadableComponent<HomePage>{
   }
 
   public TargetListListingsPage navigateToTargetListListingsPage() {
-    driver.get(PropertiesCache.getInstance().getProperty("qa.host.address") + "/target-lists");
+    driver.get(PropertiesCache.getInstance().getProperty("host.address") + "/target-lists");
 
     return PageFactory.initElements(driver, TargetListListingsPage.class);
   }
@@ -310,16 +307,9 @@ public class HomePage extends LoadableComponent<HomePage>{
    */
   @Deprecated
     public AccountDashboard navigateToAccountDashboard(){
-      navigateToAccountDashboardPage();
+      PageFactory.initElements(driver, AccountDashboardPage.class).goToPage();
 	    return PageFactory.initElements(driver, AccountDashboard.class);
     }
-
-  public AccountDashboardPage navigateToAccountDashboardPage() {
-    waitForVisibleFluentWait(myPerformanceLink).click();
-    waitForVisibleFluentWait(accountDashboardLink).click();
-
-    return PageFactory.initElements(driver, AccountDashboardPage.class);
-  }
 
   public MyScorecards navigateToMyScoreCards(){
     	waitForVisibleFluentWait(myPerformanceLink).click();

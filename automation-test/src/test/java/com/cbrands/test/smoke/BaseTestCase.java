@@ -21,7 +21,7 @@ public abstract class BaseTestCase {
   @BeforeSuite
   public void setUpSuite() throws MalformedURLException {
     final PropertiesCache propertiesCache = PropertiesCache.getInstance();
-    webAppBaseUrl = propertiesCache.getProperty("qa.host.address");
+    webAppBaseUrl = propertiesCache.getProperty("host.address");
 
     log.info("\n Browser opening...");
 

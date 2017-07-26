@@ -5,70 +5,50 @@ import java.io.InputStream;
 import java.util.Properties;
 import java.util.Set;
 
-/**
- * The Class PropertiesCache.
- */
 public class PropertiesCache {
-	
-	/** The config prop. */
-	private final Properties configProp = new Properties();
+  private static final String BASE_AUTOMATION_PROPERTIES_FILENAME = "automation.properties";
 
-	/**
-	 * Instantiates a new properties cache.
-	 */
-	private PropertiesCache() {
-		InputStream in = this.getClass().getClassLoader().getResourceAsStream("automation.properties");
-		try {
-			configProp.load(in);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
+  private final Properties configProp = new Properties();
 
-	/**
-	 * The Class LazyHolder.
-	 */
-	private static class LazyHolder {
-		
-		/** The Constant INSTANCE. */
-		private static final PropertiesCache INSTANCE = new PropertiesCache();
-	}
+  private PropertiesCache() {
+    InputStream in = this.getClass().getClassLoader().getResourceAsStream(getPropertiesFilename());
+    try {
+      configProp.load(in);
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+  }
 
-	/**
-	 * Gets the single instance of PropertiesCache.
-	 *
-	 * @return single instance of PropertiesCache
-	 */
-	public static PropertiesCache getInstance() {
-		return LazyHolder.INSTANCE;
-	}
+  private String getPropertiesFilename() {
+    final String filename;
 
-	/**
-	 * Gets the property.
-	 *
-	 * @param key the key
-	 * @return the property
-	 */
-	public String getProperty(String key) {
-		return configProp.getProperty(key);
-	}
+    final String prefix = System.getProperty("env");
+    if (null != prefix) {
+      filename = prefix + "." + BASE_AUTOMATION_PROPERTIES_FILENAME;
+    } else {
+      filename = "local." + BASE_AUTOMATION_PROPERTIES_FILENAME;
+    }
 
-	/**
-	 * Gets the all property names.
-	 *
-	 * @return the all property names
-	 */
-	public Set<String> getAllPropertyNames() {
-		return configProp.stringPropertyNames();
-	}
+    return filename;
+  }
 
-	/**
-	 * Contains key.
-	 *
-	 * @param key the key
-	 * @return true, if successful
-	 */
-	public boolean containsKey(String key) {
-		return configProp.containsKey(key);
-	}
+  private static class LazyHolder {
+    private static final PropertiesCache INSTANCE = new PropertiesCache();
+  }
+
+  public static PropertiesCache getInstance() {
+    return LazyHolder.INSTANCE;
+  }
+
+  public String getProperty(String key) {
+    return configProp.getProperty(key);
+  }
+
+  public Set<String> getAllPropertyNames() {
+    return configProp.stringPropertyNames();
+  }
+
+  public boolean containsKey(String key) {
+    return configProp.containsKey(key);
+  }
 }

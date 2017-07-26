@@ -48,7 +48,7 @@ public class TargetListListingsPage extends LoadableComponent<TargetListListings
 
   @Override
   protected void load() {
-    driver.get(PropertiesCache.getInstance().getProperty("qa.host.address") + "/target-lists");
+    driver.get(PropertiesCache.getInstance().getProperty("host.address") + "/target-lists");
   }
 
   public boolean isHeaderDisplayed() {
