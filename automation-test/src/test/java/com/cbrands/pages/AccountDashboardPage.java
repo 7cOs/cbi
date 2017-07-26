@@ -1,6 +1,5 @@
 package com.cbrands.pages;
 
-import com.cbrands.helper.PropertiesCache;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openqa.selenium.By;
@@ -9,14 +8,13 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.How;
 import org.openqa.selenium.support.PageFactory;
-import org.openqa.selenium.support.ui.LoadableComponent;
 import org.testng.Assert;
 
 import java.util.List;
 
 import static com.cbrands.helper.SeleniumUtils.*;
 
-public class AccountDashboardPage extends LoadableComponent<AccountDashboardPage> {
+public class AccountDashboardPage extends TestNGBasePage {
 
   private Log log = LogFactory.getLog(AccountDashboardPage.class);
 
@@ -36,14 +34,14 @@ public class AccountDashboardPage extends LoadableComponent<AccountDashboardPage
   }
 
   @Override
-  protected void isLoaded() throws Error {
+  public boolean isLoaded() {
     waitForVisibleFluentWait(header);
-    Assert.assertTrue(header.isDisplayed());
+    return header.isDisplayed();
   }
 
   @Override
   protected void load() {
-    driver.get(PropertiesCache.getInstance().getProperty("host.address") + "/");
+    driver.get(webAppBaseUrl + "/accounts");
   }
 
   public AccountDashboardPage enterRetailerChainSearchText(String text) {
