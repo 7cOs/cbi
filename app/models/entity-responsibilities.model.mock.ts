@@ -1,7 +1,8 @@
 import * as Chance from 'chance';
 let chance = new Chance();
 
-import { EntityResponsibilities, EntityPeopleType, EntityPropertyType } from './entity-responsibilities.model';
+import { EntityResponsibilities } from './entity-responsibilities.model';
+import { EntityPeopleType, EntityPropertyType } from '../enums/entity-responsibilities.enum';
 
 const entityPeopleTypeValues = Object.keys(EntityPeopleType).map(key => EntityPeopleType[key]);
 const entityPropertyTypeValues = Object.keys(EntityPropertyType).map(key => EntityPropertyType[key]);
