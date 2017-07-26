@@ -1,5 +1,6 @@
 package com.cbrands.pages.targetList;
 
+import com.cbrands.pages.TestNGBasePage;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -13,7 +14,7 @@ import static com.cbrands.helper.SeleniumUtils.findElement;
 import static com.cbrands.helper.SeleniumUtils.waitForElementToClickable;
 import static com.cbrands.helper.SeleniumUtils.waitForVisibleFluentWait;
 
-public class EditTargetListModal extends LoadableComponent<EditTargetListModal> {
+public class EditTargetListModal extends TestNGBasePage {
 
   private final WebDriver driver;
 
@@ -43,8 +44,8 @@ public class EditTargetListModal extends LoadableComponent<EditTargetListModal> 
   }
 
   @Override
-  protected void isLoaded() throws Error {
-    Assert.assertTrue(isModalLoaded());
+  public boolean isLoaded() {
+    return isModalLoaded();
   }
 
   @Override
