@@ -33,20 +33,18 @@ export class MyPerformanceFilterComponent {
     }
   }
 
-  // tslint:disable-next-line:no-unused-variable
-  private depletionsPremiseOptions: Array<CompassRadioOption> = depletionsPremiseOptionsModel;
-  private depletionTimePeriodOptions: Array<CompassSelectOption> = [];
-  // tslint:disable-next-line:no-unused-variable
-  private distributionOptions: Array<CompassRadioOption> = distributionOptionsModel;
-  // tslint:disable-next-line:no-unused-variable
-  private distributionPremiseOptions: Array<CompassRadioOption> = distributionPremiseOptionsModel;
-  private distributionTimePeriodOptions: Array<CompassSelectOption> = [];
-  // tslint:disable-next-line:no-unused-variable
-  private filterActionTypeEnum: any = MyPerformanceFilterActionType;
-  // tslint:disable-next-line:no-unused-variable
-  private metricOptions: Array<CompassSelectOption> = metricOptionsModel;
-  // tslint:disable-next-line:no-unused-variable
-  private metricValueEnum: any = MetricValue;
+  public depletionsPremiseOptions: Array<CompassRadioOption> = depletionsPremiseOptionsModel;
+  public depletionTimePeriodOptions: Array<CompassSelectOption> = [];
+  public distributionOptions: Array<CompassRadioOption> = distributionOptionsModel;
+  public distributionPremiseOptions: Array<CompassRadioOption> = distributionPremiseOptionsModel;
+  public distributionTimePeriodOptions: Array<CompassSelectOption> = [];
+  public myPerformanceFilterActionType = MyPerformanceFilterActionType;
+  public metricOptions: Array<CompassSelectOption> = metricOptionsModel;
+  public metricValue = MetricValue;
+
+  public filterSelected(filterType: MyPerformanceFilterActionType, filterValue: any): void {
+    this.onFilterChange.emit({ filterType, filterValue });
+  }
 
   private initDateRanges(dateType: string, dateRanges: DateRangesState): Array<CompassSelectOption> {
     const depletionDateRangeCodes: Array<string> = ['CYTD', 'FYTD', 'CMIPBDL', 'LCM', 'CYTM', 'FYTM'];
@@ -65,9 +63,5 @@ export class MyPerformanceFilterComponent {
     return dateType === 'depletions'
       ? initDateRangeData(depletionDateRangeCodes, dateRanges)
       : initDateRangeData(distributionDateRangeCodes, dateRanges);
-  }
-
-  private filterSelected(filterType: MyPerformanceFilterActionType, filterValue: any): void { // tslint:disable-line:no-unused-variable
-    this.onFilterChange.emit({ filterType, filterValue });
   }
 }

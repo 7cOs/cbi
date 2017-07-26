@@ -35,7 +35,7 @@ export class MyPerformanceComponent implements OnDestroy {
     this.dateRangeSubscription.unsubscribe();
   }
 
-  private filterOptionSelected(event: MyPerformanceFilterEvent): void { // tslint:disable-line:no-unused-variable
+  public filterOptionSelected(event: MyPerformanceFilterEvent): void {
     let actionType;
 
     switch (event.filterType) {

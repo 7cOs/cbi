@@ -1,5 +1,5 @@
 export enum PremiseTypeValue {
-  ALL,
-  OFF,
-  ON
+  ALL = <any>'ALL',
+  OFF = <any>'OFF',
+  ON = <any>'ON'
 }

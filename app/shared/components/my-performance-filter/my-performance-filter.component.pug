@@ -6,53 +6,53 @@ section.filter-component-section
       [model]="filterState.metric",
       [options]="metricOptions",
       [title]="'metric'",
-      (onOptionSelected)="filterSelected(filterActionTypeEnum.Metric, $event)"
+      (onOptionSelected)="filterSelected(myPerformanceFilterActionType.Metric, $event)"
     )
 
   //- Time Period Select (Depletions)
-  div(*ngIf="filterState.metric === metricValueEnum.DEPLETIONS")
+  div(*ngIf="filterState.metric === metricValue.DEPLETIONS")
     compass-select(
       [model]="filterState.timePeriod",
       [options]="depletionTimePeriodOptions",
       [title]="'time period'",
-      (onOptionSelected)="filterSelected(filterActionTypeEnum.TimePeriod, $event)"
+      (onOptionSelected)="filterSelected(myPerformanceFilterActionType.TimePeriod, $event)"
     )
 
   //- Time Period Select (Distribution)
-  div(*ngIf="filterState.metric !== metricValueEnum.DEPLETIONS")
+  div(*ngIf="filterState.metric !== metricValue.DEPLETIONS")
     compass-select(
       [model]="filterState.timePeriod",
       [options]="distributionTimePeriodOptions",
       [title]="'time period'",
-      (onOptionSelected)="filterSelected(filterActionTypeEnum.TimePeriod, $event)"
+      (onOptionSelected)="filterSelected(myPerformanceFilterActionType.TimePeriod, $event)"
     )
 
   //- Premise Type Radio (Depletions)
-  div(*ngIf="filterState.metric === metricValueEnum.DEPLETIONS")
+  div(*ngIf="filterState.metric === metricValue.DEPLETIONS")
     compass-radio(
       [model]="filterState.premiseType",
       [options]="depletionsPremiseOptions",
       [title]="'premise type'",
       [stacked]="false",
-      (onRadioClicked)="filterSelected(filterActionTypeEnum.PremiseType, $event)",
+      (onRadioClicked)="filterSelected(myPerformanceFilterActionType.PremiseType, $event)",
     )
 
   //- Premise Type Radio (Distribution)
-  div(*ngIf="filterState.metric !== metricValueEnum.DEPLETIONS")
+  div(*ngIf="filterState.metric !== metricValue.DEPLETIONS")
     compass-radio(
       [model]="filterState.premiseType",
       [options]="distributionPremiseOptions",
       [title]="'premise type'",
-      [stacked]="filterState.metric === metricValueEnum.DISTRIBUTION ? true : false",
-      (onRadioClicked)="filterSelected(filterActionTypeEnum.PremiseType, $event)"
+      [stacked]="filterState.metric === metricValue.DISTRIBUTION ? true : false",
+      (onRadioClicked)="filterSelected(myPerformanceFilterActionType.PremiseType, $event)"
     )
 
   //- Distribution Type Radio
-  div(*ngIf="filterState.metric === metricValueEnum.DISTRIBUTION")
+  div(*ngIf="filterState.metric === metricValue.DISTRIBUTION")
     compass-radio(
       [model]="filterState.distributionType",
       [options]="distributionOptions",
       [title]="'distribution type'",
       [stacked]="true",
-      (onRadioClicked)="filterSelected(filterActionTypeEnum.DistributionType, $event)"
+      (onRadioClicked)="filterSelected(myPerformanceFilterActionType.DistributionType, $event)"
     )

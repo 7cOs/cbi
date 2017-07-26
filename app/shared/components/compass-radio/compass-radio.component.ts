@@ -16,7 +16,7 @@ export class CompassRadioComponent {
   @Input() stacked: boolean;
   @Input() title?: string;
 
-  private radioClicked(option: CompassRadioOption): void { // tslint:disable-line:no-unused-variable
+  public radioClicked(option: CompassRadioOption): void {
     this.onRadioClicked.emit(option.value);
   }
 }

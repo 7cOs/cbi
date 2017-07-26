@@ -1,6 +1,6 @@
 export enum MyPerformanceFilterActionType {
-  Metric,
-  TimePeriod,
-  PremiseType,
-  DistributionType
+  Metric = <any>'Metric',
+  TimePeriod = <any>'TimePeriod',
+  PremiseType = <any>'PremiseType',
+  DistributionType = <any>'DistributionType'
 }

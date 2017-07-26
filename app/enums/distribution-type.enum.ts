@@ -1,4 +1,4 @@
 export enum DistributionTypeValue {
-  SIMPLE,
-  EFFECTIVE
+  SIMPLE = <any>'SIMPLE',
+  EFFECTIVE = <any>'EFFECTIVE'
 }
