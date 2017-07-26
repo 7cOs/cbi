@@ -1,5 +1,5 @@
 import * as CompassVersionActions from './compass-version.action';
-import { appVersionMock } from '../../models/app-version.model.mock';
+import { getAppVersionMock } from '../../models/app-version.model.mock';
 import * as Chance from 'chance';
 let chance = new Chance();
 
@@ -19,7 +19,7 @@ describe('Compass Version Actions', () => {
   });
 
   describe('FetchVersionSuccessAction', () => {
-    const version = appVersionMock();
+    const version = getAppVersionMock();
     let action: CompassVersionActions.FetchVersionSuccessAction;
 
     beforeEach(() => {
