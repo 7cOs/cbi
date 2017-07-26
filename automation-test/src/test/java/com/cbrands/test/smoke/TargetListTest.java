@@ -49,6 +49,7 @@ public class TargetListTest extends BaseTestCase {
       .enterDescription(targetListDescription)
       .clickSaveButton();
 
+    Assert.assertTrue(targetListListingPage.isLoaded(), "Failure loading page after saving new Target List");
     Assert.assertTrue(targetListListingPage.doesTargetListExist(targetListName), "Failure creating target list: " +
       targetListName);
   }
