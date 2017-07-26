@@ -1,5 +1,6 @@
 package com.cbrands.pages.targetList;
 
+import com.cbrands.pages.TestNGBasePage;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -11,7 +12,7 @@ import org.testng.Assert;
 
 import static com.cbrands.helper.SeleniumUtils.*;
 
-public class TargetListDetailPage extends LoadableComponent<TargetListDetailPage> {
+public class TargetListDetailPage extends TestNGBasePage {
 
   private final WebDriver driver;
 
@@ -26,8 +27,8 @@ public class TargetListDetailPage extends LoadableComponent<TargetListDetailPage
   }
 
   @Override
-  protected void isLoaded() throws Error {
-    Assert.assertTrue(isOpportunityListLoaded());
+  public boolean isLoaded() {
+    return isOpportunityListLoaded();
   }
 
   @Override
