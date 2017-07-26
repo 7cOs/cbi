@@ -290,7 +290,13 @@ module.exports = /*  @ngInject */
       }],
       premiseTypeValue: {
         'ON PREMISE': 'on',
-        'OFF PREMISE': 'off'
+        'OFF PREMISE': 'off',
+        'NON RETAIL': 'all'
+      },
+      premiseTypeDisplay: {
+        'ON PREMISE': 'ON',
+        'OFF PREMISE': 'OFF',
+        'NON RETAIL': 'NON-RETAIL'
       },
       accountBrands: [{
         name: 'Distribution (simple)',
