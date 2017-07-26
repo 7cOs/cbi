@@ -243,8 +243,8 @@ describe('[Services.userService - performance]', function() {
     const type = {
       value: 1
     };
-    let defaultUrlBase = '/v2/users/undefined/performance/topBottomSnapshot/';
-    let defaultUrlQuery = 'distributors?filter=myAccountsOnly%3Atrue%2C';
+    const defaultUrlBase = '/v2/users/undefined/performance/topBottomSnapshot/';
+    const defaultUrlQuery = 'distributors?filter=myAccountsOnly%3Atrue%2C';
     let urlBase = defaultUrlBase;
     let urlQuery = defaultUrlQuery;
 
