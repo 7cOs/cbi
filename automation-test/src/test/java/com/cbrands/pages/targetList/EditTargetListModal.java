@@ -7,7 +7,6 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.How;
 import org.openqa.selenium.support.PageFactory;
-import org.openqa.selenium.support.ui.LoadableComponent;
 import org.testng.Assert;
 
 import static com.cbrands.helper.SeleniumUtils.findElement;
@@ -45,17 +44,13 @@ public class EditTargetListModal extends TestNGBasePage {
 
   @Override
   public boolean isLoaded() {
-    return isModalLoaded();
+    waitForVisibleFluentWait(modal);
+    return modal.isDisplayed();
   }
 
   @Override
   protected void load() {
     Assert.fail("The Manage modal for Target Lists cannot be loaded directly.");
-  }
-
-  public boolean isModalLoaded() {
-    waitForVisibleFluentWait(modal);
-    return modal.isDisplayed();
   }
 
   public EditTargetListModal enterListName(String name) {
