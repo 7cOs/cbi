@@ -1,0 +1,67 @@
+@import '../../../assets/styles/base/variables';
+
+/deep/ .compass-card {
+  color: $gray-1;
+  background-color: $white;
+  padding: 20px;
+
+  md-card-title {
+    font-size: 18px;
+    padding-left: 0;
+    padding-right: 0;
+    padding-top: 0;
+
+    .icon {
+      background-image: url('../../../assets/img/icons/tool-updates.svg');
+      background-position: left center;
+      background-repeat: no-repeat;
+      padding-left: 39px;
+      margin-top: 0;
+    }
+  }
+
+  md-card-content {
+    padding-left: 0;
+    padding-right: 0;
+
+    p, & {
+      font-size: 12px;
+    }
+
+    li {
+      list-style: disc;
+      margin-left: 18px;
+      padding-top: 11px;
+
+      li {
+        margin-left: 36px;
+      }
+    }
+  }
+
+  md-card-actions {
+    font-size: 11px;
+    font-family: $rajdhani;
+    color: $hyperlink;
+    font-weight: $semibold;
+    padding-left: 0;
+
+    div {
+      display: inline-block;
+      margin-top: 10px;
+    }
+
+    img {
+      margin-left: 5px;
+    }
+  }
+
+  md-card-actions div:hover {
+    color: $hyperlink-hover;
+    cursor: pointer;
+  }
+
+  md-card-actions:active {
+    color: $hyperlink-hover;
+  }
+}

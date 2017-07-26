@@ -477,8 +477,12 @@ module.exports = /*  @ngInject */
     }
 
     function getTopBottomSnapshot(snapshotType, params) {
-      var snapshotPromise = $q.defer(),
-          url, baseUrl = '/v2/users/' + service.model.currentUser.employeeID;
+      const snapshotPromise = $q.defer();
+      let baseUrl = '/v2/users/' + service.model.currentUser.employeeID;
+      let isGettingAccounts = false;
+      const independentAccountId = '999999';
+      const allOtherAccountId = 'ALL OTHER';
+
       params.type = 'topBottom';
 
       switch (snapshotType.value) {
@@ -487,17 +491,20 @@ module.exports = /*  @ngInject */
           break;
         case 2:
           baseUrl += '/performance/topBottomSnapshot/accounts';
+          isGettingAccounts = true;
           break;
-
         case 3:
           baseUrl +=  '/performance/topBottomSnapshot/subaccounts';
+          if (params.account[0] === independentAccountId || params.account[0] === allOtherAccountId) {
+            isGettingAccounts = true;
+          }
           break;
-
         case 4:
           baseUrl += '/performance/topBottomSnapshot/stores';
           break;
       }
-      url = apiHelperService.request(baseUrl, params);
+
+      const url = apiHelperService.request(baseUrl, params);
 
       $http.get(url)
         .then(getTopBottomSnapshotSuccess)
@@ -505,12 +512,29 @@ module.exports = /*  @ngInject */
 
       function getTopBottomSnapshotSuccess(response) {
         calculateTrendValuesForPlan(response.data.performance);
-        // console.log('top Bottom Data', response.data.performance);
+        if (isGettingAccounts) {
+          response.data.performance = indicatePremiseTypes(response.data.performance);
+        }
         snapshotPromise.resolve(response.data);
       }
 
       function getTopBottomSnapshotFail(error) {
         snapshotPromise.reject(error);
+      }
+
+      function indicatePremiseTypes(accountArray) {
+        return accountArray.map(account => {
+
+          if (account.id === independentAccountId || account.id === allOtherAccountId) {
+            const premiseTypeDisplay = ` (${filtersService.accountFilters.premiseTypeDisplay[account.premiseType]})`;
+
+            account.name = account.id === '999999'
+              ? account.name + premiseTypeDisplay
+              : 'UNMANAGED CHAIN' + premiseTypeDisplay;
+          }
+
+          return account;
+        });
       }
 
       return snapshotPromise.promise;

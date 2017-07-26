@@ -1,0 +1,16 @@
+@import '../../../assets/styles/base/variables';
+
+.filter-component-section {
+  background-color: $gray-4;
+  height: 100px;
+  min-width: 1100px;
+  padding-left: 30px;
+  padding-top: 15px;
+  padding-bottom: 15px;
+
+  div {
+    display: inline-block;
+    margin-right: 30px;
+    vertical-align: top;
+  }
+}
