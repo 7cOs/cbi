@@ -1,2 +1,7 @@
-h2 This page will come
-  div soon...
+h1 Performance
+
+my-performance-filter(
+  [dateRanges]="dateRanges",
+  [filterState]="filterState",
+  (onFilterChange)="filterOptionSelected($event)"
+)
