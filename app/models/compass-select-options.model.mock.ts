@@ -3,7 +3,7 @@ import { CompassSelectOption } from './compass-select-component.model';
 
 const chance = new Chance();
 
-export function selectOptionsMockStandard(): Array<CompassSelectOption> {
+export function getSelectOptionsMockStandard(): Array<CompassSelectOption> {
   return [{
     display: chance.string(),
     value: chance.string()
@@ -16,7 +16,7 @@ export function selectOptionsMockStandard(): Array<CompassSelectOption> {
   }];
 }
 
-export function selectOptionsMockStrings(): Array<CompassSelectOption> {
+export function getSelectOptionsMockStrings(): Array<CompassSelectOption> {
   return [{
     display: chance.string(),
     subDisplay: chance.string(),
@@ -32,7 +32,7 @@ export function selectOptionsMockStrings(): Array<CompassSelectOption> {
   }];
 }
 
-export function selectOptionsMockNumbers(): Array<CompassSelectOption> {
+export function getSelectOptionsMockNumbers(): Array<CompassSelectOption> {
   return [{
     display: chance.string(),
     subDisplay: chance.string(),

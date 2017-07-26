@@ -7,15 +7,15 @@ import * as Chance from 'chance';
 
 import { CompassSelectComponent } from './compass-select.component';
 import {
-  selectOptionsMockNumbers,
-  selectOptionsMockStandard,
-  selectOptionsMockStrings
+  getSelectOptionsMockNumbers,
+  getSelectOptionsMockStandard,
+  getSelectOptionsMockStrings
 } from '../../../models/compass-select-options.model.mock';
 
 const chance = new Chance();
-const optionsMockNumbers = selectOptionsMockNumbers();
-const optionsMockStandard = selectOptionsMockStandard();
-const optionsMockStrings = selectOptionsMockStrings();
+const optionsMockNumbers = getSelectOptionsMockNumbers();
+const optionsMockStandard = getSelectOptionsMockStandard();
+const optionsMockStrings = getSelectOptionsMockStrings();
 const titleMock = chance.string();
 
 describe('CompassSelectComponent', () => {

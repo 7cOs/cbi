@@ -5,11 +5,11 @@ import { FormsModule } from '@angular/forms';
 import { MdRadioModule } from '@angular/material';
 import * as Chance from 'chance';
 
-import { compassRadioOptionMock } from '../../../models/compass-radio-options.model.mock';
+import { getCompassRadioOptionMock } from '../../../models/compass-radio-options.model.mock';
 import { CompassRadioComponent } from './compass-radio.component';
 
 const chance = new Chance();
-const optionsMock = compassRadioOptionMock();
+const optionsMock = getCompassRadioOptionMock();
 const titleMock = chance.string();
 
 describe('CompassRadioComponent', () => {

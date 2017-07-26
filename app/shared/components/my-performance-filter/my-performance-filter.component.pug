@@ -43,7 +43,7 @@ section.filter-component-section
       [model]="filterState.premiseType",
       [options]="distributionPremiseOptions",
       [title]="'premise type'",
-      [stacked]="filterState.metric === metricValue.DISTRIBUTION ? true : false",
+      [stacked]="filterState.metric === metricValue.DISTRIBUTION",
       (onRadioClicked)="filterSelected(myPerformanceFilterActionType.PremiseType, $event)"
     )
 
