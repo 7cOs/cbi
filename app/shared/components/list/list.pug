@@ -166,7 +166,7 @@ v-accordion.styled-list(multiple="" id="opportunities" control="list.accordion" 
                     a(ng-click="list.opportunityDismissTrigger = false; list.undoClicked = true") UNDO
                   p(ng-if="list.shareOpportunityFail") Whatever you just tried didn't work
                 div(ng-if="list.opportunityShared || list.shareOpportunityFail" ng-click="list.currentOpportunityId = ''").hide-wrapper.hide-icon-wrapper.hide-row
-              div.cell-parent.sub-item(row)
+              div.cell-parent.sub-item(row ng-class="{'inactive': product.status.toUpperCase() === 'INACTIVE'}")
                 .sub-item-select(column='1' ng-class="{'flag-yellow': product.featureTypeCode === null && list.showItemAuthorizationFlag(product.itemAuthorizationCode, product.depletionsCurrentYearToDate), 'flag-green': product.featureTypeCode !== null && product.itemAuthorizationDesc === null, 'flag-both': product.featureTypeCode !== null && list.showItemAuthorizationFlag(product.itemAuthorizationCode, product.depletionsCurrentYearToDate)}")
                   md-checkbox(aria-label="Select Item" ng-click="list.selectOpportunity($event, opportunity, product, list.selected);" ng-checked="product.selected")
                 div(column='2').pad-cell
@@ -174,9 +174,17 @@ v-accordion.styled-list(multiple="" id="opportunities" control="list.accordion" 
                   | {{::product.product.name}}
                 div.type(column='2') {{list.opportunityTypeOrSubtype(product) | formatOpportunitiesType}}
                 div(column='4') {{::product.rationale}}
-                div(column='1') {{product.status | titlecase}}
+                div(column='1')
+                  .tooltip-wrap
+                    p(class="tooltip") {{product.status | titlecase}}
+                    span.tooltip(ng-if="product.status.toUpperCase() === 'INACTIVE'")
+                      img(src="../../../assets/img/icons/help-tooltip.svg")
+                      md-tooltip(md-direction="bottom")
+                        label Opportunity List
+                        h3 Inactive Status
+                        p This opportunity recommendation is no longer supported by data analytics (see Compass user guide for more details). Consider 'removing' this opportunity from your list to ensure your list stays actionable and relevant.
                 div(column='1' class="impact {{product.impactDescription | lowercase}}")
-                div(column='1').bottom.dismiss-product
+                div(column='1' ng-show="product.status.toUpperCase() !== 'INACTIVE'").bottom.dismiss-product
                   div.more-wrapper
                     md-menu(md-position-mode="target-right target")
                       md-button.md-icon-button(aria-label="More" md-menu-origin ng-click="$mdOpenMenu($event)")
