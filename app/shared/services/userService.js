@@ -495,7 +495,7 @@ module.exports = /*  @ngInject */
           break;
         case 3:
           baseUrl +=  '/performance/topBottomSnapshot/subaccounts';
-          if (params.account[0] === independentAccountId || params.account[0] === allOtherAccountId) {
+          if (params.account && (params.account[0] === independentAccountId || params.account[0] === allOtherAccountId)) {
             isGettingAccounts = true;
           }
           break;
