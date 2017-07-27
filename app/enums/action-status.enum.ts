@@ -1,8 +1,8 @@
 export enum ActionStatus {
-  NotFetched,
-  Fetching,
-  Fetched,
-  Error
+  NotFetched = <any>'NotFetched',
+  Fetching = <any>'Fetching',
+  Fetched = <any>'Fetched',
+  Error = <any>'Error'
 }
 
 export interface State {

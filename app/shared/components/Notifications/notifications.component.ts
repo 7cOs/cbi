@@ -57,6 +57,4 @@ export class NotificationsComponent {
   notUnknown(value: string) {
     return value && value.toString().toUpperCase() !== 'UNKNOWN';
   }
-
-  // override setter and orderBy: '-dateCreated'
 }

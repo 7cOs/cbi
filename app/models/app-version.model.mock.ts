@@ -3,7 +3,7 @@ import * as Chance from 'chance';
 
 let chance = new Chance();
 
-export function appVersionMock(): AppVersion {
+export function getAppVersionMock(): AppVersion {
   return {
     env: chance.string(),
     hash: chance.string(),
