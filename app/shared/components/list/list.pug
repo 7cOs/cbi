@@ -192,7 +192,7 @@ v-accordion.styled-list(multiple="" id="opportunities" control="list.accordion" 
                       md-menu-content(width="4")
                         md-menu-item
                           p(ng-click="list.openShareModal(product.id); $pane.collapse()") Send To
-                        md-menu-item(ng-show="product.status.toUpperCase() !== 'TARGETED' && product.type.toUpperCase() !== 'CUSTOM' && product.status.toUpperCase() !== 'INACTIVE'")
+                        md-menu-item(ng-show="product.status.toUpperCase() !== 'TARGETED' && product.type.toUpperCase() !== 'CUSTOM'")
                           p(ng-click="list.openDismissModal(product.id); $pane.collapse()") Dismiss
                         md-menu-item(ng-show="product.type.toUpperCase() === 'CUSTOM' && product.status !== 'CLOSED'")
                           p(ng-click="list.closeOrDismissOpportunity(product.id, {}, false); $pane.collapse()") Close
