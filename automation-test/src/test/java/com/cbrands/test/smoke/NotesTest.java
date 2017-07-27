@@ -43,7 +43,7 @@ public class NotesTest extends BaseTestCase {
       .clickNotesButton()
       .waitForLoaderToDisappear();
 
-    Assert.assertTrue(notesModal.isModalLoaded(), "Failure to load Notes modal \n");
+    Assert.assertTrue(notesModal.isLoaded(), "Failure to load Notes modal \n");
   }
 
   @AfterMethod
