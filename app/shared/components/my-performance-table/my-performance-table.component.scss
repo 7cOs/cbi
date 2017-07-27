@@ -1,0 +1,331 @@
+@import '../../../assets/styles/base/variables';
+
+table {
+  border: 1px 1px 1px 0 solid $gray-4;
+  border-collapse: collapse;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+thead {
+  text-align: left;
+  display: block;
+  float: left;
+  width: 100%;
+
+  tr {
+    display: table-row;
+    width: 100%;
+  }
+}
+
+tbody {
+  display: block;
+  max-height: 500px;
+  overflow-y: auto;
+  -ms-overflow-style: -ms-autohiding-scrollbar;
+  float: left;
+  width: 100%;
+
+  tr {
+    display: table-row;
+    width: 100%;
+  }
+}
+
+my-performance-table-row {
+  width: 100%;
+}
+
+th {
+  font-weight: normal;
+  font-size: 10px;
+}
+
+.col-100-pct {
+  width: 100%;
+}
+
+.col-60-pct {
+  width: 60%;
+}
+
+.col-50-pct {
+  width: 50%;
+}
+
+.col-30-pct {
+  width: 30%;
+}
+
+.col-20-pct {
+  width: 20%;
+}
+
+.col-16-pct {
+  width: 16.6666%;
+}
+
+.col-10-pct {
+  width: 10%;
+}
+
+.col-0-width {
+  width: 0;
+}
+
+.left-col {
+  text-align: left;
+  min-width: 120px;
+  padding-left: 16px;
+  font-weight: $semibold;
+}
+
+.right-col {
+  text-align: center;
+}
+
+.performance-table-wrapper {
+  width: 50%;
+  min-width: 565px;
+  display: inline-block;
+}
+
+.performance-table-summary {
+  background-color: $gray-4;
+  border-bottom: 2px solid $gray-8;
+  font-family: $rajdhani;
+  height: 70px;
+  min-width: 565px;
+  padding-top: 10px;
+}
+
+.total-row {
+  height: 60px;
+  border-bottom: 1px solid $gray-10;
+}
+
+.center-col {
+  text-align: center;
+  background-color: $gray-4;
+}
+
+.entity-row {
+  height: 60px;
+  border-bottom: 1px solid $gray-10;
+
+  /deep/.center-col {
+    text-align: center;
+  }
+
+  /deep/.right-col {
+    &.opportunities {
+      color: $blue;
+      font-weight: normal;
+    }
+  }
+
+  &:hover {
+    border-right: 1px solid $gray-14;
+
+    /deep/td {
+      background-color: $light-blue-4;
+    }
+  }
+}
+
+span.positive {
+  color: $green;
+}
+
+span.negative {
+  color: $red;
+}
+
+span.link-out {
+  color: $blue;
+}
+
+td, th {
+  font-family: WorkSans;
+  font-size: 12px;
+  font-weight: $semibold;
+  cursor: pointer;
+}
+
+.top-header {
+  margin-top: 0.5em;
+  height: 30px;
+
+  th {
+    font-family: $rajdhani;
+    font-size: 11px;
+    font-weight: bold;
+    letter-spacing: 1px;
+    text-align: center;
+    vertical-align: center;
+    color: $gray-1;
+
+    &.right-col, &.center-col {
+      vertical-align: center;
+    }
+
+    &.left-col {
+      text-align: left;
+      margin-left: 16px;
+    }
+  }
+}
+
+.sub-header {
+  height: 30px;
+  border-bottom: 1px solid $gray-10;
+
+  th {
+    font-family: $rajdhani;
+    font-size: 10px;
+    font-weight: $semibold;
+    letter-spacing: 0.9px;
+    text-align: center;
+    color: $gray-1;
+  }
+}
+
+.summary-header {
+  font-family: WorkSans;
+  font-size: 24px;
+  font-weight: 300;
+  text-align: left;
+  color: $gray-1;
+  padding-left: 16px;
+}
+
+.summary-date-range {
+  font-family: $rajdhani;
+  font-size: 11px;
+  font-weight: $semibold;
+  letter-spacing: 1px;
+  text-align: left;
+  color: $gray-1;
+  padding-left: 16px;
+}
+
+div.ctv {
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.view-type {
+
+  // brands
+  &.view-type-0 {
+
+    /deep/td.left-col {
+      color: $blue;
+      font-weight: normal;
+    }
+  }
+
+  // skus 
+  &.view-type-1 {
+
+    tr.total-row {
+
+      /deep/td.left-col {
+        font-weight: $semibold;
+        color: $blue; 
+      }      
+    }
+
+    tr.entity-row {
+
+      /deep/td.left-col {
+
+        /deep/span {
+          color: $blue;
+          font-weight: normal;
+          padding-left: 12px;
+        }
+      }
+    }
+  }
+
+  // people
+  &.view-type-3 {
+
+    tr.total-row {
+  
+      /deep/td.left-col {
+
+        div.description-line-1 {
+          padding-top: 5px;
+        }
+
+        span.description-line-1 {
+          font-family: $rajdhani;
+          font-weight: $semibold;
+          font-size: 0.7rem;
+          text-transform: uppercase;
+          letter-spacing: 1px;
+          outline: 0; 
+        }
+      }
+
+    }
+
+    tr.entity-row {
+
+      /deep/td.left-col {
+
+        span {
+          color: $blue;
+          font-weight: normal;
+          padding-left: 12px;
+        }
+      }
+    }
+  }
+
+  // distributors/accounts 
+  &.view-type-4, &.view-type-5 {
+
+    tr.total-row {
+  
+      /deep/td.left-col {
+
+        div.description-line-1 {
+          padding-top: 5px;
+        }
+
+        span.description-line-1 {
+          font-family: $rajdhani;
+          font-weight: $semibold;
+          font-size: 0.7rem;
+          text-transform: uppercase;
+          letter-spacing: 1px;
+          outline: 0; 
+        }
+      }
+    }
+
+    tr.entity-row {
+
+      /deep/td.left-col {
+
+        div.description-line-1 {
+          padding-top: 5px;
+        }
+
+        span.description-line-1 {
+          font-family: $rajdhani;
+          font-weight: $semibold;
+          font-size: 0.7rem;
+          text-transform: uppercase;
+          letter-spacing: 1px;
+          outline: 0; 
+          color: $blue;
+        }
+      }
+    }
+  }
+}
