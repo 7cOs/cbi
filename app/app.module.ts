@@ -19,6 +19,7 @@ import { NotificationsComponent } from './shared/components/Notifications/notifi
 import { rootReducer } from './state/reducers/root.reducer';
 import { SettingsComponent } from './shared/components/settings/settings.component';
 import { TimeAgoPipe } from './pipes/timeAgo.pipe';
+import { UtilService } from './services/util.service';
 
 export const AppUpgradeAdapter = new UpgradeAdapter(forwardRef(() => AppModule)); // tslint:disable-line:variable-name no-use-before-declare
 
@@ -56,7 +57,8 @@ AppUpgradeAdapter.upgradeNg1Provider('$state');
   providers: [
     DateRangeApiService,
     DateRangeService,
-    DateRangeTransformerService
+    DateRangeTransformerService,
+    UtilService
   ]
 })
 export class AppModule {
