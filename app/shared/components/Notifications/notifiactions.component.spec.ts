@@ -8,15 +8,16 @@ import { TimeAgoPipe } from '../../../pipes/timeAgo.pipe';
 import { NotificationsComponent } from './notifications.component';
 import { Notification } from '../../../models/notification.model';
 import {
-  targetListNotificationNotificationMock,
-  opportunityNotificationMock,
-  storeNotificationMock,
-  accountNotificationMock
+  getTargetListNotificationNotificationMock,
+  getOpportunityNotificationMock,
+  getStoreNotificationMock,
+  getAccountNotificationMock
 } from '../../../models/notification.model.mock';
 
 describe('NotificationsComponent', () => {
 
   let fixture: ComponentFixture<NotificationsComponent>;
+  let componentInstance: NotificationsComponent;
 
   beforeEach(() => {
     const mockAngulartics2 = jasmine.createSpyObj('angulartics2', ['eventTrack']);
@@ -38,6 +39,7 @@ describe('NotificationsComponent', () => {
     });
 
     fixture = TestBed.createComponent(NotificationsComponent);
+    componentInstance = fixture.componentInstance;
   });
 
   describe('constructor', () => {
@@ -55,11 +57,11 @@ describe('NotificationsComponent', () => {
 
     it('should determine that all notifications are not read', () => {
       const notificationsMock = [
-        targetListNotificationNotificationMock(),
-        opportunityNotificationMock()
+        getTargetListNotificationNotificationMock(),
+        getOpportunityNotificationMock()
       ];
 
-      fixture.componentInstance.notifications = notificationsMock;
+      componentInstance.notifications = notificationsMock;
 
       fixture.detectChanges();
       const noUnreadNotificationElement = fixture.debugElement
@@ -69,14 +71,14 @@ describe('NotificationsComponent', () => {
 
     it('should determine that all notifications are read', () => {
       const notificationsMock = [
-        storeNotificationMock(),
-        accountNotificationMock()
+        getStoreNotificationMock(),
+        getAccountNotificationMock()
       ];
 
       notificationsMock[0].status = 'READ';
       notificationsMock[1].status = 'READ';
 
-      fixture.componentInstance.notifications = notificationsMock;
+      componentInstance.notifications = notificationsMock;
 
       fixture.detectChanges();
       const noUnreadNotificationElement = fixture.debugElement
@@ -86,14 +88,14 @@ describe('NotificationsComponent', () => {
 
     it('should sort the notifications by dateCreated descending', () => {
       const notificationsMock = [
-        storeNotificationMock(),
-        accountNotificationMock()
+        getStoreNotificationMock(),
+        getAccountNotificationMock()
       ];
 
       notificationsMock[0].dateCreated = moment().subtract(2, 'days');
       notificationsMock[1].dateCreated = moment().subtract(1, 'days');
 
-      fixture.componentInstance.notifications = notificationsMock;
+      componentInstance.notifications = notificationsMock;
 
       fixture.detectChanges();
       const firstCreatorLabel = fixture.debugElement
@@ -115,8 +117,8 @@ describe('NotificationsComponent', () => {
       inject([ NotificationsComponent ], (component: NotificationsComponent) => {
 
       const notificationsMock = [
-        opportunityNotificationMock(),
-        opportunityNotificationMock()
+        getOpportunityNotificationMock(),
+        getOpportunityNotificationMock()
       ];
 
       component.onNotificationClicked.subscribe((notification: Notification) => {

@@ -1,0 +1,44 @@
+div.performance-table-wrapper
+  div.performance-table-summary.col-100-pct
+    div.summary-header 
+      span {{ performanceMetric }}
+      span(*ngIf='dateRange') - {{ dateRange.displayCode }}
+    div.summary-date-range
+      span(*ngIf="dateRange") {{ dateRange.range }}
+  table.my-performance-table.col-100-pct.view-type([ngClass]="'view-type-' + viewType")
+    thead.col-100-pct
+      tr.top-header.col-100-pct
+        th.left-col.sort-indicator(colspan=1, [ngClass]="columnWidth()", (click)="sortRows(columnType.descriptionRow0)")
+          span {{ tableHeaderRow[0] }}
+            sort-indicator([status]="getSortStatus(columnType.descriptionRow0)")
+        th.center-col.sort-indicator(colspan=3, [ngClass]="centerColumnsWidth()") {{ tableHeaderRow[1] }} 
+        th.right-col.sort-indicator(colspan=1, [ngClass]="columnWidth()", (click)="sortRows(columnType.ctv)") 
+          span {{ tableHeaderRow[2] }}
+            sort-indicator([status]="getSortStatus(columnType.ctv)")
+        th.right-col.sort-indicator(*ngIf="showOpportunities", colspan=1, [ngClass]="columnWidth()") 
+          span OPPS
+      tr.sub-header.col-100-pct
+        th(colspan=1, [ngClass]="columnWidth()")
+        th.center-col.sort-indicator(colspan=1, [ngClass]="columnWidth()", (click)="sortRows(columnType.metricColumn0)") 
+          span CYTD
+            sort-indicator([status]='getSortStatus(columnType.metricColumn0)')
+        th.center-col.sort-indicator(colspan=1, [ngClass]="columnWidth()", (click)="sortRows(columnType.metricColumn1)") 
+          span VS YA
+            sort-indicator([status]='getSortStatus(columnType.metricColumn1)')
+        th.center-col.sort-indicator(colspan=1, [ngClass]="columnWidth()", (click)="sortRows(columnType.metricColumn2)") 
+          span VS YA %
+            sort-indicator([status]='getSortStatus(columnType.metricColumn2)')
+        th.right-col(colspan=1, [ngClass]="columnWidth()")
+        th.right-col(*ngIf="showOpportunities", colspan=1, [ngClass]="columnWidth()")
+        
+      tr.total-row.col-100-pct(my-performance-table-row, 
+                              *ngIf="totalRow",
+                              [rowData]="totalRow",
+                              [showOpportunities]="showOpportunities")
+
+    tbody
+      tr.entity-row.col-100-pct(my-performance-table-row, 
+                                *ngFor="let rowData of sortedTableData, let i = index", 
+                                [rowData]="rowData",
+                                [showOpportunities]="showOpportunities",
+                                (click)="clickOn(rowData, i)")

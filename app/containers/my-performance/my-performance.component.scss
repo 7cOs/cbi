@@ -1,0 +1,26 @@
+@import '../../assets/styles/base/variables';
+
+my-performance-table {
+  display: inline-block;
+  width: 50%;
+  min-width: 565px;
+  vertical-align: top;
+
+  &.right {
+    box-shadow: -10px 0 20px $gray-14;
+    -webkit-box-shadow: -10px 0 20px $gray-14;
+    -moz-box-shadow: -10px 0 20px $gray-14;
+  }
+
+  &.left {
+
+    /deep/tr.total-row { 
+      background-color: $dark-blue-2;
+      color: $gray-10;
+
+      /deep/.center-col {
+        background-color: $dark-blue-7;
+      }
+    }
+  }
+}

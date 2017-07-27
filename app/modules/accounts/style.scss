@@ -208,7 +208,6 @@
   .section-header-user {
     display: inline-block;
     font-size: 1.1em;
-    width: 265px;
   }
 
   md-select:focus {
@@ -222,7 +221,7 @@
   border: 0;
   background: $gray-4;
   height: 85px;
-  width: 566px;
+  width: 100%;
 
   .brands,
   .market,
