@@ -3,13 +3,11 @@
 /deep/ .compass-card {
   color: $gray-1;
   background-color: $white;
-  padding: 20px;
+  padding: 10px 20px;
 
   md-card-title {
     font-size: 18px;
-    padding-left: 0;
-    padding-right: 0;
-    padding-top: 0;
+    padding: 13px 0 0;
 
     .icon {
       background-image: url('../../../assets/img/icons/tool-updates.svg');
@@ -45,23 +43,35 @@
     color: $hyperlink;
     font-weight: $semibold;
     padding-left: 0;
+    margin: 0;
+    position: relative;
+    left: -9px;
 
     div {
       display: inline-block;
-      margin-top: 10px;
+      padding: 6px 9px;
+      border-radius: 3px;
     }
 
-    img {
-      margin-left: 5px;
+    .right-arrow {
+      background-image: url('../../../assets/img/icons/arrow-right-blue.svg');
+      background-repeat: no-repeat;
+      background-position: right 9px center;
+      padding-right: 23px;
     }
   }
 
-  md-card-actions div:hover {
+  & div:hover {
     color: $hyperlink-hover;
     cursor: pointer;
+    background-color: $gray-4;
+
+    &.right-arrow {
+      background-image: url('../../../assets/img/icons/arrow-right-dark-blue.svg');
+    }
   }
 
-  md-card-actions:active {
+  &:active {
     color: $hyperlink-hover;
   }
 }
