@@ -101,12 +101,6 @@ public class HomePage extends LoadableComponent<HomePage>{
     return userInfo.isDisplayed();
   }
 
-  public TargetListListingsPage navigateToTargetListListingsPage() {
-    driver.get(PropertiesCache.getInstance().getProperty("host.address") + "/target-lists");
-
-    return PageFactory.initElements(driver, TargetListListingsPage.class);
-  }
-
   /**
    * @deprecated This method returns a deprecated page object. Please use the new navigateToTargetListListingsPage() method
    * to navigate to the
@@ -116,7 +110,7 @@ public class HomePage extends LoadableComponent<HomePage>{
    */
   @Deprecated
   public TargetList navigateTargetList() {
-    navigateToTargetListListingsPage();
+    PageFactory.initElements(driver, TargetListListingsPage.class).goToPage();
     return PageFactory.initElements(driver, TargetList.class);
   }
 
