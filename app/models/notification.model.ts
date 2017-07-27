@@ -1,6 +1,7 @@
 import { Moment } from 'moment';
 
-import { NotificationObjectType, NotificationAction, NotificationStatus, OpportunityType } from '../enums/notification.enum';
+import { NotificationObjectType, NotificationAction, NotificationStatus } from '../enums/notification.enum';
+import { OpportunityType } from '../enums/opportunity.enum';
 
 export interface Notification {
   dateCreated: Moment;
