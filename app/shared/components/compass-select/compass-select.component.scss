@@ -1,28 +1,26 @@
 @import '../../../assets/styles/base/variables';
 
 .compass-select {
+  padding: 0;
   width: 320px;
 }
 
 .title {
-  color: #4A4A4A;
+  color: $gray-1;
   font-family: $rajdhani;
   font-size: 0.7rem;
   font-weight: $semibold;
   letter-spacing: 1px;
   margin-bottom: 6px;
-  margin-left: 5px;
-  outline: 0;
   text-transform: uppercase;
 }
 
 .subtitle {
-  color: #4a4a4a;
+  color: $gray-1;
   font-family: $work-sans;
   font-size: 11px;
   font-weight: $semibold;
   letter-spacing: 1.2px;
-  margin-left: 5px;
   margin-top: 5px;
   text-align: left;
 }
@@ -32,13 +30,13 @@ md-select {
   width: 100%;
 
   /deep/ .mat-select-trigger {
-    background: #FFFFFF;
+    background: $white;
     box-shadow: 0 1px 3px 0;
     height: 40px;
     width: 100%;
 
     .mat-select-value {
-      color: #4A4A4A;
+      color: $gray-1;
       font-size: 16px;
       font-weight: $light;
       height: 40px;
@@ -48,7 +46,7 @@ md-select {
     }
 
     .mat-select-arrow {
-      background-color: #F3F3F3;
+      background-color: $gray-4;
       background-image: url('../../../assets/img/icons/drop-chevron.svg');
       background-position: center;
       background-repeat: no-repeat;
@@ -67,11 +65,11 @@ md-select {
 }
 
 .compass-select-option {
-  border-bottom: 1px dotted #F3F3F3;
+  border-bottom: 1px dotted $gray-4;
   padding: 5px;
 
   .option-container {
-    color: #4A4A4A;
+    color: $gray-1;
     line-height: normal;
     padding: 5px;
 

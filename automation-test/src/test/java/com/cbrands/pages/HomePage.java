@@ -74,9 +74,6 @@ public class HomePage extends LoadableComponent<HomePage>{
 	@FindBy(how = How.XPATH, using = "//a[contains(.,'My Performance')]")
 	private WebElement myPerformanceLink;
 
-	@FindBy(how = How.XPATH, using = "//a[contains(.,'Account Dashboard')]")
-	private WebElement accountDashboardLink;
-
 	@FindBy(how = How.XPATH, using = "//a[contains(.,'My Scorecards')]")
 	private WebElement myScoreCards;
 
@@ -104,12 +101,6 @@ public class HomePage extends LoadableComponent<HomePage>{
     return userInfo.isDisplayed();
   }
 
-  public TargetListListingsPage navigateToTargetListListingsPage() {
-    driver.get(PropertiesCache.getInstance().getProperty("host.address") + "/target-lists");
-
-    return PageFactory.initElements(driver, TargetListListingsPage.class);
-  }
-
   /**
    * @deprecated This method returns a deprecated page object. Please use the new navigateToTargetListListingsPage() method
    * to navigate to the
@@ -119,7 +110,7 @@ public class HomePage extends LoadableComponent<HomePage>{
    */
   @Deprecated
   public TargetList navigateTargetList() {
-    navigateToTargetListListingsPage();
+    PageFactory.initElements(driver, TargetListListingsPage.class).goToPage();
     return PageFactory.initElements(driver, TargetList.class);
   }
 
@@ -310,16 +301,9 @@ public class HomePage extends LoadableComponent<HomePage>{
    */
   @Deprecated
     public AccountDashboard navigateToAccountDashboard(){
-      navigateToAccountDashboardPage();
+      PageFactory.initElements(driver, AccountDashboardPage.class).goToPage();
 	    return PageFactory.initElements(driver, AccountDashboard.class);
     }
-
-  public AccountDashboardPage navigateToAccountDashboardPage() {
-    waitForVisibleFluentWait(myPerformanceLink).click();
-    waitForVisibleFluentWait(accountDashboardLink).click();
-
-    return PageFactory.initElements(driver, AccountDashboardPage.class);
-  }
 
   public MyScorecards navigateToMyScoreCards(){
     	waitForVisibleFluentWait(myPerformanceLink).click();

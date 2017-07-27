@@ -1,5 +1,5 @@
 describe('[Services.userService - performance]', function() {
-  var $httpBackend, userService, depletionPerformanceData, distributionPerformanceData, params;
+  let $httpBackend, userService, depletionPerformanceData, distributionPerformanceData, mockDistributionData, params;
 
   beforeEach(function() {
     angular.mock.module('cf.common.services');
@@ -10,72 +10,131 @@ describe('[Services.userService - performance]', function() {
     });
 
     depletionPerformanceData = {
-            performance: [{
-                measures: [{
-                    depletions: 300,
-                    depletionsBU: 50,
-                    depletionsBULastYear: 132439.3203,
-                    depletionsBUTrend: -10,
-                    depletionsGap: -0,
-                    depletionsLastYear: 50826.4906,
-                    depletionsTrend: -100,
-                    plan: 100,
-                    timeframe: 'MTD',
-                    vsPlan: 0,
-                    vsPlanPercent: NaN
-            }, {
-                    depletions: 200,
-                    depletionsBU: 25,
-                    depletionsBULastYear: 12,
-                    depletionsBUTrend: -10,
-                    depletionsGap: -10,
-                    depletionsLastYear: 50,
-                    depletionsTrend: -1,
-                    plan: 622,
-                    timeframe: 'MTD',
-                    vsPlan: 0,
-                    vsPlanPercent: NaN
-            }]}]
-        };
-    distributionPerformanceData = {
-         performance: [{
-                measures: [{
-                      planSimple: 60,
-                      planEffective: 100,
-                      distributionsSimple: 90,
-                      planDistirbutionSimpleTrend: 0,
-                      planDistirbutionEffectiveTrend: 0,
-                      distributionsEffective: 120
-                    }, {
-                      planSimple: 0,
-                      planEffective: 0,
-                      distributionsSimple: 90,
-                      planDistirbutionSimpleTrend: 0,
-                      planDistirbutionEffectiveTrend: 0,
-                      distributionsEffective: 120
-                    }]
-                }]
+      performance: [{
+        measures: [{
+          depletions: 300,
+          depletionsBU: 50,
+          depletionsBULastYear: 132439.3203,
+          depletionsBUTrend: -10,
+          depletionsGap: -0,
+          depletionsLastYear: 50826.4906,
+          depletionsTrend: -100,
+          plan: 100,
+          timeframe: 'MTD',
+          vsPlan: 0,
+          vsPlanPercent: NaN
+        }, {
+          depletions: 200,
+          depletionsBU: 25,
+          depletionsBULastYear: 12,
+          depletionsBUTrend: -10,
+          depletionsGap: -10,
+          depletionsLastYear: 50,
+          depletionsTrend: -1,
+          plan: 622,
+          timeframe: 'MTD',
+          vsPlan: 0,
+          vsPlanPercent: NaN
+        }]
+      }]
     };
+
+    distributionPerformanceData = {
+      performance: [{
+        measures: [{
+          planSimple: 60,
+          planEffective: 100,
+          distributionsSimple: 90,
+          planDistirbutionSimpleTrend: 0,
+          planDistirbutionEffectiveTrend: 0,
+          distributionsEffective: 120
+        }, {
+          planSimple: 0,
+          planEffective: 0,
+          distributionsSimple: 90,
+          planDistirbutionSimpleTrend: 0,
+          planDistirbutionEffectiveTrend: 0,
+          distributionsEffective: 120
+        }]
+      }]
+    };
+
+    mockDistributionData = {
+      performance: [{
+        id: '123456',
+        name: 'Walgreens',
+        premiseType: 'OFF PREMISE',
+        measures: {
+          performance: [{ measures: [distributionPerformanceData.performance[0].measures[0]] }]
+        }
+      }, {
+        id: '999999',
+        name: 'INDEPENDENT',
+        premiseType: 'OFF PREMISE',
+        measures: {
+          performance: [{ measures: [distributionPerformanceData.performance[0].measures[0]] }]
+        }
+      }, {
+        id: '999999',
+        name: 'INDEPENDENT',
+        premiseType: 'ON PREMISE',
+        measures: {
+          performance: [{ measures: [distributionPerformanceData.performance[0].measures[0]] }]
+        }
+      }, {
+        id: '999999',
+        name: 'INDEPENDENT',
+        premiseType: 'NON RETAIL',
+        measures: {
+          performance: [{ measures: [distributionPerformanceData.performance[0].measures[0]] }]
+        }
+      }, {
+        id: 'ALL OTHER',
+        name: 'ALL OTHER',
+        premiseType: 'OFF PREMISE',
+        measures: {
+          performance: [{ measures: [distributionPerformanceData.performance[0].measures[0]] }]
+        }
+      }, {
+        id: 'ALL OTHER',
+        name: 'ALL OTHER',
+        premiseType: 'ON PREMISE',
+        measures: {
+          performance: [{ measures: [distributionPerformanceData.performance[0].measures[0]] }]
+        }
+      }, {
+        id: 'ALL OTHER',
+        name: 'ALL OTHER',
+        premiseType: 'NON RETAIL',
+        measures: {
+          performance: [{ measures: [distributionPerformanceData.performance[0].measures[0]] }]
+        }
+      }]
+    };
+
     params = {
-          myAccountsOnly: true,
-          premiseType: 'all',
-          retailer: 'Chain'
-      };
+      myAccountsOnly: true,
+      premiseType: 'all',
+      retailer: 'Chain'
+    };
   });
 
   it('should be defined', function() {
-      expect(userService).toBeDefined();
+    expect(userService).toBeDefined();
   });
 
   it('should return valid values', function() {
-      var returnValue = userService.isValidValues(1);
-      expect(returnValue).toEqual(true);
-      returnValue = userService.isValidValues(NaN);
-      expect(returnValue).toEqual(false);
-      returnValue = userService.isValidValues('not a number');
-      expect(returnValue).toEqual(false);
-      returnValue = userService.isValidValues(null);
-      expect(returnValue).toEqual(false);
+    let returnValue = userService.isValidValues(1);
+    expect(returnValue).toEqual(true);
+
+    returnValue = userService.isValidValues(NaN);
+    expect(returnValue).toEqual(false);
+
+    returnValue = userService.isValidValues('not a number');
+    expect(returnValue).toEqual(false);
+
+    returnValue = userService.isValidValues(null);
+    expect(returnValue).toEqual(false);
   });
 
   it('should get performance depletion', function() {
@@ -142,69 +201,121 @@ describe('[Services.userService - performance]', function() {
       });
   });
 
-  it('get top bottom snapshot distribution', function() {
+  it('should update INDEPENDENT/ALL OTHER account/subaccount name with premise type', () => {
+    const mockParams = {
+      myAccountsOnly: true,
+      premiseType: 'all',
+      retailer: 'Chain',
+      distributor: ['111111']
+    };
+    const mockType = {
+      value: 2
+    };
 
-      var params = {
-          myAccountsOnly: true,
-          premiseType: 'all',
-          retailer: 'Chain'
-      };
-      var type = {
-          value: 1
-      };
+    $httpBackend
+    .expect('GET', '/v2/users/undefined/performance/topBottomSnapshot/accounts?filter=myAccountsOnly%3Atrue%2Cdistributor%3A111111')
+    .respond(200, mockDistributionData);
 
-       $httpBackend
-        .expect('GET', '/v2/users/undefined/performance/topBottomSnapshot/distributors?filter=myAccountsOnly%3Atrue%2C')
-        .respond(200, distributionPerformanceData);
-      var returnPromise = userService.getTopBottomSnapshot(type, params);
-      $httpBackend.flush();
+    const returnedMockData = userService.getTopBottomSnapshot(mockType, mockParams);
+    $httpBackend.flush();
+    const returnedAccounts = returnedMockData.$$state.value.performance;
 
-      expect(returnPromise.$$state.value.performance[0].measures[0]).toEqual({
-          planSimple: 60,
-          planEffective: 100,
-          distributionsSimple: 90,
-          planDistirbutionSimpleTrend: 50,
-          planDistirbutionEffectiveTrend: -10,
-          distributionsEffective: 120
-      });
-      expect(returnPromise.$$state.value.performance[0].measures[1]).toEqual({
-          planSimple: 0,
-          planEffective: 0,
-          distributionsSimple: 90,
-          planDistirbutionSimpleTrend: 0,
-          planDistirbutionEffectiveTrend: 0,
-          distributionsEffective: 120
-      });
+    expect(returnedAccounts[0].name).toEqual('Walgreens');
+    expect(returnedAccounts[1].name).toEqual('INDEPENDENT (OFF)');
+    expect(returnedAccounts[2].name).toEqual('INDEPENDENT (ON)');
+    expect(returnedAccounts[3].name).toEqual('INDEPENDENT (NON-RETAIL)');
+    expect(returnedAccounts[4].name).toEqual('UNMANAGED CHAIN (OFF)');
+    expect(returnedAccounts[5].name).toEqual('UNMANAGED CHAIN (ON)');
+    expect(returnedAccounts[6].name).toEqual('UNMANAGED CHAIN (NON-RETAIL)');
+  });
 
-      type.value = 2;
-      $httpBackend
-      .expect('GET', '/v2/users/undefined/performance/topBottomSnapshot/accounts?filter=myAccountsOnly%3Atrue%2C')
-      .respond(200, distributionPerformanceData);
-      returnPromise = userService.getTopBottomSnapshot(type, params);
-      $httpBackend.flush();
+  it('get top bottom snapshot distribution', () => {
+    const defaultParams = {
+      myAccountsOnly: true,
+      premiseType: 'all',
+      retailer: 'Chain'
+    };
+    let params = {
+      myAccountsOnly: true,
+      premiseType: 'all',
+      retailer: 'Chain'
+    };
+    const type = {
+      value: 1
+    };
+    const defaultUrlBase = '/v2/users/undefined/performance/topBottomSnapshot/';
+    const defaultUrlQuery = 'distributors?filter=myAccountsOnly%3Atrue%2C';
+    let urlBase = defaultUrlBase;
+    let urlQuery = defaultUrlQuery;
 
-      type.value = 3;
-      $httpBackend
-      .expect('GET', '/v2/users/undefined/performance/topBottomSnapshot/subaccounts?filter=myAccountsOnly%3Atrue%2C')
-      .respond(200, distributionPerformanceData);
-      returnPromise = userService.getTopBottomSnapshot(type, params);
-      $httpBackend.flush();
+    $httpBackend
+    .expect('GET', urlBase + urlQuery)
+    .respond(200, distributionPerformanceData);
 
-      type.value = 4;
-      $httpBackend
-      .expect('GET', '/v2/users/undefined/performance/topBottomSnapshot/stores?filter=myAccountsOnly%3Atrue%2C')
-      .respond(200, distributionPerformanceData);
-      returnPromise = userService.getTopBottomSnapshot(type, params);
-      $httpBackend.flush();
+    let returnPromise = userService.getTopBottomSnapshot(type, params);
+    $httpBackend.flush();
 
-      type.value = 2;
-      $httpBackend
-      .expect('GET', '/v2/users/undefined/performance/topBottomSnapshot/accounts?filter=myAccountsOnly%3Atrue%2C')
-      .respond(400);
-      returnPromise = userService.getTopBottomSnapshot(type, params);
-      $httpBackend.flush();
-      expect(returnPromise.$$state.status).toEqual(2);
+    expect(returnPromise.$$state.value.performance[0].measures[0]).toEqual({
+      planSimple: 60,
+      planEffective: 100,
+      distributionsSimple: 90,
+      planDistirbutionSimpleTrend: 50,
+      planDistirbutionEffectiveTrend: -10,
+      distributionsEffective: 120
+    });
 
+    expect(returnPromise.$$state.value.performance[0].measures[1]).toEqual({
+      planSimple: 0,
+      planEffective: 0,
+      distributionsSimple: 90,
+      planDistirbutionSimpleTrend: 0,
+      planDistirbutionEffectiveTrend: 0,
+      distributionsEffective: 120
+    });
+
+    type.value = 2;
+    params['distributor'] = ['111111'];
+    urlQuery = 'accounts?filter=myAccountsOnly%3Atrue%2Cdistributor%3A111111';
+
+    $httpBackend
+    .expect('GET', urlBase + urlQuery)
+    .respond(200, distributionPerformanceData);
+
+    returnPromise = userService.getTopBottomSnapshot(type, params);
+    $httpBackend.flush();
+    type.value = 3;
+    params['account'] = ['222222'];
+    urlQuery = 'subaccounts?filter=myAccountsOnly%3Atrue%2Cdistributor%3A111111%2Caccount%3A222222';
+
+    $httpBackend
+    .expect('GET', urlBase + urlQuery)
+    .respond(200, distributionPerformanceData);
+
+    returnPromise = userService.getTopBottomSnapshot(type, params);
+    $httpBackend.flush();
+    type.value = 4;
+    params['subaccount'] = ['333333'];
+    urlQuery = 'stores?filter=myAccountsOnly%3Atrue%2Cdistributor%3A111111%2Caccount%3A222222%2Csubaccount%3A333333';
+
+    $httpBackend
+    .expect('GET', urlBase + urlQuery)
+    .respond(200, distributionPerformanceData);
+
+    returnPromise = userService.getTopBottomSnapshot(type, params);
+    $httpBackend.flush();
+    type.value = 2;
+    urlQuery = 'accounts?filter=myAccountsOnly%3Atrue%2Cdistributor%3A111111';
+    params = defaultParams;
+    params['distributor'] = ['111111'];
+
+    $httpBackend
+    .expect('GET', urlBase + urlQuery)
+    .respond(400);
+
+    returnPromise = userService.getTopBottomSnapshot(type, params);
+    $httpBackend.flush();
+
+    expect(returnPromise.$$state.status).toEqual(2);
   });
 
   it('get top bottom depletion', function() {

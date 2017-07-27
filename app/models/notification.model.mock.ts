@@ -3,7 +3,7 @@ import * as moment from 'moment';
 
 let chance = new Chance();
 
-export function targetListNotificationNotificationMock(): any {
+export function getTargetListNotificationNotificationMock(): any {
   return {
     dateCreated: moment(),
     dateUpdated: moment(),
@@ -27,7 +27,7 @@ export function targetListNotificationNotificationMock(): any {
   };
 }
 
-export function opportunityNotificationMock(): any {
+export function getOpportunityNotificationMock(): any {
   return {
     dateCreated: moment(),
     dateUpdated: moment(),
@@ -68,7 +68,7 @@ export function opportunityNotificationMock(): any {
   };
 }
 
-export function storeNotificationMock(): any {
+export function getStoreNotificationMock(): any {
   return {
     dateCreated: moment(),
     dateUpdated: moment(),
@@ -96,7 +96,7 @@ export function storeNotificationMock(): any {
   };
 }
 
-export function accountNotificationMock(): any {
+export function getAccountNotificationMock(): any {
   return {
     dateCreated: moment(),
     dateUpdated: moment(),

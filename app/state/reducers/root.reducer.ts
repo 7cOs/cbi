@@ -1,12 +1,15 @@
 import { compassVersionReducer, CompassVersionState } from './compass-version.reducer';
 import { dateRangesReducer, DateRangesState } from './date-ranges.reducer';
+import { myPerformanceFilterReducer, MyPerformanceFilterState } from './my-performance-filter.reducer';
 
 export interface AppState {
   compassVersion: CompassVersionState;
   dateRanges: DateRangesState;
+  myPerformanceFilter: MyPerformanceFilterState;
 }
 
 export const rootReducer = {
   compassVersion: compassVersionReducer,
-  dateRanges: dateRangesReducer
+  dateRanges: dateRangesReducer,
+  myPerformanceFilter: myPerformanceFilterReducer
 };
