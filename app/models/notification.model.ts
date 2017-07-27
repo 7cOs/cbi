@@ -4,7 +4,7 @@ export interface Notification {
   dateCreated: Moment;
   dateUpdated: Moment;
   id: string;
-  objectType: NotificationObjectType;
+  objectType: NotificationObject;
   objectId: string;
   action: NotificationAction;
   salesforceUserNoteID: string;
@@ -70,7 +70,7 @@ export interface AccountNotification extends Notification {
   };
 }
 
-export type NotificationObjectType = 'TARGET_LIST' | 'OPPORTUNITY' | 'STORE' | 'ACCOUNT';
+export type NotificationObject = 'TARGET_LIST' | 'OPPORTUNITY' | 'STORE' | 'ACCOUNT';
 
 export type NotificationAction = 'SHARE_TARGET_LIST' | 'SHARE_OPPORTUNITY' | 'ADDED_NOTE' | 'ARCHIVE_TARGET_LIST';
 

@@ -1,6 +1,6 @@
 import { TestBed, inject } from '@angular/core/testing';
 import { EffectsRunner, EffectsTestingModule } from '@ngrx/effects/testing';
-import { appVersionMock } from '../../models/app-version.model.mock';
+import { getAppVersionMock } from '../../models/app-version.model.mock';
 import { CompassVersionEffects } from './compass-version.effect';
 import { FetchVersionAction, FetchVersionFailureAction, FetchVersionSuccessAction } from '../actions/compass-version.action';
 import * as Chance from 'chance';
@@ -10,7 +10,7 @@ describe('Compass Version Effects', () => {
 
   let runner: EffectsRunner;
   let compassVersionEffects: CompassVersionEffects;
-  const mockVersion = appVersionMock();
+  const mockVersion = getAppVersionMock();
   let mockVersionService = {
     getVersion: () => Promise.resolve(mockVersion),
     model: { } as any

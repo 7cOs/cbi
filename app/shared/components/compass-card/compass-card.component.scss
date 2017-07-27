@@ -1,0 +1,77 @@
+@import '../../../assets/styles/base/variables';
+
+/deep/ .compass-card {
+  color: $gray-1;
+  background-color: $white;
+  padding: 10px 20px;
+
+  md-card-title {
+    font-size: 18px;
+    padding: 13px 0 0;
+
+    .icon {
+      background-image: url('../../../assets/img/icons/tool-updates.svg');
+      background-position: left center;
+      background-repeat: no-repeat;
+      padding-left: 39px;
+      margin-top: 0;
+    }
+  }
+
+  md-card-content {
+    padding-left: 0;
+    padding-right: 0;
+
+    p, & {
+      font-size: 12px;
+    }
+
+    li {
+      list-style: disc;
+      margin-left: 18px;
+      padding-top: 11px;
+
+      li {
+        margin-left: 36px;
+      }
+    }
+  }
+
+  md-card-actions {
+    font-size: 11px;
+    font-family: $rajdhani;
+    color: $hyperlink;
+    font-weight: $semibold;
+    padding-left: 0;
+    margin: 0;
+    position: relative;
+    left: -9px;
+
+    div {
+      display: inline-block;
+      padding: 6px 9px;
+      border-radius: 3px;
+    }
+
+    .right-arrow {
+      background-image: url('../../../assets/img/icons/arrow-right-blue.svg');
+      background-repeat: no-repeat;
+      background-position: right 9px center;
+      padding-right: 23px;
+    }
+  }
+
+  & div:hover {
+    color: $hyperlink-hover;
+    cursor: pointer;
+    background-color: $gray-4;
+
+    &.right-arrow {
+      background-image: url('../../../assets/img/icons/arrow-right-dark-blue.svg');
+    }
+  }
+
+  &:active {
+    color: $hyperlink-hover;
+  }
+}

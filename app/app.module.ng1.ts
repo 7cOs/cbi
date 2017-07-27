@@ -6,6 +6,7 @@ import '@uirouter/angularjs';
 
 import { AppComponent } from './shared/containers/app/app.component';
 import { AppUpgradeAdapter } from './app.module';
+import { CompassCardComponent } from './shared/components/compass-card/compass-card.component';
 import { DateRangeComponent } from './shared/components/date-ranges/date-ranges.component';
 import { DateRangeService } from './services/date-range.service';
 import { GreetingComponent } from './shared/components/greeting/greeting.component';
@@ -33,6 +34,7 @@ export default angular.module('cf', [
 ])
   // make ng2 components/services available to ng1 code & templates
   .directive('appRoot', AppUpgradeAdapter.downgradeNg2Component(AppComponent) as IDirectiveFactory)
+  .directive('compassCard', AppUpgradeAdapter.downgradeNg2Component(CompassCardComponent) as IDirectiveFactory)
   .directive('dateRanges', AppUpgradeAdapter.downgradeNg2Component(DateRangeComponent) as IDirectiveFactory)
   .directive('greeting', AppUpgradeAdapter.downgradeNg2Component(GreetingComponent) as IDirectiveFactory)
   .directive('myPerformance', AppUpgradeAdapter.downgradeNg2Component(MyPerformanceComponent) as IDirectiveFactory)

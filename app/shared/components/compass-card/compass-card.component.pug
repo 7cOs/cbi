@@ -1,0 +1,7 @@
+md-card.compass-card
+  md-card-title(*ngIf="title")
+    h3([ngClass]="{ 'icon' : iconVisible }") {{ title }}
+  md-card-content
+    ng-content
+  md-card-actions(*ngIf="mainAction")
+    div.right-arrow((click)="optionMainActionClicked()") {{ mainAction | uppercase }}

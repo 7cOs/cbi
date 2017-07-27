@@ -2,26 +2,6 @@
   background: $body-bg;
   padding: 0;
 
-  .announcement-widget {
-    margin-top: 60px;
-    text-align: center;
-
-    .go-arrow:after {
-      left: 80%;
-      top: 3px;
-    }
-
-    h2 {
-      font-weight: $semibold;
-      font-size: 1.2em;
-    }
-
-    p {
-      position: relative;
-      padding: 0.25em 1.5em;
-    }
-  }
-
   .landing-page-data {
     padding: 0;
 
