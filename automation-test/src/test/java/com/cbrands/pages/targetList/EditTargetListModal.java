@@ -82,7 +82,6 @@ public class EditTargetListModal extends TestNGBasePage {
     final TargetListListingsPage targetListListingsPage = PageFactory.initElements(driver, TargetListListingsPage.class);
 
     saveButton.click();
-    targetListListingsPage.isLoaded();
 
     return targetListListingsPage;
   }
