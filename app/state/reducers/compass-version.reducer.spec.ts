@@ -1,7 +1,7 @@
 import { compassVersionReducer, initialState } from './compass-version.reducer';
 import { ActionStatus } from '../../enums/action-status.enum';
 import * as CompassVersionActions from '../actions/compass-version.action';
-import { appVersionMock } from '../../models/app-version.model.mock';
+import { getAppVersionMock } from '../../models/app-version.model.mock';
 
 describe('Compass Version Reducer', () => {
 
@@ -17,7 +17,7 @@ describe('Compass Version Reducer', () => {
   });
 
   it('should update the status and store the new data when a fetch is successful', () => {
-    const payload = appVersionMock();
+    const payload = getAppVersionMock();
 
     const expectedState = {
       status: ActionStatus.Fetched,

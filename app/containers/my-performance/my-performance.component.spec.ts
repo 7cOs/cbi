@@ -12,7 +12,11 @@ import { MyPerformanceComponent } from './my-performance.component';
 import { MyPerformanceFilterActionType } from '../../enums/my-performance-filter.enum';
 import { MyPerformanceFilterEvent } from '../../models/my-performance-filter.model'; // tslint:disable-line:no-unused-variable
 import { MyPerformanceFilterState } from '../../state/reducers/my-performance-filter.reducer';
+import { MyPerformanceTableComponent } from '../../shared/components/my-performance-table/my-performance-table.component';
+import { MyPerformanceTableRowComponent } from '../../shared/components/my-performance-table-row/my-performance-table-row.component';
+import { SortIndicatorComponent } from '../../shared/components/sort-indicator/sort-indicator.component';
 import { PremiseTypeValue } from '../../enums/premise-type.enum';
+import { UtilService } from '../../services/util.service';
 
 @Component({
   selector: 'my-performance-filter',
@@ -31,11 +35,20 @@ describe('MyPerformanceComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [ MockMyPerformanceFilterComponent, MyPerformanceComponent ],
-      providers: [{
-        provide: Store,
-        useValue: new MockStore({})
-      }]
+      declarations: [
+        MockMyPerformanceFilterComponent,
+        MyPerformanceComponent,
+        MyPerformanceTableComponent,
+        MyPerformanceTableRowComponent,
+        SortIndicatorComponent
+      ],
+      providers: [
+        {
+          provide: Store,
+          useValue: new MockStore({})
+        },
+        UtilService
+      ]
     })
     .compileComponents();
 
