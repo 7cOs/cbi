@@ -16,6 +16,8 @@ import { FormatOpportunitiesTypePipe } from './pipes/formatOpportunitiesType.pip
 import { GreetingComponent } from './shared/components/greeting/greeting.component';
 import { MyPerformanceModule } from './containers/my-performance/my-performance.module';
 import { NotificationsComponent } from './shared/components/Notifications/notifications.component';
+import { ResponsibilitiesApiService } from './services/responsibilities-api.service';
+import { ResponsibilitiesTransformerService } from  './services/responsibilities-transformer.service';
 import { rootReducer } from './state/reducers/root.reducer';
 import { SettingsComponent } from './shared/components/settings/settings.component';
 import { TimeAgoPipe } from './pipes/timeAgo.pipe';
@@ -58,6 +60,8 @@ AppUpgradeAdapter.upgradeNg1Provider('$state');
     DateRangeApiService,
     DateRangeService,
     DateRangeTransformerService,
+    ResponsibilitiesApiService,
+    ResponsibilitiesTransformerService,
     UtilService
   ]
 })
