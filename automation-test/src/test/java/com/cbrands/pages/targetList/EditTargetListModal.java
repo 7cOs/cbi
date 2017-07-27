@@ -1,19 +1,19 @@
 package com.cbrands.pages.targetList;
 
+import com.cbrands.pages.TestNGBasePage;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.How;
 import org.openqa.selenium.support.PageFactory;
-import org.openqa.selenium.support.ui.LoadableComponent;
 import org.testng.Assert;
 
 import static com.cbrands.helper.SeleniumUtils.findElement;
 import static com.cbrands.helper.SeleniumUtils.waitForElementToClickable;
 import static com.cbrands.helper.SeleniumUtils.waitForVisibleFluentWait;
 
-public class EditTargetListModal extends LoadableComponent<EditTargetListModal> {
+public class EditTargetListModal extends TestNGBasePage {
 
   private final WebDriver driver;
 
@@ -43,18 +43,14 @@ public class EditTargetListModal extends LoadableComponent<EditTargetListModal> 
   }
 
   @Override
-  protected void isLoaded() throws Error {
-    Assert.assertTrue(isModalLoaded());
+  public boolean isLoaded() {
+    waitForVisibleFluentWait(modal);
+    return modal.isDisplayed();
   }
 
   @Override
   protected void load() {
     Assert.fail("The Manage modal for Target Lists cannot be loaded directly.");
-  }
-
-  public boolean isModalLoaded() {
-    waitForVisibleFluentWait(modal);
-    return modal.isDisplayed();
   }
 
   public EditTargetListModal enterListName(String name) {
