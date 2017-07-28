@@ -58,8 +58,6 @@ AppUpgradeAdapter.upgradeNg1Provider('$state');
     DateRangeApiService,
     DateRangeService,
     DateRangeTransformerService,
-    ResponsibilitiesApiService,
-    ResponsibilitiesTransformerService,
     UtilService
   ]
 })
