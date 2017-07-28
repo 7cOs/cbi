@@ -1,9 +1,15 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { Observable } from 'rxjs';
+import { Store } from '@ngrx/store';
 
+import { AppState } from '../../state/reducers/root.reducer';
 import { ColumnType } from '../../enums/column-type.enum';
 import { DateRange } from '../../models/date-range.model';
+import { FetchResponsibilitiesAction } from '../../state/actions/responsibilities.action';
 import { getDateRangeMock } from '../../models/date-range.model.mock';
+import { MyPerformanceTableDataTransformerService } from '../../services/my-performance-table-data-transformer.service';
 import { MyPerformanceTableRow } from '../../models/my-performance-table-row.model';
+import { ResponsibilitiesState } from '../../state/reducers/responsibilities.reducer';
 import { SortingCriteria } from '../../models/sorting-criteria.model';
 import { ViewType } from '../../enums/view-type.enum';
 
@@ -17,7 +23,8 @@ import { myPerformanceTableData,
   template: require('./my-performance.component.pug'),
   styles: [require('./my-performance.component.scss')]
 })
-export class MyPerformanceComponent {
+export class MyPerformanceComponent implements OnInit {
+  public roleGroups: Observable<ResponsibilitiesState>;
   public viewType = ViewType;
 
   // mocks
@@ -36,6 +43,13 @@ export class MyPerformanceComponent {
     }
   ];
 
+  constructor(private store: Store<AppState>,
+              private myPerformanceTableDataTransformerService: MyPerformanceTableDataTransformerService) {
+    this.store.select('responsibilities').subscribe((responsibilitiesState: ResponsibilitiesState) => {
+      this.tableData = this.myPerformanceTableDataTransformerService.transformRoleGroupTableData(responsibilitiesState.responsibilities);
+    });
+  }
+
   public handleSortRows(criteria: SortingCriteria[]): void {
     this.sortingCriteria = criteria;
   }
@@ -43,5 +57,9 @@ export class MyPerformanceComponent {
   public handleElementClicked(row: MyPerformanceTableRow, index: number): void {
     console.log(row);
     console.log(index);
+  }
+
+  ngOnInit() {
+    this.store.dispatch(new FetchResponsibilitiesAction());
   }
 }

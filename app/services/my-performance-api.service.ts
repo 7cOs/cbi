@@ -4,15 +4,15 @@ import { Observable } from 'rxjs';
 import 'rxjs/add/operator/map';
 
 // tslint:disable-next-line:no-unused-variable
-import { Person } from '../models/person.model';
+import { EntityResponsibilitiesDTO } from '../models/entity-responsibilities-dto.model';
 
 @Injectable()
-export class ResponsibilitiesApiService {
+export class MyPerformanceApiService {
   private url: string;
 
   constructor(private http: Http) { }
 
-  public getResponsibilities(personId: number): Observable<Person[]> {
+  public getResponsibilities(personId: number): Observable<EntityResponsibilitiesDTO[]> {
     this.url = `/v3/people/${personId}/responsibilities`;
     return this.http.get(`${this.url}`)
       .map(res => res.json())
