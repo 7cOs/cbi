@@ -6,9 +6,9 @@ import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/do';
 import 'rxjs/add/operator/switchMap';
 
-import { Person } from '../../models/person.model';
+import { EntityResponsibilitiesDTO } from '../../models/entity-responsibilities-dto.model';
 import * as ResponsibilitiesActions from '../../state/actions/responsibilities.action';
-import { ResponsibilitiesApiService } from '../../services/responsibilities-api.service';
+import { MyPerformanceApiService } from '../../services/my-performance-api.service';
 import { ResponsibilitiesTransformerService } from '../../services/responsibilities-transformer.service';
 
 @Injectable()
@@ -16,7 +16,7 @@ export class ResponsibilitiesEffects {
 
   constructor(
     private actions$: Actions,
-    private responsibilitiesApiService: ResponsibilitiesApiService,
+    private myPerformanceApiService: MyPerformanceApiService,
     private responsibilitiesTransformerService: ResponsibilitiesTransformerService
   ) { }
 
@@ -25,8 +25,8 @@ export class ResponsibilitiesEffects {
     return this.actions$
       .ofType(ResponsibilitiesActions.FETCH_RESPONSIBILITIES_ACTION)
       .switchMap(() => {
-        return this.responsibilitiesApiService.getResponsibilities(1)
-          .map((response: Person[]) => {
+        return this.myPerformanceApiService.getResponsibilities(1)
+          .map((response: EntityResponsibilitiesDTO[]) => {
             let roleGroups = this.responsibilitiesTransformerService.groupPeopleByRoleGroups(response);
             return new ResponsibilitiesActions.FetchResponsibilitiesSuccessAction(roleGroups);
           })

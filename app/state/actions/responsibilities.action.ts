@@ -1,5 +1,7 @@
 import { Action } from '@ngrx/store';
 
+import { RoleGroups } from '../../models/role-groups.model';
+
 export const FETCH_RESPONSIBILITIES_ACTION = '[Responsibilities] FETCH_RESPONSIBILITIES_ACTION';
 export class FetchResponsibilitiesAction implements Action {
   readonly type = FETCH_RESPONSIBILITIES_ACTION;
@@ -9,7 +11,7 @@ export const FETCH_RESPONSIBILITIES_SUCCESS_ACTION = '[Responsibilities] FETCH_R
 export class FetchResponsibilitiesSuccessAction implements Action {
   readonly type = FETCH_RESPONSIBILITIES_SUCCESS_ACTION;
 
-  constructor(public payload: any) { }
+  constructor(public payload: RoleGroups) { }
 }
 
 export const FETCH_RESPONSIBILITIES_FAILURE_ACTION = '[Responsibilities] FETCH_RESPONSIBILITIES_FAILURE_ACTION';
