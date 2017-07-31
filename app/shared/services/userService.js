@@ -4,6 +4,8 @@ module.exports = /*  @ngInject */
   function userService($http, $q, apiHelperService, filtersService, targetListService) {
 
     const maxNumberOfFilters = 100;
+    const independentAccountId = '999999';
+    const allOtherAccountId = 'ALL OTHER';
 
     var model = {
       currentUser: {},
@@ -519,9 +521,6 @@ module.exports = /*  @ngInject */
       }
 
       function indicatePremiseTypes(accountArray) {
-        const independentAccountId = '999999';
-        const allOtherAccountId = 'ALL OTHER';
-
         return accountArray.map(account => {
           if (account.id === independentAccountId || account.id === allOtherAccountId) {
             const premiseTypeDisplay = ` (${filtersService.accountFilters.premiseTypeDisplay[account.premiseType]})`;
