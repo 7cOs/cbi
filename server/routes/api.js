@@ -13,6 +13,7 @@ module.exports = function(app) {
       // grabbing hard-coded v3 base url from config
       // TODO: remove once api gateway is in place
       if (req.url.match(/\/v3\/dateRangeCodes/)) v3BaseURLKey = 'dateRangeCodes';
+      if (req.url.match(/\/v3\/people\/\d+\/performanceTotal/)) v3BaseURLKey = 'performanceTotal';
       if (req.url.match(/\/v3\/people\/\d+\/responsibilities/)) v3BaseURLKey = 'responsibilities';
 
       headers['X-CBI-API-AGENT'] = util.agentHeader();

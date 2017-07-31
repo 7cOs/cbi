@@ -13,6 +13,8 @@ import { ResponsibilitiesState } from '../../state/reducers/responsibilities.red
 import { SortingCriteria } from '../../models/sorting-criteria.model';
 import { ViewType } from '../../enums/view-type.enum';
 
+import { FetchPerformanceTotalAction } from '../../state/actions/performance-total.action';
+
 // mocks
 import { myPerformanceTableData,
          myPerformanceTotalRowData,
@@ -44,9 +46,16 @@ export class MyPerformanceComponent implements OnInit {
   ];
 
   constructor(private store: Store<AppState>,
-              private myPerformanceTableDataTransformerService: MyPerformanceTableDataTransformerService) {
+    private myPerformanceTableDataTransformerService: MyPerformanceTableDataTransformerService) {
+
     this.store.select('responsibilities').subscribe((responsibilitiesState: ResponsibilitiesState) => {
       this.tableData = this.myPerformanceTableDataTransformerService.transformRoleGroupTableData(responsibilitiesState.responsibilities);
+    });
+
+    this.store.select(state => state.performanceTotal).subscribe((performanceTotalData: any) => {
+      if (performanceTotalData.status === 2) {
+        console.log('performanceTotalData', performanceTotalData);
+      }
     });
   }
 
@@ -63,5 +72,6 @@ export class MyPerformanceComponent implements OnInit {
     // stub current user for now
     const currentUserId = 1;
     this.store.dispatch(new FetchResponsibilitiesAction(currentUserId));
+    this.store.dispatch(new FetchPerformanceTotalAction(currentUserId));
   }
 }
