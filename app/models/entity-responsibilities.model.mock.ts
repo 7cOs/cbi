@@ -10,7 +10,8 @@ export function entityPeopleResponsibilitiesMock(): EntityResponsibilities {
   return {
     peopleType: entityPeopleTypeValues[chance.integer({min: 0, max: entityPeopleTypeValues.length - 1})],
     id: chance.natural(),
-    name: chance.string()
+    name: chance.string(),
+    typeDisplayName: chance.string()
   };
 }
 
@@ -18,6 +19,7 @@ export function entityPropertyResponsibilitiesMock(): EntityResponsibilities {
   return {
     propertyType: entityPropertyTypeValues[chance.integer({min: 0, max: entityPropertyTypeValues.length - 1})],
     id: chance.natural(),
-    name: chance.string()
+    name: chance.string(),
+    typeDisplayName: chance.string()
   };
 }
