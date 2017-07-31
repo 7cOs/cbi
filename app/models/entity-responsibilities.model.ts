@@ -1,8 +1,10 @@
 export interface EntityResponsibilities {
-  peopleType?: EntityPeopleType;
-  propertyType?: EntityPropertyType;
   id: number;
   name: string;
+  otherType?: string;
+  peopleType?: EntityPeopleType;
+  propertyType?: EntityPropertyType;
+  typeDisplayName: string;
 }
 
 // this needs to be updated to accommodate all types

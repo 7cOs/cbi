@@ -8,11 +8,11 @@ let chance = new Chance();
 
 @Injectable()
 export class MyPerformanceTableDataTransformerService {
-  // still mocking the performance data for now;
+  // mocking the performance data for now;
   public transformRoleGroupTableData(roleGroups: RoleGroups): MyPerformanceTableRow[] {
     return Object.keys(roleGroups).map((groupName: string) => {
       return {
-        descriptionRow0: `${groupName}s`,
+        descriptionRow0: groupName,
         descriptionRow1: '',
         metricColumn0: chance.natural({max: 1000}),
         metricColumn1: chance.natural({max: 1000}),
@@ -21,20 +21,4 @@ export class MyPerformanceTableDataTransformerService {
       };
     });
   }
-//   for setting people, we will go a level deeper
-//   (this is for example purposes only)
-//   private transformPeopleTableData(roleGroups: RoleGroups): MyPerformanceTableRow[] {
-//     return Object.keys(roleGroups).map((groupName: string) => {
-//       return roleGroups[groupName].map((group: EntityResponsibilitiesDTO[]) => {
-//         return {
-//           descriptionRow0: groupName,
-//           descriptionRow1: 'groupName',
-//           metricColumn0: chance.natural({max: 1000}),
-//           metricColumn1: chance.natural({max: 1000}),
-//           metricColumn2: chance.natural({max: 100}),
-//           ctv: 99
-//         };
-//       });
-//     });
-//   }
 }
