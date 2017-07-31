@@ -4,6 +4,8 @@ module.exports = /*  @ngInject */
   function userService($http, $q, apiHelperService, filtersService, targetListService) {
 
     const maxNumberOfFilters = 100;
+    const independentAccountId = '999999';
+    const allOtherAccountId = 'ALL OTHER';
 
     var model = {
       currentUser: {},
@@ -480,8 +482,6 @@ module.exports = /*  @ngInject */
       const snapshotPromise = $q.defer();
       let baseUrl = '/v2/users/' + service.model.currentUser.employeeID;
       let isGettingAccounts = false;
-      const independentAccountId = '999999';
-      const allOtherAccountId = 'ALL OTHER';
 
       params.type = 'topBottom';
 
@@ -495,9 +495,7 @@ module.exports = /*  @ngInject */
           break;
         case 3:
           baseUrl +=  '/performance/topBottomSnapshot/subaccounts';
-          if (params.account && (params.account[0] === independentAccountId || params.account[0] === allOtherAccountId)) {
-            isGettingAccounts = true;
-          }
+          isGettingAccounts = true;
           break;
         case 4:
           baseUrl += '/performance/topBottomSnapshot/stores';
@@ -524,7 +522,6 @@ module.exports = /*  @ngInject */
 
       function indicatePremiseTypes(accountArray) {
         return accountArray.map(account => {
-
           if (account.id === independentAccountId || account.id === allOtherAccountId) {
             const premiseTypeDisplay = ` (${filtersService.accountFilters.premiseTypeDisplay[account.premiseType]})`;
 

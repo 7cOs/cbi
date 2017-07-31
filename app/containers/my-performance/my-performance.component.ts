@@ -1,12 +1,12 @@
-import { Component, OnDestroy } from '@angular/core';
+import { Component } from '@angular/core';
+import { Observable } from 'rxjs/Observable';
 import { Store } from '@ngrx/store';
-import { Subscription } from 'rxjs/Subscription';
 
 import { AppState } from '../../state/reducers/root.reducer';
 import { DateRangesState } from '../../state/reducers/date-ranges.reducer';
-import { MyPerformanceFilter } from '../../models/my-performance-filter.model';
 import { MyPerformanceFilterActionType } from '../../enums/my-performance-filter.enum';
 import { MyPerformanceFilterEvent } from '../../models/my-performance-filter.model';
+import { MyPerformanceFilterState } from '../../state/reducers/my-performance-filter.reducer';
 import * as MyPerformanceFilterActions from '../../state/actions/my-performance-filter.action';
 
 import { ColumnType } from '../../enums/column-type.enum';
@@ -32,7 +32,7 @@ import { myPerformanceTableData,
   template: require('./my-performance.component.pug'),
   styles: [require('./my-performance.component.scss')]
 })
-export class MyPerformanceComponent implements OnDestroy {
+export class MyPerformanceComponent {
   public viewType = ViewType;
 
   // mocks
@@ -57,24 +57,12 @@ export class MyPerformanceComponent implements OnDestroy {
     }
   ];
 
-  private dateRanges: DateRangesState;
-  private dateRangeSubscription: Subscription;
-  private filterState: MyPerformanceFilter;
-  private filterStateSubscription: Subscription;
+  private dateRanges$: Observable<DateRangesState>;
+  private filterState$: Observable<MyPerformanceFilterState>;
 
   constructor(private store: Store<AppState>) {
-    this.filterStateSubscription = this.store.select(state => state.myPerformanceFilter).subscribe(filterState => {
-      this.filterState = filterState;
-    });
-
-    this.dateRangeSubscription = this.store.select(state => state.dateRanges).subscribe(dateRanges => {
-      this.dateRanges = dateRanges;
-    });
-  }
-
-  ngOnDestroy() {
-    this.filterStateSubscription.unsubscribe();
-    this.dateRangeSubscription.unsubscribe();
+    this.filterState$ = this.store.select(state => state.myPerformanceFilter);
+    this.dateRanges$ = this.store.select(state => state.dateRanges);
   }
 
   public handleSortRows(criteria: SortingCriteria[]): void {
