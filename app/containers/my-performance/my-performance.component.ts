@@ -60,6 +60,8 @@ export class MyPerformanceComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.store.dispatch(new FetchResponsibilitiesAction());
+    // stub current user for now
+    const currentUserId = 1;
+    this.store.dispatch(new FetchResponsibilitiesAction(currentUserId));
   }
 }

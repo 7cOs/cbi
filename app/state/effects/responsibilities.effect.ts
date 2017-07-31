@@ -24,10 +24,11 @@ export class ResponsibilitiesEffects {
   fetchResponsibilities$(): Observable<Action> {
     return this.actions$
       .ofType(ResponsibilitiesActions.FETCH_RESPONSIBILITIES_ACTION)
-      .switchMap(() => {
-        return this.myPerformanceApiService.getResponsibilities(1)
+      .switchMap((action: Action) => {
+        const entityId = action.payload;
+        return this.myPerformanceApiService.getResponsibilities(entityId)
           .map((response: EntityResponsibilitiesDTO[]) => {
-            let roleGroups = this.responsibilitiesTransformerService.groupPeopleByRoleGroups(response);
+            const roleGroups = this.responsibilitiesTransformerService.groupPeopleByRoleGroups(response);
             return new ResponsibilitiesActions.FetchResponsibilitiesSuccessAction(roleGroups);
           })
           .catch((err: Error) => Observable.of(new ResponsibilitiesActions.FetchResponsibilitiesFailureAction(err)));
