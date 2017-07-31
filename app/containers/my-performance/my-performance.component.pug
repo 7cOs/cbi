@@ -1,15 +1,15 @@
 h1 Performance
 
 my-performance-filter(
-  [dateRanges]="dateRanges",
-  [filterState]="filterState",
+  [dateRanges]="dateRanges$ | async",
+  [filterState]="filterState$ | async",
   (onFilterChange)="filterOptionSelected($event)"
 )
 
 div(style="margin-top: 100px;")
   my-performance-table.left(
-    [tableData]="tableData", 
-    [dateRange]="dateRange", 
+    [tableData]="tableData",
+    [dateRange]="dateRange",
     [tableHeaderRow]="tableHeaderRowLeft",
     [performanceMetric]="performanceMetric",
     [totalRow]="totalRowData",
@@ -19,7 +19,7 @@ div(style="margin-top: 100px;")
     (onSortingCriteriaChanged)="handleSortRows($event)")
 
   my-performance-table.right(
-    [tableData]="rightTableData", 
+    [tableData]="rightTableData",
     [tableHeaderRow]="tableHeaderRowRight",
     [performanceMetric]="'Product Snapshot'",
     [sortingCriteria]="sortingCriteria",
@@ -29,8 +29,8 @@ div(style="margin-top: 100px;")
 
 div(style="margin-top: 100px;")
   my-performance-table.left(
-    [tableData]="tableData", 
-    [dateRange]="dateRange", 
+    [tableData]="tableData",
+    [dateRange]="dateRange",
     [tableHeaderRow]="tableHeaderRowLeft",
     [performanceMetric]="performanceMetric",
     [totalRow]="totalRowData",
@@ -40,7 +40,7 @@ div(style="margin-top: 100px;")
     (onSortingCriteriaChanged)="handleSortRows($event)")
 
   my-performance-table.right.view-type.skus(
-    [tableData]="skusData", 
+    [tableData]="skusData",
     [totalRow]="skuTotalData",
     [tableHeaderRow]="tableHeaderRowRight",
     [performanceMetric]="'Product Snapshot'",
@@ -51,8 +51,8 @@ div(style="margin-top: 100px;")
 
 div(style="margin-top: 100px;")
   my-performance-table.left.view-type.people(
-    [tableData]="peopleData", 
-    [dateRange]="dateRange", 
+    [tableData]="peopleData",
+    [dateRange]="dateRange",
     [tableHeaderRow]="tableHeaderRowLeft",
     [performanceMetric]="performanceMetric",
     [totalRow]="peopleTotalData",
@@ -62,7 +62,7 @@ div(style="margin-top: 100px;")
     (onSortingCriteriaChanged)="handleSortRows($event)")
 
   my-performance-table.right.view-type.skus(
-    [tableData]="skusData", 
+    [tableData]="skusData",
     [totalRow]="skuTotalData",
     [tableHeaderRow]="tableHeaderRowRight",
     [performanceMetric]="'Product Snapshot'",
@@ -73,8 +73,8 @@ div(style="margin-top: 100px;")
 
 div(style="margin-top: 100px;")
   my-performance-table.left.view-type.accounts(
-    [tableData]="accountData", 
-    [dateRange]="dateRange", 
+    [tableData]="accountData",
+    [dateRange]="dateRange",
     [tableHeaderRow]="tableHeaderRowLeft",
     [performanceMetric]="performanceMetric",
     [totalRow]="accountTotalData",
