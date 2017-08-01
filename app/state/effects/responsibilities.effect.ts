@@ -27,8 +27,8 @@ export class ResponsibilitiesEffects {
       .switchMap((action: Action) => {
         const entityId = action.payload;
         return this.myPerformanceApiService.getResponsibilities(entityId)
-          .map((response: EntityResponsibilitiesDTO[]) => {
-            const roleGroups = this.responsibilitiesTransformerService.groupPeopleByRoleGroups(response);
+          .map(response => {
+            const roleGroups = this.responsibilitiesTransformerService.groupPeopleByRoleGroups(response.people);
             return new ResponsibilitiesActions.FetchResponsibilitiesSuccessAction(roleGroups);
           })
           .catch((err: Error) => Observable.of(new ResponsibilitiesActions.FetchResponsibilitiesFailureAction(err)));

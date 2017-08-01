@@ -17,17 +17,16 @@ export class ResponsibilitiesTransformerService {
   public groupPeopleByRoleGroups(responsibilities: EntityResponsibilitiesDTO[]): RoleGroups {
     let roleGroups: RoleGroups = {};
     Object.keys(responsibilities).forEach((entityType: string) => {
-      responsibilities[entityType].forEach((entity: EntityResponsibilitiesDTO) => {
-        const typeDisplayName: string = this.typeDisplayMapping[entity.type] || entity.type;
+      const entity = responsibilities[entityType];
+      const typeDisplayName: string = this.typeDisplayMapping[entity.type] || entity.type;
 
-        if (Array.isArray(roleGroups[typeDisplayName])) {
-          roleGroups[typeDisplayName].push(this.transformEntityResponsibilitiesDTO(entity, typeDisplayName));
-        } else {
-          roleGroups[typeDisplayName] = [
-            this.transformEntityResponsibilitiesDTO(entity, typeDisplayName)
-          ];
-        }
-      });
+      if (Array.isArray(roleGroups[entity.type])) {
+        roleGroups[entity.type].push(this.transformEntityResponsibilitiesDTO(entity, typeDisplayName));
+      } else {
+        roleGroups[entity.type] = [
+          this.transformEntityResponsibilitiesDTO(entity, typeDisplayName)
+        ];
+      }
     });
 
     return roleGroups;
