@@ -5,7 +5,7 @@ import 'rxjs/add/operator/map';
 
 // tslint:disable-next-line:no-unused-variable
 import { EntityResponsibilitiesDTO } from '../models/entity-responsibilities-dto.model';
-import { PerformanceTotalDTO } from '../models/performance-total-dto.model';
+import { PerformanceTotal } from '../models/performance-total.model';
 
 @Injectable()
 export class MyPerformanceApiService {
@@ -20,7 +20,7 @@ export class MyPerformanceApiService {
       .catch(err => this.handleError(new Error(err)));
   }
 
-  public getPerformanceTotal(personId: number): Observable<PerformanceTotalDTO> {
+  public getPerformanceTotal(personId: number): Observable<PerformanceTotal> {
     this.url = `/v3/people/${personId}/performanceTotal`;
 
     return this.http.get(`${this.url}`)

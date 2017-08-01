@@ -1,23 +1,22 @@
 package com.cbrands.pages.targetList;
 
+import com.cbrands.pages.TestNGBasePage;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.How;
 import org.openqa.selenium.support.PageFactory;
-import org.openqa.selenium.support.ui.LoadableComponent;
 import org.testng.Assert;
 
-import static com.cbrands.helper.SeleniumUtils.findElement;
-import static com.cbrands.helper.SeleniumUtils.waitForElementToClickable;
-import static com.cbrands.helper.SeleniumUtils.waitForVisibleFluentWait;
+import static com.cbrands.helper.SeleniumUtils.*;
 
-public class EditTargetListModal extends LoadableComponent<EditTargetListModal> {
+public class EditTargetListModal extends TestNGBasePage {
 
+  private static final String MODAL_CONTAINER_XPATH = "//div[contains(@class, 'target-list-modal')]";
   private final WebDriver driver;
 
-  @FindBy(how = How.XPATH, using = "//div[contains(@class, 'target-list-modal')]")
+  @FindBy(how = How.XPATH, using = MODAL_CONTAINER_XPATH)
   private WebElement modal;
 
   @FindBy(how = How.CSS, using = "input[placeholder='Enter List Name']")
@@ -43,18 +42,14 @@ public class EditTargetListModal extends LoadableComponent<EditTargetListModal> 
   }
 
   @Override
-  protected void isLoaded() throws Error {
-    Assert.assertTrue(isModalLoaded());
+  public boolean isLoaded() {
+    waitForVisibleFluentWait(modal);
+    return modal.isDisplayed();
   }
 
   @Override
   protected void load() {
     Assert.fail("The Manage modal for Target Lists cannot be loaded directly.");
-  }
-
-  public boolean isModalLoaded() {
-    waitForVisibleFluentWait(modal);
-    return modal.isDisplayed();
   }
 
   public EditTargetListModal enterListName(String name) {
@@ -86,7 +81,7 @@ public class EditTargetListModal extends LoadableComponent<EditTargetListModal> 
     final TargetListListingsPage targetListListingsPage = PageFactory.initElements(driver, TargetListListingsPage.class);
 
     saveButton.click();
-    targetListListingsPage.isLoaded();
+    waitForElementToDisappear(By.xpath(MODAL_CONTAINER_XPATH));
 
     return targetListListingsPage;
   }

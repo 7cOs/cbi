@@ -3,7 +3,7 @@ import 'rxjs/add/operator/map';
 import * as Chance from 'chance';
 
 import { MyPerformanceTableRow } from '../models/my-performance-table-row.model';
-import { PerformanceTotalDTO } from '../models/performance-total-dto.model';
+import { PerformanceTotal } from '../models/performance-total.model';
 import { RoleGroups } from '../models/role-groups.model';
 
 const chance = new Chance();
@@ -25,14 +25,14 @@ export class MyPerformanceTableDataTransformerService {
     });
   }
 
-  public getTotalRowDisplayData(performanceTotalDTO: PerformanceTotalDTO): MyPerformanceTableRow {
+  public getTotalRowDisplayData(performanceTotal: PerformanceTotal): MyPerformanceTableRow {
     return {
       descriptionRow0: 'Total',
       descriptionRow1: '',
-      metricColumn0: performanceTotalDTO.total,
-      metricColumn1: performanceTotalDTO.totalYearAgo,
-      metricColumn2: parseFloat((performanceTotalDTO.total / performanceTotalDTO.totalYearAgo).toFixed(1)),
-      ctv: performanceTotalDTO.contributionToVolume
+      metricColumn0: performanceTotal.total,
+      metricColumn1: performanceTotal.totalYearAgo,
+      metricColumn2: parseFloat((performanceTotal.total / performanceTotal.totalYearAgo).toFixed(1)),
+      ctv: performanceTotal.contributionToVolume
     };
   }
 }

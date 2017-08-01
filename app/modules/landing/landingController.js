@@ -2,7 +2,7 @@
 const DateRangeTimePeriod = require('../../enums/date-range-time-period.enum').DateRangeTimePeriod;
 
 module.exports = /*  @ngInject */
-  function landingController($rootScope, $state, $filter, $mdSelect, filtersService, chipsService, myperformanceService, userService) {
+  function landingController($rootScope, $state, $filter, $mdSelect, $window, filtersService, chipsService, myperformanceService, userService) {
 
     // ****************
     // CONTROLLER SETUP
@@ -28,6 +28,7 @@ module.exports = /*  @ngInject */
     vm.findOpportunities = findOpportunities;
     vm.goToSavedFilter = goToSavedFilter;
     vm.selectPremiseType = selectPremiseType;
+    vm.openViewJobAides = openViewJobAides;
 
     // Set values
     vm.greetingName = userService.model.currentUser.firstName;
@@ -102,6 +103,10 @@ module.exports = /*  @ngInject */
         data.offPremiseColumn = 'off';
       }
       return data;
+    }
+
+    function openViewJobAides() {
+      $window.open('https://constel1.sharepoint.com/sites/goldnetwork/SitePages/Learning%20and%20Development.aspx?', '_blank');
     }
 
     // ***************

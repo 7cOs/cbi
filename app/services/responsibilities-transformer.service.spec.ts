@@ -1,6 +1,6 @@
 import { inject, TestBed } from '@angular/core/testing';
 
-import { EntityPeopleType } from '../models/entity-responsibilities.model';
+import { EntityPeopleType } from '../enums/entity-responsibilities.enum';
 import { mockEntityResponsibilitiesDTOCollection } from '../models/entity-responsibilities-dto.model.mock';
 import { ResponsibilitiesTransformerService } from './responsibilities-transformer.service';
 import { RoleGroups } from '../models/role-groups.model';

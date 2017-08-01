@@ -14,8 +14,6 @@ import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.LoadableComponent;
 import org.testng.Assert;
 
-import com.cbrands.helper.PropertiesCache;
-
 public class Login extends LoadableComponent<Login>{
     private Log log = LogFactory.getLog(Login.class);
 
@@ -84,7 +82,7 @@ public class Login extends LoadableComponent<Login>{
 
   /**
    * @deprecated Please use the methods available in the Logout page object.
-   * @see Logout
+   * @see LogoutPage
    */
   @Deprecated
 	public void logOut() {
@@ -94,7 +92,7 @@ public class Login extends LoadableComponent<Login>{
 
   /**
    * @deprecated Please use the methods available in the Logout page object.
-   * @see Logout
+   * @see LogoutPage
    */
   @Deprecated
 	public void logOutwithWait() {

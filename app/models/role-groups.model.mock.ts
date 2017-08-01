@@ -1,10 +1,10 @@
 import { RoleGroups } from './role-groups.model';
 
-import { entityPeopleResponsibilitiesMock } from './entity-responsibilities.model.mock';
+import { getEntityPeopleResponsibilitiesMock } from './entity-responsibilities.model.mock';
 
 export function getMockRoleGroups(): RoleGroups {
   return {
-    Specialist: [ entityPeopleResponsibilitiesMock() ],
-    MDM: [ entityPeopleResponsibilitiesMock() ]
+    Specialist: [ getEntityPeopleResponsibilitiesMock() ],
+    MDM: [ getEntityPeopleResponsibilitiesMock() ]
   };
 }

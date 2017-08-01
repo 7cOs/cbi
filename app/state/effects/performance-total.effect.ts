@@ -6,7 +6,7 @@ import 'rxjs/add/operator/do';
 import 'rxjs/add/operator/switchMap';
 
 import { MyPerformanceApiService } from '../../services/my-performance-api.service';
-import { PerformanceTotalDTO } from '../../models/performance-total-dto.model';
+import { PerformanceTotal } from '../../models/performance-total.model';
 import * as PerformanceTotalActions from '../../state/actions/performance-total.action';
 
 @Injectable()
@@ -25,7 +25,7 @@ export class PerformanceTotalEffects {
         const personId = action.payload;
 
         return this.myPerformanceApiService.getPerformanceTotal(personId)
-          .map((response: PerformanceTotalDTO) => {
+          .map((response: PerformanceTotal) => {
             return new PerformanceTotalActions.FetchPerformanceTotalSuccessAction(response);
           })
           .catch((err: Error) => Observable.of(new PerformanceTotalActions.FetchPerformanceTotalFailureAction(err)));

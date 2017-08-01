@@ -94,6 +94,10 @@ list {
     }
   }
 
+  .inactive {
+    background-color: $gray-4;
+  }
+
   .styled-list {
     margin-bottom: 0;
   }

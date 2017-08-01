@@ -1,7 +1,15 @@
-div
+h1 Performance
+
+my-performance-filter(
+  [dateRanges]="dateRanges$ | async",
+  [filterState]="filterState$ | async",
+  (onFilterChange)="filterOptionSelected($event)"
+)
+
+div(style="margin-top: 100px;")
   my-performance-table.left(
-    [tableData]="tableData", 
-    [dateRange]="dateRange", 
+    [tableData]="tableData",
+    [dateRange]="dateRange",
     [tableHeaderRow]="tableHeaderRowLeft",
     [performanceMetric]="performanceMetric",
     [totalRow]="totalRowData",
@@ -11,7 +19,7 @@ div
     (onSortingCriteriaChanged)="handleSortRows($event)")
 
   my-performance-table.right(
-    [tableData]="rightTableData", 
+    [tableData]="rightTableData",
     [tableHeaderRow]="tableHeaderRowRight",
     [performanceMetric]="'Product Snapshot'",
     [sortingCriteria]="sortingCriteria",
