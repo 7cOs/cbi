@@ -38,7 +38,15 @@ public class OpportunitiesTest extends BaseTestCase {
 
   @Test(description = "Search Opportunities")
   public void searchOpportunities() {
-    Assert.assertTrue(opportunitiesPage.isLoaded());
+    opportunitiesPage
+      .enterAccountSearchText("Walgreens")
+      .clickSearchForAccount()
+      .clickFirstAccountResult()
+      .clickApplyFiltersButton()
+      .waitForLoaderToDisappear();
+
+    Assert.assertTrue(opportunitiesPage.hasOpportunityResults(), "No results returned after opportunities search. " +
+      "Results expected.");
   }
 
 }
