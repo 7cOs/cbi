@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
 import 'rxjs/add/operator/map';
 
-import { EntityPeopleType, EntityPropertyType, EntityResponsibilities } from '../models/entity-responsibilities.model';
+import { EntityResponsibilities } from '../models/entity-responsibilities.model';
+import { EntityPeopleType, EntityPropertyType } from '../enums/entity-responsibilities.enum';
 import { EntityResponsibilitiesDTO } from '../models/entity-responsibilities-dto.model';
 import { RoleGroups } from '../models/role-groups.model';
 

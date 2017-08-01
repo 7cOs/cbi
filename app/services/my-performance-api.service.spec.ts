@@ -2,7 +2,7 @@ import { BaseRequestOptions, Http, RequestMethod, Response, ResponseOptions } fr
 import { inject, TestBed } from '@angular/core/testing';
 import { MockBackend, MockConnection } from '@angular/http/testing';
 
-import { EntityPeopleType } from '../models/entity-responsibilities.model';
+import { EntityPeopleType } from '../enums/entity-responsibilities.enum';
 import { MyPerformanceApiService } from './my-performance-api.service';
 
 describe('Service: DateRangeApiService', () => {
