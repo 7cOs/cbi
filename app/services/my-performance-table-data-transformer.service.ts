@@ -15,7 +15,7 @@ export class MyPerformanceTableDataTransformerService {
   public transformRoleGroupTableData(roleGroups: RoleGroups): MyPerformanceTableRow[] {
     return Object.keys(roleGroups).map((groupName: string) => {
       return {
-        descriptionRow0: groupName,
+        descriptionRow0: roleGroups[groupName][0].typeDisplayName,
         descriptionRow1: '',
         metricColumn0: chance.natural({max: 1000}),
         metricColumn1: chance.natural({max: 1000}),
