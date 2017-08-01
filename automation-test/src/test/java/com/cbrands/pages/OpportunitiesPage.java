@@ -1,6 +1,7 @@
 package com.cbrands.pages;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -68,5 +69,18 @@ public class OpportunitiesPage extends TestNGBasePage {
   public OpportunitiesPage waitForLoaderToDisappear() {
     waitForElementToDisappear(By.xpath("//div[contains(@class, 'loader-wrap')]"));
     return this;
+  }
+
+  public boolean hasOpportunityResults() {
+    boolean hasResults;
+
+    try {
+      findElement(By.xpath("//v-pane[contains(@ng-repeat, 'list.opportunitiesService.model.opportunities')]"));
+      hasResults = true;
+    } catch (NoSuchElementException e) {
+      hasResults = false;
+    }
+
+    return hasResults;
   }
 }
