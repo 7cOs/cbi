@@ -16,6 +16,9 @@ public class OpportunitiesPage extends TestNGBasePage {
   @FindBy(how = How.XPATH, using = "//form[contains(@class, 'filters')]")
   private WebElement filterContainer;
 
+  @FindBy(how = How.XPATH, using = "//button[@value='Apply Filters']")
+  private WebElement applyFiltersButton;
+
   public OpportunitiesPage(WebDriver driver) {
     this.driver = driver;
     PageFactory.initElements(driver, this);
@@ -45,6 +48,20 @@ public class OpportunitiesPage extends TestNGBasePage {
     final WebElement searchButton = filterContainer
       .findElement(By.xpath(".//input[contains(@class, 'submit-btn visible')]"));
     waitForElementToClickable(searchButton, true).click();
+
+    return this;
+  }
+
+  public OpportunitiesPage clickFirstAccountResult() {
+    final WebElement searchButton = filterContainer
+      .findElement(By.xpath(".//div[contains(@class, 'results-container')]//li"));
+    waitForElementToClickable(searchButton, true).click();
+    return this;
+  }
+
+  public OpportunitiesPage clickApplyFiltersButton() {
+    waitForElementToClickable(applyFiltersButton, true);
+    waitForVisibleFluentWait(applyFiltersButton).click();
 
     return this;
   }
