@@ -1,7 +1,7 @@
-import { NgModule }       from '@angular/core';
-import { CommonModule }   from '@angular/common';
+import { NgModule } from '@angular/core';
+import { CommonModule } from '@angular/common';
 
-import { MyPerformanceComponent }    from './my-performance.component';
+import { MyPerformanceComponent } from './my-performance.component';
 import { MyPerformanceTableComponent } from '../../shared/components/my-performance-table/my-performance-table.component';
 import { MyPerformanceTableRowComponent } from '../../shared/components/my-performance-table-row/my-performance-table-row.component';
 import { MyPerformanceTableDataTransformerService } from '../../services/my-performance-table-data-transformer.service';

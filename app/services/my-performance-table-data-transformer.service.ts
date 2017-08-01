@@ -1,13 +1,16 @@
-import * as Chance from 'chance';
 import { Injectable } from '@angular/core';
 import 'rxjs/add/operator/map';
+import * as Chance from 'chance';
 
 import { MyPerformanceTableRow } from '../models/my-performance-table-row.model';
+import { PerformanceTotalDTO } from '../models/performance-total-dto.model';
 import { RoleGroups } from '../models/role-groups.model';
-let chance = new Chance();
+
+const chance = new Chance();
 
 @Injectable()
 export class MyPerformanceTableDataTransformerService {
+
   // mocking the performance data for now;
   public transformRoleGroupTableData(roleGroups: RoleGroups): MyPerformanceTableRow[] {
     return Object.keys(roleGroups).map((groupName: string) => {
@@ -20,5 +23,16 @@ export class MyPerformanceTableDataTransformerService {
         ctv: chance.natural({max: 100})
       };
     });
+  }
+
+  public getTotalRowDisplayData(performanceTotalDTO: PerformanceTotalDTO): MyPerformanceTableRow {
+    return {
+      descriptionRow0: 'Total',
+      descriptionRow1: '',
+      metricColumn0: performanceTotalDTO.total,
+      metricColumn1: performanceTotalDTO.totalYearAgo,
+      metricColumn2: parseFloat((performanceTotalDTO.total / performanceTotalDTO.totalYearAgo).toFixed(1)),
+      ctv: performanceTotalDTO.contributionToVolume
+    };
   }
 }

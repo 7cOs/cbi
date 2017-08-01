@@ -16,9 +16,10 @@ import { ViewType } from '../../enums/view-type.enum';
 import { FetchPerformanceTotalAction } from '../../state/actions/performance-total.action';
 
 // mocks
-import { myPerformanceTableData,
-         myPerformanceTotalRowData,
-         myPerformanceRightTableData } from '../../models/my-performance-table-data.model.mock';
+import {
+  myPerformanceTableData,
+  myPerformanceRightTableData
+} from '../../models/my-performance-table-data.model.mock';
 
 @Component({
   selector: 'my-performance',
@@ -36,7 +37,7 @@ export class MyPerformanceComponent implements OnInit {
   public dateRange: DateRange = getDateRangeMock();
   public tableData: MyPerformanceTableRow[] = myPerformanceTableData;
   public rightTableData: MyPerformanceTableRow[] = myPerformanceRightTableData;
-  public totalRowData: MyPerformanceTableRow = myPerformanceTotalRowData;
+  public totalRowData: MyPerformanceTableRow;
   public showOpportunities: boolean = true;
   public sortingCriteria: Array<SortingCriteria> = [
     {
@@ -45,8 +46,10 @@ export class MyPerformanceComponent implements OnInit {
     }
   ];
 
-  constructor(private store: Store<AppState>,
-    private myPerformanceTableDataTransformerService: MyPerformanceTableDataTransformerService) {
+  constructor(
+    private store: Store<AppState>,
+    private myPerformanceTableDataTransformerService: MyPerformanceTableDataTransformerService
+  ) {
 
     this.store.select('responsibilities').subscribe((responsibilitiesState: ResponsibilitiesState) => {
       this.tableData = this.myPerformanceTableDataTransformerService.transformRoleGroupTableData(responsibilitiesState.responsibilities);
@@ -54,7 +57,7 @@ export class MyPerformanceComponent implements OnInit {
 
     this.store.select(state => state.performanceTotal).subscribe((performanceTotalData: any) => {
       if (performanceTotalData.status === 2) {
-        console.log('performanceTotalData', performanceTotalData);
+        this.totalRowData = this.myPerformanceTableDataTransformerService.getTotalRowDisplayData(performanceTotalData);
       }
     });
   }

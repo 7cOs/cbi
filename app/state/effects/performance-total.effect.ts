@@ -1,4 +1,3 @@
-
 import { Action } from '@ngrx/store';
 import { Actions, Effect } from '@ngrx/effects';
 import { Injectable } from '@angular/core';
@@ -15,7 +14,7 @@ export class PerformanceTotalEffects {
 
   constructor(
     private actions$: Actions,
-    private myPerformanceApiService: MyPerformanceApiService,
+    private myPerformanceApiService: MyPerformanceApiService
   ) { }
 
   @Effect()
