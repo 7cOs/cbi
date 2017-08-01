@@ -40,4 +40,12 @@ public class OpportunitiesPage extends TestNGBasePage {
 
     return this;
   }
+
+  public OpportunitiesPage clickSearchForAccount() {
+    final WebElement searchButton = filterContainer
+      .findElement(By.xpath(".//input[contains(@class, 'submit-btn visible')]"));
+    waitForElementToClickable(searchButton, true).click();
+
+    return this;
+  }
 }
