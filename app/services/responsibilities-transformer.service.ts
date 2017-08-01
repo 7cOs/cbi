@@ -8,7 +8,7 @@ import { RoleGroups } from '../models/role-groups.model';
 
 @Injectable()
 export class ResponsibilitiesTransformerService {
-  private typeDisplayMapping: any = {
+  private typeDisplayMapping: {[key: string]: string} = {
     'MDM': 'Market Development Managers',
     'Specialist': 'Specialists'
   };
