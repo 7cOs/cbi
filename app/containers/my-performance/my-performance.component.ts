@@ -55,8 +55,10 @@ export class MyPerformanceComponent implements OnInit {
               private myPerformanceTableDataTransformerService: MyPerformanceTableDataTransformerService) {
     this.filterState$ = this.store.select(state => state.myPerformanceFilter);
     this.dateRanges$ = this.store.select(state => state.dateRanges);
-    this.store.select('responsibilities').subscribe((responsibilitiesState: ResponsibilitiesState) => {
-      this.tableData = this.myPerformanceTableDataTransformerService.transformRoleGroupTableData(responsibilitiesState.responsibilities);
+    this.store.select(state => state.responsibilities).subscribe((responsibilitiesState: ResponsibilitiesState) => {
+      if (responsibilitiesState && responsibilitiesState.responsibilities) {
+        this.tableData = this.myPerformanceTableDataTransformerService.transformRoleGroupTableData(responsibilitiesState.responsibilities);
+      }
     });
   }
 

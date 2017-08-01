@@ -7,7 +7,7 @@ export interface AppState {
   compassVersion: CompassVersionState;
   dateRanges: DateRangesState;
   myPerformanceFilter: MyPerformanceFilterState;
-  responsibilitiesState: ResponsibilitiesState;
+  responsibilities: ResponsibilitiesState;
 }
 
 export const rootReducer = {
