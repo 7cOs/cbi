@@ -8,10 +8,10 @@ import { TimeAgoPipe } from '../../../pipes/timeAgo.pipe';
 import { NotificationsComponent } from './notifications.component';
 import { Notification } from '../../../models/notification.model';
 import {
-  targetListNotificationNotificationMock,
-  opportunityNotificationMock,
-  storeNotificationMock,
-  accountNotificationMock
+  getTargetListNotificationNotificationMock,
+  getOpportunityNotificationMock,
+  getStoreNotificationMock,
+  getAccountNotificationMock
 } from '../../../models/notification.model.mock';
 
 describe('NotificationsComponent', () => {
@@ -57,8 +57,8 @@ describe('NotificationsComponent', () => {
 
     it('should determine that all notifications are not read', () => {
       const notificationsMock = [
-        targetListNotificationNotificationMock(),
-        opportunityNotificationMock()
+        getTargetListNotificationNotificationMock(),
+        getOpportunityNotificationMock()
       ];
 
       componentInstance.notifications = notificationsMock;
@@ -71,8 +71,8 @@ describe('NotificationsComponent', () => {
 
     it('should determine that all notifications are read', () => {
       const notificationsMock = [
-        storeNotificationMock(),
-        accountNotificationMock()
+        getStoreNotificationMock(),
+        getAccountNotificationMock()
       ];
 
       notificationsMock[0].status = 'READ';
@@ -88,8 +88,8 @@ describe('NotificationsComponent', () => {
 
     it('should sort the notifications by dateCreated descending', () => {
       const notificationsMock = [
-        storeNotificationMock(),
-        accountNotificationMock()
+        getStoreNotificationMock(),
+        getAccountNotificationMock()
       ];
 
       notificationsMock[0].dateCreated = moment().subtract(2, 'days');
@@ -117,8 +117,8 @@ describe('NotificationsComponent', () => {
       inject([ NotificationsComponent ], (component: NotificationsComponent) => {
 
       const notificationsMock = [
-        opportunityNotificationMock(),
-        opportunityNotificationMock()
+        getOpportunityNotificationMock(),
+        getOpportunityNotificationMock()
       ];
 
       component.onNotificationClicked.subscribe((notification: Notification) => {

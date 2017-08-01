@@ -5,9 +5,9 @@ import { TestBed, ComponentFixture } from '@angular/core/testing';
 import { ColumnType } from '../../../enums/column-type.enum';
 import { MyPerformanceTableComponent } from './my-performance-table.component';
 import { MyPerformanceTableRow } from '../../../models/my-performance-table-row.model';
-import { myPerformanceTableRowMock } from '../../../models/my-performance-table-row.model.mock';
+import { getMyPerformanceTableRowMock } from '../../../models/my-performance-table-row.model.mock';
 import { SortIndicatorComponent } from '../sort-indicator/sort-indicator.component';
-import { sortingCriteriaMock } from '../../../models/my-performance-table-sorting-criteria.model.mock';
+import { getSortingCriteriaMock } from '../../../models/my-performance-table-sorting-criteria.model.mock';
 import { UtilService } from '../../../services/util.service';
 import { ViewType } from '../../../enums/view-type.enum';
 
@@ -47,10 +47,10 @@ describe('MyPerformanceTableComponent', () => {
   describe('setSortingcriteria', () => {
 
     it('should sort the data with one criterion', () => {
-      const tableData = myPerformanceTableRowMock(2);
+      const tableData = getMyPerformanceTableRowMock(2);
       componentInstance.tableData = tableData;
 
-      const sortingCriteria = sortingCriteriaMock(1);
+      const sortingCriteria = getSortingCriteriaMock(1);
       componentInstance.sortingCriteria = sortingCriteria;
       const firstSortingCriterion = sortingCriteria[0];
       const firstColumnType = ColumnType[sortingCriteria[0].columnType];
@@ -78,7 +78,7 @@ describe('MyPerformanceTableComponent', () => {
     });
 
     it('should sort the data with two criteria', () => {
-      let tableData = myPerformanceTableRowMock(3);
+      let tableData = getMyPerformanceTableRowMock(3);
       tableData[0].descriptionRow0 = 'b';
       tableData[0].metricColumn0 = 1;
       tableData[1].descriptionRow0 = 'a';
@@ -127,12 +127,12 @@ describe('MyPerformanceTableComponent', () => {
   describe('setTableData', () => {
 
     it('should sort the data if some sorting criteria were present', () => {
-      const sortingCriteria = sortingCriteriaMock(1);
+      const sortingCriteria = getSortingCriteriaMock(1);
       componentInstance.sortingCriteria = sortingCriteria;
       const firstSortingCriterion = sortingCriteria[0];
       const firstColumnType = ColumnType[sortingCriteria[0].columnType];
 
-      const tableData = myPerformanceTableRowMock(2);
+      const tableData = getMyPerformanceTableRowMock(2);
       componentInstance.tableData = tableData;
 
       fixture.detectChanges();

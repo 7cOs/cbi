@@ -1,0 +1,72 @@
+@import '../../../assets/styles/base/variables';
+
+.compass-radio {
+  padding: 0;
+}
+
+/deep/ .compass-radio-button {
+  margin-bottom: 0;
+
+  .mat-radio-label .mat-radio-container {
+
+    .mat-radio-outer-circle {
+      border: 1px solid $gray-8;
+    }
+
+    .mat-radio-inner-circle {
+      background-color: $gray-8;
+      transform: scale(0.5);
+    }
+  }
+}
+
+.compass-radio-value {
+  color: $gray-1;
+  font-size: 14px;
+  font-weight: $regular;
+  letter-spacing: 1px;
+  text-transform: initial;
+}
+
+/deep/ .mat-radio-checked .mat-radio-label {
+
+  .compass-radio-value {
+    color: $blue;
+  }
+
+  .mat-radio-container {
+
+    .mat-radio-outer-circle {
+      border-color: $blue;
+      border-width: 4px;
+    }
+
+    .mat-radio-inner-circle {
+      background-color: $blue;
+      transform: scale(0.4);
+    }
+  }
+}
+
+
+.inline {
+  margin-right: 20px;
+}
+
+.stacked {
+  display: block;
+
+  /deep/ .mat-radio-label-content {
+    line-height: 10px;
+  }
+}
+
+.title {
+  color: $gray-1;
+  font-family: $rajdhani;
+  font-size: 0.7rem;
+  font-weight: $semibold;
+  letter-spacing: 1px;
+  margin-bottom: 5px;
+  text-transform: uppercase;
+}

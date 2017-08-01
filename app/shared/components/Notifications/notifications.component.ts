@@ -3,6 +3,7 @@ import { Component, Input, Output, EventEmitter } from '@angular/core';
 import * as moment from 'moment';
 
 import { Notification } from '../../../models/notification.model';
+import { NotificationStatus } from '../../../enums/notification.enum';
 
 @Component({
   selector: 'notifications',
@@ -24,7 +25,7 @@ export class NotificationsComponent {
     });
 
     this._notifications = this._notifications.sort((n1, n2) => n2.dateCreated.diff(n1.dateCreated));
-    this.allNotificationRead = this._notifications.filter(notification => notification.status !== 'READ').length < 1;
+    this.allNotificationRead = this._notifications.filter(notification => notification.status !== NotificationStatus.READ).length < 1;
   }
 
   private allNotificationRead: boolean = true;
@@ -49,7 +50,7 @@ export class NotificationsComponent {
 
   notificationClasses(notification: Notification) {
     return {
-      ['read']: notification.status === 'READ',
+      ['read']: notification.status === NotificationStatus.READ,
       [notification.action]: true
     };
   }
