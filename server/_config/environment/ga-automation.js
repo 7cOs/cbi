@@ -15,7 +15,7 @@ module.exports = function (config) {
   };
 
   config.analytics = {
-    id: 'UA-77300343-6'
+    id: 'UA-77300343-8'
   };
 
   config.api = {
