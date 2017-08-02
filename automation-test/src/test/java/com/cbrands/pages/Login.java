@@ -3,6 +3,7 @@ package com.cbrands.pages;
 import static com.cbrands.helper.SeleniumUtils.waitForVisible;
 import static com.cbrands.helper.SeleniumUtils.waitForVisibleFluentWait;
 
+import com.cbrands.TestUser;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openqa.selenium.By;
@@ -63,7 +64,7 @@ public class Login extends LoadableComponent<Login>{
 	}
 
 	/**
-   * @deprecated Returns a deprecated class. Please use the {@link #login} method instead
+   * @deprecated Returns a deprecated class. Please use the {@link #loginAs} method instead
    */
   @Deprecated
   public Home loginWithValidCredentials(String userName, String password) {
@@ -72,13 +73,17 @@ public class Login extends LoadableComponent<Login>{
     return PageFactory.initElements(driver, Home.class);
   }
 
-  public HomePage login(String userName, String password) {
+  public HomePage loginAs(TestUser user) {
+    login(user.userName(), user.password());
+
+    return PageFactory.initElements(driver, HomePage.class);
+  }
+
+  private void login(String userName, String password) {
     typeUserName(userName);
     typePassword(password);
     log.info("User: " + userName + " login submitted");
     submitButton.click();
-
-    return PageFactory.initElements(driver, HomePage.class);
   }
 
   public boolean isUserLoggedIn(){
