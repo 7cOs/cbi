@@ -27,6 +27,10 @@ import org.testng.Assert;
 
 import com.cbrands.helper.PropertiesCache;
 
+/**
+ * @deprecated Please use the {@link HomePage} page object instead.
+ */
+@Deprecated
 public class Home extends LoadableComponent<Home>{
 
 	private Log log = LogFactory.getLog(Home.class);
