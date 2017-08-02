@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, EventEmitter, Output } from '@angular/core';
 
 import { MyPerformanceTableRow } from '../../../models/my-performance-table-row.model';
 import { SortStatus } from '../../../enums/sort-status.enum';
@@ -10,7 +10,10 @@ import { ViewType } from '../../../enums/view-type.enum';
   styles: [ require('../my-performance-table/my-performance-table.component.scss') ]
 })
 export class MyPerformanceTableRowComponent {
+  @Output() onCellClicked = new EventEmitter<number>();
+
   @Input() rowData: MyPerformanceTableRow;
+  @Input() showBackButton: boolean;
   @Input() showOpportunities: boolean;
   @Input() viewType: ViewType;
 
@@ -22,5 +25,12 @@ export class MyPerformanceTableRowComponent {
 
   public columnWidth(): string {
     return this.showOpportunities ? 'col-16-pct' : 'col-20-pct';
+  }
+
+  public headerLeftClasses() {
+    return {
+      [this.columnWidth()]: true,
+      ['back-button']: this.showBackButton
+    };
   }
 }

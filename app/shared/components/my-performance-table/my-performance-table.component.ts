@@ -3,6 +3,7 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { ColumnType } from '../../../enums/column-type.enum';
 import { DateRange } from '../../../models/date-range.model';
 import { MyPerformanceTableRow } from '../../../models/my-performance-table-row.model';
+import { RowType } from '../../../enums/row-type.enum';
 import { SortingCriteria } from '../../../models/sorting-criteria.model';
 import { SortStatus } from '../../../enums/sort-status.enum';
 import { UtilService } from '../../../services/util.service';
@@ -14,7 +15,7 @@ import { ViewType } from '../../../enums/view-type.enum';
   styles: [ require('./my-performance-table.component.scss') ]
 })
 export class MyPerformanceTableComponent {
-  @Output() onElementClicked = new EventEmitter<{row: MyPerformanceTableRow, index: number}>();
+  @Output() onElementClicked = new EventEmitter<{type: RowType, index: number, row?: MyPerformanceTableRow}>();
   @Output() onSortingCriteriaChanged = new EventEmitter<Array<SortingCriteria>>();
 
   @Input()
@@ -31,6 +32,7 @@ export class MyPerformanceTableComponent {
 
   @Input() dateRange: DateRange;
   @Input() performanceMetric: string;
+  @Input() showBackButton: boolean = true;
   @Input() showOpportunities: boolean = true;
   @Input() tableHeaderRow: Array<string>;
   @Input() totalRow: MyPerformanceTableRow;
@@ -38,16 +40,12 @@ export class MyPerformanceTableComponent {
 
   public sortedTableData: Array<MyPerformanceTableRow>;
   public columnType = ColumnType;
+  public rowType = RowType;
 
   private sortingFunction: (elem0: MyPerformanceTableRow, elem1: MyPerformanceTableRow) => number;
   private _sortingCriteria: Array<SortingCriteria> = null;
 
   constructor (private utilService: UtilService) { }
-
-  public clickOn(row: MyPerformanceTableRow, index: number) {
-    console.log('clicked on ', row);
-    this.onElementClicked.emit({row: row, index: index});
-  }
 
   public centerColumnsWidth(): string {
     return this.showOpportunities ? 'col-50-pct' : 'col-60-pct';

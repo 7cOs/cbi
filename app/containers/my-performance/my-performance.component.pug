@@ -1,20 +1,22 @@
 div
   my-performance-table.left(
-    [tableData]="tableData", 
-    [dateRange]="dateRange", 
+    [tableData]="tableData",
+    [dateRange]="dateRange",
     [tableHeaderRow]="tableHeaderRowLeft",
     [performanceMetric]="performanceMetric",
     [totalRow]="totalRowData",
     [sortingCriteria]="sortingCriteria",
     [viewType]="viewType.roleGroups",
     [showOpportunities]="false",
-    (onSortingCriteriaChanged)="handleSortRows($event)")
+    (onSortingCriteriaChanged)="handleSortRows($event)",
+    (onElementClicked)="handleElementClicked(true, $event.type, $event.index, $event.row)")
 
   my-performance-table.right(
-    [tableData]="rightTableData", 
+    [tableData]="rightTableData",
     [tableHeaderRow]="tableHeaderRowRight",
     [performanceMetric]="'Product Snapshot'",
     [sortingCriteria]="sortingCriteria",
     [showOpportunities]="showOpportunities",
     [viewType]="viewType.brands",
-    (onSortingCriteriaChanged)="handleSortRows($event)")
+    (onSortingCriteriaChanged)="handleSortRows($event.type, $event.index, $event.row)",
+    (onElementClicked)="handleElementClicked(false, $event.type, $event.index, $event.row)")
