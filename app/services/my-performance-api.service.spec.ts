@@ -3,7 +3,9 @@ import { inject, TestBed } from '@angular/core/testing';
 import { MockBackend, MockConnection } from '@angular/http/testing';
 
 import { EntityPeopleType } from '../enums/entity-responsibilities.enum';
+import { getPerformanceTotalMock } from '../models/performance-total.model.mock';
 import { MyPerformanceApiService } from './my-performance-api.service';
+import { PerformanceTotal } from '../models/performance-total.model';
 
 describe('Service: DateRangeApiService', () => {
   let myPerformanceApiService: MyPerformanceApiService;
@@ -30,6 +32,7 @@ describe('Service: DateRangeApiService', () => {
       }
     ]
   };
+  const mockPerformanceTotalResponse: PerformanceTotal = getPerformanceTotalMock();
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -75,5 +78,24 @@ describe('Service: DateRangeApiService', () => {
           done();
         });
       });
+  });
+
+  describe('getPerformanceTotal', () => {
+
+    it ('should call the performanceTotal API and return performance data', (done) => {
+      mockBackend.connections.subscribe((connection: MockConnection) => {
+        const options = new ResponseOptions({
+          body: JSON.stringify(mockPerformanceTotalResponse)
+        });
+        connection.mockRespond(new Response(options));
+        expect(connection.request.method).toEqual(RequestMethod.Get);
+        expect(connection.request.url).toEqual('/v3/people/1/performanceTotal');
+      });
+
+      myPerformanceApiService.getPerformanceTotal(1).subscribe((response: PerformanceTotal) => {
+        expect(response).toEqual(mockPerformanceTotalResponse);
+        done();
+      });
+    });
   });
 });

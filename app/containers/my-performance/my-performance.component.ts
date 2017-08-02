@@ -1,3 +1,4 @@
+// tslint:disable:no-unused-variable
 import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { Store } from '@ngrx/store';
@@ -17,8 +18,6 @@ import { MyPerformanceTableRow } from '../../models/my-performance-table-row.mod
 import { ResponsibilitiesState } from '../../state/reducers/responsibilities.reducer';
 import { SortingCriteria } from '../../models/sorting-criteria.model';
 import { ViewType } from '../../enums/view-type.enum';
-
-import { FetchPerformanceTotalAction } from '../../state/actions/performance-total.action';
 
 // mocks
 import {
@@ -51,16 +50,13 @@ export class MyPerformanceComponent implements OnInit {
     }
   ];
 
-  private dateRanges$: Observable<DateRangesState>;
-  private filterState$: Observable<MyPerformanceFilterState>;
+  private dateRanges$: Observable<DateRangesState> = this.store.select(state => state.dateRanges);
+  private filterState$: Observable<MyPerformanceFilterState> = this.store.select(state => state.myPerformanceFilter);
 
   constructor(
     private store: Store<AppState>,
     private myPerformanceTableDataTransformerService: MyPerformanceTableDataTransformerService
   ) {
-    this.filterState$ = this.store.select(state => state.myPerformanceFilter);
-    this.dateRanges$ = this.store.select(state => state.dateRanges);
-
     this.store.select('responsibilities').subscribe((responsibilitiesState: ResponsibilitiesState) => {
       this.tableData = this.myPerformanceTableDataTransformerService.transformRoleGroupTableData(responsibilitiesState.responsibilities);
     });
@@ -106,6 +102,5 @@ export class MyPerformanceComponent implements OnInit {
     // stub current user for now
     const currentUserId = 1;
     this.store.dispatch(new FetchResponsibilitiesAction(currentUserId));
-    this.store.dispatch(new FetchPerformanceTotalAction(currentUserId));
   }
 }
