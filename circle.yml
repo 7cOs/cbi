@@ -41,8 +41,8 @@ deployment:
     commands:
       - git push git@heroku.com:app-compass-ga-automation.git $CIRCLE_SHA1:master -f
 
-  poc:
-    branch: staging
+  stage:
+    branch: stage
     commands:
       - git push git@heroku.com:app-compass-stage.git $CIRCLE_SHA1:master -f
 
