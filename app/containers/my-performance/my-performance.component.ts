@@ -16,6 +16,7 @@ import { MyPerformanceTableDataTransformerService } from '../../services/my-perf
 import { MyPerformanceTableRow } from '../../models/my-performance-table-row.model';
 import { ResponsibilitiesState } from '../../state/reducers/responsibilities.reducer';
 import { RowType } from '../../enums/row-type.enum';
+import { SetLeftMyPerformanceTableViewType, SetRightMyPerformanceTableViewType } from '../../state/actions/view-types.action';
 import { SortingCriteria } from '../../models/sorting-criteria.model';
 import { ViewType } from '../../enums/view-type.enum';
 
@@ -81,8 +82,10 @@ export class MyPerformanceComponent implements OnInit {
       default:
         if (leftSide) {
           console.log('clicked on left row:', row);
+          this.store.dispatch(new SetLeftMyPerformanceTableViewType(ViewType.people));
         } else {
           console.log('clicked on right row:', row);
+          this.store.dispatch(new SetRightMyPerformanceTableViewType(ViewType.skus));
         }
         break;
     }
@@ -115,5 +118,7 @@ export class MyPerformanceComponent implements OnInit {
     // stub current user for now
     const currentUserId = 1;
     this.store.dispatch(new FetchResponsibilitiesAction(currentUserId));
+    this.store.dispatch(new SetLeftMyPerformanceTableViewType(ViewType.roleGroups));
+    this.store.dispatch(new SetRightMyPerformanceTableViewType(ViewType.brands));
   }
 }
