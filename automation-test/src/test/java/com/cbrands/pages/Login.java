@@ -62,16 +62,26 @@ public class Login extends LoadableComponent<Login>{
         password.sendKeys(text);
 	}
 
+	/**
+   * @deprecated Returns a deprecated class. Please use the {@link #login} method instead
+   */
+  @Deprecated
   public Home loginWithValidCredentials(String userName, String password) {
-    typeUserName(userName);
-    typePassword(password);
-    log.info("User: " + userName + " login submitted");
-    submitButton.click();
+    login(userName, password);
     isUserLoggedIn = true;
     return PageFactory.initElements(driver, Home.class);
   }
 
-	public boolean isUserLoggedIn(){
+  public HomePage login(String userName, String password) {
+    typeUserName(userName);
+    typePassword(password);
+    log.info("User: " + userName + " login submitted");
+    submitButton.click();
+
+    return PageFactory.initElements(driver, HomePage.class);
+  }
+
+  public boolean isUserLoggedIn(){
 		return isUserLoggedIn;
 	}
 
