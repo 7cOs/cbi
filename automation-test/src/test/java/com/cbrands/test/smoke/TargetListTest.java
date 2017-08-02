@@ -1,7 +1,7 @@
 package com.cbrands.test.smoke;
 
 import com.cbrands.TestUser;
-import com.cbrands.pages.HomePage;
+import com.cbrands.pages.Home;
 import com.cbrands.pages.Login;
 import com.cbrands.pages.LogoutPage;
 import com.cbrands.pages.targetList.TargetListListingsPage;
@@ -28,7 +28,7 @@ public class TargetListTest extends BaseTestCase {
 
     log.info("\nLoading webpage...");
     driver.get(webAppBaseUrl);
-    HomePage homePage = login.loginWithValidCredentials(testUser.userName(), testUser.password());
+    Home homePage = login.loginWithValidCredentials(testUser.userName(), testUser.password());
     Assert.assertTrue(homePage.isOnHomePage(), "Failed to log in user: " + testUser.userName());
 
     targetListListingPage = PageFactory.initElements(driver, TargetListListingsPage.class);

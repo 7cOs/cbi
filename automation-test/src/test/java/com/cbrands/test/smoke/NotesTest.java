@@ -27,7 +27,7 @@ public class NotesTest extends BaseTestCase {
 
     log.info("\nLoading webpage...");
     driver.get(webAppBaseUrl);
-    final HomePage homePage = login.loginWithValidCredentials(testUser.userName(), testUser.password());
+    final Home homePage = login.loginWithValidCredentials(testUser.userName(), testUser.password());
     Assert.assertTrue(homePage.isOnHomePage(), "Failed to log in user: " + testUser.userName());
 
     final AccountDashboardPage accountDashboardPage = PageFactory.initElements(driver, AccountDashboardPage.class);

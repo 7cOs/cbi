@@ -35,7 +35,7 @@ public abstract class BaseSeleniumTestCase implements IConstant {
 
 	protected static WebDriver driver = null;
 	protected Login login;
-	protected HomePage homePage;
+	protected Home homePage;
 	protected Opportunities opportunitiesPage;
 	protected TargetList targetListPage;
 	protected AccountDashboard accountDashboardPage;

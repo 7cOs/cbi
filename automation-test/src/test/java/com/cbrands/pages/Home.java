@@ -27,9 +27,9 @@ import org.testng.Assert;
 
 import com.cbrands.helper.PropertiesCache;
 
-public class HomePage extends LoadableComponent<HomePage>{
+public class Home extends LoadableComponent<Home>{
 
-	private Log log = LogFactory.getLog(HomePage.class);
+	private Log log = LogFactory.getLog(Home.class);
 
 	WebDriver driver;
 
@@ -77,7 +77,7 @@ public class HomePage extends LoadableComponent<HomePage>{
 	@FindBy(how = How.XPATH, using = "//a[contains(.,'My Scorecards')]")
 	private WebElement myScoreCards;
 
-  public HomePage(WebDriver driver) {
+  public Home(WebDriver driver) {
     this.driver = driver;
   }
 
@@ -114,17 +114,17 @@ public class HomePage extends LoadableComponent<HomePage>{
     return PageFactory.initElements(driver, TargetList.class);
   }
 
-	public HomePage clickOffPremise() {
+	public Home clickOffPremise() {
 		offPremise.click();
 		return this;
 	}
 
-	public HomePage clickOnPremise() {
+	public Home clickOnPremise() {
 		onPremise.click();
 		return this;
 	}
 
-	public HomePage selectOpporunityType(String type){
+	public Home selectOpporunityType(String type){
 
 		WebElement element1 = findElement(By.cssSelector("md-select[ng-model='l.filtersService.model.selected.opportunityType']"));
 		element1.click();
@@ -139,13 +139,13 @@ public class HomePage extends LoadableComponent<HomePage>{
 		return this;
 	}
 
-	public HomePage clickOpportunityTypeDropdown() {
+	public Home clickOpportunityTypeDropdown() {
 		opportunityTypeDropDown.click();
 		return this;
 	}
 
 	//This method is used to verify whether the options in Opportunity Type drop down is clickable or not.
-	public HomePage clickOpporunityType(String type){
+	public Home clickOpporunityType(String type){
 		WebElement element = findElement(By.xpath("//md-option[@aria-label='"+type+"']"));
 		if (type=="Low Velocity"){
 			element.sendKeys(Keys.DOWN);
@@ -156,7 +156,7 @@ public class HomePage extends LoadableComponent<HomePage>{
 		return this;
 	}
 
-	public HomePage typeBrandMasterSku(String value) {
+	public Home typeBrandMasterSku(String value) {
 		brandMasterSku.sendKeys(value);
 		WebElement element = brandMasterSku.findElement(By.xpath("//input[contains(@class,'submit-btn visible')]"));
 		waitForVisibleFluentWait(element).click();
@@ -175,7 +175,7 @@ public class HomePage extends LoadableComponent<HomePage>{
 		return this;
 	}
 
-	public HomePage typeRetailer(String retailerName) {
+	public Home typeRetailer(String retailerName) {
 		retailer.sendKeys(retailerName);
 		//		WebElement element = findElement(By.xpath("//div[2]/div[1]/inline-search[1]/div[1]/input[2]"));
 		WebElement element = retailer.findElement(By.xpath("//input[contains(@class,'submit-btn visible')]"));
@@ -196,7 +196,7 @@ public class HomePage extends LoadableComponent<HomePage>{
 		return this;
 	}
 
-	public HomePage typeDistributor(String value)
+	public Home typeDistributor(String value)
 	{
 		distributor.sendKeys(value);
 		WebElement element = findElement(By.xpath("//div[2]/div[2]/inline-search/div/input[3]"));
@@ -235,7 +235,7 @@ public class HomePage extends LoadableComponent<HomePage>{
 		return PageFactory.initElements(driver, Login.class);
 	}
 
-	public HomePage pageRefresh() {
+	public Home pageRefresh() {
 		refresh();
 		return this;
 	}
@@ -273,7 +273,7 @@ public class HomePage extends LoadableComponent<HomePage>{
 		return false;
 	}
 
-	public HomePage clickSharedWithMeLink() {
+	public Home clickSharedWithMeLink() {
 
 		//waitForVisible(By.xpath("//md-tab-item/span[text()='Shared with Me']"));
 		waitForVisibleFluentWait(sharedWithMeLink).click();
@@ -281,7 +281,7 @@ public class HomePage extends LoadableComponent<HomePage>{
 	}
 
 
-	public HomePage clickNotification() {
+	public Home clickNotification() {
 		WebElement button = findElement(By.xpath("//a[@analytics-event='Notifications Click']"));
 		button.click();
 		return this;
