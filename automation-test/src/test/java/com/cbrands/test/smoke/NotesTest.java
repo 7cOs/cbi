@@ -22,13 +22,13 @@ public class NotesTest extends BaseTestCase {
     final TestUser testUser = TestUser.NOTES_ACTOR;
     final String storeAccountName = "Taco Joint";
 
-    final Login login = new Login(driver);
+    final Login loginPage = new Login(driver);
     logoutPage = new LogoutPage(driver);
 
     log.info("\nLoading webpage...");
     driver.get(webAppBaseUrl);
-    final Home homePage = login.loginWithValidCredentials(testUser.userName(), testUser.password());
-    Assert.assertTrue(homePage.isOnHomePage(), "Failed to log in user: " + testUser.userName());
+    final HomePage homePage = loginPage.loginAs(testUser);
+    Assert.assertTrue(homePage.isLoaded(), "Failed to log in user: " + testUser.userName());
 
     final AccountDashboardPage accountDashboardPage = PageFactory.initElements(driver, AccountDashboardPage.class);
     accountDashboardPage.goToPage();
