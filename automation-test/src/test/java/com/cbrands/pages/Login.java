@@ -62,18 +62,14 @@ public class Login extends LoadableComponent<Login>{
         password.sendKeys(text);
 	}
 
-	public Home clickSubmit() {
-		submitButton.click();
-		isUserLoggedIn = true;
-        return PageFactory.initElements(driver, Home.class);
-    }
-
-	public Home loginWithValidCredentials(String userName, String password) {
-        typeUserName(userName);
-        typePassword(password);
-		log.info("User: " + userName + " login submitted");
-        return clickSubmit();
-    }
+  public Home loginWithValidCredentials(String userName, String password) {
+    typeUserName(userName);
+    typePassword(password);
+    log.info("User: " + userName + " login submitted");
+    submitButton.click();
+    isUserLoggedIn = true;
+    return PageFactory.initElements(driver, Home.class);
+  }
 
 	public boolean isUserLoggedIn(){
 		return isUserLoggedIn;
