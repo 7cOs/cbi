@@ -1,13 +1,13 @@
-td.left-col(colspan=1, [ngClass]="columnWidth()")
+td.left-col(colspan=1, [ngClass]="headerLeftClasses()", (click)="onCellClicked.emit(0)")
   div
     span {{rowData.descriptionRow0}}
   div.description-line-1(*ngIf="rowData.descriptionRow1")
     span.description-line-1 {{rowData.descriptionRow1}}
 td.center-col(colspan=1, [ngClass]="columnWidth()") {{rowData.metricColumn0}}
-td.center-col(colspan=1, [ngClass]="columnWidth()") 
+td.center-col(colspan=1, [ngClass]="columnWidth()")
   span([ngClass]="getTrendClass(rowData.metricColumn1)") {{rowData.metricColumn1}}
 td.center-col(colspan=1, [ngClass]="columnWidth()")
   span([ngClass]="getTrendClass(rowData.metricColumn1)") {{rowData.metricColumn2}}%
-td.right-col(colspan=1, [ngClass]="columnWidth()") 
+td.right-col(colspan=1, [ngClass]="columnWidth()")
   span.ctv {{rowData.ctv}}%
 td.right-col.opportunities(*ngIf="showOpportunities", colspan=1, [ngClass]="columnWidth()") {{rowData.opportunities || 0}}

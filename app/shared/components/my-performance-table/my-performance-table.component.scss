@@ -216,9 +216,7 @@ div.ctv {
 }
 
 .view-type {
-
-  // brands
-  &.view-type-0 {
+  &.view-type-brands {
 
     /deep/td.left-col {
       color: $blue;
@@ -226,15 +224,14 @@ div.ctv {
     }
   }
 
-  // skus 
-  &.view-type-1 {
+  &.view-type-skus {
 
     tr.total-row {
 
       /deep/td.left-col {
         font-weight: $semibold;
-        color: $blue; 
-      }      
+        color: $blue;
+      }
     }
 
     tr.entity-row {
@@ -250,11 +247,10 @@ div.ctv {
     }
   }
 
-  // people
-  &.view-type-3 {
+  &.view-type-people {
 
     tr.total-row {
-  
+
       /deep/td.left-col {
 
         div.description-line-1 {
@@ -267,7 +263,7 @@ div.ctv {
           font-size: 0.7rem;
           text-transform: uppercase;
           letter-spacing: 1px;
-          outline: 0; 
+          outline: 0;
         }
       }
 
@@ -286,11 +282,10 @@ div.ctv {
     }
   }
 
-  // distributors/accounts 
-  &.view-type-4, &.view-type-5 {
+  &.view-type-distributors, &.view-type-accounts {
 
     tr.total-row {
-  
+
       /deep/td.left-col {
 
         div.description-line-1 {
@@ -303,7 +298,7 @@ div.ctv {
           font-size: 0.7rem;
           text-transform: uppercase;
           letter-spacing: 1px;
-          outline: 0; 
+          outline: 0;
         }
       }
     }
@@ -322,10 +317,18 @@ div.ctv {
           font-size: 0.7rem;
           text-transform: uppercase;
           letter-spacing: 1px;
-          outline: 0; 
+          outline: 0;
           color: $blue;
         }
       }
     }
   }
+}
+
+.back-button {
+  background-image: url('../../../assets/img/icons/arrow-left-white.svg');
+  background-repeat: no-repeat;
+  background-position: left 13px center;
+  padding-left: 32px;
+  box-sizing: border-box;
 }

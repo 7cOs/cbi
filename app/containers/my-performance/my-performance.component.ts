@@ -15,6 +15,7 @@ import * as MyPerformanceFilterActions from '../../state/actions/my-performance-
 import { MyPerformanceTableDataTransformerService } from '../../services/my-performance-table-data-transformer.service';
 import { MyPerformanceTableRow } from '../../models/my-performance-table-row.model';
 import { ResponsibilitiesState } from '../../state/reducers/responsibilities.reducer';
+import { RowType } from '../../enums/row-type.enum';
 import { SortingCriteria } from '../../models/sorting-criteria.model';
 import { ViewType } from '../../enums/view-type.enum';
 
@@ -66,9 +67,25 @@ export class MyPerformanceComponent implements OnInit {
     this.sortingCriteria = criteria;
   }
 
-  public handleElementClicked(row: MyPerformanceTableRow, index: number): void {
-    console.log(row);
-    console.log(index);
+  public handleElementClicked(leftSide: boolean, type: RowType, index: number, row?: MyPerformanceTableRow): void {
+    switch (type) {
+      case RowType.total:
+        if (leftSide) {
+          console.log(`clicked on cell ${index} from the left side`);
+        } else {
+          console.log(`clicked on cell ${index} from the right side`);
+        }
+        break;
+
+      case RowType.data:
+      default:
+        if (leftSide) {
+          console.log('clicked on left row:', row);
+        } else {
+          console.log('clicked on right row:', row);
+        }
+        break;
+    }
   }
 
   public filterOptionSelected(event: MyPerformanceFilterEvent): void {
