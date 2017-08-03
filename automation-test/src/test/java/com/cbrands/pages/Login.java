@@ -16,25 +16,25 @@ import org.openqa.selenium.support.ui.LoadableComponent;
 import org.testng.Assert;
 
 public class Login extends LoadableComponent<Login>{
-    private Log log = LogFactory.getLog(Login.class);
+  private Log log = LogFactory.getLog(Login.class);
 
-	private final WebDriver driver;
+  private final WebDriver driver;
 
-	private boolean isUserLoggedIn = false;
+  private boolean isUserLoggedIn = false;
 
-	@FindBy(how=How.XPATH, using="//*[@id='username']")
-	private WebElement userName;
+  @FindBy(how=How.XPATH, using="//*[@id='username']")
+  private WebElement userName;
 
-	@FindBy(how=How.XPATH, using="//*[@id='password']")
-	private WebElement password;
+  @FindBy(how=How.XPATH, using="//*[@id='password']")
+  private WebElement password;
 
-	@FindBy(how=How.XPATH, using="//button[@type='submit']")
-	private WebElement submitButton;
+  @FindBy(how=How.XPATH, using="//button[@type='submit']")
+  private WebElement submitButton;
 
-	public Login(WebDriver driver) {
-		this.driver = driver;
-        PageFactory.initElements(driver, this);
-	}
+  public Login(WebDriver driver) {
+    this.driver = driver;
+    PageFactory.initElements(driver, this);
+  }
 
   @Override
   protected void load() {
@@ -53,17 +53,17 @@ public class Login extends LoadableComponent<Login>{
     Assert.assertTrue(submitButton.isDisplayed());
   }
 
-	public void typeUserName(String text) {
-		waitForVisibleFluentWait(userName);
-        userName.sendKeys(text);
-	}
+  public void typeUserName(String text) {
+    waitForVisibleFluentWait(userName);
+    userName.sendKeys(text);
+  }
 
-	public void typePassword(String text) {
-        waitForVisibleFluentWait(password);
-        password.sendKeys(text);
-	}
+  public void typePassword(String text) {
+    waitForVisibleFluentWait(password);
+    password.sendKeys(text);
+  }
 
-	/**
+  /**
    * @deprecated Returns a deprecated class. Please use the {@link #loginAs} method instead
    */
   @Deprecated
@@ -87,8 +87,8 @@ public class Login extends LoadableComponent<Login>{
   }
 
   public boolean isUserLoggedIn(){
-		return isUserLoggedIn;
-	}
+    return isUserLoggedIn;
+  }
 
 
   /**
@@ -96,19 +96,19 @@ public class Login extends LoadableComponent<Login>{
    * @see LogoutPage
    */
   @Deprecated
-	public void logOut() {
-		isUserLoggedIn = false;
-		driver.get("https://compass-qa.cbrands.com/auth/logout");
-	}
+  public void logOut() {
+    isUserLoggedIn = false;
+    driver.get("https://compass-qa.cbrands.com/auth/logout");
+  }
 
   /**
    * @deprecated Please use the methods available in the Logout page object.
    * @see LogoutPage
    */
   @Deprecated
-	public void logOutwithWait() {
-		isUserLoggedIn = false;
-		driver.get("https://compass-qa.cbrands.com/auth/logout");
-		waitForVisible (By.id("username"));
-	}
+  public void logOutwithWait() {
+    isUserLoggedIn = false;
+    driver.get("https://compass-qa.cbrands.com/auth/logout");
+    waitForVisible (By.id("username"));
+  }
 }
