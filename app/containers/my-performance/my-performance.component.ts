@@ -8,6 +8,7 @@ import { AppState } from '../../state/reducers/root.reducer';
 import { ColumnType } from '../../enums/column-type.enum';
 import { DateRange } from '../../models/date-range.model';
 import { DateRangesState } from '../../state/reducers/date-ranges.reducer';
+import { FetchPerformanceTotalAction } from '../../state/actions/performance-total.action';
 import { FetchResponsibilitiesAction } from '../../state/actions/responsibilities.action';
 import { getDateRangeMock } from '../../models/date-range.model.mock';
 import { MyPerformanceFilterActionType } from '../../enums/my-performance-filter.enum';
@@ -60,12 +61,14 @@ export class MyPerformanceComponent implements OnInit {
     private myPerformanceTableDataTransformerService: MyPerformanceTableDataTransformerService
   ) {
     this.store.select('responsibilities').subscribe((responsibilitiesState: ResponsibilitiesState) => {
+      console.log('responsibilitiesState', responsibilitiesState);
       if (responsibilitiesState && responsibilitiesState.responsibilities) {
         this.tableData = this.myPerformanceTableDataTransformerService.transformRoleGroupTableData(responsibilitiesState.responsibilities);
       }
     });
 
     this.store.select(state => state.performanceTotal).subscribe((performanceTotalData: PerformanceTotalState) => {
+      console.log('performanceTotalData', performanceTotalData);
       if (performanceTotalData.status === ActionStatus.Fetched) {
         this.totalRowData = this.myPerformanceTableDataTransformerService.getTotalRowDisplayData(performanceTotalData.performanceTotal);
       }
@@ -108,5 +111,6 @@ export class MyPerformanceComponent implements OnInit {
     // stub current user for now
     const currentUserId = 1;
     this.store.dispatch(new FetchResponsibilitiesAction(currentUserId));
+    this.store.dispatch(new FetchPerformanceTotalAction(currentUserId));
   }
 }

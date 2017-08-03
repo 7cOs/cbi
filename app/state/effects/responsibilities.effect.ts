@@ -1,3 +1,4 @@
+// tslint:disable:no-unused-variable
 import { Action } from '@ngrx/store';
 import { Actions, Effect } from '@ngrx/effects';
 import { Injectable } from '@angular/core';
@@ -5,13 +6,11 @@ import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/do';
 import 'rxjs/add/operator/switchMap';
 
-import { MyPerformanceApiService } from '../../services/my-performance-api.service';
-// TODO Figure out: Array<PeopleResponsibilitiesDTO | PerformanceTotal>
-// import { PeopleResponsibilitiesDTO } from '../../models/people-responsibilities-dto.model';
-// import { PerformanceTotal } from '../../models/performance-total.model';
-import { ResponsibilitiesTransformerService } from '../../services/responsibilities-transformer.service';
-import * as PerformanceTotalActions from '../../state/actions/performance-total.action';
+import { EntityResponsibilitiesDTO } from '../../models/entity-responsibilities-dto.model';
 import * as ResponsibilitiesActions from '../../state/actions/responsibilities.action';
+import { MyPerformanceApiService } from '../../services/my-performance-api.service';
+import { PeopleResponsibilitiesDTO } from '../../models/people-responsibilities-dto.model';
+import { ResponsibilitiesTransformerService } from '../../services/responsibilities-transformer.service';
 
 @Injectable()
 export class ResponsibilitiesEffects {
@@ -28,22 +27,13 @@ export class ResponsibilitiesEffects {
       .ofType(ResponsibilitiesActions.FETCH_RESPONSIBILITIES_ACTION)
       .switchMap((action: Action) => {
         const entityId = action.payload;
-
-        return Observable.forkJoin(
-          this.myPerformanceApiService.getResponsibilities(entityId),
-          this.myPerformanceApiService.getPerformanceTotal(entityId)
-        );
-      })
-      .mergeMap(([responsibilities, performanceTotal]: Array<any>) => {
-        const roleGroups = this.responsibilitiesTransformerService.groupPeopleByRoleGroups(responsibilities.people);
-
-        return [
-          new ResponsibilitiesActions.FetchResponsibilitiesSuccessAction(roleGroups),
-          new PerformanceTotalActions.FetchPerformanceTotalSuccessAction(performanceTotal)
-        ];
-      })
-      // TODO: Follow up on error handling different action failures
-      .catch((err: Error) => Observable.of(new ResponsibilitiesActions.FetchResponsibilitiesFailureAction(err)));
+        return this.myPerformanceApiService.getResponsibilities(entityId)
+          .map((response: PeopleResponsibilitiesDTO) => {
+            const roleGroups = this.responsibilitiesTransformerService.groupPeopleByRoleGroups(response.people);
+            return new ResponsibilitiesActions.FetchResponsibilitiesSuccessAction(roleGroups);
+          })
+          .catch((err: Error) => Observable.of(new ResponsibilitiesActions.FetchResponsibilitiesFailureAction(err)));
+      });
   }
 
   @Effect({dispatch: false})
