@@ -6,7 +6,9 @@ import 'rxjs/add/operator/do';
 import 'rxjs/add/operator/switchMap';
 
 import { MyPerformanceApiService } from '../../services/my-performance-api.service';
-import { PerformanceTotal } from '../../models/performance-total.model';
+// TODO Figure out: Array<PeopleResponsibilitiesDTO | PerformanceTotal>
+// import { PeopleResponsibilitiesDTO } from '../../models/people-responsibilities-dto.model';
+// import { PerformanceTotal } from '../../models/performance-total.model';
 import { ResponsibilitiesTransformerService } from '../../services/responsibilities-transformer.service';
 import * as PerformanceTotalActions from '../../state/actions/performance-total.action';
 import * as ResponsibilitiesActions from '../../state/actions/responsibilities.action';
@@ -26,12 +28,13 @@ export class ResponsibilitiesEffects {
       .ofType(ResponsibilitiesActions.FETCH_RESPONSIBILITIES_ACTION)
       .switchMap((action: Action) => {
         const entityId = action.payload;
-        const responsibilities$ = this.myPerformanceApiService.getResponsibilities(entityId);
-        const performanceTotal$ = this.myPerformanceApiService.getPerformanceTotal(entityId);
 
-        return Observable.forkJoin(responsibilities$, performanceTotal$);
+        return Observable.forkJoin(
+          this.myPerformanceApiService.getResponsibilities(entityId),
+          this.myPerformanceApiService.getPerformanceTotal(entityId)
+        );
       })
-      .mergeMap(([responsibilities, performanceTotal]: Array<any|PerformanceTotal>) => {
+      .mergeMap(([responsibilities, performanceTotal]: Array<any>) => {
         const roleGroups = this.responsibilitiesTransformerService.groupPeopleByRoleGroups(responsibilities.people);
 
         return [

@@ -9,7 +9,7 @@ export interface AppState {
   dateRanges: DateRangesState;
   performanceTotal: PerformanceTotalState;
   myPerformanceFilter: MyPerformanceFilterState;
-  responsibilitiesState: ResponsibilitiesState;
+  responsibilities: ResponsibilitiesState;
 }
 
 export const rootReducer = {

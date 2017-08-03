@@ -17,7 +17,7 @@ import { RoleGroups } from '../../models/role-groups.model';
 
 let chance = new Chance();
 
-fdescribe('Responsibilities Effects', () => {
+describe('Responsibilities Effects', () => {
   const roleGroupsMock: RoleGroups = getMockRoleGroups();
   const performanceTotalMock: PerformanceTotal = getPerformanceTotalMock();
   const myPerformanceApiServiceMock = {

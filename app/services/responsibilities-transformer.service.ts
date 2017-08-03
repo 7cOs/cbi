@@ -8,7 +8,7 @@ import { RoleGroups } from '../models/role-groups.model';
 
 @Injectable()
 export class ResponsibilitiesTransformerService {
-  private typeDisplayMapping: any = {
+  private typeDisplayMapping: {[key: string]: string} = {
     'MDM': 'Market Development Managers',
     'Specialist': 'Specialists'
   };
@@ -16,9 +16,7 @@ export class ResponsibilitiesTransformerService {
   constructor() { }
 
   public groupPeopleByRoleGroups(responsibilities: EntityResponsibilitiesDTO[]): RoleGroups {
-    let roleGroups: RoleGroups = {};
-    Object.keys(responsibilities).forEach((entityType: string) => {
-      const entity = responsibilities[entityType];
+    return responsibilities.reduce((roleGroups: RoleGroups, entity: EntityResponsibilitiesDTO) => {
       const typeDisplayName: string = this.typeDisplayMapping[entity.type] || entity.type;
 
       if (Array.isArray(roleGroups[entity.type])) {
@@ -28,9 +26,9 @@ export class ResponsibilitiesTransformerService {
           this.transformEntityResponsibilitiesDTO(entity, typeDisplayName)
         ];
       }
-    });
 
-    return roleGroups;
+      return roleGroups;
+    }, {});
   }
 
   private transformEntityResponsibilitiesDTO(entity: EntityResponsibilitiesDTO, displayName: string): EntityResponsibilities {

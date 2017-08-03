@@ -58,7 +58,9 @@ export class MyPerformanceComponent implements OnInit {
     private myPerformanceTableDataTransformerService: MyPerformanceTableDataTransformerService
   ) {
     this.store.select('responsibilities').subscribe((responsibilitiesState: ResponsibilitiesState) => {
-      this.tableData = this.myPerformanceTableDataTransformerService.transformRoleGroupTableData(responsibilitiesState.responsibilities);
+      if (responsibilitiesState && responsibilitiesState.responsibilities) {
+        this.tableData = this.myPerformanceTableDataTransformerService.transformRoleGroupTableData(responsibilitiesState.responsibilities);
+      }
     });
 
     this.store.select(state => state.performanceTotal).subscribe((performanceTotalData: any) => {
