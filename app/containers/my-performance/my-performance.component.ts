@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { Store } from '@ngrx/store';
 
+import { ActionStatus } from '../../enums/action-status.enum';
 import { AppState } from '../../state/reducers/root.reducer';
 import { ColumnType } from '../../enums/column-type.enum';
 import { DateRange } from '../../models/date-range.model';
@@ -15,6 +16,7 @@ import { MyPerformanceFilterState } from '../../state/reducers/my-performance-fi
 import * as MyPerformanceFilterActions from '../../state/actions/my-performance-filter.action';
 import { MyPerformanceTableDataTransformerService } from '../../services/my-performance-table-data-transformer.service';
 import { MyPerformanceTableRow } from '../../models/my-performance-table-row.model';
+import { PerformanceTotalState } from '../../state/reducers/performance-total.reducer';
 import { ResponsibilitiesState } from '../../state/reducers/responsibilities.reducer';
 import { SortingCriteria } from '../../models/sorting-criteria.model';
 import { ViewType } from '../../enums/view-type.enum';
@@ -63,8 +65,10 @@ export class MyPerformanceComponent implements OnInit {
       }
     });
 
-    this.store.select(state => state.performanceTotal).subscribe((performanceTotalData: any) => {
-      this.totalRowData = this.myPerformanceTableDataTransformerService.getTotalRowDisplayData(performanceTotalData);
+    this.store.select(state => state.performanceTotal).subscribe((performanceTotalData: PerformanceTotalState) => {
+      if (performanceTotalData.status === ActionStatus.Fetched) {
+        this.totalRowData = this.myPerformanceTableDataTransformerService.getTotalRowDisplayData(performanceTotalData.performanceTotal);
+      }
     });
   }
 

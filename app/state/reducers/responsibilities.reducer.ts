@@ -16,6 +16,7 @@ export function responsibilitiesReducer(
   state: ResponsibilitiesState = initialState,
   action: ResponsibilitiesActions.Action
 ): ResponsibilitiesState {
+
   switch (action.type) {
     case ResponsibilitiesActions.FETCH_RESPONSIBILITIES_ACTION:
       return Object.assign({}, state, {

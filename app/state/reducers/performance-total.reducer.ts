@@ -1,18 +1,19 @@
 import { ActionStatus, State } from '../../enums/action-status.enum';
+import { PerformanceTotal } from '../../models/performance-total.model';
 import * as PerformanceTotalActions from '../actions/performance-total.action';
 
 export interface PerformanceTotalState extends State {
   status: ActionStatus;
-  total: number;
-  totalYearAgo: number;
-  contributionToVolume: number;
+  performanceTotal: PerformanceTotal;
 }
 
 export const initialState: PerformanceTotalState = {
   status: ActionStatus.NotFetched,
-  total: 0,
-  totalYearAgo: 0,
-  contributionToVolume: 0
+  performanceTotal: {
+    total: 0,
+    totalYearAgo: 0,
+    contributionToVolume: 0
+  }
 };
 
 export function performanceTotalReducer(
@@ -29,9 +30,7 @@ export function performanceTotalReducer(
     case PerformanceTotalActions.FETCH_PERFORMANCE_TOTAL_SUCCESS_ACTION:
       return {
         status: ActionStatus.Fetched,
-        total: action.payload.total,
-        totalYearAgo: action.payload.totalYearAgo,
-        contributionToVolume: action.payload.contributionToVolume
+        performanceTotal: action.payload
       };
 
     case PerformanceTotalActions.FETCH_PERFORMANCE_TOTAL_FAILURE_ACTION:

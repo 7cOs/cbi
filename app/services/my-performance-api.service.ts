@@ -20,6 +20,17 @@ export class MyPerformanceApiService {
       .catch(err => this.handleError(new Error(err)));
   }
 
+  public getResponsibilityPerformanceTotal(positionId: number, entityType: string): Observable<any> {
+    this.url = `/v3/position/${ positionId }/responsibilities/${ entityType }/performanceTotal`;
+
+    return this.http.get(`${ this.url }`)
+      .map(res => {
+        console.log('getResponsibilityPerformanceTotal', res.json());
+        return res.json();
+      })
+      .catch(err => this.handleError(new Error(err)));
+  }
+
   public getPerformanceTotal(personId: number): Observable<PerformanceTotal> {
     this.url = `/v3/people/${personId}/performanceTotal`;
 
