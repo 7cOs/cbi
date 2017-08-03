@@ -19,13 +19,13 @@ public class OpportunitiesTest extends BaseTestCase {
   public void setUp() {
     final TestUser testUser = TestUser.ACTOR4;
 
-    final Login login = new Login(driver);
+    final Login loginPage = new Login(driver);
     logoutPage = new LogoutPage(driver);
 
     log.info("\nLoading webpage...");
     driver.get(webAppBaseUrl);
-    final HomePage homePage = login.loginWithValidCredentials(testUser.userName(), testUser.password());
-    Assert.assertTrue(homePage.isOnHomePage(), "Failed to log in user: " + testUser.userName());
+    final HomePage homePage = loginPage.loginAs(testUser);
+    Assert.assertTrue(homePage.isLoaded(), "Failed to log in user: " + testUser.userName());
 
     opportunitiesPage = PageFactory.initElements(driver, OpportunitiesPage.class);
     opportunitiesPage.goToPage();

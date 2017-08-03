@@ -703,9 +703,9 @@ public class Opportunities extends LoadableComponent<Opportunities> {
 		return this;
 	}
 
-	public HomePage navigateToHome() {
+	public Home navigateToHome() {
 		driver.get(PropertiesCache.getInstance().getProperty("host.address"));
-		return PageFactory.initElements(driver, HomePage.class);
+		return PageFactory.initElements(driver, Home.class);
 	}
 
 	public TargetList navigateToTargetList() {

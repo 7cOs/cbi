@@ -12,12 +12,12 @@ import org.testng.annotations.*;
  */
 public class LoginTest extends BaseTestCase {
 
-  private Login login;
+  private Login loginPage;
   private LogoutPage logoutPage;
 
   @BeforeMethod
   public void setUp() {
-    login = new Login(driver);
+    loginPage = new Login(driver);
     logoutPage = new LogoutPage(driver);
 
     log.info("\nLoading webpage...");
@@ -31,8 +31,8 @@ public class LoginTest extends BaseTestCase {
 
   @Test(dataProvider = "userCredentials", description = "Testing basic login and logout")
   public void testLogin(TestUser testUser) {
-    final HomePage homePage = login.loginWithValidCredentials(testUser.userName(), testUser.password());
-    Assert.assertTrue(homePage.isOnHomePage(), "Login failed for userName: " + testUser.userName());
+    final HomePage homePage = loginPage.loginAs(testUser);
+    Assert.assertTrue(homePage.isLoaded(), "Login failed for userName: " + testUser.userName());
 
     log.info("Logged in successfully as: " + testUser.userName());
   }
