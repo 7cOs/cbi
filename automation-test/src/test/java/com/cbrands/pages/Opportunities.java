@@ -28,6 +28,10 @@ import org.testng.Assert;
 
 import com.cbrands.helper.PropertiesCache;
 
+/**
+ * @deprecated Please use {@link OpportunitiesPage} instead.
+ */
+@Deprecated
 public class Opportunities extends LoadableComponent<Opportunities> {
 
 	private final WebDriver driver;

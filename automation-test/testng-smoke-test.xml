@@ -9,6 +9,7 @@
 			<class name="com.cbrands.test.smoke.LoginTest" />
 			<class name="com.cbrands.test.smoke.TargetListTest" />
 			<class name="com.cbrands.test.smoke.NotesTest" />
+			<class name="com.cbrands.test.smoke.OpportunitiesTest" />
 		</classes>
 	</test> <!-- Test -->
 </suite> <!-- Suite -->
