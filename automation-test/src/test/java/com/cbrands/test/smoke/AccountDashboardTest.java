@@ -39,6 +39,12 @@ public class AccountDashboardTest extends BaseTestCase {
 
   @Test(description = "Search for accounts")
   public void searchAccounts() {
-    Assert.fail("Test not implemented");
+    accountDashboardPage.enterDistributorSearchText("Coastal")
+      .clickSearchForDistributor()
+      .selectDistributorFilterByName("COASTAL BEV CO-NC (WILMINGTON)")
+      .clickApplyFilters();
+
+    Assert.assertTrue(accountDashboardPage.isLeftPanelResultsLoaded(), "Left brands panel failed to load results");
+    Assert.assertTrue(accountDashboardPage.isRightPanelResultsLoaded(), "Right accounts panel failed to load results");
   }
 }
