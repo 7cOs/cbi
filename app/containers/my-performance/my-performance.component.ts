@@ -6,10 +6,13 @@ import { AppState } from '../../state/reducers/root.reducer';
 import { ColumnType } from '../../enums/column-type.enum';
 import { DateRange } from '../../models/date-range.model';
 import { FetchResponsibilitiesAction } from '../../state/actions/responsibilities.action';
+import * as MyPerformanceVersionActions from '../../state/actions/my-performance-version.action';
 import { getDateRangeMock } from '../../models/date-range.model.mock';
+import { MyPerformanceData } from '../../state/reducers/my-performance-version.reducer';
 import { MyPerformanceTableDataTransformerService } from '../../services/my-performance-table-data-transformer.service';
 import { MyPerformanceTableRow } from '../../models/my-performance-table-row.model';
-import { ResponsibilitiesState } from '../../state/reducers/responsibilities.reducer';
+import { ResponsibilitiesState } from '../../state/reducers/responsibilities.reducer'; // tslint:disable-line:no-unused-variable
+import { MyPerformanceState } from '../../state/reducers/my-performance.reducer';
 import { RowType } from '../../enums/row-type.enum';
 import { SortingCriteria } from '../../models/sorting-criteria.model';
 import { ViewType } from '../../enums/view-type.enum';
@@ -27,6 +30,7 @@ import { myPerformanceTableData,
 export class MyPerformanceComponent implements OnInit {
   public roleGroups: Observable<ResponsibilitiesState>;
   public viewType = ViewType;
+  public showLeftBackButton = false;
 
   // mocks
   public tableHeaderRowLeft: Array<string> = ['PEOPLE', 'DEPLETIONS', 'CTV'];
@@ -44,10 +48,17 @@ export class MyPerformanceComponent implements OnInit {
     }
   ];
 
+  private currentState: MyPerformanceData;
+
   constructor(private store: Store<AppState>,
               private myPerformanceTableDataTransformerService: MyPerformanceTableDataTransformerService) {
-    this.store.select('responsibilities').subscribe((responsibilitiesState: ResponsibilitiesState) => {
-      this.tableData = this.myPerformanceTableDataTransformerService.transformRoleGroupTableData(responsibilitiesState.responsibilities);
+    this.store.select('myPerformance').subscribe((myPerformanceState: MyPerformanceState) => {
+      this.tableData = this.myPerformanceTableDataTransformerService
+      .transformRoleGroupTableData(myPerformanceState.current.responsibilities.responsibilities);
+
+      this.currentState = myPerformanceState.current;
+      console.log(myPerformanceState.versions.length);
+      this.showLeftBackButton = myPerformanceState.versions.length > 0;
     });
   }
 
@@ -59,6 +70,9 @@ export class MyPerformanceComponent implements OnInit {
     switch (type) {
       case RowType.total:
         if (leftSide) {
+          if (this.showLeftBackButton) {
+            this.store.dispatch(new MyPerformanceVersionActions.RestoreMyPerformanceStateAction());
+          }
           console.log(`clicked on cell ${index} from the left side`);
         } else {
           console.log(`clicked on cell ${index} from the right side`);
@@ -68,6 +82,7 @@ export class MyPerformanceComponent implements OnInit {
       case RowType.data:
       default:
         if (leftSide) {
+          this.store.dispatch(new MyPerformanceVersionActions.SaveMyPerformanceStateAction(this.currentState));
           console.log('clicked on left row:', row);
         } else {
           console.log('clicked on right row:', row);
