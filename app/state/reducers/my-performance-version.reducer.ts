@@ -1,11 +1,6 @@
-import { ResponsibilitiesState } from './responsibilities.reducer';
 import * as MyPerformanceVersionActions from '../actions/my-performance-version.action';
 
-import { MyPerformanceState } from './my-performance.reducer';
-
-export interface MyPerformanceData {
-  responsibilities?: ResponsibilitiesState;
-}
+import { MyPerformanceData, MyPerformanceState } from './my-performance.reducer';
 
 export const initialState: Array<MyPerformanceData> = Array<MyPerformanceData>();
 

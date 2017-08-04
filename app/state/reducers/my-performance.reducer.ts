@@ -1,12 +1,16 @@
 import { Action } from '@ngrx/store';
 
-import { responsibilitiesReducer } from './responsibilities.reducer';
+import { responsibilitiesReducer, ResponsibilitiesState } from './responsibilities.reducer';
 import * as ResponsibilitiesActions from '../actions/responsibilities.action';
 import * as initialStateResponsibilities from './responsibilities.reducer';
 import * as MyPerformanceVersionActions from '../actions/my-performance-version.action';
-import { MyPerformanceData, myPerformanceVersionReducer } from './my-performance-version.reducer';
+import { myPerformanceVersionReducer } from './my-performance-version.reducer';
 import * as initialStateMyPerformanceSaver from './my-performance-version.reducer';
 import { State } from '../../enums/action-status.enum';
+
+export interface MyPerformanceData {
+  responsibilities?: ResponsibilitiesState;
+}
 
 export interface MyPerformanceState extends State {
   current: MyPerformanceData;

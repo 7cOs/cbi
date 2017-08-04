@@ -8,11 +8,10 @@ import { DateRange } from '../../models/date-range.model';
 import { FetchResponsibilitiesAction } from '../../state/actions/responsibilities.action';
 import * as MyPerformanceVersionActions from '../../state/actions/my-performance-version.action';
 import { getDateRangeMock } from '../../models/date-range.model.mock';
-import { MyPerformanceData } from '../../state/reducers/my-performance-version.reducer';
 import { MyPerformanceTableDataTransformerService } from '../../services/my-performance-table-data-transformer.service';
 import { MyPerformanceTableRow } from '../../models/my-performance-table-row.model';
 import { ResponsibilitiesState } from '../../state/reducers/responsibilities.reducer'; // tslint:disable-line:no-unused-variable
-import { MyPerformanceState } from '../../state/reducers/my-performance.reducer';
+import { MyPerformanceState, MyPerformanceData } from '../../state/reducers/my-performance.reducer';
 import { RowType } from '../../enums/row-type.enum';
 import { SortingCriteria } from '../../models/sorting-criteria.model';
 import { ViewType } from '../../enums/view-type.enum';

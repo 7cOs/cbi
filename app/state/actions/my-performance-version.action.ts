@@ -1,6 +1,6 @@
 import { Action } from '@ngrx/store';
 
-import { MyPerformanceData } from '../reducers/my-performance-version.reducer';
+import { MyPerformanceData } from '../reducers/my-performance.reducer';
 
 export const SAVE_MY_PERFORMANCE_STATE_ACTION = '[My Performance] SAVE_MY_PERFORMANCE_STATE_ACTION';
 export class SaveMyPerformanceStateAction implements Action {
