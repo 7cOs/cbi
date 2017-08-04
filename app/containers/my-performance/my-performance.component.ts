@@ -53,14 +53,14 @@ export class MyPerformanceComponent implements OnInit {
     }
   ];
 
-  private dateRanges$: Observable<DateRangesState> = this.store.select(state => state.dateRanges);
-  private filterState$: Observable<MyPerformanceFilterState> = this.store.select(state => state.myPerformanceFilter);
+  private dateRanges$: Observable<DateRangesState>;
+  private filterState$: Observable<MyPerformanceFilterState>;
 
   constructor(
     private store: Store<AppState>,
     private myPerformanceTableDataTransformerService: MyPerformanceTableDataTransformerService
   ) {
-    this.store.select('responsibilities').subscribe((responsibilitiesState: ResponsibilitiesState) => {
+    this.store.select(state => state.responsibilities).subscribe((responsibilitiesState: ResponsibilitiesState) => {
       if (responsibilitiesState && responsibilitiesState.responsibilities) {
         this.tableData = this.myPerformanceTableDataTransformerService.getRoleGroupPerformanceTableData(
           responsibilitiesState.responsibilitiesPerformanceTotals
@@ -69,7 +69,7 @@ export class MyPerformanceComponent implements OnInit {
     });
 
     this.store.select(state => state.performanceTotal).subscribe((performanceTotalData: PerformanceTotalState) => {
-      if (performanceTotalData.status === ActionStatus.Fetched) {
+      if (performanceTotalData && performanceTotalData.status === ActionStatus.Fetched) {
         this.totalRowData = this.myPerformanceTableDataTransformerService.getTotalRowDisplayData(performanceTotalData.performanceTotal);
       }
     });
@@ -108,9 +108,11 @@ export class MyPerformanceComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.dateRanges$ = this.store.select(state => state.dateRanges);
+    this.filterState$ = this.store.select(state => state.myPerformanceFilter);
+
     // stub current user for now
     const currentUserId = 1;
     this.store.dispatch(new FetchResponsibilitiesAction(currentUserId));
-    this.store.dispatch(new FetchPerformanceTotalAction(currentUserId));
   }
 }

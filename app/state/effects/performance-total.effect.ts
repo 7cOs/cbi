@@ -7,6 +7,7 @@ import 'rxjs/add/operator/switchMap';
 
 import { MyPerformanceApiService } from '../../services/my-performance-api.service';
 import { PerformanceTotal } from '../../models/performance-total.model';
+import * as FetchResponsibilitiesActions from '../../state/actions/responsibilities.action';
 import * as PerformanceTotalActions from '../../state/actions/performance-total.action';
 
 @Injectable()
@@ -20,7 +21,10 @@ export class PerformanceTotalEffects {
   @Effect()
   fetchPerformanceTotal$(): Observable<Action> {
     return this.actions$
-      .ofType(PerformanceTotalActions.FETCH_PERFORMANCE_TOTAL_ACTION)
+      .ofType(
+        PerformanceTotalActions.FETCH_PERFORMANCE_TOTAL_ACTION,
+        FetchResponsibilitiesActions.FETCH_RESPONSIBILITIES_ACTION
+      )
       .switchMap((action: Action) => {
         const personId = action.payload;
 
