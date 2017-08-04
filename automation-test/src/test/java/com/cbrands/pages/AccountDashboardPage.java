@@ -61,7 +61,7 @@ public class AccountDashboardPage extends TestNGBasePage {
     return this;
   }
 
-  public AccountDashboardPage selectRetailerChainByName(String accountName) {
+  public AccountDashboardPage selectRetailerChainFilterByName(String accountName) {
     final WebElement resultsContainer = retailerChainFilter
       .findElement(By.xpath(".//div[contains(@class, 'results-container')]"));
     waitForVisibleFluentWait(resultsContainer);
