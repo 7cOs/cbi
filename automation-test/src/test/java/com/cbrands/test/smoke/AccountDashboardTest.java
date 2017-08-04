@@ -47,4 +47,9 @@ public class AccountDashboardTest extends BaseTestCase {
     Assert.assertTrue(accountDashboardPage.isLeftPanelResultsLoaded(), "Left brands panel failed to load results");
     Assert.assertTrue(accountDashboardPage.isRightPanelResultsLoaded(), "Right accounts panel failed to load results");
   }
+
+  @Test(description = "Drill all the way down the account hierarchy and drill back up")
+  public void drillDownUpAccounts() {
+    Assert.fail("Test not implemented");
+  }
 }
