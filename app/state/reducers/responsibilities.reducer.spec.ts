@@ -6,26 +6,38 @@ import { getMockRoleGroups } from '../../models/role-groups.model.mock';
 describe('Responsibilities Reducer', () => {
 
   it('updates the status when a fetch is dispatched', () => {
-    const mockPersonID = 1;
+    const mockPositionId = 1;
     const expectedState = {
       status: ActionStatus.Fetching,
-      responsibilities: {}
+      positionId: 0,
+      responsibilities: {},
+      responsibilitiesPerformanceTotals: new Array()
     };
 
-    const actualState = responsibilitiesReducer(initialState, new ResponsibilitiesActions.FetchResponsibilitiesAction(mockPersonID));
+    const actualState = responsibilitiesReducer(initialState, new ResponsibilitiesActions.FetchResponsibilitiesAction(mockPositionId));
 
     expect(actualState).toEqual(expectedState);
   });
 
-  it('should update the status and store the new data when a fetch is successful', () => {
-    const payload = getMockRoleGroups();
+  it('should update the status and store a fetch responsibilities is successful', () => {
+    const mockPositionId = 1;
+    const mockRoleGroups = getMockRoleGroups();
+    const mockPayload = {
+      positionId: mockPositionId,
+      responsibilities: mockRoleGroups
+    };
 
     const expectedState = {
       status: ActionStatus.Fetched,
-      responsibilities: payload
+      positionId: mockPositionId,
+      responsibilities: mockRoleGroups,
+      responsibilitiesPerformanceTotals: new Array()
     };
 
-    const actualState = responsibilitiesReducer(initialState, new ResponsibilitiesActions.FetchResponsibilitiesSuccessAction(payload));
+    const actualState = responsibilitiesReducer(
+      initialState,
+      new ResponsibilitiesActions.FetchResponsibilitiesSuccessAction(mockPayload)
+    );
 
     expect(actualState).toEqual(expectedState);
   });
@@ -33,10 +45,15 @@ describe('Responsibilities Reducer', () => {
   it('should update the status when a fetch fails', () => {
     const expectedState = {
       status: ActionStatus.Error,
-      responsibilities: {}
+      positionId: 0,
+      responsibilities: {},
+      responsibilitiesPerformanceTotals: new Array()
     };
 
-    const actualState = responsibilitiesReducer(initialState, new ResponsibilitiesActions.FetchResponsibilitiesFailureAction(new Error()));
+    const actualState = responsibilitiesReducer(
+      initialState,
+      new ResponsibilitiesActions.FetchResponsibilitiesFailureAction(new Error())
+    );
 
     expect(actualState).toEqual(expectedState);
   });

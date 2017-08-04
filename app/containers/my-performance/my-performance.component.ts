@@ -61,14 +61,14 @@ export class MyPerformanceComponent implements OnInit {
     private myPerformanceTableDataTransformerService: MyPerformanceTableDataTransformerService
   ) {
     this.store.select('responsibilities').subscribe((responsibilitiesState: ResponsibilitiesState) => {
-      console.log('responsibilitiesState', responsibilitiesState);
       if (responsibilitiesState && responsibilitiesState.responsibilities) {
-        this.tableData = this.myPerformanceTableDataTransformerService.transformRoleGroupTableData(responsibilitiesState.responsibilities);
+        this.tableData = this.myPerformanceTableDataTransformerService.getRoleGroupPerformanceTableData(
+          responsibilitiesState.responsibilitiesPerformanceTotals
+        );
       }
     });
 
     this.store.select(state => state.performanceTotal).subscribe((performanceTotalData: PerformanceTotalState) => {
-      console.log('performanceTotalData', performanceTotalData);
       if (performanceTotalData.status === ActionStatus.Fetched) {
         this.totalRowData = this.myPerformanceTableDataTransformerService.getTotalRowDisplayData(performanceTotalData.performanceTotal);
       }

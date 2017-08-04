@@ -1,15 +1,19 @@
 import { ActionStatus, State } from '../../enums/action-status.enum';
-import { RoleGroups } from '../../models/role-groups.model';
+import { RoleGroups, RoleGroupPerformanceTotal } from '../../models/role-groups.model';
 import * as ResponsibilitiesActions from '../actions/responsibilities.action';
 
 export interface ResponsibilitiesState extends State {
   status: ActionStatus;
+  positionId: number;
   responsibilities: RoleGroups;
+  responsibilitiesPerformanceTotals: Array<RoleGroupPerformanceTotal>;
 }
 
 export const initialState: ResponsibilitiesState = {
   status: ActionStatus.NotFetched,
-  responsibilities: {}
+  positionId: 0,
+  responsibilities: {},
+  responsibilitiesPerformanceTotals: []
 };
 
 export function responsibilitiesReducer(
@@ -24,14 +28,20 @@ export function responsibilitiesReducer(
       });
 
     case ResponsibilitiesActions.FETCH_RESPONSIBILITIES_SUCCESS_ACTION:
-      return {
+      return Object.assign({}, state, {
         status: ActionStatus.Fetched,
-        responsibilities: action.payload
-      };
+        responsibilities: action.payload.responsibilities,
+        positionId: action.payload.positionId
+      });
 
     case ResponsibilitiesActions.FETCH_RESPONSIBILITIES_FAILURE_ACTION:
       return Object.assign({}, state, {
         status: ActionStatus.Error
+      });
+
+    case ResponsibilitiesActions.FETCH_RESPONSIBILITIES_PERFORMANCE_TOTALS_SUCCESS:
+      return Object.assign({}, state, {
+        responsibilitiesPerformanceTotals: action.payload
       });
 
     default:

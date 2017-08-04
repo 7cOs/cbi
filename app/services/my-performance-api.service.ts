@@ -6,6 +6,8 @@ import 'rxjs/add/operator/map';
 // tslint:disable-next-line:no-unused-variable
 import { EntityResponsibilitiesDTO } from '../models/entity-responsibilities-dto.model';
 import { PerformanceTotal } from '../models/performance-total.model';
+// tslint:disable-next-line:no-unused-variable
+import { RoleGroupPerformanceTotal } from '../models/role-groups.model';
 
 @Injectable()
 export class MyPerformanceApiService {
@@ -20,13 +22,22 @@ export class MyPerformanceApiService {
       .catch(err => this.handleError(new Error(err)));
   }
 
-  public getResponsibilityPerformanceTotal(positionId: number, entityType: string): Observable<any> {
-    this.url = `/v3/position/${ positionId }/responsibilities/${ entityType }/performanceTotal`;
+  public getResponsibilitiesPerformanceTotal(positionId: number, entityType: Array<string>): Observable<RoleGroupPerformanceTotal[]> {
+    const apiCalls: any[] = [];
+
+    entityType.forEach((entity: string) => {
+      apiCalls.push(this.getResponsibilityPerformanceTotal(positionId, entity));
+    });
+
+    return Observable.forkJoin(apiCalls);
+  }
+
+  public getResponsibilityPerformanceTotal(positionId: number, entityType: string): Observable<RoleGroupPerformanceTotal|Error> {
+    this.url = `/v3/people/${ positionId }/responsibilities/${ entityType }/performanceTotal`;
 
     return this.http.get(`${ this.url }`)
       .map(res => {
-        console.log('getResponsibilityPerformanceTotal', res.json());
-        return res.json();
+        return { entityType: entityType, performanceTotal: res.json() };
       })
       .catch(err => this.handleError(new Error(err)));
   }

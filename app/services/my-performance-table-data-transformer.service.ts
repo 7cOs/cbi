@@ -4,7 +4,7 @@ import * as Chance from 'chance';
 
 import { MyPerformanceTableRow } from '../models/my-performance-table-row.model';
 import { PerformanceTotal } from '../models/performance-total.model';
-import { RoleGroups } from '../models/role-groups.model';
+import { RoleGroups, RoleGroupPerformanceTotal } from '../models/role-groups.model';
 
 const chance = new Chance();
 
@@ -20,6 +20,18 @@ export class MyPerformanceTableDataTransformerService {
         metricColumn1: chance.natural({max: 1000}),
         metricColumn2: chance.natural({max: 100}),
         ctv: chance.natural({max: 100})
+      };
+    });
+  }
+
+  public getRoleGroupPerformanceTableData(performanceData: RoleGroupPerformanceTotal[]): MyPerformanceTableRow[] {
+    return performanceData.map((performance: RoleGroupPerformanceTotal) => {
+      return {
+        descriptionRow0: performance.entityType,
+        metricColumn0: performance.performanceTotal.total,
+        metricColumn1: performance.performanceTotal.totalYearAgo,
+        metricColumn2: parseFloat((performance.performanceTotal.total / performance.performanceTotal.totalYearAgo).toFixed(1)),
+        ctv: performance.performanceTotal.contributionToVolume
       };
     });
   }
