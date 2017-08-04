@@ -1,4 +1,5 @@
 import { By } from '@angular/platform-browser';
+import * as Chance from 'chance';
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { Observable } from 'rxjs';
@@ -7,8 +8,6 @@ import { Store } from '@ngrx/store';
 import { DateRangesState } from '../../state/reducers/date-ranges.reducer';
 import { DateRangeTimePeriodValue } from '../../enums/date-range-time-period.enum';
 import { DistributionTypeValue } from '../../enums/distribution-type.enum';
-import { getDateRangesStateMock } from '../../state/reducers/date-ranges.reducer.mock';
-import { getMyPerformanceFilterStateMock } from '../../state/reducers/my-performance-filter.reducer.mock';
 import { MetricValue } from '../../enums/metric-type.enum';
 import { MockStore } from '../../state/mock-store';
 import { MyPerformanceComponent } from './my-performance.component';
@@ -20,6 +19,8 @@ import { MyPerformanceTableRowComponent } from '../../shared/components/my-perfo
 import { SortIndicatorComponent } from '../../shared/components/sort-indicator/sort-indicator.component';
 import { PremiseTypeValue } from '../../enums/premise-type.enum';
 import { UtilService } from '../../services/util.service';
+
+let chance = new Chance();
 
 @Component({
   selector: 'my-performance-filter',
@@ -103,8 +104,8 @@ describe('MyPerformanceComponent', () => {
 
   it('should call select with the right arguments', () => {
     const mockState = {
-        myPerformanceFilter: getMyPerformanceFilterStateMock(),
-        dateRanges: getDateRangesStateMock()
+        myPerformanceFilter: chance.string(),
+        dateRanges: chance.string()
     };
 
     spyOn(store, 'select').and.callFake((elem: any) => {
@@ -124,7 +125,7 @@ describe('MyPerformanceComponent', () => {
     const mockMyPerformanceFilter = fixture.debugElement.query(By.directive(MockMyPerformanceFilterComponent))
     .injector
     .get(MockMyPerformanceFilterComponent) as MockMyPerformanceFilterComponent;
-    expect(mockMyPerformanceFilter.filterState).toEqual(mockState.myPerformanceFilter);
-    expect(mockMyPerformanceFilter.dateRanges).toBe(mockState.dateRanges);
+    expect(mockMyPerformanceFilter.filterState).toEqual(mockState.myPerformanceFilter as any);
+    expect(mockMyPerformanceFilter.dateRanges).toBe(mockState.dateRanges as any);
   });
 });
