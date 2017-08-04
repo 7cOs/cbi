@@ -353,22 +353,6 @@ public class TargetList extends LoadableComponent<TargetList> {
     return this;
   }
 
-  /**
-   * @deprecated Please use the method extracted to the TargetListListingsPage page object
-   * @see TargetListListingsPage
-   */
-  @Deprecated
-  public TargetList selectTargetList(String listname) {
-    final TargetListListingsPage targetListListingsPage = PageFactory.initElements(
-      driver,
-      TargetListListingsPage.class
-    );
-
-    targetListListingsPage.selectTargetListByName(listname);
-
-    return this;
-  }
-
   public TargetList typeTargetName(String name) {
 
 		WebElement element = findElement(By.xpath("//input[@placeholder='Enter List Name']"));

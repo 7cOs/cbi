@@ -3,6 +3,7 @@ package com.cbrands.test.smoke;
 import com.cbrands.TestUser;
 import com.cbrands.pages.*;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.PageFactory;
 import org.testng.Assert;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
@@ -13,7 +14,7 @@ public class NotesTest extends BaseTestCase {
   private static String current_time_stamp = new java.text.SimpleDateFormat("MM.dd.yyyy HH:mm:ss").format(new java.util
     .Date());
 
-  private Logout logout;
+  private LogoutPage logoutPage;
   private NotesModal notesModal;
 
   @BeforeMethod
@@ -22,14 +23,17 @@ public class NotesTest extends BaseTestCase {
     final String storeAccountName = "Taco Joint";
 
     final Login login = new Login(driver);
-    logout = new Logout(driver);
+    logoutPage = new LogoutPage(driver);
 
     log.info("\nLoading webpage...");
     driver.get(webAppBaseUrl);
-    HomePage homePage = login.loginWithValidCredentials(testUser.userName(), testUser.password());
+    final HomePage homePage = login.loginWithValidCredentials(testUser.userName(), testUser.password());
     Assert.assertTrue(homePage.isOnHomePage(), "Failed to log in user: " + testUser.userName());
 
-    notesModal = homePage.navigateToAccountDashboardPage()
+    final AccountDashboardPage accountDashboardPage = PageFactory.initElements(driver, AccountDashboardPage.class);
+    accountDashboardPage.goToPage();
+
+    notesModal = accountDashboardPage
       .enterRetailerChainSearchText(storeAccountName)
       .clickSearchForRetailerChain()
       .selectRetailerChainByName(storeAccountName)
@@ -39,12 +43,12 @@ public class NotesTest extends BaseTestCase {
       .clickNotesButton()
       .waitForLoaderToDisappear();
 
-    Assert.assertTrue(notesModal.isModalLoaded(), "Failure to load Notes modal \n");
+    Assert.assertTrue(notesModal.isLoaded(), "Failure to load Notes modal \n");
   }
 
   @AfterMethod
   public void tearDown() {
-    logout.logoutViaUrl();
+    logoutPage.goToPage();
   }
 
   @Test(description = "Create a new Note", dataProvider = "NoteData")

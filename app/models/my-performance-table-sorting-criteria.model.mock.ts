@@ -9,7 +9,7 @@ const columnTypeValues = Object.keys(ColumnType)
   .map(key => ColumnType[key])
   .filter(value => typeof value === 'number');
 
-export function sortingCriteriaMock(length: number) {
+export function getSortingCriteriaMock(length: number) {
   let criteria: Array<SortingCriteria> = Array<SortingCriteria>();
 
   for (let i = 0 ; i < length ; i++) {

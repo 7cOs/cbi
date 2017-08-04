@@ -4,7 +4,7 @@ import { MyPerformanceTableRow } from './my-performance-table-row.model';
 
 let chance = new Chance();
 
-export function myPerformanceTableRowMock(length: number) {
+export function getMyPerformanceTableRowMock(length: number) {
   let rows: Array<MyPerformanceTableRow> = Array<MyPerformanceTableRow>();
 
   for (let i = 0 ; i < length ; i++) {

@@ -3,7 +3,7 @@ let chance = new Chance();
 
 import { PerformanceTotal } from './performance-total.model';
 
-export function performanceTotalMock(): PerformanceTotal { // name: get or no get? We need to make that consistent.
+export function getPerformanceTotalMock(): PerformanceTotal {
   return {
     total: chance.floating(),
     totalYearAgo: chance.floating(),

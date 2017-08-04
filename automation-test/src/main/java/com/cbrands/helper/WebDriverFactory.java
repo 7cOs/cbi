@@ -8,8 +8,6 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openqa.selenium.Platform;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.ie.InternetExplorerDriver;
 import org.openqa.selenium.remote.CapabilityType;
 import org.openqa.selenium.remote.DesiredCapabilities;
@@ -35,46 +33,18 @@ public class WebDriverFactory implements SauceOnDemandSessionIdProvider, SauceOn
 
   public static WebDriver createDriver(String driverName) throws MalformedURLException {
 
-    if (BrowserType.firefox.name().equals(driverName)) {
-      webDriver.set(new FirefoxDriver());
-    } else if (BrowserType.ie.name().equals(driverName)) {
-      webDriver.set(new InternetExplorerDriver());
-    } else if (BrowserType.chrome.name().equals(driverName)) {
-      webDriver.set(new ChromeDriver());
-    } else if (driverName.startsWith(BrowserType.remote.name())) {
+    if (driverName.startsWith(BrowserType.remote.name())) {
       setRemoteWebDriver(driverName);
-    } else if (driverName.startsWith(BrowserType.sauce.name())) {
-      setSauceWebDriver(driverName);
+    } else {
+      setSauceWebDriver();
     }
     log.info("Connected to Selenium Server. Session ID: " + sessionId.get());
     Validate.notNull(webDriver.get(), "Driver could be found by name:" + driverName);
     return webDriver.get();
   }
 
-  private static void setSauceWebDriver(String driverName) throws MalformedURLException {
-    String[] params = driverName.split(":");
-    Validate.isTrue(
-      params.length == 4,
-      "Remote driver is not right, accept format is \"remote:localhost:4444:firefox\", but the input is\""
-        + driverName + "\""
-    );
-
-    String remoteHost = params[1];
-    String remotePort = params[2];
-    String driverType = params[3];
-
-    DesiredCapabilities capabilities = null;
-    if (BrowserType.ie.name().equals(driverType)) {
-      capabilities = DesiredCapabilities.internetExplorer();
-      capabilities.setCapability(CapabilityType.PLATFORM, Platform.WIN8_1);
-      capabilities.setCapability(InternetExplorerDriver.INTRODUCE_FLAKINESS_BY_IGNORING_SECURITY_DOMAINS, true);
-      capabilities.setCapability(InternetExplorerDriver.REQUIRE_WINDOW_FOCUS, true);
-      capabilities.setCapability(InternetExplorerDriver.ENABLE_ELEMENT_CACHE_CLEANUP, true);
-      capabilities.setCapability(InternetExplorerDriver.IE_ENSURE_CLEAN_SESSION, true);
-      capabilities.setCapability("name", "Automated Functional Test");
-    } else if (BrowserType.chrome.name().equals(driverType)) {
-      capabilities = DesiredCapabilities.chrome();
-    }
+  private static void setSauceWebDriver() throws MalformedURLException {
+    final DesiredCapabilities capabilities = getSauceCapabilitiesByBrowser(System.getProperty("browser"));
     SauceHelpers.addSauceConnectTunnelId(capabilities);
 
     // Launch remote browser and set it as the current thread
@@ -87,6 +57,40 @@ public class WebDriverFactory implements SauceOnDemandSessionIdProvider, SauceOn
     String id = ((RemoteWebDriver) getWebDriver()).getSessionId().toString();
     sessionId.set(id);
     log.info("Targeted Host:" + BrowserType.sauce.name());
+  }
+
+  private static DesiredCapabilities getSauceCapabilitiesByBrowser(String driverType) {
+    DesiredCapabilities capabilities;
+
+    if (BrowserType.chrome.name().equals(driverType)) {
+      capabilities = getSauceCapabilitiesForChrome();
+    } else {
+      capabilities = getSauceCapabilitiesForIE();
+    }
+
+    return capabilities;
+  }
+
+  private static DesiredCapabilities getSauceCapabilitiesForChrome() {
+    final DesiredCapabilities capabilities = DesiredCapabilities.chrome();
+
+    capabilities.setCapability(CapabilityType.PLATFORM, Platform.WIN8_1);
+    capabilities.setCapability("name", "Automated Functional Test - Chrome");
+
+    return capabilities;
+  }
+
+  private static DesiredCapabilities getSauceCapabilitiesForIE() {
+    final DesiredCapabilities capabilities = DesiredCapabilities.internetExplorer();
+
+    capabilities.setCapability(CapabilityType.PLATFORM, Platform.WIN8_1);
+    capabilities.setCapability(InternetExplorerDriver.INTRODUCE_FLAKINESS_BY_IGNORING_SECURITY_DOMAINS, true);
+    capabilities.setCapability(InternetExplorerDriver.REQUIRE_WINDOW_FOCUS, true);
+    capabilities.setCapability(InternetExplorerDriver.ENABLE_ELEMENT_CACHE_CLEANUP, true);
+    capabilities.setCapability(InternetExplorerDriver.IE_ENSURE_CLEAN_SESSION, true);
+    capabilities.setCapability("name", "Automated Functional Test - IE");
+
+    return capabilities;
   }
 
   private static void setRemoteWebDriver(String driverName) {
