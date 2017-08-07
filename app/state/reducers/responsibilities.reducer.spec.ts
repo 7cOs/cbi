@@ -1,7 +1,7 @@
 import { responsibilitiesReducer, initialState } from './responsibilities.reducer';
 import { ActionStatus } from '../../enums/action-status.enum';
 import * as ResponsibilitiesActions from '../actions/responsibilities.action';
-import { getMockRoleGroups } from '../../models/role-groups.model.mock';
+import { getMockRoleGroups, getMockRoleGroupPerformanceTotals } from '../../models/role-groups.model.mock';
 
 describe('Responsibilities Reducer', () => {
 
@@ -19,7 +19,7 @@ describe('Responsibilities Reducer', () => {
     expect(actualState).toEqual(expectedState);
   });
 
-  it('should update the status and store a fetch responsibilities is successful', () => {
+  it('should store the payload when a fetch responsibilities is successful', () => {
     const mockPositionId = 1;
     const mockRoleGroups = getMockRoleGroups();
     const mockPayload = {
@@ -28,7 +28,7 @@ describe('Responsibilities Reducer', () => {
     };
 
     const expectedState = {
-      status: ActionStatus.Fetched,
+      status: ActionStatus.NotFetched,
       positionId: mockPositionId,
       responsibilities: mockRoleGroups,
       responsibilitiesPerformanceTotals: new Array()
@@ -37,6 +37,22 @@ describe('Responsibilities Reducer', () => {
     const actualState = responsibilitiesReducer(
       initialState,
       new ResponsibilitiesActions.FetchResponsibilitiesSuccessAction(mockPayload)
+    );
+
+    expect(actualState).toEqual(expectedState);
+  });
+
+  it('should store the payload and update the status when fetch responsibilities performance is successful', () => {
+    const mockPayload = getMockRoleGroupPerformanceTotals();
+    const expectedState = {
+      status: ActionStatus.Fetched,
+      positionId: 0,
+      responsibilities: {},
+      responsibilitiesPerformanceTotals: mockPayload
+    };
+    const actualState = responsibilitiesReducer(
+      initialState,
+      new ResponsibilitiesActions.FetchResponsibilitiesPerformanceTotalsSuccess(mockPayload)
     );
 
     expect(actualState).toEqual(expectedState);

@@ -1,7 +1,7 @@
 import * as Chance from 'chance';
 
-import { getMockRoleGroups } from '../../models/role-groups.model.mock';
-import { RoleGroups } from '../../models/role-groups.model';
+import { getMockRoleGroups, getMockRoleGroupPerformanceTotals } from '../../models/role-groups.model.mock';
+import { RoleGroupPerformanceTotal, RoleGroups } from '../../models/role-groups.model';
 import * as ResponsibilitiesActions from './responsibilities.action';
 
 const chance = new Chance();
@@ -53,6 +53,26 @@ describe('Responsibilities Actions', () => {
         positionId: mockUserId,
         responsibilities: mockRoleGroups
       });
+    });
+  });
+
+  describe('FetchResponsibilitiesPerformanceTotalsSuccess', () => {
+    let action: ResponsibilitiesActions.FetchResponsibilitiesPerformanceTotalsSuccess;
+    let mockPayload: Array<RoleGroupPerformanceTotal>;
+
+    beforeEach(() => {
+      mockPayload = getMockRoleGroupPerformanceTotals();
+      action = new ResponsibilitiesActions.FetchResponsibilitiesPerformanceTotalsSuccess(mockPayload);
+    });
+
+    it('should have the correct type', () => {
+      expect(ResponsibilitiesActions.FETCH_RESPONSIBILITIES_PERFORMANCE_TOTALS_SUCCESS)
+        .toBe('[Responsibilities] FETCH_RESPONSIBILITIES_PERFORMANCE_TOTALS_SUCCESS');
+      expect(action.type).toBe(ResponsibilitiesActions.FETCH_RESPONSIBILITIES_PERFORMANCE_TOTALS_SUCCESS);
+    });
+
+    it('should contain the correct payload', () => {
+      expect(action.payload).toEqual(mockPayload);
     });
   });
 

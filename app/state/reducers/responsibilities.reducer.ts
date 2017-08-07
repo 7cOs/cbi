@@ -29,19 +29,19 @@ export function responsibilitiesReducer(
 
     case ResponsibilitiesActions.FETCH_RESPONSIBILITIES_SUCCESS_ACTION:
       return Object.assign({}, state, {
-        status: ActionStatus.Fetched,
         responsibilities: action.payload.responsibilities,
         positionId: action.payload.positionId
+      });
+
+    case ResponsibilitiesActions.FETCH_RESPONSIBILITIES_PERFORMANCE_TOTALS_SUCCESS:
+      return Object.assign({}, state, {
+        status: ActionStatus.Fetched,
+        responsibilitiesPerformanceTotals: action.payload
       });
 
     case ResponsibilitiesActions.FETCH_RESPONSIBILITIES_FAILURE_ACTION:
       return Object.assign({}, state, {
         status: ActionStatus.Error
-      });
-
-    case ResponsibilitiesActions.FETCH_RESPONSIBILITIES_PERFORMANCE_TOTALS_SUCCESS:
-      return Object.assign({}, state, {
-        responsibilitiesPerformanceTotals: action.payload
       });
 
     default:

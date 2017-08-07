@@ -6,6 +6,11 @@ export interface RoleGroups {
   Specialist?: EntityResponsibilities[];
 }
 
+export interface FetchResponsibilitiesSuccessPayload {
+  positionId: number;
+  responsibilities: RoleGroups;
+}
+
 export interface RoleGroupPerformanceTotal {
   entityType: string;
   performanceTotal: PerformanceTotal;

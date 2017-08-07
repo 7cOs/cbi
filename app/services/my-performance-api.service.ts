@@ -3,21 +3,18 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import 'rxjs/add/operator/map';
 
-// tslint:disable-next-line:no-unused-variable
-import { EntityResponsibilitiesDTO } from '../models/entity-responsibilities-dto.model';
-import { PerformanceTotal } from '../models/performance-total.model';
-// tslint:disable-next-line:no-unused-variable
-import { RoleGroupPerformanceTotal } from '../models/role-groups.model';
+import { PerformanceTotal } from '../models/performance-total.model'; // tslint:disable-line:no-unused-variable
+import { RoleGroupPerformanceTotal } from '../models/role-groups.model'; // tslint:disable-line:no-unused-variable
 
 @Injectable()
 export class MyPerformanceApiService {
-  private url: string;
 
   constructor(private http: Http) { }
 
-  public getResponsibilities(personId: number): Observable<any> {
-    this.url = `/v3/people/${personId}/responsibilities`;
-    return this.http.get(`${this.url}`)
+  public getResponsibilities(positionId: number): Observable<any> {
+    const url = `/v3/positions/${ positionId }/responsibilities`;
+
+    return this.http.get(`${url}`)
       .map(res => res.json())
       .catch(err => this.handleError(new Error(err)));
   }
@@ -33,19 +30,19 @@ export class MyPerformanceApiService {
   }
 
   public getResponsibilityPerformanceTotal(positionId: number, entityType: string): Observable<RoleGroupPerformanceTotal|Error> {
-    this.url = `/v3/people/${ positionId }/responsibilities/${ entityType }/performanceTotal`;
+    const url = `/v3/positions/${ positionId }/responsibilities/${ entityType }/performanceTotal`;
 
-    return this.http.get(`${ this.url }`)
+    return this.http.get(`${ url }`)
       .map(res => {
         return { entityType: entityType, performanceTotal: res.json() };
       })
       .catch(err => this.handleError(new Error(err)));
   }
 
-  public getPerformanceTotal(personId: number): Observable<PerformanceTotal> {
-    this.url = `/v3/people/${personId}/performanceTotal`;
+  public getPerformanceTotal(positionId: number): Observable<PerformanceTotal> {
+    const url = `/v3/positions/${ positionId }/performanceTotal`;
 
-    return this.http.get(`${this.url}`)
+    return this.http.get(`${ url }`)
       .map(res => res.json())
       .catch(err => this.handleError(new Error(err)));
   }

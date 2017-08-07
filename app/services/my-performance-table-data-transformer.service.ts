@@ -39,7 +39,6 @@ export class MyPerformanceTableDataTransformerService {
   public getTotalRowDisplayData(performanceTotal: PerformanceTotal): MyPerformanceTableRow {
     return {
       descriptionRow0: 'Total',
-      descriptionRow1: '',
       metricColumn0: performanceTotal.total,
       metricColumn1: performanceTotal.totalYearAgo,
       metricColumn2: parseFloat((performanceTotal.total / performanceTotal.totalYearAgo).toFixed(1)),
