@@ -18,6 +18,7 @@ import { MyPerformanceTableRowComponent } from '../../shared/components/my-perfo
 import { SortIndicatorComponent } from '../../shared/components/sort-indicator/sort-indicator.component';
 import { PremiseTypeValue } from '../../enums/premise-type.enum';
 import { UtilService } from '../../services/util.service';
+import { initialState } from '../../state/reducers/my-performance.reducer';
 
 @Component({
   selector: 'my-performance-filter',
@@ -47,7 +48,7 @@ describe('MyPerformanceComponent', () => {
         MyPerformanceTableDataTransformerService,
         {
           provide: Store,
-          useValue: new MockStore({})
+          useValue: new MockStore(initialState)
         },
         UtilService
       ]

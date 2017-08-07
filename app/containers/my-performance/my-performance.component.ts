@@ -60,14 +60,17 @@ export class MyPerformanceComponent implements OnInit {
               private myPerformanceTableDataTransformerService: MyPerformanceTableDataTransformerService) {
     this.filterState$ = this.store.select(state => state.myPerformanceFilter);
     this.dateRanges$ = this.store.select(state => state.dateRanges);
-    this.store.select('myPerformance').subscribe((myPerformanceState: MyPerformanceState) => {
-      if (myPerformanceState.current.responsibilities && myPerformanceState.current.responsibilities.responsibilities) {
+    this.store.select(state => state.myPerformance).subscribe((myPerformanceState: MyPerformanceState) => {
+      if (myPerformanceState
+          && myPerformanceState.current.responsibilities
+          && myPerformanceState.current.responsibilities.responsibilities) {
         this.tableData = this.myPerformanceTableDataTransformerService
         .transformRoleGroupTableData(myPerformanceState.current.responsibilities.responsibilities);
+
+        this.currentState = myPerformanceState.current;
+        this.showLeftBackButton = myPerformanceState.versions.length > 0;
       }
 
-      this.currentState = myPerformanceState.current;
-      this.showLeftBackButton = myPerformanceState.versions.length > 0;
     });
   }
 

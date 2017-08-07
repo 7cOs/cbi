@@ -17,7 +17,7 @@ export interface MyPerformanceState extends State {
   versions: Array<MyPerformanceData>;
 }
 
-const initialState: MyPerformanceState = {
+export const initialState: MyPerformanceState = {
   current: {
     responsibilities: initialStateResponsibilities.initialState
   },
