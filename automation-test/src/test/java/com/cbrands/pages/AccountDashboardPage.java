@@ -19,6 +19,7 @@ public class AccountDashboardPage extends TestNGBasePage {
   private static final String LEFT_PANEL_XPATH = "//div[contains(@class, 'scorecard-table')]";
   private static final String RIGHT_PANEL_XPATH = "//div[contains(@class, 'scorecard-chart')]";
   private static final String RIGHT_PANEL_ROW_XPATH = ".//p[contains(@class, 'data-brand')]";
+  private static final String BACK_CHEVRON_XPATH = ".//span[contains(@class, 'back-chevron')]";
 
   private Log log = LogFactory.getLog(AccountDashboardPage.class);
 
@@ -161,6 +162,14 @@ public class AccountDashboardPage extends TestNGBasePage {
     final List<WebElement> elements = rightPanel.findElements(By.xpath(RIGHT_PANEL_ROW_XPATH));
     waitForElementsVisibleFluentWait(elements);
     return elements;
+  }
+
+  public AccountDashboardPage drillUpRightPanel() {
+    final WebElement backButton = rightPanel.findElement(By.xpath(BACK_CHEVRON_XPATH));
+    waitForVisibleFluentWait(backButton);
+    waitForElementToClickable(backButton, true).click();
+
+    return this;
   }
 
   public NotesModal clickNotesButton() {
