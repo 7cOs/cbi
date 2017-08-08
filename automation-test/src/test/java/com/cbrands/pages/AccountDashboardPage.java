@@ -163,7 +163,6 @@ public class AccountDashboardPage extends TestNGBasePage {
   public boolean isLeftPanelResultsLoaded() {
     boolean resultsAreLoaded;
 
-    waitForVisibleFluentWait(leftPanel);
     try {
       waitForVisibleFluentWait(leftPanel.findElement(By.xpath(".//tr[@ng-repeat]")));
       resultsAreLoaded = true;
@@ -174,17 +173,25 @@ public class AccountDashboardPage extends TestNGBasePage {
     return resultsAreLoaded;
   }
 
-  public boolean isRightPanelResultsLoaded() {
+  public boolean isRightPanelResultsLoadedFor(RightPanelLevel rightPanelLevel) {
     boolean resultsAreLoaded;
 
-    waitForVisibleFluentWait(rightPanel);
     try {
       waitForVisibleFluentWait(rightPanel.findElement(By.xpath(".//div[contains(@class, 'widget-row-container')]")));
-      resultsAreLoaded = true;
+
+      final WebElement panelHeader = rightPanel.findElement(By.xpath(".//div[@class='widget-subheader-item']/p"));
+      resultsAreLoaded = rightPanelLevel.name().equalsIgnoreCase(panelHeader.getText());
     } catch (NoSuchElementException e) {
       resultsAreLoaded = false;
     }
 
     return resultsAreLoaded;
+  }
+
+  public enum RightPanelLevel {
+    Distributors,
+    Accounts,
+    SubAccounts,
+    Stores
   }
 }
