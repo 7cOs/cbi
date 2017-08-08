@@ -10,8 +10,7 @@ export interface MyPerformanceFilterState extends MyPerformanceFilter {}
 export const initialState: MyPerformanceFilterState = {
   metric: MetricValue.DEPLETIONS,
   timePeriod: DateRangeTimePeriodValue.CYTDBDL,
-  premiseType: PremiseTypeValue.ALL,
-  distributionType: DistributionTypeValue.SIMPLE
+  premiseType: PremiseTypeValue.ALL
 };
 
 export function myPerformanceFilterReducer(
@@ -22,12 +21,15 @@ export function myPerformanceFilterReducer(
   switch (action.type) {
 
     case MyPerformanceFilterActions.SET_METRIC:
-      return Object.assign({}, state, {
+      const newState = {
         metric: action.payload,
         timePeriod: action.payload === MetricValue.DEPLETIONS ? DateRangeTimePeriodValue.CYTDBDL : DateRangeTimePeriodValue.L90BDL,
-        premiseType: action.payload === MetricValue.DEPLETIONS ? PremiseTypeValue.ALL : PremiseTypeValue.OFF,
-        distributionType: DistributionTypeValue.SIMPLE
-      });
+        premiseType: action.payload === MetricValue.DEPLETIONS ? PremiseTypeValue.ALL : PremiseTypeValue.OFF
+      };
+
+      if (action.payload === MetricValue.DISTRIBUTION) newState['distributionType'] = DistributionTypeValue.SIMPLE;
+
+      return newState;
 
     case MyPerformanceFilterActions.SET_TIME_PERIOD:
       return Object.assign({}, state, {

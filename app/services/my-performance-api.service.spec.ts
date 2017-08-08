@@ -1,11 +1,14 @@
+// tslint:disable:no-unused-variable
 import { BaseRequestOptions, Http, RequestMethod, Response, ResponseOptions } from '@angular/http';
 import { inject, TestBed } from '@angular/core/testing';
 import { MockBackend, MockConnection } from '@angular/http/testing';
+import { StoreModule } from '@ngrx/store';
 
 import { EntityPeopleType } from '../enums/entity-responsibilities.enum';
 import { getPerformanceTotalMock } from '../models/performance-total.model.mock';
 import { MyPerformanceApiService } from './my-performance-api.service';
 import { PerformanceTotal } from '../models/performance-total.model';
+import { RoleGroupPerformanceTotal } from '../models/role-groups.model';
 
 describe('Service: DateRangeApiService', () => {
   let myPerformanceApiService: MyPerformanceApiService;
@@ -33,12 +36,17 @@ describe('Service: DateRangeApiService', () => {
     ]
   };
   const mockPerformanceTotalResponse: PerformanceTotal = getPerformanceTotalMock();
+  const mockResponsibilityPerformanceTotalResponse: RoleGroupPerformanceTotal = {
+    entityType: 'Specialist',
+    performanceTotal: getPerformanceTotalMock()
+  };
 
   beforeEach(() => {
     TestBed.configureTestingModule({
+      imports: [
+        StoreModule.provideStore({})
+      ],
       providers: [
-        MockBackend,
-        BaseRequestOptions,
         {
           provide: Http,
           useFactory: (backendInstance: MockBackend, defaultOptions: BaseRequestOptions) => {
@@ -46,7 +54,9 @@ describe('Service: DateRangeApiService', () => {
           },
           deps: [ MockBackend, BaseRequestOptions ]
         },
-       MyPerformanceApiService
+        BaseRequestOptions,
+        MockBackend,
+        MyPerformanceApiService
       ]
     });
   });
@@ -61,7 +71,7 @@ describe('Service: DateRangeApiService', () => {
 
   describe('getResponsibilities', () => {
 
-    it('should call the search api and return all Date Ranges', (done) => {
+    it('should call the responsibilities endpoint and return all responsibilities', (done) => {
       mockBackend.connections.subscribe((connection: MockConnection) => {
         const options = new ResponseOptions({
           body: JSON.stringify(mockResponsibilitiesResponse)
@@ -82,7 +92,7 @@ describe('Service: DateRangeApiService', () => {
 
   describe('getPerformanceTotal', () => {
 
-    it ('should call the performanceTotal API and return performance data', (done) => {
+    it('should call the performanceTotal API and return performance data', (done) => {
       mockBackend.connections.subscribe((connection: MockConnection) => {
         const options = new ResponseOptions({
           body: JSON.stringify(mockPerformanceTotalResponse)
@@ -98,4 +108,24 @@ describe('Service: DateRangeApiService', () => {
       });
     });
   });
+
+  // describe('getResponsibilityPerformanceTotal', () => {
+
+  //   it('should call the responsibility performanceTotal endpoint and return performance data for the responsibility', (done) => {
+  //     mockBackend.connections.subscribe((connection: MockConnection) => {
+  //       const options = new ResponseOptions({
+  //         body: JSON.stringify(mockResponsibilityPerformanceTotalResponse)
+  //       });
+  //       connection.mockRespond(new Response(options));
+  //       expect(connection.request.method).toEqual(RequestMethod.Get);
+  //       expect(connection.request.url).toEqual('/v3/positions/1/responsibilities/Specialist/performanceTotal');
+  //     });
+
+  //     myPerformanceApiService.getResponsibilityPerformanceTotal(1, 'Specialist')
+  //       .subscribe((res) => {
+  //         expect(res).toEqual(mockResponsibilityPerformanceTotalResponse);
+  //         done();
+  //       });
+  //   });
+  // });
 });

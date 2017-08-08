@@ -56,6 +56,7 @@ describe('MyPerformanceComponent', () => {
 
     fixture = TestBed.createComponent(MyPerformanceComponent);
     store = fixture.debugElement.injector.get(Store);
+    fixture.detectChanges();
   });
 
   it('should trigger appropriate actions when the filter component emits an event', () => {

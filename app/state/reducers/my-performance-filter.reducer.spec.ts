@@ -13,8 +13,7 @@ describe('My Performance Filter Reducer', () => {
     const expectedState: MyPerformanceFilter = {
       metric: MetricValue.DEPLETIONS,
       timePeriod: DateRangeTimePeriodValue.CYTDBDL,
-      premiseType: PremiseTypeValue.ALL,
-      distributionType: DistributionTypeValue.SIMPLE
+      premiseType: PremiseTypeValue.ALL
     };
 
     expect(actualState).toEqual(expectedState);
@@ -40,8 +39,7 @@ describe('My Performance Filter Reducer', () => {
     const expectedState: MyPerformanceFilter = {
       metric: MetricValue.DEPLETIONS,
       timePeriod: DateRangeTimePeriodValue.CMIPBDL,
-      premiseType: PremiseTypeValue.ALL,
-      distributionType: DistributionTypeValue.SIMPLE
+      premiseType: PremiseTypeValue.ALL
     };
 
     expect(actualState).toEqual(expectedState);
@@ -52,8 +50,7 @@ describe('My Performance Filter Reducer', () => {
     const expectedState: MyPerformanceFilter = {
       metric: MetricValue.DEPLETIONS,
       timePeriod: DateRangeTimePeriodValue.CYTDBDL,
-      premiseType: PremiseTypeValue.ON,
-      distributionType: DistributionTypeValue.SIMPLE
+      premiseType: PremiseTypeValue.ON
     };
 
     expect(actualState).toEqual(expectedState);

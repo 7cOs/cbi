@@ -24,7 +24,7 @@ export class MyPerformanceTableDataTransformerService {
     });
   }
 
-  public getRoleGroupPerformanceTableData(performanceData: RoleGroupPerformanceTotal[]): MyPerformanceTableRow[] {
+  public getRoleGroupPerformanceTableData(performanceData: Array<RoleGroupPerformanceTotal>): Array<MyPerformanceTableRow> {
     return performanceData.map((performance: RoleGroupPerformanceTotal) => {
       return {
         descriptionRow0: performance.entityType,
