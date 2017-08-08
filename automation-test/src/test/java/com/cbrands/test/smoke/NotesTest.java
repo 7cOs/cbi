@@ -36,7 +36,7 @@ public class NotesTest extends BaseTestCase {
     notesModal = accountDashboardPage
       .enterRetailerChainSearchText(storeAccountName)
       .clickSearchForRetailerChain()
-      .selectRetailerChainByName(storeAccountName)
+      .selectRetailerChainFilterByName(storeAccountName)
       .clickApplyFilters()
       .drillIntoRightPanelWithName(storeAccountName)
       .drillIntoRightPanelWithName(storeAccountName)
