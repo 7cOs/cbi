@@ -6,5 +6,5 @@ export enum ActionStatus {
 }
 
 export interface State {
-  status?: ActionStatus;
+  status: ActionStatus;
 }

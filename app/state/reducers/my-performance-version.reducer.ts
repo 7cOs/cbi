@@ -1,6 +1,5 @@
-import * as MyPerformanceVersionActions from '../actions/my-performance-version.action';
-
 import { MyPerformanceData, MyPerformanceState } from './my-performance.reducer';
+import * as MyPerformanceVersionActions from '../actions/my-performance-version.action';
 
 export const initialState: Array<MyPerformanceData> = Array<MyPerformanceData>();
 
@@ -11,16 +10,17 @@ export function myPerformanceVersionReducer(
   switch (action.type) {
 
     case MyPerformanceVersionActions.SAVE_MY_PERFORMANCE_STATE_ACTION:
-      state.versions.push(action.payload);
+      const versionsUpdated = [...state.versions];
+      versionsUpdated.push(action.payload);
       return {
         current: {
           responsibilities: state.current.responsibilities
         },
-        versions: state.versions
+        versions: versionsUpdated
       };
 
     case MyPerformanceVersionActions.RESTORE_MY_PERFORMANCE_STATE_ACTION:
-      const lastState = state.versions.pop(); // Do I need to use Object.assign?
+      const lastState = [...state.versions].pop();
       return lastState ?
       {
         current: {
