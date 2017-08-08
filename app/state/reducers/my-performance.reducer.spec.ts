@@ -1,49 +1,36 @@
-import * as Chance from 'chance';
-
-import { ActionStatus } from '../../enums/action-status.enum';
 import { myPerformanceReducer, initialState } from './my-performance.reducer';
 import * as MyPerformanceVersionActions from '../actions/my-performance-version.action';
-
-let chance = new Chance();
+import * as myPerformanceVersion from './my-performance-version.reducer';
+import * as responsibilities from './responsibilities.reducer';
+import * as ResponsibilitiesActions from '../actions/responsibilities.action';
 
 describe('My Performance Reducer', () => {
 
-  it('should not modify the initial state when a save action is dispatched', () => {
-    const savedObject = {'key': chance.string()};
-    myPerformanceReducer(initialState, new MyPerformanceVersionActions.SaveMyPerformanceStateAction(savedObject));
+  let myPerformanceVersionReducerSpy: jasmine.Spy;
+  let responsibilitiesReducerSpy: jasmine.Spy;
 
-    expect(initialState.versions.length).toBe(0);
+  beforeEach(() => {
+    myPerformanceVersionReducerSpy = spyOn(myPerformanceVersion, 'myPerformanceVersionReducer').and.callThrough();
+    responsibilitiesReducerSpy = spyOn(responsibilities, 'responsibilitiesReducer').and.callThrough();
   });
 
-  it('should save the current state when a save action is dispatched', () => {
-    const savedObject = {'key': chance.string()};
-    const newState = myPerformanceReducer(initialState, new MyPerformanceVersionActions.SaveMyPerformanceStateAction(savedObject));
-
-    expect(newState.current).toEqual(initialState.current);
-    expect(newState.versions.length).toBe(1);
-    expect(newState.versions[0]).toBe(savedObject);
-  });
-
-  it('should not modify the initial state when a restore action is dispatched', () => {
-    const savedObject = {'key': chance.string()};
-    initialState.versions.push(savedObject);
+  it('should call the versioning reducer when a versioning action is received', () => {
+    myPerformanceReducer(initialState, new MyPerformanceVersionActions.SaveMyPerformanceStateAction({}));
     myPerformanceReducer(initialState, new MyPerformanceVersionActions.RestoreMyPerformanceStateAction());
 
-    expect(initialState.versions.length).toBe(1);
+    expect(myPerformanceVersionReducerSpy).toHaveBeenCalled();
+    expect(myPerformanceVersionReducerSpy.calls.count()).toBe(2);
+    expect(responsibilitiesReducerSpy).not.toHaveBeenCalled();
   });
 
-  it('should update the current state when a restore action is dispatched', () => {
-    const savedObject = {
-      responsibilities: {
-        status: ActionStatus.Fetched,
-        responsibilities: chance.string()
-      }
-    };
+  it('should call the responsibilities reducer when a responsibility action is received', () => {
+    myPerformanceReducer(initialState, new ResponsibilitiesActions.FetchResponsibilitiesAction(0));
+    myPerformanceReducer(initialState, new ResponsibilitiesActions.FetchResponsibilitiesSuccessAction({}));
+    myPerformanceReducer(initialState, new ResponsibilitiesActions.FetchResponsibilitiesFailureAction(new Error()));
 
-    initialState.versions.push(savedObject);
-    const newState = myPerformanceReducer(initialState, new MyPerformanceVersionActions.RestoreMyPerformanceStateAction());
-
-    expect(newState.current).toEqual(savedObject);
+    expect(responsibilitiesReducerSpy).toHaveBeenCalled();
+    expect(responsibilitiesReducerSpy.calls.count()).toBe(3);
+    expect(myPerformanceVersionReducerSpy).not.toHaveBeenCalled();
   });
 
   it('should return current state when an unknown action is dispatched', () => {
