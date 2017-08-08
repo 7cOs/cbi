@@ -52,6 +52,41 @@ public class AccountDashboardTest extends BaseTestCase {
 
   @Test(description = "Drill all the way down the account hierarchy and drill back up")
   public void drillDownUpAccounts() {
-    Assert.fail("Test not implemented");
+    drillRightPanelToBottom();
+//    drillRightPanelToTop();
   }
+
+  private void drillRightPanelToBottom() {
+    accountDashboardPage.drillIntoFirstRowInRightPanel();
+    Assert.assertTrue(
+      accountDashboardPage.isRightPanelResultsLoadedFor(RightPanelLevel.Accounts),
+      "Right panel failed to load accounts for selected distributor"
+    );
+    Assert.assertTrue(
+      accountDashboardPage.isLeftPanelResultsLoaded(),
+      "Left brands panel failed to load results"
+    );
+
+    accountDashboardPage.drillIntoFirstRowInRightPanel();
+    Assert.assertTrue(
+      accountDashboardPage.isRightPanelResultsLoadedFor(RightPanelLevel.SubAccounts),
+      "Right panel failed to load subaccounts for selected account"
+    );
+    Assert.assertTrue(
+      accountDashboardPage.isLeftPanelResultsLoaded(),
+      "Left brands panel failed to reload for subaccounts"
+    );
+
+    accountDashboardPage.drillIntoFirstRowInRightPanel();
+    Assert.assertTrue(
+      accountDashboardPage.isRightPanelResultsLoadedFor(RightPanelLevel.Stores),
+      "Right accounts panel failed to load stores for selected subaccount"
+    );
+    Assert.assertTrue(
+      accountDashboardPage.isLeftPanelResultsLoaded(),
+      "Left brands panel failed to reload for stores"
+    );
+  }
+
+
 }

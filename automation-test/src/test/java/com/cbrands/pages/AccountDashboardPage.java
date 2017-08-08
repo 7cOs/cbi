@@ -16,6 +16,9 @@ import java.util.List;
 import static com.cbrands.helper.SeleniumUtils.*;
 
 public class AccountDashboardPage extends TestNGBasePage {
+  private static final String LEFT_PANEL_XPATH = "//div[contains(@class, 'scorecard-table')]";
+  private static final String RIGHT_PANEL_XPATH = "//div[contains(@class, 'scorecard-chart')]";
+  private static final String RIGHT_PANEL_ROW_XPATH = ".//p[contains(@class, 'data-brand')]";
 
   private Log log = LogFactory.getLog(AccountDashboardPage.class);
 
@@ -33,10 +36,10 @@ public class AccountDashboardPage extends TestNGBasePage {
   @FindBy(css = "md-content._md div div.ng-scope div:nth-of-type(3) div:nth-of-type(2) div.apply-filters button.btn-action")
   private WebElement applyFilters;
 
-  @FindBy(how = How.XPATH, using = "//div[contains(@class, 'scorecard-table')]")
+  @FindBy(how = How.XPATH, using = LEFT_PANEL_XPATH)
   private WebElement leftPanel;
 
-  @FindBy(how = How.XPATH, using = "//div[contains(@class, 'scorecard-chart')]")
+  @FindBy(how = How.XPATH, using = RIGHT_PANEL_XPATH)
   private WebElement rightPanel;
 
   public AccountDashboardPage(WebDriver driver) {
@@ -139,17 +142,25 @@ public class AccountDashboardPage extends TestNGBasePage {
     return this;
   }
 
-  public AccountDashboardPage drillIntoRightPanelWithName(String name) {
-    final List<WebElement> elements = findElements(By.xpath(
-      "//div[@class='scorecard-chart']//p[contains(@class, 'data-brand')]"));
-    waitForElementsVisibleFluentWait(elements);
+  public AccountDashboardPage drillIntoFirstRowInRightPanel() {
+    scrollToAndClick(rightPanel.findElement(By.xpath(RIGHT_PANEL_ROW_XPATH)));
+    return this;
+  }
 
+  public AccountDashboardPage drillIntoRightPanelWithName(String name) {
+    final List<WebElement> elements = getRightPanelRows();
     final WebElement element = getFirstElementTextMatchByName(name, elements);
     Assert.assertNotNull(element, "No item found by name: " + name);
 
     scrollToAndClick(element);
 
     return this;
+  }
+
+  private List<WebElement> getRightPanelRows() {
+    final List<WebElement> elements = rightPanel.findElements(By.xpath(RIGHT_PANEL_ROW_XPATH));
+    waitForElementsVisibleFluentWait(elements);
+    return elements;
   }
 
   public NotesModal clickNotesButton() {
