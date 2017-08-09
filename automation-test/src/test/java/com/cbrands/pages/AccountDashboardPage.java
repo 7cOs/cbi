@@ -16,8 +16,6 @@ import java.util.List;
 import static com.cbrands.helper.SeleniumUtils.*;
 
 public class AccountDashboardPage extends TestNGBasePage {
-  private static final String LEFT_PANEL_XPATH = "//div[contains(@class, 'scorecard-table')]";
-  private static final String RIGHT_PANEL_XPATH = "//div[contains(@class, 'scorecard-chart')]";
   private static final String RIGHT_PANEL_ROW_XPATH = ".//p[contains(@class, 'data-brand')]";
   private static final String BACK_CHEVRON_XPATH = ".//span[contains(@class, 'back-chevron')]";
 
@@ -37,10 +35,10 @@ public class AccountDashboardPage extends TestNGBasePage {
   @FindBy(css = "md-content._md div div.ng-scope div:nth-of-type(3) div:nth-of-type(2) div.apply-filters button.btn-action")
   private WebElement applyFilters;
 
-  @FindBy(how = How.XPATH, using = LEFT_PANEL_XPATH)
+  @FindBy(how = How.XPATH, using = "//div[contains(@class, 'scorecard-table')]")
   private WebElement leftPanel;
 
-  @FindBy(how = How.XPATH, using = RIGHT_PANEL_XPATH)
+  @FindBy(how = How.XPATH, using = "//div[contains(@class, 'scorecard-chart')]")
   private WebElement rightPanel;
 
   public AccountDashboardPage(WebDriver driver) {
