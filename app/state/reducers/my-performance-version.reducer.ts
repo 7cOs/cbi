@@ -21,9 +21,7 @@ export function myPerformanceVersionReducer(
       const lastState = [...state.versions].pop();
       return lastState ?
       {
-        current: {
-          responsibilities: lastState.responsibilities
-        },
+        current: lastState,
         versions: state.versions
       }
       : state;
