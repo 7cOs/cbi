@@ -291,7 +291,8 @@ module.exports = /*  @ngInject */
       premiseTypeValue: {
         'ON PREMISE': 'on',
         'OFF PREMISE': 'off',
-        'NON RETAIL': 'all'
+        'NON RETAIL': 'nonretail',
+        'ALL': 'all'
       },
       premiseTypeDisplay: {
         'ON PREMISE': 'ON',
