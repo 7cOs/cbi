@@ -1,5 +1,5 @@
 export enum MetricValue {
-  DEPLETIONS = <any>'depletions',
-  DISTRIBUTION = <any>'distribution',
+  DEPLETIONS = <any>'volume',
+  DISTRIBUTION = <any>'PointsOfDistribution',
   VELOCITY = <any>'velocity'
 }

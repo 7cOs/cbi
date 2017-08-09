@@ -45,7 +45,7 @@ export class MyPerformanceApiService {
     const url = `/v3/positions/${ positionId }/responsibilities/${ entityType }/performanceTotal`;
 
     return this.http.get(`${ url }`, {
-      params: this.filterState
+      params: this.getFilterStateParams(this.filterState)
     })
       .map(res => ({ entityType: entityType, performanceTotal: res.json() }))
       .catch(err => this.handleError(new Error(err)));
@@ -55,10 +55,22 @@ export class MyPerformanceApiService {
     const url = `/v3/positions/${ positionId }/performanceTotal`;
 
     return this.http.get(`${ url }`, {
-      params: this.filterState
+      params: this.getFilterStateParams(this.filterState)
     })
     .map(res => res.json())
     .catch(err => this.handleError(new Error(err)));
+  }
+
+  public getFilterStateParams(filterState: MyPerformanceFilterState): any {
+    if (filterState && filterState.distributionType) {
+      return {
+        metricType: filterState.distributionType + filterState.metricType,
+        dateRangeCode: filterState.dateRangeCode,
+        premiseType: filterState.premiseType
+      };
+    }
+
+    return filterState;
   }
 
   private handleError(err: Error): Observable<Error> {

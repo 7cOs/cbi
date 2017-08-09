@@ -9,8 +9,9 @@ import { ResponsibilitiesEffects } from './responsibilities.effect';
 import { ResponsibilitiesTransformerService } from '../../services/responsibilities-transformer.service';
 import { FetchResponsibilitiesAction,
          FetchResponsibilitiesFailureAction,
+         FetchResponsibilitiesPerformanceTotalsSuccess,
          FetchResponsibilitiesSuccessAction } from '../actions/responsibilities.action';
-import { getMockRoleGroups } from '../../models/role-groups.model.mock';
+import { getMockRoleGroups, getMockRoleGroupPerformanceTotals } from '../../models/role-groups.model.mock';
 
 const chance = new Chance();
 
@@ -21,6 +22,7 @@ describe('Responsibilities Effects', () => {
     positionId: positionIdMock,
     responsibilities: roleGroupsMock
   };
+  const mockRoleGroupPerformanceTotals = getMockRoleGroupPerformanceTotals();
   const err = new Error(chance.string());
 
   let runner: EffectsRunner;
@@ -28,6 +30,9 @@ describe('Responsibilities Effects', () => {
   let myPerformanceApiServiceMock = {
     getResponsibilities() {
       return Observable.of(getResponsibilitiesResponseMock);
+    },
+    getResponsibilitiesPerformanceTotals() {
+      return Observable.of(mockRoleGroupPerformanceTotals);
     }
   };
   let responsibilitiesTransformerServiceMock = {
@@ -113,6 +118,46 @@ describe('Responsibilities Effects', () => {
       responsibilitiesEffects.fetchVersionFailure$().subscribe(() => {
         expect(console.error).toHaveBeenCalled();
         done();
+      });
+    });
+  });
+
+  describe('when a FetchResponsibilitiesSuccessAction is received', () => {
+
+    describe('when getResponsibilitiesPerformanceTotals returns successfully', () => {
+      let myPerformanceApiService: MyPerformanceApiService;
+
+      beforeEach(inject([ MyPerformanceApiService ],
+        (_myPerformanceApiService: MyPerformanceApiService) => {
+          myPerformanceApiService = _myPerformanceApiService;
+          runner.queue(new FetchResponsibilitiesSuccessAction(getResponsibilitiesResponseMock));
+        }
+      ));
+
+      it('should return a FetchResponsibilitiesPerformanceTotalsSuccess action', (done) => {
+        responsibilitiesEffects.fetchResponsibilitiesPerformanceTotals$().subscribe(result => {
+          expect(result).toEqual(new FetchResponsibilitiesPerformanceTotalsSuccess(mockRoleGroupPerformanceTotals));
+          done();
+        });
+      });
+    });
+
+    describe('when getResponsibilitiesPerformanceTotals returns an error', () => {
+      let myPerformanceApiService: MyPerformanceApiService;
+
+      beforeEach(inject([ MyPerformanceApiService ],
+        (_myPerformanceApiService: MyPerformanceApiService) => {
+          myPerformanceApiService = _myPerformanceApiService;
+          runner.queue(new FetchResponsibilitiesSuccessAction(getResponsibilitiesResponseMock));
+        }
+      ));
+
+      it('should return a FetchVersionFailureAction after catching an error', (done) => {
+        spyOn(myPerformanceApiService, 'getResponsibilitiesPerformanceTotals').and.returnValue(Observable.throw(err));
+        responsibilitiesEffects.fetchResponsibilitiesPerformanceTotals$().subscribe((result) => {
+          expect(result).toEqual(new FetchResponsibilitiesFailureAction(err));
+          done();
+        });
       });
     });
   });

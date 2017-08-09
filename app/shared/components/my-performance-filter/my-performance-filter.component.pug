@@ -3,32 +3,32 @@ section.filter-component-section
   //- Metric Select
   div
     compass-select(
-      [model]="filterState.metric",
+      [model]="filterState.metricType",
       [options]="metricOptions",
       [title]="'metric'",
       (onOptionSelected)="filterSelected(myPerformanceFilterActionType.Metric, $event)"
     )
 
   //- Time Period Select (Depletions)
-  div(*ngIf="filterState.metric === metricValue.DEPLETIONS")
+  div(*ngIf="filterState.metricType === metricValue.DEPLETIONS")
     compass-select(
-      [model]="filterState.timePeriod",
+      [model]="filterState.dateRangeCode",
       [options]="depletionTimePeriodOptions",
       [title]="'time period'",
       (onOptionSelected)="filterSelected(myPerformanceFilterActionType.TimePeriod, $event)"
     )
 
   //- Time Period Select (Distribution)
-  div(*ngIf="filterState.metric !== metricValue.DEPLETIONS")
+  div(*ngIf="filterState.metricType !== metricValue.DEPLETIONS")
     compass-select(
-      [model]="filterState.timePeriod",
+      [model]="filterState.dateRangeCode",
       [options]="distributionTimePeriodOptions",
       [title]="'time period'",
       (onOptionSelected)="filterSelected(myPerformanceFilterActionType.TimePeriod, $event)"
     )
 
   //- Premise Type Radio (Depletions)
-  div(*ngIf="filterState.metric === metricValue.DEPLETIONS")
+  div(*ngIf="filterState.metricType === metricValue.DEPLETIONS")
     compass-radio(
       [model]="filterState.premiseType",
       [options]="depletionsPremiseOptions",
@@ -38,17 +38,17 @@ section.filter-component-section
     )
 
   //- Premise Type Radio (Distribution)
-  div(*ngIf="filterState.metric !== metricValue.DEPLETIONS")
+  div(*ngIf="filterState.metricType !== metricValue.DEPLETIONS")
     compass-radio(
       [model]="filterState.premiseType",
       [options]="distributionPremiseOptions",
       [title]="'premise type'",
-      [stacked]="filterState.metric === metricValue.DISTRIBUTION",
+      [stacked]="filterState.metricType === metricValue.DISTRIBUTION",
       (onRadioClicked)="filterSelected(myPerformanceFilterActionType.PremiseType, $event)"
     )
 
   //- Distribution Type Radio
-  div(*ngIf="filterState.metric === metricValue.DISTRIBUTION")
+  div(*ngIf="filterState.metricType === metricValue.DISTRIBUTION")
     compass-radio(
       [model]="filterState.distributionType",
       [options]="distributionOptions",

@@ -11,8 +11,8 @@ describe('My Performance Filter Reducer', () => {
   it('should set the metric and set correct default timePeriod and premiseType values when SET_METRIC "DEPLETIONS" is dispatched', () => {
     const actualState = myPerformanceFilterReducer(initialState, new MyPerformanceFilterActions.SetMetric(MetricValue.DEPLETIONS));
     const expectedState: MyPerformanceFilter = {
-      metric: MetricValue.DEPLETIONS,
-      timePeriod: DateRangeTimePeriodValue.CYTDBDL,
+      metricType: MetricValue.DEPLETIONS,
+      dateRangeCode: DateRangeTimePeriodValue.CYTDBDL,
       premiseType: PremiseTypeValue.ALL
     };
 
@@ -22,8 +22,8 @@ describe('My Performance Filter Reducer', () => {
   it('should set the metric and set correct default timePeriod and premiseType values when SET_METRIC "DISTRIBUTION" is dispatched', () => {
     const actualState = myPerformanceFilterReducer(initialState, new MyPerformanceFilterActions.SetMetric(MetricValue.DISTRIBUTION));
     const expectedState: MyPerformanceFilter = {
-      metric: MetricValue.DISTRIBUTION,
-      timePeriod: DateRangeTimePeriodValue.L90BDL,
+      metricType: MetricValue.DISTRIBUTION,
+      dateRangeCode: DateRangeTimePeriodValue.L90BDL,
       premiseType: PremiseTypeValue.OFF,
       distributionType: DistributionTypeValue.SIMPLE
     };
@@ -37,8 +37,8 @@ describe('My Performance Filter Reducer', () => {
       new MyPerformanceFilterActions.SetTimePeriod(DateRangeTimePeriodValue.CMIPBDL)
     );
     const expectedState: MyPerformanceFilter = {
-      metric: MetricValue.DEPLETIONS,
-      timePeriod: DateRangeTimePeriodValue.CMIPBDL,
+      metricType: MetricValue.DEPLETIONS,
+      dateRangeCode: DateRangeTimePeriodValue.CMIPBDL,
       premiseType: PremiseTypeValue.ALL
     };
 
@@ -48,8 +48,8 @@ describe('My Performance Filter Reducer', () => {
   it('should set the premiseType when SET_PREMISE_TYPE is dispatched', () => {
     const actualState = myPerformanceFilterReducer(initialState, new MyPerformanceFilterActions.SetPremiseType(PremiseTypeValue.ON));
     const expectedState: MyPerformanceFilter = {
-      metric: MetricValue.DEPLETIONS,
-      timePeriod: DateRangeTimePeriodValue.CYTDBDL,
+      metricType: MetricValue.DEPLETIONS,
+      dateRangeCode: DateRangeTimePeriodValue.CYTDBDL,
       premiseType: PremiseTypeValue.ON
     };
 
@@ -62,8 +62,8 @@ describe('My Performance Filter Reducer', () => {
       new MyPerformanceFilterActions.SetDistributionType(DistributionTypeValue.EFFECTIVE)
     );
     const expectedState: MyPerformanceFilter = {
-      metric: MetricValue.DEPLETIONS,
-      timePeriod: DateRangeTimePeriodValue.CYTDBDL,
+      metricType: MetricValue.DEPLETIONS,
+      dateRangeCode: DateRangeTimePeriodValue.CYTDBDL,
       premiseType: PremiseTypeValue.ALL,
       distributionType: DistributionTypeValue.EFFECTIVE
     };

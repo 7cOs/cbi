@@ -8,8 +8,8 @@ import { PremiseTypeValue } from '../../enums/premise-type.enum';
 export interface MyPerformanceFilterState extends MyPerformanceFilter {}
 
 export const initialState: MyPerformanceFilterState = {
-  metric: MetricValue.DEPLETIONS,
-  timePeriod: DateRangeTimePeriodValue.CYTDBDL,
+  metricType: MetricValue.DEPLETIONS,
+  dateRangeCode: DateRangeTimePeriodValue.CYTDBDL,
   premiseType: PremiseTypeValue.ALL
 };
 
@@ -22,8 +22,8 @@ export function myPerformanceFilterReducer(
 
     case MyPerformanceFilterActions.SET_METRIC:
       const newState = {
-        metric: action.payload,
-        timePeriod: action.payload === MetricValue.DEPLETIONS ? DateRangeTimePeriodValue.CYTDBDL : DateRangeTimePeriodValue.L90BDL,
+        metricType: action.payload,
+        dateRangeCode: action.payload === MetricValue.DEPLETIONS ? DateRangeTimePeriodValue.CYTDBDL : DateRangeTimePeriodValue.L90BDL,
         premiseType: action.payload === MetricValue.DEPLETIONS ? PremiseTypeValue.ALL : PremiseTypeValue.OFF
       };
 
@@ -33,7 +33,7 @@ export function myPerformanceFilterReducer(
 
     case MyPerformanceFilterActions.SET_TIME_PERIOD:
       return Object.assign({}, state, {
-        timePeriod: action.payload
+        dateRangeCode: action.payload
       });
 
     case MyPerformanceFilterActions.SET_PREMISE_TYPE:

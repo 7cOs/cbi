@@ -9,7 +9,7 @@ import { MyPerformanceApiService } from './my-performance-api.service';
 import { PerformanceTotal } from '../models/performance-total.model';
 import { RoleGroupPerformanceTotal } from '../models/role-groups.model';
 
-describe('Service: DateRangeApiService', () => {
+describe('Service: MyPerformanceApiService', () => {
   let myPerformanceApiService: MyPerformanceApiService;
   let mockBackend: MockBackend;
   const mockResponsibilitiesResponse: any = {
@@ -88,13 +88,19 @@ describe('Service: DateRangeApiService', () => {
   describe('getPerformanceTotal', () => {
 
     it('should call the performanceTotal API and return performance data', (done) => {
+      spyOn(myPerformanceApiService, 'getFilterStateParams').and.returnValue({
+        metricType: 'volume',
+        dateRangeCode: 'CYTDBDL',
+        premiseType: 'All'
+      });
+
       mockBackend.connections.subscribe((connection: MockConnection) => {
         const options = new ResponseOptions({
           body: JSON.stringify(mockPerformanceTotalResponse)
         });
         connection.mockRespond(new Response(options));
         expect(connection.request.method).toEqual(RequestMethod.Get);
-        expect(connection.request.url).toEqual('/v3/positions/1/performanceTotal');
+        expect(connection.request.url).toEqual('/v3/positions/1/performanceTotal?metricType=volume&dateRangeCode=CYTDBDL&premiseType=All');
       });
 
       myPerformanceApiService.getPerformanceTotal(1).subscribe((response: PerformanceTotal) => {
@@ -107,6 +113,15 @@ describe('Service: DateRangeApiService', () => {
   describe('getResponsibilityPerformanceTotal', () => {
 
     it('should call the responsibility performanceTotal endpoint and return performance data for the responsibility', (done) => {
+      const expectedBaseUrl = '/v3/positions/1/responsibilities/Specialist/performanceTotal';
+      const expectedUrlParams = '?metricType=simplePointsOfDistribution&dateRangeCode=LCM&premiseType=Off';
+
+      spyOn(myPerformanceApiService, 'getFilterStateParams').and.returnValue({
+        metricType: 'simplePointsOfDistribution',
+        dateRangeCode: 'LCM',
+        premiseType: 'Off'
+      });
+
       mockBackend.connections.subscribe((connection: MockConnection) => {
         const options = new ResponseOptions({
           body: JSON.stringify(mockPerformanceTotalResponse)
@@ -114,7 +129,7 @@ describe('Service: DateRangeApiService', () => {
 
         connection.mockRespond(new Response(options));
         expect(connection.request.method).toEqual(RequestMethod.Get);
-        expect(connection.request.url).toEqual('/v3/positions/1/responsibilities/Specialist/performanceTotal');
+        expect(connection.request.url).toEqual(expectedBaseUrl + expectedUrlParams);
       });
 
       myPerformanceApiService.getResponsibilityPerformanceTotal(1, 'Specialist')
@@ -129,6 +144,13 @@ describe('Service: DateRangeApiService', () => {
 
     it('should call the responsibility performanceTotal endpoint for each entity and return an array of performance data', (done) => {
       const entityArray: Array<string> = ['Specialist', 'MDM'];
+      const expectedUrlParams = '?metricType=effectivePointsOfDistribution&dateRangeCode=FYTDBDL&premiseType=On';
+
+      spyOn(myPerformanceApiService, 'getFilterStateParams').and.returnValue({
+        metricType: 'effectivePointsOfDistribution',
+        dateRangeCode: 'FYTDBDL',
+        premiseType: 'On'
+      });
 
       mockBackend.connections.subscribe((connection: MockConnection) => {
         const options = new ResponseOptions({
@@ -151,7 +173,8 @@ describe('Service: DateRangeApiService', () => {
       expect(mockBackend.connectionsArray.length).toBe(entityArray.length);
 
       mockBackend.connectionsArray.forEach((connection: MockConnection, index) => {
-        expect(connection.request.url).toEqual(`/v3/positions/1/responsibilities/${ entityArray[index] }/performanceTotal`);
+        expect(connection.request.url)
+        .toEqual(`/v3/positions/1/responsibilities/${ entityArray[index] }/performanceTotal` + expectedUrlParams);
       });
     });
   });

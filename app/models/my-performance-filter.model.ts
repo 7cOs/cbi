@@ -7,8 +7,8 @@ import { MetricValue } from '../enums/metric-type.enum';
 import { PremiseTypeValue } from '../enums/premise-type.enum';
 
 export interface MyPerformanceFilter {
-  metric: MetricValue;
-  timePeriod: DateRangeTimePeriodValue;
+  metricType: MetricValue;
+  dateRangeCode: DateRangeTimePeriodValue;
   premiseType: PremiseTypeValue;
   distributionType?: DistributionTypeValue;
 }

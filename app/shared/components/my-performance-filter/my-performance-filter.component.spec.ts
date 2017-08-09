@@ -14,14 +14,14 @@ import { MyPerformanceFilterState } from '../../../state/reducers/my-performance
 import { PremiseTypeValue } from '../../../enums/premise-type.enum';
 
 const initialStateMock: MyPerformanceFilterState = {
-  metric: MetricValue.DEPLETIONS,
-  timePeriod: DateRangeTimePeriodValue.CYTDBDL,
+  metricType: MetricValue.DEPLETIONS,
+  dateRangeCode: DateRangeTimePeriodValue.CYTDBDL,
   premiseType: PremiseTypeValue.ALL,
   distributionType: DistributionTypeValue.SIMPLE
 };
 const updatedStateMock: MyPerformanceFilterState = {
-  metric: MetricValue.DISTRIBUTION,
-  timePeriod: DateRangeTimePeriodValue.L90BDL,
+  metricType: MetricValue.DISTRIBUTION,
+  dateRangeCode: DateRangeTimePeriodValue.L90BDL,
   premiseType: PremiseTypeValue.OFF,
   distributionType: DistributionTypeValue.SIMPLE
 };

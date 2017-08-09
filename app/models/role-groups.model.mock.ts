@@ -9,7 +9,7 @@ export function getMockRoleGroups(): RoleGroups {
   };
 }
 
-export function getMockRoleGroupPerformanceTotals(): RoleGroupPerformanceTotal[] {
+export function getMockRoleGroupPerformanceTotals(): Array<RoleGroupPerformanceTotal> {
   return [
     { entityType: 'Specialist', performanceTotal: getPerformanceTotalMock() },
     { entityType: 'MDM', performanceTotal: getPerformanceTotalMock() }
