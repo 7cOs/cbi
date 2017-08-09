@@ -31,7 +31,7 @@ export class MyPerformanceApiService {
       .catch(err => this.handleError(new Error(err)));
   }
 
-  public getResponsibilitiesPerformanceTotal(positionId: number, entityType: Array<string>): Observable<RoleGroupPerformanceTotal[]> {
+  public getResponsibilitiesPerformanceTotals(positionId: number, entityType: Array<string>): Observable<RoleGroupPerformanceTotal[]> {
     const apiCalls: any[] = [];
 
     entityType.forEach((entity: string) => {

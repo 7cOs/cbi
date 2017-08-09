@@ -11,7 +11,7 @@ import * as PerformanceTotalActions from '../actions/performance-total.action';
 
 const chance = new Chance();
 
-fdescribe('Performance Total Effects', () => {
+describe('Performance Total Effects', () => {
   const positionIdMock = chance.natural();
   const performanceTotalMock: PerformanceTotal = getPerformanceTotalMock();
   const error = new Error(chance.string());

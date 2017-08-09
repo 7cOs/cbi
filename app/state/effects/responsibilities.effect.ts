@@ -49,7 +49,7 @@ export class ResponsibilitiesEffects {
         const positionId = action.payload.positionId;
         const entityTypes = Object.keys(action.payload.responsibilities);
 
-        return this.myPerformanceApiService.getResponsibilitiesPerformanceTotal(positionId, entityTypes)
+        return this.myPerformanceApiService.getResponsibilitiesPerformanceTotals(positionId, entityTypes)
           .map((response: RoleGroupPerformanceTotal[]) => {
             return new ResponsibilitiesActions.FetchResponsibilitiesPerformanceTotalsSuccess(response);
           })

@@ -1,4 +1,3 @@
-// tslint:disable:no-unused-variable
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { Store } from '@ngrx/store';
@@ -9,7 +8,6 @@ import { AppState } from '../../state/reducers/root.reducer';
 import { ColumnType } from '../../enums/column-type.enum';
 import { DateRange } from '../../models/date-range.model';
 import { DateRangesState } from '../../state/reducers/date-ranges.reducer';
-import { FetchPerformanceTotalAction } from '../../state/actions/performance-total.action';
 import { FetchResponsibilitiesAction } from '../../state/actions/responsibilities.action';
 import { getDateRangeMock } from '../../models/date-range.model.mock';
 import { MyPerformanceFilterActionType } from '../../enums/my-performance-filter.enum';

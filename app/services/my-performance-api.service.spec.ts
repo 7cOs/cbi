@@ -1,4 +1,3 @@
-// tslint:disable:no-unused-variable
 import { BaseRequestOptions, Http, RequestMethod, Response, ResponseOptions } from '@angular/http';
 import { inject, TestBed } from '@angular/core/testing';
 import { MockBackend, MockConnection } from '@angular/http/testing';
@@ -36,10 +35,6 @@ describe('Service: DateRangeApiService', () => {
     ]
   };
   const mockPerformanceTotalResponse: PerformanceTotal = getPerformanceTotalMock();
-  const mockResponsibilityPerformanceTotalResponse: RoleGroupPerformanceTotal = {
-    entityType: 'Specialist',
-    performanceTotal: getPerformanceTotalMock()
-  };
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -109,23 +104,55 @@ describe('Service: DateRangeApiService', () => {
     });
   });
 
-  // describe('getResponsibilityPerformanceTotal', () => {
+  describe('getResponsibilityPerformanceTotal', () => {
 
-  //   it('should call the responsibility performanceTotal endpoint and return performance data for the responsibility', (done) => {
-  //     mockBackend.connections.subscribe((connection: MockConnection) => {
-  //       const options = new ResponseOptions({
-  //         body: JSON.stringify(mockResponsibilityPerformanceTotalResponse)
-  //       });
-  //       connection.mockRespond(new Response(options));
-  //       expect(connection.request.method).toEqual(RequestMethod.Get);
-  //       expect(connection.request.url).toEqual('/v3/positions/1/responsibilities/Specialist/performanceTotal');
-  //     });
+    it('should call the responsibility performanceTotal endpoint and return performance data for the responsibility', (done) => {
+      mockBackend.connections.subscribe((connection: MockConnection) => {
+        const options = new ResponseOptions({
+          body: JSON.stringify(mockPerformanceTotalResponse)
+        });
 
-  //     myPerformanceApiService.getResponsibilityPerformanceTotal(1, 'Specialist')
-  //       .subscribe((res) => {
-  //         expect(res).toEqual(mockResponsibilityPerformanceTotalResponse);
-  //         done();
-  //       });
-  //   });
-  // });
+        connection.mockRespond(new Response(options));
+        expect(connection.request.method).toEqual(RequestMethod.Get);
+        expect(connection.request.url).toEqual('/v3/positions/1/responsibilities/Specialist/performanceTotal');
+      });
+
+      myPerformanceApiService.getResponsibilityPerformanceTotal(1, 'Specialist')
+        .subscribe((response: RoleGroupPerformanceTotal) => {
+          expect(response).toEqual({ entityType: 'Specialist', performanceTotal: mockPerformanceTotalResponse });
+          done();
+        });
+    });
+  });
+
+  describe('getResponsibilitiesPerformanceTotals', () => {
+
+    it('should call the responsibility performanceTotal endpoint for each entity and return an array of performance data', (done) => {
+      const entityArray: Array<string> = ['Specialist', 'MDM'];
+
+      mockBackend.connections.subscribe((connection: MockConnection) => {
+        const options = new ResponseOptions({
+          body: JSON.stringify(mockPerformanceTotalResponse)
+        });
+
+        connection.mockRespond(new Response(options));
+        expect(connection.request.method).toEqual(RequestMethod.Get);
+      });
+
+      myPerformanceApiService.getResponsibilitiesPerformanceTotals(1, entityArray)
+        .subscribe((response) => {
+          expect(response).toEqual([
+            { entityType: 'Specialist', performanceTotal: mockPerformanceTotalResponse },
+            { entityType: 'MDM', performanceTotal: mockPerformanceTotalResponse }
+          ]);
+          done();
+        });
+
+      expect(mockBackend.connectionsArray.length).toBe(entityArray.length);
+
+      mockBackend.connectionsArray.forEach((connection: MockConnection, index) => {
+        expect(connection.request.url).toEqual(`/v3/positions/1/responsibilities/${ entityArray[index] }/performanceTotal`);
+      });
+    });
+  });
 });
