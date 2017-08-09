@@ -13,9 +13,7 @@ export function myPerformanceVersionReducer(
       const versionsUpdated = [...state.versions];
       versionsUpdated.push(action.payload);
       return {
-        current: {
-          responsibilities: state.current.responsibilities
-        },
+        current: state.current,
         versions: versionsUpdated
       };
 
