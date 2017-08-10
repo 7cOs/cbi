@@ -116,7 +116,7 @@ describe('MyPerformanceComponent', () => {
     });
     fixture = TestBed.createComponent(MyPerformanceComponent);
 
-    expect(store.select.calls.count()).toBe(2);
+    expect(store.select.calls.count()).toBe(3);
     const functionPassToSelectCall1 = store.select.calls.argsFor(0)[0];
     expect(functionPassToSelectCall1(mockState)).toBe(mockState.myPerformanceFilter);
 
