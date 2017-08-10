@@ -1,8 +1,10 @@
 import { EntityPeopleType, EntityPropertyType } from '../enums/entity-responsibilities.enum';
 
 export interface EntityResponsibilities {
+  id: number;
+  name: string;
+  otherType?: string;
   peopleType?: EntityPeopleType;
   propertyType?: EntityPropertyType;
-  id: string;
-  name: string;
+  typeDisplayName: string;
 }

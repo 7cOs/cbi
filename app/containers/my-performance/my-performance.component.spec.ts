@@ -15,6 +15,7 @@ import { MyPerformanceFilterActionType } from '../../enums/my-performance-filter
 import { MyPerformanceFilterEvent } from '../../models/my-performance-filter.model'; // tslint:disable-line:no-unused-variable
 import { MyPerformanceFilterState } from '../../state/reducers/my-performance-filter.reducer';
 import { MyPerformanceTableComponent } from '../../shared/components/my-performance-table/my-performance-table.component';
+import { MyPerformanceTableDataTransformerService } from '../../services/my-performance-table-data-transformer.service';
 import { MyPerformanceTableRowComponent } from '../../shared/components/my-performance-table-row/my-performance-table-row.component';
 import { SortIndicatorComponent } from '../../shared/components/sort-indicator/sort-indicator.component';
 import { PremiseTypeValue } from '../../enums/premise-type.enum';
@@ -47,6 +48,7 @@ describe('MyPerformanceComponent', () => {
         SortIndicatorComponent
       ],
       providers: [
+        MyPerformanceTableDataTransformerService,
         {
           provide: Store,
           useValue: store
