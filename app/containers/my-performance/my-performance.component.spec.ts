@@ -1,6 +1,8 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { By } from '@angular/platform-browser';
+import * as Chance from 'chance';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { Observable } from 'rxjs';
 import { Store } from '@ngrx/store';
 
 import { DateRangesState } from '../../state/reducers/date-ranges.reducer';
@@ -19,6 +21,8 @@ import { SortIndicatorComponent } from '../../shared/components/sort-indicator/s
 import { PremiseTypeValue } from '../../enums/premise-type.enum';
 import { UtilService } from '../../services/util.service';
 
+let chance = new Chance();
+
 @Component({
   selector: 'my-performance-filter',
   template: ''
@@ -32,7 +36,7 @@ class MockMyPerformanceFilterComponent {
 
 describe('MyPerformanceComponent', () => {
   let fixture: ComponentFixture<MyPerformanceComponent>;
-  let store: any;
+  let store: any = new MockStore({});
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -47,22 +51,22 @@ describe('MyPerformanceComponent', () => {
         MyPerformanceTableDataTransformerService,
         {
           provide: Store,
-          useValue: new MockStore({})
+          useValue: store
         },
         UtilService
       ]
-    })
-    .compileComponents();
+    });
 
     fixture = TestBed.createComponent(MyPerformanceComponent);
-    store = fixture.debugElement.injector.get(Store);
   });
 
   it('should trigger appropriate actions when the filter component emits an event', () => {
     spyOn(store, 'dispatch');
 
     const mockMyPerformanceFilter = fixture.debugElement.query(By.directive(MockMyPerformanceFilterComponent));
-    const mockFilterElement = mockMyPerformanceFilter.injector.get(MockMyPerformanceFilterComponent) as MockMyPerformanceFilterComponent;
+    const mockFilterElement = mockMyPerformanceFilter
+    .injector
+    .get(MockMyPerformanceFilterComponent) as MockMyPerformanceFilterComponent;
 
     mockFilterElement.onFilterChange.emit({
       filterType: MyPerformanceFilterActionType.Metric,
@@ -81,7 +85,7 @@ describe('MyPerformanceComponent', () => {
       filterValue: DistributionTypeValue.SIMPLE
     });
 
-    expect(store.dispatch.calls.count()).toEqual(4);
+    expect(store.dispatch.calls.count()).toBe(4);
     expect(store.dispatch.calls.argsFor(0)).toEqual([{
       payload: MetricValue.DEPLETIONS,
       type: '[My Performance Filter] SET_METRIC'
@@ -98,5 +102,32 @@ describe('MyPerformanceComponent', () => {
       payload: DistributionTypeValue.SIMPLE,
       type: '[My Performance Filter] SET_DISTRIBUTION_TYPE'
     }]);
+  });
+
+  it('should call select with the right arguments', () => {
+    const mockState = {
+        myPerformanceFilter: chance.string(),
+        dateRanges: chance.string()
+    };
+
+    spyOn(store, 'select').and.callFake((elem: any) => {
+      const selectFunction = elem as ((state: any) => any);
+      return Observable.of(selectFunction(mockState));
+    });
+    fixture = TestBed.createComponent(MyPerformanceComponent);
+
+    expect(store.select.calls.count()).toBe(3);
+    const functionPassToSelectCall1 = store.select.calls.argsFor(0)[0];
+    expect(functionPassToSelectCall1(mockState)).toBe(mockState.myPerformanceFilter);
+
+    const functionPassToSelectCall2 = store.select.calls.argsFor(1)[0];
+    expect(functionPassToSelectCall2(mockState)).toBe(mockState.dateRanges);
+
+    fixture.detectChanges();
+    const mockMyPerformanceFilter = fixture.debugElement.query(By.directive(MockMyPerformanceFilterComponent))
+    .injector
+    .get(MockMyPerformanceFilterComponent) as MockMyPerformanceFilterComponent;
+    expect(mockMyPerformanceFilter.filterState).toEqual(mockState.myPerformanceFilter as any);
+    expect(mockMyPerformanceFilter.dateRanges).toBe(mockState.dateRanges as any);
   });
 });
