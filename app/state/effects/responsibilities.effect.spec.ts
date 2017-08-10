@@ -22,7 +22,7 @@ describe('Responsibilities Effects', () => {
   let responsibilitiesEffects: ResponsibilitiesEffects;
   let myPerformanceApiServiceMock = {
     getResponsibilities() {
-      return Observable.of(roleGroupsMock);
+      return Observable.of({positions: roleGroupsMock});
     }
   };
   let responsibilitiesTransformerServiceMock = {
