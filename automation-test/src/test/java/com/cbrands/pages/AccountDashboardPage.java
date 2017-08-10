@@ -16,6 +16,8 @@ import java.util.List;
 import static com.cbrands.helper.SeleniumUtils.*;
 
 public class AccountDashboardPage extends TestNGBasePage {
+  private static final String RIGHT_PANEL_ROW_XPATH = ".//p[contains(@class, 'data-brand')]";
+  private static final String BACK_CHEVRON_XPATH = ".//span[contains(@class, 'back-chevron')]";
 
   private Log log = LogFactory.getLog(AccountDashboardPage.class);
 
@@ -139,15 +141,31 @@ public class AccountDashboardPage extends TestNGBasePage {
     return this;
   }
 
-  public AccountDashboardPage drillIntoRightPanelWithName(String name) {
-    final List<WebElement> elements = findElements(By.xpath(
-      "//div[@class='scorecard-chart']//p[contains(@class, 'data-brand')]"));
-    waitForElementsVisibleFluentWait(elements);
+  public AccountDashboardPage drillIntoFirstRowInRightPanel() {
+    scrollToAndClick(rightPanel.findElement(By.xpath(RIGHT_PANEL_ROW_XPATH)));
+    return this;
+  }
 
+  public AccountDashboardPage drillIntoRightPanelWithName(String name) {
+    final List<WebElement> elements = getRightPanelRows();
     final WebElement element = getFirstElementTextMatchByName(name, elements);
     Assert.assertNotNull(element, "No item found by name: " + name);
 
     scrollToAndClick(element);
+
+    return this;
+  }
+
+  private List<WebElement> getRightPanelRows() {
+    final List<WebElement> elements = rightPanel.findElements(By.xpath(RIGHT_PANEL_ROW_XPATH));
+    waitForElementsVisibleFluentWait(elements);
+    return elements;
+  }
+
+  public AccountDashboardPage drillUpRightPanel() {
+    final WebElement backButton = rightPanel.findElement(By.xpath(BACK_CHEVRON_XPATH));
+    waitForVisibleFluentWait(backButton);
+    waitForElementToClickable(backButton, true).click();
 
     return this;
   }
@@ -163,7 +181,6 @@ public class AccountDashboardPage extends TestNGBasePage {
   public boolean isLeftPanelResultsLoaded() {
     boolean resultsAreLoaded;
 
-    waitForVisibleFluentWait(leftPanel);
     try {
       waitForVisibleFluentWait(leftPanel.findElement(By.xpath(".//tr[@ng-repeat]")));
       resultsAreLoaded = true;
@@ -174,17 +191,25 @@ public class AccountDashboardPage extends TestNGBasePage {
     return resultsAreLoaded;
   }
 
-  public boolean isRightPanelResultsLoaded() {
+  public boolean isRightPanelResultsLoadedFor(RightPanelLevel rightPanelLevel) {
     boolean resultsAreLoaded;
 
-    waitForVisibleFluentWait(rightPanel);
     try {
       waitForVisibleFluentWait(rightPanel.findElement(By.xpath(".//div[contains(@class, 'widget-row-container')]")));
-      resultsAreLoaded = true;
+
+      final WebElement panelHeader = rightPanel.findElement(By.xpath(".//div[@class='widget-subheader-item']/p"));
+      resultsAreLoaded = rightPanelLevel.name().equalsIgnoreCase(panelHeader.getText());
     } catch (NoSuchElementException e) {
       resultsAreLoaded = false;
     }
 
     return resultsAreLoaded;
+  }
+
+  public enum RightPanelLevel {
+    Distributors,
+    Accounts,
+    SubAccounts,
+    Stores
   }
 }
