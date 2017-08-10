@@ -60,7 +60,6 @@ describe('MyPerformanceComponent', () => {
 
   it('should trigger appropriate actions when the filter component emits an event', () => {
     spyOn(store, 'dispatch');
-
     const mockMyPerformanceFilter = fixture.debugElement.query(By.directive(MockMyPerformanceFilterComponent));
     const mockFilterElement = mockMyPerformanceFilter.injector.get(MockMyPerformanceFilterComponent) as MockMyPerformanceFilterComponent;
 
