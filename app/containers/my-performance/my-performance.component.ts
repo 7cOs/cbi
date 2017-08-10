@@ -106,7 +106,6 @@ export class MyPerformanceComponent implements OnInit {
           }
         } else {
           console.log('clicked on right row:', row);
-          this.store.dispatch(new SetRightMyPerformanceTableViewType(ViewType.skus));
         }
     }
   }

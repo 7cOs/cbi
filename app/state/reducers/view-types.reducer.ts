@@ -18,13 +18,11 @@ export function viewTypesReducer(
   switch (action.type) {
 
     case ViewTypesActions.SET_LEFT_MY_PERFORMANCE_TABLE_VIEW_TYPE:
-      console.log('setleft', action.payload);
       return Object.assign({}, state, {
         leftTableViewType: action.payload
       });
 
     case ViewTypesActions.SET_RIGHT_MY_PERFORMANCE_TABLE_VIEW_TYPE:
-      console.log('setright', action.payload);
       return Object.assign({}, state, {
         rightTableViewType: action.payload
       });
