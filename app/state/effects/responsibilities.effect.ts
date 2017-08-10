@@ -45,7 +45,7 @@ export class ResponsibilitiesEffects {
               new ResponsibilitiesActions.FetchResponsibilitiesSuccessAction(roleGroups)
             ]
           );
-        }).merge()
+        })
       .catch((err: Error) => Observable.of(new ResponsibilitiesActions.FetchResponsibilitiesFailureAction(err)));
   }
 
