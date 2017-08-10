@@ -1,7 +1,8 @@
 import { BaseRequestOptions, Http, RequestMethod, Response, ResponseOptions } from '@angular/http';
 import { inject, TestBed } from '@angular/core/testing';
 import { MockBackend, MockConnection } from '@angular/http/testing';
-import { StoreModule } from '@ngrx/store';
+import { Observable } from 'rxjs';
+import { Store } from '@ngrx/store';
 
 import { EntityPeopleType } from '../enums/entity-responsibilities.enum';
 import { getPerformanceTotalMock } from '../models/performance-total.model.mock';
@@ -10,37 +11,46 @@ import { PerformanceTotal } from '../models/performance-total.model';
 import { RoleGroupPerformanceTotal } from '../models/role-groups.model';
 
 describe('Service: MyPerformanceApiService', () => {
+  let store: any;
   let myPerformanceApiService: MyPerformanceApiService;
   let mockBackend: MockBackend;
-  const mockResponsibilitiesResponse: any = {
-    positions: [
-      {
-        id: 123,
-        name: 'Joe',
-        typeDisplayName: 'Market Development Managers',
-        peopleType: EntityPeopleType.MDM
-      },
-      {
-        id: 456,
-        name: 'Jack',
-        typeDisplayName: 'Market Development Managers',
-        peopleType: EntityPeopleType.MDM
-      },
-      {
-        id: 789,
-        name: 'Janet',
-        typeDisplayName: 'Specialists',
-        peopleType: EntityPeopleType.Specialist
-      }
-    ]
-  };
+
   const mockPerformanceTotalResponse: PerformanceTotal = getPerformanceTotalMock();
+  const mockResponsibilitiesResponse: any = {
+    positions: [{
+      id: 123,
+      name: 'Joe',
+      typeDisplayName: 'Market Development Managers',
+      peopleType: EntityPeopleType.MDM
+    }, {
+      id: 456,
+      name: 'Jack',
+      typeDisplayName: 'Market Development Managers',
+      peopleType: EntityPeopleType.MDM
+    }, {
+      id: 789,
+      name: 'Janet',
+      typeDisplayName: 'Specialists',
+      peopleType: EntityPeopleType.Specialist
+    }]
+  };
+  const mockState = {
+    myPerformanceFilter: {
+      metricType: 'PointsOfDistribution',
+      dateRangeCode: 'FYTDBDL',
+      premiseType: 'On',
+      distributionType: 'effective'
+    }
+  };
+  const mockStore = {
+    select: jasmine.createSpy('select').and.callFake((elem: any) => {
+      const selectFunction = elem as ((state: any) => any);
+      return Observable.of(selectFunction(mockState));
+    })
+  };
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [
-        StoreModule.provideStore({})
-      ],
       providers: [
         {
           provide: Http,
@@ -49,6 +59,10 @@ describe('Service: MyPerformanceApiService', () => {
           },
           deps: [ MockBackend, BaseRequestOptions ]
         },
+        {
+          provide: Store,
+          useValue: mockStore
+        },
         BaseRequestOptions,
         MockBackend,
         MyPerformanceApiService
@@ -56,11 +70,11 @@ describe('Service: MyPerformanceApiService', () => {
     });
   });
 
-  beforeEach(inject([MyPerformanceApiService, MockBackend],
-    (_myPerformanceApiService: MyPerformanceApiService,
-    _mockBackend: MockBackend) => {
+  beforeEach(inject([MyPerformanceApiService, MockBackend, Store],
+    (_myPerformanceApiService: MyPerformanceApiService, _mockBackend: MockBackend, _store: any) => {
       myPerformanceApiService = _myPerformanceApiService;
       mockBackend = _mockBackend;
+      store = _store;
     })
   );
 
@@ -88,19 +102,15 @@ describe('Service: MyPerformanceApiService', () => {
   describe('getPerformanceTotal', () => {
 
     it('should call the performanceTotal API and return performance data', (done) => {
-      spyOn(myPerformanceApiService, 'getFilterStateParams').and.returnValue({
-        metricType: 'volume',
-        dateRangeCode: 'CYTDBDL',
-        premiseType: 'All'
-      });
-
       mockBackend.connections.subscribe((connection: MockConnection) => {
         const options = new ResponseOptions({
           body: JSON.stringify(mockPerformanceTotalResponse)
         });
         connection.mockRespond(new Response(options));
         expect(connection.request.method).toEqual(RequestMethod.Get);
-        expect(connection.request.url).toEqual('/v3/positions/1/performanceTotal?metricType=volume&dateRangeCode=CYTDBDL&premiseType=All');
+        expect(connection.request.url).toEqual(
+          '/v3/positions/1/performanceTotal?metricType=effectivePointsOfDistribution&dateRangeCode=FYTDBDL&premiseType=On'
+        );
       });
 
       myPerformanceApiService.getPerformanceTotal(1).subscribe((response: PerformanceTotal) => {
@@ -114,13 +124,7 @@ describe('Service: MyPerformanceApiService', () => {
 
     it('should call the responsibility performanceTotal endpoint and return performance data for the responsibility', (done) => {
       const expectedBaseUrl = '/v3/positions/1/responsibilities/Specialist/performanceTotal';
-      const expectedUrlParams = '?metricType=simplePointsOfDistribution&dateRangeCode=LCM&premiseType=Off';
-
-      spyOn(myPerformanceApiService, 'getFilterStateParams').and.returnValue({
-        metricType: 'simplePointsOfDistribution',
-        dateRangeCode: 'LCM',
-        premiseType: 'Off'
-      });
+      const expectedUrlParams = '?metricType=effectivePointsOfDistribution&dateRangeCode=FYTDBDL&premiseType=On';
 
       mockBackend.connections.subscribe((connection: MockConnection) => {
         const options = new ResponseOptions({
@@ -145,12 +149,6 @@ describe('Service: MyPerformanceApiService', () => {
     it('should call the responsibility performanceTotal endpoint for each entity and return an array of performance data', (done) => {
       const entityArray: Array<string> = ['Specialist', 'MDM'];
       const expectedUrlParams = '?metricType=effectivePointsOfDistribution&dateRangeCode=FYTDBDL&premiseType=On';
-
-      spyOn(myPerformanceApiService, 'getFilterStateParams').and.returnValue({
-        metricType: 'effectivePointsOfDistribution',
-        dateRangeCode: 'FYTDBDL',
-        premiseType: 'On'
-      });
 
       mockBackend.connections.subscribe((connection: MockConnection) => {
         const options = new ResponseOptions({

@@ -61,8 +61,8 @@ export class MyPerformanceApiService {
     .catch(err => this.handleError(new Error(err)));
   }
 
-  public getFilterStateParams(filterState: MyPerformanceFilterState): any {
-    if (filterState && filterState.distributionType) {
+  private getFilterStateParams(filterState: MyPerformanceFilterState): any {
+    if (filterState.distributionType) {
       return {
         metricType: filterState.distributionType + filterState.metricType,
         dateRangeCode: filterState.dateRangeCode,
