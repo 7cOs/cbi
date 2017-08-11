@@ -8,9 +8,9 @@ import { PremiseTypeValue } from '../../enums/premise-type.enum';
 export interface MyPerformanceFilterState extends MyPerformanceFilter {}
 
 export const initialState: MyPerformanceFilterState = {
-  metricType: MetricValue.DEPLETIONS,
+  metricType: MetricValue.volume,
   dateRangeCode: DateRangeTimePeriodValue.CYTDBDL,
-  premiseType: PremiseTypeValue.ALL
+  premiseType: PremiseTypeValue.All
 };
 
 export function myPerformanceFilterReducer(
@@ -23,11 +23,11 @@ export function myPerformanceFilterReducer(
     case MyPerformanceFilterActions.SET_METRIC:
       const newState = {
         metricType: action.payload,
-        dateRangeCode: action.payload === MetricValue.DEPLETIONS ? DateRangeTimePeriodValue.CYTDBDL : DateRangeTimePeriodValue.L90BDL,
-        premiseType: action.payload === MetricValue.DEPLETIONS ? PremiseTypeValue.ALL : PremiseTypeValue.OFF
+        dateRangeCode: action.payload === MetricValue.volume ? DateRangeTimePeriodValue.CYTDBDL : DateRangeTimePeriodValue.L90BDL,
+        premiseType: action.payload === MetricValue.volume ? PremiseTypeValue.All : PremiseTypeValue.Off
       };
 
-      if (action.payload === MetricValue.DISTRIBUTION) newState['distributionType'] = DistributionTypeValue.SIMPLE;
+      if (action.payload === MetricValue.PointsOfDistribution) newState['distributionType'] = DistributionTypeValue.simple;
 
       return newState;
 

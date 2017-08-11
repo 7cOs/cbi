@@ -20,38 +20,38 @@ export interface MyPerformanceFilterEvent {
 
 export const metricOptionsModel: Array<CompassSelectOption> = [{
   display: 'Depletions',
-  value: MetricValue.DEPLETIONS
+  value: MetricValue.volume
 }, {
   display: 'Distribution',
-  value: MetricValue.DISTRIBUTION
+  value: MetricValue.PointsOfDistribution
 }, {
   display: 'Velocity',
-  value: MetricValue.VELOCITY
+  value: MetricValue.velocity
 }];
 
 export const depletionsPremiseOptionsModel: Array<CompassRadioOption> = [{
   display: 'All',
-  value: PremiseTypeValue.ALL
+  value: PremiseTypeValue.All
 }, {
   display: 'Off-Premise',
-  value: PremiseTypeValue.OFF
+  value: PremiseTypeValue.Off
 }, {
   display: 'On-Premise',
-  value: PremiseTypeValue.ON
+  value: PremiseTypeValue.On
 }];
 
 export const distributionPremiseOptionsModel: Array<CompassRadioOption> = [{
   display: 'Off-Premise',
-  value: PremiseTypeValue.OFF
+  value: PremiseTypeValue.Off
 }, {
   display: 'On-Premise',
-  value: PremiseTypeValue.ON
+  value: PremiseTypeValue.On
 }];
 
 export const distributionOptionsModel: Array<CompassRadioOption> = [{
   display: 'Simple',
-  value: DistributionTypeValue.SIMPLE
+  value: DistributionTypeValue.simple
 }, {
   display: 'Effective',
-  value: DistributionTypeValue.EFFECTIVE
+  value: DistributionTypeValue.effective
 }];

@@ -11,25 +11,25 @@ import { FetchResponsibilitiesAction,
          FetchResponsibilitiesFailureAction,
          FetchResponsibilitiesPerformanceTotalsSuccess,
          FetchResponsibilitiesSuccessAction } from '../actions/responsibilities.action';
-import { getMockRoleGroups, getMockRoleGroupPerformanceTotals } from '../../models/role-groups.model.mock';
+import { getRoleGroupsMock, getRoleGroupPerformanceTotalsMock } from '../../models/role-groups.model.mock';
 
 const chance = new Chance();
 
 describe('Responsibilities Effects', () => {
-  const roleGroupsMock: RoleGroups = getMockRoleGroups();
+  const roleGroupsMock: RoleGroups = getRoleGroupsMock();
   const positionIdMock = chance.natural();
-  const getResponsibilitiesResponseMock = {
+  const responsibilitiesResponseMock = {
     positionId: positionIdMock,
     responsibilities: roleGroupsMock
   };
-  const mockRoleGroupPerformanceTotals = getMockRoleGroupPerformanceTotals();
+  const mockRoleGroupPerformanceTotals = getRoleGroupPerformanceTotalsMock();
   const err = new Error(chance.string());
 
   let runner: EffectsRunner;
   let responsibilitiesEffects: ResponsibilitiesEffects;
   let myPerformanceApiServiceMock = {
     getResponsibilities() {
-      return Observable.of(getResponsibilitiesResponseMock);
+      return Observable.of(responsibilitiesResponseMock);
     },
     getResponsibilitiesPerformanceTotals() {
       return Observable.of(mockRoleGroupPerformanceTotals);
@@ -80,7 +80,7 @@ describe('Responsibilities Effects', () => {
 
       it('should return a FetchResponsibilitiesSuccessAction', (done) => {
         responsibilitiesEffects.fetchResponsibilities$().subscribe(result => {
-          expect(result).toEqual(new FetchResponsibilitiesSuccessAction(getResponsibilitiesResponseMock));
+          expect(result).toEqual(new FetchResponsibilitiesSuccessAction(responsibilitiesResponseMock));
           done();
         });
       });
@@ -130,7 +130,7 @@ describe('Responsibilities Effects', () => {
       beforeEach(inject([ MyPerformanceApiService ],
         (_myPerformanceApiService: MyPerformanceApiService) => {
           myPerformanceApiService = _myPerformanceApiService;
-          runner.queue(new FetchResponsibilitiesSuccessAction(getResponsibilitiesResponseMock));
+          runner.queue(new FetchResponsibilitiesSuccessAction(responsibilitiesResponseMock));
         }
       ));
 
@@ -148,7 +148,7 @@ describe('Responsibilities Effects', () => {
       beforeEach(inject([ MyPerformanceApiService ],
         (_myPerformanceApiService: MyPerformanceApiService) => {
           myPerformanceApiService = _myPerformanceApiService;
-          runner.queue(new FetchResponsibilitiesSuccessAction(getResponsibilitiesResponseMock));
+          runner.queue(new FetchResponsibilitiesSuccessAction(responsibilitiesResponseMock));
         }
       ));
 

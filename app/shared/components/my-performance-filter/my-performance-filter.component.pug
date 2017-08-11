@@ -10,7 +10,7 @@ section.filter-component-section
     )
 
   //- Time Period Select (Depletions)
-  div(*ngIf="filterState.metricType === metricValue.DEPLETIONS")
+  div(*ngIf="filterState.metricType === metricValue.volume")
     compass-select(
       [model]="filterState.dateRangeCode",
       [options]="depletionTimePeriodOptions",
@@ -19,7 +19,7 @@ section.filter-component-section
     )
 
   //- Time Period Select (Distribution)
-  div(*ngIf="filterState.metricType !== metricValue.DEPLETIONS")
+  div(*ngIf="filterState.metricType !== metricValue.volume")
     compass-select(
       [model]="filterState.dateRangeCode",
       [options]="distributionTimePeriodOptions",
@@ -28,7 +28,7 @@ section.filter-component-section
     )
 
   //- Premise Type Radio (Depletions)
-  div(*ngIf="filterState.metricType === metricValue.DEPLETIONS")
+  div(*ngIf="filterState.metricType === metricValue.volume")
     compass-radio(
       [model]="filterState.premiseType",
       [options]="depletionsPremiseOptions",
@@ -38,17 +38,17 @@ section.filter-component-section
     )
 
   //- Premise Type Radio (Distribution)
-  div(*ngIf="filterState.metricType !== metricValue.DEPLETIONS")
+  div(*ngIf="filterState.metricType !== metricValue.volume")
     compass-radio(
       [model]="filterState.premiseType",
       [options]="distributionPremiseOptions",
       [title]="'premise type'",
-      [stacked]="filterState.metricType === metricValue.DISTRIBUTION",
+      [stacked]="filterState.metricType === metricValue.PointsOfDistribution",
       (onRadioClicked)="filterSelected(myPerformanceFilterActionType.PremiseType, $event)"
     )
 
   //- Distribution Type Radio
-  div(*ngIf="filterState.metricType === metricValue.DISTRIBUTION")
+  div(*ngIf="filterState.metricType === metricValue.PointsOfDistribution")
     compass-radio(
       [model]="filterState.distributionType",
       [options]="distributionOptions",

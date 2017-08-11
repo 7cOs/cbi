@@ -1,12 +1,12 @@
 import { inject, TestBed } from '@angular/core/testing';
 
-import { getMockRoleGroupPerformanceTotals, getMockRoleGroups } from '../models/role-groups.model.mock';
+import { getRoleGroupPerformanceTotalsMock, getRoleGroupsMock } from '../models/role-groups.model.mock';
 import { MyPerformanceTableDataTransformerService } from './my-performance-table-data-transformer.service';
 import { getPerformanceTotalMock } from '../models/performance-total.model.mock';
 
 describe('Service: MyPerformanceTableDataTransformerService', () => {
-  const mockRoleGroups = getMockRoleGroups();
-  const mockRoleGroupPerformanceTotals = getMockRoleGroupPerformanceTotals();
+  const mockRoleGroups = getRoleGroupsMock();
+  const mockRoleGroupPerformanceTotals = getRoleGroupPerformanceTotalsMock();
   const mockPerformanceTotal = getPerformanceTotalMock();
 
   beforeEach(() => TestBed.configureTestingModule({

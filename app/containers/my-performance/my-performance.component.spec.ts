@@ -67,7 +67,7 @@ describe('MyPerformanceComponent', () => {
 
     mockFilterElement.onFilterChange.emit({
       filterType: MyPerformanceFilterActionType.Metric,
-      filterValue: MetricValue.DEPLETIONS
+      filterValue: MetricValue.volume
     });
     mockFilterElement.onFilterChange.emit({
       filterType: MyPerformanceFilterActionType.TimePeriod,
@@ -75,16 +75,16 @@ describe('MyPerformanceComponent', () => {
     });
     mockFilterElement.onFilterChange.emit({
       filterType: MyPerformanceFilterActionType.PremiseType,
-      filterValue: PremiseTypeValue.OFF
+      filterValue: PremiseTypeValue.Off
     });
     mockFilterElement.onFilterChange.emit({
       filterType: MyPerformanceFilterActionType.DistributionType,
-      filterValue: DistributionTypeValue.SIMPLE
+      filterValue: DistributionTypeValue.simple
     });
 
     expect(store.dispatch.calls.count()).toEqual(4);
     expect(store.dispatch.calls.argsFor(0)).toEqual([{
-      payload: MetricValue.DEPLETIONS,
+      payload: MetricValue.volume,
       type: '[My Performance Filter] SET_METRIC'
     }]);
     expect(store.dispatch.calls.argsFor(1)).toEqual([{
@@ -92,11 +92,11 @@ describe('MyPerformanceComponent', () => {
       type: '[My Performance Filter] SET_TIME_PERIOD'
     }]);
     expect(store.dispatch.calls.argsFor(2)).toEqual([{
-      payload: PremiseTypeValue.OFF,
+      payload: PremiseTypeValue.Off,
       type: '[My Performance Filter] SET_PREMISE_TYPE'
     }]);
     expect(store.dispatch.calls.argsFor(3)).toEqual([{
-      payload: DistributionTypeValue.SIMPLE,
+      payload: DistributionTypeValue.simple,
       type: '[My Performance Filter] SET_DISTRIBUTION_TYPE'
     }]);
   });

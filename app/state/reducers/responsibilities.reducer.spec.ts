@@ -1,7 +1,7 @@
 import { responsibilitiesReducer, initialState } from './responsibilities.reducer';
 import { ActionStatus } from '../../enums/action-status.enum';
 import * as ResponsibilitiesActions from '../actions/responsibilities.action';
-import { getMockRoleGroups, getMockRoleGroupPerformanceTotals } from '../../models/role-groups.model.mock';
+import { getRoleGroupsMock, getRoleGroupPerformanceTotalsMock } from '../../models/role-groups.model.mock';
 
 describe('Responsibilities Reducer', () => {
 
@@ -21,7 +21,7 @@ describe('Responsibilities Reducer', () => {
 
   it('should store the payload when a fetch responsibilities is successful', () => {
     const mockPositionId = 1;
-    const mockRoleGroups = getMockRoleGroups();
+    const mockRoleGroups = getRoleGroupsMock();
     const mockPayload = {
       positionId: mockPositionId,
       responsibilities: mockRoleGroups
@@ -43,7 +43,7 @@ describe('Responsibilities Reducer', () => {
   });
 
   it('should store the payload and update the status when fetch responsibilities performance is successful', () => {
-    const mockPayload = getMockRoleGroupPerformanceTotals();
+    const mockPayload = getRoleGroupPerformanceTotalsMock();
     const expectedState = {
       status: ActionStatus.Fetched,
       positionId: 0,

@@ -1,6 +1,6 @@
 import * as Chance from 'chance';
 
-import { getMockRoleGroups, getMockRoleGroupPerformanceTotals } from '../../models/role-groups.model.mock';
+import { getRoleGroupsMock, getRoleGroupPerformanceTotalsMock } from '../../models/role-groups.model.mock';
 import { RoleGroupPerformanceTotal, RoleGroups } from '../../models/role-groups.model';
 import * as ResponsibilitiesActions from './responsibilities.action';
 
@@ -33,7 +33,7 @@ describe('Responsibilities Actions', () => {
     let mockUserId: number;
 
     beforeEach(() => {
-      mockRoleGroups = getMockRoleGroups();
+      mockRoleGroups = getRoleGroupsMock();
       mockUserId = chance.natural();
 
       action = new ResponsibilitiesActions.FetchResponsibilitiesSuccessAction({
@@ -61,7 +61,7 @@ describe('Responsibilities Actions', () => {
     let mockPayload: Array<RoleGroupPerformanceTotal>;
 
     beforeEach(() => {
-      mockPayload = getMockRoleGroupPerformanceTotals();
+      mockPayload = getRoleGroupPerformanceTotalsMock();
       action = new ResponsibilitiesActions.FetchResponsibilitiesPerformanceTotalsSuccess(mockPayload);
     });
 

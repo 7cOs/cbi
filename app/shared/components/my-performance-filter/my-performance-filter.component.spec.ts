@@ -14,16 +14,16 @@ import { MyPerformanceFilterState } from '../../../state/reducers/my-performance
 import { PremiseTypeValue } from '../../../enums/premise-type.enum';
 
 const initialStateMock: MyPerformanceFilterState = {
-  metricType: MetricValue.DEPLETIONS,
+  metricType: MetricValue.volume,
   dateRangeCode: DateRangeTimePeriodValue.CYTDBDL,
-  premiseType: PremiseTypeValue.ALL,
-  distributionType: DistributionTypeValue.SIMPLE
+  premiseType: PremiseTypeValue.All,
+  distributionType: DistributionTypeValue.simple
 };
 const updatedStateMock: MyPerformanceFilterState = {
-  metricType: MetricValue.DISTRIBUTION,
+  metricType: MetricValue.PointsOfDistribution,
   dateRangeCode: DateRangeTimePeriodValue.L90BDL,
-  premiseType: PremiseTypeValue.OFF,
-  distributionType: DistributionTypeValue.SIMPLE
+  premiseType: PremiseTypeValue.Off,
+  distributionType: DistributionTypeValue.simple
 };
 
 describe('My Performance Filter Component', () => {
@@ -52,9 +52,9 @@ describe('My Performance Filter Component', () => {
       let mockRadioComponents = fixture.debugElement.queryAll(By.directive(MockCompassRadioComponent));
       let premiseTypeRadio = mockRadioComponents[0].injector.get(MockCompassRadioComponent) as MockCompassRadioComponent;
 
-      expect(metricCompassSelect.model).toEqual(MetricValue.DEPLETIONS);
+      expect(metricCompassSelect.model).toEqual(MetricValue.volume);
       expect(timePeriodCompassSelect.model).toEqual(DateRangeTimePeriodValue.CYTDBDL);
-      expect(premiseTypeRadio.model).toEqual(PremiseTypeValue.ALL);
+      expect(premiseTypeRadio.model).toEqual(PremiseTypeValue.All);
 
       componentInstance.filterState = updatedStateMock;
       fixture.detectChanges();
@@ -67,10 +67,10 @@ describe('My Performance Filter Component', () => {
       premiseTypeRadio = mockRadioComponents[0].injector.get(MockCompassRadioComponent) as MockCompassRadioComponent;
       const distributionTypeRadio = mockRadioComponents[1].injector.get(MockCompassRadioComponent) as MockCompassRadioComponent;
 
-      expect(metricCompassSelect.model).toEqual(MetricValue.DISTRIBUTION);
+      expect(metricCompassSelect.model).toEqual(MetricValue.PointsOfDistribution);
       expect(timePeriodCompassSelect.model).toEqual(DateRangeTimePeriodValue.L90BDL);
-      expect(premiseTypeRadio.model).toEqual(PremiseTypeValue.OFF);
-      expect(distributionTypeRadio.model).toEqual(DistributionTypeValue.SIMPLE);
+      expect(premiseTypeRadio.model).toEqual(PremiseTypeValue.Off);
+      expect(distributionTypeRadio.model).toEqual(DistributionTypeValue.simple);
     });
   });
 
@@ -80,13 +80,13 @@ describe('My Performance Filter Component', () => {
       componentInstance.dateRanges = dateRangeStateMock;
 
       componentInstance.onFilterChange.subscribe((value: MyPerformanceFilterEvent) => {
-        expect(value).toEqual({ filterType: MyPerformanceFilterActionType.Metric, filterValue: MetricValue.DEPLETIONS });
+        expect(value).toEqual({ filterType: MyPerformanceFilterActionType.Metric, filterValue: MetricValue.volume });
       });
 
       const mockSelectComponents = fixture.debugElement.queryAll(By.directive(MockCompassSelectComponent));
       const metricCompassSelect = mockSelectComponents[0].injector.get(MockCompassSelectComponent) as MockCompassSelectComponent;
 
-      metricCompassSelect.onOptionSelected.emit(MetricValue.DEPLETIONS);
+      metricCompassSelect.onOptionSelected.emit(MetricValue.volume);
     });
 
     it('should emit value outputed by time period select dropdown child component', () => {
@@ -110,13 +110,13 @@ describe('My Performance Filter Component', () => {
       fixture.detectChanges();
 
       componentInstance.onFilterChange.subscribe((value: MyPerformanceFilterEvent) => {
-        expect(value).toEqual({ filterType: MyPerformanceFilterActionType.PremiseType, filterValue: PremiseTypeValue.OFF });
+        expect(value).toEqual({ filterType: MyPerformanceFilterActionType.PremiseType, filterValue: PremiseTypeValue.Off });
       });
 
       const mockRadioComponents = fixture.debugElement.queryAll(By.directive(MockCompassRadioComponent));
       const premiseTypeRadio = mockRadioComponents[0].injector.get(MockCompassRadioComponent) as MockCompassRadioComponent;
 
-      premiseTypeRadio.onRadioClicked.emit(PremiseTypeValue.OFF);
+      premiseTypeRadio.onRadioClicked.emit(PremiseTypeValue.Off);
     });
 
     it('should emit value outputed by distribution type child component radio button', () => {
@@ -125,13 +125,13 @@ describe('My Performance Filter Component', () => {
       fixture.detectChanges();
 
       componentInstance.onFilterChange.subscribe((value: MyPerformanceFilterEvent) => {
-        expect(value).toEqual({ filterType: MyPerformanceFilterActionType.DistributionType, filterValue: DistributionTypeValue.SIMPLE });
+        expect(value).toEqual({ filterType: MyPerformanceFilterActionType.DistributionType, filterValue: DistributionTypeValue.simple });
       });
 
       const mockRadioComponents = fixture.debugElement.queryAll(By.directive(MockCompassRadioComponent));
       const distributionTypeRadio = mockRadioComponents[1].injector.get(MockCompassRadioComponent) as MockCompassRadioComponent;
 
-      distributionTypeRadio.onRadioClicked.emit(DistributionTypeValue.SIMPLE);
+      distributionTypeRadio.onRadioClicked.emit(DistributionTypeValue.simple);
     });
   });
 });

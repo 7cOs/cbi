@@ -9,23 +9,25 @@ import * as MyPerformanceFilterActions from '../actions/my-performance-filter.ac
 describe('My Performance Filter Reducer', () => {
 
   it('should set the metric and set correct default timePeriod and premiseType values when SET_METRIC "DEPLETIONS" is dispatched', () => {
-    const actualState = myPerformanceFilterReducer(initialState, new MyPerformanceFilterActions.SetMetric(MetricValue.DEPLETIONS));
+    const actualState = myPerformanceFilterReducer(initialState, new MyPerformanceFilterActions.SetMetric(MetricValue.volume));
     const expectedState: MyPerformanceFilter = {
-      metricType: MetricValue.DEPLETIONS,
+      metricType: MetricValue.volume,
       dateRangeCode: DateRangeTimePeriodValue.CYTDBDL,
-      premiseType: PremiseTypeValue.ALL
+      premiseType: PremiseTypeValue.All
     };
 
     expect(actualState).toEqual(expectedState);
   });
 
   it('should set the metric and set correct default timePeriod and premiseType values when SET_METRIC "DISTRIBUTION" is dispatched', () => {
-    const actualState = myPerformanceFilterReducer(initialState, new MyPerformanceFilterActions.SetMetric(MetricValue.DISTRIBUTION));
+    const actualState = myPerformanceFilterReducer(
+      initialState, new MyPerformanceFilterActions.SetMetric(MetricValue.PointsOfDistribution)
+    );
     const expectedState: MyPerformanceFilter = {
-      metricType: MetricValue.DISTRIBUTION,
+      metricType: MetricValue.PointsOfDistribution,
       dateRangeCode: DateRangeTimePeriodValue.L90BDL,
-      premiseType: PremiseTypeValue.OFF,
-      distributionType: DistributionTypeValue.SIMPLE
+      premiseType: PremiseTypeValue.Off,
+      distributionType: DistributionTypeValue.simple
     };
 
     expect(actualState).toEqual(expectedState);
@@ -37,20 +39,20 @@ describe('My Performance Filter Reducer', () => {
       new MyPerformanceFilterActions.SetTimePeriod(DateRangeTimePeriodValue.CMIPBDL)
     );
     const expectedState: MyPerformanceFilter = {
-      metricType: MetricValue.DEPLETIONS,
+      metricType: MetricValue.volume,
       dateRangeCode: DateRangeTimePeriodValue.CMIPBDL,
-      premiseType: PremiseTypeValue.ALL
+      premiseType: PremiseTypeValue.All
     };
 
     expect(actualState).toEqual(expectedState);
   });
 
   it('should set the premiseType when SET_PREMISE_TYPE is dispatched', () => {
-    const actualState = myPerformanceFilterReducer(initialState, new MyPerformanceFilterActions.SetPremiseType(PremiseTypeValue.ON));
+    const actualState = myPerformanceFilterReducer(initialState, new MyPerformanceFilterActions.SetPremiseType(PremiseTypeValue.On));
     const expectedState: MyPerformanceFilter = {
-      metricType: MetricValue.DEPLETIONS,
+      metricType: MetricValue.volume,
       dateRangeCode: DateRangeTimePeriodValue.CYTDBDL,
-      premiseType: PremiseTypeValue.ON
+      premiseType: PremiseTypeValue.On
     };
 
     expect(actualState).toEqual(expectedState);
@@ -59,13 +61,13 @@ describe('My Performance Filter Reducer', () => {
   it('should set the distribution type when SET_DISTRIBUTION_TYPE is dispatched', () => {
     const actualState = myPerformanceFilterReducer(
       initialState,
-      new MyPerformanceFilterActions.SetDistributionType(DistributionTypeValue.EFFECTIVE)
+      new MyPerformanceFilterActions.SetDistributionType(DistributionTypeValue.effective)
     );
     const expectedState: MyPerformanceFilter = {
-      metricType: MetricValue.DEPLETIONS,
+      metricType: MetricValue.volume,
       dateRangeCode: DateRangeTimePeriodValue.CYTDBDL,
-      premiseType: PremiseTypeValue.ALL,
-      distributionType: DistributionTypeValue.EFFECTIVE
+      premiseType: PremiseTypeValue.All,
+      distributionType: DistributionTypeValue.effective
     };
 
     expect(actualState).toEqual(expectedState);
