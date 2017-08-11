@@ -5,15 +5,17 @@ import { MyPerformanceTableDataTransformerService } from './my-performance-table
 
 describe('Service: MyPerformanceTableDataTransformerService', () => {
   const mockRoleGroups = getMockRoleGroups();
+  let myPerformanceTableDataTransformerService: MyPerformanceTableDataTransformerService;
 
-  beforeEach(() => TestBed.configureTestingModule({
-    providers: [
-      MyPerformanceTableDataTransformerService
-    ]
-  }));
+  beforeEach(() => {
+    TestBed.configureTestingModule({
+      providers: [
+        MyPerformanceTableDataTransformerService
+      ]
+    });
+  });
 
   describe('transformRoleGroupTableData', () => {
-    let myPerformanceTableDataTransformerService: MyPerformanceTableDataTransformerService;
     beforeEach(inject([ MyPerformanceTableDataTransformerService ],
       (_myPerformanceTableDataTransformerService: MyPerformanceTableDataTransformerService) => {
         myPerformanceTableDataTransformerService = _myPerformanceTableDataTransformerService;
@@ -32,13 +34,12 @@ describe('Service: MyPerformanceTableDataTransformerService', () => {
   });
 
   describe('transformPeopleTableData', () => {
-    let myPerformanceTableDataTransformerService: MyPerformanceTableDataTransformerService;
     beforeEach(inject([ MyPerformanceTableDataTransformerService ],
       (_myPerformanceTableDataTransformerService: MyPerformanceTableDataTransformerService) => {
         myPerformanceTableDataTransformerService = _myPerformanceTableDataTransformerService;
     }));
 
-    it('should return a collection of formatted table data featureing \'positions\'', () => {
+    it('should return a collection of formatted table data featuring \'positions\'', () => {
       spyOn(myPerformanceTableDataTransformerService, 'transformPeopleTableData').and.callThrough();
       const transformedPeopleTableData =
         myPerformanceTableDataTransformerService.transformPeopleTableData({'MDM': mockRoleGroups.MDM});
@@ -50,7 +51,6 @@ describe('Service: MyPerformanceTableDataTransformerService', () => {
   });
 
   describe('buildTotalRow', () => {
-    let myPerformanceTableDataTransformerService: MyPerformanceTableDataTransformerService;
     beforeEach(inject([ MyPerformanceTableDataTransformerService ],
       (_myPerformanceTableDataTransformerService: MyPerformanceTableDataTransformerService) => {
         myPerformanceTableDataTransformerService = _myPerformanceTableDataTransformerService;

@@ -1,4 +1,4 @@
-import { getMockViewType } from '../../enums/view-type.mock.enum';
+import { getViewTypeMock } from '../../enums/view-type.enum.mock';
 import { ViewType } from '../../enums/view-type.enum';
 import * as ViewTypeActions from './view-types.action';
 
@@ -8,7 +8,7 @@ describe('View Type Actions', () => {
     let action: ViewTypeActions.SetLeftMyPerformanceTableViewType;
 
     beforeEach(() => {
-      action = new ViewTypeActions.SetLeftMyPerformanceTableViewType(ViewType[getMockViewType]);
+      action = new ViewTypeActions.SetLeftMyPerformanceTableViewType(ViewType[getViewTypeMock()]);
     });
 
     it('should have the correct type', () => {
@@ -21,7 +21,7 @@ describe('View Type Actions', () => {
     let action: ViewTypeActions.SetRightMyPerformanceTableViewType;
 
     beforeEach(() => {
-      action = new ViewTypeActions.SetRightMyPerformanceTableViewType(ViewType[getMockViewType]);
+      action = new ViewTypeActions.SetRightMyPerformanceTableViewType(ViewType[getViewTypeMock()]);
     });
 
     it('should have the correct type', () => {
