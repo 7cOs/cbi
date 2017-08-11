@@ -66,18 +66,10 @@ export class MyPerformanceComponent implements OnInit {
     });
     this.store.select(state => state.responsibilities).subscribe((responsibilitiesState: ResponsibilitiesState) => {
       if (responsibilitiesState && responsibilitiesState.responsibilities) {
-        switch (this.leftTableViewType) {
-          case ViewType.people:
-            this.tableData =
-              this.myPerformanceTableDataTransformerService.transformPeopleTableData(responsibilitiesState.responsibilities);
-            this.totalRowData =
-              this.myPerformanceTableDataTransformerService.buildTotalRow(responsibilitiesState.responsibilities);
-            break;
-
-          default: // incl. case ViewType.roleGroups
-            this.tableData =
-              this.myPerformanceTableDataTransformerService.transformRoleGroupTableData(responsibilitiesState.responsibilities);
-        }
+        let { tableData, totalRowData } =
+          this.myPerformanceTableDataTransformerService.getTableData(this.leftTableViewType, responsibilitiesState.responsibilities);
+        this.tableData = tableData;
+        this.totalRowData = totalRowData || this.totalRowData;
       }
     });
   }

@@ -2,6 +2,8 @@ import { inject, TestBed } from '@angular/core/testing';
 
 import { getMockRoleGroups } from '../models/role-groups.model.mock';
 import { MyPerformanceTableDataTransformerService } from './my-performance-table-data-transformer.service';
+import { MyPerformanceTableRow } from '../models/my-performance-table-row.model';
+import { ViewType } from '../enums/view-type.enum';
 
 describe('Service: MyPerformanceTableDataTransformerService', () => {
   const mockRoleGroups = getMockRoleGroups();
@@ -65,6 +67,36 @@ describe('Service: MyPerformanceTableDataTransformerService', () => {
       // expect(transformedTotalRowTableData).toEqual(expectedTableData);
       expect(transformedTotalRowTableData.descriptionRow0).toEqual('TOTAL');
       expect(transformedTotalRowTableData.descriptionRow1).toEqual('MDMs');
+    });
+  });
+
+  describe('getTableData', () => {
+    beforeEach(inject([ MyPerformanceTableDataTransformerService ],
+      (_myPerformanceTableDataTransformerService: MyPerformanceTableDataTransformerService) => {
+        myPerformanceTableDataTransformerService = _myPerformanceTableDataTransformerService;
+    }));
+    it('should return properly formatted table data and total row data when view type is people', () => {
+      spyOn(myPerformanceTableDataTransformerService, 'getTableData').and.callThrough();
+      const { tableData, totalRowData } =
+        myPerformanceTableDataTransformerService.getTableData(ViewType.people, {'MDM': mockRoleGroups.MDM});
+
+        expect(tableData).toBeDefined();
+        expect(tableData.length).toBeTruthy();
+        expect(totalRowData).toBeDefined();
+        expect(tableData[0].descriptionRow0).toBe(mockRoleGroups.MDM[0].name);
+        expect(totalRowData.descriptionRow0).toBe('TOTAL');
+        expect(totalRowData.descriptionRow1).toBe('MDMs');
+    });
+    it('should return properly formatted table data without a total row when view type is not people', () =>  {
+      spyOn(myPerformanceTableDataTransformerService, 'getTableData').and.callThrough();
+      const { tableData, totalRowData } =
+        myPerformanceTableDataTransformerService.getTableData(ViewType.roleGroups,  mockRoleGroups);
+
+        expect(tableData).toBeDefined();
+        expect(tableData.length).toBeTruthy();
+        expect(totalRowData).not.toBeDefined();
+        expect(tableData[0].descriptionRow0).toBe(mockRoleGroups.Specialist[0].typeDisplayName);
+        expect(tableData[1].descriptionRow0).toBe(mockRoleGroups.MDM[0].typeDisplayName);
     });
   });
 });

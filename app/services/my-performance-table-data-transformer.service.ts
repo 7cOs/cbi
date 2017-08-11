@@ -6,6 +6,7 @@ import { EntityResponsibilities } from '../models/entity-responsibilities.model'
 import { EntityPeopleType } from '../enums/entity-responsibilities.enum';
 import { MyPerformanceTableRow } from '../models/my-performance-table-row.model';
 import { RoleGroups } from '../models/role-groups.model';
+import { ViewType } from '../enums/view-type.enum';
 let chance = new Chance();
 
 @Injectable()
@@ -22,6 +23,21 @@ export class MyPerformanceTableDataTransformerService {
       };
     });
   }
+
+  public getTableData(viewType: ViewType, responsibilities: RoleGroups):
+    { tableData: MyPerformanceTableRow[], totalRowData?: MyPerformanceTableRow } {
+      switch (viewType) {
+        case ViewType.people:
+          return {
+            tableData: this.transformPeopleTableData(responsibilities),
+            totalRowData:  this.buildTotalRow(responsibilities)
+          };
+        default: // handles case ViewType.roleGroups
+          return {
+            tableData: this.transformRoleGroupTableData(responsibilities)
+          };
+      }
+    }
 
   public transformPeopleTableData(roleGroups: RoleGroups): MyPerformanceTableRow[] {
     const groupName = Object.keys(roleGroups)[0];
