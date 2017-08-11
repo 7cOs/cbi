@@ -121,4 +121,27 @@ public class AccountDashboardTest extends BaseTestCase {
       "Left brands panel failed to reload for distributors"
     );
   }
+
+  @Test(description = "Drill all the way down the brands hierarchy and drill back up")
+  public void drillDownDrillUpBrands () {
+    accountDashboardPage.drillIntoFirstRowInLeftPanel();
+    Assert.assertTrue(
+      accountDashboardPage.isLeftPanelResultsLoadedFor(LeftPanelLevel.SkuPackage),
+      "Left brands panel failed to load for SKU/Packages"
+    );
+    Assert.assertTrue(
+      accountDashboardPage.isRightPanelResultsLoadedFor(RightPanelLevel.Distributors),
+      "Right accounts panel failed to reload for SKU/Packages"
+    );
+
+    accountDashboardPage.drillUpLeftPanel();
+    Assert.assertTrue(
+      accountDashboardPage.isLeftPanelResultsLoadedFor(LeftPanelLevel.Brand),
+      "Left brands panel failed to load for Brands"
+    );
+    Assert.assertTrue(
+      accountDashboardPage.isRightPanelResultsLoadedFor(RightPanelLevel.Distributors),
+      "Right accounts panel failed to reload for Brands"
+    );
+  }
 }
