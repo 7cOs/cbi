@@ -28,8 +28,6 @@ describe('Service: MyPerformanceTableDataTransformerService', () => {
       const transformedRoleGroupTableData =
         myPerformanceTableDataTransformerService.transformRoleGroupTableData(mockRoleGroups);
 
-      // when actual performance data is added, we can replace the following with:
-      // expect(transformedRoleGroupTableData).toEqual(expectedTableData);
       expect(transformedRoleGroupTableData[0].descriptionRow0).toEqual(mockRoleGroups.Specialist[0].typeDisplayName);
       expect(transformedRoleGroupTableData[1].descriptionRow0).toEqual(mockRoleGroups.MDM[0].typeDisplayName);
     });
@@ -46,8 +44,6 @@ describe('Service: MyPerformanceTableDataTransformerService', () => {
       const transformedPeopleTableData =
         myPerformanceTableDataTransformerService.transformPeopleTableData({'MDM': mockRoleGroups.MDM});
 
-      // when actual performance data is added, we can replace the following with:
-      // expect(transformedPeopleTableData).toEqual(expectedTableData);
       expect(transformedPeopleTableData[0].descriptionRow0).toEqual(mockRoleGroups.MDM[0].name);
     });
   });
@@ -63,8 +59,6 @@ describe('Service: MyPerformanceTableDataTransformerService', () => {
       const transformedTotalRowTableData =
         myPerformanceTableDataTransformerService.buildTotalRow({'MDM': mockRoleGroups.MDM});
 
-      // when actual performance data is added, we can replace the following with:
-      // expect(transformedTotalRowTableData).toEqual(expectedTableData);
       expect(transformedTotalRowTableData.descriptionRow0).toEqual('TOTAL');
       expect(transformedTotalRowTableData.descriptionRow1).toEqual('MDMs');
     });
@@ -75,6 +69,7 @@ describe('Service: MyPerformanceTableDataTransformerService', () => {
       (_myPerformanceTableDataTransformerService: MyPerformanceTableDataTransformerService) => {
         myPerformanceTableDataTransformerService = _myPerformanceTableDataTransformerService;
     }));
+
     it('should return properly formatted table data and total row data when view type is people', () => {
       spyOn(myPerformanceTableDataTransformerService, 'getTableData').and.callThrough();
       const { tableData, totalRowData } =
@@ -87,6 +82,7 @@ describe('Service: MyPerformanceTableDataTransformerService', () => {
         expect(totalRowData.descriptionRow0).toBe('TOTAL');
         expect(totalRowData.descriptionRow1).toBe('MDMs');
     });
+
     it('should return properly formatted table data without a total row when view type is not people', () =>  {
       spyOn(myPerformanceTableDataTransformerService, 'getTableData').and.callThrough();
       const { tableData, totalRowData } =
