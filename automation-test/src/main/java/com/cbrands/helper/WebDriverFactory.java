@@ -71,15 +71,6 @@ public class WebDriverFactory implements SauceOnDemandSessionIdProvider, SauceOn
     return capabilities;
   }
 
-  private static DesiredCapabilities getSauceCapabilitiesForChrome() {
-    final DesiredCapabilities capabilities = DesiredCapabilities.chrome();
-
-    capabilities.setCapability(CapabilityType.PLATFORM, Platform.WIN8_1);
-    capabilities.setCapability("name", "Automated Functional Test - Chrome");
-
-    return capabilities;
-  }
-
   private static DesiredCapabilities getSauceCapabilitiesForIE() {
     final DesiredCapabilities capabilities = DesiredCapabilities.internetExplorer();
 
@@ -88,9 +79,24 @@ public class WebDriverFactory implements SauceOnDemandSessionIdProvider, SauceOn
     capabilities.setCapability(InternetExplorerDriver.REQUIRE_WINDOW_FOCUS, true);
     capabilities.setCapability(InternetExplorerDriver.ENABLE_ELEMENT_CACHE_CLEANUP, true);
     capabilities.setCapability(InternetExplorerDriver.IE_ENSURE_CLEAN_SESSION, true);
-    capabilities.setCapability("name", "Automated Functional Test - IE");
+
+    capabilities.setCapability("name", getTestRunName(BrowserType.ie.name()));
 
     return capabilities;
+  }
+
+  private static DesiredCapabilities getSauceCapabilitiesForChrome() {
+    final DesiredCapabilities capabilities = DesiredCapabilities.chrome();
+
+    capabilities.setCapability(CapabilityType.PLATFORM, Platform.WIN8_1);
+    capabilities.setCapability("name", getTestRunName(BrowserType.chrome.name()));
+
+    return capabilities;
+  }
+
+  private static String getTestRunName(String browserName) {
+    return "Automated Functional Test - " + browserName.toUpperCase() + " - " + PropertiesCache.getInstance().getProperty
+      ("origin");
   }
 
   private static void setRemoteWebDriver(String driverName) {

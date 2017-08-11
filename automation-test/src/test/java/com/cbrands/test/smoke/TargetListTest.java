@@ -15,7 +15,7 @@ import org.testng.annotations.Test;
 public class TargetListTest extends BaseTestCase {
   static String current_time_stamp = new java.text.SimpleDateFormat("MM.dd.yyyy HH:mm:ss").format(new java.util.Date());
 
-  private Login login;
+  private Login loginPage;
   private LogoutPage logoutPage;
   private TargetListListingsPage targetListListingPage;
 
@@ -23,13 +23,13 @@ public class TargetListTest extends BaseTestCase {
   public void setUp() {
     final TestUser testUser = TestUser.ACTOR4;
 
-    login = new Login(driver);
+    loginPage = new Login(driver);
     logoutPage = new LogoutPage(driver);
 
     log.info("\nLoading webpage...");
     driver.get(webAppBaseUrl);
-    HomePage homePage = login.loginWithValidCredentials(testUser.userName(), testUser.password());
-    Assert.assertTrue(homePage.isOnHomePage(), "Failed to log in user: " + testUser.userName());
+    final HomePage homePage = loginPage.loginAs(testUser);
+    Assert.assertTrue(homePage.isLoaded(), "Failed to log in user: " + testUser.userName());
 
     targetListListingPage = PageFactory.initElements(driver, TargetListListingsPage.class);
     targetListListingPage.goToPage();

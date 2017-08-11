@@ -14,7 +14,7 @@ import static com.cbrands.helper.SeleniumUtils.waitForVisibleFluentWait;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.cbrands.pages.HomePage;
+import com.cbrands.pages.Home;
 import com.cbrands.pages.NotificationContent;
 import com.cbrands.pages.Opportunities;
 import org.openqa.selenium.By;
@@ -466,9 +466,9 @@ public class TargetList extends LoadableComponent<TargetList> {
 		return PageFactory.initElements(driver, TargetList.class);
 	}
 
-	public HomePage navigateToHomePage() {
+	public Home navigateToHomePage() {
 		homePage.click();
-		return PageFactory.initElements(driver, HomePage.class);
+		return PageFactory.initElements(driver, Home.class);
 	}
 
 	public TargetList clickCollaborator() {

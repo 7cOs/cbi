@@ -28,14 +28,21 @@ deployment:
     branch: develop
     commands:
       - git push git@heroku.com:app-orion-dev.git $CIRCLE_SHA1:master -f
+
   qa:
     branch: test
     commands:
       - git push git@heroku.com:app-orion-qa.git $CIRCLE_SHA1:master -f
       - cd automation-test && mvn test -DargLine="-Denv=qa -Dbrowser=ie"
       - cd automation-test && mvn test -DargLine="-Denv=qa -Dbrowser=chrome"
-  poc:
-    branch: staging
+
+  ga-automation:
+    branch: ga-automation
+    commands:
+      - git push git@heroku.com:app-compass-ga-automation.git $CIRCLE_SHA1:master -f
+
+  stage:
+    branch: stage
     commands:
       - git push git@heroku.com:app-compass-stage.git $CIRCLE_SHA1:master -f
 
