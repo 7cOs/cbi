@@ -143,6 +143,11 @@ public class AccountDashboardPage extends TestNGBasePage {
     return this;
   }
 
+  public AccountDashboardPage drillIntoFirstRowInLeftPanel() {
+    scrollToAndClick(leftPanel.findElement(By.xpath(LEFT_PANEL_ROW_XPATH)));
+    return this;
+  }
+
   public AccountDashboardPage drillIntoFirstRowInRightPanel() {
     scrollToAndClick(rightPanel.findElement(By.xpath(RIGHT_PANEL_ROW_XPATH)));
     return this;
