@@ -148,6 +148,14 @@ public class AccountDashboardPage extends TestNGBasePage {
     return this;
   }
 
+  public AccountDashboardPage drillUpLeftPanel() {
+    final WebElement backButton = leftPanel.findElement(By.xpath(BACK_CHEVRON_XPATH));
+    waitForVisibleFluentWait(backButton);
+    waitForElementToClickable(backButton, true).click();
+
+    return this;
+  }
+
   public AccountDashboardPage drillIntoFirstRowInRightPanel() {
     scrollToAndClick(rightPanel.findElement(By.xpath(RIGHT_PANEL_ROW_XPATH)));
     return this;
