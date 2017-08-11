@@ -44,6 +44,13 @@ export function responsibilitiesReducer(
         status: ActionStatus.Error
       });
 
+    case ResponsibilitiesActions.GET_PEOPLE_BY_ROLE_GROUP_ACTION:
+      return Object.assign({}, state, {
+        responsibilities: {
+          [action.payload]: state.responsibilities[action.payload]
+        }
+      });
+
     default:
       return state;
   }
