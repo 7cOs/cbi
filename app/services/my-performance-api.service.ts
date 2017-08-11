@@ -13,7 +13,7 @@ export class MyPerformanceApiService {
   constructor(private http: Http) { }
 
   public getResponsibilities(personId: number): Observable<any> {
-    this.url = `/v3/people/${personId}/responsibilities`;
+    this.url = `/v3/positions/${personId}/responsibilities`;
     return this.http.get(`${this.url}`)
       .map(res => res.json())
       .catch(err => this.handleError(new Error(err)));

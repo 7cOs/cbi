@@ -26,13 +26,13 @@ describe('Service: ResponsibilitiesTransformerService', () => {
           {
             id: 123,
             name: 'Joe',
-            typeDisplayName: 'Market Development Managers',
+            typeDisplayName: 'Market Development Manager',
             peopleType: EntityPeopleType.MDM
           },
           {
             id: 456,
             name: 'Jack',
-            typeDisplayName: 'Market Development Managers',
+            typeDisplayName: 'Market Development Manager',
             peopleType: EntityPeopleType.MDM
           }
         ],
@@ -40,7 +40,7 @@ describe('Service: ResponsibilitiesTransformerService', () => {
           {
             id: 789,
             name: 'Janet',
-            typeDisplayName: 'Specialists',
+            typeDisplayName: 'Specialist',
             peopleType: EntityPeopleType.Specialist
           }
         ]

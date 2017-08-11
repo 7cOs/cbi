@@ -1,5 +1,6 @@
 import * as Chance from 'chance';
 
+import { getEntityPeopleResponsibilitiesMock } from '../../models/entity-responsibilities.model.mock';
 import { getMockRoleGroups } from '../../models/role-groups.model.mock';
 import * as ResponsibilitiesActions from './responsibilities.action';
 import { RoleGroups } from '../../models/role-groups.model';
@@ -64,4 +65,24 @@ describe('Responsibilities Actions', () => {
       expect(action.payload).toEqual(error);
     });
   });
+
+  describe('FetchResponsibilitiesFailureAction', () => {
+    const entityPeopleType = getEntityPeopleResponsibilitiesMock().peopleType;
+    let action: ResponsibilitiesActions.GetPeopleByRoleGroupAction;
+
+    beforeEach(() => {
+      action = new ResponsibilitiesActions.GetPeopleByRoleGroupAction(entityPeopleType);
+    });
+
+    it('should have the correct type', () => {
+      expect(ResponsibilitiesActions.GET_PEOPLE_BY_ROLE_GROUP_ACTION)
+        .toBe('[Responsibilities] GET_PEOPLE_BY_ROLE_GROUP_ACTION');
+      expect(action.type).toBe(ResponsibilitiesActions.GET_PEOPLE_BY_ROLE_GROUP_ACTION);
+    });
+
+    it('should contain the mock payload', () => {
+      expect(action.payload).toEqual(entityPeopleType);
+    });
+  });
+
 });

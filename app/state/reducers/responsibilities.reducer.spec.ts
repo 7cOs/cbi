@@ -1,6 +1,7 @@
 import { responsibilitiesReducer, initialState } from './responsibilities.reducer';
 import { ActionStatus } from '../../enums/action-status.enum';
 import * as ResponsibilitiesActions from '../actions/responsibilities.action';
+import { getEntityPeopleResponsibilitiesMock } from '../../models/entity-responsibilities.model.mock';
 import { getMockRoleGroups } from '../../models/role-groups.model.mock';
 
 describe('Responsibilities Reducer', () => {
@@ -26,6 +27,27 @@ describe('Responsibilities Reducer', () => {
     };
 
     const actualState = responsibilitiesReducer(initialState, new ResponsibilitiesActions.FetchResponsibilitiesSuccessAction(payload));
+
+    expect(actualState).toEqual(expectedState);
+  });
+
+  it('should update responsibilities with the selected role group\'s positions', () => {
+    const mockRoleGroups = getMockRoleGroups();
+    const payload = getEntityPeopleResponsibilitiesMock().peopleType;
+
+    const stateWithRoleGroups = {
+      status: ActionStatus.Fetched,
+      responsibilities: mockRoleGroups
+    };
+
+    const expectedState = {
+      status: ActionStatus.Fetched,
+      responsibilities: {
+        [payload]: mockRoleGroups[payload]
+      }
+    };
+
+    const actualState = responsibilitiesReducer(stateWithRoleGroups, new ResponsibilitiesActions.GetPeopleByRoleGroupAction(payload));
 
     expect(actualState).toEqual(expectedState);
   });

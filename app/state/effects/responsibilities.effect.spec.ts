@@ -3,14 +3,16 @@ import { EffectsRunner, EffectsTestingModule } from '@ngrx/effects/testing';
 import { Observable } from 'rxjs';
 import { TestBed, inject } from '@angular/core/testing';
 
-import { RoleGroups } from '../../models/role-groups.model';
-import { MyPerformanceApiService } from '../../services/my-performance-api.service';
-import { ResponsibilitiesEffects } from './responsibilities.effect';
-import { ResponsibilitiesTransformerService } from '../../services/responsibilities-transformer.service';
 import { FetchResponsibilitiesAction,
          FetchResponsibilitiesFailureAction,
          FetchResponsibilitiesSuccessAction } from '../actions/responsibilities.action';
 import { getMockRoleGroups } from '../../models/role-groups.model.mock';
+import { MyPerformanceApiService } from '../../services/my-performance-api.service';
+import { ResponsibilitiesEffects } from './responsibilities.effect';
+import { ResponsibilitiesTransformerService } from '../../services/responsibilities-transformer.service';
+import { RoleGroups } from '../../models/role-groups.model';
+import { SetLeftMyPerformanceTableViewType } from '../actions/view-types.action';
+import { ViewType } from '../../enums/view-type.enum';
 
 let chance = new Chance();
 
@@ -22,7 +24,7 @@ describe('Responsibilities Effects', () => {
   let responsibilitiesEffects: ResponsibilitiesEffects;
   let myPerformanceApiServiceMock = {
     getResponsibilities() {
-      return Observable.of(roleGroupsMock);
+      return Observable.of({positions: roleGroupsMock});
     }
   };
   let responsibilitiesTransformerServiceMock = {
@@ -58,7 +60,6 @@ describe('Responsibilities Effects', () => {
   describe('when a FetchResponsibilitiesAction is received', () => {
 
     describe('when ResponsibilitiesApiService returns successfully', () => {
-
       let myPerformanceApiService: MyPerformanceApiService;
       beforeEach(inject([ MyPerformanceApiService ],
         (_myPerformanceApiService: MyPerformanceApiService) => {
@@ -69,8 +70,9 @@ describe('Responsibilities Effects', () => {
       ));
 
       it('should return a FetchResponsibilitiesSuccessAction', (done) => {
-        responsibilitiesEffects.fetchResponsibilities$().subscribe(result => {
-          expect(result).toEqual(new FetchResponsibilitiesSuccessAction(roleGroupsMock));
+        responsibilitiesEffects.fetchResponsibilities$().pairwise().subscribe(([result1, result2]) => {
+          expect(result1).toEqual(new SetLeftMyPerformanceTableViewType(ViewType.roleGroups));
+          expect(result2).toEqual(new FetchResponsibilitiesSuccessAction(roleGroupsMock));
           done();
         });
       });
@@ -86,7 +88,7 @@ describe('Responsibilities Effects', () => {
         }
       ));
 
-      it('should return a FetchVersionFailureAction after catching an error', (done) => {
+      it('should return a FetchResponsibilitiesFailureAction after catching an error', (done) => {
         spyOn(myPerformanceApiService, 'getResponsibilities').and.returnValue(Observable.throw(err));
         responsibilitiesEffects.fetchResponsibilities$().subscribe((result) => {
           expect(result).toEqual(new FetchResponsibilitiesFailureAction(err));
@@ -96,16 +98,15 @@ describe('Responsibilities Effects', () => {
     });
   });
 
-  describe('when a FetchVersionFailureAction is received', () => {
+  describe('when a FetchResponsibilitiesFailureAction is received', () => {
 
     beforeEach(() => {
       runner.queue(new FetchResponsibilitiesFailureAction(err));
       spyOn(console, 'error');
     });
 
-    // console logging isn't important, but it will be important to test real error handling if added later
     it('should log the error payload', (done) => {
-      responsibilitiesEffects.fetchVersionFailure$().subscribe(() => {
+      responsibilitiesEffects.fetchResponsibilitiesFailure$().subscribe(() => {
         expect(console.error).toHaveBeenCalled();
         done();
       });

@@ -14,9 +14,10 @@ div(style="margin-top: 100px;")
     [performanceMetric]="performanceMetric",
     [totalRow]="totalRowData",
     [sortingCriteria]="sortingCriteria",
-    [viewType]="viewType.roleGroups",
+    [viewType]="leftTableViewType",
     [showOpportunities]="false",
-    (onSortingCriteriaChanged)="handleSortRows($event)")
+    (onSortingCriteriaChanged)="handleSortRows($event)",
+    (onElementClicked)="handleElementClicked(true, $event.type, $event.index, $event.row)")
 
   my-performance-table.right(
     [tableData]="rightTableData",
@@ -25,4 +26,5 @@ div(style="margin-top: 100px;")
     [sortingCriteria]="sortingCriteria",
     [showOpportunities]="showOpportunities",
     [viewType]="viewType.brands",
-    (onSortingCriteriaChanged)="handleSortRows($event)")
+    (onSortingCriteriaChanged)="handleSortRows($event.type, $event.index, $event.row)",
+    (onElementClicked)="handleElementClicked(false, $event.type, $event.index, $event.row)")
