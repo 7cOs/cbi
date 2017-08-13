@@ -1,6 +1,6 @@
 import { DateRangeTimePeriodValue } from '../../enums/date-range-time-period.enum';
 import { DistributionTypeValue } from '../../enums/distribution-type.enum';
-import { MetricValue } from '../../enums/metric-type.enum';
+import { MetricTypeValue } from '../../enums/metric-type.enum';
 import { PremiseTypeValue } from '../../enums/premise-type.enum';
 import * as MyPerformanceFilterActions from './my-performance-filter.action';
 
@@ -8,7 +8,7 @@ describe('My Performance Filter Actions', () => {
 
   describe('SetMetric action', () => {
     let action: MyPerformanceFilterActions.SetMetric;
-    const payload: MetricValue = MetricValue.volume;
+    const payload: MetricTypeValue = MetricTypeValue.volume;
 
     beforeEach(() => {
       action = new MyPerformanceFilterActions.SetMetric(payload);

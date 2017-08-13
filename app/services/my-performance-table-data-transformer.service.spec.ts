@@ -100,16 +100,17 @@ describe('Service: MyPerformanceTableDataTransformerService', () => {
   });
 
   describe('getTotalRowDisplayData', () => {
-    let myPerformanceTableDataTransformerService: MyPerformanceTableDataTransformerService;
+    let tableDataTransformerService: MyPerformanceTableDataTransformerService;
+
     beforeEach(inject([ MyPerformanceTableDataTransformerService ],
       (_myPerformanceTableDataTransformerService: MyPerformanceTableDataTransformerService) => {
-        myPerformanceTableDataTransformerService = _myPerformanceTableDataTransformerService;
+        tableDataTransformerService = _myPerformanceTableDataTransformerService;
     }));
 
     it('should return a formatted total row from total performance data', () => {
-      spyOn(myPerformanceTableDataTransformerService, 'getTotalRowDisplayData').and.callThrough();
+      spyOn(tableDataTransformerService, 'getTotalRowDisplayData').and.callThrough();
 
-      const performanceTotalRowData = myPerformanceTableDataTransformerService.getTotalRowDisplayData(mockPerformanceTotal);
+      const performanceTotalRowData = tableDataTransformerService.getTotalRowDisplayData(mockPerformanceTotal);
 
       expect(performanceTotalRowData).toEqual({
         descriptionRow0: 'Total',
@@ -122,17 +123,18 @@ describe('Service: MyPerformanceTableDataTransformerService', () => {
   });
 
   describe('getRoleGroupPerformanceTableData', () => {
-    let myPerformanceTableDataTransformerService: MyPerformanceTableDataTransformerService;
+    let tableDataTransformerService: MyPerformanceTableDataTransformerService;
+
     beforeEach(inject([ MyPerformanceTableDataTransformerService ],
       (_myPerformanceTableDataTransformerService: MyPerformanceTableDataTransformerService) => {
-        myPerformanceTableDataTransformerService = _myPerformanceTableDataTransformerService;
+        tableDataTransformerService = _myPerformanceTableDataTransformerService;
     }));
 
     it('should return a collection of formatted table data from role group performance data', () => {
-      spyOn(myPerformanceTableDataTransformerService, 'getRoleGroupPerformanceTableData').and.callThrough();
+      spyOn(tableDataTransformerService, 'getRoleGroupPerformanceTableData').and.callThrough();
 
       const roleGroupPerformanceTableData =
-        myPerformanceTableDataTransformerService.getRoleGroupPerformanceTableData(mockRoleGroupPerformanceTotals);
+        tableDataTransformerService.getRoleGroupPerformanceTableData(mockRoleGroupPerformanceTotals);
 
       expect(roleGroupPerformanceTableData[0].descriptionRow0).toEqual(mockRoleGroupPerformanceTotals[0].entityType);
       expect(roleGroupPerformanceTableData[1].descriptionRow0).toEqual(mockRoleGroupPerformanceTotals[1].entityType);

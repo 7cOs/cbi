@@ -1,27 +1,20 @@
 import { Http } from '@angular/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { Store } from '@ngrx/store';
 import 'rxjs/add/operator/map';
 
-import { AppState } from '../state/reducers/root.reducer';
+import { DateRangeTimePeriodValue } from '../enums/date-range-time-period.enum';
+import { DistributionTypeValue } from '../enums/distribution-type.enum';
+import { MetricTypeValue } from '../enums/metric-type.enum';
 import { MyPerformanceFilterState } from '../state/reducers/my-performance-filter.reducer';
 import { PerformanceTotal } from '../models/performance-total.model'; // tslint:disable-line:no-unused-variable
+import { PremiseTypeValue } from '../enums/premise-type.enum';
 import { RoleGroupPerformanceTotal } from '../models/role-groups.model'; // tslint:disable-line:no-unused-variable
 
 @Injectable()
 export class MyPerformanceApiService {
 
-  private filterState: MyPerformanceFilterState;
-
-  constructor(
-    private http: Http,
-    private store: Store<AppState>
-  ) {
-    this.store.select(state => state.myPerformanceFilter).subscribe(filterState => {
-      this.filterState = filterState;
-    });
-  }
+  constructor(private http: Http) { }
 
   public getResponsibilities(positionId: number): Observable<any> {
     const url = `/v3/positions/${ positionId }/responsibilities`;
@@ -31,46 +24,48 @@ export class MyPerformanceApiService {
       .catch(err => this.handleError(new Error(err)));
   }
 
-  public getResponsibilitiesPerformanceTotals(positionId: number, entityType: Array<string>): Observable<RoleGroupPerformanceTotal[]> {
+  public getResponsibilitiesPerformanceTotals(
+    positionId: number, entityType: Array<string>, filter: MyPerformanceFilterState
+  ): Observable<RoleGroupPerformanceTotal[]> {
     const apiCalls: any[] = [];
 
     entityType.forEach((entity: string) => {
-      apiCalls.push(this.getResponsibilityPerformanceTotal(positionId, entity));
+      apiCalls.push(this.getResponsibilityPerformanceTotal(positionId, entity, filter));
     });
 
     return Observable.forkJoin(apiCalls);
   }
 
-  public getResponsibilityPerformanceTotal(positionId: number, entityType: string): Observable<RoleGroupPerformanceTotal|Error> {
+  public getResponsibilityPerformanceTotal(
+    positionId: number, entityType: string, filter: MyPerformanceFilterState
+  ): Observable<RoleGroupPerformanceTotal|Error> {
     const url = `/v3/positions/${ positionId }/responsibilities/${ entityType }/performanceTotal`;
 
     return this.http.get(`${ url }`, {
-      params: this.getFilterStateParams(this.filterState)
+      params: this.getFilterStateParams(filter)
     })
       .map(res => ({ entityType: entityType, performanceTotal: res.json() }))
       .catch(err => this.handleError(new Error(err)));
   }
 
-  public getPerformanceTotal(positionId: number): Observable<PerformanceTotal> {
+  public getPerformanceTotal(positionId: number, filter: MyPerformanceFilterState): Observable<PerformanceTotal> {
     const url = `/v3/positions/${ positionId }/performanceTotal`;
 
     return this.http.get(`${ url }`, {
-      params: this.getFilterStateParams(this.filterState)
+      params: this.getFilterStateParams(filter)
     })
     .map(res => res.json())
     .catch(err => this.handleError(new Error(err)));
   }
 
-  private getFilterStateParams(filterState: MyPerformanceFilterState): any {
-    if (filterState.distributionType) {
-      return {
-        metricType: filterState.distributionType + filterState.metricType,
-        dateRangeCode: filterState.dateRangeCode,
-        premiseType: filterState.premiseType
-      };
-    }
-
-    return filterState;
+  private getFilterStateParams(filter: MyPerformanceFilterState): any {
+    return {
+      metricType: filter.hasOwnProperty('distributionType')
+        ? DistributionTypeValue[filter.distributionType] + MetricTypeValue[filter.metricType]
+        : MetricTypeValue[filter.metricType],
+      dateRangeCode: DateRangeTimePeriodValue[filter.dateRangeCode],
+      premiseType: PremiseTypeValue[filter.premiseType]
+    };
   }
 
   private handleError(err: Error): Observable<Error> {

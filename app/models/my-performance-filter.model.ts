@@ -3,11 +3,11 @@ import { CompassSelectOption } from './compass-select-component.model';
 import { DateRangeTimePeriodValue } from '../enums/date-range-time-period.enum';
 import { DistributionTypeValue } from '../enums/distribution-type.enum';
 import { MyPerformanceFilterActionType } from '../enums/my-performance-filter.enum';
-import { MetricValue } from '../enums/metric-type.enum';
+import { MetricTypeValue } from '../enums/metric-type.enum';
 import { PremiseTypeValue } from '../enums/premise-type.enum';
 
 export interface MyPerformanceFilter {
-  metricType: MetricValue;
+  metricType: MetricTypeValue;
   dateRangeCode: DateRangeTimePeriodValue;
   premiseType: PremiseTypeValue;
   distributionType?: DistributionTypeValue;
@@ -20,13 +20,13 @@ export interface MyPerformanceFilterEvent {
 
 export const metricOptionsModel: Array<CompassSelectOption> = [{
   display: 'Depletions',
-  value: MetricValue.volume
+  value: MetricTypeValue.volume
 }, {
   display: 'Distribution',
-  value: MetricValue.PointsOfDistribution
+  value: MetricTypeValue.PointsOfDistribution
 }, {
   display: 'Velocity',
-  value: MetricValue.velocity
+  value: MetricTypeValue.velocity
 }];
 
 export const depletionsPremiseOptionsModel: Array<CompassRadioOption> = [{

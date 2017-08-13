@@ -1,7 +1,12 @@
 import * as Chance from 'chance';
 
+import { DateRangeTimePeriodValue } from '../../enums/date-range-time-period.enum';
+import { DistributionTypeValue } from '../../enums/distribution-type.enum';
 import { getEntityPeopleResponsibilitiesMock } from '../../models/entity-responsibilities.model.mock';
 import { getRoleGroupsMock, getRoleGroupPerformanceTotalsMock } from '../../models/role-groups.model.mock';
+import { MetricTypeValue } from '../../enums/metric-type.enum';
+import { MyPerformanceFilterState } from '../reducers/my-performance-filter.reducer';
+import { PremiseTypeValue } from '../../enums/premise-type.enum';
 import { RoleGroupPerformanceTotal, RoleGroups } from '../../models/role-groups.model';
 import * as ResponsibilitiesActions from './responsibilities.action';
 
@@ -12,10 +17,19 @@ describe('Responsibilities Actions', () => {
   describe('FetchResponsibilitiesAction', () => {
     let action: ResponsibilitiesActions.FetchResponsibilitiesAction;
     let mockUserID: number;
+    const mockPerformanceFilterState: MyPerformanceFilterState = {
+      metricType: MetricTypeValue.PointsOfDistribution,
+      dateRangeCode: DateRangeTimePeriodValue.FYTDBDL,
+      premiseType: PremiseTypeValue.On,
+      distributionType: DistributionTypeValue.simple
+    };
 
     beforeEach(() => {
       mockUserID = chance.natural();
-      action = new ResponsibilitiesActions.FetchResponsibilitiesAction(mockUserID);
+      action = new ResponsibilitiesActions.FetchResponsibilitiesAction({
+        positionId: mockUserID,
+        filter: mockPerformanceFilterState
+      });
     });
 
     it('should have the correct type', () => {
@@ -24,7 +38,10 @@ describe('Responsibilities Actions', () => {
     });
 
     it('should contain the correct payload', () => {
-      expect(action.payload).toEqual(mockUserID);
+      expect(action.payload).toEqual({
+        positionId: mockUserID,
+        filter: mockPerformanceFilterState
+      });
     });
   });
 
@@ -32,14 +49,17 @@ describe('Responsibilities Actions', () => {
     let action: ResponsibilitiesActions.FetchResponsibilitiesSuccessAction;
     let mockRoleGroups: RoleGroups;
     let mockUserId: number;
+    let mockRoleGroupPerformanceTotals: Array<RoleGroupPerformanceTotal>;
 
     beforeEach(() => {
       mockRoleGroups = getRoleGroupsMock();
       mockUserId = chance.natural();
+      mockRoleGroupPerformanceTotals = getRoleGroupPerformanceTotalsMock();
 
       action = new ResponsibilitiesActions.FetchResponsibilitiesSuccessAction({
         positionId: mockUserId,
-        responsibilities: mockRoleGroups
+        responsibilities: mockRoleGroups,
+        performanceTotals: mockRoleGroupPerformanceTotals
       });
     });
 
@@ -52,28 +72,9 @@ describe('Responsibilities Actions', () => {
     it('should contain the mock payload', () => {
       expect(action.payload).toEqual({
         positionId: mockUserId,
-        responsibilities: mockRoleGroups
+        responsibilities: mockRoleGroups,
+        performanceTotals: mockRoleGroupPerformanceTotals
       });
-    });
-  });
-
-  describe('FetchResponsibilitiesPerformanceTotalsSuccess', () => {
-    let action: ResponsibilitiesActions.FetchResponsibilitiesPerformanceTotalsSuccess;
-    let mockPayload: Array<RoleGroupPerformanceTotal>;
-
-    beforeEach(() => {
-      mockPayload = getRoleGroupPerformanceTotalsMock();
-      action = new ResponsibilitiesActions.FetchResponsibilitiesPerformanceTotalsSuccess(mockPayload);
-    });
-
-    it('should have the correct type', () => {
-      expect(ResponsibilitiesActions.FETCH_RESPONSIBILITIES_PERFORMANCE_TOTALS_SUCCESS)
-        .toBe('[Responsibilities] FETCH_RESPONSIBILITIES_PERFORMANCE_TOTALS_SUCCESS');
-      expect(action.type).toBe(ResponsibilitiesActions.FETCH_RESPONSIBILITIES_PERFORMANCE_TOTALS_SUCCESS);
-    });
-
-    it('should contain the correct payload', () => {
-      expect(action.payload).toEqual(mockPayload);
     });
   });
 
@@ -96,7 +97,7 @@ describe('Responsibilities Actions', () => {
     });
   });
 
-  describe('FetchResponsibilitiesFailureAction', () => {
+  describe('GetPeopleByRoleGroupAction', () => {
     const entityPeopleType = getEntityPeopleResponsibilitiesMock().peopleType;
     let action: ResponsibilitiesActions.GetPeopleByRoleGroupAction;
 

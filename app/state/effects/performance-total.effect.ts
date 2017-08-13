@@ -26,9 +26,9 @@ export class PerformanceTotalEffects {
         FetchResponsibilitiesActions.FETCH_RESPONSIBILITIES_ACTION
       )
       .switchMap((action: Action) => {
-        const personId = action.payload;
+        const { positionId, filter } = action.payload;
 
-        return this.myPerformanceApiService.getPerformanceTotal(personId)
+        return this.myPerformanceApiService.getPerformanceTotal(positionId, filter)
           .map((response: PerformanceTotal) => {
             return new PerformanceTotalActions.FetchPerformanceTotalSuccessAction(response);
           })

@@ -1,4 +1,4 @@
-export enum MetricValue {
+export enum MetricTypeValue {
   volume,
   PointsOfDistribution,
   velocity

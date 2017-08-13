@@ -6,14 +6,14 @@ export interface ResponsibilitiesState extends State {
   status: ActionStatus;
   positionId: number;
   responsibilities: RoleGroups;
-  responsibilitiesPerformanceTotals: Array<RoleGroupPerformanceTotal>;
+  performanceTotals: Array<RoleGroupPerformanceTotal>;
 }
 
 export const initialState: ResponsibilitiesState = {
   status: ActionStatus.NotFetched,
   positionId: 0,
   responsibilities: {},
-  responsibilitiesPerformanceTotals: []
+  performanceTotals: []
 };
 
 export function responsibilitiesReducer(
@@ -29,14 +29,10 @@ export function responsibilitiesReducer(
 
     case ResponsibilitiesActions.FETCH_RESPONSIBILITIES_SUCCESS_ACTION:
       return Object.assign({}, state, {
-        responsibilities: action.payload.responsibilities,
-        positionId: action.payload.positionId
-      });
-
-    case ResponsibilitiesActions.FETCH_RESPONSIBILITIES_PERFORMANCE_TOTALS_SUCCESS:
-      return Object.assign({}, state, {
         status: ActionStatus.Fetched,
-        responsibilitiesPerformanceTotals: action.payload
+        positionId: action.payload.positionId,
+        responsibilities: action.payload.responsibilities,
+        performanceTotals: action.payload.performanceTotals
       });
 
     case ResponsibilitiesActions.FETCH_RESPONSIBILITIES_FAILURE_ACTION:

@@ -2,13 +2,13 @@ import { Action } from '@ngrx/store';
 
 import { DateRangeTimePeriodValue } from '../../enums/date-range-time-period.enum';
 import { DistributionTypeValue } from '../../enums/distribution-type.enum';
-import { MetricValue } from '../../enums/metric-type.enum';
+import { MetricTypeValue } from '../../enums/metric-type.enum';
 import { PremiseTypeValue } from '../../enums/premise-type.enum';
 
 export const SET_METRIC = '[My Performance Filter] SET_METRIC';
 export class SetMetric implements Action {
   readonly type = SET_METRIC;
-  constructor(public payload: MetricValue) { }
+  constructor(public payload: MetricTypeValue) { }
 }
 
 export const SET_TIME_PERIOD = '[My Performance Filter] SET_TIME_PERIOD';

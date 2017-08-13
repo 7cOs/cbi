@@ -58,9 +58,11 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
   public showOpportunities: boolean = true;
 
   private dateRanges$: Observable<DateRangesState>;
-  private filterState$: Observable<MyPerformanceFilterState>;
+  private filterState: MyPerformanceFilterState;
+  private filterStateSubscription: Subscription;
   private performanceTotalSubscription: Subscription;
   private responsibilitiesSubscription: Subscription;
+  private viewTypesSubscription: Subscription;
 
   constructor(
     private store: Store<AppState>,
@@ -69,18 +71,22 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.dateRanges$ = this.store.select(state => state.dateRanges);
-    this.filterState$ = this.store.select(state => state.myPerformanceFilter);
 
-    this.store.select(state => state.responsibilities).subscribe((responsibilitiesState: ResponsibilitiesState) => {
-      if (responsibilitiesState && responsibilitiesState.responsibilities) {
-        let { tableData, totalRowData } =
-          this.myPerformanceTableDataTransformerService.getTableData(this.leftTableViewType, responsibilitiesState.responsibilities);
-        this.tableData = tableData;
-        this.totalRowData = totalRowData || this.totalRowData;
-      }
+    this.filterStateSubscription = this.store.select(state => state.myPerformanceFilter).subscribe(filterState => {
+      this.filterState = filterState;
     });
 
-    this.store.select(state => state.viewTypes).subscribe((viewTypeState: ViewTypeState) => {
+    this.responsibilitiesSubscription = this.store.select(state => state.responsibilities)
+      .subscribe((responsibilitiesState: ResponsibilitiesState) => {
+        if (responsibilitiesState && responsibilitiesState.responsibilities) {
+          let { tableData, totalRowData } =
+            this.myPerformanceTableDataTransformerService.getTableData(this.leftTableViewType, responsibilitiesState.responsibilities);
+          this.tableData = tableData;
+          this.totalRowData = totalRowData || this.totalRowData;
+        }
+    });
+
+    this.viewTypesSubscription = this.store.select(state => state.viewTypes).subscribe((viewTypeState: ViewTypeState) => {
       if (viewTypeState && viewTypeState.leftTableViewType) this.leftTableViewType = viewTypeState.leftTableViewType;
     });
 
@@ -93,12 +99,17 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
 
     // stub current user for now
     const currentUserId = 1;
-    this.store.dispatch(new FetchResponsibilitiesAction(currentUserId));
+    this.store.dispatch(new FetchResponsibilitiesAction({ positionId: currentUserId, filter: this.filterState }));
+
+    // setting ViewType for right side here for now
+    this.store.dispatch(new SetRightMyPerformanceTableViewType(ViewType.brands));
   }
 
   ngOnDestroy() {
+    this.filterStateSubscription.unsubscribe();
     this.performanceTotalSubscription.unsubscribe();
     this.responsibilitiesSubscription.unsubscribe();
+    this.viewTypesSubscription.unsubscribe();
   }
 
   public handleSortRows(criteria: SortingCriteria[]): void {

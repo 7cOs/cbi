@@ -12,7 +12,7 @@ import {
   metricOptionsModel,
   MyPerformanceFilterEvent // tslint:disable-line:no-unused-variable
 } from '../../../models/my-performance-filter.model';
-import { MetricValue } from '../../../enums/metric-type.enum';
+import { MetricTypeValue } from '../../../enums/metric-type.enum';
 import { MyPerformanceFilterActionType } from '../../../enums/my-performance-filter.enum';
 import { MyPerformanceFilterState } from '../../../state/reducers/my-performance-filter.reducer';
 
@@ -40,7 +40,7 @@ export class MyPerformanceFilterComponent {
   public distributionTimePeriodOptions: Array<CompassSelectOption> = [];
   public myPerformanceFilterActionType = MyPerformanceFilterActionType;
   public metricOptions: Array<CompassSelectOption> = metricOptionsModel;
-  public metricValue = MetricValue;
+  public metricTypeValue = MetricTypeValue;
 
   public filterSelected(filterType: MyPerformanceFilterActionType, filterValue: any): void {
     this.onFilterChange.emit({ filterType, filterValue });

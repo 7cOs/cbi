@@ -9,7 +9,7 @@ import { DateRangesState } from '../../state/reducers/date-ranges.reducer';
 import { DateRangeTimePeriodValue } from '../../enums/date-range-time-period.enum';
 import { DistributionTypeValue } from '../../enums/distribution-type.enum';
 import { FetchResponsibilitiesAction } from '../../state/actions/responsibilities.action';
-import { MetricValue } from '../../enums/metric-type.enum';
+import { MetricTypeValue } from '../../enums/metric-type.enum';
 import { MockStore } from '../../state/mock-store';
 import { MyPerformanceComponent } from './my-performance.component';
 import { MyPerformanceFilterActionType } from '../../enums/my-performance-filter.enum';
@@ -68,10 +68,33 @@ describe('MyPerformanceComponent', () => {
   });
 
   it('should dispatch actions on init', () => {
+    const mockState = {
+      myPerformanceFilter: {
+        metricType: MetricTypeValue.PointsOfDistribution,
+        dateRangeCode: DateRangeTimePeriodValue.FYTDBDL,
+        premiseType: PremiseTypeValue.On,
+        distributionType: DistributionTypeValue.simple,
+      },
+      dateRanges: chance.string(),
+      responsibilities: chance.string(),
+      viewTypes: chance.string(),
+      performanceTotal: chance.natural()
+    };
+
+    spyOn(store, 'select').and.callFake((elem: any) => {
+      const selectFunction = elem as ((state: any) => any);
+      return Observable.of(selectFunction(mockState));
+    });
     spyOn(store, 'dispatch');
-    componentInstance.ngOnInit();
+
+    fixture = TestBed.createComponent(MyPerformanceComponent);
+    fixture.detectChanges();
+
     expect(store.dispatch.calls.count()).toBe(2);
-    expect(store.dispatch.calls.argsFor(0)).toEqual([new FetchResponsibilitiesAction(1)]);
+    expect(store.dispatch.calls.argsFor(0)).toEqual([new FetchResponsibilitiesAction({
+      positionId: 1,
+      filter: mockState.myPerformanceFilter
+    })]);
 
     // this will change once right table is built
     expect(store.dispatch.calls.argsFor(1)).toEqual([new SetRightMyPerformanceTableViewType(ViewType.brands)]);
@@ -86,7 +109,7 @@ describe('MyPerformanceComponent', () => {
 
     mockFilterElement.onFilterChange.emit({
       filterType: MyPerformanceFilterActionType.Metric,
-      filterValue: MetricValue.volume
+      filterValue: MetricTypeValue.volume
     });
     mockFilterElement.onFilterChange.emit({
       filterType: MyPerformanceFilterActionType.TimePeriod,
@@ -103,7 +126,7 @@ describe('MyPerformanceComponent', () => {
 
     expect(store.dispatch.calls.count()).toBe(4);
     expect(store.dispatch.calls.argsFor(0)).toEqual([{
-      payload: MetricValue.volume,
+      payload: MetricTypeValue.volume,
       type: '[My Performance Filter] SET_METRIC'
     }]);
     expect(store.dispatch.calls.argsFor(1)).toEqual([{
@@ -122,8 +145,11 @@ describe('MyPerformanceComponent', () => {
 
   it('should call select with the right arguments', () => {
     const mockState = {
-        myPerformanceFilter: chance.string(),
-        dateRanges: chance.string()
+      myPerformanceFilter: 'mockPerformanceFilterState',
+      dateRanges: 'mockDateRangesState',
+      responsibilities: 'mockResponsibilitiesState',
+      viewTypes: 'mockViewTypesState',
+      performanceTotal: 'mockPerformanceTotalState'
     };
 
     spyOn(store, 'select').and.callFake((elem: any) => {
@@ -131,13 +157,23 @@ describe('MyPerformanceComponent', () => {
       return Observable.of(selectFunction(mockState));
     });
     fixture = TestBed.createComponent(MyPerformanceComponent);
+    fixture.detectChanges();
 
-    expect(store.select.calls.count()).toBe(4);
+    expect(store.select.calls.count()).toBe(5);
     const functionPassToSelectCall1 = store.select.calls.argsFor(0)[0];
-    expect(functionPassToSelectCall1(mockState)).toBe(mockState.myPerformanceFilter);
+    expect(functionPassToSelectCall1(mockState)).toBe(mockState.dateRanges);
 
     const functionPassToSelectCall2 = store.select.calls.argsFor(1)[0];
-    expect(functionPassToSelectCall2(mockState)).toBe(mockState.dateRanges);
+    expect(functionPassToSelectCall2(mockState)).toBe(mockState.myPerformanceFilter);
+
+    const functionPassToSelectCall3 = store.select.calls.argsFor(2)[0];
+    expect(functionPassToSelectCall3(mockState)).toBe(mockState.responsibilities);
+
+    const functionPassToSelectCall4 = store.select.calls.argsFor(3)[0];
+    expect(functionPassToSelectCall4(mockState)).toBe(mockState.viewTypes);
+
+    const functionPassToSelectCall5 = store.select.calls.argsFor(4)[0];
+    expect(functionPassToSelectCall5(mockState)).toBe(mockState.performanceTotal);
 
     fixture.detectChanges();
     const mockMyPerformanceFilter = fixture.debugElement.query(By.directive(MockMyPerformanceFilterComponent))

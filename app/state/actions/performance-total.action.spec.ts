@@ -1,7 +1,12 @@
 import * as Chance from 'chance';
 
-import { PerformanceTotal } from '../../models/performance-total.model';
+import { DateRangeTimePeriodValue } from '../../enums/date-range-time-period.enum';
+import { DistributionTypeValue } from '../../enums/distribution-type.enum';
 import { getPerformanceTotalMock } from '../../models/performance-total.model.mock';
+import { MetricTypeValue } from '../../enums/metric-type.enum';
+import { MyPerformanceFilterState } from '../reducers/my-performance-filter.reducer';
+import { PerformanceTotal } from '../../models/performance-total.model';
+import { PremiseTypeValue } from '../../enums/premise-type.enum';
 import * as PerformanceTotalActions from './performance-total.action';
 
 const chance = new Chance();
@@ -10,10 +15,19 @@ describe('Performance Total Actions', () => {
 
   describe('Fetch Performance Total Action', () => {
     const mockPositionId: number = chance.integer();
+    const mockPerformanceFilterState: MyPerformanceFilterState = {
+      metricType: MetricTypeValue.PointsOfDistribution,
+      dateRangeCode: DateRangeTimePeriodValue.FYTDBDL,
+      premiseType: PremiseTypeValue.On,
+      distributionType: DistributionTypeValue.simple
+    };
     let action: PerformanceTotalActions.FetchPerformanceTotalAction;
 
     beforeEach(() => {
-      action = new PerformanceTotalActions.FetchPerformanceTotalAction(mockPositionId);
+      action = new PerformanceTotalActions.FetchPerformanceTotalAction({
+        positionId: mockPositionId,
+        filter: mockPerformanceFilterState
+      });
     });
 
     it('should be the correct type', () => {
@@ -22,7 +36,10 @@ describe('Performance Total Actions', () => {
     });
 
     it('should contain the correct payload', () => {
-      expect(action.payload).toBe(mockPositionId);
+      expect(action.payload).toEqual({
+        positionId: mockPositionId,
+        filter: mockPerformanceFilterState
+      });
     });
   });
 

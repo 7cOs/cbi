@@ -5,10 +5,22 @@ import { getPerformanceTotalMock } from '../../models/performance-total.model.mo
 import { initialState, performanceTotalReducer } from './performance-total.reducer';
 import * as PerformanceTotalActions from '../actions/performance-total.action';
 
+import { DateRangeTimePeriodValue } from '../../enums/date-range-time-period.enum';
+import { DistributionTypeValue } from '../../enums/distribution-type.enum';
+import { MetricTypeValue } from '../../enums/metric-type.enum';
+import { PremiseTypeValue } from '../../enums/premise-type.enum';
+import { MyPerformanceFilterState } from '../reducers/my-performance-filter.reducer';
+
 const chance = new Chance();
 
 describe('Performance Total Reducer', () => {
   const mockPositionId: number = chance.integer();
+  const mockPerformanceFilterState: MyPerformanceFilterState = {
+    metricType: MetricTypeValue.PointsOfDistribution,
+    dateRangeCode: DateRangeTimePeriodValue.FYTDBDL,
+    premiseType: PremiseTypeValue.On,
+    distributionType: DistributionTypeValue.simple
+  };
 
   it('should update its status when a fetch action is dispatched', () => {
     const expectedState = {
@@ -19,7 +31,10 @@ describe('Performance Total Reducer', () => {
         contributionToVolume: 0
       }
     };
-    const actualState = performanceTotalReducer(initialState, new PerformanceTotalActions.FetchPerformanceTotalAction(mockPositionId));
+    const actualState = performanceTotalReducer(initialState, new PerformanceTotalActions.FetchPerformanceTotalAction({
+      positionId: mockPositionId,
+      filter: mockPerformanceFilterState
+    }));
 
     expect(actualState).toEqual(expectedState);
   });
@@ -30,7 +45,8 @@ describe('Performance Total Reducer', () => {
       status: ActionStatus.Fetched,
       performanceTotal: mockPayload
     };
-    const actualState = performanceTotalReducer(initialState, new PerformanceTotalActions.FetchPerformanceTotalSuccessAction(mockPayload));
+    const actualState = performanceTotalReducer(
+initialState, new PerformanceTotalActions.FetchPerformanceTotalSuccessAction(mockPayload));
 
     expect(actualState).toEqual(expectedState);
   });
@@ -44,7 +60,8 @@ describe('Performance Total Reducer', () => {
         contributionToVolume: 0
       }
     };
-    const actualState = performanceTotalReducer(initialState, new PerformanceTotalActions.FetchPerformanceTotalFailureAction(new Error()));
+    const actualState = performanceTotalReducer(
+initialState, new PerformanceTotalActions.FetchPerformanceTotalFailureAction(new Error()));
 
     expect(actualState).toEqual(expectedState);
   });
