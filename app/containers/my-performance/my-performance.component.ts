@@ -86,6 +86,10 @@ export class MyPerformanceComponent implements OnInit {
         this.totalRowData = totalRowData || this.totalRowData;
       }
 
+      if (myPerformanceState) {
+        this.currentState = myPerformanceState.current;
+        this.showLeftBackButton = myPerformanceState.versions.length > 0;
+      }
     });
   }
 
