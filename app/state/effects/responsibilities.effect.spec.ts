@@ -21,7 +21,7 @@ import { ViewType } from '../../enums/view-type.enum';
 
 const chance = new Chance();
 
-fdescribe('Responsibilities Effects', () => {
+describe('Responsibilities Effects', () => {
   const positionIdMock = chance.natural();
   const roleGroupsMock: RoleGroups = getRoleGroupsMock();
   const mockRoleGroupPerformanceTotals = getRoleGroupPerformanceTotalsMock();

@@ -100,17 +100,15 @@ describe('Service: MyPerformanceTableDataTransformerService', () => {
   });
 
   describe('getTotalRowDisplayData', () => {
-    let tableDataTransformerService: MyPerformanceTableDataTransformerService;
-
     beforeEach(inject([ MyPerformanceTableDataTransformerService ],
       (_myPerformanceTableDataTransformerService: MyPerformanceTableDataTransformerService) => {
-        tableDataTransformerService = _myPerformanceTableDataTransformerService;
+        myPerformanceTableDataTransformerService = _myPerformanceTableDataTransformerService;
     }));
 
     it('should return a formatted total row from total performance data', () => {
-      spyOn(tableDataTransformerService, 'getTotalRowDisplayData').and.callThrough();
+      spyOn(myPerformanceTableDataTransformerService, 'getTotalRowDisplayData').and.callThrough();
 
-      const performanceTotalRowData = tableDataTransformerService.getTotalRowDisplayData(mockPerformanceTotal);
+      const performanceTotalRowData = myPerformanceTableDataTransformerService.getTotalRowDisplayData(mockPerformanceTotal);
 
       expect(performanceTotalRowData).toEqual({
         descriptionRow0: 'Total',
@@ -123,18 +121,9 @@ describe('Service: MyPerformanceTableDataTransformerService', () => {
   });
 
   describe('getRoleGroupPerformanceTableData', () => {
-    let tableDataTransformerService: MyPerformanceTableDataTransformerService;
-
-    beforeEach(inject([ MyPerformanceTableDataTransformerService ],
-      (_myPerformanceTableDataTransformerService: MyPerformanceTableDataTransformerService) => {
-        tableDataTransformerService = _myPerformanceTableDataTransformerService;
-    }));
-
     it('should return a collection of formatted table data from role group performance data', () => {
-      spyOn(tableDataTransformerService, 'getRoleGroupPerformanceTableData').and.callThrough();
-
       const roleGroupPerformanceTableData =
-        tableDataTransformerService.getRoleGroupPerformanceTableData(mockRoleGroupPerformanceTotals);
+        myPerformanceTableDataTransformerService.getRoleGroupPerformanceTableData(mockRoleGroupPerformanceTotals);
 
       expect(roleGroupPerformanceTableData[0].descriptionRow0).toEqual(mockRoleGroupPerformanceTotals[0].entityType);
       expect(roleGroupPerformanceTableData[1].descriptionRow0).toEqual(mockRoleGroupPerformanceTotals[1].entityType);

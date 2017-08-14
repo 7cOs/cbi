@@ -27,10 +27,7 @@ import { ViewTypeState } from '../../state/reducers/view-types.reducer';
 import * as MyPerformanceFilterActions from '../../state/actions/my-performance-filter.action';
 
 // mocks
-import {
-  myPerformanceTableData,
-  myPerformanceRightTableData
-} from '../../models/my-performance-table-data.model.mock';
+import { myPerformanceRightTableData } from '../../models/my-performance-table-data.model.mock';
 
 @Component({
   selector: 'my-performance',
@@ -52,7 +49,7 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
   public tableHeaderRowRight: Array<string> = ['BRAND', 'DEPLETIONS', 'CTV'];
   public performanceMetric: string = 'Depletions';
   public dateRange: DateRange = getDateRangeMock();
-  public tableData: MyPerformanceTableRow[] = myPerformanceTableData;
+  public tableData: Array<MyPerformanceTableRow>;
   public rightTableData: MyPerformanceTableRow[] = myPerformanceRightTableData;
   public totalRowData: MyPerformanceTableRow;
   public showOpportunities: boolean = true;

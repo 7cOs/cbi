@@ -17,6 +17,7 @@ describe('Responsibilities Actions', () => {
   describe('FetchResponsibilitiesAction', () => {
     let action: ResponsibilitiesActions.FetchResponsibilitiesAction;
     let mockUserID: number;
+    let actionPayloadMock: any;
     const mockPerformanceFilterState: MyPerformanceFilterState = {
       metricType: MetricTypeValue.PointsOfDistribution,
       dateRangeCode: DateRangeTimePeriodValue.FYTDBDL,
@@ -26,10 +27,11 @@ describe('Responsibilities Actions', () => {
 
     beforeEach(() => {
       mockUserID = chance.natural();
-      action = new ResponsibilitiesActions.FetchResponsibilitiesAction({
+      actionPayloadMock = {
         positionId: mockUserID,
         filter: mockPerformanceFilterState
-      });
+      };
+      action = new ResponsibilitiesActions.FetchResponsibilitiesAction(actionPayloadMock);
     });
 
     it('should have the correct type', () => {
@@ -38,10 +40,7 @@ describe('Responsibilities Actions', () => {
     });
 
     it('should contain the correct payload', () => {
-      expect(action.payload).toEqual({
-        positionId: mockUserID,
-        filter: mockPerformanceFilterState
-      });
+      expect(action.payload).toEqual(actionPayloadMock);
     });
   });
 
@@ -50,17 +49,19 @@ describe('Responsibilities Actions', () => {
     let mockRoleGroups: RoleGroups;
     let mockUserId: number;
     let mockRoleGroupPerformanceTotals: Array<RoleGroupPerformanceTotal>;
+    let mockSuccessActionPayload: any;
 
     beforeEach(() => {
       mockRoleGroups = getRoleGroupsMock();
       mockUserId = chance.natural();
       mockRoleGroupPerformanceTotals = getRoleGroupPerformanceTotalsMock();
-
-      action = new ResponsibilitiesActions.FetchResponsibilitiesSuccessAction({
+      mockSuccessActionPayload = {
         positionId: mockUserId,
         responsibilities: mockRoleGroups,
         performanceTotals: mockRoleGroupPerformanceTotals
-      });
+      };
+
+      action = new ResponsibilitiesActions.FetchResponsibilitiesSuccessAction(mockSuccessActionPayload);
     });
 
     it('should have the correct type', () => {
@@ -70,11 +71,7 @@ describe('Responsibilities Actions', () => {
     });
 
     it('should contain the mock payload', () => {
-      expect(action.payload).toEqual({
-        positionId: mockUserId,
-        responsibilities: mockRoleGroups,
-        performanceTotals: mockRoleGroupPerformanceTotals
-      });
+      expect(action.payload).toEqual(mockSuccessActionPayload);
     });
   });
 
