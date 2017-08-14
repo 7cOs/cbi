@@ -43,7 +43,7 @@ export class ResponsibilitiesEffects {
           .map((response: PeopleResponsibilitiesDTO) => {
             roleGroups = this.responsibilitiesTransformerService.groupPeopleByRoleGroups(response.positions);
             entityTypes = Object.keys(roleGroups);
-
+            console.log('\n\nRESPONSE', response);
             if (response.positions) entityType = ViewType.roleGroups;
           });
         })
