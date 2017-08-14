@@ -126,7 +126,6 @@ th {
   }
 
   &:hover {
-    border-right: 1px solid $gray-14;
 
     /deep/td {
       background-color: $light-blue-4;
@@ -266,7 +265,6 @@ div.ctv {
           outline: 0;
         }
       }
-
     }
 
     tr.entity-row {
@@ -277,6 +275,7 @@ div.ctv {
           color: $blue;
           font-weight: normal;
           padding-left: 12px;
+          text-transform: uppercase;
         }
       }
     }

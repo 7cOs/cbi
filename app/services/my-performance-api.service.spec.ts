@@ -9,7 +9,7 @@ describe('Service: DateRangeApiService', () => {
   let myPerformanceApiService: MyPerformanceApiService;
   let mockBackend: MockBackend;
   const mockResponsibilitiesResponse: any = {
-    people: [
+    positions: [
       {
         id: 123,
         name: 'Joe',
@@ -65,7 +65,7 @@ describe('Service: DateRangeApiService', () => {
         });
         connection.mockRespond(new Response(options));
         expect(connection.request.method).toEqual(RequestMethod.Get);
-        expect(connection.request.url).toEqual('/v3/people/1/responsibilities');
+        expect(connection.request.url).toEqual('/v3/positions/1/responsibilities');
       });
 
       myPerformanceApiService

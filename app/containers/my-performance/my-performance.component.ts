@@ -6,9 +6,11 @@ import { AppState } from '../../state/reducers/root.reducer';
 import { ColumnType } from '../../enums/column-type.enum';
 import { DateRange } from '../../models/date-range.model';
 import { DateRangesState } from '../../state/reducers/date-ranges.reducer';
+import { EntityPeopleType } from '../../enums/entity-responsibilities.enum';
 import { FetchResponsibilitiesAction } from '../../state/actions/responsibilities.action';
 import * as MyPerformanceVersionActions from '../../state/actions/my-performance-version.action';
 import { getDateRangeMock } from '../../models/date-range.model.mock';
+import { GetPeopleByRoleGroupAction } from '../../state/actions/responsibilities.action';
 import { MyPerformanceFilterActionType } from '../../enums/my-performance-filter.enum';
 import { MyPerformanceFilterEvent } from '../../models/my-performance-filter.model';
 import { MyPerformanceFilterState } from '../../state/reducers/my-performance-filter.reducer';
@@ -18,8 +20,10 @@ import { MyPerformanceTableRow } from '../../models/my-performance-table-row.mod
 import { ResponsibilitiesState } from '../../state/reducers/responsibilities.reducer'; // tslint:disable-line:no-unused-variable
 import { MyPerformanceState, MyPerformanceData } from '../../state/reducers/my-performance.reducer';
 import { RowType } from '../../enums/row-type.enum';
+import { SetLeftMyPerformanceTableViewType, SetRightMyPerformanceTableViewType } from '../../state/actions/view-types.action';
 import { SortingCriteria } from '../../models/sorting-criteria.model';
 import { ViewType } from '../../enums/view-type.enum';
+import { ViewTypeState } from '../../state/reducers/view-types.reducer';
 
 // mocks
 import { myPerformanceTableData,
@@ -32,7 +36,14 @@ import { myPerformanceTableData,
   styles: [require('./my-performance.component.scss')]
 })
 export class MyPerformanceComponent implements OnInit {
+  public leftTableViewType: ViewType;
   public roleGroups: Observable<ResponsibilitiesState>;
+  public sortingCriteria: Array<SortingCriteria> = [
+    {
+      columnType: ColumnType.metricColumn0,
+      ascending: false
+    }
+  ];
   public viewType = ViewType;
   public showLeftBackButton = false;
 
@@ -45,12 +56,6 @@ export class MyPerformanceComponent implements OnInit {
   public rightTableData: MyPerformanceTableRow[] = myPerformanceRightTableData;
   public totalRowData: MyPerformanceTableRow = myPerformanceTotalRowData;
   public showOpportunities: boolean = true;
-  public sortingCriteria: Array<SortingCriteria> = [
-    {
-      columnType: ColumnType.metricColumn0,
-      ascending: false
-    }
-  ];
 
   private currentState: MyPerformanceData;
   private dateRanges$: Observable<DateRangesState>;
@@ -60,15 +65,20 @@ export class MyPerformanceComponent implements OnInit {
               private myPerformanceTableDataTransformerService: MyPerformanceTableDataTransformerService) {
     this.filterState$ = this.store.select(state => state.myPerformanceFilter);
     this.dateRanges$ = this.store.select(state => state.dateRanges);
-    this.store.select(state => state.myPerformance).subscribe((myPerformanceState: MyPerformanceState) => {
-      if (myPerformanceState
-          && myPerformanceState.current.responsibilities
-          && myPerformanceState.current.responsibilities.responsibilities) {
-        this.tableData = this.myPerformanceTableDataTransformerService
-        .transformRoleGroupTableData(myPerformanceState.current.responsibilities.responsibilities);
 
-        this.currentState = myPerformanceState.current;
-        this.showLeftBackButton = myPerformanceState.versions.length > 0;
+    this.store.select(state => state.myPerformance.current).subscribe((myPerformanceData: MyPerformanceData) => {
+      if (myPerformanceData.viewTypes
+        && myPerformanceData.viewTypes.leftTableViewType) {
+          this.leftTableViewType = myPerformanceData.viewTypes.leftTableViewType;
+        }
+
+      if (myPerformanceData
+          && myPerformanceData.responsibilities
+          && myPerformanceData.responsibilities.responsibilities) {
+        let { tableData, totalRowData } = this.myPerformanceTableDataTransformerService
+          .getTableData(this.leftTableViewType, myPerformanceData.responsibilities.responsibilities);
+        this.tableData = tableData;
+        this.totalRowData = totalRowData || this.totalRowData;
       }
 
     });
@@ -96,10 +106,13 @@ export class MyPerformanceComponent implements OnInit {
         if (leftSide) {
           this.store.dispatch(new MyPerformanceVersionActions.SaveMyPerformanceStateAction(this.currentState));
           console.log('clicked on left row:', row);
+          if (this.leftTableViewType === ViewType.roleGroups) {
+            this.store.dispatch(new SetLeftMyPerformanceTableViewType(ViewType.people));
+            this.store.dispatch(new GetPeopleByRoleGroupAction(EntityPeopleType[row.descriptionRow0]));
+          }
         } else {
           console.log('clicked on right row:', row);
         }
-        break;
     }
   }
 
@@ -130,5 +143,8 @@ export class MyPerformanceComponent implements OnInit {
     // stub current user for now
     const currentUserId = 1;
     this.store.dispatch(new FetchResponsibilitiesAction(currentUserId));
+
+    // setting ViewType for right side here for now
+    this.store.dispatch(new SetRightMyPerformanceTableViewType(ViewType.brands));
   }
 }
