@@ -84,12 +84,19 @@ describe('Performance Total Effects', () => {
       });
     });
 
-    it('should log the error payload', (done) => {
-      runner.queue(new PerformanceTotalActions.FetchPerformanceTotalFailureAction(error));
+    it('should log the error payload when a FetchPerformanceTotalFailureAction is received', (done) => {
+      spyOn(myPerformanceApiService, 'getPerformanceTotal').and.returnValue(Observable.throw(error));
       spyOn(console, 'error');
 
-      performanceTotalEffects.fetchPerformanceTotalFailure$().subscribe(() => {
-        expect(console.error).toHaveBeenCalled();
+      performanceTotalEffects.fetchPerformanceTotal$().subscribe(result => {
+        expect(result).toEqual(new PerformanceTotalActions.FetchPerformanceTotalFailureAction(error));
+        runner.queue(new PerformanceTotalActions.FetchPerformanceTotalFailureAction(error));
+        done();
+      });
+
+      performanceTotalEffects.fetchPerformanceTotalFailure$().subscribe((result) => {
+        expect(result).toEqual(new PerformanceTotalActions.FetchPerformanceTotalFailureAction(error));
+        expect(console.error).toHaveBeenCalledWith('Failed fetching performance total data', result.payload);
         done();
       });
     });

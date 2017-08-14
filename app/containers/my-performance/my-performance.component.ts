@@ -76,10 +76,8 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
     this.responsibilitiesSubscription = this.store.select(state => state.responsibilities)
       .subscribe((responsibilitiesState: ResponsibilitiesState) => {
         if (responsibilitiesState && responsibilitiesState.responsibilities) {
-          let { tableData, totalRowData } =
-            this.myPerformanceTableDataTransformerService.getTableData(this.leftTableViewType, responsibilitiesState.responsibilities);
-          this.tableData = tableData;
-          this.totalRowData = totalRowData || this.totalRowData;
+          this.tableData = this.myPerformanceTableDataTransformerService
+            .getRoleGroupPerformanceTableData(responsibilitiesState.performanceTotals);
         }
     });
 
@@ -95,7 +93,7 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
     });
 
     // stub current user for now
-    const currentUserId = 1;
+    const currentUserId = 3843;
     this.store.dispatch(new FetchResponsibilitiesAction({ positionId: currentUserId, filter: this.filterState }));
 
     // setting ViewType for right side here for now

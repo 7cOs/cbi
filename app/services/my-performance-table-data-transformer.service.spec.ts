@@ -4,6 +4,7 @@ import { getRoleGroupPerformanceTotalsMock, getRoleGroupsMock } from '../models/
 import { MyPerformanceTableDataTransformerService } from './my-performance-table-data-transformer.service';
 import { MyPerformanceTableRow } from '../models/my-performance-table-row.model';
 import { getPerformanceTotalMock } from '../models/performance-total.model.mock';
+import { UtilService } from './util.service';
 import { ViewType } from '../enums/view-type.enum';
 
 describe('Service: MyPerformanceTableDataTransformerService', () => {
@@ -15,7 +16,8 @@ describe('Service: MyPerformanceTableDataTransformerService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       providers: [
-        MyPerformanceTableDataTransformerService
+        MyPerformanceTableDataTransformerService,
+        UtilService
       ]
     });
   });

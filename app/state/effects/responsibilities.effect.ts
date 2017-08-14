@@ -31,7 +31,6 @@ export class ResponsibilitiesEffects {
     let filter: MyPerformanceFilterState;
     let positionId: number;
     let entityTypes: any;
-    let roleGroupsPerformanceTotals: Array<RoleGroupPerformanceTotal>;
 
     return this.actions$
       .ofType(ResponsibilitiesActions.FETCH_RESPONSIBILITIES_ACTION)
@@ -48,19 +47,16 @@ export class ResponsibilitiesEffects {
         })
         .concatMap(() => {
           return this.myPerformanceApiService.getResponsibilitiesPerformanceTotals(positionId, entityTypes, filter)
-            .map((res: Array<RoleGroupPerformanceTotal>) => {
-              roleGroupsPerformanceTotals = res;
+            .mergeMap((res: Array<RoleGroupPerformanceTotal>) => {
+              return Observable.from([
+                new ViewTypeActions.SetLeftMyPerformanceTableViewType(entityType),
+                new ResponsibilitiesActions.FetchResponsibilitiesSuccessAction({
+                  positionId: positionId,
+                  responsibilities: roleGroups,
+                  performanceTotals: res
+                })
+              ]);
             });
-        })
-        .concatMap(() => {
-          return Observable.from([
-            new ViewTypeActions.SetLeftMyPerformanceTableViewType(entityType),
-            new ResponsibilitiesActions.FetchResponsibilitiesSuccessAction({
-              positionId: positionId,
-              responsibilities: roleGroups,
-              performanceTotals: roleGroupsPerformanceTotals
-            })
-          ]);
         })
       .catch((err: Error) => Observable.of(new ResponsibilitiesActions.FetchResponsibilitiesFailureAction(err)));
   }

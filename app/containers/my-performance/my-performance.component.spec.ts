@@ -92,7 +92,7 @@ describe('MyPerformanceComponent', () => {
 
     expect(store.dispatch.calls.count()).toBe(2);
     expect(store.dispatch.calls.argsFor(0)).toEqual([new FetchResponsibilitiesAction({
-      positionId: 1,
+      positionId: 3843,
       filter: mockState.myPerformanceFilter
     })]);
 

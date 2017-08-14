@@ -7,12 +7,15 @@ import { EntityPeopleType } from '../enums/entity-responsibilities.enum';
 import { MyPerformanceTableRow } from '../models/my-performance-table-row.model';
 import { PerformanceTotal } from '../models/performance-total.model';
 import { RoleGroups, RoleGroupPerformanceTotal } from '../models/role-groups.model';
+import { UtilService } from './util.service';
 import { ViewType } from '../enums/view-type.enum';
 
 const chance = new Chance();
 
 @Injectable()
 export class MyPerformanceTableDataTransformerService {
+
+  constructor(private utilService: UtilService) { }
 
   // mocking the performance data for now;
   public transformRoleGroupTableData(roleGroups: RoleGroups): MyPerformanceTableRow[] {
@@ -73,7 +76,7 @@ export class MyPerformanceTableDataTransformerService {
         descriptionRow0: performance.entityType,
         metricColumn0: performance.performanceTotal.total,
         metricColumn1: performance.performanceTotal.totalYearAgo,
-        metricColumn2: parseFloat((performance.performanceTotal.total / performance.performanceTotal.totalYearAgo).toFixed(1)),
+        metricColumn2: this.utilService.getYearAgoPercent(performance.performanceTotal.total, performance.performanceTotal.totalYearAgo),
         ctv: performance.performanceTotal.contributionToVolume
       };
     });
@@ -84,7 +87,7 @@ export class MyPerformanceTableDataTransformerService {
       descriptionRow0: 'Total',
       metricColumn0: performanceTotal.total,
       metricColumn1: performanceTotal.totalYearAgo,
-      metricColumn2: parseFloat((performanceTotal.total / performanceTotal.totalYearAgo).toFixed(1)),
+      metricColumn2: this.utilService.getYearAgoPercent(performanceTotal.total, performanceTotal.totalYearAgo),
       ctv: performanceTotal.contributionToVolume
     };
   }
