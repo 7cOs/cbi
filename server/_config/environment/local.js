@@ -32,7 +32,7 @@ module.exports = function (config) {
     // TODO: remove when api gateway is in place
     v3BaseUrls: {
       dateRangeCodes: 'https://cbi-product-metrics-api-qa.herokuapp.com',
-      responsibilities: 'https://api-position-internal-qa.herokuapp.com'
+      positions: 'https://api-position-internal-qa.herokuapp.com'
     }
   };
 
