@@ -2,6 +2,7 @@ package com.cbrands.test.smoke;
 
 import com.cbrands.TestUser;
 import com.cbrands.pages.AccountDashboardPage;
+import com.cbrands.pages.AccountDashboardPage.LeftPanelLevel;
 import com.cbrands.pages.AccountDashboardPage.RightPanelLevel;
 import com.cbrands.pages.HomePage;
 import com.cbrands.pages.Login;
@@ -45,7 +46,8 @@ public class AccountDashboardTest extends BaseTestCase {
       .selectDistributorFilterByName("COASTAL BEV CO-NC (WILMINGTON)")
       .clickApplyFilters();
 
-    Assert.assertTrue(accountDashboardPage.isLeftPanelResultsLoaded(), "Left brands panel failed to load results");
+    Assert.assertTrue(accountDashboardPage.isLeftPanelResultsLoadedFor(LeftPanelLevel.Brand), "Left brands panel failed to load " +
+      "results");
     Assert.assertTrue(accountDashboardPage.isRightPanelResultsLoadedFor(RightPanelLevel.Accounts), "Right accounts panel failed to " +
       "load results");
   }
@@ -63,7 +65,7 @@ public class AccountDashboardTest extends BaseTestCase {
       "Right panel failed to load accounts for selected distributor"
     );
     Assert.assertTrue(
-      accountDashboardPage.isLeftPanelResultsLoaded(),
+      accountDashboardPage.isLeftPanelResultsLoadedFor(LeftPanelLevel.Brand),
       "Left brands panel failed to load results"
     );
 
@@ -73,7 +75,7 @@ public class AccountDashboardTest extends BaseTestCase {
       "Right panel failed to load subaccounts for selected account"
     );
     Assert.assertTrue(
-      accountDashboardPage.isLeftPanelResultsLoaded(),
+      accountDashboardPage.isLeftPanelResultsLoadedFor(LeftPanelLevel.Brand),
       "Left brands panel failed to reload for subaccounts"
     );
 
@@ -83,7 +85,7 @@ public class AccountDashboardTest extends BaseTestCase {
       "Right accounts panel failed to load stores for selected subaccount"
     );
     Assert.assertTrue(
-      accountDashboardPage.isLeftPanelResultsLoaded(),
+      accountDashboardPage.isLeftPanelResultsLoadedFor(LeftPanelLevel.Brand),
       "Left brands panel failed to reload for stores"
     );
   }
@@ -95,7 +97,7 @@ public class AccountDashboardTest extends BaseTestCase {
       "Right accounts panel failed to load subaccounts"
     );
     Assert.assertTrue(
-      accountDashboardPage.isLeftPanelResultsLoaded(),
+      accountDashboardPage.isLeftPanelResultsLoadedFor(LeftPanelLevel.Brand),
       "Left brands panel failed to reload for subaccounts"
     );
 
@@ -105,7 +107,7 @@ public class AccountDashboardTest extends BaseTestCase {
       "Right accounts panel failed to load accounts"
     );
     Assert.assertTrue(
-      accountDashboardPage.isLeftPanelResultsLoaded(),
+      accountDashboardPage.isLeftPanelResultsLoadedFor(LeftPanelLevel.Brand),
       "Left brands panel failed to reload for accounts"
     );
 
@@ -115,8 +117,31 @@ public class AccountDashboardTest extends BaseTestCase {
       "Right accounts panel failed to load distributors"
     );
     Assert.assertTrue(
-      accountDashboardPage.isLeftPanelResultsLoaded(),
+      accountDashboardPage.isLeftPanelResultsLoadedFor(LeftPanelLevel.Brand),
       "Left brands panel failed to reload for distributors"
+    );
+  }
+
+  @Test(description = "Drill all the way down the brands hierarchy and drill back up")
+  public void drillDownDrillUpBrands () {
+    accountDashboardPage.drillIntoFirstRowInLeftPanel();
+    Assert.assertTrue(
+      accountDashboardPage.isLeftPanelResultsLoadedFor(LeftPanelLevel.SkuPackage),
+      "Left brands panel failed to load for SKU/Packages"
+    );
+    Assert.assertTrue(
+      accountDashboardPage.isRightPanelResultsLoadedFor(RightPanelLevel.Distributors),
+      "Right accounts panel failed to reload for SKU/Packages"
+    );
+
+    accountDashboardPage.drillUpLeftPanel();
+    Assert.assertTrue(
+      accountDashboardPage.isLeftPanelResultsLoadedFor(LeftPanelLevel.Brand),
+      "Left brands panel failed to load for Brands"
+    );
+    Assert.assertTrue(
+      accountDashboardPage.isRightPanelResultsLoadedFor(RightPanelLevel.Distributors),
+      "Right accounts panel failed to reload for Brands"
     );
   }
 }
