@@ -20,7 +20,6 @@ class MockMyPerformanceTableRowComponent {
   @Input() showBackButton: boolean;
   @Input() showOpportunities: boolean;
   @Input() viewType: ViewType;
-  @Input() showBackButton: boolean;
 }
 
 describe('MyPerformanceTableComponent', () => {

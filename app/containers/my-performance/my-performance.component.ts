@@ -66,17 +66,22 @@ export class MyPerformanceComponent implements OnInit {
     this.filterState$ = this.store.select(state => state.myPerformanceFilter);
     this.dateRanges$ = this.store.select(state => state.dateRanges);
 
-    this.store.select(state => state.myPerformance.current).subscribe((myPerformanceData: MyPerformanceData) => {
-      if (myPerformanceData.viewTypes
-        && myPerformanceData.viewTypes.leftTableViewType) {
-          this.leftTableViewType = myPerformanceData.viewTypes.leftTableViewType;
+    // TODO: check if I can subscribe to a part of the store which might not exist (state.myPerformance.current)
+    this.store.select(state => state.myPerformance).subscribe((myPerformanceState: MyPerformanceState) => {
+      // TODO: check if I can mock it instead
+      if (myPerformanceState
+        && myPerformanceState.current
+        && myPerformanceState.current.viewTypes
+        && myPerformanceState.current.viewTypes.leftTableViewType) {
+          this.leftTableViewType = myPerformanceState.current.viewTypes.leftTableViewType;
         }
 
-      if (myPerformanceData
-          && myPerformanceData.responsibilities
-          && myPerformanceData.responsibilities.responsibilities) {
+      if (myPerformanceState
+          && myPerformanceState.current
+          && myPerformanceState.current.responsibilities
+          && myPerformanceState.current.responsibilities.responsibilities) {
         let { tableData, totalRowData } = this.myPerformanceTableDataTransformerService
-          .getTableData(this.leftTableViewType, myPerformanceData.responsibilities.responsibilities);
+          .getTableData(this.leftTableViewType, myPerformanceState.current.responsibilities.responsibilities);
         this.tableData = tableData;
         this.totalRowData = totalRowData || this.totalRowData;
       }
