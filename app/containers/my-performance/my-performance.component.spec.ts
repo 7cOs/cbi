@@ -160,29 +160,29 @@ describe('MyPerformanceComponent', () => {
   it('should trigger appropriate actions when receiving events from elements clicked', () => {
     storeMock.dispatch.and.callThrough();
     storeMock.dispatch.calls.reset();
-    const mockRow = getMyPerformanceTableRowMock(1)[0];
+    const rowMock = getMyPerformanceTableRowMock(1)[0];
 
     componentInstance.showLeftBackButton = false;
-    componentInstance.handleElementClicked(true, RowType.total, 0);
+    componentInstance.handleElementClicked({leftSide: true, type: RowType.total, index: 0});
     expect(storeMock.dispatch.calls.count()).toEqual(0);
 
     storeMock.dispatch.calls.reset();
     componentInstance.showLeftBackButton = true;
-    componentInstance.handleElementClicked(true, RowType.total, 0);
+    componentInstance.handleElementClicked({leftSide: true, type: RowType.total, index: 0});
     expect(storeMock.dispatch.calls.count()).toEqual(1);
 
     storeMock.dispatch.calls.reset();
     componentInstance.leftTableViewType = ViewType.roleGroups;
-    componentInstance.handleElementClicked(true, RowType.data, 0, mockRow);
+    componentInstance.handleElementClicked({leftSide: true, type: RowType.data, index: 0, row: rowMock});
     expect(storeMock.dispatch.calls.count()).toEqual(3);
 
     storeMock.dispatch.calls.reset();
     componentInstance.leftTableViewType = ViewType.accounts;
-    componentInstance.handleElementClicked(true, RowType.data, 0, mockRow);
+    componentInstance.handleElementClicked({leftSide: true, type: RowType.data, index: 0, row: rowMock});
     expect(storeMock.dispatch.calls.count()).toEqual(1);
 
     storeMock.dispatch.calls.reset();
-    componentInstance.handleElementClicked(false, RowType.data, 0);
+    componentInstance.handleElementClicked({leftSide: false, type: RowType.data, index: 0});
     expect(storeMock.dispatch.calls.count()).toEqual(0);
   });
 

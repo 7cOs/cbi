@@ -30,6 +30,13 @@ import { myPerformanceTableData,
          myPerformanceTotalRowData,
          myPerformanceRightTableData } from '../../models/my-performance-table-data.model.mock';
 
+export interface HandleElementClickedParameters {
+  leftSide: boolean;
+  type: RowType;
+  index: number;
+  row?: MyPerformanceTableRow;
+}
+
 @Component({
   selector: 'my-performance',
   template: require('./my-performance.component.pug'),
@@ -88,30 +95,30 @@ export class MyPerformanceComponent implements OnInit {
     this.sortingCriteria = criteria;
   }
 
-  public handleElementClicked(leftSide: boolean, type: RowType, index: number, row?: MyPerformanceTableRow): void {
-    switch (type) {
+  public handleElementClicked(parameters: HandleElementClickedParameters): void {
+    switch (parameters.type) {
       case RowType.total:
-        if (leftSide) {
+        if (parameters.leftSide) {
           if (this.showLeftBackButton) {
             this.store.dispatch(new MyPerformanceVersionActions.RestoreMyPerformanceStateAction());
           }
-          console.log(`clicked on cell ${index} from the left side`);
+          console.log(`clicked on cell ${parameters.index} from the left side`);
         } else {
-          console.log(`clicked on cell ${index} from the right side`);
+          console.log(`clicked on cell ${parameters.index} from the right side`);
         }
         break;
 
       case RowType.data:
       default:
-        if (leftSide) {
+        if (parameters.leftSide) {
           this.store.dispatch(new MyPerformanceVersionActions.SaveMyPerformanceStateAction(this.currentState));
-          console.log('clicked on left row:', row);
+          console.log('clicked on left row:', parameters.row);
           if (this.leftTableViewType === ViewType.roleGroups) {
             this.store.dispatch(new SetLeftMyPerformanceTableViewType(ViewType.people));
-            this.store.dispatch(new GetPeopleByRoleGroupAction(EntityPeopleType[row.descriptionRow0]));
+            this.store.dispatch(new GetPeopleByRoleGroupAction(EntityPeopleType[parameters.row.descriptionRow0]));
           }
         } else {
-          console.log('clicked on right row:', row);
+          console.log('clicked on right row:', parameters.row);
         }
     }
   }
