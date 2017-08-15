@@ -25,11 +25,11 @@ export class MyPerformanceApiService {
   }
 
   public getResponsibilitiesPerformanceTotals(
-    positionId: number, entityType: Array<string>, filter: MyPerformanceFilterState
+    positionId: number, entityTypes: Array<{ entityTypeName: string, entityTypeId: string }>, filter: MyPerformanceFilterState
   ): Observable<RoleGroupPerformanceTotal[]> {
     const apiCalls: any[] = [];
 
-    entityType.forEach((entity: string) => {
+    entityTypes.forEach((entity: { entityTypeName: string, entityTypeId: string }) => {
       apiCalls.push(this.getResponsibilityPerformanceTotal(positionId, entity, filter));
     });
 
@@ -37,14 +37,14 @@ export class MyPerformanceApiService {
   }
 
   public getResponsibilityPerformanceTotal(
-    positionId: number, entityType: string, filter: MyPerformanceFilterState
+    positionId: number, entityType: { entityTypeName: string, entityTypeId: string }, filter: MyPerformanceFilterState
   ): Observable<RoleGroupPerformanceTotal|Error> {
-    const url = `/v3/positions/${ positionId }/responsibilities/${ entityType }/performanceTotal`;
+    const url = `/v3/positions/${ positionId }/responsibilities/${ entityType.entityTypeId }/performanceTotal`;
 
     return this.http.get(`${ url }`, {
       params: this.getFilterStateParams(filter)
     })
-      .map(res => ({ entityType: entityType, performanceTotal: res.json() }))
+      .map(res => ({ entityType: entityType.entityTypeName, performanceTotal: res.json() }))
       .catch(err => this.handleError(new Error(err)));
   }
 

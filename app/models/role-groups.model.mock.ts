@@ -4,14 +4,14 @@ import { RoleGroups, RoleGroupPerformanceTotal } from './role-groups.model';
 
 export function getRoleGroupsMock(): RoleGroups {
   return {
-    Specialist: [ getEntityPeopleResponsibilitiesMock() ],
-    MDM: [ getEntityPeopleResponsibilitiesMock() ]
+    'GENERAL MANAGER': [ getEntityPeopleResponsibilitiesMock() ],
+    'MARKET DEVELOPMENT MANAGER': [ getEntityPeopleResponsibilitiesMock() ]
   };
 }
 
 export function getRoleGroupPerformanceTotalsMock(): Array<RoleGroupPerformanceTotal> {
   return [
-    { entityType: 'Specialist', performanceTotal: getPerformanceTotalMock() },
-    { entityType: 'MDM', performanceTotal: getPerformanceTotalMock() }
+    { entityType: 'General Manager', performanceTotal: getPerformanceTotalMock() },
+    { entityType: 'Market Development Manager', performanceTotal: getPerformanceTotalMock() }
   ];
 }

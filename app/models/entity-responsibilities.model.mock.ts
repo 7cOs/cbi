@@ -1,5 +1,5 @@
 import * as Chance from 'chance';
-let chance = new Chance();
+const chance = new Chance();
 
 import { EntityResponsibilities } from './entity-responsibilities.model';
 import { EntityPeopleType, EntityPropertyType } from '../enums/entity-responsibilities.enum';
@@ -11,8 +11,11 @@ export function getEntityPeopleResponsibilitiesMock(): EntityResponsibilities {
   return {
     peopleType: entityPeopleTypeValues[chance.integer({min: 0, max: entityPeopleTypeValues.length - 1})],
     id: chance.natural(),
+    employeeId: chance.string(),
     name: chance.string(),
-    typeDisplayName: chance.string()
+    type: chance.string(),
+    hierarchyType: chance.string(),
+    description: chance.string()
   };
 }
 
@@ -20,7 +23,10 @@ export function getEntityPropertyResponsibilitiesMock(): EntityResponsibilities 
   return {
     propertyType: entityPropertyTypeValues[chance.integer({min: 0, max: entityPropertyTypeValues.length - 1})],
     id: chance.natural(),
+    employeeId: chance.string(),
     name: chance.string(),
-    typeDisplayName: chance.string()
+    type: chance.string(),
+    hierarchyType: chance.string(),
+    description: chance.string()
   };
 }

@@ -3,7 +3,6 @@ import { Injectable } from '@angular/core';
 import 'rxjs/add/operator/map';
 
 import { EntityResponsibilities } from '../models/entity-responsibilities.model';
-import { EntityPeopleType } from '../enums/entity-responsibilities.enum';
 import { MyPerformanceTableRow } from '../models/my-performance-table-row.model';
 import { PerformanceTotal } from '../models/performance-total.model';
 import { RoleGroups, RoleGroupPerformanceTotal } from '../models/role-groups.model';
@@ -21,7 +20,7 @@ export class MyPerformanceTableDataTransformerService {
   public transformRoleGroupTableData(roleGroups: RoleGroups): MyPerformanceTableRow[] {
     return Object.keys(roleGroups).map((groupName: string) => {
       return {
-        descriptionRow0: roleGroups[groupName][0].typeDisplayName,
+        descriptionRow0: roleGroups[groupName][0].description,
         metricColumn0: chance.natural({max: 1000}),
         metricColumn1: chance.natural({max: 1000}),
         metricColumn2: chance.natural({max: 100}),
@@ -59,7 +58,7 @@ export class MyPerformanceTableDataTransformerService {
   }
 
   public buildTotalRow(roleGroups: RoleGroups): MyPerformanceTableRow {
-    const groupName: EntityPeopleType = EntityPeopleType[Object.keys(roleGroups)[0]];
+    const groupName: string = Object.keys(roleGroups)[0];
     return {
       descriptionRow0: 'TOTAL',
       descriptionRow1: `${groupName}s`,

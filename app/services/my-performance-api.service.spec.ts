@@ -4,7 +4,6 @@ import { MockBackend, MockConnection } from '@angular/http/testing';
 
 import { DateRangeTimePeriodValue } from '../enums/date-range-time-period.enum';
 import { DistributionTypeValue } from '../enums/distribution-type.enum';
-import { EntityPeopleType } from '../enums/entity-responsibilities.enum';
 import { getPerformanceTotalMock } from '../models/performance-total.model.mock';
 import { MetricTypeValue } from '../enums/metric-type.enum';
 import { MyPerformanceApiService } from './my-performance-api.service';
@@ -20,19 +19,25 @@ describe('Service: MyPerformanceApiService', () => {
   const mockResponsibilitiesResponse: any = {
     positions: [{
       id: 123,
-      name: 'Joe',
-      typeDisplayName: 'Market Development Managers',
-      peopleType: EntityPeopleType.MDM
+      employeeId: '1231231',
+      name: 'Joel Cummins',
+      description: 'MARKET DEVELOPMENT MANAGER',
+      type: '10',
+      hierarchyType: 'SALES_HIER',
     }, {
       id: 456,
-      name: 'Jack',
-      typeDisplayName: 'Market Development Managers',
-      peopleType: EntityPeopleType.MDM
+      employeeId: '4564561',
+      name: 'Andy Farag',
+      description: 'MARKET DEVELOPMENT MANAGER',
+      type: '20',
+      hierarchyType: 'SALES_HIER',
     }, {
       id: 789,
-      name: 'Janet',
-      typeDisplayName: 'Specialists',
-      peopleType: EntityPeopleType.Specialist
+      employeeId: '7897891',
+      name: 'Ryan Stasik',
+      description: 'Specialist',
+      type: '30',
+      hierarchyType: 'SALES_HIER',
     }]
   };
 
@@ -116,7 +121,11 @@ describe('Service: MyPerformanceApiService', () => {
         dateRangeCode: DateRangeTimePeriodValue.L90BDL,
         premiseType: PremiseTypeValue.All
       };
-      const expectedBaseUrl = '/v3/positions/1/responsibilities/Specialist/performanceTotal';
+      const mockEntityType = {
+        entityTypeName: 'MARKET DEVELOPMENT MANAGER',
+        entityTypeId: '10'
+      };
+      const expectedBaseUrl = '/v3/positions/1/responsibilities/10/performanceTotal';
       const expectedUrlParams = '?metricType=velocity&dateRangeCode=L90BDL&premiseType=All';
 
       mockBackend.connections.subscribe((connection: MockConnection) => {
@@ -129,9 +138,9 @@ describe('Service: MyPerformanceApiService', () => {
         expect(connection.request.url).toEqual(expectedBaseUrl + expectedUrlParams);
       });
 
-      myPerformanceApiService.getResponsibilityPerformanceTotal(1, 'Specialist', mockFilter)
+      myPerformanceApiService.getResponsibilityPerformanceTotal(1, mockEntityType, mockFilter)
         .subscribe((response: RoleGroupPerformanceTotal) => {
-          expect(response).toEqual({ entityType: 'Specialist', performanceTotal: mockPerformanceTotalResponse });
+          expect(response).toEqual({ entityType: 'MARKET DEVELOPMENT MANAGER', performanceTotal: mockPerformanceTotalResponse });
           done();
         });
     });
@@ -146,7 +155,13 @@ describe('Service: MyPerformanceApiService', () => {
         premiseType: PremiseTypeValue.On,
         distributionType: DistributionTypeValue.simple
       };
-      const entityArray: Array<string> = ['Specialist', 'MDM'];
+      const mockEntityTypeArray = [{
+        entityTypeName: 'MARKET DEVELOPMENT MANAGER',
+        entityTypeId: '10'
+      }, {
+        entityTypeName: 'GENERAL MANAGER',
+        entityTypeId: '20'
+      }];
       const expectedUrlParams = '?metricType=simplePointsOfDistribution&dateRangeCode=LCM&premiseType=On';
 
       mockBackend.connections.subscribe((connection: MockConnection) => {
@@ -158,20 +173,20 @@ describe('Service: MyPerformanceApiService', () => {
         expect(connection.request.method).toEqual(RequestMethod.Get);
       });
 
-      myPerformanceApiService.getResponsibilitiesPerformanceTotals(1, entityArray, mockFilter)
+      myPerformanceApiService.getResponsibilitiesPerformanceTotals(1, mockEntityTypeArray, mockFilter)
         .subscribe((response) => {
           expect(response).toEqual([
-            { entityType: 'Specialist', performanceTotal: mockPerformanceTotalResponse },
-            { entityType: 'MDM', performanceTotal: mockPerformanceTotalResponse }
+            { entityType: 'MARKET DEVELOPMENT MANAGER', performanceTotal: mockPerformanceTotalResponse },
+            { entityType: 'GENERAL MANAGER', performanceTotal: mockPerformanceTotalResponse }
           ]);
           done();
         });
 
-      expect(mockBackend.connectionsArray.length).toBe(entityArray.length);
+      expect(mockBackend.connectionsArray.length).toBe(mockEntityTypeArray.length);
 
       mockBackend.connectionsArray.forEach((connection: MockConnection, index) => {
         expect(connection.request.url)
-        .toEqual(`/v3/positions/1/responsibilities/${ entityArray[index] }/performanceTotal` + expectedUrlParams);
+        .toEqual(`/v3/positions/1/responsibilities/${ mockEntityTypeArray[index].entityTypeId }/performanceTotal` + expectedUrlParams);
       });
     });
   });

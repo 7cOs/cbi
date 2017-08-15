@@ -33,8 +33,8 @@ describe('Service: MyPerformanceTableDataTransformerService', () => {
       const transformedRoleGroupTableData =
         myPerformanceTableDataTransformerService.transformRoleGroupTableData(mockRoleGroups);
 
-      expect(transformedRoleGroupTableData[0].descriptionRow0).toEqual(mockRoleGroups.Specialist[0].typeDisplayName);
-      expect(transformedRoleGroupTableData[1].descriptionRow0).toEqual(mockRoleGroups.MDM[0].typeDisplayName);
+      expect(transformedRoleGroupTableData[0].descriptionRow0).toEqual(mockRoleGroups['GENERAL MANAGER'][0].description);
+      expect(transformedRoleGroupTableData[1].descriptionRow0).toEqual(mockRoleGroups['MARKET DEVELOPMENT MANAGER'][0].description);
     });
   });
 
@@ -47,9 +47,11 @@ describe('Service: MyPerformanceTableDataTransformerService', () => {
     it('should return a collection of formatted table data featuring \'positions\'', () => {
       spyOn(myPerformanceTableDataTransformerService, 'transformPeopleTableData').and.callThrough();
       const transformedPeopleTableData =
-        myPerformanceTableDataTransformerService.transformPeopleTableData({'MDM': mockRoleGroups.MDM});
+        myPerformanceTableDataTransformerService.transformPeopleTableData({
+          'MARKET DEVELOPMENT MANAGER': mockRoleGroups['MARKET DEVELOPMENT MANAGER']
+        });
 
-      expect(transformedPeopleTableData[0].descriptionRow0).toEqual(mockRoleGroups.MDM[0].name);
+      expect(transformedPeopleTableData[0].descriptionRow0).toEqual(mockRoleGroups['MARKET DEVELOPMENT MANAGER'][0].name);
     });
   });
 
@@ -62,10 +64,12 @@ describe('Service: MyPerformanceTableDataTransformerService', () => {
     it('should return a formatted totalrow', () => {
       spyOn(myPerformanceTableDataTransformerService, 'transformRoleGroupTableData').and.callThrough();
       const transformedTotalRowTableData =
-        myPerformanceTableDataTransformerService.buildTotalRow({'MDM': mockRoleGroups.MDM});
+        myPerformanceTableDataTransformerService.buildTotalRow({
+          'MARKET DEVELOPMENT MANAGER': mockRoleGroups['MARKET DEVELOPMENT MANAGER']
+        });
 
       expect(transformedTotalRowTableData.descriptionRow0).toEqual('TOTAL');
-      expect(transformedTotalRowTableData.descriptionRow1).toEqual('MDMs');
+      expect(transformedTotalRowTableData.descriptionRow1).toEqual('MARKET DEVELOPMENT MANAGERs');
     });
   });
 
@@ -78,14 +82,17 @@ describe('Service: MyPerformanceTableDataTransformerService', () => {
     it('should return properly formatted table data and total row data when view type is people', () => {
       spyOn(myPerformanceTableDataTransformerService, 'getTableData').and.callThrough();
       const { tableData, totalRowData } =
-        myPerformanceTableDataTransformerService.getTableData(ViewType.people, {'MDM': mockRoleGroups.MDM});
+        myPerformanceTableDataTransformerService.getTableData(
+          ViewType.people,
+          { 'MARKET DEVELOPMENT MANAGER': mockRoleGroups['MARKET DEVELOPMENT MANAGER'] }
+        );
 
         expect(tableData).toBeDefined();
         expect(tableData.length).toBeTruthy();
         expect(totalRowData).toBeDefined();
-        expect(tableData[0].descriptionRow0).toBe(mockRoleGroups.MDM[0].name);
+        expect(tableData[0].descriptionRow0).toBe(mockRoleGroups['MARKET DEVELOPMENT MANAGER'][0].name);
         expect(totalRowData.descriptionRow0).toBe('TOTAL');
-        expect(totalRowData.descriptionRow1).toBe('MDMs');
+        expect(totalRowData.descriptionRow1).toBe('MARKET DEVELOPMENT MANAGERs');
     });
 
     it('should return properly formatted table data without a total row when view type is not people', () =>  {
@@ -96,8 +103,8 @@ describe('Service: MyPerformanceTableDataTransformerService', () => {
         expect(tableData).toBeDefined();
         expect(tableData.length).toBeTruthy();
         expect(totalRowData).not.toBeDefined();
-        expect(tableData[0].descriptionRow0).toBe(mockRoleGroups.Specialist[0].typeDisplayName);
-        expect(tableData[1].descriptionRow0).toBe(mockRoleGroups.MDM[0].typeDisplayName);
+        expect(tableData[0].descriptionRow0).toBe(mockRoleGroups['GENERAL MANAGER'][0].description);
+        expect(tableData[1].descriptionRow0).toBe(mockRoleGroups['MARKET DEVELOPMENT MANAGER'][0].description);
     });
   });
 
