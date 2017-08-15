@@ -16,6 +16,8 @@ import java.util.List;
 import static com.cbrands.helper.SeleniumUtils.*;
 
 public class AccountDashboardPage extends TestNGBasePage {
+  private static final String LEFT_PANEL_XPATH = "//div[contains(@class, 'scorecard-table')]";
+  private static final String LEFT_PANEL_ROW_XPATH = ".//md-tab-content[contains(@class, 'md-active')]//tr[@ng-repeat]";
   private static final String RIGHT_PANEL_ROW_XPATH = ".//p[contains(@class, 'data-brand')]";
   private static final String BACK_CHEVRON_XPATH = ".//span[contains(@class, 'back-chevron')]";
 
@@ -35,7 +37,7 @@ public class AccountDashboardPage extends TestNGBasePage {
   @FindBy(css = "md-content._md div div.ng-scope div:nth-of-type(3) div:nth-of-type(2) div.apply-filters button.btn-action")
   private WebElement applyFilters;
 
-  @FindBy(how = How.XPATH, using = "//div[contains(@class, 'scorecard-table')]")
+  @FindBy(how = How.XPATH, using = LEFT_PANEL_XPATH)
   private WebElement leftPanel;
 
   @FindBy(how = How.XPATH, using = "//div[contains(@class, 'scorecard-chart')]")
@@ -141,6 +143,19 @@ public class AccountDashboardPage extends TestNGBasePage {
     return this;
   }
 
+  public AccountDashboardPage drillIntoFirstRowInLeftPanel() {
+    scrollToAndClick(leftPanel.findElement(By.xpath(LEFT_PANEL_ROW_XPATH)));
+    return this;
+  }
+
+  public AccountDashboardPage drillUpLeftPanel() {
+    final WebElement backButton = leftPanel.findElement(By.xpath(BACK_CHEVRON_XPATH));
+    waitForVisibleFluentWait(backButton);
+    waitForElementToClickable(backButton, true).click();
+
+    return this;
+  }
+
   public AccountDashboardPage drillIntoFirstRowInRightPanel() {
     scrollToAndClick(rightPanel.findElement(By.xpath(RIGHT_PANEL_ROW_XPATH)));
     return this;
@@ -178,12 +193,14 @@ public class AccountDashboardPage extends TestNGBasePage {
     return  PageFactory.initElements(driver, NotesModal.class);
   }
 
-  public boolean isLeftPanelResultsLoaded() {
+  public boolean isLeftPanelResultsLoadedFor(LeftPanelLevel level) {
     boolean resultsAreLoaded;
 
     try {
-      waitForVisibleFluentWait(leftPanel.findElement(By.xpath(".//tr[@ng-repeat]")));
-      resultsAreLoaded = true;
+      waitForElementToDisappear(By.xpath(LEFT_PANEL_XPATH + "//div[contains(@class, 'loader-wrap')]"));
+      waitForVisibleFluentWait(leftPanel.findElement(By.xpath(LEFT_PANEL_ROW_XPATH)));
+      final WebElement panelHeader = leftPanel.findElement(By.xpath(".//th//span[@aria-hidden='false']"));
+      resultsAreLoaded = level.header.equalsIgnoreCase(panelHeader.getText());
     } catch (NoSuchElementException e) {
       resultsAreLoaded = false;
     }
@@ -211,5 +228,16 @@ public class AccountDashboardPage extends TestNGBasePage {
     Accounts,
     SubAccounts,
     Stores
+  }
+
+  public enum LeftPanelLevel {
+    Brand ("Brand"),
+    SkuPackage("SKU / PACKAGE");
+
+    private final String header;
+
+    LeftPanelLevel(String header) {
+      this.header = header;
+    }
   }
 }
