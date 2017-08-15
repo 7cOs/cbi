@@ -1,9 +1,9 @@
 import { inject, TestBed } from '@angular/core/testing';
 
+import { getPerformanceTotalMock } from '../models/performance-total.model.mock';
 import { getRoleGroupPerformanceTotalsMock, getRoleGroupsMock } from '../models/role-groups.model.mock';
 import { MyPerformanceTableDataTransformerService } from './my-performance-table-data-transformer.service';
 import { MyPerformanceTableRow } from '../models/my-performance-table-row.model';
-import { getPerformanceTotalMock } from '../models/performance-total.model.mock';
 import { UtilService } from './util.service';
 import { ViewType } from '../enums/view-type.enum';
 
@@ -11,6 +11,10 @@ describe('Service: MyPerformanceTableDataTransformerService', () => {
   const mockRoleGroups = getRoleGroupsMock();
   const mockRoleGroupPerformanceTotals = getRoleGroupPerformanceTotalsMock();
   const mockPerformanceTotal = getPerformanceTotalMock();
+  const mockResponsibilitiesState: any = {
+    responsibilities: mockRoleGroups,
+    performanceTotals: mockRoleGroupPerformanceTotals
+  };
   let myPerformanceTableDataTransformerService: MyPerformanceTableDataTransformerService;
 
   beforeEach(() => {
@@ -69,7 +73,7 @@ describe('Service: MyPerformanceTableDataTransformerService', () => {
         });
 
       expect(transformedTotalRowTableData.descriptionRow0).toEqual('TOTAL');
-      expect(transformedTotalRowTableData.descriptionRow1).toEqual('MARKET DEVELOPMENT MANAGERs');
+      expect(transformedTotalRowTableData.descriptionRow1).toEqual('MARKET DEVELOPMENT MANAGERS');
     });
   });
 
@@ -79,32 +83,24 @@ describe('Service: MyPerformanceTableDataTransformerService', () => {
         myPerformanceTableDataTransformerService = _myPerformanceTableDataTransformerService;
     }));
 
-    it('should return properly formatted table data and total row data when view type is people', () => {
+    it('should return properly formatted table data when view type is people', () => {
       spyOn(myPerformanceTableDataTransformerService, 'getTableData').and.callThrough();
-      const { tableData, totalRowData } =
-        myPerformanceTableDataTransformerService.getTableData(
-          ViewType.people,
-          { 'MARKET DEVELOPMENT MANAGER': mockRoleGroups['MARKET DEVELOPMENT MANAGER'] }
-        );
+
+      const tableData = myPerformanceTableDataTransformerService.getTableData(ViewType.people, mockResponsibilitiesState);
 
         expect(tableData).toBeDefined();
         expect(tableData.length).toBeTruthy();
-        expect(totalRowData).toBeDefined();
-        expect(tableData[0].descriptionRow0).toBe(mockRoleGroups['MARKET DEVELOPMENT MANAGER'][0].name);
-        expect(totalRowData.descriptionRow0).toBe('TOTAL');
-        expect(totalRowData.descriptionRow1).toBe('MARKET DEVELOPMENT MANAGERs');
+        expect(tableData[0].descriptionRow0).toBe(mockRoleGroups['GENERAL MANAGER'][0].name);
     });
 
-    it('should return properly formatted table data without a total row when view type is not people', () =>  {
+    it('should return properly formatted table data without a total row when view type is roleGroups', () =>  {
       spyOn(myPerformanceTableDataTransformerService, 'getTableData').and.callThrough();
-      const { tableData, totalRowData } =
-        myPerformanceTableDataTransformerService.getTableData(ViewType.roleGroups,  mockRoleGroups);
+      const tableData = myPerformanceTableDataTransformerService.getTableData(ViewType.roleGroups, mockResponsibilitiesState);
 
         expect(tableData).toBeDefined();
         expect(tableData.length).toBeTruthy();
-        expect(totalRowData).not.toBeDefined();
-        expect(tableData[0].descriptionRow0).toBe(mockRoleGroups['GENERAL MANAGER'][0].description);
-        expect(tableData[1].descriptionRow0).toBe(mockRoleGroups['MARKET DEVELOPMENT MANAGER'][0].description);
+        expect(tableData[0].descriptionRow0).toBe(mockRoleGroupPerformanceTotals[0].entityType + 'S');
+        expect(tableData[1].descriptionRow0).toBe(mockRoleGroupPerformanceTotals[1].entityType + 'S');
     });
   });
 
@@ -134,8 +130,8 @@ describe('Service: MyPerformanceTableDataTransformerService', () => {
       const roleGroupPerformanceTableData =
         myPerformanceTableDataTransformerService.getRoleGroupPerformanceTableData(mockRoleGroupPerformanceTotals);
 
-      expect(roleGroupPerformanceTableData[0].descriptionRow0).toEqual(mockRoleGroupPerformanceTotals[0].entityType);
-      expect(roleGroupPerformanceTableData[1].descriptionRow0).toEqual(mockRoleGroupPerformanceTotals[1].entityType);
+      expect(roleGroupPerformanceTableData[0].descriptionRow0).toEqual(mockRoleGroupPerformanceTotals[0].entityType + 'S');
+      expect(roleGroupPerformanceTableData[1].descriptionRow0).toEqual(mockRoleGroupPerformanceTotals[1].entityType + 'S');
     });
   });
 });

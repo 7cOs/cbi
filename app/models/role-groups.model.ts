@@ -1,4 +1,3 @@
-import { EntityPeopleType } from '../enums/entity-responsibilities.enum';
 import { EntityResponsibilities } from './entity-responsibilities.model';
 import { PerformanceTotal } from './performance-total.model';
 

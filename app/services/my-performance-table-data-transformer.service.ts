@@ -5,6 +5,7 @@ import 'rxjs/add/operator/map';
 import { EntityResponsibilities } from '../models/entity-responsibilities.model';
 import { MyPerformanceTableRow } from '../models/my-performance-table-row.model';
 import { PerformanceTotal } from '../models/performance-total.model';
+import { ResponsibilitiesState } from '../state/reducers/responsibilities.reducer';
 import { RoleGroups, RoleGroupPerformanceTotal } from '../models/role-groups.model';
 import { UtilService } from './util.service';
 import { ViewType } from '../enums/view-type.enum';
@@ -29,19 +30,14 @@ export class MyPerformanceTableDataTransformerService {
     });
   }
 
-  public getTableData(viewType: ViewType, responsibilities: RoleGroups):
-    { tableData: MyPerformanceTableRow[], totalRowData?: MyPerformanceTableRow } {
-      switch (viewType) {
-        case ViewType.people:
-          return {
-            tableData: this.transformPeopleTableData(responsibilities),
-            totalRowData:  this.buildTotalRow(responsibilities)
-          };
-        default: // handles case ViewType.roleGroups
-          return {
-            tableData: this.transformRoleGroupTableData(responsibilities)
-          };
-      }
+  public getTableData(viewType: ViewType, responsibilitiesState: ResponsibilitiesState): MyPerformanceTableRow[] {
+    switch (viewType) {
+      case ViewType.people:
+        return this.transformPeopleTableData(responsibilitiesState.responsibilities);
+
+      default: // handles case ViewType.roleGroups
+        return this.getRoleGroupPerformanceTableData(responsibilitiesState.performanceTotals);
+    }
   }
 
   public transformPeopleTableData(roleGroups: RoleGroups): MyPerformanceTableRow[] {
@@ -61,7 +57,7 @@ export class MyPerformanceTableDataTransformerService {
     const groupName: string = Object.keys(roleGroups)[0];
     return {
       descriptionRow0: 'TOTAL',
-      descriptionRow1: `${groupName}s`,
+      descriptionRow1: `${groupName}S`,
       metricColumn0: chance.natural({max: 1000}),
       metricColumn1: chance.natural({max: 1000}),
       metricColumn2: chance.natural({max: 100}),
@@ -72,7 +68,7 @@ export class MyPerformanceTableDataTransformerService {
   public getRoleGroupPerformanceTableData(performanceData: Array<RoleGroupPerformanceTotal>): Array<MyPerformanceTableRow> {
     return performanceData.map((performance: RoleGroupPerformanceTotal) => {
       return {
-        descriptionRow0: performance.entityType,
+        descriptionRow0: `${performance.entityType}S`,
         metricColumn0: performance.performanceTotal.total,
         metricColumn1: performance.performanceTotal.totalYearAgo,
         metricColumn2: this.utilService.getYearAgoPercent(performance.performanceTotal.total, performance.performanceTotal.totalYearAgo),

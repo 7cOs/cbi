@@ -77,7 +77,7 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
       .subscribe((responsibilitiesState: ResponsibilitiesState) => {
         if (responsibilitiesState && responsibilitiesState.responsibilities) {
           this.tableData = this.myPerformanceTableDataTransformerService
-            .getRoleGroupPerformanceTableData(responsibilitiesState.performanceTotals);
+            .getTableData(this.leftTableViewType, responsibilitiesState);
         }
     });
 
@@ -127,7 +127,7 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
           console.log('clicked on left row:', row);
           if (this.leftTableViewType === ViewType.roleGroups) {
             this.store.dispatch(new SetLeftMyPerformanceTableViewType(ViewType.people));
-            this.store.dispatch(new GetPeopleByRoleGroupAction(EntityPeopleType[row.descriptionRow0]));
+            this.store.dispatch(new GetPeopleByRoleGroupAction(EntityPeopleType[row.descriptionRow0.slice(0, -1)]));
           }
         } else {
           console.log('clicked on right row:', row);

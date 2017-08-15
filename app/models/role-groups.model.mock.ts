@@ -11,7 +11,7 @@ export function getRoleGroupsMock(): RoleGroups {
 
 export function getRoleGroupPerformanceTotalsMock(): Array<RoleGroupPerformanceTotal> {
   return [
-    { entityType: 'General Manager', performanceTotal: getPerformanceTotalMock() },
-    { entityType: 'Market Development Manager', performanceTotal: getPerformanceTotalMock() }
+    { entityType: 'GENERAL MANAGER', performanceTotal: getPerformanceTotalMock() },
+    { entityType: 'MARKET DEVELOPMENT MANAGER', performanceTotal: getPerformanceTotalMock() }
   ];
 }
