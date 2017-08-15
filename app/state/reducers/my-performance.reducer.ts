@@ -41,6 +41,7 @@ export function myPerformanceReducer(
     case ResponsibilitiesActions.FETCH_RESPONSIBILITIES_ACTION:
     case ResponsibilitiesActions.FETCH_RESPONSIBILITIES_SUCCESS_ACTION:
     case ResponsibilitiesActions.FETCH_RESPONSIBILITIES_FAILURE_ACTION:
+    case ResponsibilitiesActions.GET_PEOPLE_BY_ROLE_GROUP_ACTION:
       return {
         current: {
           responsibilities: responsibilitiesReducer(state.current.responsibilities, action as ResponsibilitiesActions.Action),

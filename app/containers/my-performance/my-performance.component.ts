@@ -66,30 +66,21 @@ export class MyPerformanceComponent implements OnInit {
     this.filterState$ = this.store.select(state => state.myPerformanceFilter);
     this.dateRanges$ = this.store.select(state => state.dateRanges);
 
-    // TODO: check if I can subscribe to a part of the store which might not exist (state.myPerformance.current)
-    this.store.select(state => state.myPerformance).subscribe((myPerformanceState: MyPerformanceState) => {
-      // TODO: check if I can mock it instead
-      if (myPerformanceState
-        && myPerformanceState.current
-        && myPerformanceState.current.viewTypes
-        && myPerformanceState.current.viewTypes.leftTableViewType) {
-          this.leftTableViewType = myPerformanceState.current.viewTypes.leftTableViewType;
-        }
+    this.store.select(state => state.myPerformance.current.viewTypes).subscribe((viewTypeState: ViewTypeState) => {
+      this.leftTableViewType = viewTypeState.leftTableViewType;
+    });
 
-      if (myPerformanceState
-          && myPerformanceState.current
-          && myPerformanceState.current.responsibilities
-          && myPerformanceState.current.responsibilities.responsibilities) {
-        let { tableData, totalRowData } = this.myPerformanceTableDataTransformerService
-          .getTableData(this.leftTableViewType, myPerformanceState.current.responsibilities.responsibilities);
-        this.tableData = tableData;
-        this.totalRowData = totalRowData || this.totalRowData;
-      }
+    this.store.select(state => state.myPerformance.current.responsibilities).subscribe((responsibilities: ResponsibilitiesState) => {
+      let { tableData, totalRowData } = this.myPerformanceTableDataTransformerService
+        .getTableData(this.leftTableViewType, responsibilities.responsibilities);
+      this.tableData = tableData;
+      this.totalRowData = totalRowData || this.totalRowData;
+    });
 
-      if (myPerformanceState) {
-        this.currentState = myPerformanceState.current;
-        this.showLeftBackButton = myPerformanceState.versions.length > 0;
-      }
+    this.store.select(state => state.myPerformance.current).subscribe((current: MyPerformanceState) => this.currentState = current);
+
+    this.store.select(state => state.myPerformance.versions).subscribe((versions: Array<MyPerformanceState>) => {
+      this.showLeftBackButton = versions.length > 0;
     });
   }
 

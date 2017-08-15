@@ -64,8 +64,16 @@ describe('MyPerformanceComponent', () => {
   let fixture: ComponentFixture<MyPerformanceComponent>;
   let componentInstance: MyPerformanceComponent;
 
+  const stateMock = {
+      myPerformanceFilter: chance.string(),
+      dateRanges: chance.string(),
+      myPerformance: initialState
+  };
+
   const storeMock = {
-    select: jasmine.createSpy('select.myPerformance').and.returnValue(Observable.of(initialState)),
+    select: jasmine.createSpy('select.myPerformance').and.callFake((selectFunction: (state: any) => any) => {
+      return Observable.of(selectFunction(stateMock));
+    }),
     dispatch: jasmine.createSpy('dispatch')
   };
 
@@ -179,30 +187,22 @@ describe('MyPerformanceComponent', () => {
   });
 
   it('should call select with the right arguments', () => {
-    const mockState = {
-        myPerformanceFilter: chance.string(),
-        dateRanges: chance.string()
-    };
-
-    storeMock.select.and.callFake((selectFunction: (state: any) => any) => {
-      return Observable.of(selectFunction(mockState));
-    });
     storeMock.dispatch.calls.reset();
     storeMock.select.calls.reset();
     fixture = TestBed.createComponent(MyPerformanceComponent);
 
-    expect(storeMock.select.calls.count()).toBe(3);
+    expect(storeMock.select.calls.count()).toBe(6);
     const functionPassToSelectCall1 = storeMock.select.calls.argsFor(0)[0];
-    expect(functionPassToSelectCall1(mockState)).toBe(mockState.myPerformanceFilter);
+    expect(functionPassToSelectCall1(stateMock)).toBe(stateMock.myPerformanceFilter);
 
     const functionPassToSelectCall2 = storeMock.select.calls.argsFor(1)[0];
-    expect(functionPassToSelectCall2(mockState)).toBe(mockState.dateRanges);
+    expect(functionPassToSelectCall2(stateMock)).toBe(stateMock.dateRanges);
 
     fixture.detectChanges();
     const mockMyPerformanceFilter = fixture.debugElement.query(By.directive(MyPerformanceFilterComponentMock))
     .injector
     .get(MyPerformanceFilterComponentMock) as MyPerformanceFilterComponentMock;
-    expect(mockMyPerformanceFilter.filterState).toEqual(mockState.myPerformanceFilter as any);
-    expect(mockMyPerformanceFilter.dateRanges).toBe(mockState.dateRanges as any);
+    expect(mockMyPerformanceFilter.filterState).toEqual(stateMock.myPerformanceFilter as any);
+    expect(mockMyPerformanceFilter.dateRanges).toBe(stateMock.dateRanges as any);
   });
 });
