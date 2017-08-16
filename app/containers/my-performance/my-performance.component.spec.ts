@@ -46,9 +46,6 @@ class MyPerformanceFilterComponentMock {
   template: ''
 })
 class MyPerformanceTableComponentMock {
-  @Output() onElementClicked = new EventEmitter<{type: RowType, index: number, row?: MyPerformanceTableRow}>();
-  @Output() onSortingCriteriaChanged = new EventEmitter<Array<SortingCriteria>>();
-
   @Input() sortingCriteria: Array<SortingCriteria>;
   @Input() tableData: Array<MyPerformanceTableRow>;
   @Input() dateRange: DateRange;

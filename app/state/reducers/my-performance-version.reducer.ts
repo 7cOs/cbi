@@ -20,12 +20,12 @@ export function myPerformanceVersionReducer(
     case MyPerformanceVersionActions.RESTORE_MY_PERFORMANCE_STATE_ACTION:
       const updatedVersions = [...state.versions];
       const lastState = updatedVersions.pop();
-      return lastState ?
-      {
-        current: lastState,
-        versions: updatedVersions
-      }
-      : state;
+      return lastState
+        ? {
+          current: lastState,
+          versions: updatedVersions
+          }
+        : state;
 
     default:
       return state;
