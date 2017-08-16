@@ -8,22 +8,16 @@ import { RoleGroups } from '../models/role-groups.model';
 
 @Injectable()
 export class ResponsibilitiesTransformerService {
-  private typeDisplayMapping: {[key: string]: string} = {
-    'MDM': 'Market Development Manager',
-    'Specialist': 'Specialist'
-  };
 
   constructor() { }
 
   public groupPeopleByRoleGroups(responsibilities: EntityResponsibilitiesDTO[]): RoleGroups {
     return responsibilities.reduce((roleGroups: RoleGroups, entity: EntityResponsibilitiesDTO) => {
-      const typeDisplayName: string = this.typeDisplayMapping[entity.type] || entity.type;
-
-      if (Array.isArray(roleGroups[entity.type])) {
-        roleGroups[entity.type].push(this.transformEntityResponsibilitiesDTO(entity, typeDisplayName));
+      if (Array.isArray(roleGroups[entity.description])) {
+        roleGroups[entity.description].push(this.transformEntityResponsibilitiesDTO(entity));
       } else {
-        roleGroups[entity.type] = [
-          this.transformEntityResponsibilitiesDTO(entity, typeDisplayName)
+        roleGroups[entity.description] = [
+          this.transformEntityResponsibilitiesDTO(entity)
         ];
       }
 
@@ -31,19 +25,22 @@ export class ResponsibilitiesTransformerService {
     }, {});
   }
 
-  private transformEntityResponsibilitiesDTO(entity: EntityResponsibilitiesDTO, displayName: string): EntityResponsibilities {
+  private transformEntityResponsibilitiesDTO(entity: EntityResponsibilitiesDTO): EntityResponsibilities {
     const transformedEntity: EntityResponsibilities = {
       id: entity.id,
+      employeeId: entity.employeeId,
       name: entity.name,
-      typeDisplayName: displayName
+      type: entity.type,
+      hierarchyType: entity.hierarchyType,
+      description: entity.description
     };
 
-    if (entity.type in EntityPeopleType) {
-      transformedEntity.peopleType = EntityPeopleType[entity.type];
-    } else if (entity.type in EntityPropertyType) {
-      transformedEntity.propertyType = EntityPropertyType[entity.type];
+    if (entity.description in EntityPeopleType) {
+      transformedEntity.peopleType = EntityPeopleType[entity.description];
+    } else if (entity.description in EntityPropertyType) {
+      transformedEntity.propertyType = EntityPropertyType[entity.description];
     } else {
-      transformedEntity.otherType = entity.type;
+      transformedEntity.otherType = entity.description;
     }
 
     return transformedEntity;
