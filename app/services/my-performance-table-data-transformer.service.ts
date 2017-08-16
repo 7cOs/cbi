@@ -35,7 +35,10 @@ export class MyPerformanceTableDataTransformerService {
       case ViewType.people:
         return this.transformPeopleTableData(responsibilitiesState.responsibilities);
 
-      default: // handles case ViewType.roleGroups
+      case ViewType.roleGroups:
+        return this.getRoleGroupPerformanceTableData(responsibilitiesState.performanceTotals);
+
+      default:
         return this.getRoleGroupPerformanceTableData(responsibilitiesState.performanceTotals);
     }
   }

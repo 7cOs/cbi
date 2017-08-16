@@ -25,11 +25,7 @@ describe('Performance Total Reducer', () => {
   it('should update its status when a fetch action is dispatched', () => {
     const expectedState = {
       status: ActionStatus.Fetching,
-      performanceTotal: {
-        total: 0,
-        totalYearAgo: 0,
-        contributionToVolume: 0
-      }
+      performanceTotal: initialState.performanceTotal
     };
     const actualState = performanceTotalReducer(initialState, new PerformanceTotalActions.FetchPerformanceTotalAction({
       positionId: mockPositionId,
@@ -45,8 +41,7 @@ describe('Performance Total Reducer', () => {
       status: ActionStatus.Fetched,
       performanceTotal: mockPayload
     };
-    const actualState = performanceTotalReducer(
-initialState, new PerformanceTotalActions.FetchPerformanceTotalSuccessAction(mockPayload));
+    const actualState = performanceTotalReducer(initialState, new PerformanceTotalActions.FetchPerformanceTotalSuccessAction(mockPayload));
 
     expect(actualState).toEqual(expectedState);
   });
@@ -54,14 +49,9 @@ initialState, new PerformanceTotalActions.FetchPerformanceTotalSuccessAction(moc
   it('should update the state status when a fetch fails', () => {
     const expectedState = {
       status: ActionStatus.Error,
-      performanceTotal: {
-        total: 0,
-        totalYearAgo: 0,
-        contributionToVolume: 0
-      }
+      performanceTotal: initialState.performanceTotal
     };
-    const actualState = performanceTotalReducer(
-initialState, new PerformanceTotalActions.FetchPerformanceTotalFailureAction(new Error()));
+    const actualState = performanceTotalReducer(initialState, new PerformanceTotalActions.FetchPerformanceTotalFailureAction(new Error()));
 
     expect(actualState).toEqual(expectedState);
   });

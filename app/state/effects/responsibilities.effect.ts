@@ -30,7 +30,7 @@ export class ResponsibilitiesEffects {
     let entityType: ViewType;
     let filter: MyPerformanceFilterState;
     let positionId: number;
-    let entityTypes: Array<{ entityTypeName: string, entityTypeId: string }> = [];
+    let entityTypes: Array<{ entityTypeName: string, entityTypeId: string }>;
 
     return this.actions$
       .ofType(ResponsibilitiesActions.FETCH_RESPONSIBILITIES_ACTION)
@@ -41,12 +41,11 @@ export class ResponsibilitiesEffects {
         return this.myPerformanceApiService.getResponsibilities(positionId)
           .map((response: PeopleResponsibilitiesDTO) => {
             roleGroups = this.responsibilitiesTransformerService.groupPeopleByRoleGroups(response.positions);
-
-            Object.keys(roleGroups).forEach(roleGroup => {
-              entityTypes.push({
+            entityTypes = Object.keys(roleGroups).map((roleGroup: string) => {
+              return {
                 entityTypeName: roleGroup,
                 entityTypeId: roleGroups[roleGroup][0].type
-              });
+              };
             });
 
             if (response.positions) entityType = ViewType.roleGroups;
