@@ -13,18 +13,19 @@ describe('Responsibilities Reducer', () => {
 
   it('updates the status when a fetch is dispatched', () => {
     const mockPositionId = 1;
-    const expectedState = {
-      status: ActionStatus.Fetching,
-      positionId: 0,
-      responsibilities: {},
-      performanceTotals: new Array()
-    };
     const mockPerformanceFilterState: MyPerformanceFilterState = {
       metricType: MetricTypeValue.PointsOfDistribution,
       dateRangeCode: DateRangeTimePeriodValue.FYTDBDL,
       premiseType: PremiseTypeValue.On,
       distributionType: DistributionTypeValue.simple
     };
+    const expectedState = {
+      status: ActionStatus.Fetching,
+      positionId: initialState.positionId,
+      responsibilities: initialState.responsibilities,
+      performanceTotals: initialState.performanceTotals
+    };
+
     const actualState = responsibilitiesReducer(initialState, new ResponsibilitiesActions.FetchResponsibilitiesAction({
       positionId: mockPositionId,
       filter: mockPerformanceFilterState
@@ -64,19 +65,19 @@ describe('Responsibilities Reducer', () => {
     const payload = getEntityPeopleResponsibilitiesMock().peopleType;
 
     const stateWithRoleGroups = {
-      status: ActionStatus.Fetched,
-      positionId: 0,
+      status: initialState.status,
+      positionId: initialState.positionId,
       responsibilities: mockRoleGroups,
-      performanceTotals: new Array()
+      performanceTotals: initialState.performanceTotals
     };
 
     const expectedState = {
-      status: ActionStatus.Fetched,
-      positionId: 0,
+      status: initialState.status,
+      positionId: initialState.positionId,
       responsibilities: {
         [payload]: mockRoleGroups[payload]
       },
-      performanceTotals: new Array()
+      performanceTotals: initialState.performanceTotals
     };
 
     const actualState = responsibilitiesReducer(stateWithRoleGroups, new ResponsibilitiesActions.GetPeopleByRoleGroupAction(payload));
@@ -87,9 +88,9 @@ describe('Responsibilities Reducer', () => {
   it('should update the status when a fetch fails', () => {
     const expectedState = {
       status: ActionStatus.Error,
-      positionId: 0,
-      responsibilities: {},
-      performanceTotals: new Array()
+      positionId: initialState.positionId,
+      responsibilities: initialState.responsibilities,
+      performanceTotals: initialState.performanceTotals
     };
 
     const actualState = responsibilitiesReducer(
