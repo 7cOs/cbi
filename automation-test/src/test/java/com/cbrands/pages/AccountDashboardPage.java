@@ -18,8 +18,10 @@ import static com.cbrands.helper.SeleniumUtils.*;
 public class AccountDashboardPage extends TestNGBasePage {
   private static final String LEFT_PANEL_XPATH = "//div[contains(@class, 'scorecard-table')]";
   private static final String LEFT_PANEL_ROW_XPATH = ".//md-tab-content[contains(@class, 'md-active')]//tr[@ng-repeat]";
+  private static final String RIGHT_PANEL_XPATH = "//div[contains(@class, 'scorecard-chart')]";
   private static final String RIGHT_PANEL_ROW_XPATH = ".//p[contains(@class, 'data-brand')]";
   private static final String BACK_CHEVRON_XPATH = ".//span[contains(@class, 'back-chevron')]";
+  private static final String PANEL_LOADER_XPATH = "//div[contains(@class, 'loader-wrap')]";
 
   private Log log = LogFactory.getLog(AccountDashboardPage.class);
 
@@ -40,7 +42,7 @@ public class AccountDashboardPage extends TestNGBasePage {
   @FindBy(how = How.XPATH, using = LEFT_PANEL_XPATH)
   private WebElement leftPanel;
 
-  @FindBy(how = How.XPATH, using = "//div[contains(@class, 'scorecard-chart')]")
+  @FindBy(how = How.XPATH, using = RIGHT_PANEL_XPATH)
   private WebElement rightPanel;
 
   public AccountDashboardPage(WebDriver driver) {
@@ -197,7 +199,7 @@ public class AccountDashboardPage extends TestNGBasePage {
     boolean resultsAreLoaded;
 
     try {
-      waitForElementToDisappear(By.xpath(LEFT_PANEL_XPATH + "//div[contains(@class, 'loader-wrap')]"));
+      waitForElementToDisappear(By.xpath(LEFT_PANEL_XPATH + PANEL_LOADER_XPATH));
       waitForVisibleFluentWait(leftPanel.findElement(By.xpath(LEFT_PANEL_ROW_XPATH)));
       final WebElement panelHeader = leftPanel.findElement(By.xpath(".//th//span[@aria-hidden='false']"));
       resultsAreLoaded = level.header.equalsIgnoreCase(panelHeader.getText());
@@ -212,7 +214,8 @@ public class AccountDashboardPage extends TestNGBasePage {
     boolean resultsAreLoaded;
 
     try {
-      waitForVisibleFluentWait(rightPanel.findElement(By.xpath(".//div[contains(@class, 'widget-row-container')]")));
+      waitForElementToDisappear(By.xpath(RIGHT_PANEL_XPATH + PANEL_LOADER_XPATH));
+      waitForVisibleFluentWait(rightPanel.findElement(By.xpath(RIGHT_PANEL_ROW_XPATH)));
 
       final WebElement panelHeader = rightPanel.findElement(By.xpath(".//div[@class='widget-subheader-item']/p"));
       resultsAreLoaded = rightPanelLevel.name().equalsIgnoreCase(panelHeader.getText());
