@@ -254,7 +254,6 @@ module.exports = /*  @ngInject */
      * @returns {String} velocity
      */
     function displayBrandValueAccountBrandVelocity(brandMeasures, firstDepletion) {
-      debugger;
       if (brandMeasures) {
         const matchedMeasure = getMatchedMeasure(brandMeasures, 'distributionTimePeriod');
         if (matchedMeasure[0] && firstDepletion) {
