@@ -2,7 +2,7 @@ h1 Performance
 
 my-performance-filter(
   [dateRanges]="dateRanges$ | async",
-  [filterState]="filterState$ | async",
+  [filterState]="filterState",
   (onFilterChange)="filterOptionSelected($event)"
 )
 

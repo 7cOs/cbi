@@ -1,7 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { Store } from '@ngrx/store';
+import { Subscription } from 'rxjs/Subscription';
 
+import { ActionStatus } from '../../enums/action-status.enum';
 import { AppState } from '../../state/reducers/root.reducer';
 import { ColumnType } from '../../enums/column-type.enum';
 import { DateRange } from '../../models/date-range.model';
@@ -13,35 +15,33 @@ import { GetPeopleByRoleGroupAction } from '../../state/actions/responsibilities
 import { MyPerformanceFilterActionType } from '../../enums/my-performance-filter.enum';
 import { MyPerformanceFilterEvent } from '../../models/my-performance-filter.model';
 import { MyPerformanceFilterState } from '../../state/reducers/my-performance-filter.reducer';
-import * as MyPerformanceFilterActions from '../../state/actions/my-performance-filter.action';
 import { MyPerformanceTableDataTransformerService } from '../../services/my-performance-table-data-transformer.service';
 import { MyPerformanceTableRow } from '../../models/my-performance-table-row.model';
+import { PerformanceTotalState } from '../../state/reducers/performance-total.reducer';
 import { ResponsibilitiesState } from '../../state/reducers/responsibilities.reducer';
 import { RowType } from '../../enums/row-type.enum';
 import { SetLeftMyPerformanceTableViewType, SetRightMyPerformanceTableViewType } from '../../state/actions/view-types.action';
 import { SortingCriteria } from '../../models/sorting-criteria.model';
 import { ViewType } from '../../enums/view-type.enum';
 import { ViewTypeState } from '../../state/reducers/view-types.reducer';
+import * as MyPerformanceFilterActions from '../../state/actions/my-performance-filter.action';
 
 // mocks
-import { myPerformanceTableData,
-         myPerformanceTotalRowData,
-         myPerformanceRightTableData } from '../../models/my-performance-table-data.model.mock';
+import { myPerformanceRightTableData } from '../../models/my-performance-table-data.model.mock';
 
 @Component({
   selector: 'my-performance',
   template: require('./my-performance.component.pug'),
   styles: [require('./my-performance.component.scss')]
 })
-export class MyPerformanceComponent implements OnInit {
+
+export class MyPerformanceComponent implements OnInit, OnDestroy {
   public leftTableViewType: ViewType;
   public roleGroups: Observable<ResponsibilitiesState>;
-  public sortingCriteria: Array<SortingCriteria> = [
-    {
-      columnType: ColumnType.metricColumn0,
-      ascending: false
-    }
-  ];
+  public sortingCriteria: Array<SortingCriteria> = [{
+    columnType: ColumnType.metricColumn0,
+    ascending: false
+  }];
   public viewType = ViewType;
 
   // mocks
@@ -49,29 +49,62 @@ export class MyPerformanceComponent implements OnInit {
   public tableHeaderRowRight: Array<string> = ['BRAND', 'DEPLETIONS', 'CTV'];
   public performanceMetric: string = 'Depletions';
   public dateRange: DateRange = getDateRangeMock();
-  public tableData: MyPerformanceTableRow[] = myPerformanceTableData;
+  public tableData: Array<MyPerformanceTableRow>;
   public rightTableData: MyPerformanceTableRow[] = myPerformanceRightTableData;
-  public totalRowData: MyPerformanceTableRow = myPerformanceTotalRowData;
+  public totalRowData: MyPerformanceTableRow;
   public showOpportunities: boolean = true;
 
   private dateRanges$: Observable<DateRangesState>;
-  private filterState$: Observable<MyPerformanceFilterState>;
+  private filterState: MyPerformanceFilterState;
+  private filterStateSubscription: Subscription;
+  private performanceTotalSubscription: Subscription;
+  private responsibilitiesSubscription: Subscription;
+  private viewTypesSubscription: Subscription;
 
-  constructor(private store: Store<AppState>,
-              private myPerformanceTableDataTransformerService: MyPerformanceTableDataTransformerService) {
-    this.filterState$ = this.store.select(state => state.myPerformanceFilter);
+  constructor(
+    private store: Store<AppState>,
+    private myPerformanceTableDataTransformerService: MyPerformanceTableDataTransformerService
+  ) { }
+
+  ngOnInit() {
     this.dateRanges$ = this.store.select(state => state.dateRanges);
-    this.store.select(state => state.viewTypes).subscribe((viewTypeState: ViewTypeState) => {
+
+    this.filterStateSubscription = this.store.select(state => state.myPerformanceFilter).subscribe(filterState => {
+      this.filterState = filterState;
+    });
+
+    this.responsibilitiesSubscription = this.store.select(state => state.responsibilities)
+      .subscribe((responsibilitiesState: ResponsibilitiesState) => {
+        if (responsibilitiesState && responsibilitiesState.responsibilities) {
+          this.tableData = this.myPerformanceTableDataTransformerService
+            .getTableData(this.leftTableViewType, responsibilitiesState);
+        }
+    });
+
+    this.viewTypesSubscription = this.store.select(state => state.viewTypes).subscribe((viewTypeState: ViewTypeState) => {
       if (viewTypeState && viewTypeState.leftTableViewType) this.leftTableViewType = viewTypeState.leftTableViewType;
     });
-    this.store.select(state => state.responsibilities).subscribe((responsibilitiesState: ResponsibilitiesState) => {
-      if (responsibilitiesState && responsibilitiesState.responsibilities) {
-        let { tableData, totalRowData } =
-          this.myPerformanceTableDataTransformerService.getTableData(this.leftTableViewType, responsibilitiesState.responsibilities);
-        this.tableData = tableData;
-        this.totalRowData = totalRowData || this.totalRowData;
-      }
+
+    this.performanceTotalSubscription = this.store.select(state => state.performanceTotal)
+      .subscribe((performanceTotalData: PerformanceTotalState) => {
+        if (performanceTotalData && performanceTotalData.status === ActionStatus.Fetched) {
+          this.totalRowData = this.myPerformanceTableDataTransformerService.getTotalRowDisplayData(performanceTotalData.performanceTotal);
+        }
     });
+
+    // stub current user for now
+    const currentUserId = 3843;
+    this.store.dispatch(new FetchResponsibilitiesAction({ positionId: currentUserId, filter: this.filterState }));
+
+    // setting ViewType for right side here for now
+    this.store.dispatch(new SetRightMyPerformanceTableViewType(ViewType.brands));
+  }
+
+  ngOnDestroy() {
+    this.filterStateSubscription.unsubscribe();
+    this.performanceTotalSubscription.unsubscribe();
+    this.responsibilitiesSubscription.unsubscribe();
+    this.viewTypesSubscription.unsubscribe();
   }
 
   public handleSortRows(criteria: SortingCriteria[]): void {
@@ -94,7 +127,7 @@ export class MyPerformanceComponent implements OnInit {
           console.log('clicked on left row:', row);
           if (this.leftTableViewType === ViewType.roleGroups) {
             this.store.dispatch(new SetLeftMyPerformanceTableViewType(ViewType.people));
-            this.store.dispatch(new GetPeopleByRoleGroupAction(EntityPeopleType[row.descriptionRow0]));
+            this.store.dispatch(new GetPeopleByRoleGroupAction(EntityPeopleType[row.descriptionRow0.slice(0, -1)]));
           }
         } else {
           console.log('clicked on right row:', row);
@@ -123,14 +156,5 @@ export class MyPerformanceComponent implements OnInit {
     }
 
     this.store.dispatch({type: actionType, payload: event.filterValue});
-  }
-
-  ngOnInit() {
-    // stub current user for now
-    const currentUserId = 1;
-    this.store.dispatch(new FetchResponsibilitiesAction(currentUserId));
-
-    // setting ViewType for right side here for now
-    this.store.dispatch(new SetRightMyPerformanceTableViewType(ViewType.brands));
   }
 }

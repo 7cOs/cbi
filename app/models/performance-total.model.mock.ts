@@ -1,7 +1,8 @@
 import * as Chance from 'chance';
-let chance = new Chance();
 
 import { PerformanceTotal } from './performance-total.model';
+
+const chance = new Chance();
 
 export function getPerformanceTotalMock(): PerformanceTotal {
   return {

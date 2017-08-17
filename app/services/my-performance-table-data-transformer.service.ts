@@ -3,19 +3,25 @@ import { Injectable } from '@angular/core';
 import 'rxjs/add/operator/map';
 
 import { EntityResponsibilities } from '../models/entity-responsibilities.model';
-import { EntityPeopleType } from '../enums/entity-responsibilities.enum';
 import { MyPerformanceTableRow } from '../models/my-performance-table-row.model';
-import { RoleGroups } from '../models/role-groups.model';
+import { PerformanceTotal } from '../models/performance-total.model';
+import { ResponsibilitiesState } from '../state/reducers/responsibilities.reducer';
+import { RoleGroups, RoleGroupPerformanceTotal } from '../models/role-groups.model';
+import { UtilService } from './util.service';
 import { ViewType } from '../enums/view-type.enum';
-let chance = new Chance();
+
+const chance = new Chance();
 
 @Injectable()
 export class MyPerformanceTableDataTransformerService {
+
+  constructor(private utilService: UtilService) { }
+
   // mocking the performance data for now;
   public transformRoleGroupTableData(roleGroups: RoleGroups): MyPerformanceTableRow[] {
     return Object.keys(roleGroups).map((groupName: string) => {
       return {
-        descriptionRow0: roleGroups[groupName][0].typeDisplayName,
+        descriptionRow0: roleGroups[groupName][0].description,
         metricColumn0: chance.natural({max: 1000}),
         metricColumn1: chance.natural({max: 1000}),
         metricColumn2: chance.natural({max: 100}),
@@ -24,20 +30,16 @@ export class MyPerformanceTableDataTransformerService {
     });
   }
 
-  public getTableData(viewType: ViewType, responsibilities: RoleGroups):
-    { tableData: MyPerformanceTableRow[], totalRowData?: MyPerformanceTableRow } {
-      switch (viewType) {
-        case ViewType.people:
-          return {
-            tableData: this.transformPeopleTableData(responsibilities),
-            totalRowData:  this.buildTotalRow(responsibilities)
-          };
-        default: // handles case ViewType.roleGroups
-          return {
-            tableData: this.transformRoleGroupTableData(responsibilities)
-          };
-      }
+  public getTableData(viewType: ViewType, responsibilitiesState: ResponsibilitiesState): MyPerformanceTableRow[] {
+    switch (viewType) {
+      case ViewType.people:
+        return this.transformPeopleTableData(responsibilitiesState.responsibilities);
+
+      case ViewType.roleGroups:
+      default:
+        return this.getRoleGroupPerformanceTableData(responsibilitiesState.performanceTotals);
     }
+  }
 
   public transformPeopleTableData(roleGroups: RoleGroups): MyPerformanceTableRow[] {
     const groupName = Object.keys(roleGroups)[0];
@@ -53,14 +55,36 @@ export class MyPerformanceTableDataTransformerService {
   }
 
   public buildTotalRow(roleGroups: RoleGroups): MyPerformanceTableRow {
-    const groupName: EntityPeopleType = EntityPeopleType[Object.keys(roleGroups)[0]];
+    const groupName: string = Object.keys(roleGroups)[0];
     return {
       descriptionRow0: 'TOTAL',
-      descriptionRow1: `${groupName}s`,
+      descriptionRow1: `${groupName}S`,
       metricColumn0: chance.natural({max: 1000}),
       metricColumn1: chance.natural({max: 1000}),
       metricColumn2: chance.natural({max: 100}),
       ctv: 100
+    };
+  }
+
+  public getRoleGroupPerformanceTableData(performanceData: Array<RoleGroupPerformanceTotal>): Array<MyPerformanceTableRow> {
+    return performanceData.map((performance: RoleGroupPerformanceTotal) => {
+      return {
+        descriptionRow0: `${performance.entityType}S`,
+        metricColumn0: performance.performanceTotal.total,
+        metricColumn1: performance.performanceTotal.totalYearAgo,
+        metricColumn2: this.utilService.getYearAgoPercent(performance.performanceTotal.total, performance.performanceTotal.totalYearAgo),
+        ctv: performance.performanceTotal.contributionToVolume
+      };
+    });
+  }
+
+  public getTotalRowDisplayData(performanceTotal: PerformanceTotal): MyPerformanceTableRow {
+    return {
+      descriptionRow0: 'Total',
+      metricColumn0: performanceTotal.total,
+      metricColumn1: performanceTotal.totalYearAgo,
+      metricColumn2: this.utilService.getYearAgoPercent(performanceTotal.total, performanceTotal.totalYearAgo),
+      ctv: performanceTotal.contributionToVolume
     };
   }
 }

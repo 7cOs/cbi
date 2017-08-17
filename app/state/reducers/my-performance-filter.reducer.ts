@@ -1,17 +1,16 @@
 import * as MyPerformanceFilterActions from '../actions/my-performance-filter.action';
 import { DateRangeTimePeriodValue } from '../../enums/date-range-time-period.enum';
 import { DistributionTypeValue } from '../../enums/distribution-type.enum';
-import { MetricValue } from '../../enums/metric-type.enum';
+import { MetricTypeValue } from '../../enums/metric-type.enum';
 import { MyPerformanceFilter } from '../../models/my-performance-filter.model';
 import { PremiseTypeValue } from '../../enums/premise-type.enum';
 
 export interface MyPerformanceFilterState extends MyPerformanceFilter {}
 
 export const initialState: MyPerformanceFilterState = {
-  metric: MetricValue.DEPLETIONS,
-  timePeriod: DateRangeTimePeriodValue.CYTDBDL,
-  premiseType: PremiseTypeValue.ALL,
-  distributionType: DistributionTypeValue.SIMPLE
+  metricType: MetricTypeValue.volume,
+  dateRangeCode: DateRangeTimePeriodValue.CYTDBDL,
+  premiseType: PremiseTypeValue.All
 };
 
 export function myPerformanceFilterReducer(
@@ -22,16 +21,19 @@ export function myPerformanceFilterReducer(
   switch (action.type) {
 
     case MyPerformanceFilterActions.SET_METRIC:
-      return Object.assign({}, state, {
-        metric: action.payload,
-        timePeriod: action.payload === MetricValue.DEPLETIONS ? DateRangeTimePeriodValue.CYTDBDL : DateRangeTimePeriodValue.L90BDL,
-        premiseType: action.payload === MetricValue.DEPLETIONS ? PremiseTypeValue.ALL : PremiseTypeValue.OFF,
-        distributionType: DistributionTypeValue.SIMPLE
-      });
+      const newState = {
+        metricType: action.payload,
+        dateRangeCode: action.payload === MetricTypeValue.volume ? DateRangeTimePeriodValue.CYTDBDL : DateRangeTimePeriodValue.L90BDL,
+        premiseType: action.payload === MetricTypeValue.volume ? PremiseTypeValue.All : PremiseTypeValue.Off
+      };
+
+      if (action.payload === MetricTypeValue.PointsOfDistribution) newState['distributionType'] = DistributionTypeValue.simple;
+
+      return newState;
 
     case MyPerformanceFilterActions.SET_TIME_PERIOD:
       return Object.assign({}, state, {
-        timePeriod: action.payload
+        dateRangeCode: action.payload
       });
 
     case MyPerformanceFilterActions.SET_PREMISE_TYPE:

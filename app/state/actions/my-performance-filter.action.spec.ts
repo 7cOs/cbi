@@ -1,6 +1,6 @@
 import { DateRangeTimePeriodValue } from '../../enums/date-range-time-period.enum';
 import { DistributionTypeValue } from '../../enums/distribution-type.enum';
-import { MetricValue } from '../../enums/metric-type.enum';
+import { MetricTypeValue } from '../../enums/metric-type.enum';
 import { PremiseTypeValue } from '../../enums/premise-type.enum';
 import * as MyPerformanceFilterActions from './my-performance-filter.action';
 
@@ -8,7 +8,7 @@ describe('My Performance Filter Actions', () => {
 
   describe('SetMetric action', () => {
     let action: MyPerformanceFilterActions.SetMetric;
-    const payload: MetricValue = MetricValue.DEPLETIONS;
+    const payload: MetricTypeValue = MetricTypeValue.volume;
 
     beforeEach(() => {
       action = new MyPerformanceFilterActions.SetMetric(payload);
@@ -44,7 +44,7 @@ describe('My Performance Filter Actions', () => {
 
   describe('SetPremiseType action', () => {
     let action: MyPerformanceFilterActions.SetPremiseType;
-    const payload: PremiseTypeValue = PremiseTypeValue.OFF;
+    const payload: PremiseTypeValue = PremiseTypeValue.Off;
 
     beforeEach(() => {
       action = new MyPerformanceFilterActions.SetPremiseType(payload);
@@ -62,7 +62,7 @@ describe('My Performance Filter Actions', () => {
 
   describe('SetDistributionType action', () => {
     let action: MyPerformanceFilterActions.SetDistributionType;
-    const payload: DistributionTypeValue = DistributionTypeValue.SIMPLE;
+    const payload: DistributionTypeValue = DistributionTypeValue.simple;
 
     beforeEach(() => {
       action = new MyPerformanceFilterActions.SetDistributionType(payload);
