@@ -1460,32 +1460,36 @@ module.exports = /*  @ngInject */
     }
 
     function navPrevLevelInTopBottom() {
-      var performanceData;
-      var newLevelName;
-      var newAccountType;
-      var levelToResetBeyond;
-      var currentLevelName = vm.currentTopBottomAcctType.name;
+      const currentLevelName = vm.currentTopBottomAcctType.name;
+      let performanceData;
+      let newLevelName;
+      let newAccountType;
+      let levelToResetBeyond;
 
       if (currentLevelName === 'distributors') return;
 
       switch (currentLevelName) {
         case 'Accounts':
-          newAccountType     = {name: 'Distributors', value: 1};
+          newAccountType      = { name: 'Distributors', value: 1 };
           vm.premiseTypeValue = vm.topBottomHistory.distributors.prevPremiseType;
+          vm.showXDistributor = false;
           break;
         case 'Sub-Accounts':
-          newLevelName       = 'accounts';
-          performanceData    = vm.topBottomHistory.distributors;
-          newAccountType     = {name: 'Accounts', value: 2};
-          levelToResetBeyond = {name: 'Distributors', value: 1};
+          newLevelName        = 'accounts';
+          performanceData     = vm.topBottomHistory.distributors;
+          newAccountType      = { name: 'Accounts', value: 2 };
+          levelToResetBeyond  = { name: 'Distributors', value: 1 };
           vm.premiseTypeValue = vm.topBottomHistory[newLevelName].prevPremiseType;
+          vm.showXDistributor = true;
+          vm.showXChain       = false;
           break;
         case 'Stores':
-          newLevelName       = 'subAccounts';
-          performanceData    = vm.topBottomHistory.accounts;
-          newAccountType     = {name: 'Sub-Accounts', value: 3};
-          levelToResetBeyond = {name: 'Accounts', value: 2};
+          newLevelName        = 'subAccounts';
+          performanceData     = vm.topBottomHistory.accounts;
+          newAccountType      = { name: 'Sub-Accounts', value: 3 };
+          levelToResetBeyond  = { name: 'Accounts', value: 2 };
           vm.premiseTypeValue = vm.topBottomHistory[newLevelName].prevPremiseType;
+          vm.showXStore       = false;
           break;
       }
 
@@ -1501,6 +1505,7 @@ module.exports = /*  @ngInject */
           // (must be set before setTopBottomAcctTypeSelection because of side-effects)
           vm.filtersService.model.account = vm.currentTopBottomFilters.accounts.name;
         }
+
         setTopBottomAcctTypeSelection(newAccountType, levelToResetBeyond);
         resetTopBottomHistory();
         return;
@@ -1512,11 +1517,13 @@ module.exports = /*  @ngInject */
       setTopBottomFilterModel(newLevelName, performanceData, true);
       setUpdatedFilters();
       setChainDropdownAndPlaceHolder(newLevelName, performanceData);
+
       if (newLevelName === 'subAccounts' && vm.currentTopBottomFilters.stores) {
         // when switching back to subaccount level, set the account filter back to the account name
         // (account filter is changed to subaccount name when on stores level)
         vm.filtersService.model.account = vm.currentTopBottomFilters.accounts.name;
       }
+
       vm.currentTopBottomAcctType = newAccountType;
       myperformanceService.resetFiltersForLevelsAboveCurrent(levelToResetBeyond, vm.currentTopBottomFilters, vm.topBottomData);
       updateBrandSnapshot(true);
