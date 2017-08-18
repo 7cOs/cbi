@@ -3,8 +3,11 @@ import { EntityPeopleType, EntityPropertyType } from '../enums/entity-responsibi
 export interface EntityResponsibilities {
   id: number;
   name: string;
+  type: string;
+  hierarchyType: string;
+  description: string;
   otherType?: string;
   peopleType?: EntityPeopleType;
+  employeeId?: string;
   propertyType?: EntityPropertyType;
-  typeDisplayName: string;
 }

@@ -5,12 +5,15 @@ import * as initialStateResponsibilities from './responsibilities.reducer';
 import * as initialStateViewTypes from './view-types.reducer';
 import * as MyPerformanceVersionActions from '../actions/my-performance-version.action';
 import { myPerformanceVersionReducer } from './my-performance-version.reducer';
+import * as PerformanceTotalActions from '../actions/performance-total.action';
+import { performanceTotalReducer, PerformanceTotalState } from './performance-total.reducer';
 import * as ResponsibilitiesActions from '../actions/responsibilities.action';
 import { responsibilitiesReducer, ResponsibilitiesState } from './responsibilities.reducer';
 import * as viewTypesActions from '../actions/view-types.action';
 import { viewTypesReducer, ViewTypeState } from './view-types.reducer';
 
 export interface MyPerformanceData {
+  performanceTotal?: PerformanceTotalState;
   responsibilities?: ResponsibilitiesState;
   viewTypes?: ViewTypeState;
 }
@@ -34,6 +37,18 @@ export function myPerformanceReducer(
 ): MyPerformanceState {
   switch (action.type) {
 
+    case PerformanceTotalActions.FETCH_PERFORMANCE_TOTAL_ACTION:
+    case PerformanceTotalActions.FETCH_PERFORMANCE_TOTAL_SUCCESS_ACTION:
+    case PerformanceTotalActions.FETCH_PERFORMANCE_TOTAL_FAILURE_ACTION:
+      return {
+        current: {
+          performanceTotal: performanceTotalReducer(state.current.performanceTotal, action as PerformanceTotalActions.Action),
+          responsibilities: state.current.responsibilities,
+          viewTypes: state.current.viewTypes
+        },
+        versions: state.versions
+      };
+
     case MyPerformanceVersionActions.SAVE_MY_PERFORMANCE_STATE_ACTION:
     case MyPerformanceVersionActions.RESTORE_MY_PERFORMANCE_STATE_ACTION:
       return myPerformanceVersionReducer(state, action as MyPerformanceVersionActions.Action);
@@ -44,6 +59,7 @@ export function myPerformanceReducer(
     case ResponsibilitiesActions.GET_PEOPLE_BY_ROLE_GROUP_ACTION:
       return {
         current: {
+          performanceTotal: state.current.performanceTotal,
           responsibilities: responsibilitiesReducer(state.current.responsibilities, action as ResponsibilitiesActions.Action),
           viewTypes: state.current.viewTypes
         },
@@ -54,6 +70,7 @@ export function myPerformanceReducer(
     case viewTypesActions.SET_RIGHT_MY_PERFORMANCE_TABLE_VIEW_TYPE:
       return {
         current: {
+          performanceTotal: state.current.performanceTotal,
           responsibilities: state.current.responsibilities, // If it doesn't exist, is that ok? I guess I might see with unit tests
           viewTypes: viewTypesReducer(state.current.viewTypes, action as viewTypesActions.Action)
         },
