@@ -1,5 +1,5 @@
-import { NgModule }       from '@angular/core';
-import { CommonModule }   from '@angular/common';
+import { NgModule } from '@angular/core';
+import { CommonModule } from '@angular/common';
 
 import { MyPerformanceComponent } from './my-performance.component';
 import { MyPerformanceFilterComponent } from '../../shared/components/my-performance-filter/my-performance-filter.component';

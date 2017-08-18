@@ -1,37 +1,58 @@
-import * as Chance from 'chance';
 import { EffectsRunner, EffectsTestingModule } from '@ngrx/effects/testing';
 import { Observable } from 'rxjs';
 import { TestBed, inject } from '@angular/core/testing';
+import * as Chance from 'chance';
 
+import { DateRangeTimePeriodValue } from '../../enums/date-range-time-period.enum';
+import { DistributionTypeValue } from '../../enums/distribution-type.enum';
 import { FetchResponsibilitiesAction,
          FetchResponsibilitiesFailureAction,
          FetchResponsibilitiesSuccessAction } from '../actions/responsibilities.action';
-import { getMockRoleGroups } from '../../models/role-groups.model.mock';
+import { getRoleGroupsMock, getRoleGroupPerformanceTotalsMock } from '../../models/role-groups.model.mock';
+import { MetricTypeValue } from '../../enums/metric-type.enum';
 import { MyPerformanceApiService } from '../../services/my-performance-api.service';
+import { MyPerformanceFilterState } from '../reducers/my-performance-filter.reducer';
+import { PremiseTypeValue } from '../../enums/premise-type.enum';
 import { ResponsibilitiesEffects } from './responsibilities.effect';
 import { ResponsibilitiesTransformerService } from '../../services/responsibilities-transformer.service';
 import { RoleGroups } from '../../models/role-groups.model';
 import { SetLeftMyPerformanceTableViewType } from '../actions/view-types.action';
 import { ViewType } from '../../enums/view-type.enum';
 
-let chance = new Chance();
+const chance = new Chance();
 
 describe('Responsibilities Effects', () => {
-  const roleGroupsMock: RoleGroups = getMockRoleGroups();
+  const positionIdMock = chance.natural();
+  const roleGroupsMock: RoleGroups = getRoleGroupsMock();
+  const mockRoleGroupPerformanceTotals = getRoleGroupPerformanceTotalsMock();
+  const performanceFilterStateMock: MyPerformanceFilterState = {
+    metricType: MetricTypeValue.PointsOfDistribution,
+    dateRangeCode: DateRangeTimePeriodValue.FYTDBDL,
+    premiseType: PremiseTypeValue.On,
+    distributionType: DistributionTypeValue.simple
+  };
+  const responsibilitiesSuccessPayloadMock = {
+    positionId: positionIdMock,
+    responsibilities: roleGroupsMock,
+    performanceTotals: mockRoleGroupPerformanceTotals
+  };
   const err = new Error(chance.string());
-
-  let runner: EffectsRunner;
-  let responsibilitiesEffects: ResponsibilitiesEffects;
-  let myPerformanceApiServiceMock = {
+  const myPerformanceApiServiceMock = {
     getResponsibilities() {
       return Observable.of({positions: roleGroupsMock});
+    },
+    getResponsibilitiesPerformanceTotals() {
+      return Observable.of(mockRoleGroupPerformanceTotals);
     }
   };
-  let responsibilitiesTransformerServiceMock = {
+  const responsibilitiesTransformerServiceMock = {
     groupPeopleByRoleGroups(mockArgs: any): RoleGroups {
       return roleGroupsMock;
     }
   };
+
+  let runner: EffectsRunner;
+  let responsibilitiesEffects: ResponsibilitiesEffects;
 
   beforeEach(() => TestBed.configureTestingModule({
     imports: [
@@ -65,14 +86,17 @@ describe('Responsibilities Effects', () => {
         (_myPerformanceApiService: MyPerformanceApiService) => {
           myPerformanceApiService = _myPerformanceApiService;
 
-          runner.queue(new FetchResponsibilitiesAction(1));
+          runner.queue(new FetchResponsibilitiesAction({
+            positionId: positionIdMock,
+            filter: performanceFilterStateMock
+          }));
         }
       ));
 
       it('should return a FetchResponsibilitiesSuccessAction', (done) => {
         responsibilitiesEffects.fetchResponsibilities$().pairwise().subscribe(([result1, result2]) => {
           expect(result1).toEqual(new SetLeftMyPerformanceTableViewType(ViewType.roleGroups));
-          expect(result2).toEqual(new FetchResponsibilitiesSuccessAction(roleGroupsMock));
+          expect(result2).toEqual(new FetchResponsibilitiesSuccessAction(responsibilitiesSuccessPayloadMock));
           done();
         });
       });
@@ -84,7 +108,10 @@ describe('Responsibilities Effects', () => {
       beforeEach(inject([ MyPerformanceApiService ],
         (_myPerformanceApiService: MyPerformanceApiService) => {
           myPerformanceApiService = _myPerformanceApiService;
-          runner.queue(new FetchResponsibilitiesAction(1));
+          runner.queue(new FetchResponsibilitiesAction({
+            positionId: positionIdMock,
+            filter: performanceFilterStateMock
+          }));
         }
       ));
 
