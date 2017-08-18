@@ -288,19 +288,19 @@ module.exports = /*  @ngInject */
     function saveNewList(e) {
       vm.buttonDisabled = true;
 
-      // Create target list
-      userService.addTargetList(vm.newList).then(function(response) {
-        $analytics.eventTrack('Add to Target List', {
-          category: vm.analyticsCategory,
+      userService.addTargetList(vm.newList).then(response => {
+        $analytics.eventTrack('Create Target List', {
+          category: 'Opportunities',
           label: response.id
         });
+
         vm.addToTargetList(response.id);
         vm.closeModal();
         vm.buttonDisabled = false;
 
         return targetListService.addTargetListShares(response.id, vm.newList.targetListShares);
       })
-      .then(function(addCollaboratorResponse) {
+      .then(addCollaboratorResponse => {
         userService.model.targetLists.owned[0].collaborators = addCollaboratorResponse.data;
 
         vm.newList = {
@@ -311,7 +311,8 @@ module.exports = /*  @ngInject */
           targetListShares: [],
           collaborateAndInvite: false
         };
-      });
+      })
+      .catch(error => console.error('Error creating target list: ', error));
     }
 
     function addCollaborator(e) {
@@ -427,10 +428,10 @@ module.exports = /*  @ngInject */
     }
 
     function submitFeedback(opportunity, data) {
-
       if (data.type === 'other' && !data.feedback) {
         data.feedback = 'other';
       }
+
       vm.closeOrDismissOpportunity(opportunity, data, true);
       vm.opportunityDismissTrigger = true;
       vm.opportunity.feedback = '';
