@@ -69,12 +69,18 @@ module.exports = /*  @ngInject */
       note.uploadSizeError = false;
       note.editMode = !note.editMode;
       cancelNewNote(vm.newNote);
+
       if (cancel) {
         note.body = vm.cachedNote.body;
         note.title = vm.cachedNote.title;
       } else {
         vm.cachedNote = angular.copy(note);
       }
+
+      $analytics.eventTrack('Edit Note', {
+        category: notesService.model.currentStoreProperty === 'distributor' ? 'Distributor Notes' : 'Retailer Notes',
+        label: note.id
+      });
     }
 
     function openCreateNote() {
@@ -128,6 +134,11 @@ module.exports = /*  @ngInject */
         data.id = response.successReturnValue[0].id;
         vm.notes.push(data);
 
+        $analytics.eventTrack('Create Note', {
+          category: data.accountType === 'DISTRIBUTOR' ? 'Distributor Notes' : 'Retailer Notes',
+          label: response.successReturnValue[0].id
+        });
+
         jumpToNotesTop();
         setNoteAuthor();
 
@@ -147,7 +158,8 @@ module.exports = /*  @ngInject */
         if (data.attachments && data.attachments.length) {
           uploadFiles(data.id, data.attachments);
         }
-      }).catch(function() {
+      })
+      .catch(() => {
         vm.fileUploading = false;
         vm.notesError = true;
       });
@@ -183,12 +195,20 @@ module.exports = /*  @ngInject */
 
     function deleteNote(data, accountId) {
       vm.loading = true;
-      notesService.deleteNote(data.id).then(function(success) {
-       var index = vm.notes.indexOf(data);
-       vm.notes.splice(index, 1);
-       setNoteAuthor();
-       vm.loading = false;
-      }).catch(function() {
+
+      notesService.deleteNote(data.id).then(resonse => {
+        const deletedNoteIndex = vm.notes.indexOf(data);
+
+        vm.notes.splice(deletedNoteIndex, 1);
+        setNoteAuthor();
+        vm.loading = false;
+
+        $analytics.eventTrack('Delete Note', {
+          category: notesService.model.currentStoreProperty === 'distributor' ? 'Distributor Notes' : 'Retailer Notes',
+          label: data.id
+        });
+      })
+      .catch(() => {
         vm.notesError = true;
       });
     }
