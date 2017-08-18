@@ -18,14 +18,12 @@ import { MyPerformanceFilterEvent } from '../../models/my-performance-filter.mod
 import { MyPerformanceFilterState } from '../../state/reducers/my-performance-filter.reducer';
 import { MyPerformanceTableDataTransformerService } from '../../services/my-performance-table-data-transformer.service';
 import { MyPerformanceTableRow } from '../../models/my-performance-table-row.model';
-import { PerformanceTotalState } from '../../state/reducers/performance-total.reducer';
 import { ResponsibilitiesState } from '../../state/reducers/responsibilities.reducer';
 import { MyPerformanceState, MyPerformanceData } from '../../state/reducers/my-performance.reducer';
 import { RowType } from '../../enums/row-type.enum';
 import { SetLeftMyPerformanceTableViewType, SetRightMyPerformanceTableViewType } from '../../state/actions/view-types.action';
 import { SortingCriteria } from '../../models/sorting-criteria.model';
 import { ViewType } from '../../enums/view-type.enum';
-import { ViewTypeState } from '../../state/reducers/view-types.reducer';
 import * as MyPerformanceFilterActions from '../../state/actions/my-performance-filter.action';
 
 // mocks
@@ -68,9 +66,8 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
   private dateRanges$: Observable<DateRangesState>;
   private filterState: MyPerformanceFilterState;
   private filterStateSubscription: Subscription;
-  private performanceTotalSubscription: Subscription;
-  private responsibilitiesSubscription: Subscription;
-  private viewTypesSubscription: Subscription;
+  private myPerformanceCurrentSubscription: Subscription;
+  private myPerformanceVersionSubscription: Subscription;
 
   constructor(
     private store: Store<AppState>,
@@ -84,28 +81,23 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
       this.filterState = filterState;
     });
 
-    this.responsibilitiesSubscription = this.store.select(state => state.myPerformance.current.responsibilities)
-      .subscribe((responsibilitiesState: ResponsibilitiesState) => {
-        if (responsibilitiesState && responsibilitiesState.responsibilities) {
+    this.myPerformanceCurrentSubscription = this.store
+      .select(state => state.myPerformance.current)
+      .subscribe((current: MyPerformanceData) => {
+        this.currentState = current;
+
+        this.leftTableViewType = current.viewType.leftTableViewType;
+
+        if (current.responsibilities) {
           this.tableData = this.myPerformanceTableDataTransformerService
-            .getTableData(this.leftTableViewType, responsibilitiesState);
+            .getTableData(this.leftTableViewType, current.responsibilities);
+        }
+
+        if (current.performanceTotal && current.performanceTotal.status === ActionStatus.Fetched) {
+          this.totalRowData = this.myPerformanceTableDataTransformerService
+            .getTotalRowDisplayData(current.performanceTotal.performanceTotal);
         }
     });
-
-    this.viewTypesSubscription = this.store
-      .select(state => state.myPerformance.current.viewTypes)
-      .subscribe((viewTypeState: ViewTypeState) => {
-      this.leftTableViewType = viewTypeState.leftTableViewType;
-    });
-
-    this.performanceTotalSubscription = this.store.select(state => state.myPerformance.current.performanceTotal)
-      .subscribe((performanceTotalData: PerformanceTotalState) => {
-        if (performanceTotalData && performanceTotalData.status === ActionStatus.Fetched) {
-          this.totalRowData = this.myPerformanceTableDataTransformerService.getTotalRowDisplayData(performanceTotalData.performanceTotal);
-        }
-    });
-
-    this.store.select(state => state.myPerformance.current).subscribe((current: MyPerformanceState) => this.currentState = current);
 
     this.store.select(state => state.myPerformance.versions).subscribe((versions: Array<MyPerformanceState>) => {
       this.showLeftBackButton = versions.length > 0;
@@ -121,9 +113,8 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.filterStateSubscription.unsubscribe();
-    this.performanceTotalSubscription.unsubscribe();
-    this.responsibilitiesSubscription.unsubscribe();
-    this.viewTypesSubscription.unsubscribe();
+    this.myPerformanceCurrentSubscription.unsubscribe();
+    this.myPerformanceVersionSubscription.unsubscribe();
   }
 
   public handleSortRows(criteria: SortingCriteria[]): void {

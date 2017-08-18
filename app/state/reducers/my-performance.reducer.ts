@@ -15,7 +15,7 @@ import { viewTypesReducer, ViewTypeState } from './view-types.reducer';
 export interface MyPerformanceData {
   performanceTotal?: PerformanceTotalState;
   responsibilities?: ResponsibilitiesState;
-  viewTypes?: ViewTypeState;
+  viewType?: ViewTypeState;
 }
 
 export interface MyPerformanceState {
@@ -26,7 +26,7 @@ export interface MyPerformanceState {
 export const initialState: MyPerformanceState = {
   current: {
     responsibilities: initialStateResponsibilities.initialState,
-    viewTypes: initialStateViewTypes.initialState
+    viewType: initialStateViewTypes.initialState
   },
   versions: initialStateMyPerformanceSaver.initialState
 };
@@ -44,7 +44,7 @@ export function myPerformanceReducer(
         current: {
           performanceTotal: performanceTotalReducer(state.current.performanceTotal, action as PerformanceTotalActions.Action),
           responsibilities: state.current.responsibilities,
-          viewTypes: state.current.viewTypes
+          viewType: state.current.viewType
         },
         versions: state.versions
       };
@@ -61,7 +61,7 @@ export function myPerformanceReducer(
         current: {
           performanceTotal: state.current.performanceTotal,
           responsibilities: responsibilitiesReducer(state.current.responsibilities, action as ResponsibilitiesActions.Action),
-          viewTypes: state.current.viewTypes
+          viewType: state.current.viewType
         },
         versions: state.versions
       };
@@ -72,7 +72,7 @@ export function myPerformanceReducer(
         current: {
           performanceTotal: state.current.performanceTotal,
           responsibilities: state.current.responsibilities, // If it doesn't exist, is that ok? I guess I might see with unit tests
-          viewTypes: viewTypesReducer(state.current.viewTypes, action as viewTypesActions.Action)
+          viewType: viewTypesReducer(state.current.viewType, action as viewTypesActions.Action)
         },
         versions: state.versions
       };

@@ -199,7 +199,7 @@ describe('MyPerformanceComponent', () => {
     fixture = TestBed.createComponent(MyPerformanceComponent);
     fixture.detectChanges();
 
-    expect(storeMock.select.calls.count()).toBe(7);
+    expect(storeMock.select.calls.count()).toBe(4);
     const functionPassToSelectCall1 = storeMock.select.calls.argsFor(0)[0];
     expect(functionPassToSelectCall1(stateMock)).toBe(stateMock.dateRanges);
 
@@ -207,18 +207,9 @@ describe('MyPerformanceComponent', () => {
     expect(functionPassToSelectCall2(stateMock)).toBe(stateMock.myPerformanceFilter);
 
     const functionPassToSelectCall3 = storeMock.select.calls.argsFor(2)[0];
-    expect(functionPassToSelectCall3(stateMock)).toBe(stateMock.myPerformance.current.responsibilities);
+    expect(functionPassToSelectCall3(stateMock)).toBe(stateMock.myPerformance.current);
 
-    const functionPassToSelectCall4 = storeMock.select.calls.argsFor(3)[0];
-    expect(functionPassToSelectCall4(stateMock)).toBe(stateMock.myPerformance.current.viewTypes);
-
-    const functionPassToSelectCall5 = storeMock.select.calls.argsFor(4)[0];
-    expect(functionPassToSelectCall5(stateMock)).toBe(stateMock.myPerformance.current.performanceTotal);
-
-    const functionPassToSelectCall6 = storeMock.select.calls.argsFor(5)[0];
-    expect(functionPassToSelectCall6(stateMock)).toBe(stateMock.myPerformance.current);
-
-    const functionPassToSelectCall7 = storeMock.select.calls.argsFor(6)[0];
+    const functionPassToSelectCall7 = storeMock.select.calls.argsFor(3)[0];
     expect(functionPassToSelectCall7(stateMock)).toBe(stateMock.myPerformance.versions);
 
     fixture.detectChanges();
