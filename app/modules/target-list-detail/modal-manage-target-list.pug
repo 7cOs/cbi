@@ -47,7 +47,12 @@ div.modal.target-list-modal
       label(ng-if="tld.targetListService.model.currentList.permissionLevel !== 'author'") Add Recipient
       inline-search(type="user" placeholder="Enter names or CBI Email addresses" variety="manage-collaborators" chosen-result="tld.collaboratorName" callback="tld.addCollaboratorClick(result)")
     div(ng-if="tld.saveButton")
-      button(ng-disabled="!tld.changed" ng-click="tld.updateList()" analytics-on="click" analytics-event="Save Target List" analytics-category="Target Lists" analytics-label="Manage Target List").btn-action Save
+      button.btn-action(ng-disabled="!tld.changed"
+                        ng-click="tld.updateList()"
+                        analytics-on="click"
+                        analytics-category="{{tld.analyticsCategory}}"
+                        analytics-event="Manage Target List"
+                        analytics-label="{{tld.listID}}") Save
       p.cancel.accent(ng-click="tld.closeModal(true)") X Cancel
     button(ng-if="tld.closeButton" ng-click="tld.changed ? tld.navigateToTL() : tld.closeModal(true)").btn-action Close
   div.modal-footer.clearfix(ng-if="tld.targetListService.model.currentList.permissionLevel !== 'author'" ng-class="{'toasted': tld.showToast}")
@@ -55,7 +60,11 @@ div.modal.target-list-modal
     .toast(ng-hide="!tld.showToast")
       p Are you sure you want to leave this target list?
       p.bold.link(ng-if="!tld.confirmToast")
-        a(ng-click="tld.removeCollaborator([tld.userService.model.currentUser.employeeID]); tld.removeFooterToast()") Yes, Leave
+        a(ng-click="tld.removeCollaborator([tld.userService.model.currentUser.employeeID]); tld.removeFooterToast()"
+          analytics-on="click"
+          analytics-event="Leave Target List"
+          analytics-category="{{tld.analyticsCategory}}"
+          analytics-label="{{tld.listID}}") Yes, Leave
       a.hide-row(ng-click="tld.removeFooterToast(); tld.leave = false")
   div.modal-footer.clearfix(ng-if="tld.editable" ng-class="{'toasted': tld.showToast}")
     button.link.align-left(ng-click="tld.footerToast('archive')") Archive List

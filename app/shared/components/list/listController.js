@@ -359,7 +359,6 @@ module.exports = /*  @ngInject */
         for (let i = 0; i < vm.sharedCollaborators.length; i++) {
           userService.sendOpportunity(vm.sharedCollaborators[i].employeeId, vm.currentOpportunityId).then(function(data) {
             vm.opportunityShared = true;
-            console.log('shared');
           });
         }
       } else {
