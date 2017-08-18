@@ -84,12 +84,6 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
       this.filterState = filterState;
     });
 
-    this.viewTypesSubscription = this.store
-      .select(state => state.myPerformance.current.viewTypes)
-      .subscribe((viewTypeState: ViewTypeState) => {
-      this.leftTableViewType = viewTypeState.leftTableViewType;
-    });
-
     this.responsibilitiesSubscription = this.store.select(state => state.myPerformance.current.responsibilities)
       .subscribe((responsibilitiesState: ResponsibilitiesState) => {
         if (responsibilitiesState && responsibilitiesState.responsibilities) {
@@ -98,17 +92,23 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
         }
     });
 
-    this.store.select(state => state.myPerformance.current).subscribe((current: MyPerformanceState) => this.currentState = current);
-
-    this.store.select(state => state.myPerformance.versions).subscribe((versions: Array<MyPerformanceState>) => {
-      this.showLeftBackButton = versions.length > 0;
+    this.viewTypesSubscription = this.store
+      .select(state => state.myPerformance.current.viewTypes)
+      .subscribe((viewTypeState: ViewTypeState) => {
+      this.leftTableViewType = viewTypeState.leftTableViewType;
     });
 
     this.performanceTotalSubscription = this.store.select(state => state.myPerformance.current.performanceTotal)
       .subscribe((performanceTotalData: PerformanceTotalState) => {
-        if (performanceTotalData && performanceTotalData.status === ActionStatus.Fetched) { // TODO: remove
+        if (performanceTotalData && performanceTotalData.status === ActionStatus.Fetched) {
           this.totalRowData = this.myPerformanceTableDataTransformerService.getTotalRowDisplayData(performanceTotalData.performanceTotal);
         }
+    });
+
+    this.store.select(state => state.myPerformance.current).subscribe((current: MyPerformanceState) => this.currentState = current);
+
+    this.store.select(state => state.myPerformance.versions).subscribe((versions: Array<MyPerformanceState>) => {
+      this.showLeftBackButton = versions.length > 0;
     });
 
     // stub current user for now

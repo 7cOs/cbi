@@ -37,7 +37,9 @@ describe('My Performance Reducer', () => {
     const savedObject = {
       responsibilities: {
         status: ActionStatus.Fetched,
-        responsibilities: chance.string()
+        positionId: chance.integer(),
+        responsibilities: chance.string(),
+        performanceTotals: [] as any
       }
     };
 

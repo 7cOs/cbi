@@ -64,8 +64,13 @@ describe('MyPerformanceComponent', () => {
   const stateMock = {
       myPerformanceFilter: chance.string(),
       dateRanges: chance.string(),
+      responsibilities: chance.string(),
+      viewTypes: chance.string(),
+      performanceTotal: chance.string(),
       myPerformance: initialState
   };
+
+  console.warn(stateMock);
 
   const storeMock = {
     select: jasmine.createSpy('select.myPerformance').and.callFake((selectFunction: (state: any) => any) => {
@@ -95,45 +100,19 @@ describe('MyPerformanceComponent', () => {
 
     fixture = TestBed.createComponent(MyPerformanceComponent);
     componentInstance = fixture.componentInstance;
-
-    fixture.detectChanges(); // TODO: necessary?
   });
 
-  // it('should dispatch actions on init', () => {
-  //   storeMock.dispatch.and.callThrough();
-  //   storeMock.dispatch.calls.reset();
-  //
-  //   componentInstance.ngOnInit();
-  //   expect(storeMock.dispatch.calls.count()).toBe(2);
-  //   expect(storeMock.dispatch.calls.argsFor(0)).toEqual([new FetchResponsibilitiesAction(1)]);
-
   it('should dispatch actions on init', () => {
-    const mockState = {
-      myPerformanceFilter: {
-        metricType: MetricTypeValue.PointsOfDistribution,
-        dateRangeCode: DateRangeTimePeriodValue.FYTDBDL,
-        premiseType: PremiseTypeValue.On,
-        distributionType: DistributionTypeValue.simple,
-      },
-      dateRanges: chance.string(),
-      responsibilities: chance.string(),
-      viewTypes: chance.string(),
-      performanceTotal: chance.natural()
-    };
-
-    spyOn(store, 'select').and.callFake((elem: any) => {
-      const selectFunction = elem as ((state: any) => any);
-      return Observable.of(selectFunction(mockState));
-    });
-    spyOn(store, 'dispatch');
+    storeMock.dispatch.and.callThrough();
+    storeMock.dispatch.calls.reset();
 
     fixture = TestBed.createComponent(MyPerformanceComponent);
     fixture.detectChanges();
 
-    expect(store.dispatch.calls.count()).toBe(2);
-    expect(store.dispatch.calls.argsFor(0)).toEqual([new FetchResponsibilitiesAction({
+    expect(storeMock.dispatch.calls.count()).toBe(2);
+    expect(storeMock.dispatch.calls.argsFor(0)).toEqual([new FetchResponsibilitiesAction({
       positionId: 3843,
-      filter: mockState.myPerformanceFilter
+      filter: stateMock.myPerformanceFilter as any
     })]);
 
     // this will change once right table is built
@@ -215,26 +194,12 @@ describe('MyPerformanceComponent', () => {
   });
 
   it('should call select with the right arguments', () => {
-    // const mockState = {
-    //   myPerformanceFilter: 'mockPerformanceFilterState',
-    //   dateRanges: 'mockDateRangesState',
-    //   responsibilities: 'mockResponsibilitiesState',
-    //   viewTypes: 'mockViewTypesState',
-    //   performanceTotal: 'mockPerformanceTotalState'
-    // };
-    //
-    // spyOn(store, 'select').and.callFake((elem: any) => {
-    //   const selectFunction = elem as ((state: any) => any);
-    //   return Observable.of(selectFunction(mockState));
-    // });
-
-
     storeMock.dispatch.calls.reset();
     storeMock.select.calls.reset();
     fixture = TestBed.createComponent(MyPerformanceComponent);
     fixture.detectChanges();
 
-    expect(storeMock.select.calls.count()).toBe(5);
+    expect(storeMock.select.calls.count()).toBe(7);
     const functionPassToSelectCall1 = storeMock.select.calls.argsFor(0)[0];
     expect(functionPassToSelectCall1(stateMock)).toBe(stateMock.dateRanges);
 
@@ -242,19 +207,25 @@ describe('MyPerformanceComponent', () => {
     expect(functionPassToSelectCall2(stateMock)).toBe(stateMock.myPerformanceFilter);
 
     const functionPassToSelectCall3 = storeMock.select.calls.argsFor(2)[0];
-    expect(functionPassToSelectCall3(stateMock)).toBe(stateMock.responsibilities);
+    expect(functionPassToSelectCall3(stateMock)).toBe(stateMock.myPerformance.current.responsibilities);
 
     const functionPassToSelectCall4 = storeMock.select.calls.argsFor(3)[0];
-    expect(functionPassToSelectCall4(stateMock)).toBe(stateMock.viewTypes);
+    expect(functionPassToSelectCall4(stateMock)).toBe(stateMock.myPerformance.current.viewTypes);
 
     const functionPassToSelectCall5 = storeMock.select.calls.argsFor(4)[0];
-    expect(functionPassToSelectCall5(stateMock)).toBe(stateMock.performanceTotal);
+    expect(functionPassToSelectCall5(stateMock)).toBe(stateMock.myPerformance.current.performanceTotal);
+
+    const functionPassToSelectCall6 = storeMock.select.calls.argsFor(5)[0];
+    expect(functionPassToSelectCall6(stateMock)).toBe(stateMock.myPerformance.current);
+
+    const functionPassToSelectCall7 = storeMock.select.calls.argsFor(6)[0];
+    expect(functionPassToSelectCall7(stateMock)).toBe(stateMock.myPerformance.versions);
 
     fixture.detectChanges();
-    const mockMyPerformanceFilter = fixture.debugElement.query(By.directive(MyPerformanceFilterComponentMock))
+    const myPerformanceFilterMock = fixture.debugElement.query(By.directive(MyPerformanceFilterComponentMock))
     .injector
     .get(MyPerformanceFilterComponentMock) as MyPerformanceFilterComponentMock;
-    expect(mockMyPerformanceFilter.filterState).toEqual(stateMock.myPerformanceFilter as any);
-    expect(mockMyPerformanceFilter.dateRanges).toBe(stateMock.dateRanges as any);
+    expect(myPerformanceFilterMock.filterState).toEqual(stateMock.myPerformanceFilter as any);
+    expect(myPerformanceFilterMock.dateRanges).toBe(stateMock.dateRanges as any);
   });
 });

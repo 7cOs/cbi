@@ -1,8 +1,12 @@
+import * as Chance from 'chance';
+
 import { myPerformanceReducer, initialState } from './my-performance.reducer';
 import * as MyPerformanceVersionActions from '../actions/my-performance-version.action';
 import * as myPerformanceVersion from './my-performance-version.reducer';
 import * as responsibilities from './responsibilities.reducer';
 import * as ResponsibilitiesActions from '../actions/responsibilities.action';
+
+let chance = new Chance();
 
 describe('My Performance Reducer', () => {
 
@@ -15,7 +19,7 @@ describe('My Performance Reducer', () => {
   });
 
   it('should call the versioning reducer when a versioning action is received', () => {
-    myPerformanceReducer(initialState, new MyPerformanceVersionActions.SaveMyPerformanceStateAction({}));
+    myPerformanceReducer(initialState, new MyPerformanceVersionActions.SaveMyPerformanceStateAction(null));
     myPerformanceReducer(initialState, new MyPerformanceVersionActions.RestoreMyPerformanceStateAction());
 
     expect(myPerformanceVersionReducerSpy).toHaveBeenCalled();
@@ -24,8 +28,15 @@ describe('My Performance Reducer', () => {
   });
 
   it('should call the responsibilities reducer when a responsibility action is received', () => {
-    myPerformanceReducer(initialState, new ResponsibilitiesActions.FetchResponsibilitiesAction(0));
-    myPerformanceReducer(initialState, new ResponsibilitiesActions.FetchResponsibilitiesSuccessAction({}));
+    myPerformanceReducer(initialState, new ResponsibilitiesActions.FetchResponsibilitiesAction({
+      positionId: chance.integer(),
+      filter: null
+    }));
+    myPerformanceReducer(initialState, new ResponsibilitiesActions.FetchResponsibilitiesSuccessAction({
+      positionId: chance.integer(),
+      responsibilities: {},
+      performanceTotals: []
+    }));
     myPerformanceReducer(initialState, new ResponsibilitiesActions.FetchResponsibilitiesFailureAction(new Error()));
 
     expect(responsibilitiesReducerSpy).toHaveBeenCalled();
