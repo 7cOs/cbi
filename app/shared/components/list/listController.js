@@ -404,6 +404,10 @@ module.exports = /*  @ngInject */
                   storeGroup.splice(key, 1);
                 } else if (opportunity.id === oId && !dismiss) {
                   opportunity.status = 'CLOSED';
+                  $analytics.eventTrack('Opportunities', {
+                    category: 'Close Opportunity',
+                    label: opportunity.id
+                  });
                 }
               });
 
