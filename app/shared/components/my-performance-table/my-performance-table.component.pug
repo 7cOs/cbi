@@ -36,7 +36,6 @@ div.performance-table-wrapper
                               [rowData]="totalRow",
                               [showBackButton]="showBackButton",
                               [showOpportunities]="showOpportunities",
-                              [ngClass]="columnWidth()",
                               (onCellClicked)="onElementClicked.emit({type: rowType.total, index: $event})")
 
     tbody
