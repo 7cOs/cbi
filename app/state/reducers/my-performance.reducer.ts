@@ -71,7 +71,7 @@ export function myPerformanceReducer(
       return {
         current: {
           performanceTotal: state.current.performanceTotal,
-          responsibilities: state.current.responsibilities, // If it doesn't exist, is that ok? I guess I might see with unit tests
+          responsibilities: state.current.responsibilities,
           viewType: viewTypesReducer(state.current.viewType, action as viewTypesActions.Action)
         },
         versions: state.versions
