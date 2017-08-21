@@ -1499,6 +1499,7 @@ module.exports = /*  @ngInject */
       // if performanceData does not exist (when navigating back to upper-most level) treat it like a new request
       if (!performanceData) {
         vm.currentTopBottomObj = getCurrentTopBottomObject(newAccountType);
+        vm.filtersService.model.selected.premiseType = vm.premiseTypeValue;
         if (newLevelName === 'subAccounts') {
           // when switching back to subaccount level, set the account filter back to the account name
           // because account filter is changed to subaccount name when on stores level
