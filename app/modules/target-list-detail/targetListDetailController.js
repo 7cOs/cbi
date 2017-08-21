@@ -10,6 +10,7 @@ module.exports = /*  @ngInject */
     // Initial variables
     var vm = this;
     vm.loadingList = true;
+    vm.analyticsCategory = '';
     vm.archiving = false;
     vm.changed = false;
     vm.closeButton = false;
@@ -18,11 +19,11 @@ module.exports = /*  @ngInject */
     vm.deleting = false;
     vm.editable = false;
     vm.leave = false;
+    vm.listID;
     vm.originalList = {};
     vm.pendingShares = [];
     vm.pendingSharesPayload = [];
     vm.pendingRemovals = [];
-    vm.permissionLevel = 'Collaborate';
     vm.saveButton = false;
     vm.selectedCollaboratorId = '';
     vm.stayOnPage = true;
@@ -35,7 +36,7 @@ module.exports = /*  @ngInject */
     // Set page title for head and nav
     $rootScope.pageTitle = $state.current.title;
 
-    // Expose public methods
+  // Expose public methods
     vm.addCollaboratorClick = addCollaboratorClick;
     vm.changePermissionClick = changePermissionClick;
     vm.closeModal = closeModal;
@@ -79,11 +80,7 @@ module.exports = /*  @ngInject */
     }
 
     function permissionLabel(permissionLevel) {
-      if (permissionLevel === 'author') {
-        return 'owner';
-      } else {
-        return 'collaborator';
-      }
+      return permissionLevel === 'author' ? 'owner' : 'collaborator';
     }
 
     function enableButton() {
@@ -92,11 +89,7 @@ module.exports = /*  @ngInject */
 
     function changePermissionClick() {
       listChanged();
-      if (targetListService.model.currentList.collaboratorPermissionLevel === 'collaborateandinvite') {
-        return true;
-      } else {
-        return false;
-      }
+      return targetListService.model.currentList.collaboratorPermissionLevel === 'collaborateandinvite';
     }
 
     function closeModal(revert) {
@@ -329,6 +322,7 @@ module.exports = /*  @ngInject */
     // **************
 
     function init() {
+      vm.listID = $state.params.id;
       targetListService.model.currentList.id = $state.params.id;
 
       // reset all chips and filters on page init
@@ -348,6 +342,7 @@ module.exports = /*  @ngInject */
         const numberOfStores = targetList.opportunitiesSummary.storesCount;
         opportunitiesService.setPaginationModel(numberOfOpps, numberOfStores);
         vm.loadingList = false;
+        setAnalyticsCategory(targetList);
       }).catch(() => {
         vm.modalUnauthorizedAccess();
         vm.loadingList = false;
@@ -377,5 +372,13 @@ module.exports = /*  @ngInject */
       vm.pendingSharesPayload = [];
 
       closeModal();
+    }
+
+    function setAnalyticsCategory(targetList) {
+      vm.analyticsCategory = `Target List - ${targetList.archived
+        ? 'Archived'
+        : targetList.permissionLevel === 'author'
+          ? 'My Target Lists'
+          : 'Shared With Me'}`;
     }
   };

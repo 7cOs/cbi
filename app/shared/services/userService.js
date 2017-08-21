@@ -282,26 +282,17 @@ module.exports = /*  @ngInject */
      * @memberOf cf.common.services
      */
     function saveOpportunityFilter(filterDescription) {
-      var opportunityFilterPromise = $q.defer(),
-          url = apiHelperService.request('/v2/users/' + service.model.currentUser.employeeID + '/opportunityFilters/'),
-          payload = {
-            name: filtersService.model.newServiceName,
-            filterString: encodeURIComponent(filtersService.model.appliedFilter.appliedFilter),
-            description: filterDescription
-          };
+      const opportunityFilterPromise = $q.defer();
+      const url = apiHelperService.request('/v2/users/' + service.model.currentUser.employeeID + '/opportunityFilters/');
+      const payload = {
+        name: filtersService.model.newServiceName,
+        filterString: encodeURIComponent(filtersService.model.appliedFilter.appliedFilter),
+        description: filterDescription
+      };
 
       $http.post(url, payload)
-        .then(saveOpportunityFilterSuccess)
-        .catch(saveOpportunityFilterFail);
-
-      function saveOpportunityFilterSuccess(response) {
-        // resolve promise
-        opportunityFilterPromise.resolve(response.data);
-      }
-
-      function saveOpportunityFilterFail(error) {
-        opportunityFilterPromise.reject(error);
-      }
+      .then(response => opportunityFilterPromise.resolve(response.data))
+      .catch(error => opportunityFilterPromise.reject(error));
 
       return opportunityFilterPromise.promise;
     }

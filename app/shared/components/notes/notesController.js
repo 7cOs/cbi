@@ -51,6 +51,7 @@ module.exports = /*  @ngInject */
     vm.deleteAttachment = deleteAttachment;
     vm.getMaxFileSize = getMaxFileSize;
     vm.addAttachment = addAttachment;
+    vm.attachmentClicked = attachmentClicked;
 
     init();
 
@@ -68,12 +69,18 @@ module.exports = /*  @ngInject */
       note.uploadSizeError = false;
       note.editMode = !note.editMode;
       cancelNewNote(vm.newNote);
+
       if (cancel) {
         note.body = vm.cachedNote.body;
         note.title = vm.cachedNote.title;
       } else {
         vm.cachedNote = angular.copy(note);
       }
+
+      $analytics.eventTrack('Edit Note', {
+        category: notesService.model.currentStoreProperty === 'distributor' ? 'Distributor Notes' : 'Retailer Notes',
+        label: note.id
+      });
     }
 
     function openCreateNote() {
@@ -127,6 +134,11 @@ module.exports = /*  @ngInject */
         data.id = response.successReturnValue[0].id;
         vm.notes.push(data);
 
+        $analytics.eventTrack('Create Note', {
+          category: data.accountType === 'DISTRIBUTOR' ? 'Distributor Notes' : 'Retailer Notes',
+          label: response.successReturnValue[0].id
+        });
+
         jumpToNotesTop();
         setNoteAuthor();
 
@@ -146,7 +158,8 @@ module.exports = /*  @ngInject */
         if (data.attachments && data.attachments.length) {
           uploadFiles(data.id, data.attachments);
         }
-      }).catch(function() {
+      })
+      .catch(() => {
         vm.fileUploading = false;
         vm.notesError = true;
       });
@@ -182,12 +195,20 @@ module.exports = /*  @ngInject */
 
     function deleteNote(data, accountId) {
       vm.loading = true;
-      notesService.deleteNote(data.id).then(function(success) {
-       var index = vm.notes.indexOf(data);
-       vm.notes.splice(index, 1);
-       setNoteAuthor();
-       vm.loading = false;
-      }).catch(function() {
+
+      notesService.deleteNote(data.id).then(resonse => {
+        const deletedNoteIndex = vm.notes.indexOf(data);
+
+        vm.notes.splice(deletedNoteIndex, 1);
+        setNoteAuthor();
+        vm.loading = false;
+
+        $analytics.eventTrack('Delete Note', {
+          category: notesService.model.currentStoreProperty === 'distributor' ? 'Distributor Notes' : 'Retailer Notes',
+          label: data.id
+        });
+      })
+      .catch(() => {
         vm.notesError = true;
       });
     }
@@ -199,6 +220,11 @@ module.exports = /*  @ngInject */
 
     function readMore(note) {
       note.readMore = true;
+
+      $analytics.eventTrack('Read More', {
+        category: notesService.model.currentStoreProperty === 'distributor' ? 'Distributor Notes' : 'Retailer Notes',
+        label: note.id
+      });
     }
 
     function addAttachment(note, file, invalidFile) {
@@ -272,23 +298,22 @@ module.exports = /*  @ngInject */
     }
 
     function mailNote(note) {
-      var emailString,
-          currentAccount,
-          updatedNoteBody;
+      const currentAccount = notesService.model;
+      const updatedNoteBody = formatEmailString(note.body);
+      let emailString = 'mailto:';
 
-      currentAccount = notesService.model;
-
-      updatedNoteBody = formatEmailString(note.body);
+      $analytics.eventTrack('Email Note', {
+         category: currentAccount.currentStoreProperty === 'distributor' ? 'Distributor Notes' : 'Retailer Notes',
+         label: note.id
+       });
 
       if (notesService.model.currentStoreProperty === 'subaccount' || notesService.model.currentStoreProperty === 'account') {
-        emailString = 'mailto:';
         emailString += '?subject=' + currentAccount.currentStoreName + ': Note: ' + note.title;
         emailString += '&body=' + currentAccount.currentStoreName + '%0D%0A%0D%0A' + updatedNoteBody;
         $window.location = emailString;
       }
 
       if (notesService.model.currentStoreProperty === 'store') {
-        emailString = 'mailto:';
         if (currentAccount.currentStoreName) emailString += '?subject=' + currentAccount.currentStoreName + ': Note: ' + note.title;
         if (currentAccount.currentStoreName) emailString += '&body=' + currentAccount.currentStoreName + '%0D%0A%0D%0A';
         if (currentAccount.address) emailString += currentAccount.address + '%0D%0A';
@@ -301,7 +326,6 @@ module.exports = /*  @ngInject */
       }
 
       if (notesService.model.currentStoreProperty === 'distributor') {
-        emailString = 'mailto:';
         if (currentAccount.currentStoreName) emailString += '?subject=' + currentAccount.currentStoreName + ': Note: ' + note.title;
         if (currentAccount.currentStoreName) emailString += '&body=' + currentAccount.currentStoreName + '%0D%0A%0D%0A';
         if (currentAccount.address) emailString += currentAccount.address + '%0D%0A';
@@ -341,6 +365,13 @@ module.exports = /*  @ngInject */
         }
       });
       return (Math.round(10000 - totalSize)).toString() + 'KB';
+    }
+
+    function attachmentClicked(noteId) {
+      $analytics.eventTrack('View Attachment', {
+        category: notesService.model.currentStoreProperty === 'distributor' ? 'Distributor Notes' : 'Retailer Notes',
+        label: noteId
+      });
     }
 
     // ***************
