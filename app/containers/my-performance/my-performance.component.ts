@@ -10,6 +10,7 @@ import { DateRange } from '../../models/date-range.model';
 import { DateRangesState } from '../../state/reducers/date-ranges.reducer';
 import { EntityPeopleType } from '../../enums/entity-responsibilities.enum';
 import { FetchResponsibilitiesAction } from '../../state/actions/responsibilities.action';
+import * as MyPerformanceVersionActions from '../../state/actions/my-performance-version.action';
 import { getDateRangeMock } from '../../models/date-range.model.mock';
 import { GetPeopleByRoleGroupAction } from '../../state/actions/responsibilities.action';
 import { MyPerformanceFilterActionType } from '../../enums/my-performance-filter.enum';
@@ -17,17 +18,23 @@ import { MyPerformanceFilterEvent } from '../../models/my-performance-filter.mod
 import { MyPerformanceFilterState } from '../../state/reducers/my-performance-filter.reducer';
 import { MyPerformanceTableDataTransformerService } from '../../services/my-performance-table-data-transformer.service';
 import { MyPerformanceTableRow } from '../../models/my-performance-table-row.model';
-import { PerformanceTotalState } from '../../state/reducers/performance-total.reducer';
 import { ResponsibilitiesState } from '../../state/reducers/responsibilities.reducer';
+import { MyPerformanceState, MyPerformanceData } from '../../state/reducers/my-performance.reducer';
 import { RowType } from '../../enums/row-type.enum';
 import { SetLeftMyPerformanceTableViewType, SetRightMyPerformanceTableViewType } from '../../state/actions/view-types.action';
 import { SortingCriteria } from '../../models/sorting-criteria.model';
 import { ViewType } from '../../enums/view-type.enum';
-import { ViewTypeState } from '../../state/reducers/view-types.reducer';
 import * as MyPerformanceFilterActions from '../../state/actions/my-performance-filter.action';
 
 // mocks
 import { myPerformanceRightTableData } from '../../models/my-performance-table-data.model.mock';
+
+export interface HandleElementClickedParameters {
+  leftSide: boolean;
+  type: RowType;
+  index: number;
+  row?: MyPerformanceTableRow;
+}
 
 @Component({
   selector: 'my-performance',
@@ -43,6 +50,7 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
     ascending: false
   }];
   public viewType = ViewType;
+  public showLeftBackButton = false;
 
   // mocks
   public tableHeaderRowLeft: Array<string> = ['PEOPLE', 'DEPLETIONS', 'CTV'];
@@ -54,12 +62,12 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
   public totalRowData: MyPerformanceTableRow;
   public showOpportunities: boolean = true;
 
+  private currentState: MyPerformanceData;
   private dateRanges$: Observable<DateRangesState>;
   private filterState: MyPerformanceFilterState;
   private filterStateSubscription: Subscription;
-  private performanceTotalSubscription: Subscription;
-  private responsibilitiesSubscription: Subscription;
-  private viewTypesSubscription: Subscription;
+  private myPerformanceCurrentSubscription: Subscription;
+  private myPerformanceVersionSubscription: Subscription;
 
   constructor(
     private store: Store<AppState>,
@@ -73,23 +81,26 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
       this.filterState = filterState;
     });
 
-    this.responsibilitiesSubscription = this.store.select(state => state.responsibilities)
-      .subscribe((responsibilitiesState: ResponsibilitiesState) => {
-        if (responsibilitiesState && responsibilitiesState.responsibilities) {
+    this.myPerformanceCurrentSubscription = this.store
+      .select(state => state.myPerformance.current)
+      .subscribe((current: MyPerformanceData) => {
+        this.currentState = current;
+
+        this.leftTableViewType = current.viewType.leftTableViewType;
+
+        if (current.responsibilities) {
           this.tableData = this.myPerformanceTableDataTransformerService
-            .getTableData(this.leftTableViewType, responsibilitiesState);
+            .getTableData(this.leftTableViewType, current.responsibilities);
+        }
+
+        if (current.performanceTotal && current.performanceTotal.status === ActionStatus.Fetched) {
+          this.totalRowData = this.myPerformanceTableDataTransformerService
+            .getTotalRowDisplayData(current.performanceTotal.performanceTotal);
         }
     });
 
-    this.viewTypesSubscription = this.store.select(state => state.viewTypes).subscribe((viewTypeState: ViewTypeState) => {
-      if (viewTypeState && viewTypeState.leftTableViewType) this.leftTableViewType = viewTypeState.leftTableViewType;
-    });
-
-    this.performanceTotalSubscription = this.store.select(state => state.performanceTotal)
-      .subscribe((performanceTotalData: PerformanceTotalState) => {
-        if (performanceTotalData && performanceTotalData.status === ActionStatus.Fetched) {
-          this.totalRowData = this.myPerformanceTableDataTransformerService.getTotalRowDisplayData(performanceTotalData.performanceTotal);
-        }
+    this.store.select(state => state.myPerformance.versions).subscribe((versions: Array<MyPerformanceState>) => {
+      this.showLeftBackButton = versions.length > 0;
     });
 
     // stub current user for now
@@ -102,35 +113,38 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.filterStateSubscription.unsubscribe();
-    this.performanceTotalSubscription.unsubscribe();
-    this.responsibilitiesSubscription.unsubscribe();
-    this.viewTypesSubscription.unsubscribe();
+    this.myPerformanceCurrentSubscription.unsubscribe();
+    this.myPerformanceVersionSubscription.unsubscribe();
   }
 
   public handleSortRows(criteria: SortingCriteria[]): void {
     this.sortingCriteria = criteria;
   }
 
-  public handleElementClicked(leftSide: boolean, type: RowType, index: number, row?: MyPerformanceTableRow): void {
-    switch (type) {
+  public handleElementClicked(parameters: HandleElementClickedParameters): void {
+    switch (parameters.type) {
       case RowType.total:
-        if (leftSide) {
-          console.log(`clicked on cell ${index} from the left side`);
+        if (parameters.leftSide) {
+          if (this.showLeftBackButton) {
+            this.store.dispatch(new MyPerformanceVersionActions.RestoreMyPerformanceStateAction());
+          }
+          console.log(`clicked on cell ${parameters.index} from the left side`);
         } else {
-          console.log(`clicked on cell ${index} from the right side`);
+          console.log(`clicked on cell ${parameters.index} from the right side`);
         }
         break;
 
       case RowType.data:
       default:
-        if (leftSide) {
-          console.log('clicked on left row:', row);
+        if (parameters.leftSide) {
+          this.store.dispatch(new MyPerformanceVersionActions.SaveMyPerformanceStateAction(this.currentState));
+          console.log('clicked on left row:', parameters.row);
           if (this.leftTableViewType === ViewType.roleGroups) {
             this.store.dispatch(new SetLeftMyPerformanceTableViewType(ViewType.people));
-            this.store.dispatch(new GetPeopleByRoleGroupAction(EntityPeopleType[row.descriptionRow0.slice(0, -1)]));
+            this.store.dispatch(new GetPeopleByRoleGroupAction(EntityPeopleType[parameters.row.descriptionRow0.slice(0, -1)]));
           }
         } else {
-          console.log('clicked on right row:', row);
+          console.log('clicked on right row:', parameters.row);
         }
     }
   }

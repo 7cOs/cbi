@@ -17,9 +17,9 @@ import { ViewType } from '../../../enums/view-type.enum';
 })
 class MockMyPerformanceTableRowComponent {
   @Input() rowData: MyPerformanceTableRow;
+  @Input() showBackButton: boolean;
   @Input() showOpportunities: boolean;
   @Input() viewType: ViewType;
-  @Input() showBackButton: boolean;
 }
 
 describe('MyPerformanceTableComponent', () => {
