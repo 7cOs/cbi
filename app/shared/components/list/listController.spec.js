@@ -1,5 +1,5 @@
 describe('Unit: list controller', function() {
-  var scope, ctrl, q, httpBackend, mdDialog, closedOpportunitiesService, filtersService, loaderService, opportunitiesService, storesService, targetListService, toastService, userService, filter;
+  var scope, ctrl, q, httpBackend, mdDialog, closedOpportunitiesService, filtersService, loaderService, opportunitiesService, storesService, targetListService, toastService, userService, filter, $analytics;
   var bindings = {showAddToTargetList: true, showRemoveButton: false, selectAllAvailable: true, pageName: 'MyTestPage'};
 
   beforeEach(function() {
@@ -10,7 +10,7 @@ describe('Unit: list controller', function() {
     angular.mock.module('cf.common.services');
     angular.mock.module('cf.common.components.list');
 
-    inject(function($rootScope, _$q_, _$httpBackend_, _$mdDialog_, $controller, _$filter_, _closedOpportunitiesService_, _filtersService_, _loaderService_, _opportunitiesService_, _storesService_, _targetListService_, _toastService_, _userService_) {
+    inject(function($rootScope, _$q_, _$httpBackend_, _$mdDialog_, $controller, _$filter_, _closedOpportunitiesService_, _filtersService_, _loaderService_, _opportunitiesService_, _storesService_, _targetListService_, _toastService_, _userService_, _$analytics_) {
       scope = $rootScope.$new();
       q = _$q_;
       mdDialog = _$mdDialog_;
@@ -25,6 +25,7 @@ describe('Unit: list controller', function() {
       targetListService = _targetListService_;
       toastService = _toastService_;
       userService = _userService_;
+      $analytics = _$analytics_;
 
       userService.model.currentUser.employeeID = 1;
 
@@ -743,6 +744,49 @@ describe('Unit: list controller', function() {
     it('should call the userService create a target list', function() {
       ctrl.saveNewList(ctrl.newList);
       expect(userService.addTargetList).toHaveBeenCalled();
+    });
+  });
+
+  describe('list.saveNewList GA Event', () => {
+
+    it('should log a GA event on userService.addTargetList success', () => {
+      httpBackend.expectGET('/v2/users/1/targetLists/').respond(200);
+      httpBackend.expectPOST('/v2/targetLists/123-456-789/shares').respond(200);
+
+      spyOn(userService, 'addTargetList').and.callFake(() => {
+        const defer = q.defer();
+        defer.resolve({ id: '123-456-789' });
+        return defer.promise;
+      });
+      spyOn($analytics, 'eventTrack');
+
+      ctrl.saveNewList();
+      scope.$apply();
+
+      expect(userService.addTargetList).toHaveBeenCalled();
+      expect($analytics.eventTrack).toHaveBeenCalledWith('Create Target List', {
+        category: 'Opportunities',
+        label: '123-456-789'
+      });
+    });
+
+    it('should NOT log a GA event on userService.addTargetList error', () => {
+      httpBackend.expectGET('/v2/users/1/targetLists/').respond(200);
+
+      spyOn(userService, 'addTargetList').and.callFake(() => {
+        const defer = q.defer();
+        defer.reject({ error: 'Error' });
+        return defer.promise;
+      });
+      spyOn($analytics, 'eventTrack');
+      spyOn(console, 'error');
+
+      ctrl.saveNewList();
+      scope.$apply();
+
+      expect(userService.addTargetList).toHaveBeenCalled();
+      expect($analytics.eventTrack).not.toHaveBeenCalled();
+      expect(console.error).toHaveBeenCalled();
     });
   });
 
