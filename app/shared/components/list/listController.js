@@ -892,6 +892,10 @@ module.exports = /*  @ngInject */
       const totalOpps = usedOpps + (vm.isAllOpportunitiesSelected ? filtersService.model.appliedFilter.pagination.totalOpportunities : this.selected.length);
       const hasRemainingOpps = totalOpps <= maxOpportunities;
       if (hasRemainingOpps) {
+        $analytics.eventTrack('Copy to Target List', {
+          label: targetList.id,
+          category: targetListService.getAnalyticsCategory(vm.targetListService.model.currentList.permissionLevel)
+        });
         vm.addToTargetList(targetList.id);
       } else {
         const parentEl = angular.element(document.body);
