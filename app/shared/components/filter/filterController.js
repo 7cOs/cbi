@@ -301,31 +301,32 @@ module.exports = /*  @ngInject */
     function saveFilter() {
       vm.duplicateName = false;
       loaderService.openLoader(true);
-      var chipsDescription = getDescriptionForFilter(chipsService.model, filtersService.model);
+      const chipsDescription = getDescriptionForFilter(chipsService.model, filtersService.model);
       vm.tempId++;
-      userService.saveOpportunityFilter(chipsDescription).then(function(data) {
+
+      userService.saveOpportunityFilter(chipsDescription).then(response => {
+        $analytics.eventTrack('Save Report', {
+          category: 'Opportunities',
+          label: response.id
+        });
+
         userService.model.opportunityFilters.unshift({
           filterString: encodeURIComponent(filtersService.model.appliedFilter.appliedFilter),
           name: filtersService.model.newServiceName,
-          description: data.description,
+          description: response.description,
           id: vm.tempId
         });
 
-        // reset new service name
         filtersService.model.newServiceName = null;
-
         filtersService.disableFilters(true, false, true, false);
-
         loaderService.closeLoader();
-
-        // close modal
         closeModal();
-      }, function(err) {
-        if (err.data[0].description === 'F101') vm.duplicateName = true;
-        console.warn(err);
+      })
+      .catch(error => {
+        if (error.data[0].description === 'F101') vm.duplicateName = true;
+        console.error('Error saving report: ', error);
         loaderService.closeLoader();
       });
-      loaderService.closeLoader();
     }
 
     function updateFilter() {

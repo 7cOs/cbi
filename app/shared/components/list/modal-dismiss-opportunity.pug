@@ -13,5 +13,10 @@ div.modal
       label Additional Feedback
       textarea(ng-model="list.opportunity.feedback.feedback" name="feedback").modal-content-feedback
     .modal-content
-      button.btn-action(ng-click="list.submitFeedback(list.currentOpportunityId, list.opportunity.feedback); list.closeModal()") Submit
+      button.btn-action(
+        ng-click="list.submitFeedback(list.currentOpportunityId, list.opportunity.feedback); list.closeModal()"
+        analytics-on="click"
+        analytics-category="Opportunities"
+        analytics-event="Dismiss Opportunity"
+        analytics-label="{{ list.currentOpportunityId }}") Submit
       p.cancel.accent(ng-click="list.opportunityDismissTrigger = false; list.closeModal();") X Cancel

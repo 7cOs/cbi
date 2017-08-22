@@ -1,5 +1,5 @@
 describe('Unit: notes controller', function() {
-  var $q, scope, $rootScope, ctrl, notesService, $window, note, callBackData, $httpBackend, files, $timeout;
+  var $q, scope, $rootScope, ctrl, notesService, $window, note, callBackData, $httpBackend, files, $timeout, $analytics;
 
   beforeEach(function() {
     angular.mock.module('ui.router');
@@ -16,7 +16,7 @@ describe('Unit: notes controller', function() {
       $provide.value('$window', $window);
     });
 
-    inject(function(_$rootScope_, $controller, _notesService_, _$q_, $injector, _$httpBackend_, _$timeout_) {
+    inject(function(_$rootScope_, $controller, _notesService_, _$q_, $injector, _$httpBackend_, _$timeout_, _$analytics_) {
       $rootScope = _$rootScope_;
       scope = $rootScope.$new();
       scope.analytics = {};
@@ -24,12 +24,15 @@ describe('Unit: notes controller', function() {
       $q = _$q_;
       $httpBackend = _$httpBackend_;
       $timeout = _$timeout_;
+      $analytics = _$analytics_;
+
       ctrl = $controller('notesController', {
         $scope: scope,
         $rootscope: scope
       });
     });
-  note = {
+
+    note = {
       attachments: [],
       author: 'meeeee',
       aurhorId: '1234500',
@@ -39,7 +42,7 @@ describe('Unit: notes controller', function() {
       lastModifiedDate: '2017-02-21T20:51:37.000+0000',
       title: 'Display'
     };
-  callBackData = {
+    callBackData = {
       isSuccess: true,
       successReturnValue: [{
         errors: [],
@@ -47,14 +50,14 @@ describe('Unit: notes controller', function() {
         success: true
       }]
     };
-  files = [{
+    files = [{
       lastModified: 1487789547000,
       name: 'file 1',
       size: 6060,
       type: 'image/jpeg'
     }];
 
-  spyOn(angular, 'element').and.returnValue([{scrollTop: 0}]);
+    spyOn(angular, 'element').and.returnValue([{scrollTop: 0}]);
   });
 
   it('should expose public methods', function() {
@@ -443,5 +446,221 @@ describe('Unit: notes controller', function() {
     expect(ctrl.notes).toEqual([note]);
     expect(ctrl.notesError).toEqual(false);
     expect(ctrl.loading).toEqual(false);
+  });
+
+  describe('Edit Note GA', () => {
+
+    it('should log a GA event based on the passed in note data and current notesService.model.currentStoreProperty', () => {
+      spyOn($analytics, 'eventTrack');
+
+      const noteMock = { id: '123-456-789' };
+
+      notesService.model.currentStoreProperty = 'distributor';
+      ctrl.isEditing(noteMock);
+
+      expect($analytics.eventTrack).toHaveBeenCalledWith('Edit Note', {
+        category: 'Distributor Notes',
+        label: '123-456-789'
+      });
+
+      notesService.model.currentStoreProperty = 'store';
+      ctrl.isEditing(noteMock);
+
+      expect($analytics.eventTrack).toHaveBeenCalledWith('Edit Note', {
+        category: 'Retailer Notes',
+        label: '123-456-789'
+      });
+    });
+  });
+
+  describe('Create Note GA', () => {
+    const noteDataMock = { accountType: 'store' };
+
+    beforeEach(() => {
+      ctrl.newNote = { title: 'Mock Title' };
+      ctrl.notes = [];
+
+      spyOn($analytics, 'eventTrack');
+    });
+
+    it('should log a Distributor GA event when notesService.createNote is successful for a distributor', () => {
+      notesService.model.currentStoreProperty = 'distributor';
+
+      spyOn(notesService, 'createNote').and.callFake(() => {
+        const defer = $q.defer();
+        defer.resolve({ successReturnValue: [{ id: '10' }] });
+        return defer.promise;
+      });
+
+      $httpBackend.expectPOST('/v2/sfdcNotifications/').respond(200);
+      ctrl.createNote(noteDataMock);
+      scope.$apply();
+
+      expect(notesService.createNote).toHaveBeenCalled();
+      expect($analytics.eventTrack).toHaveBeenCalledWith('Create Note', {
+        category: 'Distributor Notes',
+        label: '10'
+      });
+    });
+
+    it('should log a Retailer GA event when notesService.createNote is successful for a store', () => {
+      notesService.model.currentStoreProperty = 'store';
+
+      spyOn(notesService, 'createNote').and.callFake(() => {
+        const defer = $q.defer();
+        defer.resolve({ successReturnValue: [{ id: '10' }] });
+        return defer.promise;
+      });
+
+      $httpBackend.expectPOST('/v2/sfdcNotifications/').respond(200);
+      ctrl.createNote(noteDataMock);
+      scope.$apply();
+
+      expect(notesService.createNote).toHaveBeenCalled();
+      expect($analytics.eventTrack).toHaveBeenCalledWith('Create Note', {
+        category: 'Retailer Notes',
+        label: '10'
+      });
+    });
+
+    it('should NOT log a GA event when notesService.createNote returns an error', () => {
+      notesService.model.currentStoreProperty = 'distributor';
+
+      spyOn(notesService, 'createNote').and.callFake(() => {
+        const defer = $q.defer();
+        defer.reject({ error: 'Error' });
+        return defer.promise;
+      });
+
+      ctrl.createNote(noteDataMock);
+      scope.$apply();
+
+      expect(notesService.createNote).toHaveBeenCalled();
+      expect($analytics.eventTrack).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('Delete Note GA', () => {
+
+    it('should log a GA event when notesService.deleteNote is successful', () => {
+      notesService.model.currentStoreProperty = 'distributor';
+      ctrl.notes = [];
+
+      spyOn(notesService, 'deleteNote').and.callFake(() => {
+        const defer = $q.defer();
+        defer.resolve(true);
+        return defer.promise;
+      });
+      spyOn($analytics, 'eventTrack');
+
+      ctrl.deleteNote({ id: '10' });
+      scope.$apply();
+
+      expect(notesService.deleteNote).toHaveBeenCalled();
+      expect($analytics.eventTrack).toHaveBeenCalledWith('Delete Note', {
+        category: 'Distributor Notes',
+        label: '10'
+      });
+
+      notesService.model.currentStoreProperty = 'store';
+      ctrl.deleteNote({ id: '10' });
+      scope.$apply();
+
+      expect(notesService.deleteNote).toHaveBeenCalled();
+      expect($analytics.eventTrack).toHaveBeenCalledWith('Delete Note', {
+        category: 'Retailer Notes',
+        label: '10'
+      });
+    });
+
+    it('should NOT log a GA event when notesService.deleteNote returns an error', () => {
+      spyOn(notesService, 'deleteNote').and.callFake(() => {
+        const defer = $q.defer();
+        defer.reject(true);
+        return defer.promise;
+      });
+      spyOn($analytics, 'eventTrack');
+
+      ctrl.deleteNote({ id: '10' });
+      scope.$apply();
+
+      expect(notesService.deleteNote).toHaveBeenCalled();
+      expect($analytics.eventTrack).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('Read More Note GA', () => {
+
+    it('should log a GA event when `Read More` is clicked on a note', () => {
+      spyOn($analytics, 'eventTrack');
+
+      notesService.model.currentStoreProperty = 'distributor';
+      ctrl.readMore({ id: '10' });
+      scope.$apply();
+
+      expect($analytics.eventTrack).toHaveBeenCalledWith('Read More', {
+        category: 'Distributor Notes',
+        label: '10'
+      });
+
+      notesService.model.currentStoreProperty = 'store';
+      ctrl.readMore({ id: '10' });
+      scope.$apply();
+
+      expect($analytics.eventTrack).toHaveBeenCalledWith('Read More', {
+        category: 'Retailer Notes',
+        label: '10'
+      });
+    });
+  });
+
+  describe('Mail Note GA', () => {
+
+    it('should log a GA event when e-mailing a note', () => {
+      spyOn($analytics, 'eventTrack');
+
+      notesService.model.currentStoreProperty = 'distributor';
+      ctrl.mailNote({ id: '10', body: 'Mock Note' });
+      scope.$apply();
+
+      expect($analytics.eventTrack).toHaveBeenCalledWith('Email Note', {
+        category: 'Distributor Notes',
+        label: '10'
+      });
+
+      notesService.model.currentStoreProperty = 'store';
+      ctrl.mailNote({ id: '10', body: 'Mock Note' });
+      scope.$apply();
+
+      expect($analytics.eventTrack).toHaveBeenCalledWith('Email Note', {
+        category: 'Retailer Notes',
+        label: '10'
+      });
+    });
+  });
+
+  describe('Note Attachment GA', () => {
+
+    it('should log a GA event when clicking a note\'s attachment', () => {
+      spyOn($analytics, 'eventTrack');
+
+      notesService.model.currentStoreProperty = 'distributor';
+      ctrl.attachmentClicked('123456');
+      scope.$apply();
+
+      expect($analytics.eventTrack).toHaveBeenCalledWith('View Attachment', {
+        category: 'Distributor Notes',
+        label: '123456'
+      });
+
+      notesService.model.currentStoreProperty = 'store';
+      ctrl.attachmentClicked('654321');
+      scope.$apply();
+
+      expect($analytics.eventTrack).toHaveBeenCalledWith('View Attachment', {
+        category: 'Retailer Notes',
+        label: '654321'
+      });
+    });
   });
 });
