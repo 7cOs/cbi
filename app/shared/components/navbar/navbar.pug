@@ -41,11 +41,11 @@ div.outer-nav-wrapper
           a.nav-icon.add-opportunity(ng-click="nb.modalAddOpportunityForm(); nb.getTargetLists()" analytics-on="click" analytics-event="Add Opportunity" analytics-category="Opportunities" analytics-label="Navbar Icon Click")
             inline-search(ng-if="nb.accountSelectorSelected === 'Store'" type="store" placeholder="Search for a store" chosen-result="nb.searchResult" nav="true")
           md-menu(md-position-mode="target-right target" md-offset="1 38")
-            a.nav-icon.notifications(href="#" md-menu-origin ng-click="$mdOpenMenu($event); nb.markSeen(nb.notifications)", aria-label="Notifications" analytics-on="click" analytics-event="View Notification" analytics-category="Notifications" analytics-label="Navbar Icon Click")
+            a.nav-icon.notifications(href="#" md-menu-origin ng-click="$mdOpenMenu($event); nb.markSeen(nb.notifications)", aria-label="Notifications" analytics-on="click" analytics-event="Image Click" analytics-category="Navigation" analytics-label="Notifications")
             md-menu-content.nav-flyout
               notifications([notifications]="nb.notifications", (on-notification-clicked)="nb.notificationClicked($event)")
           md-menu(md-position-mode="target-right target" md-offset="2 54")
-            a.nav-icon.settings(href="#" md-menu-origin ng-click="$mdOpenMenu($event)", aria-label="Settings" analytics-on="click" analytics-event="View Settings" analytics-category="Settings" analytics-label="Navbar Icon Click")
+            a.nav-icon.settings(href="#" md-menu-origin ng-click="$mdOpenMenu($event)", aria-label="Settings" analytics-on="click" analytics-event="Image Click" analytics-category="Navigation" analytics-label="Settings")
             md-menu-content
               .nav-flyout
                 .content

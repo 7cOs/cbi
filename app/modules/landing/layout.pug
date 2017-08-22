@@ -61,6 +61,7 @@ section.landing-page
         [title]="'Compass Enhancements'",
         [main-action]="'View job aides'",
         [icon-visible]="true",
+        [analytics-properties]="{category: 'Navigation', label: 'View Job Aides'}",
         (on-main-action-clicked)="l.openViewJobAides()"
       )
         p Have you heard about the latest Compass enhancements? Here's what's new:
