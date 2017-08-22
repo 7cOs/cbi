@@ -20,7 +20,8 @@ module.exports = /*  @ngInject */
       getTargetListShares: getTargetListShares,
       addTargetListShares: addTargetListShares,
       updateTargetListShares: updateTargetListShares,
-      deleteTargetListShares: deleteTargetListShares
+      deleteTargetListShares: deleteTargetListShares,
+      getAnalyticsCategory: getAnalyticsCategory
     };
 
     return service;
@@ -364,5 +365,21 @@ module.exports = /*  @ngInject */
       }
 
       return targetListPromise.promise;
+    }
+
+    /**
+     * @name getAnalyticsCategory
+     * @desc get analytics 'category' field for target list google analytics events
+     * @params {String} listPermissionLevel - current users' permission for target list
+     * @params {Boolean} listIsArchived - if target list is archived
+     * @returns {String} - string for google analytics event
+     * @memberOf cf.common.services
+     */
+    function getAnalyticsCategory(listPermissionLevel, listIsArchived) {
+      return `Target Lists - ${listIsArchived
+        ? 'Archived'
+        : listPermissionLevel === 'author'
+          ? 'My Target Lists'
+          : 'Shared With Me'}`;
     }
   };
