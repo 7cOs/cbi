@@ -2,7 +2,7 @@ h1 Performance
 
 my-performance-filter(
   [dateRanges]="dateRanges$ | async",
-  [filterState]="filterState$ | async",
+  [filterState]="filterState",
   (onFilterChange)="filterOptionSelected($event)"
 )
 
@@ -15,9 +15,10 @@ div(style="margin-top: 100px;")
     [totalRow]="totalRowData",
     [sortingCriteria]="sortingCriteria",
     [viewType]="leftTableViewType",
+    [showBackButton]="showLeftBackButton",
     [showOpportunities]="false",
     (onSortingCriteriaChanged)="handleSortRows($event)",
-    (onElementClicked)="handleElementClicked(true, $event.type, $event.index, $event.row)")
+    (onElementClicked)="handleElementClicked({leftSide: true, type: $event.type, index: $event.index, row: $event.row})")
 
   my-performance-table.right(
     [tableData]="rightTableData",
@@ -27,4 +28,4 @@ div(style="margin-top: 100px;")
     [showOpportunities]="showOpportunities",
     [viewType]="viewType.brands",
     (onSortingCriteriaChanged)="handleSortRows($event.type, $event.index, $event.row)",
-    (onElementClicked)="handleElementClicked(false, $event.type, $event.index, $event.row)")
+    (onElementClicked)="handleElementClicked({leftSide: false, type: $event.type, index: $event.index, row: $event.row})")

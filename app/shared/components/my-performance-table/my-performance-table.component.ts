@@ -25,14 +25,16 @@ export class MyPerformanceTableComponent {
 
   @Input()
   set tableData(tableData: Array<MyPerformanceTableRow>) {
-    this.sortedTableData = typeof this.sortingFunction === 'function'
-      ? tableData.sort(this.sortingFunction)
-      : tableData;
+    if (tableData) {
+      this.sortedTableData = typeof this.sortingFunction === 'function'
+        ? tableData.sort(this.sortingFunction)
+        : tableData;
+    }
   }
 
   @Input() dateRange: DateRange;
   @Input() performanceMetric: string;
-  @Input() showBackButton: boolean = true;
+  @Input() showBackButton: boolean = false;
   @Input() showOpportunities: boolean = true;
   @Input() tableHeaderRow: Array<string>;
   @Input() totalRow: MyPerformanceTableRow;

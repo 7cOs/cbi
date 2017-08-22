@@ -89,7 +89,7 @@ div.modal.notes(ng-if="notesOpen")
           .attachments
             p.accent Attachments
         ul.note-attachments
-          li(ng-repeat="attachment in note.attachments")
+          li(ng-repeat="attachment in note.attachments" ng-click="n.attachmentClicked(note.id)")
             div.attached-files(ng-switch="attachment.fileType")
               //- I have to repeat the same code because no multiple 'ng-switch-when' conditions before Angular 1.5.10 :(
               .photo(ng-switch-when="image/gif")
@@ -156,6 +156,6 @@ div.modal.notes(ng-if="notesOpen")
             .delete-note(ng-if="note.author === 'Me'" ng-click="n.toggleDelete(note)")
             .edit-note(ng-if="note.author === 'Me'" ng-click="n.isEditing(note)" ng-class="{'edit-note': !note.editMode, 'edit-note-active': note.editMode}")
             .tooltip-wrap.tooltip
-                .email-note(ng-click="n.mailNote(note)" analytics-on="click" analytics-event="Actions" analytics-category="{{n.analyticsCategory}}" analytics-label="Email")
+                .email-note(ng-click="n.mailNote(note)")
                 md-tooltip(md-direction="bottom" md-z-index="1001" ng-if="note.attachments.length > 0")
                   p Don't forget to download and add attachments
