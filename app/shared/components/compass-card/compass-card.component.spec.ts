@@ -1,3 +1,4 @@
+import { Angulartics2 } from 'angulartics2';
 import { By } from '@angular/platform-browser';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MdCardModule } from '@angular/material';
@@ -10,11 +11,20 @@ const chance = new Chance();
 describe('Compass Card Component', () => {
   let fixture: ComponentFixture<CompassCardComponent>;
   let componentInstance: CompassCardComponent;
+  let mockAngulartics2: any;
 
   beforeEach(() => {
+    mockAngulartics2 = jasmine.createSpyObj('angulartics2', ['eventTrack']);
+    mockAngulartics2.eventTrack = jasmine.createSpyObj('angulartics2.eventTrack', ['next']);
     TestBed.configureTestingModule({
       imports: [ MdCardModule ],
-      declarations: [ CompassCardComponent ]
+      declarations: [ CompassCardComponent ],
+      providers: [
+        {
+          provide: Angulartics2,
+          useValue: mockAngulartics2
+        }
+      ]
     });
 
     fixture = TestBed.createComponent(CompassCardComponent);
@@ -24,11 +34,13 @@ describe('Compass Card Component', () => {
   describe('component inputs', () => {
     it('should pass input data to its template', () => {
       const mockInputs = {
+        analyticsProperties: {label: 'mockLabel', category: 'mockCategory'},
         title: chance.string(),
         mainAction: chance.string(),
         iconVisible: true
       };
 
+      componentInstance.analyticsProperties = mockInputs.analyticsProperties;
       componentInstance.title = mockInputs.title;
       componentInstance.mainAction = mockInputs.mainAction;
       componentInstance.iconVisible = mockInputs.iconVisible;
@@ -60,6 +72,16 @@ describe('Compass Card Component', () => {
       });
 
       fixture.debugElement.queryAll(By.css('md-card-actions div'))[0].triggerEventHandler('click', null);
+    });
+  });
+
+  describe('optionMainActionClicked', () => {
+    it('should trigger analytics', () => {
+      componentInstance.analyticsProperties = {label: 'mockLabel', category: 'mockCategory'};
+      componentInstance.optionMainActionClicked();
+      expect(mockAngulartics2.eventTrack.next).toHaveBeenCalledWith(
+        {action: 'Link Click', properties: {label: 'mockLabel', category: 'mockCategory'}}
+      );
     });
   });
 });
