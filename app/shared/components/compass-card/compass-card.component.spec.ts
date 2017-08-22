@@ -76,12 +76,16 @@ describe('Compass Card Component', () => {
   });
 
   describe('optionMainActionClicked', () => {
-    it('should trigger analytics', () => {
+    it('should trigger analytics when analyticsProperties are provided as inputs', () => {
       componentInstance.analyticsProperties = {label: 'mockLabel', category: 'mockCategory'};
       componentInstance.optionMainActionClicked();
       expect(mockAngulartics2.eventTrack.next).toHaveBeenCalledWith(
         {action: 'Link Click', properties: {label: 'mockLabel', category: 'mockCategory'}}
       );
+    });
+    it('should not trigger analytics when no analyticsProperties are provided as inputs', () => {
+      componentInstance.optionMainActionClicked();
+      expect(mockAngulartics2.eventTrack.next).not.toHaveBeenCalled();
     });
   });
 });
