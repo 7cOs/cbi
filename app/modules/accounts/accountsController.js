@@ -226,8 +226,8 @@ module.exports = /*  @ngInject */
     function displayBrandValue(brandMeasures, property, timePeriod) {
       if (brandMeasures) {
         const matchedMeasure = getMatchedMeasure(brandMeasures, timePeriod);
-        if (matchedMeasure[0]) {
-          return matchedMeasure[0][property];
+        if (matchedMeasure) {
+          return matchedMeasure[property];
         }
       }
     }
@@ -236,10 +236,10 @@ module.exports = /*  @ngInject */
      * Returns the measure for the given time period
      * @param {Array} brandMeasures - array of measures for a brand
      * @param {String} timePeriod - the time period
-     * @returns {Array} Array containing the measures that matched (should only be one)
+     * @returns {Object} The measures found or undefined
      */
     function getMatchedMeasure(brandMeasures, timePeriod) {
-      return brandMeasures.filter((currentMeasure) => {
+      return brandMeasures.find((currentMeasure) => {
          return vm.filterModel[timePeriod]
            ? currentMeasure.timeframe === vm.filterModel[timePeriod].name
            : false;
@@ -256,11 +256,11 @@ module.exports = /*  @ngInject */
     function displayBrandValueAccountBrandVelocity(brandMeasures, firstDepletion) {
       if (brandMeasures) {
         const matchedMeasure = getMatchedMeasure(brandMeasures, 'distributionTimePeriod');
-        if (matchedMeasure[0] && firstDepletion) {
+        if (matchedMeasure && firstDepletion) {
           const isNonApplicableTest = isNonApplicableMeasure(firstDepletion);
           return isNonApplicableTest
             ? 'N/A'
-            : $filter('number')(matchedMeasure[0]['velocity'], 0);
+            : $filter('number')(matchedMeasure['velocity'], 0);
         }
       }
     }
@@ -1239,8 +1239,8 @@ module.exports = /*  @ngInject */
      * @returns Updates the object with the correct data
      */
     function getDataForTopBottomLevel(topBottomObj, callback) {
-      var categoryBound = vm.filtersService.model.accountSelected.accountMarkets;
-      var params = filtersService.getAppliedFilters('topBottom');
+      const categoryBound = vm.filtersService.model.accountSelected.accountMarkets;
+      let params = filtersService.getAppliedFilters('topBottom');
       appendBrandParametersForTopBottom(params);
       params = myperformanceService.appendFilterParametersForTopBottom(params, vm.currentTopBottomFilters, vm.filtersService.model.selected.myAccountsOnly);
 
@@ -1290,8 +1290,8 @@ module.exports = /*  @ngInject */
           displayValue = 'N/A';
         } else {
           if (data.measure) {
-            var propName = vm.filtersService.model.accountSelected.accountMarkets.propertyName;
-            var matchedMeasure = data.measure[propName];
+            const propName = vm.filtersService.model.accountSelected.accountMarkets.propertyName;
+            const matchedMeasure = data.measure[propName];
             if (userService.isValidValues(matchedMeasure)) {
               displayValue = $filter('number')(matchedMeasure, 0);
             }
