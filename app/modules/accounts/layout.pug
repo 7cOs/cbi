@@ -193,7 +193,7 @@ div(row)
                 td(ng-class="a.getClassBasedOnValue(a.getTrendValues(item.measures, 'depletions', 'depletionsTimePeriod').value)") <span ng-bind="a.getTrendValues(item.measures, 'depletions', 'depletionsTimePeriod').displayValue"></span>
 
                 //- Velocity value
-                td(ng-if="a.isDisplayBrandSnapshotRow(a.filtersService.accountFilters.accountBrandEnum.velocity, false, false)") {{a.displayBrandValue(item.measures, 'velocity', 'distributionTimePeriod') | number:0 }}
+                td(ng-if="a.isDisplayBrandSnapshotRow(a.filtersService.accountFilters.accountBrandEnum.velocity, false, false)") {{a.displayBrandValueAccountBrandVelocity(item.measures, item.firstSoldDate)}}
 
                 //- Velocity Trend
                 td(ng-if="a.isDisplayBrandSnapshotRow(a.filtersService.accountFilters.accountBrandEnum.velocity, false, false)"  ng-class="a.getClassBasedOnValue(a.displayBrandValue(item.measures, 'velocityTrend', 'distributionTimePeriod'))") <span ng-if="a.checkIfVelocityPresent(item)">{{a.displayBrandValue(item.measures, 'velocityTrend', 'distributionTimePeriod') | number:1}}%</span><span ng-if="!a.displayBrandValue(item.measures, 'velocityTrend', 'distributionTimePeriod')">-</span>
@@ -262,7 +262,7 @@ div(row)
             .widget-data-left
               p.dist-label.data-brand {{data.title}}<span ng-if="a.isStoreLevel && a.getAccountTypePerformanceData(index).storeNumber && a.getAccountTypePerformanceData(index).storeNumber !== 'UNKNOWN'">&nbsp;{{'#' + a.getAccountTypePerformanceData(index).storeNumber}}</span>
             .widget-data-right
-              p.dark.text-center {{a.getValueBoundForAcctType(data.measure)}}
+              p.dark.text-center {{a.getValueBoundForAcctType(data)}}
       .widget-graph
         .graph-container(ng-repeat="data in a.currentChartData")
           nvd3(options="a.chartOptions" data="data")
