@@ -11,18 +11,18 @@ const chance = new Chance();
 describe('Compass Card Component', () => {
   let fixture: ComponentFixture<CompassCardComponent>;
   let componentInstance: CompassCardComponent;
-  let mockAngulartics2: any;
+  let angulartics2Mock: any;
 
   beforeEach(() => {
-    mockAngulartics2 = jasmine.createSpyObj('angulartics2', ['eventTrack']);
-    mockAngulartics2.eventTrack = jasmine.createSpyObj('angulartics2.eventTrack', ['next']);
+    angulartics2Mock = jasmine.createSpyObj('angulartics2', ['eventTrack']);
+    angulartics2Mock.eventTrack = jasmine.createSpyObj('angulartics2.eventTrack', ['next']);
     TestBed.configureTestingModule({
       imports: [ MdCardModule ],
       declarations: [ CompassCardComponent ],
       providers: [
         {
           provide: Angulartics2,
-          useValue: mockAngulartics2
+          useValue: angulartics2Mock
         }
       ]
     });
@@ -77,15 +77,15 @@ describe('Compass Card Component', () => {
 
   describe('optionMainActionClicked', () => {
     it('should trigger analytics when analyticsProperties are provided as inputs', () => {
-      componentInstance.analyticsProperties = {label: 'mockLabel', category: 'mockCategory'};
+      componentInstance.analyticsProperties = {label: 'labelMock', category: 'categoryMock'};
       componentInstance.optionMainActionClicked();
-      expect(mockAngulartics2.eventTrack.next).toHaveBeenCalledWith(
-        {action: 'Link Click', properties: {label: 'mockLabel', category: 'mockCategory'}}
+      expect(angulartics2Mock.eventTrack.next).toHaveBeenCalledWith(
+        {action: 'Link Click', properties: {label: 'labelMock', category: 'categoryMock'}}
       );
     });
     it('should not trigger analytics when no analyticsProperties are provided as inputs', () => {
       componentInstance.optionMainActionClicked();
-      expect(mockAngulartics2.eventTrack.next).not.toHaveBeenCalled();
+      expect(angulartics2Mock.eventTrack.next).not.toHaveBeenCalled();
     });
   });
 });
