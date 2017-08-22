@@ -2,6 +2,7 @@
 
 module.exports =
   angular.module('cf.common.directives', [])
+    .directive('analyticsEventOn', require('./analytics-event'))
     .directive('customChip', require('./customChip'))
     .directive('longNote', require('./longNote'))
     .directive('imageLoader', require('./imageLoader'))
