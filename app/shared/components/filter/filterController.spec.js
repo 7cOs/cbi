@@ -788,6 +788,45 @@ describe('Unit: filter controller (opportunities)', function() {
     it('should call userService.saveOpportunityFilter', function() {});
   });
 
+  describe('userService.saveOpportunityFilter GA events', () => {
+
+    it('should log a GA event on userService.saveOpportunityFilter success', () => {
+      spyOn(userService, 'saveOpportunityFilter').and.callFake(() => {
+        const defer = q.defer();
+        defer.resolve({ id: '123-456-789' });
+        return defer.promise;
+      });
+      spyOn($analytics, 'eventTrack');
+
+      userService.model.opportunityFilters = [];
+
+      ctrl.saveFilter();
+      scope.$apply();
+
+      expect(userService.saveOpportunityFilter).toHaveBeenCalled();
+      expect($analytics.eventTrack).toHaveBeenCalledWith('Save Report', {
+        category: 'Opportunities',
+        label: '123-456-789'
+      });
+    });
+
+    it('should NOT log a GA event on userService.saveOpportunityFilter error', () => {
+      spyOn(userService, 'saveOpportunityFilter').and.callFake(() => {
+        const defer = q.defer();
+        defer.reject({ data: [{ error: 'Error!' }] });
+        return defer.promise;
+      });
+      spyOn($analytics, 'eventTrack');
+      spyOn(console, 'error');
+
+      ctrl.saveFilter();
+      scope.$apply();
+
+      expect(userService.saveOpportunityFilter).toHaveBeenCalled();
+      expect($analytics.eventTrack).not.toHaveBeenCalled();
+      expect(console.error).toHaveBeenCalled();
+    });
+  });
 });
 
 describe('Unit: filter controller (state = target-list-detail)', function() {
