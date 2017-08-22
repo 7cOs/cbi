@@ -53,6 +53,7 @@
     "@types/chance": "^0.7.33",
     "@types/core-js": "0.9.36",
     "@types/crypto-js": "^3.1.33",
+    "@types/google.analytics": "0.0.34",
     "@types/jasmine": "~2.5.46",
     "@types/jquery": "2.0.41",
     "@types/karma-jasmine": "^0.0.29",
