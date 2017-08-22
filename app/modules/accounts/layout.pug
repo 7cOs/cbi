@@ -262,7 +262,7 @@ div(row)
             .widget-data-left
               p.dist-label.data-brand {{data.title}}<span ng-if="a.isStoreLevel && a.getAccountTypePerformanceData(index).storeNumber && a.getAccountTypePerformanceData(index).storeNumber !== 'UNKNOWN'">&nbsp;{{'#' + a.getAccountTypePerformanceData(index).storeNumber}}</span>
             .widget-data-right
-              p.dark.text-center {{a.getValueBoundForAcctType(data)}}
+              p.dark.text-center {{a.getValueBoundForAcctType(data.measure, a.getAccountTypePerformanceData(index))}}
       .widget-graph
         .graph-container(ng-repeat="data in a.currentChartData")
           nvd3(options="a.chartOptions" data="data")
