@@ -375,10 +375,6 @@ module.exports = /*  @ngInject */
     }
 
     function setAnalyticsCategory(targetList) {
-      vm.analyticsCategory = `Target List - ${targetList.archived
-        ? 'Archived'
-        : targetList.permissionLevel === 'author'
-          ? 'My Target Lists'
-          : 'Shared With Me'}`;
+      vm.analyticsCategory = targetListService.getAnalyticsCategory(targetList.archived, targetList.permissionLevel);
     }
   };
