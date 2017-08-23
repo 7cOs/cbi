@@ -99,8 +99,9 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
         }
     });
 
-    this.store.select(state => state.myPerformance.versions).subscribe((versions: Array<MyPerformanceState>) => {
-      this.showLeftBackButton = versions.length > 0;
+    this.myPerformanceVersionSubscription = this.store.select(state => state.myPerformance.versions)
+      .subscribe((versions: Array<MyPerformanceState>) => {
+        this.showLeftBackButton = versions.length > 0;
     });
 
     // stub current user for now
