@@ -268,17 +268,19 @@ describe('Unit: list controller', function() {
     var runTimeout = inject(function($timeout) {
         $timeout.flush(4000);
       });
+    let feedbackDeferred;
+    let closeDeferred;
 
     beforeEach(function() {
       httpBackend.expectGET('/v2/users/1/targetLists/').respond(200);
 
       spyOn(opportunitiesService, 'createOpportunityFeedback').and.callFake(function() {
-        var feedbackDeferred = q.defer();
+        feedbackDeferred = q.defer();
         return feedbackDeferred.promise;
       });
 
       spyOn(closedOpportunitiesService, 'closeOpportunity').and.callFake(function() {
-        var closeDeferred = q.defer();
+        closeDeferred = q.defer();
         return closeDeferred.promise;
       });
 
@@ -295,6 +297,26 @@ describe('Unit: list controller', function() {
       ctrl.closeOrDismissOpportunity('123', {}, false);
       runTimeout();
       expect(closedOpportunitiesService.closeOpportunity).toHaveBeenCalled();
+    });
+
+    it('should log a GA event on closeOpportunity method call with dismiss false', () => {
+      spyOn($analytics, 'eventTrack');
+      opportunitiesService.model.opportunities = [{
+        store: {id: '1699829'},
+        groupedOpportunities: [{
+          id: '0080123___80013466___20170820'
+        }]
+      }];
+
+      ctrl.closeOrDismissOpportunity('0080123___80013466___20170820', {}, false);
+      runTimeout();
+      closeDeferred.resolve();
+      scope.$apply();
+
+      expect($analytics.eventTrack).toHaveBeenCalledWith('Close Opportunity', {
+       category: 'Opportunities',
+       label: '0080123___80013466___20170820'
+      });
     });
 
     it('should not run either method if undo clicked', function() {
