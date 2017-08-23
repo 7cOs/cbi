@@ -8,8 +8,9 @@ import 'rxjs/add/operator/switchMap';
 import { MyPerformanceApiService } from '../../services/my-performance-api.service';
 import { MyPerformanceFilterState } from '../../state/reducers/my-performance-filter.reducer';
 import { PeopleResponsibilitiesDTO } from '../../models/people-responsibilities-dto.model';
+import { PerformanceTotalTransformerService } from '../../services/performance-total-transformer.service';
 import { ResponsibilitiesTransformerService } from '../../services/responsibilities-transformer.service';
-import { RoleGroupPerformanceTotal } from '../../models/role-groups.model';
+import { RoleGroupPerformanceTotalDTO } from '../../models/role-groups.model';
 import { RoleGroups } from '../../models/role-groups.model';
 import { ViewType } from '../../enums/view-type.enum';
 import * as ResponsibilitiesActions from '../../state/actions/responsibilities.action';
@@ -21,6 +22,7 @@ export class ResponsibilitiesEffects {
   constructor(
     private actions$: Actions,
     private myPerformanceApiService: MyPerformanceApiService,
+    private performanceTotalTransformerService: PerformanceTotalTransformerService,
     private responsibilitiesTransformerService: ResponsibilitiesTransformerService
   ) { }
 
@@ -53,13 +55,15 @@ export class ResponsibilitiesEffects {
         })
         .concatMap(() => {
           return this.myPerformanceApiService.getResponsibilitiesPerformanceTotals(positionId, entityTypes, filter)
-            .mergeMap((res: Array<RoleGroupPerformanceTotal>) => {
+            .mergeMap((response: Array<RoleGroupPerformanceTotalDTO>) => {
+              const roleGroupPerformanceTotals = this.performanceTotalTransformerService.transformRoleGroupPerformanceTotalDTO(response);
+
               return Observable.from([
                 new ViewTypeActions.SetLeftMyPerformanceTableViewType(entityType),
                 new ResponsibilitiesActions.FetchResponsibilitiesSuccessAction({
                   positionId: positionId,
                   responsibilities: roleGroups,
-                  performanceTotals: res
+                  performanceTotals: roleGroupPerformanceTotals
                 })
               ]);
             });

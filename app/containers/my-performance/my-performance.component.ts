@@ -10,7 +10,6 @@ import { DateRange } from '../../models/date-range.model';
 import { DateRangesState } from '../../state/reducers/date-ranges.reducer';
 import { EntityPeopleType } from '../../enums/entity-responsibilities.enum';
 import { FetchResponsibilitiesAction } from '../../state/actions/responsibilities.action';
-import * as MyPerformanceVersionActions from '../../state/actions/my-performance-version.action';
 import { getDateRangeMock } from '../../models/date-range.model.mock';
 import { GetPeopleByRoleGroupAction } from '../../state/actions/responsibilities.action';
 import { MyPerformanceFilterActionType } from '../../enums/my-performance-filter.enum';
@@ -25,6 +24,7 @@ import { SetLeftMyPerformanceTableViewType, SetRightMyPerformanceTableViewType }
 import { SortingCriteria } from '../../models/sorting-criteria.model';
 import { ViewType } from '../../enums/view-type.enum';
 import * as MyPerformanceFilterActions from '../../state/actions/my-performance-filter.action';
+import * as MyPerformanceVersionActions from '../../state/actions/my-performance-version.action';
 
 // mocks
 import { myPerformanceRightTableData } from '../../models/my-performance-table-data.model.mock';
@@ -89,8 +89,7 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
         this.leftTableViewType = current.viewType.leftTableViewType;
 
         if (current.responsibilities) {
-          this.tableData = this.myPerformanceTableDataTransformerService
-            .getTableData(this.leftTableViewType, current.responsibilities);
+          this.tableData = this.myPerformanceTableDataTransformerService.getTableData(this.leftTableViewType, current.responsibilities);
         }
 
         if (current.performanceTotal && current.performanceTotal.status === ActionStatus.Fetched) {

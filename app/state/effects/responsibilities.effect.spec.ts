@@ -8,14 +8,17 @@ import { DistributionTypeValue } from '../../enums/distribution-type.enum';
 import { FetchResponsibilitiesAction,
          FetchResponsibilitiesFailureAction,
          FetchResponsibilitiesSuccessAction } from '../actions/responsibilities.action';
-import { getRoleGroupsMock, getRoleGroupPerformanceTotalsMock } from '../../models/role-groups.model.mock';
+import { getRoleGroupsMock,
+         getRoleGroupPerformanceTotalsMock,
+         getRoleGroupPerformanceTotalDTOMock } from '../../models/role-groups.model.mock';
 import { MetricTypeValue } from '../../enums/metric-type.enum';
 import { MyPerformanceApiService } from '../../services/my-performance-api.service';
 import { MyPerformanceFilterState } from '../reducers/my-performance-filter.reducer';
+import { PerformanceTotalTransformerService } from '../../services/performance-total-transformer.service';
 import { PremiseTypeValue } from '../../enums/premise-type.enum';
 import { ResponsibilitiesEffects } from './responsibilities.effect';
 import { ResponsibilitiesTransformerService } from '../../services/responsibilities-transformer.service';
-import { RoleGroups } from '../../models/role-groups.model';
+import { RoleGroups, RoleGroupPerformanceTotal } from '../../models/role-groups.model';
 import { SetLeftMyPerformanceTableViewType } from '../actions/view-types.action';
 import { ViewType } from '../../enums/view-type.enum';
 
@@ -24,7 +27,10 @@ const chance = new Chance();
 describe('Responsibilities Effects', () => {
   const positionIdMock = chance.natural();
   const roleGroupsMock: RoleGroups = getRoleGroupsMock();
-  const mockRoleGroupPerformanceTotals = getRoleGroupPerformanceTotalsMock();
+  const roleGroupPerformanceTotalDTOMock = getRoleGroupPerformanceTotalDTOMock();
+  const roleGroupPerformanceTotalsMock = getRoleGroupPerformanceTotalsMock();
+  const err = new Error(chance.string());
+
   const performanceFilterStateMock: MyPerformanceFilterState = {
     metricType: MetricTypeValue.PointsOfDistribution,
     dateRangeCode: DateRangeTimePeriodValue.FYTDBDL,
@@ -34,20 +40,24 @@ describe('Responsibilities Effects', () => {
   const responsibilitiesSuccessPayloadMock = {
     positionId: positionIdMock,
     responsibilities: roleGroupsMock,
-    performanceTotals: mockRoleGroupPerformanceTotals
+    performanceTotals: roleGroupPerformanceTotalsMock
   };
-  const err = new Error(chance.string());
   const myPerformanceApiServiceMock = {
     getResponsibilities() {
       return Observable.of({positions: roleGroupsMock});
     },
     getResponsibilitiesPerformanceTotals() {
-      return Observable.of(mockRoleGroupPerformanceTotals);
+      return Observable.of(roleGroupPerformanceTotalDTOMock);
     }
   };
   const responsibilitiesTransformerServiceMock = {
     groupPeopleByRoleGroups(mockArgs: any): RoleGroups {
       return roleGroupsMock;
+    }
+  };
+  const performanceTotalTransformerServiceMock = {
+    transformRoleGroupPerformanceTotalDTO(mockArgs: any): Array<RoleGroupPerformanceTotal> {
+      return roleGroupPerformanceTotalsMock;
     }
   };
 
@@ -67,6 +77,10 @@ describe('Responsibilities Effects', () => {
       {
         provide: ResponsibilitiesTransformerService,
         useValue: responsibilitiesTransformerServiceMock
+      },
+      {
+        provide: PerformanceTotalTransformerService,
+        useValue: performanceTotalTransformerServiceMock
       }
     ]
   }));

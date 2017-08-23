@@ -7,15 +7,12 @@ import { MyPerformanceTableRow } from '../models/my-performance-table-row.model'
 import { PerformanceTotal } from '../models/performance-total.model';
 import { ResponsibilitiesState } from '../state/reducers/responsibilities.reducer';
 import { RoleGroups, RoleGroupPerformanceTotal } from '../models/role-groups.model';
-import { UtilService } from './util.service';
 import { ViewType } from '../enums/view-type.enum';
 
 const chance = new Chance();
 
 @Injectable()
 export class MyPerformanceTableDataTransformerService {
-
-  constructor(private utilService: UtilService) { }
 
   // mocking the performance data for now;
   public transformRoleGroupTableData(roleGroups: RoleGroups): MyPerformanceTableRow[] {
@@ -72,7 +69,7 @@ export class MyPerformanceTableDataTransformerService {
         descriptionRow0: `${performance.entityType}S`,
         metricColumn0: performance.performanceTotal.total,
         metricColumn1: performance.performanceTotal.totalYearAgo,
-        metricColumn2: this.utilService.getYearAgoPercent(performance.performanceTotal.total, performance.performanceTotal.totalYearAgo),
+        metricColumn2: performance.performanceTotal.totalYearAgoPercent,
         ctv: performance.performanceTotal.contributionToVolume
       };
     });
@@ -83,7 +80,7 @@ export class MyPerformanceTableDataTransformerService {
       descriptionRow0: 'Total',
       metricColumn0: performanceTotal.total,
       metricColumn1: performanceTotal.totalYearAgo,
-      metricColumn2: this.utilService.getYearAgoPercent(performanceTotal.total, performanceTotal.totalYearAgo),
+      metricColumn2: performanceTotal.totalYearAgoPercent,
       ctv: performanceTotal.contributionToVolume
     };
   }

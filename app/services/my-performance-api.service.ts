@@ -7,9 +7,9 @@ import { DateRangeTimePeriodValue } from '../enums/date-range-time-period.enum';
 import { DistributionTypeValue } from '../enums/distribution-type.enum';
 import { MetricTypeValue } from '../enums/metric-type.enum';
 import { MyPerformanceFilterState } from '../state/reducers/my-performance-filter.reducer';
-import { PerformanceTotal } from '../models/performance-total.model'; // tslint:disable-line:no-unused-variable
+import { PerformanceTotalDTO } from '../models/performance-total.model'; // tslint:disable-line:no-unused-variable
 import { PremiseTypeValue } from '../enums/premise-type.enum';
-import { RoleGroupPerformanceTotal } from '../models/role-groups.model'; // tslint:disable-line:no-unused-variable
+import { RoleGroupPerformanceTotalDTO } from '../models/role-groups.model'; // tslint:disable-line:no-unused-variable
 
 @Injectable()
 export class MyPerformanceApiService {
@@ -26,7 +26,7 @@ export class MyPerformanceApiService {
 
   public getResponsibilitiesPerformanceTotals(
     positionId: number, entityTypes: Array<{ entityTypeName: string, entityTypeId: string }>, filter: MyPerformanceFilterState
-  ): Observable<RoleGroupPerformanceTotal[]> {
+  ): Observable<RoleGroupPerformanceTotalDTO[]> {
     const apiCalls: any[] = [];
 
     entityTypes.forEach((entity: { entityTypeName: string, entityTypeId: string }) => {
@@ -38,7 +38,7 @@ export class MyPerformanceApiService {
 
   public getResponsibilityPerformanceTotal(
     positionId: number, entityType: { entityTypeName: string, entityTypeId: string }, filter: MyPerformanceFilterState
-  ): Observable<RoleGroupPerformanceTotal|Error> {
+  ): Observable<RoleGroupPerformanceTotalDTO|Error> {
     const url = `/v3/positions/${ positionId }/responsibilities/${ entityType.entityTypeId }/performanceTotal`;
 
     return this.http.get(`${ url }`, {
@@ -48,7 +48,7 @@ export class MyPerformanceApiService {
       .catch(err => this.handleError(new Error(err)));
   }
 
-  public getPerformanceTotal(positionId: number, filter: MyPerformanceFilterState): Observable<PerformanceTotal> {
+  public getPerformanceTotal(positionId: number, filter: MyPerformanceFilterState): Observable<PerformanceTotalDTO> {
     const url = `/v3/positions/${ positionId }/performanceTotal`;
 
     return this.http.get(`${ url }`, {

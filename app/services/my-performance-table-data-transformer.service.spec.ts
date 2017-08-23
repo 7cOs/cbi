@@ -4,7 +4,6 @@ import { getPerformanceTotalMock } from '../models/performance-total.model.mock'
 import { getRoleGroupPerformanceTotalsMock, getRoleGroupsMock } from '../models/role-groups.model.mock';
 import { MyPerformanceTableDataTransformerService } from './my-performance-table-data-transformer.service';
 import { MyPerformanceTableRow } from '../models/my-performance-table-row.model';
-import { UtilService } from './util.service';
 import { ViewType } from '../enums/view-type.enum';
 
 describe('Service: MyPerformanceTableDataTransformerService', () => {
@@ -20,8 +19,7 @@ describe('Service: MyPerformanceTableDataTransformerService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       providers: [
-        MyPerformanceTableDataTransformerService,
-        UtilService
+        MyPerformanceTableDataTransformerService
       ]
     });
   });
@@ -119,7 +117,7 @@ describe('Service: MyPerformanceTableDataTransformerService', () => {
         descriptionRow0: 'Total',
         metricColumn0: mockPerformanceTotal.total,
         metricColumn1: mockPerformanceTotal.totalYearAgo,
-        metricColumn2: parseFloat((mockPerformanceTotal.total / mockPerformanceTotal.totalYearAgo).toFixed(1)),
+        metricColumn2: mockPerformanceTotal.totalYearAgoPercent,
         ctv: mockPerformanceTotal.contributionToVolume
       });
     });

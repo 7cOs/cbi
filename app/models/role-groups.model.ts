@@ -1,9 +1,14 @@
 import { EntityResponsibilities } from './entity-responsibilities.model';
-import { PerformanceTotal } from './performance-total.model';
+import { PerformanceTotal, PerformanceTotalDTO } from './performance-total.model';
 
 export interface RoleGroups {
   'MARKET DEVELOPMENT MANAGER'?: EntityResponsibilities[];
   'GENERAL MANAGER'?: EntityResponsibilities[];
+}
+
+export interface RoleGroupPerformanceTotalDTO {
+  entityType: string;
+  performanceTotal: PerformanceTotalDTO;
 }
 
 export interface RoleGroupPerformanceTotal {

@@ -12,6 +12,7 @@ export const initialState: PerformanceTotalState = {
   performanceTotal: {
     total: 0,
     totalYearAgo: 0,
+    totalYearAgoPercent: 0,
     contributionToVolume: 0
   }
 };
