@@ -290,7 +290,7 @@ module.exports = /*  @ngInject */
 
       userService.addTargetList(vm.newList).then(response => {
         $analytics.eventTrack('Create Target List', {
-          category: 'Opportunities',
+          category: 'Target Lists - My Target Lists',
           label: response.id
         });
 
