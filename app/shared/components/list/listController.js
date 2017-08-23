@@ -98,6 +98,7 @@ module.exports = /*  @ngInject */
     vm.handleAddToTargetList = handleAddToTargetList;
     vm.isTotalOpportunitiesWithinMaxLimit = isTotalOpportunitiesWithinMaxLimit;
     vm.resetOpportunitiesExpanded = resetOpportunitiesExpanded;
+    vm.recordGAEvent = recordGAEvent;
 
     // Custom Headers for CSV export
     vm.csvHeader = [
@@ -289,10 +290,8 @@ module.exports = /*  @ngInject */
       vm.buttonDisabled = true;
 
       userService.addTargetList(vm.newList).then(response => {
-        $analytics.eventTrack('Create Target List', {
-          category: 'Opportunities',
-          label: response.id
-        });
+
+        recordGAEvent('Create Target List', 'Opportunities', response.id);
 
         vm.addToTargetList(response.id);
         vm.closeModal();
@@ -386,6 +385,13 @@ module.exports = /*  @ngInject */
       });
     }
 
+    function recordGAEvent(action, category, label) {
+      $analytics.eventTrack(action, {
+        category: category,
+        label: label
+      });
+    }
+
     function closeOrDismissOpportunity(oId, payload, dismiss) {
       vm.opportunityDismissTrigger = true;
       vm.currentOpportunityId = oId;
@@ -404,10 +410,7 @@ module.exports = /*  @ngInject */
                   storeGroup.splice(key, 1);
                 } else if (opportunity.id === oId && !dismiss) {
                   opportunity.status = 'CLOSED';
-                  $analytics.eventTrack('Close Opportunity', {
-                    category: 'Opportunities',
-                    label: opportunity.id
-                  });
+                  recordGAEvent('Close Opportunity', 'Opportunities', opportunity.id);
                 }
               });
 
