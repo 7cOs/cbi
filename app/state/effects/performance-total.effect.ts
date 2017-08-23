@@ -6,7 +6,7 @@ import 'rxjs/add/operator/do';
 import 'rxjs/add/operator/switchMap';
 
 import { MyPerformanceApiService } from '../../services/my-performance-api.service';
-import { PerformanceTotal, PerformanceTotalDTO } from '../../models/performance-total.model';
+import { PerformanceTotalDTO } from '../../models/performance-total.model';
 import { PerformanceTotalTransformerService } from '../../services/performance-total-transformer.service';
 import * as FetchResponsibilitiesActions from '../../state/actions/responsibilities.action';
 import * as PerformanceTotalActions from '../../state/actions/performance-total.action';

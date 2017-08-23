@@ -38,7 +38,7 @@ export class MyPerformanceApiService {
 
   public getResponsibilityPerformanceTotal(
     positionId: number, entityType: { entityTypeName: string, entityTypeId: string }, filter: MyPerformanceFilterState
-  ): Observable<RoleGroupPerformanceTotalDTO|Error> {
+  ): Observable<RoleGroupPerformanceTotalDTO> {
     const url = `/v3/positions/${ positionId }/responsibilities/${ entityType.entityTypeId }/performanceTotal`;
 
     return this.http.get(`${ url }`, {
