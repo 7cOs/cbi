@@ -98,7 +98,6 @@ module.exports = /*  @ngInject */
     vm.handleAddToTargetList = handleAddToTargetList;
     vm.isTotalOpportunitiesWithinMaxLimit = isTotalOpportunitiesWithinMaxLimit;
     vm.resetOpportunitiesExpanded = resetOpportunitiesExpanded;
-    vm.recordGAEvent = recordGAEvent;
 
     // Custom Headers for CSV export
     vm.csvHeader = [
@@ -290,8 +289,10 @@ module.exports = /*  @ngInject */
       vm.buttonDisabled = true;
 
       userService.addTargetList(vm.newList).then(response => {
-
-        recordGAEvent('Create Target List', 'Opportunities', response.id);
+        $analytics.eventTrack('Create Target List', {
+          category: 'Target Lists - My Target Lists',
+          label: response.id
+        });
 
         vm.addToTargetList(response.id);
         vm.closeModal();
@@ -385,13 +386,6 @@ module.exports = /*  @ngInject */
       });
     }
 
-    function recordGAEvent(action, category, label) {
-      $analytics.eventTrack(action, {
-        category: category,
-        label: label
-      });
-    }
-
     function closeOrDismissOpportunity(oId, payload, dismiss) {
       vm.opportunityDismissTrigger = true;
       vm.currentOpportunityId = oId;
@@ -410,7 +404,10 @@ module.exports = /*  @ngInject */
                   storeGroup.splice(key, 1);
                 } else if (opportunity.id === oId && !dismiss) {
                   opportunity.status = 'CLOSED';
-                  recordGAEvent('Close Opportunity', 'Opportunities', opportunity.id);
+                  $analytics.eventTrack('Close Opportunity', {
+                    category: 'Opportunities',
+                    label: opportunity.id
+                  });
                 }
               });
 
@@ -899,6 +896,10 @@ module.exports = /*  @ngInject */
       const totalOpps = usedOpps + (vm.isAllOpportunitiesSelected ? filtersService.model.appliedFilter.pagination.totalOpportunities : this.selected.length);
       const hasRemainingOpps = totalOpps <= maxOpportunities;
       if (hasRemainingOpps) {
+        $analytics.eventTrack('Copy to Target List', {
+          label: targetList.id,
+          category: targetListService.getAnalyticsCategory(vm.targetListService.model.currentList.permissionLevel)
+        });
         vm.addToTargetList(targetList.id);
       } else {
         const parentEl = angular.element(document.body);

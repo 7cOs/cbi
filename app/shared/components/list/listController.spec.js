@@ -756,6 +756,51 @@ describe('Unit: list controller', function() {
     });
   });
 
+  describe('list.saveNewList GA Event', () => {
+    let targetListResponseMock;
+
+    it('should log a GA event on userService.addTargetList success', () => {
+      targetListResponseMock = {id: '123-456-789'};
+      httpBackend.expectGET('/v2/users/1/targetLists/').respond(200);
+      httpBackend.expectPOST('/v2/targetLists/123-456-789/shares').respond(200);
+
+      spyOn(userService, 'addTargetList').and.callFake(() => {
+        const defer = q.defer();
+        defer.resolve(targetListResponseMock);
+        return defer.promise;
+      });
+      spyOn($analytics, 'eventTrack');
+
+      ctrl.saveNewList();
+      scope.$apply();
+
+      expect(userService.addTargetList).toHaveBeenCalled();
+      expect($analytics.eventTrack).toHaveBeenCalledWith('Create Target List', {
+        category: 'Target Lists - My Target Lists',
+        label: targetListResponseMock.id
+      });
+    });
+
+    it('should NOT log a GA event on userService.addTargetList error', () => {
+      httpBackend.expectGET('/v2/users/1/targetLists/').respond(200);
+
+      spyOn(userService, 'addTargetList').and.callFake(() => {
+        const defer = q.defer();
+        defer.reject({ error: 'Error' });
+        return defer.promise;
+      });
+      spyOn($analytics, 'eventTrack');
+      spyOn(console, 'error');
+
+      ctrl.saveNewList();
+      scope.$apply();
+
+      expect(userService.addTargetList).toHaveBeenCalled();
+      expect($analytics.eventTrack).not.toHaveBeenCalled();
+      expect(console.error).toHaveBeenCalled();
+    });
+  });
+
   describe('[list.showDisabled] method', function() {
     it('should assign the disabled message object to equal the passed in object from function', function() {
       var newMessage = {'name': 'message'};
