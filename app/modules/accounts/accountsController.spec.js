@@ -325,7 +325,7 @@ describe('Unit: accountsController', function() {
   ];
 
   const mockDateRangeService = {
-    getDateRanges: () => Observable.of(getDateRangeMock())
+    getDateRanges: () => Observable.of({L90: getDateRangeMock()})
   };
 
   beforeEach(function() {
@@ -335,6 +335,7 @@ describe('Unit: accountsController', function() {
     angular.mock.module('angulartics');
     angular.mock.module('cf.common.services');
     angular.mock.module('cf.modules.accounts');
+    angular.mock.module('angularMoment');
 
     inject(function($rootScope, _$controller_, _$state_, _$q_, _chipsService_, _filtersService_, _userService_, _myperformanceService_, _storesService_, _$filter_) {
       // Create scope
@@ -496,6 +497,9 @@ describe('Unit: accountsController', function() {
       expect(ctrl.displayBrandValue).not.toBeUndefined();
       expect(typeof (ctrl.displayBrandValue)).toEqual('function');
 
+      expect(ctrl.displayBrandValueAccountBrandVelocity).not.toBeUndefined();
+      expect(typeof (ctrl.displayBrandValueAccountBrandVelocity)).toEqual('function');
+
       expect(ctrl.getTrendValues).not.toBeUndefined();
       expect(typeof (ctrl.getTrendValues)).toEqual('function');
 
@@ -528,6 +532,9 @@ describe('Unit: accountsController', function() {
 
       expect(ctrl.filterTopBottom).not.toBeUndefined();
       expect(typeof (ctrl.filterTopBottom)).toEqual('function');
+
+      expect(ctrl.getValueBoundForAcctType).not.toBeUndefined();
+      expect(typeof (ctrl.getValueBoundForAcctType)).toEqual('function');
     });
 
     it('Should get default radio button options on init', function () {
@@ -575,6 +582,28 @@ describe('Unit: accountsController', function() {
     it('Should get totals for distributions', function() {});
 
     it('Should get totals for velocity', function() {});
+  });
+
+  describe('displayBrandValueAccountBrandVelocity', () => {
+    it('Should display N/A only when the first depletion is after the beginning of the time period', () => {
+      const dateRangeMock = {L90: getDateRangeMock()};
+      dateRangeMock.L90.range = '05/14/17 - 08/11/17';
+      const dateRangeServiceWithRangeMock = {
+        getDateRanges: () => Observable.of(dateRangeMock)
+      };
+
+      ctrl = $controller('accountsController', {$scope: scope, dateRangeService: dateRangeServiceWithRangeMock});
+
+      const brandMeasures = [
+        {
+          timeframe: 'L90',
+          velocity: 123.456
+        }
+      ];
+
+      expect(ctrl.displayBrandValueAccountBrandVelocity(brandMeasures, '2017-05-14')).toBe('123');
+      expect(ctrl.displayBrandValueAccountBrandVelocity(brandMeasures, '2017-05-15')).toBe('N/A');
+    });
   });
 
   describe('[Method] goToOpportunities', function() {
@@ -1434,33 +1463,82 @@ describe('Unit: accountsController', function() {
       ctrl.getDataForTopBottomLevel(ctrl.topBottomData.stores);
       ctrl.marketSelectedIndex = 3;
     });
+  });
 
+  describe('getValueBoundForAcctType', () => {
     it('Should get the correct property from the measure', function() {
-      var val;
+      var displayValue;
       // MTD
+
+      const performanceData0 = {
+        measure: topBottomSnapshotDistributorData.performance[0].measures[0],
+        performanceData: {
+          firstSoldDate: ''
+        }
+      };
+
+      const performanceData1 = {
+        measure: topBottomSnapshotDistributorData.performance[0].measures[7],
+        performanceData: {
+          firstSoldDate: ''
+        }
+      };
+
       ctrl.filtersService.model.accountSelected.accountMarkets = ctrl.filtersService.accountFilters.accountMarkets[0];
-      val = ctrl.getValueBoundForAcctType(topBottomSnapshotDistributorData.performance[0].measures[0]);
-      expect(val).toEqual($filter('number')(375314, 0));
+      displayValue = ctrl.getValueBoundForAcctType(performanceData0);
+      expect(displayValue).toEqual($filter('number')(375314, 0));
 
       ctrl.filtersService.model.accountSelected.accountMarkets = ctrl.filtersService.accountFilters.accountMarkets[1];
-      val = ctrl.getValueBoundForAcctType(topBottomSnapshotDistributorData.performance[0].measures[7]);
-      expect(val).toEqual($filter('number')(14612, 0));
+      displayValue = ctrl.getValueBoundForAcctType(performanceData1);
+      expect(displayValue).toEqual($filter('number')(14612, 0));
 
       ctrl.filtersService.model.accountSelected.accountMarkets = ctrl.filtersService.accountFilters.accountMarkets[2];
-      val = ctrl.getValueBoundForAcctType(topBottomSnapshotDistributorData.performance[0].measures[7]);
-      expect(val).toEqual($filter('number')(30104, 0));
+      displayValue = ctrl.getValueBoundForAcctType(performanceData1);
+      expect(displayValue).toEqual($filter('number')(30104, 0));
 
       ctrl.filtersService.model.accountSelected.accountMarkets = ctrl.filtersService.accountFilters.accountMarkets[3];
-      val = ctrl.getValueBoundForAcctType(topBottomSnapshotDistributorData.performance[0].measures[7]);
-      expect(val).toEqual($filter('number')(7190, 0));
+      displayValue = ctrl.getValueBoundForAcctType(performanceData1);
+      expect(displayValue).toEqual($filter('number')(7190, 0));
 
       ctrl.filtersService.model.accountSelected.accountMarkets = ctrl.filtersService.accountFilters.accountMarkets[0];
-      val = ctrl.getValueBoundForAcctType(topBottomSnapshotDistributorData.performance[0].measures[0]);
-      expect(val).not.toEqual('-');
+      displayValue = ctrl.getValueBoundForAcctType(performanceData0);
+      expect(displayValue).not.toEqual('-');
 
       ctrl.filtersService.model.accountSelected.accountMarkets = null;
-      val = ctrl.getValueBoundForAcctType(topBottomSnapshotDistributorData.performance[0].measures[0]);
-      expect(val).toEqual('-');
+      displayValue = ctrl.getValueBoundForAcctType(performanceData0);
+      expect(displayValue).toEqual('-');
+    });
+
+    it('Should display N/A only when the first depletion is after the beginning of the time period', () => {
+      const dateRangeMock = {L90: getDateRangeMock()};
+      dateRangeMock.L90.range = '05/14/17 - 08/11/17';
+      const dateRangeServiceWithRangeMock = {
+        getDateRanges: () => Observable.of(dateRangeMock)
+      };
+
+      ctrl = $controller('accountsController', {$scope: scope, dateRangeService: dateRangeServiceWithRangeMock});
+
+      const performanceData = {
+        measure: topBottomSnapshotDistributorData.performance[0].measures[7],
+        performanceData: {
+          firstSoldDate: '2017-05-14'
+        }
+      };
+
+      const performanceDataNA = {
+        measure: topBottomSnapshotDistributorData.performance[0].measures[7],
+        performanceData: {
+          firstSoldDate: '2017-05-15'
+        }
+      };
+
+      ctrl.filtersService.model.accountSelected.accountMarkets = ctrl.filtersService.accountFilters.accountMarkets[3];
+
+      let displayValue = ctrl.getValueBoundForAcctType(performanceData);
+      expect(displayValue).toEqual($filter('number')(7190, 0));
+
+      displayValue = ctrl.getValueBoundForAcctType(performanceDataNA);
+      expect(displayValue).toEqual('N/A');
     });
   });
 
