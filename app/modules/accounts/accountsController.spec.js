@@ -2,7 +2,7 @@ import { getDateRangeMock } from '../../models/date-range.model.mock';
 import { Observable } from 'rxjs';
 
 describe('Unit: accountsController', function() {
-  var scope, ctrl, $controller, $state, $q, filtersService, chipsService, userService, packageSkuData, brandSpy, brandPerformanceData, myperformanceService, storesService, $filter;
+  var scope, ctrl, $controller, $state, $q, filtersService, chipsService, userService, packageSkuData, brandSpy, brandPerformanceData, myperformanceService, storesService, $filter, $analytics;
   let promiseGetStores;
 
   var topBottomSnapshotDistributorData = {
@@ -337,7 +337,7 @@ describe('Unit: accountsController', function() {
     angular.mock.module('cf.modules.accounts');
     angular.mock.module('angularMoment');
 
-    inject(function($rootScope, _$controller_, _$state_, _$q_, _chipsService_, _filtersService_, _userService_, _myperformanceService_, _storesService_, _$filter_) {
+    inject(function($rootScope, _$controller_, _$state_, _$q_, _chipsService_, _filtersService_, _userService_, _myperformanceService_, _storesService_, _$filter_, _$analytics_) {
       // Create scope
       scope = $rootScope.$new();
 
@@ -351,6 +351,7 @@ describe('Unit: accountsController', function() {
       userService = _userService_;
       myperformanceService = _myperformanceService_;
       storesService = _storesService_;
+      $analytics = _$analytics_;
 
       brandPerformanceData = {
         performance: [
@@ -716,6 +717,19 @@ describe('Unit: accountsController', function() {
       expect(filtersService.model.selected.account).toEqual('');
       expect(chipsService.model).toEqual([{ name: 'two', type: 'subaccount', applied: true, removable: false }]);
     });
+
+    it('Should record all opportunities GA events', function() {
+      filtersService.model.selected.premiseType = 'all';
+      filtersService.model.selected.chain = ['01110000 01101100 01110011'];
+      spyOn($analytics, 'eventTrack');
+
+      ctrl.goToOpportunities(e);
+
+      expect($analytics.eventTrack).toHaveBeenCalledWith('Accounts', {
+        action: 'Top Opportunities',
+        label: 'All Opportunities'
+      });
+    });
   });
 
   describe('[Method] updateBrandSnapshot', function() {
@@ -744,6 +758,22 @@ describe('Unit: accountsController', function() {
 
       expect(userService.getPerformanceBrand).toHaveBeenCalled();
       expect(userService.getPerformanceBrand.calls.count()).toEqual(1);
+    });
+  });
+
+  describe('should record snapshot GA event', function() {
+    beforeEach(function () {
+      brandSpy.calls.reset();
+      spyOn($analytics, 'eventTrack');
+    });
+
+    it('Check if Snapshot GA is recorded', function() {
+      ctrl.updateBrandSnapshot();
+
+      expect($analytics.eventTrack).toHaveBeenCalledWith('Snapshot', {
+        action: 'All Brands',
+        label: 'Distribution (simple)'
+      });
     });
   });
 

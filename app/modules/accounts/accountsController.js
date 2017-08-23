@@ -362,6 +362,7 @@ module.exports = /*  @ngInject */
       } else {
         e.preventDefault();
       }
+      sendAllOpportunityAnalyticsEvent();
     }
 
     // Make notes available to the page
@@ -606,6 +607,8 @@ module.exports = /*  @ngInject */
         });
       }
 
+      sendBrandSnapshotAnalyticsEvent();
+
       for (var topBottomObj in vm.topBottomData) {
         myperformanceService.resetPerformanceDataFlags(vm.topBottomData[topBottomObj]);
       }
@@ -836,6 +839,7 @@ module.exports = /*  @ngInject */
           }, 500);
         });
       }
+      sendBrandSnapshotAnalyticsEvent();
       disableApplyFilter(true);
     }
 
@@ -1720,25 +1724,54 @@ module.exports = /*  @ngInject */
        });
      }
 
-     angular.element($window).bind('scroll', function() {
-       if (vm.selectOpen) {
-         return;
-       }
-       vm.st = this.pageYOffset;
-       if (vm.st >= 230) {
-         // Only set element class if state has changed
-         if (!vm.scrolledBelowHeader) {
-           setOverviewDisplay(true);
-         }
-         vm.scrolledBelowHeader = true;
-       } else {
-         // Only set element class if state has changed
-         if (vm.scrolledBelowHeader) {
-           setOverviewDisplay(false);
-         }
-         vm.scrolledBelowHeader = false;
-       }
-     });
+    function sendAllOpportunityAnalyticsEvent() {
+      $analytics.eventTrack('Accounts', {
+        action: 'Top Opportunities',
+        label: 'All Opportunities'
+      });
+    }
+
+    /**************************************
+     * GA update to record snapshot events.
+     * records:
+     *        Category:       Snapshot
+     *        Action:         All Brands  [OR]  <Brand ID>  [OR]  <SKU.Package ID>
+     *                        (depends on selected state of the brand snapshot table)
+     *        Label:          Distribution (simple) [OR]  Distribution (effective)  [OR]  Velocity
+     *                        (corresponds to value of selected metric in dropdown)
+     *************************************/
+    function sendBrandSnapshotAnalyticsEvent() {
+        $analytics.eventTrack('Snapshot', {
+            action: getSnapshotAction(),
+            label: vm.filtersService.model.accountSelected.accountBrands.name
+        });
+    }
+
+    function getSnapshotAction() {
+      return vm.brandWidgetSkuTitle
+        ? vm.brandWidgetSkuTitle
+        : (currentBrandSelected ? currentBrandSelected.name : vm.brandWidgetTitleDefault);
+    }
+
+    angular.element($window).bind('scroll', function() {
+      if (vm.selectOpen) {
+        return;
+      }
+      vm.st = this.pageYOffset;
+      if (vm.st >= 230) {
+        // Only set element class if state has changed
+        if (!vm.scrolledBelowHeader) {
+          setOverviewDisplay(true);
+        }
+        vm.scrolledBelowHeader = true;
+      } else {
+        // Only set element class if state has changed
+        if (vm.scrolledBelowHeader) {
+          setOverviewDisplay(false);
+        }
+        vm.scrolledBelowHeader = false;
+      }
+    });
 
     function formatChartData(chartData) {
       if (chartData.length && angular.isArray(chartData)) {
