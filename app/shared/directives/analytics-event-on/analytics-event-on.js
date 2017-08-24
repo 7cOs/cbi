@@ -8,6 +8,10 @@ module.exports = /*  @ngInject */
         const eventType = $attrs.analyticsEvent || 'click';
 
         angular.element($element[0]).bind(eventType, () => {
+          if ($attrs.analyticsIf && !$scope.$eval($attrs.analyticsIf)) {
+            return; // cancel this event when analytics-if attribute is present but falsey
+          }
+
           analyticsService.trackEvent($attrs.category, $attrs.action, $attrs.label);
         });
       }

@@ -11,6 +11,7 @@ export class AnalyticsEventDirective implements AfterContentInit {
   @Input() category: string;
   @Input() action: string;
   @Input() label: string;
+  @Input() analyticsIf?: boolean;
 
   private el: HTMLElement;
 
@@ -27,6 +28,10 @@ export class AnalyticsEventDirective implements AfterContentInit {
   }
 
   public eventTrack() {
+    if (this.analyticsIf !== undefined && !this.analyticsIf) {
+      return; // cancel this event when analytics-if attribute is present but falsey
+    }
+
     this.analyticsService.trackEvent(this.category, this.action, this.label);
   }
 }
