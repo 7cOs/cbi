@@ -16,6 +16,9 @@ function start() {
   if (process.env.NODE_ENV === 'local') {
     const dotenv = require('dotenv');
     dotenv.config();
+    console.log('Loaded local .env file for configuration variables.');
+  } else {
+    console.log('Expecting configuration to be set via environment variables.');
   }
 
   // Define our constants

@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports = /*  @ngInject */
-  function expandedController($state, $scope, $filter, $mdDialog, $q, $timeout, userService, targetListService, loaderService, toastService) {
+  function expandedController(analyticsService, $state, $scope, $filter, $mdDialog, $q, $timeout, userService, targetListService, loaderService, toastService) {
 
     // ****************
     // CONTROLLER SETUP
@@ -81,13 +81,17 @@ module.exports = /*  @ngInject */
 
       // get selected target list ids and their promises
       archiveTargetListPromises = selectedTargetLists.map(function(targetList) {
+        analyticsService.trackEvent(
+          targetListService.getAnalyticsCategory(targetList.permissionLevel, targetList.archived),
+          'Archive Target List',
+          targetList.id
+        );
         return targetListService.updateTargetList(targetList.id, {archived: true});
       });
 
       // run all archive requests at the same time
       $q.all(archiveTargetListPromises).then(function(response) {
         angular.forEach(selectedTargetLists, function(item, key) {
-          // this may work or i may need to do the object. cant test due to api issues.
           item.archived = true;
 
           userService.model.targetLists.archived.unshift(item);
@@ -153,6 +157,12 @@ module.exports = /*  @ngInject */
       if (vm.allowDelete) {
         // get selected target list ids and their promises
         deleteTargetListPromises = selectedItems.map(function(targetList) {
+          analyticsService.trackEvent(
+            targetListService.getAnalyticsCategory(targetList.permissionLevel, targetList.archived),
+            'Delete Target List',
+            targetList.id
+          );
+
           return targetListService.deleteTargetList(targetList.id);
         });
 

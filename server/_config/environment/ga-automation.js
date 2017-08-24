@@ -1,6 +1,8 @@
 'use strict';
 
 module.exports = function (config) {
+  console.log('Using server config for GA-AUTOMATION environment.');
+
   // global settings
   config.domain = 'app-compass-ga-automation.herokuapp.com';
   config.env = 'ga-automation';

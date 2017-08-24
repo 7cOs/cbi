@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports = /*  @ngInject */
-  function navbarController($rootScope, $scope, $state, $transitions, $window, $mdPanel, $mdDialog, $mdMenu, $mdSelect, $anchorScroll, $analytics, $location, notificationsService, opportunitiesService, targetListService, userService, versionService, loaderService, ieHackService, toastService, filtersService, chipsService, notesService, moment, ENV_VARS) {
+  function navbarController($rootScope, $scope, $state, $transitions, $window, $mdPanel, $mdDialog, $mdMenu, $mdSelect, $anchorScroll, $location, notificationsService, opportunitiesService, targetListService, userService, versionService, loaderService, ieHackService, toastService, filtersService, chipsService, notesService, moment, ENV_VARS) {
 
     // ****************
     // CONTROLLER SETUP

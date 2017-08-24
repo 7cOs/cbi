@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports = /*  @ngInject */
-  function listController($scope, $state, $q, $location, $anchorScroll, $mdDialog, $timeout, $analytics, $filter, filtersService, loaderService, opportunitiesService, targetListService, storesService, userService, closedOpportunitiesService, ieHackService, toastService) {
+  function listController($scope, $state, $q, $location, $anchorScroll, $mdDialog, $timeout, analyticsService, $filter, filtersService, loaderService, opportunitiesService, targetListService, storesService, userService, closedOpportunitiesService, ieHackService, toastService) {
 
     // ****************
     // CONTROLLER SETUP
@@ -289,10 +289,11 @@ module.exports = /*  @ngInject */
       vm.buttonDisabled = true;
 
       userService.addTargetList(vm.newList).then(response => {
-        $analytics.eventTrack('Create Target List', {
-          category: 'Opportunities',
-          label: response.id
-        });
+        analyticsService.trackEvent(
+          'Target Lists - My Target Lists',
+          'Create Target List',
+          response.id
+        );
 
         vm.addToTargetList(response.id);
         vm.closeModal();
@@ -404,6 +405,11 @@ module.exports = /*  @ngInject */
                   storeGroup.splice(key, 1);
                 } else if (opportunity.id === oId && !dismiss) {
                   opportunity.status = 'CLOSED';
+                  analyticsService.trackEvent(
+                    'Opportunities',
+                    'Close Opportunity',
+                    opportunity.id
+                  );
                 }
               });
 
@@ -892,6 +898,11 @@ module.exports = /*  @ngInject */
       const totalOpps = usedOpps + (vm.isAllOpportunitiesSelected ? filtersService.model.appliedFilter.pagination.totalOpportunities : this.selected.length);
       const hasRemainingOpps = totalOpps <= maxOpportunities;
       if (hasRemainingOpps) {
+        analyticsService.trackEvent(
+          targetListService.getAnalyticsCategory(vm.targetListService.model.currentList.permissionLevel),
+          'Copy to Target List',
+          targetList.id
+        );
         vm.addToTargetList(targetList.id);
       } else {
         const parentEl = angular.element(document.body);

@@ -1,7 +1,7 @@
-import { Angulartics2 } from 'angulartics2';
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import * as moment from 'moment';
 
+import { AnalyticsService } from '../../../services/analytics.service';
 import { Notification } from '../../../models/notification.model';
 import { NotificationStatus } from '../../../enums/notification.enum';
 
@@ -38,12 +38,16 @@ export class NotificationsComponent {
   };
 
   constructor(
-    private angulartics2: Angulartics2
+    private analyticsService: AnalyticsService
   ) { }
 
   clickOn(notification: Notification) {
     const analyticsLabel = this.notificationActionAnalyticsMapping[notification.objectType];
-    this.angulartics2.eventTrack.next({action: 'Read Notification', properties: {category: 'Notifications', label: analyticsLabel}});
+    this.analyticsService.trackEvent(
+      'Notifications',
+      'Read Notification',
+      analyticsLabel
+    );
 
     this.onNotificationClicked.emit(notification);
   }

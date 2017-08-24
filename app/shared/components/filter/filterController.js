@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports = /*  @ngInject */
-  function filterController($state, $scope, $mdDialog, $mdSelect, $analytics, loaderService, chipsService, filtersService, opportunityFiltersService, userService, usStatesService) {
+  function filterController($state, $scope, $mdDialog, $mdSelect, analyticsService, loaderService, chipsService, filtersService, opportunityFiltersService, userService, usStatesService) {
 
     // ****************
     // CONTROLLER SETUP
@@ -305,10 +305,11 @@ module.exports = /*  @ngInject */
       vm.tempId++;
 
       userService.saveOpportunityFilter(chipsDescription).then(response => {
-        $analytics.eventTrack('Save Report', {
-          category: 'Opportunities',
-          label: response.id
-        });
+        analyticsService.trackEvent(
+          'Opportunities',
+          'Save Report',
+          response.id
+        );
 
         userService.model.opportunityFilters.unshift({
           filterString: encodeURIComponent(filtersService.model.appliedFilter.appliedFilter),
@@ -440,10 +441,11 @@ module.exports = /*  @ngInject */
             break;
         }
 
-        $analytics.eventTrack(action, {
-          category: 'Filters',
-          label: label
-        });
+        analyticsService.trackEvent(
+          'Filters',
+          action,
+          label
+        );
       }
     }
 

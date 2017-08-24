@@ -262,11 +262,11 @@ div(row)
             .widget-data-left
               p.dist-label.data-brand {{data.title}}<span ng-if="a.isStoreLevel && a.getAccountTypePerformanceData(index).storeNumber && a.getAccountTypePerformanceData(index).storeNumber !== 'UNKNOWN'">&nbsp;{{'#' + a.getAccountTypePerformanceData(index).storeNumber}}</span>
             .widget-data-right
-              p.dark.text-center {{a.getValueBoundForAcctType(data)}}
+              p.dark.text-center {{a.getValueBoundForAcctType(data.measure, a.getAccountTypePerformanceData(index))}}
       .widget-graph
         .graph-container(ng-repeat="data in a.currentChartData")
           nvd3(options="a.chartOptions" data="data")
 
 h3.top-opportunities-header Top Opportunities
-  a.accent(ng-click="a.goToOpportunities($event);" ng-disabled="a.allOpportunitiesDisabled()" analytics-on="click" analytics-event="{{a.currentTopBottomAcctType.name}}" analytics-category="{{a.filtersService.model.valuesVsTrend.name}}" analytics-label="View Opportunities") See All Opportunities
+  a.accent(ng-click="a.goToOpportunities($event);" ng-disabled="a.allOpportunitiesDisabled()") See All Opportunities
   label Select a premise type followed by a retailer and/or distributor to view opportunities
