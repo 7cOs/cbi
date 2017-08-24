@@ -76,11 +76,6 @@ module.exports = /*  @ngInject */
       } else {
         vm.cachedNote = angular.copy(note);
       }
-
-      $analytics.eventTrack('Edit Note', {
-        category: notesService.model.currentStoreProperty === 'distributor' ? 'Distributor Notes' : 'Retailer Notes',
-        label: note.id
-      });
     }
 
     function openCreateNote() {
@@ -175,7 +170,12 @@ module.exports = /*  @ngInject */
       vm.loading = true;
       note.date = moment.utc().format();
 
-      notesService.updateNote(note).then(function(updateSuccess) {
+      notesService.updateNote(note).then(updateSuccess => {
+        $analytics.eventTrack('Edit Note', {
+          category: notesService.model.currentStoreProperty === 'distributor' ? 'Distributor Notes' : 'Retailer Notes',
+          label: note.id
+        });
+
         notesService.accountNotes().then(function(success) {
           vm.notes = success;
           jumpToNotesTop();
