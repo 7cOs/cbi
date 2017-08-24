@@ -359,10 +359,10 @@ module.exports = /*  @ngInject */
           applyFiltersOnLoad: true,
           referrer: 'accounts'
         });
+        sendAllOpportunityAnalyticsEvent();
       } else {
         e.preventDefault();
       }
-      sendAllOpportunityAnalyticsEvent();
     }
 
     // Make notes available to the page
