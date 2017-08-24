@@ -1,9 +1,9 @@
-import { Angulartics2 } from 'angulartics2';
 import { By } from '@angular/platform-browser';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MdCardModule } from '@angular/material';
 import * as Chance from 'chance';
 
+import { AnalyticsService } from '../../../services/analytics.service';
 import { CompassCardComponent } from './compass-card.component';
 
 const chance = new Chance();
@@ -11,18 +11,17 @@ const chance = new Chance();
 describe('Compass Card Component', () => {
   let fixture: ComponentFixture<CompassCardComponent>;
   let componentInstance: CompassCardComponent;
-  let angulartics2Mock: any;
+  let analyticsServiceMock: any;
 
   beforeEach(() => {
-    angulartics2Mock = jasmine.createSpyObj('angulartics2', ['eventTrack']);
-    angulartics2Mock.eventTrack = jasmine.createSpyObj('angulartics2.eventTrack', ['next']);
+    analyticsServiceMock = jasmine.createSpyObj(['trackEvent']);
     TestBed.configureTestingModule({
       imports: [ MdCardModule ],
       declarations: [ CompassCardComponent ],
       providers: [
         {
-          provide: Angulartics2,
-          useValue: angulartics2Mock
+          provide: AnalyticsService,
+          useValue: analyticsServiceMock
         }
       ]
     });
@@ -79,13 +78,15 @@ describe('Compass Card Component', () => {
     it('should trigger analytics when analyticsProperties are provided as inputs', () => {
       componentInstance.analyticsProperties = {label: 'labelMock', category: 'categoryMock'};
       componentInstance.optionMainActionClicked();
-      expect(angulartics2Mock.eventTrack.next).toHaveBeenCalledWith(
-        {action: 'Link Click', properties: {label: 'labelMock', category: 'categoryMock'}}
+      expect(analyticsServiceMock.trackEvent).toHaveBeenCalledWith(
+        'categoryMock',
+        'Link Click',
+        'labelMock'
       );
     });
     it('should not trigger analytics when no analyticsProperties are provided as inputs', () => {
       componentInstance.optionMainActionClicked();
-      expect(angulartics2Mock.eventTrack.next).not.toHaveBeenCalled();
+      expect(analyticsServiceMock.trackEvent).not.toHaveBeenCalled();
     });
   });
 });

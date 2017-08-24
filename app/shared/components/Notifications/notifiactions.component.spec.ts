@@ -1,8 +1,8 @@
-import { Angulartics2 } from 'angulartics2';
 import { By } from '@angular/platform-browser';
 import { inject, TestBed, ComponentFixture } from '@angular/core/testing';
 import * as moment from 'moment';
 
+import { AnalyticsService } from '../../../services/analytics.service';
 import { FormatOpportunitiesTypePipe } from '../../../pipes/formatOpportunitiesType.pipe';
 import { TimeAgoPipe } from '../../../pipes/timeAgo.pipe';
 import { NotificationsComponent } from './notifications.component';
@@ -18,10 +18,10 @@ describe('NotificationsComponent', () => {
 
   let fixture: ComponentFixture<NotificationsComponent>;
   let componentInstance: NotificationsComponent;
+  let analyticsServiceMock: any;
 
   beforeEach(() => {
-    const mockAngulartics2 = jasmine.createSpyObj('angulartics2', ['eventTrack']);
-    mockAngulartics2.eventTrack = jasmine.createSpyObj('angulartics2', ['next']);
+    analyticsServiceMock = jasmine.createSpyObj(['trackEvent']);
 
     TestBed.configureTestingModule({
       declarations: [
@@ -32,8 +32,8 @@ describe('NotificationsComponent', () => {
       providers: [
         NotificationsComponent,
         {
-          provide: Angulartics2,
-          useValue: mockAngulartics2
+          provide: AnalyticsService,
+          useValue: analyticsServiceMock
         }
       ]
     });
@@ -127,6 +127,24 @@ describe('NotificationsComponent', () => {
 
       component.notifications = notificationsMock;
       component.clickOn(notificationsMock[0]);
+    }));
+
+    it('should send an analytics event on click',
+      inject([ NotificationsComponent ], (component: NotificationsComponent) => {
+
+      const notificationsMock = [
+        getOpportunityNotificationMock(),
+        getOpportunityNotificationMock()
+      ];
+
+      component.notifications = notificationsMock;
+      component.clickOn(notificationsMock[0]);
+
+      expect(analyticsServiceMock.trackEvent).toHaveBeenCalledWith(
+        'Notifications',
+        'Read Notification',
+        'Shared Opportunity'
+      );
     }));
 
   });

@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Output, Input } from '@angular/core';
-import { Angulartics2 } from 'angulartics2';
+import { AnalyticsService } from '../../../services/analytics.service';
 
 @Component({
   selector: 'compass-card',
@@ -17,14 +17,15 @@ export class CompassCardComponent {
   @Input() iconVisible: boolean;
 
   constructor(
-    private angulartics2: Angulartics2) { }
+    private analyticsService: AnalyticsService) { }
 
   public optionMainActionClicked(): void {
     if (this.analyticsProperties) {
-      this.angulartics2.eventTrack.next({
-        action: 'Link Click',
-        properties: this.analyticsProperties
-      });
+      this.analyticsService.trackEvent(
+        this.analyticsProperties.category,
+        'Link Click',
+        this.analyticsProperties.label
+      );
     }
     this.onMainActionClicked.emit();
   }
