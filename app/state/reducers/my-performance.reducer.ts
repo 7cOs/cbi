@@ -40,6 +40,7 @@ export function myPerformanceReducer(
     case PerformanceTotalActions.FETCH_PERFORMANCE_TOTAL_ACTION:
     case PerformanceTotalActions.FETCH_PERFORMANCE_TOTAL_SUCCESS_ACTION:
     case PerformanceTotalActions.FETCH_PERFORMANCE_TOTAL_FAILURE_ACTION:
+    case PerformanceTotalActions.SET_TABLE_ROW_PERFORMANCE_TOTAL:
       return {
         current: {
           performanceTotal: performanceTotalReducer(state.current.performanceTotal, action as PerformanceTotalActions.Action),

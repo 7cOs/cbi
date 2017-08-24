@@ -9,4 +9,5 @@ export interface PerformanceTotal {
   totalYearAgo: number;
   totalYearAgoPercent: number;
   contributionToVolume: number;
+  entityType?: string;
 }

@@ -21,6 +21,7 @@ import { ResponsibilitiesState } from '../../state/reducers/responsibilities.red
 import { MyPerformanceState, MyPerformanceData } from '../../state/reducers/my-performance.reducer';
 import { RowType } from '../../enums/row-type.enum';
 import { SetLeftMyPerformanceTableViewType, SetRightMyPerformanceTableViewType } from '../../state/actions/view-types.action';
+import { SetTableRowPerformanceTotal } from '../../state/actions/performance-total.action';
 import { SortingCriteria } from '../../models/sorting-criteria.model';
 import { ViewType } from '../../enums/view-type.enum';
 import * as MyPerformanceFilterActions from '../../state/actions/my-performance-filter.action';
@@ -84,6 +85,7 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
     this.myPerformanceCurrentSubscription = this.store
       .select(state => state.myPerformance.current)
       .subscribe((current: MyPerformanceData) => {
+        console.log('current.performanceTotal', current.performanceTotal);
         this.currentState = current;
 
         this.leftTableViewType = current.viewType.leftTableViewType;
@@ -142,6 +144,7 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
           if (this.leftTableViewType === ViewType.roleGroups) {
             this.store.dispatch(new SetLeftMyPerformanceTableViewType(ViewType.people));
             this.store.dispatch(new GetPeopleByRoleGroupAction(EntityPeopleType[parameters.row.descriptionRow0.slice(0, -1)]));
+            this.store.dispatch(new SetTableRowPerformanceTotal(parameters.row));
           }
         } else {
           console.log('clicked on right row:', parameters.row);

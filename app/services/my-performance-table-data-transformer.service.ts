@@ -76,12 +76,16 @@ export class MyPerformanceTableDataTransformerService {
   }
 
   public getTotalRowDisplayData(performanceTotal: PerformanceTotal): MyPerformanceTableRow {
-    return {
+    const totalRow = {
       descriptionRow0: 'Total',
       metricColumn0: performanceTotal.total,
       metricColumn1: performanceTotal.totalYearAgo,
       metricColumn2: performanceTotal.totalYearAgoPercent,
       ctv: performanceTotal.contributionToVolume
     };
+
+    if (performanceTotal.entityType) totalRow['descriptionRow1'] = performanceTotal.entityType;
+
+    return totalRow;
   }
 }

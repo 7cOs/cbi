@@ -39,6 +39,18 @@ export function performanceTotalReducer(
         status: ActionStatus.Error
       });
 
+    case PerformanceTotalActions.SET_TABLE_ROW_PERFORMANCE_TOTAL:
+      console.log('SET TABLE ROW REDUCER', action.payload);
+      return Object.assign({}, state, {
+        performanceTotal: {
+          total: action.payload.metricColumn0,
+          totalYearAgo: action.payload.metricColumn1,
+          totalYearAgoPercent: action.payload.metricColumn2,
+          contributionToVolume: action.payload.ctv,
+          entityType: action.payload.descriptionRow0
+        }
+      });
+
     default:
       return state;
   }
