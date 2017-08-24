@@ -1,10 +1,17 @@
 'use strict';
 
 module.exports = /*  @ngInject */
-  function analyticsEventOn(analyticsService) {
+  function analyticsEventOn($injector, $timeout) {
     return {
       restrict: 'A',
       link: function ($scope, $element, $attrs) {
+        // workaround for circular injection dependencies when
+        // this directive is used inside an upgraded component
+        let analyticsService;
+        $timeout(function() {
+          analyticsService = $injector.get('analyticsService');
+        }, 0);
+
         const eventType = $attrs.analyticsEvent || 'click';
 
         angular.element($element[0]).bind(eventType, () => {

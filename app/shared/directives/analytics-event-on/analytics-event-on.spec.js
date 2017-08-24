@@ -3,6 +3,7 @@ describe('analytics-event-on directive', () => {
   let mockAnalyticsService;
   let element;
   let compiledElement;
+  let timeout;
 
   beforeEach(() => {
     angular.mock.module('cf.common.directives');
@@ -14,6 +15,10 @@ describe('analytics-event-on directive', () => {
 
       $provide.value('analyticsService', mockAnalyticsService);
     });
+
+    inject(function(_$timeout_) {
+      timeout = _$timeout_;
+    });
   });
 
   describe('when no analytics-if condition is specified', () => {
@@ -22,6 +27,7 @@ describe('analytics-event-on directive', () => {
         const scope = $rootScope.$new();
         element = angular.element('<div analytics-event-on="click" category="myCat" action="myAction" label="myLabel"></div>');
         compiledElement = $compile(element)(scope);
+        timeout.flush();
       });
     });
 
@@ -37,6 +43,7 @@ describe('analytics-event-on directive', () => {
         const scope = $rootScope.$new();
         element = angular.element('<div analytics-event-on="click" analytics-if="{{ (1===1) }}" category="myCat" action="myAction" label="myLabel"></div>');
         compiledElement = $compile(element)(scope);
+        timeout.flush();
       });
     });
 
@@ -53,6 +60,7 @@ describe('analytics-event-on directive', () => {
         scope.sendEvent = true;
         element = angular.element('<div analytics-event-on="click" analytics-if="{{sendEvent}}" category="myCat" action="myAction" label="myLabel"></div>');
         compiledElement = $compile(element)(scope);
+        timeout.flush();
       });
     });
 
@@ -68,6 +76,7 @@ describe('analytics-event-on directive', () => {
         const scope = $rootScope.$new();
         element = angular.element('<div analytics-event-on="click" analytics-if="true" category="myCat" action="myAction" label="myLabel"></div>');
         compiledElement = $compile(element)(scope);
+        timeout.flush();
       });
     });
 
@@ -83,6 +92,7 @@ describe('analytics-event-on directive', () => {
         const scope = $rootScope.$new();
         element = angular.element('<div analytics-event-on="click" analytics-if="{{ (1===2) }}" category="myCat" action="myAction" label="myLabel"></div>');
         compiledElement = $compile(element)(scope);
+        timeout.flush();
       });
     });
 
@@ -99,6 +109,7 @@ describe('analytics-event-on directive', () => {
         scope.sendEvent = false;
         element = angular.element('<div analytics-event-on="click" analytics-if="{{sendEvent}}" category="myCat" action="myAction" label="myLabel"></div>');
         compiledElement = $compile(element)(scope);
+        timeout.flush();
       });
     });
 
@@ -115,6 +126,7 @@ describe('analytics-event-on directive', () => {
         scope.sendEvent = false;
         element = angular.element('<div analytics-event-on="click" analytics-if="false" category="myCat" action="myAction" label="myLabel"></div>');
         compiledElement = $compile(element)(scope);
+        timeout.flush();
       });
     });
 
