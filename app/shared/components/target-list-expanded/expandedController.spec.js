@@ -6,7 +6,6 @@ describe('Unit: expanded target list controller', function() {
   }));
 
   beforeEach(function() {
-    angular.mock.module('angulartics');
     angular.mock.module('ui.router');
     angular.mock.module('ngMaterial');
     angular.mock.module('cf.common.services');

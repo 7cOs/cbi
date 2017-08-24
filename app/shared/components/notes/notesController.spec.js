@@ -5,7 +5,6 @@ describe('Unit: notes controller', function() {
     angular.mock.module('ui.router');
     angular.mock.module('ngMaterial');
     angular.mock.module('ngFileUpload');
-    angular.mock.module('angulartics');
     angular.mock.module('cf.common.services');
     angular.mock.module('cf.common.components.notes');
     angular.mock.module('angularMoment');

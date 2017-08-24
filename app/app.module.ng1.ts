@@ -28,8 +28,6 @@ export default angular.module('cf', [
   require('textangular'),
   require('ng-csv'),
   require('angular-moment'),
-  require('angulartics'),
-  require('angulartics-google-analytics'),
   require('./shared').name,
   require('./modules').name
 ])

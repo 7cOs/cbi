@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports = /*  @ngInject */
-  function($rootScope, $cookies, $analytics, userService, encodingService) {
+  function($rootScope, $cookies, userService, encodingService) {
     const userEncoded = $cookies.get('user');
 
     userService.model.currentUser = userEncoded

@@ -5,7 +5,6 @@ describe('Unit: list controller', function() {
   beforeEach(function() {
     angular.mock.module('ui.router');
     angular.mock.module('ngMaterial');
-    angular.mock.module('angulartics');
     angular.mock.module('cf.common.filters');
     angular.mock.module('cf.common.services');
     angular.mock.module('cf.common.components.list');
