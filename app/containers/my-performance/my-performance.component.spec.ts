@@ -70,8 +70,6 @@ describe('MyPerformanceComponent', () => {
       myPerformance: initialState
   };
 
-  console.warn(stateMock);
-
   const storeMock = {
     select: jasmine.createSpy('select.myPerformance').and.callFake((selectFunction: (state: any) => any) => {
       return Observable.of(selectFunction(stateMock));
@@ -100,6 +98,7 @@ describe('MyPerformanceComponent', () => {
 
     fixture = TestBed.createComponent(MyPerformanceComponent);
     componentInstance = fixture.componentInstance;
+    fixture.detectChanges();
   });
 
   it('should dispatch actions on init', () => {
