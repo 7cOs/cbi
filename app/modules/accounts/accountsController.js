@@ -257,8 +257,7 @@ module.exports = /*  @ngInject */
       if (brandMeasures) {
         const matchedMeasure = getMatchedMeasure(brandMeasures, 'distributionTimePeriod');
         if (matchedMeasure && firstDepletion) {
-          const isNonApplicable = isNonApplicableMeasure(firstDepletion);
-          return isNonApplicable
+          return isNonApplicableMeasure(firstDepletion)
             ? 'N/A'
             : $filter('number')(matchedMeasure['velocity'], 0);
         }
