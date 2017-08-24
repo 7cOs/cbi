@@ -86,7 +86,7 @@ div.my-scorecards
             td.column-total 100%
             td.column-total 100%
           tr(ng-repeat="depletion in s.userService.model.depletion | filter:s.scorecardsFilter('depletion') | orderBy:s.sortBy('depletionSort'):s.depletionSort.sortDescending" class="disable-ng-animate" ng-click="s.toggleSelected($index, 'depletions')" ng-class="{'selected': s.selectedList === 'depletions' && $index === s.selectedIndex}")
-            td.left.data-brand(ng-click='s.goToAccountDashboard(depletion)' analytics-on="click" analytics-event="Brand Performance Selected" analytics-category="Scorecards" analytics-label="My Depletions Scorecard") {{depletion.name}}
+            td.left.data-brand(ng-click='s.goToAccountDashboard(depletion)' analytics-event-on="click" category="Scorecards" action="Brand Performance Selected" label="My Depletions Scorecard") {{depletion.name}}
             td.dark {{s.getFilteredValue('timeFrameTotal', depletion, 'depletion')}}
             td.medium-dark(ng-class="{'negative': !s.isPositive(s.getFilteredValue('vsYa', depletion, 'depletion'))}") {{s.getFilteredValue('vsYa', depletion, 'depletion')}}
             td.medium-dark.no-border(ng-class="{'negative': s.getFilteredValue('vsYaPercent', depletion, 'depletion') < 0}") {{s.getFilteredValue('vsYaPercent', depletion, 'depletion')}}%
@@ -183,7 +183,7 @@ div.my-scorecards
             td.column-total.no-border 100%
 
           tr(ng-repeat="distribution in s.userService.model.distribution | filter:s.scorecardsFilter('distribution') | orderBy:s.sortBy('distributionSort'):s.distributionSort.sortDescending" class="disable-ng-animate" ng-click="s.toggleSelected($index, 'distributions')" ng-class="{'selected': s.selectedList === 'distributions' && $index === s.selectedIndex}")
-            td.left.data-brand(ng-click='s.goToAccountDashboard(distribution, s.distributionRadioOptions.selected.placementType === "simple")' ng-disabled="s.distributionRadioOptions.selected.placementType === 'simple'" analytics-on="click" analytics-event="Brand Performance Selected" analytics-category="Scorecards" analytics-label="My Distribution Scorecard") {{distribution.name}}
+            td.left.data-brand(ng-click='s.goToAccountDashboard(distribution, s.distributionRadioOptions.selected.placementType === "simple")' ng-disabled="s.distributionRadioOptions.selected.placementType === 'simple'" analytics-event-on="click" category="Scorecards" action="Brand Performance Selected" label="My Distribution Scorecard") {{distribution.name}}
             td.dark
               span(ng-class="{'negative': s.getFilteredValue('timeFrameTotal', distribution, 'distribution') < 0}") {{s.getFilteredValue('timeFrameTotal', distribution, 'distribution')}}
             td.medium-dark

@@ -9,8 +9,8 @@ div.modal.share-opportunity
     div.collaborator-list
       .collaborator(ng-repeat="collaborator in list.sharedCollaborators track by $index") {{collaborator.firstName | titlecase}} {{collaborator.lastName | titlecase}}<span class="accent" ng-click="list.removeSharedCollaborator(collaborator)">X</span><span class="break">&nbsp;</span>
     button.btn-action(ng-click="list.shareOpportunity()"
-                      analytics-on="click"
-                      analytics-category="Opportunities"
-                      analytics-event="Send To"
-                      analytics-label="{{list.currentOpportunityId}}") Send
+                      analytics-event-on="click"
+                      category="Opportunities"
+                      action="Send To"
+                      label="{{list.currentOpportunityId}}") Send
     p.cancel.accent(ng-click="list.closeModal()") X Cancel

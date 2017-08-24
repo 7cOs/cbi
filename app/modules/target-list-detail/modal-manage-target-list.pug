@@ -49,10 +49,10 @@ div.modal.target-list-modal
     div(ng-if="tld.saveButton")
       button.btn-action(ng-disabled="!tld.changed"
                         ng-click="tld.updateList()"
-                        analytics-on="click"
-                        analytics-category="{{tld.analyticsCategory}}"
-                        analytics-event="Manage Target List"
-                        analytics-label="{{tld.listID}}") Save
+                        analytics-event-on="click"
+                        category="{{tld.analyticsCategory}}"
+                        action="Manage Target List"
+                        label="{{tld.listID}}") Save
       p.cancel.accent(ng-click="tld.closeModal(true)") X Cancel
     button(ng-if="tld.closeButton" ng-click="tld.changed ? tld.navigateToTL() : tld.closeModal(true)").btn-action Close
   div.modal-footer.clearfix(ng-if="tld.targetListService.model.currentList.permissionLevel !== 'author'" ng-class="{'toasted': tld.showToast}")
@@ -61,10 +61,10 @@ div.modal.target-list-modal
       p Are you sure you want to leave this target list?
       p.bold.link(ng-if="!tld.confirmToast")
         a(ng-click="tld.removeCollaborator([tld.userService.model.currentUser.employeeID]); tld.removeFooterToast()"
-          analytics-on="click"
-          analytics-event="Leave Target List"
-          analytics-category="{{tld.analyticsCategory}}"
-          analytics-label="{{tld.listID}}") Yes, Leave
+          analytics-event-on="click"
+          category="{{tld.analyticsCategory}}"
+          action="Leave Target List"
+          label="{{tld.listID}}") Yes, Leave
       a.hide-row(ng-click="tld.removeFooterToast(); tld.leave = false")
   div.modal-footer.clearfix(ng-if="tld.editable" ng-class="{'toasted': tld.showToast}")
     button.link.align-left(ng-click="tld.footerToast('archive')") Archive List
