@@ -725,8 +725,8 @@ describe('Unit: accountsController', function() {
 
       ctrl.goToOpportunities(e);
 
-      expect($analytics.eventTrack).toHaveBeenCalledWith('Accounts', {
-        action: 'Top Opportunities',
+      expect($analytics.eventTrack).toHaveBeenCalledWith('Top Opportunities', {
+        category: 'Accounts',
         label: 'All Opportunities'
       });
     });
@@ -770,8 +770,8 @@ describe('Unit: accountsController', function() {
     it('Check if Snapshot GA is recorded', function() {
       ctrl.updateBrandSnapshot();
 
-      expect($analytics.eventTrack).toHaveBeenCalledWith('Snapshot', {
-        action: 'All Brands',
+      expect($analytics.eventTrack).toHaveBeenCalledWith('All Brands', {
+        category: 'Snapshot',
         label: 'Distribution (simple)'
       });
     });

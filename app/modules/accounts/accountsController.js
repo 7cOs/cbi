@@ -1725,24 +1725,15 @@ module.exports = /*  @ngInject */
      }
 
     function sendAllOpportunityAnalyticsEvent() {
-      $analytics.eventTrack('Accounts', {
-        action: 'Top Opportunities',
+      $analytics.eventTrack('Top Opportunities', {
+        category: 'Accounts',
         label: 'All Opportunities'
       });
     }
 
-    /**************************************
-     * GA update to record snapshot events.
-     * records:
-     *        Category:       Snapshot
-     *        Action:         All Brands  [OR]  <Brand ID>  [OR]  <SKU.Package ID>
-     *                        (depends on selected state of the brand snapshot table)
-     *        Label:          Distribution (simple) [OR]  Distribution (effective)  [OR]  Velocity
-     *                        (corresponds to value of selected metric in dropdown)
-     *************************************/
     function sendBrandSnapshotAnalyticsEvent() {
-        $analytics.eventTrack('Snapshot', {
-            action: getSnapshotAction(),
+        $analytics.eventTrack(getSnapshotAction(), {
+            category: 'Snapshot',
             label: vm.filtersService.model.accountSelected.accountBrands.name
         });
     }
