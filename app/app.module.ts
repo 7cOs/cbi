@@ -1,7 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { HttpModule } from '@angular/http';
 import { NgModule, forwardRef } from '@angular/core';
-import { RouterModule } from '@angular/router';
 import { StoreModule } from '@ngrx/store';
 import { UpgradeAdapter } from '@angular/upgrade';
 
@@ -43,7 +42,6 @@ AppUpgradeAdapter.upgradeNg1Provider('versionService');
     EffectsModule,
     HttpModule,
     MyPerformanceModule,
-    RouterModule.forRoot([ {path: 'placeholder', redirectTo: '/'} ]), // need ng2 router for angulartics2 to work
     StoreModule.provideStore(rootReducer)
   ],
   declarations: [
