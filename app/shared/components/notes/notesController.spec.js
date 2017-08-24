@@ -451,12 +451,23 @@ describe('Unit: notes controller', function() {
   describe('Edit Note GA', () => {
 
     it('should log a GA event based on the passed in note data and current notesService.model.currentStoreProperty', () => {
-      spyOn($analytics, 'eventTrack');
+      const noteMock = { id: '123-456-789', title: 'Note Title' };
 
-      const noteMock = { id: '123-456-789' };
+      spyOn($analytics, 'eventTrack');
+      spyOn(notesService, 'updateNote').and.callFake(() => {
+        const defer = $q.defer();
+        defer.resolve(noteMock);
+        return defer.promise;
+      });
+      spyOn(notesService, 'accountNotes').and.callFake(() => {
+        const defer = $q.defer();
+        defer.resolve([noteMock]);
+        return defer.promise;
+      });
 
       notesService.model.currentStoreProperty = 'distributor';
-      ctrl.isEditing(noteMock);
+      ctrl.saveEditedNote(noteMock);
+      scope.$apply();
 
       expect($analytics.eventTrack).toHaveBeenCalledWith('Edit Note', {
         category: 'Distributor Notes',
@@ -464,7 +475,8 @@ describe('Unit: notes controller', function() {
       });
 
       notesService.model.currentStoreProperty = 'store';
-      ctrl.isEditing(noteMock);
+      ctrl.saveEditedNote(noteMock);
+      scope.$apply();
 
       expect($analytics.eventTrack).toHaveBeenCalledWith('Edit Note', {
         category: 'Retailer Notes',
