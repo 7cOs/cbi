@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports = /*  @ngInject */
-  function expandedController($analytics, $state, $scope, $filter, $mdDialog, $q, $timeout, userService, targetListService, loaderService, toastService) {
+  function expandedController(analyticsService, $state, $scope, $filter, $mdDialog, $q, $timeout, userService, targetListService, loaderService, toastService) {
 
     // ****************
     // CONTROLLER SETUP
@@ -81,10 +81,11 @@ module.exports = /*  @ngInject */
 
       // get selected target list ids and their promises
       archiveTargetListPromises = selectedTargetLists.map(function(targetList) {
-        $analytics.eventTrack('Archive Target List', {
-          label: targetList.id,
-          category: targetListService.getAnalyticsCategory(targetList.permissionLevel, targetList.archived)
-        });
+        analyticsService.trackEvent(
+          targetListService.getAnalyticsCategory(targetList.permissionLevel, targetList.archived),
+          'Archive Target List',
+          targetList.id
+        );
         return targetListService.updateTargetList(targetList.id, {archived: true});
       });
 
@@ -156,10 +157,11 @@ module.exports = /*  @ngInject */
       if (vm.allowDelete) {
         // get selected target list ids and their promises
         deleteTargetListPromises = selectedItems.map(function(targetList) {
-         $analytics.eventTrack('Delete Target List', {
-           label: targetList.id,
-           category: targetListService.getAnalyticsCategory(targetList.permissionLevel, targetList.archived)
-          });
+          analyticsService.trackEvent(
+            targetListService.getAnalyticsCategory(targetList.permissionLevel, targetList.archived),
+            'Delete Target List',
+            targetList.id
+          );
 
           return targetListService.deleteTargetList(targetList.id);
         });

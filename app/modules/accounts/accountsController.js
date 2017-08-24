@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports = /*  @ngInject */
-  function accountsController($rootScope, $scope, $state, $log, $q, $window, $filter, $timeout, $analytics, myperformanceService, chipsService, filtersService, notesService, userService, storesService, dateRangeService, moment) {
+  function accountsController($rootScope, $scope, $state, $log, $q, $window, $filter, $timeout, analyticsService, myperformanceService, chipsService, filtersService, notesService, userService, storesService, dateRangeService, moment) {
 
     // ****************
     // CONTROLLER SETUP
@@ -1721,24 +1721,27 @@ module.exports = /*  @ngInject */
     }
 
      function sendTopBottomAnalyticsEvent() {
-       $analytics.eventTrack(vm.currentTopBottomAcctType.name, {
-         category: vm.filtersService.model.valuesVsTrend.name,
-         label: vm.filtersService.model.accountSelected.accountMarkets.name
-       });
+       analyticsService.trackEvent(
+         vm.filtersService.model.valuesVsTrend.name,
+         vm.currentTopBottomAcctType.name,
+         vm.filtersService.model.accountSelected.accountMarkets.name
+       );
      }
 
     function sendAllOpportunityAnalyticsEvent() {
-      $analytics.eventTrack('Top Opportunities', {
-        category: 'Accounts',
-        label: 'All Opportunities'
-      });
+      analyticsService.trackEvent(
+        'Accounts',
+        'Top Opportunities',
+        'All Opportunities'
+      );
     }
 
     function sendBrandSnapshotAnalyticsEvent() {
-        $analytics.eventTrack(getSnapshotAction(), {
-            category: 'Snapshot',
-            label: vm.filtersService.model.accountSelected.accountBrands.name
-        });
+      analyticsService.trackEvent(
+        'Snapshot',
+        getSnapshotAction(),
+        vm.filtersService.model.accountSelected.accountBrands.name
+      );
     }
 
     function getSnapshotAction() {

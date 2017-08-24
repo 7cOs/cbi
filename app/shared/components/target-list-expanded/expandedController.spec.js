@@ -1,18 +1,24 @@
 describe('Unit: expanded target list controller', function() {
-  let ctrl, state, scope, mdDialog, httpBackend, provide, userService, q, targetListService, toastService, $analytics;
+  let ctrl, state, scope, mdDialog, httpBackend, provide, userService, q, targetListService, toastService, analyticsService;
 
   beforeEach(angular.mock.module(function(_$provide_) {
     provide = _$provide_;
   }));
 
   beforeEach(function() {
-    angular.mock.module('angulartics');
     angular.mock.module('ui.router');
     angular.mock.module('ngMaterial');
     angular.mock.module('cf.common.services');
     angular.mock.module('cf.common.components.expanded');
 
-    inject(function($controller, $rootScope, _$mdDialog_, _$q_, _$http_, _$httpBackend_, _$timeout_, _userService_, _targetListService_, _loaderService_, _toastService_, _$analytics_) {
+    angular.mock.module(($provide) => {
+      analyticsService = {
+        trackEvent: () => {}
+      };
+      $provide.value('analyticsService', analyticsService);
+    });
+
+    inject(function($controller, $rootScope, _$mdDialog_, _$q_, _$http_, _$httpBackend_, _$timeout_, _userService_, _targetListService_, _loaderService_, _toastService_) {
       state = {
         current: {
           name: 'opportunities'
@@ -24,7 +30,6 @@ describe('Unit: expanded target list controller', function() {
         }
       };
       scope = $rootScope.$new();
-      $analytics = _$analytics_;
       mdDialog = _$mdDialog_;
       httpBackend = _$httpBackend_;
       userService = _userService_;
@@ -524,7 +529,7 @@ describe('Unit: expanded target list controller', function() {
 
         httpBackend.expectGET('/v2/targetLists').respond(200);
 
-        spyOn($analytics, 'eventTrack').and.callFake(() => {});
+        spyOn(analyticsService, 'trackEvent').and.callFake(() => {});
       });
 
       afterEach(function() {
@@ -570,17 +575,17 @@ describe('Unit: expanded target list controller', function() {
         expect(ctrl.allowDelete).toBe(true);
       });
 
-      it('calls $analytics.eventTrack when delete is allowed', function() {
+      it('calls analyticsService.trackEvent when delete is allowed', function() {
         ctrl.selected = singleCollaborator;
         ctrl.allowDelete = true;
         ctrl.deleteTargetList();
-        expect($analytics.eventTrack).toHaveBeenCalled();
+        expect(analyticsService.trackEvent).toHaveBeenCalled();
       });
 
-      it('does not call $analytics.eventTrack when delete is not allowed', function() {
+      it('does not call analyticsService.trackEvent when delete is not allowed', function() {
         ctrl.allowDelete = false;
         ctrl.deleteTargetList();
-        expect($analytics.eventTrack).not.toHaveBeenCalled();
+        expect(analyticsService.trackEvent).not.toHaveBeenCalled();
       });
 
       it('should return proper authors for each target list', function() {
@@ -664,7 +669,7 @@ describe('Unit: expanded target list controller', function() {
 
       spyOn(toastService, 'showToast').and.callThrough();
 
-      spyOn($analytics, 'eventTrack').and.callFake(() => {});
+      spyOn(analyticsService, 'trackEvent').and.callFake(() => {});
 
        ctrl.selected = [{
          archived: false,
@@ -690,7 +695,7 @@ describe('Unit: expanded target list controller', function() {
        expect(userService.model.targetLists.ownedNotArchivedTargetLists).toEqual([]);
        expect(ctrl.selected).toEqual([]);
        expect(toastService.showToast).toHaveBeenCalled();
-       expect($analytics.eventTrack).toHaveBeenCalled();
+       expect(analyticsService.trackEvent).toHaveBeenCalled();
      });
    });
 });

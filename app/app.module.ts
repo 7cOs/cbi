@@ -1,8 +1,6 @@
-import { Angulartics2, Angulartics2Module, Angulartics2GoogleAnalytics } from 'angulartics2';
 import { BrowserModule } from '@angular/platform-browser';
 import { HttpModule } from '@angular/http';
 import { NgModule, forwardRef } from '@angular/core';
-import { RouterModule } from '@angular/router';
 import { StoreModule } from '@ngrx/store';
 import { UpgradeAdapter } from '@angular/upgrade';
 
@@ -40,12 +38,10 @@ AppUpgradeAdapter.upgradeNg1Provider('versionService');
 
 @NgModule({
   imports: [
-    Angulartics2Module.forRoot([ Angulartics2GoogleAnalytics ]),
     BrowserModule,
     EffectsModule,
     HttpModule,
     MyPerformanceModule,
-    RouterModule.forRoot([ {path: 'placeholder', redirectTo: '/'} ]), // need ng2 router for angulartics2 to work
     StoreModule.provideStore(rootReducer)
   ],
   declarations: [
@@ -69,13 +65,7 @@ AppUpgradeAdapter.upgradeNg1Provider('versionService');
   ]
 })
 export class AppModule {
-  constructor(analytics: AnalyticsService, angulartics2: Angulartics2, angulartics2GoogleAnalytics: Angulartics2GoogleAnalytics) {
-    // Note: must keep angulartics2GoogleAnalytics constructor param so that it gets instantiated
-
+  constructor(analytics: AnalyticsService) {
     analytics.initializeAnalytics();
-
-    // disable automatic page view tracking
-    angulartics2.virtualPageviews(false);
-    angulartics2.firstPageview(false);
   }
 }
