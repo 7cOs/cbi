@@ -586,4 +586,20 @@ describe('[Services.targetListService]', function() {
     });
   });
 
+  describe('getAnalyticsCategory', () => {
+    it('returns proper string when archived', () => {
+      const result = targetListService.getAnalyticsCategory('permissionLevelMock', true);
+      expect(result).toBe('Target Lists - Archived');
+    });
+
+    it('returns proper string when not archived and permission level is author', () => {
+      const result = targetListService.getAnalyticsCategory('author');
+      expect(result).toBe('Target Lists - My Target Lists');
+    });
+
+    it('returns proper string when not archived and permission level is not author', () => {
+      const result = targetListService.getAnalyticsCategory('permissionLevelMock');
+      expect(result).toBe('Target Lists - Shared With Me');
+    });
+  });
 });
