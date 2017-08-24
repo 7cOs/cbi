@@ -1,5 +1,5 @@
 import * as Chance from 'chance';
-import { fn as momentPrototype } from 'moment'; // http://dancork.co.uk/2015/12/07/stubbing-moment/
+import { fn as momentPrototype } from 'moment';
 import { inject, TestBed } from '@angular/core/testing';
 
 import { AnalyticsService } from './analytics.service';
@@ -8,36 +8,36 @@ import { GoogleAnalyticsTrackerService } from './google-analytics-tracker.servic
 const chance = new Chance();
 
 describe('Service: AnalyticsService', () => {
-  let mockTracker: any;
-  let mockGoogleAnalyticsTrackerService: GoogleAnalyticsTrackerService;
-  let mockStateService: any;
-  let mockTransitionsService: any;
-  let mockUserService: any;
-  let mockFormattedMoment: string;
+  let trackerMock: any;
+  let googleAnalyticsTrackerServiceMock: GoogleAnalyticsTrackerService;
+  let stateServiceMock: any;
+  let transitionsServiceMock: any;
+  let userServiceMock: any;
+  let formattedMomentMock: string;
 
   let analyticsService: AnalyticsService;
 
   beforeEach(() => {
-    mockFormattedMoment = chance.string();
+    formattedMomentMock = chance.string();
     spyOn(momentPrototype, 'format').and.callFake((format: string) => {
-      return format === 'YYYY-MM-DDTHH:mm:ss.SSSZ' ? mockFormattedMoment : '';
+      return format === 'YYYY-MM-DDTHH:mm:ss.SSSZ' ? formattedMomentMock : '';
     });
 
-    mockTracker = jasmine.createSpy('ga');
-    mockGoogleAnalyticsTrackerService = {
-      getTrackerInterface: jasmine.createSpy('getTrackerInterface').and.returnValue(mockTracker)
+    trackerMock = jasmine.createSpy('ga');
+    googleAnalyticsTrackerServiceMock = {
+      getTrackerInterface: jasmine.createSpy('getTrackerInterface').and.returnValue(trackerMock)
     };
-    mockStateService = {
+    stateServiceMock = {
       current: {
         name: chance.string()
       },
       params: chance.string(),
       href: jasmine.createSpy('href')
     };
-    mockTransitionsService = {
+    transitionsServiceMock = {
       onSuccess: jasmine.createSpy('onSuccess')
     };
-    mockUserService = {
+    userServiceMock = {
       model: {
         currentUser: {
           employeeID: chance.string(),
@@ -60,10 +60,10 @@ describe('Service: AnalyticsService', () => {
   beforeEach(() => TestBed.configureTestingModule({
     providers: [
       AnalyticsService,
-      { provide: GoogleAnalyticsTrackerService, useValue: mockGoogleAnalyticsTrackerService },
-      { provide: '$state', useValue: mockStateService },
-      { provide: '$transitions', useValue: mockTransitionsService },
-      { provide: 'userService', useValue: mockUserService }
+      { provide: GoogleAnalyticsTrackerService, useValue: googleAnalyticsTrackerServiceMock },
+      { provide: '$state', useValue: stateServiceMock },
+      { provide: '$transitions', useValue: transitionsServiceMock },
+      { provide: 'userService', useValue: userServiceMock }
     ]
   }));
 
@@ -73,7 +73,7 @@ describe('Service: AnalyticsService', () => {
 
   describe('constructor', () => {
     it('should get tracker interface', () => {
-      expect(mockGoogleAnalyticsTrackerService.getTrackerInterface).toHaveBeenCalled();
+      expect(googleAnalyticsTrackerServiceMock.getTrackerInterface).toHaveBeenCalled();
     });
   });
 
@@ -83,45 +83,45 @@ describe('Service: AnalyticsService', () => {
     });
 
     it('should execute 2 tracker commands', () => {
-      expect(mockTracker.calls.count()).toBe(2);
+      expect(trackerMock.calls.count()).toBe(2);
     });
 
     it('should create tracker with the correct ID values', () => {
-      expect(mockTracker.calls.argsFor(0)).toEqual([
+      expect(trackerMock.calls.argsFor(0)).toEqual([
         'create',
-        mockUserService.model.currentUser.analytics.trackerId,
+        userServiceMock.model.currentUser.analytics.trackerId,
         'auto',
-        { userId: mockUserService.model.currentUser.employeeID }
+        { userId: userServiceMock.model.currentUser.employeeID }
       ]);
     });
 
     it('should set session-level custom dimensions', () => {
-      expect(mockTracker.calls.argsFor(1)).toEqual([
+      expect(trackerMock.calls.argsFor(1)).toEqual([
         'set',
         {
           dimension1: 'Constellation Brands',
-          dimension2: mockUserService.model.currentUser.sfdcUserInfo.CompanyName,
-          dimension3: mockUserService.model.currentUser.sfdcUserInfo.Division,
-          dimension4: mockUserService.model.currentUser.sfdcUserInfo.Role__c,
-          dimension5: mockUserService.model.currentUser.sfdcUserInfo.Supervisory__c,
-          dimension6: mockUserService.model.currentUser.sfdcUserInfo.CBI_Department__c,
-          dimension7: mockUserService.model.currentUser.employeeID,
-          dimension9: mockUserService.model.currentUser.analytics.sessionId
+          dimension2: userServiceMock.model.currentUser.sfdcUserInfo.CompanyName,
+          dimension3: userServiceMock.model.currentUser.sfdcUserInfo.Division,
+          dimension4: userServiceMock.model.currentUser.sfdcUserInfo.Role__c,
+          dimension5: userServiceMock.model.currentUser.sfdcUserInfo.Supervisory__c,
+          dimension6: userServiceMock.model.currentUser.sfdcUserInfo.CBI_Department__c,
+          dimension7: userServiceMock.model.currentUser.employeeID,
+          dimension9: userServiceMock.model.currentUser.analytics.sessionId
         }
       ]);
     });
   });
 
   describe('trackStateTransitions', () => {
-    let mockUrl: string;
-    let mockLocation: string;
+    let urlMock: string;
+    let locationMock: string;
 
     beforeEach(() => {
-      mockUrl = chance.string();
-      mockLocation = chance.string();
-      mockStateService.href.and.callFake((name: string, params: string, props: any) => {
-        if (name === mockStateService.current.name && params === mockStateService.params) {
-          return props && props.absolute === true ? mockLocation : mockUrl;
+      urlMock = chance.string();
+      locationMock = chance.string();
+      stateServiceMock.href.and.callFake((name: string, params: string, props: any) => {
+        if (name === stateServiceMock.current.name && params === stateServiceMock.params) {
+          return props && props.absolute === true ? locationMock : urlMock;
         }
       });
 
@@ -129,40 +129,40 @@ describe('Service: AnalyticsService', () => {
     });
 
     it('should register onSuccess  handler for all transitions ({}) in initializeAnalytics', () => {
-      expect(mockTransitionsService.onSuccess.calls.count()).toBe(1);
-      expect(mockTransitionsService.onSuccess.calls.first().args[0]).toEqual({});
+      expect(transitionsServiceMock.onSuccess.calls.count()).toBe(1);
+      expect(transitionsServiceMock.onSuccess.calls.first().args[0]).toEqual({});
     });
 
     describe('state transition with no overrides', () => {
       let transitonHandler: any;
-      let mockState: any;
-      let mockTransition: any;
+      let stateMock: any;
+      let transitionMock: any;
 
       beforeEach(() => {
         spyOn(analyticsService, 'trackPageView');
-        mockState = {
+        stateMock = {
           title: chance.string()
         };
-        mockTransition = {
-          to: () => mockState
+        transitionMock = {
+          to: () => stateMock
         };
 
-        transitonHandler = mockTransitionsService.onSuccess.calls.first().args[1];
-        transitonHandler(mockTransition);
+        transitonHandler = transitionsServiceMock.onSuccess.calls.first().args[1];
+        transitonHandler(transitionMock);
       });
 
       it('should track page view with url, title, and location for current state', () => {
-        expect(analyticsService.trackPageView).toHaveBeenCalledWith(mockUrl, mockState.title, mockLocation);
+        expect(analyticsService.trackPageView).toHaveBeenCalledWith(urlMock, stateMock.title, locationMock);
       });
 
       it('should set tracker properties so page variables are included in future events', () => {
-        expect(mockTracker.calls.count()).toBe(3);
-        expect(mockTracker.calls.argsFor(2)).toEqual([
+        expect(trackerMock.calls.count()).toBe(3);
+        expect(trackerMock.calls.argsFor(2)).toEqual([
           'set',
           {
-            location: mockLocation,
-            page: mockUrl,
-            title: mockState.title
+            location: locationMock,
+            page: urlMock,
+            title: stateMock.title
           }
         ]);
       });
@@ -170,41 +170,41 @@ describe('Service: AnalyticsService', () => {
 
     describe('state transition with analyticsData overrides', () => {
       let transitonHandler: any;
-      let mockState: any;
-      let mockTransition: any;
+      let stateMock: any;
+      let transitionMock: any;
 
       beforeEach(() => {
         spyOn(analyticsService, 'trackPageView');
-        mockState = {
+        stateMock = {
           title: chance.string(),
           analyticsData: {
             pageTitle: chance.string(),
             pageUrl: chance.string()
           }
         };
-        mockTransition = {
-          to: () => mockState
+        transitionMock = {
+          to: () => stateMock
         };
 
-        transitonHandler = mockTransitionsService.onSuccess.calls.first().args[1];
-        transitonHandler(mockTransition);
+        transitonHandler = transitionsServiceMock.onSuccess.calls.first().args[1];
+        transitonHandler(transitionMock);
       });
 
       it('should track page view with location and overridden url and title for current state', () => {
         expect(analyticsService.trackPageView).toHaveBeenCalledWith(
-          mockState.analyticsData.pageUrl,
-          mockState.analyticsData.pageTitle,
-          mockLocation);
+          stateMock.analyticsData.pageUrl,
+          stateMock.analyticsData.pageTitle,
+          locationMock);
       });
 
       it('should set tracker properties with overridden values so page variables are included in future events', () => {
-        expect(mockTracker.calls.count()).toBe(3);
-        expect(mockTracker.calls.argsFor(2)).toEqual([
+        expect(trackerMock.calls.count()).toBe(3);
+        expect(trackerMock.calls.argsFor(2)).toEqual([
           'set',
           {
-            location: mockLocation,
-            page: mockState.analyticsData.pageUrl,
-            title: mockState.analyticsData.pageTitle
+            location: locationMock,
+            page: stateMock.analyticsData.pageUrl,
+            title: stateMock.analyticsData.pageTitle
           }
         ]);
       });
@@ -225,10 +225,10 @@ describe('Service: AnalyticsService', () => {
     });
 
     it('should send pageview with correct parameters', () => {
-      expect(mockTracker).toHaveBeenCalledWith('send', 'pageview', testUrl, {
+      expect(trackerMock).toHaveBeenCalledWith('send', 'pageview', testUrl, {
         location: testLocation,
         title: testTitle,
-        dimension8: mockFormattedMoment
+        dimension8: formattedMomentMock
       });
     });
   });
@@ -247,8 +247,8 @@ describe('Service: AnalyticsService', () => {
     });
 
     it('should send event with correct parameters', () => {
-      expect(mockTracker).toHaveBeenCalledWith('send', 'event', testCategory, testAction, testLabel, {
-        dimension8: mockFormattedMoment,
+      expect(trackerMock).toHaveBeenCalledWith('send', 'event', testCategory, testAction, testLabel, {
+        dimension8: formattedMomentMock,
         dimension11: `${testCategory}/${testAction}/${testLabel}`
       });
     });

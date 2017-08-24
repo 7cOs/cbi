@@ -93,9 +93,7 @@ export class AnalyticsService {
   }
 
   private createTracker(trackerId: string, userId: string) {
-    this.gaTracker('create', trackerId, 'auto', {
-      userId: userId || 'undefined'
-    });
+    this.gaTracker('create', trackerId, 'auto', { userId: userId });
   }
 
   private setTrackerProperties(properties: any) {

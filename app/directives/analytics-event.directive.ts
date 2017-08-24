@@ -12,7 +12,7 @@ export class AnalyticsEventDirective implements AfterContentInit {
   @Input() action: string;
   @Input() label: string;
 
-  private el: any;
+  private el: HTMLElement;
 
   constructor(
     private elRef: ElementRef,
