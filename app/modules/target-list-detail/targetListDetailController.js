@@ -375,6 +375,6 @@ module.exports = /*  @ngInject */
     }
 
     function setAnalyticsCategory(targetList) {
-      vm.analyticsCategory = targetListService.getAnalyticsCategory(targetList.archived, targetList.permissionLevel);
+      vm.analyticsCategory = targetListService.getAnalyticsCategory(targetList.permissionLevel, targetList.archived);
     }
   };
