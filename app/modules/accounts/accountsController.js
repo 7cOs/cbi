@@ -257,8 +257,7 @@ module.exports = /*  @ngInject */
       if (brandMeasures) {
         const matchedMeasure = getMatchedMeasure(brandMeasures, 'distributionTimePeriod');
         if (matchedMeasure && firstDepletion) {
-          const isNonApplicableTest = isNonApplicableMeasure(firstDepletion);
-          return isNonApplicableTest
+          return isNonApplicableMeasure(firstDepletion)
             ? 'N/A'
             : $filter('number')(matchedMeasure['velocity'], 0);
         }
@@ -362,6 +361,7 @@ module.exports = /*  @ngInject */
       } else {
         e.preventDefault();
       }
+      sendAllOpportunityAnalyticsEvent();
     }
 
     // Make notes available to the page
@@ -606,6 +606,8 @@ module.exports = /*  @ngInject */
         });
       }
 
+      sendBrandSnapshotAnalyticsEvent();
+
       for (var topBottomObj in vm.topBottomData) {
         myperformanceService.resetPerformanceDataFlags(vm.topBottomData[topBottomObj]);
       }
@@ -836,6 +838,7 @@ module.exports = /*  @ngInject */
           }, 500);
         });
       }
+      sendBrandSnapshotAnalyticsEvent();
       disableApplyFilter(true);
     }
 
@@ -1271,27 +1274,31 @@ module.exports = /*  @ngInject */
     }
 
     /**
-     * Gets the value from the data that is passed. It can be either performanceData, timePeriodFilteredData
-     * @param {Object} data Can be either
-     *                      topBottomData.distirbutor.performanceData/timePeriodFilteredData,
-     *                      topBottomData.account.performanceData/timePeriodFilteredData
-     *                      topBottomData.stores.performanceData/timePeriodFilteredData etc
+     * Gets the value from the measure and performanceData that is passed.
+     * @param {Object} measures Can be either
+     *                      topBottomData.distirbutor.performanceData.measures,
+     *                      topBottomData.distirbutor.timePeriodFilteredData.measures,
+     *                      topBottomData.account.performanceData.measures,
+     *                      topBottomData.account.timePeriodFilteredData.measures,
+     *                      topBottomData.stores.performanceData.measures,
+     *                      topBottomData.stores.timePeriodFilteredData.measures etc
+     * @param {Object} performanceData The performance data
      * @returns Returns the rounded value or if null returns '-' or if non applicable returns N/A
      */
-    function getValueBoundForAcctType(data) {
+    function getValueBoundForAcctType(measures, performanceData) {
       let displayValue = '-';
 
       if (vm.filtersService.model.accountSelected.accountMarkets) {
         const isNonApplicable = vm.filtersService.model.accountSelected.accountMarkets.propertyName === 'velocity'
-          ? isNonApplicableMeasure(data.performanceData.firstSoldDate)
+          ? isNonApplicableMeasure(performanceData.firstSoldDate)
           : false;
 
         if (isNonApplicable) {
           displayValue = 'N/A';
         } else {
-          if (data.measure) {
+          if (measures) {
             const propName = vm.filtersService.model.accountSelected.accountMarkets.propertyName;
-            const matchedMeasure = data.measure[propName];
+            const matchedMeasure = measures[propName];
             if (userService.isValidValues(matchedMeasure)) {
               displayValue = $filter('number')(matchedMeasure, 0);
             }
@@ -1720,25 +1727,45 @@ module.exports = /*  @ngInject */
        });
      }
 
-     angular.element($window).bind('scroll', function() {
-       if (vm.selectOpen) {
-         return;
-       }
-       vm.st = this.pageYOffset;
-       if (vm.st >= 230) {
-         // Only set element class if state has changed
-         if (!vm.scrolledBelowHeader) {
-           setOverviewDisplay(true);
-         }
-         vm.scrolledBelowHeader = true;
-       } else {
-         // Only set element class if state has changed
-         if (vm.scrolledBelowHeader) {
-           setOverviewDisplay(false);
-         }
-         vm.scrolledBelowHeader = false;
-       }
-     });
+    function sendAllOpportunityAnalyticsEvent() {
+      $analytics.eventTrack('Top Opportunities', {
+        category: 'Accounts',
+        label: 'All Opportunities'
+      });
+    }
+
+    function sendBrandSnapshotAnalyticsEvent() {
+        $analytics.eventTrack(getSnapshotAction(), {
+            category: 'Snapshot',
+            label: vm.filtersService.model.accountSelected.accountBrands.name
+        });
+    }
+
+    function getSnapshotAction() {
+      return vm.brandWidgetSkuTitle
+        ? vm.brandWidgetSkuTitle
+        : (currentBrandSelected ? currentBrandSelected.name : vm.brandWidgetTitleDefault);
+    }
+
+    angular.element($window).bind('scroll', function() {
+      if (vm.selectOpen) {
+        return;
+      }
+      vm.st = this.pageYOffset;
+      if (vm.st >= 230) {
+        // Only set element class if state has changed
+        if (!vm.scrolledBelowHeader) {
+          setOverviewDisplay(true);
+        }
+        vm.scrolledBelowHeader = true;
+      } else {
+        // Only set element class if state has changed
+        if (vm.scrolledBelowHeader) {
+          setOverviewDisplay(false);
+        }
+        vm.scrolledBelowHeader = false;
+      }
+    });
 
     function formatChartData(chartData) {
       if (chartData.length && angular.isArray(chartData)) {

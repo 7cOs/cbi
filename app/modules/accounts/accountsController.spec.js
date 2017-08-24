@@ -2,7 +2,7 @@ import { getDateRangeMock } from '../../models/date-range.model.mock';
 import { Observable } from 'rxjs';
 
 describe('Unit: accountsController', function() {
-  var scope, ctrl, $controller, $state, $q, filtersService, chipsService, userService, packageSkuData, brandSpy, brandPerformanceData, myperformanceService, storesService, $filter;
+  var scope, ctrl, $controller, $state, $q, filtersService, chipsService, userService, packageSkuData, brandSpy, brandPerformanceData, myperformanceService, storesService, $filter, $analytics;
   let promiseGetStores;
 
   var topBottomSnapshotDistributorData = {
@@ -337,7 +337,7 @@ describe('Unit: accountsController', function() {
     angular.mock.module('cf.modules.accounts');
     angular.mock.module('angularMoment');
 
-    inject(function($rootScope, _$controller_, _$state_, _$q_, _chipsService_, _filtersService_, _userService_, _myperformanceService_, _storesService_, _$filter_) {
+    inject(function($rootScope, _$controller_, _$state_, _$q_, _chipsService_, _filtersService_, _userService_, _myperformanceService_, _storesService_, _$filter_, _$analytics_) {
       // Create scope
       scope = $rootScope.$new();
 
@@ -351,6 +351,7 @@ describe('Unit: accountsController', function() {
       userService = _userService_;
       myperformanceService = _myperformanceService_;
       storesService = _storesService_;
+      $analytics = _$analytics_;
 
       brandPerformanceData = {
         performance: [
@@ -716,6 +717,19 @@ describe('Unit: accountsController', function() {
       expect(filtersService.model.selected.account).toEqual('');
       expect(chipsService.model).toEqual([{ name: 'two', type: 'subaccount', applied: true, removable: false }]);
     });
+
+    it('Should record all opportunities GA events', function() {
+      filtersService.model.selected.premiseType = 'all';
+      filtersService.model.selected.chain = ['01110000 01101100 01110011'];
+      spyOn($analytics, 'eventTrack');
+
+      ctrl.goToOpportunities(e);
+
+      expect($analytics.eventTrack).toHaveBeenCalledWith('Top Opportunities', {
+        category: 'Accounts',
+        label: 'All Opportunities'
+      });
+    });
   });
 
   describe('[Method] updateBrandSnapshot', function() {
@@ -744,6 +758,22 @@ describe('Unit: accountsController', function() {
 
       expect(userService.getPerformanceBrand).toHaveBeenCalled();
       expect(userService.getPerformanceBrand.calls.count()).toEqual(1);
+    });
+  });
+
+  describe('should record snapshot GA event', function() {
+    beforeEach(function () {
+      brandSpy.calls.reset();
+      spyOn($analytics, 'eventTrack');
+    });
+
+    it('Check if Snapshot GA is recorded', function() {
+      ctrl.updateBrandSnapshot();
+
+      expect($analytics.eventTrack).toHaveBeenCalledWith('All Brands', {
+        category: 'Snapshot',
+        label: 'Distribution (simple)'
+      });
     });
   });
 
@@ -1470,42 +1500,34 @@ describe('Unit: accountsController', function() {
       var displayValue;
       // MTD
 
-      const performanceData0 = {
-        measure: topBottomSnapshotDistributorData.performance[0].measures[0],
-        performanceData: {
-          firstSoldDate: ''
-        }
-      };
-
-      const performanceData1 = {
-        measure: topBottomSnapshotDistributorData.performance[0].measures[7],
-        performanceData: {
-          firstSoldDate: ''
-        }
+      const measures0 = topBottomSnapshotDistributorData.performance[0].measures[0];
+      const measures1 = topBottomSnapshotDistributorData.performance[0].measures[7];
+      const emptyPerformanceData = {
+        firstSoldDate: ''
       };
 
       ctrl.filtersService.model.accountSelected.accountMarkets = ctrl.filtersService.accountFilters.accountMarkets[0];
-      displayValue = ctrl.getValueBoundForAcctType(performanceData0);
+      displayValue = ctrl.getValueBoundForAcctType(measures0, emptyPerformanceData);
       expect(displayValue).toEqual($filter('number')(375314, 0));
 
       ctrl.filtersService.model.accountSelected.accountMarkets = ctrl.filtersService.accountFilters.accountMarkets[1];
-      displayValue = ctrl.getValueBoundForAcctType(performanceData1);
+      displayValue = ctrl.getValueBoundForAcctType(measures1, emptyPerformanceData);
       expect(displayValue).toEqual($filter('number')(14612, 0));
 
       ctrl.filtersService.model.accountSelected.accountMarkets = ctrl.filtersService.accountFilters.accountMarkets[2];
-      displayValue = ctrl.getValueBoundForAcctType(performanceData1);
+      displayValue = ctrl.getValueBoundForAcctType(measures1, emptyPerformanceData);
       expect(displayValue).toEqual($filter('number')(30104, 0));
 
       ctrl.filtersService.model.accountSelected.accountMarkets = ctrl.filtersService.accountFilters.accountMarkets[3];
-      displayValue = ctrl.getValueBoundForAcctType(performanceData1);
+      displayValue = ctrl.getValueBoundForAcctType(measures1, emptyPerformanceData);
       expect(displayValue).toEqual($filter('number')(7190, 0));
 
       ctrl.filtersService.model.accountSelected.accountMarkets = ctrl.filtersService.accountFilters.accountMarkets[0];
-      displayValue = ctrl.getValueBoundForAcctType(performanceData0);
+      displayValue = ctrl.getValueBoundForAcctType(measures0, emptyPerformanceData);
       expect(displayValue).not.toEqual('-');
 
       ctrl.filtersService.model.accountSelected.accountMarkets = null;
-      displayValue = ctrl.getValueBoundForAcctType(performanceData0);
+      displayValue = ctrl.getValueBoundForAcctType(measures0, emptyPerformanceData);
       expect(displayValue).toEqual('-');
     });
 
@@ -1518,15 +1540,15 @@ describe('Unit: accountsController', function() {
 
       ctrl = $controller('accountsController', {$scope: scope, dateRangeService: dateRangeServiceWithRangeMock});
 
-      const performanceData = {
-        measure: topBottomSnapshotDistributorData.performance[0].measures[7],
+      const storeData = {
+        measures: topBottomSnapshotDistributorData.performance[0].measures[7],
         performanceData: {
           firstSoldDate: '2017-05-14'
         }
       };
 
-      const performanceDataNA = {
-        measure: topBottomSnapshotDistributorData.performance[0].measures[7],
+      const storeDataNA = {
+        measures: topBottomSnapshotDistributorData.performance[0].measures[7],
         performanceData: {
           firstSoldDate: '2017-05-15'
         }
@@ -1534,10 +1556,10 @@ describe('Unit: accountsController', function() {
 
       ctrl.filtersService.model.accountSelected.accountMarkets = ctrl.filtersService.accountFilters.accountMarkets[3];
 
-      let displayValue = ctrl.getValueBoundForAcctType(performanceData);
+      let displayValue = ctrl.getValueBoundForAcctType(storeData.measures, storeData.performanceData);
       expect(displayValue).toEqual($filter('number')(7190, 0));
 
-      displayValue = ctrl.getValueBoundForAcctType(performanceDataNA);
+      displayValue = ctrl.getValueBoundForAcctType(storeDataNA.measures, storeDataNA.performanceData);
       expect(displayValue).toEqual('N/A');
     });
   });
