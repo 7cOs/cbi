@@ -290,7 +290,7 @@ module.exports = /*  @ngInject */
 
       userService.addTargetList(vm.newList).then(response => {
         $analytics.eventTrack('Create Target List', {
-          category: 'Opportunities',
+          category: 'Target Lists - My Target Lists',
           label: response.id
         });
 
@@ -404,6 +404,10 @@ module.exports = /*  @ngInject */
                   storeGroup.splice(key, 1);
                 } else if (opportunity.id === oId && !dismiss) {
                   opportunity.status = 'CLOSED';
+                  $analytics.eventTrack('Close Opportunity', {
+                    category: 'Opportunities',
+                    label: opportunity.id
+                  });
                 }
               });
 
@@ -892,6 +896,10 @@ module.exports = /*  @ngInject */
       const totalOpps = usedOpps + (vm.isAllOpportunitiesSelected ? filtersService.model.appliedFilter.pagination.totalOpportunities : this.selected.length);
       const hasRemainingOpps = totalOpps <= maxOpportunities;
       if (hasRemainingOpps) {
+        $analytics.eventTrack('Copy to Target List', {
+          label: targetList.id,
+          category: targetListService.getAnalyticsCategory(vm.targetListService.model.currentList.permissionLevel)
+        });
         vm.addToTargetList(targetList.id);
       } else {
         const parentEl = angular.element(document.body);

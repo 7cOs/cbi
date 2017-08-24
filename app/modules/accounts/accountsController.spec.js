@@ -1500,42 +1500,34 @@ describe('Unit: accountsController', function() {
       var displayValue;
       // MTD
 
-      const performanceData0 = {
-        measure: topBottomSnapshotDistributorData.performance[0].measures[0],
-        performanceData: {
-          firstSoldDate: ''
-        }
-      };
-
-      const performanceData1 = {
-        measure: topBottomSnapshotDistributorData.performance[0].measures[7],
-        performanceData: {
-          firstSoldDate: ''
-        }
+      const measures0 = topBottomSnapshotDistributorData.performance[0].measures[0];
+      const measures1 = topBottomSnapshotDistributorData.performance[0].measures[7];
+      const emptyPerformanceData = {
+        firstSoldDate: ''
       };
 
       ctrl.filtersService.model.accountSelected.accountMarkets = ctrl.filtersService.accountFilters.accountMarkets[0];
-      displayValue = ctrl.getValueBoundForAcctType(performanceData0);
+      displayValue = ctrl.getValueBoundForAcctType(measures0, emptyPerformanceData);
       expect(displayValue).toEqual($filter('number')(375314, 0));
 
       ctrl.filtersService.model.accountSelected.accountMarkets = ctrl.filtersService.accountFilters.accountMarkets[1];
-      displayValue = ctrl.getValueBoundForAcctType(performanceData1);
+      displayValue = ctrl.getValueBoundForAcctType(measures1, emptyPerformanceData);
       expect(displayValue).toEqual($filter('number')(14612, 0));
 
       ctrl.filtersService.model.accountSelected.accountMarkets = ctrl.filtersService.accountFilters.accountMarkets[2];
-      displayValue = ctrl.getValueBoundForAcctType(performanceData1);
+      displayValue = ctrl.getValueBoundForAcctType(measures1, emptyPerformanceData);
       expect(displayValue).toEqual($filter('number')(30104, 0));
 
       ctrl.filtersService.model.accountSelected.accountMarkets = ctrl.filtersService.accountFilters.accountMarkets[3];
-      displayValue = ctrl.getValueBoundForAcctType(performanceData1);
+      displayValue = ctrl.getValueBoundForAcctType(measures1, emptyPerformanceData);
       expect(displayValue).toEqual($filter('number')(7190, 0));
 
       ctrl.filtersService.model.accountSelected.accountMarkets = ctrl.filtersService.accountFilters.accountMarkets[0];
-      displayValue = ctrl.getValueBoundForAcctType(performanceData0);
+      displayValue = ctrl.getValueBoundForAcctType(measures0, emptyPerformanceData);
       expect(displayValue).not.toEqual('-');
 
       ctrl.filtersService.model.accountSelected.accountMarkets = null;
-      displayValue = ctrl.getValueBoundForAcctType(performanceData0);
+      displayValue = ctrl.getValueBoundForAcctType(measures0, emptyPerformanceData);
       expect(displayValue).toEqual('-');
     });
 
@@ -1548,15 +1540,15 @@ describe('Unit: accountsController', function() {
 
       ctrl = $controller('accountsController', {$scope: scope, dateRangeService: dateRangeServiceWithRangeMock});
 
-      const performanceData = {
-        measure: topBottomSnapshotDistributorData.performance[0].measures[7],
+      const storeData = {
+        measures: topBottomSnapshotDistributorData.performance[0].measures[7],
         performanceData: {
           firstSoldDate: '2017-05-14'
         }
       };
 
-      const performanceDataNA = {
-        measure: topBottomSnapshotDistributorData.performance[0].measures[7],
+      const storeDataNA = {
+        measures: topBottomSnapshotDistributorData.performance[0].measures[7],
         performanceData: {
           firstSoldDate: '2017-05-15'
         }
@@ -1564,10 +1556,10 @@ describe('Unit: accountsController', function() {
 
       ctrl.filtersService.model.accountSelected.accountMarkets = ctrl.filtersService.accountFilters.accountMarkets[3];
 
-      let displayValue = ctrl.getValueBoundForAcctType(performanceData);
+      let displayValue = ctrl.getValueBoundForAcctType(storeData.measures, storeData.performanceData);
       expect(displayValue).toEqual($filter('number')(7190, 0));
 
-      displayValue = ctrl.getValueBoundForAcctType(performanceDataNA);
+      displayValue = ctrl.getValueBoundForAcctType(storeDataNA.measures, storeDataNA.performanceData);
       expect(displayValue).toEqual('N/A');
     });
   });
