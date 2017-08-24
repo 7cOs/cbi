@@ -4,6 +4,7 @@ import { IDirectiveFactory } from 'angular';
 import 'textangular/dist/textAngular-sanitize.min';
 import '@uirouter/angularjs';
 
+import { AnalyticsService } from './services/analytics.service';
 import { AppComponent } from './shared/containers/app/app.component';
 import { AppUpgradeAdapter } from './app.module';
 import { CompassCardComponent } from './shared/components/compass-card/compass-card.component';
@@ -41,5 +42,6 @@ export default angular.module('cf', [
   .directive('settings', AppUpgradeAdapter.downgradeNg2Component(SettingsComponent) as IDirectiveFactory)
   .directive('notifications', AppUpgradeAdapter.downgradeNg2Component(NotificationsComponent) as IDirectiveFactory)
   .factory('dateRangeService', downgradeInjectable(DateRangeService))
+  .factory('analyticsService', downgradeInjectable(AnalyticsService))
   .config(require('./config'))
   .run(require('./run'));

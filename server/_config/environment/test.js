@@ -1,6 +1,8 @@
 'use strict';
 
 module.exports = function (config) {
+  console.log('Using server config for TEST environment.');
+
   // global settings
   config.domain = 'compass-qa.cbrands.com';
   config.env = 'test';

@@ -1,6 +1,8 @@
 'use strict';
 
 module.exports = function (config) {
+  console.log('Using server config for DEVELOPMENT environment.');
+
   // global settings
   config.domain = 'compass-dev.cbrands.com';
   config.env = 'development';

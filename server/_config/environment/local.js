@@ -3,6 +3,7 @@
 const os = require('os');
 
 module.exports = function (config) {
+  console.log('Using server config for LOCAL environment.');
 
   var interfaces = os.networkInterfaces();
   var addresses = [];

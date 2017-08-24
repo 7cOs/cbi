@@ -1,6 +1,8 @@
 'use strict';
 
 module.exports = function (config) {
+  console.log('Using server config for STAGE environment.');
+
   // global settings
   config.domain = 'compass-stage.cbrands.com';
   config.env = 'stage';
