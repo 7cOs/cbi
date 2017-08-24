@@ -134,7 +134,7 @@ describe('analyticsEvent Directive', () => {
   });
 
   describe('when analyticsIf condition evaluates to false', () => {
-    it('should call trackEvent when clicked', fakeAsync(() => {
+    it('should not call trackEvent when clicked', fakeAsync(() => {
       const fixture = TestBed.createComponent(TestComponentD);
       fixture.detectChanges();
       expect(mockAnalyticsService.trackEvent).not.toHaveBeenCalled();
@@ -148,7 +148,7 @@ describe('analyticsEvent Directive', () => {
   });
 
   describe('when analyticsIf condition class variable evaluates to false', () => {
-    it('should call trackEvent when clicked', fakeAsync(() => {
+    it('should not call trackEvent when clicked', fakeAsync(() => {
       const fixture = TestBed.createComponent(TestComponentE);
       fixture.detectChanges();
       expect(mockAnalyticsService.trackEvent).not.toHaveBeenCalled();

@@ -4,11 +4,11 @@ module.exports = /*  @ngInject */
   function analyticsEventOn($injector, $timeout) {
     return {
       restrict: 'A',
-      link: function ($scope, $element, $attrs) {
+      link: ($scope, $element, $attrs) => {
         // workaround for circular injection dependencies when
         // this directive is used inside an upgraded component
         let analyticsService;
-        $timeout(function() {
+        $timeout(() => {
           analyticsService = $injector.get('analyticsService');
         }, 0);
 

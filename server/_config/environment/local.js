@@ -42,7 +42,7 @@ module.exports = function (config) {
   };
 
   config.analytics = {
-    id: 'test'
+    id: ''
   };
 
   config.auth = {
