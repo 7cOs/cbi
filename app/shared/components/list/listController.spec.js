@@ -1,5 +1,5 @@
 describe('Unit: list controller', function() {
-  var scope, ctrl, q, httpBackend, mdDialog, closedOpportunitiesService, filtersService, loaderService, opportunitiesService, storesService, targetListService, toastService, userService, filter, $analytics;
+  var scope, ctrl, q, httpBackend, mdDialog, closedOpportunitiesService, filtersService, loaderService, opportunitiesService, storesService, targetListService, toastService, userService, filter, analyticsService;
   var bindings = {showAddToTargetList: true, showRemoveButton: false, selectAllAvailable: true, pageName: 'MyTestPage'};
 
   beforeEach(function() {
@@ -10,7 +10,14 @@ describe('Unit: list controller', function() {
     angular.mock.module('cf.common.services');
     angular.mock.module('cf.common.components.list');
 
-    inject(function($rootScope, _$q_, _$httpBackend_, _$mdDialog_, $controller, _$filter_, _closedOpportunitiesService_, _filtersService_, _loaderService_, _opportunitiesService_, _storesService_, _targetListService_, _toastService_, _userService_, _$analytics_) {
+    angular.mock.module(($provide) => {
+      analyticsService = {
+        trackEvent: () => {}
+      };
+      $provide.value('analyticsService', analyticsService);
+    });
+
+    inject(function($rootScope, _$q_, _$httpBackend_, _$mdDialog_, $controller, _$filter_, _closedOpportunitiesService_, _filtersService_, _loaderService_, _opportunitiesService_, _storesService_, _targetListService_, _toastService_, _userService_) {
       scope = $rootScope.$new();
       q = _$q_;
       mdDialog = _$mdDialog_;
@@ -25,7 +32,6 @@ describe('Unit: list controller', function() {
       targetListService = _targetListService_;
       toastService = _toastService_;
       userService = _userService_;
-      $analytics = _$analytics_;
 
       userService.model.currentUser.employeeID = 1;
 
@@ -300,7 +306,7 @@ describe('Unit: list controller', function() {
     });
 
     it('should log a GA event on closeOpportunity method call with dismiss false', () => {
-      spyOn($analytics, 'eventTrack');
+      spyOn(analyticsService, 'trackEvent');
       opportunitiesService.model.opportunities = [{
         store: {id: '1699829'},
         groupedOpportunities: [{
@@ -313,10 +319,11 @@ describe('Unit: list controller', function() {
       closeDeferred.resolve();
       scope.$apply();
 
-      expect($analytics.eventTrack).toHaveBeenCalledWith('Close Opportunity', {
-       category: 'Opportunities',
-       label: '0080123___80013466___20170820'
-      });
+      expect(analyticsService.trackEvent).toHaveBeenCalledWith(
+        'Opportunities',
+        'Close Opportunity',
+        '0080123___80013466___20170820'
+      );
     });
 
     it('should not run either method if undo clicked', function() {
@@ -782,16 +789,17 @@ describe('Unit: list controller', function() {
         defer.resolve(targetListResponseMock);
         return defer.promise;
       });
-      spyOn($analytics, 'eventTrack');
+      spyOn(analyticsService, 'trackEvent');
 
       ctrl.saveNewList();
       scope.$apply();
 
       expect(userService.addTargetList).toHaveBeenCalled();
-      expect($analytics.eventTrack).toHaveBeenCalledWith('Create Target List', {
-        category: 'Target Lists - My Target Lists',
-        label: targetListResponseMock.id
-      });
+      expect(analyticsService.trackEvent).toHaveBeenCalledWith(
+        'Target Lists - My Target Lists',
+        'Create Target List',
+        targetListResponseMock.id
+      );
     });
 
     it('should NOT log a GA event on userService.addTargetList error', () => {
@@ -802,14 +810,14 @@ describe('Unit: list controller', function() {
         defer.reject({ error: 'Error' });
         return defer.promise;
       });
-      spyOn($analytics, 'eventTrack');
+      spyOn(analyticsService, 'trackEvent');
       spyOn(console, 'error');
 
       ctrl.saveNewList();
       scope.$apply();
 
       expect(userService.addTargetList).toHaveBeenCalled();
-      expect($analytics.eventTrack).not.toHaveBeenCalled();
+      expect(analyticsService.trackEvent).not.toHaveBeenCalled();
       expect(console.error).toHaveBeenCalled();
     });
   });

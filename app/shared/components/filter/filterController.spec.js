@@ -1,5 +1,5 @@
 describe('Unit: filter controller (opportunities)', function() {
-  var scope, ctrl, mdDialog, mdSelect, q, state, chipsService, loaderService, filtersService, opportunityFiltersService, userService, $analytics;
+  var scope, ctrl, mdDialog, mdSelect, q, state, chipsService, loaderService, filtersService, opportunityFiltersService, userService, analyticsService;
 
   beforeEach(function() {
     angular.mock.module('ui.router');
@@ -8,7 +8,14 @@ describe('Unit: filter controller (opportunities)', function() {
     angular.mock.module('cf.common.services');
     angular.mock.module('cf.common.components.filter');
 
-    inject(function($controller, _$mdDialog_, _$mdSelect_, _$q_, $rootScope, _chipsService_, _filtersService_, _loaderService_, _opportunityFiltersService_, _userService_, _$analytics_) {
+    angular.mock.module(($provide) => {
+      analyticsService = {
+        trackEvent: () => {}
+      };
+      $provide.value('analyticsService', analyticsService);
+    });
+
+    inject(function($controller, _$mdDialog_, _$mdSelect_, _$q_, $rootScope, _chipsService_, _filtersService_, _loaderService_, _opportunityFiltersService_, _userService_) {
       scope = $rootScope.$new();
       q = _$q_;
       state = {
@@ -25,7 +32,6 @@ describe('Unit: filter controller (opportunities)', function() {
       loaderService = _loaderService_;
       opportunityFiltersService = _opportunityFiltersService_;
       userService = _userService_;
-      $analytics = _$analytics_;
 
       ctrl = $controller('filterController', {$scope: scope, $state: state});
     });
@@ -709,22 +715,22 @@ describe('Unit: filter controller (opportunities)', function() {
       removable: true
     }];
 
-    spyOn($analytics, 'eventTrack');
+    spyOn(analyticsService, 'trackEvent');
     ctrl.applyFilters();
 
-    expect($analytics.eventTrack).toHaveBeenCalledWith('ACCOUNT SCOPE', { category: 'Filters', label: 'MY ACCOUNTS ONLY' });
-    expect($analytics.eventTrack).toHaveBeenCalledWith('DISTRIBUTION TYPE', { category: 'Filters', label: 'SIMPLE' });
-    expect($analytics.eventTrack).toHaveBeenCalledWith('CBBD CONTACT', { category: 'Filters', label: 'Mr. Simpson' });
-    expect($analytics.eventTrack).toHaveBeenCalledWith('MASTER SKU', { category: 'Filters', label: '228' });
-    expect($analytics.eventTrack).toHaveBeenCalledWith('PREDICTED IMPACT', { category: 'Filters', label: 'HIGH' });
-    expect($analytics.eventTrack).toHaveBeenCalledWith('ACCOUNT', { category: 'Filters', label: 'Walmart' });
-    expect($analytics.eventTrack).toHaveBeenCalledWith('STORE TYPE', { category: 'Filters', label: 'STORE TYPE' });
-    expect($analytics.eventTrack).toHaveBeenCalledWith('STORE SEGMENTATION', { category: 'Filters', label: 'A' });
-    expect($analytics.eventTrack).toHaveBeenCalledWith('CITY', { category: 'Filters', label: 'HOUSTON' });
-    expect($analytics.eventTrack).toHaveBeenCalledWith('STORE STATUS', { category: 'Filters', label: 'UNSOLD' });
-    expect($analytics.eventTrack).toHaveBeenCalledWith('STORE FORMAT', { category: 'Filters', label: 'ALL FORMATS' });
-    expect($analytics.eventTrack).toHaveBeenCalledWith('STORE FORMAT', { category: 'Filters', label: 'HISPANIC' });
-    expect($analytics.eventTrack).toHaveBeenCalledWith('STORE FORMAT', { category: 'Filters', label: 'GENERAL MARKET' });
+    expect(analyticsService.trackEvent).toHaveBeenCalledWith('Filters', 'ACCOUNT SCOPE', 'MY ACCOUNTS ONLY');
+    expect(analyticsService.trackEvent).toHaveBeenCalledWith('Filters', 'DISTRIBUTION TYPE', 'SIMPLE');
+    expect(analyticsService.trackEvent).toHaveBeenCalledWith('Filters', 'CBBD CONTACT', 'Mr. Simpson');
+    expect(analyticsService.trackEvent).toHaveBeenCalledWith('Filters', 'MASTER SKU', '228');
+    expect(analyticsService.trackEvent).toHaveBeenCalledWith('Filters', 'PREDICTED IMPACT', 'HIGH');
+    expect(analyticsService.trackEvent).toHaveBeenCalledWith('Filters', 'ACCOUNT', 'Walmart');
+    expect(analyticsService.trackEvent).toHaveBeenCalledWith('Filters', 'STORE TYPE', 'STORE TYPE');
+    expect(analyticsService.trackEvent).toHaveBeenCalledWith('Filters', 'STORE SEGMENTATION', 'A');
+    expect(analyticsService.trackEvent).toHaveBeenCalledWith('Filters', 'CITY', 'HOUSTON');
+    expect(analyticsService.trackEvent).toHaveBeenCalledWith('Filters', 'STORE STATUS', 'UNSOLD');
+    expect(analyticsService.trackEvent).toHaveBeenCalledWith('Filters', 'STORE FORMAT', 'ALL FORMATS');
+    expect(analyticsService.trackEvent).toHaveBeenCalledWith('Filters', 'STORE FORMAT', 'HISPANIC');
+    expect(analyticsService.trackEvent).toHaveBeenCalledWith('Filters', 'STORE FORMAT', 'GENERAL MARKET');
   });
 
   describe('[method.saveFilter]', function() {
@@ -796,7 +802,7 @@ describe('Unit: filter controller (opportunities)', function() {
         defer.resolve({ id: '123-456-789' });
         return defer.promise;
       });
-      spyOn($analytics, 'eventTrack');
+      spyOn(analyticsService, 'trackEvent');
 
       userService.model.opportunityFilters = [];
 
@@ -804,10 +810,11 @@ describe('Unit: filter controller (opportunities)', function() {
       scope.$apply();
 
       expect(userService.saveOpportunityFilter).toHaveBeenCalled();
-      expect($analytics.eventTrack).toHaveBeenCalledWith('Save Report', {
-        category: 'Opportunities',
-        label: '123-456-789'
-      });
+      expect(analyticsService.trackEvent).toHaveBeenCalledWith(
+        'Opportunities',
+        'Save Report',
+        '123-456-789'
+      );
     });
 
     it('should NOT log a GA event on userService.saveOpportunityFilter error', () => {
@@ -816,14 +823,14 @@ describe('Unit: filter controller (opportunities)', function() {
         defer.reject({ data: [{ error: 'Error!' }] });
         return defer.promise;
       });
-      spyOn($analytics, 'eventTrack');
+      spyOn(analyticsService, 'trackEvent');
       spyOn(console, 'error');
 
       ctrl.saveFilter();
       scope.$apply();
 
       expect(userService.saveOpportunityFilter).toHaveBeenCalled();
-      expect($analytics.eventTrack).not.toHaveBeenCalled();
+      expect(analyticsService.trackEvent).not.toHaveBeenCalled();
       expect(console.error).toHaveBeenCalled();
     });
   });
@@ -838,6 +845,12 @@ describe('Unit: filter controller (state = target-list-detail)', function() {
     angular.mock.module('angulartics');
     angular.mock.module('cf.common.services');
     angular.mock.module('cf.common.components.filter');
+
+    angular.mock.module(($provide) => {
+      $provide.value('analyticsService', {
+        trackEvent: () => {}
+      });
+    });
 
     inject(function($controller, $rootScope) {
       scope = $rootScope.$new();
