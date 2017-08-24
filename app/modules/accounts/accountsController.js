@@ -361,6 +361,7 @@ module.exports = /*  @ngInject */
       } else {
         e.preventDefault();
       }
+      sendAllOpportunityAnalyticsEvent();
     }
 
     // Make notes available to the page
@@ -605,6 +606,8 @@ module.exports = /*  @ngInject */
         });
       }
 
+      sendBrandSnapshotAnalyticsEvent();
+
       for (var topBottomObj in vm.topBottomData) {
         myperformanceService.resetPerformanceDataFlags(vm.topBottomData[topBottomObj]);
       }
@@ -835,6 +838,7 @@ module.exports = /*  @ngInject */
           }, 500);
         });
       }
+      sendBrandSnapshotAnalyticsEvent();
       disableApplyFilter(true);
     }
 
@@ -1723,25 +1727,45 @@ module.exports = /*  @ngInject */
        });
      }
 
-     angular.element($window).bind('scroll', function() {
-       if (vm.selectOpen) {
-         return;
-       }
-       vm.st = this.pageYOffset;
-       if (vm.st >= 230) {
-         // Only set element class if state has changed
-         if (!vm.scrolledBelowHeader) {
-           setOverviewDisplay(true);
-         }
-         vm.scrolledBelowHeader = true;
-       } else {
-         // Only set element class if state has changed
-         if (vm.scrolledBelowHeader) {
-           setOverviewDisplay(false);
-         }
-         vm.scrolledBelowHeader = false;
-       }
-     });
+    function sendAllOpportunityAnalyticsEvent() {
+      $analytics.eventTrack('Top Opportunities', {
+        category: 'Accounts',
+        label: 'All Opportunities'
+      });
+    }
+
+    function sendBrandSnapshotAnalyticsEvent() {
+        $analytics.eventTrack(getSnapshotAction(), {
+            category: 'Snapshot',
+            label: vm.filtersService.model.accountSelected.accountBrands.name
+        });
+    }
+
+    function getSnapshotAction() {
+      return vm.brandWidgetSkuTitle
+        ? vm.brandWidgetSkuTitle
+        : (currentBrandSelected ? currentBrandSelected.name : vm.brandWidgetTitleDefault);
+    }
+
+    angular.element($window).bind('scroll', function() {
+      if (vm.selectOpen) {
+        return;
+      }
+      vm.st = this.pageYOffset;
+      if (vm.st >= 230) {
+        // Only set element class if state has changed
+        if (!vm.scrolledBelowHeader) {
+          setOverviewDisplay(true);
+        }
+        vm.scrolledBelowHeader = true;
+      } else {
+        // Only set element class if state has changed
+        if (vm.scrolledBelowHeader) {
+          setOverviewDisplay(false);
+        }
+        vm.scrolledBelowHeader = false;
+      }
+    });
 
     function formatChartData(chartData) {
       if (chartData.length && angular.isArray(chartData)) {
