@@ -17,23 +17,14 @@ export class MyPerformanceTableDataTransformerService {
 
   constructor(private utilService: UtilService) { }
 
-  // mocking the performance data for now;
-  public transformRoleGroupTableData(roleGroups: RoleGroups): MyPerformanceTableRow[] {
-    return Object.keys(roleGroups).map((groupName: string) => {
-      return {
-        descriptionRow0: roleGroups[groupName][0].description,
-        metricColumn0: chance.natural({max: 1000}),
-        metricColumn1: chance.natural({max: 1000}),
-        metricColumn2: chance.natural({max: 100}),
-        ctv: chance.natural({max: 100})
-      };
-    });
-  }
-
   public getTableData(viewType: ViewType, responsibilitiesState: ResponsibilitiesState): MyPerformanceTableRow[] {
     switch (viewType) {
       case ViewType.people:
         return this.transformPeopleTableData(responsibilitiesState.responsibilities);
+
+      case ViewType.accounts:
+      case ViewType.distributors:
+        return this.transformAccountDistributorsTableData(responsibilitiesState.responsibilities);
 
       case ViewType.roleGroups:
       default:
@@ -49,21 +40,28 @@ export class MyPerformanceTableDataTransformerService {
         metricColumn0: chance.natural({max: 1000}),
         metricColumn1: chance.natural({max: 1000}),
         metricColumn2: chance.natural({max: 100}),
-        ctv: chance.natural({max: 100})
+        ctv: chance.natural({max: 100}),
+        metadata: {
+          positionId: person.positionId
+        }
       };
     });
   }
 
-  public buildTotalRow(roleGroups: RoleGroups): MyPerformanceTableRow {
-    const groupName: string = Object.keys(roleGroups)[0];
-    return {
-      descriptionRow0: 'TOTAL',
-      descriptionRow1: `${groupName}S`,
-      metricColumn0: chance.natural({max: 1000}),
-      metricColumn1: chance.natural({max: 1000}),
-      metricColumn2: chance.natural({max: 100}),
-      ctv: 100
-    };
+  public transformAccountDistributorsTableData(roleGroups: RoleGroups): MyPerformanceTableRow[] {
+    const groupName = Object.keys(roleGroups)[0];
+    return roleGroups[groupName].map((property: EntityResponsibilities) => {
+      return {
+        descriptionRow0: property.name,
+        metricColumn0: chance.natural({max: 1000}),
+        metricColumn1: chance.natural({max: 1000}),
+        metricColumn2: chance.natural({max: 100}),
+        ctv: chance.natural({max: 100}),
+        metadata: {
+          positionId: property.positionId
+        }
+      };
+    });
   }
 
   public getRoleGroupPerformanceTableData(performanceData: Array<RoleGroupPerformanceTotal>): Array<MyPerformanceTableRow> {

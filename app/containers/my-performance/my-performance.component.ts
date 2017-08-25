@@ -104,7 +104,7 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
     });
 
     // stub current user for now
-    const currentUserId = 3843;
+    const currentUserId = '3843';
     this.store.dispatch(new FetchResponsibilitiesAction({ positionId: currentUserId, filter: this.filterState }));
 
     // setting ViewType for right side here for now
@@ -142,6 +142,11 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
           if (this.leftTableViewType === ViewType.roleGroups) {
             this.store.dispatch(new SetLeftMyPerformanceTableViewType(ViewType.people));
             this.store.dispatch(new GetPeopleByRoleGroupAction(EntityPeopleType[parameters.row.descriptionRow0.slice(0, -1)]));
+          } else if (this.leftTableViewType === ViewType.people) {
+            this.store.dispatch(new FetchResponsibilitiesAction({
+              positionId: parameters.row.metadata.positionId,
+              filter: this.filterState
+            }));
           }
         } else {
           console.log('clicked on right row:', parameters.row);

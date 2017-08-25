@@ -29,11 +29,11 @@ describe('My Performance Reducer', () => {
 
   it('should call the responsibilities reducer when a responsibility action is received', () => {
     myPerformanceReducer(initialState, new ResponsibilitiesActions.FetchResponsibilitiesAction({
-      positionId: chance.integer(),
+      positionId: chance.string(),
       filter: null
     }));
     myPerformanceReducer(initialState, new ResponsibilitiesActions.FetchResponsibilitiesSuccessAction({
-      positionId: chance.integer(),
+      positionId: chance.string(),
       responsibilities: {},
       performanceTotals: []
     }));

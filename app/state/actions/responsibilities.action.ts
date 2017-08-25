@@ -7,7 +7,7 @@ export const FETCH_RESPONSIBILITIES_ACTION = '[Responsibilities] FETCH_RESPONSIB
 export class FetchResponsibilitiesAction implements Action {
   readonly type = FETCH_RESPONSIBILITIES_ACTION;
 
-  constructor(public payload: { positionId: number, filter: MyPerformanceFilterState }) { }
+  constructor(public payload: { positionId: string, filter: MyPerformanceFilterState }) { }
 }
 
 export const FETCH_RESPONSIBILITIES_SUCCESS_ACTION = '[Responsibilities] FETCH_RESPONSIBILITIES_SUCCESS_ACTION';

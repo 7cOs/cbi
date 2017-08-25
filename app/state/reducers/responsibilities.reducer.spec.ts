@@ -12,7 +12,7 @@ import * as ResponsibilitiesActions from '../actions/responsibilities.action';
 describe('Responsibilities Reducer', () => {
 
   it('updates the status when a fetch is dispatched', () => {
-    const mockPositionId = 1;
+    const mockPositionId = '1';
     const mockPerformanceFilterState: MyPerformanceFilterState = {
       metricType: MetricTypeValue.PointsOfDistribution,
       dateRangeCode: DateRangeTimePeriodValue.FYTDBDL,
@@ -35,7 +35,7 @@ describe('Responsibilities Reducer', () => {
   });
 
   it('should store the payload when a fetch responsibilities is successful', () => {
-    const mockPositionId = 1;
+    const mockPositionId = '1';
     const mockRoleGroups = getRoleGroupsMock();
     const mockRoleGroupPerformanceTotals = getRoleGroupPerformanceTotalsMock();
 

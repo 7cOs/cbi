@@ -2,8 +2,7 @@ import { EntityResponsibilities } from './entity-responsibilities.model';
 import { PerformanceTotal } from './performance-total.model';
 
 export interface RoleGroups {
-  'MARKET DEVELOPMENT MANAGER'?: EntityResponsibilities[];
-  'GENERAL MANAGER'?: EntityResponsibilities[];
+  [key: string]: EntityResponsibilities[];
 }
 
 export interface RoleGroupPerformanceTotal {
@@ -12,7 +11,7 @@ export interface RoleGroupPerformanceTotal {
 }
 
 export interface FetchResponsibilitiesSuccessPayload {
-  positionId: number;
+  positionId: string;
   responsibilities: RoleGroups;
   performanceTotals: Array<RoleGroupPerformanceTotal>;
 }

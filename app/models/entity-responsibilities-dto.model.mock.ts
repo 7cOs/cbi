@@ -2,7 +2,7 @@ import { EntityResponsibilitiesDTO } from './entity-responsibilities-dto.model';
 
 export const mockEntityResponsibilitiesDTOCollection: EntityResponsibilitiesDTO[] = [
   {
-    id: 123,
+    id: '123',
     employeeId: '1231231',
     name: 'Joel Cummins',
     description: 'MARKET DEVELOPMENT MANAGER',
@@ -10,7 +10,7 @@ export const mockEntityResponsibilitiesDTOCollection: EntityResponsibilitiesDTO[
     hierarchyType: 'SALES_HIER'
   },
   {
-    id: 456,
+    id: '456',
     employeeId: '4564561',
     name: 'Andy Farag',
     description: 'MARKET DEVELOPMENT MANAGER',
@@ -18,7 +18,7 @@ export const mockEntityResponsibilitiesDTOCollection: EntityResponsibilitiesDTO[
     hierarchyType: 'SALES_HIER'
   },
   {
-    id: 789,
+    id: '789',
     employeeId: '7897891',
     name: 'Ryan Stasik',
     description: 'GENERAL MANAGER',

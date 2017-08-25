@@ -3,10 +3,12 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import 'rxjs/add/operator/map';
 
+import { EntityDTO } from '../models/entity-dto.model'; // tslint:disable-line:no-unused-variable
 import { DateRangeTimePeriodValue } from '../enums/date-range-time-period.enum';
 import { DistributionTypeValue } from '../enums/distribution-type.enum';
 import { MetricTypeValue } from '../enums/metric-type.enum';
 import { MyPerformanceFilterState } from '../state/reducers/my-performance-filter.reducer';
+import { PeopleResponsibilitiesDTO } from '../models/people-responsibilities-dto.model'; // tslint:disable-line:no-unused-variable
 import { PerformanceTotal } from '../models/performance-total.model'; // tslint:disable-line:no-unused-variable
 import { PremiseTypeValue } from '../enums/premise-type.enum';
 import { RoleGroupPerformanceTotal } from '../models/role-groups.model'; // tslint:disable-line:no-unused-variable
@@ -16,7 +18,7 @@ export class MyPerformanceApiService {
 
   constructor(private http: Http) { }
 
-  public getResponsibilities(positionId: number): Observable<any> {
+  public getResponsibilities(positionId: string): Observable<PeopleResponsibilitiesDTO> {
     const url = `/v3/positions/${ positionId }/responsibilities`;
 
     return this.http.get(`${url}`)
@@ -25,7 +27,7 @@ export class MyPerformanceApiService {
   }
 
   public getResponsibilitiesPerformanceTotals(
-    positionId: number, entityTypes: Array<{ entityTypeName: string, entityTypeId: string }>, filter: MyPerformanceFilterState
+    positionId: string, entityTypes: Array<{ entityTypeName: string, entityTypeId: string }>, filter: MyPerformanceFilterState
   ): Observable<RoleGroupPerformanceTotal[]> {
     const apiCalls: any[] = [];
 
@@ -37,7 +39,7 @@ export class MyPerformanceApiService {
   }
 
   public getResponsibilityPerformanceTotal(
-    positionId: number, entityType: { entityTypeName: string, entityTypeId: string }, filter: MyPerformanceFilterState
+    positionId: string, entityType: { entityTypeName: string, entityTypeId: string }, filter: MyPerformanceFilterState
   ): Observable<RoleGroupPerformanceTotal|Error> {
     const url = `/v3/positions/${ positionId }/responsibilities/${ entityType.entityTypeId }/performanceTotal`;
 
@@ -48,7 +50,10 @@ export class MyPerformanceApiService {
       .catch(err => this.handleError(new Error(err)));
   }
 
-  public getPerformanceTotal(positionId: number, filter: MyPerformanceFilterState): Observable<PerformanceTotal> {
+  public getPerformanceTotal(
+    positionId: string,
+    filter: MyPerformanceFilterState
+  ): Observable<PerformanceTotal> {
     const url = `/v3/positions/${ positionId }/performanceTotal`;
 
     return this.http.get(`${ url }`, {
@@ -56,6 +61,16 @@ export class MyPerformanceApiService {
     })
     .map(res => res.json())
     .catch(err => this.handleError(new Error(err)));
+  }
+
+  public getAccountsDistributors(
+    entityURI: string
+  ): Observable<Array<EntityDTO>> {
+    const url = `/v3${ entityURI }`;
+
+    return this.http.get(`${url}`)
+      .map(res => res.json())
+      .catch(err => this.handleError(new Error(err)));
   }
 
   private getFilterStateParams(filter: MyPerformanceFilterState): any {

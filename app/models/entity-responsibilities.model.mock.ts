@@ -10,7 +10,7 @@ const entityPropertyTypeValues = Object.keys(EntityPropertyType).map(key => Enti
 export function getEntityPeopleResponsibilitiesMock(): EntityResponsibilities {
   return {
     peopleType: entityPeopleTypeValues[chance.integer({min: 0, max: entityPeopleTypeValues.length - 1})],
-    id: chance.natural(),
+    positionId: chance.string(),
     employeeId: chance.string(),
     name: chance.string(),
     type: chance.string(),
@@ -22,7 +22,7 @@ export function getEntityPeopleResponsibilitiesMock(): EntityResponsibilities {
 export function getEntityPropertyResponsibilitiesMock(): EntityResponsibilities {
   return {
     propertyType: entityPropertyTypeValues[chance.integer({min: 0, max: entityPropertyTypeValues.length - 1})],
-    id: chance.natural(),
+    positionId: chance.string(),
     employeeId: chance.string(),
     name: chance.string(),
     type: chance.string(),

@@ -17,7 +17,7 @@ import * as PerformanceTotalActions from '../actions/performance-total.action';
 const chance = new Chance();
 
 describe('Performance Total Effects', () => {
-  const positionIdMock = chance.natural();
+  const positionIdMock = chance.string();
   const performanceFilterStateMock: MyPerformanceFilterState = {
     metricType: MetricTypeValue.PointsOfDistribution,
     dateRangeCode: DateRangeTimePeriodValue.FYTDBDL,

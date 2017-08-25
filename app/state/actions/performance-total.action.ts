@@ -7,7 +7,7 @@ export const FETCH_PERFORMANCE_TOTAL_ACTION = '[Performance Total] FETCH_PERFORM
 export class FetchPerformanceTotalAction implements Action {
   readonly type = FETCH_PERFORMANCE_TOTAL_ACTION;
 
-  constructor(public payload: { positionId: number, filter: MyPerformanceFilterState }) { }
+  constructor(public payload: { positionId: string, filter: MyPerformanceFilterState }) { }
 }
 
 export const FETCH_PERFORMANCE_TOTAL_SUCCESS_ACTION = '[Performance Total] FETCH_PERFORMANCE_TOTAL_SUCCESS_ACTION';

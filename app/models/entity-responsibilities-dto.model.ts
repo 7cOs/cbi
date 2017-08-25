@@ -1,5 +1,5 @@
 export interface EntityResponsibilitiesDTO {
-  id: number;
+  id: string;
   employeeId: string;
   name: string;
   description: string;

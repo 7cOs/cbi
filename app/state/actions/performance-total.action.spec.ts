@@ -14,7 +14,7 @@ const chance = new Chance();
 describe('Performance Total Actions', () => {
 
   describe('Fetch Performance Total Action', () => {
-    const mockPositionId: number = chance.integer();
+    const mockPositionId: string = chance.string();
     const mockPerformanceFilterState: MyPerformanceFilterState = {
       metricType: MetricTypeValue.PointsOfDistribution,
       dateRangeCode: DateRangeTimePeriodValue.FYTDBDL,

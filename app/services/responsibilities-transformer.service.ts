@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import 'rxjs/add/operator/map';
 
+import { EntityDTO } from '../models/entity-dto.model';
 import { EntityResponsibilities } from '../models/entity-responsibilities.model';
 import { EntityPeopleType, EntityPropertyType } from '../enums/entity-responsibilities.enum';
 import { EntityResponsibilitiesDTO } from '../models/entity-responsibilities-dto.model';
@@ -25,9 +26,21 @@ export class ResponsibilitiesTransformerService {
     }, {});
   }
 
+  public groupsAccountsDistributors(accountsDistributors: Array<EntityDTO>): RoleGroups {
+    return accountsDistributors.reduce((groups: RoleGroups, entity: EntityDTO) => {
+      groups['all'].push({
+        propertyType: entity.type,
+        positionId: entity.id,
+        name: entity.name
+      });
+
+      return groups;
+    }, {'all': []});
+  }
+
   private transformEntityResponsibilitiesDTO(entity: EntityResponsibilitiesDTO): EntityResponsibilities {
     const transformedEntity: EntityResponsibilities = {
-      id: entity.id,
+      positionId: entity.id,
       employeeId: entity.employeeId,
       name: entity.name,
       type: entity.type,

@@ -14,7 +14,7 @@ import { MyPerformanceFilterState } from '../reducers/my-performance-filter.redu
 const chance = new Chance();
 
 describe('Performance Total Reducer', () => {
-  const mockPositionId: number = chance.integer();
+  const mockPositionId: string = chance.string();
   const mockPerformanceFilterState: MyPerformanceFilterState = {
     metricType: MetricTypeValue.PointsOfDistribution,
     dateRangeCode: DateRangeTimePeriodValue.FYTDBDL,

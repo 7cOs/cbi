@@ -18,21 +18,21 @@ describe('Service: MyPerformanceApiService', () => {
   const mockPerformanceTotalResponse: PerformanceTotal = getPerformanceTotalMock();
   const mockResponsibilitiesResponse: any = {
     positions: [{
-      id: 123,
+      id: '123',
       employeeId: '1231231',
       name: 'Joel Cummins',
       description: 'MARKET DEVELOPMENT MANAGER',
       type: '10',
       hierarchyType: 'SALES_HIER',
     }, {
-      id: 456,
+      id: '456',
       employeeId: '4564561',
       name: 'Andy Farag',
       description: 'MARKET DEVELOPMENT MANAGER',
       type: '20',
       hierarchyType: 'SALES_HIER',
     }, {
-      id: 789,
+      id: '789',
       employeeId: '7897891',
       name: 'Ryan Stasik',
       description: 'Specialist',
@@ -78,7 +78,7 @@ describe('Service: MyPerformanceApiService', () => {
       });
 
       myPerformanceApiService
-        .getResponsibilities(1)
+        .getResponsibilities('1')
         .subscribe((res) => {
           expect(res).toEqual(mockResponsibilitiesResponse);
           done();
@@ -106,7 +106,7 @@ describe('Service: MyPerformanceApiService', () => {
         );
       });
 
-      myPerformanceApiService.getPerformanceTotal(1, mockFilter).subscribe((response: PerformanceTotal) => {
+      myPerformanceApiService.getPerformanceTotal('1', mockFilter).subscribe((response: PerformanceTotal) => {
         expect(response).toEqual(mockPerformanceTotalResponse);
         done();
       });
@@ -138,7 +138,7 @@ describe('Service: MyPerformanceApiService', () => {
         expect(connection.request.url).toEqual(expectedBaseUrl + expectedUrlParams);
       });
 
-      myPerformanceApiService.getResponsibilityPerformanceTotal(1, mockEntityType, mockFilter)
+      myPerformanceApiService.getResponsibilityPerformanceTotal('1', mockEntityType, mockFilter)
         .subscribe((response: RoleGroupPerformanceTotal) => {
           expect(response).toEqual({ entityType: 'MARKET DEVELOPMENT MANAGER', performanceTotal: mockPerformanceTotalResponse });
           done();
@@ -173,7 +173,7 @@ describe('Service: MyPerformanceApiService', () => {
         expect(connection.request.method).toEqual(RequestMethod.Get);
       });
 
-      myPerformanceApiService.getResponsibilitiesPerformanceTotals(1, mockEntityTypeArray, mockFilter)
+      myPerformanceApiService.getResponsibilitiesPerformanceTotals('1', mockEntityTypeArray, mockFilter)
         .subscribe((response) => {
           expect(response).toEqual([
             { entityType: 'MARKET DEVELOPMENT MANAGER', performanceTotal: mockPerformanceTotalResponse },

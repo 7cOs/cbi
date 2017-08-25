@@ -26,22 +26,6 @@ describe('Service: MyPerformanceTableDataTransformerService', () => {
     });
   });
 
-  describe('transformRoleGroupTableData', () => {
-    beforeEach(inject([ MyPerformanceTableDataTransformerService ],
-      (_myPerformanceTableDataTransformerService: MyPerformanceTableDataTransformerService) => {
-        myPerformanceTableDataTransformerService = _myPerformanceTableDataTransformerService;
-    }));
-
-    it('should return a collection of formatted table data from RoleGroups', () => {
-      spyOn(myPerformanceTableDataTransformerService, 'transformRoleGroupTableData').and.callThrough();
-      const transformedRoleGroupTableData =
-        myPerformanceTableDataTransformerService.transformRoleGroupTableData(mockRoleGroups);
-
-      expect(transformedRoleGroupTableData[0].descriptionRow0).toEqual(mockRoleGroups['GENERAL MANAGER'][0].description);
-      expect(transformedRoleGroupTableData[1].descriptionRow0).toEqual(mockRoleGroups['MARKET DEVELOPMENT MANAGER'][0].description);
-    });
-  });
-
   describe('transformPeopleTableData', () => {
     beforeEach(inject([ MyPerformanceTableDataTransformerService ],
       (_myPerformanceTableDataTransformerService: MyPerformanceTableDataTransformerService) => {
@@ -56,24 +40,6 @@ describe('Service: MyPerformanceTableDataTransformerService', () => {
         });
 
       expect(transformedPeopleTableData[0].descriptionRow0).toEqual(mockRoleGroups['MARKET DEVELOPMENT MANAGER'][0].name);
-    });
-  });
-
-  describe('buildTotalRow', () => {
-    beforeEach(inject([ MyPerformanceTableDataTransformerService ],
-      (_myPerformanceTableDataTransformerService: MyPerformanceTableDataTransformerService) => {
-        myPerformanceTableDataTransformerService = _myPerformanceTableDataTransformerService;
-    }));
-
-    it('should return a formatted totalrow', () => {
-      spyOn(myPerformanceTableDataTransformerService, 'transformRoleGroupTableData').and.callThrough();
-      const transformedTotalRowTableData =
-        myPerformanceTableDataTransformerService.buildTotalRow({
-          'MARKET DEVELOPMENT MANAGER': mockRoleGroups['MARKET DEVELOPMENT MANAGER']
-        });
-
-      expect(transformedTotalRowTableData.descriptionRow0).toEqual('TOTAL');
-      expect(transformedTotalRowTableData.descriptionRow1).toEqual('MARKET DEVELOPMENT MANAGERS');
     });
   });
 

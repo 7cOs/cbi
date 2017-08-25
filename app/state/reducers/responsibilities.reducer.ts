@@ -4,14 +4,14 @@ import * as ResponsibilitiesActions from '../actions/responsibilities.action';
 
 export interface ResponsibilitiesState extends State {
   status: ActionStatus;
-  positionId: number;
+  positionId: string;
   responsibilities: RoleGroups;
   performanceTotals: Array<RoleGroupPerformanceTotal>;
 }
 
 export const initialState: ResponsibilitiesState = {
   status: ActionStatus.NotFetched,
-  positionId: 0,
+  positionId: '0',
   responsibilities: {},
   performanceTotals: []
 };

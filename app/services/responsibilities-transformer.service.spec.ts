@@ -23,7 +23,7 @@ describe('Service: ResponsibilitiesTransformerService', () => {
       spyOn(responsibilitiesTransformerService, 'groupPeopleByRoleGroups').and.callThrough();
       const expectedRoleGroups: RoleGroups = {
         'MARKET DEVELOPMENT MANAGER': [{
-          id: 123,
+          positionId: '123',
           employeeId: '1231231',
           name: 'Joel Cummins',
           description: 'MARKET DEVELOPMENT MANAGER',
@@ -31,7 +31,7 @@ describe('Service: ResponsibilitiesTransformerService', () => {
           hierarchyType: 'SALES_HIER',
           peopleType: EntityPeopleType['MARKET DEVELOPMENT MANAGER']
         }, {
-          id: 456,
+          positionId: '456',
           employeeId: '4564561',
           name: 'Andy Farag',
           description: 'MARKET DEVELOPMENT MANAGER',
@@ -40,7 +40,7 @@ describe('Service: ResponsibilitiesTransformerService', () => {
           peopleType: EntityPeopleType['MARKET DEVELOPMENT MANAGER']
         }],
         'GENERAL MANAGER': [{
-          id: 789,
+          positionId: '789',
           employeeId: '7897891',
           name: 'Ryan Stasik',
           description: 'GENERAL MANAGER',
