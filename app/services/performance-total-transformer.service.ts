@@ -30,9 +30,22 @@ export class PerformanceTotalTransformerService {
             roleGroupPerformance.performanceTotal.total,
             roleGroupPerformance.performanceTotal.totalYearAgo
           ),
-          contributionToVolume: roleGroupPerformance.performanceTotal.contributionToVolume
+          contributionToVolume: 0
         }
       };
+    });
+  }
+
+  public transformResponsibilityEntitiesPerformanceTotalDTO(entitiesData: any[]): any {
+    return entitiesData.map(entity => {
+      return Object.assign(entity, {
+        performanceTotal: {
+          total: entity.performanceTotal.total,
+          totalYearAgo: entity.performanceTotal.totalYearAgo,
+          totalYearAgoPercent: this.utilService.getYearAgoPercent(entity.performanceTotal.total, entity.performanceTotal.totalYearAgo),
+          contributionToVolume: 0
+        }
+      });
     });
   }
 }

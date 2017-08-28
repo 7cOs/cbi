@@ -40,22 +40,22 @@ describe('Service: MyPerformanceTableDataTransformerService', () => {
     });
   });
 
-  describe('transformPeopleTableData', () => {
-    beforeEach(inject([ MyPerformanceTableDataTransformerService ],
-      (_myPerformanceTableDataTransformerService: MyPerformanceTableDataTransformerService) => {
-        myPerformanceTableDataTransformerService = _myPerformanceTableDataTransformerService;
-    }));
+  // describe('transformPeopleTableData', () => {
+  //   beforeEach(inject([ MyPerformanceTableDataTransformerService ],
+  //     (_myPerformanceTableDataTransformerService: MyPerformanceTableDataTransformerService) => {
+  //       myPerformanceTableDataTransformerService = _myPerformanceTableDataTransformerService;
+  //   }));
 
-    it('should return a collection of formatted table data featuring \'positions\'', () => {
-      spyOn(myPerformanceTableDataTransformerService, 'transformPeopleTableData').and.callThrough();
-      const transformedPeopleTableData =
-        myPerformanceTableDataTransformerService.transformPeopleTableData({
-          'MARKET DEVELOPMENT MANAGER': mockRoleGroups['MARKET DEVELOPMENT MANAGER']
-        });
+  //   it('should return a collection of formatted table data featuring \'positions\'', () => {
+  //     spyOn(myPerformanceTableDataTransformerService, 'transformPeopleTableData').and.callThrough();
+  //     const transformedPeopleTableData =
+  //       myPerformanceTableDataTransformerService.transformPeopleTableData({
+  //         'MARKET DEVELOPMENT MANAGER': mockRoleGroups['MARKET DEVELOPMENT MANAGER']
+  //       });
 
-      expect(transformedPeopleTableData[0].descriptionRow0).toEqual(mockRoleGroups['MARKET DEVELOPMENT MANAGER'][0].name);
-    });
-  });
+  //     expect(transformedPeopleTableData[0].descriptionRow0).toEqual(mockRoleGroups['MARKET DEVELOPMENT MANAGER'][0].name);
+  //   });
+  // });
 
   describe('buildTotalRow', () => {
     beforeEach(inject([ MyPerformanceTableDataTransformerService ],

@@ -47,6 +47,17 @@ export function responsibilitiesReducer(
         }
       });
 
+    case ResponsibilitiesActions.FETCH_RESPONSIBILITY_ENTITY_DATA_ACTION:
+      return Object.assign({}, state, {
+        status: ActionStatus.Fetching
+      });
+
+    case ResponsibilitiesActions.FETCH_RESPONSIBILITY_ENTITY_DATA_SUCCESS_ACTION:
+      return Object.assign({}, state, {
+        status: ActionStatus.Fetched,
+        performanceTotals: action.payload
+      });
+
     default:
       return state;
   }

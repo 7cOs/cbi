@@ -2,7 +2,7 @@ import * as Chance from 'chance';
 import { Injectable } from '@angular/core';
 import 'rxjs/add/operator/map';
 
-import { EntityResponsibilities } from '../models/entity-responsibilities.model';
+// import { EntityResponsibilities } from '../models/entity-responsibilities.model';
 import { MyPerformanceTableRow } from '../models/my-performance-table-row.model';
 import { PerformanceTotal } from '../models/performance-total.model';
 import { ResponsibilitiesState } from '../state/reducers/responsibilities.reducer';
@@ -30,7 +30,7 @@ export class MyPerformanceTableDataTransformerService {
   public getTableData(viewType: ViewType, responsibilitiesState: ResponsibilitiesState): MyPerformanceTableRow[] {
     switch (viewType) {
       case ViewType.people:
-        return this.transformPeopleTableData(responsibilitiesState.responsibilities);
+        return this.transformPeopleTableData(responsibilitiesState.performanceTotals);
 
       case ViewType.roleGroups:
       default:
@@ -38,15 +38,14 @@ export class MyPerformanceTableDataTransformerService {
     }
   }
 
-  public transformPeopleTableData(roleGroups: RoleGroups): MyPerformanceTableRow[] {
-    const groupName = Object.keys(roleGroups)[0];
-    return roleGroups[groupName].map((person: EntityResponsibilities) => {
+  public transformPeopleTableData(responsibilityEntities: any[]): MyPerformanceTableRow[] {
+    return responsibilityEntities.map((entity: any) => {
       return {
-        descriptionRow0: person.name,
-        metricColumn0: chance.natural({max: 1000}),
-        metricColumn1: chance.natural({max: 1000}),
-        metricColumn2: chance.natural({max: 100}),
-        ctv: chance.natural({max: 100})
+        descriptionRow0: entity.name,
+        metricColumn0: entity.performanceTotal.total,
+        metricColumn1: entity.performanceTotal.totalYearAgo,
+        metricColumn2: entity.performanceTotal.totalYearAgoPercent,
+        ctv: entity.performanceTotal.contributionToVolume
       };
     });
   }

@@ -12,6 +12,7 @@ import { PerformanceTotalTransformerService } from '../../services/performance-t
 import { ResponsibilitiesTransformerService } from '../../services/responsibilities-transformer.service';
 import { RoleGroupPerformanceTotalDTO } from '../../models/role-groups.model';
 import { RoleGroups } from '../../models/role-groups.model';
+import { SetTableRowPerformanceTotal } from '../../state/actions/performance-total.action';
 import { ViewType } from '../../enums/view-type.enum';
 import * as ResponsibilitiesActions from '../../state/actions/responsibilities.action';
 import * as ViewTypeActions from '../../state/actions/view-types.action';
@@ -69,6 +70,27 @@ export class ResponsibilitiesEffects {
             });
         })
       .catch((err: Error) => Observable.of(new ResponsibilitiesActions.FetchResponsibilitiesFailureAction(err)));
+  }
+
+  @Effect() GetResponsibilityEntityData$(): Observable<Action> {
+    return this.actions$
+      .ofType(ResponsibilitiesActions.FETCH_RESPONSIBILITY_ENTITY_DATA_ACTION)
+      .switchMap((action: Action) => {
+        const { entityType, entities, filter, performanceTotal, viewType } = action.payload;
+
+        return this.myPerformanceApiService.getResponsibilityEntitiesPerformance(entities, filter)
+          .switchMap((response: any[]) => {
+            const entityData = this.performanceTotalTransformerService.transformResponsibilityEntitiesPerformanceTotalDTO(response);
+
+            return Observable.from([
+              new SetTableRowPerformanceTotal(performanceTotal),
+              new ResponsibilitiesActions.GetPeopleByRoleGroupAction(entityType),
+              new ResponsibilitiesActions.FetchResponsibilityEntityDataSuccessAction(entityData),
+              new ViewTypeActions.SetLeftMyPerformanceTableViewType(viewType)
+            ]);
+          })
+          .catch((err: Error) => Observable.of(new ResponsibilitiesActions.FetchResponsibilitiesFailureAction(err)));
+      });
   }
 
   @Effect({dispatch: false})

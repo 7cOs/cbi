@@ -48,6 +48,28 @@ export class MyPerformanceApiService {
       .catch(err => this.handleError(new Error(err)));
   }
 
+  public getResponsibilityEntitiesPerformance(entities: any[], filter: any): any {
+    const apiCalls: any[] = [];
+
+    entities.forEach((entity: any) => {
+      apiCalls.push(this.getResponsibilityEntityPerformance(entity, filter));
+    });
+
+    return Observable.forkJoin(apiCalls);
+  }
+
+  public getResponsibilityEntityPerformance(entity: any, filter: any): any {
+    const url = `/v3/positions/${ entity.id }/responsibilities/${ entity.type }/performanceTotal`;
+
+    return this.http.get(`${ url }`, {
+      params: this.getFilterStateParams(filter)
+    })
+      .map(res => Object.assign({}, entity, {
+        performanceTotal: res.json()
+      }))
+      .catch(error => this.handleError(new Error(error)));
+  }
+
   public getPerformanceTotal(positionId: number, filter: MyPerformanceFilterState): Observable<PerformanceTotalDTO> {
     const url = `/v3/positions/${ positionId }/performanceTotal`;
 

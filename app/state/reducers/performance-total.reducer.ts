@@ -40,7 +40,6 @@ export function performanceTotalReducer(
       });
 
     case PerformanceTotalActions.SET_TABLE_ROW_PERFORMANCE_TOTAL:
-      console.log('SET TABLE ROW REDUCER', action.payload);
       return Object.assign({}, state, {
         performanceTotal: {
           total: action.payload.metricColumn0,

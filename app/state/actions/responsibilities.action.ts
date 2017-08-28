@@ -1,5 +1,7 @@
 import { Action } from '@ngrx/store';
+
 import { EntityPeopleType } from '../../enums/entity-responsibilities.enum';
+import { EntityResponsibilities } from '../../models/entity-responsibilities.model';
 import { FetchResponsibilitiesSuccessPayload } from '../../models/role-groups.model';
 import { MyPerformanceFilterState } from '../../state/reducers/my-performance-filter.reducer';
 
@@ -24,6 +26,26 @@ export class FetchResponsibilitiesFailureAction implements Action {
   constructor(public payload: Error) { }
 }
 
+export const FETCH_RESPONSIBILITY_ENTITY_DATA_ACTION = '[Responsibilities] FETCH_RESPONSIBILITY_ENTITY_DATA_ACTION';
+export class FetchResponsibilityEntityDataAction implements Action {
+  readonly type = FETCH_RESPONSIBILITY_ENTITY_DATA_ACTION;
+
+  constructor(public payload: {
+    entityType: EntityPeopleType,
+    entities: EntityResponsibilities[],
+    filter: MyPerformanceFilterState,
+    performanceTotal: any,
+    viewType: any
+  }) { }
+}
+
+export const FETCH_RESPONSIBILITY_ENTITY_DATA_SUCCESS_ACTION = '[Responsibilities] FETCH_RESPONSIBILITY_ENTITY_DATA_SUCCESS_ACTION';
+export class FetchResponsibilityEntityDataSuccessAction implements Action {
+  readonly type = FETCH_RESPONSIBILITY_ENTITY_DATA_SUCCESS_ACTION;
+
+  constructor(public payload: any[]) { }
+}
+
 export const GET_PEOPLE_BY_ROLE_GROUP_ACTION = '[Responsibilities] GET_PEOPLE_BY_ROLE_GROUP_ACTION';
 export class GetPeopleByRoleGroupAction implements Action {
   readonly type = GET_PEOPLE_BY_ROLE_GROUP_ACTION;
@@ -31,8 +53,10 @@ export class GetPeopleByRoleGroupAction implements Action {
   constructor(public payload: EntityPeopleType) { }
 }
 
-export type Action =
-  FetchResponsibilitiesAction
+export type Action
+  = FetchResponsibilitiesAction
   | FetchResponsibilitiesSuccessAction
   | FetchResponsibilitiesFailureAction
-  | GetPeopleByRoleGroupAction;
+  | GetPeopleByRoleGroupAction
+  | FetchResponsibilityEntityDataAction
+  | FetchResponsibilityEntityDataSuccessAction;
