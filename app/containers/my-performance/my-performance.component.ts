@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, Inject } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs/Subscription';
@@ -71,7 +71,8 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
 
   constructor(
     private store: Store<AppState>,
-    private myPerformanceTableDataTransformerService: MyPerformanceTableDataTransformerService
+    private myPerformanceTableDataTransformerService: MyPerformanceTableDataTransformerService,
+    @Inject('userService') private userService: any
   ) { }
 
   ngOnInit() {
@@ -104,8 +105,7 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
         this.showLeftBackButton = versions.length > 0;
     });
 
-    // stub current user for now
-    const currentUserId = 3843;
+    const currentUserId = this.userService.model.currentUser.positionId ? parseInt(this.userService.model.currentUser.positionId, 0) : 0;
     this.store.dispatch(new FetchResponsibilitiesAction({ positionId: currentUserId, filter: this.filterState }));
 
     // setting ViewType for right side here for now
