@@ -892,7 +892,7 @@ module.exports = /*  @ngInject */
       return result;
     }
 
-    function handleAddToTargetList(ev, targetList, idx) {
+    function handleAddToTargetList(ev, targetList, idx, addAction) {
       const usedOpps = targetList.opportunitiesSummary.opportunitiesCount;
       const remainingOpps = remainingOpportunitySpots(usedOpps);
       const totalOpps = usedOpps + (vm.isAllOpportunitiesSelected ? filtersService.model.appliedFilter.pagination.totalOpportunities : this.selected.length);
@@ -900,8 +900,8 @@ module.exports = /*  @ngInject */
       if (hasRemainingOpps) {
         analyticsService.trackEvent(
           targetListService.getAnalyticsCategory(vm.targetListService.model.currentList.permissionLevel),
-          'Copy to Target List',
-          targetList.id
+          `${addAction ? 'Add' : 'Copy'} to Target List`,
+          addAction ? targetList.id : vm.targetListService.model.currentList.id
         );
         vm.addToTargetList(targetList.id);
       } else {
