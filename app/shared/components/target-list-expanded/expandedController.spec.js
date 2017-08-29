@@ -335,7 +335,7 @@ describe('Unit: expanded target list controller', function() {
         expect(newList).toBe(undefined);
       });
 
-      it('should save new list', function(done) {
+      it('should save new list and send analytics event', function(done) {
         ctrl.newList = {
         name: 'Standard Name',
         collaborators: [
@@ -355,7 +355,7 @@ describe('Unit: expanded target list controller', function() {
 
         spyOn(userService, 'addTargetList').and.callFake(function() {
           return {
-            then: function(callback) { return callback({}); }
+            then: function(callback) { return callback({id: '998877'}); }
           };
         });
 
@@ -364,6 +364,8 @@ describe('Unit: expanded target list controller', function() {
             then: function(callback) { return q.when(callback({data: {id: '1234', name: 'collab name'}})); }
           };
         });
+
+        spyOn(analyticsService, 'trackEvent');
 
         userService.model.targetLists = {
          ownedNotArchivedTargetLists: [{
@@ -374,6 +376,7 @@ describe('Unit: expanded target list controller', function() {
 
         var newList = ctrl.saveNewList();
         expect(userService.addTargetList).toHaveBeenCalled();
+        expect(analyticsService.trackEvent).toHaveBeenCalledWith('Target Lists - My Target Lists', 'Create Target List', '998877');
         expect(ctrl.buttonDisabled).toEqual(false);
         expect(newList).toBe(undefined);
         expect(userService.model.targetLists.ownedNotArchivedTargetLists[0].collaborators).toEqual({ id: '1234', name: 'collab name' });
