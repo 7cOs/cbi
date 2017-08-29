@@ -16,18 +16,6 @@ export interface EntityResponsibilities {
   propertyType?: EntityPropertyType;
 }
 
-export interface EntityResponsibilitiesPerformanceDTO {
-  id: number;
-  name: string;
-  performanceTotal: PerformanceTotalDTO;
-}
-
-export interface EntityResponsibilitiesPerformance {
-  id: number;
-  name: string;
-  performanceTotal: PerformanceTotal;
-}
-
 export interface ResponsibilityEntityPerformanceDTO {
   id: number;
   name: string;
