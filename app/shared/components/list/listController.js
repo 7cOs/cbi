@@ -138,7 +138,10 @@ module.exports = /*  @ngInject */
         analyticsService.trackEvent('Opportunities', 'Download', 'Opportunity Result List');
       } else {
         analyticsService.trackEvent(
-          targetListService.getAnalyticsCategory(vm.targetListService.model.currentList.permissionLevel),
+          targetListService.getAnalyticsCategory(
+            vm.targetListService.model.currentList.permissionLevel,
+            vm.targetListService.model.currentList.archived
+          ),
           'Download Target List',
           vm.targetListService.model.currentList.id
         );

@@ -2160,16 +2160,21 @@ describe('Unit: list controller', function() {
     let analyticsCategoryMock;
     let permissionLevelMock;
     let selectedListMock;
+    let archivedMock;
 
     beforeEach(() => {
       spyOn(analyticsService, 'trackEvent');
+
       analyticsCategoryMock = chance.string();
       permissionLevelMock = chance.string();
       selectedListMock = chance.string();
+      archivedMock = chance.string();
       targetListService.model.currentList.permissionLevel = permissionLevelMock;
       targetListService.model.currentList.id = selectedListMock;
-      spyOn(targetListService, 'getAnalyticsCategory').and.callFake((permLvl) => {
-        if (permLvl === permissionLevelMock) {
+      targetListService.model.currentList.archived = archivedMock;
+
+      spyOn(targetListService, 'getAnalyticsCategory').and.callFake((permLvl, arch) => {
+        if (permLvl === permissionLevelMock && arch === archivedMock) {
           return analyticsCategoryMock;
         }
       });
