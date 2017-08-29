@@ -21,13 +21,13 @@
         md-menu-content.target-list-menu
           md-menu-item(ng-click="list.createNewList($event)")
             p Create New List
-          md-menu-item(ng-repeat="targetList in list.userService.model.targetLists.owned | filter:{archived:false, deleted: false}" ng-click="list.handleAddToTargetList($event, targetList, $index)" analytics-event-on="click" category="{{list.analyticsCategory}}" action="Add to Target List" label="{{targetList.id}}")
+          md-menu-item(ng-repeat="targetList in list.userService.model.targetLists.owned | filter:{archived:false, deleted: false}" ng-click="list.handleAddToTargetList($event, targetList, $index, true)")
             p {{::targetList.name | truncateText:18}}
               span.spots-available {{list.remainingOpportunitySpots(targetList.opportunitiesSummary.opportunitiesCount)}} SPOTS AVAILABLE
       md-menu(md-offset="0 45" ng-if="list.showCopyToTargetList && !list.targetListService.model.currentList.archived")
         button.btn-action(ng-click="$mdOpenMenu($event)") Copy to Target List
         md-menu-content.target-list-menu
-          md-menu-item(ng-repeat="targetList in list.userService.model.targetLists.owned" ng-click="list.handleAddToTargetList($event, targetList, $index)" analytics-event-on="click" category="{{list.analyticsCategory}}" action="Add to Target List" label="{{targetList.id}}")
+          md-menu-item(ng-repeat="targetList in list.userService.model.targetLists.owned" ng-click="list.handleAddToTargetList($event, targetList, $index, false)")
             p {{::targetList.name | truncateText:18}}
               span.spots-available {{list.remainingOpportunitySpots(targetList.opportunitiesSummary.opportunitiesCount)}} SPOTS AVAILABLE
       md-menu(md-offset="0 45")

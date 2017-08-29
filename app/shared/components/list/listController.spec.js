@@ -1,3 +1,7 @@
+import * as Chance from 'chance';
+
+const chance = new Chance();
+
 describe('Unit: list controller', function() {
   var scope, ctrl, q, httpBackend, mdDialog, closedOpportunitiesService, filtersService, loaderService, opportunitiesService, storesService, targetListService, toastService, userService, filter, analyticsService;
   var bindings = {showAddToTargetList: true, showRemoveButton: false, selectAllAvailable: true, pageName: 'MyTestPage'};
@@ -1995,38 +1999,134 @@ describe('Unit: list controller', function() {
       expect(opportunitiesService.model.opportunities[1].store.highImpactOpportunityCount).toEqual(0);
     });
 
-    it('Should have enough opportunities spots remaining to add to target list', () => {
-      const addToTargetListPromise = q.defer();
-      const opportunityIDsPromise = q.defer();
-
-      spyOn(ctrl, 'addToTargetList').and.callThrough();
-
-      spyOn(targetListService, 'addTargetListOpportunities').and.callFake(() => {
-        return addToTargetListPromise.promise;
-      });
-
-      ctrl.selected = ['fake1'];
-
-      const targetList = {
+    describe('when there are enough opportunities spots remaining to add to target list', () => {
+      let addToTargetListPromise;
+      let opportunityIDsPromise;
+      let analyticsCategoryMock;
+      let permissionLevelMock;
+      let selectedListMock;
+      let archivedMock;
+      const destTargetListMock = {
         opportunitiesSummary: {
           opportunitiesCount: 300
         },
         id: 'fakeID'
       };
 
-      filtersService.model.appliedFilter.pagination.totalOpportunities = 5000;
+      beforeEach(() => {
+        addToTargetListPromise = q.defer();
+        opportunityIDsPromise = q.defer();
+        analyticsCategoryMock = chance.string();
+        permissionLevelMock = chance.string();
+        selectedListMock = chance.string();
+        archivedMock = chance.string();
 
-      const fakeEvent = {
-        stopPropagation: () => {}
+        targetListService.model.currentList.permissionLevel = permissionLevelMock;
+        targetListService.model.currentList.id = selectedListMock;
+        targetListService.model.currentList.archived = archivedMock;
+        spyOn(analyticsService, 'trackEvent');
+        spyOn(targetListService, 'getAnalyticsCategory').and.callFake((permLvl, arch) => {
+          if (permLvl === permissionLevelMock && arch === archivedMock) {
+            return analyticsCategoryMock;
+          }
+        });
+        spyOn(ctrl, 'addToTargetList').and.callThrough();
+        spyOn(targetListService, 'addTargetListOpportunities').and.callFake(() => {
+          return addToTargetListPromise.promise;
+        });
+      });
+
+      it('should add to target list and send analytics event for "add" action', () => {
+        ctrl.selected = [{id: 'fake1'}];
+
+        filtersService.model.appliedFilter.pagination.totalOpportunities = 5000;
+
+        const fakeEvent = {
+          stopPropagation: () => {}
+        };
+
+        ctrl.handleAddToTargetList(fakeEvent, destTargetListMock, 0, true);
+        opportunityIDsPromise.resolve(['fake1']);
+        addToTargetListPromise.resolve(true);
+
+        scope.$digest();
+
+        expect(ctrl.addToTargetList).toHaveBeenCalledWith(destTargetListMock.id);
+        expect(ctrl.userService.model.targetLists.owned[0].opportunitiesSummary.opportunitiesCount).toEqual(301);
+        expect(analyticsService.trackEvent).toHaveBeenCalledWith(analyticsCategoryMock, 'Add to Target List', destTargetListMock.id);
+      });
+
+      it('should add to target list and send analytics event for "copy" action', () => {
+        ctrl.selected = [{id: 'fake1'}];
+
+        filtersService.model.appliedFilter.pagination.totalOpportunities = 5000;
+
+        const fakeEvent = {
+          stopPropagation: () => {}
+        };
+
+        ctrl.handleAddToTargetList(fakeEvent, destTargetListMock, 0, false);
+        opportunityIDsPromise.resolve(['fake1']);
+        addToTargetListPromise.resolve(true);
+
+        scope.$digest();
+
+        expect(ctrl.addToTargetList).toHaveBeenCalledWith(destTargetListMock.id);
+        expect(ctrl.userService.model.targetLists.owned[0].opportunitiesSummary.opportunitiesCount).toEqual(301);
+        expect(analyticsService.trackEvent).toHaveBeenCalledWith(analyticsCategoryMock, 'Copy to Target List', selectedListMock);
+      });
+    });
+
+    describe('when there are NOT enough opportunities spots remaining to add to target list', () => {
+      let addToTargetListPromise;
+      let analyticsCategoryMock;
+      let permissionLevelMock;
+      const destTargetListMock = {
+        opportunitiesSummary: {
+          opportunitiesCount: 1000
+        },
+        id: 'fakeID'
       };
 
-      ctrl.handleAddToTargetList(fakeEvent, targetList, 0);
-      opportunityIDsPromise.resolve(['fake1']);
-      addToTargetListPromise.resolve(true);
+      beforeEach(() => {
+        addToTargetListPromise = q.defer();
+        analyticsCategoryMock = chance.string();
+        permissionLevelMock = chance.string();
 
-      scope.$digest();
+        ctrl.userService.model.targetLists.owned[0].opportunitiesSummary.opportunitiesCount = 1000;
+        targetListService.model.currentList.permissionLevel = permissionLevelMock;
+        spyOn(analyticsService, 'trackEvent');
+        spyOn(targetListService, 'getAnalyticsCategory').and.callFake((permLvl) => {
+          if (permLvl === permissionLevelMock) {
+            return analyticsCategoryMock;
+          }
+        });
+        spyOn(ctrl, 'addToTargetList').and.callThrough();
+        spyOn(targetListService, 'addTargetListOpportunities').and.callFake(() => {
+          return addToTargetListPromise.promise;
+        });
+        spyOn(mdDialog, 'show');
+      });
 
-      expect(ctrl.userService.model.targetLists.owned[0].opportunitiesSummary.opportunitiesCount).toEqual(301);
+      it('should not add to target list or send analytics event, and should open modal', () => {
+        ctrl.selected = ['fake1'];
+
+        filtersService.model.appliedFilter.pagination.totalOpportunities = 5000;
+
+        const fakeEvent = {
+          stopPropagation: () => {}
+        };
+
+        ctrl.handleAddToTargetList(fakeEvent, destTargetListMock, 0, true);
+
+        scope.$digest();
+
+        expect(ctrl.addToTargetList).not.toHaveBeenCalled();
+        expect(ctrl.userService.model.targetLists.owned[0].opportunitiesSummary.opportunitiesCount).toEqual(1000);
+        expect(analyticsService.trackEvent).not.toHaveBeenCalled();
+
+        expect(mdDialog.show).toHaveBeenCalled();
+      });
     });
   });
 
