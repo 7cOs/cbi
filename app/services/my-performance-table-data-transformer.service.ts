@@ -2,7 +2,7 @@ import * as Chance from 'chance';
 import { Injectable } from '@angular/core';
 import 'rxjs/add/operator/map';
 
-// import { EntityResponsibilities } from '../models/entity-responsibilities.model';
+import { ResponsibilityEntityPerformance } from '../models/entity-responsibilities.model';
 import { MyPerformanceTableRow } from '../models/my-performance-table-row.model';
 import { PerformanceTotal } from '../models/performance-total.model';
 import { ResponsibilitiesState } from '../state/reducers/responsibilities.reducer';
@@ -39,7 +39,7 @@ export class MyPerformanceTableDataTransformerService {
   }
 
   public transformPeopleTableData(responsibilityEntities: any[]): MyPerformanceTableRow[] {
-    return responsibilityEntities.map((entity: any) => {
+    return responsibilityEntities.map((entity: ResponsibilityEntityPerformance) => {
       return {
         descriptionRow0: entity.name,
         metricColumn0: entity.performanceTotal.total,
@@ -62,7 +62,7 @@ export class MyPerformanceTableDataTransformerService {
     };
   }
 
-  public getRoleGroupPerformanceTableData(performanceData: Array<RoleGroupPerformanceTotal>): Array<MyPerformanceTableRow> {
+  public getRoleGroupPerformanceTableData(performanceData: any[]): MyPerformanceTableRow[] {
     return performanceData.map((performance: RoleGroupPerformanceTotal) => {
       return {
         descriptionRow0: `${performance.entityType}S`,

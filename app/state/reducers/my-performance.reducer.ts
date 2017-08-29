@@ -58,8 +58,8 @@ export function myPerformanceReducer(
     case ResponsibilitiesActions.FETCH_RESPONSIBILITIES_SUCCESS_ACTION:
     case ResponsibilitiesActions.FETCH_RESPONSIBILITIES_FAILURE_ACTION:
     case ResponsibilitiesActions.GET_PEOPLE_BY_ROLE_GROUP_ACTION:
-    case ResponsibilitiesActions.FETCH_RESPONSIBILITY_ENTITY_DATA_ACTION:
-    case ResponsibilitiesActions.FETCH_RESPONSIBILITY_ENTITY_DATA_SUCCESS_ACTION:
+    case ResponsibilitiesActions.FETCH_RESPONSIBILITY_ENTITY_PERFORMANCE:
+    case ResponsibilitiesActions.FETCH_RESPONSIBILITY_ENTITY_PERFORMANCE_SUCCESS:
       return {
         current: {
           performanceTotal: state.current.performanceTotal,

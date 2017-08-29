@@ -9,7 +9,7 @@ import { ColumnType } from '../../enums/column-type.enum';
 import { DateRange } from '../../models/date-range.model';
 import { DateRangesState } from '../../state/reducers/date-ranges.reducer';
 import { EntityPeopleType } from '../../enums/entity-responsibilities.enum';
-import { FetchResponsibilitiesAction, FetchResponsibilityEntityDataAction } from '../../state/actions/responsibilities.action';
+import { FetchResponsibilitiesAction, FetchResponsibilityEntityPerformance } from '../../state/actions/responsibilities.action';
 import { getDateRangeMock } from '../../models/date-range.model.mock';
 import { MyPerformanceFilterActionType } from '../../enums/my-performance-filter.enum';
 import { MyPerformanceFilterEvent } from '../../models/my-performance-filter.model';
@@ -139,7 +139,7 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
           this.store.dispatch(new MyPerformanceVersionActions.SaveMyPerformanceStateAction(this.currentState));
 
           if (this.leftTableViewType === ViewType.roleGroups) {
-            this.store.dispatch(new FetchResponsibilityEntityDataAction({
+            this.store.dispatch(new FetchResponsibilityEntityPerformance({
               entityType: EntityPeopleType[parameters.row.descriptionRow0.slice(0, -1)],
               entities: this.currentState.responsibilities.responsibilities[EntityPeopleType[parameters.row.descriptionRow0.slice(0, -1)]],
               filter: this.filterState,

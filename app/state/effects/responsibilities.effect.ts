@@ -9,6 +9,7 @@ import { MyPerformanceApiService } from '../../services/my-performance-api.servi
 import { MyPerformanceFilterState } from '../../state/reducers/my-performance-filter.reducer';
 import { PeopleResponsibilitiesDTO } from '../../models/people-responsibilities-dto.model';
 import { PerformanceTotalTransformerService } from '../../services/performance-total-transformer.service';
+import { ResponsibilityEntityPerformanceDTO } from '../../models/entity-responsibilities.model';
 import { ResponsibilitiesTransformerService } from '../../services/responsibilities-transformer.service';
 import { RoleGroupPerformanceTotalDTO } from '../../models/role-groups.model';
 import { RoleGroups } from '../../models/role-groups.model';
@@ -72,20 +73,20 @@ export class ResponsibilitiesEffects {
       .catch((err: Error) => Observable.of(new ResponsibilitiesActions.FetchResponsibilitiesFailureAction(err)));
   }
 
-  @Effect() GetResponsibilityEntityData$(): Observable<Action> {
+  @Effect() FetchResponsibilityEntityPerformance$(): Observable<Action> {
     return this.actions$
-      .ofType(ResponsibilitiesActions.FETCH_RESPONSIBILITY_ENTITY_DATA_ACTION)
+      .ofType(ResponsibilitiesActions.FETCH_RESPONSIBILITY_ENTITY_PERFORMANCE)
       .switchMap((action: Action) => {
         const { entityType, entities, filter, performanceTotal, viewType } = action.payload;
 
         return this.myPerformanceApiService.getResponsibilityEntitiesPerformance(entities, filter)
-          .switchMap((response: any[]) => {
-            const entityData = this.performanceTotalTransformerService.transformResponsibilityEntitiesPerformanceTotalDTO(response);
+          .switchMap((response: ResponsibilityEntityPerformanceDTO[]) => {
+            const entityPerformance = this.performanceTotalTransformerService.transformResponsibilityEntitiesPerformanceDTO(response);
 
             return Observable.from([
               new SetTableRowPerformanceTotal(performanceTotal),
               new ResponsibilitiesActions.GetPeopleByRoleGroupAction(entityType),
-              new ResponsibilitiesActions.FetchResponsibilityEntityDataSuccessAction(entityData),
+              new ResponsibilitiesActions.FetchResponsibilityEntityPerformanceSuccess(entityPerformance),
               new ViewTypeActions.SetLeftMyPerformanceTableViewType(viewType)
             ]);
           })

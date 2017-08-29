@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import 'rxjs/add/operator/map';
 
 import { PerformanceTotal, PerformanceTotalDTO } from '../models/performance-total.model';
+import { ResponsibilityEntityPerformance, ResponsibilityEntityPerformanceDTO } from '../models/entity-responsibilities.model';
 import { RoleGroupPerformanceTotal, RoleGroupPerformanceTotalDTO } from '../models/role-groups.model';
 import { UtilService } from './util.service';
 
@@ -36,8 +37,8 @@ export class PerformanceTotalTransformerService {
     });
   }
 
-  public transformResponsibilityEntitiesPerformanceTotalDTO(entitiesData: any[]): any {
-    return entitiesData.map(entity => {
+  public transformResponsibilityEntitiesPerformanceDTO(entities: ResponsibilityEntityPerformanceDTO[]): ResponsibilityEntityPerformance[] {
+    return entities.map((entity: ResponsibilityEntityPerformanceDTO) => {
       return Object.assign(entity, {
         performanceTotal: {
           total: entity.performanceTotal.total,
