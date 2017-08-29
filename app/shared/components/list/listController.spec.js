@@ -2004,9 +2004,14 @@ describe('Unit: list controller', function() {
       let opportunityIDsPromise;
       let analyticsCategoryMock;
       let permissionLevelMock;
-      let destTargetListMock;
       let selectedListMock;
       let archivedMock;
+      const destTargetListMock = {
+        opportunitiesSummary: {
+          opportunitiesCount: 300
+        },
+        id: 'fakeID'
+      };
 
       beforeEach(() => {
         addToTargetListPromise = q.defer();
@@ -2015,12 +2020,6 @@ describe('Unit: list controller', function() {
         permissionLevelMock = chance.string();
         selectedListMock = chance.string();
         archivedMock = chance.string();
-        destTargetListMock = {
-          opportunitiesSummary: {
-            opportunitiesCount: 300
-          },
-          id: 'fakeID'
-        };
 
         targetListService.model.currentList.permissionLevel = permissionLevelMock;
         targetListService.model.currentList.id = selectedListMock;
@@ -2082,18 +2081,17 @@ describe('Unit: list controller', function() {
       let addToTargetListPromise;
       let analyticsCategoryMock;
       let permissionLevelMock;
-      let destTargetListMock;
+      const destTargetListMock = {
+        opportunitiesSummary: {
+          opportunitiesCount: 1000
+        },
+        id: 'fakeID'
+      };
 
       beforeEach(() => {
         addToTargetListPromise = q.defer();
         analyticsCategoryMock = chance.string();
         permissionLevelMock = chance.string();
-        destTargetListMock = {
-          opportunitiesSummary: {
-            opportunitiesCount: 1000
-          },
-          id: 'fakeID'
-        };
 
         ctrl.userService.model.targetLists.owned[0].opportunitiesSummary.opportunitiesCount = 1000;
         targetListService.model.currentList.permissionLevel = permissionLevelMock;
