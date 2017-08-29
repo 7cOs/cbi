@@ -14,6 +14,7 @@ import { GreetingComponent } from './shared/components/greeting/greeting.compone
 import { MyPerformanceComponent } from './containers/my-performance/my-performance.component';
 import { NotificationsComponent } from './shared/components/Notifications/notifications.component';
 import { SettingsComponent } from './shared/components/settings/settings.component';
+import { UtilService } from './services/util.service';
 
 (<any>window).CryptoJS = require('crypto-js');
 
@@ -41,5 +42,6 @@ export default angular.module('cf', [
   .directive('notifications', AppUpgradeAdapter.downgradeNg2Component(NotificationsComponent) as IDirectiveFactory)
   .factory('dateRangeService', downgradeInjectable(DateRangeService))
   .factory('analyticsService', downgradeInjectable(AnalyticsService))
+  .factory('utilService', downgradeInjectable(UtilService))
   .config(require('./config'))
   .run(require('./run'));

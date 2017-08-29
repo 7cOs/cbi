@@ -1,11 +1,10 @@
 'use strict';
-
 const myPerformanceConfigState = require('./containers/my-performance/my-performance.state.ts').configState;
 
 module.exports = /*  @ngInject */
-  function($mdThemingProvider, $locationProvider, $httpProvider, $urlRouterProvider, $stateProvider) {
+  function($mdThemingProvider, $locationProvider, $httpProvider, $urlRouterProvider, $stateProvider, utilServiceProvider) {
 
-    myPerformanceConfigState($stateProvider);
+    myPerformanceConfigState($stateProvider, () => utilServiceProvider.$get().resetMyPerformanceBreadcrumb);
 
     if (!$httpProvider.defaults.headers.get) {
       $httpProvider.defaults.headers.get = {};
