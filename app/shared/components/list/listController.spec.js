@@ -2155,4 +2155,38 @@ describe('Unit: list controller', function() {
       expect(ctrl.isTotalOpportunitiesWithinMaxLimit()).toBeFalsy();
     });
   });
+
+  describe('sendDownloadEvent', () => {
+    let analyticsCategoryMock;
+    let permissionLevelMock;
+    let selectedListMock;
+
+    beforeEach(() => {
+      spyOn(analyticsService, 'trackEvent');
+      analyticsCategoryMock = chance.string();
+      permissionLevelMock = chance.string();
+      selectedListMock = chance.string();
+      targetListService.model.currentList.permissionLevel = permissionLevelMock;
+      targetListService.model.currentList.id = selectedListMock;
+      spyOn(targetListService, 'getAnalyticsCategory').and.callFake((permLvl) => {
+        if (permLvl === permissionLevelMock) {
+          return analyticsCategoryMock;
+        }
+      });
+    });
+
+    it('should send correct event for opportunities page', () => {
+      ctrl.pageName = 'opportunities';
+      ctrl.sendDownloadEvent();
+
+      expect(analyticsService.trackEvent).toHaveBeenCalledWith('Opportunities', 'Download', 'Opportunity Result List');
+    });
+
+    it('should send correct event for target list details page', () => {
+      ctrl.pageName = 'target-list-detail';
+      ctrl.sendDownloadEvent();
+
+      expect(analyticsService.trackEvent).toHaveBeenCalledWith(analyticsCategoryMock, 'Download Target List', selectedListMock);
+    });
+  });
 });
