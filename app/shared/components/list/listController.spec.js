@@ -2006,6 +2006,7 @@ describe('Unit: list controller', function() {
       let permissionLevelMock;
       let destTargetListMock;
       let selectedListMock;
+      let archivedMock;
 
       beforeEach(() => {
         addToTargetListPromise = q.defer();
@@ -2013,6 +2014,7 @@ describe('Unit: list controller', function() {
         analyticsCategoryMock = chance.string();
         permissionLevelMock = chance.string();
         selectedListMock = chance.string();
+        archivedMock = chance.string();
         destTargetListMock = {
           opportunitiesSummary: {
             opportunitiesCount: 300
@@ -2022,9 +2024,10 @@ describe('Unit: list controller', function() {
 
         targetListService.model.currentList.permissionLevel = permissionLevelMock;
         targetListService.model.currentList.id = selectedListMock;
+        targetListService.model.currentList.archived = archivedMock;
         spyOn(analyticsService, 'trackEvent');
-        spyOn(targetListService, 'getAnalyticsCategory').and.callFake((permLvl) => {
-          if (permLvl === permissionLevelMock) {
+        spyOn(targetListService, 'getAnalyticsCategory').and.callFake((permLvl, arch) => {
+          if (permLvl === permissionLevelMock && arch === archivedMock) {
             return analyticsCategoryMock;
           }
         });
