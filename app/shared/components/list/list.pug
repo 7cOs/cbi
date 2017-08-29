@@ -33,9 +33,9 @@
       md-menu(md-offset="0 45")
         button.btn-action(ng-click="$mdOpenMenu($event)" ng-disabled="list.selected < 1") Download
         md-menu-content.target-list-menu
-          md-menu-item(ng-csv="list.getCSVData(true)" filename="{{list.getDate() | date:'yyyy-MM-dd'}}.csv" csv-header="list.csvHeaderRationale" ng-click="$mdCloseMenu($event)" analytics-event-on="click" category="{{list.analyticsCategory}}" action="Download" label="{{list.analyticsLabel}}")
+          md-menu-item(ng-csv="list.getCSVData(true)" filename="{{list.getDate() | date:'yyyy-MM-dd'}}.csv" csv-header="list.csvHeaderRationale" ng-click="$mdCloseMenu($event); list.sendDownloadEvent()")
             p With Rationale
-          md-menu-item(ng-csv="list.getCSVData()" filename="{{list.getDate() | date:'yyyy-MM-dd'}}.csv" csv-header="list.csvHeader" ng-click="$mdCloseMenu($event)" analytics-event-on="click" category="{{list.analyticsCategory}}" action="Download" label="{{list.analyticsLabel}}")
+          md-menu-item(ng-csv="list.getCSVData()" filename="{{list.getDate() | date:'yyyy-MM-dd'}}.csv" csv-header="list.csvHeader" ng-click="$mdCloseMenu($event); list.sendDownloadEvent()")
             p Without Rationale
       button.btn-action(ng-disabled="list.selected < 1" ng-click="list.removeOpportunity()" ng-if="list.showRemoveButton && !list.targetListService.model.currentList.archived") Remove
 

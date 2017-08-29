@@ -98,6 +98,7 @@ module.exports = /*  @ngInject */
     vm.handleAddToTargetList = handleAddToTargetList;
     vm.isTotalOpportunitiesWithinMaxLimit = isTotalOpportunitiesWithinMaxLimit;
     vm.resetOpportunitiesExpanded = resetOpportunitiesExpanded;
+    vm.sendDownloadEvent = sendDownloadEvent;
 
     // Custom Headers for CSV export
     vm.csvHeader = [
@@ -131,6 +132,21 @@ module.exports = /*  @ngInject */
     $scope.$on('$mdMenuClose', function() {
       vm.showSubMenu = false;
     });
+
+    function sendDownloadEvent() {
+      if (vm.pageName === 'opportunities') {
+        analyticsService.trackEvent('Opportunities', 'Download', 'Opportunity Result List');
+      } else {
+        analyticsService.trackEvent(
+          targetListService.getAnalyticsCategory(
+            vm.targetListService.model.currentList.permissionLevel,
+            vm.targetListService.model.currentList.archived
+          ),
+          'Download Target List',
+          vm.targetListService.model.currentList.id
+        );
+      }
+    }
 
     /**
      * Add a person to a list of collaboraters
@@ -1018,13 +1034,5 @@ module.exports = /*  @ngInject */
     function init() {
       // Initialize the target lists for the user Id
       getTargetLists();
-
-      if (vm.pageName === 'opportunities') {
-        vm.analyticsCategory = 'Opportunities';
-        vm.analyticsLabel = 'Opportunity Result List';
-      } else {
-        vm.analyticsCategory = 'Target Lists';
-        vm.analyticsLabel = 'Opportunities';
-      }
     }
   };
