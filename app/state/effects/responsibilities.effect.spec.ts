@@ -57,7 +57,7 @@ describe('Responsibilities Effects', () => {
     }
   };
   const performanceTotalTransformerServiceMock = {
-    transformRoleGroupPerformanceTotalDTO(mockArgs: any): ResponsibilityEntityPerformance[] {
+    transformEntityPerformanceTotalDTO(mockArgs: any): ResponsibilityEntityPerformance[] {
       return responsibilityEntitiesPerformanceMock;
     }
   };

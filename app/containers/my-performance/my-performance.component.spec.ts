@@ -180,7 +180,7 @@ describe('MyPerformanceComponent', () => {
     storeMock.dispatch.calls.reset();
     componentInstance.leftTableViewType = ViewType.roleGroups;
     componentInstance.handleElementClicked({leftSide: true, type: RowType.data, index: 0, row: rowMock});
-    expect(storeMock.dispatch.calls.count()).toEqual(3);
+    expect(storeMock.dispatch.calls.count()).toEqual(2);
 
     storeMock.dispatch.calls.reset();
     componentInstance.leftTableViewType = ViewType.accounts;

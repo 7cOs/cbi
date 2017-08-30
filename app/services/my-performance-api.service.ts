@@ -26,48 +26,19 @@ export class MyPerformanceApiService {
   }
 
   public getResponsibilitiesPerformanceTotals(
-    positionId: number, entityTypes: Array<{ entityTypeName: string, entityTypeId: string }>, filter: MyPerformanceFilterState
+    entities: Array<{ id: number, type: string, name: string }>, filter: MyPerformanceFilterState
   ): Observable<ResponsibilityEntityPerformanceDTO[]> {
-    const apiCalls: any[] = [];
+    const apiCalls: Observable<ResponsibilityEntityPerformanceDTO | Error>[] = [];
 
-    entityTypes.forEach((entity: { entityTypeName: string, entityTypeId: string }) => {
-      apiCalls.push(this.getResponsibilityPerformanceTotal(positionId, entity, filter));
+    entities.forEach((entity: { id: number, type: string, name: string }) => {
+      apiCalls.push(this.getResponsibilityPerformanceTotal(entity, filter));
     });
 
     return Observable.forkJoin(apiCalls);
   }
 
   public getResponsibilityPerformanceTotal(
-    positionId: number, entityType: { entityTypeName: string, entityTypeId: string }, filter: MyPerformanceFilterState
-  ): Observable<ResponsibilityEntityPerformanceDTO|Error> {
-    const url = `/v3/positions/${ positionId }/responsibilities/${ entityType.entityTypeId }/performanceTotal`;
-
-    return this.http.get(`${ url }`, {
-      params: this.getFilterStateParams(filter)
-    })
-      .map(res => ({
-        id: entityType.entityTypeId,
-        name: entityType.entityTypeName,
-        performanceTotal: res.json()
-      }))
-      .catch(err => this.handleError(new Error(err)));
-  }
-
-  public getResponsibilityEntitiesPerformance(
-    entities: EntityResponsibilities[], filter: MyPerformanceFilterState
-  ): Observable<ResponsibilityEntityPerformanceDTO[]> {
-    const apiCalls: any[] = [];
-    console.log('entities', entities);
-
-    entities.forEach((entity: EntityResponsibilities) => {
-      apiCalls.push(this.getResponsibilityEntityPerformance(entity, filter));
-    });
-
-    return Observable.forkJoin(apiCalls);
-  }
-
-  public getResponsibilityEntityPerformance(
-    entity: EntityResponsibilities, filter: MyPerformanceFilterState
+    entity: { id: number, type: string, name: string }, filter: MyPerformanceFilterState
   ): Observable<ResponsibilityEntityPerformanceDTO|Error> {
     const url = `/v3/positions/${ entity.id }/responsibilities/${ entity.type }/performanceTotal`;
 
@@ -79,7 +50,7 @@ export class MyPerformanceApiService {
         name: entity.name,
         performanceTotal: res.json()
       }))
-      .catch(error => this.handleError(new Error(error)));
+      .catch(err => this.handleError(new Error(err)));
   }
 
   public getPerformanceTotal(positionId: number, filter: MyPerformanceFilterState): Observable<PerformanceTotalDTO> {

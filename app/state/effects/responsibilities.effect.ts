@@ -33,7 +33,7 @@ export class ResponsibilitiesEffects {
     let entityType: ViewType;
     let filter: MyPerformanceFilterState;
     let positionId: number;
-    let entityTypes: Array<{ entityTypeName: string, entityTypeId: string }>;
+    let entityTypes: Array<{ id: number, type: string, name: string }>;
 
     return this.actions$
       .ofType(ResponsibilitiesActions.FETCH_RESPONSIBILITIES_ACTION)
@@ -46,8 +46,9 @@ export class ResponsibilitiesEffects {
             roleGroups = this.responsibilitiesTransformerService.groupPeopleByRoleGroups(response.positions);
             entityTypes = Object.keys(roleGroups).map((roleGroup: string) => {
               return {
-                entityTypeName: roleGroup,
-                entityTypeId: roleGroups[roleGroup][0].type
+                id: positionId,
+                type: roleGroups[roleGroup][0].type,
+                name: roleGroup
               };
             });
 
@@ -55,7 +56,7 @@ export class ResponsibilitiesEffects {
           });
         })
         .concatMap(() => {
-          return this.myPerformanceApiService.getResponsibilitiesPerformanceTotals(positionId, entityTypes, filter)
+          return this.myPerformanceApiService.getResponsibilitiesPerformanceTotals(entityTypes, filter)
             .mergeMap((response: ResponsibilityEntityPerformanceDTO[]) => {
               const roleGroupPerformanceTotals = this.performanceTotalTransformerService.transformEntityPerformanceTotalDTO(response);
 
@@ -78,7 +79,7 @@ export class ResponsibilitiesEffects {
       .switchMap((action: Action) => {
         const { entityType, entities, filter, performanceTotal, viewType } = action.payload;
 
-        return this.myPerformanceApiService.getResponsibilityEntitiesPerformance(entities, filter)
+        return this.myPerformanceApiService.getResponsibilitiesPerformanceTotals(entities, filter)
           .switchMap((response: ResponsibilityEntityPerformanceDTO[]) => {
             const entityPerformance = this.performanceTotalTransformerService.transformEntityPerformanceTotalDTO(response);
 
