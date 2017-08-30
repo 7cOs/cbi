@@ -1,5 +1,4 @@
-import { Component, Input } from '@angular/core';
-// import { Component, Input, EventEmitter, Output } from '@angular/core';
+import { Component, Input, EventEmitter, Output } from '@angular/core';
 
 @Component({
   selector: 'my-performance-breadcrumb',
@@ -9,6 +8,7 @@ import { Component, Input } from '@angular/core';
 
 export class MyPerformanceBreadcrumbComponent {
   @Input() breadcrumbTrail: string[];
+  @Output() breadcrumbEntityClicked = new EventEmitter<any>();
 
   constructor() { }
 }

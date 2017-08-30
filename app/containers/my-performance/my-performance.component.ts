@@ -44,7 +44,6 @@ export interface HandleElementClickedParameters {
 })
 
 export class MyPerformanceComponent implements OnInit, OnDestroy {
-  // public breadcrumbTrail$: Observable<string[]>;
   public breadcrumbTrail$: any;
   public leftTableViewType: ViewType;
   public roleGroups: Observable<ResponsibilitiesState>;
@@ -160,6 +159,12 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
           console.log('clicked on right row:', parameters.row);
         }
     }
+  }
+
+  public handleBreadcrumbEntityClicked(params: any) {
+    this.store.dispatch(new MyPerformanceVersionActions.RestoreMyPerformanceStateAction());
+    this.store.dispatch(new BreadcrumbActions.RemoveBreadcrumbEntities(1));
+    debugger;
   }
 
   public filterOptionSelected(event: MyPerformanceFilterEvent): void {

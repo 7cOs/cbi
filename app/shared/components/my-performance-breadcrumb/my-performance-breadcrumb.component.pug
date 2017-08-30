@@ -1,2 +1,4 @@
 .breadcrumb-container 
-  span.breadcrumb-entity(*ngFor="let entity of breadcrumbTrail") {{ entity }}
+  span.breadcrumb-entity(
+    *ngFor="let entity of breadcrumbTrail",
+    (click)="breadcrumbEntityClicked.emit({trail: breadcrumbTrail, entity: entity})") {{ entity }}

@@ -7,7 +7,8 @@ my-performance-filter(
 )
 
 my-performance-breadcrumb(
-  [breadcrumbTrail]="(breadcrumbTrail$ | async).trail")
+  [breadcrumbTrail]="(breadcrumbTrail$ | async).trail",
+  (breadcrumbEntityClicked)="handleBreadcrumbEntityClicked($event)")
 
 my-performance-table.left(
   [tableData]="tableData",
