@@ -11,7 +11,6 @@ import { PeopleResponsibilitiesDTO } from '../../models/people-responsibilities-
 import { PerformanceTotalTransformerService } from '../../services/performance-total-transformer.service';
 import { ResponsibilityEntityPerformanceDTO } from '../../models/entity-responsibilities.model';
 import { ResponsibilitiesTransformerService } from '../../services/responsibilities-transformer.service';
-import { RoleGroupPerformanceTotalDTO } from '../../models/role-groups.model';
 import { RoleGroups } from '../../models/role-groups.model';
 import { SetTableRowPerformanceTotal } from '../../state/actions/performance-total.action';
 import { ViewType } from '../../enums/view-type.enum';
@@ -57,8 +56,8 @@ export class ResponsibilitiesEffects {
         })
         .concatMap(() => {
           return this.myPerformanceApiService.getResponsibilitiesPerformanceTotals(positionId, entityTypes, filter)
-            .mergeMap((response: Array<RoleGroupPerformanceTotalDTO>) => {
-              const roleGroupPerformanceTotals = this.performanceTotalTransformerService.transformRoleGroupPerformanceTotalDTO(response);
+            .mergeMap((response: ResponsibilityEntityPerformanceDTO[]) => {
+              const roleGroupPerformanceTotals = this.performanceTotalTransformerService.transformEntityPerformanceTotalDTO(response);
 
               return Observable.from([
                 new ViewTypeActions.SetLeftMyPerformanceTableViewType(entityType),
@@ -81,7 +80,7 @@ export class ResponsibilitiesEffects {
 
         return this.myPerformanceApiService.getResponsibilityEntitiesPerformance(entities, filter)
           .switchMap((response: ResponsibilityEntityPerformanceDTO[]) => {
-            const entityPerformance = this.performanceTotalTransformerService.transformResponsibilityEntitiesPerformanceDTO(response);
+            const entityPerformance = this.performanceTotalTransformerService.transformEntityPerformanceTotalDTO(response);
 
             return Observable.from([
               new SetTableRowPerformanceTotal(performanceTotal),

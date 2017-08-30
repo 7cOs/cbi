@@ -1,7 +1,7 @@
 export interface PerformanceTotalDTO {
   total: number;
   totalYearAgo: number;
-  contributionToVolume: number;
+  contributionToVolume?: number;
 }
 
 export interface PerformanceTotal {
@@ -9,5 +9,5 @@ export interface PerformanceTotal {
   totalYearAgo: number;
   totalYearAgoPercent: number;
   contributionToVolume: number;
-  entityType?: string;
+  name?: string;
 }

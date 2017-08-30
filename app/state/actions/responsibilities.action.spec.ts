@@ -2,12 +2,14 @@ import * as Chance from 'chance';
 
 import { DateRangeTimePeriodValue } from '../../enums/date-range-time-period.enum';
 import { DistributionTypeValue } from '../../enums/distribution-type.enum';
-import { getEntityPeopleResponsibilitiesMock } from '../../models/entity-responsibilities.model.mock';
-import { getRoleGroupsMock, getRoleGroupPerformanceTotalsMock } from '../../models/role-groups.model.mock';
+import { getEntityPeopleResponsibilitiesMock,
+         getResponsibilityEntitiesPerformanceMock } from '../../models/entity-responsibilities.model.mock';
+import { getRoleGroupsMock } from '../../models/role-groups.model.mock';
 import { MetricTypeValue } from '../../enums/metric-type.enum';
 import { MyPerformanceFilterState } from '../reducers/my-performance-filter.reducer';
 import { PremiseTypeValue } from '../../enums/premise-type.enum';
-import { RoleGroupPerformanceTotal, RoleGroups } from '../../models/role-groups.model';
+import { ResponsibilityEntityPerformance } from '../../models/entity-responsibilities.model';
+import { RoleGroups } from '../../models/role-groups.model';
 import * as ResponsibilitiesActions from './responsibilities.action';
 
 const chance = new Chance();
@@ -16,9 +18,9 @@ describe('Responsibilities Actions', () => {
 
   describe('FetchResponsibilitiesAction', () => {
     let action: ResponsibilitiesActions.FetchResponsibilitiesAction;
-    let mockUserID: number;
+    let userIdMock: number;
     let actionPayloadMock: any;
-    const mockPerformanceFilterState: MyPerformanceFilterState = {
+    const performanceFilterStateMock: MyPerformanceFilterState = {
       metricType: MetricTypeValue.PointsOfDistribution,
       dateRangeCode: DateRangeTimePeriodValue.FYTDBDL,
       premiseType: PremiseTypeValue.On,
@@ -26,10 +28,10 @@ describe('Responsibilities Actions', () => {
     };
 
     beforeEach(() => {
-      mockUserID = chance.natural();
+      userIdMock = chance.natural();
       actionPayloadMock = {
-        positionId: mockUserID,
-        filter: mockPerformanceFilterState
+        positionId: userIdMock,
+        filter: performanceFilterStateMock
       };
       action = new ResponsibilitiesActions.FetchResponsibilitiesAction(actionPayloadMock);
     });
@@ -46,19 +48,19 @@ describe('Responsibilities Actions', () => {
 
   describe('FetchResponsibilitiesSuccessAction', () => {
     let action: ResponsibilitiesActions.FetchResponsibilitiesSuccessAction;
-    let mockRoleGroups: RoleGroups;
-    let mockUserId: number;
-    let mockRoleGroupPerformanceTotals: Array<RoleGroupPerformanceTotal>;
+    let roleGroupsMock: RoleGroups;
+    let userIdMock: number;
+    let responsibilityEntitiesPerformanceMock: ResponsibilityEntityPerformance[];
     let mockSuccessActionPayload: any;
 
     beforeEach(() => {
-      mockRoleGroups = getRoleGroupsMock();
-      mockUserId = chance.natural();
-      mockRoleGroupPerformanceTotals = getRoleGroupPerformanceTotalsMock();
+      roleGroupsMock = getRoleGroupsMock();
+      userIdMock = chance.natural();
+      responsibilityEntitiesPerformanceMock = getResponsibilityEntitiesPerformanceMock();
       mockSuccessActionPayload = {
-        positionId: mockUserId,
-        responsibilities: mockRoleGroups,
-        performanceTotals: mockRoleGroupPerformanceTotals
+        positionId: userIdMock,
+        responsibilities: roleGroupsMock,
+        performanceTotals: responsibilityEntitiesPerformanceMock
       };
 
       action = new ResponsibilitiesActions.FetchResponsibilitiesSuccessAction(mockSuccessActionPayload);

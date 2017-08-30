@@ -1,10 +1,26 @@
 import { Action } from '@ngrx/store';
 
 import { EntityPeopleType } from '../../enums/entity-responsibilities.enum';
-import { FetchResponsibilitiesSuccessPayload } from '../../models/role-groups.model';
-import { FetchResponsibilityEntitiesPerformancePayload } from '../../models/entity-responsibilities.model';
+import { EntityResponsibilities } from '../../models/entity-responsibilities.model';
 import { MyPerformanceFilterState } from '../../state/reducers/my-performance-filter.reducer';
+import { MyPerformanceTableRow } from '../../models/my-performance-table-row.model';
 import { ResponsibilityEntityPerformance } from '../../models/entity-responsibilities.model';
+import { RoleGroups } from '../../models/role-groups.model';
+import { ViewType } from '../../enums/view-type.enum';
+
+export interface FetchResponsibilitiesSuccessPayload {
+  positionId: number;
+  responsibilities: RoleGroups;
+  performanceTotals: ResponsibilityEntityPerformance[];
+}
+
+export interface FetchResponsibilityEntitiesPerformancePayload {
+  entityType: EntityPeopleType;
+  entities: EntityResponsibilities[];
+  filter: MyPerformanceFilterState;
+  performanceTotal: MyPerformanceTableRow;
+  viewType: ViewType;
+}
 
 export const FETCH_RESPONSIBILITIES_ACTION = '[Responsibilities] FETCH_RESPONSIBILITIES_ACTION';
 export class FetchResponsibilitiesAction implements Action {

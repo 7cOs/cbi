@@ -1,13 +1,13 @@
 import { ActionStatus, State } from '../../enums/action-status.enum';
 import { ResponsibilityEntityPerformance } from '../../models/entity-responsibilities.model';
-import { RoleGroups, RoleGroupPerformanceTotal } from '../../models/role-groups.model';
+import { RoleGroups } from '../../models/role-groups.model';
 import * as ResponsibilitiesActions from '../actions/responsibilities.action';
 
 export interface ResponsibilitiesState extends State {
   status: ActionStatus;
   positionId: number;
   responsibilities: RoleGroups;
-  performanceTotals: RoleGroupPerformanceTotal[] | ResponsibilityEntityPerformance[];
+  performanceTotals: ResponsibilityEntityPerformance[];
 }
 
 export const initialState: ResponsibilitiesState = {

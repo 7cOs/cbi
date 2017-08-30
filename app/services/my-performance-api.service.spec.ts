@@ -9,7 +9,7 @@ import { MetricTypeValue } from '../enums/metric-type.enum';
 import { MyPerformanceApiService } from './my-performance-api.service';
 import { PerformanceTotal } from '../models/performance-total.model';
 import { PremiseTypeValue } from '../enums/premise-type.enum';
-import { RoleGroupPerformanceTotal } from '../models/role-groups.model';
+import { ResponsibilityEntityPerformance } from '../models/entity-responsibilities.model';
 
 describe('Service: MyPerformanceApiService', () => {
   let myPerformanceApiService: MyPerformanceApiService;
@@ -139,8 +139,12 @@ describe('Service: MyPerformanceApiService', () => {
       });
 
       myPerformanceApiService.getResponsibilityPerformanceTotal(1, mockEntityType, mockFilter)
-        .subscribe((response: RoleGroupPerformanceTotal) => {
-          expect(response).toEqual({ entityType: 'MARKET DEVELOPMENT MANAGER', performanceTotal: mockPerformanceTotalResponse });
+        .subscribe((response: ResponsibilityEntityPerformance) => {
+          expect(response).toEqual({
+            id: '10',
+            name: 'MARKET DEVELOPMENT MANAGER',
+            performanceTotal: mockPerformanceTotalResponse
+          });
           done();
         });
     });
@@ -176,8 +180,8 @@ describe('Service: MyPerformanceApiService', () => {
       myPerformanceApiService.getResponsibilitiesPerformanceTotals(1, mockEntityTypeArray, mockFilter)
         .subscribe((response) => {
           expect(response).toEqual([
-            { entityType: 'MARKET DEVELOPMENT MANAGER', performanceTotal: mockPerformanceTotalResponse },
-            { entityType: 'GENERAL MANAGER', performanceTotal: mockPerformanceTotalResponse }
+            { id: '10', name: 'MARKET DEVELOPMENT MANAGER', performanceTotal: mockPerformanceTotalResponse },
+            { id: '20', name: 'GENERAL MANAGER', performanceTotal: mockPerformanceTotalResponse }
           ]);
           done();
         });

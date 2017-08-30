@@ -11,7 +11,6 @@ import { MetricTypeValue } from '../enums/metric-type.enum';
 import { MyPerformanceFilterState } from '../state/reducers/my-performance-filter.reducer';
 import { PerformanceTotalDTO } from '../models/performance-total.model'; // tslint:disable-line:no-unused-variable
 import { PremiseTypeValue } from '../enums/premise-type.enum';
-import { RoleGroupPerformanceTotalDTO } from '../models/role-groups.model'; // tslint:disable-line:no-unused-variable
 
 @Injectable()
 export class MyPerformanceApiService {
@@ -28,7 +27,7 @@ export class MyPerformanceApiService {
 
   public getResponsibilitiesPerformanceTotals(
     positionId: number, entityTypes: Array<{ entityTypeName: string, entityTypeId: string }>, filter: MyPerformanceFilterState
-  ): Observable<RoleGroupPerformanceTotalDTO[]> {
+  ): Observable<ResponsibilityEntityPerformanceDTO[]> {
     const apiCalls: any[] = [];
 
     entityTypes.forEach((entity: { entityTypeName: string, entityTypeId: string }) => {
@@ -40,13 +39,17 @@ export class MyPerformanceApiService {
 
   public getResponsibilityPerformanceTotal(
     positionId: number, entityType: { entityTypeName: string, entityTypeId: string }, filter: MyPerformanceFilterState
-  ): Observable<RoleGroupPerformanceTotalDTO> {
+  ): Observable<ResponsibilityEntityPerformanceDTO|Error> {
     const url = `/v3/positions/${ positionId }/responsibilities/${ entityType.entityTypeId }/performanceTotal`;
 
     return this.http.get(`${ url }`, {
       params: this.getFilterStateParams(filter)
     })
-      .map(res => ({ entityType: entityType.entityTypeName, performanceTotal: res.json() }))
+      .map(res => ({
+        id: entityType.entityTypeId,
+        name: entityType.entityTypeName,
+        performanceTotal: res.json()
+      }))
       .catch(err => this.handleError(new Error(err)));
   }
 
@@ -54,6 +57,7 @@ export class MyPerformanceApiService {
     entities: EntityResponsibilities[], filter: MyPerformanceFilterState
   ): Observable<ResponsibilityEntityPerformanceDTO[]> {
     const apiCalls: any[] = [];
+    console.log('entities', entities);
 
     entities.forEach((entity: EntityResponsibilities) => {
       apiCalls.push(this.getResponsibilityEntityPerformance(entity, filter));
@@ -64,7 +68,7 @@ export class MyPerformanceApiService {
 
   public getResponsibilityEntityPerformance(
     entity: EntityResponsibilities, filter: MyPerformanceFilterState
-  ): Observable<ResponsibilityEntityPerformanceDTO> {
+  ): Observable<ResponsibilityEntityPerformanceDTO|Error> {
     const url = `/v3/positions/${ entity.id }/responsibilities/${ entity.type }/performanceTotal`;
 
     return this.http.get(`${ url }`, {

@@ -87,12 +87,14 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
         this.leftTableViewType = current.viewType.leftTableViewType;
 
         if (current.responsibilities && current.responsibilities.status === ActionStatus.Fetched) {
-          this.tableData = this.myPerformanceTableDataTransformerService.getTableData(this.leftTableViewType, current.responsibilities);
+          this.tableData = this.myPerformanceTableDataTransformerService.getLeftTableData(
+            current.responsibilities.performanceTotals
+          );
         }
 
         if (current.performanceTotal && current.performanceTotal.status === ActionStatus.Fetched) {
           this.totalRowData = this.myPerformanceTableDataTransformerService
-            .getTotalRowDisplayData(current.performanceTotal.performanceTotal);
+            .getTotalRowData(current.performanceTotal.performanceTotal);
         }
     });
 
@@ -140,8 +142,8 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
 
           if (this.leftTableViewType === ViewType.roleGroups) {
             this.store.dispatch(new FetchResponsibilityEntityPerformance({
-              entityType: EntityPeopleType[parameters.row.descriptionRow0.slice(0, -1)],
-              entities: this.currentState.responsibilities.responsibilities[EntityPeopleType[parameters.row.descriptionRow0.slice(0, -1)]],
+              entityType: EntityPeopleType[parameters.row.descriptionRow0],
+              entities: this.currentState.responsibilities.responsibilities[EntityPeopleType[parameters.row.descriptionRow0]],
               filter: this.filterState,
               performanceTotal: parameters.row,
               viewType: ViewType.people
