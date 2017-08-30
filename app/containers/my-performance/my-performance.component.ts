@@ -6,6 +6,7 @@ import { Subscription } from 'rxjs/Subscription';
 import { ActionStatus } from '../../enums/action-status.enum';
 import { AppState } from '../../state/reducers/root.reducer';
 import * as BreadcrumbActions from '../../state/actions/my-performance-breadcrumb.action';
+import { BreadcrumbEntityClickedEvent } from '../../models/breadcrumb-entity-clicked-event.model';
 import { ColumnType } from '../../enums/column-type.enum';
 import { DateRange } from '../../models/date-range.model';
 import { DateRangesState } from '../../state/reducers/date-ranges.reducer';
@@ -161,10 +162,13 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
     }
   }
 
-  public handleBreadcrumbEntityClicked(params: any) {
-    this.store.dispatch(new MyPerformanceVersionActions.RestoreMyPerformanceStateAction());
-    this.store.dispatch(new BreadcrumbActions.RemoveBreadcrumbEntities(1));
-    debugger;
+  public handleBreadcrumbEntityClicked(params: BreadcrumbEntityClickedEvent): void {
+    const { trail, entity } = params;
+    const indexOffset = 1;
+    const stepsBack = trail.length - indexOffset - trail.indexOf(entity);
+    if (stepsBack < 1) return;
+    this.store.dispatch(new MyPerformanceVersionActions.RestoreMyPerformanceStateAction(stepsBack));
+    this.store.dispatch(new BreadcrumbActions.RemoveBreadcrumbEntities(stepsBack));
   }
 
   public filterOptionSelected(event: MyPerformanceFilterEvent): void {

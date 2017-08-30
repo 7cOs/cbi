@@ -18,8 +18,11 @@ export function myPerformanceVersionReducer(
       };
 
     case MyPerformanceVersionActions.RESTORE_MY_PERFORMANCE_STATE_ACTION:
+      debugger;
       const updatedVersions = [...state.versions];
-      const lastState = updatedVersions.pop();
+      const stepsBack: number = action.payload;
+      const startIndex: number = updatedVersions.length - stepsBack;
+      const lastState = updatedVersions.splice(startIndex, stepsBack)[0];
       return lastState
         ? {
           current: lastState,

@@ -12,6 +12,8 @@ export class SaveMyPerformanceStateAction implements Action {
 export const RESTORE_MY_PERFORMANCE_STATE_ACTION = '[My Performance] RESTORE_MY_PERFORMANCE_STATE_ACTION';
 export class RestoreMyPerformanceStateAction implements Action {
   readonly type = RESTORE_MY_PERFORMANCE_STATE_ACTION;
+
+  constructor(public payload: number = 1) { }
 }
 
 export type Action =
