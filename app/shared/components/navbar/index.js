@@ -1,5 +1,7 @@
 'use strict';
 
+const Environment = require('../../../environment').Environment;
+
 module.exports =
   angular.module('cf.common.components.navbar', [])
   .component('navbar', {
@@ -9,5 +11,5 @@ module.exports =
   })
   .controller('navbarController', require('./navbarController'))
   .constant('ENV_VARS', {
-    iqURL: process.env.IQ_LINK  // resolved during webpack build
+    iqURL: Environment.getIQLink()
   });
