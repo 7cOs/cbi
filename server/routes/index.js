@@ -6,10 +6,8 @@ module.exports = function(app) {
 
   app.get('/version', function (req, res) {
     if (req.isAuthenticated()) {
-      var env  = process.env.NODE_ENV;
       var hash = process.env.HEROKU_SLUG_DESCRIPTION || git.short();
       var data = {
-        env: env,
         hash: hash,
         version: pjson.version
       };
