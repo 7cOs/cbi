@@ -65,7 +65,7 @@ AppUpgradeAdapter.upgradeNg1Provider('versionService');
   ]
 })
 export class AppModule {
-  constructor(analytics: AnalyticsService) {
-    analytics.initializeAnalytics();
+  constructor(analyticsService: AnalyticsService) {
+    analyticsService.initializeAnalytics();
   }
 }
