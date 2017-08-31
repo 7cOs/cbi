@@ -18,7 +18,6 @@ export function myPerformanceVersionReducer(
       };
 
     case MyPerformanceVersionActions.RESTORE_MY_PERFORMANCE_STATE_ACTION:
-      debugger;
       const updatedVersions = [...state.versions];
       const stepsBack: number = action.payload;
       const startIndex: number = updatedVersions.length - stepsBack;

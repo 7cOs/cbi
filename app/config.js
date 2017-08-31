@@ -2,9 +2,9 @@
 const myPerformanceConfigState = require('./containers/my-performance/my-performance.state.ts').configState;
 
 module.exports = /*  @ngInject */
-  function($mdThemingProvider, $locationProvider, $httpProvider, $urlRouterProvider, $stateProvider, utilServiceProvider) {
+  function($mdThemingProvider, $locationProvider, $httpProvider, $urlRouterProvider, $stateProvider, breadcrumbServiceProvider) {
 
-    myPerformanceConfigState($stateProvider, () => utilServiceProvider.$get().resetMyPerformanceBreadcrumb);
+    myPerformanceConfigState($stateProvider, () => breadcrumbServiceProvider.$get().resetMyPerformanceBreadcrumb);
 
     if (!$httpProvider.defaults.headers.get) {
       $httpProvider.defaults.headers.get = {};

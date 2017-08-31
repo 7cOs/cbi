@@ -18,6 +18,7 @@
   letter-spacing: 1.3px;
   text-align: left;
   color: $blue; 
+  cursor: pointer;
 
   &::after {
     color: #000;
@@ -26,6 +27,7 @@
 
   &:nth-last-child(1) {
     color: #000;
+    cursor: default;
 
     &::after {
       content: '';

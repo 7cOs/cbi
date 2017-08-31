@@ -7,6 +7,7 @@ import '@uirouter/angularjs';
 import { AnalyticsService } from './services/analytics.service';
 import { AppComponent } from './shared/containers/app/app.component';
 import { AppUpgradeAdapter } from './app.module';
+import { BreadcrumbService } from './services/breadcrumb.service';
 import { CompassCardComponent } from './shared/components/compass-card/compass-card.component';
 import { DateRangeComponent } from './shared/components/date-ranges/date-ranges.component';
 import { DateRangeService } from './services/date-range.service';
@@ -14,7 +15,6 @@ import { GreetingComponent } from './shared/components/greeting/greeting.compone
 import { MyPerformanceComponent } from './containers/my-performance/my-performance.component';
 import { NotificationsComponent } from './shared/components/Notifications/notifications.component';
 import { SettingsComponent } from './shared/components/settings/settings.component';
-import { UtilService } from './services/util.service';
 
 (<any>window).CryptoJS = require('crypto-js');
 
@@ -42,6 +42,6 @@ export default angular.module('cf', [
   .directive('notifications', AppUpgradeAdapter.downgradeNg2Component(NotificationsComponent) as IDirectiveFactory)
   .factory('dateRangeService', downgradeInjectable(DateRangeService))
   .factory('analyticsService', downgradeInjectable(AnalyticsService))
-  .factory('utilService', downgradeInjectable(UtilService))
+  .factory('breadcrumbService', downgradeInjectable(BreadcrumbService))
   .config(require('./config'))
   .run(require('./run'));
