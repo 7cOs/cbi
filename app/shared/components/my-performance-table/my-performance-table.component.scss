@@ -125,6 +125,10 @@ th {
     }
   }
 
+  /deep/.left-col {
+    color: $blue;
+  }
+
   &:hover {
 
     /deep/td {

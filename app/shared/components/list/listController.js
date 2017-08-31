@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports = /*  @ngInject */
-  function listController($scope, $state, $q, $location, $anchorScroll, $mdDialog, $timeout, $analytics, $filter, filtersService, loaderService, opportunitiesService, targetListService, storesService, userService, closedOpportunitiesService, ieHackService, toastService) {
+  function listController($scope, $state, $q, $location, $anchorScroll, $mdDialog, $timeout, analyticsService, $filter, filtersService, loaderService, opportunitiesService, targetListService, storesService, userService, closedOpportunitiesService, ieHackService, toastService) {
 
     // ****************
     // CONTROLLER SETUP
@@ -98,6 +98,7 @@ module.exports = /*  @ngInject */
     vm.handleAddToTargetList = handleAddToTargetList;
     vm.isTotalOpportunitiesWithinMaxLimit = isTotalOpportunitiesWithinMaxLimit;
     vm.resetOpportunitiesExpanded = resetOpportunitiesExpanded;
+    vm.sendDownloadEvent = sendDownloadEvent;
 
     // Custom Headers for CSV export
     vm.csvHeader = [
@@ -131,6 +132,21 @@ module.exports = /*  @ngInject */
     $scope.$on('$mdMenuClose', function() {
       vm.showSubMenu = false;
     });
+
+    function sendDownloadEvent() {
+      if (vm.pageName === 'opportunities') {
+        analyticsService.trackEvent('Opportunities', 'Download', 'Opportunity Result List');
+      } else {
+        analyticsService.trackEvent(
+          targetListService.getAnalyticsCategory(
+            vm.targetListService.model.currentList.permissionLevel,
+            vm.targetListService.model.currentList.archived
+          ),
+          'Download Target List',
+          vm.targetListService.model.currentList.id
+        );
+      }
+    }
 
     /**
      * Add a person to a list of collaboraters
@@ -289,10 +305,11 @@ module.exports = /*  @ngInject */
       vm.buttonDisabled = true;
 
       userService.addTargetList(vm.newList).then(response => {
-        $analytics.eventTrack('Create Target List', {
-          category: 'Target Lists - My Target Lists',
-          label: response.id
-        });
+        analyticsService.trackEvent(
+          'Target Lists - My Target Lists',
+          'Create Target List',
+          response.id
+        );
 
         vm.addToTargetList(response.id);
         vm.closeModal();
@@ -404,10 +421,11 @@ module.exports = /*  @ngInject */
                   storeGroup.splice(key, 1);
                 } else if (opportunity.id === oId && !dismiss) {
                   opportunity.status = 'CLOSED';
-                  $analytics.eventTrack('Close Opportunity', {
-                    category: 'Opportunities',
-                    label: opportunity.id
-                  });
+                  analyticsService.trackEvent(
+                    'Opportunities',
+                    'Close Opportunity',
+                    opportunity.id
+                  );
                 }
               });
 
@@ -890,16 +908,17 @@ module.exports = /*  @ngInject */
       return result;
     }
 
-    function handleAddToTargetList(ev, targetList, idx) {
+    function handleAddToTargetList(ev, targetList, idx, addAction) {
       const usedOpps = targetList.opportunitiesSummary.opportunitiesCount;
       const remainingOpps = remainingOpportunitySpots(usedOpps);
       const totalOpps = usedOpps + (vm.isAllOpportunitiesSelected ? filtersService.model.appliedFilter.pagination.totalOpportunities : this.selected.length);
       const hasRemainingOpps = totalOpps <= maxOpportunities;
       if (hasRemainingOpps) {
-        $analytics.eventTrack('Copy to Target List', {
-          label: targetList.id,
-          category: targetListService.getAnalyticsCategory(vm.targetListService.model.currentList.permissionLevel)
-        });
+        analyticsService.trackEvent(
+          targetListService.getAnalyticsCategory(vm.targetListService.model.currentList.permissionLevel, targetListService.model.currentList.archived),
+          `${addAction ? 'Add' : 'Copy'} to Target List`,
+          addAction ? targetList.id : vm.targetListService.model.currentList.id
+        );
         vm.addToTargetList(targetList.id);
       } else {
         const parentEl = angular.element(document.body);
@@ -1015,13 +1034,5 @@ module.exports = /*  @ngInject */
     function init() {
       // Initialize the target lists for the user Id
       getTargetLists();
-
-      if (vm.pageName === 'opportunities') {
-        vm.analyticsCategory = 'Opportunities';
-        vm.analyticsLabel = 'Opportunity Result List';
-      } else {
-        vm.analyticsCategory = 'Target Lists';
-        vm.analyticsLabel = 'Opportunities';
-      }
     }
   };

@@ -1,45 +1,48 @@
 'use strict';
 
 module.exports = function(app) {
-  const SamlStrategy = require('passport-saml').Strategy,
-        util = require('../../_lib/util')(app),
-        logutil = require('../../_lib/logutil'),
-        request = require('request');
+  const SamlStrategy = require('passport-saml').Strategy;
+  const request = require('request');
+
+  const appConfig = app.get('config');
+  const util = require('../../_lib/util')(app);
+  const logutil = require('../../_lib/logutil');
+  const sfdc = require('../../_lib/sfdc');
+  const apiAuthUrl = util.signApiUrl('/v2/auth');
 
   return new SamlStrategy({
     protocol: 'https://',
     path: '/auth/callback',
     logoutUrl: '/auth/logout',
-    issuer: app.get('config').saml.issuer,
+    issuer: appConfig.saml.issuer,
     passReqToCallback: true,
-    entryPoint: app.get('config').saml.entryPoint,
+    entryPoint: appConfig.saml.entryPoint,
     identifierFormat: 'urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified',
-    cert: app.get('config').saml.cert,
-    signatureAlgorithm: app.get('config').saml.signatureAlgorithm
+    cert: appConfig.saml.cert,
+    signatureAlgorithm: appConfig.saml.signatureAlgorithm
   }, function(req, profile, done) {
 
     const headers = {
       'X-CBI-API-AGENT': util.agentHeader(),
       'X-CBI-API-USER': util.userHeaderFromSaml(req.body.SAMLResponse)
     };
-    const signed = util.signApiUrl('/v2/auth');
 
-    request.post(signed, {headers: headers, body: req.body.SAMLResponse}, function(err, httpResponse, body) {
-      if (err) {  // request error
+    request.post(apiAuthUrl, {headers: headers, body: req.body.SAMLResponse}, function(err, httpResponse, body) {
+      if (err) {  // error making request (no response)
         const logObj = Object.assign(
-          logutil.buildAPIError(req.headers['x-request-id'], httpResponse.req.method, signed, null, 'Error occurred in SAML auth process when making API request.'),
+          logutil.buildAPIError(req.headers['x-request-id'], httpResponse.req.method, apiAuthUrl, null, 'Error occurred in SAML auth process when making API request.'),
           err);
         logutil.logError(logObj);
 
         return done(null, false);
-      } else if (httpResponse.statusCode >= 400) {  // error response
-        const logObj = logutil.buildAPIError(req.headers['x-request-id'], httpResponse.req.method, signed, httpResponse.statusCode, 'Error occurred in SAML auth process - Error response received when making API request.', body);
+      } else if (httpResponse.statusCode >= 400) {  // error in response
+        const logObj = logutil.buildAPIError(req.headers['x-request-id'], httpResponse.req.method, apiAuthUrl, httpResponse.statusCode, 'Error occurred in SAML auth process - Error response received when making API request.', body);
         logutil.logError(logObj);
 
         return done(null, false);
       } else {
-        const user = JSON.parse(body);
-        return done(null, user);
+        const userProfile = JSON.parse(body);
+        return done(null, userProfile);
       }
     });
   });

@@ -15,8 +15,8 @@ div.modal
     .modal-content
       button.btn-action(
         ng-click="list.submitFeedback(list.currentOpportunityId, list.opportunity.feedback); list.closeModal()"
-        analytics-on="click"
-        analytics-category="Opportunities"
-        analytics-event="Dismiss Opportunity"
-        analytics-label="{{ list.currentOpportunityId }}") Submit
+        analytics-event-on="click"
+        category="Opportunities"
+        action="Dismiss Opportunity"
+        label="{{ list.currentOpportunityId }}") Submit
       p.cancel.accent(ng-click="list.opportunityDismissTrigger = false; list.closeModal();") X Cancel

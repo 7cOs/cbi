@@ -1,6 +1,8 @@
 'use strict';
 
 module.exports = function (config) {
+  console.log('Using server config for PRODUCTION environment.');
+
   // global settings
   config.domain = 'compass.cbrands.com';
   config.env = 'production';

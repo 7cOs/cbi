@@ -3,7 +3,7 @@
 const myPerformanceConfigState = require('./containers/my-performance/my-performance.state.ts').configState;
 
 module.exports = /*  @ngInject */
-  function($mdThemingProvider, $locationProvider, $httpProvider, $analyticsProvider, $urlRouterProvider, $stateProvider) {
+  function($mdThemingProvider, $locationProvider, $httpProvider, $urlRouterProvider, $stateProvider) {
 
     myPerformanceConfigState($stateProvider);
 
@@ -23,10 +23,4 @@ module.exports = /*  @ngInject */
 
     // route to / when unknown route is encountered
     $urlRouterProvider.otherwise('/');
-
-    // disable angulartics auto tracking
-    $analyticsProvider.virtualPageviews(false);
-    $analyticsProvider.trackRoutes(false);
-    $analyticsProvider.trackStates(false);
-    $analyticsProvider.firstPageview(false);
   };

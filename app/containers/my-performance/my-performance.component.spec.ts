@@ -1,7 +1,7 @@
 import { By } from '@angular/platform-browser';
 import * as Chance from 'chance';
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, inject } from '@angular/core/testing';
 import { Observable } from 'rxjs';
 import { Store } from '@ngrx/store';
 
@@ -28,7 +28,7 @@ import { UtilService } from '../../services/util.service';
 import { initialState } from '../../state/reducers/my-performance.reducer';
 import { ViewType } from '../../enums/view-type.enum';
 
-let chance = new Chance();
+const chance = new Chance();
 
 @Component({
   selector: 'my-performance-filter',
@@ -60,6 +60,7 @@ class MyPerformanceTableComponentMock {
 describe('MyPerformanceComponent', () => {
   let fixture: ComponentFixture<MyPerformanceComponent>;
   let componentInstance: MyPerformanceComponent;
+  let userServiceMock: any;
 
   const stateMock = {
       myPerformanceFilter: chance.string(),
@@ -78,6 +79,14 @@ describe('MyPerformanceComponent', () => {
   };
 
   beforeEach(() => {
+    userServiceMock = {
+      model: {
+        currentUser: {
+          positionId: chance.integer().toString()
+        }
+      }
+    };
+
     TestBed.configureTestingModule({
       declarations: [
         MyPerformanceFilterComponentMock,
@@ -91,6 +100,10 @@ describe('MyPerformanceComponent', () => {
         {
           provide: Store,
           useValue: storeMock
+        },
+        {
+          provide: 'userService',
+          useValue: userServiceMock
         },
         UtilService
       ]
@@ -110,13 +123,43 @@ describe('MyPerformanceComponent', () => {
 
     expect(storeMock.dispatch.calls.count()).toBe(2);
     expect(storeMock.dispatch.calls.argsFor(0)).toEqual([new FetchResponsibilitiesAction({
-      positionId: 3843,
+      positionId: parseInt(userServiceMock.model.currentUser.positionId, 0),
       filter: stateMock.myPerformanceFilter as any
     })]);
 
     // this will change once right table is built
     expect(storeMock.dispatch.calls.argsFor(1)).toEqual([new SetRightMyPerformanceTableViewType(ViewType.brands)]);
   });
+
+  it('should dispatch actions on init and handle empty positionId', inject([ 'userService' ], (userService: any) => {
+    userService.model.currentUser.positionId = '';
+    storeMock.dispatch.and.callThrough();
+    storeMock.dispatch.calls.reset();
+
+    fixture = TestBed.createComponent(MyPerformanceComponent);
+    fixture.detectChanges();
+
+    expect(storeMock.dispatch.calls.count()).toBe(2);
+    expect(storeMock.dispatch.calls.argsFor(0)).toEqual([new FetchResponsibilitiesAction({
+      positionId: 0,
+      filter: stateMock.myPerformanceFilter as any
+    })]);
+  }));
+
+  it('should dispatch actions on init and handle undefined positionId', inject([ 'userService' ], (userService: any) => {
+    delete userService.model.currentUser.positionId;
+    storeMock.dispatch.and.callThrough();
+    storeMock.dispatch.calls.reset();
+
+    fixture = TestBed.createComponent(MyPerformanceComponent);
+    fixture.detectChanges();
+
+    expect(storeMock.dispatch.calls.count()).toBe(2);
+    expect(storeMock.dispatch.calls.argsFor(0)).toEqual([new FetchResponsibilitiesAction({
+      positionId: 0,
+      filter: stateMock.myPerformanceFilter as any
+    })]);
+  }));
 
   it('should trigger appropriate actions when the filter component emits an event', () => {
     storeMock.dispatch.and.callThrough();

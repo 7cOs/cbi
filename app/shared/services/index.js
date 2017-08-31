@@ -23,5 +23,4 @@ module.exports =
     .factory('ieHackService', require('./ieHackService'))
     .factory('toastService', require('./toastService'))
     .factory('httpInterceptorService', require('./httpInterceptorService'))
-    .factory('encodingService', require('./encodingService'))
-    .factory('analyticsHelperService', require('./analyticsHelperService'));
+    .factory('encodingService', require('./encodingService'));

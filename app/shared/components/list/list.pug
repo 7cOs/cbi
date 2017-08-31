@@ -21,25 +21,25 @@
         md-menu-content.target-list-menu
           md-menu-item(ng-click="list.createNewList($event)")
             p Create New List
-          md-menu-item(ng-repeat="targetList in list.userService.model.targetLists.owned | filter:{archived:false, deleted: false}" ng-click="list.handleAddToTargetList($event, targetList, $index)" analytics-on="click" analytics-event="Add to Target List" analytics-category="{{list.analyticsCategory}}" analytics-label="{{targetList.id}}")
+          md-menu-item(ng-repeat="targetList in list.userService.model.targetLists.owned | filter:{archived:false, deleted: false}" ng-click="list.handleAddToTargetList($event, targetList, $index, true)")
             p {{::targetList.name | truncateText:18}}
               span.spots-available {{list.remainingOpportunitySpots(targetList.opportunitiesSummary.opportunitiesCount)}} SPOTS AVAILABLE
       md-menu(md-offset="0 45" ng-if="list.showCopyToTargetList && !list.targetListService.model.currentList.archived")
         button.btn-action(ng-click="$mdOpenMenu($event)") Copy to Target List
         md-menu-content.target-list-menu
-          md-menu-item(ng-repeat="targetList in list.userService.model.targetLists.owned" ng-click="list.handleAddToTargetList($event, targetList, $index)" analytics-on="click" analytics-event="Add to Target List" analytics-category="{{list.analyticsCategory}}" analytics-label="{{targetList.id}}")
+          md-menu-item(ng-repeat="targetList in list.userService.model.targetLists.owned | filter:{archived:false, deleted: false}" ng-click="list.handleAddToTargetList($event, targetList, $index, false)")
             p {{::targetList.name | truncateText:18}}
               span.spots-available {{list.remainingOpportunitySpots(targetList.opportunitiesSummary.opportunitiesCount)}} SPOTS AVAILABLE
       md-menu(md-offset="0 45")
         button.btn-action(ng-click="$mdOpenMenu($event)" ng-disabled="list.selected < 1") Download
         md-menu-content.target-list-menu
-          md-menu-item(ng-csv="list.getCSVData(true)" filename="{{list.getDate() | date:'yyyy-MM-dd'}}.csv" csv-header="list.csvHeaderRationale" ng-click="$mdCloseMenu($event)" analytics-on="click" analytics-event="Download" analytics-category="{{list.analyticsCategory}}" analytics-label="{{list.analyticsLabel}}")
+          md-menu-item(ng-csv="list.getCSVData(true)" filename="{{list.getDate() | date:'yyyy-MM-dd'}}.csv" csv-header="list.csvHeaderRationale" ng-click="$mdCloseMenu($event); list.sendDownloadEvent()")
             p With Rationale
-          md-menu-item(ng-csv="list.getCSVData()" filename="{{list.getDate() | date:'yyyy-MM-dd'}}.csv" csv-header="list.csvHeader" ng-click="$mdCloseMenu($event)" analytics-on="click" analytics-event="Download" analytics-category="{{list.analyticsCategory}}" analytics-label="{{list.analyticsLabel}}")
+          md-menu-item(ng-csv="list.getCSVData()" filename="{{list.getDate() | date:'yyyy-MM-dd'}}.csv" csv-header="list.csvHeader" ng-click="$mdCloseMenu($event); list.sendDownloadEvent()")
             p Without Rationale
       button.btn-action(ng-disabled="list.selected < 1" ng-click="list.removeOpportunity()" ng-if="list.showRemoveButton && !list.targetListService.model.currentList.archived") Remove
 
-button.icon.narrow-icon.expand-all(ng-click="list.accordion.expandAll()" ng-disabled="list.allOpportunitiesExpanded()" analytics-on="click" analytics-event="Expand Store" analytics-category="Opportunities" analytics-label="All") Expand All
+button.icon.narrow-icon.expand-all(ng-click="list.accordion.expandAll()" ng-disabled="list.allOpportunitiesExpanded()" analytics-event-on="click" category="Opportunities" action="Expand Store" label="All") Expand All
 button.icon.narrow-icon.collapse-all(ng-click="list.accordion.collapseAll()" ng-disabled="list.noOpportunitiesExpanded()") Collapse All
 p.list-disabled-message {{::list.disabledMessage}}
 
@@ -86,7 +86,7 @@ v-accordion.styled-list(multiple="" id="opportunities" control="list.accordion" 
       .header-wrapper(ng-click="list.toggleOpportunitiesInStore(opportunity, list.selected)")
         div.checkbox-wrapper
           md-checkbox(aria-label="Select Item" ng-checked="opportunity.selectedOpportunities === opportunity.groupedOpportunities.length")
-        v-pane-header.checkbox-sibling(column='12' ng-click="$event.stopPropagation()" analytics-if="opportunity.isExpanded" analytics-on="click" analytics-event="Expand Store" analytics-category="Opportunities" analytics-label="{{opportunity.store.id}}")
+        v-pane-header.checkbox-sibling(column='12' ng-click="$event.stopPropagation()" analytics-event-on="click" analytics-if="opportunity.isExpanded" category="Opportunities" action="Expand Store" label="{{opportunity.store.id}}")
           div(ng-class="{long: opportunity.store.name.length > 21}").cell-parent
             div.pad-cell.semi-bold(column='3') {{::opportunity.store.name | titlecase}} <span class="supporting-text" ng-if="opportunity.store.storeNumber">\#{{::opportunity.store.storeNumber | uppercase}}</span>
             div.address(column='4') {{::opportunity.store.streetAddress | titlecase}}, {{::opportunity.store.city | titlecase}}, {{::opportunity.store.state}} {{::opportunity.store.zip | zipcode}}

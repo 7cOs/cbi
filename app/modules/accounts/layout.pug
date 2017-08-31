@@ -158,7 +158,7 @@ div(row)
             td(ng-class="a.getClassBasedOnValue(a.getTrendValues(a.currentTotalsObject.measures, 'depletions', 'depletionsTimePeriod').value)") <span ng-bind="a.getTrendValues(a.currentTotalsObject.measures, 'depletions', 'depletionsTimePeriod').displayValue"></span>
 
             //- Velocity Value
-            td(ng-if="a.isDisplayBrandSnapshotRow(a.filtersService.accountFilters.accountBrandEnum.velocity, false, false)") {{a.displayBrandValue(a.currentTotalsObject.measures, 'velocity', 'distributionTimePeriod') | number:0 }}
+            td(ng-if="a.isDisplayBrandSnapshotRow(a.filtersService.accountFilters.accountBrandEnum.velocity, false, false)") {{a.displayBrandValueAccountBrandVelocity(a.currentTotalsObject.measures, a.currentTotalsObject.firstSoldDate)}}
 
             //- Velocity Trend
             td(ng-if="a.isDisplayBrandSnapshotRow(a.filtersService.accountFilters.accountBrandEnum.velocity, false, false)" ng-class="a.getClassBasedOnValue(a.displayBrandValue(a.currentTotalsObject.measures, 'velocityTrend', 'distributionTimePeriod'))") <span ng-if="a.checkIfVelocityPresent(a.currentTotalsObject)">{{a.displayBrandValue(a.currentTotalsObject.measures, 'velocityTrend', 'distributionTimePeriod') | number:1}}%</span><span ng-if="!a.displayBrandValue(a.currentTotalsObject.measures, 'velocityTrend', 'distributionTimePeriod')">-</span>
@@ -268,5 +268,5 @@ div(row)
           nvd3(options="a.chartOptions" data="data")
 
 h3.top-opportunities-header Top Opportunities
-  a.accent(ng-click="a.goToOpportunities($event);" ng-disabled="a.allOpportunitiesDisabled()" analytics-on="click" analytics-event="{{a.currentTopBottomAcctType.name}}" analytics-category="{{a.filtersService.model.valuesVsTrend.name}}" analytics-label="View Opportunities") See All Opportunities
+  a.accent(ng-click="a.goToOpportunities($event);" ng-disabled="a.allOpportunitiesDisabled()") See All Opportunities
   label Select a premise type followed by a retailer and/or distributor to view opportunities
