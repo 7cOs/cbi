@@ -7,29 +7,29 @@
 div.outer-nav-wrapper
   div.inner-nav-wrapper(container)
     div(row)
-      img(src="../../../assets/img/logos/Compass_logo.svg", ui-sref="landing", alt="Home" analytics-on="click" analytics-event="Image Click" analytics-category="Navigation" analytics-label="Compass Logo").nav-logo
+      img(src="../../../assets/img/logos/Compass_logo.svg", ui-sref="landing", alt="Home" analytics-event-on="click" category="Navigation" action="Image Click" label="Compass Logo").nav-logo
       .nav-logo-background
       div.nav-link-wrapper
         ul(column='8').main-nav
-          li.top-level-menu(ui-sref-active="active" ui-sref="landing" analytics-on="click" analytics-event="Link Click" analytics-category="Navigation" analytics-label="Home")
+          li.top-level-menu(ui-sref-active="active" ui-sref="landing" analytics-event-on="click" category="Navigation" action="Link Click" label="Home")
             div.inner
               span #[a Home]
           li.top-level-menu.parent(ui-sref-active="active")
             div.inner
               span #[a My Performance]
             ul.dropdown
-              li.sub-menu(ui-sref="scorecards" analytics-on="click" analytics-event="Link Click" analytics-category="Navigation" analytics-label="My Scorecards")
+              li.sub-menu(ui-sref="scorecards" analytics-event-on="click" category="Navigation" action="Link Click" label="My Scorecards")
                 div.sub-menu-item #[a My Scorecards]
-              li.sub-menu(ui-sref="accounts" analytics-on="click" analytics-event="Link Click" analytics-category="Navigation" analytics-label="Account Dashboard")
+              li.sub-menu(ui-sref="accounts" analytics-event-on="click" category="Navigation" action="Link Click" label="Account Dashboard")
                 div.sub-menu-item #[a Account Dashboard]
-              li.sub-menu(ng-click="nb.openIQLink()" target="_blank" analytics-on="click" analytics-event="Link Click" analytics-category="Navigation" analytics-label="More Reports")
+              li.sub-menu(ng-click="nb.openIQLink()" target="_blank" analytics-event-on="click" category="Navigation" action="Link Click" label="More Reports")
                 div.sub-menu-item
                   a.external-link More Reports
                     .icon.dropdown-icon
-          li.top-level-menu(ui-sref-active="active" ui-sref="opportunities" analytics-on="click" analytics-event="Link Click" analytics-category="Navigation" analytics-label="Opportunities")
+          li.top-level-menu(ui-sref-active="active" ui-sref="opportunities" analytics-event-on="click" category="Navigation" action="Link Click" label="Opportunities")
             div.inner
               span #[a Opportunities]
-          li.top-level-menu(ui-sref-active="active" ui-sref="target-lists" analytics-on="click" analytics-event="Link Click" analytics-category="Navigation" analytics-label="Target Lists")
+          li.top-level-menu(ui-sref-active="active" ui-sref="target-lists" analytics-event-on="click" category="Navigation" action="Link Click" label="Target Lists")
             div.inner
               span #[a Target Lists]
           // li.top-level-menu(ui-sref-active="active")
@@ -38,22 +38,22 @@ div.outer-nav-wrapper
         div.nav-icon-container
           .notification-count-badge(ng-if="nb.notificationHelper.showBadge")
             span {{nb.notificationHelper.unseenNotifications}}
-          a.nav-icon.add-opportunity(ng-click="nb.modalAddOpportunityForm(); nb.getTargetLists()" analytics-on="click" analytics-event="Add Opportunity" analytics-category="Opportunities" analytics-label="Navbar Icon Click")
+          a.nav-icon.add-opportunity(ng-click="nb.modalAddOpportunityForm(); nb.getTargetLists()" analytics-event-on="click" category="Opportunities" action="Add Opportunity" label="Navbar Icon Click")
             inline-search(ng-if="nb.accountSelectorSelected === 'Store'" type="store" placeholder="Search for a store" chosen-result="nb.searchResult" nav="true")
           md-menu(md-position-mode="target-right target" md-offset="1 38")
-            a.nav-icon.notifications(href="#" md-menu-origin ng-click="$mdOpenMenu($event); nb.markSeen(nb.notifications)", aria-label="Notifications" analytics-on="click" analytics-event="View Notification" analytics-category="Notifications" analytics-label="Navbar Icon Click")
+            a.nav-icon.notifications(href="#" md-menu-origin ng-click="$mdOpenMenu($event); nb.markSeen(nb.notifications)", aria-label="Notifications" analytics-event-on="click" category="Navigation" action="Image Click" label="Notifications")
             md-menu-content.nav-flyout
               notifications([notifications]="nb.notifications", (on-notification-clicked)="nb.notificationClicked($event)")
           md-menu(md-position-mode="target-right target" md-offset="2 54")
-            a.nav-icon.settings(href="#" md-menu-origin ng-click="$mdOpenMenu($event)", aria-label="Settings" analytics-on="click" analytics-event="View Settings" analytics-category="Settings" analytics-label="Navbar Icon Click")
+            a.nav-icon.settings(href="#" md-menu-origin ng-click="$mdOpenMenu($event)", aria-label="Settings" analytics-event-on="click" category="Navigation" action="Image Click" label="Settings")
             md-menu-content
               .nav-flyout
                 .content
                   settings
-          a.feedback(href="#" ng-click="nb.sendFeedback()" analytics-on="click" analytics-event="Link Click" analytics-category="Navigation" analytics-label="Send Feedback") Send Feedback
+          a.feedback(href="#" ng-click="nb.sendFeedback()" analytics-event-on="click" category="Navigation" action="Link Click" label="Send Feedback") Send Feedback
       ul.nav-sub-menu(ng-if="$root.pageTitle === 'Account Dashboard' || $root.pageTitle === 'Scorecards'")
-        li.accent #[a(ui-sref="scorecards" ui-sref-active="active" analytics-on="click" analytics-event="Link Click" analytics-category="Navigation" analytics-label="My Scorecards") My Scorecards]
-        li.accent #[a(ui-sref="accounts" ui-sref-active="active" analytics-on="click" analytics-event="Link Click" analytics-category="Navigation" analytics-label="Account Dashboard") Account Dashboard]
+        li.accent #[a(ui-sref="scorecards" ui-sref-active="active" analytics-event-on="click" category="Navigation" action="Link Click" label="My Scorecards") My Scorecards]
+        li.accent #[a(ui-sref="accounts" ui-sref-active="active" analytics-event-on="click" category="Navigation" action="Link Click" label="Account Dashboard") Account Dashboard]
         li.accent
-          a.external-link(href="{{nb.linkToIQ}}" target="_blank" analytics-on="click" analytics-event="Link Click" analytics-category="Navigation" analytics-label="More Reports") More Reports
+          a.external-link(href="{{nb.linkToIQ}}" target="_blank" analytics-event-on="click" category="Navigation" action="Link Click" label="More Reports") More Reports
             .icon.inline-icon

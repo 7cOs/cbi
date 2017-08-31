@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports = /*  @ngInject */
-  function accountsController($rootScope, $scope, $state, $log, $q, $window, $filter, $timeout, $analytics, myperformanceService, chipsService, filtersService, notesService, userService, storesService, dateRangeService) {
+  function accountsController($rootScope, $scope, $state, $log, $q, $window, $filter, $timeout, analyticsService, myperformanceService, chipsService, filtersService, notesService, userService, storesService, dateRangeService, moment) {
 
     // ****************
     // CONTROLLER SETUP
@@ -129,6 +129,7 @@ module.exports = /*  @ngInject */
     vm.disablePremiseType = disablePremiseType;
     vm.disableStoreType = disableStoreType;
     vm.displayBrandValue = displayBrandValue;
+    vm.displayBrandValueAccountBrandVelocity = displayBrandValueAccountBrandVelocity;
     vm.goToOpportunities = goToOpportunities;
     vm.getClassBasedOnValue = getClassBasedOnValue;
     vm.getTrendValues = getTrendValues;
@@ -224,13 +225,55 @@ module.exports = /*  @ngInject */
      */
     function displayBrandValue(brandMeasures, property, timePeriod) {
       if (brandMeasures) {
-        var matchedMeasure = brandMeasures.filter(function(currentMeasure) {
-          return vm.filterModel[timePeriod] ? currentMeasure.timeframe === vm.filterModel[timePeriod].name : false;
-        });
-        if (matchedMeasure[0]) {
-          return matchedMeasure[0][property];
+        const matchedMeasure = getMatchedMeasure(brandMeasures, timePeriod);
+        if (matchedMeasure) {
+          return matchedMeasure[property];
         }
       }
+    }
+
+    /**
+     * Returns the measure for the given time period
+     * @param {Array} brandMeasures - array of measures for a brand
+     * @param {String} timePeriod - the time period
+     * @returns {Object} The measures found or undefined
+     */
+    function getMatchedMeasure(brandMeasures, timePeriod) {
+      return brandMeasures.find((currentMeasure) => {
+         return vm.filterModel[timePeriod]
+           ? currentMeasure.timeframe === vm.filterModel[timePeriod].name
+           : false;
+      });
+    }
+
+    /**
+     * Returns the brand mesure for velicity or N/A if the first depletion
+     * date is before the start date of the distribution time period
+     * @param {Array} brandMeasures - array of measures for a brand
+     * @param {String} firstDepletion - the depletion date for the given measures (YYYY-MM-DD)
+     * @returns {String} velocity
+     */
+    function displayBrandValueAccountBrandVelocity(brandMeasures, firstDepletion) {
+      if (brandMeasures) {
+        const matchedMeasure = getMatchedMeasure(brandMeasures, 'distributionTimePeriod');
+        if (matchedMeasure && firstDepletion) {
+          return isNonApplicableMeasure(firstDepletion)
+            ? 'N/A'
+            : $filter('number')(matchedMeasure['velocity'], 0);
+        }
+      }
+    }
+
+    /**
+     * Checks if the given first depletion date given is applicable for a velocity measure
+     * @param {String} firstDepletionDateRaw - the depletion date for the given measures (YYYY-MM-DD)
+     * @returns {Boolean} true if it's applicable, false otherwise
+     */
+    function isNonApplicableMeasure(firstDepletionDateRaw) {
+      const firstDepletionDate = moment(firstDepletionDateRaw, 'YYYY-MM-DD');
+      const firstDayTimePeriodDateRaw = vm.dateRanges[vm.filterModel.distributionTimePeriod.v3ApiCode].range.split(' - ')[0];
+      const firstDayTimePeriodDate = moment(firstDayTimePeriodDateRaw, 'MM/DD/YY');
+      return firstDayTimePeriodDate.isBefore(firstDepletionDate);
     }
 
     function filterTopBottom() {
@@ -318,6 +361,7 @@ module.exports = /*  @ngInject */
       } else {
         e.preventDefault();
       }
+      sendAllOpportunityAnalyticsEvent();
     }
 
     // Make notes available to the page
@@ -562,6 +606,8 @@ module.exports = /*  @ngInject */
         });
       }
 
+      sendBrandSnapshotAnalyticsEvent();
+
       for (var topBottomObj in vm.topBottomData) {
         myperformanceService.resetPerformanceDataFlags(vm.topBottomData[topBottomObj]);
       }
@@ -792,6 +838,7 @@ module.exports = /*  @ngInject */
           }, 500);
         });
       }
+      sendBrandSnapshotAnalyticsEvent();
       disableApplyFilter(true);
     }
 
@@ -1195,8 +1242,8 @@ module.exports = /*  @ngInject */
      * @returns Updates the object with the correct data
      */
     function getDataForTopBottomLevel(topBottomObj, callback) {
-      var categoryBound = vm.filtersService.model.accountSelected.accountMarkets;
-      var params = filtersService.getAppliedFilters('topBottom');
+      const categoryBound = vm.filtersService.model.accountSelected.accountMarkets;
+      let params = filtersService.getAppliedFilters('topBottom');
       appendBrandParametersForTopBottom(params);
       params = myperformanceService.appendFilterParametersForTopBottom(params, vm.currentTopBottomFilters, vm.filtersService.model.selected.myAccountsOnly);
 
@@ -1227,22 +1274,39 @@ module.exports = /*  @ngInject */
     }
 
     /**
-     * Gets the value from the measure that is passed. It can be either Depletions,Dist(simple/effective), velocity
-     * @param {Object} measures Can be either topBottomData.distirbutor, topBottomData.account etc
-     * @returns Returns the rounded value or if null returns  '-'
+     * Gets the value from the measure and performanceData that is passed.
+     * @param {Object} measures Can be either
+     *                      topBottomData.distirbutor.performanceData.measures,
+     *                      topBottomData.distirbutor.timePeriodFilteredData.measures,
+     *                      topBottomData.account.performanceData.measures,
+     *                      topBottomData.account.timePeriodFilteredData.measures,
+     *                      topBottomData.stores.performanceData.measures,
+     *                      topBottomData.stores.timePeriodFilteredData.measures etc
+     * @param {Object} performanceData The performance data
+     * @returns Returns the rounded value or if null returns '-' or if non applicable returns N/A
      */
-    function getValueBoundForAcctType(measures) {
-      if (measures && vm.filtersService.model.accountSelected.accountMarkets) {
-        var propName = vm.filtersService.model.accountSelected.accountMarkets.propertyName;
-        var matchedMeasure = measures[propName];
-        if (userService.isValidValues(matchedMeasure)) {
-          return $filter('number')(matchedMeasure, 0);
+    function getValueBoundForAcctType(measures, performanceData) {
+      let displayValue = '-';
+
+      if (vm.filtersService.model.accountSelected.accountMarkets) {
+        const isNonApplicable = vm.filtersService.model.accountSelected.accountMarkets.propertyName === 'velocity'
+          ? isNonApplicableMeasure(performanceData.firstSoldDate)
+          : false;
+
+        if (isNonApplicable) {
+          displayValue = 'N/A';
         } else {
-          return '-';
+          if (measures) {
+            const propName = vm.filtersService.model.accountSelected.accountMarkets.propertyName;
+            const matchedMeasure = measures[propName];
+            if (userService.isValidValues(matchedMeasure)) {
+              displayValue = $filter('number')(matchedMeasure, 0);
+            }
+          }
         }
-      } else {
-        return '-';
       }
+
+      return displayValue;
     }
 
     /**
@@ -1657,31 +1721,54 @@ module.exports = /*  @ngInject */
     }
 
      function sendTopBottomAnalyticsEvent() {
-       $analytics.eventTrack(vm.currentTopBottomAcctType.name, {
-         category: vm.filtersService.model.valuesVsTrend.name,
-         label: vm.filtersService.model.accountSelected.accountMarkets.name
-       });
+       analyticsService.trackEvent(
+         vm.filtersService.model.valuesVsTrend.name,
+         vm.currentTopBottomAcctType.name,
+         vm.filtersService.model.accountSelected.accountMarkets.name
+       );
      }
 
-     angular.element($window).bind('scroll', function() {
-       if (vm.selectOpen) {
-         return;
-       }
-       vm.st = this.pageYOffset;
-       if (vm.st >= 230) {
-         // Only set element class if state has changed
-         if (!vm.scrolledBelowHeader) {
-           setOverviewDisplay(true);
-         }
-         vm.scrolledBelowHeader = true;
-       } else {
-         // Only set element class if state has changed
-         if (vm.scrolledBelowHeader) {
-           setOverviewDisplay(false);
-         }
-         vm.scrolledBelowHeader = false;
-       }
-     });
+    function sendAllOpportunityAnalyticsEvent() {
+      analyticsService.trackEvent(
+        'Accounts',
+        'Top Opportunities',
+        'All Opportunities'
+      );
+    }
+
+    function sendBrandSnapshotAnalyticsEvent() {
+      analyticsService.trackEvent(
+        'Snapshot',
+        getSnapshotAction(),
+        vm.filtersService.model.accountSelected.accountBrands.name
+      );
+    }
+
+    function getSnapshotAction() {
+      return vm.brandWidgetSkuTitle
+        ? vm.brandWidgetSkuTitle
+        : (currentBrandSelected ? currentBrandSelected.name : vm.brandWidgetTitleDefault);
+    }
+
+    angular.element($window).bind('scroll', function() {
+      if (vm.selectOpen) {
+        return;
+      }
+      vm.st = this.pageYOffset;
+      if (vm.st >= 230) {
+        // Only set element class if state has changed
+        if (!vm.scrolledBelowHeader) {
+          setOverviewDisplay(true);
+        }
+        vm.scrolledBelowHeader = true;
+      } else {
+        // Only set element class if state has changed
+        if (vm.scrolledBelowHeader) {
+          setOverviewDisplay(false);
+        }
+        vm.scrolledBelowHeader = false;
+      }
+    });
 
     function formatChartData(chartData) {
       if (chartData.length && angular.isArray(chartData)) {

@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports = /*  @ngInject */
-  function notesController($scope, $state, $mdDialog, $timeout, $filter, $window, $location, $analytics, notesService, userService, Upload, moment) {
+  function notesController($scope, $state, $mdDialog, $timeout, $filter, $window, $location, analyticsService, notesService, userService, Upload, moment) {
 
     // ****************
     // CONTROLLER SETUP
@@ -76,11 +76,6 @@ module.exports = /*  @ngInject */
       } else {
         vm.cachedNote = angular.copy(note);
       }
-
-      $analytics.eventTrack('Edit Note', {
-        category: notesService.model.currentStoreProperty === 'distributor' ? 'Distributor Notes' : 'Retailer Notes',
-        label: note.id
-      });
     }
 
     function openCreateNote() {
@@ -134,10 +129,11 @@ module.exports = /*  @ngInject */
         data.id = response.successReturnValue[0].id;
         vm.notes.push(data);
 
-        $analytics.eventTrack('Create Note', {
-          category: data.accountType === 'DISTRIBUTOR' ? 'Distributor Notes' : 'Retailer Notes',
-          label: response.successReturnValue[0].id
-        });
+        analyticsService.trackEvent(
+          data.accountType === 'DISTRIBUTOR' ? 'Distributor Notes' : 'Retailer Notes',
+          'Create Note',
+          response.successReturnValue[0].id
+        );
 
         jumpToNotesTop();
         setNoteAuthor();
@@ -175,7 +171,13 @@ module.exports = /*  @ngInject */
       vm.loading = true;
       note.date = moment.utc().format();
 
-      notesService.updateNote(note).then(function(updateSuccess) {
+      notesService.updateNote(note).then(updateSuccess => {
+        analyticsService.trackEvent(
+          notesService.model.currentStoreProperty === 'distributor' ? 'Distributor Notes' : 'Retailer Notes',
+          'Edit Note',
+          note.id
+        );
+
         notesService.accountNotes().then(function(success) {
           vm.notes = success;
           jumpToNotesTop();
@@ -203,10 +205,11 @@ module.exports = /*  @ngInject */
         setNoteAuthor();
         vm.loading = false;
 
-        $analytics.eventTrack('Delete Note', {
-          category: notesService.model.currentStoreProperty === 'distributor' ? 'Distributor Notes' : 'Retailer Notes',
-          label: data.id
-        });
+        analyticsService.trackEvent(
+          notesService.model.currentStoreProperty === 'distributor' ? 'Distributor Notes' : 'Retailer Notes',
+          'Delete Note',
+          data.id
+        );
       })
       .catch(() => {
         vm.notesError = true;
@@ -221,10 +224,11 @@ module.exports = /*  @ngInject */
     function readMore(note) {
       note.readMore = true;
 
-      $analytics.eventTrack('Read More', {
-        category: notesService.model.currentStoreProperty === 'distributor' ? 'Distributor Notes' : 'Retailer Notes',
-        label: note.id
-      });
+      analyticsService.trackEvent(
+        notesService.model.currentStoreProperty === 'distributor' ? 'Distributor Notes' : 'Retailer Notes',
+        'Read More',
+        note.id
+      );
     }
 
     function addAttachment(note, file, invalidFile) {
@@ -302,10 +306,11 @@ module.exports = /*  @ngInject */
       const updatedNoteBody = formatEmailString(note.body);
       let emailString = 'mailto:';
 
-      $analytics.eventTrack('Email Note', {
-         category: currentAccount.currentStoreProperty === 'distributor' ? 'Distributor Notes' : 'Retailer Notes',
-         label: note.id
-       });
+      analyticsService.trackEvent(
+         currentAccount.currentStoreProperty === 'distributor' ? 'Distributor Notes' : 'Retailer Notes',
+        'Email Note',
+         note.id
+       );
 
       if (notesService.model.currentStoreProperty === 'subaccount' || notesService.model.currentStoreProperty === 'account') {
         emailString += '?subject=' + currentAccount.currentStoreName + ': Note: ' + note.title;
@@ -368,10 +373,11 @@ module.exports = /*  @ngInject */
     }
 
     function attachmentClicked(noteId) {
-      $analytics.eventTrack('View Attachment', {
-        category: notesService.model.currentStoreProperty === 'distributor' ? 'Distributor Notes' : 'Retailer Notes',
-        label: noteId
-      });
+      analyticsService.trackEvent(
+        notesService.model.currentStoreProperty === 'distributor' ? 'Distributor Notes' : 'Retailer Notes',
+        'View Attachment',
+        noteId
+      );
     }
 
     // ***************
@@ -474,10 +480,11 @@ module.exports = /*  @ngInject */
           break;
       }
 
-      $analytics.eventTrack('Notes Tab', {
-        category: vm.analyticsCategory,
-        label: 'Open Notes Tab'
-      });
+      analyticsService.trackEvent(
+        vm.analyticsCategory,
+        'Notes Tab',
+        'Open Notes Tab'
+      );
 
       $location.hash(account.noteId);
     });

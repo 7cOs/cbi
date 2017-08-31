@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, Inject } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs/Subscription';
@@ -28,6 +28,8 @@ import * as MyPerformanceFilterActions from '../../state/actions/my-performance-
 
 // mocks
 import { myPerformanceRightTableData } from '../../models/my-performance-table-data.model.mock';
+
+const CORPORATE_USER_POSITION_ID = '0';
 
 export interface HandleElementClickedParameters {
   leftSide: boolean;
@@ -71,7 +73,8 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
 
   constructor(
     private store: Store<AppState>,
-    private myPerformanceTableDataTransformerService: MyPerformanceTableDataTransformerService
+    private myPerformanceTableDataTransformerService: MyPerformanceTableDataTransformerService,
+    @Inject('userService') private userService: any
   ) { }
 
   ngOnInit() {
@@ -99,12 +102,12 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
         }
     });
 
-    this.store.select(state => state.myPerformance.versions).subscribe((versions: Array<MyPerformanceState>) => {
-      this.showLeftBackButton = versions.length > 0;
+    this.myPerformanceVersionSubscription = this.store.select(state => state.myPerformance.versions)
+      .subscribe((versions: Array<MyPerformanceState>) => {
+        this.showLeftBackButton = versions.length > 0;
     });
 
-    // stub current user for now
-    const currentUserId = '3843';
+    const currentUserId = this.userService.model.currentUser.positionId || CORPORATE_USER_POSITION_ID;
     this.store.dispatch(new FetchResponsibilitiesAction({ positionId: currentUserId, filter: this.filterState }));
 
     // setting ViewType for right side here for now

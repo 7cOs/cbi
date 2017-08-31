@@ -2,7 +2,7 @@ import { getDateRangeMock } from '../../models/date-range.model.mock';
 import { Observable } from 'rxjs';
 
 describe('Unit: accountsController', function() {
-  var scope, ctrl, $controller, $state, $q, filtersService, chipsService, userService, packageSkuData, brandSpy, brandPerformanceData, myperformanceService, storesService, $filter;
+  var scope, ctrl, $controller, $state, $q, filtersService, chipsService, userService, packageSkuData, brandSpy, brandPerformanceData, myperformanceService, storesService, $filter, analyticsService;
   let promiseGetStores;
 
   var topBottomSnapshotDistributorData = {
@@ -325,16 +325,23 @@ describe('Unit: accountsController', function() {
   ];
 
   const mockDateRangeService = {
-    getDateRanges: () => Observable.of(getDateRangeMock())
+    getDateRanges: () => Observable.of({L90: getDateRangeMock()})
   };
 
   beforeEach(function() {
     // Get Mock Modules
     angular.mock.module('ui.router');
     angular.mock.module('ngMaterial');
-    angular.mock.module('angulartics');
     angular.mock.module('cf.common.services');
     angular.mock.module('cf.modules.accounts');
+    angular.mock.module('angularMoment');
+
+    angular.mock.module(($provide) => {
+      analyticsService = {
+        trackEvent: () => {}
+      };
+      $provide.value('analyticsService', analyticsService);
+    });
 
     inject(function($rootScope, _$controller_, _$state_, _$q_, _chipsService_, _filtersService_, _userService_, _myperformanceService_, _storesService_, _$filter_) {
       // Create scope
@@ -496,6 +503,9 @@ describe('Unit: accountsController', function() {
       expect(ctrl.displayBrandValue).not.toBeUndefined();
       expect(typeof (ctrl.displayBrandValue)).toEqual('function');
 
+      expect(ctrl.displayBrandValueAccountBrandVelocity).not.toBeUndefined();
+      expect(typeof (ctrl.displayBrandValueAccountBrandVelocity)).toEqual('function');
+
       expect(ctrl.getTrendValues).not.toBeUndefined();
       expect(typeof (ctrl.getTrendValues)).toEqual('function');
 
@@ -528,6 +538,9 @@ describe('Unit: accountsController', function() {
 
       expect(ctrl.filterTopBottom).not.toBeUndefined();
       expect(typeof (ctrl.filterTopBottom)).toEqual('function');
+
+      expect(ctrl.getValueBoundForAcctType).not.toBeUndefined();
+      expect(typeof (ctrl.getValueBoundForAcctType)).toEqual('function');
     });
 
     it('Should get default radio button options on init', function () {
@@ -575,6 +588,28 @@ describe('Unit: accountsController', function() {
     it('Should get totals for distributions', function() {});
 
     it('Should get totals for velocity', function() {});
+  });
+
+  describe('displayBrandValueAccountBrandVelocity', () => {
+    it('Should display N/A only when the first depletion is after the beginning of the time period', () => {
+      const dateRangeMock = {L90: getDateRangeMock()};
+      dateRangeMock.L90.range = '05/14/17 - 08/11/17';
+      const dateRangeServiceWithRangeMock = {
+        getDateRanges: () => Observable.of(dateRangeMock)
+      };
+
+      ctrl = $controller('accountsController', {$scope: scope, dateRangeService: dateRangeServiceWithRangeMock});
+
+      const brandMeasures = [
+        {
+          timeframe: 'L90',
+          velocity: 123.456
+        }
+      ];
+
+      expect(ctrl.displayBrandValueAccountBrandVelocity(brandMeasures, '2017-05-14')).toBe('123');
+      expect(ctrl.displayBrandValueAccountBrandVelocity(brandMeasures, '2017-05-15')).toBe('N/A');
+    });
   });
 
   describe('[Method] goToOpportunities', function() {
@@ -687,6 +722,20 @@ describe('Unit: accountsController', function() {
       expect(filtersService.model.selected.account).toEqual('');
       expect(chipsService.model).toEqual([{ name: 'two', type: 'subaccount', applied: true, removable: false }]);
     });
+
+    it('Should record all opportunities GA events', function() {
+      filtersService.model.selected.premiseType = 'all';
+      filtersService.model.selected.chain = ['01110000 01101100 01110011'];
+      spyOn(analyticsService, 'trackEvent');
+
+      ctrl.goToOpportunities(e);
+
+      expect(analyticsService.trackEvent).toHaveBeenCalledWith(
+        'Accounts',
+        'Top Opportunities',
+        'All Opportunities'
+      );
+    });
   });
 
   describe('[Method] updateBrandSnapshot', function() {
@@ -715,6 +764,23 @@ describe('Unit: accountsController', function() {
 
       expect(userService.getPerformanceBrand).toHaveBeenCalled();
       expect(userService.getPerformanceBrand.calls.count()).toEqual(1);
+    });
+  });
+
+  describe('should record snapshot GA event', function() {
+    beforeEach(function () {
+      brandSpy.calls.reset();
+      spyOn(analyticsService, 'trackEvent');
+    });
+
+    it('Check if Snapshot GA is recorded', function() {
+      ctrl.updateBrandSnapshot();
+
+      expect(analyticsService.trackEvent).toHaveBeenCalledWith(
+        'Snapshot',
+        'All Brands',
+        'Distribution (simple)'
+      );
     });
   });
 
@@ -1434,33 +1500,74 @@ describe('Unit: accountsController', function() {
       ctrl.getDataForTopBottomLevel(ctrl.topBottomData.stores);
       ctrl.marketSelectedIndex = 3;
     });
+  });
 
+  describe('getValueBoundForAcctType', () => {
     it('Should get the correct property from the measure', function() {
-      var val;
+      var displayValue;
       // MTD
+
+      const measures0 = topBottomSnapshotDistributorData.performance[0].measures[0];
+      const measures1 = topBottomSnapshotDistributorData.performance[0].measures[7];
+      const emptyPerformanceData = {
+        firstSoldDate: ''
+      };
+
       ctrl.filtersService.model.accountSelected.accountMarkets = ctrl.filtersService.accountFilters.accountMarkets[0];
-      val = ctrl.getValueBoundForAcctType(topBottomSnapshotDistributorData.performance[0].measures[0]);
-      expect(val).toEqual($filter('number')(375314, 0));
+      displayValue = ctrl.getValueBoundForAcctType(measures0, emptyPerformanceData);
+      expect(displayValue).toEqual($filter('number')(375314, 0));
 
       ctrl.filtersService.model.accountSelected.accountMarkets = ctrl.filtersService.accountFilters.accountMarkets[1];
-      val = ctrl.getValueBoundForAcctType(topBottomSnapshotDistributorData.performance[0].measures[7]);
-      expect(val).toEqual($filter('number')(14612, 0));
+      displayValue = ctrl.getValueBoundForAcctType(measures1, emptyPerformanceData);
+      expect(displayValue).toEqual($filter('number')(14612, 0));
 
       ctrl.filtersService.model.accountSelected.accountMarkets = ctrl.filtersService.accountFilters.accountMarkets[2];
-      val = ctrl.getValueBoundForAcctType(topBottomSnapshotDistributorData.performance[0].measures[7]);
-      expect(val).toEqual($filter('number')(30104, 0));
+      displayValue = ctrl.getValueBoundForAcctType(measures1, emptyPerformanceData);
+      expect(displayValue).toEqual($filter('number')(30104, 0));
 
       ctrl.filtersService.model.accountSelected.accountMarkets = ctrl.filtersService.accountFilters.accountMarkets[3];
-      val = ctrl.getValueBoundForAcctType(topBottomSnapshotDistributorData.performance[0].measures[7]);
-      expect(val).toEqual($filter('number')(7190, 0));
+      displayValue = ctrl.getValueBoundForAcctType(measures1, emptyPerformanceData);
+      expect(displayValue).toEqual($filter('number')(7190, 0));
 
       ctrl.filtersService.model.accountSelected.accountMarkets = ctrl.filtersService.accountFilters.accountMarkets[0];
-      val = ctrl.getValueBoundForAcctType(topBottomSnapshotDistributorData.performance[0].measures[0]);
-      expect(val).not.toEqual('-');
+      displayValue = ctrl.getValueBoundForAcctType(measures0, emptyPerformanceData);
+      expect(displayValue).not.toEqual('-');
 
       ctrl.filtersService.model.accountSelected.accountMarkets = null;
-      val = ctrl.getValueBoundForAcctType(topBottomSnapshotDistributorData.performance[0].measures[0]);
-      expect(val).toEqual('-');
+      displayValue = ctrl.getValueBoundForAcctType(measures0, emptyPerformanceData);
+      expect(displayValue).toEqual('-');
+    });
+
+    it('Should display N/A only when the first depletion is after the beginning of the time period', () => {
+      const dateRangeMock = {L90: getDateRangeMock()};
+      dateRangeMock.L90.range = '05/14/17 - 08/11/17';
+      const dateRangeServiceWithRangeMock = {
+        getDateRanges: () => Observable.of(dateRangeMock)
+      };
+
+      ctrl = $controller('accountsController', {$scope: scope, dateRangeService: dateRangeServiceWithRangeMock});
+
+      const storeData = {
+        measures: topBottomSnapshotDistributorData.performance[0].measures[7],
+        performanceData: {
+          firstSoldDate: '2017-05-14'
+        }
+      };
+
+      const storeDataNA = {
+        measures: topBottomSnapshotDistributorData.performance[0].measures[7],
+        performanceData: {
+          firstSoldDate: '2017-05-15'
+        }
+      };
+
+      ctrl.filtersService.model.accountSelected.accountMarkets = ctrl.filtersService.accountFilters.accountMarkets[3];
+
+      let displayValue = ctrl.getValueBoundForAcctType(storeData.measures, storeData.performanceData);
+      expect(displayValue).toEqual($filter('number')(7190, 0));
+
+      displayValue = ctrl.getValueBoundForAcctType(storeDataNA.measures, storeDataNA.performanceData);
+      expect(displayValue).toEqual('N/A');
     });
   });
 
