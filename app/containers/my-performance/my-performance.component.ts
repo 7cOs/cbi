@@ -31,6 +31,8 @@ import * as MyPerformanceFilterActions from '../../state/actions/my-performance-
 // mocks
 import { myPerformanceRightTableData } from '../../models/my-performance-table-data.model.mock';
 
+const CORPORATE_USER_POSITION_ID = 0;
+
 export interface HandleElementClickedParameters {
   leftSide: boolean;
   type: RowType;
@@ -113,8 +115,9 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
         this.showLeftBackButton = versions.length > 0;
     });
 
-    // stub current user for now
-    const currentUserId = 3843;
+    const currentUserId = this.userService.model.currentUser.positionId
+      ? parseInt(this.userService.model.currentUser.positionId, 0)
+      : CORPORATE_USER_POSITION_ID;
     this.store.dispatch(new FetchResponsibilitiesAction({ positionId: currentUserId, filter: this.filterState }));
 
     // setting ViewType for right side here for now

@@ -210,6 +210,8 @@ module.exports = /*  @ngInject */
         closeModal();
         vm.buttonDisabled = false;
 
+        analyticsService.trackEvent('Target Lists - My Target Lists', 'Create Target List', response.id);
+
         // add collaborators to newly created target list
         return targetListService.addTargetListShares(response.id, newPayload);
       })
