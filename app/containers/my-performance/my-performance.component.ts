@@ -150,11 +150,11 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
       default:
         if (parameters.leftSide) {
           this.store.dispatch(new MyPerformanceVersionActions.SaveMyPerformanceStateAction(this.currentState));
+          this.store.dispatch(new BreadcrumbActions.AddBreadcrumbEntity(parameters.row.descriptionRow0));
           console.log('clicked on left row:', parameters.row);
           if (this.leftTableViewType === ViewType.roleGroups) {
             this.store.dispatch(new SetLeftMyPerformanceTableViewType(ViewType.people));
             this.store.dispatch(new GetPeopleByRoleGroupAction(EntityPeopleType[parameters.row.descriptionRow0.slice(0, -1)]));
-            this.store.dispatch(new BreadcrumbActions.AddBreadcrumbEntity(parameters.row.descriptionRow0));
           }
         } else {
           console.log('clicked on right row:', parameters.row);
