@@ -25,7 +25,7 @@ describe('Responsibilities Actions', () => {
     });
   });
 
-  describe('FetchResponsibilitiesSuccessAction', () => {
+  describe('RestoreMyPerformanceAction', () => {
     let action: MyPerformanceVersionActions.RestoreMyPerformanceStateAction;
 
     beforeEach(() => {
@@ -36,6 +36,16 @@ describe('Responsibilities Actions', () => {
       expect(MyPerformanceVersionActions.RESTORE_MY_PERFORMANCE_STATE_ACTION)
         .toBe('[My Performance] RESTORE_MY_PERFORMANCE_STATE_ACTION');
       expect(action.type).toBe(MyPerformanceVersionActions.RESTORE_MY_PERFORMANCE_STATE_ACTION);
+    });
+
+    it('should have a default payload of 1 if none is provided', () => {
+      expect(action.payload).toBe(1);
+    });
+
+    it('should contain the correct payload when one is provided', () => {
+      const actionPayloadMock = chance.natural();
+      const actionWithPayloadMock = new MyPerformanceVersionActions.RestoreMyPerformanceStateAction(actionPayloadMock);
+      expect(actionWithPayloadMock.payload).toEqual(actionPayloadMock);
     });
   });
 

@@ -15,6 +15,7 @@ import { FetchResponsibilitiesAction } from '../../state/actions/responsibilitie
 import * as MyPerformanceVersionActions from '../../state/actions/my-performance-version.action';
 import { getDateRangeMock } from '../../models/date-range.model.mock';
 import { GetPeopleByRoleGroupAction } from '../../state/actions/responsibilities.action';
+import { MyPerformanceBreadcrumbState } from '../../state/reducers/my-performance-breadcrumb.reducer';
 import { MyPerformanceFilterActionType } from '../../enums/my-performance-filter.enum';
 import { MyPerformanceFilterEvent } from '../../models/my-performance-filter.model';
 import { MyPerformanceFilterState } from '../../state/reducers/my-performance-filter.reducer';
@@ -47,7 +48,7 @@ export interface HandleElementClickedParameters {
 })
 
 export class MyPerformanceComponent implements OnInit, OnDestroy {
-  public breadcrumbTrail$: any;
+  public breadcrumbTrail$: Observable<MyPerformanceBreadcrumbState>;
   public leftTableViewType: ViewType;
   public roleGroups: Observable<ResponsibilitiesState>;
   public showLeftBackButton = false;
@@ -81,10 +82,6 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit() {
-    this.store.dispatch(new BreadcrumbActions.ResetBreadcrumbTrail);
-    this.store.dispatch(new BreadcrumbActions.AddBreadcrumbEntity(
-      `${this.userService.model.currentUser.firstName} ${this.userService.model.currentUser.lastName}`
-    ));
     this.dateRanges$ = this.store.select(state => state.dateRanges);
     this.breadcrumbTrail$ = this.store.select(state => state.myPerformanceBreadcrumb);
 
@@ -122,10 +119,14 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
 
     // setting ViewType for right side here for now
     this.store.dispatch(new SetRightMyPerformanceTableViewType(ViewType.brands));
+
+    this.store.dispatch(new BreadcrumbActions.ResetBreadcrumbTrail);
+    this.store.dispatch(new BreadcrumbActions.AddBreadcrumbEntity(
+      `${this.userService.model.currentUser.firstName} ${this.userService.model.currentUser.lastName}`
+    ));
   }
 
   ngOnDestroy() {
-    this.store.dispatch(new BreadcrumbActions.ResetBreadcrumbTrail());
     this.filterStateSubscription.unsubscribe();
     this.myPerformanceCurrentSubscription.unsubscribe();
     this.myPerformanceVersionSubscription.unsubscribe();
@@ -165,8 +166,8 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
     }
   }
 
-  public handleBreadcrumbEntityClicked(params: BreadcrumbEntityClickedEvent): void {
-    const { trail, entity } = params;
+  public handleBreadcrumbEntityClicked(event: BreadcrumbEntityClickedEvent): void {
+    const { trail, entity } = event;
     const indexOffset = 1;
     const stepsBack = trail.length - indexOffset - trail.indexOf(entity);
     if (stepsBack < 1) return;
