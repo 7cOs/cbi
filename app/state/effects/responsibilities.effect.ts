@@ -91,7 +91,7 @@ export class ResponsibilitiesEffects {
             ]);
           })
           .catch((err: Error) => Observable.of(new ResponsibilitiesActions.FetchResponsibilitiesFailureAction(err)));
-      });
+    });
   }
 
   @Effect({dispatch: false})

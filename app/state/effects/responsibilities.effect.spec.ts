@@ -1,3 +1,4 @@
+// tslint:disable:no-unused-variable
 import { EffectsRunner, EffectsTestingModule } from '@ngrx/effects/testing';
 import { Observable } from 'rxjs';
 import { TestBed, inject } from '@angular/core/testing';
@@ -5,9 +6,16 @@ import * as Chance from 'chance';
 
 import { DateRangeTimePeriodValue } from '../../enums/date-range-time-period.enum';
 import { DistributionTypeValue } from '../../enums/distribution-type.enum';
+import { EntityPeopleType } from '../../enums/entity-responsibilities.enum';
 import { FetchResponsibilitiesAction,
          FetchResponsibilitiesFailureAction,
-         FetchResponsibilitiesSuccessAction } from '../actions/responsibilities.action';
+         FetchResponsibilitiesSuccessAction,
+         FetchResponsibilityEntityPerformance,
+         FetchResponsibilityEntityPerformanceSuccess,
+         FetchResponsibilityEntitiesPerformancePayload,
+         GetPeopleByRoleGroupAction } from '../actions/responsibilities.action';
+import { getEntityPeopleResponsibilitiesMock } from '../../models/entity-responsibilities.model.mock';
+import { getMyPerformanceTableRowMock } from '../../models/my-performance-table-row.model.mock';
 import { getResponsibilityEntitiesPerformanceMock,
          getResponsibilityEntitiesPerformanceDTOMock } from '../../models/entity-responsibilities.model.mock';
 import { getRoleGroupsMock } from '../../models/role-groups.model.mock';
@@ -21,6 +29,7 @@ import { ResponsibilityEntityPerformance } from '../../models/entity-responsibil
 import { ResponsibilitiesTransformerService } from '../../services/responsibilities-transformer.service';
 import { RoleGroups } from '../../models/role-groups.model';
 import { SetLeftMyPerformanceTableViewType } from '../actions/view-types.action';
+import { SetTableRowPerformanceTotal } from '../actions/performance-total.action';
 import { ViewType } from '../../enums/view-type.enum';
 
 const chance = new Chance();
@@ -151,6 +160,58 @@ describe('Responsibilities Effects', () => {
       responsibilitiesEffects.fetchResponsibilitiesFailure$().subscribe(() => {
         expect(console.error).toHaveBeenCalled();
         done();
+      });
+    });
+  });
+
+  describe('when a FetchResponsibilityEntityPerformance is received', () => {
+    const fetchEntityPerformancePayloadMock: FetchResponsibilityEntitiesPerformancePayload = {
+      entityType: EntityPeopleType['GENERAL MANAGER'],
+      entities: [getEntityPeopleResponsibilitiesMock()],
+      filter: performanceFilterStateMock,
+      performanceTotal: getMyPerformanceTableRowMock(1)[0],
+      viewType: ViewType.people
+    };
+
+    describe('when MyPerformanceApiService returns successfully', () => {
+      let myPerformanceApiService: MyPerformanceApiService;
+
+      beforeEach(inject([ MyPerformanceApiService ],
+        (_myPerformanceApiService: MyPerformanceApiService) => {
+          myPerformanceApiService = _myPerformanceApiService;
+
+          runner.queue(new FetchResponsibilityEntityPerformance(fetchEntityPerformancePayloadMock));
+        }
+      ));
+
+      it('should dispatch appropriate actions', (done) => {
+        responsibilitiesEffects.FetchResponsibilityEntityPerformance$().combineAll().subscribe((result: any) => {
+          expect(result).toEqual(new SetTableRowPerformanceTotal(fetchEntityPerformancePayloadMock.performanceTotal));
+          expect(result).toEqual(new GetPeopleByRoleGroupAction(fetchEntityPerformancePayloadMock.entityType));
+          expect(result).toEqual(new FetchResponsibilityEntityPerformanceSuccess(responsibilityEntitiesPerformanceMock));
+          expect(result).toEqual(new SetLeftMyPerformanceTableViewType(fetchEntityPerformancePayloadMock.viewType));
+          done();
+        });
+      });
+    });
+
+    describe('when MyPerformanceApiService returns an error', () => {
+      let myPerformanceApiService: MyPerformanceApiService;
+
+      beforeEach(inject([ MyPerformanceApiService ],
+        (_myPerformanceApiService: MyPerformanceApiService) => {
+          myPerformanceApiService = _myPerformanceApiService;
+
+          runner.queue(new FetchResponsibilityEntityPerformance(fetchEntityPerformancePayloadMock));
+        }
+      ));
+
+      it('should return a FetchResponsibilitiesFailureAction after catching an error', (done) => {
+        spyOn(myPerformanceApiService, 'getResponsibilitiesPerformanceTotals').and.returnValue(Observable.throw(err));
+        responsibilitiesEffects.fetchResponsibilities$().subscribe((result) => {
+          expect(result).toEqual(new FetchResponsibilitiesFailureAction(err));
+          done();
+        });
       });
     });
   });

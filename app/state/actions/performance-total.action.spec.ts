@@ -1,21 +1,22 @@
 import * as Chance from 'chance';
+const chance = new Chance();
 
 import { DateRangeTimePeriodValue } from '../../enums/date-range-time-period.enum';
 import { DistributionTypeValue } from '../../enums/distribution-type.enum';
+import { getMyPerformanceTableRowMock } from '../../models/my-performance-table-row.model.mock';
 import { getPerformanceTotalMock } from '../../models/performance-total.model.mock';
 import { MetricTypeValue } from '../../enums/metric-type.enum';
 import { MyPerformanceFilterState } from '../reducers/my-performance-filter.reducer';
+import { MyPerformanceTableRow } from '../../models/my-performance-table-row.model';
 import { PerformanceTotal } from '../../models/performance-total.model';
 import { PremiseTypeValue } from '../../enums/premise-type.enum';
 import * as PerformanceTotalActions from './performance-total.action';
 
-const chance = new Chance();
-
 describe('Performance Total Actions', () => {
 
   describe('Fetch Performance Total Action', () => {
-    const mockPositionId: number = chance.integer();
-    const mockPerformanceFilterState: MyPerformanceFilterState = {
+    const positionIdMock: number = chance.integer();
+    const performanceFilterStateMock: MyPerformanceFilterState = {
       metricType: MetricTypeValue.PointsOfDistribution,
       dateRangeCode: DateRangeTimePeriodValue.FYTDBDL,
       premiseType: PremiseTypeValue.On,
@@ -25,8 +26,8 @@ describe('Performance Total Actions', () => {
 
     beforeEach(() => {
       action = new PerformanceTotalActions.FetchPerformanceTotalAction({
-        positionId: mockPositionId,
-        filter: mockPerformanceFilterState
+        positionId: positionIdMock,
+        filter: performanceFilterStateMock
       });
     });
 
@@ -37,18 +38,18 @@ describe('Performance Total Actions', () => {
 
     it('should contain the correct payload', () => {
       expect(action.payload).toEqual({
-        positionId: mockPositionId,
-        filter: mockPerformanceFilterState
+        positionId: positionIdMock,
+        filter: performanceFilterStateMock
       });
     });
   });
 
   describe('Fetch Performance Total Success Action', () => {
-    const mockPerformanceTotal: PerformanceTotal = getPerformanceTotalMock();
+    const performanceTotalMock: PerformanceTotal = getPerformanceTotalMock();
     let action: PerformanceTotalActions.FetchPerformanceTotalSuccessAction;
 
     beforeEach(() => {
-      action = new PerformanceTotalActions.FetchPerformanceTotalSuccessAction(mockPerformanceTotal);
+      action = new PerformanceTotalActions.FetchPerformanceTotalSuccessAction(performanceTotalMock);
     });
 
     it('should be the correct type', () => {
@@ -58,16 +59,16 @@ describe('Performance Total Actions', () => {
     });
 
     it('should contain the correct payload', () => {
-      expect(action.payload).toEqual(mockPerformanceTotal);
+      expect(action.payload).toEqual(performanceTotalMock);
     });
   });
 
   describe('Fetch Performance Total Failure Action', () => {
-    const mockError: Error = new Error(chance.string());
+    const errorMock: Error = new Error(chance.string());
     let action: PerformanceTotalActions.FetchPerformanceTotalFailureAction;
 
     beforeEach(() => {
-      action = new PerformanceTotalActions.FetchPerformanceTotalFailureAction(mockError);
+      action = new PerformanceTotalActions.FetchPerformanceTotalFailureAction(errorMock);
     });
 
     it('should be the correct type', () => {
@@ -77,7 +78,25 @@ describe('Performance Total Actions', () => {
     });
 
     it('should contain the correct payload', () => {
-      expect(action.payload).toBe(mockError);
+      expect(action.payload).toBe(errorMock);
+    });
+  });
+
+  describe('Set Table Row Performance Total Action', () => {
+    const tableRowMock: MyPerformanceTableRow = getMyPerformanceTableRowMock(1)[0];
+    let action: PerformanceTotalActions.SetTableRowPerformanceTotal;
+
+    beforeEach(() => {
+      action = new PerformanceTotalActions.SetTableRowPerformanceTotal(tableRowMock);
+    });
+
+    it('should be the correct type', () => {
+      expect(PerformanceTotalActions.SET_TABLE_ROW_PERFORMANCE_TOTAL).toBe('[Performance Total] SET_TABLE_ROW_PERFORMANCE_TOTAL');
+      expect(action.type).toBe(PerformanceTotalActions.SET_TABLE_ROW_PERFORMANCE_TOTAL);
+    });
+
+    it('should contain the correct payload', () => {
+      expect(action.payload).toEqual(tableRowMock);
     });
   });
 });
