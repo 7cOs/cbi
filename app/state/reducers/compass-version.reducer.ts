@@ -9,7 +9,6 @@ export interface CompassVersionState extends State {
 export const initialState: CompassVersionState = {
   status: ActionStatus.NotFetched,
   version: {
-    env: '',
     hash: '-',
     version: '0.0.0'
   }
