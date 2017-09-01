@@ -1,11 +1,10 @@
 import { By } from '@angular/platform-browser';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { Observable } from 'rxjs';
 import { DateRangeComponent } from './date-ranges.component';
-import { DateRangeService } from '../../../services/date-range.service';
+import { dateRangeStateMock } from '../../../models/date-range-state.model.mock';
 import { DateRangeTimePeriod } from '../../../enums/date-range-time-period.enum';
-import { DateRange } from '../../../models/date-range.model';
-import { getDateRangeMock } from '../../../models/date-range.model.mock';
+import { Observable } from 'rxjs';
+import { Store } from '@ngrx/store';
 
 describe('DateRangeComponent', () => {
 
@@ -13,22 +12,18 @@ describe('DateRangeComponent', () => {
   let componentInstance: DateRangeComponent;
   let daterangeElement: HTMLElement;
 
+  const mockStore = {
+    select: jasmine.createSpy('select').and.returnValue(Observable.of(dateRangeStateMock))
+  };
+
   beforeEach(() => {
-
-    const mockDateRange: DateRange = getDateRangeMock();
-    let mockDateRangeService = {
-      getDateRange() {
-        return Observable.of(mockDateRange);
-      }
-    };
-
     TestBed.configureTestingModule({
       declarations: [ DateRangeComponent ],
       providers: [
         DateRangeComponent,
         {
-          provide: DateRangeService,
-          useValue: mockDateRangeService
+          provide: Store,
+          useValue: mockStore
         }
       ]
     });
@@ -36,23 +31,23 @@ describe('DateRangeComponent', () => {
     fixture = TestBed.createComponent(DateRangeComponent);
     componentInstance = fixture.componentInstance;
     daterangeElement = fixture.debugElement.query(By.css('p')).nativeElement;
+  });
 
-    it('L90 date-range check', () => {
-      componentInstance.dateRange = DateRangeTimePeriod.L90;
-      fixture.detectChanges();
-      expect(daterangeElement.textContent).toBe(`${mockDateRange.range}`);
-    });
+  it('L90 date-range check', () => {
+    componentInstance.dateRange = DateRangeTimePeriod.L90;
+    fixture.detectChanges();
+    expect(daterangeElement.textContent).toBe(dateRangeStateMock.L90.range);
+  });
 
-    it('FYTD date-range check', () => {
-      componentInstance.dateRange = DateRangeTimePeriod.FYTD;
-      fixture.detectChanges();
-      expect(daterangeElement.textContent).toBe(`${mockDateRange.range}`);
-    });
+  it('FYTD date-range check', () => {
+    componentInstance.dateRange = DateRangeTimePeriod.FYTD;
+    fixture.detectChanges();
+    expect(daterangeElement.textContent).toBe(dateRangeStateMock.FYTD.range);
+  });
 
-    it('FAKE date-range check should be NULL', () => {
-      componentInstance.dateRange = DateRangeTimePeriod['FAKE'];
-      fixture.detectChanges();
-      expect(daterangeElement.textContent).toBe(``);
-    });
+  it('should not display a date range when date ranges have not been fetched', () => {
+    componentInstance.dateRange = DateRangeTimePeriod['FAKE'];
+    fixture.detectChanges();
+    expect(daterangeElement.textContent).toBe(``);
   });
 });

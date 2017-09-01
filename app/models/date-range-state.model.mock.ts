@@ -1,3 +1,4 @@
+import { ActionStatus } from '../enums/action-status.enum';
 import { DateRangesState } from '../state/reducers/date-ranges.reducer';
 
 export const dateRangeStateMock: DateRangesState = {
@@ -61,5 +62,5 @@ export const dateRangeStateMock: DateRangesState = {
     displayCode: 'MTD',
     range: '06/01/17 - 06/17/17'
   },
-  status: 2
+  status: ActionStatus.Fetched
 };
