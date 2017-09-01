@@ -6,7 +6,7 @@ const cssnano = require('cssnano');
 const commonConfig = require('./webpack.common.js');
 const helpers = require('./helpers');
 
-const ENV = process.env.NODE_ENV = process.env.ENV = 'production';
+const ENV = process.env.NODE_ENV;
 
 module.exports = webpackMerge(commonConfig, {
   devtool: false,
