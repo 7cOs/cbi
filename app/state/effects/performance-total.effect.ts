@@ -6,7 +6,8 @@ import 'rxjs/add/operator/do';
 import 'rxjs/add/operator/switchMap';
 
 import { MyPerformanceApiService } from '../../services/my-performance-api.service';
-import { PerformanceTotal } from '../../models/performance-total.model';
+import { PerformanceTotalDTO } from '../../models/performance-total.model';
+import { PerformanceTotalTransformerService } from '../../services/performance-total-transformer.service';
 import * as FetchResponsibilitiesActions from '../../state/actions/responsibilities.action';
 import * as PerformanceTotalActions from '../../state/actions/performance-total.action';
 
@@ -15,7 +16,8 @@ export class PerformanceTotalEffects {
 
   constructor(
     private actions$: Actions,
-    private myPerformanceApiService: MyPerformanceApiService
+    private myPerformanceApiService: MyPerformanceApiService,
+    private performanceTotalTransformerService: PerformanceTotalTransformerService
   ) { }
 
   @Effect()
@@ -29,8 +31,9 @@ export class PerformanceTotalEffects {
         const { positionId, filter } = action.payload;
 
         return this.myPerformanceApiService.getPerformanceTotal(positionId, filter)
-          .map((response: PerformanceTotal) => {
-            return new PerformanceTotalActions.FetchPerformanceTotalSuccessAction(response);
+          .map((response: PerformanceTotalDTO) => {
+            const performanceTotal = this.performanceTotalTransformerService.transformPerformanceTotalDTO(response);
+            return new PerformanceTotalActions.FetchPerformanceTotalSuccessAction(performanceTotal);
           })
           .catch((err: Error) => Observable.of(new PerformanceTotalActions.FetchPerformanceTotalFailureAction(err)));
       });

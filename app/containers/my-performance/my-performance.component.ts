@@ -9,10 +9,8 @@ import { ColumnType } from '../../enums/column-type.enum';
 import { DateRange } from '../../models/date-range.model';
 import { DateRangesState } from '../../state/reducers/date-ranges.reducer';
 import { EntityPeopleType } from '../../enums/entity-responsibilities.enum';
-import { FetchResponsibilitiesAction } from '../../state/actions/responsibilities.action';
-import * as MyPerformanceVersionActions from '../../state/actions/my-performance-version.action';
+import { FetchResponsibilitiesAction, FetchResponsibilityEntityPerformance } from '../../state/actions/responsibilities.action';
 import { getDateRangeMock } from '../../models/date-range.model.mock';
-import { GetPeopleByRoleGroupAction } from '../../state/actions/responsibilities.action';
 import { MyPerformanceFilterActionType } from '../../enums/my-performance-filter.enum';
 import { MyPerformanceFilterEvent } from '../../models/my-performance-filter.model';
 import { MyPerformanceFilterState } from '../../state/reducers/my-performance-filter.reducer';
@@ -21,10 +19,11 @@ import { MyPerformanceTableRow } from '../../models/my-performance-table-row.mod
 import { ResponsibilitiesState } from '../../state/reducers/responsibilities.reducer';
 import { MyPerformanceState, MyPerformanceData } from '../../state/reducers/my-performance.reducer';
 import { RowType } from '../../enums/row-type.enum';
-import { SetLeftMyPerformanceTableViewType, SetRightMyPerformanceTableViewType } from '../../state/actions/view-types.action';
+import { SetRightMyPerformanceTableViewType } from '../../state/actions/view-types.action';
 import { SortingCriteria } from '../../models/sorting-criteria.model';
 import { ViewType } from '../../enums/view-type.enum';
 import * as MyPerformanceFilterActions from '../../state/actions/my-performance-filter.action';
+import * as MyPerformanceVersionActions from '../../state/actions/my-performance-version.action';
 
 // mocks
 import { myPerformanceRightTableData } from '../../models/my-performance-table-data.model.mock';
@@ -88,17 +87,17 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
       .select(state => state.myPerformance.current)
       .subscribe((current: MyPerformanceData) => {
         this.currentState = current;
-
         this.leftTableViewType = current.viewType.leftTableViewType;
 
-        if (current.responsibilities) {
-          this.tableData = this.myPerformanceTableDataTransformerService
-            .getTableData(this.leftTableViewType, current.responsibilities);
+        if (current.responsibilities && current.responsibilities.status === ActionStatus.Fetched) {
+          this.tableData = this.myPerformanceTableDataTransformerService.getLeftTableData( // What about accounts?
+            current.responsibilities.performanceTotals
+          );
         }
 
         if (current.performanceTotal && current.performanceTotal.status === ActionStatus.Fetched) {
           this.totalRowData = this.myPerformanceTableDataTransformerService
-            .getTotalRowDisplayData(current.performanceTotal.performanceTotal);
+            .getTotalRowData(current.performanceTotal.performanceTotal);
         }
     });
 
@@ -140,20 +139,26 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
       case RowType.data:
       default:
         if (parameters.leftSide) {
-          this.store.dispatch(new MyPerformanceVersionActions.SaveMyPerformanceStateAction(this.currentState));
           console.log('clicked on left row:', parameters.row);
+          this.store.dispatch(new MyPerformanceVersionActions.SaveMyPerformanceStateAction(this.currentState));
+
           if (this.leftTableViewType === ViewType.roleGroups) {
-            this.store.dispatch(new SetLeftMyPerformanceTableViewType(ViewType.people));
-            this.store.dispatch(new GetPeopleByRoleGroupAction(EntityPeopleType[parameters.row.descriptionRow0.slice(0, -1)]));
+            this.store.dispatch(new FetchResponsibilityEntityPerformance({
+              entityType: EntityPeopleType[parameters.row.descriptionRow0],
+              entities: this.currentState.responsibilities.responsibilities[EntityPeopleType[parameters.row.descriptionRow0]],
+              filter: this.filterState,
+              performanceTotal: parameters.row,
+              viewType: ViewType.people
+            }));
           } else if (this.leftTableViewType === ViewType.people) {
             this.store.dispatch(new FetchResponsibilitiesAction({
               positionId: parameters.row.metadata.positionId,
               filter: this.filterState
             }));
-          }
         } else {
           console.log('clicked on right row:', parameters.row);
         }
+      }
     }
   }
 

@@ -1,29 +1,35 @@
 import { Action } from '@ngrx/store';
 import { Actions, Effect } from '@ngrx/effects';
+import * as Chance from 'chance';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/do';
 import 'rxjs/add/operator/switchMap';
 
 import { EntityDTO } from '../../models/entity-dto.model';
+import { EntityResponsibilities } from '../../models/entity-responsibilities.model';
 import { MyPerformanceApiService } from '../../services/my-performance-api.service';
 import { MyPerformanceFilterState } from '../../state/reducers/my-performance-filter.reducer';
 import { PeopleResponsibilitiesDTO } from '../../models/people-responsibilities-dto.model';
+import { PerformanceTotalTransformerService } from '../../services/performance-total-transformer.service';
+import { ResponsibilityEntityPerformance, ResponsibilityEntityPerformanceDTO } from '../../models/entity-responsibilities.model';
 import { ResponsibilitiesTransformerService } from '../../services/responsibilities-transformer.service';
-import { RoleGroupPerformanceTotal } from '../../models/role-groups.model';
 import { RoleGroups } from '../../models/role-groups.model';
+import { SetTableRowPerformanceTotal } from '../../state/actions/performance-total.action';
 import { ViewType } from '../../enums/view-type.enum';
 import * as ResponsibilitiesActions from '../../state/actions/responsibilities.action';
 import * as ViewTypeActions from '../../state/actions/view-types.action';
 
+const chance = new Chance();
+
 interface ResponsibilitiesData {
   roleGroups?: RoleGroups;
   viewType?: ViewType;
-  entityTypes?: Array<{ entityTypeName: string, entityTypeId: string }>;
+  entityTypes?: Array<{ type: string, name: string }>;
   entitiesURL?: string;
   positionId?: string;
   filter?: MyPerformanceFilterState;
-  performanceTotals?: Array<RoleGroupPerformanceTotal>;
+  performanceTotals?: Array<ResponsibilityEntityPerformance>;
 }
 
 @Injectable()
@@ -32,6 +38,7 @@ export class ResponsibilitiesEffects {
   constructor(
     private actions$: Actions,
     private myPerformanceApiService: MyPerformanceApiService,
+    private performanceTotalTransformerService: PerformanceTotalTransformerService,
     private responsibilitiesTransformerService: ResponsibilitiesTransformerService
   ) { }
 
@@ -54,6 +61,27 @@ export class ResponsibilitiesEffects {
       .catch((err: Error) => Observable.of(new ResponsibilitiesActions.FetchResponsibilitiesFailureAction(err)));
   }
 
+  @Effect() FetchResponsibilityEntityPerformance$(): Observable<Action> {
+    return this.actions$
+      .ofType(ResponsibilitiesActions.FETCH_RESPONSIBILITY_ENTITY_PERFORMANCE)
+      .switchMap((action: Action) => {
+        const { entityType, entities, filter, performanceTotal, viewType } = action.payload;
+
+        return this.myPerformanceApiService.getResponsibilitiesPerformanceTotals(entities, filter)
+          .switchMap((response: ResponsibilityEntityPerformanceDTO[]) => {
+            const entityPerformance = this.performanceTotalTransformerService.transformEntityPerformanceTotalDTO(response);
+
+            return Observable.from([
+              new SetTableRowPerformanceTotal(performanceTotal),
+              new ResponsibilitiesActions.GetPeopleByRoleGroupAction(entityType),
+              new ResponsibilitiesActions.FetchResponsibilityEntityPerformanceSuccess(entityPerformance),
+              new ViewTypeActions.SetLeftMyPerformanceTableViewType(viewType)
+            ]);
+          })
+          .catch((err: Error) => Observable.of(new ResponsibilitiesActions.FetchResponsibilitiesFailureAction(err)));
+    });
+  }
+
   @Effect({dispatch: false})
   fetchResponsibilitiesFailure$(): Observable<Action> {
     return this.actions$
@@ -69,7 +97,7 @@ export class ResponsibilitiesEffects {
       .map((response: PeopleResponsibilitiesDTO) => {
         let roleGroups: RoleGroups;
         let viewType: ViewType;
-        let entityTypes: Array<{ entityTypeName: string, entityTypeId: string }>;
+        let entityTypes: Array<{ type: string, name: string }>;
         let entitiesURL: string;
 
         if (response.positions) {
@@ -78,8 +106,8 @@ export class ResponsibilitiesEffects {
           roleGroups = this.responsibilitiesTransformerService.groupPeopleByRoleGroups(response.positions);
           entityTypes = Object.keys(roleGroups).map((roleGroup: string) => {
             return {
-              entityTypeName: roleGroup,
-              entityTypeId: roleGroups[roleGroup][0].type
+              type: roleGroups[roleGroup][0].type,
+              name: roleGroup
             };
           });
         } else {
@@ -106,11 +134,11 @@ export class ResponsibilitiesEffects {
     : Observable<ResponsibilitiesData> {
     if (responsibilitiesData.viewType === ViewType.roleGroups) {
       return this.myPerformanceApiService
-      .getResponsibilitiesPerformanceTotals(responsibilitiesData.positionId,
-        responsibilitiesData.entityTypes,
-        responsibilitiesData.filter)
-      .mergeMap((res: Array<RoleGroupPerformanceTotal>) => {
-        responsibilitiesData.performanceTotals = res;
+      .getResponsibilitiesPerformanceTotals(responsibilitiesData.entityTypes,
+        responsibilitiesData.filter,
+        responsibilitiesData.positionId)
+      .mergeMap((response: ResponsibilityEntityPerformanceDTO[]) => {
+        responsibilitiesData.performanceTotals = this.performanceTotalTransformerService.transformEntityPerformanceTotalDTO(response);
         return Observable.of(responsibilitiesData);
       });
     } else {
@@ -124,8 +152,25 @@ export class ResponsibilitiesEffects {
       || responsibilitiesData.viewType === ViewType.accounts) {
       return this.myPerformanceApiService.getAccountsDistributors(responsibilitiesData.entitiesURL)
         .switchMap((accountsDistributors: Array<EntityDTO>) => {
+        const roleGroups = this.responsibilitiesTransformerService.groupsAccountsDistributors(accountsDistributors);
+
+        // Temporary build fake performance total
+        let performanceTotals = roleGroups['all'].map((entity: EntityResponsibilities) => {
+          return {
+            positionId: entity.positionId,
+            name: entity.name,
+            performanceTotal: {
+              total: chance.natural({max: 1000}),
+              totalYearAgo: chance.natural({max: 1000}),
+              totalYearAgoPercent: chance.natural({max: 100}),
+              contributionToVolume: chance.natural({max: 100})
+            }
+          };
+        });
+
         return Observable.of(Object.assign(responsibilitiesData, {
-          roleGroups: this.responsibilitiesTransformerService.groupsAccountsDistributors(accountsDistributors)
+          roleGroups: roleGroups,
+          performanceTotals: performanceTotals, // Temporary
         }));
       });
     } else {

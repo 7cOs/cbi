@@ -1,6 +1,7 @@
 import { Action } from '@ngrx/store';
 
 import { MyPerformanceFilterState } from '../../state/reducers/my-performance-filter.reducer';
+import { MyPerformanceTableRow } from '../../models/my-performance-table-row.model';
 import { PerformanceTotal } from '../../models/performance-total.model';
 
 export const FETCH_PERFORMANCE_TOTAL_ACTION = '[Performance Total] FETCH_PERFORMANCE_TOTAL_ACTION';
@@ -24,7 +25,15 @@ export class FetchPerformanceTotalFailureAction implements Action {
   constructor(public payload: Error) { }
 }
 
+export const SET_TABLE_ROW_PERFORMANCE_TOTAL = '[Performance Total] SET_TABLE_ROW_PERFORMANCE_TOTAL';
+export class SetTableRowPerformanceTotal implements Action {
+  readonly type = SET_TABLE_ROW_PERFORMANCE_TOTAL;
+
+  constructor(public payload: MyPerformanceTableRow) { }
+}
+
 export type Action
   = FetchPerformanceTotalAction
   | FetchPerformanceTotalSuccessAction
-  | FetchPerformanceTotalFailureAction;
+  | FetchPerformanceTotalFailureAction
+  | SetTableRowPerformanceTotal;
