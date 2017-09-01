@@ -9,7 +9,7 @@ import { MetricTypeValue } from '../enums/metric-type.enum';
 import { MyPerformanceApiService } from './my-performance-api.service';
 import { PerformanceTotal } from '../models/performance-total.model';
 import { PremiseTypeValue } from '../enums/premise-type.enum';
-import { RoleGroupPerformanceTotal } from '../models/role-groups.model';
+import { ResponsibilityEntityPerformance } from '../models/entity-responsibilities.model';
 
 describe('Service: MyPerformanceApiService', () => {
   let myPerformanceApiService: MyPerformanceApiService;
@@ -121,11 +121,12 @@ describe('Service: MyPerformanceApiService', () => {
         dateRangeCode: DateRangeTimePeriodValue.L90BDL,
         premiseType: PremiseTypeValue.All
       };
-      const mockEntityType = {
-        entityTypeName: 'MARKET DEVELOPMENT MANAGER',
-        entityTypeId: '10'
+      const entityMock = {
+        id: chance.natural(),
+        name: chance.string(),
+        type: chance.string()
       };
-      const expectedBaseUrl = '/v3/positions/1/responsibilities/10/performanceTotal';
+      const expectedBaseUrl = `/v3/positions/${ entityMock.id }/responsibilities/${ entityMock.type }/performanceTotal`;
       const expectedUrlParams = '?metricType=velocity&dateRangeCode=L90BDL&premiseType=All';
 
       mockBackend.connections.subscribe((connection: MockConnection) => {
@@ -138,9 +139,13 @@ describe('Service: MyPerformanceApiService', () => {
         expect(connection.request.url).toEqual(expectedBaseUrl + expectedUrlParams);
       });
 
-      myPerformanceApiService.getResponsibilityPerformanceTotal(1, mockEntityType, mockFilter)
-        .subscribe((response: RoleGroupPerformanceTotal) => {
-          expect(response).toEqual({ entityType: 'MARKET DEVELOPMENT MANAGER', performanceTotal: mockPerformanceTotalResponse });
+      myPerformanceApiService.getResponsibilityPerformanceTotal(entityMock, mockFilter)
+        .subscribe((response: ResponsibilityEntityPerformance) => {
+          expect(response).toEqual({
+            id: entityMock.id,
+            name: entityMock.name,
+            performanceTotal: mockPerformanceTotalResponse
+          });
           done();
         });
     });
@@ -155,13 +160,10 @@ describe('Service: MyPerformanceApiService', () => {
         premiseType: PremiseTypeValue.On,
         distributionType: DistributionTypeValue.simple
       };
-      const mockEntityTypeArray = [{
-        entityTypeName: 'MARKET DEVELOPMENT MANAGER',
-        entityTypeId: '10'
-      }, {
-        entityTypeName: 'GENERAL MANAGER',
-        entityTypeId: '20'
-      }];
+      const entityArrayMock = [
+        { id: chance.natural(), name: chance.string(), type: chance.string() },
+        { id: chance.natural(), name: chance.string(), type: chance.string() }
+      ];
       const expectedUrlParams = '?metricType=simplePointsOfDistribution&dateRangeCode=LCM&premiseType=On';
 
       mockBackend.connections.subscribe((connection: MockConnection) => {
@@ -173,20 +175,23 @@ describe('Service: MyPerformanceApiService', () => {
         expect(connection.request.method).toEqual(RequestMethod.Get);
       });
 
-      myPerformanceApiService.getResponsibilitiesPerformanceTotals(1, mockEntityTypeArray, mockFilter)
+      myPerformanceApiService.getResponsibilitiesPerformanceTotals(entityArrayMock, mockFilter)
         .subscribe((response) => {
           expect(response).toEqual([
-            { entityType: 'MARKET DEVELOPMENT MANAGER', performanceTotal: mockPerformanceTotalResponse },
-            { entityType: 'GENERAL MANAGER', performanceTotal: mockPerformanceTotalResponse }
+            { id: entityArrayMock[0].id, name: entityArrayMock[0].name, performanceTotal: mockPerformanceTotalResponse },
+            { id: entityArrayMock[1].id, name: entityArrayMock[1].name, performanceTotal: mockPerformanceTotalResponse }
           ]);
           done();
         });
 
-      expect(mockBackend.connectionsArray.length).toBe(mockEntityTypeArray.length);
+      expect(mockBackend.connectionsArray.length).toBe(entityArrayMock.length);
 
       mockBackend.connectionsArray.forEach((connection: MockConnection, index) => {
         expect(connection.request.url)
-        .toEqual(`/v3/positions/1/responsibilities/${ mockEntityTypeArray[index].entityTypeId }/performanceTotal` + expectedUrlParams);
+        .toEqual(
+          `/v3/positions/${ entityArrayMock[index].id }/responsibilities/${ entityArrayMock[index].type }/performanceTotal`
+          + expectedUrlParams
+        );
       });
     });
   });

@@ -8,9 +8,11 @@ import 'rxjs/add/operator/switchMap';
 import { MyPerformanceApiService } from '../../services/my-performance-api.service';
 import { MyPerformanceFilterState } from '../../state/reducers/my-performance-filter.reducer';
 import { PeopleResponsibilitiesDTO } from '../../models/people-responsibilities-dto.model';
+import { PerformanceTotalTransformerService } from '../../services/performance-total-transformer.service';
+import { ResponsibilityEntityPerformanceDTO } from '../../models/entity-responsibilities.model';
 import { ResponsibilitiesTransformerService } from '../../services/responsibilities-transformer.service';
-import { RoleGroupPerformanceTotal } from '../../models/role-groups.model';
 import { RoleGroups } from '../../models/role-groups.model';
+import { SetTableRowPerformanceTotal } from '../../state/actions/performance-total.action';
 import { ViewType } from '../../enums/view-type.enum';
 import * as ResponsibilitiesActions from '../../state/actions/responsibilities.action';
 import * as ViewTypeActions from '../../state/actions/view-types.action';
@@ -21,6 +23,7 @@ export class ResponsibilitiesEffects {
   constructor(
     private actions$: Actions,
     private myPerformanceApiService: MyPerformanceApiService,
+    private performanceTotalTransformerService: PerformanceTotalTransformerService,
     private responsibilitiesTransformerService: ResponsibilitiesTransformerService
   ) { }
 
@@ -30,7 +33,7 @@ export class ResponsibilitiesEffects {
     let entityType: ViewType;
     let filter: MyPerformanceFilterState;
     let positionId: number;
-    let entityTypes: Array<{ entityTypeName: string, entityTypeId: string }>;
+    let entityTypes: Array<{ id: number, type: string, name: string }>;
 
     return this.actions$
       .ofType(ResponsibilitiesActions.FETCH_RESPONSIBILITIES_ACTION)
@@ -43,8 +46,9 @@ export class ResponsibilitiesEffects {
             roleGroups = this.responsibilitiesTransformerService.groupPeopleByRoleGroups(response.positions);
             entityTypes = Object.keys(roleGroups).map((roleGroup: string) => {
               return {
-                entityTypeName: roleGroup,
-                entityTypeId: roleGroups[roleGroup][0].type
+                id: positionId,
+                type: roleGroups[roleGroup][0].type,
+                name: roleGroup
               };
             });
 
@@ -52,19 +56,42 @@ export class ResponsibilitiesEffects {
           });
         })
         .concatMap(() => {
-          return this.myPerformanceApiService.getResponsibilitiesPerformanceTotals(positionId, entityTypes, filter)
-            .mergeMap((res: Array<RoleGroupPerformanceTotal>) => {
+          return this.myPerformanceApiService.getResponsibilitiesPerformanceTotals(entityTypes, filter)
+            .mergeMap((response: ResponsibilityEntityPerformanceDTO[]) => {
+              const roleGroupPerformanceTotals = this.performanceTotalTransformerService.transformEntityPerformanceTotalDTO(response);
+
               return Observable.from([
                 new ViewTypeActions.SetLeftMyPerformanceTableViewType(entityType),
                 new ResponsibilitiesActions.FetchResponsibilitiesSuccessAction({
                   positionId: positionId,
                   responsibilities: roleGroups,
-                  performanceTotals: res
+                  performanceTotals: roleGroupPerformanceTotals
                 })
               ]);
             });
         })
       .catch((err: Error) => Observable.of(new ResponsibilitiesActions.FetchResponsibilitiesFailureAction(err)));
+  }
+
+  @Effect() FetchResponsibilityEntityPerformance$(): Observable<Action> {
+    return this.actions$
+      .ofType(ResponsibilitiesActions.FETCH_RESPONSIBILITY_ENTITY_PERFORMANCE)
+      .switchMap((action: Action) => {
+        const { entityType, entities, filter, performanceTotal, viewType } = action.payload;
+
+        return this.myPerformanceApiService.getResponsibilitiesPerformanceTotals(entities, filter)
+          .switchMap((response: ResponsibilityEntityPerformanceDTO[]) => {
+            const entityPerformance = this.performanceTotalTransformerService.transformEntityPerformanceTotalDTO(response);
+
+            return Observable.from([
+              new SetTableRowPerformanceTotal(performanceTotal),
+              new ResponsibilitiesActions.GetPeopleByRoleGroupAction(entityType),
+              new ResponsibilitiesActions.FetchResponsibilityEntityPerformanceSuccess(entityPerformance),
+              new ViewTypeActions.SetLeftMyPerformanceTableViewType(viewType)
+            ]);
+          })
+          .catch((err: Error) => Observable.of(new ResponsibilitiesActions.FetchResponsibilitiesFailureAction(err)));
+    });
   }
 
   @Effect({dispatch: false})

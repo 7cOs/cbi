@@ -1,12 +1,13 @@
 import { ActionStatus, State } from '../../enums/action-status.enum';
-import { RoleGroups, RoleGroupPerformanceTotal } from '../../models/role-groups.model';
+import { ResponsibilityEntityPerformance } from '../../models/entity-responsibilities.model';
+import { RoleGroups } from '../../models/role-groups.model';
 import * as ResponsibilitiesActions from '../actions/responsibilities.action';
 
 export interface ResponsibilitiesState extends State {
   status: ActionStatus;
   positionId: number;
   responsibilities: RoleGroups;
-  performanceTotals: Array<RoleGroupPerformanceTotal>;
+  performanceTotals: ResponsibilityEntityPerformance[];
 }
 
 export const initialState: ResponsibilitiesState = {
@@ -45,6 +46,17 @@ export function responsibilitiesReducer(
         responsibilities: {
           [action.payload]: state.responsibilities[action.payload]
         }
+      });
+
+    case ResponsibilitiesActions.FETCH_RESPONSIBILITY_ENTITY_PERFORMANCE:
+      return Object.assign({}, state, {
+        status: ActionStatus.Fetching
+      });
+
+    case ResponsibilitiesActions.FETCH_RESPONSIBILITY_ENTITY_PERFORMANCE_SUCCESS:
+      return Object.assign({}, state, {
+        status: ActionStatus.Fetched,
+        performanceTotals: action.payload
       });
 
     default:
