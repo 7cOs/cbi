@@ -17,7 +17,7 @@ import { MyPerformanceFilterState } from '../../state/reducers/my-performance-fi
 import { MyPerformanceTableDataTransformerService } from '../../services/my-performance-table-data-transformer.service';
 import { MyPerformanceTableRow } from '../../models/my-performance-table-row.model';
 import { ResponsibilitiesState } from '../../state/reducers/responsibilities.reducer';
-import { MyPerformanceState, MyPerformanceData } from '../../state/reducers/my-performance.reducer';
+import { MyPerformanceState, MyPerformanceEntitiesData } from '../../state/reducers/my-performance.reducer';
 import { RowType } from '../../enums/row-type.enum';
 import { SetRightMyPerformanceTableViewType } from '../../state/actions/view-types.action';
 import { SortingCriteria } from '../../models/sorting-criteria.model';
@@ -63,7 +63,7 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
   public totalRowData: MyPerformanceTableRow;
   public showOpportunities: boolean = true;
 
-  private currentState: MyPerformanceData;
+  private currentState: MyPerformanceEntitiesData;
   private dateRanges$: Observable<DateRangesState>;
   private filterState: MyPerformanceFilterState;
   private filterStateSubscription: Subscription;
@@ -85,7 +85,7 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
 
     this.myPerformanceCurrentSubscription = this.store
       .select(state => state.myPerformance.current)
-      .subscribe((current: MyPerformanceData) => {
+      .subscribe((current: MyPerformanceEntitiesData) => {
         this.currentState = current;
         this.leftTableViewType = current.viewType.leftTableViewType;
 
@@ -95,9 +95,11 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
           );
         }
 
-        if (current.performanceTotal && current.performanceTotal.status === ActionStatus.Fetched) {
+        if (current.responsibilities
+          && current.responsibilities.performanceTotal
+          && current.responsibilities.status === ActionStatus.Fetched) {
           this.totalRowData = this.myPerformanceTableDataTransformerService
-            .getTotalRowData(current.performanceTotal.performanceTotal);
+            .getTotalRowData(current.responsibilities.performanceTotal);
         }
     });
 

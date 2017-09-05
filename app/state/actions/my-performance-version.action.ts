@@ -1,12 +1,12 @@
 import { Action } from '@ngrx/store';
 
-import { MyPerformanceData } from '../reducers/my-performance.reducer';
+import { MyPerformanceEntitiesData } from '../reducers/my-performance.reducer';
 
 export const SAVE_MY_PERFORMANCE_STATE_ACTION = '[My Performance] SAVE_MY_PERFORMANCE_STATE_ACTION';
 export class SaveMyPerformanceStateAction implements Action {
   readonly type = SAVE_MY_PERFORMANCE_STATE_ACTION;
 
-  constructor(public payload: MyPerformanceData) { }
+  constructor(public payload: MyPerformanceEntitiesData) { }
 }
 
 export const RESTORE_MY_PERFORMANCE_STATE_ACTION = '[My Performance] RESTORE_MY_PERFORMANCE_STATE_ACTION';

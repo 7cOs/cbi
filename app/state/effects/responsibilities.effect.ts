@@ -11,11 +11,11 @@ import { EntityResponsibilities } from '../../models/entity-responsibilities.mod
 import { MyPerformanceApiService } from '../../services/my-performance-api.service';
 import { MyPerformanceFilterState } from '../../state/reducers/my-performance-filter.reducer';
 import { PeopleResponsibilitiesDTO } from '../../models/people-responsibilities-dto.model';
+import { PerformanceTotalDTO } from '../../models/performance-total.model';
 import { PerformanceTotalTransformerService } from '../../services/performance-total-transformer.service';
 import { ResponsibilityEntityPerformance, ResponsibilityEntityPerformanceDTO } from '../../models/entity-responsibilities.model';
 import { ResponsibilitiesTransformerService } from '../../services/responsibilities-transformer.service';
 import { RoleGroups } from '../../models/role-groups.model';
-import { SetTableRowPerformanceTotal } from '../../state/actions/performance-total.action';
 import { ViewType } from '../../enums/view-type.enum';
 import * as ResponsibilitiesActions from '../../state/actions/responsibilities.action';
 import * as ViewTypeActions from '../../state/actions/view-types.action';
@@ -72,7 +72,7 @@ export class ResponsibilitiesEffects {
             const entityPerformance = this.performanceTotalTransformerService.transformEntityPerformanceTotalDTO(response);
 
             return Observable.from([
-              new SetTableRowPerformanceTotal(performanceTotal),
+              new ResponsibilitiesActions.SetTableRowPerformanceTotal(performanceTotal),
               new ResponsibilitiesActions.GetPeopleByRoleGroupAction(entityType),
               new ResponsibilitiesActions.FetchResponsibilityEntityPerformanceSuccess(entityPerformance),
               new ViewTypeActions.SetLeftMyPerformanceTableViewType(viewType)
@@ -89,6 +89,34 @@ export class ResponsibilitiesEffects {
     .do((action: Action) => {
       console.error('Responsibilities fetch failure:', action.payload);
     });
+  }
+
+  @Effect()
+  fetchPerformanceTotal$(): Observable<Action> {
+    return this.actions$
+      .ofType(
+        ResponsibilitiesActions.FETCH_PERFORMANCE_TOTAL_ACTION,
+        ResponsibilitiesActions.FETCH_RESPONSIBILITIES_ACTION
+      )
+      .switchMap((action: Action) => {
+        const { positionId, filter } = action.payload;
+
+        return this.myPerformanceApiService.getPerformanceTotal(positionId, filter)
+          .map((response: PerformanceTotalDTO) => {
+            const performanceTotal = this.performanceTotalTransformerService.transformPerformanceTotalDTO(response);
+            return new ResponsibilitiesActions.FetchPerformanceTotalSuccessAction(performanceTotal);
+          })
+          .catch((err: Error) => Observable.of(new ResponsibilitiesActions.FetchPerformanceTotalFailureAction(err)));
+      });
+  }
+
+  @Effect({dispatch: false})
+  fetchPerformanceTotalFailure$(): Observable<Action> {
+    return this.actions$
+      .ofType(ResponsibilitiesActions.FETCH_PERFORMANCE_TOTAL_FAILURE_ACTION)
+      .do(action => {
+        console.error('Failed fetching performance total data', action.payload);
+      });
   }
 
   private getResponsibilities(responsibilitiesData: ResponsibilitiesData)
