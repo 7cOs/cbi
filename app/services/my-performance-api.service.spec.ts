@@ -161,8 +161,8 @@ describe('Service: MyPerformanceApiService', () => {
         distributionType: DistributionTypeValue.simple
       };
       const entityArrayMock = [
-        { id: chance.string(), name: chance.string(), type: chance.string() },
-        { id: chance.string(), name: chance.string(), type: chance.string() }
+        { positionId: chance.string(), name: chance.string(), type: chance.string() },
+        { positionId: chance.string(), name: chance.string(), type: chance.string() }
       ];
       const expectedUrlParams = '?metricType=simplePointsOfDistribution&dateRangeCode=LCM&premiseType=On';
 
@@ -178,8 +178,8 @@ describe('Service: MyPerformanceApiService', () => {
       myPerformanceApiService.getResponsibilitiesPerformanceTotals(entityArrayMock, mockFilter)
         .subscribe((response) => {
           expect(response).toEqual([
-            { id: entityArrayMock[0].id, name: entityArrayMock[0].name, performanceTotal: mockPerformanceTotalResponse },
-            { id: entityArrayMock[1].id, name: entityArrayMock[1].name, performanceTotal: mockPerformanceTotalResponse }
+            { id: entityArrayMock[0].positionId, name: entityArrayMock[0].name, performanceTotal: mockPerformanceTotalResponse },
+            { id: entityArrayMock[1].positionId, name: entityArrayMock[1].name, performanceTotal: mockPerformanceTotalResponse }
           ]);
           done();
         });
@@ -189,7 +189,7 @@ describe('Service: MyPerformanceApiService', () => {
       mockBackend.connectionsArray.forEach((connection: MockConnection, index) => {
         expect(connection.request.url)
         .toEqual(
-          `/v3/positions/${ entityArrayMock[index].id }/responsibilities/${ entityArrayMock[index].type }/performanceTotal`
+          `/v3/positions/${ entityArrayMock[index].positionId }/responsibilities/${ entityArrayMock[index].type }/performanceTotal`
           + expectedUrlParams
         );
       });

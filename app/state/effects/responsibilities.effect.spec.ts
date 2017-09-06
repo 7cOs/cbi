@@ -13,9 +13,14 @@ import { FetchResponsibilitiesAction,
          FetchResponsibilityEntityPerformance,
          FetchResponsibilityEntityPerformanceSuccess,
          FetchResponsibilityEntitiesPerformancePayload,
-         GetPeopleByRoleGroupAction } from '../actions/responsibilities.action';
+         GetPeopleByRoleGroupAction,
+         SetTableRowPerformanceTotal,
+         FetchPerformanceTotalAction,
+         FetchPerformanceTotalSuccessAction,
+         FetchPerformanceTotalFailureAction } from '../actions/responsibilities.action';
 import { getEntityPeopleResponsibilitiesMock } from '../../models/entity-responsibilities.model.mock';
 import { getMyPerformanceTableRowMock } from '../../models/my-performance-table-row.model.mock';
+import { getPerformanceTotalMock, getPerformanceTotalDTOMock } from '../../models/performance-total.model.mock';
 import { getResponsibilityEntitiesPerformanceMock,
          getResponsibilityEntitiesPerformanceDTOMock } from '../../models/entity-responsibilities.model.mock';
 import { getRoleGroupsMock } from '../../models/role-groups.model.mock';
@@ -23,13 +28,13 @@ import { MetricTypeValue } from '../../enums/metric-type.enum';
 import { MyPerformanceApiService } from '../../services/my-performance-api.service';
 import { MyPerformanceFilterState } from '../reducers/my-performance-filter.reducer';
 import { PerformanceTotalTransformerService } from '../../services/performance-total-transformer.service';
+import { PerformanceTotal, PerformanceTotalDTO } from '../../models/performance-total.model';
 import { PremiseTypeValue } from '../../enums/premise-type.enum';
 import { ResponsibilitiesEffects } from './responsibilities.effect';
 import { ResponsibilityEntityPerformance } from '../../models/entity-responsibilities.model';
 import { ResponsibilitiesTransformerService } from '../../services/responsibilities-transformer.service';
 import { RoleGroups } from '../../models/role-groups.model';
 import { SetLeftMyPerformanceTableViewType } from '../actions/view-types.action';
-import { SetTableRowPerformanceTotal } from '../actions/performance-total.action';
 import { ViewType } from '../../enums/view-type.enum';
 
 const chance = new Chance();
@@ -39,7 +44,9 @@ describe('Responsibilities Effects', () => {
   const roleGroupsMock: RoleGroups = getRoleGroupsMock();
   const responsibilityEntitiesPerformanceDTOMock = getResponsibilityEntitiesPerformanceDTOMock();
   const responsibilityEntitiesPerformanceMock = getResponsibilityEntitiesPerformanceMock();
-  const err = new Error(chance.string());
+  const performanceTotalMock: PerformanceTotal = getPerformanceTotalMock();
+  const performanceTotalDTOMock: PerformanceTotalDTO = getPerformanceTotalDTOMock();
+  const error = new Error(chance.string());
 
   const performanceFilterStateMock: MyPerformanceFilterState = {
     metricType: MetricTypeValue.PointsOfDistribution,
@@ -58,6 +65,9 @@ describe('Responsibilities Effects', () => {
     },
     getResponsibilitiesPerformanceTotals() {
       return Observable.of(responsibilityEntitiesPerformanceDTOMock);
+    },
+    getPerformanceTotal() {
+      return Observable.of(performanceTotalDTOMock);
     }
   };
   const responsibilitiesTransformerServiceMock = {
@@ -68,6 +78,9 @@ describe('Responsibilities Effects', () => {
   const performanceTotalTransformerServiceMock = {
     transformEntityPerformanceTotalDTO(mockArgs: any): ResponsibilityEntityPerformance[] {
       return responsibilityEntitiesPerformanceMock;
+    },
+    transformPerformanceTotalDTO(mockArgs: any): PerformanceTotal {
+      return performanceTotalMock;
     }
   };
 
@@ -140,9 +153,9 @@ describe('Responsibilities Effects', () => {
       ));
 
       it('should return a FetchResponsibilitiesFailureAction after catching an error', (done) => {
-        spyOn(myPerformanceApiService, 'getResponsibilities').and.returnValue(Observable.throw(err));
+        spyOn(myPerformanceApiService, 'getResponsibilities').and.returnValue(Observable.throw(error));
         responsibilitiesEffects.fetchResponsibilities$().subscribe((result) => {
-          expect(result).toEqual(new FetchResponsibilitiesFailureAction(err));
+          expect(result).toEqual(new FetchResponsibilitiesFailureAction(error));
           done();
         });
       });
@@ -152,7 +165,7 @@ describe('Responsibilities Effects', () => {
   describe('when a FetchResponsibilitiesFailureAction is received', () => {
 
     beforeEach(() => {
-      runner.queue(new FetchResponsibilitiesFailureAction(err));
+      runner.queue(new FetchResponsibilitiesFailureAction(error));
       spyOn(console, 'error');
     });
 
@@ -207,11 +220,58 @@ describe('Responsibilities Effects', () => {
       ));
 
       it('should return a FetchResponsibilitiesFailureAction after catching an error', (done) => {
-        spyOn(myPerformanceApiService, 'getResponsibilitiesPerformanceTotals').and.returnValue(Observable.throw(err));
+        spyOn(myPerformanceApiService, 'getResponsibilitiesPerformanceTotals').and.returnValue(Observable.throw(error));
         responsibilitiesEffects.fetchResponsibilities$().subscribe((result) => {
-          expect(result).toEqual(new FetchResponsibilitiesFailureAction(err));
+          expect(result).toEqual(new FetchResponsibilitiesFailureAction(error));
           done();
         });
+      });
+    });
+  });
+
+  describe('when a fetch performance total or responsibilities action is dispatched', () => {
+    let myPerformanceApiService: MyPerformanceApiService;
+
+    beforeEach(inject([ MyPerformanceApiService ],
+      (_myPerformanceApiService: MyPerformanceApiService) => {
+        myPerformanceApiService = _myPerformanceApiService;
+        runner.queue(new FetchPerformanceTotalAction({
+          positionId: positionIdMock,
+          filter: performanceFilterStateMock
+        }));
+      }
+    ));
+
+    it('should return a success action when the api service returns a response', (done) => {
+      responsibilitiesEffects.fetchPerformanceTotal$().subscribe(result => {
+        expect(result).toEqual(new FetchPerformanceTotalSuccessAction(performanceTotalMock));
+        done();
+      });
+    });
+
+    it('should return a fail action when the api service returns an error', (done) => {
+      spyOn(myPerformanceApiService, 'getPerformanceTotal').and.returnValue(Observable.throw(error));
+
+      responsibilitiesEffects.fetchPerformanceTotal$().subscribe(result => {
+        expect(result).toEqual(new FetchPerformanceTotalFailureAction(error));
+        done();
+      });
+    });
+
+    it('should log the error payload when a FetchPerformanceTotalFailureAction is received', (done) => {
+      spyOn(myPerformanceApiService, 'getPerformanceTotal').and.returnValue(Observable.throw(error));
+      spyOn(console, 'error');
+
+      responsibilitiesEffects.fetchPerformanceTotal$().subscribe(result => {
+        expect(result).toEqual(new FetchPerformanceTotalFailureAction(error));
+        runner.queue(new FetchPerformanceTotalFailureAction(error));
+        done();
+      });
+
+      responsibilitiesEffects.fetchPerformanceTotalFailure$().subscribe((result) => {
+        expect(result).toEqual(new FetchPerformanceTotalFailureAction(error));
+        expect(console.error).toHaveBeenCalledWith('Failed fetching performance total data', result.payload);
+        done();
       });
     });
   });

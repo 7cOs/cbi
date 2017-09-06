@@ -7,14 +7,18 @@ import { initialState, responsibilitiesReducer } from './responsibilities.reduce
 import { getEntityPeopleResponsibilitiesMock,
          getResponsibilityEntitiesPerformanceMock } from '../../models/entity-responsibilities.model.mock';
 import { getMyPerformanceTableRowMock } from '../../models/my-performance-table-row.model.mock';
+import { getPerformanceTotalMock } from '../../models/performance-total.model.mock';
 import { getRoleGroupsMock } from '../../models/role-groups.model.mock';
 import { MetricTypeValue } from '../../enums/metric-type.enum';
+import { MyPerformanceTableRow } from '../../models/my-performance-table-row.model';
 import { MyPerformanceFilterState } from '../reducers/my-performance-filter.reducer';
+import { PerformanceTotal } from '../../models/performance-total.model';
 import { PremiseTypeValue } from '../../enums/premise-type.enum';
 import { ResponsibilityEntityPerformance } from '../../models/entity-responsibilities.model';
 import { ViewType } from '../../enums/view-type.enum';
 import * as ResponsibilitiesActions from '../actions/responsibilities.action';
 
+const positionIdMock = chance.string();
 const performanceFilterStateMock: MyPerformanceFilterState = {
   metricType: MetricTypeValue.PointsOfDistribution,
   dateRangeCode: DateRangeTimePeriodValue.FYTDBDL,
@@ -23,15 +27,14 @@ const performanceFilterStateMock: MyPerformanceFilterState = {
 };
 
 describe('Responsibilities Reducer', () => {
-
   it('updates the status when a fetch is dispatched', () => {
-    const positionIdMock = '1';
 
     const expectedState = {
       status: ActionStatus.Fetching,
       positionId: initialState.positionId,
       responsibilities: initialState.responsibilities,
-      performanceTotals: initialState.performanceTotals
+      performanceTotals: initialState.performanceTotals,
+      performanceTotal: initialState.performanceTotal
     };
 
     const actualState = responsibilitiesReducer(initialState, new ResponsibilitiesActions.FetchResponsibilitiesAction({
@@ -43,26 +46,26 @@ describe('Responsibilities Reducer', () => {
   });
 
   it('should store the payload when a fetch responsibilities is successful', () => {
-    const positionIdMock = '1';
-    const mockRoleGroups = getRoleGroupsMock();
-    const mockRoleGroupPerformanceTotals = getResponsibilityEntitiesPerformanceMock();
+    const roleGroupsMock = getRoleGroupsMock();
+    const roleGroupPerformanceTotalsMock = getResponsibilityEntitiesPerformanceMock();
 
-    const mockPayload = {
+    const payloadMock = {
       positionId: positionIdMock,
-      responsibilities: mockRoleGroups,
-      performanceTotals: mockRoleGroupPerformanceTotals
+      responsibilities: roleGroupsMock,
+      performanceTotals: roleGroupPerformanceTotalsMock
     };
 
     const expectedState = {
       status: ActionStatus.Fetched,
       positionId: positionIdMock,
-      responsibilities: mockRoleGroups,
-      performanceTotals: mockRoleGroupPerformanceTotals
+      responsibilities: roleGroupsMock,
+      performanceTotals: roleGroupPerformanceTotalsMock,
+      performanceTotal: initialState.performanceTotal
     };
 
     const actualState = responsibilitiesReducer(
       initialState,
-      new ResponsibilitiesActions.FetchResponsibilitiesSuccessAction(mockPayload)
+      new ResponsibilitiesActions.FetchResponsibilitiesSuccessAction(payloadMock)
     );
 
     expect(actualState).toEqual(expectedState);
@@ -76,7 +79,8 @@ describe('Responsibilities Reducer', () => {
       status: initialState.status,
       positionId: initialState.positionId,
       responsibilities: mockRoleGroups,
-      performanceTotals: initialState.performanceTotals
+      performanceTotals: initialState.performanceTotals,
+      performanceTotal: initialState.performanceTotal
     };
 
     const expectedState = {
@@ -85,7 +89,8 @@ describe('Responsibilities Reducer', () => {
       responsibilities: {
         [payload]: mockRoleGroups[payload]
       },
-      performanceTotals: initialState.performanceTotals
+      performanceTotals: initialState.performanceTotals,
+      performanceTotal: initialState.performanceTotal
     };
 
     const actualState = responsibilitiesReducer(stateWithRoleGroups, new ResponsibilitiesActions.GetPeopleByRoleGroupAction(payload));
@@ -98,7 +103,8 @@ describe('Responsibilities Reducer', () => {
       status: ActionStatus.Error,
       positionId: initialState.positionId,
       responsibilities: initialState.responsibilities,
-      performanceTotals: initialState.performanceTotals
+      performanceTotals: initialState.performanceTotals,
+      performanceTotal: initialState.performanceTotal
     };
 
     const actualState = responsibilitiesReducer(
@@ -128,7 +134,8 @@ describe('Responsibilities Reducer', () => {
       status: ActionStatus.Fetching,
       positionId: initialState.positionId,
       responsibilities: initialState.responsibilities,
-      performanceTotals: initialState.performanceTotals
+      performanceTotals: initialState.performanceTotals,
+      performanceTotal: initialState.performanceTotal
     };
     const actualState = responsibilitiesReducer(
       initialState, new ResponsibilitiesActions.FetchResponsibilityEntityPerformance(payloadMock)
@@ -143,12 +150,83 @@ describe('Responsibilities Reducer', () => {
       status: ActionStatus.Fetched,
       positionId: initialState.positionId,
       responsibilities: initialState.responsibilities,
-      performanceTotals: payloadMock
+      performanceTotals: payloadMock,
+      performanceTotal: initialState.performanceTotal
     };
     const actualState = responsibilitiesReducer(
       initialState, new ResponsibilitiesActions.FetchResponsibilityEntityPerformanceSuccess(payloadMock)
     );
 
     expect(actualState).toEqual(expectedState);
+  });
+
+  it('should update its status when a fetch action is dispatched', () => {
+    const expectedState = {
+      status: ActionStatus.Fetching,
+      positionId: initialState.positionId,
+      responsibilities: initialState.responsibilities,
+      performanceTotals: initialState.performanceTotals,
+      performanceTotal: initialState.performanceTotal
+    };
+    const actualState = responsibilitiesReducer(initialState, new ResponsibilitiesActions.FetchPerformanceTotalAction({
+      positionId: positionIdMock,
+      filter: performanceFilterStateMock
+    }));
+
+    expect(actualState).toEqual(expectedState);
+  });
+
+  it('should update the state status and data when a fetch is successful', () => {
+    const payloadMock: PerformanceTotal = getPerformanceTotalMock();
+    const expectedState = {
+      status: ActionStatus.Fetched,
+      positionId: initialState.positionId,
+      responsibilities: initialState.responsibilities,
+      performanceTotals: initialState.performanceTotals,
+      performanceTotal: payloadMock
+    };
+    const actualState = responsibilitiesReducer(initialState, new ResponsibilitiesActions.FetchPerformanceTotalSuccessAction(payloadMock));
+
+    expect(actualState).toEqual(expectedState);
+  });
+
+  it('should update the performanceTotal data when SetTableRowPerformanceTotal action is received', () => {
+    const payloadMock: MyPerformanceTableRow = getMyPerformanceTableRowMock(1)[0];
+    const expectedState = {
+      status: initialState.status,
+      positionId: initialState.positionId,
+      responsibilities: initialState.responsibilities,
+      performanceTotals: initialState.performanceTotals,
+      performanceTotal: {
+        total: payloadMock.metricColumn0,
+        totalYearAgo: payloadMock.metricColumn1,
+        totalYearAgoPercent: payloadMock.metricColumn2,
+        contributionToVolume: payloadMock.ctv,
+        entityType: payloadMock.descriptionRow0
+      }
+    };
+    const actualState = responsibilitiesReducer(initialState, new ResponsibilitiesActions.SetTableRowPerformanceTotal(payloadMock));
+
+    expect(actualState).toEqual(expectedState);
+  });
+
+  it('should update the state status when a fetch fails', () => {
+    const expectedState = {
+      status: ActionStatus.Error,
+      positionId: initialState.positionId,
+      responsibilities: initialState.responsibilities,
+      performanceTotals: initialState.performanceTotals,
+      performanceTotal: initialState.performanceTotal
+    };
+    const actualState = responsibilitiesReducer(initialState, new ResponsibilitiesActions.FetchPerformanceTotalFailureAction(new Error()));
+
+    expect(actualState).toEqual(expectedState);
+  });
+
+  it('should return the current state when an unknown action is dispatched', () => {
+    expect(responsibilitiesReducer(
+      initialState,
+      { type: 'UNKNOWN_ACTION' } as any
+    )).toBe(initialState);
   });
 });

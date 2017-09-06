@@ -39,7 +39,10 @@ describe('Service: MyPerformanceTableDataTransformerService', () => {
         metricColumn0: responsibilityEntitiesPerformanceMock[0].performanceTotal.total,
         metricColumn1: responsibilityEntitiesPerformanceMock[0].performanceTotal.totalYearAgo,
         metricColumn2: responsibilityEntitiesPerformanceMock[0].performanceTotal.totalYearAgoPercent,
-        ctv: responsibilityEntitiesPerformanceMock[0].performanceTotal.contributionToVolume
+        ctv: responsibilityEntitiesPerformanceMock[0].performanceTotal.contributionToVolume,
+        metadata: {
+          positionId: responsibilityEntitiesPerformanceMock[0].positionId
+        }
       });
     });
   });

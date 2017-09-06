@@ -39,7 +39,13 @@ describe('My Performance Reducer', () => {
         status: ActionStatus.Fetched,
         positionId: chance.string(),
         responsibilities: chance.string() as any,
-        performanceTotals: [] as any
+        performanceTotals: [] as any,
+        performanceTotal: {
+          total: 0,
+          totalYearAgo: 0,
+          totalYearAgoPercent: 0,
+          contributionToVolume: 0
+        }
       }
     };
 
