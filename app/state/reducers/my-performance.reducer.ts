@@ -1,8 +1,9 @@
 import { Action } from '@ngrx/store';
 
+import { initialState as initialStatePerformanceTotal } from './performance-total.reducer';
+import { initialState as initialStateResponsibilities } from './responsibilities.reducer';
+import { initialState as initialStateViewTypes } from './view-types.reducer';
 import { initialStateVersions } from './my-performance-version.reducer';
-import * as initialStateResponsibilities from './responsibilities.reducer';
-import * as initialStateViewTypes from './view-types.reducer';
 import * as MyPerformanceActions from '../actions/my-performance.action';
 import * as MyPerformanceVersionActions from '../actions/my-performance-version.action';
 import { myPerformanceVersionReducer } from './my-performance-version.reducer';
@@ -27,8 +28,9 @@ export interface MyPerformanceState {
 
 export const initialState: MyPerformanceState = {
   current: {
-    responsibilities: initialStateResponsibilities.initialState,
-    viewType: initialStateViewTypes.initialState
+    responsibilities: initialStateResponsibilities,
+    viewType: initialStateViewTypes,
+    performanceTotal: initialStatePerformanceTotal
   },
   versions: initialStateVersions
 };
@@ -46,7 +48,8 @@ export function myPerformanceReducer(
         current: {
           performanceTotal: performanceTotalReducer(state.current.performanceTotal, action as PerformanceTotalActions.Action),
           responsibilities: state.current.responsibilities,
-          viewType: state.current.viewType
+          viewType: state.current.viewType,
+          selectedEntity: state.current.selectedEntity
         },
         versions: state.versions
       };
@@ -67,7 +70,6 @@ export function myPerformanceReducer(
       };
 
     case MyPerformanceActions.CLEAR_MY_PERFORMANCE_STATE_ACTION:
-      console.log('working');
       return initialState;
 
     case ResponsibilitiesActions.FETCH_RESPONSIBILITIES_ACTION:
@@ -78,7 +80,8 @@ export function myPerformanceReducer(
         current: {
           performanceTotal: state.current.performanceTotal,
           responsibilities: responsibilitiesReducer(state.current.responsibilities, action as ResponsibilitiesActions.Action),
-          viewType: state.current.viewType
+          viewType: state.current.viewType,
+          selectedEntity: state.current.selectedEntity
         },
         versions: state.versions
       };
@@ -89,7 +92,8 @@ export function myPerformanceReducer(
         current: {
           performanceTotal: state.current.performanceTotal,
           responsibilities: state.current.responsibilities,
-          viewType: viewTypesReducer(state.current.viewType, action as viewTypesActions.Action)
+          viewType: viewTypesReducer(state.current.viewType, action as viewTypesActions.Action),
+          selectedEntity: state.current.selectedEntity
         },
         versions: state.versions
       };

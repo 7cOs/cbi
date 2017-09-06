@@ -13,6 +13,8 @@ import { DistributionTypeValue } from '../../enums/distribution-type.enum';
 import { FetchResponsibilitiesAction } from '../../state/actions/responsibilities.action';
 import { getMyPerformanceTableRowMock } from '../../models/my-performance-table-row.model.mock';
 import { MetricTypeValue } from '../../enums/metric-type.enum';
+import * as MyPerformanceActions from '../../state/actions/my-performance.action';
+import * as MyPerformanceVersionActions from '../../state/actions/my-performance-version.action';
 import { MyPerformanceComponent } from './my-performance.component';
 import { MyPerformanceFilterActionType } from '../../enums/my-performance-filter.enum';
 import { MyPerformanceFilterEvent } from '../../models/my-performance-filter.model'; // tslint:disable-line:no-unused-variable
@@ -277,5 +279,60 @@ describe('MyPerformanceComponent', () => {
     .get(MyPerformanceFilterComponentMock) as MyPerformanceFilterComponentMock;
     expect(myPerformanceFilterMock.filterState).toEqual(stateMock.myPerformanceFilter as any);
     expect(myPerformanceFilterMock.dateRanges).toBe(stateMock.dateRanges as any);
+  });
+
+  describe('handleBreadcrumbEntityClicked', () => {
+    it('should dispatch RestoreMyPerformanceStateAction when steps back are possible', () => {
+      fixture = TestBed.createComponent(MyPerformanceComponent);
+      const breadcrumbLength = chance.natural({min: 4, max: 9});
+      const entityIndex = chance.natural({max: breadcrumbLength - 2});
+      const breadcrumbMock = Array(breadcrumbLength)
+                             .fill('')
+                             .map(element => chance.string());
+      const entityMock = breadcrumbMock[entityIndex];
+      const indexOffset = 1;
+
+      storeMock.dispatch.calls.reset();
+      storeMock.select.calls.reset();
+
+      componentInstance.handleBreadcrumbEntityClicked({
+        trail: breadcrumbMock,
+        entity: entityMock
+      });
+
+      const actionDispatched = storeMock.dispatch.calls.argsFor(0)[0];
+
+      expect(actionDispatched.type).toBe(MyPerformanceVersionActions.RESTORE_MY_PERFORMANCE_STATE_ACTION);
+      expect(actionDispatched.payload).toBe(breadcrumbLength - entityIndex - indexOffset);
+    });
+
+    it('should not dispatch RestoreMyPerformanceStateAction when steps back are not possible', () => {
+      fixture = TestBed.createComponent(MyPerformanceComponent);
+      const breadcrumbLength = chance.natural({max: 9});
+      const entityIndex = breadcrumbLength - 1;
+      const breadcrumbMock = Array(breadcrumbLength)
+                             .fill('')
+                             .map(element => chance.string());
+      const entityMock = breadcrumbMock[entityIndex];
+
+      storeMock.dispatch.calls.reset();
+      storeMock.select.calls.reset();
+
+      componentInstance.handleBreadcrumbEntityClicked({
+        trail: breadcrumbMock,
+        entity: entityMock
+      });
+
+      expect(storeMock.dispatch.calls.count()).toBe(0);
+    });
+  });
+
+  describe('onDestroy', () => {
+    it('should dispatch ClearMyPerformanceStateAction as its final call dispatch', () => {
+      fixture = TestBed.createComponent(MyPerformanceComponent);
+      fixture.detectChanges();
+      fixture.componentInstance.ngOnDestroy();
+      expect(storeMock.dispatch.calls.mostRecent().args[0].type).toBe(MyPerformanceActions.CLEAR_MY_PERFORMANCE_STATE_ACTION);
+    });
   });
 });
