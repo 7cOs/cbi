@@ -7,7 +7,6 @@ import '@uirouter/angularjs';
 import { AnalyticsService } from './services/analytics.service';
 import { AppComponent } from './shared/containers/app/app.component';
 import { AppUpgradeAdapter } from './app.module';
-import { BreadcrumbService } from './services/breadcrumb.service';
 import { CompassCardComponent } from './shared/components/compass-card/compass-card.component';
 import { DateRangeComponent } from './shared/components/date-ranges/date-ranges.component';
 import { DateRangeService } from './services/date-range.service';
@@ -42,6 +41,5 @@ export default angular.module('cf', [
   .directive('notifications', AppUpgradeAdapter.downgradeNg2Component(NotificationsComponent) as IDirectiveFactory)
   .factory('dateRangeService', downgradeInjectable(DateRangeService))
   .factory('analyticsService', downgradeInjectable(AnalyticsService))
-  .factory('breadcrumbService', downgradeInjectable(BreadcrumbService))
   .config(require('./config'))
   .run(require('./run'));

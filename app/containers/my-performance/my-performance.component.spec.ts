@@ -5,7 +5,6 @@ import { ComponentFixture, TestBed, inject } from '@angular/core/testing';
 import { Observable } from 'rxjs';
 import { Store } from '@ngrx/store';
 
-import * as BreadcrumbActions from '../../state/actions/my-performance-breadcrumb.action';
 import { BreadcrumbEntityClickedEvent } from '../../models/breadcrumb-entity-clicked-event.model'; // tslint:disable-line:no-unused-variable
 import { DateRange } from '../../models/date-range.model';
 import { DateRangesState } from '../../state/reducers/date-ranges.reducer';
@@ -18,6 +17,7 @@ import { MyPerformanceComponent } from './my-performance.component';
 import { MyPerformanceFilterActionType } from '../../enums/my-performance-filter.enum';
 import { MyPerformanceFilterEvent } from '../../models/my-performance-filter.model'; // tslint:disable-line:no-unused-variable
 import { MyPerformanceFilterState } from '../../state/reducers/my-performance-filter.reducer';
+import { MyPerformanceState, initialState } from '../../state/reducers/my-performance.reducer';
 import { MyPerformanceTableDataTransformerService } from '../../services/my-performance-table-data-transformer.service';
 import { MyPerformanceTableRow } from '../../models/my-performance-table-row.model';
 import { MyPerformanceTableRowComponent } from '../../shared/components/my-performance-table-row/my-performance-table-row.component';
@@ -27,7 +27,6 @@ import { SetRightMyPerformanceTableViewType } from '../../state/actions/view-typ
 import { SortIndicatorComponent } from '../../shared/components/sort-indicator/sort-indicator.component';
 import { SortingCriteria } from '../../models/sorting-criteria.model';
 import { UtilService } from '../../services/util.service';
-import { initialState } from '../../state/reducers/my-performance.reducer';
 import { ViewType } from '../../enums/view-type.enum';
 
 const chance = new Chance();
@@ -49,7 +48,8 @@ class MyPerformanceFilterComponentMock {
 })
 class MyPerformanceBreadcrumbComponentMock {
   @Output() breadcrumbEntityClicked = new EventEmitter<BreadcrumbEntityClickedEvent>();
-  @Input() breadcrumbTrail: string[];
+  @Input() currentUserFullName: string[];
+  @Input() performanceState: MyPerformanceState;
 }
 
 @Component({
@@ -79,7 +79,6 @@ describe('MyPerformanceComponent', () => {
       responsibilities: chance.string(),
       viewTypes: chance.string(),
       performanceTotal: chance.string(),
-      myPerformanceBreadcrumb: [chance.string()],
       myPerformance: initialState
   };
 
@@ -136,7 +135,7 @@ describe('MyPerformanceComponent', () => {
     fixture = TestBed.createComponent(MyPerformanceComponent);
     fixture.detectChanges();
 
-    expect(storeMock.dispatch.calls.count()).toBe(4);
+    expect(storeMock.dispatch.calls.count()).toBe(2);
     expect(storeMock.dispatch.calls.argsFor(0)).toEqual([new FetchResponsibilitiesAction({
       positionId: parseInt(userServiceMock.model.currentUser.positionId, 0),
       filter: stateMock.myPerformanceFilter as any
@@ -144,11 +143,6 @@ describe('MyPerformanceComponent', () => {
 
     // this will change once right table is built
     expect(storeMock.dispatch.calls.argsFor(1)).toEqual([new SetRightMyPerformanceTableViewType(ViewType.brands)]);
-
-    expect(storeMock.dispatch.calls.argsFor(2)).toEqual([new BreadcrumbActions.ResetBreadcrumbTrail()]);
-    expect(storeMock.dispatch.calls.argsFor(3)).toEqual([new BreadcrumbActions.AddBreadcrumbEntity(
-      `${userService.model.currentUser.firstName} ${userService.model.currentUser.lastName}`
-    )]);
   }));
 
   it('should dispatch actions on init and handle empty positionId', inject([ 'userService' ], (userService: any) => {
@@ -159,7 +153,7 @@ describe('MyPerformanceComponent', () => {
     fixture = TestBed.createComponent(MyPerformanceComponent);
     fixture.detectChanges();
 
-    expect(storeMock.dispatch.calls.count()).toBe(4);
+    expect(storeMock.dispatch.calls.count()).toBe(2);
     expect(storeMock.dispatch.calls.argsFor(0)).toEqual([new FetchResponsibilitiesAction({
       positionId: 0,
       filter: stateMock.myPerformanceFilter as any
@@ -174,7 +168,7 @@ describe('MyPerformanceComponent', () => {
     fixture = TestBed.createComponent(MyPerformanceComponent);
     fixture.detectChanges();
 
-    expect(storeMock.dispatch.calls.count()).toBe(4);
+    expect(storeMock.dispatch.calls.count()).toBe(2);
     expect(storeMock.dispatch.calls.argsFor(0)).toEqual([new FetchResponsibilitiesAction({
       positionId: 0,
       filter: stateMock.myPerformanceFilter as any
@@ -238,7 +232,7 @@ describe('MyPerformanceComponent', () => {
     storeMock.dispatch.calls.reset();
     componentInstance.showLeftBackButton = true;
     componentInstance.handleElementClicked({leftSide: true, type: RowType.total, index: 0});
-    expect(storeMock.dispatch.calls.count()).toEqual(2);
+    expect(storeMock.dispatch.calls.count()).toEqual(1);
 
     storeMock.dispatch.calls.reset();
     componentInstance.leftTableViewType = ViewType.roleGroups;
@@ -266,7 +260,7 @@ describe('MyPerformanceComponent', () => {
     expect(functionPassToSelectCall0(stateMock)).toBe(stateMock.dateRanges);
 
     const functionPassToSelectCall1 = storeMock.select.calls.argsFor(1)[0];
-    expect(functionPassToSelectCall1(stateMock)).toBe(stateMock.myPerformanceBreadcrumb);
+    expect(functionPassToSelectCall1(stateMock)).toBe(stateMock.myPerformance);
 
     const functionPassToSelectCall2 = storeMock.select.calls.argsFor(2)[0];
     expect(functionPassToSelectCall2(stateMock)).toBe(stateMock.myPerformanceFilter);

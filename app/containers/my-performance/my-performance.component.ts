@@ -5,22 +5,21 @@ import { Subscription } from 'rxjs/Subscription';
 
 import { ActionStatus } from '../../enums/action-status.enum';
 import { AppState } from '../../state/reducers/root.reducer';
-import * as BreadcrumbActions from '../../state/actions/my-performance-breadcrumb.action';
 import { BreadcrumbEntityClickedEvent } from '../../models/breadcrumb-entity-clicked-event.model';
 import { ColumnType } from '../../enums/column-type.enum';
 import { DateRange } from '../../models/date-range.model';
 import { DateRangesState } from '../../state/reducers/date-ranges.reducer';
 import { EntityPeopleType } from '../../enums/entity-responsibilities.enum';
 import { FetchResponsibilitiesAction } from '../../state/actions/responsibilities.action';
-import * as MyPerformanceVersionActions from '../../state/actions/my-performance-version.action';
 import { getDateRangeMock } from '../../models/date-range.model.mock';
 import { GetPeopleByRoleGroupAction } from '../../state/actions/responsibilities.action';
-import { MyPerformanceBreadcrumbState } from '../../state/reducers/my-performance-breadcrumb.reducer';
+import * as MyPerformanceActions from '../../state/actions/my-performance.action';
 import { MyPerformanceFilterActionType } from '../../enums/my-performance-filter.enum';
 import { MyPerformanceFilterEvent } from '../../models/my-performance-filter.model';
 import { MyPerformanceFilterState } from '../../state/reducers/my-performance-filter.reducer';
 import { MyPerformanceTableDataTransformerService } from '../../services/my-performance-table-data-transformer.service';
 import { MyPerformanceTableRow } from '../../models/my-performance-table-row.model';
+import * as MyPerformanceVersionActions from '../../state/actions/my-performance-version.action';
 import { ResponsibilitiesState } from '../../state/reducers/responsibilities.reducer';
 import { MyPerformanceState, MyPerformanceData } from '../../state/reducers/my-performance.reducer';
 import { RowType } from '../../enums/row-type.enum';
@@ -48,8 +47,9 @@ export interface HandleElementClickedParameters {
 })
 
 export class MyPerformanceComponent implements OnInit, OnDestroy {
-  public breadcrumbTrail$: Observable<MyPerformanceBreadcrumbState>;
+  public currentUserFullName: string;
   public leftTableViewType: ViewType;
+  public performanceState$: Observable<MyPerformanceState>;
   public roleGroups: Observable<ResponsibilitiesState>;
   public showLeftBackButton = false;
   public sortingCriteria: Array<SortingCriteria> = [{
@@ -82,8 +82,9 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit() {
+    this.currentUserFullName = `${this.userService.model.currentUser.firstName} ${this.userService.model.currentUser.lastName}`;
     this.dateRanges$ = this.store.select(state => state.dateRanges);
-    this.breadcrumbTrail$ = this.store.select(state => state.myPerformanceBreadcrumb);
+    this.performanceState$ = this.store.select(state => state.myPerformance);
 
     this.filterStateSubscription = this.store.select(state => state.myPerformanceFilter).subscribe(filterState => {
       this.filterState = filterState;
@@ -93,7 +94,6 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
       .select(state => state.myPerformance.current)
       .subscribe((current: MyPerformanceData) => {
         this.currentState = current;
-
         this.leftTableViewType = current.viewType.leftTableViewType;
 
         if (current.responsibilities) {
@@ -108,7 +108,7 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
     });
 
     this.myPerformanceVersionSubscription = this.store.select(state => state.myPerformance.versions)
-      .subscribe((versions: Array<MyPerformanceState>) => {
+      .subscribe((versions: MyPerformanceData[]) => {
         this.showLeftBackButton = versions.length > 0;
     });
 
@@ -119,14 +119,10 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
 
     // setting ViewType for right side here for now
     this.store.dispatch(new SetRightMyPerformanceTableViewType(ViewType.brands));
-
-    this.store.dispatch(new BreadcrumbActions.ResetBreadcrumbTrail);
-    this.store.dispatch(new BreadcrumbActions.AddBreadcrumbEntity(
-      `${this.userService.model.currentUser.firstName} ${this.userService.model.currentUser.lastName}`
-    ));
   }
 
   ngOnDestroy() {
+    this.store.dispatch(new MyPerformanceActions.ClearMyPerformanceStateAction());
     this.filterStateSubscription.unsubscribe();
     this.myPerformanceCurrentSubscription.unsubscribe();
     this.myPerformanceVersionSubscription.unsubscribe();
@@ -142,7 +138,6 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
         if (parameters.leftSide) {
           if (this.showLeftBackButton) {
             this.store.dispatch(new MyPerformanceVersionActions.RestoreMyPerformanceStateAction());
-            this.store.dispatch(new BreadcrumbActions.RemoveBreadcrumbEntities(1));
           }
           console.log(`clicked on cell ${parameters.index} from the left side`);
         } else {
@@ -153,8 +148,8 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
       case RowType.data:
       default:
         if (parameters.leftSide) {
+          this.store.dispatch(new MyPerformanceActions.SetMyPerformanceSelectedEntityAction(parameters.row.descriptionRow0));
           this.store.dispatch(new MyPerformanceVersionActions.SaveMyPerformanceStateAction(this.currentState));
-          this.store.dispatch(new BreadcrumbActions.AddBreadcrumbEntity(parameters.row.descriptionRow0));
           console.log('clicked on left row:', parameters.row);
           if (this.leftTableViewType === ViewType.roleGroups) {
             this.store.dispatch(new SetLeftMyPerformanceTableViewType(ViewType.people));
@@ -172,7 +167,6 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
     const stepsBack = trail.length - indexOffset - trail.indexOf(entity);
     if (stepsBack < 1) return;
     this.store.dispatch(new MyPerformanceVersionActions.RestoreMyPerformanceStateAction(stepsBack));
-    this.store.dispatch(new BreadcrumbActions.RemoveBreadcrumbEntities(stepsBack));
   }
 
   public filterOptionSelected(event: MyPerformanceFilterEvent): void {

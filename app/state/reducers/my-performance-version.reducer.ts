@@ -1,7 +1,7 @@
 import { MyPerformanceData, MyPerformanceState } from './my-performance.reducer';
 import * as MyPerformanceVersionActions from '../actions/my-performance-version.action';
 
-export const initialState: Array<MyPerformanceData> = Array<MyPerformanceData>();
+export const initialStateVersions: Array<MyPerformanceData> = Array<MyPerformanceData>();
 
 export function myPerformanceVersionReducer(
   state: MyPerformanceState,

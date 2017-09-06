@@ -7,7 +7,6 @@ import { UpgradeAdapter } from '@angular/upgrade';
 import { AnalyticsEventDirective } from './directives/analytics-event.directive';
 import { AnalyticsService } from './services/analytics.service';
 import { AppComponent } from './shared/containers/app/app.component';
-import { BreadcrumbService } from './services/breadcrumb.service';
 import { DateRangeApiService } from './services/date-range-api.service';
 import { DateRangeComponent } from './shared/components/date-ranges/date-ranges.component';
 import { DateRangeService } from './services/date-range.service';
@@ -58,7 +57,6 @@ AppUpgradeAdapter.upgradeNg1Provider('versionService');
   ],
   providers: [
     AnalyticsService,
-    BreadcrumbService,
     DateRangeApiService,
     DateRangeService,
     DateRangeTransformerService,
