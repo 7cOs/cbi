@@ -42,13 +42,13 @@ module.exports = function (config) {
 
   config.sfdcSec = {
     // assertionEndpoint: the endpoint you connect to in order to get the session token.
-    assertionEndpoint: 'https://cbrands--Full.cs17.my.salesforce.com/services/oauth2/token?so=00Dg0000006Hhfi',
+    assertionEndpoint: 'https://cbrands--Full.cs3.my.salesforce.com/services/oauth2/token?so=00DQ000000EeY1O',
     // privateKey and certfile: keys generated from SFDC's Key and Certificate Management area
     privateKey: process.env.SFDC_SIGNING_KEY,
     certfile: process.env.SFDC_CERTIFICATE,
     // issuer, recipient: can be anything, but must match between the SFDC Single Sign-On Configuration and this value.
     issuer: process.env.SFDC_ISSUER,
-    recipient: 'https://cbrands--Full.cs17.my.salesforce.com?so=00Dg0000006Hhfi',
+    recipient: 'https://cbrands--Full.cs3.my.salesforce.com?so=00DQ000000EeY1O',
     // This value matches with the Entity Id value in the SFDC Single Sign-On Configuration
     audience: 'https://saml.salesforce.com',
     // These algorithms should not be touched.  They are used to encrypt the certificates.
