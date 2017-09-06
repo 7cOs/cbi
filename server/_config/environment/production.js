@@ -47,7 +47,7 @@ module.exports = function (config) {
     privateKey: process.env.SFDC_SIGNING_KEY,
     certfile: process.env.SFDC_CERTIFICATE,
     // issuer, recipient: can be anything, but must match between the SFDC Single Sign-On Configuration and this value.
-    issuer: 'compass-portal',
+    issuer: process.env.SFDC_ISSUER,
     recipient: 'https://cbrands.my.salesforce.com?so=00DA0000000Iy9s',
     // This value matches with the Entity Id value in the SFDC Single Sign-On Configuration
     audience: 'https://saml.salesforce.com',
@@ -55,7 +55,7 @@ module.exports = function (config) {
     signatureAlgorithm: 'rsa-sha256',
     digestAlgorithm: 'sha256',
     // Used in samlBuilder as an attribute in the Assertion creation.
-    ssoStartPage: 'compass-portal'
+    ssoStartPage: process.env.SFDC_ISSUER
   };
 
   config.sfdcSettings = {

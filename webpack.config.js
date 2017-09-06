@@ -11,5 +11,6 @@ switch (process.env.NODE_ENV) {
     break;
   case 'local':
   default:
+    process.env.NODE_ENV = 'local';
     module.exports = require('./config/webpack.dev');
 }

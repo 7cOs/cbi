@@ -7,7 +7,6 @@ module.exports = function(app) {
   const appConfig = app.get('config');
   const util = require('../../_lib/util')(app);
   const logutil = require('../../_lib/logutil');
-  const sfdc = require('../../_lib/sfdc');
   const apiAuthUrl = util.signApiUrl('/v2/auth');
 
   return new SamlStrategy({

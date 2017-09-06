@@ -1,4 +1,4 @@
-// tslint:disable:no-unused-variable
+import { Action } from '@ngrx/store';
 import { EffectsRunner, EffectsTestingModule } from '@ngrx/effects/testing';
 import { Observable } from 'rxjs';
 import { TestBed, inject } from '@angular/core/testing';
@@ -198,11 +198,19 @@ describe('Responsibilities Effects', () => {
       ));
 
       it('should dispatch appropriate actions', (done) => {
-        responsibilitiesEffects.FetchResponsibilityEntityPerformance$().combineAll().subscribe((result: any) => {
-          expect(result).toEqual(new SetTableRowPerformanceTotal(fetchEntityPerformancePayloadMock.performanceTotal));
-          expect(result).toEqual(new GetPeopleByRoleGroupAction(fetchEntityPerformancePayloadMock.entityType));
-          expect(result).toEqual(new FetchResponsibilityEntityPerformanceSuccess(responsibilityEntitiesPerformanceMock));
-          expect(result).toEqual(new SetLeftMyPerformanceTableViewType(fetchEntityPerformancePayloadMock.viewType));
+        const dispatchedActions: Action[] = [];
+
+        responsibilitiesEffects.FetchResponsibilityEntityPerformance$().subscribe((dispatchedAction: Action) => {
+          dispatchedActions.push(dispatchedAction);
+
+          if (dispatchedActions.length === 4) {
+            expect(dispatchedActions).toEqual([
+              new SetTableRowPerformanceTotal(fetchEntityPerformancePayloadMock.performanceTotal),
+              new GetPeopleByRoleGroupAction(fetchEntityPerformancePayloadMock.entityType),
+              new FetchResponsibilityEntityPerformanceSuccess(responsibilityEntitiesPerformanceMock),
+              new SetLeftMyPerformanceTableViewType(fetchEntityPerformancePayloadMock.viewType)
+            ]);
+          }
           done();
         });
       });
@@ -221,7 +229,7 @@ describe('Responsibilities Effects', () => {
 
       it('should return a FetchResponsibilitiesFailureAction after catching an error', (done) => {
         spyOn(myPerformanceApiService, 'getResponsibilitiesPerformanceTotals').and.returnValue(Observable.throw(error));
-        responsibilitiesEffects.fetchResponsibilities$().subscribe((result) => {
+        responsibilitiesEffects.FetchResponsibilityEntityPerformance$().subscribe((result) => {
           expect(result).toEqual(new FetchResponsibilitiesFailureAction(error));
           done();
         });
