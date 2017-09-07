@@ -21,7 +21,7 @@ import { MyPerformanceTableDataTransformerService } from '../../services/my-perf
 import { MyPerformanceTableRow } from '../../models/my-performance-table-row.model';
 import * as MyPerformanceVersionActions from '../../state/actions/my-performance-version.action';
 import { ResponsibilitiesState } from '../../state/reducers/responsibilities.reducer';
-import { MyPerformanceState, MyPerformanceData } from '../../state/reducers/my-performance.reducer';
+import { MyPerformanceData } from '../../state/reducers/my-performance.reducer';
 import { RowType } from '../../enums/row-type.enum';
 import { SetRightMyPerformanceTableViewType } from '../../state/actions/view-types.action';
 import { SortingCriteria } from '../../models/sorting-criteria.model';
@@ -48,7 +48,7 @@ export interface HandleElementClickedParameters {
 export class MyPerformanceComponent implements OnInit, OnDestroy {
   public currentUserFullName: string;
   public leftTableViewType: ViewType;
-  public performanceState$: Observable<MyPerformanceState>;
+  public performanceStateVersions$: Observable<MyPerformanceData[]>;
   public roleGroups: Observable<ResponsibilitiesState>;
   public showLeftBackButton = false;
   public sortingCriteria: Array<SortingCriteria> = [{
@@ -83,7 +83,7 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.currentUserFullName = `${this.userService.model.currentUser.firstName} ${this.userService.model.currentUser.lastName}`;
     this.dateRanges$ = this.store.select(state => state.dateRanges);
-    this.performanceState$ = this.store.select(state => state.myPerformance);
+    this.performanceStateVersions$ = this.store.select(state => state.myPerformance.versions);
 
     this.filterStateSubscription = this.store.select(state => state.myPerformanceFilter).subscribe(filterState => {
       this.filterState = filterState;

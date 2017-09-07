@@ -32,11 +32,11 @@ describe('Breadcrumb Component', () => {
     it('should translate inputs into breadcrumb trail with initial performance state', () => {
       const mockInputs = {
         currentUserFullName: chance.string(),
-        performanceState: initialState
+        performanceStateVersions: initialState.versions
       };
 
       componentInstance.currentUserFullName = mockInputs.currentUserFullName;
-      componentInstance.performanceState = mockInputs.performanceState;
+      componentInstance.performanceStateVersions = mockInputs.performanceStateVersions;
 
       fixture.detectChanges();
 
@@ -48,18 +48,18 @@ describe('Breadcrumb Component', () => {
     it('should translate inputs into breadcrumb trail with initial performance state', () => {
       const mockInputs = {
         currentUserFullName: chance.string(),
-        performanceState: myPerformanceStateMock
+        performanceStateVersions: myPerformanceStateMock.versions
       };
 
       componentInstance.currentUserFullName = mockInputs.currentUserFullName;
-      componentInstance.performanceState = mockInputs.performanceState;
+      componentInstance.performanceStateVersions = mockInputs.performanceStateVersions;
 
       fixture.detectChanges();
 
       const breadcrumbContainer = fixture.debugElement.query(By.css('.breadcrumb-container')).nativeElement;
 
       expect(breadcrumbContainer.textContent).toBe(
-        ` ${mockInputs.currentUserFullName + mockInputs.performanceState.versions.map(version => version.selectedEntity).join('')}`);
+        ` ${mockInputs.currentUserFullName + mockInputs.performanceStateVersions.map(version => version.selectedEntity).join('')}`);
     });
   });
 
@@ -67,13 +67,13 @@ describe('Breadcrumb Component', () => {
     it('should output proper event when breadcrumb entity is clicked', (done) => {
       const mockInputs = {
         currentUserFullName: chance.string(),
-        performanceState: myPerformanceStateMock
+        performanceStateVersions: myPerformanceStateMock.versions
       };
 
       componentInstance.currentUserFullName = mockInputs.currentUserFullName;
-      componentInstance.performanceState = mockInputs.performanceState;
+      componentInstance.performanceStateVersions = mockInputs.performanceStateVersions;
 
-      const breadcrumbEntityIndexToClick = chance.natural({min: 0, max: mockInputs.performanceState.versions.length});
+      const breadcrumbEntityIndexToClick = chance.natural({min: 0, max: mockInputs.performanceStateVersions.length});
 
       fixture.detectChanges();
 

@@ -18,7 +18,7 @@ import { MyPerformanceComponent } from './my-performance.component';
 import { MyPerformanceFilterActionType } from '../../enums/my-performance-filter.enum';
 import { MyPerformanceFilterEvent } from '../../models/my-performance-filter.model'; // tslint:disable-line:no-unused-variable
 import { MyPerformanceFilterState } from '../../state/reducers/my-performance-filter.reducer';
-import { MyPerformanceState, initialState } from '../../state/reducers/my-performance.reducer';
+import { MyPerformanceData, initialState } from '../../state/reducers/my-performance.reducer';
 import { MyPerformanceTableDataTransformerService } from '../../services/my-performance-table-data-transformer.service';
 import { MyPerformanceTableRow } from '../../models/my-performance-table-row.model';
 import { MyPerformanceTableRowComponent } from '../../shared/components/my-performance-table-row/my-performance-table-row.component';
@@ -50,7 +50,7 @@ class MyPerformanceFilterComponentMock {
 class MyPerformanceBreadcrumbComponentMock {
   @Output() breadcrumbEntityClicked = new EventEmitter<BreadcrumbEntityClickedEvent>();
   @Input() currentUserFullName: string[];
-  @Input() performanceState: MyPerformanceState;
+  @Input() performanceStateVersions: MyPerformanceData[];
 }
 
 @Component({
@@ -261,7 +261,7 @@ describe('MyPerformanceComponent', () => {
     expect(functionPassToSelectCall0(stateMock)).toBe(stateMock.dateRanges);
 
     const functionPassToSelectCall1 = storeMock.select.calls.argsFor(1)[0];
-    expect(functionPassToSelectCall1(stateMock)).toBe(stateMock.myPerformance);
+    expect(functionPassToSelectCall1(stateMock)).toBe(stateMock.myPerformance.versions);
 
     const functionPassToSelectCall2 = storeMock.select.calls.argsFor(2)[0];
     expect(functionPassToSelectCall2(stateMock)).toBe(stateMock.myPerformanceFilter);
