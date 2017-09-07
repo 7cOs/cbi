@@ -1,6 +1,7 @@
 import { ActionStatus } from '../../enums/action-status.enum';
+import { getResponsibilityEntitiesPerformanceMock } from '../../models/entity-responsibilities.model.mock';
 import { getPerformanceTotalMock } from '../../models/performance-total.model.mock';
-import { getRoleGroupsMock, getRoleGroupPerformanceTotalsMock } from '../../models/role-groups.model.mock';
+import { getRoleGroupsMock } from '../../models/role-groups.model.mock';
 // tslint:disable-next-line:no-unused-variable
 import { getViewTypeMock } from '../../enums/view-type.enum.mock';
 import { MyPerformanceData, MyPerformanceState } from './my-performance.reducer';
@@ -19,7 +20,7 @@ export function getPerformanceTotalStateMock(): PerformanceTotalState {
 export function getResponsibilitesStateMock(): ResponsibilitiesState {
   return {
     responsibilities: getRoleGroupsMock(),
-    performanceTotals: getRoleGroupPerformanceTotalsMock(),
+    performanceTotals: getResponsibilityEntitiesPerformanceMock(),
     positionId: chance.natural(),
     status: ActionStatus.Fetched
   };

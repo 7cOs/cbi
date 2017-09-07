@@ -12,6 +12,7 @@ export const initialState: PerformanceTotalState = {
   performanceTotal: {
     total: 0,
     totalYearAgo: 0,
+    totalYearAgoPercent: 0,
     contributionToVolume: 0
   }
 };
@@ -36,6 +37,17 @@ export function performanceTotalReducer(
     case PerformanceTotalActions.FETCH_PERFORMANCE_TOTAL_FAILURE_ACTION:
       return Object.assign({}, state, {
         status: ActionStatus.Error
+      });
+
+    case PerformanceTotalActions.SET_TABLE_ROW_PERFORMANCE_TOTAL:
+      return Object.assign({}, state, {
+        performanceTotal: {
+          total: action.payload.metricColumn0,
+          totalYearAgo: action.payload.metricColumn1,
+          totalYearAgoPercent: action.payload.metricColumn2,
+          contributionToVolume: action.payload.ctv,
+          entityType: action.payload.descriptionRow0
+        }
       });
 
     default:

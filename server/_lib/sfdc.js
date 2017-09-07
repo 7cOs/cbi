@@ -47,9 +47,14 @@ function sfdcConn(app, req) {
           }));
         });
       }).catch(function(err) {
+        let msg = 'Unable to get Salesforce session';
+        if (err) {
+          msg = err.errorMessage || err.message || err.error || msg;
+        }
+
         let error = {
           'isSuccess': false,
-          'errorMessage': (err && err.errorMessage) ? err.errorMessage : 'Unable to get Salesforce session'
+          'errorMessage': msg
         };
 
         reject(error);
@@ -257,7 +262,7 @@ function userInfo(app, req) {
     }).catch(function(err) {
       reject({
         isSuccess: false,
-        errorMessage: connErrorMessage + err
+        errorMessage: connErrorMessage + JSON.stringify(err)
       });
     });
   });

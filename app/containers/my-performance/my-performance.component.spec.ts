@@ -239,7 +239,7 @@ describe('MyPerformanceComponent', () => {
     storeMock.dispatch.calls.reset();
     componentInstance.leftTableViewType = ViewType.roleGroups;
     componentInstance.handleElementClicked({leftSide: true, type: RowType.data, index: 0, row: rowMock});
-    expect(storeMock.dispatch.calls.count()).toEqual(4);
+    expect(storeMock.dispatch.calls.count()).toEqual(3);
 
     storeMock.dispatch.calls.reset();
     componentInstance.leftTableViewType = ViewType.accounts;
@@ -283,7 +283,6 @@ describe('MyPerformanceComponent', () => {
 
   describe('handleBreadcrumbEntityClicked', () => {
     it('should dispatch RestoreMyPerformanceStateAction when steps back are possible', () => {
-      fixture = TestBed.createComponent(MyPerformanceComponent);
       const breadcrumbLength = chance.natural({min: 4, max: 9});
       const entityIndex = chance.natural({max: breadcrumbLength - 2});
       const breadcrumbMock = Array(breadcrumbLength)
@@ -307,7 +306,6 @@ describe('MyPerformanceComponent', () => {
     });
 
     it('should not dispatch RestoreMyPerformanceStateAction when steps back are not possible', () => {
-      fixture = TestBed.createComponent(MyPerformanceComponent);
       const breadcrumbLength = chance.natural({max: 9});
       const entityIndex = breadcrumbLength - 1;
       const breadcrumbMock = Array(breadcrumbLength)
@@ -329,9 +327,7 @@ describe('MyPerformanceComponent', () => {
 
   describe('onDestroy', () => {
     it('should dispatch ClearMyPerformanceStateAction as its final call dispatch', () => {
-      fixture = TestBed.createComponent(MyPerformanceComponent);
-      fixture.detectChanges();
-      fixture.componentInstance.ngOnDestroy();
+      componentInstance.ngOnDestroy();
       expect(storeMock.dispatch.calls.mostRecent().args[0].type).toBe(MyPerformanceActions.CLEAR_MY_PERFORMANCE_STATE_ACTION);
     });
   });

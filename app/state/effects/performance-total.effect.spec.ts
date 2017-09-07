@@ -5,12 +5,13 @@ import * as Chance from 'chance';
 
 import { DateRangeTimePeriodValue } from '../../enums/date-range-time-period.enum';
 import { DistributionTypeValue } from '../../enums/distribution-type.enum';
-import { getPerformanceTotalMock } from '../../models/performance-total.model.mock';
+import { getPerformanceTotalMock, getPerformanceTotalDTOMock } from '../../models/performance-total.model.mock';
 import { MetricTypeValue } from '../../enums/metric-type.enum';
 import { MyPerformanceApiService } from '../../services/my-performance-api.service';
 import { MyPerformanceFilterState } from '../reducers/my-performance-filter.reducer';
-import { PerformanceTotal } from '../../models/performance-total.model';
+import { PerformanceTotal, PerformanceTotalDTO } from '../../models/performance-total.model';
 import { PerformanceTotalEffects } from './performance-total.effect';
+import { PerformanceTotalTransformerService } from '../../services/performance-total-transformer.service';
 import { PremiseTypeValue } from '../../enums/premise-type.enum';
 import * as PerformanceTotalActions from '../actions/performance-total.action';
 
@@ -24,11 +25,17 @@ describe('Performance Total Effects', () => {
     premiseType: PremiseTypeValue.On,
     distributionType: DistributionTypeValue.simple
   };
+  const performanceTotalDTOMock: PerformanceTotalDTO = getPerformanceTotalDTOMock();
   const performanceTotalMock: PerformanceTotal = getPerformanceTotalMock();
   const error = new Error(chance.string());
   const myPerformanceApiServiceMock = {
     getPerformanceTotal() {
-      return Observable.of(performanceTotalMock);
+      return Observable.of(performanceTotalDTOMock);
+    }
+  };
+  const performanceTotalTransformerServiceMock = {
+    transformPerformanceTotalDTO(mockArgs: any): PerformanceTotal {
+      return performanceTotalMock;
     }
   };
 
@@ -44,6 +51,10 @@ describe('Performance Total Effects', () => {
       {
         provide: MyPerformanceApiService,
         useValue: myPerformanceApiServiceMock
+      },
+      {
+        provide: PerformanceTotalTransformerService,
+        useValue: performanceTotalTransformerServiceMock
       }
     ]
   }));
