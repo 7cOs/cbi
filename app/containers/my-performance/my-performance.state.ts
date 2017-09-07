@@ -3,9 +3,6 @@ export const configState = ($stateProvider: any, resetBreadcrumbFunction: any) =
   .state('my-performance', {
     url: '/my-performance',
     component: 'myPerformance',
-    title: 'My Performance',
-    onExit: () => {
-      resetBreadcrumbFunction();
-    }
+    title: 'My Performance'
   });
 };
