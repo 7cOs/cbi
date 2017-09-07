@@ -1,4 +1,4 @@
-export const configState = ($stateProvider: any, resetBreadcrumbFunction: any) => {
+export const configState = ($stateProvider: any) => {
   $stateProvider
   .state('my-performance', {
     url: '/my-performance',

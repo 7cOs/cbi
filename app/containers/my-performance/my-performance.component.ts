@@ -10,8 +10,6 @@ import { ColumnType } from '../../enums/column-type.enum';
 import { DateRange } from '../../models/date-range.model';
 import { DateRangesState } from '../../state/reducers/date-ranges.reducer';
 import { EntityPeopleType } from '../../enums/entity-responsibilities.enum';
-// import { FetchResponsibilitiesAction } from '../../state/actions/responsibilities.action';
-// import { getDateRangeMock } from '../../models/date-range.model.mock';
 import { FetchResponsibilitiesAction, FetchResponsibilityEntityPerformance } from '../../state/actions/responsibilities.action';
 import { getDateRangeMock } from '../../models/date-range.model.mock';
 import { GetPeopleByRoleGroupAction } from '../../state/actions/responsibilities.action';
