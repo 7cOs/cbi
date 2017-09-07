@@ -1,10 +1,10 @@
 import * as Chance from 'chance';
 
-import { PerformanceTotal, PerformanceTotalDTO } from './performance-total.model';
+import { EntitiesTotalPerformances, EntitiesTotalPerformancesDTO } from './entities-total-performances.model';
 
 const chance = new Chance();
 
-export function getPerformanceTotalDTOMock(): PerformanceTotalDTO {
+export function getEntitiesTotalPerformancesDTOMock(): EntitiesTotalPerformancesDTO {
   return {
     total: chance.floating(),
     totalYearAgo: chance.floating(),
@@ -12,7 +12,7 @@ export function getPerformanceTotalDTOMock(): PerformanceTotalDTO {
   };
 }
 
-export function getPerformanceTotalMock(): PerformanceTotal {
+export function getPerformanceTotalMock(): EntitiesTotalPerformances {
   return {
     total: chance.floating(),
     totalYearAgo: chance.floating(),

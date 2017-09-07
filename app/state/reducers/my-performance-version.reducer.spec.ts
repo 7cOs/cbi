@@ -35,12 +35,12 @@ describe('My Performance Reducer', () => {
 
   it('should update the current state when a restore action is dispatched', () => {
     const savedObject = {
-      responsibilities: {
+      groupedEntities: {
         status: ActionStatus.Fetched,
         positionId: chance.string(),
-        responsibilities: chance.string() as any,
-        performanceTotals: [] as any,
-        performanceTotal: {
+        groupedEntities: chance.string() as any,
+        entitiesPerformances: [] as any,
+        entitiesTotalPerformances: {
           total: 0,
           totalYearAgo: 0,
           totalYearAgoPercent: 0,

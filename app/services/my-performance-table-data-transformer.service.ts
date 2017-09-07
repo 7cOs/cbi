@@ -2,14 +2,14 @@ import { Injectable } from '@angular/core';
 import 'rxjs/add/operator/map';
 
 import { MyPerformanceTableRow } from '../models/my-performance-table-row.model';
-import { PerformanceTotal } from '../models/performance-total.model';
-import { ResponsibilityEntityPerformance } from '../models/entity-responsibilities.model';
+import { EntitiesTotalPerformances } from '../models/entities-total-performances.model';
+import { EntitiesPerformances } from '../models/entities-performances.model';
 
 @Injectable()
 export class MyPerformanceTableDataTransformerService {
 
-  public getLeftTableData(entities: ResponsibilityEntityPerformance[]): MyPerformanceTableRow[] {
-    return entities.map((entity: ResponsibilityEntityPerformance) => {
+  public getLeftTableData(entities: EntitiesPerformances[]): MyPerformanceTableRow[] {
+    return entities.map((entity: EntitiesPerformances) => {
       return {
         descriptionRow0: entity.name,
         metricColumn0: entity.performanceTotal.total,
@@ -23,7 +23,7 @@ export class MyPerformanceTableDataTransformerService {
     });
   }
 
-  public getTotalRowData(performanceTotal: PerformanceTotal): MyPerformanceTableRow {
+  public getTotalRowData(performanceTotal: EntitiesTotalPerformances): MyPerformanceTableRow {
     const totalRow = {
       descriptionRow0: 'Total',
       metricColumn0: performanceTotal.total,

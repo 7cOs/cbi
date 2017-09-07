@@ -20,20 +20,19 @@ import { FetchResponsibilitiesAction,
          FetchPerformanceTotalFailureAction } from '../actions/responsibilities.action';
 import { getEntityPeopleResponsibilitiesMock } from '../../models/entity-responsibilities.model.mock';
 import { getMyPerformanceTableRowMock } from '../../models/my-performance-table-row.model.mock';
-import { getPerformanceTotalMock, getPerformanceTotalDTOMock } from '../../models/performance-total.model.mock';
-import { getResponsibilityEntitiesPerformanceMock,
-         getResponsibilityEntitiesPerformanceDTOMock } from '../../models/entity-responsibilities.model.mock';
-import { getRoleGroupsMock } from '../../models/role-groups.model.mock';
+import { getPerformanceTotalMock, getEntitiesTotalPerformancesDTOMock } from '../../models/entities-total-performances.model.mock';
+import { getEntitiesPerformancesMock, getResponsibilityEntitiesPerformanceDTOMock } from '../../models/entities-performances.model.mock';
+import { getGroupedEntitiesMock } from '../../models/grouped-entities.model.mock';
 import { MetricTypeValue } from '../../enums/metric-type.enum';
 import { MyPerformanceApiService } from '../../services/my-performance-api.service';
 import { MyPerformanceFilterState } from '../reducers/my-performance-filter.reducer';
 import { PerformanceTotalTransformerService } from '../../services/performance-total-transformer.service';
-import { PerformanceTotal, PerformanceTotalDTO } from '../../models/performance-total.model';
+import { EntitiesTotalPerformances, EntitiesTotalPerformancesDTO } from '../../models/entities-total-performances.model';
 import { PremiseTypeValue } from '../../enums/premise-type.enum';
 import { ResponsibilitiesEffects } from './responsibilities.effect';
-import { ResponsibilityEntityPerformance } from '../../models/entity-responsibilities.model';
+import { EntitiesPerformances } from '../../models/entities-performances.model';
 import { ResponsibilitiesTransformerService } from '../../services/responsibilities-transformer.service';
-import { RoleGroups } from '../../models/role-groups.model';
+import { GroupedEntities } from '../../models/grouped-entities.model';
 import { SetLeftMyPerformanceTableViewType } from '../actions/view-types.action';
 import { ViewType } from '../../enums/view-type.enum';
 
@@ -41,11 +40,11 @@ const chance = new Chance();
 
 describe('Responsibilities Effects', () => {
   const positionIdMock = chance.string();
-  const roleGroupsMock: RoleGroups = getRoleGroupsMock();
+  const roleGroupsMock: GroupedEntities = getGroupedEntitiesMock();
   const responsibilityEntitiesPerformanceDTOMock = getResponsibilityEntitiesPerformanceDTOMock();
-  const responsibilityEntitiesPerformanceMock = getResponsibilityEntitiesPerformanceMock();
-  const performanceTotalMock: PerformanceTotal = getPerformanceTotalMock();
-  const performanceTotalDTOMock: PerformanceTotalDTO = getPerformanceTotalDTOMock();
+  const responsibilityEntitiesPerformanceMock = getEntitiesPerformancesMock();
+  const performanceTotalMock: EntitiesTotalPerformances = getPerformanceTotalMock();
+  const entitiesTotalPerformancesDTOMock: EntitiesTotalPerformancesDTO = getEntitiesTotalPerformancesDTOMock();
   const error = new Error(chance.string());
 
   const performanceFilterStateMock: MyPerformanceFilterState = {
@@ -56,8 +55,8 @@ describe('Responsibilities Effects', () => {
   };
   const responsibilitiesSuccessPayloadMock = {
     positionId: positionIdMock,
-    responsibilities: roleGroupsMock,
-    performanceTotals: responsibilityEntitiesPerformanceMock
+    groupedEntities: roleGroupsMock,
+    entitiesPerformances: responsibilityEntitiesPerformanceMock
   };
   const myPerformanceApiServiceMock = {
     getResponsibilities() {
@@ -67,19 +66,19 @@ describe('Responsibilities Effects', () => {
       return Observable.of(responsibilityEntitiesPerformanceDTOMock);
     },
     getPerformanceTotal() {
-      return Observable.of(performanceTotalDTOMock);
+      return Observable.of(entitiesTotalPerformancesDTOMock);
     }
   };
   const responsibilitiesTransformerServiceMock = {
-    groupPeopleByRoleGroups(mockArgs: any): RoleGroups {
+    groupPeopleByRoleGroups(mockArgs: any): GroupedEntities {
       return roleGroupsMock;
     }
   };
   const performanceTotalTransformerServiceMock = {
-    transformEntityPerformanceTotalDTO(mockArgs: any): ResponsibilityEntityPerformance[] {
+    transformEntityEntitiesTotalPerformancesDTO(mockArgs: any): EntitiesPerformances[] {
       return responsibilityEntitiesPerformanceMock;
     },
-    transformPerformanceTotalDTO(mockArgs: any): PerformanceTotal {
+    transformEntitiesTotalPerformancesDTO(mockArgs: any): EntitiesTotalPerformances {
       return performanceTotalMock;
     }
   };
@@ -182,7 +181,7 @@ describe('Responsibilities Effects', () => {
       entityType: EntityPeopleType['GENERAL MANAGER'],
       entities: [getEntityPeopleResponsibilitiesMock()],
       filter: performanceFilterStateMock,
-      performanceTotal: getMyPerformanceTableRowMock(1)[0],
+      entitiesTotalPerformances: getMyPerformanceTableRowMock(1)[0],
       viewType: ViewType.people
     };
 
@@ -205,7 +204,7 @@ describe('Responsibilities Effects', () => {
 
           if (dispatchedActions.length === 4) {
             expect(dispatchedActions).toEqual([
-              new SetTableRowPerformanceTotal(fetchEntityPerformancePayloadMock.performanceTotal),
+              new SetTableRowPerformanceTotal(fetchEntityPerformancePayloadMock.entitiesTotalPerformances),
               new GetPeopleByRoleGroupAction(fetchEntityPerformancePayloadMock.entityType),
               new FetchResponsibilityEntityPerformanceSuccess(responsibilityEntitiesPerformanceMock),
               new SetLeftMyPerformanceTableViewType(fetchEntityPerformancePayloadMock.viewType)

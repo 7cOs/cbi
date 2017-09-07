@@ -1,5 +1,4 @@
 import { EntityPeopleType, EntityPropertyType } from '../enums/entity-responsibilities.enum';
-import { PerformanceTotal, PerformanceTotalDTO } from './performance-total.model';
 
 export interface EntityResponsibilities {
   positionId: string;
@@ -13,14 +12,11 @@ export interface EntityResponsibilities {
   propertyType?: EntityPropertyType;
 }
 
-export interface ResponsibilityEntityPerformanceDTO {
+export interface EntityResponsibilitiesDTO {
   id: string;
+  employeeId: string;
   name: string;
-  performanceTotal: PerformanceTotalDTO;
-}
-
-export interface ResponsibilityEntityPerformance {
-  positionId: string;
-  name: string;
-  performanceTotal: PerformanceTotal;
+  description: string;
+  type: string;
+  hierarchyType: string;
 }

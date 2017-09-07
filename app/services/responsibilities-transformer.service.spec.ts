@@ -1,9 +1,9 @@
 import { inject, TestBed } from '@angular/core/testing';
 
 import { EntityPeopleType } from '../enums/entity-responsibilities.enum';
-import { mockEntityResponsibilitiesDTOCollection } from '../models/entity-responsibilities-dto.model.mock';
+import { mockEntityResponsibilitiesDTOCollection } from '../models/entity-responsibilities.model.mock';
 import { ResponsibilitiesTransformerService } from './responsibilities-transformer.service';
-import { RoleGroups } from '../models/role-groups.model';
+import { GroupedEntities } from '../models/grouped-entities.model';
 
 describe('Service: ResponsibilitiesTransformerService', () => {
   beforeEach(() => TestBed.configureTestingModule({
@@ -20,8 +20,8 @@ describe('Service: ResponsibilitiesTransformerService', () => {
     }));
 
     it('should return a collection of formatted Responsibilitiess from a collection of ResponsibilitiesDTOs', () => {
-      spyOn(responsibilitiesTransformerService, 'groupPeopleByRoleGroups').and.callThrough();
-      const expectedRoleGroups: RoleGroups = {
+      spyOn(responsibilitiesTransformerService, 'groupPeopleByGroupedEntities').and.callThrough();
+      const expectedRoleGroups: GroupedEntities = {
         'MARKET DEVELOPMENT MANAGER': [{
           positionId: '123',
           employeeId: '1231231',
@@ -50,7 +50,7 @@ describe('Service: ResponsibilitiesTransformerService', () => {
         }]
       };
       const transformedRoleGroups =
-        responsibilitiesTransformerService.groupPeopleByRoleGroups(mockEntityResponsibilitiesDTOCollection);
+        responsibilitiesTransformerService.groupPeopleByGroupedEntities(mockEntityResponsibilitiesDTOCollection);
       expect(transformedRoleGroups).toEqual(expectedRoleGroups);
     });
   });

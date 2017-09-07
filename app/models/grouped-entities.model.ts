@@ -1,5 +1,5 @@
 import { EntityResponsibilities } from './entity-responsibilities.model';
 
-export interface RoleGroups {
+export interface GroupedEntities {
   [key: string]: EntityResponsibilities[];
 }

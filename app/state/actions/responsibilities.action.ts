@@ -1,25 +1,25 @@
 import { Action } from '@ngrx/store';
 
+import { EntitiesPerformances } from '../../models/entities-performances.model';
+import { EntitiesTotalPerformances } from '../../models/entities-total-performances.model';
 import { EntityPeopleType } from '../../enums/entity-responsibilities.enum';
 import { EntityResponsibilities } from '../../models/entity-responsibilities.model';
+import { GroupedEntities } from '../../models/grouped-entities.model';
 import { MyPerformanceFilterState } from '../../state/reducers/my-performance-filter.reducer';
 import { MyPerformanceTableRow } from '../../models/my-performance-table-row.model';
-import { PerformanceTotal } from '../../models/performance-total.model';
-import { ResponsibilityEntityPerformance } from '../../models/entity-responsibilities.model';
-import { RoleGroups } from '../../models/role-groups.model';
 import { ViewType } from '../../enums/view-type.enum';
 
 export interface FetchResponsibilitiesSuccessPayload {
   positionId: string;
-  responsibilities: RoleGroups;
-  performanceTotals: ResponsibilityEntityPerformance[];
+  groupedEntities: GroupedEntities;
+  entitiesPerformances: EntitiesPerformances[];
 }
 
 export interface FetchResponsibilityEntitiesPerformancePayload {
   entityType: EntityPeopleType;
   entities: EntityResponsibilities[];
   filter: MyPerformanceFilterState;
-  performanceTotal: MyPerformanceTableRow;
+  entitiesTotalPerformances: MyPerformanceTableRow;
   viewType: ViewType;
 }
 
@@ -55,7 +55,7 @@ export const FETCH_RESPONSIBILITY_ENTITY_PERFORMANCE_SUCCESS = '[Responsibilitie
 export class FetchResponsibilityEntityPerformanceSuccess implements Action {
   readonly type = FETCH_RESPONSIBILITY_ENTITY_PERFORMANCE_SUCCESS;
 
-  constructor(public payload: ResponsibilityEntityPerformance[]) { }
+  constructor(public payload: EntitiesPerformances[]) { }
 }
 
 export const GET_PEOPLE_BY_ROLE_GROUP_ACTION = '[Responsibilities] GET_PEOPLE_BY_ROLE_GROUP_ACTION';
@@ -76,7 +76,7 @@ export const FETCH_PERFORMANCE_TOTAL_SUCCESS_ACTION = '[Performance Total] FETCH
 export class FetchPerformanceTotalSuccessAction implements Action {
   readonly type = FETCH_PERFORMANCE_TOTAL_SUCCESS_ACTION;
 
-  constructor(public payload: PerformanceTotal) { }
+  constructor(public payload: EntitiesTotalPerformances) { }
 }
 
 export const FETCH_PERFORMANCE_TOTAL_FAILURE_ACTION = '[Performance Total] FETCH_PERFORMANCE_TOTAL_FAILURE_ACTION';

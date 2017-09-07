@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import 'rxjs/add/operator/map';
 
-import { PerformanceTotal, PerformanceTotalDTO } from '../models/performance-total.model';
-import { ResponsibilityEntityPerformance, ResponsibilityEntityPerformanceDTO } from '../models/entity-responsibilities.model';
+import { EntitiesTotalPerformances, EntitiesTotalPerformancesDTO } from '../models/entities-total-performances.model';
+import { EntitiesPerformances, EntitiesPerformancesDTO } from '../models/entities-performances.model';
 import { UtilService } from './util.service';
 
 @Injectable()
@@ -10,19 +10,20 @@ export class PerformanceTotalTransformerService {
 
   constructor(private utilService: UtilService) { }
 
-  public transformPerformanceTotalDTO(performanceTotalDTO: PerformanceTotalDTO): PerformanceTotal {
-    return Object.assign({}, performanceTotalDTO, {
-      totalYearAgoPercent: this.utilService.getYearAgoPercent(performanceTotalDTO.total, performanceTotalDTO.totalYearAgo),
+  public transformEntitiesTotalPerformancesDTO(entitiesTotalPerformancesDTO: EntitiesTotalPerformancesDTO): EntitiesTotalPerformances {
+    return Object.assign({}, entitiesTotalPerformancesDTO, {
+      totalYearAgoPercent: this.utilService
+        .getYearAgoPercent(entitiesTotalPerformancesDTO.total, entitiesTotalPerformancesDTO.totalYearAgo),
       contributionToVolume: 0
     });
   }
 
-  public transformEntityPerformanceTotalDTO(entities: ResponsibilityEntityPerformanceDTO[]): ResponsibilityEntityPerformance[] {
-    return entities.map((entity: ResponsibilityEntityPerformanceDTO) => {
+  public transformEntityEntitiesTotalPerformancesDTO(entities: EntitiesPerformancesDTO[]): EntitiesPerformances[] {
+    return entities.map((entity: EntitiesPerformancesDTO) => {
       return {
         positionId: entity.id,
         name: entity.name,
-        performanceTotal: this.transformPerformanceTotalDTO(entity.performanceTotal)
+        performanceTotal: this.transformEntitiesTotalPerformancesDTO(entity.performanceTotal)
       };
     });
   }

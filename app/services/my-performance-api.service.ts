@@ -6,12 +6,12 @@ import 'rxjs/add/operator/map';
 import { EntityDTO } from '../models/entity-dto.model'; // tslint:disable-line:no-unused-variable
 import { DateRangeTimePeriodValue } from '../enums/date-range-time-period.enum';
 import { DistributionTypeValue } from '../enums/distribution-type.enum';
-import { EntityResponsibilities,
-         ResponsibilityEntityPerformanceDTO } from '../models/entity-responsibilities.model'; // tslint:disable-line:no-unused-variable
+import { EntitiesPerformancesDTO } from '../models/entities-performances.model'; // tslint:disable-line:no-unused-variable
+import { EntityResponsibilities } from '../models/entity-responsibilities.model'; // tslint:disable-line:no-unused-variable
 import { MetricTypeValue } from '../enums/metric-type.enum';
 import { MyPerformanceFilterState } from '../state/reducers/my-performance-filter.reducer';
 import { PeopleResponsibilitiesDTO } from '../models/people-responsibilities-dto.model'; // tslint:disable-line:no-unused-variable
-import { PerformanceTotalDTO } from '../models/performance-total.model'; // tslint:disable-line:no-unused-variable
+import { EntitiesTotalPerformancesDTO } from '../models/entities-total-performances.model'; // tslint:disable-line:no-unused-variable
 import { PremiseTypeValue } from '../enums/premise-type.enum';
 
 @Injectable()
@@ -29,8 +29,8 @@ export class MyPerformanceApiService {
 
   public getResponsibilitiesPerformanceTotals(
     entities: Array<{ positionId?: string, type: string, name: string }>, filter: MyPerformanceFilterState, positionId?: string
-  ): Observable<ResponsibilityEntityPerformanceDTO[]> {
-    const apiCalls: Observable<ResponsibilityEntityPerformanceDTO | Error>[] = [];
+  ): Observable<EntitiesPerformancesDTO[]> {
+    const apiCalls: Observable<EntitiesPerformancesDTO | Error>[] = [];
 
     entities.forEach((entity: { positionId?: string, type: string, name: string }) => {
       apiCalls.push(this.getResponsibilityPerformanceTotal(entity, filter, entity.positionId || positionId));
@@ -41,7 +41,7 @@ export class MyPerformanceApiService {
 
   public getResponsibilityPerformanceTotal(
     entity: { type: string, name: string }, filter: MyPerformanceFilterState, positionId: string
-  ): Observable<ResponsibilityEntityPerformanceDTO|Error> {
+  ): Observable<EntitiesPerformancesDTO|Error> {
     const url = `/v3/positions/${ positionId }/responsibilities/${ entity.type }/performanceTotal`;
 
     return this.http.get(`${ url }`, {
@@ -58,7 +58,7 @@ export class MyPerformanceApiService {
   public getPerformanceTotal(
     positionId: string,
     filter: MyPerformanceFilterState
-  ): Observable<PerformanceTotalDTO> {
+  ): Observable<EntitiesTotalPerformancesDTO> {
     const url = `/v3/positions/${ positionId }/performanceTotal`;
 
     return this.http.get(`${ url }`, {

@@ -91,15 +91,15 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
 
         if (current.responsibilities && current.responsibilities.status === ActionStatus.Fetched) {
           this.tableData = this.myPerformanceTableDataTransformerService.getLeftTableData( // What about accounts?
-            current.responsibilities.performanceTotals
+            current.responsibilities.entitiesPerformances
           );
         }
 
         if (current.responsibilities
-          && current.responsibilities.performanceTotal
+          && current.responsibilities.entitiesPerformances
           && current.responsibilities.status === ActionStatus.Fetched) {
           this.totalRowData = this.myPerformanceTableDataTransformerService
-            .getTotalRowData(current.responsibilities.performanceTotal);
+            .getTotalRowData(current.responsibilities.entitiesTotalPerformances);
         }
     });
 
@@ -147,9 +147,9 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
           if (this.leftTableViewType === ViewType.roleGroups) {
             this.store.dispatch(new FetchResponsibilityEntityPerformance({
               entityType: EntityPeopleType[parameters.row.descriptionRow0],
-              entities: this.currentState.responsibilities.responsibilities[EntityPeopleType[parameters.row.descriptionRow0]],
+              entities: this.currentState.responsibilities.groupedEntities[EntityPeopleType[parameters.row.descriptionRow0]],
               filter: this.filterState,
-              performanceTotal: parameters.row,
+              entitiesTotalPerformances: parameters.row,
               viewType: ViewType.people
             }));
           } else if (this.leftTableViewType === ViewType.people) {

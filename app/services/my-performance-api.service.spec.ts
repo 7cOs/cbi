@@ -4,18 +4,18 @@ import { MockBackend, MockConnection } from '@angular/http/testing';
 
 import { DateRangeTimePeriodValue } from '../enums/date-range-time-period.enum';
 import { DistributionTypeValue } from '../enums/distribution-type.enum';
-import { getPerformanceTotalMock } from '../models/performance-total.model.mock';
+import { getPerformanceTotalMock } from '../models/entities-total-performances.model.mock';
 import { MetricTypeValue } from '../enums/metric-type.enum';
 import { MyPerformanceApiService } from './my-performance-api.service';
-import { PerformanceTotal } from '../models/performance-total.model';
+import { EntitiesTotalPerformances } from '../models/entities-total-performances.model';
 import { PremiseTypeValue } from '../enums/premise-type.enum';
-import { ResponsibilityEntityPerformanceDTO } from '../models/entity-responsibilities.model';
+import { EntitiesPerformancesDTO } from '../models/entities-performances.model';
 
 describe('Service: MyPerformanceApiService', () => {
   let myPerformanceApiService: MyPerformanceApiService;
   let mockBackend: MockBackend;
 
-  const mockPerformanceTotalResponse: PerformanceTotal = getPerformanceTotalMock();
+  const mockPerformanceTotalResponse: EntitiesTotalPerformances = getPerformanceTotalMock();
   const mockResponsibilitiesResponse: any = {
     positions: [{
       id: '123',
@@ -106,7 +106,7 @@ describe('Service: MyPerformanceApiService', () => {
         );
       });
 
-      myPerformanceApiService.getPerformanceTotal('1', mockFilter).subscribe((response: PerformanceTotal) => {
+      myPerformanceApiService.getPerformanceTotal('1', mockFilter).subscribe((response: EntitiesTotalPerformances) => {
         expect(response).toEqual(mockPerformanceTotalResponse);
         done();
       });
@@ -140,7 +140,7 @@ describe('Service: MyPerformanceApiService', () => {
       });
 
       myPerformanceApiService.getResponsibilityPerformanceTotal(entityMock, mockFilter, positionIdMock)
-        .subscribe((response: ResponsibilityEntityPerformanceDTO) => {
+        .subscribe((response: EntitiesPerformancesDTO) => {
           expect(response).toEqual({
             id: positionIdMock,
             name: entityMock.name,

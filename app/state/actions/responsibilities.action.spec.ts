@@ -5,18 +5,18 @@ import { DateRangeTimePeriodValue } from '../../enums/date-range-time-period.enu
 import { DistributionTypeValue } from '../../enums/distribution-type.enum';
 import { EntityPeopleType } from '../../enums/entity-responsibilities.enum';
 import { FetchResponsibilityEntitiesPerformancePayload } from './responsibilities.action';
-import { getEntityPeopleResponsibilitiesMock,
-         getResponsibilityEntitiesPerformanceMock } from '../../models/entity-responsibilities.model.mock';
-import { getPerformanceTotalMock } from '../../models/performance-total.model.mock';
+import { getEntitiesPerformancesMock } from '../../models/entities-performances.model.mock';
+import { getEntityPeopleResponsibilitiesMock } from '../../models/entity-responsibilities.model.mock';
+import { getPerformanceTotalMock } from '../../models/entities-total-performances.model.mock';
 import { getMyPerformanceTableRowMock } from '../../models/my-performance-table-row.model.mock';
-import { getRoleGroupsMock } from '../../models/role-groups.model.mock';
+import { getGroupedEntitiesMock } from '../../models/grouped-entities.model.mock';
 import { MetricTypeValue } from '../../enums/metric-type.enum';
 import { MyPerformanceFilterState } from '../reducers/my-performance-filter.reducer';
 import { MyPerformanceTableRow } from '../../models/my-performance-table-row.model';
-import { PerformanceTotal } from '../../models/performance-total.model';
+import { EntitiesTotalPerformances } from '../../models/entities-total-performances.model';
 import { PremiseTypeValue } from '../../enums/premise-type.enum';
-import { ResponsibilityEntityPerformance } from '../../models/entity-responsibilities.model';
-import { RoleGroups } from '../../models/role-groups.model';
+import { EntitiesPerformances } from '../../models/entities-performances.model';
+import { GroupedEntities } from '../../models/grouped-entities.model';
 import { ViewType } from '../../enums/view-type.enum';
 import * as ResponsibilitiesActions from './responsibilities.action';
 
@@ -55,15 +55,15 @@ describe('Responsibilities Actions', () => {
 
   describe('FetchResponsibilitiesSuccessAction', () => {
     let action: ResponsibilitiesActions.FetchResponsibilitiesSuccessAction;
-    let roleGroupsMock: RoleGroups;
+    let roleGroupsMock: GroupedEntities;
     let userIdMock: number;
-    let responsibilityEntitiesPerformanceMock: ResponsibilityEntityPerformance[];
+    let responsibilityEntitiesPerformanceMock: EntitiesPerformances[];
     let mockSuccessActionPayload: any;
 
     beforeEach(() => {
-      roleGroupsMock = getRoleGroupsMock();
+      roleGroupsMock = getGroupedEntitiesMock();
       userIdMock = chance.natural();
-      responsibilityEntitiesPerformanceMock = getResponsibilityEntitiesPerformanceMock();
+      responsibilityEntitiesPerformanceMock = getEntitiesPerformancesMock();
       mockSuccessActionPayload = {
         positionId: userIdMock,
         responsibilities: roleGroupsMock,
@@ -127,7 +127,7 @@ describe('Responsibilities Actions', () => {
       entityType: EntityPeopleType['GENERAL MANAGER'],
       entities: [getEntityPeopleResponsibilitiesMock()],
       filter: performanceFilterStateMock,
-      performanceTotal: getMyPerformanceTableRowMock(1)[0],
+      entitiesTotalPerformances: getMyPerformanceTableRowMock(1)[0],
       viewType: ViewType.people
     };
     let action: ResponsibilitiesActions.FetchResponsibilityEntityPerformance;
@@ -148,7 +148,7 @@ describe('Responsibilities Actions', () => {
   });
 
   describe('FetchResponsibilityEntityPerformanceSuccess', () => {
-    const payloadMock: ResponsibilityEntityPerformance[] = getResponsibilityEntitiesPerformanceMock();
+    const payloadMock: EntitiesPerformances[] = getEntitiesPerformancesMock();
     let action: ResponsibilitiesActions.FetchResponsibilityEntityPerformanceSuccess;
 
     beforeEach(() => {
@@ -191,7 +191,7 @@ describe('Responsibilities Actions', () => {
   });
 
   describe('Fetch Performance Total Success Action', () => {
-    const performanceTotalMock: PerformanceTotal = getPerformanceTotalMock();
+    const performanceTotalMock: EntitiesTotalPerformances = getPerformanceTotalMock();
     let action: ResponsibilitiesActions.FetchPerformanceTotalSuccessAction;
 
     beforeEach(() => {

@@ -4,16 +4,16 @@ import 'rxjs/add/operator/map';
 import { EntityDTO } from '../models/entity-dto.model';
 import { EntityResponsibilities } from '../models/entity-responsibilities.model';
 import { EntityPeopleType, EntityPropertyType } from '../enums/entity-responsibilities.enum';
-import { EntityResponsibilitiesDTO } from '../models/entity-responsibilities-dto.model';
-import { RoleGroups } from '../models/role-groups.model';
+import { EntityResponsibilitiesDTO } from '../models/entity-responsibilities.model';
+import { GroupedEntities } from '../models/grouped-entities.model';
 
 @Injectable()
 export class ResponsibilitiesTransformerService {
 
   constructor() { }
 
-  public groupPeopleByRoleGroups(responsibilities: EntityResponsibilitiesDTO[]): RoleGroups {
-    return responsibilities.reduce((roleGroups: RoleGroups, entity: EntityResponsibilitiesDTO) => {
+  public groupPeopleByGroupedEntities(responsibilities: EntityResponsibilitiesDTO[]): GroupedEntities {
+    return responsibilities.reduce((roleGroups: GroupedEntities, entity: EntityResponsibilitiesDTO) => {
       if (Array.isArray(roleGroups[entity.description])) {
         roleGroups[entity.description].push(this.transformEntityResponsibilitiesDTO(entity));
       } else {
@@ -26,8 +26,8 @@ export class ResponsibilitiesTransformerService {
     }, {});
   }
 
-  public groupsAccountsDistributors(accountsDistributors: Array<EntityDTO>): RoleGroups {
-    return accountsDistributors.reduce((groups: RoleGroups, entity: EntityDTO) => {
+  public groupsAccountsDistributors(accountsDistributors: Array<EntityDTO>): GroupedEntities {
+    return accountsDistributors.reduce((groups: GroupedEntities, entity: EntityDTO) => {
       groups['all'].push({
         propertyType: entity.type,
         positionId: entity.id,
