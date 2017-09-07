@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
+import { MyPerformanceBreadcrumbComponent } from '../../shared/components/my-performance-breadcrumb/my-performance-breadcrumb.component';
 import { MyPerformanceComponent } from './my-performance.component';
 import { MyPerformanceFilterComponent } from '../../shared/components/my-performance-filter/my-performance-filter.component';
 import { MyPerformanceTableComponent } from '../../shared/components/my-performance-table/my-performance-table.component';
@@ -18,6 +19,7 @@ import { SortIndicatorComponent } from '../../shared/components/sort-indicator/s
     SharedModule
   ],
   declarations: [
+    MyPerformanceBreadcrumbComponent,
     MyPerformanceComponent,
     MyPerformanceFilterComponent,
     MyPerformanceTableComponent,

@@ -21,9 +21,10 @@ describe('My Performance Reducer', () => {
   it('should call the versioning reducer when a versioning action is received', () => {
     myPerformanceReducer(initialState, new MyPerformanceVersionActions.SaveMyPerformanceStateAction(null));
     myPerformanceReducer(initialState, new MyPerformanceVersionActions.RestoreMyPerformanceStateAction());
+    myPerformanceReducer(initialState, new MyPerformanceVersionActions.SetMyPerformanceSelectedEntityAction(chance.string()));
+    myPerformanceReducer(initialState, new MyPerformanceVersionActions.ClearMyPerformanceStateAction);
 
-    expect(myPerformanceVersionReducerSpy).toHaveBeenCalled();
-    expect(myPerformanceVersionReducerSpy.calls.count()).toBe(2);
+    expect(myPerformanceVersionReducerSpy).toHaveBeenCalledTimes(4);
     expect(responsibilitiesReducerSpy).not.toHaveBeenCalled();
   });
 
