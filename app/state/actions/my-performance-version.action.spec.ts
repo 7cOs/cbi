@@ -49,4 +49,37 @@ describe('Responsibilities Actions', () => {
     });
   });
 
+  describe('SetMyPerformanceSelectedEntityAction', () => {
+    let entityNameMock: string;
+    let action: MyPerformanceVersionActions.SetMyPerformanceSelectedEntityAction;
+
+    beforeEach(() => {
+      entityNameMock = chance.string();
+      action = new MyPerformanceVersionActions.SetMyPerformanceSelectedEntityAction(entityNameMock);
+    });
+
+    it('should have the correct type', () => {
+      expect(MyPerformanceVersionActions.SET_MY_PERFORMANCE_SELECTED_ENTITY_ACTION)
+        .toBe('[My Performance] SET_MY_PERFORMANCE_SELECTED_ENTITY_ACTION');
+      expect(action.type).toBe(MyPerformanceVersionActions.SET_MY_PERFORMANCE_SELECTED_ENTITY_ACTION);
+    });
+
+    it('should contain the correct payload', () => {
+      expect(action.payload).toEqual(entityNameMock);
+    });
+  });
+
+  describe('ClearMyPerformanceAction', () => {
+    let action: MyPerformanceVersionActions.ClearMyPerformanceStateAction;
+
+    beforeEach(() => {
+      action = new MyPerformanceVersionActions.ClearMyPerformanceStateAction();
+    });
+
+    it('should have the correct type', () => {
+      expect(MyPerformanceVersionActions.CLEAR_MY_PERFORMANCE_STATE_ACTION)
+        .toBe('[My Performance] CLEAR_MY_PERFORMANCE_STATE_ACTION');
+      expect(action.type).toBe(MyPerformanceVersionActions.CLEAR_MY_PERFORMANCE_STATE_ACTION);
+    });
+  });
 });

@@ -57,21 +57,9 @@ export function myPerformanceReducer(
 
     case MyPerformanceVersionActions.SAVE_MY_PERFORMANCE_STATE_ACTION:
     case MyPerformanceVersionActions.RESTORE_MY_PERFORMANCE_STATE_ACTION:
+    case MyPerformanceVersionActions.SET_MY_PERFORMANCE_SELECTED_ENTITY_ACTION:
+    case MyPerformanceVersionActions.CLEAR_MY_PERFORMANCE_STATE_ACTION:
       return myPerformanceVersionReducer(state, action as MyPerformanceVersionActions.Action);
-
-    case MyPerformanceActions.SET_MY_PERFORMANCE_SELECTED_ENTITY_ACTION:
-      return {
-        current: {
-          performanceTotal: state.current.performanceTotal,
-          responsibilities: state.current.responsibilities,
-          viewType: state.current.viewType,
-          selectedEntity: action.payload
-        },
-        versions: state.versions
-      };
-
-    case MyPerformanceActions.CLEAR_MY_PERFORMANCE_STATE_ACTION:
-      return initialState;
 
     case ResponsibilitiesActions.FETCH_RESPONSIBILITIES_ACTION:
     case ResponsibilitiesActions.FETCH_RESPONSIBILITIES_SUCCESS_ACTION:

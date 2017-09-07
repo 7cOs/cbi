@@ -13,7 +13,6 @@ import { DistributionTypeValue } from '../../enums/distribution-type.enum';
 import { FetchResponsibilitiesAction } from '../../state/actions/responsibilities.action';
 import { getMyPerformanceTableRowMock } from '../../models/my-performance-table-row.model.mock';
 import { MetricTypeValue } from '../../enums/metric-type.enum';
-import * as MyPerformanceActions from '../../state/actions/my-performance.action';
 import * as MyPerformanceVersionActions from '../../state/actions/my-performance-version.action';
 import { MyPerformanceComponent } from './my-performance.component';
 import { MyPerformanceFilterActionType } from '../../enums/my-performance-filter.enum';
@@ -328,7 +327,7 @@ describe('MyPerformanceComponent', () => {
   describe('onDestroy', () => {
     it('should dispatch ClearMyPerformanceStateAction as its final call dispatch', () => {
       componentInstance.ngOnDestroy();
-      expect(storeMock.dispatch.calls.mostRecent().args[0].type).toBe(MyPerformanceActions.CLEAR_MY_PERFORMANCE_STATE_ACTION);
+      expect(storeMock.dispatch.calls.mostRecent().args[0].type).toBe(MyPerformanceVersionActions.CLEAR_MY_PERFORMANCE_STATE_ACTION);
     });
   });
 });

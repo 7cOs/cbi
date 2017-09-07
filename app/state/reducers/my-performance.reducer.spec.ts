@@ -1,8 +1,6 @@
 import * as Chance from 'chance';
 
-import { getMyPerformanceStateMock } from './my-performance.state.mock';
-import * as MyPerformanceActions from '../actions/my-performance.action';
-import { myPerformanceReducer, MyPerformanceState, initialState } from './my-performance.reducer';
+import { myPerformanceReducer, initialState } from './my-performance.reducer';
 import * as MyPerformanceVersionActions from '../actions/my-performance-version.action';
 import * as myPerformanceVersion from './my-performance-version.reducer';
 import * as responsibilities from './responsibilities.reducer';
@@ -23,9 +21,10 @@ describe('My Performance Reducer', () => {
   it('should call the versioning reducer when a versioning action is received', () => {
     myPerformanceReducer(initialState, new MyPerformanceVersionActions.SaveMyPerformanceStateAction(null));
     myPerformanceReducer(initialState, new MyPerformanceVersionActions.RestoreMyPerformanceStateAction());
+    myPerformanceReducer(initialState, new MyPerformanceVersionActions.SetMyPerformanceSelectedEntityAction(chance.string()));
+    myPerformanceReducer(initialState, new MyPerformanceVersionActions.ClearMyPerformanceStateAction);
 
-    expect(myPerformanceVersionReducerSpy).toHaveBeenCalled();
-    expect(myPerformanceVersionReducerSpy.calls.count()).toBe(2);
+    expect(myPerformanceVersionReducerSpy).toHaveBeenCalledTimes(4);
     expect(responsibilitiesReducerSpy).not.toHaveBeenCalled();
   });
 
@@ -44,28 +43,6 @@ describe('My Performance Reducer', () => {
     expect(responsibilitiesReducerSpy).toHaveBeenCalled();
     expect(responsibilitiesReducerSpy.calls.count()).toBe(3);
     expect(myPerformanceVersionReducerSpy).not.toHaveBeenCalled();
-  });
-
-  it('should set the selected entity when SetMyPerformanceSelectedEntityAction is received', () => {
-    const entityNameMock = chance.string();
-    const beforeState = getMyPerformanceStateMock();
-    const expectedState = {
-      current: {
-        performanceTotal: beforeState.current.performanceTotal,
-        responsibilities: beforeState.current.responsibilities,
-        viewType: beforeState.current.viewType,
-        selectedEntity: entityNameMock
-      },
-      versions: beforeState.versions
-    };
-    const actualState = myPerformanceReducer(beforeState, new MyPerformanceActions.SetMyPerformanceSelectedEntityAction(entityNameMock));
-    expect(actualState).toEqual(expectedState);
-  });
-
-  it('should return the MyPerformanceState to its initial state when ClearMyPerformanceStateAction is received', () => {
-
-    expect(myPerformanceReducer(getMyPerformanceStateMock(), new MyPerformanceActions.ClearMyPerformanceStateAction()))
-      .toEqual(initialState);
   });
 
   it('should return current state when an unknown action is dispatched', () => {

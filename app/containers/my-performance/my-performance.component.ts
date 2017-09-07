@@ -13,7 +13,6 @@ import { EntityPeopleType } from '../../enums/entity-responsibilities.enum';
 import { FetchResponsibilitiesAction, FetchResponsibilityEntityPerformance } from '../../state/actions/responsibilities.action';
 import { getDateRangeMock } from '../../models/date-range.model.mock';
 import { GetPeopleByRoleGroupAction } from '../../state/actions/responsibilities.action';
-import * as MyPerformanceActions from '../../state/actions/my-performance.action';
 import * as MyPerformanceFilterActions from '../../state/actions/my-performance-filter.action';
 import { MyPerformanceFilterActionType } from '../../enums/my-performance-filter.enum';
 import { MyPerformanceFilterEvent } from '../../models/my-performance-filter.model';
@@ -123,7 +122,7 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.store.dispatch(new MyPerformanceActions.ClearMyPerformanceStateAction());
+    this.store.dispatch(new MyPerformanceVersionActions.ClearMyPerformanceStateAction());
     if (this.filterStateSubscription) this.filterStateSubscription.unsubscribe();
     if (this.myPerformanceCurrentSubscription) this.myPerformanceCurrentSubscription.unsubscribe();
     if (this.myPerformanceVersionSubscription) this.myPerformanceVersionSubscription.unsubscribe();
@@ -150,7 +149,7 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
       default:
         if (parameters.leftSide) {
           console.log('clicked on left row:', parameters.row);
-          this.store.dispatch(new MyPerformanceActions.SetMyPerformanceSelectedEntityAction(parameters.row.descriptionRow0));
+          this.store.dispatch(new MyPerformanceVersionActions.SetMyPerformanceSelectedEntityAction(parameters.row.descriptionRow0));
           this.store.dispatch(new MyPerformanceVersionActions.SaveMyPerformanceStateAction(this.currentState));
 
           if (this.leftTableViewType === ViewType.roleGroups) {
