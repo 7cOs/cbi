@@ -1,7 +1,7 @@
-import { MyPerformanceData, MyPerformanceState } from './my-performance.reducer';
+import { MyPerformanceData, MyPerformanceState, initialState } from './my-performance.reducer';
 import * as MyPerformanceVersionActions from '../actions/my-performance-version.action';
 
-export const initialState: Array<MyPerformanceData> = Array<MyPerformanceData>();
+export const initialStateVersions: Array<MyPerformanceData> = Array<MyPerformanceData>();
 
 export function myPerformanceVersionReducer(
   state: MyPerformanceState,
@@ -19,13 +19,29 @@ export function myPerformanceVersionReducer(
 
     case MyPerformanceVersionActions.RESTORE_MY_PERFORMANCE_STATE_ACTION:
       const updatedVersions = [...state.versions];
-      const lastState = updatedVersions.pop();
+      const stepsBack: number = action.payload;
+      const startIndex: number = updatedVersions.length - stepsBack;
+      const lastState = updatedVersions.splice(startIndex, stepsBack)[0];
       return lastState
         ? {
           current: lastState,
           versions: updatedVersions
           }
         : state;
+
+    case MyPerformanceVersionActions.SET_MY_PERFORMANCE_SELECTED_ENTITY_ACTION:
+      return {
+        current: {
+          performanceTotal: state.current.performanceTotal,
+          responsibilities: state.current.responsibilities,
+          viewType: state.current.viewType,
+          selectedEntity: action.payload
+        },
+        versions: state.versions
+      };
+
+    case MyPerformanceVersionActions.CLEAR_MY_PERFORMANCE_STATE_ACTION:
+      return initialState;
 
     default:
       return state;

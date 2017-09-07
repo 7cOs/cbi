@@ -5,25 +5,26 @@ import { Subscription } from 'rxjs/Subscription';
 
 import { ActionStatus } from '../../enums/action-status.enum';
 import { AppState } from '../../state/reducers/root.reducer';
+import { BreadcrumbEntityClickedEvent } from '../../models/breadcrumb-entity-clicked-event.model';
 import { ColumnType } from '../../enums/column-type.enum';
 import { DateRange } from '../../models/date-range.model';
 import { DateRangesState } from '../../state/reducers/date-ranges.reducer';
 import { EntityPeopleType } from '../../enums/entity-responsibilities.enum';
 import { FetchResponsibilitiesAction, FetchResponsibilityEntityPerformance } from '../../state/actions/responsibilities.action';
 import { getDateRangeMock } from '../../models/date-range.model.mock';
+import * as MyPerformanceFilterActions from '../../state/actions/my-performance-filter.action';
 import { MyPerformanceFilterActionType } from '../../enums/my-performance-filter.enum';
 import { MyPerformanceFilterEvent } from '../../models/my-performance-filter.model';
 import { MyPerformanceFilterState } from '../../state/reducers/my-performance-filter.reducer';
 import { MyPerformanceTableDataTransformerService } from '../../services/my-performance-table-data-transformer.service';
 import { MyPerformanceTableRow } from '../../models/my-performance-table-row.model';
+import * as MyPerformanceVersionActions from '../../state/actions/my-performance-version.action';
 import { ResponsibilitiesState } from '../../state/reducers/responsibilities.reducer';
-import { MyPerformanceState, MyPerformanceData } from '../../state/reducers/my-performance.reducer';
+import { MyPerformanceData } from '../../state/reducers/my-performance.reducer';
 import { RowType } from '../../enums/row-type.enum';
 import { SetRightMyPerformanceTableViewType } from '../../state/actions/view-types.action';
 import { SortingCriteria } from '../../models/sorting-criteria.model';
 import { ViewType } from '../../enums/view-type.enum';
-import * as MyPerformanceFilterActions from '../../state/actions/my-performance-filter.action';
-import * as MyPerformanceVersionActions from '../../state/actions/my-performance-version.action';
 
 // mocks
 import { myPerformanceRightTableData } from '../../models/my-performance-table-data.model.mock';
@@ -44,14 +45,16 @@ export interface HandleElementClickedParameters {
 })
 
 export class MyPerformanceComponent implements OnInit, OnDestroy {
+  public currentUserFullName: string;
   public leftTableViewType: ViewType;
+  public performanceStateVersions$: Observable<MyPerformanceData[]>;
   public roleGroups: Observable<ResponsibilitiesState>;
+  public showLeftBackButton = false;
   public sortingCriteria: Array<SortingCriteria> = [{
     columnType: ColumnType.metricColumn0,
     ascending: false
   }];
   public viewType = ViewType;
-  public showLeftBackButton = false;
 
   // mocks
   public tableHeaderRowLeft: Array<string> = ['PEOPLE', 'DEPLETIONS', 'CTV'];
@@ -77,7 +80,9 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit() {
+    this.currentUserFullName = `${this.userService.model.currentUser.firstName} ${this.userService.model.currentUser.lastName}`;
     this.dateRanges$ = this.store.select(state => state.dateRanges);
+    this.performanceStateVersions$ = this.store.select(state => state.myPerformance.versions);
 
     this.filterStateSubscription = this.store.select(state => state.myPerformanceFilter).subscribe(filterState => {
       this.filterState = filterState;
@@ -102,7 +107,7 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
     });
 
     this.myPerformanceVersionSubscription = this.store.select(state => state.myPerformance.versions)
-      .subscribe((versions: Array<MyPerformanceState>) => {
+      .subscribe((versions: MyPerformanceData[]) => {
         this.showLeftBackButton = versions.length > 0;
     });
 
@@ -116,9 +121,10 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.filterStateSubscription.unsubscribe();
-    this.myPerformanceCurrentSubscription.unsubscribe();
-    this.myPerformanceVersionSubscription.unsubscribe();
+    this.store.dispatch(new MyPerformanceVersionActions.ClearMyPerformanceStateAction());
+    if (this.filterStateSubscription) this.filterStateSubscription.unsubscribe();
+    if (this.myPerformanceCurrentSubscription) this.myPerformanceCurrentSubscription.unsubscribe();
+    if (this.myPerformanceVersionSubscription) this.myPerformanceVersionSubscription.unsubscribe();
   }
 
   public handleSortRows(criteria: SortingCriteria[]): void {
@@ -142,6 +148,7 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
       default:
         if (parameters.leftSide) {
           console.log('clicked on left row:', parameters.row);
+          this.store.dispatch(new MyPerformanceVersionActions.SetMyPerformanceSelectedEntityAction(parameters.row.descriptionRow0));
           this.store.dispatch(new MyPerformanceVersionActions.SaveMyPerformanceStateAction(this.currentState));
 
           if (this.leftTableViewType === ViewType.roleGroups) {
@@ -157,6 +164,14 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
           console.log('clicked on right row:', parameters.row);
         }
     }
+  }
+
+  public handleBreadcrumbEntityClicked(event: BreadcrumbEntityClickedEvent): void {
+    const { trail, entity } = event;
+    const indexOffset = 1;
+    const stepsBack = trail.length - indexOffset - trail.indexOf(entity);
+    if (stepsBack < 1) return;
+    this.store.dispatch(new MyPerformanceVersionActions.RestoreMyPerformanceStateAction(stepsBack));
   }
 
   public filterOptionSelected(event: MyPerformanceFilterEvent): void {

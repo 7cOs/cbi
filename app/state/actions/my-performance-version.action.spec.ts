@@ -25,7 +25,7 @@ describe('Responsibilities Actions', () => {
     });
   });
 
-  describe('FetchResponsibilitiesSuccessAction', () => {
+  describe('RestoreMyPerformanceAction', () => {
     let action: MyPerformanceVersionActions.RestoreMyPerformanceStateAction;
 
     beforeEach(() => {
@@ -37,6 +37,49 @@ describe('Responsibilities Actions', () => {
         .toBe('[My Performance] RESTORE_MY_PERFORMANCE_STATE_ACTION');
       expect(action.type).toBe(MyPerformanceVersionActions.RESTORE_MY_PERFORMANCE_STATE_ACTION);
     });
+
+    it('should have a default payload of 1 if none is provided', () => {
+      expect(action.payload).toBe(1);
+    });
+
+    it('should contain the correct payload when one is provided', () => {
+      const actionPayloadMock = chance.natural();
+      const actionWithPayloadMock = new MyPerformanceVersionActions.RestoreMyPerformanceStateAction(actionPayloadMock);
+      expect(actionWithPayloadMock.payload).toEqual(actionPayloadMock);
+    });
   });
 
+  describe('SetMyPerformanceSelectedEntityAction', () => {
+    let entityNameMock: string;
+    let action: MyPerformanceVersionActions.SetMyPerformanceSelectedEntityAction;
+
+    beforeEach(() => {
+      entityNameMock = chance.string();
+      action = new MyPerformanceVersionActions.SetMyPerformanceSelectedEntityAction(entityNameMock);
+    });
+
+    it('should have the correct type', () => {
+      expect(MyPerformanceVersionActions.SET_MY_PERFORMANCE_SELECTED_ENTITY_ACTION)
+        .toBe('[My Performance] SET_MY_PERFORMANCE_SELECTED_ENTITY_ACTION');
+      expect(action.type).toBe(MyPerformanceVersionActions.SET_MY_PERFORMANCE_SELECTED_ENTITY_ACTION);
+    });
+
+    it('should contain the correct payload', () => {
+      expect(action.payload).toEqual(entityNameMock);
+    });
+  });
+
+  describe('ClearMyPerformanceAction', () => {
+    let action: MyPerformanceVersionActions.ClearMyPerformanceStateAction;
+
+    beforeEach(() => {
+      action = new MyPerformanceVersionActions.ClearMyPerformanceStateAction();
+    });
+
+    it('should have the correct type', () => {
+      expect(MyPerformanceVersionActions.CLEAR_MY_PERFORMANCE_STATE_ACTION)
+        .toBe('[My Performance] CLEAR_MY_PERFORMANCE_STATE_ACTION');
+      expect(action.type).toBe(MyPerformanceVersionActions.CLEAR_MY_PERFORMANCE_STATE_ACTION);
+    });
+  });
 });

@@ -1,8 +1,9 @@
 import { Action } from '@ngrx/store';
 
-import * as initialStateMyPerformanceSaver from './my-performance-version.reducer';
-import * as initialStateResponsibilities from './responsibilities.reducer';
-import * as initialStateViewTypes from './view-types.reducer';
+import { initialState as initialStatePerformanceTotal } from './performance-total.reducer';
+import { initialState as initialStateResponsibilities } from './responsibilities.reducer';
+import { initialState as initialStateViewTypes } from './view-types.reducer';
+import { initialStateVersions } from './my-performance-version.reducer';
 import * as MyPerformanceVersionActions from '../actions/my-performance-version.action';
 import { myPerformanceVersionReducer } from './my-performance-version.reducer';
 import * as PerformanceTotalActions from '../actions/performance-total.action';
@@ -16,6 +17,7 @@ export interface MyPerformanceData {
   performanceTotal?: PerformanceTotalState;
   responsibilities?: ResponsibilitiesState;
   viewType?: ViewTypeState;
+  selectedEntity?: string;
 }
 
 export interface MyPerformanceState {
@@ -25,10 +27,11 @@ export interface MyPerformanceState {
 
 export const initialState: MyPerformanceState = {
   current: {
-    responsibilities: initialStateResponsibilities.initialState,
-    viewType: initialStateViewTypes.initialState
+    responsibilities: initialStateResponsibilities,
+    viewType: initialStateViewTypes,
+    performanceTotal: initialStatePerformanceTotal
   },
-  versions: initialStateMyPerformanceSaver.initialState
+  versions: initialStateVersions
 };
 
 export function myPerformanceReducer(
@@ -45,13 +48,16 @@ export function myPerformanceReducer(
         current: {
           performanceTotal: performanceTotalReducer(state.current.performanceTotal, action as PerformanceTotalActions.Action),
           responsibilities: state.current.responsibilities,
-          viewType: state.current.viewType
+          viewType: state.current.viewType,
+          selectedEntity: state.current.selectedEntity
         },
         versions: state.versions
       };
 
     case MyPerformanceVersionActions.SAVE_MY_PERFORMANCE_STATE_ACTION:
     case MyPerformanceVersionActions.RESTORE_MY_PERFORMANCE_STATE_ACTION:
+    case MyPerformanceVersionActions.SET_MY_PERFORMANCE_SELECTED_ENTITY_ACTION:
+    case MyPerformanceVersionActions.CLEAR_MY_PERFORMANCE_STATE_ACTION:
       return myPerformanceVersionReducer(state, action as MyPerformanceVersionActions.Action);
 
     case ResponsibilitiesActions.FETCH_RESPONSIBILITIES_ACTION:
@@ -64,7 +70,8 @@ export function myPerformanceReducer(
         current: {
           performanceTotal: state.current.performanceTotal,
           responsibilities: responsibilitiesReducer(state.current.responsibilities, action as ResponsibilitiesActions.Action),
-          viewType: state.current.viewType
+          viewType: state.current.viewType,
+          selectedEntity: state.current.selectedEntity
         },
         versions: state.versions
       };
@@ -75,7 +82,8 @@ export function myPerformanceReducer(
         current: {
           performanceTotal: state.current.performanceTotal,
           responsibilities: state.current.responsibilities,
-          viewType: viewTypesReducer(state.current.viewType, action as viewTypesActions.Action)
+          viewType: viewTypesReducer(state.current.viewType, action as viewTypesActions.Action),
+          selectedEntity: state.current.selectedEntity
         },
         versions: state.versions
       };
