@@ -55,18 +55,18 @@ describe('Responsibilities Actions', () => {
 
   describe('FetchResponsibilitiesSuccessAction', () => {
     let action: ResponsibilitiesActions.FetchResponsibilitiesSuccessAction;
-    let roleGroupsMock: GroupedEntities;
+    let groupedEntitiesMock: GroupedEntities;
     let userIdMock: number;
     let responsibilityEntitiesPerformanceMock: EntitiesPerformances[];
     let mockSuccessActionPayload: any;
 
     beforeEach(() => {
-      roleGroupsMock = getGroupedEntitiesMock();
+      groupedEntitiesMock = getGroupedEntitiesMock();
       userIdMock = chance.natural();
       responsibilityEntitiesPerformanceMock = getEntitiesPerformancesMock();
       mockSuccessActionPayload = {
         positionId: userIdMock,
-        responsibilities: roleGroupsMock,
+        responsibilities: groupedEntitiesMock,
         performanceTotals: responsibilityEntitiesPerformanceMock
       };
 

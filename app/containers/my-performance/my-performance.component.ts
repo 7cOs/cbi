@@ -16,7 +16,6 @@ import { MyPerformanceFilterEvent } from '../../models/my-performance-filter.mod
 import { MyPerformanceFilterState } from '../../state/reducers/my-performance-filter.reducer';
 import { MyPerformanceTableDataTransformerService } from '../../services/my-performance-table-data-transformer.service';
 import { MyPerformanceTableRow } from '../../models/my-performance-table-row.model';
-import { ResponsibilitiesState } from '../../state/reducers/responsibilities.reducer';
 import { MyPerformanceState, MyPerformanceEntitiesData } from '../../state/reducers/my-performance.reducer';
 import { RowType } from '../../enums/row-type.enum';
 import { SetRightMyPerformanceTableViewType } from '../../state/actions/view-types.action';
@@ -45,7 +44,6 @@ export interface HandleElementClickedParameters {
 
 export class MyPerformanceComponent implements OnInit, OnDestroy {
   public leftTableViewType: ViewType;
-  public roleGroups: Observable<ResponsibilitiesState>;
   public sortingCriteria: Array<SortingCriteria> = [{
     columnType: ColumnType.metricColumn0,
     ascending: false
@@ -90,16 +88,14 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
         this.leftTableViewType = current.viewType.leftTableViewType;
 
         if (current.responsibilities && current.responsibilities.status === ActionStatus.Fetched) {
-          this.tableData = this.myPerformanceTableDataTransformerService.getLeftTableData( // What about accounts?
+          this.tableData = this.myPerformanceTableDataTransformerService.getLeftTableData(
             current.responsibilities.entitiesPerformances
           );
-        }
 
-        if (current.responsibilities
-          && current.responsibilities.entitiesPerformances
-          && current.responsibilities.status === ActionStatus.Fetched) {
-          this.totalRowData = this.myPerformanceTableDataTransformerService
-            .getTotalRowData(current.responsibilities.entitiesTotalPerformances);
+          if (current.responsibilities.entitiesPerformances) {
+            this.totalRowData = this.myPerformanceTableDataTransformerService
+              .getTotalRowData(current.responsibilities.entitiesTotalPerformances);
+          }
         }
     });
 

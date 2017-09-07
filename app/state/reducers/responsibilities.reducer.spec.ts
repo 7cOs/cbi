@@ -46,19 +46,19 @@ describe('Responsibilities Reducer', () => {
   });
 
   it('should store the payload when a fetch responsibilities is successful', () => {
-    const roleGroupsMock = getGroupedEntitiesMock();
+    const groupedEntitiesMock = getGroupedEntitiesMock();
     const entitiesPerformancesMock = getEntitiesPerformancesMock();
 
     const payloadMock = {
       positionId: positionIdMock,
-      groupedEntities: roleGroupsMock,
+      groupedEntities: groupedEntitiesMock,
       entitiesPerformances: entitiesPerformancesMock
     };
 
     const expectedState = {
       status: ActionStatus.Fetched,
       positionId: positionIdMock,
-      groupedEntities: roleGroupsMock,
+      groupedEntities: groupedEntitiesMock,
       entitiesPerformances: entitiesPerformancesMock,
       entitiesTotalPerformances: initialState.entitiesTotalPerformances
     };
@@ -72,13 +72,13 @@ describe('Responsibilities Reducer', () => {
   });
 
   it('should update responsibilities with the selected role group\'s positions', () => {
-    const mockRoleGroups = getGroupedEntitiesMock();
+    const groupedEntitiesMock = getGroupedEntitiesMock();
     const payload = getEntityPeopleResponsibilitiesMock().peopleType;
 
-    const stateWithRoleGroups = {
+    const stateWithGroupedEntities = {
       status: initialState.status,
       positionId: initialState.positionId,
-      groupedEntities: mockRoleGroups,
+      groupedEntities: groupedEntitiesMock,
       entitiesPerformances: initialState.entitiesPerformances,
       entitiesTotalPerformances: initialState.entitiesTotalPerformances
     };
@@ -87,13 +87,13 @@ describe('Responsibilities Reducer', () => {
       status: initialState.status,
       positionId: initialState.positionId,
       groupedEntities: {
-        [payload]: mockRoleGroups[payload]
+        [payload]: groupedEntitiesMock[payload]
       },
       entitiesPerformances: initialState.entitiesPerformances,
       entitiesTotalPerformances: initialState.entitiesTotalPerformances
     };
 
-    const actualState = responsibilitiesReducer(stateWithRoleGroups, new ResponsibilitiesActions.GetPeopleByRoleGroupAction(payload));
+    const actualState = responsibilitiesReducer(stateWithGroupedEntities, new ResponsibilitiesActions.GetPeopleByRoleGroupAction(payload));
 
     expect(actualState).toEqual(expectedState);
   });

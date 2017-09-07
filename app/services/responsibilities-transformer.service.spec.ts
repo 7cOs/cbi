@@ -21,7 +21,7 @@ describe('Service: ResponsibilitiesTransformerService', () => {
 
     it('should return a collection of formatted Responsibilitiess from a collection of ResponsibilitiesDTOs', () => {
       spyOn(responsibilitiesTransformerService, 'groupPeopleByGroupedEntities').and.callThrough();
-      const expectedRoleGroups: GroupedEntities = {
+      const expectedgroupedEntities: GroupedEntities = {
         'MARKET DEVELOPMENT MANAGER': [{
           positionId: '123',
           employeeId: '1231231',
@@ -49,9 +49,9 @@ describe('Service: ResponsibilitiesTransformerService', () => {
           peopleType: EntityPeopleType['GENERAL MANAGER']
         }]
       };
-      const transformedRoleGroups =
+      const transformedgroupedEntities =
         responsibilitiesTransformerService.groupPeopleByGroupedEntities(mockEntityResponsibilitiesDTOCollection);
-      expect(transformedRoleGroups).toEqual(expectedRoleGroups);
+      expect(transformedgroupedEntities).toEqual(expectedgroupedEntities);
     });
   });
 });

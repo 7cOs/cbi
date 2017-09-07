@@ -23,13 +23,13 @@ import * as ViewTypeActions from '../../state/actions/view-types.action';
 const chance = new Chance();
 
 interface ResponsibilitiesData {
-  roleGroups?: GroupedEntities;
+  groupedEntities?: GroupedEntities;
   viewType?: ViewType;
   entityTypes?: Array<{ type: string, name: string }>;
   entitiesURL?: string;
   positionId?: string;
   filter?: MyPerformanceFilterState;
-  performanceTotals?: Array<EntitiesPerformances>;
+  entitiesPerformances?: Array<EntitiesPerformances>;
 }
 
 @Injectable()
@@ -149,7 +149,7 @@ export class ResponsibilitiesEffects {
         }
 
         return Object.assign({}, responsibilitiesData, {
-          roleGroups: groupedEntities,
+          groupedEntities: groupedEntities,
           viewType: viewType,
           entityTypes: entityTypes,
           entitiesURL: entitiesURL
@@ -157,7 +157,7 @@ export class ResponsibilitiesEffects {
       });
     }
 
-  // See if I can change this function to take an observable and return it if no treatment is necessary
+  // TODO: See if I can change this function to take an observable and return it if no treatment is necessary
   private getPerformanceTotalForGroupedEntities(responsibilitiesData: ResponsibilitiesData)
     : Observable<ResponsibilitiesData> {
     if (responsibilitiesData.viewType === ViewType.roleGroups) {
@@ -166,7 +166,7 @@ export class ResponsibilitiesEffects {
         responsibilitiesData.filter,
         responsibilitiesData.positionId)
       .mergeMap((response: EntitiesPerformancesDTO[]) => {
-        responsibilitiesData.performanceTotals
+        responsibilitiesData.entitiesPerformances
           = this.performanceTotalTransformerService.transformEntityEntitiesTotalPerformancesDTO(response);
         return Observable.of(responsibilitiesData);
       });
@@ -181,10 +181,10 @@ export class ResponsibilitiesEffects {
       || responsibilitiesData.viewType === ViewType.accounts) {
       return this.myPerformanceApiService.getAccountsDistributors(responsibilitiesData.entitiesURL)
         .switchMap((accountsDistributors: Array<EntityDTO>) => {
-        const roleGroups = this.responsibilitiesTransformerService.groupsAccountsDistributors(accountsDistributors);
+        const groupedEntities = this.responsibilitiesTransformerService.groupsAccountsDistributors(accountsDistributors);
 
         // Temporary build fake performance total
-        let performanceTotals = roleGroups['all'].map((entity: EntityResponsibilities) => {
+        let performanceTotals = groupedEntities['all'].map((entity: EntityResponsibilities) => {
           return {
             positionId: entity.positionId,
             name: entity.name,
@@ -198,7 +198,7 @@ export class ResponsibilitiesEffects {
         });
 
         return Observable.of(Object.assign(responsibilitiesData, {
-          roleGroups: roleGroups,
+          groupedEntities: groupedEntities,
           performanceTotals: performanceTotals, // Temporary
         }));
       });
@@ -213,8 +213,8 @@ export class ResponsibilitiesEffects {
       new ViewTypeActions.SetLeftMyPerformanceTableViewType(responsibilitiesData.viewType),
       new ResponsibilitiesActions.FetchResponsibilitiesSuccessAction({
         positionId: responsibilitiesData.positionId,
-        groupedEntities: responsibilitiesData.roleGroups,
-        entitiesPerformances: responsibilitiesData.performanceTotals
+        groupedEntities: responsibilitiesData.groupedEntities,
+        entitiesPerformances: responsibilitiesData.entitiesPerformances
       })
     ]);
   }

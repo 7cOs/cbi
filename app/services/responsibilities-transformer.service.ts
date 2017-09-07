@@ -13,16 +13,16 @@ export class ResponsibilitiesTransformerService {
   constructor() { }
 
   public groupPeopleByGroupedEntities(responsibilities: EntityResponsibilitiesDTO[]): GroupedEntities {
-    return responsibilities.reduce((roleGroups: GroupedEntities, entity: EntityResponsibilitiesDTO) => {
-      if (Array.isArray(roleGroups[entity.description])) {
-        roleGroups[entity.description].push(this.transformEntityResponsibilitiesDTO(entity));
+    return responsibilities.reduce((groupedEntities: GroupedEntities, entity: EntityResponsibilitiesDTO) => {
+      if (Array.isArray(groupedEntities[entity.description])) {
+        groupedEntities[entity.description].push(this.transformEntityResponsibilitiesDTO(entity));
       } else {
-        roleGroups[entity.description] = [
+        groupedEntities[entity.description] = [
           this.transformEntityResponsibilitiesDTO(entity)
         ];
       }
 
-      return roleGroups;
+      return groupedEntities;
     }, {});
   }
 

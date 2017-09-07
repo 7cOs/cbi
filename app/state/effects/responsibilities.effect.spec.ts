@@ -40,7 +40,7 @@ const chance = new Chance();
 
 describe('Responsibilities Effects', () => {
   const positionIdMock = chance.string();
-  const roleGroupsMock: GroupedEntities = getGroupedEntitiesMock();
+  const groupedEntitiesMock: GroupedEntities = getGroupedEntitiesMock();
   const responsibilityEntitiesPerformanceDTOMock = getResponsibilityEntitiesPerformanceDTOMock();
   const responsibilityEntitiesPerformanceMock = getEntitiesPerformancesMock();
   const performanceTotalMock: EntitiesTotalPerformances = getPerformanceTotalMock();
@@ -55,12 +55,12 @@ describe('Responsibilities Effects', () => {
   };
   const responsibilitiesSuccessPayloadMock = {
     positionId: positionIdMock,
-    groupedEntities: roleGroupsMock,
+    groupedEntities: groupedEntitiesMock,
     entitiesPerformances: responsibilityEntitiesPerformanceMock
   };
   const myPerformanceApiServiceMock = {
     getResponsibilities() {
-      return Observable.of({positions: roleGroupsMock});
+      return Observable.of({positions: groupedEntitiesMock});
     },
     getResponsibilitiesPerformanceTotals() {
       return Observable.of(responsibilityEntitiesPerformanceDTOMock);
@@ -71,7 +71,7 @@ describe('Responsibilities Effects', () => {
   };
   const responsibilitiesTransformerServiceMock = {
     groupPeopleByGroupedEntities(mockArgs: any): GroupedEntities {
-      return roleGroupsMock;
+      return groupedEntitiesMock;
     }
   };
   const performanceTotalTransformerServiceMock = {
