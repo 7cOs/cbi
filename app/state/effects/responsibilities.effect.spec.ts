@@ -26,7 +26,7 @@ import { getGroupedEntitiesMock } from '../../models/grouped-entities.model.mock
 import { MetricTypeValue } from '../../enums/metric-type.enum';
 import { MyPerformanceApiService } from '../../services/my-performance-api.service';
 import { MyPerformanceFilterState } from '../reducers/my-performance-filter.reducer';
-import { PerformanceTotalTransformerService } from '../../services/performance-total-transformer.service';
+import { PerformanceTransformerService } from '../../services/performance-transformer.service';
 import { EntitiesTotalPerformances, EntitiesTotalPerformancesDTO } from '../../models/entities-total-performances.model';
 import { PremiseTypeValue } from '../../enums/premise-type.enum';
 import { ResponsibilitiesEffects } from './responsibilities.effect';
@@ -74,12 +74,12 @@ describe('Responsibilities Effects', () => {
       return groupedEntitiesMock;
     }
   };
-  const performanceTotalTransformerServiceMock = {
-    transformEntityEntitiesTotalPerformancesDTO(mockArgs: any): EntitiesPerformances[] {
-      return responsibilityEntitiesPerformanceMock;
-    },
+  const performanceTransformerServiceMock = {
     transformEntitiesTotalPerformancesDTO(mockArgs: any): EntitiesTotalPerformances {
       return performanceTotalMock;
+    },
+    transformEntitiesPerformancesDTO(mockArgs: any): EntitiesPerformances[] {
+      return responsibilityEntitiesPerformanceMock;
     }
   };
 
@@ -101,8 +101,8 @@ describe('Responsibilities Effects', () => {
         useValue: responsibilitiesTransformerServiceMock
       },
       {
-        provide: PerformanceTotalTransformerService,
-        useValue: performanceTotalTransformerServiceMock
+        provide: PerformanceTransformerService,
+        useValue: performanceTransformerServiceMock
       }
     ]
   }));

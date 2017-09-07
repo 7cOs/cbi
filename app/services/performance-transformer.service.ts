@@ -6,7 +6,7 @@ import { EntitiesPerformances, EntitiesPerformancesDTO } from '../models/entitie
 import { UtilService } from './util.service';
 
 @Injectable()
-export class PerformanceTotalTransformerService {
+export class PerformanceTransformerService {
 
   constructor(private utilService: UtilService) { }
 
@@ -18,7 +18,7 @@ export class PerformanceTotalTransformerService {
     });
   }
 
-  public transformEntityEntitiesTotalPerformancesDTO(entities: EntitiesPerformancesDTO[]): EntitiesPerformances[] {
+  public transformEntitiesPerformancesDTO(entities: EntitiesPerformancesDTO[]): EntitiesPerformances[] {
     return entities.map((entity: EntitiesPerformancesDTO) => {
       return {
         positionId: entity.id,

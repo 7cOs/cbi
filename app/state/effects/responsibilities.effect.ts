@@ -12,7 +12,7 @@ import { MyPerformanceApiService } from '../../services/my-performance-api.servi
 import { MyPerformanceFilterState } from '../../state/reducers/my-performance-filter.reducer';
 import { PeopleResponsibilitiesDTO } from '../../models/people-responsibilities-dto.model';
 import { EntitiesTotalPerformancesDTO } from '../../models/entities-total-performances.model';
-import { PerformanceTotalTransformerService } from '../../services/performance-total-transformer.service';
+import { PerformanceTransformerService } from '../../services/performance-transformer.service';
 import { EntitiesPerformances, EntitiesPerformancesDTO } from '../../models/entities-performances.model';
 import { ResponsibilitiesTransformerService } from '../../services/responsibilities-transformer.service';
 import { GroupedEntities } from '../../models/grouped-entities.model';
@@ -38,7 +38,7 @@ export class ResponsibilitiesEffects {
   constructor(
     private actions$: Actions,
     private myPerformanceApiService: MyPerformanceApiService,
-    private performanceTotalTransformerService: PerformanceTotalTransformerService,
+    private performanceTransformerService: PerformanceTransformerService,
     private responsibilitiesTransformerService: ResponsibilitiesTransformerService
   ) { }
 
@@ -69,7 +69,7 @@ export class ResponsibilitiesEffects {
 
         return this.myPerformanceApiService.getResponsibilitiesPerformanceTotals(entities, filter)
           .switchMap((response: EntitiesPerformancesDTO[]) => {
-            const entityPerformance = this.performanceTotalTransformerService.transformEntityEntitiesTotalPerformancesDTO(response);
+            const entityPerformance = this.performanceTransformerService.transformEntitiesPerformancesDTO(response);
 
             return Observable.from([
               new ResponsibilitiesActions.SetTableRowPerformanceTotal(entitiesTotalPerformances),
@@ -103,7 +103,7 @@ export class ResponsibilitiesEffects {
 
         return this.myPerformanceApiService.getPerformanceTotal(positionId, filter)
           .map((response: EntitiesTotalPerformancesDTO) => {
-            const performanceTotal = this.performanceTotalTransformerService.transformEntitiesTotalPerformancesDTO(response);
+            const performanceTotal = this.performanceTransformerService.transformEntitiesTotalPerformancesDTO(response);
             return new ResponsibilitiesActions.FetchPerformanceTotalSuccessAction(performanceTotal);
           })
           .catch((err: Error) => Observable.of(new ResponsibilitiesActions.FetchPerformanceTotalFailureAction(err)));
@@ -167,7 +167,7 @@ export class ResponsibilitiesEffects {
         responsibilitiesData.positionId)
       .mergeMap((response: EntitiesPerformancesDTO[]) => {
         responsibilitiesData.entitiesPerformances
-          = this.performanceTotalTransformerService.transformEntityEntitiesTotalPerformancesDTO(response);
+          = this.performanceTransformerService.transformEntitiesPerformancesDTO(response);
         return Observable.of(responsibilitiesData);
       });
     } else {
