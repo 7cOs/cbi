@@ -4,7 +4,6 @@ import { initialState as initialStatePerformanceTotal } from './performance-tota
 import { initialState as initialStateResponsibilities } from './responsibilities.reducer';
 import { initialState as initialStateViewTypes } from './view-types.reducer';
 import { initialStateVersions } from './my-performance-version.reducer';
-import * as MyPerformanceActions from '../actions/my-performance.action';
 import * as MyPerformanceVersionActions from '../actions/my-performance-version.action';
 import { myPerformanceVersionReducer } from './my-performance-version.reducer';
 import * as PerformanceTotalActions from '../actions/performance-total.action';
