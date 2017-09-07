@@ -12,7 +12,7 @@ describe('DateRangeComponent', () => {
   let componentInstance: DateRangeComponent;
   let daterangeElement: HTMLElement;
 
-  const mockStore = {
+  const storeMock = {
     select: jasmine.createSpy('select').and.returnValue(Observable.of(dateRangeStateMock))
   };
 
@@ -23,7 +23,7 @@ describe('DateRangeComponent', () => {
         DateRangeComponent,
         {
           provide: Store,
-          useValue: mockStore
+          useValue: storeMock
         }
       ]
     });
