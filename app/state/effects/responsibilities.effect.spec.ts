@@ -70,7 +70,7 @@ describe('Responsibilities Effects', () => {
     }
   };
   const responsibilitiesTransformerServiceMock = {
-    groupPeopleByRoleGroups(mockArgs: any): GroupedEntities {
+    groupPeopleByGroupedEntities(mockArgs: any): GroupedEntities {
       return roleGroupsMock;
     }
   };
@@ -209,8 +209,9 @@ describe('Responsibilities Effects', () => {
               new FetchResponsibilityEntityPerformanceSuccess(responsibilityEntitiesPerformanceMock),
               new SetLeftMyPerformanceTableViewType(fetchEntityPerformancePayloadMock.viewType)
             ]);
+
+            done();
           }
-          done();
         });
       });
     });

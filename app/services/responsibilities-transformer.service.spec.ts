@@ -12,7 +12,7 @@ describe('Service: ResponsibilitiesTransformerService', () => {
     ]
   }));
 
-  describe('#groupPeopleByRoleGroups', () => {
+  describe('#groupPeopleByGroupedEntities', () => {
     let responsibilitiesTransformerService: ResponsibilitiesTransformerService;
     beforeEach(inject([ ResponsibilitiesTransformerService ],
       (_responsibilitiesTransformerService: ResponsibilitiesTransformerService) => {
