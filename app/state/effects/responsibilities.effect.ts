@@ -183,7 +183,7 @@ export class ResponsibilitiesEffects {
         const groupedEntities = this.responsibilitiesTransformerService.groupsAccountsDistributors(accountsDistributors);
 
         // Temporary build fake performance total
-        let performanceTotals = groupedEntities['all'].map((entity: EntityResponsibilities) => {
+        let entitiesPerformances = groupedEntities['all'].map((entity: EntityResponsibilities) => {
           return {
             positionId: entity.positionId,
             name: entity.name,
@@ -198,7 +198,7 @@ export class ResponsibilitiesEffects {
 
         return Observable.of(Object.assign(responsibilitiesData, {
           groupedEntities: groupedEntities,
-          performanceTotals: performanceTotals, // Temporary
+          entitiesPerformances: entitiesPerformances, // Temporary
         }));
       });
     } else {
