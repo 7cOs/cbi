@@ -11,12 +11,12 @@ export class PerformanceTransformerService {
   constructor(private utilService: UtilService) { }
 
   public transformEntitiesTotalPerformancesDTO(performanceDTO: EntitiesTotalPerformancesDTO): EntitiesTotalPerformances {
-    return Object.assign({}, performanceDTO, {
+    return {
       total: parseInt((performanceDTO.total).toFixed(), 10),
       totalYearAgo: this.utilService.getYearAgoDelta(performanceDTO.total, performanceDTO.totalYearAgo),
       totalYearAgoPercent: this.utilService.getYearAgoPercent(performanceDTO.total, performanceDTO.totalYearAgo),
       contributionToVolume: 0
-    });
+    };
   }
 
   public transformEntitiesPerformancesDTO(entities: EntitiesPerformancesDTO[]): EntitiesPerformances[] {
