@@ -12,7 +12,11 @@ export class UtilService {
         : 0;
   }
 
+  public getYearAgoDelta(total: number, totalYearAgo: number): number {
+    return Math.round(total - totalYearAgo);
+  }
+
   public getYearAgoPercent(total: number, totalYearAgo: number): number {
-    return parseFloat((total / totalYearAgo).toFixed(1));
+    return parseFloat((((total / totalYearAgo) - 1) * 100).toFixed(1));
   }
 }
