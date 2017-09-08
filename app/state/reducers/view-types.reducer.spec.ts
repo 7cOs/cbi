@@ -1,5 +1,5 @@
 import { getViewTypeMock } from '../../enums/view-type.enum.mock';
-import { initialState, viewTypesReducer, ViewTypeState } from './view-types.reducer';
+import { initialState, viewTypesReducer } from './view-types.reducer';
 import { ViewType } from '../../enums/view-type.enum';
 import * as ViewTypeActions from '../actions/view-types.action';
 
