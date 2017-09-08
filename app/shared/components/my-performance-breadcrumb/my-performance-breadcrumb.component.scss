@@ -20,14 +20,22 @@
   color: $blue; 
   cursor: pointer;
 
+  &:hover {
+    color: $dark-blue-5;
+  }
+
   &::after {
-    color: #000;
+    color: $black;
     content: ' > ';
   }
 
   &:nth-last-child(1) {
     color: #000;
     cursor: default;
+
+    &:hover {
+      color: $black;
+    }
 
     &::after {
       content: '';
