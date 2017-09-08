@@ -5,15 +5,18 @@ import { DateRangeTimePeriodValue } from '../../enums/date-range-time-period.enu
 import { DistributionTypeValue } from '../../enums/distribution-type.enum';
 import { EntityPeopleType } from '../../enums/entity-responsibilities.enum';
 import { FetchResponsibilityEntitiesPerformancePayload } from './responsibilities.action';
-import { getEntityPeopleResponsibilitiesMock,
-         getResponsibilityEntitiesPerformanceMock } from '../../models/entity-responsibilities.model.mock';
+import { getEntitiesPerformancesMock } from '../../models/entities-performances.model.mock';
+import { getEntityPeopleResponsibilitiesMock } from '../../models/entity-responsibilities.model.mock';
+import { getEntitiesTotalPerformancesMock } from '../../models/entities-total-performances.model.mock';
 import { getMyPerformanceTableRowMock } from '../../models/my-performance-table-row.model.mock';
-import { getRoleGroupsMock } from '../../models/role-groups.model.mock';
+import { getGroupedEntitiesMock } from '../../models/grouped-entities.model.mock';
 import { MetricTypeValue } from '../../enums/metric-type.enum';
 import { MyPerformanceFilterState } from '../reducers/my-performance-filter.reducer';
+import { MyPerformanceTableRow } from '../../models/my-performance-table-row.model';
+import { EntitiesTotalPerformances } from '../../models/entities-total-performances.model';
 import { PremiseTypeValue } from '../../enums/premise-type.enum';
-import { ResponsibilityEntityPerformance } from '../../models/entity-responsibilities.model';
-import { RoleGroups } from '../../models/role-groups.model';
+import { EntitiesPerformances } from '../../models/entities-performances.model';
+import { GroupedEntities } from '../../models/grouped-entities.model';
 import { ViewType } from '../../enums/view-type.enum';
 import * as ResponsibilitiesActions from './responsibilities.action';
 
@@ -52,18 +55,18 @@ describe('Responsibilities Actions', () => {
 
   describe('FetchResponsibilitiesSuccessAction', () => {
     let action: ResponsibilitiesActions.FetchResponsibilitiesSuccessAction;
-    let roleGroupsMock: RoleGroups;
+    let groupedEntitiesMock: GroupedEntities;
     let userIdMock: number;
-    let responsibilityEntitiesPerformanceMock: ResponsibilityEntityPerformance[];
+    let responsibilityEntitiesPerformanceMock: EntitiesPerformances[];
     let mockSuccessActionPayload: any;
 
     beforeEach(() => {
-      roleGroupsMock = getRoleGroupsMock();
+      groupedEntitiesMock = getGroupedEntitiesMock();
       userIdMock = chance.natural();
-      responsibilityEntitiesPerformanceMock = getResponsibilityEntitiesPerformanceMock();
+      responsibilityEntitiesPerformanceMock = getEntitiesPerformancesMock();
       mockSuccessActionPayload = {
         positionId: userIdMock,
-        responsibilities: roleGroupsMock,
+        responsibilities: groupedEntitiesMock,
         performanceTotals: responsibilityEntitiesPerformanceMock
       };
 
@@ -124,7 +127,7 @@ describe('Responsibilities Actions', () => {
       entityType: EntityPeopleType['GENERAL MANAGER'],
       entities: [getEntityPeopleResponsibilitiesMock()],
       filter: performanceFilterStateMock,
-      performanceTotal: getMyPerformanceTableRowMock(1)[0],
+      entitiesTotalPerformances: getMyPerformanceTableRowMock(1)[0],
       viewType: ViewType.people
     };
     let action: ResponsibilitiesActions.FetchResponsibilityEntityPerformance;
@@ -145,7 +148,7 @@ describe('Responsibilities Actions', () => {
   });
 
   describe('FetchResponsibilityEntityPerformanceSuccess', () => {
-    const payloadMock: ResponsibilityEntityPerformance[] = getResponsibilityEntitiesPerformanceMock();
+    const payloadMock: EntitiesPerformances[] = getEntitiesPerformancesMock();
     let action: ResponsibilitiesActions.FetchResponsibilityEntityPerformanceSuccess;
 
     beforeEach(() => {
@@ -160,6 +163,86 @@ describe('Responsibilities Actions', () => {
 
     it('should contain the mock payload', () => {
       expect(action.payload).toEqual(payloadMock);
+    });
+  });
+
+  describe('Fetch Performance Total Action', () => {
+    const positionIdMock: string = chance.string();
+    let action: ResponsibilitiesActions.FetchPerformanceTotalAction;
+
+    beforeEach(() => {
+      action = new ResponsibilitiesActions.FetchPerformanceTotalAction({
+        positionId: positionIdMock,
+        filter: performanceFilterStateMock
+      });
+    });
+
+    it('should be the correct type', () => {
+      expect(ResponsibilitiesActions.FETCH_PERFORMANCE_TOTAL_ACTION).toBe('[Performance Total] FETCH_PERFORMANCE_TOTAL_ACTION');
+      expect(action.type).toBe(ResponsibilitiesActions.FETCH_PERFORMANCE_TOTAL_ACTION);
+    });
+
+    it('should contain the correct payload', () => {
+      expect(action.payload).toEqual({
+        positionId: positionIdMock,
+        filter: performanceFilterStateMock
+      });
+    });
+  });
+
+  describe('Fetch Performance Total Success Action', () => {
+    const performanceTotalMock: EntitiesTotalPerformances = getEntitiesTotalPerformancesMock();
+    let action: ResponsibilitiesActions.FetchPerformanceTotalSuccessAction;
+
+    beforeEach(() => {
+      action = new ResponsibilitiesActions.FetchPerformanceTotalSuccessAction(performanceTotalMock);
+    });
+
+    it('should be the correct type', () => {
+      expect(ResponsibilitiesActions.FETCH_PERFORMANCE_TOTAL_SUCCESS_ACTION)
+        .toBe('[Performance Total] FETCH_PERFORMANCE_TOTAL_SUCCESS_ACTION');
+      expect(action.type).toBe(ResponsibilitiesActions.FETCH_PERFORMANCE_TOTAL_SUCCESS_ACTION);
+    });
+
+    it('should contain the correct payload', () => {
+      expect(action.payload).toEqual(performanceTotalMock);
+    });
+  });
+
+  describe('Fetch Performance Total Failure Action', () => {
+    const errorMock: Error = new Error(chance.string());
+    let action: ResponsibilitiesActions.FetchPerformanceTotalFailureAction;
+
+    beforeEach(() => {
+      action = new ResponsibilitiesActions.FetchPerformanceTotalFailureAction(errorMock);
+    });
+
+    it('should be the correct type', () => {
+      expect(ResponsibilitiesActions.FETCH_PERFORMANCE_TOTAL_FAILURE_ACTION)
+        .toBe('[Performance Total] FETCH_PERFORMANCE_TOTAL_FAILURE_ACTION');
+      expect(action.type).toBe(ResponsibilitiesActions.FETCH_PERFORMANCE_TOTAL_FAILURE_ACTION);
+    });
+
+    it('should contain the correct payload', () => {
+      expect(action.payload).toBe(errorMock);
+    });
+  });
+
+  describe('Set Table Row Performance Total Action', () => {
+    const tableRowMock: MyPerformanceTableRow = getMyPerformanceTableRowMock(1)[0];
+    let action: ResponsibilitiesActions.SetTableRowPerformanceTotal;
+
+    beforeEach(() => {
+      action = new ResponsibilitiesActions.SetTableRowPerformanceTotal(tableRowMock);
+    });
+
+    it('should be the correct type', () => {
+      expect(ResponsibilitiesActions.SET_TABLE_ROW_PERFORMANCE_TOTAL).toBe('[Performance Total] SET_TABLE_ROW_PERFORMANCE_TOTAL');
+      expect(action.type).toBe(ResponsibilitiesActions.SET_TABLE_ROW_PERFORMANCE_TOTAL);
+    });
+
+    it('should contain the correct payload', () => {
+      expect(action.payload).toEqual(tableRowMock);
     });
   });
 });

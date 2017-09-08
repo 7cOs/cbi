@@ -1,10 +1,10 @@
-export interface PerformanceTotalDTO {
+export interface EntitiesTotalPerformancesDTO {
   total: number;
   totalYearAgo: number;
   contributionToVolume?: number;
 }
 
-export interface PerformanceTotal {
+export interface EntitiesTotalPerformances {
   total: number;
   totalYearAgo: number;
   totalYearAgoPercent: number;

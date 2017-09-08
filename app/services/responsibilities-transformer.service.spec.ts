@@ -1,9 +1,9 @@
 import { inject, TestBed } from '@angular/core/testing';
 
 import { EntityPeopleType } from '../enums/entity-responsibilities.enum';
-import { mockEntityResponsibilitiesDTOCollection } from '../models/entity-responsibilities-dto.model.mock';
+import { mockEntityResponsibilitiesDTOCollection } from '../models/entity-responsibilities.model.mock';
 import { ResponsibilitiesTransformerService } from './responsibilities-transformer.service';
-import { RoleGroups } from '../models/role-groups.model';
+import { GroupedEntities } from '../models/grouped-entities.model';
 
 describe('Service: ResponsibilitiesTransformerService', () => {
   beforeEach(() => TestBed.configureTestingModule({
@@ -12,7 +12,7 @@ describe('Service: ResponsibilitiesTransformerService', () => {
     ]
   }));
 
-  describe('#groupPeopleByRoleGroups', () => {
+  describe('#groupPeopleByGroupedEntities', () => {
     let responsibilitiesTransformerService: ResponsibilitiesTransformerService;
     beforeEach(inject([ ResponsibilitiesTransformerService ],
       (_responsibilitiesTransformerService: ResponsibilitiesTransformerService) => {
@@ -20,10 +20,10 @@ describe('Service: ResponsibilitiesTransformerService', () => {
     }));
 
     it('should return a collection of formatted Responsibilitiess from a collection of ResponsibilitiesDTOs', () => {
-      spyOn(responsibilitiesTransformerService, 'groupPeopleByRoleGroups').and.callThrough();
-      const expectedRoleGroups: RoleGroups = {
+      spyOn(responsibilitiesTransformerService, 'groupPeopleByGroupedEntities').and.callThrough();
+      const expectedgroupedEntities: GroupedEntities = {
         'MARKET DEVELOPMENT MANAGER': [{
-          id: 123,
+          positionId: '123',
           employeeId: '1231231',
           name: 'Joel Cummins',
           description: 'MARKET DEVELOPMENT MANAGER',
@@ -31,7 +31,7 @@ describe('Service: ResponsibilitiesTransformerService', () => {
           hierarchyType: 'SALES_HIER',
           peopleType: EntityPeopleType['MARKET DEVELOPMENT MANAGER']
         }, {
-          id: 456,
+          positionId: '456',
           employeeId: '4564561',
           name: 'Andy Farag',
           description: 'MARKET DEVELOPMENT MANAGER',
@@ -40,7 +40,7 @@ describe('Service: ResponsibilitiesTransformerService', () => {
           peopleType: EntityPeopleType['MARKET DEVELOPMENT MANAGER']
         }],
         'GENERAL MANAGER': [{
-          id: 789,
+          positionId: '789',
           employeeId: '7897891',
           name: 'Ryan Stasik',
           description: 'GENERAL MANAGER',
@@ -49,9 +49,9 @@ describe('Service: ResponsibilitiesTransformerService', () => {
           peopleType: EntityPeopleType['GENERAL MANAGER']
         }]
       };
-      const transformedRoleGroups =
-        responsibilitiesTransformerService.groupPeopleByRoleGroups(mockEntityResponsibilitiesDTOCollection);
-      expect(transformedRoleGroups).toEqual(expectedRoleGroups);
+      const transformedgroupedEntities =
+        responsibilitiesTransformerService.groupPeopleByGroupedEntities(mockEntityResponsibilitiesDTOCollection);
+      expect(transformedgroupedEntities).toEqual(expectedgroupedEntities);
     });
   });
 });

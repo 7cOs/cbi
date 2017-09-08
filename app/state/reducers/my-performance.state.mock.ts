@@ -1,27 +1,22 @@
 import { ActionStatus } from '../../enums/action-status.enum';
-import { getResponsibilityEntitiesPerformanceMock } from '../../models/entity-responsibilities.model.mock';
-import { getPerformanceTotalMock } from '../../models/performance-total.model.mock';
-import { getRoleGroupsMock } from '../../models/role-groups.model.mock';
+// tslint:disable-next-line:no-unused-variable
+import { EntitiesTotalPerformances } from '../../models/entities-total-performances.model';
+import { getEntitiesPerformancesMock } from '../../models/entities-performances.model.mock';
+import { getEntitiesTotalPerformancesMock } from '../../models/entities-total-performances.model.mock';
+import { getGroupedEntitiesMock } from '../../models/grouped-entities.model.mock';
 // tslint:disable-next-line:no-unused-variable
 import { getViewTypeMock } from '../../enums/view-type.enum.mock';
-import { MyPerformanceData, MyPerformanceState } from './my-performance.reducer';
-import { PerformanceTotalState } from './performance-total.reducer';
+import { MyPerformanceEntitiesData, MyPerformanceState } from './my-performance.reducer';
 import { ResponsibilitiesState } from './responsibilities.reducer';
 import { ViewType } from '../../enums/view-type.enum';
 import { ViewTypeState } from './view-types.reducer';
 
-export function getPerformanceTotalStateMock(): PerformanceTotalState {
-  return {
-    status: ActionStatus.Fetched,
-    performanceTotal: getPerformanceTotalMock()
-  };
-}
-
 export function getResponsibilitesStateMock(): ResponsibilitiesState {
   return {
-    responsibilities: getRoleGroupsMock(),
-    performanceTotals: getResponsibilityEntitiesPerformanceMock(),
-    positionId: chance.natural(),
+    groupedEntities: getGroupedEntitiesMock(),
+    entitiesPerformances: getEntitiesPerformancesMock(),
+    entitiesTotalPerformances: getEntitiesTotalPerformancesMock(),
+    positionId: chance.string(),
     status: ActionStatus.Fetched
   };
 }
@@ -33,10 +28,9 @@ export function getViewTypeStateMock(): ViewTypeState {
   };
 }
 
-export function getMyPerformanceDataMock(): MyPerformanceData {
+export function getMyPerformanceEntitiesDataMock(): MyPerformanceEntitiesData {
   return {
     responsibilities: getResponsibilitesStateMock(),
-    performanceTotal: getPerformanceTotalStateMock(),
     viewType: getViewTypeStateMock(),
     selectedEntity: chance.string()
   };
@@ -44,11 +38,11 @@ export function getMyPerformanceDataMock(): MyPerformanceData {
 
 export function getMyPerformanceStateMock(): MyPerformanceState  {
   const performanceStateMock = {
-    current: getMyPerformanceDataMock(),
-    versions: <MyPerformanceData[]>
+    current: getMyPerformanceEntitiesDataMock(),
+    versions: <MyPerformanceEntitiesData[]>
               Array(chance.natural({min: 0, max: 9}))
               .fill('')
-              .map(element => getMyPerformanceDataMock())
+              .map(element => getMyPerformanceEntitiesDataMock())
   };
 
   return performanceStateMock;

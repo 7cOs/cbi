@@ -1,7 +1,7 @@
-import { MyPerformanceData, MyPerformanceState, initialState } from './my-performance.reducer';
+import { MyPerformanceEntitiesData, MyPerformanceState, initialState } from './my-performance.reducer';
 import * as MyPerformanceVersionActions from '../actions/my-performance-version.action';
 
-export const initialStateVersions: Array<MyPerformanceData> = Array<MyPerformanceData>();
+export const initialStateVersions: Array<MyPerformanceEntitiesData> = Array<MyPerformanceEntitiesData>();
 
 export function myPerformanceVersionReducer(
   state: MyPerformanceState,
@@ -32,7 +32,6 @@ export function myPerformanceVersionReducer(
     case MyPerformanceVersionActions.SET_MY_PERFORMANCE_SELECTED_ENTITY_ACTION:
       return {
         current: {
-          performanceTotal: state.current.performanceTotal,
           responsibilities: state.current.responsibilities,
           viewType: state.current.viewType,
           selectedEntity: action.payload
