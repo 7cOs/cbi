@@ -76,7 +76,7 @@ export function responsibilitiesReducer(
       return Object.assign({}, state, {
         status: ActionStatus.Fetched,
         entitiesTotalPerformances: action.payload
-      }); // TODO: Make sure that we are setting the flag to fetched only when we should. Maybe that should be a different action? YEAH!
+      });
 
     case ResponsibilitiesActions.FETCH_PERFORMANCE_TOTAL_FAILURE_ACTION:
       return Object.assign({}, state, {

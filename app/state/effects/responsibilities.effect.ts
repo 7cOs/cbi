@@ -157,7 +157,6 @@ export class ResponsibilitiesEffects {
       });
     }
 
-  // TODO: See if I can change this function to take an observable and return it if no treatment is necessary
   private getPerformanceTotalForGroupedEntities(responsibilitiesData: ResponsibilitiesData)
     : Observable<ResponsibilitiesData> {
     if (responsibilitiesData.viewType === ViewType.roleGroups) {

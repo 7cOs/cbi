@@ -1,5 +1,5 @@
 import { EntitiesPerformances, EntitiesPerformancesDTO } from '../models/entities-performances.model';
-import { getEntitiesTotalPerformancesDTOMock, getEntitiesTotalPerformancesMock } from '../models/entities-total-performances.model.mock'; // TODO: rn
+import { getEntitiesTotalPerformancesMock, getEntitiesTotalPerformancesDTOMock } from '../models/entities-total-performances.model.mock';
 
 export function getResponsibilityEntitiesPerformanceDTOMock(): EntitiesPerformancesDTO[] {
   return [
