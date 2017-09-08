@@ -1,7 +1,6 @@
 import { ActionStatus } from '../../../enums/action-status.enum';
 import { AppState } from '../../../state/reducers/root.reducer';
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
-import { DateRangesState } from '../../../state/reducers/date-ranges.reducer';
 import { DateRangeTimePeriod } from '../../../enums/date-range-time-period.enum';
 import { Subscription } from 'rxjs';
 import { Store } from '@ngrx/store';

@@ -3,7 +3,6 @@ import { inject, TestBed } from '@angular/core/testing';
 import { getEntitiesTotalPerformancesMock } from '../models/entities-total-performances.model.mock';
 import { MyPerformanceTableDataTransformerService } from './my-performance-table-data-transformer.service';
 import { getEntitiesPerformancesMock } from '../models/entities-performances.model.mock';
-import { MyPerformanceTableRow } from '../models/my-performance-table-row.model';
 import { EntitiesTotalPerformances } from '../models/entities-total-performances.model';
 import { EntitiesPerformances } from '../models/entities-performances.model';
 
