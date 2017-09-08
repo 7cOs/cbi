@@ -36,11 +36,17 @@ describe('My Performance Reducer', () => {
 
   it('should update the current state when a restore action is dispatched', () => {
     const savedObject = {
-      responsibilities: {
+      groupedEntities: {
         status: ActionStatus.Fetched,
-        positionId: chance.integer(),
-        responsibilities: chance.string(),
-        performanceTotals: [] as any
+        positionId: chance.string(),
+        groupedEntities: chance.string() as any,
+        entitiesPerformances: [] as any,
+        entitiesTotalPerformances: {
+          total: 0,
+          totalYearAgo: 0,
+          totalYearAgoPercent: 0,
+          contributionToVolume: 0
+        }
       }
     };
 
@@ -55,7 +61,6 @@ describe('My Performance Reducer', () => {
     const beforeState = getMyPerformanceStateMock();
     const expectedState = {
       current: {
-        performanceTotal: beforeState.current.performanceTotal,
         responsibilities: beforeState.current.responsibilities,
         viewType: beforeState.current.viewType,
         selectedEntity: entityNameMock

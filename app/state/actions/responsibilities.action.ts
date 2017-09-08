@@ -1,24 +1,25 @@
 import { Action } from '@ngrx/store';
 
+import { EntitiesPerformances } from '../../models/entities-performances.model';
+import { EntitiesTotalPerformances } from '../../models/entities-total-performances.model';
 import { EntityPeopleType } from '../../enums/entity-responsibilities.enum';
 import { EntityResponsibilities } from '../../models/entity-responsibilities.model';
+import { GroupedEntities } from '../../models/grouped-entities.model';
 import { MyPerformanceFilterState } from '../../state/reducers/my-performance-filter.reducer';
 import { MyPerformanceTableRow } from '../../models/my-performance-table-row.model';
-import { ResponsibilityEntityPerformance } from '../../models/entity-responsibilities.model';
-import { RoleGroups } from '../../models/role-groups.model';
 import { ViewType } from '../../enums/view-type.enum';
 
 export interface FetchResponsibilitiesSuccessPayload {
-  positionId: number;
-  responsibilities: RoleGroups;
-  performanceTotals: ResponsibilityEntityPerformance[];
+  positionId: string;
+  groupedEntities: GroupedEntities;
+  entitiesPerformances: EntitiesPerformances[];
 }
 
 export interface FetchResponsibilityEntitiesPerformancePayload {
   entityType: EntityPeopleType;
   entities: EntityResponsibilities[];
   filter: MyPerformanceFilterState;
-  performanceTotal: MyPerformanceTableRow;
+  entitiesTotalPerformances: MyPerformanceTableRow;
   viewType: ViewType;
 }
 
@@ -26,7 +27,7 @@ export const FETCH_RESPONSIBILITIES_ACTION = '[Responsibilities] FETCH_RESPONSIB
 export class FetchResponsibilitiesAction implements Action {
   readonly type = FETCH_RESPONSIBILITIES_ACTION;
 
-  constructor(public payload: { positionId: number, filter: MyPerformanceFilterState }) { }
+  constructor(public payload: { positionId: string, filter: MyPerformanceFilterState }) { }
 }
 
 export const FETCH_RESPONSIBILITIES_SUCCESS_ACTION = '[Responsibilities] FETCH_RESPONSIBILITIES_SUCCESS_ACTION';
@@ -54,7 +55,7 @@ export const FETCH_RESPONSIBILITY_ENTITY_PERFORMANCE_SUCCESS = '[Responsibilitie
 export class FetchResponsibilityEntityPerformanceSuccess implements Action {
   readonly type = FETCH_RESPONSIBILITY_ENTITY_PERFORMANCE_SUCCESS;
 
-  constructor(public payload: ResponsibilityEntityPerformance[]) { }
+  constructor(public payload: EntitiesPerformances[]) { }
 }
 
 export const GET_PEOPLE_BY_ROLE_GROUP_ACTION = '[Responsibilities] GET_PEOPLE_BY_ROLE_GROUP_ACTION';
@@ -64,10 +65,42 @@ export class GetPeopleByRoleGroupAction implements Action {
   constructor(public payload: EntityPeopleType) { }
 }
 
+export const FETCH_PERFORMANCE_TOTAL_ACTION = '[Performance Total] FETCH_PERFORMANCE_TOTAL_ACTION';
+export class FetchPerformanceTotalAction implements Action {
+  readonly type = FETCH_PERFORMANCE_TOTAL_ACTION;
+
+  constructor(public payload: { positionId: string, filter: MyPerformanceFilterState }) { }
+}
+
+export const FETCH_PERFORMANCE_TOTAL_SUCCESS_ACTION = '[Performance Total] FETCH_PERFORMANCE_TOTAL_SUCCESS_ACTION';
+export class FetchPerformanceTotalSuccessAction implements Action {
+  readonly type = FETCH_PERFORMANCE_TOTAL_SUCCESS_ACTION;
+
+  constructor(public payload: EntitiesTotalPerformances) { }
+}
+
+export const FETCH_PERFORMANCE_TOTAL_FAILURE_ACTION = '[Performance Total] FETCH_PERFORMANCE_TOTAL_FAILURE_ACTION';
+export class FetchPerformanceTotalFailureAction implements Action {
+  readonly type = FETCH_PERFORMANCE_TOTAL_FAILURE_ACTION;
+
+  constructor(public payload: Error) { }
+}
+
+export const SET_TABLE_ROW_PERFORMANCE_TOTAL = '[Performance Total] SET_TABLE_ROW_PERFORMANCE_TOTAL';
+export class SetTableRowPerformanceTotal implements Action {
+  readonly type = SET_TABLE_ROW_PERFORMANCE_TOTAL;
+
+  constructor(public payload: MyPerformanceTableRow) { }
+}
+
 export type Action
   = FetchResponsibilitiesAction
   | FetchResponsibilitiesSuccessAction
   | FetchResponsibilitiesFailureAction
   | GetPeopleByRoleGroupAction
   | FetchResponsibilityEntityPerformance
-  | FetchResponsibilityEntityPerformanceSuccess;
+  | FetchResponsibilityEntityPerformanceSuccess
+  | FetchPerformanceTotalAction
+  | FetchPerformanceTotalSuccessAction
+  | FetchPerformanceTotalFailureAction
+  | SetTableRowPerformanceTotal;

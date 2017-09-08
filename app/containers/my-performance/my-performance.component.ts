@@ -18,9 +18,9 @@ import { MyPerformanceFilterEvent } from '../../models/my-performance-filter.mod
 import { MyPerformanceFilterState } from '../../state/reducers/my-performance-filter.reducer';
 import { MyPerformanceTableDataTransformerService } from '../../services/my-performance-table-data-transformer.service';
 import { MyPerformanceTableRow } from '../../models/my-performance-table-row.model';
+import { MyPerformanceEntitiesData } from '../../state/reducers/my-performance.reducer';
 import * as MyPerformanceVersionActions from '../../state/actions/my-performance-version.action';
 import { ResponsibilitiesState } from '../../state/reducers/responsibilities.reducer';
-import { MyPerformanceData } from '../../state/reducers/my-performance.reducer';
 import { RowType } from '../../enums/row-type.enum';
 import { SetRightMyPerformanceTableViewType } from '../../state/actions/view-types.action';
 import { SortingCriteria } from '../../models/sorting-criteria.model';
@@ -29,7 +29,7 @@ import { ViewType } from '../../enums/view-type.enum';
 // mocks
 import { myPerformanceRightTableData } from '../../models/my-performance-table-data.model.mock';
 
-const CORPORATE_USER_POSITION_ID = 0;
+const CORPORATE_USER_POSITION_ID = '0';
 
 export interface HandleElementClickedParameters {
   leftSide: boolean;
@@ -47,7 +47,7 @@ export interface HandleElementClickedParameters {
 export class MyPerformanceComponent implements OnInit, OnDestroy {
   public currentUserFullName: string;
   public leftTableViewType: ViewType;
-  public performanceStateVersions$: Observable<MyPerformanceData[]>;
+  public performanceStateVersions$: Observable<MyPerformanceEntitiesData[]>;
   public roleGroups: Observable<ResponsibilitiesState>;
   public showLeftBackButton = false;
   public sortingCriteria: Array<SortingCriteria> = [{
@@ -66,7 +66,7 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
   public totalRowData: MyPerformanceTableRow;
   public showOpportunities: boolean = true;
 
-  private currentState: MyPerformanceData;
+  private currentState: MyPerformanceEntitiesData;
   private dateRanges$: Observable<DateRangesState>;
   private filterState: MyPerformanceFilterState;
   private filterStateSubscription: Subscription;
@@ -90,30 +90,28 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
 
     this.myPerformanceCurrentSubscription = this.store
       .select(state => state.myPerformance.current)
-      .subscribe((current: MyPerformanceData) => {
+      .subscribe((current: MyPerformanceEntitiesData) => {
         this.currentState = current;
         this.leftTableViewType = current.viewType.leftTableViewType;
 
         if (current.responsibilities && current.responsibilities.status === ActionStatus.Fetched) {
           this.tableData = this.myPerformanceTableDataTransformerService.getLeftTableData(
-            current.responsibilities.performanceTotals
+            current.responsibilities.entitiesPerformances
           );
-        }
 
-        if (current.performanceTotal && current.performanceTotal.status === ActionStatus.Fetched) {
-          this.totalRowData = this.myPerformanceTableDataTransformerService
-            .getTotalRowData(current.performanceTotal.performanceTotal);
+          if (current.responsibilities.entitiesPerformances) {
+            this.totalRowData = this.myPerformanceTableDataTransformerService
+              .getTotalRowData(current.responsibilities.entitiesTotalPerformances);
+          }
         }
     });
 
     this.myPerformanceVersionSubscription = this.store.select(state => state.myPerformance.versions)
-      .subscribe((versions: MyPerformanceData[]) => {
+      .subscribe((versions: MyPerformanceEntitiesData[]) => {
         this.showLeftBackButton = versions.length > 0;
     });
 
-    const currentUserId = this.userService.model.currentUser.positionId
-      ? parseInt(this.userService.model.currentUser.positionId, 0)
-      : CORPORATE_USER_POSITION_ID;
+    const currentUserId = this.userService.model.currentUser.positionId || CORPORATE_USER_POSITION_ID;
     this.store.dispatch(new FetchResponsibilitiesAction({ positionId: currentUserId, filter: this.filterState }));
 
     // setting ViewType for right side here for now
@@ -154,15 +152,20 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
           if (this.leftTableViewType === ViewType.roleGroups) {
             this.store.dispatch(new FetchResponsibilityEntityPerformance({
               entityType: EntityPeopleType[parameters.row.descriptionRow0],
-              entities: this.currentState.responsibilities.responsibilities[EntityPeopleType[parameters.row.descriptionRow0]],
+              entities: this.currentState.responsibilities.groupedEntities[EntityPeopleType[parameters.row.descriptionRow0]],
               filter: this.filterState,
-              performanceTotal: parameters.row,
+              entitiesTotalPerformances: parameters.row,
               viewType: ViewType.people
             }));
-          }
+          } else if (this.leftTableViewType === ViewType.people) {
+            this.store.dispatch(new FetchResponsibilitiesAction({
+              positionId: parameters.row.metadata.positionId,
+              filter: this.filterState
+            }));
         } else {
           console.log('clicked on right row:', parameters.row);
         }
+      }
     }
   }
 

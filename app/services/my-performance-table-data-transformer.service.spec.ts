@@ -1,16 +1,16 @@
 import { inject, TestBed } from '@angular/core/testing';
 
-import { getPerformanceTotalMock } from '../models/performance-total.model.mock';
+import { getEntitiesTotalPerformancesMock } from '../models/entities-total-performances.model.mock';
 import { MyPerformanceTableDataTransformerService } from './my-performance-table-data-transformer.service';
-import { getResponsibilityEntitiesPerformanceMock } from '../models/entity-responsibilities.model.mock';
+import { getEntitiesPerformancesMock } from '../models/entities-performances.model.mock';
 import { MyPerformanceTableRow } from '../models/my-performance-table-row.model';
-import { PerformanceTotal } from '../models/performance-total.model';
-import { ResponsibilityEntityPerformance } from '../models/entity-responsibilities.model';
+import { EntitiesTotalPerformances } from '../models/entities-total-performances.model';
+import { EntitiesPerformances } from '../models/entities-performances.model';
 
 describe('Service: MyPerformanceTableDataTransformerService', () => {
   let myPerformanceTableDataTransformerService: MyPerformanceTableDataTransformerService;
-  let mockPerformanceTotal: PerformanceTotal;
-  let responsibilityEntitiesPerformanceMock: ResponsibilityEntityPerformance[];
+  let mockPerformanceTotal: EntitiesTotalPerformances;
+  let responsibilityEntitiesPerformanceMock: EntitiesPerformances[];
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -24,7 +24,7 @@ describe('Service: MyPerformanceTableDataTransformerService', () => {
     beforeEach(inject([ MyPerformanceTableDataTransformerService ],
       (_myPerformanceTableDataTransformerService: MyPerformanceTableDataTransformerService) => {
         myPerformanceTableDataTransformerService = _myPerformanceTableDataTransformerService;
-        responsibilityEntitiesPerformanceMock = getResponsibilityEntitiesPerformanceMock();
+        responsibilityEntitiesPerformanceMock = getEntitiesPerformancesMock();
     }));
 
     it('should return formatted ResponsibilityEntityPerformance data', () => {
@@ -39,7 +39,10 @@ describe('Service: MyPerformanceTableDataTransformerService', () => {
         metricColumn0: responsibilityEntitiesPerformanceMock[0].performanceTotal.total,
         metricColumn1: responsibilityEntitiesPerformanceMock[0].performanceTotal.totalYearAgo,
         metricColumn2: responsibilityEntitiesPerformanceMock[0].performanceTotal.totalYearAgoPercent,
-        ctv: responsibilityEntitiesPerformanceMock[0].performanceTotal.contributionToVolume
+        ctv: responsibilityEntitiesPerformanceMock[0].performanceTotal.contributionToVolume,
+        metadata: {
+          positionId: responsibilityEntitiesPerformanceMock[0].positionId
+        }
       });
     });
   });
@@ -48,7 +51,7 @@ describe('Service: MyPerformanceTableDataTransformerService', () => {
     beforeEach(inject([ MyPerformanceTableDataTransformerService ],
       (_myPerformanceTableDataTransformerService: MyPerformanceTableDataTransformerService) => {
         myPerformanceTableDataTransformerService = _myPerformanceTableDataTransformerService;
-        mockPerformanceTotal = getPerformanceTotalMock();
+        mockPerformanceTotal = getEntitiesTotalPerformancesMock();
     }));
 
     it('should return a formatted total row from total performance data', () => {

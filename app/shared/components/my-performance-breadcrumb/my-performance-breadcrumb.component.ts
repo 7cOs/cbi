@@ -2,7 +2,7 @@ import { Component, Input, EventEmitter, Output } from '@angular/core';
 
 // tslint:disable-next-line:no-unused-variable
 import { BreadcrumbEntityClickedEvent } from '../../../models/breadcrumb-entity-clicked-event.model';
-import { MyPerformanceData } from '../../../state/reducers/my-performance.reducer';
+import { MyPerformanceEntitiesData } from '../../../state/reducers/my-performance.reducer';
 
 @Component({
   selector: 'my-performance-breadcrumb',
@@ -14,9 +14,9 @@ export class MyPerformanceBreadcrumbComponent {
   @Output() breadcrumbEntityClicked = new EventEmitter<BreadcrumbEntityClickedEvent>();
   @Input() currentUserFullName: string;
   @Input()
-  set performanceStateVersions (versions: MyPerformanceData[]) {
+  set performanceStateVersions (versions: MyPerformanceEntitiesData[]) {
     this.breadcrumbTrail = [ this.currentUserFullName ]
-      .concat(versions.map((version: MyPerformanceData) => version.selectedEntity));
+      .concat(versions.map((version: MyPerformanceEntitiesData) => version.selectedEntity));
   }
 
   public breadcrumbTrail: string[];
