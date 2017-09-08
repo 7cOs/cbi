@@ -1,5 +1,5 @@
 import { EntitiesPerformances, EntitiesPerformancesDTO } from '../models/entities-performances.model';
-import { getEntitiesTotalPerformancesDTOMock, getPerformanceTotalMock } from '../models/entities-total-performances.model.mock'; // TODO: rn
+import { getEntitiesTotalPerformancesDTOMock, getEntitiesTotalPerformancesMock } from '../models/entities-total-performances.model.mock'; // TODO: rn
 
 export function getResponsibilityEntitiesPerformanceDTOMock(): EntitiesPerformancesDTO[] {
   return [
@@ -11,8 +11,8 @@ export function getResponsibilityEntitiesPerformanceDTOMock(): EntitiesPerforman
 
 export function getEntitiesPerformancesMock(): EntitiesPerformances[] {
   return [
-    { positionId: chance.string(), name: chance.string(), performanceTotal: getPerformanceTotalMock() },
-    { positionId: chance.string(), name: chance.string(), performanceTotal: getPerformanceTotalMock() },
-    { positionId: chance.string(), name: chance.string(), performanceTotal: getPerformanceTotalMock() }
+    { positionId: chance.string(), name: chance.string(), performanceTotal: getEntitiesTotalPerformancesMock() },
+    { positionId: chance.string(), name: chance.string(), performanceTotal: getEntitiesTotalPerformancesMock() },
+    { positionId: chance.string(), name: chance.string(), performanceTotal: getEntitiesTotalPerformancesMock() }
   ];
 }

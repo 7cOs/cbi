@@ -7,7 +7,7 @@ import { EntityPeopleType } from '../../enums/entity-responsibilities.enum';
 import { FetchResponsibilityEntitiesPerformancePayload } from './responsibilities.action';
 import { getEntitiesPerformancesMock } from '../../models/entities-performances.model.mock';
 import { getEntityPeopleResponsibilitiesMock } from '../../models/entity-responsibilities.model.mock';
-import { getPerformanceTotalMock } from '../../models/entities-total-performances.model.mock';
+import { getEntitiesTotalPerformancesMock } from '../../models/entities-total-performances.model.mock';
 import { getMyPerformanceTableRowMock } from '../../models/my-performance-table-row.model.mock';
 import { getGroupedEntitiesMock } from '../../models/grouped-entities.model.mock';
 import { MetricTypeValue } from '../../enums/metric-type.enum';
@@ -191,7 +191,7 @@ describe('Responsibilities Actions', () => {
   });
 
   describe('Fetch Performance Total Success Action', () => {
-    const performanceTotalMock: EntitiesTotalPerformances = getPerformanceTotalMock();
+    const performanceTotalMock: EntitiesTotalPerformances = getEntitiesTotalPerformancesMock();
     let action: ResponsibilitiesActions.FetchPerformanceTotalSuccessAction;
 
     beforeEach(() => {

@@ -61,7 +61,6 @@ describe('My Performance Reducer', () => {
     const beforeState = getMyPerformanceStateMock();
     const expectedState = {
       current: {
-        performanceTotal: beforeState.current.performanceTotal,
         responsibilities: beforeState.current.responsibilities,
         viewType: beforeState.current.viewType,
         selectedEntity: entityNameMock

@@ -20,7 +20,7 @@ import { FetchResponsibilitiesAction,
          FetchPerformanceTotalFailureAction } from '../actions/responsibilities.action';
 import { getEntityPeopleResponsibilitiesMock } from '../../models/entity-responsibilities.model.mock';
 import { getMyPerformanceTableRowMock } from '../../models/my-performance-table-row.model.mock';
-import { getPerformanceTotalMock, getEntitiesTotalPerformancesDTOMock } from '../../models/entities-total-performances.model.mock';
+import { getEntitiesTotalPerformancesMock, getEntitiesTotalPerformancesDTOMock } from '../../models/entities-total-performances.model.mock';
 import { getEntitiesPerformancesMock, getResponsibilityEntitiesPerformanceDTOMock } from '../../models/entities-performances.model.mock';
 import { getGroupedEntitiesMock } from '../../models/grouped-entities.model.mock';
 import { MetricTypeValue } from '../../enums/metric-type.enum';
@@ -43,7 +43,7 @@ describe('Responsibilities Effects', () => {
   const groupedEntitiesMock: GroupedEntities = getGroupedEntitiesMock();
   const responsibilityEntitiesPerformanceDTOMock = getResponsibilityEntitiesPerformanceDTOMock();
   const responsibilityEntitiesPerformanceMock = getEntitiesPerformancesMock();
-  const performanceTotalMock: EntitiesTotalPerformances = getPerformanceTotalMock();
+  const performanceTotalMock: EntitiesTotalPerformances = getEntitiesTotalPerformancesMock();
   const entitiesTotalPerformancesDTOMock: EntitiesTotalPerformancesDTO = getEntitiesTotalPerformancesDTOMock();
   const error = new Error(chance.string());
 

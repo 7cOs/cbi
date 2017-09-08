@@ -12,7 +12,7 @@ export function getEntitiesTotalPerformancesDTOMock(): EntitiesTotalPerformances
   };
 }
 
-export function getPerformanceTotalMock(): EntitiesTotalPerformances {
+export function getEntitiesTotalPerformancesMock(): EntitiesTotalPerformances {
   return {
     total: chance.floating(),
     totalYearAgo: chance.floating(),

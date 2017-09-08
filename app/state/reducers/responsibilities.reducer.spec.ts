@@ -8,7 +8,7 @@ import { initialState, responsibilitiesReducer } from './responsibilities.reduce
 import { getEntityPeopleResponsibilitiesMock } from '../../models/entity-responsibilities.model.mock';
 import { getEntitiesPerformancesMock } from '../../models/entities-performances.model.mock';
 import { getMyPerformanceTableRowMock } from '../../models/my-performance-table-row.model.mock';
-import { getPerformanceTotalMock } from '../../models/entities-total-performances.model.mock';
+import { getEntitiesTotalPerformancesMock } from '../../models/entities-total-performances.model.mock';
 import { getGroupedEntitiesMock } from '../../models/grouped-entities.model.mock';
 import { MetricTypeValue } from '../../enums/metric-type.enum';
 import { MyPerformanceTableRow } from '../../models/my-performance-table-row.model';
@@ -177,7 +177,7 @@ describe('Responsibilities Reducer', () => {
   });
 
   it('should update the state status and data when a fetch is successful', () => {
-    const payloadMock: EntitiesTotalPerformances = getPerformanceTotalMock();
+    const payloadMock: EntitiesTotalPerformances = getEntitiesTotalPerformancesMock();
     const expectedState = {
       status: ActionStatus.Fetched,
       positionId: initialState.positionId,

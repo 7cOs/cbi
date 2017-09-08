@@ -18,7 +18,7 @@ import { MyPerformanceComponent } from './my-performance.component';
 import { MyPerformanceFilterActionType } from '../../enums/my-performance-filter.enum';
 import { MyPerformanceFilterEvent } from '../../models/my-performance-filter.model'; // tslint:disable-line:no-unused-variable
 import { MyPerformanceFilterState } from '../../state/reducers/my-performance-filter.reducer';
-import { MyPerformanceData, initialState } from '../../state/reducers/my-performance.reducer';
+import { MyPerformanceEntitiesData, initialState } from '../../state/reducers/my-performance.reducer';
 import { MyPerformanceTableDataTransformerService } from '../../services/my-performance-table-data-transformer.service';
 import { MyPerformanceTableRow } from '../../models/my-performance-table-row.model';
 import { MyPerformanceTableRowComponent } from '../../shared/components/my-performance-table-row/my-performance-table-row.component';
@@ -50,7 +50,7 @@ class MyPerformanceFilterComponentMock {
 class MyPerformanceBreadcrumbComponentMock {
   @Output() breadcrumbEntityClicked = new EventEmitter<BreadcrumbEntityClickedEvent>();
   @Input() currentUserFullName: string[];
-  @Input() performanceStateVersions: MyPerformanceData[];
+  @Input() performanceStateVersions: MyPerformanceEntitiesData[];
 }
 
 @Component({

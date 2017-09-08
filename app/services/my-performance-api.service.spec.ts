@@ -4,7 +4,7 @@ import { MockBackend, MockConnection } from '@angular/http/testing';
 
 import { DateRangeTimePeriodValue } from '../enums/date-range-time-period.enum';
 import { DistributionTypeValue } from '../enums/distribution-type.enum';
-import { getPerformanceTotalMock } from '../models/entities-total-performances.model.mock';
+import { getEntitiesTotalPerformancesMock } from '../models/entities-total-performances.model.mock';
 import { MetricTypeValue } from '../enums/metric-type.enum';
 import { MyPerformanceApiService } from './my-performance-api.service';
 import { EntitiesTotalPerformances } from '../models/entities-total-performances.model';
@@ -15,7 +15,7 @@ describe('Service: MyPerformanceApiService', () => {
   let myPerformanceApiService: MyPerformanceApiService;
   let mockBackend: MockBackend;
 
-  const mockPerformanceTotalResponse: EntitiesTotalPerformances = getPerformanceTotalMock();
+  const mockPerformanceTotalResponse: EntitiesTotalPerformances = getEntitiesTotalPerformancesMock();
   const mockResponsibilitiesResponse: any = {
     positions: [{
       id: '123',
