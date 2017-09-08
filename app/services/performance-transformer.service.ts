@@ -10,10 +10,11 @@ export class PerformanceTransformerService {
 
   constructor(private utilService: UtilService) { }
 
-  public transformEntitiesTotalPerformancesDTO(entitiesTotalPerformancesDTO: EntitiesTotalPerformancesDTO): EntitiesTotalPerformances {
-    return Object.assign({}, entitiesTotalPerformancesDTO, {
-      totalYearAgoPercent: this.utilService
-        .getYearAgoPercent(entitiesTotalPerformancesDTO.total, entitiesTotalPerformancesDTO.totalYearAgo),
+  public transformEntitiesTotalPerformancesDTO(entitiesPerformancesDTO: EntitiesTotalPerformancesDTO): EntitiesTotalPerformances {
+    return Object.assign({}, entitiesPerformancesDTO, {
+      total: parseInt((entitiesPerformancesDTO.total).toFixed(), 10),
+      totalYearAgo: this.utilService.getYearAgoDelta(entitiesPerformancesDTO.total, entitiesPerformancesDTO.totalYearAgo),
+      totalYearAgoPercent: this.utilService.getYearAgoPercent(entitiesPerformancesDTO.total, entitiesPerformancesDTO.totalYearAgo),
       contributionToVolume: 0
     });
   }

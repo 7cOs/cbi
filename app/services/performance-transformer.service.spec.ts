@@ -36,10 +36,13 @@ describe('Service: PerformanceTransformerService', () => {
 
       expect(performanceTotal).toBeDefined();
       expect(performanceTotal).toEqual({
-        total: entitiesTotalPerformancesDTOMock.total,
-        totalYearAgo: entitiesTotalPerformancesDTOMock.totalYearAgo,
-        totalYearAgoPercent: utilService.getYearAgoPercent(entitiesTotalPerformancesDTOMock.total,
-          entitiesTotalPerformancesDTOMock.totalYearAgo),
+        total: parseInt((entitiesTotalPerformancesDTOMock.total).toFixed(), 10),
+        totalYearAgo: utilService.getYearAgoDelta(
+          entitiesTotalPerformancesDTOMock.total, entitiesTotalPerformancesDTOMock.totalYearAgo
+        ),
+        totalYearAgoPercent: utilService.getYearAgoPercent(
+          entitiesTotalPerformancesDTOMock.total, entitiesTotalPerformancesDTOMock.totalYearAgo
+        ),
         contributionToVolume: 0
       });
     });
@@ -67,8 +70,8 @@ describe('Service: PerformanceTransformerService', () => {
         positionId: responsibilityEntitiesPerformanceDTOMock[0].id,
         name: responsibilityEntitiesPerformanceDTOMock[0].name,
         performanceTotal: {
-          total: entityPerformanceMock.total,
-          totalYearAgo: entityPerformanceMock.totalYearAgo,
+          total: parseInt((entityPerformanceMock.total).toFixed(), 10),
+          totalYearAgo: utilService.getYearAgoDelta(entityPerformanceMock.total, entityPerformanceMock.totalYearAgo),
           totalYearAgoPercent: utilService.getYearAgoPercent(entityPerformanceMock.total, entityPerformanceMock.totalYearAgo),
           contributionToVolume: 0
         }
