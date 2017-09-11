@@ -1,7 +1,7 @@
 import * as Chance from 'chance';
 
 import { ActionStatus } from '../../enums/action-status.enum';
-import { getMyPerformanceStateMock } from './my-performance.state.mock';
+import { getMyPerformanceStateMock, getMyPerformanceEntitiesDataMock } from './my-performance.state.mock';
 import { initialState } from './my-performance.reducer';
 import * as MyPerformanceVersionActions from '../actions/my-performance-version.action';
 import { myPerformanceVersionReducer } from './my-performance-version.reducer';
@@ -11,14 +11,14 @@ let chance = new Chance();
 describe('My Performance Reducer', () => {
 
   it('should not modify the initial state when a save action is dispatched', () => {
-    const savedObject = {'key': chance.string()};
+    const savedObject = getMyPerformanceEntitiesDataMock();
     myPerformanceVersionReducer(initialState, new MyPerformanceVersionActions.SaveMyPerformanceStateAction(savedObject));
 
     expect(initialState.versions.length).toBe(0);
   });
 
   it('should save the current state when a save action is dispatched', () => {
-    const savedObject = {'key': chance.string()};
+    const savedObject = getMyPerformanceEntitiesDataMock();
     const newState = myPerformanceVersionReducer(initialState, new MyPerformanceVersionActions.SaveMyPerformanceStateAction(savedObject));
 
     expect(newState.current).toEqual(initialState.current);
@@ -27,7 +27,7 @@ describe('My Performance Reducer', () => {
   });
 
   it('should not modify the initial state when a restore action is dispatched', () => {
-    const savedObject = {'key': chance.string()};
+    const savedObject = getMyPerformanceEntitiesDataMock();
     initialState.versions.push(savedObject);
     myPerformanceVersionReducer(initialState, new MyPerformanceVersionActions.RestoreMyPerformanceStateAction());
 
@@ -36,7 +36,7 @@ describe('My Performance Reducer', () => {
 
   it('should update the current state when a restore action is dispatched', () => {
     const savedObject = {
-      groupedEntities: {
+      responsibilities: {
         status: ActionStatus.Fetched,
         positionId: chance.string(),
         groupedEntities: chance.string() as any,
