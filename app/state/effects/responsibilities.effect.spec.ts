@@ -62,7 +62,7 @@ describe('Responsibilities Effects', () => {
     getResponsibilities() {
       return Observable.of({positions: groupedEntitiesMock});
     },
-    getResponsibilitiesPerformanceTotals() {
+    getResponsibilityPerformanceTotal() {
       return Observable.of(responsibilityEntitiesPerformanceDTOMock);
     },
     getPerformanceTotal() {
@@ -228,11 +228,80 @@ describe('Responsibilities Effects', () => {
       ));
 
       it('should return a FetchResponsibilitiesFailureAction after catching an error', (done) => {
-        spyOn(myPerformanceApiService, 'getResponsibilitiesPerformanceTotals').and.returnValue(Observable.throw(error));
+        spyOn(myPerformanceApiService, 'getResponsibilityPerformanceTotal').and.returnValue(Observable.throw(error));
         responsibilitiesEffects.FetchResponsibilityEntityPerformance$().subscribe((result) => {
           expect(result).toEqual(new FetchResponsibilitiesFailureAction(error));
           done();
         });
+      });
+    });
+
+    describe('when getResponsibilityPerformanceTotal returns successfully', () => {
+      let myPerformanceApiService: MyPerformanceApiService;
+      let performanceTransformerService: PerformanceTransformerService;
+
+      fetchEntityPerformancePayloadMock.entities.push(getEntityPeopleResponsibilitiesMock());
+
+      beforeEach(inject([ MyPerformanceApiService, PerformanceTransformerService ],
+        (_myPerformanceApiService: MyPerformanceApiService, _performanceTransformerServiceMock: PerformanceTransformerService) => {
+          myPerformanceApiService = _myPerformanceApiService;
+          performanceTransformerService = _performanceTransformerServiceMock;
+
+          runner.queue(new FetchResponsibilityEntityPerformance(fetchEntityPerformancePayloadMock));
+        }
+      ));
+
+      it('should call the responsibility performanceTotal endpoint for each entity and return an array of performance data',
+      (done: any) => {
+        const performanceTotalArrayMock = [
+          getEntitiesTotalPerformancesMock(),
+          getEntitiesTotalPerformancesMock()
+        ];
+
+        const getResponsibilityPerformanceTotalSpy = spyOn(myPerformanceApiService, 'getResponsibilityPerformanceTotal').and.callFake(
+          (entity: { type: string, name: string }, filter: MyPerformanceFilterState, positionId: string) => {
+          const performancesIndex = fetchEntityPerformancePayloadMock.entities.findIndex(item => item.positionId === positionId);
+          return Observable.of({
+            id: positionId,
+            name: entity.name,
+            performanceTotal: performanceTotalArrayMock[performancesIndex]
+          });
+        });
+
+        const transformEntitiesPerformancesDTOResponseMock: any = chance.string();
+
+        spyOn(performanceTransformerService, 'transformEntitiesPerformancesDTO').and.callFake(() => {
+          return transformEntitiesPerformancesDTOResponseMock;
+        });
+
+        const dispatchedActions: Action[] = [];
+
+        responsibilitiesEffects.FetchResponsibilityEntityPerformance$().subscribe((dispatchedAction: Action) => {
+          dispatchedActions.push(dispatchedAction);
+
+          if (dispatchedActions.length === 4) {
+            expect(dispatchedActions).toEqual([
+              new SetTableRowPerformanceTotal(fetchEntityPerformancePayloadMock.entitiesTotalPerformances),
+              new GetPeopleByRoleGroupAction(fetchEntityPerformancePayloadMock.entityType),
+              new FetchResponsibilityEntityPerformanceSuccess(transformEntitiesPerformancesDTOResponseMock),
+              new SetLeftMyPerformanceTableViewType(fetchEntityPerformancePayloadMock.viewType)
+            ]);
+
+            done();
+          }
+        });
+
+        expect(getResponsibilityPerformanceTotalSpy.calls.count()).toBe(fetchEntityPerformancePayloadMock.entities.length);
+        expect(getResponsibilityPerformanceTotalSpy.calls.argsFor(0)).toEqual([
+          fetchEntityPerformancePayloadMock.entities[0],
+          fetchEntityPerformancePayloadMock.filter,
+          fetchEntityPerformancePayloadMock.entities[0].positionId
+        ]);
+        expect(getResponsibilityPerformanceTotalSpy.calls.argsFor(1)).toEqual([
+          fetchEntityPerformancePayloadMock.entities[1],
+          fetchEntityPerformancePayloadMock.filter,
+          fetchEntityPerformancePayloadMock.entities[1].positionId
+        ]);
       });
     });
   });

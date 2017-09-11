@@ -61,13 +61,14 @@ export class ResponsibilitiesEffects {
       .catch((err: Error) => Observable.of(new ResponsibilitiesActions.FetchResponsibilitiesFailureAction(err)));
   }
 
-  @Effect() FetchResponsibilityEntityPerformance$(): Observable<Action> {
+  @Effect()
+  FetchResponsibilityEntityPerformance$(): Observable<Action> {
     return this.actions$
       .ofType(ResponsibilitiesActions.FETCH_RESPONSIBILITY_ENTITY_PERFORMANCE)
       .switchMap((action: Action) => {
         const { entityType, entities, filter, entitiesTotalPerformances, viewType } = action.payload;
 
-        return this.myPerformanceApiService.getResponsibilitiesPerformanceTotals(entities, filter)
+        return this.getResponsibilitiesPerformanceTotals(entities, filter)
           .switchMap((response: EntitiesPerformancesDTO[]) => {
             const entityPerformance = this.performanceTransformerService.transformEntitiesPerformancesDTO(response);
 
@@ -160,8 +161,7 @@ export class ResponsibilitiesEffects {
   private getPerformanceTotalForGroupedEntities(responsibilitiesData: ResponsibilitiesData)
     : Observable<ResponsibilitiesData> {
     if (responsibilitiesData.viewType === ViewType.roleGroups) {
-      return this.myPerformanceApiService
-      .getResponsibilitiesPerformanceTotals(responsibilitiesData.entityTypes,
+      return this.getResponsibilitiesPerformanceTotals(responsibilitiesData.entityTypes,
         responsibilitiesData.filter,
         responsibilitiesData.positionId)
       .mergeMap((response: EntitiesPerformancesDTO[]) => {
@@ -216,5 +216,17 @@ export class ResponsibilitiesEffects {
         entitiesPerformances: responsibilitiesData.entitiesPerformances
       })
     ]);
+  }
+
+  private getResponsibilitiesPerformanceTotals(
+    entities: Array<{ positionId?: string, type: string, name: string }>, filter: MyPerformanceFilterState, positionId?: string
+  ): Observable<(EntitiesPerformancesDTO | Error)[]> {
+    const apiCalls: Observable<EntitiesPerformancesDTO | Error>[] = [];
+
+    entities.forEach((entity: { positionId?: string, type: string, name: string }) => {
+      apiCalls.push(this.myPerformanceApiService.getResponsibilityPerformanceTotal(entity, filter, entity.positionId || positionId));
+    });
+
+    return Observable.forkJoin(apiCalls);
   }
 }
