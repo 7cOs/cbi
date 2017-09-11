@@ -29,7 +29,7 @@ export class MyPerformanceApiService {
 
   public getResponsibilitiesPerformanceTotals(
     entities: Array<{ positionId?: string, type: string, name: string }>, filter: MyPerformanceFilterState, positionId?: string
-  ): Observable<EntitiesPerformancesDTO[]> {
+  ): Observable<(EntitiesPerformancesDTO | Error)[]> {
     const apiCalls: Observable<EntitiesPerformancesDTO | Error>[] = [];
 
     entities.forEach((entity: { positionId?: string, type: string, name: string }) => {
