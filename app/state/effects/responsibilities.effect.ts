@@ -6,18 +6,19 @@ import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/do';
 import 'rxjs/add/operator/switchMap';
 
+import { EntitiesPerformances, EntitiesPerformancesDTO } from '../../models/entities-performances.model';
+import { EntitiesTotalPerformancesDTO } from '../../models/entities-total-performances.model';
 import { EntityDTO } from '../../models/entity-dto.model';
 import { EntityResponsibilities } from '../../models/entity-responsibilities.model';
+import { EntitySubAccountDTO } from '../../models/entity-subaccount-dto.model';
+import { GroupedEntities } from '../../models/grouped-entities.model';
 import { MyPerformanceApiService } from '../../services/my-performance-api.service';
 import { MyPerformanceFilterState } from '../../state/reducers/my-performance-filter.reducer';
 import { PeopleResponsibilitiesDTO } from '../../models/people-responsibilities-dto.model';
-import { EntitiesTotalPerformancesDTO } from '../../models/entities-total-performances.model';
 import { PerformanceTransformerService } from '../../services/performance-transformer.service';
-import { EntitiesPerformances, EntitiesPerformancesDTO } from '../../models/entities-performances.model';
-import { ResponsibilitiesTransformerService } from '../../services/responsibilities-transformer.service';
-import { GroupedEntities } from '../../models/grouped-entities.model';
-import { ViewType } from '../../enums/view-type.enum';
 import * as ResponsibilitiesActions from '../../state/actions/responsibilities.action';
+import { ResponsibilitiesTransformerService } from '../../services/responsibilities-transformer.service';
+import { ViewType } from '../../enums/view-type.enum';
 import * as ViewTypeActions from '../../state/actions/view-types.action';
 
 const chance = new Chance();
@@ -116,6 +117,20 @@ export class ResponsibilitiesEffects {
       .ofType(ResponsibilitiesActions.FETCH_PERFORMANCE_TOTAL_FAILURE_ACTION)
       .do(action => {
         console.error('Failed fetching performance total data', action.payload);
+      });
+  }
+
+  @Effect() fetchSubAccounts$(): any {
+    return this.actions$
+      .ofType(ResponsibilitiesActions.FETCH_SUBACCOUNTS_ACTION)
+      .switchMap((action: Action) => {
+        const { accountId, positionId, premiseType } = action.payload;
+
+        return this.myPerformanceApiService.getSubAccounts(accountId, positionId, premiseType)
+          .map((response: Array<EntitySubAccountDTO>) => {
+            console.log('Get SubAccounts', response);
+          })
+          .catch((err: Error) => Observable.of(new ResponsibilitiesActions.FetchResponsibilitiesFailureAction(err)));
       });
   }
 

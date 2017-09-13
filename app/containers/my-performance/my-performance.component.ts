@@ -10,7 +10,9 @@ import { ColumnType } from '../../enums/column-type.enum';
 import { DateRange } from '../../models/date-range.model';
 import { DateRangesState } from '../../state/reducers/date-ranges.reducer';
 import { EntityPeopleType } from '../../enums/entity-responsibilities.enum';
-import { FetchResponsibilitiesAction, FetchResponsibilityEntityPerformance } from '../../state/actions/responsibilities.action';
+import { FetchResponsibilitiesAction,
+         FetchResponsibilityEntityPerformance,
+         FetchSubAccountsAction } from '../../state/actions/responsibilities.action';
 import { getDateRangeMock } from '../../models/date-range.model.mock';
 import * as MyPerformanceFilterActions from '../../state/actions/my-performance-filter.action';
 import { MyPerformanceFilterActionType } from '../../enums/my-performance-filter.enum';
@@ -145,25 +147,35 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
       case RowType.data:
       default:
         if (parameters.leftSide) {
-          console.log('clicked on left row:', parameters.row);
           this.store.dispatch(new MyPerformanceVersionActions.SetMyPerformanceSelectedEntityAction(parameters.row.descriptionRow0));
           this.store.dispatch(new MyPerformanceVersionActions.SaveMyPerformanceStateAction(this.currentState));
+          console.log('this.leftTableViewType', this.leftTableViewType);
 
-          if (this.leftTableViewType === ViewType.roleGroups) {
-            this.store.dispatch(new FetchResponsibilityEntityPerformance({
-              entityType: EntityPeopleType[parameters.row.descriptionRow0],
-              entities: this.currentState.responsibilities.groupedEntities[EntityPeopleType[parameters.row.descriptionRow0]],
-              filter: this.filterState,
-              entitiesTotalPerformances: parameters.row,
-              viewType: ViewType.people
-            }));
-          } else if (this.leftTableViewType === ViewType.people) {
-            this.store.dispatch(new FetchResponsibilitiesAction({
-              positionId: parameters.row.metadata.positionId,
-              filter: this.filterState
-            }));
-        } else {
-          console.log('clicked on right row:', parameters.row);
+          switch (this.leftTableViewType) {
+            case ViewType.roleGroups:
+              this.store.dispatch(new FetchResponsibilityEntityPerformance({
+                entityType: EntityPeopleType[parameters.row.descriptionRow0],
+                entities: this.currentState.responsibilities.groupedEntities[EntityPeopleType[parameters.row.descriptionRow0]],
+                filter: this.filterState,
+                entitiesTotalPerformances: parameters.row,
+                viewType: ViewType.people
+              }));
+              break;
+            case ViewType.people:
+              this.store.dispatch(new FetchResponsibilitiesAction({
+                positionId: parameters.row.metadata.positionId,
+                filter: this.filterState
+              }));
+              break;
+            case ViewType.accounts:
+              this.store.dispatch(new FetchSubAccountsAction({
+                accountId: parameters.row.metadata.positionId,
+                positionId: this.currentState.responsibilities.positionId,
+                premiseType: this.filterState.premiseType
+              }));
+              break;
+            default:
+              console.log('clicked on left row:', parameters.row);
         }
       }
     }

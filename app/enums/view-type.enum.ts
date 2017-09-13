@@ -4,5 +4,6 @@ export enum ViewType {
   roleGroups = <any>'roleGroups',
   people = <any>'people',
   distributors = <any>'distributors',
-  accounts = <any>'accounts'
+  accounts = <any>'accounts',
+  subAccounts = <any>'subAccounts'
 }
