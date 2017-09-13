@@ -3,7 +3,6 @@ import { inject, TestBed } from '@angular/core/testing';
 import { MockBackend, MockConnection } from '@angular/http/testing';
 
 import { DateRangeTimePeriodValue } from '../enums/date-range-time-period.enum';
-import { DistributionTypeValue } from '../enums/distribution-type.enum';
 import { getEntitiesTotalPerformancesMock } from '../models/entities-total-performances.model.mock';
 import { MetricTypeValue } from '../enums/metric-type.enum';
 import { MyPerformanceApiService } from './my-performance-api.service';
@@ -148,51 +147,6 @@ describe('Service: MyPerformanceApiService', () => {
           });
           done();
         });
-    });
-  });
-
-  describe('getResponsibilitiesPerformanceTotals', () => {
-
-    it('should call the responsibility performanceTotal endpoint for each entity and return an array of performance data', (done) => {
-      const mockFilter = {
-        metricType: MetricTypeValue.PointsOfDistribution,
-        dateRangeCode: DateRangeTimePeriodValue.LCM,
-        premiseType: PremiseTypeValue.On,
-        distributionType: DistributionTypeValue.simple
-      };
-      const entityArrayMock = [
-        { positionId: chance.string(), name: chance.string(), type: chance.string() },
-        { positionId: chance.string(), name: chance.string(), type: chance.string() }
-      ];
-      const expectedUrlParams = '?metricType=simplePointsOfDistribution&dateRangeCode=LCM&premiseType=On';
-
-      mockBackend.connections.subscribe((connection: MockConnection) => {
-        const options = new ResponseOptions({
-          body: JSON.stringify(mockPerformanceTotalResponse)
-        });
-
-        connection.mockRespond(new Response(options));
-        expect(connection.request.method).toEqual(RequestMethod.Get);
-      });
-
-      myPerformanceApiService.getResponsibilitiesPerformanceTotals(entityArrayMock, mockFilter)
-        .subscribe((response) => {
-          expect(response).toEqual([
-            { id: entityArrayMock[0].positionId, name: entityArrayMock[0].name, performanceTotal: mockPerformanceTotalResponse },
-            { id: entityArrayMock[1].positionId, name: entityArrayMock[1].name, performanceTotal: mockPerformanceTotalResponse }
-          ]);
-          done();
-        });
-
-      expect(mockBackend.connectionsArray.length).toBe(entityArrayMock.length);
-
-      mockBackend.connectionsArray.forEach((connection: MockConnection, index) => {
-        expect(connection.request.url)
-        .toEqual(
-          `/v3/positions/${ entityArrayMock[index].positionId }/responsibilities/${ entityArrayMock[index].type }/performanceTotal`
-          + expectedUrlParams
-        );
-      });
     });
   });
 });

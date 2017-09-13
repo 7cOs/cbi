@@ -149,7 +149,6 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
         if (parameters.leftSide) {
           this.store.dispatch(new MyPerformanceVersionActions.SetMyPerformanceSelectedEntityAction(parameters.row.descriptionRow0));
           this.store.dispatch(new MyPerformanceVersionActions.SaveMyPerformanceStateAction(this.currentState));
-          console.log('this.leftTableViewType', this.leftTableViewType);
 
           switch (this.leftTableViewType) {
             case ViewType.roleGroups:

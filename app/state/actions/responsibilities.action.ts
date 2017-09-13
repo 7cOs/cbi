@@ -37,6 +37,7 @@ export const FETCH_RESPONSIBILITY_ENTITY_PERFORMANCE =         '[Responsibilitie
 export const FETCH_RESPONSIBILITY_ENTITY_PERFORMANCE_SUCCESS = '[Responsibilities] FETCH_RESPONSIBILITY_ENTITY_PERFORMANCE_SUCCESS';
 export const GET_PEOPLE_BY_ROLE_GROUP_ACTION =                 '[Responsibilities] GET_PEOPLE_BY_ROLE_GROUP_ACTION';
 export const FETCH_SUBACCOUNTS_ACTION =                        '[Responsibilities] FETCH_SUBACCOUNTS_ACTION';
+export const FETCH_SUBACCOUNTS_SUCCESS_ACTION =                '[Responsibilities] FETCH_SUBACCOUNTS_SUCCESS_ACTION';
 export const FETCH_PERFORMANCE_TOTAL_ACTION =                  '[Performance Total] FETCH_PERFORMANCE_TOTAL_ACTION';
 export const FETCH_PERFORMANCE_TOTAL_SUCCESS_ACTION =          '[Performance Total] FETCH_PERFORMANCE_TOTAL_SUCCESS_ACTION';
 export const FETCH_PERFORMANCE_TOTAL_FAILURE_ACTION =          '[Performance Total] FETCH_PERFORMANCE_TOTAL_FAILURE_ACTION';
@@ -75,6 +76,11 @@ export class GetPeopleByRoleGroupAction implements Action {
 export class FetchSubAccountsAction implements Action {
   readonly type = FETCH_SUBACCOUNTS_ACTION;
   constructor(public payload: FetchSubAccountsActionPayload) { }
+}
+
+export class FetchSubAccountsSuccessAction implements Action {
+  readonly type = FETCH_SUBACCOUNTS_SUCCESS_ACTION;
+  constructor(public payload: any[]) { }
 }
 
 export class FetchPerformanceTotalAction implements Action {
