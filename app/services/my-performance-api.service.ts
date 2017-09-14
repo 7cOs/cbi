@@ -78,6 +78,20 @@ export class MyPerformanceApiService {
       .catch(err => this.handleError(new Error(err)));
   }
 
+  public getDistributorPerformanceTotals(
+    filter: MyPerformanceFilterState,
+    distributorID: string
+    ): Observable<EntitiesTotalPerformancesDTO> {
+    const url = `v3/distributors/${distributorID}/performanceTotal`;
+    console.log('filter: ', filter);
+
+    return this.http.get(`${url}`, {
+      params: this.getFilterStateParams(filter)
+    })
+      .map(res => res.json())
+      .catch(err => this.handleError(new Error(err)));
+  }
+
   private getFilterStateParams(filter: MyPerformanceFilterState): any {
     return {
       metricType: filter.hasOwnProperty('distributionType')

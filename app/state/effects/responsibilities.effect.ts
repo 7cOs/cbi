@@ -1,6 +1,6 @@
 import { Action } from '@ngrx/store';
 import { Actions, Effect } from '@ngrx/effects';
-import * as Chance from 'chance';
+// import * as Chance from 'chance';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/do';
@@ -20,7 +20,7 @@ import { ViewType } from '../../enums/view-type.enum';
 import * as ResponsibilitiesActions from '../../state/actions/responsibilities.action';
 import * as ViewTypeActions from '../../state/actions/view-types.action';
 
-const chance = new Chance();
+// const chance = new Chance();
 
 interface ResponsibilitiesData {
   groupedEntities?: GroupedEntities;
@@ -181,24 +181,24 @@ export class ResponsibilitiesEffects {
       return this.myPerformanceApiService.getAccountsDistributors(responsibilitiesData.entitiesURL)
         .switchMap((accountsDistributors: Array<EntityDTO>) => {
         const groupedEntities = this.responsibilitiesTransformerService.groupsAccountsDistributors(accountsDistributors);
-
-        // Temporary build fake performance total
         let entitiesPerformances = groupedEntities['all'].map((entity: EntityResponsibilities) => {
-          return {
-            positionId: entity.positionId,
-            name: entity.name,
-            performanceTotal: {
-              total: chance.natural({max: 1000}),
-              totalYearAgo: chance.natural({max: 1000}),
-              totalYearAgoPercent: chance.natural({max: 100}),
-              contributionToVolume: chance.natural({max: 100})
-            }
-          };
+          if (responsibilitiesData.viewType === ViewType.distributors) {
+            // this.myPerformanceApiService.getDistributorPerformanceTotals(responsibilitiesData.filter, entity.positionId)
+              // .subscribe(response => {
+                // console.log(this.performanceTransformerService.transformEntitiesTotalPerformancesDTO(response));
+                return {
+                  positionId: entity.positionId,
+                  name: entity.name,
+                  // performanceTotal: this.performanceTransformerService.transformEntitiesTotalPerformancesDTO(response)
+                  performanceTotal: {}
+                };
+              // });
+          }
         });
 
         return Observable.of(Object.assign(responsibilitiesData, {
           groupedEntities: groupedEntities,
-          entitiesPerformances: entitiesPerformances, // Temporary
+          entitiesPerformances: entitiesPerformances // Temporary
         }));
       });
     } else {
