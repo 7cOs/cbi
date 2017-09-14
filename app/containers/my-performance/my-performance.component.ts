@@ -168,8 +168,10 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
               break;
             case ViewType.accounts:
               this.store.dispatch(new FetchSubAccountsAction({
-                accountId: parameters.row.metadata.positionId,
-                positionId: this.currentState.responsibilities.positionId,
+                positionId: parameters.row.metadata.positionId,
+                contextPositionId: this.currentState.responsibilities.positionId,
+                entityType: parameters.row.descriptionRow0,
+                entitiesTotalPerformances: parameters.row,
                 premiseType: this.filterState.premiseType
               }));
               break;

@@ -94,6 +94,18 @@ export function responsibilitiesReducer(
         }
       });
 
+    case ResponsibilitiesActions.FETCH_SUBACCOUNTS_ACTION:
+      return Object.assign({}, state, {
+        status: ActionStatus.Fetching
+      });
+
+    case ResponsibilitiesActions.FETCH_SUBACCOUNTS_SUCCESS_ACTION:
+      return Object.assign({}, state, {
+        status: ActionStatus.Fetched,
+        groupedEntities: action.payload.groupedEntities,
+        entitiesPerformances: action.payload.entitiesPerformances
+      });
+
     default:
       return state;
   }

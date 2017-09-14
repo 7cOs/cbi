@@ -17,5 +17,6 @@ export enum EntityPeopleType {
 
 export enum EntityPropertyType {
   Distributor = <any>'Distributor',
-  Account = <any>'Account'
+  Account = <any>'Account',
+  SubAccount = <any>'SubAccount'
 }

@@ -61,12 +61,12 @@ export class MyPerformanceApiService {
       .catch(err => this.handleError(new Error(err)));
   }
 
-  public getSubAccounts(accountId: string, positionId: string, premiseType: PremiseTypeValue): Observable<Array<EntitySubAccountDTO>> {
-    const url = `/v3/accounts/${ accountId }/subAccounts`;
+  public getSubAccounts(positionId: string, contextPositionId: string, premiseType: PremiseTypeValue): Observable<EntitySubAccountDTO[]> {
+    const url = `/v3/accounts/${ positionId }/subAccounts`;
 
     return this.http.get(`${ url }`, {
       params: {
-        positionId: positionId,
+        positionId: contextPositionId,
         premiseType: PremiseTypeValue[premiseType]
       }
     })

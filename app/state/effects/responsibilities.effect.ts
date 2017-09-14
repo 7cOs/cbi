@@ -9,6 +9,7 @@ import { EntitiesPerformances } from '../../models/entities-performances.model';
 import { EntitiesTotalPerformances } from '../../models/entities-total-performances.model';
 import * as ResponsibilitiesActions from '../../state/actions/responsibilities.action';
 import { ResponsibilitiesService, ResponsibilitiesData } from '../../services/responsibilities.service';
+import { ViewType } from '../../enums/view-type.enum';
 import * as ViewTypeActions from '../../state/actions/view-types.action';
 
 @Injectable()
@@ -61,16 +62,11 @@ export class ResponsibilitiesEffects {
   @Effect() fetchSubAccounts$(): any {
     return this.actions$
       .ofType(ResponsibilitiesActions.FETCH_SUBACCOUNTS_ACTION)
-      .switchMap((action: Action) => {
-        const { accountId, positionId, premiseType } = action.payload;
-
-        return this.responsibilitiesService.getSubAccounts(accountId, positionId, premiseType)
-          .switchMap((response: any) => {
-            console.log('Get SubAccounts', response);
-            return Observable.of(new ResponsibilitiesActions.FetchSubAccountsSuccessAction(response));
-          })
-          .catch((err: Error) => Observable.of(new ResponsibilitiesActions.FetchResponsibilitiesFailureAction(err)));
-      });
+      .switchMap((action: Action) => Observable.of(action.payload))
+      .switchMap((subAccountsData) => this.responsibilitiesService.getSubAccounts(subAccountsData))
+      .switchMap((subAccountsData) => this.responsibilitiesService.getSubAccountsPerformanceTotals(subAccountsData))
+      .switchMap((subAccountsData) => this.constructSubAccountsSuccessAction(subAccountsData))
+      .catch((err: Error) => Observable.of(new ResponsibilitiesActions.FetchResponsibilitiesFailureAction(err)));
   }
 
   @Effect({dispatch: false})
@@ -117,6 +113,17 @@ export class ResponsibilitiesEffects {
         groupedEntities: responsibilitiesData.groupedEntities,
         entitiesPerformances: responsibilitiesData.entitiesPerformances
       })
+    ]);
+  }
+
+  private constructSubAccountsSuccessAction(subAccountsData: any): Observable<Action> {
+    return Observable.from([
+      new ResponsibilitiesActions.SetTableRowPerformanceTotal(subAccountsData.entitiesTotalPerformances),
+      new ResponsibilitiesActions.FetchSubAccountsSuccessAction({
+        groupedEntities: subAccountsData.groupedEntities,
+        entitiesPerformances: subAccountsData.entitiesPerformances
+      }),
+      new ViewTypeActions.SetLeftMyPerformanceTableViewType(ViewType.subAccounts)
     ]);
   }
 }

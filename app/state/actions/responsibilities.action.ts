@@ -25,8 +25,10 @@ export interface FetchResponsibilityEntitiesPerformancePayload {
 }
 
 export interface FetchSubAccountsActionPayload {
-  accountId: string;
   positionId: string;
+  contextPositionId: string;
+  entityType: string;
+  entitiesTotalPerformances: MyPerformanceTableRow;
   premiseType: PremiseTypeValue;
 }
 
@@ -80,7 +82,7 @@ export class FetchSubAccountsAction implements Action {
 
 export class FetchSubAccountsSuccessAction implements Action {
   readonly type = FETCH_SUBACCOUNTS_SUCCESS_ACTION;
-  constructor(public payload: any[]) { }
+  constructor(public payload: any) { }
 }
 
 export class FetchPerformanceTotalAction implements Action {
@@ -111,6 +113,7 @@ export type Action
   | FetchResponsibilityEntityPerformanceSuccess
   | GetPeopleByRoleGroupAction
   | FetchSubAccountsAction
+  | FetchSubAccountsSuccessAction
   | FetchPerformanceTotalAction
   | FetchPerformanceTotalSuccessAction
   | FetchPerformanceTotalFailureAction
