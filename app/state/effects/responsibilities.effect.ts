@@ -8,7 +8,7 @@ import 'rxjs/add/operator/switchMap';
 import { EntitiesPerformances } from '../../models/entities-performances.model';
 import { EntitiesTotalPerformances } from '../../models/entities-total-performances.model';
 import * as ResponsibilitiesActions from '../../state/actions/responsibilities.action';
-import { ResponsibilitiesService, ResponsibilitiesData } from '../../services/responsibilities.service';
+import { ResponsibilitiesService, ResponsibilitiesData, SubAccountData } from '../../services/responsibilities.service';
 import { ViewType } from '../../enums/view-type.enum';
 import * as ViewTypeActions from '../../state/actions/view-types.action';
 
@@ -59,7 +59,7 @@ export class ResponsibilitiesEffects {
     });
   }
 
-  @Effect() fetchSubAccounts$(): any {
+  @Effect() fetchSubAccounts$(): Observable<Action> {
     return this.actions$
       .ofType(ResponsibilitiesActions.FETCH_SUBACCOUNTS_ACTION)
       .switchMap((action: Action) => Observable.of(action.payload))
@@ -116,7 +116,7 @@ export class ResponsibilitiesEffects {
     ]);
   }
 
-  private constructSubAccountsSuccessAction(subAccountsData: any): Observable<Action> {
+  private constructSubAccountsSuccessAction(subAccountsData: SubAccountData): Observable<Action> {
     return Observable.from([
       new ResponsibilitiesActions.SetTableRowPerformanceTotal(subAccountsData.entitiesTotalPerformances),
       new ResponsibilitiesActions.FetchSubAccountsSuccessAction({

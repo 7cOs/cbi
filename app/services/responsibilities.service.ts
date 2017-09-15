@@ -12,6 +12,7 @@ import { EntityResponsibilities } from '../models/entity-responsibilities.model'
 import { GroupedEntities } from '../models/grouped-entities.model';
 import { MyPerformanceApiService } from './my-performance-api.service';
 import { MyPerformanceFilterState } from '../state/reducers/my-performance-filter.reducer';
+import { MyPerformanceTableRow } from '../models/my-performance-table-row.model';
 import { PeopleResponsibilitiesDTO } from '../models/people-responsibilities-dto.model';
 import { PerformanceTransformerService } from './performance-transformer.service';
 import { PremiseTypeValue } from '../enums/premise-type.enum';
@@ -37,6 +38,7 @@ export interface SubAccountData {
   premiseType: PremiseTypeValue;
   groupedEntities?: GroupedEntities;
   entitiesPerformances?: Array<EntitiesPerformances>;
+  entitiesTotalPerformances: MyPerformanceTableRow;
 }
 
 @Injectable()
@@ -166,9 +168,9 @@ export class ResponsibilitiesService {
       });
   }
 
-  public getSubAccountsPerformanceTotals(subAccountData: SubAccountData): any {
+  public getSubAccountsPerformanceTotals(subAccountData: SubAccountData): Observable<SubAccountData> {
     // Mock SubAccount performance till next story
-    const entitiesPerformancesMock: EntitiesPerformances[] = subAccountData.groupedEntities[subAccountData.entityType]
+    const entitiesPerformancesMock: Array<EntitiesPerformances> = subAccountData.groupedEntities[subAccountData.entityType]
       .map((subAccount: EntityResponsibilities) => {
         return {
           positionId: subAccount.positionId,
