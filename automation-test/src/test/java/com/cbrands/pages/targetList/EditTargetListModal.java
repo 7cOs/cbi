@@ -53,8 +53,9 @@ public class EditTargetListModal extends TestNGBasePage {
   }
 
   public EditTargetListModal enterListName(String name) {
-    waitForVisibleFluentWait(listNameTextBox);
+    waitForElementToClickable(listNameTextBox, true).click();
     listNameTextBox.clear();
+    waitForElementToClickable(listNameTextBox, true).click();
     listNameTextBox.sendKeys(name);
     return this;
   }
