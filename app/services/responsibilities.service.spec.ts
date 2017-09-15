@@ -1,430 +1,555 @@
-// import { Action } from '@ngrx/store';
-// import { EffectsRunner, EffectsTestingModule } from '@ngrx/effects/testing';
-// import { Observable } from 'rxjs';
-// import { TestBed, inject } from '@angular/core/testing';
-// import * as Chance from 'chance';
-//
-// import { DateRangeTimePeriodValue } from '../../enums/date-range-time-period.enum';
-// import { DistributionTypeValue } from '../../enums/distribution-type.enum';
-// import { EntityPeopleType } from '../../enums/entity-responsibilities.enum';
-// import { FetchResponsibilitiesAction,
-//          FetchResponsibilitiesFailureAction,
-//          FetchResponsibilitiesSuccessAction,
-//          FetchResponsibilityEntityPerformance,
-//          FetchResponsibilityEntityPerformanceSuccess,
-//          FetchResponsibilityEntitiesPerformancePayload,
-//          GetPeopleByRoleGroupAction,
-//          SetTableRowPerformanceTotal,
-//          FetchPerformanceTotalAction,
-//          FetchPerformanceTotalSuccessAction,
-//          FetchPerformanceTotalFailureAction } from '../actions/responsibilities.action';
-// import { getEntityPeopleResponsibilitiesMock } from '../../models/entity-responsibilities.model.mock';
-// import { getMyPerformanceTableRowMock } from '../../models/my-performance-table-row.model.mock';
-// import { getEntitiesTotalPerformancesMock,
-// getEntitiesTotalPerformancesDTOMock } from '../../models/entities-total-performances.model.mock';
-// import { getEntitiesPerformancesMock, getResponsibilityEntitiesPerformanceDTOMock } from '../../models/entities-performances.model.mock';
-// import { getGroupedEntitiesMock } from '../../models/grouped-entities.model.mock';
-// import { MetricTypeValue } from '../../enums/metric-type.enum';
-// import { MyPerformanceApiService } from '../../services/my-performance-api.service';
-// import { MyPerformanceFilterState } from '../reducers/my-performance-filter.reducer';
-// import { PerformanceTransformerService } from '../../services/performance-transformer.service';
-// import { EntitiesTotalPerformances, EntitiesTotalPerformancesDTO } from '../../models/entities-total-performances.model';
-// import { PremiseTypeValue } from '../../enums/premise-type.enum';
-// import { ResponsibilitiesEffects } from './responsibilities.effect';
-// import { EntitiesPerformances } from '../../models/entities-performances.model';
-// import { ResponsibilitiesTransformerService } from '../../services/responsibilities-transformer.service';
-// import { GroupedEntities } from '../../models/grouped-entities.model';
-// import { SetLeftMyPerformanceTableViewType } from '../actions/view-types.action';
-// import { ViewType } from '../../enums/view-type.enum';
-//
-// const chance = new Chance();
-//
-// describe('Responsibilities Effects', () => {
-//   const positionIdMock = chance.string();
-//   const groupedEntitiesMock: GroupedEntities = getGroupedEntitiesMock();
-//   const responsibilityEntitiesPerformanceDTOMock = getResponsibilityEntitiesPerformanceDTOMock();
-//   const responsibilityEntitiesPerformanceMock = getEntitiesPerformancesMock();
-//   const performanceTotalMock: EntitiesTotalPerformances = getEntitiesTotalPerformancesMock();
-//   const entitiesTotalPerformancesDTOMock: EntitiesTotalPerformancesDTO = getEntitiesTotalPerformancesDTOMock();
-//   const error = new Error(chance.string());
-//
-//   const performanceFilterStateMock: MyPerformanceFilterState = {
-//     metricType: MetricTypeValue.PointsOfDistribution,
-//     dateRangeCode: DateRangeTimePeriodValue.FYTDBDL,
-//     premiseType: PremiseTypeValue.On,
-//     distributionType: DistributionTypeValue.simple
-//   };
-//   const responsibilitiesSuccessPayloadMock = {
-//     positionId: positionIdMock,
-//     groupedEntities: groupedEntitiesMock,
-//     entitiesPerformances: responsibilityEntitiesPerformanceMock
-//   };
-//   const myPerformanceApiServiceMock = {
-//     getResponsibilities() {
-//       return Observable.of({positions: groupedEntitiesMock});
-//     },
-//     getResponsibilityPerformanceTotal() {
-//       return Observable.of(responsibilityEntitiesPerformanceDTOMock);
-//     },
-//     getPerformanceTotal() {
-//       return Observable.of(entitiesTotalPerformancesDTOMock);
-//     }
-//   };
-//   const responsibilitiesTransformerServiceMock = {
-//     groupPeopleByGroupedEntities(mockArgs: any): GroupedEntities {
-//       return groupedEntitiesMock;
-//     }
-//   };
-//   const performanceTransformerServiceMock = {
-//     transformEntitiesTotalPerformancesDTO(mockArgs: any): EntitiesTotalPerformances {
-//       return performanceTotalMock;
-//     },
-//     transformEntitiesPerformancesDTO(mockArgs: any): EntitiesPerformances[] {
-//       return responsibilityEntitiesPerformanceMock;
-//     }
-//   };
-//
-//   let runner: EffectsRunner;
-//   let responsibilitiesEffects: ResponsibilitiesEffects;
-//
-//   beforeEach(() => TestBed.configureTestingModule({
-//     imports: [
-//       EffectsTestingModule
-//     ],
-//     providers: [
-//       ResponsibilitiesEffects,
-//       {
-//         provide: MyPerformanceApiService,
-//         useValue: myPerformanceApiServiceMock
-//       },
-//       {
-//         provide: ResponsibilitiesTransformerService,
-//         useValue: responsibilitiesTransformerServiceMock
-//       },
-//       {
-//         provide: PerformanceTransformerService,
-//         useValue: performanceTransformerServiceMock
-//       }
-//     ]
-//   }));
-//
-//   beforeEach(inject([ EffectsRunner, ResponsibilitiesEffects ],
-//     (_runner: EffectsRunner, _compassWebEffects: ResponsibilitiesEffects) => {
-//       runner = _runner;
-//       responsibilitiesEffects = _compassWebEffects;
-//     }
-//   ));
-//
-//   describe('when a FetchResponsibilitiesAction is received', () => {
-//
-//     describe('when ResponsibilitiesApiService returns successfully', () => {
-//       let myPerformanceApiService: MyPerformanceApiService;
-//       beforeEach(inject([ MyPerformanceApiService ],
-//         (_myPerformanceApiService: MyPerformanceApiService) => {
-//           myPerformanceApiService = _myPerformanceApiService;
-//
-//           runner.queue(new FetchResponsibilitiesAction({
-//             positionId: positionIdMock,
-//             filter: performanceFilterStateMock
-//           }));
-//         }
-//       ));
-//
-//       it('should return a FetchResponsibilitiesSuccessAction', (done) => {
-//         responsibilitiesEffects.fetchResponsibilities$().pairwise().subscribe(([result1, result2]) => {
-//           expect(result1).toEqual(new SetLeftMyPerformanceTableViewType(ViewType.roleGroups));
-//           expect(result2).toEqual(new FetchResponsibilitiesSuccessAction(responsibilitiesSuccessPayloadMock));
-//           done();
-//         });
-//       });
-//     });
-//
-//     describe('when ResponsibilitiesApiService returns an error', () => {
-//       let myPerformanceApiService: MyPerformanceApiService;
-//
-//       beforeEach(inject([ MyPerformanceApiService ],
-//         (_myPerformanceApiService: MyPerformanceApiService) => {
-//           myPerformanceApiService = _myPerformanceApiService;
-//           runner.queue(new FetchResponsibilitiesAction({
-//             positionId: positionIdMock,
-//             filter: performanceFilterStateMock
-//           }));
-//         }
-//       ));
-//
-//       it('should return a FetchResponsibilitiesFailureAction after catching an error', (done) => {
-//         spyOn(myPerformanceApiService, 'getResponsibilities').and.returnValue(Observable.throw(error));
-//         responsibilitiesEffects.fetchResponsibilities$().subscribe((result) => {
-//           expect(result).toEqual(new FetchResponsibilitiesFailureAction(error));
-//           done();
-//         });
-//       });
-//     });
-//
-//     describe('when a FetchResponsibilitiesFailureAction is received', () => {
-//
-//       beforeEach(() => {
-//         runner.queue(new FetchResponsibilitiesFailureAction(error));
-//         spyOn(console, 'error');
-//       });
-//
-//       it('should log the error payload', (done) => {
-//         responsibilitiesEffects.fetchResponsibilitiesFailure$().subscribe(() => {
-//           expect(console.error).toHaveBeenCalled();
-//           done();
-//         });
-//       });
-//     });
-//
-//     // fdescribe('getPerformanceTotalForGroupedEntities stage', () => { // TODO: rename
-//     //   let myPerformanceApiService: MyPerformanceApiService;
-//     //   let performanceTransformerService: PerformanceTransformerService;
-//     //   let performanceTotalArrayMock: [EntitiesTotalPerformances];
-//     //   let getResponsibilityPerformanceTotalSpy: jasmine.Spy;
-//     //   let transformEntitiesPerformancesDTOResponseMock: any;
-//     //
-//     //   fetchEntityPerformancePayloadMock.entities.push(getEntityPeopleResponsibilitiesMock());
-//     //
-//     //   beforeEach(inject([ MyPerformanceApiService, PerformanceTransformerService ],
-//     //     (_myPerformanceApiService: MyPerformanceApiService, _performanceTransformerServiceMock: PerformanceTransformerService) => {
-//     //       myPerformanceApiService = _myPerformanceApiService;
-//     //       performanceTransformerService = _performanceTransformerServiceMock;
-//     //
-//     //       runner.queue(new FetchResponsibilityEntityPerformance(fetchEntityPerformancePayloadMock));
-//     //
-//     //       performanceTotalArrayMock = [
-//     //         getEntitiesTotalPerformancesMock(),
-//     //         getEntitiesTotalPerformancesMock()
-//     //       ];
-//     //
-//     //       getResponsibilityPerformanceTotalSpy = spyOn(myPerformanceApiService, 'getResponsibilityPerformanceTotal').and.callFake(
-//     //         (entity: { type: string, name: string }, filter: MyPerformanceFilterState, positionId: string) => {
-//     //         const performancesIndex = fetchEntityPerformancePayloadMock.entities.findIndex(item => item.positionId === positionId);
-//     //         return Observable.of({
-//     //           id: positionId,
-//     //           name: entity.name,
-//     //           performanceTotal: performanceTotalArrayMock[performancesIndex]
-//     //         });
-//     //       });
-//     //
-//     //       transformEntitiesPerformancesDTOResponseMock = chance.string();
-//     //
-//     //       spyOn(performanceTransformerService, 'transformEntitiesPerformancesDTO').and.callFake(() => {
-//     //         return transformEntitiesPerformancesDTOResponseMock;
-//     //       });
-//     //     }
-//     //   ));
-//     //
-//     //   it('should call the responsibility performanceTotal endpoint for each entity and return an array of performance data',
-//     //   (done: any) => {
-//     //     const dispatchedActions: Action[] = [];
-//     //
-//     //     responsibilitiesEffects.FetchResponsibilityEntityPerformance$().subscribe((dispatchedAction: Action) => {
-//     //       dispatchedActions.push(dispatchedAction);
-//     //
-//     //       if (dispatchedActions.length === 4) {
-//     //         expect(dispatchedActions).toEqual([
-//     //           new SetTableRowPerformanceTotal(fetchEntityPerformancePayloadMock.entitiesTotalPerformances),
-//     //           new GetPeopleByRoleGroupAction(fetchEntityPerformancePayloadMock.entityType),
-//     //           new FetchResponsibilityEntityPerformanceSuccess(transformEntitiesPerformancesDTOResponseMock),
-//     //           new SetLeftMyPerformanceTableViewType(fetchEntityPerformancePayloadMock.viewType)
-//     //         ]);
-//     //
-//     //         done();
-//     //       }
-//     //     });
-//     //   });
-//     //
-//     //   it('should call getResponsibilitiesPerformanceTotal with the right arguments', () => {
-//     //
-//     //   });
-//     // });
-//   });
-//
-//   describe('when a FetchResponsibilityEntityPerformance is received', () => {
-//     const fetchEntityPerformancePayloadMock: FetchResponsibilityEntitiesPerformancePayload = {
-//       entityType: EntityPeopleType['GENERAL MANAGER'],
-//       entities: [getEntityPeopleResponsibilitiesMock()],
-//       filter: performanceFilterStateMock,
-//       entitiesTotalPerformances: getMyPerformanceTableRowMock(1)[0],
-//       viewType: ViewType.people
-//     };
-//
-//     describe('when MyPerformanceApiService returns successfully', () => {
-//       let myPerformanceApiService: MyPerformanceApiService;
-//
-//       beforeEach(inject([ MyPerformanceApiService ],
-//         (_myPerformanceApiService: MyPerformanceApiService) => {
-//           myPerformanceApiService = _myPerformanceApiService;
-//
-//           runner.queue(new FetchResponsibilityEntityPerformance(fetchEntityPerformancePayloadMock));
-//         }
-//       ));
-//
-//       it('should dispatch appropriate actions', (done) => {
-//         const dispatchedActions: Action[] = [];
-//
-//         responsibilitiesEffects.FetchResponsibilityEntityPerformance$().subscribe((dispatchedAction: Action) => {
-//           dispatchedActions.push(dispatchedAction);
-//
-//           if (dispatchedActions.length === 4) {
-//             expect(dispatchedActions).toEqual([
-//               new SetTableRowPerformanceTotal(fetchEntityPerformancePayloadMock.entitiesTotalPerformances),
-//               new GetPeopleByRoleGroupAction(fetchEntityPerformancePayloadMock.entityType),
-//               new FetchResponsibilityEntityPerformanceSuccess(responsibilityEntitiesPerformanceMock),
-//               new SetLeftMyPerformanceTableViewType(fetchEntityPerformancePayloadMock.viewType)
-//             ]);
-//
-//             done();
-//           }
-//         });
-//       });
-//     });
-//
-//     describe('when MyPerformanceApiService returns an error', () => {
-//       let myPerformanceApiService: MyPerformanceApiService;
-//
-//       beforeEach(inject([ MyPerformanceApiService ],
-//         (_myPerformanceApiService: MyPerformanceApiService) => {
-//           myPerformanceApiService = _myPerformanceApiService;
-//
-//           runner.queue(new FetchResponsibilityEntityPerformance(fetchEntityPerformancePayloadMock));
-//         }
-//       ));
-//
-//       it('should return a FetchResponsibilitiesFailureAction after catching an error', (done) => {
-//         spyOn(myPerformanceApiService, 'getResponsibilityPerformanceTotal').and.returnValue(Observable.throw(error));
-//         responsibilitiesEffects.FetchResponsibilityEntityPerformance$().subscribe((result) => {
-//           expect(result).toEqual(new FetchResponsibilitiesFailureAction(error));
-//           done();
-//         });
-//       });
-//     });
-//
-//     describe('when getResponsibilityPerformanceTotal returns successfully', () => {
-//       let myPerformanceApiService: MyPerformanceApiService;
-//       let performanceTransformerService: PerformanceTransformerService;
-//       let performanceTotalArrayMock: [EntitiesTotalPerformances];
-//       let getResponsibilityPerformanceTotalSpy: jasmine.Spy;
-//       let transformEntitiesPerformancesDTOResponseMock: any;
-//
-//       fetchEntityPerformancePayloadMock.entities.push(getEntityPeopleResponsibilitiesMock());
-//
-//       beforeEach(inject([ MyPerformanceApiService, PerformanceTransformerService ],
-//         (_myPerformanceApiService: MyPerformanceApiService, _performanceTransformerServiceMock: PerformanceTransformerService) => {
-//           myPerformanceApiService = _myPerformanceApiService;
-//           performanceTransformerService = _performanceTransformerServiceMock;
-//
-//           runner.queue(new FetchResponsibilityEntityPerformance(fetchEntityPerformancePayloadMock));
-//
-//           performanceTotalArrayMock = [
-//             getEntitiesTotalPerformancesMock(),
-//             getEntitiesTotalPerformancesMock()
-//           ];
-//
-//           getResponsibilityPerformanceTotalSpy = spyOn(myPerformanceApiService, 'getResponsibilityPerformanceTotal').and.callFake(
-//             (entity: { type: string, name: string }, filter: MyPerformanceFilterState, positionId: string) => {
-//             const performancesIndex = fetchEntityPerformancePayloadMock.entities.findIndex(item => item.positionId === positionId);
-//             return Observable.of({
-//               id: positionId,
-//               name: entity.name,
-//               performanceTotal: performanceTotalArrayMock[performancesIndex]
-//             });
-//           });
-//
-//           transformEntitiesPerformancesDTOResponseMock = chance.string();
-//
-//           spyOn(performanceTransformerService, 'transformEntitiesPerformancesDTO').and.callFake(() => {
-//             return transformEntitiesPerformancesDTOResponseMock;
-//           });
-//         }
-//       ));
-//
-//       it('should call the responsibility performanceTotal endpoint for each entity and return an array of performance data',
-//       (done: any) => {
-//         const dispatchedActions: Action[] = [];
-//
-//         responsibilitiesEffects.FetchResponsibilityEntityPerformance$().subscribe((dispatchedAction: Action) => {
-//           dispatchedActions.push(dispatchedAction);
-//
-//           if (dispatchedActions.length === 4) {
-//             expect(dispatchedActions).toEqual([
-//               new SetTableRowPerformanceTotal(fetchEntityPerformancePayloadMock.entitiesTotalPerformances),
-//               new GetPeopleByRoleGroupAction(fetchEntityPerformancePayloadMock.entityType),
-//               new FetchResponsibilityEntityPerformanceSuccess(transformEntitiesPerformancesDTOResponseMock),
-//               new SetLeftMyPerformanceTableViewType(fetchEntityPerformancePayloadMock.viewType)
-//             ]);
-//
-//             done();
-//           }
-//         });
-//       });
-//
-//       it('should call getResponsibilitiesPerformanceTotal with the right arguments',
-//       (done: any) => {
-//         responsibilitiesEffects.FetchResponsibilityEntityPerformance$().subscribe((dispatchedAction: Action) => {
-//           done();
-//         });
-//
-//         expect(getResponsibilityPerformanceTotalSpy.calls.count()).toBe(fetchEntityPerformancePayloadMock.entities.length);
-//         expect(getResponsibilityPerformanceTotalSpy.calls.argsFor(0)).toEqual([
-//           fetchEntityPerformancePayloadMock.entities[0],
-//           fetchEntityPerformancePayloadMock.filter,
-//           fetchEntityPerformancePayloadMock.entities[0].positionId
-//         ]);
-//         expect(getResponsibilityPerformanceTotalSpy.calls.argsFor(1)).toEqual([
-//           fetchEntityPerformancePayloadMock.entities[1],
-//           fetchEntityPerformancePayloadMock.filter,
-//           fetchEntityPerformancePayloadMock.entities[1].positionId
-//         ]);
-//       });
-//     });
-//   });
-//
-//   describe('when a fetch performance total or responsibilities action is dispatched', () => {
-//     let myPerformanceApiService: MyPerformanceApiService;
-//
-//     beforeEach(inject([ MyPerformanceApiService ],
-//       (_myPerformanceApiService: MyPerformanceApiService) => {
-//         myPerformanceApiService = _myPerformanceApiService;
-//         runner.queue(new FetchPerformanceTotalAction({
-//           positionId: positionIdMock,
-//           filter: performanceFilterStateMock
-//         }));
-//       }
-//     ));
-//
-//     it('should return a success action when the api service returns a response', (done) => {
-//       responsibilitiesEffects.fetchPerformanceTotal$().subscribe(result => {
-//         expect(result).toEqual(new FetchPerformanceTotalSuccessAction(performanceTotalMock));
-//         done();
-//       });
-//     });
-//
-//     it('should return a fail action when the api service returns an error', (done) => {
-//       spyOn(myPerformanceApiService, 'getPerformanceTotal').and.returnValue(Observable.throw(error));
-//
-//       responsibilitiesEffects.fetchPerformanceTotal$().subscribe(result => {
-//         expect(result).toEqual(new FetchPerformanceTotalFailureAction(error));
-//         done();
-//       });
-//     });
-//
-//     it('should log the error payload when a FetchPerformanceTotalFailureAction is received', (done) => {
-//       spyOn(myPerformanceApiService, 'getPerformanceTotal').and.returnValue(Observable.throw(error));
-//       spyOn(console, 'error');
-//
-//       responsibilitiesEffects.fetchPerformanceTotal$().subscribe(result => {
-//         expect(result).toEqual(new FetchPerformanceTotalFailureAction(error));
-//         runner.queue(new FetchPerformanceTotalFailureAction(error));
-//         done();
-//       });
-//
-//       responsibilitiesEffects.fetchPerformanceTotalFailure$().subscribe((result) => {
-//         expect(result).toEqual(new FetchPerformanceTotalFailureAction(error));
-//         expect(console.error).toHaveBeenCalledWith('Failed fetching performance total data', result.payload);
-//         done();
-//       });
-//     });
-//   });
-// });
+import { Observable } from 'rxjs';
+import { TestBed, inject } from '@angular/core/testing';
+import * as Chance from 'chance';
+
+import { DateRangeTimePeriodValue } from '../enums/date-range-time-period.enum';
+import { DistributionTypeValue } from '../enums/distribution-type.enum';
+// import { EntityPeopleType } from '../enums/entity-responsibilities.enum';
+import { EntitiesTotalPerformances, EntitiesTotalPerformancesDTO } from '../models/entities-total-performances.model';
+import { EntityDTO } from '../models/entity-dto.model';
+// import { getEntityPeopleResponsibilitiesMock } from '../models/entity-responsibilities.model.mock';
+// import { getMyPerformanceTableRowMock } from '../models/my-performance-table-row.model.mock';
+import { getEntitiesTotalPerformancesMock,
+getEntitiesTotalPerformancesDTOMock } from '../models/entities-total-performances.model.mock';
+import { getEntitiesPerformancesMock, getResponsibilityEntitiesPerformanceDTOMock } from '../models/entities-performances.model.mock';
+import { getEntityDTOMock } from '../models/entity-dto.model.mock';
+import { getEntityPeopleResponsibilitiesMock } from '../models/entity-responsibilities.model.mock';
+import { getGroupedEntitiesMock } from '../models/grouped-entities.model.mock';
+import { getPeopleResponsibilitiesDTOMock } from '../models/people-responsibilities-dto.model.mock';
+import { MetricTypeValue } from '../enums/metric-type.enum';
+import { MyPerformanceApiService } from '../services/my-performance-api.service';
+import { MyPerformanceFilterState } from '../state/reducers/my-performance-filter.reducer';
+import { PeopleResponsibilitiesDTO } from '../models/people-responsibilities-dto.model';
+import { PerformanceTransformerService } from '../services/performance-transformer.service';
+import { PremiseTypeValue } from '../enums/premise-type.enum';
+import { EntitiesPerformances, EntitiesPerformancesDTO } from '../models/entities-performances.model';
+import { ResponsibilitiesTransformerService } from '../services/responsibilities-transformer.service';
+import { ResponsibilitiesService, ResponsibilitiesData } from './responsibilities.service';
+import { GroupedEntities } from '../models/grouped-entities.model';
+import { ViewType } from '../enums/view-type.enum';
+
+const chance = new Chance();
+
+describe('Responsibilities Effects', () => {
+  let positionIdMock: string;
+  let groupedEntitiesMock: GroupedEntities;
+  let accountsDistributorsMock: GroupedEntities;
+  let peopleResponsibilitiesDTOMock: PeopleResponsibilitiesDTO;
+  let responsibilityEntitiesPerformanceDTOMock: EntitiesPerformancesDTO[];
+  let entitiesPerformanceMock: EntitiesPerformances[];
+  let performanceTotalMock: EntitiesTotalPerformances;
+  let entitiesTotalPerformancesDTOMock: EntitiesTotalPerformancesDTO;
+  let entityDTOMock: EntityDTO;
+  // const error = new Error(chance.string());
+
+  const performanceFilterStateMock: MyPerformanceFilterState = {
+    metricType: MetricTypeValue.PointsOfDistribution,
+    dateRangeCode: DateRangeTimePeriodValue.FYTDBDL,
+    premiseType: PremiseTypeValue.On,
+    distributionType: DistributionTypeValue.simple
+  };
+
+  const myPerformanceApiServiceMock = {
+    getResponsibilities() {
+      return Observable.of(peopleResponsibilitiesDTOMock);
+    },
+    getResponsibilityPerformanceTotal() {
+      return Observable.of(responsibilityEntitiesPerformanceDTOMock);
+    },
+    getPerformanceTotal() {
+      return Observable.of(entitiesTotalPerformancesDTOMock);
+    },
+    getAccountsDistributors() {
+      return Observable.of(entityDTOMock);
+    }
+  };
+
+  const performanceTransformerServiceMock = {
+    transformEntitiesTotalPerformancesDTO(mockArgs: any): EntitiesTotalPerformances {
+      return performanceTotalMock;
+    },
+    transformEntitiesPerformancesDTO(mockArgs: any): EntitiesPerformances[] {
+      return entitiesPerformanceMock;
+    }
+  };
+
+  const responsibilitiesTransformerServiceMock = {
+    groupPeopleByGroupedEntities(mockArgs: any): GroupedEntities {
+      return groupedEntitiesMock;
+    },
+    groupsAccountsDistributors(mockArgs: any): GroupedEntities {
+      return accountsDistributorsMock;
+    }
+  };
+
+  let responsibilitiesService: ResponsibilitiesService;
+  let myPerformanceApiService: MyPerformanceApiService;
+  let performanceTransformerService: PerformanceTransformerService;
+  let responsibilitiesTransformerService: ResponsibilitiesTransformerService;
+
+  beforeEach(() => TestBed.configureTestingModule({
+    providers: [
+      ResponsibilitiesService,
+      {
+        provide: MyPerformanceApiService,
+        useValue: myPerformanceApiServiceMock
+      },
+      {
+        provide: ResponsibilitiesTransformerService,
+        useValue: responsibilitiesTransformerServiceMock
+      },
+      {
+        provide: PerformanceTransformerService,
+        useValue: performanceTransformerServiceMock
+      }
+    ]
+  }));
+
+  beforeEach(inject([ ResponsibilitiesService, MyPerformanceApiService, PerformanceTransformerService, ResponsibilitiesTransformerService ],
+    (_responsibilitiesService: ResponsibilitiesService,
+    _myPerformanceApiService: MyPerformanceApiService,
+    _performanceTransformerService: PerformanceTransformerService,
+    _responsibilitiesTransformerService: ResponsibilitiesTransformerService) => {
+      responsibilitiesService = _responsibilitiesService;
+      myPerformanceApiService = _myPerformanceApiService;
+      performanceTransformerService = _performanceTransformerService;
+      responsibilitiesTransformerService = _responsibilitiesTransformerService;
+
+      positionIdMock = chance.string();
+      groupedEntitiesMock = getGroupedEntitiesMock();
+      accountsDistributorsMock = {'all': [ getEntityPeopleResponsibilitiesMock() ]};
+      peopleResponsibilitiesDTOMock = getPeopleResponsibilitiesDTOMock();
+      responsibilityEntitiesPerformanceDTOMock = getResponsibilityEntitiesPerformanceDTOMock();
+      entitiesPerformanceMock = getEntitiesPerformancesMock();
+      performanceTotalMock = getEntitiesTotalPerformancesMock();
+      entitiesTotalPerformancesDTOMock = getEntitiesTotalPerformancesDTOMock();
+      entityDTOMock = getEntityDTOMock();
+  }));
+
+  describe('when getResponsibilities is called', () => {
+    let responsibilitiesDataMock: ResponsibilitiesData;
+
+    beforeEach(() => {
+      responsibilitiesDataMock = {
+        positionId: positionIdMock
+      };
+    });
+
+    describe('when myPerformanceApiService returns some positions', () => {
+      beforeEach(() => {
+        peopleResponsibilitiesDTOMock.entityURIs = undefined;
+      });
+      it('returns positions and their performances', (done) => {
+        const expectedResponsibilities = {
+          positionId: positionIdMock,
+          groupedEntities: groupedEntitiesMock,
+          viewType: ViewType.roleGroups,
+          entityTypes: [
+            {
+              type: groupedEntitiesMock['GENERAL MANAGER'][0].type,
+              name: 'GENERAL MANAGER'
+            },
+            {
+              type: groupedEntitiesMock['MARKET DEVELOPMENT MANAGER'][0].type,
+              name: 'MARKET DEVELOPMENT MANAGER'
+            }
+          ],
+          entitiesURL: undefined as any
+        };
+
+        responsibilitiesService.getResponsibilities(responsibilitiesDataMock).subscribe((responsibilitiesData: ResponsibilitiesData) => {
+          expect(responsibilitiesData).toEqual(expectedResponsibilities);
+
+          done();
+        });
+      });
+
+      it('calls getResponsibilities with the right parameters', (done) => {
+        const getResponsibilitiesSpy = spyOn(myPerformanceApiService, 'getResponsibilities').and.callThrough();
+
+        responsibilitiesService.getResponsibilities(responsibilitiesDataMock).subscribe(() => {
+          done();
+        });
+
+        expect(getResponsibilitiesSpy.calls.count()).toBe(1);
+        expect(getResponsibilitiesSpy.calls.argsFor(0)[0]).toBe(positionIdMock);
+      });
+
+      it('calls groupPeopleByGroupedEntities with the right parameters', (done) => {
+        const groupPeopleByGroupedEntitiesSpy = spyOn(responsibilitiesTransformerService, 'groupPeopleByGroupedEntities').and.callThrough();
+
+        responsibilitiesService.getResponsibilities(responsibilitiesDataMock).subscribe(() => {
+          done();
+        });
+
+        expect(groupPeopleByGroupedEntitiesSpy.calls.count()).toBe(1);
+        expect(groupPeopleByGroupedEntitiesSpy.calls.argsFor(0)[0]).toBe(peopleResponsibilitiesDTOMock.positions);
+      });
+    });
+
+    describe('when myPerformanceApiService returns some accounts', () => {
+      beforeEach(() => {
+        peopleResponsibilitiesDTOMock.positions = undefined;
+        peopleResponsibilitiesDTOMock.entityURIs[0] = 'accounts';
+      });
+
+      it('returns accounts and their performances', (done) => {
+        const expectedResponsibilities = {
+          positionId: positionIdMock,
+          groupedEntities: undefined as any,
+          viewType: ViewType.accounts,
+          entityTypes: undefined as any,
+          entitiesURL: peopleResponsibilitiesDTOMock.entityURIs[0]
+        };
+
+        responsibilitiesService.getResponsibilities(responsibilitiesDataMock).subscribe((responsibilitiesData: ResponsibilitiesData) => {
+          expect(responsibilitiesData).toEqual(expectedResponsibilities);
+
+          done();
+        });
+      });
+
+      it('calls getResponsibilities with the right parameters', (done) => {
+        const getResponsibilitiesSpy = spyOn(myPerformanceApiService, 'getResponsibilities').and.callThrough();
+
+        responsibilitiesService.getResponsibilities(responsibilitiesDataMock).subscribe(() => {
+          done();
+        });
+
+        expect(getResponsibilitiesSpy.calls.count()).toBe(1);
+        expect(getResponsibilitiesSpy.calls.argsFor(0)[0]).toBe(positionIdMock);
+      });
+
+      it('does not call groupPeopleByGroupedEntities', (done) => {
+        const groupPeopleByGroupedEntitiesSpy = spyOn(responsibilitiesTransformerService, 'groupPeopleByGroupedEntities').and.callThrough();
+
+        responsibilitiesService.getResponsibilities(responsibilitiesDataMock).subscribe(() => {
+          done();
+        });
+
+        expect(groupPeopleByGroupedEntitiesSpy.calls.count()).toBe(0);
+      });
+    });
+
+    describe('when myPerformanceApiService returns some distributors', () => {
+      beforeEach(() => {
+        peopleResponsibilitiesDTOMock.positions = undefined;
+        peopleResponsibilitiesDTOMock.entityURIs[0] = 'distributors';
+      });
+
+      it('returns the distributors and their performances', (done) => {
+        const expectedResponsibilities = {
+          positionId: positionIdMock,
+          groupedEntities: undefined as any,
+          viewType: ViewType.distributors,
+          entityTypes: undefined as any,
+          entitiesURL: peopleResponsibilitiesDTOMock.entityURIs[0]
+        };
+
+        responsibilitiesService.getResponsibilities(responsibilitiesDataMock).subscribe((responsibilitiesData: ResponsibilitiesData) => {
+          expect(responsibilitiesData).toEqual(expectedResponsibilities);
+
+          done();
+        });
+      });
+
+      it('calls getResponsibilities with the right parameters', (done) => {
+        const getResponsibilitiesSpy = spyOn(myPerformanceApiService, 'getResponsibilities').and.callThrough();
+
+        responsibilitiesService.getResponsibilities(responsibilitiesDataMock).subscribe(() => {
+          done();
+        });
+
+        expect(getResponsibilitiesSpy.calls.count()).toBe(1);
+        expect(getResponsibilitiesSpy.calls.argsFor(0)[0]).toBe(positionIdMock);
+      });
+
+      it('does not call groupPeopleByGroupedEntities', (done) => {
+        const groupPeopleByGroupedEntitiesSpy = spyOn(responsibilitiesTransformerService, 'groupPeopleByGroupedEntities').and.callThrough();
+
+        responsibilitiesService.getResponsibilities(responsibilitiesDataMock).subscribe(() => {
+          done();
+        });
+
+        expect(groupPeopleByGroupedEntitiesSpy.calls.count()).toBe(0);
+      });
+    });
+  });
+
+  describe('when getPerformanceTotalForGroupedEntities is called', () => {
+    describe('when called for roleGroups', () => {
+      const responsibilitiesDataMock: ResponsibilitiesData = {
+        positionId: positionIdMock,
+        viewType: ViewType.roleGroups,
+        entityTypes: [{
+          type: chance.string(),
+          name: chance.string()
+        }],
+        filter: performanceFilterStateMock
+      };
+
+      it('returns performances totals', (done) => {
+        spyOn(responsibilitiesService, 'getResponsibilitiesPerformanceTotals').and.callFake(() => {
+          return Observable.of(entitiesPerformanceMock);
+        });
+
+        const expectedPerformancesTotal = {
+          positionId: responsibilitiesDataMock.positionId,
+          viewType: ViewType.roleGroups,
+          entityTypes: responsibilitiesDataMock.entityTypes,
+          filter: responsibilitiesDataMock.filter,
+          entitiesPerformances: entitiesPerformanceMock
+        };
+
+        responsibilitiesService.getPerformanceTotalForGroupedEntities(responsibilitiesDataMock)
+          .subscribe((responsibilitiesData: ResponsibilitiesData) => {
+          expect(responsibilitiesData).toEqual(expectedPerformancesTotal);
+
+          done();
+        });
+      });
+
+      it('calls getPerformanceTotalForGroupedEntities with the right parameters', (done) => {
+        const getResponsibilitiesPerformanceSpy = spyOn(responsibilitiesService, 'getResponsibilitiesPerformanceTotals').and.callThrough();
+
+        responsibilitiesService.getPerformanceTotalForGroupedEntities(responsibilitiesDataMock).subscribe(() => {
+          done();
+        });
+
+        expect(getResponsibilitiesPerformanceSpy.calls.count()).toBe(1);
+        expect(getResponsibilitiesPerformanceSpy.calls.argsFor(0)).toEqual([
+          responsibilitiesDataMock.entityTypes,
+          responsibilitiesDataMock.filter,
+          responsibilitiesDataMock.positionId
+        ]);
+      });
+
+      it('does not call getPerformanceTotalForGroupedEntities if we are not viewing role groups', (done) => {
+        responsibilitiesDataMock.viewType = ViewType.accounts;
+        const getResponsibilitiesPerformanceSpy = spyOn(responsibilitiesService, 'getResponsibilitiesPerformanceTotals').and.callThrough();
+
+        responsibilitiesService.getPerformanceTotalForGroupedEntities(responsibilitiesDataMock).subscribe(
+          (responsibilitiesData: ResponsibilitiesData) => {
+          expect(responsibilitiesDataMock).toBe(responsibilitiesData);
+
+          done();
+        });
+
+        expect(getResponsibilitiesPerformanceSpy.calls.count()).toBe(0);
+      });
+    });
+  });
+
+  describe('when getAccountsDistributors is called', () => {
+    describe('when called for distributors or accounts', () => {
+      const responsibilitiesDataMock: ResponsibilitiesData = {
+        viewType: ViewType.distributors,
+        entityTypes: [{
+          type: chance.string(),
+          name: chance.string()
+        }]
+      };
+
+      it('returns accounts or distributors', (done) => {
+        const expectedGroupedEntities = accountsDistributorsMock;
+
+        responsibilitiesService.getAccountsDistributors(responsibilitiesDataMock)
+          .subscribe((responsibilitiesData: ResponsibilitiesData) => {
+          expect(responsibilitiesData.groupedEntities).toEqual(expectedGroupedEntities);
+
+          done();
+        });
+      });
+
+      it('calls getAccountsDistributors with the right parameters', (done) => {
+        const getAccountsDistributorsSpy = spyOn(myPerformanceApiService, 'getAccountsDistributors').and.callThrough();
+
+        responsibilitiesService.getAccountsDistributors(responsibilitiesDataMock).subscribe(() => {
+          done();
+        });
+
+        expect(getAccountsDistributorsSpy.calls.count()).toBe(1);
+        expect(getAccountsDistributorsSpy.calls.argsFor(0)[0]).toEqual(responsibilitiesDataMock.entitiesURL);
+      });
+
+      it('calls groupsAccountsDistributors with the right parameters', (done) => {
+        const groupsAccountsDistributorsSpy = spyOn(responsibilitiesTransformerService, 'groupsAccountsDistributors').and.callThrough();
+
+        responsibilitiesService.getAccountsDistributors(responsibilitiesDataMock).subscribe(() => {
+          done();
+        });
+
+        expect(groupsAccountsDistributorsSpy.calls.count()).toBe(1);
+        expect(groupsAccountsDistributorsSpy.calls.argsFor(0)[0]).toEqual(entityDTOMock);
+      });
+
+      it('gives back the original parameters if not call with accounts or distributors', (done) => {
+        responsibilitiesDataMock.viewType = ViewType.roleGroups;
+
+        const getAccountsDistributorsSpy = spyOn(myPerformanceApiService, 'getAccountsDistributors').and.callThrough();
+        const groupsAccountsDistributorsSpy = spyOn(responsibilitiesTransformerService, 'groupsAccountsDistributors').and.callThrough();
+
+        responsibilitiesService.getAccountsDistributors(responsibilitiesDataMock).subscribe(
+          (responsibilitiesData: ResponsibilitiesData) => {
+          expect(responsibilitiesDataMock).toBe(responsibilitiesData);
+
+          done();
+        });
+
+        expect(getAccountsDistributorsSpy.calls.count()).toBe(0);
+        expect(groupsAccountsDistributorsSpy.calls.count()).toBe(0);
+      });
+    });
+  });
+
+  describe('when getResponsibilitiesPerformanceTotals is called', () => {
+    let entities: Array<{ positionId?: string, type: string, name: string }>;
+
+    beforeEach(() => {
+      entities = [
+        {
+          positionId: chance.string(),
+          type: chance.string(),
+          name: chance.string()
+        },
+        {
+          positionId: chance.string(),
+          type: chance.string(),
+          name: chance.string()
+        }
+      ];
+    });
+
+    it('returns the transformed entities performances when given a positionId', (done) => {
+      responsibilitiesService.getResponsibilitiesPerformanceTotals(
+        entities,
+        performanceFilterStateMock,
+        positionIdMock
+        )
+        .subscribe((entitiesPerformances: EntitiesPerformances[]) => {
+        expect(entitiesPerformances).toBe(entitiesPerformanceMock);
+
+        done();
+      });
+    });
+
+    it('returns the transformed entities performances not given a positionId', (done) => {
+      responsibilitiesService.getResponsibilitiesPerformanceTotals(
+        entities,
+        performanceFilterStateMock
+        )
+        .subscribe((entitiesPerformances: EntitiesPerformances[]) => {
+        expect(entitiesPerformances).toBe(entitiesPerformanceMock);
+
+        done();
+      });
+    });
+
+    it('calls getResponsibilityPerformanceTotal with the given positionId when then entities donn\'t have some', (done) => {
+      const getPerformanceSpy = spyOn(myPerformanceApiService, 'getResponsibilityPerformanceTotal').and.callThrough();
+
+      entities[0].positionId = undefined;
+      entities[1].positionId = undefined;
+
+      responsibilitiesService.getResponsibilitiesPerformanceTotals(
+        entities,
+        performanceFilterStateMock,
+        positionIdMock
+        )
+        .subscribe((entitiesPerformances: EntitiesPerformances[]) => {
+        expect(entitiesPerformances).toBe(entitiesPerformanceMock);
+
+        done();
+      });
+
+      expect(getPerformanceSpy.calls.count()).toBe(2);
+      expect(getPerformanceSpy.calls.argsFor(0)).toEqual([
+        entities[0],
+        performanceFilterStateMock,
+        positionIdMock
+      ]);
+      expect(getPerformanceSpy.calls.argsFor(1)).toEqual([
+        entities[1],
+        performanceFilterStateMock,
+        positionIdMock
+      ]);
+    });
+
+    it('calls getResponsibilityPerformanceTotal with the individual entitie\'s positionId when they are popoulated', (done) => {
+      const getPerformanceSpy = spyOn(myPerformanceApiService, 'getResponsibilityPerformanceTotal').and.callThrough();
+
+      responsibilitiesService.getResponsibilitiesPerformanceTotals(
+        entities,
+        performanceFilterStateMock
+        )
+        .subscribe((entitiesPerformances: EntitiesPerformances[]) => {
+        expect(entitiesPerformances).toBe(entitiesPerformanceMock);
+
+        done();
+      });
+
+      expect(getPerformanceSpy.calls.count()).toBe(2);
+      expect(getPerformanceSpy.calls.argsFor(0)).toEqual([
+        entities[0],
+        performanceFilterStateMock,
+        entities[0].positionId
+      ]);
+      expect(getPerformanceSpy.calls.argsFor(1)).toEqual([
+        entities[1],
+        performanceFilterStateMock,
+        entities[1].positionId
+      ]);
+    });
+
+    it('calls transformEntitiesPerformancesDTO with the right parameters', (done) => {
+      const transformerSpy = spyOn(performanceTransformerService, 'transformEntitiesPerformancesDTO').and.callThrough();
+
+      responsibilitiesService.getResponsibilitiesPerformanceTotals(entities, performanceFilterStateMock)
+        .subscribe((entitiesPerformances: EntitiesPerformances[]) => {
+        done();
+      });
+
+      expect(transformerSpy.calls.count()).toBe(1);
+      expect(transformerSpy.calls.argsFor(0)[0]).toEqual([
+        responsibilityEntitiesPerformanceDTOMock,
+        responsibilityEntitiesPerformanceDTOMock
+      ]);
+    });
+  });
+
+  describe('when getPerformanceTotal is called', () => {
+    it('returns the transformed total performances', (done) => {
+      responsibilitiesService.getPerformanceTotal(positionIdMock, performanceFilterStateMock)
+        .subscribe((entitiesTotalPerformances: EntitiesTotalPerformances) => {
+        expect(entitiesTotalPerformances).toBe(performanceTotalMock);
+
+        done();
+      });
+    });
+
+    it('calls getPerformanceTotal with the right parameters', (done) => {
+      const getPerformanceTotalSpy = spyOn(myPerformanceApiService, 'getPerformanceTotal').and.callThrough();
+
+      responsibilitiesService.getPerformanceTotal(positionIdMock, performanceFilterStateMock).subscribe(() => {
+        done();
+      });
+
+      expect(getPerformanceTotalSpy.calls.count()).toBe(1);
+      expect(getPerformanceTotalSpy.calls.argsFor(0)).toEqual([
+        positionIdMock,
+        performanceFilterStateMock
+      ]);
+    });
+
+    it('calls transformEntitiesTotalPerformancesDTO with the right parameters', (done) => {
+      const transformerSpy = spyOn(performanceTransformerService, 'transformEntitiesTotalPerformancesDTO').and.callThrough();
+
+      responsibilitiesService.getPerformanceTotal(positionIdMock, performanceFilterStateMock).subscribe(() => {
+        done();
+      });
+
+      expect(transformerSpy.calls.count()).toBe(1);
+      expect(transformerSpy.calls.argsFor(0)[0]).toEqual(entitiesTotalPerformancesDTOMock);
+    });
+  });
+});

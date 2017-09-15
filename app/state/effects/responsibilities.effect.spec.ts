@@ -103,17 +103,15 @@ describe('Responsibilities Effects', () => {
   ));
 
   describe('when a FetchResponsibilitiesAction is received', () => {
-    beforeEach(inject([],
-      () => {
-        runner.queue(new FetchResponsibilitiesAction({
-          positionId: positionIdMock,
-          filter: performanceFilterStateMock
-        }));
-      }
-    ));
+    beforeEach(() => {
+      runner.queue(new FetchResponsibilitiesAction({
+        positionId: positionIdMock,
+        filter: performanceFilterStateMock
+      }));
+    });
 
     describe('when everything returns successfully', () => {
-      it('should return a FetchResponsibilitiesSuccessAction', (done: any) => {
+      it('should return a FetchResponsibilitiesSuccessAction', (done) => {
         const responsibilitiesSuccessPayloadMock = {
           positionId: positionIdMock,
           groupedEntities: groupedEntitiesMock,
@@ -230,10 +228,9 @@ describe('Responsibilities Effects', () => {
       viewType: ViewType.people
     };
 
-    beforeEach(inject([], () => {
-        runner.queue(new FetchResponsibilityEntityPerformance(fetchEntityPerformancePayloadMock));
-      }
-    ));
+    beforeEach(() => {
+      runner.queue(new FetchResponsibilityEntityPerformance(fetchEntityPerformancePayloadMock));
+    });
 
     it('should call getResponsibilitiesPerformanceTotals with the right arguments', (done) => {
       const getResponsibilitiesSpy = spyOn(responsibilitiesService, 'getResponsibilitiesPerformanceTotals').and.callThrough();
@@ -282,13 +279,12 @@ describe('Responsibilities Effects', () => {
   });
 
   describe('when a fetch performance total or responsibilities action is dispatched', () => {
-    beforeEach(inject([], () => {
-        runner.queue(new FetchPerformanceTotalAction({
-          positionId: positionIdMock,
-          filter: performanceFilterStateMock
-        }));
-      }
-    ));
+    beforeEach(() => {
+      runner.queue(new FetchPerformanceTotalAction({
+        positionId: positionIdMock,
+        filter: performanceFilterStateMock
+      }));
+    });
 
     it('should return a success action when the api service returns a response', (done) => {
       responsibilitiesEffects.fetchPerformanceTotal$().subscribe(result => {
