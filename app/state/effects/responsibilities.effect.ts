@@ -7,12 +7,9 @@ import 'rxjs/add/operator/switchMap';
 
 import { EntitiesPerformances } from '../../models/entities-performances.model';
 import { EntitiesTotalPerformances } from '../../models/entities-total-performances.model';
-import { GroupedEntities } from '../../models/grouped-entities.model';
-import { MyPerformanceFilterState } from '../../state/reducers/my-performance-filter.reducer';
 import { ResponsibilitiesService, ResponsibilitiesData } from '../../services/responsibilities.service';
 import * as ResponsibilitiesActions from '../../state/actions/responsibilities.action';
 import * as ViewTypeActions from '../../state/actions/view-types.action';
-import { ViewType } from '../../enums/view-type.enum';
 
 @Injectable()
 export class ResponsibilitiesEffects {

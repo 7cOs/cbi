@@ -10,6 +10,7 @@ import { MyPerformanceTableDataTransformerService } from '../../services/my-perf
 import { MyPerformanceApiService } from '../../services/my-performance-api.service';
 import { PerformanceTransformerService } from '../../services/performance-transformer.service';
 import { ResponsibilitiesTransformerService } from  '../../services/responsibilities-transformer.service';
+import { ResponsibilitiesService } from  '../../services/responsibilities.service';
 import { SharedModule } from '../../shared/shared.module';
 import { SortIndicatorComponent } from '../../shared/components/sort-indicator/sort-indicator.component';
 
@@ -30,7 +31,8 @@ import { SortIndicatorComponent } from '../../shared/components/sort-indicator/s
     MyPerformanceApiService,
     MyPerformanceTableDataTransformerService,
     PerformanceTransformerService,
-    ResponsibilitiesTransformerService
+    ResponsibilitiesTransformerService,
+    ResponsibilitiesService
   ]
 })
 
