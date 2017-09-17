@@ -78,9 +78,10 @@ export class MyPerformanceApiService {
       .catch(err => this.handleError(new Error(err)));
   }
 
-  public getDistributorsPerformanceTotals(distributors: EntityDTO[], filter: MyPerformanceFilterState) {
+  public getDistributorsPerformanceTotals(distributors: EntityResponsibilities[], filter: MyPerformanceFilterState) {
+    console.log(distributors);
     const apiCalls: Observable<EntitiesTotalPerformancesDTO | Error>[] =
-      distributors.map((dist: EntityDTO) => this.getDistributorPerformanceTotal(dist.id, filter));
+      distributors.map((dist: EntityResponsibilities) => this.getDistributorPerformanceTotal(dist.positionId, filter));
 
     return Observable.forkJoin(apiCalls);
   }

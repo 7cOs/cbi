@@ -1,7 +1,7 @@
 import { EntityPropertyType } from '../enums/entity-responsibilities.enum';
 import { EntityDTO } from './entity-dto.model';
 
-export function getDistributorEntityDTOMock () {
+export function getDistributorEntityDTOMock (): EntityDTO {
   return {
     type: EntityPropertyType.Distributor,
     id: chance.string(),
@@ -9,7 +9,7 @@ export function getDistributorEntityDTOMock () {
   };
 }
 
-export function getAccountEntityDTOMock () {
+export function getAccountEntityDTOMock (): EntityDTO {
   return {
     type: EntityPropertyType.Account,
     id: chance.string(),

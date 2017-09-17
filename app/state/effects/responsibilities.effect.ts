@@ -52,8 +52,9 @@ export class ResponsibilitiesEffects {
         return Observable.of(responsibilitiesData);
       })
       .switchMap((responsibilitiesData) => this.getResponsibilities(responsibilitiesData))
-      .switchMap((responsibilitiesData) => this.getPerformanceTotalForGroupedEntities(responsibilitiesData))
       .switchMap((responsibilitiesData) => this.getAccountsDistributors(responsibilitiesData))
+      .switchMap((responsibilitiesData) => this.getPerformanceTotalForGroupedEntities(responsibilitiesData))
+      .switchMap((responsibilitiesData) => this.getPerformancesForDistributors(responsibilitiesData))
       .switchMap((responsibilitiesData) => this.constructSuccessAction(responsibilitiesData))
       .catch((err: Error) => Observable.of(new ResponsibilitiesActions.FetchResponsibilitiesFailureAction(err)));
   }
@@ -171,9 +172,22 @@ export class ResponsibilitiesEffects {
     }
   }
 
-  // private getDistributorsPerformance(distributors: any) {
-  //     debugger;
-  // }
+  private getPerformancesForDistributors(responsibilitiesData: ResponsibilitiesData)
+    : Observable<ResponsibilitiesData> {
+    if (responsibilitiesData.viewType === ViewType.distributors && responsibilitiesData.groupedEntities.all.length) {
+      return this.myPerformanceApiService
+        .getDistributorsPerformanceTotals(responsibilitiesData.groupedEntities.all,
+          responsibilitiesData.filter)
+        .mergeMap((response: EntitiesTotalPerformancesDTO[]) => {
+          responsibilitiesData.entitiesPerformances
+            = this.performanceTransformerService
+              .transformEntityDTOsWithPerformance(response, responsibilitiesData.groupedEntities.all);
+          return Observable.of(responsibilitiesData);
+      });
+    } else {
+      return Observable.of(responsibilitiesData);
+    }
+  }
 
   private getAccountsDistributors(responsibilitiesData: ResponsibilitiesData)
     : Observable<ResponsibilitiesData> {
@@ -181,15 +195,10 @@ export class ResponsibilitiesEffects {
       return this.myPerformanceApiService.getAccountsDistributors(responsibilitiesData.entitiesURL)
         .switchMap((distributors: Array<EntityDTO>): Observable<ResponsibilitiesData> => {
         const groupedEntities = this.responsibilitiesTransformerService.groupsAccountsDistributors(distributors);
-        return Observable.of(Object.assign({}, responsibilitiesData, {
+        const balls =  Observable.of(Object.assign({}, responsibilitiesData, {
           groupedEntities: groupedEntities,
-          entitiesPerformance: (() => {
-            return this.myPerformanceApiService.getDistributorsPerformanceTotals(distributors, responsibilitiesData.filter)
-            .map((performanceResponses: EntitiesTotalPerformancesDTO[], idx: number) => {
-              return this.performanceTransformerService.transformEntityDTOsWithPerformance(performanceResponses, distributors);
-              });
-            })()
-          }));
+        }));
+        return balls;
       });
         // const entitiesPerformances = this.performanceTransformerService.transformEntitiesPerformancesDTOs(response);
         //  let entitiesPerformances = groupedEntities['all'].map((entity: EntityResponsibilities) => {
