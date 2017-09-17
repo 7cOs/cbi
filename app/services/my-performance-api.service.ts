@@ -89,7 +89,27 @@ export class MyPerformanceApiService {
     distributorID: string,
     filter: MyPerformanceFilterState
     ): Observable<EntitiesTotalPerformancesDTO> {
-    const url = `v3/distributors/${distributorID}/performanceTotal`;
+    const url = `/v3/distributors/${distributorID}/performanceTotal`;
+
+    return this.http.get(url, {
+      params: this.getFilterStateParams(filter)
+    })
+      .map(res => res.json())
+      .catch(err => this.handleError(new Error(err)));
+  }
+
+  public getAccountsPerformanceTotals(accounts: EntityDTO[], filter: MyPerformanceFilterState) {
+    const apiCalls: Observable<EntitiesTotalPerformancesDTO | Error>[] =
+      accounts.map((acc: EntityDTO) => this.getAccountPerformanceTotal(acc.id, filter));
+
+    return Observable.forkJoin(apiCalls);
+  }
+
+  public getAccountPerformanceTotal(
+    distributorID: string,
+    filter: MyPerformanceFilterState
+    ): Observable<EntitiesTotalPerformancesDTO> {
+    const url = `/v3/accounts/${distributorID}/performanceTotal`;
 
     return this.http.get(url, {
       params: this.getFilterStateParams(filter)
