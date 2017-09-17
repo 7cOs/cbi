@@ -1,13 +1,12 @@
 import { Action } from '@ngrx/store';
 import { Actions, Effect } from '@ngrx/effects';
-// import * as Chance from 'chance';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/do';
 import 'rxjs/add/operator/switchMap';
 
 import { EntityDTO } from '../../models/entity-dto.model';
-import { EntityResponsibilities } from '../../models/entity-responsibilities.model';
+// import { EntityResponsibilities } from '../../models/entity-responsibilities.model';
 import { MyPerformanceApiService } from '../../services/my-performance-api.service';
 import { MyPerformanceFilterState } from '../../state/reducers/my-performance-filter.reducer';
 import { PeopleResponsibilitiesDTO } from '../../models/people-responsibilities-dto.model';
@@ -19,8 +18,6 @@ import { GroupedEntities } from '../../models/grouped-entities.model';
 import { ViewType } from '../../enums/view-type.enum';
 import * as ResponsibilitiesActions from '../../state/actions/responsibilities.action';
 import * as ViewTypeActions from '../../state/actions/view-types.action';
-
-// const chance = new Chance();
 
 interface ResponsibilitiesData {
   groupedEntities?: GroupedEntities;
@@ -69,7 +66,7 @@ export class ResponsibilitiesEffects {
 
         return this.myPerformanceApiService.getResponsibilitiesPerformanceTotals(entities, filter)
           .switchMap((response: EntitiesPerformancesDTO[]) => {
-            const entityPerformance = this.performanceTransformerService.transformEntitiesPerformancesDTO(response);
+            const entityPerformance = this.performanceTransformerService.transformEntitiesPerformancesDTOs(response);
 
             return Observable.from([
               new ResponsibilitiesActions.SetTableRowPerformanceTotal(entitiesTotalPerformances),
@@ -161,46 +158,55 @@ export class ResponsibilitiesEffects {
     : Observable<ResponsibilitiesData> {
     if (responsibilitiesData.viewType === ViewType.roleGroups) {
       return this.myPerformanceApiService
-      .getResponsibilitiesPerformanceTotals(responsibilitiesData.entityTypes,
-        responsibilitiesData.filter,
-        responsibilitiesData.positionId)
-      .mergeMap((response: EntitiesPerformancesDTO[]) => {
-        responsibilitiesData.entitiesPerformances
-          = this.performanceTransformerService.transformEntitiesPerformancesDTO(response);
-        return Observable.of(responsibilitiesData);
+        .getResponsibilitiesPerformanceTotals(responsibilitiesData.entityTypes,
+          responsibilitiesData.filter,
+          responsibilitiesData.positionId)
+        .mergeMap((response: EntitiesPerformancesDTO[]) => {
+          responsibilitiesData.entitiesPerformances
+            = this.performanceTransformerService.transformEntitiesPerformancesDTOs(response);
+          return Observable.of(responsibilitiesData);
       });
     } else {
       return Observable.of(responsibilitiesData);
     }
   }
 
+  // private getDistributorsPerformance(distributors: any) {
+  //     debugger;
+  // }
+
   private getAccountsDistributors(responsibilitiesData: ResponsibilitiesData)
     : Observable<ResponsibilitiesData> {
-    if (responsibilitiesData.viewType === ViewType.distributors
-      || responsibilitiesData.viewType === ViewType.accounts) {
+    if (responsibilitiesData.viewType === ViewType.distributors) {
       return this.myPerformanceApiService.getAccountsDistributors(responsibilitiesData.entitiesURL)
-        .switchMap((accountsDistributors: Array<EntityDTO>) => {
-        const groupedEntities = this.responsibilitiesTransformerService.groupsAccountsDistributors(accountsDistributors);
-        let entitiesPerformances = groupedEntities['all'].map((entity: EntityResponsibilities) => {
-          if (responsibilitiesData.viewType === ViewType.distributors) {
-            // this.myPerformanceApiService.getDistributorPerformanceTotals(responsibilitiesData.filter, entity.positionId)
-              // .subscribe(response => {
-                // console.log(this.performanceTransformerService.transformEntitiesTotalPerformancesDTO(response));
-                return {
-                  positionId: entity.positionId,
-                  name: entity.name,
-                  // performanceTotal: this.performanceTransformerService.transformEntitiesTotalPerformancesDTO(response)
-                  performanceTotal: {}
-                };
-              // });
-          }
-        });
-
-        return Observable.of(Object.assign(responsibilitiesData, {
+        .switchMap((distributors: Array<EntityDTO>): Observable<ResponsibilitiesData> => {
+        const groupedEntities = this.responsibilitiesTransformerService.groupsAccountsDistributors(distributors);
+        return Observable.of(Object.assign({}, responsibilitiesData, {
           groupedEntities: groupedEntities,
-          entitiesPerformances: entitiesPerformances // Temporary
-        }));
+          entitiesPerformance: (() => {
+            return this.myPerformanceApiService.getDistributorsPerformanceTotals(distributors, responsibilitiesData.filter)
+            .map((performanceResponses: EntitiesTotalPerformancesDTO[], idx: number) => {
+              return this.performanceTransformerService.transformEntityDTOsWithPerformance(performanceResponses, distributors);
+              });
+            })()
+          }));
       });
+        // const entitiesPerformances = this.performanceTransformerService.transformEntitiesPerformancesDTOs(response);
+        //  let entitiesPerformances = groupedEntities['all'].map((entity: EntityResponsibilities) => {
+        //    if (responsibilitiesData.viewType === ViewType.distributors) {
+        //      return {
+        //        positionId: entity.positionId,
+        //        name: entity.name,
+        //        performanceTotal: {}
+        //      };
+        //    }
+        // });
+
+        // return Observable.of(Object.assign(responsibilitiesData, {
+        //   groupedEntities: groupedEntities,
+        //   entitiesResponsibilities: entiti
+        // }));
+      // });
     } else {
       return Observable.of(responsibilitiesData);
     }

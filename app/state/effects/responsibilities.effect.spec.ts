@@ -78,7 +78,7 @@ describe('Responsibilities Effects', () => {
     transformEntitiesTotalPerformancesDTO(mockArgs: any): EntitiesTotalPerformances {
       return performanceTotalMock;
     },
-    transformEntitiesPerformancesDTO(mockArgs: any): EntitiesPerformances[] {
+    transformEntitiesPerformancesDTOs(mockArgs: any): EntitiesPerformances[] {
       return responsibilityEntitiesPerformanceMock;
     }
   };

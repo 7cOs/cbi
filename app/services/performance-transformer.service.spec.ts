@@ -58,10 +58,10 @@ describe('Service: PerformanceTransformerService', () => {
     }));
 
     it('should return transformed EntityPerformanceTotal data given EntityEntitiesTotalPerformancesDTO data', () => {
-      spyOn(performanceTransformerService, 'transformEntitiesPerformancesDTO').and.callThrough();
+      spyOn(performanceTransformerService, 'transformEntitiesPerformancesDTOs').and.callThrough();
 
       const entityPerformance: EntitiesPerformances[] =
-        performanceTransformerService.transformEntitiesPerformancesDTO(responsibilityEntitiesPerformanceDTOMock);
+        performanceTransformerService.transformEntitiesPerformancesDTOs(responsibilityEntitiesPerformanceDTOMock);
       const entityPerformanceMock = responsibilityEntitiesPerformanceDTOMock[0].performanceTotal;
 
       expect(entityPerformance).toBeDefined();
