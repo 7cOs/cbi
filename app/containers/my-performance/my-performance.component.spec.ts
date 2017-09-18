@@ -241,7 +241,7 @@ describe('MyPerformanceComponent', () => {
     storeMock.dispatch.calls.reset();
     componentInstance.leftTableViewType = ViewType.accounts;
     componentInstance.handleElementClicked({leftSide: true, type: RowType.data, index: 0, row: rowMock});
-    expect(storeMock.dispatch.calls.count()).toEqual(3);
+    expect(storeMock.dispatch.calls.count()).toBe(3);
 
     storeMock.dispatch.calls.reset();
     componentInstance.handleElementClicked({leftSide: false, type: RowType.data, index: 0});

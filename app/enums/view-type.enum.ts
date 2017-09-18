@@ -1,9 +1,9 @@
 export enum ViewType {
-  brands = <any>'brands',
-  skus = <any>'skus',
-  roleGroups = <any>'roleGroups',
-  people = <any>'people',
-  distributors = <any>'distributors',
-  accounts = <any>'accounts',
-  subAccounts = <any>'subAccounts'
+  brands       = 'brands',
+  skus         = 'skus',
+  roleGroups   = 'roleGroups',
+  people       = 'people',
+  distributors = 'distributors',
+  accounts     = 'accounts',
+  subAccounts  = 'subAccounts'
 }
