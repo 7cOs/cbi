@@ -6,6 +6,7 @@ import { compassVersionReducer } from './compass-version.reducer';
 import { dateRangesReducer } from './date-ranges.reducer';
 import { myPerformanceReducer } from './my-performance.reducer';
 import { myPerformanceFilterReducer } from './my-performance-filter.reducer';
+import { productMetricsReducer } from './product-metrics.reducer';
 
 const chance = new Chance();
 
@@ -38,6 +39,7 @@ describe('Root Reducer', () => {
       compassVersion: compassVersionReducer,
       dateRanges: dateRangesReducer,
       myPerformance: myPerformanceReducer,
+      myPerformanceProductMetrics: productMetricsReducer,
       myPerformanceFilter: myPerformanceFilterReducer
     });
     expect(rootReducerMock).toHaveBeenCalledWith(inputStateMock, inputActionMock);
