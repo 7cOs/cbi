@@ -1,4 +1,4 @@
-package com.cbrands.test.functional.opportunity;
+package com.cbrands.test.functional.legacy.opportunity;
 
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.CoreMatchers.not;

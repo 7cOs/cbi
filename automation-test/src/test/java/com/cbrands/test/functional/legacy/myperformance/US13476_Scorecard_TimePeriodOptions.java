@@ -1,4 +1,4 @@
-package com.cbrands.test.functional.myperformance;
+package com.cbrands.test.functional.legacy.myperformance;
 
 import org.testng.annotations.Test;
 

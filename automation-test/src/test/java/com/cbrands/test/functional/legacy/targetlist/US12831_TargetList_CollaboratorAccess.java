@@ -1,4 +1,4 @@
-package com.cbrands.test.functional.targetlist;
+package com.cbrands.test.functional.legacy.targetlist;
 
 import org.testng.annotations.Test;
 

@@ -1,4 +1,4 @@
-package com.cbrands.test.functional.myperformance;
+package com.cbrands.test.functional.legacy.myperformance;
 
 import static net.javacrumbs.hamcrest.logger.HamcrestLoggerMatcher.log;
 import static org.hamcrest.CoreMatchers.containsString;

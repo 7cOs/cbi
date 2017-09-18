@@ -1,4 +1,4 @@
-package com.cbrands.test.functional.opportunity;
+package com.cbrands.test.functional.legacy.opportunity;
 
 import org.testng.Assert;
 import org.testng.annotations.AfterMethod;
