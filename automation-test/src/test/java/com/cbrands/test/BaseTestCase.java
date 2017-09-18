@@ -1,4 +1,4 @@
-package com.cbrands.test.smoke;
+package com.cbrands.test;
 
 import com.cbrands.helper.PropertiesCache;
 import com.cbrands.helper.SeleniumUtils;

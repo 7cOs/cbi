@@ -4,6 +4,7 @@ import com.cbrands.TestUser;
 import com.cbrands.pages.HomePage;
 import com.cbrands.pages.Login;
 import com.cbrands.pages.LogoutPage;
+import com.cbrands.test.BaseTestCase;
 import org.testng.Assert;
 import org.testng.annotations.*;
 
