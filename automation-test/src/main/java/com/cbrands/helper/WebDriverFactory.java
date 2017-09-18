@@ -33,7 +33,7 @@ public class WebDriverFactory implements SauceOnDemandSessionIdProvider, SauceOn
 
   public static WebDriver createDriver(String driverName) throws MalformedURLException {
 
-    if (driverName.startsWith(BrowserType.remote.name())) {
+    if (driverName.startsWith(HostType.remote.name())) {
       setRemoteWebDriver(driverName);
     } else {
       setSauceWebDriver();
@@ -56,7 +56,7 @@ public class WebDriverFactory implements SauceOnDemandSessionIdProvider, SauceOn
     // set current sessionId
     String id = ((RemoteWebDriver) getWebDriver()).getSessionId().toString();
     sessionId.set(id);
-    log.info("Targeted Host:" + BrowserType.sauce.name());
+    log.info("Targeted Host:" + HostType.sauce.name());
   }
 
   private static DesiredCapabilities getSauceCapabilitiesByBrowser(String driverType) {
@@ -130,17 +130,20 @@ public class WebDriverFactory implements SauceOnDemandSessionIdProvider, SauceOn
       webDriver.set(new RemoteWebDriver(new URL(remoteUrl), cap));
       String id = ((RemoteWebDriver) getWebDriver()).getSessionId().toString();
       sessionId.set(id);
-      log.info("Targeted Host:" + BrowserType.remote.name());
+      log.info("Targeted Host:" + HostType.remote.name());
     } catch (MalformedURLException e) {
       throw new RuntimeException(e);
     }
   }
 
   public enum BrowserType {
-
     firefox,
     ie,
-    chrome,
+    chrome
+  }
+
+  public enum HostType {
+    local,
     remote,
     sauce
   }
