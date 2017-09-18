@@ -77,9 +77,7 @@ describe('MyPerformanceComponent', () => {
   const stateMock = {
       myPerformanceFilter: chance.string(),
       dateRanges: chance.string(),
-      responsibilities: chance.string(),
       viewTypes: chance.string(),
-      performanceTotal: chance.string(),
       myPerformance: initialState
   };
 
@@ -228,17 +226,17 @@ describe('MyPerformanceComponent', () => {
 
     componentInstance.showLeftBackButton = false;
     componentInstance.handleElementClicked({leftSide: true, type: RowType.total, index: 0});
-    expect(storeMock.dispatch.calls.count()).toEqual(0);
+    expect(storeMock.dispatch.calls.count()).toBe(0);
 
     storeMock.dispatch.calls.reset();
     componentInstance.showLeftBackButton = true;
     componentInstance.handleElementClicked({leftSide: true, type: RowType.total, index: 0});
-    expect(storeMock.dispatch.calls.count()).toEqual(1);
+    expect(storeMock.dispatch.calls.count()).toBe(1);
 
     storeMock.dispatch.calls.reset();
     componentInstance.leftTableViewType = ViewType.roleGroups;
     componentInstance.handleElementClicked({leftSide: true, type: RowType.data, index: 0, row: rowMock});
-    expect(storeMock.dispatch.calls.count()).toEqual(3);
+    expect(storeMock.dispatch.calls.count()).toBe(3);
 
     storeMock.dispatch.calls.reset();
     componentInstance.leftTableViewType = ViewType.accounts;
@@ -247,7 +245,16 @@ describe('MyPerformanceComponent', () => {
 
     storeMock.dispatch.calls.reset();
     componentInstance.handleElementClicked({leftSide: false, type: RowType.data, index: 0});
-    expect(storeMock.dispatch.calls.count()).toEqual(0);
+    expect(storeMock.dispatch.calls.count()).toBe(0);
+
+    storeMock.dispatch.calls.reset();
+    componentInstance.leftTableViewType = ViewType.people;
+    componentInstance.handleElementClicked({leftSide: true, type: RowType.data, index: 0, row: rowMock});
+    expect(storeMock.dispatch.calls.count()).toBe(3);
+    expect(storeMock.dispatch.calls.argsFor(2)[0]).toEqual(new FetchResponsibilitiesAction({
+      positionId: rowMock.metadata.positionId,
+      filter: stateMock.myPerformanceFilter as any
+    }));
   });
 
   it('should call select with the right arguments', () => {

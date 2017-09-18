@@ -1,8 +1,10 @@
 import { inject, TestBed } from '@angular/core/testing';
 
+import { EntityDTO } from '../models/entity-dto.model';
 import { EntityPeopleType, EntityPropertyType } from '../enums/entity-responsibilities.enum';
 import { EntityResponsibilities } from '../models/entity-responsibilities.model';
 import { EntitySubAccountDTO } from '../models/entity-subaccount-dto.model';
+import { getEntityDTOMock } from '../models/entity-dto.model.mock';
 import { getEntitySubAccountDTOMock } from '../models/entity-subaccount-dto.model.mock';
 import { GroupedEntities } from '../models/grouped-entities.model';
 import { mockEntityResponsibilitiesDTOCollection } from '../models/entity-responsibilities.model.mock';
@@ -15,15 +17,14 @@ describe('Service: ResponsibilitiesTransformerService', () => {
     providers: [ ResponsibilitiesTransformerService ]
   }));
 
+  beforeEach(inject([ ResponsibilitiesTransformerService ],
+    (_responsibilitiesTransformerService: ResponsibilitiesTransformerService) => {
+      responsibilitiesTransformerService = _responsibilitiesTransformerService;
+  }));
+
   describe('#groupPeopleByGroupedEntities', () => {
 
-    beforeEach(inject([ ResponsibilitiesTransformerService ],
-      (_responsibilitiesTransformerService: ResponsibilitiesTransformerService) => {
-        responsibilitiesTransformerService = _responsibilitiesTransformerService;
-    }));
-
     it('should return a collection of formatted Responsibilitiess from a collection of ResponsibilitiesDTOs', () => {
-      spyOn(responsibilitiesTransformerService, 'groupPeopleByGroupedEntities').and.callThrough();
       const expectedgroupedEntities: GroupedEntities = {
         'MARKET DEVELOPMENT MANAGER': [{
           positionId: '123',
@@ -60,11 +61,6 @@ describe('Service: ResponsibilitiesTransformerService', () => {
 
   describe('transformSubAccountsDTO', () => {
 
-    beforeEach(inject([ ResponsibilitiesTransformerService ],
-      (_responsibilitiesTransformerService: ResponsibilitiesTransformerService) => {
-        responsibilitiesTransformerService = _responsibilitiesTransformerService;
-    }));
-
     it('should return EntityResponsibilities given EntitySubAccountDTO objects', () => {
       spyOn(responsibilitiesTransformerService, 'transformSubAccountsDTO').and.callThrough();
 
@@ -79,6 +75,26 @@ describe('Service: ResponsibilitiesTransformerService', () => {
         contextPositionId: entitySubAccountDTOMock[0].accountCode,
         name: entitySubAccountDTOMock[0].subaccountDescription,
         propertyType: EntityPropertyType.SubAccount
+      });
+    });
+  });
+
+  describe('groupsAccountsDistributors', () => {
+
+    it('should return a unique group of formatted entities from a collection of EntitiesDTO', () => {
+      const entitiesDTOMock: Array<EntityDTO> = [getEntityDTOMock(), getEntityDTOMock()];
+      const transformedEntities = responsibilitiesTransformerService.groupsAccountsDistributors(entitiesDTOMock);
+
+      expect(transformedEntities).toEqual({
+        'all': [{
+          propertyType: entitiesDTOMock[0].type,
+          positionId: entitiesDTOMock[0].id,
+          name: entitiesDTOMock[0].name
+        }, {
+          propertyType: entitiesDTOMock[1].type,
+          positionId: entitiesDTOMock[1].id,
+          name: entitiesDTOMock[1].name
+        }]
       });
     });
   });

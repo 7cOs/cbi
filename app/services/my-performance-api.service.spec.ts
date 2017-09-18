@@ -3,10 +3,12 @@ import { inject, TestBed } from '@angular/core/testing';
 import { MockBackend, MockConnection } from '@angular/http/testing';
 
 import { DateRangeTimePeriodValue } from '../enums/date-range-time-period.enum';
+import { EntityDTO } from '../models/entity-dto.model';
 import { EntitiesPerformancesDTO } from '../models/entities-performances.model';
 import { EntitySubAccountDTO } from '../models/entity-subaccount-dto.model';
-import { EntitiesTotalPerformances } from '../models/entities-total-performances.model';
-import { getEntitiesTotalPerformancesMock } from '../models/entities-total-performances.model.mock';
+import { EntitiesTotalPerformancesDTO } from '../models/entities-total-performances.model';
+import { getEntityDTOMock } from '../models/entity-dto.model.mock';
+import { getEntitiesTotalPerformancesDTOMock } from '../models/entities-total-performances.model.mock';
 import { MetricTypeValue } from '../enums/metric-type.enum';
 import { MyPerformanceApiService } from './my-performance-api.service';
 import { PremiseTypeValue } from '../enums/premise-type.enum';
@@ -15,8 +17,8 @@ describe('Service: MyPerformanceApiService', () => {
   let myPerformanceApiService: MyPerformanceApiService;
   let mockBackend: MockBackend;
 
-  const mockPerformanceTotalResponse: EntitiesTotalPerformances = getEntitiesTotalPerformancesMock();
-  const mockResponsibilitiesResponse: any = {
+  const performanceTotalResponseMock: EntitiesTotalPerformancesDTO = getEntitiesTotalPerformancesDTOMock();
+  const responsibilitiesResponseMock: any = {
     positions: [{
       id: '123',
       employeeId: '1231231',
@@ -40,6 +42,7 @@ describe('Service: MyPerformanceApiService', () => {
       hierarchyType: 'SALES_HIER',
     }]
   };
+  const entityDTOMock: Array<EntityDTO> = [getEntityDTOMock(), getEntityDTOMock()];
   const subAccountsResponseMock: Array<EntitySubAccountDTO> = [{
     accountCode: chance.string(),
     premiseTypeCode: chance.string(),
@@ -76,7 +79,7 @@ describe('Service: MyPerformanceApiService', () => {
     it('should call the responsibilities endpoint and return all responsibilities', (done) => {
       mockBackend.connections.subscribe((connection: MockConnection) => {
         const options = new ResponseOptions({
-          body: JSON.stringify(mockResponsibilitiesResponse)
+          body: JSON.stringify(responsibilitiesResponseMock)
         });
         connection.mockRespond(new Response(options));
         expect(connection.request.method).toEqual(RequestMethod.Get);
@@ -86,7 +89,7 @@ describe('Service: MyPerformanceApiService', () => {
       myPerformanceApiService
         .getResponsibilities('1')
         .subscribe((res) => {
-          expect(res).toEqual(mockResponsibilitiesResponse);
+          expect(res).toEqual(responsibilitiesResponseMock);
           done();
         });
       });
@@ -103,7 +106,7 @@ describe('Service: MyPerformanceApiService', () => {
 
       mockBackend.connections.subscribe((connection: MockConnection) => {
         const options = new ResponseOptions({
-          body: JSON.stringify(mockPerformanceTotalResponse)
+          body: JSON.stringify(performanceTotalResponseMock)
         });
         connection.mockRespond(new Response(options));
         expect(connection.request.method).toEqual(RequestMethod.Get);
@@ -112,11 +115,34 @@ describe('Service: MyPerformanceApiService', () => {
         );
       });
 
-      myPerformanceApiService.getPerformanceTotal('1', mockFilter).subscribe((response: EntitiesTotalPerformances) => {
-        expect(response).toEqual(mockPerformanceTotalResponse);
+      myPerformanceApiService.getPerformanceTotal('1', mockFilter).subscribe((response: EntitiesTotalPerformancesDTO) => {
+        expect(response).toEqual(performanceTotalResponseMock);
         done();
       });
     });
+  });
+
+  describe('getAccountsDistributors', () => {
+
+    it('should call the responsibilities endpoint and return some entities', (done) => {
+      const entityURIMock = chance.string();
+
+      mockBackend.connections.subscribe((connection: MockConnection) => {
+        const options = new ResponseOptions({
+          body: JSON.stringify(entityDTOMock)
+        });
+        connection.mockRespond(new Response(options));
+        expect(connection.request.method).toEqual(RequestMethod.Get);
+        expect(connection.request.url).toEqual(`/v3${ entityURIMock }`);
+      });
+
+      myPerformanceApiService
+        .getAccountsDistributors(entityURIMock)
+        .subscribe((res) => {
+          expect(res).toEqual(entityDTOMock);
+          done();
+        });
+      });
   });
 
   describe('getResponsibilityPerformanceTotal', () => {
@@ -137,7 +163,7 @@ describe('Service: MyPerformanceApiService', () => {
 
       mockBackend.connections.subscribe((connection: MockConnection) => {
         const options = new ResponseOptions({
-          body: JSON.stringify(mockPerformanceTotalResponse)
+          body: JSON.stringify(performanceTotalResponseMock)
         });
 
         connection.mockRespond(new Response(options));
@@ -150,7 +176,7 @@ describe('Service: MyPerformanceApiService', () => {
           expect(response).toEqual({
             id: positionIdMock,
             name: entityMock.name,
-            performanceTotal: mockPerformanceTotalResponse
+            performanceTotal: performanceTotalResponseMock
           });
           done();
         });
