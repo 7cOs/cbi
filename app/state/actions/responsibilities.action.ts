@@ -32,6 +32,11 @@ export interface FetchSubAccountsActionPayload {
   premiseType: PremiseTypeValue;
 }
 
+export interface FetchSubAccountsSuccessPayload {
+  groupedEntities: GroupedEntities;
+  entitiesPerformances: EntitiesPerformances[];
+}
+
 export const FETCH_RESPONSIBILITIES_ACTION =                   '[Responsibilities] FETCH_RESPONSIBILITIES_ACTION';
 export const FETCH_RESPONSIBILITIES_SUCCESS_ACTION =           '[Responsibilities] FETCH_RESPONSIBILITIES_SUCCESS_ACTION';
 export const FETCH_RESPONSIBILITIES_FAILURE_ACTION =           '[Responsibilities] FETCH_RESPONSIBILITIES_FAILURE_ACTION';
@@ -82,7 +87,7 @@ export class FetchSubAccountsAction implements Action {
 
 export class FetchSubAccountsSuccessAction implements Action {
   readonly type = FETCH_SUBACCOUNTS_SUCCESS_ACTION;
-  constructor(public payload: any) { }
+  constructor(public payload: FetchSubAccountsSuccessPayload) { }
 }
 
 export class FetchPerformanceTotalAction implements Action {

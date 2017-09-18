@@ -3,12 +3,13 @@ import { inject, TestBed } from '@angular/core/testing';
 import { MockBackend, MockConnection } from '@angular/http/testing';
 
 import { DateRangeTimePeriodValue } from '../enums/date-range-time-period.enum';
+import { EntitiesPerformancesDTO } from '../models/entities-performances.model';
+import { EntitySubAccountDTO } from '../models/entity-subaccount-dto.model';
+import { EntitiesTotalPerformances } from '../models/entities-total-performances.model';
 import { getEntitiesTotalPerformancesMock } from '../models/entities-total-performances.model.mock';
 import { MetricTypeValue } from '../enums/metric-type.enum';
 import { MyPerformanceApiService } from './my-performance-api.service';
-import { EntitiesTotalPerformances } from '../models/entities-total-performances.model';
 import { PremiseTypeValue } from '../enums/premise-type.enum';
-import { EntitiesPerformancesDTO } from '../models/entities-performances.model';
 
 describe('Service: MyPerformanceApiService', () => {
   let myPerformanceApiService: MyPerformanceApiService;
@@ -39,6 +40,12 @@ describe('Service: MyPerformanceApiService', () => {
       hierarchyType: 'SALES_HIER',
     }]
   };
+  const subAccountsResponseMock: Array<EntitySubAccountDTO> = [{
+    accountCode: chance.string(),
+    premiseTypeCode: chance.string(),
+    subaccountCode: chance.string(),
+    subaccountDescription: chance.string()
+  }];
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -145,6 +152,35 @@ describe('Service: MyPerformanceApiService', () => {
             name: entityMock.name,
             performanceTotal: mockPerformanceTotalResponse
           });
+          done();
+        });
+    });
+  });
+
+  describe('getSubAccounts', () => {
+
+    it('should call the accounts/subAcccount endpoint and return subAccounts', (done) => {
+      const positionIdMock: string = chance.string({pool: '1234567890'});
+      const contextPositionIdMock: string = chance.string({pool: '1234567890'});
+      const premiseTypeMock: PremiseTypeValue = PremiseTypeValue.All;
+
+      const expectedBaseUrl = `/v3/accounts/${ positionIdMock }/subAccounts`;
+      const expectedUrlParams = `?positionId=${ contextPositionIdMock }&premiseType=${ PremiseTypeValue[premiseTypeMock] }`;
+
+      mockBackend.connections.subscribe((connection: MockConnection) => {
+        const options = new ResponseOptions({
+          body: JSON.stringify(subAccountsResponseMock)
+        });
+
+        connection.mockRespond(new Response(options));
+
+        expect(connection.request.method).toEqual(RequestMethod.Get);
+        expect(connection.request.url).toEqual(expectedBaseUrl + expectedUrlParams);
+      });
+
+      myPerformanceApiService.getSubAccounts(positionIdMock, contextPositionIdMock, premiseTypeMock)
+        .subscribe((response: Array<EntitySubAccountDTO>) => {
+          expect(response).toEqual(subAccountsResponseMock);
           done();
         });
     });
