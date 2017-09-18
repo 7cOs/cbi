@@ -8,6 +8,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openqa.selenium.Platform;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.ie.InternetExplorerDriver;
 import org.openqa.selenium.remote.CapabilityType;
 import org.openqa.selenium.remote.DesiredCapabilities;
@@ -32,16 +33,31 @@ public class WebDriverFactory implements SauceOnDemandSessionIdProvider, SauceOn
   private static ThreadLocal<String> sessionId = new ThreadLocal<String>();
 
   public static WebDriver createDriver() throws MalformedURLException {
-    final WebDriver webDriver;
+    final WebDriver driver;
 
     final String driverHost = PropertiesCache.getInstance().getProperty("driver.host");
     if (HostType.remote.name().equalsIgnoreCase(driverHost)) {
-      webDriver = getRemoteWebDriver();
+      driver = getRemoteWebDriver();
     } else if(HostType.sauce.name().equalsIgnoreCase(driverHost)) {
-      webDriver = getSauceWebDriver();
+      driver = getSauceWebDriver();
+    } else {
+      driver = getLocalWebDriver();
     }
 
-    return webDriver;
+    return driver;
+  }
+
+  private static WebDriver getLocalWebDriver() {
+    System.setProperty("webdriver.chrome.driver", "chromedriver");
+    webDriver.set(new ChromeDriver());
+
+    Validate.notNull(
+      webDriver.get(),
+      "Driver for " + BrowserType.chrome.name() + "could not be found at:" + HostType.local.name() +
+        "/n Have you downloaded the correct driver into your local target directory?"
+    );
+
+    return webDriver.get();
   }
 
   private static WebDriver getSauceWebDriver() throws MalformedURLException {
