@@ -27,6 +27,7 @@ public abstract class BaseTestCase {
 
     driver = WebDriverFactory.createDriver();
     driver.get(webAppBaseUrl);
+    driver.manage().window().maximize();
     SeleniumUtils.setDriver(driver);
     SeleniumUtils.setStopAtShutdown();
 
