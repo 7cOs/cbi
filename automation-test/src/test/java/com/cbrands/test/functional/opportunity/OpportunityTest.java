@@ -17,6 +17,11 @@ import com.cbrands.helper.RetryAnalyzer;
 import com.cbrands.pages.Login;
 
 
+/**
+ * @deprecated Legacy functional test removed from the functional suite. No longer working due to login/logout being
+ * wrong. Saved for reference only. Should be deleted as soon as there is a new test to replace it.
+ */
+@Deprecated
 public class OpportunityTest extends BaseSeleniumTestCase {
 
 	@Test(retryAnalyzer = RetryAnalyzer.class, dataProvider = "opportunityPage1Test", description = "Run - 2: I can select Save Report to save a set of filter criteria for reuse.", priority = 1)

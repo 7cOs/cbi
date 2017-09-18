@@ -17,8 +17,13 @@ import static org.hamcrest.Matchers.not;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.DataProvider;
 
+/**
+ * @deprecated Legacy functional test removed from the functional suite. No longer working due to login/logout being
+ * wrong. Saved for reference only. Should be deleted as soon as there is a new test to replace it.
+ */
+@Deprecated
 public class US13107_TargetList_Show_Depletions extends BaseSeleniumTestCase{
-	
+
   @Test(retryAnalyzer = RetryAnalyzer.class,dataProvider="showDepletionsData", priority=1)
   public void us13107_TargetList_Show_Depletions(String listname, String listURL) {
 	  login = new Login(driver);
@@ -34,14 +39,14 @@ public class US13107_TargetList_Show_Depletions extends BaseSeleniumTestCase{
 		else{
 			assertThat(targetListPage.getTargetLists(), log(hasItems(not(equalToIgnoringCase(listname)))));
 		}
-	
+
   }
-  
+
   @DataProvider(name = "showDepletionsData")
   public static Object[][] data1() {
 	  return new Object[][] { {"Closed Oppty Test - DO NOT DELETE", "https://orion-qa.cbrands.com/target-lists/fc692d94-e17f-4085-945e-4d23768042db"} };
-  }  
-  
+  }
+
   @AfterMethod
   public void signOut() {
 	  logout();

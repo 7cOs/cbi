@@ -11,6 +11,11 @@ import com.cbrands.BaseSeleniumTestCase;
 import com.cbrands.helper.RetryAnalyzer;
 import com.cbrands.pages.Login;
 
+/**
+ * @deprecated Legacy functional test removed from the functional suite. No longer working due to login/logout being
+ * wrong. Saved for reference only. Should be deleted as soon as there is a new test to replace it.
+ */
+@Deprecated
 public class Run8_SearchBasedFilterFieldsTest extends BaseSeleniumTestCase {
 
 	private SoftAssert softAssert = new SoftAssert();
@@ -61,7 +66,7 @@ public class Run8_SearchBasedFilterFieldsTest extends BaseSeleniumTestCase {
 		opportunitiesPage.clickOpporunityTypeDone();
 		Assert.assertNotNull(opportunitiesPage.getFilterPillNonBuy(), "'At Risk' filter pill not displaying");
 		opportunitiesPage.clearFirstRemovableFilterPill();
-		
+
 		softAssert.assertAll();
 
 	}
