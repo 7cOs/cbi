@@ -31,16 +31,19 @@ public class WebDriverFactory implements SauceOnDemandSessionIdProvider, SauceOn
   private static ThreadLocal<WebDriver> webDriver = new ThreadLocal<WebDriver>();
   private static ThreadLocal<String> sessionId = new ThreadLocal<String>();
 
-  public static WebDriver createDriver(String seleniumHostAddress) throws MalformedURLException {
-
+  public static WebDriver createDriver() throws MalformedURLException {
     final String driverHost = PropertiesCache.getInstance().getProperty("driver.host");
+
     if (HostType.remote.name().equalsIgnoreCase(driverHost)) {
+      final String seleniumHostAddress = PropertiesCache.getInstance().getProperty("selenium.host.address");
       setRemoteWebDriver(seleniumHostAddress);
+      log.info("Connected to Selenium Server. Session ID: " + sessionId.get());
+      Validate.notNull(webDriver.get(), "Driver could not be found at:" + seleniumHostAddress);
     } else if(HostType.sauce.name().equalsIgnoreCase(driverHost)) {
       setSauceWebDriver();
+      log.info("Connected to Selenium Server. Session ID: " + sessionId.get());
+      Validate.notNull(webDriver.get(), "Driver could not be found at:" + driverHost);
     }
-    log.info("Connected to Selenium Server. Session ID: " + sessionId.get());
-    Validate.notNull(webDriver.get(), "Driver could be found by name:" + seleniumHostAddress);
     return webDriver.get();
   }
 
