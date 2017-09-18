@@ -32,22 +32,19 @@ public class WebDriverFactory implements SauceOnDemandSessionIdProvider, SauceOn
   private static ThreadLocal<String> sessionId = new ThreadLocal<String>();
 
   public static WebDriver createDriver() throws MalformedURLException {
-    final String driverHost = PropertiesCache.getInstance().getProperty("driver.host");
+    final WebDriver webDriver;
 
+    final String driverHost = PropertiesCache.getInstance().getProperty("driver.host");
     if (HostType.remote.name().equalsIgnoreCase(driverHost)) {
-      final String seleniumHostAddress = PropertiesCache.getInstance().getProperty("selenium.host.address");
-      setRemoteWebDriver(seleniumHostAddress);
-      log.info("Connected to Selenium Server. Session ID: " + sessionId.get());
-      Validate.notNull(webDriver.get(), "Driver could not be found at:" + seleniumHostAddress);
+      webDriver = getRemoteWebDriver();
     } else if(HostType.sauce.name().equalsIgnoreCase(driverHost)) {
-      setSauceWebDriver();
-      log.info("Connected to Selenium Server. Session ID: " + sessionId.get());
-      Validate.notNull(webDriver.get(), "Driver could not be found at:" + driverHost);
+      webDriver = getSauceWebDriver();
     }
-    return webDriver.get();
+
+    return webDriver;
   }
 
-  private static void setSauceWebDriver() throws MalformedURLException {
+  private static WebDriver getSauceWebDriver() throws MalformedURLException {
     final DesiredCapabilities capabilities = getSauceCapabilitiesByBrowser(System.getProperty("browser"));
     SauceHelpers.addSauceConnectTunnelId(capabilities);
 
@@ -61,6 +58,10 @@ public class WebDriverFactory implements SauceOnDemandSessionIdProvider, SauceOn
     String id = ((RemoteWebDriver) getWebDriver()).getSessionId().toString();
     sessionId.set(id);
     log.info("Targeted Host:" + HostType.sauce.name());
+    log.info("Connected to Selenium Server. Session ID: " + sessionId.get());
+    Validate.notNull(webDriver.get(), "Driver could not be found at:" + HostType.sauce.name());
+
+    return webDriver.get();
   }
 
   private static DesiredCapabilities getSauceCapabilitiesByBrowser(String driverType) {
@@ -103,12 +104,13 @@ public class WebDriverFactory implements SauceOnDemandSessionIdProvider, SauceOn
       ("origin");
   }
 
-  private static void setRemoteWebDriver(String driverName) {
-    String[] params = driverName.split(":");
+  private static WebDriver getRemoteWebDriver() {
+    final String seleniumHostAddress = PropertiesCache.getInstance().getProperty("selenium.host.address");
+    String[] params = seleniumHostAddress.split(":");
     Validate.isTrue(
       params.length == 4,
       "Remote driver is not right, accept format is \"remote:localhost:4444:firefox\", but the input is\""
-        + driverName + "\""
+        + seleniumHostAddress + "\""
     );
 
     String remoteHost = params[1];
@@ -138,6 +140,10 @@ public class WebDriverFactory implements SauceOnDemandSessionIdProvider, SauceOn
     } catch (MalformedURLException e) {
       throw new RuntimeException(e);
     }
+
+    log.info("Connected to Selenium Server. Session ID: " + sessionId.get());
+    Validate.notNull(webDriver.get(), "Driver could not be found at:" + seleniumHostAddress);
+    return webDriver.get();
   }
 
   public enum BrowserType {
