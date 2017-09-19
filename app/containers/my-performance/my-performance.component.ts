@@ -96,7 +96,9 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
 
         if (current.responsibilities && current.responsibilities.status === ActionStatus.Fetched) {
           this.tableData = this.myPerformanceTableDataTransformerService.getLeftTableData(
-            current.responsibilities.entitiesPerformances
+            current.responsibilities.entitiesPerformances,
+            current.responsibilities.groupedEntities,
+            current.viewType.leftTableViewType
           );
 
           if (current.responsibilities.entitiesPerformances) {

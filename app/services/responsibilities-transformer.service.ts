@@ -13,6 +13,7 @@ export class ResponsibilitiesTransformerService {
   constructor() { }
 
   public groupPeopleByGroupedEntities(responsibilities: EntityResponsibilitiesDTO[]): GroupedEntities {
+console.log('groupPeopleByGroupedEntities ', responsibilities);
     return responsibilities.reduce((groupedEntities: GroupedEntities, entity: EntityResponsibilitiesDTO) => {
       if (Array.isArray(groupedEntities[entity.description])) {
         groupedEntities[entity.description].push(this.transformEntityResponsibilitiesDTO(entity));
@@ -27,6 +28,7 @@ export class ResponsibilitiesTransformerService {
   }
 
   public groupsAccountsDistributors(accountsDistributors: Array<EntityDTO>): GroupedEntities {
+console.log('groupsAccountsDistributors ', accountsDistributors);
     return accountsDistributors.reduce((groups: GroupedEntities, entity: EntityDTO) => {
       groups['all'].push({
         propertyType: entity.type,
@@ -50,6 +52,12 @@ export class ResponsibilitiesTransformerService {
 
     if (entity.description in EntityPeopleType) {
       transformedEntity.peopleType = EntityPeopleType[entity.description];
+console.log('EntityResponsibilities ', entity);
+      if (entity.name === 'Open') {
+// debugger;
+console.log('Open Entity ', entity);
+        transformedEntity.subName = entity.positionDescription;
+      }
     } else if (entity.description in EntityPropertyType) {
       transformedEntity.propertyType = EntityPropertyType[entity.description];
     } else {

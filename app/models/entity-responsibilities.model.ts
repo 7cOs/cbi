@@ -3,6 +3,7 @@ import { EntityPeopleType, EntityPropertyType } from '../enums/entity-responsibi
 export interface EntityResponsibilities {
   positionId: string;
   name: string;
+  subName?: string;
   type?: string;
   hierarchyType?: string;
   description?: string;
@@ -19,4 +20,5 @@ export interface EntityResponsibilitiesDTO {
   description: string;
   type: string;
   hierarchyType: string;
+  positionDescription?: string;
 }
