@@ -79,7 +79,6 @@ export class MyPerformanceApiService {
   }
 
   public getDistributorsPerformanceTotals(distributors: EntityResponsibilities[], filter: MyPerformanceFilterState) {
-    console.log(distributors);
     const apiCalls: Observable<EntitiesTotalPerformancesDTO | Error>[] =
       distributors.map((dist: EntityResponsibilities) => this.getDistributorPerformanceTotal(dist.positionId, filter));
 
@@ -99,18 +98,18 @@ export class MyPerformanceApiService {
       .catch(err => this.handleError(new Error(err)));
   }
 
-  public getAccountsPerformanceTotals(accounts: EntityDTO[], filter: MyPerformanceFilterState) {
+  public getAccountsPerformanceTotals(accounts: EntityResponsibilities[], filter: MyPerformanceFilterState) {
     const apiCalls: Observable<EntitiesTotalPerformancesDTO | Error>[] =
-      accounts.map((acc: EntityDTO) => this.getAccountPerformanceTotal(acc.id, filter));
+      accounts.map((acc: EntityResponsibilities) => this.getAccountPerformanceTotal(acc.positionId, filter));
 
     return Observable.forkJoin(apiCalls);
   }
 
   public getAccountPerformanceTotal(
-    distributorID: string,
+    accountID: string,
     filter: MyPerformanceFilterState
     ): Observable<EntitiesTotalPerformancesDTO> {
-    const url = `/v3/accounts/${distributorID}/performanceTotal`;
+    const url = `/v3/accounts/${accountID}/performanceTotal`;
 
     return this.http.get(url, {
       params: this.getFilterStateParams(filter)
