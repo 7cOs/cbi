@@ -10,6 +10,7 @@ import { EntitiesPerformancesDTO } from '../models/entities-performances.model';
 import { EntitiesTotalPerformancesDTO } from '../models/entities-total-performances.model';
 import { MetricTypeValue } from '../enums/metric-type.enum';
 import { MyPerformanceApiService } from './my-performance-api.service';
+import { PeopleResponsibilitiesDTO } from '../models/people-responsibilities-dto.model';
 import { PremiseTypeValue } from '../enums/premise-type.enum';
 import { productMetricsBrandDTOMock } from '../models/entity-product-metrics-dto.model.mock';
 import { ProductMetricType } from '../enums/product-metrics-type.enum';
@@ -19,7 +20,7 @@ describe('Service: MyPerformanceApiService', () => {
   let mockBackend: MockBackend;
 
   const performanceTotalResponseMock: EntitiesTotalPerformancesDTO = getEntitiesTotalPerformancesDTOMock();
-  const responsibilitiesResponseMock: any = {
+  const responsibilitiesResponseMock: PeopleResponsibilitiesDTO = {
     positions: [{
       id: '123',
       employeeId: '1231231',
