@@ -4,14 +4,16 @@ import { MockBackend, MockConnection } from '@angular/http/testing';
 
 import { DateRangeTimePeriodValue } from '../enums/date-range-time-period.enum';
 import { EntityDTO } from '../models/entity-dto.model';
-import { EntitiesPerformancesDTO } from '../models/entities-performances.model';
 import { EntitySubAccountDTO } from '../models/entity-subaccount-dto.model';
+import { EntitiesPerformancesDTO } from '../models/entities-performances.model';
 import { EntitiesTotalPerformancesDTO } from '../models/entities-total-performances.model';
 import { getEntityDTOMock } from '../models/entity-dto.model.mock';
 import { getEntitiesTotalPerformancesDTOMock } from '../models/entities-total-performances.model.mock';
 import { MetricTypeValue } from '../enums/metric-type.enum';
 import { MyPerformanceApiService } from './my-performance-api.service';
 import { PremiseTypeValue } from '../enums/premise-type.enum';
+import { productMetricsBrandDTOMock } from '../models/entity-product-metrics-dto.model.mock';
+import { ProductMetricType } from '../enums/product-metrics-type.enum';
 
 describe('Service: MyPerformanceApiService', () => {
   let myPerformanceApiService: MyPerformanceApiService;
@@ -93,6 +95,33 @@ describe('Service: MyPerformanceApiService', () => {
           done();
         });
       });
+  });
+
+  describe('getProductMetrics', () => {
+
+    it('should call the getProductMetrics endpoint and return all ProductMetrics', (done) => {
+      const mockFilter = {
+        metricType: MetricTypeValue.volume,
+        dateRangeCode: DateRangeTimePeriodValue.FYTDBDL,
+        premiseType: PremiseTypeValue.On
+      };
+      mockBackend.connections.subscribe((connection: MockConnection) => {
+        const options = new ResponseOptions({
+          body: JSON.stringify(productMetricsBrandDTOMock)
+        });
+        connection.mockRespond(new Response(options));
+        expect(connection.request.method).toEqual(RequestMethod.Get);
+        expect(connection.request.url).toEqual(
+          '/v3/positions/1/productMetrics?metricType=volume&dateRangeCode=FYTDBDL&premiseType=On&aggregationLevel=brand');
+      });
+
+      myPerformanceApiService
+        .getProductMetrics('1', mockFilter, ProductMetricType.brand)
+        .subscribe((res) => {
+          expect(res).toEqual(productMetricsBrandDTOMock);
+          done();
+        });
+    });
   });
 
   describe('getPerformanceTotal', () => {

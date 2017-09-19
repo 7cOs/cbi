@@ -4,6 +4,7 @@ import 'rxjs/add/operator/map';
 import { EntitiesPerformances } from '../models/entities-performances.model';
 import { EntitiesTotalPerformances } from '../models/entities-total-performances.model';
 import { MyPerformanceTableRow } from '../models/my-performance-table-row.model';
+import { ProductMetrics, ProductMetricsBrandValue } from '../models/product-metrics.model';
 
 @Injectable()
 export class MyPerformanceTableDataTransformerService {
@@ -24,6 +25,18 @@ export class MyPerformanceTableDataTransformerService {
       if (entity.contextPositionId) transformedEntity.metadata.contextPositionId = entity.contextPositionId;
 
       return transformedEntity;
+    });
+  }
+
+  public getRightTableData(productMetrics: ProductMetrics): MyPerformanceTableRow[] {
+    return (productMetrics.brand).map((item: ProductMetricsBrandValue) => {
+      return {
+        descriptionRow0: item.brandDescription,
+        metricColumn0: item.current,
+        metricColumn1: item.yearAgo,
+        metricColumn2: item.yearAgoPercent,
+        ctv: chance.natural({max: 100})
+      };
     });
   }
 

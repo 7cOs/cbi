@@ -11,6 +11,7 @@ import { MyPerformanceApiService } from '../../services/my-performance-api.servi
 import { PerformanceTransformerService } from '../../services/performance-transformer.service';
 import { ResponsibilitiesService } from '../../services/responsibilities.service';
 import { ResponsibilitiesTransformerService } from  '../../services/responsibilities-transformer.service';
+import { ProductMetricsTransformerService } from  '../../services/product-metrics-transformer.service';
 import { SharedModule } from '../../shared/shared.module';
 import { SortIndicatorComponent } from '../../shared/components/sort-indicator/sort-indicator.component';
 
@@ -31,6 +32,7 @@ import { SortIndicatorComponent } from '../../shared/components/sort-indicator/s
     MyPerformanceApiService,
     MyPerformanceTableDataTransformerService,
     PerformanceTransformerService,
+    ProductMetricsTransformerService,
     ResponsibilitiesService,
     ResponsibilitiesTransformerService
   ]
