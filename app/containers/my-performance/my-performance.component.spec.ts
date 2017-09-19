@@ -24,11 +24,11 @@ import { MyPerformanceTableRow } from '../../models/my-performance-table-row.mod
 import { MyPerformanceTableRowComponent } from '../../shared/components/my-performance-table-row/my-performance-table-row.component';
 import { PremiseTypeValue } from '../../enums/premise-type.enum';
 import { RowType } from '../../enums/row-type.enum';
-import { SetRightMyPerformanceTableViewType } from '../../state/actions/view-types.action';
 import { SortIndicatorComponent } from '../../shared/components/sort-indicator/sort-indicator.component';
 import { SortingCriteria } from '../../models/sorting-criteria.model';
 import { UtilService } from '../../services/util.service';
 import { ViewType } from '../../enums/view-type.enum';
+import { FetchProductMetricsAction } from '../../state/actions/product-metrics.action';
 
 const chance = new Chance();
 
@@ -77,6 +77,7 @@ describe('MyPerformanceComponent', () => {
   const stateMock = {
       myPerformanceFilter: chance.string(),
       dateRanges: chance.string(),
+      myPerformanceProductMetrics: chance.string(),
       viewTypes: chance.string(),
       myPerformance: initialState
   };
@@ -140,8 +141,10 @@ describe('MyPerformanceComponent', () => {
       filter: stateMock.myPerformanceFilter as any
     })]);
 
-    // this will change once right table is built
-    expect(storeMock.dispatch.calls.argsFor(1)).toEqual([new SetRightMyPerformanceTableViewType(ViewType.brands)]);
+    expect(storeMock.dispatch.calls.argsFor(1)).toEqual([new FetchProductMetricsAction({
+      positionId: userServiceMock.model.currentUser.positionId,
+      filter: stateMock.myPerformanceFilter as any
+    })]);
   }));
 
   it('should dispatch actions on init and handle empty positionId', inject([ 'userService' ], (userService: any) => {
@@ -263,7 +266,7 @@ describe('MyPerformanceComponent', () => {
     fixture = TestBed.createComponent(MyPerformanceComponent);
     fixture.detectChanges();
 
-    expect(storeMock.select.calls.count()).toBe(5);
+    expect(storeMock.select.calls.count()).toBe(6);
     const functionPassToSelectCall0 = storeMock.select.calls.argsFor(0)[0];
     expect(functionPassToSelectCall0(stateMock)).toBe(stateMock.dateRanges);
 
@@ -274,9 +277,12 @@ describe('MyPerformanceComponent', () => {
     expect(functionPassToSelectCall2(stateMock)).toBe(stateMock.myPerformanceFilter);
 
     const functionPassToSelectCall3 = storeMock.select.calls.argsFor(3)[0];
-    expect(functionPassToSelectCall3(stateMock)).toBe(stateMock.myPerformance.current);
+    expect(functionPassToSelectCall3(stateMock)).toBe(stateMock.myPerformanceProductMetrics);
 
-    const functionPassToSelectCall7 = storeMock.select.calls.argsFor(4)[0];
+    const functionPassToSelectCall4 = storeMock.select.calls.argsFor(4)[0];
+    expect(functionPassToSelectCall4(stateMock)).toBe(stateMock.myPerformance.current);
+
+    const functionPassToSelectCall7 = storeMock.select.calls.argsFor(5)[0];
     expect(functionPassToSelectCall7(stateMock)).toBe(stateMock.myPerformance.versions);
 
     fixture.detectChanges();

@@ -4,6 +4,7 @@ import 'rxjs/add/operator/map';
 import { MyPerformanceTableRow } from '../models/my-performance-table-row.model';
 import { EntitiesTotalPerformances } from '../models/entities-total-performances.model';
 import { EntitiesPerformances } from '../models/entities-performances.model';
+import { ProductMetrics, ProductMetricsBrandValue } from '../models/product-metrics.model';
 
 @Injectable()
 export class MyPerformanceTableDataTransformerService {
@@ -19,6 +20,18 @@ export class MyPerformanceTableDataTransformerService {
         metadata: {
           positionId: entity.positionId
         }
+      };
+    });
+  }
+
+  public getRightTableData(productMetrics: ProductMetrics): MyPerformanceTableRow[] {
+    return (productMetrics.brand).map((item: ProductMetricsBrandValue) => {
+      return {
+        descriptionRow0: item.brandDescription,
+        metricColumn0: item.current,
+        metricColumn1: item.yearAgo,
+        metricColumn2: item.yearAgoPercent,
+        ctv: chance.natural({max: 100})
       };
     });
   }

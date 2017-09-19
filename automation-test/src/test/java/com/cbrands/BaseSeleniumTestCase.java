@@ -44,7 +44,7 @@ public abstract class BaseSeleniumTestCase implements IConstant {
 	@BeforeSuite
 	public void setUp() throws Exception {
 		log.info("Browser Opening.");
-		driver = WebDriverFactory.createDriver(PropertiesCache.getInstance().getProperty("selenium.host.address"));
+		driver = WebDriverFactory.createDriver();
 		driver.get(PropertiesCache.getInstance().getProperty("host.address"));
 		SeleniumUtils.setDriver(driver);
 		SeleniumUtils.setStopAtShutdown();

@@ -7,12 +7,13 @@ import { EntityDTO } from '../models/entity-dto.model'; // tslint:disable-line:n
 import { DateRangeTimePeriodValue } from '../enums/date-range-time-period.enum';
 import { DistributionTypeValue } from '../enums/distribution-type.enum';
 import { EntitiesPerformancesDTO } from '../models/entities-performances.model'; // tslint:disable-line:no-unused-variable
-import { EntityResponsibilities } from '../models/entity-responsibilities.model'; // tslint:disable-line:no-unused-variable
+import { EntitiesTotalPerformancesDTO } from '../models/entities-total-performances.model'; // tslint:disable-line:no-unused-variable
 import { MetricTypeValue } from '../enums/metric-type.enum';
 import { MyPerformanceFilterState } from '../state/reducers/my-performance-filter.reducer';
 import { PeopleResponsibilitiesDTO } from '../models/people-responsibilities-dto.model'; // tslint:disable-line:no-unused-variable
-import { EntitiesTotalPerformancesDTO } from '../models/entities-total-performances.model'; // tslint:disable-line:no-unused-variable
 import { PremiseTypeValue } from '../enums/premise-type.enum';
+import { ProductMetricType } from '../enums/product-metrics-type.enum';
+import { ProductMetricsDTO } from '../models/entity-product-metrics-dto.model'; // tslint:disable-line:no-unused-variable
 
 @Injectable()
 export class MyPerformanceApiService {
@@ -66,6 +67,25 @@ export class MyPerformanceApiService {
       .catch(err => this.handleError(new Error(err)));
   }
 
+  public getProductMetrics(
+    positionId: string,
+    filter: MyPerformanceFilterState,
+    aggregation: ProductMetricType
+  ): Observable<ProductMetricsDTO> {
+
+    const url = `/v3/positions/${ positionId }/productMetrics`;
+
+    const filterStateParams = this.getFilterStateParams(filter);
+
+    Object.assign(filterStateParams, {
+      aggregationLevel: aggregation
+    });
+
+    return this.http.get(`${url}`, {params: filterStateParams})
+      .map(res => res.json())
+      .catch(err => this.handleError(new Error(err)));
+  }
+
   private getFilterStateParams(filter: MyPerformanceFilterState): any {
     return {
       metricType: filter.hasOwnProperty('distributionType')
@@ -77,7 +97,7 @@ export class MyPerformanceApiService {
   }
 
   private handleError(err: Error): Observable<Error> {
-    console.log(err.message || 'Unkown Error');
+    console.log(err.message || 'Unknown Error');
     return Observable.throw(err);
   }
 }
