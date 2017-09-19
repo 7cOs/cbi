@@ -25,8 +25,9 @@ public abstract class BaseTestCase {
 
     log.info("\n Browser opening...");
 
-    driver = WebDriverFactory.createDriver(propertiesCache.getProperty("selenium.host.address"));
+    driver = WebDriverFactory.createDriver();
     driver.get(webAppBaseUrl);
+    driver.manage().window().maximize();
     SeleniumUtils.setDriver(driver);
     SeleniumUtils.setStopAtShutdown();
 
