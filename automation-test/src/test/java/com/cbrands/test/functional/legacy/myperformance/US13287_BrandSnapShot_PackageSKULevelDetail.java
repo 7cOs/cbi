@@ -1,4 +1,4 @@
-package com.cbrands.test.functional.myperformance;
+package com.cbrands.test.functional.legacy.myperformance;
 
 import org.testng.Assert;
 import org.testng.annotations.AfterMethod;
@@ -9,11 +9,16 @@ import com.cbrands.BaseSeleniumTestCase;
 import com.cbrands.helper.RetryAnalyzer;
 import com.cbrands.pages.Login;
 
+/**
+ * @deprecated Legacy functional test removed from the functional suite. No longer working due to login/logout being
+ * wrong. Saved for reference only. Should be deleted as soon as there is a new test to replace it.
+ */
+@Deprecated
 public class US13287_BrandSnapShot_PackageSKULevelDetail extends BaseSeleniumTestCase{
   @Test(retryAnalyzer = RetryAnalyzer.class, dataProvider="AT_US13287_BrandSnapShot_PackageSKULevelDetail")
   public void US13287_AT_BrandSnapshot_Package_SKULevelDetail(String brandName) {
 	  login = new Login(driver);
-		if(!login.isUserLoggedIn()) { 
+		if(!login.isUserLoggedIn()) {
 			homePage = login.loginWithValidCredentials(ACTOR1_USER_NAME, ACTOR1_PASSWORD);
 		}
 		accountDashboardPage = homePage.navigateToAccountDashboard();
@@ -40,12 +45,12 @@ public class US13287_BrandSnapShot_PackageSKULevelDetail extends BaseSeleniumTes
 		Assert.assertEquals(accountDashboardPage.depletionsTimePeriodDropdownOptions(), "Clo Mth"+"CYTM"+"FYTM","'Depletions Time Period' drop down options do not change when 'Last Closed Month' is selected as the Ending Time Period");
 		Assert.assertEquals(accountDashboardPage.distributionsTimePeriodDropdownOptions(), "L03 Mth","'Distribution Time Period' drop down options do not change when 'Last Closed Month' is selected as the Ending Time Period");
   }
-  
+
 	@DataProvider(name="AT_US13287_BrandSnapShot_PackageSKULevelDetail")
 	public static Object[][] data1(){
 		return new Object[][]{{"CORONA LIGHT"}};
 	}
-  
+
 	@AfterMethod
 	public void signOut() {
 		logout();

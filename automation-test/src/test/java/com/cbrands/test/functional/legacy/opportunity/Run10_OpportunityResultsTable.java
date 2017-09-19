@@ -1,4 +1,4 @@
-package com.cbrands.test.functional.opportunity;
+package com.cbrands.test.functional.legacy.opportunity;
 
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.CoreMatchers.not;
@@ -13,6 +13,11 @@ import com.cbrands.BaseSeleniumTestCase;
 import com.cbrands.helper.RetryAnalyzer;
 import com.cbrands.pages.Login;
 
+/**
+ * @deprecated Legacy functional test removed from the functional suite. No longer working due to login/logout being
+ * wrong. Saved for reference only. Should be deleted as soon as there is a new test to replace it.
+ */
+@Deprecated
 public class Run10_OpportunityResultsTable extends BaseSeleniumTestCase {
 
 	@Test(retryAnalyzer = RetryAnalyzer.class, dataProvider="AT_Opportunities_Run10_OpportunityResultsTable")
@@ -28,10 +33,10 @@ public class Run10_OpportunityResultsTable extends BaseSeleniumTestCase {
 		opportunitiesPage.selectAccountScope();
 		opportunitiesPage.typeDistributor(distributorName);
 		opportunitiesPage.clickApplyFilters();
-		
+
 		String allText = getAllTextFromPage();
 		assertThat("Unable to find any opportunities that met your criteria.", allText, not(containsString("Dang! We were unable to find any opportunities that met your criteria.")));
-		
+
 		Assert.assertNotNull(opportunitiesPage.getColumnHeaderStoreNumber(), "Store/Number column header not present");
 		Assert.assertNotNull(opportunitiesPage.getColumnHeaderAddress(), "Address header not present");
 		Assert.assertNotNull(opportunitiesPage.getColumnHeaderOpportunitites(), "Opportunities column header not present");
@@ -76,16 +81,16 @@ public class Run10_OpportunityResultsTable extends BaseSeleniumTestCase {
 		//opportunitiesPage.searchRetailerChainByName(retailStoreName2);
 		opportunitiesPage.searchRetailerChain(retailStoreName2);
 		opportunitiesPage.clickApplyFilters();
-		
+
 		allText = getAllTextFromPage();
 		assertThat("Unable to find any opportunities that met your criteria.", allText, not(containsString("Dang! We were unable to find any opportunities that met your criteria.")));
-		
+
 		opportunitiesPage.clickFirstSearchResult();
 		Assert.assertNotNull(opportunitiesPage.getYellowFlagIcon(), "Yellow Flag icon not present");
 		opportunitiesPage.clickLevelOneRow();*/
 
 	}
-	
+
 	@DataProvider(name="AT_Opportunities_Run10_OpportunityResultsTable")
 	public static Object[][] data1(){
 		return new Object[][]{{"Manhattan Beer Dist Llc - Ny (Suffern)","3808767","Walmart"}};

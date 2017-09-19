@@ -1,4 +1,4 @@
-package com.cbrands.test.functional.opportunity;
+package com.cbrands.test.functional.legacy.opportunity;
 
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.Test;
@@ -8,6 +8,11 @@ import com.cbrands.BaseSeleniumTestCase;
 import com.cbrands.helper.RetryAnalyzer;
 import com.cbrands.pages.Login;
 
+/**
+ * @deprecated Legacy functional test removed from the functional suite. No longer working due to login/logout being
+ * wrong. Saved for reference only. Should be deleted as soon as there is a new test to replace it.
+ */
+@Deprecated
 public class Run7_OpportunitiesFilterValues extends BaseSeleniumTestCase {
 
 	private SoftAssert softAssert = new SoftAssert();
