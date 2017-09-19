@@ -16,6 +16,7 @@ import java.util.List;
 import static com.cbrands.helper.SeleniumUtils.*;
 
 public class TargetListListingsPage extends TestNGBasePage {
+  private static final String LOADER_XPATH = "//loader";
 
   private final WebDriver driver;
   protected Log log = LogFactory.getLog(TargetListListingsPage.class);
@@ -42,6 +43,7 @@ public class TargetListListingsPage extends TestNGBasePage {
   @Override
   public boolean isLoaded() {
     waitForVisibleFluentWait(listingsHeader);
+    waitForElementToDisappear(By.xpath(LOADER_XPATH));
     return listingsHeader.isDisplayed();
   }
 
