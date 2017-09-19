@@ -60,18 +60,18 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
   public tableHeaderRowRight: Array<string> = ['BRAND', 'DEPLETIONS', 'CTV'];
   public performanceMetric: string = 'Depletions';
   public dateRange: DateRange = getDateRangeMock();
-  public salesHierarchy: Array<MyPerformanceTableRow>;
-  public productPerformance: Array<MyPerformanceTableRow>;
-  public totalRowData: MyPerformanceTableRow;
   public showOpportunities: boolean = true;
 
   private currentState: MyPerformanceEntitiesData;
   private dateRanges$: Observable<DateRangesState>;
   private filterState: MyPerformanceFilterState;
   private filterStateSubscription: Subscription;
-  private productMetricsSubscription: Subscription;
   private myPerformanceCurrentSubscription: Subscription;
   private myPerformanceVersionSubscription: Subscription;
+  private productMetricsSubscription: Subscription;
+  private productPerformance: Array<MyPerformanceTableRow>;
+  private salesHierarchy: Array<MyPerformanceTableRow>;
+  private salesHierarchyTotal: MyPerformanceTableRow;
 
   constructor(
     private store: Store<AppState>,
@@ -110,7 +110,7 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
         }
 
         if (current.responsibilities.entitiesPerformances) {
-          this.totalRowData = this.myPerformanceTableDataTransformerService
+          this.salesHierarchyTotal = this.myPerformanceTableDataTransformerService
             .getTotalRowData(current.responsibilities.entitiesTotalPerformances);
         }
 

@@ -1,18 +1,21 @@
 import { inject, TestBed } from '@angular/core/testing';
 
+import { ActionStatus } from '../enums/action-status.enum';
 import { EntitiesTotalPerformances } from '../models/entities-total-performances.model';
 import { EntitiesPerformances } from '../models/entities-performances.model';
 import { getEntitiesTotalPerformancesMock } from '../models/entities-total-performances.model.mock';
 import { getEntitiesPerformancesMock } from '../models/entities-performances.model.mock';
 import { getProductMetricMock } from '../models/entity-product-metrics-dto.model.mock';
 import { MyPerformanceTableDataTransformerService } from './my-performance-table-data-transformer.service';
+import { ProductMetricsState } from '../state/reducers/product-metrics.reducer';
 
 describe('Service: MyPerformanceTableDataTransformerService', () => {
   let myPerformanceTableDataTransformerService: MyPerformanceTableDataTransformerService;
   let mockPerformanceTotal: EntitiesTotalPerformances;
   let responsibilityEntitiesPerformanceMock: EntitiesPerformances[];
 
-  const productMetricsState: any = {
+  const productMetricsState: ProductMetricsState = {
+    status: ActionStatus.Fetched,
     products: getProductMetricMock()
   };
 

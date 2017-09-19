@@ -33,13 +33,13 @@ describe('Responsibilities Actions', () => {
 
   describe('FetchResponsibilitiesAction', () => {
     let action: ResponsibilitiesActions.FetchResponsibilitiesAction;
-    let userIdMock: number;
+    let positionIdMock: number;
     let actionPayloadMock: any;
 
     beforeEach(() => {
-      userIdMock = chance.natural();
+      positionIdMock = chance.natural();
       actionPayloadMock = {
-        positionId: userIdMock,
+        positionId: positionIdMock,
         filter: performanceFilterStateMock
       };
       action = new ResponsibilitiesActions.FetchResponsibilitiesAction(actionPayloadMock);
@@ -58,16 +58,16 @@ describe('Responsibilities Actions', () => {
   describe('FetchResponsibilitiesSuccessAction', () => {
     let action: ResponsibilitiesActions.FetchResponsibilitiesSuccessAction;
     let groupedEntitiesMock: GroupedEntities;
-    let userIdMock: number;
+    let positionIdMock: number;
     let responsibilityEntitiesPerformanceMock: EntitiesPerformances[];
     let mockSuccessActionPayload: any;
 
     beforeEach(() => {
       groupedEntitiesMock = getGroupedEntitiesMock();
-      userIdMock = chance.natural();
+      positionIdMock = chance.natural();
       responsibilityEntitiesPerformanceMock = getEntitiesPerformancesMock();
       mockSuccessActionPayload = {
-        positionId: userIdMock,
+        positionId: positionIdMock,
         responsibilities: groupedEntitiesMock,
         performanceTotals: responsibilityEntitiesPerformanceMock
       };
@@ -114,8 +114,7 @@ describe('Responsibilities Actions', () => {
     });
 
     it('should have the correct type', () => {
-      expect(ResponsibilitiesActions.GET_PEOPLE_BY_ROLE_GROUP_ACTION)
-        .toBe('[Responsibilities] GET_PEOPLE_BY_ROLE_GROUP_ACTION');
+      expect(ResponsibilitiesActions.GET_PEOPLE_BY_ROLE_GROUP_ACTION).toBe('[Responsibilities] GET_PEOPLE_BY_ROLE_GROUP_ACTION');
       expect(action.type).toBe(ResponsibilitiesActions.GET_PEOPLE_BY_ROLE_GROUP_ACTION);
     });
 
