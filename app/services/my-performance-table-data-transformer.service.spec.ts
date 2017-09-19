@@ -1,15 +1,20 @@
 import { inject, TestBed } from '@angular/core/testing';
 
-import { getEntitiesTotalPerformancesMock } from '../models/entities-total-performances.model.mock';
-import { MyPerformanceTableDataTransformerService } from './my-performance-table-data-transformer.service';
-import { getEntitiesPerformancesMock } from '../models/entities-performances.model.mock';
 import { EntitiesTotalPerformances } from '../models/entities-total-performances.model';
 import { EntitiesPerformances } from '../models/entities-performances.model';
+import { getEntitiesTotalPerformancesMock } from '../models/entities-total-performances.model.mock';
+import { getEntitiesPerformancesMock } from '../models/entities-performances.model.mock';
+import { getProductMetricMock } from '../models/entity-product-metrics-dto.model.mock';
+import { MyPerformanceTableDataTransformerService } from './my-performance-table-data-transformer.service';
 
 describe('Service: MyPerformanceTableDataTransformerService', () => {
   let myPerformanceTableDataTransformerService: MyPerformanceTableDataTransformerService;
   let mockPerformanceTotal: EntitiesTotalPerformances;
   let responsibilityEntitiesPerformanceMock: EntitiesPerformances[];
+
+  const productMetricsState: any = {
+    products: getProductMetricMock()
+  };
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -65,6 +70,19 @@ describe('Service: MyPerformanceTableDataTransformerService', () => {
         metricColumn2: mockPerformanceTotal.totalYearAgoPercent,
         ctv: mockPerformanceTotal.contributionToVolume
       });
+    });
+  });
+
+  describe('myPerformanceRightTableData', () => {
+    it('should return properly formatted table data for ProductMetrics', () => {
+      spyOn(myPerformanceTableDataTransformerService, 'getRightTableData').and.callThrough();
+
+      const transformedProductMetricsData =
+        myPerformanceTableDataTransformerService.getRightTableData(productMetricsState.products);
+
+      expect(transformedProductMetricsData).toBeDefined();
+      expect(transformedProductMetricsData.length).toBeTruthy();
+      expect(transformedProductMetricsData[0].descriptionRow0).toEqual(productMetricsState.products.brand[0].brandDescription);
     });
   });
 });
