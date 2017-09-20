@@ -162,7 +162,7 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
               entityType: EntityPeopleType[parameters.row.descriptionRow0],
               entities: this.currentState.responsibilities.groupedEntities[EntityPeopleType[parameters.row.descriptionRow0]],
               filter: this.filterState,
-              entitiesTotalPerformances: parameters.row,
+              selectedPositionId: parameters.row.metadata.positionId,
               viewType: ViewType.people
             }));
           } else if (this.leftTableViewType === ViewType.people) {

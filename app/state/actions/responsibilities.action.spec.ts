@@ -12,7 +12,6 @@ import { getMyPerformanceTableRowMock } from '../../models/my-performance-table-
 import { getGroupedEntitiesMock } from '../../models/grouped-entities.model.mock';
 import { MetricTypeValue } from '../../enums/metric-type.enum';
 import { MyPerformanceFilterState } from '../reducers/my-performance-filter.reducer';
-import { MyPerformanceTableRow } from '../../models/my-performance-table-row.model';
 import { EntitiesTotalPerformances } from '../../models/entities-total-performances.model';
 import { PremiseTypeValue } from '../../enums/premise-type.enum';
 import { EntitiesPerformances } from '../../models/entities-performances.model';
@@ -127,7 +126,7 @@ describe('Responsibilities Actions', () => {
       entityType: EntityPeopleType['GENERAL MANAGER'],
       entities: [getEntityPeopleResponsibilitiesMock()],
       filter: performanceFilterStateMock,
-      entitiesTotalPerformances: getMyPerformanceTableRowMock(1)[0],
+      selectedPositionId: getMyPerformanceTableRowMock(1)[0].metadata.positionId,
       viewType: ViewType.people
     };
     let action: ResponsibilitiesActions.FetchResponsibilityEntityPerformance;
@@ -229,11 +228,11 @@ describe('Responsibilities Actions', () => {
   });
 
   describe('Set Table Row Performance Total Action', () => {
-    const tableRowMock: MyPerformanceTableRow = getMyPerformanceTableRowMock(1)[0];
+    const selectedPositionIdMock: string = getMyPerformanceTableRowMock(1)[0].metadata.positionId;
     let action: ResponsibilitiesActions.SetTableRowPerformanceTotal;
 
     beforeEach(() => {
-      action = new ResponsibilitiesActions.SetTableRowPerformanceTotal(tableRowMock);
+      action = new ResponsibilitiesActions.SetTableRowPerformanceTotal(selectedPositionIdMock);
     });
 
     it('should be the correct type', () => {
@@ -242,7 +241,7 @@ describe('Responsibilities Actions', () => {
     });
 
     it('should contain the correct payload', () => {
-      expect(action.payload).toEqual(tableRowMock);
+      expect(action.payload).toEqual(selectedPositionIdMock);
     });
   });
 });

@@ -84,14 +84,10 @@ export function responsibilitiesReducer(
       });
 
     case ResponsibilitiesActions.SET_TABLE_ROW_PERFORMANCE_TOTAL:
+      const selectedEntity = state.entitiesPerformances.filter(entity => entity.positionId === action.payload)[0];
+
       return Object.assign({}, state, {
-        entitiesTotalPerformances: {
-          total: action.payload.metricColumn0,
-          totalYearAgo: action.payload.metricColumn1,
-          totalYearAgoPercent: action.payload.metricColumn2,
-          contributionToVolume: action.payload.ctv,
-          entityType: action.payload.descriptionRow0
-        }
+        entitiesTotalPerformances: selectedEntity.performanceTotal
       });
 
     default:
