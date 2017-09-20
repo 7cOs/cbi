@@ -156,9 +156,8 @@ export class ResponsibilitiesService {
       subAccountData.positionId, subAccountData.contextPositionId, subAccountData.premiseType
     )
       .map((response: Array<EntitySubAccountDTO>) => {
-        const groupedEntities: GroupedEntities = {
-          [subAccountData.entityType]: this.responsibilitiesTransformerService.transformSubAccountsDTO(response)
-        };
+        const groupedEntities: GroupedEntities =
+          this.responsibilitiesTransformerService.transformSubAccountsDTO(response, subAccountData.entityType);
 
         return Object.assign({}, subAccountData, {
           groupedEntities: groupedEntities

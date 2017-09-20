@@ -93,7 +93,7 @@ export class MyPerformanceApiService {
       })
     })
       .map(res => res.json())
-      .catch(err =>  this.handleError(new Error(err)));
+      .catch(err => this.handleError(new Error(err)));
   }
 
   private getFilterStateParams(filter: MyPerformanceFilterState): any {
