@@ -14,7 +14,10 @@ export function getMyPerformanceTableRowMock(length: number) {
       metricColumn0: chance.floating(),
       metricColumn1: chance.floating(),
       metricColumn2: chance.floating(),
-      ctv: chance.natural()
+      ctv: chance.natural(),
+      metadata: {
+        positionId: chance.string()
+      }
     });
   }
 
