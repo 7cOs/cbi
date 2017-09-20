@@ -213,11 +213,14 @@ describe('Service: MyPerformanceApiService', () => {
 
     it('should call the accounts/subAcccount endpoint and return subAccounts', (done) => {
       const positionIdMock: string = chance.string();
-      const contextPositionIdMock: string = chance.string();
+      const contextPositionIdMock: string = chance.string({
+        pool: 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!#%^&*()[]'
+      });
       const premiseTypeMock: PremiseTypeValue = PremiseTypeValue.All;
 
       const expectedBaseUrl = `/v3/accounts/${ positionIdMock }/subAccounts`;
-      const expectedUrlParams = encodeURI(`?positionId=${ contextPositionIdMock }&premiseType=${ PremiseTypeValue[premiseTypeMock] }`);
+      const expectedUrlParams =
+        `?positionId=${encodeURIComponent(contextPositionIdMock)}&premiseType=${encodeURIComponent(PremiseTypeValue[premiseTypeMock])}`;
 
       mockBackend.connections.subscribe((connection: MockConnection) => {
         const options = new ResponseOptions({
