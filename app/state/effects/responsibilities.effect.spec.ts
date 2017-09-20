@@ -25,7 +25,6 @@ import { getEntitiesTotalPerformancesMock } from '../../models/entities-total-pe
 import { getEntitiesPerformancesMock } from '../../models/entities-performances.model.mock';
 import { getGroupedEntitiesMock } from '../../models/grouped-entities.model.mock';
 import { getMyPerformanceTableRowMock } from '../../models/my-performance-table-row.model.mock';
-// import { getResponsibilityEntitiesPerformanceDTOMock } from '../../models/entities-performances.model.mock';
 import { getViewTypeMock } from '../../enums/view-type.enum.mock';
 import { GroupedEntities } from '../../models/grouped-entities.model';
 import { MetricTypeValue } from '../../enums/metric-type.enum';
@@ -130,7 +129,7 @@ describe('Responsibilities Effects', () => {
 
         spyOn(responsibilitiesService, 'getPerformanceTotalForGroupedEntities').and.callFake(
           (responsibilitiesData: ResponsibilitiesData) => {
-          responsibilitiesData.entitiesPerformances = entitiesPerformancesMock;
+          responsibilitiesData.entitiesPerformances = responsibilityEntitiesPerformanceMock;
           return Observable.of(responsibilitiesData);
         });
 

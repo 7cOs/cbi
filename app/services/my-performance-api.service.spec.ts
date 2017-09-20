@@ -3,8 +3,6 @@ import { inject, TestBed } from '@angular/core/testing';
 import { MockBackend, MockConnection } from '@angular/http/testing';
 
 import { DateRangeTimePeriodValue } from '../enums/date-range-time-period.enum';
-// import { DistributionTypeValue } from '../enums/distribution-type.enum';
-// import { getEntitiesTotalPerformancesMock } from '../models/entities-total-performances.model.mock';
 import { getEntitiesTotalPerformancesDTOMock } from '../models/entities-total-performances.model.mock';
 import { getEntityDTOMock } from '../models/entity-dto.model.mock';
 import { EntityDTO } from '../models/entity-dto.model';
@@ -91,7 +89,6 @@ describe('Service: MyPerformanceApiService', () => {
   });
 
   describe('getPerformanceTotal', () => {
-
     it('should call the performanceTotal API and return performance data', (done) => {
       const mockFilter = {
         metricType: MetricTypeValue.volume,
@@ -117,46 +114,7 @@ describe('Service: MyPerformanceApiService', () => {
     });
   });
 
-  // describe('getDistributorsPerformanceTotals', () => {
-  //   it('should call getDistributorPerformance total with the proper id for each distributor', () => {
-  //     const getDistributorPerformanceSpy = spyOn(myPerformanceApiService, 'getDistributorPerformanceTotal').and.callFake(() => {});
-  //     const mockFilter = {
-  //       metricType: MetricTypeValue.volume,
-  //       dateRangeCode: DateRangeTimePeriodValue.FYTDBDL,
-  //       premiseType: PremiseTypeValue.On
-  //     };
-
-  //     const len = chance.natural({min: 1, max: 99});
-  //     const distributorDTOs = Array(len).fill('').map(el => getDistributorEntityDTOMock());
-  //     myPerformanceApiService.getDistributorsPerformanceTotals(distributorDTOs, mockFilter);
-  //     expect(getDistributorPerformanceSpy).toHaveBeenCalledTimes(len);
-  //     distributorDTOs.map((distributorDTO) => {
-  //       expect(getDistributorPerformanceSpy).toHaveBeenCalledWith(distributorDTO.id, mockFilter);
-  //     });
-  //   });
-  // });
-
-  // describe('getAccountsPerformanceTotals', () => {
-  //   it('should call getAccountPerformance total with the proper id for each account', () => {
-  //     const getAccountPerformanceSpy = spyOn(myPerformanceApiService, 'getAccountPerformanceTotal').and.callFake(() => {});
-  //     const mockFilter = {
-  //       metricType: MetricTypeValue.volume,
-  //       dateRangeCode: DateRangeTimePeriodValue.FYTDBDL,
-  //       premiseType: PremiseTypeValue.On
-  //     };
-
-  //     const len = chance.natural({min: 1, max: 99});
-  //     const accountDTOs = Array(len).fill('').map(el => getAccountEntityDTOMock());
-  //     myPerformanceApiService.getAccountsPerformanceTotals(accountDTOs, mockFilter);
-  //     expect(getAccountPerformanceSpy).toHaveBeenCalledTimes(len);
-  //     accountDTOs.map((accountDTO) => {
-  //       expect(getAccountPerformanceSpy).toHaveBeenCalledWith(accountDTO.id, mockFilter);
-  //     });
-  //   });
-  // });
-
-  describe('getDistributorPerformanceTotal', () => {
-
+  describe('getDistributorPerformance', () => {
     it('should call the distributors performance API and return performance data', (done) => {
       const mockFilter = {
         metricType: MetricTypeValue.volume,
@@ -175,15 +133,14 @@ describe('Service: MyPerformanceApiService', () => {
         );
       });
 
-      myPerformanceApiService.getDistributorPerformanceTotal('1', mockFilter).subscribe((response: EntitiesTotalPerformancesDTO) => {
+      myPerformanceApiService.getDistributorPerformance('1', mockFilter).subscribe((response: EntitiesTotalPerformancesDTO) => {
         expect(response).toEqual(performanceTotalResponseMock);
         done();
       });
     });
   });
 
-  describe('getAccountsPerformanceTotals', () => {
-
+  describe('getAccountsPerformance', () => {
     it('should call the accounts performance API and return performance data', (done) => {
       const mockFilter = {
         metricType: MetricTypeValue.volume,
@@ -202,7 +159,7 @@ describe('Service: MyPerformanceApiService', () => {
         );
       });
 
-      myPerformanceApiService.getAccountPerformanceTotal('1', mockFilter).subscribe((response: EntitiesTotalPerformancesDTO) => {
+      myPerformanceApiService.getAccountPerformance('1', mockFilter).subscribe((response: EntitiesTotalPerformancesDTO) => {
         expect(response).toEqual(performanceTotalResponseMock);
         done();
       });

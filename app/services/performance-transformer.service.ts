@@ -41,7 +41,7 @@ export class PerformanceTransformerService {
   public transformEntityDTOsWithPerformance(
     performanceDTOs: EntitiesTotalPerformancesDTO[],
     entities: EntityResponsibilities[]
-    ) {
+    ): EntitiesPerformances[] {
     return performanceDTOs.map(
       (performanceDTO: EntitiesTotalPerformancesDTO,
       idx: number) => {
