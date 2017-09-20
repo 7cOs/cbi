@@ -5,11 +5,17 @@ import { MyPerformanceTableDataTransformerService } from './my-performance-table
 import { getEntitiesPerformancesMock } from '../models/entities-performances.model.mock';
 import { EntitiesTotalPerformances } from '../models/entities-total-performances.model';
 import { EntitiesPerformances } from '../models/entities-performances.model';
+import { GroupedEntities } from '../models/grouped-entities.model';
+// import { ViewType } from '../enums/view-type.enum';
+import { getEntityPeopleResponsibilitiesMock } from '../models/entity-responsibilities.model.mock';
+import { getViewTypeMock } from '../enums/view-type.enum.mock';
 
 describe('Service: MyPerformanceTableDataTransformerService', () => {
   let myPerformanceTableDataTransformerService: MyPerformanceTableDataTransformerService;
   let mockPerformanceTotal: EntitiesTotalPerformances;
   let responsibilityEntitiesPerformanceMock: EntitiesPerformances[];
+  let responsibilityGroupEntitiesMock: GroupedEntities;
+  let viewTypeMock: string;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -24,26 +30,31 @@ describe('Service: MyPerformanceTableDataTransformerService', () => {
       (_myPerformanceTableDataTransformerService: MyPerformanceTableDataTransformerService) => {
         myPerformanceTableDataTransformerService = _myPerformanceTableDataTransformerService;
         responsibilityEntitiesPerformanceMock = getEntitiesPerformancesMock();
+        // responsibilityGroupEntitiesMock = getEntityPeopleResponsibilitiesMock();
+        viewTypeMock = getViewTypeMock();
     }));
 
-    // it('should return formatted ResponsibilityEntityPerformance data', () => {
-    //   spyOn(myPerformanceTableDataTransformerService, 'getLeftTableData').and.callThrough();
-    //
-    //   const tableData = myPerformanceTableDataTransformerService.getLeftTableData(responsibilityEntitiesPerformanceMock);
-    //
-    //   expect(tableData).toBeDefined();
-    //   expect(tableData.length).toBeTruthy();
-    //   expect(tableData[0]).toEqual({
-    //     descriptionRow0: responsibilityEntitiesPerformanceMock[0].name,
-    //     metricColumn0: responsibilityEntitiesPerformanceMock[0].performanceTotal.total,
-    //     metricColumn1: responsibilityEntitiesPerformanceMock[0].performanceTotal.totalYearAgo,
-    //     metricColumn2: responsibilityEntitiesPerformanceMock[0].performanceTotal.totalYearAgoPercent,
-    //     ctv: responsibilityEntitiesPerformanceMock[0].performanceTotal.contributionToVolume,
-    //     metadata: {
-    //       positionId: responsibilityEntitiesPerformanceMock[0].positionId
-    //     }
-    //   });
-    // });
+    it('should return formatted ResponsibilityEntityPerformance data', () => {
+      spyOn(myPerformanceTableDataTransformerService, 'getLeftTableData').and.callThrough();
+
+      const tableData = null; // myPerformanceTableDataTransformerService.getLeftTableData(
+      //   responsibilityEntitiesPerformanceMock,
+      //   responsibilityGroupEntitiesMock,
+      //   viewTypeMock);
+
+      expect(tableData).toBeDefined();
+      expect(tableData.length).toBeTruthy();
+      expect(tableData[0]).toEqual({
+        descriptionRow0: responsibilityEntitiesPerformanceMock[0].name,
+        metricColumn0: responsibilityEntitiesPerformanceMock[0].performanceTotal.total,
+        metricColumn1: responsibilityEntitiesPerformanceMock[0].performanceTotal.totalYearAgo,
+        metricColumn2: responsibilityEntitiesPerformanceMock[0].performanceTotal.totalYearAgoPercent,
+        ctv: responsibilityEntitiesPerformanceMock[0].performanceTotal.contributionToVolume,
+        metadata: {
+          positionId: responsibilityEntitiesPerformanceMock[0].positionId
+        }
+      });
+    });
   });
 
   describe('getTotalRowData', () => {

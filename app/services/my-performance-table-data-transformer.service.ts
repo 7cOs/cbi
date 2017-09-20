@@ -4,9 +4,10 @@ import 'rxjs/add/operator/map';
 import { MyPerformanceTableRow } from '../models/my-performance-table-row.model';
 import { EntitiesTotalPerformances } from '../models/entities-total-performances.model';
 import { EntitiesPerformances } from '../models/entities-performances.model';
+import { EntityResponsibilities } from '../models/entity-responsibilities.model';
+import { EntityPeopleType } from '../enums/entity-responsibilities.enum';
 import { GroupedEntities } from '../models/grouped-entities.model';
 import { ViewType } from '../enums/view-type.enum';
-import { EntityPeopleType } from '../enums/entity-responsibilities.enum';
 
 @Injectable()
 export class MyPerformanceTableDataTransformerService {
@@ -17,23 +18,20 @@ export class MyPerformanceTableDataTransformerService {
 
     return entities.map((entity: EntitiesPerformances) => {
       let isOpen: boolean = false;
+      let localSubName: string;
+      let localName: string = entity.name;
+
       if (entity.name === 'Open' && view === ViewType.people) {
-        // entity.subName = null;
-console.log(' groups  ', peopleGroup[EntityPeopleType['KEY ACCOUNT MANAGER']]);
-//         for (let obj in peopleGroup[EntityPeopleType['KEY ACCOUNT MANAGER']]) {
-//           if (obj === entity.positionId) console.log('HELLO!!!'); // entity.subName = obj.subName;
-// console.log(' obj ', obj);
-//         }
-          //   (positionId: string = entity.positionId) => {
-          //   for (let ent of peopleGroup.map){
-          //     if (ent.positionId === positionId){
-          //       return ent.subName;
-          //     }
-          //   }
-          // };
+        (peopleGroup[EntityPeopleType['KEY ACCOUNT MANAGER']]).map((person: EntityResponsibilities) => {
+          if (person.positionId === entity.positionId) {
+            isOpen = true;
+            localSubName = person.subName;
+            localName = 'Open Position';
+          }
+        });
       }
       return {
-        descriptionRow0: entity.name + ((isOpen) ? '\n' + entity.subName : ''),
+        descriptionRow0: localName + ((isOpen) ? '\n' + localSubName : ''),
         metricColumn0: entity.performanceTotal.total,
         metricColumn1: entity.performanceTotal.totalYearAgo,
         metricColumn2: entity.performanceTotal.totalYearAgoPercent,
