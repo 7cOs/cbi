@@ -35,7 +35,6 @@ export class MyPerformanceApiService {
 
     entities.forEach((entity: { positionId?: string, type: string, name: string }) => {
       apiCalls.push(this.getResponsibilityPerformanceTotal(entity, filter, entity.positionId || positionId));
-console.log('getResponsibilitiesPerformanceTotals  ', entity);
     });
 
     return Observable.forkJoin(apiCalls);
