@@ -16,7 +16,8 @@ export function getMyPerformanceTableRowMock(length: number) {
       metricColumn2: chance.floating(),
       ctv: chance.natural(),
       metadata: {
-        positionId: chance.string()
+        positionId: chance.string(),
+        contextPositionId: chance.string()
       }
     });
   }
