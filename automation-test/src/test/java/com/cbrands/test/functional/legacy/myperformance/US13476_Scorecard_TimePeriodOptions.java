@@ -1,4 +1,4 @@
-package com.cbrands.test.functional.myperformance;
+package com.cbrands.test.functional.legacy.myperformance;
 
 import org.testng.annotations.Test;
 
@@ -9,12 +9,17 @@ import com.cbrands.pages.Login;
 import org.testng.Assert;
 import org.testng.annotations.AfterMethod;
 
+/**
+ * @deprecated Legacy functional test removed from the functional suite. No longer working due to login/logout being
+ * wrong. Saved for reference only. Should be deleted as soon as there is a new test to replace it.
+ */
+@Deprecated
 public class US13476_Scorecard_TimePeriodOptions extends BaseSeleniumTestCase{
-  
+
 	@Test(retryAnalyzer = RetryAnalyzer.class)
 	public void us13476_AT_Scorecard_TimePeriodOptions() {
 		login = new Login(driver);
-		if(!login.isUserLoggedIn()) { 
+		if(!login.isUserLoggedIn()) {
 			homePage = login.loginWithValidCredentials(ACTOR1_USER_NAME, ACTOR1_PASSWORD);
 		}
 		myScorecards = homePage.navigateToMyScoreCards();
@@ -37,10 +42,10 @@ public class US13476_Scorecard_TimePeriodOptions extends BaseSeleniumTestCase{
 		Assert.assertEquals(myScorecards.distributionTimePeriodValue(), "L03 Mth", "The default value of Distribution Time Period drop down is not 'L03'");
 		myScorecards.selectDistributionTimePeriod("L03");
 		Assert.assertEquals(myScorecards.distributionScorecardTableLabelTextL03(),"L03 Mth", "The Distribution Scorecard Table label is incorrect");
-		
+
 	}
-  
-	
+
+
 	@AfterMethod
 	public void signOut() {
 		logout();

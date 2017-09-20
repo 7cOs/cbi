@@ -1,39 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
 <suite name="Suite">
-	<listeners>
-		<listener class-name="com.cbrands.listener.TestNGCustomReportListener" />
-	</listeners>
-	<test name="Functional Test">
-		<classes>
-            <!-- Opportunity -->
-            <class name="com.cbrands.test.functional.opportunity.AT_Opportunities_DismissOpportunity" />
-			<class name="com.cbrands.test.functional.opportunity.OpportunityResultTest" />
-			<class name="com.cbrands.test.functional.opportunity.OpportunityTest" />
-			<class name="com.cbrands.test.functional.opportunity.Run10_OpportunityResultsTable" />
-			<class name="com.cbrands.test.functional.opportunity.Run5_SavedReports" />
-			<class name="com.cbrands.test.functional.opportunity.Run6_OpportunitiesFilterTest" />
-			<class name="com.cbrands.test.functional.opportunity.Run7_OpportunitiesFilterValues" />
-			<class name="com.cbrands.test.functional.opportunity.Run8_SearchBasedFilterFieldsTest" />
-			<class name="com.cbrands.test.functional.opportunity.US12985_OpportunitySorting" />
-            
-			<!-- Target List -->
-			<class name="com.cbrands.test.functional.targetlist.US12828_TargetList_Create_and_Delete" />
-			<class name="com.cbrands.test.functional.targetlist.US12829_TargetList_Add_Remove_Opportunities" />
-			<class name="com.cbrands.test.functional.targetlist.US12830_TargetList_Add_and_Remove_Collaborators" />
-			<class name="com.cbrands.test.functional.targetlist.US12831_TargetList_CollaboratorAccess" />
-			<class name="com.cbrands.test.functional.targetlist.US12999_TargetList_Share_An_Opportunity" />
-			<class name="com.cbrands.test.functional.targetlist.US13001_TargetList_Cannot_Dismiss_Targeted_Opportunities" />
-			<class name="com.cbrands.test.functional.targetlist.US13024_TargetList_Export" />
-			<class name="com.cbrands.test.functional.targetlist.US13025_TargetList_Archive" />
-			<class name="com.cbrands.test.functional.targetlist.US13098_TargetList_Copy" />
-			<class name="com.cbrands.test.functional.targetlist.US13107_TargetList_Show_Depletions" />
-			<class name="com.cbrands.test.functional.targetlist.US13108_TargetList_Transfer_Ownership" />
-			
-            <!-- My Performance -->
-            <class name="com.cbrands.test.functional.myperformance.US13287_BrandSnapShot_PackageSKULevelDetail" />
-            <class name="com.cbrands.test.functional.myperformance.US13484_AccountDashboard_ApplyFilters_SeeAllOpportunities" />
-            <class name="com.cbrands.test.functional.myperformance.US13476_Scorecard_TimePeriodOptions" />
-       </classes>
-	</test> <!-- Test -->
+  <listeners>
+    <listener class-name="com.cbrands.listener.TestNGCustomReportListener" />
+  </listeners>
+  <test name="Functional Test">
+    <classes>
+    </classes>
+  </test> <!-- Test -->
 </suite> <!-- Suite -->
