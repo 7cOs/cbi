@@ -28,18 +28,6 @@ export class MyPerformanceApiService {
       .catch(err => this.handleError(new Error(err)));
   }
 
-  public getResponsibilitiesPerformanceTotals(
-    entities: Array<{ positionId?: string, type: string, name: string }>, filter: MyPerformanceFilterState, positionId?: string
-  ): Observable<(EntitiesPerformancesDTO | Error)[]> {
-    const apiCalls: Observable<EntitiesPerformancesDTO | Error>[] = [];
-
-    entities.forEach((entity: { positionId?: string, type: string, name: string }) => {
-      apiCalls.push(this.getResponsibilityPerformanceTotal(entity, filter, entity.positionId || positionId));
-    });
-
-    return Observable.forkJoin(apiCalls);
-  }
-
   public getResponsibilityPerformanceTotal(
     entity: { type: string, name: string }, filter: MyPerformanceFilterState, positionId: string
   ): Observable<EntitiesPerformancesDTO|Error> {
