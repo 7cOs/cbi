@@ -16,3 +16,9 @@ export function getEntitiesPerformancesMock(): EntitiesPerformances[] {
     { positionId: chance.string(), name: chance.string(), subName: chance.string(), performanceTotal: getEntitiesTotalPerformancesMock() }
   ];
 }
+
+export function getEntitiesPerformancesOpenPositionMock(): EntitiesPerformances[] {
+  return [
+    { positionId: '1', name: 'Open', subName: chance.string(), performanceTotal: getEntitiesTotalPerformancesMock() }
+  ];
+}

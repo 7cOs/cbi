@@ -211,12 +211,12 @@ describe('Service: MyPerformanceApiService', () => {
             {
               id: entityArrayMock[0].positionId,
               name: entityArrayMock[0].name,
-              subName: entityArrayMock[0].subName,
+              subName: entityArrayMock[0].name,
               performanceTotal: mockPerformanceTotalResponse
             }, {
               id: entityArrayMock[1].positionId,
               name: entityArrayMock[1].name,
-              subName: entityArrayMock[1].subName,
+              subName: entityArrayMock[1].name,
               performanceTotal: mockPerformanceTotalResponse
             }
           ]);

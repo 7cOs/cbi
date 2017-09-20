@@ -4,6 +4,7 @@ const chance = new Chance();
 import { EntityResponsibilities } from './entity-responsibilities.model';
 import { EntityPeopleType, EntityPropertyType } from '../enums/entity-responsibilities.enum';
 import { EntityResponsibilitiesDTO } from './entity-responsibilities.model';
+import { GroupedEntities } from './grouped-entities.model';
 
 const entityPeopleTypeValues = Object.keys(EntityPeopleType).map(key => EntityPeopleType[key]);
 const entityPropertyTypeValues = Object.keys(EntityPropertyType).map(key => EntityPropertyType[key]);
@@ -29,6 +30,25 @@ export function getEntityPropertyResponsibilitiesMock(): EntityResponsibilities 
     type: chance.string(),
     hierarchyType: chance.string(),
     description: chance.string()
+  };
+}
+
+export function getEntityPeopleResponsibilitiesOpenPositionMock(): EntityResponsibilities {
+  return {
+    peopleType: entityPeopleTypeValues[chance.integer({min: 0, max: entityPeopleTypeValues.length - 1})],
+    positionId: '1',
+    employeeId: null,
+    name: 'Open',
+    subName: 'Best job on earth',
+    type: chance.string(),
+    hierarchyType: chance.string(),
+    description: chance.string()
+  };
+}
+
+export function getGroupEntityPeopleResponsibilitiesMock(): GroupedEntities {
+  return {
+   'CORPORATE': [getEntityPeopleResponsibilitiesOpenPositionMock()]
   };
 }
 

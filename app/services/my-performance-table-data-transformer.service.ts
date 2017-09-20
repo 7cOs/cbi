@@ -18,21 +18,38 @@ export class MyPerformanceTableDataTransformerService {
                           view: ViewType): MyPerformanceTableRow[] {
 
     return entities.map((entity: EntitiesPerformances) => {
-      let isOpen: boolean = false;
-      let localSubName: string;
+      let isOpenPosition: boolean = false;
       let localName: string = entity.name;
+      let localSubName: string = entity.name;
 
-      if (entity.name === 'Open' && view === ViewType.people) {
-        (peopleGroup[EntityPeopleType['KEY ACCOUNT MANAGER']]).map((person: EntityResponsibilities) => {
-          if (person.positionId === entity.positionId) {
-            isOpen = true;
-            localSubName = person.subName;
-            localName = 'Open Position';
+      if (view === ViewType.people && entity.name === 'Open') {
+        Object.keys(EntityPeopleType).filter(entityPeopleTypeKey => {
+          if (peopleGroup[EntityPeopleType[entityPeopleTypeKey]]) {
+            (peopleGroup[EntityPeopleType[entityPeopleTypeKey]]).map((person: EntityResponsibilities) => {
+              if (person.positionId === entity.positionId) {
+                isOpenPosition = true;
+                localSubName = person.subName;
+                localName = 'Open Position';
+              }
+            });
           }
         });
+
+        return {
+          descriptionRow0: localName,
+          descriptionRow1: localSubName,
+          metricColumn0: entity.performanceTotal.total,
+          metricColumn1: entity.performanceTotal.totalYearAgo,
+          metricColumn2: entity.performanceTotal.totalYearAgoPercent,
+          ctv: entity.performanceTotal.contributionToVolume,
+          metadata: {
+            positionId: entity.positionId
+          }
+        };
       }
+
       return {
-        descriptionRow0: localName + ((isOpen) ? '\n' + localSubName : ''),
+        descriptionRow0: entity.name,
         metricColumn0: entity.performanceTotal.total,
         metricColumn1: entity.performanceTotal.totalYearAgo,
         metricColumn2: entity.performanceTotal.totalYearAgoPercent,
