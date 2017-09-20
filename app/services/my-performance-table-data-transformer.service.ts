@@ -18,26 +18,11 @@ export class MyPerformanceTableDataTransformerService {
                           view: ViewType): MyPerformanceTableRow[] {
 
     return entities.map((entity: EntitiesPerformances) => {
-      let isOpenPosition: boolean = false;
-      let localName: string = entity.name;
-      let localSubName: string = entity.name;
-
       if (view === ViewType.people && entity.name === 'Open') {
-        Object.keys(EntityPeopleType).filter(entityPeopleTypeKey => {
-          if (peopleGroup[EntityPeopleType[entityPeopleTypeKey]]) {
-            (peopleGroup[EntityPeopleType[entityPeopleTypeKey]]).map((person: EntityResponsibilities) => {
-              if (person.positionId === entity.positionId) {
-                isOpenPosition = true;
-                localSubName = person.subName;
-                localName = 'Open Position';
-              }
-            });
-          }
-        });
-
+        return this.getOpenPositionCase(entity, peopleGroup);
+      } else {
         return {
-          descriptionRow0: localName,
-          descriptionRow1: localSubName,
+          descriptionRow0: entity.name,
           metricColumn0: entity.performanceTotal.total,
           metricColumn1: entity.performanceTotal.totalYearAgo,
           metricColumn2: entity.performanceTotal.totalYearAgoPercent,
@@ -47,17 +32,6 @@ export class MyPerformanceTableDataTransformerService {
           }
         };
       }
-
-      return {
-        descriptionRow0: entity.name,
-        metricColumn0: entity.performanceTotal.total,
-        metricColumn1: entity.performanceTotal.totalYearAgo,
-        metricColumn2: entity.performanceTotal.totalYearAgoPercent,
-        ctv: entity.performanceTotal.contributionToVolume,
-        metadata: {
-          positionId: entity.positionId
-        }
-      };
     });
   }
 
@@ -85,5 +59,33 @@ export class MyPerformanceTableDataTransformerService {
     if (performanceTotal.name) totalRow['descriptionRow1'] = performanceTotal.name;
 
     return totalRow;
+  }
+
+  private getOpenPositionCase(entity: EntitiesPerformances, peopleGroup: GroupedEntities): MyPerformanceTableRow {
+    let localName: string = entity.name;
+    let localSubName: string = entity.name;
+
+    Object.keys(EntityPeopleType).filter(entityPeopleTypeKey => {
+      if (peopleGroup[EntityPeopleType[entityPeopleTypeKey]]) {
+        (peopleGroup[EntityPeopleType[entityPeopleTypeKey]]).map((person: EntityResponsibilities) => {
+          if (person.positionId === entity.positionId) {
+            localSubName = person.subName;
+            localName = 'Open Position';
+          }
+        });
+      }
+    });
+
+    return {
+      descriptionRow0: localName,
+      descriptionRow1: localSubName,
+      metricColumn0: entity.performanceTotal.total,
+      metricColumn1: entity.performanceTotal.totalYearAgo,
+      metricColumn2: entity.performanceTotal.totalYearAgoPercent,
+      ctv: entity.performanceTotal.contributionToVolume,
+      metadata: {
+        positionId: entity.positionId
+      }
+    };
   }
 }
