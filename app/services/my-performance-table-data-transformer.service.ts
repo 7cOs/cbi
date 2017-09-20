@@ -7,6 +7,7 @@ import { EntitiesPerformances } from '../models/entities-performances.model';
 import { EntityResponsibilities } from '../models/entity-responsibilities.model';
 import { EntityPeopleType } from '../enums/entity-responsibilities.enum';
 import { GroupedEntities } from '../models/grouped-entities.model';
+import { ProductMetrics, ProductMetricsBrandValue } from '../models/product-metrics.model';
 import { ViewType } from '../enums/view-type.enum';
 
 @Injectable()
@@ -39,6 +40,18 @@ export class MyPerformanceTableDataTransformerService {
         metadata: {
           positionId: entity.positionId
         }
+      };
+    });
+  }
+
+  public getRightTableData(productMetrics: ProductMetrics): MyPerformanceTableRow[] {
+    return (productMetrics.brand).map((item: ProductMetricsBrandValue) => {
+      return {
+        descriptionRow0: item.brandDescription,
+        metricColumn0: item.current,
+        metricColumn1: item.yearAgo,
+        metricColumn2: item.yearAgoPercent,
+        ctv: chance.natural({max: 100})
       };
     });
   }

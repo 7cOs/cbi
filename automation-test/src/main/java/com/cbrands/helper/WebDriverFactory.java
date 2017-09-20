@@ -8,6 +8,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openqa.selenium.Platform;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.ie.InternetExplorerDriver;
 import org.openqa.selenium.remote.CapabilityType;
 import org.openqa.selenium.remote.DesiredCapabilities;
@@ -31,19 +32,35 @@ public class WebDriverFactory implements SauceOnDemandSessionIdProvider, SauceOn
   private static ThreadLocal<WebDriver> webDriver = new ThreadLocal<WebDriver>();
   private static ThreadLocal<String> sessionId = new ThreadLocal<String>();
 
-  public static WebDriver createDriver(String driverName) throws MalformedURLException {
+  public static WebDriver createDriver() throws MalformedURLException {
+    final WebDriver driver;
 
-    if (driverName.startsWith(BrowserType.remote.name())) {
-      setRemoteWebDriver(driverName);
+    final String driverHost = PropertiesCache.getInstance().getProperty("driver.host");
+    if (HostType.remote.name().equalsIgnoreCase(driverHost)) {
+      driver = getRemoteWebDriver();
+    } else if(HostType.sauce.name().equalsIgnoreCase(driverHost)) {
+      driver = getSauceWebDriver();
     } else {
-      setSauceWebDriver();
+      driver = getLocalWebDriver();
     }
-    log.info("Connected to Selenium Server. Session ID: " + sessionId.get());
-    Validate.notNull(webDriver.get(), "Driver could be found by name:" + driverName);
+
+    return driver;
+  }
+
+  private static WebDriver getLocalWebDriver() {
+    System.setProperty("webdriver.chrome.driver", "chromedriver");
+    webDriver.set(new ChromeDriver());
+
+    Validate.notNull(
+      webDriver.get(),
+      "Driver for " + BrowserType.chrome.name() + "could not be found at:" + HostType.local.name() +
+        "/n Have you downloaded the correct driver into your local target directory?"
+    );
+
     return webDriver.get();
   }
 
-  private static void setSauceWebDriver() throws MalformedURLException {
+  private static WebDriver getSauceWebDriver() throws MalformedURLException {
     final DesiredCapabilities capabilities = getSauceCapabilitiesByBrowser(System.getProperty("browser"));
     SauceHelpers.addSauceConnectTunnelId(capabilities);
 
@@ -56,7 +73,11 @@ public class WebDriverFactory implements SauceOnDemandSessionIdProvider, SauceOn
     // set current sessionId
     String id = ((RemoteWebDriver) getWebDriver()).getSessionId().toString();
     sessionId.set(id);
-    log.info("Targeted Host:" + BrowserType.sauce.name());
+    log.info("Targeted Host:" + HostType.sauce.name());
+    log.info("Connected to Selenium Server. Session ID: " + sessionId.get());
+    Validate.notNull(webDriver.get(), "Driver could not be found at:" + HostType.sauce.name());
+
+    return webDriver.get();
   }
 
   private static DesiredCapabilities getSauceCapabilitiesByBrowser(String driverType) {
@@ -99,12 +120,13 @@ public class WebDriverFactory implements SauceOnDemandSessionIdProvider, SauceOn
       ("origin");
   }
 
-  private static void setRemoteWebDriver(String driverName) {
-    String[] params = driverName.split(":");
+  private static WebDriver getRemoteWebDriver() {
+    final String seleniumHostAddress = PropertiesCache.getInstance().getProperty("selenium.host.address");
+    String[] params = seleniumHostAddress.split(":");
     Validate.isTrue(
       params.length == 4,
       "Remote driver is not right, accept format is \"remote:localhost:4444:firefox\", but the input is\""
-        + driverName + "\""
+        + seleniumHostAddress + "\""
     );
 
     String remoteHost = params[1];
@@ -130,17 +152,24 @@ public class WebDriverFactory implements SauceOnDemandSessionIdProvider, SauceOn
       webDriver.set(new RemoteWebDriver(new URL(remoteUrl), cap));
       String id = ((RemoteWebDriver) getWebDriver()).getSessionId().toString();
       sessionId.set(id);
-      log.info("Targeted Host:" + BrowserType.remote.name());
+      log.info("Targeted Host:" + HostType.remote.name());
     } catch (MalformedURLException e) {
       throw new RuntimeException(e);
     }
+
+    log.info("Connected to Selenium Server. Session ID: " + sessionId.get());
+    Validate.notNull(webDriver.get(), "Driver could not be found at:" + seleniumHostAddress);
+    return webDriver.get();
   }
 
   public enum BrowserType {
-
     firefox,
     ie,
-    chrome,
+    chrome
+  }
+
+  public enum HostType {
+    local,
     remote,
     sauce
   }

@@ -12,7 +12,7 @@ my-performance-breadcrumb(
   (breadcrumbEntityClicked)="handleBreadcrumbEntityClicked($event)")
 
 my-performance-table.left(
-  [tableData]="tableData",
+  [tableData]="salesHierarchy",
   [dateRange]="dateRange",
   [tableHeaderRow]="tableHeaderRowLeft",
   [performanceMetric]="performanceMetric",
@@ -25,7 +25,7 @@ my-performance-table.left(
   (onElementClicked)="handleElementClicked({leftSide: true, type: $event.type, index: $event.index, row: $event.row})")
 
 my-performance-table.right(
-  [tableData]="rightTableData",
+  [tableData]="productPerformance",
   [tableHeaderRow]="tableHeaderRowRight",
   [performanceMetric]="'Product Snapshot'",
   [sortingCriteria]="sortingCriteria",
