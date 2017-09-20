@@ -39,12 +39,11 @@ import { ViewType } from '../../enums/view-type.enum';
 const chance = new Chance();
 
 describe('Responsibilities Effects', () => {
-  const positionIdMock = chance.string();
   const entitiesPerformancesMock = getEntitiesPerformancesMock();
+  const error = new Error(chance.string());
   const groupedEntitiesMock: GroupedEntities = getGroupedEntitiesMock();
   const performanceTotalMock: EntitiesTotalPerformances = getEntitiesTotalPerformancesMock();
-  const responsibilityEntitiesPerformanceMock = getEntitiesPerformancesMock();
-  const error = new Error(chance.string());
+  const positionIdMock = chance.string();
 
   const responsibilitiesServiceMock = {
     getResponsibilities(responsibilitiesData: ResponsibilitiesData): Observable<ResponsibilitiesData> {
@@ -74,7 +73,7 @@ describe('Responsibilities Effects', () => {
   const responsibilitiesSuccessPayloadMock = {
     positionId: positionIdMock,
     groupedEntities: groupedEntitiesMock,
-    entitiesPerformances: responsibilityEntitiesPerformanceMock
+    entitiesPerformances: entitiesPerformancesMock
   };
 
   const responsibilitiesDataMock: ResponsibilitiesData = {
@@ -129,7 +128,7 @@ describe('Responsibilities Effects', () => {
 
         spyOn(responsibilitiesService, 'getPerformanceTotalForGroupedEntities').and.callFake(
           (responsibilitiesData: ResponsibilitiesData) => {
-          responsibilitiesData.entitiesPerformances = responsibilityEntitiesPerformanceMock;
+          responsibilitiesData.entitiesPerformances = entitiesPerformancesMock;
           return Observable.of(responsibilitiesData);
         });
 

@@ -39,6 +39,11 @@ describe('Responsibilities Effects', () => {
   let entitiesTotalPerformancesDTOMock: EntitiesTotalPerformancesDTO;
   let entityDTOMock: EntityDTO;
 
+  let responsibilitiesService: ResponsibilitiesService;
+  let myPerformanceApiService: MyPerformanceApiService;
+  let performanceTransformerService: PerformanceTransformerService;
+  let responsibilitiesTransformerService: ResponsibilitiesTransformerService;
+
   const performanceFilterStateMock: MyPerformanceFilterState = {
     metricType: MetricTypeValue.PointsOfDistribution,
     dateRangeCode: DateRangeTimePeriodValue.FYTDBDL,
@@ -64,8 +69,7 @@ describe('Responsibilities Effects', () => {
     },
     getDistributorPerformance() {
       return Observable.of(entitiesTotalPerformancesDTOMock);
-    },
-
+    }
   };
 
   const responsibilitiesTransformerServiceMock = {
@@ -76,11 +80,6 @@ describe('Responsibilities Effects', () => {
       return accountsDistributorsMock;
     }
   };
-
-  let responsibilitiesService: ResponsibilitiesService;
-  let myPerformanceApiService: MyPerformanceApiService;
-  let performanceTransformerService: PerformanceTransformerService;
-  let responsibilitiesTransformerService: ResponsibilitiesTransformerService;
 
   const performanceTransformerServiceMock = {
     transformEntitiesTotalPerformancesDTO(mockArgs: any): EntitiesTotalPerformances {

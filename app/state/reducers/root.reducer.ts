@@ -7,11 +7,13 @@ import { dateRangesReducer, DateRangesState } from './date-ranges.reducer';
 import { Environment } from '../../environment';
 import { myPerformanceReducer, MyPerformanceState } from './my-performance.reducer';
 import { myPerformanceFilterReducer, MyPerformanceFilterState } from './my-performance-filter.reducer';
+import { productMetricsReducer, ProductMetricsState } from './product-metrics.reducer';
 
 export interface AppState {
   compassVersion: CompassVersionState;
   dateRanges: DateRangesState;
   myPerformance: MyPerformanceState;
+  myPerformanceProductMetrics: ProductMetricsState;
   myPerformanceFilter: MyPerformanceFilterState;
 }
 
@@ -19,6 +21,7 @@ const allReducers = {
   compassVersion: compassVersionReducer,
   dateRanges: dateRangesReducer,
   myPerformance: myPerformanceReducer,
+  myPerformanceProductMetrics: productMetricsReducer,
   myPerformanceFilter: myPerformanceFilterReducer
 };
 

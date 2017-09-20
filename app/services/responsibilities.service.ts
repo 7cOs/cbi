@@ -53,14 +53,12 @@ export class ResponsibilitiesService {
               name: roleGroup
             };
           });
-        } else {
-          if (response.entityURIs) {
-            viewType = response.entityURIs[0].search('distributors') !== -1
-              ? ViewType.distributors
-              : ViewType.accounts;
+        } else if (response.entityURIs) {
+          viewType = response.entityURIs[0].search('distributors') !== -1
+            ? ViewType.distributors
+            : ViewType.accounts;
 
-            entitiesURL = response.entityURIs[0];
-          }
+          entitiesURL = response.entityURIs[0];
         }
 
         return Object.assign({}, responsibilitiesData, {

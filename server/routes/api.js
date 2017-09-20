@@ -12,10 +12,10 @@ module.exports = function(app) {
 
       // grabbing hard-coded v3 base url from config
       // TODO: remove once api gateway is in place
-      if (req.url.match(/\/v3\/dateRangeCodes/)) v3BaseURLKey = 'dateRangeCodes';
       if (req.url.match(/\/v3\/positions.+/)) v3BaseURLKey = 'positions';
       if (req.url.match(/\/v3\/distributors.+/)) v3BaseURLKey = 'distributors';
       if (req.url.match(/\/v3\/accounts.+/)) v3BaseURLKey = 'accounts';
+      if (req.url.match(/\/v3\/(dateRangeCodes|.+\/productMetrics)/)) v3BaseURLKey = 'products';
 
       headers['X-CBI-API-AGENT'] = util.agentHeader();
       headers['User-Agent'] = req.headers['user-agent'];
@@ -36,10 +36,6 @@ module.exports = function(app) {
 
     .get(function(req, res) {
       const auth = app.locals.apiAuth;
-
-      if (req.url.match(/\/v3\/distributors.+/)) console.log('distributors: ', app.locals.apiAuth.signed);
-      if (req.url.match(/\/v3\/accounts.+/)) console.log('accounts: ', app.locals.apiAuth.signed);
-      if (req.url.match(/\/v3\/positions.+/)) console.log('positions: ', app.locals.apiAuth.signed);
 
       let apiRequestStream = request(auth.signed, {json: true, headers: auth.headers}).auth(null, null, true, auth.jwtToken);
       req.pipe(apiRequestStream); // pipe client request to API request so headers are passed through
