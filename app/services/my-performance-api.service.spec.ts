@@ -175,7 +175,7 @@ describe('Service: MyPerformanceApiService', () => {
         );
       });
 
-      myPerformanceApiService.getDistributorPerformanceTotal('1', mockFilter).subscribe((response: EntitiesTotalPerformances) => {
+      myPerformanceApiService.getDistributorPerformanceTotal('1', mockFilter).subscribe((response: EntitiesTotalPerformancesDTO) => {
         expect(response).toEqual(performanceTotalResponseMock);
         done();
       });
@@ -202,7 +202,7 @@ describe('Service: MyPerformanceApiService', () => {
         );
       });
 
-      myPerformanceApiService.getAccountPerformanceTotal('1', mockFilter).subscribe((response: EntitiesTotalPerformances) => {
+      myPerformanceApiService.getAccountPerformanceTotal('1', mockFilter).subscribe((response: EntitiesTotalPerformancesDTO) => {
         expect(response).toEqual(performanceTotalResponseMock);
         done();
       });

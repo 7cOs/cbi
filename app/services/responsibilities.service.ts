@@ -1,4 +1,3 @@
-import * as Chance from 'chance';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/do';
@@ -6,7 +5,6 @@ import 'rxjs/add/operator/switchMap';
 
 import { EntitiesTotalPerformances, EntitiesTotalPerformancesDTO } from '../models/entities-total-performances.model';
 import { EntityDTO } from '../models/entity-dto.model';
-import { EntityResponsibilities } from '../models/entity-responsibilities.model';
 import { MyPerformanceApiService } from './my-performance-api.service';
 import { MyPerformanceFilterState } from '../state/reducers/my-performance-filter.reducer';
 import { PeopleResponsibilitiesDTO } from '../models/people-responsibilities-dto.model';
@@ -15,8 +13,6 @@ import { EntitiesPerformances, EntitiesPerformancesDTO } from '../models/entitie
 import { ResponsibilitiesTransformerService } from './responsibilities-transformer.service';
 import { GroupedEntities } from '../models/grouped-entities.model';
 import { ViewType } from '../enums/view-type.enum';
-
-const chance = new Chance();
 
 export interface ResponsibilitiesData {
   groupedEntities?: GroupedEntities;
@@ -86,7 +82,7 @@ export class ResponsibilitiesService {
 
     return Observable.forkJoin(apiCalls)
       .switchMap((response: EntitiesPerformancesDTO[]) => {
-        return Observable.of(this.performanceTransformerService.transformEntitiesPerformancesDTO(response));
+        return Observable.of(this.performanceTransformerService.transformEntitiesPerformancesDTOs(response));
       });
   }
 
@@ -101,41 +97,39 @@ export class ResponsibilitiesService {
   }
 
   public getPerformanceTotalForGroupedEntities(responsibilitiesData: ResponsibilitiesData)
-    : Observable<ResponsibilitiesData> {
-    if (responsibilitiesData.viewType === ViewType.roleGroups) {
-      return this.myPerformanceApiService
-        .getResponsibilitiesPerformanceTotals(responsibilitiesData.entityTypes,
-          responsibilitiesData.filter,
-          responsibilitiesData.positionId)
-        .mergeMap((response: EntitiesPerformancesDTO[]) => {
-          responsibilitiesData.entitiesPerformances
-            = this.performanceTransformerService.transformEntitiesPerformancesDTOs(response);
-          return Observable.of(responsibilitiesData);
-      });
-    } else if (responsibilitiesData.viewType === ViewType.distributors && responsibilitiesData.groupedEntities.all.length) {
-      return this.myPerformanceApiService
-        .getDistributorsPerformanceTotals(responsibilitiesData.groupedEntities.all,
-          responsibilitiesData.filter)
-        .mergeMap((response: EntitiesTotalPerformancesDTO[]) => {
-          responsibilitiesData.entitiesPerformances
-            = this.performanceTransformerService
-              .transformEntityDTOsWithPerformance(response, responsibilitiesData.groupedEntities.all);
-          return Observable.of(responsibilitiesData);
-      });
-    } else if (responsibilitiesData.viewType === ViewType.accounts && responsibilitiesData.groupedEntities.all.length) {
-      return this.myPerformanceApiService
-        .getAccountsPerformanceTotals(responsibilitiesData.groupedEntities.all,
-          responsibilitiesData.filter)
-        .mergeMap((response: EntitiesTotalPerformancesDTO[]) => {
-          responsibilitiesData.entitiesPerformances
-            = this.performanceTransformerService
-              .transformEntityDTOsWithPerformance(response, responsibilitiesData.groupedEntities.all);
-          return Observable.of(responsibilitiesData);
-      });
-    } else {
+  : Observable<ResponsibilitiesData> {
+  if (responsibilitiesData.viewType === ViewType.roleGroups) {
+    return this.getResponsibilitiesPerformanceTotals(responsibilitiesData.entityTypes,
+      responsibilitiesData.filter,
+      responsibilitiesData.positionId)
+    .switchMap((entityPerformances: EntitiesPerformances[]) => {
+      responsibilitiesData.entitiesPerformances = entityPerformances;
       return Observable.of(responsibilitiesData);
-    }
+    });
+  } else if (responsibilitiesData.viewType === ViewType.distributors) {
+    return this.myPerformanceApiService
+      .getDistributorsPerformanceTotals(responsibilitiesData.groupedEntities.all,
+        responsibilitiesData.filter)
+      .mergeMap((response: EntitiesTotalPerformancesDTO[]) => {
+        responsibilitiesData.entitiesPerformances
+          = this.performanceTransformerService
+            .transformEntityDTOsWithPerformance(response, responsibilitiesData.groupedEntities.all);
+        return Observable.of(responsibilitiesData);
+    });
+  } else if (responsibilitiesData.viewType === ViewType.accounts) {
+    return this.myPerformanceApiService
+      .getAccountsPerformanceTotals(responsibilitiesData.groupedEntities.all,
+        responsibilitiesData.filter)
+      .mergeMap((response: EntitiesTotalPerformancesDTO[]) => {
+        responsibilitiesData.entitiesPerformances
+          = this.performanceTransformerService
+            .transformEntityDTOsWithPerformance(response, responsibilitiesData.groupedEntities.all);
+        return Observable.of(responsibilitiesData);
+    });
+  } else {
+    return Observable.of(responsibilitiesData);
   }
+}
 
   public getAccountsDistributors(responsibilitiesData: ResponsibilitiesData)
     : Observable<ResponsibilitiesData> {

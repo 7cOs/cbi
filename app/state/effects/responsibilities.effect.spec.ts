@@ -46,7 +46,6 @@ describe('Responsibilities Effects', () => {
   const performanceTotalMock: EntitiesTotalPerformances = getEntitiesTotalPerformancesMock();
   const responsibilityEntitiesPerformanceMock = getEntitiesPerformancesMock();
   const error = new Error(chance.string());
-  // const responsibilityEntitiesPerformanceDTOMock = getResponsibilityEntitiesPerformanceDTOMock();
 
   const responsibilitiesServiceMock = {
     getResponsibilities(responsibilitiesData: ResponsibilitiesData): Observable<ResponsibilitiesData> {
@@ -78,33 +77,6 @@ describe('Responsibilities Effects', () => {
     groupedEntities: groupedEntitiesMock,
     entitiesPerformances: responsibilityEntitiesPerformanceMock
   };
-
-  // const myPerformanceApiServiceMock = {
-  //   getResponsibilities() {
-  //     return Observable.of({positions: groupedEntitiesMock});
-  //   },
-  //   getResponsibilitiesPerformanceTotals() {
-  //     return Observable.of(responsibilityEntitiesPerformanceDTOMock);
-  //   },
-  //   getPerformanceTotal() {
-  //     return Observable.of(entitiesTotalPerformancesDTOMock);
-  //   }
-  // };
-
-  // const responsibilitiesTransformerServiceMock = {
-  //   groupPeopleByGroupedEntities(mockArgs: any): GroupedEntities {
-  //     return groupedEntitiesMock;
-  //   }
-  // };
-
-  // const performanceTransformerServiceMock = {
-  //   transformEntitiesTotalPerformancesDTO(mockArgs: any): EntitiesTotalPerformances {
-  //     return performanceTotalMock;
-  //   },
-  //   transformEntitiesPerformancesDTOs(mockArgs: any): EntitiesPerformances[] {
-  //     return responsibilityEntitiesPerformanceMock;
-  //   }
-  // };
 
   const responsibilitiesDataMock: ResponsibilitiesData = {
           filter: performanceFilterStateMock,

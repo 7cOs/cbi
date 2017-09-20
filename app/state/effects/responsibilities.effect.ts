@@ -5,19 +5,10 @@ import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/do';
 import 'rxjs/add/operator/switchMap';
 
-import { EntityDTO } from '../../models/entity-dto.model';
-import { MyPerformanceApiService } from '../../services/my-performance-api.service';
-import { MyPerformanceFilterState } from '../../state/reducers/my-performance-filter.reducer';
-import { PeopleResponsibilitiesDTO } from '../../models/people-responsibilities-dto.model';
-import { EntitiesPerformances, EntitiesPerformancesDTO } from '../../models/entities-performances.model';
+import { EntitiesPerformances } from '../../models/entities-performances.model';
 import { EntitiesTotalPerformances } from '../../models/entities-total-performances.model';
-import { EntitiesTotalPerformancesDTO } from '../../models/entities-total-performances.model';
-import { GroupedEntities } from '../../models/grouped-entities.model';
-import { PerformanceTransformerService } from '../../services/performance-transformer.service';
 import * as ResponsibilitiesActions from '../../state/actions/responsibilities.action';
 import { ResponsibilitiesService, ResponsibilitiesData } from '../../services/responsibilities.service';
-import { ResponsibilitiesTransformerService } from '../../services/responsibilities-transformer.service';
-import { ViewType } from '../../enums/view-type.enum';
 import * as ViewTypeActions from '../../state/actions/view-types.action';
 
 @Injectable()
@@ -41,8 +32,8 @@ export class ResponsibilitiesEffects {
         return Observable.of(responsibilitiesData);
       })
       .switchMap((responsibilitiesData) => this.responsibilitiesService.getResponsibilities(responsibilitiesData))
-      .switchMap((responsibilitiesData) => this.responsibilitiesService.getPerformanceTotalForGroupedEntities(responsibilitiesData))
       .switchMap((responsibilitiesData) => this.responsibilitiesService.getAccountsDistributors(responsibilitiesData))
+      .switchMap((responsibilitiesData) => this.responsibilitiesService.getPerformanceTotalForGroupedEntities(responsibilitiesData))
       .switchMap((responsibilitiesData) => this.constructSuccessAction(responsibilitiesData))
       .catch((err: Error) => Observable.of(new ResponsibilitiesActions.FetchResponsibilitiesFailureAction(err)));
   }

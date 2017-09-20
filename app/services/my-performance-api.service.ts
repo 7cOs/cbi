@@ -8,10 +8,11 @@ import { DateRangeTimePeriodValue } from '../enums/date-range-time-period.enum';
 import { DistributionTypeValue } from '../enums/distribution-type.enum';
 import { EntitiesPerformancesDTO } from '../models/entities-performances.model'; // tslint:disable-line:no-unused-variable
 import { EntityResponsibilities } from '../models/entity-responsibilities.model'; // tslint:disable-line:no-unused-variable
+import { EntitiesTotalPerformances } from '../models/entities-total-performances.model';
+import { EntitiesTotalPerformancesDTO } from '../models/entities-total-performances.model'; // tslint:disable-line:no-unused-variable
 import { MetricTypeValue } from '../enums/metric-type.enum';
 import { MyPerformanceFilterState } from '../state/reducers/my-performance-filter.reducer';
 import { PeopleResponsibilitiesDTO } from '../models/people-responsibilities-dto.model'; // tslint:disable-line:no-unused-variable
-import { EntitiesTotalPerformancesDTO } from '../models/entities-total-performances.model'; // tslint:disable-line:no-unused-variable
 import { PremiseTypeValue } from '../enums/premise-type.enum';
 
 @Injectable()

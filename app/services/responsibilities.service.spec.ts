@@ -4,11 +4,9 @@ import * as Chance from 'chance';
 
 import { DateRangeTimePeriodValue } from '../enums/date-range-time-period.enum';
 import { DistributionTypeValue } from '../enums/distribution-type.enum';
-// import { EntityPeopleType } from '../enums/entity-responsibilities.enum';
 import { EntitiesTotalPerformances, EntitiesTotalPerformancesDTO } from '../models/entities-total-performances.model';
 import { EntityDTO } from '../models/entity-dto.model';
 import { getEntityPeopleResponsibilitiesMock } from '../models/entity-responsibilities.model.mock';
-// import { getMyPerformanceTableRowMock } from '../models/my-performance-table-row.model.mock';
 import { getEntitiesTotalPerformancesMock,
          getEntitiesTotalPerformancesDTOMock } from '../models/entities-total-performances.model.mock';
 import { getEntitiesPerformancesMock, getResponsibilityEntitiesPerformanceDTOMock } from '../models/entities-performances.model.mock';
@@ -39,7 +37,6 @@ describe('Responsibilities Effects', () => {
   let performanceTotalMock: EntitiesTotalPerformances;
   let entitiesTotalPerformancesDTOMock: EntitiesTotalPerformancesDTO;
   let entityDTOMock: EntityDTO;
-  // const error = new Error(chance.string());
 
   const performanceFilterStateMock: MyPerformanceFilterState = {
     metricType: MetricTypeValue.PointsOfDistribution,
@@ -63,15 +60,6 @@ describe('Responsibilities Effects', () => {
     }
   };
 
-  const performanceTransformerServiceMock = {
-    transformEntitiesTotalPerformancesDTO(mockArgs: any): EntitiesTotalPerformances {
-      return performanceTotalMock;
-    },
-    transformEntitiesPerformancesDTO(mockArgs: any): EntitiesPerformances[] {
-      return entitiesPerformanceMock;
-    }
-  };
-
   const responsibilitiesTransformerServiceMock = {
     groupPeopleByGroupedEntities(mockArgs: any): GroupedEntities {
       return groupedEntitiesMock;
@@ -85,6 +73,21 @@ describe('Responsibilities Effects', () => {
   let myPerformanceApiService: MyPerformanceApiService;
   let performanceTransformerService: PerformanceTransformerService;
   let responsibilitiesTransformerService: ResponsibilitiesTransformerService;
+
+  const performanceTransformerServiceMock = {
+    transformEntitiesTotalPerformancesDTO(mockArgs: any): EntitiesTotalPerformances {
+      return performanceTotalMock;
+    },
+    transformEntitiesPerformancesDTOs(mockArgs: any): EntitiesPerformances[] {
+      return entitiesPerformanceMock;
+    },
+    transformEntityDTOsWithPerformance(mockArgs: any): EntitiesTotalPerformances {
+      return performanceTotalMock;
+    },
+    transformEntitiesPerformancesDTO(mockArgs: any): EntitiesTotalPerformances {
+      return performanceTotalMock;
+    }
+  };
 
   beforeEach(() => TestBed.configureTestingModule({
     providers: [
@@ -276,7 +279,7 @@ describe('Responsibilities Effects', () => {
   });
 
   describe('when getPerformanceTotalForGroupedEntities is called', () => {
-    fdescribe('when called for roleGroups', () => {
+    describe('when called for roleGroups', () => {
       const responsibilitiesDataMock: ResponsibilitiesData = {
         positionId: positionIdMock,
         viewType: ViewType.roleGroups,
@@ -284,6 +287,7 @@ describe('Responsibilities Effects', () => {
           type: chance.string(),
           name: chance.string()
         }],
+        groupedEntities: accountsDistributorsMock,
         filter: performanceFilterStateMock
       };
 
@@ -297,7 +301,8 @@ describe('Responsibilities Effects', () => {
           viewType: ViewType.roleGroups,
           entityTypes: responsibilitiesDataMock.entityTypes,
           filter: responsibilitiesDataMock.filter,
-          entitiesPerformances: entitiesPerformanceMock
+          entitiesPerformances: entitiesPerformanceMock,
+          groupedEntities: responsibilitiesDataMock.groupedEntities
         };
 
         responsibilitiesService.getPerformanceTotalForGroupedEntities(responsibilitiesDataMock)
@@ -321,20 +326,6 @@ describe('Responsibilities Effects', () => {
           responsibilitiesDataMock.filter,
           responsibilitiesDataMock.positionId
         ]);
-      });
-
-      it('does not call getPerformanceTotalForGroupedEntities if we are not viewing role groups', (done) => {
-        responsibilitiesDataMock.viewType = ViewType.accounts;
-        const getResponsibilitiesPerformanceSpy = spyOn(responsibilitiesService, 'getResponsibilitiesPerformanceTotals').and.callThrough();
-
-        responsibilitiesService.getPerformanceTotalForGroupedEntities(responsibilitiesDataMock).subscribe(
-          (responsibilitiesData: ResponsibilitiesData) => {
-          expect(responsibilitiesDataMock).toBe(responsibilitiesData);
-
-          done();
-        });
-
-        expect(getResponsibilitiesPerformanceSpy.calls.count()).toBe(0);
       });
     });
   });
@@ -426,9 +417,9 @@ describe('Responsibilities Effects', () => {
         positionIdMock
         )
         .subscribe((entitiesPerformances: EntitiesPerformances[]) => {
-        expect(entitiesPerformances).toBe(entitiesPerformanceMock);
+          expect(entitiesPerformances).toBe(entitiesPerformanceMock);
 
-        done();
+          done();
       });
     });
 
@@ -500,8 +491,8 @@ describe('Responsibilities Effects', () => {
       ]);
     });
 
-    it('calls transformEntitiesPerformancesDTO with the right parameters', (done) => {
-      const transformerSpy = spyOn(performanceTransformerService, 'transformEntitiesPerformancesDTO').and.callThrough();
+    it('calls transformEntitiesPerformancesDTOs with the right parameters', (done) => {
+      const transformerSpy = spyOn(performanceTransformerService, 'transformEntitiesPerformancesDTOs').and.callThrough();
 
       responsibilitiesService.getResponsibilitiesPerformanceTotals(entities, performanceFilterStateMock)
         .subscribe((entitiesPerformances: EntitiesPerformances[]) => {
