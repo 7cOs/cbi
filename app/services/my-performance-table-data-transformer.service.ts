@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import 'rxjs/add/operator/map';
 
-import { MyPerformanceTableRow } from '../models/my-performance-table-row.model';
-import { EntitiesTotalPerformances } from '../models/entities-total-performances.model';
 import { EntitiesPerformances } from '../models/entities-performances.model';
+import { EntitiesTotalPerformances } from '../models/entities-total-performances.model';
+import { MyPerformanceTableRow } from '../models/my-performance-table-row.model';
 import { ProductMetrics, ProductMetricsBrandValue } from '../models/product-metrics.model';
 
 @Injectable()
@@ -12,7 +12,7 @@ export class MyPerformanceTableDataTransformerService {
   public getLeftTableData(entities: EntitiesPerformances[]): MyPerformanceTableRow[] {
 
     return entities.map((entity: EntitiesPerformances) => {
-      const row = {
+      const transformedEntity: MyPerformanceTableRow = {
         descriptionRow0: entity.name,
         metricColumn0: entity.performanceTotal.total,
         metricColumn1: entity.performanceTotal.totalYearAgo,
@@ -23,12 +23,14 @@ export class MyPerformanceTableDataTransformerService {
         }
       };
 
-      if (entity.positionDescription) {
-        row.descriptionRow0 = (entity.name === 'Open') ? 'Open Position' : entity.name;
-        row['descriptionRow1'] = entity.positionDescription;
+      if (entity.positionDescription && entity.name === 'Open') {
+        transformedEntity.descriptionRow0 = entity.name;
+        transformedEntity['descriptionRow1'] = entity.positionDescription;
       }
 
-      return row;
+      if (entity.contextPositionId) transformedEntity.metadata.contextPositionId = entity.contextPositionId;
+
+      return transformedEntity;
     });
   }
 

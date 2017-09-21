@@ -1,26 +1,30 @@
 import { inject, TestBed } from '@angular/core/testing';
 
-import { EntityPeopleType } from '../enums/entity-responsibilities.enum';
+import { EntityDTO } from '../models/entity-dto.model';
+import { EntityPeopleType, EntityPropertyType } from '../enums/entity-responsibilities.enum';
+import { EntityResponsibilities } from '../models/entity-responsibilities.model';
+import { EntitySubAccountDTO } from '../models/entity-subaccount-dto.model';
+import { getEntityDTOMock } from '../models/entity-dto.model.mock';
+import { getEntitySubAccountDTOMock } from '../models/entity-subaccount-dto.model.mock';
+import { GroupedEntities } from '../models/grouped-entities.model';
 import { mockEntityResponsibilitiesDTOCollection } from '../models/entity-responsibilities.model.mock';
 import { ResponsibilitiesTransformerService } from './responsibilities-transformer.service';
-import { GroupedEntities } from '../models/grouped-entities.model';
 
 describe('Service: ResponsibilitiesTransformerService', () => {
+  let responsibilitiesTransformerService: ResponsibilitiesTransformerService;
+
   beforeEach(() => TestBed.configureTestingModule({
-    providers: [
-      ResponsibilitiesTransformerService
-    ]
+    providers: [ ResponsibilitiesTransformerService ]
+  }));
+
+  beforeEach(inject([ ResponsibilitiesTransformerService ],
+    (_responsibilitiesTransformerService: ResponsibilitiesTransformerService) => {
+      responsibilitiesTransformerService = _responsibilitiesTransformerService;
   }));
 
   describe('#groupPeopleByGroupedEntities', () => {
-    let responsibilitiesTransformerService: ResponsibilitiesTransformerService;
-    beforeEach(inject([ ResponsibilitiesTransformerService ],
-      (_responsibilitiesTransformerService: ResponsibilitiesTransformerService) => {
-        responsibilitiesTransformerService = _responsibilitiesTransformerService;
-    }));
 
     it('should return a collection of formatted Responsibilitiess from a collection of ResponsibilitiesDTOs', () => {
-      spyOn(responsibilitiesTransformerService, 'groupPeopleByGroupedEntities').and.callThrough();
       const expectedgroupedEntities: GroupedEntities = {
         'MARKET DEVELOPMENT MANAGER': [{
           positionId: '123',
@@ -55,6 +59,49 @@ describe('Service: ResponsibilitiesTransformerService', () => {
       const transformedgroupedEntities =
         responsibilitiesTransformerService.groupPeopleByGroupedEntities(mockEntityResponsibilitiesDTOCollection);
       expect(transformedgroupedEntities).toEqual(expectedgroupedEntities);
+    });
+  });
+
+  describe('transformSubAccountsDTO', () => {
+
+    it('should return EntityResponsibilities given EntitySubAccountDTO objects', () => {
+      spyOn(responsibilitiesTransformerService, 'transformSubAccountsDTO').and.callThrough();
+
+      const entitySubAccountDTOMock: Array<EntitySubAccountDTO> = getEntitySubAccountDTOMock();
+      const entityResponsibilities: Array<EntityResponsibilities> =
+        responsibilitiesTransformerService.transformSubAccountsDTO(entitySubAccountDTOMock);
+
+      expect(entityResponsibilities).toBeDefined();
+      expect(entityResponsibilities.length).toBeTruthy();
+      expect(entityResponsibilities[0]).toEqual({
+        positionId: entitySubAccountDTOMock[0].subaccountCode,
+        contextPositionId: entitySubAccountDTOMock[0].accountCode,
+        name: entitySubAccountDTOMock[0].subaccountDescription,
+        propertyType: EntityPropertyType.SubAccount,
+        positionDescription: ''
+      });
+    });
+  });
+
+  describe('groupsAccountsDistributors', () => {
+
+    it('should return a unique group of formatted entities from a collection of EntitiesDTO', () => {
+      const entitiesDTOMock: Array<EntityDTO> = [getEntityDTOMock(), getEntityDTOMock()];
+      const transformedEntities = responsibilitiesTransformerService.groupsAccountsDistributors(entitiesDTOMock);
+
+      expect(transformedEntities).toEqual({
+        'all': [{
+          propertyType: entitiesDTOMock[0].type,
+          positionId: entitiesDTOMock[0].id,
+          name: entitiesDTOMock[0].name,
+          positionDescription: ''
+        }, {
+          propertyType: entitiesDTOMock[1].type,
+          positionId: entitiesDTOMock[1].id,
+          name: entitiesDTOMock[1].name,
+          positionDescription: ''
+        }]
+      });
     });
   });
 });

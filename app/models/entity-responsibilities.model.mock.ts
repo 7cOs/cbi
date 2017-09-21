@@ -34,6 +34,17 @@ export function getEntityPropertyResponsibilitiesMock(): EntityResponsibilities 
   };
 }
 
+export function getEntityResponsibilitiesDTO(): EntityResponsibilitiesDTO {
+  return {
+    id: chance.string(),
+    employeeId: chance.string(),
+    name: chance.string(),
+    description: chance.string(),
+    type: chance.string(),
+    hierarchyType: chance.string()
+  };
+}
+
 export const mockEntityResponsibilitiesDTOCollection: EntityResponsibilitiesDTO[] = [
   {
     id: '123',

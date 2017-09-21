@@ -10,7 +10,7 @@ import { UtilService } from './util.service';
 export class ProductMetricsTransformerService {
   constructor(private utilService: UtilService) { }
 
-  public transformProductMetrics(aggregation: ProductMetricType, productMetricsDTOs: ProductMetricsDTO): ProductMetrics {
+  public transformProductMetrics(productMetricsDTOs: ProductMetricsDTO, aggregation: ProductMetricType): ProductMetrics {
     return productMetricsDTOs.brandValues.reduce((productMetrics: ProductMetrics, entity: ProductMetricsBrandValueDTO) => {
       if (Array.isArray(productMetrics[ProductMetricType[aggregation]])) {
         productMetrics[ProductMetricType[aggregation]].push(this.formatProductMetricsDTO(entity));
@@ -24,12 +24,10 @@ export class ProductMetricsTransformerService {
   private formatProductMetricsDTO(productMetricsDTO: ProductMetricsBrandValueDTO): ProductMetricsBrandValue {
     return {
       brandDescription: productMetricsDTO.brandDescription,
-      current: parseInt((productMetricsDTO.values[0].current).toFixed(), 10),
-      yearAgo: this.utilService.getYearAgoDelta(
-        productMetricsDTO.values[0].current, productMetricsDTO.values[0].yearAgo),
       collectionMethod: productMetricsDTO.values[0].collectionMethod,
-      yearAgoPercent: this.utilService.getYearAgoPercent(
-        productMetricsDTO.values[0].current, productMetricsDTO.values[0].yearAgo)
+      current: Math.round(productMetricsDTO.values[0].current),
+      yearAgo: this.utilService.getYearAgoDelta(productMetricsDTO.values[0].current, productMetricsDTO.values[0].yearAgo),
+      yearAgoPercent: this.utilService.getYearAgoPercent(productMetricsDTO.values[0].current, productMetricsDTO.values[0].yearAgo)
     };
   }
 }
