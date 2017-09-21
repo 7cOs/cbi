@@ -163,12 +163,12 @@ describe('Responsibilities Effects', () => {
             {
               type: groupedEntitiesMock['GENERAL MANAGER'][0].type,
               name: 'GENERAL MANAGER',
-              positionDescription: ''
+              positionDescription: groupedEntitiesMock['GENERAL MANAGER'][0].positionDescription
             },
             {
               type: groupedEntitiesMock['MARKET DEVELOPMENT MANAGER'][0].type,
               name: 'MARKET DEVELOPMENT MANAGER',
-              positionDescription: ''
+              positionDescription: groupedEntitiesMock['MARKET DEVELOPMENT MANAGER'][0].positionDescription
             }
           ],
           entitiesURL: undefined as any
