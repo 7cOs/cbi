@@ -8,6 +8,7 @@ import com.cbrands.test.BaseTestCase;
 import org.testng.Assert;
 import org.testng.annotations.*;
 
+import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -30,8 +31,11 @@ public class LoginTest extends BaseTestCase {
   }
 
   @AfterMethod
-  public void tearDown() {
+  public void tearDown()  throws MalformedURLException{
     logoutPage.goToPage();
+
+    shutDownBrowser();
+    startUpBrowser();
   }
 
   @Test(dataProvider = "userCredentials", description = "Testing login and logout for a valid user")

@@ -8,6 +8,8 @@ import com.cbrands.test.BaseTestCase;
 import org.testng.Assert;
 import org.testng.annotations.*;
 
+import java.net.MalformedURLException;
+
 /**
  * Automated test for logging in and out of the web app.
  */
@@ -26,8 +28,11 @@ public class LoginTest extends BaseTestCase {
   }
 
   @AfterMethod
-  public void tearDown() {
+  public void tearDown() throws MalformedURLException {
     logoutPage.goToPage();
+
+    shutDownBrowser();
+    startUpBrowser();
   }
 
   @Test(dataProvider = "userCredentials", description = "Testing basic login and logout")
