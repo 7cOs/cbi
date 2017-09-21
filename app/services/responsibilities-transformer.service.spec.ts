@@ -1,8 +1,10 @@
 import { inject, TestBed } from '@angular/core/testing';
 
 import { EntityDTO } from '../models/entity-dto.model';
-import { EntityPeopleType } from '../enums/entity-responsibilities.enum';
+import { EntityPeopleType, EntityPropertyType } from '../enums/entity-responsibilities.enum';
+import { EntitySubAccountDTO } from '../models/entity-subaccount-dto.model';
 import { getEntityDTOMock } from '../models/entity-dto.model.mock';
+import { getEntitySubAccountDTOMock } from '../models/entity-subaccount-dto.model.mock';
 import { GroupedEntities } from '../models/grouped-entities.model';
 import { mockEntityResponsibilitiesDTOCollection } from '../models/entity-responsibilities.model.mock';
 import { ResponsibilitiesTransformerService } from './responsibilities-transformer.service';
@@ -11,9 +13,7 @@ describe('Service: ResponsibilitiesTransformerService', () => {
   let responsibilitiesTransformerService: ResponsibilitiesTransformerService;
 
   beforeEach(() => TestBed.configureTestingModule({
-    providers: [
-      ResponsibilitiesTransformerService
-    ]
+    providers: [ ResponsibilitiesTransformerService ]
   }));
 
   beforeEach(inject([ ResponsibilitiesTransformerService ],
@@ -58,12 +58,39 @@ describe('Service: ResponsibilitiesTransformerService', () => {
     });
   });
 
+  describe('transformSubAccountsDTO', () => {
+
+    it('should return Grouped EntityResponsibilities given EntitySubAccountDTO objects under the given entityType', () => {
+      spyOn(responsibilitiesTransformerService, 'transformSubAccountsDTO').and.callThrough();
+
+      const entitySubAccountDTOMock: Array<EntitySubAccountDTO> = [getEntitySubAccountDTOMock(), getEntitySubAccountDTOMock()];
+      const entityTypeMock: string = chance.string();
+
+      const groupedSubAccounts: GroupedEntities =
+        responsibilitiesTransformerService.transformSubAccountsDTO(entitySubAccountDTOMock, entityTypeMock);
+
+      expect(groupedSubAccounts).toBeDefined();
+      expect(groupedSubAccounts[entityTypeMock][0]).toEqual({
+        positionId: entitySubAccountDTOMock[0].subaccountCode,
+        contextPositionId: entitySubAccountDTOMock[0].accountCode,
+        name: entitySubAccountDTOMock[0].subaccountDescription,
+        propertyType: EntityPropertyType.SubAccount
+      });
+      expect(groupedSubAccounts[entityTypeMock][1]).toEqual({
+        positionId: entitySubAccountDTOMock[1].subaccountCode,
+        contextPositionId: entitySubAccountDTOMock[1].accountCode,
+        name: entitySubAccountDTOMock[1].subaccountDescription,
+        propertyType: EntityPropertyType.SubAccount
+      });
+    });
+  });
+
   describe('groupsAccountsDistributors', () => {
 
     it('should return a unique group of formatted entities from a collection of EntitiesDTO', () => {
       const entitiesDTOMock: Array<EntityDTO> = [getEntityDTOMock(), getEntityDTOMock()];
-
       const transformedEntities = responsibilitiesTransformerService.groupsAccountsDistributors(entitiesDTOMock);
+
       expect(transformedEntities).toEqual({
         'all': [
           {

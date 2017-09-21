@@ -8,6 +8,7 @@ export interface EntitiesPerformancesDTO {
 
 export interface EntitiesPerformances {
   positionId: string;
+  contextPositionId?: string;
   name: string;
   performanceTotal: EntitiesTotalPerformances;
 }

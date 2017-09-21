@@ -6,43 +6,49 @@ import { DateRangeTimePeriodValue } from '../enums/date-range-time-period.enum';
 import { DistributionTypeValue } from '../enums/distribution-type.enum';
 import { EntitiesTotalPerformances, EntitiesTotalPerformancesDTO } from '../models/entities-total-performances.model';
 import { EntityDTO } from '../models/entity-dto.model';
+import { EntitiesPerformances, EntitiesPerformancesDTO } from '../models/entities-performances.model';
+import { EntityPropertyType } from '../enums/entity-responsibilities.enum';
+import { EntitySubAccountDTO } from '../models/entity-subaccount-dto.model';
 import { getEntityPeopleResponsibilitiesMock,
          getEntityPropertyResponsibilitiesMock } from '../models/entity-responsibilities.model.mock';
 import { getEntitiesTotalPerformancesMock,
          getEntitiesTotalPerformancesDTOMock } from '../models/entities-total-performances.model.mock';
 import { getEntitiesPerformancesMock, getResponsibilityEntitiesPerformanceDTOMock } from '../models/entities-performances.model.mock';
 import { getEntityDTOMock } from '../models/entity-dto.model.mock';
+import { getEntitySubAccountDTOMock } from '../models/entity-subaccount-dto.model.mock';
 import { getGroupedEntitiesMock } from '../models/grouped-entities.model.mock';
+import { getMyPerformanceTableRowMock } from '../models/my-performance-table-row.model.mock';
 import { getPeopleResponsibilitiesDTOMock } from '../models/people-responsibilities-dto.model.mock';
+import { GroupedEntities } from '../models/grouped-entities.model';
 import { MetricTypeValue } from '../enums/metric-type.enum';
 import { MyPerformanceApiService } from '../services/my-performance-api.service';
 import { MyPerformanceFilterState } from '../state/reducers/my-performance-filter.reducer';
 import { PeopleResponsibilitiesDTO } from '../models/people-responsibilities-dto.model';
 import { PerformanceTransformerService } from '../services/performance-transformer.service';
 import { PremiseTypeValue } from '../enums/premise-type.enum';
-import { EntitiesPerformances, EntitiesPerformancesDTO } from '../models/entities-performances.model';
 import { ResponsibilitiesTransformerService } from '../services/responsibilities-transformer.service';
-import { ResponsibilitiesService, ResponsibilitiesData } from './responsibilities.service';
-import { GroupedEntities } from '../models/grouped-entities.model';
+import { ResponsibilitiesService, ResponsibilitiesData, SubAccountData } from './responsibilities.service';
 import { ViewType } from '../enums/view-type.enum';
 
 const chance = new Chance();
 
 describe('Responsibilities Effects', () => {
   let positionIdMock: string;
+  let contextPositionIdMock: string;
   let groupedEntitiesMock: GroupedEntities;
   let accountsDistributorsMock: GroupedEntities;
+  let groupedSubAccountsMock: GroupedEntities;
   let peopleResponsibilitiesDTOMock: PeopleResponsibilitiesDTO;
   let responsibilityEntitiesPerformanceDTOMock: EntitiesPerformancesDTO[];
   let entitiesPerformanceMock: EntitiesPerformances[];
   let performanceTotalMock: EntitiesTotalPerformances;
   let entitiesTotalPerformancesDTOMock: EntitiesTotalPerformancesDTO;
   let entityDTOMock: EntityDTO;
-
   let responsibilitiesService: ResponsibilitiesService;
   let myPerformanceApiService: MyPerformanceApiService;
   let performanceTransformerService: PerformanceTransformerService;
   let responsibilitiesTransformerService: ResponsibilitiesTransformerService;
+  let entitySubAccountDTOMock: EntitySubAccountDTO[];
 
   const performanceFilterStateMock: MyPerformanceFilterState = {
     metricType: MetricTypeValue.PointsOfDistribution,
@@ -64,11 +70,14 @@ describe('Responsibilities Effects', () => {
     getAccountsDistributors() {
       return Observable.of(entityDTOMock);
     },
+    getDistributorPerformance() {
+      return Observable.of(entitiesTotalPerformancesDTOMock);
+    },
     getAccountPerformance() {
       return Observable.of(entitiesTotalPerformancesDTOMock);
     },
-    getDistributorPerformance() {
-      return Observable.of(entitiesTotalPerformancesDTOMock);
+    getSubAccounts() {
+      return Observable.of(entitySubAccountDTOMock);
     }
   };
 
@@ -78,6 +87,9 @@ describe('Responsibilities Effects', () => {
     },
     groupsAccountsDistributors(mockArgs: any): GroupedEntities {
       return accountsDistributorsMock;
+    },
+    transformSubAccountsDTO(mockArgs: any): GroupedEntities {
+      return groupedSubAccountsMock;
     }
   };
 
@@ -125,6 +137,7 @@ describe('Responsibilities Effects', () => {
       responsibilitiesTransformerService = _responsibilitiesTransformerService;
 
       positionIdMock = chance.string();
+      contextPositionIdMock = chance.string();
       groupedEntitiesMock = getGroupedEntitiesMock();
       accountsDistributorsMock = {'all': [ getEntityPeopleResponsibilitiesMock() ]};
       peopleResponsibilitiesDTOMock = getPeopleResponsibilitiesDTOMock();
@@ -381,7 +394,7 @@ describe('Responsibilities Effects', () => {
         expect(distributorsPerformanceSpy.calls.argsFor(0)).toEqual([
           responsibilitiesDataMock.groupedEntities.all,
           responsibilitiesDataMock.filter,
-          undefined
+          responsibilitiesDataMock.positionId
         ]);
       });
     });
@@ -431,7 +444,7 @@ describe('Responsibilities Effects', () => {
         expect(accountsPerformanceSpy.calls.argsFor(0)).toEqual([
           responsibilitiesDataMock.groupedEntities.all,
           responsibilitiesDataMock.filter,
-          undefined
+          responsibilitiesDataMock.positionId
         ]);
       });
     });
@@ -686,6 +699,71 @@ describe('Responsibilities Effects', () => {
       expect(getAccountPerformanceSpy).toHaveBeenCalledTimes(numberOfEntities);
       accounts.map((account) => {
         expect(getAccountPerformanceSpy).toHaveBeenCalledWith(account.positionId, mockFilter, contextId);
+      });
+    });
+  });
+
+  describe('when getSubAccounts is called', () => {
+    let subAccountDataMock: SubAccountData;
+
+    beforeEach(() => {
+      entitySubAccountDTOMock = [getEntitySubAccountDTOMock(), getEntitySubAccountDTOMock()];
+      subAccountDataMock = {
+        positionId: positionIdMock,
+        contextPositionId: contextPositionIdMock,
+        entityType: chance.string(),
+        premiseType: PremiseTypeValue.All,
+        entitiesTotalPerformances: getMyPerformanceTableRowMock(1)[0]
+      };
+      groupedSubAccountsMock = {
+        [subAccountDataMock.entityType]: [{
+          positionId: entitySubAccountDTOMock[0].subaccountCode,
+          contextPositionId: entitySubAccountDTOMock[0].accountCode,
+          name: entitySubAccountDTOMock[0].subaccountDescription,
+          propertyType: EntityPropertyType.SubAccount
+        }, {
+          positionId: entitySubAccountDTOMock[1].subaccountCode,
+          contextPositionId: entitySubAccountDTOMock[1].accountCode,
+          name: entitySubAccountDTOMock[1].subaccountDescription,
+          propertyType: EntityPropertyType.SubAccount
+        }]
+      };
+    });
+
+    it('calls getSubAccounts from the myPerformanceApiService with the right parameters', (done) => {
+      const getSubAccountsSpy = spyOn(myPerformanceApiService, 'getSubAccounts').and.callThrough();
+
+      responsibilitiesService.getSubAccounts(subAccountDataMock).subscribe(() => {
+        done();
+      });
+
+      expect(getSubAccountsSpy.calls.count()).toBe(1);
+      expect(getSubAccountsSpy.calls.argsFor(0)).toEqual([
+        subAccountDataMock.positionId,
+        subAccountDataMock.contextPositionId,
+        subAccountDataMock.premiseType
+      ]);
+    });
+
+    it('calls transformSubAccountsDTO with the right parameters', (done) => {
+      const transformerSpy = spyOn(responsibilitiesTransformerService, 'transformSubAccountsDTO').and.callThrough();
+
+      responsibilitiesService.getSubAccounts(subAccountDataMock).subscribe(() => {
+        done();
+      });
+
+      expect(transformerSpy.calls.count()).toBe(1);
+      expect(transformerSpy.calls.argsFor(0)[0]).toEqual(entitySubAccountDTOMock);
+    });
+
+    it('returns grouped subAccounts with initial subAccountData', (done) => {
+      const expectedResponse: SubAccountData = Object.assign({}, subAccountDataMock, {
+        groupedEntities : groupedSubAccountsMock
+      });
+
+      responsibilitiesService.getSubAccounts(subAccountDataMock).subscribe((actualResponse: SubAccountData) => {
+        expect(expectedResponse).toEqual(actualResponse);
+        done();
       });
     });
   });

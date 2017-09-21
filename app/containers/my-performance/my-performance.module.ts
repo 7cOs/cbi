@@ -33,8 +33,8 @@ import { SortIndicatorComponent } from '../../shared/components/sort-indicator/s
     MyPerformanceTableDataTransformerService,
     PerformanceTransformerService,
     ProductMetricsTransformerService,
-    ResponsibilitiesTransformerService,
-    ResponsibilitiesService
+    ResponsibilitiesService,
+    ResponsibilitiesTransformerService
   ]
 })
 

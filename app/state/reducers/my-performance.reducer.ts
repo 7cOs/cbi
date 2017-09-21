@@ -51,6 +51,8 @@ export function myPerformanceReducer(
     case ResponsibilitiesActions.FETCH_PERFORMANCE_TOTAL_SUCCESS_ACTION:
     case ResponsibilitiesActions.FETCH_PERFORMANCE_TOTAL_FAILURE_ACTION:
     case ResponsibilitiesActions.SET_TABLE_ROW_PERFORMANCE_TOTAL:
+    case ResponsibilitiesActions.FETCH_SUBACCOUNTS_ACTION:
+    case ResponsibilitiesActions.FETCH_SUBACCOUNTS_SUCCESS_ACTION:
       return {
         current: {
           responsibilities: responsibilitiesReducer(state.current.responsibilities, action as ResponsibilitiesActions.Action),

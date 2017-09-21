@@ -1,5 +1,5 @@
 export enum ProductMetricType {
-  brand = <any> 'brand',
-  sku = <any> 'sku',
-  item_description = <any> 'item_description'
+  brand = 'brand',
+  sku = 'sku',
+  item_description = 'item_description'
 }

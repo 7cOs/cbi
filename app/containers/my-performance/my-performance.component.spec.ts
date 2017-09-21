@@ -5,18 +5,19 @@ import { ComponentFixture, TestBed, inject } from '@angular/core/testing';
 import { Observable } from 'rxjs';
 import { Store } from '@ngrx/store';
 
-import { BreadcrumbEntityClickedEvent } from '../../models/breadcrumb-entity-clicked-event.model'; // tslint:disable-line:no-unused-variable
+import { BreadcrumbEntityClickedEvent } from '../../models/breadcrumb-entity-clicked-event.model';
 import { DateRange } from '../../models/date-range.model';
 import { DateRangesState } from '../../state/reducers/date-ranges.reducer';
 import { DateRangeTimePeriodValue } from '../../enums/date-range-time-period.enum';
 import { DistributionTypeValue } from '../../enums/distribution-type.enum';
+import { FetchProductMetricsAction } from '../../state/actions/product-metrics.action';
 import { FetchResponsibilitiesAction } from '../../state/actions/responsibilities.action';
 import { getMyPerformanceTableRowMock } from '../../models/my-performance-table-row.model.mock';
 import { MetricTypeValue } from '../../enums/metric-type.enum';
 import * as MyPerformanceVersionActions from '../../state/actions/my-performance-version.action';
 import { MyPerformanceComponent } from './my-performance.component';
 import { MyPerformanceFilterActionType } from '../../enums/my-performance-filter.enum';
-import { MyPerformanceFilterEvent } from '../../models/my-performance-filter.model'; // tslint:disable-line:no-unused-variable
+import { MyPerformanceFilterEvent } from '../../models/my-performance-filter.model';
 import { MyPerformanceFilterState } from '../../state/reducers/my-performance-filter.reducer';
 import { MyPerformanceEntitiesData, initialState } from '../../state/reducers/my-performance.reducer';
 import { MyPerformanceTableDataTransformerService } from '../../services/my-performance-table-data-transformer.service';
@@ -28,7 +29,6 @@ import { SortIndicatorComponent } from '../../shared/components/sort-indicator/s
 import { SortingCriteria } from '../../models/sorting-criteria.model';
 import { UtilService } from '../../services/util.service';
 import { ViewType } from '../../enums/view-type.enum';
-import { FetchProductMetricsAction } from '../../state/actions/product-metrics.action';
 
 const chance = new Chance();
 
@@ -75,11 +75,11 @@ describe('MyPerformanceComponent', () => {
   let userServiceMock: any;
 
   const stateMock = {
-      myPerformanceFilter: chance.string(),
-      dateRanges: chance.string(),
-      myPerformanceProductMetrics: chance.string(),
-      viewTypes: chance.string(),
-      myPerformance: initialState
+    myPerformance: initialState,
+    myPerformanceProductMetrics: chance.string(),
+    myPerformanceFilter: chance.string(),
+    dateRanges: chance.string(),
+    viewTypes: chance.string()
   };
 
   const storeMock = {
@@ -244,7 +244,7 @@ describe('MyPerformanceComponent', () => {
     storeMock.dispatch.calls.reset();
     componentInstance.leftTableViewType = ViewType.accounts;
     componentInstance.handleElementClicked({leftSide: true, type: RowType.data, index: 0, row: rowMock});
-    expect(storeMock.dispatch.calls.count()).toBe(2);
+    expect(storeMock.dispatch.calls.count()).toBe(3);
 
     storeMock.dispatch.calls.reset();
     componentInstance.handleElementClicked({leftSide: false, type: RowType.data, index: 0});

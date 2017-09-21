@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import 'rxjs/add/operator/map';
 
-import { MyPerformanceTableRow } from '../models/my-performance-table-row.model';
-import { EntitiesTotalPerformances } from '../models/entities-total-performances.model';
 import { EntitiesPerformances } from '../models/entities-performances.model';
+import { EntitiesTotalPerformances } from '../models/entities-total-performances.model';
+import { MyPerformanceTableRow } from '../models/my-performance-table-row.model';
 import { ProductMetrics, ProductMetricsBrandValue } from '../models/product-metrics.model';
 
 @Injectable()
@@ -11,7 +11,7 @@ export class MyPerformanceTableDataTransformerService {
 
   public getLeftTableData(entities: EntitiesPerformances[]): MyPerformanceTableRow[] {
     return entities.map((entity: EntitiesPerformances) => {
-      return {
+      const transformedEntity: MyPerformanceTableRow = {
         descriptionRow0: entity.name,
         metricColumn0: entity.performanceTotal.total,
         metricColumn1: entity.performanceTotal.totalYearAgo,
@@ -21,6 +21,10 @@ export class MyPerformanceTableDataTransformerService {
           positionId: entity.positionId
         }
       };
+
+      if (entity.contextPositionId) transformedEntity.metadata.contextPositionId = entity.contextPositionId;
+
+      return transformedEntity;
     });
   }
 

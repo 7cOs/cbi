@@ -49,7 +49,7 @@ describe('Service: ProductMetricsTransformerService', () => {
         }]
       };
       const transformedProductMetrics =
-        productMetricsTransformerService.transformProductMetrics(ProductMetricType.brand, productMetricsBrandDTOMock);
+        productMetricsTransformerService.transformProductMetrics(productMetricsBrandDTOMock, ProductMetricType.brand);
       expect(transformedProductMetrics).toEqual(expectedProductBrands);
     });
   });
