@@ -3,7 +3,7 @@ import { EntityPeopleType, EntityPropertyType } from '../enums/entity-responsibi
 export interface EntityResponsibilities {
   positionId: string;
   name: string;
-  subName?: string;
+  positionDescription: string;
   type?: string;
   hierarchyType?: string;
   description?: string;

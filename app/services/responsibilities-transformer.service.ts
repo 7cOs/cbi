@@ -31,7 +31,8 @@ export class ResponsibilitiesTransformerService {
       groups['all'].push({
         propertyType: entity.type,
         positionId: entity.id,
-        name: entity.name
+        name: entity.name,
+        positionDescription: ''
       });
 
       return groups;
@@ -43,6 +44,7 @@ export class ResponsibilitiesTransformerService {
       positionId: entity.id,
       employeeId: entity.employeeId,
       name: entity.name,
+      positionDescription: entity.positionDescription,
       type: entity.type,
       hierarchyType: entity.hierarchyType,
       description: entity.description
@@ -50,9 +52,6 @@ export class ResponsibilitiesTransformerService {
 
     if (entity.description in EntityPeopleType) {
       transformedEntity.peopleType = EntityPeopleType[entity.description];
-      if (entity.name === 'Open') {
-        transformedEntity.subName = entity.positionDescription;
-      }
     } else if (entity.description in EntityPropertyType) {
       transformedEntity.propertyType = EntityPropertyType[entity.description];
     } else {

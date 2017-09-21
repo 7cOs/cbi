@@ -25,7 +25,7 @@ const chance = new Chance();
 interface ResponsibilitiesData {
   groupedEntities?: GroupedEntities;
   viewType?: ViewType;
-  entityTypes?: Array<{ type: string, name: string }>;
+  entityTypes?: Array<{ type: string, name: string, positionDescription: string }>;
   entitiesURL?: string;
   positionId?: string;
   filter?: MyPerformanceFilterState;
@@ -161,7 +161,8 @@ export class ResponsibilitiesEffects {
     : Observable<ResponsibilitiesData> {
     if (responsibilitiesData.viewType === ViewType.roleGroups) {
       return this.myPerformanceApiService
-      .getResponsibilitiesPerformanceTotals(responsibilitiesData.entityTypes,
+      .getResponsibilitiesPerformanceTotals(
+        responsibilitiesData.entityTypes,
         responsibilitiesData.filter,
         responsibilitiesData.positionId)
       .mergeMap((response: EntitiesPerformancesDTO[]) => {

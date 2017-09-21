@@ -145,14 +145,15 @@ describe('Service: MyPerformanceApiService', () => {
   describe('getResponsibilityPerformanceTotal', () => {
 
     it('should call the responsibility performanceTotal endpoint and return performance data for the responsibility', (done) => {
-      const mockFilter = {
+      const filterMock = {
         metricType: MetricTypeValue.velocity,
         dateRangeCode: DateRangeTimePeriodValue.L90BDL,
         premiseType: PremiseTypeValue.All
       };
       const entityMock = {
         name: chance.string(),
-        type: chance.string()
+        type: chance.string(),
+        positionDescription: chance.string()
       };
       const positionIdMock = chance.string();
       const expectedBaseUrl = `/v3/positions/${ positionIdMock }/responsibilities/${ entityMock.type }/performanceTotal`;
@@ -168,12 +169,12 @@ describe('Service: MyPerformanceApiService', () => {
         expect(connection.request.url).toEqual(expectedBaseUrl + expectedUrlParams);
       });
 
-      myPerformanceApiService.getResponsibilityPerformanceTotal(entityMock, mockFilter, positionIdMock)
+      myPerformanceApiService.getResponsibilityPerformanceTotal(entityMock, filterMock, positionIdMock)
         .subscribe((response: EntitiesPerformancesDTO) => {
           expect(response).toEqual({
             id: positionIdMock,
             name: entityMock.name,
-            subName: entityMock.name,
+            positionDescription: entityMock.positionDescription,
             performanceTotal: mockPerformanceTotalResponse
           });
           done();
@@ -184,15 +185,15 @@ describe('Service: MyPerformanceApiService', () => {
   describe('getResponsibilitiesPerformanceTotals', () => {
 
     it('should call the responsibility performanceTotal endpoint for each entity and return an array of performance data', (done) => {
-      const mockFilter = {
+      const filterMock = {
         metricType: MetricTypeValue.PointsOfDistribution,
         dateRangeCode: DateRangeTimePeriodValue.LCM,
         premiseType: PremiseTypeValue.On,
         distributionType: DistributionTypeValue.simple
       };
       const entityArrayMock = [
-        { positionId: chance.string(), name: chance.string(), subName: chance.string(), type: chance.string() },
-        { positionId: chance.string(), name: chance.string(), subName: chance.string(), type: chance.string() }
+        { positionId: chance.string(), name: chance.string(), positionDescription: chance.string(), type: chance.string() },
+        { positionId: chance.string(), name: chance.string(), positionDescription: chance.string(), type: chance.string() }
       ];
       const expectedUrlParams = '?metricType=simplePointsOfDistribution&dateRangeCode=LCM&premiseType=On';
 
@@ -205,18 +206,18 @@ describe('Service: MyPerformanceApiService', () => {
         expect(connection.request.method).toEqual(RequestMethod.Get);
       });
 
-      myPerformanceApiService.getResponsibilitiesPerformanceTotals(entityArrayMock, mockFilter)
+      myPerformanceApiService.getResponsibilitiesPerformanceTotals(entityArrayMock, filterMock)
         .subscribe((response) => {
           expect(response).toEqual([
             {
               id: entityArrayMock[0].positionId,
               name: entityArrayMock[0].name,
-              subName: entityArrayMock[0].name,
+              positionDescription: entityArrayMock[0].positionDescription,
               performanceTotal: mockPerformanceTotalResponse
             }, {
               id: entityArrayMock[1].positionId,
               name: entityArrayMock[1].name,
-              subName: entityArrayMock[1].name,
+              positionDescription: entityArrayMock[1].positionDescription,
               performanceTotal: mockPerformanceTotalResponse
             }
           ]);

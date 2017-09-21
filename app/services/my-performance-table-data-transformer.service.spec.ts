@@ -2,8 +2,6 @@ import { inject, TestBed } from '@angular/core/testing';
 
 import { EntitiesTotalPerformances } from '../models/entities-total-performances.model';
 import { EntitiesPerformances } from '../models/entities-performances.model';
-import { GroupedEntities } from '../models/grouped-entities.model';
-import { getGroupEntityPeopleResponsibilitiesMock } from '../models/entity-responsibilities.model.mock';
 import { getEntitiesTotalPerformancesMock } from '../models/entities-total-performances.model.mock';
 import {
   getEntitiesPerformancesMock,
@@ -11,14 +9,12 @@ import {
 } from '../models/entities-performances.model.mock';
 import { getProductMetricMock } from '../models/entity-product-metrics-dto.model.mock';
 import { MyPerformanceTableDataTransformerService } from './my-performance-table-data-transformer.service';
-import { ViewType } from '../enums/view-type.enum';
 
 describe('Service: MyPerformanceTableDataTransformerService', () => {
   let myPerformanceTableDataTransformerService: MyPerformanceTableDataTransformerService;
   let mockPerformanceTotal: EntitiesTotalPerformances;
   let responsibilityEntitiesPerformanceMock: EntitiesPerformances[];
   let responsibilityEntitiesPerformanceOpenPositionMock: EntitiesPerformances[];
-  let responsibilityGroupEntitiesMock: GroupedEntities;
 
   const productMetricsState: any = {
     products: getProductMetricMock()
@@ -38,16 +34,12 @@ describe('Service: MyPerformanceTableDataTransformerService', () => {
         myPerformanceTableDataTransformerService = _myPerformanceTableDataTransformerService;
         responsibilityEntitiesPerformanceMock = getEntitiesPerformancesMock();
         responsibilityEntitiesPerformanceOpenPositionMock = getEntitiesPerformancesOpenPositionMock();
-        responsibilityGroupEntitiesMock = getGroupEntityPeopleResponsibilitiesMock();
     }));
 
     it('should return formatted ResponsibilityEntityPerformance data', () => {
       spyOn(myPerformanceTableDataTransformerService, 'getLeftTableData').and.callThrough();
 
-      const tableData =  myPerformanceTableDataTransformerService.getLeftTableData(
-        responsibilityEntitiesPerformanceMock,
-        responsibilityGroupEntitiesMock,
-        ViewType.distributors);
+      const tableData =  myPerformanceTableDataTransformerService.getLeftTableData(responsibilityEntitiesPerformanceMock);
 
       expect(tableData).toBeDefined();
       expect(tableData.length).toBeTruthy();
@@ -66,10 +58,7 @@ describe('Service: MyPerformanceTableDataTransformerService', () => {
     it('should return formatted ResponsibilityEntityPerformance data with Open Position', () => {
       spyOn(myPerformanceTableDataTransformerService, 'getLeftTableData').and.callThrough();
 
-      const tableData =  myPerformanceTableDataTransformerService.getLeftTableData(
-        responsibilityEntitiesPerformanceOpenPositionMock,
-        responsibilityGroupEntitiesMock,
-        ViewType.people);
+      const tableData =  myPerformanceTableDataTransformerService.getLeftTableData(responsibilityEntitiesPerformanceOpenPositionMock);
 
       expect(tableData).toBeDefined();
       expect(tableData.length).toBeTruthy();
