@@ -124,36 +124,16 @@ export class ResponsibilitiesService {
 
   public getPerformanceTotalForGroupedEntities(responsibilitiesData: ResponsibilitiesData)
   : Observable<ResponsibilitiesData> {
-  if (responsibilitiesData.viewType === ViewType.roleGroups) {
-    return this.getResponsibilitiesPerformanceTotals(responsibilitiesData.entityTypes,
-      responsibilitiesData.filter,
-      responsibilitiesData.positionId)
-    .switchMap((entityPerformances: EntitiesPerformances[]) => {
-      responsibilitiesData.entitiesPerformances = entityPerformances;
+    if (responsibilitiesData.viewType === ViewType.roleGroups) {
+      return this.handleResponsibilitiesPerformanceTotals(responsibilitiesData);
+    } else if (responsibilitiesData.viewType === ViewType.distributors) {
+      return this.handleDistributorsPerformances(responsibilitiesData);
+    } else if (responsibilitiesData.viewType === ViewType.accounts) {
+      return this.handleAccountsPerformances(responsibilitiesData);
+    } else {
       return Observable.of(responsibilitiesData);
-    });
-  } else if (responsibilitiesData.viewType === ViewType.distributors) {
-    return this.getDistributorsPerformances(responsibilitiesData.groupedEntities.all,
-        responsibilitiesData.filter, responsibilitiesData.positionId)
-      .mergeMap((response: EntitiesTotalPerformancesDTO[]) => {
-        responsibilitiesData.entitiesPerformances
-          = this.performanceTransformerService
-            .transformEntityDTOsWithPerformance(response, responsibilitiesData.groupedEntities.all);
-        return Observable.of(responsibilitiesData);
-    });
-  } else if (responsibilitiesData.viewType === ViewType.accounts) {
-    return this.getAccountsPerformances(responsibilitiesData.groupedEntities.all,
-        responsibilitiesData.filter, responsibilitiesData.positionId)
-      .mergeMap((response: EntitiesTotalPerformancesDTO[]) => {
-        responsibilitiesData.entitiesPerformances
-          = this.performanceTransformerService
-            .transformEntityDTOsWithPerformance(response, responsibilitiesData.groupedEntities.all);
-        return Observable.of(responsibilitiesData);
-    });
-  } else {
-    return Observable.of(responsibilitiesData);
+    }
   }
-}
 
   public getAccountsDistributors(responsibilitiesData: ResponsibilitiesData)
     : Observable<ResponsibilitiesData> {
@@ -206,4 +186,39 @@ export class ResponsibilitiesService {
       entitiesPerformances: entitiesPerformancesMock
     }));
   }
+
+  private handleResponsibilitiesPerformanceTotals(responsibilitiesData: ResponsibilitiesData) {
+    return this.getResponsibilitiesPerformanceTotals(responsibilitiesData.entityTypes,
+      responsibilitiesData.filter,
+      responsibilitiesData.positionId)
+        .map((entityPerformances: EntitiesPerformances[]) => {
+          responsibilitiesData.entitiesPerformances = entityPerformances;
+          return responsibilitiesData;
+        });
+   }
+
+  private handleDistributorsPerformances(responsibilitiesData: ResponsibilitiesData) {
+    return this.getDistributorsPerformances(responsibilitiesData.groupedEntities.all,
+      responsibilitiesData.filter,
+      responsibilitiesData.positionId)
+        .map((response: EntitiesTotalPerformancesDTO[]) => {
+          responsibilitiesData.entitiesPerformances
+            = this.performanceTransformerService
+              .transformEntityDTOsWithPerformance(response, responsibilitiesData.groupedEntities.all);
+          return responsibilitiesData;
+        });
+  }
+
+  private handleAccountsPerformances(responsibilitiesData: ResponsibilitiesData) {
+    return this.getAccountsPerformances(responsibilitiesData.groupedEntities.all,
+      responsibilitiesData.filter,
+      responsibilitiesData.positionId)
+        .map((response: EntitiesTotalPerformancesDTO[]) => {
+          responsibilitiesData.entitiesPerformances
+            = this.performanceTransformerService
+              .transformEntityDTOsWithPerformance(response, responsibilitiesData.groupedEntities.all);
+          return responsibilitiesData;
+        });
+  }
+
 }
