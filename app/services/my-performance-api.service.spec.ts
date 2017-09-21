@@ -159,12 +159,14 @@ describe('Service: MyPerformanceApiService', () => {
         connection.mockRespond(new Response(options));
         expect(connection.request.method).toEqual(RequestMethod.Get);
         expect(connection.request.url).toEqual(
-          '/v3/distributors/1/performanceTotal?metricType=volume&dateRangeCode=FYTDBDL&premiseType=On'
+          '/v3/distributors/1/performanceTotal?metricType=volume&dateRangeCode=FYTDBDL&premiseType=On&positionId=1'
         );
       });
 
-      myPerformanceApiService.getDistributorPerformance('1', mockFilter).subscribe((response: EntitiesTotalPerformancesDTO) => {
-        expect(response).toEqual(performanceTotalResponseMock);
+      const expected = Object.assign({}, performanceTotalResponseMock, {entityId: '1'});
+
+      myPerformanceApiService.getDistributorPerformance('1', mockFilter, '1').subscribe((response: EntitiesTotalPerformancesDTO) => {
+        expect(response).toEqual(expected);
         done();
       });
     });
@@ -185,12 +187,14 @@ describe('Service: MyPerformanceApiService', () => {
         connection.mockRespond(new Response(options));
         expect(connection.request.method).toEqual(RequestMethod.Get);
         expect(connection.request.url).toEqual(
-          '/v3/accounts/1/performanceTotal?metricType=volume&dateRangeCode=FYTDBDL&premiseType=On'
+          '/v3/accounts/1/performanceTotal?metricType=volume&dateRangeCode=FYTDBDL&premiseType=On&positionId=1'
         );
       });
 
-      myPerformanceApiService.getAccountPerformance('1', mockFilter).subscribe((response: EntitiesTotalPerformancesDTO) => {
-        expect(response).toEqual(performanceTotalResponseMock);
+      const expected = Object.assign({}, performanceTotalResponseMock, {entityId: '1'});
+
+      myPerformanceApiService.getAccountPerformance('1', mockFilter, '1').subscribe((response: EntitiesTotalPerformancesDTO) => {
+        expect(response).toEqual(expected);
         done();
       });
     });

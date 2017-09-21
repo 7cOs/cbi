@@ -43,9 +43,11 @@ export class PerformanceTransformerService {
     entities: EntityResponsibilities[]
     ): EntitiesPerformances[] {
     return performanceDTOs.map(
-      (performanceDTO: EntitiesTotalPerformancesDTO,
-      idx: number) => {
-      return this.transformEntityDTOWithPerformance(performanceDTO, entities[idx]);
+      (performanceDTO: EntitiesTotalPerformancesDTO) => {
+      return this.transformEntityDTOWithPerformance(
+        performanceDTO,
+        entities.find(entity => entity.positionId === performanceDTO.entityId,
+      ));
     });
   }
 

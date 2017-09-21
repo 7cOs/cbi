@@ -37,6 +37,7 @@ module.exports = function(app) {
     .get(function(req, res) {
       const auth = app.locals.apiAuth;
 
+      if (req.url.match(/\/v3\/distributors.+/)) console.log(req.url);
       let apiRequestStream = request(auth.signed, {json: true, headers: auth.headers}).auth(null, null, true, auth.jwtToken);
       req.pipe(apiRequestStream); // pipe client request to API request so headers are passed through
 

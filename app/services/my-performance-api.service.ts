@@ -71,27 +71,35 @@ export class MyPerformanceApiService {
 
   public getDistributorPerformance(
     distributorID: string,
-    filter: MyPerformanceFilterState
+    filter: MyPerformanceFilterState,
+    contextPositionId?: string
     ): Observable<EntitiesTotalPerformancesDTO> {
     const url = `/v3/distributors/${distributorID}/performanceTotal`;
+    const params = contextPositionId
+      ? Object.assign({}, this.getFilterStateParams(filter), { positionId: contextPositionId })
+      : this.getFilterStateParams(filter);
 
     return this.http.get(url, {
-      params: this.getFilterStateParams(filter)
+      params: params
     })
-      .map(res => res.json())
+      .map(res => Object.assign({}, res.json(), { entityId: distributorID }))
       .catch(err => this.handleError(new Error(err)));
   }
 
   public getAccountPerformance(
     accountID: string,
-    filter: MyPerformanceFilterState
+    filter: MyPerformanceFilterState,
+    contextPositionId?: string
     ): Observable<EntitiesTotalPerformancesDTO> {
     const url = `/v3/accounts/${accountID}/performanceTotal`;
+    const params = contextPositionId
+      ? Object.assign({}, this.getFilterStateParams(filter), { positionId: contextPositionId })
+      : this.getFilterStateParams(filter);
 
     return this.http.get(url, {
-      params: this.getFilterStateParams(filter)
+      params: params
     })
-      .map(res => res.json())
+      .map(res => Object.assign({}, res.json(), { entityId: accountID }))
       .catch(err => this.handleError(new Error(err)));
   }
 

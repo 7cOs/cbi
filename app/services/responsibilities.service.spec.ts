@@ -380,7 +380,8 @@ describe('Responsibilities Effects', () => {
         expect(distributorsPerformanceSpy.calls.count()).toBe(1);
         expect(distributorsPerformanceSpy.calls.argsFor(0)).toEqual([
           responsibilitiesDataMock.groupedEntities.all,
-          responsibilitiesDataMock.filter
+          responsibilitiesDataMock.filter,
+          undefined
         ]);
       });
     });
@@ -429,7 +430,8 @@ describe('Responsibilities Effects', () => {
         expect(accountsPerformanceSpy.calls.count()).toBe(1);
         expect(accountsPerformanceSpy.calls.argsFor(0)).toEqual([
           responsibilitiesDataMock.groupedEntities.all,
-          responsibilitiesDataMock.filter
+          responsibilitiesDataMock.filter,
+          undefined
         ]);
       });
     });
@@ -657,12 +659,13 @@ describe('Responsibilities Effects', () => {
         premiseType: PremiseTypeValue.On
       };
 
+      const contextId = chance.string({pool: 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!#%^&*()[]'});
       const numberOfEntities = chance.natural({min: 1, max: 99});
       const distributors = Array(numberOfEntities).fill('').map(el => getEntityPropertyResponsibilitiesMock());
-      responsibilitiesService.getDistributorsPerformances(distributors, mockFilter);
+      responsibilitiesService.getDistributorsPerformances(distributors, mockFilter, contextId);
       expect(getDistributorPerformanceSpy).toHaveBeenCalledTimes(numberOfEntities);
       distributors.map((distributor) => {
-        expect(getDistributorPerformanceSpy).toHaveBeenCalledWith(distributor.positionId, mockFilter);
+        expect(getDistributorPerformanceSpy).toHaveBeenCalledWith(distributor.positionId, mockFilter, contextId);
       });
     });
   });
@@ -676,12 +679,13 @@ describe('Responsibilities Effects', () => {
         premiseType: PremiseTypeValue.On
       };
 
+      const contextId = chance.string({pool: 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!#%^&*()[]'});
       const numberOfEntities = chance.natural({min: 1, max: 99});
       const accounts = Array(numberOfEntities).fill('').map(el => getEntityPropertyResponsibilitiesMock());
-      responsibilitiesService.getAccountsPerformances(accounts, mockFilter);
+      responsibilitiesService.getAccountsPerformances(accounts, mockFilter, contextId);
       expect(getAccountPerformanceSpy).toHaveBeenCalledTimes(numberOfEntities);
       accounts.map((account) => {
-        expect(getAccountPerformanceSpy).toHaveBeenCalledWith(account.positionId, mockFilter);
+        expect(getAccountPerformanceSpy).toHaveBeenCalledWith(account.positionId, mockFilter, contextId);
       });
     });
   });

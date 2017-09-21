@@ -95,16 +95,20 @@ export class ResponsibilitiesService {
       });
   }
 
-  public getDistributorsPerformances(distributors: EntityResponsibilities[], filter: MyPerformanceFilterState) {
+  public getDistributorsPerformances(distributors: EntityResponsibilities[], filter: MyPerformanceFilterState, contextPositionId?: string) {
     const apiCalls: Observable<EntitiesTotalPerformancesDTO | Error>[] =
-      distributors.map((dist: EntityResponsibilities) => this.myPerformanceApiService.getDistributorPerformance(dist.positionId, filter));
+      distributors.map((dist: EntityResponsibilities) => {
+        return this.myPerformanceApiService.getDistributorPerformance(dist.positionId, filter, contextPositionId);
+      });
 
     return Observable.forkJoin(apiCalls);
   }
 
-  public getAccountsPerformances(accounts: EntityResponsibilities[], filter: MyPerformanceFilterState) {
+  public getAccountsPerformances(accounts: EntityResponsibilities[], filter: MyPerformanceFilterState, contextPositionId?: string) {
     const apiCalls: Observable<EntitiesTotalPerformancesDTO | Error>[] =
-      accounts.map((acc: EntityResponsibilities) => this.myPerformanceApiService.getAccountPerformance(acc.positionId, filter));
+      accounts.map((acc: EntityResponsibilities) => {
+        return this.myPerformanceApiService.getAccountPerformance(acc.positionId, filter, contextPositionId);
+      });
 
     return Observable.forkJoin(apiCalls);
   }
@@ -121,7 +125,7 @@ export class ResponsibilitiesService {
     });
   } else if (responsibilitiesData.viewType === ViewType.distributors) {
     return this.getDistributorsPerformances(responsibilitiesData.groupedEntities.all,
-        responsibilitiesData.filter)
+        responsibilitiesData.filter, responsibilitiesData.positionId)
       .mergeMap((response: EntitiesTotalPerformancesDTO[]) => {
         responsibilitiesData.entitiesPerformances
           = this.performanceTransformerService
@@ -130,7 +134,7 @@ export class ResponsibilitiesService {
     });
   } else if (responsibilitiesData.viewType === ViewType.accounts) {
     return this.getAccountsPerformances(responsibilitiesData.groupedEntities.all,
-        responsibilitiesData.filter)
+        responsibilitiesData.filter, responsibilitiesData.positionId)
       .mergeMap((response: EntitiesTotalPerformancesDTO[]) => {
         responsibilitiesData.entitiesPerformances
           = this.performanceTransformerService
