@@ -42,9 +42,8 @@ public class LoginTest extends BaseTestCase {
   public static Object[][] userCredentials() {
     return new Object[][] {
       { TestUser.ACTOR4 } ,
-      { TestUser.ACTOR5 }
+      { TestUser.NOTES_ACTOR }
     };
   }
-
 
 }
