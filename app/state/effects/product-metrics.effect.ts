@@ -35,7 +35,7 @@ export class ProductMetricsEffects {
           .map((response: ProductMetricsDTO) => {
             return new ProductMetricsActions.FetchProductMetricsSuccessAction({
               positionId: positionId,
-              products: this.productMetricsTransformerService.transformProductMetrics(ProductMetricType.brand, response)
+              products: this.productMetricsTransformerService.transformProductMetrics(response, ProductMetricType.brand)
             });
           })
           .catch((err: Error) => Observable.of(new ProductMetricsActions.FetchProductMetricsFailureAction(err)));

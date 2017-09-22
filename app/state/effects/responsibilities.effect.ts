@@ -7,8 +7,9 @@ import 'rxjs/add/operator/switchMap';
 
 import { EntitiesPerformances } from '../../models/entities-performances.model';
 import { EntitiesTotalPerformances } from '../../models/entities-total-performances.model';
-import { ResponsibilitiesService, ResponsibilitiesData } from '../../services/responsibilities.service';
 import * as ResponsibilitiesActions from '../../state/actions/responsibilities.action';
+import { ResponsibilitiesService, ResponsibilitiesData, SubAccountData } from '../../services/responsibilities.service';
+import { ViewType } from '../../enums/view-type.enum';
 import * as ViewTypeActions from '../../state/actions/view-types.action';
 
 @Injectable()
@@ -32,8 +33,8 @@ export class ResponsibilitiesEffects {
         return Observable.of(responsibilitiesData);
       })
       .switchMap((responsibilitiesData) => this.responsibilitiesService.getResponsibilities(responsibilitiesData))
-      .switchMap((responsibilitiesData) => this.responsibilitiesService.getPerformanceTotalForGroupedEntities(responsibilitiesData))
       .switchMap((responsibilitiesData) => this.responsibilitiesService.getAccountsDistributors(responsibilitiesData))
+      .switchMap((responsibilitiesData) => this.responsibilitiesService.getPerformanceTotalForGroupedEntities(responsibilitiesData))
       .switchMap((responsibilitiesData) => this.constructSuccessAction(responsibilitiesData))
       .catch((err: Error) => Observable.of(new ResponsibilitiesActions.FetchResponsibilitiesFailureAction(err)));
   }
@@ -56,6 +57,16 @@ export class ResponsibilitiesEffects {
           })
           .catch((err: Error) => Observable.of(new ResponsibilitiesActions.FetchResponsibilitiesFailureAction(err)));
     });
+  }
+
+  @Effect() fetchSubAccounts$(): Observable<Action> {
+    return this.actions$
+      .ofType(ResponsibilitiesActions.FETCH_SUBACCOUNTS_ACTION)
+      .switchMap((action: Action) => Observable.of(action.payload))
+      .switchMap((subAccountsData) => this.responsibilitiesService.getSubAccounts(subAccountsData))
+      .switchMap((subAccountsData) => this.responsibilitiesService.getSubAccountsPerformanceTotals(subAccountsData))
+      .switchMap((subAccountsData) => this.constructSubAccountsSuccessAction(subAccountsData))
+      .catch((err: Error) => Observable.of(new ResponsibilitiesActions.FetchResponsibilitiesFailureAction(err)));
   }
 
   @Effect({dispatch: false})
@@ -94,8 +105,7 @@ export class ResponsibilitiesEffects {
       });
   }
 
-  private constructSuccessAction(responsibilitiesData: ResponsibilitiesData)
-    : Observable<Action> {
+  private constructSuccessAction(responsibilitiesData: ResponsibilitiesData): Observable<Action> {
     return Observable.from([
       new ViewTypeActions.SetLeftMyPerformanceTableViewType(responsibilitiesData.viewType),
       new ResponsibilitiesActions.FetchResponsibilitiesSuccessAction({
@@ -103,6 +113,17 @@ export class ResponsibilitiesEffects {
         groupedEntities: responsibilitiesData.groupedEntities,
         entitiesPerformances: responsibilitiesData.entitiesPerformances
       })
+    ]);
+  }
+
+  private constructSubAccountsSuccessAction(subAccountsData: SubAccountData): Observable<Action> {
+    return Observable.from([
+      new ResponsibilitiesActions.SetTableRowPerformanceTotal(subAccountsData.selectedPositionId),
+      new ResponsibilitiesActions.FetchSubAccountsSuccessAction({
+        groupedEntities: subAccountsData.groupedEntities,
+        entitiesPerformances: subAccountsData.entitiesPerformances
+      }),
+      new ViewTypeActions.SetLeftMyPerformanceTableViewType(ViewType.subAccounts)
     ]);
   }
 }

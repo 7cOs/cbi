@@ -1,18 +1,25 @@
 import { inject, TestBed } from '@angular/core/testing';
 
+import { ActionStatus } from '../enums/action-status.enum';
 import { EntitiesTotalPerformances } from '../models/entities-total-performances.model';
 import { EntitiesPerformances } from '../models/entities-performances.model';
 import { getEntitiesTotalPerformancesMock } from '../models/entities-total-performances.model.mock';
-import { getEntitiesPerformancesMock } from '../models/entities-performances.model.mock';
+import {
+  getEntitiesPerformancesMock,
+  getEntitiesPerformancesOpenPositionMock
+} from '../models/entities-performances.model.mock';
 import { getProductMetricMock } from '../models/entity-product-metrics-dto.model.mock';
 import { MyPerformanceTableDataTransformerService } from './my-performance-table-data-transformer.service';
+import { ProductMetricsState } from '../state/reducers/product-metrics.reducer';
 
 describe('Service: MyPerformanceTableDataTransformerService', () => {
   let myPerformanceTableDataTransformerService: MyPerformanceTableDataTransformerService;
   let mockPerformanceTotal: EntitiesTotalPerformances;
   let responsibilityEntitiesPerformanceMock: EntitiesPerformances[];
+  let responsibilityEntitiesPerformanceOpenPositionMock: EntitiesPerformances[];
 
-  const productMetricsState: any = {
+  const productMetricsState: ProductMetricsState = {
+    status: ActionStatus.Fetched,
     products: getProductMetricMock()
   };
 
@@ -29,12 +36,13 @@ describe('Service: MyPerformanceTableDataTransformerService', () => {
       (_myPerformanceTableDataTransformerService: MyPerformanceTableDataTransformerService) => {
         myPerformanceTableDataTransformerService = _myPerformanceTableDataTransformerService;
         responsibilityEntitiesPerformanceMock = getEntitiesPerformancesMock();
+        responsibilityEntitiesPerformanceOpenPositionMock = getEntitiesPerformancesOpenPositionMock();
     }));
 
     it('should return formatted ResponsibilityEntityPerformance data', () => {
       spyOn(myPerformanceTableDataTransformerService, 'getLeftTableData').and.callThrough();
 
-      const tableData = myPerformanceTableDataTransformerService.getLeftTableData(responsibilityEntitiesPerformanceMock);
+      const tableData =  myPerformanceTableDataTransformerService.getLeftTableData(responsibilityEntitiesPerformanceMock);
 
       expect(tableData).toBeDefined();
       expect(tableData.length).toBeTruthy();
@@ -46,6 +54,26 @@ describe('Service: MyPerformanceTableDataTransformerService', () => {
         ctv: responsibilityEntitiesPerformanceMock[0].performanceTotal.contributionToVolume,
         metadata: {
           positionId: responsibilityEntitiesPerformanceMock[0].positionId
+        }
+      });
+    });
+
+    it('should return formatted ResponsibilityEntityPerformance data with Open Position', () => {
+      spyOn(myPerformanceTableDataTransformerService, 'getLeftTableData').and.callThrough();
+
+      const tableData =  myPerformanceTableDataTransformerService.getLeftTableData(responsibilityEntitiesPerformanceOpenPositionMock);
+
+      expect(tableData).toBeDefined();
+      expect(tableData.length).toBeTruthy();
+      expect(tableData[0]).toEqual({
+        descriptionRow0: 'Open Position',
+        descriptionRow1: 'Best job on earth',
+        metricColumn0: responsibilityEntitiesPerformanceOpenPositionMock[0].performanceTotal.total,
+        metricColumn1: responsibilityEntitiesPerformanceOpenPositionMock[0].performanceTotal.totalYearAgo,
+        metricColumn2: responsibilityEntitiesPerformanceOpenPositionMock[0].performanceTotal.totalYearAgoPercent,
+        ctv: responsibilityEntitiesPerformanceOpenPositionMock[0].performanceTotal.contributionToVolume,
+        metadata: {
+          positionId: responsibilityEntitiesPerformanceOpenPositionMock[0].positionId
         }
       });
     });

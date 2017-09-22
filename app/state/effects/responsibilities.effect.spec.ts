@@ -19,7 +19,10 @@ import { FetchResponsibilitiesAction,
          SetTableRowPerformanceTotal,
          FetchPerformanceTotalAction,
          FetchPerformanceTotalSuccessAction,
-         FetchPerformanceTotalFailureAction } from '../actions/responsibilities.action';
+         FetchPerformanceTotalFailureAction,
+         FetchSubAccountsAction,
+         FetchSubAccountsSuccessAction,
+         FetchSubAccountsActionPayload } from '../actions/responsibilities.action';
 import { getEntityPeopleResponsibilitiesMock } from '../../models/entity-responsibilities.model.mock';
 import { getEntitiesTotalPerformancesMock } from '../../models/entities-total-performances.model.mock';
 import { getEntitiesPerformancesMock } from '../../models/entities-performances.model.mock';
@@ -30,7 +33,7 @@ import { GroupedEntities } from '../../models/grouped-entities.model';
 import { MetricTypeValue } from '../../enums/metric-type.enum';
 import { MyPerformanceFilterState } from '../reducers/my-performance-filter.reducer';
 import { PremiseTypeValue } from '../../enums/premise-type.enum';
-import { ResponsibilitiesData } from '../../services/responsibilities.service';
+import { ResponsibilitiesData, SubAccountData } from '../../services/responsibilities.service';
 import { ResponsibilitiesEffects } from './responsibilities.effect';
 import { ResponsibilitiesService } from '../../services/responsibilities.service';
 import { SetLeftMyPerformanceTableViewType } from '../actions/view-types.action';
@@ -39,11 +42,11 @@ import { ViewType } from '../../enums/view-type.enum';
 const chance = new Chance();
 
 describe('Responsibilities Effects', () => {
-  const positionIdMock = chance.string();
   const entitiesPerformancesMock = getEntitiesPerformancesMock();
+  const error = new Error(chance.string());
   const groupedEntitiesMock: GroupedEntities = getGroupedEntitiesMock();
   const performanceTotalMock: EntitiesTotalPerformances = getEntitiesTotalPerformancesMock();
-  const error = new Error(chance.string());
+  const positionIdMock = chance.string();
 
   const responsibilitiesServiceMock = {
     getResponsibilities(responsibilitiesData: ResponsibilitiesData): Observable<ResponsibilitiesData> {
@@ -60,6 +63,12 @@ describe('Responsibilities Effects', () => {
     },
     getPerformanceTotal(args: any): Observable<EntitiesTotalPerformances> {
       return Observable.of(performanceTotalMock);
+    },
+    getSubAccounts(subAccountData: SubAccountData): Observable<SubAccountData> {
+      return Observable.of(subAccountData);
+    },
+    getSubAccountsPerformanceTotals(subAccountData: SubAccountData): Observable<SubAccountData> {
+      return Observable.of(subAccountData);
     }
   };
 
@@ -68,6 +77,12 @@ describe('Responsibilities Effects', () => {
     dateRangeCode: DateRangeTimePeriodValue.FYTDBDL,
     premiseType: PremiseTypeValue.On,
     distributionType: DistributionTypeValue.simple
+  };
+
+  const responsibilitiesSuccessPayloadMock = {
+    positionId: positionIdMock,
+    groupedEntities: groupedEntitiesMock,
+    entitiesPerformances: entitiesPerformancesMock
   };
 
   const responsibilitiesDataMock: ResponsibilitiesData = {
@@ -112,12 +127,6 @@ describe('Responsibilities Effects', () => {
 
     describe('when everything returns successfully', () => {
       it('should return a FetchResponsibilitiesSuccessAction', (done) => {
-        const responsibilitiesSuccessPayloadMock = {
-          positionId: positionIdMock,
-          groupedEntities: groupedEntitiesMock,
-          entitiesPerformances: entitiesPerformancesMock
-        };
-
         const viewTypeMock = ViewType[getViewTypeMock()];
 
         spyOn(responsibilitiesService, 'getResponsibilities').and.callFake((responsibilitiesData: ResponsibilitiesData) => {
@@ -330,6 +339,101 @@ describe('Responsibilities Effects', () => {
         expect(result).toEqual(new FetchPerformanceTotalFailureAction(error));
         expect(console.error).toHaveBeenCalledWith('Failed fetching performance total data', result.payload);
         done();
+      });
+    });
+
+    describe('when a FetchSubAccountsAction is recieved', () => {
+      let fetchSubAccountsPayloadMock: FetchSubAccountsActionPayload;
+      let subAccountDataMock: SubAccountData;
+
+      beforeEach(() => {
+        fetchSubAccountsPayloadMock = {
+          positionId: chance.string({pool: '0123456789'}),
+          contextPositionId: chance.string({pool: '0123456789'}),
+          entityType: chance.string(),
+          selectedPositionId: getMyPerformanceTableRowMock(1)[0].metadata.positionId,
+          premiseType: PremiseTypeValue.All
+        };
+        subAccountDataMock = Object.assign({}, fetchSubAccountsPayloadMock);
+
+        runner.queue(new FetchSubAccountsAction(fetchSubAccountsPayloadMock));
+      });
+
+      describe('when everything returns successfully', () => {
+        it('should call getSubAccounts with the right arguments', (done) => {
+          const getSubAccountsSpy = spyOn(responsibilitiesService, 'getSubAccounts').and.callThrough();
+
+          responsibilitiesEffects.fetchSubAccounts$().subscribe(() => {
+            done();
+          });
+
+          expect(getSubAccountsSpy.calls.count()).toBe(1);
+          expect(getSubAccountsSpy.calls.argsFor(0)[0]).toEqual(subAccountDataMock);
+        });
+
+        it('should call getSubAccountsPerformanceTotals with the right arguments', (done) => {
+          const getSubAccountsPerformanceSpy = spyOn(responsibilitiesService, 'getSubAccountsPerformanceTotals').and.callThrough();
+
+          responsibilitiesEffects.fetchSubAccounts$().subscribe(() => {
+            done();
+          });
+
+          expect(getSubAccountsPerformanceSpy.calls.count()).toBe(1);
+          expect(getSubAccountsPerformanceSpy.calls.argsFor(0)[0]).toEqual(subAccountDataMock);
+        });
+
+        it('should return a FetchSubAccountsSuccessAction', (done) => {
+          spyOn(responsibilitiesService, 'getSubAccounts').and.callFake((subAccountData: SubAccountData) => {
+            return Observable.of(Object.assign({}, subAccountData, {
+              groupedEntities: groupedEntitiesMock
+            }));
+          });
+
+          spyOn(responsibilitiesService, 'getSubAccountsPerformanceTotals').and.callFake((subAccountData: SubAccountData) => {
+            return Observable.of(Object.assign({}, subAccountData, {
+              entitiesPerformances: entitiesPerformancesMock
+            }));
+          });
+
+          const dispatchedActions: Action[] = [];
+
+          responsibilitiesEffects.fetchSubAccounts$().subscribe((dispatchedAction: Action) => {
+            dispatchedActions.push(dispatchedAction);
+
+            if (dispatchedActions.length === 3) {
+              expect(dispatchedActions).toEqual([
+                new SetTableRowPerformanceTotal(fetchSubAccountsPayloadMock.selectedPositionId),
+                new FetchSubAccountsSuccessAction({
+                  groupedEntities: groupedEntitiesMock,
+                  entitiesPerformances: entitiesPerformancesMock
+                }),
+                new SetLeftMyPerformanceTableViewType(ViewType.subAccounts)
+              ]);
+
+              done();
+            }
+          });
+        });
+      });
+
+      describe('when getSubAccounts returns an error', () => {
+        it('should return a FetchResponsibilitiesFailureAction after catching an error', (done) => {
+          spyOn(responsibilitiesService, 'getSubAccounts').and.returnValue(Observable.throw(error));
+          responsibilitiesEffects.fetchSubAccounts$().subscribe((result) => {
+            expect(result).toEqual(new FetchResponsibilitiesFailureAction(error));
+            done();
+          });
+        });
+      });
+
+      describe('when getSubAccountsPerformanceTotals returns an error', () => {
+        it('should return a FetchResponsibilitiesFailureAction after catching an error', (done) => {
+          spyOn(responsibilitiesService, 'getSubAccountsPerformanceTotals').and.returnValue(Observable.throw(error));
+          responsibilitiesEffects.fetchSubAccounts$().subscribe((result) => {
+            expect(result).toEqual(new FetchResponsibilitiesFailureAction(error));
+            done();
+          });
+        });
       });
     });
   });

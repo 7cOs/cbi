@@ -32,8 +32,10 @@ module.exports = function (config) {
 
     // TODO: remove when api gateway is in place
     v3BaseUrls: {
-      products: 'https://cbi-product-metrics-api-qa.herokuapp.com',
-      positions: 'https://api-position-internal-qa.herokuapp.com'
+      accounts: 'https://api-account-internal-qa.herokuapp.com',
+      distributors: 'https://api-distributors-internal-qa.herokuapp.com',
+      positions: 'https://api-position-internal-qa.herokuapp.com',
+      productMetrics: 'https://cbi-product-metrics-api-qa.herokuapp.com'
     }
   };
 

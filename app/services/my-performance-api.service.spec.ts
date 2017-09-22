@@ -3,11 +3,13 @@ import { inject, TestBed } from '@angular/core/testing';
 import { MockBackend, MockConnection } from '@angular/http/testing';
 
 import { DateRangeTimePeriodValue } from '../enums/date-range-time-period.enum';
-import { getEntitiesTotalPerformancesDTOMock } from '../models/entities-total-performances.model.mock';
-import { getEntityDTOMock } from '../models/entity-dto.model.mock';
 import { EntityDTO } from '../models/entity-dto.model';
+import { EntitySubAccountDTO } from '../models/entity-subaccount-dto.model';
 import { EntitiesPerformancesDTO } from '../models/entities-performances.model';
 import { EntitiesTotalPerformancesDTO } from '../models/entities-total-performances.model';
+import { getEntityDTOMock } from '../models/entity-dto.model.mock';
+import { getEntitySubAccountDTOMock } from '../models/entity-subaccount-dto.model.mock';
+import { getEntitiesTotalPerformancesDTOMock } from '../models/entities-total-performances.model.mock';
 import { MetricTypeValue } from '../enums/metric-type.enum';
 import { MyPerformanceApiService } from './my-performance-api.service';
 import { PeopleResponsibilitiesDTO } from '../models/people-responsibilities-dto.model';
@@ -45,6 +47,7 @@ describe('Service: MyPerformanceApiService', () => {
     }]
   };
   const entityDTOMock: Array<EntityDTO> = [getEntityDTOMock(), getEntityDTOMock()];
+  const subAccountsDTOMock: Array<EntitySubAccountDTO> = [getEntitySubAccountDTOMock(), getEntitySubAccountDTOMock()];
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -54,7 +57,7 @@ describe('Service: MyPerformanceApiService', () => {
           useFactory: (backendInstance: MockBackend, defaultOptions: BaseRequestOptions) => {
             return new Http(backendInstance, defaultOptions);
           },
-          deps: [ MockBackend, BaseRequestOptions ]
+          deps: [MockBackend, BaseRequestOptions]
         },
         BaseRequestOptions,
         MockBackend,
@@ -88,13 +91,13 @@ describe('Service: MyPerformanceApiService', () => {
           expect(res).toEqual(responsibilitiesResponseMock);
           done();
         });
-      });
+    });
   });
 
   describe('getProductMetrics', () => {
 
     it('should call the getProductMetrics endpoint and return all ProductMetrics', (done) => {
-      const mockFilter = {
+      const filterMock = {
         metricType: MetricTypeValue.volume,
         dateRangeCode: DateRangeTimePeriodValue.FYTDBDL,
         premiseType: PremiseTypeValue.On
@@ -110,7 +113,7 @@ describe('Service: MyPerformanceApiService', () => {
       });
 
       myPerformanceApiService
-        .getProductMetrics('1', mockFilter, ProductMetricType.brand)
+        .getProductMetrics('1', filterMock, ProductMetricType.brand)
         .subscribe((res) => {
           expect(res).toEqual(productMetricsBrandDTOMock);
           done();
@@ -119,9 +122,8 @@ describe('Service: MyPerformanceApiService', () => {
   });
 
   describe('getPerformanceTotal', () => {
-
     it('should call the performanceTotal API and return performance data', (done) => {
-      const mockFilter = {
+      const filterMock = {
         metricType: MetricTypeValue.volume,
         dateRangeCode: DateRangeTimePeriodValue.FYTDBDL,
         premiseType: PremiseTypeValue.On
@@ -138,8 +140,64 @@ describe('Service: MyPerformanceApiService', () => {
         );
       });
 
-      myPerformanceApiService.getPerformanceTotal('1', mockFilter).subscribe((response: EntitiesTotalPerformancesDTO) => {
+      myPerformanceApiService.getPerformanceTotal('1', filterMock).subscribe((response: EntitiesTotalPerformancesDTO) => {
         expect(response).toEqual(performanceTotalResponseMock);
+        done();
+      });
+    });
+  });
+
+  describe('getDistributorPerformance', () => {
+    it('should call the distributors performance API and return performance data', (done) => {
+      const mockFilter = {
+        metricType: MetricTypeValue.volume,
+        dateRangeCode: DateRangeTimePeriodValue.FYTDBDL,
+        premiseType: PremiseTypeValue.On
+      };
+
+      mockBackend.connections.subscribe((connection: MockConnection) => {
+        const options = new ResponseOptions({
+          body: JSON.stringify(performanceTotalResponseMock)
+        });
+        connection.mockRespond(new Response(options));
+        expect(connection.request.method).toEqual(RequestMethod.Get);
+        expect(connection.request.url).toEqual(
+          '/v3/distributors/1/performanceTotal?metricType=volume&dateRangeCode=FYTDBDL&premiseType=On&positionId=1'
+        );
+      });
+
+      const expected = performanceTotalResponseMock;
+
+      myPerformanceApiService.getDistributorPerformance('1', mockFilter, '1').subscribe((response: EntitiesTotalPerformancesDTO) => {
+        expect(response).toEqual(expected);
+        done();
+      });
+    });
+  });
+
+  describe('getAccountsPerformance', () => {
+    it('should call the accounts performance API and return performance data', (done) => {
+      const mockFilter = {
+        metricType: MetricTypeValue.volume,
+        dateRangeCode: DateRangeTimePeriodValue.FYTDBDL,
+        premiseType: PremiseTypeValue.On
+      };
+
+      mockBackend.connections.subscribe((connection: MockConnection) => {
+        const options = new ResponseOptions({
+          body: JSON.stringify(performanceTotalResponseMock)
+        });
+        connection.mockRespond(new Response(options));
+        expect(connection.request.method).toEqual(RequestMethod.Get);
+        expect(connection.request.url).toEqual(
+          '/v3/accounts/1/performanceTotal?metricType=volume&dateRangeCode=FYTDBDL&premiseType=On&positionId=1'
+        );
+      });
+
+      const expected = performanceTotalResponseMock;
+
+      myPerformanceApiService.getAccountPerformance('1', mockFilter, '1').subscribe((response: EntitiesTotalPerformancesDTO) => {
+        expect(response).toEqual(expected);
         done();
       });
     });
@@ -165,20 +223,21 @@ describe('Service: MyPerformanceApiService', () => {
           expect(res).toEqual(entityDTOMock);
           done();
         });
-      });
+    });
   });
 
   describe('getResponsibilityPerformanceTotal', () => {
 
     it('should call the responsibility performanceTotal endpoint and return performance data for the responsibility', (done) => {
-      const mockFilter = {
+      const filterMock = {
         metricType: MetricTypeValue.velocity,
         dateRangeCode: DateRangeTimePeriodValue.L90BDL,
         premiseType: PremiseTypeValue.All
       };
       const entityMock = {
         name: chance.string(),
-        type: chance.string()
+        type: chance.string(),
+        positionDescription: chance.string()
       };
       const positionIdMock = chance.string();
       const expectedBaseUrl = `/v3/positions/${ positionIdMock }/responsibilities/${ entityMock.type }/performanceTotal`;
@@ -194,13 +253,46 @@ describe('Service: MyPerformanceApiService', () => {
         expect(connection.request.url).toEqual(expectedBaseUrl + expectedUrlParams);
       });
 
-      myPerformanceApiService.getResponsibilityPerformanceTotal(entityMock, mockFilter, positionIdMock)
+      myPerformanceApiService.getResponsibilityPerformanceTotal(entityMock, filterMock, positionIdMock)
         .subscribe((response: EntitiesPerformancesDTO) => {
           expect(response).toEqual({
             id: positionIdMock,
             name: entityMock.name,
+            positionDescription: entityMock.positionDescription,
             performanceTotal: performanceTotalResponseMock
           });
+          done();
+      });
+    });
+  });
+
+  describe('getSubAccounts', () => {
+
+    it('should call the accounts/subAcccount endpoint and return subAccounts', (done) => {
+      const positionIdMock: string = chance.string();
+      const contextPositionIdMock: string = chance.string({
+        pool: 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!#%^&*()[]'
+      });
+      const premiseTypeMock: PremiseTypeValue = PremiseTypeValue.All;
+
+      const expectedBaseUrl = `/v3/accounts/${ positionIdMock }/subAccounts`;
+      const expectedUrlParams =
+        `?positionId=${encodeURIComponent(contextPositionIdMock)}&premiseType=${encodeURIComponent(PremiseTypeValue[premiseTypeMock])}`;
+
+      mockBackend.connections.subscribe((connection: MockConnection) => {
+        const options = new ResponseOptions({
+          body: JSON.stringify(subAccountsDTOMock)
+        });
+
+        connection.mockRespond(new Response(options));
+
+        expect(connection.request.method).toBe(RequestMethod.Get);
+        expect(connection.request.url).toBe(expectedBaseUrl + expectedUrlParams);
+      });
+
+      myPerformanceApiService.getSubAccounts(positionIdMock, contextPositionIdMock, premiseTypeMock)
+        .subscribe((response: Array<EntitySubAccountDTO>) => {
+          expect(response).toEqual(subAccountsDTOMock);
           done();
         });
     });

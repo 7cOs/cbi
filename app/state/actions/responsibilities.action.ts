@@ -6,6 +6,7 @@ import { EntityPeopleType } from '../../enums/entity-responsibilities.enum';
 import { EntityResponsibilities } from '../../models/entity-responsibilities.model';
 import { GroupedEntities } from '../../models/grouped-entities.model';
 import { MyPerformanceFilterState } from '../../state/reducers/my-performance-filter.reducer';
+import { PremiseTypeValue } from '../../enums/premise-type.enum';
 import { ViewType } from '../../enums/view-type.enum';
 
 export interface FetchResponsibilitiesSuccessPayload {
@@ -20,6 +21,19 @@ export interface FetchResponsibilityEntitiesPerformancePayload {
   filter: MyPerformanceFilterState;
   selectedPositionId: string;
   viewType: ViewType;
+}
+
+export interface FetchSubAccountsActionPayload {
+  positionId: string;
+  contextPositionId: string;
+  entityType: string;
+  selectedPositionId: string;
+  premiseType: PremiseTypeValue;
+}
+
+export interface FetchSubAccountsSuccessPayload {
+  groupedEntities: GroupedEntities;
+  entitiesPerformances: EntitiesPerformances[];
 }
 
 export const FETCH_RESPONSIBILITIES_ACTION = '[Responsibilities] FETCH_RESPONSIBILITIES_ACTION';
@@ -64,6 +78,20 @@ export class GetPeopleByRoleGroupAction implements Action {
   constructor(public payload: EntityPeopleType) { }
 }
 
+export const FETCH_SUBACCOUNTS_ACTION = '[Responsibilities] FETCH_SUBACCOUNTS_ACTION';
+export class FetchSubAccountsAction implements Action {
+  readonly type = FETCH_SUBACCOUNTS_ACTION;
+
+  constructor(public payload: FetchSubAccountsActionPayload) { }
+}
+
+export const FETCH_SUBACCOUNTS_SUCCESS_ACTION = '[Responsibilities] FETCH_SUBACCOUNTS_SUCCESS_ACTION';
+export class FetchSubAccountsSuccessAction implements Action {
+  readonly type = FETCH_SUBACCOUNTS_SUCCESS_ACTION;
+
+  constructor(public payload: FetchSubAccountsSuccessPayload) { }
+}
+
 export const FETCH_PERFORMANCE_TOTAL_ACTION = '[Performance Total] FETCH_PERFORMANCE_TOTAL_ACTION';
 export class FetchPerformanceTotalAction implements Action {
   readonly type = FETCH_PERFORMANCE_TOTAL_ACTION;
@@ -96,9 +124,11 @@ export type Action
   = FetchResponsibilitiesAction
   | FetchResponsibilitiesSuccessAction
   | FetchResponsibilitiesFailureAction
-  | GetPeopleByRoleGroupAction
   | FetchResponsibilityEntityPerformance
   | FetchResponsibilityEntityPerformanceSuccess
+  | GetPeopleByRoleGroupAction
+  | FetchSubAccountsAction
+  | FetchSubAccountsSuccessAction
   | FetchPerformanceTotalAction
   | FetchPerformanceTotalSuccessAction
   | FetchPerformanceTotalFailureAction

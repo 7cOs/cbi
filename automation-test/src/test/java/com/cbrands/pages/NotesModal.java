@@ -60,13 +60,16 @@ public class NotesModal extends TestNGBasePage {
   }
 
   public NotesModal selectNoteTopicByName(String name) {
-    final List<WebElement> topics = findElements(By.xpath("//md-option[@ng-repeat='topic in n.noteTopics']"));
+    final List<WebElement> topics = modalContainer.findElements(
+      By.xpath("//md-option[@ng-repeat='topic in n.noteTopics']")
+    );
     waitForElementsVisibleFluentWait(topics);
 
     final WebElement selectedTopic = getOptionByName(name, topics);
     Assert.assertNotNull(selectedTopic, "No topic found by name of: " + name);
 
     waitForElementToClickable(selectedTopic, true).click();
+    waitForElementToDisappear(By.xpath(MODAL_CONTAINER_XPATH + "//md-option[@ng-repeat='topic in n.noteTopics']"));
 
     return this;
   }
@@ -89,11 +92,13 @@ public class NotesModal extends TestNGBasePage {
   }
 
   public NotesModal enterNoteText(String noteText) {
-    final WebElement textBox = modalContainer.findElement(By.xpath(".//text-angular//div[@contenteditable='true']"));
+    final By noteTextXPathSelector = By.xpath(".//text-angular//div[@contenteditable='true']");
+    final WebElement textBox = modalContainer.findElement(noteTextXPathSelector);
     waitForVisibleFluentWait(textBox);
     waitForElementToClickable(textBox, true).click();
 
     textBox.sendKeys(noteText);
+    waitForTextPresent(noteTextXPathSelector, noteText);
 
     return this;
   }
