@@ -55,6 +55,7 @@ export class ResponsibilitiesTransformerService {
       positionId: entity.id,
       employeeId: entity.employeeId,
       name: entity.name,
+      positionDescription: entity.positionDescription || '',
       type: entity.type,
       hierarchyType: entity.hierarchyType,
       description: entity.description

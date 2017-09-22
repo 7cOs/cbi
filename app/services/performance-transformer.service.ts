@@ -25,6 +25,7 @@ export class PerformanceTransformerService {
       return {
         positionId: entity.id,
         name: entity.name,
+        positionDescription: entity.positionDescription,
         performanceTotal: this.transformEntitiesTotalPerformancesDTO(entity.performanceTotal)
       };
     });

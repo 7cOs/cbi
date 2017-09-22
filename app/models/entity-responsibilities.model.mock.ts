@@ -14,18 +14,30 @@ export function getEntityPeopleResponsibilitiesMock(): EntityResponsibilities {
     positionId: chance.string(),
     employeeId: chance.string(),
     name: chance.string(),
+    positionDescription: chance.string(),
     type: chance.string(),
     hierarchyType: chance.string(),
     description: chance.string()
   };
 }
-
+export function getEntityPeopleResponsibilitiesWithOutPositionDescriptionMock(): EntityResponsibilities {
+  return {
+    peopleType: entityPeopleTypeValues[chance.integer({min: 0, max: entityPeopleTypeValues.length - 1})],
+    positionId: chance.string(),
+    employeeId: chance.string(),
+    name: chance.string(),
+    type: chance.string(),
+    hierarchyType: chance.string(),
+    description: chance.string()
+  };
+}
 export function getEntityPropertyResponsibilitiesMock(): EntityResponsibilities {
   return {
     propertyType: entityPropertyTypeValues[chance.integer({min: 0, max: entityPropertyTypeValues.length - 1})],
     positionId: chance.string(),
     employeeId: chance.string(),
     name: chance.string(),
+    positionDescription: chance.string(),
     type: chance.string(),
     hierarchyType: chance.string(),
     description: chance.string()
@@ -49,6 +61,7 @@ export const mockEntityResponsibilitiesDTOCollection: EntityResponsibilitiesDTO[
     employeeId: '1231231',
     name: 'Joel Cummins',
     description: 'MARKET DEVELOPMENT MANAGER',
+    positionDescription: 'Director of Personnel',
     type: '10',
     hierarchyType: 'SALES_HIER'
   },
@@ -66,6 +79,14 @@ export const mockEntityResponsibilitiesDTOCollection: EntityResponsibilitiesDTO[
     name: 'Ryan Stasik',
     description: 'GENERAL MANAGER',
     type: '30',
+    hierarchyType: 'SALES_HIER'
+  },
+  {
+    id: '987',
+    employeeId: '2225687',
+    name: 'Tom Brady',
+    description: 'GENERAL MANAGER',
+    type: '14',
     hierarchyType: 'SALES_HIER'
   }
 ];

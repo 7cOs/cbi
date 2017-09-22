@@ -10,6 +10,7 @@ import { ProductMetrics, ProductMetricsBrandValue } from '../models/product-metr
 export class MyPerformanceTableDataTransformerService {
 
   public getLeftTableData(entities: EntitiesPerformances[]): MyPerformanceTableRow[] {
+
     return entities.map((entity: EntitiesPerformances) => {
       const transformedEntity: MyPerformanceTableRow = {
         descriptionRow0: entity.name,
@@ -21,6 +22,11 @@ export class MyPerformanceTableDataTransformerService {
           positionId: entity.positionId
         }
       };
+
+      if (entity.positionDescription && entity.name === 'Open') {
+        transformedEntity.descriptionRow0 = 'Open Position';
+        transformedEntity['descriptionRow1'] = entity.positionDescription;
+      }
 
       if (entity.contextPositionId) transformedEntity.metadata.contextPositionId = entity.contextPositionId;
 

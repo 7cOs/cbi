@@ -10,9 +10,9 @@ import { EntitiesPerformances, EntitiesPerformancesDTO } from '../models/entitie
 import { EntityPropertyType } from '../enums/entity-responsibilities.enum';
 import { EntitySubAccountDTO } from '../models/entity-subaccount-dto.model';
 import { getEntityPeopleResponsibilitiesMock,
-         getEntityPropertyResponsibilitiesMock } from '../models/entity-responsibilities.model.mock';
+  getEntityPropertyResponsibilitiesMock } from '../models/entity-responsibilities.model.mock';
 import { getEntitiesTotalPerformancesMock,
-         getEntitiesTotalPerformancesDTOMock } from '../models/entities-total-performances.model.mock';
+  getEntitiesTotalPerformancesDTOMock } from '../models/entities-total-performances.model.mock';
 import { getEntitiesPerformancesMock, getResponsibilityEntitiesPerformanceDTOMock } from '../models/entities-performances.model.mock';
 import { getEntityDTOMock } from '../models/entity-dto.model.mock';
 import { getEntitySubAccountDTOMock } from '../models/entity-subaccount-dto.model.mock';
@@ -128,9 +128,9 @@ describe('Responsibilities Effects', () => {
 
   beforeEach(inject([ ResponsibilitiesService, MyPerformanceApiService, PerformanceTransformerService, ResponsibilitiesTransformerService ],
     (_responsibilitiesService: ResponsibilitiesService,
-    _myPerformanceApiService: MyPerformanceApiService,
-    _performanceTransformerService: PerformanceTransformerService,
-    _responsibilitiesTransformerService: ResponsibilitiesTransformerService) => {
+     _myPerformanceApiService: MyPerformanceApiService,
+     _performanceTransformerService: PerformanceTransformerService,
+     _responsibilitiesTransformerService: ResponsibilitiesTransformerService) => {
       responsibilitiesService = _responsibilitiesService;
       myPerformanceApiService = _myPerformanceApiService;
       performanceTransformerService = _performanceTransformerService;
@@ -146,7 +146,7 @@ describe('Responsibilities Effects', () => {
       entitiesTotalPerformancesMock = getEntitiesTotalPerformancesMock();
       entitiesTotalPerformancesDTOMock = getEntitiesTotalPerformancesDTOMock();
       entityDTOMock = getEntityDTOMock();
-  }));
+    }));
 
   describe('when getResponsibilities is called', () => {
     let responsibilitiesDataMock: ResponsibilitiesData;
@@ -169,11 +169,13 @@ describe('Responsibilities Effects', () => {
           entityTypes: [
             {
               type: groupedEntitiesMock['GENERAL MANAGER'][0].type,
-              name: 'GENERAL MANAGER'
+              name: 'GENERAL MANAGER',
+              positionDescription: groupedEntitiesMock['GENERAL MANAGER'][0].positionDescription
             },
             {
               type: groupedEntitiesMock['MARKET DEVELOPMENT MANAGER'][0].type,
-              name: 'MARKET DEVELOPMENT MANAGER'
+              name: 'MARKET DEVELOPMENT MANAGER',
+              positionDescription: groupedEntitiesMock['MARKET DEVELOPMENT MANAGER'][0].positionDescription
             }
           ],
           entitiesURL: undefined as any
@@ -305,7 +307,8 @@ describe('Responsibilities Effects', () => {
         viewType: ViewType.roleGroups,
         entityTypes: [{
           type: chance.string(),
-          name: chance.string()
+          name: chance.string(),
+          positionDescription: chance.string()
         }],
         groupedEntities: accountsDistributorsMock,
         filter: performanceFilterStateMock
@@ -327,10 +330,10 @@ describe('Responsibilities Effects', () => {
 
         responsibilitiesService.getPerformanceTotalForGroupedEntities(responsibilitiesDataMock)
           .subscribe((responsibilitiesData: ResponsibilitiesData) => {
-          expect(responsibilitiesData).toEqual(expectedPerformancesTotal);
+            expect(responsibilitiesData).toEqual(expectedPerformancesTotal);
 
-          done();
-        });
+            done();
+          });
       });
 
       it('calls getPerformanceTotalForGroupedEntities with the right parameters', (done) => {
@@ -355,7 +358,8 @@ describe('Responsibilities Effects', () => {
         viewType: ViewType.distributors,
         entityTypes: [{
           type: chance.string(),
-          name: chance.string()
+          name: chance.string(),
+          positionDescription: chance.string()
         }],
         groupedEntities: {'all': [ getEntityPeopleResponsibilitiesMock() ]},
         filter: performanceFilterStateMock
@@ -376,10 +380,10 @@ describe('Responsibilities Effects', () => {
 
         responsibilitiesService.getPerformanceTotalForGroupedEntities(responsibilitiesDataMock)
           .subscribe((responsibilitiesData: ResponsibilitiesData) => {
-          expect(responsibilitiesData).toEqual(expectedPerformancesTotal);
+            expect(responsibilitiesData).toEqual(expectedPerformancesTotal);
 
-          done();
-        });
+            done();
+          });
       });
 
       it('calls getPerformanceTotalForGroupedEntities with the right parameters', (done) => {
@@ -405,7 +409,8 @@ describe('Responsibilities Effects', () => {
         viewType: ViewType.accounts,
         entityTypes: [{
           type: chance.string(),
-          name: chance.string()
+          name: chance.string(),
+          positionDescription: chance.string()
         }],
         groupedEntities: {'all': [ getEntityPeopleResponsibilitiesMock() ]},
         filter: performanceFilterStateMock
@@ -426,10 +431,10 @@ describe('Responsibilities Effects', () => {
 
         responsibilitiesService.getPerformanceTotalForGroupedEntities(responsibilitiesDataMock)
           .subscribe((responsibilitiesData: ResponsibilitiesData) => {
-          expect(responsibilitiesData).toEqual(expectedPerformancesTotal);
+            expect(responsibilitiesData).toEqual(expectedPerformancesTotal);
 
-          done();
-        });
+            done();
+          });
       });
 
       it('calls getPerformanceTotalForGroupedEntities with the right parameters', (done) => {
@@ -456,7 +461,8 @@ describe('Responsibilities Effects', () => {
         viewType: ViewType.distributors,
         entityTypes: [{
           type: chance.string(),
-          name: chance.string()
+          name: chance.string(),
+          positionDescription: chance.string()
         }]
       };
 
@@ -465,10 +471,10 @@ describe('Responsibilities Effects', () => {
 
         responsibilitiesService.getAccountsDistributors(responsibilitiesDataMock)
           .subscribe((responsibilitiesData: ResponsibilitiesData) => {
-          expect(responsibilitiesData.groupedEntities).toEqual(expectedGroupedEntities);
+            expect(responsibilitiesData.groupedEntities).toEqual(expectedGroupedEntities);
 
-          done();
-        });
+            done();
+          });
       });
 
       it('calls getAccountsDistributors with the right parameters', (done) => {
@@ -501,10 +507,10 @@ describe('Responsibilities Effects', () => {
 
         responsibilitiesService.getAccountsDistributors(responsibilitiesDataMock).subscribe(
           (responsibilitiesData: ResponsibilitiesData) => {
-          expect(responsibilitiesDataMock).toBe(responsibilitiesData);
+            expect(responsibilitiesDataMock).toBe(responsibilitiesData);
 
-          done();
-        });
+            done();
+          });
 
         expect(getAccountsDistributorsSpy.calls.count()).toBe(0);
         expect(groupsAccountsDistributorsSpy.calls.count()).toBe(0);
@@ -513,19 +519,21 @@ describe('Responsibilities Effects', () => {
   });
 
   describe('when getResponsibilitiesPerformanceTotals is called', () => {
-    let entities: Array<{ positionId?: string, type: string, name: string }>;
+    let entities: Array<{ positionId?: string, type: string, name: string, positionDescription: string }>;
 
     beforeEach(() => {
       entities = [
         {
           positionId: chance.string(),
           type: chance.string(),
-          name: chance.string()
+          name: chance.string(),
+          positionDescription: chance.string()
         },
         {
           positionId: chance.string(),
           type: chance.string(),
-          name: chance.string()
+          name: chance.string(),
+          positionDescription: chance.string()
         }
       ];
     });
@@ -535,24 +543,24 @@ describe('Responsibilities Effects', () => {
         entities,
         performanceFilterStateMock,
         positionIdMock
-        )
+      )
         .subscribe((entitiesPerformances: EntitiesPerformances[]) => {
           expect(entitiesPerformances).toBe(entitiesPerformancesCollectionMock);
 
           done();
-      });
+        });
     });
 
     it('returns the transformed entities performances not given a positionId', (done) => {
       responsibilitiesService.getResponsibilitiesPerformanceTotals(
         entities,
         performanceFilterStateMock
-        )
+      )
         .subscribe((entitiesPerformances: EntitiesPerformances[]) => {
-        expect(entitiesPerformances).toBe(entitiesPerformancesCollectionMock);
+          expect(entitiesPerformances).toBe(entitiesPerformancesCollectionMock);
 
-        done();
-      });
+          done();
+        });
     });
 
     it('calls getResponsibilityPerformanceTotal with the given positionId when then entities donn\'t have some', (done) => {
@@ -565,12 +573,12 @@ describe('Responsibilities Effects', () => {
         entities,
         performanceFilterStateMock,
         positionIdMock
-        )
+      )
         .subscribe((entitiesPerformances: EntitiesPerformances[]) => {
-        expect(entitiesPerformances).toBe(entitiesPerformancesCollectionMock);
+          expect(entitiesPerformances).toBe(entitiesPerformancesCollectionMock);
 
-        done();
-      });
+          done();
+        });
 
       expect(getPerformanceSpy.calls.count()).toBe(2);
       expect(getPerformanceSpy.calls.argsFor(0)).toEqual([
@@ -591,12 +599,12 @@ describe('Responsibilities Effects', () => {
       responsibilitiesService.getResponsibilitiesPerformanceTotals(
         entities,
         performanceFilterStateMock
-        )
+      )
         .subscribe((entitiesPerformances: EntitiesPerformances[]) => {
-        expect(entitiesPerformances).toBe(entitiesPerformancesCollectionMock);
+          expect(entitiesPerformances).toBe(entitiesPerformancesCollectionMock);
 
-        done();
-      });
+          done();
+        });
 
       expect(getPerformanceSpy.calls.count()).toBe(2);
       expect(getPerformanceSpy.calls.argsFor(0)).toEqual([
@@ -616,8 +624,8 @@ describe('Responsibilities Effects', () => {
 
       responsibilitiesService.getResponsibilitiesPerformanceTotals(entities, performanceFilterStateMock)
         .subscribe((entitiesPerformances: EntitiesPerformances[]) => {
-        done();
-      });
+          done();
+        });
 
       expect(transformerSpy.calls.count()).toBe(1);
       expect(transformerSpy.calls.argsFor(0)[0]).toEqual([
@@ -631,10 +639,10 @@ describe('Responsibilities Effects', () => {
     it('returns the transformed total performances', (done) => {
       responsibilitiesService.getPerformanceTotal(positionIdMock, performanceFilterStateMock)
         .subscribe((entitiesTotalPerformances: EntitiesTotalPerformances) => {
-        expect(entitiesTotalPerformances).toBe(entitiesTotalPerformancesMock);
+          expect(entitiesTotalPerformances).toBe(entitiesTotalPerformancesMock);
 
-        done();
-      });
+          done();
+        });
     });
 
     it('calls getPerformanceTotal with the right parameters', (done) => {
