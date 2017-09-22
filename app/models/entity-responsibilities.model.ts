@@ -5,7 +5,7 @@ export interface EntityResponsibilities {
   employeeId?: string;
   contextPositionId?: string;
   name: string;
-  positionDescription: string;
+  positionDescription?: string;
   description?: string;
   type?: string;
   hierarchyType?: string;

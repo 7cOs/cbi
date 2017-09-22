@@ -8,7 +8,6 @@ import { EntitiesPerformances, EntitiesPerformancesDTO } from '../models/entitie
 import { EntitiesTotalPerformances, EntitiesTotalPerformancesDTO } from '../models/entities-total-performances.model';
 import { EntityDTO } from '../models/entity-dto.model';
 import { EntityPropertyType } from '../enums/entity-responsibilities.enum';
-import { EntityResponsibilities } from '../models/entity-responsibilities.model';
 import { EntitySubAccountDTO } from '../models/entity-subaccount-dto.model';
 import { getEntitiesTotalPerformancesMock, getEntitiesTotalPerformancesDTOMock } from '../models/entities-total-performances.model.mock';
 import { getEntitiesPerformancesMock, getResponsibilityEntitiesPerformanceDTOMock } from '../models/entities-performances.model.mock';
@@ -36,6 +35,7 @@ describe('Responsibilities Effects', () => {
   let contextPositionIdMock: string;
   let groupedEntitiesMock: GroupedEntities;
   let accountsDistributorsMock: GroupedEntities;
+  let groupedSubAccountsMock: GroupedEntities;
   let peopleResponsibilitiesDTOMock: PeopleResponsibilitiesDTO;
   let responsibilityEntitiesPerformanceDTOMock: EntitiesPerformancesDTO[];
   let entitiesPerformanceMock: EntitiesPerformances[];
@@ -85,14 +85,8 @@ describe('Responsibilities Effects', () => {
     groupsAccountsDistributors(mockArgs: any): GroupedEntities {
       return accountsDistributorsMock;
     },
-    transformSubAccountsDTO(mockArgs: any): Array<EntityResponsibilities> {
-      return [{
-        positionId: mockArgs[0].subaccountCode,
-        contextPositionId: mockArgs[0].accountCode,
-        name: mockArgs[0].subaccountDescription,
-        positionDescription: mockArgs[0].positionDescription,
-        propertyType: EntityPropertyType.SubAccount
-      }];
+    transformSubAccountsDTO(mockArgs: any): GroupedEntities {
+      return groupedSubAccountsMock;
     }
   };
 
@@ -578,13 +572,26 @@ describe('Responsibilities Effects', () => {
     let subAccountDataMock: SubAccountData;
 
     beforeEach(() => {
-      entitySubAccountDTOMock = getEntitySubAccountDTOMock();
+      entitySubAccountDTOMock = [getEntitySubAccountDTOMock(), getEntitySubAccountDTOMock()];
       subAccountDataMock = {
         positionId: positionIdMock,
         contextPositionId: contextPositionIdMock,
         entityType: chance.string(),
         premiseType: PremiseTypeValue.All,
         entitiesTotalPerformances: getMyPerformanceTableRowMock(1)[0]
+      };
+      groupedSubAccountsMock = {
+        [subAccountDataMock.entityType]: [{
+          positionId: entitySubAccountDTOMock[0].subaccountCode,
+          contextPositionId: entitySubAccountDTOMock[0].accountCode,
+          name: entitySubAccountDTOMock[0].subaccountDescription,
+          propertyType: EntityPropertyType.SubAccount
+        }, {
+          positionId: entitySubAccountDTOMock[1].subaccountCode,
+          contextPositionId: entitySubAccountDTOMock[1].accountCode,
+          name: entitySubAccountDTOMock[1].subaccountDescription,
+          propertyType: EntityPropertyType.SubAccount
+        }]
       };
     });
 
@@ -616,15 +623,7 @@ describe('Responsibilities Effects', () => {
 
     it('returns grouped subAccounts with initial subAccountData', (done) => {
       const expectedResponse: SubAccountData = Object.assign({}, subAccountDataMock, {
-        groupedEntities: {
-          [subAccountDataMock.entityType]: [{
-            positionId: entitySubAccountDTOMock[0].subaccountCode,
-            contextPositionId: entitySubAccountDTOMock[0].accountCode,
-            name: entitySubAccountDTOMock[0].subaccountDescription,
-            positionDescription: undefined,
-            propertyType: EntityPropertyType.SubAccount
-          }]
-        }
+        groupedEntities : groupedSubAccountsMock
       });
 
       responsibilitiesService.getSubAccounts(subAccountDataMock).subscribe((actualResponse: SubAccountData) => {

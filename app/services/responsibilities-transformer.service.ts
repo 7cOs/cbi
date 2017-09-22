@@ -30,24 +30,24 @@ export class ResponsibilitiesTransformerService {
       groups['all'].push({
         propertyType: entity.type,
         positionId: entity.id,
-        name: entity.name,
-        positionDescription: ''
+        name: entity.name
       });
 
       return groups;
     }, {'all': []});
   }
 
-  public transformSubAccountsDTO(subAccountsDTO: Array<EntitySubAccountDTO>): Array<EntityResponsibilities> {
-    return subAccountsDTO.map((subAccount: EntitySubAccountDTO) => {
-      return {
-        positionId: subAccount.subaccountCode,
-        contextPositionId: subAccount.accountCode,
-        name: subAccount.subaccountDescription,
-        propertyType: EntityPropertyType.SubAccount,
-        positionDescription: ''
-      };
-    });
+  public transformSubAccountsDTO(subAccountsDTO: Array<EntitySubAccountDTO>, accountName: string): GroupedEntities {
+    return {
+      [accountName]: subAccountsDTO.map((subAccount: EntitySubAccountDTO) => {
+        return {
+          positionId: subAccount.subaccountCode,
+          contextPositionId: subAccount.accountCode,
+          name: subAccount.subaccountDescription,
+          propertyType: EntityPropertyType.SubAccount
+        };
+      })
+    };
   }
 
   private transformEntityResponsibilitiesDTO(entity: EntityResponsibilitiesDTO): EntityResponsibilities {
@@ -55,7 +55,7 @@ export class ResponsibilitiesTransformerService {
       positionId: entity.id,
       employeeId: entity.employeeId,
       name: entity.name,
-      positionDescription: entity.positionDescription,
+      positionDescription: entity.positionDescription || '',
       type: entity.type,
       hierarchyType: entity.hierarchyType,
       description: entity.description

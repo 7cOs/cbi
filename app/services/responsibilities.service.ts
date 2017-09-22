@@ -55,7 +55,7 @@ export class ResponsibilitiesService {
       .map((response: PeopleResponsibilitiesDTO) => {
         let groupedEntities: GroupedEntities;
         let viewType: ViewType;
-        let entityTypes: Array<{ type: string, name: string, positionDescription: string }>;
+        let entityTypes: Array<{ type: string, name: string, positionDescription?: string }>;
         let entitiesURL: string;
 
         if (response.positions) {
@@ -159,9 +159,8 @@ export class ResponsibilitiesService {
       subAccountData.positionId, subAccountData.contextPositionId, subAccountData.premiseType
     )
       .map((response: Array<EntitySubAccountDTO>) => {
-        const groupedEntities: GroupedEntities = {
-          [subAccountData.entityType]: this.responsibilitiesTransformerService.transformSubAccountsDTO(response)
-        };
+        const groupedEntities: GroupedEntities =
+          this.responsibilitiesTransformerService.transformSubAccountsDTO(response, subAccountData.entityType);
 
         return Object.assign({}, subAccountData, {
           groupedEntities: groupedEntities
@@ -177,7 +176,6 @@ export class ResponsibilitiesService {
           positionId: subAccount.positionId,
           contextPositionId: subAccount.contextPositionId,
           name: subAccount.name,
-          positionDescription: subAccount.positionDescription,
           performanceTotal: {
             total: 1337,
             totalYearAgo: 9001,
