@@ -70,6 +70,7 @@ describe('Service: PerformanceTransformerService', () => {
       expect(entityPerformance[0]).toEqual({
         positionId: responsibilityEntitiesPerformanceDTOMock[0].id,
         name: responsibilityEntitiesPerformanceDTOMock[0].name,
+        positionDescription: responsibilityEntitiesPerformanceDTOMock[0].positionDescription,
         performanceTotal: {
           total: parseInt((entityPerformanceMock.total).toFixed(), 10),
           totalYearAgo: utilService.getYearAgoDelta(entityPerformanceMock.total, entityPerformanceMock.totalYearAgo),

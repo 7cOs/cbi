@@ -21,7 +21,7 @@ import { ViewType } from '../enums/view-type.enum';
 export interface ResponsibilitiesData {
   groupedEntities?: GroupedEntities;
   viewType?: ViewType;
-  entityTypes?: Array<{ type: string, name: string }>;
+  entityTypes?: Array<{ type: string, name: string, positionDescription: string }>;
   entitiesURL?: string;
   positionId?: string;
   filter?: MyPerformanceFilterState;
@@ -52,7 +52,7 @@ export class ResponsibilitiesService {
       .map((response: PeopleResponsibilitiesDTO) => {
         let groupedEntities: GroupedEntities;
         let viewType: ViewType;
-        let entityTypes: Array<{ type: string, name: string }>;
+        let entityTypes: Array<{ type: string, name: string, positionDescription?: string }>;
         let entitiesURL: string;
 
         if (response.positions) {
@@ -62,7 +62,8 @@ export class ResponsibilitiesService {
           entityTypes = Object.keys(groupedEntities).map((roleGroup: string) => {
             return {
               type: groupedEntities[roleGroup][0].type,
-              name: roleGroup
+              name: roleGroup,
+              positionDescription: groupedEntities[roleGroup][0].positionDescription
             };
           });
         } else if (response.entityURIs) {
@@ -83,11 +84,13 @@ export class ResponsibilitiesService {
   }
 
   public getResponsibilitiesPerformanceTotals(
-    entities: Array<{ positionId?: string, type: string, name: string }>, filter: MyPerformanceFilterState, positionId?: string
+    entities: Array<{ positionId?: string, type: string, name: string, positionDescription: string }>,
+    filter: MyPerformanceFilterState,
+    positionId?: string
   ): Observable<(EntitiesPerformances | Error)[]> {
     const apiCalls: Observable<EntitiesPerformancesDTO | Error>[] = [];
 
-    entities.forEach((entity: { positionId?: string, type: string, name: string }) => {
+    entities.forEach((entity: { positionId?: string, type: string, name: string, positionDescription: string }) => {
       apiCalls.push(this.myPerformanceApiService.getResponsibilityPerformanceTotal(entity, filter, entity.positionId || positionId));
     });
 

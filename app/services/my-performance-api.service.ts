@@ -6,8 +6,6 @@ import 'rxjs/add/operator/map';
 import { DateRangeTimePeriodValue } from '../enums/date-range-time-period.enum';
 import { DistributionTypeValue } from '../enums/distribution-type.enum';
 import { EntitiesPerformancesDTO } from '../models/entities-performances.model'; // tslint:disable-line:no-unused-variable
-import { EntityResponsibilities } from '../models/entity-responsibilities.model'; // tslint:disable-line:no-unused-variable
-import { EntitiesTotalPerformances } from '../models/entities-total-performances.model';
 import { EntitiesTotalPerformancesDTO } from '../models/entities-total-performances.model';
 import { EntityDTO } from '../models/entity-dto.model';
 import { EntitySubAccountDTO } from '../models/entity-subaccount-dto.model';
@@ -32,7 +30,7 @@ export class MyPerformanceApiService {
   }
 
   public getResponsibilityPerformanceTotal(
-    entity: { type: string, name: string }, filter: MyPerformanceFilterState, positionId: string
+    entity: { type: string, name: string, positionDescription: string }, filter: MyPerformanceFilterState, positionId: string
   ): Observable<EntitiesPerformancesDTO|Error> {
     const url = `/v3/positions/${ positionId }/responsibilities/${ entity.type }/performanceTotal`;
 
@@ -42,6 +40,7 @@ export class MyPerformanceApiService {
       .map(res => ({
         id: positionId,
         name: entity.name,
+        positionDescription: entity.positionDescription,
         performanceTotal: res.json()
       }))
       .catch(err => this.handleError(new Error(err)));
