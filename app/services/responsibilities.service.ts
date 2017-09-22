@@ -105,18 +105,24 @@ export class ResponsibilitiesService {
   }
 
   public getDistributorsPerformances(distributors: EntityResponsibilities[], filter: MyPerformanceFilterState, contextPositionId?: string) {
-    const apiCalls: Observable<EntitiesTotalPerformancesDTO | Error>[] =
-      distributors.map((dist: EntityResponsibilities) => {
-        return this.myPerformanceApiService.getDistributorPerformance(dist.positionId, filter, contextPositionId);
+    const apiCalls: Observable<EntitiesPerformances | Error>[] =
+      distributors.map((distributor: EntityResponsibilities) => {
+        return this.myPerformanceApiService.getDistributorPerformance(distributor.positionId, filter, contextPositionId)
+          .map(response => {
+            return this.performanceTransformerService.transformEntityWithPerformance(response, distributor);
+          });
       });
 
     return Observable.forkJoin(apiCalls);
   }
 
   public getAccountsPerformances(accounts: EntityResponsibilities[], filter: MyPerformanceFilterState, contextPositionId?: string) {
-    const apiCalls: Observable<EntitiesTotalPerformancesDTO | Error>[] =
-      accounts.map((acc: EntityResponsibilities) => {
-        return this.myPerformanceApiService.getAccountPerformance(acc.positionId, filter, contextPositionId);
+    const apiCalls: Observable<EntitiesPerformances | Error>[] =
+      accounts.map((account: EntityResponsibilities) => {
+        return this.myPerformanceApiService.getAccountPerformance(account.positionId, filter, contextPositionId)
+          .map(response => {
+            return this.performanceTransformerService.transformEntityWithPerformance(response, account);
+          });
       });
 
     return Observable.forkJoin(apiCalls);
@@ -198,25 +204,23 @@ export class ResponsibilitiesService {
    }
 
   private handleDistributorsPerformances(responsibilitiesData: ResponsibilitiesData) {
-    return this.getDistributorsPerformances(responsibilitiesData.groupedEntities.all,
+    return this.getDistributorsPerformances(
+      responsibilitiesData.groupedEntities.all,
       responsibilitiesData.filter,
       responsibilitiesData.positionId)
-        .map((response: EntitiesTotalPerformancesDTO[]) => {
-          responsibilitiesData.entitiesPerformances
-            = this.performanceTransformerService
-              .transformEntityDTOsWithPerformance(response, responsibilitiesData.groupedEntities.all);
+        .map((entityPerformances: EntitiesPerformances[]) => {
+          responsibilitiesData.entitiesPerformances = entityPerformances;
           return responsibilitiesData;
         });
   }
 
   private handleAccountsPerformances(responsibilitiesData: ResponsibilitiesData) {
-    return this.getAccountsPerformances(responsibilitiesData.groupedEntities.all,
+    return this.getAccountsPerformances(
+      responsibilitiesData.groupedEntities.all,
       responsibilitiesData.filter,
       responsibilitiesData.positionId)
-        .map((response: EntitiesTotalPerformancesDTO[]) => {
-          responsibilitiesData.entitiesPerformances
-            = this.performanceTransformerService
-              .transformEntityDTOsWithPerformance(response, responsibilitiesData.groupedEntities.all);
+        .map((entityPerformances: EntitiesPerformances[]) => {
+          responsibilitiesData.entitiesPerformances = entityPerformances;
           return responsibilitiesData;
         });
   }

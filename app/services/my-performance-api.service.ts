@@ -78,7 +78,7 @@ export class MyPerformanceApiService {
     return this.http.get(url, {
       params: params
     })
-      .map(res => Object.assign({}, res.json(), { entityId: distributorID }))
+      .map(res => res.json())
       .catch(err => this.handleError(new Error(err)));
   }
 
@@ -95,7 +95,7 @@ export class MyPerformanceApiService {
     return this.http.get(url, {
       params: params
     })
-      .map(res => Object.assign({}, res.json(), { entityId: accountID }))
+      .map(res => res.json())
       .catch(err => this.handleError(new Error(err)));
   }
 

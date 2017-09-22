@@ -166,7 +166,7 @@ describe('Service: MyPerformanceApiService', () => {
         );
       });
 
-      const expected = Object.assign({}, performanceTotalResponseMock, {entityId: '1'});
+      const expected = performanceTotalResponseMock;
 
       myPerformanceApiService.getDistributorPerformance('1', mockFilter, '1').subscribe((response: EntitiesTotalPerformancesDTO) => {
         expect(response).toEqual(expected);
@@ -194,7 +194,7 @@ describe('Service: MyPerformanceApiService', () => {
         );
       });
 
-      const expected = Object.assign({}, performanceTotalResponseMock, {entityId: '1'});
+      const expected = performanceTotalResponseMock;
 
       myPerformanceApiService.getAccountPerformance('1', mockFilter, '1').subscribe((response: EntitiesTotalPerformancesDTO) => {
         expect(response).toEqual(expected);

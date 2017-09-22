@@ -80,7 +80,7 @@ describe('Service: PerformanceTransformerService', () => {
     });
   });
 
-  describe('transformEntityDTOWithPerformancesDTO', () => {
+  describe('transformEntityWithPerformancesDTO', () => {
 
     beforeEach(inject([ PerformanceTransformerService, UtilService ],
       (_performanceTransformerService: PerformanceTransformerService, _utilService: UtilService) => {
@@ -94,37 +94,13 @@ describe('Service: PerformanceTransformerService', () => {
       const entity = getEntityPropertyResponsibilitiesMock();
       const performanceDTO = getEntitiesTotalPerformancesDTOMock();
 
-      const actual = performanceTransformerService.transformEntityDTOWithPerformance(performanceDTO, entity);
+      const actual = performanceTransformerService.transformEntityWithPerformance(performanceDTO, entity);
 
       expect(actual.positionId).toBe(entity.positionId);
       expect(actual.name).toBe(entity.name);
       expect(actual.performanceTotal).toBeDefined();
       expect(transformPerformanceSpy).toHaveBeenCalledTimes(1);
       expect(transformPerformanceSpy).toHaveBeenCalledWith(performanceDTO);
-    });
-  });
-
-  describe('transformEntityWithPerformancesDTO', () => {
-
-    beforeEach(inject([ PerformanceTransformerService, UtilService ],
-      (_performanceTransformerService: PerformanceTransformerService, _utilService: UtilService) => {
-        performanceTransformerService = _performanceTransformerService;
-        utilService = _utilService;
-    }));
-
-    it('should transform data given an entity and performance data', () => {
-      const numberOfEntities = chance.natural({min: 1, max: 99});
-      const entities = Array(numberOfEntities).fill('').map(el => getEntityPropertyResponsibilitiesMock());
-      const performanceDTOs = Array(numberOfEntities)
-        .fill('')
-        .map((el, idx) => {
-          return Object.assign({}, getEntitiesTotalPerformancesDTOMock(), {entityId: entities[idx].positionId});
-        });
-      const transformPerformanceEntitySpy = spyOn(performanceTransformerService, 'transformEntityDTOWithPerformance').and.callThrough();
-
-      performanceTransformerService.transformEntityDTOsWithPerformance(performanceDTOs, entities);
-
-      expect(transformPerformanceEntitySpy).toHaveBeenCalledTimes(numberOfEntities);
     });
   });
 });

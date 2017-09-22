@@ -38,20 +38,7 @@ export class PerformanceTransformerService {
     };
   }
 
-  public transformEntityDTOsWithPerformance(
-    performanceDTOs: EntitiesTotalPerformancesDTO[],
-    entities: EntityResponsibilities[]
-    ): EntitiesPerformances[] {
-    return performanceDTOs.map(
-      (performanceDTO: EntitiesTotalPerformancesDTO) => {
-      return this.transformEntityDTOWithPerformance(
-        performanceDTO,
-        entities.find(entity => entity.positionId === performanceDTO.entityId,
-      ));
-    });
-  }
-
-  public transformEntityDTOWithPerformance(
+  public transformEntityWithPerformance(
     performanceDTO: EntitiesTotalPerformancesDTO,
     entity: EntityResponsibilities): EntitiesPerformances {
 
