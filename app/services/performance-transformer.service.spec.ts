@@ -3,6 +3,7 @@ import { inject, TestBed } from '@angular/core/testing';
 import { getEntitiesTotalPerformancesDTOMock } from '../models/entities-total-performances.model.mock';
 import { getResponsibilityEntitiesPerformanceDTOMock } from '../models/entities-performances.model.mock';
 import { EntitiesTotalPerformances, EntitiesTotalPerformancesDTO } from '../models/entities-total-performances.model';
+import { getEntityPropertyResponsibilitiesMock } from '../models/entity-responsibilities.model.mock';
 import { PerformanceTransformerService } from './performance-transformer.service';
 import { EntitiesPerformances, EntitiesPerformancesDTO } from '../models/entities-performances.model';
 import { UtilService } from './util.service';
@@ -58,10 +59,10 @@ describe('Service: PerformanceTransformerService', () => {
     }));
 
     it('should return transformed EntityPerformanceTotal data given EntityEntitiesTotalPerformancesDTO data', () => {
-      spyOn(performanceTransformerService, 'transformEntitiesPerformancesDTO').and.callThrough();
+      spyOn(performanceTransformerService, 'transformEntitiesPerformancesDTOs').and.callThrough();
 
       const entityPerformance: EntitiesPerformances[] =
-        performanceTransformerService.transformEntitiesPerformancesDTO(responsibilityEntitiesPerformanceDTOMock);
+        performanceTransformerService.transformEntitiesPerformancesDTOs(responsibilityEntitiesPerformanceDTOMock);
       const entityPerformanceMock = responsibilityEntitiesPerformanceDTOMock[0].performanceTotal;
 
       expect(entityPerformance).toBeDefined();
@@ -76,6 +77,30 @@ describe('Service: PerformanceTransformerService', () => {
           contributionToVolume: 0
         }
       });
+    });
+  });
+
+  describe('transformEntityWithPerformancesDTO', () => {
+
+    beforeEach(inject([ PerformanceTransformerService, UtilService ],
+      (_performanceTransformerService: PerformanceTransformerService, _utilService: UtilService) => {
+        performanceTransformerService = _performanceTransformerService;
+        utilService = _utilService;
+    }));
+
+    it('should transform data given an entity and performance data', () => {
+      const transformPerformanceSpy = spyOn(performanceTransformerService, 'transformEntitiesTotalPerformancesDTO').and.callThrough();
+
+      const entity = getEntityPropertyResponsibilitiesMock();
+      const performanceDTO = getEntitiesTotalPerformancesDTOMock();
+
+      const actual = performanceTransformerService.transformEntityWithPerformance(performanceDTO, entity);
+
+      expect(actual.positionId).toBe(entity.positionId);
+      expect(actual.name).toBe(entity.name);
+      expect(actual.performanceTotal).toBeDefined();
+      expect(transformPerformanceSpy).toHaveBeenCalledTimes(1);
+      expect(transformPerformanceSpy).toHaveBeenCalledWith(performanceDTO);
     });
   });
 });

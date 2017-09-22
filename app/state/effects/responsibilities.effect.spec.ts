@@ -42,11 +42,11 @@ import { ViewType } from '../../enums/view-type.enum';
 const chance = new Chance();
 
 describe('Responsibilities Effects', () => {
-  const positionIdMock = chance.string();
   const entitiesPerformancesMock = getEntitiesPerformancesMock();
+  const error = new Error(chance.string());
   const groupedEntitiesMock: GroupedEntities = getGroupedEntitiesMock();
   const performanceTotalMock: EntitiesTotalPerformances = getEntitiesTotalPerformancesMock();
-  const error = new Error(chance.string());
+  const positionIdMock = chance.string();
 
   const responsibilitiesServiceMock = {
     getResponsibilities(responsibilitiesData: ResponsibilitiesData): Observable<ResponsibilitiesData> {
@@ -77,6 +77,12 @@ describe('Responsibilities Effects', () => {
     dateRangeCode: DateRangeTimePeriodValue.FYTDBDL,
     premiseType: PremiseTypeValue.On,
     distributionType: DistributionTypeValue.simple
+  };
+
+  const responsibilitiesSuccessPayloadMock = {
+    positionId: positionIdMock,
+    groupedEntities: groupedEntitiesMock,
+    entitiesPerformances: entitiesPerformancesMock
   };
 
   const responsibilitiesDataMock: ResponsibilitiesData = {
@@ -121,12 +127,6 @@ describe('Responsibilities Effects', () => {
 
     describe('when everything returns successfully', () => {
       it('should return a FetchResponsibilitiesSuccessAction', (done) => {
-        const responsibilitiesSuccessPayloadMock = {
-          positionId: positionIdMock,
-          groupedEntities: groupedEntitiesMock,
-          entitiesPerformances: entitiesPerformancesMock
-        };
-
         const viewTypeMock = ViewType[getViewTypeMock()];
 
         spyOn(responsibilitiesService, 'getResponsibilities').and.callFake((responsibilitiesData: ResponsibilitiesData) => {
