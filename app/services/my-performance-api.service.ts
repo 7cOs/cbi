@@ -6,8 +6,6 @@ import 'rxjs/add/operator/map';
 import { DateRangeTimePeriodValue } from '../enums/date-range-time-period.enum';
 import { DistributionTypeValue } from '../enums/distribution-type.enum';
 import { EntitiesPerformancesDTO } from '../models/entities-performances.model'; // tslint:disable-line:no-unused-variable
-import { EntityResponsibilities } from '../models/entity-responsibilities.model'; // tslint:disable-line:no-unused-variable
-import { EntitiesTotalPerformances } from '../models/entities-total-performances.model';
 import { EntitiesTotalPerformancesDTO } from '../models/entities-total-performances.model';
 import { EntityDTO } from '../models/entity-dto.model';
 import { EntitySubAccountDTO } from '../models/entity-subaccount-dto.model';
@@ -29,20 +27,6 @@ export class MyPerformanceApiService {
     return this.http.get(`${url}`)
       .map(res => res.json())
       .catch(err => this.handleError(new Error(err)));
-  }
-
-  public getResponsibilitiesPerformanceTotals(
-    entities: Array<{ positionId?: string, type: string, name: string, positionDescription: string }>,
-    filter: MyPerformanceFilterState,
-    positionId?: string
-  ): Observable<(EntitiesPerformancesDTO | Error)[]> {
-    const apiCalls: Observable<EntitiesPerformancesDTO | Error>[] = [];
-
-    entities.forEach((entity: { positionId?: string, type: string, name: string, positionDescription: string }) => {
-      apiCalls.push(this.getResponsibilityPerformanceTotal(entity, filter, entity.positionId || positionId));
-    });
-
-    return Observable.forkJoin(apiCalls);
   }
 
   public getResponsibilityPerformanceTotal(
