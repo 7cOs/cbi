@@ -33,8 +33,8 @@ export class ResponsibilitiesEffects {
         return Observable.of(responsibilitiesData);
       })
       .switchMap((responsibilitiesData) => this.responsibilitiesService.getResponsibilities(responsibilitiesData))
-      .switchMap((responsibilitiesData) => this.responsibilitiesService.getPerformanceTotalForGroupedEntities(responsibilitiesData))
       .switchMap((responsibilitiesData) => this.responsibilitiesService.getAccountsDistributors(responsibilitiesData))
+      .switchMap((responsibilitiesData) => this.responsibilitiesService.getPerformanceTotalForGroupedEntities(responsibilitiesData))
       .switchMap((responsibilitiesData) => this.constructSuccessAction(responsibilitiesData))
       .catch((err: Error) => Observable.of(new ResponsibilitiesActions.FetchResponsibilitiesFailureAction(err)));
   }

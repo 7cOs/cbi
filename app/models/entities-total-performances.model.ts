@@ -5,9 +5,9 @@ export interface EntitiesTotalPerformancesDTO {
 }
 
 export interface EntitiesTotalPerformances {
+  contributionToVolume: number;
   total: number;
   totalYearAgo: number;
   totalYearAgoPercent: number;
-  contributionToVolume: number;
   name?: string;
 }
