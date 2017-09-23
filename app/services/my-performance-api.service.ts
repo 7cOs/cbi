@@ -65,11 +65,11 @@ export class MyPerformanceApiService {
   }
 
   public getDistributorPerformance(
-    distributorID: string,
+    distributorId: string,
     filter: MyPerformanceFilterState,
     contextPositionId?: string
     ): Observable<PerformanceDTO> {
-    const url = `/v3/distributors/${distributorID}/performanceTotal`;
+    const url = `/v3/distributors/${ distributorId }/performanceTotal`;
     const params = contextPositionId
       ? Object.assign({}, this.getFilterStateParams(filter), { positionId: contextPositionId })
       : this.getFilterStateParams(filter);
@@ -82,11 +82,11 @@ export class MyPerformanceApiService {
   }
 
   public getAccountPerformance(
-    accountID: string,
+    accountId: string,
     filter: MyPerformanceFilterState,
     contextPositionId?: string
     ): Observable<PerformanceDTO> {
-    const url = `/v3/accounts/${accountID}/performanceTotal`;
+    const url = `/v3/accounts/${ accountId }/performanceTotal`;
     const params = contextPositionId
       ? Object.assign({}, this.getFilterStateParams(filter), { positionId: contextPositionId })
       : this.getFilterStateParams(filter);
@@ -98,8 +98,8 @@ export class MyPerformanceApiService {
       .catch(err => this.handleError(new Error(err)));
   }
 
-  public getSubAccounts(positionId: string, contextPositionId: string, premiseType: PremiseTypeValue): Observable<EntitySubAccountDTO[]> {
-    const url = `/v3/accounts/${ positionId }/subAccounts`;
+  public getSubAccounts(accountId: string, contextPositionId: string, premiseType: PremiseTypeValue): Observable<EntitySubAccountDTO[]> {
+    const url = `/v3/accounts/${ accountId }/subAccounts`;
 
     return this.http.get(`${ url }`, {
       params: {
