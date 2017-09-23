@@ -17,6 +17,7 @@ import { getEntitiesWithPerformancesMock, getResponsibilityEntitiesPerformanceDT
 import { getEntityDTOMock } from '../models/entity-dto.model.mock';
 import { getEntitySubAccountDTOMock } from '../models/entity-subaccount-dto.model.mock';
 import { getGroupedEntitiesMock } from '../models/grouped-entities.model.mock';
+import { getMyPerformanceFilterMock } from '../models/my-performance-filter.model.mock';
 import { getMyPerformanceTableRowMock } from '../models/my-performance-table-row.model.mock';
 import { getPeopleResponsibilitiesDTOMock } from '../models/people-responsibilities-dto.model.mock';
 import { GroupedEntities } from '../models/grouped-entities.model';
@@ -50,12 +51,7 @@ describe('Responsibilities Effects', () => {
   let responsibilitiesTransformerService: ResponsibilitiesTransformerService;
   let entitySubAccountDTOMock: EntitySubAccountDTO[];
 
-  const performanceFilterStateMock: MyPerformanceFilterState = {
-    metricType: MetricTypeValue.PointsOfDistribution,
-    dateRangeCode: DateRangeTimePeriodValue.FYTDBDL,
-    premiseType: PremiseTypeValue.On,
-    distributionType: DistributionTypeValue.simple
-  };
+  const performanceFilterStateMock: MyPerformanceFilterState = getMyPerformanceFilterMock();
 
   const myPerformanceApiServiceMock = {
     getResponsibilities() {
