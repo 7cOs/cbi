@@ -5,6 +5,7 @@ import * as Chance from 'chance';
 
 import { DateRangeTimePeriodValue } from '../../enums/date-range-time-period.enum';
 import { DistributionTypeValue } from '../../enums/distribution-type.enum';
+import { getProductMetricMock } from '../../models/entity-product-metrics-dto.model.mock';
 import * as ProductMetricsActions from '../actions/product-metrics.action';
 import { MetricTypeValue } from '../../enums/metric-type.enum';
 import { MyPerformanceApiService } from '../../services/my-performance-api.service';
@@ -12,8 +13,8 @@ import { MyPerformanceFilterState } from '../reducers/my-performance-filter.redu
 import { PremiseTypeValue } from '../../enums/premise-type.enum';
 import { ProductMetricsEffects } from './product-metrics.effect';
 import { ProductMetricsTransformerService } from '../../services/product-metrics-transformer.service';
-import { FetchProductMetricsSuccessPayload, ProductMetrics } from '../../models/product-metrics.model';
-import { getProductMetricMock } from '../../models/entity-product-metrics-dto.model.mock';
+import { ProductMetrics, FetchProductMetricsSuccessPayload } from '../../models/product-metrics.model';
+import { SelectedEntityType } from '../../enums/selected-entity-type.enum';
 
 const chance = new Chance();
 
@@ -70,7 +71,7 @@ describe('ProductMetrics Effects', () => {
     }
   ));
 
-  describe('when a FetchProductMetricsAction is received', () => {
+  describe('when a FetchProductMetricsAction for a Position is received', () => {
 
     describe('when ProductMetricsApiService returns successfully', () => {
       let myPerformanceApiService: MyPerformanceApiService;
@@ -80,7 +81,8 @@ describe('ProductMetrics Effects', () => {
 
           runner.queue(new ProductMetricsActions.FetchProductMetricsAction({
             positionId: positionIdMock,
-            filter: performanceFilterStateMock
+            filter: performanceFilterStateMock,
+            selectedEntityType: SelectedEntityType.Position
           }));
         }
       ));
@@ -102,7 +104,8 @@ describe('ProductMetrics Effects', () => {
           myPerformanceApiService = _myPerformanceApiService;
           runner.queue(new ProductMetricsActions.FetchProductMetricsAction({
             positionId: positionIdMock,
-            filter: performanceFilterStateMock
+            filter: performanceFilterStateMock,
+            selectedEntityType: SelectedEntityType.Position
           }));
         }
       ));

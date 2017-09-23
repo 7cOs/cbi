@@ -7,6 +7,7 @@ import { MetricTypeValue } from '../../enums/metric-type.enum';
 import { MyPerformanceFilterState } from '../reducers/my-performance-filter.reducer';
 import { PremiseTypeValue } from '../../enums/premise-type.enum';
 import * as ProductMetricsActions from '../actions/product-metrics.action';
+import { SelectedEntityType } from '../../enums/selected-entity-type.enum';
 
 const positionIdMock = chance.string();
 const performanceFilterStateMock: MyPerformanceFilterState = {
@@ -27,7 +28,8 @@ describe('ProductMetrics Reducer', () => {
 
     const actualState = productMetricsReducer(initialState, new ProductMetricsActions.FetchProductMetricsAction({
       positionId: positionIdMock,
-      filter: performanceFilterStateMock
+      filter: performanceFilterStateMock,
+      selectedEntityType: SelectedEntityType.Position
     }));
 
     expect(actualState).toEqual(expectedState);

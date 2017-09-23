@@ -29,6 +29,7 @@ import { MyPerformanceTableRow } from '../../models/my-performance-table-row.mod
 import { MyPerformanceTableRowComponent } from '../../shared/components/my-performance-table-row/my-performance-table-row.component';
 import { PremiseTypeValue } from '../../enums/premise-type.enum';
 import { RowType } from '../../enums/row-type.enum';
+import { SelectedEntityType } from '../../enums/selected-entity-type.enum';
 import { SortIndicatorComponent } from '../../shared/components/sort-indicator/sort-indicator.component';
 import { SortingCriteria } from '../../models/sorting-criteria.model';
 import { UtilService } from '../../services/util.service';
@@ -164,10 +165,10 @@ describe('MyPerformanceComponent', () => {
       positionId: userServiceMock.model.currentUser.positionId,
       filter: stateMock.myPerformanceFilter as any
     })]);
-
     expect(storeMock.dispatch.calls.argsFor(1)).toEqual([new FetchProductMetricsAction({
       positionId: userServiceMock.model.currentUser.positionId,
-      filter: stateMock.myPerformanceFilter as any
+      filter: stateMock.myPerformanceFilter as any,
+      selectedEntityType: SelectedEntityType.Position
     })]);
   }));
 
@@ -363,7 +364,8 @@ describe('MyPerformanceComponent', () => {
       }));
       expect(storeMock.dispatch.calls.argsFor(3)[0]).toEqual(new FetchProductMetricsAction({
         positionId: rowMock.metadata.positionId,
-        filter: stateMock.myPerformanceFilter as any
+        filter: stateMock.myPerformanceFilter as any,
+        selectedEntityType: SelectedEntityType.Position
       }));
     });
   });
