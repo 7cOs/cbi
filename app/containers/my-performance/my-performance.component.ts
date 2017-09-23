@@ -196,6 +196,12 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
                 selectedPositionId: parameters.row.metadata.positionId,
                 premiseType: this.filterState.premiseType
               }));
+              this.store.dispatch(new FetchProductMetricsAction({
+                positionId: parameters.row.metadata.positionId,
+                contextPositionId: this.currentState.responsibilities.positionId,
+                filter: this.filterState,
+                selectedEntityType: SelectedEntityType.Account
+              }));
               break;
             default:
               console.log('clicked on left row:', parameters.row);

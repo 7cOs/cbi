@@ -3,14 +3,11 @@ import { Observable } from 'rxjs';
 import { TestBed, inject } from '@angular/core/testing';
 import * as Chance from 'chance';
 
-import { DateRangeTimePeriodValue } from '../../enums/date-range-time-period.enum';
-import { DistributionTypeValue } from '../../enums/distribution-type.enum';
+import { getMyPerformanceFilterMock } from '../../models/my-performance-filter.model.mock';
 import { getProductMetricMock } from '../../models/entity-product-metrics-dto.model.mock';
 import * as ProductMetricsActions from '../actions/product-metrics.action';
-import { MetricTypeValue } from '../../enums/metric-type.enum';
 import { MyPerformanceApiService } from '../../services/my-performance-api.service';
 import { MyPerformanceFilterState } from '../reducers/my-performance-filter.reducer';
-import { PremiseTypeValue } from '../../enums/premise-type.enum';
 import { ProductMetricsEffects } from './product-metrics.effect';
 import { ProductMetricsTransformerService } from '../../services/product-metrics-transformer.service';
 import { ProductMetrics, FetchProductMetricsSuccessPayload } from '../../models/product-metrics.model';
@@ -20,13 +17,9 @@ const chance = new Chance();
 
 describe('ProductMetrics Effects', () => {
   const positionIdMock = chance.string();
+  const contextPositionIdMock = chance.string();
   const productsMock: ProductMetrics = getProductMetricMock();
-  const performanceFilterStateMock: MyPerformanceFilterState = {
-    metricType: MetricTypeValue.PointsOfDistribution,
-    dateRangeCode: DateRangeTimePeriodValue.FYTDBDL,
-    premiseType: PremiseTypeValue.On,
-    distributionType: DistributionTypeValue.simple
-  };
+  const performanceFilterStateMock: MyPerformanceFilterState = getMyPerformanceFilterMock();
   const productMetricsSuccessPayloadMock: FetchProductMetricsSuccessPayload = {
     positionId: positionIdMock,
     products: productsMock
@@ -34,6 +27,9 @@ describe('ProductMetrics Effects', () => {
   const err = new Error(chance.string());
   const myPerformanceApiServiceMock = {
     getPositionProductMetrics() {
+      return Observable.of({products: productsMock});
+    },
+    getAccountProductMetrics() {
       return Observable.of({products: productsMock});
     }
   };
@@ -75,6 +71,7 @@ describe('ProductMetrics Effects', () => {
 
     describe('when ProductMetricsApiService returns successfully', () => {
       let myPerformanceApiService: MyPerformanceApiService;
+
       beforeEach(inject([ MyPerformanceApiService ],
         (_myPerformanceApiService: MyPerformanceApiService) => {
           myPerformanceApiService = _myPerformanceApiService;
@@ -102,6 +99,8 @@ describe('ProductMetrics Effects', () => {
       beforeEach(inject([ MyPerformanceApiService ],
         (_myPerformanceApiService: MyPerformanceApiService) => {
           myPerformanceApiService = _myPerformanceApiService;
+          spyOn(myPerformanceApiService, 'getPositionProductMetrics').and.returnValue(Observable.throw(err));
+
           runner.queue(new ProductMetricsActions.FetchProductMetricsAction({
             positionId: positionIdMock,
             filter: performanceFilterStateMock,
@@ -111,7 +110,58 @@ describe('ProductMetrics Effects', () => {
       ));
 
       it('should return a FetchProductMetricsFailureAction after catching an error', (done) => {
-        spyOn(myPerformanceApiService, 'getPositionProductMetrics').and.returnValue(Observable.throw(err));
+        productMetricsEffects.fetchProductMetrics$().subscribe((result) => {
+          expect(result).toEqual(new ProductMetricsActions.FetchProductMetricsFailureAction(err));
+          done();
+        });
+      });
+    });
+  });
+
+  describe('when a FetchProductMetricsAction for an Account is received', () => {
+
+    describe('when ProductMetricsApiService returns successfully', () => {
+      let myPerformanceApiService: MyPerformanceApiService;
+
+      beforeEach(inject([ MyPerformanceApiService ],
+        (_myPerformanceApiService: MyPerformanceApiService) => {
+          myPerformanceApiService = _myPerformanceApiService;
+
+          runner.queue(new ProductMetricsActions.FetchProductMetricsAction({
+            positionId: positionIdMock,
+            contextPositionId: contextPositionIdMock,
+            filter: performanceFilterStateMock,
+            selectedEntityType: SelectedEntityType.Account
+          }));
+        }
+      ));
+
+      it('should return a FetchProductMetricsSuccessAction', (done) => {
+        productMetricsEffects.fetchProductMetrics$().subscribe(result => {
+          expect(result).toEqual(new ProductMetricsActions.FetchProductMetricsSuccessAction(
+            productMetricsSuccessPayloadMock));
+          done();
+        });
+      });
+    });
+
+    describe('when ProductMetricsApiService returns an error', () => {
+      let myPerformanceApiService: MyPerformanceApiService;
+
+      beforeEach(inject([ MyPerformanceApiService ],
+        (_myPerformanceApiService: MyPerformanceApiService) => {
+          myPerformanceApiService = _myPerformanceApiService;
+          spyOn(myPerformanceApiService, 'getAccountProductMetrics').and.returnValue(Observable.throw(err));
+
+          runner.queue(new ProductMetricsActions.FetchProductMetricsAction({
+            positionId: positionIdMock,
+            filter: performanceFilterStateMock,
+            selectedEntityType: SelectedEntityType.Account
+          }));
+        }
+      ));
+
+      it('should return a FetchProductMetricsFailureAction after catching an error', (done) => {
         productMetricsEffects.fetchProductMetrics$().subscribe((result) => {
           expect(result).toEqual(new ProductMetricsActions.FetchProductMetricsFailureAction(err));
           done();

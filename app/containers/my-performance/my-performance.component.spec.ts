@@ -11,11 +11,9 @@ import { DateRangesState } from '../../state/reducers/date-ranges.reducer';
 import { DateRangeTimePeriodValue } from '../../enums/date-range-time-period.enum';
 import { DistributionTypeValue } from '../../enums/distribution-type.enum';
 import { FetchProductMetricsAction } from '../../state/actions/product-metrics.action';
-import { FetchResponsibilities } from '../../state/actions/responsibilities.action';
-import {
-  getMyPerformanceEntitiesDataMock,
-  getMyPerformanceStateMock
-} from '../../state/reducers/my-performance.state.mock';
+import { FetchResponsibilities, FetchSubAccountsAction } from '../../state/actions/responsibilities.action';
+import { getMyPerformanceFilterMock } from '../../models/my-performance-filter.model.mock';
+import { getMyPerformanceStateMock } from '../../state/reducers/my-performance.state.mock';
 import { getMyPerformanceTableRowMock } from '../../models/my-performance-table-row.model.mock';
 import { MetricTypeValue } from '../../enums/metric-type.enum';
 import * as MyPerformanceVersionActions from '../../state/actions/my-performance-version.action';
@@ -94,7 +92,7 @@ describe('MyPerformanceComponent', () => {
   const stateMock = {
     myPerformance: myPerformanceStateMock,
     myPerformanceProductMetrics: chance.string(),
-    myPerformanceFilter: chance.string(),
+    myPerformanceFilter: getMyPerformanceFilterMock(),
     dateRanges: chance.string(),
     viewTypes: chance.string()
   };
@@ -349,6 +347,24 @@ describe('MyPerformanceComponent', () => {
       componentInstance.leftTableViewType = ViewType.accounts;
       componentInstance.handleElementClicked({leftSide: true, type: RowType.data, index: 0, row: rowMock});
       expect(storeMock.dispatch.calls.count()).toBe(3);
+
+      storeMock.dispatch.calls.reset();
+      componentInstance.leftTableViewType = ViewType.accounts;
+      componentInstance.handleElementClicked({leftSide: true, type: RowType.data, index: 0, row: rowMock});
+      expect(storeMock.dispatch.calls.count()).toBe(4);
+      expect(storeMock.dispatch.calls.argsFor(2)[0]).toEqual(new FetchSubAccountsAction({
+        positionId: rowMock.metadata.positionId,
+        contextPositionId: stateMock.myPerformance.current.responsibilities.positionId,
+        entityType: rowMock.descriptionRow0,
+        selectedPositionId: rowMock.metadata.positionId,
+        premiseType: stateMock.myPerformanceFilter.premiseType
+      }));
+      expect(storeMock.dispatch.calls.argsFor(3)[0]).toEqual(new FetchProductMetricsAction({
+        positionId: rowMock.metadata.positionId,
+        contextPositionId: stateMock.myPerformance.current.responsibilities.positionId,
+        filter: stateMock.myPerformanceFilter as any,
+        selectedEntityType: SelectedEntityType.Account
+      }));
 
       storeMock.dispatch.calls.reset();
       componentInstance.handleElementClicked({leftSide: false, type: RowType.data, index: 0});
