@@ -44,12 +44,12 @@ export class ResponsibilitiesEffects {
     return this.actions$
       .ofType(ResponsibilitiesActions.FETCH_RESPONSIBILITY_ENTITY_PERFORMANCE)
       .switchMap((action: Action) => {
-        const { entityType, entities, filter, entitiesTotalPerformances, viewType } = action.payload;
+        const { entityType, entities, filter, selectedPositionId, viewType } = action.payload;
 
         return this.responsibilitiesService.getResponsibilitiesPerformanceTotals(entities, filter)
           .switchMap((entityPerformances: EntitiesPerformances[]) => {
             return Observable.from([
-              new ResponsibilitiesActions.SetTableRowPerformanceTotal(entitiesTotalPerformances),
+              new ResponsibilitiesActions.SetTableRowPerformanceTotal(selectedPositionId),
               new ResponsibilitiesActions.GetPeopleByRoleGroupAction(entityType),
               new ResponsibilitiesActions.FetchResponsibilityEntityPerformanceSuccess(entityPerformances),
               new ViewTypeActions.SetLeftMyPerformanceTableViewType(viewType)
@@ -118,7 +118,7 @@ export class ResponsibilitiesEffects {
 
   private constructSubAccountsSuccessAction(subAccountsData: SubAccountData): Observable<Action> {
     return Observable.from([
-      new ResponsibilitiesActions.SetTableRowPerformanceTotal(subAccountsData.entitiesTotalPerformances),
+      new ResponsibilitiesActions.SetTableRowPerformanceTotal(subAccountsData.selectedPositionId),
       new ResponsibilitiesActions.FetchSubAccountsSuccessAction({
         groupedEntities: subAccountsData.groupedEntities,
         entitiesPerformances: subAccountsData.entitiesPerformances

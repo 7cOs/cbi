@@ -163,7 +163,7 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
                 entityType: EntityPeopleType[parameters.row.descriptionRow0],
                 entities: this.currentState.responsibilities.groupedEntities[EntityPeopleType[parameters.row.descriptionRow0]],
                 filter: this.filterState,
-                entitiesTotalPerformances: parameters.row,
+                selectedPositionId: parameters.row.metadata.positionId,
                 viewType: ViewType.people
               }));
               break;
@@ -178,7 +178,7 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
                 positionId: parameters.row.metadata.positionId,
                 contextPositionId: this.currentState.responsibilities.positionId,
                 entityType: parameters.row.descriptionRow0,
-                entitiesTotalPerformances: parameters.row,
+                selectedPositionId: parameters.row.metadata.positionId,
                 premiseType: this.filterState.premiseType
               }));
               break;
