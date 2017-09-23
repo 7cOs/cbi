@@ -12,6 +12,7 @@ import { DateRangeTimePeriodValue } from '../../enums/date-range-time-period.enu
 import { DistributionTypeValue } from '../../enums/distribution-type.enum';
 import { FetchProductMetricsAction } from '../../state/actions/product-metrics.action';
 import { FetchResponsibilitiesAction } from '../../state/actions/responsibilities.action';
+import { getMyPerformanceStateMock } from '../../state/reducers/my-performance.state.mock';
 import { getMyPerformanceTableRowMock } from '../../models/my-performance-table-row.model.mock';
 import { MetricTypeValue } from '../../enums/metric-type.enum';
 import * as MyPerformanceVersionActions from '../../state/actions/my-performance-version.action';
@@ -19,7 +20,7 @@ import { MyPerformanceComponent } from './my-performance.component';
 import { MyPerformanceFilterActionType } from '../../enums/my-performance-filter.enum';
 import { MyPerformanceFilterEvent } from '../../models/my-performance-filter.model';
 import { MyPerformanceFilterState } from '../../state/reducers/my-performance-filter.reducer';
-import { MyPerformanceEntitiesData, initialState } from '../../state/reducers/my-performance.reducer';
+import { MyPerformanceEntitiesData, MyPerformanceState } from '../../state/reducers/my-performance.reducer';
 import { MyPerformanceTableDataTransformerService } from '../../services/my-performance-table-data-transformer.service';
 import { MyPerformanceTableRow } from '../../models/my-performance-table-row.model';
 import { MyPerformanceTableRowComponent } from '../../shared/components/my-performance-table-row/my-performance-table-row.component';
@@ -73,9 +74,23 @@ describe('MyPerformanceComponent', () => {
   let fixture: ComponentFixture<MyPerformanceComponent>;
   let componentInstance: MyPerformanceComponent;
   let userServiceMock: any;
+  let myPerformanceStateMock: MyPerformanceState = getMyPerformanceStateMock();
+
+  const versionsMock: MyPerformanceEntitiesData[] = Array(9).fill('').map(() => {
+    return {
+      viewType: {
+        leftTableViewType: ViewType.distributors,
+        rightTableViewType: ViewType.brands
+      }
+    };
+  });
+
+  Object.assign(myPerformanceStateMock, {
+    versions: versionsMock
+  });
 
   const stateMock = {
-    myPerformance: initialState,
+    myPerformance: myPerformanceStateMock,
     myPerformanceProductMetrics: chance.string(),
     myPerformanceFilter: chance.string(),
     dateRanges: chance.string(),
@@ -253,8 +268,12 @@ describe('MyPerformanceComponent', () => {
     storeMock.dispatch.calls.reset();
     componentInstance.leftTableViewType = ViewType.people;
     componentInstance.handleElementClicked({leftSide: true, type: RowType.data, index: 0, row: rowMock});
-    expect(storeMock.dispatch.calls.count()).toBe(3);
+    expect(storeMock.dispatch.calls.count()).toBe(4);
     expect(storeMock.dispatch.calls.argsFor(2)[0]).toEqual(new FetchResponsibilitiesAction({
+      positionId: rowMock.metadata.positionId,
+      filter: stateMock.myPerformanceFilter as any
+    }));
+    expect(storeMock.dispatch.calls.argsFor(3)[0]).toEqual(new FetchProductMetricsAction({
       positionId: rowMock.metadata.positionId,
       filter: stateMock.myPerformanceFilter as any
     }));
