@@ -11,9 +11,7 @@ import { MyPerformanceApiService } from '../../services/my-performance-api.servi
 import { MyPerformanceFilterState } from '../reducers/my-performance-filter.reducer';
 import { PremiseTypeValue } from '../../enums/premise-type.enum';
 import { ProductMetricsEffects } from './product-metrics.effect';
-import { ProductMetricsDTO } from '../../models/entity-product-metrics-dto.model';
 import { ProductMetricsTransformerService } from '../../services/product-metrics-transformer.service';
-import { ProductMetricType } from '../../enums/product-metrics-type.enum';
 import { FetchProductMetricsSuccessPayload, ProductMetrics } from '../../models/product-metrics.model';
 import { getProductMetricMock } from '../../models/entity-product-metrics-dto.model.mock';
 
@@ -34,14 +32,13 @@ describe('ProductMetrics Effects', () => {
   };
   const err = new Error(chance.string());
   const myPerformanceApiServiceMock = {
-    getProductMetrics() {
+    getPositionProductMetrics() {
       return Observable.of({products: productsMock});
     }
   };
 
   const productMetricsTransformerServiceMock = {
-    transformProductMetrics(aggregation: ProductMetricType = ProductMetricType.brand,
-      productMetricsDTOs: ProductMetricsDTO): ProductMetrics {
+    transformProductMetrics(): ProductMetrics {
       return productsMock;
     }
   };
@@ -111,7 +108,7 @@ describe('ProductMetrics Effects', () => {
       ));
 
       it('should return a FetchProductMetricsFailureAction after catching an error', (done) => {
-        spyOn(myPerformanceApiService, 'getProductMetrics').and.returnValue(Observable.throw(err));
+        spyOn(myPerformanceApiService, 'getPositionProductMetrics').and.returnValue(Observable.throw(err));
         productMetricsEffects.fetchProductMetrics$().subscribe((result) => {
           expect(result).toEqual(new ProductMetricsActions.FetchProductMetricsFailureAction(err));
           done();

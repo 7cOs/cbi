@@ -3,19 +3,19 @@ import 'rxjs/add/operator/map';
 
 import { ProductMetricsDTO, ProductMetricsBrandValueDTO } from '../models/entity-product-metrics-dto.model';
 import { ProductMetrics, ProductMetricsBrandValue } from '../models/product-metrics.model';
-import { ProductMetricType } from '../enums/product-metrics-type.enum';
+import { ProductMetricsAggregationType } from '../enums/product-metrics-aggregation-type.enum';
 import { UtilService } from './util.service';
 
 @Injectable()
 export class ProductMetricsTransformerService {
   constructor(private utilService: UtilService) { }
 
-  public transformProductMetrics(productMetricsDTOs: ProductMetricsDTO, aggregation: ProductMetricType): ProductMetrics {
+  public transformProductMetrics(productMetricsDTOs: ProductMetricsDTO, aggregation: ProductMetricsAggregationType): ProductMetrics {
     return productMetricsDTOs.brandValues.reduce((productMetrics: ProductMetrics, entity: ProductMetricsBrandValueDTO) => {
-      if (Array.isArray(productMetrics[ProductMetricType[aggregation]])) {
-        productMetrics[ProductMetricType[aggregation]].push(this.formatProductMetricsDTO(entity));
+      if (Array.isArray(productMetrics[ProductMetricsAggregationType[aggregation]])) {
+        productMetrics[ProductMetricsAggregationType[aggregation]].push(this.formatProductMetricsDTO(entity));
       } else {
-        productMetrics[ProductMetricType[aggregation]] = [this.formatProductMetricsDTO(entity)];
+        productMetrics[ProductMetricsAggregationType[aggregation]] = [this.formatProductMetricsDTO(entity)];
       }
       return productMetrics;
     }, {});

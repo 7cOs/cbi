@@ -13,7 +13,7 @@ import { MetricTypeValue } from '../enums/metric-type.enum';
 import { MyPerformanceFilterState } from '../state/reducers/my-performance-filter.reducer';
 import { PeopleResponsibilitiesDTO } from '../models/people-responsibilities-dto.model';
 import { PremiseTypeValue } from '../enums/premise-type.enum';
-import { ProductMetricType } from '../enums/product-metrics-type.enum';
+import { ProductMetricsAggregationType } from '../enums/product-metrics-aggregation-type.enum';
 import { ProductMetricsDTO } from '../models/entity-product-metrics-dto.model'; // tslint:disable-line:no-unused-variable
 
 @Injectable()
@@ -111,21 +111,41 @@ export class MyPerformanceApiService {
     .catch(err => this.handleError(new Error(err)));
   }
 
-  public getProductMetrics(
-    positionId: string, filter: MyPerformanceFilterState, aggregation: ProductMetricType
+  public getPositionProductMetrics(
+    positionId: string, filter: MyPerformanceFilterState, aggregation: ProductMetricsAggregationType
   ): Observable<ProductMetricsDTO> {
     const url = `/v3/positions/${ positionId }/productMetrics`;
 
-    const filterStateParams = this.getFilterStateParams(filter);
-
-    Object.assign(filterStateParams, {
-      aggregationLevel: aggregation
-    });
+    const params = Object.assign({},
+      this.getFilterStateParams(filter),
+      {aggregationLevel: aggregation}
+    );
 
     return this.http.get(`${ url }`, {
-      params: Object.assign({}, this.getFilterStateParams(filter), {
-        aggregationLevel: aggregation
-      })
+      params: params
+    })
+      .map(res => res.json())
+      .catch(err => this.handleError(new Error(err)));
+  }
+
+  public getAccountProductMetrics(
+    accountId: string,
+    positionId: string,
+    filter: MyPerformanceFilterState,
+    aggregation: ProductMetricsAggregationType
+  ): Observable<ProductMetricsDTO> {
+    const url = `/v3/accounts/${ accountId }/productMetrics`;
+
+    const params = Object.assign({},
+      this.getFilterStateParams(filter),
+      {
+        aggregationLevel: aggregation,
+        positionId: positionId
+      }
+    );
+
+    return this.http.get(`${ url }`, {
+      params: params
     })
       .map(res => res.json())
       .catch(err => this.handleError(new Error(err)));
