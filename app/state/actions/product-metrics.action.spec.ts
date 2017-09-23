@@ -1,13 +1,10 @@
 import * as Chance from 'chance';
 
-import { DateRangeTimePeriodValue } from '../../enums/date-range-time-period.enum';
-import { DistributionTypeValue } from '../../enums/distribution-type.enum';
-import { MetricTypeValue } from '../../enums/metric-type.enum';
+import { getMyPerformanceFilterMock } from '../../models/my-performance-filter.model.mock';
+import { getProductMetricMock } from '../../models/entity-product-metrics-dto.model.mock';
 import { MyPerformanceFilterState } from '../reducers/my-performance-filter.reducer';
-import { PremiseTypeValue } from '../../enums/premise-type.enum';
 import { ProductMetrics } from '../../models/product-metrics.model';
 import * as ProductMetricsActions from './product-metrics.action';
-import { getProductMetricMock } from '../../models/entity-product-metrics-dto.model.mock';
 
 const chance = new Chance();
 
@@ -17,12 +14,7 @@ describe('ProductMetrics Actions', () => {
     let action: ProductMetricsActions.FetchProductMetricsAction;
     let positionIdMock: string;
     let actionPayloadMock: any;
-    const mockPerformanceFilterState: MyPerformanceFilterState = {
-      metricType: MetricTypeValue.PointsOfDistribution,
-      dateRangeCode: DateRangeTimePeriodValue.FYTDBDL,
-      premiseType: PremiseTypeValue.On,
-      distributionType: DistributionTypeValue.simple
-    };
+    const mockPerformanceFilterState: MyPerformanceFilterState = getMyPerformanceFilterMock();
 
     beforeEach(() => {
       positionIdMock = chance.string();

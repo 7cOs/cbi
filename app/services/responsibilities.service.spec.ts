@@ -3,7 +3,6 @@ import { TestBed, inject } from '@angular/core/testing';
 import * as Chance from 'chance';
 
 import { DateRangeTimePeriodValue } from '../enums/date-range-time-period.enum';
-import { DistributionTypeValue } from '../enums/distribution-type.enum';
 import { EntitiesTotalPerformances, EntitiesTotalPerformancesDTO } from '../models/entities-total-performances.model';
 import { EntityDTO } from '../models/entity-dto.model';
 import { EntitiesPerformances, EntitiesPerformancesDTO } from '../models/entities-performances.model';
@@ -17,6 +16,7 @@ import { getEntitiesPerformancesMock, getResponsibilityEntitiesPerformanceDTOMoc
 import { getEntityDTOMock } from '../models/entity-dto.model.mock';
 import { getEntitySubAccountDTOMock } from '../models/entity-subaccount-dto.model.mock';
 import { getGroupedEntitiesMock } from '../models/grouped-entities.model.mock';
+import { getMyPerformanceFilterMock } from '../models/my-performance-filter.model.mock';
 import { getMyPerformanceTableRowMock } from '../models/my-performance-table-row.model.mock';
 import { getPeopleResponsibilitiesDTOMock } from '../models/people-responsibilities-dto.model.mock';
 import { GroupedEntities } from '../models/grouped-entities.model';
@@ -50,12 +50,7 @@ describe('Responsibilities Effects', () => {
   let responsibilitiesTransformerService: ResponsibilitiesTransformerService;
   let entitySubAccountDTOMock: EntitySubAccountDTO[];
 
-  const performanceFilterStateMock: MyPerformanceFilterState = {
-    metricType: MetricTypeValue.PointsOfDistribution,
-    dateRangeCode: DateRangeTimePeriodValue.FYTDBDL,
-    premiseType: PremiseTypeValue.On,
-    distributionType: DistributionTypeValue.simple
-  };
+  const performanceFilterStateMock: MyPerformanceFilterState = getMyPerformanceFilterMock();
 
   const myPerformanceApiServiceMock = {
     getResponsibilities() {

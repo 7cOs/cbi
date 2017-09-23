@@ -1,8 +1,6 @@
 import * as Chance from 'chance';
 const chance = new Chance();
 
-import { DateRangeTimePeriodValue } from '../../enums/date-range-time-period.enum';
-import { DistributionTypeValue } from '../../enums/distribution-type.enum';
 import { EntityPeopleType } from '../../enums/entity-responsibilities.enum';
 import { FetchResponsibilityEntitiesPerformancePayload,
          FetchSubAccountsActionPayload,
@@ -10,9 +8,9 @@ import { FetchResponsibilityEntitiesPerformancePayload,
 import { getEntitiesPerformancesMock } from '../../models/entities-performances.model.mock';
 import { getEntityPeopleResponsibilitiesMock } from '../../models/entity-responsibilities.model.mock';
 import { getEntitiesTotalPerformancesMock } from '../../models/entities-total-performances.model.mock';
+import { getMyPerformanceFilterMock } from '../../models/my-performance-filter.model.mock';
 import { getMyPerformanceTableRowMock } from '../../models/my-performance-table-row.model.mock';
 import { getGroupedEntitiesMock } from '../../models/grouped-entities.model.mock';
-import { MetricTypeValue } from '../../enums/metric-type.enum';
 import { MyPerformanceFilterState } from '../reducers/my-performance-filter.reducer';
 import { EntitiesTotalPerformances } from '../../models/entities-total-performances.model';
 import { PremiseTypeValue } from '../../enums/premise-type.enum';
@@ -21,12 +19,7 @@ import { GroupedEntities } from '../../models/grouped-entities.model';
 import { ViewType } from '../../enums/view-type.enum';
 import * as ResponsibilitiesActions from './responsibilities.action';
 
-const performanceFilterStateMock: MyPerformanceFilterState = {
-  metricType: MetricTypeValue.PointsOfDistribution,
-  dateRangeCode: DateRangeTimePeriodValue.FYTDBDL,
-  premiseType: PremiseTypeValue.On,
-  distributionType: DistributionTypeValue.simple
-};
+const performanceFilterStateMock: MyPerformanceFilterState = getMyPerformanceFilterMock();
 
 describe('Responsibilities Actions', () => {
 
