@@ -16,49 +16,60 @@ import { SelectedEntityType } from '../../enums/selected-entity-type.enum';
 const chance = new Chance();
 
 describe('ProductMetrics Effects', () => {
-  const positionIdMock = chance.string();
-  const contextPositionIdMock = chance.string();
-  const productsMock: ProductMetrics = getProductMetricMock();
-  const performanceFilterStateMock: MyPerformanceFilterState = getMyPerformanceFilterMock();
-  const productMetricsSuccessPayloadMock: FetchProductMetricsSuccessPayload = {
-    positionId: positionIdMock,
-    products: productsMock
-  };
-  const err = new Error(chance.string());
-  const myPerformanceApiServiceMock = {
-    getPositionProductMetrics() {
-      return Observable.of({products: productsMock});
-    },
-    getAccountProductMetrics() {
-      return Observable.of({products: productsMock});
-    }
-  };
-
-  const productMetricsTransformerServiceMock = {
-    transformProductMetrics(): ProductMetrics {
-      return productsMock;
-    }
-  };
+  let positionIdMock: string;
+  let contextPositionIdMock: string;
+  let productMetricsMock: ProductMetrics;
+  let performanceFilterStateMock: MyPerformanceFilterState;
+  let productMetricsSuccessPayloadMock: FetchProductMetricsSuccessPayload;
+  let err: Error;
+  let myPerformanceApiServiceMock: any;
+  let productMetricsTransformerServiceMock: any;
 
   let runner: EffectsRunner;
   let productMetricsEffects: ProductMetricsEffects;
 
-  beforeEach(() => TestBed.configureTestingModule({
-    imports: [
-      EffectsTestingModule
-    ],
-    providers: [
-      ProductMetricsEffects,
-      {
-        provide: MyPerformanceApiService,
-        useValue: myPerformanceApiServiceMock
+  beforeEach(() => {
+    positionIdMock = chance.string();
+    contextPositionIdMock = chance.string();
+    productMetricsMock = getProductMetricMock();
+    performanceFilterStateMock = getMyPerformanceFilterMock();
+    productMetricsSuccessPayloadMock = {
+      positionId: positionIdMock,
+      products: productMetricsMock
+    };
+    err = new Error(chance.string());
+    myPerformanceApiServiceMock = {
+      getPositionProductMetrics() {
+        return Observable.of({products: productMetricsMock});
       },
-      {
-        provide: ProductMetricsTransformerService,
-        useValue: productMetricsTransformerServiceMock
+      getAccountProductMetrics() {
+        return Observable.of({products: productMetricsMock});
       }
-    ]
-  }));
+    };
+
+    productMetricsTransformerServiceMock = {
+      transformProductMetrics(): ProductMetrics {
+        return productMetricsMock;
+      }
+    };
+
+    TestBed.configureTestingModule({
+      imports: [
+        EffectsTestingModule
+      ],
+      providers: [
+        ProductMetricsEffects,
+        {
+          provide: MyPerformanceApiService,
+          useValue: myPerformanceApiServiceMock
+        },
+        {
+          provide: ProductMetricsTransformerService,
+          useValue: productMetricsTransformerServiceMock
+        }
+      ]
+    });
+  });
 
   beforeEach(inject([ EffectsRunner, ProductMetricsEffects ],
     (_runner: EffectsRunner, _compassWebEffects: ProductMetricsEffects) => {
