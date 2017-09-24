@@ -321,7 +321,8 @@ describe('Service: MyPerformanceApiService', () => {
             id: positionIdMock,
             name: entityMock.name,
             positionDescription: entityMock.positionDescription,
-            performanceTotal: performanceTotalResponseMock
+            performanceTotal: performanceTotalResponseMock,
+            entityTypeCode: entityMock.type
           });
           done();
       });

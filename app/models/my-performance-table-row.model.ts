@@ -1,6 +1,7 @@
 export interface MyPerformanceTableRowMetadata {
   positionId: string;
   contextPositionId?: string;
+  entityTypeCode?: string;
 }
 
 export interface MyPerformanceTableRow {

@@ -11,7 +11,11 @@ import { DateRangesState } from '../../state/reducers/date-ranges.reducer';
 import { DateRangeTimePeriodValue } from '../../enums/date-range-time-period.enum';
 import { DistributionTypeValue } from '../../enums/distribution-type.enum';
 import { FetchProductMetricsAction } from '../../state/actions/product-metrics.action';
-import { FetchResponsibilitiesAction, FetchSubAccountsAction } from '../../state/actions/responsibilities.action';
+import {
+  FetchResponsibilitiesAction,
+  FetchResponsibilityEntityPerformance,
+  FetchSubAccountsAction
+} from '../../state/actions/responsibilities.action';
 import { getMyPerformanceFilterMock } from '../../models/my-performance-filter.model.mock';
 import { getMyPerformanceStateMock } from '../../state/reducers/my-performance.state.mock';
 import { getMyPerformanceTableRowMock } from '../../models/my-performance-table-row.model.mock';
@@ -32,6 +36,7 @@ import { SortIndicatorComponent } from '../../shared/components/sort-indicator/s
 import { SortingCriteria } from '../../models/sorting-criteria.model';
 import { UtilService } from '../../services/util.service';
 import { ViewType } from '../../enums/view-type.enum';
+import { EntityPeopleType } from '../../enums/entity-responsibilities.enum';
 
 const chance = new Chance();
 
@@ -257,7 +262,20 @@ describe('MyPerformanceComponent', () => {
     storeMock.dispatch.calls.reset();
     componentInstance.leftTableViewType = ViewType.roleGroups;
     componentInstance.handleElementClicked({leftSide: true, type: RowType.data, index: 0, row: rowMock});
-    expect(storeMock.dispatch.calls.count()).toBe(3);
+    expect(storeMock.dispatch.calls.count()).toBe(4);
+    expect(storeMock.dispatch.calls.argsFor(2)[0]).toEqual(new FetchResponsibilityEntityPerformance({
+      entityTypeGroupName: EntityPeopleType[rowMock.descriptionRow0],
+      entities: stateMock.myPerformance.current.responsibilities.groupedEntities[EntityPeopleType[rowMock.descriptionRow0]],
+      filter: stateMock.myPerformanceFilter as any,
+      selectedPositionId: rowMock.metadata.positionId,
+      viewType: ViewType.people
+    }));
+    expect(storeMock.dispatch.calls.argsFor(3)[0]).toEqual(new FetchProductMetricsAction({
+      positionId: rowMock.metadata.positionId,
+      entityTypeCode: rowMock.metadata.entityTypeCode,
+      filter: stateMock.myPerformanceFilter as any,
+      selectedEntityType: SelectedEntityType.RoleGroup
+    }));
 
     storeMock.dispatch.calls.reset();
     componentInstance.leftTableViewType = ViewType.accounts;

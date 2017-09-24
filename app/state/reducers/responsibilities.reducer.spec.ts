@@ -116,7 +116,7 @@ describe('Responsibilities Reducer', () => {
 
   it('should update the status when a FetchResponsibilityEntityPerformance action is received', () => {
     const payloadMock: FetchResponsibilityEntitiesPerformancePayload = {
-      entityType: EntityPeopleType['GENERAL MANAGER'],
+      entityTypeGroupName: EntityPeopleType['GENERAL MANAGER'],
       entities: [getEntityPeopleResponsibilitiesMock()],
       filter: performanceFilterStateMock,
       selectedPositionId: getMyPerformanceTableRowMock(1)[0].metadata.positionId,

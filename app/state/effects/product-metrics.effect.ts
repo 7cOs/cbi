@@ -39,7 +39,7 @@ export class ProductMetricsEffects {
           );
         } else if (action.payload.selectedEntityType === SelectedEntityType.RoleGroup) {
           dtos = this.myPerformanceApiService.getRoleGroupProductMetrics(
-            payload.positionId, payload.entityType, payload.filter, ProductMetricsAggregationType.brand
+            payload.positionId, payload.entityTypeCode, payload.filter, ProductMetricsAggregationType.brand
           );
         }
 

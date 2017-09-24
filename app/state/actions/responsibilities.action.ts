@@ -16,7 +16,7 @@ export interface FetchResponsibilitiesSuccessPayload {
 }
 
 export interface FetchResponsibilityEntitiesPerformancePayload {
-  entityType: EntityPeopleType;
+  entityTypeGroupName: EntityPeopleType;
   entities: EntityResponsibilities[];
   filter: MyPerformanceFilterState;
   selectedPositionId: string;

@@ -24,6 +24,7 @@ export class PerformanceTransformerService {
     return entities.map((entity: EntitiesPerformancesDTO) => {
       return {
         positionId: entity.id,
+        entityTypeCode: entity.entityTypeCode,
         name: entity.name,
         positionDescription: entity.positionDescription,
         performanceTotal: this.transformEntitiesTotalPerformancesDTO(entity.performanceTotal)

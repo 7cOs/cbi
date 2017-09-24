@@ -19,7 +19,7 @@ const chance = new Chance();
 describe('ProductMetrics Effects', () => {
   let positionIdMock: string;
   let contextPositionIdMock: string;
-  let entityTypeMock: string;
+  let entityTypeCodeMock: string;
   let productMetricsMock: ProductMetrics;
   let performanceFilterStateMock: MyPerformanceFilterState;
   let productMetricsSuccessPayloadMock: FetchProductMetricsSuccessPayload;
@@ -33,7 +33,7 @@ describe('ProductMetrics Effects', () => {
   beforeEach(() => {
     positionIdMock = chance.string();
     contextPositionIdMock = chance.string();
-    entityTypeMock = chance.string();
+    entityTypeCodeMock = chance.string();
     productMetricsMock = getProductMetricMock();
     performanceFilterStateMock = getMyPerformanceFilterMock();
     productMetricsSuccessPayloadMock = {
@@ -206,7 +206,7 @@ describe('ProductMetrics Effects', () => {
         spyOn(myPerformanceApiService, 'getRoleGroupProductMetrics').and.callThrough();
         runner.queue(new ProductMetricsActions.FetchProductMetricsAction({
           positionId: positionIdMock,
-          entityType: entityTypeMock,
+          entityTypeCode: entityTypeCodeMock,
           filter: performanceFilterStateMock,
           selectedEntityType: SelectedEntityType.RoleGroup
         }));
@@ -215,7 +215,7 @@ describe('ProductMetrics Effects', () => {
       it('should return a FetchProductMetricsSuccessAction', (done) => {
         productMetricsEffects.fetchProductMetrics$().subscribe(result => {
           expect(myPerformanceApiService.getRoleGroupProductMetrics).toHaveBeenCalledWith(
-            positionIdMock, entityTypeMock, performanceFilterStateMock, ProductMetricsAggregationType.brand
+            positionIdMock, entityTypeCodeMock, performanceFilterStateMock, ProductMetricsAggregationType.brand
           );
           expect(result).toEqual(new ProductMetricsActions.FetchProductMetricsSuccessAction(
             productMetricsSuccessPayloadMock));
@@ -229,7 +229,7 @@ describe('ProductMetrics Effects', () => {
         spyOn(myPerformanceApiService, 'getRoleGroupProductMetrics').and.returnValue(Observable.throw(err));
         runner.queue(new ProductMetricsActions.FetchProductMetricsAction({
           positionId: positionIdMock,
-          entityType: entityTypeMock,
+          entityTypeCode: entityTypeCodeMock,
           filter: performanceFilterStateMock,
           selectedEntityType: SelectedEntityType.RoleGroup
         }));
@@ -238,7 +238,7 @@ describe('ProductMetrics Effects', () => {
       it('should return a FetchProductMetricsFailureAction after catching an error', (done) => {
         productMetricsEffects.fetchProductMetrics$().subscribe((result) => {
           expect(myPerformanceApiService.getRoleGroupProductMetrics).toHaveBeenCalledWith(
-            positionIdMock, entityTypeMock, performanceFilterStateMock, ProductMetricsAggregationType.brand
+            positionIdMock, entityTypeCodeMock, performanceFilterStateMock, ProductMetricsAggregationType.brand
           );
           expect(result).toEqual(new ProductMetricsActions.FetchProductMetricsFailureAction(err));
           done();

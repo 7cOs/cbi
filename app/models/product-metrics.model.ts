@@ -16,7 +16,7 @@ export interface ProductMetrics {
 export interface FetchProductMetricsPayload {
   positionId: string;
   contextPositionId?: string;
-  entityType?: string;
+  entityTypeCode?: string;
   filter: MyPerformanceFilterState;
   selectedEntityType: SelectedEntityType;
 }

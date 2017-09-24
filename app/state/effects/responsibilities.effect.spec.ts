@@ -223,7 +223,7 @@ describe('Responsibilities Effects', () => {
 
   describe('when a FetchResponsibilityEntityPerformance is received', () => {
     const fetchEntityPerformancePayloadMock: FetchResponsibilityEntitiesPerformancePayload = {
-      entityType: EntityPeopleType['GENERAL MANAGER'],
+      entityTypeGroupName: EntityPeopleType['GENERAL MANAGER'],
       entities: [getEntityPeopleResponsibilitiesMock()],
       filter: performanceFilterStateMock,
       selectedPositionId: getMyPerformanceTableRowMock(1)[0].metadata.positionId,
@@ -258,7 +258,7 @@ describe('Responsibilities Effects', () => {
           if (dispatchedActions.length === 4) {
             expect(dispatchedActions).toEqual([
               new SetTableRowPerformanceTotal(fetchEntityPerformancePayloadMock.selectedPositionId),
-              new GetPeopleByRoleGroupAction(fetchEntityPerformancePayloadMock.entityType),
+              new GetPeopleByRoleGroupAction(fetchEntityPerformancePayloadMock.entityTypeGroupName),
               new FetchResponsibilityEntityPerformanceSuccess(entitiesPerformancesMock),
               new SetLeftMyPerformanceTableViewType(fetchEntityPerformancePayloadMock.viewType)
             ]);

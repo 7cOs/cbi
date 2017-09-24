@@ -41,6 +41,7 @@ export class MyPerformanceApiService {
         id: positionId,
         name: entity.name,
         positionDescription: entity.positionDescription,
+        entityTypeCode: entity.type,
         performanceTotal: res.json()
       }))
       .catch(err => this.handleError(new Error(err)));

@@ -117,7 +117,7 @@ describe('Responsibilities Actions', () => {
 
   describe('FetchResponsibilityEntityPerformance', () => {
     const payloadMock: FetchResponsibilityEntitiesPerformancePayload = {
-      entityType: EntityPeopleType['GENERAL MANAGER'],
+      entityTypeGroupName: EntityPeopleType['GENERAL MANAGER'],
       entities: [getEntityPeopleResponsibilitiesMock()],
       filter: performanceFilterStateMock,
       selectedPositionId: getMyPerformanceTableRowMock(1)[0].metadata.positionId,

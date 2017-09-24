@@ -169,12 +169,19 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
 
           switch (this.leftTableViewType) {
             case ViewType.roleGroups:
+              const entityTypeGroupName = EntityPeopleType[parameters.row.descriptionRow0];
               this.store.dispatch(new FetchResponsibilityEntityPerformance({
-                entityType: EntityPeopleType[parameters.row.descriptionRow0],
-                entities: this.currentState.responsibilities.groupedEntities[EntityPeopleType[parameters.row.descriptionRow0]],
+                entityTypeGroupName: entityTypeGroupName,
+                entities: this.currentState.responsibilities.groupedEntities[entityTypeGroupName],
                 filter: this.filterState,
                 selectedPositionId: parameters.row.metadata.positionId,
                 viewType: ViewType.people
+              }));
+              this.store.dispatch(new FetchProductMetricsAction({
+                positionId: parameters.row.metadata.positionId,
+                entityTypeCode: parameters.row.metadata.entityTypeCode,
+                filter: this.filterState,
+                selectedEntityType: SelectedEntityType.RoleGroup
               }));
               break;
             case ViewType.people:
