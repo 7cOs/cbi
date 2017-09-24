@@ -30,7 +30,7 @@ export interface ResponsibilitiesData {
 export interface SubAccountData {
   positionId: string;
   contextPositionId: string;
-  entityType: string;
+  entityTypeAccountName: string;
   premiseType: PremiseTypeValue;
   groupedEntities?: GroupedEntities;
   entitiesPerformances?: Array<EntitiesPerformances>;
@@ -164,7 +164,7 @@ export class ResponsibilitiesService {
     )
       .map((response: Array<EntitySubAccountDTO>) => {
         const groupedEntities: GroupedEntities =
-          this.responsibilitiesTransformerService.transformSubAccountsDTO(response, subAccountData.entityType);
+          this.responsibilitiesTransformerService.transformSubAccountsDTO(response, subAccountData.entityTypeAccountName);
 
         return Object.assign({}, subAccountData, {
           groupedEntities: groupedEntities
@@ -174,7 +174,7 @@ export class ResponsibilitiesService {
 
   public getSubAccountsPerformanceTotals(subAccountData: SubAccountData): Observable<SubAccountData> {
     // Mock SubAccount performance till next story
-    const entitiesPerformancesMock: Array<EntitiesPerformances> = subAccountData.groupedEntities[subAccountData.entityType]
+    const entitiesPerformancesMock: Array<EntitiesPerformances> = subAccountData.groupedEntities[subAccountData.entityTypeAccountName]
       .map((subAccount: EntityResponsibilities) => {
         return {
           positionId: subAccount.positionId,

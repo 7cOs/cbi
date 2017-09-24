@@ -26,7 +26,7 @@ export interface FetchResponsibilityEntitiesPerformancePayload {
 export interface FetchSubAccountsActionPayload {
   positionId: string;
   contextPositionId: string;
-  entityType: string;
+  entityTypeAccountName: string;
   selectedPositionId: string;
   premiseType: PremiseTypeValue;
 }

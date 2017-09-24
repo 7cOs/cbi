@@ -199,7 +199,7 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
               this.store.dispatch(new FetchSubAccountsAction({
                 positionId: parameters.row.metadata.positionId,
                 contextPositionId: this.currentState.responsibilities.positionId,
-                entityType: parameters.row.descriptionRow0,
+                entityTypeAccountName: parameters.row.descriptionRow0,
                 selectedPositionId: parameters.row.metadata.positionId,
                 premiseType: this.filterState.premiseType
               }));

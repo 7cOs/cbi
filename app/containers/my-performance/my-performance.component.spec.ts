@@ -284,7 +284,7 @@ describe('MyPerformanceComponent', () => {
     expect(storeMock.dispatch.calls.argsFor(2)[0]).toEqual(new FetchSubAccountsAction({
       positionId: rowMock.metadata.positionId,
       contextPositionId: stateMock.myPerformance.current.responsibilities.positionId,
-      entityType: rowMock.descriptionRow0,
+      entityTypeAccountName: rowMock.descriptionRow0,
       selectedPositionId: rowMock.metadata.positionId,
       premiseType: stateMock.myPerformanceFilter.premiseType
     }));
