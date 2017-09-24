@@ -37,6 +37,10 @@ export class ProductMetricsEffects {
           dtos = this.myPerformanceApiService.getAccountProductMetrics(
             payload.positionId, payload.contextPositionId, payload.filter, ProductMetricsAggregationType.brand
           );
+        } else if (action.payload.selectedEntityType === SelectedEntityType.RoleGroup) {
+          dtos = this.myPerformanceApiService.getRoleGroupProductMetrics(
+            payload.positionId, payload.entityType, payload.filter, ProductMetricsAggregationType.brand
+          );
         }
 
         return dtos
