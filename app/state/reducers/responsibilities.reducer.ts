@@ -7,6 +7,7 @@ import * as ResponsibilitiesActions from '../actions/responsibilities.action';
 export interface ResponsibilitiesState extends State {
   status: ActionStatus;
   positionId: string;
+  entityTypeCode?: string;
   groupedEntities: GroupedEntities;
   entitiesPerformances: EntitiesPerformances[];
   entitiesTotalPerformances: EntitiesTotalPerformances;
@@ -64,7 +65,8 @@ export function responsibilitiesReducer(
     case ResponsibilitiesActions.FETCH_RESPONSIBILITY_ENTITY_PERFORMANCE_SUCCESS:
       return Object.assign({}, state, {
         status: ActionStatus.Fetched,
-        entitiesPerformances: action.payload
+        entitiesPerformances: action.payload.entitiesPerformances,
+        entityTypeCode: action.payload.entityTypeCode
       });
 
     case ResponsibilitiesActions.FETCH_PERFORMANCE_TOTAL_ACTION:

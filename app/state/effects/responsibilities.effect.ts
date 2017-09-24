@@ -44,14 +44,17 @@ export class ResponsibilitiesEffects {
     return this.actions$
       .ofType(ResponsibilitiesActions.FETCH_RESPONSIBILITY_ENTITY_PERFORMANCE)
       .switchMap((action: Action) => {
-        const { entityTypeGroupName, entities, filter, selectedPositionId, viewType } = action.payload;
+        const { entityTypeGroupName, entityTypeCode, entities, filter, selectedPositionId, viewType } = action.payload;
 
         return this.responsibilitiesService.getResponsibilitiesPerformanceTotals(entities, filter)
           .switchMap((entityPerformances: EntitiesPerformances[]) => {
             return Observable.from([
               new ResponsibilitiesActions.SetTableRowPerformanceTotal(selectedPositionId),
               new ResponsibilitiesActions.GetPeopleByRoleGroupAction(entityTypeGroupName),
-              new ResponsibilitiesActions.FetchResponsibilityEntityPerformanceSuccess(entityPerformances),
+              new ResponsibilitiesActions.FetchResponsibilityEntityPerformanceSuccess({
+                entitiesPerformances: entityPerformances,
+                entityTypeCode: entityTypeCode
+              }),
               new ViewTypeActions.SetLeftMyPerformanceTableViewType(viewType)
             ]);
           })

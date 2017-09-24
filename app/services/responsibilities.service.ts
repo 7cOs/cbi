@@ -23,6 +23,7 @@ export interface ResponsibilitiesData {
   entityTypes?: Array<{ type: string, name: string, positionDescription: string }>;
   entitiesURL?: string;
   positionId?: string;
+  entityTypeCode?: string;
   filter?: MyPerformanceFilterState;
   entitiesPerformances?: Array<EntitiesPerformances>;
 }

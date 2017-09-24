@@ -17,10 +17,16 @@ export interface FetchResponsibilitiesSuccessPayload {
 
 export interface FetchResponsibilityEntitiesPerformancePayload {
   entityTypeGroupName: EntityPeopleType;
+  entityTypeCode: string;
   entities: EntityResponsibilities[];
   filter: MyPerformanceFilterState;
   selectedPositionId: string;
   viewType: ViewType;
+}
+
+export interface FetchResponsibilityEntitiesPerformanceSuccessPayload {
+  entitiesPerformances: EntitiesPerformances[];
+  entityTypeCode: string;
 }
 
 export interface FetchSubAccountsActionPayload {
@@ -68,7 +74,7 @@ export const FETCH_RESPONSIBILITY_ENTITY_PERFORMANCE_SUCCESS = '[Responsibilitie
 export class FetchResponsibilityEntityPerformanceSuccess implements Action {
   readonly type = FETCH_RESPONSIBILITY_ENTITY_PERFORMANCE_SUCCESS;
 
-  constructor(public payload: EntitiesPerformances[]) { }
+  constructor(public payload: FetchResponsibilityEntitiesPerformanceSuccessPayload) { }
 }
 
 export const GET_PEOPLE_BY_ROLE_GROUP_ACTION = '[Responsibilities] GET_PEOPLE_BY_ROLE_GROUP_ACTION';

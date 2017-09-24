@@ -1,8 +1,10 @@
 import { ActionStatus } from '../../enums/action-status.enum';
-import { EntitiesPerformances } from '../../models/entities-performances.model';
 import { EntitiesTotalPerformances } from '../../models/entities-total-performances.model';
 import { EntityPeopleType } from '../../enums/entity-responsibilities.enum';
-import { FetchResponsibilityEntitiesPerformancePayload } from '../actions/responsibilities.action';
+import {
+  FetchResponsibilityEntitiesPerformancePayload,
+  FetchResponsibilityEntitiesPerformanceSuccessPayload
+} from '../actions/responsibilities.action';
 import { initialState, responsibilitiesReducer } from './responsibilities.reducer';
 import { getEntityPeopleResponsibilitiesMock } from '../../models/entity-responsibilities.model.mock';
 import { getEntitiesPerformancesMock } from '../../models/entities-performances.model.mock';
@@ -16,6 +18,7 @@ import { ViewType } from '../../enums/view-type.enum';
 import * as ResponsibilitiesActions from '../actions/responsibilities.action';
 
 const positionIdMock = chance.string();
+const entityTypeCodeMock = chance.string();
 const performanceFilterStateMock: MyPerformanceFilterState = getMyPerformanceFilterMock();
 
 describe('Responsibilities Reducer', () => {
@@ -117,6 +120,7 @@ describe('Responsibilities Reducer', () => {
   it('should update the status when a FetchResponsibilityEntityPerformance action is received', () => {
     const payloadMock: FetchResponsibilityEntitiesPerformancePayload = {
       entityTypeGroupName: EntityPeopleType['GENERAL MANAGER'],
+      entityTypeCode: entityTypeCodeMock,
       entities: [getEntityPeopleResponsibilitiesMock()],
       filter: performanceFilterStateMock,
       selectedPositionId: getMyPerformanceTableRowMock(1)[0].metadata.positionId,
@@ -137,12 +141,16 @@ describe('Responsibilities Reducer', () => {
   });
 
   it('should update the state when a FetchResponsibilityEntityPerformanceSuccess action is received', () => {
-    const payloadMock: EntitiesPerformances[] = getEntitiesPerformancesMock();
+    const payloadMock: FetchResponsibilityEntitiesPerformanceSuccessPayload = {
+      entitiesPerformances: getEntitiesPerformancesMock(),
+      entityTypeCode: entityTypeCodeMock
+    };
     const expectedState = {
       status: ActionStatus.Fetched,
       positionId: initialState.positionId,
       groupedEntities: initialState.groupedEntities,
-      entitiesPerformances: payloadMock,
+      entitiesPerformances: payloadMock.entitiesPerformances,
+      entityTypeCode: payloadMock.entityTypeCode,
       entitiesTotalPerformances: initialState.entitiesTotalPerformances
     };
     const actualState = responsibilitiesReducer(

@@ -265,6 +265,7 @@ describe('MyPerformanceComponent', () => {
     expect(storeMock.dispatch.calls.count()).toBe(4);
     expect(storeMock.dispatch.calls.argsFor(2)[0]).toEqual(new FetchResponsibilityEntityPerformance({
       entityTypeGroupName: EntityPeopleType[rowMock.descriptionRow0],
+      entityTypeCode: rowMock.metadata.entityTypeCode,
       entities: stateMock.myPerformance.current.responsibilities.groupedEntities[EntityPeopleType[rowMock.descriptionRow0]],
       filter: stateMock.myPerformanceFilter as any,
       selectedPositionId: rowMock.metadata.positionId,

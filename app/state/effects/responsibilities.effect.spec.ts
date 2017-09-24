@@ -45,6 +45,7 @@ describe('Responsibilities Effects', () => {
   const groupedEntitiesMock: GroupedEntities = getGroupedEntitiesMock();
   const performanceTotalMock: EntitiesTotalPerformances = getEntitiesTotalPerformancesMock();
   const positionIdMock = chance.string();
+  const entityTypeCodeMock = chance.string();
 
   const responsibilitiesServiceMock = {
     getResponsibilities(responsibilitiesData: ResponsibilitiesData): Observable<ResponsibilitiesData> {
@@ -79,9 +80,9 @@ describe('Responsibilities Effects', () => {
   };
 
   const responsibilitiesDataMock: ResponsibilitiesData = {
-          filter: performanceFilterStateMock,
-          positionId: positionIdMock
-        };
+    filter: performanceFilterStateMock,
+    positionId: positionIdMock
+  };
 
   let runner: EffectsRunner;
   let responsibilitiesEffects: ResponsibilitiesEffects;
@@ -224,6 +225,7 @@ describe('Responsibilities Effects', () => {
   describe('when a FetchResponsibilityEntityPerformance is received', () => {
     const fetchEntityPerformancePayloadMock: FetchResponsibilityEntitiesPerformancePayload = {
       entityTypeGroupName: EntityPeopleType['GENERAL MANAGER'],
+      entityTypeCode: entityTypeCodeMock,
       entities: [getEntityPeopleResponsibilitiesMock()],
       filter: performanceFilterStateMock,
       selectedPositionId: getMyPerformanceTableRowMock(1)[0].metadata.positionId,
@@ -259,7 +261,10 @@ describe('Responsibilities Effects', () => {
             expect(dispatchedActions).toEqual([
               new SetTableRowPerformanceTotal(fetchEntityPerformancePayloadMock.selectedPositionId),
               new GetPeopleByRoleGroupAction(fetchEntityPerformancePayloadMock.entityTypeGroupName),
-              new FetchResponsibilityEntityPerformanceSuccess(entitiesPerformancesMock),
+              new FetchResponsibilityEntityPerformanceSuccess({
+                entitiesPerformances: entitiesPerformancesMock,
+                entityTypeCode: entityTypeCodeMock
+              }),
               new SetLeftMyPerformanceTableViewType(fetchEntityPerformancePayloadMock.viewType)
             ]);
 

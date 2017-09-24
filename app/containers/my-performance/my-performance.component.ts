@@ -23,7 +23,6 @@ import { MyPerformanceTableDataTransformerService } from '../../services/my-perf
 import { MyPerformanceTableRow } from '../../models/my-performance-table-row.model';
 import { MyPerformanceEntitiesData } from '../../state/reducers/my-performance.reducer';
 import * as MyPerformanceVersionActions from '../../state/actions/my-performance-version.action';
-import { ResponsibilitiesState } from '../../state/reducers/responsibilities.reducer';
 import { RowType } from '../../enums/row-type.enum';
 import { SelectedEntityType } from '../../enums/selected-entity-type.enum';
 import { SortingCriteria } from '../../models/sorting-criteria.model';
@@ -48,7 +47,6 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
   public currentUserFullName: string;
   public leftTableViewType: ViewType;
   public performanceStateVersions$: Observable<MyPerformanceEntitiesData[]>;
-  public roleGroups: Observable<ResponsibilitiesState>;
   public showLeftBackButton = false;
   public sortingCriteria: Array<SortingCriteria> = [{
     columnType: ColumnType.metricColumn0,
@@ -172,6 +170,7 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
               const entityTypeGroupName = EntityPeopleType[parameters.row.descriptionRow0];
               this.store.dispatch(new FetchResponsibilityEntityPerformance({
                 entityTypeGroupName: entityTypeGroupName,
+                entityTypeCode: parameters.row.metadata.entityTypeCode,
                 entities: this.currentState.responsibilities.groupedEntities[entityTypeGroupName],
                 filter: this.filterState,
                 selectedPositionId: parameters.row.metadata.positionId,
@@ -258,6 +257,13 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
         positionId: state.responsibilities.positionId,
         filter: this.filterState,
         selectedEntityType: SelectedEntityType.Position
+      }));
+    } else if (state.viewType.leftTableViewType === ViewType.people) {
+      this.store.dispatch(new FetchProductMetricsAction({
+        positionId: state.responsibilities.positionId,
+        entityTypeCode: state.responsibilities.entityTypeCode,
+        filter: this.filterState,
+        selectedEntityType: SelectedEntityType.RoleGroup
       }));
     }
   }

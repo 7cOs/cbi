@@ -2,9 +2,12 @@ import * as Chance from 'chance';
 const chance = new Chance();
 
 import { EntityPeopleType } from '../../enums/entity-responsibilities.enum';
-import { FetchResponsibilityEntitiesPerformancePayload,
-         FetchSubAccountsActionPayload,
-         FetchSubAccountsSuccessPayload } from './responsibilities.action';
+import {
+  FetchResponsibilityEntitiesPerformancePayload,
+  FetchResponsibilityEntitiesPerformanceSuccessPayload,
+  FetchSubAccountsActionPayload,
+  FetchSubAccountsSuccessPayload
+} from './responsibilities.action';
 import { getEntitiesPerformancesMock } from '../../models/entities-performances.model.mock';
 import { getEntityPeopleResponsibilitiesMock } from '../../models/entity-responsibilities.model.mock';
 import { getEntitiesTotalPerformancesMock } from '../../models/entities-total-performances.model.mock';
@@ -118,6 +121,7 @@ describe('Responsibilities Actions', () => {
   describe('FetchResponsibilityEntityPerformance', () => {
     const payloadMock: FetchResponsibilityEntitiesPerformancePayload = {
       entityTypeGroupName: EntityPeopleType['GENERAL MANAGER'],
+      entityTypeCode: chance.string(),
       entities: [getEntityPeopleResponsibilitiesMock()],
       filter: performanceFilterStateMock,
       selectedPositionId: getMyPerformanceTableRowMock(1)[0].metadata.positionId,
@@ -141,7 +145,10 @@ describe('Responsibilities Actions', () => {
   });
 
   describe('FetchResponsibilityEntityPerformanceSuccess', () => {
-    const payloadMock: EntitiesPerformances[] = getEntitiesPerformancesMock();
+    const payloadMock: FetchResponsibilityEntitiesPerformanceSuccessPayload = {
+      entitiesPerformances: getEntitiesPerformancesMock(),
+      entityTypeCode: chance.string()
+    };
     let action: ResponsibilitiesActions.FetchResponsibilityEntityPerformanceSuccess;
 
     beforeEach(() => {
