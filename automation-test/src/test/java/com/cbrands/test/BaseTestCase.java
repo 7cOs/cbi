@@ -1,4 +1,4 @@
-package com.cbrands.test.smoke;
+package com.cbrands.test;
 
 import com.cbrands.helper.PropertiesCache;
 import com.cbrands.helper.SeleniumUtils;
@@ -19,10 +19,21 @@ public abstract class BaseTestCase {
   protected Log log = LogFactory.getLog(BaseTestCase.class);
 
   @BeforeSuite
-  public void setUpSuite() throws MalformedURLException {
-    final PropertiesCache propertiesCache = PropertiesCache.getInstance();
-    webAppBaseUrl = propertiesCache.getProperty("host.address");
+  public void setUpSuite() {
+    webAppBaseUrl = PropertiesCache.getInstance().getProperty("host.address");
+  }
 
+  @BeforeClass
+  public void setUpClass() throws MalformedURLException {
+    startUpBrowser();
+  }
+
+  @AfterClass
+  public void tearDownClass() {
+    shutDownBrowser();
+  }
+
+  protected void startUpBrowser() throws MalformedURLException {
     log.info("\n Browser opening...");
 
     driver = WebDriverFactory.createDriver();
@@ -34,8 +45,7 @@ public abstract class BaseTestCase {
     log.info("Browser opened.\n");
   }
 
-  @AfterSuite
-  public void tearDownSuite() {
+  protected void shutDownBrowser() {
     log.info("\nBrowser closing...");
     driver.quit();
     log.info("Browser closed.\n");
