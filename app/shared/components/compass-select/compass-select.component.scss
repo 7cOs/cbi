@@ -45,6 +45,12 @@ md-select {
       width: 85%;
     }
 
+    .mat-select-value-text {
+      font-family: WorkSans;
+      font-size: 16px;
+      font-weight: 300;
+    }
+
     .mat-select-arrow {
       background-color: $gray-4;
       background-image: url('../../../assets/img/icons/drop-chevron.svg');
@@ -72,6 +78,14 @@ md-select {
     color: $gray-1;
     line-height: normal;
     padding: 5px;
+
+    .option-text {
+      font-size: 16px;
+      font-weight: $light;
+      height: 10px;
+      margin: 0;
+      text-align: left;
+    }
 
     .option-top-text {
       font-size: 16px;
