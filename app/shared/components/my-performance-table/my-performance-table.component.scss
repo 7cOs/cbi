@@ -78,7 +78,7 @@ th {
   text-align: left;
   min-width: 120px;
   padding-left: 16px;
-  font-weight: $semibold;
+  font-weight: $regular;
 }
 
 .right-col {
@@ -103,6 +103,11 @@ th {
 .total-row {
   height: 60px;
   border-bottom: 1px solid $gray-10;
+  text-transform: uppercase;
+
+  /deep/.left-col, /deep/.center-col, /deep/.right-col {
+    font-weight: $semibold;
+  }
 }
 
 .center-col {
@@ -152,7 +157,7 @@ span.link-out {
 td, th {
   font-family: WorkSans;
   font-size: 12px;
-  font-weight: $semibold;
+  font-weight: $regular;
   cursor: pointer;
 }
 

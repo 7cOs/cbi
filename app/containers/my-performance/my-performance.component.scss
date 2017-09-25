@@ -8,14 +8,14 @@ my-performance-table {
   vertical-align: top;
 
   &.right {
-    box-shadow: -10px 0 20px $gray-14;
-    -webkit-box-shadow: -10px 0 20px $gray-14;
-    -moz-box-shadow: -10px 0 20px $gray-14;
   }
 
   &.left {
+    box-shadow: inset -8px 0 15px rgba(0, 0, 0, 0.1);
+    -webkit-box-shadow: inset -8px 0 15px rgba(0, 0, 0, 0.1);
+    -moz-box-shadow: inset -8px 0 15px rgba(0, 0, 0, 0.1);
 
-    /deep/tr.total-row { 
+    /deep/tr.total-row {
       background-color: $dark-blue-2;
       color: $gray-10;
 
