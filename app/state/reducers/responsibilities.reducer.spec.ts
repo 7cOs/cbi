@@ -2,6 +2,7 @@ import { ActionStatus } from '../../enums/action-status.enum';
 import { DateRangeTimePeriodValue } from '../../enums/date-range-time-period.enum';
 import { DistributionTypeValue } from '../../enums/distribution-type.enum';
 import { EntitiesPerformances } from '../../models/entities-performances.model';
+import { EntitiesTotalPerformances } from '../../models/entities-total-performances.model';
 import { EntityPeopleType } from '../../enums/entity-responsibilities.enum';
 import { FetchResponsibilityEntitiesPerformancePayload } from '../actions/responsibilities.action';
 import { initialState, responsibilitiesReducer } from './responsibilities.reducer';
@@ -11,10 +12,9 @@ import { getMyPerformanceTableRowMock } from '../../models/my-performance-table-
 import { getEntitiesTotalPerformancesMock } from '../../models/entities-total-performances.model.mock';
 import { getGroupedEntitiesMock } from '../../models/grouped-entities.model.mock';
 import { MetricTypeValue } from '../../enums/metric-type.enum';
-import { MyPerformanceTableRow } from '../../models/my-performance-table-row.model';
 import { MyPerformanceFilterState } from '../reducers/my-performance-filter.reducer';
-import { EntitiesTotalPerformances } from '../../models/entities-total-performances.model';
 import { PremiseTypeValue } from '../../enums/premise-type.enum';
+import { ResponsibilitiesState } from './responsibilities.reducer';
 import { ViewType } from '../../enums/view-type.enum';
 import * as ResponsibilitiesActions from '../actions/responsibilities.action';
 
@@ -127,7 +127,7 @@ describe('Responsibilities Reducer', () => {
       entityType: EntityPeopleType['GENERAL MANAGER'],
       entities: [getEntityPeopleResponsibilitiesMock()],
       filter: performanceFilterStateMock,
-      entitiesTotalPerformances: getMyPerformanceTableRowMock(1)[0],
+      selectedPositionId: getMyPerformanceTableRowMock(1)[0].metadata.positionId,
       viewType: ViewType.people
     };
     const expectedState = {
@@ -191,21 +191,36 @@ describe('Responsibilities Reducer', () => {
   });
 
   it('should update the performanceTotal data when SetTableRowPerformanceTotal action is received', () => {
-    const payloadMock: MyPerformanceTableRow = getMyPerformanceTableRowMock(1)[0];
-    const expectedState = {
-      status: initialState.status,
-      positionId: initialState.positionId,
-      groupedEntities: initialState.groupedEntities,
-      entitiesPerformances: initialState.entitiesPerformances,
+    const selectedRowMock = getMyPerformanceTableRowMock(1)[0];
+    const payloadMock: string = selectedRowMock.metadata.positionId;
+    const mockState: ResponsibilitiesState = Object.assign({}, initialState, {
+      entitiesPerformances: [{
+        positionId: payloadMock,
+        name: selectedRowMock.descriptionRow0,
+        performanceTotal: {
+          total: selectedRowMock.metricColumn0,
+          totalYearAgo: selectedRowMock.metricColumn1,
+          totalYearAgoPercent: selectedRowMock.metricColumn2,
+          contributionToVolume: selectedRowMock.ctv,
+          name: selectedRowMock.descriptionRow0
+        }
+      }]
+    });
+
+    const expectedState: ResponsibilitiesState = {
+      status: mockState.status,
+      positionId: mockState.positionId,
+      groupedEntities: mockState.groupedEntities,
+      entitiesPerformances: mockState.entitiesPerformances,
       entitiesTotalPerformances: {
-        total: payloadMock.metricColumn0,
-        totalYearAgo: payloadMock.metricColumn1,
-        totalYearAgoPercent: payloadMock.metricColumn2,
-        contributionToVolume: payloadMock.ctv,
-        entityType: payloadMock.descriptionRow0
+        total: selectedRowMock.metricColumn0,
+        totalYearAgo: selectedRowMock.metricColumn1,
+        totalYearAgoPercent: selectedRowMock.metricColumn2,
+        contributionToVolume: selectedRowMock.ctv,
+        name: selectedRowMock.descriptionRow0
       }
     };
-    const actualState = responsibilitiesReducer(initialState, new ResponsibilitiesActions.SetTableRowPerformanceTotal(payloadMock));
+    const actualState = responsibilitiesReducer(mockState, new ResponsibilitiesActions.SetTableRowPerformanceTotal(payloadMock));
 
     expect(actualState).toEqual(expectedState);
   });

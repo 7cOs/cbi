@@ -11,7 +11,6 @@ import { EntitySubAccountDTO } from '../models/entity-subaccount-dto.model';
 import { GroupedEntities } from '../models/grouped-entities.model';
 import { MyPerformanceApiService } from './my-performance-api.service';
 import { MyPerformanceFilterState } from '../state/reducers/my-performance-filter.reducer';
-import { MyPerformanceTableRow } from '../models/my-performance-table-row.model';
 import { PeopleResponsibilitiesDTO } from '../models/people-responsibilities-dto.model';
 import { PerformanceTransformerService } from './performance-transformer.service';
 import { PremiseTypeValue } from '../enums/premise-type.enum';
@@ -35,7 +34,7 @@ export interface SubAccountData {
   premiseType: PremiseTypeValue;
   groupedEntities?: GroupedEntities;
   entitiesPerformances?: Array<EntitiesPerformances>;
-  entitiesTotalPerformances: MyPerformanceTableRow;
+  selectedPositionId: string;
 }
 
 @Injectable()

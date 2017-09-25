@@ -6,7 +6,6 @@ import { EntityPeopleType } from '../../enums/entity-responsibilities.enum';
 import { EntityResponsibilities } from '../../models/entity-responsibilities.model';
 import { GroupedEntities } from '../../models/grouped-entities.model';
 import { MyPerformanceFilterState } from '../../state/reducers/my-performance-filter.reducer';
-import { MyPerformanceTableRow } from '../../models/my-performance-table-row.model';
 import { PremiseTypeValue } from '../../enums/premise-type.enum';
 import { ViewType } from '../../enums/view-type.enum';
 
@@ -20,7 +19,7 @@ export interface FetchResponsibilityEntitiesPerformancePayload {
   entityType: EntityPeopleType;
   entities: EntityResponsibilities[];
   filter: MyPerformanceFilterState;
-  entitiesTotalPerformances: MyPerformanceTableRow;
+  selectedPositionId: string;
   viewType: ViewType;
 }
 
@@ -28,7 +27,7 @@ export interface FetchSubAccountsActionPayload {
   positionId: string;
   contextPositionId: string;
   entityType: string;
-  entitiesTotalPerformances: MyPerformanceTableRow;
+  selectedPositionId: string;
   premiseType: PremiseTypeValue;
 }
 
@@ -118,7 +117,7 @@ export const SET_TABLE_ROW_PERFORMANCE_TOTAL = '[Performance Total] SET_TABLE_RO
 export class SetTableRowPerformanceTotal implements Action {
   readonly type = SET_TABLE_ROW_PERFORMANCE_TOTAL;
 
-  constructor(public payload: MyPerformanceTableRow) { }
+  constructor(public payload: string) { }
 }
 
 export type Action

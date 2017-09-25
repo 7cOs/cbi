@@ -233,7 +233,7 @@ describe('Responsibilities Effects', () => {
       entityType: EntityPeopleType['GENERAL MANAGER'],
       entities: [getEntityPeopleResponsibilitiesMock()],
       filter: performanceFilterStateMock,
-      entitiesTotalPerformances: getMyPerformanceTableRowMock(1)[0],
+      selectedPositionId: getMyPerformanceTableRowMock(1)[0].metadata.positionId,
       viewType: ViewType.people
     };
 
@@ -264,7 +264,7 @@ describe('Responsibilities Effects', () => {
 
           if (dispatchedActions.length === 4) {
             expect(dispatchedActions).toEqual([
-              new SetTableRowPerformanceTotal(fetchEntityPerformancePayloadMock.entitiesTotalPerformances),
+              new SetTableRowPerformanceTotal(fetchEntityPerformancePayloadMock.selectedPositionId),
               new GetPeopleByRoleGroupAction(fetchEntityPerformancePayloadMock.entityType),
               new FetchResponsibilityEntityPerformanceSuccess(entitiesPerformancesMock),
               new SetLeftMyPerformanceTableViewType(fetchEntityPerformancePayloadMock.viewType)
@@ -351,7 +351,7 @@ describe('Responsibilities Effects', () => {
           positionId: chance.string({pool: '0123456789'}),
           contextPositionId: chance.string({pool: '0123456789'}),
           entityType: chance.string(),
-          entitiesTotalPerformances: getMyPerformanceTableRowMock(1)[0],
+          selectedPositionId: getMyPerformanceTableRowMock(1)[0].metadata.positionId,
           premiseType: PremiseTypeValue.All
         };
         subAccountDataMock = Object.assign({}, fetchSubAccountsPayloadMock);
@@ -402,7 +402,7 @@ describe('Responsibilities Effects', () => {
 
             if (dispatchedActions.length === 3) {
               expect(dispatchedActions).toEqual([
-                new SetTableRowPerformanceTotal(fetchSubAccountsPayloadMock.entitiesTotalPerformances),
+                new SetTableRowPerformanceTotal(fetchSubAccountsPayloadMock.selectedPositionId),
                 new FetchSubAccountsSuccessAction({
                   groupedEntities: groupedEntitiesMock,
                   entitiesPerformances: entitiesPerformancesMock

@@ -725,7 +725,7 @@ describe('Responsibilities Effects', () => {
         contextPositionId: contextPositionIdMock,
         entityType: chance.string(),
         premiseType: PremiseTypeValue.All,
-        entitiesTotalPerformances: getMyPerformanceTableRowMock(1)[0]
+        selectedPositionId: getMyPerformanceTableRowMock(1)[0].metadata.positionId
       };
       groupedSubAccountsMock = {
         [subAccountDataMock.entityType]: [{
