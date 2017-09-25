@@ -1,16 +1,16 @@
-import { EntitiesTotalPerformances, EntitiesTotalPerformancesDTO } from './entities-total-performances.model';
+import { Performance, PerformanceDTO } from './performance.model';
 
-export interface EntitiesPerformancesDTO {
+export interface EntityWithPerformanceDTO {
   id: string;
   name: string;
   positionDescription?: string;
-  performanceTotal: EntitiesTotalPerformancesDTO;
+  performance: PerformanceDTO;
 }
 
-export interface EntitiesPerformances {
+export interface EntityWithPerformance {
   positionId: string;
   contextPositionId?: string;
   name: string;
   positionDescription?: string;
-  performanceTotal: EntitiesTotalPerformances;
+  performance: Performance;
 }

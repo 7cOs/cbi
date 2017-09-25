@@ -2,22 +2,22 @@ import { Injectable } from '@angular/core';
 import 'rxjs/add/operator/map';
 
 import { EntityDTO } from '../models/entity-dto.model';
-import { EntityResponsibilities } from '../models/entity-responsibilities.model';
+import { HierarchyEntity } from '../models/hierarchy-entity.model';
 import { EntityPeopleType, EntityPropertyType } from '../enums/entity-responsibilities.enum';
-import { EntityResponsibilitiesDTO } from '../models/entity-responsibilities.model';
+import { HierarchyEntityDTO } from '../models/hierarchy-entity.model';
 import { EntitySubAccountDTO } from '../models/entity-subaccount-dto.model';
 import { GroupedEntities } from '../models/grouped-entities.model';
 
 @Injectable()
 export class ResponsibilitiesTransformerService {
 
-  public groupPeopleByGroupedEntities(responsibilities: EntityResponsibilitiesDTO[]): GroupedEntities {
-    return responsibilities.reduce((groupedEntities: GroupedEntities, entity: EntityResponsibilitiesDTO) => {
+  public groupPeopleByGroupedEntities(responsibilities: HierarchyEntityDTO[]): GroupedEntities {
+    return responsibilities.reduce((groupedEntities: GroupedEntities, entity: HierarchyEntityDTO) => {
       if (Array.isArray(groupedEntities[entity.description])) {
-        groupedEntities[entity.description].push(this.transformEntityResponsibilitiesDTO(entity));
+        groupedEntities[entity.description].push(this.transformHierarchyEntityDTO(entity));
       } else {
         groupedEntities[entity.description] = [
-          this.transformEntityResponsibilitiesDTO(entity)
+          this.transformHierarchyEntityDTO(entity)
         ];
       }
 
@@ -50,8 +50,8 @@ export class ResponsibilitiesTransformerService {
     };
   }
 
-  private transformEntityResponsibilitiesDTO(entity: EntityResponsibilitiesDTO): EntityResponsibilities {
-    const transformedEntity: EntityResponsibilities = {
+  private transformHierarchyEntityDTO(entity: HierarchyEntityDTO): HierarchyEntity {
+    const transformedEntity: HierarchyEntity = {
       positionId: entity.id,
       employeeId: entity.employeeId,
       name: entity.name,

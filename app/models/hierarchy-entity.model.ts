@@ -1,6 +1,6 @@
 import { EntityPeopleType, EntityPropertyType } from '../enums/entity-responsibilities.enum';
 
-export interface EntityResponsibilities {
+export interface HierarchyEntity {
   positionId: string;
   employeeId?: string;
   contextPositionId?: string;
@@ -14,7 +14,7 @@ export interface EntityResponsibilities {
   propertyType?: EntityPropertyType;
 }
 
-export interface EntityResponsibilitiesDTO {
+export interface HierarchyEntityDTO {
   id: string;
   employeeId: string;
   name: string;

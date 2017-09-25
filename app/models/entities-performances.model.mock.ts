@@ -1,30 +1,30 @@
-import { EntitiesPerformances, EntitiesPerformancesDTO } from '../models/entities-performances.model';
-import { getEntitiesTotalPerformancesMock, getEntitiesTotalPerformancesDTOMock } from '../models/entities-total-performances.model.mock';
+import { EntityWithPerformance, EntityWithPerformanceDTO } from '../models/entities-performances.model';
+import { getPerformanceMock, getPerformanceDTOMock } from '../models/performance.model.mock';
 
-export function getResponsibilityEntitiesPerformanceDTOMock(): EntitiesPerformancesDTO[] {
+export function getResponsibilityEntitiesPerformanceDTOMock(): EntityWithPerformanceDTO[] {
   return [
     { id: chance.string(), name: chance.string(), positionDescription: chance.string(),
-      performanceTotal: getEntitiesTotalPerformancesDTOMock() },
+      performance: getPerformanceDTOMock() },
     { id: chance.string(), name: chance.string(), positionDescription: chance.string(),
-      performanceTotal: getEntitiesTotalPerformancesDTOMock() },
+      performance: getPerformanceDTOMock() },
     { id: chance.string(), name: chance.string(), positionDescription: chance.string(),
-      performanceTotal: getEntitiesTotalPerformancesDTOMock() }
+      performance: getPerformanceDTOMock() }
   ];
 }
 
-export function getEntitiesPerformancesMock(): EntitiesPerformances[] {
+export function getEntitiesWithPerformancesMock(): EntityWithPerformance[] {
   return [
     { positionId: chance.string(), name: chance.string(), positionDescription: undefined,
-      performanceTotal: getEntitiesTotalPerformancesMock() },
+      performance: getPerformanceMock() },
     { positionId: chance.string(), name: chance.string(), positionDescription: undefined,
-      performanceTotal: getEntitiesTotalPerformancesMock() },
+      performance: getPerformanceMock() },
     { positionId: chance.string(), name: chance.string(), positionDescription: undefined,
-      performanceTotal: getEntitiesTotalPerformancesMock() }
+      performance: getPerformanceMock() }
   ];
 }
 
-export function getEntitiesPerformancesOpenPositionMock(): EntitiesPerformances[] {
+export function getEntitiesWithPerformancesOpenPositionMock(): EntityWithPerformance[] {
   return [
-    { positionId: '1', name: 'Open', positionDescription: 'Best job on earth', performanceTotal: getEntitiesTotalPerformancesMock() }
+    { positionId: '1', name: 'Open', positionDescription: 'Best job on earth', performance: getPerformanceMock() }
   ];
 }
