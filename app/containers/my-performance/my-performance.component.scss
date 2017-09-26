@@ -10,12 +10,12 @@ my-performance-table {
   &.right {
   }
 
-  &.left { 
-    box-shadow: inset -8px 0 15px rgba(0, 0, 0, 0.1);
-    -webkit-box-shadow: inset -8px 0 15px rgba(0, 0, 0, 0.1);
-    -moz-box-shadow: inset -8px 0 15px rgba(0, 0, 0, 0.1);
+  &.left {
+    box-shadow: inset -8px 0 15px $table-shadow;
+    -webkit-box-shadow: inset -8px 0 15px $table-shadow;
+    -moz-box-shadow: inset -8px 0 15px $table-shadow;
 
-    /deep/tr.total-row { 
+    /deep/tr.total-row {
       background-color: $dark-blue-2;
       color: $gray-10;
 
