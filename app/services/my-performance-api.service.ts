@@ -111,7 +111,7 @@ export class MyPerformanceApiService {
     .catch(err => this.handleError(new Error(err)));
   }
 
-  public getSubAccountsPerformanceTotal(positionId: string, filter: MyPerformanceFilterState): Observable<EntitiesTotalPerformancesDTO[]> {
+  public getSubAccountsPerformanceTotal(positionId: string, filter: MyPerformanceFilterState): Observable<EntitiesTotalPerformancesDTO> {
     const url = `/v3/subAccounts/${positionId}/performanceTotal`;
 
     return this.http.get(`${ url }`, {

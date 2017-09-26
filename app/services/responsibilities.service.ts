@@ -35,6 +35,7 @@ export interface SubAccountData {
   groupedEntities?: GroupedEntities;
   entitiesPerformances?: Array<EntitiesPerformances>;
   selectedPositionId: string;
+  filter: MyPerformanceFilterState;
 }
 
 @Injectable()
@@ -130,6 +131,23 @@ export class ResponsibilitiesService {
     return Observable.forkJoin(apiCalls);
   }
 
+  public getSubAccountsPerformanceTotals(subAccountData: SubAccountData): Observable<SubAccountData> {
+    const subAccounts = subAccountData.groupedEntities[subAccountData.entityType].map((subAccount: EntityResponsibilities) => subAccount);
+    const apiCalls: Observable<EntitiesPerformances | Error>[] =
+      subAccounts.map((subAccount: EntityResponsibilities) => {
+        return this.myPerformanceApiService.getSubAccountsPerformanceTotal(subAccountData.positionId, subAccountData.filter)
+          .map((response) => {
+            return this.performanceTransformerService.transformEntityWithPerformance(response, subAccount);
+          });
+      });
+
+    return Observable.forkJoin(apiCalls)
+      .map((entityPerformances: EntitiesPerformances[]) => {
+        subAccountData.entitiesPerformances = entityPerformances;
+        return subAccountData;
+      });
+  }
+
   public getPerformanceTotalForGroupedEntities(responsibilitiesData: ResponsibilitiesData)
   : Observable<ResponsibilitiesData> {
     if (responsibilitiesData.viewType === ViewType.roleGroups) {
@@ -194,19 +212,6 @@ export class ResponsibilitiesService {
       entitiesPerformances: entitiesPerformancesMock
     }));
   }*/
-
-
-  public getSubAccountsPerformanceTotals(subAccountData: SubAccountData , filter: MyPerformanceFilterState) {
-    const apiCalls: Observable<EntitiesPerformances | Error>[] =
-      subAccountData.groupedEntities[subAccountData.entityType].map((subAccount: EntityResponsibilities) => {
-        return this.myPerformanceApiService.getSubAccountsPerformanceTotal(subAccountData.positionId, filter)
-          .map(response => {
-            return this.performanceTransformerService.transformEntityWithPerformance(response, subAccount);
-          });
-      });
-
-    return Observable.forkJoin(apiCalls);
-  }
 
   private handleResponsibilitiesPerformanceTotals(responsibilitiesData: ResponsibilitiesData) {
     return this.getResponsibilitiesPerformanceTotals(responsibilitiesData.entityTypes,
