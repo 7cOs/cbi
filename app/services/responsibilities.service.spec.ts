@@ -3,7 +3,6 @@ import { TestBed, inject } from '@angular/core/testing';
 import * as Chance from 'chance';
 
 import { DateRangeTimePeriodValue } from '../enums/date-range-time-period.enum';
-import { DistributionTypeValue } from '../enums/distribution-type.enum';
 import { Performance, PerformanceDTO } from '../models/performance.model';
 import { EntityDTO } from '../models/entity-dto.model';
 import { EntityWithPerformance, EntityWithPerformanceDTO } from '../models/entity-with-performance.model';

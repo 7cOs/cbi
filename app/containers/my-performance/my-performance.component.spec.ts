@@ -13,7 +13,7 @@ import { DistributionTypeValue } from '../../enums/distribution-type.enum';
 import { FetchProductMetricsAction } from '../../state/actions/product-metrics.action';
 import { FetchResponsibilities, FetchSubAccountsAction } from '../../state/actions/responsibilities.action';
 import { getMyPerformanceFilterMock } from '../../models/my-performance-filter.model.mock';
-import { getMyPerformanceStateMock } from '../../state/reducers/my-performance.state.mock';
+import { getMyPerformanceEntitiesDataMock, getMyPerformanceStateMock } from '../../state/reducers/my-performance.state.mock';
 import { getMyPerformanceTableRowMock } from '../../models/my-performance-table-row.model.mock';
 import { MetricTypeValue } from '../../enums/metric-type.enum';
 import * as MyPerformanceVersionActions from '../../state/actions/my-performance-version.action';
@@ -78,7 +78,7 @@ describe('MyPerformanceComponent', () => {
   let userServiceMock: any;
   let myPerformanceStateMock: MyPerformanceState = getMyPerformanceStateMock();
 
-  function generateMockVersions(min: number, max: number) {
+  function generateMockVersions(min: number, max: number): MyPerformanceEntitiesData[] {
     return Array(chance.natural({min: min, max: max})).fill('').map(() => getMyPerformanceEntitiesDataMock());
   }
 
@@ -313,7 +313,8 @@ describe('MyPerformanceComponent', () => {
         expect(storeMock.dispatch.calls.argsFor(0)[0]).toEqual(new MyPerformanceVersionActions.RestoreMyPerformanceStateAction());
         expect(storeMock.dispatch.calls.argsFor(1)[0]).toEqual(new FetchProductMetricsAction({
           positionId: versionsMock[versionsMock.length - 1].responsibilities.positionId,
-          filter: stateMock.myPerformanceFilter as any
+          filter: stateMock.myPerformanceFilter as any,
+          selectedEntityType: SelectedEntityType.Position
         }));
       });
 
@@ -327,7 +328,8 @@ describe('MyPerformanceComponent', () => {
         expect(storeMock.dispatch.calls.argsFor(0)[0]).toEqual(new MyPerformanceVersionActions.RestoreMyPerformanceStateAction());
         expect(storeMock.dispatch.calls.argsFor(1)[0]).toEqual(new FetchProductMetricsAction({
           positionId: versionsMock[versionsMock.length - 1].responsibilities.positionId,
-          filter: stateMock.myPerformanceFilter as any
+          filter: stateMock.myPerformanceFilter as any,
+          selectedEntityType: SelectedEntityType.Position
         }));
       });
     });
@@ -340,11 +342,6 @@ describe('MyPerformanceComponent', () => {
       const rowMock = getMyPerformanceTableRowMock(1)[0];
 
       componentInstance.leftTableViewType = ViewType.roleGroups;
-      componentInstance.handleElementClicked({leftSide: true, type: RowType.data, index: 0, row: rowMock});
-      expect(storeMock.dispatch.calls.count()).toBe(3);
-
-      storeMock.dispatch.calls.reset();
-      componentInstance.leftTableViewType = ViewType.accounts;
       componentInstance.handleElementClicked({leftSide: true, type: RowType.data, index: 0, row: rowMock});
       expect(storeMock.dispatch.calls.count()).toBe(3);
 
@@ -495,7 +492,8 @@ describe('MyPerformanceComponent', () => {
         ));
         expect(storeMock.dispatch.calls.argsFor(1)[0]).toEqual(new FetchProductMetricsAction({
           positionId: expectedPositionId,
-          filter: stateMock.myPerformanceFilter as any
+          filter: stateMock.myPerformanceFilter as any,
+          selectedEntityType: SelectedEntityType.Position
         }));
       });
 
@@ -512,7 +510,8 @@ describe('MyPerformanceComponent', () => {
         ));
         expect(storeMock.dispatch.calls.argsFor(1)[0]).toEqual(new FetchProductMetricsAction({
           positionId: expectedPositionId,
-          filter: stateMock.myPerformanceFilter as any
+          filter: stateMock.myPerformanceFilter as any,
+          selectedEntityType: SelectedEntityType.Position
         }));
       });
     });

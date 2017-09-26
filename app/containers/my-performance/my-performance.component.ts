@@ -125,7 +125,7 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
     });
 
     const currentUserId = this.userService.model.currentUser.positionId || CORPORATE_USER_POSITION_ID;
-    this.store.dispatch(new FetchResponsibilitiesAction({ positionId: currentUserId, filter: this.filterState }));
+    this.store.dispatch(new FetchResponsibilities({ positionId: currentUserId, filter: this.filterState }));
     this.store.dispatch(new FetchProductMetricsAction({
       positionId: currentUserId,
       filter: this.filterState,

@@ -5,10 +5,8 @@ import { EntityPeopleType } from '../../enums/entity-responsibilities.enum';
 import { FetchEntityWithPerformancePayload,
          FetchSubAccountsActionPayload,
          FetchSubAccountsSuccessPayload } from './responsibilities.action';
-import { getEntitiesTotalPerformancesMock } from '../../models/entities-total-performances.model.mock';
 import { getMyPerformanceFilterMock } from '../../models/my-performance-filter.model.mock';
 import { getEntitiesWithPerformancesMock } from '../../models/entity-with-performance.model.mock';
-import { getPerformanceMock } from '../../models/performance.model.mock';
 import { getEntityPeopleResponsibilitiesMock } from '../../models/hierarchy-entity.model.mock';
 import { getPerformanceMock } from '../../models/performance.model.mock';
 import { getMyPerformanceTableRowMock } from '../../models/my-performance-table-row.model.mock';
