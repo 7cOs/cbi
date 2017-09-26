@@ -6,7 +6,7 @@ import { EntitySubAccountDTO } from '../models/entity-subaccount-dto.model';
 import { getEntityDTOMock } from '../models/entity-dto.model.mock';
 import { getEntitySubAccountDTOMock } from '../models/entity-subaccount-dto.model.mock';
 import { GroupedEntities } from '../models/grouped-entities.model';
-import { mockEntityResponsibilitiesDTOCollection } from '../models/entity-responsibilities.model.mock';
+import { mockHierarchyEntityDTOCollection } from '../models/hierarchy-entity.model.mock';
 import { ResponsibilitiesTransformerService } from './responsibilities-transformer.service';
 
 describe('Service: ResponsibilitiesTransformerService', () => {
@@ -65,14 +65,14 @@ describe('Service: ResponsibilitiesTransformerService', () => {
         }]
       };
       const transformedgroupedEntities =
-        responsibilitiesTransformerService.groupPeopleByGroupedEntities(mockEntityResponsibilitiesDTOCollection);
+        responsibilitiesTransformerService.groupPeopleByGroupedEntities(mockHierarchyEntityDTOCollection);
       expect(transformedgroupedEntities).toEqual(expectedgroupedEntities);
     });
   });
 
   describe('transformSubAccountsDTO', () => {
 
-    it('should return Grouped EntityResponsibilities given EntitySubAccountDTO objects under the given entityType', () => {
+    it('should return Grouped HierarchyEntity given EntitySubAccountDTO objects under the given entityType', () => {
       spyOn(responsibilitiesTransformerService, 'transformSubAccountsDTO').and.callThrough();
 
       const entitySubAccountDTOMock: Array<EntitySubAccountDTO> = [getEntitySubAccountDTOMock(), getEntitySubAccountDTOMock()];

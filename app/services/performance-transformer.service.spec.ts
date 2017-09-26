@@ -1,18 +1,18 @@
 import { inject, TestBed } from '@angular/core/testing';
 
-import { getEntitiesTotalPerformancesDTOMock } from '../models/entities-total-performances.model.mock';
-import { getResponsibilityEntitiesPerformanceDTOMock } from '../models/entities-performances.model.mock';
-import { EntitiesTotalPerformances, EntitiesTotalPerformancesDTO } from '../models/entities-total-performances.model';
-import { getEntityPropertyResponsibilitiesMock } from '../models/entity-responsibilities.model.mock';
+import { getPerformanceDTOMock } from '../models/performance.model.mock';
+import { getResponsibilityEntitiesPerformanceDTOMock } from '../models/entity-with-performance.model.mock';
+import { Performance, PerformanceDTO } from '../models/performance.model';
+import { getEntityPropertyResponsibilitiesMock } from '../models/hierarchy-entity.model.mock';
 import { PerformanceTransformerService } from './performance-transformer.service';
-import { EntitiesPerformances, EntitiesPerformancesDTO } from '../models/entities-performances.model';
+import { EntityWithPerformance, EntityWithPerformanceDTO } from '../models/entity-with-performance.model';
 import { UtilService } from './util.service';
 
 describe('Service: PerformanceTransformerService', () => {
   let performanceTransformerService: PerformanceTransformerService;
   let utilService: UtilService;
-  let entitiesTotalPerformancesDTOMock: EntitiesTotalPerformancesDTO;
-  let responsibilityEntitiesPerformanceDTOMock: EntitiesPerformancesDTO[];
+  let entitiesTotalPerformancesDTOMock: PerformanceDTO;
+  let responsibilityEntitiesPerformanceDTOMock: EntityWithPerformanceDTO[];
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -20,23 +20,23 @@ describe('Service: PerformanceTransformerService', () => {
     });
   });
 
-  describe('transformEntitiesTotalPerformancesDTO', () => {
+  describe('transformPerformanceDTO', () => {
 
     beforeEach(inject([ PerformanceTransformerService, UtilService ],
       (_performanceTransformerService: PerformanceTransformerService, _utilService: UtilService) => {
         performanceTransformerService = _performanceTransformerService;
         utilService = _utilService;
-        entitiesTotalPerformancesDTOMock = getEntitiesTotalPerformancesDTOMock();
+        entitiesTotalPerformancesDTOMock = getPerformanceDTOMock();
     }));
 
-    it('should return transformed PerformanceTotal data given EntitiesTotalPerformancesDTO data', () => {
-      spyOn(performanceTransformerService, 'transformEntitiesTotalPerformancesDTO').and.callThrough();
+    it('should return transformed PerformanceTotal data given PerformanceDTO data', () => {
+      spyOn(performanceTransformerService, 'transformPerformanceDTO').and.callThrough();
 
-      const performanceTotal: EntitiesTotalPerformances
-        = performanceTransformerService.transformEntitiesTotalPerformancesDTO(entitiesTotalPerformancesDTOMock);
+      const performance: Performance
+        = performanceTransformerService.transformPerformanceDTO(entitiesTotalPerformancesDTOMock);
 
-      expect(performanceTotal).toBeDefined();
-      expect(performanceTotal).toEqual({
+      expect(performance).toBeDefined();
+      expect(performance).toEqual({
         total: parseInt((entitiesTotalPerformancesDTOMock.total).toFixed(), 10),
         totalYearAgo: utilService.getYearAgoDelta(
           entitiesTotalPerformancesDTOMock.total, entitiesTotalPerformancesDTOMock.totalYearAgo
@@ -49,7 +49,7 @@ describe('Service: PerformanceTransformerService', () => {
     });
   });
 
-  describe('transformEntityEntitiesTotalPerformancesDTO', () => {
+  describe('transformEntityPerformanceDTO', () => {
 
     beforeEach(inject([ PerformanceTransformerService, UtilService ],
       (_performanceTransformerService: PerformanceTransformerService, _utilService: UtilService) => {
@@ -58,12 +58,12 @@ describe('Service: PerformanceTransformerService', () => {
         responsibilityEntitiesPerformanceDTOMock = getResponsibilityEntitiesPerformanceDTOMock();
     }));
 
-    it('should return transformed EntityPerformanceTotal data given EntityEntitiesTotalPerformancesDTO data', () => {
-      spyOn(performanceTransformerService, 'transformEntitiesPerformancesDTOs').and.callThrough();
+    it('should return transformed EntityPerformanceTotal data given EntityPerformanceDTO data', () => {
+      spyOn(performanceTransformerService, 'transformEntityWithPerformanceDTOs').and.callThrough();
 
-      const entityPerformance: EntitiesPerformances[] =
-        performanceTransformerService.transformEntitiesPerformancesDTOs(responsibilityEntitiesPerformanceDTOMock);
-      const entityPerformanceMock = responsibilityEntitiesPerformanceDTOMock[0].performanceTotal;
+      const entityPerformance: EntityWithPerformance[] =
+        performanceTransformerService.transformEntityWithPerformanceDTOs(responsibilityEntitiesPerformanceDTOMock);
+      const entityPerformanceMock = responsibilityEntitiesPerformanceDTOMock[0].performance;
 
       expect(entityPerformance).toBeDefined();
       expect(entityPerformance.length).toBeTruthy();
@@ -71,7 +71,7 @@ describe('Service: PerformanceTransformerService', () => {
         positionId: responsibilityEntitiesPerformanceDTOMock[0].id,
         name: responsibilityEntitiesPerformanceDTOMock[0].name,
         positionDescription: responsibilityEntitiesPerformanceDTOMock[0].positionDescription,
-        performanceTotal: {
+        performance: {
           total: parseInt((entityPerformanceMock.total).toFixed(), 10),
           totalYearAgo: utilService.getYearAgoDelta(entityPerformanceMock.total, entityPerformanceMock.totalYearAgo),
           totalYearAgoPercent: utilService.getYearAgoPercent(entityPerformanceMock.total, entityPerformanceMock.totalYearAgo),
@@ -90,16 +90,16 @@ describe('Service: PerformanceTransformerService', () => {
     }));
 
     it('should transform data given an entity and performance data', () => {
-      const transformPerformanceSpy = spyOn(performanceTransformerService, 'transformEntitiesTotalPerformancesDTO').and.callThrough();
+      const transformPerformanceSpy = spyOn(performanceTransformerService, 'transformPerformanceDTO').and.callThrough();
 
       const entity = getEntityPropertyResponsibilitiesMock();
-      const performanceDTO = getEntitiesTotalPerformancesDTOMock();
+      const performanceDTO = getPerformanceDTOMock();
 
       const actual = performanceTransformerService.transformEntityWithPerformance(performanceDTO, entity);
 
       expect(actual.positionId).toBe(entity.positionId);
       expect(actual.name).toBe(entity.name);
-      expect(actual.performanceTotal).toBeDefined();
+      expect(actual.performance).toBeDefined();
       expect(transformPerformanceSpy).toHaveBeenCalledTimes(1);
       expect(transformPerformanceSpy).toHaveBeenCalledWith(performanceDTO);
     });
