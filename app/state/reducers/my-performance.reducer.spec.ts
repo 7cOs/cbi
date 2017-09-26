@@ -29,16 +29,16 @@ describe('My Performance Reducer', () => {
   });
 
   it('should call the responsibilities reducer when a responsibility action is received', () => {
-    myPerformanceReducer(initialState, new ResponsibilitiesActions.FetchResponsibilitiesAction({
+    myPerformanceReducer(initialState, new ResponsibilitiesActions.FetchResponsibilities({
       positionId: chance.string(),
       filter: null
     }));
-    myPerformanceReducer(initialState, new ResponsibilitiesActions.FetchResponsibilitiesSuccessAction({
+    myPerformanceReducer(initialState, new ResponsibilitiesActions.FetchResponsibilitiesSuccess({
       positionId: chance.string(),
       groupedEntities: {},
-      entitiesPerformances: []
+      entityWithPerformance: []
     }));
-    myPerformanceReducer(initialState, new ResponsibilitiesActions.FetchResponsibilitiesFailureAction(new Error()));
+    myPerformanceReducer(initialState, new ResponsibilitiesActions.FetchResponsibilitiesFailure(new Error()));
 
     expect(responsibilitiesReducerSpy).toHaveBeenCalled();
     expect(responsibilitiesReducerSpy.calls.count()).toBe(3);
