@@ -1,4 +1,4 @@
-td.left-col(colspan=1, [ngClass]="headerLeftClasses()", (click)="onCellClicked.emit(0)")
+td.left-col(colspan=1, [ngClass]="getHeaderLeftClasses()", (click)="onCellClicked.emit(0)")
   div
     span {{rowData.descriptionRow0}}
   div.description-line-1(*ngIf="rowData.descriptionRow1")

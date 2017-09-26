@@ -1,5 +1,6 @@
 import { Component, Input, EventEmitter, Output } from '@angular/core';
 
+import { CssClasses } from '../../../models/css-classes.model';
 import { MyPerformanceTableRow } from '../../../models/my-performance-table-row.model';
 import { SortStatus } from '../../../enums/sort-status.enum';
 import { ViewType } from '../../../enums/view-type.enum';
@@ -16,6 +17,7 @@ export class MyPerformanceTableRowComponent {
   @Input() showBackButton: boolean;
   @Input() showOpportunities: boolean;
   @Input() viewType: ViewType;
+  @Input() sublineClickable: boolean;
 
   public sortStatus = SortStatus;
 
@@ -27,10 +29,16 @@ export class MyPerformanceTableRowComponent {
     return this.showOpportunities ? 'col-16-pct' : 'col-20-pct';
   }
 
-  public headerLeftClasses() {
+  public getHeaderLeftClasses(): CssClasses {
     return {
       [this.columnWidth()]: true,
       ['back-button']: this.showBackButton
+    };
+  }
+
+  public getSublineClass(): CssClasses {
+    return {
+      ['link']: this.sublineClickable
     };
   }
 }

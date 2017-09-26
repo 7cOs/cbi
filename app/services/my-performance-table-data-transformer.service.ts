@@ -25,7 +25,7 @@ export class MyPerformanceTableDataTransformerService {
 
       if (entity.positionDescription && entity.name === 'Open') {
         transformedEntity.descriptionRow0 = 'Open Position';
-        transformedEntity['descriptionRow1'] = entity.positionDescription;
+        transformedEntity.descriptionRow1 = entity.positionDescription;
       }
 
       if (entity.contextPositionId) transformedEntity.metadata.contextPositionId = entity.contextPositionId;
