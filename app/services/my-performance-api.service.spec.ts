@@ -121,7 +121,7 @@ describe('Service: MyPerformanceApiService', () => {
     });
   });
 
-  describe('getPerformanceTotal', () => {
+  describe('getPerformance', () => {
     it('should call the performance API and return performance data', (done) => {
       const filterMock = {
         metricType: MetricTypeValue.volume,
@@ -140,7 +140,7 @@ describe('Service: MyPerformanceApiService', () => {
         );
       });
 
-      myPerformanceApiService.getPerformanceTotal('1', filterMock).subscribe((response: PerformanceDTO) => {
+      myPerformanceApiService.getPerformance('1', filterMock).subscribe((response: PerformanceDTO) => {
         expect(response).toEqual(performanceResponseMock);
         done();
       });
@@ -226,7 +226,7 @@ describe('Service: MyPerformanceApiService', () => {
     });
   });
 
-  describe('getResponsibilityPerformanceTotal', () => {
+  describe('getResponsibilityPerformance', () => {
 
     it('should call the responsibility performance endpoint and return performance data for the responsibility', (done) => {
       const filterMock = {
@@ -253,7 +253,7 @@ describe('Service: MyPerformanceApiService', () => {
         expect(connection.request.url).toEqual(expectedBaseUrl + expectedUrlParams);
       });
 
-      myPerformanceApiService.getResponsibilityPerformanceTotal(entityMock, filterMock, positionIdMock)
+      myPerformanceApiService.getResponsibilityPerformance(entityMock, filterMock, positionIdMock)
         .subscribe((response: EntityWithPerformanceDTO) => {
           expect(response).toEqual({
             id: positionIdMock,

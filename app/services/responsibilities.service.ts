@@ -82,7 +82,7 @@ export class ResponsibilitiesService {
       });
   }
 
-  public getResponsibilitiesPerformanceTotals(
+  public getResponsibilitiesPerformances(
     entities: Array<{ positionId?: string, type: string, name: string, positionDescription: string }>,
     filter: MyPerformanceFilterState,
     positionId?: string
@@ -90,7 +90,7 @@ export class ResponsibilitiesService {
     const apiCalls: Observable<EntityWithPerformanceDTO | Error>[] = [];
 
     entities.forEach((entity: { positionId?: string, type: string, name: string, positionDescription: string }) => {
-      apiCalls.push(this.myPerformanceApiService.getResponsibilityPerformanceTotal(entity, filter, entity.positionId || positionId));
+      apiCalls.push(this.myPerformanceApiService.getResponsibilityPerformance(entity, filter, entity.positionId || positionId));
     });
 
     return Observable.forkJoin(apiCalls)
@@ -99,8 +99,8 @@ export class ResponsibilitiesService {
       });
   }
 
-  public getPerformanceTotal(positionId: string, filter: MyPerformanceFilterState): Observable<Performance> {
-    return this.myPerformanceApiService.getPerformanceTotal(positionId, filter)
+  public getPerformance(positionId: string, filter: MyPerformanceFilterState): Observable<Performance> {
+    return this.myPerformanceApiService.getPerformance(positionId, filter)
       .map((response: PerformanceDTO) => {
         return this.performanceTransformerService.transformPerformanceDTO(response);
       });
@@ -130,10 +130,10 @@ export class ResponsibilitiesService {
     return Observable.forkJoin(apiCalls);
   }
 
-  public getPerformanceTotalForGroupedEntities(responsibilitiesData: ResponsibilitiesData)
+  public getPerformanceForGroupedEntities(responsibilitiesData: ResponsibilitiesData)
   : Observable<ResponsibilitiesData> {
     if (responsibilitiesData.viewType === ViewType.roleGroups) {
-      return this.handleResponsibilitiesPerformanceTotals(responsibilitiesData);
+      return this.handleResponsibilitiesPerformances(responsibilitiesData);
     } else if (responsibilitiesData.viewType === ViewType.distributors) {
       return this.handleDistributorsPerformances(responsibilitiesData);
     } else if (responsibilitiesData.viewType === ViewType.accounts) {
@@ -172,7 +172,7 @@ export class ResponsibilitiesService {
       });
   }
 
-  public getSubAccountsPerformanceTotals(subAccountData: SubAccountData): Observable<SubAccountData> {
+  public getSubAccountsPerformances(subAccountData: SubAccountData): Observable<SubAccountData> {
     // Mock SubAccount performance till next story
     const entityWithPerformanceMock: Array<EntityWithPerformance> = subAccountData.groupedEntities[subAccountData.entityType]
       .map((subAccount: HierarchyEntity) => {
@@ -195,8 +195,8 @@ export class ResponsibilitiesService {
     }));
   }
 
-  private handleResponsibilitiesPerformanceTotals(responsibilitiesData: ResponsibilitiesData) {
-    return this.getResponsibilitiesPerformanceTotals(responsibilitiesData.entityTypes,
+  private handleResponsibilitiesPerformances(responsibilitiesData: ResponsibilitiesData) {
+    return this.getResponsibilitiesPerformances(responsibilitiesData.entityTypes,
       responsibilitiesData.filter,
       responsibilitiesData.positionId)
         .map((entityPerformances: EntityWithPerformance[]) => {

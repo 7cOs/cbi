@@ -17,7 +17,7 @@ describe('ProductMetrics Actions', () => {
     let action: ProductMetricsActions.FetchProductMetricsAction;
     let positionIdMock: string;
     let actionPayloadMock: any;
-    const mockPerformanceFilterState: MyPerformanceFilterState = {
+    const performanceFilterStateMock: MyPerformanceFilterState = {
       metricType: MetricTypeValue.PointsOfDistribution,
       dateRangeCode: DateRangeTimePeriodValue.FYTDBDL,
       premiseType: PremiseTypeValue.On,
@@ -28,7 +28,7 @@ describe('ProductMetrics Actions', () => {
       positionIdMock = chance.string();
       actionPayloadMock = {
         positionId: positionIdMock,
-        filter: mockPerformanceFilterState
+        filter: performanceFilterStateMock
       };
       action = new ProductMetricsActions.FetchProductMetricsAction(actionPayloadMock);
     });

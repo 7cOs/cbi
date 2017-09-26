@@ -14,7 +14,7 @@ import { ProductMetricsState } from '../state/reducers/product-metrics.reducer';
 
 describe('Service: MyPerformanceTableDataTransformerService', () => {
   let myPerformanceTableDataTransformerService: MyPerformanceTableDataTransformerService;
-  let mockPerformanceTotal: Performance;
+  let performanceMock: Performance;
   let responsibilityEntitiesPerformanceMock: EntityWithPerformance[];
   let responsibilityEntitiesPerformanceOpenPositionMock: EntityWithPerformance[];
 
@@ -83,20 +83,20 @@ describe('Service: MyPerformanceTableDataTransformerService', () => {
     beforeEach(inject([ MyPerformanceTableDataTransformerService ],
       (_myPerformanceTableDataTransformerService: MyPerformanceTableDataTransformerService) => {
         myPerformanceTableDataTransformerService = _myPerformanceTableDataTransformerService;
-        mockPerformanceTotal = getPerformanceMock();
+        performanceMock = getPerformanceMock();
     }));
 
     it('should return a formatted total row from total performance data', () => {
       spyOn(myPerformanceTableDataTransformerService, 'getTotalRowData').and.callThrough();
 
-      const performanceRowData = myPerformanceTableDataTransformerService.getTotalRowData(mockPerformanceTotal);
+      const performanceRowData = myPerformanceTableDataTransformerService.getTotalRowData(performanceMock);
 
       expect(performanceRowData).toEqual({
         descriptionRow0: 'Total',
-        metricColumn0: mockPerformanceTotal.total,
-        metricColumn1: mockPerformanceTotal.totalYearAgo,
-        metricColumn2: mockPerformanceTotal.totalYearAgoPercent,
-        ctv: mockPerformanceTotal.contributionToVolume
+        metricColumn0: performanceMock.total,
+        metricColumn1: performanceMock.totalYearAgo,
+        metricColumn2: performanceMock.totalYearAgoPercent,
+        ctv: performanceMock.contributionToVolume
       });
     });
   });
