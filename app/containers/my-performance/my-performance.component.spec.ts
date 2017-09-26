@@ -16,6 +16,7 @@ import {
   getMyPerformanceEntitiesDataMock,
   getMyPerformanceStateMock
 } from '../../state/reducers/my-performance.state.mock';
+import { FetchResponsibilities } from '../../state/actions/responsibilities.action';
 import { getMyPerformanceTableRowMock } from '../../models/my-performance-table-row.model.mock';
 import { MetricTypeValue } from '../../enums/metric-type.enum';
 import * as MyPerformanceVersionActions from '../../state/actions/my-performance-version.action';
@@ -160,7 +161,7 @@ describe('MyPerformanceComponent', () => {
     fixture.detectChanges();
 
     expect(storeMock.dispatch.calls.count()).toBe(2);
-    expect(storeMock.dispatch.calls.argsFor(0)).toEqual([new FetchResponsibilitiesAction({
+    expect(storeMock.dispatch.calls.argsFor(0)).toEqual([new FetchResponsibilities({
       positionId: userServiceMock.model.currentUser.positionId,
       filter: stateMock.myPerformanceFilter as any
     })]);
@@ -180,7 +181,7 @@ describe('MyPerformanceComponent', () => {
     fixture.detectChanges();
 
     expect(storeMock.dispatch.calls.count()).toBe(2);
-    expect(storeMock.dispatch.calls.argsFor(0)).toEqual([new FetchResponsibilitiesAction({
+    expect(storeMock.dispatch.calls.argsFor(0)).toEqual([new FetchResponsibilities({
       positionId: '0',
       filter: stateMock.myPerformanceFilter as any
     })]);
@@ -195,7 +196,7 @@ describe('MyPerformanceComponent', () => {
     fixture.detectChanges();
 
     expect(storeMock.dispatch.calls.count()).toBe(2);
-    expect(storeMock.dispatch.calls.argsFor(0)).toEqual([new FetchResponsibilitiesAction({
+    expect(storeMock.dispatch.calls.argsFor(0)).toEqual([new FetchResponsibilities({
       positionId: '0',
       filter: stateMock.myPerformanceFilter as any
     })]);
@@ -357,7 +358,7 @@ describe('MyPerformanceComponent', () => {
       componentInstance.leftTableViewType = ViewType.people;
       componentInstance.handleElementClicked({leftSide: true, type: RowType.data, index: 0, row: rowMock});
       expect(storeMock.dispatch.calls.count()).toBe(4);
-      expect(storeMock.dispatch.calls.argsFor(2)[0]).toEqual(new FetchResponsibilitiesAction({
+      expect(storeMock.dispatch.calls.argsFor(2)[0]).toEqual(new FetchResponsibilities({
         positionId: rowMock.metadata.positionId,
         filter: stateMock.myPerformanceFilter as any
       }));
