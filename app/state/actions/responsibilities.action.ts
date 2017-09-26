@@ -29,6 +29,7 @@ export interface FetchSubAccountsActionPayload {
   entityType: string;
   selectedPositionId: string;
   premiseType: PremiseTypeValue;
+  filter: MyPerformanceFilterState;
 }
 
 export interface FetchSubAccountsSuccessPayload {

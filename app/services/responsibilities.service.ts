@@ -172,7 +172,7 @@ export class ResponsibilitiesService {
       });
   }
 
-  public getSubAccountsPerformanceTotals(subAccountData: SubAccountData): Observable<SubAccountData> {
+ /* public getSubAccountsPerformanceTotals(subAccountData: SubAccountData): Observable<SubAccountData> {
     // Mock SubAccount performance till next story
     const entitiesPerformancesMock: Array<EntitiesPerformances> = subAccountData.groupedEntities[subAccountData.entityType]
       .map((subAccount: EntityResponsibilities) => {
@@ -193,6 +193,19 @@ export class ResponsibilitiesService {
     return Observable.of(Object.assign({}, subAccountData, {
       entitiesPerformances: entitiesPerformancesMock
     }));
+  }*/
+
+
+  public getSubAccountsPerformanceTotals(subAccountData: SubAccountData , filter: MyPerformanceFilterState) {
+    const apiCalls: Observable<EntitiesPerformances | Error>[] =
+      subAccountData.groupedEntities[subAccountData.entityType].map((subAccount: EntityResponsibilities) => {
+        return this.myPerformanceApiService.getSubAccountsPerformanceTotal(subAccountData.positionId, filter)
+          .map(response => {
+            return this.performanceTransformerService.transformEntityWithPerformance(response, subAccount);
+          });
+      });
+
+    return Observable.forkJoin(apiCalls);
   }
 
   private handleResponsibilitiesPerformanceTotals(responsibilitiesData: ResponsibilitiesData) {

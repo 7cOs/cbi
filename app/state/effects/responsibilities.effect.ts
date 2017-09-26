@@ -64,7 +64,7 @@ export class ResponsibilitiesEffects {
       .ofType(ResponsibilitiesActions.FETCH_SUBACCOUNTS_ACTION)
       .switchMap((action: Action) => Observable.of(action.payload))
       .switchMap((subAccountsData) => this.responsibilitiesService.getSubAccounts(subAccountsData))
-      .switchMap((subAccountsData) => this.responsibilitiesService.getSubAccountsPerformanceTotals(subAccountsData))
+      .switchMap((subAccountsData) => this.responsibilitiesService.getSubAccountsPerformanceTotals(subAccountsData, subAccountsData.filter))
       .switchMap((subAccountsData) => this.constructSubAccountsSuccessAction(subAccountsData))
       .catch((err: Error) => Observable.of(new ResponsibilitiesActions.FetchResponsibilitiesFailureAction(err)));
   }
