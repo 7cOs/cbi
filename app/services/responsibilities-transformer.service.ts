@@ -25,16 +25,16 @@ export class ResponsibilitiesTransformerService {
     }, {});
   }
 
-  public groupsAccountsDistributors(accountsDistributors: Array<EntityDTO>): GroupedEntities {
+  public groupsAccountsDistributors(accountsDistributors: Array<EntityDTO>, entityType: string): GroupedEntities {
     return accountsDistributors.reduce((groups: GroupedEntities, entity: EntityDTO) => {
-      groups['all'].push({
+      groups[entityType].push({
         propertyType: entity.type,
         positionId: entity.id,
         name: entity.name
       });
 
       return groups;
-    }, {'all': []});
+    }, {[entityType]: []});
   }
 
   public transformSubAccountsDTO(subAccountsDTO: Array<EntitySubAccountDTO>, accountName: string): GroupedEntities {

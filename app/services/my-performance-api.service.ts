@@ -111,6 +111,18 @@ export class MyPerformanceApiService {
     .catch(err => this.handleError(new Error(err)));
   }
 
+  public getAlternateHierarchy(positionId: string): Observable<PeopleResponsibilitiesDTO> {
+    const url = `/v3/positions/${ positionId }/alternateHierarchy`;
+
+    return this.http.get(`${ url }`, {
+      params: {
+        contextPositionId: positionId
+      }
+    })
+      .map(res => res.json())
+      .catch(err => this.handleError(new Error(err)));
+  }
+
   public getProductMetrics(
     positionId: string, filter: MyPerformanceFilterState, aggregation: ProductMetricType
   ): Observable<ProductMetricsDTO> {

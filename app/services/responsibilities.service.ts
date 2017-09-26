@@ -22,6 +22,7 @@ export interface ResponsibilitiesData {
   viewType?: ViewType;
   entityTypes?: Array<{ type: string, name: string, positionDescription: string }>;
   entitiesURL?: string;
+  alternateEntitiesURL?: string;
   positionId?: string;
   filter?: MyPerformanceFilterState;
   entityWithPerformance?: Array<EntityWithPerformance>;
@@ -132,7 +133,10 @@ export class ResponsibilitiesService {
 
   public getPerformanceTotalForGroupedEntities(responsibilitiesData: ResponsibilitiesData)
   : Observable<ResponsibilitiesData> {
-    if (responsibilitiesData.viewType === ViewType.roleGroups) {
+
+    console.log('getPerformanceTotalForGroupedEntities', responsibilitiesData);
+
+    if (responsibilitiesData.viewType === ViewType.roleGroups || responsibilitiesData.entityTypes.length > 1) {
       return this.handleResponsibilitiesPerformanceTotals(responsibilitiesData);
     } else if (responsibilitiesData.viewType === ViewType.distributors) {
       return this.handleDistributorsPerformances(responsibilitiesData);
@@ -148,10 +152,18 @@ export class ResponsibilitiesService {
     if (responsibilitiesData.viewType === ViewType.distributors || responsibilitiesData.viewType === ViewType.accounts) {
       return this.myPerformanceApiService.getAccountsDistributors(responsibilitiesData.entitiesURL)
         .switchMap((accountsOrDistributors: Array<EntityDTO>): Observable<ResponsibilitiesData> => {
-        const groupedEntities = this.responsibilitiesTransformerService.groupsAccountsDistributors(accountsOrDistributors);
-        return Observable.of(Object.assign({}, responsibilitiesData, {
-          groupedEntities: groupedEntities
-        }));
+          const entityTypes: Array<{ name: string, type?: string, positionDescription?: string }> = [{
+            name: accountsOrDistributors[0].type.toUpperCase()
+          }];
+          const groupedEntities: GroupedEntities = this.responsibilitiesTransformerService.groupsAccountsDistributors(
+            accountsOrDistributors,
+            accountsOrDistributors[0].type.toUpperCase()
+          );
+
+          return Observable.of(Object.assign({}, responsibilitiesData, {
+            entityTypes: entityTypes,
+            groupedEntities: groupedEntities
+          }));
       });
     } else {
       return Observable.of(responsibilitiesData);
@@ -195,6 +207,42 @@ export class ResponsibilitiesService {
     }));
   }
 
+  public getAlternateHierarchy(responsibilitiesData: ResponsibilitiesData): Observable<ResponsibilitiesData> {
+    return this.myPerformanceApiService.getAlternateHierarchy(responsibilitiesData.positionId)
+      .switchMap((response: PeopleResponsibilitiesDTO) => {
+        if (!response.hasOwnProperty('entityURIs') || !response.entityURIs.length) {
+          return Observable.of(responsibilitiesData);
+        } else {
+          return Observable.of(Object.assign({}, responsibilitiesData, {
+            alternateEntitiesURL: response.entityURIs[0]
+          }));
+        }
+    });
+  }
+
+  public getAlternateAccountsDistributors(responsibilitiesData: ResponsibilitiesData): Observable<ResponsibilitiesData> {
+    if (responsibilitiesData.alternateEntitiesURL) {
+      return this.myPerformanceApiService.getAccountsDistributors(responsibilitiesData.alternateEntitiesURL)
+        .switchMap((response: Array<EntityDTO>) => {
+          let entityTypes: Array<{ name: string, type?: string, positionDescription?: string }>;
+
+          const groupedEntities = Object.assign({},
+            responsibilitiesData.groupedEntities,
+            this.responsibilitiesTransformerService.groupsAccountsDistributors(response, 'GEOGRAPHY')
+          );
+
+          entityTypes = [{ name: 'GEOGRAPHY', type: responsibilitiesData.positionId}].concat(responsibilitiesData.entityTypes);
+
+          return Observable.of(Object.assign({}, responsibilitiesData, {
+            entityTypes: entityTypes,
+            groupedEntities: groupedEntities
+          }));
+        });
+    } else {
+      return Observable.of(responsibilitiesData);
+    }
+  }
+
   private handleResponsibilitiesPerformanceTotals(responsibilitiesData: ResponsibilitiesData) {
     return this.getResponsibilitiesPerformanceTotals(responsibilitiesData.entityTypes,
       responsibilitiesData.filter,
@@ -207,7 +255,7 @@ export class ResponsibilitiesService {
 
   private handleDistributorsPerformances(responsibilitiesData: ResponsibilitiesData) {
     return this.getDistributorsPerformances(
-      responsibilitiesData.groupedEntities.all,
+      responsibilitiesData.groupedEntities.Distributor,
       responsibilitiesData.filter,
       responsibilitiesData.positionId)
         .map((entityPerformances: EntityWithPerformance[]) => {
@@ -218,7 +266,7 @@ export class ResponsibilitiesService {
 
   private handleAccountsPerformances(responsibilitiesData: ResponsibilitiesData) {
     return this.getAccountsPerformances(
-      responsibilitiesData.groupedEntities.all,
+      responsibilitiesData.groupedEntities.Account,
       responsibilitiesData.filter,
       responsibilitiesData.positionId)
         .map((entityPerformances: EntityWithPerformance[]) => {
