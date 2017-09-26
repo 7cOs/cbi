@@ -1,11 +1,11 @@
 import { inject, TestBed } from '@angular/core/testing';
 
 import { getPerformanceDTOMock } from '../models/performance.model.mock';
-import { getResponsibilityEntitiesPerformanceDTOMock } from '../models/entities-performances.model.mock';
+import { getResponsibilityEntitiesPerformanceDTOMock } from '../models/entity-with-performance.model.mock';
 import { Performance, PerformanceDTO } from '../models/performance.model';
 import { getEntityPropertyResponsibilitiesMock } from '../models/hierarchy-entity.model.mock';
 import { PerformanceTransformerService } from './performance-transformer.service';
-import { EntityWithPerformance, EntityWithPerformanceDTO } from '../models/entities-performances.model';
+import { EntityWithPerformance, EntityWithPerformanceDTO } from '../models/entity-with-performance.model';
 import { UtilService } from './util.service';
 
 describe('Service: PerformanceTransformerService', () => {

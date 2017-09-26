@@ -5,7 +5,7 @@ import 'rxjs/add/operator/map';
 
 import { DateRangeTimePeriodValue } from '../enums/date-range-time-period.enum';
 import { DistributionTypeValue } from '../enums/distribution-type.enum';
-import { EntityWithPerformanceDTO } from '../models/entities-performances.model'; // tslint:disable-line:no-unused-variable
+import { EntityWithPerformanceDTO } from '../models/entity-with-performance.model'; // tslint:disable-line:no-unused-variable
 import { PerformanceDTO } from '../models/performance.model';
 import { EntityDTO } from '../models/entity-dto.model';
 import { EntitySubAccountDTO } from '../models/entity-subaccount-dto.model';

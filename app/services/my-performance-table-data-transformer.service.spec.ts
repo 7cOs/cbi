@@ -2,12 +2,12 @@ import { inject, TestBed } from '@angular/core/testing';
 
 import { ActionStatus } from '../enums/action-status.enum';
 import { Performance } from '../models/performance.model';
-import { EntityWithPerformance } from '../models/entities-performances.model';
+import { EntityWithPerformance } from '../models/entity-with-performance.model';
 import { getPerformanceMock } from '../models/performance.model.mock';
 import {
   getEntitiesWithPerformancesMock,
   getEntitiesWithPerformancesOpenPositionMock
-} from '../models/entities-performances.model.mock';
+} from '../models/entity-with-performance.model.mock';
 import { getProductMetricMock } from '../models/entity-product-metrics-dto.model.mock';
 import { MyPerformanceTableDataTransformerService } from './my-performance-table-data-transformer.service';
 import { ProductMetricsState } from '../state/reducers/product-metrics.reducer';

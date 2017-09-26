@@ -5,7 +5,7 @@ import { MockBackend, MockConnection } from '@angular/http/testing';
 import { DateRangeTimePeriodValue } from '../enums/date-range-time-period.enum';
 import { EntityDTO } from '../models/entity-dto.model';
 import { EntitySubAccountDTO } from '../models/entity-subaccount-dto.model';
-import { EntityWithPerformanceDTO } from '../models/entities-performances.model';
+import { EntityWithPerformanceDTO } from '../models/entity-with-performance.model';
 import { PerformanceDTO } from '../models/performance.model';
 import { getEntityDTOMock } from '../models/entity-dto.model.mock';
 import { getEntitySubAccountDTOMock } from '../models/entity-subaccount-dto.model.mock';

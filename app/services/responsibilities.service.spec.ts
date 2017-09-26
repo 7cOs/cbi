@@ -6,14 +6,14 @@ import { DateRangeTimePeriodValue } from '../enums/date-range-time-period.enum';
 import { DistributionTypeValue } from '../enums/distribution-type.enum';
 import { Performance, PerformanceDTO } from '../models/performance.model';
 import { EntityDTO } from '../models/entity-dto.model';
-import { EntityWithPerformance, EntityWithPerformanceDTO } from '../models/entities-performances.model';
+import { EntityWithPerformance, EntityWithPerformanceDTO } from '../models/entity-with-performance.model';
 import { EntityPropertyType } from '../enums/entity-responsibilities.enum';
 import { EntitySubAccountDTO } from '../models/entity-subaccount-dto.model';
 import { getEntityPeopleResponsibilitiesMock,
   getEntityPropertyResponsibilitiesMock } from '../models/hierarchy-entity.model.mock';
 import { getPerformanceMock,
   getPerformanceDTOMock } from '../models/performance.model.mock';
-import { getEntitiesWithPerformancesMock, getResponsibilityEntitiesPerformanceDTOMock } from '../models/entities-performances.model.mock';
+import { getEntitiesWithPerformancesMock, getResponsibilityEntitiesPerformanceDTOMock } from '../models/entity-with-performance.model.mock';
 import { getEntityDTOMock } from '../models/entity-dto.model.mock';
 import { getEntitySubAccountDTOMock } from '../models/entity-subaccount-dto.model.mock';
 import { getGroupedEntitiesMock } from '../models/grouped-entities.model.mock';

@@ -1,6 +1,6 @@
 import { Action } from '@ngrx/store';
 
-import { EntityWithPerformance } from '../../models/entities-performances.model';
+import { EntityWithPerformance } from '../../models/entity-with-performance.model';
 import { Performance } from '../../models/performance.model';
 import { EntityPeopleType } from '../../enums/entity-responsibilities.enum';
 import { HierarchyEntity } from '../../models/hierarchy-entity.model';

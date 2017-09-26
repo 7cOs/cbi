@@ -1,5 +1,5 @@
 import { ActionStatus, State } from '../../enums/action-status.enum';
-import { EntityWithPerformance } from '../../models/entities-performances.model';
+import { EntityWithPerformance } from '../../models/entity-with-performance.model';
 import { Performance } from '../../models/performance.model';
 import { GroupedEntities } from '../../models/grouped-entities.model';
 import * as ResponsibilitiesActions from '../actions/responsibilities.action';

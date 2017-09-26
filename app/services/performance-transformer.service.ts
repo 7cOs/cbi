@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import 'rxjs/add/operator/map';
 
-import { EntityWithPerformance, EntityWithPerformanceDTO } from '../models/entities-performances.model';
+import { EntityWithPerformance, EntityWithPerformanceDTO } from '../models/entity-with-performance.model';
 import { HierarchyEntity } from '../models/hierarchy-entity.model';
 import { Performance, PerformanceDTO } from '../models/performance.model';
 import { UtilService } from './util.service';

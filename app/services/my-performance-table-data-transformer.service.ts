@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import 'rxjs/add/operator/map';
 
-import { EntityWithPerformance } from '../models/entities-performances.model';
+import { EntityWithPerformance } from '../models/entity-with-performance.model';
 import { Performance } from '../models/performance.model';
 import { MyPerformanceTableRow } from '../models/my-performance-table-row.model';
 import { ProductMetrics, ProductMetricsBrandValue } from '../models/product-metrics.model';

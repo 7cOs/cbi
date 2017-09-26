@@ -1,4 +1,4 @@
-import { EntityWithPerformance, EntityWithPerformanceDTO } from '../models/entities-performances.model';
+import { EntityWithPerformance, EntityWithPerformanceDTO } from '../models/entity-with-performance.model';
 import { getPerformanceMock, getPerformanceDTOMock } from '../models/performance.model.mock';
 
 export function getResponsibilityEntitiesPerformanceDTOMock(): EntityWithPerformanceDTO[] {
