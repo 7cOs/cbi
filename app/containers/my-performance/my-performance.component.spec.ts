@@ -11,12 +11,11 @@ import { DateRangesState } from '../../state/reducers/date-ranges.reducer';
 import { DateRangeTimePeriodValue } from '../../enums/date-range-time-period.enum';
 import { DistributionTypeValue } from '../../enums/distribution-type.enum';
 import { FetchProductMetricsAction } from '../../state/actions/product-metrics.action';
-import { FetchResponsibilitiesAction } from '../../state/actions/responsibilities.action';
+import { FetchResponsibilities } from '../../state/actions/responsibilities.action';
 import {
   getMyPerformanceEntitiesDataMock,
   getMyPerformanceStateMock
 } from '../../state/reducers/my-performance.state.mock';
-import { FetchResponsibilities } from '../../state/actions/responsibilities.action';
 import { getMyPerformanceTableRowMock } from '../../models/my-performance-table-row.model.mock';
 import { MetricTypeValue } from '../../enums/metric-type.enum';
 import * as MyPerformanceVersionActions from '../../state/actions/my-performance-version.action';
