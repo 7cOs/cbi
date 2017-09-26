@@ -6,6 +6,7 @@ import com.cbrands.helper.WebDriverFactory;
 import com.cbrands.listener.SeleniumSnapshotRule;
 import com.cbrands.pages.*;
 import com.cbrands.pages.targetList.TargetList;
+import com.cbrands.test.BaseTestCase;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openqa.selenium.*;
@@ -25,7 +26,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
  * Methods in this class will be extracted to their appropriate page object or utility classes.
  * The new base test class should contain only code relevant to setup and teardown of test suites.
  *
- * @see com.cbrands.test.smoke.BaseTestCase
+ * @see BaseTestCase
  */
 @Deprecated
 @Listeners(value = SeleniumSnapshotRule.class)
