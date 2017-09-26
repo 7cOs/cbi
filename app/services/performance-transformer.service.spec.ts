@@ -29,7 +29,7 @@ describe('Service: PerformanceTransformerService', () => {
         entitiesTotalPerformancesDTOMock = getPerformanceDTOMock();
     }));
 
-    it('should return transformed PerformanceTotal data given PerformanceDTO data', () => {
+    it('should return transformed Performance data given PerformanceDTO data', () => {
       spyOn(performanceTransformerService, 'transformPerformanceDTO').and.callThrough();
 
       const performance: Performance
@@ -58,7 +58,7 @@ describe('Service: PerformanceTransformerService', () => {
         responsibilityEntitiesPerformanceDTOMock = getResponsibilityEntitiesPerformanceDTOMock();
     }));
 
-    it('should return transformed EntityPerformanceTotal data given EntityPerformanceDTO data', () => {
+    it('should return transformed EntityPerformance data given EntityPerformanceDTO data', () => {
       spyOn(performanceTransformerService, 'transformEntityWithPerformanceDTOs').and.callThrough();
 
       const entityPerformance: EntityWithPerformance[] =
