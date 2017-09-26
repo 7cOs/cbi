@@ -4,19 +4,19 @@ const chance = new Chance();
 import { DateRangeTimePeriodValue } from '../../enums/date-range-time-period.enum';
 import { DistributionTypeValue } from '../../enums/distribution-type.enum';
 import { EntityPeopleType } from '../../enums/entity-responsibilities.enum';
-import { FetchResponsibilityEntitiesPerformancePayload,
+import { FetchEntityWithPerformancePayload,
          FetchSubAccountsActionPayload,
          FetchSubAccountsSuccessPayload } from './responsibilities.action';
-import { getEntitiesPerformancesMock } from '../../models/entities-performances.model.mock';
-import { getEntityPeopleResponsibilitiesMock } from '../../models/entity-responsibilities.model.mock';
-import { getEntitiesTotalPerformancesMock } from '../../models/entities-total-performances.model.mock';
+import { getEntitiesWithPerformancesMock } from '../../models/entity-with-performance.model.mock';
+import { getEntityPeopleResponsibilitiesMock } from '../../models/hierarchy-entity.model.mock';
+import { getPerformanceMock } from '../../models/performance.model.mock';
 import { getMyPerformanceTableRowMock } from '../../models/my-performance-table-row.model.mock';
 import { getGroupedEntitiesMock } from '../../models/grouped-entities.model.mock';
 import { MetricTypeValue } from '../../enums/metric-type.enum';
 import { MyPerformanceFilterState } from '../reducers/my-performance-filter.reducer';
-import { EntitiesTotalPerformances } from '../../models/entities-total-performances.model';
+import { Performance } from '../../models/performance.model';
 import { PremiseTypeValue } from '../../enums/premise-type.enum';
-import { EntitiesPerformances } from '../../models/entities-performances.model';
+import { EntityWithPerformance } from '../../models/entity-with-performance.model';
 import { GroupedEntities } from '../../models/grouped-entities.model';
 import { ViewType } from '../../enums/view-type.enum';
 import * as ResponsibilitiesActions from './responsibilities.action';
@@ -30,8 +30,8 @@ const performanceFilterStateMock: MyPerformanceFilterState = {
 
 describe('Responsibilities Actions', () => {
 
-  describe('FetchResponsibilitiesAction', () => {
-    let action: ResponsibilitiesActions.FetchResponsibilitiesAction;
+  describe('FetchResponsibilities', () => {
+    let action: ResponsibilitiesActions.FetchResponsibilities;
     let positionIdMock: number;
     let actionPayloadMock: any;
 
@@ -41,12 +41,12 @@ describe('Responsibilities Actions', () => {
         positionId: positionIdMock,
         filter: performanceFilterStateMock
       };
-      action = new ResponsibilitiesActions.FetchResponsibilitiesAction(actionPayloadMock);
+      action = new ResponsibilitiesActions.FetchResponsibilities(actionPayloadMock);
     });
 
     it('should have the correct type', () => {
-      expect(ResponsibilitiesActions.FETCH_RESPONSIBILITIES_ACTION).toBe('[Responsibilities] FETCH_RESPONSIBILITIES_ACTION');
-      expect(action.type).toBe(ResponsibilitiesActions.FETCH_RESPONSIBILITIES_ACTION);
+      expect(ResponsibilitiesActions.FETCH_RESPONSIBILITIES).toBe('[Responsibilities] FETCH_RESPONSIBILITIES');
+      expect(action.type).toBe(ResponsibilitiesActions.FETCH_RESPONSIBILITIES);
     });
 
     it('should contain the correct payload', () => {
@@ -54,30 +54,30 @@ describe('Responsibilities Actions', () => {
     });
   });
 
-  describe('FetchResponsibilitiesSuccessAction', () => {
-    let action: ResponsibilitiesActions.FetchResponsibilitiesSuccessAction;
+  describe('FetchResponsibilitiesSuccess', () => {
+    let action: ResponsibilitiesActions.FetchResponsibilitiesSuccess;
     let groupedEntitiesMock: GroupedEntities;
     let positionIdMock: number;
-    let responsibilityEntitiesPerformanceMock: EntitiesPerformances[];
+    let responsibilityEntitiesPerformanceMock: EntityWithPerformance[];
     let mockSuccessActionPayload: any;
 
     beforeEach(() => {
       groupedEntitiesMock = getGroupedEntitiesMock();
       positionIdMock = chance.natural();
-      responsibilityEntitiesPerformanceMock = getEntitiesPerformancesMock();
+      responsibilityEntitiesPerformanceMock = getEntitiesWithPerformancesMock();
       mockSuccessActionPayload = {
         positionId: positionIdMock,
         responsibilities: groupedEntitiesMock,
-        performanceTotals: responsibilityEntitiesPerformanceMock
+        performances: responsibilityEntitiesPerformanceMock
       };
 
-      action = new ResponsibilitiesActions.FetchResponsibilitiesSuccessAction(mockSuccessActionPayload);
+      action = new ResponsibilitiesActions.FetchResponsibilitiesSuccess(mockSuccessActionPayload);
     });
 
     it('should have the correct type', () => {
-      expect(ResponsibilitiesActions.FETCH_RESPONSIBILITIES_SUCCESS_ACTION)
-        .toBe('[Responsibilities] FETCH_RESPONSIBILITIES_SUCCESS_ACTION');
-      expect(action.type).toBe(ResponsibilitiesActions.FETCH_RESPONSIBILITIES_SUCCESS_ACTION);
+      expect(ResponsibilitiesActions.FETCH_RESPONSIBILITIES_SUCCESS)
+        .toBe('[Responsibilities] FETCH_RESPONSIBILITIES_SUCCESS');
+      expect(action.type).toBe(ResponsibilitiesActions.FETCH_RESPONSIBILITIES_SUCCESS);
     });
 
     it('should contain the mock payload', () => {
@@ -85,18 +85,18 @@ describe('Responsibilities Actions', () => {
     });
   });
 
-  describe('FetchResponsibilitiesFailureAction', () => {
+  describe('FetchResponsibilitiesFailure', () => {
     const error: Error = new Error(chance.string());
-    let action: ResponsibilitiesActions.FetchResponsibilitiesFailureAction;
+    let action: ResponsibilitiesActions.FetchResponsibilitiesFailure;
 
     beforeEach(() => {
-      action = new ResponsibilitiesActions.FetchResponsibilitiesFailureAction(error);
+      action = new ResponsibilitiesActions.FetchResponsibilitiesFailure(error);
     });
 
     it('should have the correct type', () => {
-      expect(ResponsibilitiesActions.FETCH_RESPONSIBILITIES_FAILURE_ACTION)
-        .toBe('[Responsibilities] FETCH_RESPONSIBILITIES_FAILURE_ACTION');
-      expect(action.type).toBe(ResponsibilitiesActions.FETCH_RESPONSIBILITIES_FAILURE_ACTION);
+      expect(ResponsibilitiesActions.FETCH_RESPONSIBILITIES_FAILURE)
+        .toBe('[Responsibilities] FETCH_RESPONSIBILITIES_FAILURE');
+      expect(action.type).toBe(ResponsibilitiesActions.FETCH_RESPONSIBILITIES_FAILURE);
     });
 
     it('should contain the mock payload', () => {
@@ -122,24 +122,24 @@ describe('Responsibilities Actions', () => {
     });
   });
 
-  describe('FetchResponsibilityEntityPerformance', () => {
-    const payloadMock: FetchResponsibilityEntitiesPerformancePayload = {
+  describe('FetchEntityWithPerformance', () => {
+    const payloadMock: FetchEntityWithPerformancePayload = {
       entityType: EntityPeopleType['GENERAL MANAGER'],
       entities: [getEntityPeopleResponsibilitiesMock()],
       filter: performanceFilterStateMock,
       selectedPositionId: getMyPerformanceTableRowMock(1)[0].metadata.positionId,
       viewType: ViewType.people
     };
-    let action: ResponsibilitiesActions.FetchResponsibilityEntityPerformance;
+    let action: ResponsibilitiesActions.FetchEntityWithPerformance;
 
     beforeEach(() => {
-      action = new ResponsibilitiesActions.FetchResponsibilityEntityPerformance(payloadMock);
+      action = new ResponsibilitiesActions.FetchEntityWithPerformance(payloadMock);
     });
 
     it('should have the correct type', () => {
-      expect(ResponsibilitiesActions.FETCH_RESPONSIBILITY_ENTITY_PERFORMANCE)
-        .toBe('[Responsibilities] FETCH_RESPONSIBILITY_ENTITY_PERFORMANCE');
-      expect(action.type).toBe(ResponsibilitiesActions.FETCH_RESPONSIBILITY_ENTITY_PERFORMANCE);
+      expect(ResponsibilitiesActions.FETCH_ENTITIES_PERFORMANCES)
+        .toBe('[Responsibilities] FETCH_ENTITIES_PERFORMANCES');
+      expect(action.type).toBe(ResponsibilitiesActions.FETCH_ENTITIES_PERFORMANCES);
     });
 
     it('should contain the mock payload', () => {
@@ -147,18 +147,18 @@ describe('Responsibilities Actions', () => {
     });
   });
 
-  describe('FetchResponsibilityEntityPerformanceSuccess', () => {
-    const payloadMock: EntitiesPerformances[] = getEntitiesPerformancesMock();
-    let action: ResponsibilitiesActions.FetchResponsibilityEntityPerformanceSuccess;
+  describe('FetchEntityWithPerformanceSuccess', () => {
+    const payloadMock: EntityWithPerformance[] = getEntitiesWithPerformancesMock();
+    let action: ResponsibilitiesActions.FetchEntityWithPerformanceSuccess;
 
     beforeEach(() => {
-      action = new ResponsibilitiesActions.FetchResponsibilityEntityPerformanceSuccess(payloadMock);
+      action = new ResponsibilitiesActions.FetchEntityWithPerformanceSuccess(payloadMock);
     });
 
     it('should have the correct type', () => {
-      expect(ResponsibilitiesActions.FETCH_RESPONSIBILITY_ENTITY_PERFORMANCE_SUCCESS)
-        .toBe('[Responsibilities] FETCH_RESPONSIBILITY_ENTITY_PERFORMANCE_SUCCESS');
-      expect(action.type).toBe(ResponsibilitiesActions.FETCH_RESPONSIBILITY_ENTITY_PERFORMANCE_SUCCESS);
+      expect(ResponsibilitiesActions.FETCH_ENTITIES_PERFORMANCES_SUCCESS)
+        .toBe('[Responsibilities] FETCH_ENTITIES_PERFORMANCES_SUCCESS');
+      expect(action.type).toBe(ResponsibilitiesActions.FETCH_ENTITIES_PERFORMANCES_SUCCESS);
     });
 
     it('should contain the mock payload', () => {
@@ -168,18 +168,18 @@ describe('Responsibilities Actions', () => {
 
   describe('Fetch Performance Total Action', () => {
     const positionIdMock: string = chance.string();
-    let action: ResponsibilitiesActions.FetchPerformanceTotalAction;
+    let action: ResponsibilitiesActions.FetchTotalPerformance;
 
     beforeEach(() => {
-      action = new ResponsibilitiesActions.FetchPerformanceTotalAction({
+      action = new ResponsibilitiesActions.FetchTotalPerformance({
         positionId: positionIdMock,
         filter: performanceFilterStateMock
       });
     });
 
     it('should be the correct type', () => {
-      expect(ResponsibilitiesActions.FETCH_PERFORMANCE_TOTAL_ACTION).toBe('[Performance Total] FETCH_PERFORMANCE_TOTAL_ACTION');
-      expect(action.type).toBe(ResponsibilitiesActions.FETCH_PERFORMANCE_TOTAL_ACTION);
+      expect(ResponsibilitiesActions.FETCH_TOTAL_PERFORMANCE).toBe('[Performance Total] FETCH_TOTAL_PERFORMANCE');
+      expect(action.type).toBe(ResponsibilitiesActions.FETCH_TOTAL_PERFORMANCE);
     });
 
     it('should contain the correct payload', () => {
@@ -191,36 +191,36 @@ describe('Responsibilities Actions', () => {
   });
 
   describe('Fetch Performance Total Success Action', () => {
-    const performanceTotalMock: EntitiesTotalPerformances = getEntitiesTotalPerformancesMock();
-    let action: ResponsibilitiesActions.FetchPerformanceTotalSuccessAction;
+    const performanceMock: Performance = getPerformanceMock();
+    let action: ResponsibilitiesActions.FetchTotalPerformanceSuccess;
 
     beforeEach(() => {
-      action = new ResponsibilitiesActions.FetchPerformanceTotalSuccessAction(performanceTotalMock);
+      action = new ResponsibilitiesActions.FetchTotalPerformanceSuccess(performanceMock);
     });
 
     it('should be the correct type', () => {
-      expect(ResponsibilitiesActions.FETCH_PERFORMANCE_TOTAL_SUCCESS_ACTION)
-        .toBe('[Performance Total] FETCH_PERFORMANCE_TOTAL_SUCCESS_ACTION');
-      expect(action.type).toBe(ResponsibilitiesActions.FETCH_PERFORMANCE_TOTAL_SUCCESS_ACTION);
+      expect(ResponsibilitiesActions.FETCH_TOTAL_PERFORMANCE_SUCCESS)
+        .toBe('[Performance Total] FETCH_TOTAL_PERFORMANCE_SUCCESS');
+      expect(action.type).toBe(ResponsibilitiesActions.FETCH_TOTAL_PERFORMANCE_SUCCESS);
     });
 
     it('should contain the correct payload', () => {
-      expect(action.payload).toEqual(performanceTotalMock);
+      expect(action.payload).toEqual(performanceMock);
     });
   });
 
   describe('Fetch Performance Total Failure Action', () => {
     const errorMock: Error = new Error(chance.string());
-    let action: ResponsibilitiesActions.FetchPerformanceTotalFailureAction;
+    let action: ResponsibilitiesActions.FetchTotalPerformanceFailure;
 
     beforeEach(() => {
-      action = new ResponsibilitiesActions.FetchPerformanceTotalFailureAction(errorMock);
+      action = new ResponsibilitiesActions.FetchTotalPerformanceFailure(errorMock);
     });
 
     it('should be the correct type', () => {
-      expect(ResponsibilitiesActions.FETCH_PERFORMANCE_TOTAL_FAILURE_ACTION)
-        .toBe('[Performance Total] FETCH_PERFORMANCE_TOTAL_FAILURE_ACTION');
-      expect(action.type).toBe(ResponsibilitiesActions.FETCH_PERFORMANCE_TOTAL_FAILURE_ACTION);
+      expect(ResponsibilitiesActions.FETCH_TOTAL_PERFORMANCE_FAILURE)
+        .toBe('[Performance Total] FETCH_TOTAL_PERFORMANCE_FAILURE');
+      expect(action.type).toBe(ResponsibilitiesActions.FETCH_TOTAL_PERFORMANCE_FAILURE);
     });
 
     it('should contain the correct payload', () => {
@@ -230,15 +230,15 @@ describe('Responsibilities Actions', () => {
 
   describe('Set Table Row Performance Total Action', () => {
     const selectedPositionIdMock: string = getMyPerformanceTableRowMock(1)[0].metadata.positionId;
-    let action: ResponsibilitiesActions.SetTableRowPerformanceTotal;
+    let action: ResponsibilitiesActions.SetTotalPerformance;
 
     beforeEach(() => {
-      action = new ResponsibilitiesActions.SetTableRowPerformanceTotal(selectedPositionIdMock);
+      action = new ResponsibilitiesActions.SetTotalPerformance(selectedPositionIdMock);
     });
 
     it('should be the correct type', () => {
-      expect(ResponsibilitiesActions.SET_TABLE_ROW_PERFORMANCE_TOTAL).toBe('[Performance Total] SET_TABLE_ROW_PERFORMANCE_TOTAL');
-      expect(action.type).toBe(ResponsibilitiesActions.SET_TABLE_ROW_PERFORMANCE_TOTAL);
+      expect(ResponsibilitiesActions.SET_TOTAL_PERFORMANCE).toBe('[Performance Total] SET_TOTAL_PERFORMANCE');
+      expect(action.type).toBe(ResponsibilitiesActions.SET_TOTAL_PERFORMANCE);
     });
 
     it('should contain the correct payload', () => {
@@ -273,7 +273,7 @@ describe('Responsibilities Actions', () => {
   describe('FetchSubAccountsSuccessAction', () => {
     const payloadMock: FetchSubAccountsSuccessPayload = {
       groupedEntities: getGroupedEntitiesMock(),
-      entitiesPerformances: getEntitiesPerformancesMock()
+      entityWithPerformance: getEntitiesWithPerformancesMock()
     };
     let action: ResponsibilitiesActions.FetchSubAccountsSuccessAction;
 

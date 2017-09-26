@@ -1,8 +1,8 @@
 import { ActionStatus } from '../../enums/action-status.enum';
 // tslint:disable-next-line:no-unused-variable
-import { EntitiesTotalPerformances } from '../../models/entities-total-performances.model';
-import { getEntitiesPerformancesMock } from '../../models/entities-performances.model.mock';
-import { getEntitiesTotalPerformancesMock } from '../../models/entities-total-performances.model.mock';
+import { Performance } from '../../models/performance.model';
+import { getEntitiesWithPerformancesMock } from '../../models/entity-with-performance.model.mock';
+import { getPerformanceMock } from '../../models/performance.model.mock';
 import { getGroupedEntitiesMock } from '../../models/grouped-entities.model.mock';
 // tslint:disable-next-line:no-unused-variable
 import { getViewTypeMock } from '../../enums/view-type.enum.mock';
@@ -14,8 +14,8 @@ import { ViewTypeState } from './view-types.reducer';
 export function getResponsibilitesStateMock(): ResponsibilitiesState {
   return {
     groupedEntities: getGroupedEntitiesMock(),
-    entitiesPerformances: getEntitiesPerformancesMock(),
-    entitiesTotalPerformances: getEntitiesTotalPerformancesMock(),
+    entityWithPerformance: getEntitiesWithPerformancesMock(),
+    entitiesTotalPerformances: getPerformanceMock(),
     positionId: chance.string(),
     status: ActionStatus.Fetched
   };

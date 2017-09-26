@@ -41,16 +41,16 @@ export function myPerformanceReducer(
     case MyPerformanceVersionActions.CLEAR_MY_PERFORMANCE_STATE_ACTION:
       return myPerformanceVersionReducer(state, action as MyPerformanceVersionActions.Action);
 
-    case ResponsibilitiesActions.FETCH_RESPONSIBILITIES_ACTION:
-    case ResponsibilitiesActions.FETCH_RESPONSIBILITIES_SUCCESS_ACTION:
-    case ResponsibilitiesActions.FETCH_RESPONSIBILITIES_FAILURE_ACTION:
+    case ResponsibilitiesActions.FETCH_RESPONSIBILITIES:
+    case ResponsibilitiesActions.FETCH_RESPONSIBILITIES_SUCCESS:
+    case ResponsibilitiesActions.FETCH_RESPONSIBILITIES_FAILURE:
     case ResponsibilitiesActions.GET_PEOPLE_BY_ROLE_GROUP_ACTION:
-    case ResponsibilitiesActions.FETCH_RESPONSIBILITY_ENTITY_PERFORMANCE:
-    case ResponsibilitiesActions.FETCH_RESPONSIBILITY_ENTITY_PERFORMANCE_SUCCESS:
-    case ResponsibilitiesActions.FETCH_PERFORMANCE_TOTAL_ACTION:
-    case ResponsibilitiesActions.FETCH_PERFORMANCE_TOTAL_SUCCESS_ACTION:
-    case ResponsibilitiesActions.FETCH_PERFORMANCE_TOTAL_FAILURE_ACTION:
-    case ResponsibilitiesActions.SET_TABLE_ROW_PERFORMANCE_TOTAL:
+    case ResponsibilitiesActions.FETCH_ENTITIES_PERFORMANCES:
+    case ResponsibilitiesActions.FETCH_ENTITIES_PERFORMANCES_SUCCESS:
+    case ResponsibilitiesActions.FETCH_TOTAL_PERFORMANCE:
+    case ResponsibilitiesActions.FETCH_TOTAL_PERFORMANCE_SUCCESS:
+    case ResponsibilitiesActions.FETCH_TOTAL_PERFORMANCE_FAILURE:
+    case ResponsibilitiesActions.SET_TOTAL_PERFORMANCE:
     case ResponsibilitiesActions.FETCH_SUBACCOUNTS_ACTION:
     case ResponsibilitiesActions.FETCH_SUBACCOUNTS_SUCCESS_ACTION:
       return {
