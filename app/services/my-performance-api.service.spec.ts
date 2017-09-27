@@ -157,7 +157,7 @@ describe('Service: MyPerformanceApiService', () => {
 
       mockBackend.connections.subscribe((connection: MockConnection) => {
         const options = new ResponseOptions({
-          body: JSON.stringify(performanceTotalResponseMock)
+          body: JSON.stringify(performanceResponseMock)
         });
         connection.mockRespond(new Response(options));
         expect(connection.request.method).toEqual(RequestMethod.Get);
@@ -166,8 +166,8 @@ describe('Service: MyPerformanceApiService', () => {
         );
       });
 
-      myPerformanceApiService.getSubAccountsPerformanceTotal('1', '1', filterMock).subscribe((response: EntitiesTotalPerformancesDTO) => {
-        expect(response).toEqual(performanceTotalResponseMock);
+      myPerformanceApiService.getSubAccountsPerformanceTotal('1', '1', filterMock).subscribe((response: PerformanceDTO) => {
+        expect(response).toEqual(performanceResponseMock);
         done();
       });
     });
