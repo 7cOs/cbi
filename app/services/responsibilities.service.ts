@@ -206,28 +206,6 @@ export class ResponsibilitiesService {
       });
   }
 
-/*  public getSubAccountsPerformances(subAccountData: SubAccountData): Observable<SubAccountData> {
-    // Mock SubAccount performance till next story
-    const entityWithPerformanceMock: Array<EntityWithPerformance> = subAccountData.groupedEntities[subAccountData.entityType]
-      .map((subAccount: HierarchyEntity) => {
-        return {
-          positionId: subAccount.positionId,
-          contextPositionId: subAccount.contextPositionId,
-          name: subAccount.name,
-          performance: {
-            total: 1337,
-            totalYearAgo: 9001,
-            totalYearAgoPercent: 404,
-            contributionToVolume: 30,
-            name: subAccount.name
-          }
-        };
-    });
-
-    return Observable.of(Object.assign({}, subAccountData, {
-      entityWithPerformance: entityWithPerformanceMock
-    }));
-  }*/
 
   private handleResponsibilitiesPerformances(responsibilitiesData: ResponsibilitiesData) {
     return this.getResponsibilitiesPerformances(responsibilitiesData.entityTypes,

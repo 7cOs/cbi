@@ -715,6 +715,54 @@ describe('Responsibilities Effects', () => {
     });
   });
 
+  describe('getSubAccountsPerformances', () => {
+
+    let subAccountDataMock: SubAccountData;
+
+    beforeEach(() => {
+      entitySubAccountDTOMock = [getEntitySubAccountDTOMock(), getEntitySubAccountDTOMock()];
+      subAccountDataMock = {
+        positionId: positionIdMock,
+        contextPositionId: contextPositionIdMock,
+        entityType: chance.string(),
+        premiseType: PremiseTypeValue.All,
+        selectedPositionId: getMyPerformanceTableRowMock(1)[0].metadata.positionId,
+        filter: performanceFilterStateMock
+      };
+      groupedSubAccountsMock = {
+        [subAccountDataMock.entityType]: [{
+          positionId: entitySubAccountDTOMock[0].id,
+          name: entitySubAccountDTOMock[0].name,
+          propertyType: EntityPropertyType.SubAccount,
+        }, {
+          positionId: entitySubAccountDTOMock[1].id,
+          name: entitySubAccountDTOMock[1].name,
+          propertyType: EntityPropertyType.SubAccount
+        }]
+      };
+    });
+
+    it('should call getSubAccountPerformance total with the proper id for each account', (done) => {
+      const getSubAccountPerformanceSpy = spyOn(myPerformanceApiService, 'getSubAccountsPerformanceTotal');
+      const mockFilter = {
+        metricType: MetricTypeValue.volume,
+        dateRangeCode: DateRangeTimePeriodValue.FYTDBDL,
+        premiseType: PremiseTypeValue.On
+      };
+
+      const contextId = chance.string({pool: 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!#%^&*()[]'});
+      const numberOfEntities = chance.natural({min: 1, max: 99});
+      const subAccounts = Array(numberOfEntities).fill('').map(el => getEntityPropertyResponsibilitiesMock());
+      responsibilitiesService.getSubAccounts(subAccountDataMock).subscribe(() => {
+        done();
+      });
+      expect(getSubAccountPerformanceSpy).toHaveBeenCalledTimes(numberOfEntities);
+      subAccounts.map((subAccount) => {
+        expect(getSubAccountPerformanceSpy).toHaveBeenCalledWith(subAccount.positionId, mockFilter, contextId);
+      });
+    });
+  });
+
   describe('when getSubAccounts is called', () => {
     let subAccountDataMock: SubAccountData;
 
