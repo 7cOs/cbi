@@ -14,13 +14,13 @@ describe('ProductMetrics Actions', () => {
     let action: ProductMetricsActions.FetchProductMetricsAction;
     let positionIdMock: string;
     let actionPayloadMock: any;
-    const mockPerformanceFilterState: MyPerformanceFilterState = getMyPerformanceFilterMock();
+    const performanceFilterStateMock: MyPerformanceFilterState = getMyPerformanceFilterMock();
 
     beforeEach(() => {
       positionIdMock = chance.string();
       actionPayloadMock = {
         positionId: positionIdMock,
-        filter: mockPerformanceFilterState
+        filter: performanceFilterStateMock
       };
       action = new ProductMetricsActions.FetchProductMetricsAction(actionPayloadMock);
     });

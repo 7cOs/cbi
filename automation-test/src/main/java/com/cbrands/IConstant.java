@@ -1,6 +1,6 @@
 package com.cbrands;
 
-import static com.cbrands.TestUser.*;
+import static com.cbrands.TestUser.ACTOR4;
 
 /**
  * The Interface IConstant.
@@ -13,35 +13,56 @@ import static com.cbrands.TestUser.*;
 @Deprecated
 public interface IConstant {
 
+  enum LegacyUser{
+    @Deprecated
+    ACTOR1 ("juan.baez@cbrands.com", "Corona.2016", "Juan", "Baez"),
+    @Deprecated
+    ACTOR2 ("stash.rowley@cbrands.com", "Corona.2016", "Stash", ""),
+    @Deprecated
+    ACTOR3 ("eric.ramey@cbrands.com", "Corona.2016", "Eric", "Ramey");
+
+    private final String userName;
+    private final String password;
+    private final String firstName;
+    private final String lastName;
+
+    LegacyUser(String username, String password, String firstName, String lastName) {
+      this.userName = username;
+      this.password = password;
+      this.firstName = firstName;
+      this.lastName = lastName;
+    }
+  }
+
   /** The actor1 user name. */
-  String ACTOR1_USER_NAME = ACTOR1.userName();
+  String ACTOR1_USER_NAME = LegacyUser.ACTOR1.userName;
 
   /** The actor1 password. */
-  String ACTOR1_PASSWORD = ACTOR1.password();
+  String ACTOR1_PASSWORD = LegacyUser.ACTOR1.password;
 
   /** The actor1 first name. */
-  String ACTOR1_FIRST_NAME = ACTOR1.firstName();
+  String ACTOR1_FIRST_NAME = LegacyUser.ACTOR1.firstName;
 
   /** The actor1 last name. */
-  String ACTOR1_LAST_NAME = ACTOR1.lastName();
+  String ACTOR1_LAST_NAME = LegacyUser.ACTOR1.lastName;
 
   /** The actor2 user name. */
-  String ACTOR2_USER_NAME = ACTOR2.userName();
+  String ACTOR2_USER_NAME = LegacyUser.ACTOR2.userName;
 
   /** The actor2 password. */
-  String ACTOR2_PASSWORD = ACTOR2.password();
+  String ACTOR2_PASSWORD = LegacyUser.ACTOR2.password;
 
   /** The actor2 first name. */
-  String ACTOR2_FIRST_NAME = ACTOR2.firstName();
+  String ACTOR2_FIRST_NAME = LegacyUser.ACTOR2.firstName;
 
   /** The actor3 user name. */
-  String ACTOR3_USER_NAME = ACTOR3.userName();
+  String ACTOR3_USER_NAME = LegacyUser.ACTOR3.userName;
 
   /** The actor3 password. */
-  String ACTOR3_PASSWORD =   ACTOR3.password();
+  String ACTOR3_PASSWORD =   LegacyUser.ACTOR3.password;
 
   /** The actor3 first name. */
-  String ACTOR3_FIRST_NAME = ACTOR3.firstName();
+  String ACTOR3_FIRST_NAME = LegacyUser.ACTOR3.firstName;
 
   /** The actor4 user name. */
   String ACTOR4_USER_NAME = ACTOR4.userName();

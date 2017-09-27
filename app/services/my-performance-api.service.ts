@@ -5,8 +5,8 @@ import 'rxjs/add/operator/map';
 
 import { DateRangeTimePeriodValue } from '../enums/date-range-time-period.enum';
 import { DistributionTypeValue } from '../enums/distribution-type.enum';
-import { EntitiesPerformancesDTO } from '../models/entities-performances.model'; // tslint:disable-line:no-unused-variable
-import { EntitiesTotalPerformancesDTO } from '../models/entities-total-performances.model';
+import { EntityWithPerformanceDTO } from '../models/entity-with-performance.model'; // tslint:disable-line:no-unused-variable
+import { PerformanceDTO } from '../models/performance.model';
 import { EntityDTO } from '../models/entity-dto.model';
 import { EntitySubAccountDTO } from '../models/entity-subaccount-dto.model';
 import { MetricTypeValue } from '../enums/metric-type.enum';
@@ -29,9 +29,9 @@ export class MyPerformanceApiService {
       .catch(err => this.handleError(new Error(err)));
   }
 
-  public getResponsibilityPerformanceTotal(
+  public getResponsibilityPerformance(
     entity: { type: string, name: string, positionDescription: string }, filter: MyPerformanceFilterState, positionId: string
-  ): Observable<EntitiesPerformancesDTO|Error> {
+  ): Observable<EntityWithPerformanceDTO|Error> {
     const url = `/v3/positions/${ positionId }/responsibilities/${ entity.type }/performanceTotal`;
 
     return this.http.get(`${ url }`, {
@@ -42,12 +42,12 @@ export class MyPerformanceApiService {
         name: entity.name,
         positionDescription: entity.positionDescription,
         entityTypeCode: entity.type,
-        performanceTotal: res.json()
+        performance: res.json()
       }))
       .catch(err => this.handleError(new Error(err)));
   }
 
-  public getPerformanceTotal(positionId: string, filter: MyPerformanceFilterState): Observable<EntitiesTotalPerformancesDTO> {
+  public getPerformance(positionId: string, filter: MyPerformanceFilterState): Observable<PerformanceDTO> {
     const url = `/v3/positions/${ positionId }/performanceTotal`;
 
     return this.http.get(`${ url }`, {
@@ -69,7 +69,7 @@ export class MyPerformanceApiService {
     distributorId: string,
     filter: MyPerformanceFilterState,
     contextPositionId?: string
-    ): Observable<EntitiesTotalPerformancesDTO> {
+    ): Observable<PerformanceDTO> {
     const url = `/v3/distributors/${ distributorId }/performanceTotal`;
     const params = contextPositionId
       ? Object.assign({}, this.getFilterStateParams(filter), { positionId: contextPositionId })
@@ -86,7 +86,7 @@ export class MyPerformanceApiService {
     accountId: string,
     filter: MyPerformanceFilterState,
     contextPositionId?: string
-    ): Observable<EntitiesTotalPerformancesDTO> {
+    ): Observable<PerformanceDTO> {
     const url = `/v3/accounts/${ accountId }/performanceTotal`;
     const params = contextPositionId
       ? Object.assign({}, this.getFilterStateParams(filter), { positionId: contextPositionId })
@@ -119,7 +119,7 @@ export class MyPerformanceApiService {
 
     const params = Object.assign({},
       this.getFilterStateParams(filter),
-      { aggregationLevel: aggregation }
+      {aggregationLevel: aggregation}
     );
 
     return this.http.get(`${ url }`, {

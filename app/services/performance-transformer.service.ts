@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import 'rxjs/add/operator/map';
 
-import { EntitiesPerformances, EntitiesPerformancesDTO } from '../models/entities-performances.model';
-import { EntityResponsibilities } from '../models/entity-responsibilities.model';
-import { EntitiesTotalPerformances, EntitiesTotalPerformancesDTO } from '../models/entities-total-performances.model';
+import { EntityWithPerformance, EntityWithPerformanceDTO } from '../models/entity-with-performance.model';
+import { HierarchyEntity } from '../models/hierarchy-entity.model';
+import { Performance, PerformanceDTO } from '../models/performance.model';
 import { UtilService } from './util.service';
 
 @Injectable()
@@ -11,7 +11,7 @@ export class PerformanceTransformerService {
 
   constructor(private utilService: UtilService) { }
 
-  public transformEntitiesTotalPerformancesDTO(performanceDTO: EntitiesTotalPerformancesDTO): EntitiesTotalPerformances {
+  public transformPerformanceDTO(performanceDTO: PerformanceDTO): Performance {
     return {
       total: Math.round(performanceDTO.total),
       totalYearAgo: this.utilService.getYearAgoDelta(performanceDTO.total, performanceDTO.totalYearAgo),
@@ -20,34 +20,34 @@ export class PerformanceTransformerService {
     };
   }
 
-  public transformEntitiesPerformancesDTOs(entities: EntitiesPerformancesDTO[]): EntitiesPerformances[] {
-    return entities.map((entity: EntitiesPerformancesDTO) => {
+  public transformEntityWithPerformanceDTOs(entities: EntityWithPerformanceDTO[]): EntityWithPerformance[] {
+    return entities.map((entity: EntityWithPerformanceDTO) => {
       return {
         positionId: entity.id,
         entityTypeCode: entity.entityTypeCode,
         name: entity.name,
         positionDescription: entity.positionDescription,
-        performanceTotal: this.transformEntitiesTotalPerformancesDTO(entity.performanceTotal)
+        performance: this.transformPerformanceDTO(entity.performance)
       };
     });
   }
 
-  public transformEntitiesPerformancesDTO(entity: EntitiesPerformancesDTO): EntitiesPerformances {
+  public transformEntityWithPerformanceDTO(entity: EntityWithPerformanceDTO): EntityWithPerformance {
     return {
       positionId: entity.id,
       name: entity.name,
-      performanceTotal: this.transformEntitiesTotalPerformancesDTO(entity.performanceTotal)
+      performance: this.transformPerformanceDTO(entity.performance)
     };
   }
 
   public transformEntityWithPerformance(
-    performanceDTO: EntitiesTotalPerformancesDTO,
-    entity: EntityResponsibilities): EntitiesPerformances {
+    performanceDTO: PerformanceDTO,
+    entity: HierarchyEntity): EntityWithPerformance {
 
     return {
       positionId: entity.positionId,
       name: entity.name,
-      performanceTotal: this.transformEntitiesTotalPerformancesDTO(performanceDTO)
+      performance: this.transformPerformanceDTO(performanceDTO)
     };
   }
 }

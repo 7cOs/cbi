@@ -40,7 +40,7 @@ describe('My Performance Version Reducer', () => {
         status: ActionStatus.Fetched,
         positionId: chance.string(),
         groupedEntities: chance.string() as any,
-        entitiesPerformances: [] as any,
+        entityWithPerformance: [] as any,
         entitiesTotalPerformances: {
           total: 0,
           totalYearAgo: 0,

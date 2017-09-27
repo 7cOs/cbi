@@ -1,23 +1,23 @@
 import { Injectable } from '@angular/core';
 import 'rxjs/add/operator/map';
 
-import { EntitiesPerformances } from '../models/entities-performances.model';
-import { EntitiesTotalPerformances } from '../models/entities-total-performances.model';
+import { EntityWithPerformance } from '../models/entity-with-performance.model';
+import { Performance } from '../models/performance.model';
 import { MyPerformanceTableRow } from '../models/my-performance-table-row.model';
 import { ProductMetrics, ProductMetricsBrandValue } from '../models/product-metrics.model';
 
 @Injectable()
 export class MyPerformanceTableDataTransformerService {
 
-  public getLeftTableData(entities: EntitiesPerformances[]): MyPerformanceTableRow[] {
+  public getLeftTableData(entities: EntityWithPerformance[]): MyPerformanceTableRow[] {
 
-    return entities.map((entity: EntitiesPerformances) => {
+    return entities.map((entity: EntityWithPerformance) => {
       const transformedEntity: MyPerformanceTableRow = {
         descriptionRow0: entity.name,
-        metricColumn0: entity.performanceTotal.total,
-        metricColumn1: entity.performanceTotal.totalYearAgo,
-        metricColumn2: entity.performanceTotal.totalYearAgoPercent,
-        ctv: entity.performanceTotal.contributionToVolume,
+        metricColumn0: entity.performance.total,
+        metricColumn1: entity.performance.totalYearAgo,
+        metricColumn2: entity.performance.totalYearAgoPercent,
+        ctv: entity.performance.contributionToVolume,
         metadata: {
           positionId: entity.positionId
         }
@@ -47,16 +47,16 @@ export class MyPerformanceTableDataTransformerService {
     });
   }
 
-  public getTotalRowData(performanceTotal: EntitiesTotalPerformances): MyPerformanceTableRow {
+  public getTotalRowData(performance: Performance): MyPerformanceTableRow {
     const totalRow = {
       descriptionRow0: 'Total',
-      metricColumn0: performanceTotal.total,
-      metricColumn1: performanceTotal.totalYearAgo,
-      metricColumn2: performanceTotal.totalYearAgoPercent,
-      ctv: performanceTotal.contributionToVolume
+      metricColumn0: performance.total,
+      metricColumn1: performance.totalYearAgo,
+      metricColumn2: performance.totalYearAgoPercent,
+      ctv: performance.contributionToVolume
     };
 
-    if (performanceTotal.name) totalRow['descriptionRow1'] = performanceTotal.name;
+    if (performance.name) totalRow['descriptionRow1'] = performance.name;
 
     return totalRow;
   }

@@ -11,8 +11,8 @@ import { DateRange } from '../../models/date-range.model';
 import { DateRangesState } from '../../state/reducers/date-ranges.reducer';
 import { EntityPeopleType } from '../../enums/entity-responsibilities.enum';
 import { FetchProductMetricsAction } from '../../state/actions/product-metrics.action';
-import { FetchResponsibilitiesAction,
-        FetchResponsibilityEntityPerformance,
+import { FetchResponsibilities,
+        FetchEntityWithPerformance,
         FetchSubAccountsAction } from '../../state/actions/responsibilities.action';
 import { getDateRangeMock } from '../../models/date-range.model.mock';
 import * as MyPerformanceFilterActions from '../../state/actions/my-performance-filter.action';
@@ -105,11 +105,11 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
 
         if (current.responsibilities && current.responsibilities.status === ActionStatus.Fetched) {
           this.salesHierarchy = this.myPerformanceTableDataTransformerService.getLeftTableData(
-            current.responsibilities.entitiesPerformances
+            current.responsibilities.entityWithPerformance
           );
         }
 
-        if (current.responsibilities.entitiesPerformances) {
+        if (current.responsibilities.entityWithPerformance) {
           this.salesHierarchyTotal = this.myPerformanceTableDataTransformerService
             .getTotalRowData(current.responsibilities.entitiesTotalPerformances);
         }
@@ -123,7 +123,7 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
     });
 
     const currentUserId = this.userService.model.currentUser.positionId || CORPORATE_USER_POSITION_ID;
-    this.store.dispatch(new FetchResponsibilitiesAction({ positionId: currentUserId, filter: this.filterState }));
+    this.store.dispatch(new FetchResponsibilities({ positionId: currentUserId, filter: this.filterState }));
     this.store.dispatch(new FetchProductMetricsAction({
       positionId: currentUserId,
       filter: this.filterState,
@@ -168,10 +168,10 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
           switch (this.leftTableViewType) {
             case ViewType.roleGroups:
               const entityTypeGroupName = EntityPeopleType[parameters.row.descriptionRow0];
-              this.store.dispatch(new FetchResponsibilityEntityPerformance({
+              this.store.dispatch(new FetchEntityWithPerformance({
                 entityTypeGroupName: entityTypeGroupName,
                 entityTypeCode: parameters.row.metadata.entityTypeCode,
-                entities: this.currentState.responsibilities.groupedEntities[entityTypeGroupName],
+                entities: this.currentState.responsibilities.groupedEntities[EntityPeopleType[parameters.row.descriptionRow0]],
                 filter: this.filterState,
                 selectedPositionId: parameters.row.metadata.positionId,
                 viewType: ViewType.people
@@ -184,7 +184,7 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
               }));
               break;
             case ViewType.people:
-              this.store.dispatch(new FetchResponsibilitiesAction({
+              this.store.dispatch(new FetchResponsibilities({
                 positionId: parameters.row.metadata.positionId,
                 filter: this.filterState
               }));

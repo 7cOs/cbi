@@ -1,6 +1,6 @@
 import { ActionStatus, State } from '../../enums/action-status.enum';
-import { EntitiesPerformances } from '../../models/entities-performances.model';
-import { EntitiesTotalPerformances } from '../../models/entities-total-performances.model';
+import { EntityWithPerformance } from '../../models/entity-with-performance.model';
+import { Performance } from '../../models/performance.model';
 import { GroupedEntities } from '../../models/grouped-entities.model';
 import * as ResponsibilitiesActions from '../actions/responsibilities.action';
 
@@ -9,15 +9,15 @@ export interface ResponsibilitiesState extends State {
   positionId: string;
   entityTypeCode?: string;
   groupedEntities: GroupedEntities;
-  entitiesPerformances: EntitiesPerformances[];
-  entitiesTotalPerformances: EntitiesTotalPerformances;
+  entityWithPerformance: EntityWithPerformance[];
+  entitiesTotalPerformances: Performance;
 }
 
 export const initialState: ResponsibilitiesState = {
   status: ActionStatus.NotFetched,
   positionId: '0',
   groupedEntities: {},
-  entitiesPerformances: [],
+  entityWithPerformance: [],
   entitiesTotalPerformances: {
     total: 0,
     totalYearAgo: 0,
@@ -32,20 +32,20 @@ export function responsibilitiesReducer(
 ): ResponsibilitiesState {
 
   switch (action.type) {
-    case ResponsibilitiesActions.FETCH_RESPONSIBILITIES_ACTION:
+    case ResponsibilitiesActions.FETCH_RESPONSIBILITIES:
       return Object.assign({}, state, {
         status: ActionStatus.Fetching
       });
 
-    case ResponsibilitiesActions.FETCH_RESPONSIBILITIES_SUCCESS_ACTION:
+    case ResponsibilitiesActions.FETCH_RESPONSIBILITIES_SUCCESS:
       return Object.assign({}, state, {
         status: ActionStatus.Fetched,
         positionId: action.payload.positionId,
         groupedEntities: action.payload.groupedEntities,
-        entitiesPerformances: action.payload.entitiesPerformances
+        entityWithPerformance: action.payload.entityWithPerformance
       });
 
-    case ResponsibilitiesActions.FETCH_RESPONSIBILITIES_FAILURE_ACTION:
+    case ResponsibilitiesActions.FETCH_RESPONSIBILITIES_FAILURE:
       return Object.assign({}, state, {
         status: ActionStatus.Error
       });
@@ -57,39 +57,39 @@ export function responsibilitiesReducer(
         }
       });
 
-    case ResponsibilitiesActions.FETCH_RESPONSIBILITY_ENTITY_PERFORMANCE:
+    case ResponsibilitiesActions.FETCH_ENTITIES_PERFORMANCES:
       return Object.assign({}, state, {
         status: ActionStatus.Fetching
       });
 
-    case ResponsibilitiesActions.FETCH_RESPONSIBILITY_ENTITY_PERFORMANCE_SUCCESS:
+    case ResponsibilitiesActions.FETCH_ENTITIES_PERFORMANCES_SUCCESS:
       return Object.assign({}, state, {
         status: ActionStatus.Fetched,
-        entitiesPerformances: action.payload.entitiesPerformances,
+        entityWithPerformance: action.payload.entityWithPerformance,
         entityTypeCode: action.payload.entityTypeCode
       });
 
-    case ResponsibilitiesActions.FETCH_PERFORMANCE_TOTAL_ACTION:
+    case ResponsibilitiesActions.FETCH_TOTAL_PERFORMANCE:
       return Object.assign({}, state, {
         status: ActionStatus.Fetching
       });
 
-    case ResponsibilitiesActions.FETCH_PERFORMANCE_TOTAL_SUCCESS_ACTION:
+    case ResponsibilitiesActions.FETCH_TOTAL_PERFORMANCE_SUCCESS:
       return Object.assign({}, state, {
         status: ActionStatus.Fetched,
         entitiesTotalPerformances: action.payload
       });
 
-    case ResponsibilitiesActions.FETCH_PERFORMANCE_TOTAL_FAILURE_ACTION:
+    case ResponsibilitiesActions.FETCH_TOTAL_PERFORMANCE_FAILURE:
       return Object.assign({}, state, {
         status: ActionStatus.Error
       });
 
-    case ResponsibilitiesActions.SET_TABLE_ROW_PERFORMANCE_TOTAL:
-      const selectedEntity = state.entitiesPerformances.find(entity => entity.positionId === action.payload);
+    case ResponsibilitiesActions.SET_TOTAL_PERFORMANCE:
+      const selectedEntity = state.entityWithPerformance.find(entity => entity.positionId === action.payload);
 
       return Object.assign({}, state, {
-        entitiesTotalPerformances: selectedEntity.performanceTotal
+        entitiesTotalPerformances: selectedEntity.performance
       });
 
     case ResponsibilitiesActions.FETCH_SUBACCOUNTS_ACTION:
@@ -101,7 +101,7 @@ export function responsibilitiesReducer(
       return Object.assign({}, state, {
         status: ActionStatus.Fetched,
         groupedEntities: action.payload.groupedEntities,
-        entitiesPerformances: action.payload.entitiesPerformances
+        entityWithPerformance: action.payload.entityWithPerformance
       });
 
     default:

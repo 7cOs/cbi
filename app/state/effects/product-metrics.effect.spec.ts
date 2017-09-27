@@ -8,8 +8,8 @@ import { getProductMetricMock } from '../../models/entity-product-metrics-dto.mo
 import * as ProductMetricsActions from '../actions/product-metrics.action';
 import { MyPerformanceApiService } from '../../services/my-performance-api.service';
 import { MyPerformanceFilterState } from '../reducers/my-performance-filter.reducer';
-import { ProductMetricsEffects } from './product-metrics.effect';
 import { ProductMetricsAggregationType } from '../../enums/product-metrics-aggregation-type.enum';
+import { ProductMetricsEffects } from './product-metrics.effect';
 import { ProductMetricsTransformerService } from '../../services/product-metrics-transformer.service';
 import { ProductMetrics, FetchProductMetricsSuccessPayload } from '../../models/product-metrics.model';
 import { SelectedEntityType } from '../../enums/selected-entity-type.enum';
@@ -237,9 +237,6 @@ describe('ProductMetrics Effects', () => {
 
       it('should return a FetchProductMetricsFailureAction after catching an error', (done) => {
         productMetricsEffects.fetchProductMetrics$().subscribe((result) => {
-          expect(myPerformanceApiService.getRoleGroupProductMetrics).toHaveBeenCalledWith(
-            positionIdMock, entityTypeCodeMock, performanceFilterStateMock, ProductMetricsAggregationType.brand
-          );
           expect(result).toEqual(new ProductMetricsActions.FetchProductMetricsFailureAction(err));
           done();
         });
