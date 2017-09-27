@@ -382,7 +382,7 @@ describe('MyPerformanceComponent', () => {
     });
   });
 
-  describe('when left side data row is clicked', () => {
+  describe('when right side data row is clicked', () => {
     it('should not dispatch any actions', () => {
       storeMock.dispatch.calls.reset();
       const params: HandleElementClickedParameters = { leftSide: false, type: RowType.data, index: 0 };
