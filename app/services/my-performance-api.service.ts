@@ -100,7 +100,6 @@ export class MyPerformanceApiService {
 
   public getSubAccounts(subAccountId: string, contextPositionId: string, premiseType: PremiseTypeValue): Observable<EntitySubAccountDTO[]> {
     const url = `/v3/accounts/${ subAccountId }/subAccounts`;
-    debugger;
     return this.http.get(`${ url }`, {
       params: {
         positionId: contextPositionId,
