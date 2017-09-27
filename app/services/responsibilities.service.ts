@@ -100,17 +100,13 @@ export class ResponsibilitiesService {
       });
   }
 
-  public getPositionsPerformances(
-    entities: HierarchyEntity[],
-    filter: MyPerformanceFilterState
-  ) {
-    const apiCalls: Observable<EntityWithPerformance | Error>[] =
-      entities.map((entity: HierarchyEntity) => {
-        return this.myPerformanceApiService.getPerformance(entity.positionId, filter)
-          .map((response: PerformanceDTO) => {
-            return this.performanceTransformerService.transformEntityWithPerformance(response, entity);
-          });
-      });
+  public getPositionsPerformances(entities: HierarchyEntity[], filter: MyPerformanceFilterState) {
+    const apiCalls: Observable<EntityWithPerformance | Error>[] = entities.map((entity: HierarchyEntity) => {
+      return this.myPerformanceApiService.getPerformance(entity.positionId, filter)
+        .map((response: PerformanceDTO) => {
+          return this.performanceTransformerService.transformEntityWithPerformance(response, entity);
+        });
+    });
 
     return Observable.forkJoin(apiCalls);
   }
@@ -148,9 +144,6 @@ export class ResponsibilitiesService {
 
   public getPerformanceForGroupedEntities(responsibilitiesData: ResponsibilitiesData)
   : Observable<ResponsibilitiesData> {
-
-    console.log('getPerformanceTotalForGroupedEntities', responsibilitiesData);
-
     if (responsibilitiesData.viewType === ViewType.roleGroups || responsibilitiesData.entityTypes.length > 1) {
       return this.handleResponsibilitiesPerformances(Object.assign({}, responsibilitiesData, {
         viewType: ViewType.roleGroups
@@ -260,6 +253,26 @@ export class ResponsibilitiesService {
     }
   }
 
+  public getGroupsPerformanceEntities(payload: any): any {
+    // TODO: Update types, use enums, clean up trash below this
+    if (payload.entityType === 'ACCOUNT') {
+      return this.getAccountsPerformances(payload.entities, payload.filter, payload.selectedPositionId);
+    } else if (payload.entityType === 'DISTRIBUTOR') {
+      return this.getDistributorsPerformances(payload.entities, payload.filter, payload.selectedPositionId);
+    } else if (payload.entityType === 'GEOGRAPHY') {
+      const geographyEntityType = payload.entities[0].propertyType;
+
+      if (geographyEntityType === 'Account') {
+        return this.getAccountsPerformances(payload.entities, payload.filter, payload.selectedPositionId);
+      } else {
+        return this.getDistributorsPerformances(payload.entities, payload.filter, payload.selectedPositionId);
+      }
+
+    } else {
+      return this.getPositionsPerformances(payload.entities, payload.filter);
+    }
+  }
+
   private handleResponsibilitiesPerformances(responsibilitiesData: ResponsibilitiesData) {
     return this.getResponsibilitiesPerformances(responsibilitiesData.entityTypes,
       responsibilitiesData.filter,
@@ -272,7 +285,7 @@ export class ResponsibilitiesService {
 
   private handleDistributorsPerformances(responsibilitiesData: ResponsibilitiesData) {
     return this.getDistributorsPerformances(
-      responsibilitiesData.groupedEntities.Distributor,
+      responsibilitiesData.groupedEntities.DISTRIBUTOR,
       responsibilitiesData.filter,
       responsibilitiesData.positionId)
         .map((entityPerformances: EntityWithPerformance[]) => {
@@ -283,7 +296,7 @@ export class ResponsibilitiesService {
 
   private handleAccountsPerformances(responsibilitiesData: ResponsibilitiesData) {
     return this.getAccountsPerformances(
-      responsibilitiesData.groupedEntities.Account,
+      responsibilitiesData.groupedEntities.ACCOUNT,
       responsibilitiesData.filter,
       responsibilitiesData.positionId)
         .map((entityPerformances: EntityWithPerformance[]) => {

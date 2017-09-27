@@ -1,3 +1,4 @@
+// tslint:disable:no-unused-variable
 import { Action } from '@ngrx/store';
 import { Actions, Effect } from '@ngrx/effects';
 import { Injectable } from '@angular/core';
@@ -48,13 +49,26 @@ export class ResponsibilitiesEffects {
       .switchMap((action: Action) => {
         const { entityType, entities, filter, selectedPositionId, viewType } = action.payload;
 
-        return this.responsibilitiesService.getPositionsPerformances(entities, filter)
-          .switchMap((entityPerformances: EntityWithPerformance[]) => {
+        // TODO: Clean this up
+        let newViewType = entityType === 'ACCOUNT'
+          ? ViewType.accounts
+          : entityType === 'DISTRIBUTOR'
+            ? ViewType.distributors
+            : ViewType.people;
+
+        if (entityType === 'GEOGRAPHY') {
+          newViewType = entities[0].propertyType === 'Account'
+            ? ViewType.accounts
+            : ViewType.distributors;
+        }
+
+        return this.responsibilitiesService.getGroupsPerformanceEntities(action.payload)
+          .switchMap((performanceEntities: EntityWithPerformance[]) => {
             return Observable.from([
               new ResponsibilitiesActions.SetTotalPerformance(selectedPositionId),
               new ResponsibilitiesActions.GetPeopleByRoleGroupAction(entityType),
-              new ResponsibilitiesActions.FetchEntityWithPerformanceSuccess(entityPerformances),
-              new ViewTypeActions.SetLeftMyPerformanceTableViewType(viewType)
+              new ResponsibilitiesActions.FetchEntityWithPerformanceSuccess(performanceEntities),
+              new ViewTypeActions.SetLeftMyPerformanceTableViewType(newViewType)
             ]);
           })
           .catch((err: Error) => Observable.of(new ResponsibilitiesActions.FetchResponsibilitiesFailure(err)));
