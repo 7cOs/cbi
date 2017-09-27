@@ -284,7 +284,8 @@ describe('MyPerformanceComponent', () => {
         expect(storeMock.dispatch.calls.argsFor(0)[0]).toEqual(new MyPerformanceVersionActions.RestoreMyPerformanceStateAction());
       });
 
-      it('should dispatch RestoreMyPerformanceStateAction when last version has a leftTableViewType of people', () => {
+      it('should dispatch RestoreMyPerformanceStateAction and FetchProductMetricsAction ' +
+        'when last version has a leftTableViewType of people', () => {
         versionsMock[versionsMock.length - 1].viewType.leftTableViewType = ViewType.people;
         versionsSubject.next(versionsMock);
 
@@ -292,8 +293,14 @@ describe('MyPerformanceComponent', () => {
         const params: HandleElementClickedParameters = { leftSide: true, type: RowType.total, index: 0 };
         componentInstance.handleElementClicked(params);
 
-        expect(storeMock.dispatch.calls.count()).toBe(1);
+        expect(storeMock.dispatch.calls.count()).toBe(2);
         expect(storeMock.dispatch.calls.argsFor(0)[0]).toEqual(new MyPerformanceVersionActions.RestoreMyPerformanceStateAction());
+        expect(storeMock.dispatch.calls.argsFor(1)[0]).toEqual(new FetchProductMetricsAction({
+          positionId: versionsMock[versionsMock.length - 1].responsibilities.positionId,
+          entityTypeCode: versionsMock[versionsMock.length - 1].responsibilities.entityTypeCode,
+          filter: stateMock.myPerformanceFilter as any,
+          selectedEntityType: SelectedEntityType.RoleGroup
+        }));
       });
 
       it('should dispatch RestoreMyPerformanceStateAction when last version has a leftTableViewType of subAccounts', () => {
@@ -462,6 +469,7 @@ describe('MyPerformanceComponent', () => {
       let breadcrumbSelectionIndex: number;
       let expectedStepsBack: number;
       let expectedPositionId: string;
+      let expectedEntityTypeCode: string;
 
       function setupVersionAndBreadcrumbMocks(selectedStateViewType: ViewType) {
         versionsMock = generateMockVersions(4, 9);
@@ -471,6 +479,7 @@ describe('MyPerformanceComponent', () => {
         expectedStepsBack = breadcrumbTrailMock.length - breadcrumbSelectionIndex - 1;
         versionsMock[breadcrumbSelectionIndex].viewType.leftTableViewType = selectedStateViewType;
         expectedPositionId = versionsMock[breadcrumbSelectionIndex].responsibilities.positionId;
+        expectedEntityTypeCode = versionsMock[breadcrumbSelectionIndex].responsibilities.entityTypeCode;
         versionsSubject.next(versionsMock);
       }
 
@@ -505,20 +514,28 @@ describe('MyPerformanceComponent', () => {
         ));
       });
 
-      it('should dispatch RestoreMyPerformanceStateAction when selected step has people view type', () => {
+      it('should dispatch RestoreMyPerformanceStateAction and FetchProductMetricsAction ' +
+        'when selected step has people view type', () => {
         setupVersionAndBreadcrumbMocks(ViewType.people);
         componentInstance.handleBreadcrumbEntityClicked({
           trail: breadcrumbTrailMock,
           entity: breadcrumbTrailMock[breadcrumbSelectionIndex]
         });
 
-        expect(storeMock.dispatch.calls.count()).toBe(1);
+        expect(storeMock.dispatch.calls.count()).toBe(2);
         expect(storeMock.dispatch.calls.argsFor(0)[0]).toEqual(new MyPerformanceVersionActions.RestoreMyPerformanceStateAction(
           expectedStepsBack
         ));
+        expect(storeMock.dispatch.calls.argsFor(1)[0]).toEqual(new FetchProductMetricsAction({
+          positionId: expectedPositionId,
+          entityTypeCode: expectedEntityTypeCode,
+          filter: stateMock.myPerformanceFilter as any,
+          selectedEntityType: SelectedEntityType.RoleGroup
+        }));
       });
 
-      it('should dispatch multiple actions when steps back are possible and selected step has roleGroups view type', () => {
+      it('should dispatch RestoreMyPerformanceStateAction and FetchProductMetricsAction ' +
+        'when selected step has roleGroups view type', () => {
         setupVersionAndBreadcrumbMocks(ViewType.roleGroups);
         componentInstance.handleBreadcrumbEntityClicked({
           trail: breadcrumbTrailMock,
@@ -536,7 +553,8 @@ describe('MyPerformanceComponent', () => {
         }));
       });
 
-      it('should dispatch multiple actions when steps back are possible and selected step has accounts view type', () => {
+      it('should dispatch RestoreMyPerformanceStateAction and FetchProductMetricsAction ' +
+        'when selected step has accounts view type', () => {
         setupVersionAndBreadcrumbMocks(ViewType.accounts);
         componentInstance.handleBreadcrumbEntityClicked({
           trail: breadcrumbTrailMock,
