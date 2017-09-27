@@ -3,6 +3,7 @@ import { Observable } from 'rxjs/Observable';
 import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs/Subscription';
 
+import { AccountDashboardStateParameters } from '../../models/account-dashboard-state-parameters.model';
 import { ActionStatus } from '../../enums/action-status.enum';
 import { AppState } from '../../state/reducers/root.reducer';
 import { BreadcrumbEntityClickedEvent } from '../../models/breadcrumb-entity-clicked-event.model';
@@ -76,7 +77,8 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
   constructor(
     private store: Store<AppState>,
     private myPerformanceTableDataTransformerService: MyPerformanceTableDataTransformerService,
-    @Inject('userService') private userService: any
+    @Inject('userService') private userService: any,
+    @Inject('$state') private $state: any
   ) { }
 
   ngOnInit() {
@@ -132,6 +134,11 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
     if (this.myPerformanceCurrentSubscription) this.myPerformanceCurrentSubscription.unsubscribe();
     if (this.myPerformanceVersionSubscription) this.myPerformanceVersionSubscription.unsubscribe();
     if (this.productMetricsSubscription) this.productMetricsSubscription.unsubscribe();
+  }
+
+  public handleSublineClicked(row: MyPerformanceTableRow): void {
+    console.log('Going to accoutn dashboard');
+    this.$state.go('accounts', this.accountDashboardStateParameters(), {newtab: true});
   }
 
   public handleSortRows(criteria: SortingCriteria[]): void {
@@ -219,4 +226,16 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
 
     this.store.dispatch({type: actionType, payload: event.filterValue});
   }
+
+  private accountDashboardStateParameters(): AccountDashboardStateParameters {
+    return {
+      accounts: 'string',
+      storeid: 'string',
+      myaccountsonly: true,
+      timeperiodcode: 'string',
+      distributorid: 'string',
+      premisetype: 'string'
+    };
+  }
+
 }

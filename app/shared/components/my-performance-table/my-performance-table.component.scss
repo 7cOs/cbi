@@ -343,3 +343,11 @@ div.ctv {
   padding-left: 32px;
   box-sizing: border-box;
 }
+
+.link {
+  color: $blue;
+
+  &:hover {
+    cursor: pointer;
+  }
+}

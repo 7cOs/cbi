@@ -43,4 +43,6 @@ div.performance-table-wrapper
                                 *ngFor="let rowData of sortedTableData, let i = index",
                                 [rowData]="rowData",
                                 [showOpportunities]="showOpportunities",
+                                [viewType]="viewType",
+                                (onSublineClicked)="onSublineClicked.emit({row: rowData});",
                                 (click)="onElementClicked.emit({type: rowType.data, index: i, row: rowData})")

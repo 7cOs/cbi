@@ -12,12 +12,12 @@ import { ViewType } from '../../../enums/view-type.enum';
 })
 export class MyPerformanceTableRowComponent {
   @Output() onCellClicked = new EventEmitter<number>();
+  @Output() onSublineClicked = new EventEmitter<any>();
 
   @Input() rowData: MyPerformanceTableRow;
   @Input() showBackButton: boolean;
   @Input() showOpportunities: boolean;
   @Input() viewType: ViewType;
-  @Input() sublineClickable: boolean;
 
   public sortStatus = SortStatus;
 
@@ -38,7 +38,13 @@ export class MyPerformanceTableRowComponent {
 
   public getSublineClass(): CssClasses {
     return {
-      ['link']: this.sublineClickable
+      ['link']: this.viewType === ViewType.distributors
     };
+  }
+
+  public sublineClicked(): void {
+    if (this.viewType === ViewType.distributors) {
+      this.onSublineClicked.emit();
+    }
   }
 }

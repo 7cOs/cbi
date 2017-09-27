@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import 'rxjs/add/operator/map';
 
+import { EntityPropertyType } from '../enums/entity-responsibilities.enum';
 import { EntityWithPerformance } from '../models/entity-with-performance.model';
 import { Performance } from '../models/performance.model';
 import { MyPerformanceTableRow } from '../models/my-performance-table-row.model';
@@ -30,7 +31,7 @@ export class MyPerformanceTableDataTransformerService {
 
       if (entity.contextPositionId) transformedEntity.metadata.contextPositionId = entity.contextPositionId;
 
-      if (entity.propertyType) {
+      if (entity.propertyType === EntityPropertyType.Distributor) {
         transformedEntity.descriptionRow1 = 'GO TO DASHBOARD';
       }
 
