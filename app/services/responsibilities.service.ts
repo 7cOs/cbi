@@ -135,7 +135,8 @@ export class ResponsibilitiesService {
     const subAccounts = subAccountData.groupedEntities[subAccountData.entityType].map((subAccount: EntityResponsibilities) => subAccount);
     const apiCalls: Observable<EntitiesPerformances | Error>[] =
       subAccounts.map((subAccount: EntityResponsibilities) => {
-        return this.myPerformanceApiService.getSubAccountsPerformanceTotal(subAccountData.positionId, subAccountData.filter)
+        return this.myPerformanceApiService.getSubAccountsPerformanceTotal(subAccountData.positionId, subAccountData.contextPositionId,
+          subAccountData.filter)
           .map((response) => {
             return this.performanceTransformerService.transformEntityWithPerformance(response, subAccount);
           });

@@ -147,6 +147,32 @@ describe('Service: MyPerformanceApiService', () => {
     });
   });
 
+  describe('getSubAccountsPerformanceTotal', () => {
+    it('should call the SubAccountsperformance Total API and return performance data', (done) => {
+      const filterMock = {
+        metricType: MetricTypeValue.volume,
+        dateRangeCode: DateRangeTimePeriodValue.FYTDBDL,
+        premiseType: PremiseTypeValue.On
+      };
+
+      mockBackend.connections.subscribe((connection: MockConnection) => {
+        const options = new ResponseOptions({
+          body: JSON.stringify(performanceTotalResponseMock)
+        });
+        connection.mockRespond(new Response(options));
+        expect(connection.request.method).toEqual(RequestMethod.Get);
+        expect(connection.request.url).toEqual(
+          '/v3/subAccounts/1/performanceTotal?metricType=volume&dateRangeCode=FYTDBDL&premiseType=On&positionId=1'
+        );
+      });
+
+      myPerformanceApiService.getSubAccountsPerformanceTotal('1', '1', filterMock).subscribe((response: EntitiesTotalPerformancesDTO) => {
+        expect(response).toEqual(performanceTotalResponseMock);
+        done();
+      });
+    });
+  });
+
   describe('getDistributorPerformance', () => {
     it('should call the distributors performance API and return performance data', (done) => {
       const mockFilter = {

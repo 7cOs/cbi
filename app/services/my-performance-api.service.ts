@@ -98,9 +98,9 @@ export class MyPerformanceApiService {
       .catch(err => this.handleError(new Error(err)));
   }
 
-  public getSubAccounts(positionId: string, contextPositionId: string, premiseType: PremiseTypeValue): Observable<EntitySubAccountDTO[]> {
-    const url = `/v3/accounts/${ positionId }/subAccounts`;
-
+  public getSubAccounts(subAccountId: string, contextPositionId: string, premiseType: PremiseTypeValue): Observable<EntitySubAccountDTO[]> {
+    const url = `/v3/accounts/${ subAccountId }/subAccounts`;
+    debugger;
     return this.http.get(`${ url }`, {
       params: {
         positionId: contextPositionId,
@@ -111,11 +111,16 @@ export class MyPerformanceApiService {
     .catch(err => this.handleError(new Error(err)));
   }
 
-  public getSubAccountsPerformanceTotal(positionId: string, filter: MyPerformanceFilterState): Observable<EntitiesTotalPerformancesDTO> {
+  public getSubAccountsPerformanceTotal(
+    positionId: string, contextPositionId: string, filter: MyPerformanceFilterState)
+  : Observable<EntitiesTotalPerformancesDTO> {
     const url = `/v3/subAccounts/${positionId}/performanceTotal`;
+    const params = contextPositionId
+      ? Object.assign({}, this.getFilterStateParams(filter), { positionId: contextPositionId })
+      : this.getFilterStateParams(filter);
 
-    return this.http.get(`${ url }`, {
-      params: this.getFilterStateParams(filter)
+    return this.http.get(url, {
+      params: params
     })
       .map(res => res.json())
       .catch(err => this.handleError(new Error(err)));
