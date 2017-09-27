@@ -99,6 +99,21 @@ export class ResponsibilitiesService {
       });
   }
 
+  public getPositionsPerformances(
+    entities: HierarchyEntity[],
+    filter: MyPerformanceFilterState
+  ) {
+    const apiCalls: Observable<EntityWithPerformance | Error>[] =
+      entities.map((entity: HierarchyEntity) => {
+        return this.myPerformanceApiService.getPerformance(entity.positionId, filter)
+          .map((response: PerformanceDTO) => {
+            return this.performanceTransformerService.transformEntityWithPerformance(response, entity);
+          });
+      });
+
+    return Observable.forkJoin(apiCalls);
+  }
+
   public getPerformance(positionId: string, filter: MyPerformanceFilterState): Observable<Performance> {
     return this.myPerformanceApiService.getPerformance(positionId, filter)
       .map((response: PerformanceDTO) => {
