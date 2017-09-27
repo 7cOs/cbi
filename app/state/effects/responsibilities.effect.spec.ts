@@ -52,22 +52,25 @@ describe('Responsibilities Effects', () => {
     getResponsibilities(responsibilitiesData: ResponsibilitiesData): Observable<ResponsibilitiesData> {
       return Observable.of(responsibilitiesData);
     },
-    getPerformanceTotalForGroupedEntities(responsibilitiesData: ResponsibilitiesData): Observable<ResponsibilitiesData> {
+    getPerformanceForGroupedEntities(responsibilitiesData: ResponsibilitiesData): Observable<ResponsibilitiesData> {
       return Observable.of(responsibilitiesData);
     },
     getAccountsDistributors(responsibilitiesData: ResponsibilitiesData): Observable<ResponsibilitiesData> {
       return Observable.of(responsibilitiesData);
     },
-    getResponsibilitiesPerformanceTotals(args: any): Observable<(EntityWithPerformance | Error)[]> {
+    getResponsibilitiesPerformances(args: any): Observable<(EntityWithPerformance | Error)[]> {
       return Observable.of(entityWithPerformanceMock);
     },
-    getPerformanceTotal(args: any): Observable<Performance> {
+    getPositionsPerformances(args: any): Observable<(EntityWithPerformance | Error)[]> {
+      return Observable.of(entityWithPerformanceMock);
+    },
+    getPerformance(args: any): Observable<Performance> {
       return Observable.of(performanceMock);
     },
     getSubAccounts(subAccountData: SubAccountData): Observable<SubAccountData> {
       return Observable.of(subAccountData);
     },
-    getSubAccountsPerformanceTotals(subAccountData: SubAccountData): Observable<SubAccountData> {
+    getSubAccountsPerformances(subAccountData: SubAccountData): Observable<SubAccountData> {
       return Observable.of(subAccountData);
     }
   };
@@ -135,7 +138,7 @@ describe('Responsibilities Effects', () => {
           return Observable.of(responsibilitiesData);
         });
 
-        spyOn(responsibilitiesService, 'getPerformanceTotalForGroupedEntities').and.callFake(
+        spyOn(responsibilitiesService, 'getPerformanceForGroupedEntities').and.callFake(
           (responsibilitiesData: ResponsibilitiesData) => {
           responsibilitiesData.entityWithPerformance = entityWithPerformanceMock;
           return Observable.of(responsibilitiesData);
@@ -159,8 +162,8 @@ describe('Responsibilities Effects', () => {
         expect(getResponsibilitiesSpy.calls.argsFor(0)[0]).toEqual(responsibilitiesDataMock);
       });
 
-      it('should call getPerformanceTotalForGroupedEntities with the right arguments', (done) => {
-        const getPerformanceSpy = spyOn(responsibilitiesService, 'getPerformanceTotalForGroupedEntities').and.callThrough();
+      it('should call getPerformanceForGroupedEntities with the right arguments', (done) => {
+        const getPerformanceSpy = spyOn(responsibilitiesService, 'getPerformanceForGroupedEntities').and.callThrough();
 
         responsibilitiesEffects.fetchResponsibilities$().subscribe(() => {
           done();
@@ -192,9 +195,9 @@ describe('Responsibilities Effects', () => {
       });
     });
 
-    describe('when getPerformanceTotalForGroupedEntities returns an error', () => {
+    describe('when getPerformanceForGroupedEntities returns an error', () => {
       it('should return a FetchResponsibilitiesFailure after catching an error', (done) => {
-        spyOn(responsibilitiesService, 'getPerformanceTotalForGroupedEntities').and.returnValue(Observable.throw(error));
+        spyOn(responsibilitiesService, 'getPerformanceForGroupedEntities').and.returnValue(Observable.throw(error));
         responsibilitiesEffects.fetchResponsibilities$().subscribe((result) => {
           expect(result).toEqual(new FetchResponsibilitiesFailure(error));
           done();
@@ -241,8 +244,8 @@ describe('Responsibilities Effects', () => {
       runner.queue(new FetchEntityWithPerformance(fetchEntityPerformancePayloadMock));
     });
 
-    it('should call getResponsibilitiesPerformanceTotals with the right arguments', (done) => {
-      const getResponsibilitiesSpy = spyOn(responsibilitiesService, 'getResponsibilitiesPerformanceTotals').and.callThrough();
+    it('should call getPositionsPerformances with the right arguments', (done) => {
+      const getResponsibilitiesSpy = spyOn(responsibilitiesService, 'getPositionsPerformances').and.callThrough();
 
       responsibilitiesEffects.FetchEntityWithPerformance$().subscribe(() => {
         done();
@@ -255,7 +258,7 @@ describe('Responsibilities Effects', () => {
       ]);
     });
 
-    describe('when getResponsibilitiesPerformanceTotals returns successfully', () => {
+    describe('when getResponsibilitiesPerformances returns successfully', () => {
       it('should dispatch appropriate actions', (done) => {
         const dispatchedActions: Action[] = [];
 
@@ -277,8 +280,8 @@ describe('Responsibilities Effects', () => {
     });
 
     describe('when getResponsibilitiesPerformanceTotals returns an error', () => {
-      it('should return a FetchResponsibilitiesFailure after catching an error', (done) => {
-        spyOn(responsibilitiesService, 'getResponsibilitiesPerformanceTotals').and.returnValue(Observable.throw(error));
+      it('should return a FetchResponsibilitiesFailureAction after catching an error', (done) => {
+        spyOn(responsibilitiesService, 'getPositionsPerformances').and.returnValue(Observable.throw(error));
         responsibilitiesEffects.FetchEntityWithPerformance$().subscribe((result) => {
           expect(result).toEqual(new FetchResponsibilitiesFailure(error));
           done();
@@ -296,16 +299,16 @@ describe('Responsibilities Effects', () => {
     });
 
     it('should return a success action when the api service returns a response', (done) => {
-      responsibilitiesEffects.fetchPerformanceTotal$().subscribe(result => {
+      responsibilitiesEffects.fetchPerformance$().subscribe(result => {
         expect(result).toEqual(new FetchTotalPerformanceSuccess(performanceMock));
         done();
       });
     });
 
-    it('should call getPerformanceTotal with the right arguments', (done) => {
-      const getResponsibilitiesSpy = spyOn(responsibilitiesService, 'getPerformanceTotal').and.callThrough();
+    it('should call getPerformance with the right arguments', (done) => {
+      const getResponsibilitiesSpy = spyOn(responsibilitiesService, 'getPerformance').and.callThrough();
 
-      responsibilitiesEffects.fetchPerformanceTotal$().subscribe(() => {
+      responsibilitiesEffects.fetchPerformance$().subscribe(() => {
         done();
       });
 
@@ -317,25 +320,25 @@ describe('Responsibilities Effects', () => {
     });
 
     it('should return a fail action when the api service returns an error', (done) => {
-      spyOn(responsibilitiesService, 'getPerformanceTotal').and.returnValue(Observable.throw(error));
+      spyOn(responsibilitiesService, 'getPerformance').and.returnValue(Observable.throw(error));
 
-      responsibilitiesEffects.fetchPerformanceTotal$().subscribe(result => {
+      responsibilitiesEffects.fetchPerformance$().subscribe(result => {
         expect(result).toEqual(new FetchTotalPerformanceFailure(error));
         done();
       });
     });
 
     it('should log the error payload when a FetchTotalPerformanceFailure is received', (done) => {
-      spyOn(responsibilitiesService, 'getPerformanceTotal').and.returnValue(Observable.throw(error));
+      spyOn(responsibilitiesService, 'getPerformance').and.returnValue(Observable.throw(error));
       spyOn(console, 'error');
 
-      responsibilitiesEffects.fetchPerformanceTotal$().subscribe(result => {
+      responsibilitiesEffects.fetchPerformance$().subscribe(result => {
         expect(result).toEqual(new FetchTotalPerformanceFailure(error));
         runner.queue(new FetchTotalPerformanceFailure(error));
         done();
       });
 
-      responsibilitiesEffects.fetchPerformanceTotalFailure$().subscribe((result) => {
+      responsibilitiesEffects.fetchPerformanceFailure$().subscribe((result) => {
         expect(result).toEqual(new FetchTotalPerformanceFailure(error));
         expect(console.error).toHaveBeenCalledWith('Failed fetching performance total data', result.payload);
         done();
@@ -371,8 +374,8 @@ describe('Responsibilities Effects', () => {
           expect(getSubAccountsSpy.calls.argsFor(0)[0]).toEqual(subAccountDataMock);
         });
 
-        it('should call getSubAccountsPerformanceTotals with the right arguments', (done) => {
-          const getSubAccountsPerformanceSpy = spyOn(responsibilitiesService, 'getSubAccountsPerformanceTotals').and.callThrough();
+        it('should call getSubAccountsPerformances with the right arguments', (done) => {
+          const getSubAccountsPerformanceSpy = spyOn(responsibilitiesService, 'getSubAccountsPerformances').and.callThrough();
 
           responsibilitiesEffects.fetchSubAccounts$().subscribe(() => {
             done();
@@ -389,7 +392,7 @@ describe('Responsibilities Effects', () => {
             }));
           });
 
-          spyOn(responsibilitiesService, 'getSubAccountsPerformanceTotals').and.callFake((subAccountData: SubAccountData) => {
+          spyOn(responsibilitiesService, 'getSubAccountsPerformances').and.callFake((subAccountData: SubAccountData) => {
             return Observable.of(Object.assign({}, subAccountData, {
               entityWithPerformance: entityWithPerformanceMock
             }));
@@ -426,9 +429,9 @@ describe('Responsibilities Effects', () => {
         });
       });
 
-      describe('when getSubAccountsPerformanceTotals returns an error', () => {
+      describe('when getSubAccountsPerformances returns an error', () => {
         it('should return a FetchResponsibilitiesFailure after catching an error', (done) => {
-          spyOn(responsibilitiesService, 'getSubAccountsPerformanceTotals').and.returnValue(Observable.throw(error));
+          spyOn(responsibilitiesService, 'getSubAccountsPerformances').and.returnValue(Observable.throw(error));
           responsibilitiesEffects.fetchSubAccounts$().subscribe((result) => {
             expect(result).toEqual(new FetchResponsibilitiesFailure(error));
             done();

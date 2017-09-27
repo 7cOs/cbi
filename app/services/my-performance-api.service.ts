@@ -29,7 +29,7 @@ export class MyPerformanceApiService {
       .catch(err => this.handleError(new Error(err)));
   }
 
-  public getResponsibilityPerformanceTotal(
+  public getResponsibilityPerformance(
     entity: { type: string, name: string, positionDescription: string }, filter: MyPerformanceFilterState, positionId: string
   ): Observable<EntityWithPerformanceDTO|Error> {
     const url = `/v3/positions/${ positionId }/responsibilities/${ entity.type }/performanceTotal`;
@@ -46,7 +46,7 @@ export class MyPerformanceApiService {
       .catch(err => this.handleError(new Error(err)));
   }
 
-  public getPerformanceTotal(positionId: string, filter: MyPerformanceFilterState): Observable<PerformanceDTO> {
+  public getPerformance(positionId: string, filter: MyPerformanceFilterState): Observable<PerformanceDTO> {
     const url = `/v3/positions/${ positionId }/performanceTotal`;
 
     return this.http.get(`${ url }`, {
