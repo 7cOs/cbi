@@ -1,4 +1,4 @@
-package com.cbrands.test.smoke;
+package com.cbrands.test.functional.login;
 
 import com.cbrands.TestUser;
 import com.cbrands.pages.HomePage;
@@ -9,9 +9,12 @@ import org.testng.Assert;
 import org.testng.annotations.*;
 
 import java.net.MalformedURLException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 /**
- * Automated test for logging in and out of the web app.
+ * Login test for the functional suite.
  */
 public class LoginTest extends BaseTestCase {
 
@@ -28,15 +31,15 @@ public class LoginTest extends BaseTestCase {
   }
 
   @AfterMethod
-  public void tearDown() throws MalformedURLException {
+  public void tearDown()  throws MalformedURLException{
     logoutPage.goToPage();
 
     shutDownBrowser();
     startUpBrowser();
   }
 
-  @Test(dataProvider = "userCredentials", description = "Testing basic login and logout")
-  public void testLogin(TestUser testUser) {
+  @Test(dataProvider = "userCredentials", description = "Testing login and logout for a valid user")
+  public void testUserLogin(TestUser testUser) {
     final HomePage homePage = loginPage.loginAs(testUser);
     Assert.assertTrue(homePage.isLoaded(), "Login failed for userName: " + testUser.userName());
 
@@ -45,10 +48,14 @@ public class LoginTest extends BaseTestCase {
 
   @DataProvider(name = "userCredentials")
   public static Object[][] userCredentials() {
-    return new Object[][] {
-      { TestUser.ACTOR4 } ,
-      { TestUser.NOTES_ACTOR }
-    };
+    final List<Object[]> allTestUsers = getTestUsersAsObjects(TestUser.values());
+    return allTestUsers.toArray(new Object[][] {});
+  }
+
+  private static List<Object[]> getTestUsersAsObjects(TestUser[] testUsers) {
+    final List<Object[]> usersParams =  new ArrayList<>();
+    Arrays.asList(testUsers).stream().forEach(u -> usersParams.add(new Object[]{u}));
+    return usersParams;
   }
 
 }

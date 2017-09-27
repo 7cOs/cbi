@@ -1,14 +1,14 @@
 import * as Chance from 'chance';
 const chance = new Chance();
 
-import { EntityResponsibilities } from './entity-responsibilities.model';
+import { HierarchyEntity } from './hierarchy-entity.model';
 import { EntityPeopleType, EntityPropertyType } from '../enums/entity-responsibilities.enum';
-import { EntityResponsibilitiesDTO } from './entity-responsibilities.model';
+import { HierarchyEntityDTO } from './hierarchy-entity.model';
 
 const entityPeopleTypeValues = Object.keys(EntityPeopleType).map(key => EntityPeopleType[key]);
 const entityPropertyTypeValues = Object.keys(EntityPropertyType).map(key => EntityPropertyType[key]);
 
-export function getEntityPeopleResponsibilitiesMock(): EntityResponsibilities {
+export function getEntityPeopleResponsibilitiesMock(): HierarchyEntity {
   return {
     peopleType: entityPeopleTypeValues[chance.integer({min: 0, max: entityPeopleTypeValues.length - 1})],
     positionId: chance.string(),
@@ -20,7 +20,7 @@ export function getEntityPeopleResponsibilitiesMock(): EntityResponsibilities {
     description: chance.string()
   };
 }
-export function getEntityPeopleResponsibilitiesWithOutPositionDescriptionMock(): EntityResponsibilities {
+export function getEntityPeopleResponsibilitiesWithOutPositionDescriptionMock(): HierarchyEntity {
   return {
     peopleType: entityPeopleTypeValues[chance.integer({min: 0, max: entityPeopleTypeValues.length - 1})],
     positionId: chance.string(),
@@ -31,7 +31,7 @@ export function getEntityPeopleResponsibilitiesWithOutPositionDescriptionMock():
     description: chance.string()
   };
 }
-export function getEntityPropertyResponsibilitiesMock(): EntityResponsibilities {
+export function getEntityPropertyResponsibilitiesMock(): HierarchyEntity {
   return {
     propertyType: entityPropertyTypeValues[chance.integer({min: 0, max: entityPropertyTypeValues.length - 1})],
     positionId: chance.string(),
@@ -44,7 +44,7 @@ export function getEntityPropertyResponsibilitiesMock(): EntityResponsibilities 
   };
 }
 
-export function getEntityResponsibilitiesDTO(): EntityResponsibilitiesDTO {
+export function getHierarchyEntityDTO(): HierarchyEntityDTO {
   return {
     id: chance.string(),
     employeeId: chance.string(),
@@ -55,7 +55,7 @@ export function getEntityResponsibilitiesDTO(): EntityResponsibilitiesDTO {
   };
 }
 
-export const mockEntityResponsibilitiesDTOCollection: EntityResponsibilitiesDTO[] = [
+export const mockHierarchyEntityDTOCollection: HierarchyEntityDTO[] = [
   {
     id: '123',
     employeeId: '1231231',

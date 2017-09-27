@@ -6,6 +6,7 @@
   </listeners>
   <test name="Functional Test">
     <classes>
+      <class name="com.cbrands.test.functional.login.LoginTest" />
     </classes>
   </test> <!-- Test -->
 </suite> <!-- Suite -->

@@ -1,6 +1,6 @@
-import { EntityResponsibilitiesDTO } from './entity-responsibilities.model';
+import { HierarchyEntityDTO } from './hierarchy-entity.model';
 
 export interface PeopleResponsibilitiesDTO {
-  positions?: EntityResponsibilitiesDTO[];
+  positions?: HierarchyEntityDTO[];
   entityURIs?: Array<string>;
 }
