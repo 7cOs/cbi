@@ -14,7 +14,10 @@ export enum EntityPeopleType {
   'SALES LEADERSHIP' = 'SALES LEADERSHIP',
   'TEAM LEAD' = 'TEAM LEAD',
   'OFF PREMISE SPECIALIST' = 'OFF PREMISE SPECIALIST',
-  'DRAFT' = 'DRAFT'
+  'DRAFT' = 'DRAFT',
+  'DISTRIBUTOR' = 'DISTRIBUTOR',
+  'ACCOUNT' = 'ACCOUNT',
+  'GEOGRAPHY' = 'GEOGRAPHY'
 }
 
 export enum EntityPropertyType {

@@ -157,43 +157,33 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
           this.store.dispatch(new MyPerformanceVersionActions.SetMyPerformanceSelectedEntityAction(parameters.row.descriptionRow0));
           this.store.dispatch(new MyPerformanceVersionActions.SaveMyPerformanceStateAction(this.currentState));
 
-          if (['GEOGRAPHY', 'ACCOUNT', 'DISTRIBUTOR'].indexOf(parameters.row.descriptionRow0) !== -1) {
-            console.log('CLICKED NEW: ', parameters.row);
-
-            // this.store.dispatch(new FetchResponsibilities({
-            //   positionId: parameters.row.metadata.positionId,
-            //   filter: this.filterState
-            // }));
-
-          } else {
-            switch (this.leftTableViewType) {
-              case ViewType.roleGroups:
-                this.store.dispatch(new FetchEntityWithPerformance({
-                  entityType: EntityPeopleType[parameters.row.descriptionRow0],
-                  entities: this.currentState.responsibilities.groupedEntities[EntityPeopleType[parameters.row.descriptionRow0]],
-                  filter: this.filterState,
-                  selectedPositionId: parameters.row.metadata.positionId,
-                  viewType: ViewType.people
-                }));
-                break;
-              case ViewType.people:
-                this.store.dispatch(new FetchResponsibilities({
-                  positionId: parameters.row.metadata.positionId,
-                  filter: this.filterState
-                }));
-                break;
-              case ViewType.accounts:
-                this.store.dispatch(new FetchSubAccountsAction({
-                  positionId: parameters.row.metadata.positionId,
-                  contextPositionId: this.currentState.responsibilities.positionId,
-                  entityType: parameters.row.descriptionRow0,
-                  selectedPositionId: parameters.row.metadata.positionId,
-                  premiseType: this.filterState.premiseType
-                }));
-                break;
-              default:
-                console.log('clicked on left row:', parameters.row);
-          }
+          switch (this.leftTableViewType) {
+            case ViewType.roleGroups:
+              this.store.dispatch(new FetchEntityWithPerformance({
+                entityType: EntityPeopleType[parameters.row.descriptionRow0],
+                entities: this.currentState.responsibilities.groupedEntities[EntityPeopleType[parameters.row.descriptionRow0]],
+                filter: this.filterState,
+                selectedPositionId: parameters.row.metadata.positionId,
+                viewType: ViewType.people
+              }));
+              break;
+            case ViewType.people:
+              this.store.dispatch(new FetchResponsibilities({
+                positionId: parameters.row.metadata.positionId,
+                filter: this.filterState
+              }));
+              break;
+            case ViewType.accounts:
+              this.store.dispatch(new FetchSubAccountsAction({
+                positionId: parameters.row.metadata.positionId,
+                contextPositionId: this.currentState.responsibilities.positionId,
+                entityType: parameters.row.descriptionRow0,
+                selectedPositionId: parameters.row.metadata.positionId,
+                premiseType: this.filterState.premiseType
+              }));
+              break;
+            default:
+              console.log('clicked on left row:', parameters.row);
         }
       }
     }

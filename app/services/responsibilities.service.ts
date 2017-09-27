@@ -137,7 +137,9 @@ export class ResponsibilitiesService {
     console.log('getPerformanceTotalForGroupedEntities', responsibilitiesData);
 
     if (responsibilitiesData.viewType === ViewType.roleGroups || responsibilitiesData.entityTypes.length > 1) {
-      return this.handleResponsibilitiesPerformanceTotals(responsibilitiesData);
+      return this.handleResponsibilitiesPerformanceTotals(Object.assign({}, responsibilitiesData, {
+        viewType: ViewType.roleGroups
+      }));
     } else if (responsibilitiesData.viewType === ViewType.distributors) {
       return this.handleDistributorsPerformances(responsibilitiesData);
     } else if (responsibilitiesData.viewType === ViewType.accounts) {
