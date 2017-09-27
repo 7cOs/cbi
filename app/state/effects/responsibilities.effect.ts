@@ -62,7 +62,9 @@ export class ResponsibilitiesEffects {
   @Effect() fetchSubAccounts$(): Observable<Action> {
     return this.actions$
       .ofType(ResponsibilitiesActions.FETCH_SUBACCOUNTS_ACTION)
-      .switchMap((action: Action) => Observable.of(action.payload))
+      .switchMap((action: Action): Observable<SubAccountData> => {
+        return Observable.of(action.payload);
+      })
       .switchMap((subAccountsData) => this.responsibilitiesService.getSubAccounts(subAccountsData))
       .switchMap((subAccountsData) => this.responsibilitiesService.getSubAccountsPerformances(subAccountsData))
       .switchMap((subAccountsData) => this.constructSubAccountsSuccessAction(subAccountsData))

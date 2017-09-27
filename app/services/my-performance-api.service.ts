@@ -113,7 +113,7 @@ export class MyPerformanceApiService {
 
   public getSubAccountsPerformanceTotal(
     positionId: string, contextPositionId: string, filter: MyPerformanceFilterState)
-  : Observable<EntitiesTotalPerformancesDTO> {
+  : Observable<PerformanceDTO> {
     const url = `/v3/subAccounts/${positionId}/performanceTotal`;
     const params = contextPositionId
       ? Object.assign({}, this.getFilterStateParams(filter), { positionId: contextPositionId })
