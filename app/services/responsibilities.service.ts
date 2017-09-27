@@ -111,7 +111,9 @@ export class ResponsibilitiesService {
       distributors.map((distributor: HierarchyEntity) => {
         return this.myPerformanceApiService.getDistributorPerformance(distributor.positionId, filter, contextPositionId)
           .map(response => {
-            return this.performanceTransformerService.transformEntityWithPerformance(response, distributor);
+            const entityWithPerformance = this.performanceTransformerService.transformEntityWithPerformance(response, distributor);
+            entityWithPerformance.propertyType = distributor.propertyType;
+            return entityWithPerformance;
           });
       });
 

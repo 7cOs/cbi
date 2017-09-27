@@ -30,6 +30,10 @@ export class MyPerformanceTableDataTransformerService {
 
       if (entity.contextPositionId) transformedEntity.metadata.contextPositionId = entity.contextPositionId;
 
+      if (entity.propertyType) {
+        transformedEntity.descriptionRow1 = 'GO TO DASHBOARD';
+      }
+
       return transformedEntity;
     });
   }

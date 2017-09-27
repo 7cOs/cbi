@@ -1,3 +1,4 @@
+import { EntityPropertyType } from '../enums/entity-responsibilities.enum';
 import { Performance, PerformanceDTO } from './performance.model';
 
 export interface EntityWithPerformanceDTO {
@@ -13,4 +14,5 @@ export interface EntityWithPerformance {
   name: string;
   positionDescription?: string;
   performance: Performance;
+  propertyType?: EntityPropertyType;
 }
