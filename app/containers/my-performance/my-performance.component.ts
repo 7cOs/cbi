@@ -21,6 +21,7 @@ import { MyPerformanceFilterEvent } from '../../models/my-performance-filter.mod
 import { MyPerformanceFilterState } from '../../state/reducers/my-performance-filter.reducer';
 import { MyPerformanceTableDataTransformerService } from '../../services/my-performance-table-data-transformer.service';
 import { MyPerformanceTableRow } from '../../models/my-performance-table-row.model';
+import { MyPerformanceService } from '../../services/my-performance.service';
 import { MyPerformanceEntitiesData } from '../../state/reducers/my-performance.reducer';
 import * as MyPerformanceVersionActions from '../../state/actions/my-performance-version.action';
 import { ResponsibilitiesState } from '../../state/reducers/responsibilities.reducer';
@@ -73,6 +74,8 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
   private salesHierarchy: Array<MyPerformanceTableRow>;
   private salesHierarchyTotal: MyPerformanceTableRow;
 
+  private myPerformanceService: MyPerformanceService;
+
   constructor(
     private store: Store<AppState>,
     private myPerformanceTableDataTransformerService: MyPerformanceTableDataTransformerService,
@@ -84,8 +87,11 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
     this.dateRanges$ = this.store.select(state => state.dateRanges);
     this.performanceStateVersions$ = this.store.select(state => state.myPerformance.versions);
 
-    this.filterStateSubscription = this.store.select(state => state.myPerformanceFilter).subscribe(filterState => {
-      this.filterState = filterState;
+    this.filterStateSubscription = this.store
+      .select(state => state.myPerformanceFilter)
+      .subscribe(filterState => {
+      this.filterState = this.myPerformanceService.getUserDefaultFilterState(
+        filterState, this.userService.model.currentUser.srcTypeCd[0]);
     });
 
     this.productMetricsSubscription = this.store

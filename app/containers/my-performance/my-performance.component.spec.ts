@@ -21,6 +21,7 @@ import { MyPerformanceFilterEvent } from '../../models/my-performance-filter.mod
 import { MyPerformanceFilterState } from '../../state/reducers/my-performance-filter.reducer';
 import { MyPerformanceEntitiesData, initialState } from '../../state/reducers/my-performance.reducer';
 import { MyPerformanceTableDataTransformerService } from '../../services/my-performance-table-data-transformer.service';
+import { MyPerformanceService } from '../../services/my-performance.service';
 import { MyPerformanceTableRow } from '../../models/my-performance-table-row.model';
 import { MyPerformanceTableRowComponent } from '../../shared/components/my-performance-table-row/my-performance-table-row.component';
 import { PremiseTypeValue } from '../../enums/premise-type.enum';
@@ -109,6 +110,7 @@ describe('MyPerformanceComponent', () => {
       ],
       providers: [
         MyPerformanceTableDataTransformerService,
+        MyPerformanceService,
         {
           provide: Store,
           useValue: storeMock
