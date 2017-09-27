@@ -46,7 +46,7 @@ export class ResponsibilitiesEffects {
       .switchMap((action: Action) => {
         const { entityType, entities, filter, selectedPositionId, viewType } = action.payload;
 
-        return this.responsibilitiesService.getResponsibilitiesPerformances(entities, filter)
+        return this.responsibilitiesService.getPositionsPerformances(entities, filter)
           .switchMap((entityPerformances: EntityWithPerformance[]) => {
             return Observable.from([
               new ResponsibilitiesActions.SetTotalPerformance(selectedPositionId),

@@ -15,9 +15,9 @@ import { FetchResponsibilities, FetchSubAccountsAction } from '../../state/actio
 import { getMyPerformanceFilterMock } from '../../models/my-performance-filter.model.mock';
 import { getMyPerformanceEntitiesDataMock, getMyPerformanceStateMock } from '../../state/reducers/my-performance.state.mock';
 import { getMyPerformanceTableRowMock } from '../../models/my-performance-table-row.model.mock';
+import { HandleElementClickedParameters, MyPerformanceComponent } from './my-performance.component';
 import { MetricTypeValue } from '../../enums/metric-type.enum';
 import * as MyPerformanceVersionActions from '../../state/actions/my-performance-version.action';
-import { MyPerformanceComponent } from './my-performance.component';
 import { MyPerformanceFilterActionType } from '../../enums/my-performance-filter.enum';
 import { MyPerformanceFilterEvent } from '../../models/my-performance-filter.model';
 import { MyPerformanceFilterState } from '../../state/reducers/my-performance-filter.reducer';
@@ -101,7 +101,7 @@ describe('MyPerformanceComponent', () => {
     select: jasmine.createSpy('select.myPerformance').and.callFake((selectFunction: (state: any) => any) => {
       const selectedValue = selectFunction(stateMock);
 
-      if (selectedValue == stateMock.myPerformance.versions) { // tslint:disable-line:triple-equals
+      if (selectedValue === stateMock.myPerformance.versions) {
         return versionsSubject;
       } else {
         return Observable.of(selectedValue);
@@ -163,6 +163,7 @@ describe('MyPerformanceComponent', () => {
       positionId: userServiceMock.model.currentUser.positionId,
       filter: stateMock.myPerformanceFilter as any
     })]);
+
     expect(storeMock.dispatch.calls.argsFor(1)).toEqual([new FetchProductMetricsAction({
       positionId: userServiceMock.model.currentUser.positionId,
       filter: stateMock.myPerformanceFilter as any,
@@ -258,7 +259,8 @@ describe('MyPerformanceComponent', () => {
     describe('when back button is NOT displayed', () => {
       it('should NOT dispatch any actions', () => {
         componentInstance.showLeftBackButton = false;
-        componentInstance.handleElementClicked({leftSide: true, type: RowType.total, index: 0});
+        const params: HandleElementClickedParameters = { leftSide: true, type: RowType.total, index: 0 };
+        componentInstance.handleElementClicked(params);
 
         expect(storeMock.dispatch.calls.count()).toBe(0);
       });
@@ -269,45 +271,50 @@ describe('MyPerformanceComponent', () => {
         componentInstance.showLeftBackButton = true;
       });
 
-      it('should trigger appropriate actions when last version has a leftTableViewType of distributors', () => {
+      it('should dispatch RestoreMyPerformanceStateAction when last version has a leftTableViewType of distributors', () => {
         versionsMock[versionsMock.length - 1].viewType.leftTableViewType = ViewType.distributors;
         versionsSubject.next(versionsMock);
 
         storeMock.dispatch.calls.reset();
-        componentInstance.handleElementClicked({leftSide: true, type: RowType.total, index: 0});
+        const params: HandleElementClickedParameters = { leftSide: true, type: RowType.total, index: 0 };
+        componentInstance.handleElementClicked(params);
 
         expect(storeMock.dispatch.calls.count()).toBe(1);
         expect(storeMock.dispatch.calls.argsFor(0)[0]).toEqual(new MyPerformanceVersionActions.RestoreMyPerformanceStateAction());
       });
 
-      it('should trigger appropriate actions when last version has a leftTableViewType of people', () => {
+      it('should dispatch RestoreMyPerformanceStateAction when last version has a leftTableViewType of people', () => {
         versionsMock[versionsMock.length - 1].viewType.leftTableViewType = ViewType.people;
         versionsSubject.next(versionsMock);
 
         storeMock.dispatch.calls.reset();
-        componentInstance.handleElementClicked({leftSide: true, type: RowType.total, index: 0});
+        const params: HandleElementClickedParameters = { leftSide: true, type: RowType.total, index: 0 };
+        componentInstance.handleElementClicked(params);
 
         expect(storeMock.dispatch.calls.count()).toBe(1);
         expect(storeMock.dispatch.calls.argsFor(0)[0]).toEqual(new MyPerformanceVersionActions.RestoreMyPerformanceStateAction());
       });
 
-      it('should trigger appropriate actions when last version has a leftTableViewType of subAccounts', () => {
+      it('should dispatch RestoreMyPerformanceStateAction when last version has a leftTableViewType of subAccounts', () => {
         versionsMock[versionsMock.length - 1].viewType.leftTableViewType = ViewType.subAccounts;
         versionsSubject.next(versionsMock);
 
         storeMock.dispatch.calls.reset();
-        componentInstance.handleElementClicked({leftSide: true, type: RowType.total, index: 0});
+        const params: HandleElementClickedParameters = { leftSide: true, type: RowType.total, index: 0 };
+        componentInstance.handleElementClicked(params);
 
         expect(storeMock.dispatch.calls.count()).toBe(1);
         expect(storeMock.dispatch.calls.argsFor(0)[0]).toEqual(new MyPerformanceVersionActions.RestoreMyPerformanceStateAction());
       });
 
-      it('should trigger appropriate actions when last version has a leftTableViewType of roleGroups', () => {
+      it('should dispatch RestoreMyPerformanceStateAction and FetchProductMetricsAction ' +
+        'when last version has a leftTableViewType of roleGroups', () => {
         versionsMock[versionsMock.length - 1].viewType.leftTableViewType = ViewType.roleGroups;
         versionsSubject.next(versionsMock);
 
         storeMock.dispatch.calls.reset();
-        componentInstance.handleElementClicked({leftSide: true, type: RowType.total, index: 0});
+        const params: HandleElementClickedParameters = { leftSide: true, type: RowType.total, index: 0 };
+        componentInstance.handleElementClicked(params);
 
         expect(storeMock.dispatch.calls.count()).toBe(2);
         expect(storeMock.dispatch.calls.argsFor(0)[0]).toEqual(new MyPerformanceVersionActions.RestoreMyPerformanceStateAction());
@@ -318,12 +325,15 @@ describe('MyPerformanceComponent', () => {
         }));
       });
 
-      it('should trigger appropriate actions when last version has a leftTableViewType of accounts', () => {
+      it('should dispatch RestoreMyPerformanceStateAction and FetchProductMetricsAction ' +
+        'when last version has a leftTableViewType of accounts', () => {
         versionsMock[versionsMock.length - 1].viewType.leftTableViewType = ViewType.accounts;
         versionsSubject.next(versionsMock);
 
         storeMock.dispatch.calls.reset();
-        componentInstance.handleElementClicked({leftSide: true, type: RowType.total, index: 0});
+        const params: HandleElementClickedParameters = { leftSide: true, type: RowType.total, index: 0 };
+        componentInstance.handleElementClicked(params);
+
         expect(storeMock.dispatch.calls.count()).toBe(2);
         expect(storeMock.dispatch.calls.argsFor(0)[0]).toEqual(new MyPerformanceVersionActions.RestoreMyPerformanceStateAction());
         expect(storeMock.dispatch.calls.argsFor(1)[0]).toEqual(new FetchProductMetricsAction({
@@ -336,18 +346,25 @@ describe('MyPerformanceComponent', () => {
   });
 
   describe('when left side data row is clicked', () => {
-    it('should trigger appropriate actions', () => {
+    let rowMock: MyPerformanceTableRow;
+
+    beforeEach(() => {
       storeMock.dispatch.and.callThrough();
       storeMock.dispatch.calls.reset();
-      const rowMock = getMyPerformanceTableRowMock(1)[0];
+      rowMock = getMyPerformanceTableRowMock(1)[0];
+    });
 
+    it('should trigger appropriate actions when current ViewType is roleGroups', () => {
       componentInstance.leftTableViewType = ViewType.roleGroups;
-      componentInstance.handleElementClicked({leftSide: true, type: RowType.data, index: 0, row: rowMock});
+      const params: HandleElementClickedParameters = { leftSide: true, type: RowType.data, index: 0, row: rowMock };
+      componentInstance.handleElementClicked(params);
       expect(storeMock.dispatch.calls.count()).toBe(3);
+    });
 
-      storeMock.dispatch.calls.reset();
+    it('should trigger appropriate actions when current ViewType is accounts', () => {
       componentInstance.leftTableViewType = ViewType.accounts;
-      componentInstance.handleElementClicked({leftSide: true, type: RowType.data, index: 0, row: rowMock});
+      const params: HandleElementClickedParameters = { leftSide: true, type: RowType.data, index: 0, row: rowMock };
+      componentInstance.handleElementClicked(params);
       expect(storeMock.dispatch.calls.count()).toBe(4);
       expect(storeMock.dispatch.calls.argsFor(2)[0]).toEqual(new FetchSubAccountsAction({
         positionId: rowMock.metadata.positionId,
@@ -362,14 +379,12 @@ describe('MyPerformanceComponent', () => {
         filter: stateMock.myPerformanceFilter as any,
         selectedEntityType: SelectedEntityType.Account
       }));
+    });
 
-      storeMock.dispatch.calls.reset();
-      componentInstance.handleElementClicked({leftSide: false, type: RowType.data, index: 0});
-      expect(storeMock.dispatch.calls.count()).toBe(0);
-
-      storeMock.dispatch.calls.reset();
+    it('should trigger appropriate actions when current ViewType is people', () => {
       componentInstance.leftTableViewType = ViewType.people;
-      componentInstance.handleElementClicked({leftSide: true, type: RowType.data, index: 0, row: rowMock});
+      const params: HandleElementClickedParameters = { leftSide: true, type: RowType.data, index: 0, row: rowMock };
+      componentInstance.handleElementClicked(params);
       expect(storeMock.dispatch.calls.count()).toBe(4);
       expect(storeMock.dispatch.calls.argsFor(2)[0]).toEqual(new FetchResponsibilities({
         positionId: rowMock.metadata.positionId,
@@ -380,6 +395,15 @@ describe('MyPerformanceComponent', () => {
         filter: stateMock.myPerformanceFilter as any,
         selectedEntityType: SelectedEntityType.Position
       }));
+    });
+  });
+
+  describe('when right side data row is clicked', () => {
+    it('should not dispatch any actions', () => {
+      storeMock.dispatch.calls.reset();
+      const params: HandleElementClickedParameters = { leftSide: false, type: RowType.data, index: 0 };
+      componentInstance.handleElementClicked(params);
+      expect(storeMock.dispatch.calls.count()).toBe(0);
     });
   });
 
