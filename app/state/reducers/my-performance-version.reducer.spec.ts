@@ -8,7 +8,7 @@ import { myPerformanceVersionReducer } from './my-performance-version.reducer';
 
 let chance = new Chance();
 
-describe('My Performance Reducer', () => {
+describe('My Performance Version Reducer', () => {
 
   it('should not modify the initial state when a save action is dispatched', () => {
     const savedObject = getMyPerformanceEntitiesDataMock();
