@@ -17,6 +17,9 @@ public class OpportunitiesPage extends TestNGBasePage {
   @FindBy(how = How.XPATH, using = "//form[contains(@class, 'filters')]")
   private WebElement filterContainer;
 
+  @FindBy(how = How.XPATH, using = "//md-select[contains(@ng-model, 'retailer')]")
+  private WebElement retailerTypeFilter;
+
   @FindBy(how = How.XPATH, using = "//button[@value='Apply Filters']")
   private WebElement applyFiltersButton;
 
@@ -36,7 +39,24 @@ public class OpportunitiesPage extends TestNGBasePage {
     return filterContainer.isDisplayed();
   }
 
-  public OpportunitiesPage enterChainAccountSearchText(String searchText) {
+  public OpportunitiesPage clickRetailerTypeDropdown() {
+    waitForElementToClickable(retailerTypeFilter, true).click();
+    return this;
+  }
+
+  public OpportunitiesPage selectChainRetailerType() {
+    selectRetailerType("Chain");
+    return this;
+  }
+
+  private void selectRetailerType(String retailerType) {
+    final WebElement typeOption = retailerTypeFilter.findElement(By.xpath(
+      "//md-option[contains(@ng-repeat, 'retailer')]/div[contains(.,'" + retailerType + "')]"));
+    waitForElementToClickable(typeOption, true).click();
+    waitForElementToClickable(typeOption, false);
+  }
+
+  public OpportunitiesPage enterChaiRetailerSearchText(String searchText) {
     final WebElement chainSearchField = filterContainer.findElement(By.xpath(CHAIN_SEARCHBOX_XPATH));
     waitForElementToClickable(chainSearchField, true).click();
     chainSearchField.sendKeys(searchText);
@@ -44,7 +64,7 @@ public class OpportunitiesPage extends TestNGBasePage {
     return this;
   }
 
-  public OpportunitiesPage clickSearchForAccount() {
+  public OpportunitiesPage clickSearchForRetailer() {
     final WebElement searchButton = filterContainer
       .findElement(By.xpath(".//input[contains(@class, 'submit-btn visible')]"));
     waitForElementToClickable(searchButton, true).click();
@@ -52,10 +72,18 @@ public class OpportunitiesPage extends TestNGBasePage {
     return this;
   }
 
-  public OpportunitiesPage clickFirstAccountResult() {
+  public OpportunitiesPage clickFirstRetailerResult() {
     final WebElement searchButton = filterContainer
       .findElement(By.xpath(".//div[contains(@class, 'results-container')]//li"));
     waitForElementToClickable(searchButton, true).click();
+    return this;
+  }
+
+  public OpportunitiesPage clickFirstRetailerResultContaining(String accountName) {
+    final WebElement searchButton = filterContainer
+      .findElement(By.xpath(".//div[contains(@class, 'results-container')]//li[contains(., '" + accountName + "')]"));
+    waitForElementToClickable(searchButton, true).click();
+
     return this;
   }
 
@@ -71,6 +99,13 @@ public class OpportunitiesPage extends TestNGBasePage {
     return this;
   }
 
+  public boolean isPremiseFilterSelectedAs(PremiseType premiseType) {
+    final WebElement checkbox = findElement(
+      By.xpath("//md-radio-button[contains(@aria-label, '" + premiseType.name() + "')]")
+    );
+    return "true".equalsIgnoreCase(checkbox.getAttribute("aria-checked"));
+  }
+
   public boolean hasOpportunityResults() {
     boolean hasResults;
 
@@ -83,4 +118,18 @@ public class OpportunitiesPage extends TestNGBasePage {
 
     return hasResults;
   }
+
+  public boolean doesPremiseTypeChipMatch(PremiseType premiseType) {
+    return isChipPresent(premiseType.name() + "-premise");
+  }
+
+  private boolean isChipPresent(String chipTitle) {
+    return isElementPresent(By.xpath("//md-chip//div/div[contains(., '" + chipTitle + "')]"));
+  }
+
+  public enum PremiseType {
+    On,
+    Off
+  }
+
 }
