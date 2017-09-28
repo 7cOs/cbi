@@ -127,9 +127,9 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
         this.showLeftBackButton = versions.length > 0;
     });
 
+    const userType = this.userService.model.currentUser.srcTypeCd[0];
     const currentUserId = this.userService.model.currentUser.positionId || CORPORATE_USER_POSITION_ID;
-    const defaultUserPremiseType = this.myPerformanceService.getUserDefaultPremiseType(
-      this.filterState.metricType, this.userService.model.currentUser.srcTypeCd[0]);
+    const defaultUserPremiseType = this.myPerformanceService.getUserDefaultPremiseType(this.filterState.metricType, userType);
 
     this.store.dispatch(new SetPremiseType( defaultUserPremiseType ));
     this.store.dispatch(new FetchResponsibilities({ positionId: currentUserId, filter: this.filterState }));

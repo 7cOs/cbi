@@ -28,12 +28,12 @@ describe('Service: MyPerformanceService', () => {
         myPerformanceService = _myPerformanceService;
     }));
 
-    it('should return MyPerformanceFilterState data', () => {
+    it('should return PremiseTypeValue of Off when Corporate', () => {
       spyOn(myPerformanceService, 'getUserDefaultPremiseType').and.callThrough();
 
       const newPremiseValueState =  myPerformanceService.getUserDefaultPremiseType(MetricTypeValue.velocity, userType);
 
-      expect(newPremiseValueState).toEqual(PremiseTypeValue.All);
+      expect(newPremiseValueState).toEqual(PremiseTypeValue.Off);
     });
   });
 });
