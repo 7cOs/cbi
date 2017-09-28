@@ -112,7 +112,8 @@ module.exports = {
       'process.env': {
         'ENV': JSON.stringify(ENV),
         'NODE_ENV': JSON.stringify(ENV),
-        'IQ_LINK': JSON.stringify(process.env.IQ_LINK)
+        'IQ_LINK': JSON.stringify(process.env.IQ_LINK),
+        'DEBUG_GOOGLE_ANALYTICS': JSON.stringify(process.env.DEBUG_GOOGLE_ANALYTICS)
       }
     }),
 

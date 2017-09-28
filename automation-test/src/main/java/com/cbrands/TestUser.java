@@ -1,20 +1,10 @@
 package com.cbrands;
 
 /**
- * Test users for automated testing. Deprecated users have been decommissioned,
- * and should be replaced at earliest convenience.
+ * Test users for automated testing. Only valid users currently used in the ATs should be in this enum.
  */
 public enum TestUser {
-
-  @Deprecated
-  ACTOR1 ("juan.baez@cbrands.com", "Corona.2016", "Juan", "Baez"),
-  @Deprecated
-  ACTOR2 ("stash.rowley@cbrands.com", "Corona.2016", "Stash", ""),
-  @Deprecated
-  ACTOR3 ("eric.ramey@cbrands.com", "Corona.2016", "Eric", "Ramey"),
-
   ACTOR4 ("chris.williams@cbrands.com", "Corona.2016", "Chris", "Williams"),
-  ACTOR5 ("joe.delapaz@cbrands.com", "Corona.2016", "Joe", "Delapaz"),
   NOTES_ACTOR("chelsea.hoff@cbrands.com", "Corona.2016", "Chelsea", "Hoff");
 
   private final String userName;

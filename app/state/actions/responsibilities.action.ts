@@ -1,26 +1,25 @@
 import { Action } from '@ngrx/store';
 
-import { EntitiesPerformances } from '../../models/entities-performances.model';
-import { EntitiesTotalPerformances } from '../../models/entities-total-performances.model';
+import { EntityWithPerformance } from '../../models/entity-with-performance.model';
+import { Performance } from '../../models/performance.model';
 import { EntityPeopleType } from '../../enums/entity-responsibilities.enum';
-import { EntityResponsibilities } from '../../models/entity-responsibilities.model';
+import { HierarchyEntity } from '../../models/hierarchy-entity.model';
 import { GroupedEntities } from '../../models/grouped-entities.model';
 import { MyPerformanceFilterState } from '../../state/reducers/my-performance-filter.reducer';
-import { MyPerformanceTableRow } from '../../models/my-performance-table-row.model';
 import { PremiseTypeValue } from '../../enums/premise-type.enum';
 import { ViewType } from '../../enums/view-type.enum';
 
 export interface FetchResponsibilitiesSuccessPayload {
   positionId: string;
   groupedEntities: GroupedEntities;
-  entitiesPerformances: EntitiesPerformances[];
+  entityWithPerformance: EntityWithPerformance[];
 }
 
-export interface FetchResponsibilityEntitiesPerformancePayload {
+export interface FetchEntityWithPerformancePayload {
   entityType: EntityPeopleType;
-  entities: EntityResponsibilities[];
+  entities: HierarchyEntity[];
   filter: MyPerformanceFilterState;
-  entitiesTotalPerformances: MyPerformanceTableRow;
+  selectedPositionId: string;
   viewType: ViewType;
 }
 
@@ -28,48 +27,48 @@ export interface FetchSubAccountsActionPayload {
   positionId: string;
   contextPositionId: string;
   entityType: string;
-  entitiesTotalPerformances: MyPerformanceTableRow;
+  selectedPositionId: string;
   premiseType: PremiseTypeValue;
 }
 
 export interface FetchSubAccountsSuccessPayload {
   groupedEntities: GroupedEntities;
-  entitiesPerformances: EntitiesPerformances[];
+  entityWithPerformance: EntityWithPerformance[];
 }
 
-export const FETCH_RESPONSIBILITIES_ACTION = '[Responsibilities] FETCH_RESPONSIBILITIES_ACTION';
-export class FetchResponsibilitiesAction implements Action {
-  readonly type = FETCH_RESPONSIBILITIES_ACTION;
+export const FETCH_RESPONSIBILITIES = '[Responsibilities] FETCH_RESPONSIBILITIES';
+export class FetchResponsibilities implements Action {
+  readonly type = FETCH_RESPONSIBILITIES;
 
   constructor(public payload: { positionId: string, filter: MyPerformanceFilterState }) { }
 }
 
-export const FETCH_RESPONSIBILITIES_SUCCESS_ACTION = '[Responsibilities] FETCH_RESPONSIBILITIES_SUCCESS_ACTION';
-export class FetchResponsibilitiesSuccessAction implements Action {
-  readonly type = FETCH_RESPONSIBILITIES_SUCCESS_ACTION;
+export const FETCH_RESPONSIBILITIES_SUCCESS = '[Responsibilities] FETCH_RESPONSIBILITIES_SUCCESS';
+export class FetchResponsibilitiesSuccess implements Action {
+  readonly type = FETCH_RESPONSIBILITIES_SUCCESS;
 
   constructor(public payload: FetchResponsibilitiesSuccessPayload) { }
 }
 
-export const FETCH_RESPONSIBILITIES_FAILURE_ACTION = '[Responsibilities] FETCH_RESPONSIBILITIES_FAILURE_ACTION';
-export class FetchResponsibilitiesFailureAction implements Action {
-  readonly type = FETCH_RESPONSIBILITIES_FAILURE_ACTION;
+export const FETCH_RESPONSIBILITIES_FAILURE = '[Responsibilities] FETCH_RESPONSIBILITIES_FAILURE';
+export class FetchResponsibilitiesFailure implements Action {
+  readonly type = FETCH_RESPONSIBILITIES_FAILURE;
 
   constructor(public payload: Error) { }
 }
 
-export const FETCH_RESPONSIBILITY_ENTITY_PERFORMANCE = '[Responsibilities] FETCH_RESPONSIBILITY_ENTITY_PERFORMANCE';
-export class FetchResponsibilityEntityPerformance implements Action {
-  readonly type = FETCH_RESPONSIBILITY_ENTITY_PERFORMANCE;
+export const FETCH_ENTITIES_PERFORMANCES = '[Responsibilities] FETCH_ENTITIES_PERFORMANCES';
+export class FetchEntityWithPerformance implements Action {
+  readonly type = FETCH_ENTITIES_PERFORMANCES;
 
-  constructor(public payload: FetchResponsibilityEntitiesPerformancePayload) { }
+  constructor(public payload: FetchEntityWithPerformancePayload) { }
 }
 
-export const FETCH_RESPONSIBILITY_ENTITY_PERFORMANCE_SUCCESS = '[Responsibilities] FETCH_RESPONSIBILITY_ENTITY_PERFORMANCE_SUCCESS';
-export class FetchResponsibilityEntityPerformanceSuccess implements Action {
-  readonly type = FETCH_RESPONSIBILITY_ENTITY_PERFORMANCE_SUCCESS;
+export const FETCH_ENTITIES_PERFORMANCES_SUCCESS = '[Responsibilities] FETCH_ENTITIES_PERFORMANCES_SUCCESS';
+export class FetchEntityWithPerformanceSuccess implements Action {
+  readonly type = FETCH_ENTITIES_PERFORMANCES_SUCCESS;
 
-  constructor(public payload: EntitiesPerformances[]) { }
+  constructor(public payload: EntityWithPerformance[]) { }
 }
 
 export const GET_PEOPLE_BY_ROLE_GROUP_ACTION = '[Responsibilities] GET_PEOPLE_BY_ROLE_GROUP_ACTION';
@@ -93,44 +92,44 @@ export class FetchSubAccountsSuccessAction implements Action {
   constructor(public payload: FetchSubAccountsSuccessPayload) { }
 }
 
-export const FETCH_PERFORMANCE_TOTAL_ACTION = '[Performance Total] FETCH_PERFORMANCE_TOTAL_ACTION';
-export class FetchPerformanceTotalAction implements Action {
-  readonly type = FETCH_PERFORMANCE_TOTAL_ACTION;
+export const FETCH_TOTAL_PERFORMANCE = '[Performance Total] FETCH_TOTAL_PERFORMANCE';
+export class FetchTotalPerformance implements Action {
+  readonly type = FETCH_TOTAL_PERFORMANCE;
 
   constructor(public payload: { positionId: string, filter: MyPerformanceFilterState }) { }
 }
 
-export const FETCH_PERFORMANCE_TOTAL_SUCCESS_ACTION = '[Performance Total] FETCH_PERFORMANCE_TOTAL_SUCCESS_ACTION';
-export class FetchPerformanceTotalSuccessAction implements Action {
-  readonly type = FETCH_PERFORMANCE_TOTAL_SUCCESS_ACTION;
+export const FETCH_TOTAL_PERFORMANCE_SUCCESS = '[Performance Total] FETCH_TOTAL_PERFORMANCE_SUCCESS';
+export class FetchTotalPerformanceSuccess implements Action {
+  readonly type = FETCH_TOTAL_PERFORMANCE_SUCCESS;
 
-  constructor(public payload: EntitiesTotalPerformances) { }
+  constructor(public payload: Performance) { }
 }
 
-export const FETCH_PERFORMANCE_TOTAL_FAILURE_ACTION = '[Performance Total] FETCH_PERFORMANCE_TOTAL_FAILURE_ACTION';
-export class FetchPerformanceTotalFailureAction implements Action {
-  readonly type = FETCH_PERFORMANCE_TOTAL_FAILURE_ACTION;
+export const FETCH_TOTAL_PERFORMANCE_FAILURE = '[Performance Total] FETCH_TOTAL_PERFORMANCE_FAILURE';
+export class FetchTotalPerformanceFailure implements Action {
+  readonly type = FETCH_TOTAL_PERFORMANCE_FAILURE;
 
   constructor(public payload: Error) { }
 }
 
-export const SET_TABLE_ROW_PERFORMANCE_TOTAL = '[Performance Total] SET_TABLE_ROW_PERFORMANCE_TOTAL';
-export class SetTableRowPerformanceTotal implements Action {
-  readonly type = SET_TABLE_ROW_PERFORMANCE_TOTAL;
+export const SET_TOTAL_PERFORMANCE = '[Performance Total] SET_TOTAL_PERFORMANCE';
+export class SetTotalPerformance implements Action {
+  readonly type = SET_TOTAL_PERFORMANCE;
 
-  constructor(public payload: MyPerformanceTableRow) { }
+  constructor(public payload: string) { }
 }
 
 export type Action
-  = FetchResponsibilitiesAction
-  | FetchResponsibilitiesSuccessAction
-  | FetchResponsibilitiesFailureAction
-  | FetchResponsibilityEntityPerformance
-  | FetchResponsibilityEntityPerformanceSuccess
+  = FetchResponsibilities
+  | FetchResponsibilitiesSuccess
+  | FetchResponsibilitiesFailure
+  | FetchEntityWithPerformance
+  | FetchEntityWithPerformanceSuccess
   | GetPeopleByRoleGroupAction
   | FetchSubAccountsAction
   | FetchSubAccountsSuccessAction
-  | FetchPerformanceTotalAction
-  | FetchPerformanceTotalSuccessAction
-  | FetchPerformanceTotalFailureAction
-  | SetTableRowPerformanceTotal;
+  | FetchTotalPerformance
+  | FetchTotalPerformanceSuccess
+  | FetchTotalPerformanceFailure
+  | SetTotalPerformance;

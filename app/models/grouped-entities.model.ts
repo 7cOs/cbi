@@ -1,5 +1,5 @@
-import { EntityResponsibilities } from './entity-responsibilities.model';
+import { HierarchyEntity } from './hierarchy-entity.model';
 
 export interface GroupedEntities {
-  [key: string]: EntityResponsibilities[];
+  [key: string]: HierarchyEntity[];
 }

@@ -11,8 +11,8 @@ import { DateRange } from '../../models/date-range.model';
 import { DateRangesState } from '../../state/reducers/date-ranges.reducer';
 import { EntityPeopleType } from '../../enums/entity-responsibilities.enum';
 import { FetchProductMetricsAction } from '../../state/actions/product-metrics.action';
-import { FetchResponsibilitiesAction,
-        FetchResponsibilityEntityPerformance,
+import { FetchResponsibilities,
+        FetchEntityWithPerformance,
         FetchSubAccountsAction } from '../../state/actions/responsibilities.action';
 import { getDateRangeMock } from '../../models/date-range.model.mock';
 import * as MyPerformanceFilterActions from '../../state/actions/my-performance-filter.action';
@@ -64,6 +64,7 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
   public showOpportunities: boolean = true;
 
   private currentState: MyPerformanceEntitiesData;
+  private versions: MyPerformanceEntitiesData[];
   private dateRanges$: Observable<DateRangesState>;
   private filterState: MyPerformanceFilterState;
   private filterStateSubscription: Subscription;
@@ -111,11 +112,11 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
 
         if (current.responsibilities && current.responsibilities.status === ActionStatus.Fetched) {
           this.salesHierarchy = this.myPerformanceTableDataTransformerService.getLeftTableData(
-            current.responsibilities.entitiesPerformances
+            current.responsibilities.entityWithPerformance
           );
         }
 
-        if (current.responsibilities.entitiesPerformances) {
+        if (current.responsibilities.entityWithPerformance) {
           this.salesHierarchyTotal = this.myPerformanceTableDataTransformerService
             .getTotalRowData(current.responsibilities.entitiesTotalPerformances);
         }
@@ -124,11 +125,12 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
 
     this.myPerformanceVersionSubscription = this.store.select(state => state.myPerformance.versions)
       .subscribe((versions: MyPerformanceEntitiesData[]) => {
+        this.versions = versions;
         this.showLeftBackButton = versions.length > 0;
     });
 
     const currentUserId = this.userService.model.currentUser.positionId || CORPORATE_USER_POSITION_ID;
-    this.store.dispatch(new FetchResponsibilitiesAction({ positionId: currentUserId, filter: this.filterState }));
+    this.store.dispatch(new FetchResponsibilities({ positionId: currentUserId, filter: this.filterState }));
     this.store.dispatch(new FetchProductMetricsAction({ positionId: currentUserId, filter: this.filterState }));
   }
 
@@ -149,7 +151,10 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
       case RowType.total:
         if (parameters.leftSide) {
           if (this.showLeftBackButton) {
+            const previousIndex: number = this.versions.length - 1;
+            const previousState = this.versions[previousIndex];
             this.store.dispatch(new MyPerformanceVersionActions.RestoreMyPerformanceStateAction());
+            this.fetchProductMetricsForPreviousState(previousState);
           }
           console.log(`clicked on cell ${parameters.index} from the left side`);
         } else {
@@ -165,16 +170,20 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
 
           switch (this.leftTableViewType) {
             case ViewType.roleGroups:
-              this.store.dispatch(new FetchResponsibilityEntityPerformance({
+              this.store.dispatch(new FetchEntityWithPerformance({
                 entityType: EntityPeopleType[parameters.row.descriptionRow0],
                 entities: this.currentState.responsibilities.groupedEntities[EntityPeopleType[parameters.row.descriptionRow0]],
                 filter: this.filterState,
-                entitiesTotalPerformances: parameters.row,
+                selectedPositionId: parameters.row.metadata.positionId,
                 viewType: ViewType.people
               }));
               break;
             case ViewType.people:
-              this.store.dispatch(new FetchResponsibilitiesAction({
+              this.store.dispatch(new FetchResponsibilities({
+                positionId: parameters.row.metadata.positionId,
+                filter: this.filterState
+              }));
+              this.store.dispatch(new FetchProductMetricsAction({
                 positionId: parameters.row.metadata.positionId,
                 filter: this.filterState
               }));
@@ -184,7 +193,7 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
                 positionId: parameters.row.metadata.positionId,
                 contextPositionId: this.currentState.responsibilities.positionId,
                 entityType: parameters.row.descriptionRow0,
-                entitiesTotalPerformances: parameters.row,
+                selectedPositionId: parameters.row.metadata.positionId,
                 premiseType: this.filterState.premiseType
               }));
               break;
@@ -199,8 +208,11 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
     const { trail, entity } = event;
     const indexOffset = 1;
     const stepsBack = trail.length - indexOffset - trail.indexOf(entity);
+    const clickedIndex: number = this.versions.length - stepsBack;
+    const clickedState = this.versions[clickedIndex];
     if (stepsBack < 1) return;
     this.store.dispatch(new MyPerformanceVersionActions.RestoreMyPerformanceStateAction(stepsBack));
+    this.fetchProductMetricsForPreviousState(clickedState);
   }
 
   public filterOptionSelected(event: MyPerformanceFilterEvent): void {
@@ -224,5 +236,15 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
     }
 
     this.store.dispatch({type: actionType, payload: event.filterValue});
+  }
+
+  private fetchProductMetricsForPreviousState(state: MyPerformanceEntitiesData) {
+    if (state.viewType.leftTableViewType === ViewType.roleGroups
+      || state.viewType.leftTableViewType === ViewType.accounts) {
+      this.store.dispatch(new FetchProductMetricsAction({
+        positionId: state.responsibilities.positionId,
+        filter: this.filterState
+      }));
+    }
   }
 }
