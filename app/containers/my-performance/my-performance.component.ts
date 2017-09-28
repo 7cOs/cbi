@@ -63,6 +63,7 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
   public showOpportunities: boolean = true;
 
   private currentState: MyPerformanceEntitiesData;
+  private versions: MyPerformanceEntitiesData[];
   private dateRanges$: Observable<DateRangesState>;
   private filterState: MyPerformanceFilterState;
   private filterStateSubscription: Subscription;
@@ -118,6 +119,7 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
 
     this.myPerformanceVersionSubscription = this.store.select(state => state.myPerformance.versions)
       .subscribe((versions: MyPerformanceEntitiesData[]) => {
+        this.versions = versions;
         this.showLeftBackButton = versions.length > 0;
     });
 
@@ -143,7 +145,10 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
       case RowType.total:
         if (parameters.leftSide) {
           if (this.showLeftBackButton) {
+            const previousIndex: number = this.versions.length - 1;
+            const previousState = this.versions[previousIndex];
             this.store.dispatch(new MyPerformanceVersionActions.RestoreMyPerformanceStateAction());
+            this.fetchProductMetricsForPreviousState(previousState);
           }
           console.log(`clicked on cell ${parameters.index} from the left side`);
         } else {
@@ -172,6 +177,10 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
                 positionId: parameters.row.metadata.positionId,
                 filter: this.filterState
               }));
+              this.store.dispatch(new FetchProductMetricsAction({
+                positionId: parameters.row.metadata.positionId,
+                filter: this.filterState
+              }));
               break;
             case ViewType.accounts:
               this.store.dispatch(new FetchSubAccountsAction({
@@ -194,8 +203,11 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
     const { trail, entity } = event;
     const indexOffset = 1;
     const stepsBack = trail.length - indexOffset - trail.indexOf(entity);
+    const clickedIndex: number = this.versions.length - stepsBack;
+    const clickedState = this.versions[clickedIndex];
     if (stepsBack < 1) return;
     this.store.dispatch(new MyPerformanceVersionActions.RestoreMyPerformanceStateAction(stepsBack));
+    this.fetchProductMetricsForPreviousState(clickedState);
   }
 
   public filterOptionSelected(event: MyPerformanceFilterEvent): void {
@@ -219,5 +231,15 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
     }
 
     this.store.dispatch({type: actionType, payload: event.filterValue});
+  }
+
+  private fetchProductMetricsForPreviousState(state: MyPerformanceEntitiesData) {
+    if (state.viewType.leftTableViewType === ViewType.roleGroups
+      || state.viewType.leftTableViewType === ViewType.accounts) {
+      this.store.dispatch(new FetchProductMetricsAction({
+        positionId: state.responsibilities.positionId,
+        filter: this.filterState
+      }));
+    }
   }
 }
