@@ -12,11 +12,18 @@ export class PerformanceTransformerService {
   constructor(private utilService: UtilService) { }
 
   public transformPerformanceDTO(performanceDTO: PerformanceDTO): Performance {
-    return {
+    return performanceDTO ? {
       total: Math.round(performanceDTO.total),
       totalYearAgo: this.utilService.getYearAgoDelta(performanceDTO.total, performanceDTO.totalYearAgo),
       totalYearAgoPercent: this.utilService.getYearAgoPercent(performanceDTO.total, performanceDTO.totalYearAgo),
-      contributionToVolume: 0
+      contributionToVolume: 0,
+      error: false
+    } : {
+      total: 0,
+      totalYearAgo: 0,
+      totalYearAgoPercent: 0,
+      contributionToVolume: 0,
+      error: true
     };
   }
 

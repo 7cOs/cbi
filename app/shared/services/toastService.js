@@ -9,12 +9,14 @@ module.exports = /*  @ngInject */
       copied: false,
       added: false,
       deleteError: false,
-      multipleTargetListsSelected: false
+      multipleTargetListsSelected: false,
+      performanceDataError: false
     };
 
     var service = {
       model: model,
-      showToast: showToast
+      showToast: showToast,
+      showPerformanceDataErrorToast: showPerformanceDataErrorToast
     };
 
     return service;
@@ -42,5 +44,13 @@ module.exports = /*  @ngInject */
       $timeout(function () {
         model.multipleTargetListsSelected = false;
       }, 6000);
+    }
+
+    function showPerformanceDataErrorToast() {
+      model.performanceDataError = true;
+
+      $timeout(() => {
+        model.performanceDataError = false;
+      }, 10000);
     }
   };

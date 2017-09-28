@@ -135,6 +135,25 @@ th {
       background-color: $light-blue-4;
     }
   }
+
+  &.performance-error {
+
+    /deep/td {
+      background-color: $very-light-red;
+    }
+
+    /deep/span.positive,
+    /deep/span.negative {
+      color: inherit;
+    }
+
+    &:hover {
+
+      /deep/td {
+        background-color: $light-blue-4;
+      }
+    }
+  }
 }
 
 span.positive {

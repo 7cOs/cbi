@@ -1,6 +1,7 @@
 import { Inject, Injectable } from '@angular/core';
 import * as moment from 'moment';
 
+import { Environment } from '../environment';
 import { GoogleAnalyticsTrackerService } from './google-analytics-tracker.service';
 
 @Injectable()
@@ -14,6 +15,9 @@ export class AnalyticsService {
     @Inject('userService') private userService: any
   ) {
     this.gaTracker = gaTrackerService.getTrackerInterface();
+    if (Environment.debugGoogleAnalytics()) {
+      console.log('DEBUG GA (Analytics Service) - Tracker Interface Fetched:', this.gaTracker);
+    }
   }
 
   initializeAnalytics() {
@@ -30,11 +34,17 @@ export class AnalyticsService {
     });
 
     this.gaTracker('send', 'pageview', url, properties);
+    if (Environment.debugGoogleAnalytics()) {
+      console.log('DEBUG GA (Analytics Service) - Send PAGEVIEW (url / props):', url, properties);
+    }
   }
 
   trackEvent(category: string, action: string, label: string) {
     const properties = this.buildHitDimensions(category, action, label);
     this.gaTracker('send', 'event', category, action, label, properties);
+    if (Environment.debugGoogleAnalytics()) {
+      console.log('DEBUG GA (Analytics Service) - Send EVENT (category / action / label / props):', category, action, label, properties);
+    }
   }
 
   private buildHitDimensions(category?: string, action?: string, label?: string) {
@@ -94,9 +104,15 @@ export class AnalyticsService {
 
   private createTracker(trackerId: string, userId: string) {
     this.gaTracker('create', trackerId, 'auto', { userId: userId });
+    if (Environment.debugGoogleAnalytics()) {
+      console.log('DEBUG GA (Analytics Service) - Tracker Created');
+    }
   }
 
   private setTrackerProperties(properties: any) {
     this.gaTracker('set', properties);
+    if (Environment.debugGoogleAnalytics()) {
+      console.log('DEBUG GA (Analytics Service) - Set Tracker Properties:', properties);
+    }
   }
 }
