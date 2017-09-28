@@ -12,6 +12,7 @@ import static com.cbrands.helper.SeleniumUtils.*;
 
 public class OpportunitiesPage extends TestNGBasePage {
   private static final String CHAIN_SEARCHBOX_XPATH = ".//input[@placeholder='Account or Subaccount Name']";
+  private static final String STORE_SEARCHBOX_XPATH = ".//input[@placeholder='Name, Address, TDLinx']";
   private final WebDriver driver;
 
   @FindBy(how = How.XPATH, using = "//form[contains(@class, 'filters')]")
@@ -49,6 +50,11 @@ public class OpportunitiesPage extends TestNGBasePage {
     return this;
   }
 
+  public OpportunitiesPage selectStoreRetailerType() {
+    selectRetailerType("Store");
+    return this;
+  }
+
   private void selectRetailerType(String retailerType) {
     final WebElement typeOption = retailerTypeFilter.findElement(By.xpath(
       "//md-option[contains(@ng-repeat, 'retailer')]/div[contains(.,'" + retailerType + "')]"));
@@ -56,10 +62,18 @@ public class OpportunitiesPage extends TestNGBasePage {
     waitForElementToClickable(typeOption, false);
   }
 
-  public OpportunitiesPage enterChaiRetailerSearchText(String searchText) {
+  public OpportunitiesPage enterChainRetailerSearchText(String searchText) {
     final WebElement chainSearchField = filterContainer.findElement(By.xpath(CHAIN_SEARCHBOX_XPATH));
     waitForElementToClickable(chainSearchField, true).click();
     chainSearchField.sendKeys(searchText);
+
+    return this;
+  }
+
+  public OpportunitiesPage enterStoreAccountSearchText(String searchText) {
+    final WebElement storeSearchField = filterContainer.findElement(By.xpath(STORE_SEARCHBOX_XPATH));
+    waitForElementToClickable(storeSearchField, true).click();
+    storeSearchField.sendKeys(searchText);
 
     return this;
   }
