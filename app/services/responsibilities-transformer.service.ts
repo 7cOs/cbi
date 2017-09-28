@@ -3,7 +3,7 @@ import 'rxjs/add/operator/map';
 
 import { EntityDTO } from '../models/entity-dto.model';
 import { HierarchyEntity } from '../models/hierarchy-entity.model';
-import { EntityPeopleType, EntityPropertyType } from '../enums/entity-responsibilities.enum';
+import { EntityPeopleType, EntityPropertyType, EntityType } from '../enums/entity-responsibilities.enum';
 import { HierarchyEntityDTO } from '../models/hierarchy-entity.model';
 import { EntitySubAccountDTO } from '../models/entity-subaccount-dto.model';
 import { GroupedEntities } from '../models/grouped-entities.model';
@@ -28,9 +28,10 @@ export class ResponsibilitiesTransformerService {
   public groupsAccountsDistributors(accountsDistributors: Array<EntityDTO>, entityType: string): GroupedEntities {
     return accountsDistributors.reduce((groups: GroupedEntities, entity: EntityDTO) => {
       groups[entityType].push({
-        propertyType: entity.type,
+        name: entity.name,
         positionId: entity.id,
-        name: entity.name
+        propertyType: entity.type,
+        entityType: EntityType[entity.type]
       });
 
       return groups;
@@ -44,7 +45,8 @@ export class ResponsibilitiesTransformerService {
           positionId: subAccount.subaccountCode,
           contextPositionId: subAccount.accountCode,
           name: subAccount.subaccountDescription,
-          propertyType: EntityPropertyType.SubAccount
+          propertyType: EntityPropertyType.SubAccount,
+          entityType: EntityType.SubAccount
         };
       })
     };
@@ -58,7 +60,8 @@ export class ResponsibilitiesTransformerService {
       positionDescription: entity.positionDescription || '',
       type: entity.type,
       hierarchyType: entity.hierarchyType,
-      description: entity.description
+      description: entity.description,
+      entityType: EntityType.Person
     };
 
     if (entity.description in EntityPeopleType) {

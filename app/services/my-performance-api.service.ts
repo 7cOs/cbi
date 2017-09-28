@@ -5,16 +5,17 @@ import 'rxjs/add/operator/map';
 
 import { DateRangeTimePeriodValue } from '../enums/date-range-time-period.enum';
 import { DistributionTypeValue } from '../enums/distribution-type.enum';
-import { EntityWithPerformanceDTO } from '../models/entity-with-performance.model'; // tslint:disable-line:no-unused-variable
-import { PerformanceDTO } from '../models/performance.model';
 import { EntityDTO } from '../models/entity-dto.model';
 import { EntitySubAccountDTO } from '../models/entity-subaccount-dto.model';
+import { EntityType } from '../enums/entity-responsibilities.enum';
+import { EntityWithPerformanceDTO } from '../models/entity-with-performance.model';
 import { MetricTypeValue } from '../enums/metric-type.enum';
 import { MyPerformanceFilterState } from '../state/reducers/my-performance-filter.reducer';
+import { PerformanceDTO } from '../models/performance.model';
 import { PeopleResponsibilitiesDTO } from '../models/people-responsibilities-dto.model';
 import { PremiseTypeValue } from '../enums/premise-type.enum';
+import { ProductMetricsDTO } from '../models/entity-product-metrics-dto.model';
 import { ProductMetricType } from '../enums/product-metrics-type.enum';
-import { ProductMetricsDTO } from '../models/entity-product-metrics-dto.model'; // tslint:disable-line:no-unused-variable
 
 @Injectable()
 export class MyPerformanceApiService {
@@ -30,7 +31,9 @@ export class MyPerformanceApiService {
   }
 
   public getResponsibilityPerformance(
-    entity: { type: string, name: string, positionDescription: string }, filter: MyPerformanceFilterState, positionId: string
+    entity: { type: string, name: string, entityType: EntityType, positionDescription: string },
+    filter: MyPerformanceFilterState,
+    positionId: string
   ): Observable<EntityWithPerformanceDTO|Error> {
     const url = `/v3/positions/${ positionId }/responsibilities/${ entity.type }/performanceTotal`;
 
@@ -40,6 +43,7 @@ export class MyPerformanceApiService {
       .map(res => ({
         id: positionId,
         name: entity.name,
+        entityType: entity.entityType,
         positionDescription: entity.positionDescription,
         performance: res.json()
       }))

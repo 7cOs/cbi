@@ -10,7 +10,6 @@ import { ProductMetrics, ProductMetricsBrandValue } from '../models/product-metr
 export class MyPerformanceTableDataTransformerService {
 
   public getLeftTableData(entities: EntityWithPerformance[]): MyPerformanceTableRow[] {
-
     return entities.map((entity: EntityWithPerformance) => {
       const transformedEntity: MyPerformanceTableRow = {
         descriptionRow0: entity.name,
@@ -19,7 +18,8 @@ export class MyPerformanceTableDataTransformerService {
         metricColumn2: entity.performance.totalYearAgoPercent,
         ctv: entity.performance.contributionToVolume,
         metadata: {
-          positionId: entity.positionId
+          positionId: entity.positionId,
+          entityType: entity.entityType
         }
       };
 

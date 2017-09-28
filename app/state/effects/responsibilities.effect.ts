@@ -1,4 +1,3 @@
-// tslint:disable:no-unused-variable
 import { Action } from '@ngrx/store';
 import { Actions, Effect } from '@ngrx/effects';
 import { Injectable } from '@angular/core';
@@ -47,20 +46,8 @@ export class ResponsibilitiesEffects {
     return this.actions$
       .ofType(ResponsibilitiesActions.FETCH_ENTITIES_PERFORMANCES)
       .switchMap((action: Action) => {
-        const { entityType, entities, filter, selectedPositionId, viewType } = action.payload;
-
-        // TODO: Clean this up
-        let newViewType = entityType === 'ACCOUNT'
-          ? ViewType.accounts
-          : entityType === 'DISTRIBUTOR'
-            ? ViewType.distributors
-            : ViewType.people;
-
-        if (entityType === 'GEOGRAPHY') {
-          newViewType = entities[0].propertyType === 'Account'
-            ? ViewType.accounts
-            : ViewType.distributors;
-        }
+        const { selectedPositionId, entityType, type } = action.payload;
+        const viewType: ViewType = this.responsibilitiesService.getEntityGroupViewType(type);
 
         return this.responsibilitiesService.getGroupsPerformanceEntities(action.payload)
           .switchMap((performanceEntities: EntityWithPerformance[]) => {
@@ -68,7 +55,7 @@ export class ResponsibilitiesEffects {
               new ResponsibilitiesActions.SetTotalPerformance(selectedPositionId),
               new ResponsibilitiesActions.GetPeopleByRoleGroupAction(entityType),
               new ResponsibilitiesActions.FetchEntityWithPerformanceSuccess(performanceEntities),
-              new ViewTypeActions.SetLeftMyPerformanceTableViewType(newViewType)
+              new ViewTypeActions.SetLeftMyPerformanceTableViewType(viewType)
             ]);
           })
           .catch((err: Error) => Observable.of(new ResponsibilitiesActions.FetchResponsibilitiesFailure(err)));
@@ -82,6 +69,16 @@ export class ResponsibilitiesEffects {
       .switchMap((subAccountsData) => this.responsibilitiesService.getSubAccounts(subAccountsData))
       .switchMap((subAccountsData) => this.responsibilitiesService.getSubAccountsPerformances(subAccountsData))
       .switchMap((subAccountsData) => this.constructSubAccountsSuccessAction(subAccountsData))
+      .catch((err: Error) => Observable.of(new ResponsibilitiesActions.FetchResponsibilitiesFailure(err)));
+  }
+
+  @Effect() constructRoleGroups$(): Observable<Action> {
+    return this.actions$
+      .ofType(ResponsibilitiesActions.CONSTRUCT_ROLE_GROUPS)
+      .switchMap((action: Action) => Observable.of(action.payload))
+      .switchMap((responsibilitiesData) => this.responsibilitiesService.groupResponsibilities(responsibilitiesData))
+      .switchMap((responsibilitiesData) => this.responsibilitiesService.getPerformanceForGroupedEntities(responsibilitiesData))
+      .switchMap((responsibilitiesData) => this.constructSuccessAction(responsibilitiesData))
       .catch((err: Error) => Observable.of(new ResponsibilitiesActions.FetchResponsibilitiesFailure(err)));
   }
 

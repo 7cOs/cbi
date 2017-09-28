@@ -3,7 +3,7 @@ import { DateRangeTimePeriodValue } from '../../enums/date-range-time-period.enu
 import { DistributionTypeValue } from '../../enums/distribution-type.enum';
 import { EntityWithPerformance } from '../../models/entity-with-performance.model';
 import { Performance } from '../../models/performance.model';
-import { EntityPeopleType } from '../../enums/entity-responsibilities.enum';
+import { EntityPeopleType, EntityType } from '../../enums/entity-responsibilities.enum';
 import { FetchEntityWithPerformancePayload } from '../actions/responsibilities.action';
 import { initialState, responsibilitiesReducer } from './responsibilities.reducer';
 import { getEntityPeopleResponsibilitiesMock } from '../../models/hierarchy-entity.model.mock';
@@ -93,7 +93,8 @@ describe('Responsibilities Reducer', () => {
       entitiesTotalPerformances: initialState.entitiesTotalPerformances
     };
 
-    const actualState = responsibilitiesReducer(stateWithGroupedEntities, new ResponsibilitiesActions.GetPeopleByRoleGroupAction(payload));
+    const actualState =
+responsibilitiesReducer(stateWithGroupedEntities, new ResponsibilitiesActions.GetPeopleByRoleGroupAction(payload));
 
     expect(actualState).toEqual(expectedState);
   });
@@ -128,7 +129,7 @@ describe('Responsibilities Reducer', () => {
       entities: [getEntityPeopleResponsibilitiesMock()],
       filter: performanceFilterStateMock,
       selectedPositionId: getMyPerformanceTableRowMock(1)[0].metadata.positionId,
-      viewType: ViewType.people
+      type: EntityType.Person
     };
     const expectedState = {
       status: ActionStatus.Fetching,

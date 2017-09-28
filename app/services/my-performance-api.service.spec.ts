@@ -5,14 +5,15 @@ import { MockBackend, MockConnection } from '@angular/http/testing';
 import { DateRangeTimePeriodValue } from '../enums/date-range-time-period.enum';
 import { EntityDTO } from '../models/entity-dto.model';
 import { EntitySubAccountDTO } from '../models/entity-subaccount-dto.model';
+import { EntityType } from '../enums/entity-responsibilities.enum';
 import { EntityWithPerformanceDTO } from '../models/entity-with-performance.model';
-import { PerformanceDTO } from '../models/performance.model';
 import { getEntityDTOMock } from '../models/entity-dto.model.mock';
 import { getEntitySubAccountDTOMock } from '../models/entity-subaccount-dto.model.mock';
 import { getPerformanceDTOMock } from '../models/performance.model.mock';
 import { MetricTypeValue } from '../enums/metric-type.enum';
 import { MyPerformanceApiService } from './my-performance-api.service';
 import { PeopleResponsibilitiesDTO } from '../models/people-responsibilities-dto.model';
+import { PerformanceDTO } from '../models/performance.model';
 import { PremiseTypeValue } from '../enums/premise-type.enum';
 import { productMetricsBrandDTOMock } from '../models/entity-product-metrics-dto.model.mock';
 import { ProductMetricType } from '../enums/product-metrics-type.enum';
@@ -29,21 +30,21 @@ describe('Service: MyPerformanceApiService', () => {
       name: 'Joel Cummins',
       description: 'MARKET DEVELOPMENT MANAGER',
       type: '10',
-      hierarchyType: 'SALES_HIER',
+      hierarchyType: 'SALES_HIER'
     }, {
       id: '456',
       employeeId: '4564561',
       name: 'Andy Farag',
       description: 'MARKET DEVELOPMENT MANAGER',
       type: '20',
-      hierarchyType: 'SALES_HIER',
+      hierarchyType: 'SALES_HIER'
     }, {
       id: '789',
       employeeId: '7897891',
       name: 'Ryan Stasik',
       description: 'Specialist',
       type: '30',
-      hierarchyType: 'SALES_HIER',
+      hierarchyType: 'SALES_HIER'
     }]
   };
   const entityDTOMock: Array<EntityDTO> = [getEntityDTOMock(), getEntityDTOMock()];
@@ -237,6 +238,7 @@ describe('Service: MyPerformanceApiService', () => {
       const entityMock = {
         name: chance.string(),
         type: chance.string(),
+        entityType: EntityType.Person,
         positionDescription: chance.string()
       };
       const positionIdMock = chance.string();
@@ -258,6 +260,7 @@ describe('Service: MyPerformanceApiService', () => {
           expect(response).toEqual({
             id: positionIdMock,
             name: entityMock.name,
+            entityType: entityMock.entityType,
             positionDescription: entityMock.positionDescription,
             performance: performanceResponseMock
           });
@@ -293,6 +296,35 @@ describe('Service: MyPerformanceApiService', () => {
       myPerformanceApiService.getSubAccounts(positionIdMock, contextPositionIdMock, premiseTypeMock)
         .subscribe((response: Array<EntitySubAccountDTO>) => {
           expect(response).toEqual(subAccountsDTOMock);
+          done();
+        });
+    });
+  });
+
+  describe('getAlternateHierarchy', () => {
+    it('should call the positions alternateHierarchy endpoint and return the position\'s hierarchy call', (done) => {
+      const positionIdMock: string = chance.string({
+        pool: 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!*()'
+      });
+      const responseMock: PeopleResponsibilitiesDTO = {
+        entityURIs: [chance.string()]
+      };
+      const expectedUrl = `/v3/positions/${ positionIdMock }/alternateHierarchy?contextPositionId=${ positionIdMock }`;
+
+      mockBackend.connections.subscribe((connection: MockConnection) => {
+        const options = new ResponseOptions({
+          body: JSON.stringify(responseMock)
+        });
+
+        connection.mockRespond(new Response(options));
+
+        expect(connection.request.method).toBe(RequestMethod.Get);
+        expect(connection.request.url).toBe(expectedUrl);
+      });
+
+      myPerformanceApiService.getAlternateHierarchy(positionIdMock)
+        .subscribe((response: PeopleResponsibilitiesDTO) => {
+          expect(response).toEqual(responseMock);
           done();
         });
     });

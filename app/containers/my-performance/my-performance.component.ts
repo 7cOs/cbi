@@ -7,13 +7,14 @@ import { ActionStatus } from '../../enums/action-status.enum';
 import { AppState } from '../../state/reducers/root.reducer';
 import { BreadcrumbEntityClickedEvent } from '../../models/breadcrumb-entity-clicked-event.model';
 import { ColumnType } from '../../enums/column-type.enum';
+import { ConstructRoleGroups,
+         FetchEntityWithPerformance,
+         FetchResponsibilities,
+         FetchSubAccountsAction } from '../../state/actions/responsibilities.action';
 import { DateRange } from '../../models/date-range.model';
 import { DateRangesState } from '../../state/reducers/date-ranges.reducer';
-import { EntityPeopleType } from '../../enums/entity-responsibilities.enum';
+import { EntityPeopleType, EntityType } from '../../enums/entity-responsibilities.enum';
 import { FetchProductMetricsAction } from '../../state/actions/product-metrics.action';
-import { FetchResponsibilities,
-        FetchEntityWithPerformance,
-        FetchSubAccountsAction } from '../../state/actions/responsibilities.action';
 import { getDateRangeMock } from '../../models/date-range.model.mock';
 import * as MyPerformanceFilterActions from '../../state/actions/my-performance-filter.action';
 import { MyPerformanceFilterActionType } from '../../enums/my-performance-filter.enum';
@@ -159,13 +160,21 @@ export class MyPerformanceComponent implements OnInit, OnDestroy {
 
           switch (this.leftTableViewType) {
             case ViewType.roleGroups:
-              this.store.dispatch(new FetchEntityWithPerformance({
-                entityType: EntityPeopleType[parameters.row.descriptionRow0],
-                entities: this.currentState.responsibilities.groupedEntities[EntityPeopleType[parameters.row.descriptionRow0]],
-                filter: this.filterState,
-                selectedPositionId: parameters.row.metadata.positionId,
-                viewType: ViewType.people
-              }));
+              if (parameters.row.metadata.entityType !== EntityType.ResponsibilitiesGroup) {
+                this.store.dispatch(new FetchEntityWithPerformance({
+                  entityType: EntityPeopleType[parameters.row.descriptionRow0],
+                  entities: this.currentState.responsibilities.groupedEntities[EntityPeopleType[parameters.row.descriptionRow0]],
+                  filter: this.filterState,
+                  selectedPositionId: parameters.row.metadata.positionId,
+                  type: parameters.row.metadata.entityType
+                }));
+              } else {
+                this.store.dispatch(new ConstructRoleGroups({
+                  positionId: parameters.row.metadata.positionId,
+                  entities: this.currentState.responsibilities.groupedEntities[EntityPeopleType[parameters.row.descriptionRow0]],
+                  filter: this.filterState
+                }));
+              }
               break;
             case ViewType.people:
               this.store.dispatch(new FetchResponsibilities({

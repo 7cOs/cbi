@@ -6,7 +6,7 @@ import * as Chance from 'chance';
 
 import { DateRangeTimePeriodValue } from '../../enums/date-range-time-period.enum';
 import { DistributionTypeValue } from '../../enums/distribution-type.enum';
-import { EntityPeopleType } from '../../enums/entity-responsibilities.enum';
+import { EntityPeopleType, EntityType } from '../../enums/entity-responsibilities.enum';
 import { EntityWithPerformance } from '../../models/entity-with-performance.model';
 import { Performance } from '../../models/performance.model';
 import { FetchResponsibilities,
@@ -237,7 +237,7 @@ describe('Responsibilities Effects', () => {
       entities: [getEntityPeopleResponsibilitiesMock()],
       filter: performanceFilterStateMock,
       selectedPositionId: getMyPerformanceTableRowMock(1)[0].metadata.positionId,
-      viewType: ViewType.people
+      type: EntityType.RoleGroup
     };
 
     beforeEach(() => {
@@ -270,7 +270,7 @@ describe('Responsibilities Effects', () => {
               new SetTotalPerformance(fetchEntityPerformancePayloadMock.selectedPositionId),
               new GetPeopleByRoleGroupAction(fetchEntityPerformancePayloadMock.entityType),
               new FetchEntityWithPerformanceSuccess(entityWithPerformanceMock),
-              new SetLeftMyPerformanceTableViewType(fetchEntityPerformancePayloadMock.viewType)
+              new SetLeftMyPerformanceTableViewType(ViewType.people)
             ]);
 
             done();

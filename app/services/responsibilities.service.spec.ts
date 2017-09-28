@@ -7,13 +7,12 @@ import { DistributionTypeValue } from '../enums/distribution-type.enum';
 import { Performance, PerformanceDTO } from '../models/performance.model';
 import { EntityDTO } from '../models/entity-dto.model';
 import { EntityWithPerformance, EntityWithPerformanceDTO } from '../models/entity-with-performance.model';
-import { EntityPropertyType } from '../enums/entity-responsibilities.enum';
+import { EntityPropertyType, EntityType } from '../enums/entity-responsibilities.enum';
 import { EntitySubAccountDTO } from '../models/entity-subaccount-dto.model';
-import { getEntityPeopleResponsibilitiesMock,
-  getEntityPropertyResponsibilitiesMock } from '../models/hierarchy-entity.model.mock';
-import { getPerformanceMock,
-  getPerformanceDTOMock } from '../models/performance.model.mock';
-import { getEntitiesWithPerformancesMock, getResponsibilityEntitiesPerformanceDTOMock } from '../models/entity-with-performance.model.mock';
+import { getEntityPeopleResponsibilitiesMock, getEntityPropertyResponsibilitiesMock } from '../models/hierarchy-entity.model.mock';
+import { getPerformanceMock, getPerformanceDTOMock } from '../models/performance.model.mock';
+import { getEntitiesWithPerformancesMock,
+         getResponsibilityEntitiesPerformanceDTOMock } from '../models/entity-with-performance.model.mock';
 import { getEntityDTOMock } from '../models/entity-dto.model.mock';
 import { getEntitySubAccountDTOMock } from '../models/entity-subaccount-dto.model.mock';
 import { getGroupedEntitiesMock } from '../models/grouped-entities.model.mock';
@@ -126,7 +125,8 @@ describe('Responsibilities Effects', () => {
     ]
   }));
 
-  beforeEach(inject([ ResponsibilitiesService, MyPerformanceApiService, PerformanceTransformerService, ResponsibilitiesTransformerService ],
+  beforeEach(inject([ ResponsibilitiesService,
+                          MyPerformanceApiService, PerformanceTransformerService, ResponsibilitiesTransformerService ],
     (_responsibilitiesService: ResponsibilitiesService,
      _myPerformanceApiService: MyPerformanceApiService,
      _performanceTransformerService: PerformanceTransformerService,
@@ -170,12 +170,14 @@ describe('Responsibilities Effects', () => {
             {
               type: groupedEntitiesMock['GENERAL MANAGER'][0].type,
               name: 'GENERAL MANAGER',
-              positionDescription: groupedEntitiesMock['GENERAL MANAGER'][0].positionDescription
+              positionDescription: groupedEntitiesMock['GENERAL MANAGER'][0].positionDescription,
+              entityType: EntityType.RoleGroup
             },
             {
               type: groupedEntitiesMock['MARKET DEVELOPMENT MANAGER'][0].type,
               name: 'MARKET DEVELOPMENT MANAGER',
-              positionDescription: groupedEntitiesMock['MARKET DEVELOPMENT MANAGER'][0].positionDescription
+              positionDescription: groupedEntitiesMock['MARKET DEVELOPMENT MANAGER'][0].positionDescription,
+              entityType: EntityType.RoleGroup
             }
           ],
           entitiesURL: undefined as any
@@ -183,7 +185,6 @@ describe('Responsibilities Effects', () => {
 
         responsibilitiesService.getResponsibilities(responsibilitiesDataMock).subscribe((responsibilitiesData: ResponsibilitiesData) => {
           expect(responsibilitiesData).toEqual(expectedResponsibilities);
-
           done();
         });
       });
@@ -200,7 +201,8 @@ describe('Responsibilities Effects', () => {
       });
 
       it('calls groupPeopleByGroupedEntities with the right parameters', (done) => {
-        const groupPeopleByGroupedEntitiesSpy = spyOn(responsibilitiesTransformerService, 'groupPeopleByGroupedEntities').and.callThrough();
+        const groupPeopleByGroupedEntitiesSpy = spyOn(
+                        responsibilitiesTransformerService, 'groupPeopleByGroupedEntities').and.callThrough();
 
         responsibilitiesService.getResponsibilities(responsibilitiesDataMock).subscribe(() => {
           done();
@@ -226,7 +228,8 @@ describe('Responsibilities Effects', () => {
           entitiesURL: peopleResponsibilitiesDTOMock.entityURIs[0]
         };
 
-        responsibilitiesService.getResponsibilities(responsibilitiesDataMock).subscribe((responsibilitiesData: ResponsibilitiesData) => {
+        responsibilitiesService.getResponsibilities(responsibilitiesDataMock)
+                                    .subscribe((responsibilitiesData: ResponsibilitiesData) => {
           expect(responsibilitiesData).toEqual(expectedResponsibilities);
 
           done();
@@ -245,7 +248,8 @@ describe('Responsibilities Effects', () => {
       });
 
       it('does not call groupPeopleByGroupedEntities', (done) => {
-        const groupPeopleByGroupedEntitiesSpy = spyOn(responsibilitiesTransformerService, 'groupPeopleByGroupedEntities').and.callThrough();
+        const groupPeopleByGroupedEntitiesSpy = spyOn
+                      (responsibilitiesTransformerService, 'groupPeopleByGroupedEntities').and.callThrough();
 
         responsibilitiesService.getResponsibilities(responsibilitiesDataMock).subscribe(() => {
           done();
@@ -270,7 +274,8 @@ describe('Responsibilities Effects', () => {
           entitiesURL: peopleResponsibilitiesDTOMock.entityURIs[0]
         };
 
-        responsibilitiesService.getResponsibilities(responsibilitiesDataMock).subscribe((responsibilitiesData: ResponsibilitiesData) => {
+        responsibilitiesService.getResponsibilities(responsibilitiesDataMock)
+                                  .subscribe((responsibilitiesData: ResponsibilitiesData) => {
           expect(responsibilitiesData).toEqual(expectedResponsibilities);
 
           done();
@@ -289,7 +294,8 @@ describe('Responsibilities Effects', () => {
       });
 
       it('does not call groupPeopleByGroupedEntities', (done) => {
-        const groupPeopleByGroupedEntitiesSpy = spyOn(responsibilitiesTransformerService, 'groupPeopleByGroupedEntities').and.callThrough();
+        const groupPeopleByGroupedEntitiesSpy =
+                        spyOn(responsibilitiesTransformerService, 'groupPeopleByGroupedEntities').and.callThrough();
 
         responsibilitiesService.getResponsibilities(responsibilitiesDataMock).subscribe(() => {
           done();
@@ -308,7 +314,8 @@ describe('Responsibilities Effects', () => {
         entityTypes: [{
           type: chance.string(),
           name: chance.string(),
-          positionDescription: chance.string()
+          positionDescription: chance.string(),
+          entityType: EntityType.RoleGroup
         }],
         groupedEntities: accountsDistributorsMock,
         filter: performanceFilterStateMock
@@ -359,7 +366,8 @@ describe('Responsibilities Effects', () => {
         entityTypes: [{
           type: chance.string(),
           name: chance.string(),
-          positionDescription: chance.string()
+          positionDescription: chance.string(),
+          entityType: EntityType.Distributor
         }],
         groupedEntities: {'all': [ getEntityPeopleResponsibilitiesMock() ]},
         filter: performanceFilterStateMock
@@ -410,7 +418,8 @@ describe('Responsibilities Effects', () => {
         entityTypes: [{
           type: chance.string(),
           name: chance.string(),
-          positionDescription: chance.string()
+          positionDescription: chance.string(),
+          entityType: EntityType.Account
         }],
         groupedEntities: {'all': [ getEntityPeopleResponsibilitiesMock() ]},
         filter: performanceFilterStateMock
@@ -462,7 +471,8 @@ describe('Responsibilities Effects', () => {
         entityTypes: [{
           type: chance.string(),
           name: chance.string(),
-          positionDescription: chance.string()
+          positionDescription: chance.string(),
+          entityType: EntityType.Distributor
         }]
       };
 
@@ -732,12 +742,14 @@ describe('Responsibilities Effects', () => {
           positionId: entitySubAccountDTOMock[0].subaccountCode,
           contextPositionId: entitySubAccountDTOMock[0].accountCode,
           name: entitySubAccountDTOMock[0].subaccountDescription,
-          propertyType: EntityPropertyType.SubAccount
+          propertyType: EntityPropertyType.SubAccount,
+          entityType: EntityType.SubAccount
         }, {
           positionId: entitySubAccountDTOMock[1].subaccountCode,
           contextPositionId: entitySubAccountDTOMock[1].accountCode,
           name: entitySubAccountDTOMock[1].subaccountDescription,
-          propertyType: EntityPropertyType.SubAccount
+          propertyType: EntityPropertyType.SubAccount,
+          entityType: EntityType.SubAccount
         }]
       };
     });

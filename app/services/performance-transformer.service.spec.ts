@@ -1,5 +1,6 @@
 import { inject, TestBed } from '@angular/core/testing';
 
+import { EntityType } from '../enums/entity-responsibilities.enum';
 import { getPerformanceDTOMock } from '../models/performance.model.mock';
 import { getResponsibilityEntitiesPerformanceDTOMock } from '../models/entity-with-performance.model.mock';
 import { Performance, PerformanceDTO } from '../models/performance.model';
@@ -70,6 +71,7 @@ describe('Service: PerformanceTransformerService', () => {
       expect(entityPerformance[0]).toEqual({
         positionId: responsibilityEntitiesPerformanceDTOMock[0].id,
         name: responsibilityEntitiesPerformanceDTOMock[0].name,
+        entityType: responsibilityEntitiesPerformanceDTOMock[0].entityType,
         positionDescription: responsibilityEntitiesPerformanceDTOMock[0].positionDescription,
         performance: {
           total: parseInt((entityPerformanceMock.total).toFixed(), 10),

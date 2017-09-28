@@ -25,3 +25,15 @@ export enum EntityPropertyType {
   Account = 'Account',
   SubAccount = 'SubAccount'
 }
+
+export enum EntityType {
+  Person = 'Person',
+  RoleGroup = 'RoleGroup',
+  ResponsibilitiesGroup = 'ResponsibilitiesGroup',
+  Distributor = 'Distributor',
+  DistributorGroup = 'DistributorGroup',
+  Account = 'Account',
+  AccountGroup = 'AccountGroup',
+  SubAccount = 'SubAccount',
+  SubAccountGroup = 'SubAccountGroup'
+}

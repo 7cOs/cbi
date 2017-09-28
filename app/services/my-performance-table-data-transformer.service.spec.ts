@@ -53,7 +53,8 @@ describe('Service: MyPerformanceTableDataTransformerService', () => {
         metricColumn2: responsibilityEntitiesPerformanceMock[0].performance.totalYearAgoPercent,
         ctv: responsibilityEntitiesPerformanceMock[0].performance.contributionToVolume,
         metadata: {
-          positionId: responsibilityEntitiesPerformanceMock[0].positionId
+          positionId: responsibilityEntitiesPerformanceMock[0].positionId,
+          entityType: responsibilityEntitiesPerformanceMock[0].entityType
         }
       });
     });
@@ -73,7 +74,8 @@ describe('Service: MyPerformanceTableDataTransformerService', () => {
         metricColumn2: responsibilityEntitiesPerformanceOpenPositionMock[0].performance.totalYearAgoPercent,
         ctv: responsibilityEntitiesPerformanceOpenPositionMock[0].performance.contributionToVolume,
         metadata: {
-          positionId: responsibilityEntitiesPerformanceOpenPositionMock[0].positionId
+          positionId: responsibilityEntitiesPerformanceOpenPositionMock[0].positionId,
+          entityType: responsibilityEntitiesPerformanceOpenPositionMock[0].entityType
         }
       });
     });

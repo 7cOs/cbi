@@ -3,15 +3,17 @@ import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/do';
 import 'rxjs/add/operator/switchMap';
 
-import { EntityWithPerformance, EntityWithPerformanceDTO } from '../models/entity-with-performance.model';
-import { Performance, PerformanceDTO } from '../models/performance.model';
 import { EntityDTO } from '../models/entity-dto.model';
-import { HierarchyEntity } from '../models/hierarchy-entity.model'; // tslint:disable-line:no-unused-variable
+import { EntityPeopleType, EntityType } from '../enums/entity-responsibilities.enum';
 import { EntitySubAccountDTO } from '../models/entity-subaccount-dto.model';
+import { EntityWithPerformance, EntityWithPerformanceDTO } from '../models/entity-with-performance.model';
+import { FetchEntityWithPerformancePayload } from '../state/actions/responsibilities.action';
 import { GroupedEntities } from '../models/grouped-entities.model';
+import { HierarchyEntity, HierarchyEntityDTO } from '../models/hierarchy-entity.model';
 import { MyPerformanceApiService } from './my-performance-api.service';
 import { MyPerformanceFilterState } from '../state/reducers/my-performance-filter.reducer';
 import { PeopleResponsibilitiesDTO } from '../models/people-responsibilities-dto.model';
+import { Performance, PerformanceDTO } from '../models/performance.model';
 import { PerformanceTransformerService } from './performance-transformer.service';
 import { PremiseTypeValue } from '../enums/premise-type.enum';
 import { ResponsibilitiesTransformerService } from './responsibilities-transformer.service';
@@ -20,12 +22,13 @@ import { ViewType } from '../enums/view-type.enum';
 export interface ResponsibilitiesData {
   groupedEntities?: GroupedEntities;
   viewType?: ViewType;
-  entityTypes?: Array<{ type: string, name: string, positionDescription: string }>;
+  entityTypes?: Array<{ type: string, name: string, entityType: EntityType, positionDescription: string }>;
   entitiesURL?: string;
   alternateEntitiesURL?: string;
   positionId?: string;
   filter?: MyPerformanceFilterState;
   entityWithPerformance?: Array<EntityWithPerformance>;
+  entities?: HierarchyEntityDTO[];
 }
 
 export interface SubAccountData {
@@ -63,6 +66,7 @@ export class ResponsibilitiesService {
             return {
               type: groupedEntities[roleGroup][0].type,
               name: roleGroup,
+              entityType: EntityType.RoleGroup,
               positionDescription: groupedEntities[roleGroup][0].positionDescription
             };
           });
@@ -83,14 +87,37 @@ export class ResponsibilitiesService {
       });
   }
 
+  public groupResponsibilities(responsibilitiesData: ResponsibilitiesData): Observable<ResponsibilitiesData> {
+    let entityTypes: Array<{ type: string, name: string, entityType: EntityType, positionDescription: string }>;
+
+    const groupedEntities: GroupedEntities =
+      this.responsibilitiesTransformerService.groupPeopleByGroupedEntities(responsibilitiesData.entities);
+
+    entityTypes = Object.keys(groupedEntities).map((roleGroup: string) => {
+      return {
+        type: groupedEntities[roleGroup][0].type,
+        name: roleGroup,
+        entityType: EntityType.RoleGroup,
+        positionDescription: groupedEntities[roleGroup][0].positionDescription
+      };
+    });
+
+    return Observable.of(Object.assign({}, responsibilitiesData, {
+      entityTypes: entityTypes,
+      groupedEntities: groupedEntities,
+      viewType: ViewType.roleGroups
+    }));
+  }
+
   public getResponsibilitiesPerformances(
-    entities: Array<{ positionId?: string, type: string, name: string, positionDescription: string }>,
+    entities: Array<{ positionId?: string, type: string, name: string, positionDescription?: string }>,
     filter: MyPerformanceFilterState,
     positionId?: string
   ): Observable<(EntityWithPerformance | Error)[]> {
     const apiCalls: Observable<EntityWithPerformanceDTO | Error>[] = [];
-
-    entities.forEach((entity: { positionId?: string, type: string, name: string, positionDescription: string }) => {
+    entities.forEach((entity: {
+      positionId?: string, type: string, name: string, entityType: EntityType, positionDescription: string
+    }) => {
       apiCalls.push(this.myPerformanceApiService.getResponsibilityPerformance(entity, filter, entity.positionId || positionId));
     });
 
@@ -142,12 +169,10 @@ export class ResponsibilitiesService {
     return Observable.forkJoin(apiCalls);
   }
 
-  public getPerformanceForGroupedEntities(responsibilitiesData: ResponsibilitiesData)
-  : Observable<ResponsibilitiesData> {
-    if (responsibilitiesData.viewType === ViewType.roleGroups || responsibilitiesData.entityTypes.length > 1) {
-      return this.handleResponsibilitiesPerformances(Object.assign({}, responsibilitiesData, {
-        viewType: ViewType.roleGroups
-      }));
+  public getPerformanceForGroupedEntities(responsibilitiesData: ResponsibilitiesData): Observable<ResponsibilitiesData> {
+    console.log('getPerformanceForGroupedEntities', responsibilitiesData);
+    if (responsibilitiesData.viewType === ViewType.roleGroups) {
+      return this.handleResponsibilitiesPerformances(responsibilitiesData);
     } else if (responsibilitiesData.viewType === ViewType.distributors) {
       return this.handleDistributorsPerformances(responsibilitiesData);
     } else if (responsibilitiesData.viewType === ViewType.accounts) {
@@ -162,8 +187,10 @@ export class ResponsibilitiesService {
     if (responsibilitiesData.viewType === ViewType.distributors || responsibilitiesData.viewType === ViewType.accounts) {
       return this.myPerformanceApiService.getAccountsDistributors(responsibilitiesData.entitiesURL)
         .switchMap((accountsOrDistributors: Array<EntityDTO>): Observable<ResponsibilitiesData> => {
-          const entityTypes: Array<{ name: string, type?: string, positionDescription?: string }> = [{
-            name: accountsOrDistributors[0].type.toUpperCase()
+          const entityTypes: Array<{ name: string, entityType: EntityType, type: string }> = [{
+            name: accountsOrDistributors[0].type.toUpperCase(),
+            type: responsibilitiesData.positionId,
+            entityType: accountsOrDistributors[0].type === 'Distributor' ? EntityType.DistributorGroup : EntityType.AccountGroup
           }];
           const groupedEntities: GroupedEntities = this.responsibilitiesTransformerService.groupsAccountsDistributors(
             accountsOrDistributors,
@@ -202,6 +229,7 @@ export class ResponsibilitiesService {
           positionId: subAccount.positionId,
           contextPositionId: subAccount.contextPositionId,
           name: subAccount.name,
+          entityType: EntityType.SubAccount,
           performance: {
             total: 1337,
             totalYearAgo: 9001,
@@ -220,12 +248,26 @@ export class ResponsibilitiesService {
   public getAlternateHierarchy(responsibilitiesData: ResponsibilitiesData): Observable<ResponsibilitiesData> {
     return this.myPerformanceApiService.getAlternateHierarchy(responsibilitiesData.positionId)
       .switchMap((response: PeopleResponsibilitiesDTO) => {
-        if (!response.hasOwnProperty('entityURIs') || !response.entityURIs.length) {
-          return Observable.of(responsibilitiesData);
-        } else {
+        if (response.positions) {
+          const entityTypes: Array<{ name: string, entityType: EntityType, type: string }> = [{
+            name: 'GEOGRAPHY',
+            type: responsibilitiesData.positionId,
+            entityType: EntityType.ResponsibilitiesGroup
+          }].concat(responsibilitiesData.entityTypes);
+          const groupedEntities: GroupedEntities = Object.assign({}, responsibilitiesData.groupedEntities, {
+            GEOGRAPHY: response.positions
+          });
+
+          return Observable.of(Object.assign({}, responsibilitiesData, {
+            entityTypes: entityTypes,
+            groupedEntities: groupedEntities
+          }));
+        } else if (response.entityURIs && response.entityURIs.length) {
           return Observable.of(Object.assign({}, responsibilitiesData, {
             alternateEntitiesURL: response.entityURIs[0]
           }));
+        } else {
+          return Observable.of(responsibilitiesData);
         }
     });
   }
@@ -234,18 +276,19 @@ export class ResponsibilitiesService {
     if (responsibilitiesData.alternateEntitiesURL) {
       return this.myPerformanceApiService.getAccountsDistributors(responsibilitiesData.alternateEntitiesURL)
         .switchMap((response: Array<EntityDTO>) => {
-          let entityTypes: Array<{ name: string, type?: string, positionDescription?: string }>;
-
-          const groupedEntities = Object.assign({},
-            responsibilitiesData.groupedEntities,
-            this.responsibilitiesTransformerService.groupsAccountsDistributors(response, 'GEOGRAPHY')
-          );
-
-          entityTypes = [{ name: 'GEOGRAPHY', type: responsibilitiesData.positionId}].concat(responsibilitiesData.entityTypes);
+          const groupedEntities = Object.assign({}, responsibilitiesData.groupedEntities,
+            this.responsibilitiesTransformerService.groupsAccountsDistributors(response, EntityPeopleType.GEOGRAPHY));
+          const geographyEntityType: string = EntityPeopleType.GEOGRAPHY;
+          const entityTypes: Array<{ name: string, type: string, entityType: EntityType }> = [{
+            name: geographyEntityType,
+            type: responsibilitiesData.positionId,
+            entityType: response[0].type === 'Distributor' ? EntityType.DistributorGroup : EntityType.AccountGroup
+          }].concat(responsibilitiesData.entityTypes);
 
           return Observable.of(Object.assign({}, responsibilitiesData, {
             entityTypes: entityTypes,
-            groupedEntities: groupedEntities
+            groupedEntities: groupedEntities,
+            viewType: ViewType.roleGroups
           }));
         });
     } else {
@@ -253,23 +296,35 @@ export class ResponsibilitiesService {
     }
   }
 
-  public getGroupsPerformanceEntities(payload: any): any {
-    // TODO: Update types, use enums, clean up trash below this
-    if (payload.entityType === 'ACCOUNT') {
-      return this.getAccountsPerformances(payload.entities, payload.filter, payload.selectedPositionId);
-    } else if (payload.entityType === 'DISTRIBUTOR') {
-      return this.getDistributorsPerformances(payload.entities, payload.filter, payload.selectedPositionId);
-    } else if (payload.entityType === 'GEOGRAPHY') {
-      const geographyEntityType = payload.entities[0].propertyType;
-
-      if (geographyEntityType === 'Account') {
-        return this.getAccountsPerformances(payload.entities, payload.filter, payload.selectedPositionId);
-      } else {
+  public getGroupsPerformanceEntities(payload: FetchEntityWithPerformancePayload): Observable<(EntityWithPerformance | Error)[]> {
+    switch (payload.type) {
+      case EntityType.ResponsibilitiesGroup:
+        // HANDLE GEOGRAPHY > ROLE GROUPS > PEOPLE
+        console.log('getGroupsPerformanceEntities', payload);
+        break;
+      case EntityType.RoleGroup:
+        return this.getPositionsPerformances(payload.entities, payload.filter);
+      case EntityType.DistributorGroup:
         return this.getDistributorsPerformances(payload.entities, payload.filter, payload.selectedPositionId);
-      }
+      case EntityType.AccountGroup:
+        return this.getAccountsPerformances(payload.entities, payload.filter, payload.selectedPositionId);
+      default:
+        throw new Error(`[getGroupsPerformanceEntities]: EntityType of ${ payload.type } is not supported.`);
+    }
+  }
 
-    } else {
-      return this.getPositionsPerformances(payload.entities, payload.filter);
+  public getEntityGroupViewType(type: EntityType): ViewType {
+    switch (type) {
+      case EntityType.ResponsibilitiesGroup:
+        return ViewType.roleGroups;
+      case EntityType.RoleGroup:
+        return ViewType.people;
+      case EntityType.DistributorGroup:
+        return ViewType.distributors;
+      case EntityType.AccountGroup:
+        return ViewType.accounts;
+      default:
+        throw new Error(`[getEntityGroupViewType]: EntityType of ${ type } is not supported.`);
     }
   }
 
@@ -304,5 +359,4 @@ export class ResponsibilitiesService {
           return responsibilitiesData;
         });
   }
-
 }
